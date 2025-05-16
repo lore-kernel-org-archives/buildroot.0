@@ -1,52 +1,84 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59F9AC3ABC9
-	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 15:18:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1ADF4C3ABC9
+	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 15:36:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 03953831E3;
-	Fri, 16 May 2025 15:18:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A9FDF6068B;
+	Fri, 16 May 2025 15:36:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HSMJp8id0-4r; Fri, 16 May 2025 15:18:12 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eHYAP9jezztC; Fri, 16 May 2025 15:36:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 20D76821EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DABE16129E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 20D76821EA;
-	Fri, 16 May 2025 15:18:12 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 4BC6E185
- for <buildroot@buildroot.org>; Fri, 16 May 2025 15:18:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DABE16129E;
+	Fri, 16 May 2025 15:36:48 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 001B3185
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 15:36:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3CCCE4093B
- for <buildroot@buildroot.org>; Fri, 16 May 2025 15:18:10 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DA5076080C
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 15:36:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Sa-2Hmd-dLBz for <buildroot@buildroot.org>;
- Fri, 16 May 2025 15:18:09 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TEEgCBq3GW-n for <buildroot@buildroot.org>;
+ Fri, 16 May 2025 15:36:47 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=114.111.35.112;
+ helo=cvsmtppost26.nm.naver.com; envelope-from=dungeonlords789@naver.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 89C4540983
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 89C4540983
- for <buildroot@buildroot.org>; Fri, 16 May 2025 15:18:09 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 841C786C3F; Fri, 16 May 2025 15:18:09 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 16 May 2025 17:17:56 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b0a703a974503b59881630a6b36ee8f5a1d37248
-X-Git-Newrev: 4662553088b81dbf35fa43aaeef098ac2c7f41f9
-X-Patchwork-Hint: ignore
-Message-Id: <20250516151809.841C786C3F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/sdl2: add wayland support
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6C7366068B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C7366068B
+Received: from cvsmtppost26.nm.naver.com (cvsmtppost26.nm.naver.com
+ [114.111.35.112])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6C7366068B
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 15:36:45 +0000 (UTC)
+X-Originating-IP: 125.132.232.68
+Received: from cvsendbo012.nm ([10.112.24.38])
+ by cvsmtppost26.nm.naver.com with ESMTP id Xmu48bRNSmG2r2qHRx2yCg
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 15:36:44 -0000
+X-Session-ID: yEDT9WMDT7itz7k4bCRvWw
+X-Originating-IP: 125.132.232.68
+X-Works-Send-Opt: k/YdjAJYjHmlKxu/FoJYKxgXKBwkx0eFjAJYKg==
+X-Works-Smtp-Source: eZnXKqbdFqJZ+HmqKAtX+6E=
+Received: from Linux.. ([125.132.232.68])
+ by cvnsmtp010.nm.naver.com with ESMTP id yEDT9WMDT7itz7k4bCRvWw
+ for <multiple recipients>
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Fri, 16 May 2025 15:36:43 -0000
+From: Cherniaev Andrei <dungeonlords789@naver.com>
+To: buildroot@buildroot.org,
+	peter@korsgaard.com
+Cc: Cherniaev Andrei <dungeonlords789@naver.com>,
+ Bernd Kuhls <bernd@kuhls.net>, Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Sat, 17 May 2025 00:36:24 +0900
+Message-ID: <20250516153626.352323-1-dungeonlords789@naver.com>
+X-Mailer: git-send-email 2.45.2
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=naver.com; s=s20171208; 
+ t=1747409804; bh=yTANyD8MFkucBRxmUFGagdKGrn+ih1kC2JDEmXa0KEk=;
+ h=From:To:Subject:Date:Message-ID:From:Subject:Feedback-ID:
+ X-Works-Security;
+ b=KzcG2YarV4bIgGg6wNs8ICMnkG+w65J3VjqaQ+2IBTnJNP0R6fKOC4UZ2WFF94uyu
+ MmOMA7h2XIc3jdIlwtTVnht9DAnWie2XuKzNUwzsHC/+GTG0blRl1kizVD6UMuiGuk
+ THiYtNSoiz5sA/jfgoZSELd8yV52A5vJS8iKPihzf7O1V6yiIqRqfuiARNid0nCWbF
+ CoEQo+oxD30S4GwEHvvChxTmlcdgES2qWv8rHv+5bXQRRKsVdespDSEzjECcuvdCj/
+ Agpb4L2kH518+utwFC5i3kRkN+sch+wLrOQV+vaXILJnQ74IXgf4U6m5oM5uVi4IrL
+ gghByhictT+UA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=naver.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=naver.com header.i=@naver.com header.a=rsa-sha256
+ header.s=s20171208 header.b=KzcG2Yar
+Subject: [Buildroot] [PATCH] package/libopenh264: switch to meson
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,81 +90,31 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4662553088b81dbf35fa43aaeef098ac2c7f41f9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Modern build system meson was added to openh264 because of many reasons, details https://github.com/cisco/openh264/pull/2955 buildroot should prefer modern build system.
 
-This adds a configuration option to enable the Wayland
-video driver support in SDL2.
-
-Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
-[Peter: move after KMS/DRM]
-Tested-by: Alexander Shiyan <eagle.alexander923@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Cherniaev Andrei <dungeonlords789@naver.com>
 ---
- package/sdl2/Config.in | 17 +++++++++++++++++
- package/sdl2/sdl2.mk   |  8 +++++++-
- 2 files changed, 24 insertions(+), 1 deletion(-)
+ package/libopenh264/libopenh264.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/sdl2/Config.in b/package/sdl2/Config.in
-index f1c22e4f80..432b34b9e4 100644
---- a/package/sdl2/Config.in
-+++ b/package/sdl2/Config.in
-@@ -38,6 +38,23 @@ comment "KMS/DRM video driver needs a GBM provider, and OpenGL or OpenGLES+EGL"
- 		!BR2_PACKAGE_HAS_LIBEGL || \
- 		!(BR2_PACKAGE_SDL2_OPENGL || BR2_PACKAGE_SDL2_OPENGLES)
+diff --git a/package/libopenh264/libopenh264.mk b/package/libopenh264/libopenh264.mk
+index 9ae996fee1..87bd537fe7 100644
+--- a/package/libopenh264/libopenh264.mk
++++ b/package/libopenh264/libopenh264.mk
+@@ -55,4 +55,4 @@ define LIBOPENH264_INSTALL_TARGET_CMDS
+ 		DESTDIR=$(TARGET_DIR) PREFIX=/usr install
+ endef
  
-+config BR2_PACKAGE_SDL2_WAYLAND
-+	bool "Wayland video driver"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland
-+	depends on BR2_PACKAGE_WAYLAND
-+	depends on BR2_PACKAGE_HAS_LIBEGL
-+	depends on BR2_PACKAGE_SDL2_OPENGLES
-+	select BR2_PACKAGE_LIBXKBCOMMON
-+	select BR2_PACKAGE_WAYLAND_PROTOCOLS
-+
-+comment "Wayland video driver needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+
-+comment "Wayland video driver needs wayland with an OpenGLES+EGL backend"
-+	depends on !BR2_PACKAGE_WAYLAND || \
-+		!BR2_PACKAGE_HAS_LIBEGL || \
-+		!BR2_PACKAGE_SDL2_OPENGLES
-+
- config BR2_PACKAGE_SDL2_OPENGL
- 	bool "OpenGL (GLX)"
- 	depends on BR2_PACKAGE_HAS_LIBGL
-diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
-index 8e4d7700c0..9b4a19571c 100644
---- a/package/sdl2/sdl2.mk
-+++ b/package/sdl2/sdl2.mk
-@@ -23,7 +23,6 @@ SDL2_CONF_OPTS += \
- 	--disable-video-vivante \
- 	--disable-video-cocoa \
- 	--disable-video-metal \
--	--disable-video-wayland \
- 	--disable-video-dummy \
- 	--disable-video-offscreen \
- 	--disable-video-vulkan \
-@@ -105,6 +104,13 @@ else
- SDL2_CONF_OPTS += --disable-video-x11-xcursor
- endif
- 
-+ifeq ($(BR2_PACKAGE_SDL2_WAYLAND),y)
-+SDL2_DEPENDENCIES += libegl libxkbcommon wayland wayland-protocols
-+SDL2_CONF_OPTS += --enable-video-wayland
-+else
-+SDL2_CONF_OPTS += --disable-video-wayland
-+endif
-+
- ifeq ($(BR2_PACKAGE_XLIB_LIBXI),y)
- SDL2_DEPENDENCIES += xlib_libXi
- SDL2_CONF_OPTS += --enable-video-x11-xinput
+-$(eval $(generic-package))
++$(eval $(meson-package))
+-- 
+2.45.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
