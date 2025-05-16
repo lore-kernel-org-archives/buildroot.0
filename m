@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B9B6C2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:00:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D403C2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:00:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1177C8473D;
-	Mon, 19 May 2025 11:00:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8476B70DC0;
+	Mon, 19 May 2025 11:00:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BEDMKmUDP_S0; Mon, 19 May 2025 11:00:22 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Bm75vRdZAE-V; Mon, 19 May 2025 11:00:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2EF1084760
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1DD0C70DBD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2EF1084760;
-	Mon, 19 May 2025 11:00:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1DD0C70DBD;
+	Mon, 19 May 2025 11:00:24 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 43C17D4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:47:00 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 15DCCE4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:47:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B2FEF40DE8
+ by smtp4.osuosl.org (Postfix) with ESMTP id C02B940E5E
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id O7R1pb_3N1Jp for <buildroot@buildroot.org>;
+ id apwrGOXKu04t for <buildroot@buildroot.org>;
  Mon, 19 May 2025 10:40:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 06667417F7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0FA5241173
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 06667417F7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0FA5241173
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:04 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 030C88348A; Mon, 19 May 2025 10:40:04 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+ id 0C062872E7; Mon, 19 May 2025 10:40:04 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 16 May 2025 13:40:17 +0200
+Date: Fri, 16 May 2025 13:53:18 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3615b2cd04727c38733c48d0d611736c3b24f8ed
-X-Git-Newrev: 9a1aaec3f3db99bd8fda26cbaf476f4c20dd6740
+X-Git-Oldrev: 9a1aaec3f3db99bd8fda26cbaf476f4c20dd6740
+X-Git-Newrev: 0c230eef9075a37248488ecf0a877012115f7b58
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104004.030C88348A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/screen: security bump
- to version 5.0.1
+Message-Id: <20250519104004.0C062872E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/mtd: update to 2.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,54 +64,85 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9a1aaec3f3db99bd8fda26cbaf476f4c20dd6740
+commit: https://git.buildroot.net/buildroot/commit/?id=0c230eef9075a37248488ecf0a877012115f7b58
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes the following security issues:
+Changelog: https://git.infradead.org/?p=mtd-utils.git;a=blob;f=CHANGELOG.md
 
-CVE-2025-46805: do NOT send signals with root privileges
-CVE-2025-46804: avoid file existence test information leaks
-CVE-2025-46803: apply safe PTY default mode of 0620
-CVE-2025-46802: prevent temporary 0666 mode on PTYs in attacher
-CVE-2025-23395: reintroduce lf_secreopen() for logfile
+The TestMtd build fails with the following error
 
-https://lists.gnu.org/archive/html/info-gnu/2025-05/msg00002.html
+  checking pkg-config is at least version 0.9.0... ./configure: line
+  5375: .../output/TestMtd/host/bin/pkg-config: No such file or
+  directory
 
-For more details, see:
-https://security.opensuse.org/2025/05/12/screen-security-issues.html
+So we promote host-pkgconf to be a required dependency for the build.
 
+Signed-off-by: Brandon Maier <brandon.maier@collins.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/screen/screen.hash | 4 ++--
- package/screen/screen.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/mtd/mtd.hash | 4 ++--
+ package/mtd/mtd.mk   | 9 +++++----
+ 2 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/package/screen/screen.hash b/package/screen/screen.hash
-index 208a9cb36d..61bacd88ff 100644
---- a/package/screen/screen.hash
-+++ b/package/screen/screen.hash
-@@ -1,5 +1,5 @@
+diff --git a/package/mtd/mtd.hash b/package/mtd/mtd.hash
+index 0eb90a5118..84b9e83bff 100644
+--- a/package/mtd/mtd.hash
++++ b/package/mtd/mtd.hash
+@@ -1,4 +1,4 @@
  # Locally calculated after checking pgp signature
--# https://ftp.gnu.org/gnu/screen/screen-5.0.0.tar.gz.sig
--sha256  f04a39d00a0e5c7c86a55338808903082ad5df4d73df1a2fd3425976aed94971  screen-5.0.0.tar.gz
-+# https://ftp.gnu.org/gnu/screen/screen-5.0.1.tar.gz.sig
-+sha256  2dae36f4db379ffcd14b691596ba6ec18ac3a9e22bc47ac239789ab58409869d  screen-5.0.1.tar.gz
- # Locally calculated
- sha256  e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  COPYING
-diff --git a/package/screen/screen.mk b/package/screen/screen.mk
-index 9a64780a9a..74453faff8 100644
---- a/package/screen/screen.mk
-+++ b/package/screen/screen.mk
+-# https://infraroot.at/pub/mtd/mtd-utils-2.2.1.tar.bz2.asc
+-sha256  f7ae20b2eb79ee83441468f0b99d897024cd96ff853eea59106fb1952065c803  mtd-utils-2.2.1.tar.bz2
++# https://infraroot.at/pub/mtd/mtd-utils-2.3.0.tar.bz2.asc
++sha256  2db102908b232406ccb20719c0f43b61196aef4534493419fbf98a273c598c10  mtd-utils-2.3.0.tar.bz2
+ sha256  dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
+diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+index 77050e7e40..4ff43a1dce 100644
+--- a/package/mtd/mtd.mk
++++ b/package/mtd/mtd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SCREEN_VERSION = 5.0.0
-+SCREEN_VERSION = 5.0.1
- SCREEN_SITE = $(BR2_GNU_MIRROR)/screen
- SCREEN_LICENSE = GPL-3.0+
- SCREEN_LICENSE_FILES = COPYING
+-MTD_VERSION = 2.2.1
++MTD_VERSION = 2.3.0
+ MTD_SOURCE = mtd-utils-$(MTD_VERSION).tar.bz2
+ MTD_SITE = https://infraroot.at/pub/mtd
+ MTD_LICENSE = GPL-2.0
+@@ -12,6 +12,7 @@ MTD_LICENSE_FILES = COPYING
+ MTD_CPE_ID_VENDOR = mtd-utils_project
+ MTD_CPE_ID_PRODUCT = mtd-utils
+ MTD_INSTALL_STAGING = YES
++MTD_DEPENDENCIES = host-pkgconf
+ 
+ MTD_LDFLAGS = $(TARGET_LDFLAGS)
+ 
+@@ -28,7 +29,7 @@ MTD_CONF_OPTS += --without-lzo
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+-MTD_DEPENDENCIES += host-pkgconf zlib
++MTD_DEPENDENCIES += zlib
+ MTD_CONF_OPTS += --with-zlib
+ else
+ MTD_CONF_OPTS += --without-zlib
+@@ -43,7 +44,7 @@ MTD_CONF_OPTS += --without-jffs
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_MTD_UBIFS_UTILS),y)
+-MTD_DEPENDENCIES += util-linux host-pkgconf
++MTD_DEPENDENCIES += util-linux
+ MTD_CONF_OPTS += --with-ubifs
+ # crypto needs linux/hash_info.h
+ ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12)$(BR2_PACKAGE_OPENSSL),yy)
+@@ -83,7 +84,7 @@ else
+ MTD_CONF_OPTS += --without-xattr
+ endif
+ 
+-HOST_MTD_DEPENDENCIES = host-acl host-zlib host-lzo host-util-linux host-zstd
++HOST_MTD_DEPENDENCIES = host-pkgconf host-acl host-zlib host-lzo host-util-linux host-zstd
+ HOST_MTD_CONF_OPTS = \
+ 	--with-jffs \
+ 	--with-ubifs \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
