@@ -1,71 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9CBB4C3ABC9
-	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 10:49:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3123BC3ABD8
+	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 10:49:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 574DE61120;
-	Fri, 16 May 2025 10:49:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E4D9C40C90;
+	Fri, 16 May 2025 10:49:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JAz7bGGp4HLk; Fri, 16 May 2025 10:49:37 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0AKEOBFCl_Ed; Fri, 16 May 2025 10:49:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D32260B0B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 04A9D4180F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7D32260B0B;
-	Fri, 16 May 2025 10:49:37 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 79DDD13D
- for <buildroot@buildroot.org>; Fri, 16 May 2025 10:49:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 04A9D4180F;
+	Fri, 16 May 2025 10:49:53 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 299C01AB
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 10:49:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6B1D483CF7
- for <buildroot@buildroot.org>; Fri, 16 May 2025 10:49:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1AB1B4180F
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 10:49:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id C86WLxGcdkUK for <buildroot@buildroot.org>;
- Fri, 16 May 2025 10:49:35 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rXAQohfjPXTN for <buildroot@buildroot.org>;
+ Fri, 16 May 2025 10:49:51 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
  helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7679383CF5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7679383CF5
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 32EA240C90
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 32EA240C90
 Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7679383CF5
- for <buildroot@buildroot.org>; Fri, 16 May 2025 10:49:35 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 32EA240C90
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 10:49:51 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 733E11C0FE9; Fri, 16 May 2025 12:49:33 +0200 (CEST)
-Message-ID: <1d8fa180-4af2-4bb5-8336-ba0e732796f5@rnout.be>
-Date: Fri, 16 May 2025 12:49:32 +0200
+ with ESMTPSA id 21DEC1C0FC0; Fri, 16 May 2025 12:49:49 +0200 (CEST)
+Message-ID: <d7c13553-dc60-4433-8e6c-54b8c69912c8@rnout.be>
+Date: Fri, 16 May 2025 12:49:47 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Titouan Christophe <titouan.christophe@mind.be>, buildroot@buildroot.org
-References: <20250430091523.96309-1-titouan.christophe@mind.be>
- <20250430095312.104032-1-titouan.christophe@mind.be>
+To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20250502162208.864286-1-james.hilliard1@gmail.com>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20250430095312.104032-1-titouan.christophe@mind.be>
+In-Reply-To: <20250502162208.864286-1-james.hilliard1@gmail.com>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1747392573; h=from:subject:date:message-id:to:mime-version:content-type:
+ t=1747392589; h=from:subject:date:message-id:to:cc:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=uOhq1dx1b5ZCurq6vTfUcZhF0ISTusfqrGtRq+sSfxc=;
- b=bb3UC4odvOvcu/ZQZGbUTrAE9kmZk30va0ZT4R12u8+cuYiTo2fk8AY1FTquFj1+2/2uUp
- RsryUUA5w8wttdcE2U9oUzHKr833VyIEJxG4u6XyJmhuhVFsDyHzdYQ+fGdRQ7RPnxfcmd
- 49GonmRFDHXLjAf6vcZl3NFICBFXi/PsTQcFumPDr9u1vQLeZgfuVCb8DrJx8a9V8ixF7I
- zusiA7+lLBvo1F1EIjksTMCAYgLAAV9loHI6L5tyRxOE/2xBGTouKgBBYM6lZj2wAb5Poy
- USjMOm4IsmJR7uSx4ymYikR5g2BSNlMeP2Mx7XF3DrtU6TZICKC6U+o7u2QL4w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=Kq1PR3IpioJspeFg3M267bSmBdoyPTgI9SP+Zis6aFM=;
+ b=Vb5DHz4DUFmYtMqm1pkTFb1k7bLHxSJ//5g9XXoE7taSnL+pPM8EjwweXC38NPydkcZGPr
+ Rifa4z1lKImlOrWukD+lTQnySrlhOSGvtCqxz34IsSZLBHpfSFINvewzX5cmtXyJXkJ3Os
+ VPvzlJhjr9ZuPrwVPO+P11iDCcMiUdj90vqvNOggAmB1h27gvS6RKlVJJ/yQuR7RpTRwb0
+ dAbqoKQg0yiGOTp2tziNElNJTSBqbCNVrqJNbFpNcFreVP8VYvfmFI24XdS5iOHIPk6m1S
+ YLW/AtLP1iIY/iZ3svQcGh2IDREoyIgr0Hx4hRRX/kpSs7wZR/739/i8d7vNKA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=bb3UC4od
-Subject: Re: [Buildroot] [PATCH v2] package/yasm: add patch for
- CVE-2021-33454
+ header.a=rsa-sha256 header.s=dkim header.b=Vb5DHz4D
+Subject: Re: [Buildroot] [PATCH 1/1] package/hiredis: bump to version 1.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,20 +85,8 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 30/04/2025 11:53, Titouan Christophe via buildroot wrote:
-> This fixes a potential NULL pointer dereference
-> 
-> As a side note, this package has many opened CVEs, but upstream doesn't seem
-> to really consider them as security issues, see their disclaimer here:
-> https://github.com/yasm/yasm/blob/master/SECURITY.md
-> 
-> We could speculate that this disclaimer has been written as a consequence of
-> the many small CVEs opened in a short time, that don't have a substantial
-> security impact (besides the command line tool crashing). All of these small
-> CVEs have been opened for bug reports issued by a third party who used a
-> fuzzy tester to manipulate the assembler input
-> 
-> Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+On 02/05/2025 18:22, James Hilliard wrote:
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
   Applied to 2025.02.x, thanks.
 
@@ -107,66 +94,91 @@ On 30/04/2025 11:53, Titouan Christophe via buildroot wrote:
   Arnout
 
 > ---
-> Change v1->v2:
-> * Fix patch location: in package's directory instead of patches/ subdir
-> ---
->   ...-dereference-in-yasm_expr_get_intnum.patch | 32 +++++++++++++++++++
->   package/yasm/yasm.mk                          |  3 ++
->   2 files changed, 35 insertions(+)
->   create mode 100644 package/yasm/0001-fix-null-pointer-dereference-in-yasm_expr_get_intnum.patch
+>   ...ption-to-not-install-NuGet-packaging.patch | 51 -------------------
+>   package/hiredis/hiredis.hash                  |  2 +-
+>   package/hiredis/hiredis.mk                    |  2 +-
+>   3 files changed, 2 insertions(+), 53 deletions(-)
+>   delete mode 100644 package/hiredis/0001-CMakeList-add-option-to-not-install-NuGet-packaging.patch
 > 
-> diff --git a/package/yasm/0001-fix-null-pointer-dereference-in-yasm_expr_get_intnum.patch b/package/yasm/0001-fix-null-pointer-dereference-in-yasm_expr_get_intnum.patch
-> new file mode 100644
-> index 0000000000..976c2f7a13
-> --- /dev/null
-> +++ b/package/yasm/0001-fix-null-pointer-dereference-in-yasm_expr_get_intnum.patch
-> @@ -0,0 +1,32 @@
-> +From 48ced849ed621a05cec4c04d4567323af3a76e81 Mon Sep 17 00:00:00 2001
-> +From: dataisland <dataisland@outlook.com>
-> +Date: Fri, 15 Sep 2023 18:20:49 +0000
-> +Subject: [PATCH] Fix null-pointer-dereference in yasm_expr_get_intnum
-> +
-> +Fixes the following CVE:
-> +  - CVE-2021-33454: NULL pointer dereference in yasm_expr_get_intnum() in libyasm/expr.c
-> +
-> +For more info see:
-> +  - https://nvd.nist.gov/vuln/detail/CVE-2021-33454
-> +  - https://github.com/yasm/yasm/pull/244
-> +
-> +Upstream: https://github.com/yasm/yasm/pull/244
-> +
-> +Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-> +---
-> + libyasm/expr.c | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/libyasm/expr.c b/libyasm/expr.c
-> +index c2c868ede..6838eca56 100644
-> +--- a/libyasm/expr.c
-> ++++ b/libyasm/expr.c
-> +@@ -1260,7 +1260,7 @@ yasm_expr_get_intnum(yasm_expr **ep, int calc_bc_dist)
-> + {
-> +     *ep = yasm_expr_simplify(*ep, calc_bc_dist);
-> +
-> +-    if ((*ep)->op == YASM_EXPR_IDENT && (*ep)->terms[0].type == YASM_EXPR_INT)
-> ++    if (*ep && (*ep)->op == YASM_EXPR_IDENT && (*ep)->terms[0].type == YASM_EXPR_INT)
-> +         return (*ep)->terms[0].data.intn;
-> +     else
-> +         return (yasm_intnum *)NULL;
-> diff --git a/package/yasm/yasm.mk b/package/yasm/yasm.mk
-> index cdb8e15bee..766d29df3b 100644
-> --- a/package/yasm/yasm.mk
-> +++ b/package/yasm/yasm.mk
-> @@ -10,6 +10,9 @@ YASM_LICENSE = BSD-2-Clause, BSD-3-Clause, Artistic, GPL-2.0, LGPL-2.0
->   YASM_LICENSE_FILES = COPYING BSD.txt Artistic.txt GNU_GPL-2.0 GNU_LGPL-2.0
->   YASM_CPE_ID_VENDOR = tortall
+> diff --git a/package/hiredis/0001-CMakeList-add-option-to-not-install-NuGet-packaging.patch b/package/hiredis/0001-CMakeList-add-option-to-not-install-NuGet-packaging.patch
+> deleted file mode 100644
+> index dbe8bc0ae6..0000000000
+> --- a/package/hiredis/0001-CMakeList-add-option-to-not-install-NuGet-packaging.patch
+> +++ /dev/null
+> @@ -1,51 +0,0 @@
+> -From ff7a064490e0aacf718a5263b25b2ddaad0d245e Mon Sep 17 00:00:00 2001
+> -From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> -Date: Sat, 20 Jan 2024 13:53:39 +0100
+> -Subject: [PATCH] CMakeList: add option to not install NuGet packaging
+> -
+> -The NuGet hiredis.target packaging description file is of no use on
+> -systems that are not using NuGet, like Linux systems, and the spurious
+> -presence of that file is not "clean".
+> -
+> -Add a cmake option to allow users to disable installation of that file.
+> -As some people may have relied on that file to be installed, continue to
+> -install it by default.
+> -
+> -Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> -Upstream: https://github.com/redis/hiredis/commit/ff7a064490e0aacf718a5263b25b2ddaad0d245e
+> ----
+> - CMakeLists.txt | 11 ++++++++---
+> - 1 file changed, 8 insertions(+), 3 deletions(-)
+> -
+> -diff --git a/CMakeLists.txt b/CMakeLists.txt
+> -index b7d6ee8..0fcf29b 100644
+> ---- a/CMakeLists.txt
+> -+++ b/CMakeLists.txt
+> -@@ -6,6 +6,9 @@ OPTION(DISABLE_TESTS "If tests should be compiled or not" OFF)
+> - OPTION(ENABLE_SSL_TESTS "Should we test SSL connections" OFF)
+> - OPTION(ENABLE_EXAMPLES "Enable building hiredis examples" OFF)
+> - OPTION(ENABLE_ASYNC_TESTS "Should we run all asynchronous API tests" OFF)
+> -+# Historically, the NuGet file was always install; default
+> -+# to ON for those who rely on that historical behaviour.
+> -+OPTION(ENABLE_NUGET "Install NuGET packaging details" ON)
+> -
+> - MACRO(getVersionBit name)
+> -   SET(VERSION_REGEX "^#define ${name} (.+)$")
+> -@@ -105,9 +108,11 @@ if (MSVC AND BUILD_SHARED_LIBS)
+> -         CONFIGURATIONS Debug RelWithDebInfo)
+> - endif()
+> -
+> --# For NuGet packages
+> --INSTALL(FILES hiredis.targets
+> --    DESTINATION build/native)
+> -+if (ENABLE_NUGET)
+> -+    # For NuGet packages
+> -+    INSTALL(FILES hiredis.targets
+> -+        DESTINATION build/native)
+> -+endif()
+> -
+> - INSTALL(FILES hiredis.h read.h sds.h async.h alloc.h sockcompat.h
+> -     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/hiredis)
+> ---
+> -2.43.0
+> -
+> diff --git a/package/hiredis/hiredis.hash b/package/hiredis/hiredis.hash
+> index 16ee442d93..b9b4fe556e 100644
+> --- a/package/hiredis/hiredis.hash
+> +++ b/package/hiredis/hiredis.hash
+> @@ -1,3 +1,3 @@
+>   # Locally computed:
+> -sha256  82ad632d31ee05da13b537c124f819eb88e18851d9cb0c30ae0552084811588c  hiredis-1.2.0.tar.gz
+> +sha256  25cee4500f359cf5cad3b51ed62059aadfc0939b05150c1f19c7e2829123631c  hiredis-1.3.0.tar.gz
+>   sha256  dca05ce8fc87a8261783b4aed0deef8becc9350b6aa770bc714d0c1833b896eb  COPYING
+> diff --git a/package/hiredis/hiredis.mk b/package/hiredis/hiredis.mk
+> index 86f35bd4cd..f7acb2f131 100644
+> --- a/package/hiredis/hiredis.mk
+> +++ b/package/hiredis/hiredis.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
 >   
-> +# 0001-fix-null-pointer-dereference-in-yasm_expr_get_intnum.patch
-> +YASM_IGNORE_CVES += CVE-2021-33454
-> +
->   # This sed prevents it compiling 2 programs (vsyasm and ytasm)
->   # that are only of use on Microsoft Windows.
->   define YASM_PRE_CONFIGURE_FIXUP
+> -HIREDIS_VERSION_MAJOR = 1.2
+> +HIREDIS_VERSION_MAJOR = 1.3
+>   HIREDIS_VERSION = $(HIREDIS_VERSION_MAJOR).0
+>   HIREDIS_SITE = $(call github,redis,hiredis,v$(HIREDIS_VERSION))
+>   HIREDIS_LICENSE = BSD-3-Clause
 
 _______________________________________________
 buildroot mailing list
