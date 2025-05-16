@@ -4,101 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D084CC3ABDD
-	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 07:56:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6978C3ABD8
+	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 07:59:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8598040CE9;
-	Fri, 16 May 2025 07:56:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 66F3340D1A;
+	Fri, 16 May 2025 07:59:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UnaK30x1asju; Fri, 16 May 2025 07:56:06 +0000 (UTC)
+ id 73XejUBMRAhJ; Fri, 16 May 2025 07:59:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC1D640C19
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9526340D56
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BC1D640C19;
-	Fri, 16 May 2025 07:56:06 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 68C901AB
- for <buildroot@buildroot.org>; Fri, 16 May 2025 07:56:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9526340D56;
+	Fri, 16 May 2025 07:59:20 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9C3881AB
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 07:59:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4B04240C19
- for <buildroot@buildroot.org>; Fri, 16 May 2025 07:56:05 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8D7CE83C59
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 07:59:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sIqCTqnfElts for <buildroot@buildroot.org>;
- Fri, 16 May 2025 07:56:04 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::12a; helo=mail-lf1-x12a.google.com;
- envelope-from=roykollensvendsen@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4FB6240A06
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4FB6240A06
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com
- [IPv6:2a00:1450:4864:20::12a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4FB6240A06
- for <buildroot@buildroot.org>; Fri, 16 May 2025 07:56:04 +0000 (UTC)
-Received: by mail-lf1-x12a.google.com with SMTP id
- 2adb3069b0e04-54e98f73850so1783290e87.1
- for <buildroot@buildroot.org>; Fri, 16 May 2025 00:56:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1747382162; x=1747986962;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=CFO0AEoNJBOBgK4uSI3KB+qdot9GpcDE3qFqHynphIU=;
- b=X8Q1ogLfAsEAf8SmQjnuzBbaOqPQsqtrdElZVxMDk2+D7pW/azXIJD78LGHO2ylQui
- m4izFKtvYq1NHj9yZeVe0x50Zlffu/id5Dhk6hGqaa6zIpZ1ebkfhiEGw2l1DYDtnciR
- xPnWBfLG98dPkLoDjJVhWdAvJ65TlZJ3+f3pogq/DP42z9zOLZMFAkab9KSQI+BCVkTw
- 10heyvsii7DA2SXZz88qQ1xP1sDii/ZF1qH+0T4KAmkDgdBs7Jh13j6XdyfVnjfYpMCS
- H+MX770nuGcL7C55hp0pH6xuNxzXE+1GteNVdb3Hfc+Tz7HKvCpbGeaJqUgkE+WrLpYy
- NtYg==
-X-Gm-Message-State: AOJu0YzDTov2CvenhaE1qUGJ/RKaU3l0Kst/2YNxAgTJQhB5myoXpKAU
- YGJ1p4ljRFsiYbmxIB9z9z+pYmQ0Fx8MTHDdERZ2nR4sQtyOy0il4k3voaoyAg==
-X-Gm-Gg: ASbGncsDYAOfJZuMBPQUSK/7CHMLg628BYMzpWLXvMQjMxjn5hrZqTnoUHazXNVLTH1
- o7FklfVn+pK7oQ4mUwA40dJ1yO7BPeabniVKZnUxMgdP2UF+d7VrXsEJJ1bCwj9evytTYb3XFnJ
- cs9lcOIBDrHGw4BsZiJ9Iyu2QM+Th41hdQbZbeHEUIQTJZus9A6tEdavlkV3cijKqCeF/5QaCpw
- I54G5e+1Sc//VCIheYumg/2ND7Cj+JxaV1Hg+YJ9VrhO/2ns+XnmjrJykfKzrXttXdoopB7+rvR
- 10KdFQq/9wpPlGjbxPi41fSvACcAFY7VdCsLskC41QdSITogrk2mdb7filg8cNeY5bX3uxF38Xv
- 2/YHeYg==
-X-Google-Smtp-Source: AGHT+IFqqn1i9cT7aflK0AJYLchP/B+HwVRuh3d2H1iyep3Iv2ZBneYVD48Y1tblA7azz2evkxQtSA==
-X-Received: by 2002:a05:6512:6714:b0:54b:f10:fe46 with SMTP id
- 2adb3069b0e04-550e71d02c0mr545452e87.25.1747382161765; 
- Fri, 16 May 2025 00:56:01 -0700 (PDT)
-Received: from precision7530-arch-roy.lan ([79.161.254.180])
- by smtp.gmail.com with ESMTPSA id
- 2adb3069b0e04-550e6f31497sm311448e87.82.2025.05.16.00.56.00
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 16 May 2025 00:56:00 -0700 (PDT)
-From: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
-To: buildroot@buildroot.org
-Cc: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
-Date: Fri, 16 May 2025 09:55:51 +0200
-Message-ID: <20250516075553.3942690-2-roykollensvendsen@gmail.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250516075553.3942690-1-roykollensvendsen@gmail.com>
-References: <20250516075553.3942690-1-roykollensvendsen@gmail.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hO0tuVNm1A1d for <buildroot@buildroot.org>;
+ Fri, 16 May 2025 07:59:17 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
+ helo=relay1-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 311EB83B5B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 311EB83B5B
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 311EB83B5B
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 07:59:16 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 974B643A81;
+ Fri, 16 May 2025 07:59:13 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1uFpyL-004bO4-0W;
+ Fri, 16 May 2025 09:59:13 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Thomas Devoogdt <thomas@devoogdt.com>
+Cc: buildroot@buildroot.org
+References: <20250516072047.3667158-1-thomas@devoogdt.com>
+Date: Fri, 16 May 2025 09:59:13 +0200
+In-Reply-To: <20250516072047.3667158-1-thomas@devoogdt.com> (Thomas Devoogdt's
+ message of "Fri, 16 May 2025 09:20:47 +0200")
+Message-ID: <87o6vtc7fy.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1747382162; x=1747986962; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=CFO0AEoNJBOBgK4uSI3KB+qdot9GpcDE3qFqHynphIU=;
- b=N3fp0obsBDYaMQPqv2Z4YXV2sOg5gVojLJJG3/HW04VvpV1yuwtbJTh/mQmrECG283
- zMqq9cum0teJVWg5N3TT2wJ3VnncJMKgKss/lR/u9HHFj93QvvCGyjNbvh16ZBxpFe7M
- 8wH9/Ll1/94c5U4435wgZ6QNO+mQAtt/II0dFJKyjhtlRmA/C3nSb9r/j0ElIt3BJn2h
- 2tkBtm/p3JJ84aDLdYXQ3fHQs1TQLPwrlOoV/bxEWQdpMeGwGi4bZTjLABXf+3mTvEfp
- S0tBdS6/gtUuuyXi7qsAAS0jiihlKuU89gqkPNybquSm57Ew9idzTcEssH8suChxLjiQ
- 5tQg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=N3fp0obs
-Subject: [Buildroot] [PATCH 2/2] package/dlib: update links in description
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefuddvvdduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufhfffgjkfgfgggtsehttddttddtredtnecuhfhrohhmpefrvghtvghrucfmohhrshhgrggrrhguuceophgvthgvrheskhhorhhsghgrrghrugdrtghomheqnecuggftrfgrthhtvghrnhepvdetudeljeelhfevjeffjeefueeiieeffeekteffgeffgffhhfdvgefgjefggedunecuffhomhgrihhnpehflhhuvghnthgsihhtrdhiohdpghhithhhuhgsrdgtohhmnecukfhppedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumeejiegukeemfegvfhhfmehfvggsfeemgegssgehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeekgedvrgemgeehrggtmeelgedtudemjeeiugekmeefvghffhemfhgvsgefmeegsggshedphhgvlhhopeguvghllhdrsggvrdegkegvrhhsrdgukhdpmhgrihhlfhhrohhmpehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmpdhnsggprhgtphhtthhopedvpdhrtghpthhtohepthhhohhmrghsseguvghvohhoghguthdrtghomhdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhg
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH v1] package/fluent-bit: bump to 4.0.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,28 +77,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
----
- package/dlib/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+>>>>> "Thomas" == Thomas Devoogdt <thomas@devoogdt.com> writes:
 
-diff --git a/package/dlib/Config.in b/package/dlib/Config.in
-index 7862f8d074..4054ed8bae 100644
---- a/package/dlib/Config.in
-+++ b/package/dlib/Config.in
-@@ -8,7 +8,8 @@ config BR2_PACKAGE_DLIB
- 	  algorithms and tools for creating complex software in C++ to
- 	  solve real world problems.
- 
--	  http://dlib.net
-+	  https://dlib.net
-+	  https://github.com/davisking/dlib
- 
- comment "dlib needs a toolchain w/ C++, threads, wchar"
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
+ > News:
+ > - https://fluentbit.io/announcements/v4.0.1/
+ > - https://fluentbit.io/announcements/v4.0.2/
+
+ > Other remarks:
+ > - Drop the FLB_UNICODE_ENCODER option, as it is no longer needed. [1]
+
+ > - Added support for FLB_OUT_PGSQL.
+
+ > - Compile against the buildroot provided zstd package. [2]
+
+ > - Dropped some patches as they are obsolete. (We use the buildroot packages for them.)
+ >    - 0003-lib-nghttp2-CMakeLists.txt-do-not-require-a-CXX-comp.patch
+ >    - 0004-lib-luajit-cmake-CMakeLists.txt-do-not-require-a-CXX.patch
+ >    - 0006-lib-zstd-only-enable-CXX-support-if-tests-are-requir.patch
+
+ > - Synced the other patches with their upstream equivalent.
+
+ > [1] https://github.com/fluent/fluent-bit/commit/92de130cead75f66bd565496947263168d2d5c37
+ > [2] https://github.com/fluent/fluent-bit/commit/5f409f55ec667b525716be4afd54b5485c9d55c1
+
+ > Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+
+Committed, thanks.
+
 -- 
-2.49.0
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
