@@ -4,61 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A0BBC3ABC9
-	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 14:33:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F136C3ABD8
+	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 14:33:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CD4A340888;
-	Fri, 16 May 2025 14:33:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DC0AB406FE;
+	Fri, 16 May 2025 14:33:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id V8ExlBp1wELw; Fri, 16 May 2025 14:33:19 +0000 (UTC)
+ id fhypYtE2VTAP; Fri, 16 May 2025 14:33:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EFC904078E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 10FC54078E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EFC904078E;
-	Fri, 16 May 2025 14:33:18 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id BD1D9185
- for <buildroot@buildroot.org>; Fri, 16 May 2025 14:33:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 10FC54078E;
+	Fri, 16 May 2025 14:33:42 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id CC2891AB
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 14:33:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AEBDB4057B
- for <buildroot@buildroot.org>; Fri, 16 May 2025 14:33:16 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BD5F2830D7
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 14:33:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1oTYLDnGkgEd for <buildroot@buildroot.org>;
- Fri, 16 May 2025 14:33:16 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
- helo=relay9-d.mail.gandi.net; envelope-from=peko@korsgaard.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pK6m7Q7Ux5La for <buildroot@buildroot.org>;
+ Fri, 16 May 2025 14:33:39 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A0B314025F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A0B314025F
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A0B314025F
- for <buildroot@buildroot.org>; Fri, 16 May 2025 14:33:15 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C8DFC43A0D;
- Fri, 16 May 2025 14:33:11 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@dell.be.48ers.dk>) id 1uFw7b-009gff-14;
- Fri, 16 May 2025 16:33:11 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F13F982BBC
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id F13F982BBC
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 14:33:38 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id EC07286BEE; Fri, 16 May 2025 14:33:38 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 16 May 2025 16:33:09 +0200
-Message-Id: <20250516143310.2308959-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.39.5
-MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefudeftddtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefrvghtvghrucfmohhrshhgrggrrhguuceophgvthgvrheskhhorhhsghgrrghrugdrtghomheqnecuggftrfgrthhtvghrnheptdetgeekkeejudeggeelleeuueehteduvddvjeekgfehgfdtieelheffvdeitddtnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucfkphepvdgrtddvmeekgedvrgemgeehrggtmeelgedtudemjeeiugekmeefvghffhemfhgvsgefmeegsggsheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumeejiegukeemfegvfhhfmehfvggsfeemgegssgehpdhhvghlohepuggvlhhlrdgsvgdrgeekvghrshdrughkpdhmrghilhhfrhhomhepphgvkhhosehkohhrshhgrggrrhgurdgtohhmpdhnsggprhgtphhtthhopeefpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmpdhrtghpthhtohepphhhihhlihhpphgvrdhrvgihnhgvshesshhofhhtr
- ghthhhomhgvrdgtohhm
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: [Buildroot] [PATCH] package/ibm-sw-tpm2: add upstream patch to fix
- builds against libopenssl 3.5.x
+Date: Fri, 16 May 2025 16:22:53 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5eb46878bd954ec434d288dc97de596676273bb5
+X-Git-Newrev: 8a25ff3f893e1d45171dce0a240e5fb5d61bac8a
+X-Patchwork-Hint: ignore
+Message-Id: <20250516143338.EC07286BEE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/android-tools: add patch to fix
+ GCC 15.x build issue
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,67 +59,104 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Philippe Reynes <philippe.reynes@softathome.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============9010287546489563777=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../0004-tpm-Update-to-OpenSSL-3.5.patch      | 39 +++++++++++++++++++
- 1 file changed, 39 insertions(+)
- create mode 100644 package/ibm-sw-tpm2/0004-tpm-Update-to-OpenSSL-3.5.patch
+--===============9010287546489563777==
+Content-Type: text/plain
 
-diff --git a/package/ibm-sw-tpm2/0004-tpm-Update-to-OpenSSL-3.5.patch b/package/ibm-sw-tpm2/0004-tpm-Update-to-OpenSSL-3.5.patch
+commit: https://git.buildroot.net/buildroot/commit/?id=8a25ff3f893e1d45171dce0a240e5fb5d61bac8a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+host-android-tools fails to build when the host gcc version is >=
+15.x. A simple patch allows to fix the issue by adjusting how
+allocate_inode() gets called.
+
+Fixes:
+
+  https://autobuild.buildroot.org/results/e8152490540ee1968182f4eb7813e5e940f3e9b3/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ ..._utils-contents.c-allocate_inode-doesn-t-.patch | 57 ++++++++++++++++++++++
+ 1 file changed, 57 insertions(+)
+
+diff --git a/package/android-tools/0017-extras-ext4_utils-contents.c-allocate_inode-doesn-t-.patch b/package/android-tools/0017-extras-ext4_utils-contents.c-allocate_inode-doesn-t-.patch
 new file mode 100644
-index 0000000000..36a9cb97dc
+index 0000000000..a9baf4dc29
 --- /dev/null
-+++ b/package/ibm-sw-tpm2/0004-tpm-Update-to-OpenSSL-3.5.patch
-@@ -0,0 +1,39 @@
-+From 720ed4b8c74c3b517a46b442be9482319ed027dd Mon Sep 17 00:00:00 2001
-+From: Ken Goldman <kgold@linux.ibm.com>
-+Date: Fri, 18 Apr 2025 13:41:59 -0400
-+Subject: [PATCH] tpm: Update to OpenSSL 3.5
++++ b/package/android-tools/0017-extras-ext4_utils-contents.c-allocate_inode-doesn-t-.patch
+@@ -0,0 +1,57 @@
++From b822c8e2f380ba6158601e621a12927a4264ff67 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Fri, 16 May 2025 15:32:00 +0200
++Subject: [PATCH] extras/ext4_utils/contents.c: allocate_inode() doesn't take
++ any argument
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
-+Accept 3.5 as a supported version
++Fixes:
 +
-+Signed-off-by: Ken Goldman <kgold@linux.ibm.com>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+Upstream: https://github.com/kgoldman/ibmswtpm2/commit/720ed4b8c74c3b517a46b442be9482319ed027dd
++/home/thomas/projets/buildroot/output/build/host-android-tools-4.2.2+git20130218/extras/ext4_utils/contents.c: In function ‘make_directory’:
++/home/thomas/projets/buildroot/output/build/host-android-tools-4.2.2+git20130218/extras/ext4_utils/contents.c:102:29: error: too many arguments to function ‘allocate_inode’; expected 0, have 1
++  102 |                 inode_num = allocate_inode(info);
++
++and similar build failures that occur with GCC 15.x.
++
++Upstream: N/A, we're too far from upstream
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 +---
-+ src/BnToOsslMath.h | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
++ extras/ext4_utils/contents.c | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
 +
-+diff --git a/src/BnToOsslMath.h b/src/BnToOsslMath.h
-+index 165304d..5fd5323 100644
-+--- a/src/BnToOsslMath.h
-++++ b/src/BnToOsslMath.h
-+@@ -54,7 +54,7 @@
-+ /*    arising in any way out of use or reliance upon this specification or any 	*/
-+ /*    information herein.							*/
-+ /*										*/
-+-/*  (c) Copyright IBM Corp. and others, 2023				  	*/
-++/*  (c) Copyright IBM Corp. and others, 2023 - 2025			  	*/
-+ /*										*/
-+ /********************************************************************************/
++diff --git a/extras/ext4_utils/contents.c b/extras/ext4_utils/contents.c
++index 6300680..b0336a4 100644
++--- a/extras/ext4_utils/contents.c
+++++ b/extras/ext4_utils/contents.c
++@@ -99,7 +99,7 @@ u32 make_directory(u32 dir_inode_num, u32 entries, struct dentry *dentries,
++ 	len = blocks * info.block_size;
 + 
-+@@ -77,7 +77,7 @@
-+ #include <openssl/ec.h>
-+ #include <openssl/bn.h>
++ 	if (dir_inode_num) {
++-		inode_num = allocate_inode(info);
+++		inode_num = allocate_inode();
++ 	} else {
++ 		dir_inode_num = EXT4_ROOT_INO;
++ 		inode_num = EXT4_ROOT_INO;
++@@ -167,7 +167,7 @@ u32 make_file(const char *filename, u64 len)
++ 	struct ext4_inode *inode;
++ 	u32 inode_num;
 + 
-+-#if OPENSSL_VERSION_NUMBER >= 0x30400ff0L
-++#if OPENSSL_VERSION_NUMBER >= 0x30500ff0L
-+ // Check the bignum_st definition against the one below and either update the
-+ // version check or provide the new definition for this version.
-+ #  error Untested OpenSSL version
++-	inode_num = allocate_inode(info);
+++	inode_num = allocate_inode();
++ 	if (inode_num == EXT4_ALLOCATE_FAILED) {
++ 		error("failed to allocate inode\n");
++ 		return EXT4_ALLOCATE_FAILED;
++@@ -196,7 +196,7 @@ u32 make_link(const char *filename, const char *link)
++ 	u32 inode_num;
++ 	u32 len = strlen(link);
++ 
++-	inode_num = allocate_inode(info);
+++	inode_num = allocate_inode();
++ 	if (inode_num == EXT4_ALLOCATE_FAILED) {
++ 		error("failed to allocate inode\n");
++ 		return EXT4_ALLOCATE_FAILED;
 +-- 
-+2.39.5
++2.49.0
 +
--- 
-2.39.5
+
+--===============9010287546489563777==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============9010287546489563777==--
