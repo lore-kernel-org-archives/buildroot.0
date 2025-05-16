@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33522C3ABD8
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED71CC2D0CD
 	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:01:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5A29C70E6A;
-	Mon, 19 May 2025 11:01:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B3AAE80C7E;
+	Mon, 19 May 2025 11:01:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OsAOIKPDwJI7; Mon, 19 May 2025 11:01:06 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eMdoFnWjkdwL; Mon, 19 May 2025 11:01:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 15C8E70E61
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3FE9C847D4
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 15C8E70E61;
-	Mon, 19 May 2025 11:01:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3FE9C847D4;
+	Mon, 19 May 2025 11:01:08 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 291BDD4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:47:20 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 8E841D4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:47:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A4F1A41A15
+ by smtp4.osuosl.org (Postfix) with ESMTP id ECA3441A26
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TekvwSId8W6F for <buildroot@buildroot.org>;
+ id mvo4tOZjfAYf for <buildroot@buildroot.org>;
  Mon, 19 May 2025 10:40:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C23F41A26
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF3CB41A23
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0C23F41A26
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:05 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EF3CB41A23
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:04 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 097088348A; Mon, 19 May 2025 10:40:05 +0000 (UTC)
+ id EBB1C872E7; Mon, 19 May 2025 10:40:04 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 16 May 2025 16:46:57 +0200
+Date: Fri, 16 May 2025 16:42:22 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 70d5bac305792c9c008eb11dfdc793778a5f6ba3
-X-Git-Newrev: b15cd1d8fee1fe9c253ffaf6a112532fe9a8f092
+X-Git-Oldrev: 8a25ff3f893e1d45171dce0a240e5fb5d61bac8a
+X-Git-Newrev: f11b9db0b5f150d73e10a0c25989e2ec6300588e
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104005.097088348A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- docs/manual/adding-packages-python.adoc: clarify how _BUILD_OPTS work
+Message-Id: <20250519104004.EBB1C872E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/asterisk: bump to
+ 22.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,50 +58,161 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b15cd1d8fee1fe9c253ffaf6a112532fe9a8f092
+commit: https://git.buildroot.net/buildroot/commit/?id=f11b9db0b5f150d73e10a0c25989e2ec6300588e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-PYTHON_FOO_BUILD_OPTS are passed to the build module call of the package
-build, this allows passing options to the python build *backend* by
-using the --config-setting= option. setup.py is no longer involved since
-even the setuptools backend now used the pep517 build method.
+For a changelog see here:
+https://downloads.asterisk.org/pub/telephony/asterisk/ChangeLog-22.3.0.md
 
-The note about the options being passed to
-support/scripts/pyinstaller.py seems to be no longer accurate.
+Changes made by the package maintainer:
+- add systemd service file
+- run asterisk as non-root user asterisk
+- build pjsip as bundled source code, but download it like
+  sound files
+- remove unused configure options
+- chan_alsa was removed upstream in commit
+  de3ce178ab0282445cf25161b49f3737ac2d20ff
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-[Arnout: also mention -C (suggested by James)]
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+See here for the reason behind using the bundled pjsip:
+https://github.com/asterisk/asterisk/issues/671
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- docs/manual/adding-packages-python.adoc | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ package/asterisk/asterisk.hash    |  4 +++-
+ package/asterisk/asterisk.mk      | 31 ++++++++++++++++++-------------
+ package/asterisk/asterisk.service | 23 +++++++++++++++++++++++
+ 3 files changed, 44 insertions(+), 14 deletions(-)
 
-diff --git a/docs/manual/adding-packages-python.adoc b/docs/manual/adding-packages-python.adoc
-index b42c06e54c..d6bae299a0 100644
---- a/docs/manual/adding-packages-python.adoc
-+++ b/docs/manual/adding-packages-python.adoc
-@@ -128,10 +128,9 @@ therefore only use a few of them, or none.
-   and +HOST_PKG_PYTHON_PEP517_ENV+ (for flit/pep517 host packages).
+diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
+index 8c8ebddc47..7b28624921 100644
+--- a/package/asterisk/asterisk.hash
++++ b/package/asterisk/asterisk.hash
+@@ -1,6 +1,8 @@
+ # Locally computed
+-sha256  94647b3f887f7dc91df51a4f88dfc3a07cc279bef86b8d05aa72f0c49d187571  asterisk-20.11.1.tar.gz
++sha256  4cc403c8885d4aed3956dfb75d315d3e5bcc129eb9cd47c156d3b12ecceed1ba  asterisk-22.3.0.tar.gz
  
- * +PYTHON_FOO_BUILD_OPTS+, to specify additional options to pass to
--  the Python +setup.py+ script during the build step, this generally
--  only makes sense to use for setuptools based packages as flit/pep517
--  based packages do not pass these options to a +setup.py+ script but
--  instead pass them to +support/scripts/pyinstaller.py+.
-+  the Python +python -m build+ call. To pass additional options to the
-+  build backend use the +--config-setting=+ (+-C+) flag of the +build+
-+  module.
++# Locally computed
++sha256  58bb83cec4d431f48d006e455d821668450f8cf6b6c95f090def47062fa3a60c  pjproject-2.15.1.tar.bz2
+ # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
+ # sha256 locally computed
+ sha1  721c512feaea102700d5bdce952fdc0bb29dc640  asterisk-core-sounds-en-gsm-1.6.1.tar.gz
+diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+index ec67632ef4..6d682f161d 100644
+--- a/package/asterisk/asterisk.mk
++++ b/package/asterisk/asterisk.mk
+@@ -4,15 +4,20 @@
+ #
+ ################################################################################
  
- * +PYTHON_FOO_INSTALL_TARGET_OPTS+, +PYTHON_FOO_INSTALL_STAGING_OPTS+,
-   +HOST_PYTHON_FOO_INSTALL_OPTS+ to specify additional options to pass
+-ASTERISK_VERSION = 20.11.1
++ASTERISK_VERSION = 22.3.0
+ # Use the github mirror: it's an official mirror maintained by Digium, and
+ # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
+ ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
+ 
++# compilation with the external pjsip produces a non-working asterisk, which
++# segfaults. The reason behind this is unclear.
++# https://github.com/asterisk/asterisk/issues/671
++ASTERISK_PJSIP_URL = https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/2.15.1/
+ ASTERISK_SOUNDS_BASE_URL = http://downloads.asterisk.org/pub/telephony/sounds/releases
+ ASTERISK_EXTRA_DOWNLOADS = \
+ 	$(ASTERISK_SOUNDS_BASE_URL)/asterisk-core-sounds-en-gsm-1.6.1.tar.gz \
+-	$(ASTERISK_SOUNDS_BASE_URL)/asterisk-moh-opsound-wav-2.03.tar.gz
++	$(ASTERISK_SOUNDS_BASE_URL)/asterisk-moh-opsound-wav-2.03.tar.gz \
++	$(ASTERISK_PJSIP_URL)/pjproject-2.15.1.tar.bz2
+ 
+ ASTERISK_LICENSE = GPL-2.0, BSD-3-Clause (SHA1, resample), BSD-4-Clause (db1-ast)
+ ASTERISK_LICENSE_FILES = \
+@@ -76,7 +81,6 @@ ASTERISK_CONF_OPTS = \
+ 	--without-neon29 \
+ 	--without-newt \
+ 	--without-openr2 \
+-	--without-osptk \
+ 	--without-postgres \
+ 	--without-popt \
+ 	--without-resample \
+@@ -94,10 +98,9 @@ ASTERISK_CONF_OPTS = \
+ 	--with-libjwt="$(STAGING_DIR)/usr" \
+ 	--with-libxml2 \
+ 	--with-libedit="$(STAGING_DIR)/usr" \
+-	--without-pjproject-bundled \
+-	--with-pjproject="$(STAGING_DIR)/usr" \
++	--with-pjproject-bundled \
+ 	--with-sqlite3="$(STAGING_DIR)/usr" \
+-	--with-sounds-cache=$(ASTERISK_DL_DIR)
++	--with-download-cache=$(ASTERISK_DL_DIR)
+ 
+ # avcodec are from ffmpeg. There is virtually zero chance this could
+ # even work; asterisk is looking for ffmpeg/avcodec.h which has not
+@@ -135,13 +138,6 @@ else
+ ASTERISK_CONF_OPTS += --without-gsm
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
+-ASTERISK_DEPENDENCIES += alsa-lib
+-ASTERISK_CONF_OPTS += --with-asound
+-else
+-ASTERISK_CONF_OPTS += --without-asound
+-endif
+-
+ ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS),y)
+ ASTERISK_DEPENDENCIES += bluez5_utils
+ ASTERISK_CONF_OPTS += --with-bluetooth
+@@ -299,6 +295,15 @@ ASTERISK_INSTALL_TARGET_OPTS = \
+ 	LDCONFIG=true \
+ 	install samples
+ 
++define ASTERISK_USERS
++	asterisk -1 asterisk -1 * /usr/lib/asterisk - - asterisk user
++endef
++
++define ASTERISK_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 package/asterisk/asterisk.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/asterisk.service
++endef
++
+ $(eval $(autotools-package))
+ 
+ #-------------------------------------------------------------------------------
+diff --git a/package/asterisk/asterisk.service b/package/asterisk/asterisk.service
+new file mode 100644
+index 0000000000..802789defb
+--- /dev/null
++++ b/package/asterisk/asterisk.service
+@@ -0,0 +1,23 @@
++# based on included asterisk.service, but changed
++# Type to simple, comments removed
++[Unit]
++Description=Asterisk PBX and telephony daemon.
++After=network.target
++
++[Service]
++Type=simple
++Environment=HOME=/usr/lib/asterisk
++WorkingDirectory=/usr/lib/asterisk
++User=asterisk
++Group=asterisk
++ExecStart=/usr/sbin/asterisk -mqf -C /etc/asterisk/asterisk.conf
++ExecReload=/usr/sbin/asterisk -rx 'core reload'
++RuntimeDirectory=asterisk
++LimitCORE=infinity
++Restart=always
++RestartSec=4
++StandardOutput=null
++PrivateTmp=true
++
++[Install]
++WantedBy=multi-user.target
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
