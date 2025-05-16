@@ -4,71 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D76F2C3ABC9
-	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 10:17:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE804C3ABD8
+	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 10:19:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 713F0838B3;
-	Fri, 16 May 2025 10:17:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 49A0D83A1C;
+	Fri, 16 May 2025 10:19:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kO26Kr7i1v4M; Fri, 16 May 2025 10:17:55 +0000 (UTC)
+ id qezVSd889Hdv; Fri, 16 May 2025 10:19:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9088C8385D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3677A838FE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9088C8385D;
-	Fri, 16 May 2025 10:17:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 5C46E185
- for <buildroot@buildroot.org>; Fri, 16 May 2025 10:17:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3677A838FE;
+	Fri, 16 May 2025 10:19:58 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 32C3213D
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 10:19:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 591CD8385D
- for <buildroot@buildroot.org>; Fri, 16 May 2025 10:17:54 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 18F3840973
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 10:19:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id d2dUE2K-PjOd for <buildroot@buildroot.org>;
- Fri, 16 May 2025 10:17:53 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.131;
- helo=smtpcmd12131.aruba.it;
- envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 400A583760
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 400A583760
-Received: from smtpcmd12131.aruba.it (smtpcmd12131.aruba.it [62.149.156.131])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 400A583760
- for <buildroot@buildroot.org>; Fri, 16 May 2025 10:17:50 +0000 (UTC)
-Received: from localhost.localdomain ([84.33.84.190])
- by Aruba SMTP with ESMTPSA
- id Fs8Ru09tGDWj0Fs8RugEdo; Fri, 16 May 2025 12:17:48 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id U_qwKVUoTjmv for <buildroot@buildroot.org>;
+ Fri, 16 May 2025 10:19:55 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2BFCC40415
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2BFCC40415
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 10:19:55 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 24FB586963; Fri, 16 May 2025 10:19:55 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Luca Ceresoli <luca.ceresoli@bootlin.com>
-Date: Fri, 16 May 2025 12:17:47 +0200
-Message-Id: <20250516101747.2942959-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.39.5
-MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfGnAVdZLIxc0M4Jj1Pwh2FMDQtoMcQXVROFPa08b/5a1GMZkKUdYrLHzf0z47qSibYz+XXCiLaYT+YM9zXBIvu35Lr76UP2kWpiTsz/WfHZXMWmFCbhJ
- 6f8bBMNufyKIuoZ731mIBlb8SoKTuxgIuRebUKUGEL3HPp1ku/AMwCE7iEvZHDTpf4sckNEkMwh2DxH5c8jZTrtVlB6MJW6y0EuD2Lc9ZRgEPMUgIP1FY0VS
- 8LkpmBWJM76W9pgavb4mmnKYqlMMgiHoG486OhBGGNBD1EzuIARbQI6mohF4J+L1Zuyo87xKionK1TX2zYjHsg==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1747390668; bh=45iaXIkzNgdC3H92UpWI5EhSBd9jfl5y0MXeyaN2M4M=;
- h=From:To:Subject:Date:MIME-Version;
- b=iFr3cRiUqBvqTLgTSz2Nshsw0xhXAvcKd5ZRlWf89wUt7gDJ1iBuVpJeuLpno/PsX
- 0v+ebrsukt7t2drlY14qbSoH6+TL6WOOUjKPLEo2EBYt28DDovXubFDMNmKa2mszB0
- KW9Xbl6R6jbnplLqVQ9MjDpJ4rO9HXKrxyB60ta4IPp/II55wmxNUykpv8VR+3lhPO
- KEAb0Bm3ocBNqs+Ul6Nd54mi9OdnAZSvj4uGwKnP8bFqagxt/onvLkHX4xyiQ+ocE5
- 51/4seSfbyb4LXxNu2cMHAd7ErMxAp/fvK45UtDZFg97OWW7OOeZfVmiS2M1ijWuVf
- qMTGU+N9O5how==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=temperror header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=iFr3cRiU
-Subject: [Buildroot] [PATCH v2] package/rtl8188eu: fix building with Linux
- 6.14
+Date: Fri, 16 May 2025 12:08:05 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 00b2d74dbb73790578b271cac91cb3bd9082487b
+X-Git-Newrev: a127b7e999586a83bd59655635caa621ce8d256f
+X-Patchwork-Hint: ignore
+Message-Id: <20250516101955.24FB586963@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/openssh: bump to version 10.0p1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -80,67 +58,141 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add local patch pending upstream to fix build failure with Linux 6.14.
+commit: https://git.buildroot.net/buildroot/commit/?id=a127b7e999586a83bd59655635caa621ce8d256f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-https://autobuild.buildroot.org/results/065b9afc1c6f9f5561547b12171269adc8c12275
+Release notes:
+https://www.openssh.com/txt/release-10.0
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Install sshd-auth.
+https://github.com/openssh/openssh-portable/commit/6072e4c9385713e9c166f32cfca6a7e603d4f0b8
+
+Also, the release note of 10.0p1 states it is a security update for
+CVE-2025-32728. This commit is not marked as security bump, because the
+security fix is already present in Buildroot since commit [1]. For this
+reason, this commit also removes the package patches and the
+_IGNORE_CVES variable.
+
+[1] https://gitlab.com/buildroot.org/buildroot/-/commit/211e822d433806893c1395b55c1d891343a07aa0
+
+Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
+[Julien:
+ - remove the "security" mention commit title
+ - remove local patches and _IGNORE_CVES
+ - add info in commit log
+]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
-V1->V2:
-* fix Subject prefix as pointed by Luca Ceresoli
----
- .../0002-Fix-build-with-Linux-6.14.patch      | 33 +++++++++++++++++++
- 1 file changed, 33 insertions(+)
- create mode 100644 package/rtl8188eu/0002-Fix-build-with-Linux-6.14.patch
+ ...x-logic-error-in-disableforwarding-option.patch | 49 ----------------------
+ package/openssh/openssh.hash                       |  4 +-
+ package/openssh/openssh.mk                         |  8 ++--
+ 3 files changed, 5 insertions(+), 56 deletions(-)
 
-diff --git a/package/rtl8188eu/0002-Fix-build-with-Linux-6.14.patch b/package/rtl8188eu/0002-Fix-build-with-Linux-6.14.patch
-new file mode 100644
-index 0000000000..a05a760d22
---- /dev/null
-+++ b/package/rtl8188eu/0002-Fix-build-with-Linux-6.14.patch
-@@ -0,0 +1,33 @@
-+From 0363681349f683050bc9a265db8310e8c4eb6534 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Thu, 15 May 2025 22:32:48 +0200
-+Subject: [PATCH] Fix build with Linux 6.14
-+
-+Commit:
-+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7a53af85d3bbdbe06cd47b81a6d99a04dc0a3963
-+adds argument "unsigned int link_id" to get_tx_power(), so let's add it to
-+cfg80211_rtw_get_txpower() according to Linux version.
-+
-+Upstream: https://github.com/lwfinger/rtl8188eu/pull/464
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ ioctl_cfg80211.c | 3 +++
-+ 1 file changed, 3 insertions(+)
-+
-+diff --git a/ioctl_cfg80211.c b/ioctl_cfg80211.c
-+index 270cfce..04434fa 100644
-+--- a/ioctl_cfg80211.c
-++++ b/ioctl_cfg80211.c
-+@@ -3240,6 +3240,9 @@ static int cfg80211_rtw_set_txpower(struct wiphy *wiphy,
-+ static int cfg80211_rtw_get_txpower(struct wiphy *wiphy,
-+ #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 8, 0))
-+ 	struct wireless_dev *wdev,
-++#endif
-++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 14, 0))
-++	unsigned int link_id,
-+ #endif
-+ 	int *dbm)
-+ {
-+-- 
-+2.39.5
-+
--- 
-2.39.5
-
+diff --git a/package/openssh/0001-fix-logic-error-in-disableforwarding-option.patch b/package/openssh/0001-fix-logic-error-in-disableforwarding-option.patch
+deleted file mode 100644
+index 2c64ec1910..0000000000
+--- a/package/openssh/0001-fix-logic-error-in-disableforwarding-option.patch
++++ /dev/null
+@@ -1,49 +0,0 @@
+-From fc86875e6acb36401dfc1dfb6b628a9d1460f367 Mon Sep 17 00:00:00 2001
+-From: "djm@openbsd.org" <djm@openbsd.org>
+-Date: Wed, 9 Apr 2025 07:00:03 +0000
+-Subject: [PATCH] upstream: Fix logic error in DisableForwarding option.
+-
+-This option was documented as disabling X11 and agent forwarding but it failed to do so.
+-Spotted by Tim Rice.
+-
+-OpenBSD-Commit-ID: fffc89195968f7eedd2fc57f0b1f1ef3193f5ed1
+-
+-Upstream: https://github.com/openssh/openssh-portable/commit/fc86875e6acb36401dfc1dfb6b628a9d1460f367
+-
+-Fixes the following CVE:
+-  - CVE-2025-32728: In sshd in OpenSSH before 10.0, the DisableForwarding
+-                    directive does not adhere to the documentation stating
+-                    that it disables X11 and agent forwarding.
+-
+-[Titouan: 
+- - Remove diff on OpenBSD comment at the top of the file that does not apply
+-   cleanly on openssh 9.9
+-]
+-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+----
+- session.c | 7 ++++---
+- 1 file changed, 4 insertions(+), 3 deletions(-)
+-
+-diff --git a/session.c b/session.c
+-index 52a4a3446e6..6444c77f31c 100644
+---- a/session.c
+-+++ b/session.c
+-@@ -2171,7 +2171,8 @@ session_auth_agent_req(struct ssh *ssh, Session *s)
+- 	if ((r = sshpkt_get_end(ssh)) != 0)
+- 		sshpkt_fatal(ssh, r, "%s: parse packet", __func__);
+- 	if (!auth_opts->permit_agent_forwarding_flag ||
+--	    !options.allow_agent_forwarding) {
+-+	    !options.allow_agent_forwarding ||
+-+	    options.disable_forwarding) {
+- 		debug_f("agent forwarding disabled");
+- 		return 0;
+- 	}
+-@@ -2566,7 +2567,7 @@ session_setup_x11fwd(struct ssh *ssh, Session *s)
+- 		ssh_packet_send_debug(ssh, "X11 forwarding disabled by key options.");
+- 		return 0;
+- 	}
+--	if (!options.x11_forwarding) {
+-+	if (!options.x11_forwarding || options.disable_forwarding) {
+- 		debug("X11 forwarding disabled in server configuration file.");
+- 		return 0;
+- 	}
+diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
+index 0bbc4874df..62c3bcad99 100644
+--- a/package/openssh/openssh.hash
++++ b/package/openssh/openssh.hash
+@@ -1,4 +1,4 @@
+-# From https://www.openssh.com/txt/release-9.9p2
+-sha256  91aadb603e08cc285eddf965e1199d02585fa94d994d6cae5b41e1721e215673  openssh-9.9p2.tar.gz
++# From https://www.openssh.com/txt/release-10.0
++sha256  021a2e709a0edf4250b1256bd5a9e500411a90dddabea830ed59cef90eb9d85c  openssh-10.0p1.tar.gz
+ # Locally calculated
+ sha256  5bb5b160726ef5756e4f32fe95b35249c294962419650f48d05134b486d27ccb  LICENCE
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index b5e4645b50..f1b8c0920b 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-OPENSSH_VERSION_MAJOR = 9.9
+-OPENSSH_VERSION_MINOR = p2
++OPENSSH_VERSION_MAJOR = 10.0
++OPENSSH_VERSION_MINOR = p1
+ OPENSSH_VERSION = $(OPENSSH_VERSION_MAJOR)$(OPENSSH_VERSION_MINOR)
+ OPENSSH_CPE_ID_VERSION = $(OPENSSH_VERSION_MAJOR)
+ OPENSSH_CPE_ID_UPDATE = $(OPENSSH_VERSION_MINOR)
+@@ -13,9 +13,6 @@ OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
+ OPENSSH_LICENSE = BSD-3-Clause, BSD-2-Clause, Public Domain
+ OPENSSH_LICENSE_FILES = LICENCE
+ 
+-# 0001-fix-logic-error-in-disableforwarding-option.patch
+-OPENSSH_IGNORE_CVES += CVE-2025-32728
+-
+ OPENSSH_CONF_ENV = \
+ 	LD="$(TARGET_CC)" \
+ 	LDFLAGS="$(TARGET_CFLAGS)" \
+@@ -122,6 +119,7 @@ define OPENSSH_INSTALL_SERVER_PROGRAMS
+ 	$(INSTALL) -D -m 0755 $(@D)/sshd $(TARGET_DIR)/usr/sbin/sshd
+ 	$(INSTALL) -D -m 0755 $(@D)/sshd-session $(TARGET_DIR)/usr/libexec/sshd-session
+ 	$(INSTALL) -D -m 0755 $(@D)/sftp-server $(TARGET_DIR)/usr/libexec/sftp-server
++	$(INSTALL) -D -m 0755 $(@D)/sshd-auth $(TARGET_DIR)/usr/libexec/sshd-auth
+ endef
+ OPENSSH_POST_INSTALL_TARGET_HOOKS += OPENSSH_INSTALL_SERVER_PROGRAMS
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
