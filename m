@@ -4,69 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A704C54756
-	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 17:59:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AAF11C3ABC9
+	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 17:59:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 349F2612AE;
-	Fri, 16 May 2025 17:59:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 83B2E61347;
+	Fri, 16 May 2025 17:59:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BZ4M5842Goi7; Fri, 16 May 2025 17:59:37 +0000 (UTC)
+ id YWxxu13M6sg0; Fri, 16 May 2025 17:59:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 46C7061315
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6DAE460C14
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 46C7061315;
-	Fri, 16 May 2025 17:59:37 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id E5920185
- for <buildroot@buildroot.org>; Fri, 16 May 2025 17:59:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6DAE460C14;
+	Fri, 16 May 2025 17:59:39 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3802613D
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 17:59:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D743A4003A
- for <buildroot@buildroot.org>; Fri, 16 May 2025 17:59:30 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1DF8783CAD
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 17:59:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CT4yswcb80vv for <buildroot@buildroot.org>;
- Fri, 16 May 2025 17:59:30 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id po_MlwAlVf2B for <buildroot@buildroot.org>;
+ Fri, 16 May 2025 17:59:31 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
  helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C6659400F6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C6659400F6
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 19BE383CA8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 19BE383CA8
 Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C6659400F6
- for <buildroot@buildroot.org>; Fri, 16 May 2025 17:59:29 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 19BE383CA8
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 17:59:31 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id BB9661C0FCB; Fri, 16 May 2025 19:59:27 +0200 (CEST)
-Message-ID: <bdedb768-1e59-4e22-8e1a-96ea5d7d46d9@rnout.be>
-Date: Fri, 16 May 2025 13:21:26 +0200
+ with ESMTPSA id EBC201C1104; Fri, 16 May 2025 19:59:28 +0200 (CEST)
+Message-ID: <063b5965-3c7b-4b2d-947d-ebea0986f8cd@rnout.be>
+Date: Fri, 16 May 2025 13:21:41 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Marcus Hoffmann <buildroot@bubu1.eu>, buildroot@buildroot.org
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Oli Vogt <oli.vogt.pub01@gmail.com>
-References: <20250514094620.59162-1-buildroot@bubu1.eu>
+To: Thomas Perale <thomas.perale@mind.be>, buildroot@buildroot.org
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20250514210430.1064027-1-thomas.perale@mind.be>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20250514094620.59162-1-buildroot@bubu1.eu>
+In-Reply-To: <20250514210430.1064027-1-thomas.perale@mind.be>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1747418367; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1747418369; h=from:subject:date:message-id:to:cc:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=m/6yFMICsFId+lBpe7Zknag9DFzTjen5YR6hA135BZw=;
- b=HV0PCBamZbKoHcCe/rOmlg4JncsGFv8kpOBCA7qM6y2VzKArAUfeEL+W1HdioC7z6ec4WN
- 26Oxg4kXvc+nTxC0yQC0KG+9G74Dr9CM/8ely94weE1P8eiEKPhxql3//YmJbB8Lp4lBv0
- IUQ1CC5HQ3JUEQiUoLxyJsXeahWtAtCnFg1ti4zWGQuIdj5GW5h8n0DbSpM4jlQEHGzyMq
- QxYlszmQsa+zxmzuJ6cPy4NjYb9cGR6Iw+ni7pIAz6TNR9QRGMkUZLe2bOpfkO0i5I3vNC
- AWzRaMu7M9FuFyAZixYeT9h/oFH1K1lxV6zE8TjwAR69Jr+qnQU7RmgoMAvnMQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=wekrYbHVFzY1rwfsnGZqS8E0TQeYiYGSWc9RgDDTTCw=;
+ b=kCilR3IQe9+b7vk6I6wxTUr0eMXNP3KkJef5TWvY73PMOBVLpuwJnJ0pQAArn2i38Gr6gz
+ CAhzcUWNxZ6OB5yGMfvYti13J0bPwc7k8dfLiH1k4ooqFYR6k6u5CkFUJ1MNV4Bafsg0bn
+ 8GfhctPLJc8rNXlElJ7BE/9iZ3Y9xTO0yYKoLPULfw7Ne+65yqM7E+qIJTGU7yBxEXWBIR
+ E8155XsOX520P7VGV5SzJ3WPLRM3sC86fCStTCySWXf/6Dhl+xb+zqH+nxmMFa1PclyPsF
+ K6OHWNGxOgGFbH0SvZY3tKoBJPOB8vuF9W3L8z0vF4lvjtPbzpKN5CL8xDpdpQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=HV0PCBam
-Subject: Re: [Buildroot] [PATCH v2 1/2] package/python-django: security bump
- to 5.1.9
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
+ header.s=dkim header.b=kCilR3IQ
+Subject: Re: [Buildroot] [PATCH 1/1] package/libraw: security bump to
+ version 0.21.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,15 +87,43 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 14/05/2025 11:46, Marcus Hoffmann via buildroot wrote:
-> Fixes CVE-2025-32873 [1].
-> Django also updates setuptools[2], so we can remove the --skip-dependency-check
-> flag and need to update the package archive capitalization accordingly.
+On 14/05/2025 23:04, Thomas Perale via buildroot wrote:
+> Fixes the following seucrity issues:
 > 
-> [1] https://www.djangoproject.com/weblog/2025/may/07/security-releases/
-> [2] https://github.com/django/django/commit/bbf376bbc8cdfca817b54e7df99539633d10b06e
+> - CVE-2025-43961: metadata/tiff.cpp has an out-of-bounds read in the
+>      Fujifilm 0xf00c tag parser.
 > 
-> Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+> For more information, see:
+>    - https://nvd.nist.gov/vuln/detail/CVE-2025-43961
+>    - https://github.com/LibRaw/LibRaw/commit/66fe663e02a4dd610b4e832f5d9af326709336c2
+> 
+> - CVE-2025-43962: phase_one_correct in decoders/load_mfbacks.cpp has
+>      out-of-bounds reads for tag 0x412 processing
+> 
+> For more information, see:
+>    - https://nvd.nist.gov/vuln/detail/CVE-2025-43962
+>    - https://github.com/LibRaw/LibRaw/commit/66fe663e02a4dd610b4e832f5d9af326709336c2
+> 
+> - CVE-2025-43963: phase_one_correct in decoders/load_mfbacks.cpp allows
+>      out-of-buffer access
+> 
+> For more information, see:
+>    - https://nvd.nist.gov/vuln/detail/CVE-2025-43963
+>    - https://github.com/LibRaw/LibRaw/commit/be26e7639ecf8beb55f124ce780e99842de2e964
+> 
+> - CVE-2025-43964: tag 0x412 processing in phase_one_correct in
+>      decoders/load_mfbacks.cpp does not enforce minimum w0 and w1 values.
+> 
+> For more information, see:
+>    - https://nvd.nist.gov/vuln/detail/CVE-2025-43964
+>    - https://github.com/LibRaw/LibRaw/commit/a50dc3f1127d2e37a9b39f57ad9bb2ebb60f18c0
+> 
+> For more details on the version bump, see the release notes:
+>    - https://github.com/LibRaw/LibRaw/releases/tag/0.21.4
+>    - https://github.com/LibRaw/LibRaw/releases/tag/0.21.3
+>    - https://github.com/LibRaw/LibRaw/compare/0.21.2...0.21.4
+> 
+> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
   Applied to 2025.02.x, thanks.
 
@@ -103,45 +131,34 @@ On 14/05/2025 11:46, Marcus Hoffmann via buildroot wrote:
   Arnout
 
 > ---
->   package/python-django/python-django.hash | 4 ++--
->   package/python-django/python-django.mk   | 7 +++----
->   2 files changed, 5 insertions(+), 6 deletions(-)
+>   package/libraw/libraw.hash | 2 +-
+>   package/libraw/libraw.mk   | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-> index 1e197004d0..57b9e9fb0e 100644
-> --- a/package/python-django/python-django.hash
-> +++ b/package/python-django/python-django.hash
+> diff --git a/package/libraw/libraw.hash b/package/libraw/libraw.hash
+> index 838c598d78..36d9d31948 100644
+> --- a/package/libraw/libraw.hash
+> +++ b/package/libraw/libraw.hash
 > @@ -1,5 +1,5 @@
->   # md5, sha256 from https://pypi.org/pypi/django/json
-> -md5  80247a8b48cdac55e5ad3fb682ab71a3  Django-5.1.8.tar.gz
-> -sha256  42e92a1dd2810072bcc40a39a212b693f94406d0ba0749e68eb642f31dc770b4  Django-5.1.8.tar.gz
-> +md5  da93c81fcaf2e0b4dab3cf44e7564c7c  django-5.1.9.tar.gz
-> +sha256  565881bdd0eb67da36442e9ac788bda90275386b549070d70aee86327781a4fc  django-5.1.9.tar.gz
->   # Locally computed sha256 checksums
->   sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-> diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-> index b64d8e4cd1..fd8a4eb9e8 100644
-> --- a/package/python-django/python-django.mk
-> +++ b/package/python-django/python-django.mk
-> @@ -4,15 +4,14 @@
+>   # Locally calculated
+> -sha256  fe7288013206854baf6e4417d0fb63ba4ed7227bf36fff021992671c2dd34b03  LibRaw-0.21.2.tar.gz
+> +sha256  6be43f19397e43214ff56aab056bf3ff4925ca14012ce5a1538a172406a09e63  LibRaw-0.21.4.tar.gz
+>   sha256  eea173a556abac0370461e57e12aab266894ea6be3874c2be05fd87871f75449  LICENSE.LGPL
+>   sha256  0e3098d2d54a12434715f6679ea408d57da5e8d613c385c58ecc6fe5d30cc81f  LICENSE.CDDL
+>   sha256  7d6650cef6cf892abe95e55a6bda1e1c42f221fd411b807deb2fc0b805b868d4  README.md
+> diff --git a/package/libraw/libraw.mk b/package/libraw/libraw.mk
+> index 211b67f935..e320b2d835 100644
+> --- a/package/libraw/libraw.mk
+> +++ b/package/libraw/libraw.mk
+> @@ -4,7 +4,7 @@
 >   #
 >   ################################################################################
 >   
-> -PYTHON_DJANGO_VERSION = 5.1.8
-> -PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
-> +PYTHON_DJANGO_VERSION = 5.1.9
-> +PYTHON_DJANGO_SOURCE = django-$(PYTHON_DJANGO_VERSION).tar.gz
->   # The official Django site has an unpractical URL
-> -PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/00/40/45adc1b93435d1b418654a734b68351bb6ce0a0e5e37b2f0e9aeb1a2e233
-> +PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/10/08/2e6f05494b3fc0a3c53736846034f882b82ee6351791a7815bbb45715d79
->   PYTHON_DJANGO_LICENSE = BSD-3-Clause
->   PYTHON_DJANGO_LICENSE_FILES = LICENSE
->   PYTHON_DJANGO_CPE_ID_VENDOR = djangoproject
->   PYTHON_DJANGO_CPE_ID_PRODUCT = django
->   PYTHON_DJANGO_SETUP_TYPE = setuptools
-> -PYTHON_DJANGO_BUILD_OPTS = --skip-dependency-check
->   
->   $(eval $(python-package))
+> -LIBRAW_VERSION = 0.21.2
+> +LIBRAW_VERSION = 0.21.4
+>   LIBRAW_SOURCE = LibRaw-$(LIBRAW_VERSION).tar.gz
+>   LIBRAW_SITE = http://www.libraw.org/data
+>   LIBRAW_INSTALL_STAGING = YES
 
 _______________________________________________
 buildroot mailing list
