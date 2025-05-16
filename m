@@ -1,51 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D71BC3ABC9
-	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 14:21:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12896C3ABD8
+	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 14:21:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2AC09417B6;
-	Fri, 16 May 2025 14:21:45 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gxAWF6tjoBWz; Fri, 16 May 2025 14:21:44 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ADCE5417FC
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ADCE5417FC;
-	Fri, 16 May 2025 14:21:43 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4CA9A1C7
- for <buildroot@buildroot.org>; Fri, 16 May 2025 14:21:31 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AAF3281368
- for <buildroot@buildroot.org>; Fri, 16 May 2025 14:21:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D22388101F;
+	Fri, 16 May 2025 14:21:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3pC1fMAsIY-D for <buildroot@buildroot.org>;
+ id 2wrAuXHXy5uB; Fri, 16 May 2025 14:21:46 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B9AB880E82
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id B9AB880E82;
+	Fri, 16 May 2025 14:21:46 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0CE8913D
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 14:21:32 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id F09934044F
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 14:21:30 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id P8B9FQS-v9wr for <buildroot@buildroot.org>;
  Fri, 16 May 2025 14:21:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E199E839CD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E6FB40BC9
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E199E839CD
- for <buildroot@buildroot.org>; Fri, 16 May 2025 14:21:29 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2E6FB40BC9
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 14:21:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D972686BD9; Fri, 16 May 2025 14:21:29 +0000 (UTC)
+ id 2CC5686BD9; Fri, 16 May 2025 14:21:30 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 16 May 2025 16:19:45 +0200
+Date: Fri, 16 May 2025 16:19:52 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c912dc1d27279d5fc6e4187d6c05bda7de7af040
-X-Git-Newrev: 0468aae90a0124b79febf8705d9779e7a8a2ce4c
+X-Git-Oldrev: c100f6a2feb5785a2c8064a75a2e747e4882e957
+X-Git-Newrev: 45321879e16d97079c3d1a4431f615c73291200b
 X-Patchwork-Hint: ignore
-Message-Id: <20250516142129.D972686BD9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-anyio: bump to 4.9.0
+Message-Id: <20250516142130.2CC5686BD9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: new python-pydantic
+ runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,59 +66,111 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0468aae90a0124b79febf8705d9779e7a8a2ce4c
+commit: https://git.buildroot.net/buildroot/commit/?id=45321879e16d97079c3d1a4431f615c73291200b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes: https://github.com/agronholm/anyio/releases/tag/4.9.0
+While in theory, the fastapi tests finds problems with the pydantic
+package, it's not obvious that this test should be run when the pydantic
+package is updated.
+
+Add a new test that just covers pydantic.
 
 Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- package/python-anyio/Config.in         | 1 -
- package/python-anyio/python-anyio.hash | 4 ++--
- package/python-anyio/python-anyio.mk   | 4 ++--
- 3 files changed, 4 insertions(+), 5 deletions(-)
+ DEVELOPERS                                         |  2 ++
+ .../tests/package/sample_python_pydantic.py        | 32 ++++++++++++++++++++++
+ .../testing/tests/package/test_python_pydantic.py  | 27 ++++++++++++++++++
+ 3 files changed, 61 insertions(+)
 
-diff --git a/package/python-anyio/Config.in b/package/python-anyio/Config.in
-index 353c7e4629..d843f37af0 100644
---- a/package/python-anyio/Config.in
-+++ b/package/python-anyio/Config.in
-@@ -2,7 +2,6 @@ config BR2_PACKAGE_PYTHON_ANYIO
- 	bool "python-anyio"
- 	select BR2_PACKAGE_PYTHON_IDNA # runtime
- 	select BR2_PACKAGE_PYTHON_SNIFFIO # runtime
--	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
- 	help
- 	  High level compatibility layer for multiple asynchronous
- 	  event loop implementations.
-diff --git a/package/python-anyio/python-anyio.hash b/package/python-anyio/python-anyio.hash
-index 4ff6955ae5..e1fdf474c2 100644
---- a/package/python-anyio/python-anyio.hash
-+++ b/package/python-anyio/python-anyio.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/anyio/json
--md5  ad00874069a6685b2e3e84c5a2e045cb  anyio-4.8.0.tar.gz
--sha256  1d9fe889df5212298c0c0723fa20479d1b94883a2df44bd3897aa91083316f7a  anyio-4.8.0.tar.gz
-+md5  d0e4db5f5e4041d1bc9664042b454218  anyio-4.9.0.tar.gz
-+sha256  673c0c244e15788651a4ff38710fea9675823028a6f08a5eda409e0c9840a028  anyio-4.9.0.tar.gz
- # Locally computed sha256 checksums
- sha256  5361ac9dc58f2ef5fd2e9b09c68297c17f04950909bbc8023bdb82eacf22c2b0  LICENSE
-diff --git a/package/python-anyio/python-anyio.mk b/package/python-anyio/python-anyio.mk
-index 4f38e12794..3be3f2b78f 100644
---- a/package/python-anyio/python-anyio.mk
-+++ b/package/python-anyio/python-anyio.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 2b28384d0b..44056c5149 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2283,10 +2283,12 @@ F:	package/python-typing-inspection/
+ F:	package/python-tzlocal/
+ F:	package/python-waitress/
+ F:	support/testing/tests/package/test_python_fastapi.py
++F:	support/testing/tests/package/test_python_pydantic.py
+ F:	support/testing/tests/package/test_python_ruamel_yaml.py
+ F:	support/testing/tests/package/test_python_tzlocal.py
+ F:	support/testing/tests/package/test_python_waitress.py
+ F:	support/testing/tests/package/sample_python_fastapi.py
++F:	support/testing/tests/package/sample_python_pydantic.py
+ F:	support/testing/tests/package/sample_python_ruamel_yaml.py
  
--PYTHON_ANYIO_VERSION = 4.8.0
-+PYTHON_ANYIO_VERSION = 4.9.0
- PYTHON_ANYIO_SOURCE = anyio-$(PYTHON_ANYIO_VERSION).tar.gz
--PYTHON_ANYIO_SITE = https://files.pythonhosted.org/packages/a3/73/199a98fc2dae33535d6b8e8e6ec01f8c1d76c9adb096c6b7d64823038cde
-+PYTHON_ANYIO_SITE = https://files.pythonhosted.org/packages/95/7d/4c1bd541d4dffa1b52bd83fb8527089e097a106fc90b467a7313b105f840
- PYTHON_ANYIO_SETUP_TYPE = setuptools
- PYTHON_ANYIO_LICENSE = MIT
- PYTHON_ANYIO_LICENSE_FILES = LICENSE
+ N:	Marek Belisko <marek.belisko@open-nandra.com>
+diff --git a/support/testing/tests/package/sample_python_pydantic.py b/support/testing/tests/package/sample_python_pydantic.py
+new file mode 100644
+index 0000000000..4c22f5ede4
+--- /dev/null
++++ b/support/testing/tests/package/sample_python_pydantic.py
+@@ -0,0 +1,32 @@
++from datetime import datetime
++
++from pydantic import BaseModel, PositiveInt
++
++
++class User(BaseModel):
++    id: int
++    name: str = "John Doe"
++    signup_ts: datetime | None
++    tastes: dict[str, PositiveInt]
++
++
++external_data = {
++    "id": 123,
++    "signup_ts": "2019-06-01 12:22",
++    "tastes": {
++        "wine": 9,
++        b"cheese": 7,
++        "cabbage": "1",
++    },
++}
++
++user = User(**external_data)
++expected_user_dump = {
++    "id": 123,
++    "name": "John Doe",
++    "signup_ts": datetime(2019, 6, 1, 12, 22),
++    "tastes": {"wine": 9, "cheese": 7, "cabbage": 1},
++}
++
++assert user.id == 123
++assert user.model_dump() == expected_user_dump
+diff --git a/support/testing/tests/package/test_python_pydantic.py b/support/testing/tests/package/test_python_pydantic.py
+new file mode 100644
+index 0000000000..1369d82f59
+--- /dev/null
++++ b/support/testing/tests/package/test_python_pydantic.py
+@@ -0,0 +1,27 @@
++import os
++
++from tests.package.test_python import TestPythonPackageBase
++
++
++class TestPythonPy3Pydantic(TestPythonPackageBase):
++    __test__ = True
++    config = """
++        BR2_arm=y
++        BR2_cortex_a9=y
++        BR2_ARM_ENABLE_NEON=y
++        BR2_ARM_ENABLE_VFP=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_PYDANTIC=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++    sample_scripts = ["tests/package/sample_python_pydantic.py"]
++    timeout = 30
++
++    def login(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(
++            arch="armv7", kernel="builtin", options=["-initrd", cpio_file]
++        )
++        self.emulator.login()
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
