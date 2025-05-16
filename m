@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38218C3ABDD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:02:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E9CAC2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:02:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 298FB70F4D;
-	Mon, 19 May 2025 11:02:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B6E1470E41;
+	Mon, 19 May 2025 11:02:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rTbQ0fQgoSiK; Mon, 19 May 2025 11:02:39 +0000 (UTC)
+ id HJGh0MqP_KCN; Mon, 19 May 2025 11:02:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B59670F5B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D05070F62
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4B59670F5B;
-	Mon, 19 May 2025 11:02:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6D05070F62;
+	Mon, 19 May 2025 11:02:41 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 46048E4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:47:54 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 15A3E193
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:47:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8F82441A74
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9843641C09
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id puSvcDT3es9S for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:35 +0000 (UTC)
+ id GWyU6PRw6Y7x for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 502B641D94
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 85CB640C49
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 502B641D94
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:06 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 85CB640C49
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4A5B382A2E; Mon, 19 May 2025 10:40:06 +0000 (UTC)
+ id 8231C872E7; Mon, 19 May 2025 10:40:05 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 17 May 2025 09:28:58 +0200
+Date: Fri, 16 May 2025 18:44:56 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: cc93da91ac44ebf9ed6cf29d6a24c0632854f5a4
-X-Git-Newrev: d9aabc1af39fc478e5aeee446bd2d814a2dcbda5
+X-Git-Oldrev: a0b51dd088de15ab7a039d7d7476022e826fb4ff
+X-Git-Newrev: e9498b4faa28c494c064728d564b43c07b1b0689
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104006.4A5B382A2E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/m4: bump to 1.4.20
+Message-Id: <20250519104005.8231C872E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] support/testing: new dieharder
+ runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,55 +66,76 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d9aabc1af39fc478e5aeee446bd2d814a2dcbda5
+commit: https://git.buildroot.net/buildroot/commit/?id=e9498b4faa28c494c064728d564b43c07b1b0689
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The new version bundles an updated gnulib that includes support for
--std=c23 which is the default for gcc 15.
+Note: this test was not working in Buildroot test infrastructure
+before commit [1] was merged, because dieharder has the string "# "
+in its output.
 
-Signed-off-by: Vincent Fazio <vfazio@gmail.com>
+[1] https://gitlab.com/buildroot.org/buildroot/-/commit/0cad947b964be5612a182413da136fcf0dc5a1f2
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- package/m4/m4.hash |  2 +-
- package/m4/m4.mk   | 12 +-----------
- 2 files changed, 2 insertions(+), 12 deletions(-)
+ DEVELOPERS                                      |  1 +
+ support/testing/tests/package/test_dieharder.py | 36 +++++++++++++++++++++++++
+ 2 files changed, 37 insertions(+)
 
-diff --git a/package/m4/m4.hash b/package/m4/m4.hash
-index a81f4fab9c..a5b8456cc2 100644
---- a/package/m4/m4.hash
-+++ b/package/m4/m4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256  63aede5c6d33b6d9b13511cd0be2cac046f2e70fd0a07aa9573a04a82783af96  m4-1.4.19.tar.xz
-+sha256  e236ea3a1ccf5f6c270b1c4bb60726f371fa49459a8eaaebc90b216b328daf2b  m4-1.4.20.tar.xz
- # License files, locally calculated
- sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
-diff --git a/package/m4/m4.mk b/package/m4/m4.mk
-index f5e1e27ad8..396c2bbee2 100644
---- a/package/m4/m4.mk
-+++ b/package/m4/m4.mk
-@@ -4,20 +4,10 @@
- #
- ################################################################################
- 
--M4_VERSION = 1.4.19
-+M4_VERSION = 1.4.20
- M4_SOURCE = m4-$(M4_VERSION).tar.xz
- M4_SITE = $(BR2_GNU_MIRROR)/m4
- M4_LICENSE = GPL-3.0+
- M4_LICENSE_FILES = COPYING
- 
--# gcc-15 defaults to -std=gnu23 which is incorrectly detected and
--# generates build failures in the gnulib copy included in
--# m4-1.4.19. We workaround this by forcing the previous gcc default
--# standard, which is -std=gnu17 only when host gcc is >= 15. This
--# workaround can be removed when m4 will be updated to a version
--# including a fix for gcc-15.
--ifeq ($(BR2_HOST_GCC_AT_LEAST_15),y)
--HOST_M4_CONF_ENV = CFLAGS="$(HOST_CFLAGS) -std=gnu17"
--endif
--
- $(eval $(host-autotools-package))
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 6528a63a83..c4df675aaf 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1885,6 +1885,7 @@ F:	support/testing/tests/package/test_cryptsetup.py
+ F:	support/testing/tests/package/test_cryptsetup/
+ F:	support/testing/tests/package/test_ddrescue.py
+ F:	support/testing/tests/package/test_ddrescue/
++F:	support/testing/tests/package/test_dieharder.py
+ F:	support/testing/tests/package/test_dmidecode.py
+ F:	support/testing/tests/package/test_dos2unix.py
+ F:	support/testing/tests/package/test_dosfstools.py
+diff --git a/support/testing/tests/package/test_dieharder.py b/support/testing/tests/package/test_dieharder.py
+new file mode 100644
+index 0000000000..de09b383b4
+--- /dev/null
++++ b/support/testing/tests/package/test_dieharder.py
+@@ -0,0 +1,36 @@
++import os
++
++import infra.basetest
++
++
++class TestDieharder(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_DIEHARDER=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++
++        # Check the program can run (by showing its version)
++        self.assertRunOk("dieharder -V")
++
++        # The birthdays randomness test on the mt19937 random number
++        # generator with 25 sample is expected to always succeed.
++        cmd = "dieharder -g mt19937 -d diehard_birthdays -t 25"
++        output, exit_code = self.emulator.run(cmd, timeout=10)
++        self.assertEqual(exit_code, 0)
++        self.assertIn("PASSED", '\n'.join(output))
++
++        # The birthdays randomness test on file /dev/zero is expected
++        # to always fail.
++        cmd = "dieharder -g file_input_raw -f /dev/zero -d diehard_birthdays -t 25"
++        output, exit_code = self.emulator.run(cmd, timeout=40)
++        self.assertEqual(exit_code, 0)
++        self.assertIn("FAILED", '\n'.join(output))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
