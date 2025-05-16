@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE53BC3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:59:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 995CDC3DA6D
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:59:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8918D8470A;
-	Mon, 19 May 2025 10:59:51 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DnPhOA_v8TLj; Mon, 19 May 2025 10:59:50 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A10FA84706
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A10FA84706;
+	by smtp3.osuosl.org (Postfix) with ESMTP id 02EF070C06;
 	Mon, 19 May 2025 10:59:50 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ct4GptTcjyDe; Mon, 19 May 2025 10:59:48 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 315DC70D2D
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 315DC70D2D;
+	Mon, 19 May 2025 10:59:48 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 28FA3D4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:46:43 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 176A7193
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:46:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 077DE41574
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:29 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D7FA44170D
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id H9_pGu3KqrVp for <buildroot@buildroot.org>;
+ id XJp8ovKHoNpA for <buildroot@buildroot.org>;
  Mon, 19 May 2025 10:40:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D358440DE8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 25DD54173A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D358440DE8
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:02 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 25DD54173A
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:03 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CE5DF8348A; Mon, 19 May 2025 10:40:02 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 2267282A2E; Mon, 19 May 2025 10:40:03 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 14 May 2025 15:03:38 +0200
+Date: Fri, 16 May 2025 10:55:25 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 09299c5b0cf4841e20ee8f8196a4122890e6530f
-X-Git-Newrev: c722fa1cf245039a28d3f10430d1841ff44fff4f
+X-Git-Oldrev: d9182a7556989c32e78a6db55017566c132b74a1
+X-Git-Newrev: aaa50b0e617eb0b288efd00c384a305e90289690
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104002.CE5DF8348A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-django: bump to
- 5.2.1
+Message-Id: <20250519104003.2267282A2E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/xz: bump to version
+ 5.8.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,50 +65,442 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c722fa1cf245039a28d3f10430d1841ff44fff4f
+commit: https://git.buildroot.net/buildroot/commit/?id=aaa50b0e617eb0b288efd00c384a305e90289690
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Django 5.2 is a new LTS series. Release notes and announcement:
+Update hash of the COPYING file. (Notes about old releases was removed)
 
-https://docs.djangoproject.com/en/5.2/releases/5.2/
-https://www.djangoproject.com/weblog/2025/apr/02/django-52-released/
+Release notes:
+https://github.com/tukaani-project/xz/releases/tag/v5.8.1
+https://github.com/tukaani-project/xz/releases/tag/v5.8.0
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Also, the release note of v5.8.1 states it is a security update for
+CVE-2025-31115. This commit is not marked as security bump, because the
+security fix is already present in Buildroot since commit [1]. For this
+reason, this commit also removes the package patches and the
+XZ_IGNORE_CVES variable.
+
+[1] https://gitlab.com/buildroot.org/buildroot/-/commit/38494a0a613d77169fb3178be287315ebc1b8ade
+
+Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
+[Julien:
+ - remove the "security" mention commit title
+ - remove local patches and XZ_IGNORE_CVES
+ - add info in commit log
+]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-django/python-django.hash | 4 ++--
- package/python-django/python-django.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/xz/0001-liblzma-mt-dec-Fix-a-comment.patch |  29 ----
+ ...dec-Simplify-by-removing-the-THR_STOP-sta.patch | 152 ---------------------
+ ...dec-Don-t-free-the-input-buffer-too-early.patch |  98 -------------
+ ...dec-Don-t-modify-thr-in_size-in-the-worke.patch |  56 --------
+ package/xz/xz.hash                                 |   6 +-
+ package/xz/xz.mk                                   |   8 +-
+ 6 files changed, 4 insertions(+), 345 deletions(-)
 
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index 57b9e9fb0e..836307f6b8 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/django/json
--md5  da93c81fcaf2e0b4dab3cf44e7564c7c  django-5.1.9.tar.gz
--sha256  565881bdd0eb67da36442e9ac788bda90275386b549070d70aee86327781a4fc  django-5.1.9.tar.gz
-+md5  317174c6e0593c40e58ec1bd428b1091  django-5.2.1.tar.gz
-+sha256  57fe1f1b59462caed092c80b3dd324fd92161b620d59a9ba9181c34746c97284  django-5.2.1.tar.gz
- # Locally computed sha256 checksums
- sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index fd8a4eb9e8..62c8a00313 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,10 +4,10 @@
+diff --git a/package/xz/0001-liblzma-mt-dec-Fix-a-comment.patch b/package/xz/0001-liblzma-mt-dec-Fix-a-comment.patch
+deleted file mode 100644
+index 2424fb0d13..0000000000
+--- a/package/xz/0001-liblzma-mt-dec-Fix-a-comment.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-From 9f508dead050cd51f53aff3807c7319e2e6773cf Mon Sep 17 00:00:00 2001
+-From: Lasse Collin <lasse.collin@tukaani.org>
+-Date: Thu, 3 Apr 2025 14:34:42 +0300
+-Subject: [PATCH] liblzma: mt dec: Fix a comment
+-
+-Reviewed-by: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
+-Thanks-to: Sam James <sam@gentoo.org>
+-Upstream: https://github.com/tukaani-project/xz/commit/831b55b971cf579ee16a854f177c36b20d3c6999
+-Signed-off-by: Julien Olivain <ju.o@free.fr>
+----
+- src/liblzma/common/stream_decoder_mt.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/liblzma/common/stream_decoder_mt.c b/src/liblzma/common/stream_decoder_mt.c
+-index 244624a4..6f06f1d1 100644
+---- a/src/liblzma/common/stream_decoder_mt.c
+-+++ b/src/liblzma/common/stream_decoder_mt.c
+-@@ -347,7 +347,7 @@ worker_enable_partial_update(void *thr_ptr)
+- 
+- 
+- /// Things do to at THR_STOP or when finishing a Block.
+--/// This is called with thr->mutex locked.
+-+/// This is called with thr->coder->mutex locked.
+- static void
+- worker_stop(struct worker_thread *thr)
+- {
+--- 
+-2.49.0
+-
+diff --git a/package/xz/0002-liblzma-mt-dec-Simplify-by-removing-the-THR_STOP-sta.patch b/package/xz/0002-liblzma-mt-dec-Simplify-by-removing-the-THR_STOP-sta.patch
+deleted file mode 100644
+index 7845380a8c..0000000000
+--- a/package/xz/0002-liblzma-mt-dec-Simplify-by-removing-the-THR_STOP-sta.patch
++++ /dev/null
+@@ -1,152 +0,0 @@
+-From b336944f3a6af4cbd5cf57aa00ef16d30c4ff773 Mon Sep 17 00:00:00 2001
+-From: Lasse Collin <lasse.collin@tukaani.org>
+-Date: Thu, 3 Apr 2025 14:34:42 +0300
+-Subject: [PATCH] liblzma: mt dec: Simplify by removing the THR_STOP state
+-
+-The main thread can directly set THR_IDLE in threads_stop() which is
+-called when errors are detected. threads_stop() won't return the stopped
+-threads to the pool or free the memory pointed by thr->in anymore, but
+-it doesn't matter because the existing workers won't be reused after
+-an error. The resources will be cleaned up when threads_end() is
+-called (reinitializing the decoder always calls threads_end()).
+-
+-Reviewed-by: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
+-Thanks-to: Sam James <sam@gentoo.org>
+-Upstream: https://github.com/tukaani-project/xz/commit/c0c835964dfaeb2513a3c0bdb642105152fe9f34
+-Signed-off-by: Julien Olivain <ju.o@free.fr>
+----
+- src/liblzma/common/stream_decoder_mt.c | 75 ++++++++++----------------
+- 1 file changed, 29 insertions(+), 46 deletions(-)
+-
+-diff --git a/src/liblzma/common/stream_decoder_mt.c b/src/liblzma/common/stream_decoder_mt.c
+-index 6f06f1d1..e1d07007 100644
+---- a/src/liblzma/common/stream_decoder_mt.c
+-+++ b/src/liblzma/common/stream_decoder_mt.c
+-@@ -23,15 +23,10 @@ typedef enum {
+- 	THR_IDLE,
+- 
+- 	/// Decoding is in progress.
+--	/// Main thread may change this to THR_STOP or THR_EXIT.
+-+	/// Main thread may change this to THR_IDLE or THR_EXIT.
+- 	/// The worker thread may change this to THR_IDLE.
+- 	THR_RUN,
+- 
+--	/// The main thread wants the thread to stop whatever it was doing
+--	/// but not exit. Main thread may change this to THR_EXIT.
+--	/// The worker thread may change this to THR_IDLE.
+--	THR_STOP,
+--
+- 	/// The main thread wants the thread to exit.
+- 	THR_EXIT,
+- 
+-@@ -346,27 +341,6 @@ worker_enable_partial_update(void *thr_ptr)
+- }
+- 
+- 
+--/// Things do to at THR_STOP or when finishing a Block.
+--/// This is called with thr->coder->mutex locked.
+--static void
+--worker_stop(struct worker_thread *thr)
+--{
+--	// Update memory usage counters.
+--	thr->coder->mem_in_use -= thr->in_size;
+--	thr->in_size = 0; // thr->in was freed above.
+--
+--	thr->coder->mem_in_use -= thr->mem_filters;
+--	thr->coder->mem_cached += thr->mem_filters;
+--
+--	// Put this thread to the stack of free threads.
+--	thr->next = thr->coder->threads_free;
+--	thr->coder->threads_free = thr;
+--
+--	mythread_cond_signal(&thr->coder->cond);
+--	return;
+--}
+--
+--
+- static MYTHREAD_RET_TYPE
+- worker_decoder(void *thr_ptr)
+- {
+-@@ -397,17 +371,6 @@ next_loop_unlocked:
+- 		return MYTHREAD_RET_VALUE;
+- 	}
+- 
+--	if (thr->state == THR_STOP) {
+--		thr->state = THR_IDLE;
+--		mythread_mutex_unlock(&thr->mutex);
+--
+--		mythread_sync(thr->coder->mutex) {
+--			worker_stop(thr);
+--		}
+--
+--		goto next_loop_lock;
+--	}
+--
+- 	assert(thr->state == THR_RUN);
+- 
+- 	// Update progress info for get_progress().
+-@@ -510,7 +473,22 @@ next_loop_unlocked:
+- 				&& thr->coder->thread_error == LZMA_OK)
+- 			thr->coder->thread_error = ret;
+- 
+--		worker_stop(thr);
+-+		// Return the worker thread to the stack of available
+-+		// threads.
+-+		{
+-+			// Update memory usage counters.
+-+			thr->coder->mem_in_use -= thr->in_size;
+-+			thr->in_size = 0; // thr->in was freed above.
+-+
+-+			thr->coder->mem_in_use -= thr->mem_filters;
+-+			thr->coder->mem_cached += thr->mem_filters;
+-+
+-+			// Put this thread to the stack of free threads.
+-+			thr->next = thr->coder->threads_free;
+-+			thr->coder->threads_free = thr;
+-+		}
+-+
+-+		mythread_cond_signal(&thr->coder->cond);
+- 	}
+- 
+- 	goto next_loop_lock;
+-@@ -544,17 +522,22 @@ threads_end(struct lzma_stream_coder *coder, const lzma_allocator *allocator)
+- }
+- 
+- 
+-+/// Tell worker threads to stop without doing any cleaning up.
+-+/// The clean up will be done when threads_exit() is called;
+-+/// it's not possible to reuse the threads after threads_stop().
+-+///
+-+/// This is called before returning an unrecoverable error code
+-+/// to the application. It would be waste of processor time
+-+/// to keep the threads running in such a situation.
+- static void
+- threads_stop(struct lzma_stream_coder *coder)
+- {
+- 	for (uint32_t i = 0; i < coder->threads_initialized; ++i) {
+-+		// The threads that are in the THR_RUN state will stop
+-+		// when they check the state the next time. There's no
+-+		// need to signal coder->threads[i].cond.
+- 		mythread_sync(coder->threads[i].mutex) {
+--			// The state must be changed conditionally because
+--			// THR_IDLE -> THR_STOP is not a valid state change.
+--			if (coder->threads[i].state != THR_IDLE) {
+--				coder->threads[i].state = THR_STOP;
+--				mythread_cond_signal(&coder->threads[i].cond);
+--			}
+-+			coder->threads[i].state = THR_IDLE;
+- 		}
+- 	}
+- 
+-@@ -1948,7 +1931,7 @@ stream_decoder_mt_init(lzma_next_coder *next, const lzma_allocator *allocator,
+- 	// accounting from scratch, too. Changes in filter and block sizes may
+- 	// affect number of threads.
+- 	//
+--	// FIXME? Reusing should be easy but unlike the single-threaded
+-+	// Reusing threads doesn't seem worth it. Unlike the single-threaded
+- 	// decoder, with some types of input file combinations reusing
+- 	// could leave quite a lot of memory allocated but unused (first
+- 	// file could allocate a lot, the next files could use fewer
+--- 
+-2.49.0
+-
+diff --git a/package/xz/0003-liblzma-mt-dec-Don-t-free-the-input-buffer-too-early.patch b/package/xz/0003-liblzma-mt-dec-Don-t-free-the-input-buffer-too-early.patch
+deleted file mode 100644
+index 9915e6b275..0000000000
+--- a/package/xz/0003-liblzma-mt-dec-Don-t-free-the-input-buffer-too-early.patch
++++ /dev/null
+@@ -1,98 +0,0 @@
+-From fb6110f90e28c43261cc8c290f99b19c9f01a15c Mon Sep 17 00:00:00 2001
+-From: Lasse Collin <lasse.collin@tukaani.org>
+-Date: Thu, 3 Apr 2025 14:34:42 +0300
+-Subject: [PATCH] liblzma: mt dec: Don't free the input buffer too early
+- (CVE-2025-31115)
+-
+-The input buffer must be valid as long as the main thread is writing
+-to the worker-specific input buffer. Fix it by making the worker
+-thread not free the buffer on errors and not return the worker thread to
+-the pool. The input buffer will be freed when threads_end() is called.
+-
+-With invalid input, the bug could at least result in a crash. The
+-effects include heap use after free and writing to an address based
+-on the null pointer plus an offset.
+-
+-The bug has been there since the first committed version of the threaded
+-decoder and thus affects versions from 5.3.3alpha to 5.8.0.
+-
+-As the commit message in 4cce3e27f529 says, I had made significant
+-changes on top of Sebastian's patch. This bug was indeed introduced
+-by my changes; it wasn't in Sebastian's version.
+-
+-Thanks to Harri K. Koskinen for discovering and reporting this issue.
+-
+-Fixes: 4cce3e27f529 ("liblzma: Add threaded .xz decompressor.")
+-Reported-by: Harri K. Koskinen <x64nop@nannu.org>
+-Reviewed-by: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
+-Thanks-to: Sam James <sam@gentoo.org>
+-Upstream: https://github.com/tukaani-project/xz/commit/d5a2ffe41bb77b918a8c96084885d4dbe4bf6480
+-Signed-off-by: Julien Olivain <ju.o@free.fr>
+----
+- src/liblzma/common/stream_decoder_mt.c | 31 ++++++++++++++++++--------
+- 1 file changed, 22 insertions(+), 9 deletions(-)
+-
+-diff --git a/src/liblzma/common/stream_decoder_mt.c b/src/liblzma/common/stream_decoder_mt.c
+-index e1d07007..ce5e54ac 100644
+---- a/src/liblzma/common/stream_decoder_mt.c
+-+++ b/src/liblzma/common/stream_decoder_mt.c
+-@@ -435,8 +435,7 @@ next_loop_unlocked:
+- 	}
+- 
+- 	// Either we finished successfully (LZMA_STREAM_END) or an error
+--	// occurred. Both cases are handled almost identically. The error
+--	// case requires updating thr->coder->thread_error.
+-+	// occurred.
+- 	//
+- 	// The sizes are in the Block Header and the Block decoder
+- 	// checks that they match, thus we know these:
+-@@ -444,16 +443,30 @@ next_loop_unlocked:
+- 	assert(ret != LZMA_STREAM_END
+- 		|| thr->out_pos == thr->block_options.uncompressed_size);
+- 
+--	// Free the input buffer. Don't update in_size as we need
+--	// it later to update thr->coder->mem_in_use.
+--	lzma_free(thr->in, thr->allocator);
+--	thr->in = NULL;
+--
+- 	mythread_sync(thr->mutex) {
+-+		// Block decoder ensures this, but do a sanity check anyway
+-+		// because thr->in_filled < thr->in_size means that the main
+-+		// thread is still writing to thr->in.
+-+		if (ret == LZMA_STREAM_END && thr->in_filled != thr->in_size) {
+-+			assert(0);
+-+			ret = LZMA_PROG_ERROR;
+-+		}
+-+
+- 		if (thr->state != THR_EXIT)
+- 			thr->state = THR_IDLE;
+- 	}
+- 
+-+	// Free the input buffer. Don't update in_size as we need
+-+	// it later to update thr->coder->mem_in_use.
+-+	//
+-+	// This step is skipped if an error occurred because the main thread
+-+	// might still be writing to thr->in. The memory will be freed after
+-+	// threads_end() sets thr->state = THR_EXIT.
+-+	if (ret == LZMA_STREAM_END) {
+-+		lzma_free(thr->in, thr->allocator);
+-+		thr->in = NULL;
+-+	}
+-+
+- 	mythread_sync(thr->coder->mutex) {
+- 		// Move our progress info to the main thread.
+- 		thr->coder->progress_in += thr->in_pos;
+-@@ -474,8 +487,8 @@ next_loop_unlocked:
+- 			thr->coder->thread_error = ret;
+- 
+- 		// Return the worker thread to the stack of available
+--		// threads.
+--		{
+-+		// threads only if no errors occurred.
+-+		if (ret == LZMA_STREAM_END) {
+- 			// Update memory usage counters.
+- 			thr->coder->mem_in_use -= thr->in_size;
+- 			thr->in_size = 0; // thr->in was freed above.
+--- 
+-2.49.0
+-
+diff --git a/package/xz/0004-liblzma-mt-dec-Don-t-modify-thr-in_size-in-the-worke.patch b/package/xz/0004-liblzma-mt-dec-Don-t-modify-thr-in_size-in-the-worke.patch
+deleted file mode 100644
+index 1a914e08db..0000000000
+--- a/package/xz/0004-liblzma-mt-dec-Don-t-modify-thr-in_size-in-the-worke.patch
++++ /dev/null
+@@ -1,56 +0,0 @@
+-From c5c6a429bf3df0558ab88704eee7eb08287406dd Mon Sep 17 00:00:00 2001
+-From: Lasse Collin <lasse.collin@tukaani.org>
+-Date: Thu, 3 Apr 2025 14:34:42 +0300
+-Subject: [PATCH] liblzma: mt dec: Don't modify thr->in_size in the worker
+- thread
+-
+-Don't set thr->in_size = 0 when returning the thread to the stack of
+-available threads. Not only is it useless, but the main thread may
+-read the value in SEQ_BLOCK_THR_RUN. With valid inputs, it made
+-no difference if the main thread saw the original value or 0. With
+-invalid inputs (when worker thread stops early), thr->in_size was
+-no longer modified after the previous commit with the security fix
+-("Don't free the input buffer too early").
+-
+-So while the bug appears harmless now, it's important to fix it because
+-the variable was being modified without proper locking. It's trivial
+-to fix because there is no need to change the value. Only main thread
+-needs to set the value in (in SEQ_BLOCK_THR_INIT) when starting a new
+-Block before the worker thread is activated.
+-
+-Fixes: 4cce3e27f529 ("liblzma: Add threaded .xz decompressor.")
+-Reviewed-by: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
+-Thanks-to: Sam James <sam@gentoo.org>
+-Upstream: https://github.com/tukaani-project/xz/commit/8188048854e8d11071b8a50d093c74f4c030acc9
+-Signed-off-by: Julien Olivain <ju.o@free.fr>
+----
+- src/liblzma/common/stream_decoder_mt.c | 6 ++++--
+- 1 file changed, 4 insertions(+), 2 deletions(-)
+-
+-diff --git a/src/liblzma/common/stream_decoder_mt.c b/src/liblzma/common/stream_decoder_mt.c
+-index ce5e54ac..0cdb47d3 100644
+---- a/src/liblzma/common/stream_decoder_mt.c
+-+++ b/src/liblzma/common/stream_decoder_mt.c
+-@@ -491,8 +491,6 @@ next_loop_unlocked:
+- 		if (ret == LZMA_STREAM_END) {
+- 			// Update memory usage counters.
+- 			thr->coder->mem_in_use -= thr->in_size;
+--			thr->in_size = 0; // thr->in was freed above.
+--
+- 			thr->coder->mem_in_use -= thr->mem_filters;
+- 			thr->coder->mem_cached += thr->mem_filters;
+- 
+-@@ -1557,6 +1555,10 @@ stream_decode_mt(void *coder_ptr, const lzma_allocator *allocator,
+- 		}
+- 
+- 		// Return if the input didn't contain the whole Block.
+-+		//
+-+		// NOTE: When we updated coder->thr->in_filled a few lines
+-+		// above, the worker thread might by now have finished its
+-+		// work and returned itself back to the stack of free threads.
+- 		if (coder->thr->in_filled < coder->thr->in_size) {
+- 			assert(*in_pos == in_size);
+- 			return LZMA_OK;
+--- 
+-2.49.0
+-
+diff --git a/package/xz/xz.hash b/package/xz/xz.hash
+index 5ed714273f..0e0618ec02 100644
+--- a/package/xz/xz.hash
++++ b/package/xz/xz.hash
+@@ -1,10 +1,10 @@
+ # Locally calculated after checking pgp signature
+-# https://github.com/tukaani-project/xz/releases/download/v5.6.4/xz-5.6.4.tar.bz2.sig
++# https://github.com/tukaani-project/xz/releases/download/v5.8.1/xz-5.8.1.tar.bz2.sig
+ # using key 3690C240CE51B4670D30AD1C38EE757D69184620 Lasse Collin <lasse.collin@tukaani.org>
+-sha256  176d510c30d80a23b8050bbc048f2ecaacb823ae48b6821727ed6591f0df9200  xz-5.6.4.tar.bz2
++sha256  5965c692c4c8800cd4b33ce6d0f6ac9ac9d6ab227b17c512b6561bce4f08d47e  xz-5.8.1.tar.bz2
+ 
+ # Hash for license files
+-sha256  ee3b35b82f7bb0ba5fd9f13ca34ebbe757a59c05bfde5ab9d50ff4188ed33396  COPYING
++sha256  616a3ad264ce29b8f1cb97e53037b139d406899ca8d1f799651e17bfa09830b8  COPYING
+ sha256  0b01625d853911cd0e2e088dcfb743261034a091bb379246cb25a14cc4c74bf1  COPYING.0BSD
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING.GPLv3
+diff --git a/package/xz/xz.mk b/package/xz/xz.mk
+index 60c2df70ee..b1e210a172 100644
+--- a/package/xz/xz.mk
++++ b/package/xz/xz.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_DJANGO_VERSION = 5.1.9
-+PYTHON_DJANGO_VERSION = 5.2.1
- PYTHON_DJANGO_SOURCE = django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/10/08/2e6f05494b3fc0a3c53736846034f882b82ee6351791a7815bbb45715d79
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/ac/10/0d546258772b8f31398e67c85e52c66ebc2b13a647193c3eef8ee433f1a8
- PYTHON_DJANGO_LICENSE = BSD-3-Clause
- PYTHON_DJANGO_LICENSE_FILES = LICENSE
- PYTHON_DJANGO_CPE_ID_VENDOR = djangoproject
+-XZ_VERSION = 5.6.4
++XZ_VERSION = 5.8.1
+ XZ_SOURCE = xz-$(XZ_VERSION).tar.bz2
+ XZ_SITE = https://github.com/tukaani-project/xz/releases/download/v$(XZ_VERSION)
+ XZ_INSTALL_STAGING = YES
+@@ -18,12 +18,6 @@ XZ_AUTORECONF = YES
+ # The package is a dependency to ccache so ccache cannot be a dependency
+ HOST_XZ_ADD_CCACHE_DEPENDENCY = NO
+ 
+-# 0001-liblzma-mt-dec-Fix-a-comment.patch
+-# 0002-liblzma-mt-dec-Simplify-by-removing-the-THR_STOP-sta.patch
+-# 0003-liblzma-mt-dec-Don-t-free-the-input-buffer-too-early.patch
+-# 0004-liblzma-mt-dec-Don-t-modify-thr-in_size-in-the-worke.patch
+-XZ_IGNORE_CVES = CVE-2025-31115
+-
+ XZ_CONF_OPTS = \
+ 	--enable-encoders=lzma1,lzma2,delta,x86,powerpc,ia64,arm,armthumb,arm64,sparc,riscv \
+ 	--enable-decoders=lzma1,lzma2,delta,x86,powerpc,ia64,arm,armthumb,arm64,sparc,riscv \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
