@@ -1,76 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B898EC3ABC9
-	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 17:12:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FF34C54756
+	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 17:12:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 71BD283126;
-	Fri, 16 May 2025 17:12:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DC8D3612EF;
+	Fri, 16 May 2025 17:12:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Od3zVzuiyBMF; Fri, 16 May 2025 17:12:27 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EuC8Gb_OUcle; Fri, 16 May 2025 17:12:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BC468832C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DEA64608FA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BC468832C2;
-	Fri, 16 May 2025 17:12:27 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 5DB041AB
- for <buildroot@buildroot.org>; Fri, 16 May 2025 17:12:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DEA64608FA;
+	Fri, 16 May 2025 17:12:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2733213D
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 17:12:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4EFCA83145
- for <buildroot@buildroot.org>; Fri, 16 May 2025 17:12:26 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 158E1832D4
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 17:12:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id I3M5-jvRxdEB for <buildroot@buildroot.org>;
- Fri, 16 May 2025 17:12:24 +0000 (UTC)
+ id 96fpR4-iQGTv for <buildroot@buildroot.org>;
+ Fri, 16 May 2025 17:12:26 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
+ client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
  envelope-from=elmehdi.younes@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F183583126
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F183583126
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F183583126
- for <buildroot@buildroot.org>; Fri, 16 May 2025 17:12:23 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id
- 5b1f17b1804b1-43d2d952eb1so17948085e9.1
- for <buildroot@buildroot.org>; Fri, 16 May 2025 10:12:23 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E2ADC832AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E2ADC832AA
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E2ADC832AA
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 17:12:25 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ 5b1f17b1804b1-43edb40f357so17808025e9.0
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 10:12:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1747415541; x=1748020341;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=ApN95YX6R0KFrl4xs9m+6KekDzBVo6f+3WhquVUSCHA=;
- b=sZUZ3lhEMCnZ7uX0DJpOYW0bgsXhGMp5E7EBp+dQ7r9XzWOk0VWwfkV04DQ6K7p6xO
- IXag9hF/RN97KsfWPTchkeL/zqBTVd2tn6A20ddnimeesLEDCATpNZbRizSZX8Dz0Vi6
- 62osurrw4FB8jMfzOO9nm3mVQOii9RsWXUupZDikuN+3JtqcqorhetSSgz8EEkLt4zY/
- 2QUAeKZsihFMnaKN0/sxzDaLBfDW8gq8/xL3tXGOxfMAg4Dt+5gIMgnrS8YMsXXBl03Q
- 1i5BRZeWIw5sWVFefk0EzA8QRWJBaUuB7yUwhYbTqc3lr6ZVYNlMwhb2zRV3TZ2DHM/L
- FETQ==
-X-Gm-Message-State: AOJu0YyJoZY0ye+YoJT6HOI4g0yZvHr/8vUpDZvvTFRSB1IlDQrNoQKB
- dj2UnaJOZBAvDMpAvPaxF3OWVQvFqpYaRRWtgl4TyOLcvDabQtlziL1tZL8J9tfgbAo6Q5u8STk
- nYnyL
-X-Gm-Gg: ASbGncubxtZ18ESEntyi4oaoPGsglIVUprYrkxs4YmT9OGpuCrKh4zsEDJenVx4bEMo
- uwN4QcXULghn2bjoE0ay1Ig5j8oHfDFkAaMWjcRZXmfjhQ6bu6t5HfpTmrj50iJKFCoJWiQD1lF
- AXVYMOMxy4PT/0LOua5aRlPsHHbaJEWivLS3eIFjv4yeQePE3PsWhq4XmW+58hFADBndV9xHEoU
- ANxdnhcuhPZ8xyYhD2r44MQHvHSmskY0AwNJN41x+19hE7sWXvHjgsA1F6HEy2FanraA4kbcPbX
- uUeRBkm9B0glqSU/zmV5+PTt4nHFjCF2Hrgm9L4IAgGYhnH9O0mv8Tcrs9UiKMs49FqAmllnI9k
- Zg7txudHW7M7gxT438Z4tKh7ulUHlPxf7oUhrbMo=
-X-Google-Smtp-Source: AGHT+IGBuqB4K5idTSsHnbKJBi8XGXJFFZX0LDVCRKGa/jlw5aNpsnklKz9jRo1UQX14LvVdsVsgkg==
-X-Received: by 2002:a05:600c:4e42:b0:43c:e70d:4504 with SMTP id
- 5b1f17b1804b1-442fd64dfccmr43380145e9.19.1747415541383; 
- Fri, 16 May 2025 10:12:21 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1747415543; x=1748020343;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=L7/BK8f6AveLHVvuxCeq5JOaPXABLXufp5wNbotwj8s=;
+ b=WL813m8586+qIT/ZZWmtu4TewihCK5kOk/EmnizVr2Mm3j0THkPiFBFljJs6zi2T0p
+ 2Dj9QsBNDsXYqJXV2DhrMlzQdnOQRZxiezqFcPNTOijCjpXQrlj5iygN4yMwz2S1jZxj
+ hZHxcRX46ibEwgq0mOmv5E+2mc0kaxppiW02ldno1IEQDN6q8TiqqwUGQS/OkQaxBrOd
+ 1kCCl3l5J5rHtQdAB8nimUZtronDwayZFbVvZTO8fJ86BwLg1IlDSSUppnnLZoSictu4
+ JlYGDYCPcEJv+zHgjzF/iRG6mNjShiokClRatUBeAN3psba9R0IkCFuQlurLx+7sV144
+ y4Qw==
+X-Gm-Message-State: AOJu0YwuV5+WBiiBGkeoPlu8KxTwbS8BCPng9GcwM+73AJjKVKReNG1f
+ 4jHZz7E1TDvcSUzZbCjUOHTl5dq5rMwza7+kr5m+1S2tdHLsYx7f7SDT0L9DYCu7whK+/g5Ec34
+ oR8ZU
+X-Gm-Gg: ASbGncvfoqNkfpdOF8VglkQGJXfmWPvpFEH+mQ9eE/bwhMz/vibJ7QSjLOpokiRC9uy
+ d1GgeVAipY9ZIN+QyJngI8RJFtz6MnpsrR/2Tu1Nn50WDqDKy0mPn9yUXco22DUpl5MDz1VfvEd
+ oF64VGPoq67/UU8D/bXxV3pJp94764EADWZFTW04JcBOmUCKVBvALKVBxqm3pX0LeuXg7SWuIPk
+ wP020nBSChh+x+iLblLCzQpu3y6hfwjGHHTKCZYcLaBk1N1UXiImXcZJwHgL8A977ITAsU1qkcz
+ MdGQjTU0FtyN4wjOJibnbmgGKB/jDXPXRomW1ZdbAvIPsKLZT5O8H0au7xl8tm/ek1wnOL8sxUM
+ EXLhZFpuC5acIGHEUdM9evgx3S+dO+MhZAgQuTpQ=
+X-Google-Smtp-Source: AGHT+IHeFgSNp0mORLwBqMt9kPXqaGVf0+kTkOz3wz++myY2sTwlImjWOuptyhuUwm5ldKhMOGAJMg==
+X-Received: by 2002:a05:600c:5006:b0:442:f956:53f9 with SMTP id
+ 5b1f17b1804b1-442fd64e4d3mr47366935e9.18.1747415543454; 
+ Fri, 16 May 2025 10:12:23 -0700 (PDT)
 Received: from P-NAN-ABRICOT.numericable.fr (185.137.153.77.rev.sfr.net.
  [77.153.137.185]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-442f482f1d6sm105479675e9.14.2025.05.16.10.12.20
+ 5b1f17b1804b1-442f482f1d6sm105479675e9.14.2025.05.16.10.12.23
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 16 May 2025 10:12:21 -0700 (PDT)
+ Fri, 16 May 2025 10:12:23 -0700 (PDT)
 To: buildroot@buildroot.org
 Cc: Daniel Lang <dalang@gmx.at>,
  Giulio Benetti <giulio.benetti@benettiengineering.com>,
@@ -79,26 +79,29 @@ Cc: Daniel Lang <dalang@gmx.at>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Valentin Korenblit <valentinkorenblit@gmail.com>,
  El Mehdi YOUNES <elmehdi.younes@smile.fr>
-Date: Fri, 16 May 2025 19:11:29 +0200
-Message-ID: <20250516171134.1687054-1-elmehdi.younes@smile.fr>
+Date: Fri, 16 May 2025 19:11:30 +0200
+Message-ID: <20250516171134.1687054-2-elmehdi.younes@smile.fr>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250516171134.1687054-1-elmehdi.younes@smile.fr>
+References: <20250516171134.1687054-1-elmehdi.younes@smile.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1747415541; x=1748020341; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=ApN95YX6R0KFrl4xs9m+6KekDzBVo6f+3WhquVUSCHA=;
- b=iePQ0LXqKPRb9Nc2XmCCaiFMyMzBLlro9w+3FWsPadJzQ1WLgixMicybHE75qDa/XM
- OEKoG9y1oOVBESjBVHHU75j8f3T59fpVr5ijMFWTSlOiZfc09tN785WnMh/8UWSrb6wN
- diREZJuu0C09Qflrezuh0G4Z1Z4ULsO2ZuGjs=
+ d=smile.fr; s=google; t=1747415543; x=1748020343; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=L7/BK8f6AveLHVvuxCeq5JOaPXABLXufp5wNbotwj8s=;
+ b=qP7bk5QWzDy2RGlQESOE9Fb8CX8fjWTt+KrPbplPkydXQ7dyZfd2BZ1ToVzBLNhO2j
+ jXwTjaeK5W0XT86KBrz9sxMWk/N9cWKZqe8bEeRh9oNb4fd4pSvDKYEMABHd7JEsvRsV
+ t1dYc7OKm0j0LWy5ClAM/Y9Ry+yYhGKwZTtcU=
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=smile.fr
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
- header.a=rsa-sha256 header.s=google header.b=iePQ0LXq
-Subject: [Buildroot] [PATCH 0/5] package/llvm-project: upgrade to version
- 20.1.3
+ header.a=rsa-sha256 header.s=google header.b=qP7bk5QW
+Subject: [Buildroot] [PATCH 1/5] support/testing: TestClangCompilerRT: Add a
+ kernel fragment for 48 bits virtual adress
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -112,79 +115,64 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: El Mehdi YOUNES via buildroot <buildroot@buildroot.org>
 Reply-To: El Mehdi YOUNES <elmehdi.younes@smile.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gYWxsLAoKVGhpcyBwYXRjaCBzZXJpZXMgaXMgYSBmaXJzdCBiZXN0LWVmZm9ydCBhdHRl
-bXB0IHRvIHVwZGF0ZQpsbHZtLXByb2plY3QgdG8gdmVyc2lvbiAyMC4xLjMuCkR1cmluZyB0aGlz
-IHdvcmssIEkgaGF2ZSBhcHBsaWVkIG11bHRpcGxlIGNoYW5nZXMsIGluY2x1ZGluZzoKCkJ1aWxk
-IGZpeGVzIHNwZWNpZmljIHRvIHRoZSBuZXcgTExWTSBzdHJ1Y3R1cmUsCgpBZGFwdGF0aW9ucyBh
-bmQgY2xlYW51cHMgYmFzZWQgb24gY29tbWl0cyBhbmQgdXBzdHJlYW0KY2hhbmdlcyBvYnNlcnZl
-ZCBiZXR3ZWVuIHZlcnNpb25zIDE1LnggYW5kIDIwLjEuMywKCkFkanVzdG1lbnRzIHRvIEJ1aWxk
-cm9vdCBpbmZyYXN0cnVjdHVyZSB0byBzdXBwb3J0IHRoZXNlIGNoYW5nZXMgY2xlYW5seS4KClRv
-IHZhbGlkYXRlIHRoZSB1cGRhdGUsIEkgcGVyZm9ybWVkOgoKUnVudGltZSB0ZXN0aW5nIHdpdGgg
-dGhlIGNsYW5nIGNvbXBpbGVyLXJ0IHRlc3QgdG8gZW5zdXJlIGJhc2ljIGZ1bmN0aW9uYWxpdHks
-CgpCdWlsZCB0ZXN0aW5nIGZvciBvdGhlciBjb21wb25lbnRzIGJ5IGVuYWJsaW5nIHRoZW0gaW4g
-Cm1lbnVjb25maWcgKHNhbWUgdGVzdCBzZXR1cCkg4oCUIGV2ZXJ5dGhpbmcgYnVpbGRzIHN1Y2Nl
-c3NmdWxseSBmb3Igbm93LgoKVGhpcyBwYXRjaHNldCByZXByZXNlbnRzIGEgdmVyc2lvbiAxICh2
-MSkgb2YgdGhlIHdvcmsgSeKAmXZlIGRvbmUgc28gZmFyLgpBZGRpdGlvbmFsIHByb2JsZW1zIG1h
-eSBhcmlzZSB3aXRoIGJyb2FkZXIgdGVzdGluZyBhbmQgcmV2aWV3LApzbyBJ4oCZbSBzaGFyaW5n
-IHRoaXMgd29yayB3aXRoIHRoZSBjb21tdW5pdHkgdG8gZ2F0aGVyIGZlZWRiYWNrLgpJZiBhbnlv
-bmUgZW5jb3VudGVycyByZWdyZXNzaW9ucyBvciBpcyBhd2FyZSBvZiBvdGhlciByZWxldmFudCB1
-cHN0cmVhbQpjaGFuZ2VzIHRoYXQgc2hvdWxkIGJlIGNvbnNpZGVyZWQsIHlvdXIgaW5wdXQgaXMg
-dmVyeSB3ZWxjb21lLgoKTG9va2luZyBmb3J3YXJkIHRvIHlvdXIgY29tbWVudHMgYW5kIHN1Z2dl
-c3Rpb25zLgoKQmVzdCByZWdhcmRzLApFbCBNZWhkaSBZT1VORVMKCgpFbCBNZWhkaSBZT1VORVMg
-KDUpOgogIHN1cHBvcnQvdGVzdGluZzogVGVzdENsYW5nQ29tcGlsZXJSVDogQWRkIGEga2VybmVs
-IGZyYWdtZW50IGZvciA0OAogICAgYml0cyB2aXJ0dWFsIGFkcmVzcwogIHBhY2thZ2UvbGx2bS1w
-cm9qZWN0OiBhZGQgbGx2bS1ydW50aW1lcyBwYWNrYWdlCiAgcGFja2FnZS9zcGlydi1sbHZtLXRy
-YW5zbGF0b3I6IGJ1bXAgdmVyc2lvbiB0byAyMC4xLjIKICBwYWNrYWdlL3NwaXJ2LWhlYWRlcnMg
-c3BpcnYtdG9vbHM6IGJ1bXAgdG8gdmVyc2lvbiAxLjQuMzA5LjAKICBwYWNrYWdlL2xsdm0tcHJv
-amVjdDogYnVtcCB0byB2ZXJzaW9uIDIwLjEuMwoKIC5jaGVja3BhY2thZ2VpZ25vcmUgICAgICAg
-ICAgICAgICAgICAgICAgICAgICB8ICAyIC0KIC4uLmhhaW5zLUdudS1Vc2UtR0NDX0lOU1RBTExf
-UFJFRklYLWluLS5wYXRjaCB8IDc4IC0tLS0tLS0tLS0tLS0tLS0tLS0KIHBhY2thZ2UvbGx2bS1w
-cm9qZWN0L2NsYW5nL0NvbmZpZy5pbiAgICAgICAgICB8ICAxICsKIHBhY2thZ2UvbGx2bS1wcm9q
-ZWN0L2NsYW5nL2NsYW5nLmhhc2ggICAgICAgICB8ICAyICstCiBwYWNrYWdlL2xsdm0tcHJvamVj
-dC9jbGFuZy9jbGFuZy5tayAgICAgICAgICAgfCAyNyArKysrKystCiBwYWNrYWdlL2xsdm0tcHJv
-amVjdC9jb21waWxlci1ydC9Db25maWcuaW4gICAgfCAgMSArCiAuLi4vbGx2bS1wcm9qZWN0L2Nv
-bXBpbGVyLXJ0L2NvbXBpbGVyLXJ0Lmhhc2ggfCAgMiArLQogLi4uL2xsdm0tcHJvamVjdC9jb21w
-aWxlci1ydC9jb21waWxlci1ydC5tayAgIHwgIDkgKystCiAuLi4vMDAwMS1zdXBwb3J0LW91dC1v
-Zi10cmVlLWJ1aWxkLnBhdGNoICAgICAgfCA3NyArKysrKy0tLS0tLS0tLS0tLS0KIHBhY2thZ2Uv
-bGx2bS1wcm9qZWN0L2xpYmNsYy9Db25maWcuaW4gICAgICAgICB8ICAxICsKIHBhY2thZ2UvbGx2
-bS1wcm9qZWN0L2xpYmNsYy9saWJjbGMuaGFzaCAgICAgICB8ICAyICstCiBwYWNrYWdlL2xsdm0t
-cHJvamVjdC9saWJjbGMvbGliY2xjLm1rICAgICAgICAgfCAgNSArLQogcGFja2FnZS9sbHZtLXBy
-b2plY3QvbGxkL0NvbmZpZy5pbi5ob3N0ICAgICAgIHwgIDEgKwogcGFja2FnZS9sbHZtLXByb2pl
-Y3QvbGxkL2xsZC5oYXNoICAgICAgICAgICAgIHwgIDIgKy0KIHBhY2thZ2UvbGx2bS1wcm9qZWN0
-L2xsZC9sbGQubWsgICAgICAgICAgICAgICB8ICAyICsKIC4uLi9sbHZtLXByb2plY3QvbGx2bS1j
-bWFrZS9sbHZtLWNtYWtlLmhhc2ggICB8ICAyICstCiBwYWNrYWdlL2xsdm0tcHJvamVjdC9sbHZt
-LWNtYWtlL2xsdm0tY21ha2UubWsgfCAgNSArLQogLi4uL2xsdm0tbGlidW53aW5kL2xsdm0tbGli
-dW53aW5kLmhhc2ggICAgICAgIHwgIDIgKy0KIC4uLi9sbHZtLWxpYnVud2luZC9sbHZtLWxpYnVu
-d2luZC5tayAgICAgICAgICB8ICA1ICstCiBwYWNrYWdlL2xsdm0tcHJvamVjdC9sbHZtLXByb2pl
-Y3QubWsgICAgICAgICAgfCAgNCArLQogLi4uL2xsdm0tcnVudGltZXMvbGx2bS1ydW50aW1lcy5o
-YXNoICAgICAgICAgIHwgIDEgKwogLi4uL2xsdm0tcnVudGltZXMvbGx2bS1ydW50aW1lcy5tayAg
-ICAgICAgICAgIHwgMTcgKysrKwogLi4uLzAwMDEtRml4LXN0YW5kYWxvbmUtYnVpbGQtZm9yLWxs
-dm0ucGF0Y2ggIHwgNDkgKysrKysrKysrKysrCiBwYWNrYWdlL2xsdm0tcHJvamVjdC9sbHZtL0Nv
-bmZpZy5pbiAgICAgICAgICAgfCAgMSArCiBwYWNrYWdlL2xsdm0tcHJvamVjdC9sbHZtL2xsdm0u
-aGFzaCAgICAgICAgICAgfCAgMiArLQogcGFja2FnZS9sbHZtLXByb2plY3QvbGx2bS9sbHZtLm1r
-ICAgICAgICAgICAgIHwgMTQgKysrLQogcGFja2FnZS9zcGlydi1oZWFkZXJzL3NwaXJ2LWhlYWRl
-cnMuaGFzaCAgICAgIHwgIDIgKy0KIHBhY2thZ2Uvc3BpcnYtaGVhZGVycy9zcGlydi1oZWFkZXJz
-Lm1rICAgICAgICB8ICA0ICstCiAuLi4vc3BpcnYtbGx2bS10cmFuc2xhdG9yLmhhc2ggICAgICAg
-ICAgICAgICAgfCAgMiArLQogLi4uL3NwaXJ2LWxsdm0tdHJhbnNsYXRvci5tayAgICAgICAgICAg
-ICAgICAgIHwgIDIgKy0KIHBhY2thZ2Uvc3BpcnYtdG9vbHMvc3BpcnYtdG9vbHMuaGFzaCAgICAg
-ICAgICB8ICAyICstCiBwYWNrYWdlL3NwaXJ2LXRvb2xzL3NwaXJ2LXRvb2xzLm1rICAgICAgICAg
-ICAgfCAgNCArLQogc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF9jbGFuZy5weSAg
-IHwgIDUgKy0KIC4uLi90ZXN0X2NsYW5nL2xpbnV4LWFybTY0LXZhNDguZnJhZ21lbnQgICAgICB8
-ICAxICsKIHRvb2xjaGFpbi90b29sY2hhaW4td3JhcHBlci5jICAgICAgICAgICAgICAgICB8ICAz
-ICsKIDM1IGZpbGVzIGNoYW5nZWQsIDE2NSBpbnNlcnRpb25zKCspLCAxNzQgZGVsZXRpb25zKC0p
-CiBkZWxldGUgbW9kZSAxMDA2NDQgcGFja2FnZS9sbHZtLXByb2plY3QvY2xhbmcvMDAwMS1saWIt
-RHJpdmVyLVRvb2xDaGFpbnMtR251LVVzZS1HQ0NfSU5TVEFMTF9QUkVGSVgtaW4tLnBhdGNoCiBj
-cmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9sbHZtLXByb2plY3QvbGx2bS1ydW50aW1lcy9sbHZt
-LXJ1bnRpbWVzLmhhc2gKIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2xsdm0tcHJvamVjdC9s
-bHZtLXJ1bnRpbWVzL2xsdm0tcnVudGltZXMubWsKIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdl
-L2xsdm0tcHJvamVjdC9sbHZtLzAwMDEtRml4LXN0YW5kYWxvbmUtYnVpbGQtZm9yLWxsdm0ucGF0
-Y2gKIGNyZWF0ZSBtb2RlIDEwMDY0NCBzdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS90ZXN0
-X2NsYW5nL2xpbnV4LWFybTY0LXZhNDguZnJhZ21lbnQKCi0tIAoyLjQzLjAKCl9fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxp
-c3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21h
-aWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Add a kernel fragment to enable
+CONFIG_ARM64_VA_BITS_48 for the AARCH64 QEMU platform in the
+clang compiler -rt runtime test.
+
+Without this setting, this sanitize-based test fails with clang-20
+due to insufficient virtual adress space.
+
+"This might potentially affect ARM platforms with 39-bit address space." from [1]
+
+[1] https://github.com/llvm/llvm-project/commit/a588cfe37ea36ec4fae35a233a13d3557fba86e9
+
+Signed-off-by: El Mehdi YOUNES <elmehdi.younes@smile.fr>
+---
+ support/testing/tests/package/test_clang.py                  | 5 ++++-
+ .../tests/package/test_clang/linux-arm64-va48.fragment       | 1 +
+ 2 files changed, 5 insertions(+), 1 deletion(-)
+ create mode 100644 support/testing/tests/package/test_clang/linux-arm64-va48.fragment
+
+diff --git a/support/testing/tests/package/test_clang.py b/support/testing/tests/package/test_clang.py
+index f36faa059a..a9794a49fa 100644
+--- a/support/testing/tests/package/test_clang.py
++++ b/support/testing/tests/package/test_clang.py
+@@ -7,8 +7,10 @@ FUZZ_TIMEOUT = 120
+ 
+ class TestClangCompilerRT(infra.basetest.BRTest):
+     br2_external = [infra.filepath("tests/package/br2-external/clang-compiler-rt")]
++    # Without this option the test fails due to insufficient address space for 64-bit allocator
++    va48_fragment = infra.filepath("tests/package/test_clang/linux-arm64-va48.fragment")
+     config = \
+-        """
++        f"""
+         BR2_aarch64=y
+         BR2_TOOLCHAIN_EXTERNAL=y
+         BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+@@ -17,6 +19,7 @@ class TestClangCompilerRT(infra.basetest.BRTest):
+         BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.283"
+         BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+         BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
++        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{va48_fragment}"
+         BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+         BR2_PACKAGE_COMPILER_RT=y
+         BR2_PACKAGE_LLVM=y
+diff --git a/support/testing/tests/package/test_clang/linux-arm64-va48.fragment b/support/testing/tests/package/test_clang/linux-arm64-va48.fragment
+new file mode 100644
+index 0000000000..1bafe6e581
+--- /dev/null
++++ b/support/testing/tests/package/test_clang/linux-arm64-va48.fragment
+@@ -0,0 +1 @@
++CONFIG_ARM64_VA_BITS_48=y
+-- 
+2.43.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
