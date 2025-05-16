@@ -1,52 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44341C3ABC9
-	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 13:32:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48C57C3DA6D
+	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 13:33:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F1B3D81836;
-	Fri, 16 May 2025 13:32:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EE25F612BB;
+	Fri, 16 May 2025 13:33:28 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GNQ04GH8JJm8; Fri, 16 May 2025 13:33:28 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E7FBE61237
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id E7FBE61237;
+	Fri, 16 May 2025 13:33:27 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 96C7E185
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 13:33:27 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7C3DD831CA
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 13:33:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wvpppRw926eq; Fri, 16 May 2025 13:32:38 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1FEB281B23
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1FEB281B23;
-	Fri, 16 May 2025 13:32:38 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 33D4E13D
- for <buildroot@buildroot.org>; Fri, 16 May 2025 13:32:37 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 248444086F
- for <buildroot@buildroot.org>; Fri, 16 May 2025 13:32:37 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PV0qewbUZ47q for <buildroot@buildroot.org>;
- Fri, 16 May 2025 13:32:36 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72AEB40874
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 72AEB40874
- for <buildroot@buildroot.org>; Fri, 16 May 2025 13:32:36 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 619D786A91; Fri, 16 May 2025 13:32:36 +0000 (UTC)
+ id sFYPCjpZgM0a for <buildroot@buildroot.org>;
+ Fri, 16 May 2025 13:33:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C4FBB81ED3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C4FBB81ED3
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C4FBB81ED3
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 13:33:26 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id 6B61960143;
+ Fri, 16 May 2025 15:33:20 +0200 (CEST)
+Received: from 2a02-842a-45ac-9401-0517-4590-b867-5f74.rev.sfr.net
+ (2a02:842a:45ac:9401:517:4590:b867:5f74)
+ via 2a02-842a-45ac-9401-0517-4590-b867-5f74.rev.sfr.net
+ (2a02:842a:45ac:9401:517:4590:b867:5f74) by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 16 May 2025 15:33:20 +0200
+MIME-Version: 1.0
+Date: Fri, 16 May 2025 15:33:20 +0200
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Fri, 16 May 2025 15:31:48 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2e05f22ff862192a7e512d0db0486351bba94ae8
-X-Git-Newrev: f5d4ed04acd448fc70d330edf3c2a6ac886749b1
-X-Patchwork-Hint: ignore
-Message-Id: <20250516133236.619D786A91@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/psplash: bump to revision 53ae74a
+To: Olivier Benjamin <olivier.benjamin@bootlin.com>
+Cc: buildroot@buildroot.org, Phil Eichinger <phil.eichinger@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+In-Reply-To: <20250515123547.571910-1-olivier.benjamin@bootlin.com>
+References: <20250515123547.571910-1-olivier.benjamin@bootlin.com>
+User-Agent: Webmail Free/1.6.10
+Message-ID: <de9002df8ddd27899c790221f94342e1@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1747402403;
+ bh=diVTlRHO5bcFmI0nw9dMO5cnQ1BiDgv3+VPaRmnNTNw=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=JlxiyXAyEJBJrQzvNOvlbSsqM4W7uVg0I1rpTPz5NRhCGMjSiNtW0J6hBNiD7qVcL
+ Yf4qM/VyiRdXIdJCR6RdEJSzU3OKQn4YHnHCWgL76CIrMbYQMTbwfb0D3VM5ixCIWM
+ q02AikflavjAQCzUgvBy9HmJgwce+89TUpIclYzznKv5Rjhgc/uQqaqRiW3Pii9nRH
+ +kFVYZDg2D3DTkOs4WujKRYNKbjWQyFWus9LsVctd0QV+FJpU3VPIqPtlMdVkRV9VO
+ Y93l1/SfowuLF+pDF/9lYLw0f5FzrPtZfKDw2NboJiYQr2iALwXQi3qRjHG9BBdjv7
+ uGbSkvuwPOgRw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=JlxiyXAy
+Subject: Re: [Buildroot] [PATCH 1/1] package/psplash: bump to revision
+ 53ae74a
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,53 +85,24 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f5d4ed04acd448fc70d330edf3c2a6ac886749b1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 15/05/2025 14:35, Olivier Benjamin via buildroot wrote:
+> This includes the following changes:
+> 
+> 53ae74a configure.ac: fix autoconf code for img_fullscreen
+> ec1ed35 configure.ac: standardize default-enabled options
+> 1f64c65 README: Update mailing list to point to yocto-patches ml
+> b1a75fd psplash: Only define bool if using C standard older than C23
+> 5a32cf6 psplash.c: fix crash from length becoming negative
+> ecc1913 SECURITY.md: Add file
+> 
+> Signed-off-by: Olivier Benjamin <olivier.benjamin@bootlin.com>
 
-This includes the following changes:
-
-53ae74a configure.ac: fix autoconf code for img_fullscreen
-ec1ed35 configure.ac: standardize default-enabled options
-1f64c65 README: Update mailing list to point to yocto-patches ml
-b1a75fd psplash: Only define bool if using C standard older than C23
-5a32cf6 psplash.c: fix crash from length becoming negative
-ecc1913 SECURITY.md: Add file
-
-Signed-off-by: Olivier Benjamin <olivier.benjamin@bootlin.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/psplash/psplash.hash | 2 +-
- package/psplash/psplash.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/psplash/psplash.hash b/package/psplash/psplash.hash
-index 61514f57c0..e28f35b4f3 100644
---- a/package/psplash/psplash.hash
-+++ b/package/psplash/psplash.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  06def825088f44422fad8a885077d917db6f47688457d4a0953c2ff6f6036378  psplash-44afb7506d43cca15582b4c5b90ba5580344d75d-git4.tar.gz
-+sha256  18efa5f56e5b2ff4e8916b7632e7da59122e33f79bb514a8e225e12931e3ef20  psplash-53ae74a36bf17675228552abb927d2f981940a6a-git4.tar.gz
- sha256  f9c375a1be4a41f7b70301dd83c91cb89e41567478859b77eef375a52d782505  COPYING
-diff --git a/package/psplash/psplash.mk b/package/psplash/psplash.mk
-index bb249e7de8..ea57d884d5 100644
---- a/package/psplash/psplash.mk
-+++ b/package/psplash/psplash.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PSPLASH_VERSION = 44afb7506d43cca15582b4c5b90ba5580344d75d
-+PSPLASH_VERSION = 53ae74a36bf17675228552abb927d2f981940a6a
- PSPLASH_SITE = https://git.yoctoproject.org/psplash
- PSPLASH_SITE_METHOD = git
- PSPLASH_LICENSE = GPL-2.0+
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
