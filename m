@@ -1,78 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 686E1C3ABD8
-	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 15:16:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FB6EC3ABC9
+	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 15:17:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 20F21825BF;
-	Fri, 16 May 2025 15:16:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DA9116074D;
+	Fri, 16 May 2025 15:17:24 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id huCErmfRsRTC; Fri, 16 May 2025 15:17:24 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1EFC26114E
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1EFC26114E;
+	Fri, 16 May 2025 15:17:24 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 021521AB
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 15:17:23 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id DB9A481EA8
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 15:17:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id elygy4nc4zIo; Fri, 16 May 2025 15:16:29 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5845083490
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5845083490;
-	Fri, 16 May 2025 15:16:29 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id E28631AB
- for <buildroot@buildroot.org>; Fri, 16 May 2025 15:16:27 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C802A40591
- for <buildroot@buildroot.org>; Fri, 16 May 2025 15:16:27 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id H6yDkR7-NMIr for <buildroot@buildroot.org>;
- Fri, 16 May 2025 15:16:27 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org F0EDA4093B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F0EDA4093B
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp2.osuosl.org (Postfix) with ESMTPS id F0EDA4093B
- for <buildroot@buildroot.org>; Fri, 16 May 2025 15:16:26 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 970B819F5C2;
- Fri, 16 May 2025 17:16:21 +0200 (CEST)
-Received: from 2a02-842a-45ac-9401-0517-4590-b867-5f74.rev.sfr.net
- (2a02:842a:45ac:9401:517:4590:b867:5f74)
- via 2a02-842a-45ac-9401-0517-4590-b867-5f74.rev.sfr.net
- (2a02:842a:45ac:9401:517:4590:b867:5f74) by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 16 May 2025 17:16:21 +0200
+ id plb7LtyhH6LE for <buildroot@buildroot.org>;
+ Fri, 16 May 2025 15:17:21 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
+ helo=relay9-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 648F881DF1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 648F881DF1
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 648F881DF1
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 15:17:19 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id CC96C4422A;
+ Fri, 16 May 2025 15:17:17 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1uFwoH-009j20-15;
+ Fri, 16 May 2025 17:17:17 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Thomas Devoogdt <thomas@devoogdt.com>
+Cc: buildroot@buildroot.org,  Michael Fischer <mf@go-sys.de>,  Alexander
+ Shiyan <eagle.alexander923@gmail.com>,  Thomas Devoogdt
+ <thomas.devoogdt@barco.com>
+References: <20240830175229.2619362-1-thomas@devoogdt.com>
+ <20250209181625.87351-1-thomas@devoogdt.com>
+Date: Fri, 16 May 2025 17:17:17 +0200
+In-Reply-To: <20250209181625.87351-1-thomas@devoogdt.com> (Thomas Devoogdt's
+ message of "Sun, 9 Feb 2025 19:16:25 +0100")
+Message-ID: <87frh4a8le.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-Date: Fri, 16 May 2025 17:16:21 +0200
-From: Julien Olivain <ju.o@free.fr>
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Cc: buildroot@buildroot.org, Luca Ceresoli <luca.ceresoli@bootlin.com>
-In-Reply-To: <20250516101747.2942959-1-giulio.benetti@benettiengineering.com>
-References: <20250516101747.2942959-1-giulio.benetti@benettiengineering.com>
-User-Agent: Webmail Free/1.6.10
-Message-ID: <b392148004b0573246f7892d9eb39804@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1747408583;
- bh=5x3VIsiNdhy79E4KDwgUA32fLUecnyDD7mM+8aaJYbc=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=pB5EbduimmNb4WSC6DbW9p6mNsylCUxXxBp7MvbR8qn0p5BtZ80+EqKT0iBIiAfw0
- kRJ3bkYxod1rUOEY8YU7yKvHwpgRYNVJ4eN4ymsOOiTfGYY510ZslrgLy7gjYGQINq
- ATLsPGMgY8aAapSd9WpkQVMhEizxHO9xe2e2cYDRbtmM1awX6E4U1EWrMJAGHV3DVt
- z4vE6XO4pvxZUXVJATc+zGqxRLDzlq9iGHde952vaYF3lKqDWM0eARi3E2wBP08qrH
- zorpnrNx34p8f9w9rKwaRTlmUHpZfSpVImsUxHzbvlwsDhjciC0LDJmbVF0Okx8/h/
- cRRlA3SRex6iw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=pB5Ebdui
-Subject: Re: [Buildroot] [PATCH v2] package/rtl8188eu: fix building with
- Linux 6.14
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefudeftdelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufhfffgjkfgfgggtsehttddttddtredtnecuhfhrohhmpefrvghtvghrucfmohhrshhgrggrrhguuceophgvthgvrheskhhorhhsghgrrghrugdrtghomheqnecuggftrfgrthhtvghrnhepvdfhgeetkedttdffgeduleeiffduvedvteffgeeuteevieeigfefgfdtiedtudeunecuffhomhgrihhnpehoiihlrggsshdrohhrghenucfkphepvdgrtddvmeekgedvrgemgeehrggtmeelgedtudemjeeiugekmeefvghffhemfhgvsgefmeegsggsheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumeejiegukeemfegvfhhfmehfvggsfeemgegssgehpdhhvghlohepuggvlhhlrdgsvgdrgeekvghrshdrughkpdhmrghilhhfrhhomhepphgvthgvrheskhhorhhsghgrrghrugdrtghomhdpnhgspghrtghpthhtohephedprhgtphhtthhopehthhhomhgrshesuggvvhhoohhgughtrdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehmfhesghhoqdhshihsrdguvgdprhgtphhtt
+ hhopegvrghglhgvrdgrlhgvgigrnhguvghrledvfeesghhmrghilhdrtghomhdprhgtphhtthhopehthhhomhgrshdruggvvhhoohhgughtsegsrghrtghordgtohhm
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH v2] package/sdl2: add wayland support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,20 +76,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 16/05/2025 12:17, Giulio Benetti wrote:
-> Add local patch pending upstream to fix build failure with Linux 6.14.
-> 
-> Fixes:
-> https://autobuild.buildroot.org/results/065b9afc1c6f9f5561547b12171269adc8c12275
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>>>>> "Thomas" == Thomas Devoogdt <thomas@devoogdt.com> writes:
 
-Applied to master, thanks.
+ > From: Thomas Devoogdt <thomas.devoogdt@barco.com>
+ > This adds a configuration option to enable the Wayland
+ > video driver support in SDL2.
+
+ > Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+ > Tested-by: Alexander Shiyan <eagle.alexander923@gmail.com>
+ > ---
+ > v2:
+ > - Added tested sign-off, see https://patchwork.ozlabs.org/comment/3457513/.
+ > - Slightly changed the git message.
+ > ---
+ >  package/sdl2/Config.in | 17 +++++++++++++++++
+ >  package/sdl2/sdl2.mk   |  8 +++++++-
+ >  2 files changed, 24 insertions(+), 1 deletion(-)
+
+ > diff --git a/package/sdl2/Config.in b/package/sdl2/Config.in
+ > index f1c22e4f80..018e64a8d8 100644
+ > --- a/package/sdl2/Config.in
+ > +++ b/package/sdl2/Config.in
+ > @@ -22,6 +22,23 @@ comment "X11 video driver needs X.org"
+ >  	depends on !BR2_PACKAGE_XORG7
+ >  	depends on BR2_USE_MMU
+ 
+ > +config BR2_PACKAGE_SDL2_WAYLAND
+ > +	bool "Wayland video driver"
+ > +	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland
+ > +	depends on BR2_PACKAGE_WAYLAND
+ > +	depends on BR2_PACKAGE_HAS_LIBEGL
+ > +	depends on BR2_PACKAGE_SDL2_OPENGLES
+ > +	select BR2_PACKAGE_LIBXKBCOMMON
+ > +	select BR2_PACKAGE_WAYLAND_PROTOCOLS
+ > +
+ > +comment "Wayland video driver needs a toolchain w/ threads"
+ > +	depends on !BR2_TOOLCHAIN_HAS_THREADS
+ > +
+ > +comment "Wayland video driver needs wayland with an OpenGLES+EGL backend"
+ > +	depends on !BR2_PACKAGE_WAYLAND || \
+ > +		!BR2_PACKAGE_HAS_LIBEGL || \
+ > +		!BR2_PACKAGE_SDL2_OPENGLES
+ > +
+ >  config BR2_PACKAGE_SDL2_KMSDRM
+
+Moved it after KMSDRM and applied, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
