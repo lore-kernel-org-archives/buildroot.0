@@ -1,71 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72A4EC3ABD8
-	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 17:59:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78AEFC54754
+	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 17:59:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3F6BB41772;
-	Fri, 16 May 2025 17:59:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 41CED613AF;
+	Fri, 16 May 2025 17:59:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T4KosrkzBCQ7; Fri, 16 May 2025 17:59:52 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1NnZBsrYWa-Q; Fri, 16 May 2025 17:59:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 60411417A0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 64D03613A2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 60411417A0;
-	Fri, 16 May 2025 17:59:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 64D03613A2;
+	Fri, 16 May 2025 17:59:54 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 76ADD13D
- for <buildroot@buildroot.org>; Fri, 16 May 2025 17:59:39 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1A2A413D
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 17:59:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5BB2241779
+ by smtp4.osuosl.org (Postfix) with ESMTP id F0CE841779
  for <buildroot@buildroot.org>; Fri, 16 May 2025 17:59:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bqaxbbUGgKj3 for <buildroot@buildroot.org>;
- Fri, 16 May 2025 17:59:38 +0000 (UTC)
+ id Zt48BNmYX4kE for <buildroot@buildroot.org>;
+ Fri, 16 May 2025 17:59:39 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
  helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3850740853
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3850740853
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B950C41786
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B950C41786
 Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3850740853
- for <buildroot@buildroot.org>; Fri, 16 May 2025 17:59:37 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B950C41786
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 17:59:38 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 4F9FB1C1104; Fri, 16 May 2025 19:59:35 +0200 (CEST)
-Message-ID: <f8fc1b51-bb13-4c04-8fb4-9bcfd9a28b36@rnout.be>
-Date: Fri, 16 May 2025 17:48:41 +0200
+ with ESMTPSA id 860DF1C0FCB; Fri, 16 May 2025 19:59:36 +0200 (CEST)
+Message-ID: <65e477f4-54a5-4d5d-ab48-600a1913af73@rnout.be>
+Date: Fri, 16 May 2025 18:07:51 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Jakob Kastelic <jkastelic@thinksrs.com>, buildroot@buildroot.org
-References: <20241219214555.3435133-1-jkastelic@thinksrs.com>
+To: Quentin Schulz <foss+buildroot@0leil.net>, buildroot@buildroot.org
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Kieran Bingham <kieran.bingham@ideasonboard.com>,
+ Marcus Folkesson <marcus.folkesson@gmail.com>,
+ Quentin Schulz <quentin.schulz@cherry.de>, Peter Seiderer <ps.report@gmx.net>
+References: <20250415-libcamera-qcam-v2-0-84301a46a144@cherry.de>
+ <20250415-libcamera-qcam-v2-1-84301a46a144@cherry.de>
 Content-Language: en-GB, fr-BE
-Cc: vincent.stehle@arm.com
-In-Reply-To: <20241219214555.3435133-1-jkastelic@thinksrs.com>
+In-Reply-To: <20250415-libcamera-qcam-v2-1-84301a46a144@cherry.de>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1747418375; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1747418376; h=from:subject:date:message-id:to:cc:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=J+GwInlhrPTX1npX7gimt4LqYFTh9ZRlViM9cBZZ2p0=;
- b=DgWNNy6WW6N7JdTFYdf4w+FOH53O5qw5uc/LsjXT1m3cG0l5NAtU1whgu6VNvgtKbbLC1/
- GXbsqIw4P9XOsln/ivWzsRkpMpwI8MGatOAUZLs5Ygvh87wuA5JWqOdaPxAi8oQEjfnzNe
- H8hxOfTfChah5SXqenowafcfaJjzcJYNSpZc09zdKTCBrTjv3MqU7VaB2sSvA+4GZs6Oqb
- uWGNjHzQ5rN5+So5KX1mMquVmITMOtqj9MVIPtfE8xl1WPYDDA5jAzhpmttuQxY9QsXfaX
- dZauHSohG0rufySfenotmcQftlPAbGY4TBRlbMUgeGAAGDZYGzNV4/mzADPbTw==
+ bh=Xa+MvxbVPDTa8eZNC0/l5xh8w9JWusiV3wxyijxjCuw=;
+ b=BFZwiyAhhCTp8X6vYlmL3BfwRikDtRnYGmheAyAmnoa7BGlOGnHun00cQDMIqJC1OcNWtE
+ VZp8C83GReiUi1JJerTemEzwOUSFwIi30mHN2/eySH5V6RseZ8hNZlV+iE9Ul8VDxICIC2
+ wImy1BQBJ6oIgX5XYGDpKE0TfLsstvF4nKRD4N+9OR4O0EM56Qwd11sLzQMQYv8c0hAu5u
+ k4q0q4tfTqyljSwo7z/HNR0fN2BZHjwfcQ9dqbotXF0Gyez2OFS966Ypj3/x7nTGNLpL+K
+ KJrNolgAMfgxqpZQ1CHHnr8aA3KOnN6TyJbNz1oAxg5/Gvkop7i38dbnA4WS1A==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=DgWNNy6W
-Subject: Re: [Buildroot] [PATCH 1/1] boot/arm-trusted-firmware: optional
- Linux as BL33
+ header.a=rsa-sha256 header.s=dkim header.b=BFZwiyAh
+Subject: Re: [Buildroot] [PATCH v2 1/2] Makefile: add libexec to BR_PATH
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,105 +87,82 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-  Hi Jakob,
+  Hi Quentin,
 
-  Very interesting contribution! Sorry that it took us so long to react... I 
-have a few questions. I'm also adding Vincent in Cc since he has more knowledge 
-about this.
-
-On 19/12/2024 22:45, Jakob Kastelic wrote:
-> Arm Trusted Firmware (TF-A) can be used to load U-Boot or another
-> bootloader, which in turn loads the Linux kernel. However, TF-A is
-> capable of loading the kernel directly. To this end, we need to define
-> the BL33 and BL33_CFG compile options containing, respectively, the
-> zImage and the DTB.
-
-  I didn't even know this was possible, so I checked the documentation, and it 
-talks about setting ARM_LINUX_KERNEL_AS_BL33=1 so I think that should be set as 
-well? Perhaps you use a patched TF-A version that has this set by default?
-
-  Also, on aarch64, it seems you have to set RESET_TO_SP_MIN=1 to be able to use 
-this option.
-
-  Perhaps it would also be a good idea to add a variant of the qemu defconfigs 
-that tests this option. We can use the qemu_arm_vexpress_tz_defconfig, drop 
-U-Boot from it, and switch to booting to Linux directly from TF-A. For aarch64 
-unfortunately we have no defconfigs that don't require UEFI so we don't have 
-anything to test this option with.
-
-  If you don't feel comfortable testing on aarch64, please add a "depends on 
-BR2_arm || BR2_armeb" and mention in the commit message why it's excluded.
-
-
-> This config introduces a new config option,
-> BR2_TARGET_ARM_TRUSTED_FIRMWARE_LINUX_AS_BL33, which sets the BL33 and
-> BL33_CFG parameters, and ensures that the kernel is built before the
-> TF-A by having linux as a _DEPENDENCY of the TF-A.
+On 15/04/2025 11:57, Quentin Schulz wrote:
+> From: Quentin Schulz <quentin.schulz@cherry.de>
 > 
-> Signed-off-by: Jakob Kastelic <jkastelic@thinksrs.com>
-> ---
->   boot/arm-trusted-firmware/Config.in           | 19 +++++++++++++++++++
->   .../arm-trusted-firmware.mk                   |  6 ++++++
->   2 files changed, 25 insertions(+)
+> Meson qt6 module is looking for uic, moc and other host tools that are
+> now installed in /libexec since Qt 6.1.[1]
 > 
-> diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
-> index c8deede9cd..929561fc87 100644
-> --- a/boot/arm-trusted-firmware/Config.in
-> +++ b/boot/arm-trusted-firmware/Config.in
-> @@ -182,6 +182,25 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_EDK2_AS_BL33
->   	  for the 'qemu_sbsa' platform. In this case, due to the EDK2
->   	  build system, the dependency between ATF and EDK is reversed.
->   
-> +config BR2_TARGET_ARM_TRUSTED_FIRMWARE_LINUX_AS_BL33
-> +	bool "Linux kernel"
-> +	depends on BR2_LINUX_KERNEL
-> +	help
-> +	  This option allows to embed the Linux kernel as the BL33 part
-> +	  of the ARM Trusted Firmware.
-> +
-> +	  Do not choose this option if you intend to use U-Boot or
-> +	  another second-stage bootloader. With this option, TF-A starts
-> +	  Linux directly.
-> +
-> +	  With this option chosen, whenever the Linux zImage changes,
-> +	  TF-A may need need to be re-built to create the latest FIP
-> +	  file. Since Buildroot does not track package dependencies,
-> +	  this has to be done manually by invoking `make
-> +	  arm-trusted-firmware-rebuild`. The final boot medium image may
-> +	  need to be re-generated as well to include the latest FIP file
-> +	  version.
-> +
->   endchoice
->   
->   if BR2_TARGET_ARM_TRUSTED_FIRMWARE_BAREBOX_AS_BL33
-> diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> index 172a930b5c..6fc15ab700 100644
-> --- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> +++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> @@ -132,6 +132,12 @@ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += BL33=$(BINARIES_DIR)/$(ARM_TRUSTED_FIRMWARE_UB
->   ARM_TRUSTED_FIRMWARE_DEPENDENCIES += uboot
->   endif
->   
-> +ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_LINUX_AS_BL33),y)
-> +ARM_TRUSTED_FIRMWARE_MAKE_OPTS += BL33=$(BINARIES_DIR)/zImage
+> Since the libexec directory can contain executables,
 
-  On aarch64, it is Image, not zImage. If you can't test it on aarch64, I'
+  libexec is meant for executables that are called from other places and that a 
+user should never call directly. Sometimes, they have the same name as a related 
+executable in bin or sbin.
 
-  Perhaps we should also depend on BR2_LINUX_KERNEL_ZIMAGE || 
-BR2_LINUX_KERNEL_APPENDED_ZIMAGE (|| BR2_LINUX_KERNEL_IMAGE for aarch64) 
-otherwise the zImage will not appear in BINARIES_DIR.
+> it seemingly makes
+> sense to add that path to the BR_PATH environment variable
+
+  So no, it does not make sense to do that.
+
+> so that Qt6
+> applications built with meson can find uic, moc, rcc, etc...
+
+  I don't understand why Qt did this... It implies that these tools are no 
+longer meant to be called directly, but only through qmake? There is 
+documentation for calling moc from the Makefile[1], but that won't work if they 
+install in libexec...
+
+
+> in the
+> Buildroot host tools.
+> 
+> Another attempt[2] was made to make Meson look into the Buildroot host
+> directory but maybe it does make more sense to have libexec part of
+> BR_PATH anyway. Both solutions to the issue aren't exclusive though.
+> 
+> [1] https://github.com/mesonbuild/meson/issues/9791
+
+  It seems it has been fixed in meson now [2][3] so I think we should take those 
+patches (or update meson to 1.8.0) instead.
+
+> [2] https://github.com/mesonbuild/meson/pull/14381
+
+  There's an interesting comment there [4] which says that we call meson 
+incorrectly. That's useful to investigate as well.
 
 
   Regards,
   Arnout
 
-> +ARM_TRUSTED_FIRMWARE_MAKE_OPTS += BL33_CFG=$(BINARIES_DIR)/$(LINUX_DTBS)
-> +ARM_TRUSTED_FIRMWARE_DEPENDENCIES += linux
-> +endif
-> +
->   ifeq ($(BR2_TARGET_VEXPRESS_FIRMWARE),y)
->   ARM_TRUSTED_FIRMWARE_MAKE_OPTS += SCP_BL2=$(BINARIES_DIR)/scp-fw.bin
->   ARM_TRUSTED_FIRMWARE_DEPENDENCIES += vexpress-firmware
+[1] https://doc.qt.io/qt-6/moc.html#writing-make-rules-for-invoking-moc
+[2] https://github.com/mesonbuild/meson/pull/9988
+[3] https://github.com/mesonbuild/meson/pull/10259
+[4] https://github.com/mesonbuild/meson/pull/14381#discussion_r2033625986
+
+
+> 
+> Suggested-by: Peter Seiderer <ps.report@gmx.net>
+> Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
+> ---
+>   Makefile | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index 5bf5abfe3badbd460392582425bbb49ab1a4e7b1..8787a9065fcaae126ed46c434f7ed7988d99bb16 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -468,7 +468,7 @@ $(STAGING_DIR_SYMLINK): | $(BASE_DIR)
+>   	ln -snf $(STAGING_DIR) $(STAGING_DIR_SYMLINK)
+>   
+>   # Quotes are needed for spaces and all in the original PATH content.
+> -BR_PATH = "$(HOST_DIR)/bin:$(HOST_DIR)/sbin:$(PATH)"
+> +BR_PATH = "$(HOST_DIR)/libexec:$(HOST_DIR)/bin:$(HOST_DIR)/sbin:$(PATH)"
+>   
+>   # Location of a file giving a big fat warning that output/target
+>   # should not be used as the root filesystem.
+> 
 
 _______________________________________________
 buildroot mailing list
