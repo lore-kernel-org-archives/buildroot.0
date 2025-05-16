@@ -1,52 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CFF40C2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:01:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04065C2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:01:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7649070EBE;
-	Mon, 19 May 2025 11:01:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C1C9E84820;
+	Mon, 19 May 2025 11:01:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HVi58po41wp5; Mon, 19 May 2025 11:01:29 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zocvj6rR1AR4; Mon, 19 May 2025 11:01:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B34D70EB2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB5E18481B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7B34D70EB2;
-	Mon, 19 May 2025 11:01:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EB5E18481B;
+	Mon, 19 May 2025 11:01:33 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 85EAEE4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:47:32 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 19177193
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:47:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E434041A41
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:34 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2DD00411BB
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DPQnKSepfPrO for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:32 +0000 (UTC)
+ id ovxC28gQZL3R for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CFCFE411BB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 47C04411AD
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id CFCFE411BB
+ by smtp4.osuosl.org (Postfix) with ESMTP id 47C04411AD
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:04 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CDF69872E7; Mon, 19 May 2025 10:40:04 +0000 (UTC)
+ id 3E5AF872E7; Mon, 19 May 2025 10:40:04 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 16 May 2025 16:19:52 +0200
+Date: Fri, 16 May 2025 15:31:48 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c100f6a2feb5785a2c8064a75a2e747e4882e957
-X-Git-Newrev: 45321879e16d97079c3d1a4431f615c73291200b
+X-Git-Oldrev: 2e05f22ff862192a7e512d0db0486351bba94ae8
+X-Git-Newrev: f5d4ed04acd448fc70d330edf3c2a6ac886749b1
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104004.CDF69872E7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] support/testing: new
- python-pydantic runtime test
+Message-Id: <20250519104004.3E5AF872E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/psplash: bump to
+ revision 53ae74a
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,119 +59,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=45321879e16d97079c3d1a4431f615c73291200b
+commit: https://git.buildroot.net/buildroot/commit/?id=f5d4ed04acd448fc70d330edf3c2a6ac886749b1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-While in theory, the fastapi tests finds problems with the pydantic
-package, it's not obvious that this test should be run when the pydantic
-package is updated.
+This includes the following changes:
 
-Add a new test that just covers pydantic.
+53ae74a configure.ac: fix autoconf code for img_fullscreen
+ec1ed35 configure.ac: standardize default-enabled options
+1f64c65 README: Update mailing list to point to yocto-patches ml
+b1a75fd psplash: Only define bool if using C standard older than C23
+5a32cf6 psplash.c: fix crash from length becoming negative
+ecc1913 SECURITY.md: Add file
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+Signed-off-by: Olivier Benjamin <olivier.benjamin@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- DEVELOPERS                                         |  2 ++
- .../tests/package/sample_python_pydantic.py        | 32 ++++++++++++++++++++++
- .../testing/tests/package/test_python_pydantic.py  | 27 ++++++++++++++++++
- 3 files changed, 61 insertions(+)
+ package/psplash/psplash.hash | 2 +-
+ package/psplash/psplash.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 2b28384d0b..44056c5149 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2283,10 +2283,12 @@ F:	package/python-typing-inspection/
- F:	package/python-tzlocal/
- F:	package/python-waitress/
- F:	support/testing/tests/package/test_python_fastapi.py
-+F:	support/testing/tests/package/test_python_pydantic.py
- F:	support/testing/tests/package/test_python_ruamel_yaml.py
- F:	support/testing/tests/package/test_python_tzlocal.py
- F:	support/testing/tests/package/test_python_waitress.py
- F:	support/testing/tests/package/sample_python_fastapi.py
-+F:	support/testing/tests/package/sample_python_pydantic.py
- F:	support/testing/tests/package/sample_python_ruamel_yaml.py
+diff --git a/package/psplash/psplash.hash b/package/psplash/psplash.hash
+index 61514f57c0..e28f35b4f3 100644
+--- a/package/psplash/psplash.hash
++++ b/package/psplash/psplash.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  06def825088f44422fad8a885077d917db6f47688457d4a0953c2ff6f6036378  psplash-44afb7506d43cca15582b4c5b90ba5580344d75d-git4.tar.gz
++sha256  18efa5f56e5b2ff4e8916b7632e7da59122e33f79bb514a8e225e12931e3ef20  psplash-53ae74a36bf17675228552abb927d2f981940a6a-git4.tar.gz
+ sha256  f9c375a1be4a41f7b70301dd83c91cb89e41567478859b77eef375a52d782505  COPYING
+diff --git a/package/psplash/psplash.mk b/package/psplash/psplash.mk
+index bb249e7de8..ea57d884d5 100644
+--- a/package/psplash/psplash.mk
++++ b/package/psplash/psplash.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- N:	Marek Belisko <marek.belisko@open-nandra.com>
-diff --git a/support/testing/tests/package/sample_python_pydantic.py b/support/testing/tests/package/sample_python_pydantic.py
-new file mode 100644
-index 0000000000..4c22f5ede4
---- /dev/null
-+++ b/support/testing/tests/package/sample_python_pydantic.py
-@@ -0,0 +1,32 @@
-+from datetime import datetime
-+
-+from pydantic import BaseModel, PositiveInt
-+
-+
-+class User(BaseModel):
-+    id: int
-+    name: str = "John Doe"
-+    signup_ts: datetime | None
-+    tastes: dict[str, PositiveInt]
-+
-+
-+external_data = {
-+    "id": 123,
-+    "signup_ts": "2019-06-01 12:22",
-+    "tastes": {
-+        "wine": 9,
-+        b"cheese": 7,
-+        "cabbage": "1",
-+    },
-+}
-+
-+user = User(**external_data)
-+expected_user_dump = {
-+    "id": 123,
-+    "name": "John Doe",
-+    "signup_ts": datetime(2019, 6, 1, 12, 22),
-+    "tastes": {"wine": 9, "cheese": 7, "cabbage": 1},
-+}
-+
-+assert user.id == 123
-+assert user.model_dump() == expected_user_dump
-diff --git a/support/testing/tests/package/test_python_pydantic.py b/support/testing/tests/package/test_python_pydantic.py
-new file mode 100644
-index 0000000000..1369d82f59
---- /dev/null
-+++ b/support/testing/tests/package/test_python_pydantic.py
-@@ -0,0 +1,27 @@
-+import os
-+
-+from tests.package.test_python import TestPythonPackageBase
-+
-+
-+class TestPythonPy3Pydantic(TestPythonPackageBase):
-+    __test__ = True
-+    config = """
-+        BR2_arm=y
-+        BR2_cortex_a9=y
-+        BR2_ARM_ENABLE_NEON=y
-+        BR2_ARM_ENABLE_VFP=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_PYDANTIC=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+    sample_scripts = ["tests/package/sample_python_pydantic.py"]
-+    timeout = 30
-+
-+    def login(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(
-+            arch="armv7", kernel="builtin", options=["-initrd", cpio_file]
-+        )
-+        self.emulator.login()
+-PSPLASH_VERSION = 44afb7506d43cca15582b4c5b90ba5580344d75d
++PSPLASH_VERSION = 53ae74a36bf17675228552abb927d2f981940a6a
+ PSPLASH_SITE = https://git.yoctoproject.org/psplash
+ PSPLASH_SITE_METHOD = git
+ PSPLASH_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
