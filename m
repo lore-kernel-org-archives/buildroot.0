@@ -4,50 +4,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4DF6C3ABC9
-	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 15:15:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 686E1C3ABD8
+	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 15:16:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9FFEC825BF;
-	Fri, 16 May 2025 15:15:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 20F21825BF;
+	Fri, 16 May 2025 15:16:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BFtslUxv_Jb8; Fri, 16 May 2025 15:15:42 +0000 (UTC)
+ id elygy4nc4zIo; Fri, 16 May 2025 15:16:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CEE9E824F4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5845083490
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CEE9E824F4;
-	Fri, 16 May 2025 15:15:41 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 268A4185
- for <buildroot@buildroot.org>; Fri, 16 May 2025 15:15:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5845083490;
+	Fri, 16 May 2025 15:16:29 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id E28631AB
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 15:16:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0C990612C1
- for <buildroot@buildroot.org>; Fri, 16 May 2025 15:15:40 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C802A40591
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 15:16:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id stBZUwUVE0w4 for <buildroot@buildroot.org>;
- Fri, 16 May 2025 15:15:39 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4017E612AE
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4017E612AE
- for <buildroot@buildroot.org>; Fri, 16 May 2025 15:15:39 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2F09E86BEE; Fri, 16 May 2025 15:15:39 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id H6yDkR7-NMIr for <buildroot@buildroot.org>;
+ Fri, 16 May 2025 15:16:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org F0EDA4093B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F0EDA4093B
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F0EDA4093B
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 15:16:26 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 970B819F5C2;
+ Fri, 16 May 2025 17:16:21 +0200 (CEST)
+Received: from 2a02-842a-45ac-9401-0517-4590-b867-5f74.rev.sfr.net
+ (2a02:842a:45ac:9401:517:4590:b867:5f74)
+ via 2a02-842a-45ac-9401-0517-4590-b867-5f74.rev.sfr.net
+ (2a02:842a:45ac:9401:517:4590:b867:5f74) by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 16 May 2025 17:16:21 +0200
+MIME-Version: 1.0
+Date: Fri, 16 May 2025 17:16:21 +0200
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Fri, 16 May 2025 17:15:08 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d0841c007b4fbfaa4d9070d5936ad6924d61a105
-X-Git-Newrev: b0a703a974503b59881630a6b36ee8f5a1d37248
-X-Patchwork-Hint: ignore
-Message-Id: <20250516151539.2F09E86BEE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rtl8188eu: fix building with Linux
- 6.14
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: buildroot@buildroot.org, Luca Ceresoli <luca.ceresoli@bootlin.com>
+In-Reply-To: <20250516101747.2942959-1-giulio.benetti@benettiengineering.com>
+References: <20250516101747.2942959-1-giulio.benetti@benettiengineering.com>
+User-Agent: Webmail Free/1.6.10
+Message-ID: <b392148004b0573246f7892d9eb39804@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1747408583;
+ bh=5x3VIsiNdhy79E4KDwgUA32fLUecnyDD7mM+8aaJYbc=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=pB5EbduimmNb4WSC6DbW9p6mNsylCUxXxBp7MvbR8qn0p5BtZ80+EqKT0iBIiAfw0
+ kRJ3bkYxod1rUOEY8YU7yKvHwpgRYNVJ4eN4ymsOOiTfGYY510ZslrgLy7gjYGQINq
+ ATLsPGMgY8aAapSd9WpkQVMhEizxHO9xe2e2cYDRbtmM1awX6E4U1EWrMJAGHV3DVt
+ z4vE6XO4pvxZUXVJATc+zGqxRLDzlq9iGHde952vaYF3lKqDWM0eARi3E2wBP08qrH
+ zorpnrNx34p8f9w9rKwaRTlmUHpZfSpVImsUxHzbvlwsDhjciC0LDJmbVF0Okx8/h/
+ cRRlA3SRex6iw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=pB5Ebdui
+Subject: Re: [Buildroot] [PATCH v2] package/rtl8188eu: fix building with
+ Linux 6.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,66 +84,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b0a703a974503b59881630a6b36ee8f5a1d37248
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 16/05/2025 12:17, Giulio Benetti wrote:
+> Add local patch pending upstream to fix build failure with Linux 6.14.
+> 
+> Fixes:
+> https://autobuild.buildroot.org/results/065b9afc1c6f9f5561547b12171269adc8c12275
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-Add local patch pending upstream to fix build failure with Linux 6.14.
-
-Fixes:
-https://autobuild.buildroot.org/results/065b9afc1c6f9f5561547b12171269adc8c12275
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- .../rtl8188eu/0002-Fix-build-with-Linux-6.14.patch | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
-
-diff --git a/package/rtl8188eu/0002-Fix-build-with-Linux-6.14.patch b/package/rtl8188eu/0002-Fix-build-with-Linux-6.14.patch
-new file mode 100644
-index 0000000000..a05a760d22
---- /dev/null
-+++ b/package/rtl8188eu/0002-Fix-build-with-Linux-6.14.patch
-@@ -0,0 +1,33 @@
-+From 0363681349f683050bc9a265db8310e8c4eb6534 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Thu, 15 May 2025 22:32:48 +0200
-+Subject: [PATCH] Fix build with Linux 6.14
-+
-+Commit:
-+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7a53af85d3bbdbe06cd47b81a6d99a04dc0a3963
-+adds argument "unsigned int link_id" to get_tx_power(), so let's add it to
-+cfg80211_rtw_get_txpower() according to Linux version.
-+
-+Upstream: https://github.com/lwfinger/rtl8188eu/pull/464
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ ioctl_cfg80211.c | 3 +++
-+ 1 file changed, 3 insertions(+)
-+
-+diff --git a/ioctl_cfg80211.c b/ioctl_cfg80211.c
-+index 270cfce..04434fa 100644
-+--- a/ioctl_cfg80211.c
-++++ b/ioctl_cfg80211.c
-+@@ -3240,6 +3240,9 @@ static int cfg80211_rtw_set_txpower(struct wiphy *wiphy,
-+ static int cfg80211_rtw_get_txpower(struct wiphy *wiphy,
-+ #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 8, 0))
-+ 	struct wireless_dev *wdev,
-++#endif
-++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 14, 0))
-++	unsigned int link_id,
-+ #endif
-+ 	int *dbm)
-+ {
-+-- 
-+2.39.5
-+
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
