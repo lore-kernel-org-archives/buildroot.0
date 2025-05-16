@@ -1,104 +1,101 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6404FC3ABDD
-	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 07:45:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43EC7C3ABD8
+	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 07:56:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 02B13408D5;
-	Fri, 16 May 2025 07:45:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E2FE260655;
+	Fri, 16 May 2025 07:56:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PM5GXb2kB6QF; Fri, 16 May 2025 07:45:02 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id A-KNqak3lHjo; Fri, 16 May 2025 07:56:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F30E4092E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3388560AFD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2F30E4092E;
-	Fri, 16 May 2025 07:45:02 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 3103713D
- for <buildroot@buildroot.org>; Fri, 16 May 2025 07:45:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3388560AFD;
+	Fri, 16 May 2025 07:56:05 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id E63441C7
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 07:56:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 15B684092E
- for <buildroot@buildroot.org>; Fri, 16 May 2025 07:45:01 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CB7C983C54
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 07:56:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HEK6XQA4rU0K for <buildroot@buildroot.org>;
- Fri, 16 May 2025 07:45:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9o5ZJJ-wZXRW for <buildroot@buildroot.org>;
+ Fri, 16 May 2025 07:56:02 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::52a; helo=mail-ed1-x52a.google.com;
- envelope-from=adam.duskett@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 415F640928
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 415F640928
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com
- [IPv6:2a00:1450:4864:20::52a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 415F640928
- for <buildroot@buildroot.org>; Fri, 16 May 2025 07:45:00 +0000 (UTC)
-Received: by mail-ed1-x52a.google.com with SMTP id
- 4fb4d7f45d1cf-600fca8930aso107867a12.3
- for <buildroot@buildroot.org>; Fri, 16 May 2025 00:44:59 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::12e; helo=mail-lf1-x12e.google.com;
+ envelope-from=roykollensvendsen@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0245583C4F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0245583C4F
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com
+ [IPv6:2a00:1450:4864:20::12e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0245583C4F
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 07:56:01 +0000 (UTC)
+Received: by mail-lf1-x12e.google.com with SMTP id
+ 2adb3069b0e04-54fcffd6b9dso2077285e87.1
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 00:56:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1747381498; x=1747986298;
+ d=1e100.net; s=20230601; t=1747382160; x=1747986960;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=OvhfvDSMvEVgo7Ppx279nsF0MTMIYSSmyrIa7A1KVzk=;
- b=DcdScE0aRGlzWfzL42hHZghxNNIRNMgi7vv67Mm+7uRg1dktNotGx0L08NDQUc9QkY
- oaBIR4y85Avf4nFpmNuS3a7T+xi3+V4jqoRAel4qh6wbs23/3tvOPBGL0xM+sRfYDNIT
- EzGPYDLobl8bNUCS3rx4ucxc6CbSJynHjReGlrABvsGulRe1uCRkiYzbohA2Yg2K3uG/
- Mpw3dunkPbQME5x2m4aP+RtCSiDfbQeFlD56GRNNJR0ZwK1DmR3ccxH6KWs1BvzU88qw
- jnVp1lJRFZzd7q0y9jwU1nFeDJi4kCQzqrnqa/HR5+BazlxQ+3hRSu0aaOG5hXa65qSf
- Zbwg==
-X-Gm-Message-State: AOJu0Yz1680Ap1VrY6NuGCCtgrAmwsq+V6wSb2CPwASYGRkDpCOI1VD3
- CDPEHjGBUm2LDNHpiYwf0cSz5htS4EiEdYqfiyR9653F6rXf9R9FG74Bc/9Jf9cq1V5ibmwQsdB
- XZTV21J0=
-X-Gm-Gg: ASbGncsr8rdtXYavGIxM9laIKe4CUCpRgh9G5RezdHCtTBOEeYNbwZDXStZyrYQ1YKF
- /1kkeyB+CtiDcd6hE76nCVMyutxn4qf+AX1Q9AZanoyYPNlyJpjoOxRSgLu7FFUA5BAiImV1JEW
- jkfHYm/VQaUAYeymoqvT1i9rJAe8aWaxBcHgWoWn9WtIFASsakUJXnDPY8p/NnhWNokYxqV83Nu
- MZSmiFocTmZtgaYHWWcZUOMcZVxMuxX+MAI7FB4DIHP4JN0FJEWOS1mwbZIjhnP1FtBr8kxonqn
- 716YiJ56mEp/ycrtUwPhWIoqQcUuf8zckmUPmHubmR4MdWDPdriqWxkzre1DpWQr7KmvvOSSObf
- yuA9lu0f1uOmf4iMnE2jdJ0BCMntgyTQQKvKjjz7M48pZz5GOjEcdWX2QFXXvQK9aNecY1H08/D
- 53w5zyLGIUaiXNaeoXU5XNJemK9bdFMxo=
-X-Google-Smtp-Source: AGHT+IG1Ke/TUuMPtQ4evZuxoHWUMWocob+nLlNHsrKjPgtbZPzo/5GXUjk7vUy1HYwrNQZoXxP2NQ==
-X-Received: by 2002:a17:907:b13:b0:ad4:fd61:6154 with SMTP id
- a640c23a62f3a-ad52d428cb8mr68081666b.1.1747381497865; 
- Fri, 16 May 2025 00:44:57 -0700 (PDT)
-Received: from fedora.amarulasolutions.com
- (2001-1c00-8182-4700-cf31-04f3-d898-af42.cable.dynamic.v6.ziggo.nl.
- [2001:1c00:8182:4700:cf31:4f3:d898:af42])
+ bh=bMw7ufgi5p4FaWXiEFQba6r4MDEO8FC0XWQKbVs5EH8=;
+ b=V2NA75zVicnX4hpqx+uviRDvtzNaVcP/mNnhhSvMywtK1ADK3Kw2LGB3S8SZWNBgyB
+ NfuhT3n4T001oLeldVo4bnMDcAquy4GT6A9CQNRMdbYBjDXtsnR37GYVf8LnXnc7sdAj
+ 9bCt6nR4gXFQ7tjrjCxXyxv033XGHuaYDc7znoTWu6EoobN66Ucw2escrU+LBoTuwK08
+ B7INvPCJShDJdF0f7bzZcF0lwJiaOgmXFz5dODVmHy0Sg+GYlfj3LyXDLmaUpJNNp/hB
+ +njpu0LL7Nr4OzHq+zcdT2ZC5OHH+5M+VmwI5ILVFCqV+HixVZ7EN2jed2skvZJjq27R
+ Qgdw==
+X-Gm-Message-State: AOJu0YwxWOY69Lp9w1QudFK0FtxgYNkH7BzgWsjELGU2gf/DYcELw88m
+ xvJ0/dqmXu8uynZheAHPXg5BwMF/dua/NJl/BYEfmslQ8hdqshzhmthszMp/+Q==
+X-Gm-Gg: ASbGncsfMi8p1w34cV5yTykAP9ZBkQRhZMltI2F9i2XcvNNPzMOIsW8XL6IfgHscgWN
+ kVFU3wNk1mGoVGdZGJggs+S4P+RUCUTPtvE0sfv7yLbOrEtrlhfZy1oBN9rowOrkmsnfd079B53
+ TRle+L1xqcu6LoJton/nrm839YvvqYZ5MLiPqwJZ4yPHbHBTorEX1b0Ru/cJBlmvpoRWtbIEi/Z
+ +FQEQErxvmGQ35C1bPMu8nVBip73Q7Zo06B2SJsKKCxiVMoVF3OcK++F4GOghJTEI92Nu14BHYX
+ yp/nXygbePx1UeJYhKwQfSvDWFDpFKJcFAiTYYyRf3WvnvWMME0/bq6eHqHNWUUZmeq+J6rq2tG
+ h8XctsA==
+X-Google-Smtp-Source: AGHT+IE55HrRfXMFR/+jmMQC297WLkVBoeWfiXbxdccLnrZEGdKncCHMJD1KVTVqm4MzlREU67T3RQ==
+X-Received: by 2002:a05:6512:460d:b0:550:e4a2:e0e0 with SMTP id
+ 2adb3069b0e04-550e72455c5mr664277e87.44.1747382159299; 
+ Fri, 16 May 2025 00:55:59 -0700 (PDT)
+Received: from precision7530-arch-roy.lan ([79.161.254.180])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-ad52d4cc1dcsm109178166b.170.2025.05.16.00.44.57
+ 2adb3069b0e04-550e6f31497sm311448e87.82.2025.05.16.00.55.57
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 16 May 2025 00:44:57 -0700 (PDT)
-From: Adam Duskett <adam.duskett@amarulasolutions.com>
+ Fri, 16 May 2025 00:55:58 -0700 (PDT)
+From: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
 To: buildroot@buildroot.org
-Cc: Marek Belisko <marek.belisko@open-nandra.com>,
- Adam Duskett <adam.duskett@amarulasolutions.com>
-Date: Fri, 16 May 2025 09:44:55 +0200
-Message-ID: <20250516074455.1473051-1-adam.duskett@amarulasolutions.com>
+Cc: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
+Date: Fri, 16 May 2025 09:55:50 +0200
+Message-ID: <20250516075553.3942690-1-roykollensvendsen@gmail.com>
 X-Mailer: git-send-email 2.49.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1747381498; x=1747986298;
- darn=buildroot.org; 
+ d=gmail.com; s=20230601; t=1747382160; x=1747986960; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=OvhfvDSMvEVgo7Ppx279nsF0MTMIYSSmyrIa7A1KVzk=;
- b=nGozREBr2xD6lv1zCNVA6SCzjePb52fHEdEUn3NnuuL4yvCb8AgndwaaPjab2FAixW
- DMkWswBYQRzEL1mqnibKcXViUxv2Q/rh18rHxfyKwSZ6tocl1mR4reLtA+Y1VClbHXVv
- BejPKZCp7tSR6ZBilw3i1SW7QhU/1zCgumGUo=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=bMw7ufgi5p4FaWXiEFQba6r4MDEO8FC0XWQKbVs5EH8=;
+ b=GEZkZsxuNRCTl9ns+InkfLhE42EHKnL09C6xoeFQHqMiCA1mp6QZffwUSZSqKNboGi
+ baxJfju4p1FxogYUafU8RI2vsAW2bosTgahIa9RCnm8Ilh6qycDifETn9cxJjg4PDE/3
+ XrUcICQ3gbizFBOF5/IVYWAXi1NLLRMy+j7SFSyNfp1YpxPxnK8dfL/9CM18KHbePehg
+ pFGjMTr/7yfPUfaVWV/QbtChC81aRGrUIwbraf31Sm1Iho+cyRMz4ZoKyGyzUZavnE59
+ H+agHYpX7wjbdTjgzdeS0DyoPWbcMC0YZ4fWERZVisUBvCc0SWxbvwJTRrHy4Wy9d0Dn
+ uygQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=nGozREBr
-Subject: [Buildroot] [PATCH 1/1] package/polkit: bump version to 126
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=GEZkZsxu
+Subject: [Buildroot] [PATCH 1/2] package/dlib: bump version to 19.24.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,53 +112,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop the -Djs_engine=duktape option as mozjs support has been removed entirely
-and as such, the option no longer exists.
-
-Tested with `./support/testing/run-tests tests.package.test_polkit`
-Both tests pass.
-
-Also tested with `./utils/test-pkg -p polkit -a`
-40 builds, 8 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
-
-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
 ---
- package/polkit/polkit.hash | 2 +-
- package/polkit/polkit.mk   | 5 ++---
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ package/dlib/dlib.hash | 2 +-
+ package/dlib/dlib.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/polkit/polkit.hash b/package/polkit/polkit.hash
-index a3855adecd..f8499f5ed2 100644
---- a/package/polkit/polkit.hash
-+++ b/package/polkit/polkit.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  ea5cd6e6e2afa6bad938ee770bf0c2cd9317910f37956faeba2869adcf3747d1  polkit-125.tar.gz
-+sha256  2814a7281989f6baa9e57bd33bbc5e148827e2721ccef22aaf28ab2b376068e8  polkit-126.tar.gz
- sha256  d2e2aa973e29c75e1b492e67ea7b7da9de2d501d49a934657971fd74f9a0b0a8  COPYING
-diff --git a/package/polkit/polkit.mk b/package/polkit/polkit.mk
-index 234e1cf415..653a2819c4 100644
---- a/package/polkit/polkit.mk
-+++ b/package/polkit/polkit.mk
+diff --git a/package/dlib/dlib.hash b/package/dlib/dlib.hash
+index af206386b8..350f30dc26 100644
+--- a/package/dlib/dlib.hash
++++ b/package/dlib/dlib.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  22513c353ec9c153300c394050c96ca9d088e02966ac0f639e989e50318c82d6  dlib-19.24.6.tar.gz
++sha256  65ff8debc3ffea84430bdd4992982082caf505404e16d986b7493c00f96f44e9  dlib-19.24.9.tar.gz
+ 
+ # Hashes for license files
+ sha256  50c1c5978d490c7f13062d91c4b89affc83774f87bc4568a714f748b62a5b216  dlib/external/libjpeg/README
+diff --git a/package/dlib/dlib.mk b/package/dlib/dlib.mk
+index 4eb0002775..0c93130d34 100644
+--- a/package/dlib/dlib.mk
++++ b/package/dlib/dlib.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--POLKIT_VERSION = 125
-+POLKIT_VERSION = 126
- POLKIT_SITE = $(call github,polkit-org,polkit,$(POLKIT_VERSION))
- POLKIT_LICENSE = GPL-2.0
- POLKIT_LICENSE_FILES = COPYING
-@@ -20,8 +20,7 @@ POLKIT_LDFLAGS = $(TARGET_NLS_LIBS)
- POLKIT_CONF_OPTS = \
- 	-Dman=false \
- 	-Dexamples=false \
--	-Dsession_tracking=ConsoleKit \
--	-Djs_engine=duktape
-+	-Dsession_tracking=ConsoleKit
- 
- ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
- POLKIT_CONF_OPTS += -Dintrospection=true
+-DLIB_VERSION = 19.24.6
++DLIB_VERSION = 19.24.9
+ DLIB_SITE = $(call github,davisking,dlib,v$(DLIB_VERSION))
+ DLIB_CMAKE_BACKEND = ninja
+ DLIB_INSTALL_STAGING = YES
 -- 
 2.49.0
 
