@@ -1,53 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0EAAC3ABC9
-	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 11:57:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D5E0C3ABD8
+	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 11:57:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A013B4071E;
-	Fri, 16 May 2025 11:57:04 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sYX3RfPeO6Oy; Fri, 16 May 2025 11:57:03 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B1261406F1
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B1261406F1;
-	Fri, 16 May 2025 11:57:03 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id C6C6B1AB
- for <buildroot@buildroot.org>; Fri, 16 May 2025 11:57:00 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B80E76071E
- for <buildroot@buildroot.org>; Fri, 16 May 2025 11:57:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 69A91606F6;
+	Fri, 16 May 2025 11:57:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pehYW7HEESjX for <buildroot@buildroot.org>;
- Fri, 16 May 2025 11:57:00 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F1B1606F6
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0F1B1606F6
- for <buildroot@buildroot.org>; Fri, 16 May 2025 11:57:00 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0AA5A86A52; Fri, 16 May 2025 11:57:00 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 16 May 2025 13:55:09 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fa5771d9759868365823dcaf3f8a8fc6673b681c
-X-Git-Newrev: 45439ae262aeb0cf720815c5a7b541467a39a60c
-X-Patchwork-Hint: ignore
-Message-Id: <20250516115700.0AA5A86A52@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-flask: security bump to
- version 3.1.1
+ id LRVZtmVogxxg; Fri, 16 May 2025 11:57:45 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A67336071E
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id A67336071E;
+	Fri, 16 May 2025 11:57:45 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7D78B13D
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 11:57:44 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6F1EB60B0B
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 11:57:44 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LUq_7a7qVM3O for <buildroot@buildroot.org>;
+ Fri, 16 May 2025 11:57:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=84.110.109.230;
+ helo=mail.tkos.co.il; envelope-from=baruch@tkos.co.il; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org BC3CF6071E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC3CF6071E
+Received: from mail.tkos.co.il (golan.tkos.co.il [84.110.109.230])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BC3CF6071E
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 11:57:42 +0000 (UTC)
+Received: from localhost (unknown [10.0.8.2])
+ by mail.tkos.co.il (Postfix) with ESMTP id 2190D440B04;
+ Fri, 16 May 2025 14:57:18 +0300 (IDT)
+To: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+In-Reply-To: <1e53f695-653e-4506-82fe-3ed97d468b46@rnout.be> (Arnout
+ Vandecappelle via buildroot's message of "Fri, 16 May 2025 12:41:26
+ +0200")
+References: <20250415141711.1940219-1-lancethepants@gmail.com>
+ <1e53f695-653e-4506-82fe-3ed97d468b46@rnout.be>
+User-Agent: mu4e 1.12.9; emacs 30.1
+Date: Fri, 16 May 2025 14:57:38 +0300
+Message-ID: <87ecwowyx9.fsf@tarshish>
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=tkos.co.il; s=default; t=1747396638;
+ bh=iA7ZB1en+3sbyGYFcGpJxIHGzEMaFQDvzKs/4G/JDwI=;
+ h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+ b=wte3Y6YYZatn9x006yPfT+rKKjuIKiKl/9JzG4Q1NmlWZw3leniV3Ak+Bq/9rtqRz
+ MBslMUAm43hJk2rEeRdZvvAyKSfqKzXFrPJAwN9csg1bOKqHFdXh64t0B8Q4fJJ9rA
+ sxWuPyhAbI/z58kWMKCjbZfwIEZrcf9Ko7baPB8kKLIrLpqfw0fKw8Qcz1JmEkVCFq
+ M1LO+myVyDS7RhGnz/h/Y6jTXGv+lTIDSeuxnN/gq1i3AZ3lhnVY4d5Pw6zOJy8UPc
+ puwxGIYw9eJ8RI22hKC+sitGWB3LM/dAqDZrRt+jcNrXgaMoZQAyFKfKRlp9kYdwhB
+ c9nDKu9CNmyuw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=tkos.co.il
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=tkos.co.il header.i=@tkos.co.il header.a=rsa-sha256
+ header.s=default header.b=wte3Y6YY
+Subject: Re: [Buildroot] [PATCH] package/dnsmasq: bump version to 2.91
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,64 +78,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Baruch Siach via buildroot <buildroot@buildroot.org>
+Reply-To: Baruch Siach <baruch@tkos.co.il>
+Cc: Bernd Kuhls <bernd@kuhls.net>, Lance Fredrickson <lancethepants@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=45439ae262aeb0cf720815c5a7b541467a39a60c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Arnout,
 
-Fixes the following security issues:
+On Fri, May 16 2025, Arnout Vandecappelle via buildroot wrote:
+> On 15/04/2025 16:17, Lance Fredrickson wrote:
+>> From: Lance Fredrickson <lancethepants@gmail.com>
+>> Changelog: https://thekelleys.org.uk/dnsmasq/CHANGELOG
+>> Release notes:
+>> https://lists.thekelleys.org.uk/pipermail/dnsmasq-discuss/2025q1/018079.html
+>> Signed-off-by: Lance Fredrickson <lancethepants@gmail.com>
+>
+>  Applied to 2025.02.x, thanks.
 
-- CVE-2025-47278: In Flask 3.1.0, the way fallback key configuration was
-    handled resulted in the last fallback key being used for signing,
-    rather than the current signing key.
+For some reason, this and all your other commits to stable branches are
+signed off by Thomas Perale. Is that intended?
 
-For more information, see:
-  - https://nvd.nist.gov/vuln/detail/CVE-2025-47278
-  - https://github.com/pallets/flask/commit/73d6504063bfa00666a92b07a28aaf906c532f09
+baruch
 
-For more details on the version bump, see the release notes:
-  - https://github.com/pallets/flask/releases/tag/3.1.1
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-flask/python-flask.hash | 4 ++--
- package/python-flask/python-flask.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/python-flask/python-flask.hash b/package/python-flask/python-flask.hash
-index 97982f99d5..17564e8587 100644
---- a/package/python-flask/python-flask.hash
-+++ b/package/python-flask/python-flask.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/flask/json
--md5  c95d81666442bf04f7de7db7edbe2aff  flask-3.1.0.tar.gz
--sha256  5f873c5184c897c8d9d1b05df1e3d01b14910ce69607a117bd3277098a5836ac  flask-3.1.0.tar.gz
-+md5  59dc1b0772bab098aff83e8008e97af6  flask-3.1.1.tar.gz
-+sha256  284c7b8f2f58cb737f0cf1c30fd7eaf0ccfcde196099d24ecede3fc2005aa59e  flask-3.1.1.tar.gz
- # Locally computed sha256 checksums
- sha256  489a8e1108509ed98a37bb983e11e0f7e1d31f0bd8f99a79c8448e7ff37d07ea  LICENSE.txt
- sha256  1e07e9c25f2618a040560b70e63f42259eab24e558d0f3532e6163d751cb4eea  docs/license.rst
-diff --git a/package/python-flask/python-flask.mk b/package/python-flask/python-flask.mk
-index d44c2e68ef..2269b05d29 100644
---- a/package/python-flask/python-flask.mk
-+++ b/package/python-flask/python-flask.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_FLASK_VERSION = 3.1.0
-+PYTHON_FLASK_VERSION = 3.1.1
- PYTHON_FLASK_SOURCE = flask-$(PYTHON_FLASK_VERSION).tar.gz
--PYTHON_FLASK_SITE = https://files.pythonhosted.org/packages/89/50/dff6380f1c7f84135484e176e0cac8690af72fa90e932ad2a0a60e28c69b
-+PYTHON_FLASK_SITE = https://files.pythonhosted.org/packages/c0/de/e47735752347f4128bcf354e0da07ef311a78244eba9e3dc1d4a5ab21a98
- PYTHON_FLASK_SETUP_TYPE = flit
- PYTHON_FLASK_LICENSE = BSD-3-Clause
- PYTHON_FLASK_LICENSE_FILES = LICENSE.txt docs/license.rst
+-- 
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
