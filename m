@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 309E5C3ABDD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:01:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FA95C3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:01:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6482881162;
-	Mon, 19 May 2025 11:01:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D97C8813CC;
+	Mon, 19 May 2025 11:01:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tmKA728cwKFk; Mon, 19 May 2025 11:01:45 +0000 (UTC)
+ id 8iLYHqESaF3T; Mon, 19 May 2025 11:01:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F0E1810FB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E73A181233
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8F0E1810FB;
-	Mon, 19 May 2025 11:01:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E73A181233;
+	Mon, 19 May 2025 11:01:48 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 20A4CE4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:47:40 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 32201D4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:47:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9ED3B41A3A
+ by smtp4.osuosl.org (Postfix) with ESMTP id C2019411CB
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CpW4aC16ScKf for <buildroot@buildroot.org>;
+ id LXNxe87dm-MO for <buildroot@buildroot.org>;
  Mon, 19 May 2025 10:40:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C89C441A70
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7360941A4A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C89C441A70
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7360941A4A
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C6B7783BC0; Mon, 19 May 2025 10:40:05 +0000 (UTC)
+ id 6E1728348A; Mon, 19 May 2025 10:40:05 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 16 May 2025 20:00:36 +0200
+Date: Fri, 16 May 2025 18:33:11 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e743759a5202d50b40b10bd9b9a1c31243621dad
-X-Git-Newrev: 3776f7c11ffa5bf0ee8d4f7d03bb06db1ae418aa
+X-Git-Oldrev: 82575b3e52b5ada683a3305a275ed38cdda3a912
+X-Git-Newrev: f777c7991275c62f2881d1dae0c2aa357a7f1a21
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104005.C6B7783BC0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] support/download: replace
- deprecated .cargo/config
+Message-Id: <20250519104005.6E1728348A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/dbus: set
+ session-socket-dir to /tmp
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,49 +66,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3776f7c11ffa5bf0ee8d4f7d03bb06db1ae418aa
+commit: https://git.buildroot.net/buildroot/commit/?id=f777c7991275c62f2881d1dae0c2aa357a7f1a21
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-With the current vendoring process, any Cargo build emits the
-following warning:
+dbus has a session socket directory configuration setting,
+that, if not set, will be autodeducted based on env vars
+like TMPDIR during configuration time.
 
-warning: `.../.cargo/config` is deprecated in favor of `config.toml`
+Becuse of that, the builder's environment variables will
+lead to an image with a broken session bus while
+leaking builder's details to the image.
 
-.cargo/config.toml was introduced in 1.39 [1], so there shouldn't be
-backwards compatibility issues in Buildroot. However, because the
-generated config file becomes part of the vendored archive, this
-changes the hashes of all Cargo-based packages.
+Add an explicit setting of session-socket-dir to /tmp dir.
 
-[1] https://doc.rust-lang.org/cargo/reference/config.html#hierarchical-structure
+Fixes: https://gitlab.com/buildroot.org/buildroot/-/issues/67
 
-Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Nikita Kiryushin <kiryushin@ancud.ru>
+Reviewed-by: Fiona Klute <fiona.klute@gmx.de>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- support/download/cargo-post-process | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/dbus/dbus.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/support/download/cargo-post-process b/support/download/cargo-post-process
-index 12198051a4..b0e59ad74d 100755
---- a/support/download/cargo-post-process
-+++ b/support/download/cargo-post-process
-@@ -31,14 +31,14 @@ post_process_unpack "${base_name}" "${output}"
- # Do the Cargo vendoring
- pushd "${base_name}" > /dev/null
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index c60bf473cd..2002e707f0 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -34,6 +34,7 @@ DBUS_CONF_OPTS = \
+ 	--disable-doxygen-docs \
+ 	--with-system-socket=/run/dbus/system_bus_socket \
+ 	--with-system-pid-file=/run/messagebus.pid \
++	--with-session-socket-dir=/tmp \
+ 	--runstatedir=/run
  
--# Create the local .cargo/config with vendor info
-+# Create the local .cargo/config.toml with vendor info
- mkdir -p .cargo/
- mkdir -p "${CARGO_HOME}"
- flock "${CARGO_HOME}"/.br-lock \
- cargo vendor \
-     --manifest-path "${manifest}" \
-     --locked VENDOR \
--    > .cargo/config
-+    > .cargo/config.toml
- 
- # "cargo vendor' outputs on stderr a message directing to add some data
- # to the project's .cargo/config.toml, data that it outputs on stdout.
+ ifeq ($(BR2_STATIC_LIBS),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
