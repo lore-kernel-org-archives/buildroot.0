@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92A83C3DA6D
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:48:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 909FFC3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:48:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 656ED6F514;
-	Mon, 19 May 2025 10:48:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 581B983FF3;
+	Mon, 19 May 2025 10:48:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WL_5Oof_MFm2; Mon, 19 May 2025 10:48:12 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id G_scTrGMMji3; Mon, 19 May 2025 10:48:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 13F3B6F518
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8AA5583FF0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 13F3B6F518;
-	Mon, 19 May 2025 10:48:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0419FD4
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8AA5583FF0;
+	Mon, 19 May 2025 10:48:14 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 73E50D4
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:41:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 761D841282
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:56 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0EAC341825
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gyjdOIvw_Rkl for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:55 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dCHtCwdJcx_L for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A7F7E40D34
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 446AF417F5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A7F7E40D34
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:48 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 446AF417F5
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:03 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A1B2D84A21; Mon, 19 May 2025 10:39:48 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+ id 4057A873D4; Mon, 19 May 2025 10:40:03 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 10 Apr 2025 21:35:31 +0200
+Date: Fri, 16 May 2025 11:48:02 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 2d5903769ff00d0104b9e945c0e13a8094c7a6dd
-X-Git-Newrev: 4df4d1d31240aa4d1c49dcbcb9694ce32eb626ba
+X-Git-Oldrev: 4e95062f820a64ecd2402115ee552dbcf2874f02
+X-Git-Newrev: 634b2c525308ce3bcc86a55f286aeb1f07b18b15
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103948.A1B2D84A21@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libcoap: bump version
- to 4.3.5
+Message-Id: <20250519104003.4057A873D4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/fluidsynth: bump to
+ version 2.4.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,109 +65,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4df4d1d31240aa4d1c49dcbcb9694ce32eb626ba
+commit: https://git.buildroot.net/buildroot/commit/?id=634b2c525308ce3bcc86a55f286aeb1f07b18b15
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The patch introduced in [1] that fixed the CVE-2024-0962 is now
-available upstream in the 4.3.5 release [2].
+For change log since v2.4.3, see:
+https://github.com/FluidSynth/fluidsynth/releases/tag/v2.4.4
+https://github.com/FluidSynth/fluidsynth/releases/tag/v2.4.5
 
-This commit also updates the LICENSE file hash, after adding reference
-to wolfSSL in [3].
-
-For more details see the release note:
-https://github.com/obgm/libcoap/blob/v4.3.5/ChangeLog
-
-[1] 9002b818be package/libcoap: fix CVE-2024-0962
-[2] https://github.com/obgm/libcoap/commit/2b28d8b0e9607e71a145345b4fe49517e052b7d9
-[3] https://github.com/obgm/libcoap/commit/e3a662a934ae9e2854f50eb4cf420009a90fe1df
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-[Julien: fix LICENSE file hash]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-parsing-OSCORE-configuration-information.patch | 38 ----------------------
- package/libcoap/libcoap.hash                       |  4 +--
- package/libcoap/libcoap.mk                         |  5 +--
- 3 files changed, 3 insertions(+), 44 deletions(-)
+ package/fluidsynth/fluidsynth.hash | 2 +-
+ package/fluidsynth/fluidsynth.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libcoap/0001-coap_oscore-c-Fix-parsing-OSCORE-configuration-information.patch b/package/libcoap/0001-coap_oscore-c-Fix-parsing-OSCORE-configuration-information.patch
-deleted file mode 100644
-index e75250d613..0000000000
---- a/package/libcoap/0001-coap_oscore-c-Fix-parsing-OSCORE-configuration-information.patch
-+++ /dev/null
-@@ -1,38 +0,0 @@
--From 2b28d8b0e9607e71a145345b4fe49517e052b7d9 Mon Sep 17 00:00:00 2001
--From: Jon Shallow <supjps-libcoap@jpshallow.com>
--Date: Thu, 25 Jan 2024 18:03:17 +0000
--Subject: [PATCH] coap_oscore.c: Fix parsing OSCORE configuration information
--
--Upstream: https://github.com/obgm/libcoap/commit/2b28d8b0e9607e71a145345b4fe49517e052b7d9
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/coap_oscore.c | 5 +++--
-- 1 file changed, 3 insertions(+), 2 deletions(-)
--
--diff --git a/src/coap_oscore.c b/src/coap_oscore.c
--index 83f785c92..e0fb22947 100644
----- a/src/coap_oscore.c
--+++ b/src/coap_oscore.c
--@@ -1678,11 +1678,12 @@ get_split_entry(const char **start,
--                 oscore_value_t *value) {
--   const char *begin = *start;
--   const char *end;
--+  const char *kend;
--   const char *split;
--   size_t i;
-- 
-- retry:
---  end = memchr(begin, '\n', size);
--+  kend = end = memchr(begin, '\n', size);
--   if (end == NULL)
--     return 0;
-- 
--@@ -1693,7 +1694,7 @@ get_split_entry(const char **start,
-- 
--   if (begin[0] == '#' || (end - begin) == 0) {
--     /* Skip comment / blank line */
---    size -= end - begin + 1;
--+    size -= kend - begin + 1;
--     begin = *start;
--     goto retry;
--   }
-diff --git a/package/libcoap/libcoap.hash b/package/libcoap/libcoap.hash
-index 20abb94f8f..fc618fef52 100644
---- a/package/libcoap/libcoap.hash
-+++ b/package/libcoap/libcoap.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  ae61a48c21f7b40e1442c9e1da9aab9e6f2cf0deccb02f3fed4de232a0b0522e  libcoap-4.3.4.tar.gz
-+sha256  a417ed26ec6c95c041b42353b5b6fad1602e2bf42a6e26c09863450e227b7b5f  libcoap-4.3.5.tar.gz
- sha256  09dd86a017bad210527085008cbf706609c58210897b69845af14099577e7eb7  COPYING
--sha256  bdd94ddd8e75010aebd045ead1c951110788003395c708811d6960248acb3891  LICENSE
-+sha256  ecff7aa3af994b008dbb57c180753bd2a6c53fa6f8265a2486740f4cfd45280c  LICENSE
-diff --git a/package/libcoap/libcoap.mk b/package/libcoap/libcoap.mk
-index 29161142f6..c5e5f85c62 100644
---- a/package/libcoap/libcoap.mk
-+++ b/package/libcoap/libcoap.mk
+diff --git a/package/fluidsynth/fluidsynth.hash b/package/fluidsynth/fluidsynth.hash
+index 60a5f8a3b0..39123dad55 100644
+--- a/package/fluidsynth/fluidsynth.hash
++++ b/package/fluidsynth/fluidsynth.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  a92aa83d2ff09a1a6d6186e81d8182bd2958947dffca77a6490ffd41b3ec9dc7  fluidsynth-2.4.3.tar.gz
++sha256  2d2a5ca35bbb3f3fd241ef388a0cb3ae5755ebbb78121c7869f02b021d694810  fluidsynth-2.4.5.tar.gz
+ sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  LICENSE
+diff --git a/package/fluidsynth/fluidsynth.mk b/package/fluidsynth/fluidsynth.mk
+index 1c9139aa9f..910e6854e3 100644
+--- a/package/fluidsynth/fluidsynth.mk
++++ b/package/fluidsynth/fluidsynth.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBCOAP_VERSION = 4.3.4
-+LIBCOAP_VERSION = 4.3.5
- LIBCOAP_SITE = $(call github,obgm,libcoap,v$(LIBCOAP_VERSION))
- LIBCOAP_INSTALL_STAGING = YES
- LIBCOAP_LICENSE = BSD-2-Clause
-@@ -15,9 +15,6 @@ LIBCOAP_CONF_OPTS = \
- 	--disable-examples --disable-examples-source --without-tinydtls
- LIBCOAP_AUTORECONF = YES
- 
--# 0001-coap_oscore-c-Fix-parsing-OSCORE-configuration-information.patch
--LIBCOAP_IGNORE_CVES += CVE-2024-0962
--
- ifeq ($(BR2_PACKAGE_GNUTLS),y)
- LIBCOAP_DEPENDENCIES += gnutls
- LIBCOAP_CONF_OPTS += \
+-FLUIDSYNTH_VERSION = 2.4.3
++FLUIDSYNTH_VERSION = 2.4.5
+ FLUIDSYNTH_SITE = $(call github,FluidSynth,fluidsynth,v$(FLUIDSYNTH_VERSION))
+ FLUIDSYNTH_LICENSE = LGPL-2.1+
+ FLUIDSYNTH_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
