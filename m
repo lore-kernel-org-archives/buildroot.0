@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D0EDC3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:59:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35381C3ABDD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:59:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4808C846E0;
-	Mon, 19 May 2025 10:59:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1FB5870BED;
+	Mon, 19 May 2025 10:59:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZdkAe1TksMag; Mon, 19 May 2025 10:59:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lloBpHIH97Es; Mon, 19 May 2025 10:59:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 66A66846DD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 48B2F70D0F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 66A66846DD;
-	Mon, 19 May 2025 10:59:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 48B2F70D0F;
+	Mon, 19 May 2025 10:59:40 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 868D8D4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:46:36 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 48843D4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:46:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 254444151D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 317DD40D81
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 64Ut_Wl7CnBg for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:26 +0000 (UTC)
+ id XLhX231cChWG for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A3DA4157B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0B84D40DA7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8A3DA4157B
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:02 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0B84D40DA7
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:03 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 88B1A872E7; Mon, 19 May 2025 10:40:02 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+ id 0504C82A2E; Mon, 19 May 2025 10:40:03 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 13 May 2025 22:31:05 +0200
+Date: Fri, 16 May 2025 10:15:22 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 999fb19d4b09c9ced3425668b7c3a12a9dd88b87
-X-Git-Newrev: 778da2b7195f8ba93d17282c00a4aaffaf5d4908
+X-Git-Oldrev: 8bfdd3305e8db9ebe37b183b318e8f66478f8cae
+X-Git-Newrev: 889d47baef3ecf14c741b478d4846cb38d1ce221
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104002.88B1A872E7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/dbus-glib: bump
- version to 0.114
+Message-Id: <20250519104003.0504C82A2E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/freescale_p1025twr:
+ bump linux kernel to 6.12.27
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,65 +65,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=778da2b7195f8ba93d17282c00a4aaffaf5d4908
+commit: https://git.buildroot.net/buildroot/commit/?id=889d47baef3ecf14c741b478d4846cb38d1ce221
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-For change log, see [1].
+Since commit [1] "package/binutils: make 2.43 the default version",
+the freescale_p1025twr_defconfig fails to build the Linux
+kernel, with the error:
 
-A notable change is that this release fixes GCC 15 build issues
-and some deprecation warnings.
+    arch/powerpc/boot/util.S: Assembler messages:
+    arch/powerpc/boot/util.S:49: Error: junk at end of line, first unrecognized character is `0'
+    arch/powerpc/boot/util.S:54: Error: syntax error; found `b', expected `,'
+    arch/powerpc/boot/util.S:54: Error: junk at end of line: `b'
 
-Updated license files and hashes due to upstream commit [2].
-There is not an actual license change.
+This commit fixes the issue by updating the Linux kernel to the latest
+LTS version.
 
-[1] https://gitlab.freedesktop.org/dbus/dbus-glib/-/blob/dbus-glib-0.114/NEWS
-[2] https://gitlab.freedesktop.org/dbus/dbus-glib/-/commit/ad08ba0c6ba2d69783d41254e0cf03b2ae1647db
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/9967089759
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Florian Larysch <fl@n621.de>
-Tested-by: Florian Larysch <fl@n621.de>
-[Julien: add extra info in the commit log]
+[1] https://gitlab.com/buildroot.org/buildroot/-/commit/360fd01de20eb42aa0e6b5e9f7b37eaa104c6fc9
+
 Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dbus-glib/dbus-glib.hash | 6 ++++--
- package/dbus-glib/dbus-glib.mk   | 7 +++++--
- 2 files changed, 9 insertions(+), 4 deletions(-)
+ configs/freescale_p1025twr_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dbus-glib/dbus-glib.hash b/package/dbus-glib/dbus-glib.hash
-index 072dde3d69..1ce3c6b63d 100644
---- a/package/dbus-glib/dbus-glib.hash
-+++ b/package/dbus-glib/dbus-glib.hash
-@@ -1,5 +1,7 @@
- # Locally calculated after checking pgp signature
--sha256  7d550dccdfcd286e33895501829ed971eeb65c614e73aadb4a08aeef719b143a  dbus-glib-0.112.tar.gz
-+sha256  c09c5c085b2a0e391b8ee7d783a1d63fe444e96717cc1814d61b5e8fc2827a7c  dbus-glib-0.114.tar.gz
- 
- # Locally calculated
--sha256  589bc300214a8b9ecd121f51570fe6342617487fd8fc0fb1f4ec26a13d5b96f8  COPYING
-+sha256  095e2affe38031d0ca80db5dbf06881306e5f5125f6ba422297396bdfe02b3d5  COPYING
-+sha256  93bb4f7417aa775bab9026cc3d0af28aeb64451fc5a8ec651876785edd8eaf9b  LICENSES/AFL-2.1.txt
-+sha256  aaf135472f81c5b4a0dca9367e5bb5e9750032b5bebe5442b36e4c0a47430df3  LICENSES/GPL-2.0-or-later.txt
-diff --git a/package/dbus-glib/dbus-glib.mk b/package/dbus-glib/dbus-glib.mk
-index 0d247e1d89..5c13c0b37f 100644
---- a/package/dbus-glib/dbus-glib.mk
-+++ b/package/dbus-glib/dbus-glib.mk
-@@ -4,11 +4,14 @@
- #
- ################################################################################
- 
--DBUS_GLIB_VERSION = 0.112
-+DBUS_GLIB_VERSION = 0.114
- DBUS_GLIB_SITE = http://dbus.freedesktop.org/releases/dbus-glib
- DBUS_GLIB_INSTALL_STAGING = YES
- DBUS_GLIB_LICENSE = AFL-2.1 or GPL-2.0+
--DBUS_GLIB_LICENSE_FILES = COPYING
-+DBUS_GLIB_LICENSE_FILES = \
-+	COPYING \
-+	LICENSES/AFL-2.1.txt \
-+	LICENSES/GPL-2.0-or-later.txt
- DBUS_GLIB_CPE_ID_VENDOR = freedesktop
- 
- DBUS_GLIB_CONF_ENV = \
+diff --git a/configs/freescale_p1025twr_defconfig b/configs/freescale_p1025twr_defconfig
+index 72374ae7a1..568f2060b1 100644
+--- a/configs/freescale_p1025twr_defconfig
++++ b/configs/freescale_p1025twr_defconfig
+@@ -1,10 +1,10 @@
+ BR2_powerpc=y
+ BR2_powerpc_8548=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15.7"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
+ BR2_LINUX_KERNEL_DEFCONFIG="mpc85xx_smp"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="fsl/p1025twr"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
