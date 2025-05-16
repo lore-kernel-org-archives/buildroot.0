@@ -4,77 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C548FC3ABC9
-	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 09:20:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2387C3ABC9
+	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 09:23:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 74FA260B76;
-	Fri, 16 May 2025 09:20:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 74AC261298;
+	Fri, 16 May 2025 09:23:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id W0swTHKCdEVS; Fri, 16 May 2025 09:20:45 +0000 (UTC)
+ id r7NTnR4F_oMy; Fri, 16 May 2025 09:23:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B2FCA61263
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 89D5C60B6E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B2FCA61263;
-	Fri, 16 May 2025 09:20:45 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id D9E0F1AB
- for <buildroot@buildroot.org>; Fri, 16 May 2025 09:20:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 89D5C60B6E;
+	Fri, 16 May 2025 09:23:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0C8601AB
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 09:23:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CAE2C61286
- for <buildroot@buildroot.org>; Fri, 16 May 2025 09:20:43 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E552240C3A
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 09:23:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GlKzc_dtJ75M for <buildroot@buildroot.org>;
- Fri, 16 May 2025 09:20:42 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
- helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WOBI3lomwrM2 for <buildroot@buildroot.org>;
+ Fri, 16 May 2025 09:23:28 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4A98D60B4F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4A98D60B4F
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4A98D60B4F
- for <buildroot@buildroot.org>; Fri, 16 May 2025 09:20:42 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 11DAA4333B;
- Fri, 16 May 2025 09:20:38 +0000 (UTC)
-Date: Fri, 16 May 2025 11:20:37 +0200
-To: Adam Duskett <adam.duskett@amarulasolutions.com>
-Cc: buildroot@buildroot.org
-Message-ID: <20250516112037.7cebf69a@windsurf>
-In-Reply-To: <20250429101607.864604-1-adam.duskett@amarulasolutions.com>
-References: <20250429101607.864604-1-adam.duskett@amarulasolutions.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefuddvfeejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepledtgedvjeehgeetgfeufffglefhkedvfeduveeiieelteeliedtfefguefggffhnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumegufeduvgemvdefheemtgehvgdvmegvugekfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumegufeduvgemvdefheemtgehvgdvmegvugekfedphhgvlhhopeifihhnughsuhhrfhdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvddprhgtphhtthhopegruggrmhdrughushhkvghtthesrghmrghruhhlrghsohhluhhtihhonhhsrdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrg
- h
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1747387239;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=TtdxPjWqLiv9c0Oy4Vb+XKA7o+vZkVtsH4/RY/9GUqw=;
- b=GbXQgxTL7knt4GTXmyO++kMAZs/+ol7HtIaRtYqCFy4ft1aLAfXyf59psxmMTpi5L00yPt
- EIVbl0anuPX2S2xZ4rbi6cUyE6YmZtW+5LgPKujT7XY+kE11p84rt+ScpZzlB3COuLZ/tu
- WFnBYcL3gpgaLZn0PBVT/CSUeg5EgoKQFN+F/TiwQ8U95zP3G1Ze31njvS9vnHCjT5Ag9k
- LzuJ85I9lMJyCcrnfKkrMKZOCqHBZpoWSMpfGVxdde5cznjGL8PiHshmv6yXk5f8FwtpdA
- 0qPhiAxiYLHTljyne1yifpteN1k9RPMZ8ubyt5mUkzEWJPswGXprbJQx5QrM9g==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=GbXQgxTL
-Subject: Re: [Buildroot] [PATCH v2 1/3] configs/mender_x86_64_efi_defconfig:
- bump kernel to 6.12.25
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 25C1240C1D
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 25C1240C1D
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 09:23:28 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 12B9B868F7; Fri, 16 May 2025 09:23:28 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Fri, 16 May 2025 11:19:36 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: aaa50b0e617eb0b288efd00c384a305e90289690
+X-Git-Newrev: 211e822d433806893c1395b55c1d891343a07aa0
+X-Patchwork-Hint: ignore
+Message-Id: <20250516092328.12B9B868F7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/openssh: apply security patch for
+ CVE-2025-32728 (sshd)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,53 +59,95 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Adam,
+commit: https://git.buildroot.net/buildroot/commit/?id=211e822d433806893c1395b55c1d891343a07aa0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 29 Apr 2025 12:16:05 +0200
-Adam Duskett <adam.duskett@amarulasolutions.com> wrote:
+Fixes:
+https://www.cve.org/CVERecord?id=CVE-2025-32728
 
-> Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-> ---
->  configs/mender_x86_64_efi_defconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/configs/mender_x86_64_efi_defconfig b/configs/mender_x86_64_efi_defconfig
-> index d0e0d8a364..2e124ba211 100644
-> --- a/configs/mender_x86_64_efi_defconfig
-> +++ b/configs/mender_x86_64_efi_defconfig
-> @@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/mender/x86_64/post-image-efi.sh"
->  BR2_ROOTFS_POST_SCRIPT_ARGS="--data-part-size=32M --device-type=buildroot-x86_64 --artifact-name=1.0"
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.49"
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.25"
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+[Julien: add link to CVE in commit log]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ ...x-logic-error-in-disableforwarding-option.patch | 49 ++++++++++++++++++++++
+ package/openssh/openssh.mk                         |  3 ++
+ 2 files changed, 52 insertions(+)
 
-Thanks a lot this update! However, you also need to adjust:
-
-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-
-to keep the configuration consistent.
-
->  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
->  BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/mender/x86_64/linux.config"
-
-Doesn't this file needs a "refresh" when you do a big bump like 6.6 ->
-6.12 ?
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/openssh/0001-fix-logic-error-in-disableforwarding-option.patch b/package/openssh/0001-fix-logic-error-in-disableforwarding-option.patch
+new file mode 100644
+index 0000000000..2c64ec1910
+--- /dev/null
++++ b/package/openssh/0001-fix-logic-error-in-disableforwarding-option.patch
+@@ -0,0 +1,49 @@
++From fc86875e6acb36401dfc1dfb6b628a9d1460f367 Mon Sep 17 00:00:00 2001
++From: "djm@openbsd.org" <djm@openbsd.org>
++Date: Wed, 9 Apr 2025 07:00:03 +0000
++Subject: [PATCH] upstream: Fix logic error in DisableForwarding option.
++
++This option was documented as disabling X11 and agent forwarding but it failed to do so.
++Spotted by Tim Rice.
++
++OpenBSD-Commit-ID: fffc89195968f7eedd2fc57f0b1f1ef3193f5ed1
++
++Upstream: https://github.com/openssh/openssh-portable/commit/fc86875e6acb36401dfc1dfb6b628a9d1460f367
++
++Fixes the following CVE:
++  - CVE-2025-32728: In sshd in OpenSSH before 10.0, the DisableForwarding
++                    directive does not adhere to the documentation stating
++                    that it disables X11 and agent forwarding.
++
++[Titouan: 
++ - Remove diff on OpenBSD comment at the top of the file that does not apply
++   cleanly on openssh 9.9
++]
++Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
++---
++ session.c | 7 ++++---
++ 1 file changed, 4 insertions(+), 3 deletions(-)
++
++diff --git a/session.c b/session.c
++index 52a4a3446e6..6444c77f31c 100644
++--- a/session.c
+++++ b/session.c
++@@ -2171,7 +2171,8 @@ session_auth_agent_req(struct ssh *ssh, Session *s)
++ 	if ((r = sshpkt_get_end(ssh)) != 0)
++ 		sshpkt_fatal(ssh, r, "%s: parse packet", __func__);
++ 	if (!auth_opts->permit_agent_forwarding_flag ||
++-	    !options.allow_agent_forwarding) {
+++	    !options.allow_agent_forwarding ||
+++	    options.disable_forwarding) {
++ 		debug_f("agent forwarding disabled");
++ 		return 0;
++ 	}
++@@ -2566,7 +2567,7 @@ session_setup_x11fwd(struct ssh *ssh, Session *s)
++ 		ssh_packet_send_debug(ssh, "X11 forwarding disabled by key options.");
++ 		return 0;
++ 	}
++-	if (!options.x11_forwarding) {
+++	if (!options.x11_forwarding || options.disable_forwarding) {
++ 		debug("X11 forwarding disabled in server configuration file.");
++ 		return 0;
++ 	}
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index 115290ce13..b5e4645b50 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -13,6 +13,9 @@ OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
+ OPENSSH_LICENSE = BSD-3-Clause, BSD-2-Clause, Public Domain
+ OPENSSH_LICENSE_FILES = LICENCE
+ 
++# 0001-fix-logic-error-in-disableforwarding-option.patch
++OPENSSH_IGNORE_CVES += CVE-2025-32728
++
+ OPENSSH_CONF_ENV = \
+ 	LD="$(TARGET_CC)" \
+ 	LDFLAGS="$(TARGET_CFLAGS)" \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
