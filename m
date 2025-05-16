@@ -4,80 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29504C3ABC9
-	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 20:52:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCF9AC3ABD8
+	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 20:55:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CBD5360B3E;
-	Fri, 16 May 2025 20:52:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9B9DC612E0;
+	Fri, 16 May 2025 20:55:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IoXg6NBmL99F; Fri, 16 May 2025 20:52:09 +0000 (UTC)
+ id UOiiTHPZZhqK; Fri, 16 May 2025 20:55:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1056C612E0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF22061314
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1056C612E0;
-	Fri, 16 May 2025 20:52:09 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 8A85322CD
- for <buildroot@buildroot.org>; Fri, 16 May 2025 20:52:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DF22061314;
+	Fri, 16 May 2025 20:55:55 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6E2C022CD
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 20:55:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 428194071C
- for <buildroot@buildroot.org>; Fri, 16 May 2025 20:52:04 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 500B961314
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 20:55:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 85jc4bHODXdM for <buildroot@buildroot.org>;
- Fri, 16 May 2025 20:52:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
- helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bDvKswJ1bSBi for <buildroot@buildroot.org>;
+ Fri, 16 May 2025 20:55:53 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
+ helo=relay9-d.mail.gandi.net; envelope-from=peko@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 22E2340735
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 22E2340735
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 22E2340735
- for <buildroot@buildroot.org>; Fri, 16 May 2025 20:52:02 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2D61A41B5F;
- Fri, 16 May 2025 20:51:59 +0000 (UTC)
-Date: Fri, 16 May 2025 22:51:58 +0200
-To: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
-Cc: buildroot@buildroot.org, Christian Hitz <christian@klarinett.li>, Zoltan
- Gyarmati <zgyarmati@zgyarmati.de>, Baxiche Su <baxiche@gmail.com>, Jesse
- Van Gavere <jesseevg@gmail.com>
-Message-ID: <20250516225158.706cccf5@windsurf>
-In-Reply-To: <20250515103632.2631227-9-roykollensvendsen@gmail.com>
-References: <20250515103632.2631227-1-roykollensvendsen@gmail.com>
- <20250515103632.2631227-9-roykollensvendsen@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org DDA79612E0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DDA79612E0
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DDA79612E0
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 20:55:52 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1CB684327F;
+ Fri, 16 May 2025 20:55:48 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peko@dell.be.48ers.dk>) id 1uG25s-00BrNX-1w;
+ Fri, 16 May 2025 22:55:48 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Fri, 16 May 2025 22:55:46 +0200
+Message-Id: <20250516205547.2826778-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
 X-GND-State: clean
 X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefudefjeeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepledtgedvjeehgeetgfeufffglefhkedvfeduveeiieelteeliedtfefguefggffhnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumegufeduvgemvdefheemtgehvgdvmegvugekfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumegufeduvgemvdefheemtgehvgdvmegvugekfedphhgvlhhopeifihhnughsuhhrfhdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepiedprhgtphhtthhopehrohihkhholhhlvghnshhvvghnughsvghnsehgmhgrihhlrdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtt
- hhopegthhhrihhsthhirghnsehklhgrrhhinhgvthhtrdhlihdprhgtphhtthhopeiighihrghrmhgrthhiseiighihrghrmhgrthhirdguvgdprhgtphhtthhopegsrgigihgthhgvsehgmhgrihhlrdgtohhmpdhrtghpthhtohepjhgvshhsvggvvhhgsehgmhgrihhlrdgtohhm
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1747428719;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=DURvG+doDCkfVm0BvIhxU29V0qgIbrIjUpU2+6EsyaI=;
- b=KLTu9CizsL/uk1/Q3OyeZW9hXDtN9nwvx8xiyq9COWppU4kMYOa4fK51NQLMAQeOwH+gfs
- 9B/Ntj4f7WpsGNu7+wzE3toO9rZk2OAAOcNlsmw39Yp5bxI+bpBa2CtD7+BO2lYY0UbY+w
- FIphaCzfsjh1rT2CtIuOXK/JzMJj+TnVSxC0FWfd2wSH/pRoKkq+1gLBhS5eTkyJi1d7fP
- S5L1eIP/EmrOQudy1Iz8SIJDbmeE5z3BtJdTiLMa0K/iCm0BHIky5KfSgp6yICgJqQy3D0
- DtO/aSqICV+TEaD1gx+Ke+N+OtJdQXDIxdn47eAztBMb+aQTiM/L14LZMIJSbA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=KLTu9Ciz
-Subject: Re: [Buildroot] [PATCH 09/10] package/qt6/qt6tools: build only host
- linguist tools
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefudefjeeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefrvghtvghrucfmohhrshhgrggrrhguuceophgvthgvrheskhhorhhsghgrrghrugdrtghomheqnecuggftrfgrthhtvghrnhepgeeigeehvedvjeejgeekteeivefhvdeghfeuvdeufeevgfetheefgfejheevvedtnecuffhomhgrihhnpegsuhhilhgurhhoohhtrdhorhhgpdhgnhhurdhorhhgnecukfhppedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumeejiegukeemfegvfhhfmehfvggsfeemgegssgehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeekgedvrgemgeehrggtmeelgedtudemjeeiugekmeefvghffhemfhgvsgefmeegsggshedphhgvlhhopeguvghllhdrsggvrdegkegvrhhsrdgukhdpmhgrihhlfhhrohhmpehpvghkoheskhhorhhsghgrrghrugdrtghomhdpnhgspghrtghpthhtohepfedprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtohepphgvthgvrheskhhorhhsghgrrghrugdrtghomhdprhgtphhtthhopehthhhomhgrshdrphgvt
+ hgriiiiohhnihessghoohhtlhhinhdrtghomh
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: [Buildroot] [PATCH] package/pkg-autotools.mk: LIBTOOL_PATCH_HOOK:
+ also handle libtool 2.5.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -89,54 +70,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Roy,
+Fixes:
+https://autobuild.buildroot.org/results/ac60d29fbcd9fb8ddb21b76b3b185e45e580c006/
 
-Thanks for the great patch series! I'm going through it, and I'm hoping
-to merge it progressively in the next days. I have one question on this
-patch though.
+Libtool 2.5.x has been released and is starting to be used by upstreams when
+generating release tarballs (E.G. openvpn-2.6.14).
 
-On Thu, 15 May 2025 12:36:25 +0200
-Roy Kollen Svendsen <roykollensvendsen@gmail.com> wrote:
+https://lists.gnu.org/archive/html/autotools-announce/2024-09/msg00000.html
 
-> Strip down qt6tools to the bare minimum by:
-> - Removing the target package
-> - Disabling all features except for the linguist tools
-> 
-> This change addresses ongoing issues with qt6tools and focuses on its
-> primary intended use: providing linguist tools for translating Qt6
-> applications during the build process.
-> 
-> The linguist tools are essential for internationalization (i18n) of Qt6
-> applications and are now available as a host package for cross-compilation
-> purposes.
-> 
-> This modification should resolve stability issues while still maintaining
-> the core functionality required for Qt6 application translation.
-> 
-> update host package
+It needs to be patched similar to earlier versions, and the existing v2.4.4
+patch luckily still applies, so extend LIBTOOL_PATCH_HOOK to also patch
+2.5.x versions with that.
 
-What does this mean?
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/pkg-autotools.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
-
-Could you clarify why PATCH 09/10 and 10/10 are separate? It feels odd
-to drop the target package, only to re-introduce it one commit after. I
-was thinking of squashing both commits together. What do you think?
-
-Thanks for your feedback!
-
-Thomas
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index 8ffb0e0047..16b21acb6d 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -74,6 +74,8 @@ define LIBTOOL_PATCH_HOOK
+ 			else \
+ 				patch -i support/libtool/buildroot-libtool-v2.4.patch $${i}; \
+ 			fi \
++		elif test $${ltmain_version} = "2.5"; then\
++			patch -i support/libtool/buildroot-libtool-v2.4.4.patch $${i}; \
+ 		fi \
+ 	done
+ endef
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.39.5
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
