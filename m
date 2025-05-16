@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F8C7C54756
-	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 14:21:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D71BC3ABC9
+	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 14:21:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D3881417F9;
-	Fri, 16 May 2025 14:21:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2AC09417B6;
+	Fri, 16 May 2025 14:21:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id w0veCctmDqiE; Fri, 16 May 2025 14:21:42 +0000 (UTC)
+ id gxAWF6tjoBWz; Fri, 16 May 2025 14:21:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F1E8241786
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ADCE5417FC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F1E8241786;
-	Fri, 16 May 2025 14:21:41 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 43749185
+	by smtp4.osuosl.org (Postfix) with ESMTP id ADCE5417FC;
+	Fri, 16 May 2025 14:21:43 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4CA9A1C7
  for <buildroot@buildroot.org>; Fri, 16 May 2025 14:21:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C515760841
+ by smtp1.osuosl.org (Postfix) with ESMTP id AAF3281368
  for <buildroot@buildroot.org>; Fri, 16 May 2025 14:21:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3dbzlU-qK2Cm for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3pC1fMAsIY-D for <buildroot@buildroot.org>;
  Fri, 16 May 2025 14:21:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0CB946123A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E199E839CD
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0CB946123A
- for <buildroot@buildroot.org>; Fri, 16 May 2025 14:21:30 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E199E839CD
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 14:21:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0A30886BD9; Fri, 16 May 2025 14:21:30 +0000 (UTC)
+ id D972686BD9; Fri, 16 May 2025 14:21:29 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 16 May 2025 16:19:49 +0200
+Date: Fri, 16 May 2025 16:19:45 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e1c939e4269130fd0ef857c63a0f752f9e5c13ec
-X-Git-Newrev: cde5e50b73a0b0bd07ebfcc0a93fc1b20d2bbd4a
+X-Git-Oldrev: c912dc1d27279d5fc6e4187d6c05bda7de7af040
+X-Git-Newrev: 0468aae90a0124b79febf8705d9779e7a8a2ce4c
 X-Patchwork-Hint: ignore
-Message-Id: <20250516142130.0A30886BD9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pydantic-settings: bump to
- 2.9.1
+Message-Id: <20250516142129.D972686BD9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-anyio: bump to 4.9.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,57 +65,59 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cde5e50b73a0b0bd07ebfcc0a93fc1b20d2bbd4a
+commit: https://git.buildroot.net/buildroot/commit/?id=0468aae90a0124b79febf8705d9779e7a8a2ce4c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Release notes: https://github.com/agronholm/anyio/releases/tag/4.9.0
 
 Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- package/python-pydantic-settings/Config.in                     | 1 +
- package/python-pydantic-settings/python-pydantic-settings.hash | 4 ++--
- package/python-pydantic-settings/python-pydantic-settings.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 4 deletions(-)
+ package/python-anyio/Config.in         | 1 -
+ package/python-anyio/python-anyio.hash | 4 ++--
+ package/python-anyio/python-anyio.mk   | 4 ++--
+ 3 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pydantic-settings/Config.in b/package/python-pydantic-settings/Config.in
-index 0e8dbc29b5..76cf564f0c 100644
---- a/package/python-pydantic-settings/Config.in
-+++ b/package/python-pydantic-settings/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_PYTHON_PYDANTIC_SETTINGS
- 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-pydantic -> python-pydantic-core
- 	select BR2_PACKAGE_PYTHON_DOTENV # runtime
- 	select BR2_PACKAGE_PYTHON_PYDANTIC # runtime
-+	select BR2_PACKAGE_PYTHON_TYPING_INSPECTION # runtime
+diff --git a/package/python-anyio/Config.in b/package/python-anyio/Config.in
+index 353c7e4629..d843f37af0 100644
+--- a/package/python-anyio/Config.in
++++ b/package/python-anyio/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_PYTHON_ANYIO
+ 	bool "python-anyio"
+ 	select BR2_PACKAGE_PYTHON_IDNA # runtime
+ 	select BR2_PACKAGE_PYTHON_SNIFFIO # runtime
+-	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
  	help
- 	  Settings management using Pydantic.
- 
-diff --git a/package/python-pydantic-settings/python-pydantic-settings.hash b/package/python-pydantic-settings/python-pydantic-settings.hash
-index 173293389c..66197ca41d 100644
---- a/package/python-pydantic-settings/python-pydantic-settings.hash
-+++ b/package/python-pydantic-settings/python-pydantic-settings.hash
+ 	  High level compatibility layer for multiple asynchronous
+ 	  event loop implementations.
+diff --git a/package/python-anyio/python-anyio.hash b/package/python-anyio/python-anyio.hash
+index 4ff6955ae5..e1fdf474c2 100644
+--- a/package/python-anyio/python-anyio.hash
++++ b/package/python-anyio/python-anyio.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pydantic-settings/json
--md5  c12f2c0a6e767e4e65665ad6f9641e93  pydantic_settings-2.7.1.tar.gz
--sha256  10c9caad35e64bfb3c2fbf70a078c0e25cc92499782e5200747f942a065dec93  pydantic_settings-2.7.1.tar.gz
-+md5  ff06507b3ea80b5a6f9adf7a7dcb2b23  pydantic_settings-2.9.1.tar.gz
-+sha256  c509bf79d27563add44e8446233359004ed85066cd096d8b510f715e6ef5d268  pydantic_settings-2.9.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/anyio/json
+-md5  ad00874069a6685b2e3e84c5a2e045cb  anyio-4.8.0.tar.gz
+-sha256  1d9fe889df5212298c0c0723fa20479d1b94883a2df44bd3897aa91083316f7a  anyio-4.8.0.tar.gz
++md5  d0e4db5f5e4041d1bc9664042b454218  anyio-4.9.0.tar.gz
++sha256  673c0c244e15788651a4ff38710fea9675823028a6f08a5eda409e0c9840a028  anyio-4.9.0.tar.gz
  # Locally computed sha256 checksums
- sha256  eb355a753e020346d33d83bf9769135b89fc610568ac531a01c295bcee7fd998  LICENSE
-diff --git a/package/python-pydantic-settings/python-pydantic-settings.mk b/package/python-pydantic-settings/python-pydantic-settings.mk
-index d3dc3d8246..0200ba72ed 100644
---- a/package/python-pydantic-settings/python-pydantic-settings.mk
-+++ b/package/python-pydantic-settings/python-pydantic-settings.mk
+ sha256  5361ac9dc58f2ef5fd2e9b09c68297c17f04950909bbc8023bdb82eacf22c2b0  LICENSE
+diff --git a/package/python-anyio/python-anyio.mk b/package/python-anyio/python-anyio.mk
+index 4f38e12794..3be3f2b78f 100644
+--- a/package/python-anyio/python-anyio.mk
++++ b/package/python-anyio/python-anyio.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYDANTIC_SETTINGS_VERSION = 2.7.1
-+PYTHON_PYDANTIC_SETTINGS_VERSION = 2.9.1
- PYTHON_PYDANTIC_SETTINGS_SOURCE = pydantic_settings-$(PYTHON_PYDANTIC_SETTINGS_VERSION).tar.gz
--PYTHON_PYDANTIC_SETTINGS_SITE = https://files.pythonhosted.org/packages/73/7b/c58a586cd7d9ac66d2ee4ba60ca2d241fa837c02bca9bea80a9a8c3d22a9
-+PYTHON_PYDANTIC_SETTINGS_SITE = https://files.pythonhosted.org/packages/67/1d/42628a2c33e93f8e9acbde0d5d735fa0850f3e6a2f8cb1eb6c40b9a732ac
- PYTHON_PYDANTIC_SETTINGS_SETUP_TYPE = hatch
- PYTHON_PYDANTIC_SETTINGS_LICENSE = MIT
- PYTHON_PYDANTIC_SETTINGS_LICENSE_FILES = LICENSE
+-PYTHON_ANYIO_VERSION = 4.8.0
++PYTHON_ANYIO_VERSION = 4.9.0
+ PYTHON_ANYIO_SOURCE = anyio-$(PYTHON_ANYIO_VERSION).tar.gz
+-PYTHON_ANYIO_SITE = https://files.pythonhosted.org/packages/a3/73/199a98fc2dae33535d6b8e8e6ec01f8c1d76c9adb096c6b7d64823038cde
++PYTHON_ANYIO_SITE = https://files.pythonhosted.org/packages/95/7d/4c1bd541d4dffa1b52bd83fb8527089e097a106fc90b467a7313b105f840
+ PYTHON_ANYIO_SETUP_TYPE = setuptools
+ PYTHON_ANYIO_LICENSE = MIT
+ PYTHON_ANYIO_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
