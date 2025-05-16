@@ -4,50 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F136C3ABD8
-	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 14:33:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71031C3ABC9
+	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 14:34:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DC0AB406FE;
-	Fri, 16 May 2025 14:33:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 36BBB406FE;
+	Fri, 16 May 2025 14:34:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fhypYtE2VTAP; Fri, 16 May 2025 14:33:42 +0000 (UTC)
+ id N_hcmYTTjE_l; Fri, 16 May 2025 14:34:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 10FC54078E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 733714090D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 10FC54078E;
-	Fri, 16 May 2025 14:33:42 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id CC2891AB
- for <buildroot@buildroot.org>; Fri, 16 May 2025 14:33:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 733714090D;
+	Fri, 16 May 2025 14:34:08 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2CF581AB
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 14:34:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BD5F2830D7
- for <buildroot@buildroot.org>; Fri, 16 May 2025 14:33:39 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1E597612BB
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 14:34:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pK6m7Q7Ux5La for <buildroot@buildroot.org>;
- Fri, 16 May 2025 14:33:39 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nV5U_x2_-9A1 for <buildroot@buildroot.org>;
+ Fri, 16 May 2025 14:34:06 +0000 (UTC)
+X-Greylist: delayed 327 seconds by postgrey-1.37 at util1.osuosl.org;
+ Fri, 16 May 2025 14:34:06 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3704A6123A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3704A6123A
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=92.121.34.21;
+ helo=inva021.nxp.com; envelope-from=juanpablo.monterocastro@nxp.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F13F982BBC
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id F13F982BBC
- for <buildroot@buildroot.org>; Fri, 16 May 2025 14:33:38 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EC07286BEE; Fri, 16 May 2025 14:33:38 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3704A6123A
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 14:34:06 +0000 (UTC)
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+ by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id E33ED20059D;
+ Fri, 16 May 2025 16:28:37 +0200 (CEST)
+Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com
+ [134.27.226.22])
+ by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id D726F20053A;
+ Fri, 16 May 2025 16:28:37 +0200 (CEST)
+Received: from lsv051113.swis.nl-cdc01.nxp.com
+ (lsv051113.swis.nl-cdc01.nxp.com [10.168.3.63])
+ by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 32C6920315;
+ Fri, 16 May 2025 16:28:37 +0200 (CEST)
+From: Juan Pablo Montero Castro <juanpablo.monterocastro@nxp.com>
 To: buildroot@buildroot.org
-Date: Fri, 16 May 2025 16:22:53 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5eb46878bd954ec434d288dc97de596676273bb5
-X-Git-Newrev: 8a25ff3f893e1d45171dce0a240e5fb5d61bac8a
-X-Patchwork-Hint: ignore
-Message-Id: <20250516143338.EC07286BEE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/android-tools: add patch to fix
- GCC 15.x build issue
+Date: Fri, 16 May 2025 16:28:27 +0200
+Message-Id: <20250516142827.3211350-1-juanpablo.monterocastro@nxp.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=nxp.com
+Subject: [Buildroot] [PATCH 1/1] fix imx9 bootloader preparation script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,104 +72,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============9010287546489563777=="
+Cc: Juan Pablo MONTERO CASTRO <juanpablo.monterocastro@nxp.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============9010287546489563777==
-Content-Type: text/plain
+From: Juan Pablo MONTERO CASTRO <juanpablo.monterocastro@nxp.com>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8a25ff3f893e1d45171dce0a240e5fb5d61bac8a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This commit replaces A35 with A55 in imx9 bootloader preparation script.
+i.MX9 families have CortexA55, see link below:
+https://www.nxp.com/products/processors-and-microcontrollers/arm-processors/i-mx-applications-processors/i-mx-9-processors:IMX9-PROCESSORS
 
-host-android-tools fails to build when the host gcc version is >=
-15.x. A simple patch allows to fix the issue by adjusting how
-allocate_inode() gets called.
-
-Fixes:
-
-  https://autobuild.buildroot.org/results/e8152490540ee1968182f4eb7813e5e940f3e9b3/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Juan Pablo MONTERO CASTRO <juanpablo.monterocastro@nxp.com>
 ---
- ..._utils-contents.c-allocate_inode-doesn-t-.patch | 57 ++++++++++++++++++++++
- 1 file changed, 57 insertions(+)
+ .../freescale/common/imx/imx9-bootloader-prepare.sh  | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/android-tools/0017-extras-ext4_utils-contents.c-allocate_inode-doesn-t-.patch b/package/android-tools/0017-extras-ext4_utils-contents.c-allocate_inode-doesn-t-.patch
-new file mode 100644
-index 0000000000..a9baf4dc29
---- /dev/null
-+++ b/package/android-tools/0017-extras-ext4_utils-contents.c-allocate_inode-doesn-t-.patch
-@@ -0,0 +1,57 @@
-+From b822c8e2f380ba6158601e621a12927a4264ff67 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Fri, 16 May 2025 15:32:00 +0200
-+Subject: [PATCH] extras/ext4_utils/contents.c: allocate_inode() doesn't take
-+ any argument
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Fixes:
-+
-+/home/thomas/projets/buildroot/output/build/host-android-tools-4.2.2+git20130218/extras/ext4_utils/contents.c: In function ‘make_directory’:
-+/home/thomas/projets/buildroot/output/build/host-android-tools-4.2.2+git20130218/extras/ext4_utils/contents.c:102:29: error: too many arguments to function ‘allocate_inode’; expected 0, have 1
-+  102 |                 inode_num = allocate_inode(info);
-+
-+and similar build failures that occur with GCC 15.x.
-+
-+Upstream: N/A, we're too far from upstream
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ extras/ext4_utils/contents.c | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/extras/ext4_utils/contents.c b/extras/ext4_utils/contents.c
-+index 6300680..b0336a4 100644
-+--- a/extras/ext4_utils/contents.c
-++++ b/extras/ext4_utils/contents.c
-+@@ -99,7 +99,7 @@ u32 make_directory(u32 dir_inode_num, u32 entries, struct dentry *dentries,
-+ 	len = blocks * info.block_size;
-+ 
-+ 	if (dir_inode_num) {
-+-		inode_num = allocate_inode(info);
-++		inode_num = allocate_inode();
-+ 	} else {
-+ 		dir_inode_num = EXT4_ROOT_INO;
-+ 		inode_num = EXT4_ROOT_INO;
-+@@ -167,7 +167,7 @@ u32 make_file(const char *filename, u64 len)
-+ 	struct ext4_inode *inode;
-+ 	u32 inode_num;
-+ 
-+-	inode_num = allocate_inode(info);
-++	inode_num = allocate_inode();
-+ 	if (inode_num == EXT4_ALLOCATE_FAILED) {
-+ 		error("failed to allocate inode\n");
-+ 		return EXT4_ALLOCATE_FAILED;
-+@@ -196,7 +196,7 @@ u32 make_link(const char *filename, const char *link)
-+ 	u32 inode_num;
-+ 	u32 len = strlen(link);
-+ 
-+-	inode_num = allocate_inode(info);
-++	inode_num = allocate_inode();
-+ 	if (inode_num == EXT4_ALLOCATE_FAILED) {
-+ 		error("failed to allocate inode\n");
-+ 		return EXT4_ALLOCATE_FAILED;
-+-- 
-+2.49.0
-+
-
---===============9010287546489563777==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/board/freescale/common/imx/imx9-bootloader-prepare.sh b/board/freescale/common/imx/imx9-bootloader-prepare.sh
+index 8ab5a241b0..2db887a785 100755
+--- a/board/freescale/common/imx/imx9-bootloader-prepare.sh
++++ b/board/freescale/common/imx/imx9-bootloader-prepare.sh
+@@ -18,19 +18,19 @@ main ()
+ 
+ 	if grep -Eq "^BR2_TARGET_OPTEE_OS=y$" "${BR2_CONFIG}"; then
+ 		"${HOST_DIR}/bin/mkimage_imx8" -soc IMX9 -c \
+-			-ap "${BINARIES_DIR}/bl31.bin" a35 ${ATF_LOAD_ADDR} \
+-			-ap "${BINARIES_DIR}/u-boot-hash.bin" a35 0x80200000 \
+-			-ap "${BINARIES_DIR}/tee.bin" a35 0x96000000 \
++			-ap "${BINARIES_DIR}/bl31.bin" a55 ${ATF_LOAD_ADDR} \
++			-ap "${BINARIES_DIR}/u-boot-hash.bin" a55 0x80200000 \
++			-ap "${BINARIES_DIR}/tee.bin" a55 0x96000000 \
+ 			-out "${BINARIES_DIR}/u-boot-atf-container.img"
+ 	else
+ 		"${HOST_DIR}/bin/mkimage_imx8" -soc IMX9 -c \
+-			-ap "${BINARIES_DIR}/bl31.bin" a35 ${ATF_LOAD_ADDR} \
+-			-ap "${BINARIES_DIR}/u-boot-hash.bin" a35 0x80200000 \
++			-ap "${BINARIES_DIR}/bl31.bin" a55 ${ATF_LOAD_ADDR} \
++			-ap "${BINARIES_DIR}/u-boot-hash.bin" a55 0x80200000 \
+ 			-out "${BINARIES_DIR}/u-boot-atf-container.img"
+ 	fi
+ 
+ 	"${HOST_DIR}/bin/mkimage_imx8" -soc IMX9 -append "${BINARIES_DIR}/ahab-container.img" -c \
+-		-ap "${BINARIES_DIR}/u-boot-spl-ddr.bin" a35 ${SPL_LOAD_ADDR} \
++		-ap "${BINARIES_DIR}/u-boot-spl-ddr.bin" a55 ${SPL_LOAD_ADDR} \
+ 		-out "${BINARIES_DIR}/imx9-boot-sd.bin"
+ 
+ 	flashbin_size="$(wc -c "${BINARIES_DIR}/imx9-boot-sd.bin" | awk '{print $1}')"
+-- 
+2.34.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============9010287546489563777==--
