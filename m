@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55E60C3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:01:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30870C2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:01:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EFB9170EE1;
-	Mon, 19 May 2025 11:01:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2F2A960034;
+	Mon, 19 May 2025 11:01:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sb8FBpZCT24r; Mon, 19 May 2025 11:01:41 +0000 (UTC)
+ id WQHSdWjvCDvl; Mon, 19 May 2025 11:01:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1602870EF1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 054B670EEE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1602870EF1;
-	Mon, 19 May 2025 11:01:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 054B670EEE;
+	Mon, 19 May 2025 11:01:43 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 6DF73E4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:47:38 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 11B73D4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:47:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 845D040DED
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8E7DB41A37
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id f8NI2dTPUC1g for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:34 +0000 (UTC)
+ id ctRBkoInpid4 for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C5BD241A63
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A63941A3A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C5BD241A63
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4A63941A3A
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BF15682A2E; Mon, 19 May 2025 10:40:05 +0000 (UTC)
+ id 4664A872E7; Mon, 19 May 2025 10:40:05 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 16 May 2025 19:57:59 +0200
+Date: Fri, 16 May 2025 16:56:37 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 10720c036eba57bf6bc6b78b4a8dc5d9f1d6f22e
-X-Git-Newrev: e743759a5202d50b40b10bd9b9a1c31243621dad
+X-Git-Oldrev: 218a17dbc4ea320304d35d74c773cc319ec3dda9
+X-Git-Newrev: d0841c007b4fbfaa4d9070d5936ad6924d61a105
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104005.BF15682A2E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/sysprof: bump to
- version 48.0
+Message-Id: <20250519104005.4664A872E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ package/python-charset-normalizer: bump to version 3.4.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,69 +58,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e743759a5202d50b40b10bd9b9a1c31243621dad
+commit: https://git.buildroot.net/buildroot/commit/?id=d0841c007b4fbfaa4d9070d5936ad6924d61a105
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This new release includes a number of improvements. Release notes:
+Add new host-python-mypy and host-python-setuptools-scm build
+dependencies.
 
-  https://gitlab.gnome.org/GNOME/sysprof/-/blob/48.0/NEWS
+Set --skip-dependency-check due to unnecessarily strict mypy
+version limit.
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Set CHARSET_NORMALIZER_USE_MYPYC=1 in env so that mypyc optimizations
+are enabled.
+
+License hash changed due to year update:
+https://github.com/jawah/charset_normalizer/commit/deed20577ba5358bb9624c17e6c8aa6ab26f6e08
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- package/sysprof/sysprof.hash |  4 ++--
- package/sysprof/sysprof.mk   | 11 +++++++++--
- 2 files changed, 11 insertions(+), 4 deletions(-)
+ .../python-charset-normalizer/python-charset-normalizer.hash  |  6 +++---
+ .../python-charset-normalizer/python-charset-normalizer.mk    | 11 +++++++++--
+ 2 files changed, 12 insertions(+), 5 deletions(-)
 
-diff --git a/package/sysprof/sysprof.hash b/package/sysprof/sysprof.hash
-index 1d7373e16d..5084ee2b11 100644
---- a/package/sysprof/sysprof.hash
-+++ b/package/sysprof/sysprof.hash
+diff --git a/package/python-charset-normalizer/python-charset-normalizer.hash b/package/python-charset-normalizer/python-charset-normalizer.hash
+index ebed9d19d7..0518440057 100644
+--- a/package/python-charset-normalizer/python-charset-normalizer.hash
++++ b/package/python-charset-normalizer/python-charset-normalizer.hash
 @@ -1,5 +1,5 @@
--# From https://download.gnome.org/sources/sysprof/47/sysprof-47.2.sha256sum
--sha256  e4b5ede9fd978ec3f0d5a0d44d0429a6d201c362bf6cb4527319031ae462c54f  sysprof-47.2.tar.xz
-+# From https://download.gnome.org/sources/sysprof/48/sysprof-48.0.sha256sum
-+sha256  1b0f0380f2f30708ba87829321a06fee1db36dfa87797bbf07f0a7acf4498d18  sysprof-48.0.tar.xz
- 
- # License files
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/sysprof/sysprof.mk b/package/sysprof/sysprof.mk
-index 13b3de175e..abbddfb6e1 100644
---- a/package/sysprof/sysprof.mk
-+++ b/package/sysprof/sysprof.mk
-@@ -4,8 +4,8 @@
+ # md5, sha256 from https://pypi.org/pypi/charset-normalizer/json
+-md5  8e0d0f33219087c2cd2d01b1d6ff11b6  charset_normalizer-3.4.0.tar.gz
+-sha256  223217c3d4f82c3ac5e29032b3f1c2eb0fb591b72161f86d93f5719079dae93e  charset_normalizer-3.4.0.tar.gz
++md5  1d808eb9efaf70bf0ec3b800f3c7dca8  charset_normalizer-3.4.1.tar.gz
++sha256  44251f18cd68a75b56585dd00dae26183e102cd5e0f9f1466e6df5da2ed64ea3  charset_normalizer-3.4.1.tar.gz
+ # Locally computed sha256 checksums
+-sha256  eb31a0c5a4fb09b8a4e32055d25c1e5f9c358a2752fef3cd720213d1ccfee241  LICENSE
++sha256  6d0d41bfe170ac6c7dc248c9a63e254d0fb45a60d50a8257d0af92c6e249b887  LICENSE
+diff --git a/package/python-charset-normalizer/python-charset-normalizer.mk b/package/python-charset-normalizer/python-charset-normalizer.mk
+index ee04bf8968..64a82dd016 100644
+--- a/package/python-charset-normalizer/python-charset-normalizer.mk
++++ b/package/python-charset-normalizer/python-charset-normalizer.mk
+@@ -4,12 +4,19 @@
  #
  ################################################################################
  
--SYSPROF_VERSION_MAJOR = 47
--SYSPROF_VERSION = $(SYSPROF_VERSION_MAJOR).2
-+SYSPROF_VERSION_MAJOR = 48
-+SYSPROF_VERSION = $(SYSPROF_VERSION_MAJOR).0
- SYSPROF_SOURCE = sysprof-$(SYSPROF_VERSION).tar.xz
- SYSPROF_SITE = https://download.gnome.org/sources/sysprof/$(SYSPROF_VERSION_MAJOR)
- SYSPROF_LICENSE = GPL-3.0+
-@@ -22,6 +22,13 @@ SYSPROF_CONF_OPTS = \
- 	-Dtools=true \
- 	-Dsystemdunitdir=/usr/lib/systemd/system
- 
-+ifeq ($(BR2_PACKAGE_ELFUTILS),y)
-+SYSPROF_DEPENDENCIES += elfutils
-+SYSPROF_CONF_OPTS += -Ddebuginfod=enabled
-+else
-+SYSPROF_CONF_OPTS += -Ddebuginfod=disabled
-+endif
+-PYTHON_CHARSET_NORMALIZER_VERSION = 3.4.0
++PYTHON_CHARSET_NORMALIZER_VERSION = 3.4.1
+ PYTHON_CHARSET_NORMALIZER_SOURCE = charset_normalizer-$(PYTHON_CHARSET_NORMALIZER_VERSION).tar.gz
+-PYTHON_CHARSET_NORMALIZER_SITE = https://files.pythonhosted.org/packages/f2/4f/e1808dc01273379acc506d18f1504eb2d299bd4131743b9fc54d7be4df1e
++PYTHON_CHARSET_NORMALIZER_SITE = https://files.pythonhosted.org/packages/16/b0/572805e227f01586461c80e0fd25d65a2115599cc9dad142fee4b747c357
+ PYTHON_CHARSET_NORMALIZER_SETUP_TYPE = setuptools
+ PYTHON_CHARSET_NORMALIZER_LICENSE = MIT
+ PYTHON_CHARSET_NORMALIZER_LICENSE_FILES = LICENSE
++PYTHON_CHARSET_NORMALIZER_DEPENDENCIES = host-python-mypy host-python-setuptools-scm
++PYTHON_CHARSET_NORMALIZER_BUILD_OPTS = --skip-dependency-check
++PYTHON_CHARSET_NORMALIZER_ENV = CHARSET_NORMALIZER_USE_MYPYC=1
 +
- ifeq ($(BR2_PACKAGE_SYSTEMD),y)
- SYSPROF_DEPENDENCIES += systemd
- endif
++HOST_PYTHON_CHARSET_NORMALIZER_DEPENDENCIES = host-python-mypy host-python-setuptools-scm
++HOST_PYTHON_CHARSET_NORMALIZER_BUILD_OPTS = --skip-dependency-check
++HOST_PYTHON_CHARSET_NORMALIZER_ENV = CHARSET_NORMALIZER_USE_MYPYC=1
+ 
+ $(eval $(python-package))
+ $(eval $(host-python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
