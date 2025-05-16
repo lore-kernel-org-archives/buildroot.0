@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B013C3ABD8
-	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 14:21:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5FC50C3ABC9
+	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 14:21:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2C42D417D8;
-	Fri, 16 May 2025 14:21:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2CAD880D35;
+	Fri, 16 May 2025 14:21:41 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JFdCbDCpIxmq; Fri, 16 May 2025 14:21:40 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 59B0180D52
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 59B0180D52;
+	Fri, 16 May 2025 14:21:40 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1AF1A185
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 14:21:31 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 00043406F2
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 14:21:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JXmxttEhGnE6; Fri, 16 May 2025 14:21:38 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B8E0E417B7
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B8E0E417B7;
-	Fri, 16 May 2025 14:21:37 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id D3BE91C7
- for <buildroot@buildroot.org>; Fri, 16 May 2025 14:21:30 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C48584057B
- for <buildroot@buildroot.org>; Fri, 16 May 2025 14:21:30 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QSDYgN7J8D6K for <buildroot@buildroot.org>;
+ id yaMuU-L4YS4O for <buildroot@buildroot.org>;
  Fri, 16 May 2025 14:21:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 07FEA4044F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3795040788
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 07FEA4044F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3795040788
  for <buildroot@buildroot.org>; Fri, 16 May 2025 14:21:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id ED23C86BD6; Fri, 16 May 2025 14:21:29 +0000 (UTC)
+ id 360BD86BDA; Fri, 16 May 2025 14:21:30 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 16 May 2025 16:19:47 +0200
+Date: Fri, 16 May 2025 16:19:53 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9b6e7bf7ee2fb03fae040853a3c12a8e1b46a532
-X-Git-Newrev: e42de820cd598d6ed7045fd4f06aa1429a359e05
+X-Git-Oldrev: 45321879e16d97079c3d1a4431f615c73291200b
+X-Git-Newrev: 5eb46878bd954ec434d288dc97de596676273bb5
 X-Patchwork-Hint: ignore
-Message-Id: <20250516142129.ED23C86BD6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pydantic-core: bump to
- 2.34.1
+Message-Id: <20250516142130.360BD86BDA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: new
+ python-pydantic-settings runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,58 +66,90 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e42de820cd598d6ed7045fd4f06aa1429a359e05
+commit: https://git.buildroot.net/buildroot/commit/?id=5eb46878bd954ec434d288dc97de596676273bb5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-[Arnout: update hash for cargo3]
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- package/python-pydantic-core/Config.in                 | 3 ++-
- package/python-pydantic-core/python-pydantic-core.hash | 2 +-
- package/python-pydantic-core/python-pydantic-core.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 4 deletions(-)
+ DEVELOPERS                                         |  2 ++
+ .../package/sample_python_pydantic_settings.py     |  8 +++++
+ .../tests/package/test_python_pydantic_settings.py | 35 ++++++++++++++++++++++
+ 3 files changed, 45 insertions(+)
 
-diff --git a/package/python-pydantic-core/Config.in b/package/python-pydantic-core/Config.in
-index 3eeb1844a2..3f985ae4da 100644
---- a/package/python-pydantic-core/Config.in
-+++ b/package/python-pydantic-core/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_PYTHON_PYDANTIC_CORE
- 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
- 	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
- 	help
--	  Core validation logic for pydantic written in rust.
-+	  Core functionality for Pydantic validation and
-+	  serialization.
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 44056c5149..6528a63a83 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2284,11 +2284,13 @@ F:	package/python-tzlocal/
+ F:	package/python-waitress/
+ F:	support/testing/tests/package/test_python_fastapi.py
+ F:	support/testing/tests/package/test_python_pydantic.py
++F:	support/testing/tests/package/test_python_pydantic_settings.py
+ F:	support/testing/tests/package/test_python_ruamel_yaml.py
+ F:	support/testing/tests/package/test_python_tzlocal.py
+ F:	support/testing/tests/package/test_python_waitress.py
+ F:	support/testing/tests/package/sample_python_fastapi.py
+ F:	support/testing/tests/package/sample_python_pydantic.py
++F:	support/testing/tests/package/sample_python_pydantic_settings.py
+ F:	support/testing/tests/package/sample_python_ruamel_yaml.py
  
- 	  https://github.com/pydantic/pydantic-core
-diff --git a/package/python-pydantic-core/python-pydantic-core.hash b/package/python-pydantic-core/python-pydantic-core.hash
-index aca95d2c13..11b00dc05d 100644
---- a/package/python-pydantic-core/python-pydantic-core.hash
-+++ b/package/python-pydantic-core/python-pydantic-core.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after vendoring
--sha256  b3e332ffb9193d9fb08bdd8690ceb1ed787d03e1e7c4a00b069715bb3def1424  python-pydantic-core-2.29.0-cargo3.tar.gz
-+sha256  475e20938b8dd93465a4e9fe9e030dfa51dcf1961d1cb02e3e50889489defd67  python-pydantic-core-2.34.1-cargo3.tar.gz
- # Locally computed sha256 checksums
- sha256  2afdd30d54b4d62b6f488a6bcc1546e84ec5061f13f4209c03d012348783795a  LICENSE
-diff --git a/package/python-pydantic-core/python-pydantic-core.mk b/package/python-pydantic-core/python-pydantic-core.mk
-index c27967689d..48fd4960af 100644
---- a/package/python-pydantic-core/python-pydantic-core.mk
-+++ b/package/python-pydantic-core/python-pydantic-core.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--PYTHON_PYDANTIC_CORE_VERSION = 2.29.0
-+PYTHON_PYDANTIC_CORE_VERSION = 2.34.1
- PYTHON_PYDANTIC_CORE_SOURCE_PYPI = pydantic_core-$(PYTHON_PYDANTIC_CORE_VERSION).tar.gz
--PYTHON_PYDANTIC_CORE_SITE_PYPI = https://files.pythonhosted.org/packages/79/f6/904edea98c98c09b8d618d619749af19a50ea5a71b9199ee2131a5a03dfb
- PYTHON_PYDANTIC_CORE_SITE = $(PYTHON_PYDANTIC_CORE_SITE_PYPI)/$(PYTHON_PYDANTIC_CORE_SOURCE_PYPI)?buildroot-path=filename
-+PYTHON_PYDANTIC_CORE_SITE_PYPI = https://files.pythonhosted.org/packages/42/fa/5f682f3db14e14f7b5b7f5008ac24594b93943d1da4facbacff5876624cf
- PYTHON_PYDANTIC_CORE_SETUP_TYPE = maturin
- PYTHON_PYDANTIC_CORE_LICENSE = MIT
- PYTHON_PYDANTIC_CORE_LICENSE_FILES = LICENSE
+ N:	Marek Belisko <marek.belisko@open-nandra.com>
+diff --git a/support/testing/tests/package/sample_python_pydantic_settings.py b/support/testing/tests/package/sample_python_pydantic_settings.py
+new file mode 100644
+index 0000000000..c98d1ce9c1
+--- /dev/null
++++ b/support/testing/tests/package/sample_python_pydantic_settings.py
+@@ -0,0 +1,8 @@
++from pydantic_settings import BaseSettings
++
++
++class Settings(BaseSettings):
++    api_key: str
++
++
++assert Settings().api_key == "ABCD1234"
+diff --git a/support/testing/tests/package/test_python_pydantic_settings.py b/support/testing/tests/package/test_python_pydantic_settings.py
+new file mode 100644
+index 0000000000..608cbbc5b1
+--- /dev/null
++++ b/support/testing/tests/package/test_python_pydantic_settings.py
+@@ -0,0 +1,35 @@
++import os
++
++from tests.package.test_python import TestPythonPackageBase
++
++
++class TestPythonPy3PydanticSettings(TestPythonPackageBase):
++    __test__ = True
++    config = """
++        BR2_arm=y
++        BR2_cortex_a9=y
++        BR2_ARM_ENABLE_NEON=y
++        BR2_ARM_ENABLE_VFP=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_PYDANTIC_SETTINGS=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++    sample_scripts = ["tests/package/sample_python_pydantic_settings.py"]
++    timeout = 30
++
++    def login(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(
++            arch="armv7", kernel="builtin", options=["-initrd", cpio_file]
++        )
++        self.emulator.login()
++
++    def run_sample_scripts(self):
++        """Run sample script while setting an environment variable"""
++        for script in self.sample_scripts:
++            cmd = (
++                "api_key=ABCD1234 " + self.interpreter + " " + os.path.basename(script)
++            )
++            self.assertRunOk(cmd, timeout=self.timeout)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
