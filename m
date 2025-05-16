@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FA95C3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:01:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 507B9C2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:01:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D97C8813CC;
-	Mon, 19 May 2025 11:01:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 106DD6F712;
+	Mon, 19 May 2025 11:01:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8iLYHqESaF3T; Mon, 19 May 2025 11:01:49 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3ERCiuqlo4sj; Mon, 19 May 2025 11:01:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E73A181233
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 21C7870EFE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E73A181233;
-	Mon, 19 May 2025 11:01:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 21C7870EFE;
+	Mon, 19 May 2025 11:01:51 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 32201D4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:47:41 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 329EAD4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:47:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C2019411CB
+ by smtp4.osuosl.org (Postfix) with ESMTP id D5BC441A4A
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LXNxe87dm-MO for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:34 +0000 (UTC)
+ id LmqhuFKeAKYW for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7360941A4A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DF45D41A74
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7360941A4A
+ by smtp4.osuosl.org (Postfix) with ESMTP id DF45D41A74
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6E1728348A; Mon, 19 May 2025 10:40:05 +0000 (UTC)
+ id DC49482A2E; Mon, 19 May 2025 10:40:05 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 16 May 2025 18:33:11 +0200
+Date: Fri, 16 May 2025 20:00:38 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 82575b3e52b5ada683a3305a275ed38cdda3a912
-X-Git-Newrev: f777c7991275c62f2881d1dae0c2aa357a7f1a21
+X-Git-Oldrev: e0beecec56ec979070ee056af0e8bd89be4c900f
+X-Git-Newrev: b0a62a96543065086a6ad7b44f4da39dfa42b9da
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104005.6E1728348A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/dbus: set
- session-socket-dir to /tmp
+Message-Id: <20250519104005.DC49482A2E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] docs/migrating.adoc: document
+ the tarball suffix update for Cargo-fetch packages
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,40 +66,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f777c7991275c62f2881d1dae0c2aa357a7f1a21
+commit: https://git.buildroot.net/buildroot/commit/?id=b0a62a96543065086a6ad7b44f4da39dfa42b9da
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-dbus has a session socket directory configuration setting,
-that, if not set, will be autodeducted based on env vars
-like TMPDIR during configuration time.
+We changed the suffix of tarballs for Cargo-fetched packages, which
+affects out-of-tree packages, so it makes sense to document that in
+the migration guide.
 
-Becuse of that, the builder's environment variables will
-lead to an image with a broken session bus while
-leaking builder's details to the image.
-
-Add an explicit setting of session-socket-dir to /tmp dir.
-
-Fixes: https://gitlab.com/buildroot.org/buildroot/-/issues/67
-
-Signed-off-by: Nikita Kiryushin <kiryushin@ancud.ru>
-Reviewed-by: Fiona Klute <fiona.klute@gmx.de>
+Reported-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- package/dbus/dbus.mk | 1 +
- 1 file changed, 1 insertion(+)
+ docs/manual/migrating.adoc | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index c60bf473cd..2002e707f0 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -34,6 +34,7 @@ DBUS_CONF_OPTS = \
- 	--disable-doxygen-docs \
- 	--with-system-socket=/run/dbus/system_bus_socket \
- 	--with-system-pid-file=/run/messagebus.pid \
-+	--with-session-socket-dir=/tmp \
- 	--runstatedir=/run
- 
- ifeq ($(BR2_STATIC_LIBS),y)
+diff --git a/docs/manual/migrating.adoc b/docs/manual/migrating.adoc
+index 1b55bc6173..ac40197147 100644
+--- a/docs/manual/migrating.adoc
++++ b/docs/manual/migrating.adoc
+@@ -209,3 +209,9 @@ or with a startup script.
+ Note that systems using systemd are not impacted: systemd always ensures
+ that `/run` is writable. Systems further using systemd-resolved already
+ had a `/etc/resolv.conf` that pointed into `/run` anyway.
++
++Due to the update of Rust to a version greater than 1.84.0 making the
++Cargo.lock file mandatory and the change from +.cargo/config+ to
+++.cargo/config.toml+, tarballs generated by Cargo-fetched packages
++have changed. Therefore the suffix of such tarballs has been changed
++from +-cargo2+ to +-cargo4+.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
