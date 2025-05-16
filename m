@@ -4,49 +4,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3F6FC3ABD8
-	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 14:48:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0261AC3ABD8
+	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 14:49:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 927F583279;
-	Fri, 16 May 2025 14:48:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9088B839D8;
+	Fri, 16 May 2025 14:49:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KrZnXOgksC7S; Fri, 16 May 2025 14:48:42 +0000 (UTC)
+ id UemMLkrBMRlT; Fri, 16 May 2025 14:49:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B0B37831D6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B984C839B4
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B0B37831D6;
-	Fri, 16 May 2025 14:48:42 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id B440C185
- for <buildroot@buildroot.org>; Fri, 16 May 2025 14:48:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B984C839B4;
+	Fri, 16 May 2025 14:49:40 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0860B1AB
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 14:49:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9A2E8831C1
- for <buildroot@buildroot.org>; Fri, 16 May 2025 14:48:41 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E23DD4057B
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 14:49:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Yw_eP3NuG9-w for <buildroot@buildroot.org>;
- Fri, 16 May 2025 14:48:40 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oxRBtqA390Xy for <buildroot@buildroot.org>;
+ Fri, 16 May 2025 14:49:39 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
+ helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB414831D5
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id CB414831D5
- for <buildroot@buildroot.org>; Fri, 16 May 2025 14:48:40 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BC71A86C59; Fri, 16 May 2025 14:48:40 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 16 May 2025 16:47:14 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b15cd1d8fee1fe9c253ffaf6a112532fe9a8f092
-X-Git-Newrev: fc827edb6585d77ad8d866953af2f649c8e1e1a8
-X-Patchwork-Hint: ignore
-Message-Id: <20250516144840.BC71A86C59@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/musepack: fix incompatible pointer
- types
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org CBE0B4025F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CBE0B4025F
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id CBE0B4025F
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 14:49:38 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B2B3143A2B;
+ Fri, 16 May 2025 14:49:35 +0000 (UTC)
+Date: Fri, 16 May 2025 16:49:34 +0200
+To: Waldemar Brodkorb <wbx@openadk.org>
+Cc: buildroot@buildroot.org
+Message-ID: <20250516164934.30f9efa4@windsurf>
+In-Reply-To: <Z-4CjumMkTD4gck1@waldemar-brodkorb.de>
+References: <Z-4CjumMkTD4gck1@waldemar-brodkorb.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-State: clean
+X-GND-Score: 0
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefudeftdefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecunecujfgurhepfffhvfevuffkjghfohfogggtgfesthejredtredtvdenucfhrhhomhepvfhhohhmrghsucfrvghtrgiiiihonhhiuceothhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeliedvffefieduheehteduvdekvddvfeevteehteelgfdvgfeltddtveevteefgfenucffohhmrghinheprghsthgvrhhishhkrdhorhhgpddtrdhmugdpghhithhhuhgsrdgtohhmpdgsohhothhlihhnrdgtohhmnecukfhppedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumegufeduvgemvdefheemtgehvgdvmegvugekfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumegufeduvgemvdefheemtgehvgdvmegvugekfedphhgvlhhopeifihhnughsuhhrfhdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvddprhgtphhtthhopeifsgigsehophgvnhgrughkrdhorhhgpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrgh
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1747406975;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=GxmuMFzel2wK3KQl1mV7spiyWhyCsvQ0+7EMgcvGzgg=;
+ b=cP10K1uD1clWPHbN1q2R7nbAcUiKBWXgWRQ4zmsJdaW3HRkSUkJbLrTCp9jBl4Pyyqy8FQ
+ qOeGGcdaBYynVJX5sg+iR69P7bndqSHlci13ouAAXaY73tY9200lsiJcsclTI+6Pi4jQXv
+ E2xogoCUDLZ3d/lx4yaboQKMDiy21CgEzKgl7422PM7D3fcGmmz4wiA37Zn9qYaSsOdPvX
+ aCDwWzE00QdWGj3jGEtUd4Bjq5Esgymf2b0GgxVIMI7XUDa54EDP3+9cbT3Yj/ilSxt2Y2
+ RVXT9jj3lPm1Uo187cCRJLyY26xSgfl2eYPmWbbtcbMPMhOfZliQ9bgXnnfgkg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=cP10K1uD
+Subject: Re: [Buildroot] [PATCH v2] package/asterisk: update to 22.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,100 +84,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3457319865899174659=="
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3457319865899174659==
-Content-Type: text/plain
+Hello Waldemar,
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fc827edb6585d77ad8d866953af2f649c8e1e1a8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 3 Apr 2025 05:37:50 +0200
+Waldemar Brodkorb <wbx@openadk.org> wrote:
 
-As of GCC14, GCC no longer allows implicitly casting all pointer types
-to all other pointer types.
+> For a changelog see here:
+> https://downloads.asterisk.org/pub/telephony/asterisk/ChangeLog-22.3.0.md
+> 
+> Changes made by the package maintainer:
+> - add systemd service file
+> - run asterisk as non-root user asterisk
+> - build pjsip as bundled source code, but download it like
+>   sound files
+> - remove unused configure options
+> - chan_alsa was removed upstream in commit
+>   de3ce178ab0282445cf25161b49f3737ac2d20ff
+> 
+> See here for the reason behind using the bundled pjsip:
+> https://github.com/asterisk/asterisk/issues/671
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+> - v1 -> v2:
+>   - add a comment about the pjsip issue to the Makefile (Arnout)
+>   - update commit log to include link to chan_alsa removal (Arnout)
+>   - update systemd file with a comment where it come from and
+>     what changed to the orginal file (Arnout)
+> ---
+>  package/asterisk/asterisk.hash    |  4 +++-
+>  package/asterisk/asterisk.mk      | 31 ++++++++++++++++++-------------
+>  package/asterisk/asterisk.service | 23 +++++++++++++++++++++++
+>  3 files changed, 44 insertions(+), 14 deletions(-)
+>  create mode 100644 package/asterisk/asterisk.service
 
-We can fix this error, by adding the appropriate cast.
-This patch is a port of a Gentoo patch.
+It is obviously not amazing that we have to use a bundled pjsip, but oh
+well, for now it will do the job. It'd be nice to continue to follow-up
+with upstream (either asterisk or pjsip or both) and see if ultimately
+the issue can be fixed.
 
-Link: https://gitweb.gentoo.org/repo/gentoo.git/tree/media-sound/musepack-tools/files/musepack-tools-495-incompatible-pointers.patch
+Best regards,
 
-Fixes:
-
-    https://autobuild.buildroot.org/results/6412fc37d533dff27f18b09c668870bebff2bec5/
-
-Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
----
- package/musepack/0006-incompatible-pointers.patch | 47 +++++++++++++++++++++++
- 1 file changed, 47 insertions(+)
-
-diff --git a/package/musepack/0006-incompatible-pointers.patch b/package/musepack/0006-incompatible-pointers.patch
-new file mode 100644
-index 0000000000..7fb1b8fa23
---- /dev/null
-+++ b/package/musepack/0006-incompatible-pointers.patch
-@@ -0,0 +1,47 @@
-+Fixed incompatible pointer types
-+
-+This is due to GCC14 that no longer allows implicitly casting all pointer types
-+to all other pointer types. Resulting in error such as :
-+
-+output/build/musepack-475/libmpcpsy/ans.c:291:120: error: passing argument 10 of ‘FindOptimalANS’ from incompatible pointer type [-Wincompatible-pointer-types]
-+  291 | L, ANSspec_M, m->NS_Order_L, m->SNR_comp_L, m->FIR_L, smr.L, smr.M, m->SCF_Index_L, Transient );
-+      |                                                                     ~^~~~~~~~~~~~~
-+      |                                                                      |
-+      |                                                                      int *
-+
-+Patch downloaded from Gentoo:
-+https://gitweb.gentoo.org/repo/gentoo.git/tree/media-sound/musepack-tools/files/musepack-tools-495-incompatible-pointers.patch
-+
-+Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
-+Upstream: N/A no SCM, not active anymore
-+
-+--- musepack-tools-495/libmpcpsy/ans.c
-++++ musepack-tools-495-fixed/libmpcpsy/ans.c
-+@@ -287,12 +287,12 @@
-+     // for L or M, respectively
-+     memset ( m->FIR_L,      0, sizeof m->FIR_L      );         // reset FIR
-+     memset ( m->NS_Order_L, 0, sizeof m->NS_Order_L );         // reset Flags
-+-	FindOptimalANS ( MaxBand, MSflag, ANSspec_L, ANSspec_M, m->NS_Order_L, m->SNR_comp_L, m->FIR_L, smr.L, smr.M, m->SCF_Index_L, Transient );
-++	FindOptimalANS ( MaxBand, MSflag, ANSspec_L, ANSspec_M, m->NS_Order_L, m->SNR_comp_L, m->FIR_L, smr.L, smr.M, (const void*)m->SCF_Index_L, Transient );
-+ 
-+     // for R or S, respectively
-+ 	memset ( m->FIR_R,      0, sizeof m->FIR_R      );         // reset FIR
-+ 	memset ( m->NS_Order_R, 0, sizeof m->NS_Order_R );         // reset Flags
-+-	FindOptimalANS ( MaxBand, MSflag, ANSspec_R, ANSspec_S, m->NS_Order_R, m->SNR_comp_R, m->FIR_R, smr.R, smr.S, m->SCF_Index_R, Transient );
-++	FindOptimalANS ( MaxBand, MSflag, ANSspec_R, ANSspec_S, m->NS_Order_R, m->SNR_comp_R, m->FIR_R, smr.R, smr.S, (const void*)m->SCF_Index_R, Transient );
-+ 
-+     return;
-+ }
-+--- musepack-tools-495/mpcenc/mpcenc.h
-++++ musepack-tools-495-fixed/mpcenc/mpcenc.h
-+@@ -241,8 +241,8 @@
-+ 
-+ float  ISNR_Schaetzer                  ( const float* samples, const float comp, const int res);
-+ float  ISNR_Schaetzer_Trans            ( const float* samples, const float comp, const int res);
-+-void   QuantizeSubband                 ( unsigned int* qu_output, const float* input, const int res, float* errors, const int maxNsOrder );
-+-void   QuantizeSubbandWithNoiseShaping ( unsigned int* qu_output, const float* input, const int res, float* errors, const float* FIR );
-++void   QuantizeSubband                 ( mpc_int16_t* qu_output, const float* input, const int res, float* errors, const int maxNsOrder );
-++void   QuantizeSubbandWithNoiseShaping ( mpc_int16_t* qu_output, const float* input, const int res, float* errors, const float* FIR );
-+ 
-+ void   NoiseInjectionComp ( void );
-+ 
-
---===============3457319865899174659==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3457319865899174659==--
