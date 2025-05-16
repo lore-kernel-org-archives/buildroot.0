@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 666C9C3ABC9
-	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 08:17:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A13E2C3ABD8
+	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 08:17:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1155061250;
-	Fri, 16 May 2025 08:17:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6AF99405E5;
+	Fri, 16 May 2025 08:17:11 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QY78XjZTuXWq; Fri, 16 May 2025 08:17:10 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A914B406EF
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id A914B406EF;
+	Fri, 16 May 2025 08:17:10 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id A59C513D
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 08:17:07 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8BC8161250
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 08:17:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tam2iIpudyP4; Fri, 16 May 2025 08:17:08 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 40C9860AEE
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 40C9860AEE;
-	Fri, 16 May 2025 08:17:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 6E3F413D
- for <buildroot@buildroot.org>; Fri, 16 May 2025 08:17:07 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5F51940906
- for <buildroot@buildroot.org>; Fri, 16 May 2025 08:17:07 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Jmn55ESBb0sS for <buildroot@buildroot.org>;
+ id uwrY-kjNxO2S for <buildroot@buildroot.org>;
  Fri, 16 May 2025 08:17:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8C44E4223C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A79EC606D4
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8C44E4223C
+ by smtp3.osuosl.org (Postfix) with ESMTP id A79EC606D4
  for <buildroot@buildroot.org>; Fri, 16 May 2025 08:17:06 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 80DCE8692B; Fri, 16 May 2025 08:17:06 +0000 (UTC)
+ id 9687C8692F; Fri, 16 May 2025 08:17:06 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 16 May 2025 10:14:35 +0200
+Date: Fri, 16 May 2025 10:15:47 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 84d9cf3abe32761f52c778973e5b8968f3f8960b
-X-Git-Newrev: 8bfdd3305e8db9ebe37b183b318e8f66478f8cae
+X-Git-Oldrev: 889d47baef3ecf14c741b478d4846cb38d1ce221
+X-Git-Newrev: 6ad80909205f43aabe3a6ec7ebf875f1f01d23ad
 X-Patchwork-Hint: ignore
-Message-Id: <20250516081706.80DCE8692B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libsndfile: update project home
- page url
+Message-Id: <20250516081706.9687C8692F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/freescale_t1040d4rdb: bump linux
+ kernel to 6.12.27
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,34 +65,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8bfdd3305e8db9ebe37b183b318e8f66478f8cae
+commit: https://git.buildroot.net/buildroot/commit/?id=6ad80909205f43aabe3a6ec7ebf875f1f01d23ad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The libsndfile package homepage url [1] points to an old site in which
-the last update is for version 1.0.28 (April 2 2017). This site does
-not seem to be maintained anymore.
+Since commit [1] "package/binutils: make 2.43 the default version",
+the freescale_t1040d4rdb_defconfig fails to build the Linux
+kernel, with the error:
 
-This commit updates the libsndfile homepage url to [2].
+    arch/powerpc/boot/util.S: Assembler messages:
+    arch/powerpc/boot/util.S:49: Error: junk at end of line, first unrecognized character is `0'
+    arch/powerpc/boot/util.S:54: Error: syntax error; found `b', expected `,'
+    arch/powerpc/boot/util.S:54: Error: junk at end of line: `b'
 
-[1] http://www.mega-nerd.com/libsndfile/
-[2] https://libsndfile.github.io/libsndfile/
+This commit fixes the issue by updating the Linux kernel to the latest
+LTS version.
+
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/9967089767
+
+[1] https://gitlab.com/buildroot.org/buildroot/-/commit/360fd01de20eb42aa0e6b5e9f7b37eaa104c6fc9
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libsndfile/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ configs/freescale_t1040d4rdb_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libsndfile/Config.in b/package/libsndfile/Config.in
-index 4ccf937691..6fdc7fbd6c 100644
---- a/package/libsndfile/Config.in
-+++ b/package/libsndfile/Config.in
-@@ -5,4 +5,4 @@ config BR2_PACKAGE_LIBSNDFILE
- 	  containing sampled sound (such as MS Windows WAV and the
- 	  Apple/SGI AIFF format) through one standard library interface.
- 
--	  http://www.mega-nerd.com/libsndfile/
-+	  https://libsndfile.github.io/libsndfile/
+diff --git a/configs/freescale_t1040d4rdb_defconfig b/configs/freescale_t1040d4rdb_defconfig
+index ad231e7f1e..851e011983 100644
+--- a/configs/freescale_t1040d4rdb_defconfig
++++ b/configs/freescale_t1040d4rdb_defconfig
+@@ -1,10 +1,10 @@
+ BR2_powerpc64=y
+ BR2_powerpc_e5500=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15.7"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
+ BR2_LINUX_KERNEL_DEFCONFIG="corenet64_smp"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="fsl/t1040d4rdb"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
