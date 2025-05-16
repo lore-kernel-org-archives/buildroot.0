@@ -1,63 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E5F1C3ABD8
-	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 16:04:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48D04C3ABC9
+	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 16:33:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1A22983C5E;
-	Fri, 16 May 2025 16:04:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D7CDA40826;
+	Fri, 16 May 2025 16:33:33 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3ZE-yvy-JutG; Fri, 16 May 2025 16:33:33 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 100E140836
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 100E140836;
+	Fri, 16 May 2025 16:33:33 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id EEDCE1AB
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 16:33:31 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id EB42E80E2C
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 16:33:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CWkYiEgoIXtY; Fri, 16 May 2025 16:04:50 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2DDDF83BDD
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2DDDF83BDD;
-	Fri, 16 May 2025 16:04:50 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 7131A185
- for <buildroot@buildroot.org>; Fri, 16 May 2025 16:04:49 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 628236123A
- for <buildroot@buildroot.org>; Fri, 16 May 2025 16:04:49 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2ZMxOxfuYHIi for <buildroot@buildroot.org>;
- Fri, 16 May 2025 16:04:48 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
- helo=relay4-d.mail.gandi.net; envelope-from=peko@korsgaard.com;
+ id uJtNOT0bS2tK for <buildroot@buildroot.org>;
+ Fri, 16 May 2025 16:33:31 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5A36260A99
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5A36260A99
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5A36260A99
- for <buildroot@buildroot.org>; Fri, 16 May 2025 16:04:48 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id DA61D43AF6;
- Fri, 16 May 2025 16:04:44 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@dell.be.48ers.dk>) id 1uFxYC-00AGMp-1G;
- Fri, 16 May 2025 18:04:44 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D97C80F81
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2D97C80F81
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 16:33:31 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 1AD0486C67; Fri, 16 May 2025 16:33:31 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 16 May 2025 18:04:41 +0200
-Message-Id: <20250516160442.2446184-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.39.5
-MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefudefudekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefrvghtvghrucfmohhrshhgrggrrhguuceophgvthgvrheskhhorhhsghgrrghrugdrtghomheqnecuggftrfgrthhtvghrnheplefhieejfeegkefhgeevgfejleejheevkefhvdegkeffvedtheeuledtgfehueetnecuffhomhgrihhnpehgihhthhhusgdrtghomhdplhhisghsughlrdhorhhgnecukfhppedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumeejiegukeemfegvfhhfmehfvggsfeemgegssgehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeekgedvrgemgeehrggtmeelgedtudemjeeiugekmeefvghffhemfhgvsgefmeegsggshedphhgvlhhopeguvghllhdrsggvrdegkegvrhhsrdgukhdpmhgrihhlfhhrohhmpehpvghkoheskhhorhhsghgrrghrugdrtghomhdpnhgspghrtghpthhtohepfedprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtohepphgvthgvrheskhhorhhsghgrrghrugdrtghomhdprhgtphhtthhopehmfhesghhoqdhshihsr
- dguvg
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: [Buildroot] [PATCH] package/sdl2: bump version to 2.32.6
+Date: Fri, 16 May 2025 18:33:11 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 82575b3e52b5ada683a3305a275ed38cdda3a912
+X-Git-Newrev: f777c7991275c62f2881d1dae0c2aa357a7f1a21
+X-Patchwork-Hint: ignore
+Message-Id: <20250516163331.1AD0486C67@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dbus: set session-socket-dir to
+ /tmp
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,49 +58,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Michael Fischer <mf@go-sys.de>
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bugfix release, fixing various minor issues:
-https://github.com/libsdl-org/SDL/releases/tag/release-2.32.4
-https://github.com/libsdl-org/SDL/releases/tag/release-2.32.6
+commit: https://git.buildroot.net/buildroot/commit/?id=f777c7991275c62f2881d1dae0c2aa357a7f1a21
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+dbus has a session socket directory configuration setting,
+that, if not set, will be autodeducted based on env vars
+like TMPDIR during configuration time.
+
+Becuse of that, the builder's environment variables will
+lead to an image with a broken session bus while
+leaking builder's details to the image.
+
+Add an explicit setting of session-socket-dir to /tmp dir.
+
+Fixes: https://gitlab.com/buildroot.org/buildroot/-/issues/67
+
+Signed-off-by: Nikita Kiryushin <kiryushin@ancud.ru>
+Reviewed-by: Fiona Klute <fiona.klute@gmx.de>
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- package/sdl2/sdl2.hash | 4 ++--
- package/sdl2/sdl2.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/dbus/dbus.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/sdl2/sdl2.hash b/package/sdl2/sdl2.hash
-index 140de28eae..f5c0d44801 100644
---- a/package/sdl2/sdl2.hash
-+++ b/package/sdl2/sdl2.hash
-@@ -1,4 +1,4 @@
--# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.32.2.tar.gz.sig
--sha256  c5f30c427fd8107ee4a400c84d4447dd211352512eaf0b6e89cc6a50a2821922  SDL2-2.32.2.tar.gz
-+# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.32.6.tar.gz.sig
-+sha256  6a7a40d6c2e00016791815e1a9f4042809210bdf10cc78d2c75b45c4f52f93ad  SDL2-2.32.6.tar.gz
- # Locally calculated
- sha256  97f35b302b361680ec1e891e95d2d52097bb95abff361434916d99dc1305f127  LICENSE.txt
-diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
-index 5ed7c6c612..5225d8a531 100644
---- a/package/sdl2/sdl2.mk
-+++ b/package/sdl2/sdl2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index c60bf473cd..2002e707f0 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -34,6 +34,7 @@ DBUS_CONF_OPTS = \
+ 	--disable-doxygen-docs \
+ 	--with-system-socket=/run/dbus/system_bus_socket \
+ 	--with-system-pid-file=/run/messagebus.pid \
++	--with-session-socket-dir=/tmp \
+ 	--runstatedir=/run
  
--SDL2_VERSION = 2.32.2
-+SDL2_VERSION = 2.32.6
- SDL2_SOURCE = SDL2-$(SDL2_VERSION).tar.gz
- SDL2_SITE = http://www.libsdl.org/release
- SDL2_LICENSE = Zlib
--- 
-2.39.5
-
+ ifeq ($(BR2_STATIC_LIBS),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
