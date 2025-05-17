@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BDDEC2D0CD
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FD6EC3ABDD
 	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:04:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 396288493A;
-	Mon, 19 May 2025 11:04:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 60A99710C2;
+	Mon, 19 May 2025 11:04:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yuA3LnppB1I1; Mon, 19 May 2025 11:04:16 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id A-J6IdrPxS0t; Mon, 19 May 2025 11:04:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6B9BB8493D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D74F1710AE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6B9BB8493D;
-	Mon, 19 May 2025 11:04:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D74F1710AE;
+	Mon, 19 May 2025 11:04:11 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1A302D4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:48:46 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 519ECE4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:48:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4262A41E48
+ by smtp4.osuosl.org (Postfix) with ESMTP id 231AD419E7
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aHMavfip1vf7 for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:42 +0000 (UTC)
+ id De8ig2GdXYsE for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B1368411F9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E728C41E03
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B1368411F9
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:08 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E728C41E03
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:06 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AAAFA80FD9; Mon, 19 May 2025 10:40:08 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id E593583BC0; Mon, 19 May 2025 10:40:06 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 17 May 2025 21:57:11 +0200
+Date: Sat, 17 May 2025 11:38:14 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b74e19a039871cd444621ef96447d97b70ae7318
-X-Git-Newrev: 9f212f3897f808f64003d7365b116850d2d263d9
+X-Git-Oldrev: 4cca0f30f2b263acf97c6d0abd8d31e2417542e2
+X-Git-Newrev: adff0d37ba9cd5f3bf6d1b0faa562a1e097a244b
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104008.AAAFA80FD9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/dlib: bump version to
- 19.24.9
+Message-Id: <20250519104006.E593583BC0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/qt6/qt6base: fix build
+ when xcb support is enabled
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,46 +58,79 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9f212f3897f808f64003d7365b116850d2d263d9
+commit: https://git.buildroot.net/buildroot/commit/?id=adff0d37ba9cd5f3bf6d1b0faa562a1e097a244b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/dlib/dlib.hash | 2 +-
- package/dlib/dlib.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Fixes:
+ERROR: Feature "xcb": Forcing to "ON" breaks its condition:
+QT_FEATURE_thread AND TARGET XCB::XCB AND TEST_xcb_syslibs AND QT_FEATURE_xkbcommon_x11
+Condition values dump:
+QT_FEATURE_thread = "ON"
+TARGET XCB::XCB found
+TEST_xcb_syslibs = "FALSE"
+QT_FEATURE_xkbcommon_x11 not evaluated
 
-diff --git a/package/dlib/dlib.hash b/package/dlib/dlib.hash
-index af206386b8..350f30dc26 100644
---- a/package/dlib/dlib.hash
-+++ b/package/dlib/dlib.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  22513c353ec9c153300c394050c96ca9d088e02966ac0f639e989e50318c82d6  dlib-19.24.6.tar.gz
-+sha256  65ff8debc3ffea84430bdd4992982082caf505404e16d986b7493c00f96f44e9  dlib-19.24.9.tar.gz
- 
- # Hashes for license files
- sha256  50c1c5978d490c7f13062d91c4b89affc83774f87bc4568a714f748b62a5b216  dlib/external/libjpeg/README
-diff --git a/package/dlib/dlib.mk b/package/dlib/dlib.mk
-index 4eb0002775..0c93130d34 100644
---- a/package/dlib/dlib.mk
-+++ b/package/dlib/dlib.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DLIB_VERSION = 19.24.6
-+DLIB_VERSION = 19.24.9
- DLIB_SITE = $(call github,davisking,dlib,v$(DLIB_VERSION))
- DLIB_CMAKE_BACKEND = ninja
- DLIB_INSTALL_STAGING = YES
+The xcb feature is defined in [2].
+
+According to [1] XCB::CURSOR is needed for xcb support.
+
+[1] https://code.qt.io/cgit/qt/qtbase.git/tree/src/gui/configure.cmake?h=6.9.0#n522
+[2] https://code.qt.io/cgit/qt/qtbase.git/tree/src/gui/configure.cmake?h=6.9.0#n1016
+
+This bug was introduced in e634be8906bd64d6a9de1768204d0f03d8d8357a,
+and fixes the build with the following defconfig:
+
+ BR2_arm=y
+ BR2_cortex_a9=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_MUSL_STABLE=y
+ BR2_PACKAGE_QT6=y
+ BR2_PACKAGE_QT6BASE_GUI=y
+ BR2_PACKAGE_QT6BASE_XCB=y
+ BR2_PACKAGE_XORG7=y
+
+Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+---
+ package/qt6/qt6base/Config.in  | 1 +
+ package/qt6/qt6base/qt6base.mk | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/package/qt6/qt6base/Config.in b/package/qt6/qt6base/Config.in
+index 96a0416dbd..7f3948ec27 100644
+--- a/package/qt6/qt6base/Config.in
++++ b/package/qt6/qt6base/Config.in
+@@ -61,6 +61,7 @@ config BR2_PACKAGE_QT6BASE_XCB
+ 	depends on BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_LIBXCB
++	select BR2_PACKAGE_XCB_UTIL_CURSOR
+ 	select BR2_PACKAGE_XCB_UTIL_IMAGE
+ 	select BR2_PACKAGE_XCB_UTIL_KEYSYMS
+ 	select BR2_PACKAGE_XCB_UTIL_RENDERUTIL
+diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
+index a4c56da601..39fb440be7 100644
+--- a/package/qt6/qt6base/qt6base.mk
++++ b/package/qt6/qt6base/qt6base.mk
+@@ -211,6 +211,7 @@ QT6BASE_CONF_OPTS += \
+ QT6BASE_DEPENDENCIES += \
+ 	libxcb \
+ 	libxkbcommon \
++	xcb-util-cursor \
+ 	xcb-util-wm \
+ 	xcb-util-image \
+ 	xcb-util-keysyms \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
