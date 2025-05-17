@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6EAE1C2D0CD
-	for <buildroot@archiver.kernel.org>; Sat, 17 May 2025 09:09:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1A93C3ABDA
+	for <buildroot@archiver.kernel.org>; Sat, 17 May 2025 09:09:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 39D6A83D19;
-	Sat, 17 May 2025 09:09:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7048683D9E;
+	Sat, 17 May 2025 09:09:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5dCIvcIInNex; Sat, 17 May 2025 09:09:43 +0000 (UTC)
+ id k-P4EeIFkqWI; Sat, 17 May 2025 09:09:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF36E83D9E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 76DFF83DE4
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CF36E83D9E;
-	Sat, 17 May 2025 09:09:42 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 09F52D8A
+	by smtp1.osuosl.org (Postfix) with ESMTP id 76DFF83DE4;
+	Sat, 17 May 2025 09:09:45 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 29013E4
  for <buildroot@buildroot.org>; Sat, 17 May 2025 09:09:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EF9B383D19
+ by smtp3.osuosl.org (Postfix) with ESMTP id E9CEB60903
  for <buildroot@buildroot.org>; Sat, 17 May 2025 09:09:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Bn1jbdnkLAbh for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3lliBmf6U4CI for <buildroot@buildroot.org>;
  Sat, 17 May 2025 09:09:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F2CD83D1D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3958060A89
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1F2CD83D1D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3958060A89
  for <buildroot@buildroot.org>; Sat, 17 May 2025 09:09:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 18CA486DF3; Sat, 17 May 2025 09:09:36 +0000 (UTC)
+ id 27DA086DF4; Sat, 17 May 2025 09:09:36 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 17 May 2025 10:08:35 +0200
+Date: Sat, 17 May 2025 10:08:49 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cbabeb507744e220f5edaabb3a1549c1399adad6
-X-Git-Newrev: 992b6783931157a809ed8435b08c2d21f380cc01
+X-Git-Oldrev: 992b6783931157a809ed8435b08c2d21f380cc01
+X-Git-Newrev: 2a7823a7fe2a1859ff8cab2d92a22a69003d62db
 X-Patchwork-Hint: ignore
-Message-Id: <20250517090936.18CA486DF3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libsepol: bump to version 3.8.1
+Message-Id: <20250517090936.27DA086DF4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libsemanage: bump to version 3.8.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,134 +65,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=992b6783931157a809ed8435b08c2d21f380cc01
+commit: https://git.buildroot.net/buildroot/commit/?id=2a7823a7fe2a1859ff8cab2d92a22a69003d62db
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changes:
-    - SELinux policy version 34 is available starting with kernel 6.14.
-    - Updated 0001-support-static-only.patch to apply cleanly and changed
-      the email address from aduskett@gmail.com to
-      adam.duskett@amarulasolutions.com
+License sha change is due to white space cleanup on commit 5969e99.
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- package/libsepol/0001-support-static-only.patch | 39 ++++++++++++++-----------
- package/libsepol/Config.in                      |  2 ++
- package/libsepol/libsepol.hash                  |  2 +-
- package/libsepol/libsepol.mk                    |  2 +-
- 4 files changed, 26 insertions(+), 19 deletions(-)
+ package/libsemanage/libsemanage.hash | 4 ++--
+ package/libsemanage/libsemanage.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libsepol/0001-support-static-only.patch b/package/libsepol/0001-support-static-only.patch
-index b3eb608f7b..7a614d7d0d 100644
---- a/package/libsepol/0001-support-static-only.patch
-+++ b/package/libsepol/0001-support-static-only.patch
-@@ -1,6 +1,6 @@
- From 2140db697c7f1da2a0a3f7bbcb14c1a0dade84e5 Mon Sep 17 00:00:00 2001
--From: Adam Duskett <aduskett@gmail.com>
--Date: Mon, 9 Oct 2017 16:28:12 -0400
-+From: Adam Duskett <adam.duskett@amarulasolutions.com>
-+Date: Wed, 14 May 2025 16:32:53 +0200
- Subject: [PATCH] Add support for static-only build
- 
- Instead of unconditionally building shared libraries, this patch
-@@ -10,17 +10,19 @@ libraries. It allows to support cases where the target architecture
- does not have support for shared libraries.
- 
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Signed-off-by: Adam Duskett <aduskett@gmail.com>
-+[Updated for 3.8.1]
-+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- [Update for 2.8]
- ---
-- src/Makefile | 13 ++++++++++---
-- 1 file changed, 10 insertions(+), 3 deletions(-)
-+ src/Makefile | 9 ++++++++-
-+ 1 file changed, 8 insertions(+), 1 deletion(-)
- 
--diff -durNw libsepol-2.7.orig/src/Makefile libsepol-2.7/src/Makefile
----- libsepol-2.7.orig/src/Makefile	2018-01-15 21:07:51.285183415 +0100
--+++ libsepol-2.7/src/Makefile	2018-01-15 21:08:56.515182717 +0100
--@@ -39,7 +39,12 @@
-+diff --git a/src/Makefile b/src/Makefile
-+index 71fa3ed..efb81bc 100644
-+--- a/src/Makefile
-++++ b/src/Makefile
-+@@ -45,7 +45,12 @@ LDFLAGS += -undefined dynamic_lookup
-  LN=gln
-  endif
-  
-@@ -34,14 +36,17 @@ diff -durNw libsepol-2.7.orig/src/Makefile libsepol-2.7/src/Makefile
-  
-  
-  $(LIBA):  $(OBJS)
--@@ -81,8 +86,10 @@
-+@@ -87,8 +92,10 @@ endif
-  install: all
--	test -d $(DESTDIR)$(LIBDIR) || install -m 755 -d $(DESTDIR)$(LIBDIR)
--	install -m 644 $(LIBA) $(DESTDIR)$(LIBDIR)
-+ 	test -d $(DESTDIR)$(LIBDIR) || install -m 755 -d $(DESTDIR)$(LIBDIR)
-+ 	install -m 644 $(LIBA) $(DESTDIR)$(LIBDIR)
- +ifeq ($(STATIC),)
--	test -d $(DESTDIR)$(SHLIBDIR) || install -m 755 -d $(DESTDIR)$(SHLIBDIR)
--	install -m 755 $(LIBSO) $(DESTDIR)$(SHLIBDIR)
-+ 	test -d $(DESTDIR)$(SHLIBDIR) || install -m 755 -d $(DESTDIR)$(SHLIBDIR)
-+ 	install -m 755 $(LIBSO) $(DESTDIR)$(SHLIBDIR)
- +endif
--	test -d $(DESTDIR)$(LIBDIR)/pkgconfig || install -m 755 -d $(DESTDIR)$(LIBDIR)/pkgconfig
--	install -m 644 $(LIBPC) $(DESTDIR)$(LIBDIR)/pkgconfig
--	$(LN) -sf --relative $(DESTDIR)$(SHLIBDIR)/$(LIBSO) $(DESTDIR)$(LIBDIR)/$(TARGET)
-+ 	test -d $(DESTDIR)$(LIBDIR)/pkgconfig || install -m 755 -d $(DESTDIR)$(LIBDIR)/pkgconfig
-+ 	install -m 644 $(LIBPC) $(DESTDIR)$(LIBDIR)/pkgconfig
-+ 	$(LN) -sf --relative $(DESTDIR)$(SHLIBDIR)/$(LIBSO) $(DESTDIR)$(LIBDIR)/$(TARGET)
-+-- 
-+2.49.0
-+
-diff --git a/package/libsepol/Config.in b/package/libsepol/Config.in
-index 5dfd1a41d3..5b0832009c 100644
---- a/package/libsepol/Config.in
-+++ b/package/libsepol/Config.in
-@@ -12,6 +12,7 @@ if BR2_PACKAGE_LIBSEPOL
- 
- config BR2_PACKAGE_LIBSEPOL_POLICY_VERSION
- 	int "Policy version"
-+	default 34 if BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_14
- 	default 33 if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_8
- 	default 32 if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_5
- 	default 31 if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13
-@@ -32,6 +33,7 @@ config BR2_PACKAGE_LIBSEPOL_POLICY_VERSION
- 	  >= 4.13 < 5.5    31
- 	  >= 5.5 < 5.8     32
- 	  >= 5.8           33
-+	  >= 6.14          34
- 
- endif
- 
-diff --git a/package/libsepol/libsepol.hash b/package/libsepol/libsepol.hash
-index dcc67ac638..adf7cb86bb 100644
---- a/package/libsepol/libsepol.hash
-+++ b/package/libsepol/libsepol.hash
+diff --git a/package/libsemanage/libsemanage.hash b/package/libsemanage/libsemanage.hash
+index 4d1b2161da..78067b3ede 100644
+--- a/package/libsemanage/libsemanage.hash
++++ b/package/libsemanage/libsemanage.hash
 @@ -1,5 +1,5 @@
  # From: https://github.com/SELinuxProject/selinux/wiki/Releases
--sha256  cd741e25244e7ef6cd934d633614131a266c3eaeab33d8bfa45e8a93b45cc901  libsepol-3.7.tar.gz
-+sha256  0e78705305f955abd4c0654d37a5477ee26349ab74db9e2b03a7868897ae1ddf  libsepol-3.8.1.tar.gz
+-sha256  e166cae29a417dab008db9ca0874023f353a3017b07693a036ed97487eda35b1  libsemanage-3.7.tar.gz
++sha256  7b39127b219cc70bfd935a4af6b0f2ba83d4b35c916f253c7e942c23ab490f07  libsemanage-3.8.1.tar.gz
  
  # Hash for license file
- sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  LICENSE
-diff --git a/package/libsepol/libsepol.mk b/package/libsepol/libsepol.mk
-index af14778ead..2376ab852d 100644
---- a/package/libsepol/libsepol.mk
-+++ b/package/libsepol/libsepol.mk
+-sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  LICENSE
++sha256  e1c0890440efe31b6cd2ee2abf895eb917c787799f079133f5809414d90d5d60  LICENSE
+diff --git a/package/libsemanage/libsemanage.mk b/package/libsemanage/libsemanage.mk
+index cf9e9c46fa..21ca9fd3f9 100644
+--- a/package/libsemanage/libsemanage.mk
++++ b/package/libsemanage/libsemanage.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBSEPOL_VERSION = 3.7
-+LIBSEPOL_VERSION = 3.8.1
- LIBSEPOL_SITE = https://github.com/SELinuxProject/selinux/releases/download/$(LIBSEPOL_VERSION)
- LIBSEPOL_LICENSE = LGPL-2.1+
- LIBSEPOL_LICENSE_FILES = LICENSE
+-LIBSEMANAGE_VERSION = 3.7
++LIBSEMANAGE_VERSION = 3.8.1
+ LIBSEMANAGE_SITE = https://github.com/SELinuxProject/selinux/releases/download/$(LIBSEMANAGE_VERSION)
+ LIBSEMANAGE_LICENSE = LGPL-2.1+
+ LIBSEMANAGE_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
