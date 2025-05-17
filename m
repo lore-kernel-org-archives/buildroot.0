@@ -4,67 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33DF6C2D0CD
-	for <buildroot@archiver.kernel.org>; Sat, 17 May 2025 07:38:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06533C2D0CD
+	for <buildroot@archiver.kernel.org>; Sat, 17 May 2025 07:59:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ADF6340887;
-	Sat, 17 May 2025 07:38:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7A34D406B9;
+	Sat, 17 May 2025 07:59:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yUI_Fxx_H4KE; Sat, 17 May 2025 07:38:32 +0000 (UTC)
+ id WCDo6QZCOD8t; Sat, 17 May 2025 07:59:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE45540B52
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A62C406BE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AE45540B52;
-	Sat, 17 May 2025 07:38:32 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 09C3A223
- for <buildroot@buildroot.org>; Sat, 17 May 2025 07:38:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8A62C406BE;
+	Sat, 17 May 2025 07:59:46 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9AD21E4
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 07:59:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0601940887
- for <buildroot@buildroot.org>; Sat, 17 May 2025 07:38:31 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8C06040534
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 07:59:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v4qL1mC6dFDy for <buildroot@buildroot.org>;
- Sat, 17 May 2025 07:38:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
- helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2EDC34086D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2EDC34086D
-Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2EDC34086D
- for <buildroot@buildroot.org>; Sat, 17 May 2025 07:38:29 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 07EA71C0F9B; Sat, 17 May 2025 09:38:27 +0200 (CEST)
-Message-ID: <ba4dd77a-49f0-412a-8a04-f6a1575267d1@rnout.be>
-Date: Sat, 17 May 2025 09:38:26 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AmmuDVud8M7w for <buildroot@buildroot.org>;
+ Sat, 17 May 2025 07:59:44 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
+ helo=smtp4-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6FA3340125
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6FA3340125
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6FA3340125
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 07:59:44 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:93aa:5000:c0e7:5e2f:eef4:db82])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPSA id 7870D19F74D
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 09:59:40 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sat, 17 May 2025 09:59:37 +0200
+Date: Sat, 17 May 2025 09:59:37 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Message-ID: <aChB6bwZ007ymPK_@landeda>
+References: <cover.1747241900.git.yann.morin.1998@free.fr>
+ <8b83ad421062201ab3387b1133eee53a800b1918.1747241900.git.yann.morin.1998@free.fr>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Vincent Fazio <vfazio@gmail.com>, buildroot@buildroot.org
-References: <20250517024045.625622-1-vfazio@gmail.com>
-Content-Language: en-GB, fr-BE
-In-Reply-To: <20250517024045.625622-1-vfazio@gmail.com>
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rnout.be; s=dkim; 
- t=1747467508; h=from:subject:date:message-id:to:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=n81+/d7h1NlXt0fnS+zXTE8D8zZ7syq3mOLv+FmXo1o=;
- b=Qne9TfSl+NzH8K0aNeEJGwmlpj9s1mUSmyLu/ffPcfM3TuExg0e4KBM7i3EMR47Zs9+bOD
- gOdTKiWvUVyCqU5z2AclaRvHCtNKusJ4NfO/O59L8mIOaI2eSKHjmYtCaE0sYYqfKqgtwB
- OCE4Vf9z7gsDa7xb5ZwVFcEJw4qpEHy5agQeRQC85QFyGwm7NBhvKVm8Rz6FTwimz3cVid
- dyY9saKu+fDws6apaV9jwIw/yMR776yWaR+dqMX5NE6zhH2bTYHFNwViQF4LnJEa+Y3JoJ
- LI9WD0e+0Sk5XlxvUoxe8RzyofhkqVjy7F0enYCyyO3ioh0jlnhEBZML3ReKug==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
- header.s=dkim header.b=Qne9TfSl
-Subject: Re: [Buildroot] [PATCH] package/m4: bump to 1.4.20
+Content-Disposition: inline
+In-Reply-To: <8b83ad421062201ab3387b1133eee53a800b1918.1747241900.git.yann.morin.1998@free.fr>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1747468781;
+ bh=Ps8IhHZTpO6NTCLrBGSuxKYI0NKTTioJf9ltpPP6eIo=;
+ h=Date:From:To:Subject:References:In-Reply-To:From;
+ b=FsaBMvr/S4agXcde/a/545j30f/I25YoAg4/JBINhyUlLx/gsouJgi7HxqvqPnCm5
+ V0Am7ZAz/+jXnqktAjAguQnD19Xku3VbkaFTGpOgCLOnNj1PLk0MtBAuFozpnAynCz
+ BPYaB8f5e5lmbW+ePM512ZmipeFv3KFy911Zm8k8c2RVqjdv44HFZo87/uXbHTlXaW
+ 3uNBg/2DUHYJvq/q0apd5+nircgr5lt2TYGHU9MmTPwI0ulVGkdLrUXRaaA4TZQ1f6
+ M87R2OmomMmBw72Ixf8hkmzAKVR6Ywfpe+dusXYP8Vj9u9W0kWiC51JWNkWKHsbxFP
+ ey45zJVv/xZZA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=FsaBMvr/
+Subject: Re: [Buildroot] [PATCH 05/13] support/scripts: fix and restrict
+ conditions to accept merged dirs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,68 +82,73 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+All,
 
-
-On 17/05/2025 04:40, Vincent Fazio wrote:
-> The new version bundles an updated gnulib that includes support for
-> -std=c23 which is the default for gcc 15.
+On 2025-05-14 18:58 +0200, Yann E. MORIN spake thusly:
+> Currently, we accept that the merged usr is bqckward, i.e. that the
+> /usr/bin, /usr/sbin, and /usr/lib entries be symlinks to, resp., /bin,
+> /sbin, and /lib. We also allow either entries to be symlinks to other
+> parts of the root. Both are accepted despite the comment at the top of
+> the script explaining what should be accepted.
 > 
-> Signed-off-by: Vincent Fazio <vfazio@gmail.com>
+> However, a properly merged usr is the other way around: /bin, /sbin, and
+> /lib are the symlinks to resp. /usr/bin, /usr/sbin, and /usr/lib, and
+> the latters are actual directories.
+[--SNIP--]
+> @@ -32,12 +29,21 @@ test_merged() {
+>  	local dir2="${3}"
+>  	local inode1 inode2
+>  
+> +	# OK if missing first entry and second entry is an actual directory
+> +	test -e "${root}${dir1}" || { test -d "${root}${dir2}" && return; }
+> +
+>  	inode1="$(stat -c '%i' "${root}${dir1}/." 2>/dev/null)"
+>  	inode2="$(stat -c '%i' "${root}${dir2}/." 2>/dev/null)"
+>  
+> -	test -z "${inode1}" || \
+> -		test "${inode1}" = "${inode2}" || \
+> -			printf '%s\n' "${dir1}"
+> +	# OK if first entry is a symlink, second entry is a directoy, and
+> +	# both have the same inode (once dereferenced)
+> +	test -L "${root}${dir1}" \
+> +	&& test -d "${root}${dir2}" \
+> +	&& test "${inode1}" = "${inode2}" \
+> +	&& return
+> +
+> +	# Otherwise, this directory is not merged
+> +	printf '%s\n' "${dir1}"
 
-  Applied to master, thanks.
+This new test is still quite complex, and is in fact still wrong in
+weird cases. For example, with BASE a custom skeleton or rootfs overlay,
+if BASE/sbin and BASE/usr/sbin ar absolute symlinks to /usr/sbin, the
+test above will accept BASE as being properly merged, while it is in
+fact broken.
 
-  Regards,
-  Arnout
+I'm preparing a v2 which greatly simplifies the test, and makes it cover
+more (all, hopefully) cases.
 
-> ---
->   package/m4/m4.hash |  2 +-
->   package/m4/m4.mk   | 12 +-----------
->   2 files changed, 2 insertions(+), 12 deletions(-)
+Regards,
+Yann E. MORIN.
+
+>  }
+>  
+>  test_merged "${root}" "/lib" "/usr/lib"
+> -- 
+> 2.47.0
 > 
-> diff --git a/package/m4/m4.hash b/package/m4/m4.hash
-> index a81f4fab9c..a5b8456cc2 100644
-> --- a/package/m4/m4.hash
-> +++ b/package/m4/m4.hash
-> @@ -1,4 +1,4 @@
->   # Locally calculated after checking pgp signature
-> -sha256  63aede5c6d33b6d9b13511cd0be2cac046f2e70fd0a07aa9573a04a82783af96  m4-1.4.19.tar.xz
-> +sha256  e236ea3a1ccf5f6c270b1c4bb60726f371fa49459a8eaaebc90b216b328daf2b  m4-1.4.20.tar.xz
->   # License files, locally calculated
->   sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
-> diff --git a/package/m4/m4.mk b/package/m4/m4.mk
-> index f5e1e27ad8..396c2bbee2 100644
-> --- a/package/m4/m4.mk
-> +++ b/package/m4/m4.mk
-> @@ -4,20 +4,10 @@
->   #
->   ################################################################################
->   
-> -M4_VERSION = 1.4.19
-> +M4_VERSION = 1.4.20
->   M4_SOURCE = m4-$(M4_VERSION).tar.xz
->   M4_SITE = $(BR2_GNU_MIRROR)/m4
->   M4_LICENSE = GPL-3.0+
->   M4_LICENSE_FILES = COPYING
->   
-> -# gcc-15 defaults to -std=gnu23 which is incorrectly detected and
-> -# generates build failures in the gnulib copy included in
-> -# m4-1.4.19. We workaround this by forcing the previous gcc default
-> -# standard, which is -std=gnu17 only when host gcc is >= 15. This
-> -# workaround can be removed when m4 will be updated to a version
-> -# including a fix for gcc-15.
-> -ifeq ($(BR2_HOST_GCC_AT_LEAST_15),y)
-> -HOST_M4_CONF_ENV = CFLAGS="$(HOST_CFLAGS) -std=gnu17"
-> -endif
-> -
->   $(eval $(host-autotools-package))
 
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
