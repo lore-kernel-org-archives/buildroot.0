@@ -1,52 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CDF25C3DA6D
-	for <buildroot@archiver.kernel.org>; Sat, 17 May 2025 07:14:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F464C3ABDA
+	for <buildroot@archiver.kernel.org>; Sat, 17 May 2025 07:37:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 927E1607DF;
-	Sat, 17 May 2025 07:14:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BAC36408E6;
+	Sat, 17 May 2025 07:37:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gocsbHLx7hjV; Sat, 17 May 2025 07:14:32 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oekhFH3jNeLr; Sat, 17 May 2025 07:37:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B65606080C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E697940887
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B65606080C;
-	Sat, 17 May 2025 07:14:32 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id C73C1223
- for <buildroot@buildroot.org>; Sat, 17 May 2025 07:14:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E697940887;
+	Sat, 17 May 2025 07:37:26 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 444781DE
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 07:37:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B8EB840125
- for <buildroot@buildroot.org>; Sat, 17 May 2025 07:14:30 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 299E3812D9
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 07:37:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lupLYTBUz-K9 for <buildroot@buildroot.org>;
- Sat, 17 May 2025 07:14:28 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id y0TeNhHsjylR for <buildroot@buildroot.org>;
+ Sat, 17 May 2025 07:37:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AD0EC40967
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6DBDA811AF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id AD0EC40967
- for <buildroot@buildroot.org>; Sat, 17 May 2025 07:14:28 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6DBDA811AF
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 07:37:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A76C286E0A; Sat, 17 May 2025 07:14:28 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 5C82D86799; Sat, 17 May 2025 07:37:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 17 May 2025 09:07:31 +0200
+Date: Sat, 17 May 2025 09:28:58 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 359908d33ccf4b44a8b035f6c3ae6ffc52d40453
-X-Git-Newrev: cc93da91ac44ebf9ed6cf29d6a24c0632854f5a4
+X-Git-Oldrev: cc93da91ac44ebf9ed6cf29d6a24c0632854f5a4
+X-Git-Newrev: d9aabc1af39fc478e5aeee446bd2d814a2dcbda5
 X-Patchwork-Hint: ignore
-Message-Id: <20250517071428.A76C286E0A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mtd: revert update to 2.3.0
+Message-Id: <20250517073725.5C82D86799@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/m4: bump to 1.4.20
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,95 +57,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc93da91ac44ebf9ed6cf29d6a24c0632854f5a4
+commit: https://git.buildroot.net/buildroot/commit/?id=d9aabc1af39fc478e5aeee446bd2d814a2dcbda5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The mtd package fails to compile when BR2_PACKAGE_MTD_TESTS=y is enabled
-with the following error.
+The new version bundles an updated gnulib that includes support for
+-std=c23 which is the default for gcc 15.
 
-> make[1]: *** No rule to make target
-> 'tests/ubifs_tools-tests/images/good.gz', needed by 'all-am'.  Stop.
-
-This issue was reported upstream and a patch submitted. However we can't
-apply the patch to fix the problem. The issue is that a file is missing
-from the released tarball, so only a new MTD release can fix it.
-
-This reverts commit 0c230eef9075a37248488ecf0a877012115f7b58.
-
-Upstream: https://lore.kernel.org/linux-mtd/20250220112554.2150046-1-m.olbrich@pengutronix.de/
-Reported-by: Heiko Thiery <heiko.thiery@gmail.com>
-Signed-off-by: Brandon Maier <brandon.maier@collins.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Vincent Fazio <vfazio@gmail.com>
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- package/mtd/mtd.hash | 4 ++--
- package/mtd/mtd.mk   | 9 ++++-----
- 2 files changed, 6 insertions(+), 7 deletions(-)
+ package/m4/m4.hash |  2 +-
+ package/m4/m4.mk   | 12 +-----------
+ 2 files changed, 2 insertions(+), 12 deletions(-)
 
-diff --git a/package/mtd/mtd.hash b/package/mtd/mtd.hash
-index 84b9e83bff..0eb90a5118 100644
---- a/package/mtd/mtd.hash
-+++ b/package/mtd/mtd.hash
+diff --git a/package/m4/m4.hash b/package/m4/m4.hash
+index a81f4fab9c..a5b8456cc2 100644
+--- a/package/m4/m4.hash
++++ b/package/m4/m4.hash
 @@ -1,4 +1,4 @@
  # Locally calculated after checking pgp signature
--# https://infraroot.at/pub/mtd/mtd-utils-2.3.0.tar.bz2.asc
--sha256  2db102908b232406ccb20719c0f43b61196aef4534493419fbf98a273c598c10  mtd-utils-2.3.0.tar.bz2
-+# https://infraroot.at/pub/mtd/mtd-utils-2.2.1.tar.bz2.asc
-+sha256  f7ae20b2eb79ee83441468f0b99d897024cd96ff853eea59106fb1952065c803  mtd-utils-2.2.1.tar.bz2
- sha256  dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
-diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-index 4ff43a1dce..77050e7e40 100644
---- a/package/mtd/mtd.mk
-+++ b/package/mtd/mtd.mk
-@@ -4,7 +4,7 @@
+-sha256  63aede5c6d33b6d9b13511cd0be2cac046f2e70fd0a07aa9573a04a82783af96  m4-1.4.19.tar.xz
++sha256  e236ea3a1ccf5f6c270b1c4bb60726f371fa49459a8eaaebc90b216b328daf2b  m4-1.4.20.tar.xz
+ # License files, locally calculated
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
+diff --git a/package/m4/m4.mk b/package/m4/m4.mk
+index f5e1e27ad8..396c2bbee2 100644
+--- a/package/m4/m4.mk
++++ b/package/m4/m4.mk
+@@ -4,20 +4,10 @@
  #
  ################################################################################
  
--MTD_VERSION = 2.3.0
-+MTD_VERSION = 2.2.1
- MTD_SOURCE = mtd-utils-$(MTD_VERSION).tar.bz2
- MTD_SITE = https://infraroot.at/pub/mtd
- MTD_LICENSE = GPL-2.0
-@@ -12,7 +12,6 @@ MTD_LICENSE_FILES = COPYING
- MTD_CPE_ID_VENDOR = mtd-utils_project
- MTD_CPE_ID_PRODUCT = mtd-utils
- MTD_INSTALL_STAGING = YES
--MTD_DEPENDENCIES = host-pkgconf
+-M4_VERSION = 1.4.19
++M4_VERSION = 1.4.20
+ M4_SOURCE = m4-$(M4_VERSION).tar.xz
+ M4_SITE = $(BR2_GNU_MIRROR)/m4
+ M4_LICENSE = GPL-3.0+
+ M4_LICENSE_FILES = COPYING
  
- MTD_LDFLAGS = $(TARGET_LDFLAGS)
- 
-@@ -29,7 +28,7 @@ MTD_CONF_OPTS += --without-lzo
- endif
- 
- ifeq ($(BR2_PACKAGE_ZLIB),y)
--MTD_DEPENDENCIES += zlib
-+MTD_DEPENDENCIES += host-pkgconf zlib
- MTD_CONF_OPTS += --with-zlib
- else
- MTD_CONF_OPTS += --without-zlib
-@@ -44,7 +43,7 @@ MTD_CONF_OPTS += --without-jffs
- endif
- 
- ifeq ($(BR2_PACKAGE_MTD_UBIFS_UTILS),y)
--MTD_DEPENDENCIES += util-linux
-+MTD_DEPENDENCIES += util-linux host-pkgconf
- MTD_CONF_OPTS += --with-ubifs
- # crypto needs linux/hash_info.h
- ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12)$(BR2_PACKAGE_OPENSSL),yy)
-@@ -84,7 +83,7 @@ else
- MTD_CONF_OPTS += --without-xattr
- endif
- 
--HOST_MTD_DEPENDENCIES = host-pkgconf host-acl host-zlib host-lzo host-util-linux host-zstd
-+HOST_MTD_DEPENDENCIES = host-acl host-zlib host-lzo host-util-linux host-zstd
- HOST_MTD_CONF_OPTS = \
- 	--with-jffs \
- 	--with-ubifs \
+-# gcc-15 defaults to -std=gnu23 which is incorrectly detected and
+-# generates build failures in the gnulib copy included in
+-# m4-1.4.19. We workaround this by forcing the previous gcc default
+-# standard, which is -std=gnu17 only when host gcc is >= 15. This
+-# workaround can be removed when m4 will be updated to a version
+-# including a fix for gcc-15.
+-ifeq ($(BR2_HOST_GCC_AT_LEAST_15),y)
+-HOST_M4_CONF_ENV = CFLAGS="$(HOST_CFLAGS) -std=gnu17"
+-endif
+-
+ $(eval $(host-autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
