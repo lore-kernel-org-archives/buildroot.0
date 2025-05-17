@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FB7AC3DA6D
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:49:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42447C2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:49:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9D0996174F;
-	Mon, 19 May 2025 10:49:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1DCF56FBDE;
+	Mon, 19 May 2025 10:49:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sEuooC3hrPlL; Mon, 19 May 2025 10:49:25 +0000 (UTC)
+ id 6uqfQnyKGVQ1; Mon, 19 May 2025 10:49:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 39C3F6FB74
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E2B4360F7B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 39C3F6FB74;
-	Mon, 19 May 2025 10:49:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E2B4360F7B;
+	Mon, 19 May 2025 10:49:28 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 4CB21D4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:42:01 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 10C43193
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:42:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6ABCA4193F
+ by smtp2.osuosl.org (Postfix) with ESMTP id ABABB41947
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kt5N6fp0vmTn for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:06 +0000 (UTC)
+ id p2cTPDlXa0fv for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E5ED41930
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3E6154191A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8E5ED41930
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:06 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3E6154191A
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8C78A872E7; Mon, 19 May 2025 10:40:06 +0000 (UTC)
+ id 3C4F9872E7; Mon, 19 May 2025 10:40:07 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 17 May 2025 10:14:58 +0200
+Date: Sat, 17 May 2025 12:37:16 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ebf1217a7bd2b7750cde99718348f8f4e823588f
-X-Git-Newrev: d0e1181b16819fd489ee7226be9957038310faa1
+X-Git-Oldrev: 0bae9b29cd2a6008c5945747a45dfe8af54fae35
+X-Git-Newrev: d0fe20e891a8ac2bd724c3359e1e7c0cf9a96553
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104006.8C78A872E7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/restorecond: bump to
- version 3.8.1
+Message-Id: <20250519104007.3C4F9872E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libfuse3: fix build
+ failure with no NPTL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,48 +58,210 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d0e1181b16819fd489ee7226be9957038310faa1
+commit: https://git.buildroot.net/buildroot/commit/?id=d0fe20e891a8ac2bd724c3359e1e7c0cf9a96553
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
----
- package/restorecond/restorecond.hash | 2 +-
- package/restorecond/restorecond.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Since the bump of libfuse3 from 3.16.2 to 3.17.1 in Buildroot commit
+a4430578aeb6ca460813f4ff7d833cdd839a3249, libfuse3 uses
+pthread_setname_np() which is only available with NPTL.
 
-diff --git a/package/restorecond/restorecond.hash b/package/restorecond/restorecond.hash
-index 34847f28f1..2a55edc313 100644
---- a/package/restorecond/restorecond.hash
-+++ b/package/restorecond/restorecond.hash
-@@ -1,5 +1,5 @@
- # https://github.com/SELinuxProject/selinux/wiki/Releases
--sha256  4192595c08c775ff540f5ab850885ce11b132a4a4e29b65f20e751dd0a69d31f  restorecond-3.7.tar.gz
-+sha256  164fe4825a9c65f3dd664f68fe252e67df72d4ea817a90d8f62ae0544bfb8ba2  restorecond-3.8.1.tar.gz
- 
- # Hash for license file
- sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  LICENSE
-diff --git a/package/restorecond/restorecond.mk b/package/restorecond/restorecond.mk
-index 4624b9204d..f2618c20b3 100644
---- a/package/restorecond/restorecond.mk
-+++ b/package/restorecond/restorecond.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RESTORECOND_VERSION = 3.7
-+RESTORECOND_VERSION = 3.8.1
- RESTORECOND_SITE = https://github.com/SELinuxProject/selinux/releases/download/$(RESTORECOND_VERSION)
- RESTORECOND_LICENSE = GPL-2.0
- RESTORECOND_LICENSE_FILES = LICENSE
+Some initial fixes were made upstream, but are insufficient to fully
+fix the problem, so this commit brings additional upstream patches
+fixing the issue completely.
+
+Fixes:
+
+  https://autobuild.buildroot.net/results/f3cfaa8ed63483858ffa32b719ea4be68ba6c4f3/
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../libfuse3/0001-Fix-meson-function-tests.patch   | 121 +++++++++++++++++++++
+ ...ld-make-special_funcs-check-more-reliable.patch |  41 +++++++
+ 2 files changed, 162 insertions(+)
+
+diff --git a/package/libfuse3/0001-Fix-meson-function-tests.patch b/package/libfuse3/0001-Fix-meson-function-tests.patch
+new file mode 100644
+index 0000000000..7af9721337
+--- /dev/null
++++ b/package/libfuse3/0001-Fix-meson-function-tests.patch
+@@ -0,0 +1,121 @@
++From 4840ffe9e8610934d91b27061ff149cc74b41c28 Mon Sep 17 00:00:00 2001
++From: Bernd Schubert <bschubert@ddn.com>
++Date: Thu, 24 Apr 2025 16:49:08 +0200
++Subject: [PATCH] Fix meson function tests
++
++Several meson tests were incorrectly failing
++
++Checking for function "static_assert" : NO (cached)
++Checking for function "pthread_setname_np" : NO (cached)
++Check usable header "#include <linux/close_range.h>" : NO (cached)
++
++These functions get now tested with compilation tests
++and get found on my system.
++
++Checking if "static_assert check" compiles: YES
++Checking if "pthread_setname_np check" compiles: YES
++Checking if "close_range check" compiles: YES
++
++Upstream: https://github.com/libfuse/libfuse/commit/82bcd818fb3e7d5ced9b0c04b7b7a98a892e807e
++Signed-off-by: Bernd Schubert <bschubert@ddn.com>
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ meson.build | 67 +++++++++++++++++++++++++++++++++++++++--------------
++ 1 file changed, 49 insertions(+), 18 deletions(-)
++
++diff --git a/meson.build b/meson.build
++index ba551ed..d1346d0 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -59,6 +59,8 @@ include_default = '''
++ #include <sys/types.h>
++ #include <sys/stat.h>
++ #include <fcntl.h>
+++#include <assert.h>     /* For static_assert */
+++#include <pthread.h>    /* For pthread_setname_np */
++ '''
++ args_default = [ '-D_GNU_SOURCE' ]
++ 
++@@ -72,32 +74,61 @@ private_cfg.set_quoted('PACKAGE_VERSION', meson.project_version())
++ # Test for presence of some functions
++ test_funcs = [ 'fork', 'fstatat', 'openat', 'readlinkat', 'pipe2',
++                'splice', 'vmsplice', 'posix_fallocate', 'fdatasync',
++-               'utimensat', 'copy_file_range', 'fallocate', 'static_assert',
++-               'pthread_setname_np' ]
+++               'utimensat', 'copy_file_range', 'fallocate' ]
++ foreach func : test_funcs
++     private_cfg.set('HAVE_' + func.to_upper(),
++         cc.has_function(func, prefix: include_default, args: args_default))
++ endforeach
++-private_cfg.set('HAVE_SETXATTR', 
++-        cc.has_function('setxattr', prefix: '#include <sys/xattr.h>'))
++-private_cfg.set('HAVE_ICONV', 
++-        cc.has_function('iconv', prefix: '#include <iconv.h>'))
++-private_cfg.set('HAVE_BACKTRACE',
++-        cc.has_function('backtrace', prefix: '#include <execinfo.h>'))
++ 
++-# Test if headers exist
++-private_cfg.set('HAVE_LINUX_CLOSE_RANGE_H',
++-        cc.check_header('#include <linux/close_range.h>'))
+++# Special case checks that need custom code
+++special_funcs = {
+++    'static_assert': '''
+++        #include <assert.h>
+++        static_assert(1, "test");
+++        int main(void) { return 0; }
+++    ''',
+++    'pthread_setname_np': '''
+++        #include <pthread.h>
+++        int main(void) {
+++            pthread_t thread = pthread_self();
+++            pthread_setname_np(thread, "test");
+++            return 0;
+++        }
+++    ''',
+++    'close_range': '''
+++        #include <unistd.h>
+++        #include <fcntl.h>
+++        #include <linux/close_range.h>
+++        int main(void) {
+++            unsigned int flags = CLOSE_RANGE_UNSHARE;
+++            return close_range(3, ~0U, flags);
+++        }
+++    '''
+++}
+++
+++foreach name, code : special_funcs
+++    private_cfg.set('HAVE_' + name.to_upper(),
+++        cc.compiles(code, args: ['-Werror'] + args_default,
+++                 name: name + ' check'))
+++endforeach
+++
+++# Regular function checks
+++private_cfg.set('HAVE_SETXATTR',
+++    cc.has_function('setxattr', prefix: '#include <sys/xattr.h>'))
+++private_cfg.set('HAVE_ICONV',
+++    cc.has_function('iconv', prefix: '#include <iconv.h>'))
+++private_cfg.set('HAVE_BACKTRACE',
+++    cc.has_function('backtrace', prefix: '#include <execinfo.h>'))
++ 
++-# Test if structs have specific member
+++# Struct member checks
++ private_cfg.set('HAVE_STRUCT_STAT_ST_ATIM',
++-         cc.has_member('struct stat', 'st_atim',
++-                       prefix: include_default,
++-                       args: args_default))
+++    cc.has_member('struct stat', 'st_atim',
+++                  prefix: include_default + '#include <sys/stat.h>',
+++                  args: args_default))
++ private_cfg.set('HAVE_STRUCT_STAT_ST_ATIMESPEC',
++-         cc.has_member('struct stat', 'st_atimespec',
++-                       prefix: include_default,
++-                       args: args_default))
+++    cc.has_member('struct stat', 'st_atimespec',
+++                  prefix: include_default + '#include <sys/stat.h>',
+++                  args: args_default))
++ 
++ #
++ # Compiler configuration
++-- 
++2.39.5
++
+diff --git a/package/libfuse3/0002-meson.build-make-special_funcs-check-more-reliable.patch b/package/libfuse3/0002-meson.build-make-special_funcs-check-more-reliable.patch
+new file mode 100644
+index 0000000000..dccaf52326
+--- /dev/null
++++ b/package/libfuse3/0002-meson.build-make-special_funcs-check-more-reliable.patch
+@@ -0,0 +1,41 @@
++From 6f50c950d09ad09339437b81ce22b36e0e2749c9 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Fri, 25 Apr 2025 19:00:14 +0200
++Subject: [PATCH] meson.build: make special_funcs check more reliable
++
++Unfortunately while cross-compiling with build tools like Buildroot it
++happens to have repeated flags or anything that could lead to a warning.
++This way the check fails because of a warning not related to the special
++function. So let's use cc.links() and increase minimum meson_version to
++0.60 since cc.links() has been added during that version.
++
++Upstream: https://github.com/libfuse/libfuse/commit/8e226c6af6f386a88ed53d0a0940ff6b869b372d
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ meson.build | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/meson.build b/meson.build
++index d1346d0..d3d236d 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -1,6 +1,6 @@
++ project('libfuse3', ['c'],
++         version: '3.17.2',
++-        meson_version: '>= 0.51.0',
+++        meson_version: '>= 0.60.0',
++         default_options: [
++             'buildtype=debugoptimized',
++             'c_std=gnu11',
++@@ -108,7 +108,7 @@ special_funcs = {
++ 
++ foreach name, code : special_funcs
++     private_cfg.set('HAVE_' + name.to_upper(),
++-        cc.compiles(code, args: ['-Werror'] + args_default,
+++        cc.links(code, args: args_default,
++                  name: name + ' check'))
++ endforeach
++ 
++-- 
++2.39.5
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
