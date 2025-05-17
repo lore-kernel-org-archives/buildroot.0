@@ -1,52 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AC29C3ABDD
-	for <buildroot@archiver.kernel.org>; Sat, 17 May 2025 14:59:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E0BCC2D0CD
+	for <buildroot@archiver.kernel.org>; Sat, 17 May 2025 15:00:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ED73460DEF;
-	Sat, 17 May 2025 14:59:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 12B9640B65;
+	Sat, 17 May 2025 15:00:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MxOL3fKKy_WF; Sat, 17 May 2025 14:59:55 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id b3dEo15OD1aU; Sat, 17 May 2025 15:00:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 672DF60D8C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3FA434095E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 672DF60D8C;
-	Sat, 17 May 2025 14:59:55 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 31162E4
- for <buildroot@buildroot.org>; Sat, 17 May 2025 14:59:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3FA434095E;
+	Sat, 17 May 2025 15:00:52 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id A69B31DE
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 15:00:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 22E7740F84
- for <buildroot@buildroot.org>; Sat, 17 May 2025 14:59:52 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 97205831DA
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 15:00:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KGc0tQp5B55A for <buildroot@buildroot.org>;
- Sat, 17 May 2025 14:59:51 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 54C2A40C12
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 54C2A40C12
- for <buildroot@buildroot.org>; Sat, 17 May 2025 14:59:51 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4246E86F52; Sat, 17 May 2025 14:59:51 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UmAyjYrI8ciZ for <buildroot@buildroot.org>;
+ Sat, 17 May 2025 15:00:50 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F3D1D8203B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F3D1D8203B
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id F3D1D8203B
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 15:00:49 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 617472003C8;
+ Sat, 17 May 2025 17:00:44 +0200 (CEST)
+Received: from 2a02-842a-45ac-9401-0517-4590-b867-5f74.rev.sfr.net
+ (2a02:842a:45ac:9401:517:4590:b867:5f74)
+ via 2a02-842a-45ac-9401-0517-4590-b867-5f74.rev.sfr.net
+ (2a02:842a:45ac:9401:517:4590:b867:5f74) by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 17 May 2025 17:00:44 +0200
+MIME-Version: 1.0
+Date: Sat, 17 May 2025 17:00:44 +0200
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 17 May 2025 16:57:13 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 76a4a6361283b06a41220d26f4a25f644cd88f05
-X-Git-Newrev: 236363b12562b3aa2cd0ab30861870c4c7e8345b
-X-Patchwork-Hint: ignore
-Message-Id: <20250517145951.4246E86F52@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/intel-mediadriver: fix cmake 4
+To: James Hilliard <james.hilliard1@gmail.com>
+Cc: buildroot@buildroot.org, Bernd Kuhls <bernd@kuhls.net>
+In-Reply-To: <20250514195151.684820-1-james.hilliard1@gmail.com>
+References: <20250514195151.684820-1-james.hilliard1@gmail.com>
+User-Agent: Webmail Free/1.6.10
+Message-ID: <8242fbbb81989658e4ae36c6b642ab33@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1747494046;
+ bh=z2BFQLRNq+8GRgbBrjIm7ZAYD8tyJReqkPahcUeiL4Q=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=buEEwEWnveSaS+DdWjfgcRjCmRC6y0QXqN5pH4AyaFNwtmDaf2tZL7n1+GVmhfP4r
+ ml7tBpTkW5MB57tU6zcbpK4WI9n5XUBFAmtpZVohW3/AqJjPD+/hfEM7yISG3LXB6z
+ t6HM1egwfoPS7BqGMvW2/ulhJgRCFDK0/P7ZJki/5WnYwYTXr+x5/15Z6tlxQm9Gtk
+ QkWetbBwgujAwICPuus8/U2FKiUYDMgFiaT9V+KmjINDaGMTp8P8WIeKVKefxVFCrZ
+ 7kPnrZL9LdQIG+/RZEJlQkSXyhBnko+4qJEnmywZ1dKDHwHqro9+hC1Pk2JcLU4ZBG
+ JtMUrdLx/dP9Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=buEEwEWn
+Subject: Re: [Buildroot] [PATCH 1/1] package/intel-mediadriver: fix cmake 4
  compatibility
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -59,216 +84,17 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=236363b12562b3aa2cd0ab30861870c4c7e8345b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 14/05/2025 21:51, James Hilliard wrote:
+> Add a patch fixing cmake 4 compatibility.
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-Add a patch fixing cmake 4 compatibility.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...n-Update-cmake_minimum_required-to-3.5-co.patch | 187 +++++++++++++++++++++
- 1 file changed, 187 insertions(+)
-
-diff --git a/package/intel-mediadriver/0001-Media-Common-Update-cmake_minimum_required-to-3.5-co.patch b/package/intel-mediadriver/0001-Media-Common-Update-cmake_minimum_required-to-3.5-co.patch
-new file mode 100644
-index 0000000000..6d0d972be0
---- /dev/null
-+++ b/package/intel-mediadriver/0001-Media-Common-Update-cmake_minimum_required-to-3.5-co.patch
-@@ -0,0 +1,187 @@
-+From c8a2c037e25498e366467860b461b8681cea5356 Mon Sep 17 00:00:00 2001
-+From: Rudi Heitbaum <rudi@heitbaum.com>
-+Date: Fri, 28 Mar 2025 05:06:53 +0000
-+Subject: [PATCH] [Media Common] Update cmake_minimum_required to 3.5
-+ consisently across CMakeLists
-+
-+Some of the CMakeLists.txt are already requiring CMake 3.5.
-+Update remaining files to 3.5.
-+This supports the compilation with cmake-4.0.0
-+
-+Signed-off-by: Rudi Heitbaum <rudi@heitbaum.com>
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+Upstream: https://github.com/intel/media-driver/pull/1919
-+---
-+ Tools/MediaDriverTools/GenDmyHex/CMakeLists.txt          | 2 +-
-+ Tools/MediaDriverTools/GenKrnBin/CMakeLists.txt          | 2 +-
-+ Tools/MediaDriverTools/KernelBinToSource/CMakeLists.txt  | 2 +-
-+ Tools/MediaDriverTools/KrnToHex/CMakeLists.txt           | 2 +-
-+ Tools/MediaDriverTools/KrnToHex_IGA/CMakeLists.txt       | 2 +-
-+ cmrtlib/CMakeLists.txt                                   | 2 +-
-+ cmrtlib/linux/CMakeLists.txt                             | 2 +-
-+ media_driver/linux/ult/CMakeLists.txt                    | 2 +-
-+ media_driver/linux/ult/libdrm_mock/CMakeLists.txt        | 2 +-
-+ media_driver/linux/ult/ult_app/CMakeLists.txt            | 2 +-
-+ media_driver/linux/ult/ult_app/googletest/CMakeLists.txt | 2 +-
-+ os_release_info.cmake                                    | 2 +-
-+ 12 files changed, 12 insertions(+), 12 deletions(-)
-+
-+diff --git a/Tools/MediaDriverTools/GenDmyHex/CMakeLists.txt b/Tools/MediaDriverTools/GenDmyHex/CMakeLists.txt
-+index 2c72d282d..025b93542 100644
-+--- a/Tools/MediaDriverTools/GenDmyHex/CMakeLists.txt
-++++ b/Tools/MediaDriverTools/GenDmyHex/CMakeLists.txt
-+@@ -18,7 +18,7 @@
-+ # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR 
-+ # OTHER DEALINGS IN THE SOFTWARE.
-+ 
-+-cmake_minimum_required (VERSION 2.8)
-++cmake_minimum_required(VERSION 3.5)
-+ project(IntelGenDmyHexTool) 
-+ add_compile_options(-std=c++11)
-+ 
-+diff --git a/Tools/MediaDriverTools/GenKrnBin/CMakeLists.txt b/Tools/MediaDriverTools/GenKrnBin/CMakeLists.txt
-+index cc586ba76..519ca954d 100644
-+--- a/Tools/MediaDriverTools/GenKrnBin/CMakeLists.txt
-++++ b/Tools/MediaDriverTools/GenKrnBin/CMakeLists.txt
-+@@ -18,7 +18,7 @@
-+ # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR 
-+ # OTHER DEALINGS IN THE SOFTWARE.
-+ 
-+-cmake_minimum_required(VERSION 2.6)
-++cmake_minimum_required(VERSION 3.5)
-+ 
-+ project(GenKrnBin)
-+ 
-+diff --git a/Tools/MediaDriverTools/KernelBinToSource/CMakeLists.txt b/Tools/MediaDriverTools/KernelBinToSource/CMakeLists.txt
-+index 713d08600..91eacf15d 100644
-+--- a/Tools/MediaDriverTools/KernelBinToSource/CMakeLists.txt
-++++ b/Tools/MediaDriverTools/KernelBinToSource/CMakeLists.txt
-+@@ -18,7 +18,7 @@
-+ # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR 
-+ # OTHER DEALINGS IN THE SOFTWARE.
-+ 
-+-cmake_minimum_required (VERSION 2.8)
-++cmake_minimum_required(VERSION 3.5)
-+ project(IntelKernelBinToSourceTool) 
-+ add_compile_options(-std=c++11)
-+ 
-+diff --git a/Tools/MediaDriverTools/KrnToHex/CMakeLists.txt b/Tools/MediaDriverTools/KrnToHex/CMakeLists.txt
-+index a3cb7341c..e2bfde5e8 100644
-+--- a/Tools/MediaDriverTools/KrnToHex/CMakeLists.txt
-++++ b/Tools/MediaDriverTools/KrnToHex/CMakeLists.txt
-+@@ -18,7 +18,7 @@
-+ # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR 
-+ # OTHER DEALINGS IN THE SOFTWARE.
-+ 
-+-cmake_minimum_required (VERSION 2.8)
-++cmake_minimum_required(VERSION 3.5)
-+ project(KrnToHexTool) 
-+ add_compile_options(-std=c++11)
-+ 
-+diff --git a/Tools/MediaDriverTools/KrnToHex_IGA/CMakeLists.txt b/Tools/MediaDriverTools/KrnToHex_IGA/CMakeLists.txt
-+index af622be19..40e4eba17 100644
-+--- a/Tools/MediaDriverTools/KrnToHex_IGA/CMakeLists.txt
-++++ b/Tools/MediaDriverTools/KrnToHex_IGA/CMakeLists.txt
-+@@ -18,7 +18,7 @@
-+ # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-+ # OTHER DEALINGS IN THE SOFTWARE.
-+ 
-+-cmake_minimum_required(VERSION 2.6)
-++cmake_minimum_required(VERSION 3.5)
-+ 
-+ project(KrnToHex_IGA)
-+ 
-+diff --git a/cmrtlib/CMakeLists.txt b/cmrtlib/CMakeLists.txt
-+index 9ecb1e4e1..54f907b37 100644
-+--- a/cmrtlib/CMakeLists.txt
-++++ b/cmrtlib/CMakeLists.txt
-+@@ -19,7 +19,7 @@
-+ # OTHER DEALINGS IN THE SOFTWARE.
-+ 
-+ set(BUILD_ALL $ENV{BUILD_ALL})
-+-cmake_minimum_required(VERSION 2.8)
-++cmake_minimum_required(VERSION 3.5)
-+ project(CM_RT)
-+ add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/linux)
-+ 
-+diff --git a/cmrtlib/linux/CMakeLists.txt b/cmrtlib/linux/CMakeLists.txt
-+index b066138d9..df02bab2a 100644
-+--- a/cmrtlib/linux/CMakeLists.txt
-++++ b/cmrtlib/linux/CMakeLists.txt
-+@@ -18,7 +18,7 @@
-+ # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-+ # OTHER DEALINGS IN THE SOFTWARE.
-+ 
-+-cmake_minimum_required(VERSION 2.8)
-++cmake_minimum_required(VERSION 3.5)
-+ include (${CMAKE_CURRENT_LIST_DIR}/cmrt_utils.cmake)
-+ 
-+ 
-+diff --git a/media_driver/linux/ult/CMakeLists.txt b/media_driver/linux/ult/CMakeLists.txt
-+index 9fb5b39ee..f06b49011 100644
-+--- a/media_driver/linux/ult/CMakeLists.txt
-++++ b/media_driver/linux/ult/CMakeLists.txt
-+@@ -17,7 +17,7 @@
-+ # OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-+ # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-+ # OTHER DEALINGS IN THE SOFTWARE.
-+-cmake_minimum_required(VERSION 3.1)
-++cmake_minimum_required(VERSION 3.5)
-+ 
-+ if ("${BUILD_TYPE}" STREQUAL "debug")
-+     set(CMAKE_BUILD_TYPE "Debug")
-+diff --git a/media_driver/linux/ult/libdrm_mock/CMakeLists.txt b/media_driver/linux/ult/libdrm_mock/CMakeLists.txt
-+index 438715a91..e5d2c88ed 100644
-+--- a/media_driver/linux/ult/libdrm_mock/CMakeLists.txt
-++++ b/media_driver/linux/ult/libdrm_mock/CMakeLists.txt
-+@@ -17,7 +17,7 @@
-+ # OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-+ # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-+ # OTHER DEALINGS IN THE SOFTWARE.
-+-cmake_minimum_required(VERSION 2.8)
-++cmake_minimum_required(VERSION 3.5)
-+ 
-+ project(libdrm_mock)
-+ 
-+diff --git a/media_driver/linux/ult/ult_app/CMakeLists.txt b/media_driver/linux/ult/ult_app/CMakeLists.txt
-+index 1b24fed7f..64217b9fe 100644
-+--- a/media_driver/linux/ult/ult_app/CMakeLists.txt
-++++ b/media_driver/linux/ult/ult_app/CMakeLists.txt
-+@@ -17,7 +17,7 @@
-+ # OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-+ # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-+ # OTHER DEALINGS IN THE SOFTWARE.
-+-cmake_minimum_required(VERSION 3.1)
-++cmake_minimum_required(VERSION 3.5)
-+ 
-+ project(devult)
-+ 
-+diff --git a/media_driver/linux/ult/ult_app/googletest/CMakeLists.txt b/media_driver/linux/ult/ult_app/googletest/CMakeLists.txt
-+index 6b1f74335..bba044a97 100644
-+--- a/media_driver/linux/ult/ult_app/googletest/CMakeLists.txt
-++++ b/media_driver/linux/ult/ult_app/googletest/CMakeLists.txt
-+@@ -17,7 +17,7 @@
-+ # OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-+ # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-+ # OTHER DEALINGS IN THE SOFTWARE.
-+-cmake_minimum_required(VERSION 2.8)
-++cmake_minimum_required(VERSION 3.5)
-+ 
-+ project(devult)
-+ 
-+diff --git a/os_release_info.cmake b/os_release_info.cmake
-+index b4a84e2c5..a3b879d85 100644
-+--- a/os_release_info.cmake
-++++ b/os_release_info.cmake
-+@@ -29,7 +29,7 @@ set(_os_release_info TRUE)
-+ # of the local cmake environment.
-+ 
-+ # Set cmake policies for at least this level:
-+-cmake_minimum_required(VERSION 2.8.12)
-++cmake_minimum_required(VERSION 3.5)
-+ 
-+ 
-+ # Function get_os_release_info - Determine and return OS name and version
-+-- 
-+2.34.1
-+
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
