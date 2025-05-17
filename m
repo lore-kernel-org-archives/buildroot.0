@@ -4,64 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DA80C2D0CD
-	for <buildroot@archiver.kernel.org>; Sat, 17 May 2025 09:34:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76AF5C2D0CD
+	for <buildroot@archiver.kernel.org>; Sat, 17 May 2025 09:38:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 22AB9810ED;
-	Sat, 17 May 2025 09:34:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 40531811F4;
+	Sat, 17 May 2025 09:38:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iAP7tfqBzrTk; Sat, 17 May 2025 09:34:17 +0000 (UTC)
+ id rBmhTq5F2_ls; Sat, 17 May 2025 09:38:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6570F83CE5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 70E1A81204
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6570F83CE5;
-	Sat, 17 May 2025 09:34:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 70E1A81204;
+	Sat, 17 May 2025 09:38:51 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id EADA5E4
- for <buildroot@buildroot.org>; Sat, 17 May 2025 09:34:15 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 409F11DE
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 09:38:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E7B546066C
- for <buildroot@buildroot.org>; Sat, 17 May 2025 09:34:15 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 211FF60C2A
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 09:38:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bWIhqan8Yw19 for <buildroot@buildroot.org>;
- Sat, 17 May 2025 09:34:15 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
- helo=relay3-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ id VdwyQHg7VFPQ for <buildroot@buildroot.org>;
+ Sat, 17 May 2025 09:38:49 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
+ helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C46D860B83
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C46D860B83
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C46D860B83
- for <buildroot@buildroot.org>; Sat, 17 May 2025 09:34:14 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id CE44C1FCEC;
- Sat, 17 May 2025 09:34:10 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1uGDvm-00CP66-18;
- Sat, 17 May 2025 11:34:10 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20250516205547.2826778-1-peter@korsgaard.com>
-Date: Sat, 17 May 2025 11:34:10 +0200
-In-Reply-To: <20250516205547.2826778-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Fri, 16 May 2025 22:55:46 +0200")
-Message-ID: <87jz6ffunh.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0B0E560A55
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0B0E560A55
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0B0E560A55
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 09:38:47 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 592C14329A;
+ Sat, 17 May 2025 09:38:43 +0000 (UTC)
+Date: Sat, 17 May 2025 11:38:42 +0200
+To: Thomas Perale via buildroot <buildroot@buildroot.org>
+Cc: Thomas Perale <thomas.perale@mind.be>, Daniel Price
+ <daniel.price@gmail.com>, Martin Bark <martin@barkynet.com>
+Message-ID: <20250517113842.6fd95971@windsurf>
+In-Reply-To: <20250426073305.1189443-1-thomas.perale@mind.be>
+References: <20250426073305.1189443-1-thomas.perale@mind.be>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-State: clean
 X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefudehvdekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufhfffgjkfgfgggtsehttddttddtredtnecuhfhrohhmpefrvghtvghrucfmohhrshhgrggrrhguuceophgvthgvrheskhhorhhsghgrrghrugdrtghomheqnecuggftrfgrthhtvghrnhepfffhjeelffduleehueegheehleehieejfffhvefhjeetveekvdevgeefieefjeelnecuffhomhgrihhnpegsuhhilhgurhhoohhtrdhorhhgpdhgnhhurdhorhhgnecukfhppedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumeejiegukeemfegvfhhfmehfvggsfeemgegssgehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeekgedvrgemgeehrggtmeelgedtudemjeeiugekmeefvghffhemfhgvsgefmeegsggshedphhgvlhhopeguvghllhdrsggvrdegkegvrhhsrdgukhdpmhgrihhlfhhrohhmpehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmpdhnsggprhgtphhtthhopedvpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomh
-X-GND-Sasl: peter@korsgaard.com
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefudehvdelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepledtgedvjeehgeetgfeufffglefhkedvfeduveeiieelteeliedtfefguefggffhnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumegufeduvgemvdefheemtgehvgdvmegvugekfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumegufeduvgemvdefheemtgehvgdvmegvugekfedphhgvlhhopeifihhnughsuhhrfhdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepgedprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtohepthhhohhmrghsrdhpvghrrghlvgesmhhinhgurdgsvgdprhgtphhtthhopegurghni
+ hgvlhdrphhrihgtvgesghhmrghilhdrtghomhdprhgtphhtthhopehmrghrthhinhessggrrhhkhihnvghtrdgtohhm
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1747474723;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=tlTAFn2Sf1y7Uz3BR64fJZBNbKt+shBi3ED5IOsNUiQ=;
+ b=RHPoYURmPqv9u/YNf5xrIZbb3dmDWKr8HfeELrdSVsfBqPeucWjYlPoHedrzO5w6I6JC3H
+ mV9eH4FvHTZ2CEejh565bExnM7WMuz10c/WCJIlxdKb8Qj/JPnJTaaH4ogH8Gi+hihL7cs
+ V4m2IPIGx7brIEIrBHm6b/POKGfxxaJQqkp7PkJJ9U9eBpyMykoVkEEpvXvYB5n55aydoy
+ wmmmT9CO1BbdvOouEoplvO9G2Oief4z4uLa01sLa5wvabudtd+a8E98kIuQEZJi956gzvh
+ cvc/Cin6ZauWgfyqonqF5hvjiB9mPgGaymmBmNmzzbFlgz+8MhODGy0spEqs4Q==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/pkg-autotools.mk:
- LIBTOOL_PATCH_HOOK: also handle libtool 2.5.x
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=RHPoYURm
+Subject: Re: [Buildroot] [PATCH 1/1] package/nodejs: make target nodejs
+ package virtual
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -73,31 +87,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+On Sat, 26 Apr 2025 09:33:05 +0200
+Thomas Perale via buildroot <buildroot@buildroot.org> wrote:
 
- > Fixes:
- > https://autobuild.buildroot.org/results/ac60d29fbcd9fb8ddb21b76b3b185e45e580c006/
+> Since commit [1], the host-nodejs package was turned into a virtual
+> package. However, the target nodejs package was intentionally not
+> turned into a virtual package and became an empty package.
+> The reason for this is:
+> 
+>   - No alternatives providers were introduced for the target nodejs
+>     package.
+>   - The Config.in remained unchaged for the target package.
+> 
+> As a result, running `make show-info` with a config that includes the
+> target nodejs package, outputs an entry for the empty package:
+> 
+> ```
+> "nodejs": {
+>     "type": "target",
+>     "name": "nodejs",
+>     "virtual": false,
+>     "version": "",
+>     ...
+>     "cpe-id": "cpe:2.3:a:nodejs:node.js::*:*:*:*:*:*:*"
+> },
+> ```
+> 
+> This can be an issue because the CPE ID of the empty nodejs package
+> is the following `cpe:2.3:a:nodejs:node.js::*:*:*:*:*:*:*`.
+> Reporting such a CPE ID can be an issue for certain software that consume
+> the SBOM and could be interpreted as CPE that matches with every versions
+> of the package.
+> 
+> This patch converts the target nodejs package into a virtual package to
+> prevents the empty package from being included in the SBOM.
+> 
+> [1] 4cbc2af604 package/nodejs: rename to nodejs-src and convert to virtual package
+> 
+> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+> ---
+>  package/nodejs/Config.in                | 4 ++++
+>  package/nodejs/nodejs-src/nodejs-src.mk | 1 +
+>  package/nodejs/nodejs.mk                | 3 +--
+>  3 files changed, 6 insertions(+), 2 deletions(-)
 
- > Libtool 2.5.x has been released and is starting to be used by upstreams when
- > generating release tarballs (E.G. openvpn-2.6.14).
+Applied to master, thanks.
 
- > https://lists.gnu.org/archive/html/autotools-announce/2024-09/msg00000.html
-
- > It needs to be patched similar to earlier versions, and the existing v2.4.4
- > patch luckily still applies, so extend LIBTOOL_PATCH_HOOK to also patch
- > 2.5.x versions with that.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed, thanks.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
