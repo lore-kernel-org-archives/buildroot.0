@@ -4,75 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0733C2D0CD
-	for <buildroot@archiver.kernel.org>; Sat, 17 May 2025 15:01:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DF3EC2D0CD
+	for <buildroot@archiver.kernel.org>; Sat, 17 May 2025 15:02:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AE82E60D77;
-	Sat, 17 May 2025 15:01:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 17F0560DFD;
+	Sat, 17 May 2025 15:02:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KiIBqL0AqM-9; Sat, 17 May 2025 15:01:07 +0000 (UTC)
+ id VwgkAo1iZVlh; Sat, 17 May 2025 15:02:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E463D60D78
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2542D60D8C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E463D60D78;
-	Sat, 17 May 2025 15:01:06 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id BC46EE4
- for <buildroot@buildroot.org>; Sat, 17 May 2025 15:01:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2542D60D8C;
+	Sat, 17 May 2025 15:02:12 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id D6E641DE
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 15:02:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AE0BF40FBD
- for <buildroot@buildroot.org>; Sat, 17 May 2025 15:01:05 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C81EB60D8C
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 15:02:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id x58_hnUqycyj for <buildroot@buildroot.org>;
- Sat, 17 May 2025 15:01:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org F099E40C12
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F099E40C12
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp2.osuosl.org (Postfix) with ESMTPS id F099E40C12
- for <buildroot@buildroot.org>; Sat, 17 May 2025 15:01:04 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 08DAF2003F7;
- Sat, 17 May 2025 17:01:00 +0200 (CEST)
-Received: from 2a02-842a-45ac-9401-0517-4590-b867-5f74.rev.sfr.net
- (2a02:842a:45ac:9401:517:4590:b867:5f74)
- via 2a02-842a-45ac-9401-0517-4590-b867-5f74.rev.sfr.net
- (2a02:842a:45ac:9401:517:4590:b867:5f74) by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 17 May 2025 17:01:00 +0200
-MIME-Version: 1.0
-Date: Sat, 17 May 2025 17:01:00 +0200
-From: Julien Olivain <ju.o@free.fr>
-To: James Hilliard <james.hilliard1@gmail.com>
-Cc: buildroot@buildroot.org, Bernd Kuhls <bernd@kuhls.net>
-In-Reply-To: <20250514194324.683472-1-james.hilliard1@gmail.com>
-References: <20250514194324.683472-1-james.hilliard1@gmail.com>
-User-Agent: Webmail Free/1.6.10
-Message-ID: <a57aef10448f48fd7a557107896be6ae@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1747494063;
- bh=ExcMS0G9agspO5gAgGqRupH83rBqYtlJt//C6MFFiJc=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=uilQUp4ZkgXopNvXvzHebP4rkLorSbrVldHCgLvOvr/vca4G+/uGznjHYBOz4KNpd
- zqLoTgyAC0397SPW4XfKCY33iA2qkRJkn8njsW0FXL4M1MMnrPVN/qVOtM2x6xZTrG
- dWmrDkOGQTm4uz79riHQ1dJROgXMt0gV7fwRZIGM6fdQamSL/A8mlOir6e4+djCjqO
- clibiwGtL3DUh/Mxbo0Nbxsxrm0dKZWO2dPUfiPPp2jq1GhrysWbAxOSzLxQs9k2xc
- 6vMo0IvJgAOXSk+vSa0u9S+lWxEVSh76AqPpL/cxzg9DU7munzsIsx+24pKXBB70u9
- vs3ycSZm8sWwg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=uilQUp4Z
-Subject: Re: [Buildroot] [PATCH 1/1] package/intel-gmmlib: fix cmake 4
- compatibility
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9nwuxaNwzPU6 for <buildroot@buildroot.org>;
+ Sat, 17 May 2025 15:02:10 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1591060D58
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1591060D58
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 15:02:10 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 0269686F7F; Sat, 17 May 2025 15:02:10 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 17 May 2025 17:01:42 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 236363b12562b3aa2cd0ab30861870c4c7e8345b
+X-Git-Newrev: dad998a8070bc07838f78453fcb7906fefab22ba
+X-Patchwork-Hint: ignore
+Message-Id: <20250517150210.0269686F7F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lpac: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,17 +57,131 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 14/05/2025 21:43, James Hilliard wrote:
-> Add a patch fixing cmake 4 compatibility.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=dad998a8070bc07838f78453fcb7906fefab22ba
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS             |  1 +
+ package/Config.in      |  1 +
+ package/lpac/Config.in | 16 ++++++++++++++++
+ package/lpac/lpac.hash |  5 +++++
+ package/lpac/lpac.mk   | 41 +++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 64 insertions(+)
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 2e472d4838..7bc7385586 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -3504,6 +3504,7 @@ F:	package/libuci/
+ F:	package/libxmlb/
+ F:	package/linux-firmware/
+ F:	package/linux-serial-test/
++F:	package/lpac/
+ F:	package/modem-manager/
+ F:	package/ncftp/
+ F:	package/nftables/
+diff --git a/package/Config.in b/package/Config.in
+index 68da6f9f62..d09cfe066a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2559,6 +2559,7 @@ endif
+ 	source "package/linux-zigbee/Config.in"
+ 	source "package/linuxptp/Config.in"
+ 	source "package/lldpd/Config.in"
++	source "package/lpac/Config.in"
+ 	source "package/lrzsz/Config.in"
+ 	source "package/lynx/Config.in"
+ 	source "package/macchanger/Config.in"
+diff --git a/package/lpac/Config.in b/package/lpac/Config.in
+new file mode 100644
+index 0000000000..6cfe11cc67
+--- /dev/null
++++ b/package/lpac/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_LPAC
++	bool "lpac"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # pcsc-lite
++	depends on BR2_USE_MMU # pcsc-lite
++	depends on !BR2_STATIC_LIBS # pcsc-lite
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pcsc-lite
++	select BR2_PACKAGE_PCSC_LITE
++	help
++	  C-based eUICC LPA.
++
++	  https://github.com/estkme-group/lpac
++
++comment "lpac needs a toolchain w/ threads, dynamic library, gcc >= 4.9"
++	depends on BR2_USE_MMU
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+diff --git a/package/lpac/lpac.hash b/package/lpac/lpac.hash
+new file mode 100644
+index 0000000000..bf93ef245f
+--- /dev/null
++++ b/package/lpac/lpac.hash
+@@ -0,0 +1,5 @@
++# Locally computed:
++sha256  3d87080a625b10430eebb82f89e2d24e16a84a8435a9c40b3718fd88c82028ba  lpac-2.2.1.tar.gz
++sha256  8486a10c4393cee1c25392769ddd3b2d6c242d6ec7928e1414efff7dfb2f07ef  src/LICENSE
++sha256  b673293d21e887eaa9b971696b33f0f9141839900c65c83e560afa469d291ba6  euicc/LICENSE
++sha256  163766832b15cc9c90d593216360c67af579b8b36932b297fca2aeb61544de2f  cjson/LICENSE
+diff --git a/package/lpac/lpac.mk b/package/lpac/lpac.mk
+new file mode 100644
+index 0000000000..36cd4d591d
+--- /dev/null
++++ b/package/lpac/lpac.mk
+@@ -0,0 +1,41 @@
++################################################################################
++#
++# lpac
++#
++################################################################################
++
++LPAC_VERSION = 2.2.1
++LPAC_SITE = $(call github,estkme-group,lpac,v$(LPAC_VERSION))
++LPAC_LICENSE = LGPL-2.1+ (library), AGPL-3.0 (programs), MIT (cjson)
++LPAC_LICENSE_FILES = src/LICENSE euicc/LICENSE cjson/LICENSE
++LPAC_DEPENDENCIES = pcsc-lite
++
++ifeq ($(BR2_PACKAGE_LIBCURL),y)
++LPAC_DEPENDENCIES += libcurl
++LPAC_CONF_OPTS += -DLPAC_WITH_HTTP_CURL=ON
++else
++LPAC_CONF_OPTS += -DLPAC_WITH_HTTP_CURL=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_LIBQMI),y)
++LPAC_DEPENDENCIES += libqmi
++LPAC_CONF_OPTS += -DLPAC_WITH_APDU_QMI=ON
++else
++LPAC_CONF_OPTS += -DLPAC_WITH_APDU_QMI=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_LIBQRTR_GLIB),y)
++LPAC_DEPENDENCIES += libqmi libqrtr-glib
++LPAC_CONF_OPTS += -DLPAC_WITH_APDU_QMI_QRTR=ON
++else
++LPAC_CONF_OPTS += -DLPAC_WITH_APDU_QMI_QRTR=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_LIBMBIM),y)
++LPAC_DEPENDENCIES += libmbim
++LPAC_CONF_OPTS += -DLPAC_WITH_APDU_MBIM=ON
++else
++LPAC_CONF_OPTS += -DLPAC_WITH_APDU_MBIM=OFF
++endif
++
++$(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
