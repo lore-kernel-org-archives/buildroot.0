@@ -4,104 +4,100 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39CAAC2D0CD
-	for <buildroot@archiver.kernel.org>; Sat, 17 May 2025 17:35:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C201C3ABDD
+	for <buildroot@archiver.kernel.org>; Sat, 17 May 2025 17:40:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D5D956080C;
-	Sat, 17 May 2025 17:35:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 62DB460836;
+	Sat, 17 May 2025 17:40:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MdYizS3GB0U1; Sat, 17 May 2025 17:35:10 +0000 (UTC)
+ id u_gIAwtiYbu7; Sat, 17 May 2025 17:40:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0B117608A3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 981EC60883
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0B117608A3;
-	Sat, 17 May 2025 17:35:10 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 67A98201
- for <buildroot@buildroot.org>; Sat, 17 May 2025 17:35:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 981EC60883;
+	Sat, 17 May 2025 17:40:30 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4188B201
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 17:40:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4C36F4098E
- for <buildroot@buildroot.org>; Sat, 17 May 2025 17:35:09 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 32D9D40350
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 17:40:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jV7mZQ2Wxl7Y for <buildroot@buildroot.org>;
- Sat, 17 May 2025 17:35:08 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GJO0GV0pLr-U for <buildroot@buildroot.org>;
+ Sat, 17 May 2025 17:40:28 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::435; helo=mail-wr1-x435.google.com;
- envelope-from=olteanv@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8A124409B1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A124409B1
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
- [IPv6:2a00:1450:4864:20::435])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8A124409B1
- for <buildroot@buildroot.org>; Sat, 17 May 2025 17:35:08 +0000 (UTC)
-Received: by mail-wr1-x435.google.com with SMTP id
- ffacd0b85a97d-3a36210dbe4so234310f8f.1
- for <buildroot@buildroot.org>; Sat, 17 May 2025 10:35:08 -0700 (PDT)
+ client-ip=2607:f8b0:4864:20::12a; helo=mail-il1-x12a.google.com;
+ envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B2036403E8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B2036403E8
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com
+ [IPv6:2607:f8b0:4864:20::12a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B2036403E8
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 17:40:27 +0000 (UTC)
+Received: by mail-il1-x12a.google.com with SMTP id
+ e9e14a558f8ab-3d9327d0720so22979295ab.3
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 10:40:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1747503306; x=1748108106;
- h=in-reply-to:content-disposition:mime-version:references:message-id
- :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=jEfNzw/Tb/Vu2pHijTIR10dR4XtysHVyln2z51rIiRs=;
- b=TcT1kQbF6qO3X+OFKagsBUcEIVNH+qMu8ceWqJzW3+XjqYRO6qgYoyWNGmVSnEswU1
- ciXSVZy8E9o7aiuBblTWz1HOUMcro6K6hys4vqyZHIl/Mp9wSkgpYVychTQ4RNcLswKp
- JCy+mHfrH0ItcNkCfrr5vzwVe50xroIKDGcjohkfOo0eeRlHYOW9qZvTljvrlyMtj6H4
- F4UANlRjptOj786mBeFHZ7rwpXTTctCpzlg9vogjZ3JWGnm1Y3/8iunb3aA58rGhfOd6
- YrVGFFMWG+lqj4JGixU4l2sR40Wi17QsWlJHZrFXltNeQ3ytatJtB8SOLCXmJenJSQ61
- 3QvA==
-X-Gm-Message-State: AOJu0YwEs0+819ag+LVySlUgjOONvMCk0byM8o+WXNNKraEE7ururwCg
- Tu9aQ0V9QI356GhSBUf2sc3XUMlSW4kSwdtMN3xReuio/RGe8XfFCQX8
-X-Gm-Gg: ASbGncuwPbMSuG9EYF0O+s07g/8J7Q1ZZHTI+37GhSk8hZBl45aS5Q160uQunTkCtmz
- sXvZTs4R5PloDnr97zVxScjw9JxKwgeK1lac4Hpg664uoQt7NkNQiQr5lxLXm2kZ9tJg45sNRfI
- doj4txnJnP8l0QAXfmrCilBvQzDRvJ/9u+hnheOVY/HZwwNFDi+wWSlfKEvGHLBMXZ5hNPNlL94
- PGup6IXWybRqLswy0F/In7FNdRHdXWLQbelZmDd7YvI8/TfdSdPctz3wZ+8/tNm1TpkXjB0S/VF
- jA+4irVCOAmmva2nacq7ITQ9TFVuoYKv9HSF6NA=
-X-Google-Smtp-Source: AGHT+IHMHOGCHB9GMNJzavuc1m+KUnWiNr3BBA5Umr6rgHplnPsCjizwiOaDFhsb90qX2O6R8Ujcpg==
-X-Received: by 2002:a05:600c:190d:b0:439:a30f:2e49 with SMTP id
- 5b1f17b1804b1-442fd670800mr28575855e9.5.1747503306192; 
- Sat, 17 May 2025 10:35:06 -0700 (PDT)
-Received: from skbuf ([188.25.50.178]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-442fd50ee03sm76916395e9.14.2025.05.17.10.35.04
+ d=1e100.net; s=20230601; t=1747503626; x=1748108426;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=FfuirtN7g/8ayeIJU+hjubO663HiD4ZZZPWVAJQKncA=;
+ b=JerVUOOCWoU6W8TVuxSK+OQCncuWxXhOz06bxAPbk/hD9l9PudE9+k+XKxghrxlH+b
+ nYBeo8Jg1qAaBJsa2uNfUGefN01ggMvuErPDGl/xXfKdFoIRu9GXGqT/Vl85XBiRZmoR
+ 1LdgKp9uX8wxJ0FXytuq39NwD4/Dfzjn/QFm63xR0s5B9+wIgPt8WPyTymBk2BQpozs/
+ 2YtEQhUcbJyA7QOGPa+jzq8uFRC3J/rsB0HhzPnmSPyOzf7orHz+qESMVp63AjnzToMm
+ RTDTBh6lK26j2+UNxRDRQ2nFKG+LfzDUw5lskLY5pr9HaQaoMSBXqRRz/iLA6EQZZjiR
+ sJ6A==
+X-Gm-Message-State: AOJu0Yzunu66Ig1fkjzpset/CN9+ZDfNga9Ndn66BO43Lw3q2uWRoFBH
+ +VX1Kuvwn6dP69mopHEnlUOAM8rzVlbIpy6eCTmbkbbVVbI1sTmzgmlUSqwwGuOg
+X-Gm-Gg: ASbGncsQIKm0Gwn1jg5YzrELEX8iR7xJ3+n6/P6P/utLAza97UM5antgyPReFlVnJkR
+ ZBlBVBl6mWfV2D1ouWzKHQWefIm/C67UlmAadvIFSn1joVHhMRVcCMhIkUrvvVFNXq3ykG2d9fK
+ Mg19bfQnrlDVm46/2fslr/H9kpX3HAiuqPGjDECX1lXgSnsrZFNKMVGd0RMiL9pbdLszippv8nO
+ lURDmUEuoGAn+hiKhbf+pinAQN0p2rvWJcN4IgasAPJujr9WQMZiiIAttmsHONpdIvGdkVwQpKp
+ BZXHqM1KlBcfB4BbjpJoO32/xcxD1PNNp36TODAkCQUDR1g9zR/AhTopJnGa4EWSAOGkYitv4ol
+ z2Mitij/zIlb0syFhoj7+Gx9K1NyOag==
+X-Google-Smtp-Source: AGHT+IE4fyfB2vvAcY9p5G8RzEguGqT9zCqCeRemYrFtBIqD7n4VxEtB6b6rztp9mjCBk1UnmLyC1A==
+X-Received: by 2002:a05:6e02:351d:b0:3db:7265:622f with SMTP id
+ e9e14a558f8ab-3db8433235amr92055785ab.21.1747503625978; 
+ Sat, 17 May 2025 10:40:25 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-120-130.hlrn.qwest.net.
+ [71.218.120.130]) by smtp.gmail.com with ESMTPSA id
+ e9e14a558f8ab-3db8443a37dsm10754535ab.53.2025.05.17.10.40.24
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 17 May 2025 10:35:04 -0700 (PDT)
-Date: Sat, 17 May 2025 20:35:02 +0300
-From: Vladimir Oltean <olteanv@gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org, Ioana Ciornei <ciorneiioana@gmail.com>,
- Brandon Maier <Brandon.Maier@collins.com>,
- Vincent Jardin <vjardin@free.fr>, Julien Olivain <ju.o@free.fr>,
- Romain Naour <romain.naour@smile.fr>,
- Akhilesh Nema <nemaakhilesh@gmail.com>
-Message-ID: <20250517173502.qbcd6au4kavfgsmj@skbuf>
-References: <20250328180427.3434693-1-olteanv@gmail.com>
- <20250328180427.3434693-19-olteanv@gmail.com>
- <20250422234518.2422983e@windsurf>
+ Sat, 17 May 2025 10:40:25 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Cc: Norbert Lange <nolange79@gmail.com>, Sen Hastings <sen@hastings.org>,
+ James Hilliard <james.hilliard1@gmail.com>
+Date: Sat, 17 May 2025 11:40:19 -0600
+Message-Id: <20250517174019.3732498-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20250422234518.2422983e@windsurf>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1747503306; x=1748108106; darn=buildroot.org;
- h=in-reply-to:content-disposition:mime-version:references:message-id
- :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
- bh=jEfNzw/Tb/Vu2pHijTIR10dR4XtysHVyln2z51rIiRs=;
- b=b+TBd+oARLBDAnsmVKbS77eh2JYtW1JNlho+Yb6q/FAP2WvnOPwAHmxF9IWteoNalY
- PToUDPZH1B+ABiwI9nwC4D6A4TaCKn7aCVkIKzKH7uWR3PNqLFLDPz6i82NzjYmeLOUD
- TryfKDHM71PMpCYD4cesaHAAZxCYesW+oo8eJgJPrU8b8Aj8FvKD9uH0zqQkzniAZNFk
- rpHsAhOcevNDDIQzed2TJYxXG1mGv7qaAQugHY37qK6cmuKyjiYrFnyZe9330SZTy2FT
- og/LC0ILLCrKejR2tpIFVuamscfDudcYdm/Irkfh5YY/UwI00/45p04GUHN4opDUimw7
- pF1g==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=gmail.com; s=20230601; t=1747503626; x=1748108426; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=FfuirtN7g/8ayeIJU+hjubO663HiD4ZZZPWVAJQKncA=;
+ b=lGPfcsifRKdidIMjXxhEdpqO06OK+H0JSVH5/Wx/fG+YRrBuJ8uiUBik6H+o/xLy63
+ 6wSsl4H4Vr+Zn776hNEW7zH+sq/b+y6RoMTpLPJkBJA8xiROg4IWACYo+nDD0WEyOtjj
+ cf90w7psq7PkaZUTEjJLVGJieK02GGjoMTcrat2mtjGMAA+msC0CaC3dV1ZYUrPt0jyu
+ j7CyrEYPJBrz3HehdRtTOptX6UqxU3JvY8ufiObj83ANOA5ZQEj8P7lkJ8GhJgksFHC/
+ mbigNVL7jKyRvZaaA/i0/nICZkG6iHQ2lD8RNcODbJ4lTuaA7geMjZ3f1dEQdHLyq4/k
+ u2uQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=b+TBd+oA
-Subject: Re: [Buildroot] [PATCH v2 18/18] board/lx2160ardb: new platform
+ header.s=20230601 header.b=lGPfcsif
+Subject: [Buildroot] [PATCH 1/1] package/systemd: fix systemd-boot
+ installation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,55 +114,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Thomas,
+When the meson build directory was changed to buildroot-build in
+4e95062f820a64ecd2402115ee552dbcf2874f02 we forgot to update the
+install path for the systemd-boot efi binary.
 
-On Tue, Apr 22, 2025 at 11:45:18PM +0200, Thomas Petazzoni wrote:
-> Hello Vlad,
-> 
-> On Fri, 28 Mar 2025 20:04:26 +0200
-> Vladimir Oltean <olteanv@gmail.com> wrote:
-> 
-> 
-> > +The components from NXP are:
-> > +  - rcw, lf-6.12.3-1.0.0
-> > +  - atf (fork), lf-6.12.3-1.0.0
-> > +  - uboot (fork), lf-6.12.3-1.0.0
-> > +  - cadence-dp-firmware (blob), lf-6.12.3-1.0.0
-> 
-> So this line should be dropped, if I understand correctly?
-> 
-> > diff --git a/board/freescale/lx2160ardb/uboot-env.txt b/board/freescale/lx2160ardb/uboot-env.txt
-> > new file mode 100644
-> > index 000000000000..ad1e5882dd9e
-> > --- /dev/null
-> > +++ b/board/freescale/lx2160ardb/uboot-env.txt
-> 
-> I agree with Vincent that it would be nice to have a simpler U-Boot
-> environment if possible.
-> 
-> > +BR2_PACKAGE_QORIQ_RESTOOL=y
-> 
-> Due to restool not being applied (build issues), I can't apply this
-> defconfig just yet. Can you send a v3 with restool fixed? Thanks!
+Fixes:
+/usr/bin/install: cannot stat '/home/buildroot/buildroot/output/build/systemd-256.7/build/src/boot/efi/systemd-bootx64.efi': No such file or directory
 
-The upstream restool is now fixed to support 32-bit builds and I am
-preparing for a v3.
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/systemd/systemd.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I want to understand the request for a simpler U-Boot environment
-better.
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 337d52b1f2..71fe0de550 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -646,7 +646,7 @@ SYSTEMD_CONF_OPTS += -Dbootloader=enabled
+ 
+ SYSTEMD_BOOT_EFI_ARCH = $(call qstrip,$(BR2_PACKAGE_SYSTEMD_BOOT_EFI_ARCH))
+ define SYSTEMD_INSTALL_BOOT_FILES
+-	$(INSTALL) -D -m 0644 $(@D)/build/src/boot/efi/systemd-boot$(SYSTEMD_BOOT_EFI_ARCH).efi \
++	$(INSTALL) -D -m 0644 $(@D)/buildroot-build/src/boot/efi/systemd-boot$(SYSTEMD_BOOT_EFI_ARCH).efi \
+ 		$(BINARIES_DIR)/efi-part/EFI/BOOT/boot$(SYSTEMD_BOOT_EFI_ARCH).efi
+ 	$(INSTALL) -D -m 0644 $(SYSTEMD_PKGDIR)/boot-files/loader.conf \
+ 		$(BINARIES_DIR)/efi-part/loader/loader.conf
+-- 
+2.34.1
 
-Is it that the U-Boot distro boot environment variables (which form a
-majority of the contents of this env) are not welcome in general in
-upstream Buildroot, or is it just that the environment file itself is
-too large to maintain for a board instance, and contains many
-board-unspecific things (which I agree with)?
-
-I want to make sure it's the latter and not the former, because
-BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SOURCE supports specifying
-multiple input files, and I can move the distro boot portion to a
-generic location like package/uboot-tools/env-distro-boot.txt, to be
-potentially reused by other boards, and simplify the lx2160ardb env.
-Does that sound acceptable?
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
