@@ -4,77 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9977C2D0CD
-	for <buildroot@archiver.kernel.org>; Sat, 17 May 2025 15:28:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A02AC2D0CD
+	for <buildroot@archiver.kernel.org>; Sat, 17 May 2025 15:32:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BB727606B4;
-	Sat, 17 May 2025 15:28:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BC3E860DED;
+	Sat, 17 May 2025 15:32:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D_nMTPs41Wry; Sat, 17 May 2025 15:28:59 +0000 (UTC)
+ id X0p2G9mFDAJq; Sat, 17 May 2025 15:32:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F0E1860703
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E091E60DCA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F0E1860703;
-	Sat, 17 May 2025 15:28:58 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1F6991DE
- for <buildroot@buildroot.org>; Sat, 17 May 2025 15:28:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E091E60DCA;
+	Sat, 17 May 2025 15:32:56 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0E0D1223
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 15:32:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 054A3606B4
- for <buildroot@buildroot.org>; Sat, 17 May 2025 15:28:57 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0B1F881EA5
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 15:32:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yEThLNJP0_oc for <buildroot@buildroot.org>;
- Sat, 17 May 2025 15:28:56 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
- helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AIEvV3LaYmz0 for <buildroot@buildroot.org>;
+ Sat, 17 May 2025 15:32:55 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
+ helo=relay6-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 141F260703
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 141F260703
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 141F260703
- for <buildroot@buildroot.org>; Sat, 17 May 2025 15:28:54 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0CE1643B29;
- Sat, 17 May 2025 15:28:51 +0000 (UTC)
-Date: Sat, 17 May 2025 17:28:51 +0200
-To: =?UTF-8?B?UmFwaGHDq2wgTcOpbG90dGU=?= via buildroot
- <buildroot@buildroot.org>
-Cc: =?UTF-8?B?UmFwaGHDq2wgTcOpbG90dGU=?= <raphael.melotte@mind.be>
-Message-ID: <20250517172851.1f69e1ea@windsurf>
-In-Reply-To: <20250426210411.1120310-1-raphael.melotte@mind.be>
-References: <20250426210411.1120310-1-raphael.melotte@mind.be>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5C68B81E96
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5C68B81E96
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5C68B81E96
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 15:32:53 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 9B77241C7D;
+ Sat, 17 May 2025 15:32:50 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1uGJWr-00Dh8l-1v;
+ Sat, 17 May 2025 17:32:49 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Felicitas Pojtinger <felicitas@pojtinger.com>
+Cc: buildroot@buildroot.org,  Christian Stewart <christian@aperture.us>,
+ Thomas Perale <thomas.perale@mind.be>,  Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>
+References: <87cyc8c1gi.fsf@dell.be.48ers.dk>
+ <20250516225859.1280601-3-felicitas@pojtinger.com>
+Date: Sat, 17 May 2025 17:32:49 +0200
+In-Reply-To: <20250516225859.1280601-3-felicitas@pojtinger.com> (Felicitas
+ Pojtinger's message of "Fri, 16 May 2025 15:58:21 -0700")
+Message-ID: <871psnfe1q.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-State: clean
 X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefudehleelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtqhertdertdejnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepheduteeufeekieevieegueegiefgvdevhefggfdutdeiuedvtdfgledvgeevleeinecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumegufeduvgemvdefheemtgehvgdvmegvugekfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumegufeduvgemvdefheemtgehvgdvmegvugekfedphhgvlhhopeifihhnughsuhhrfhdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvddprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtoheprhgrphhhrggvlhdrmhgvlhhothhtvgesmhhinhgurdgsvg
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1747495732;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=vVoXvyFRHr/t25v1GHJfYh60GASADdytQu2nUOKQvNw=;
- b=gjVlyFacedf741zD3qc5C+AmgHT+sMb0O+Gj6GY53k//OouWaK/qvhMEL9i+96MsVnrbsw
- jNV7msixvB5izcdL5tOhw1r1Ys37Tdjby43lP5Otu3+4hnghNUFs3VBRzwbT2HI74Isu/T
- vrzAWILzer2R7Un0qdNhjSlWAiWrkpCXoYjRK5YyaN3IBseDi7xliShsDx0q2dTduHiwVu
- D4q6giCkiblfFVLWs6c8S260CZ2CM4bGdMk0A2OxCI2hTFqWqKLkKc4gOPBRsFwh2jcb8J
- I5IrY3aSEUen/jo608UVo+pm9SgesAYfRdMAtG4Fq6NhY6vfOV75ncWFqJy6Sw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=gjVlyFac
-Subject: Re: [Buildroot] [PATCH 1/1] support/scripts/cve.py: remove unused
- each_product()
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefudehleelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufhfffgjkfgfgggtsehttddttddtredtnecuhfhrohhmpefrvghtvghrucfmohhrshhgrggrrhguuceophgvthgvrheskhhorhhsghgrrghrugdrtghomheqnecuggftrfgrthhtvghrnhepkeegffdtieevkeejheevteeludetveeffedutedvkeefjeehiedtvdfhkeffueetnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucfkphepvdgrtddvmeekgedvrgemgeehrggtmeelgedtudemjeeiugekmeefvghffhemfhgvsgefmeegsggsheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumeejiegukeemfegvfhhfmehfvggsfeemgegssgehpdhhvghlohepuggvlhhlrdgsvgdrgeekvghrshdrughkpdhmrghilhhfrhhomhepphgvthgvrheskhhorhhsghgrrghrugdrtghomhdpnhgspghrtghpthhtohephedprhgtphhtthhopehfvghlihgtihhtrghssehpohhjthhinhhgvghrrdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopegthhhrihhsthhirghnsegrphgvr
+ hhtuhhrvgdruhhspdhrtghpthhtohepthhhohhmrghsrdhpvghrrghlvgesmhhinhgurdgsvgdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomh
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH 2/5] package/go: fix builds on GCC 15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,23 +76,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gU2F0LCAyNiBBcHIgMjAyNSAyMzowNDowOSArMDIwMApSYXBoYcOrbCBNw6lsb3R0ZSB2aWEg
-YnVpbGRyb290IDxidWlsZHJvb3RAYnVpbGRyb290Lm9yZz4gd3JvdGU6Cgo+IFRoZSBsYXN0IHVz
-YWdlIG9mIGVhY2hfcHJvZHVjdCgpIHdhcyByZW1vdmVkIGluIGNvbW1pdAo+IDUyYWUwOTIwNDY2
-OTZmMDk5Mzk3ZDNiMGE4MjA2MjYyZTgyMDNmNDAgKCJzdXBwb3J0L3NjcmlwdHMvY3ZlLnB5OiB1
-c2UKPiB0aGUgSlNPTiBkYXRhIGluIDEuMSBzY2hlbWEiKS4KPiAKPiBTaW5jZSBpdCdzIG5vdyB1
-bnVzZWQsIHJlbW92ZSBpdC4KPiAKPiBTaWduZWQtb2ZmLWJ5OiBSYXBoYcOrbCBNw6lsb3R0ZSA8
-cmFwaGFlbC5tZWxvdHRlQG1pbmQuYmU+Cj4gLS0tCj4gIHN1cHBvcnQvc2NyaXB0cy9jdmUucHkg
-fCA2IC0tLS0tLQo+ICAxIGZpbGUgY2hhbmdlZCwgNiBkZWxldGlvbnMoLSkKCkFwcGxpZWQgdG8g
-bWFzdGVyLCB0aGFua3MuCgpUaG9tYXMKLS0gClRob21hcyBQZXRhenpvbmksIENUTywgQm9vdGxp
-bgpFbWJlZGRlZCBMaW51eCBhbmQgS2VybmVsIGVuZ2luZWVyaW5nCmh0dHBzOi8vYm9vdGxpbi5j
-b20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRy
-b290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1
-aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+>>>>> "Felicitas" == Felicitas Pojtinger <felicitas@pojtinger.com> writes:
+
+ > Signed-off-by: Felicitas Pojtinger <felicitas@pojtinger.com>
+
+Committed after changing it to use -std=gnu99 and extending the commit
+message to explain what the issue is, thanks.
+
+> ---
+ >  package/go/go-bootstrap-stage1/go-bootstrap-stage1.mk | 3 ++-
+ >  1 file changed, 2 insertions(+), 1 deletion(-)
+
+ > diff --git a/package/go/go-bootstrap-stage1/go-bootstrap-stage1.mk b/package/go/go-bootstrap-stage1/go-bootstrap-stage1.mk
+ > index 3e4ee574329..3d536a35596 100644
+ > --- a/package/go/go-bootstrap-stage1/go-bootstrap-stage1.mk
+ > +++ b/package/go/go-bootstrap-stage1/go-bootstrap-stage1.mk
+ > @@ -17,12 +17,13 @@ HOST_GO_BOOTSTRAP_STAGE1_ROOT = $(HOST_DIR)/lib/go-$(GO_BOOTSTRAP_STAGE1_VERSION
+ 
+ >  # The go build system is not compatible with ccache, so use
+ >  # HOSTCC_NOCCACHE. See https://github.com/golang/go/issues/11685.
+ > +# CFLAGS and GO_CCFLAGS have no effect, so overwrite CC directly.
+ >  HOST_GO_BOOTSTRAP_STAGE1_MAKE_ENV = \
+ >  	GOOS=linux \
+ >  	GOROOT_FINAL="$(HOST_GO_BOOTSTRAP_STAGE1_ROOT)" \
+ >  	GOROOT="$(@D)" \
+ >  	GOBIN="$(@D)/bin" \
+ > -	CC=$(HOSTCC_NOCCACHE) \
+ > +	CC="$(HOSTCC_NOCCACHE) -std=gnu17" \
+ >  	CGO_ENABLED=0
+ 
+ >  define HOST_GO_BOOTSTRAP_STAGE1_BUILD_CMDS
+ > -- 
+ > 2.49.0
+
+
+-- 
+Bye, Peter Korsgaard
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
