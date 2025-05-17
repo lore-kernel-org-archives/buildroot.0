@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34FFEC3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:04:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BDDEC2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:04:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1E360710A0;
-	Mon, 19 May 2025 11:04:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 396288493A;
+	Mon, 19 May 2025 11:04:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id g50jW3bNSUCZ; Mon, 19 May 2025 11:04:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yuA3LnppB1I1; Mon, 19 May 2025 11:04:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A6CED70F5D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6B9BB8493D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A6CED70F5D;
-	Mon, 19 May 2025 11:04:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6B9BB8493D;
+	Mon, 19 May 2025 11:04:16 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 12ACAD4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:48:45 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1A302D4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:48:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3397E41E03
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4262A41E48
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5lK69dWQt3s0 for <buildroot@buildroot.org>;
+ id aHMavfip1vf7 for <buildroot@buildroot.org>;
  Mon, 19 May 2025 10:40:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A3FD441E78
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B1368411F9
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A3FD441E78
+ by smtp4.osuosl.org (Postfix) with ESMTP id B1368411F9
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9A38E873D5; Mon, 19 May 2025 10:40:08 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+ id AAAFA80FD9; Mon, 19 May 2025 10:40:08 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 17 May 2025 21:07:20 +0200
+Date: Sat, 17 May 2025 21:57:11 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 9869bae0f9cb662db96eb9a5a683a13123d201c1
-X-Git-Newrev: a8f53a907ba314addd1bc05ffd49346ab1bc85af
+X-Git-Oldrev: b74e19a039871cd444621ef96447d97b70ae7318
+X-Git-Newrev: 9f212f3897f808f64003d7365b116850d2d263d9
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104008.9A38E873D5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/postgresql: security
- bump to version 17.5
+Message-Id: <20250519104008.AAAFA80FD9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/dlib: bump version to
+ 19.24.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,52 +65,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a8f53a907ba314addd1bc05ffd49346ab1bc85af
+commit: https://git.buildroot.net/buildroot/commit/?id=9f212f3897f808f64003d7365b116850d2d263d9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes the following security issue:
-
-CVE-2025-4207: PostgreSQL GB18030 encoding validation can read one byte past
-end of allocation for text that fails validation
-
-A buffer over-read in PostgreSQL GB18030 encoding validation allows a
-database input provider to achieve temporary denial of service on platforms
-where a 1-byte over-read can elicit process termination.  This affects the
-database server and also libpq.
-
-https://www.postgresql.org/about/news/postgresql-175-169-1513-1418-and-1321-released-3072/
-
+Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/postgresql/postgresql.hash | 4 ++--
- package/postgresql/postgresql.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/dlib/dlib.hash | 2 +-
+ package/dlib/dlib.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index 1c77119207..f17d4ca3ce 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.postgresql.org/pub/source/v17.4/postgresql-17.4.tar.bz2.sha256
--sha256  c4605b73fea11963406699f949b966e5d173a7ee0ccaef8938dec0ca8a995fe7  postgresql-17.4.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v17.5/postgresql-17.5.tar.bz2.sha256
-+sha256  fcb7ab38e23b264d1902cb25e6adafb4525a6ebcbd015434aeef9eda80f528d8  postgresql-17.5.tar.bz2
- # License file, Locally calculated
- sha256  e3822c4797fadcab31a3fc73f75c28ac20c73d72b565da91e9974cf9398ef4d2  COPYRIGHT
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index bffa544a5a..671bd30347 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
+diff --git a/package/dlib/dlib.hash b/package/dlib/dlib.hash
+index af206386b8..350f30dc26 100644
+--- a/package/dlib/dlib.hash
++++ b/package/dlib/dlib.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  22513c353ec9c153300c394050c96ca9d088e02966ac0f639e989e50318c82d6  dlib-19.24.6.tar.gz
++sha256  65ff8debc3ffea84430bdd4992982082caf505404e16d986b7493c00f96f44e9  dlib-19.24.9.tar.gz
+ 
+ # Hashes for license files
+ sha256  50c1c5978d490c7f13062d91c4b89affc83774f87bc4568a714f748b62a5b216  dlib/external/libjpeg/README
+diff --git a/package/dlib/dlib.mk b/package/dlib/dlib.mk
+index 4eb0002775..0c93130d34 100644
+--- a/package/dlib/dlib.mk
++++ b/package/dlib/dlib.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--POSTGRESQL_VERSION = 17.4
-+POSTGRESQL_VERSION = 17.5
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
+-DLIB_VERSION = 19.24.6
++DLIB_VERSION = 19.24.9
+ DLIB_SITE = $(call github,davisking,dlib,v$(DLIB_VERSION))
+ DLIB_CMAKE_BACKEND = ninja
+ DLIB_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
