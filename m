@@ -1,52 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AB0DC3ABDD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:03:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36EC3C2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:03:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EF6E4848B2;
-	Mon, 19 May 2025 11:03:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C3DD97102D;
+	Mon, 19 May 2025 11:03:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id R2ZbljLzHqKf; Mon, 19 May 2025 11:03:34 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VBlP8J4t21cO; Mon, 19 May 2025 11:03:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0F56E848AC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D15E87101A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0F56E848AC;
-	Mon, 19 May 2025 11:03:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D15E87101A;
+	Mon, 19 May 2025 11:03:35 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id EDBCCD4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:48:22 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 085F0E4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:48:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 978F841DA5
+ by smtp4.osuosl.org (Postfix) with ESMTP id A7D7D41DCE
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BIsYdeeUzlIi for <buildroot@buildroot.org>;
+ id HuOkfTBlqDlj for <buildroot@buildroot.org>;
  Mon, 19 May 2025 10:40:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ACBA7411DF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B635F41E53
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id ACBA7411DF
+ by smtp4.osuosl.org (Postfix) with ESMTP id B635F41E53
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AB3A482A2E; Mon, 19 May 2025 10:40:07 +0000 (UTC)
+ id B499A83BC0; Mon, 19 May 2025 10:40:07 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 17 May 2025 13:00:23 +0200
+Date: Sat, 17 May 2025 15:37:41 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 564ae5e1ca0ca82d1cdddfb642695a4d4b9ef1b5
-X-Git-Newrev: 763971cfe3235ede53c6455aa26eb671c51809cb
+X-Git-Oldrev: 763971cfe3235ede53c6455aa26eb671c51809cb
+X-Git-Newrev: 73ff421159c542cc627a002e570812d531e6489a
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104007.AB3A482A2E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libqrencode: fix the
- _SITE package download url
+Message-Id: <20250519104007.B499A83BC0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/sdl2: bump version to
+ 2.32.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,76 +59,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=763971cfe3235ede53c6455aa26eb671c51809cb
+commit: https://git.buildroot.net/buildroot/commit/?id=73ff421159c542cc627a002e570812d531e6489a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The qrencode release archive is no longer distributed at [1].
-This url now shows a HTTP/404 not found error.
+Bugfix release, fixing various minor issues:
+https://github.com/libsdl-org/SDL/releases/tag/release-2.32.4
+https://github.com/libsdl-org/SDL/releases/tag/release-2.32.6
 
-The qrencode homepage [2] states:
-"You can download the source packages at Releases[3] page at GitHub."
-
-This commit updates the package download url to use github. The github
-archive is not the same as the old release archive: it does not
-contain the autotools configure script. For this reason, the hash
-archive is updated and "_AUTORECONF = YES" is also added.
-
-This commit also fixes the zbar runtime test [4] which is using
-libqrencode to generate a qrcode to test zbar.
-
-Fixes: [4]
-
-[1] http://fukuchi.org/works/qrencode/qrencode-4.1.1.tar.gz
-[2] https://fukuchi.org/en/works/qrencode/
-[3] https://github.com/fukuchi/libqrencode/releases
-[4] https://gitlab.com/buildroot.org/buildroot/-/jobs/9774022888
-
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libqrencode/libqrencode.hash | 4 ++--
- package/libqrencode/libqrencode.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/sdl2/sdl2.hash | 4 ++--
+ package/sdl2/sdl2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libqrencode/libqrencode.hash b/package/libqrencode/libqrencode.hash
-index ffcc537379..4586159420 100644
---- a/package/libqrencode/libqrencode.hash
-+++ b/package/libqrencode/libqrencode.hash
-@@ -1,5 +1,5 @@
--# From http://fukuchi.org/works/qrencode/qrencode-4.1.1.tar.gz.sha
--sha512  209bb656ae3f391b03c7b3ceb03e34f7320b0105babf48b619e7a299528b8828449e0e7696f0b5db0d99170a81709d0518e34835229a748701e7df784e58a9ce  qrencode-4.1.1.tar.gz
-+# Locally computed:
-+sha256  5385bc1b8c2f20f3b91d258bf8ccc8cf62023935df2d2676b5b67049f31a049c  libqrencode-4.1.1.tar.gz
- 
- # Hash for license file:
- sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING
-diff --git a/package/libqrencode/libqrencode.mk b/package/libqrencode/libqrencode.mk
-index 0062a96a39..8698d88611 100644
---- a/package/libqrencode/libqrencode.mk
-+++ b/package/libqrencode/libqrencode.mk
-@@ -5,12 +5,12 @@
+diff --git a/package/sdl2/sdl2.hash b/package/sdl2/sdl2.hash
+index 140de28eae..f5c0d44801 100644
+--- a/package/sdl2/sdl2.hash
++++ b/package/sdl2/sdl2.hash
+@@ -1,4 +1,4 @@
+-# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.32.2.tar.gz.sig
+-sha256  c5f30c427fd8107ee4a400c84d4447dd211352512eaf0b6e89cc6a50a2821922  SDL2-2.32.2.tar.gz
++# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.32.6.tar.gz.sig
++sha256  6a7a40d6c2e00016791815e1a9f4042809210bdf10cc78d2c75b45c4f52f93ad  SDL2-2.32.6.tar.gz
+ # Locally calculated
+ sha256  97f35b302b361680ec1e891e95d2d52097bb95abff361434916d99dc1305f127  LICENSE.txt
+diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
+index 5ed7c6c612..5225d8a531 100644
+--- a/package/sdl2/sdl2.mk
++++ b/package/sdl2/sdl2.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIBQRENCODE_VERSION = 4.1.1
--LIBQRENCODE_SOURCE = qrencode-$(LIBQRENCODE_VERSION).tar.gz
--LIBQRENCODE_SITE = http://fukuchi.org/works/qrencode
-+LIBQRENCODE_SITE = $(call github,fukuchi,libqrencode,v$(LIBQRENCODE_VERSION))
- LIBQRENCODE_DEPENDENCIES = host-pkgconf
- LIBQRENCODE_INSTALL_STAGING = YES
- LIBQRENCODE_LICENSE = LGPL-2.1+
- LIBQRENCODE_LICENSE_FILES = COPYING
-+LIBQRENCODE_AUTORECONF = YES
- 
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
- LIBQRENCODE_CONF_ENV += LIBS='-pthread'
+-SDL2_VERSION = 2.32.2
++SDL2_VERSION = 2.32.6
+ SDL2_SOURCE = SDL2-$(SDL2_VERSION).tar.gz
+ SDL2_SITE = http://www.libsdl.org/release
+ SDL2_LICENSE = Zlib
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
