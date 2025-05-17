@@ -1,52 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 364D9C3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:03:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D262BC3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:03:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7537B70FCC;
-	Mon, 19 May 2025 11:03:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7E2498487F;
+	Mon, 19 May 2025 11:03:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bPgD_uTnYByt; Mon, 19 May 2025 11:03:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xSAiP42swYZ5; Mon, 19 May 2025 11:03:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 14E9070FCE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 969B882060
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 14E9070FCE;
-	Mon, 19 May 2025 11:03:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 969B882060;
+	Mon, 19 May 2025 11:03:16 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 5FBC6E4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:48:11 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id CDE29E4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:48:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3FE4A411F5
+ by smtp4.osuosl.org (Postfix) with ESMTP id 70C7341DD5
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 052um7Lo8_VF for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:37 +0000 (UTC)
+ id 8PMlfU-UBKEe for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0557E41E14
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 653F641E40
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0557E41E14
+ by smtp4.osuosl.org (Postfix) with ESMTP id 653F641E40
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 03D9B82A2E; Mon, 19 May 2025 10:40:07 +0000 (UTC)
+ id 606B983BC0; Mon, 19 May 2025 10:40:07 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 17 May 2025 11:38:17 +0200
+Date: Sat, 17 May 2025 12:39:37 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 04d1ee01054d21d138031dfd12eca49486360e26
-X-Git-Newrev: fe783b16b362e4d739ad8583ad6c5c02d626f13a
+X-Git-Oldrev: 8b5dd49c5b2eb52e71ba9dff67b1ba54d0e00ac3
+X-Git-Newrev: 58f9c7b83c86b06e1a086dbe884e216799410118
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104007.03D9B82A2E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/qt6/qt6multimedia:
- ffmpeg support needs headers >= 5.2
+Message-Id: <20250519104007.606B983BC0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/spirv-llvm-translator:
+ add target variant to provide LLVMSPIRVLib
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,86 +59,94 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4611213880301983208=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4611213880301983208==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=fe783b16b362e4d739ad8583ad6c5c02d626f13a
+commit: https://git.buildroot.net/buildroot/commit/?id=58f9c7b83c86b06e1a086dbe884e216799410118
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The V4L2 code in the ffmpeg plugin uses V4L2_PIX_FMT_BGRA32 which was
-only introduced in kernel headers 5.2, in upstream kernel commit
-e25ec9141114c7124eeba09385e272dd76fbe617.
+This target version is needed for Rusticl which is an LLVM based OpenCL
+framework[1]. Rusticl allow programs to compile OpenCL C/C++ code
+at runtime with Clang. Clang generates LLVM IR which is translated into
+SPIR-V by spirv-llvm-translator. Finally, mesa can use its internal
+tools to manage SPIR-V.
 
-Fixes:
+[1]: https://docs.mesa3d.org/rusticl.html
 
-/home/thomas/buildroot/buildroot/outputs/qt/build/qt6multimedia-6.8.1/src/plugins/multimedia/ffmpeg/qv4l2camera.cpp:36:43: error: ‘V4L2_PIX_FMT_BGRA
-32’ was not declared in this scope; did you mean ‘V4L2_PIX_FMT_BGR32’?
-   36 |     { QVideoFrameFormat::Format_BGRA8888, V4L2_PIX_FMT_BGRA32  },
-      |                                           ^~~~~~~~~~~~~~~~~~~
-      |                                           V4L2_PIX_FMT_BGR32
-
-when building:
-
- BR2_arm=y
- BR2_cortex_a9=y
- BR2_ARM_ENABLE_VFP=y
- BR2_TOOLCHAIN_EXTERNAL=y
- BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
- BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_MUSL_STABLE=y
- BR2_PACKAGE_QT6=y
- BR2_PACKAGE_QT6BASE_XCB=y
- BR2_PACKAGE_QT6MULTIMEDIA=y
- BR2_PACKAGE_QT6MULTIMEDIA_FFMPEG=y
- BR2_PACKAGE_XORG7=y
-
-at a time when the Bootlin stable toolchain was using Linux 4.19
-headers.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Sebastian Weyer <sebastian.weyer@smile.fr>
+Signed-off-by: Antoine Coutant <antoine.coutant@smile.fr>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/qt6/qt6multimedia/Config.in | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/Config.in                                  |  1 +
+ package/spirv-llvm-translator/Config.in            | 22 ++++++++++++++++++++++
+ .../spirv-llvm-translator/spirv-llvm-translator.mk | 10 ++++++++++
+ 3 files changed, 33 insertions(+)
 
-diff --git a/package/qt6/qt6multimedia/Config.in b/package/qt6/qt6multimedia/Config.in
-index 3107caa597..f64f60a004 100644
---- a/package/qt6/qt6multimedia/Config.in
-+++ b/package/qt6/qt6multimedia/Config.in
-@@ -28,10 +28,17 @@ config BR2_PACKAGE_QT6MULTIMEDIA_EXAMPLES
- 	help
- 	  This option enables the Qt6 Multimedia examples.
- 
-+comment "ffmpeg plugin needs kernel headers >= 5.2"
-+	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_PULSEAUDIO_HAS_ATOMIC
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2
+diff --git a/package/Config.in b/package/Config.in
+index 86e05fb724..33dc03a28a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -332,6 +332,7 @@ comment "Graphic applications"
+ 	source "package/pngquant/Config.in"
+ 	source "package/qt5cinex/Config.in"
+ 	source "package/rrdtool/Config.in"
++	source "package/spirv-llvm-translator/Config.in"
+ 	source "package/spirv-tools/Config.in"
+ 	source "package/stellarium/Config.in"
+ 	source "package/sway/Config.in"
+diff --git a/package/spirv-llvm-translator/Config.in b/package/spirv-llvm-translator/Config.in
+new file mode 100644
+index 0000000000..73ca787d8a
+--- /dev/null
++++ b/package/spirv-llvm-translator/Config.in
+@@ -0,0 +1,22 @@
++config BR2_PACKAGE_SPIRV_LLVM_TRANSLATOR
++	bool "spirv-translator"
++	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_STATIC_LIBS
++	depends on BR2_HOST_GCC_AT_LEAST_7 # host-llvm
++	select BR2_PACKAGE_LLVM
++	select BR2_PACKAGE_SPIRV_HEADERS
++	select BR2_PACKAGE_ZLIB
++	help
++	  LLVM/SPIR-V Bi-Directional Translator is a library and tool
++	  for translation between LLVM IR and SPIR-V.
 +
- config BR2_PACKAGE_QT6MULTIMEDIA_FFMPEG
- 	bool "ffmpeg plugin"
- 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_PULSEAUDIO_HAS_ATOMIC
-+	# V4L2_PIX_FMT_BGRA32
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2
- 	# qt6-multimedia ffmpeg plugin needs
- 	# qt6base-concurrent, PulseAudio and ffmpeg-swcale.
- 	select BR2_PACKAGE_FFMPEG
-
---===============4611213880301983208==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
++	  https://github.com/khronosGroup/SPIRV-LLVM-Translator
++
++comment "spirv-translator needs a toolchain w/ threads, C++, gcc >= 7, dynamic library, host gcc >= 7"
++	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 \
++		|| BR2_STATIC_LIBS || !BR2_HOST_GCC_AT_LEAST_7
+diff --git a/package/spirv-llvm-translator/spirv-llvm-translator.mk b/package/spirv-llvm-translator/spirv-llvm-translator.mk
+index 523890a986..ffc8a63b89 100644
+--- a/package/spirv-llvm-translator/spirv-llvm-translator.mk
++++ b/package/spirv-llvm-translator/spirv-llvm-translator.mk
+@@ -19,4 +19,14 @@ HOST_SPIRV_LLVM_TRANSLATOR_CONF_OPTS = \
+ 	-DLLVM_EXTERNAL_PROJECTS="SPIRV-Headers" \
+ 	-DLLVM_EXTERNAL_SPIRV_HEADERS_SOURCE_DIR=$(HOST_DIR)/include
+ 
++SPIRV_LLVM_TRANSLATOR_INSTALL_STAGING = YES
++SPIRV_LLVM_TRANSLATOR_DEPENDENCIES = host-clang host-llvm llvm spirv-headers
++SPIRV_LLVM_TRANSLATOR_CONF_OPTS = \
++	-DLLVM_EXTERNAL_SPIRV_HEADERS_SOURCE_DIR=$(STAGING_DIR)/usr \
++	-DLLVM_BUILD_TOOLS=ON \
++	-DLLVM_DIR=$(STAGING_DIR)/lib/cmake/llvm \
++	-DLLVM_SPIRV_BUILD_EXTERNAL=YES \
++	-DLLVM_SPIRV_INCLUDE_TESTS=OFF
++
++$(eval $(cmake-package))
+ $(eval $(host-cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4611213880301983208==--
