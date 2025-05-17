@@ -4,101 +4,100 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27646C3ABDA
-	for <buildroot@archiver.kernel.org>; Sat, 17 May 2025 22:11:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28CECC2D0CD
+	for <buildroot@archiver.kernel.org>; Sat, 17 May 2025 22:24:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A7FC280D81;
-	Sat, 17 May 2025 22:11:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C676A8212C;
+	Sat, 17 May 2025 22:24:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n-Am1qoLszZ8; Sat, 17 May 2025 22:11:44 +0000 (UTC)
+ id IDxRCULrV9di; Sat, 17 May 2025 22:24:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A425180DAA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7B4982125
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A425180DAA;
-	Sat, 17 May 2025 22:11:44 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 543C3E4
- for <buildroot@buildroot.org>; Sat, 17 May 2025 22:11:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D7B4982125;
+	Sat, 17 May 2025 22:24:22 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id B3343E4
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 22:24:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3A8A280D78
- for <buildroot@buildroot.org>; Sat, 17 May 2025 22:11:43 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A44EA40481
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 22:24:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QXF353MCmvp9 for <buildroot@buildroot.org>;
- Sat, 17 May 2025 22:11:41 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Lif2_GFsvwVM for <buildroot@buildroot.org>;
+ Sat, 17 May 2025 22:24:20 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d33; helo=mail-io1-xd33.google.com;
+ client-ip=2607:f8b0:4864:20::d32; helo=mail-io1-xd32.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1C3B180DAA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C3B180DAA
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com
- [IPv6:2607:f8b0:4864:20::d33])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1C3B180DAA
- for <buildroot@buildroot.org>; Sat, 17 May 2025 22:11:40 +0000 (UTC)
-Received: by mail-io1-xd33.google.com with SMTP id
- ca18e2360f4ac-85e1b1f08a5so96729339f.2
- for <buildroot@buildroot.org>; Sat, 17 May 2025 15:11:40 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B8ADA40027
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B8ADA40027
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com
+ [IPv6:2607:f8b0:4864:20::d32])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B8ADA40027
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 22:24:20 +0000 (UTC)
+Received: by mail-io1-xd32.google.com with SMTP id
+ ca18e2360f4ac-85d9a87660fso357809239f.1
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 15:24:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1747519900; x=1748124700;
+ d=1e100.net; s=20230601; t=1747520659; x=1748125459;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=WO+ADu4BJMgc7k7VICqSGTXovTDOaQZT9/KEvT0KGyM=;
- b=PrQm1nHgtUyYK6In7pCJMBcWJpBH+VuEGcMvNMnugkj8lZjOZgCEFSS6KdghmcEjAs
- hMOpYo/PU9kLgmymNnUV7hOzfs7YVrVXF3HcBWJqB89v+3KoU2eejwTV+LyVFE/sNvK2
- zYV2l8jv//qk7LPd88iu9HIcwHph9Fzo0FAwjaiAvCvQ7o3sKFXpPF04osoSFjy8lNNK
- sbPufZWb4lrgFnfdhvPloTM7MdmnVEoV+dJKV7aKv84KZJsxLwgZIL+gEKGBXiCxugzA
- 4JpwgovrWBbvvcORYoLr4E7QpD/dfaxE8GimnFlRZ7qhiXpEd3JnXbVb96X7h9mfPwfq
- t7qg==
-X-Gm-Message-State: AOJu0YyQFTPaSEd9czFewblyLt3fOAlHWk6pPMnDXjYldKOXTb2XVrm8
- Pmt4Nr4Nu0PCjBjJ85YjDFESNwUz1u22AevuG+SNThnWn7lb4JVc58bFhHgx/lPJ
-X-Gm-Gg: ASbGncsIuVFcnyRp7xeqO9hxPTnjqboE9U2nNVT25AOexcUFVGKQtzVwe+CDpRTynE6
- tHORezu1i3L0Kj5w7kgqUrFzohs9AS2k8yRI7I+V5FsbFVNxQQr/iP83lXvanxqKw1Vnyo8lCSO
- OplF7ZiM3J9betFGJZqegAQxoOwClvIRerauEL7gXP/eAhdGL3S87AlyYojJz+xDCzSIMOv+fjb
- Rd0KGGIviQ1FvXN8tMyjNk0N5jvsr31RmKxL5uKiWi5ZSLYYoFV8bspd4Makl4EHJnOGp9gW3XL
- J3PIIVnmqVQqR78Pjd6RafJqyX3qdeSOsAs/oqJGJyKjfYMPdukr81ZMXh9x6VLCpg+74TPRbLp
- 4eKbgodAe4cRFIEQOZwK/vMgpuLwO6Q==
-X-Google-Smtp-Source: AGHT+IGIIuhdO8J4BYqGwM0dio0fvKfbL3J3W7QAdHOQmU4QVXRACwuMZ9v4TUDu1saXDlRhQ/z24g==
-X-Received: by 2002:a05:6e02:144a:b0:3da:7237:525a with SMTP id
- e9e14a558f8ab-3db843013ecmr96485295ab.8.1747519899586; 
- Sat, 17 May 2025 15:11:39 -0700 (PDT)
+ bh=GtG4TWhSbqnmgXQRnfXnktnBYdbhzY4fIU47gda7IJk=;
+ b=a6qvH6dc906JXtzlTe+kDrHtj5q1cbGNaCyTWJryV/upLP5IjFxm1PtXpalfQVufFi
+ Jg61ANhm0rfJZ00kvXyakV8qjsPo0ZwLosDcyHkphLiPN3/oQ3L/uSYvHeP8Y9rlUKGQ
+ ZUAtFHt7/4lE2YVY6O4ivv7jKeb2/CQQqBMcwhvnvvCfc8/jdHEtI8YpcxQ4C2LWgiAT
+ 9Nk7EGk3U54rqLuyyYNnrEf8SQreHnQxch/vUqg1q1S/fbjWM1E0ulTpasT/tQtVcDCg
+ VSA1aTagLyLNCm4HcyEa4gQkKNmYY6HKwGUu8/c37uuObTHWz4S0BeMefpHwr+WZAhJf
+ 4FnQ==
+X-Gm-Message-State: AOJu0YxybBgPpEBKrZXWPssa/Bw6e+VB12KkZTLIwiUgSsIu7yiGINBK
+ TqOu4ZspfmkGQar982OXGReJpSohc1ldbthhRpLf59gWGBX0S9Xq8R6WvBKdl9h2
+X-Gm-Gg: ASbGncuZg3Cpmj89jmrdMYjRQy3/l7J1YMsXHmOs52CyJ2xrw1Fnv4JgvWqJoZf9Pjr
+ 46dhrLLkPYzjcBALk+Jnj6uIJh9Y7wHvcN1lzYW1mukpjSdwg4H/cfKoERTIChbw4ui5V66MzVa
+ hYoj/Hz7Uh85fRGwJpEIdl3BpFlkFGt0WiejSUlCrTzwO9Aa18FhAMdPRI4x2hgoWhMmT2vLrNn
+ ZxcvjyZc5sMZMTN2dxzr4dK4O3moubKGhSv/iiIvQzGD8BZmC65dyTaRWHRecTnt0IF68+azTDS
+ 3JiWOwQo0kAnB8kkgCzAik91RuxCFDs6nETRJn8jP78MB5Sb4UO7H8MLlL/NHcK4McUVFIvXdir
+ Uuf6qDCJaMUdsLoYiPmsoP2cxBmxOfg==
+X-Google-Smtp-Source: AGHT+IFmLYazBSt1bpsb9G+ps9uKzIq72tO62yFpEXHEtRB5jdxceNeUDEOUNgWwuXVJwvPjemrl8Q==
+X-Received: by 2002:a05:6602:b85:b0:867:667d:18dd with SMTP id
+ ca18e2360f4ac-86a24bb2330mr832344539f.1.1747520659206; 
+ Sat, 17 May 2025 15:24:19 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-120-130.hlrn.qwest.net.
  [71.218.120.130]) by smtp.gmail.com with ESMTPSA id
- 8926c6da1cb9f-4fbcc3b19aasm1041812173.52.2025.05.17.15.11.38
+ ca18e2360f4ac-86a235be4f1sm104013739f.5.2025.05.17.15.24.18
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 17 May 2025 15:11:39 -0700 (PDT)
+ Sat, 17 May 2025 15:24:18 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Cc: Daniel Lang <dalang@gmx.at>, Joseph Kogut <joseph.kogut@gmail.com>,
- Romain Naour <romain.naour@gmail.com>,
- Valentin Korenblit <valentinkorenblit@gmail.com>,
+Cc: Pierre-Jean Texier <texier.pj2@gmail.com>,
  James Hilliard <james.hilliard1@gmail.com>
-Date: Sat, 17 May 2025 16:11:31 -0600
-Message-Id: <20250517221131.4172735-1-james.hilliard1@gmail.com>
+Date: Sat, 17 May 2025 16:24:12 -0600
+Message-Id: <20250517222412.4177167-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1747519900; x=1748124700; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1747520659; x=1748125459; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=WO+ADu4BJMgc7k7VICqSGTXovTDOaQZT9/KEvT0KGyM=;
- b=Q1R+qtnjhdqOTFxdSy2P2N2R7MgLFtwVOQadmVJGo7osBRJLSCHiBbWAzcy/OlPb1j
- jVrIjRdhOhn7lyd9dPaG4T8D42EUVZfWPrrTMN/Jiqdw6BXLAiFRAFpqLptpKMXktEO3
- YAHGZHOBKtZQNiKLGya4bLN5l1QW/o0T73l6t+uxKy5vpP2xBOTfdmh/MV7uO9tioWQ4
- Cklf1jJXFUHiDt475wZ1+6XRXp7t0lByAflhESri1/ytbgAWM6g+TvsTA+Ol9zBX3os7
- K02q4x8Uad0N56mXnipJaKjEeFsR8DBb7bIGMo4iegAn7J8tNq2SDUg0cCbmaQsIFild
- 0eAA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=GtG4TWhSbqnmgXQRnfXnktnBYdbhzY4fIU47gda7IJk=;
+ b=DrY10EsUjvN3blIzeqm3uSrQXoeBGui1slu/R7nfOhBwYls/PEM1r7oC0aSj2K4yi8
+ 8WkHG3xLguhUzvAkCb5r/A9fVJbCpWOnR9+keczRi/GiVg4+tf1f60g3i1c6Xs7XcpsM
+ TfxT4hXmUJy0C6PwlLKwaqfawEwbNFo4IztOwBKH6ZGe8Y3ScTWCU65We7BXylPLDCY3
+ fR8XeATgg1Smzz3bEiks6ti3pNEEumZDmDlxj20r7oHsSGPyC51xnmODulz3J3qSELCK
+ 75DaWGwHMtr4MufHCoLVjhxzSYvAHg/KJ+B9zS53ENxOIYlxB7aJX2m9UBzBqiqgAgOm
+ ZmVw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=Q1R+qtnj
-Subject: [Buildroot] [PATCH 1/1] package/llvm-project: fix build with gcc 15
+ header.s=20230601 header.b=DrY10EsU
+Subject: [Buildroot] [PATCH 1/1] package/libarchive: fix mbedtls 3
+ compatibility
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -110,125 +109,270 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-QWRhcHQgZ2VudG9vIGdjYyBwYXRjaGVzIGZyb20gaHR0cHM6Ly9idWdzLmdlbnRvby5vcmcvOTM5
-NDk4IHRvIGZpeApidWlsZCB3aXRoIGdjYyAxNS4KClRoZSBsbHZtIHByb2plY3Qgbm8gbG9uZ2Vy
-IG1haW50YWlucyB0aGUgbGx2bSAxNSBicmFuY2guCgpTaWduZWQtb2ZmLWJ5OiBKYW1lcyBIaWxs
-aWFyZCA8amFtZXMuaGlsbGlhcmQxQGdtYWlsLmNvbT4KLS0tCiAuLi4vY29tcGlsZXItcnQvMDAw
-MS1pbmNsdWRlLWNzdGRpbnQucGF0Y2ggICAgfCAzMSArKysrKysrKysrKysrKysrCiAuLi5EVC1B
-ZGQtY3N0ZGludC10by1TbWFsbFZlY3Rvci0xMDE3NjEucGF0Y2ggfCAzNSArKysrKysrKysrKysr
-KysrKysrCiAuLi5jc3RkaW50LWluLUFNREdQVU1DVGFyZ2V0RGVzYy0xMDE3NjYucGF0Y2ggfCAz
-MSArKysrKysrKysrKysrKysrCiAuLi4wMy1Bbm90aGVyLWdjYy0xNS1maXgtZnJvbS1TYW0tSmFt
-ZXMucGF0Y2ggfCAzMSArKysrKysrKysrKysrKysrCiA0IGZpbGVzIGNoYW5nZWQsIDEyOCBpbnNl
-cnRpb25zKCspCiBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9sbHZtLXByb2plY3QvY29tcGls
-ZXItcnQvMDAwMS1pbmNsdWRlLWNzdGRpbnQucGF0Y2gKIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNr
-YWdlL2xsdm0tcHJvamVjdC9sbHZtLzAwMDEtQURULUFkZC1jc3RkaW50LXRvLVNtYWxsVmVjdG9y
-LTEwMTc2MS5wYXRjaAogY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvbGx2bS1wcm9qZWN0L2xs
-dm0vMDAwMi1BTURHUFUtSW5jbHVkZS1jc3RkaW50LWluLUFNREdQVU1DVGFyZ2V0RGVzYy0xMDE3
-NjYucGF0Y2gKIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2xsdm0tcHJvamVjdC9sbHZtLzAw
-MDMtQW5vdGhlci1nY2MtMTUtZml4LWZyb20tU2FtLUphbWVzLnBhdGNoCgpkaWZmIC0tZ2l0IGEv
-cGFja2FnZS9sbHZtLXByb2plY3QvY29tcGlsZXItcnQvMDAwMS1pbmNsdWRlLWNzdGRpbnQucGF0
-Y2ggYi9wYWNrYWdlL2xsdm0tcHJvamVjdC9jb21waWxlci1ydC8wMDAxLWluY2x1ZGUtY3N0ZGlu
-dC5wYXRjaApuZXcgZmlsZSBtb2RlIDEwMDY0NAppbmRleCAwMDAwMDAwMDAwLi5jZTc1YjI5ZjRl
-Ci0tLSAvZGV2L251bGwKKysrIGIvcGFja2FnZS9sbHZtLXByb2plY3QvY29tcGlsZXItcnQvMDAw
-MS1pbmNsdWRlLWNzdGRpbnQucGF0Y2gKQEAgLTAsMCArMSwzMSBAQAorRnJvbSA3MzUyMDdhYzE2
-YmIxNWQ4ODExNmJmMDAyODNlYjAxMzVlZDI1ODVhIE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQor
-RnJvbTogUGF1bCBaYW5kZXIgPG5lZ3JpbC5ueCtnZW50b29AZ21haWwuY29tPgorRGF0ZTogVGh1
-LCAyMiBBdWcgMjAyNCAxMTo0MDoxMyArMDIwMAorU3ViamVjdDogW1BBVENIXSBpbmNsdWRlIGNz
-dGRpbnQKK01JTUUtVmVyc2lvbjogMS4wCitDb250ZW50LVR5cGU6IHRleHQvcGxhaW47IGNoYXJz
-ZXQ9VVRGLTgKK0NvbnRlbnQtVHJhbnNmZXItRW5jb2Rpbmc6IDhiaXQKKworR2VudG9vLUNvbXBv
-bmVudDogY29tcGlsZXItcnQKK1NpZ25lZC1vZmYtYnk6IFBhdWwgWmFuZGVyIDxuZWdyaWwubngr
-Z2VudG9vQGdtYWlsLmNvbT4KK1NpZ25lZC1vZmYtYnk6IE1pY2hhxYIgR8Ozcm55IDxtZ29ybnlA
-Z2VudG9vLm9yZz4KK1NpZ25lZC1vZmYtYnk6IEphbWVzIEhpbGxpYXJkIDxqYW1lcy5oaWxsaWFy
-ZDFAZ21haWwuY29tPgorVXBzdHJlYW06IGh0dHBzOi8vYnVncy5nZW50b28ub3JnLzkzOTQ5OAor
-LS0tCisgbGliL29yYy9lcnJvci5oIHwgMSArCisgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9u
-KCspCisKK2RpZmYgLS1naXQgYS9saWIvb3JjL2Vycm9yLmggYi9saWIvb3JjL2Vycm9yLmgKK2lu
-ZGV4IDkyYWM1YTg4NGFjNi4uMzNhNTk5ZjcxMTQ5IDEwMDY0NAorLS0tIGEvbGliL29yYy9lcnJv
-ci5oCisrKysgYi9saWIvb3JjL2Vycm9yLmgKK0BAIC0xNCw2ICsxNCw3IEBACisgI2luY2x1ZGUg
-InN0bF9leHRyYXMuaCIKKyAKKyAjaW5jbHVkZSA8Y2Fzc2VydD4KKysjaW5jbHVkZSA8Y3N0ZGlu
-dD4KKyAjaW5jbHVkZSA8bWVtb3J5PgorICNpbmNsdWRlIDxzdHJpbmc+CisgI2luY2x1ZGUgPHR5
-cGVfdHJhaXRzPgorLS0gCisyLjQ2LjAKZGlmZiAtLWdpdCBhL3BhY2thZ2UvbGx2bS1wcm9qZWN0
-L2xsdm0vMDAwMS1BRFQtQWRkLWNzdGRpbnQtdG8tU21hbGxWZWN0b3ItMTAxNzYxLnBhdGNoIGIv
-cGFja2FnZS9sbHZtLXByb2plY3QvbGx2bS8wMDAxLUFEVC1BZGQtY3N0ZGludC10by1TbWFsbFZl
-Y3Rvci0xMDE3NjEucGF0Y2gKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAwMC4u
-ZWVhODNjMjdhOAotLS0gL2Rldi9udWxsCisrKyBiL3BhY2thZ2UvbGx2bS1wcm9qZWN0L2xsdm0v
-MDAwMS1BRFQtQWRkLWNzdGRpbnQtdG8tU21hbGxWZWN0b3ItMTAxNzYxLnBhdGNoCkBAIC0wLDAg
-KzEsMzUgQEAKK0Zyb20gNTFkODg0MDdjMWFlODZjM2IzYzdiNDk3ZDA0OWY4OTgwZjJhMzUxMCBN
-b24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKK0Zyb206IFNhbSBKYW1lcyA8c2FtQGdlbnRvby5vcmc+
-CitEYXRlOiBGcmksIDIgQXVnIDIwMjQgMjM6MDc6MjEgKzAxMDAKK1N1YmplY3Q6IFtQQVRDSF0g
-W0FEVF0gQWRkIGA8Y3N0ZGludD5gIHRvIFNtYWxsVmVjdG9yICgjMTAxNzYxKQorTUlNRS1WZXJz
-aW9uOiAxLjAKK0NvbnRlbnQtVHlwZTogdGV4dC9wbGFpbjsgY2hhcnNldD1VVEYtOAorQ29udGVu
-dC1UcmFuc2Zlci1FbmNvZGluZzogOGJpdAorCitTbWFsbFZlY3RvciB1c2VzIGB1aW50MzJfdGAs
-IGB1aW50NjRfdGAgd2l0aG91dCBpbmNsdWRpbmcgYDxjc3RkaW50PmAKK3doaWNoIGZhaWxzIHRv
-IGJ1aWxkIHcvIEdDQyAxNSBhZnRlciBhIGNoYW5nZSBpbiBsaWJzdGRjKysgWzBdCisKK1swXSBo
-dHRwczovL2djYy5nbnUub3JnL2dpdC8/cD1nY2MuZ2l0O2E9Y29tbWl0O2g9M2E4MTdhNGE1YTZk
-OTRkYTkxMjdhZjNiZTlmODRhNzRlMzA3NmVlMgorCitHZW50b28tQ29tcG9uZW50OiBsbHZtCitT
-aWduZWQtb2ZmLWJ5OiBNaWNoYcWCIEfDs3JueSA8bWdvcm55QGdlbnRvby5vcmc+CitTaWduZWQt
-b2ZmLWJ5OiBKYW1lcyBIaWxsaWFyZCA8amFtZXMuaGlsbGlhcmQxQGdtYWlsLmNvbT4KK1Vwc3Ry
-ZWFtOiBodHRwczovL2J1Z3MuZ2VudG9vLm9yZy85Mzk0OTgKKy0tLQorIGluY2x1ZGUvbGx2bS9B
-RFQvU21hbGxWZWN0b3IuaCB8IDEgKworIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKQor
-CitkaWZmIC0tZ2l0IGEvaW5jbHVkZS9sbHZtL0FEVC9TbWFsbFZlY3Rvci5oIGIvaW5jbHVkZS9s
-bHZtL0FEVC9TbWFsbFZlY3Rvci5oCitpbmRleCBlMzQ3MDJiZGJiM2MuLjFjMGYzNDY1YjJhOSAx
-MDA2NDQKKy0tLSBhL2luY2x1ZGUvbGx2bS9BRFQvU21hbGxWZWN0b3IuaAorKysrIGIvaW5jbHVk
-ZS9sbHZtL0FEVC9TbWFsbFZlY3Rvci5oCitAQCAtMTksNiArMTksNyBAQAorICNpbmNsdWRlIDxh
-bGdvcml0aG0+CisgI2luY2x1ZGUgPGNhc3NlcnQ+CisgI2luY2x1ZGUgPGNzdGRkZWY+CisrI2lu
-Y2x1ZGUgPGNzdGRpbnQ+CisgI2luY2x1ZGUgPGNzdGRsaWI+CisgI2luY2x1ZGUgPGNzdHJpbmc+
-CisgI2luY2x1ZGUgPGZ1bmN0aW9uYWw+CistLSAKKzIuNDYuMApkaWZmIC0tZ2l0IGEvcGFja2Fn
-ZS9sbHZtLXByb2plY3QvbGx2bS8wMDAyLUFNREdQVS1JbmNsdWRlLWNzdGRpbnQtaW4tQU1ER1BV
-TUNUYXJnZXREZXNjLTEwMTc2Ni5wYXRjaCBiL3BhY2thZ2UvbGx2bS1wcm9qZWN0L2xsdm0vMDAw
-Mi1BTURHUFUtSW5jbHVkZS1jc3RkaW50LWluLUFNREdQVU1DVGFyZ2V0RGVzYy0xMDE3NjYucGF0
-Y2gKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAwMC4uNzNiZWFiNmMyMwotLS0g
-L2Rldi9udWxsCisrKyBiL3BhY2thZ2UvbGx2bS1wcm9qZWN0L2xsdm0vMDAwMi1BTURHUFUtSW5j
-bHVkZS1jc3RkaW50LWluLUFNREdQVU1DVGFyZ2V0RGVzYy0xMDE3NjYucGF0Y2gKQEAgLTAsMCAr
-MSwzMSBAQAorRnJvbSAwMDBmOTJiZWI0NTkwOTY1MzRhN2JmYWE4YzVlOTlkNzdiNzU5NGMxIE1v
-biBTZXAgMTcgMDA6MDA6MDAgMjAwMQorRnJvbTogU2FtIEphbWVzIDxzYW1AZ2VudG9vLm9yZz4K
-K0RhdGU6IFNhdCwgMyBBdWcgMjAyNCAwNjozNjo0MyArMDEwMAorU3ViamVjdDogW1BBVENIXSBb
-QU1ER1BVXSBJbmNsdWRlIGA8Y3N0ZGludD5gIGluIEFNREdQVU1DVGFyZ2V0RGVzYworICgjMTAx
-NzY2KQorTUlNRS1WZXJzaW9uOiAxLjAKK0NvbnRlbnQtVHlwZTogdGV4dC9wbGFpbjsgY2hhcnNl
-dD1VVEYtOAorQ29udGVudC1UcmFuc2Zlci1FbmNvZGluZzogOGJpdAorCitHZW50b28tQ29tcG9u
-ZW50OiBsbHZtCitTaWduZWQtb2ZmLWJ5OiBNaWNoYcWCIEfDs3JueSA8bWdvcm55QGdlbnRvby5v
-cmc+CitTaWduZWQtb2ZmLWJ5OiBKYW1lcyBIaWxsaWFyZCA8amFtZXMuaGlsbGlhcmQxQGdtYWls
-LmNvbT4KK1Vwc3RyZWFtOiBodHRwczovL2J1Z3MuZ2VudG9vLm9yZy85Mzk0OTgKKy0tLQorIGxp
-Yi9UYXJnZXQvQU1ER1BVL01DVGFyZ2V0RGVzYy9BTURHUFVNQ1RhcmdldERlc2MuaCB8IDEgKwor
-IDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKQorCitkaWZmIC0tZ2l0IGEvbGliL1Rhcmdl
-dC9BTURHUFUvTUNUYXJnZXREZXNjL0FNREdQVU1DVGFyZ2V0RGVzYy5oIGIvbGliL1RhcmdldC9B
-TURHUFUvTUNUYXJnZXREZXNjL0FNREdQVU1DVGFyZ2V0RGVzYy5oCitpbmRleCBjMmUyNTYzYzM5
-ODkuLjUzYWFjODkzNDEwMCAxMDA2NDQKKy0tLSBhL2xpYi9UYXJnZXQvQU1ER1BVL01DVGFyZ2V0
-RGVzYy9BTURHUFVNQ1RhcmdldERlc2MuaAorKysrIGIvbGliL1RhcmdldC9BTURHUFUvTUNUYXJn
-ZXREZXNjL0FNREdQVU1DVGFyZ2V0RGVzYy5oCitAQCAtMTUsNiArMTUsNyBAQAorICNpZm5kZWYg
-TExWTV9MSUJfVEFSR0VUX0FNREdQVV9NQ1RBUkdFVERFU0NfQU1ER1BVTUNUQVJHRVRERVNDX0gK
-KyAjZGVmaW5lIExMVk1fTElCX1RBUkdFVF9BTURHUFVfTUNUQVJHRVRERVNDX0FNREdQVU1DVEFS
-R0VUREVTQ19ICisgCisrI2luY2x1ZGUgPGNzdGRpbnQ+CisgI2luY2x1ZGUgPG1lbW9yeT4KKyAK
-KyBuYW1lc3BhY2UgbGx2bSB7CistLSAKKzIuNDYuMApkaWZmIC0tZ2l0IGEvcGFja2FnZS9sbHZt
-LXByb2plY3QvbGx2bS8wMDAzLUFub3RoZXItZ2NjLTE1LWZpeC1mcm9tLVNhbS1KYW1lcy5wYXRj
-aCBiL3BhY2thZ2UvbGx2bS1wcm9qZWN0L2xsdm0vMDAwMy1Bbm90aGVyLWdjYy0xNS1maXgtZnJv
-bS1TYW0tSmFtZXMucGF0Y2gKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAwMC4u
-YmM5NThiYjA1NgotLS0gL2Rldi9udWxsCisrKyBiL3BhY2thZ2UvbGx2bS1wcm9qZWN0L2xsdm0v
-MDAwMy1Bbm90aGVyLWdjYy0xNS1maXgtZnJvbS1TYW0tSmFtZXMucGF0Y2gKQEAgLTAsMCArMSwz
-MSBAQAorRnJvbSA2N2ZjMDA2OWMyODViMzdmMDlkNDA4YWFlNDNjMzdiOGFmZGYxMWY3IE1vbiBT
-ZXAgMTcgMDA6MDA6MDAgMjAwMQorRnJvbTogPT9VVEYtOD9xP01pY2hhPUM1PTgyPTIwRz1DMz1C
-M3JueT89IDxtZ29ybnlAZ2VudG9vLm9yZz4KK0RhdGU6IFNhdCwgMyBBdWcgMjAyNCAxMjowMToy
-MCArMDIwMAorU3ViamVjdDogW1BBVENIXSBBbm90aGVyIGdjYy0xNSBmaXggZnJvbSBTYW0gSmFt
-ZXMKK01JTUUtVmVyc2lvbjogMS4wCitDb250ZW50LVR5cGU6IHRleHQvcGxhaW47IGNoYXJzZXQ9
-VVRGLTgKK0NvbnRlbnQtVHJhbnNmZXItRW5jb2Rpbmc6IDhiaXQKKworQnVnOiBodHRwczovL2J1
-Z3MuZ2VudG9vLm9yZy85MzcxNjQKK0dlbnRvby1Db21wb25lbnQ6IGxsdm0KK1NpZ25lZC1vZmYt
-Ynk6IE1pY2hhxYIgR8Ozcm55IDxtZ29ybnlAZ2VudG9vLm9yZz4KK1NpZ25lZC1vZmYtYnk6IEph
-bWVzIEhpbGxpYXJkIDxqYW1lcy5oaWxsaWFyZDFAZ21haWwuY29tPgorVXBzdHJlYW06IGh0dHBz
-Oi8vYnVncy5nZW50b28ub3JnLzkzOTQ5OAorLS0tCisgbGliL1RhcmdldC9YODYvTUNUYXJnZXRE
-ZXNjL1g4Nk1DVGFyZ2V0RGVzYy5oIHwgMSArCisgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9u
-KCspCisKK2RpZmYgLS1naXQgYS9saWIvVGFyZ2V0L1g4Ni9NQ1RhcmdldERlc2MvWDg2TUNUYXJn
-ZXREZXNjLmggYi9saWIvVGFyZ2V0L1g4Ni9NQ1RhcmdldERlc2MvWDg2TUNUYXJnZXREZXNjLmgK
-K2luZGV4IGQwNTMwYmQ0ZDY1MC4uMTBiNTk0NjJhZWJlIDEwMDY0NAorLS0tIGEvbGliL1Rhcmdl
-dC9YODYvTUNUYXJnZXREZXNjL1g4Nk1DVGFyZ2V0RGVzYy5oCisrKysgYi9saWIvVGFyZ2V0L1g4
-Ni9NQ1RhcmdldERlc2MvWDg2TUNUYXJnZXREZXNjLmgKK0BAIC0xMyw2ICsxMyw3IEBACisgI2lm
-bmRlZiBMTFZNX0xJQl9UQVJHRVRfWDg2X01DVEFSR0VUREVTQ19YODZNQ1RBUkdFVERFU0NfSAor
-ICNkZWZpbmUgTExWTV9MSUJfVEFSR0VUX1g4Nl9NQ1RBUkdFVERFU0NfWDg2TUNUQVJHRVRERVND
-X0gKKyAKKysjaW5jbHVkZSA8Y3N0ZGludD4KKyAjaW5jbHVkZSA8bWVtb3J5PgorICNpbmNsdWRl
-IDxzdHJpbmc+CisgCistLSAKKzIuNDYuMAotLSAKMi4zNC4xCgpfX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxk
-cm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xp
-c3RpbmZvL2J1aWxkcm9vdAo=
+Backport a patch fixing mbedtls 3 compatibility.
+
+This broke in buildroot when mbedtls was bumped to 3.6.3.1 in
+3481a9643fc7223e400ed877f08ade34d44e6b78.
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ ...mbedtls-version-3-compatibility-2602.patch | 238 ++++++++++++++++++
+ 1 file changed, 238 insertions(+)
+ create mode 100644 package/libarchive/0003-Fix-mbedtls-version-3-compatibility-2602.patch
+
+diff --git a/package/libarchive/0003-Fix-mbedtls-version-3-compatibility-2602.patch b/package/libarchive/0003-Fix-mbedtls-version-3-compatibility-2602.patch
+new file mode 100644
+index 0000000000..67fb3ff738
+--- /dev/null
++++ b/package/libarchive/0003-Fix-mbedtls-version-3-compatibility-2602.patch
+@@ -0,0 +1,238 @@
++From 26ba5ee5d560d62ad05aa6819608fd21cbb962f9 Mon Sep 17 00:00:00 2001
++From: James Hilliard <james.hilliard1@gmail.com>
++Date: Thu, 15 May 2025 04:56:59 -0600
++Subject: [PATCH] Fix mbedtls version 3 compatibility (#2602)
++
++We need to use the new API for mbedtls 3 compatibility
++
++Fixes #2025
++
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++Upstream: https://github.com/libarchive/libarchive/commit/63d7c24eeaa108ecc2ef258c0505eefdadaaaf35
++---
++ libarchive/archive_digest.c | 72 +++++++++++++++++++++++++++++++++++++
++ 1 file changed, 72 insertions(+)
++
++diff --git a/libarchive/archive_digest.c b/libarchive/archive_digest.c
++index 33518740..03f0edd6 100644
++--- a/libarchive/archive_digest.c
+++++ b/libarchive/archive_digest.c
++@@ -235,7 +235,11 @@ static int
++ __archive_md5init(archive_md5_ctx *ctx)
++ {
++   mbedtls_md5_init(ctx);
+++#if MBEDTLS_VERSION_NUMBER > 0x03000000
+++  if (mbedtls_md5_starts(ctx) == 0)
+++#else
++   if (mbedtls_md5_starts_ret(ctx) == 0)
+++#endif
++     return (ARCHIVE_OK);
++   else
++     return (ARCHIVE_FATAL);
++@@ -245,7 +249,11 @@ static int
++ __archive_md5update(archive_md5_ctx *ctx, const void *indata,
++     size_t insize)
++ {
+++#if MBEDTLS_VERSION_NUMBER > 0x03000000
+++  if (mbedtls_md5_update(ctx, indata, insize) == 0)
+++#else
++   if (mbedtls_md5_update_ret(ctx, indata, insize) == 0)
+++#endif
++     return (ARCHIVE_OK);
++   else
++     return (ARCHIVE_FATAL);
++@@ -254,7 +262,11 @@ __archive_md5update(archive_md5_ctx *ctx, const void *indata,
++ static int
++ __archive_md5final(archive_md5_ctx *ctx, void *md)
++ {
+++#if MBEDTLS_VERSION_NUMBER > 0x03000000
+++  if (mbedtls_md5_finish(ctx, md) == 0) {
+++#else
++   if (mbedtls_md5_finish_ret(ctx, md) == 0) {
+++#endif
++     mbedtls_md5_free(ctx);
++     return (ARCHIVE_OK);
++   } else {
++@@ -431,7 +443,11 @@ static int
++ __archive_ripemd160init(archive_rmd160_ctx *ctx)
++ {
++   mbedtls_ripemd160_init(ctx);
+++#if MBEDTLS_VERSION_NUMBER > 0x03000000
+++  if (mbedtls_ripemd160_starts(ctx) == 0)
+++#else
++   if (mbedtls_ripemd160_starts_ret(ctx) == 0)
+++#endif
++     return (ARCHIVE_OK);
++   else
++     return (ARCHIVE_FATAL);
++@@ -441,7 +457,11 @@ static int
++ __archive_ripemd160update(archive_rmd160_ctx *ctx, const void *indata,
++     size_t insize)
++ {
+++#if MBEDTLS_VERSION_NUMBER > 0x03000000
+++  if (mbedtls_ripemd160_update(ctx, indata, insize) == 0)
+++#else
++   if (mbedtls_ripemd160_update_ret(ctx, indata, insize) == 0)
+++#endif
++     return (ARCHIVE_OK);
++   else
++     return (ARCHIVE_FATAL);
++@@ -450,7 +470,11 @@ __archive_ripemd160update(archive_rmd160_ctx *ctx, const void *indata,
++ static int
++ __archive_ripemd160final(archive_rmd160_ctx *ctx, void *md)
++ {
+++#if MBEDTLS_VERSION_NUMBER > 0x03000000
+++  if (mbedtls_ripemd160_finish(ctx, md) == 0) {
+++#else
++   if (mbedtls_ripemd160_finish_ret(ctx, md) == 0) {
+++#endif
++     mbedtls_ripemd160_free(ctx);
++     return (ARCHIVE_OK);
++   } else {
++@@ -622,7 +646,11 @@ static int
++ __archive_sha1init(archive_sha1_ctx *ctx)
++ {
++   mbedtls_sha1_init(ctx);
+++#if MBEDTLS_VERSION_NUMBER > 0x03000000
+++  if (mbedtls_sha1_starts(ctx) == 0)
+++#else
++   if (mbedtls_sha1_starts_ret(ctx) == 0)
+++#endif
++     return (ARCHIVE_OK);
++   else
++     return (ARCHIVE_FATAL);
++@@ -632,7 +660,11 @@ static int
++ __archive_sha1update(archive_sha1_ctx *ctx, const void *indata,
++     size_t insize)
++ {
+++#if MBEDTLS_VERSION_NUMBER > 0x03000000
+++  if (mbedtls_sha1_update(ctx, indata, insize) == 0)
+++#else
++   if (mbedtls_sha1_update_ret(ctx, indata, insize) == 0)
+++#endif
++     return (ARCHIVE_OK);
++   else
++     return (ARCHIVE_FATAL);
++@@ -641,7 +673,11 @@ __archive_sha1update(archive_sha1_ctx *ctx, const void *indata,
++ static int
++ __archive_sha1final(archive_sha1_ctx *ctx, void *md)
++ {
+++#if MBEDTLS_VERSION_NUMBER > 0x03000000
+++  if (mbedtls_sha1_finish(ctx, md) == 0) {
+++#else
++   if (mbedtls_sha1_finish_ret(ctx, md) == 0) {
+++#endif
++     mbedtls_sha1_free(ctx);
++     return (ARCHIVE_OK);
++   } else {
++@@ -890,7 +926,11 @@ static int
++ __archive_sha256init(archive_sha256_ctx *ctx)
++ {
++   mbedtls_sha256_init(ctx);
+++#if MBEDTLS_VERSION_NUMBER > 0x03000000
+++  if (mbedtls_sha256_starts(ctx, 0) == 0)
+++#else
++   if (mbedtls_sha256_starts_ret(ctx, 0) == 0)
+++#endif
++     return (ARCHIVE_OK);
++   else
++     return (ARCHIVE_FATAL);
++@@ -900,7 +940,11 @@ static int
++ __archive_sha256update(archive_sha256_ctx *ctx, const void *indata,
++     size_t insize)
++ {
+++#if MBEDTLS_VERSION_NUMBER > 0x03000000
+++  if (mbedtls_sha256_update(ctx, indata, insize) == 0)
+++#else
++   if (mbedtls_sha256_update_ret(ctx, indata, insize) == 0)
+++#endif
++     return (ARCHIVE_OK);
++   else
++     return (ARCHIVE_FATAL);
++@@ -909,7 +953,11 @@ __archive_sha256update(archive_sha256_ctx *ctx, const void *indata,
++ static int
++ __archive_sha256final(archive_sha256_ctx *ctx, void *md)
++ {
+++#if MBEDTLS_VERSION_NUMBER > 0x03000000
+++  if (mbedtls_sha256_finish(ctx, md) == 0) {
+++#else
++   if (mbedtls_sha256_finish_ret(ctx, md) == 0) {
+++#endif
++     mbedtls_sha256_free(ctx);
++     return (ARCHIVE_OK);
++   } else {
++@@ -1130,7 +1178,11 @@ static int
++ __archive_sha384init(archive_sha384_ctx *ctx)
++ {
++   mbedtls_sha512_init(ctx);
+++#if MBEDTLS_VERSION_NUMBER > 0x03000000
+++  if (mbedtls_sha512_starts(ctx, 1) == 0)
+++#else
++   if (mbedtls_sha512_starts_ret(ctx, 1) == 0)
+++#endif
++     return (ARCHIVE_OK);
++   else
++     return (ARCHIVE_FATAL);
++@@ -1140,7 +1192,11 @@ static int
++ __archive_sha384update(archive_sha384_ctx *ctx, const void *indata,
++     size_t insize)
++ {
+++#if MBEDTLS_VERSION_NUMBER > 0x03000000
+++  if (mbedtls_sha512_update(ctx, indata, insize) == 0)
+++#else
++   if (mbedtls_sha512_update_ret(ctx, indata, insize) == 0)
+++#endif
++     return (ARCHIVE_OK);
++   else
++     return (ARCHIVE_FATAL);
++@@ -1149,7 +1205,11 @@ __archive_sha384update(archive_sha384_ctx *ctx, const void *indata,
++ static int
++ __archive_sha384final(archive_sha384_ctx *ctx, void *md)
++ {
+++#if MBEDTLS_VERSION_NUMBER > 0x03000000
+++  if (mbedtls_sha512_finish(ctx, md) == 0) {
+++#else
++   if (mbedtls_sha512_finish_ret(ctx, md) == 0) {
+++#endif
++     mbedtls_sha512_free(ctx);
++     return (ARCHIVE_OK);
++   } else {
++@@ -1394,7 +1454,11 @@ static int
++ __archive_sha512init(archive_sha512_ctx *ctx)
++ {
++   mbedtls_sha512_init(ctx);
+++#if MBEDTLS_VERSION_NUMBER > 0x03000000
+++  if (mbedtls_sha512_starts(ctx, 0) == 0)
+++#else
++   if (mbedtls_sha512_starts_ret(ctx, 0) == 0)
+++#endif
++     return (ARCHIVE_OK);
++   else
++     return (ARCHIVE_FATAL);
++@@ -1404,7 +1468,11 @@ static int
++ __archive_sha512update(archive_sha512_ctx *ctx, const void *indata,
++     size_t insize)
++ {
+++#if MBEDTLS_VERSION_NUMBER > 0x03000000
+++  if (mbedtls_sha512_update(ctx, indata, insize) == 0)
+++#else
++   if (mbedtls_sha512_update_ret(ctx, indata, insize) == 0)
+++#endif
++     return (ARCHIVE_OK);
++   else
++     return (ARCHIVE_FATAL);
++@@ -1413,7 +1481,11 @@ __archive_sha512update(archive_sha512_ctx *ctx, const void *indata,
++ static int
++ __archive_sha512final(archive_sha512_ctx *ctx, void *md)
++ {
+++#if MBEDTLS_VERSION_NUMBER > 0x03000000
+++  if (mbedtls_sha512_finish(ctx, md) == 0) {
+++#else
++   if (mbedtls_sha512_finish_ret(ctx, md) == 0) {
+++#endif
++     mbedtls_sha512_free(ctx);
++     return (ARCHIVE_OK);
++   } else {
++-- 
++2.34.1
++
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
