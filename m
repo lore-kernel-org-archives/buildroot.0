@@ -1,51 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F59AC3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:04:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B1A4C2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:04:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 71AE36151D;
-	Mon, 19 May 2025 11:04:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4DA7C84890;
+	Mon, 19 May 2025 11:04:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tCmVDJiVOznZ; Mon, 19 May 2025 11:04:02 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QM4NZZlVnIN2; Mon, 19 May 2025 11:04:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F141471095
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7A28684902
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F141471095;
-	Mon, 19 May 2025 11:04:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7A28684902;
+	Mon, 19 May 2025 11:04:04 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 28E98E4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:48:37 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 3943EE4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:48:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5C49941E32
+ by smtp4.osuosl.org (Postfix) with ESMTP id 73AD040DA9
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yTYLuc8928c3 for <buildroot@buildroot.org>;
+ id ycEGVYzyYnGC for <buildroot@buildroot.org>;
  Mon, 19 May 2025 10:40:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 48EA840DA9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4EDFD41E69
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 48EA840DA9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4EDFD41E69
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4331C83BC0; Mon, 19 May 2025 10:40:08 +0000 (UTC)
+ id 4C62981E90; Mon, 19 May 2025 10:40:08 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 17 May 2025 17:01:42 +0200
+Date: Sat, 17 May 2025 17:06:32 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 236363b12562b3aa2cd0ab30861870c4c7e8345b
-X-Git-Newrev: dad998a8070bc07838f78453fcb7906fefab22ba
+X-Git-Oldrev: dad998a8070bc07838f78453fcb7906fefab22ba
+X-Git-Newrev: 2722a8ad73c9bd84e69fafcd84e0ab7940f1e6cb
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104008.4331C83BC0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/lpac: new package
+Message-Id: <20250519104008.4C62981E90@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libubootenv: fix cmake
+ 4 compatibility
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -57,131 +59,82 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dad998a8070bc07838f78453fcb7906fefab22ba
+commit: https://git.buildroot.net/buildroot/commit/?id=2722a8ad73c9bd84e69fafcd84e0ab7940f1e6cb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS             |  1 +
- package/Config.in      |  1 +
- package/lpac/Config.in | 16 ++++++++++++++++
- package/lpac/lpac.hash |  5 +++++
- package/lpac/lpac.mk   | 41 +++++++++++++++++++++++++++++++++++++++++
- 5 files changed, 64 insertions(+)
+Add a patch fixing cmake 4 compatibility.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 2e472d4838..7bc7385586 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3504,6 +3504,7 @@ F:	package/libuci/
- F:	package/libxmlb/
- F:	package/linux-firmware/
- F:	package/linux-serial-test/
-+F:	package/lpac/
- F:	package/modem-manager/
- F:	package/ncftp/
- F:	package/nftables/
-diff --git a/package/Config.in b/package/Config.in
-index 68da6f9f62..d09cfe066a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2559,6 +2559,7 @@ endif
- 	source "package/linux-zigbee/Config.in"
- 	source "package/linuxptp/Config.in"
- 	source "package/lldpd/Config.in"
-+	source "package/lpac/Config.in"
- 	source "package/lrzsz/Config.in"
- 	source "package/lynx/Config.in"
- 	source "package/macchanger/Config.in"
-diff --git a/package/lpac/Config.in b/package/lpac/Config.in
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ ...0002-Update-cmake_minimum_required-to-3.5.patch | 53 ++++++++++++++++++++++
+ 1 file changed, 53 insertions(+)
+
+diff --git a/package/libubootenv/0002-Update-cmake_minimum_required-to-3.5.patch b/package/libubootenv/0002-Update-cmake_minimum_required-to-3.5.patch
 new file mode 100644
-index 0000000000..6cfe11cc67
+index 0000000000..531623bc53
 --- /dev/null
-+++ b/package/lpac/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_LPAC
-+	bool "lpac"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # pcsc-lite
-+	depends on BR2_USE_MMU # pcsc-lite
-+	depends on !BR2_STATIC_LIBS # pcsc-lite
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pcsc-lite
-+	select BR2_PACKAGE_PCSC_LITE
-+	help
-+	  C-based eUICC LPA.
++++ b/package/libubootenv/0002-Update-cmake_minimum_required-to-3.5.patch
+@@ -0,0 +1,53 @@
++From 87581f45d442903af8a9f331b11052bdd836c7f6 Mon Sep 17 00:00:00 2001
++From: James Hilliard <james.hilliard1@gmail.com>
++Date: Wed, 14 May 2025 14:03:38 -0600
++Subject: [PATCH] Update cmake_minimum_required to 3.5
 +
-+	  https://github.com/estkme-group/lpac
++This supports compilation with cmake-4.0.0.
 +
-+comment "lpac needs a toolchain w/ threads, dynamic library, gcc >= 4.9"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-diff --git a/package/lpac/lpac.hash b/package/lpac/lpac.hash
-new file mode 100644
-index 0000000000..bf93ef245f
---- /dev/null
-+++ b/package/lpac/lpac.hash
-@@ -0,0 +1,5 @@
-+# Locally computed:
-+sha256  3d87080a625b10430eebb82f89e2d24e16a84a8435a9c40b3718fd88c82028ba  lpac-2.2.1.tar.gz
-+sha256  8486a10c4393cee1c25392769ddd3b2d6c242d6ec7928e1414efff7dfb2f07ef  src/LICENSE
-+sha256  b673293d21e887eaa9b971696b33f0f9141839900c65c83e560afa469d291ba6  euicc/LICENSE
-+sha256  163766832b15cc9c90d593216360c67af579b8b36932b297fca2aeb61544de2f  cjson/LICENSE
-diff --git a/package/lpac/lpac.mk b/package/lpac/lpac.mk
-new file mode 100644
-index 0000000000..36cd4d591d
---- /dev/null
-+++ b/package/lpac/lpac.mk
-@@ -0,0 +1,41 @@
-+################################################################################
-+#
-+# lpac
-+#
-+################################################################################
++Fixes:
++CMake Error at CMakeLists.txt:5 (cmake_minimum_required):
++  Compatibility with CMake < 3.5 has been removed from CMake.
 +
-+LPAC_VERSION = 2.2.1
-+LPAC_SITE = $(call github,estkme-group,lpac,v$(LPAC_VERSION))
-+LPAC_LICENSE = LGPL-2.1+ (library), AGPL-3.0 (programs), MIT (cjson)
-+LPAC_LICENSE_FILES = src/LICENSE euicc/LICENSE cjson/LICENSE
-+LPAC_DEPENDENCIES = pcsc-lite
++  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
++  to tell CMake that the project requires at least <min> but has been updated
++  to work with policies introduced by <max> or earlier.
 +
-+ifeq ($(BR2_PACKAGE_LIBCURL),y)
-+LPAC_DEPENDENCIES += libcurl
-+LPAC_CONF_OPTS += -DLPAC_WITH_HTTP_CURL=ON
-+else
-+LPAC_CONF_OPTS += -DLPAC_WITH_HTTP_CURL=OFF
-+endif
++  Or, add -DCMAKE_POLICY_VERSION_MINIMUM=3.5 to try configuring anyway.
 +
-+ifeq ($(BR2_PACKAGE_LIBQMI),y)
-+LPAC_DEPENDENCIES += libqmi
-+LPAC_CONF_OPTS += -DLPAC_WITH_APDU_QMI=ON
-+else
-+LPAC_CONF_OPTS += -DLPAC_WITH_APDU_QMI=OFF
-+endif
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++Upstream: https://patchwork.ozlabs.org/project/swupdate/patch/20250514201740.686772-1-james.hilliard1@gmail.com/
++---
++ CMakeLists.txt     | 2 +-
++ src/CMakeLists.txt | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
 +
-+ifeq ($(BR2_PACKAGE_LIBQRTR_GLIB),y)
-+LPAC_DEPENDENCIES += libqmi libqrtr-glib
-+LPAC_CONF_OPTS += -DLPAC_WITH_APDU_QMI_QRTR=ON
-+else
-+LPAC_CONF_OPTS += -DLPAC_WITH_APDU_QMI_QRTR=OFF
-+endif
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 796d7bc..0a11730 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -2,7 +2,7 @@
++ #
++ # SPDX-License-Identifier:     LGPL-2.1-or-later
++ 
++-cmake_minimum_required (VERSION 2.6)
+++cmake_minimum_required (VERSION 3.5)
++ project (libubootenv C)
++ 
++ # The version number.
++diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
++index c56d0c7..3370232 100644
++--- a/src/CMakeLists.txt
+++++ b/src/CMakeLists.txt
++@@ -1,7 +1,7 @@
++ # SPDX-FileCopyrightText: 2019-2021 Stefano Babic <stefano.babic@swupdate.org>
++ #
++ # SPDX-License-Identifier:     LGPL-2.1-or-later
++-cmake_minimum_required (VERSION 2.6)
+++cmake_minimum_required (VERSION 3.5)
++ # Sources and private headers
++ SET(libubootenv_SOURCES
++   uboot_env.c
++-- 
++2.34.1
 +
-+ifeq ($(BR2_PACKAGE_LIBMBIM),y)
-+LPAC_DEPENDENCIES += libmbim
-+LPAC_CONF_OPTS += -DLPAC_WITH_APDU_MBIM=ON
-+else
-+LPAC_CONF_OPTS += -DLPAC_WITH_APDU_MBIM=OFF
-+endif
-+
-+$(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
