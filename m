@@ -4,48 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1BC3C54754
-	for <buildroot@archiver.kernel.org>; Sat, 17 May 2025 09:30:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A291EC2D0CD
+	for <buildroot@archiver.kernel.org>; Sat, 17 May 2025 09:31:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E73F083DA3;
-	Sat, 17 May 2025 09:30:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7538F83D39;
+	Sat, 17 May 2025 09:31:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lh242LtpDCcV; Sat, 17 May 2025 09:30:48 +0000 (UTC)
+ id ZB29s70cnRMX; Sat, 17 May 2025 09:31:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ACF0983DC4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA4EA83D1D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ACF0983DC4;
-	Sat, 17 May 2025 09:30:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AA4EA83D1D;
+	Sat, 17 May 2025 09:31:25 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 6F9A11DE
- for <buildroot@buildroot.org>; Sat, 17 May 2025 09:30:41 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 40F26E4
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 09:31:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9F50183CE5
- for <buildroot@buildroot.org>; Sat, 17 May 2025 09:30:40 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2711983D37
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 09:31:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id r6WqUJv8o8GV for <buildroot@buildroot.org>;
- Sat, 17 May 2025 09:30:39 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id hlTP_zH0WgVB for <buildroot@buildroot.org>;
+ Sat, 17 May 2025 09:31:23 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
+ helo=relay4-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C406883D48
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C406883D48
- for <buildroot@buildroot.org>; Sat, 17 May 2025 09:30:39 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BF8BE86E18; Sat, 17 May 2025 09:30:39 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 17 May 2025 11:30:16 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2ad082971a4be9a7ba84336385b44e70908df946
-X-Git-Newrev: eeb49a1f1f970fcd06c120c183315688be2629ea
-X-Patchwork-Hint: ignore
-Message-Id: <20250517093039.BF8BE86E18@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libnetconf2: bump to version 3.7.1
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 92D6683CE5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 92D6683CE5
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 92D6683CE5
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 09:31:22 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E156143349;
+ Sat, 17 May 2025 09:31:17 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1uGDsz-00COoE-1I;
+ Sat, 17 May 2025 11:31:17 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Cc: stefan.nickl@gmail.com
+References: <20250516211429.763211-1-arnout@rnout.be>
+ <87frh42ppz.fsf@dell.be.48ers.dk>
+Date: Sat, 17 May 2025 11:31:17 +0200
+In-Reply-To: <87frh42ppz.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Fri, 16 May 2025 23:46:48 +0200")
+Message-ID: <87plg7fusa.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefudehvdejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufhfffgjkfgfgggtsehttddttddtredtnecuhfhrohhmpefrvghtvghrucfmohhrshhgrggrrhguuceophgvthgvrheskhhorhhsghgrrghrugdrtghomheqnecuggftrfgrthhtvghrnheptefgleevffevhedtveegfeejieduudeltdffheeggfelkeetkeetuddthfelieeunecukfhppedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumeejiegukeemfegvfhhfmehfvggsfeemgegssgehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeekgedvrgemgeehrggtmeelgedtudemjeeiugekmeefvghffhemfhgvsgefmeegsggshedphhgvlhhopeguvghllhdrsggvrdegkegvrhhsrdgukhdpmhgrihhlfhhrohhmpehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmpdhnsggprhgtphhtthhopedvpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehsthgvfhgrnhdrnhhitghklhesghhmrghilhdrtghomh
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH] docs/manual/adding-packages-tips.adoc: add
+ section about private repositories
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -57,174 +74,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8754219322207033027=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8754219322207033027==
-Content-Type: text/plain
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eeb49a1f1f970fcd06c120c183315688be2629ea
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Arnout" == Arnout Vandecappelle via buildroot <buildroot@buildroot.org> writes:
+ >> Buildroot packaging pretty much assumes that the sources it downloads
+ >> are publicly available. In general, however, Buildroot is also used to
+ >> download sources from private repositories. Nowadays, that mostly means
+ >> from a github or gitlab instance.
 
-Changelog:
-  error-path data node
-  now using proper format so in rpc-reply uses XML XPath format instead of JSON
-  several bugfixes and improvements
+ >> Although git-over-ssh can be used for that, this poses a problem for CI,
+ >> because the CI runners integrated with github and gitlab only have
+ >> access to the repository itself, not to other private repositories. And
+ >> creating ssh keypairs for CI runners is tricky.
 
-Depends on libyang v3.12.2:
+ >> Therefore, document how standard tools can be used to make private
+ >> repositories available both to developers and to CI. There are quite a
+ >> few alternative approaches possible, but they're more complicated or
+ >> less generically applicable.
 
-  https://github.com/CESNET/libyang/releases/tag/v3.12.2
+ >> Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 
-As part of this version bump, the ENABLE_SSH and ENABLE_TLS options
-have been dropped by upstream in favor of a single ENABLE_SSH_TLS
-option, which requires openssl or mbedtls, libcurl and libssh. Since
-this is getting quite complicated to handle as an implicit optional
-dependency, we make this explicit with a new sub-option
-BR2_PACKAGE_LIBNETCONF2_SSH_TLS that ensures everything needed is
-enabled.
+Committed after fixing the insteadOf example, a few typos and I also
+capitalized SSH/HTTPS for consistency with CI - Thanks.
 
-In theory, libnetconf2 can use either mbedtls or openssl for crypto,
-but netopeer2 will only work if OpenSSL is used, so we only allow
-using OpenSSL until that gets fixed upstream.
-
-The netopeer2 package, which needs SSH/TLS support in libnetconf2 is
-updated accordingly (and actually becomes simpler).
-
-Signed-off-by: Mattias Walström <lazzer@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libnetconf2/Config.in        | 18 ++++++++++++++++++
- package/libnetconf2/libnetconf2.hash |  2 +-
- package/libnetconf2/libnetconf2.mk   | 21 +++++++++------------
- package/netopeer2/Config.in          |  8 +++-----
- 4 files changed, 31 insertions(+), 18 deletions(-)
-
-diff --git a/package/libnetconf2/Config.in b/package/libnetconf2/Config.in
-index 1763243120..59e021375d 100644
---- a/package/libnetconf2/Config.in
-+++ b/package/libnetconf2/Config.in
-@@ -12,6 +12,24 @@ config BR2_PACKAGE_LIBNETCONF2
- 
- 	  https://github.com/CESNET/libnetconf2
- 
-+if BR2_PACKAGE_LIBNETCONF2
-+
-+config BR2_PACKAGE_LIBNETCONF2_SSH_TLS
-+	bool "SSH/TLS support"
-+	depends on BR2_USE_MMU # libssh
-+	depends on !BR2_STATIC_LIBS # libssh
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libssh
-+	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_MBEDTLS
-+	select BR2_PACKAGE_LIBCURL
-+	select BR2_PACKAGE_LIBSSH
-+	select BR2_PACKAGE_LIBSSH_SERVER
-+
-+comment "SSH/TLS support needs a toolchain w/ threads, dynamic library"
-+	depends on BR2_USE_MMU
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
-+
-+endif
-+
- comment "libnetconf2 needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-diff --git a/package/libnetconf2/libnetconf2.hash b/package/libnetconf2/libnetconf2.hash
-index 675c76a500..2d6394e81b 100644
---- a/package/libnetconf2/libnetconf2.hash
-+++ b/package/libnetconf2/libnetconf2.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  72e9a6461fadbd22f0cf0d23ba68d62b297c8f564f7f2bee069748fb67fc3a24  libnetconf2-2.1.28.tar.gz
-+sha256  c95c00ad887295d1fa31098c859c74e330eead78b2eee8d008701af2d9df80e5  libnetconf2-3.7.1.tar.gz
- sha256  bd962ab457c8a8cb8faaaa36c11484680f3c9a47dbc336507817ae8935384064  LICENSE
-diff --git a/package/libnetconf2/libnetconf2.mk b/package/libnetconf2/libnetconf2.mk
-index 88163926c0..79d8419a11 100644
---- a/package/libnetconf2/libnetconf2.mk
-+++ b/package/libnetconf2/libnetconf2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBNETCONF2_VERSION = 2.1.28
-+LIBNETCONF2_VERSION = 3.7.1
- LIBNETCONF2_SITE = $(call github,CESNET,libnetconf2,v$(LIBNETCONF2_VERSION))
- LIBNETCONF2_INSTALL_STAGING = YES
- LIBNETCONF2_LICENSE = BSD-3-Clause
-@@ -16,18 +16,16 @@ LIBNETCONF2_CONF_OPTS = \
- 	-DENABLE_TESTS=OFF \
- 	-DENABLE_VALGRIND_TESTS=OFF
- 
--ifeq ($(BR2_PACKAGE_LIBSSH_SERVER), y)
--LIBNETCONF2_CONF_OPTS += -DENABLE_SSH=ON
--LIBNETCONF2_DEPENDENCIES += libssh
-+ifeq ($(BR2_PACKAGE_LIBNETCONF2_SSH_TLS),y)
-+LIBNETCONF2_CONF_OPTS += -DENABLE_SSH_TLS=ON
-+LIBNETCONF2_DEPENDENCIES += libcurl libssh
-+ifeq ($(BR2_PACKAGE_MBEDTLS),y)
-+LIBNETCONF2_DEPENDENCIES += mbedtls
- else
--LIBNETCONF2_CONF_OPTS += -DENABLE_SSH=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_LIBOPENSSL), y)
--LIBNETCONF2_CONF_OPTS += -DENABLE_TLS=ON
- LIBNETCONF2_DEPENDENCIES += openssl
-+endif
- else
--LIBNETCONF2_CONF_OPTS += -DENABLE_TLS=OFF
-+LIBNETCONF2_CONF_OPTS += -DENABLE_SSH_TLS=OFF
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBXCRYPT),y)
-@@ -37,8 +35,7 @@ endif
- HOST_LIBNETCONF2_CONF_OPTS = \
- 	-DENABLE_TESTS=OFF \
- 	-DENABLE_VALGRIND_TESTS=OFF \
--	-DENABLE_SSH=OFF \
--	-DENABLE_TLS=OFF
-+	-DENABLE_SSH_TLS=OFF
- 
- $(eval $(cmake-package))
- $(eval $(host-cmake-package))
-diff --git a/package/netopeer2/Config.in b/package/netopeer2/Config.in
-index db31a786a1..1e4248fa91 100644
---- a/package/netopeer2/Config.in
-+++ b/package/netopeer2/Config.in
-@@ -6,17 +6,15 @@ comment "netopeer2 needs a toolchain w/ gcc >= 4.8, C++, threads, dynamic librar
- 
- config BR2_PACKAGE_NETOPEER2
- 	bool "netopeer2"
--	depends on BR2_USE_MMU # libnetconf2, libssh, sysrepo
-+	depends on BR2_USE_MMU # libnetconf2, sysrepo
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libyang
--	depends on !BR2_STATIC_LIBS # libnetconf2, libssh, libyang, sysrepo
-+	depends on !BR2_STATIC_LIBS # libnetconf2, libyang, sysrepo
- 	depends on BR2_INSTALL_LIBSTDCPP # sysrepo
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # sysrepo
- 	select BR2_PACKAGE_LIBNETCONF2
--	select BR2_PACKAGE_LIBSSH
--	select BR2_PACKAGE_LIBSSH_SERVER # For libnetconf2 to have SSH
-+	select BR2_PACKAGE_LIBNETCONF2_SSH_TLS
- 	select BR2_PACKAGE_LIBYANG
--	select BR2_PACKAGE_OPENSSL # For libnetconf2 to have TLS
- 	select BR2_PACKAGE_SYSREPO
- 	help
- 	  Netopeer2 is a set of tools implementing network configuration
-
---===============8754219322207033027==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8754219322207033027==--
