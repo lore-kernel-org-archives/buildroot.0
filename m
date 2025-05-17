@@ -1,70 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A02AC2D0CD
-	for <buildroot@archiver.kernel.org>; Sat, 17 May 2025 15:32:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81723C3ABDD
+	for <buildroot@archiver.kernel.org>; Sat, 17 May 2025 15:33:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BC3E860DED;
-	Sat, 17 May 2025 15:32:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4DBC740B3C;
+	Sat, 17 May 2025 15:33:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id X0p2G9mFDAJq; Sat, 17 May 2025 15:32:57 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OJ76hNf8sXcn; Sat, 17 May 2025 15:33:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E091E60DCA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 873CA40B40
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E091E60DCA;
-	Sat, 17 May 2025 15:32:56 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0E0D1223
- for <buildroot@buildroot.org>; Sat, 17 May 2025 15:32:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 873CA40B40;
+	Sat, 17 May 2025 15:33:44 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5B6391DE
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 15:33:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0B1F881EA5
- for <buildroot@buildroot.org>; Sat, 17 May 2025 15:32:56 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3EF4140B40
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 15:33:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AIEvV3LaYmz0 for <buildroot@buildroot.org>;
- Sat, 17 May 2025 15:32:55 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
- helo=relay6-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iypYnDQNZYu6 for <buildroot@buildroot.org>;
+ Sat, 17 May 2025 15:33:42 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5C68B81E96
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5C68B81E96
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5C68B81E96
- for <buildroot@buildroot.org>; Sat, 17 May 2025 15:32:53 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9B77241C7D;
- Sat, 17 May 2025 15:32:50 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1uGJWr-00Dh8l-1v;
- Sat, 17 May 2025 17:32:49 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F05040B3C
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9F05040B3C
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 15:33:42 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8919B86F8A; Sat, 17 May 2025 15:33:42 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Felicitas Pojtinger <felicitas@pojtinger.com>
-Cc: buildroot@buildroot.org,  Christian Stewart <christian@aperture.us>,
- Thomas Perale <thomas.perale@mind.be>,  Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>
-References: <87cyc8c1gi.fsf@dell.be.48ers.dk>
- <20250516225859.1280601-3-felicitas@pojtinger.com>
-Date: Sat, 17 May 2025 17:32:49 +0200
-In-Reply-To: <20250516225859.1280601-3-felicitas@pojtinger.com> (Felicitas
- Pojtinger's message of "Fri, 16 May 2025 15:58:21 -0700")
-Message-ID: <871psnfe1q.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefudehleelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufhfffgjkfgfgggtsehttddttddtredtnecuhfhrohhmpefrvghtvghrucfmohhrshhgrggrrhguuceophgvthgvrheskhhorhhsghgrrghrugdrtghomheqnecuggftrfgrthhtvghrnhepkeegffdtieevkeejheevteeludetveeffedutedvkeefjeehiedtvdfhkeffueetnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucfkphepvdgrtddvmeekgedvrgemgeehrggtmeelgedtudemjeeiugekmeefvghffhemfhgvsgefmeegsggsheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumeejiegukeemfegvfhhfmehfvggsfeemgegssgehpdhhvghlohepuggvlhhlrdgsvgdrgeekvghrshdrughkpdhmrghilhhfrhhomhepphgvthgvrheskhhorhhsghgrrghrugdrtghomhdpnhgspghrtghpthhtohephedprhgtphhtthhopehfvghlihgtihhtrghssehpohhjthhinhhgvghrrdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopegthhhrihhsthhirghnsegrphgvr
- hhtuhhrvgdruhhspdhrtghpthhtohepthhhohhmrghsrdhpvghrrghlvgesmhhinhgurdgsvgdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomh
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 2/5] package/go: fix builds on GCC 15
+To: buildroot@buildroot.org
+Date: Sat, 17 May 2025 17:33:18 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d0a7a468130bcae54d40a6e9f3c7c72664803324
+X-Git-Newrev: a2356a9e0a1a6d24c11bb74dd8ca3136c5c1c6cb
+X-Patchwork-Hint: ignore
+Message-Id: <20250517153342.8919B86F8A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/go-bootstrap-stage1: fix builds on
+ GCC 15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,47 +59,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Felicitas" == Felicitas Pojtinger <felicitas@pojtinger.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=a2356a9e0a1a6d24c11bb74dd8ca3136c5c1c6cb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Felicitas Pojtinger <felicitas@pojtinger.com>
+GCC 15 defaults to -std=gnu23, which adds the bool keyword, causing
+conflicts with stage1:
 
-Committed after changing it to use -std=gnu99 and extending the commit
-message to explain what the issue is, thanks.
+https://gcc.gnu.org/gcc-15/porting_to.html#c23-new-keywords
 
-> ---
- >  package/go/go-bootstrap-stage1/go-bootstrap-stage1.mk | 3 ++-
- >  1 file changed, 2 insertions(+), 1 deletion(-)
+As a workaround, force the build to use -std=gnu99 mode.
 
- > diff --git a/package/go/go-bootstrap-stage1/go-bootstrap-stage1.mk b/package/go/go-bootstrap-stage1/go-bootstrap-stage1.mk
- > index 3e4ee574329..3d536a35596 100644
- > --- a/package/go/go-bootstrap-stage1/go-bootstrap-stage1.mk
- > +++ b/package/go/go-bootstrap-stage1/go-bootstrap-stage1.mk
- > @@ -17,12 +17,13 @@ HOST_GO_BOOTSTRAP_STAGE1_ROOT = $(HOST_DIR)/lib/go-$(GO_BOOTSTRAP_STAGE1_VERSION
+Signed-off-by: Felicitas Pojtinger <felicitas@pojtinger.com>
+[Peter: extend commit message]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/go/go-bootstrap-stage1/go-bootstrap-stage1.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/go/go-bootstrap-stage1/go-bootstrap-stage1.mk b/package/go/go-bootstrap-stage1/go-bootstrap-stage1.mk
+index 3e4ee57432..83cb278f68 100644
+--- a/package/go/go-bootstrap-stage1/go-bootstrap-stage1.mk
++++ b/package/go/go-bootstrap-stage1/go-bootstrap-stage1.mk
+@@ -17,12 +17,13 @@ HOST_GO_BOOTSTRAP_STAGE1_ROOT = $(HOST_DIR)/lib/go-$(GO_BOOTSTRAP_STAGE1_VERSION
  
- >  # The go build system is not compatible with ccache, so use
- >  # HOSTCC_NOCCACHE. See https://github.com/golang/go/issues/11685.
- > +# CFLAGS and GO_CCFLAGS have no effect, so overwrite CC directly.
- >  HOST_GO_BOOTSTRAP_STAGE1_MAKE_ENV = \
- >  	GOOS=linux \
- >  	GOROOT_FINAL="$(HOST_GO_BOOTSTRAP_STAGE1_ROOT)" \
- >  	GOROOT="$(@D)" \
- >  	GOBIN="$(@D)/bin" \
- > -	CC=$(HOSTCC_NOCCACHE) \
- > +	CC="$(HOSTCC_NOCCACHE) -std=gnu17" \
- >  	CGO_ENABLED=0
+ # The go build system is not compatible with ccache, so use
+ # HOSTCC_NOCCACHE. See https://github.com/golang/go/issues/11685.
++# CFLAGS and GO_CCFLAGS have no effect, so overwrite CC directly.
+ HOST_GO_BOOTSTRAP_STAGE1_MAKE_ENV = \
+ 	GOOS=linux \
+ 	GOROOT_FINAL="$(HOST_GO_BOOTSTRAP_STAGE1_ROOT)" \
+ 	GOROOT="$(@D)" \
+ 	GOBIN="$(@D)/bin" \
+-	CC=$(HOSTCC_NOCCACHE) \
++	CC="$(HOSTCC_NOCCACHE) -std=gnu99" \
+ 	CGO_ENABLED=0
  
- >  define HOST_GO_BOOTSTRAP_STAGE1_BUILD_CMDS
- > -- 
- > 2.49.0
-
-
--- 
-Bye, Peter Korsgaard
+ define HOST_GO_BOOTSTRAP_STAGE1_BUILD_CMDS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
