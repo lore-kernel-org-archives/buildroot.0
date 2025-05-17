@@ -4,49 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B4E7C3ABDA
-	for <buildroot@archiver.kernel.org>; Sat, 17 May 2025 09:39:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E700C3ABDA
+	for <buildroot@archiver.kernel.org>; Sat, 17 May 2025 09:39:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B07A04151A;
-	Sat, 17 May 2025 09:39:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 28973405A6;
+	Sat, 17 May 2025 09:39:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1fymh31cl_Oc; Sat, 17 May 2025 09:39:03 +0000 (UTC)
+ id QBTaddKNvi_E; Sat, 17 May 2025 09:39:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F4C44169C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5849F405DB
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9F4C44169C;
-	Sat, 17 May 2025 09:39:03 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 8C69DE4
- for <buildroot@buildroot.org>; Sat, 17 May 2025 09:38:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5849F405DB;
+	Sat, 17 May 2025 09:39:35 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id B3A91E4
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 09:39:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 88C01414D6
- for <buildroot@buildroot.org>; Sat, 17 May 2025 09:38:57 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 98E6F60A55
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 09:39:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6FVoLQPW6Oh1 for <buildroot@buildroot.org>;
- Sat, 17 May 2025 09:38:56 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 26D8B4151A
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 26D8B4151A
- for <buildroot@buildroot.org>; Sat, 17 May 2025 09:38:56 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1384686E54; Sat, 17 May 2025 09:38:56 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ing3LJZE3tRE for <buildroot@buildroot.org>;
+ Sat, 17 May 2025 09:39:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 39D766066C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 39D766066C
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 39D766066C
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 09:39:31 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a0433.dip0.t-ipconnect.de [91.58.4.51])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 9D407A4C16C2;
+ Sat, 17 May 2025 11:39:28 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:34098)
+ by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
+ (envelope-from <bernd@kuhls.net>) id 1uGE0u-000000007lZ-1MD9;
+ Sat, 17 May 2025 09:39:27 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 17 May 2025 11:38:19 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fe783b16b362e4d739ad8583ad6c5c02d626f13a
-X-Git-Newrev: 32df543fa3c61c922296d79b9304d6cb730f93b2
-X-Patchwork-Hint: ignore
-Message-Id: <20250517093856.1384686E54@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ffmpeg: bump to latest commit in
- 6.1.x branch
+Cc: Akhilesh Nema <nemaakhilesh@gmail.com>
+Date: Sat, 17 May 2025 11:39:25 +0200
+Message-Id: <20250517093925.359219-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.5
+MIME-Version: 1.0
+X-Spamd-Bar: +
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202412041019; t=1747474768;
+ bh=WNdq4MYGF38g0iKQx3FZvgMAcqetOgUFWYUQ2UfQdxY=;
+ h=From:To:Cc:Subject:Date:From;
+ b=hS4Z0EtK7RZdMuTcD6Okcu0ENOCSUFFTZk2nm5qQctmARGaD3iswOBUMhcWdu5RcI
+ /n10Mnu9rNF7JOpTcbQM05w18IneHHdW2GTlkEqjLpsn/UQJmULlREP55EnUpO4k7Q
+ u0t2OQXQ0fl8HQXFVh9SjQFyPIN0Uzf6lml9cE2lMzNQ4DZMYGq1U1x+1TMkBEbPBq
+ MBl4/Alf/njkqvCzKM9Wy0fN7ZwSE7eLuYGsFfcWwnPPu6OzPI4u5dB6ulaiYB7lMr
+ LVDvQbvrtg386kv1786c9rBaxP+QmvkS3ucNebvkpLlfkA0Kk/NF8nP6HsurgiD6eL
+ qxxfxCVeGgUJw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202412041019 header.b=hS4Z0EtK
+Subject: [Buildroot] [PATCH v2 1/1] package/ncurses: bump to version
+ 6.5.20250510
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,174 +82,86 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4064643443114070099=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4064643443114070099==
-Content-Type: text/plain
+From: Akhilesh Nema <nemaakhilesh@gmail.com>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=32df543fa3c61c922296d79b9304d6cb730f93b2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Release notes:
+https://github.com/ThomasDickey/ncurses-snapshots/blob/v6_5_20250510/NEWS
 
-Version 6.1.2 of ffmpeg fails to build with GCC 14.x due to the V4L2
-ioctl code:
+- Drop upstream patch - 0001-fix-XOPEN_SOURCE-detection.patch
+- COPYING hash changed due to Copyright year update.
 
-libavdevice/v4l2.c:137:17: error: assignment to ‘int (*)(int,  long unsigned int, ...)’ from incompatible pointer type ‘int (*)(int,  int, ...)’ [-W
-incompatible-pointer-types]
-  137 |     s->ioctl_f  = prefix ## ioctl;      \
-      |                 ^
-libavdevice/v4l2.c:151:9: note: in expansion of macro ‘SET_WRAPPERS’
-  151 |         SET_WRAPPERS();
-      |         ^~~~~~~~~~~~
-
-This has been fixed upstream in the release/6.1 branch, which has 27
-fixes on top of 6.1.2. The commits necessary to fix our issue are:
-
-f71076c009f84917e7a0f2f1ece86b718de2d8d3 configure: improve check for POSIX ioctl
-60593d6c06c9b610359bd6af26a268feff1293eb configure: restore autodetection of v4l2 and fbdev
-
-However, since all other commits are fixes, we believe bumping to the
-latest commit in the release/6.1 branch is a better idea.
-
-This allows to drop
-0008-libavcodec-arm-mlpdsp_armv5te-fix-label-format-to-wo.patch, which
-is upstream as of:
-
-4c688845a50f7dce3af9afebe60f0f7a493c4f07 libavcodec/arm/mlpdsp_armv5te: fix label format to work with binutils 2.43
-
-Note that we set FFMPEG_CPE_ID_VERSION to get proper CVE matching even
-with FFMPEG_VERSION being set to n6.1.2-27-ge16ff06adb. One who have
-ideally set FFMPEG_VERSION to n$(FFMPEG_CPE_ID_VERSION)-ge16ff06adb,
-but that makes check-package unhappy with:
-
-WARNING: package/ffmpeg/ffmpeg.mk:7: expecting package version to be set before CPE_ID_VERSION
-
-Fixes:
-
-  https://autobuild.buildroot.net/results/fe1574443acd50ca7e576bb4beb24467be1713e3/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- ...arm-mlpdsp_armv5te-fix-label-format-to-wo.patch | 63 ----------------------
- package/ffmpeg/ffmpeg.hash                         |  2 +-
- package/ffmpeg/ffmpeg.mk                           |  8 +--
- 3 files changed, 6 insertions(+), 67 deletions(-)
+v2: Bernd: bumped to 6.5.20250510
+    This bump fixes the build of gdb-16.3 with gcc-15
+    Build-tested using the defconfig from
+    https://patchwork.ozlabs.org/project/buildroot/patch/20250120052252.3702-1-nemaakhilesh@gmail.com/#3447368
 
-diff --git a/package/ffmpeg/0008-libavcodec-arm-mlpdsp_armv5te-fix-label-format-to-wo.patch b/package/ffmpeg/0008-libavcodec-arm-mlpdsp_armv5te-fix-label-format-to-wo.patch
+ .../0001-fix-XOPEN_SOURCE-detection.patch       | 17 -----------------
+ package/ncurses/ncurses.hash                    |  4 ++--
+ package/ncurses/ncurses.mk                      |  4 ++--
+ 3 files changed, 4 insertions(+), 21 deletions(-)
+ delete mode 100644 package/ncurses/0001-fix-XOPEN_SOURCE-detection.patch
+
+diff --git a/package/ncurses/0001-fix-XOPEN_SOURCE-detection.patch b/package/ncurses/0001-fix-XOPEN_SOURCE-detection.patch
 deleted file mode 100644
-index 178ffbc33b..0000000000
---- a/package/ffmpeg/0008-libavcodec-arm-mlpdsp_armv5te-fix-label-format-to-wo.patch
+index 130ef524b4..0000000000
+--- a/package/ncurses/0001-fix-XOPEN_SOURCE-detection.patch
 +++ /dev/null
-@@ -1,63 +0,0 @@
--From 4c688845a50f7dce3af9afebe60f0f7a493c4f07 Mon Sep 17 00:00:00 2001
--From: Ross Burton <ross.burton@arm.com>
--Date: Fri, 9 Aug 2024 11:32:00 +0100
--Subject: [PATCH] libavcodec/arm/mlpdsp_armv5te: fix label format to work with
-- binutils 2.43
--MIME-Version: 1.0
--Content-Type: text/plain; charset=utf8
--Content-Transfer-Encoding: 8bit
+@@ -1,17 +0,0 @@
+-Fix detection of XOPEN_SOURCE
 -
--binutils 2.43 has stricter validation for labels[1] and results in errors
--when building ffmpeg for armv5:
+-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+-Upstream: fixed in latest release, no git/svn/hg
 -
--src/libavcodec/arm/mlpdsp_armv5te.S:232: Error: junk at end of line, first unrecognized character is `0'
--
--Remove the leading zero in the "01" label to resolve this error.
--
--[1] https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=226749d5a6ff0d5c607d6428d6c81e1e7e7a994b
--
--Signed-off-by: Ross Burton <ross.burton@arm.com>
--Signed-off-by: Martin StorsjÃ¶ <martin@martin.st>
--(cherry picked from commit 654bd47716c4f36719fb0f3f7fd8386d5ed0b916)
--
--Upstream: http://git.videolan.org/?p=ffmpeg.git;a=commit;h=4c688845a50f7dce3af9afebe60f0f7a493c4f07
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- libavcodec/arm/mlpdsp_armv5te.S | 6 +++---
-- 1 file changed, 3 insertions(+), 3 deletions(-)
--
--diff --git a/libavcodec/arm/mlpdsp_armv5te.S b/libavcodec/arm/mlpdsp_armv5te.S
--index 4f9aa485fd..d31568611c 100644
----- a/libavcodec/arm/mlpdsp_armv5te.S
--+++ b/libavcodec/arm/mlpdsp_armv5te.S
--@@ -229,7 +229,7 @@ A .endif
--   .endif
+-diff -Nur ncurses-snapshots-6_4_20230603.orig/configure ncurses-snapshots-6_4_20230603/configure
+---- ncurses-snapshots-6_4_20230603.orig/configure	2023-06-04 00:07:40.000000000 +0200
+-+++ ncurses-snapshots-6_4_20230603/configure	2024-08-14 20:38:03.426905460 +0200
+-@@ -10411,7 +10411,7 @@
+- 	cf_xopen_source="-D_SGI_SOURCE"
+- 	cf_XOPEN_SOURCE=
+- 	;;
+--(linux*gnu|linux*gnuabi64|linux*gnuabin32|linux*gnueabi|linux*gnueabihf|linux*gnux32|uclinux*|gnu*|mint*|k*bsd*-gnu|cygwin|msys|mingw*)
+-+(linux*gnu|linux*gnuabi64|linux*gnuabin32|linux*gnueabi|linux*gnueabihf|linux*gnux32|uclinux*|gnu*|mint*|k*bsd*-gnu|cygwin|msys|mingw*|linux*uclibc)
 - 
--         // Begin loop
---01:
--+1:
--   .if TOTAL_TAPS == 0
--         // Things simplify a lot in this case
--         // In fact this could be pipelined further if it's worth it...
--@@ -241,7 +241,7 @@ A .endif
--         str     ST0, [PST, #-4]!
--         str     ST0, [PST, #4 * (MAX_BLOCKSIZE + MAX_FIR_ORDER)]
--         str     ST0, [PSAMP], #4 * MAX_CHANNELS
---        bne     01b
--+        bne     1b
--   .else
--     .if \fir_taps & 1
--       .set LOAD_REG, 1
--@@ -333,7 +333,7 @@ T       orr     AC0, AC0, AC1
--         str     ST3, [PST, #-4]!
--         str     ST2, [PST, #4 * (MAX_BLOCKSIZE + MAX_FIR_ORDER)]
--         str     ST3, [PSAMP], #4 * MAX_CHANNELS
---        bne     01b
--+        bne     1b
--   .endif
--         b       99f
+- cf_gnu_xopen_source=$cf_XOPEN_SOURCE
 - 
---- 
--2.30.2
--
-diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
-index 630bd70c56..50498a6ba9 100644
---- a/package/ffmpeg/ffmpeg.hash
-+++ b/package/ffmpeg/ffmpeg.hash
-@@ -1,5 +1,5 @@
+diff --git a/package/ncurses/ncurses.hash b/package/ncurses/ncurses.hash
+index b82a7b29e4..50b5f5c43c 100644
+--- a/package/ncurses/ncurses.hash
++++ b/package/ncurses/ncurses.hash
+@@ -1,4 +1,4 @@
  # Locally calculated
--sha256  3b624649725ecdc565c903ca6643d41f33bd49239922e45c9b1442c63dca4e38  ffmpeg-6.1.2.tar.xz
-+sha256  f0b2b07c7014b7aa8c4689095b83a49a85d41887049fc5302543aec0bef7d066  ffmpeg-n6.1.2-27-ge16ff06adb-git4.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
- sha256  b634ab5640e258563c536e658cad87080553df6f34f62269a21d554844e58bfe  COPYING.LGPLv2.1
- sha256  cb48bf09a11f5fb576cddb0431c8f5ed0a60157a9ec942adffc13907cbe083f2  LICENSE.md
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 799201c820..5c00ba2dff 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -4,10 +4,12 @@
- #
+-sha256  b0910671694c2c8377f579eea68477a15d67bd20ddd4b29328cfe15c62c7b3fd  ncurses-6.4-20230603.tar.gz
++sha256  98da8cec5e320a3f532660acd7f1deba0555e901ea91a62938c273f38e583468  ncurses-6.5-20250510.tar.gz
+ # Locally computed
+-sha256  0413b2f4ea863194c174673032f0fca84f1ea1ed4eed6476baea68c075a631ce  COPYING
++sha256  708999f95527e1ffa670c6fce288c6c600cb477dd04afcc1171422b3dd4ee226  COPYING
+diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+index 00e1c0d424..0c8f7fc6df 100644
+--- a/package/ncurses/ncurses.mk
++++ b/package/ncurses/ncurses.mk
+@@ -5,8 +5,8 @@
  ################################################################################
  
--FFMPEG_VERSION = 6.1.2
--FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
--FFMPEG_SITE = https://ffmpeg.org/releases
-+# Update FFMPEG_CPE_ID_VERSION if needed
-+FFMPEG_VERSION = n6.1.2-27-ge16ff06adb
-+FFMPEG_SITE = https://git.ffmpeg.org/ffmpeg.git
-+FFMPEG_SITE_METHOD = git
- FFMPEG_INSTALL_STAGING = YES
-+FFMPEG_CPE_ID_VERSION = 6.1.2
- 
- FFMPEG_LICENSE = LGPL-2.1+, libjpeg license
- FFMPEG_LICENSE_FILES = LICENSE.md COPYING.LGPLv2.1
-
---===============4064643443114070099==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+ # When there is no snapshost yet for a new version, set it to the empty string
+-NCURSES_VERSION_MAJOR = 6.4
+-NCURSES_SNAPSHOT_DATE = 20230603
++NCURSES_VERSION_MAJOR = 6.5
++NCURSES_SNAPSHOT_DATE = 20250510
+ NCURSES_VERSION = $(NCURSES_VERSION_MAJOR)$(if $(NCURSES_SNAPSHOT_DATE),-$(NCURSES_SNAPSHOT_DATE))
+ NCURSES_VERSION_GIT = $(subst .,_,$(subst -,_,$(NCURSES_VERSION)))
+ NCURSES_SITE = $(call github,ThomasDickey,ncurses-snapshots,v$(NCURSES_VERSION_GIT))
+-- 
+2.39.5
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4064643443114070099==--
