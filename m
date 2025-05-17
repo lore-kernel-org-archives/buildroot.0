@@ -1,78 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46E26C2D0CD
-	for <buildroot@archiver.kernel.org>; Sat, 17 May 2025 13:42:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E962BC2D0CD
+	for <buildroot@archiver.kernel.org>; Sat, 17 May 2025 13:51:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0C65281EC5;
-	Sat, 17 May 2025 13:42:39 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id I6y9jeG2whX8; Sat, 17 May 2025 13:42:38 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 42AF282BEB
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 42AF282BEB;
-	Sat, 17 May 2025 13:42:38 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 171C0223
- for <buildroot@buildroot.org>; Sat, 17 May 2025 13:42:37 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 07699408E7
- for <buildroot@buildroot.org>; Sat, 17 May 2025 13:42:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9A21A406EC;
+	Sat, 17 May 2025 13:51:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vg8203lnpxAM for <buildroot@buildroot.org>;
- Sat, 17 May 2025 13:42:36 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0C974408CE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C974408CE
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0C974408CE
- for <buildroot@buildroot.org>; Sat, 17 May 2025 13:42:35 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 3619A19F5BA;
- Sat, 17 May 2025 15:42:32 +0200 (CEST)
-Received: from 2a02-842a-45ac-9401-0517-4590-b867-5f74.rev.sfr.net
- (2a02:842a:45ac:9401:517:4590:b867:5f74)
- via 2a02-842a-45ac-9401-0517-4590-b867-5f74.rev.sfr.net
- (2a02:842a:45ac:9401:517:4590:b867:5f74) by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 17 May 2025 15:42:32 +0200
-MIME-Version: 1.0
-Date: Sat, 17 May 2025 15:42:32 +0200
+ id 7UKFopM39ydK; Sat, 17 May 2025 13:51:52 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD2A240683
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id BD2A240683;
+	Sat, 17 May 2025 13:51:52 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 46ED8D89
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 13:51:51 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3821E40581
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 13:51:51 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id m0ZkkjkNM-JN for <buildroot@buildroot.org>;
+ Sat, 17 May 2025 13:51:50 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 880C1404CD
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 880C1404CD
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 13:51:50 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 76DAF86F3A; Sat, 17 May 2025 13:51:50 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Peter Korsgaard <peter@korsgaard.com>
-Cc: buildroot@buildroot.org, Michael Fischer <mf@go-sys.de>
-In-Reply-To: <20250516160442.2446184-1-peter@korsgaard.com>
-References: <20250516160442.2446184-1-peter@korsgaard.com>
-User-Agent: Webmail Free/1.6.10
-Message-ID: <ea122a53e2e603d3d25f4d3a6ce14194@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1747489354;
- bh=IpHgK1PBkm281H2GXw5dapZMF1bNBFPIncj7ZKattMo=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=PwSYj7yAAxC68lm52r96xQwNc7fiWCP/g7uomhC5slnz3hwMcWRdXZvV9Mnwa/IS0
- CkFbbe402K86sjcGoBA5jqcbrD1uI0l4pQEtlfLSvTPnvTtsbdQ1aJVtquU++TwKfE
- VAH8a+GBgn/Y1F1breEWlQDYjplrzlAShV0ZupeIil5G3P2wzlFVZyApQNcs5sPCoG
- 3HUKRswSpfpjWferJUltaHX2SwjhJnlCA+L+GG83TZ+Vy+vsun3Ta0q64WNrSO5tk8
- gLMeZZUR9xzlTUPFsxcnDX81IXjw5zCVmncagp0J3kqXB+LGbFkVzZZbi2O6zsC1Op
- iahvZaFcKmO9Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=PwSYj7yA
-Subject: Re: [Buildroot] [PATCH] package/sdl2: bump version to 2.32.6
+To: buildroot@buildroot.org
+Date: Sat, 17 May 2025 15:48:50 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 73ff421159c542cc627a002e570812d531e6489a
+X-Git-Newrev: 600e75b606e61d5456257cb5368ca312df70046f
+X-Patchwork-Hint: ignore
+Message-Id: <20250517135150.76DAF86F3A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mesa3d: remove depends on
+ architecture for Iris/Vulkan
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,19 +59,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 16/05/2025 18:04, Peter Korsgaard wrote:
-> Bugfix release, fixing various minor issues:
-> https://github.com/libsdl-org/SDL/releases/tag/release-2.32.4
-> https://github.com/libsdl-org/SDL/releases/tag/release-2.32.6
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=600e75b606e61d5456257cb5368ca312df70046f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+This dependency systematically applied with integrated GPUs but no longer
+with discrete GPUs, so remove it.
+
+Signed-off-by: Francois Dugast <francois.dugast.foss@gmail.com>
+[Julien: fix conflicts after mesa3d bump in commit 317260f]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/mesa3d/Config.in | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index ef2c2c3258..a059fe6749 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -129,7 +129,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_I915
+ 
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS
+ 	bool "Gallium iris driver"
+-	depends on BR2_i386 || BR2_x86_64
+ 	depends on BR2_PACKAGE_MESA3D_LLVM
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	select BR2_PACKAGE_MESA3D_OPENCL
+@@ -322,7 +321,6 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_BROADCOM
+ 
+ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
+ 	bool "Vulkan Intel driver"
+-	depends on BR2_i386 || BR2_x86_64
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # memfd.h
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC # ifunc, static_assert
+@@ -331,7 +329,6 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
+ 	  Vulkan driver for Intel hardware from Ivy Bridge onward.
+ 
+ comment "intel vulkan needs a glibc toolchain w/ headers >= 3.17"
+-	depends on BR2_i386 || BR2_x86_64
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7
+ 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 || \
+ 		!BR2_TOOLCHAIN_USES_GLIBC
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
