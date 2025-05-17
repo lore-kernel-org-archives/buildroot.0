@@ -4,100 +4,103 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C201C3ABDD
-	for <buildroot@archiver.kernel.org>; Sat, 17 May 2025 17:40:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36338C2D0CD
+	for <buildroot@archiver.kernel.org>; Sat, 17 May 2025 19:07:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 62DB460836;
-	Sat, 17 May 2025 17:40:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BA5E960AD6;
+	Sat, 17 May 2025 19:07:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id u_gIAwtiYbu7; Sat, 17 May 2025 17:40:30 +0000 (UTC)
+ id pZktpj2rhqGC; Sat, 17 May 2025 19:07:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 981EC60883
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 813E26068B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 981EC60883;
-	Sat, 17 May 2025 17:40:30 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 4188B201
- for <buildroot@buildroot.org>; Sat, 17 May 2025 17:40:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 813E26068B;
+	Sat, 17 May 2025 19:07:10 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 98287201
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 19:07:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 32D9D40350
- for <buildroot@buildroot.org>; Sat, 17 May 2025 17:40:29 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 89AC381087
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 19:07:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GJO0GV0pLr-U for <buildroot@buildroot.org>;
- Sat, 17 May 2025 17:40:28 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id m93unHPMmkGN for <buildroot@buildroot.org>;
+ Sat, 17 May 2025 19:07:07 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::12a; helo=mail-il1-x12a.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B2036403E8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B2036403E8
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com
- [IPv6:2607:f8b0:4864:20::12a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B2036403E8
- for <buildroot@buildroot.org>; Sat, 17 May 2025 17:40:27 +0000 (UTC)
-Received: by mail-il1-x12a.google.com with SMTP id
- e9e14a558f8ab-3d9327d0720so22979295ab.3
- for <buildroot@buildroot.org>; Sat, 17 May 2025 10:40:27 -0700 (PDT)
+ client-ip=2607:f8b0:4864:20::d2d; helo=mail-io1-xd2d.google.com;
+ envelope-from=brandon.maier@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9A98E81088
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9A98E81088
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com
+ [IPv6:2607:f8b0:4864:20::d2d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9A98E81088
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 19:07:07 +0000 (UTC)
+Received: by mail-io1-xd2d.google.com with SMTP id
+ ca18e2360f4ac-85dac9729c3so334516539f.2
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 12:07:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1747503626; x=1748108426;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=FfuirtN7g/8ayeIJU+hjubO663HiD4ZZZPWVAJQKncA=;
- b=JerVUOOCWoU6W8TVuxSK+OQCncuWxXhOz06bxAPbk/hD9l9PudE9+k+XKxghrxlH+b
- nYBeo8Jg1qAaBJsa2uNfUGefN01ggMvuErPDGl/xXfKdFoIRu9GXGqT/Vl85XBiRZmoR
- 1LdgKp9uX8wxJ0FXytuq39NwD4/Dfzjn/QFm63xR0s5B9+wIgPt8WPyTymBk2BQpozs/
- 2YtEQhUcbJyA7QOGPa+jzq8uFRC3J/rsB0HhzPnmSPyOzf7orHz+qESMVp63AjnzToMm
- RTDTBh6lK26j2+UNxRDRQ2nFKG+LfzDUw5lskLY5pr9HaQaoMSBXqRRz/iLA6EQZZjiR
- sJ6A==
-X-Gm-Message-State: AOJu0Yzunu66Ig1fkjzpset/CN9+ZDfNga9Ndn66BO43Lw3q2uWRoFBH
- +VX1Kuvwn6dP69mopHEnlUOAM8rzVlbIpy6eCTmbkbbVVbI1sTmzgmlUSqwwGuOg
-X-Gm-Gg: ASbGncsQIKm0Gwn1jg5YzrELEX8iR7xJ3+n6/P6P/utLAza97UM5antgyPReFlVnJkR
- ZBlBVBl6mWfV2D1ouWzKHQWefIm/C67UlmAadvIFSn1joVHhMRVcCMhIkUrvvVFNXq3ykG2d9fK
- Mg19bfQnrlDVm46/2fslr/H9kpX3HAiuqPGjDECX1lXgSnsrZFNKMVGd0RMiL9pbdLszippv8nO
- lURDmUEuoGAn+hiKhbf+pinAQN0p2rvWJcN4IgasAPJujr9WQMZiiIAttmsHONpdIvGdkVwQpKp
- BZXHqM1KlBcfB4BbjpJoO32/xcxD1PNNp36TODAkCQUDR1g9zR/AhTopJnGa4EWSAOGkYitv4ol
- z2Mitij/zIlb0syFhoj7+Gx9K1NyOag==
-X-Google-Smtp-Source: AGHT+IE4fyfB2vvAcY9p5G8RzEguGqT9zCqCeRemYrFtBIqD7n4VxEtB6b6rztp9mjCBk1UnmLyC1A==
-X-Received: by 2002:a05:6e02:351d:b0:3db:7265:622f with SMTP id
- e9e14a558f8ab-3db8433235amr92055785ab.21.1747503625978; 
- Sat, 17 May 2025 10:40:25 -0700 (PDT)
-Received: from james-x399.localdomain (71-218-120-130.hlrn.qwest.net.
- [71.218.120.130]) by smtp.gmail.com with ESMTPSA id
- e9e14a558f8ab-3db8443a37dsm10754535ab.53.2025.05.17.10.40.24
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 17 May 2025 10:40:25 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Cc: Norbert Lange <nolange79@gmail.com>, Sen Hastings <sen@hastings.org>,
- James Hilliard <james.hilliard1@gmail.com>
-Date: Sat, 17 May 2025 11:40:19 -0600
-Message-Id: <20250517174019.3732498-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
+ d=1e100.net; s=20230601; t=1747508826; x=1748113626;
+ h=in-reply-to:references:cc:to:from:subject:message-id:date
+ :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+ :cc:subject:date:message-id:reply-to;
+ bh=eWVGyQB8PRik+3Uz5wRSupVmloFOuPuhQxbq50IYEiY=;
+ b=kDSxes5s8Mfusb9I3l8MhxpyYGnrXZDLdSIamqrihKLHWk2637XNLO5Zb/Zjr9l3V8
+ RgzaaKUTEOMfSfaxFLeTukv+Q6oqNgkrbeJOo25FEXaizy+wB4N9bsAPai0G9ht9hyqb
+ pqX9ZlkkWZRNkxgDOidmmIs8f/w86hwFFrgXYmOlQ1acYFLIzIwHlC2lmtlYWtBaDezP
+ yOG8T7AqDB6nCKqJjDOE0Nw7s3ac3eL2ncdBRRWPq77ZZMhOsz8Ozyuv+nTDNLIgdqWs
+ pvAkKiJCOvFumxuMY+UlpEceeUc7/UvNupYhwZlK03tpBZN3AljihsJcSdzp/HtkRHt/
+ z97g==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCVKjfOUF+ek9owtukg335hpbK7Tvti85v4YjaGBx9b1Za7QnYAxl3WxK5S/BbLAT+EboQkfuHzoQH0=@buildroot.org
+X-Gm-Message-State: AOJu0YzIoXP+6S8Bg8OgKpuRk7lVdV6ar40ja85xCgrkjdij+PZjnMtu
+ 1au34J3lZFlkCAnRLGqQjXzaMyuiIDyuo4lqQy5TcnAhcDdfur50vRtt
+X-Gm-Gg: ASbGncunEPNNVA7FEz7/tbE4i4MnfvDrJEkSM3M8k8lKeASpQDEpgFk8HWvhlyVnp04
+ eX0yvZCEieShlHrmJS4qnlUPvdfEEi4JiytwzQCs0zVUeYukz9i+sMH8W/lQ71sGuz6PgEZ05/N
+ 0M1dyxtQmODgpbmzwCz9hcNPaxNDw2ACCwGQ1IWUm8K2KwzOxuklOEvKTcGA3i9cWgFq90bwQ8T
+ YLX9rOXXGcDYNwoKDNP08sWVc9isQQNigAS/22Ic0fzkUVx2KJ0bymKeVbER21T3AUutehLpYgN
+ i2D2rthTM6ECuhzVamkzB7dAOGlMrN4dUr2wG4FzOr1hNuZvfAnGhiPvR+HxapZXZCYXPrsJp4I
+ qbOfk9g3nkaWnLv1wCtfOz0F8/Q==
+X-Google-Smtp-Source: AGHT+IEWOasIsTeF5X91WOI2RZ4NoYbWgmeIormWQ1Mdpuc5e0UgRpC0njcDW4uLvqpDJA0dk2xdug==
+X-Received: by 2002:a05:6602:398f:b0:85a:e279:1ed6 with SMTP id
+ ca18e2360f4ac-86a2322e5f7mr1048226839f.11.1747508826389; 
+ Sat, 17 May 2025 12:07:06 -0700 (PDT)
+Received: from localhost (207-191-210-45.dhcp.imoncommunications.net.
+ [207.191.210.45]) by smtp.gmail.com with ESMTPSA id
+ 8926c6da1cb9f-4fbcc38a460sm1008390173.26.2025.05.17.12.07.05
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 17 May 2025 12:07:05 -0700 (PDT)
+Mime-Version: 1.0
+Date: Sat, 17 May 2025 14:07:04 -0500
+Message-Id: <D9YO6FEL97S3.I5F8GAPKM4YC@gmail.com>
+From: "Brandon Maier" <brandon.maier@gmail.com>
+To: "James Hilliard" <james.hilliard1@gmail.com>, <buildroot@buildroot.org>
+Cc: "Brandon Maier" <brandon.maier@collins.com>
+X-Mailer: aerc 0.20.1
+References: <20250514190529.680618-1-james.hilliard1@gmail.com>
+In-Reply-To: <20250514190529.680618-1-james.hilliard1@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1747503626; x=1748108426; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=FfuirtN7g/8ayeIJU+hjubO663HiD4ZZZPWVAJQKncA=;
- b=lGPfcsifRKdidIMjXxhEdpqO06OK+H0JSVH5/Wx/fG+YRrBuJ8uiUBik6H+o/xLy63
- 6wSsl4H4Vr+Zn776hNEW7zH+sq/b+y6RoMTpLPJkBJA8xiROg4IWACYo+nDD0WEyOtjj
- cf90w7psq7PkaZUTEjJLVGJieK02GGjoMTcrat2mtjGMAA+msC0CaC3dV1ZYUrPt0jyu
- j7CyrEYPJBrz3HehdRtTOptX6UqxU3JvY8ufiObj83ANOA5ZQEj8P7lkJ8GhJgksFHC/
- mbigNVL7jKyRvZaaA/i0/nICZkG6iHQ2lD8RNcODbJ4lTuaA7geMjZ3f1dEQdHLyq4/k
- u2uQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=gmail.com; s=20230601; t=1747508826; x=1748113626; darn=buildroot.org;
+ h=in-reply-to:references:cc:to:from:subject:message-id:date
+ :content-transfer-encoding:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=eWVGyQB8PRik+3Uz5wRSupVmloFOuPuhQxbq50IYEiY=;
+ b=B5m0N5sQukmRHa1zRsqxa+5z0GAe3MgP7nhikpVTA5ODhhMywNrjN2bdere20wfo3t
+ EfIpWGGpZns/2BRR9/5v+yR4NKXi55nvJcjuk2rpl1QRtLyWTPZCr56+UiCrW5PqLoZ9
+ IyNbn5A5CaxCDyrHpwMMmUA+oJxzPKzliC1bydzGrBLXksHPle+Phkb+rzLwAVYYWrFq
+ XtlAGn1PHM1WW1tEOjv5zT0Q6us3qTuOHDKjc97RV7inhQM3ZP8/baOVVmLnvJ0q84Ji
+ Z7CzyncasmNHYyUtyBFYoH7X/c6KhfIjH3G4GjTrVzZs2DCOxwTHjtlobHQIcAPRjoS1
+ w6IQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=lGPfcsif
-Subject: [Buildroot] [PATCH 1/1] package/systemd: fix systemd-boot
- installation
+ header.s=20230601 header.b=B5m0N5sQ
+Subject: Re: [Buildroot] [PATCH 1/1] package/unifdef: fix build with gcc 15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,34 +117,86 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-When the meson build directory was changed to buildroot-build in
-4e95062f820a64ecd2402115ee552dbcf2874f02 we forgot to update the
-install path for the systemd-boot efi binary.
+On Wed May 14, 2025 at 2:05 PM CDT, James Hilliard wrote:
+> Add a patch fixing compilation on hosts with gcc 15.
+>
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-Fixes:
-/usr/bin/install: cannot stat '/home/buildroot/buildroot/output/build/systemd-256.7/build/src/boot/efi/systemd-bootx64.efi': No such file or directory
+Reviewed-by: Brandon Maier <brandon.maier@gmail.com>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/systemd/systemd.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks!
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 337d52b1f2..71fe0de550 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -646,7 +646,7 @@ SYSTEMD_CONF_OPTS += -Dbootloader=enabled
- 
- SYSTEMD_BOOT_EFI_ARCH = $(call qstrip,$(BR2_PACKAGE_SYSTEMD_BOOT_EFI_ARCH))
- define SYSTEMD_INSTALL_BOOT_FILES
--	$(INSTALL) -D -m 0644 $(@D)/build/src/boot/efi/systemd-boot$(SYSTEMD_BOOT_EFI_ARCH).efi \
-+	$(INSTALL) -D -m 0644 $(@D)/buildroot-build/src/boot/efi/systemd-boot$(SYSTEMD_BOOT_EFI_ARCH).efi \
- 		$(BINARIES_DIR)/efi-part/EFI/BOOT/boot$(SYSTEMD_BOOT_EFI_ARCH).efi
- 	$(INSTALL) -D -m 0644 $(SYSTEMD_PKGDIR)/boot-files/loader.conf \
- 		$(BINARIES_DIR)/efi-part/loader/loader.conf
--- 
-2.34.1
-
+> ---
+>  ...0002-Don-t-use-C23-constexpr-keyword.patch | 60 +++++++++++++++++++
+>  1 file changed, 60 insertions(+)
+>  create mode 100644 package/unifdef/0002-Don-t-use-C23-constexpr-keyword.patch
+>
+> diff --git a/package/unifdef/0002-Don-t-use-C23-constexpr-keyword.patch b/package/unifdef/0002-Don-t-use-C23-constexpr-keyword.patch
+> new file mode 100644
+> index 0000000000..5b5c9690da
+> --- /dev/null
+> +++ b/package/unifdef/0002-Don-t-use-C23-constexpr-keyword.patch
+> @@ -0,0 +1,60 @@
+> +From d616741e6b0d5b57b66447e85ad32b283b28adde Mon Sep 17 00:00:00 2001
+> +From: Sam James <sam@gentoo.org>
+> +Date: Sun, 17 Nov 2024 01:26:27 +0000
+> +Subject: [PATCH] Don't use C23 constexpr keyword
+> +
+> +This fixes building with upcoming GCC 15 which defaults to -std=gnu23.
+> +
+> +Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> +Upstream: https://github.com/fanf2/unifdef/pull/19
+> +---
+> + unifdef.c | 10 +++++-----
+> + 1 file changed, 5 insertions(+), 5 deletions(-)
+> +
+> +diff --git a/unifdef.c b/unifdef.c
+> +index dc145a2..4bd3bda 100644
+> +--- a/unifdef.c
+> ++++ b/unifdef.c
+> +@@ -202,7 +202,7 @@ static int              depth;			/* current #if nesting */
+> + static int              delcount;		/* count of deleted lines */
+> + static unsigned         blankcount;		/* count of blank lines */
+> + static unsigned         blankmax;		/* maximum recent blankcount */
+> +-static bool             constexpr;		/* constant #if expression */
+> ++static bool             is_constexpr;		/* constant #if expression */
+> + static bool             zerosyms;		/* to format symdepth output */
+> + static bool             firstsym;		/* ditto */
+> +
+> +@@ -1086,7 +1086,7 @@ eval_unary(const struct ops *ops, long *valp, const char **cpp)
+> + 			*valp = (value[sym] != NULL);
+> + 			lt = *valp ? LT_TRUE : LT_FALSE;
+> + 		}
+> +-		constexpr = false;
+> ++		is_constexpr = false;
+> + 	} else if (!endsym(*cp)) {
+> + 		debug("eval%d symbol", prec(ops));
+> + 		sym = findsym(&cp);
+> +@@ -1103,7 +1103,7 @@ eval_unary(const struct ops *ops, long *valp, const char **cpp)
+> + 			lt = *valp ? LT_TRUE : LT_FALSE;
+> + 			cp = skipargs(cp);
+> + 		}
+> +-		constexpr = false;
+> ++		is_constexpr = false;
+> + 	} else {
+> + 		debug("eval%d bad expr", prec(ops));
+> + 		return (LT_ERROR);
+> +@@ -1170,10 +1170,10 @@ ifeval(const char **cpp)
+> + 	long val = 0;
+> +
+> + 	debug("eval %s", *cpp);
+> +-	constexpr = killconsts ? false : true;
+> ++	is_constexpr = killconsts ? false : true;
+> + 	ret = eval_table(eval_ops, &val, cpp);
+> + 	debug("eval = %d", val);
+> +-	return (constexpr ? LT_IF : ret == LT_ERROR ? LT_IF : ret);
+> ++	return (is_constexpr ? LT_IF : ret == LT_ERROR ? LT_IF : ret);
+> + }
+> +
+> + /*
+> +--
+> +2.34.1
+> +
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
