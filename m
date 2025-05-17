@@ -4,49 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85892C3ABDA
-	for <buildroot@archiver.kernel.org>; Sat, 17 May 2025 09:10:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 253EAC2D0CD
+	for <buildroot@archiver.kernel.org>; Sat, 17 May 2025 09:11:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 551B383E83;
-	Sat, 17 May 2025 09:10:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CC84583D31;
+	Sat, 17 May 2025 09:11:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WBvm0ohsxJSm; Sat, 17 May 2025 09:09:59 +0000 (UTC)
+ id WRGY0Cfc9ldf; Sat, 17 May 2025 09:11:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B25983E8A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F1A0683D39
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3B25983E8A;
-	Sat, 17 May 2025 09:09:59 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 872541DE
- for <buildroot@buildroot.org>; Sat, 17 May 2025 09:09:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F1A0683D39;
+	Sat, 17 May 2025 09:11:20 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 967C5E4
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 09:11:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5B4E240DF0
- for <buildroot@buildroot.org>; Sat, 17 May 2025 09:09:37 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7C3B783D31
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 09:11:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YzglyWKZBnCZ for <buildroot@buildroot.org>;
- Sat, 17 May 2025 09:09:36 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8CA5D41259
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8CA5D41259
- for <buildroot@buildroot.org>; Sat, 17 May 2025 09:09:36 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 89D1286DF3; Sat, 17 May 2025 09:09:36 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 17 May 2025 11:07:23 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f93e0ec5850402b2cc0478e864223019277ecc79
-X-Git-Newrev: 5cfe10ffb26f5b250fdbce3b1b0a692346349571
-X-Patchwork-Hint: ignore
-Message-Id: <20250517090936.89D1286DF3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/refpolicy: bump to version
- 2.20250213
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2A7GFTJyE6U2 for <buildroot@buildroot.org>;
+ Sat, 17 May 2025 09:11:18 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
+ helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8591E83D39
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8591E83D39
+Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8591E83D39
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 09:11:18 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 8FD2C1C0D7A; Sat, 17 May 2025 11:11:16 +0200 (CEST)
+Message-ID: <896c41b4-9bfe-4a77-b2a6-30ad5db7440a@rnout.be>
+Date: Sat, 17 May 2025 11:11:15 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Adam Duskett <adam.duskett@amarulasolutions.com>, buildroot@buildroot.org
+Cc: Marcus Folkesson <marcus.folkesson@gmail.com>,
+ Antoine Tenart <atenart@kernel.org>, Fiona Klute <fiona.klute@gmx.de>
+References: <20250515121027.561571-1-adam.duskett@amarulasolutions.com>
+Content-Language: en-GB, fr-BE
+In-Reply-To: <20250515121027.561571-1-adam.duskett@amarulasolutions.com>
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=rnout.be; s=dkim; 
+ t=1747473076; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:in-reply-to:references;
+ bh=ZWX9/b5caB025ORgekRIbJxz/Jo2d/q+3eIH+HsvZzE=;
+ b=F1IPjjq9zrMHOuQzIM/jtGVqPwZXGA9yDCcEFJBntLaWjxX9uBfGGpVUDMmk2vOIBo7BVg
+ WDCNHyosdx25Pnh6cvAOL6LFyA2xeFfTgYSxbtepvslkqjHoBWPEdM701bPFmZfSuRiRUL
+ H9ve269vRxWq69V5HvYPE+KMUeCN//JiqENBuXjtjezuqTZKLQeLjNhyZAvFl4ff4rEo/5
+ N+Jj414r3OnbdM9G8GuPkHFdYW1GuaJVd6Fq/vMFyf/tT3J9UeUxN4qj1Sy60K/dH3yKl2
+ 8ydCS0gR8hTg4ktRLKkO4jFSkAmt/T/4/UdHMFcRbnU26m1yAyhpG5y1iIMK3A==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=rnout.be
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
+ header.a=rsa-sha256 header.s=dkim header.b=F1IPjjq9
+Subject: Re: [Buildroot] [PATCH 00/10] SELinux updates
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,161 +79,97 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@rnout.be>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5cfe10ffb26f5b250fdbce3b1b0a692346349571
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add a patch (found in an upstream PR) to avoid the following error when
-the dbus module is not enabled:
 
-   ```
-   policy/modules/system/selinuxutil.te:102:ERROR 'attribute
-   dbusd_system_bus_client is not within scope' at token ';'
-   on line 155976:
-   ```
+On 15/05/2025 14:10, Adam Duskett wrote:
+> Update the SELinux packages.
 
-Remove the patch 0001-policy-modules-services-smartmon.te-make-fstools-opt.patch
-(upstream commit 65eed16b58015b08f43a096c202dae6cba2f0a37).
+  Applied the series to master with two fixes as mentioned in individual replies.
 
-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-[Arnout:
- - Add patch to fix dbus issue.
- - Remove dbus from default modules again.
- - Remove the existing patch which is applied upstream.
-]
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
----
- ...les-services-smartmon.te-make-fstools-opt.patch | 44 ----------------------
- ...-building-when-dbus-module-is-not-enabled.patch | 40 ++++++++++++++++++++
- package/refpolicy/refpolicy.hash                   |  2 +-
- package/refpolicy/refpolicy.mk                     |  2 +-
- 4 files changed, 42 insertions(+), 46 deletions(-)
+> 
+> Of note:
+> 
+> Refpolicy:
+> 
+> Added a dependency on dbus if the selinuxutil module is selected on
+> commit 523b279. This seems like a mistake, and I raised an issue at
+> https://github.com/SELinuxProject/refpolicy/issues/906.
+> 
+> Due to this commit, if the dbus module is set to no, refpolicy fails to build
+> with the following error:
+> ```
+> policy/modules/system/selinuxutil.te:102:ERROR 'attribute
+> dbusd_system_bus_client is not within scope' at token ';'
+> on line 155976:
+> ```
+> 
+> As a temporary solution, I enabled the dbus policy by default.
+> 
+> 
+> libsepol:
+> Kernel 6.14 bumped the maximum policy from 33 to 34.
+> 
+> Full release notes here:
+> https://github.com/SELinuxProject/selinux/releases/download/3.8/RELEASE-3.8.txt
 
-diff --git a/package/refpolicy/2.20231002/0001-policy-modules-services-smartmon.te-make-fstools-opt.patch b/package/refpolicy/2.20231002/0001-policy-modules-services-smartmon.te-make-fstools-opt.patch
-deleted file mode 100644
-index ddf2943bfa..0000000000
---- a/package/refpolicy/2.20231002/0001-policy-modules-services-smartmon.te-make-fstools-opt.patch
-+++ /dev/null
-@@ -1,44 +0,0 @@
--From c6d1345732c463cb45d8ba490081ad92936bfd69 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Tue, 28 Nov 2023 22:30:01 +0100
--Subject: [PATCH] policy/modules/services/smartmon.te: make fstools optional
--
--Make fstools optional to avoid the following build failure raised since
--version 2.20231002 and
--https://github.com/SELinuxProject/refpolicy/commit/cb068f09d224f90a97fa63a574fb423bbe1ceeda:
--
-- Compiling targeted policy.33
-- env LD_LIBRARY_PATH="/home/thomas/autobuild/instance-2/output-1/host/lib:/home/thomas/autobuild/instance-2/output-1/host/usr/lib" /home/thomas/autobuild/instance-2/output-1/host/usr/bin/checkpolicy -c 33 -U deny -S -O -E policy.conf -o policy.33
-- policy/modules/services/smartmon.te:146:ERROR 'type fsadm_exec_t is not within scope' at token ';' on line 237472:
-- 	allow smartmon_update_drivedb_t fsadm_exec_t:file { { getattr open map read execute ioctl } ioctl lock execute_no_trans };
-- #line 146
-- checkpolicy:  error(s) encountered while parsing configuration
-- make[1]: *** [Rules.monolithic:80: policy.33] Error 1
--
--Fixes:
-- - http://autobuild.buildroot.org/results/a01123de9a8c1927060e7e4748666bebfc82ea44
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Upstream: https://github.com/SELinuxProject/refpolicy/pull/738
-----
-- policy/modules/services/smartmon.te | 4 +++-
-- 1 file changed, 3 insertions(+), 1 deletion(-)
--
--diff --git a/policy/modules/services/smartmon.te b/policy/modules/services/smartmon.te
--index 32c80f712..761280c11 100644
----- a/policy/modules/services/smartmon.te
--+++ b/policy/modules/services/smartmon.te
--@@ -143,7 +143,9 @@ corenet_tcp_connect_http_port(smartmon_update_drivedb_t)
-- 
-- files_read_etc_files(smartmon_update_drivedb_t)
-- 
---fstools_exec(smartmon_update_drivedb_t)
--+optional_policy(`
--+	fstools_exec(smartmon_update_drivedb_t)
--+')
-- 
-- kernel_dontaudit_read_system_state(smartmon_update_drivedb_t)
-- 
---- 
--2.42.0
--
-diff --git a/package/refpolicy/2.20250213/0001-fix-building-when-dbus-module-is-not-enabled.patch b/package/refpolicy/2.20250213/0001-fix-building-when-dbus-module-is-not-enabled.patch
-new file mode 100644
-index 0000000000..4ac9725961
---- /dev/null
-+++ b/package/refpolicy/2.20250213/0001-fix-building-when-dbus-module-is-not-enabled.patch
-@@ -0,0 +1,40 @@
-+From eff537f7be038120ca06fc7c39f9817ae120ce00 Mon Sep 17 00:00:00 2001
-+From: Dave Sugar <dsugar100@gmail.com>
-+Date: Thu, 15 May 2025 10:05:24 -0400
-+Subject: [PATCH] fix building when dbus module is not enabled
-+
-+Signed-off-by: Dave Sugar <dsugar100@gmail.com>
-+Upstream: https://github.com/SELinuxProject/refpolicy/pull/908
-+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-+---
-+ policy/modules/system/selinuxutil.te | 7 ++++++-
-+ 1 file changed, 6 insertions(+), 1 deletion(-)
-+
-+diff --git a/policy/modules/system/selinuxutil.te b/policy/modules/system/selinuxutil.te
-+index 86a6e5503..cd0e8762f 100644
-+--- a/policy/modules/system/selinuxutil.te
-++++ b/policy/modules/system/selinuxutil.te
-+@@ -99,7 +99,8 @@ role run_init_roles types run_init_t;
-+ 
-+ type selinux_dbus_t;
-+ type selinux_dbus_exec_t;
-+-dbus_system_domain(selinux_dbus_t, selinux_dbus_exec_t)
-++domain_type(selinux_dbus_t)
-++domain_entry_file(selinux_dbus_t, selinux_dbus_exec_t)
-+ 
-+ type semanage_t;
-+ type semanage_exec_t;
-+@@ -504,6 +505,10 @@ miscfiles_read_localization(selinux_dbus_t)
-+ 
-+ seutil_domtrans_semanage(selinux_dbus_t)
-+ 
-++optional_policy(`
-++	dbus_system_domain(selinux_dbus_t, selinux_dbus_exec_t)
-++')
-++
-+ optional_policy(`
-+ 	policykit_dbus_chat(selinux_dbus_t)
-+ ')
-+-- 
-+2.49.0
-+
-diff --git a/package/refpolicy/refpolicy.hash b/package/refpolicy/refpolicy.hash
-index 5e876d4a43..76bbf482ae 100644
---- a/package/refpolicy/refpolicy.hash
-+++ b/package/refpolicy/refpolicy.hash
-@@ -1,5 +1,5 @@
- # From https://github.com/SELinuxProject/refpolicy/releases
--sha256  7ed41f4f45189b9ee9706da8ac357eccc103651b56daabaddb54c436e8117cf9  refpolicy-2.20240226.tar.bz2
-+sha256  d2487c49420e8710e999b18bbe699fbff033fe5adc5127e3f0c7dafaa9b4d209  refpolicy-2.20250213.tar.bz2
- 
- # Locally computed
- sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
-diff --git a/package/refpolicy/refpolicy.mk b/package/refpolicy/refpolicy.mk
-index 74ccb79624..be27147ec5 100644
---- a/package/refpolicy/refpolicy.mk
-+++ b/package/refpolicy/refpolicy.mk
-@@ -23,7 +23,7 @@ REFPOLICY_SITE = $(call qstrip,$(BR2_PACKAGE_REFPOLICY_CUSTOM_REPO_URL))
- REFPOLICY_SITE_METHOD = git
- BR_NO_CHECK_HASH_FOR += $(REFPOLICY_SOURCE)
- else
--REFPOLICY_VERSION = 2.20240226
-+REFPOLICY_VERSION = 2.20250213
- REFPOLICY_SOURCE = refpolicy-$(REFPOLICY_VERSION).tar.bz2
- REFPOLICY_SITE = https://github.com/SELinuxProject/refpolicy/releases/download/RELEASE_$(subst .,_,$(REFPOLICY_VERSION))
- endif
+  Excellent summary of the series, thanks!
+
+
+> Tested with:
+> ./support/testing/run-tests tests.core.test_selinux
+> ./support/testing/run-tests tests.init.test_systemd_selinux
+
+  I forgot to re-run the tests after my modifications. I'm doing that now and 
+I'll fix any issues that I created.
+
+  Regards,
+  Arnout
+
+> 
+> All tests pass with Ubuntu 24.04
+> 
+> Adam Duskett (10):
+>    package/audit/S02auditd: fix shellcheck and check-package warnings
+>    package/libsepol: bump to version 3.8.1
+>    package/libsemanage: bump to version 3.8.1
+>    package/libselinux: bump to version 3.8.1
+>    package/policycoreutils: bump to version 3.8.1
+>    package/checkpolicy: bump to version 3.8.1
+>    package/restorecond: bump to version 3.8.1
+>    package/semodule-utils: bump to version 3.8.1
+>    package/selinux-python: bump to verson 3.8.1
+>    package/refpolicy: bump to version 2.20250213
+> 
+>   package/audit/S02auditd                       | 66 ++++++++++++-------
+>   package/checkpolicy/checkpolicy.hash          |  2 +-
+>   package/checkpolicy/checkpolicy.mk            |  2 +-
+>   ...T-and-rely-on-the-installed-file-nam.patch |  2 +-
+>   package/libselinux/libselinux.hash            |  2 +-
+>   package/libselinux/libselinux.mk              |  2 +-
+>   package/libsemanage/libsemanage.hash          |  4 +-
+>   package/libsemanage/libsemanage.mk            |  2 +-
+>   .../libsepol/0001-support-static-only.patch   | 39 ++++++-----
+>   package/libsepol/Config.in                    |  2 +
+>   package/libsepol/libsepol.hash                |  2 +-
+>   package/libsepol/libsepol.mk                  |  2 +-
+>   package/policycoreutils/policycoreutils.hash  |  2 +-
+>   package/policycoreutils/policycoreutils.mk    |  2 +-
+>   package/refpolicy/refpolicy.hash              |  2 +-
+>   package/refpolicy/refpolicy.mk                |  3 +-
+>   package/restorecond/restorecond.hash          |  2 +-
+>   package/restorecond/restorecond.mk            |  2 +-
+>   package/selinux-python/selinux-python.hash    |  2 +-
+>   package/selinux-python/selinux-python.mk      |  2 +-
+>   package/semodule-utils/semodule-utils.hash    |  2 +-
+>   package/semodule-utils/semodule-utils.mk      |  2 +-
+>   22 files changed, 89 insertions(+), 59 deletions(-)
+> 
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
