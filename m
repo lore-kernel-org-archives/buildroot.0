@@ -4,49 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3374FC3ABDD
-	for <buildroot@archiver.kernel.org>; Sat, 17 May 2025 14:35:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB680C3ABDA
+	for <buildroot@archiver.kernel.org>; Sat, 17 May 2025 14:35:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 572EF60D94;
-	Sat, 17 May 2025 14:35:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B6829608B9;
+	Sat, 17 May 2025 14:35:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P9w1qfwKSm9T; Sat, 17 May 2025 14:35:13 +0000 (UTC)
+ id u5PB2VOgkJIA; Sat, 17 May 2025 14:35:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A90560DF4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 95A5760E0A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7A90560DF4;
-	Sat, 17 May 2025 14:35:12 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 545F7E4
- for <buildroot@buildroot.org>; Sat, 17 May 2025 14:35:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 95A5760E0A;
+	Sat, 17 May 2025 14:35:19 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id EC0061DE
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 14:35:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EBA6360C1A
- for <buildroot@buildroot.org>; Sat, 17 May 2025 14:35:06 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D878540BE9
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 14:35:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gV_NW73eO-8W for <buildroot@buildroot.org>;
- Sat, 17 May 2025 14:35:05 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zkeee2dH_XQb for <buildroot@buildroot.org>;
+ Sat, 17 May 2025 14:35:08 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.195;
+ helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D87B4608B9
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D87B4608B9
- for <buildroot@buildroot.org>; Sat, 17 May 2025 14:35:05 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C50E486FE6; Sat, 17 May 2025 14:35:05 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 17 May 2025 16:34:08 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0d4ca3c5fec73738cd0490dae28b8381bb20b2a1
-X-Git-Newrev: 8c4a96e52fbc60b0e6348fd4b41ea08cd78fd145
-X-Patchwork-Hint: ignore
-Message-Id: <20250517143505.C50E486FE6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mender_x86_64_efi_defconfig: bump
- kernel to 6.12.28
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 55A2A40BA0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 55A2A40BA0
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 55A2A40BA0
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 14:35:08 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6FD4F1FCEA;
+ Sat, 17 May 2025 14:35:04 +0000 (UTC)
+Date: Sat, 17 May 2025 16:35:03 +0200
+To: Adam Duskett <adam.duskett@amarulasolutions.com>
+Cc: buildroot@buildroot.org, Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Message-ID: <20250517163503.5fcef45d@windsurf>
+In-Reply-To: <20250516125333.3681798-1-adam.duskett@amarulasolutions.com>
+References: <20250516125333.3681798-1-adam.duskett@amarulasolutions.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefudehkeekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepledtgedvjeehgeetgfeufffglefhkedvfeduveeiieelteeliedtfefguefggffhnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumegufeduvgemvdefheemtgehvgdvmegvugekfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumegufeduvgemvdefheemtgehvgdvmegvugekfedphhgvlhhopeifihhnughsuhhrfhdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepfedprhgtphhtthhopegruggrmhdrughushhkvghtthesrghmrghruhhlrghsohhluhhtihhonhhsrdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrg
+ hdprhgtphhtthhopegrnhhgvghlohdrtghomhhprghgnhhutggtihesghhmrghilhdrtghomh
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1747492504;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=A8onQExb1kTR5bj/qR6IZzT7As4++594mEDCaJkUJLU=;
+ b=S+z6VhXAf7QryDJQ3jY2/g32zhzjfOjdMpBFQlqfLWI5fwQmWbVKtlLXDSSxemZB4DeXyg
+ JcOqXxStgBlscC/ovwlMsxVtGMySkAGAVs8aUY9tOcsV4i34+PQrVrXrmxkISKFJTFOz/S
+ XwvzeEiUqD7QbqYLTh0ozJgW0Er03FsSVx1eOzQHvWEpSmEQvePqaVGn50/X33hHbVEaTy
+ LOZcCrBLwdEOZxZmNnMw7lZSAmsblGJVPLzClf520eHjqqDXdVENhMpoHr+WOCfUZbe/yQ
+ KjZQSMxh06In2r3ev3rVTEbNpKjEqvJ/CCn2ODRjuC2W4pqdb/wnUx6noDlOrA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=S+z6VhXA
+Subject: Re: [Buildroot] [PATCH v3 1/3] package/mender_x86_64_efi_defconfig:
+ bump kernel to 6.12.28
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,44 +88,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8c4a96e52fbc60b0e6348fd4b41ea08cd78fd145
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, 16 May 2025 14:53:30 +0200
+Adam Duskett <adam.duskett@amarulasolutions.com> wrote:
 
-linux.conf does not change after manually checking the output of
-`make savedefconfig` in the kernel source directory.
+> linux.conf does not change after manually checking the output of
+> `make savedefconfig` in the kernel source directory.
+> 
+> Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+> ---
+> v2 -> v3: fix custom headers version. Update to 6.12.28
 
-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- configs/mender_x86_64_efi_defconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Applied to master, thanks.
 
-diff --git a/configs/mender_x86_64_efi_defconfig b/configs/mender_x86_64_efi_defconfig
-index d0e0d8a364..219f02839c 100644
---- a/configs/mender_x86_64_efi_defconfig
-+++ b/configs/mender_x86_64_efi_defconfig
-@@ -1,5 +1,5 @@
- BR2_x86_64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_INIT_SYSV=y
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/mender/x86_64/post-image-efi.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="--data-part-size=32M --device-type=buildroot-x86_64 --artifact-name=1.0"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.49"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.28"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/mender/x86_64/linux.config"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
