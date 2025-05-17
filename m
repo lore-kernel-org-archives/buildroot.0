@@ -4,75 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85AEFC2D0CD
-	for <buildroot@archiver.kernel.org>; Sat, 17 May 2025 20:10:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21AE3C2D0CD
+	for <buildroot@archiver.kernel.org>; Sat, 17 May 2025 20:24:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3C12360836;
-	Sat, 17 May 2025 20:10:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B56A160B22;
+	Sat, 17 May 2025 20:24:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KwPRGK0E1CO4; Sat, 17 May 2025 20:10:31 +0000 (UTC)
+ id oABueu6I_BfN; Sat, 17 May 2025 20:24:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7DC8860B45
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA83F608B9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7DC8860B45;
-	Sat, 17 May 2025 20:10:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DA83F608B9;
+	Sat, 17 May 2025 20:24:25 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3934C201
- for <buildroot@buildroot.org>; Sat, 17 May 2025 20:10:30 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id AF2DE201
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 20:24:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2A19381D3D
- for <buildroot@buildroot.org>; Sat, 17 May 2025 20:10:30 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 956EC834D3
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 20:24:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ae_uU4Ph6lYT for <buildroot@buildroot.org>;
- Sat, 17 May 2025 20:10:29 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
- helo=smtp4-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+ id csxYaBIDCQUB for <buildroot@buildroot.org>;
+ Sat, 17 May 2025 20:24:23 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
+ helo=relay2-d.mail.gandi.net; envelope-from=peko@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2B1C781D11
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2B1C781D11
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2B1C781D11
- for <buildroot@buildroot.org>; Sat, 17 May 2025 20:10:29 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:93aa:5000:c0e7:5e2f:eef4:db82])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 6335B19F5BE;
- Sat, 17 May 2025 22:10:24 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 17 May 2025 22:10:21 +0200
-Date: Sat, 17 May 2025 22:10:21 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Edgar Bonet <bonet@grenoble.cnrs.fr>
-Cc: buildroot@buildroot.org
-Message-ID: <aCjtLQWO7iDws1Ta@landeda>
-References: <cover.1747241900.git.yann.morin.1998@free.fr>
- <200097a3e73767c60f2633b2f46fccb22c161698.1747241900.git.yann.morin.1998@free.fr>
- <0ed2c252-a279-4751-820d-eb11445eca9a@grenoble.cnrs.fr>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D94BF834B9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D94BF834B9
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D94BF834B9
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 20:24:22 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7672D440EC;
+ Sat, 17 May 2025 20:24:19 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peko@dell.be.48ers.dk>) id 1uGO4x-00Ektl-03;
+ Sat, 17 May 2025 22:24:19 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Sat, 17 May 2025 22:24:17 +0200
+Message-Id: <20250517202418.3516858-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <0ed2c252-a279-4751-820d-eb11445eca9a@grenoble.cnrs.fr>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1747512626;
- bh=ZSanScmfq5ZXpnU0iYsK8BZ/5+vVZLMM0zoLuALe4k8=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=lzJyhNZoPPWpreSyEAtyXa1EoV1zK4+VvHRnRuOandDOa198XVspMRF106S2h1iPS
- 0XtYuWrr2u8b5igJuO6pU6hBJ//p4i32f3osl+jfzCiY+yeAP2uN9GYEwlnG+hNA03
- IaGynmBWfr1B/cqYbk5cVr+PIgWJ6Us+mDij8B5N/PSLfUZldXUAW+S65Fn6I3hZPG
- NESuN2NC4exkjA6eqvE3EWWHiuwfoBOJYVWhnANHz12lZ1LOF/vvRQygRfI2CIOuqf
- B5VdfoDsY2kZj7OkZy0fV/U2NcdAR//FR6qAJ/b0guakT2ytGrA3ta78sfRASOcpJ/
- 2Oz7mLTwh1i8g==
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefudeiheekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefrvghtvghrucfmohhrshhgrggrrhguuceophgvthgvrheskhhorhhsghgrrghrugdrtghomheqnecuggftrfgrthhtvghrnhepjeegtdevgfffffegvdfgjeehteejieevueeigffhffeukeelfeeivdevgfevvdelnecuffhomhgrihhnpeifvggskhhithhgthhkrdhorhhgnecukfhppedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumeejiegukeemfegvfhhfmehfvggsfeemgegssgehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeekgedvrgemgeehrggtmeelgedtudemjeeiugekmeefvghffhemfhgvsgefmeegsggshedphhgvlhhopeguvghllhdrsggvrdegkegvrhhsrdgukhdpmhgrihhlfhhrohhmpehpvghkoheskhhorhhsghgrrghrugdrtghomhdpnhgspghrtghpthhtohepfedprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtohepphgvthgvrheskhhorhhsghgrrghrugdrtghomhdprhgtphhtthhopegrphgvrhgviiesihhgrghlihgrrdgtohhm
+X-GND-Sasl: peter@korsgaard.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=lzJyhNZo
-Subject: Re: [Buildroot] [PATCH 08/13] system: add support for merged
- /usr/sbin (aka merged-bin)
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: [Buildroot] [PATCH] package/webkitgtk: security bump to version
+ 2.48.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,31 +69,99 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Adrian Perez de Castro <aperez@igalia.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Edgar, All,
+Fixes the following security issues:
 
-On 2025-05-17 18:52 +0200, Edgar Bonet spake thusly:
-> On 14/05/2025 18:58, Yann E. MORIN wrote:
-[--SNIP--]
-> > +	using a merged structuren for the following directories: \
-> Small typo: s/structuren/structure/
+CVE-2025-24223
+    Versions affected: WebKitGTK and WPE WebKit before 2.48.2.
+    Credit to rheza (@ginggilBesel) and an anonymous researcher.
+    Impact: Processing maliciously crafted web content may lead to
+    memory corruption. Description: The issue was addressed with
+    improved memory handling.
+    WebKit Bugzilla: 287577
 
-Good catch, thanks!
+CVE-2025-31204
+    Versions affected: WebKitGTK and WPE WebKit before 2.48.2.
+    Credit to Nan Wang (@eternalsakura13).
+    Impact: Processing maliciously crafted web content may lead to
+    memory corruption. Description: The issue was addressed with
+    improved memory handling.
+    WebKit Bugzilla: 291506
 
-Regards,
-Yann E. MORIN.
+CVE-2025-31205
+    Versions affected: WebKitGTK and WPE WebKit before 2.48.2.
+    Credit to Ivan Fratric of Google Project Zero.
+    Impact: A malicious website may exfiltrate data cross-origin.
+    Description: The issue was addressed with improved checks.
+    WebKit Bugzilla: 290992
 
+CVE-2025-31206
+    Versions affected: WebKitGTK and WPE WebKit before 2.48.2.
+    Credit to an anonymous researcher.
+    Impact: Processing maliciously crafted web content may lead to an
+    unexpected Safari crash. Description: A type confusion issue was
+    addressed with improved state handling.
+    WebKit Bugzilla: 290834
+
+CVE-2025-31215
+    Versions affected: WebKitGTK and WPE WebKit before 2.48.2.
+    Credit to Jiming Wang and Jikai Ren.
+    Impact: Processing maliciously crafted web content may lead to an
+    unexpected process crash. Description: The issue was addressed with
+    improved checks.
+    WebKit Bugzilla: 288814
+
+CVE-2025-31257
+    Versions affected: WebKitGTK and WPE WebKit before 2.48.2.
+    Credit to Juergen Schmied of Lynck GmbH.
+    Impact: Processing maliciously crafted web content may lead to an
+    unexpected Safari crash. Description: This issue was addressed with
+    improved memory handling.
+    WebKit Bugzilla: 290985
+
+https://webkitgtk.org/security/WSA-2025-0004.html
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/webkitgtk/webkitgtk.hash | 6 +++---
+ package/webkitgtk/webkitgtk.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index fd9420bad9..82b5cb4651 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,6 +1,6 @@
+-# From https://www.webkitgtk.org/releases/webkitgtk-2.48.1.tar.xz.sums
+-sha1  f7939f920f92f6b1395b8573f069d3fb9c085b3f  webkitgtk-2.48.1.tar.xz
+-sha256  98efdf21c4cdca0fe0b73ab5a8cb52093b5aa52d9b1b016a93f71dbfa1eb258f  webkitgtk-2.48.1.tar.xz
++# From https://www.webkitgtk.org/releases/webkitgtk-2.48.2.tar.xz.sums
++sha1  e1a216588ad5eaf71b548b035699319f74cbd8da  webkitgtk-2.48.2.tar.xz
++sha256  ec58f6dfc25d3b360388e192f865068d69aab09b4d7df021f90e314d2fa54f37  webkitgtk-2.48.2.tar.xz
+ 
+ # Hashes for license files:
+ sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 2c22bfb607..246afad3cf 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WEBKITGTK_VERSION = 2.48.1
++WEBKITGTK_VERSION = 2.48.2
+ WEBKITGTK_SITE = https://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.39.5
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
