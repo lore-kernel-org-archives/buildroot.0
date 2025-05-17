@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2993BC3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:49:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FB7AC3DA6D
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:49:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C504B6FBE1;
-	Mon, 19 May 2025 10:49:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9D0996174F;
+	Mon, 19 May 2025 10:49:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BXlKwosEX0YM; Mon, 19 May 2025 10:49:23 +0000 (UTC)
+ id sEuooC3hrPlL; Mon, 19 May 2025 10:49:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 68D4B6FBD8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 39C3F6FB74
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 68D4B6FBD8;
-	Mon, 19 May 2025 10:49:23 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0F026193
+	by smtp3.osuosl.org (Postfix) with ESMTP id 39C3F6FB74;
+	Mon, 19 May 2025 10:49:25 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4CB21D4
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:42:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9C71041317
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:58 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6ABCA4193F
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7_DeQNefdTaO for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:57 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kt5N6fp0vmTn for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 60DD7410B8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E5ED41930
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 60DD7410B8
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:49 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8E5ED41930
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:06 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5D8B984A21; Mon, 19 May 2025 10:39:49 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+ id 8C78A872E7; Mon, 19 May 2025 10:40:06 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 13 Apr 2025 11:33:49 +0200
+Date: Sat, 17 May 2025 10:14:58 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 06f3d593f65cc52baddadf2c55e582f7310b2ede
-X-Git-Newrev: 3358c3e8a8e9cdd06ff93d174e4b674af69fa50a
+X-Git-Oldrev: ebf1217a7bd2b7750cde99718348f8f4e823588f
+X-Git-Newrev: d0e1181b16819fd489ee7226be9957038310faa1
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103949.5D8B984A21@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/fmlib: bump version to
- lf-6.12.3-1.0.0-3-g7a58eca
+Message-Id: <20250519104006.8C78A872E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/restorecond: bump to
+ version 3.8.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,153 +58,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6813967940976694568=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6813967940976694568==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=3358c3e8a8e9cdd06ff93d174e4b674af69fa50a
+commit: https://git.buildroot.net/buildroot/commit/?id=d0e1181b16819fd489ee7226be9957038310faa1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This is technically the master branch, a few commits post release tag.
-Change log:
-
-7a58ecaf0d90 fm_lib: explicit conversion to ioc_fm_pcd_exceptions in FM_PCD_SetException()
-22a0d3f1867e fm_lib: make REPORT_ERROR() definition more function-like
-08ac8b3112a8 fm_lib: fix conversion warnings between e_FmPcdEngine and enum ioc_fm_pcd_engine
-168eae74fd8a fm_lib: fix integer-to-pointer conversion build warning in GetDeviceId()
-
-The build fix patch from Buildroot is no longer necessary, remove it.
-
-Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
-[Julien: switch _VERSION to use git describe syntax]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- ...eger-conversion-error-and-enum-compare-wa.patch | 79 ----------------------
- package/fmlib/fmlib.hash                           |  2 +-
- package/fmlib/fmlib.mk                             |  2 +-
- 3 files changed, 2 insertions(+), 81 deletions(-)
+ package/restorecond/restorecond.hash | 2 +-
+ package/restorecond/restorecond.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/fmlib/0001-Fix-the-integer-conversion-error-and-enum-compare-wa.patch b/package/fmlib/0001-Fix-the-integer-conversion-error-and-enum-compare-wa.patch
-deleted file mode 100644
-index e38b36128f..0000000000
---- a/package/fmlib/0001-Fix-the-integer-conversion-error-and-enum-compare-wa.patch
-+++ /dev/null
-@@ -1,79 +0,0 @@
--From 3a1962a70cec74b3dac979e52a2cbcaa8897b9c8 Mon Sep 17 00:00:00 2001
--From: Akhilesh Nema <nemaakhilesh@gmail.com>
--Date: Fri, 10 Jan 2025 20:20:50 -0800
--Subject: [PATCH] Fix the integer conversion error and enum compare
-- warnings on build under gcc-14
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--Error:
--src/fm_lib.c: In function ‘GetDeviceId’:
--src/fm_lib.c:139:21: error: returning ‘uintptr_t’ {aka ‘long unsigned int’} from a function with return type ‘t_Handle’ {aka ‘void *’} makes pointer from integer without a cast [-Wint-conversion]
--  139 |         return p_Dev->id;
--      |                ~~~~~^~~~
--
--Warnings:
--
--src/fm_lib.c: In function ‘FM_PCD_CcRootModifyNextEngine’:
--src/fm_lib.c:997:51: warning: comparison between ‘e_FmPcdEngine’ and ‘enum ioc_fm_pcd_engine’ [-Wenum-compare]
--  997 |         if (p_FmPcdCcNextEngineParams->nextEngine == e_IOC_FM_PCD_FR) {
--      |                                                   ^~
--src/fm_lib.c: In function ‘FM_PCD_MatchTableAddKey’:
--src/fm_lib.c:1103:57: warning: comparison between ‘e_FmPcdEngine’ and ‘enum ioc_fm_pcd_engine’ [-Wenum-compare]
-- 1103 |     else if (p_KeyParams->ccNextEngineParams.nextEngine == e_IOC_FM_PCD_FR) {
--      |                                                         ^~
--src/fm_lib.c: In function ‘FM_PCD_MatchTableModifyKeyAndNextEngine’:
--src/fm_lib.c:1174:57: warning: comparison between ‘e_FmPcdEngine’ and ‘enum ioc_fm_pcd_engine’ [-Wenum-compare]
-- 1174 |     else if (p_KeyParams->ccNextEngineParams.nextEngine == e_IOC_FM_PCD_FR) {
--
--Upstream: https://github.com/nxp-qoriq/fmlib/pull/1
--
--Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
-----
-- src/fm_lib.c | 8 ++++----
-- 1 file changed, 4 insertions(+), 4 deletions(-)
--
--diff --git a/src/fm_lib.c b/src/fm_lib.c
--index 4ea40ff..85b4a66 100644
----- a/src/fm_lib.c
--+++ b/src/fm_lib.c
--@@ -136,7 +136,7 @@ t_Handle GetDeviceId(t_Handle h_Dev)
-- {
-- 	t_Device *p_Dev = (t_Device*)h_Dev;
-- 
---	return p_Dev->id;
--+	return (t_Handle) p_Dev->id;
-- }
-- 
-- 
--@@ -994,7 +994,7 @@ t_Error FM_PCD_CcRootModifyNextEngine(t_Handle                  h_CcTree,
--     }
-- 
-- #if (DPAA_VERSION >= 11)
---	if (p_FmPcdCcNextEngineParams->nextEngine == e_IOC_FM_PCD_FR) {
--+	if (p_FmPcdCcNextEngineParams->nextEngine == e_FM_PCD_FR) {
--         t_Device *p_NextDev = (t_Device*) p_FmPcdCcNextEngineParams->params.frParams.h_FrmReplic;
--         params.cc_next_engine_params.params.fr_params.frm_replic_id = UINT_TO_PTR(p_NextDev->id);
--     }
--@@ -1100,7 +1100,7 @@ t_Error FM_PCD_MatchTableAddKey(t_Handle            h_CcNode,
--     	params.key_params.cc_next_engine_params.params.kg_params.p_direct_scheme = UINT_TO_PTR(p_NextDev->id);
--     }
-- #if (DPAA_VERSION >= 11)
---    else if (p_KeyParams->ccNextEngineParams.nextEngine == e_IOC_FM_PCD_FR) {
--+    else if (p_KeyParams->ccNextEngineParams.nextEngine == e_FM_PCD_FR) {
--     	t_Device *p_NextDev = (t_Device*) p_KeyParams->ccNextEngineParams.params.frParams.h_FrmReplic;
--     	params.key_params.cc_next_engine_params.params.fr_params.frm_replic_id = UINT_TO_PTR(p_NextDev->id);
--     }
--@@ -1171,7 +1171,7 @@ t_Error FM_PCD_MatchTableModifyKeyAndNextEngine(t_Handle            h_CcNode,
--     	params.key_params.cc_next_engine_params.params.kg_params.p_direct_scheme = UINT_TO_PTR(p_NextDev->id);
--     }
-- #if (DPAA_VERSION >= 11)
---    else if (p_KeyParams->ccNextEngineParams.nextEngine == e_IOC_FM_PCD_FR) {
--+    else if (p_KeyParams->ccNextEngineParams.nextEngine == e_FM_PCD_FR) {
--     	t_Device *p_NextDev = (t_Device*) p_KeyParams->ccNextEngineParams.params.frParams.h_FrmReplic;
--     	params.key_params.cc_next_engine_params.params.fr_params.frm_replic_id = UINT_TO_PTR(p_NextDev->id);
--     }
---- 
--2.25.1
--
-diff --git a/package/fmlib/fmlib.hash b/package/fmlib/fmlib.hash
-index edf87426df..2d63a615c0 100644
---- a/package/fmlib/fmlib.hash
-+++ b/package/fmlib/fmlib.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  173f1c41207e50dd3908c7dad192962240fd1a9269bca6e368f401134b3503bf  fmlib-lf-6.6.52-2.2.0.tar.gz
-+sha256  087e1be3584a390cf0a75fa3730589edf76aa9a4832fa012a67c381cbf5b57a3  fmlib-lf-6.12.3-1.0.0-3-g7a58eca.tar.gz
- sha256  5d7770fa9f70f0c6f0b4784bbca8401811259a4b1e03455dbd863ffd0d34d2ca  LICENSE
-diff --git a/package/fmlib/fmlib.mk b/package/fmlib/fmlib.mk
-index 601a3e16ef..2d25c0845c 100644
---- a/package/fmlib/fmlib.mk
-+++ b/package/fmlib/fmlib.mk
+diff --git a/package/restorecond/restorecond.hash b/package/restorecond/restorecond.hash
+index 34847f28f1..2a55edc313 100644
+--- a/package/restorecond/restorecond.hash
++++ b/package/restorecond/restorecond.hash
+@@ -1,5 +1,5 @@
+ # https://github.com/SELinuxProject/selinux/wiki/Releases
+-sha256  4192595c08c775ff540f5ab850885ce11b132a4a4e29b65f20e751dd0a69d31f  restorecond-3.7.tar.gz
++sha256  164fe4825a9c65f3dd664f68fe252e67df72d4ea817a90d8f62ae0544bfb8ba2  restorecond-3.8.1.tar.gz
+ 
+ # Hash for license file
+ sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  LICENSE
+diff --git a/package/restorecond/restorecond.mk b/package/restorecond/restorecond.mk
+index 4624b9204d..f2618c20b3 100644
+--- a/package/restorecond/restorecond.mk
++++ b/package/restorecond/restorecond.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FMLIB_VERSION = lf-6.6.52-2.2.0
-+FMLIB_VERSION = lf-6.12.3-1.0.0-3-g7a58eca
- FMLIB_SITE = $(call github,nxp-qoriq,fmlib,$(FMLIB_VERSION))
- FMLIB_LICENSE = BSD-3-Clause
- FMLIB_LICENSE_FILES = LICENSE
-
---===============6813967940976694568==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-RESTORECOND_VERSION = 3.7
++RESTORECOND_VERSION = 3.8.1
+ RESTORECOND_SITE = https://github.com/SELinuxProject/selinux/releases/download/$(RESTORECOND_VERSION)
+ RESTORECOND_LICENSE = GPL-2.0
+ RESTORECOND_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6813967940976694568==--
