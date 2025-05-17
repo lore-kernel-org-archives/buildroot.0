@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71ECBC2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:02:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 761D2C3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:02:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7A6326147C;
-	Mon, 19 May 2025 11:02:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 45F5D6154B;
+	Mon, 19 May 2025 11:02:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gwGM8F3SW6Hf; Mon, 19 May 2025 11:02:28 +0000 (UTC)
+ id q-R7QS5kuQOt; Mon, 19 May 2025 11:02:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A2EC570F1F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6612B6FA0F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A2EC570F1F;
-	Mon, 19 May 2025 11:02:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6612B6FA0F;
+	Mon, 19 May 2025 11:02:33 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 726DAD4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:47:49 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 320E0D4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:47:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 06CE4410C2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3791E41A52
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RADj4b0D0MHE for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:35 +0000 (UTC)
+ id GB5uA6bTwYLE for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EAC9E40DEE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 970BE41DCE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id EAC9E40DEE
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:05 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 970BE41DCE
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:06 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E4E9B83BC0; Mon, 19 May 2025 10:40:05 +0000 (UTC)
+ id 9593C82A2E; Mon, 19 May 2025 10:40:06 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 16 May 2025 20:01:25 +0200
+Date: Sat, 17 May 2025 10:15:17 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b0a62a96543065086a6ad7b44f4da39dfa42b9da
-X-Git-Newrev: 585eeb464018f2c5865b71251df83e10a02cb8b0
+X-Git-Oldrev: d0e1181b16819fd489ee7226be9957038310faa1
+X-Git-Newrev: 0683e7d65b27609b2d3c642186d4cfbca8748aa6
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104005.E4E9B83BC0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] fs/erofs: unbreak custom
- compression handling
+Message-Id: <20250519104006.9593C82A2E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/semodule-utils: bump
+ to version 3.8.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,42 +66,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=585eeb464018f2c5865b71251df83e10a02cb8b0
+commit: https://git.buildroot.net/buildroot/commit/?id=0683e7d65b27609b2d3c642186d4cfbca8748aa6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes:
-https://autobuild.buildroot.net/results/0f856def945b9a863f45f7a58553b62f6875720b/
-
-Commit a02e43741719 ("fs/erofs: add custom compression option with optional
-compress-hints file") added logic for custom compression, but in fact it did
-not work.
-
-BR2_TARGET_ROOTFS_EROFS_COMPRESSION_{ALGORITHMS,HINTS} are kconfig string
-variables, so we need to use qstrip rather than strip.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- fs/erofs/erofs.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/semodule-utils/semodule-utils.hash | 2 +-
+ package/semodule-utils/semodule-utils.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/fs/erofs/erofs.mk b/fs/erofs/erofs.mk
-index 6543a364f1..881ecea053 100644
---- a/fs/erofs/erofs.mk
-+++ b/fs/erofs/erofs.mk
-@@ -11,9 +11,9 @@ ROOTFS_EROFS_ARGS += -zlz4hc,$(BR2_TARGET_ROOTFS_EROFS_LZ4HC_LEVEL)
- else ifeq ($(BR2_TARGET_ROOTFS_EROFS_LZMA),y)
- ROOTFS_EROFS_ARGS += -zlzma,$(BR2_TARGET_ROOTFS_EROFS_LZMA_LEVEL)
- else ifeq ($(BR2_TARGET_ROOTFS_EROFS_CUSTOM_COMPRESSION),y)
--ROOTFS_EROFS_ARGS += -z$(strip $(BR2_TARGET_ROOTFS_EROFS_COMPRESSION_ALGORITHMS))
--ifneq ($(strip $(BR2_TARGET_ROOTFS_EROFS_COMPRESSION_HINTS)),)
--ROOTFS_EROFS_ARGS += --compress-hints $(strip $(BR2_TARGET_ROOTFS_EROFS_COMPRESSION_HINTS))
-+ROOTFS_EROFS_ARGS += -z$(call qstrip,$(BR2_TARGET_ROOTFS_EROFS_COMPRESSION_ALGORITHMS))
-+ifneq ($(call qstrip,$(BR2_TARGET_ROOTFS_EROFS_COMPRESSION_HINTS)),)
-+ROOTFS_EROFS_ARGS += --compress-hints $(call qstrip,$(BR2_TARGET_ROOTFS_EROFS_COMPRESSION_HINTS))
- endif
- endif
+diff --git a/package/semodule-utils/semodule-utils.hash b/package/semodule-utils/semodule-utils.hash
+index 296f7fe137..011833027c 100644
+--- a/package/semodule-utils/semodule-utils.hash
++++ b/package/semodule-utils/semodule-utils.hash
+@@ -1,5 +1,5 @@
+ # https://github.com/SELinuxProject/selinux/wiki/Releases
+-sha256  db0641aeafefec46612c7c2ddd33ef1060bb721ce64842d2a96c33dddb5eb176  semodule-utils-3.7.tar.gz
++sha256  7705b0db059c53a21d6a77c0b50f6c467d91a0ea92ff875f1c93527cd2762395  semodule-utils-3.8.1.tar.gz
  
+ # Hash for license file
+ sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  LICENSE
+diff --git a/package/semodule-utils/semodule-utils.mk b/package/semodule-utils/semodule-utils.mk
+index c9d3af4509..ae32e6cd80 100644
+--- a/package/semodule-utils/semodule-utils.mk
++++ b/package/semodule-utils/semodule-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SEMODULE_UTILS_VERSION = 3.7
++SEMODULE_UTILS_VERSION = 3.8.1
+ SEMODULE_UTILS_SITE = https://github.com/SELinuxProject/selinux/releases/download/$(SEMODULE_UTILS_VERSION)
+ SEMODULE_UTILS_LICENSE = GPL-2.0
+ SEMODULE_UTILS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
