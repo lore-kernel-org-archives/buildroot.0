@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93C16C2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:04:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06922C3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:04:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D582C71123;
-	Mon, 19 May 2025 11:04:43 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id W__OYhAVXj6g; Mon, 19 May 2025 11:04:43 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D3FA371138
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D3FA371138;
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1764684993;
 	Mon, 19 May 2025 11:04:42 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4TCBSqY_IY6v; Mon, 19 May 2025 11:04:41 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1384B84994
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1384B84994;
+	Mon, 19 May 2025 11:04:41 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 62248D4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:48:59 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 526B2E4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:48:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 687F6410F6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0EB72410B6
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hJhZXZ9NeE0X for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:43 +0000 (UTC)
+ id d6Ib6t6OMcEm for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 092684202E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1991441E62
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 092684202E
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:09 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1991441E62
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 070A883BC0; Mon, 19 May 2025 10:40:09 +0000 (UTC)
+ id 15943872E7; Mon, 19 May 2025 10:40:08 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 18 May 2025 10:53:10 +0200
+Date: Sat, 17 May 2025 16:34:09 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 0b0662f02a0e779f72a6f3ed5f024c6c065d9aa7
-X-Git-Newrev: 56ea5a02268631f2ea679c067e9b0ec94e0e512e
+X-Git-Oldrev: a474642fdcd8c69e12126bbe8304479aa855d916
+X-Git-Newrev: 6debbd693b920ffa618b8d30ac5eb6edbff814f2
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104009.070A883BC0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] support/scripts/pkg-stats: add
- support for reporting stale CVE entries
+Message-Id: <20250519104008.15943872E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/mender-update-modules:
+ enable docker, rpm, and script modules
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,174 +61,162 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0092234485568749363=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0092234485568749363==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=56ea5a02268631f2ea679c067e9b0ec94e0e512e
+commit: https://git.buildroot.net/buildroot/commit/?id=6debbd693b920ffa618b8d30ac5eb6edbff814f2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The NVD database contains some CPEs that are wrongly not associated
-with any version number. They are for example sometimes associated
-with very old CVEs.
-Those CPEs are annoying, because they pollute our pkg-stat CVE results
-with CVE entries which actually don't affect us.
+Starting with mender 5.x, the docker, rpm and script modules provided by
+the mender package now reside in the mender-update-modules repository.
 
-The proper way to solve it is, and should remain, to fix the NVD
-database by reporting these issues. Having to deal with a lot of
-CVEs/CPEs, the NVD database is however slow to be updated.
+Even though the mender package provided by Buildroot is not updated yet to 5.x,
+it is best to enable the modules here to help facilitate the future update of
+the mender package to 5.x, and to ensure that any future modifications or bug
+fixes to these modules are easy to apply by simply bumping the upstream package
+version.
 
-To reduce the noise in our pkg-stats results in the meantime, one
-possibility is to add <PKG_IGNORE_CVES> entries for those CVEs.  This
-however comes with the downside that even once the NVD database gets
-fixed, those ignored entries risk remaining in Buildroot forever
-because they are undetected.
+Script is enabled by default to preserve the existing behavior of the mender
+package.
 
-This commit tries to address this downside by checking for and
-reporting CVEs that are ignored in Buildroot, but where the
-NVD reports our package version as unaffected. Those CVEs will appear
-in the 'CVEs Ignored' column as '(stale)', and the cell will be
-colored the same way warnings are. This should allow us to detect and
-remove those entries.
-
-It can be tested for example by adding the following variable to the
-apache package (for a CVE that was recently fixed in the NVD database):
-APACHE_IGNORE_CVES = CVE-1999-0236
-
-Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/scripts/cve.py    |  4 +---
- support/scripts/pkg-stats | 36 ++++++++++++++++++++++++++++++++----
- 2 files changed, 33 insertions(+), 7 deletions(-)
+ package/mender-update-modules/Config.in            | 56 ++++++++++++++++++++++
+ .../mender-update-modules/mender-update-modules.mk | 10 ++++
+ package/mender/mender.mk                           |  7 +--
+ 3 files changed, 67 insertions(+), 6 deletions(-)
 
-diff --git a/support/scripts/cve.py b/support/scripts/cve.py
-index 18fda8e1a1..1cbe24c02d 100755
---- a/support/scripts/cve.py
-+++ b/support/scripts/cve.py
-@@ -184,13 +184,11 @@ class CVE:
-         """The set of CPE products referred by this CVE definition"""
-         return set(cpe_product(p['id']) for p in self.each_cpe())
+diff --git a/package/mender-update-modules/Config.in b/package/mender-update-modules/Config.in
+index 8181cfe91b..beec9d24e7 100644
+--- a/package/mender-update-modules/Config.in
++++ b/package/mender-update-modules/Config.in
+@@ -72,6 +72,40 @@ config BR2_PACKAGE_MENDER_UPDATE_MODULES_DIRTY
  
--    def affects(self, name, version, cve_ignore_list, cpeid=None):
-+    def affects(self, name, version, cpeid=None):
-         """
-         True if the Buildroot Package object passed as argument is affected
-         by this CVE.
-         """
--        if self.identifier in cve_ignore_list:
--            return self.CVE_DOESNT_AFFECT
+ 	  https://github.com/mendersoftware/mender-update-modules/tree/master/dirty
  
-         pkg_version = distutils.version.LooseVersion(version)
-         if not hasattr(pkg_version, "version"):
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 46b12cd992..a0a46aa8cb 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -122,6 +122,7 @@ class Package:
-         self.cves = list()
-         self.ignored_cves = list()
-         self.unsure_cves = list()
-+        self.stale_cve_ignores = list()
-         self.latest_version = {'status': RM_API_STATUS_ERROR, 'version': None, 'id': None}
-         self.status = {}
- 
-@@ -638,7 +639,18 @@ def check_package_cve_affects(cve, cpe_product_pkgs):
-         if product not in cpe_product_pkgs:
-             continue
-         for pkg in cpe_product_pkgs[product]:
--            cve_status = cve.affects(pkg.name, pkg.current_version, pkg.ignored_cves, pkg.cpeid)
-+            cve_status = cve.affects(pkg.name, pkg.current_version, pkg.cpeid)
++config BR2_PACKAGE_MENDER_UPDATE_MODULES_DOCKER
++	bool "docker"
++	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS # docker-engine, docker-cli
++	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS # docker-engine, docker-cli
++	depends on BR2_TOOLCHAIN_HAS_THREADS # docker-engine, docker-cli
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC # containerd -> runc
++	depends on BR2_USE_MMU # containerd
++	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS # libseccomp
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # libseccom
++	select BR2_PACKAGE_DOCKER_ENGINE
++	select BR2_PACKAGE_DOCKER_CLI
++	select BR2_PACKAGE_JQ # runtime
++	help
++	  The Docker Update Module handles the Docker images that shall
++	  be running in the device. A deployment with this module will
++	  stop all currently running Docker containers in the device,
++	  and start new containers with the provided list of Docker
++	  images in the Mender Artifact.
 +
-+            if cve.identifier in pkg.ignored_cves:
-+                if cve_status == cve.CVE_DOESNT_AFFECT:
-+                    # We have an ignore entry for a CVE which is
-+                    # already reported as 'not affected'. This might
-+                    # happen for example when the NVD database doesn't
-+                    # initially include version numbers for a CPE, and
-+                    # later fixes it. Store it so that we can report
-+                    # it.
-+                    pkg.stale_cve_ignores.append(cve.identifier)
-+                cve_status = cve.CVE_DOESNT_AFFECT
-             if cve_status == cve.CVE_AFFECTS:
-                 pkg.cves.append(cve.identifier)
-             elif cve_status == cve.CVE_UNKNOWN:
-@@ -670,6 +682,8 @@ def check_package_cves(nvd_path, packages):
-         if 'cve' not in pkg.status:
-             if pkg.cves or pkg.unsure_cves:
-                 pkg.status['cve'] = ("error", "affected by CVEs")
-+            elif pkg.stale_cve_ignores:
-+                pkg.status['cve'] = ("warning", "has stale CVE ignores")
-             else:
-                 pkg.status['cve'] = ("ok", "not affected by CVEs")
++	  In case of an unforeseen error during the process, the module
++	  will use the rollback mechanism of the Mender client to
++	  restore the previously running Docker containers.
++
++	  https://github.com/mendersoftware/mender-update-modules/tree/master/docker
++
++comment "docker support needs a glibc or musl toolchain w/ threads, headers >= 3.17"
++	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
++	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_TOOLCHAIN_USES_UCLIBC || \
++		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
++	depends on BR2_USE_MMU
++
+ config BR2_PACKAGE_MENDER_UPDATE_MODULES_IPK
+ 	bool "ipk"
+ 	select BR2_PACKAGE_OPKG
+@@ -157,6 +191,28 @@ config BR2_PACKAGE_MENDER_UPDATE_MODULES_ROOTFS_VERSION_CHECK
+ comment "rootfs version check needs a toolchain w/ threads"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
  
-@@ -712,10 +726,13 @@ def calculate_stats(packages):
-         stats["patches"] += pkg.patch_count
-         stats["total-cves"] += len(pkg.cves)
-         stats["total-unsure-cves"] += len(pkg.unsure_cves)
-+        stats["total-stale-cve-ignores"] += len(pkg.stale_cve_ignores)
-         if len(pkg.cves) != 0:
-             stats["pkg-cves"] += 1
-         if len(pkg.unsure_cves) != 0:
-             stats["pkg-unsure-cves"] += 1
-+        if len(pkg.stale_cve_ignores) != 0:
-+            stats["pkg-stale-cve-ignores"] += 1
-         if pkg.cpeid:
-             stats["cpe-id"] += 1
-         else:
-@@ -867,7 +884,7 @@ function expandField(fieldId){
-  .wrong, .lotsofpatches, .invalid_url, .version-needs-update, .cpe-nok, .cve-nok {
-    background: #ff9a69;
-  }
-- .somepatches, .somewarnings, .missing_url, .version-unknown, .cpe-unknown, .cve-unknown {
-+ .somepatches, .somewarnings, .missing_url, .version-unknown, .cpe-unknown, .cve-unknown, .cve-stale {
-    background: #ffd870;
-  }
-  .cve_ignored, .version-error {
-@@ -1080,10 +1097,17 @@ def dump_html_pkg(f, pkg):
-     div_class = ["centered data ignored_cves"]
-     div_class.append(f'_{pkg_css_class}')
-     if pkg.ignored_cves:
--        div_class.append("cve_ignored")
-+        if pkg.stale_cve_ignores:
-+            div_class.append("cve-stale")
-+        else:
-+            div_class.append("cve_ignored")
-     f.write(f'  <div id="{data_field_id}" class="{" ".join(div_class)}">\n')
-     for ignored_cve in pkg.ignored_cves:
--        f.write(f'    <a href="https://security-tracker.debian.org/tracker/{ignored_cve}">{ignored_cve}</a><br/>\n')
-+        if ignored_cve in pkg.stale_cve_ignores:
-+            f.write(f"""    <a href="https://security-tracker.debian.org/tracker/{ignored_cve}">{ignored_cve}"""
-+                    """ <i>(stale)</i></a><br/>\n""")
-+        else:
-+            f.write(f'    <a href="https://security-tracker.debian.org/tracker/{ignored_cve}">{ignored_cve}</a><br/>\n')
-     f.write("  </div>\n")
++config BR2_PACKAGE_MENDER_UPDATE_MODULES_RPM
++	bool "rpm"
++	depends on !BR2_STATIC_LIBS # dlfcn.h
++	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
++	depends on BR2_PACKAGE_LUA && !BR2_PACKAGE_LUA_5_1
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_RPM
++	help
++	  The Rpm Update Module updates software on the device using
++	  the native local package manager.
++
++	  A Mender Artifact containing one or more software packages
++	  is sent to the device, where the Update Module will call
++	  the package manager to install them in alphabetical order.
++
++	  https://github.com/mendersoftware/mender-update-modules/tree/master/rpm
++
++comment "rpm needs a toolchain w/ dynamic library, threads and lua >= 5.3"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
++		|| !BR2_PACKAGE_LUA || BR2_PACKAGE_LUA_5_1
++	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
++
+ config BR2_PACKAGE_MENDER_UPDATE_MODULES_SWU
+ 	bool "swupdate"
+ 	depends on !BR2_STATIC_LIBS
+diff --git a/package/mender-update-modules/mender-update-modules.mk b/package/mender-update-modules/mender-update-modules.mk
+index 90c076ea96..0024acc189 100644
+--- a/package/mender-update-modules/mender-update-modules.mk
++++ b/package/mender-update-modules/mender-update-modules.mk
+@@ -10,6 +10,8 @@ MENDER_UPDATE_MODULES_LICENSE = Apache-2.0
+ MENDER_UPDATE_MODULES_LICENSE_FILES = LICENSE
+ MENDER_UPDATE_MODULES_DEPENDENCIES = host-mender-artifact mender
  
-     # CPE ID
-@@ -1193,6 +1217,10 @@ def dump_html_stats(f, stats):
-             stats["pkg-unsure-cves"])
-     f.write('<div class="data">Total number of unsure CVEs affecting all packages</div><div class="data">%s</div>\n' %
-             stats["total-unsure-cves"])
-+    f.write('<div class="data">Packages with stale CVE ignores</div><div class="data">%s</div>\n' %
-+            stats["pkg-stale-cve-ignores"])
-+    f.write('<div class="data">Total number of stale CVE ignores affecting all packages</div><div class="data">%s</div>\n' %
-+            stats["total-stale-cve-ignores"])
-     f.write('<div class="data">Packages with CPE ID</div><div class="data">%s</div>\n' %
-             stats["cpe-id"])
-     f.write('<div class="data">Packages without CPE ID</div><div class="data">%s</div>\n' %
-
---===============0092234485568749363==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
++MENDER_UPDATE_MODULES_MODULES = script
++
+ ifeq ($(BR2_PACKAGE_MENDER_UPDATE_MODULES_DFU),y)
+ MENDER_UPDATE_MODULES_MODULES += dfu
+ endif
+@@ -22,6 +24,10 @@ ifeq ($(BR2_PACKAGE_MENDER_UPDATE_MODULES_DIRTY),y)
+ MENDER_UPDATE_MODULES_MODULES += dirty
+ endif
+ 
++ifeq ($(BR2_PACKAGE_MENDER_UPDATE_MODULES_DOCKER),y)
++MENDER_UPDATE_MODULES_MODULES += docker
++endif
++
+ ifeq ($(BR2_PACKAGE_MENDER_UPDATE_MODULES_IPK),y)
+ MENDER_UPDATE_MODULES_MODULES += ipk
+ endif
+@@ -49,6 +55,10 @@ endef
+ MENDER_UPDATE_MODULES_POST_INSTALL_TARGET_HOOKS += MENDER_UPDATE_MODULES_INSTALL_MENDER_COMPARE_VERSIONS
+ endif
+ 
++ifeq ($(BR2_PACKAGE_MENDER_UPDATE_MODULES_RPM),y)
++MENDER_UPDATE_MODULES_MODULES += rpm
++endif
++
+ ifeq ($(BR2_PACKAGE_MENDER_UPDATE_MODULES_SWU),y)
+ MENDER_UPDATE_MODULES_MODULES += swu
+ endif
+diff --git a/package/mender/mender.mk b/package/mender/mender.mk
+index 146e6b2b73..770589390f 100644
+--- a/package/mender/mender.mk
++++ b/package/mender/mender.mk
+@@ -45,12 +45,7 @@ MENDER_DEPENDENCIES = host-pkgconf openssl
+ 
+ MENDER_LDFLAGS = -X github.com/mendersoftware/mender/conf.Version=$(MENDER_VERSION)
+ 
+-MENDER_UPDATE_MODULES_FILES = \
+-	directory \
+-	script \
+-	single-file \
+-	$(if $(BR2_PACKAGE_DOCKER_CLI),docker) \
+-	$(if $(BR2_PACKAGE_RPM),rpm)
++MENDER_UPDATE_MODULES_FILES = directory single-file
+ 
+ define MENDER_INSTALL_CONFIG_FILES
+ 	$(INSTALL) -d -m 755 $(TARGET_DIR)/etc/mender/scripts
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0092234485568749363==--
