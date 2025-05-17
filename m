@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92676C3ABDA
-	for <buildroot@archiver.kernel.org>; Sat, 17 May 2025 09:09:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6EAE1C2D0CD
+	for <buildroot@archiver.kernel.org>; Sat, 17 May 2025 09:09:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 126F583D9B;
-	Sat, 17 May 2025 09:09:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 39D6A83D19;
+	Sat, 17 May 2025 09:09:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id r8eOx4ORX5uS; Sat, 17 May 2025 09:09:41 +0000 (UTC)
+ id 5dCIvcIInNex; Sat, 17 May 2025 09:09:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 54F9C83D4C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF36E83D9E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 54F9C83D4C;
-	Sat, 17 May 2025 09:09:40 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 07521D89
+	by smtp1.osuosl.org (Postfix) with ESMTP id CF36E83D9E;
+	Sat, 17 May 2025 09:09:42 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 09F52D8A
  for <buildroot@buildroot.org>; Sat, 17 May 2025 09:09:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EC0F3412C2
+ by smtp1.osuosl.org (Postfix) with ESMTP id EF9B383D19
  for <buildroot@buildroot.org>; Sat, 17 May 2025 09:09:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cfNCJ1zQECSb for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Bn1jbdnkLAbh for <buildroot@buildroot.org>;
  Sat, 17 May 2025 09:09:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4727440DED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F2CD83D1D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4727440DED
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1F2CD83D1D
  for <buildroot@buildroot.org>; Sat, 17 May 2025 09:09:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3848986DF0; Sat, 17 May 2025 09:09:36 +0000 (UTC)
+ id 18CA486DF3; Sat, 17 May 2025 09:09:36 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 17 May 2025 10:11:32 +0200
+Date: Sat, 17 May 2025 10:08:35 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2a7823a7fe2a1859ff8cab2d92a22a69003d62db
-X-Git-Newrev: 1ae3ad4e878e1f4217ba3276ff0c9e584234afa4
+X-Git-Oldrev: cbabeb507744e220f5edaabb3a1549c1399adad6
+X-Git-Newrev: 992b6783931157a809ed8435b08c2d21f380cc01
 X-Patchwork-Hint: ignore
-Message-Id: <20250517090936.3848986DF0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libselinux: bump to version 3.8.1
+Message-Id: <20250517090936.18CA486DF3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libsepol: bump to version 3.8.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,54 +65,134 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ae3ad4e878e1f4217ba3276ff0c9e584234afa4
+commit: https://git.buildroot.net/buildroot/commit/?id=992b6783931157a809ed8435b08c2d21f380cc01
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Changes:
+    - SELinux policy version 34 is available starting with kernel 6.14.
+    - Updated 0001-support-static-only.patch to apply cleanly and changed
+      the email address from aduskett@gmail.com to
+      adam.duskett@amarulasolutions.com
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- .../0001-Do-not-use-PYCEXT-and-rely-on-the-installed-file-nam.patch     | 2 +-
- package/libselinux/libselinux.hash                                      | 2 +-
- package/libselinux/libselinux.mk                                        | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/libsepol/0001-support-static-only.patch | 39 ++++++++++++++-----------
+ package/libsepol/Config.in                      |  2 ++
+ package/libsepol/libsepol.hash                  |  2 +-
+ package/libsepol/libsepol.mk                    |  2 +-
+ 4 files changed, 26 insertions(+), 19 deletions(-)
 
-diff --git a/package/libselinux/0001-Do-not-use-PYCEXT-and-rely-on-the-installed-file-nam.patch b/package/libselinux/0001-Do-not-use-PYCEXT-and-rely-on-the-installed-file-nam.patch
-index 3bdb1d0f46..0d6db785ec 100644
---- a/package/libselinux/0001-Do-not-use-PYCEXT-and-rely-on-the-installed-file-nam.patch
-+++ b/package/libselinux/0001-Do-not-use-PYCEXT-and-rely-on-the-installed-file-nam.patch
-@@ -36,7 +36,7 @@ index 190016e2af34..7ee22fd35da3 100644
-  RUBYINC ?= $(shell $(RUBY) -e 'puts "-I" + RbConfig::CONFIG["rubyarchhdrdir"] + " -I" + RbConfig::CONFIG["rubyhdrdir"]')
-  RUBYLIBS ?= $(shell $(RUBY) -e 'puts "-L" + RbConfig::CONFIG["libdir"] + " -L" + RbConfig::CONFIG["archlibdir"] + " " + RbConfig::CONFIG["LIBRUBYARG_SHARED"]')
-  RUBYINSTALL ?= $(shell $(RUBY) -e 'puts RbConfig::CONFIG["vendorarchdir"]')
--@@ -193,7 +192,7 @@ install: all
-+@@ -195,7 +194,7 @@ install: all
-  install-pywrap: pywrap
-  	CFLAGS="$(CPPFLAGS) $(CFLAGS) $(SWIG_CFLAGS)" $(PYTHON) -m pip install --prefix=$(PREFIX) `test -n "$(DESTDIR)" && echo --root $(DESTDIR) --ignore-installed --no-deps` $(PYTHON_SETUP_ARGS) .
-  	install -m 644 $(SWIGPYOUT) $(DESTDIR)$(PYTHONLIBDIR)/selinux/__init__.py
-diff --git a/package/libselinux/libselinux.hash b/package/libselinux/libselinux.hash
-index fac9d3cef2..0933398f1e 100644
---- a/package/libselinux/libselinux.hash
-+++ b/package/libselinux/libselinux.hash
+diff --git a/package/libsepol/0001-support-static-only.patch b/package/libsepol/0001-support-static-only.patch
+index b3eb608f7b..7a614d7d0d 100644
+--- a/package/libsepol/0001-support-static-only.patch
++++ b/package/libsepol/0001-support-static-only.patch
+@@ -1,6 +1,6 @@
+ From 2140db697c7f1da2a0a3f7bbcb14c1a0dade84e5 Mon Sep 17 00:00:00 2001
+-From: Adam Duskett <aduskett@gmail.com>
+-Date: Mon, 9 Oct 2017 16:28:12 -0400
++From: Adam Duskett <adam.duskett@amarulasolutions.com>
++Date: Wed, 14 May 2025 16:32:53 +0200
+ Subject: [PATCH] Add support for static-only build
+ 
+ Instead of unconditionally building shared libraries, this patch
+@@ -10,17 +10,19 @@ libraries. It allows to support cases where the target architecture
+ does not have support for shared libraries.
+ 
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Signed-off-by: Adam Duskett <aduskett@gmail.com>
++[Updated for 3.8.1]
++Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ [Update for 2.8]
+ ---
+- src/Makefile | 13 ++++++++++---
+- 1 file changed, 10 insertions(+), 3 deletions(-)
++ src/Makefile | 9 ++++++++-
++ 1 file changed, 8 insertions(+), 1 deletion(-)
+ 
+-diff -durNw libsepol-2.7.orig/src/Makefile libsepol-2.7/src/Makefile
+---- libsepol-2.7.orig/src/Makefile	2018-01-15 21:07:51.285183415 +0100
+-+++ libsepol-2.7/src/Makefile	2018-01-15 21:08:56.515182717 +0100
+-@@ -39,7 +39,12 @@
++diff --git a/src/Makefile b/src/Makefile
++index 71fa3ed..efb81bc 100644
++--- a/src/Makefile
+++++ b/src/Makefile
++@@ -45,7 +45,12 @@ LDFLAGS += -undefined dynamic_lookup
+  LN=gln
+  endif
+  
+@@ -34,14 +36,17 @@ diff -durNw libsepol-2.7.orig/src/Makefile libsepol-2.7/src/Makefile
+  
+  
+  $(LIBA):  $(OBJS)
+-@@ -81,8 +86,10 @@
++@@ -87,8 +92,10 @@ endif
+  install: all
+-	test -d $(DESTDIR)$(LIBDIR) || install -m 755 -d $(DESTDIR)$(LIBDIR)
+-	install -m 644 $(LIBA) $(DESTDIR)$(LIBDIR)
++ 	test -d $(DESTDIR)$(LIBDIR) || install -m 755 -d $(DESTDIR)$(LIBDIR)
++ 	install -m 644 $(LIBA) $(DESTDIR)$(LIBDIR)
+ +ifeq ($(STATIC),)
+-	test -d $(DESTDIR)$(SHLIBDIR) || install -m 755 -d $(DESTDIR)$(SHLIBDIR)
+-	install -m 755 $(LIBSO) $(DESTDIR)$(SHLIBDIR)
++ 	test -d $(DESTDIR)$(SHLIBDIR) || install -m 755 -d $(DESTDIR)$(SHLIBDIR)
++ 	install -m 755 $(LIBSO) $(DESTDIR)$(SHLIBDIR)
+ +endif
+-	test -d $(DESTDIR)$(LIBDIR)/pkgconfig || install -m 755 -d $(DESTDIR)$(LIBDIR)/pkgconfig
+-	install -m 644 $(LIBPC) $(DESTDIR)$(LIBDIR)/pkgconfig
+-	$(LN) -sf --relative $(DESTDIR)$(SHLIBDIR)/$(LIBSO) $(DESTDIR)$(LIBDIR)/$(TARGET)
++ 	test -d $(DESTDIR)$(LIBDIR)/pkgconfig || install -m 755 -d $(DESTDIR)$(LIBDIR)/pkgconfig
++ 	install -m 644 $(LIBPC) $(DESTDIR)$(LIBDIR)/pkgconfig
++ 	$(LN) -sf --relative $(DESTDIR)$(SHLIBDIR)/$(LIBSO) $(DESTDIR)$(LIBDIR)/$(TARGET)
++-- 
++2.49.0
++
+diff --git a/package/libsepol/Config.in b/package/libsepol/Config.in
+index 5dfd1a41d3..5b0832009c 100644
+--- a/package/libsepol/Config.in
++++ b/package/libsepol/Config.in
+@@ -12,6 +12,7 @@ if BR2_PACKAGE_LIBSEPOL
+ 
+ config BR2_PACKAGE_LIBSEPOL_POLICY_VERSION
+ 	int "Policy version"
++	default 34 if BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_14
+ 	default 33 if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_8
+ 	default 32 if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_5
+ 	default 31 if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13
+@@ -32,6 +33,7 @@ config BR2_PACKAGE_LIBSEPOL_POLICY_VERSION
+ 	  >= 4.13 < 5.5    31
+ 	  >= 5.5 < 5.8     32
+ 	  >= 5.8           33
++	  >= 6.14          34
+ 
+ endif
+ 
+diff --git a/package/libsepol/libsepol.hash b/package/libsepol/libsepol.hash
+index dcc67ac638..adf7cb86bb 100644
+--- a/package/libsepol/libsepol.hash
++++ b/package/libsepol/libsepol.hash
 @@ -1,5 +1,5 @@
  # From: https://github.com/SELinuxProject/selinux/wiki/Releases
--sha256  ea03f42d13a4f95757997dba8cf0b26321fac5d2f164418b4cc856a92d2b17bd  libselinux-3.7.tar.gz
-+sha256  ec2d2789f931152d21c1db1eb4bc202ce4eccede34d9be9e360e3b45243cee2c  libselinux-3.8.1.tar.gz
+-sha256  cd741e25244e7ef6cd934d633614131a266c3eaeab33d8bfa45e8a93b45cc901  libsepol-3.7.tar.gz
++sha256  0e78705305f955abd4c0654d37a5477ee26349ab74db9e2b03a7868897ae1ddf  libsepol-3.8.1.tar.gz
  
  # Hash for license file
- sha256  86657b4c0fe868d7cbd977cb04c63b6c667e08fa51595a7bc846ad4bed8fc364  LICENSE
-diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
-index 360ab063ca..e19bb4dd2d 100644
---- a/package/libselinux/libselinux.mk
-+++ b/package/libselinux/libselinux.mk
+ sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  LICENSE
+diff --git a/package/libsepol/libsepol.mk b/package/libsepol/libsepol.mk
+index af14778ead..2376ab852d 100644
+--- a/package/libsepol/libsepol.mk
++++ b/package/libsepol/libsepol.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBSELINUX_VERSION = 3.7
-+LIBSELINUX_VERSION = 3.8.1
- LIBSELINUX_SITE = https://github.com/SELinuxProject/selinux/releases/download/$(LIBSELINUX_VERSION)
- LIBSELINUX_LICENSE = Public Domain
- LIBSELINUX_LICENSE_FILES = LICENSE
+-LIBSEPOL_VERSION = 3.7
++LIBSEPOL_VERSION = 3.8.1
+ LIBSEPOL_SITE = https://github.com/SELinuxProject/selinux/releases/download/$(LIBSEPOL_VERSION)
+ LIBSEPOL_LICENSE = LGPL-2.1+
+ LIBSEPOL_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
