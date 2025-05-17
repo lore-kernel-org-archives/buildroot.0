@@ -4,72 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECC55C3ABDD
-	for <buildroot@archiver.kernel.org>; Sat, 17 May 2025 16:18:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 761EEC2D0CD
+	for <buildroot@archiver.kernel.org>; Sat, 17 May 2025 16:30:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 58A0A82BA7;
-	Sat, 17 May 2025 16:18:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0DF9B81E0D;
+	Sat, 17 May 2025 16:30:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kwx5PrZnKLX5; Sat, 17 May 2025 16:18:24 +0000 (UTC)
+ id tO45bJJH9mqV; Sat, 17 May 2025 16:30:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1320E81255
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3FA9482BBC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1320E81255;
-	Sat, 17 May 2025 16:18:24 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 29A34204
- for <buildroot@buildroot.org>; Sat, 17 May 2025 16:18:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3FA9482BBC;
+	Sat, 17 May 2025 16:30:09 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id AE7B3204
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 16:30:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 26AA540FB8
- for <buildroot@buildroot.org>; Sat, 17 May 2025 16:18:22 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id AAEE1400D2
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 16:30:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Y-cW82sqjzpS for <buildroot@buildroot.org>;
- Sat, 17 May 2025 16:18:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
- helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id 6H2dPDmPqMOY for <buildroot@buildroot.org>;
+ Sat, 17 May 2025 16:30:06 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
+ helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9305240350
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9305240350
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9305240350
- for <buildroot@buildroot.org>; Sat, 17 May 2025 16:18:19 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 55936439B4;
- Sat, 17 May 2025 16:18:16 +0000 (UTC)
-Date: Sat, 17 May 2025 18:18:15 +0200
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2D46240350
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2D46240350
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2D46240350
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 16:30:05 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id BC3D14327F;
+ Sat, 17 May 2025 16:30:01 +0000 (UTC)
+Date: Sat, 17 May 2025 18:30:00 +0200
 To: nvd <nvd@nist.gov>
 Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
-Message-ID: <20250517181815.02ce0393@windsurf>
+Message-ID: <20250517183000.40b28b4d@windsurf>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-State: clean
 X-GND-Score: 0
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefudeitdekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecunecujfgurhepfffhvfevuffkohfogggtgfesthejredtredtvdenucfhrhhomhepvfhhohhmrghsucfrvghtrgiiiihonhhiuceothhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeuueeivdfhteekudeiuddugeffjeeuleffhfegtdettdfglefftdekgedufeetleenucffohhmrghinhepughovhgvtghothdrohhrghdpghhithhhuhgsrdgtohhmpdgsohhothhlihhnrdgtohhmnecukfhppedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumegufeduvgemvdefheemtgehvgdvmegvugekfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumegufeduvgemvdefheemtgehvgdvmegvugekfedphhgvlhhopeifihhnughsuhhrfhdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvddprhgtphhtthhopehnvhgusehnihhsthdrghhovhdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhg
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefudeiudduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecunecujfgurhepfffhvfevuffkohfogggtgfesthejredtredtvdenucfhrhhomhepvfhhohhmrghsucfrvghtrgiiiihonhhiuceothhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpedthfegueffiedvfedtueeuhefgjeevffdttdfhfeffieegtdefudfhvefhtdfhffenucffohhmrghinhepvgigihhmrdhorhhgpdguvggsihgrnhdrohhrghdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddvmeekgedvrgemgeehrggtmeelgedtudemugefudgvmedvfeehmegthegvvdemvggukeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeekgedvrgemgeehrggtmeelgedtudemugefudgvmedvfeehmegthegvvdemvggukeefpdhhvghlohepfihinhgushhurhhfpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedvpdhrtghpthhtohepnhhvugesnhhishhtrdhgohhvpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrgh
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1747498696;
+ d=bootlin.com; s=gm1; t=1747499401;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding;
- bh=wGglp/gTgy745244aA53reh+ERmAYLDMJeTZmv3xnIs=;
- b=CS0HUor5UhvMN7g1RlL9mYG1/9Y6dU6pBQSaDdEXR2c/kK/oR5oghcOTEmoZhmid0Foz3T
- 8+c61Ps7fARFCKsQzl4tEJ/vyDlhjWwsTzLnDiU4E7VpFG4N95XMot465oyh6VxggrZaMv
- aZx+uD1oMzUsNw8mVq99Z53D8doraPcOOtiV9WpNBslegVtPaF3fPR9LzbmE0k+Rh92NNn
- c8cZywolLjQ50g/wtS18STe3O3Ck52fpWiuTs1WTt8GwexiiDW/uyyqwtZFfJDBlJRlCGt
- THZ0qFiwNpuydwh3wxV5UAYqWPxanQzS03dhVIgRBmxbBFfGyEl8ZseNXAnHbA==
+ bh=4HeGJ1KDVuECFOBx3rqvEtoAA1/w+5Pq3gK9K3Ye3fU=;
+ b=AtpBe5ANfj/E+P1b4UlY8M2jGEc9HCJcatvM99W6DJmbtTzmme6ojtsIaYpqmyWPWDoT/7
+ KtwB/E1C9Va7P/SCyxP75IwwhgSkXDheyMipVPxG0aaLquZuMX+GErGFBVGNR2Pdo4JoYK
+ a4MoH/Wq4dIsldfnRTvTFLhuPwMNowJ7828oUteE3LRBi+PkkzCkCuEOtonouwoMiGXQ2Q
+ 5csraiw7HYxAJXBhNdT3HAxpveGmsBw4cgJqDtsKacOdsaMNoXE9wkuFcsGt6mb5vLGC1w
+ xNAoIYAVB5ptJzfVUQ+FVjrAWdvGJ3z7fPy23fuS4ktq83WRsfsgDdcwSrRlpg==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=CS0HUor5
-Subject: [Buildroot] CVE-2022-30550 version range fix
+ header.s=gm1 header.b=AtpBe5AN
+Subject: [Buildroot] CVE-2022-3620 version range fix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -90,42 +90,36 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Hello,
 
-CVE-2022-30550 is documented in your database as affecting versions of
-dovecot up to 2.3.20.
+CVE-2022-3620 is documented in your database as affecting version
+2022-10-18 of exim, which doesn't make much sense as there is no such
+version released by the exim project. See their version naming scheme
+by looking at their Git tags:
 
-However, according to
-https://dovecot.org/pipermail/dovecot-news/2022-July/000477.html, the
-fix for this issue is:
+  https://code.exim.org/exim/exim/tags
 
-  https://github.com/dovecot/core/compare/7bad6a24%5E..a1022072.patch
+The Debian Security Tracker at
+https://security-tracker.debian.org/tracker/CVE-2022-3620 documents
+that this CVE was introduced in commit
+92583637b25b6bde926f9ca6be7b085e5ac8b1e6, which first appeared in the
+release 4.95 of exim:
 
-And this commit is only in Dovecot 2.4.0, which means that versions
-2.3.21, 2.3.21.1 are affected.
+$ git tag --contains 92583637b25b6bde926f9ca6be7b085e5ac8b1e6 | sort | head -1
+exim-4.95
 
-Here is some additional evidence based on the Git repository of Dovecot:
+And was subsequently fixed by 12fb3842f81bcbd4a4519d5728f2d7e0e3ca1445
+which first appeared in the release 4.97 of exim:
 
-$ git log --format=oneline 2.3.21  | grep "auth: Fix handling passdbs with identical driver/args but"
-$
+$ git tag --contains 12fb3842f81bcbd4a4519d5728f2d7e0e3ca1445 | sort | head -1
+exim-4.97
 
-So 2.3.21 doesn't have the fix.
+Therefore, your entry CVE-2022-3620 should be updated to reflect that
+version 4.95 to 4.97 are affected.
 
-$ git log --format=oneline 2.3.21.1  | grep "auth: Fix handling passdbs with identical driver/args but"
-$
+Do you think you could adjust this in your database?
 
-So 2.3.21.1 doesn't have the fix.
+Thanks a lot!
 
-$ git log --format=oneline 2.4.0  | grep "auth: Fix handling passdbs with identical driver/args but"
-7bad6a24160e34bce8f10e73dbbf9e5fbbcd1904 auth: Fix handling passdbs with identical driver/args but different mechanisms/username_filter
-
-Which means that 2.4.0 has the fix.
-
-Therefore, your entry for CVE-2022-30550 should be fixed to indicate
-that versions up to (excluding) 2.4.0 are affected.
-
-Thanks for your great work on maintaining this database! It would be
-create to have a public issue tracker to report issues.
-
-Thomas
+Thomas Petazzoni
 -- 
 Thomas Petazzoni, co-owner and CEO, Bootlin
 Embedded Linux and Kernel engineering and training
