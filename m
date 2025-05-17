@@ -4,73 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06533C2D0CD
-	for <buildroot@archiver.kernel.org>; Sat, 17 May 2025 07:59:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B66EDC2D0CD
+	for <buildroot@archiver.kernel.org>; Sat, 17 May 2025 08:05:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7A34D406B9;
-	Sat, 17 May 2025 07:59:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 507F0419E7;
+	Sat, 17 May 2025 08:05:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WCDo6QZCOD8t; Sat, 17 May 2025 07:59:46 +0000 (UTC)
+ id fRhCsFM7-qZe; Sat, 17 May 2025 08:05:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A62C406BE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E690409E8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8A62C406BE;
-	Sat, 17 May 2025 07:59:46 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 9AD21E4
- for <buildroot@buildroot.org>; Sat, 17 May 2025 07:59:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7E690409E8;
+	Sat, 17 May 2025 08:05:24 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 55D03E4
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 08:05:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8C06040534
- for <buildroot@buildroot.org>; Sat, 17 May 2025 07:59:45 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4680D407CC
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 08:05:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AmmuDVud8M7w for <buildroot@buildroot.org>;
- Sat, 17 May 2025 07:59:44 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
- helo=smtp4-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6FA3340125
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6FA3340125
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6FA3340125
- for <buildroot@buildroot.org>; Sat, 17 May 2025 07:59:44 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:93aa:5000:c0e7:5e2f:eef4:db82])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 7870D19F74D
- for <buildroot@buildroot.org>; Sat, 17 May 2025 09:59:40 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 17 May 2025 09:59:37 +0200
-Date: Sat, 17 May 2025 09:59:37 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Message-ID: <aChB6bwZ007ymPK_@landeda>
-References: <cover.1747241900.git.yann.morin.1998@free.fr>
- <8b83ad421062201ab3387b1133eee53a800b1918.1747241900.git.yann.morin.1998@free.fr>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NhgRIb_7PwFG for <buildroot@buildroot.org>;
+ Sat, 17 May 2025 08:05:22 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
+ helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 883F9406BE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 883F9406BE
+Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 883F9406BE
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 08:05:22 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 3D1761C0D7A; Sat, 17 May 2025 10:05:20 +0200 (CEST)
+Message-ID: <22ec8c6d-3d0e-4087-ac25-8586c2be9344@rnout.be>
+Date: Sat, 17 May 2025 10:05:18 +0200
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <8b83ad421062201ab3387b1133eee53a800b1918.1747241900.git.yann.morin.1998@free.fr>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1747468781;
- bh=Ps8IhHZTpO6NTCLrBGSuxKYI0NKTTioJf9ltpPP6eIo=;
- h=Date:From:To:Subject:References:In-Reply-To:From;
- b=FsaBMvr/S4agXcde/a/545j30f/I25YoAg4/JBINhyUlLx/gsouJgi7HxqvqPnCm5
- V0Am7ZAz/+jXnqktAjAguQnD19Xku3VbkaFTGpOgCLOnNj1PLk0MtBAuFozpnAynCz
- BPYaB8f5e5lmbW+ePM512ZmipeFv3KFy911Zm8k8c2RVqjdv44HFZo87/uXbHTlXaW
- 3uNBg/2DUHYJvq/q0apd5+nircgr5lt2TYGHU9MmTPwI0ulVGkdLrUXRaaA4TZQ1f6
- M87R2OmomMmBw72Ixf8hkmzAKVR6Ywfpe+dusXYP8Vj9u9W0kWiC51JWNkWKHsbxFP
- ey45zJVv/xZZA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=FsaBMvr/
-Subject: Re: [Buildroot] [PATCH 05/13] support/scripts: fix and restrict
- conditions to accept merged dirs
+User-Agent: Mozilla Thunderbird
+To: Adam Duskett <adam.duskett@amarulasolutions.com>, buildroot@buildroot.org
+Cc: Marcus Folkesson <marcus.folkesson@gmail.com>,
+ Antoine Tenart <atenart@kernel.org>, Fiona Klute <fiona.klute@gmx.de>
+References: <20250515121027.561571-1-adam.duskett@amarulasolutions.com>
+ <20250515121027.561571-2-adam.duskett@amarulasolutions.com>
+Content-Language: en-GB, fr-BE
+In-Reply-To: <20250515121027.561571-2-adam.duskett@amarulasolutions.com>
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=rnout.be; s=dkim; 
+ t=1747469120; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:in-reply-to:references;
+ bh=fudtOGlTPy5+QV9muRN1uXsi93Q5fKzi+DVF5kjtEMc=;
+ b=BerJHUlXlf6D24CpOTZ+BNBbCitaOXoilE+2iXkDYcNYx4CVvrZY/LYo7b0qBF1Y2qXsWm
+ CrJOPa2eWSrk0bzQbiTkbMCaUGXTPowbN9c7/UxypXcVraZiEXFw1uk2+jPo6tXJnsShjh
+ zS4L9VzSFcrbC8PPKugnz7tII3omJgE/LqC2gYZTsxY8hQTfwslavE0Hb5z+AD8m03W/F4
+ vNNDF41jDr014Axy2k3EBUDvkE8g+5GHMKxhyZQLKLFEqkIykfBqmdVfa04jiALCYCuGbL
+ 73eVZnHL+5EDvJoEZrb6ozkPGMCUlBN3N7MaBIJQJPKfCAQ2+dLgc8HOGkpl7w==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=rnout.be
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
+ header.a=rsa-sha256 header.s=dkim header.b=BerJHUlX
+Subject: Re: [Buildroot] [PATCH 01/10] package/audit/S02auditd: fix
+ shellcheck and check-package warnings
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,73 +79,135 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-All,
 
-On 2025-05-14 18:58 +0200, Yann E. MORIN spake thusly:
-> Currently, we accept that the merged usr is bqckward, i.e. that the
-> /usr/bin, /usr/sbin, and /usr/lib entries be symlinks to, resp., /bin,
-> /sbin, and /lib. We also allow either entries to be symlinks to other
-> parts of the root. Both are accepted despite the comment at the top of
-> the script explaining what should be accepted.
+
+On 15/05/2025 14:10, Adam Duskett wrote:
+> Fixup S20audit to pass shellcheck -oall and check-package. The file now
+> closely resembles package/busybox/S01syslogd.
 > 
-> However, a properly merged usr is the other way around: /bin, /sbin, and
-> /lib are the symlinks to resp. /usr/bin, /usr/sbin, and /usr/lib, and
-> the latters are actual directories.
-[--SNIP--]
-> @@ -32,12 +29,21 @@ test_merged() {
->  	local dir2="${3}"
->  	local inode1 inode2
->  
-> +	# OK if missing first entry and second entry is an actual directory
-> +	test -e "${root}${dir1}" || { test -d "${root}${dir2}" && return; }
-> +
->  	inode1="$(stat -c '%i' "${root}${dir1}/." 2>/dev/null)"
->  	inode2="$(stat -c '%i' "${root}${dir2}/." 2>/dev/null)"
->  
-> -	test -z "${inode1}" || \
-> -		test "${inode1}" = "${inode2}" || \
-> -			printf '%s\n' "${dir1}"
-> +	# OK if first entry is a symlink, second entry is a directoy, and
-> +	# both have the same inode (once dereferenced)
-> +	test -L "${root}${dir1}" \
-> +	&& test -d "${root}${dir2}" \
-> +	&& test "${inode1}" = "${inode2}" \
-> +	&& return
-> +
-> +	# Otherwise, this directory is not merged
-> +	printf '%s\n' "${dir1}"
-
-This new test is still quite complex, and is in fact still wrong in
-weird cases. For example, with BASE a custom skeleton or rootfs overlay,
-if BASE/sbin and BASE/usr/sbin ar absolute symlinks to /usr/sbin, the
-test above will accept BASE as being properly merged, while it is in
-fact broken.
-
-I'm preparing a v2 which greatly simplifies the test, and makes it cover
-more (all, hopefully) cases.
-
-Regards,
-Yann E. MORIN.
-
->  }
->  
->  test_merged "${root}" "/lib" "/usr/lib"
-> -- 
-> 2.47.0
+> Tested with qemu_x86_64_defconfig. start, stop, restart, reload, and rotate
+> all work with busybox ash shell.
 > 
+> Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+> ---
+>   package/audit/S02auditd | 66 +++++++++++++++++++++++++++--------------
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+  You forgot to remove it from checkpackageignore. Applied with that fixed.
+
+  Regards,
+  Arnout
+
+>   1 file changed, 44 insertions(+), 22 deletions(-)
+> 
+> diff --git a/package/audit/S02auditd b/package/audit/S02auditd
+> index dd3dc22d6d..f32f01714e 100644
+> --- a/package/audit/S02auditd
+> +++ b/package/audit/S02auditd
+> @@ -8,52 +8,74 @@
+>   #              will be sent to syslog.
+>   #
+>   
+> -NAME=auditd
+> -DAEMON=/usr/sbin/${NAME}
+> -CONFIG=/etc/audit/auditd.conf
+> -PIDFILE=/var/run/${NAME}.pid
+> +DAEMON="auditd"
+> +PIDFILE="/var/run/${DAEMON}.pid"
+>   
+>   start(){
+> -	printf "Starting ${NAME}: "
+> +	printf "Starting %s: " "${DAEMON}"
+>   
+>   	# Create dir to store log files in if one doesn't exist. Create
+>   	# the directory with SELinux permissions if possible
+> -	command -v selabel_lookup >/dev/null 2>&1
+> -	if [ $? = 0 ]; then
+> -		mkdir -p /var/log/audit -Z `selabel_lookup -b file -k /var/log/audit | cut -d ' ' -f 3`
+> +	if command -v selabel_lookup >/dev/null 2>&1; then
+> +		audit_log_selable="$(selabel_lookup -b file -k /var/log/audit | cut -d ' ' -f 3)"
+> +		mkdir -p /var/log/audit -Z "${audit_log_selable}"
+>   	else
+>   		mkdir -p /var/log/audit
+>   	fi
+>   
+> -	# Run audit daemon executable
+> -	start-stop-daemon -S -q -p ${PIDFILE} --exec ${DAEMON}
+> -
+> -	if [ $? = 0 ]; then
+> +	start-stop-daemon --start --background --make-pidfile \
+> +		--pidfile "${PIDFILE}" --exec "/usr/sbin/${DAEMON}"
+> +	status=$?
+> +	if [ "${status}" -eq 0 ]; then
+>   		# Load the default rules
+>   		test -f /etc/audit/rules.d/audit.rules && /usr/sbin/auditctl -R /etc/audit/rules.d/audit.rules >/dev/null
+>   		echo "OK"
+>   	else
+>   		echo "FAIL"
+>   	fi
+> +	return "${status}"
+>   }
+>   
+>   stop(){
+> -	printf "Stopping ${NAME}: "
+> -
+> -	start-stop-daemon -K -q -p ${PIDFILE}
+> -	[ $? = 0 ] && echo "OK" || echo "FAIL"
+> +	printf "Stopping %s: " "${DAEMON}"
+> +	start-stop-daemon --stop --pidfile "${PIDFILE}" --exec "/usr/sbin/${DAEMON}"
+> +	status=$?
+> +	if [ "${status}" -eq 0 ]; then
+> +		echo "OK"
+> +	else
+> +		echo "FAIL"
+> +		return "${status}"
+> +	fi
+> +	while start-stop-daemon --stop --test --quiet --pidfile "${PIDFILE}" \
+> +		--exec "/sbin/${DAEMON}"; do
+> +		sleep 0.1
+> +	done
+> +	rm -f "${PIDFILE}"
+> +	return "${status}"
+>   }
+>   
+>   reload(){
+> -	printf "Reloading ${NAME} configuration: "
+> -	start-stop-daemon --stop -s 1 -p ${PIDFILE} 1>/dev/null
+> -	[ $? = 0 ] && echo "OK" || echo "FAIL"
+> +	printf "Reloading %s configuration: " "${DAEMON}"
+> +	start-stop-daemon --stop --signal HUP --pidfile "${PIDFILE}" 1>/dev/null
+> +	status=$?
+> +	if [ "${status}" -eq 0 ]; then
+> +		echo "OK"
+> +	else
+> +		echo "FAIL"
+> +	fi
+> +	return "${status}"
+>   }
+>   
+>   rotate(){
+> -	printf "Rotating ${NAME} logs: "
+> -	start-stop-daemon --stop -s 10 -p ${PIDFILE} 1>/dev/null
+> -	[ $? = 0 ] && echo "OK" || echo "FAIL"
+> +	printf "Rotating %s logs: " "${DAEMON}"
+> +	start-stop-daemon --stop --signal SIGUSR1 --pidfile "${PIDFILE}" 1>/dev/null
+> +	status=$?
+> +	if [ "${status}" -eq 0 ]; then
+> +		echo "OK"
+> +	else
+> +		echo "FAIL"
+> +	fi
+> +	return "${status}"
+>   }
+>   
+>   case "$1" in
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
