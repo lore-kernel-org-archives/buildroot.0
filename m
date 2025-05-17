@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FD6EC3ABDD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:04:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 985A8C3DA6D
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:04:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 60A99710C2;
-	Mon, 19 May 2025 11:04:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CACF170F5D;
+	Mon, 19 May 2025 11:04:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id A-J6IdrPxS0t; Mon, 19 May 2025 11:04:12 +0000 (UTC)
+ id lingL_vPSvOm; Mon, 19 May 2025 11:04:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D74F1710AE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E5FD2710D2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D74F1710AE;
-	Mon, 19 May 2025 11:04:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E5FD2710D2;
+	Mon, 19 May 2025 11:04:17 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 519ECE4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:48:44 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 69549D4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:48:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 231AD419E7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4A86A411F9
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id De8ig2GdXYsE for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:37 +0000 (UTC)
+ id ZlJT7uBT74HF for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E728C41E03
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 720D141E70
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E728C41E03
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:06 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 720D141E70
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E593583BC0; Mon, 19 May 2025 10:40:06 +0000 (UTC)
+ id 6F3E483BC0; Mon, 19 May 2025 10:40:08 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 17 May 2025 11:38:14 +0200
+Date: Sat, 17 May 2025 17:47:05 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 4cca0f30f2b263acf97c6d0abd8d31e2417542e2
-X-Git-Newrev: adff0d37ba9cd5f3bf6d1b0faa562a1e097a244b
+X-Git-Oldrev: a2356a9e0a1a6d24c11bb74dd8ca3136c5c1c6cb
+X-Git-Newrev: 236167347591fa1f464c594677a36395e9fe67a1
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104006.E593583BC0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/qt6/qt6base: fix build
- when xcb support is enabled
+Message-Id: <20250519104008.6F3E483BC0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/kodi-pvr-hts: fix
+ build with gcc-15.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,79 +59,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=adff0d37ba9cd5f3bf6d1b0faa562a1e097a244b
+commit: https://git.buildroot.net/buildroot/commit/?id=236167347591fa1f464c594677a36395e9fe67a1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes:
-ERROR: Feature "xcb": Forcing to "ON" breaks its condition:
-QT_FEATURE_thread AND TARGET XCB::XCB AND TEST_xcb_syslibs AND QT_FEATURE_xkbcommon_x11
-Condition values dump:
-QT_FEATURE_thread = "ON"
-TARGET XCB::XCB found
-TEST_xcb_syslibs = "FALSE"
-QT_FEATURE_xkbcommon_x11 not evaluated
-
-The xcb feature is defined in [2].
-
-According to [1] XCB::CURSOR is needed for xcb support.
-
-[1] https://code.qt.io/cgit/qt/qtbase.git/tree/src/gui/configure.cmake?h=6.9.0#n522
-[2] https://code.qt.io/cgit/qt/qtbase.git/tree/src/gui/configure.cmake?h=6.9.0#n1016
-
-This bug was introduced in e634be8906bd64d6a9de1768204d0f03d8d8357a,
-and fixes the build with the following defconfig:
-
- BR2_arm=y
- BR2_cortex_a9=y
- BR2_ARM_ENABLE_VFP=y
- BR2_TOOLCHAIN_EXTERNAL=y
- BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
- BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_MUSL_STABLE=y
- BR2_PACKAGE_QT6=y
- BR2_PACKAGE_QT6BASE_GUI=y
- BR2_PACKAGE_QT6BASE_XCB=y
- BR2_PACKAGE_XORG7=y
-
-Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/qt6/qt6base/Config.in  | 1 +
- package/qt6/qt6base/qt6base.mk | 1 +
- 2 files changed, 2 insertions(+)
+ package/kodi-pvr-hts/0001-gcc15.patch | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-diff --git a/package/qt6/qt6base/Config.in b/package/qt6/qt6base/Config.in
-index 96a0416dbd..7f3948ec27 100644
---- a/package/qt6/qt6base/Config.in
-+++ b/package/qt6/qt6base/Config.in
-@@ -61,6 +61,7 @@ config BR2_PACKAGE_QT6BASE_XCB
- 	depends on BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_XLIB_LIBX11
- 	select BR2_PACKAGE_LIBXCB
-+	select BR2_PACKAGE_XCB_UTIL_CURSOR
- 	select BR2_PACKAGE_XCB_UTIL_IMAGE
- 	select BR2_PACKAGE_XCB_UTIL_KEYSYMS
- 	select BR2_PACKAGE_XCB_UTIL_RENDERUTIL
-diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
-index a4c56da601..39fb440be7 100644
---- a/package/qt6/qt6base/qt6base.mk
-+++ b/package/qt6/qt6base/qt6base.mk
-@@ -211,6 +211,7 @@ QT6BASE_CONF_OPTS += \
- QT6BASE_DEPENDENCIES += \
- 	libxcb \
- 	libxkbcommon \
-+	xcb-util-cursor \
- 	xcb-util-wm \
- 	xcb-util-image \
- 	xcb-util-keysyms \
+diff --git a/package/kodi-pvr-hts/0001-gcc15.patch b/package/kodi-pvr-hts/0001-gcc15.patch
+new file mode 100644
+index 0000000000..a62c5f836b
+--- /dev/null
++++ b/package/kodi-pvr-hts/0001-gcc15.patch
+@@ -0,0 +1,26 @@
++From b8fb7f6cbe9e3e9ea2737dc465a70fb4bb0951eb Mon Sep 17 00:00:00 2001
++From: Rudi Heitbaum <rudi@heitbaum.com>
++Date: Mon, 9 Dec 2024 00:19:15 +1100
++Subject: [PATCH] Fix build with gcc-15
++
++Backport upstream commit to fix build error with gcc-15.
++
++Upstream: https://github.com/kodi-pvr/pvr.hts/commit/b8fb7f6cbe9e3e9ea2737dc465a70fb4bb0951eb
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ src/tvheadend/HTSPVFS.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/tvheadend/HTSPVFS.h b/src/tvheadend/HTSPVFS.h
++index 1fbf9d18..80f9fea3 100644
++--- a/src/tvheadend/HTSPVFS.h
+++++ b/src/tvheadend/HTSPVFS.h
++@@ -9,6 +9,7 @@
++ 
++ #include <memory>
++ #include <string>
+++#include <cstdint>
++ 
++ namespace kodi
++ {
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
