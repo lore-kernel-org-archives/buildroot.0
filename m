@@ -1,72 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D57C8C2D0CD
-	for <buildroot@archiver.kernel.org>; Sat, 17 May 2025 10:39:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C5F4C3ABDA
+	for <buildroot@archiver.kernel.org>; Sat, 17 May 2025 10:39:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6C1F960C2A;
-	Sat, 17 May 2025 10:39:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1ED2B83B4E;
+	Sat, 17 May 2025 10:39:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JIup_RtKu5r4; Sat, 17 May 2025 10:39:06 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6ceWgwrJSnUh; Sat, 17 May 2025 10:39:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 88AA3607E9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2F9EF83B0E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 88AA3607E9;
-	Sat, 17 May 2025 10:39:06 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 806FE223
- for <buildroot@buildroot.org>; Sat, 17 May 2025 10:39:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2F9EF83B0E;
+	Sat, 17 May 2025 10:39:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9CD8C1DE
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 10:39:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 71BAD406E2
- for <buildroot@buildroot.org>; Sat, 17 May 2025 10:39:04 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 826B640529
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 10:39:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BGBJ4J7XU90q for <buildroot@buildroot.org>;
- Sat, 17 May 2025 10:39:04 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
- helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A6E4E40BEC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A6E4E40BEC
-Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A6E4E40BEC
- for <buildroot@buildroot.org>; Sat, 17 May 2025 10:39:03 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id C2F7C1C0F1F; Sat, 17 May 2025 12:39:00 +0200 (CEST)
-Message-ID: <e9e19b56-fa0c-48cc-aaae-0bbcfb75125c@rnout.be>
-Date: Sat, 17 May 2025 12:38:59 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mEIsz4lxXQlo for <buildroot@buildroot.org>;
+ Sat, 17 May 2025 10:39:08 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
+ helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5D8A540409
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5D8A540409
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5D8A540409
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 10:39:07 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id F1C994327A;
+ Sat, 17 May 2025 10:39:03 +0000 (UTC)
+Date: Sat, 17 May 2025 12:39:03 +0200
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: buildroot@buildroot.org
+Message-ID: <20250517123903.01291367@windsurf>
+In-Reply-To: <20250425223140.2341210-1-giulio.benetti@benettiengineering.com>
+References: <20250425223140.2341210-1-giulio.benetti@benettiengineering.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
-Cc: Norbert Lange <nolange79@gmail.com>, Sen Hastings <sen@hastings.org>
-References: <cover.1747241900.git.yann.morin.1998@free.fr>
- <3d35742af4e065dd031c35c85eb86a1a65a52e1c.1747241900.git.yann.morin.1998@free.fr>
-Content-Language: en-GB, fr-BE
-In-Reply-To: <3d35742af4e065dd031c35c85eb86a1a65a52e1c.1747241900.git.yann.morin.1998@free.fr>
-X-Last-TLS-Session-Version: TLSv1.3
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefudehgeduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeeftdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepfffgueethffffffhgeekkeejtefgfeevuddvjedvleevleefgfefgfegudetleevnecuffhomhgrihhnpegsuhhilhgurhhoohhtrdhnvghtpdgsohhothhlihhnrdgtohhmnecukfhppedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumegufeduvgemvdefheemtgehvgdvmegvugekfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumegufeduvgemvdefheemtgehvgdvmegvugekfedphhgvlhhopeifihhnughsuhhrfhdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvddprhgtphhtthhopehgihhulhhiohdrsggvnhgvthhtihessggvnhgvthhtihgvnhhgihhnvggvrhhinhhgrdgtohhmpdhrtghpthhtohepsghuihhlu
+ ghrohhothessghuihhlughrohhothdrohhrgh
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rnout.be; s=dkim; 
- t=1747478341; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=QlbyqQkSuua+uyJl5K6AdY5CDFWpJ5+cIl8iPNKPoDk=;
- b=msk28CspOztcChb/Af8qnhd4fPnSQfwvc+aVSlewVoa+I4RNzWopuvtDVEkxNtqiFZb04z
- 7XxrlfWQ+0lJ2DobTAkDaFll8WlwBtYkg9suG8ouUxVC2i5Q/k0andzv9vYcPVGSYvKwCX
- 1zK5omiphlguIdWitShnAFnE9sb2Dz2zPvvjzVxZL+l0iwjRDMuoCTTCHExzkRTb8O1V6n
- LeBBe0pOTmdPRwSRGjy6mG+rR4O1RikhYxXqyJ/nfxJRr3+YbI9/nqAq+4tHbMNxaTE5me
- 9RUF6cNvrFu2ZrQUlb8/7Ix2kfnPuBWIrOWd9wmcIxDlZlMdx0lAB4KC1M49Ag==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=bootlin.com; s=gm1; t=1747478344;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=2NGPtZTYWSDEaQTyNtxilq1p9Fl8mk6rFZ0BlQW05BI=;
+ b=EIwQEhneKitf7YCDwkKKDDfd2jOSgd2JMVYp/Y3AwjDzYFG81JFCglR1engT9SqqLCtq/H
+ mLLaQamjAiz+WH87/WTc6Iv5eVKs7GfhX3FJ7J/Jt1iBUhwZr/q/zNTXUK6FpX2gnYo6at
+ OMiC2lRlarBsWOg11voYVQm20FNnWUGaNLMBdX3+6qZx51twX37+jM+V8i8541bUpDA8Fl
+ AgD0F+PlfiC4hm0tcv/w5lYdIc3/r0o5slc4SIxdAB4RbqUdHTuOsS39d89BFCJ9iP44vb
+ gxuOQdcDo6A/KS3aVmX0z/KzlUr7icXTiv3Ey/AdzP4/PMqeSGq6/vIGVlrKtA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
- header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
- header.s=dkim header.b=msk28Csp
-Subject: Re: [Buildroot] [PATCH 09/13] package/systemd: require merged-bin
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=EIwQEhne
+Subject: Re: [Buildroot] [PATCH] package/libfuse3: fix build failure with no
+ NPTL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -78,51 +86,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Hello Giulio,
 
+On Sat, 26 Apr 2025 00:31:40 +0200
+Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
-On 14/05/2025 18:58, Yann E. MORIN wrote:
-> Since version 256, systemd will taint the system if /usr/bin and
-> /usr/sbin are not merged, known as merged-bin. Although this is
-> not yet an error, it will be in the future.
+> Add local patches, one upstreamed and one pending upstream to fix the
+> presence of function pthread_setname_np in runtime.
 > 
-> To be as ready as we can be when that happens, forcibly enable
-> merged-bin, like we did when we initially added merged-usr.
-
-  Except that this time we don't add a comment about it :-)
-
-Acked-by: Arnout Vandecappelle <arnout@mind.be>
-
-  Regards,
-  Arnout
-
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Norbert Lange <nolange79@gmail.com>
-> Cc: Sen Hastings <sen@hastings.org>
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 > ---
->   package/systemd/Config.in | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-> index fd7671480c..5eaa092444 100644
-> --- a/package/systemd/Config.in
-> +++ b/package/systemd/Config.in
-> @@ -25,6 +25,7 @@ menuconfig BR2_PACKAGE_SYSTEMD
->   	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8
->   	depends on BR2_HOST_GCC_AT_LEAST_8 # host-systemd
->   	select BR2_ROOTFS_MERGED_USR
-> +	select BR2_ROOTFS_MERGED_SBIN
->   	select BR2_PACKAGE_HAS_UDEV
->   	select BR2_PACKAGE_DBUS if !BR2_PACKAGE_DBUS_BROKER # runtime
->   	select BR2_PACKAGE_LIBCAP
+>  .../0001-Fix-meson-function-tests.patch       | 121 ++++++++++++++++++
+>  ...ke-special_funcs-check-more-reliable.patch |  41 ++++++
+>  2 files changed, 162 insertions(+)
+>  create mode 100644 package/libfuse3/0001-Fix-meson-function-tests.patch
+>  create mode 100644 package/libfuse3/0002-meson.build-make-special_funcs-check-more-reliable.patch
 
+Applied to master, thanks. However, I had to improve the commit log
+quite a bit, because it was missing two critical information:
+
+- Since when the problem started happening, so that we know if the fix
+  needs to be backported or not
+
+- Reference to an autobuilder failure
+
+So I ended up with:
+
+    package/libfuse3: fix build failure with no NPTL
+    
+    Since the bump of libfuse3 from 3.16.2 to 3.17.1 in Buildroot commit
+    a4430578aeb6ca460813f4ff7d833cdd839a3249, libfuse3 uses
+    pthread_setname_np() which is only available with NPTL.
+    
+    Some initial fixes were made upstream, but are insufficient to fully
+    fix the problem, so this commit brings additional upstream patches
+    fixing the issue completely.
+    
+    Fixes:
+    
+      https://autobuild.buildroot.net/results/f3cfaa8ed63483858ffa32b719ea4be68ba6c4f3/
+    
+    Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+    Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Also, since your patch has been accepted upstream, I replaced the
+Upstream: link to point to the final upstream commit.
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
