@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34951C3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:49:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A571BC2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:49:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 44DEA61450;
-	Mon, 19 May 2025 10:49:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 76520840E5;
+	Mon, 19 May 2025 10:49:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nHxFPTZa5jez; Mon, 19 May 2025 10:49:17 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Fa_al5MnoFRg; Mon, 19 May 2025 10:49:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 74EB06FB74
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AB7A5840E6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 74EB06FB74;
-	Mon, 19 May 2025 10:49:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AB7A5840E6;
+	Mon, 19 May 2025 10:49:21 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 41A67E4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:41:59 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 95B40D4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:42:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 19E224190C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 254184190D
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ksxaTRU2QAAD for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:07 +0000 (UTC)
+ id aI0XTpU3Mr5s for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4FDB44190D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D14564192B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4FDB44190D
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:07 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D14564192B
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:06 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4DF46873D4; Mon, 19 May 2025 10:40:07 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+ id CBE0C872E7; Mon, 19 May 2025 10:40:06 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 17 May 2025 12:39:37 +0200
+Date: Sat, 17 May 2025 11:30:16 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 9aa966863f382e7eddd8101b42599cdd585f9ce9
-X-Git-Newrev: 4890415aa9e918bdbb52414e0e53f29e93315291
+X-Git-Oldrev: eeb49a1f1f970fcd06c120c183315688be2629ea
+X-Git-Newrev: 3502bfe7a5d6b56748bdce5d440d8f2419f07c0c
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104007.4DF46873D4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libdrm: add host
- variant
+Message-Id: <20250519104006.CBE0C872E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/netopeer2: bump to
+ version 2.4.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,55 +58,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4890415aa9e918bdbb52414e0e53f29e93315291
+commit: https://git.buildroot.net/buildroot/commit/?id=3502bfe7a5d6b56748bdce5d440d8f2419f07c0c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-host-libdrm is needed by host-mesa3d (introduced by this patch series),
-which is needed by (target) mesa3d, when enabling the Gallium Iris
-driver since version 24.1.0.
+This is needed following the bump of libyang (3.12.2),
+sysrepo (3.6.11) and libnetconf2 (3.7.1), as netopeer2 2.4.1 is the
+version designed to work with those other components.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+See https://github.com/CESNET/netopeer2/releases for the changes.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libdrm/libdrm.mk | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+ package/netopeer2/netopeer2.hash | 2 +-
+ package/netopeer2/netopeer2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index 9d463ca01e..a8a912859e 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
-@@ -116,4 +116,25 @@ else
- LIBDRM_CONF_OPTS += -Dtests=false
- endif
+diff --git a/package/netopeer2/netopeer2.hash b/package/netopeer2/netopeer2.hash
+index 6a278fbbaf..3a70b15539 100644
+--- a/package/netopeer2/netopeer2.hash
++++ b/package/netopeer2/netopeer2.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  2b1daac037f18c303e0c0dc3318ba30196459472e4c59f2f8547ee74d4cdf31d  netopeer2-2.1.49.tar.gz
++sha256  86d77efcb65f0bb2c3bc0f2128a320113ce7125f39882fe7d8334c168ed9567d  netopeer2-2.4.1.tar.gz
+ sha256  b46f161fbdcf127d3ef22602e15958c3092fe3294f71a2dc8cdf8f6689cba95b  LICENSE
+diff --git a/package/netopeer2/netopeer2.mk b/package/netopeer2/netopeer2.mk
+index 4853e5d176..71f2c50640 100644
+--- a/package/netopeer2/netopeer2.mk
++++ b/package/netopeer2/netopeer2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+HOST_LIBDRM_CONF_OPTS = \
-+	-Damdgpu=disabled \
-+	-Dcairo-tests=disabled \
-+	-Detnaviv=disabled \
-+	-Dexynos=disabled \
-+	-Dfreedreno=disabled \
-+	-Dfreedreno-kgsl=false \
-+	-Dinstall-test-programs=false \
-+	-Dintel=disabled \
-+	-Dman-pages=disabled \
-+	-Dnouveau=disabled \
-+	-Domap=disabled \
-+	-Dradeon=disabled \
-+	-Dtegra=disabled \
-+	-Dvc4=disabled \
-+	-Dvmwgfx=disabled \
-+	-Dtests=false \
-+	-Dudev=false \
-+	-Dvalgrind=disabled
-+
- $(eval $(meson-package))
-+$(eval $(host-meson-package))
+-NETOPEER2_VERSION = 2.1.49
++NETOPEER2_VERSION = 2.4.1
+ NETOPEER2_SITE = $(call github,CESNET,Netopeer2,v$(NETOPEER2_VERSION))
+ NETOPEER2_DL_SUBDIR = netopeer2
+ NETOPEER2_LICENSE = BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
