@@ -1,72 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DDA72C2D0CD
-	for <buildroot@archiver.kernel.org>; Sat, 17 May 2025 10:35:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F8CFC2D0CD
+	for <buildroot@archiver.kernel.org>; Sat, 17 May 2025 10:38:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8D61983B28;
-	Sat, 17 May 2025 10:35:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CBDD260D58;
+	Sat, 17 May 2025 10:37:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GA3dF01UOfik; Sat, 17 May 2025 10:35:14 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zouu3ZDs0F0b; Sat, 17 May 2025 10:37:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B8FA583B2A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BFA5960C2A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B8FA583B2A;
-	Sat, 17 May 2025 10:35:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BFA5960C2A;
+	Sat, 17 May 2025 10:37:58 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id B471C1DE
- for <buildroot@buildroot.org>; Sat, 17 May 2025 10:35:13 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 07DC71DE
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 10:37:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A5BA640409
- for <buildroot@buildroot.org>; Sat, 17 May 2025 10:35:13 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E2A3E40409
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 10:37:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8Xqjgdf25UhB for <buildroot@buildroot.org>;
- Sat, 17 May 2025 10:35:13 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
- helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org CF71140529
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CF71140529
-Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
- by smtp2.osuosl.org (Postfix) with ESMTPS id CF71140529
- for <buildroot@buildroot.org>; Sat, 17 May 2025 10:35:12 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 91E3F1C05C0; Sat, 17 May 2025 12:35:09 +0200 (CEST)
-Message-ID: <35b678a2-897f-4eaa-9fa3-547d33d07982@rnout.be>
-Date: Sat, 17 May 2025 12:35:08 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
-References: <cover.1747241900.git.yann.morin.1998@free.fr>
- <a014de507585b759a575d0ba424a4c5a996fa108.1747241900.git.yann.morin.1998@free.fr>
-Content-Language: en-GB, fr-BE
-In-Reply-To: <a014de507585b759a575d0ba424a4c5a996fa108.1747241900.git.yann.morin.1998@free.fr>
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rnout.be; s=dkim; 
- t=1747478109; h=from:subject:date:message-id:to:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=ttWHyt6o+kgxy0SopiS0IllA9iu4TrTa23toxys5nOs=;
- b=g4ijzKN5L4cQC3A0ooHP5rVeszwYmhn6XLi5a93k2ft2RD549md1jYOkAnWXgKiWe7/xd1
- fDwcOOrDL4dKSAunXzXmWvf3FG2Q8K0ekxNimwhrb/plTgHgKvzfCtd60XWs24qO0Nw4cy
- 6lXaDGCamrZ3qiTNuIwt0vkZ+L3r02VJ/j9uqJf6vNFDr4FALTOgHF7BOErYYfWJpbbxmR
- h9ZROmTo5t8JX3NvIvXcADpWk3RLhwRWmLI1Lng4AcnGy+SXjFGm+t7SLROylQYaBhY+va
- Er9FXg4fGljdvIhYMk2YNYInFqb59HQur1mWb9HxSdtQakKHgdkUmi5gj1Zr9w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
- header.s=dkim header.b=g4ijzKN5
-Subject: Re: [Buildroot] [PATCH 06/13] support/scripts: rename
- check-merged-usr.sh
+ id RqjRtPpb3KlX for <buildroot@buildroot.org>;
+ Sat, 17 May 2025 10:37:57 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0C96840529
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0C96840529
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 10:37:57 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id EA60A86E7A; Sat, 17 May 2025 10:37:56 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 17 May 2025 12:37:16 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 0bae9b29cd2a6008c5945747a45dfe8af54fae35
+X-Git-Newrev: d0fe20e891a8ac2bd724c3359e1e7c0cf9a96553
+X-Patchwork-Hint: ignore
+Message-Id: <20250517103756.EA60A86E7A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libfuse3: fix build failure with
+ no NPTL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -78,63 +58,210 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+commit: https://git.buildroot.net/buildroot/commit/?id=d0fe20e891a8ac2bd724c3359e1e7c0cf9a96553
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Since the bump of libfuse3 from 3.16.2 to 3.17.1 in Buildroot commit
+a4430578aeb6ca460813f4ff7d833cdd839a3249, libfuse3 uses
+pthread_setname_np() which is only available with NPTL.
 
-On 14/05/2025 18:58, Yann E. MORIN wrote:
-> We're going to need it to check merged-bin, so the naming would be
-> misleading as it would no longer be just about merged-usr.
-> 
-> Also drop the extension, it's useless.
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Some initial fixes were made upstream, but are insufficient to fully
+fix the problem, so this commit brings additional upstream patches
+fixing the issue completely.
 
-Acked-by: Arnout Vandecappelle <arnout@mind.be>
+Fixes:
 
-> ---
->   Makefile                                              | 2 +-
->   package/skeleton-custom/skeleton-custom.mk            | 2 +-
->   support/scripts/{check-merged-usr.sh => check-merged} | 0
->   3 files changed, 2 insertions(+), 2 deletions(-)
->   rename support/scripts/{check-merged-usr.sh => check-merged} (100%)
-> 
-> diff --git a/Makefile b/Makefile
-> index 411e1de515..a5aa1c6553 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -784,7 +784,7 @@ ifeq ($(BR2_ROOTFS_MERGED_USR),y)
->   
->   	$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
->   		@$(call MESSAGE,"Sanity check in overlay $(d)")$(sep) \
-> -		$(Q)not_merged_dirs="$$(support/scripts/check-merged-usr.sh $(d))"; \
-> +		$(Q)not_merged_dirs="$$(support/scripts/check-merged $(d))"; \
->   		test -n "$$not_merged_dirs" && { \
->   			echo "ERROR: The overlay in $(d) is not" \
->   				"using a merged /usr for the following directories:" \
-> diff --git a/package/skeleton-custom/skeleton-custom.mk b/package/skeleton-custom/skeleton-custom.mk
-> index b05c834b94..7d64959711 100644
-> --- a/package/skeleton-custom/skeleton-custom.mk
-> +++ b/package/skeleton-custom/skeleton-custom.mk
-> @@ -27,7 +27,7 @@ endif
->   # counterparts are appropriately setup as symlinks ones to the others.
->   ifeq ($(BR2_ROOTFS_MERGED_USR),y)
->   SKELETON_CUSTOM_NOT_MERGED_USR_DIRS = \
-> -	$(shell support/scripts/check-merged-usr.sh $(SKELETON_CUSTOM_PATH))
-> +	$(shell support/scripts/check-merged $(SKELETON_CUSTOM_PATH))
->   endif # merged /usr
->   
->   ifeq ($(BR2_PACKAGE_SKELETON_CUSTOM)$(BR_BUILDING),yy)
-> diff --git a/support/scripts/check-merged-usr.sh b/support/scripts/check-merged
-> similarity index 100%
-> rename from support/scripts/check-merged-usr.sh
-> rename to support/scripts/check-merged
+  https://autobuild.buildroot.net/results/f3cfaa8ed63483858ffa32b719ea4be68ba6c4f3/
 
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../libfuse3/0001-Fix-meson-function-tests.patch   | 121 +++++++++++++++++++++
+ ...ld-make-special_funcs-check-more-reliable.patch |  41 +++++++
+ 2 files changed, 162 insertions(+)
+
+diff --git a/package/libfuse3/0001-Fix-meson-function-tests.patch b/package/libfuse3/0001-Fix-meson-function-tests.patch
+new file mode 100644
+index 0000000000..7af9721337
+--- /dev/null
++++ b/package/libfuse3/0001-Fix-meson-function-tests.patch
+@@ -0,0 +1,121 @@
++From 4840ffe9e8610934d91b27061ff149cc74b41c28 Mon Sep 17 00:00:00 2001
++From: Bernd Schubert <bschubert@ddn.com>
++Date: Thu, 24 Apr 2025 16:49:08 +0200
++Subject: [PATCH] Fix meson function tests
++
++Several meson tests were incorrectly failing
++
++Checking for function "static_assert" : NO (cached)
++Checking for function "pthread_setname_np" : NO (cached)
++Check usable header "#include <linux/close_range.h>" : NO (cached)
++
++These functions get now tested with compilation tests
++and get found on my system.
++
++Checking if "static_assert check" compiles: YES
++Checking if "pthread_setname_np check" compiles: YES
++Checking if "close_range check" compiles: YES
++
++Upstream: https://github.com/libfuse/libfuse/commit/82bcd818fb3e7d5ced9b0c04b7b7a98a892e807e
++Signed-off-by: Bernd Schubert <bschubert@ddn.com>
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ meson.build | 67 +++++++++++++++++++++++++++++++++++++++--------------
++ 1 file changed, 49 insertions(+), 18 deletions(-)
++
++diff --git a/meson.build b/meson.build
++index ba551ed..d1346d0 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -59,6 +59,8 @@ include_default = '''
++ #include <sys/types.h>
++ #include <sys/stat.h>
++ #include <fcntl.h>
+++#include <assert.h>     /* For static_assert */
+++#include <pthread.h>    /* For pthread_setname_np */
++ '''
++ args_default = [ '-D_GNU_SOURCE' ]
++ 
++@@ -72,32 +74,61 @@ private_cfg.set_quoted('PACKAGE_VERSION', meson.project_version())
++ # Test for presence of some functions
++ test_funcs = [ 'fork', 'fstatat', 'openat', 'readlinkat', 'pipe2',
++                'splice', 'vmsplice', 'posix_fallocate', 'fdatasync',
++-               'utimensat', 'copy_file_range', 'fallocate', 'static_assert',
++-               'pthread_setname_np' ]
+++               'utimensat', 'copy_file_range', 'fallocate' ]
++ foreach func : test_funcs
++     private_cfg.set('HAVE_' + func.to_upper(),
++         cc.has_function(func, prefix: include_default, args: args_default))
++ endforeach
++-private_cfg.set('HAVE_SETXATTR', 
++-        cc.has_function('setxattr', prefix: '#include <sys/xattr.h>'))
++-private_cfg.set('HAVE_ICONV', 
++-        cc.has_function('iconv', prefix: '#include <iconv.h>'))
++-private_cfg.set('HAVE_BACKTRACE',
++-        cc.has_function('backtrace', prefix: '#include <execinfo.h>'))
++ 
++-# Test if headers exist
++-private_cfg.set('HAVE_LINUX_CLOSE_RANGE_H',
++-        cc.check_header('#include <linux/close_range.h>'))
+++# Special case checks that need custom code
+++special_funcs = {
+++    'static_assert': '''
+++        #include <assert.h>
+++        static_assert(1, "test");
+++        int main(void) { return 0; }
+++    ''',
+++    'pthread_setname_np': '''
+++        #include <pthread.h>
+++        int main(void) {
+++            pthread_t thread = pthread_self();
+++            pthread_setname_np(thread, "test");
+++            return 0;
+++        }
+++    ''',
+++    'close_range': '''
+++        #include <unistd.h>
+++        #include <fcntl.h>
+++        #include <linux/close_range.h>
+++        int main(void) {
+++            unsigned int flags = CLOSE_RANGE_UNSHARE;
+++            return close_range(3, ~0U, flags);
+++        }
+++    '''
+++}
+++
+++foreach name, code : special_funcs
+++    private_cfg.set('HAVE_' + name.to_upper(),
+++        cc.compiles(code, args: ['-Werror'] + args_default,
+++                 name: name + ' check'))
+++endforeach
+++
+++# Regular function checks
+++private_cfg.set('HAVE_SETXATTR',
+++    cc.has_function('setxattr', prefix: '#include <sys/xattr.h>'))
+++private_cfg.set('HAVE_ICONV',
+++    cc.has_function('iconv', prefix: '#include <iconv.h>'))
+++private_cfg.set('HAVE_BACKTRACE',
+++    cc.has_function('backtrace', prefix: '#include <execinfo.h>'))
++ 
++-# Test if structs have specific member
+++# Struct member checks
++ private_cfg.set('HAVE_STRUCT_STAT_ST_ATIM',
++-         cc.has_member('struct stat', 'st_atim',
++-                       prefix: include_default,
++-                       args: args_default))
+++    cc.has_member('struct stat', 'st_atim',
+++                  prefix: include_default + '#include <sys/stat.h>',
+++                  args: args_default))
++ private_cfg.set('HAVE_STRUCT_STAT_ST_ATIMESPEC',
++-         cc.has_member('struct stat', 'st_atimespec',
++-                       prefix: include_default,
++-                       args: args_default))
+++    cc.has_member('struct stat', 'st_atimespec',
+++                  prefix: include_default + '#include <sys/stat.h>',
+++                  args: args_default))
++ 
++ #
++ # Compiler configuration
++-- 
++2.39.5
++
+diff --git a/package/libfuse3/0002-meson.build-make-special_funcs-check-more-reliable.patch b/package/libfuse3/0002-meson.build-make-special_funcs-check-more-reliable.patch
+new file mode 100644
+index 0000000000..dccaf52326
+--- /dev/null
++++ b/package/libfuse3/0002-meson.build-make-special_funcs-check-more-reliable.patch
+@@ -0,0 +1,41 @@
++From 6f50c950d09ad09339437b81ce22b36e0e2749c9 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Fri, 25 Apr 2025 19:00:14 +0200
++Subject: [PATCH] meson.build: make special_funcs check more reliable
++
++Unfortunately while cross-compiling with build tools like Buildroot it
++happens to have repeated flags or anything that could lead to a warning.
++This way the check fails because of a warning not related to the special
++function. So let's use cc.links() and increase minimum meson_version to
++0.60 since cc.links() has been added during that version.
++
++Upstream: https://github.com/libfuse/libfuse/commit/8e226c6af6f386a88ed53d0a0940ff6b869b372d
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ meson.build | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/meson.build b/meson.build
++index d1346d0..d3d236d 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -1,6 +1,6 @@
++ project('libfuse3', ['c'],
++         version: '3.17.2',
++-        meson_version: '>= 0.51.0',
+++        meson_version: '>= 0.60.0',
++         default_options: [
++             'buildtype=debugoptimized',
++             'c_std=gnu11',
++@@ -108,7 +108,7 @@ special_funcs = {
++ 
++ foreach name, code : special_funcs
++     private_cfg.set('HAVE_' + name.to_upper(),
++-        cc.compiles(code, args: ['-Werror'] + args_default,
+++        cc.links(code, args: args_default,
++                  name: name + ' check'))
++ endforeach
++ 
++-- 
++2.39.5
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
