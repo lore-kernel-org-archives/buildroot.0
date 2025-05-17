@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F8ADC3ABD8
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B238C2D0CD
 	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:03:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4751071056;
-	Mon, 19 May 2025 11:03:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2005482BEB;
+	Mon, 19 May 2025 11:03:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yIQ2VGg6EGa5; Mon, 19 May 2025 11:03:44 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IMUYxmDC9SYK; Mon, 19 May 2025 11:03:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A49B7104E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D7A3846C9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0A49B7104E;
-	Mon, 19 May 2025 11:03:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2D7A3846C9;
+	Mon, 19 May 2025 11:03:46 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id A6495D4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:48:28 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 35056E4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:48:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 25101410E1
+ by smtp4.osuosl.org (Postfix) with ESMTP id 36398411C2
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Hc2s1C-nkj_B for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:40 +0000 (UTC)
+ id 8mT8JTax-jVn for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D28CE411C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9BD1241E4F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D28CE411C2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9BD1241E4F
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D10BF83BC0; Mon, 19 May 2025 10:40:07 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+ id 9A2E083BC0; Mon, 19 May 2025 10:40:07 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 17 May 2025 16:03:24 +0200
+Date: Sat, 17 May 2025 12:48:53 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3f1f404b5c59eaf3ae52ef1a4c8c2d74c0b5c80c
-X-Git-Newrev: 15cfdf4915f32e8dffc3eae65d3b406ed219ebe9
+X-Git-Oldrev: 97ac89eb115dbcd28efd1cf95d9a308f71b33041
+X-Git-Newrev: 4672e18ca1b2bb27f4eee2006168eaddecd465a3
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104007.D10BF83BC0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/mesa3d: update vc4/v3d
- drivers help messages
+Message-Id: <20250519104007.9A2E083BC0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/octave: bump to
+ version 10.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,59 +58,80 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4536824994994839891=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4536824994994839891==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=15cfdf4915f32e8dffc3eae65d3b406ed219ebe9
+commit: https://git.buildroot.net/buildroot/commit/?id=4672e18ca1b2bb27f4eee2006168eaddecd465a3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This updates the VC4/V3D driver messages with the addition of the
-current supported hardwares (VideoCore and Raspberry Pi).
+See release note:
+https://octave.org/NEWS-10.html
 
-Signed-off-by: Gaël PORTAY <gael.portay+rtone@gmail.com>
+GNU Octave now requires a C++17 compiler. This change is reflected in
+the Config.in dependencies.
+
 Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mesa3d/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/octave/Config.in   | 6 +++---
+ package/octave/octave.hash | 4 ++--
+ package/octave/octave.mk   | 2 +-
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 841a173ac2..99cb0b955c 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -255,7 +255,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4 # runtime
- 	select BR2_PACKAGE_MESA3D_OPENGL_EGL
- 	help
--	  Driver for Broadcom VC6 (rpi4) GPUs (needs vc4).
-+	  Driver for Broadcom VC6/7 (rpi4/5) GPUs (needs vc4).
+diff --git a/package/octave/Config.in b/package/octave/Config.in
+index 73e27f65e8..a969147adf 100644
+--- a/package/octave/Config.in
++++ b/package/octave/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_OCTAVE
+ 	bool "octave"
+ 	depends on BR2_PACKAGE_OPENBLAS_ARCH_SUPPORTS
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
+ 	depends on BR2_TOOLCHAIN_HAS_FORTRAN
+ 	# Some Bootlin x86_64 toolchains (like version
+ 	# bleeding-edge-2021.11-1) has a file
+@@ -32,7 +32,7 @@ config BR2_PACKAGE_OCTAVE
  
- 	  It requires a kernel 4.18+ with DRM V3D support enabled:
+ 	  https://www.octave.org/
  
-@@ -270,7 +270,8 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4
- 	select BR2_PACKAGE_LIBDRM_VC4
- 	select BR2_PACKAGE_MESA3D_OPENGL_EGL
- 	help
--	  Driver for Broadcom VC4 (rpi2/3) GPUs.
-+	  Driver for Broadcom VC4 (rpi0/1/2/3) GPUs.
-+
- 	  It requires a vanilla 4.5+ kernel with drm vc4 (open) support.
+-comment "octave needs a toolchain w/ C++ and fortran, gcc >= 4.8"
++comment "octave needs a toolchain w/ C++ and fortran, gcc >= 7"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
+ 		!BR2_TOOLCHAIN_HAS_FORTRAN
+diff --git a/package/octave/octave.hash b/package/octave/octave.hash
+index e0cf6f626c..e45fe12ceb 100644
+--- a/package/octave/octave.hash
++++ b/package/octave/octave.hash
+@@ -1,5 +1,5 @@
+ # Locally computed after checking signature
+-# https://ftp.gnu.org/gnu/octave/octave-9.4.0.tar.lz.sig
++# https://ftp.gnu.org/gnu/octave/octave-10.1.0.tar.lz.sig
+ # using key DBD9C84E39FE1AAE99F04446B05F05B75D36644B
+-sha256  693fceb5b69211034d464b61be871c803ff74a3af4de72829341c365a53d6da1  octave-9.4.0.tar.lz
++sha256  aa1583316916ab5d08e71bcfa63eb865ecaa2561e842f769748d9b106b4cb409  octave-10.1.0.tar.lz
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
+diff --git a/package/octave/octave.mk b/package/octave/octave.mk
+index 5ea3f80253..4410da38b1 100644
+--- a/package/octave/octave.mk
++++ b/package/octave/octave.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL
-
---===============4536824994994839891==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-OCTAVE_VERSION = 9.4.0
++OCTAVE_VERSION = 10.1.0
+ OCTAVE_SITE = $(BR2_GNU_MIRROR)/octave
+ OCTAVE_SOURCE = octave-$(OCTAVE_VERSION).tar.lz
+ OCTAVE_LICENSE = GPL-3.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4536824994994839891==--
