@@ -1,80 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB680C3ABDA
-	for <buildroot@archiver.kernel.org>; Sat, 17 May 2025 14:35:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30880C3ABDD
+	for <buildroot@archiver.kernel.org>; Sat, 17 May 2025 14:35:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B6829608B9;
-	Sat, 17 May 2025 14:35:21 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id u5PB2VOgkJIA; Sat, 17 May 2025 14:35:19 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 95A5760E0A
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 95A5760E0A;
-	Sat, 17 May 2025 14:35:19 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id EC0061DE
- for <buildroot@buildroot.org>; Sat, 17 May 2025 14:35:09 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D878540BE9
- for <buildroot@buildroot.org>; Sat, 17 May 2025 14:35:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EE27340BF6;
+	Sat, 17 May 2025 14:35:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zkeee2dH_XQb for <buildroot@buildroot.org>;
+ id vh5FMCn6-McH; Sat, 17 May 2025 14:35:22 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 152C840BB1
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 152C840BB1;
+	Sat, 17 May 2025 14:35:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1EF42D89
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 14:35:10 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9032D82257
+ for <buildroot@buildroot.org>; Sat, 17 May 2025 14:35:09 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SPQ_E16Mp36V for <buildroot@buildroot.org>;
  Sat, 17 May 2025 14:35:08 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.195;
- helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 55A2A40BA0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 55A2A40BA0
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 55A2A40BA0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B7E4D82553
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id B7E4D82553
  for <buildroot@buildroot.org>; Sat, 17 May 2025 14:35:08 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6FD4F1FCEA;
- Sat, 17 May 2025 14:35:04 +0000 (UTC)
-Date: Sat, 17 May 2025 16:35:03 +0200
-To: Adam Duskett <adam.duskett@amarulasolutions.com>
-Cc: buildroot@buildroot.org, Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Message-ID: <20250517163503.5fcef45d@windsurf>
-In-Reply-To: <20250516125333.3681798-1-adam.duskett@amarulasolutions.com>
-References: <20250516125333.3681798-1-adam.duskett@amarulasolutions.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefudehkeekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepledtgedvjeehgeetgfeufffglefhkedvfeduveeiieelteeliedtfefguefggffhnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumegufeduvgemvdefheemtgehvgdvmegvugekfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumegufeduvgemvdefheemtgehvgdvmegvugekfedphhgvlhhopeifihhnughsuhhrfhdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepfedprhgtphhtthhopegruggrmhdrughushhkvghtthesrghmrghruhhlrghsohhluhhtihhonhhsrdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrg
- hdprhgtphhtthhopegrnhhgvghlohdrtghomhhprghgnhhutggtihesghhmrghilhdrtghomh
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1747492504;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=A8onQExb1kTR5bj/qR6IZzT7As4++594mEDCaJkUJLU=;
- b=S+z6VhXAf7QryDJQ3jY2/g32zhzjfOjdMpBFQlqfLWI5fwQmWbVKtlLXDSSxemZB4DeXyg
- JcOqXxStgBlscC/ovwlMsxVtGMySkAGAVs8aUY9tOcsV4i34+PQrVrXrmxkISKFJTFOz/S
- XwvzeEiUqD7QbqYLTh0ozJgW0Er03FsSVx1eOzQHvWEpSmEQvePqaVGn50/X33hHbVEaTy
- LOZcCrBLwdEOZxZmNnMw7lZSAmsblGJVPLzClf520eHjqqDXdVENhMpoHr+WOCfUZbe/yQ
- KjZQSMxh06In2r3ev3rVTEbNpKjEqvJ/CCn2ODRjuC2W4pqdb/wnUx6noDlOrA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=S+z6VhXA
-Subject: Re: [Buildroot] [PATCH v3 1/3] package/mender_x86_64_efi_defconfig:
- bump kernel to 6.12.28
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A879E82884; Sat, 17 May 2025 14:35:08 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 17 May 2025 16:34:11 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 67e10ac8988b2b7217f424dc56f5128fb627a37d
+X-Git-Newrev: 745aa4d06067ca3f6ac6f90ec995b57c704c536a
+X-Patchwork-Hint: ignore
+Message-Id: <20250517143508.A879E82884@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rpm: fix build issue with musl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -88,29 +59,88 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============6014883946134719162=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 16 May 2025 14:53:30 +0200
-Adam Duskett <adam.duskett@amarulasolutions.com> wrote:
+--===============6014883946134719162==
+Content-Type: text/plain
 
-> linux.conf does not change after manually checking the output of
-> `make savedefconfig` in the kernel source directory.
-> 
-> Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-> ---
-> v2 -> v3: fix custom headers version. Update to 6.12.28
+commit: https://git.buildroot.net/buildroot/commit/?id=745aa4d06067ca3f6ac6f90ec995b57c704c536a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Since the bump of rpm from 4.17.0 to 4.18.0 in Buildroot commit
+4b4046e919b99c61b545396149bf1dcbcf7e9e41, tools/rpmuncompress.c uses
+basename() without including <libgen.h> which causes a build failure
+with the musl C library:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+tools/rpmuncompress.c: In function ‘doUntar’:
+tools/rpmuncompress.c:100:30: error: implicit declaration of function ‘basename’ [-Wimplicit-function-declaration]
+  100 |             const char *bn = basename(fn);
+      |                              ^~~~~~~~
+tools/rpmuncompress.c:100:30: error: initialization of ‘const char *’ from ‘int’ makes pointer from integer without a cast [-Wint-conversion]
+make[4]: *** [Makefile:1082: tools/rpmuncompress.o] Error 1
+
+This issue was not found by the autobuilders, but it can be reproduced
+with:
+
+BR2_arm=y
+BR2_cortex_a9=y
+BR2_ARM_ENABLE_VFP=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_MUSL_BLEEDING_EDGE=y
+BR2_PACKAGE_LUA=y
+BR2_PACKAGE_RPM=y
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...003-Fix-missing-basename-include-on-macOS.patch | 26 ++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
+
+diff --git a/package/rpm/0003-Fix-missing-basename-include-on-macOS.patch b/package/rpm/0003-Fix-missing-basename-include-on-macOS.patch
+new file mode 100644
+index 0000000000..ec920612e2
+--- /dev/null
++++ b/package/rpm/0003-Fix-missing-basename-include-on-macOS.patch
+@@ -0,0 +1,26 @@
++From f510770a214bd2e8144a39868c34cd568179599e Mon Sep 17 00:00:00 2001
++From: Calvin Buckley <calvin@cmpct.info>
++Date: Tue, 11 Jul 2023 19:22:41 -0300
++Subject: [PATCH] Fix missing basename include on macOS
++
++Upstream: b2e67642fd8cb64d8cb1cca9e759396c1c10807d
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ tools/rpmuncompress.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/tools/rpmuncompress.c b/tools/rpmuncompress.c
++index bd4146d54..58ddf5683 100644
++--- a/tools/rpmuncompress.c
+++++ b/tools/rpmuncompress.c
++@@ -1,6 +1,7 @@
++ #include "system.h"
++ 
++ #include <popt.h>
+++#include <libgen.h>
++ #include <errno.h>
++ #include <stdio.h>
++ #include <string.h>
++-- 
++2.49.0
++
+
+--===============6014883946134719162==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6014883946134719162==--
