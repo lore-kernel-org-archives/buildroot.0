@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBF78C3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:04:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ACE6EC2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:04:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8F65371084;
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0021D8490B;
 	Mon, 19 May 2025 11:04:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nwRYwqtix2mu; Mon, 19 May 2025 11:03:59 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id X9hPcRVTc3I9; Mon, 19 May 2025 11:03:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B1CD87108F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2430884904
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B1CD87108F;
-	Mon, 19 May 2025 11:03:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2430884904;
+	Mon, 19 May 2025 11:03:58 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 19A7FD4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:48:36 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id BBE46D4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:48:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0E8AB41E25
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:42 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EACB141E24
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Li7sTPJ4_hUR for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:41 +0000 (UTC)
+ id fDfg6mYfAtw2 for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3016C41E64
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7934041E47
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3016C41E64
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:08 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7934041E47
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2E54E81E90; Mon, 19 May 2025 10:40:08 +0000 (UTC)
+ id 76FDD82A2E; Mon, 19 May 2025 10:40:07 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 17 May 2025 16:57:13 +0200
+Date: Sat, 17 May 2025 12:39:37 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 745aa4d06067ca3f6ac6f90ec995b57c704c536a
-X-Git-Newrev: 76a4a6361283b06a41220d26f4a25f644cd88f05
+X-Git-Oldrev: b08bc5b9e94269adb4a1c5771c8c26c8c87e5b5a
+X-Git-Newrev: 317260f336b65ff0b41a953882cb8cccb789e010
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104008.2E54E81E90@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/intel-gmmlib: fix
- cmake 4 compatibility
+Message-Id: <20250519104007.76FDD82A2E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/{mesa3d,
+ mesa3d-headers}: bump version to 25.0.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,66 +65,588 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=76a4a6361283b06a41220d26f4a25f644cd88f05
+commit: https://git.buildroot.net/buildroot/commit/?id=317260f336b65ff0b41a953882cb8cccb789e010
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add a patch fixing cmake 4 compatibility.
+Release notes:
+https://lists.freedesktop.org/archives/mesa-announce/2024-May/000762.html
+https://lists.freedesktop.org/archives/mesa-announce/2024-June/000763.html
+https://lists.freedesktop.org/archives/mesa-announce/2024-June/000765.html
+https://lists.freedesktop.org/archives/mesa-announce/2024-July/000766.html
+https://lists.freedesktop.org/archives/mesa-announce/2024-July/000767.html
+https://lists.freedesktop.org/archives/mesa-announce/2024-July/000771.html
+https://lists.freedesktop.org/archives/mesa-announce/2024-August/000773.html
+https://lists.freedesktop.org/archives/mesa-announce/2024-August/000776.html
+https://lists.freedesktop.org/archives/mesa-announce/2024-September/000778.html
+https://lists.freedesktop.org/archives/mesa-announce/2024-September/000779.html
+https://lists.freedesktop.org/archives/mesa-announce/2024-October/000780.html
+https://lists.freedesktop.org/archives/mesa-announce/2024-October/000781.html
+https://lists.freedesktop.org/archives/mesa-announce/2024-October/000782.html
+https://lists.freedesktop.org/archives/mesa-announce/2024-November/000784.html
+https://lists.freedesktop.org/archives/mesa-announce/2024-November/000786.html
+https://lists.freedesktop.org/archives/mesa-announce/2024-December/000788.html
+https://docs.mesa3d.org/relnotes/24.3.2.html
+https://docs.mesa3d.org/relnotes/24.3.3.html
+https://docs.mesa3d.org/relnotes/24.3.4.html
+https://lists.freedesktop.org/archives/mesa-announce/2025-February/000793.html
+https://lists.freedesktop.org/archives/mesa-announce/2025-March/000794.html
+https://lists.freedesktop.org/archives/mesa-announce/2025-March/000795.html
+https://lists.freedesktop.org/archives/mesa-announce/2025-April/000796.html
+https://lists.freedesktop.org/archives/mesa-announce/2025-April/000798.html
+https://lists.freedesktop.org/archives/mesa-announce/2025-April/000801.html
+https://lists.freedesktop.org/archives/mesa-announce/2025-May/000803.html
+------------------------------------------------------------------------
+Changes needed for the bump to 24.1.x:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Added dependency to llvm & Co. for iris driver due to upstream commit:
+https://cgit.freedesktop.org/mesa/mesa/commit/meson.build?h=24.1&id=a512c2a8b572c5da360873320dbbd343c6223cd6
+
+Added host version of mesa tool intel_clc needed for target build of the
+iris driver.
+
+Added dependency to host-python-pycparser for etnaviv driver due to
+upstream commit:
+https://cgit.freedesktop.org/mesa/mesa/commit/src/etnaviv/hwdb/meson.build?h=24.1&id=2192e620bb0c68b75ff45165d0b117c7ecb77268
+
+Added dependency to host-python-ply for intel vulkan driver due to
+upstream commit:
+https://cgit.freedesktop.org/mesa/mesa/commit/src/intel/vulkan/grl/meson.build?h=24.1&id=dc1aedef2bd054884685ad971a3ef5be07ecd101
+
+Although this dependency exists since mesa3d 22.3 it is only needed when
+intel-clc is enabled, this dependency is added with this patch so no need
+to backport this dependency to older buildroot trees.
+
+Update configure parameter of glvnd option due to upstream commit:
+https://cgit.freedesktop.org/mesa/mesa/commit/meson.build?h=24.1&id=4f25b84b2460524d375424a81b42faa4d99c8e60
+------------------------------------------------------------------------
+Changes needed for the bump to 24.2.x:
+
+Added dependency to host-python-pyyaml to host and target build, needed
+due to upstream commit
+https://gitlab.freedesktop.org/mesa/mesa/-/commit/a3813327575e8875c8c3ed24b5f45a0b7ba64446
+
+Rebased patch 0002 due to upstream commit:
+https://cgit.freedesktop.org/mesa/mesa/commit/src/gallium/drivers/vc4/meson.build?h=24.2&id=da70827656757cd070faac7aff5ca057f1e7fb8a
+
+Renamed BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST to
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SOFTPIPE (also updated tests) and
+added new option BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LLVMPIPE due to
+upstream commit
+https://gitlab.freedesktop.org/mesa/mesa/-/commit/010b2f9497ab256d9e8041207902948331af5b4b
+"gallium/meson: Deconflate swrast/softpipe/llvmpipe"
+
+Also, the test_glxinfo.py now needs GBM to work. Since GBM depends
+on EGL (which also selects GBM), this commit adds
+BR2_PACKAGE_MESA3D_OPENGL_EGL=y to this glxinfo runtime test config.
+
+Without this, glxinfo fails with an error such as:
+
+    Error: couldn't find RGB GLX visual or fbconfig
+
+This is related to upstream cleanups such as:
+https://gitlab.freedesktop.org/mesa/mesa/-/commit/93511c1c5c5fb60166c806d417e4b4378bf1fb31
+
+Thanks to El Mehdi YOUNES <elmehdi.younes@smile.fr> for pointing
+that out.
+------------------------------------------------------------------------
+Changes needed for the bump to 24.3.x:
+
+Rebased patch 0002 again due to upstream commit:
+https://gitlab.freedesktop.org/mesa/mesa/-/commit/25ba90fd888cef431c2098c8afdb0a2bbd34b303
+
+Removed dri3 configure option:
+https://gitlab.freedesktop.org/mesa/mesa/-/commit/8f6fca89aa1812b03da6d9f7fac3966955abc41e
+
+Removed gallium-omx configure option:
+https://gitlab.freedesktop.org/mesa/mesa/-/commit/9b6c27a320ab4b0fcf1fb16220ae7c3d3f06f7df
+
+Removed gallium kmsro configure option:
+https://gitlab.freedesktop.org/mesa/mesa/-/commit/89863a050bea429d9574a307bc28953bb60accaf
+https://gitlab.freedesktop.org/mesa/mesa/-/commit/70813c1c13b99cb029c8fa3537163650bdd17b6d
+No legacy option needed due to automatic handling by the mesa build
+system: "Automatically include it if we're building with a driver that
+depends on it, and don't include it if we're not."
+------------------------------------------------------------------------
+Changes needed for the bump to 25.0.x:
+
+Rebased patch 0001, added license files and updated license hash
+due to upstream commits which restructured the license files:
+https://gitlab.freedesktop.org/mesa/mesa/-/commit/69849bc4d1dd3cb9e9dd5d83b2ff63b8b4edce9b#e672208340b30f973cdab11421f1c91b39d5c02e
+https://gitlab.freedesktop.org/mesa/mesa/-/commit/c22d640fe94f6390068f79475fb6b2c45bb2557b
+
+Removed configure option opencl-spirv due to upstream commit:
+https://gitlab.freedesktop.org/mesa/mesa/-/commit/80c4ffb61a91ed252d45e38a96e893cec0771940
+
+Updated configure options for host-build clc which was also renamed from
+intel_clc to mesa_clc, added host version of vtn_bindgen:
+https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/32719
+https://gitlab.freedesktop.org/mesa/mesa/-/commit/13fe5a597bb8ededaa7c1c83f3b64c4e90315618
+https://gitlab.freedesktop.org/mesa/mesa/-/commit/5ddeea9a62f720e9fd3a6e5c76f74ef6e8b1fdf8
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[Julien: add BR2_PACKAGE_MESA3D_OPENGL_EGL=y to test_glxinfo config to
+  fix the runtime test]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...e_minimum_required-to-3.5-consisently-acr.patch | 43 ++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
+ Config.in.legacy                                   |  7 +++
+ package/mesa3d-headers/mesa3d-headers.mk           |  2 +-
+ ...on-Set-proper-value-for-LIBCLC_INCLUDEDIR.patch |  8 +--
+ ...on-option-to-disable-optional-neon-suppor.patch | 18 +++---
+ package/mesa3d/Config.in                           | 38 +++++++-----
+ package/mesa3d/mesa3d.hash                         | 10 ++--
+ package/mesa3d/mesa3d.mk                           | 69 +++++++++++++++++-----
+ support/testing/tests/package/test_flutter.py      |  2 +-
+ .../tests/package/test_glslsandbox_player.py       |  2 +-
+ support/testing/tests/package/test_glxinfo.py      |  3 +-
+ support/testing/tests/package/test_kmscube.py      |  2 +-
+ support/testing/tests/package/test_python_pyqt5.py |  2 +-
+ support/testing/tests/package/test_weston.py       |  2 +-
+ 13 files changed, 110 insertions(+), 55 deletions(-)
 
-diff --git a/package/intel-gmmlib/0002-Update-cmake_minimum_required-to-3.5-consisently-acr.patch b/package/intel-gmmlib/0002-Update-cmake_minimum_required-to-3.5-consisently-acr.patch
-new file mode 100644
-index 0000000000..400cdf667f
---- /dev/null
-+++ b/package/intel-gmmlib/0002-Update-cmake_minimum_required-to-3.5-consisently-acr.patch
-@@ -0,0 +1,43 @@
-+From c9db6e993d4e440a276f2918f48de0868fe98093 Mon Sep 17 00:00:00 2001
-+From: Rudi Heitbaum <rudi@heitbaum.com>
-+Date: Fri, 28 Mar 2025 04:45:44 +0000
-+Subject: [PATCH] Update cmake_minimum_required to 3.5 consisently across
-+ CMakeLists
+diff --git a/Config.in.legacy b/Config.in.legacy
+index c455e23524..54792bc22f 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
+ 
+ comment "Legacy options removed in 2025.05"
+ 
++config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
++	bool "mesa Gallium swrast driver was replaced by softpipe"
++	select BR2_LEGACY
++	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SOFTPIPE
++	help
++	  The Gallium swrast driver was replaced by softpipe.
 +
-+Source/GmmLib/CMakeLists.txt already is requiring CMake 3.5. Update
-+remaining files to 3.5. This supports the compilation with cmake-4.0.0
+ config BR2_PACKAGE_MBEDTLS_COMPRESSION
+ 	bool "mbedtls compression support removed"
+ 	select BR2_LEGACY
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 33c60b285f..cabdbe6595 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 24.0.9
++MESA3D_HEADERS_VERSION = 25.0.6
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://archive.mesa3d.org
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/0001-meson-Set-proper-value-for-LIBCLC_INCLUDEDIR.patch b/package/mesa3d/0001-meson-Set-proper-value-for-LIBCLC_INCLUDEDIR.patch
+index e3c70c3f24..ff362551ea 100644
+--- a/package/mesa3d/0001-meson-Set-proper-value-for-LIBCLC_INCLUDEDIR.patch
++++ b/package/mesa3d/0001-meson-Set-proper-value-for-LIBCLC_INCLUDEDIR.patch
+@@ -17,8 +17,8 @@ that they are not removed by Buildroot target-finalize logic.
+ Based on the patch for autotools provided by Valentin Korenblit.
+ 
+ Signed-off-by: Romain Naour <romain.naour@smile.fr>
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-[rebased for 20.2.0 & 20.3.0]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++[rebased for 20.2.0, 20.3.0 & 25.0.0]
+ ---
+  src/gallium/frontends/clover/meson.build | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+@@ -27,7 +27,7 @@ diff --git a/src/gallium/frontends/clover/meson.build b/src/gallium/frontends/cl
+ index 62ac5f5278d..ecdeb39669c 100644
+ --- a/src/gallium/frontends/clover/meson.build
+ +++ b/src/gallium/frontends/clover/meson.build
+-@@ -27,7 +27,7 @@
++@@ -10,7 +10,7 @@
+    '-DCL_USE_DEPRECATED_OPENCL_2_0_APIS',
+    '-DCL_USE_DEPRECATED_OPENCL_2_1_APIS',
+    '-DCL_USE_DEPRECATED_OPENCL_2_2_APIS',
+@@ -35,7 +35,7 @@ index 62ac5f5278d..ecdeb39669c 100644
+ +  '-DLIBCLC_INCLUDEDIR="/usr/share"',
+    '-DLIBCLC_LIBEXECDIR="@0@/"'.format(dep_clc.get_variable(pkgconfig : 'libexecdir'))
+  ]
+- clover_spirv_cpp_args = []
++ clover_incs = [inc_include, inc_src, inc_gallium, inc_gallium_aux]
+ -- 
+ 2.20.1
+ 
+diff --git a/package/mesa3d/0002-vc4-add-meson-option-to-disable-optional-neon-suppor.patch b/package/mesa3d/0002-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
+index f3919478a6..3b9bca0693 100644
+--- a/package/mesa3d/0002-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
++++ b/package/mesa3d/0002-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
+@@ -9,8 +9,8 @@ to force disabling it at compile time.
+ 
+ Upstream: https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/4114
+ Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-[rebased for 20.2.0, 20.3.0, 21.1.0, 23.1.0 & 23.2.0]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++[rebased for 20.2.0, 20.3.0, 21.1.0, 23.1.0, 23.2.0 & 24.3.0]
+ Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ [fix syntax error after previous rebases]
+ ---
+@@ -23,7 +23,7 @@ diff --git a/meson_options.txt b/meson_options.txt
+ index 8e0bf2a..1cf0e07 100644
+ --- a/meson_options.txt
+ +++ b/meson_options.txt
+-@@ -124,6 +124,13 @@ option(
++@@ -117,6 +117,13 @@ option(
+    description : 'enable gallium va frontend.',
+  )
+  
+@@ -41,18 +41,18 @@ diff --git a/src/gallium/drivers/vc4/meson.build b/src/gallium/drivers/vc4/meson
+ index 84da951..7f950de 100644
+ --- a/src/gallium/drivers/vc4/meson.build
+ +++ b/src/gallium/drivers/vc4/meson.build
+-@@ -84,7 +84,7 @@ files_libvc4 = files(
+- vc4_c_args = []
++@@ -72,7 +72,7 @@ files_libvc4 = files(
++ ]
+  
+  libvc4_neon = []
+ -if host_machine.cpu_family() == 'arm'
+ +if host_machine.cpu_family() == 'arm' and not get_option('gallium-vc4-neon').disabled()
+    libvc4_neon = static_library(
+      'vc4_neon',
+-     'vc4_tiling_lt_neon.c',
+-@@ -93,7 +93,7 @@ if host_machine.cpu_family() == 'arm'
+-     ],
+-     c_args : '-mfpu=neon',
++     'vc4_tiling_lt.c',
++@@ -82,7 +82,7 @@ if host_machine.cpu_family() == 'arm'
++     c_args : ['-mfpu=neon', '-DV3D_BUILD_NEON'],
++     dependencies : vc4_deps,
+    )
+ -  vc4_c_args += '-DUSE_ARM_ASM'
+ +  vc4_c_args += '-DVC4_TILING_LT_NEON'
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 0412998214..ef2c2c3258 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -50,7 +50,8 @@ config BR2_PACKAGE_MESA3D_OPENCL
+ 	bool "OpenCL support"
+ 	depends on BR2_PACKAGE_MESA3D_LLVM
+ 	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600 || \
+-		BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI
++		BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI || \
++		BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS
+ 	select BR2_PACKAGE_LLVM_RTTI
+ 	select BR2_PACKAGE_CLANG
+ 	select BR2_PACKAGE_LIBCLC
+@@ -129,10 +130,18 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_I915
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS
+ 	bool "Gallium iris driver"
+ 	depends on BR2_i386 || BR2_x86_64
++	depends on BR2_PACKAGE_MESA3D_LLVM
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
++	select BR2_PACKAGE_MESA3D_OPENCL
++	select BR2_PACKAGE_SPIRV_LLVM_TRANSLATOR
++	select BR2_PACKAGE_SPIRV_TOOLS
+ 	help
+ 	  Mesa driver for iris-based Intel GPUs.
+ 
++comment "iris driver needs llvm"
++	depends on BR2_i386 || BR2_x86_64
++	depends on !BR2_PACKAGE_MESA3D_LLVM
 +
-+Signed-off-by: Rudi Heitbaum <rudi@heitbaum.com>
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+Upstream: https://github.com/intel/gmmlib/pull/130
-+---
-+ CMakeLists.txt                      | 2 +-
-+ Source/GmmLib/os_release_info.cmake | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA
+ 	bool "Gallium lima driver"
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
+@@ -140,17 +149,16 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA
+ 	help
+ 	  Mesa driver for ARM Mali Utgard GPUs.
+ 
+-config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO
+-	bool "Gallium kmsro drivers"
+-	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV \
+-		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO \
+-		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA \
+-		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST \
+-		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D \
+-		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4
++config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LLVMPIPE
++	bool "Gallium llvmpipe driver"
++	depends on BR2_PACKAGE_MESA3D_LLVM
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	help
+-	  Mesa drivers for kernel mode-setting render-only devices
++	  This is a llvm opengl implementation using the Gallium3D
++	  infrastructure.
 +
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 1a3ad36..ca42104 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -1,4 +1,4 @@
-+-cmake_minimum_required (VERSION 3.1 FATAL_ERROR)
-++cmake_minimum_required (VERSION 3.5 FATAL_ERROR)
-+ 
-+ if (NOT DEFINED RUN_TEST_SUITE)
-+ option (RUN_TEST_SUITE "run test suite after install" ON)
-+diff --git a/Source/GmmLib/os_release_info.cmake b/Source/GmmLib/os_release_info.cmake
-+index 70c8318..0951a4a 100755
-+--- a/Source/GmmLib/os_release_info.cmake
-++++ b/Source/GmmLib/os_release_info.cmake
-+@@ -28,7 +28,7 @@ if(NOT DEFINED _os_release_info)
-+ set(_os_release_info TRUE)
-+ 
-+ # Set cmake policies for at least this level:
-+-cmake_minimum_required(VERSION 2.8.12)
-++cmake_minimum_required(VERSION 3.5)
-+ 
-+ if(POLICY CMP0054)
-+     cmake_policy(SET CMP0054 NEW)
-+-- 
-+2.34.1
++comment "llvmpipe driver needs llvm"
++	depends on !BR2_PACKAGE_MESA3D_LLVM
+ 
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
+ 	bool "Gallium nouveau driver"
+@@ -224,8 +232,8 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA
+ 	help
+ 	  This is a virtual GPU driver for VMWare virtual machines.
+ 
+-config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
+-	bool "Gallium swrast driver"
++config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SOFTPIPE
++	bool "Gallium softpipe driver"
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	help
+ 	  This is a software opengl implementation using the Gallium3D
+@@ -307,7 +315,7 @@ comment "Vulkan drivers"
+ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_BROADCOM
+ 	bool "Vulkan broadcom driver"
+ 	depends on BR2_arm || BR2_aarch64
+-	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # dri3/libxshmfence
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libxshmfence
+ 	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
+ 	help
+ 	  Vulkan broadcom driver.
+@@ -331,7 +339,7 @@ comment "intel vulkan needs a glibc toolchain w/ headers >= 3.17"
+ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_SWRAST
+ 	bool "Vulkan swrast driver"
+ 	depends on BR2_PACKAGE_MESA3D_LLVM
+-	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
++	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SOFTPIPE
+ 	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
+ 	help
+ 	  Vulkan swrast driver.
+@@ -346,7 +354,7 @@ comment "Off-screen Rendering"
+ 
+ config BR2_PACKAGE_MESA3D_OSMESA_GALLIUM
+ 	bool "OSMesa (Gallium) library"
+-	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
++	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SOFTPIPE
+ 	help
+ 	  The OSMesa API provides functions for off-screen rendering.
+ 
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index d506d398b8..c94611ff05 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,5 +1,7 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2024-June/000764.html
+-sha256  51aa686ca4060e38711a9e8f60c8f1efaa516baf411946ed7f2c265cd582ca4c  mesa-24.0.9.tar.xz
+-sha512  de2ee6c9df1fc106ee10befe0a76be1e9cfe83d65dbdb83bad6d8d7cfaa085232fb115293a1a790b37b50b1fe14bd58aafbcfe5a15e953b5901a7105d57569a5  mesa-24.0.9.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2025-May/000803.html
++sha256  0d179e019e3441f5d957330d7abb3b0ef38e6782cc85a382608cd1a4a77fa2e1  mesa-25.0.6.tar.xz
++sha512  6a0abc8a5bbbb8ffdad7286fc5642f643b1f4183794425ba689c2c9f5c73a4131c8685074241deb1022631b4c1f1c505dbd848190ec60d5d6931e90dd9316e05  mesa-25.0.6.tar.xz
+ # License
+-sha256  a00275a53178e2645fb65be99a785c110513446a5071ff2c698ed260ad917d75  docs/license.rst
++sha256  0d1a0472ecc81830e75c20d59b0ea02841e3db21255e0ebad97ab682c54d6615  docs/license.rst
++sha256  323c587d0ccf10e376f8bf9a7f31fb4ca6078105194b42e0b1e0ee2bc9bde71f  licenses/MIT
++sha256  686bf035a1fd22076416fd3b90370ac67771e884bf57f55693d51f8ce7c710a7  licenses/SGI-B-2.0
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 202fc5cc74..84d1aae6ef 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,11 +5,14 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 24.0.9
++MESA3D_VERSION = 25.0.6
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://archive.mesa3d.org
+ MESA3D_LICENSE = MIT, SGI, Khronos
+-MESA3D_LICENSE_FILES = docs/license.rst
++MESA3D_LICENSE_FILES = \
++	docs/license.rst \
++	licenses/MIT \
++	licenses/SGI-B-2.0
+ MESA3D_CPE_ID_VENDOR = mesa3d
+ MESA3D_CPE_ID_PRODUCT = mesa
+ 
+@@ -21,19 +24,19 @@ MESA3D_DEPENDENCIES = \
+ 	host-bison \
+ 	host-flex \
+ 	host-python-mako \
++	host-python-pyyaml \
+ 	expat \
+ 	libdrm \
+ 	zlib
+ 
+ MESA3D_CONF_OPTS = \
+-	-Dgallium-omx=disabled \
++	-Dgallium-opencl=disabled \
++	-Dgallium-rusticl=false \
++	-Dmicrosoft-clc=disabled \
+ 	-Dpower8=disabled
+ 
+ ifeq ($(BR2_PACKAGE_MESA3D_DRIVER)$(BR2_PACKAGE_XORG7),yy)
+-MESA3D_CONF_OPTS += -Ddri3=enabled
+ MESA3D_DEPENDENCIES += xlib_libxshmfence
+-else
+-MESA3D_CONF_OPTS += -Ddri3=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_MESA3D_LLVM),y)
+@@ -50,14 +53,9 @@ else
+ MESA3D_CONF_OPTS += -Dllvm=disabled
+ endif
+ 
+-# Disable opencl-icd: OpenCL lib will be named libOpenCL instead of
+-# libMesaOpenCL and CL headers are installed
+ ifeq ($(BR2_PACKAGE_MESA3D_OPENCL),y)
+ MESA3D_PROVIDES += libopencl
+ MESA3D_DEPENDENCIES += clang libclc
+-MESA3D_CONF_OPTS += -Dgallium-opencl=standalone
+-else
+-MESA3D_CONF_OPTS += -Dgallium-opencl=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_MESA3D_NEEDS_ELFUTILS),y)
+@@ -99,14 +97,14 @@ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO) += freedre
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_I915)     += i915
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS)     += iris
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA)     += lima
+-MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO)    += kmsro
++MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LLVMPIPE) += llvmpipe
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU)  += nouveau
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST) += panfrost
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R300)     += r300
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600)     += r600
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI) += radeonsi
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA)     += svga
+-MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST)   += swrast
++MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SOFTPIPE) += softpipe
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_TEGRA)    += tegra
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D)      += v3d
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4)      += vc4
+@@ -129,6 +127,19 @@ MESA3D_CONF_OPTS += \
+ 	-Dgallium-extra-hud=true
+ endif
+ 
++ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV),y)
++MESA3D_DEPENDENCIES += host-python-pycparser
++endif
 +
++ifeq ($(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL),y)
++MESA3D_DEPENDENCIES += host-python-ply
++endif
++
++ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS),y)
++MESA3D_CONF_OPTS += -Dmesa-clc=system -Dprecomp-compiler=system
++MESA3D_DEPENDENCIES += host-mesa3d spirv-llvm-translator spirv-tools
++endif
++
+ ifeq ($(BR2_PACKAGE_MESA3D_VULKAN_DRIVER),)
+ MESA3D_CONF_OPTS += \
+ 	-Dvulkan-drivers=
+@@ -254,12 +265,38 @@ endif
+ ifeq ($(BR2_PACKAGE_LIBGLVND),y)
+ ifneq ($(BR2_PACKAGE_MESA3D_OPENGL_GLX)$(BR2_PACKAGE_MESA3D_OPENGL_EGL),)
+ MESA3D_DEPENDENCIES += libglvnd
+-MESA3D_CONF_OPTS += -Dglvnd=true
++MESA3D_CONF_OPTS += -Dglvnd=enabled
+ else
+-MESA3D_CONF_OPTS += -Dglvnd=false
++MESA3D_CONF_OPTS += -Dglvnd=disabled
+ endif
+ else
+-MESA3D_CONF_OPTS += -Dglvnd=false
++MESA3D_CONF_OPTS += -Dglvnd=disabled
+ endif
+ 
++# host-mesa3d is needed by mesa3d only when the Iris Gallium driver is
++# enabled
++HOST_MESA3D_CONF_OPTS = \
++	-Dglvnd=disabled \
++	-Dgallium-drivers=iris \
++	-Dgallium-vdpau=disabled \
++	-Dinstall-mesa-clc=true \
++	-Dmesa-clc=enabled \
++	-Dplatforms= \
++	-Dprecomp-compiler=enabled \
++	-Dglx=disabled \
++	-Dvulkan-drivers=""
++
++HOST_MESA3D_DEPENDENCIES = \
++	host-libclc \
++	host-libdrm \
++	host-python-mako \
++	host-python-pyyaml \
++	host-spirv-tools
++
++define HOST_MESA3D_INSTALL_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/buildroot-build/src/compiler/clc/mesa_clc $(HOST_DIR)/bin/mesa_clc
++	$(INSTALL) -D -m 0755 $(@D)/buildroot-build/src/compiler/spirv/vtn_bindgen $(HOST_DIR)/bin/vtn_bindgen
++endef
++
+ $(eval $(meson-package))
++$(eval $(host-meson-package))
+diff --git a/support/testing/tests/package/test_flutter.py b/support/testing/tests/package/test_flutter.py
+index 08aa497417..e4040ca7dc 100644
+--- a/support/testing/tests/package/test_flutter.py
++++ b/support/testing/tests/package/test_flutter.py
+@@ -22,7 +22,7 @@ class TestFlutter(infra.basetest.BRTest, GraphicsBase):
+         BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{infra.filepath("tests/package/test_flutter/linux-vkms.fragment")}"
+         BR2_PACKAGE_LIBDRM=y
+         BR2_PACKAGE_MESA3D=y
+-        BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
++        BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SOFTPIPE=y
+         BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL=y
+         BR2_PACKAGE_MESA3D_OPENGL_ES=y
+         BR2_PACKAGE_FLUTTER_PI=y
+diff --git a/support/testing/tests/package/test_glslsandbox_player.py b/support/testing/tests/package/test_glslsandbox_player.py
+index 3b0dd60395..f72ac2adce 100644
+--- a/support/testing/tests/package/test_glslsandbox_player.py
++++ b/support/testing/tests/package/test_glslsandbox_player.py
+@@ -17,7 +17,7 @@ class TestGlslsandboxPlayer(infra.basetest.BRTest):
+         BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{}"
+         BR2_PACKAGE_LIBDRM=y
+         BR2_PACKAGE_MESA3D=y
+-        BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
++        BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SOFTPIPE=y
+         BR2_PACKAGE_MESA3D_LLVM=y
+         BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+         BR2_PACKAGE_MESA3D_OPENGL_ES=y
+diff --git a/support/testing/tests/package/test_glxinfo.py b/support/testing/tests/package/test_glxinfo.py
+index 3ccbdca8d9..f96ee0aaeb 100644
+--- a/support/testing/tests/package/test_glxinfo.py
++++ b/support/testing/tests/package/test_glxinfo.py
+@@ -19,7 +19,8 @@ class TestGlxinfo(infra.basetest.BRTest):
+         BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux.config"
+         BR2_PACKAGE_MESA3D_DEMOS=y
+         BR2_PACKAGE_MESA3D=y
+-        BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
++        BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SOFTPIPE=y
++        BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+         BR2_PACKAGE_MESA3D_OPENGL_GLX=y
+         BR2_PACKAGE_XORG7=y
+         BR2_PACKAGE_XSERVER_XORG_SERVER=y
+diff --git a/support/testing/tests/package/test_kmscube.py b/support/testing/tests/package/test_kmscube.py
+index 0ddeb67939..4a0eb07c32 100644
+--- a/support/testing/tests/package/test_kmscube.py
++++ b/support/testing/tests/package/test_kmscube.py
+@@ -18,7 +18,7 @@ class TestKmsCube(infra.basetest.BRTest):
+         BR2_PACKAGE_KMSCUBE=y
+         BR2_PACKAGE_LIBDRM=y
+         BR2_PACKAGE_MESA3D=y
+-        BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
++        BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SOFTPIPE=y
+         BR2_PACKAGE_MESA3D_LLVM=y
+         BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+         BR2_PACKAGE_MESA3D_OPENGL_ES=y
+diff --git a/support/testing/tests/package/test_python_pyqt5.py b/support/testing/tests/package/test_python_pyqt5.py
+index 5f1952b559..65130f9c03 100644
+--- a/support/testing/tests/package/test_python_pyqt5.py
++++ b/support/testing/tests/package/test_python_pyqt5.py
+@@ -28,7 +28,7 @@ class TestPythonPyQt5(infra.basetest.BRTest):
+         BR2_PACKAGE_DEJAVU=y
+         BR2_PACKAGE_LIBDRM=y
+         BR2_PACKAGE_MESA3D=y
+-        BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
++        BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SOFTPIPE=y
+         BR2_PACKAGE_MESA3D_LLVM=y
+         BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+         BR2_PACKAGE_MESA3D_OPENGL_ES=y
+diff --git a/support/testing/tests/package/test_weston.py b/support/testing/tests/package/test_weston.py
+index 43b5240b2d..c4a522c95b 100644
+--- a/support/testing/tests/package/test_weston.py
++++ b/support/testing/tests/package/test_weston.py
+@@ -22,7 +22,7 @@ class TestWeston(infra.basetest.BRTest, GraphicsBase):
+         BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{}"
+         BR2_PACKAGE_LIBDRM=y
+         BR2_PACKAGE_MESA3D=y
+-        BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
++        BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SOFTPIPE=y
+         BR2_PACKAGE_MESA3D_LLVM=y
+         BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+         BR2_PACKAGE_MESA3D_OPENGL_ES=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
