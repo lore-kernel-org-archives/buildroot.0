@@ -1,52 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC88EC3ABC9
-	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 15:20:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6E0EC3ABC9
+	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 15:29:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5E356816A3;
-	Sun, 18 May 2025 15:20:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 268CF60B43;
+	Sun, 18 May 2025 15:29:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0wbxH18jIKuz; Sun, 18 May 2025 15:20:37 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Vgb5uFmSPVPQ; Sun, 18 May 2025 15:29:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 817A381517
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2FE8360791
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 817A381517;
-	Sun, 18 May 2025 15:20:37 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id B5B65DF
- for <buildroot@buildroot.org>; Sun, 18 May 2025 15:20:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2FE8360791;
+	Sun, 18 May 2025 15:29:29 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 45078E4
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 15:29:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9BD3481517
- for <buildroot@buildroot.org>; Sun, 18 May 2025 15:20:36 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 367EB60791
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 15:29:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YfN_3SuVHXR6 for <buildroot@buildroot.org>;
- Sun, 18 May 2025 15:20:35 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3gYESGg2Vh-9 for <buildroot@buildroot.org>;
+ Sun, 18 May 2025 15:29:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CA097815CE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5EBEE60608
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id CA097815CE
- for <buildroot@buildroot.org>; Sun, 18 May 2025 15:20:35 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5EBEE60608
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 15:29:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C402687151; Sun, 18 May 2025 15:20:35 +0000 (UTC)
+ id 4A2E586F70; Sun, 18 May 2025 15:29:27 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 18 May 2025 17:20:20 +0200
+Date: Sun, 18 May 2025 17:29:04 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 187f7b14692f4b7087aba675e9aef09fbbc05144
-X-Git-Newrev: 05d8a49c09b30c8e1083dd614eaf0a298abef9a0
+X-Git-Oldrev: 05d8a49c09b30c8e1083dd614eaf0a298abef9a0
+X-Git-Newrev: 37167915dbd542d265d573e1e3ac8dba32045c2e
 X-Patchwork-Hint: ignore
-Message-Id: <20250518152035.C402687151@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] docs/website/{download,
- news}.html: update for 2025.02.2
+Message-Id: <20250518152927.4A2E586F70@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] CHANGES: Update for 2025.02.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,96 +65,123 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=05d8a49c09b30c8e1083dd614eaf0a298abef9a0
+commit: https://git.buildroot.net/buildroot/commit/?id=37167915dbd542d265d573e1e3ac8dba32045c2e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+(cherry picked from commit 183f44a3bdfdd730c50bd939cfdbedc5ba93025e)
 ---
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+ CHANGES | 99 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 99 insertions(+)
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 9ee6ace401..ff2a615054 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -8,37 +8,37 @@
-     <div class="panel-heading">Download</div>
-     <div class="panel-body">
- 
--      <h3 style="text-align: center;">Latest stable / long term support release: <b>2025.02.1</b></h3>
-+      <h3 style="text-align: center;">Latest stable / long term support release: <b>2025.02.2</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2025.02.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2025.02.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2025.02.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2025.02.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2025.02.1.tar.gz">buildroot-2025.02.1.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2025.02.1.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2025.02.2.tar.gz">buildroot-2025.02.2.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2025.02.2.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2025.02.1.tar.xz"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2025.02.2.tar.xz"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2025.02.1.tar.xz"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2025.02.2.tar.xz"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2025.02.1.tar.xz">buildroot-2025.02.1.tar.xz</a></h3>
--	  <p><a href="/downloads/buildroot-2025.02.1.tar.xz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2025.02.2.tar.xz">buildroot-2025.02.2.tar.xz</a></h3>
-+	  <p><a href="/downloads/buildroot-2025.02.2.tar.xz.sign">PGP signature</a></p>
- 	</div>
-       </div>
- <!--
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 78c033ddb7..6b6edeee09 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li class="timeline-inverted">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2025.02.2 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>22 April 2025</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2025.02.2 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2025.02 release. See the
-+	  <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2025.02.2/CHANGES">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="https://lore.kernel.org/buildroot/49d039c0-8121-4a91-8a69-889376f85c71@rnout.be/T/#u">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2025.02.2.tar.xz">2025.02.2 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
+diff --git a/CHANGES b/CHANGES
+index aa9404c7db..14605e8eca 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,102 @@
++2025.02.2, released May 18th, 2025
 +
-   <li>
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
++	Important / security related fixes:
++
++	- openvpn: CVE-2025-2704
++	- ghostscript: CVE-2025-27830, CVE-2025-27831, CVE-2025-27832,
++		CVE-2025-27833, CVE-2025-27834, CVE-2025-27835,
++		CVE-2025-27836, CVE-2025-27837,
++	- libfcgi: CVE-2025-23016
++	- perl: CVE-2024-56406
++	- mosquitto: CVE-2023-28366
++	- c-ares: CVE-2025-31498
++	- graphicsmagick: CVE-2025-32460, CVE-2025-27795
++	- libxml2: CVE-2025-32414, CVE-2025-32415
++	- wireshark: CVE-2025-1492
++	- yam: CVE-2021-33454
++	- sqlite: CVE-2025-29087
++	- xz: CVE-2025-31115
++	- python-django: CVE-2025-32873
++	- libraw: CVE-2025-43961, CVE-2025-43962, CVE-2025-43963,
++	    CVE-2025-43964
++	- dropbear: CVE-2025-47203
++	- intel-microcode: CVE-2025-24495, CVE-2024-28956, CVE-2024-43420,
++	    CVE-2025-20103
++	- openssh: CVE-2025-32728
++	- screen: CVE-2025-23395, CVE-2025-46802, CVE-2025-46803,
++	    CVE-2025-46804, CVE-2025-46805
++	- python-flask: CVE-2025-47278
++	- python-h11: CVE-2025-43859
++	- postgresql: CVE-2025-4207
++
++	Updated / fixed packages: sysklogd, libfcgi, double-conversion,
++	igh-ethercat, c-periphery, socat, lua-periphery, fluent-bit,
++	samba4, ca-certificates, dbus-cxx, atkmm2_28, pangomm2_46,
++	cairomm1_14, glibmm2_66, gtkmm3, file, opencsd, libopenmpt,
++	fwts, libtracefs, iproute2, ripgrep, bat, dust, trace-cmd,
++	libubootenv, micropython, python-cryptography, dnsmasq,
++	wireless-regdb, python-setuptools, libuci, libubox, ubus, waf,
++	armadillo, ncftp, expat, libxml2, wireshark, hiredis, zfs,
++	sunxi-mali-utgard-driver, ruby, mtools, hwdata, traceroute,
++	zic, tzdata, jo, gdb, tpm2-pkcs11, nss-pam-ldapd, ghostscript,
++	dropbear, intel-microcode, screen, python-flask, python-h11,
++	mariadb, ffmpeg, postgresql
++
++	Test Improvements:
++
++	- test_edk2: add a few build tests
++	- weston: fix the weston shutdown test
++	- lighttpd: runtime test
++	- openocd: runtime test
++	- hyperfine: runtime test
++	- python-urllib3: runtime test
++	- test_edk2: add macchiatobin build test
++	- bat: runtime test
++	- dust: runtime test
++
++	Infrastructure updates / fixes:
++
++	- libopenh264: ignore CVE-2025-27091
++	- edk2: drop dependency on tf-a for macchiatobin
++	- vim: extend comment about vi symlink
++	- board/raspberrypi/readme.txt: various improvements
++	- raspberrypi5: install Raspberry Pi 500 device-tree blob
++	- gen-bootlin-toolchains: allows armv8-a CPU to use armv7-a toolchains
++	- libsigrokdecode: needs python3 w/ zlib support
++	- dejavu: update homepage
++	- pulseview: fix, update, and reorganise dependencies
++	- boost: move host variables closer together
++	- boost: move target library selection variables closer together
++	- support/download/git: use FOO_DL_OPTS
++	- stm32mp135f_dk: fix optee hash
++	- libcamera: various fixes
++	- apparmor don't reference libapparmor variables
++	- rpi-firmware: add note to keep in sync with kernel
++	- python-sdbus: fix upstream url
++	- qt5webengine: drop unused file
++	- warp7: Improve Wifi instructions
++	- cryptopp: add upstream URL in help text
++	- dpdk: fixup Config.in comment about dependencies
++	- ffmpeg: add support for libopenmpt
++	- pkg-stats: fix typo in --disable help text
++	- imx28evk: enable BR2_DOWNLOAD_FORCE_CHECK_HASHES
++	- friendlyarm_nanopi_r3s: fix host linux headers custom version
++	- support/dependencies/dependencies.sh: awk is needed by Buildroot
++	- Config.in: introduce BR2_HOST_GCC_AT_LEAST_{12..15}
++	- dbus: set session-socket-dir to /tmp
++	- fs/erofs: unbreak custom compression handling
++	- nodejs: make target nodejs package virtual
++	- mpd: update CPE/CVE information
++	- Various fix for GCC15 host
++
++	Build issues and other problems solved for packages:
++
++	sqlite, pahole, libv4l, arm-trusted-firmware, libopenmpt, iptables,
++	tailscale, wilc-driver, rtl8188eu, rtl8723ds, lmbench, fluent-bit,
++	mosquitto, iproutes2, pixman, linux-tools, libcoap, libcamera,
++	strongswan, mpv, hiredis, zfs, bird, netsnmp, libcap, musepack,
++	ffmpeg, libqrencode
++
+ 2025.02.1, released April 22nd, 2025
+ 
+ 	Changes with potentially large impact:
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
