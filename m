@@ -4,73 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A88B8C3ABC9
-	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 09:42:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE85FC3ABC9
+	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 09:48:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 524F6606C1;
-	Sun, 18 May 2025 09:42:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 97D546064A;
+	Sun, 18 May 2025 09:48:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EgtBsXIc2F7B; Sun, 18 May 2025 09:42:48 +0000 (UTC)
+ id 1Za_xnAyPLOJ; Sun, 18 May 2025 09:48:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 803AA60D6C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6A8960B5B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 803AA60D6C;
-	Sun, 18 May 2025 09:42:48 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id B1468DF
- for <buildroot@buildroot.org>; Sun, 18 May 2025 09:42:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B6A8960B5B;
+	Sun, 18 May 2025 09:48:38 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7C4111BA
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 09:48:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 964AC408D9
- for <buildroot@buildroot.org>; Sun, 18 May 2025 09:42:47 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 61E226064A
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 09:48:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eNlsttgWFWhE for <buildroot@buildroot.org>;
- Sun, 18 May 2025 09:42:46 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3B17B40873
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B17B40873
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3B17B40873
- for <buildroot@buildroot.org>; Sun, 18 May 2025 09:42:45 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a067b.dip0.t-ipconnect.de [91.58.6.123])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id CE603A4C1439;
- Sun, 18 May 2025 11:42:42 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:54754)
- by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
- (envelope-from <bernd@kuhls.net>) id 1uGaXZ-000000002A6-2CV1;
- Sun, 18 May 2025 09:42:42 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id w1jfGYnmjnuf for <buildroot@buildroot.org>;
+ Sun, 18 May 2025 09:48:36 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7FAB260D6C
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7FAB260D6C
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 09:48:36 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 678EE86E1B; Sun, 18 May 2025 09:48:36 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Cc: Akhilesh Nema <nemaakhilesh@gmail.com>
-Date: Sun, 18 May 2025 11:42:37 +0200
-Message-Id: <20250518094237.1811776-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.5
-MIME-Version: 1.0
-X-Spamd-Bar: +
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202412041019; t=1747561362;
- bh=QP71abh5OzU63oFq/qzmPg9Z44rLoCPLusuoyfSaNNY=;
- h=From:To:Cc:Subject:Date:From;
- b=bejt78oJoTQeZvgmBG1dbCiJaXn1iQGoq5Y0M7oD7GW3ilUkA92dk8QgoUFxhbW0B
- X/IIxF5iPU112JqDJIaynt+vvgva0qbj/JgSjES74je0bshBoIm7UU5EwxWtnBm3TC
- Mk2Our0T8D6C8BaDrvqW3rQCY6ZbhBUcOSjN0/mlGgvFOyJXQragXmyG06NgF8U3tV
- hIRJNAXlj+T3cxc1XbRbGVMguEShTQ/zX3+WO0vLpYSqv0P8A1CScrS+HrFjpLLL1Q
- 891aJayCu5k0+UpVWvs98wAI6YBU9HsDtMJcVkBpvws3Pz7f+VKKkMBPeeYskC6MWG
- FUvvi+symxLoQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202412041019 header.b=bejt78oJ
-Subject: [Buildroot] [PATCH 1/1] package/ncurses: bump to version
- 6.5.20250517
+Date: Sun, 18 May 2025 11:47:22 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: e240b889f183b8ad00c116a4cab222135ec7f17b
+X-Git-Newrev: 7b98e2ce2c54c228c13d5ac50168fc4fa66fc15e
+X-Patchwork-Hint: ignore
+Message-Id: <20250518094836.678EE86E1B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/flex: fix GCC 15.x build issue
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,95 +58,79 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Akhilesh Nema <nemaakhilesh@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=7b98e2ce2c54c228c13d5ac50168fc4fa66fc15e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://github.com/ThomasDickey/ncurses-snapshots/blob/v6_5_20250510/NEWS
+Fixes:
+https://autobuild.buildroot.net/results/924b1015d4b81385409ef00f1a14be3ca1959c8e/
 
-- Drop upstream patch - 0001-fix-XOPEN_SOURCE-detection.patch
-- COPYING hash changed due to Copyright year update.
+As part of building flex for the target a few files are built for the host,
+including a rpl_malloc() implementation containing a malloc() forward
+declaration without any function parameters.
 
-Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-[Bernd: bumped to version 6.5.20250517
- added configure option --disable-widec due to wchar support being
- enabled by default since version 6.5:
- https://github.com/ThomasDickey/ncurses-snapshots/blob/master/INSTALL#L840
- fixing non-wchar ncurses build on wchar-enabled toolchains (Peter)]
+GCC 15 defaults to -std=gnu23, which handles function declarations without
+parameters differently from earlier C standards leading to compilation
+errors:
+
+../lib/malloc.c:6:12: warning: conflicting types for built-in function 'malloc'; expected 'void *(long unsigned int)' [-Wbuiltin-declaration-mismatch]
+    6 |      void *malloc ();
+      |            ^~~~~~
+../lib/malloc.c:5:1: note: 'malloc' is declared in header '<stdlib.h>'
+    4 |      #include <sys/types.h>
+  +++ |+#include <stdlib.h>
+    5 |
+../lib/malloc.c: In function 'rpl_malloc':
+../lib/malloc.c:16:15: error: too many arguments to function 'malloc'; expected 0, have 1
+
+https://gcc.gnu.org/gcc-15/porting_to.html#c23-fn-decls-without-parameters
+
+Add a patch submitted upstream to correct the prototype.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .../0001-fix-XOPEN_SOURCE-detection.patch       | 17 -----------------
- package/ncurses/ncurses.hash                    |  4 ++--
- package/ncurses/ncurses.mk                      |  7 ++++---
- 3 files changed, 6 insertions(+), 22 deletions(-)
- delete mode 100644 package/ncurses/0001-fix-XOPEN_SOURCE-detection.patch
+ .../0004-Match-malloc-signature-to-its-use.patch   | 27 ++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-diff --git a/package/ncurses/0001-fix-XOPEN_SOURCE-detection.patch b/package/ncurses/0001-fix-XOPEN_SOURCE-detection.patch
-deleted file mode 100644
-index 130ef524b4..0000000000
---- a/package/ncurses/0001-fix-XOPEN_SOURCE-detection.patch
-+++ /dev/null
-@@ -1,17 +0,0 @@
--Fix detection of XOPEN_SOURCE
--
--Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
--Upstream: fixed in latest release, no git/svn/hg
--
--diff -Nur ncurses-snapshots-6_4_20230603.orig/configure ncurses-snapshots-6_4_20230603/configure
----- ncurses-snapshots-6_4_20230603.orig/configure	2023-06-04 00:07:40.000000000 +0200
--+++ ncurses-snapshots-6_4_20230603/configure	2024-08-14 20:38:03.426905460 +0200
--@@ -10411,7 +10411,7 @@
-- 	cf_xopen_source="-D_SGI_SOURCE"
-- 	cf_XOPEN_SOURCE=
-- 	;;
---(linux*gnu|linux*gnuabi64|linux*gnuabin32|linux*gnueabi|linux*gnueabihf|linux*gnux32|uclinux*|gnu*|mint*|k*bsd*-gnu|cygwin|msys|mingw*)
--+(linux*gnu|linux*gnuabi64|linux*gnuabin32|linux*gnueabi|linux*gnueabihf|linux*gnux32|uclinux*|gnu*|mint*|k*bsd*-gnu|cygwin|msys|mingw*|linux*uclibc)
-- 
-- cf_gnu_xopen_source=$cf_XOPEN_SOURCE
-- 
-diff --git a/package/ncurses/ncurses.hash b/package/ncurses/ncurses.hash
-index b82a7b29e4..9829cd512c 100644
---- a/package/ncurses/ncurses.hash
-+++ b/package/ncurses/ncurses.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  b0910671694c2c8377f579eea68477a15d67bd20ddd4b29328cfe15c62c7b3fd  ncurses-6.4-20230603.tar.gz
-+sha256  271044605db2f64fcd1c697c5444a08eae0f70cae33b934e59f205954004a449  ncurses-6.5-20250517.tar.gz
- # Locally computed
--sha256  0413b2f4ea863194c174673032f0fca84f1ea1ed4eed6476baea68c075a631ce  COPYING
-+sha256  708999f95527e1ffa670c6fce288c6c600cb477dd04afcc1171422b3dd4ee226  COPYING
-diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-index 00e1c0d424..4eac66a71c 100644
---- a/package/ncurses/ncurses.mk
-+++ b/package/ncurses/ncurses.mk
-@@ -5,8 +5,8 @@
- ################################################################################
- 
- # When there is no snapshost yet for a new version, set it to the empty string
--NCURSES_VERSION_MAJOR = 6.4
--NCURSES_SNAPSHOT_DATE = 20230603
-+NCURSES_VERSION_MAJOR = 6.5
-+NCURSES_SNAPSHOT_DATE = 20250517
- NCURSES_VERSION = $(NCURSES_VERSION_MAJOR)$(if $(NCURSES_SNAPSHOT_DATE),-$(NCURSES_SNAPSHOT_DATE))
- NCURSES_VERSION_GIT = $(subst .,_,$(subst -,_,$(NCURSES_VERSION)))
- NCURSES_SITE = $(call github,ThomasDickey,ncurses-snapshots,v$(NCURSES_VERSION_GIT))
-@@ -118,7 +118,8 @@ NCURSES_CONF_OPTS += --enable-ext-colors
- 
- NCURSES_POST_INSTALL_STAGING_HOOKS += NCURSES_LINK_STAGING_LIBS
- NCURSES_POST_INSTALL_STAGING_HOOKS += NCURSES_LINK_STAGING_PC
--
-+else
-+NCURSES_CONF_OPTS += --disable-widec
- endif # BR2_PACKAGE_NCURSES_WCHAR
- 
- ifneq ($(BR2_ENABLE_DEBUG),y)
--- 
-2.39.5
-
+diff --git a/package/flex/0004-Match-malloc-signature-to-its-use.patch b/package/flex/0004-Match-malloc-signature-to-its-use.patch
+new file mode 100644
+index 0000000000..ac57e3b4c8
+--- /dev/null
++++ b/package/flex/0004-Match-malloc-signature-to-its-use.patch
+@@ -0,0 +1,27 @@
++From 4b142954b54a57a9b0af0a9661056a9c39a8fa95 Mon Sep 17 00:00:00 2001
++From: Richard Barnes <rbarnes@umn.edu>
++Date: Wed, 2 Oct 2024 10:35:09 -0700
++Subject: [PATCH] Match `malloc` signature to its use
++
++Upstream: https://github.com/westes/flex/pull/674
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ lib/malloc.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/lib/malloc.c b/lib/malloc.c
++index 75e8ef9..701b9b3 100755
++--- a/lib/malloc.c
+++++ b/lib/malloc.c
++@@ -3,7 +3,7 @@
++      
++      #include <sys/types.h>
++      
++-     void *malloc ();
+++     void *malloc (size_t n);
++      
++      /* Allocate an N-byte block of memory from the heap.
++         If N is zero, allocate a 1-byte block.  */
++-- 
++2.39.5
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
