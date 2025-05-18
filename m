@@ -1,99 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55305C3ABD8
-	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 08:28:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C73DC3ABC9
+	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 08:53:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E27E6820E4;
-	Sun, 18 May 2025 08:28:31 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eEnXRa-5z7Kn; Sun, 18 May 2025 08:28:31 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0078E820EA
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0078E820EA;
-	Sun, 18 May 2025 08:28:30 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 462DFE4
- for <buildroot@buildroot.org>; Sun, 18 May 2025 08:28:30 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2C83F60B11
- for <buildroot@buildroot.org>; Sun, 18 May 2025 08:28:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B5ED160ADD;
+	Sun, 18 May 2025 08:53:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NSSfZnK5ziQq for <buildroot@buildroot.org>;
- Sun, 18 May 2025 08:28:29 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::62e; helo=mail-pl1-x62e.google.com;
- envelope-from=kadambini.nema@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5305F605B1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5305F605B1
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com
- [IPv6:2607:f8b0:4864:20::62e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5305F605B1
- for <buildroot@buildroot.org>; Sun, 18 May 2025 08:28:29 +0000 (UTC)
-Received: by mail-pl1-x62e.google.com with SMTP id
- d9443c01a7336-231f6af929eso17299665ad.2
- for <buildroot@buildroot.org>; Sun, 18 May 2025 01:28:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1747556907; x=1748161707;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=gqdEy0E61MgZQ0hS2nnp5CEK1CkaFUVt/kwNmZxXlHs=;
- b=SgzAnSwHKAbOSrJkiuqR9D2wSg3FKeFyTysN9+L6vqRtXp4RSnUFvM8NTdrDDIE2/E
- dKXfnco2wDDrpMOOpqmIXovCRRiv3e8aQUdazZjl+DPRoXuVD79dflK+S/ZS9QMwiniL
- 7gNJvQ/NrPXJgrMNqQyIac6oO8HpnvMJhf5yAwnHAOQKBVgUtTZVbYqwk4uxvLeIWXEz
- 4ogsQKgaRI0fX2n7TR2W0alx2fVEUmCKldoyQgGBHPvqGvb4VR6JWsJGmCKJ5qdE1xJW
- nYS26KiPO55f5LW+aiLzh6Tr8GQkD7Pd2JxMbprV+cdt87Sfi1jsSiYqVMqVIYhyAO8h
- e0eQ==
-X-Gm-Message-State: AOJu0YwJ8hoEPKEnonGHfxLpmRMlJJMmDU8PqdSMfJA2V+IZS+afE4Ir
- iklmpMc4cktLwqE1VLn3WXAcXFEIHdes0BjRzcE6WrC9O00ojM+AnYi5eoveZOKA
-X-Gm-Gg: ASbGncurRAhibq/mQONyNNvBrgNrEy07hakLvLRDnrTkTggh7mUM8Na1mpN1zK6Qixi
- ZXsZpsX7TVAwit4Gl8nWs6zubudQhnQvD40H2G5KyEvcc2AP4fVQNCOD6sYg41stbVvCZXokVkZ
- aXLPMI/y0yVyluIiZPswg3sUv+M2MHJ0pNu7rNK6of6jKGrDYff1Wtse9rIxBHtxLIZfRM6cEE/
- XOh7l4lMjb7DNTFC/k3jRd/e+DASouFHCf4MnJ7Pm9qyAOLqcfAvcTlKqviQrpe24ELdtmEw2lL
- d5CNLAj3zMV4GtQO4y4FBifUsuFHgOyUwPkSX58fuGCFiK36xmmDE6tn7y7VEuF3cKCcCqFhKQW
- E3L1a1+18sgns1JytgCOCKf4Ks6zZPX1lYpNd/w==
-X-Google-Smtp-Source: AGHT+IEsptVXdw3yd7/B3/nkyZSVx4zLur6mesD0gJd38xY/cELAtFGdS3cWxob9wpxeyNy3gmpiVg==
-X-Received: by 2002:a17:903:1a28:b0:231:c05f:29d7 with SMTP id
- d9443c01a7336-231d43a54f8mr125192775ad.13.1747556907499; 
- Sun, 18 May 2025 01:28:27 -0700 (PDT)
-Received: from localhost.localdomain (ip72-203-121-181.oc.oc.cox.net.
- [72.203.121.181]) by smtp.gmail.com with ESMTPSA id
- d9443c01a7336-231d4ac93besm40273865ad.12.2025.05.18.01.28.25
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 18 May 2025 01:28:27 -0700 (PDT)
-From: Kadambini Nema <kadambini.nema@gmail.com>
+ id pYq6kQVpefdm; Sun, 18 May 2025 08:53:30 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A3A1460A9E
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id A3A1460A9E;
+	Sun, 18 May 2025 08:53:30 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5EA82E4
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 08:53:29 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4431660ADD
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 08:53:29 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FaY_Nqwjxhfi for <buildroot@buildroot.org>;
+ Sun, 18 May 2025 08:53:28 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 28A3660775
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 28A3660775
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 08:53:28 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 17A6586C9A; Sun, 18 May 2025 08:53:28 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 18 May 2025 01:28:21 -0700
-Message-Id: <20250518082821.41023-1-kadambini.nema@gmail.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1747556907; x=1748161707; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=gqdEy0E61MgZQ0hS2nnp5CEK1CkaFUVt/kwNmZxXlHs=;
- b=mCq07W6HHVvjuF0SrTrMOHC+QQCJxWbnRQJ+ebalKOHbQAiUCkxKVyTzCNzn2peykp
- mY6uVgCT2KcIrTvv+0L8GBhUYEDftgqPfBwRncpAvgBEm3yTW2m4AHjbQY8u8NCYIIla
- C6Rbps8hMEb1hirl962rNkfRUV+yrIbvmckHy7a3jFLZ/xf+hUVapP5XQxNJzM+BCxPq
- dHtmJkK30zqH+BY38h587zWfRv6wyWPpRg+3sD68041BLCCwAZAEUZbFsZNsIjywvkMX
- GppT14dm33bhhbOjRdaHPSHdD8xSPo6RO2MooXOr6xpDKAxlQ3j0+mFcaNxja5FbL5PV
- kaRw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=mCq07W6H
-Subject: [Buildroot] [PATCH 1/1] package/avrdude: bump to version 8.0
+Date: Sun, 18 May 2025 10:53:10 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 0b0662f02a0e779f72a6f3ed5f024c6c065d9aa7
+X-Git-Newrev: 56ea5a02268631f2ea679c067e9b0ec94e0e512e
+X-Patchwork-Hint: ignore
+Message-Id: <20250518085328.17A6586C9A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/scripts/pkg-stats: add support for
+ reporting stale CVE entries
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -105,53 +58,177 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Wojciech M . Zabolotny" <wzab01@gmail.com>,
- Kadambini Nema <kadambini.nema@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============3602010437067170189=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://github.com/avrdudes/avrdude/blob/v8.0/NEWS
-https://github.com/avrdudes/avrdude/blob/v7.3/NEWS
+--===============3602010437067170189==
+Content-Type: text/plain
 
-Updated COPYING file hash due to the following upstream commit:
-https://github.com/avrdudes/avrdude/commit/ececf3258e77eb147b0af75275de5ba7d071d7a4
+commit: https://git.buildroot.net/buildroot/commit/?id=56ea5a02268631f2ea679c067e9b0ec94e0e512e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
+The NVD database contains some CPEs that are wrongly not associated
+with any version number. They are for example sometimes associated
+with very old CVEs.
+Those CPEs are annoying, because they pollute our pkg-stat CVE results
+with CVE entries which actually don't affect us.
+
+The proper way to solve it is, and should remain, to fix the NVD
+database by reporting these issues. Having to deal with a lot of
+CVEs/CPEs, the NVD database is however slow to be updated.
+
+To reduce the noise in our pkg-stats results in the meantime, one
+possibility is to add <PKG_IGNORE_CVES> entries for those CVEs.  This
+however comes with the downside that even once the NVD database gets
+fixed, those ignored entries risk remaining in Buildroot forever
+because they are undetected.
+
+This commit tries to address this downside by checking for and
+reporting CVEs that are ignored in Buildroot, but where the
+NVD reports our package version as unaffected. Those CVEs will appear
+in the 'CVEs Ignored' column as '(stale)', and the cell will be
+colored the same way warnings are. This should allow us to detect and
+remove those entries.
+
+It can be tested for example by adding the following variable to the
+apache package (for a CVE that was recently fixed in the NVD database):
+APACHE_IGNORE_CVES = CVE-1999-0236
+
+Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/avrdude/avrdude.hash | 4 ++--
- package/avrdude/avrdude.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ support/scripts/cve.py    |  4 +---
+ support/scripts/pkg-stats | 36 ++++++++++++++++++++++++++++++++----
+ 2 files changed, 33 insertions(+), 7 deletions(-)
 
-diff --git a/package/avrdude/avrdude.hash b/package/avrdude/avrdude.hash
-index cb34e6b6f9..2a11968eb5 100644
---- a/package/avrdude/avrdude.hash
-+++ b/package/avrdude/avrdude.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  beb4e0b0a07f8d47e550329ab93c345d5252350de6f833afde51b4d8bd934674  avrdude-7.2.tar.gz
--sha256  201babc7da198873304a77a30dbfc7ca449c9bba52df2dffa4cca0009dbdfcb2  COPYING
-+sha256  a689d70a826e2aa91538342c46c77be1987ba5feb9f7dab2606b8dae5d2a52d5  avrdude-8.0.tar.gz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/avrdude/avrdude.mk b/package/avrdude/avrdude.mk
-index 89637d4ca6..619987119b 100644
---- a/package/avrdude/avrdude.mk
-+++ b/package/avrdude/avrdude.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/support/scripts/cve.py b/support/scripts/cve.py
+index 18fda8e1a1..1cbe24c02d 100755
+--- a/support/scripts/cve.py
++++ b/support/scripts/cve.py
+@@ -184,13 +184,11 @@ class CVE:
+         """The set of CPE products referred by this CVE definition"""
+         return set(cpe_product(p['id']) for p in self.each_cpe())
  
--AVRDUDE_VERSION = 7.2
-+AVRDUDE_VERSION = 8.0
- AVRDUDE_SITE = $(call github,avrdudes,avrdude,v$(AVRDUDE_VERSION))
- AVRDUDE_LICENSE = GPL-2.0+
- AVRDUDE_LICENSE_FILES = COPYING
--- 
-2.25.1
+-    def affects(self, name, version, cve_ignore_list, cpeid=None):
++    def affects(self, name, version, cpeid=None):
+         """
+         True if the Buildroot Package object passed as argument is affected
+         by this CVE.
+         """
+-        if self.identifier in cve_ignore_list:
+-            return self.CVE_DOESNT_AFFECT
+ 
+         pkg_version = distutils.version.LooseVersion(version)
+         if not hasattr(pkg_version, "version"):
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 46b12cd992..a0a46aa8cb 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -122,6 +122,7 @@ class Package:
+         self.cves = list()
+         self.ignored_cves = list()
+         self.unsure_cves = list()
++        self.stale_cve_ignores = list()
+         self.latest_version = {'status': RM_API_STATUS_ERROR, 'version': None, 'id': None}
+         self.status = {}
+ 
+@@ -638,7 +639,18 @@ def check_package_cve_affects(cve, cpe_product_pkgs):
+         if product not in cpe_product_pkgs:
+             continue
+         for pkg in cpe_product_pkgs[product]:
+-            cve_status = cve.affects(pkg.name, pkg.current_version, pkg.ignored_cves, pkg.cpeid)
++            cve_status = cve.affects(pkg.name, pkg.current_version, pkg.cpeid)
++
++            if cve.identifier in pkg.ignored_cves:
++                if cve_status == cve.CVE_DOESNT_AFFECT:
++                    # We have an ignore entry for a CVE which is
++                    # already reported as 'not affected'. This might
++                    # happen for example when the NVD database doesn't
++                    # initially include version numbers for a CPE, and
++                    # later fixes it. Store it so that we can report
++                    # it.
++                    pkg.stale_cve_ignores.append(cve.identifier)
++                cve_status = cve.CVE_DOESNT_AFFECT
+             if cve_status == cve.CVE_AFFECTS:
+                 pkg.cves.append(cve.identifier)
+             elif cve_status == cve.CVE_UNKNOWN:
+@@ -670,6 +682,8 @@ def check_package_cves(nvd_path, packages):
+         if 'cve' not in pkg.status:
+             if pkg.cves or pkg.unsure_cves:
+                 pkg.status['cve'] = ("error", "affected by CVEs")
++            elif pkg.stale_cve_ignores:
++                pkg.status['cve'] = ("warning", "has stale CVE ignores")
+             else:
+                 pkg.status['cve'] = ("ok", "not affected by CVEs")
+ 
+@@ -712,10 +726,13 @@ def calculate_stats(packages):
+         stats["patches"] += pkg.patch_count
+         stats["total-cves"] += len(pkg.cves)
+         stats["total-unsure-cves"] += len(pkg.unsure_cves)
++        stats["total-stale-cve-ignores"] += len(pkg.stale_cve_ignores)
+         if len(pkg.cves) != 0:
+             stats["pkg-cves"] += 1
+         if len(pkg.unsure_cves) != 0:
+             stats["pkg-unsure-cves"] += 1
++        if len(pkg.stale_cve_ignores) != 0:
++            stats["pkg-stale-cve-ignores"] += 1
+         if pkg.cpeid:
+             stats["cpe-id"] += 1
+         else:
+@@ -867,7 +884,7 @@ function expandField(fieldId){
+  .wrong, .lotsofpatches, .invalid_url, .version-needs-update, .cpe-nok, .cve-nok {
+    background: #ff9a69;
+  }
+- .somepatches, .somewarnings, .missing_url, .version-unknown, .cpe-unknown, .cve-unknown {
++ .somepatches, .somewarnings, .missing_url, .version-unknown, .cpe-unknown, .cve-unknown, .cve-stale {
+    background: #ffd870;
+  }
+  .cve_ignored, .version-error {
+@@ -1080,10 +1097,17 @@ def dump_html_pkg(f, pkg):
+     div_class = ["centered data ignored_cves"]
+     div_class.append(f'_{pkg_css_class}')
+     if pkg.ignored_cves:
+-        div_class.append("cve_ignored")
++        if pkg.stale_cve_ignores:
++            div_class.append("cve-stale")
++        else:
++            div_class.append("cve_ignored")
+     f.write(f'  <div id="{data_field_id}" class="{" ".join(div_class)}">\n')
+     for ignored_cve in pkg.ignored_cves:
+-        f.write(f'    <a href="https://security-tracker.debian.org/tracker/{ignored_cve}">{ignored_cve}</a><br/>\n')
++        if ignored_cve in pkg.stale_cve_ignores:
++            f.write(f"""    <a href="https://security-tracker.debian.org/tracker/{ignored_cve}">{ignored_cve}"""
++                    """ <i>(stale)</i></a><br/>\n""")
++        else:
++            f.write(f'    <a href="https://security-tracker.debian.org/tracker/{ignored_cve}">{ignored_cve}</a><br/>\n')
+     f.write("  </div>\n")
+ 
+     # CPE ID
+@@ -1193,6 +1217,10 @@ def dump_html_stats(f, stats):
+             stats["pkg-unsure-cves"])
+     f.write('<div class="data">Total number of unsure CVEs affecting all packages</div><div class="data">%s</div>\n' %
+             stats["total-unsure-cves"])
++    f.write('<div class="data">Packages with stale CVE ignores</div><div class="data">%s</div>\n' %
++            stats["pkg-stale-cve-ignores"])
++    f.write('<div class="data">Total number of stale CVE ignores affecting all packages</div><div class="data">%s</div>\n' %
++            stats["total-stale-cve-ignores"])
+     f.write('<div class="data">Packages with CPE ID</div><div class="data">%s</div>\n' %
+             stats["cpe-id"])
+     f.write('<div class="data">Packages without CPE ID</div><div class="data">%s</div>\n' %
+
+--===============3602010437067170189==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3602010437067170189==--
