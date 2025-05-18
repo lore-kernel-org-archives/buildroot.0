@@ -1,72 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6650C3DA6D
-	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 12:11:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3F64C3ABC9
+	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 12:14:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C685140126;
-	Sun, 18 May 2025 12:11:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 752B880E9E;
+	Sun, 18 May 2025 12:14:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aSML6A6dvU1H; Sun, 18 May 2025 12:11:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5zymHbGbAXCR; Sun, 18 May 2025 12:14:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E9C4940866
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A4FB380EBB
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E9C4940866;
-	Sun, 18 May 2025 12:11:44 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id B368EDF
- for <buildroot@buildroot.org>; Sun, 18 May 2025 12:11:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A4FB380EBB;
+	Sun, 18 May 2025 12:14:55 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3EC2DDF
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 12:14:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 995A440ACE
- for <buildroot@buildroot.org>; Sun, 18 May 2025 12:11:40 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 30ACD40146
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 12:14:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GQ0mZdkJHNYH for <buildroot@buildroot.org>;
- Sun, 18 May 2025 12:11:40 +0000 (UTC)
+ id 1WVUdEV0c-lJ for <buildroot@buildroot.org>;
+ Sun, 18 May 2025 12:14:53 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
  helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D164540142
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D164540142
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 48FC140142
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 48FC140142
 Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D164540142
- for <buildroot@buildroot.org>; Sun, 18 May 2025 12:11:39 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 48FC140142
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 12:14:53 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id F15431C0FC0; Sun, 18 May 2025 14:11:37 +0200 (CEST)
-To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Julien Corjon <corjon.j@ecagroup.com>,
- =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@rtone.fr>,
- Arnout Vandecappelle <arnout@rnout.be>
-Date: Sun, 18 May 2025 14:11:30 +0200
-Message-ID: <20250518121131.2821530-3-arnout@rnout.be>
-In-Reply-To: <20250518121131.2821530-1-arnout@rnout.be>
-References: <20250518121131.2821530-1-arnout@rnout.be>
+ with ESMTPSA id F02CC1C0FAD; Sun, 18 May 2025 14:14:50 +0200 (CEST)
+Message-ID: <96cb67cc-2f76-4d17-b6d1-f5bcd1f9c4ba@rnout.be>
+Date: Sun, 18 May 2025 14:14:49 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: =?UTF-8?Q?Ga=C3=ABl_PORTAY?= <gael.portay+rtone@gmail.com>,
+ buildroot@buildroot.org
+References: <20250430033319.87555-1-gael.portay+rtone@gmail.com>
+Content-Language: en-GB, fr-BE
+In-Reply-To: <20250430033319.87555-1-gael.portay+rtone@gmail.com>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1747570298; h=from:subject:date:message-id:to:cc:mime-version:
+ t=1747570491; h=from:subject:date:message-id:to:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=8ECS11fc+dVWF1h9JXBPldC6Aw7SOPTvvxpwLQ8fHkU=;
- b=lUAfRemVLh517sCfniAmsmL0dx7HuNb4sSI2kMjvlZjaBReo5g2Yssp5svJZMcXu+z/hGe
- 1yW3kyCe1NRvMWpaqEq8lpzK7k9E17wVii1mjmJga8R4bHCZ8aeusJjeYXvglkdGMCnK1W
- 3u6apjlK2XAp5JcjdW9g4IrT5DOj1tD2APtv52JRnhwZIfoBkaG8JI7TbJY8zOWI/mXh/S
- BXncWqrB5kMGcOnwuojYvr/CWoWUYeXT+484PC3yYHQEewJd2IajYs0VFaxoXhU0eBCJab
- O1PkZTP5byVv6ulhRtsfEZGxtdl3uRoGzc1h82u9/DV8mgwcWNQiZf2tPYLkwg==
+ bh=vD61FqgRZ9xFbr6hJircfOFF6smnYRgPfnuQx9duV0s=;
+ b=ZOR0LcJ53g9L6QAyMGUj4QJPFsq/dXMnUg/m7JT2zqA8GPO+P1SjIT5XqbMPFcqX+/+WqY
+ UyAvT+86X3vBcmet3R25yS5W3lwVkSU6ze8jGW3UX1QahWDgWqWfWJ3USqTMR8kwRidZfP
+ xDyiQVYMUrtU3x94n4sNgb4Gp37WTd1CVUiVQTy56k+yAJgGIhBhzDjeb1DKWPUIx/VtDN
+ WakVofzr3J0r06pVctbcNNB1LZJcn/IWBQTbeybGN02cIJfhku5q8nCvykxhYHerd+aX8Y
+ stFsiBrWoPy3kWSjc+eY6q7J+npjI4sFOaXgtDViIqTmySziJusur1yfW2BTrA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=lUAfRemV
-Subject: [Buildroot] [PATCH 2/3] package/qt5/qt5webengine-chromium: fix
- build with host GCC 15
+ header.a=rsa-sha256 header.s=dkim header.b=ZOR0LcJ5
+Subject: Re: [Buildroot] [PATCH 1/1] configs/raspberrypi3_qt5we: remove
+ proprietary-codecs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -80,133 +79,31 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@rnout.be>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Ideally we should update our version of qt5webengine-chromium first,
-we're more than 600 commits behind on the stable branch from KDE.
-However, this is a quick fix solution that allows us to build the
-current state in Fedora 42.
-
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
----
- ...de-cstdint-for-uintptr_t-uint8_t-etc.patch | 101 ++++++++++++++++++
- 1 file changed, 101 insertions(+)
- create mode 100644 package/qt5/qt5webengine-chromium/0012-Include-cstdint-for-uintptr_t-uint8_t-etc.patch
-
-diff --git a/package/qt5/qt5webengine-chromium/0012-Include-cstdint-for-uintptr_t-uint8_t-etc.patch b/package/qt5/qt5webengine-chromium/0012-Include-cstdint-for-uintptr_t-uint8_t-etc.patch
-new file mode 100644
-index 00000000000..f68f266e39c
---- /dev/null
-+++ b/package/qt5/qt5webengine-chromium/0012-Include-cstdint-for-uintptr_t-uint8_t-etc.patch
-@@ -0,0 +1,101 @@
-+From 80ddc04dd2398611afd8eafd89f5a6cd81b82363 Mon Sep 17 00:00:00 2001
-+From: Arnout Vandecappelle <arnout@rnout.be>
-+Date: Sun, 18 May 2025 09:59:24 +0200
-+Subject: [PATCH] Include <cstdint> for uintptr_t, uint8_t, etc.
-+
-+GCC 15 adheres more strictly to the standard about which type is defined
-+in which header. As such, uintptr_t, uint8_t, etc. are  no longer
-+available unless cstdint is included.
-+
-+Add #include <cstdint> in the files that gave errors with GCC 15
-+
-+Most (all?) of these fixes are already upstream, but spread out over
-+various commits that don't necessarily apply to our version. Fixing it
-+ourselves is simpler.
-+
-+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-+Upstream: N/A, already fixed and we're very far behind
-+---
-+ chromium/base/task/thread_pool.h                                 | 1 +
-+ chromium/net/tools/huffman_trie/trie_entry.h                     | 1 +
-+ .../transport_security_state_entry.h                             | 1 +
-+ .../perfetto/include/perfetto/ext/tracing/core/slice.h           | 1 +
-+ .../perfetto/include/perfetto/tracing/tracing_backend.h          | 1 +
-+ .../perfetto/src/trace_processor/importers/gzip/gzip_utils.h     | 1 +
-+ 6 files changed, 6 insertions(+)
-+
-+diff --git a/chromium/base/task/thread_pool.h b/chromium/base/task/thread_pool.h
-+index 085c249ba58e6..afc674ca7f6fb 100644
-+--- a/chromium/base/task/thread_pool.h
-++++ b/chromium/base/task/thread_pool.h
-+@@ -5,6 +5,7 @@
-+ #ifndef BASE_TASK_THREAD_POOL_H_
-+ #define BASE_TASK_THREAD_POOL_H_
-+ 
-++#include <cstdint>
-+ #include <memory>
-+ #include <utility>
-+ 
-+diff --git a/chromium/net/tools/huffman_trie/trie_entry.h b/chromium/net/tools/huffman_trie/trie_entry.h
-+index fe70260f981f2..eac6a7fc2499d 100644
-+--- a/chromium/net/tools/huffman_trie/trie_entry.h
-++++ b/chromium/net/tools/huffman_trie/trie_entry.h
-+@@ -5,6 +5,7 @@
-+ #ifndef NET_TOOLS_HUFFMAN_TRIE_TRIE_ENTRY_H_
-+ #define NET_TOOLS_HUFFMAN_TRIE_TRIE_ENTRY_H_
-+ 
-++#include <cstdint>
-+ #include <memory>
-+ #include <string>
-+ #include <vector>
-+diff --git a/chromium/net/tools/transport_security_state_generator/transport_security_state_entry.h b/chromium/net/tools/transport_security_state_generator/transport_security_state_entry.h
-+index 59059d88f6df2..fe15bb7429f6d 100644
-+--- a/chromium/net/tools/transport_security_state_generator/transport_security_state_entry.h
-++++ b/chromium/net/tools/transport_security_state_generator/transport_security_state_entry.h
-+@@ -5,6 +5,7 @@
-+ #ifndef NET_TOOLS_TRANSPORT_SECURITY_STATE_GENERATOR_TRANSPORT_SECURITY_STATE_ENTRY_H_
-+ #define NET_TOOLS_TRANSPORT_SECURITY_STATE_GENERATOR_TRANSPORT_SECURITY_STATE_ENTRY_H_
-+ 
-++#include <cstdint>
-+ #include <map>
-+ #include <memory>
-+ #include <string>
-+diff --git a/chromium/third_party/perfetto/include/perfetto/ext/tracing/core/slice.h b/chromium/third_party/perfetto/include/perfetto/ext/tracing/core/slice.h
-+index 4ce66fdeadc3a..3f3932b228737 100644
-+--- a/chromium/third_party/perfetto/include/perfetto/ext/tracing/core/slice.h
-++++ b/chromium/third_party/perfetto/include/perfetto/ext/tracing/core/slice.h
-+@@ -20,6 +20,7 @@
-+ #include <stddef.h>
-+ #include <string.h>
-+ 
-++#include <cstdint>
-+ #include <memory>
-+ #include <string>
-+ #include <vector>
-+diff --git a/chromium/third_party/perfetto/include/perfetto/tracing/tracing_backend.h b/chromium/third_party/perfetto/include/perfetto/tracing/tracing_backend.h
-+index 67b0d2eb51e0d..3c2462de588dd 100644
-+--- a/chromium/third_party/perfetto/include/perfetto/tracing/tracing_backend.h
-++++ b/chromium/third_party/perfetto/include/perfetto/tracing/tracing_backend.h
-+@@ -17,6 +17,7 @@
-+ #ifndef INCLUDE_PERFETTO_TRACING_TRACING_BACKEND_H_
-+ #define INCLUDE_PERFETTO_TRACING_TRACING_BACKEND_H_
-+ 
-++#include <cstdint>
-+ #include <memory>
-+ #include <string>
-+ 
-+diff --git a/chromium/third_party/perfetto/src/trace_processor/importers/gzip/gzip_utils.h b/chromium/third_party/perfetto/src/trace_processor/importers/gzip/gzip_utils.h
-+index 624363ff66f90..68783e879c8e0 100644
-+--- a/chromium/third_party/perfetto/src/trace_processor/importers/gzip/gzip_utils.h
-++++ b/chromium/third_party/perfetto/src/trace_processor/importers/gzip/gzip_utils.h
-+@@ -18,6 +18,7 @@
-+ #define SRC_TRACE_PROCESSOR_IMPORTERS_GZIP_GZIP_UTILS_H_
-+ 
-+ #include <memory>
-++#include <cstdint>
-+ 
-+ struct z_stream_s;
-+ 
-+-- 
-+2.49.0
-+
--- 
-2.49.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+ICBIaSBHYWXMiGwsCgpPbiAzMC8wNC8yMDI1IDA1OjMzLCBHYcOrbCBQT1JUQVkgd3JvdGU6Cj4g
+cXR3ZWJlbmdpbmUtY2hyb21pdW0gcGFja2FnZXMgdGhlIGNocm9taXVtIHNvdXJjZXMgYW5kIGl0
+cyB0aGlyZC1wYXJ0aWVzCj4gZm9yIFF0LiBUaGUgYnVuZGxlZCBmZm1wZWcgZG9lcyBub3QgcmVj
+b25maWd1cmUgdGhlIHByb2plY3QsIGJ1dCBpdAo+IGVtYmJlZHMgdGhlIHRocmVlIGhhcmRjb2Rl
+ZCBjb25maWd1cmF0aW9uc1sxXSBpbnN0ZWFkOgo+ICAgLSBDaHJvbWl1bSBpZiBpc19jaHJvbWVf
+YnJhbmRlZCBpcyB1bnNldAo+ICAgLSBDaHJvbWUgaWYgaXNfY2hyb21lX2JyYW5kZWQgaXMgc2V0
+IChvciBpZiBpc19jaHJvbWVjYXN0IGlzIHNldCBhbmQgaWYKPiAgICAgaXNfYW5kcm9pZCBpcyBz
+ZXQpCj4gICAtIENocm9tZU9TIGlmIGlzX2Nocm9tZV9icmFuZGVkIGlzIHNldCBhbmQgaWYgaXNf
+Y2hyb21lb3MgKG9yIGlmCj4gICAgIGlzX2Nocm9tZWNhc3QgaXMgc2V0IGFuZCBpZiBpc19hbmRy
+b2lkIGlzIHVuc2V0KQpbc25pcF0KPiBOb3RlOiBBZGQgdGhlIGNvbXBpbGVyIG9wdGlvbiAtbXRo
+dW1iIHRvIHRoZSBjb21tYW5kLWxpbmUgZml4ZXMgdGhlCj4gYXNzZW1ibGVyIGlzc3VlLgoKICBU
+aGF0J3MgYSBiZXR0ZXIgc29sdXRpb24gYmVjYXVzZSB0aGVuIGl0IGlzIHJlYWxseSBmaXhlZCwg
+bm90IGp1c3QgZm9yIHRoaXMgCmRlZmNvbmZpZy4gU28gSSBzZW50IGEgcGF0Y2ggdGhhdCBkb2Vz
+IGV4YWN0bHkgdGhhdCBbMV0gYW5kIG1hcmtlZCB0aGlzIG9uZSBhcyAKU3VwZXJzZWRlZC4KCiAg
+SSBkaWRuJ3QgbWFrZSBhIHN1cGVyIGV4dGVuc2l2ZSBjb21taXQgbWVzc2FnZSBsaWtlIHlvdSBk
+aWQuIElmIHlvdSBzZWUgYSB3YXkgCnRvIGltcHJvdmUgbXkgcGF0Y2ggZnVydGhlciwgZmVlbCBm
+cmVlIHRvIGFsc28gaW1wcm92ZSB0aGUgY29tbWl0IG1lc3NhZ2Ugd2l0aCAKYWxsIHRoZSByZWZl
+cmVuY2VzIGFuZCBleHBsYW5hdGlvbnMgYW5kIHN1Y2ggdGhhdCB5b3UgaGFkIGhlcmUuCgogIFJl
+Z2FyZHMsCiAgQXJub3V0CgpbMV0gCmh0dHBzOi8vcGF0Y2h3b3JrLm96bGFicy5vcmcvcHJvamVj
+dC9idWlsZHJvb3QvcGF0Y2gvMjAyNTA1MTgxMjExMzEuMjgyMTUzMC00LWFybm91dEBybm91dC5i
+ZS8KCgoKW3NuaXBdCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBz
+Oi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
