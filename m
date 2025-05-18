@@ -1,79 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A751C3ABC9
-	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 08:58:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33FFBC3ABDD
+	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 08:58:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CEB1440B5F;
-	Sun, 18 May 2025 08:58:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BB49A60E3E;
+	Sun, 18 May 2025 08:58:14 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dkuNFRW3SkdW; Sun, 18 May 2025 08:58:13 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CBA9D60F23
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id CBA9D60F23;
+	Sun, 18 May 2025 08:58:13 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0A965E4
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 08:57:46 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 975E8409ED
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 08:57:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3qwY5v90nWw4; Sun, 18 May 2025 08:58:12 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD66040B6D
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DD66040B6D;
-	Sun, 18 May 2025 08:58:11 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 41C8AE4
- for <buildroot@buildroot.org>; Sun, 18 May 2025 08:57:43 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7426E8196A
- for <buildroot@buildroot.org>; Sun, 18 May 2025 08:57:42 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ruqT5Xu-XjK2 for <buildroot@buildroot.org>;
- Sun, 18 May 2025 08:57:41 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
+ id g775y6pLPaCb for <buildroot@buildroot.org>;
+ Sun, 18 May 2025 08:57:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
  helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 48A3E8179B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 48A3E8179B
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 43794409C3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 43794409C3
 Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 48A3E8179B
- for <buildroot@buildroot.org>; Sun, 18 May 2025 08:57:40 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPA id 555B0432FC;
+ [217.70.183.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 43794409C3
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 08:57:42 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id ED414432FA;
  Sun, 18 May 2025 08:57:39 +0000 (UTC)
 To: Buildroot List <buildroot@buildroot.org>
 Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 18 May 2025 10:57:13 +0200
-Message-ID: <20250518085723.23020-21-thomas.petazzoni@bootlin.com>
+Date: Sun, 18 May 2025 10:57:14 +0200
+Message-ID: <20250518085723.23020-22-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250518085723.23020-1-thomas.petazzoni@bootlin.com>
 References: <20250518085723.23020-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 X-GND-State: clean
 X-GND-Score: -51
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefudektdelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenogfuuhhsphgvtghtffhomhgrihhnucdlgeelmdenucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepueefteegvdelueelkeehgeehvddvgeduueeftddujeefieegfefggeefjedujeegnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpshhouhhrtggvfhhorhhgvgdrnhgvthdpuggvsghirghnrdhorhhgnecukfhppedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumegufeduvgemvdefheemtgehvgdvmegvugekfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumegufeduvgemvdefheemtgehvgdvmegvugekfedphhgvlhhopeifihhnughsuhhrfhdrrddpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepfedprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoo
- hhtrdhorhhgpdhrtghpthhtoheprhgrphhhrggvlhdrmhgvlhhothhtvgesmhhinhgurdgsvgdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomh
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefudektdelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenogfuuhhsphgvtghtffhomhgrihhnucdlgeelmdenucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepieetueejheefudfghfdvvedvueelhfdutdejiefgjeevhfegkeevgeeufeelvdeunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpshhouhhrtggvfhhorhhgvgdrnhgvthdprhgvughhrghtrdgtohhmpdguvggsihgrnhdrohhrghenucfkphepvdgrtddvmeekgedvrgemgeehrggtmeelgedtudemugefudgvmedvfeehmegthegvvdemvggukeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeekgedvrgemgeehrggtmeelgedtudemugefudgvmedvfeehmegthegvvdemvggukeefpdhhvghlohepfihinhgushhurhhfrddrpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeefpdhrtghpthhtohepsghuihhlughro
+ hhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehrrghphhgrvghlrdhmvghlohhtthgvsehmihhnugdrsggvpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhm
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1747558659;
+ d=bootlin.com; s=gm1; t=1747558660;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=MbnTB4sGzA8jbmFRojDkdcG9/3k3rbS4pZffliUlNTE=;
- b=OWtjPF1JF4eXHUfO8jf3Yn9tkynlGL+1QcjG0zTLj0qb5hVHr8T6+OWV1uIZsW2HRWTrxS
- c3T56QTFK1deZEDCJ5nJ8B22yp5LobvpDGpIEbemhXbtDxOwVn+eptmC54mryoJSoyngSg
- h+6Y/Hpg+/X3AyFj+9iVPn35dYw1U8nN+3298nB7n8UJhbrt7rkPsv5D3U1RYJub/zALKf
- GR0Y7asVE/WtVY6fsQxAZ74Nc55xG4KvuCsLd4uLeZKKd8ghlhtxPIzYZtnbUnV+WVktWr
- Z3oeH1MF66T0ctWeMwLK9si3cW0XlBFn1MV6aowk38e9sxffUKh69TnNCE01Pg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=wVepe59AsJICOVSTzEgTTzesKll/pWyI8Ss8nN7fvLk=;
+ b=CwpZQgrWqc9OqVbcYb4xhu7W21tKVv93hvoGj/JTsGurcKmX4BfxgARxxhV+i+JgxhSJ1f
+ s/GjoLxxKqZxBYHnGkIsOoEtmeEpc11KAst3ees/J+1mA7f0tvWq3tMpSPjFTHT83KHIMu
+ 1S+L46ECYGWCzbk3z8X22p3V9SBCVsPpIorzfdmRYlIm+Z27EepMNJNvOiVY+NhN7DsO7t
+ tTjRPWYQh5/NQpiosqv8eaFJTCWt/ohpeRbiC+tvOPIv/hjLIsbcvvkipA5lVLEfLjbnWm
+ ByLwpRAs5TUGKiXwIe6R92Mo9U+BLEI3YCmijgVtEPaNqLBTeRdeq332GnF4XQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=OWtjPF1J
-Subject: [Buildroot] [PATCH 20/22] package/sox: add fix for CVE-2022-31651
+ header.s=gm1 header.b=CwpZQgrW
+Subject: [Buildroot] [PATCH 21/22] package/sox: add fix for CVE-2023-32627
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -100,68 +100,66 @@ vendor/product CPE. This has been reported to NVD:
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...0010-formats-reject-implausible-rate.patch | 39 +++++++++++++++++++
+ ...ilter-null-sampling-rate-in-VOC-code.patch | 37 +++++++++++++++++++
  package/sox/sox.mk                            |  5 +++
- 2 files changed, 44 insertions(+)
- create mode 100644 package/sox/0010-formats-reject-implausible-rate.patch
+ 2 files changed, 42 insertions(+)
+ create mode 100644 package/sox/0011-CVE-2023-32627-Filter-null-sampling-rate-in-VOC-code.patch
 
-diff --git a/package/sox/0010-formats-reject-implausible-rate.patch b/package/sox/0010-formats-reject-implausible-rate.patch
+diff --git a/package/sox/0011-CVE-2023-32627-Filter-null-sampling-rate-in-VOC-code.patch b/package/sox/0011-CVE-2023-32627-Filter-null-sampling-rate-in-VOC-code.patch
 new file mode 100644
-index 0000000000..5e60b62011
+index 0000000000..b67d23c12d
 --- /dev/null
-+++ b/package/sox/0010-formats-reject-implausible-rate.patch
-@@ -0,0 +1,39 @@
-+From 6af0a8b32df4d7a83fd52a963a20e6e321f10fd6 Mon Sep 17 00:00:00 2001
++++ b/package/sox/0011-CVE-2023-32627-Filter-null-sampling-rate-in-VOC-code.patch
+@@ -0,0 +1,37 @@
++From 2ab4f13af84f224cfbdd997e027c7348156de463 Mon Sep 17 00:00:00 2001
 +From: Helmut Grohne <helmut@subdivi.de>
-+Date: Sat, 17 May 2025 23:05:33 +0200
-+Subject: [PATCH] formats: reject implausible rate
++Date: Sat, 17 May 2025 23:07:34 +0200
++Subject: [PATCH] CVE-2023-32627 Filter null sampling rate in VOC coder
 +
-+Bug: https://sourceforge.net/p/sox/bugs/360/
-+Bug-Debian: https://bugs.debian.org/1012516
++Avoid a divide by zero and out of bound read by rejecting null sampling rate in VOC file
 +
-+Upstream: https://sourceforge.net/p/sox/bugs/360/
++bug: https://sourceforge.net/p/sox/bugs/369/
++bug-redhat: https://bugzilla.redhat.com/show_bug.cgi?id=2212282
++bug-debian: https://bugs.debian.org/1041112
++bug-debian-security: https://security-tracker.debian.org/tracker/CVE-2023-32627
++
++Upstream: https://sourceforge.net/p/sox/bugs/369/
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 +---
-+ src/formats_i.c | 10 ++++++++--
-+ 1 file changed, 8 insertions(+), 2 deletions(-)
++ src/voc.c | 5 +++++
++ 1 file changed, 5 insertions(+)
 +
-+diff --git a/src/formats_i.c b/src/formats_i.c
-+index 6a7c27e3..5f5ef979 100644
-+--- a/src/formats_i.c
-++++ b/src/formats_i.c
-+@@ -70,9 +70,15 @@ int lsx_check_read_params(sox_format_t * ft, unsigned channels,
-+     ft->signal.channels = channels;
-+   }
-+ 
-+-  if (rate && ft->signal.rate && ft->signal.rate != rate)
-++  if (rate && ft->signal.rate && ft->signal.rate != rate) {
-+     lsx_warn("`%s': overriding sample rate", ft->filename);
-+-  else ft->signal.rate = rate;
-++  /* Since NaN comparisons yield false, the negation rejects them. */
-++  } else if (!(rate > 0)) {
-++    lsx_fail_errno(ft, EINVAL, "invalid rate value");
-++    return SOX_EOF;
-++  } else {
-++    ft->signal.rate = rate;
-++  }
-+ 
-+   if (encoding && ft->encoding.encoding && ft->encoding.encoding != encoding)
-+     lsx_warn("`%s': overriding encoding type", ft->filename);
++diff --git a/src/voc.c b/src/voc.c
++index 0ca07f94..d8b982c5 100644
++--- a/src/voc.c
+++++ b/src/voc.c
++@@ -353,6 +353,11 @@ static size_t read_samples(sox_format_t * ft, sox_sample_t * buf,
++             v->block_remaining = 0;
++             return done;
++           }
+++          if(uc == 0) {
+++            lsx_fail_errno(ft, EINVAL, "invalid rate value");
+++            v->block_remaining = 0;
+++            return done;
+++          }
++           *buf = SOX_UNSIGNED_8BIT_TO_SAMPLE(uc,);
++           lsx_adpcm_init(&v->adpcm, 6 - v->size, SOX_SAMPLE_TO_SIGNED_16BIT(*buf, ft->clips));
++           ++buf;
 +-- 
 +2.49.0
 +
 diff --git a/package/sox/sox.mk b/package/sox/sox.mk
-index f76a338661..c0d903f9d4 100644
+index c0d903f9d4..3c9c939e8c 100644
 --- a/package/sox/sox.mk
 +++ b/package/sox/sox.mk
-@@ -79,6 +79,11 @@ SOX_IGNORE_CVES += CVE-2021-40426
+@@ -84,6 +84,11 @@ SOX_IGNORE_CVES += CVE-2022-31650 CVE-2023-26590
  # due to the change of CPE ID to sox_project:sox in the NVD database
- SOX_IGNORE_CVES += CVE-2022-31650 CVE-2023-26590
+ SOX_IGNORE_CVES += CVE-2022-31651
  
-+# 0010-formats-reject-implausible-rate.patch
++# 0011-CVE-2023-32627-Filter-null-sampling-rate-in-VOC-code.patch
 +# This entry is NOT stale, those CVEs are not reported by pkg-stats
 +# due to the change of CPE ID to sox_project:sox in the NVD database
-+SOX_IGNORE_CVES += CVE-2022-31651
++SOX_IGNORE_CVES += CVE-2023-32627
 +
  SOX_CONF_OPTS = \
  	--with-distro="Buildroot" \
