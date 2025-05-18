@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76F1CC3ABD8
-	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 12:17:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3FBDCC3DA6D
+	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 12:17:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 482DE80DA3;
-	Sun, 18 May 2025 12:17:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 03D9040C85;
+	Sun, 18 May 2025 12:17:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Muuwe_XR1Nzz; Sun, 18 May 2025 12:17:18 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QLUXcWCkdMr4; Sun, 18 May 2025 12:17:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8ED2281E17
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2B58340C2E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8ED2281E17;
-	Sun, 18 May 2025 12:17:18 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1F1641BA
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2B58340C2E;
+	Sun, 18 May 2025 12:17:20 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 51E0ADF
  for <buildroot@buildroot.org>; Sun, 18 May 2025 12:16:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 92CAF40D7C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0339C60A73
  for <buildroot@buildroot.org>; Sun, 18 May 2025 12:16:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7BI3kw9QYreN for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QYGivdLJqrOL for <buildroot@buildroot.org>;
  Sun, 18 May 2025 12:16:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E84D40BDC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8A22D60AC3
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7E84D40BDC
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8A22D60AC3
  for <buildroot@buildroot.org>; Sun, 18 May 2025 12:16:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7C06B86E1A; Sun, 18 May 2025 12:16:39 +0000 (UTC)
+ id 87DE186879; Sun, 18 May 2025 12:16:39 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
 Date: Sun, 18 May 2025 14:15:50 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ae116161ac289ecf30cd81ae117bcf8e30b29a58
-X-Git-Newrev: 4a3eab8341311b08dd3508d1e2ec4e01055a9cac
+X-Git-Oldrev: 4a3eab8341311b08dd3508d1e2ec4e01055a9cac
+X-Git-Newrev: 381ff2bf69bb069cd6192594979e3131f090a9d6
 X-Patchwork-Hint: ignore
-Message-Id: <20250518121639.7C06B86E1A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/netsnmp: drop stale ignore CVE
- entries
+Message-Id: <20250518121639.87DE186879@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qt5/qt5base: drop stale ignore CVE
+ entries, add CPE version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,35 +65,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4a3eab8341311b08dd3508d1e2ec4e01055a9cac
+commit: https://git.buildroot.net/buildroot/commit/?id=381ff2bf69bb069cd6192594979e3131f090a9d6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The 0001-snmp_agent-disallow-SET-with-NULL-varbind.patch patch has
-been dropped as part of the bump from 5.9.3 to 5.9.4 in commit
-1799cfebfd5ea1312cce74b3807d4aad044bce67, which means 5.9.4 has the
-security fix, and therefore the ignore CVE entry is no longer needed.
+The qt5base was reported to have 2 stale ignore CVE entries, one not
+stale. Turns out that because the version is a Git commit hash, the
+version comparaison did not make a lot of sense.
 
+This commit adds QT5BASE_CPE_ID_VERSION, assigned to the closest
+upstream version that we package (the Git repo we fetch is 5.15.14
+plus a number of fixes). With this done, all 3 ignore CVE entries are
+stale because the vulnerabilities have been fixed prior to 5.15.14.
+
+In addition, setting QT5BASE_CPE_ID_VERSION allows to reduce the
+number of CVEs affecting qt5base from 20 to 8.
+
+Cc: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
+Cc: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+Cc: Christian Hitz <christian.hitz@bbv.ch>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/netsnmp/netsnmp.mk | 4 ----
- 1 file changed, 4 deletions(-)
+ package/qt5/qt5base/qt5base.mk | 11 ++---------
+ 1 file changed, 2 insertions(+), 9 deletions(-)
 
-diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
-index 499e1d9477..a79c13c611 100644
---- a/package/netsnmp/netsnmp.mk
-+++ b/package/netsnmp/netsnmp.mk
-@@ -11,10 +11,6 @@ NETSNMP_LICENSE = Various BSD-like
- NETSNMP_LICENSE_FILES = COPYING
- NETSNMP_CPE_ID_VENDOR = net-snmp
- NETSNMP_CPE_ID_PRODUCT = $(NETSNMP_CPE_ID_VENDOR)
--# 0001-snmp_agent-disallow-SET-with-NULL-varbind.patch
--NETSNMP_IGNORE_CVES = \
--	CVE-2022-44792 \
--	CVE-2022-44793
- NETSNMP_SELINUX_MODULES = snmp
- NETSNMP_INSTALL_STAGING = YES
- NETSNMP_CONF_ENV = \
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index add460c257..3ad2bdfc04 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -9,20 +9,13 @@ QT5BASE_SITE = $(QT5_SITE)/qtbase
+ QT5BASE_SITE_METHOD = git
+ QT5BASE_CPE_ID_VENDOR = qt
+ QT5BASE_CPE_ID_PRODUCT = qt
++# Closest upstream version
++QT5BASE_CPE_ID_VERSION = 5.15.14
+ 
+ QT5BASE_DEPENDENCIES = host-pkgconf pcre2 zlib
+ QT5BASE_INSTALL_STAGING = YES
+ QT5BASE_SYNC_QT_HEADERS = YES
+ 
+-# From commits:
+-# 4ce7053a59 "Avoid processing-intensive painting of high number of tiny dashes"
+-# e7ea2ed27c "Improve fix for avoiding huge number of tiny dashes"
+-QT5BASE_IGNORE_CVES += CVE-2021-38593
+-# From commit 2766b2cba6ca4b1c430304df5437e2a6c874b107 "QProcess/Unix: ensure we don't accidentally execute something from CWD"
+-QT5BASE_IGNORE_CVES += CVE-2022-25255
+-# From commit e68ca8e51375d963b2391715f70b42707992dbd8 "Windows: use QSystemLibrary instead of LoadLibrary directly"
+-QT5BASE_IGNORE_CVES += CVE-2022-25634
+-
+ # A few comments:
+ #  * -no-pch to workaround the issue described at
+ #     http://comments.gmane.org/gmane.comp.lib.qt.devel/5933.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
