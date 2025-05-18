@@ -4,61 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07C93C3ABD8
-	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 12:50:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BED62C3ABC9
+	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 12:51:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 99BB8408E8;
-	Sun, 18 May 2025 12:50:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 93E5340578;
+	Sun, 18 May 2025 12:51:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nO1L1A196kRE; Sun, 18 May 2025 12:49:59 +0000 (UTC)
+ id ZnRohoMq4ZUe; Sun, 18 May 2025 12:51:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 688A9408CE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D8D8F408AF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 688A9408CE;
-	Sun, 18 May 2025 12:49:59 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id B6233DF
- for <buildroot@buildroot.org>; Sun, 18 May 2025 12:49:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D8D8F408AF;
+	Sun, 18 May 2025 12:51:30 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 39453E4
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 12:51:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A76326089D
- for <buildroot@buildroot.org>; Sun, 18 May 2025 12:49:55 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2AE6381EB8
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 12:51:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1yOS2AD9xJSF for <buildroot@buildroot.org>;
- Sun, 18 May 2025 12:49:54 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
- helo=relay7-d.mail.gandi.net; envelope-from=peko@korsgaard.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HDK03E-7E2Nu for <buildroot@buildroot.org>;
+ Sun, 18 May 2025 12:51:28 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
+ helo=relay1-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2ED566087F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2ED566087F
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2ED566087F
- for <buildroot@buildroot.org>; Sun, 18 May 2025 12:49:53 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B5A7643941;
- Sun, 18 May 2025 12:49:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2DCBB81EB7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2DCBB81EB7
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2DCBB81EB7
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 12:51:27 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C9E1E43A16;
+ Sun, 18 May 2025 12:51:24 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@dell.be.48ers.dk>) id 1uGdSh-00HS67-09;
- Sun, 18 May 2025 14:49:51 +0200
+ (envelope-from <peter@korsgaard.com>) id 1uGdUC-00HSDL-0q;
+ Sun, 18 May 2025 14:51:24 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 18 May 2025 14:49:47 +0200
-Message-Id: <20250518124949.4159568-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.39.5
+To: <yann.morin@orange.com>
+Cc: <buildroot@buildroot.org>,  Romain Naour <romain.naour@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,  Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>
+References: <cover.1723543467.git.yann.morin@orange.com>
+ <e4024c6c1e1825bd52ab14faafbc7655d3074eb3.1723543467.git.yann.morin@orange.com>
+Date: Sun, 18 May 2025 14:51:24 +0200
+In-Reply-To: <e4024c6c1e1825bd52ab14faafbc7655d3074eb3.1723543467.git.yann.morin@orange.com>
+ (yann morin's message of "Tue, 13 Aug 2024 12:04:30 +0200")
+Message-ID: <87wmaeqdyr.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-State: clean
 X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefudekheeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefrvghtvghrucfmohhrshhgrggrrhguuceophgvthgvrheskhhorhhsghgrrghrugdrtghomheqnecuggftrfgrthhtvghrnhepgfetueffgfeghedvgeetvdejgfefieeitdfhvdeiudegiedthefgfefggedtieeinecuffhomhgrihhnpehophgvnhdqshhtugdrohhrghenucfkphepvdgrtddvmeekgedvrgemgeehrggtmeelgedtudemjeeiugekmeefvghffhemfhgvsgefmeegsggsheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumeejiegukeemfegvfhhfmehfvggsfeemgegssgehpdhhvghlohepuggvlhhlrdgsvgdrgeekvghrshdrughkpdhmrghilhhfrhhomhepphgvkhhosehkohhrshhgrggrrhgurdgtohhmpdhnsggprhgtphhtthhopeehpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmpdhrtghpthhtohepghhiuhhlihhordgsvghnvghtthhisegsvghnv
- ghtthhivghnghhinhgvvghrihhnghdrtghomhdprhgtphhtthhopehrohhmrghinhdrnhgrohhurhesghhmrghilhdrtghomhdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomh
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefudekheeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufhfffgjkfgfgggtsehttddttddtredtnecuhfhrohhmpefrvghtvghrucfmohhrshhgrggrrhguuceophgvthgvrheskhhorhhsghgrrghrugdrtghomheqnecuggftrfgrthhtvghrnhepvdfhgeetkedttdffgeduleeiffduvedvteffgeeuteevieeigfefgfdtiedtudeunecuffhomhgrihhnpehoiihlrggsshdrohhrghenucfkphepvdgrtddvmeekgedvrgemgeehrggtmeelgedtudemjeeiugekmeefvghffhemfhgvsgefmeegsggsheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumeejiegukeemfegvfhhfmehfvggsfeemgegssgehpdhhvghlohepuggvlhhlrdgsvgdrgeekvghrshdrughkpdhmrghilhhfrhhomhepphgvthgvrheskhhorhhsghgrrghrugdrtghomhdpnhgspghrtghpthhtohephedprhgtphhtthhopeihrghnnhdrmhhorhhinhesohhrrghnghgvrdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehrohhmrghinhdrnhgrohhurhesghhmr
+ ghilhdrtghomhdprhgtphhtthhopehgihhulhhiohdrsggvnhgvthhtihessggvnhgvthhtihgvnhhgihhnvggvrhhinhhgrdgtohhmpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhm
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: [Buildroot] [PATCH 1/2] toolchain/toolchain-wrapper.c: slightly
- simplify cmdline copying
+Subject: Re: [Buildroot] [PATCH 2/3] toolchain/wrapper: check we did not add
+ more args than expected
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,51 +77,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-C99 section 5.1.2.2.1p2 mandates that:
+>>>>>   <yann.morin@orange.com> writes:
 
-- argv[argc] shall be a null pointer.
+ > From: "Yann E. MORIN" <yann.morin@orange.com>
+ > We have a hard-coded constant that defines how many expected args we may
+ > conditionally add at most, but it is very easy to miss updating that
+ > when adding new conditional args.
 
-https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1256.pdf
+ > Add a check that we did not overshoot the allowance.
 
-So we might as well copy the null pointer along in the memcpy() rather than
-copy everything up to the null pointer and then add one afterwards for
-simplicity.
+ > Ideally, we would have a nice way to add to, and extend the *args array
+ > dynamically, but this would be quite costly, while the wrapper is a hot
+ > path to the compiler. So, this test is a better solution in the end: it
+ > is simple and cheap.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- toolchain/toolchain-wrapper.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+Costly? It would just be a realloc call, and the list of argument
+pointers is not very long, so I doubt it would be noticable compared to
+all the argument parsing and finally running the real compiler.
 
-diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
-index e644c1e7bb..d6ce74fc94 100644
---- a/toolchain/toolchain-wrapper.c
-+++ b/toolchain/toolchain-wrapper.c
-@@ -497,12 +497,8 @@ int main(int argc, char **argv)
- #endif
- 	}
- 
--	/* append forward args */
--	memcpy(cur, &argv[1], sizeof(char *) * (argc - 1));
--	cur += argc - 1;
--
--	/* finish with NULL termination */
--	*cur = NULL;
-+	/* append forward args and terminating NULL */
-+	memcpy(cur, &argv[1], sizeof(char *) * argc);
- 
- 	exec_args = args;
- #ifdef BR_CCACHE
+In fact, I think it would make more sense to get rid of our
+EXCLUSIVE_ARGS constant and just allocate room for E.G. 1024 arguments
+and then just realloc in the special cases where that is not enough.
+
+I've sent a small series doing that here:
+
+https://patchwork.ozlabs.org/project/buildroot/patch/20250518124949.4159568-2-peter@korsgaard.com/
+
 -- 
-2.39.5
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
