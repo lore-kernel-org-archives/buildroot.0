@@ -1,78 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 894B4C3ABC9
-	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 21:06:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CC94C3ABD8
+	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 21:07:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 51DFD60E97;
-	Sun, 18 May 2025 21:06:43 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id whoPHDtrRDkV; Sun, 18 May 2025 21:06:42 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 86B3F60E9B
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 86B3F60E9B;
-	Sun, 18 May 2025 21:06:42 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1B19E1BA
- for <buildroot@buildroot.org>; Sun, 18 May 2025 21:06:41 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E4CFC40BF8
- for <buildroot@buildroot.org>; Sun, 18 May 2025 21:06:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DE639405A6;
+	Sun, 18 May 2025 21:06:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S_rHI1AGlXLe for <buildroot@buildroot.org>;
- Sun, 18 May 2025 21:06:39 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
- helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id FNCPU6ztXt2o; Sun, 18 May 2025 21:06:59 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2ABA9405BB
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2ABA9405BB;
+	Sun, 18 May 2025 21:06:59 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2B5EC193
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 21:06:58 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1CA5241136
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 21:06:58 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7-xKGT4134fB for <buildroot@buildroot.org>;
+ Sun, 18 May 2025 21:06:57 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A184740BF7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A184740BF7
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A184740BF7
- for <buildroot@buildroot.org>; Sun, 18 May 2025 21:06:38 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 50D70442B0;
- Sun, 18 May 2025 21:06:35 +0000 (UTC)
-Date: Sun, 18 May 2025 23:06:34 +0200
-To: Kadambini Nema <kadambini.nema@gmail.com>
-Cc: buildroot@buildroot.org
-Message-ID: <20250518230634.1b8f43c8@windsurf>
-In-Reply-To: <20250518091259.58493-1-kadambini.nema@gmail.com>
-References: <20250518091259.58493-1-kadambini.nema@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefudelheegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepudduueeftdejhfetledugfevgfevtefgudfgueeffedutedvuedvteefvdduudeunecuffhomhgrihhnpehgnhhurdhorhhgpdgsohhothhlihhnrdgtohhmnecukfhppedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumegufeduvgemvdefheemtgehvgdvmegvugekfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumegufeduvgemvdefheemtgehvgdvmegvugekfedphhgvlhhopeifihhnughsuhhrfhdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvddprhgtphhtthhopehkrggurghmsghinhhirdhnvghmrgesghhmrghilhdrtghomhdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhg
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1747602395;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=XaTsCWbJ5xmKQo4hrssGqKnD01L7/1HnA7MbhmnSqgY=;
- b=Azw5QNKE61SNVj6On11rlQUoZLI6vM2NJnK6/AqLWDkNar3Xz39DyKqOqPlfi+Mzcyh3/I
- bg2+El0ZQZkIF7zTuC71uODhBXDJR+Io1qTa4UjXbRJnjgj5EFD80B2ySCIu+GMcmBaPr9
- OPvHulL1BjFdNSo9xvuTLxJNlU7ZYfxvu5Q3Qnns1cYCo+6sq5yqOJRM+jPs8iqyjfaLtl
- u9gPPnWWtnvX1KnYxLmfqFJ6WvjODWiIDn+tXZTmBfk1/1TwIksM27B9A27Mg5+nNY0iuv
- ZUOdGPm5GV6ta8yIAYDFRsVn83idiQcBWrqy39yS55ke2UAc3LxDMo67bXRW6Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Azw5QNKE
-Subject: Re: [Buildroot] [PATCH 1/1] package/gzip: bump to version 1.14
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 54ED84111D
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 54ED84111D
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 21:06:57 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 5036687394; Sun, 18 May 2025 21:06:57 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 18 May 2025 23:06:43 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 06bb701217c9928995c72b001ad4e48441c46144
+X-Git-Newrev: 0e16ff09e9538d46c9726f8998080d55dfa5d41f
+X-Patchwork-Hint: ignore
+Message-Id: <20250518210657.5036687394@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/avrdude: bump to version 8.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,31 +59,52 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 18 May 2025 02:12:59 -0700
-Kadambini Nema <kadambini.nema@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=0e16ff09e9538d46c9726f8998080d55dfa5d41f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Release notes:
-> https://git.savannah.gnu.org/cgit/gzip.git/tree/NEWS?id=fbc4883eb9c304a04623ac506dd5cf5450d055f1
-> https://lists.gnu.org/r/bug-gzip/2025-04/msg00022.html
-> 
-> Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
-> ---
->  package/gzip/gzip.hash | 4 ++--
->  package/gzip/gzip.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Release notes:
+https://github.com/avrdudes/avrdude/blob/v8.0/NEWS
+https://github.com/avrdudes/avrdude/blob/v7.3/NEWS
 
-Applied to master, thanks.
+Updated COPYING file hash due to the following upstream commit:
+https://github.com/avrdudes/avrdude/commit/ececf3258e77eb147b0af75275de5ba7d071d7a4
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/avrdude/avrdude.hash | 4 ++--
+ package/avrdude/avrdude.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/avrdude/avrdude.hash b/package/avrdude/avrdude.hash
+index cb34e6b6f9..2a11968eb5 100644
+--- a/package/avrdude/avrdude.hash
++++ b/package/avrdude/avrdude.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  beb4e0b0a07f8d47e550329ab93c345d5252350de6f833afde51b4d8bd934674  avrdude-7.2.tar.gz
+-sha256  201babc7da198873304a77a30dbfc7ca449c9bba52df2dffa4cca0009dbdfcb2  COPYING
++sha256  a689d70a826e2aa91538342c46c77be1987ba5feb9f7dab2606b8dae5d2a52d5  avrdude-8.0.tar.gz
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/avrdude/avrdude.mk b/package/avrdude/avrdude.mk
+index 89637d4ca6..619987119b 100644
+--- a/package/avrdude/avrdude.mk
++++ b/package/avrdude/avrdude.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-AVRDUDE_VERSION = 7.2
++AVRDUDE_VERSION = 8.0
+ AVRDUDE_SITE = $(call github,avrdudes,avrdude,v$(AVRDUDE_VERSION))
+ AVRDUDE_LICENSE = GPL-2.0+
+ AVRDUDE_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
