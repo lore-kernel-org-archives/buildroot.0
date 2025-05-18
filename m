@@ -4,49 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91564C3ABC9
-	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 16:45:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BFA9BC3ABD8
+	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 16:48:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3423481AAB;
-	Sun, 18 May 2025 16:45:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6A9548156C;
+	Sun, 18 May 2025 16:48:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fEPVtEkZuwrA; Sun, 18 May 2025 16:45:49 +0000 (UTC)
+ id mdqCDMkjs80n; Sun, 18 May 2025 16:48:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EADF081CE1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F722813F9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EADF081CE1;
-	Sun, 18 May 2025 16:45:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8F722813F9;
+	Sun, 18 May 2025 16:48:05 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 8C32EE4
- for <buildroot@buildroot.org>; Sun, 18 May 2025 16:45:44 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 190C5DF
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 16:48:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7021F81423
- for <buildroot@buildroot.org>; Sun, 18 May 2025 16:45:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 15C5A813F9
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 16:48:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ny0H1qRXdvW0 for <buildroot@buildroot.org>;
- Sun, 18 May 2025 16:45:42 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id LNavNBbcdZjk for <buildroot@buildroot.org>;
+ Sun, 18 May 2025 16:48:02 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
+ helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8DC75814C1
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8DC75814C1
- for <buildroot@buildroot.org>; Sun, 18 May 2025 16:45:42 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7E1B687173; Sun, 18 May 2025 16:45:42 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 18 May 2025 18:45:06 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6c3f01fde12730defcc238fe9b065b30086e066b
-X-Git-Newrev: 573ecbd44cd16b2ca4ce71b40459bcecf8c8e98c
-X-Patchwork-Hint: ignore
-Message-Id: <20250518164542.7E1B687173@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/heimdal: bump version to
- 8c3c97bdf6c06200418f1a85aa22beaa441c6b23
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3FE3481A92
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3FE3481A92
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3FE3481A92
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 16:48:01 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 87E4343B28;
+ Sun, 18 May 2025 16:47:57 +0000 (UTC)
+Date: Sun, 18 May 2025 18:47:56 +0200
+To: Guillaume Chaye <guillaume.chaye@zeetim.com>
+Cc: buildroot@buildroot.org
+Message-ID: <20250518184756.4a084524@windsurf>
+In-Reply-To: <20250428154055.1402438-1-guillaume.chaye@zeetim.com>
+References: <20250428154055.1402438-1-guillaume.chaye@zeetim.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefudeltdefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepteetueehgfdtfeelfeektdeigfevgffffefhgefhteeuffffledtjeeiudelfedvnecuffhomhgrihhnpehgihhthhhusgdrtghomhdpghhnuhdrohhrghdpghhithhlrggsrdgtohhmpdgsuhhilhgurhhoohhtrdhorhhgpdgsohhothhlihhnrdgtohhmnecukfhppedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumegufeduvgemvdefheemtgehvgdvmegvugekfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumegufeduvgemvdefheemtgehvgdvmegvugekfedphhgvlhhopeifihhnughsuhhrfhdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvddprhgtphhtthhopehguhhilhhlrghumhgvrdgthhgrhigvseiivggvt
+ hhimhdrtghomhdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhg
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1747586877;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=OwnFZSGS6inRQMBZdKVdZzLljhutQqft1eLIz5jtNxk=;
+ b=EuCxXWZAXLmQFRfoO8HOncIC94Ng8D+sB1EvG55fWcPakF+m+SclAkz7/76KxvQ1Ca30tA
+ 1PHgNq9ZP/V57u3MDqJrn5S8J8WrL89Pb3nXfjm0mzpiSiSNJllcUVBRIYOho5r9rRn1aj
+ WUs8+mIgJCNfE8fU/P92xcyos87nuFro/B4PLOgTts55+bZU33ReUSspwKvhAE4fYOSHt9
+ 4R/ZfPoWKjBZvlTS7P21PJHEUSMQ4qJadDvzZu/mhdorEmKjV7NMgfqcFuOZGD0UPxUoS5
+ 4unI7FDWChuz5iakvLXXkzTide1YVhqhLzyCaiu64DHNmIlZVxE5sUBHEjJxLw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=EuCxXWZA
+Subject: Re: [Buildroot] [PATCHv4 1/1] package/heimdal: upgrade package and
+ add target support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,187 +88,75 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=573ecbd44cd16b2ca4ce71b40459bcecf8c8e98c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Guillaume,
 
-The current version was more than 3 years old and had known CVEs (see
-CVE-2023-36328). Since this is a host only package, we don't consider
-this as a security bump.
+On Mon, 28 Apr 2025 11:40:55 -0400
+Guillaume Chaye <guillaume.chaye@zeetim.com> wrote:
 
-This upgrade allows the removal of the two patches currently applied:
+> This patch does several things, so I will try to explain clearly what has been modified.
+> 
+> First, it bumps Heimdal to the latest commit (16/04/2025).
+> The current version was more than 3 years old and had known CVEs (see CVE-2023-36328).
+> This upgrade allows the removal of the two patches currently applied:
+> - The commit 1b57b62, which fixes the build with autoconf 2.72, is already included upstream.
+> - We no longer need to use the JSON-PP module, as it is now optional (commit 13d3bcf).
+> 
+> Heimdal was previously a host-only package. This patch adds target support.
+> This requires cross-compiling the project, which was not possible without additional patches.
+> After some research, I found this pull request (https://github.com/heimdal/heimdal/pull/1174)
+> created by a well-known Heimdal contributor (Nico Williams).
+> This pull request contains 29 commits, which is quite large, so I have tried to keep things simple
+> by selecting only the minimal set of changes required for cross-compilation.
+> 
+> After extensive testing, I have successfully built the target version of Heimdal by applying 3 commits
+> picked from the pull request:
+> - The first one adds the AX_PROG_CC_FOR_BUILD macro to the project.
+>   This macro, from the GNU project (https://www.gnu.org/software/autoconf-archive/ax_prog_cc_for_build.html),
+>   allows detecting a C compiler that produces native executables.
+> - The second commit integrates the AX_PROG_CC_FOR_BUILD macro into Heimdal's autoconf scripts,
+>   enabling proper compiler selection during the build.
+> - Finally, a patch was needed to fix header errors when cross-compiling libroken.
+> 
+> Additionally, I have added two patches I wrote and submitted upstream:
+> - The first removes a hardcoded path from a script.
+> - The second fixes an error generated by the 'ar' utility during the build process.
+> 
+> Finally, since the latest version of Heimdal no longer depends on e2fsprogs,
+> the host-e2fsprogs dependency has been removed.
+> 
+> Signed-off-by: Guillaume Chaye <guillaume.chaye@zeetim.com>
 
-- The commit 1b57b62, which fixes the build with autoconf 2.72, is
-  already included upstream.
+Thanks for this new iteration. There is still too much in there, mixing
+the bump and the addition of the target package.
 
-- We no longer need to use the JSON-PP module, as it is now
-  optional (commit 13d3bcf).
+Since the version bump made sense on its own, I extracted just this
+aspect from your patch, and merged it:
 
-Also, since the latest version of Heimdal no longer depends on
-e2fsprogs, the host-e2fsprogs dependency has been removed.
+  https://gitlab.com/buildroot.org/buildroot/-/commit/573ecbd44cd16b2ca4ce71b40459bcecf8c8e98c
 
-Signed-off-by: Guillaume Chaye <guillaume.chaye@zeetim.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...dule-JSON-PP-part-of-core-instead-of-JSON.patch | 57 ----------------------
- ...largefile.m4-Fix-build-with-autoconf-2.72.patch | 27 ----------
- package/heimdal/heimdal.hash                       |  2 +-
- package/heimdal/heimdal.mk                         | 21 ++++----
- 4 files changed, 11 insertions(+), 96 deletions(-)
+For the rest, could you please:
 
-diff --git a/package/heimdal/0001-Use-perl-module-JSON-PP-part-of-core-instead-of-JSON.patch b/package/heimdal/0001-Use-perl-module-JSON-PP-part-of-core-instead-of-JSON.patch
-deleted file mode 100644
-index 7323ac70df..0000000000
---- a/package/heimdal/0001-Use-perl-module-JSON-PP-part-of-core-instead-of-JSON.patch
-+++ /dev/null
-@@ -1,57 +0,0 @@
--From f6fdb0a28e3bfcb3fd0aa1c81ad59c5411c0d660 Mon Sep 17 00:00:00 2001
--From: Andrew Sim <andrewsimz@gmail.com>
--Date: Sat, 10 Jun 2023 09:00:24 +0200
--Subject: [PATCH] Use perl module JSON:PP, part of core, instead of JSON
-- package
--
--This patch removes the need for an external package.
--
--Ported from
--https://github.com/openwrt/packages/blob/master/net/samba4/patches/105-perl-json-pp.patch
--https://github.com/openwrt/packages/commit/402f4ba4eff65b80a9deaa6085256112bec4d67b#diff-208d4e0345c9d29fbec23d6f655ba794afd3052f5cb8dd73944db72ce81b847b
--
--Upstream: https://github.com/heimdal/heimdal/pull/1176
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- cf/make-proto.pl | 4 ++--
-- configure.ac     | 1 -
-- 2 files changed, 2 insertions(+), 3 deletions(-)
--
--diff --git a/cf/make-proto.pl b/cf/make-proto.pl
--index 36a040ce6..4af21916b 100644
----- a/cf/make-proto.pl
--+++ b/cf/make-proto.pl
--@@ -4,7 +4,7 @@
-- use Getopt::Std;
-- use File::Compare;
-- 
---use JSON;
--+use JSON::PP
-- 
-- my $comment = 0;
-- my $doxygen = 0;
--@@ -70,7 +70,7 @@ if($opt_x) {
--     my $EXP;
--     local $/;
--     open(EXP, '<', $opt_x) || die "open ${opt_x}";
---    my $obj = JSON->new->utf8->decode(<EXP>);
--+    my $obj = JSON::PP->new->utf8->decode(<EXP>);
--     close $EXP;
-- 
--     foreach my $x (keys %$obj) {
--diff --git a/configure.ac b/configure.ac
--index cedb4c01f..cecd030e6 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -56,7 +56,6 @@ if ! test -f "$srcdir/lib/asn1/der-protos.h" ||
--     AC_KRB_PROG_PERL
--     AC_KRB_PERL_MOD(Getopt::Std)
--     AC_KRB_PERL_MOD(File::Compare)
---    AC_KRB_PERL_MOD(JSON)
-- fi
-- 
-- AC_KRB_PROG_YACC
---- 
--2.39.2
--
-diff --git a/package/heimdal/0002-cf-largefile.m4-Fix-build-with-autoconf-2.72.patch b/package/heimdal/0002-cf-largefile.m4-Fix-build-with-autoconf-2.72.patch
-deleted file mode 100644
-index 5b36c5a784..0000000000
---- a/package/heimdal/0002-cf-largefile.m4-Fix-build-with-autoconf-2.72.patch
-+++ /dev/null
-@@ -1,27 +0,0 @@
--From 1b57b62d82a478c1fade350f0fb1d57031a8734e Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd@kuhls.net>
--Date: Sat, 10 Feb 2024 09:33:48 +0100
--Subject: [PATCH] cf/largefile.m4: Fix build with autoconf-2.72
--
--Fixes https://github.com/heimdal/heimdal/issues/1201
--
--Upstream: https://github.com/heimdal/heimdal/commit/1b57b62d82a478c1fade350f0fb1d57031a8734e
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- cf/largefile.m4 | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/cf/largefile.m4 b/cf/largefile.m4
--index 5c54897be4..cdbbc55431 100644
----- a/cf/largefile.m4
--+++ b/cf/largefile.m4
--@@ -10,7 +10,7 @@ dnl with generated code, such as lex
-- if test "$enable_largefile" != no -a "$ac_cv_sys_large_files" != no; then
-- 	CPPFLAGS="$CPPFLAGS -D_LARGE_FILES=$ac_cv_sys_large_files"
-- fi
---if test "$enable_largefile" != no -a "$ac_cv_sys_file_offset_bits" != no; then
--+if test "$enable_largefile" != no -a "$ac_cv_sys_file_offset_bits" != no && test -n "$ac_cv_sys_file_offset_bits"; then
-- 	CPPFLAGS="$CPPFLAGS -D_FILE_OFFSET_BITS=$ac_cv_sys_file_offset_bits"
-- fi
-- ])
-diff --git a/package/heimdal/heimdal.hash b/package/heimdal/heimdal.hash
-index 250ddbbd4d..5575b52f86 100644
---- a/package/heimdal/heimdal.hash
-+++ b/package/heimdal/heimdal.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  2576c5e2d793db53c86e108fd117b278437bb02d6c6db2bec4d1b86958f1980a  heimdal-f4faaeaba371fff3f8d1bc14389f5e6d70ca8e17.tar.gz
-+sha256  aa679a6ad0349e266ec8a886b6be8085564f959183e948551a8e7d782ffaf623  heimdal-8c3c97bdf6c06200418f1a85aa22beaa441c6b23.tar.gz
- sha256  0c4b07bf5b98f7a1d01f8e60722d6c6747ef052c2aa6d2043daf690d4e1b0a7f  LICENSE
-diff --git a/package/heimdal/heimdal.mk b/package/heimdal/heimdal.mk
-index ed8826a741..6bba641e2c 100644
---- a/package/heimdal/heimdal.mk
-+++ b/package/heimdal/heimdal.mk
-@@ -4,14 +4,12 @@
- #
- ################################################################################
- 
--HEIMDAL_VERSION = f4faaeaba371fff3f8d1bc14389f5e6d70ca8e17
-+HEIMDAL_VERSION = 8c3c97bdf6c06200418f1a85aa22beaa441c6b23
- HEIMDAL_SITE = $(call github,heimdal,heimdal,$(HEIMDAL_VERSION))
--HOST_HEIMDAL_DEPENDENCIES = host-e2fsprogs host-ncurses host-pkgconf host-libxcrypt host-flex host-bison
-+HOST_HEIMDAL_DEPENDENCIES = host-ncurses host-pkgconf host-libxcrypt host-flex host-bison
- HOST_HEIMDAL_AUTORECONF = YES
--# static because of -fPIC issues with e2fsprogs on x86_64 host
-+
- HOST_HEIMDAL_CONF_OPTS = \
--	--disable-shared \
--	--enable-static \
- 	--without-openldap \
- 	--without-capng \
- 	--with-db-type-preference= \
-@@ -33,13 +31,14 @@ HEIMDAL_LICENSE = BSD-3-Clause
- HEIMDAL_LICENSE_FILES = LICENSE
- HEIMDAL_CPE_ID_VALID = YES
- 
--# We need compile_et for samba4
--define HOST_HEIMDAL_INSTALL_COMPILE_ET
--	$(INSTALL) -m 0755 $(@D)/lib/com_err/compile_et \
--		$(HOST_DIR)/bin/compile_et
-+# We need compile_et for samba4 and slc for target version of heimdal
-+# By default compile_et is not installed so we install it to bin
-+# By default slc is installed in libexec directory so we just link it
-+define HOST_HEIMDAL_INSTALL_BINARIES
-+	$(INSTALL) -m 0755 $(@D)/lib/com_err/compile_et $(HOST_DIR)/bin/compile_et
-+	ln -sf $(HOST_DIR)/libexec/heimdal/slc $(HOST_DIR)/bin/slc
- endef
- 
--HOST_HEIMDAL_POST_INSTALL_HOOKS += \
--	HOST_HEIMDAL_INSTALL_COMPILE_ET
-+HOST_HEIMDAL_POST_INSTALL_HOOKS += HOST_HEIMDAL_INSTALL_BINARIES
- 
- $(eval $(host-autotools-package))
+- Provide a new patch with a commit message that's wrapped at 80
+  columns and doesn't use first person sentence like "I have..."
+
+- Justify why heimdal for the target is useful, i.e what will use it.
+
+- Double check that the AX_PROG_CC_FOR_BUILD function in
+  autoconf-archive really doesn't work? This would allow to avoid
+  having another copy of it.
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
