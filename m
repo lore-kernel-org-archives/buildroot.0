@@ -4,49 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF1D8C3ABD8
-	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 13:28:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE6B7C3ABC9
+	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 13:31:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8030E40956;
-	Sun, 18 May 2025 13:28:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6BB014092A;
+	Sun, 18 May 2025 13:31:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DnStYNUxqHKT; Sun, 18 May 2025 13:28:13 +0000 (UTC)
+ id HgS5GShe0t_H; Sun, 18 May 2025 13:31:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ADCA94092A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A49C34092B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ADCA94092A;
-	Sun, 18 May 2025 13:28:13 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id A9B75E4
- for <buildroot@buildroot.org>; Sun, 18 May 2025 13:28:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A49C34092B;
+	Sun, 18 May 2025 13:31:01 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7E4861BA
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 13:31:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8E58760AC3
- for <buildroot@buildroot.org>; Sun, 18 May 2025 13:28:12 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 63DA36064B
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 13:31:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xsa8X8ETR1-w for <buildroot@buildroot.org>;
- Sun, 18 May 2025 13:28:12 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id kYDJm6VuDE-a for <buildroot@buildroot.org>;
+ Sun, 18 May 2025 13:30:59 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
+ helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DFB956064B
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id DFB956064B
- for <buildroot@buildroot.org>; Sun, 18 May 2025 13:28:11 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CEE2786FE9; Sun, 18 May 2025 13:28:11 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 18 May 2025 15:28:02 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 53e1772682d86ed681ce41b4027bd34163023871
-X-Git-Newrev: 7acb67fc2ba42428f724445b412a46b75bc4ecf0
-X-Patchwork-Hint: ignore
-Message-Id: <20250518132811.CEE2786FE9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/wpa_supplicant: add option to
- build deprecated WEP support
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 35D756064A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 35D756064A
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 35D756064A
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 13:30:58 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E20F542E80;
+ Sun, 18 May 2025 13:30:56 +0000 (UTC)
+Date: Sun, 18 May 2025 15:30:56 +0200
+To: Brandon Lumbra via buildroot <buildroot@buildroot.org>
+Cc: Brandon Lumbra <brandon.lumbra@sense.com>, Sergey Matyukevich
+ <geomatsi@gmail.com>
+Message-ID: <20250518153056.5a087c9f@windsurf>
+In-Reply-To: <20250404145544.971346-1-brandon.lumbra@sense.com>
+References: <20250404145544.971346-1-brandon.lumbra@sense.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefudekieefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepledtgedvjeehgeetgfeufffglefhkedvfeduveeiieelteeliedtfefguefggffhnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumegufeduvgemvdefheemtgehvgdvmegvugekfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumegufeduvgemvdefheemtgehvgdvmegvugekfedphhgvlhhopeifihhnughsuhhrfhdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepfedprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtohepsghrrghnughonhdrlhhumhgsrhgrsehsvghnshgvrdgtohhmpdhrtghpthhtohepg
+ hgvohhmrghtshhisehgmhgrihhlrdgtohhm
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1747575057;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=ewxV4ipqeuHXQanObeJ907vgFQcvC1jfmMW6MwUiOwI=;
+ b=aZi3RRwnKq+bjrPX/Qy34jVUsHs5DftuRPvrp7LvrY7relO+ZWG+AetLdlSQP02ypgO+wI
+ 70P2rZUlLDGL87Glw+zOLgSRn26VE+n70wnNu+QLahDquixaz2MPvu4atHe8v8Q5YYE2lK
+ 91mzxjYGJjvmnbPGKsYuzk7MU2F7eI/3WaAfI3wrpIgbdC1a9eGY9BiFUZ7M2yXGwEWGJF
+ 5fAEfbgx0pQk7q6FHzsyvooNzmIYMoVjFFKLhssVCJd/hsuk6YioFcuoenx4fliauttA8w
+ PAngyOENMdz5EHL4zcnrGgojXS8kfK3xlz4M7Ch2pNsR6R3NF6gbyBJW8gJBIQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=aZi3RRwn
+Subject: Re: [Buildroot] [PATCH 1/1] wpa_supplicant: add config option to
+ build in deprecated WEP support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,53 +89,27 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7acb67fc2ba42428f724445b412a46b75bc4ecf0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri,  4 Apr 2025 10:55:45 -0400
+Brandon Lumbra via buildroot <buildroot@buildroot.org> wrote:
 
-Signed-off-by: Brandon Lumbra <brandon.lumbra@sense.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/wpa_supplicant/Config.in         | 7 +++++++
- package/wpa_supplicant/wpa_supplicant.mk | 4 ++++
- 2 files changed, 11 insertions(+)
+> Signed-off-by: Brandon Lumbra <brandon.lumbra@sense.com>
+> ---
+>  package/wpa_supplicant/Config.in         | 7 +++++++
+>  package/wpa_supplicant/wpa_supplicant.mk | 4 ++++
+>  2 files changed, 11 insertions(+)
 
-diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
-index e385d762e6..fd15e95be1 100644
---- a/package/wpa_supplicant/Config.in
-+++ b/package/wpa_supplicant/Config.in
-@@ -183,4 +183,11 @@ config BR2_PACKAGE_WPA_SUPPLICANT_SMARTCARD
- 	  Enable the smart card support. Required for OpenSSL engines
- 	  to work using PKCS11 and 802.1x
- 
-+config BR2_PACKAGE_WPA_SUPPLICANT_WEP
-+	bool "Enable WEP support (deprecated)"
-+	help
-+	  Enable support for WEP. WEP support is deprecated due to
-+	  security concerns, but some systems may want to support WEP
-+	  networks.
-+
- endif
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index 9de536b943..fe4bc34d55 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -200,6 +200,10 @@ define WPA_SUPPLICANT_ENABLE_CTRL_IFACE
- endef
- endif
- 
-+ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_WEP),y)
-+WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_WEP
-+endif
-+
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_WPA_CLIENT_SO),y)
- WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_BUILD_WPA_CLIENT_SO
- define WPA_SUPPLICANT_INSTALL_WPA_CLIENT_SO
+Applied to master, thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
