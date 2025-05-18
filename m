@@ -1,81 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41C04C3ABD8
-	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 07:06:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 867DEC3ABD8
+	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 08:11:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ADDBB408E3;
-	Sun, 18 May 2025 07:06:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 809A060D68;
+	Sun, 18 May 2025 08:11:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pqJaGdUaWbOG; Sun, 18 May 2025 07:06:20 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AVEovf253Nbk; Sun, 18 May 2025 08:11:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EFF3A4070F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 558FA60C22
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EFF3A4070F;
-	Sun, 18 May 2025 07:06:19 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 202991BA
- for <buildroot@buildroot.org>; Sun, 18 May 2025 07:06:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 558FA60C22;
+	Sun, 18 May 2025 08:11:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id EBEC2E4
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 08:11:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 061CD40A1E
- for <buildroot@buildroot.org>; Sun, 18 May 2025 07:06:18 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D8CD1820A6
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 08:11:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ur6urAejKilW for <buildroot@buildroot.org>;
- Sun, 18 May 2025 07:06:17 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
- helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7SWAd_r9IEPH for <buildroot@buildroot.org>;
+ Sun, 18 May 2025 08:11:18 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
+ helo=relay9-d.mail.gandi.net; envelope-from=peko@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A7A2140A1A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A7A2140A1A
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A7A2140A1A
- for <buildroot@buildroot.org>; Sun, 18 May 2025 07:06:16 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7FF744326B;
- Sun, 18 May 2025 07:06:13 +0000 (UTC)
-Date: Sun, 18 May 2025 09:06:12 +0200
-To: Yegor Yefremov <yegorslists@googlemail.com>
-Cc: yegorslists--- via buildroot <buildroot@buildroot.org>
-Message-ID: <20250518090612.1437b8e9@windsurf>
-In-Reply-To: <CAGm1_ktd3Qwma-0c3fkuUX5SXMpbDfVo3CbT1eSoPq0T_Nw-4Q@mail.gmail.com>
-References: <20250430055956.288191-1-yegorslists@googlemail.com>
- <20250517170313.74860009@windsurf>
- <CAGm1_ktd3Qwma-0c3fkuUX5SXMpbDfVo3CbT1eSoPq0T_Nw-4Q@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6154F8113C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6154F8113C
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6154F8113C
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 08:11:17 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id DE72F431EB;
+ Sun, 18 May 2025 08:11:13 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peko@dell.be.48ers.dk>) id 1uGZ73-00GhSo-1H;
+ Sun, 18 May 2025 10:11:13 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Sun, 18 May 2025 10:11:11 +0200
+Message-Id: <20250518081112.3980310-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
 X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefudejkeejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepgfevkeduudekheetheeutdejgfelleevleejjedvteevtdelffdvhfevjeegtdejnecuffhomhgrihhnpehtvggthhhshhhiphdrtghomhdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddvmeekgedvrgemgeehrggtmeelgedtudemugefudgvmedvfeehmegthegvvdemvggukeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeekgedvrgemgeehrggtmeelgedtudemugefudgvmedvfeehmegthegvvdemvggukeefpdhhvghlohepfihinhgushhurhhfpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedvpdhrtghpthhtohephigvghhorhhslhhishhtshesghhoohhglhgvmhgrihhlrdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughro
- hhothdrohhrgh
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1747551973;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=yEZURaFIG/ACEtubmDCMVrka0Y/YGO/FITH/5ux/yfo=;
- b=TX7QRjwBEqQj26Jm98wu1aSUfSlJXxNzoDyTs3DthFU87SnsEw5ZqS2x5oeWDpih6/RIsD
- hXXLluSy2j3abrRwmKNjX18BDLLRWV1HkpzkR5mO6YeYefPX0mo8IqsX8dYIIyD+d9/s/w
- 5b9fCvDYjE8j/1flilnNeUEsH3S2x1Vv8eNp0NsiNz0rcQ9pBnzhCt7EpMk7ARpZUb6P+e
- y0zjDaShBZ8hNiG1ryOJ5cJKi9qi0Fcs+hvSW4bjjPCNx7ktALrPCJWo1eC0asy/0I6V0s
- mvesakZypWtYsHhfNkTD251crH6Vj2ACsIlmQhKHkVaKNLqRSS6r+aRPnw/zbQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=TX7QRjwB
-Subject: Re: [Buildroot] [PATCH v2] package/lpac: new package
+X-GND-Score: 0
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefudejleelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecunecujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomheprfgvthgvrhcumfhorhhsghgrrghrugcuoehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmqeenucggtffrrghtthgvrhhnpeelgeeuvefhjeegkeetkeeghfdvheehieevffduhefhuddvleduiedvfeegfeetffenucffohhmrghinhepsghuihhlughrohhothdrnhgvthdpghhnuhdrohhrghdpghhithhhuhgsrdgtohhmnecukfhppedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumeejiegukeemfegvfhhfmehfvggsfeemgegssgehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeekgedvrgemgeehrggtmeelgedtudemjeeiugekmeefvghffhemfhgvsgefmeegsggshedphhgvlhhopeguvghllhdrsggvrdegkegvrhhsrdgukhdpmhgrihhlfhhrohhmpehpvghkoheskhhorhhsghgrrghrugdrtghomhdpnhgspghrtghpthhtohepvddprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtohepphgvthgvrheskhhorhhsghgrrghrugdrtghomh
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: [Buildroot] [PATCH] package/flex: fix GCC 15.x build issue
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,33 +68,78 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Yegor,
+Fixes:
+https://autobuild.buildroot.net/results/924b1015d4b81385409ef00f1a14be3ca1959c8e/
 
-On Sat, 17 May 2025 23:00:29 +0200
-Yegor Yefremov <yegorslists@googlemail.com> wrote:
+As part of building flex for the target a few files are built for the host,
+including a rpl_malloc() implementation containing a malloc() forward
+declaration without any function parameters.
 
-> You need this tool to manage eSIM profiles. See these blog posts [1],
-> [2] for details.
-> 
-> [1] https://techship.com/blog/how-to-use-an-esim-in-linux-7/
-> [2] https://techship.com/blog/esim-euicc-and-sgp-standards-enabling-iot-connectivity-2/
+GCC 15 defaults to -std=gnu23, which handles function declarations without
+parameters differently from earlier C standards leading to compilation
+errors:
 
-Thanks for the references, very useful!
+../lib/malloc.c:6:12: warning: conflicting types for built-in function 'malloc'; expected 'void *(long unsigned int)' [-Wbuiltin-declaration-mismatch]
+    6 |      void *malloc ();
+      |            ^~~~~~
+../lib/malloc.c:5:1: note: 'malloc' is declared in header '<stdlib.h>'
+    4 |      #include <sys/types.h>
+  +++ |+#include <stdlib.h>
+    5 |
+../lib/malloc.c: In function 'rpl_malloc':
+../lib/malloc.c:16:15: error: too many arguments to function 'malloc'; expected 0, have 1
 
-Best regards,
+https://gcc.gnu.org/gcc-15/porting_to.html#c23-fn-decls-without-parameters
 
-Thomas
+Add a patch submitted upstream to correct the prototype.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...04-Match-malloc-signature-to-its-use.patch | 27 +++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+ create mode 100644 package/flex/0004-Match-malloc-signature-to-its-use.patch
+
+diff --git a/package/flex/0004-Match-malloc-signature-to-its-use.patch b/package/flex/0004-Match-malloc-signature-to-its-use.patch
+new file mode 100644
+index 0000000000..ac57e3b4c8
+--- /dev/null
++++ b/package/flex/0004-Match-malloc-signature-to-its-use.patch
+@@ -0,0 +1,27 @@
++From 4b142954b54a57a9b0af0a9661056a9c39a8fa95 Mon Sep 17 00:00:00 2001
++From: Richard Barnes <rbarnes@umn.edu>
++Date: Wed, 2 Oct 2024 10:35:09 -0700
++Subject: [PATCH] Match `malloc` signature to its use
++
++Upstream: https://github.com/westes/flex/pull/674
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ lib/malloc.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/lib/malloc.c b/lib/malloc.c
++index 75e8ef9..701b9b3 100755
++--- a/lib/malloc.c
+++++ b/lib/malloc.c
++@@ -3,7 +3,7 @@
++      
++      #include <sys/types.h>
++      
++-     void *malloc ();
+++     void *malloc (size_t n);
++      
++      /* Allocate an N-byte block of memory from the heap.
++         If N is zero, allocate a 1-byte block.  */
++-- 
++2.39.5
++
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.39.5
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
