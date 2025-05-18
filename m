@@ -4,64 +4,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95C7AC3ABD8
-	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 15:01:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2EF52C3ABC9
+	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 15:07:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 61DC960B98;
-	Sun, 18 May 2025 15:01:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BB4A660B43;
+	Sun, 18 May 2025 15:07:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vl5WeKCuOxyE; Sun, 18 May 2025 15:01:44 +0000 (UTC)
+ id 9HP7BXzE-Q9e; Sun, 18 May 2025 15:07:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2AD3D60597
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E7BB060A5B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2AD3D60597;
-	Sun, 18 May 2025 15:01:44 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 517BA1BA;
- Sun, 18 May 2025 15:01:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E7BB060A5B;
+	Sun, 18 May 2025 15:07:20 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id CBE34DF
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 15:07:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4319E80CE4;
- Sun, 18 May 2025 15:01:43 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B1BA560A5B
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 15:07:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VS01Pur7rwsq; Sun, 18 May 2025 15:01:42 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
- helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0ECC580D09
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0ECC580D09
-Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0ECC580D09;
- Sun, 18 May 2025 15:01:41 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id DA9DB1C0AEC; Sun, 18 May 2025 17:01:39 +0200 (CEST)
-Message-ID: <49d039c0-8121-4a91-8a69-889376f85c71@rnout.be>
-Date: Sun, 18 May 2025 17:01:38 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rO6IPign006K for <buildroot@buildroot.org>;
+ Sun, 18 May 2025 15:07:19 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
+ helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 9DE2A6077C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9DE2A6077C
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9DE2A6077C
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 15:07:17 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 081111FCE7;
+ Sun, 18 May 2025 15:07:14 +0000 (UTC)
+Date: Sun, 18 May 2025 17:07:14 +0200
+To: Florian Larysch <fl@n621.de>
+Cc: buildroot@buildroot.org
+Message-ID: <20250518170714.1c59ca31@windsurf>
+In-Reply-To: <20250420204540.32264-1-fl@n621.de>
+References: <20250420204540.32264-1-fl@n621.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-GB, fr-BE
-To: Buildroot Mailing List <buildroot@buildroot.org>,
- ML_BuildrootUsers <buildroot-users@buildroot.org>
-X-Last-TLS-Session-Version: TLSv1.3
+X-GND-State: clean
+X-GND-Score: 0
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefudekkedvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecunecujfgurhepfffhvfevuffkjghfohfogggtgfesthejredtredtvdenucfhrhhomhepvfhhohhmrghsucfrvghtrgiiiihonhhiuceothhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeltdegvdejheegtefgueffgfelhfekvdefudevieeileetleeitdefgfeugffghfenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucfkphepvdgrtddvmeekgedvrgemgeehrggtmeelgedtudemugefudgvmedvfeehmegthegvvdemvggukeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeekgedvrgemgeehrggtmeelgedtudemugefudgvmedvfeehmegthegvvdemvggukeefpdhhvghlohepfihinhgushhurhhfpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedvpdhrtghpthhtohepfhhlsehniedvuddruggvpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrgh
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rnout.be; s=dkim; 
- t=1747580500; h=from:subject:date:message-id:to:mime-version:content-type:
- content-transfer-encoding; bh=wp+HDUQax/3qsa/PAoEpRb10L66jI/nwFQY6KguTcj4=;
- b=db5ZxemCkDGu1Ns8+MWu7GAB0aJvcjEb6IBxfJIrulpUzgJr14SeY8AEMfWL9nvhrd6gH5
- zPmsgbYRi/3v1UHNGqSFladBbrdkLXDY3ACrEC5QgjlZW7EbySY93mRpSeVxPkc3cPGdEN
- lANayZ7ne3Xf1e3JrMy6u/YST7TzZXGkqKslJeXG2CvXEhmXzkvuTjV3nanRznHNBy+2U5
- QJH8P9jFKX87rI8QYnGKzrn3V45d7wUdwdroJTxFJdl86REjPzQ11fk1n2ovMvRULm43f/
- 08UUaGGt/55VQC1FaoiHvyTu2Onm12G6D6/cLq+3Jcw5i9v6R1oEP4FGCd+PHw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=bootlin.com; s=gm1; t=1747580835;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=v0ku8RFDOWi9QsrXJIT5pyIcydzJpG/MWClmOVKrYr4=;
+ b=Y6LkiGnxZ4qYtrON6Z5hRauQfylt/zyVJKYPDOTI5i2+S27TESqfg94tT1+fASQhhGKJPj
+ gftSkuQYAEpgKEfNcYWHgucLM/Op+UiGwgqzQ1lPzA60r4ZUsTfbeffmGCPhYTn/itFNvK
+ SHAEmNqf5ck67AlF0rLIwLFSuEZAmHpVbW2d9l9SV7zlgbfynhC2kPaXlQB5ArdvK6Auo8
+ d1RQLumxzGFrryKsu/0wmIrRxLr/aRdptLKjy+5CKJtxRm6jA0g4zs3cqPuXW4ElZqN0O/
+ VwUQ9hmJKQ3csaEr1+n+GWREh/wsKx1rWdynAgWpCHnOpRkPG4Sx6igPWWsktw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
- header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
- header.s=dkim header.b=db5ZxemC
-Subject: [Buildroot] Buildroot 2025.02.2 released
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Y6LkiGnx
+Subject: Re: [Buildroot] [PATCH 1/1] package/casync-nano: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -73,109 +84,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-CkhpLAoKQnVpbGRyb290IGlzIGEgc2ltcGxlIHRvb2wgZm9yIGNyZWF0aW5nIGNvbXBsZXRlIGVt
-YmVkZGVkIExpbnV4IHN5c3RlbXMKKGh0dHBzOi8vYnVpbGRyb290Lm9yZykuCgpCdWlsZHJvb3Qg
-MjAyNS4wMi4yIGlzIHJlbGVhc2VkIC0gR28gZG93bmxvYWQgaXQgYXQ6CgpodHRwczovL2J1aWxk
-cm9vdC5vcmcvZG93bmxvYWRzL2J1aWxkcm9vdC0yMDI1LjAyLjIudGFyLmd6CgpvcgoKaHR0cHM6
-Ly9idWlsZHJvb3Qub3JnL2Rvd25sb2Fkcy9idWlsZHJvb3QtMjAyNS4wMi4yLnRhci54egoKT3Ig
-Z2V0IGl0IGZyb20gR2l0OgoKaHR0cHM6Ly9naXRsYWIuY29tL2J1aWxkcm9vdC5vcmcvYnVpbGRy
-b290LmdpdCAoMjAyNS4wMi4yIHRhZykKCgpCdWlsZHJvb3QgMjAyNS4wMi4yIGlzIGEgYnVnZml4
-IHJlbGVhc2UsIGZpeGluZyBhIG51bWJlciBvZiBpbXBvcnRhbnQgLwpzZWN1cml0eSByZWxhdGVk
-IGlzc3VlcyBkaXNjb3ZlcmVkIHNpbmNlIHRoZSAyMDI1LjAyIHJlbGVhc2UuCgpJbXBvcnRhbnQg
-LyBzZWN1cml0eSByZWxhdGVkIGZpeGVzOgoKLSBvcGVudnBuOiBDVkUtMjAyNS0yNzA0Ci0gZ2hv
-c3RzY3JpcHQ6IENWRS0yMDI1LTI3ODMwLCBDVkUtMjAyNS0yNzgzMSwgQ1ZFLTIwMjUtMjc4MzIs
-CiAgICAgICAgIENWRS0yMDI1LTI3ODMzLCBDVkUtMjAyNS0yNzgzNCwgQ1ZFLTIwMjUtMjc4MzUs
-CiAgICAgICAgIENWRS0yMDI1LTI3ODM2LCBDVkUtMjAyNS0yNzgzNywKLSBsaWJmY2dpOiBDVkUt
-MjAyNS0yMzAxNgotIHBlcmw6IENWRS0yMDI0LTU2NDA2Ci0gbW9zcXVpdHRvOiBDVkUtMjAyMy0y
-ODM2NgotIGMtYXJlczogQ1ZFLTIwMjUtMzE0OTgKLSBncmFwaGljc21hZ2ljazogQ1ZFLTIwMjUt
-MzI0NjAsIENWRS0yMDI1LTI3Nzk1Ci0gbGlieG1sMjogQ1ZFLTIwMjUtMzI0MTQsIENWRS0yMDI1
-LTMyNDE1Ci0gd2lyZXNoYXJrOiBDVkUtMjAyNS0xNDkyCi0geWFtOiBDVkUtMjAyMS0zMzQ1NAot
-IHNxbGl0ZTogQ1ZFLTIwMjUtMjkwODcKLSB4ejogQ1ZFLTIwMjUtMzExMTUKLSBweXRob24tZGph
-bmdvOiBDVkUtMjAyNS0zMjg3MwotIGxpYnJhdzogQ1ZFLTIwMjUtNDM5NjEsIENWRS0yMDI1LTQz
-OTYyLCBDVkUtMjAyNS00Mzk2MywKICAgICBDVkUtMjAyNS00Mzk2NAotIGRyb3BiZWFyOiBDVkUt
-MjAyNS00NzIwMwotIGludGVsLW1pY3JvY29kZTogQ1ZFLTIwMjUtMjQ0OTUsIENWRS0yMDI0LTI4
-OTU2LCBDVkUtMjAyNC00MzQyMCwKICAgICBDVkUtMjAyNS0yMDEwMwotIG9wZW5zc2g6IENWRS0y
-MDI1LTMyNzI4Ci0gc2NyZWVuOiBDVkUtMjAyNS0yMzM5NSwgQ1ZFLTIwMjUtNDY4MDIsIENWRS0y
-MDI1LTQ2ODAzLAogICAgIENWRS0yMDI1LTQ2ODA0LCBDVkUtMjAyNS00NjgwNQotIHB5dGhvbi1m
-bGFzazogQ1ZFLTIwMjUtNDcyNzgKLSBweXRob24taDExOiBDVkUtMjAyNS00Mzg1OQotIHBvc3Rn
-cmVzcWw6IENWRS0yMDI1LTQyMDcKClVwZGF0ZWQgLyBmaXhlZCBwYWNrYWdlczogc3lza2xvZ2Qs
-IGxpYmZjZ2ksIGRvdWJsZS1jb252ZXJzaW9uLAppZ2gtZXRoZXJjYXQsIGMtcGVyaXBoZXJ5LCBz
-b2NhdCwgbHVhLXBlcmlwaGVyeSwgZmx1ZW50LWJpdCwKc2FtYmE0LCBjYS1jZXJ0aWZpY2F0ZXMs
-IGRidXMtY3h4LCBhdGttbTJfMjgsIHBhbmdvbW0yXzQ2LApjYWlyb21tMV8xNCwgZ2xpYm1tMl82
-NiwgZ3RrbW0zLCBmaWxlLCBvcGVuY3NkLCBsaWJvcGVubXB0LApmd3RzLCBsaWJ0cmFjZWZzLCBp
-cHJvdXRlMiwgcmlwZ3JlcCwgYmF0LCBkdXN0LCB0cmFjZS1jbWQsCmxpYnVib290ZW52LCBtaWNy
-b3B5dGhvbiwgcHl0aG9uLWNyeXB0b2dyYXBoeSwgZG5zbWFzcSwKd2lyZWxlc3MtcmVnZGIsIHB5
-dGhvbi1zZXR1cHRvb2xzLCBsaWJ1Y2ksIGxpYnVib3gsIHVidXMsIHdhZiwKYXJtYWRpbGxvLCBu
-Y2Z0cCwgZXhwYXQsIGxpYnhtbDIsIHdpcmVzaGFyaywgaGlyZWRpcywgemZzLApzdW54aS1tYWxp
-LXV0Z2FyZC1kcml2ZXIsIHJ1YnksIG10b29scywgaHdkYXRhLCB0cmFjZXJvdXRlLAp6aWMsIHR6
-ZGF0YSwgam8sIGdkYiwgdHBtMi1wa2NzMTEsIG5zcy1wYW0tbGRhcGQsIGdob3N0c2NyaXB0LApk
-cm9wYmVhciwgaW50ZWwtbWljcm9jb2RlLCBzY3JlZW4sIHB5dGhvbi1mbGFzaywgcHl0aG9uLWgx
-MSwKbWFyaWFkYiwgZmZtcGVnLCBwb3N0Z3Jlc3FsCgpUZXN0IEltcHJvdmVtZW50czoKCi0gdGVz
-dF9lZGsyOiBhZGQgYSBmZXcgYnVpbGQgdGVzdHMKLSB3ZXN0b246IGZpeCB0aGUgd2VzdG9uIHNo
-dXRkb3duIHRlc3QKLSBsaWdodHRwZDogcnVudGltZSB0ZXN0Ci0gb3Blbm9jZDogcnVudGltZSB0
-ZXN0Ci0gaHlwZXJmaW5lOiBydW50aW1lIHRlc3QKLSBweXRob24tdXJsbGliMzogcnVudGltZSB0
-ZXN0Ci0gdGVzdF9lZGsyOiBhZGQgbWFjY2hpYXRvYmluIGJ1aWxkIHRlc3QKLSBiYXQ6IHJ1bnRp
-bWUgdGVzdAotIGR1c3Q6IHJ1bnRpbWUgdGVzdAoKSW5mcmFzdHJ1Y3R1cmUgdXBkYXRlcyAvIGZp
-eGVzOgoKLSBsaWJvcGVuaDI2NDogaWdub3JlIENWRS0yMDI1LTI3MDkxCi0gZWRrMjogZHJvcCBk
-ZXBlbmRlbmN5IG9uIHRmLWEgZm9yIG1hY2NoaWF0b2JpbgotIHZpbTogZXh0ZW5kIGNvbW1lbnQg
-YWJvdXQgdmkgc3ltbGluawotIGJvYXJkL3Jhc3BiZXJyeXBpL3JlYWRtZS50eHQ6IHZhcmlvdXMg
-aW1wcm92ZW1lbnRzCi0gcmFzcGJlcnJ5cGk1OiBpbnN0YWxsIFJhc3BiZXJyeSBQaSA1MDAgZGV2
-aWNlLXRyZWUgYmxvYgotIGdlbi1ib290bGluLXRvb2xjaGFpbnM6IGFsbG93cyBhcm12OC1hIENQ
-VSB0byB1c2UgYXJtdjctYSB0b29sY2hhaW5zCi0gbGlic2lncm9rZGVjb2RlOiBuZWVkcyBweXRo
-b24zIHcvIHpsaWIgc3VwcG9ydAotIGRlamF2dTogdXBkYXRlIGhvbWVwYWdlCi0gcHVsc2V2aWV3
-OiBmaXgsIHVwZGF0ZSwgYW5kIHJlb3JnYW5pc2UgZGVwZW5kZW5jaWVzCi0gYm9vc3Q6IG1vdmUg
-aG9zdCB2YXJpYWJsZXMgY2xvc2VyIHRvZ2V0aGVyCi0gYm9vc3Q6IG1vdmUgdGFyZ2V0IGxpYnJh
-cnkgc2VsZWN0aW9uIHZhcmlhYmxlcyBjbG9zZXIgdG9nZXRoZXIKLSBzdXBwb3J0L2Rvd25sb2Fk
-L2dpdDogdXNlIEZPT19ETF9PUFRTCi0gc3RtMzJtcDEzNWZfZGs6IGZpeCBvcHRlZSBoYXNoCi0g
-bGliY2FtZXJhOiB2YXJpb3VzIGZpeGVzCi0gYXBwYXJtb3IgZG9uJ3QgcmVmZXJlbmNlIGxpYmFw
-cGFybW9yIHZhcmlhYmxlcwotIHJwaS1maXJtd2FyZTogYWRkIG5vdGUgdG8ga2VlcCBpbiBzeW5j
-IHdpdGgga2VybmVsCi0gcHl0aG9uLXNkYnVzOiBmaXggdXBzdHJlYW0gdXJsCi0gcXQ1d2ViZW5n
-aW5lOiBkcm9wIHVudXNlZCBmaWxlCi0gd2FycDc6IEltcHJvdmUgV2lmaSBpbnN0cnVjdGlvbnMK
-LSBjcnlwdG9wcDogYWRkIHVwc3RyZWFtIFVSTCBpbiBoZWxwIHRleHQKLSBkcGRrOiBmaXh1cCBD
-b25maWcuaW4gY29tbWVudCBhYm91dCBkZXBlbmRlbmNpZXMKLSBmZm1wZWc6IGFkZCBzdXBwb3J0
-IGZvciBsaWJvcGVubXB0Ci0gcGtnLXN0YXRzOiBmaXggdHlwbyBpbiAtLWRpc2FibGUgaGVscCB0
-ZXh0Ci0gaW14Mjhldms6IGVuYWJsZSBCUjJfRE9XTkxPQURfRk9SQ0VfQ0hFQ0tfSEFTSEVTCi0g
-ZnJpZW5kbHlhcm1fbmFub3BpX3IzczogZml4IGhvc3QgbGludXggaGVhZGVycyBjdXN0b20gdmVy
-c2lvbgotIHN1cHBvcnQvZGVwZW5kZW5jaWVzL2RlcGVuZGVuY2llcy5zaDogYXdrIGlzIG5lZWRl
-ZCBieSBCdWlsZHJvb3QKLSBDb25maWcuaW46IGludHJvZHVjZSBCUjJfSE9TVF9HQ0NfQVRfTEVB
-U1RfezEyLi4xNX0KLSBkYnVzOiBzZXQgc2Vzc2lvbi1zb2NrZXQtZGlyIHRvIC90bXAKLSBmcy9l
-cm9mczogdW5icmVhayBjdXN0b20gY29tcHJlc3Npb24gaGFuZGxpbmcKLSBub2RlanM6IG1ha2Ug
-dGFyZ2V0IG5vZGVqcyBwYWNrYWdlIHZpcnR1YWwKLSBtcGQ6IHVwZGF0ZSBDUEUvQ1ZFIGluZm9y
-bWF0aW9uCi0gVmFyaW91cyBmaXggZm9yIEdDQzE1IGhvc3QKCkJ1aWxkIGlzc3VlcyBhbmQgb3Ro
-ZXIgcHJvYmxlbXMgc29sdmVkIGZvciBwYWNrYWdlczoKCnNxbGl0ZSwgcGFob2xlLCBsaWJ2NGws
-IGFybS10cnVzdGVkLWZpcm13YXJlLCBsaWJvcGVubXB0LCBpcHRhYmxlcywKdGFpbHNjYWxlLCB3
-aWxjLWRyaXZlciwgcnRsODE4OGV1LCBydGw4NzIzZHMsIGxtYmVuY2gsIGZsdWVudC1iaXQsCm1v
-c3F1aXR0bywgaXByb3V0ZXMyLCBwaXhtYW4sIGxpbnV4LXRvb2xzLCBsaWJjb2FwLCBsaWJjYW1l
-cmEsCnN0cm9uZ3N3YW4sIG1wdiwgaGlyZWRpcywgemZzLCBiaXJkLCBuZXRzbm1wLCBsaWJjYXAs
-IG11c2VwYWNrLApmZm1wZWcsIGxpYnFyZW5jb2RlCgpVc2VycyBvZiB0aGUgYWZmZWN0ZWQgcGFj
-a2FnZXMgYXJlIHN0cm9uZ2x5IGVuY291cmFnZWQgdG8gdXBncmFkZS4KCgpNYW55IHRoYW5rcyB0
-byBhbGwgdGhlIHBlb3BsZSBjb250cmlidXRpbmcgdG8gdGhpcyByZWxlYXNlOgoKZ2l0IHNob3J0
-bG9nIC1zIC1uIDIwMjUuMDIuMS4uCgogICAgMTIgIEJlcm5kIEt1aGxzCiAgICAxMSAgVGhvbWFz
-IEJvbm5lZmlsbGUKICAgICA3ICBKdWxpZW4gT2xpdmFpbgogICAgIDYgIEphbWVzIEhpbGxpYXJk
-CiAgICAgNiAgUGV0ZXIgS29yc2dhYXJkCiAgICAgNiAgVGhvbWFzIFBlcmFsZQogICAgIDQgIFRo
-b21hcyBQZXRhenpvbmkKICAgICAzICBEYXJpbyBCaW5hY2NoaQogICAgIDMgIFdhbGRlbWFyIEJy
-b2Rrb3JiCiAgICAgMyAgWWFubiBFLiBNT1JJTgogICAgIDIgIEFybm91dCBWYW5kZWNhcHBlbGxl
-IChFc3NlbnNpdW0vTWluZCkKICAgICAyICBDb2xpbiBFdnJhcmQKICAgICAyICBGaW9uYSBLbHV0
-ZSAoV0lXQSkKICAgICAyICBHaWxsZXMgQmFyZG91eAogICAgIDIgIEdpdWxpbyBCZW5ldHRpCiAg
-ICAgMiAgTWFyY3VzIEhvZmZtYW5uCiAgICAgMiAgTmlrbGFzIENhc3NlbAogICAgIDIgIFRob21h
-cyBEZXZvb2dkdAogICAgIDEgIEFsZXggQmVubsOpZQogICAgIDEgIEFybm91dCBWYW5kZWNhcHBl
-bGxlCiAgICAgMSAgQ2hyaXN0aWFuIFN0ZXdhcnQKICAgICAxICBGbMOhdmlvIFRhcGFqw7NzCiAg
-ICAgMSAgSmVhbi1NaWNoZWwgSGF1dGJvaXMKICAgICAxICBMdWNhIENlcmVzb2xpCiAgICAgMSAg
-TWF0aGV1cyBUYXZhcmVzIEJlcm5hcmRpbm8KICAgICAxICBNYXR0aWFzIFdhbHN0csO2bQogICAg
-IDEgIE1heGltIEtvY2hldGtvdgogICAgIDEgIE1heGltZSBMZXJveQogICAgIDEgIE1pY2hhZWwg
-Tm9zdGhvZmYKICAgICAxICBQZXRlciBTZWlkZXJlcgogICAgIDEgIFJhcGhhw6tsIE3DqWxvdHRl
-CiAgICAgMSAgUm9tYWluIE5hb3VyCiAgICAgMSAgU8OpYmFzdGllbiBTenltYW5za2kKICAgICAx
-ICBZZWdvciBZZWZyZW1vdgogICAgIDEgIE5pa2l0YSBLaXJ5dXNoaW4KICAgICAxICBQYXRyaWsg
-T2xzc29uCiAgICAgMSAgUm95IEtvbGxlbiBTdmVuZHNlbgogICAgIDEgIFRJQU4gWXVhbmhhbwog
-ICAgIDEgIFZpbmNlbnQgRmF6aW8KICAgICAxICBXYWxkZW1hciBCcm9ka29yYgogICAgIDEgIFll
-Z29yIFllZnJlbW92CgpSZWdhcmRzLApBcm5vdXQKX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVp
-bGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9i
-dWlsZHJvb3QK
+On Sun, 20 Apr 2025 22:45:38 +0200
+Florian Larysch <fl@n621.de> wrote:
+
+> casync-nano is an implementation of a subset of the features of casync,
+> optimized for performing OTA updates on embedded systems.
+> 
+> Signed-off-by: Florian Larysch <fl@n621.de>
+> ---
+>  DEVELOPERS                           |  3 +++
+>  package/Config.in                    |  1 +
+>  package/Config.in.host               |  1 +
+>  package/casync-nano/Config.in        | 21 +++++++++++++++++++++
+>  package/casync-nano/Config.in.host   |  7 +++++++
+>  package/casync-nano/casync-nano.hash |  3 +++
+>  package/casync-nano/casync-nano.mk   | 28 ++++++++++++++++++++++++++++
+>  7 files changed, 64 insertions(+)
+>  create mode 100644 package/casync-nano/Config.in
+>  create mode 100644 package/casync-nano/Config.in.host
+>  create mode 100644 package/casync-nano/casync-nano.hash
+>  create mode 100644 package/casync-nano/casync-nano.mk
+
+Applied to master, thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
