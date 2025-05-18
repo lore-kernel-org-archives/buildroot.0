@@ -4,67 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41F73C3ABD8
-	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 14:44:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC2EEC3ABD8
+	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 14:44:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C995E80EC9;
-	Sun, 18 May 2025 14:44:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7FEB281277;
+	Sun, 18 May 2025 14:44:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bQ7yRPqy6Hme; Sun, 18 May 2025 14:44:17 +0000 (UTC)
+ id 8nBTvwv6taOZ; Sun, 18 May 2025 14:44:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CA2AE811AC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 815DC80EA3
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CA2AE811AC;
-	Sun, 18 May 2025 14:44:17 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1A20DDF
- for <buildroot@buildroot.org>; Sun, 18 May 2025 14:44:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 815DC80EA3;
+	Sun, 18 May 2025 14:44:53 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id D2791DF
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 14:44:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4C54841056
- for <buildroot@buildroot.org>; Sun, 18 May 2025 14:44:06 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C189040947
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 14:44:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5zMNQt8TZc3b for <buildroot@buildroot.org>;
- Sun, 18 May 2025 14:44:05 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UlI6Cd3tYYiZ for <buildroot@buildroot.org>;
+ Sun, 18 May 2025 14:44:50 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
  helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1F0B440FE3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1F0B440FE3
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 46DAE4092B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 46DAE4092B
 Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1F0B440FE3
- for <buildroot@buildroot.org>; Sun, 18 May 2025 14:44:05 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 46DAE4092B
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 14:44:50 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 255371C1001; Sun, 18 May 2025 16:44:03 +0200 (CEST)
-Message-ID: <84c1d91a-a1be-4d8f-ad58-92c85a8e19e9@rnout.be>
-Date: Sun, 18 May 2025 16:44:01 +0200
+ with ESMTPSA id 107281C0FF6; Sun, 18 May 2025 16:44:48 +0200 (CEST)
+Message-ID: <023c948a-647e-4677-8fd1-9ee1852fff87@rnout.be>
+Date: Sun, 18 May 2025 16:44:46 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Roy Kollen Svendsen <roykollensvendsen@gmail.com>, buildroot@buildroot.org
-References: <20250515060244.1890635-1-roykollensvendsen@gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Buildroot List <buildroot@buildroot.org>
+Cc: Roy Kollen Svendsen <roykollensvendsen@gmail.com>,
+ Bernd Kuhls <bernd@kuhls.net>, Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
+References: <20250516210452.342275-1-thomas.petazzoni@bootlin.com>
+ <20250516210452.342275-5-thomas.petazzoni@bootlin.com>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20250515060244.1890635-1-roykollensvendsen@gmail.com>
+In-Reply-To: <20250516210452.342275-5-thomas.petazzoni@bootlin.com>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1747579443; h=from:subject:date:message-id:to:mime-version:content-type:
+ t=1747579488; h=from:subject:date:message-id:to:cc:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=SH6GixTbxOMG77PsjdvyIr6DtLY0a6iHSDvFnIWgb6U=;
- b=MgcznzQzgRBCoknFwX3EN1w3l5EWwPE4W9UBGfN81KNs7WEFGYRK+Ugr0TsaBbN8MO7hU0
- n3EOBUOoaAYn1OzTnNLx/sjqWNgPXT2LW6ha05hWkGHNpXrEOUo9UHpQ0ko19xhNRWdAnI
- 21nsBZPdQRK4h1A482fGoHp4+LNa8W3qP9ZwZLzwCRMhf5T3sHS8tgo2Gl53piWBx42hgl
- Cz7WdJ429d5gXHKpQ5i+YVEg9S1XiKh03Y1mT5arj8ZY1GJou6/RuFFKo4s+rNB5Kh9+jd
- Zqbnryvp7JkqmMdid2xGOz8x2MR/vL1bQhF57r7aJKg07EOnUHnrTXywqC63kw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=oXAwm9krXk6Gr1/7qGKR0m4IRuf16xYeYEXH29yzlCY=;
+ b=XCA8hBRQUdFegbLVkh5hJ7v2GKzxhZo7KeLXkcdyQauVSpgGuqDdVTMyAXVv2HiQL9giMl
+ CetuVyYad56EKJXnkIvb5mqRJ/LntzMkRzcTMYpPPfY6ky/P1QUq7rTEzS91IcyIlSSSgH
+ rqG0Lg43i/qCFXZZZ8BCqvPEXUssjfZdHkK5cKTsT1ac4HOAoS7NfhPXXKH0ilsnTDGkl1
+ ehGUE5+63mXxyrI8hYQtw0wLFgxRrgJFbz0osCCfX0CnYcfsEadFYXvE7SZaboPUuljfJ4
+ 3uB4EfYzZQWrEjZV+eY3vgzqitq/GOsb/beNuY10tyK5pA6DyVEDH0FgJJitEw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=MgcznzQz
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/mariadb: bump version to
- 10.11.11
+ header.a=rsa-sha256 header.s=dkim header.b=XCA8hBRQ
+Subject: Re: [Buildroot] [PATCH 4/4] package/ffmpeg: bump to latest commit
+ in 6.1.x branch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -78,132 +82,122 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@rnout.be>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-
-
-On 15/05/2025 08:02, Roy Kollen Svendsen wrote:
-> Fixes:
-> Build with gcc-15 was fixed upstream in 10.11.11:
-> 
-> https://github.com/MariaDB/server/commit/1d6f857
-> 
-> Remove patch, since the problem was fixed upstream:
-> 
-> https://github.com/MariaDB/server/commit/4375245
-> 
-> After bumping the version to 10.11.11 the configuration step failed for target:
-> 
-> CMake Error: try_run() invoked in cross-compiling mode, please set the following cache variables appropriately:
->     HAVE_SYSTEM_LIBFMT_EXITCODE (advanced)
-> 
-> To fx this problem we set HAVE_SYSTEM_LIBFMT_EXITCODE=0.
-> 
-> Fix legal-info after changes to README.md.
-> 
-> Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
-
-  Applied to 2025.02.x, thanks.
-
-  Regards,
-  Arnout
-
-> ---
-> Changes v1 -> v2:
->    - fix target build by setting HAVE_SYSTEM_LIBFMT_EXITCODE=0
->    - fix legal-info after changes to README.md
->    - improve commit message
->    - link to v1: https://patchwork.ozlabs.org/project/buildroot/patch/20250514220736.1380151-1-roykollensvendsen@gmail.com/
-> 
->   ...le-failure-fmt-use-incompatible-with.patch | 35 -------------------
->   package/mariadb/mariadb.hash                  |  6 ++--
->   package/mariadb/mariadb.mk                    |  5 +--
->   3 files changed, 6 insertions(+), 40 deletions(-)
->   delete mode 100644 package/mariadb/0002-MDEV-34206-compile-failure-fmt-use-incompatible-with.patch
-> 
-> diff --git a/package/mariadb/0002-MDEV-34206-compile-failure-fmt-use-incompatible-with.patch b/package/mariadb/0002-MDEV-34206-compile-failure-fmt-use-incompatible-with.patch
-> deleted file mode 100644
-> index b6c8807f44..0000000000
-> --- a/package/mariadb/0002-MDEV-34206-compile-failure-fmt-use-incompatible-with.patch
-> +++ /dev/null
-> @@ -1,35 +0,0 @@
-> -From 69935c10b95fc7f7a2e1c3ed02831958e1a9b6a4 Mon Sep 17 00:00:00 2001
-> -From: Daniel Black <daniel@mariadb.org>
-> -Date: Wed, 22 May 2024 17:43:17 +1000
-> -Subject: [PATCH] MDEV-34206 compile failure: fmt use incompatible with
-> - libfmt-10.2.[2]+
-> -
-> -Upstream libfmt commit https://github.com/fmtlib/fmt/commit/d70729215fba1d54862e407b626abf86ddf409bf
-> -now requires the format function to be const.
-> -
-> -Adjust the function prototype so it is const and can compile.a
-> -
-> -Signed-off-by: Daniel Black <daniel@mariadb.org>
-> -[Julien: add SoB line with the original patch author name]
-> -Upstream: https://github.com/MariaDB/server/commit/4375245d5d9f01cabb6e3fd6c637535e724eae38
-> -Signed-off-by: Julien Olivain <ju.o@free.fr>
-> ----
-> - sql/item_strfunc.cc | 2 +-
-> - 1 file changed, 1 insertion(+), 1 deletion(-)
-> -
-> -diff --git a/sql/item_strfunc.cc b/sql/item_strfunc.cc
-> -index 4bbf36ec1cf..2ad8a9b3ce5 100644
-> ---- a/sql/item_strfunc.cc
-> -+++ b/sql/item_strfunc.cc
-> -@@ -1392,7 +1392,7 @@ bool Item_func_sformat::fix_length_and_dec(THD *thd)
-> - namespace fmt {
-> -   template <> struct formatter<String>: formatter<string_view> {
-> -     template <typename FormatContext>
-> --    auto format(String c, FormatContext& ctx) -> decltype(ctx.out()) {
-> -+    auto format(String c, FormatContext& ctx) const -> decltype(ctx.out()) {
-> -       string_view name = { c.ptr(), c.length() };
-> -       return formatter<string_view>::format(name, ctx);
-> -     };
-> ---
-> -2.46.0
-> -
-> diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
-> index fd73cca4f3..05340c1faa 100644
-> --- a/package/mariadb/mariadb.hash
-> +++ b/package/mariadb/mariadb.hash
-> @@ -1,6 +1,6 @@
-> -# From https://downloads.mariadb.org/mariadb/10.11.6
-> -sha512  3d77f7be4a26d5a36af56150a5f8ed5e21adeed9bc8ea1bd694e47a25a571bd73468eada7c96e0dfe5a6c81bef625abf71a56d228cf43a738e555e3c0d824a6a  mariadb-10.11.6.tar.gz
-> +# From https://downloads.mariadb.org/mariadb/10.11.11
-> +sha512  d9c154207a9f435ce08d5fbfe31814a739e577c656ef9996cf7e60c2cad8b4c07e2de8d94b6191fefa2b5cbde56437b586f85f144d3b4fcec8533449ed8411ac  mariadb-10.11.11.tar.gz
->   
->   # Hash for license files
-> -sha256  2b278a3a2f20696113a7c57c4f3e6a5cdb9a25f2a827e72e0c089a2f805ff91a  README.md
-> +sha256  ff437f42ea15b42f3d9617e691b9f159f38a0b1b0748e482304857a5026ede90  README.md
->   sha256  240a15a1d0f34d3abca462cdb7e5fb89470967563f16b0e71169e51c1e74cf2b  COPYING
-> diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-> index 1dcf6568da..0d872442f2 100644
-> --- a/package/mariadb/mariadb.mk
-> +++ b/package/mariadb/mariadb.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
->   
-> -MARIADB_VERSION = 10.11.6
-> +MARIADB_VERSION = 10.11.11
->   MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
->   MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
->   # Tarball no longer contains LGPL license text
-> @@ -27,7 +27,8 @@ MARIADB_DEPENDENCIES = \
->   
->   MARIADB_CONF_OPTS += \
->   	-DWITH_LIBFMT=system \
-> -	-DWITH_PCRE=system
-> +	-DWITH_PCRE=system \
-> +	-DHAVE_SYSTEM_LIBFMT_EXITCODE=0
->   
->   # use bundled GPL-2.0+ licensed readline as package/readline is GPL-3.0+
->   MARIADB_CONF_OPTS += -DWITH_READLINE=ON
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+CgpPbiAxNi8wNS8yMDI1IDIzOjA0LCBUaG9tYXMgUGV0YXp6b25pIHZpYSBidWlsZHJvb3Qgd3Jv
+dGU6Cj4gVmVyc2lvbiA2LjEuMiBvZiBmZm1wZWcgZmFpbHMgdG8gYnVpbGQgd2l0aCBHQ0MgMTQu
+eCBkdWUgdG8gdGhlIFY0TDIKPiBpb2N0bCBjb2RlOgo+IAo+IGxpYmF2ZGV2aWNlL3Y0bDIuYzox
+Mzc6MTc6IGVycm9yOiBhc3NpZ25tZW50IHRvIOKAmGludCAoKikoaW50LCAgbG9uZyB1bnNpZ25l
+ZCBpbnQsIC4uLinigJkgZnJvbSBpbmNvbXBhdGlibGUgcG9pbnRlciB0eXBlIOKAmGludCAoKiko
+aW50LCAgaW50LCAuLi4p4oCZIFstVwo+IGluY29tcGF0aWJsZS1wb2ludGVyLXR5cGVzXQo+ICAg
+IDEzNyB8ICAgICBzLT5pb2N0bF9mICA9IHByZWZpeCAjIyBpb2N0bDsgICAgICBcCj4gICAgICAg
+IHwgICAgICAgICAgICAgICAgIF4KPiBsaWJhdmRldmljZS92NGwyLmM6MTUxOjk6IG5vdGU6IGlu
+IGV4cGFuc2lvbiBvZiBtYWNybyDigJhTRVRfV1JBUFBFUlPigJkKPiAgICAxNTEgfCAgICAgICAg
+IFNFVF9XUkFQUEVSUygpOwo+ICAgICAgICB8ICAgICAgICAgXn5+fn5+fn5+fn5+Cj4gCj4gVGhp
+cyBoYXMgYmVlbiBmaXhlZCB1cHN0cmVhbSBpbiB0aGUgcmVsZWFzZS82LjEgYnJhbmNoLCB3aGlj
+aCBoYXMgMjcKPiBmaXhlcyBvbiB0b3Agb2YgNi4xLjIuIFRoZSBjb21taXRzIG5lY2Vzc2FyeSB0
+byBmaXggb3VyIGlzc3VlIGFyZToKPiAKPiBmNzEwNzZjMDA5Zjg0OTE3ZTdhMGYyZjFlY2U4NmI3
+MThkZTJkOGQzIGNvbmZpZ3VyZTogaW1wcm92ZSBjaGVjayBmb3IgUE9TSVggaW9jdGwKPiA2MDU5
+M2Q2YzA2YzliNjEwMzU5YmQ2YWYyNmEyNjhmZWZmMTI5M2ViIGNvbmZpZ3VyZTogcmVzdG9yZSBh
+dXRvZGV0ZWN0aW9uIG9mIHY0bDIgYW5kIGZiZGV2Cj4gCj4gSG93ZXZlciwgc2luY2UgYWxsIG90
+aGVyIGNvbW1pdHMgYXJlIGZpeGVzLCB3ZSBiZWxpZXZlIGJ1bXBpbmcgdG8gdGhlCj4gbGF0ZXN0
+IGNvbW1pdCBpbiB0aGUgcmVsZWFzZS82LjEgYnJhbmNoIGlzIGEgYmV0dGVyIGlkZWEuCj4gCj4g
+VGhpcyBhbGxvd3MgdG8gZHJvcAo+IDAwMDgtbGliYXZjb2RlYy1hcm0tbWxwZHNwX2FybXY1dGUt
+Zml4LWxhYmVsLWZvcm1hdC10by13by5wYXRjaCwgd2hpY2gKPiBpcyB1cHN0cmVhbSBhcyBvZjoK
+PiAKPiA0YzY4ODg0NWE1MGY3ZGNlM2FmOWFmZWJlNjBmMGY3YTQ5M2M0ZjA3IGxpYmF2Y29kZWMv
+YXJtL21scGRzcF9hcm12NXRlOiBmaXggbGFiZWwgZm9ybWF0IHRvIHdvcmsgd2l0aCBiaW51dGls
+cyAyLjQzCj4gCj4gTm90ZSB0aGF0IHdlIHNldCBGRk1QRUdfQ1BFX0lEX1ZFUlNJT04gdG8gZ2V0
+IHByb3BlciBDVkUgbWF0Y2hpbmcgZXZlbgo+IHdpdGggRkZNUEVHX1ZFUlNJT04gYmVpbmcgc2V0
+IHRvIG42LjEuMi0yNy1nZTE2ZmYwNmFkYi4gT25lIHdobyBoYXZlCj4gaWRlYWxseSBzZXQgRkZN
+UEVHX1ZFUlNJT04gdG8gbiQoRkZNUEVHX0NQRV9JRF9WRVJTSU9OKS1nZTE2ZmYwNmFkYiwKPiBi
+dXQgdGhhdCBtYWtlcyBjaGVjay1wYWNrYWdlIHVuaGFwcHkgd2l0aDoKPiAKPiBXQVJOSU5HOiBw
+YWNrYWdlL2ZmbXBlZy9mZm1wZWcubWs6NzogZXhwZWN0aW5nIHBhY2thZ2UgdmVyc2lvbiB0byBi
+ZSBzZXQgYmVmb3JlIENQRV9JRF9WRVJTSU9OCj4gCj4gRml4ZXM6Cj4gCj4gICAgaHR0cHM6Ly9h
+dXRvYnVpbGQuYnVpbGRyb290Lm5ldC9yZXN1bHRzL2ZlMTU3NDQ0M2FjZDUwY2E3ZTU3NmJiNGJl
+YjI0NDY3YmUxNzEzZTMvCj4gCj4gU2lnbmVkLW9mZi1ieTogVGhvbWFzIFBldGF6em9uaSA8dGhv
+bWFzLnBldGF6em9uaUBib290bGluLmNvbT4KCiAgQXBwbGllZCB0byAyMDI1LjAyLngsIHRoYW5r
+cy4KCiAgUmVnYXJkcywKICBBcm5vdXQKCj4gLS0tCj4gICAuLi5scGRzcF9hcm12NXRlLWZpeC1s
+YWJlbC1mb3JtYXQtdG8td28ucGF0Y2ggfCA2MyAtLS0tLS0tLS0tLS0tLS0tLS0tCj4gICBwYWNr
+YWdlL2ZmbXBlZy9mZm1wZWcuaGFzaCAgICAgICAgICAgICAgICAgICAgfCAgMiArLQo+ICAgcGFj
+a2FnZS9mZm1wZWcvZmZtcGVnLm1rICAgICAgICAgICAgICAgICAgICAgIHwgIDggKystCj4gICAz
+IGZpbGVzIGNoYW5nZWQsIDYgaW5zZXJ0aW9ucygrKSwgNjcgZGVsZXRpb25zKC0pCj4gICBkZWxl
+dGUgbW9kZSAxMDA2NDQgcGFja2FnZS9mZm1wZWcvMDAwOC1saWJhdmNvZGVjLWFybS1tbHBkc3Bf
+YXJtdjV0ZS1maXgtbGFiZWwtZm9ybWF0LXRvLXdvLnBhdGNoCj4gCj4gZGlmZiAtLWdpdCBhL3Bh
+Y2thZ2UvZmZtcGVnLzAwMDgtbGliYXZjb2RlYy1hcm0tbWxwZHNwX2FybXY1dGUtZml4LWxhYmVs
+LWZvcm1hdC10by13by5wYXRjaCBiL3BhY2thZ2UvZmZtcGVnLzAwMDgtbGliYXZjb2RlYy1hcm0t
+bWxwZHNwX2FybXY1dGUtZml4LWxhYmVsLWZvcm1hdC10by13by5wYXRjaAo+IGRlbGV0ZWQgZmls
+ZSBtb2RlIDEwMDY0NAo+IGluZGV4IDE3OGZmYmMzM2IuLjAwMDAwMDAwMDAKPiAtLS0gYS9wYWNr
+YWdlL2ZmbXBlZy8wMDA4LWxpYmF2Y29kZWMtYXJtLW1scGRzcF9hcm12NXRlLWZpeC1sYWJlbC1m
+b3JtYXQtdG8td28ucGF0Y2gKPiArKysgL2Rldi9udWxsCj4gQEAgLTEsNjMgKzAsMCBAQAo+IC1G
+cm9tIDRjNjg4ODQ1YTUwZjdkY2UzYWY5YWZlYmU2MGYwZjdhNDkzYzRmMDcgTW9uIFNlcCAxNyAw
+MDowMDowMCAyMDAxCj4gLUZyb206IFJvc3MgQnVydG9uIDxyb3NzLmJ1cnRvbkBhcm0uY29tPgo+
+IC1EYXRlOiBGcmksIDkgQXVnIDIwMjQgMTE6MzI6MDAgKzAxMDAKPiAtU3ViamVjdDogW1BBVENI
+XSBsaWJhdmNvZGVjL2FybS9tbHBkc3BfYXJtdjV0ZTogZml4IGxhYmVsIGZvcm1hdCB0byB3b3Jr
+IHdpdGgKPiAtIGJpbnV0aWxzIDIuNDMKPiAtTUlNRS1WZXJzaW9uOiAxLjAKPiAtQ29udGVudC1U
+eXBlOiB0ZXh0L3BsYWluOyBjaGFyc2V0PXV0ZjgKPiAtQ29udGVudC1UcmFuc2Zlci1FbmNvZGlu
+ZzogOGJpdAo+IC0KPiAtYmludXRpbHMgMi40MyBoYXMgc3RyaWN0ZXIgdmFsaWRhdGlvbiBmb3Ig
+bGFiZWxzWzFdIGFuZCByZXN1bHRzIGluIGVycm9ycwo+IC13aGVuIGJ1aWxkaW5nIGZmbXBlZyBm
+b3IgYXJtdjU6Cj4gLQo+IC1zcmMvbGliYXZjb2RlYy9hcm0vbWxwZHNwX2FybXY1dGUuUzoyMzI6
+IEVycm9yOiBqdW5rIGF0IGVuZCBvZiBsaW5lLCBmaXJzdCB1bnJlY29nbml6ZWQgY2hhcmFjdGVy
+IGlzIGAwJwo+IC0KPiAtUmVtb3ZlIHRoZSBsZWFkaW5nIHplcm8gaW4gdGhlICIwMSIgbGFiZWwg
+dG8gcmVzb2x2ZSB0aGlzIGVycm9yLgo+IC0KPiAtWzFdIGh0dHBzOi8vc291cmNld2FyZS5vcmcv
+Z2l0Lz9wPWJpbnV0aWxzLWdkYi5naXQ7YT1jb21taXQ7aD0yMjY3NDlkNWE2ZmYwZDVjNjA3ZDY0
+MjhkNmM4MWUxZTdlN2E5OTRiCj4gLQo+IC1TaWduZWQtb2ZmLWJ5OiBSb3NzIEJ1cnRvbiA8cm9z
+cy5idXJ0b25AYXJtLmNvbT4KPiAtU2lnbmVkLW9mZi1ieTogTWFydGluIFN0b3JzasODwrYgPG1h
+cnRpbkBtYXJ0aW4uc3Q+Cj4gLShjaGVycnkgcGlja2VkIGZyb20gY29tbWl0IDY1NGJkNDc3MTZj
+NGYzNjcxOWZiMGYzZjdmZDgzODZkNWVkMGI5MTYpCj4gLQo+IC1VcHN0cmVhbTogaHR0cDovL2dp
+dC52aWRlb2xhbi5vcmcvP3A9ZmZtcGVnLmdpdDthPWNvbW1pdDtoPTRjNjg4ODQ1YTUwZjdkY2Uz
+YWY5YWZlYmU2MGYwZjdhNDkzYzRmMDcKPiAtCj4gLVNpZ25lZC1vZmYtYnk6IEJlcm5kIEt1aGxz
+IDxiZXJuZEBrdWhscy5uZXQ+Cj4gLS0tLQo+IC0gbGliYXZjb2RlYy9hcm0vbWxwZHNwX2FybXY1
+dGUuUyB8IDYgKysrLS0tCj4gLSAxIGZpbGUgY2hhbmdlZCwgMyBpbnNlcnRpb25zKCspLCAzIGRl
+bGV0aW9ucygtKQo+IC0KPiAtZGlmZiAtLWdpdCBhL2xpYmF2Y29kZWMvYXJtL21scGRzcF9hcm12
+NXRlLlMgYi9saWJhdmNvZGVjL2FybS9tbHBkc3BfYXJtdjV0ZS5TCj4gLWluZGV4IDRmOWFhNDg1
+ZmQuLmQzMTU2ODYxMWMgMTAwNjQ0Cj4gLS0tLSBhL2xpYmF2Y29kZWMvYXJtL21scGRzcF9hcm12
+NXRlLlMKPiAtKysrIGIvbGliYXZjb2RlYy9hcm0vbWxwZHNwX2FybXY1dGUuUwo+IC1AQCAtMjI5
+LDcgKzIyOSw3IEBAIEEgLmVuZGlmCj4gLSAgIC5lbmRpZgo+IC0KPiAtICAgICAgICAgLy8gQmVn
+aW4gbG9vcAo+IC0tMDE6Cj4gLSsxOgo+IC0gICAuaWYgVE9UQUxfVEFQUyA9PSAwCj4gLSAgICAg
+ICAgIC8vIFRoaW5ncyBzaW1wbGlmeSBhIGxvdCBpbiB0aGlzIGNhc2UKPiAtICAgICAgICAgLy8g
+SW4gZmFjdCB0aGlzIGNvdWxkIGJlIHBpcGVsaW5lZCBmdXJ0aGVyIGlmIGl0J3Mgd29ydGggaXQu
+Li4KPiAtQEAgLTI0MSw3ICsyNDEsNyBAQCBBIC5lbmRpZgo+IC0gICAgICAgICBzdHIgICAgIFNU
+MCwgW1BTVCwgIy00XSEKPiAtICAgICAgICAgc3RyICAgICBTVDAsIFtQU1QsICM0ICogKE1BWF9C
+TE9DS1NJWkUgKyBNQVhfRklSX09SREVSKV0KPiAtICAgICAgICAgc3RyICAgICBTVDAsIFtQU0FN
+UF0sICM0ICogTUFYX0NIQU5ORUxTCj4gLS0gICAgICAgIGJuZSAgICAgMDFiCj4gLSsgICAgICAg
+IGJuZSAgICAgMWIKPiAtICAgLmVsc2UKPiAtICAgICAuaWYgXGZpcl90YXBzICYgMQo+IC0gICAg
+ICAgLnNldCBMT0FEX1JFRywgMQo+IC1AQCAtMzMzLDcgKzMzMyw3IEBAIFQgICAgICAgb3JyICAg
+ICBBQzAsIEFDMCwgQUMxCj4gLSAgICAgICAgIHN0ciAgICAgU1QzLCBbUFNULCAjLTRdIQo+IC0g
+ICAgICAgICBzdHIgICAgIFNUMiwgW1BTVCwgIzQgKiAoTUFYX0JMT0NLU0laRSArIE1BWF9GSVJf
+T1JERVIpXQo+IC0gICAgICAgICBzdHIgICAgIFNUMywgW1BTQU1QXSwgIzQgKiBNQVhfQ0hBTk5F
+TFMKPiAtLSAgICAgICAgYm5lICAgICAwMWIKPiAtKyAgICAgICAgYm5lICAgICAxYgo+IC0gICAu
+ZW5kaWYKPiAtICAgICAgICAgYiAgICAgICA5OWYKPiAtCj4gLS0tCj4gLTIuMzAuMgo+IC0KPiBk
+aWZmIC0tZ2l0IGEvcGFja2FnZS9mZm1wZWcvZmZtcGVnLmhhc2ggYi9wYWNrYWdlL2ZmbXBlZy9m
+Zm1wZWcuaGFzaAo+IGluZGV4IDYzMGJkNzBjNTYuLjUwNDk4YTZiYTkgMTAwNjQ0Cj4gLS0tIGEv
+cGFja2FnZS9mZm1wZWcvZmZtcGVnLmhhc2gKPiArKysgYi9wYWNrYWdlL2ZmbXBlZy9mZm1wZWcu
+aGFzaAo+IEBAIC0xLDUgKzEsNSBAQAo+ICAgIyBMb2NhbGx5IGNhbGN1bGF0ZWQKPiAtc2hhMjU2
+ICAzYjYyNDY0OTcyNWVjZGM1NjVjOTAzY2E2NjQzZDQxZjMzYmQ0OTIzOTkyMmU0NWM5YjE0NDJj
+NjNkY2E0ZTM4ICBmZm1wZWctNi4xLjIudGFyLnh6Cj4gK3NoYTI1NiAgZjBiMmIwN2M3MDE0Yjdh
+YThjNDY4OTA5NWI4M2E0OWE4NWQ0MTg4NzA0OWZjNTMwMjU0M2FlYzBiZWY3ZDA2NiAgZmZtcGVn
+LW42LjEuMi0yNy1nZTE2ZmYwNmFkYi1naXQ0LnRhci5nego+ICAgc2hhMjU2ICA4MTc3Zjk3NTEz
+MjEzNTI2ZGYyY2Y2MTg0ZDhmZjk4NmM2NzVhZmI1MTRkNGU2OGE0MDQwMTA1MjFiODgwNjQzICBD
+T1BZSU5HLkdQTHYyCj4gICBzaGEyNTYgIGI2MzRhYjU2NDBlMjU4NTYzYzUzNmU2NThjYWQ4NzA4
+MDU1M2RmNmYzNGY2MjI2OWEyMWQ1NTQ4NDRlNThiZmUgIENPUFlJTkcuTEdQTHYyLjEKPiAgIHNo
+YTI1NiAgY2I0OGJmMDlhMTFmNWZiNTc2Y2RkYjA0MzFjOGY1ZWQwYTYwMTU3YTllYzk0MmFkZmZj
+MTM5MDdjYmUwODNmMiAgTElDRU5TRS5tZAo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2ZmbXBlZy9m
+Zm1wZWcubWsgYi9wYWNrYWdlL2ZmbXBlZy9mZm1wZWcubWsKPiBpbmRleCA3OTkyMDFjODIwLi41
+YzAwYmEyZGZmIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvZmZtcGVnL2ZmbXBlZy5tawo+ICsrKyBi
+L3BhY2thZ2UvZmZtcGVnL2ZmbXBlZy5tawo+IEBAIC00LDEwICs0LDEyIEBACj4gICAjCj4gICAj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo+ICAgCj4gLUZGTVBFR19WRVJTSU9OID0gNi4xLjIKPiAt
+RkZNUEVHX1NPVVJDRSA9IGZmbXBlZy0kKEZGTVBFR19WRVJTSU9OKS50YXIueHoKPiAtRkZNUEVH
+X1NJVEUgPSBodHRwczovL2ZmbXBlZy5vcmcvcmVsZWFzZXMKPiArIyBVcGRhdGUgRkZNUEVHX0NQ
+RV9JRF9WRVJTSU9OIGlmIG5lZWRlZAo+ICtGRk1QRUdfVkVSU0lPTiA9IG42LjEuMi0yNy1nZTE2
+ZmYwNmFkYgo+ICtGRk1QRUdfU0lURSA9IGh0dHBzOi8vZ2l0LmZmbXBlZy5vcmcvZmZtcGVnLmdp
+dAo+ICtGRk1QRUdfU0lURV9NRVRIT0QgPSBnaXQKPiAgIEZGTVBFR19JTlNUQUxMX1NUQUdJTkcg
+PSBZRVMKPiArRkZNUEVHX0NQRV9JRF9WRVJTSU9OID0gNi4xLjIKPiAgIAo+ICAgRkZNUEVHX0xJ
+Q0VOU0UgPSBMR1BMLTIuMSssIGxpYmpwZWcgbGljZW5zZQo+ICAgRkZNUEVHX0xJQ0VOU0VfRklM
+RVMgPSBMSUNFTlNFLm1kIENPUFlJTkcuTEdQTHYyLjEKCl9fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290
+QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGlu
+Zm8vYnVpbGRyb290Cg==
