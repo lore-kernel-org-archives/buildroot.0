@@ -1,70 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC706C3ABC9
-	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 14:40:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F191CC3ABD8
+	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 14:41:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 768C760619;
-	Sun, 18 May 2025 14:40:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AF12781EAD;
+	Sun, 18 May 2025 14:41:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id z4L-HsmWN_DK; Sun, 18 May 2025 14:40:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id udKmAnMGSC52; Sun, 18 May 2025 14:41:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A3648608D9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C8D1281EAE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A3648608D9;
-	Sun, 18 May 2025 14:40:45 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 423A11BA
- for <buildroot@buildroot.org>; Sun, 18 May 2025 14:40:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C8D1281EAE;
+	Sun, 18 May 2025 14:41:00 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 905C51BA
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 14:40:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3F1D5404F0
- for <buildroot@buildroot.org>; Sun, 18 May 2025 14:40:44 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 81EAD81EAE
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 14:40:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id flay_jx_HyP1 for <buildroot@buildroot.org>;
- Sun, 18 May 2025 14:40:43 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OhcTFiChS1uq for <buildroot@buildroot.org>;
+ Sun, 18 May 2025 14:40:57 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
  helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6231040142
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6231040142
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 912B981EC9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 912B981EC9
 Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6231040142
- for <buildroot@buildroot.org>; Sun, 18 May 2025 14:40:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 912B981EC9
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 14:40:57 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 4CEF81C0FF6; Sun, 18 May 2025 16:40:41 +0200 (CEST)
-Message-ID: <0f2d0b9b-2671-476a-baba-67aa813eb914@rnout.be>
-Date: Sun, 18 May 2025 16:40:40 +0200
+ with ESMTPSA id 733A31C0FF6; Sun, 18 May 2025 16:40:55 +0200 (CEST)
+Message-ID: <7e8f1a80-d4e7-4085-8319-30c2c0095bb5@rnout.be>
+Date: Sun, 18 May 2025 16:40:54 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Peter Korsgaard <peter@korsgaard.com>, buildroot@buildroot.org
-References: <20250516105726.1462234-1-peter@korsgaard.com>
+To: Thomas Perale <thomas.perale@mind.be>, buildroot@buildroot.org
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Lionel Flandrin <lionel@svkt.org>
+References: <20250514150446.968758-1-thomas.perale@mind.be>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20250516105726.1462234-1-peter@korsgaard.com>
+In-Reply-To: <20250514150446.968758-1-thomas.perale@mind.be>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1747579241; h=from:subject:date:message-id:to:mime-version:content-type:
+ t=1747579255; h=from:subject:date:message-id:to:cc:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=Br79d+2xVqNV8ck8Xx4+mRailUzLS59bqwTJ+kNm4fo=;
- b=aRes0ILvm7YTO2a6upc2pFz4Y1C+xEfxE44cVsGvKR+hRALfV+sqY95NfCLi+y15O30N2E
- XE74zp3FeFsE0bp4Uw1gFNKyZs0zAYnPy8+O46pr25Cwg18hi4Ogqo2/dgV9l3ePcLAAqh
- Z3Cl7HZaqKhCkzFrfy8jK5Ndnxf5KAm1plIz4SKiWyvnbtbR6P/Jkpdj8+gCemj53kVmup
- rwh6MQT3qpl6cOJ4q8q4Eynz9TNjS7BjUi81/eh+12BDlc4Y/RAYT59cSveltbNumVIjZh
- g2Yp1S+pcTUvZ9RuJ7539C6Lf2hfCA5gcme8zsa8x8Y5BYdB3cCbffH+ovqanQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=1TdUn2ycDKZpGtEir8eV/XZTEpoAWqecCCkPceQGvXY=;
+ b=gpWZrFbnKgkgzLthfoDso5Ms+m0vowgAjeY1EndpzU2gqvrbhWMvumBeHpOG0CqqxgWoE+
+ IlReAgBibErcc4OE8fBMsLJvK19Dj9aB6aI8lac3QXw6v99qd7Hiz2pWTtAG8cmqXDsTcc
+ BqsFLNkk2kOiToKS6DjkWXyv553zFUVnIWOXvyRIv6ows5EGR4g5TNr8Fm7Osud/tsl90a
+ yl3GkndRytjMsb2W6mxO1B5IMR5IafoG0eWF96ZxXbA7MTjSQMY5zxzYQR5eAWXDWUu1Pg
+ Zec/XA/IxGjZUd8iuUi/a3lMaxleJzPNEnl/nUfIocIEfxOeAAnNouIZFHrJCg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=aRes0ILv
-Subject: Re: [Buildroot] [PATCH] package/screen: security bump to version
- 5.0.1
+ header.a=rsa-sha256 header.s=dkim header.b=gpWZrFbn
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-flask: security bump to
+ version 3.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,21 +87,21 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 16/05/2025 12:57, Peter Korsgaard wrote:
+On 14/05/2025 17:04, Thomas Perale via buildroot wrote:
 > Fixes the following security issues:
 > 
-> CVE-2025-46805: do NOT send signals with root privileges
-> CVE-2025-46804: avoid file existence test information leaks
-> CVE-2025-46803: apply safe PTY default mode of 0620
-> CVE-2025-46802: prevent temporary 0666 mode on PTYs in attacher
-> CVE-2025-23395: reintroduce lf_secreopen() for logfile
+> - CVE-2025-47278: In Flask 3.1.0, the way fallback key configuration was
+>      handled resulted in the last fallback key being used for signing,
+>      rather than the current signing key.
 > 
-> https://lists.gnu.org/archive/html/info-gnu/2025-05/msg00002.html
+> For more information, see:
+>    - https://nvd.nist.gov/vuln/detail/CVE-2025-47278
+>    - https://github.com/pallets/flask/commit/73d6504063bfa00666a92b07a28aaf906c532f09
 > 
-> For more details, see:
-> https://security.opensuse.org/2025/05/12/screen-security-issues.html
+> For more details on the version bump, see the release notes:
+>    - https://github.com/pallets/flask/releases/tag/3.1.1
 > 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
   Applied to 2025.02.x, thanks.
 
@@ -107,35 +109,39 @@ On 16/05/2025 12:57, Peter Korsgaard wrote:
   Arnout
 
 > ---
->   package/screen/screen.hash | 4 ++--
->   package/screen/screen.mk   | 2 +-
->   2 files changed, 3 insertions(+), 3 deletions(-)
+>   package/python-flask/python-flask.hash | 4 ++--
+>   package/python-flask/python-flask.mk   | 4 ++--
+>   2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/screen/screen.hash b/package/screen/screen.hash
-> index 208a9cb36d..61bacd88ff 100644
-> --- a/package/screen/screen.hash
-> +++ b/package/screen/screen.hash
-> @@ -1,5 +1,5 @@
->   # Locally calculated after checking pgp signature
-> -# https://ftp.gnu.org/gnu/screen/screen-5.0.0.tar.gz.sig
-> -sha256  f04a39d00a0e5c7c86a55338808903082ad5df4d73df1a2fd3425976aed94971  screen-5.0.0.tar.gz
-> +# https://ftp.gnu.org/gnu/screen/screen-5.0.1.tar.gz.sig
-> +sha256  2dae36f4db379ffcd14b691596ba6ec18ac3a9e22bc47ac239789ab58409869d  screen-5.0.1.tar.gz
->   # Locally calculated
->   sha256  e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  COPYING
-> diff --git a/package/screen/screen.mk b/package/screen/screen.mk
-> index 9a64780a9a..74453faff8 100644
-> --- a/package/screen/screen.mk
-> +++ b/package/screen/screen.mk
-> @@ -4,7 +4,7 @@
+> diff --git a/package/python-flask/python-flask.hash b/package/python-flask/python-flask.hash
+> index 97982f99d5..17564e8587 100644
+> --- a/package/python-flask/python-flask.hash
+> +++ b/package/python-flask/python-flask.hash
+> @@ -1,6 +1,6 @@
+>   # md5, sha256 from https://pypi.org/pypi/flask/json
+> -md5  c95d81666442bf04f7de7db7edbe2aff  flask-3.1.0.tar.gz
+> -sha256  5f873c5184c897c8d9d1b05df1e3d01b14910ce69607a117bd3277098a5836ac  flask-3.1.0.tar.gz
+> +md5  59dc1b0772bab098aff83e8008e97af6  flask-3.1.1.tar.gz
+> +sha256  284c7b8f2f58cb737f0cf1c30fd7eaf0ccfcde196099d24ecede3fc2005aa59e  flask-3.1.1.tar.gz
+>   # Locally computed sha256 checksums
+>   sha256  489a8e1108509ed98a37bb983e11e0f7e1d31f0bd8f99a79c8448e7ff37d07ea  LICENSE.txt
+>   sha256  1e07e9c25f2618a040560b70e63f42259eab24e558d0f3532e6163d751cb4eea  docs/license.rst
+> diff --git a/package/python-flask/python-flask.mk b/package/python-flask/python-flask.mk
+> index d44c2e68ef..2269b05d29 100644
+> --- a/package/python-flask/python-flask.mk
+> +++ b/package/python-flask/python-flask.mk
+> @@ -4,9 +4,9 @@
 >   #
 >   ################################################################################
 >   
-> -SCREEN_VERSION = 5.0.0
-> +SCREEN_VERSION = 5.0.1
->   SCREEN_SITE = $(BR2_GNU_MIRROR)/screen
->   SCREEN_LICENSE = GPL-3.0+
->   SCREEN_LICENSE_FILES = COPYING
+> -PYTHON_FLASK_VERSION = 3.1.0
+> +PYTHON_FLASK_VERSION = 3.1.1
+>   PYTHON_FLASK_SOURCE = flask-$(PYTHON_FLASK_VERSION).tar.gz
+> -PYTHON_FLASK_SITE = https://files.pythonhosted.org/packages/89/50/dff6380f1c7f84135484e176e0cac8690af72fa90e932ad2a0a60e28c69b
+> +PYTHON_FLASK_SITE = https://files.pythonhosted.org/packages/c0/de/e47735752347f4128bcf354e0da07ef311a78244eba9e3dc1d4a5ab21a98
+>   PYTHON_FLASK_SETUP_TYPE = flit
+>   PYTHON_FLASK_LICENSE = BSD-3-Clause
+>   PYTHON_FLASK_LICENSE_FILES = LICENSE.txt docs/license.rst
 
 _______________________________________________
 buildroot mailing list
