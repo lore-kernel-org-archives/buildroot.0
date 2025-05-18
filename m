@@ -1,82 +1,101 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B61DEC3ABC9
-	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 08:54:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C8BBC3ABC9
+	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 08:55:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5731160ADD;
-	Sun, 18 May 2025 08:54:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 12C854096F;
+	Sun, 18 May 2025 08:55:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jmkeTNX5k3ez; Sun, 18 May 2025 08:54:14 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id k92EsXwpagdO; Sun, 18 May 2025 08:55:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7C7E860C16
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39E794097B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7C7E860C16;
-	Sun, 18 May 2025 08:54:14 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 7C31EDF
- for <buildroot@buildroot.org>; Sun, 18 May 2025 08:54:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 39E794097B;
+	Sun, 18 May 2025 08:55:17 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id B7A9FE4
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 08:55:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6CA1C60ADD
- for <buildroot@buildroot.org>; Sun, 18 May 2025 08:54:13 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9DCF940FF3
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 08:55:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id l-ME7SGMT_Xw for <buildroot@buildroot.org>;
- Sun, 18 May 2025 08:54:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
- helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3A1A360775
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A1A360775
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3A1A360775
- for <buildroot@buildroot.org>; Sun, 18 May 2025 08:54:11 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6540E43217;
- Sun, 18 May 2025 08:54:07 +0000 (UTC)
-Date: Sun, 18 May 2025 10:54:06 +0200
-To: =?UTF-8?B?UmFwaGHDq2wgTcOpbG90dGU=?= via buildroot
- <buildroot@buildroot.org>
-Cc: =?UTF-8?B?UmFwaGHDq2wgTcOpbG90dGU=?= <raphael.melotte@mind.be>, Sen
- Hastings <sen@hastings.org>
-Message-ID: <20250518105406.41cb1a2f@windsurf>
-In-Reply-To: <20250423152906.1017522-1-raphael.melotte@mind.be>
-References: <20250423152906.1017522-1-raphael.melotte@mind.be>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yz6XYCJnaiMQ for <buildroot@buildroot.org>;
+ Sun, 18 May 2025 08:55:14 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::62f; helo=mail-pl1-x62f.google.com;
+ envelope-from=kadambini.nema@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 34C0E40FDE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 34C0E40FDE
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com
+ [IPv6:2607:f8b0:4864:20::62f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 34C0E40FDE
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 08:55:14 +0000 (UTC)
+Received: by mail-pl1-x62f.google.com with SMTP id
+ d9443c01a7336-2322f8afe02so995595ad.2
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 01:55:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1747558513; x=1748163313;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=zF5CddGDke22lldWPXe7VKFZGL+TYtt2wuwuWYDjxTk=;
+ b=WRVUS8AM+3PE2IZlPLUuNNRDPxds5SalU2or8cWodmS4uD2eM+jajScUckRs65Er3r
+ u/vyHA2ATGNfbVuMaRnAS3uRjSbm5A5gY5fwEdVFWAcLXjP9loNMkEMvLzQYqY2o4hoP
+ XqE500PqOQIQW6AikSRM3xt6c/apOV2xCpx8/as0Zvz8FhYUpLk4SfE4BrIZbWE1cyjr
+ rl0G1rDRVzIdy9DP4uwh/ULFhlYKpj/BypPwqAUgVJF3LI0wrlr8AY9QVN2S9bUMYY4P
+ XEMnNRSWNQG1feBVPZShzb7jhLEFnTZyqbowjbpm0fg25dkjRYMr1J46jEuVL0UJojzj
+ RODQ==
+X-Gm-Message-State: AOJu0YwA90L+YN2wM38OvpG/wvBMb9IDu6q8MyIvIF5mwiebtHa7jrWi
+ c5/XdmQduJEkochYOLqJd/SsM99Pn5vJsGNMegOEyJtz0XCuNxA9DrPVsb67RZ6w
+X-Gm-Gg: ASbGncuHorwod1tLPeD34Ec1FDycfx2mrYypRIG0lG7PqdLxzGw7tmAVP425/YgrQC4
+ 7Yi1VTvHCFutq+lCpTq/Ua6WO7a6mEuMshsDfYjr4Az8hbLMmSixDUaGXr5nUz/GYKqEczpUqb+
+ xmNzynmG9NnqgdkYHa+gY2nfZ3FPtpH7sMavOzOUMBPs6eo2v+wGzm5fObQAdbqAbkr42xSvZY8
+ eWpnnpESMXoseUSNGO/G0dA91vT6ofNfOAeKlHiOT2KVnOhNCSRT3m8jztAlR9RBXlLUrzpHZ9U
+ zkhcg4G0YOIs1Fst63FBr8dFRs74NQvtrxVdC00YAK9Z/Wsq22V7qnNjR8sQkKjBRrecmXSzFYz
+ hudg4o8gZavk3r0G6W1rbShh9wUR4zbFmi7oxZw==
+X-Google-Smtp-Source: AGHT+IGUyOVAFlF579+u2fovAwMd+Dn1SWqlcwuMTG0lQmyayLi6NR0dNgGN5y3ty1bMwM64UZXhXw==
+X-Received: by 2002:a17:903:22ce:b0:231:b456:b97 with SMTP id
+ d9443c01a7336-231d459a539mr135792715ad.36.1747558512850; 
+ Sun, 18 May 2025 01:55:12 -0700 (PDT)
+Received: from localhost.localdomain (ip72-203-121-181.oc.oc.cox.net.
+ [72.203.121.181]) by smtp.gmail.com with ESMTPSA id
+ d9443c01a7336-231d4e97497sm40635845ad.128.2025.05.18.01.55.12
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 18 May 2025 01:55:12 -0700 (PDT)
+From: Kadambini Nema <kadambini.nema@gmail.com>
+To: buildroot@buildroot.org
+Cc: Kadambini Nema <kadambini.nema@gmail.com>
+Date: Sun, 18 May 2025 01:55:08 -0700
+Message-Id: <20250518085508.51880-1-kadambini.nema@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefudektdelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtqhertdertdejnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepheduteeufeekieevieegueegiefgvdevhefggfdutdeiuedvtdfgledvgeevleeinecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumegufeduvgemvdefheemtgehvgdvmegvugekfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumegufeduvgemvdefheemtgehvgdvmegvugekfedphhgvlhhopeifihhnughsuhhrfhdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepfedprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtoheprhgrphhhrggvlhdrmhgvlhhothhtvgesmhhinhgurdgsvgdprhgtphhtthhopehsv
- ghnsehhrghsthhinhhgshdrohhrgh
-X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1747558447;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=MoK8wOkBNDZDukw5uZ7TrI8trwpXUNEU6r72SpoE3nU=;
- b=cHAlZqEjYsnsEf//MPxRNk5gahUq5XYaqv4SospnrvTUQE4YHJWD294WUZtbEUzqNED1Fc
- LcJkfWcvfvJfwSv8vcJcSIHPREd2bwhAOKobhYdyPjfxPzMLP4+Qpk9wzciwpt0Fwef1BO
- zUZKqu4Cwm9x5CwTmr36EaV+9p6IkIlo1XIJboja1NTUHqiR6D2y8vxAoIXZzYejDDvV97
- F0i/WmmTImaTSqkGbjyrDDREupUOFq/972FltQAujFVVt4anTjtyklX44cLZGs8Uoj9soX
- +l+wiP6l6BpGsU/OgNmcIQ+x5uDvmRrw0LH+Neo1unAqA4TUaiWOcTiNhEGAng==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=gmail.com; s=20230601; t=1747558513; x=1748163313; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=zF5CddGDke22lldWPXe7VKFZGL+TYtt2wuwuWYDjxTk=;
+ b=XerEn/b8Yj4Awt+iKLSz6Hwp/EZsm3kcu3z9of81u57XpSmsltTsXDzKHHIhnE2vA3
+ FpPHGzTsqzmOAKqQOEFyA2miY8eU6ZsHv9tug0dyUIIDgMY0aNAdtgVbn2wQ+dVEqOHJ
+ K/YxnRDE6GURSnCOhnERhuCTblH9ndaoxv2DX3Y2pF1/jUdqnj88UFGjbnZYsvw4Ssfv
+ muA6Q4l7QjHPkVfjmC5BptCbil+Ij3v+/u0W67mO+wjmj/Gw1bQ0L1dpRfbRcJLzQIsX
+ rE2qBceiUgzRV9cmPkBLKn3zcJH3qliOaMnVlPOut8t/ckm421NydZbWYyS4TziyhvjP
+ 9bYw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=cHAlZqEj
-Subject: Re: [Buildroot] [RFC PATCH 1/1] support/scripts/pkg-stats: add
- support for reporting stale CVE entries
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=XerEn/b8
+Subject: [Buildroot] [PATCH 1/1] package/smartmontools: bump version to 7.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -88,45 +107,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gV2VkLCAyMyBBcHIgMjAyNSAxNzoyOTowNSArMDIwMApSYXBoYcOrbCBNw6lsb3R0ZSB2aWEg
-YnVpbGRyb290IDxidWlsZHJvb3RAYnVpbGRyb290Lm9yZz4gd3JvdGU6Cgo+IFRoZSBOVkQgZGF0
-YWJhc2UgY29udGFpbnMgc29tZSBDUEVzIHRoYXQgYXJlIHdyb25nbHkgbm90IGFzc29jaWF0ZWQK
-PiB3aXRoIGFueSB2ZXJzaW9uIG51bWJlci4gVGhleSBhcmUgZm9yIGV4YW1wbGUgc29tZXRpbWVz
-IGFzc29jaWF0ZWQKPiB3aXRoIHZlcnkgb2xkIENWRXMuCj4gVGhvc2UgQ1BFcyBhcmUgYW5ub3lp
-bmcsIGJlY2F1c2UgdGhleSBwb2xsdXRlIG91ciBwa2ctc3RhdCBDVkUgcmVzdWx0cwo+IHdpdGgg
-Q1ZFIGVudHJpZXMgd2hpY2ggYWN0dWFsbHkgZG9uJ3QgYWZmZWN0IHVzLgo+IAo+IFRoZSBwcm9w
-ZXIgd2F5IHRvIHNvbHZlIGl0IGlzLCBhbmQgc2hvdWxkIHJlbWFpbiwgdG8gZml4IHRoZSBOVkQK
-PiBkYXRhYmFzZSBieSByZXBvcnRpbmcgdGhlc2UgaXNzdWVzLiBIYXZpbmcgdG8gZGVhbCB3aXRo
-IGEgbG90IG9mCj4gQ1ZFcy9DUEVzLCB0aGUgTlZEIGRhdGFiYXNlIGlzIGhvd2V2ZXIgc2xvdyB0
-byBiZSB1cGRhdGVkLgo+IAo+IFRvIHJlZHVjZSB0aGUgbm9pc2UgaW4gb3VyIHBrZy1zdGF0cyBy
-ZXN1bHRzIGluIHRoZSBtZWFudGltZSwgb25lCj4gcG9zc2liaWxpdHkgaXMgdG8gYWRkIDxQS0df
-SUdOT1JFX0NWRVM+IGVudHJpZXMgZm9yIHRob3NlIENWRXMuICBUaGlzCj4gaG93ZXZlciBjb21l
-cyB3aXRoIHRoZSBkb3duc2lkZSB0aGF0IGV2ZW4gb25jZSB0aGUgTlZEIGRhdGFiYXNlIGdldHMK
-PiBmaXhlZCwgdGhvc2UgaWdub3JlZCBlbnRyaWVzIHJpc2sgcmVtYWluaW5nIGluIEJ1aWxkcm9v
-dCBmb3JldmVyCj4gYmVjYXVzZSB0aGV5IGFyZSB1bmRldGVjdGVkLgo+IAo+IFRoaXMgY29tbWl0
-IHRyaWVzIHRvIGFkZHJlc3MgdGhpcyBkb3duc2lkZSBieSBjaGVja2luZyBmb3IgYW5kCj4gcmVw
-b3J0aW5nIENWRXMgdGhhdCBhcmUgaWdub3JlZCBpbiBCdWlsZHJvb3QsIGJ1dCB3aGVyZSB0aGUK
-PiBOVkQgcmVwb3J0cyBvdXIgcGFja2FnZSB2ZXJzaW9uIGFzIHVuYWZmZWN0ZWQuIFRob3NlIENW
-RXMgd2lsbCBhcHBlYXIKPiBpbiB0aGUgJ0NWRXMgSWdub3JlZCcgY29sdW1uIGFzICcoc3RhbGUp
-JywgYW5kIHRoZSBjZWxsIHdpbGwgYmUKPiBjb2xvcmVkIHRoZSBzYW1lIHdheSB3YXJuaW5ncyBh
-cmUuIFRoaXMgc2hvdWxkIGFsbG93IHVzIHRvIGRldGVjdCBhbmQKPiByZW1vdmUgdGhvc2UgZW50
-cmllcy4KPiAKPiBJdCBjYW4gYmUgdGVzdGVkIGZvciBleGFtcGxlIGJ5IGFkZGluZyB0aGUgZm9s
-bG93aW5nIHZhcmlhYmxlIHRvIHRoZQo+IGFwYWNoZSBwYWNrYWdlIChmb3IgYSBDVkUgdGhhdCB3
-YXMgcmVjZW50bHkgZml4ZWQgaW4gdGhlIE5WRCBkYXRhYmFzZSk6Cj4gQVBBQ0hFX0lHTk9SRV9D
-VkVTID0gQ1ZFLTE5OTktMDIzNgo+IAo+IFNpZ25lZC1vZmYtYnk6IFJhcGhhw6tsIE3DqWxvdHRl
-IDxyYXBoYWVsLm1lbG90dGVAbWluZC5iZT4KPiAtLS0KPiAgc3VwcG9ydC9zY3JpcHRzL2N2ZS5w
-eSAgICB8ICA0ICstLS0KPiAgc3VwcG9ydC9zY3JpcHRzL3BrZy1zdGF0cyB8IDM2ICsrKysrKysr
-KysrKysrKysrKysrKysrKysrKysrKysrLS0tLQo+ICAyIGZpbGVzIGNoYW5nZWQsIDMzIGluc2Vy
-dGlvbnMoKyksIDcgZGVsZXRpb25zKC0pCgpHcmVhdCBzdHVmZiwgdGhhbmtzIGEgbG90ISBBcHBs
-aWVkIHRvIG1hc3Rlci4KClRob21hcwotLSAKVGhvbWFzIFBldGF6em9uaSwgQ1RPLCBCb290bGlu
-CkVtYmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5naW5lZXJpbmcKaHR0cHM6Ly9ib290bGluLmNv
-bQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJv
-b3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVp
-bGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Release notes:
+https://www.smartmontools.org/browser/tags/RELEASE_7_5/smartmontools/NEWS
+
+Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
+---
+ package/smartmontools/smartmontools.hash | 8 ++++----
+ package/smartmontools/smartmontools.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/package/smartmontools/smartmontools.hash b/package/smartmontools/smartmontools.hash
+index b4e18f9002..ecc2c9d089 100644
+--- a/package/smartmontools/smartmontools.hash
++++ b/package/smartmontools/smartmontools.hash
+@@ -1,7 +1,7 @@
+-# From http://sourceforge.net/projects/smartmontools/files/smartmontools/7.4/
+-md5  178d31a6ff5256c093227ab45a3f52aa  smartmontools-7.4.tar.gz
+-sha1  b0d7c9ca80768059607b92bf4e373e2822300d3f  smartmontools-7.4.tar.gz
++# From http://sourceforge.net/projects/smartmontools/files/smartmontools/7.5/
++md5  38c38b0b82db7fc4906cdd50d15a7931  smartmontools-7.5.tar.gz
++sha1  9b0ca96931d6184da34d68bbe9a785713f5a8474  smartmontools-7.5.tar.gz
+ 
+ # Locally computed
+-sha256  e9a61f641ff96ca95319edfb17948cd297d0cd3342736b2c49c99d4716fb993d  smartmontools-7.4.tar.gz
++sha256  690b83ca331378da9ea0d9d61008c4b22dde391387b9bbad7f29387f2595f76e  smartmontools-7.5.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/smartmontools/smartmontools.mk b/package/smartmontools/smartmontools.mk
+index 18a1417681..557aec1efd 100644
+--- a/package/smartmontools/smartmontools.mk
++++ b/package/smartmontools/smartmontools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SMARTMONTOOLS_VERSION = 7.4
++SMARTMONTOOLS_VERSION = 7.5
+ SMARTMONTOOLS_SITE = http://downloads.sourceforge.net/project/smartmontools/smartmontools/$(SMARTMONTOOLS_VERSION)
+ SMARTMONTOOLS_LICENSE = GPL-2.0+
+ SMARTMONTOOLS_LICENSE_FILES = COPYING
+-- 
+2.25.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
