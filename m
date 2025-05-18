@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3CD40C2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:50:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40AFFC2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:50:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 38E186FC69;
-	Mon, 19 May 2025 10:50:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EAE856FC88;
+	Mon, 19 May 2025 10:50:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mILcAaQd3iIz; Mon, 19 May 2025 10:50:07 +0000 (UTC)
+ id iiXof4p48L2b; Mon, 19 May 2025 10:50:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3620C6FC78
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA8A26FC7B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3620C6FC78;
-	Mon, 19 May 2025 10:50:07 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 13C3C193
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:42:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DA8A26FC7B;
+	Mon, 19 May 2025 10:50:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0E4F0193
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:42:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BFCCB40EC2
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:59 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 44CA741089
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p47MsVr__Nkp for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:59 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Zny3xnBFvnux for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E7E2840DC5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6616841190
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E7E2840DC5
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:49 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6616841190
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:10 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E5E8D83B63; Mon, 19 May 2025 10:39:49 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+ id 623E2873D4; Mon, 19 May 2025 10:40:10 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 14 Apr 2025 20:15:46 +0200
+Date: Sun, 18 May 2025 16:00:31 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 1d2f135ef1fc722d61d0b3df193eb5986aea397f
-X-Git-Newrev: 81b049f829181b0bfef08db6f5c17e2482b4e5be
+X-Git-Oldrev: 5ba3e0d8a716b25cce5fc3b0570476d9f72f2690
+X-Git-Newrev: 3dbbfdeb8e82d5412b8435341772b8cf30998b3b
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103949.E5E8D83B63@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/sysklogd: bump to
- v2.7.2
+Message-Id: <20250519104010.623E2873D4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/{execline, mdevd, s6-*,
+ skalibs}: remove --prefix=/
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,53 +58,167 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1421430011180864346=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=81b049f829181b0bfef08db6f5c17e2482b4e5be
+--===============1421430011180864346==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=3dbbfdeb8e82d5412b8435341772b8cf30998b3b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-From https://github.com/troglobit/sysklogd/releases/tag/v2.7.2
+The prefix already defaults to /, so --prefix=/ is unnecessary. An
+alternative course of action would be to start setting --prefix=/usr.
 
- - logger: improved error handling for invalid arguments to -p and -o
- - Fix regression in v2.7.1,  allow '.' in tag names, eg. in.tftpd
- - Fix various typos in the documentation
-
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: J. Neuschäfer <j.neuschaefer@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/sysklogd/sysklogd.hash | 4 ++--
- package/sysklogd/sysklogd.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/execline/execline.mk                   | 1 -
+ package/mdevd/mdevd.mk                         | 1 -
+ package/s6-dns/s6-dns.mk                       | 1 -
+ package/s6-linux-init/s6-linux-init.mk         | 1 -
+ package/s6-linux-utils/s6-linux-utils.mk       | 1 -
+ package/s6-networking/s6-networking.mk         | 1 -
+ package/s6-portable-utils/s6-portable-utils.mk | 1 -
+ package/s6-rc/s6-rc.mk                         | 1 -
+ package/s6/s6.mk                               | 1 -
+ package/skalibs/skalibs.mk                     | 1 -
+ 10 files changed, 10 deletions(-)
 
-diff --git a/package/sysklogd/sysklogd.hash b/package/sysklogd/sysklogd.hash
-index 645bc6a0ae..c74d7f9ba6 100644
---- a/package/sysklogd/sysklogd.hash
-+++ b/package/sysklogd/sysklogd.hash
-@@ -1,4 +1,4 @@
--# Upstream .sha256 from https://github.com/troglobit/sysklogd/releases/tag/v2.7.1
--sha256  69944b2227647bf47ee01c9f482d19a79dbf2b53b8ce8ded0486b08db8c68c40  sysklogd-2.7.1.tar.gz
-+# Upstream .sha256 from https://github.com/troglobit/sysklogd/releases/tag/v2.7.2
-+sha256  bc410ca64551a11fac6518b418fb6b8afbd888a70af2c5eb353334a706727bca  sysklogd-2.7.2.tar.gz
- # Locally calculated
- sha256  7a71d7603a7c4456df441463e54da35acf151c1be0879246de63544f1f34f477  LICENSE
-diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
-index a3e27fd17b..baafc38083 100644
---- a/package/sysklogd/sysklogd.mk
-+++ b/package/sysklogd/sysklogd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/execline/execline.mk b/package/execline/execline.mk
+index 922fc7b5af..45d6b9294f 100644
+--- a/package/execline/execline.mk
++++ b/package/execline/execline.mk
+@@ -13,7 +13,6 @@ EXECLINE_DEPENDENCIES = skalibs
  
--SYSKLOGD_VERSION = 2.7.1
-+SYSKLOGD_VERSION = 2.7.2
- SYSKLOGD_SITE = https://github.com/troglobit/sysklogd/releases/download/v$(SYSKLOGD_VERSION)
- SYSKLOGD_LICENSE = BSD-3-Clause
- SYSKLOGD_LICENSE_FILES = LICENSE
+ EXECLINE_CONF_OPTS = \
+ 	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE" \
+-	--prefix=/ \
+ 	--with-sysdeps=$(STAGING_DIR)/lib/skalibs/sysdeps \
+ 	--with-include=$(STAGING_DIR)/include \
+ 	--with-dynlib=$(STAGING_DIR)/lib \
+diff --git a/package/mdevd/mdevd.mk b/package/mdevd/mdevd.mk
+index a1d9e17cef..b8d527f1ca 100644
+--- a/package/mdevd/mdevd.mk
++++ b/package/mdevd/mdevd.mk
+@@ -12,7 +12,6 @@ MDEVD_INSTALL_STAGING = YES
+ MDEVD_DEPENDENCIES = skalibs
+ 
+ MDEVD_CONF_OPTS = \
+-	--prefix=/ \
+ 	--with-sysdeps=$(STAGING_DIR)/lib/skalibs/sysdeps \
+ 	--with-include=$(STAGING_DIR)/include \
+ 	--with-dynlib=$(STAGING_DIR)/lib \
+diff --git a/package/s6-dns/s6-dns.mk b/package/s6-dns/s6-dns.mk
+index 8e175431a4..4184110096 100644
+--- a/package/s6-dns/s6-dns.mk
++++ b/package/s6-dns/s6-dns.mk
+@@ -12,7 +12,6 @@ S6_DNS_INSTALL_STAGING = YES
+ S6_DNS_DEPENDENCIES = skalibs
+ 
+ S6_DNS_CONF_OPTS = \
+-	--prefix=/ \
+ 	--with-sysdeps=$(STAGING_DIR)/lib/skalibs/sysdeps \
+ 	--with-include=$(STAGING_DIR)/include \
+ 	--with-dynlib=$(STAGING_DIR)/lib \
+diff --git a/package/s6-linux-init/s6-linux-init.mk b/package/s6-linux-init/s6-linux-init.mk
+index ae2bcdb8d8..73f49c49ef 100644
+--- a/package/s6-linux-init/s6-linux-init.mk
++++ b/package/s6-linux-init/s6-linux-init.mk
+@@ -11,7 +11,6 @@ S6_LINUX_INIT_LICENSE_FILES = COPYING
+ S6_LINUX_INIT_DEPENDENCIES = s6 s6-linux-utils s6-portable-utils
+ 
+ S6_LINUX_INIT_CONF_OPTS = \
+-	--prefix=/ \
+ 	--with-sysdeps=$(STAGING_DIR)/lib/skalibs/sysdeps \
+ 	--with-include=$(STAGING_DIR)/include \
+ 	--with-dynlib=$(STAGING_DIR)/lib \
+diff --git a/package/s6-linux-utils/s6-linux-utils.mk b/package/s6-linux-utils/s6-linux-utils.mk
+index 04e08c3d43..cb1b86c370 100644
+--- a/package/s6-linux-utils/s6-linux-utils.mk
++++ b/package/s6-linux-utils/s6-linux-utils.mk
+@@ -11,7 +11,6 @@ S6_LINUX_UTILS_LICENSE_FILES = COPYING
+ S6_LINUX_UTILS_DEPENDENCIES = skalibs
+ 
+ S6_LINUX_UTILS_CONF_OPTS = \
+-	--prefix=/ \
+ 	--with-sysdeps=$(STAGING_DIR)/lib/skalibs/sysdeps \
+ 	--with-include=$(STAGING_DIR)/include \
+ 	--with-dynlib=$(STAGING_DIR)/lib \
+diff --git a/package/s6-networking/s6-networking.mk b/package/s6-networking/s6-networking.mk
+index 212fae7361..5302ad8ec6 100644
+--- a/package/s6-networking/s6-networking.mk
++++ b/package/s6-networking/s6-networking.mk
+@@ -12,7 +12,6 @@ S6_NETWORKING_INSTALL_STAGING = YES
+ S6_NETWORKING_DEPENDENCIES = s6-dns s6
+ 
+ S6_NETWORKING_CONF_OPTS = \
+-	--prefix=/ \
+ 	--with-sysdeps=$(STAGING_DIR)/lib/skalibs/sysdeps \
+ 	--with-include=$(STAGING_DIR)/include \
+ 	--with-dynlib=$(STAGING_DIR)/lib \
+diff --git a/package/s6-portable-utils/s6-portable-utils.mk b/package/s6-portable-utils/s6-portable-utils.mk
+index 826750f387..bd617ee640 100644
+--- a/package/s6-portable-utils/s6-portable-utils.mk
++++ b/package/s6-portable-utils/s6-portable-utils.mk
+@@ -11,7 +11,6 @@ S6_PORTABLE_UTILS_LICENSE_FILES = COPYING
+ S6_PORTABLE_UTILS_DEPENDENCIES = skalibs
+ 
+ S6_PORTABLE_UTILS_CONF_OPTS = \
+-	--prefix=/ \
+ 	--with-sysdeps=$(STAGING_DIR)/lib/skalibs/sysdeps \
+ 	--with-include=$(STAGING_DIR)/include \
+ 	--with-dynlib=$(STAGING_DIR)/lib \
+diff --git a/package/s6-rc/s6-rc.mk b/package/s6-rc/s6-rc.mk
+index 301c705910..8eddee9c9e 100644
+--- a/package/s6-rc/s6-rc.mk
++++ b/package/s6-rc/s6-rc.mk
+@@ -12,7 +12,6 @@ S6_RC_INSTALL_STAGING = YES
+ S6_RC_DEPENDENCIES = s6
+ 
+ S6_RC_CONF_OPTS = \
+-	--prefix=/ \
+ 	--with-sysdeps=$(STAGING_DIR)/lib/skalibs/sysdeps \
+ 	--with-include=$(STAGING_DIR)/include \
+ 	--with-dynlib=$(STAGING_DIR)/lib \
+diff --git a/package/s6/s6.mk b/package/s6/s6.mk
+index 7e02c26d03..b2451e8454 100644
+--- a/package/s6/s6.mk
++++ b/package/s6/s6.mk
+@@ -12,7 +12,6 @@ S6_INSTALL_STAGING = YES
+ S6_DEPENDENCIES = execline
+ 
+ S6_CONF_OPTS = \
+-	--prefix=/ \
+ 	--with-sysdeps=$(STAGING_DIR)/lib/skalibs/sysdeps \
+ 	--with-include=$(STAGING_DIR)/include \
+ 	--with-dynlib=$(STAGING_DIR)/lib \
+diff --git a/package/skalibs/skalibs.mk b/package/skalibs/skalibs.mk
+index 45f3e15a7b..32f7aae864 100644
+--- a/package/skalibs/skalibs.mk
++++ b/package/skalibs/skalibs.mk
+@@ -11,7 +11,6 @@ SKALIBS_LICENSE_FILES = COPYING
+ SKALIBS_INSTALL_STAGING = YES
+ 
+ SKALIBS_CONF_OPTS = \
+-	--prefix=/ \
+ 	--with-default-path=/sbin:/usr/sbin:/bin:/usr/bin \
+ 	--with-sysdep-devurandom=yes \
+ 	$(SHARED_STATIC_LIBS_OPTS)
+
+--===============1421430011180864346==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1421430011180864346==--
