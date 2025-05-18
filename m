@@ -4,68 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BED62C3ABC9
-	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 12:51:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D165C3ABD8
+	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 12:52:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 93E5340578;
-	Sun, 18 May 2025 12:51:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5395B405ED;
+	Sun, 18 May 2025 12:52:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZnRohoMq4ZUe; Sun, 18 May 2025 12:51:31 +0000 (UTC)
+ id B8R_xCtSLhlW; Sun, 18 May 2025 12:52:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D8D8F408AF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 873B940619
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D8D8F408AF;
-	Sun, 18 May 2025 12:51:30 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 39453E4
- for <buildroot@buildroot.org>; Sun, 18 May 2025 12:51:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 873B940619;
+	Sun, 18 May 2025 12:52:29 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 31733DF
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 12:52:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2AE6381EB8
- for <buildroot@buildroot.org>; Sun, 18 May 2025 12:51:29 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2319660630
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 12:52:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HDK03E-7E2Nu for <buildroot@buildroot.org>;
- Sun, 18 May 2025 12:51:28 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
- helo=relay1-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wIHVku6ctxmP for <buildroot@buildroot.org>;
+ Sun, 18 May 2025 12:52:27 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2DCBB81EB7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2DCBB81EB7
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2DCBB81EB7
- for <buildroot@buildroot.org>; Sun, 18 May 2025 12:51:27 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C9E1E43A16;
- Sun, 18 May 2025 12:51:24 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1uGdUC-00HSDL-0q;
- Sun, 18 May 2025 14:51:24 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 676A56058B
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 676A56058B
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 12:52:27 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 617F886F1A; Sun, 18 May 2025 12:52:27 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: <yann.morin@orange.com>
-Cc: <buildroot@buildroot.org>,  Romain Naour <romain.naour@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,  Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>
-References: <cover.1723543467.git.yann.morin@orange.com>
- <e4024c6c1e1825bd52ab14faafbc7655d3074eb3.1723543467.git.yann.morin@orange.com>
-Date: Sun, 18 May 2025 14:51:24 +0200
-In-Reply-To: <e4024c6c1e1825bd52ab14faafbc7655d3074eb3.1723543467.git.yann.morin@orange.com>
- (yann morin's message of "Tue, 13 Aug 2024 12:04:30 +0200")
-Message-ID: <87wmaeqdyr.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefudekheeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufhfffgjkfgfgggtsehttddttddtredtnecuhfhrohhmpefrvghtvghrucfmohhrshhgrggrrhguuceophgvthgvrheskhhorhhsghgrrghrugdrtghomheqnecuggftrfgrthhtvghrnhepvdfhgeetkedttdffgeduleeiffduvedvteffgeeuteevieeigfefgfdtiedtudeunecuffhomhgrihhnpehoiihlrggsshdrohhrghenucfkphepvdgrtddvmeekgedvrgemgeehrggtmeelgedtudemjeeiugekmeefvghffhemfhgvsgefmeegsggsheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumeejiegukeemfegvfhhfmehfvggsfeemgegssgehpdhhvghlohepuggvlhhlrdgsvgdrgeekvghrshdrughkpdhmrghilhhfrhhomhepphgvthgvrheskhhorhhsghgrrghrugdrtghomhdpnhgspghrtghpthhtohephedprhgtphhtthhopeihrghnnhdrmhhorhhinhesohhrrghnghgvrdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehrohhmrghinhdrnhgrohhurhesghhmr
- ghilhdrtghomhdprhgtphhtthhopehgihhulhhiohdrsggvnhgvthhtihessggvnhgvthhtihgvnhhgihhnvggvrhhinhhgrdgtohhmpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhm
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 2/3] toolchain/wrapper: check we did not add
- more args than expected
+To: buildroot@buildroot.org
+Date: Sun, 18 May 2025 14:51:58 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 913bdcda44159e3b517b611dc7fbb2d105be343d
+X-Git-Newrev: 53e1772682d86ed681ce41b4027bd34163023871
+X-Patchwork-Hint: ignore
+Message-Id: <20250518125227.617F886F1A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] toolchain/wrapper: check unsafe paths
+ earlier
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,39 +59,96 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>>   <yann.morin@orange.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=53e1772682d86ed681ce41b4027bd34163023871
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > From: "Yann E. MORIN" <yann.morin@orange.com>
- > We have a hard-coded constant that defines how many expected args we may
- > conditionally add at most, but it is very easy to miss updating that
- > when adding new conditional args.
+We currently check for unsafe paths right between adding our arguments,
+and adding the one passed from the command line. This not very
+consistent.
 
- > Add a check that we did not overshoot the allowance.
+Unsafe paths can only come from the command line, as we are not adding
+any of our own (hopefully, we know better!), so we can run the check as
+early as possible.
 
- > Ideally, we would have a nice way to add to, and extend the *args array
- > dynamically, but this would be quite costly, while the wrapper is a hot
- > path to the compiler. So, this test is a better solution in the end: it
- > is simple and cheap.
+Move the check very early, but not before we handle --help.
 
-Costly? It would just be a realloc call, and the list of argument
-pointers is not very long, so I doubt it would be noticable compared to
-all the argument parsing and finally running the real compiler.
+Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+Cc: Romain Naour <romain.naour@gmail.com>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ toolchain/toolchain-wrapper.c | 44 +++++++++++++++++++++----------------------
+ 1 file changed, 22 insertions(+), 22 deletions(-)
 
-In fact, I think it would make more sense to get rid of our
-EXCLUSIVE_ARGS constant and just allocate room for E.G. 1024 arguments
-and then just realloc in the special cases where that is not enough.
-
-I've sent a small series doing that here:
-
-https://patchwork.ozlabs.org/project/buildroot/patch/20250518124949.4159568-2-peter@korsgaard.com/
-
--- 
-Bye, Peter Korsgaard
+diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
+index 8b1fb79dde..e644c1e7bb 100644
+--- a/toolchain/toolchain-wrapper.c
++++ b/toolchain/toolchain-wrapper.c
+@@ -319,6 +319,28 @@ int main(int argc, char **argv)
+ 		}
+ 	}
+ 
++	/* Check for unsafe library and header paths */
++	for (i = 1; i < argc; i++) {
++		const struct str_len_s *opt;
++		for (opt=unsafe_opts; opt->str; opt++ ) {
++			/* Skip any non-unsafe option. */
++			if (strncmp(argv[i], opt->str, opt->len))
++				continue;
++
++			/* Handle both cases:
++			 *  - path is a separate argument,
++			 *  - path is concatenated with option.
++			 */
++			if (argv[i][opt->len] == '\0') {
++				i++;
++				if (i == argc)
++					break;
++				check_unsafe_path(argv[i-1], argv[i], 0);
++			} else
++				check_unsafe_path(argv[i], argv[i] + opt->len, 1);
++		}
++	}
++
+ #ifdef BR_CCACHE
+ 	ret = snprintf(ccache_path, sizeof(ccache_path), "%s/bin/ccache", absbasedir);
+ 	if (ret >= sizeof(ccache_path)) {
+@@ -475,28 +497,6 @@ int main(int argc, char **argv)
+ #endif
+ 	}
+ 
+-	/* Check for unsafe library and header paths */
+-	for (i = 1; i < argc; i++) {
+-		const struct str_len_s *opt;
+-		for (opt=unsafe_opts; opt->str; opt++ ) {
+-			/* Skip any non-unsafe option. */
+-			if (strncmp(argv[i], opt->str, opt->len))
+-				continue;
+-
+-			/* Handle both cases:
+-			 *  - path is a separate argument,
+-			 *  - path is concatenated with option.
+-			 */
+-			if (argv[i][opt->len] == '\0') {
+-				i++;
+-				if (i == argc)
+-					break;
+-				check_unsafe_path(argv[i-1], argv[i], 0);
+-			} else
+-				check_unsafe_path(argv[i], argv[i] + opt->len, 1);
+-		}
+-	}
+-
+ 	/* append forward args */
+ 	memcpy(cur, &argv[1], sizeof(char *) * (argc - 1));
+ 	cur += argc - 1;
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
