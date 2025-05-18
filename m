@@ -4,50 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69E3CC3ABC9
-	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 06:46:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41C04C3ABD8
+	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 07:06:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 179F2408E8;
-	Sun, 18 May 2025 06:46:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ADDBB408E3;
+	Sun, 18 May 2025 07:06:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oONSQHV9qmiT; Sun, 18 May 2025 06:46:03 +0000 (UTC)
+ id pqJaGdUaWbOG; Sun, 18 May 2025 07:06:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BF56440884
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EFF3A4070F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BF56440884;
-	Sun, 18 May 2025 06:46:02 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 512561C9
- for <buildroot@buildroot.org>; Sun, 18 May 2025 06:46:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EFF3A4070F;
+	Sun, 18 May 2025 07:06:19 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 202991BA
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 07:06:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 36AF480C3D
- for <buildroot@buildroot.org>; Sun, 18 May 2025 06:46:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 061CD40A1E
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 07:06:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id K-E7E02Me4Wy for <buildroot@buildroot.org>;
- Sun, 18 May 2025 06:46:00 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ur6urAejKilW for <buildroot@buildroot.org>;
+ Sun, 18 May 2025 07:06:17 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
+ helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6AA1F80874
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6AA1F80874
- for <buildroot@buildroot.org>; Sun, 18 May 2025 06:46:00 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 55FE186810; Sun, 18 May 2025 06:46:00 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 18 May 2025 08:42:53 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 57eb26837b971e969a37e07b87e57bf4e9df9f34
-X-Git-Newrev: 0b0662f02a0e779f72a6f3ed5f024c6c065d9aa7
-X-Patchwork-Hint: ignore
-Message-Id: <20250518064600.55FE186810@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libarchive: fix mbedtls 3
- compatibility
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A7A2140A1A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A7A2140A1A
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A7A2140A1A
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 07:06:16 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7FF744326B;
+ Sun, 18 May 2025 07:06:13 +0000 (UTC)
+Date: Sun, 18 May 2025 09:06:12 +0200
+To: Yegor Yefremov <yegorslists@googlemail.com>
+Cc: yegorslists--- via buildroot <buildroot@buildroot.org>
+Message-ID: <20250518090612.1437b8e9@windsurf>
+In-Reply-To: <CAGm1_ktd3Qwma-0c3fkuUX5SXMpbDfVo3CbT1eSoPq0T_Nw-4Q@mail.gmail.com>
+References: <20250430055956.288191-1-yegorslists@googlemail.com>
+ <20250517170313.74860009@windsurf>
+ <CAGm1_ktd3Qwma-0c3fkuUX5SXMpbDfVo3CbT1eSoPq0T_Nw-4Q@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefudejkeejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepgfevkeduudekheetheeutdejgfelleevleejjedvteevtdelffdvhfevjeegtdejnecuffhomhgrihhnpehtvggthhhshhhiphdrtghomhdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddvmeekgedvrgemgeehrggtmeelgedtudemugefudgvmedvfeehmegthegvvdemvggukeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeekgedvrgemgeehrggtmeelgedtudemugefudgvmedvfeehmegthegvvdemvggukeefpdhhvghlohepfihinhgushhurhhfpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedvpdhrtghpthhtohephigvghhorhhslhhishhtshesghhoohhglhgvmhgrihhlrdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughro
+ hhothdrohhrgh
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1747551973;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=yEZURaFIG/ACEtubmDCMVrka0Y/YGO/FITH/5ux/yfo=;
+ b=TX7QRjwBEqQj26Jm98wu1aSUfSlJXxNzoDyTs3DthFU87SnsEw5ZqS2x5oeWDpih6/RIsD
+ hXXLluSy2j3abrRwmKNjX18BDLLRWV1HkpzkR5mO6YeYefPX0mo8IqsX8dYIIyD+d9/s/w
+ 5b9fCvDYjE8j/1flilnNeUEsH3S2x1Vv8eNp0NsiNz0rcQ9pBnzhCt7EpMk7ARpZUb6P+e
+ y0zjDaShBZ8hNiG1ryOJ5cJKi9qi0Fcs+hvSW4bjjPCNx7ktALrPCJWo1eC0asy/0I6V0s
+ mvesakZypWtYsHhfNkTD251crH6Vj2ACsIlmQhKHkVaKNLqRSS6r+aRPnw/zbQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=TX7QRjwB
+Subject: Re: [Buildroot] [PATCH v2] package/lpac: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,270 +87,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0b0662f02a0e779f72a6f3ed5f024c6c065d9aa7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Yegor,
 
-Backport a patch fixing mbedtls 3 compatibility.
+On Sat, 17 May 2025 23:00:29 +0200
+Yegor Yefremov <yegorslists@googlemail.com> wrote:
 
-This broke in buildroot when mbedtls was bumped to 3.6.3.1 in
-3481a9643fc7223e400ed877f08ade34d44e6b78.
+> You need this tool to manage eSIM profiles. See these blog posts [1],
+> [2] for details.
+> 
+> [1] https://techship.com/blog/how-to-use-an-esim-in-linux-7/
+> [2] https://techship.com/blog/esim-euicc-and-sgp-standards-enabling-iot-connectivity-2/
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...-Fix-mbedtls-version-3-compatibility-2602.patch | 238 +++++++++++++++++++++
- 1 file changed, 238 insertions(+)
+Thanks for the references, very useful!
 
-diff --git a/package/libarchive/0003-Fix-mbedtls-version-3-compatibility-2602.patch b/package/libarchive/0003-Fix-mbedtls-version-3-compatibility-2602.patch
-new file mode 100644
-index 0000000000..67fb3ff738
---- /dev/null
-+++ b/package/libarchive/0003-Fix-mbedtls-version-3-compatibility-2602.patch
-@@ -0,0 +1,238 @@
-+From 26ba5ee5d560d62ad05aa6819608fd21cbb962f9 Mon Sep 17 00:00:00 2001
-+From: James Hilliard <james.hilliard1@gmail.com>
-+Date: Thu, 15 May 2025 04:56:59 -0600
-+Subject: [PATCH] Fix mbedtls version 3 compatibility (#2602)
-+
-+We need to use the new API for mbedtls 3 compatibility
-+
-+Fixes #2025
-+
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+Upstream: https://github.com/libarchive/libarchive/commit/63d7c24eeaa108ecc2ef258c0505eefdadaaaf35
-+---
-+ libarchive/archive_digest.c | 72 +++++++++++++++++++++++++++++++++++++
-+ 1 file changed, 72 insertions(+)
-+
-+diff --git a/libarchive/archive_digest.c b/libarchive/archive_digest.c
-+index 33518740..03f0edd6 100644
-+--- a/libarchive/archive_digest.c
-++++ b/libarchive/archive_digest.c
-+@@ -235,7 +235,11 @@ static int
-+ __archive_md5init(archive_md5_ctx *ctx)
-+ {
-+   mbedtls_md5_init(ctx);
-++#if MBEDTLS_VERSION_NUMBER > 0x03000000
-++  if (mbedtls_md5_starts(ctx) == 0)
-++#else
-+   if (mbedtls_md5_starts_ret(ctx) == 0)
-++#endif
-+     return (ARCHIVE_OK);
-+   else
-+     return (ARCHIVE_FATAL);
-+@@ -245,7 +249,11 @@ static int
-+ __archive_md5update(archive_md5_ctx *ctx, const void *indata,
-+     size_t insize)
-+ {
-++#if MBEDTLS_VERSION_NUMBER > 0x03000000
-++  if (mbedtls_md5_update(ctx, indata, insize) == 0)
-++#else
-+   if (mbedtls_md5_update_ret(ctx, indata, insize) == 0)
-++#endif
-+     return (ARCHIVE_OK);
-+   else
-+     return (ARCHIVE_FATAL);
-+@@ -254,7 +262,11 @@ __archive_md5update(archive_md5_ctx *ctx, const void *indata,
-+ static int
-+ __archive_md5final(archive_md5_ctx *ctx, void *md)
-+ {
-++#if MBEDTLS_VERSION_NUMBER > 0x03000000
-++  if (mbedtls_md5_finish(ctx, md) == 0) {
-++#else
-+   if (mbedtls_md5_finish_ret(ctx, md) == 0) {
-++#endif
-+     mbedtls_md5_free(ctx);
-+     return (ARCHIVE_OK);
-+   } else {
-+@@ -431,7 +443,11 @@ static int
-+ __archive_ripemd160init(archive_rmd160_ctx *ctx)
-+ {
-+   mbedtls_ripemd160_init(ctx);
-++#if MBEDTLS_VERSION_NUMBER > 0x03000000
-++  if (mbedtls_ripemd160_starts(ctx) == 0)
-++#else
-+   if (mbedtls_ripemd160_starts_ret(ctx) == 0)
-++#endif
-+     return (ARCHIVE_OK);
-+   else
-+     return (ARCHIVE_FATAL);
-+@@ -441,7 +457,11 @@ static int
-+ __archive_ripemd160update(archive_rmd160_ctx *ctx, const void *indata,
-+     size_t insize)
-+ {
-++#if MBEDTLS_VERSION_NUMBER > 0x03000000
-++  if (mbedtls_ripemd160_update(ctx, indata, insize) == 0)
-++#else
-+   if (mbedtls_ripemd160_update_ret(ctx, indata, insize) == 0)
-++#endif
-+     return (ARCHIVE_OK);
-+   else
-+     return (ARCHIVE_FATAL);
-+@@ -450,7 +470,11 @@ __archive_ripemd160update(archive_rmd160_ctx *ctx, const void *indata,
-+ static int
-+ __archive_ripemd160final(archive_rmd160_ctx *ctx, void *md)
-+ {
-++#if MBEDTLS_VERSION_NUMBER > 0x03000000
-++  if (mbedtls_ripemd160_finish(ctx, md) == 0) {
-++#else
-+   if (mbedtls_ripemd160_finish_ret(ctx, md) == 0) {
-++#endif
-+     mbedtls_ripemd160_free(ctx);
-+     return (ARCHIVE_OK);
-+   } else {
-+@@ -622,7 +646,11 @@ static int
-+ __archive_sha1init(archive_sha1_ctx *ctx)
-+ {
-+   mbedtls_sha1_init(ctx);
-++#if MBEDTLS_VERSION_NUMBER > 0x03000000
-++  if (mbedtls_sha1_starts(ctx) == 0)
-++#else
-+   if (mbedtls_sha1_starts_ret(ctx) == 0)
-++#endif
-+     return (ARCHIVE_OK);
-+   else
-+     return (ARCHIVE_FATAL);
-+@@ -632,7 +660,11 @@ static int
-+ __archive_sha1update(archive_sha1_ctx *ctx, const void *indata,
-+     size_t insize)
-+ {
-++#if MBEDTLS_VERSION_NUMBER > 0x03000000
-++  if (mbedtls_sha1_update(ctx, indata, insize) == 0)
-++#else
-+   if (mbedtls_sha1_update_ret(ctx, indata, insize) == 0)
-++#endif
-+     return (ARCHIVE_OK);
-+   else
-+     return (ARCHIVE_FATAL);
-+@@ -641,7 +673,11 @@ __archive_sha1update(archive_sha1_ctx *ctx, const void *indata,
-+ static int
-+ __archive_sha1final(archive_sha1_ctx *ctx, void *md)
-+ {
-++#if MBEDTLS_VERSION_NUMBER > 0x03000000
-++  if (mbedtls_sha1_finish(ctx, md) == 0) {
-++#else
-+   if (mbedtls_sha1_finish_ret(ctx, md) == 0) {
-++#endif
-+     mbedtls_sha1_free(ctx);
-+     return (ARCHIVE_OK);
-+   } else {
-+@@ -890,7 +926,11 @@ static int
-+ __archive_sha256init(archive_sha256_ctx *ctx)
-+ {
-+   mbedtls_sha256_init(ctx);
-++#if MBEDTLS_VERSION_NUMBER > 0x03000000
-++  if (mbedtls_sha256_starts(ctx, 0) == 0)
-++#else
-+   if (mbedtls_sha256_starts_ret(ctx, 0) == 0)
-++#endif
-+     return (ARCHIVE_OK);
-+   else
-+     return (ARCHIVE_FATAL);
-+@@ -900,7 +940,11 @@ static int
-+ __archive_sha256update(archive_sha256_ctx *ctx, const void *indata,
-+     size_t insize)
-+ {
-++#if MBEDTLS_VERSION_NUMBER > 0x03000000
-++  if (mbedtls_sha256_update(ctx, indata, insize) == 0)
-++#else
-+   if (mbedtls_sha256_update_ret(ctx, indata, insize) == 0)
-++#endif
-+     return (ARCHIVE_OK);
-+   else
-+     return (ARCHIVE_FATAL);
-+@@ -909,7 +953,11 @@ __archive_sha256update(archive_sha256_ctx *ctx, const void *indata,
-+ static int
-+ __archive_sha256final(archive_sha256_ctx *ctx, void *md)
-+ {
-++#if MBEDTLS_VERSION_NUMBER > 0x03000000
-++  if (mbedtls_sha256_finish(ctx, md) == 0) {
-++#else
-+   if (mbedtls_sha256_finish_ret(ctx, md) == 0) {
-++#endif
-+     mbedtls_sha256_free(ctx);
-+     return (ARCHIVE_OK);
-+   } else {
-+@@ -1130,7 +1178,11 @@ static int
-+ __archive_sha384init(archive_sha384_ctx *ctx)
-+ {
-+   mbedtls_sha512_init(ctx);
-++#if MBEDTLS_VERSION_NUMBER > 0x03000000
-++  if (mbedtls_sha512_starts(ctx, 1) == 0)
-++#else
-+   if (mbedtls_sha512_starts_ret(ctx, 1) == 0)
-++#endif
-+     return (ARCHIVE_OK);
-+   else
-+     return (ARCHIVE_FATAL);
-+@@ -1140,7 +1192,11 @@ static int
-+ __archive_sha384update(archive_sha384_ctx *ctx, const void *indata,
-+     size_t insize)
-+ {
-++#if MBEDTLS_VERSION_NUMBER > 0x03000000
-++  if (mbedtls_sha512_update(ctx, indata, insize) == 0)
-++#else
-+   if (mbedtls_sha512_update_ret(ctx, indata, insize) == 0)
-++#endif
-+     return (ARCHIVE_OK);
-+   else
-+     return (ARCHIVE_FATAL);
-+@@ -1149,7 +1205,11 @@ __archive_sha384update(archive_sha384_ctx *ctx, const void *indata,
-+ static int
-+ __archive_sha384final(archive_sha384_ctx *ctx, void *md)
-+ {
-++#if MBEDTLS_VERSION_NUMBER > 0x03000000
-++  if (mbedtls_sha512_finish(ctx, md) == 0) {
-++#else
-+   if (mbedtls_sha512_finish_ret(ctx, md) == 0) {
-++#endif
-+     mbedtls_sha512_free(ctx);
-+     return (ARCHIVE_OK);
-+   } else {
-+@@ -1394,7 +1454,11 @@ static int
-+ __archive_sha512init(archive_sha512_ctx *ctx)
-+ {
-+   mbedtls_sha512_init(ctx);
-++#if MBEDTLS_VERSION_NUMBER > 0x03000000
-++  if (mbedtls_sha512_starts(ctx, 0) == 0)
-++#else
-+   if (mbedtls_sha512_starts_ret(ctx, 0) == 0)
-++#endif
-+     return (ARCHIVE_OK);
-+   else
-+     return (ARCHIVE_FATAL);
-+@@ -1404,7 +1468,11 @@ static int
-+ __archive_sha512update(archive_sha512_ctx *ctx, const void *indata,
-+     size_t insize)
-+ {
-++#if MBEDTLS_VERSION_NUMBER > 0x03000000
-++  if (mbedtls_sha512_update(ctx, indata, insize) == 0)
-++#else
-+   if (mbedtls_sha512_update_ret(ctx, indata, insize) == 0)
-++#endif
-+     return (ARCHIVE_OK);
-+   else
-+     return (ARCHIVE_FATAL);
-+@@ -1413,7 +1481,11 @@ __archive_sha512update(archive_sha512_ctx *ctx, const void *indata,
-+ static int
-+ __archive_sha512final(archive_sha512_ctx *ctx, void *md)
-+ {
-++#if MBEDTLS_VERSION_NUMBER > 0x03000000
-++  if (mbedtls_sha512_finish(ctx, md) == 0) {
-++#else
-+   if (mbedtls_sha512_finish_ret(ctx, md) == 0) {
-++#endif
-+     mbedtls_sha512_free(ctx);
-+     return (ARCHIVE_OK);
-+   } else {
-+-- 
-+2.34.1
-+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
