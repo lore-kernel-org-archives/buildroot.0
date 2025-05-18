@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30E32C2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:06:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EAA54C3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:06:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4CF1F613C4;
-	Mon, 19 May 2025 11:06:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6ED2584ACD;
+	Mon, 19 May 2025 11:06:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FUXtxCfolGNj; Mon, 19 May 2025 11:06:23 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AIOjhy7kB5Zj; Mon, 19 May 2025 11:06:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 13526712CA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9B24584167
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 13526712CA;
-	Mon, 19 May 2025 11:06:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9B24584167;
+	Mon, 19 May 2025 11:06:25 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 16502D4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:49:51 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 3E823D4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:49:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B1627423B2
+ by smtp4.osuosl.org (Postfix) with ESMTP id C4BBA4120A
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EWZfBZiT5XDt for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:51 +0000 (UTC)
+ id 66LCgtEsVg3H for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 421CD423FA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E67E40DB2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 421CD423FA
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3E67E40DB2
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 40C6C83BC0; Mon, 19 May 2025 10:40:11 +0000 (UTC)
+ id 379F282A2E; Mon, 19 May 2025 10:40:11 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Sun, 18 May 2025 23:06:43 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 0e16ff09e9538d46c9726f8998080d55dfa5d41f
-X-Git-Newrev: b5cd550cfda9f1d2171525bf9df438ef4a1b2059
+X-Git-Oldrev: 06bb701217c9928995c72b001ad4e48441c46144
+X-Git-Newrev: 0e16ff09e9538d46c9726f8998080d55dfa5d41f
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104011.40C6C83BC0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/gzip: bump to version
- 1.14
+Message-Id: <20250519104011.379F282A2E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/avrdude: bump to
+ version 8.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,46 +66,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b5cd550cfda9f1d2171525bf9df438ef4a1b2059
+commit: https://git.buildroot.net/buildroot/commit/?id=0e16ff09e9538d46c9726f8998080d55dfa5d41f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Release notes:
-https://git.savannah.gnu.org/cgit/gzip.git/tree/NEWS?id=fbc4883eb9c304a04623ac506dd5cf5450d055f1
-https://lists.gnu.org/r/bug-gzip/2025-04/msg00022.html
+https://github.com/avrdudes/avrdude/blob/v8.0/NEWS
+https://github.com/avrdudes/avrdude/blob/v7.3/NEWS
+
+Updated COPYING file hash due to the following upstream commit:
+https://github.com/avrdudes/avrdude/commit/ececf3258e77eb147b0af75275de5ba7d071d7a4
 
 Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gzip/gzip.hash | 4 ++--
- package/gzip/gzip.mk   | 2 +-
+ package/avrdude/avrdude.hash | 4 ++--
+ package/avrdude/avrdude.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gzip/gzip.hash b/package/gzip/gzip.hash
-index 4d9d0c721b..90c9be4e6e 100644
---- a/package/gzip/gzip.hash
-+++ b/package/gzip/gzip.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://ftp.gnu.org/gnu/gzip/gzip-1.13.tar.xz.sig
-+# https://ftp.gnu.org/gnu/gzip/gzip-1.14.tar.xz.sig
- # using key 155D3FC500C834486D1EEA677FD9FCCB000BEEEE
--sha256  7454eb6935db17c6655576c2e1b0fabefd38b4d0936e0f87f48cd062ce91a057  gzip-1.13.tar.xz
-+sha256  01a7b881bd220bfdf615f97b8718f80bdfd3f6add385b993dcf6efd14e8c0ac6  gzip-1.14.tar.xz
- # Locally calculated
- sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
-diff --git a/package/gzip/gzip.mk b/package/gzip/gzip.mk
-index 330321352c..e79de4c99e 100644
---- a/package/gzip/gzip.mk
-+++ b/package/gzip/gzip.mk
+diff --git a/package/avrdude/avrdude.hash b/package/avrdude/avrdude.hash
+index cb34e6b6f9..2a11968eb5 100644
+--- a/package/avrdude/avrdude.hash
++++ b/package/avrdude/avrdude.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  beb4e0b0a07f8d47e550329ab93c345d5252350de6f833afde51b4d8bd934674  avrdude-7.2.tar.gz
+-sha256  201babc7da198873304a77a30dbfc7ca449c9bba52df2dffa4cca0009dbdfcb2  COPYING
++sha256  a689d70a826e2aa91538342c46c77be1987ba5feb9f7dab2606b8dae5d2a52d5  avrdude-8.0.tar.gz
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/avrdude/avrdude.mk b/package/avrdude/avrdude.mk
+index 89637d4ca6..619987119b 100644
+--- a/package/avrdude/avrdude.mk
++++ b/package/avrdude/avrdude.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GZIP_VERSION = 1.13
-+GZIP_VERSION = 1.14
- GZIP_SOURCE = gzip-$(GZIP_VERSION).tar.xz
- GZIP_SITE = $(BR2_GNU_MIRROR)/gzip
- # Some other tools expect it to be in /bin
+-AVRDUDE_VERSION = 7.2
++AVRDUDE_VERSION = 8.0
+ AVRDUDE_SITE = $(call github,avrdudes,avrdude,v$(AVRDUDE_VERSION))
+ AVRDUDE_LICENSE = GPL-2.0+
+ AVRDUDE_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
