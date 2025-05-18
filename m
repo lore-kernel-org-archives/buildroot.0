@@ -1,52 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 211FDC3ABC9
-	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 14:41:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23878C3ABD8
+	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 14:41:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D74AF81EB6;
-	Sun, 18 May 2025 14:41:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CD8CD60619;
+	Sun, 18 May 2025 14:41:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wK4h7WdLDGqN; Sun, 18 May 2025 14:41:16 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8B2jHTDjJs4Y; Sun, 18 May 2025 14:41:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A749C81EC7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 002A460A5B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A749C81EC7;
-	Sun, 18 May 2025 14:41:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 002A460A5B;
+	Sun, 18 May 2025 14:41:20 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 149631BA
- for <buildroot@buildroot.org>; Sun, 18 May 2025 14:41:16 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 686EFDF
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 14:41:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EE1DF408E3
- for <buildroot@buildroot.org>; Sun, 18 May 2025 14:41:15 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4D991408E3
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 14:41:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id w5pdqQd0pM-0 for <buildroot@buildroot.org>;
- Sun, 18 May 2025 14:41:15 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 23AF8408E0
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 23AF8408E0
- for <buildroot@buildroot.org>; Sun, 18 May 2025 14:41:15 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1E64C86F8D; Sun, 18 May 2025 14:41:15 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 18 May 2025 16:26:36 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3a43be7df48148774e1a3f6623d2b4d7eb282197
-X-Git-Newrev: 0575a3ab10932a030c0726a8d8bedc2d06b6499c
-X-Patchwork-Hint: ignore
-Message-Id: <20250518144115.1E64C86F8D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/iperf3: bump to version 3.19
+ id 8JnjlIz9ZPn4 for <buildroot@buildroot.org>;
+ Sun, 18 May 2025 14:41:17 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
+ helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 692AA408E0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 692AA408E0
+Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 692AA408E0
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 14:41:17 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 6081F1C0FC0; Sun, 18 May 2025 16:41:15 +0200 (CEST)
+Message-ID: <abf4bfef-d537-46e7-8d4d-68e934b7e8a7@rnout.be>
+Date: Sun, 18 May 2025 16:41:14 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: Bernd Kuhls <bernd@kuhls.net>
+References: <20250516114626.110630-1-thomas.petazzoni@bootlin.com>
+Content-Language: en-GB, fr-BE
+In-Reply-To: <20250516114626.110630-1-thomas.petazzoni@bootlin.com>
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=rnout.be; s=dkim; 
+ t=1747579275; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:in-reply-to:references;
+ bh=SefKHLVIePdZqit3tO/5OHf2bB90HiivhC+wl9CPzYs=;
+ b=jHy7XcFGmEi7IGHM3l6guwc7R0ow9D/q80BsYIi1EsjgRCpthoUHWyk5D2XBifA0NPMlIe
+ 44rcI6EM1xObomvcN4vHR60OpmImq8SojPkrOwwFb3KSZK2C5V0Srs4snEyvJGbLSTtEmJ
+ X4PwHOFRYpo8tpbbOepKoXLLXtzEpuNlELPti1Z68ES/6t/4OVyGXeUdgH9bJG0ENDzDBU
+ pq0eO+MR/ZcfdCdcfykZ91sOrIIUGaNThvaEVWIM5aTOu+wDRFL6qMcZrCcQ0t54yAJx5G
+ 8NXh3dZGX2tFU2wmbjzz2Lk9nB2tTBGHrzcixOJ6WcaPBFBHNknCe3CZaDTimQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=rnout.be
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
+ header.a=rsa-sha256 header.s=dkim header.b=jHy7XcFG
+Subject: Re: [Buildroot] [PATCH] package/libcap: backport upstream patch to
+ fix build on Xtensa
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,125 +77,115 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2615335828261716614=="
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2615335828261716614==
-Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0575a3ab10932a030c0726a8d8bedc2d06b6499c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://github.com/esnet/iperf/releases/tag/3.19
+On 16/05/2025 13:46, Thomas Petazzoni via buildroot wrote:
+> Following the bump of libcap to version 2.76 in commit
+> e2eb2ee58b9f70ebb83231537cca19bd28fa48de, the build started failing on
+> Xtensa. The bug was reported upstream at
+> https://bugzilla.kernel.org/show_bug.cgi?id=219915 and was
+> subsequently fixed by upstream commit:
+> 
+>    https://git.kernel.org/pub/scm/libs/libcap/libcap.git/commit/?id=6cdd8cd72ebcedd6b1b6c989a7e5722d5d87f35c
+> 
+> Which we backport in this commit.
+> 
+> Fixes:
+> 
+>    https://autobuild.buildroot.org/results/b9ff9258f407898eeee80dd8cc4dd1d777f44c06
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Updated license hash due to copyright year bump:
-https://github.com/esnet/iperf/commit/9f6dc2164dea62221298818c54992c3f24a7e214
+  Applied to 2025.02.x, thanks.
 
-Added a patch to fix the build error with uClibc.
+  Regards,
+  Arnout
 
-Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...lation-issue-with-uClibc-due-to-a-missing.patch | 51 ++++++++++++++++++++++
- package/iperf3/iperf3.hash                         |  6 +--
- package/iperf3/iperf3.mk                           |  2 +-
- 3 files changed, 55 insertions(+), 4 deletions(-)
-
-diff --git a/package/iperf3/0001-Fix-a-compilation-issue-with-uClibc-due-to-a-missing.patch b/package/iperf3/0001-Fix-a-compilation-issue-with-uClibc-due-to-a-missing.patch
-new file mode 100644
-index 0000000000..cc2f4bd595
---- /dev/null
-+++ b/package/iperf3/0001-Fix-a-compilation-issue-with-uClibc-due-to-a-missing.patch
-@@ -0,0 +1,51 @@
-+From e5c4263c6b2c5b84a6edeb1cf3c95bddd73d4d7c Mon Sep 17 00:00:00 2001
-+From: Kadambini Nema <kadambini.nema@gmail.com>
-+Date: Sat, 17 May 2025 16:20:07 -0700
-+Subject: [PATCH] Fix a compilation issue with uClibc due to a missing include
-+ file.
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+------
-+In file included from t_auth.c:35:
-+iperf_api.h:395:77: error: unknown type name ‘va_list’
-+  395 | void iperf_exit(struct iperf_test *test, int exit_code, const char *format, va_list argp) __attribute__ ((noreturn));
-+	  |                                                                             ^~~~~~~
-+iperf_api.h:33:1: note: ‘va_list’ is defined in header ‘<stdarg.h>’; did you forget to ‘#include <stdarg.h>’?
-+   32 | #include <setjmp.h>
-+  +++ |+#include <stdarg.h>
-+   33 | #include <stdio.h>
-+-----
-+
-+Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
-+Upstream: https://github.com/esnet/iperf/pull/1888
-+---
-+ src/iperf_api.c | 1 -
-+ src/iperf_api.h | 1 +
-+ 2 files changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/iperf_api.c b/src/iperf_api.c
-+index aeec91dd3..d4a06bec9 100644
-+--- a/src/iperf_api.c
-++++ b/src/iperf_api.c
-+@@ -53,7 +53,6 @@
-+ #include <sys/stat.h>
-+ #include <sched.h>
-+ #include <setjmp.h>
-+-#include <stdarg.h>
-+ #include <math.h>
-+ 
-+ #if defined(HAVE_CPUSET_SETAFFINITY)
-+diff --git a/src/iperf_api.h b/src/iperf_api.h
-+index 03d273e8c..cd82e6f9b 100644
-+--- a/src/iperf_api.h
-++++ b/src/iperf_api.h
-+@@ -30,6 +30,7 @@
-+ #include <sys/socket.h>
-+ #include <sys/time.h>
-+ #include <setjmp.h>
-++#include <stdarg.h>
-+ #include <stdio.h>
-+ #include <stdint.h>
-+ #ifdef __cplusplus
-diff --git a/package/iperf3/iperf3.hash b/package/iperf3/iperf3.hash
-index 2aef76578a..1ffb2c6c02 100644
---- a/package/iperf3/iperf3.hash
-+++ b/package/iperf3/iperf3.hash
-@@ -1,4 +1,4 @@
--# From https://downloads.es.net/pub/iperf/iperf-3.18.tar.gz.sha256
--sha256  c0618175514331e766522500e20c94bfb293b4424eb27d7207fb427b88d20bab  iperf-3.18.tar.gz
-+# From https://downloads.es.net/pub/iperf/iperf-3.19.tar.gz.sha256
-+sha256  040161da1555ec7411a9d81191049830ef37717d429a94ee6cf0842618e0e29c  iperf-3.19.tar.gz
- # Locally computed
--sha256  3dc3e2076dd9cdea2b66d8fe213997ff25fb6171594f055b59fe25321b438f6f  LICENSE
-+sha256  7c9ba0385fcf35c4c9e08ad0c0cba72d4315f36f0f742fef4de826a28cc33a97  LICENSE
-diff --git a/package/iperf3/iperf3.mk b/package/iperf3/iperf3.mk
-index 744ee070a4..69c4792f98 100644
---- a/package/iperf3/iperf3.mk
-+++ b/package/iperf3/iperf3.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IPERF3_VERSION = 3.18
-+IPERF3_VERSION = 3.19
- IPERF3_SITE = https://downloads.es.net/pub/iperf
- IPERF3_SOURCE = iperf-$(IPERF3_VERSION).tar.gz
- IPERF3_LICENSE = BSD-3-Clause, BSD-2-Clause, MIT
-
---===============2615335828261716614==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+> ---
+>   ...-Support-for-__xtensa__-architecture.patch | 65 +++++++++++++++++++
+>   1 file changed, 65 insertions(+)
+>   create mode 100644 package/libcap/0002-Support-for-__xtensa__-architecture.patch
+> 
+> diff --git a/package/libcap/0002-Support-for-__xtensa__-architecture.patch b/package/libcap/0002-Support-for-__xtensa__-architecture.patch
+> new file mode 100644
+> index 0000000000..a81a1952aa
+> --- /dev/null
+> +++ b/package/libcap/0002-Support-for-__xtensa__-architecture.patch
+> @@ -0,0 +1,65 @@
+> +From 9421f4ff93c341482d3aa4a0cd57aba1978bdd62 Mon Sep 17 00:00:00 2001
+> +From: "Andrew G. Morgan" <morgan@kernel.org>
+> +Date: Sat, 19 Apr 2025 08:00:23 -0700
+> +Subject: [PATCH] Support for __xtensa__ architecture.
+> +
+> +It looks like __xtensa__ defines SA_RESTORER, but my read of the
+> +kernel code suggests that signal handling does not require it be
+> +set. Specifically, if the SA_RESTORER flag is not set, the kernel
+> +inserts a sys_rt_sigreturn call into the stack frame.
+> +
+> +Signed-off-by: Andrew G. Morgan <morgan@kernel.org>
+> +Upstream: 6cdd8cd72ebcedd6b1b6c989a7e5722d5d87f35c
+> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> +---
+> + psx/psx_calls.c | 13 +++++++------
+> + 1 file changed, 7 insertions(+), 6 deletions(-)
+> +
+> +diff --git a/psx/psx_calls.c b/psx/psx_calls.c
+> +index 8195964..aff105f 100644
+> +--- a/psx/psx_calls.c
+> ++++ b/psx/psx_calls.c
+> +@@ -49,7 +49,8 @@
+> +     || defined(__powerpc__) || defined(__s390__) || defined(__riscv) \
+> +     || defined(__alpha__) || defined(__hppa__) || defined(__sh__) \
+> +     || defined(__m68k__) || defined(__sparc__) || defined(__arc__) \
+> +-    || defined(__microblaze__) || defined(__or1k__)
+> ++    || defined(__microblaze__) || defined(__or1k__) \
+> ++    || defined(__xtensa__)
+> +
+> + #undef _NSIG
+> + #undef _NSIG_BPW
+> +@@ -69,8 +70,7 @@
+> + #define _NSIG_WORDS  (_NSIG / _NSIG_BPW)
+> +
+> + #if defined(__x86_64__) || defined(__i386__) \
+> +-    || defined(__arm__) \
+> +-    || defined(__powerpc__) \
+> ++    || defined(__arm__) || defined(__powerpc__) \
+> +     || defined(__arc__)
+> + /* field used */
+> + #define SA_RESTORER  0x04000000
+> +@@ -78,8 +78,9 @@
+> +
+> + #if defined(SA_RESTORER) \
+> +     || defined(__aarch64__) \
+> +-    || defined(__m68k__) || defined(__sh__) || defined(__sparc__) \
+> +-    || defined(__s390__) || defined(__sparc__)
+> ++    || defined(__m68k__) || defined(__sh__) \
+> ++    || defined(__s390__) || defined(__sparc__) \
+> ++    || defined(__xtensa__)
+> + /* field defined */
+> + #define _HAS_SA_RESTORER   void *sa_restorer;
+> + #else
+> +@@ -93,7 +94,7 @@ typedef struct {
+> + #define sigset_t psx_sigset_t
+> +
+> + struct psx_sigaction {
+> +-#if defined(__m68k__) || defined(__alpha__)
+> ++#if defined(__m68k__) || defined(__alpha__) || defined(__xtensa__)
+> +     void *sa_handler;
+> +     sigset_t sa_mask;
+> +     unsigned long sa_flags;
+> +--
+> +2.49.0
+> +
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2615335828261716614==--
