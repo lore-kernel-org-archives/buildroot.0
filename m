@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2143C2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:06:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43871C2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:06:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 74146712A3;
-	Mon, 19 May 2025 11:06:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3AEA2712B2;
+	Mon, 19 May 2025 11:06:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RqYp_tYeIESI; Mon, 19 May 2025 11:06:14 +0000 (UTC)
+ id q1nF1WsZIGDF; Mon, 19 May 2025 11:06:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7AA3E712B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A7AB712B1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7AA3E712B1;
-	Mon, 19 May 2025 11:06:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3A7AB712B1;
+	Mon, 19 May 2025 11:06:17 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 6DF1FE4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:49:47 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 4A4E1D4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:49:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0198E423A9
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:51 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5558D423BE
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qx2YxhKGDz7H for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:49 +0000 (UTC)
+ id 59v80k4_j3cF for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5C6341235
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 264C0423EF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A5C6341235
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:10 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 264C0423EF
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9EDA4872E7; Mon, 19 May 2025 10:40:10 +0000 (UTC)
+ id 247A1872E7; Mon, 19 May 2025 10:40:11 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 18 May 2025 17:07:04 +0200
+Date: Sun, 18 May 2025 22:42:54 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e7c091f11398bdb6498adaa344d0934d97b4ef39
-X-Git-Newrev: 187f7b14692f4b7087aba675e9aef09fbbc05144
+X-Git-Oldrev: faf2b8a6277c1a10ca08e5ad8ecb488d70a03de4
+X-Git-Newrev: c09ee07b2c3b3167774c1d20c4685a7366b140cf
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104010.9EDA4872E7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/casync-nano: new
- package
+Message-Id: <20250519104011.247A1872E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/hwclock-initscript:
+ new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,155 +58,126 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=187f7b14692f4b7087aba675e9aef09fbbc05144
+commit: https://git.buildroot.net/buildroot/commit/?id=c09ee07b2c3b3167774c1d20c4685a7366b140cf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-casync-nano is an implementation of a subset of the features of casync,
-optimized for performing OTA updates on embedded systems.
+Add a new initscript to save the date and time to the hardware clock
+on shutdown.
 
-Signed-off-by: Florian Larysch <fl@n621.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Michael Walle <michael@walle.cc>
+[Arnout:
+ - package as hwclock-initscript instead of buildroot-initscripts;
+ - mention in help text that it isn't needed at boot;
+ - rewrite initscript according to our usual pattern;
+ - fix shellcheck errors.
+]
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- DEVELOPERS                           |  3 +++
- package/Config.in                    |  1 +
- package/Config.in.host               |  1 +
- package/casync-nano/Config.in        | 21 +++++++++++++++++++++
- package/casync-nano/Config.in.host   |  7 +++++++
- package/casync-nano/casync-nano.hash |  3 +++
- package/casync-nano/casync-nano.mk   | 30 ++++++++++++++++++++++++++++++
- 7 files changed, 66 insertions(+)
+ package/Config.in                                |  1 +
+ package/hwclock-initscript/Config.in             | 10 ++++++
+ package/hwclock-initscript/S20hwclock            | 39 ++++++++++++++++++++++++
+ package/hwclock-initscript/hwclock-initscript.mk | 12 ++++++++
+ 4 files changed, 62 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 7bc7385586..78bb555530 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1133,6 +1133,9 @@ F:	package/rsyslog/
- N:	Florian Fainelli <f.fainelli@gmail.com>
- F:	package/cpulimit/
- 
-+N:	Florian Larysch <fl@n621.de>
-+F:	package/casync-nano/
-+
- N:	Floris Bos <bos@je-eigen-domein.nl>
- F:	package/ipmitool/
- F:	package/odhcploc/
 diff --git a/package/Config.in b/package/Config.in
-index d09cfe066a..ffaed13c74 100644
+index ffaed13c74..579b5ffc87 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2467,6 +2467,7 @@ endif
- 	source "package/can-utils/Config.in"
- 	source "package/cannelloni/Config.in"
- 	source "package/casync/Config.in"
-+	source "package/casync-nano/Config.in"
- 	source "package/cfm/Config.in"
- 	source "package/chrony/Config.in"
- 	source "package/civetweb/Config.in"
-diff --git a/package/Config.in.host b/package/Config.in.host
-index bf04f5fa97..b0f7529a13 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -13,6 +13,7 @@ menu "Host utilities"
- 	source "package/bmap-writer/Config.in.host"
- 	source "package/bootgen/Config.in.host"
- 	source "package/btrfs-progs/Config.in.host"
-+	source "package/casync-nano/Config.in.host"
- 	source "package/cbootimage/Config.in.host"
- 	source "package/checkpolicy/Config.in.host"
- 	source "package/checksec/Config.in.host"
-diff --git a/package/casync-nano/Config.in b/package/casync-nano/Config.in
+@@ -2866,6 +2866,7 @@ menu "System tools"
+ 	source "package/getent/Config.in"
+ 	source "package/gkrellm/Config.in"
+ 	source "package/htop/Config.in"
++	source "package/hwclock-initscript/Config.in"
+ 	source "package/ibm-sw-tpm2/Config.in"
+ 	source "package/initscripts/Config.in"
+ 	source "package/iotop/Config.in"
+diff --git a/package/hwclock-initscript/Config.in b/package/hwclock-initscript/Config.in
 new file mode 100644
-index 0000000000..8ba80e4ce6
+index 0000000000..a660a26eaa
 --- /dev/null
-+++ b/package/casync-nano/Config.in
-@@ -0,0 +1,21 @@
-+config BR2_PACKAGE_CASYNC_NANO
-+	bool "casync-nano"
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_ZSTD
-+	select BR2_PACKAGE_LIBCURL
++++ b/package/hwclock-initscript/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_HWCLOCK_INITSCRIPT
++	bool "hwclock-initscript"
++	depends on !BR2_PACKAGE_SYSTEMD
++	depends on BR2_PACKAGE_BUSYBOX || BR2_PACKAGE_UTIL_LINUX_HWCLOCK
 +	help
-+	  Tiny casync-like tool optimized for embedded systems.
++	  Initscript to save the date and time to the hardware clock on
++	  shutdown.
 +
-+	  https://github.com/florolf/casync-nano
-+
-+if BR2_PACKAGE_CASYNC_NANO
-+
-+config BR2_PACKAGE_CASYNC_NANO_CASYNC_SHIM
-+	bool "install casync shim"
-+	# only one package should provide the "casync" command
-+	depends on !BR2_PACKAGE_CASYNC
-+	help
-+	  Install a shim that provides basic compatibility with the
-+	  "extract" sub-command of casync to programs that expect it.
-+
-+endif
-diff --git a/package/casync-nano/Config.in.host b/package/casync-nano/Config.in.host
++	  Note that the kernel already loads the time from the hwclock
++	  at boot time, no init script is needed for that.
+diff --git a/package/hwclock-initscript/S20hwclock b/package/hwclock-initscript/S20hwclock
 new file mode 100644
-index 0000000000..2fc3340017
+index 0000000000..c9f55cff1c
 --- /dev/null
-+++ b/package/casync-nano/Config.in.host
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_HOST_CASYNC_NANO
-+	bool "host casync-nano tool"
-+	help
-+	  casync-nano host tool (csn-tool) for casync-nano specific
-+	  features like chunk encryption.
++++ b/package/hwclock-initscript/S20hwclock
+@@ -0,0 +1,39 @@
++#! /bin/sh
++#
++# hwclock      This writes the system time to the RTC on shutdown
++#
 +
-+	  https://github.com/florolf/casync-nano
-diff --git a/package/casync-nano/casync-nano.hash b/package/casync-nano/casync-nano.hash
++RTC_DEVICE=rtc0
++DAEMON=hwclock
++
++# shellcheck source=/dev/null
++[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
++
++# Quietly do nothing if /dev/rtc0 does not exist
++[ -c /dev/$RTC_DEVICE ] || exit 0
++
++start(){
++	: # Nothing to do on startup
++}
++
++stop(){
++	printf "Saving the system clock to /dev/%s\n" "${RTC_DEVICE}"
++	/sbin/$DAEMON -f "/dev/${RTC_DEVICE}" -w
++}
++
++case "$1" in
++	start)
++		start
++		;;
++	stop)
++		stop
++		;;
++	restart|reload)
++		stop
++		start
++		;;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
++		;;
++esac
+diff --git a/package/hwclock-initscript/hwclock-initscript.mk b/package/hwclock-initscript/hwclock-initscript.mk
 new file mode 100644
-index 0000000000..1697fa93ef
+index 0000000000..a5d42ef55f
 --- /dev/null
-+++ b/package/casync-nano/casync-nano.hash
-@@ -0,0 +1,3 @@
-+# locally calculated
-+sha256  29ed8a767304e7e3032e66feea3d2dada7cc7db73344231a54bf080cc6e65ecf  casync-nano-1.1.1.tar.gz
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/casync-nano/casync-nano.mk b/package/casync-nano/casync-nano.mk
-new file mode 100644
-index 0000000000..e492627fa3
---- /dev/null
-+++ b/package/casync-nano/casync-nano.mk
-@@ -0,0 +1,30 @@
++++ b/package/hwclock-initscript/hwclock-initscript.mk
+@@ -0,0 +1,12 @@
 +################################################################################
 +#
-+# casync-nano
++# hwclock-initscript
 +#
 +################################################################################
 +
-+CASYNC_NANO_VERSION = 1.1.1
-+CASYNC_NANO_SITE = $(call github,florolf,casync-nano,v$(CASYNC_NANO_VERSION))
-+CASYNC_NANO_LICENSE = LGPL-2.1
-+CASYNC_NANO_LICENSE_FILES = COPYING
-+CASYNC_NANO_DEPENDENCIES = host-pkgconf openssl zstd libcurl
-+
-+ifeq ($(BR2_PACKAGE_CASYNC_NANO_CASYNC_SHIM),y)
-+define CASYNC_NANO_INSTALL_CASYNC_SHIM
-+	ln -sf csn $(TARGET_DIR)/usr/bin/casync
-+endef
-+endif
-+
-+define CASYNC_NANO_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m0755 $(@D)/csn $(TARGET_DIR)/usr/bin/csn
-+	$(CASYNC_NANO_INSTALL_CASYNC_SHIM)
++define HWCLOCK_INITSCRIPT_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 0755 $(HWCLOCK_INITSCRIPT_PKGDIR)/S20hwclock \
++		$(TARGET_DIR)/etc/init.d/S20hwclock
 +endef
 +
-+# We're only building csn-tool for the host, so only openssl is
-+# needed, not the other dependencies
-+HOST_CASYNC_NANO_DEPENDENCIES = host-pkgconf host-openssl
-+HOST_CASYNC_NANO_CONF_OPTS = -DBUILD_CSN=Off -DBUILD_CSN_TOOL=On
-+
-+$(eval $(cmake-package))
-+$(eval $(host-cmake-package))
++$(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
