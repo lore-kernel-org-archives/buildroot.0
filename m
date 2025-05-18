@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2951BC3ABD8
-	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 16:45:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EB52C3ABC9
+	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 16:45:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 874CF81A65;
+	by smtp3.osuosl.org (Postfix) with ESMTP id E6E1560A73;
 	Sun, 18 May 2025 16:45:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id V2iZFG8I0v_M; Sun, 18 May 2025 16:45:45 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iAeG05COEGKq; Sun, 18 May 2025 16:45:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 878D0814C1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 123A960AA0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 878D0814C1;
-	Sun, 18 May 2025 16:45:45 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 35768E4
+	by smtp3.osuosl.org (Postfix) with ESMTP id 123A960AA0;
+	Sun, 18 May 2025 16:45:47 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9DBF0E4
  for <buildroot@buildroot.org>; Sun, 18 May 2025 16:45:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 268DC81A5F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 83183407F9
  for <buildroot@buildroot.org>; Sun, 18 May 2025 16:45:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8_iSU7sB8YF2 for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2-34Nm9Sw7SP for <buildroot@buildroot.org>;
  Sun, 18 May 2025 16:45:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E9AE81423
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BA72840873
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7E9AE81423
+ by smtp4.osuosl.org (Postfix) with ESMTP id BA72840873
  for <buildroot@buildroot.org>; Sun, 18 May 2025 16:45:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6C8BE87170; Sun, 18 May 2025 16:45:42 +0000 (UTC)
+ id 7511F87172; Sun, 18 May 2025 16:45:42 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 18 May 2025 18:45:04 +0200
+Date: Sun, 18 May 2025 18:45:05 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 36f9436488c5fc640836eda96799305e114c6e9d
-X-Git-Newrev: d2d5014a8e10e82debc5f9222ab931a21edbf0c8
+X-Git-Oldrev: d2d5014a8e10e82debc5f9222ab931a21edbf0c8
+X-Git-Newrev: 6c3f01fde12730defcc238fe9b065b30086e066b
 X-Patchwork-Hint: ignore
-Message-Id: <20250518164542.6C8BE87170@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/heimdal: drop INSTALL_STAGING = YES
+Message-Id: <20250518164542.7511F87172@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/samba4: needs libxcrypt
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,30 +65,61 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d2d5014a8e10e82debc5f9222ab931a21edbf0c8
+commit: https://git.buildroot.net/buildroot/commit/?id=6c3f01fde12730defcc238fe9b065b30086e066b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-HEIMDAL_INSTALL_STAGING = YES makes no sense since the package was
-introduced in 56258f491bf459cbdb2cee1db3267030340755f0 ("heimdal: new
-package") since it's a host only package.
+Since the bump of Samba to version 4.21.4 in commit
+716461af945e89af56eea4a3936c4a2adc7fdb4d, <crypt.h> is needed, due to
+upstream comit 0dccda38f27b3bbda5d2a4de588a333ff554651a. Since
+<crypt.h> is no longer provided by glibc, a dependency on libxcrypt is
+needed, to avoid the following build failure:
+
+../../lib/util/util_crypt.c:5:10: fatal error: crypt.h: No such file or directory
+    5 | #include <crypt.h>
+      |          ^~~~~~~~~
+compilation terminated.
+
+This has not been detected by the autobuilders, presumably because a
+lot of glibc configurations end up having libxcrypt selected by other
+packages, but the issue is reproducible by building:
+
+BR2_arm=y
+BR2_cortex_a9=y
+BR2_ARM_ENABLE_VFP=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+BR2_PACKAGE_SAMBA4=y
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/heimdal/heimdal.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/samba4/Config.in | 1 +
+ package/samba4/samba4.mk | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/package/heimdal/heimdal.mk b/package/heimdal/heimdal.mk
-index f6c52f63aa..ed8826a741 100644
---- a/package/heimdal/heimdal.mk
-+++ b/package/heimdal/heimdal.mk
-@@ -8,7 +8,6 @@ HEIMDAL_VERSION = f4faaeaba371fff3f8d1bc14389f5e6d70ca8e17
- HEIMDAL_SITE = $(call github,heimdal,heimdal,$(HEIMDAL_VERSION))
- HOST_HEIMDAL_DEPENDENCIES = host-e2fsprogs host-ncurses host-pkgconf host-libxcrypt host-flex host-bison
- HOST_HEIMDAL_AUTORECONF = YES
--HEIMDAL_INSTALL_STAGING = YES
- # static because of -fPIC issues with e2fsprogs on x86_64 host
- HOST_HEIMDAL_CONF_OPTS = \
- 	--disable-shared \
+diff --git a/package/samba4/Config.in b/package/samba4/Config.in
+index 36ec656168..6aff82bb3d 100644
+--- a/package/samba4/Config.in
++++ b/package/samba4/Config.in
+@@ -17,6 +17,7 @@ config BR2_PACKAGE_SAMBA4
+ 	select BR2_PACKAGE_GNUTLS
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
+ 	select BR2_PACKAGE_POPT
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index ac3141f3d9..828de56fc8 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -22,6 +22,7 @@ SAMBA4_DEPENDENCIES = \
+ 	$(if $(BR2_PACKAGE_LIBCAP),libcap) \
+ 	$(if $(BR2_PACKAGE_LIBGLIB2),libglib2) \
+ 	$(if $(BR2_PACKAGE_READLINE),readline) \
++	$(if $(BR2_PACKAGE_LIBXCRYPT),libxcrypt) \
+ 	$(TARGET_NLS_DEPENDENCIES)
+ SAMBA4_CFLAGS = $(TARGET_CFLAGS)
+ SAMBA4_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
