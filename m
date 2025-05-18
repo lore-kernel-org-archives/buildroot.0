@@ -4,79 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51741C3ABC9
-	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 12:18:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6F6AC3ABD8
+	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 12:49:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E75A44062F;
-	Sun, 18 May 2025 12:18:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 724C8408B6;
+	Sun, 18 May 2025 12:49:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HrHngaXtXp5X; Sun, 18 May 2025 12:18:46 +0000 (UTC)
+ id FkJ8uHovApoD; Sun, 18 May 2025 12:49:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 020F2403DB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D6EB408AF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 020F2403DB;
-	Sun, 18 May 2025 12:18:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9D6EB408AF;
+	Sun, 18 May 2025 12:49:57 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4968E1BA
- for <buildroot@buildroot.org>; Sun, 18 May 2025 12:18:44 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 9560BDF
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 12:49:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2EE2D80D1D
- for <buildroot@buildroot.org>; Sun, 18 May 2025 12:18:44 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7811981EBF
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 12:49:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GuYK8c2uTTmU for <buildroot@buildroot.org>;
- Sun, 18 May 2025 12:18:43 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
- helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id BFsI9xjECa9D for <buildroot@buildroot.org>;
+ Sun, 18 May 2025 12:49:54 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
+ helo=relay5-d.mail.gandi.net; envelope-from=peko@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A8C2380EB5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A8C2380EB5
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A8C2380EB5
- for <buildroot@buildroot.org>; Sun, 18 May 2025 12:18:42 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B552643A0B;
- Sun, 18 May 2025 12:18:39 +0000 (UTC)
-Date: Sun, 18 May 2025 14:18:38 +0200
-To: =?UTF-8?B?UmFwaGHDq2wgTcOpbG90dGU=?= via buildroot
- <buildroot@buildroot.org>
-Cc: =?UTF-8?B?UmFwaGHDq2wgTcOpbG90dGU=?= <raphael.melotte@mind.be>, David
- GOUARIN <dgouarin@gmail.com>
-Message-ID: <20250518141838.3ed5cad6@windsurf>
-In-Reply-To: <20250414104614.973244-1-raphael.melotte@mind.be>
-References: <20250414104614.973244-1-raphael.melotte@mind.be>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6552181EB8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6552181EB8
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6552181EB8
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 12:49:54 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2DBCE43A01;
+ Sun, 18 May 2025 12:49:52 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peko@dell.be.48ers.dk>) id 1uGdSh-00HS6D-1q;
+ Sun, 18 May 2025 14:49:51 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Sun, 18 May 2025 14:49:48 +0200
+Message-Id: <20250518124949.4159568-2-peter@korsgaard.com>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250518124949.4159568-1-peter@korsgaard.com>
+References: <20250518124949.4159568-1-peter@korsgaard.com>
 MIME-Version: 1.0
 X-GND-State: clean
-X-GND-Score: -105
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefudekgeelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenfghrlhcuvffnffculddqhedmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthhqredtredtjeenucfhrhhomhepvfhhohhmrghsucfrvghtrgiiiihonhhiuceothhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpefgleegveettdfgieekudehtdevuefggeelieejheekudelgeegkeetvedvtdehueenucffohhmrghinhepmhgrrhgtrdhinhhfohdpnhhishhtrdhgohhvpdihohgtthhophhrohhjvggtthdrohhrghdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddvmeekgedvrgemgeehrggtmeelgedtudemugefudgvmedvfeehmegthegvvdemvggukeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeekgedvrgemgeehrggtmeelgedtudemugefudgvmedvfeehmegthegvvdemvggukeefpdhhvghlohepfihinhgushhurhhfpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeefpdhrtghpthhtohepsghuihhlughrohhothessghuihhlu
- ghrohhothdrohhrghdprhgtphhtthhopehrrghphhgrvghlrdhmvghlohhtthgvsehmihhnugdrsggvpdhrtghpthhtohepughgohhurghrihhnsehgmhgrihhlrdgtohhm
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1747570720;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=PaH0pyEhG0z2aYjUPT5JPXz4PKawcv9o/6T7Pe5pGbw=;
- b=l4owWPCh+tb+fQelytvJN1dAYn0C4kF7kGuCsiukC2yC3m1HIixMIABlLmDfbz5KNK30gf
- +5k7hOa1QYUgfRnq4Ab+Ae7uky8zzo92yDWYascqtVHsnt9qINWbz4t49zngdu/+9HX76H
- qIuSMrT/gEo6PIcsCcJwSMwnqB1mRAMCWiGCvg+sdQhijjw4xKCAOUEMDeB9Y4Qe69mp8M
- Gcd5V33UZXwIL1OBCW3+ZZgM09/dGRoMI+4tbxKoUMIAQvWm5Fk1J/RC58mC5FpE0Y8k76
- dw45FUvK5aAAL429LG6q5BsANZbvZiTlKRuDvmYKq3ZoeupcxeN9xsiS7hNhaQ==
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefudekheehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefrvghtvghrucfmohhrshhgrggrrhguuceophgvthgvrheskhhorhhsghgrrghrugdrtghomheqnecuggftrfgrthhtvghrnheptdelfeekveegudfhudehtedtjeekkeeggeehgfeghfevkedvtdfhfeetudfgiedtnecukfhppedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumeejiegukeemfegvfhhfmehfvggsfeemgegssgehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeekgedvrgemgeehrggtmeelgedtudemjeeiugekmeefvghffhemfhgvsgefmeegsggshedphhgvlhhopeguvghllhdrsggvrdegkegvrhhsrdgukhdpmhgrihhlfhhrohhmpehpvghkoheskhhorhhsghgrrghrugdrtghomhdpnhgspghrtghpthhtohephedprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtohepphgvthgvrheskhhorhhsghgrrghrugdrtghomhdprhgtphhtthhopehgihhulhhiohdrsggvnhgvthhtihessggvnhgvthhtihgvnhhgihhnvggvrhhinhhgrdgtohhmp
+ dhrtghpthhtoheprhhomhgrihhnrdhnrghouhhrsehgmhgrihhlrdgtohhmpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhm
+X-GND-Sasl: peter@korsgaard.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=l4owWPCh
-Subject: Re: [Buildroot] [PATCH 1/1] package/freeradius-server: ignore
- CVE-2002-0318 and CVE-2011-4966
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: [Buildroot] [PATCH 2/2] toolchain/toolchain-wrapper.c: get rid of
+ EXCLUSIVE_ARGS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -88,46 +72,98 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gUmFwaGHDq2wsCgpPbiBNb24sIDE0IEFwciAyMDI1IDEyOjQ2OjEyICswMjAwClJhcGhh
-w6tsIE3DqWxvdHRlIHZpYSBidWlsZHJvb3QgPGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnPiB3cm90
-ZToKCj4gQ1ZFLTIwMDItMDMxOCBoYXMgYmVlbiBtaXRpZ2F0ZWQgYnkgYWRkaW5nIGEgbmV3IGNv
-bmZpZyBvcHRpb24gaW4KPiBmcmVlcmFkaXVzLXNlcnZlciBjb21taXQgZjBmNzYyZDE0MzkzMzZm
-ZmY5YzhiOTAyOTEzNjRkZGZmNTgzZjY5OCwKPiB3aGljaCBpcyBwYXJ0IG9mIHJlbGVhc2VfMF81
-XzAgb253YXJkcy4KPiBTZWUgYWxzbyB0aGUgb3JpZ2luYWwgcmVwb3J0IChbMV0pLgo+IFRoZSBO
-VkQgZGF0YWJhc2UncyBDUEUgY29uZmlndXJhdGlvbiBkb2Vzbid0IGhhdmUgYW4gYXNzb2NpYXRl
-ZAo+IHZlcnNpb24gbnVtYmVyLCB3aGljaCBpcyB3aHkgb3VyIENWRSBjaGVjayBzdGlsbCByZXBv
-cnRzIGl0Lgo+IAo+IEZvciBDVkUtMjAxMS00OTY2LCB0aGUgQ1ZFIGRlc2NyaXB0aW9uIChzZWUg
-WzJdKSBtZW50aW9ucyB0aGUgaXNzdWUgaXMKPiBmaXhlZCBpbiB2ZXJzaW9uIDIuMi4wIG9ud2Fy
-ZHMsIGJ1dCB0aGUgQ1BFIGFnYWluIGRvZXNuJ3QgdXNlIGEKPiB2ZXJzaW9uIG51bWJlci4KPiAK
-PiBUbyByZWR1Y2UgdGhlIG5vaXNlIGluIHRoZSBsaXN0IG9mIENWRXMgdGhhdCBwa2ctc3RhdHMg
-cmVwb3J0cywgaWdub3JlCj4gdGhlbS4KPiAKPiBGV0lXLCB5b2N0by9vZSBhbHNvIGlnbm9yZXMg
-dGhlbSAoc2VlIFszXSkuCj4gCj4gWzFdOiBodHRwczovL21hcmMuaW5mby8/bD1idWd0cmFxJm09
-MTAxNDQwMTEzNDEwMDgzJnc9MiMyCj4gWzJdOiBodHRwczovL252ZC5uaXN0Lmdvdi92dWxuL2Rl
-dGFpbC9DVkUtMjAxMS00OTY2Cj4gWzNdIGh0dHBzOi8vcGF0Y2h3b3JrLnlvY3RvcHJvamVjdC5v
-cmcvcHJvamVjdC9vZS9wYXRjaC8yMDIyMDcxNTEzMzUxNS4xNDI5OC0xLWRhdmlkZS5nYXJkZW5h
-bEBodWF3ZWkuY29tLwo+IAo+IFNpZ25lZC1vZmYtYnk6IFJhcGhhw6tsIE3DqWxvdHRlIDxyYXBo
-YWVsLm1lbG90dGVAbWluZC5iZT4KClRoYW5rcyBSYXBoYcOrbCwgSSBhcHBsaWVkIHlvdXIgcGF0
-Y2gsIGJ1dCBhZnRlciBjaGFuZ2luZyBpdCBhIGJpdCwgc2VlCmJlbG93LgoKPiArIyBUaGUgTlZE
-IGRhdGFiYXNlIGRvZXNuJ3QgaGF2ZSBhIHZlcnNpb24gbnVtYmVyIGNvbmZpZ3VyZWQgZm9yIHRo
-ZQo+ICsjIGZvbGxvd2luZyBDVkVzCgpUaGUgTlZEIGRhdGFiYXNlIGRvZXNuJ3QgcmVhbGx5ICJj
-b25maWd1cmUiIGFueXRoaW5nLCBzbyB0aGUgd29yZAoiY29uZmlndXJlIiBoZXJlIGlzIGEgYml0
-IG1pc2xlYWRpbmcuCgpBbmQgYWN0dWFsbHksIHdlIHRyeSB0byBoYXZlIGEgbGl0dGxlIGJpdCBt
-b3JlIGluZm9ybWF0aW9uIGF0dGFjaGVkIHRvCmVhY2ggaWdub3JlZCBDVkUsIHNvIEkndmUgY2hh
-bmdlZCB5b3VyIHBhdGNoIHRvOgoKKyMgTWl0aWdhdGVkIHVwc3RyZWFtIHNpbmNlIHZlcnNpb24g
-MC41LjAsIE5WRCBkYXRhYmFzZSBlbnRyeSBub3QKKyMgdXAtdG8tZGF0ZQorRlJFRVJBRElVU19T
-RVJWRVJfSUdOT1JFX0NWRVMgKz0gQ1ZFLTIwMDItMDMxOAorCisjIEZpeGVkIGluIDIuMi4wLCBO
-VkQgZGF0YWJhc2UgZW50cnkgbm90IHVwLXRvLWRhdGUKK0ZSRUVSQURJVVNfU0VSVkVSX0lHTk9S
-RV9DVkVTICs9IENWRS0yMDExLTQ5NjYKCndoaWNoIEkgYmVsaWV2ZSBpcyBzbGlnaHRseSBtb3Jl
-IGRlc2NyaXB0aXZlLgoKVGhhbmtzIGEgbG90IQoKVGhvbWFzCi0tIApUaG9tYXMgUGV0YXp6b25p
-LCBjby1vd25lciBhbmQgQ0VPLCBCb290bGluCkVtYmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5n
-aW5lZXJpbmcgYW5kIHRyYWluaW5nCmh0dHBzOi8vYm9vdGxpbi5jb20KX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApi
-dWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1h
-bi9saXN0aW5mby9idWlsZHJvb3QK
+Rather than having a hard coded amount of exclusive args (with the risk of
+overflow when new logic is added), simplify the argument buffer allocation
+logic to always allocate room for DEFAULT_MAX_ARGS (1024) arguments and just
+realloc to grow for the rare situation where that is not enough.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ toolchain/toolchain-wrapper.c | 37 ++++++++++++++---------------------
+ 1 file changed, 15 insertions(+), 22 deletions(-)
+
+diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
+index d6ce74fc94..fdfedf20ef 100644
+--- a/toolchain/toolchain-wrapper.c
++++ b/toolchain/toolchain-wrapper.c
+@@ -36,25 +36,9 @@ static char sysroot[PATH_MAX];
+ static char _time_[sizeof("-D__TIME__=\"HH:MM:SS\"")];
+ static char _date_[sizeof("-D__DATE__=\"MMM DD YYYY\"")];
+ 
+-/**
+- * GCC errors out with certain combinations of arguments (examples are
+- * -mfloat-abi={hard|soft} and -m{little|big}-endian), so we have to ensure
+- * that we only pass the predefined one to the real compiler if the inverse
+- * option isn't in the argument list.
+- * This specifies the worst case number of extra arguments we might pass
+- * Currently, we may have:
+- * 	-mfloat-abi=
+- * 	-march=
+- * 	-mcpu=
+- * 	-D__TIME__=
+- * 	-D__DATE__=
+- * 	-Wno-builtin-macro-redefined
+- * 	-Wl,-z,now
+- * 	-Wl,-z,relro
+- * 	-fPIE
+- * 	-pie
+- */
+-#define EXCLUSIVE_ARGS	10
++/* Maximum amount of arguments to reserve space for by default.
++   Must be > predef_args */
++#define DEFAULT_MAX_ARGS	1024
+ 
+ static char *predef_args[] = {
+ #ifdef BR_CCACHE
+@@ -246,6 +230,7 @@ int main(int argc, char **argv)
+ 	char *basename;
+ 	char *env_debug;
+ 	int ret, i, count = 0, debug = 0, found_shared = 0, found_nonoption = 0;
++	size_t n_args;
+ 
+ 	/* Debug the wrapper to see arguments it was called with.
+ 	 * If environment variable BR2_DEBUG_WRAPPER is:
+@@ -354,8 +339,7 @@ int main(int argc, char **argv)
+ 		return 3;
+ 	}
+ 
+-	cur = args = malloc(sizeof(predef_args) +
+-			    (sizeof(char *) * (argc + EXCLUSIVE_ARGS)));
++	cur = args = malloc(DEFAULT_MAX_ARGS * sizeof(char *));
+ 	if (args == NULL) {
+ 		perror(__FILE__ ": malloc");
+ 		return 2;
+@@ -497,8 +481,17 @@ int main(int argc, char **argv)
+ #endif
+ 	}
+ 
++        n_args = (cur - args);
++        if ((n_args + argc) > DEFAULT_MAX_ARGS) {
++		args = realloc(args, (n_args + argc) * sizeof(char *));
++		if (args == NULL) {
++			perror(__FILE__ ": realloc");
++			return 2;
++		}
++        }
++
+ 	/* append forward args and terminating NULL */
+-	memcpy(cur, &argv[1], sizeof(char *) * argc);
++	memcpy(&args[n_args], &argv[1], sizeof(char *) * argc);
+ 
+ 	exec_args = args;
+ #ifdef BR_CCACHE
+-- 
+2.39.5
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
