@@ -1,52 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0F45C3ABC9
-	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 14:01:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BC98C3ABC9
+	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 14:38:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BF43F60D74;
-	Sun, 18 May 2025 14:00:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EF57981EB3;
+	Sun, 18 May 2025 14:38:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8o8g_qfj82B7; Sun, 18 May 2025 14:00:57 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pSc92z3Bxc1z; Sun, 18 May 2025 14:38:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B4D7C60B4B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F3C4C81EAD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B4D7C60B4B;
-	Sun, 18 May 2025 14:00:56 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id D0F631BA
- for <buildroot@buildroot.org>; Sun, 18 May 2025 14:00:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F3C4C81EAD;
+	Sun, 18 May 2025 14:38:52 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id EA0E1DF
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 14:38:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B6ADF607F6
- for <buildroot@buildroot.org>; Sun, 18 May 2025 14:00:52 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CFA5D60639
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 14:38:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eeC_HlKAty7O for <buildroot@buildroot.org>;
- Sun, 18 May 2025 14:00:50 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E59E6077E
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5E59E6077E
- for <buildroot@buildroot.org>; Sun, 18 May 2025 14:00:50 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 57CDA811B3; Sun, 18 May 2025 14:00:50 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 18 May 2025 16:00:32 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3dbbfdeb8e82d5412b8435341772b8cf30998b3b
-X-Git-Newrev: a0a39842e609cc01915b93d7954e3992a2287359
-X-Patchwork-Hint: ignore
-Message-Id: <20250518140050.57CDA811B3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/{execline, mdevd, s6-*, skalibs,
- tipidee}: bump to October 2024 versions
+ id 8I9ELiZHatpt for <buildroot@buildroot.org>;
+ Sun, 18 May 2025 14:38:50 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
+ helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D3D8D60619
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D3D8D60619
+Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D3D8D60619
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 14:38:49 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 01A801C0FC0; Sun, 18 May 2025 16:38:44 +0200 (CEST)
+Message-ID: <58d2430d-fd48-4f68-a303-e3944eb9b663@rnout.be>
+Date: Sun, 18 May 2025 16:38:43 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Florian Larysch <fl@n621.de>, buildroot@buildroot.org
+Cc: Grzegorz Blach <grzegorz@blach.pl>
+References: <20250512120307.10341-2-fl@n621.de>
+Content-Language: en-GB, fr-BE
+In-Reply-To: <20250512120307.10341-2-fl@n621.de>
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=rnout.be; s=dkim; 
+ t=1747579125; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:in-reply-to:references;
+ bh=LVxuQREKHZgHPnjt9aidGZyNeEV52W54JPC9surNrDk=;
+ b=EDXvL6mrWTrrLbI3mDk22o43BhAXv1ftfEIrRybsqZmVFu1QupQifTOuxKqNNSxR6GhVNW
+ sz6FJQpihD3qCN4OEc7gjE9QsFvkdjmYKqVNnPj8m9ipp+qhNIqAhnpreTUDgmgTLNemir
+ 2uwDQdBn5nhfgRT188JHX4i6XdTgT60izBxTPTJBr5UbFzM5rjwMAnN8u6GUzPFRG13iZX
+ 6UZSuMKGUDGxU7yqKby9amoh4QLf+EFyMNSeEbMkAz/KHlDCtPpN6OE32NsT8cyhYNuJR4
+ isPUa2rzYoI6g62KJXFf09QBc00fO1qSyReWS4hZ66QMcOUzpuPio+YM7X0Tfg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=rnout.be
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
+ header.a=rsa-sha256 header.s=dkim header.b=EDXvL6mr
+Subject: Re: [Buildroot] [PATCH 1/1] package/f2fs-tools: fix GCC 15 build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,395 +76,83 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8710012373198153973=="
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8710012373198153973==
-Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a0a39842e609cc01915b93d7954e3992a2287359
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Releases have been made to several skarnet.org packages[1]. The biggest
-change is that static libraries are installed to /usr/lib by default.
+On 12/05/2025 14:02, Florian Larysch wrote:
+> f2fs-tools had its own "bool" typedef which now conflicts with the C23
+> keyword, causing build failures on GCC 15.
+> 
+> Import a patch from upstream that fixes this.
+> 
+> Fixes: https://autobuild.buildroot.org/results/d17641582d1beaec9dcca4dc48a68d713cecfdc8 (and others)
+> Signed-off-by: Florian Larysch <fl@n621.de>
 
-https://skarnet.org/lists/skaware/2098.html
+  Applied to 2025.02.x, thanks.
 
-Some COPYRIGHT hashes changed because the copyright years were updated.
+  Regards,
+  Arnout
 
-Signed-off-by: J. Neuschäfer <j.neuschaefer@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/execline/execline.hash                   | 2 +-
- package/execline/execline.mk                     | 4 ++--
- package/mdevd/mdevd.hash                         | 2 +-
- package/mdevd/mdevd.mk                           | 4 ++--
- package/s6-dns/s6-dns.hash                       | 2 +-
- package/s6-dns/s6-dns.mk                         | 4 ++--
- package/s6-linux-init/s6-linux-init.hash         | 4 ++--
- package/s6-linux-init/s6-linux-init.mk           | 4 ++--
- package/s6-linux-utils/s6-linux-utils.hash       | 4 ++--
- package/s6-linux-utils/s6-linux-utils.mk         | 4 ++--
- package/s6-networking/s6-networking.hash         | 2 +-
- package/s6-networking/s6-networking.mk           | 4 ++--
- package/s6-portable-utils/s6-portable-utils.hash | 4 ++--
- package/s6-portable-utils/s6-portable-utils.mk   | 4 ++--
- package/s6-rc/s6-rc.hash                         | 2 +-
- package/s6-rc/s6-rc.mk                           | 4 ++--
- package/s6/s6.hash                               | 2 +-
- package/s6/s6.mk                                 | 4 ++--
- package/skalibs/skalibs.hash                     | 2 +-
- package/skalibs/skalibs.mk                       | 2 +-
- package/tipidee/tipidee.hash                     | 2 +-
- package/tipidee/tipidee.mk                       | 4 ++--
- 22 files changed, 35 insertions(+), 35 deletions(-)
-
-diff --git a/package/execline/execline.hash b/package/execline/execline.hash
-index 76412978b9..81a47bd3dc 100644
---- a/package/execline/execline.hash
-+++ b/package/execline/execline.hash
-@@ -1,3 +1,3 @@
- # Locally generated
--sha256  ba2a27e97c5eb6bd7ca6a0987a8925e44465a5be996daa0d18f8feca37d7571a  execline-2.9.6.0.tar.gz
-+sha256  76919d62f2de4db1ac4b3a59eeb3e0e09b62bcdd9add13ae3f2dad26f8f0e5ca  execline-2.9.6.1.tar.gz
- sha256  fdc931295525dd0009cdf339189cbecd228d65cefe33402f037f9b046f07989e  COPYING
-diff --git a/package/execline/execline.mk b/package/execline/execline.mk
-index 45d6b9294f..4d9b668819 100644
---- a/package/execline/execline.mk
-+++ b/package/execline/execline.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EXECLINE_VERSION = 2.9.6.0
-+EXECLINE_VERSION = 2.9.6.1
- EXECLINE_SITE = https://skarnet.org/software/execline
- EXECLINE_LICENSE = ISC
- EXECLINE_LICENSE_FILES = COPYING
-@@ -13,7 +13,7 @@ EXECLINE_DEPENDENCIES = skalibs
- 
- EXECLINE_CONF_OPTS = \
- 	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE" \
--	--with-sysdeps=$(STAGING_DIR)/lib/skalibs/sysdeps \
-+	--with-sysdeps=$(STAGING_DIR)/usr/lib/skalibs/sysdeps \
- 	--with-include=$(STAGING_DIR)/include \
- 	--with-dynlib=$(STAGING_DIR)/lib \
- 	--with-lib=$(STAGING_DIR)/lib/skalibs \
-diff --git a/package/mdevd/mdevd.hash b/package/mdevd/mdevd.hash
-index 0151b03bd5..f2667f2643 100644
---- a/package/mdevd/mdevd.hash
-+++ b/package/mdevd/mdevd.hash
-@@ -1,3 +1,3 @@
- # Locally generated
--sha256  7358ce530b6b9befb715e48190981e9b69a12cca858519e6d2e4b46eab7e2470  mdevd-0.1.6.4.tar.gz
-+sha256  d5c86420c81b2e4720b41e4f48f727cd5d9a17f4e6317115d21c32099e72a628  mdevd-0.1.6.5.tar.gz
- sha256  701e0e7d93a5da6421f69bed2136d4c64fd4bc17f35221297838a3ad9ba6050e  COPYING
-diff --git a/package/mdevd/mdevd.mk b/package/mdevd/mdevd.mk
-index b8d527f1ca..5a3b2a971f 100644
---- a/package/mdevd/mdevd.mk
-+++ b/package/mdevd/mdevd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MDEVD_VERSION = 0.1.6.4
-+MDEVD_VERSION = 0.1.6.5
- MDEVD_SITE = https://skarnet.org/software/mdevd
- MDEVD_LICENSE = ISC
- MDEVD_LICENSE_FILES = COPYING
-@@ -12,7 +12,7 @@ MDEVD_INSTALL_STAGING = YES
- MDEVD_DEPENDENCIES = skalibs
- 
- MDEVD_CONF_OPTS = \
--	--with-sysdeps=$(STAGING_DIR)/lib/skalibs/sysdeps \
-+	--with-sysdeps=$(STAGING_DIR)/usr/lib/skalibs/sysdeps \
- 	--with-include=$(STAGING_DIR)/include \
- 	--with-dynlib=$(STAGING_DIR)/lib \
- 	--with-lib=$(STAGING_DIR)/lib/skalibs \
-diff --git a/package/s6-dns/s6-dns.hash b/package/s6-dns/s6-dns.hash
-index dd6e6f3632..29e81e7753 100644
---- a/package/s6-dns/s6-dns.hash
-+++ b/package/s6-dns/s6-dns.hash
-@@ -1,3 +1,3 @@
- # Locally generated
--sha256  6aee32bb68d01f5109f71e31a283213c668cd3c0e79fb9e469e6cabb58079f2b  s6-dns-2.3.7.2.tar.gz
-+sha256  4d7ab49c9842ac25b668dc1e2a9260be97757a75f263ce85f9b6556ad2e1dee4  s6-dns-2.4.0.0.tar.gz
- sha256  fdc931295525dd0009cdf339189cbecd228d65cefe33402f037f9b046f07989e  COPYING
-diff --git a/package/s6-dns/s6-dns.mk b/package/s6-dns/s6-dns.mk
-index 4184110096..566cdf21ef 100644
---- a/package/s6-dns/s6-dns.mk
-+++ b/package/s6-dns/s6-dns.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--S6_DNS_VERSION = 2.3.7.2
-+S6_DNS_VERSION = 2.4.0.0
- S6_DNS_SITE = https://skarnet.org/software/s6-dns
- S6_DNS_LICENSE = ISC
- S6_DNS_LICENSE_FILES = COPYING
-@@ -12,7 +12,7 @@ S6_DNS_INSTALL_STAGING = YES
- S6_DNS_DEPENDENCIES = skalibs
- 
- S6_DNS_CONF_OPTS = \
--	--with-sysdeps=$(STAGING_DIR)/lib/skalibs/sysdeps \
-+	--with-sysdeps=$(STAGING_DIR)/usr/lib/skalibs/sysdeps \
- 	--with-include=$(STAGING_DIR)/include \
- 	--with-dynlib=$(STAGING_DIR)/lib \
- 	--with-lib=$(STAGING_DIR)/lib/skalibs \
-diff --git a/package/s6-linux-init/s6-linux-init.hash b/package/s6-linux-init/s6-linux-init.hash
-index 25292c35b2..78cefb0c65 100644
---- a/package/s6-linux-init/s6-linux-init.hash
-+++ b/package/s6-linux-init/s6-linux-init.hash
-@@ -1,3 +1,3 @@
- # Locally generated
--sha256  11ae08d0a66210b5e56b6baee0f6b9b1b69fbedb05fda1285b115a31ca46c77f  s6-linux-init-1.1.2.0.tar.gz
--sha256  f68451e55e6686dc187df1ca427c574d9ac0d6f6926e1bdb909ad8b657668fe5  COPYING
-+sha256  971e014a229b7f47a128721dd714f8d493c4ac644e465197b6599a9640966530  s6-linux-init-1.1.2.1.tar.gz
-+sha256  75b0b50d7bcb9b2fc174d01442536bce03333da1814df3e61cd6ef8f663548f1  COPYING
-diff --git a/package/s6-linux-init/s6-linux-init.mk b/package/s6-linux-init/s6-linux-init.mk
-index 73f49c49ef..9378a33509 100644
---- a/package/s6-linux-init/s6-linux-init.mk
-+++ b/package/s6-linux-init/s6-linux-init.mk
-@@ -4,14 +4,14 @@
- #
- ################################################################################
- 
--S6_LINUX_INIT_VERSION = 1.1.2.0
-+S6_LINUX_INIT_VERSION = 1.1.2.1
- S6_LINUX_INIT_SITE = https://skarnet.org/software/s6-linux-init
- S6_LINUX_INIT_LICENSE = ISC
- S6_LINUX_INIT_LICENSE_FILES = COPYING
- S6_LINUX_INIT_DEPENDENCIES = s6 s6-linux-utils s6-portable-utils
- 
- S6_LINUX_INIT_CONF_OPTS = \
--	--with-sysdeps=$(STAGING_DIR)/lib/skalibs/sysdeps \
-+	--with-sysdeps=$(STAGING_DIR)/usr/lib/skalibs/sysdeps \
- 	--with-include=$(STAGING_DIR)/include \
- 	--with-dynlib=$(STAGING_DIR)/lib \
- 	--with-lib=$(STAGING_DIR)/lib/execline \
-diff --git a/package/s6-linux-utils/s6-linux-utils.hash b/package/s6-linux-utils/s6-linux-utils.hash
-index 97a67c674e..c01e856948 100644
---- a/package/s6-linux-utils/s6-linux-utils.hash
-+++ b/package/s6-linux-utils/s6-linux-utils.hash
-@@ -1,3 +1,3 @@
- # Locally generated
--sha256  8f944633ca87d3d23e0f03c9c383d1502d508c9bac16d38c3fbf723a5eab2bb7  s6-linux-utils-2.6.2.0.tar.gz
--sha256  aafa4f6a12b5b24ab2ae8ead5174e1ec03aecb5eb0e82012d74fd47ccfc57607  COPYING
-+sha256  915f167294d36ca9240a62281c7299b5ad5d558b8d45d888761135749d9fd234  s6-linux-utils-2.6.2.1.tar.gz
-+sha256  fdc931295525dd0009cdf339189cbecd228d65cefe33402f037f9b046f07989e  COPYING
-diff --git a/package/s6-linux-utils/s6-linux-utils.mk b/package/s6-linux-utils/s6-linux-utils.mk
-index cb1b86c370..f760aec78f 100644
---- a/package/s6-linux-utils/s6-linux-utils.mk
-+++ b/package/s6-linux-utils/s6-linux-utils.mk
-@@ -4,14 +4,14 @@
- #
- ################################################################################
- 
--S6_LINUX_UTILS_VERSION = 2.6.2.0
-+S6_LINUX_UTILS_VERSION = 2.6.2.1
- S6_LINUX_UTILS_SITE = https://skarnet.org/software/s6-linux-utils
- S6_LINUX_UTILS_LICENSE = ISC
- S6_LINUX_UTILS_LICENSE_FILES = COPYING
- S6_LINUX_UTILS_DEPENDENCIES = skalibs
- 
- S6_LINUX_UTILS_CONF_OPTS = \
--	--with-sysdeps=$(STAGING_DIR)/lib/skalibs/sysdeps \
-+	--with-sysdeps=$(STAGING_DIR)/usr/lib/skalibs/sysdeps \
- 	--with-include=$(STAGING_DIR)/include \
- 	--with-dynlib=$(STAGING_DIR)/lib \
- 	--with-lib=$(STAGING_DIR)/lib/skalibs \
-diff --git a/package/s6-networking/s6-networking.hash b/package/s6-networking/s6-networking.hash
-index 4eff4d49f4..dfc05f03da 100644
---- a/package/s6-networking/s6-networking.hash
-+++ b/package/s6-networking/s6-networking.hash
-@@ -1,3 +1,3 @@
- # Locally generated
--sha256  db411c54371a17ed7d4543dd86cf9530ce25fcf624bef83ae2b579520e5e70bf  s6-networking-2.7.0.3.tar.gz
-+sha256  31bdb70c824f58f6cb09d0a568a2454615eeaf498a82896f6c3f8382af590965  s6-networking-2.7.0.4.tar.gz
- sha256  fdc931295525dd0009cdf339189cbecd228d65cefe33402f037f9b046f07989e  COPYING
-diff --git a/package/s6-networking/s6-networking.mk b/package/s6-networking/s6-networking.mk
-index 5302ad8ec6..1e2aa5adaa 100644
---- a/package/s6-networking/s6-networking.mk
-+++ b/package/s6-networking/s6-networking.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--S6_NETWORKING_VERSION = 2.7.0.3
-+S6_NETWORKING_VERSION = 2.7.0.4
- S6_NETWORKING_SITE = https://skarnet.org/software/s6-networking
- S6_NETWORKING_LICENSE = ISC
- S6_NETWORKING_LICENSE_FILES = COPYING
-@@ -12,7 +12,7 @@ S6_NETWORKING_INSTALL_STAGING = YES
- S6_NETWORKING_DEPENDENCIES = s6-dns s6
- 
- S6_NETWORKING_CONF_OPTS = \
--	--with-sysdeps=$(STAGING_DIR)/lib/skalibs/sysdeps \
-+	--with-sysdeps=$(STAGING_DIR)/usr/lib/skalibs/sysdeps \
- 	--with-include=$(STAGING_DIR)/include \
- 	--with-dynlib=$(STAGING_DIR)/lib \
- 	--with-lib=$(STAGING_DIR)/lib/execline \
-diff --git a/package/s6-portable-utils/s6-portable-utils.hash b/package/s6-portable-utils/s6-portable-utils.hash
-index 2454e91a4d..790f4e3d32 100644
---- a/package/s6-portable-utils/s6-portable-utils.hash
-+++ b/package/s6-portable-utils/s6-portable-utils.hash
-@@ -1,3 +1,3 @@
- # Locally generated
--sha256  3e4492055d160c25fb90153f0efc277d7d52bf981bbe3ea2e9dfe51c493561ff  s6-portable-utils-2.3.0.3.tar.gz
--sha256  aafa4f6a12b5b24ab2ae8ead5174e1ec03aecb5eb0e82012d74fd47ccfc57607  COPYING
-+sha256  8dee87b6c89181ef3ed3241fece43f8d79aa137449cae778d3b59e1e91906b08  s6-portable-utils-2.3.0.4.tar.gz
-+sha256  fdc931295525dd0009cdf339189cbecd228d65cefe33402f037f9b046f07989e  COPYING
-diff --git a/package/s6-portable-utils/s6-portable-utils.mk b/package/s6-portable-utils/s6-portable-utils.mk
-index bd617ee640..7986e9454e 100644
---- a/package/s6-portable-utils/s6-portable-utils.mk
-+++ b/package/s6-portable-utils/s6-portable-utils.mk
-@@ -4,14 +4,14 @@
- #
- ################################################################################
- 
--S6_PORTABLE_UTILS_VERSION = 2.3.0.3
-+S6_PORTABLE_UTILS_VERSION = 2.3.0.4
- S6_PORTABLE_UTILS_SITE = https://skarnet.org/software/s6-portable-utils
- S6_PORTABLE_UTILS_LICENSE = ISC
- S6_PORTABLE_UTILS_LICENSE_FILES = COPYING
- S6_PORTABLE_UTILS_DEPENDENCIES = skalibs
- 
- S6_PORTABLE_UTILS_CONF_OPTS = \
--	--with-sysdeps=$(STAGING_DIR)/lib/skalibs/sysdeps \
-+	--with-sysdeps=$(STAGING_DIR)/usr/lib/skalibs/sysdeps \
- 	--with-include=$(STAGING_DIR)/include \
- 	--with-dynlib=$(STAGING_DIR)/lib \
- 	--with-lib=$(STAGING_DIR)/lib/skalibs \
-diff --git a/package/s6-rc/s6-rc.hash b/package/s6-rc/s6-rc.hash
-index 72bd5d42be..052039f98d 100644
---- a/package/s6-rc/s6-rc.hash
-+++ b/package/s6-rc/s6-rc.hash
-@@ -1,3 +1,3 @@
- # Locally generated
--sha256  e3272796a947904de37ab34ec10430e26107b8ef05210d81059c8b36203e6a9f  s6-rc-0.5.4.3.tar.gz
-+sha256  c3b5f1b8d3acea60a20a59fb25280b69a6aac0bb3afdab21d2edeada77b2df01  s6-rc-0.5.5.0.tar.gz
- sha256  75b0b50d7bcb9b2fc174d01442536bce03333da1814df3e61cd6ef8f663548f1  COPYING
-diff --git a/package/s6-rc/s6-rc.mk b/package/s6-rc/s6-rc.mk
-index 8eddee9c9e..07857708ba 100644
---- a/package/s6-rc/s6-rc.mk
-+++ b/package/s6-rc/s6-rc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--S6_RC_VERSION = 0.5.4.3
-+S6_RC_VERSION = 0.5.5.0
- S6_RC_SITE = https://skarnet.org/software/s6-rc
- S6_RC_LICENSE = ISC
- S6_RC_LICENSE_FILES = COPYING
-@@ -12,7 +12,7 @@ S6_RC_INSTALL_STAGING = YES
- S6_RC_DEPENDENCIES = s6
- 
- S6_RC_CONF_OPTS = \
--	--with-sysdeps=$(STAGING_DIR)/lib/skalibs/sysdeps \
-+	--with-sysdeps=$(STAGING_DIR)/usr/lib/skalibs/sysdeps \
- 	--with-include=$(STAGING_DIR)/include \
- 	--with-dynlib=$(STAGING_DIR)/lib \
- 	--with-lib=$(STAGING_DIR)/lib/execline \
-diff --git a/package/s6/s6.hash b/package/s6/s6.hash
-index 6abeb8066a..b82b226741 100644
---- a/package/s6/s6.hash
-+++ b/package/s6/s6.hash
-@@ -1,3 +1,3 @@
- # Locally generated
--sha256  7e46f8f55d80bb0e2025a64d5d649af4a4ac21e348020caaadde30ba5e5b4830  s6-2.13.0.0.tar.gz
-+sha256  bf0614cf52957cb0af04c7b02d10ebd6c5e023c9d46335cbf75484eed3e2ce7e  s6-2.13.1.0.tar.gz
- sha256  fdc931295525dd0009cdf339189cbecd228d65cefe33402f037f9b046f07989e  COPYING
-diff --git a/package/s6/s6.mk b/package/s6/s6.mk
-index b2451e8454..e72dc28460 100644
---- a/package/s6/s6.mk
-+++ b/package/s6/s6.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--S6_VERSION = 2.13.0.0
-+S6_VERSION = 2.13.1.0
- S6_SITE = https://skarnet.org/software/s6
- S6_LICENSE = ISC
- S6_LICENSE_FILES = COPYING
-@@ -12,7 +12,7 @@ S6_INSTALL_STAGING = YES
- S6_DEPENDENCIES = execline
- 
- S6_CONF_OPTS = \
--	--with-sysdeps=$(STAGING_DIR)/lib/skalibs/sysdeps \
-+	--with-sysdeps=$(STAGING_DIR)/usr/lib/skalibs/sysdeps \
- 	--with-include=$(STAGING_DIR)/include \
- 	--with-dynlib=$(STAGING_DIR)/lib \
- 	--with-lib=$(STAGING_DIR)/lib/execline \
-diff --git a/package/skalibs/skalibs.hash b/package/skalibs/skalibs.hash
-index 1e6bd96671..ba727f9ddd 100644
---- a/package/skalibs/skalibs.hash
-+++ b/package/skalibs/skalibs.hash
-@@ -1,3 +1,3 @@
- # Locally generated
--sha256  ddfec5730e5b2f19d0381ecf7f796b39a6e473236bda0ad8d3776a3fe7b07e43  skalibs-2.14.2.0.tar.gz
-+sha256  a14aa558c9b09b062fa16acec623b2c8f93d69f5cba4d07f6d0c58913066c427  skalibs-2.14.3.0.tar.gz
- sha256  fdc931295525dd0009cdf339189cbecd228d65cefe33402f037f9b046f07989e  COPYING
-diff --git a/package/skalibs/skalibs.mk b/package/skalibs/skalibs.mk
-index 32f7aae864..d37db47b20 100644
---- a/package/skalibs/skalibs.mk
-+++ b/package/skalibs/skalibs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SKALIBS_VERSION = 2.14.2.0
-+SKALIBS_VERSION = 2.14.3.0
- SKALIBS_SITE = https://skarnet.org/software/skalibs
- SKALIBS_LICENSE = ISC
- SKALIBS_LICENSE_FILES = COPYING
-diff --git a/package/tipidee/tipidee.hash b/package/tipidee/tipidee.hash
-index ecc1ab34b4..18b2c1600f 100644
---- a/package/tipidee/tipidee.hash
-+++ b/package/tipidee/tipidee.hash
-@@ -1,3 +1,3 @@
- # Locally generated
--sha256  d9e91fc719879a43d54329b99b02c6649c54e428e77bc96a0573506b52bf1422  tipidee-0.0.5.0.tar.gz
-+sha256  228a995683a8cd4a1de9a7cb3f8d83a43830886c687895d0a3d1c5033f90362b  tipidee-0.0.5.1.tar.gz
- sha256  8feb7933c6e6506a7f20fbfc03fd37df3caff4becdf3b7a0ffad5016277e441e  COPYING
-diff --git a/package/tipidee/tipidee.mk b/package/tipidee/tipidee.mk
-index 8ae18edd8d..035ff50b18 100644
---- a/package/tipidee/tipidee.mk
-+++ b/package/tipidee/tipidee.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TIPIDEE_VERSION = 0.0.5.0
-+TIPIDEE_VERSION = 0.0.5.1
- TIPIDEE_SITE = https://skarnet.org/software/tipidee
- TIPIDEE_LICENSE = ISC
- TIPIDEE_LICENSE_FILES = COPYING
-@@ -13,7 +13,7 @@ TIPIDEE_DEPENDENCIES = skalibs
- TIPIDEE_CONF_OPTS = \
- 	--prefix=/usr \
- 	--sysconfdir=/etc \
--	--with-sysdeps=$(STAGING_DIR)/lib/skalibs/sysdeps \
-+	--with-sysdeps=$(STAGING_DIR)/usr/lib/skalibs/sysdeps \
- 	--with-include=$(STAGING_DIR)/include \
- 	--with-dynlib=$(STAGING_DIR)/lib \
- 	--with-lib=$(STAGING_DIR)/lib/skalibs \
-
---===============8710012373198153973==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+> ---
+>   ...-tools-use-stdbool.h-instead-of-bool.patch | 41 +++++++++++++++++++
+>   1 file changed, 41 insertions(+)
+>   create mode 100644 package/f2fs-tools/0002-f2fs-tools-use-stdbool.h-instead-of-bool.patch
+> 
+> diff --git a/package/f2fs-tools/0002-f2fs-tools-use-stdbool.h-instead-of-bool.patch b/package/f2fs-tools/0002-f2fs-tools-use-stdbool.h-instead-of-bool.patch
+> new file mode 100644
+> index 0000000000..90dfdc209a
+> --- /dev/null
+> +++ b/package/f2fs-tools/0002-f2fs-tools-use-stdbool.h-instead-of-bool.patch
+> @@ -0,0 +1,41 @@
+> +From ec0f9d07792298f89e71cee1e692ad60bf6b8d5c Mon Sep 17 00:00:00 2001
+> +From: Jaegeuk Kim <jaegeuk@kernel.org>
+> +Date: Thu, 24 Oct 2024 20:33:38 +0000
+> +Subject: [PATCH] f2fs-tools: use stdbool.h instead of bool
+> +
+> +The existing bool definition is broken for c23, where bool is now a keyword.
+> +
+> +Signed-off-by: Elliott Hughes <enh@google.com>
+> +Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+> +Upstream: https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git/commit/?id=6617d15a660becc23825007ab3fc2d270b5b250f
+> +[Florian: rebased to 1.16.0]
+> +Signed-off-by: Florian Larysch <fl@n621.de>
+> +---
+> + include/f2fs_fs.h | 4 +---
+> + 1 file changed, 1 insertion(+), 3 deletions(-)
+> +
+> +diff --git a/include/f2fs_fs.h b/include/f2fs_fs.h
+> +index f890634..a968380 100644
+> +--- a/include/f2fs_fs.h
+> ++++ b/include/f2fs_fs.h
+> +@@ -26,6 +26,7 @@
+> + #include <stddef.h>
+> + #include <string.h>
+> + #include <time.h>
+> ++#include <stdbool.h>
+> +
+> + #ifdef HAVE_CONFIG_H
+> + #include <config.h>
+> +@@ -103,9 +104,6 @@ typedef uint16_t	u16;
+> + typedef uint8_t		u8;
+> + typedef u32		block_t;
+> + typedef u32		nid_t;
+> +-#ifndef bool
+> +-typedef u8		bool;
+> +-#endif
+> + typedef unsigned long	pgoff_t;
+> + typedef unsigned short	umode_t;
+> +
+> +--
+> +2.49.0
+> +
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8710012373198153973==--
