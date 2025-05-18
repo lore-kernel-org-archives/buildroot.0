@@ -4,76 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E405C3DA6D
-	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 11:55:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1227EC3ABD8
+	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 11:55:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 39E0E409E8;
-	Sun, 18 May 2025 11:55:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D38F0409FF;
+	Sun, 18 May 2025 11:55:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lCW4ykLzumLp; Sun, 18 May 2025 11:55:44 +0000 (UTC)
+ id U90UUOR_7Iiq; Sun, 18 May 2025 11:55:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 67AFF409FB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 09C1C4097B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 67AFF409FB;
-	Sun, 18 May 2025 11:55:44 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id D6192DF
- for <buildroot@buildroot.org>; Sun, 18 May 2025 11:55:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 09C1C4097B;
+	Sun, 18 May 2025 11:55:55 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 66E561BA
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 11:55:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C7B4F40ACE
- for <buildroot@buildroot.org>; Sun, 18 May 2025 11:55:42 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4D13040ACE
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 11:55:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SVDZoVqqgrPB for <buildroot@buildroot.org>;
- Sun, 18 May 2025 11:55:42 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
- helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org AF45540146
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AF45540146
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp2.osuosl.org (Postfix) with ESMTPS id AF45540146
- for <buildroot@buildroot.org>; Sun, 18 May 2025 11:55:41 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2C2D243226;
- Sun, 18 May 2025 11:55:37 +0000 (UTC)
-Date: Sun, 18 May 2025 13:55:36 +0200
-To: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Cc: buildroot@buildroot.org
-Message-ID: <20250518135536.35af784b@windsurf>
-In-Reply-To: <20250403044747.322647-1-hayashi.kunihiko@socionext.com>
-References: <20250403044747.322647-1-hayashi.kunihiko@socionext.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+ id d1dpqbhDilCN for <buildroot@buildroot.org>;
+ Sun, 18 May 2025 11:55:53 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5EC2E40146
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5EC2E40146
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5EC2E40146
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 11:55:53 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a067b.dip0.t-ipconnect.de [91.58.6.123])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 81DF7A4C2046;
+ Sun, 18 May 2025 13:55:23 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:51560)
+ by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
+ (envelope-from <bernd@kuhls.net>) id 1uGcby-0000000008Y-2k2H;
+ Sun, 18 May 2025 11:55:23 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Cc: Daniel Lang <dalang@gmx.at>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Joseph Kogut <joseph.kogut@gmail.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Valentin Korenblit <valentinkorenblit@gmail.com>,
+ El Mehdi YOUNES <elmehdi.younes@smile.fr>
+Date: Sun, 18 May 2025 13:55:16 +0200
+Message-Id: <20250518115519.3649662-2-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250518115519.3649662-1-bernd@kuhls.net>
+References: <20250518115519.3649662-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefudekgeegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepledtgedvjeehgeetgfeufffglefhkedvfeduveeiieelteeliedtfefguefggffhnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumegufeduvgemvdefheemtgehvgdvmegvugekfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumegufeduvgemvdefheemtgehvgdvmegvugekfedphhgvlhhopeifihhnughsuhhrfhdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvddprhgtphhtthhopehhrgihrghshhhirdhkuhhnihhhihhkohesshhotghiohhnvgigthdrtghomhdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhg
-X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1747569338;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=OxOOGwu1ge8oU1J+Cr6NsiGCg8lEaBLk0P20v7o7aq4=;
- b=AUlmZ9D+oeFedhboJ4NZ0FPf9yHBWQOARGHDfxNdMWUkdZw/2S7dEKqv4Duzklq0grjjgG
- Iu9RP5G4TSRjQ5yCnrAv6OWDx8DB1o3ufFrfhCPAeHdoEE+abGrYK3y5B0LoN+Ug+7SLNq
- N9Cvo9umGFpCCwPMWJuG3ZVUcr8LPxBSMwZxHBeg2L6tYvhu2UT4dpLFIe9P+MtVhzYO2Q
- P/MuLlA06fP0m+H7El4kK3DAjraRASZ7KgfFJy4d/EHdbspXXD6SvM+IcDcBJ6MGqSQPAr
- 6yq/VYKa6eEFxUsL9W3YnWh8+TQ4tityf2i+B1QZJmfHc+W9FzmdGZaCLNSd+Q==
+ d=kuhls.net; 
+ s=kas202412041019; t=1747569323;
+ bh=Yp+cuM8+OwUq2n5nWaYzpet2sVouN/gKJtBEGblqxwg=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+ b=hsw3TXJuPJFuMjI0sSu3YmOM80bXdVEMOy3KS34H/ymd8xnsccSunREI8zTl3fvoA
+ QcfY4fSA41zzCKsaRgdeAF0nFE0SJnBsnq8Os98Whw3lH9P0ng2akXyHEo9RShU8Re
+ tzZYhL56HMm5P62vY6Iy8XhWNzHzkXLGe+N8eZ8bigYxchomaSE4jGC9rrV7bzgOu4
+ MbBWCYbE0v4h5aevKL+h5Uqp3gz+Ndzey70KMg+EBxfcM/5kHZjWWqe7hKZs9aVfTF
+ rEEdTOjUyuaJN5SSX1ayFEfJ/3BcSEFIp83Wo79OYLdAL6OC+kAfFP3ifL0SzXl1ZZ
+ Fk9mtxq7CWwEw==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=AUlmZ9D+
-Subject: Re: [Buildroot] [PATCH 1/1] package/uboot-tools: remove absolute
- path of link source for fw_setenv
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202412041019 header.b=hsw3TXJu
+Subject: [Buildroot] [PATCH v2 2/5] package/llvm-project: add llvm-runtimes
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,32 +89,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu,  3 Apr 2025 13:47:47 +0900
-Kunihiko Hayashi <hayashi.kunihiko@socionext.com> wrote:
+From: El Mehdi YOUNES <elmehdi.younes@smile.fr>
 
-> For portability reason, it isn't preferable to include an absolute path
-> in the link to fw_printenv which is in the same directory as fw_setenv.
-> 
-> Fixes: 42646265d5dd ("package/uboot-tools: add fw_printenv to host uboot tools")
-> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-> ---
->  package/uboot-tools/uboot-tools.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Add a new host package to install the CMake modules provided by the
+runtimes archive of LLVM. These modules are required to build components
+like libunwind since upstream refactored the common flag-handling logic
+into a shared file: `HandleFlags.cmake`.
 
-Applied to master, thanks.
+This package extracts and installs the relevant files to
+`$(HOST_DIR)/lib/cmake/llvm`, where other components like libunwind
+will look for them.
 
-Thomas
+see https://github.com/llvm/llvm-project/commit/0af67d167d6c811abf12ad6c27ee34ec1365e5fb
+
+Signed-off-by: El Mehdi YOUNES <elmehdi.younes@smile.fr>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+v2: no changes
+
+ .../llvm-runtimes/llvm-runtimes.hash            |  1 +
+ .../llvm-project/llvm-runtimes/llvm-runtimes.mk | 17 +++++++++++++++++
+ 2 files changed, 18 insertions(+)
+ create mode 100644 package/llvm-project/llvm-runtimes/llvm-runtimes.hash
+ create mode 100644 package/llvm-project/llvm-runtimes/llvm-runtimes.mk
+
+diff --git a/package/llvm-project/llvm-runtimes/llvm-runtimes.hash b/package/llvm-project/llvm-runtimes/llvm-runtimes.hash
+new file mode 100644
+index 0000000000..492050e8ac
+--- /dev/null
++++ b/package/llvm-project/llvm-runtimes/llvm-runtimes.hash
+@@ -0,0 +1 @@
++sha256  6394d8f111288c918421756037c10c4f8471325992e37c44cf8811b4e3dde00b  runtimes-20.1.3.src.tar.xz
+diff --git a/package/llvm-project/llvm-runtimes/llvm-runtimes.mk b/package/llvm-project/llvm-runtimes/llvm-runtimes.mk
+new file mode 100644
+index 0000000000..88f1421f08
+--- /dev/null
++++ b/package/llvm-project/llvm-runtimes/llvm-runtimes.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# llvm-runtimes
++#
++################################################################################
++
++LLVM_RUNTIMES_VERSION = $(LLVM_PROJECT_VERSION)
++LLVM_RUNTIMES_SITE = $(LLVM_PROJECT_SITE)
++LLVM_RUNTIMES_SOURCE = runtimes-$(LLVM_RUNTIMES_VERSION).src.tar.xz
++LLVM_RUNTIMES_LICENSE = Apache-2.0 with exceptions
++
++define HOST_LLVM_RUNTIMES_INSTALL_CMDS
++        mkdir -p $(HOST_DIR)/lib/cmake/llvm/Modules
++        cp -Rv $(@D)/cmake/Modules/* $(HOST_DIR)/lib/cmake/llvm
++endef
++
++$(eval $(host-generic-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.39.5
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
