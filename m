@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91ED4C3ABC9
-	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 14:47:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 846ADC3DA6D
+	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 14:47:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 621EA80FAD;
-	Sun, 18 May 2025 14:47:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 49CDC6064D;
+	Sun, 18 May 2025 14:47:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D4YasgDK4Lu2; Sun, 18 May 2025 14:47:27 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IjezSC0EPU4U; Sun, 18 May 2025 14:47:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 625B280FF4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF8D560BD3
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 625B280FF4;
-	Sun, 18 May 2025 14:47:27 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 99ABC1BA
- for <buildroot@buildroot.org>; Sun, 18 May 2025 14:47:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EF8D560BD3;
+	Sun, 18 May 2025 14:47:28 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 05F8E1BA
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 14:47:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4845740A93
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5EAAD403FC
  for <buildroot@buildroot.org>; Sun, 18 May 2025 14:47:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JICz2AkjxnJV for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HsijmpnYlBrz for <buildroot@buildroot.org>;
  Sun, 18 May 2025 14:47:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 864C840E1D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5BA45403DA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 864C840E1D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5BA45403DA
  for <buildroot@buildroot.org>; Sun, 18 May 2025 14:47:10 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 82D0587143; Sun, 18 May 2025 14:47:10 +0000 (UTC)
+ id 5932B84AD1; Sun, 18 May 2025 14:47:10 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 18 May 2025 15:01:56 +0200
+Date: Sun, 18 May 2025 14:59:13 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: a46e7c619cdbdc09b4e64e34a8537de7140bf347
-X-Git-Newrev: 4c862b9a37d434e81c877e0e949c7dc9fd4b8c94
+X-Git-Oldrev: f7ccae9b660e70c33c217c0c5312e76498e43708
+X-Git-Newrev: 74cd7c5f4b075454500b3cc94dfc2d07af3fad10
 X-Patchwork-Hint: ignore
-Message-Id: <20250518144710.82D0587143@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/python-h11:
- security bump to version 0.16.0
+Message-Id: <20250518144710.5932B84AD1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/micropython: fix
+ build with GCC 15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,59 +66,382 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4c862b9a37d434e81c877e0e949c7dc9fd4b8c94
+commit: https://git.buildroot.net/buildroot/commit/?id=74cd7c5f4b075454500b3cc94dfc2d07af3fad10
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Fixes the following security issue:
+A set of `unterminated-string-initialization` errors appeared when
+building the micropython package with GCC15 on the host.
+The autobuilder failed to build the package micropython with the
+following error:
 
-- CVE-2025-43859: A leniency in h11's parsing of line terminators in
-    chunked-coding message bodies can lead to request smuggling
-    vulnerabilities under certain conditions.
+```
+CC ../py/emitinlinethumb.c
+../py/emitinlinethumb.c:153:9: error: initializer-string for array of 'unsigned char' truncates NUL terminator but destination lacks 'nonstring' attribute (4 chars into 3 available) [-Werror=unterminated-string-initialization]
+  153 |     {0, "r0\0"},
+      |         ^~~~~~
+../py/emitinlinethumb.c:154:9: error: initializer-string for array of 'unsigned char' truncates NUL terminator but destination lacks 'nonstring' attribute (4 chars into 3 available) [-Werror=unterminated-string-initialization]
+  154 |     {1, "r1\0"},
+      |         ^~~~~~
+...
+```
 
-For more information, see:
-  - https://nvd.nist.gov/vuln/detail/CVE-2025-43859
-  - https://github.com/python-hyper/h11/commit/114803a29ce50116dc47951c690ad4892b1a36ed
+This patch adds the set of upstream commits to fix the compatbility with
+GCC15 (see [1]).
+The patches were backported to micropython v1.22.2. The main difference
+with the upstream version is that since the v1.23, the project removed the
+use of the `STATIC` macro (see [2]).
 
-For more details on the version bump, see:
-  - https://github.com/python-hyper/h11/compare/v0.14.0...v0.16.0
+Also, in the codebase of v1.22.2 the 'unterminated-string-initialization'
+error occured in another file that was reworked in the patch [3] and
+included in v1.25. This patch is included as well to remove the error in
+v1.22.2.
+
+[1] package/micropython/0003-Fixes-for-GCC-15-1-unterminated-string-literal-warning.patch
+[2] https://github.com/micropython/micropython/commit/decf8e6a8bb940d5829ca3296790631fcece7b21
+[3] package/micropython/0002-py-emitinlinextensa-Simplify-register-name-lookup.patch
+
+Fixes: https://autobuild.buildroot.org/results/fdf/fdf1d7c3e3a51e6fc7fa5abea57de6c9ce792015
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 6541717ef963bd4e7cf5b902d2ba4781217e99dc)
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 0814b614c255abedefe5f65564f0871dbcafab9e)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/python-h11/python-h11.hash | 4 ++--
- package/python-h11/python-h11.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...nlinextensa-Simplify-register-name-lookup.patch |  85 ++++++++
+ ...-15-1-unterminated-string-literal-warning.patch | 234 +++++++++++++++++++++
+ 2 files changed, 319 insertions(+)
 
-diff --git a/package/python-h11/python-h11.hash b/package/python-h11/python-h11.hash
-index 0c65a11d00..1ea92278dd 100644
---- a/package/python-h11/python-h11.hash
-+++ b/package/python-h11/python-h11.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/h11/json
--md5  84c33fc0aa1f868928114c4d02c43dc2  h11-0.14.0.tar.gz
--sha256  8f19fbbe99e72420ff35c00b27a34cb9937e902a8b810e2c88300c6f0a3b699d  h11-0.14.0.tar.gz
-+md5  af51401a776fd654cfd98a197af9f21f  h11-0.16.0.tar.gz
-+sha256  4e35b956cf45792e4caa5885e69fba00bdbc6ffafbfa020300e549b208ee5ff1  h11-0.16.0.tar.gz
- # Locally computed sha256 checksums
- sha256  37db5bb85926db28a427a25867f10b1232003aea1be69ccb851138adb8e6f361  LICENSE.txt
-diff --git a/package/python-h11/python-h11.mk b/package/python-h11/python-h11.mk
-index d7dca5244b..4e4685ea5a 100644
---- a/package/python-h11/python-h11.mk
-+++ b/package/python-h11/python-h11.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_H11_VERSION = 0.14.0
-+PYTHON_H11_VERSION = 0.16.0
- PYTHON_H11_SOURCE = h11-$(PYTHON_H11_VERSION).tar.gz
--PYTHON_H11_SITE = https://files.pythonhosted.org/packages/f5/38/3af3d3633a34a3316095b39c8e8fb4853a28a536e55d347bd8d8e9a14b03
-+PYTHON_H11_SITE = https://files.pythonhosted.org/packages/01/ee/02a2c011bdab74c6fb3c75474d40b3052059d95df7e73351460c8588d963
- PYTHON_H11_SETUP_TYPE = setuptools
- PYTHON_H11_LICENSE = MIT
- PYTHON_H11_LICENSE_FILES = LICENSE.txt
+diff --git a/package/micropython/0002-py-emitinlinextensa-Simplify-register-name-lookup.patch b/package/micropython/0002-py-emitinlinextensa-Simplify-register-name-lookup.patch
+new file mode 100644
+index 0000000000..1d18db8235
+--- /dev/null
++++ b/package/micropython/0002-py-emitinlinextensa-Simplify-register-name-lookup.patch
+@@ -0,0 +1,85 @@
++From 7d9fcfcd1b0ef9f20e703037eba6a49a4fc4cb0c Mon Sep 17 00:00:00 2001
++From: Alessandro Gatti <a.gatti@frob.it>
++Date: Tue, 28 Jan 2025 14:58:29 +0100
++Subject: [PATCH] py/emitinlinextensa: Simplify register name lookup.
++
++This commit changes the Xtensa inline assembly parser to use a slightly
++simpler (and probably a tiny bit more efficient) way to look up register
++names when decoding instruction parameters.
++
++Signed-off-by: Alessandro Gatti <a.gatti@frob.it>
++Upstream: https://github.com/micropython/micropython/commit/50fab08e6b861adf65905d6adacd74201c87ddb9
++[tperale: backport 1.22.2]
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++---
++ py/emitinlinextensa.c | 49 +++++++++----------------------------------
++ 1 file changed, 10 insertions(+), 39 deletions(-)
++
++diff --git a/py/emitinlinextensa.c b/py/emitinlinextensa.c
++index 5dac2ae39..e59146047 100644
++--- a/py/emitinlinextensa.c
+++++ b/py/emitinlinextensa.c
++@@ -115,50 +115,21 @@ STATIC bool emit_inline_xtensa_label(emit_inline_asm_t *emit, mp_uint_t label_nu
++     return true;
++ }
++ 
++-typedef struct _reg_name_t { byte reg;
++-                             byte name[3];
++-} reg_name_t;
++-STATIC const reg_name_t reg_name_table[] = {
++-    {0, "a0\0"},
++-    {1, "a1\0"},
++-    {2, "a2\0"},
++-    {3, "a3\0"},
++-    {4, "a4\0"},
++-    {5, "a5\0"},
++-    {6, "a6\0"},
++-    {7, "a7\0"},
++-    {8, "a8\0"},
++-    {9, "a9\0"},
++-    {10, "a10"},
++-    {11, "a11"},
++-    {12, "a12"},
++-    {13, "a13"},
++-    {14, "a14"},
++-    {15, "a15"},
+++STATIC const qstr_short_t REGISTERS[16] = {
+++    MP_QSTR_a0, MP_QSTR_a1, MP_QSTR_a2, MP_QSTR_a3, MP_QSTR_a4, MP_QSTR_a5, MP_QSTR_a6, MP_QSTR_a7,
+++    MP_QSTR_a8, MP_QSTR_a9, MP_QSTR_a10, MP_QSTR_a11, MP_QSTR_a12, MP_QSTR_a13, MP_QSTR_a14, MP_QSTR_a15
++ };
++ 
++-// return empty string in case of error, so we can attempt to parse the string
++-// without a special check if it was in fact a string
++-STATIC const char *get_arg_str(mp_parse_node_t pn) {
++-    if (MP_PARSE_NODE_IS_ID(pn)) {
++-        qstr qst = MP_PARSE_NODE_LEAF_ARG(pn);
++-        return qstr_str(qst);
++-    } else {
++-        return "";
++-    }
++-}
++-
++ STATIC mp_uint_t get_arg_reg(emit_inline_asm_t *emit, const char *op, mp_parse_node_t pn) {
++-    const char *reg_str = get_arg_str(pn);
++-    for (mp_uint_t i = 0; i < MP_ARRAY_SIZE(reg_name_table); i++) {
++-        const reg_name_t *r = &reg_name_table[i];
++-        if (reg_str[0] == r->name[0]
++-            && reg_str[1] == r->name[1]
++-            && reg_str[2] == r->name[2]
++-            && (reg_str[2] == '\0' || reg_str[3] == '\0')) {
++-            return r->reg;
+++    if (MP_PARSE_NODE_IS_ID(pn)) {
+++        qstr node_qstr = MP_PARSE_NODE_LEAF_ARG(pn);
+++        for (size_t i = 0; i < MP_ARRAY_SIZE(REGISTERS); i++) {
+++            if (node_qstr == REGISTERS[i]) {
+++                return i;
+++            }
++         }
++     }
+++
++     emit_inline_xtensa_error_exc(emit,
++         mp_obj_new_exception_msg_varg(&mp_type_SyntaxError,
++             MP_ERROR_TEXT("'%s' expects a register"), op));
++-- 
++2.49.0
++
+diff --git a/package/micropython/0003-Fixes-for-GCC-15-1-unterminated-string-literal-warning.patch b/package/micropython/0003-Fixes-for-GCC-15-1-unterminated-string-literal-warning.patch
+new file mode 100644
+index 0000000000..31775bdbc0
+--- /dev/null
++++ b/package/micropython/0003-Fixes-for-GCC-15-1-unterminated-string-literal-warning.patch
+@@ -0,0 +1,234 @@
++From 531d4839d44a90447c232d51d1bee0cae45add9a Mon Sep 17 00:00:00 2001
++From: Angus Gratton <angus@redyak.com.au>
++Date: Fri, 9 May 2025 13:34:37 +1000
++Subject: [PATCH] extmod/moductypes: Refactor string literal as array
++ initializer.
++
++Avoids the new Wunterminated-string-literal when compiled with gcc 15.1.
++
++Also split out the duplicate string to a top-level array (probably the
++duplicate string literal was interned, so unlikely to have any impact.)
++
++This work was funded through GitHub Sponsors.
++
++Signed-off-by: Angus Gratton <angus@redyak.com.au>
++Upstream: https://github.com/micropython/micropython/pull/17269
++[tperale: backport 1.22.2]
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++---
++ extmod/moductypes.c | 7 +++++--
++ 1 file changed, 5 insertions(+), 2 deletions(-)
++
++diff --git a/extmod/moductypes.c b/extmod/moductypes.c
++index f56567107..87fd5fb69 100644
++--- a/extmod/moductypes.c
+++++ b/extmod/moductypes.c
++@@ -277,15 +277,18 @@ STATIC mp_obj_t uctypes_struct_sizeof(size_t n_args, const mp_obj_t *args) {
++ }
++ STATIC MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(uctypes_struct_sizeof_obj, 1, 2, uctypes_struct_sizeof);
++ 
+++static const char type2char[16] = {
+++    'B', 'b', 'H', 'h', 'I', 'i', 'Q', 'q',
+++    '-', '-', '-', '-', '-', '-', 'f', 'd'
+++};
+++
++ static inline mp_obj_t get_unaligned(uint val_type, byte *p, int big_endian) {
++     char struct_type = big_endian ? '>' : '<';
++-    static const char type2char[16] = "BbHhIiQq------fd";
++     return mp_binary_get_val(struct_type, type2char[val_type], p, &p);
++ }
++ 
++ static inline void set_unaligned(uint val_type, byte *p, int big_endian, mp_obj_t val) {
++     char struct_type = big_endian ? '>' : '<';
++-    static const char type2char[16] = "BbHhIiQq------fd";
++     mp_binary_set_val(struct_type, type2char[val_type], val, p, &p);
++ }
++ 
++
++From 0398873d8c8096d2054db130efd1fcecba2a426d Mon Sep 17 00:00:00 2001
++From: Angus Gratton <angus@redyak.com.au>
++Date: Fri, 9 May 2025 13:36:05 +1000
++Subject: [PATCH] py/emitinlinethumb: Refactor string literal as array
++ initializer.
++
++Avoids the new Wunterminated-string-literal when compiled with gcc 15.1.
++
++This work was funded through GitHub Sponsors.
++
++Signed-off-by: Angus Gratton <angus@redyak.com.au>
++---
++ py/emitinlinethumb.c | 108 +++++++++++++++++++++----------------------
++ 1 file changed, 54 insertions(+), 54 deletions(-)
++
++diff --git a/py/emitinlinethumb.c b/py/emitinlinethumb.c
++index 29487f104..0b9efa1da 100644
++--- a/py/emitinlinethumb.c
+++++ b/py/emitinlinethumb.c
++@@ -150,27 +150,27 @@ typedef struct _reg_name_t { byte reg;
++                              byte name[3];
++ } reg_name_t;
++ STATIC const reg_name_t reg_name_table[] = {
++-    {0, "r0\0"},
++-    {1, "r1\0"},
++-    {2, "r2\0"},
++-    {3, "r3\0"},
++-    {4, "r4\0"},
++-    {5, "r5\0"},
++-    {6, "r6\0"},
++-    {7, "r7\0"},
++-    {8, "r8\0"},
++-    {9, "r9\0"},
++-    {10, "r10"},
++-    {11, "r11"},
++-    {12, "r12"},
++-    {13, "r13"},
++-    {14, "r14"},
++-    {15, "r15"},
++-    {10, "sl\0"},
++-    {11, "fp\0"},
++-    {13, "sp\0"},
++-    {14, "lr\0"},
++-    {15, "pc\0"},
+++    {0, {'r', '0' }},
+++    {1, {'r', '1' }},
+++    {2, {'r', '2' }},
+++    {3, {'r', '3' }},
+++    {4, {'r', '4' }},
+++    {5, {'r', '5' }},
+++    {6, {'r', '6' }},
+++    {7, {'r', '7' }},
+++    {8, {'r', '8' }},
+++    {9, {'r', '9' }},
+++    {10, {'r', '1', '0' }},
+++    {11, {'r', '1', '1' }},
+++    {12, {'r', '1', '2' }},
+++    {13, {'r', '1', '3' }},
+++    {14, {'r', '1', '4' }},
+++    {15, {'r', '1', '5' }},
+++    {10, {'s', 'l' }},
+++    {11, {'f', 'p' }},
+++    {13, {'s', 'p' }},
+++    {14, {'l', 'r' }},
+++    {15, {'p', 'c' }},
++ };
++ 
++ #define MAX_SPECIAL_REGISTER_NAME_LENGTH 7
++@@ -368,20 +368,20 @@ typedef struct _cc_name_t { byte cc;
++                             byte name[2];
++ } cc_name_t;
++ STATIC const cc_name_t cc_name_table[] = {
++-    { ASM_THUMB_CC_EQ, "eq" },
++-    { ASM_THUMB_CC_NE, "ne" },
++-    { ASM_THUMB_CC_CS, "cs" },
++-    { ASM_THUMB_CC_CC, "cc" },
++-    { ASM_THUMB_CC_MI, "mi" },
++-    { ASM_THUMB_CC_PL, "pl" },
++-    { ASM_THUMB_CC_VS, "vs" },
++-    { ASM_THUMB_CC_VC, "vc" },
++-    { ASM_THUMB_CC_HI, "hi" },
++-    { ASM_THUMB_CC_LS, "ls" },
++-    { ASM_THUMB_CC_GE, "ge" },
++-    { ASM_THUMB_CC_LT, "lt" },
++-    { ASM_THUMB_CC_GT, "gt" },
++-    { ASM_THUMB_CC_LE, "le" },
+++    { ASM_THUMB_CC_EQ, { 'e', 'q' }},
+++    { ASM_THUMB_CC_NE, { 'n', 'e' }},
+++    { ASM_THUMB_CC_CS, { 'c', 's' }},
+++    { ASM_THUMB_CC_CC, { 'c', 'c' }},
+++    { ASM_THUMB_CC_MI, { 'm', 'i' }},
+++    { ASM_THUMB_CC_PL, { 'p', 'l' }},
+++    { ASM_THUMB_CC_VS, { 'v', 's' }},
+++    { ASM_THUMB_CC_VC, { 'v', 'c' }},
+++    { ASM_THUMB_CC_HI, { 'h', 'i' }},
+++    { ASM_THUMB_CC_LS, { 'l', 's' }},
+++    { ASM_THUMB_CC_GE, { 'g', 'e' }},
+++    { ASM_THUMB_CC_LT, { 'l', 't' }},
+++    { ASM_THUMB_CC_GT, { 'g', 't' }},
+++    { ASM_THUMB_CC_LE, { 'l', 'e' }},
++ };
++ 
++ typedef struct _format_4_op_t { byte op;
++@@ -389,21 +389,21 @@ typedef struct _format_4_op_t { byte op;
++ } format_4_op_t;
++ #define X(x) (((x) >> 4) & 0xff) // only need 1 byte to distinguish these ops
++ STATIC const format_4_op_t format_4_op_table[] = {
++-    { X(ASM_THUMB_FORMAT_4_EOR), "eor" },
++-    { X(ASM_THUMB_FORMAT_4_LSL), "lsl" },
++-    { X(ASM_THUMB_FORMAT_4_LSR), "lsr" },
++-    { X(ASM_THUMB_FORMAT_4_ASR), "asr" },
++-    { X(ASM_THUMB_FORMAT_4_ADC), "adc" },
++-    { X(ASM_THUMB_FORMAT_4_SBC), "sbc" },
++-    { X(ASM_THUMB_FORMAT_4_ROR), "ror" },
++-    { X(ASM_THUMB_FORMAT_4_TST), "tst" },
++-    { X(ASM_THUMB_FORMAT_4_NEG), "neg" },
++-    { X(ASM_THUMB_FORMAT_4_CMP), "cmp" },
++-    { X(ASM_THUMB_FORMAT_4_CMN), "cmn" },
++-    { X(ASM_THUMB_FORMAT_4_ORR), "orr" },
++-    { X(ASM_THUMB_FORMAT_4_MUL), "mul" },
++-    { X(ASM_THUMB_FORMAT_4_BIC), "bic" },
++-    { X(ASM_THUMB_FORMAT_4_MVN), "mvn" },
+++    { X(ASM_THUMB_FORMAT_4_EOR), {'e', 'o', 'r' }},
+++    { X(ASM_THUMB_FORMAT_4_LSL), {'l', 's', 'l' }},
+++    { X(ASM_THUMB_FORMAT_4_LSR), {'l', 's', 'r' }},
+++    { X(ASM_THUMB_FORMAT_4_ASR), {'a', 's', 'r' }},
+++    { X(ASM_THUMB_FORMAT_4_ADC), {'a', 'd', 'c' }},
+++    { X(ASM_THUMB_FORMAT_4_SBC), {'s', 'b', 'c' }},
+++    { X(ASM_THUMB_FORMAT_4_ROR), {'r', 'o', 'r' }},
+++    { X(ASM_THUMB_FORMAT_4_TST), {'t', 's', 't' }},
+++    { X(ASM_THUMB_FORMAT_4_NEG), {'n', 'e', 'g' }},
+++    { X(ASM_THUMB_FORMAT_4_CMP), {'c', 'm', 'p' }},
+++    { X(ASM_THUMB_FORMAT_4_CMN), {'c', 'm', 'n' }},
+++    { X(ASM_THUMB_FORMAT_4_ORR), {'o', 'r', 'r' }},
+++    { X(ASM_THUMB_FORMAT_4_MUL), {'m', 'u', 'l' }},
+++    { X(ASM_THUMB_FORMAT_4_BIC), {'b', 'i', 'c' }},
+++    { X(ASM_THUMB_FORMAT_4_MVN), {'m', 'v', 'n' }},
++ };
++ #undef X
++ 
++@@ -428,10 +428,10 @@ typedef struct _format_vfp_op_t {
++     char name[3];
++ } format_vfp_op_t;
++ STATIC const format_vfp_op_t format_vfp_op_table[] = {
++-    { 0x30, "add" },
++-    { 0x34, "sub" },
++-    { 0x20, "mul" },
++-    { 0x80, "div" },
+++    { 0x30, {'a', 'd', 'd' }},
+++    { 0x34, {'s', 'u', 'b' }},
+++    { 0x20, {'m', 'u', 'l' }},
+++    { 0x80, {'d', 'i', 'v' }},
++ };
++ 
++ // shorthand alias for whether we allow ARMv7-M instructions
++
++From bfd5a0350a0d53f52695d373dae6ee367971b145 Mon Sep 17 00:00:00 2001
++From: Angus Gratton <angus@redyak.com.au>
++Date: Fri, 9 May 2025 14:34:09 +1000
++Subject: [PATCH] lib/littlefs: Fix string initializer in lfs1.c.
++
++Avoids the new Wunterminated-string-literal when compiled with gcc 15.1.
++
++It would be preferable to just disable this warning, but Clang
++-Wunknown-warning-option kicks in even when disabling warnings so this
++becomes fiddly to apply.
++
++This work was funded through GitHub Sponsors.
++
++Signed-off-by: Angus Gratton <angus@redyak.com.au>
++---
++ lib/littlefs/lfs1.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/lib/littlefs/lfs1.c b/lib/littlefs/lfs1.c
++index 6a3fd670012cc..ec18dc470258c 100644
++--- a/lib/littlefs/lfs1.c
+++++ b/lib/littlefs/lfs1.c
++@@ -2141,7 +2141,7 @@ int lfs1_format(lfs1_t *lfs1, const struct lfs1_config *cfg) {
++             .d.elen = sizeof(superblock.d) - sizeof(superblock.d.magic) - 4,
++             .d.nlen = sizeof(superblock.d.magic),
++             .d.version = LFS1_DISK_VERSION,
++-            .d.magic = {"littlefs"},
+++            .d.magic = {'l', 'i', 't', 't', 'l', 'e', 'f', 's'},
++             .d.block_size  = lfs1->cfg->block_size,
++             .d.block_count = lfs1->cfg->block_count,
++             .d.root = {lfs1->root[0], lfs1->root[1]},
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
