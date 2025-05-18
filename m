@@ -1,71 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 975F2C3ABD8
-	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 14:43:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2AD63C3ABD8
+	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 14:43:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 501B780EA3;
-	Sun, 18 May 2025 14:43:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EC541608D9;
+	Sun, 18 May 2025 14:43:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WYx93DL4VaYr; Sun, 18 May 2025 14:43:17 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IWoQDeKMCLqN; Sun, 18 May 2025 14:43:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6B88381EBC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E24A6064D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6B88381EBC;
-	Sun, 18 May 2025 14:43:17 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1B7A31BA
- for <buildroot@buildroot.org>; Sun, 18 May 2025 14:43:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2E24A6064D;
+	Sun, 18 May 2025 14:43:48 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0CF111BA
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 14:43:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0D18440E46
- for <buildroot@buildroot.org>; Sun, 18 May 2025 14:43:16 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 097A040916
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 14:43:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xK5fjpMClpuT for <buildroot@buildroot.org>;
- Sun, 18 May 2025 14:43:15 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PcyTnrW5hqQ3 for <buildroot@buildroot.org>;
+ Sun, 18 May 2025 14:43:46 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
  helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2DF5440A93
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2DF5440A93
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2FDAC4092A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2FDAC4092A
 Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2DF5440A93
- for <buildroot@buildroot.org>; Sun, 18 May 2025 14:43:15 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2FDAC4092A
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 14:43:46 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id EE5C91C1001; Sun, 18 May 2025 16:43:12 +0200 (CEST)
-Message-ID: <0f1210e8-8e8e-494c-b22b-a80af97d4d1f@rnout.be>
-Date: Sun, 18 May 2025 16:43:11 +0200
+ with ESMTPSA id 298F31C1001; Sun, 18 May 2025 16:43:44 +0200 (CEST)
+Message-ID: <6928279c-3668-459c-b77c-73132a11208d@rnout.be>
+Date: Sun, 18 May 2025 16:43:42 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Thomas Perale <thomas.perale@mind.be>, buildroot@buildroot.org
-Cc: James Hilliard <james.hilliard1@gmail.com>
-References: <20250516165911.225407-1-thomas.perale@mind.be>
+To: Peter Korsgaard <peter@korsgaard.com>, buildroot@buildroot.org
+References: <20250516172258.2692710-1-peter@korsgaard.com>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20250516165911.225407-1-thomas.perale@mind.be>
+In-Reply-To: <20250516172258.2692710-1-peter@korsgaard.com>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1747579393; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1747579424; h=from:subject:date:message-id:to:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=VvvQM3PXeNzEfJ0G0SMfOAXiKNFrUn2Y8x4g19SGE8I=;
- b=UIW5mYDE0PaoLIopRCao3zENiDyWH7ocJbCrgZXF8+WTJTVpcg6z0sQnUD3+snM67k+0ad
- x3LuUe+qS/7ggWfmDW3Q9yd+ea+pY3je7dqdWHm8dmv6czKB1hGjefs/Vyf0actevpFDxi
- ghuKcqlXGYMsyQfMK8kuV5rBSgLHMensN7QbHPZPe5F3lb2bulCyqdhX2RwVBySRN0eyjI
- E/DuneKJ9Qv+uWJsponxC9Yj31vzDt01MpXlWKgUeKzyZl8dKQTf9mTXW5ykr/60yPNA0c
- MIoXeuNqSkEcolwOCAAGjGhyeRDCRQONdQkufIhS8Cu+9s2E9KUh+NrQjuhGAw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=YiEMLmn3BKegnsZu5Fcbk6iYoT2NEcJJiAvgY5Vu8Ao=;
+ b=UrKUhmVbXNcpqi8ghuNVB9PjS5EEnc7iyTUObI+0b/Ig2+jVrerqo5bXC7BZlhkXWswnmS
+ 6MMlch5FKlsskKDbEcQHJEIgpgSQcZEVELvOctH6puL2q8HBSQTO1rXwAYleZoY6fWRToa
+ GzvBvi/NEeu1xOo5TYB6/h47cJeGbZNr8EmnQiBEwBJniNt/CnmMhCaIuQtEMA2IqdslVE
+ 6MwjFxC7dZElqGci505C0wl6lPtWjBA/IX1ADz28LV8GcT14vzjMcyuLpTkfZ7ZHJIOUB0
+ rTJsY2jZ0pZn08w8TYD0m4secmPINI3p74/26ANlmrXT1/zue5aZhSrOEJl7hg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=UIW5mYDE
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-h11: security bump to
- version 0.16.0
+ header.a=rsa-sha256 header.s=dkim header.b=UrKUhmVb
+Subject: Re: [Buildroot] [PATCH] fs/erofs: unbreak custom compression
+ handling
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,21 +85,18 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 16/05/2025 18:59, Thomas Perale via buildroot wrote:
-> Fixes the following security issue:
+On 16/05/2025 19:22, Peter Korsgaard wrote:
+> Fixes:
+> https://autobuild.buildroot.net/results/0f856def945b9a863f45f7a58553b62f6875720b/
 > 
-> - CVE-2025-43859: A leniency in h11's parsing of line terminators in
->      chunked-coding message bodies can lead to request smuggling
->      vulnerabilities under certain conditions.
+> Commit a02e43741719 ("fs/erofs: add custom compression option with optional
+> compress-hints file") added logic for custom compression, but in fact it did
+> not work.
 > 
-> For more information, see:
->    - https://nvd.nist.gov/vuln/detail/CVE-2025-43859
->    - https://github.com/python-hyper/h11/commit/114803a29ce50116dc47951c690ad4892b1a36ed
+> BR2_TARGET_ROOTFS_EROFS_COMPRESSION_{ALGORITHMS,HINTS} are kconfig string
+> variables, so we need to use qstrip rather than strip.
 > 
-> For more details on the version bump, see:
->    - https://github.com/python-hyper/h11/compare/v0.14.0...v0.16.0
-> 
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
   Applied to 2025.02.x, thanks.
 
@@ -108,38 +104,26 @@ On 16/05/2025 18:59, Thomas Perale via buildroot wrote:
   Arnout
 
 > ---
->   package/python-h11/python-h11.hash | 4 ++--
->   package/python-h11/python-h11.mk   | 4 ++--
->   2 files changed, 4 insertions(+), 4 deletions(-)
+>   fs/erofs/erofs.mk | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/python-h11/python-h11.hash b/package/python-h11/python-h11.hash
-> index 0c65a11d00..1ea92278dd 100644
-> --- a/package/python-h11/python-h11.hash
-> +++ b/package/python-h11/python-h11.hash
-> @@ -1,5 +1,5 @@
->   # md5, sha256 from https://pypi.org/pypi/h11/json
-> -md5  84c33fc0aa1f868928114c4d02c43dc2  h11-0.14.0.tar.gz
-> -sha256  8f19fbbe99e72420ff35c00b27a34cb9937e902a8b810e2c88300c6f0a3b699d  h11-0.14.0.tar.gz
-> +md5  af51401a776fd654cfd98a197af9f21f  h11-0.16.0.tar.gz
-> +sha256  4e35b956cf45792e4caa5885e69fba00bdbc6ffafbfa020300e549b208ee5ff1  h11-0.16.0.tar.gz
->   # Locally computed sha256 checksums
->   sha256  37db5bb85926db28a427a25867f10b1232003aea1be69ccb851138adb8e6f361  LICENSE.txt
-> diff --git a/package/python-h11/python-h11.mk b/package/python-h11/python-h11.mk
-> index d7dca5244b..4e4685ea5a 100644
-> --- a/package/python-h11/python-h11.mk
-> +++ b/package/python-h11/python-h11.mk
-> @@ -4,9 +4,9 @@
->   #
->   ################################################################################
+> diff --git a/fs/erofs/erofs.mk b/fs/erofs/erofs.mk
+> index 6543a364f1..881ecea053 100644
+> --- a/fs/erofs/erofs.mk
+> +++ b/fs/erofs/erofs.mk
+> @@ -11,9 +11,9 @@ ROOTFS_EROFS_ARGS += -zlz4hc,$(BR2_TARGET_ROOTFS_EROFS_LZ4HC_LEVEL)
+>   else ifeq ($(BR2_TARGET_ROOTFS_EROFS_LZMA),y)
+>   ROOTFS_EROFS_ARGS += -zlzma,$(BR2_TARGET_ROOTFS_EROFS_LZMA_LEVEL)
+>   else ifeq ($(BR2_TARGET_ROOTFS_EROFS_CUSTOM_COMPRESSION),y)
+> -ROOTFS_EROFS_ARGS += -z$(strip $(BR2_TARGET_ROOTFS_EROFS_COMPRESSION_ALGORITHMS))
+> -ifneq ($(strip $(BR2_TARGET_ROOTFS_EROFS_COMPRESSION_HINTS)),)
+> -ROOTFS_EROFS_ARGS += --compress-hints $(strip $(BR2_TARGET_ROOTFS_EROFS_COMPRESSION_HINTS))
+> +ROOTFS_EROFS_ARGS += -z$(call qstrip,$(BR2_TARGET_ROOTFS_EROFS_COMPRESSION_ALGORITHMS))
+> +ifneq ($(call qstrip,$(BR2_TARGET_ROOTFS_EROFS_COMPRESSION_HINTS)),)
+> +ROOTFS_EROFS_ARGS += --compress-hints $(call qstrip,$(BR2_TARGET_ROOTFS_EROFS_COMPRESSION_HINTS))
+>   endif
+>   endif
 >   
-> -PYTHON_H11_VERSION = 0.14.0
-> +PYTHON_H11_VERSION = 0.16.0
->   PYTHON_H11_SOURCE = h11-$(PYTHON_H11_VERSION).tar.gz
-> -PYTHON_H11_SITE = https://files.pythonhosted.org/packages/f5/38/3af3d3633a34a3316095b39c8e8fb4853a28a536e55d347bd8d8e9a14b03
-> +PYTHON_H11_SITE = https://files.pythonhosted.org/packages/01/ee/02a2c011bdab74c6fb3c75474d40b3052059d95df7e73351460c8588d963
->   PYTHON_H11_SETUP_TYPE = setuptools
->   PYTHON_H11_LICENSE = MIT
->   PYTHON_H11_LICENSE_FILES = LICENSE.txt
 
 _______________________________________________
 buildroot mailing list
