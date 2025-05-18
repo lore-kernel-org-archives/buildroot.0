@@ -4,73 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D8C8C3ABD8
-	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 08:57:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F05A8C54756
+	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 08:57:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1822A60775;
-	Sun, 18 May 2025 08:57:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C36D860D53;
+	Sun, 18 May 2025 08:57:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lPKMVNLS51Xs; Sun, 18 May 2025 08:57:32 +0000 (UTC)
+ id l31EsF1NqDlE; Sun, 18 May 2025 08:57:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E94A660D5E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0146D60D68
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E94A660D5E;
-	Sun, 18 May 2025 08:57:31 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id D73F7204
- for <buildroot@buildroot.org>; Sun, 18 May 2025 08:57:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0146D60D68;
+	Sun, 18 May 2025 08:57:36 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1142FE4
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 08:57:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BD3BE40FDE
- for <buildroot@buildroot.org>; Sun, 18 May 2025 08:57:28 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B670A60699
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 08:57:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DezlRwyBByL4 for <buildroot@buildroot.org>;
- Sun, 18 May 2025 08:57:28 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ynKIWrlUpzvS for <buildroot@buildroot.org>;
+ Sun, 18 May 2025 08:57:29 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
  helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org BF335400C6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BF335400C6
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org DE1B460A9E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DE1B460A9E
 Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BF335400C6
- for <buildroot@buildroot.org>; Sun, 18 May 2025 08:57:27 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPA id 022E3432FA;
- Sun, 18 May 2025 08:57:24 +0000 (UTC)
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DE1B460A9E
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 08:57:28 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id E5EE2432FF;
+ Sun, 18 May 2025 08:57:26 +0000 (UTC)
 To: Buildroot List <buildroot@buildroot.org>
 Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 18 May 2025 10:56:53 +0200
-Message-ID: <20250518085723.23020-1-thomas.petazzoni@bootlin.com>
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Bernd Kuhls <bernd@kuhls.net>
+Date: Sun, 18 May 2025 10:56:56 +0200
+Message-ID: <20250518085723.23020-4-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250518085723.23020-1-thomas.petazzoni@bootlin.com>
+References: <20250518085723.23020-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 X-GND-State: clean
 X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefudektdelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffogggtgfesthekredtredtjeenucfhrhhomhepvfhhohhmrghsucfrvghtrgiiiihonhhiuceothhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeefgeehkeevteetvdfhvddvkeeiuefgtdfhgfelueekfeelieeiteffhfetfeeugfenucfkphepvdgrtddvmeekgedvrgemgeehrggtmeelgedtudemugefudgvmedvfeehmegthegvvdemvggukeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeekgedvrgemgeehrggtmeelgedtudemugefudgvmedvfeehmegthegvvdemvggukeefpdhhvghlohepfihinhgushhurhhfrddrpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeefpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehrrghphhgrvghlrdhmvghlohhtthgvsehmihhnugdrsggvpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhli
- hhnrdgtohhm
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefudektdelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnheptedtgedutdfghfetfeelhfdtteevvdeludekkeeiudegjeehgfevudeuudeutefhnecukfhppedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumegufeduvgemvdefheemtgehvgdvmegvugekfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumegufeduvgemvdefheemtgehvgdvmegvugekfedphhgvlhhopeifihhnughsuhhrfhdrrddpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepgedprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtoheprhgrphhhrggvlhdrmhgvlhhothhtvgesmhhinhgurdgsvgdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtl
+ hhinhdrtghomhdprhgtphhtthhopegsvghrnhgusehkuhhhlhhsrdhnvght
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1747558645;
+ d=bootlin.com; s=gm1; t=1747558647;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding;
- bh=r9iB47kqjjEW4aS+cwiIy82z0s7BlPIbI4WCapDtx9I=;
- b=S5h6mYt6ksye0gqrlALkefxfX9Fh4hh5sX/4s+kyzmmI33FSgsC5q5p9Uf7PlZH7YXN8Kb
- uBudOm53XdrOLoJivoZfnQmgpNmQtU8fTAbAYnY1N7LA/BQ4K1z5+muk6H4AIN3Cin8ROj
- sovMpb+Z+Wrw2Wkt+7VlTFpR+nn87zEQbCZ6A9GM1PYS8fA5Seoq+9cfEdot+B+FtkmoYM
- SckzfdG36HrRcNK4ZHh6+hp19A9u9yCREZ7Bj9Cd4qi9Cf17iyYPLRRxNaZeHoGwHzFEks
- otBl/fAJ58VL217R31vXpdIIAHpgXrxaJAOEpMQyAnWiA6d3goP87u+meYlPCg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=33z5xdCgBgW/jsWGtHMhe4+AtF1k7K0YmYo+O+PDIyU=;
+ b=ADS564SyaPrGrCgDB25DxSzOfxhN3CSH7OAmE8BkoGnYlXQqbgLeL4xjlRVHuM3AGoC41N
+ uk6uCVeBbLSSxeowOt3mRFhkDja6Zw1q0rwGfsumbeNESvvO8sUpWym4ukkm8DHmPol3ve
+ 6G+UdVaRNxSMC31J9iNcL9uampOCXildoRcLtwF5DJrbXkh+3Q72GCXQKmuXJRTLgBGlHR
+ 6xTOWcOiH+iukG5PvBGpWC87INMarweZ/JaxmlJT7hf0EyfkbltiKSwezokaGC+h7rUSg9
+ ywKY6ErMuKQDpbnsucs9Yr+XCwt8LjBz/4fvH6GkDBnAvN8bh96wbGSGr8DqXw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=S5h6mYt6
-Subject: [Buildroot] [PATCH 00/22] CVE updates
+ header.s=gm1 header.b=ADS564Sy
+Subject: [Buildroot] [PATCH 03/22] package/dnsmasq: drop stale IGNORE_CVES
+ entries
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,73 +89,39 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8sCgpGb2xsb3dpbmcgdGhlIGFkZGl0aW9uIG9mIHN0YWxlIGlnbm9yZSBDVkUgZW50cnkg
-ZGV0ZWN0aW9uIGluCnBrZy1zdGF0cyAodGhhbmtzIHRvIGdyZWF0IHdvcmsgZnJvbSBSYXBoYcOr
-bCBNw6lsb3R0ZSksIEkgbG9va2VkIGF0IHRoZQpzdGFsZSBlbnRyaWVzIGFuZCBoYW5kbGVkIGFs
-bCBvZiB0aGVtIGluIHRoaXMgcGF0Y2ggc2VyaWVzLgoKV2hpbGUgYXQgaXQsIEkgcmVwb3J0ZWQg
-c29tZSBpc3N1ZXMgdG8gdGhlIE5WRCBtYWludGFpbmVycyAoZS1tYWlscwp3ZXJlIENjJ2VkIHRv
-IHRoZSBtYWlsaW5nIGxpc3QpLiBJIGFsc28gZm91bmQgYSBudW1iZXIgb2YgQ1ZFcyBvbiBzb3gK
-dGhhdCB3ZXJlIG5vdCBmaXhlZCwgc28gSSBmaXhlZCB0aGVtIChleGNlcHQgQ1ZFLTIwMjEtMzM4
-NDQsIGZvciB3aGljaAp0aGUgZml4IGRvZXNuJ3QgYXBwbHkgdG8gb3VyIHZlcnNpb24gYW5kIGl0
-IGlzbid0IGNsZWFyIGlmIG91ciB2ZXJzaW9uCmlzIHJlYWxseSB2dWxuZXJhYmxlKS4KClBsZWFz
-ZSBoYXZlIGEgbG9vayBhbmQgbGV0IG1lIGtub3cgd2hhdCB5b3UgdGhpbmsuIFBhdGNoZXMgYXJl
-CmluZGVwZW5kZW50IGZyb20gZWFjaCBvdGhlciwgZXhjZXB0IG9mIGNvdXJzZSB0aGUgbGFyZ2Ug
-c3RhY2sgb2YKcGF0Y2hlcyBvbiB0aGUgc294IHBhY2thZ2UuCgpUaG9tYXMKClRob21hcyBQZXRh
-enpvbmkgKDIyKToKICBib290L2dydWIyOiBkcm9wIHN0YWxlIElHTk9SRV9DVkVTIGVudHJpZXMK
-ICBwYWNrYWdlL2J1c3lib3g6IGRyb3Agc3RhbGUgSUdOT1JFX0NWRVMgZW50cmllcwogIHBhY2th
-Z2UvZG5zbWFzcTogZHJvcCBzdGFsZSBJR05PUkVfQ1ZFUyBlbnRyaWVzCiAgcGFja2FnZS9kb3Zl
-Y290OiBkb2N1bWVudCB3aHkgdGhlIGlnbm9yZSBDVkUgZW50cnkgaXMgbm90IHN0YWxlCiAgcGFj
-a2FnZS9leGltOiBkcm9wIHN0YWxlIGlnbm9yZSBDVkUgZW50cnkKICBwYWNrYWdlL2V4aW06IHVw
-ZGF0ZSBjb21tZW50IG9uIENWRS0yMDIyLTM1NTkKICBwYWNrYWdlL2xpYm9wZW5oMjY0OiBkcm9w
-IHN0YWxlIGlnbm9yZSBDVkUgZW50cnkKICBwYWNrYWdlL2xpYnNzaDogZHJvcCBzdGFsZSBpZ25v
-cmUgQ1ZFIGVudHJ5CiAgcGFja2FnZS9uZXRzbm1wOiBkcm9wIHN0YWxlIGlnbm9yZSBDVkUgZW50
-cmllcwogIHBhY2thZ2UvcXQ1L3F0NWJhc2U6IGRyb3Agc3RhbGUgaWdub3JlIENWRSBlbnRyaWVz
-LCBhZGQgQ1BFIHZlcnNpb24KICBwYWNrYWdlL3JpcGdyZXA6IGRyb3Agc3RhbGUgaWdub3JlIENW
-RSBlbnRyeQogIHBhY2thZ2Uvc294OiBhZGQgU09YX0NQRV9JRF9WRVJTSU9OCiAgcGFja2FnZS9z
-b3g6IGFubm90YXRlIGlnbm9yZSBDVkUgZW50cmllcwogIHBhY2thZ2Uvc294OiBhZGQgaWdub3Jl
-IENWRSBlbnRyeSBmb3IgQ1ZFLTIwMTktMTAxMDAwNAogIHBhY2thZ2Uvc294OiByZXdvcmsgdGhl
-IDAwMDEgcGF0Y2ggdG8gbWFrZSBpdCBHaXQtYXBwbGljYWJsZQogIHBhY2thZ2Uvc294OiBhZGQg
-Zml4IGZvciBDVkUtMjAyMS0zNjQzIENWRS0yMDIxLTIzMjEwCiAgcGFja2FnZS9zb3g6IGFkZCBm
-aXggZm9yIENWRS0yMDIxLTIzMTU5LCBDVkUtMjAyMS0yMzE3MiwKICAgIENWRS0yMDIzLTM0MzE4
-CiAgcGFja2FnZS9zb3g6IGFkZCBmaXggZm9yIENWRS0yMDIxLTQwNDI2CiAgcGFja2FnZS9zb3g6
-IGFkZCBmaXggZm9yIENWRS0yMDIyLTMxNjUwLCBDVkUtMjAyMy0yNjU5MAogIHBhY2thZ2Uvc294
-OiBhZGQgZml4IGZvciBDVkUtMjAyMi0zMTY1MQogIHBhY2thZ2Uvc294OiBhZGQgZml4IGZvciBD
-VkUtMjAyMy0zMjYyNwogIHBhY2thZ2UvdGlueXhtbDogc2V0IFRJTllYTUxfQ1BFX0lEX1ZFUlNJ
-T04KCiBib290L2dydWIyL2dydWIyLm1rICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgOCAt
-LQogcGFja2FnZS9idXN5Ym94L2J1c3lib3gubWsgICAgICAgICAgICAgICAgICAgIHwgMTAgLS0t
-CiBwYWNrYWdlL2Ruc21hc3EvZG5zbWFzcS5tayAgICAgICAgICAgICAgICAgICAgfCAgMyAtCiBw
-YWNrYWdlL2RvdmVjb3QvZG92ZWNvdC5tayAgICAgICAgICAgICAgICAgICAgfCAgNCArCiBwYWNr
-YWdlL2V4aW0vZXhpbS5tayAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgNiArLQogcGFja2Fn
-ZS9saWJvcGVuaDI2NC9saWJvcGVuaDI2NC5tayAgICAgICAgICAgIHwgIDMgLQogcGFja2FnZS9s
-aWJzc2gvbGlic3NoLm1rICAgICAgICAgICAgICAgICAgICAgIHwgIDQgLQogcGFja2FnZS9uZXRz
-bm1wL25ldHNubXAubWsgICAgICAgICAgICAgICAgICAgIHwgIDQgLQogcGFja2FnZS9xdDUvcXQ1
-YmFzZS9xdDViYXNlLm1rICAgICAgICAgICAgICAgIHwgMTEgKy0tCiBwYWNrYWdlL3JpcGdyZXAv
-cmlwZ3JlcC5tayAgICAgICAgICAgICAgICAgICAgfCAgMyAtCiAuLi4tU29YLXN1cHBvcnQtdWNs
-aWJjLWJhc2VkLXRvb2xjaGFpbnMucGF0Y2ggfCAgOSArLS0KIC4uLmhvdWxkLW5ldmVyLWJlLTAt
-dG8tYXZvaWQtZGl2aXNpb24tYi5wYXRjaCB8IDM0ICsrKysrKysrKwogcGFja2FnZS9zb3gvMDAw
-Ny1oY29tLXZhbGlkYXRlLWRpY3RzaXplLnBhdGNoIHwgMzggKysrKysrKysrKwogLi4uLzAwMDgt
-cGhlcmUtYXZvaWQtaW50ZWdlci11bmRlcmZsb3cucGF0Y2ggIHwgNDIgKysrKysrKysrKysKIC4u
-LmVjdC1pbXBsYXVzaWJseS1sYXJnZS1udW1iZXItb2YtY2hhbi5wYXRjaCB8IDYzICsrKysrKysr
-KysrKysrKysKIC4uLjAwMTAtZm9ybWF0cy1yZWplY3QtaW1wbGF1c2libGUtcmF0ZS5wYXRjaCB8
-IDM5ICsrKysrKysrKysKIC4uLmlsdGVyLW51bGwtc2FtcGxpbmctcmF0ZS1pbi1WT0MtY29kZS5w
-YXRjaCB8IDM3ICsrKysrKysrKwogcGFja2FnZS9zb3gvc294Lm1rICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgIHwgNzUgKysrKysrKysrKysrKysrKysrLQogcGFja2FnZS90aW55eG1sL3Rpbnl4
-bWwubWsgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0KIDE5IGZpbGVzIGNoYW5nZWQsIDMzNyBp
-bnNlcnRpb25zKCspLCA1OCBkZWxldGlvbnMoLSkKIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdl
-L3NveC8wMDA2LXZvYy13b3JkLXdpZHRoLXNob3VsZC1uZXZlci1iZS0wLXRvLWF2b2lkLWRpdmlz
-aW9uLWIucGF0Y2gKIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL3NveC8wMDA3LWhjb20tdmFs
-aWRhdGUtZGljdHNpemUucGF0Y2gKIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL3NveC8wMDA4
-LXBoZXJlLWF2b2lkLWludGVnZXItdW5kZXJmbG93LnBhdGNoCiBjcmVhdGUgbW9kZSAxMDA2NDQg
-cGFja2FnZS9zb3gvMDAwOS1mb3JtYXRzLWFpZmYtcmVqZWN0LWltcGxhdXNpYmx5LWxhcmdlLW51
-bWJlci1vZi1jaGFuLnBhdGNoCiBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9zb3gvMDAxMC1m
-b3JtYXRzLXJlamVjdC1pbXBsYXVzaWJsZS1yYXRlLnBhdGNoCiBjcmVhdGUgbW9kZSAxMDA2NDQg
-cGFja2FnZS9zb3gvMDAxMS1DVkUtMjAyMy0zMjYyNy1GaWx0ZXItbnVsbC1zYW1wbGluZy1yYXRl
-LWluLVZPQy1jb2RlLnBhdGNoCgotLSAKMi40OS4wCgpfX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBi
-dWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZv
-L2J1aWxkcm9vdAo=
+The 0001-set-default-maximum-dns-udp-package-size.patch is no longer
+in Buildroot since the bump to 2.90 in commit
+213cfb34358d86a65deecdb9f5b11a20ad0895d1, which renders the
+CVE-2023-28450 ignore CVE entry no longer needed.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/dnsmasq/dnsmasq.mk | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
+index abeee36ce4..dec7c9a86d 100644
+--- a/package/dnsmasq/dnsmasq.mk
++++ b/package/dnsmasq/dnsmasq.mk
+@@ -17,9 +17,6 @@ DNSMASQ_LICENSE_FILES = COPYING COPYING-v3
+ DNSMASQ_CPE_ID_VENDOR = thekelleys
+ DNSMASQ_SELINUX_MODULES = dnsmasq
+ 
+-# 0001-set-default-maximum-dns-udp-package-size.patch
+-DNSMASQ_IGNORE_CVES += CVE-2023-28450
+-
+ DNSMASQ_I18N = $(if $(BR2_SYSTEM_ENABLE_NLS),-i18n)
+ 
+ ifneq ($(BR2_PACKAGE_DNSMASQ_DHCP),y)
+-- 
+2.49.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
