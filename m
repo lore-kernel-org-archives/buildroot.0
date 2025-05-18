@@ -1,71 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4A93C3ABD8
-	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 16:35:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 867DAC3ABC9
+	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 16:35:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 478ED60A73;
-	Sun, 18 May 2025 16:35:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 35B684073D;
+	Sun, 18 May 2025 16:35:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uImTuypo-ZRA; Sun, 18 May 2025 16:35:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id P-MBuVzyq9h9; Sun, 18 May 2025 16:35:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 449EB60AC3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5476840873
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 449EB60AC3;
-	Sun, 18 May 2025 16:35:06 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 5E86CE4
- for <buildroot@buildroot.org>; Sun, 18 May 2025 16:35:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5476840873;
+	Sun, 18 May 2025 16:35:22 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8DDDCE4
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 16:35:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4FD4D815CE
- for <buildroot@buildroot.org>; Sun, 18 May 2025 16:35:05 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7330840873
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 16:35:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n6hqya2dZQgx for <buildroot@buildroot.org>;
- Sun, 18 May 2025 16:35:04 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
- helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5775181583
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5775181583
-Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5775181583
- for <buildroot@busybox.net>; Sun, 18 May 2025 16:35:04 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 0A0361C10ED; Sun, 18 May 2025 18:35:00 +0200 (CEST)
-Message-ID: <078b3188-6f5b-4b52-ae5b-66e640895472@rnout.be>
-Date: Sun, 18 May 2025 18:34:59 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Francois Perrad <francois.perrad@gadz.org>, buildroot@busybox.net
-References: <20250321062358.3955810-1-francois.perrad@gadz.org>
-Content-Language: en-GB, fr-BE
-In-Reply-To: <20250321062358.3955810-1-francois.perrad@gadz.org>
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rnout.be; s=dkim; 
- t=1747586101; h=from:subject:date:message-id:to:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=pCe4K9yYY4qfYsnPZgCqTv+jC0ykQm8z6Msu8BeOTe4=;
- b=MIvyi3ct1IoCmvjQVmouzJo9fRNq+yI7zTGCS8yR+ZKKPOHxv4Z/H2MwxaKFRLw9lMWi01
- WS5TLIvzWIOZ5lxkr+5KoSmfL5iMMqSa3U1Zqk8Olov7ln/gJDY2IJLIc8uNmPkHcENHzW
- RXZiQ7ISGaaSaf+Y1wwENP8lkw+RMw/7NT7QMZNVD2ytxJcC0iTxasWDqs0shabAmXZDWx
- 8NQWIt++gAC1uJ1ZpvpNsIRuMpopYMy74JNynLwbUOsQM3ZK5G4MCFb8OcEwSW73gASG6x
- V1p2NNWuJk71pLdgtqkgfpyhFFMuqEeyXqFi8NTNd6ylpazW+39Scl27f9nBCw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
- header.s=dkim header.b=MIvyi3ct
-Subject: Re: [Buildroot] [RFC PATCH]
- docs/manual/customize-directory-structure: add a custom top Makefile
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vpNKRzA-woTI for <buildroot@buildroot.org>;
+ Sun, 18 May 2025 16:35:20 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AEF10405F7
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id AEF10405F7
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 16:35:20 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 9928587156; Sun, 18 May 2025 16:35:20 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 18 May 2025 18:20:28 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 37167915dbd542d265d573e1e3ac8dba32045c2e
+X-Git-Newrev: 36f9436488c5fc640836eda96799305e114c6e9d
+X-Patchwork-Hint: ignore
+Message-Id: <20250518163520.9928587156@busybox.osuosl.org>
+Subject: [Buildroot] [git commit]
+ docs/manual/customize-directory-structure.adoc: suggest a custom top
+ Makefile
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -79,149 +61,79 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-  Hi Francois,
+commit: https://git.buildroot.net/buildroot/commit/?id=36f9436488c5fc640836eda96799305e114c6e9d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-  Good idea to add this section!
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+[Arnout: give a bit more explanation, simplify the example]
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+---
+ docs/manual/customize-directory-structure.adoc | 42 ++++++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-On 21/03/2025 07:23, Francois Perrad via buildroot wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->   .../manual/customize-directory-structure.adoc | 84 +++++++++++++++++++
->   1 file changed, 84 insertions(+)
-> 
-> diff --git a/docs/manual/customize-directory-structure.adoc b/docs/manual/customize-directory-structure.adoc
-> index e0eecb564..b0beebb40 100644
-> --- a/docs/manual/customize-directory-structure.adoc
-> +++ b/docs/manual/customize-directory-structure.adoc
-> @@ -49,6 +49,7 @@ to you.
->   |           +-- package2.mk
->   |
->   +-- Config.in (if using a br2-external tree)
-> ++-- Makefile (if using a custom top makefile)
->   +-- external.mk (if using a br2-external tree)
->   +-- external.desc (if using a br2-external tree)
->   ----
-> @@ -109,3 +110,86 @@ BR2_GLOBAL_PATCH_DIR="board/<company>/common/patches board/<company>/fooboard/pa
->   
->   then first the patches from the 'common' layer would be applied,
->   followed by the patches from the 'fooboard' layer.
-> +
-> +==== Custom top Makefile
-> +
-> +Here, a custom Makefile for your project which adds some new targets,
-> +on the top of all Buildroot targets.
-
-  I've extended the text a bit to explain why you want this.
-
-> +
-> +The variable +BOARD+ needs to be adjusted to your project.
-> +
-> +With the variable +BUILDROOT+, it is easy to upgrade the Buildroot version
-> +used by your project.
-> +
-> +----
-> +BOARD?=<boardname>
-
-  I don't think it's very useful to have this if it supports only a single 
-defconfig.
-
-> +BUILDROOT:=buildroot-2025.02
-
-  I think we want to motivate people to use a git submodule rather than 
-downloading a tarball, because that's a shorter path to contributing upstream.
-So I just wrote that _somehow_ you have to make sure the buildroot directory exists.
-
-> +OUTPUT:=output_$(BOARD)
-> +SD?=/dev/sdX
-> +
-> +export BR2_DL_DIR=$(CURDIR)/download
-> +
-> +all: $(BOARD)
-> +
-> +.PHONY: buildroot
-> +buildroot: $(BUILDROOT)
-> +
-> +.PHONY: buildroot-clean
-> +buildroot-clean:
-> +	rm -rf $(BUILDROOT)
-> +
-> +.PHONY: conf
-> +conf: $(OUTPUT)/.config
-> +
-> +.PHONY: conf-clean
-> +conf-clean:
-> +	rm -f $(OUTPUT)/.config
-> +
-> +.PHONY: board
-> +board: $(BOARD)
-> +
-> +.PHONY: board-clean
-> +board-clean:
-> +	rm -rf $(OUTPUT)
-> +
-> +.PHONY: dd
-> +dd:
-> +	@mount | grep $(SD)
-> +	sudo dd status=progress if=$(OUTPUT)/images/sdcard.img of=$(SD)
-> +	sync
-> +	sync
-
-  This is a super specific use case. I instead wrote in the text that you can 
-add targets to upload it to a device.
-
-
-> +$(BR2_DL_DIR)/buildroot/$(BUILDROOT).tar.xz:
-> +	mkdir -p $(BR2_DL_DIR)/buildroot
-> +	cd $(BR2_DL_DIR)/buildroot && wget https://buildroot.org/downloads/$(BUILDROOT).tar.xz
-> +
-> +$(BUILDROOT): $(BR2_DL_DIR)/buildroot/$(BUILDROOT).tar.xz
-> +	tar xfJ $(BR2_DL_DIR)/buildroot/$(BUILDROOT).tar.xz
-> +	touch $(BUILDROOT)
-> +	# here, apply patches against the Buildroot official tarball
-> +
-> +$(OUTPUT)/.config: $(BUILDROOT)
-> +	$(MAKE) -C $(BUILDROOT) O=$(CURDIR)/$(OUTPUT) defconfig BR2_DEFCONFIG=../configs/$(BOARD)_defconfig BR2_EXTERNAL=..
-
-  Since this supports only a single defconfig, I've instead added a 
-simplification of the rules I use myself to support multiple configs, each in 
-their own output directory.
-
-> +
-> +.PHONY: $(BOARD)
-> +$(BOARD): $(OUTPUT)/.config
-> +	$(MAKE) -C $(BUILDROOT) O=$(CURDIR)/$(OUTPUT)
-> +
-> +# delegate all other targets to the Buildroot makefile
-> +%:
-> +	$(MAKE) -C $(BUILDROOT) O=$(CURDIR)/$(OUTPUT) $@
-
-  Unfortunately, this bit is not relevant in the multiple-output-directory case, 
-so I dropped it.
-
-  Regards,
-  Arnout
-
-> +----
-> +
-> +Now, an example of work session.
-> +
-> +----
-> + $ make buildroot       # custom
-> + $ make conf            # custom
-> + $ make nconfig         # Buildroot
-> + $ make savedefconfig   # Buildroot
-> + $ make source          # Buildroot
-> + $ make board           # custom
-> + $ make dd              # custom
-> +
-> + $ make help            # Buildroot
-> +----
-
+diff --git a/docs/manual/customize-directory-structure.adoc b/docs/manual/customize-directory-structure.adoc
+index e0eecb5641..b4b5d50e1a 100644
+--- a/docs/manual/customize-directory-structure.adoc
++++ b/docs/manual/customize-directory-structure.adoc
+@@ -49,6 +49,7 @@ to you.
+ |           +-- package2.mk
+ |
+ +-- Config.in (if using a br2-external tree)
+++-- Makefile (if using a custom top makefile)
+ +-- external.mk (if using a br2-external tree)
+ +-- external.desc (if using a br2-external tree)
+ ----
+@@ -109,3 +110,44 @@ BR2_GLOBAL_PATCH_DIR="board/<company>/common/patches board/<company>/fooboard/pa
+ 
+ then first the patches from the 'common' layer would be applied,
+ followed by the patches from the 'fooboard' layer.
++
++==== Custom top Makefile
++
++You normally launch Buildroot from the buildroot source directory, pointing
+++BR2_EXTERNAL+ and +O+ to the right places for the build you want to make.
++You can simplify this by adding a Makefile to your br2-external that sets
++these variables and calls into buildroot.
++
++You can add additional, custom rules to this Makefile for various tasks you
++need to perform, e.g. integrate multiple configurations into a single image,
++upload to a release server or to a test device, include multiple
++br2-external configurations, etc.
++
++A basic Makefile looks like this. It assumes the buildroot source is available
++(e.g. as a git submodule) in the +buildroot+ subdirectory. It makes sure that
++the download directory is shared between different builds, and it organizes
++the output directories in a structure under +outputs/+.
++
++----
++# SPDX-License-Identifier: GPL-2.0
++
++# Avoid surprises by disabling default rules
++MAKEFLAGS += --no-builtin-rules
++.SUFFIXES:
++
++THIS_EXTERNAL_PATH := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
++
++# Put downloads in this directory instead of in the Buildroot directory
++ifeq ($(BR2_DL_DIR),)
++BR2_DL_DIR = $(THIS_EXTERNAL_PATH)/dl
++endif
++
++OUTPUT_BASEDIR = $(THIS_EXTERNAL_PATH)/output
++OUTPUT_DIR = $(OUTPUT_BASEDIR)/$(patsubst %_defconfig,%,$@)
++
++MAKE_BUILDROOT = $(MAKE) -C $(THIS_EXTERNAL_PATH)/buildroot BR2_EXTERNAL=$(THIS_EXTERNAL_PATH)
++
++%: $(THIS_EXTERNAL_PATH)/configs/%
++	$(MAKE_BUILDROOT) O=$(OUTPUT_DIR) $@
++	sed -i /^BR2_DL_DIR=.*/s%%BR2_DL_DIR=$(BR2_DL_DIR)% $(OUTPUT_DIR)/.config
++----
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
