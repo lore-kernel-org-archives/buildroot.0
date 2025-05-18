@@ -4,73 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20EAFC3ABC9
-	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 12:00:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0409C3ABD8
+	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 12:04:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A8DD9409ED;
-	Sun, 18 May 2025 12:00:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 45C8B40811;
+	Sun, 18 May 2025 12:04:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rpmcfEcRjBFZ; Sun, 18 May 2025 12:00:13 +0000 (UTC)
+ id k854Bqt-GNG2; Sun, 18 May 2025 12:04:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4D38B40B74
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2B50740827
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4D38B40B74;
-	Sun, 18 May 2025 12:00:13 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 483371BA
- for <buildroot@buildroot.org>; Sun, 18 May 2025 12:00:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2B50740827;
+	Sun, 18 May 2025 12:04:42 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7BD281BA
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 12:04:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2E55760AA0
- for <buildroot@buildroot.org>; Sun, 18 May 2025 12:00:10 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7903360A73
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 12:04:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OsI_4wRQIxtd for <buildroot@buildroot.org>;
- Sun, 18 May 2025 12:00:09 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
- helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C231660B4B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C231660B4B
-Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C231660B4B
- for <buildroot@buildroot.org>; Sun, 18 May 2025 12:00:08 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 23E8C1C102D; Sun, 18 May 2025 14:00:05 +0200 (CEST)
-Message-ID: <b49b2057-3876-4824-8c5e-45bff018ef03@rnout.be>
-Date: Sun, 18 May 2025 14:00:03 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: =?UTF-8?Q?Ga=C3=ABl_PORTAY?= <gael.portay@gmail.com>,
- buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- =?UTF-8?Q?Ga=C3=ABl_PORTAY?= <gael.portay@rtone.fr>,
- Julien Corjon <corjon.j@ecagroup.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20240731150714.332503-1-gael.portay@rtone.fr>
-Content-Language: en-GB, fr-BE
-In-Reply-To: <20240731150714.332503-1-gael.portay@rtone.fr>
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rnout.be; s=dkim; 
- t=1747569605; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=P0xOmwEMjhY080W0toM1tmn0HonySL1/tjLHQjmUNJ8=;
- b=ZFHFBE0FUsMj0KF3QOJi4FXU4+jcw8iKnd86tMSca4zmGRpR3mgK3egbUz90nNdR2W/uLu
- 0orrgGlGMdsDF41tmLNWvJtdAY14Ye7kzatk8S1jbb33alHSwB3Zi7asEi4dX1BuzBCsgf
- Mx1C5BeukuHLHac/J30l7MS/BLcSq5uqiYdE+KBcnWA7QFUvt68c+N5Mjh4ffSF7RNN4p1
- tDnLGMS04DJ0UNaffn8Vw97EY6m2DKr1pEQ0LoU9HsPupRRUdgby8LwH5f5TZd5sKnDPKy
- Av70h/n9p9U/O8L8Q1zqzcmWl5ikJZ3jXy7bT+AG/F3PKkyC6RJmkVhPhbze+w==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
- header.s=dkim header.b=ZFHFBE0F
-Subject: Re: [Buildroot] [PATCH 1/1] package/qt5webengine: set
- -feature-webengine-system-jpeg if jpeg-turbo
+ id AZojizpAqQsu for <buildroot@buildroot.org>;
+ Sun, 18 May 2025 12:04:39 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8AB70608F4
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8AB70608F4
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 12:04:39 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 79F4086ECF; Sun, 18 May 2025 12:04:39 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 18 May 2025 13:59:27 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 20f2b14b19180ac6309d03294d2897b8384d13a4
+X-Git-Newrev: 3271ce10f2b00dd548a78537346f523ffab8abc4
+X-Patchwork-Hint: ignore
+Message-Id: <20250518120439.79F4086ECF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qt5/qt5webengine: use bundled
+ jpeg-turbo for chromium
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,198 +60,160 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@rnout.be>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============0283305286487843449=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-CgpPbiAzMS8wNy8yMDI0IDE3OjA3LCBHYcOrbCBQT1JUQVkgd3JvdGU6Cj4gVGhlIGNvbmZpZ3Vy
-ZSBmbGFnIC1mZWF0dXJlLXdlYmVuZ2luZS1zeXN0ZW0tanBlZ1sxXSBjaGVja3MgaWYgYSBqcGVn
-Cj4gbGlicmFyeSBpcyBpbiB0aGUgc3lzcm9vdC4KW3NuaXBdCj4gVGhpcyBzZXRzIHRoZSBjb25m
-aWd1cmUgb3B0aW9uIC1mZWF0dXJlLXdlYmVuZ2luZS1zeXN0ZW0tanBlZyBhbmQgYWRkcwo+IGpw
-ZWctdHVyYm8gdG8gdGhlIGRlcGVuZGVuY2llcyBpZiBqcGVnLXR1cmJvIGlzIHRoZSBzZWxlY3Rl
-ZCB2YXJpYW50LgoKICBXZSBkZWNpZGVkIHRoYXQgaXQncyBsZXNzIGhhc3NsZSBhbmQgbGVzcyBy
-aXNreSB0byBqdXN0IGFsd2F5cyB1c2UgdGhlIGJ1bmRsZWQgCmpwZWctdHVyYm8sIHNvIEkgYWRh
-cHRlZCB0aGUgY29tbWl0IGFjY29yZGluZ2x5IGFuZCBhcHBsaWVkIHRvIG1hc3RlciwgdGhhbmtz
-LgoKICBSZWdhcmRzLAogIEFybm91dAoKPiAKPiBOb3RlOiBDaHJvbWl1bSBidW5kbGVzIGpwZWct
-dHVyYm9bM11bNF0gaWYgbm90IHVzaW5nIHRoZSBqcGVnIGxpYnJhcnkKPiBmcm9tIHRoZSBzeXNy
-b290LCBvciBxdC1qcGVnWzVdLgo+IAo+IFsxXTogaHR0cHM6Ly9naXRodWIuY29tL3F0L3F0d2Vi
-ZW5naW5lL2Jsb2IvdjUuMTUuMTQtbHRzL3NyYy9idWlsZHRvb2xzL2NvbmZpZ3VyZS5qc29uI0w2
-MDktTDYxMwo+IFsyXTogaHR0cHM6Ly9naXRodWIuY29tL3F0L3F0d2ViZW5naW5lL2Jsb2IvdjUu
-MTUuMTQtbHRzL3NyYy9idWlsZHRvb2xzL2NvbmZpZ3VyZS5qc29uI0w5NS1MMTE2Cj4gWzNdOiBo
-dHRwczovL2dpdGh1Yi5jb20vcXQvcXR3ZWJlbmdpbmUtY2hyb21pdW0vdHJlZS8xOGM5MjYxZGM1
-YjhhYTU3YTBiZGQ1YjYyY2U2ZjY0OGNjYTFlZjVlL2Nocm9taXVtL3RoaXJkX3BhcnR5L2xpYmpw
-ZWdfdHVyYm8KPiBbNF06IGh0dHBzOi8vZ2l0aHViLmNvbS9xdC9xdHdlYmVuZ2luZS1jaHJvbWl1
-bS9ibG9iLzE4YzkyNjFkYzViOGFhNTdhMGJkZDViNjJjZTZmNjQ4Y2NhMWVmNWUvY2hyb21pdW0v
-dGhpcmRfcGFydHkvbGlianBlZy5nbmkKPiBbNV06IGh0dHBzOi8vZ2l0aHViLmNvbS9xdC9xdHdl
-YmVuZ2luZS9ibG9iL3Y1LjE1LjE0LWx0cy9zcmMvYnVpbGR0b29scy9jb25maWd1cmUuanNvbiNM
-NjE0LTYxOAo+IAo+IEZpeGVzOgo+IAo+IAlsb29raW5nIGZvciBsaWJyYXJ5IHdlYmVuZ2luZS1q
-cGVnbGliCj4gCVRyeWluZyBzb3VyY2UgMCAodHlwZSBwa2dDb25maWcpIG9mIGxpYnJhcnkgd2Vi
-ZW5naW5lLWpwZWdsaWIgLi4uCj4gCSsgUEtHX0NPTkZJR19TWVNST09UX0RJUj0vaG9tZS9ncG9y
-dGF5L3NyYy9idWlsZHJvb3Qvb3V0cHV0L2hvc3QvYXJtLWJ1aWxkcm9vdC1saW51eC1nbnVlYWJp
-aGYvc3lzcm9vdCBQS0dfQ09ORklHX0xJQkRJUj0vaG9tZS9ncG9ydGF5L3NyYy9idWlsZHJvb3Qv
-b3V0cHV0L2hvc3QvYXJtLWJ1aWxkcm9vdC1saW51eC1nbnVlYWJpaGYvc3lzcm9vdC91c3IvbGli
-L3BrZ2NvbmZpZzovaG9tZS9ncG9ydGF5L3NyYy9idWlsZHJvb3Qvb3V0cHV0L2hvc3QvYXJtLWJ1
-aWxkcm9vdC1saW51eC1nbnVlYWJpaGYvc3lzcm9vdC91c3Ivc2hhcmUvcGtnY29uZmlnOi9ob21l
-L2dwb3J0YXkvc3JjL2J1aWxkcm9vdC9vdXRwdXQvaG9zdC9hcm0tYnVpbGRyb290LWxpbnV4LWdu
-dWVhYmloZi9zeXNyb290L3Vzci9saWIvYXJtLWJ1aWxkcm9vdC1saW51eC1nbnVlYWJpaGYvcGtn
-Y29uZmlnIC9ob21lL2dwb3J0YXkvc3JjL2J1aWxkcm9vdC9vdXRwdXQvaG9zdC9iaW4vcGtnLWNv
-bmZpZyAtLWV4aXN0cyAtLXNpbGVuY2UtZXJyb3JzIGxpYmpwZWcKPiAJKyBQS0dfQ09ORklHX1NZ
-U1JPT1RfRElSPS9ob21lL2dwb3J0YXkvc3JjL2J1aWxkcm9vdC9vdXRwdXQvaG9zdC9hcm0tYnVp
-bGRyb290LWxpbnV4LWdudWVhYmloZi9zeXNyb290IFBLR19DT05GSUdfTElCRElSPS9ob21lL2dw
-b3J0YXkvc3JjL2J1aWxkcm9vdC9vdXRwdXQvaG9zdC9hcm0tYnVpbGRyb290LWxpbnV4LWdudWVh
-YmloZi9zeXNyb290L3Vzci9saWIvcGtnY29uZmlnOi9ob21lL2dwb3J0YXkvc3JjL2J1aWxkcm9v
-dC9vdXRwdXQvaG9zdC9hcm0tYnVpbGRyb290LWxpbnV4LWdudWVhYmloZi9zeXNyb290L3Vzci9z
-aGFyZS9wa2djb25maWc6L2hvbWUvZ3BvcnRheS9zcmMvYnVpbGRyb290L291dHB1dC9ob3N0L2Fy
-bS1idWlsZHJvb3QtbGludXgtZ251ZWFiaWhmL3N5c3Jvb3QvdXNyL2xpYi9hcm0tYnVpbGRyb290
-LWxpbnV4LWdudWVhYmloZi9wa2djb25maWcgL2hvbWUvZ3BvcnRheS9zcmMvYnVpbGRyb290L291
-dHB1dC9ob3N0L2Jpbi9wa2ctY29uZmlnIC0tbW9kdmVyc2lvbiBsaWJqcGVnCj4gCT4gOS42LjAK
-PiAJKyBQS0dfQ09ORklHX1NZU1JPT1RfRElSPS9ob21lL2dwb3J0YXkvc3JjL2J1aWxkcm9vdC9v
-dXRwdXQvaG9zdC9hcm0tYnVpbGRyb290LWxpbnV4LWdudWVhYmloZi9zeXNyb290IFBLR19DT05G
-SUdfTElCRElSPS9ob21lL2dwb3J0YXkvc3JjL2J1aWxkcm9vdC9vdXRwdXQvaG9zdC9hcm0tYnVp
-bGRyb290LWxpbnV4LWdudWVhYmloZi9zeXNyb290L3Vzci9saWIvcGtnY29uZmlnOi9ob21lL2dw
-b3J0YXkvc3JjL2J1aWxkcm9vdC9vdXRwdXQvaG9zdC9hcm0tYnVpbGRyb290LWxpbnV4LWdudWVh
-YmloZi9zeXNyb290L3Vzci9zaGFyZS9wa2djb25maWc6L2hvbWUvZ3BvcnRheS9zcmMvYnVpbGRy
-b290L291dHB1dC9ob3N0L2FybS1idWlsZHJvb3QtbGludXgtZ251ZWFiaWhmL3N5c3Jvb3QvdXNy
-L2xpYi9hcm0tYnVpbGRyb290LWxpbnV4LWdudWVhYmloZi9wa2djb25maWcgL2hvbWUvZ3BvcnRh
-eS9zcmMvYnVpbGRyb290L291dHB1dC9ob3N0L2Jpbi9wa2ctY29uZmlnIC0tbGlicy1vbmx5LUwg
-bGlianBlZwo+IAk+IC1ML2hvbWUvZ3BvcnRheS9zcmMvYnVpbGRyb290L291dHB1dC9ob3N0L2Fy
-bS1idWlsZHJvb3QtbGludXgtZ251ZWFiaWhmL3N5c3Jvb3QvdXNyL2xpYgo+IAkrIFBLR19DT05G
-SUdfU1lTUk9PVF9ESVI9L2hvbWUvZ3BvcnRheS9zcmMvYnVpbGRyb290L291dHB1dC9ob3N0L2Fy
-bS1idWlsZHJvb3QtbGludXgtZ251ZWFiaWhmL3N5c3Jvb3QgUEtHX0NPTkZJR19MSUJESVI9L2hv
-bWUvZ3BvcnRheS9zcmMvYnVpbGRyb290L291dHB1dC9ob3N0L2FybS1idWlsZHJvb3QtbGludXgt
-Z251ZWFiaWhmL3N5c3Jvb3QvdXNyL2xpYi9wa2djb25maWc6L2hvbWUvZ3BvcnRheS9zcmMvYnVp
-bGRyb290L291dHB1dC9ob3N0L2FybS1idWlsZHJvb3QtbGludXgtZ251ZWFiaWhmL3N5c3Jvb3Qv
-dXNyL3NoYXJlL3BrZ2NvbmZpZzovaG9tZS9ncG9ydGF5L3NyYy9idWlsZHJvb3Qvb3V0cHV0L2hv
-c3QvYXJtLWJ1aWxkcm9vdC1saW51eC1nbnVlYWJpaGYvc3lzcm9vdC91c3IvbGliL2FybS1idWls
-ZHJvb3QtbGludXgtZ251ZWFiaWhmL3BrZ2NvbmZpZyAvaG9tZS9ncG9ydGF5L3NyYy9idWlsZHJv
-b3Qvb3V0cHV0L2hvc3QvYmluL3BrZy1jb25maWcgLS1saWJzLW9ubHktbCBsaWJqcGVnCj4gCT4g
-LWxqcGVnCj4gCSsgUEtHX0NPTkZJR19TWVNST09UX0RJUj0vaG9tZS9ncG9ydGF5L3NyYy9idWls
-ZHJvb3Qvb3V0cHV0L2hvc3QvYXJtLWJ1aWxkcm9vdC1saW51eC1nbnVlYWJpaGYvc3lzcm9vdCBQ
-S0dfQ09ORklHX0xJQkRJUj0vaG9tZS9ncG9ydGF5L3NyYy9idWlsZHJvb3Qvb3V0cHV0L2hvc3Qv
-YXJtLWJ1aWxkcm9vdC1saW51eC1nbnVlYWJpaGYvc3lzcm9vdC91c3IvbGliL3BrZ2NvbmZpZzov
-aG9tZS9ncG9ydGF5L3NyYy9idWlsZHJvb3Qvb3V0cHV0L2hvc3QvYXJtLWJ1aWxkcm9vdC1saW51
-eC1nbnVlYWJpaGYvc3lzcm9vdC91c3Ivc2hhcmUvcGtnY29uZmlnOi9ob21lL2dwb3J0YXkvc3Jj
-L2J1aWxkcm9vdC9vdXRwdXQvaG9zdC9hcm0tYnVpbGRyb290LWxpbnV4LWdudWVhYmloZi9zeXNy
-b290L3Vzci9saWIvYXJtLWJ1aWxkcm9vdC1saW51eC1nbnVlYWJpaGYvcGtnY29uZmlnIC9ob21l
-L2dwb3J0YXkvc3JjL2J1aWxkcm9vdC9vdXRwdXQvaG9zdC9iaW4vcGtnLWNvbmZpZyAtLWNmbGFn
-cyBsaWJqcGVnCj4gCT4gLUkvaG9tZS9ncG9ydGF5L3NyYy9idWlsZHJvb3Qvb3V0cHV0L2hvc3Qv
-YXJtLWJ1aWxkcm9vdC1saW51eC1nbnVlYWJpaGYvc3lzcm9vdC91c3IvaW5jbHVkZQo+IAkrIGNk
-IC9ob21lL2dwb3J0YXkvc3JjL2J1aWxkcm9vdC9vdXRwdXQvYnVpbGQvcXQ1d2ViZW5naW5lLTUu
-MTUuMTQvY29uZmlnLnRlc3RzL3dlYmVuZ2luZS1qcGVnbGliICYmIFBLR19DT05GSUdfU1lTUk9P
-VF9ESVI9L2hvbWUvZ3BvcnRheS9zcmMvYnVpbGRyb290L291dHB1dC9ob3N0L2FybS1idWlsZHJv
-b3QtbGludXgtZ251ZWFiaWhmL3N5c3Jvb3QgUEtHX0NPTkZJR19MSUJESVI9L2hvbWUvZ3BvcnRh
-eS9zcmMvYnVpbGRyb290L291dHB1dC9ob3N0L2FybS1idWlsZHJvb3QtbGludXgtZ251ZWFiaWhm
-L3N5c3Jvb3QvdXNyL2xpYi9wa2djb25maWc6L2hvbWUvZ3BvcnRheS9zcmMvYnVpbGRyb290L291
-dHB1dC9ob3N0L2FybS1idWlsZHJvb3QtbGludXgtZ251ZWFiaWhmL3N5c3Jvb3QvdXNyL3NoYXJl
-L3BrZ2NvbmZpZzovaG9tZS9ncG9ydGF5L3NyYy9idWlsZHJvb3Qvb3V0cHV0L2hvc3QvYXJtLWJ1
-aWxkcm9vdC1saW51eC1nbnVlYWJpaGYvc3lzcm9vdC91c3IvbGliL2FybS1idWlsZHJvb3QtbGlu
-dXgtZ251ZWFiaWhmL3BrZ2NvbmZpZyAvaG9tZS9ncG9ydGF5L3NyYy9idWlsZHJvb3Qvb3V0cHV0
-L2hvc3QvYmluL3FtYWtlICJDT05GSUcgLT0gcXQgZGVidWdfYW5kX3JlbGVhc2UgYXBwX2J1bmRs
-ZSBsaWJfYnVuZGxlIiAiQ09ORklHICs9IHNoYXJlZCB3YXJuX29mZiBjb25zb2xlIHNpbmdsZV9h
-cmNoIiAtZWFybHkgIkNPTkZJRyArPSBjcm9zc19jb21waWxlIiAnUU1BS0VfVVNFICs9IHdlYmVu
-Z2luZS1qcGVnbGliJyAnUU1BS0VfTElCU19XRUJFTkdJTkVfSlBFR0xJQiA9IC1ML2hvbWUvZ3Bv
-cnRheS9zcmMvYnVpbGRyb290L291dHB1dC9ob3N0L2FybS1idWlsZHJvb3QtbGludXgtZ251ZWFi
-aWhmL3N5c3Jvb3QvdXNyL2xpYiAtbGpwZWcnIC9ob21lL2dwb3J0YXkvc3JjL2J1aWxkcm9vdC9v
-dXRwdXQvYnVpbGQvcXQ1d2ViZW5naW5lLTUuMTUuMTQvY29uZmlnLnRlc3RzL3dlYmVuZ2luZS1q
-cGVnbGliCj4gCSsgY2QgL2hvbWUvZ3BvcnRheS9zcmMvYnVpbGRyb290L291dHB1dC9idWlsZC9x
-dDV3ZWJlbmdpbmUtNS4xNS4xNC9jb25maWcudGVzdHMvd2ViZW5naW5lLWpwZWdsaWIgJiYgTUFL
-RUZMQUdTPSBtYWtlCj4gCT4gbWFrZVsxXTogRW50ZXJpbmcgZGlyZWN0b3J5ICcvaG9tZS9ncG9y
-dGF5L3NyYy9idWlsZHJvb3Qvb3V0cHV0L2J1aWxkL3F0NXdlYmVuZ2luZS01LjE1LjE0L2NvbmZp
-Zy50ZXN0cy93ZWJlbmdpbmUtanBlZ2xpYicKPiAJPiAvaG9tZS9ncG9ydGF5L3NyYy9idWlsZHJv
-b3Qvb3V0cHV0L2hvc3QvYmluL2FybS1idWlsZHJvb3QtbGludXgtZ251ZWFiaWhmLWcrKyAtYyAt
-cGlwZSAtRF9MQVJHRUZJTEVfU09VUkNFIC1EX0xBUkdFRklMRTY0X1NPVVJDRSAtRF9GSUxFX09G
-RlNFVF9CSVRTPTY0IC1PMiAtZzAgLURfRk9SVElGWV9TT1VSQ0U9MSAtbXR1bmU9YXJtMTE3Nmp6
-Zi1zIC1tYXJjaD1hcm12NiAtLXN5c3Jvb3Q9L2hvbWUvZ3BvcnRheS9zcmMvYnVpbGRyb290L291
-dHB1dC9ob3N0L2FybS1idWlsZHJvb3QtbGludXgtZ251ZWFiaWhmL3N5c3Jvb3QgLXcgLWZQSUMg
-IC1JLiAtSS9ob21lL2dwb3J0YXkvc3JjL2J1aWxkcm9vdC9vdXRwdXQvaG9zdC9ta3NwZWNzL2Rl
-dmljZXMvbGludXgtYnVpbGRyb290LWcrKyAtbyBtYWluLm8gbWFpbi5jcHAKPiAJPiBtYWluLmNw
-cDogSW4gZnVuY3Rpb24g4oCYaW50IG1haW4oaW50LCBjaGFyKiop4oCZOgo+IAk+IG1haW4uY3Bw
-OjEyOjU6IGVycm9yOiDigJhqcGVnX2Nyb3Bfc2NhbmxpbmXigJkgd2FzIG5vdCBkZWNsYXJlZCBp
-biB0aGlzIHNjb3BlOyBkaWQgeW91IG1lYW4g4oCYanBlZ193cml0ZV9zY2FubGluZXPigJk/Cj4g
-CT4gICAgMTIgfCAgICAganBlZ19jcm9wX3NjYW5saW5lKG51bGxwdHIsICZkdW1teSwgJmR1bW15
-KTsKPiAJPiAgICAgICB8ICAgICBefn5+fn5+fn5+fn5+fn5+fn4KPiAJPiAgICAgICB8ICAgICBq
-cGVnX3dyaXRlX3NjYW5saW5lcwo+IAk+IG1haW4uY3BwOjEzOjU6IGVycm9yOiDigJhqcGVnX3Nr
-aXBfc2NhbmxpbmVz4oCZIHdhcyBub3QgZGVjbGFyZWQgaW4gdGhpcyBzY29wZTsgZGlkIHlvdSBt
-ZWFuIOKAmGpwZWdfd3JpdGVfc2NhbmxpbmVz4oCZPwo+IAk+ICAgIDEzIHwgICAgIGpwZWdfc2tp
-cF9zY2FubGluZXMobnVsbHB0ciwgZHVtbXkpOwo+IAk+ICAgICAgIHwgICAgIF5+fn5+fn5+fn5+
-fn5+fn5+fn4KPiAJPiAgICAgICB8ICAgICBqcGVnX3dyaXRlX3NjYW5saW5lcwo+IAk+IG1ha2Vb
-MV06ICoqKiBbTWFrZWZpbGU6MzM0OiBtYWluLm9dIEVycm9yIDEKPiAJPiBtYWtlWzFdOiBMZWF2
-aW5nIGRpcmVjdG9yeSAnL2hvbWUvZ3BvcnRheS9zcmMvYnVpbGRyb290L291dHB1dC9idWlsZC9x
-dDV3ZWJlbmdpbmUtNS4xNS4xNC9jb25maWcudGVzdHMvd2ViZW5naW5lLWpwZWdsaWInCj4gCSA9
-PiBzb3VyY2UgZmFpbGVkIHZlcmlmaWNhdGlvbi4KPiAJVHJ5aW5nIHNvdXJjZSAxICh0eXBlIGlu
-bGluZSkgb2YgbGlicmFyeSB3ZWJlbmdpbmUtanBlZ2xpYiAuLi4KPiAJKyBjZCAvaG9tZS9ncG9y
-dGF5L3NyYy9idWlsZHJvb3Qvb3V0cHV0L2J1aWxkL3F0NXdlYmVuZ2luZS01LjE1LjE0L2NvbmZp
-Zy50ZXN0cy93ZWJlbmdpbmUtanBlZ2xpYiAmJiBQS0dfQ09ORklHX1NZU1JPT1RfRElSPS9ob21l
-L2dwb3J0YXkvc3JjL2J1aWxkcm9vdC9vdXRwdXQvaG9zdC9hcm0tYnVpbGRyb290LWxpbnV4LWdu
-dWVhYmloZi9zeXNyb290IFBLR19DT05GSUdfTElCRElSPS9ob21lL2dwb3J0YXkvc3JjL2J1aWxk
-cm9vdC9vdXRwdXQvaG9zdC9hcm0tYnVpbGRyb290LWxpbnV4LWdudWVhYmloZi9zeXNyb290L3Vz
-ci9saWIvcGtnY29uZmlnOi9ob21lL2dwb3J0YXkvc3JjL2J1aWxkcm9vdC9vdXRwdXQvaG9zdC9h
-cm0tYnVpbGRyb290LWxpbnV4LWdudWVhYmloZi9zeXNyb290L3Vzci9zaGFyZS9wa2djb25maWc6
-L2hvbWUvZ3BvcnRheS9zcmMvYnVpbGRyb290L291dHB1dC9ob3N0L2FybS1idWlsZHJvb3QtbGlu
-dXgtZ251ZWFiaWhmL3N5c3Jvb3QvdXNyL2xpYi9hcm0tYnVpbGRyb290LWxpbnV4LWdudWVhYmlo
-Zi9wa2djb25maWcgL2hvbWUvZ3BvcnRheS9zcmMvYnVpbGRyb290L291dHB1dC9ob3N0L2Jpbi9x
-bWFrZSAiQ09ORklHIC09IHF0IGRlYnVnX2FuZF9yZWxlYXNlIGFwcF9idW5kbGUgbGliX2J1bmRs
-ZSIgIkNPTkZJRyArPSBzaGFyZWQgd2Fybl9vZmYgY29uc29sZSBzaW5nbGVfYXJjaCIgLWVhcmx5
-ICJDT05GSUcgKz0gY3Jvc3NfY29tcGlsZSIgJ1FNQUtFX1VTRSArPSB3ZWJlbmdpbmUtanBlZ2xp
-YicgJ1FNQUtFX0xJQlNfV0VCRU5HSU5FX0pQRUdMSUIgPSAtbGpwZWcnIC9ob21lL2dwb3J0YXkv
-c3JjL2J1aWxkcm9vdC9vdXRwdXQvYnVpbGQvcXQ1d2ViZW5naW5lLTUuMTUuMTQvY29uZmlnLnRl
-c3RzL3dlYmVuZ2luZS1qcGVnbGliCj4gCSsgY2QgL2hvbWUvZ3BvcnRheS9zcmMvYnVpbGRyb290
-L291dHB1dC9idWlsZC9xdDV3ZWJlbmdpbmUtNS4xNS4xNC9jb25maWcudGVzdHMvd2ViZW5naW5l
-LWpwZWdsaWIgJiYgTUFLRUZMQUdTPSBtYWtlIGNsZWFuICYmIE1BS0VGTEFHUz0gbWFrZQo+IAk+
-IG1ha2VbMV06IEVudGVyaW5nIGRpcmVjdG9yeSAnL2hvbWUvZ3BvcnRheS9zcmMvYnVpbGRyb290
-L291dHB1dC9idWlsZC9xdDV3ZWJlbmdpbmUtNS4xNS4xNC9jb25maWcudGVzdHMvd2ViZW5naW5l
-LWpwZWdsaWInCj4gCT4gcm0gLWYgbWFpbi5vCj4gCT4gcm0gLWYgKn4gY29yZSAqLmNvcmUKPiAJ
-PiBtYWtlWzFdOiBMZWF2aW5nIGRpcmVjdG9yeSAnL2hvbWUvZ3BvcnRheS9zcmMvYnVpbGRyb290
-L291dHB1dC9idWlsZC9xdDV3ZWJlbmdpbmUtNS4xNS4xNC9jb25maWcudGVzdHMvd2ViZW5naW5l
-LWpwZWdsaWInCj4gCT4gbWFrZVsxXTogRW50ZXJpbmcgZGlyZWN0b3J5ICcvaG9tZS9ncG9ydGF5
-L3NyYy9idWlsZHJvb3Qvb3V0cHV0L2J1aWxkL3F0NXdlYmVuZ2luZS01LjE1LjE0L2NvbmZpZy50
-ZXN0cy93ZWJlbmdpbmUtanBlZ2xpYicKPiAJPiAvaG9tZS9ncG9ydGF5L3NyYy9idWlsZHJvb3Qv
-b3V0cHV0L2hvc3QvYmluL2FybS1idWlsZHJvb3QtbGludXgtZ251ZWFiaWhmLWcrKyAtYyAtcGlw
-ZSAtRF9MQVJHRUZJTEVfU09VUkNFIC1EX0xBUkdFRklMRTY0X1NPVVJDRSAtRF9GSUxFX09GRlNF
-VF9CSVRTPTY0IC1PMiAtZzAgLURfRk9SVElGWV9TT1VSQ0U9MSAtbXR1bmU9YXJtMTE3Nmp6Zi1z
-IC1tYXJjaD1hcm12NiAtLXN5c3Jvb3Q9L2hvbWUvZ3BvcnRheS9zcmMvYnVpbGRyb290L291dHB1
-dC9ob3N0L2FybS1idWlsZHJvb3QtbGludXgtZ251ZWFiaWhmL3N5c3Jvb3QgLXcgLWZQSUMgIC1J
-LiAtSS9ob21lL2dwb3J0YXkvc3JjL2J1aWxkcm9vdC9vdXRwdXQvaG9zdC9ta3NwZWNzL2Rldmlj
-ZXMvbGludXgtYnVpbGRyb290LWcrKyAtbyBtYWluLm8gbWFpbi5jcHAKPiAJPiBtYWluLmNwcDog
-SW4gZnVuY3Rpb24g4oCYaW50IG1haW4oaW50LCBjaGFyKiop4oCZOgo+IAk+IG1haW4uY3BwOjEy
-OjU6IGVycm9yOiDigJhqcGVnX2Nyb3Bfc2NhbmxpbmXigJkgd2FzIG5vdCBkZWNsYXJlZCBpbiB0
-aGlzIHNjb3BlOyBkaWQgeW91IG1lYW4g4oCYanBlZ193cml0ZV9zY2FubGluZXPigJk/Cj4gCT4g
-ICAgMTIgfCAgICAganBlZ19jcm9wX3NjYW5saW5lKG51bGxwdHIsICZkdW1teSwgJmR1bW15KTsK
-PiAJPiAgICAgICB8ICAgICBefn5+fn5+fn5+fn5+fn5+fn4KPiAJPiAgICAgICB8ICAgICBqcGVn
-X3dyaXRlX3NjYW5saW5lcwo+IAk+IG1haW4uY3BwOjEzOjU6IGVycm9yOiDigJhqcGVnX3NraXBf
-c2NhbmxpbmVz4oCZIHdhcyBub3QgZGVjbGFyZWQgaW4gdGhpcyBzY29wZTsgZGlkIHlvdSBtZWFu
-IOKAmGpwZWdfd3JpdGVfc2NhbmxpbmVz4oCZPwo+IAk+ICAgIDEzIHwgICAgIGpwZWdfc2tpcF9z
-Y2FubGluZXMobnVsbHB0ciwgZHVtbXkpOwo+IAk+ICAgICAgIHwgICAgIF5+fn5+fn5+fn5+fn5+
-fn5+fn4KPiAJPiAgICAgICB8ICAgICBqcGVnX3dyaXRlX3NjYW5saW5lcwo+IAk+IG1ha2VbMV06
-ICoqKiBbTWFrZWZpbGU6MzM0OiBtYWluLm9dIEVycm9yIDEKPiAJPiBtYWtlWzFdOiBMZWF2aW5n
-IGRpcmVjdG9yeSAnL2hvbWUvZ3BvcnRheS9zcmMvYnVpbGRyb290L291dHB1dC9idWlsZC9xdDV3
-ZWJlbmdpbmUtNS4xNS4xNC9jb25maWcudGVzdHMvd2ViZW5naW5lLWpwZWdsaWInCj4gCSA9PiBz
-b3VyY2UgZmFpbGVkIHZlcmlmaWNhdGlvbi4KPiAJdGVzdCBjb25maWcucXR3ZWJlbmdpbmVfYnVp
-bGR0b29scy5saWJyYXJpZXMud2ViZW5naW5lLWpwZWdsaWIgRkFJTEVECj4gCj4gU2lnbmVkLW9m
-Zi1ieTogR2HDq2wgUE9SVEFZIDxnYWVsLnBvcnRheUBydG9uZS5mcj4KPiAtLS0KPiAgIHBhY2th
-Z2UvcXQ1L3F0NXdlYmVuZ2luZS9xdDV3ZWJlbmdpbmUubWsgfCA3ICsrKysrLS0KPiAgIDEgZmls
-ZSBjaGFuZ2VkLCA1IGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCj4gCj4gZGlmZiAtLWdp
-dCBhL3BhY2thZ2UvcXQ1L3F0NXdlYmVuZ2luZS9xdDV3ZWJlbmdpbmUubWsgYi9wYWNrYWdlL3F0
-NS9xdDV3ZWJlbmdpbmUvcXQ1d2ViZW5naW5lLm1rCj4gaW5kZXggNTI5YTgzZGY2Yy4uOGM0YTVj
-NTY0ZCAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL3F0NS9xdDV3ZWJlbmdpbmUvcXQ1d2ViZW5naW5l
-Lm1rCj4gKysrIGIvcGFja2FnZS9xdDUvcXQ1d2ViZW5naW5lL3F0NXdlYmVuZ2luZS5tawo+IEBA
-IC03MSw3ICs3MSw2IEBAIFFUNVdFQkVOR0lORV9ERVBFTkRFTkNJRVMgKz0gXAo+ICAgCWhvc3Qt
-d2VicCBcCj4gICAJaG9zdC16bGliIFwKPiAgIAlmcmVldHlwZSBcCj4gLQlqcGVnIFwKPiAgIAls
-Y21zMiBcCj4gICAJbGliZXZlbnQgXAo+ICAgCWxpYm5zcyBcCj4gQEAgLTk0LDcgKzkzLDYgQEAg
-UVQ1V0VCRU5HSU5FX0NPTkZfT1BUUyArPSBcCj4gICAJLWZlYXR1cmUtd2ViZW5naW5lLXN5c3Rl
-bS1nbGliIFwKPiAgIAktZmVhdHVyZS13ZWJlbmdpbmUtc3lzdGVtLWdsaWJjIFwKPiAgIAktZmVh
-dHVyZS13ZWJlbmdpbmUtc3lzdGVtLWhhcmZidXp6IFwKPiAtCS1mZWF0dXJlLXdlYmVuZ2luZS1z
-eXN0ZW0tanBlZyBcCj4gICAJLWZlYXR1cmUtd2ViZW5naW5lLXN5c3RlbS1raHIgXAo+ICAgCS1m
-ZWF0dXJlLXdlYmVuZ2luZS1zeXN0ZW0tbGNtczIgXAo+ICAgCS1mZWF0dXJlLXdlYmVuZ2luZS1z
-eXN0ZW0tbGliZXZlbnQgXAo+IEBAIC0xMjEsNiArMTE5LDExIEBAIFFUNVdFQkVOR0lORV9DT05G
-X09QVFMgKz0gXAo+ICAgCS1uby1mZWF0dXJlLXdlYmVuZ2luZS1zeXN0ZW0tbWluaXppcCBcCj4g
-ICAJLW5vLWZlYXR1cmUtd2ViZW5naW5lLXN5c3RlbS1nbgo+ICAgCj4gK2lmZXEgKCQoQlIyX1BB
-Q0tBR0VfSlBFR19UVVJCTykseSkKPiArUVQ1V0VCRU5HSU5FX0RFUEVOREVOQ0lFUyArPSBqcGVn
-Cj4gK1FUNVdFQkVOR0lORV9DT05GX09QVFMgKz0gLWZlYXR1cmUtd2ViZW5naW5lLXN5c3RlbS1q
-cGVnCj4gK2VuZGlmCj4gKwo+ICAgaWZlcSAoJChCUjJfUEFDS0FHRV9RVDVXRUJFTkdJTkVfUFJP
-UFJJRVRBUllfQ09ERUNTKSx5KQo+ICAgUVQ1V0VCRU5HSU5FX0NPTkZfT1BUUyArPSAtd2ViZW5n
-aW5lLXByb3ByaWV0YXJ5LWNvZGVjcwo+ICAgZWxzZQoKX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RA
-YnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5m
-by9idWlsZHJvb3QK
+--===============0283305286487843449==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=3271ce10f2b00dd548a78537346f523ffab8abc4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+The configure flag -feature-webengine-system-jpeg[1] checks if a jpeg
+library is in the sysroot.
+
+It compiles a test file linked against the symbols jpeg_crop_scanline()
+and jpeg_skip_scanlines()[2] that are specific to jpep-turbo.
+
+As a consequence, the configure scripts fails if the libjpeg is selected
+as the jpeg variant as the symbols mentionend above are not part of the
+jpeg library installed in the sysroots.
+
+	ERROR: Feature 'webengine-system-jpeg' was enabled, but the pre-condition 'config.unix && features.system-jpeg && libs.webengine-jpeglib' failed.
+
+Additionally, see the log below, extracted from config.log:
+
+        > /home/gportay/src/buildroot/output/host/bin/arm-buildroot-linux-gnueabihf-g++ -c -pipe -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -O2 -g0 -D_FORTIFY_SOURCE=1 -mtune=arm1176jzf-s -march=armv6 --sysroot=/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot -w -fPIC  -I. -I/home/gportay/src/buildroot/output/host/mkspecs/devices/linux-buildroot-g++ -o main.o main.cpp
+        > main.cpp: In function ‘int main(int, char**)’:
+        > main.cpp:12:5: error: ‘jpeg_crop_scanline’ was not declared in this scope; did you mean ‘jpeg_write_scanlines’?
+        >    12 |     jpeg_crop_scanline(nullptr, &dummy, &dummy);
+        >       |     ^~~~~~~~~~~~~~~~~~
+        >       |     jpeg_write_scanlines
+        > main.cpp:13:5: error: ‘jpeg_skip_scanlines’ was not declared in this scope; did you mean ‘jpeg_write_scanlines’?
+        >    13 |     jpeg_skip_scanlines(nullptr, dummy);
+        >       |     ^~~~~~~~~~~~~~~~~~~
+        >       |     jpeg_write_scanlines
+        > make[1]: *** [Makefile:334: main.o] Error 1
+        > make[1]: Leaving directory '/home/gportay/src/buildroot/output/build/qt5webengine-5.15.14/config.tests/webengine-jpeglib'
+
+We could build some complicated logic to make sure what qt5webengine is
+only used with jpeg-turbo. However, Chromium bundles jpeg-turbo[3][4]
+and uses it if not using the system jpeg library or qt-jpeg[5]. It is
+simpler to just always use that version instead of the system jpeg
+library.
+
+This sets the configure option -nofeature-webengine-system-jpeg and
+removes jpeg from the dependencies.
+
+Note that host-libjpeg and qt-jpeg (and therefore, system libjpeg or
+jpeg-turbo) are still needed for the Qt integration layer, even if
+chromium uses the bundled jpeg-turbo.
+
+[1]: https://github.com/qt/qtwebengine/blob/v5.15.14-lts/src/buildtools/configure.json#L609-L613
+[2]: https://github.com/qt/qtwebengine/blob/v5.15.14-lts/src/buildtools/configure.json#L95-L116
+[3]: https://github.com/qt/qtwebengine-chromium/tree/18c9261dc5b8aa57a0bdd5b62ce6f648cca1ef5e/chromium/third_party/libjpeg_turbo
+[4]: https://github.com/qt/qtwebengine-chromium/blob/18c9261dc5b8aa57a0bdd5b62ce6f648cca1ef5e/chromium/third_party/libjpeg.gni
+[5]: https://github.com/qt/qtwebengine/blob/v5.15.14-lts/src/buildtools/configure.json#L614-618
+
+Fixes:
+
+	looking for library webengine-jpeglib
+	Trying source 0 (type pkgConfig) of library webengine-jpeglib ...
+	+ PKG_CONFIG_SYSROOT_DIR=/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot PKG_CONFIG_LIBDIR=/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/pkgconfig:/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/share/pkgconfig:/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/arm-buildroot-linux-gnueabihf/pkgconfig /home/gportay/src/buildroot/output/host/bin/pkg-config --exists --silence-errors libjpeg
+	+ PKG_CONFIG_SYSROOT_DIR=/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot PKG_CONFIG_LIBDIR=/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/pkgconfig:/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/share/pkgconfig:/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/arm-buildroot-linux-gnueabihf/pkgconfig /home/gportay/src/buildroot/output/host/bin/pkg-config --modversion libjpeg
+	> 9.6.0
+	+ PKG_CONFIG_SYSROOT_DIR=/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot PKG_CONFIG_LIBDIR=/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/pkgconfig:/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/share/pkgconfig:/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/arm-buildroot-linux-gnueabihf/pkgconfig /home/gportay/src/buildroot/output/host/bin/pkg-config --libs-only-L libjpeg
+	> -L/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib
+	+ PKG_CONFIG_SYSROOT_DIR=/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot PKG_CONFIG_LIBDIR=/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/pkgconfig:/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/share/pkgconfig:/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/arm-buildroot-linux-gnueabihf/pkgconfig /home/gportay/src/buildroot/output/host/bin/pkg-config --libs-only-l libjpeg
+	> -ljpeg
+	+ PKG_CONFIG_SYSROOT_DIR=/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot PKG_CONFIG_LIBDIR=/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/pkgconfig:/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/share/pkgconfig:/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/arm-buildroot-linux-gnueabihf/pkgconfig /home/gportay/src/buildroot/output/host/bin/pkg-config --cflags libjpeg
+	> -I/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include
+	+ cd /home/gportay/src/buildroot/output/build/qt5webengine-5.15.14/config.tests/webengine-jpeglib && PKG_CONFIG_SYSROOT_DIR=/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot PKG_CONFIG_LIBDIR=/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/pkgconfig:/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/share/pkgconfig:/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/arm-buildroot-linux-gnueabihf/pkgconfig /home/gportay/src/buildroot/output/host/bin/qmake "CONFIG -= qt debug_and_release app_bundle lib_bundle" "CONFIG += shared warn_off console single_arch" -early "CONFIG += cross_compile" 'QMAKE_USE += webengine-jpeglib' 'QMAKE_LIBS_WEBENGINE_JPEGLIB = -L/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib -ljpeg' /home/gportay/src/buildroot/output/build/qt5webengine-5.15.14/config.tests/webengine-jpeglib
+	+ cd /home/gportay/src/buildroot/output/build/qt5webengine-5.15.14/config.tests/webengine-jpeglib && MAKEFLAGS= make
+	> make[1]: Entering directory '/home/gportay/src/buildroot/output/build/qt5webengine-5.15.14/config.tests/webengine-jpeglib'
+	> /home/gportay/src/buildroot/output/host/bin/arm-buildroot-linux-gnueabihf-g++ -c -pipe -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -O2 -g0 -D_FORTIFY_SOURCE=1 -mtune=arm1176jzf-s -march=armv6 --sysroot=/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot -w -fPIC  -I. -I/home/gportay/src/buildroot/output/host/mkspecs/devices/linux-buildroot-g++ -o main.o main.cpp
+	> main.cpp: In function ‘int main(int, char**)’:
+	> main.cpp:12:5: error: ‘jpeg_crop_scanline’ was not declared in this scope; did you mean ‘jpeg_write_scanlines’?
+	>    12 |     jpeg_crop_scanline(nullptr, &dummy, &dummy);
+	>       |     ^~~~~~~~~~~~~~~~~~
+	>       |     jpeg_write_scanlines
+	> main.cpp:13:5: error: ‘jpeg_skip_scanlines’ was not declared in this scope; did you mean ‘jpeg_write_scanlines’?
+	>    13 |     jpeg_skip_scanlines(nullptr, dummy);
+	>       |     ^~~~~~~~~~~~~~~~~~~
+	>       |     jpeg_write_scanlines
+	> make[1]: *** [Makefile:334: main.o] Error 1
+	> make[1]: Leaving directory '/home/gportay/src/buildroot/output/build/qt5webengine-5.15.14/config.tests/webengine-jpeglib'
+	 => source failed verification.
+	Trying source 1 (type inline) of library webengine-jpeglib ...
+	+ cd /home/gportay/src/buildroot/output/build/qt5webengine-5.15.14/config.tests/webengine-jpeglib && PKG_CONFIG_SYSROOT_DIR=/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot PKG_CONFIG_LIBDIR=/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/pkgconfig:/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/share/pkgconfig:/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/arm-buildroot-linux-gnueabihf/pkgconfig /home/gportay/src/buildroot/output/host/bin/qmake "CONFIG -= qt debug_and_release app_bundle lib_bundle" "CONFIG += shared warn_off console single_arch" -early "CONFIG += cross_compile" 'QMAKE_USE += webengine-jpeglib' 'QMAKE_LIBS_WEBENGINE_JPEGLIB = -ljpeg' /home/gportay/src/buildroot/output/build/qt5webengine-5.15.14/config.tests/webengine-jpeglib
+	+ cd /home/gportay/src/buildroot/output/build/qt5webengine-5.15.14/config.tests/webengine-jpeglib && MAKEFLAGS= make clean && MAKEFLAGS= make
+	> make[1]: Entering directory '/home/gportay/src/buildroot/output/build/qt5webengine-5.15.14/config.tests/webengine-jpeglib'
+	> rm -f main.o
+	> rm -f *~ core *.core
+	> make[1]: Leaving directory '/home/gportay/src/buildroot/output/build/qt5webengine-5.15.14/config.tests/webengine-jpeglib'
+	> make[1]: Entering directory '/home/gportay/src/buildroot/output/build/qt5webengine-5.15.14/config.tests/webengine-jpeglib'
+	> /home/gportay/src/buildroot/output/host/bin/arm-buildroot-linux-gnueabihf-g++ -c -pipe -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -O2 -g0 -D_FORTIFY_SOURCE=1 -mtune=arm1176jzf-s -march=armv6 --sysroot=/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot -w -fPIC  -I. -I/home/gportay/src/buildroot/output/host/mkspecs/devices/linux-buildroot-g++ -o main.o main.cpp
+	> main.cpp: In function ‘int main(int, char**)’:
+	> main.cpp:12:5: error: ‘jpeg_crop_scanline’ was not declared in this scope; did you mean ‘jpeg_write_scanlines’?
+	>    12 |     jpeg_crop_scanline(nullptr, &dummy, &dummy);
+	>       |     ^~~~~~~~~~~~~~~~~~
+	>       |     jpeg_write_scanlines
+	> main.cpp:13:5: error: ‘jpeg_skip_scanlines’ was not declared in this scope; did you mean ‘jpeg_write_scanlines’?
+	>    13 |     jpeg_skip_scanlines(nullptr, dummy);
+	>       |     ^~~~~~~~~~~~~~~~~~~
+	>       |     jpeg_write_scanlines
+	> make[1]: *** [Makefile:334: main.o] Error 1
+	> make[1]: Leaving directory '/home/gportay/src/buildroot/output/build/qt5webengine-5.15.14/config.tests/webengine-jpeglib'
+	 => source failed verification.
+	test config.qtwebengine_buildtools.libraries.webengine-jpeglib FAILED
+
+Signed-off-by: Gaël PORTAY <gael.portay@rtone.fr>
+[Arnout: always use the bundled jpeg-turbo]
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+---
+ package/qt5/qt5webengine/qt5webengine.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/package/qt5/qt5webengine/qt5webengine.mk b/package/qt5/qt5webengine/qt5webengine.mk
+index 6b656a7536..00df7e1ede 100644
+--- a/package/qt5/qt5webengine/qt5webengine.mk
++++ b/package/qt5/qt5webengine/qt5webengine.mk
+@@ -71,7 +71,6 @@ QT5WEBENGINE_DEPENDENCIES += \
+ 	host-webp \
+ 	host-zlib \
+ 	freetype \
+-	jpeg \
+ 	lcms2 \
+ 	libevent \
+ 	libnss \
+@@ -96,7 +95,6 @@ QT5WEBENGINE_CONF_OPTS += \
+ 	-feature-webengine-system-glib \
+ 	-feature-webengine-system-glibc \
+ 	-feature-webengine-system-harfbuzz \
+-	-feature-webengine-system-jpeg \
+ 	-feature-webengine-system-khr \
+ 	-feature-webengine-system-lcms2 \
+ 	-feature-webengine-system-libevent \
+@@ -119,6 +117,7 @@ QT5WEBENGINE_CONF_OPTS += \
+ 	-no-feature-webengine-developer-build \
+ 	-no-feature-webengine-full-debug-info \
+ 	-no-feature-webengine-native-spellchecker \
++	-no-feature-webengine-system-jpeg \
+ 	-no-feature-webengine-system-minizip \
+ 	-no-feature-webengine-system-gn
+ 
+
+--===============0283305286487843449==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0283305286487843449==--
