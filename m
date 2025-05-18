@@ -4,67 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A1F1C3ABC9
-	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 14:39:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B59AC3ABC9
+	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 14:40:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1602E81EB3;
-	Sun, 18 May 2025 14:39:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C663781EAE;
+	Sun, 18 May 2025 14:40:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9Si3rHqqSc_w; Sun, 18 May 2025 14:39:54 +0000 (UTC)
+ id t6ScPhAvmy-N; Sun, 18 May 2025 14:40:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3066D81EB6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0916C81EB3
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3066D81EB6;
-	Sun, 18 May 2025 14:39:54 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 2E6411BA
- for <buildroot@buildroot.org>; Sun, 18 May 2025 14:39:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0916C81EB3;
+	Sun, 18 May 2025 14:40:27 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 51BEC1BA
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 14:40:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1E079404F0
- for <buildroot@buildroot.org>; Sun, 18 May 2025 14:39:53 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4E4E740913
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 14:40:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zLDiZWe7G0w8 for <buildroot@buildroot.org>;
- Sun, 18 May 2025 14:39:52 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4VbaYvNi5utc for <buildroot@buildroot.org>;
+ Sun, 18 May 2025 14:40:24 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
  helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1D0D640142
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1D0D640142
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4B23F408F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B23F408F3
 Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1D0D640142
- for <buildroot@buildroot.org>; Sun, 18 May 2025 14:39:52 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4B23F408F3
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 14:40:24 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 1E36A1C0FC0; Sun, 18 May 2025 16:39:44 +0200 (CEST)
-Message-ID: <d56457df-c002-4c48-a3a4-322a33550f32@rnout.be>
-Date: Sun, 18 May 2025 16:39:42 +0200
+ with ESMTPSA id 815291C0FF6; Sun, 18 May 2025 16:40:21 +0200 (CEST)
+Message-ID: <165173c3-6498-4c10-9c03-0b240606c367@rnout.be>
+Date: Sun, 18 May 2025 16:40:20 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
-References: <20250513195417.2730273-1-bernd@kuhls.net>
+To: Titouan Christophe <titouan.christophe@mind.be>, buildroot@buildroot.org
+Cc: thomas.perale@mind.be
+References: <20250515102716.2989377-1-titouan.christophe@mind.be>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20250513195417.2730273-1-bernd@kuhls.net>
+In-Reply-To: <20250515102716.2989377-1-titouan.christophe@mind.be>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1747579184; h=from:subject:date:message-id:to:mime-version:content-type:
+ t=1747579221; h=from:subject:date:message-id:to:cc:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=OnBoui6cgBzBTXrSczI4vfaZII2lC/u65CbE4nxb/Ds=;
- b=ll4hracFf7F7k4oBLtu6nHQDEh5N49R2Oqho6Ai7+QQwAHp7U8owhTbE/CJhvtuxdII38L
- ZQNcdLhoazEn7s9gO/lid8SUbX3VHyhPAh2dh0s/s7TMf1G2QYTO34kBqbsiKbwVq/ceLx
- CjhjZlsV2nInsnoYBOQt5udx/l8VP0NZ5bLw0a4SKNdw5VirlTfk65WitMOA80MSPQ/0Dx
- GXDqdkr5Gky9KWhmi7DSohPmBSdzYQ+o2k2KbbNgHylPyk98C0nS/TG75gmEnzP86zzx7N
- INWMokHBAzPL9vE9298kWWME5QFWfC8rmRlLoi8FHKEwLOHvzO89/HI8LsQ+Gg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=ogsZluYuRXQcy1x9JlZkqOh2MOZS4A8844wyCR7DnI8=;
+ b=EZOCv+hSPI0YpAWgj1YLg/Il2oC+3z7/cAOASpRO88Njexf+m1ZpGhSj+fOo7fUQuL+FXu
+ Xvkj1rIadhrbI4LItC5RAW3rkCuSfXCBc8OAuqZfSZTq6Zb5wgxZSNgoIdoGSPcg5zVRDb
+ 74hXnMKixAzKsdxZ4xXgCfKGWH7ufIfi5egd9RlYt3gEb0SdzuG0aXSmFJYAKvzwpY3Nqr
+ MM33m4SPWXCxXB0lB4jHpLk82oeo8ijgepJzEoYsRQCU2BtU27H5qXdQisFddLO4es+w2X
+ x/PzeTJE+FSFfWA48BH9lh9rqKe0qnMOlgH3C2n9WLPxMxXdRoA3bhH7hiuESw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=ll4hracF
-Subject: Re: [Buildroot] [PATCH 1/1] package/intel-microcode: security bump
- version to 20250512
+ header.a=rsa-sha256 header.s=dkim header.b=EZOCv+hS
+Subject: Re: [Buildroot] [PATCH for 2025.02.x] package/openssh: apply
+ security patch for CVE-2025-32728 (sshd)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,25 +86,8 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 13/05/2025 21:54, Bernd Kuhls wrote:
-> Release notes:
-> https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/releases/tag/microcode-20250512
-> 
-> CVE-2025-24495:
-> https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01322.html
-> 
-> CVE-2024-28956:
-> https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01153.html
-> 
-> CVE-2024-43420:
-> https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01247.html
-> 
-> CVE-2025-20103:
-> https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01244.html
-> 
-> "Note: INTEL-SA-01244 and INTEL-SA-01247 will be published on May 13th 2025"
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+On 15/05/2025 12:27, Titouan Christophe via buildroot wrote:
+> Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 
   Applied to 2025.02.x, thanks.
 
@@ -111,32 +95,83 @@ On 13/05/2025 21:54, Bernd Kuhls wrote:
   Arnout
 
 > ---
->   package/intel-microcode/intel-microcode.hash | 2 +-
->   package/intel-microcode/intel-microcode.mk   | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
+> There is already a pending patch to bump OpenSSH to 10.0 on Buildroot master,
+> but this probably won't happen in Buildroot LTS; hence this patch
+> ---
+>   ...ic-error-in-disableforwarding-option.patch | 49 +++++++++++++++++++
+>   package/openssh/openssh.mk                    |  3 ++
+>   2 files changed, 52 insertions(+)
+>   create mode 100644 package/openssh/0001-fix-logic-error-in-disableforwarding-option.patch
 > 
-> diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
-> index 9721a15976..9504f7a786 100644
-> --- a/package/intel-microcode/intel-microcode.hash
-> +++ b/package/intel-microcode/intel-microcode.hash
-> @@ -1,3 +1,3 @@
->   # Locally computed
-> -sha256  1da88b51953c9da2e20b5c94b3d7270cf87ea5babcaa56e3d6a5c9eaf11694b3  intel-microcode-20250211.tar.gz
-> +sha256  041af7d2f5791a47c1e914abd7d6255de4d4fc61b0f8e49ada6ee7014bcc3614  intel-microcode-20250512.tar.gz
->   sha256  03efb1491c7e899feb2665fa299363e64035e5444c1b8bc1f6ebed30de964e12  license
-> diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
-> index db3e690ec7..1fd09e6a6d 100644
-> --- a/package/intel-microcode/intel-microcode.mk
-> +++ b/package/intel-microcode/intel-microcode.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
+> diff --git a/package/openssh/0001-fix-logic-error-in-disableforwarding-option.patch b/package/openssh/0001-fix-logic-error-in-disableforwarding-option.patch
+> new file mode 100644
+> index 0000000000..2c64ec1910
+> --- /dev/null
+> +++ b/package/openssh/0001-fix-logic-error-in-disableforwarding-option.patch
+> @@ -0,0 +1,49 @@
+> +From fc86875e6acb36401dfc1dfb6b628a9d1460f367 Mon Sep 17 00:00:00 2001
+> +From: "djm@openbsd.org" <djm@openbsd.org>
+> +Date: Wed, 9 Apr 2025 07:00:03 +0000
+> +Subject: [PATCH] upstream: Fix logic error in DisableForwarding option.
+> +
+> +This option was documented as disabling X11 and agent forwarding but it failed to do so.
+> +Spotted by Tim Rice.
+> +
+> +OpenBSD-Commit-ID: fffc89195968f7eedd2fc57f0b1f1ef3193f5ed1
+> +
+> +Upstream: https://github.com/openssh/openssh-portable/commit/fc86875e6acb36401dfc1dfb6b628a9d1460f367
+> +
+> +Fixes the following CVE:
+> +  - CVE-2025-32728: In sshd in OpenSSH before 10.0, the DisableForwarding
+> +                    directive does not adhere to the documentation stating
+> +                    that it disables X11 and agent forwarding.
+> +
+> +[Titouan:
+> + - Remove diff on OpenBSD comment at the top of the file that does not apply
+> +   cleanly on openssh 9.9
+> +]
+> +Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+> +---
+> + session.c | 7 ++++---
+> + 1 file changed, 4 insertions(+), 3 deletions(-)
+> +
+> +diff --git a/session.c b/session.c
+> +index 52a4a3446e6..6444c77f31c 100644
+> +--- a/session.c
+> ++++ b/session.c
+> +@@ -2171,7 +2171,8 @@ session_auth_agent_req(struct ssh *ssh, Session *s)
+> + 	if ((r = sshpkt_get_end(ssh)) != 0)
+> + 		sshpkt_fatal(ssh, r, "%s: parse packet", __func__);
+> + 	if (!auth_opts->permit_agent_forwarding_flag ||
+> +-	    !options.allow_agent_forwarding) {
+> ++	    !options.allow_agent_forwarding ||
+> ++	    options.disable_forwarding) {
+> + 		debug_f("agent forwarding disabled");
+> + 		return 0;
+> + 	}
+> +@@ -2566,7 +2567,7 @@ session_setup_x11fwd(struct ssh *ssh, Session *s)
+> + 		ssh_packet_send_debug(ssh, "X11 forwarding disabled by key options.");
+> + 		return 0;
+> + 	}
+> +-	if (!options.x11_forwarding) {
+> ++	if (!options.x11_forwarding || options.disable_forwarding) {
+> + 		debug("X11 forwarding disabled in server configuration file.");
+> + 		return 0;
+> + 	}
+> diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+> index 115290ce13..b5e4645b50 100644
+> --- a/package/openssh/openssh.mk
+> +++ b/package/openssh/openssh.mk
+> @@ -13,6 +13,9 @@ OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
+>   OPENSSH_LICENSE = BSD-3-Clause, BSD-2-Clause, Public Domain
+>   OPENSSH_LICENSE_FILES = LICENCE
 >   
-> -INTEL_MICROCODE_VERSION = 20250211
-> +INTEL_MICROCODE_VERSION = 20250512
->   INTEL_MICROCODE_SITE = $(call github,intel,Intel-Linux-Processor-Microcode-Data-Files,microcode-$(INTEL_MICROCODE_VERSION))
->   INTEL_MICROCODE_LICENSE = PROPRIETARY
->   INTEL_MICROCODE_LICENSE_FILES = license
+> +# 0001-fix-logic-error-in-disableforwarding-option.patch
+> +OPENSSH_IGNORE_CVES += CVE-2025-32728
+> +
+>   OPENSSH_CONF_ENV = \
+>   	LD="$(TARGET_CC)" \
+>   	LDFLAGS="$(TARGET_CFLAGS)" \
 
 _______________________________________________
 buildroot mailing list
