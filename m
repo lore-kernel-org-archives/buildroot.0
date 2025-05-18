@@ -1,102 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0C82C3ABC9
-	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 19:46:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89C7EC3ABD8
+	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 19:50:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6C4F840B26;
-	Sun, 18 May 2025 19:46:09 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id huCGYvSP9S4H; Sun, 18 May 2025 19:46:08 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 890CB40B36
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 890CB40B36;
-	Sun, 18 May 2025 19:46:08 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1A86DE4
- for <buildroot@buildroot.org>; Sun, 18 May 2025 19:46:07 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AEDBD81EEE
- for <buildroot@buildroot.org>; Sun, 18 May 2025 19:46:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4C01781F1A;
+	Sun, 18 May 2025 19:50:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id m8oz_90bT8A8 for <buildroot@buildroot.org>;
- Sun, 18 May 2025 19:46:02 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::52f; helo=mail-pg1-x52f.google.com;
- envelope-from=kadambini.nema@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1C63081EE9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C63081EE9
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com
- [IPv6:2607:f8b0:4864:20::52f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1C63081EE9
- for <buildroot@buildroot.org>; Sun, 18 May 2025 19:46:01 +0000 (UTC)
-Received: by mail-pg1-x52f.google.com with SMTP id
- 41be03b00d2f7-b200047a6a5so4208777a12.0
- for <buildroot@buildroot.org>; Sun, 18 May 2025 12:46:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1747597561; x=1748202361;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=GTxLRcgRfE4qZGp7QkHGL28SfWsPtW7M4OqVfm7vpnM=;
- b=fB/w2zx/c90TC+sjRywGZsUfaQnjilw0wXILs6WVWr/PZZxxTZGDY3XQvtztEvndBC
- Pg1FkIWCbEmg5qFf3u1dXEVW8leia5rfSz7NXvPwT+dlIz0otqnVkD/WGOizZeQQkmPX
- k9bBA7HM8ua7hGijCVRULxDot1ob/bJMgKdLAqxUZXbVKP9Bt/STZxkHGehS8p95DpSa
- 7xl7Ql6/1gYge4pPS9RAvFc72E4nCYi/uzY0ABkDjkT1IC1j2/J83JMTHffS+0/bzuaB
- twYkYxbXHErmZRzP2U9t9ZlmeDg9YR0CPv58eezsLlc+opwhuT6pvdn0dG2vCbdgIbEC
- 6c2w==
-X-Gm-Message-State: AOJu0Ywh2E/+K1wZd5B1h3ROrvrUIksOX+CFxATAqJtYzHz7skXybu5l
- gIYLo8Jgmtf4sxhHlnOrA6P8/6RfMoCPXNshP0KvMOYMKB1Vu98JEfJ+woF6e3H/
-X-Gm-Gg: ASbGncv23mZ65BijuJCnecd/lBXT35hWJK+PT1XzD2vygEefN1l2omN6YvU5f2A41In
- rWco4n0dws2tnCALdVx0XyLk8uhSP5tuIZeAwOujmKVGSaYSr+xOI5V49dtqq9ZSoBhty1hF0WK
- nglAMRvOArwk1131sVrtoJOD/y6NcjJ+y1MrpKZEDBJO9JHxUGPahfR5Oi8Ka28YR7grXY/UVqX
- bTDHbSclJD+Bi+zRoaD4mM1VKLNIUdbuaRrk2N5j/reDyfG5WG+Gzjz38O91O7ceDYraoMlNjpC
- +MdlPTrBbSZ4//wRREVrmgptR3KSGFr+0d06WKPMKujEhaeXr6pW+NwKLcHUakirjgx8IFIPywb
- e4m3D3YTDoYFjWQZLk9kqUK8xyzo8NczukW/B9Q==
-X-Google-Smtp-Source: AGHT+IEQmMqZ0NiQzYhurv++Gs0+XGFPTXU6M7OhOLYnUT+rFYKPw6xCeH4SGcb8/uHl4mh4Pki7FA==
-X-Received: by 2002:a17:902:d4d0:b0:22e:3d2e:d94f with SMTP id
- d9443c01a7336-231d481919cmr163772545ad.0.1747597560765; 
- Sun, 18 May 2025 12:46:00 -0700 (PDT)
-Received: from localhost.localdomain (ip72-203-121-181.oc.oc.cox.net.
- [72.203.121.181]) by smtp.gmail.com with ESMTPSA id
- d9443c01a7336-231d4ac95e1sm46664915ad.20.2025.05.18.12.45.59
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 18 May 2025 12:46:00 -0700 (PDT)
-From: Kadambini Nema <kadambini.nema@gmail.com>
+ id O1OivHrY0Gvw; Sun, 18 May 2025 19:50:42 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 784F281F1B
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 784F281F1B;
+	Sun, 18 May 2025 19:50:42 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3E826193
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 19:50:41 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2FDCD81F1A
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 19:50:41 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4HO9cURClYEu for <buildroot@buildroot.org>;
+ Sun, 18 May 2025 19:50:40 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3DF2E81F18
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3DF2E81F18
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 19:50:40 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2C953872B2; Sun, 18 May 2025 19:50:40 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Kadambini Nema <kadambini.nema@gmail.com>
-Date: Sun, 18 May 2025 12:45:50 -0700
-Message-Id: <20250518194550.108748-1-kadambini.nema@gmail.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1747597561; x=1748202361; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=GTxLRcgRfE4qZGp7QkHGL28SfWsPtW7M4OqVfm7vpnM=;
- b=IJTKr/kooByvDjduudlZ3A7s9I6Gf3Nt9EF3pWSFopCinncSdxndA1w8BGNp4M3akT
- LMEnZEq5EtY4RTKC33C0+ifUiCiCLL9dTsD5/82eVbelJ1VVEzO2NmKCKyHu9qdI73RB
- lzS0QhFS7Kg7U8VUIdba3bzRn4M09fiqG7NxfO9OEDLr7Y+M4kb2EJtCZ30y90G3+7W+
- SpDX/8YK05AsmP6QAQ3n6MQpA9pulsRIGUYDT8TXsCtkihJcbfUfL9hYXbPBGfB8llo+
- tVb3n6xLgG/j3UZ5LWgh0HeFuCVXZB0UOUj0VmD2p0Eaud/pRdI1YqaIhgJEraRuo2/N
- olDg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=IJTKr/ko
-Subject: [Buildroot] [PATCH 1/1] package/grep: bump version to 3.12
+Date: Sun, 18 May 2025 21:49:45 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 7a09fcf7c69ca3f8a3c47ae60d0f44216968e6a9
+X-Git-Newrev: c84fcef123b94a2f66226bc946dbe251126393a7
+X-Patchwork-Hint: ignore
+Message-Id: <20250518195040.2C953872B2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/nodejs: security bump to version
+ 22.15.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -108,50 +59,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://git.savannah.gnu.org/cgit/grep.git/tree/NEWS?h=v3.12
-https://savannah.gnu.org/news/?id=10753
-https://lists.gnu.org/archive/html/info-gnu/2025-04/msg00008.html
+commit: https://git.buildroot.net/buildroot/commit/?id=c84fcef123b94a2f66226bc946dbe251126393a7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
+Fixes the following security issues:
+
+- CVE-2025-23166: Improper error handling in async cryptographic operations
+  crashes process
+
+- CVE-2025-23165: Corrupted pointer in node::fs::ReadFileUtf8(const
+  FunctionCallbackInfo<Value>& args) when args[0] is a string
+
+https://nodejs.org/en/blog/vulnerability/may-2025-security-releases
+
+Update the license hash for the addition of zstd 1.5.6 (BSD-3-Clause):
+https://github.com/nodejs/node/commit/f9f611fb584ca2ace35df2669204e7de6a92ea26
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/grep/grep.hash | 4 ++--
- package/grep/grep.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/nodejs/nodejs.hash | 14 +++++++-------
+ package/nodejs/nodejs.mk   |  2 +-
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/package/grep/grep.hash b/package/grep/grep.hash
-index a0028a4e2f..fdc1505e36 100644
---- a/package/grep/grep.hash
-+++ b/package/grep/grep.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking signature
--# https://ftp.gnu.org/gnu/grep/grep-3.11.tar.xz.sig
-+# https://ftp.gnu.org/gnu/grep/grep-3.12.tar.xz.sig
- # using key 155D3FC500C834486D1EEA677FD9FCCB000BEEEE
--sha256  1db2aedde89d0dea42b16d9528f894c8d15dae4e190b59aecc78f5a951276eab  grep-3.11.tar.xz
-+sha256  2649b27c0e90e632eadcd757be06c6e9a4f48d941de51e7c0f83ff76408a07b9  grep-3.12.tar.xz
- sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
-diff --git a/package/grep/grep.mk b/package/grep/grep.mk
-index 61900bb957..9dff26bafa 100644
---- a/package/grep/grep.mk
-+++ b/package/grep/grep.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index 6d2bdfb704..e087d8a7f9 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,8 +1,8 @@
+-# From https://nodejs.org/dist/v22.13.1/SHASUMS256.txt.asc
+-sha256  0a237c413ccbab920640438bf6e1a32edb19845bdc21f0e1cd5b91545ce1c126  node-v22.13.1-linux-arm64.tar.xz
+-sha256  f2be8dca2a7a518f6d187aa4b18abbeeafd71096a6d95f73f4d8bc0f8d2394ea  node-v22.13.1-linux-armv7l.tar.xz
+-sha256  377a7a1ea66f39251e1657f419e9404d526fcca9910620d0ecf0a870c6308f6b  node-v22.13.1-linux-ppc64le.tar.xz
+-sha256  0d2a5af33c7deab5555c8309cd3f373446fe1526c1b95833935ab3f019733b3b  node-v22.13.1-linux-x64.tar.xz
+-sha256  cfce282119390f7e0c2220410924428e90dadcb2df1744c0c4a0e7baae387cc2  node-v22.13.1.tar.xz
++# From https://nodejs.org/dist/v22.15.1/SHASUMS256.txt.asc
++sha256  f4ae8ddf7487dfaf7da92fef463ee55cc29d8772d62891361dc3fc8b8e469205  node-v22.15.1-linux-arm64.tar.xz
++sha256  6947386b4c8373b625c6a49b5571bf2226dac7c7b560a9a561a1f81bf71a25ef  node-v22.15.1-linux-armv7l.tar.xz
++sha256  da07858c6404dbe7c627bd7baea33c7825640652ad24468a6feb23c770cf7ce4  node-v22.15.1-linux-ppc64le.tar.xz
++sha256  7dca2ab34ec817aa4781e2e99dfd34d349eff9be86e5d5fbaa7e96cae8ee3179  node-v22.15.1-linux-x64.tar.xz
++sha256  c19f0177d21c621746625e5f37590bd0d79a72043b77b53784cba5f145e7263e  node-v22.15.1.tar.xz
+ # Locally calculated
+-sha256  9d72cce9b104ecb67feb8af38618511685190ae5a119cc0488ecae66b221000d  LICENSE
++sha256  1ae62e2015784ba438db7b04ebd33f3c4ff3efdb824c111c4ececd99945fd52d  LICENSE
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 752971c4a6..310face2d2 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--GREP_VERSION = 3.11
-+GREP_VERSION = 3.12
- GREP_SITE = $(BR2_GNU_MIRROR)/grep
- GREP_SOURCE = grep-$(GREP_VERSION).tar.xz
- GREP_LICENSE = GPL-3.0+
--- 
-2.25.1
-
+ # _VERSION, _SOURCE and _SITE must be kept empty to avoid downloading anything
+-NODEJS_COMMON_VERSION = 22.13.1
++NODEJS_COMMON_VERSION = 22.15.1
+ NODEJS_COMMON_SOURCE = node-v$(NODEJS_COMMON_VERSION).tar.xz
+ NODEJS_COMMON_SITE = http://nodejs.org/dist/v$(NODEJS_COMMON_VERSION)
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
