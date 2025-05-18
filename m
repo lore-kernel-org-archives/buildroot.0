@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43871C2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:06:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84A02C3ABDD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:06:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3AEA2712B2;
-	Mon, 19 May 2025 11:06:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EC12E712C5;
+	Mon, 19 May 2025 11:06:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q1nF1WsZIGDF; Mon, 19 May 2025 11:06:17 +0000 (UTC)
+ id A_md-2Z85TT9; Mon, 19 May 2025 11:06:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A7AB712B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D8AF0712C6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3A7AB712B1;
-	Mon, 19 May 2025 11:06:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D8AF0712C6;
+	Mon, 19 May 2025 11:06:20 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4A4E1D4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:49:48 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 530D8E4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:49:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5558D423BE
+ by smtp4.osuosl.org (Postfix) with ESMTP id AA8C340DE2
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 59v80k4_j3cF for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:51 +0000 (UTC)
+ id PdVaj2HDWYjT for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 264C0423EF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E6DFE423EA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 264C0423EF
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:11 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E6DFE423EA
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:10 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 247A1872E7; Mon, 19 May 2025 10:40:11 +0000 (UTC)
+ id DF7DD82A2E; Mon, 19 May 2025 10:40:10 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 18 May 2025 22:42:54 +0200
+Date: Sun, 18 May 2025 18:45:06 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: faf2b8a6277c1a10ca08e5ad8ecb488d70a03de4
-X-Git-Newrev: c09ee07b2c3b3167774c1d20c4685a7366b140cf
+X-Git-Oldrev: 6c3f01fde12730defcc238fe9b065b30086e066b
+X-Git-Newrev: 573ecbd44cd16b2ca4ce71b40459bcecf8c8e98c
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104011.247A1872E7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/hwclock-initscript:
- new package
+Message-Id: <20250519104010.DF7DD82A2E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/heimdal: bump version
+ to 8c3c97bdf6c06200418f1a85aa22beaa441c6b23
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,126 +58,189 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c09ee07b2c3b3167774c1d20c4685a7366b140cf
+commit: https://git.buildroot.net/buildroot/commit/?id=573ecbd44cd16b2ca4ce71b40459bcecf8c8e98c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add a new initscript to save the date and time to the hardware clock
-on shutdown.
+The current version was more than 3 years old and had known CVEs (see
+CVE-2023-36328). Since this is a host only package, we don't consider
+this as a security bump.
 
-Signed-off-by: Michael Walle <michael@walle.cc>
-[Arnout:
- - package as hwclock-initscript instead of buildroot-initscripts;
- - mention in help text that it isn't needed at boot;
- - rewrite initscript according to our usual pattern;
- - fix shellcheck errors.
-]
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+This upgrade allows the removal of the two patches currently applied:
+
+- The commit 1b57b62, which fixes the build with autoconf 2.72, is
+  already included upstream.
+
+- We no longer need to use the JSON-PP module, as it is now
+  optional (commit 13d3bcf).
+
+Also, since the latest version of Heimdal no longer depends on
+e2fsprogs, the host-e2fsprogs dependency has been removed.
+
+Signed-off-by: Guillaume Chaye <guillaume.chaye@zeetim.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/Config.in                                |  1 +
- package/hwclock-initscript/Config.in             | 10 ++++++
- package/hwclock-initscript/S20hwclock            | 39 ++++++++++++++++++++++++
- package/hwclock-initscript/hwclock-initscript.mk | 12 ++++++++
- 4 files changed, 62 insertions(+)
+ ...dule-JSON-PP-part-of-core-instead-of-JSON.patch | 57 ----------------------
+ ...largefile.m4-Fix-build-with-autoconf-2.72.patch | 27 ----------
+ package/heimdal/heimdal.hash                       |  2 +-
+ package/heimdal/heimdal.mk                         | 21 ++++----
+ 4 files changed, 11 insertions(+), 96 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index ffaed13c74..579b5ffc87 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2866,6 +2866,7 @@ menu "System tools"
- 	source "package/getent/Config.in"
- 	source "package/gkrellm/Config.in"
- 	source "package/htop/Config.in"
-+	source "package/hwclock-initscript/Config.in"
- 	source "package/ibm-sw-tpm2/Config.in"
- 	source "package/initscripts/Config.in"
- 	source "package/iotop/Config.in"
-diff --git a/package/hwclock-initscript/Config.in b/package/hwclock-initscript/Config.in
-new file mode 100644
-index 0000000000..a660a26eaa
---- /dev/null
-+++ b/package/hwclock-initscript/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_HWCLOCK_INITSCRIPT
-+	bool "hwclock-initscript"
-+	depends on !BR2_PACKAGE_SYSTEMD
-+	depends on BR2_PACKAGE_BUSYBOX || BR2_PACKAGE_UTIL_LINUX_HWCLOCK
-+	help
-+	  Initscript to save the date and time to the hardware clock on
-+	  shutdown.
+diff --git a/package/heimdal/0001-Use-perl-module-JSON-PP-part-of-core-instead-of-JSON.patch b/package/heimdal/0001-Use-perl-module-JSON-PP-part-of-core-instead-of-JSON.patch
+deleted file mode 100644
+index 7323ac70df..0000000000
+--- a/package/heimdal/0001-Use-perl-module-JSON-PP-part-of-core-instead-of-JSON.patch
++++ /dev/null
+@@ -1,57 +0,0 @@
+-From f6fdb0a28e3bfcb3fd0aa1c81ad59c5411c0d660 Mon Sep 17 00:00:00 2001
+-From: Andrew Sim <andrewsimz@gmail.com>
+-Date: Sat, 10 Jun 2023 09:00:24 +0200
+-Subject: [PATCH] Use perl module JSON:PP, part of core, instead of JSON
+- package
+-
+-This patch removes the need for an external package.
+-
+-Ported from
+-https://github.com/openwrt/packages/blob/master/net/samba4/patches/105-perl-json-pp.patch
+-https://github.com/openwrt/packages/commit/402f4ba4eff65b80a9deaa6085256112bec4d67b#diff-208d4e0345c9d29fbec23d6f655ba794afd3052f5cb8dd73944db72ce81b847b
+-
+-Upstream: https://github.com/heimdal/heimdal/pull/1176
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- cf/make-proto.pl | 4 ++--
+- configure.ac     | 1 -
+- 2 files changed, 2 insertions(+), 3 deletions(-)
+-
+-diff --git a/cf/make-proto.pl b/cf/make-proto.pl
+-index 36a040ce6..4af21916b 100644
+---- a/cf/make-proto.pl
+-+++ b/cf/make-proto.pl
+-@@ -4,7 +4,7 @@
+- use Getopt::Std;
+- use File::Compare;
+- 
+--use JSON;
+-+use JSON::PP
+- 
+- my $comment = 0;
+- my $doxygen = 0;
+-@@ -70,7 +70,7 @@ if($opt_x) {
+-     my $EXP;
+-     local $/;
+-     open(EXP, '<', $opt_x) || die "open ${opt_x}";
+--    my $obj = JSON->new->utf8->decode(<EXP>);
+-+    my $obj = JSON::PP->new->utf8->decode(<EXP>);
+-     close $EXP;
+- 
+-     foreach my $x (keys %$obj) {
+-diff --git a/configure.ac b/configure.ac
+-index cedb4c01f..cecd030e6 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -56,7 +56,6 @@ if ! test -f "$srcdir/lib/asn1/der-protos.h" ||
+-     AC_KRB_PROG_PERL
+-     AC_KRB_PERL_MOD(Getopt::Std)
+-     AC_KRB_PERL_MOD(File::Compare)
+--    AC_KRB_PERL_MOD(JSON)
+- fi
+- 
+- AC_KRB_PROG_YACC
+--- 
+-2.39.2
+-
+diff --git a/package/heimdal/0002-cf-largefile.m4-Fix-build-with-autoconf-2.72.patch b/package/heimdal/0002-cf-largefile.m4-Fix-build-with-autoconf-2.72.patch
+deleted file mode 100644
+index 5b36c5a784..0000000000
+--- a/package/heimdal/0002-cf-largefile.m4-Fix-build-with-autoconf-2.72.patch
++++ /dev/null
+@@ -1,27 +0,0 @@
+-From 1b57b62d82a478c1fade350f0fb1d57031a8734e Mon Sep 17 00:00:00 2001
+-From: Bernd Kuhls <bernd@kuhls.net>
+-Date: Sat, 10 Feb 2024 09:33:48 +0100
+-Subject: [PATCH] cf/largefile.m4: Fix build with autoconf-2.72
+-
+-Fixes https://github.com/heimdal/heimdal/issues/1201
+-
+-Upstream: https://github.com/heimdal/heimdal/commit/1b57b62d82a478c1fade350f0fb1d57031a8734e
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- cf/largefile.m4 | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/cf/largefile.m4 b/cf/largefile.m4
+-index 5c54897be4..cdbbc55431 100644
+---- a/cf/largefile.m4
+-+++ b/cf/largefile.m4
+-@@ -10,7 +10,7 @@ dnl with generated code, such as lex
+- if test "$enable_largefile" != no -a "$ac_cv_sys_large_files" != no; then
+- 	CPPFLAGS="$CPPFLAGS -D_LARGE_FILES=$ac_cv_sys_large_files"
+- fi
+--if test "$enable_largefile" != no -a "$ac_cv_sys_file_offset_bits" != no; then
+-+if test "$enable_largefile" != no -a "$ac_cv_sys_file_offset_bits" != no && test -n "$ac_cv_sys_file_offset_bits"; then
+- 	CPPFLAGS="$CPPFLAGS -D_FILE_OFFSET_BITS=$ac_cv_sys_file_offset_bits"
+- fi
+- ])
+diff --git a/package/heimdal/heimdal.hash b/package/heimdal/heimdal.hash
+index 250ddbbd4d..5575b52f86 100644
+--- a/package/heimdal/heimdal.hash
++++ b/package/heimdal/heimdal.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  2576c5e2d793db53c86e108fd117b278437bb02d6c6db2bec4d1b86958f1980a  heimdal-f4faaeaba371fff3f8d1bc14389f5e6d70ca8e17.tar.gz
++sha256  aa679a6ad0349e266ec8a886b6be8085564f959183e948551a8e7d782ffaf623  heimdal-8c3c97bdf6c06200418f1a85aa22beaa441c6b23.tar.gz
+ sha256  0c4b07bf5b98f7a1d01f8e60722d6c6747ef052c2aa6d2043daf690d4e1b0a7f  LICENSE
+diff --git a/package/heimdal/heimdal.mk b/package/heimdal/heimdal.mk
+index ed8826a741..6bba641e2c 100644
+--- a/package/heimdal/heimdal.mk
++++ b/package/heimdal/heimdal.mk
+@@ -4,14 +4,12 @@
+ #
+ ################################################################################
+ 
+-HEIMDAL_VERSION = f4faaeaba371fff3f8d1bc14389f5e6d70ca8e17
++HEIMDAL_VERSION = 8c3c97bdf6c06200418f1a85aa22beaa441c6b23
+ HEIMDAL_SITE = $(call github,heimdal,heimdal,$(HEIMDAL_VERSION))
+-HOST_HEIMDAL_DEPENDENCIES = host-e2fsprogs host-ncurses host-pkgconf host-libxcrypt host-flex host-bison
++HOST_HEIMDAL_DEPENDENCIES = host-ncurses host-pkgconf host-libxcrypt host-flex host-bison
+ HOST_HEIMDAL_AUTORECONF = YES
+-# static because of -fPIC issues with e2fsprogs on x86_64 host
 +
-+	  Note that the kernel already loads the time from the hwclock
-+	  at boot time, no init script is needed for that.
-diff --git a/package/hwclock-initscript/S20hwclock b/package/hwclock-initscript/S20hwclock
-new file mode 100644
-index 0000000000..c9f55cff1c
---- /dev/null
-+++ b/package/hwclock-initscript/S20hwclock
-@@ -0,0 +1,39 @@
-+#! /bin/sh
-+#
-+# hwclock      This writes the system time to the RTC on shutdown
-+#
-+
-+RTC_DEVICE=rtc0
-+DAEMON=hwclock
-+
-+# shellcheck source=/dev/null
-+[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
-+
-+# Quietly do nothing if /dev/rtc0 does not exist
-+[ -c /dev/$RTC_DEVICE ] || exit 0
-+
-+start(){
-+	: # Nothing to do on startup
-+}
-+
-+stop(){
-+	printf "Saving the system clock to /dev/%s\n" "${RTC_DEVICE}"
-+	/sbin/$DAEMON -f "/dev/${RTC_DEVICE}" -w
-+}
-+
-+case "$1" in
-+	start)
-+		start
-+		;;
-+	stop)
-+		stop
-+		;;
-+	restart|reload)
-+		stop
-+		start
-+		;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart|reload}"
-+		exit 1
-+		;;
-+esac
-diff --git a/package/hwclock-initscript/hwclock-initscript.mk b/package/hwclock-initscript/hwclock-initscript.mk
-new file mode 100644
-index 0000000000..a5d42ef55f
---- /dev/null
-+++ b/package/hwclock-initscript/hwclock-initscript.mk
-@@ -0,0 +1,12 @@
-+################################################################################
-+#
-+# hwclock-initscript
-+#
-+################################################################################
-+
-+define HWCLOCK_INITSCRIPT_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 0755 $(HWCLOCK_INITSCRIPT_PKGDIR)/S20hwclock \
-+		$(TARGET_DIR)/etc/init.d/S20hwclock
-+endef
-+
-+$(eval $(generic-package))
+ HOST_HEIMDAL_CONF_OPTS = \
+-	--disable-shared \
+-	--enable-static \
+ 	--without-openldap \
+ 	--without-capng \
+ 	--with-db-type-preference= \
+@@ -33,13 +31,14 @@ HEIMDAL_LICENSE = BSD-3-Clause
+ HEIMDAL_LICENSE_FILES = LICENSE
+ HEIMDAL_CPE_ID_VALID = YES
+ 
+-# We need compile_et for samba4
+-define HOST_HEIMDAL_INSTALL_COMPILE_ET
+-	$(INSTALL) -m 0755 $(@D)/lib/com_err/compile_et \
+-		$(HOST_DIR)/bin/compile_et
++# We need compile_et for samba4 and slc for target version of heimdal
++# By default compile_et is not installed so we install it to bin
++# By default slc is installed in libexec directory so we just link it
++define HOST_HEIMDAL_INSTALL_BINARIES
++	$(INSTALL) -m 0755 $(@D)/lib/com_err/compile_et $(HOST_DIR)/bin/compile_et
++	ln -sf $(HOST_DIR)/libexec/heimdal/slc $(HOST_DIR)/bin/slc
+ endef
+ 
+-HOST_HEIMDAL_POST_INSTALL_HOOKS += \
+-	HOST_HEIMDAL_INSTALL_COMPILE_ET
++HOST_HEIMDAL_POST_INSTALL_HOOKS += HOST_HEIMDAL_INSTALL_BINARIES
+ 
+ $(eval $(host-autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
