@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5BBAC3ABD8
-	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 12:17:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7EA67C3ABC9
+	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 12:17:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 57E9481E49;
-	Sun, 18 May 2025 12:17:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4D18A40BF8;
+	Sun, 18 May 2025 12:17:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T1mQ8e1-Fsc8; Sun, 18 May 2025 12:17:12 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7L_rPnxUZkJD; Sun, 18 May 2025 12:17:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A0A6481E21
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6FF3B40C28
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A0A6481E21;
-	Sun, 18 May 2025 12:17:12 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 67235DF
- for <buildroot@buildroot.org>; Sun, 18 May 2025 12:16:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6FF3B40C28;
+	Sun, 18 May 2025 12:17:14 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3E0DEDF
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 12:16:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C06EF40BEC
+ by smtp3.osuosl.org (Postfix) with ESMTP id EDFAD60AE2
  for <buildroot@buildroot.org>; Sun, 18 May 2025 12:16:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kYZLI_BS2LBv for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1IzNNJnH3TnB for <buildroot@buildroot.org>;
  Sun, 18 May 2025 12:16:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CB48540C27
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 211BC60A73
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CB48540C27
- for <buildroot@buildroot.org>; Sun, 18 May 2025 12:16:39 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 211BC60A73
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 12:16:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C911F86879; Sun, 18 May 2025 12:16:39 +0000 (UTC)
+ id 1E88586E1A; Sun, 18 May 2025 12:16:40 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
 Date: Sun, 18 May 2025 14:15:50 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: aea1dd9b20efc75a911823bc4d8019e9d728eadf
-X-Git-Newrev: b93b80245d9aa8853d6590ca1d2bbd02b1550a54
+X-Git-Oldrev: 0d7e72afb2b2b283cf4ad103df77f86d64c8ea6c
+X-Git-Newrev: 677b24ebaf154aaa0af59d34e91471b95d9a861b
 X-Patchwork-Hint: ignore
-Message-Id: <20250518121639.C911F86879@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/sox: add fix for CVE-2021-3643
- CVE-2021-23210
+Message-Id: <20250518121640.1E88586E1A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/tinyxml: set TINYXML_CPE_ID_VERSION
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,78 +64,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b93b80245d9aa8853d6590ca1d2bbd02b1550a54
+commit: https://git.buildroot.net/buildroot/commit/?id=677b24ebaf154aaa0af59d34e91471b95d9a861b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This fix is included in Debian's sox package. The CVE is not reported
-by pkg-stats because the NVD database has associated it to the
-sox_project:sox vendor/product CPE. This has been reported to NVD:
+With the recent addition in pkg-stats to detect stale ignore CVE
+entries, the CVE-2021-42260 ignore CVE entry is reported as
+stale. This is because TINYXML_VERSION is 2.6.2_2, and the CVE is
+annotated as affecting versions up to and including 2.6.2.
 
-  https://lore.kernel.org/buildroot/20250517220322.4da9bdb3@windsurf/
+But in fact, 2.6.2_2 is a special version from the Kodi community, but
+it's close to the 2.6.2 release, and CVE-2021-42260 is not fixed in
+it. To get meaningful results, let's tell our CVE checking logic that
+the tinyxml version is 2.6.2 by setting TINYXML_CPE_ID_VERSION (we're
+splitting on the _ and keeping the part before).
+
+Because we're now setting TINYXML_CPE_ID_VERSION, we must drop
+TINYXML_CPE_ID_VALID to avoid a check-package warning.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...dth-should-never-be-0-to-avoid-division-b.patch | 34 ++++++++++++++++++++++
- package/sox/sox.mk                                 |  5 ++++
- 2 files changed, 39 insertions(+)
+ package/tinyxml/tinyxml.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/sox/0006-voc-word-width-should-never-be-0-to-avoid-division-b.patch b/package/sox/0006-voc-word-width-should-never-be-0-to-avoid-division-b.patch
-new file mode 100644
-index 0000000000..94298b7ae5
---- /dev/null
-+++ b/package/sox/0006-voc-word-width-should-never-be-0-to-avoid-division-b.patch
-@@ -0,0 +1,34 @@
-+From ad8ecfbdd9ff184b60600a115247a6aa947d0215 Mon Sep 17 00:00:00 2001
-+From: Helmut Grohne <helmut@subdivi.de>
-+Date: Sat, 17 May 2025 22:10:00 +0200
-+Subject: [PATCH] voc: word width should never be 0 to avoid division by zero
-+
-+Bug: https://sourceforge.net/p/sox/bugs/351/
-+Bug-Debian: https://bugs.debian.org/1010374
-+
-+This patch fixes both CVE-2021-3643 and CVE-2021-23210.
-+
-+Upstream: https://sourceforge.net/p/sox/bugs/351/
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ src/voc.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/src/voc.c b/src/voc.c
-+index a75639e9..0ca07f94 100644
-+--- a/src/voc.c
-++++ b/src/voc.c
-+@@ -625,6 +625,10 @@ static int getblock(sox_format_t * ft)
-+         v->rate = new_rate_32;
-+         ft->signal.rate = new_rate_32;
-+         lsx_readb(ft, &uc);
-++        if (uc <= 1) {
-++          lsx_fail_errno(ft, SOX_EFMT, "2 bits per word required");
-++          return (SOX_EOF);
-++        }
-+         v->size = uc;
-+         lsx_readb(ft, &uc);
-+         if (v->channels != -1 && uc != v->channels) {
-+-- 
-+2.49.0
-+
-diff --git a/package/sox/sox.mk b/package/sox/sox.mk
-index d8a0d7d1df..eba166f68b 100644
---- a/package/sox/sox.mk
-+++ b/package/sox/sox.mk
-@@ -59,6 +59,11 @@ SOX_IGNORE_CVES += CVE-2019-8357
- # sox-14.4.2-44-g7b6a8892
- SOX_IGNORE_CVES += CVE-2019-13590
+diff --git a/package/tinyxml/tinyxml.mk b/package/tinyxml/tinyxml.mk
+index 01c25f7c1c..c6150b13fe 100644
+--- a/package/tinyxml/tinyxml.mk
++++ b/package/tinyxml/tinyxml.mk
+@@ -12,7 +12,7 @@ TINYXML_AUTORECONF = YES
+ TINYXML_INSTALL_STAGING = YES
+ TINYXML_LICENSE = Zlib
+ TINYXML_LICENSE_FILES = README
+-TINYXML_CPE_ID_VALID = YES
++TINYXML_CPE_ID_VERSION = $(firstword $(subst _,$(space),$(TINYXML_VERSION)))
  
-+# 0006-voc-word-width-should-never-be-0-to-avoid-division-b.patch
-+# This entry is NOT stale, those CVEs are not reported by pkg-stats
-+# due to the change of CPE ID to sox_project:sox in the NVD database
-+SOX_IGNORE_CVES += CVE-2021-3643 CVE-2021-23210
-+
- SOX_CONF_OPTS = \
- 	--with-distro="Buildroot" \
- 	--disable-stack-protector
+ # 0001-In-stamp-always-advance-the-pointer-if-p-0xef.patch
+ TINYXML_IGNORE_CVES += CVE-2021-42260
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
