@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B297C3ABC9
-	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 12:16:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6798DC3ABC9
+	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 12:17:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ED30840B6D;
-	Sun, 18 May 2025 12:16:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3570781176;
+	Sun, 18 May 2025 12:17:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wpM2CKr8uwTl; Sun, 18 May 2025 12:16:58 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fiGlTnkerOJZ; Sun, 18 May 2025 12:17:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D75F40B73
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5B2A681186
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0D75F40B73;
-	Sun, 18 May 2025 12:16:58 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 27A6B204
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5B2A681186;
+	Sun, 18 May 2025 12:17:00 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 31E4F1BA
  for <buildroot@buildroot.org>; Sun, 18 May 2025 12:16:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6D4174032E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 67EF540146
  for <buildroot@buildroot.org>; Sun, 18 May 2025 12:16:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id J35PBQdNZgsg for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5FWuv9eVVQCD for <buildroot@buildroot.org>;
  Sun, 18 May 2025 12:16:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C024840811
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9B14B40BF7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C024840811
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9B14B40BF7
  for <buildroot@buildroot.org>; Sun, 18 May 2025 12:16:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BDB7086EF4; Sun, 18 May 2025 12:16:39 +0000 (UTC)
+ id 9881F86FA9; Sun, 18 May 2025 12:16:39 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
 Date: Sun, 18 May 2025 14:15:50 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 913ca297dc6bbf2a082680aaf467e730ae075c06
-X-Git-Newrev: aea1dd9b20efc75a911823bc4d8019e9d728eadf
+X-Git-Oldrev: 107e935e1c0f9776776791d7d98a536e627c3354
+X-Git-Newrev: 9c482f525a3f3d5c2d157e4dbc598ea1c7869338
 X-Patchwork-Hint: ignore
-Message-Id: <20250518121639.BDB7086EF4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/sox: rework the 0001 patch to make
- it Git-applicable
+Message-Id: <20250518121639.9881F86FA9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sox: add SOX_CPE_ID_VERSION
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,49 +64,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aea1dd9b20efc75a911823bc4d8019e9d728eadf
+commit: https://git.buildroot.net/buildroot/commit/?id=9c482f525a3f3d5c2d157e4dbc598ea1c7869338
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Due to the "From:" in the commit log itself, this patch was not
-applicable using git am:
+All ignore CVE entries of the sox package are considered stale because
+SOX_VERSION is a Git commit and therefore the version matching logic
+doesn't do the right thing.
 
-$ git am 0001-Make-SoX-support-uclibc-based-toolchains.patch
-Applying: Make SoX support uclibc-based toolchains
-fatal: empty ident name (for <>) not allowed
+This commit sets SOX_CPE_ID_VERSION to 14.4.2, which is the closest
+upstream version on which we are based: our Git commit is 14.4.2 plus
+a number of commits that fix a large number of CVEs.
 
-Thanks to Arnout who found the issue.
+Thanks to this change, the ignore CVE entries are no longer stale.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/sox/0001-Make-SoX-support-uclibc-based-toolchains.patch | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ package/sox/sox.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/sox/0001-Make-SoX-support-uclibc-based-toolchains.patch b/package/sox/0001-Make-SoX-support-uclibc-based-toolchains.patch
-index 3d21b570f1..9d004321f7 100644
---- a/package/sox/0001-Make-SoX-support-uclibc-based-toolchains.patch
-+++ b/package/sox/0001-Make-SoX-support-uclibc-based-toolchains.patch
-@@ -1,10 +1,9 @@
--From 5d51acafe9c38fb05939b4d2d6a9dcde12476458 Mon Sep 17 00:00:00 2001
-+From a1c913c52f70ee7c70e1e5ae1473ee407cd1494c Mon Sep 17 00:00:00 2001
- From: Gustavo Zacarias <gustavo@zacarias.com.ar>
--Date: Sat, 29 Jun 2024 12:28:54 +0200
-+Date: Sat, 17 May 2025 22:12:23 +0200
- Subject: [PATCH] Make SoX support uclibc-based toolchains
- 
--From:
--http://sourceforge.net/p/sox/bugs/179/
-+From http://sourceforge.net/p/sox/bugs/179/
- 
- Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- [Julien: rebased patch on package git version 7524160,
-@@ -36,5 +35,5 @@ index 3fcf4382..9fc001bd 100644
-    (void)fp;
-  #endif
- -- 
--2.45.2
-+2.49.0
- 
+diff --git a/package/sox/sox.mk b/package/sox/sox.mk
+index d0329bf50d..42e47a916c 100644
+--- a/package/sox/sox.mk
++++ b/package/sox/sox.mk
+@@ -12,6 +12,8 @@ SOX_LICENSE = GPL-2.0+ (sox binary), LGPL-2.1+ (libraries)
+ SOX_LICENSE_FILES = LICENSE.GPL LICENSE.LGPL
+ SOX_CPE_ID_VENDOR = sound_exchange_project
+ SOX_CPE_ID_PRODUCT = sound_exchange
++# The Git commit in SOX_VERSION is 14.4.2 + a large number of commits
++SOX_CPE_ID_VERSION = 14.4.2
+ # From git and we're patching configure.ac
+ SOX_AUTORECONF = YES
+ SOX_AUTORECONF_OPTS = --include=$(HOST_DIR)/share/autoconf-archive
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
