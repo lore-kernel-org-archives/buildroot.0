@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99B39C3ABD8
-	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 14:48:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0407DC3ABC9
+	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 14:48:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 159FE60E39;
-	Sun, 18 May 2025 14:48:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C6852820A1;
+	Sun, 18 May 2025 14:48:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id daaF7Hx4czDY; Sun, 18 May 2025 14:47:59 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AM5bUPb9nLIE; Sun, 18 May 2025 14:48:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 211B260D74
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D78F582102
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 211B260D74;
-	Sun, 18 May 2025 14:47:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D78F582102;
+	Sun, 18 May 2025 14:48:00 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 068031BA
- for <buildroot@buildroot.org>; Sun, 18 May 2025 14:47:23 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 17116DF
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 14:47:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DF1FF60D5E
- for <buildroot@buildroot.org>; Sun, 18 May 2025 14:47:12 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8FD3C60AB4
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 14:47:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bkNVslD4bMyZ for <buildroot@buildroot.org>;
- Sun, 18 May 2025 14:47:10 +0000 (UTC)
+ id 8JLz77khPaw9 for <buildroot@buildroot.org>;
+ Sun, 18 May 2025 14:47:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9834960BD3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E841360D73
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9834960BD3
+ by smtp3.osuosl.org (Postfix) with ESMTP id E841360D73
  for <buildroot@buildroot.org>; Sun, 18 May 2025 14:47:10 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 961CF869F5; Sun, 18 May 2025 14:47:10 +0000 (UTC)
+ id E4B75869F5; Sun, 18 May 2025 14:47:10 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 18 May 2025 15:03:56 +0200
+Date: Sun, 18 May 2025 15:08:34 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: f9edaff297648cfd7577ce312cf666085cc1ae99
-X-Git-Newrev: 2133c1998b8e968046aee8fbd15b004b6a94b1ba
+X-Git-Oldrev: f520ab6aaace2901aaee6268aeba2f44206df18a
+X-Git-Newrev: fcdfc1256dba46373694919e7d8d2fba48f33936
 X-Patchwork-Hint: ignore
-Message-Id: <20250518144710.961CF869F5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/mariadb: bump
- version to 10.11.11
+Message-Id: <20250518144710.E4B75869F5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/libqrencode: fix
+ the _SITE package download url
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,115 +66,70 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2133c1998b8e968046aee8fbd15b004b6a94b1ba
+commit: https://git.buildroot.net/buildroot/commit/?id=fcdfc1256dba46373694919e7d8d2fba48f33936
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Fixes:
-Build with gcc-15 was fixed upstream in 10.11.11:
+The qrencode release archive is no longer distributed at [1].
+This url now shows a HTTP/404 not found error.
 
-https://github.com/MariaDB/server/commit/1d6f857
+The qrencode homepage [2] states:
+"You can download the source packages at Releases[3] page at GitHub."
 
-Remove patch, since the problem was fixed upstream:
+This commit updates the package download url to use github. The github
+archive is not the same as the old release archive: it does not
+contain the autotools configure script. For this reason, the hash
+archive is updated and "_AUTORECONF = YES" is also added.
 
-https://github.com/MariaDB/server/commit/4375245
+This commit also fixes the zbar runtime test [4] which is using
+libqrencode to generate a qrcode to test zbar.
 
-After bumping the version to 10.11.11 the configuration step failed for target:
+Fixes: [4]
 
-CMake Error: try_run() invoked in cross-compiling mode, please set the following cache variables appropriately:
-   HAVE_SYSTEM_LIBFMT_EXITCODE (advanced)
+[1] http://fukuchi.org/works/qrencode/qrencode-4.1.1.tar.gz
+[2] https://fukuchi.org/en/works/qrencode/
+[3] https://github.com/fukuchi/libqrencode/releases
+[4] https://gitlab.com/buildroot.org/buildroot/-/jobs/9774022888
 
-To fx this problem we set HAVE_SYSTEM_LIBFMT_EXITCODE=0.
-
-Fix legal-info after changes to README.md.
-
-Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 6cd8f95346aaf7dd7c26e83d263969e5406420bd)
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 763971cfe3235ede53c6455aa26eb671c51809cb)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...compile-failure-fmt-use-incompatible-with.patch | 35 ----------------------
- package/mariadb/mariadb.hash                       |  6 ++--
- package/mariadb/mariadb.mk                         |  5 ++--
- 3 files changed, 6 insertions(+), 40 deletions(-)
+ package/libqrencode/libqrencode.hash | 4 ++--
+ package/libqrencode/libqrencode.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/mariadb/0002-MDEV-34206-compile-failure-fmt-use-incompatible-with.patch b/package/mariadb/0002-MDEV-34206-compile-failure-fmt-use-incompatible-with.patch
-deleted file mode 100644
-index b6c8807f44..0000000000
---- a/package/mariadb/0002-MDEV-34206-compile-failure-fmt-use-incompatible-with.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From 69935c10b95fc7f7a2e1c3ed02831958e1a9b6a4 Mon Sep 17 00:00:00 2001
--From: Daniel Black <daniel@mariadb.org>
--Date: Wed, 22 May 2024 17:43:17 +1000
--Subject: [PATCH] MDEV-34206 compile failure: fmt use incompatible with
-- libfmt-10.2.[2]+
--
--Upstream libfmt commit https://github.com/fmtlib/fmt/commit/d70729215fba1d54862e407b626abf86ddf409bf
--now requires the format function to be const.
--
--Adjust the function prototype so it is const and can compile.a
--
--Signed-off-by: Daniel Black <daniel@mariadb.org>
--[Julien: add SoB line with the original patch author name]
--Upstream: https://github.com/MariaDB/server/commit/4375245d5d9f01cabb6e3fd6c637535e724eae38
--Signed-off-by: Julien Olivain <ju.o@free.fr>
-----
-- sql/item_strfunc.cc | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/sql/item_strfunc.cc b/sql/item_strfunc.cc
--index 4bbf36ec1cf..2ad8a9b3ce5 100644
----- a/sql/item_strfunc.cc
--+++ b/sql/item_strfunc.cc
--@@ -1392,7 +1392,7 @@ bool Item_func_sformat::fix_length_and_dec(THD *thd)
-- namespace fmt {
--   template <> struct formatter<String>: formatter<string_view> {
--     template <typename FormatContext>
---    auto format(String c, FormatContext& ctx) -> decltype(ctx.out()) {
--+    auto format(String c, FormatContext& ctx) const -> decltype(ctx.out()) {
--       string_view name = { c.ptr(), c.length() };
--       return formatter<string_view>::format(name, ctx);
--     };
---- 
--2.46.0
--
-diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
-index fd73cca4f3..05340c1faa 100644
---- a/package/mariadb/mariadb.hash
-+++ b/package/mariadb/mariadb.hash
-@@ -1,6 +1,6 @@
--# From https://downloads.mariadb.org/mariadb/10.11.6
--sha512  3d77f7be4a26d5a36af56150a5f8ed5e21adeed9bc8ea1bd694e47a25a571bd73468eada7c96e0dfe5a6c81bef625abf71a56d228cf43a738e555e3c0d824a6a  mariadb-10.11.6.tar.gz
-+# From https://downloads.mariadb.org/mariadb/10.11.11
-+sha512  d9c154207a9f435ce08d5fbfe31814a739e577c656ef9996cf7e60c2cad8b4c07e2de8d94b6191fefa2b5cbde56437b586f85f144d3b4fcec8533449ed8411ac  mariadb-10.11.11.tar.gz
+diff --git a/package/libqrencode/libqrencode.hash b/package/libqrencode/libqrencode.hash
+index ffcc537379..4586159420 100644
+--- a/package/libqrencode/libqrencode.hash
++++ b/package/libqrencode/libqrencode.hash
+@@ -1,5 +1,5 @@
+-# From http://fukuchi.org/works/qrencode/qrencode-4.1.1.tar.gz.sha
+-sha512  209bb656ae3f391b03c7b3ceb03e34f7320b0105babf48b619e7a299528b8828449e0e7696f0b5db0d99170a81709d0518e34835229a748701e7df784e58a9ce  qrencode-4.1.1.tar.gz
++# Locally computed:
++sha256  5385bc1b8c2f20f3b91d258bf8ccc8cf62023935df2d2676b5b67049f31a049c  libqrencode-4.1.1.tar.gz
  
- # Hash for license files
--sha256  2b278a3a2f20696113a7c57c4f3e6a5cdb9a25f2a827e72e0c089a2f805ff91a  README.md
-+sha256  ff437f42ea15b42f3d9617e691b9f159f38a0b1b0748e482304857a5026ede90  README.md
- sha256  240a15a1d0f34d3abca462cdb7e5fb89470967563f16b0e71169e51c1e74cf2b  COPYING
-diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index 1dcf6568da..0d872442f2 100644
---- a/package/mariadb/mariadb.mk
-+++ b/package/mariadb/mariadb.mk
-@@ -4,7 +4,7 @@
- #
+ # Hash for license file:
+ sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING
+diff --git a/package/libqrencode/libqrencode.mk b/package/libqrencode/libqrencode.mk
+index 0062a96a39..8698d88611 100644
+--- a/package/libqrencode/libqrencode.mk
++++ b/package/libqrencode/libqrencode.mk
+@@ -5,12 +5,12 @@
  ################################################################################
  
--MARIADB_VERSION = 10.11.6
-+MARIADB_VERSION = 10.11.11
- MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
- MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
- # Tarball no longer contains LGPL license text
-@@ -27,7 +27,8 @@ MARIADB_DEPENDENCIES = \
+ LIBQRENCODE_VERSION = 4.1.1
+-LIBQRENCODE_SOURCE = qrencode-$(LIBQRENCODE_VERSION).tar.gz
+-LIBQRENCODE_SITE = http://fukuchi.org/works/qrencode
++LIBQRENCODE_SITE = $(call github,fukuchi,libqrencode,v$(LIBQRENCODE_VERSION))
+ LIBQRENCODE_DEPENDENCIES = host-pkgconf
+ LIBQRENCODE_INSTALL_STAGING = YES
+ LIBQRENCODE_LICENSE = LGPL-2.1+
+ LIBQRENCODE_LICENSE_FILES = COPYING
++LIBQRENCODE_AUTORECONF = YES
  
- MARIADB_CONF_OPTS += \
- 	-DWITH_LIBFMT=system \
--	-DWITH_PCRE=system
-+	-DWITH_PCRE=system \
-+	-DHAVE_SYSTEM_LIBFMT_EXITCODE=0
- 
- # use bundled GPL-2.0+ licensed readline as package/readline is GPL-3.0+
- MARIADB_CONF_OPTS += -DWITH_READLINE=ON
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ LIBQRENCODE_CONF_ENV += LIBS='-pthread'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
