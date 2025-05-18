@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F60AC3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:05:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7839C2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:05:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8D0D0616A8;
-	Mon, 19 May 2025 11:05:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 72812710A8;
+	Mon, 19 May 2025 11:05:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ajFS1DMepfYb; Mon, 19 May 2025 11:05:53 +0000 (UTC)
+ id VE2aI8sYJVwr; Mon, 19 May 2025 11:05:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD86571254
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8053471265
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DD86571254;
-	Mon, 19 May 2025 11:05:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8053471265;
+	Mon, 19 May 2025 11:05:56 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id D1B88D4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:49:35 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 470DFD4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:49:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BBA764239A
+ by smtp4.osuosl.org (Postfix) with ESMTP id F24B64238E
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nv2x1DXKs7G7 for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:49 +0000 (UTC)
+ id 1ksu0S67Eugm for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 97B59423DD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 483DF423C7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 97B59423DD
+ by smtp4.osuosl.org (Postfix) with ESMTP id 483DF423C7
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:10 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 931C083BC0; Mon, 19 May 2025 10:40:10 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 3AEB083BC0; Mon, 19 May 2025 10:40:10 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 18 May 2025 16:54:25 +0200
+Date: Sun, 18 May 2025 15:34:18 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 7050c68b5f16899fae5708412313a4c35d9864ff
-X-Git-Newrev: e7c091f11398bdb6498adaa344d0934d97b4ef39
+X-Git-Oldrev: 61343ed57a4bd4035f77ec9562c198f8c8ead173
+X-Git-Newrev: 323aaa9f547f4925135874162f31323e88b0768f
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104010.931C083BC0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/ncurses: bump to
- version 6.5.20250517
+Message-Id: <20250519104010.3AEB083BC0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/net-tools: add
+ upstream security fix for CVE-2025-46836
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,95 +58,155 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8117545844461652308=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e7c091f11398bdb6498adaa344d0934d97b4ef39
+--===============8117545844461652308==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=323aaa9f547f4925135874162f31323e88b0768f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release notes:
-https://github.com/ThomasDickey/ncurses-snapshots/blob/v6_5_20250510/NEWS
+Fixes the following security issue:
 
-- Drop upstream patch - 0001-fix-XOPEN_SOURCE-detection.patch
-- COPYING hash changed due to Copyright year update.
+CVE-2025-46836: Stack-based Buffer Overflow in net-tools (get_name)
 
-Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-[Bernd: bumped to version 6.5.20250517
- added configure option --disable-widec due to wchar support being
- enabled by default since version 6.5:
- https://github.com/ThomasDickey/ncurses-snapshots/blob/master/INSTALL#L840
- fixing non-wchar ncurses build on wchar-enabled toolchains (Peter)]
+https://github.com/ecki/net-tools/security/advisories/GHSA-pfwf-h6m3-63wf
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/ncurses/0001-fix-XOPEN_SOURCE-detection.patch | 17 -----------------
- package/ncurses/ncurses.hash                          |  4 ++--
- package/ncurses/ncurses.mk                            |  7 ++++---
- 3 files changed, 6 insertions(+), 22 deletions(-)
+ ...836-interface.c-Stack-based-Buffer-Overfl.patch | 93 ++++++++++++++++++++++
+ package/net-tools/net-tools.mk                     |  3 +
+ 2 files changed, 96 insertions(+)
 
-diff --git a/package/ncurses/0001-fix-XOPEN_SOURCE-detection.patch b/package/ncurses/0001-fix-XOPEN_SOURCE-detection.patch
-deleted file mode 100644
-index 130ef524b4..0000000000
---- a/package/ncurses/0001-fix-XOPEN_SOURCE-detection.patch
-+++ /dev/null
-@@ -1,17 +0,0 @@
--Fix detection of XOPEN_SOURCE
--
--Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
--Upstream: fixed in latest release, no git/svn/hg
--
--diff -Nur ncurses-snapshots-6_4_20230603.orig/configure ncurses-snapshots-6_4_20230603/configure
----- ncurses-snapshots-6_4_20230603.orig/configure	2023-06-04 00:07:40.000000000 +0200
--+++ ncurses-snapshots-6_4_20230603/configure	2024-08-14 20:38:03.426905460 +0200
--@@ -10411,7 +10411,7 @@
-- 	cf_xopen_source="-D_SGI_SOURCE"
-- 	cf_XOPEN_SOURCE=
-- 	;;
---(linux*gnu|linux*gnuabi64|linux*gnuabin32|linux*gnueabi|linux*gnueabihf|linux*gnux32|uclinux*|gnu*|mint*|k*bsd*-gnu|cygwin|msys|mingw*)
--+(linux*gnu|linux*gnuabi64|linux*gnuabin32|linux*gnueabi|linux*gnueabihf|linux*gnux32|uclinux*|gnu*|mint*|k*bsd*-gnu|cygwin|msys|mingw*|linux*uclibc)
-- 
-- cf_gnu_xopen_source=$cf_XOPEN_SOURCE
-- 
-diff --git a/package/ncurses/ncurses.hash b/package/ncurses/ncurses.hash
-index b82a7b29e4..9829cd512c 100644
---- a/package/ncurses/ncurses.hash
-+++ b/package/ncurses/ncurses.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  b0910671694c2c8377f579eea68477a15d67bd20ddd4b29328cfe15c62c7b3fd  ncurses-6.4-20230603.tar.gz
-+sha256  271044605db2f64fcd1c697c5444a08eae0f70cae33b934e59f205954004a449  ncurses-6.5-20250517.tar.gz
- # Locally computed
--sha256  0413b2f4ea863194c174673032f0fca84f1ea1ed4eed6476baea68c075a631ce  COPYING
-+sha256  708999f95527e1ffa670c6fce288c6c600cb477dd04afcc1171422b3dd4ee226  COPYING
-diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-index 00e1c0d424..4eac66a71c 100644
---- a/package/ncurses/ncurses.mk
-+++ b/package/ncurses/ncurses.mk
-@@ -5,8 +5,8 @@
- ################################################################################
+diff --git a/package/net-tools/0001-CVE-2025-46836-interface.c-Stack-based-Buffer-Overfl.patch b/package/net-tools/0001-CVE-2025-46836-interface.c-Stack-based-Buffer-Overfl.patch
+new file mode 100644
+index 0000000000..0a02785f38
+--- /dev/null
++++ b/package/net-tools/0001-CVE-2025-46836-interface.c-Stack-based-Buffer-Overfl.patch
+@@ -0,0 +1,93 @@
++From 7a8f42fb20013a1493d8cae1c43436f85e656f2d Mon Sep 17 00:00:00 2001
++From: Zephkeks <zephyrofficialdiscord@gmail.com>
++Date: Tue, 13 May 2025 11:04:17 +0200
++Subject: [PATCH] CVE-2025-46836: interface.c: Stack-based Buffer Overflow in
++ get_name()
++
++Coordinated as GHSA-pfwf-h6m3-63wf
++
++Upstream: https://github.com/ecki/net-tools/commit/7a8f42fb20013a1493d8cae1c43436f85e656f2d
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ lib/interface.c | 63 ++++++++++++++++++++++++++++++-------------------
++ 1 file changed, 39 insertions(+), 24 deletions(-)
++
++diff --git a/lib/interface.c b/lib/interface.c
++index 71d4163..a054f12 100644
++--- a/lib/interface.c
+++++ b/lib/interface.c
++@@ -211,32 +211,47 @@ out:
++ }
++ 
++ static const char *get_name(char *name, const char *p)
+++/* Safe version — guarantees at most IFNAMSIZ‑1 bytes are copied
+++   and the destination buffer is always NUL‑terminated.             */
++ {
++-    while (isspace(*p))
++-	p++;
++-    while (*p) {
++-	if (isspace(*p))
++-	    break;
++-	if (*p == ':') {	/* could be an alias */
++-		const char *dot = p++;
++- 		while (*p && isdigit(*p)) p++;
++-		if (*p == ':') {
++-			/* Yes it is, backup and copy it. */
++-			p = dot;
++-			*name++ = *p++;
++-			while (*p && isdigit(*p)) {
++-				*name++ = *p++;
++-			}
++-		} else {
++-			/* No, it isn't */
++-			p = dot;
++-	    }
++-	    p++;
++-	    break;
++-	}
++-	*name++ = *p++;
+++    char       *dst = name;                 /* current write ptr          */
+++    const char *end = name + IFNAMSIZ - 1;  /* last byte we may write     */
+++
+++    /* Skip leading white‑space. */
+++    while (isspace((unsigned char)*p))
+++        ++p;
+++
+++    /* Copy until white‑space, end of string, or buffer full. */
+++    while (*p && !isspace((unsigned char)*p) && dst < end) {
+++        if (*p == ':') {                    /* possible alias veth0:123:  */
+++            const char *dot = p;            /* remember the colon         */
+++            ++p;
+++            while (*p && isdigit((unsigned char)*p))
+++                ++p;
+++
+++            if (*p == ':') {                /* confirmed alias            */
+++                p = dot;                    /* rewind and copy it all     */
+++
+++                /* copy the colon */
+++                if (dst < end)
+++                    *dst++ = *p++;
+++
+++                /* copy the digits */
+++                while (*p && isdigit((unsigned char)*p) && dst < end)
+++                    *dst++ = *p++;
+++
+++                if (*p == ':')              /* consume trailing colon     */
+++                    ++p;
+++            } else {              /* if so treat as normal */
+++                p = dot;
+++            }
+++            break;                          /* interface name ends here   */
+++        }
+++
+++        *dst++ = *p++;                      /* ordinary character copy    */
++     }
++-    *name++ = '\0';
+++
+++    *dst = '\0';                            /* always NUL‑terminate       */
++     return p;
++ }
++ 
++-- 
++2.39.5
++
+diff --git a/package/net-tools/net-tools.mk b/package/net-tools/net-tools.mk
+index 03e1c73406..a227d6477f 100644
+--- a/package/net-tools/net-tools.mk
++++ b/package/net-tools/net-tools.mk
+@@ -12,6 +12,9 @@ NET_TOOLS_LICENSE = GPL-2.0+
+ NET_TOOLS_LICENSE_FILES = COPYING
+ NET_TOOLS_CPE_ID_VALID = YES
  
- # When there is no snapshost yet for a new version, set it to the empty string
--NCURSES_VERSION_MAJOR = 6.4
--NCURSES_SNAPSHOT_DATE = 20230603
-+NCURSES_VERSION_MAJOR = 6.5
-+NCURSES_SNAPSHOT_DATE = 20250517
- NCURSES_VERSION = $(NCURSES_VERSION_MAJOR)$(if $(NCURSES_SNAPSHOT_DATE),-$(NCURSES_SNAPSHOT_DATE))
- NCURSES_VERSION_GIT = $(subst .,_,$(subst -,_,$(NCURSES_VERSION)))
- NCURSES_SITE = $(call github,ThomasDickey,ncurses-snapshots,v$(NCURSES_VERSION_GIT))
-@@ -118,7 +118,8 @@ NCURSES_CONF_OPTS += --enable-ext-colors
- 
- NCURSES_POST_INSTALL_STAGING_HOOKS += NCURSES_LINK_STAGING_LIBS
- NCURSES_POST_INSTALL_STAGING_HOOKS += NCURSES_LINK_STAGING_PC
--
-+else
-+NCURSES_CONF_OPTS += --disable-widec
- endif # BR2_PACKAGE_NCURSES_WCHAR
- 
- ifneq ($(BR2_ENABLE_DEBUG),y)
++# 0001-CVE-2025-46836-interface.c-Stack-based-Buffer-Overfl.patch
++NET_TOOLS_IGNORE_CVES += CVE-2025-46836
++
+ define NET_TOOLS_CONFIGURE_CMDS
+ 	(cd $(@D); yes "" | ./configure.sh config.in )
+ endef
+
+--===============8117545844461652308==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8117545844461652308==--
