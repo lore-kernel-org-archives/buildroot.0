@@ -4,76 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0CDDC3ABD8
-	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 13:37:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9F34C3ABD8
+	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 13:40:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9572E40544;
-	Sun, 18 May 2025 13:37:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 29A7140642;
+	Sun, 18 May 2025 13:40:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id f_BzkdqqvJD4; Sun, 18 May 2025 13:37:35 +0000 (UTC)
+ id Sly1YIXqInR8; Sun, 18 May 2025 13:40:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C71CA4051C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2B66740547
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C71CA4051C;
-	Sun, 18 May 2025 13:37:35 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 2DF8AE4
- for <buildroot@buildroot.org>; Sun, 18 May 2025 13:37:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2B66740547;
+	Sun, 18 May 2025 13:40:05 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 25634204
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 13:40:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2A74940142
- for <buildroot@buildroot.org>; Sun, 18 May 2025 13:37:34 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EE4BA405AE
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 13:40:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1y1USlKQzQiX for <buildroot@buildroot.org>;
- Sun, 18 May 2025 13:37:33 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
- helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id STxUm6BQyXiC for <buildroot@buildroot.org>;
+ Sun, 18 May 2025 13:40:02 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 27EE5404DA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 27EE5404DA
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 27EE5404DA
- for <buildroot@buildroot.org>; Sun, 18 May 2025 13:37:32 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A2B7743B22;
- Sun, 18 May 2025 13:37:28 +0000 (UTC)
-Date: Sun, 18 May 2025 15:37:28 +0200
-To: Peter Korsgaard <peter@korsgaard.com>
-Cc: buildroot@buildroot.org
-Message-ID: <20250518153728.1ac9a439@windsurf>
-In-Reply-To: <20250518132419.4171795-1-peter@korsgaard.com>
-References: <20250518132419.4171795-1-peter@korsgaard.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefudekieehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepjedvjedvgfffveetieffudegieevleeigfffteefhefhtefhueelfeekjefgfedvnecuffhomhgrihhnpehgihhthhhusgdrtghomhdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddvmeekgedvrgemgeehrggtmeelgedtudemugefudgvmedvfeehmegthegvvdemvggukeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeekgedvrgemgeehrggtmeelgedtudemugefudgvmedvfeehmegthegvvdemvggukeefpdhhvghlohepfihinhgushhurhhfpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedvpdhrtghpthhtohepphgvthgvrheskhhorhhsghgrrghrugdrtghomhdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhg
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1747575448;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=2/+ro+EMfPwFb+PZ9a9wUMMZgCZyfi7hhL5EWQ8SxHI=;
- b=IZvd/m5MBbYj/7KZNEAJjbySKwZmVzB6Ss66YxvkWl6Jzp2xm4282/zFOmYAbv3X2DZ30P
- xJn7S71MuIzHRMcFfL2nLIK1Oz34G56yqpmFyuCG4VBigkB/M/Yuednvw9KM//UA8065wx
- RbBQ0Soqi/H7ZjDhTfBv6+OoBOTb8wbNxXas9dQaoNJQsZ3u6zX4TloK5Rnjtkbc8ptGP/
- Sny1JnzYG5YNxJz6fB4wGj+VKg1nZLfo7BLUCPw9E0AuMxKasBO4n4AjH9eXbnlLMipynd
- MGHMPPnJo4doVrNVFHYOGCGdzPBFfApb7BKb0o8ugJy0EoBgxwYVF6VAYF7RzA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=IZvd/m5M
-Subject: Re: [Buildroot] [PATCH] package/net-tools: add upstream security
- fix for CVE-2025-46836
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 25F274058B
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 25F274058B
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 13:40:02 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 1466487026; Sun, 18 May 2025 13:40:02 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 18 May 2025 15:39:21 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 323aaa9f547f4925135874162f31323e88b0768f
+X-Git-Newrev: 11dcd7bd5329608f85036dd65fe9c706c54ea8cb
+X-Patchwork-Hint: ignore
+Message-Id: <20250518134002.1466487026@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/webkitgtk: add libgtk4 support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,34 +59,165 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 18 May 2025 15:24:18 +0200
-Peter Korsgaard <peter@korsgaard.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=11dcd7bd5329608f85036dd65fe9c706c54ea8cb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fixes the following security issue:
-> 
-> CVE-2025-46836: Stack-based Buffer Overflow in net-tools (get_name)
-> 
-> https://github.com/ecki/net-tools/security/advisories/GHSA-pfwf-h6m3-63wf
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  ...nterface.c-Stack-based-Buffer-Overfl.patch | 93 +++++++++++++++++++
->  package/net-tools/net-tools.mk                |  3 +
->  2 files changed, 96 insertions(+)
->  create mode 100644 package/net-tools/0001-CVE-2025-46836-interface.c-Stack-based-Buffer-Overfl.patch
+WebKitGTK defaults on GTK4 since version 2.44 [1],
+and the libgtk4 package was added in commit faf2a1d,
+so start using it. Note that webkitgtk-6.0 is the new API
+if compile with GTK4 [2].
 
-Applied to master, thanks.
+[1] https://webkitgtk.org/2024/03/27/webkigit-2.44.html
+[2] https://webkitgtk.org/reference/webkitgtk/stable/migrating-to-webkitgtk-6.0.html
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/webkitgtk/Config.in    | 33 +++++++++++++++++++++++++--------
+ package/webkitgtk/webkitgtk.mk | 21 +++++++++++++++++----
+ 2 files changed, 42 insertions(+), 12 deletions(-)
+
+diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
+index bcb4b12fa3..7827dc6218 100644
+--- a/package/webkitgtk/Config.in
++++ b/package/webkitgtk/Config.in
+@@ -16,11 +16,12 @@ config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
+ 
+-comment "webkitgtk needs libgtk3 and a toolchain w/ C++, wchar, NPTL, dynamic library, gcc >= 11, host gcc >= 4.9"
++comment "webkitgtk needs libgtk3 or libgtk4 and a toolchain w/ C++, wchar, NPTL, dynamic library, gcc >= 11, host gcc >= 4.9"
+ 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+ 	depends on !BR2_BINFMT_FLAT
+-	depends on !BR2_PACKAGE_LIBGTK3 || !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS || \
++	depends on (!BR2_PACKAGE_LIBGTK3 && !BR2_PACKAGE_LIBGTK4) || \
++		!BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
++		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_11 || \
+ 		!BR2_HOST_GCC_AT_LEAST_4_9
+ 	depends on BR2_USE_MMU
+@@ -35,7 +36,7 @@ config BR2_PACKAGE_WEBKITGTK
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_11
+ 	depends on BR2_USE_WCHAR # icu, libsoup3
+-	depends on BR2_PACKAGE_LIBGTK3
++	depends on BR2_PACKAGE_LIBGTK3 || BR2_PACKAGE_LIBGTK4
+ 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_CAIRO
+ 	select BR2_PACKAGE_CAIRO_PNG
+@@ -55,10 +56,10 @@ config BR2_PACKAGE_WEBKITGTK
+ 	select BR2_PACKAGE_WEBP_DEMUX
+ 	select BR2_PACKAGE_WEBP_MUX
+ 	select BR2_PACKAGE_WOFF2
+-	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE if BR2_PACKAGE_LIBGTK3_X11
+-	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_LIBGTK3_X11
+-	select BR2_PACKAGE_XLIB_LIBXRENDER if BR2_PACKAGE_LIBGTK3_X11
+-	select BR2_PACKAGE_XLIB_LIBXT if BR2_PACKAGE_LIBGTK3_X11
++	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE if BR2_PACKAGE_WEBKITGTK_X11
++	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_WEBKITGTK_X11
++	select BR2_PACKAGE_XLIB_LIBXRENDER if BR2_PACKAGE_WEBKITGTK_X11
++	select BR2_PACKAGE_XLIB_LIBXT if BR2_PACKAGE_WEBKITGTK_X11
+ 	help
+ 	  WebKit is an open source, standards compliant web browser
+ 	  engine.
+@@ -67,6 +68,22 @@ config BR2_PACKAGE_WEBKITGTK
+ 
+ if BR2_PACKAGE_WEBKITGTK
+ 
++comment "webkitgtk X11 target needs the X11 GDK backend"
++	depends on !BR2_PACKAGE_LIBGTK3_X11 && !BR2_PACKAGE_LIBGTK4_X11
++
++config BR2_PACKAGE_WEBKITGTK_X11
++	bool "enable x11 target"
++	default y
++	depends on BR2_PACKAGE_LIBGTK3_X11 || BR2_PACKAGE_LIBGTK4_X11
++
++comment "webkitgtk Wayland target needs the Wayland GDK backend"
++	depends on !BR2_PACKAGE_LIBGTK3_WAYLAND && !BR2_PACKAGE_LIBGTK4_WAYLAND
++
++config BR2_PACKAGE_WEBKITGTK_WAYLAND
++	bool "enable wayland target"
++	default y
++	depends on BR2_PACKAGE_LIBGTK3_WAYLAND || BR2_PACKAGE_LIBGTK4_WAYLAND
++
+ config BR2_PACKAGE_WEBKITGTK_SANDBOX
+ 	bool "sandboxing support"
+ 	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS # libseccomp
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 2c22bfb607..d139108126 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -14,7 +14,7 @@ WEBKITGTK_LICENSE_FILES = \
+ 	Source/WebCore/LICENSE-LGPL-2.1
+ WEBKITGTK_CPE_ID_VENDOR = webkitgtk
+ WEBKITGTK_DEPENDENCIES = host-ruby host-python3 host-gperf host-unifdef \
+-	enchant harfbuzz icu jpeg libegl libepoxy libgcrypt libgtk3 libsecret \
++	enchant harfbuzz icu jpeg libegl libepoxy libgcrypt libsecret \
+ 	libsoup3 libtasn1 libxml2 libxslt sqlite webp woff2
+ 
+ WEBKITGTK_CMAKE_BACKEND = ninja
+@@ -28,12 +28,19 @@ WEBKITGTK_CONF_OPTS = \
+ 	-DENABLE_WEB_RTC=OFF \
+ 	-DPORT=GTK \
+ 	-DUSE_AVIF=OFF \
+-	-DUSE_GTK4=OFF \
+ 	-DUSE_LIBHYPHEN=OFF \
+ 	-DUSE_SKIA=OFF \
+ 	-DUSE_SYSTEM_SYSPROF_CAPTURE=OFF \
+ 	-DUSE_WOFF2=ON
+ 
++ifeq ($(BR2_PACKAGE_LIBGTK4),y)
++WEBKITGTK_CONF_OPTS += -DUSE_GTK4=ON
++WEBKITGTK_DEPENDENCIES += libgtk4
++else
++WEBKITGTK_CONF_OPTS += -DUSE_GTK4=OFF
++WEBKITGTK_DEPENDENCIES += libgtk3
++endif
++
+ ifeq ($(BR2_PACKAGE_WEBKITGTK_SANDBOX),y)
+ WEBKITGTK_CONF_OPTS += \
+ 	-DENABLE_BUBBLEWRAP_SANDBOX=ON \
+@@ -64,9 +71,15 @@ WEBKITGTK_CONF_OPTS += -DENABLE_WEBDRIVER=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_WEBKITGTK_MINIBROWSER),y)
++ifeq ($(BR2_PACKAGE_LIBGTK4),y)
++define WEBKITGTK_INSTALL_MINIBROWSER_SYMLINK
++	ln -sf ../libexec/webkitgtk-6.0/MiniBrowser $(TARGET_DIR)/usr/bin/MiniBrowser
++endef
++else
+ define WEBKITGTK_INSTALL_MINIBROWSER_SYMLINK
+ 	ln -sf ../libexec/webkit2gtk-4.1/MiniBrowser $(TARGET_DIR)/usr/bin/MiniBrowser
+ endef
++endif
+ WEBKITGTK_POST_INSTALL_TARGET_HOOKS += WEBKITGTK_INSTALL_MINIBROWSER_SYMLINK
+ WEBKITGTK_CONF_OPTS += -DENABLE_MINIBROWSER=ON
+ else
+@@ -129,7 +142,7 @@ else
+ WEBKITGTK_CONF_OPTS += -DUSE_GBM=OFF
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
++ifeq ($(BR2_PACKAGE_WEBKITGTK_X11),y)
+ WEBKITGTK_CONF_OPTS += -DENABLE_X11_TARGET=ON
+ WEBKITGTK_DEPENDENCIES += libgl \
+ 	xlib_libXcomposite xlib_libXdamage xlib_libXrender xlib_libXt
+@@ -137,7 +150,7 @@ else
+ WEBKITGTK_CONF_OPTS += -DENABLE_X11_TARGET=OFF
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBGTK3_WAYLAND),y)
++ifeq ($(BR2_PACKAGE_WEBKITGTK_WAYLAND),y)
+ WEBKITGTK_CONF_OPTS += -DENABLE_WAYLAND_TARGET=ON
+ else
+ WEBKITGTK_CONF_OPTS += -DENABLE_WAYLAND_TARGET=OFF
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
