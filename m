@@ -1,77 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38BEFC3ABD8
-	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 10:02:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC0D5C3ABD8
+	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 10:44:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EDE966089D;
-	Sun, 18 May 2025 10:02:02 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SRnWIDk7CL5w; Sun, 18 May 2025 10:02:02 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2FF256077E
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2FF256077E;
-	Sun, 18 May 2025 10:02:02 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id D83241BA
- for <buildroot@buildroot.org>; Sun, 18 May 2025 10:02:00 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BDA5380DAB
- for <buildroot@buildroot.org>; Sun, 18 May 2025 10:02:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8B4E381FD0;
+	Sun, 18 May 2025 10:44:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CkbCf_DxSs8W for <buildroot@buildroot.org>;
- Sun, 18 May 2025 10:02:00 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E1DE880D81
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E1DE880D81
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E1DE880D81
- for <buildroot@buildroot.org>; Sun, 18 May 2025 10:01:59 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 0FCF85FFAA;
- Sun, 18 May 2025 12:01:56 +0200 (CEST)
-Received: from 2a02-842a-45ac-9401-0517-4590-b867-5f74.rev.sfr.net
- (2a02:842a:45ac:9401:517:4590:b867:5f74)
- via 2a02-842a-45ac-9401-0517-4590-b867-5f74.rev.sfr.net
- (2a02:842a:45ac:9401:517:4590:b867:5f74) by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 18 May 2025 12:01:56 +0200
-MIME-Version: 1.0
-Date: Sun, 18 May 2025 12:01:56 +0200
+ id v_o0nO5Q4_FR; Sun, 18 May 2025 10:44:24 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2F0DF81FC9
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2F0DF81FC9;
+	Sun, 18 May 2025 10:44:24 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1A4D7E4
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 10:44:23 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1583E81FC9
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 10:44:23 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id O0RFJpyqH3co for <buildroot@buildroot.org>;
+ Sun, 18 May 2025 10:44:22 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 36F5B813AE
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 36F5B813AE
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 10:44:22 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2EACB869B5; Sun, 18 May 2025 10:44:22 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Peter Korsgaard <peter@korsgaard.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250517210922.3620220-1-peter@korsgaard.com>
-References: <20250517210922.3620220-1-peter@korsgaard.com>
-User-Agent: Webmail Free/1.6.10
-Message-ID: <ff43a065ae3b4ef3395731c9d2f809dd@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1747562518;
- bh=xSE1p0piMdt/WRZ0cQmEq9vyCIVkqtGF2EZ56Z3X9ok=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=l1A3HWb6dLyatC9NcNu7vKCeMRevCKsnjwTpzHj08nem0mmzdqzqfEjyJixucre3S
- 41Hvqp1lSURoLsI+0CzYXlRPUySFSrtBfEpE5tM25BXIp0IHXB5+0t9XCDvO6k+fk9
- Sq2BZkGwhNsIWmDiXGpCgeZzgzH8avkTBQJgpAkv2UKki8CMtD+rplgDB+Wwj2vfap
- u+hZALtZzOEsV1D64ZDKcLgcEEa2SDpswIN8i/8Kfqui+NqfYAkXLgWnWmGoJ5cuiL
- y/p3KnYaST2ortfSR8QBYfsjxfqhLG604xO9/tnRgfpL2KgW8xtt3/0kBk6H6KChlW
- mF+qsZMN62hUw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=l1A3HWb6
-Subject: Re: [Buildroot] [PATCH] package/dhrystone: fix builds with GCC 15
+To: buildroot@buildroot.org
+Date: Sun, 18 May 2025 12:14:56 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 7acb00cc1ada4a59d7a755922fa78e264cea9254
+X-Git-Newrev: 6cce6d79d3a899722c75a99b7bd12e6274aaccaf
+X-Patchwork-Hint: ignore
+Message-Id: <20250518104422.2EACB869B5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/llvm-project: fix build with gcc 15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,22 +58,193 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============6203412014831832067=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gMTcvMDUvMjAyNSAyMzowOSwgUGV0ZXIgS29yc2dhYXJkIHdyb3RlOgo+IEdDQyAxNSBkZWZh
-dWx0cyB0byAtc3RkPWdudTIzLCB3aGljaCBoYW5kbGVzIGZ1bmN0aW9uIGRlY2xhcmF0aW9ucyAK
-PiB3aXRob3V0Cj4gcGFyYW1ldGVycyBkaWZmZXJlbnRseSBmcm9tIGVhcmxpZXIgQyBzdGFuZGFy
-ZHMgbGVhZGluZyB0byBjb21waWxhdGlvbgo+IGVycm9yczoKPiAKPiBkaHJ5XzEuYzogSW4gZnVu
-Y3Rpb24g4oCYbWFpbuKAmToKPiBkaHJ5XzEuYzoxNzY6MTk6IGVycm9yOiB0b28gbWFueSBhcmd1
-bWVudHMgdG8gZnVuY3Rpb24g4oCYRnVuY18y4oCZOyAKPiBleHBlY3RlZCAwLCBoYXZlIDIKPiAg
-IDE3NiB8ICAgICBCb29sX0dsb2IgPSAhIEZ1bmNfMiAoU3RyXzFfTG9jLCBTdHJfMl9Mb2MpOwo+
-IAo+IGh0dHBzOi8vZ2NjLmdudS5vcmcvZ2NjLTE1L3BvcnRpbmdfdG8uaHRtbCNjMjMtZm4tZGVj
-bHMtd2l0aG91dC1wYXJhbWV0ZXJzCj4gCj4gQXMgYSB3b3JrYXJvdW5kLCBmb3JjZSB0aGUgYnVp
-bGQgdG8gdXNlIC1zdGQ9Z251OTkgbW9kZS4KPiAKPiBTaWduZWQtb2ZmLWJ5OiBQZXRlciBLb3Jz
-Z2FhcmQgPHBldGVyQGtvcnNnYWFyZC5jb20+CgpBcHBsaWVkIHRvIG1hc3RlciwgdGhhbmtzLgpf
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3Qg
-bWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRy
-b290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+--===============6203412014831832067==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=6cce6d79d3a899722c75a99b7bd12e6274aaccaf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Adapt gentoo gcc patches from https://bugs.gentoo.org/939498 to fix
+build with gcc 15.
+
+The llvm project no longer maintains the llvm 15 branch.
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ .../compiler-rt/0001-include-cstdint.patch         | 31 +++++++++++++++++++
+ ...001-ADT-Add-cstdint-to-SmallVector-101761.patch | 35 ++++++++++++++++++++++
+ ...lude-cstdint-in-AMDGPUMCTargetDesc-101766.patch | 31 +++++++++++++++++++
+ .../0003-Another-gcc-15-fix-from-Sam-James.patch   | 31 +++++++++++++++++++
+ 4 files changed, 128 insertions(+)
+
+diff --git a/package/llvm-project/compiler-rt/0001-include-cstdint.patch b/package/llvm-project/compiler-rt/0001-include-cstdint.patch
+new file mode 100644
+index 0000000000..ce75b29f4e
+--- /dev/null
++++ b/package/llvm-project/compiler-rt/0001-include-cstdint.patch
+@@ -0,0 +1,31 @@
++From 735207ac16bb15d88116bf00283eb0135ed2585a Mon Sep 17 00:00:00 2001
++From: Paul Zander <negril.nx+gentoo@gmail.com>
++Date: Thu, 22 Aug 2024 11:40:13 +0200
++Subject: [PATCH] include cstdint
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Gentoo-Component: compiler-rt
++Signed-off-by: Paul Zander <negril.nx+gentoo@gmail.com>
++Signed-off-by: Michał Górny <mgorny@gentoo.org>
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++Upstream: https://bugs.gentoo.org/939498
++---
++ lib/orc/error.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/lib/orc/error.h b/lib/orc/error.h
++index 92ac5a884ac6..33a599f71149 100644
++--- a/lib/orc/error.h
+++++ b/lib/orc/error.h
++@@ -14,6 +14,7 @@
++ #include "stl_extras.h"
++ 
++ #include <cassert>
+++#include <cstdint>
++ #include <memory>
++ #include <string>
++ #include <type_traits>
++-- 
++2.46.0
+diff --git a/package/llvm-project/llvm/0001-ADT-Add-cstdint-to-SmallVector-101761.patch b/package/llvm-project/llvm/0001-ADT-Add-cstdint-to-SmallVector-101761.patch
+new file mode 100644
+index 0000000000..eea83c27a8
+--- /dev/null
++++ b/package/llvm-project/llvm/0001-ADT-Add-cstdint-to-SmallVector-101761.patch
+@@ -0,0 +1,35 @@
++From 51d88407c1ae86c3b3c7b497d049f8980f2a3510 Mon Sep 17 00:00:00 2001
++From: Sam James <sam@gentoo.org>
++Date: Fri, 2 Aug 2024 23:07:21 +0100
++Subject: [PATCH] [ADT] Add `<cstdint>` to SmallVector (#101761)
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++SmallVector uses `uint32_t`, `uint64_t` without including `<cstdint>`
++which fails to build w/ GCC 15 after a change in libstdc++ [0]
++
++[0] https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=3a817a4a5a6d94da9127af3be9f84a74e3076ee2
++
++Gentoo-Component: llvm
++Signed-off-by: Michał Górny <mgorny@gentoo.org>
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++Upstream: https://bugs.gentoo.org/939498
++---
++ include/llvm/ADT/SmallVector.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/include/llvm/ADT/SmallVector.h b/include/llvm/ADT/SmallVector.h
++index e34702bdbb3c..1c0f3465b2a9 100644
++--- a/include/llvm/ADT/SmallVector.h
+++++ b/include/llvm/ADT/SmallVector.h
++@@ -19,6 +19,7 @@
++ #include <algorithm>
++ #include <cassert>
++ #include <cstddef>
+++#include <cstdint>
++ #include <cstdlib>
++ #include <cstring>
++ #include <functional>
++-- 
++2.46.0
+diff --git a/package/llvm-project/llvm/0002-AMDGPU-Include-cstdint-in-AMDGPUMCTargetDesc-101766.patch b/package/llvm-project/llvm/0002-AMDGPU-Include-cstdint-in-AMDGPUMCTargetDesc-101766.patch
+new file mode 100644
+index 0000000000..73beab6c23
+--- /dev/null
++++ b/package/llvm-project/llvm/0002-AMDGPU-Include-cstdint-in-AMDGPUMCTargetDesc-101766.patch
+@@ -0,0 +1,31 @@
++From 000f92beb459096534a7bfaa8c5e99d77b7594c1 Mon Sep 17 00:00:00 2001
++From: Sam James <sam@gentoo.org>
++Date: Sat, 3 Aug 2024 06:36:43 +0100
++Subject: [PATCH] [AMDGPU] Include `<cstdint>` in AMDGPUMCTargetDesc
++ (#101766)
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Gentoo-Component: llvm
++Signed-off-by: Michał Górny <mgorny@gentoo.org>
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++Upstream: https://bugs.gentoo.org/939498
++---
++ lib/Target/AMDGPU/MCTargetDesc/AMDGPUMCTargetDesc.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/lib/Target/AMDGPU/MCTargetDesc/AMDGPUMCTargetDesc.h b/lib/Target/AMDGPU/MCTargetDesc/AMDGPUMCTargetDesc.h
++index c2e2563c3989..53aac8934100 100644
++--- a/lib/Target/AMDGPU/MCTargetDesc/AMDGPUMCTargetDesc.h
+++++ b/lib/Target/AMDGPU/MCTargetDesc/AMDGPUMCTargetDesc.h
++@@ -15,6 +15,7 @@
++ #ifndef LLVM_LIB_TARGET_AMDGPU_MCTARGETDESC_AMDGPUMCTARGETDESC_H
++ #define LLVM_LIB_TARGET_AMDGPU_MCTARGETDESC_AMDGPUMCTARGETDESC_H
++ 
+++#include <cstdint>
++ #include <memory>
++ 
++ namespace llvm {
++-- 
++2.46.0
+diff --git a/package/llvm-project/llvm/0003-Another-gcc-15-fix-from-Sam-James.patch b/package/llvm-project/llvm/0003-Another-gcc-15-fix-from-Sam-James.patch
+new file mode 100644
+index 0000000000..bc958bb056
+--- /dev/null
++++ b/package/llvm-project/llvm/0003-Another-gcc-15-fix-from-Sam-James.patch
+@@ -0,0 +1,31 @@
++From 67fc0069c285b37f09d408aae43c37b8afdf11f7 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Micha=C5=82=20G=C3=B3rny?= <mgorny@gentoo.org>
++Date: Sat, 3 Aug 2024 12:01:20 +0200
++Subject: [PATCH] Another gcc-15 fix from Sam James
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Bug: https://bugs.gentoo.org/937164
++Gentoo-Component: llvm
++Signed-off-by: Michał Górny <mgorny@gentoo.org>
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++Upstream: https://bugs.gentoo.org/939498
++---
++ lib/Target/X86/MCTargetDesc/X86MCTargetDesc.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/lib/Target/X86/MCTargetDesc/X86MCTargetDesc.h b/lib/Target/X86/MCTargetDesc/X86MCTargetDesc.h
++index d0530bd4d650..10b59462aebe 100644
++--- a/lib/Target/X86/MCTargetDesc/X86MCTargetDesc.h
+++++ b/lib/Target/X86/MCTargetDesc/X86MCTargetDesc.h
++@@ -13,6 +13,7 @@
++ #ifndef LLVM_LIB_TARGET_X86_MCTARGETDESC_X86MCTARGETDESC_H
++ #define LLVM_LIB_TARGET_X86_MCTARGETDESC_X86MCTARGETDESC_H
++ 
+++#include <cstdint>
++ #include <memory>
++ #include <string>
++ 
++-- 
++2.46.0
+
+--===============6203412014831832067==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6203412014831832067==--
