@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0407DC3ABC9
-	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 14:48:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2928AC3ABD8
+	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 14:48:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C6852820A1;
-	Sun, 18 May 2025 14:48:01 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AM5bUPb9nLIE; Sun, 18 May 2025 14:48:01 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D78F582102
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D78F582102;
-	Sun, 18 May 2025 14:48:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 17116DF
- for <buildroot@buildroot.org>; Sun, 18 May 2025 14:47:24 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8FD3C60AB4
- for <buildroot@buildroot.org>; Sun, 18 May 2025 14:47:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E12CF60A5B;
+	Sun, 18 May 2025 14:48:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8JLz77khPaw9 for <buildroot@buildroot.org>;
- Sun, 18 May 2025 14:47:11 +0000 (UTC)
+ id znOtlziiAB0J; Sun, 18 May 2025 14:48:06 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F418D60E8B
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id F418D60E8B;
+	Sun, 18 May 2025 14:48:05 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0E45CDF
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 14:47:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0577D60D91
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 14:47:14 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id X_Z8pCjzncd0 for <buildroot@buildroot.org>;
+ Sun, 18 May 2025 14:47:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E841360D73
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6EC7560AE4
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E841360D73
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6EC7560AE4
  for <buildroot@buildroot.org>; Sun, 18 May 2025 14:47:10 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E4B75869F5; Sun, 18 May 2025 14:47:10 +0000 (UTC)
+ id 6B43987141; Sun, 18 May 2025 14:47:10 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 18 May 2025 15:08:34 +0200
+Date: Sun, 18 May 2025 15:00:28 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: f520ab6aaace2901aaee6268aeba2f44206df18a
-X-Git-Newrev: fcdfc1256dba46373694919e7d8d2fba48f33936
+X-Git-Oldrev: 900ba32af6b679b6ef64fa0e4cc605308979a6cc
+X-Git-Newrev: b482e5b312e6beb7f1b0514b5105a926cda5a8db
 X-Patchwork-Hint: ignore
-Message-Id: <20250518144710.E4B75869F5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/libqrencode: fix
- the _SITE package download url
+Message-Id: <20250518144710.6B43987141@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/musepack: fix
+ incompatible pointer types
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,76 +61,99 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1396469057833857219=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fcdfc1256dba46373694919e7d8d2fba48f33936
+--===============1396469057833857219==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=b482e5b312e6beb7f1b0514b5105a926cda5a8db
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-The qrencode release archive is no longer distributed at [1].
-This url now shows a HTTP/404 not found error.
+As of GCC14, GCC no longer allows implicitly casting all pointer types
+to all other pointer types.
 
-The qrencode homepage [2] states:
-"You can download the source packages at Releases[3] page at GitHub."
+We can fix this error, by adding the appropriate cast.
+This patch is a port of a Gentoo patch.
 
-This commit updates the package download url to use github. The github
-archive is not the same as the old release archive: it does not
-contain the autotools configure script. For this reason, the hash
-archive is updated and "_AUTORECONF = YES" is also added.
+Link: https://gitweb.gentoo.org/repo/gentoo.git/tree/media-sound/musepack-tools/files/musepack-tools-495-incompatible-pointers.patch
 
-This commit also fixes the zbar runtime test [4] which is using
-libqrencode to generate a qrcode to test zbar.
+Fixes:
 
-Fixes: [4]
+    https://autobuild.buildroot.org/results/6412fc37d533dff27f18b09c668870bebff2bec5/
 
-[1] http://fukuchi.org/works/qrencode/qrencode-4.1.1.tar.gz
-[2] https://fukuchi.org/en/works/qrencode/
-[3] https://github.com/fukuchi/libqrencode/releases
-[4] https://gitlab.com/buildroot.org/buildroot/-/jobs/9774022888
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 763971cfe3235ede53c6455aa26eb671c51809cb)
+Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+(cherry picked from commit fc827edb6585d77ad8d866953af2f649c8e1e1a8)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/libqrencode/libqrencode.hash | 4 ++--
- package/libqrencode/libqrencode.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/musepack/0006-incompatible-pointers.patch | 47 +++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
 
-diff --git a/package/libqrencode/libqrencode.hash b/package/libqrencode/libqrencode.hash
-index ffcc537379..4586159420 100644
---- a/package/libqrencode/libqrencode.hash
-+++ b/package/libqrencode/libqrencode.hash
-@@ -1,5 +1,5 @@
--# From http://fukuchi.org/works/qrencode/qrencode-4.1.1.tar.gz.sha
--sha512  209bb656ae3f391b03c7b3ceb03e34f7320b0105babf48b619e7a299528b8828449e0e7696f0b5db0d99170a81709d0518e34835229a748701e7df784e58a9ce  qrencode-4.1.1.tar.gz
-+# Locally computed:
-+sha256  5385bc1b8c2f20f3b91d258bf8ccc8cf62023935df2d2676b5b67049f31a049c  libqrencode-4.1.1.tar.gz
- 
- # Hash for license file:
- sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING
-diff --git a/package/libqrencode/libqrencode.mk b/package/libqrencode/libqrencode.mk
-index 0062a96a39..8698d88611 100644
---- a/package/libqrencode/libqrencode.mk
-+++ b/package/libqrencode/libqrencode.mk
-@@ -5,12 +5,12 @@
- ################################################################################
- 
- LIBQRENCODE_VERSION = 4.1.1
--LIBQRENCODE_SOURCE = qrencode-$(LIBQRENCODE_VERSION).tar.gz
--LIBQRENCODE_SITE = http://fukuchi.org/works/qrencode
-+LIBQRENCODE_SITE = $(call github,fukuchi,libqrencode,v$(LIBQRENCODE_VERSION))
- LIBQRENCODE_DEPENDENCIES = host-pkgconf
- LIBQRENCODE_INSTALL_STAGING = YES
- LIBQRENCODE_LICENSE = LGPL-2.1+
- LIBQRENCODE_LICENSE_FILES = COPYING
-+LIBQRENCODE_AUTORECONF = YES
- 
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
- LIBQRENCODE_CONF_ENV += LIBS='-pthread'
+diff --git a/package/musepack/0006-incompatible-pointers.patch b/package/musepack/0006-incompatible-pointers.patch
+new file mode 100644
+index 0000000000..7fb1b8fa23
+--- /dev/null
++++ b/package/musepack/0006-incompatible-pointers.patch
+@@ -0,0 +1,47 @@
++Fixed incompatible pointer types
++
++This is due to GCC14 that no longer allows implicitly casting all pointer types
++to all other pointer types. Resulting in error such as :
++
++output/build/musepack-475/libmpcpsy/ans.c:291:120: error: passing argument 10 of ‘FindOptimalANS’ from incompatible pointer type [-Wincompatible-pointer-types]
++  291 | L, ANSspec_M, m->NS_Order_L, m->SNR_comp_L, m->FIR_L, smr.L, smr.M, m->SCF_Index_L, Transient );
++      |                                                                     ~^~~~~~~~~~~~~
++      |                                                                      |
++      |                                                                      int *
++
++Patch downloaded from Gentoo:
++https://gitweb.gentoo.org/repo/gentoo.git/tree/media-sound/musepack-tools/files/musepack-tools-495-incompatible-pointers.patch
++
++Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
++Upstream: N/A no SCM, not active anymore
++
++--- musepack-tools-495/libmpcpsy/ans.c
+++++ musepack-tools-495-fixed/libmpcpsy/ans.c
++@@ -287,12 +287,12 @@
++     // for L or M, respectively
++     memset ( m->FIR_L,      0, sizeof m->FIR_L      );         // reset FIR
++     memset ( m->NS_Order_L, 0, sizeof m->NS_Order_L );         // reset Flags
++-	FindOptimalANS ( MaxBand, MSflag, ANSspec_L, ANSspec_M, m->NS_Order_L, m->SNR_comp_L, m->FIR_L, smr.L, smr.M, m->SCF_Index_L, Transient );
+++	FindOptimalANS ( MaxBand, MSflag, ANSspec_L, ANSspec_M, m->NS_Order_L, m->SNR_comp_L, m->FIR_L, smr.L, smr.M, (const void*)m->SCF_Index_L, Transient );
++ 
++     // for R or S, respectively
++ 	memset ( m->FIR_R,      0, sizeof m->FIR_R      );         // reset FIR
++ 	memset ( m->NS_Order_R, 0, sizeof m->NS_Order_R );         // reset Flags
++-	FindOptimalANS ( MaxBand, MSflag, ANSspec_R, ANSspec_S, m->NS_Order_R, m->SNR_comp_R, m->FIR_R, smr.R, smr.S, m->SCF_Index_R, Transient );
+++	FindOptimalANS ( MaxBand, MSflag, ANSspec_R, ANSspec_S, m->NS_Order_R, m->SNR_comp_R, m->FIR_R, smr.R, smr.S, (const void*)m->SCF_Index_R, Transient );
++ 
++     return;
++ }
++--- musepack-tools-495/mpcenc/mpcenc.h
+++++ musepack-tools-495-fixed/mpcenc/mpcenc.h
++@@ -241,8 +241,8 @@
++ 
++ float  ISNR_Schaetzer                  ( const float* samples, const float comp, const int res);
++ float  ISNR_Schaetzer_Trans            ( const float* samples, const float comp, const int res);
++-void   QuantizeSubband                 ( unsigned int* qu_output, const float* input, const int res, float* errors, const int maxNsOrder );
++-void   QuantizeSubbandWithNoiseShaping ( unsigned int* qu_output, const float* input, const int res, float* errors, const float* FIR );
+++void   QuantizeSubband                 ( mpc_int16_t* qu_output, const float* input, const int res, float* errors, const int maxNsOrder );
+++void   QuantizeSubbandWithNoiseShaping ( mpc_int16_t* qu_output, const float* input, const int res, float* errors, const float* FIR );
++ 
++ void   NoiseInjectionComp ( void );
++ 
+
+--===============1396469057833857219==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1396469057833857219==--
