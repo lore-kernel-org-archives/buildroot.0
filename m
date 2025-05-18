@@ -4,77 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BFA9BC3ABD8
-	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 16:48:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 758EBC3ABD8
+	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 17:33:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6A9548156C;
-	Sun, 18 May 2025 16:48:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1C252812E9;
+	Sun, 18 May 2025 17:33:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mdqCDMkjs80n; Sun, 18 May 2025 16:48:05 +0000 (UTC)
+ id zSYcpMF2Tyol; Sun, 18 May 2025 17:33:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F722813F9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5EC9781BB2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8F722813F9;
-	Sun, 18 May 2025 16:48:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 190C5DF
- for <buildroot@buildroot.org>; Sun, 18 May 2025 16:48:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5EC9781BB2;
+	Sun, 18 May 2025 17:33:48 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id A9C7DE4
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 17:33:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 15C5A813F9
- for <buildroot@buildroot.org>; Sun, 18 May 2025 16:48:04 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9A69B60A5B
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 17:33:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LNavNBbcdZjk for <buildroot@buildroot.org>;
- Sun, 18 May 2025 16:48:02 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
- helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lbzsmxhlJM9A for <buildroot@buildroot.org>;
+ Sun, 18 May 2025 17:33:45 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3FE3481A92
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3FE3481A92
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3FE3481A92
- for <buildroot@buildroot.org>; Sun, 18 May 2025 16:48:01 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 87E4343B28;
- Sun, 18 May 2025 16:47:57 +0000 (UTC)
-Date: Sun, 18 May 2025 18:47:56 +0200
-To: Guillaume Chaye <guillaume.chaye@zeetim.com>
-Cc: buildroot@buildroot.org
-Message-ID: <20250518184756.4a084524@windsurf>
-In-Reply-To: <20250428154055.1402438-1-guillaume.chaye@zeetim.com>
-References: <20250428154055.1402438-1-guillaume.chaye@zeetim.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefudeltdefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepteetueehgfdtfeelfeektdeigfevgffffefhgefhteeuffffledtjeeiudelfedvnecuffhomhgrihhnpehgihhthhhusgdrtghomhdpghhnuhdrohhrghdpghhithhlrggsrdgtohhmpdgsuhhilhgurhhoohhtrdhorhhgpdgsohhothhlihhnrdgtohhmnecukfhppedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumegufeduvgemvdefheemtgehvgdvmegvugekfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumegufeduvgemvdefheemtgehvgdvmegvugekfedphhgvlhhopeifihhnughsuhhrfhdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvddprhgtphhtthhopehguhhilhhlrghumhgvrdgthhgrhigvseiivggvt
- hhimhdrtghomhdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhg
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1747586877;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=OwnFZSGS6inRQMBZdKVdZzLljhutQqft1eLIz5jtNxk=;
- b=EuCxXWZAXLmQFRfoO8HOncIC94Ng8D+sB1EvG55fWcPakF+m+SclAkz7/76KxvQ1Ca30tA
- 1PHgNq9ZP/V57u3MDqJrn5S8J8WrL89Pb3nXfjm0mzpiSiSNJllcUVBRIYOho5r9rRn1aj
- WUs8+mIgJCNfE8fU/P92xcyos87nuFro/B4PLOgTts55+bZU33ReUSspwKvhAE4fYOSHt9
- 4R/ZfPoWKjBZvlTS7P21PJHEUSMQ4qJadDvzZu/mhdorEmKjV7NMgfqcFuOZGD0UPxUoS5
- 4unI7FDWChuz5iakvLXXkzTide1YVhqhLzyCaiu64DHNmIlZVxE5sUBHEjJxLw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=EuCxXWZA
-Subject: Re: [Buildroot] [PATCHv4 1/1] package/heimdal: upgrade package and
- add target support
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 954656078D
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 954656078D
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 17:33:45 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 7A705873A8; Sun, 18 May 2025 17:33:45 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Sun, 18 May 2025 19:33:06 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 573ecbd44cd16b2ca4ce71b40459bcecf8c8e98c
+X-Git-Newrev: 93aa1c1ef6a5c178e2c843bdfa309f09c039725b
+X-Patchwork-Hint: ignore
+Message-Id: <20250518173345.7A705873A8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/spdlog: bump version to 1.15.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,77 +58,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Guillaume,
+commit: https://git.buildroot.net/buildroot/commit/?id=93aa1c1ef6a5c178e2c843bdfa309f09c039725b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 28 Apr 2025 11:40:55 -0400
-Guillaume Chaye <guillaume.chaye@zeetim.com> wrote:
+Release Notes: https://github.com/gabime/spdlog/releases/tag/v1.15.3
 
-> This patch does several things, so I will try to explain clearly what has been modified.
-> 
-> First, it bumps Heimdal to the latest commit (16/04/2025).
-> The current version was more than 3 years old and had known CVEs (see CVE-2023-36328).
-> This upgrade allows the removal of the two patches currently applied:
-> - The commit 1b57b62, which fixes the build with autoconf 2.72, is already included upstream.
-> - We no longer need to use the JSON-PP module, as it is now optional (commit 13d3bcf).
-> 
-> Heimdal was previously a host-only package. This patch adds target support.
-> This requires cross-compiling the project, which was not possible without additional patches.
-> After some research, I found this pull request (https://github.com/heimdal/heimdal/pull/1174)
-> created by a well-known Heimdal contributor (Nico Williams).
-> This pull request contains 29 commits, which is quite large, so I have tried to keep things simple
-> by selecting only the minimal set of changes required for cross-compilation.
-> 
-> After extensive testing, I have successfully built the target version of Heimdal by applying 3 commits
-> picked from the pull request:
-> - The first one adds the AX_PROG_CC_FOR_BUILD macro to the project.
->   This macro, from the GNU project (https://www.gnu.org/software/autoconf-archive/ax_prog_cc_for_build.html),
->   allows detecting a C compiler that produces native executables.
-> - The second commit integrates the AX_PROG_CC_FOR_BUILD macro into Heimdal's autoconf scripts,
->   enabling proper compiler selection during the build.
-> - Finally, a patch was needed to fix header errors when cross-compiling libroken.
-> 
-> Additionally, I have added two patches I wrote and submitted upstream:
-> - The first removes a hardcoded path from a script.
-> - The second fixes an error generated by the 'ar' utility during the build process.
-> 
-> Finally, since the latest version of Heimdal no longer depends on e2fsprogs,
-> the host-e2fsprogs dependency has been removed.
-> 
-> Signed-off-by: Guillaume Chaye <guillaume.chaye@zeetim.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/spdlog/spdlog.hash | 2 +-
+ package/spdlog/spdlog.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thanks for this new iteration. There is still too much in there, mixing
-the bump and the addition of the target package.
-
-Since the version bump made sense on its own, I extracted just this
-aspect from your patch, and merged it:
-
-  https://gitlab.com/buildroot.org/buildroot/-/commit/573ecbd44cd16b2ca4ce71b40459bcecf8c8e98c
-
-For the rest, could you please:
-
-- Provide a new patch with a commit message that's wrapped at 80
-  columns and doesn't use first person sentence like "I have..."
-
-- Justify why heimdal for the target is useful, i.e what will use it.
-
-- Double check that the AX_PROG_CC_FOR_BUILD function in
-  autoconf-archive really doesn't work? This would allow to avoid
-  having another copy of it.
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/spdlog/spdlog.hash b/package/spdlog/spdlog.hash
+index 12fd2e2fd4..6803ab5168 100644
+--- a/package/spdlog/spdlog.hash
++++ b/package/spdlog/spdlog.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  7a80896357f3e8e920e85e92633b14ba0f229c506e6f978578bdc35ba09e9a5d  spdlog-1.15.2.tar.gz
++sha256  15a04e69c222eb6c01094b5c7ff8a249b36bb22788d72519646fb85feb267e67  spdlog-1.15.3.tar.gz
+ sha256  4ccecab18d1ff0b61174fe3d6c430541625d3ddb865b0d5887db296f883c76e7  LICENSE
+diff --git a/package/spdlog/spdlog.mk b/package/spdlog/spdlog.mk
+index fb9a33c2ca..598f937dbd 100644
+--- a/package/spdlog/spdlog.mk
++++ b/package/spdlog/spdlog.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SPDLOG_VERSION = 1.15.2
++SPDLOG_VERSION = 1.15.3
+ SPDLOG_SITE = $(call github,gabime,spdlog,v$(SPDLOG_VERSION))
+ SPDLOG_LICENSE = MIT
+ SPDLOG_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
