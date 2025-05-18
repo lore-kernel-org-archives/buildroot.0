@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E6F7C2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:04:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A7ABC2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:04:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6CC396FC1A;
-	Mon, 19 May 2025 11:04:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B944F7112B;
+	Mon, 19 May 2025 11:04:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Z2uGrgN-8FbL; Mon, 19 May 2025 11:04:36 +0000 (UTC)
+ id y8QbqCn8WhOr; Mon, 19 May 2025 11:04:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0D94D71110
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E56E071122
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0D94D71110;
-	Mon, 19 May 2025 11:04:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E56E071122;
+	Mon, 19 May 2025 11:04:37 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 2369CD4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:48:56 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 50042E4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:48:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C992C40DCF
+ by smtp4.osuosl.org (Postfix) with ESMTP id E812B40E16
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rMTUg932NghT for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:43 +0000 (UTC)
+ id 2f6xPTnuk8wb for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DDBB841E8E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B8B34202F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DDBB841E8E
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:08 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1B8B34202F
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:09 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D6BD982A2E; Mon, 19 May 2025 10:40:08 +0000 (UTC)
+ id 1128C82A2E; Mon, 19 May 2025 10:40:09 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 17 May 2025 22:58:00 +0200
+Date: Sun, 18 May 2025 11:27:59 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: cf63f1dc1018621417c6b61f9898c212bb520247
-X-Git-Newrev: aa017484eaa7410d9cad9e8fd11de2ca613bd288
+X-Git-Oldrev: 56ea5a02268631f2ea679c067e9b0ec94e0e512e
+X-Git-Newrev: e240b889f183b8ad00c116a4cab222135ec7f17b
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104008.D6BD982A2E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/qt5webengine: fix no
- executable stack link issue on arm
+Message-Id: <20250519104009.1128C82A2E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] support/download/dl-wrapper:
+ add basic support for smb file download using curl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,146 +59,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1019538380010631948=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1019538380010631948==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=aa017484eaa7410d9cad9e8fd11de2ca613bd288
+commit: https://git.buildroot.net/buildroot/commit/?id=e240b889f183b8ad00c116a4cab222135ec7f17b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-TL;DR; This turns the configure flag -no-feature-webengine-noexecstack
-to -feature-webengine-noexecstack to workaround a link issue on ARM
-32-bit if chromium requests for an executable stack.
+It allows to download files from smb share in buildroot packages.
+Usage is specified in manual.
 
-And now, the long story...
-
-The configure flag -no-feature-webengine-noexecstack was introduced with
-commit 675cbaf9aa (package/qt5/qt5webengine: bump to version 5.15.8).
-
-That configure flag controls the feature webengine-noexecstack[1][2];
-the -no-feature-webengine-noexecstack causes qmake to **NOT** append the
-linker flags -Wl,-z,noexecstack[3] to QMAKE_LFLAGS.
-
-It results in the linkage issue below on ARM 32-bit at the creation of
-its Qt module, i.e. after qmake has built the chromium third party via
-gn:
-
-	ulimit -n 4096 && /home/gportay/src/buildroot/output/host/bin/arm-buildroot-linux-gnueabihf-g++ --sysroot=/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot @/home/gportay/src/buildroot/output/build/qt5webengine-5.15.14/src/core/release/QtWebEngineCore_o.rsp -Wl,--start-group @/home/gportay/src/buildroot/output/build/qt5webengine-5.15.14/src/core/release/QtWebEngineCore_a.rsp -Wl,--end-group -Wl,--fatal-warnings -Wl,--build-id=sha1 -fPIC -Wl,-z,relro -Wl,-z,now -Wl,-z,defs -Wl,-O2 -Wl,--gc-sections --sysroot=/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot --sysroot=/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot -Wl,-O1 -Wl,--enable-new-dtags -Wl,-whole-archive -lqtwebenginecoreapi -Wl,-no-whole-archive -Wl,--no-undefined -Wl,--version-script,QtWebEngineCore.version -Wl,-O1 -Wl,--enable-new-dtags -shared -Wl,-soname,libQt5WebEngineCore.so.5 -o libQt5WebEngineCore.so.5.15.14   -latomic /home/gporta
- y/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libQt5Quick.so /home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libQt5Gui.so /home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libQt5QmlModels.so /home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libQt5WebChannel.so /home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libQt5Qml.so /home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libQt5Network.so /home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libQt5Core.so -lpthread -L/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib -latomic -lGLESv2 -lpthread -ldl -lrt -lnss3 -lnssutil3 -lsmime3 -lplds4 -lplc4 -lnspr4 -levent -lresolv -ljpeg -lopus -lm -lz -lvpx -lpng16 -lwebp -lwebpmux -lwebpdemux -lfreetype -lexpat -lfontcon
- fig -lharfbuzz-subset -lharfbuzz -lsnappy -lxml2 -lxslt -ldbus-1 -L/home/gportay/src/buildroot/output/build/qt5webengine-5.15.14/src/core/api/release -lGLESv2 -lrt -lpthread -ldl
-	/home/gportay/src/buildroot/output/host/lib/gcc/arm-buildroot-linux-gnueabihf/13.3.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: warning: /home/gportay/src/buildroot/output/build/qt5webengine-5.15.14/src/core/release/obj/third_party/blink/renderer/platform/heap/asm/asm/SaveRegisters_arm.o: missing .note.GNU-stack section implies executable stack
-	/home/gportay/src/buildroot/output/host/lib/gcc/arm-buildroot-linux-gnueabihf/13.3.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
-	collect2: error: ld returned 1 exit status
-
-The link succeeds if the missing linker flags are appended manually to
-the command-line:
-
-	ulimit -n 4096 && /home/gportay/src/buildroot/output/host/bin/arm-buildroot-linux-gnueabihf-g++ --sysroot=/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot @/home/gportay/src/buildroot/output/build/qt5webengine-5.15.14/src/core/release/QtWebEngineCore_o.rsp -Wl,--start-group @/home/gportay/src/buildroot/output/build/qt5webengine-5.15.14/src/core/release/QtWebEngineCore_a.rsp -Wl,--end-group -Wl,--fatal-warnings -Wl,--build-id=sha1 -fPIC -Wl,-z,relro -Wl,-z,now -Wl,-z,defs -Wl,-O2 -Wl,--gc-sections --sysroot=/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot --sysroot=/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot -Wl,-O1 -Wl,--enable-new-dtags -Wl,-whole-archive -lqtwebenginecoreapi -Wl,-no-whole-archive -Wl,--no-undefined -Wl,--version-script,QtWebEngineCore.version -Wl,-O1 -Wl,--enable-new-dtags -shared -Wl,-soname,libQt5WebEngineCore.so.5 -o libQt5WebEngineCore.so.5.15.14   -latomic /home/gporta
- y/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libQt5Quick.so /home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libQt5Gui.so /home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libQt5QmlModels.so /home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libQt5WebChannel.so /home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libQt5Qml.so /home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libQt5Network.so /home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libQt5Core.so -lpthread -L/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib -latomic -lGLESv2 -lpthread -ldl -lrt -lnss3 -lnssutil3 -lsmime3 -lplds4 -lplc4 -lnspr4 -levent -lresolv -ljpeg -lopus -lvpx -lm -lpng16 -lwebp -lwebpmux -lwebpdemux -lfreetype -lexpat -lfontconfig 
- -lharfbuzz-subset -lharfbuzz -lsnappy -lxml2 -lxslt -ldbus-1 -L/home/gportay/src/buildroot/output/build/qt5webengine-5.15.14/src/core/api/release -lGLESv2 -lrt -lpthread -ldl -Wl,-z,noexecstack && echo completed
-	completed
-
-Note: The configure flag is not forwarded to chromium in any manner; its
-scope is limited to the Qt WebEngine module. That configure flag appears
-to be a workaround if the does not assemble, compile and link the Elf
-object correctly[4][5].
-
-The linker flag -z noexecstack is responsible for marking the object as
-not requiring an executable stack by adding the section .note.GNU-stack
-in the Elf object.
-
-The file SaveRegisters_arm.S is assembled from the command-line below;
-there is no noexecstack flag set:
-
-	/home/gportay/src/buildroot/output/host/bin/arm-buildroot-linux-gnueabihf-gcc -MMD -MF obj/third_party/blink/renderer/platform/heap/asm/asm/SaveRegisters_arm.o.d -DARM=1 -DUSE_UDEV -DUSE_AURA=1 -DUSE_NSS_CERTS=1 -DUSE_OZONE=1 -DOFFICIAL_BUILD -DTOOLKIT_QT -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -DNO_UNWIND_TABLES -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -DCR_SYSROOT_HASH=c2e54f675b83a61301dcdb22e8e7a2b85c01d58c -DNDEBUG -DNVALGRIND -DDYNAMIC_ANNOTATIONS_ENABLED=0 -Igen -I../../3rdparty/chromium -fPIC -fno-strict-aliasing --param=ssp-buffer-size=4 -fstack-protector -fno-unwind-tables -fno-asynchronous-unwind-tables -fPIC -pipe -pthread -std=gnu11 -march=armv7-a -mfloat-abi=hard -mtune=generic-armv7-a -mfpu=vfpv3-d16 -marm -g0 --sysroot=/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot -c ../../3rdparty/chromium/third_party/blink/renderer/platform/heap/asm/SaveRegisters_arm.S -o obj/third_party/blink/renderer/platform/heap/as
- m/asm/SaveRegisters_arm.o
-
-The GNU assembler supports the assembler flag -Wa,--{,no}execstack to
-require, or not, an executable stack for the object to assemble.
-
-The BUILD.gn does **NOT** set it for the assembler files of the blink
-third-party; but it does it for boringssl[6] (see also the project file
-CMakeLists.txt[7]).
-
-See below what readelf says if the file is assembled manually with the
-flag --noexecstack:
-
-	$ /home/gportay/src/buildroot/output/host/bin/arm-buildroot-linux-gnueabihf-gcc -MMD -MF obj/third_party/blink/renderer/platform/heap/asm/asm/SaveRegisters_arm.o.d -DARM=1 -DUSE_UDEV -DUSE_AURA=1 -DUSE_NSS_CERTS=1 -DUSE_OZONE=1 -DOFFICIAL_BUILD -DTOOLKIT_QT -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -DNO_UNWIND_TABLES -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -DCR_SYSROOT_HASH=c2e54f675b83a61301dcdb22e8e7a2b85c01d58c -DNDEBUG -DNVALGRIND -DDYNAMIC_ANNOTATIONS_ENABLED=0 -Igen -I../../3rdparty/chromium -fPIC -fno-strict-aliasing --param=ssp-buffer-size=4 -fstack-protector -fno-unwind-tables -fno-asynchronous-unwind-tables -fPIC -pipe -pthread -std=gnu11 -march=armv7-a -mfloat-abi=hard -mtune=generic-armv7-a -mfpu=vfpv3-d16 -marm -g0 --sysroot=/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot -c ../../3rdparty/chromium/third_party/blink/renderer/platform/heap/asm/SaveRegisters_arm.S -o obj/third_party/blink/renderer/platform/heap/
- asm/asm/SaveRegisters_arm.o -Wa,--noexecstack
-
-	$ readelf -a /home/gportay/src/buildroot/output/build/qt5webengine-5.15.14/src/core/release/obj/third_party/blink/renderer/platform/heap/asm/asm/SaveRegisters_arm.o
-	(...)
-	Section Headers:
-	  [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al
-	  (...)
-	  [ 4] .note.GNU-stack   PROGBITS        00000000 000058 000000 00      0   0  1
-
-The section the linker claims for is now part of the Elf object; and
-qmake is now able to link its Qt WebEngine module.
-
-Note: Alternatively, the patching the file SaveRegisters_arm.S to set
-explicitly the section in the source file works as well (this reduces
-the impact to the very single file causing the link issue):
-
-	#if defined(__linux__) && defined(__ELF__)
-	.section .note.GNU-stack,"",%progbits
-	#endif
-
-Instead of fixing directly the origin of the issue and setting the
-missing assembler flag -Wa,--noexecstack to blink; this works around the
-link issue by turning on the feature noexecstack to qtwebengine to force
-qmake to link its module using the linker flag -Wl,-z,noexecstack.
-
-[1]: https://github.com/qt/qtwebengine/blob/5.15.14/src/buildtools/configure.json#L353-L357
-[2]: https://github.com/qt/qtwebengine/blob/5.15.14/src/buildtools/configure.json#L720-L724
-[3]: https://github.com/qt/qtwebengine/blob/5.15.14/src/buildtools/config/linking.pri#L61-L62
-[4]: https://github.com/qt/qtwebengine/commit/597359a16a798df3955404200f1fc6833a7425ab
-[5]: https://codereview.qt-project.org/c/qt/qtwebengine/+/263545
-[6]: https://github.com/qt/qtwebengine-chromium/blob/87-based/chromium/third_party/boringssl/src/util/BUILD.toplevel#L64
-[7]: https://github.com/qt/qtwebengine-chromium/blob/87-based/chromium/third_party/boringssl/src/crypto/CMakeLists.txt#L33
-
-Signed-off-by: Gaël PORTAY <gael.portay@rtone.fr>
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+Signed-off-by: Guillaume Chaye <guillaume.chaye@zeetim.com>
+[Peter: reword documentation]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt5/qt5webengine/qt5webengine.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ docs/manual/adding-packages-generic.adoc | 7 +++++++
+ package/pkg-generic.mk                   | 2 +-
+ support/download/dl-wrapper              | 2 +-
+ 3 files changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/package/qt5/qt5webengine/qt5webengine.mk b/package/qt5/qt5webengine/qt5webengine.mk
-index 529a83df6c..a97d918cfd 100644
---- a/package/qt5/qt5webengine/qt5webengine.mk
-+++ b/package/qt5/qt5webengine/qt5webengine.mk
-@@ -88,6 +88,7 @@ QT5WEBENGINE_CONF_OPTS += \
- 	-webengine-webp \
- 	-feature-build-qtwebengine-core \
- 	-feature-webengine-core-support \
-+	-feature-webengine-noexecstack \
- 	-feature-webengine-system-dbus \
- 	-feature-webengine-system-fontconfig \
- 	-feature-webengine-system-freetype \
-@@ -117,7 +118,6 @@ QT5WEBENGINE_CONF_OPTS += \
- 	-no-feature-webengine-developer-build \
- 	-no-feature-webengine-full-debug-info \
- 	-no-feature-webengine-native-spellchecker \
--	-no-feature-webengine-noexecstack \
- 	-no-feature-webengine-system-minizip \
- 	-no-feature-webengine-system-gn
+diff --git a/docs/manual/adding-packages-generic.adoc b/docs/manual/adding-packages-generic.adoc
+index 7e2e066c16..6827b9975e 100644
+--- a/docs/manual/adding-packages-generic.adoc
++++ b/docs/manual/adding-packages-generic.adoc
+@@ -337,6 +337,13 @@ not and can not work as people would expect it should:
+      for +local+ packages, no patches are applied. If you need to
+      still patch the source code, use +LIBFOO_POST_RSYNC_HOOKS+, see
+      xref:hooks-rsync[].
++  ** +smb+ for retrieving source code from a SMB share. Used by
++     default when +LIBFOO_SITE+ begins with +smb://+. It uses +curl+
++     as download backend. Syntax expected:
++     +LIBFOO_SITE=smb://<server>/<share>/<path>+. This method might
++     require to define -u option in +LIBFOO_DL_OPTS+. For more
++     information, please refer to the
++     https://curl.se/docs/tutorial.html[curl documentation].
  
-
---===============1019538380010631948==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ * +LIBFOO_GIT_SUBMODULES+ can be set to +YES+ to create an archive
+   with the git submodules in the repository.  This is only available
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index f22b6e981a..95ff9135bd 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -1260,7 +1260,7 @@ else ifeq ($$($(2)_SITE_METHOD),hg)
+ DL_TOOLS_DEPENDENCIES += hg
+ else ifeq ($$($(2)_SITE_METHOD),cvs)
+ DL_TOOLS_DEPENDENCIES += cvs
+-else ifneq ($(filter ftp ftps,$$($(2)_SITE_METHOD)),)
++else ifneq ($(filter ftp ftps smb,$$($(2)_SITE_METHOD)),)
+ DL_TOOLS_DEPENDENCIES += curl
+ endif # SITE_METHOD
+ 
+diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
+index 5445aad5a7..b70c8edbd9 100755
+--- a/support/download/dl-wrapper
++++ b/support/download/dl-wrapper
+@@ -96,7 +96,7 @@ main() {
+         backend="${backend_urlencode%|*}"
+         case "${backend}" in
+             git|svn|cvs|bzr|file|scp|hg|sftp) ;;
+-            ftp|ftps) backend="curl" ;;
++            ftp|ftps|smb) backend="curl" ;;
+             *) backend="wget" ;;
+         esac
+         uri=${uri#*+}
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1019538380010631948==--
