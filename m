@@ -4,60 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 333EDC3ABD8
-	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 13:24:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF1D8C3ABD8
+	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 13:28:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D0E1040866;
-	Sun, 18 May 2025 13:24:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8030E40956;
+	Sun, 18 May 2025 13:28:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id A-Ize9AXTu9c; Sun, 18 May 2025 13:24:26 +0000 (UTC)
+ id DnStYNUxqHKT; Sun, 18 May 2025 13:28:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 05C4240855
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ADCA94092A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 05C4240855;
-	Sun, 18 May 2025 13:24:26 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 33E781BA
- for <buildroot@buildroot.org>; Sun, 18 May 2025 13:24:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ADCA94092A;
+	Sun, 18 May 2025 13:28:13 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id A9B75E4
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 13:28:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 258BC404DA
- for <buildroot@buildroot.org>; Sun, 18 May 2025 13:24:24 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8E58760AC3
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 13:28:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ffubhli4T4Yd for <buildroot@buildroot.org>;
- Sun, 18 May 2025 13:24:23 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
- helo=relay7-d.mail.gandi.net; envelope-from=peko@korsgaard.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xsa8X8ETR1-w for <buildroot@buildroot.org>;
+ Sun, 18 May 2025 13:28:12 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E52CA40142
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E52CA40142
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E52CA40142
- for <buildroot@buildroot.org>; Sun, 18 May 2025 13:24:22 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id BBB7C42DF9;
- Sun, 18 May 2025 13:24:20 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@dell.be.48ers.dk>) id 1uGe04-00HVI0-0p;
- Sun, 18 May 2025 15:24:20 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DFB956064B
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id DFB956064B
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 13:28:11 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id CEE2786FE9; Sun, 18 May 2025 13:28:11 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 18 May 2025 15:24:18 +0200
-Message-Id: <20250518132419.4171795-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.39.5
-MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: 0
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefudekieefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecunecujfgurhephffvvefufffkofggtgfgsehtkeertdertdejnecuhfhrohhmpefrvghtvghrucfmohhrshhgrggrrhguuceophgvthgvrheskhhorhhsghgrrghrugdrtghomheqnecuggftrfgrthhtvghrnhepgeelveelhedvuedtudekjeehtdfgvdegueehfeehfeevfeetjedvgedtgfehvdelnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucfkphepvdgrtddvmeekgedvrgemgeehrggtmeelgedtudemjeeiugekmeefvghffhemfhgvsgefmeegsggsheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumeejiegukeemfegvfhhfmehfvggsfeemgegssgehpdhhvghlohepuggvlhhlrdgsvgdrgeekvghrshdrughkpdhmrghilhhfrhhomhepphgvkhhosehkohhrshhgrggrrhgurdgtohhmpdhnsggprhgtphhtthhopedvpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehpvghtvghrsehkohhrshhgrggrrhgurdgtohhm
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: [Buildroot] [PATCH] package/net-tools: add upstream security fix
- for CVE-2025-46836
+Date: Sun, 18 May 2025 15:28:02 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 53e1772682d86ed681ce41b4027bd34163023871
+X-Git-Newrev: 7acb67fc2ba42428f724445b412a46b75bc4ecf0
+X-Patchwork-Hint: ignore
+Message-Id: <20250518132811.CEE2786FE9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/wpa_supplicant: add option to
+ build deprecated WEP support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,88 +58,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Rml4ZXMgdGhlIGZvbGxvd2luZyBzZWN1cml0eSBpc3N1ZToKCkNWRS0yMDI1LTQ2ODM2OiBTdGFj
-ay1iYXNlZCBCdWZmZXIgT3ZlcmZsb3cgaW4gbmV0LXRvb2xzIChnZXRfbmFtZSkKCmh0dHBzOi8v
-Z2l0aHViLmNvbS9lY2tpL25ldC10b29scy9zZWN1cml0eS9hZHZpc29yaWVzL0dIU0EtcGZ3Zi1o
-Nm0zLTYzd2YKClNpZ25lZC1vZmYtYnk6IFBldGVyIEtvcnNnYWFyZCA8cGV0ZXJAa29yc2dhYXJk
-LmNvbT4KLS0tCiAuLi5udGVyZmFjZS5jLVN0YWNrLWJhc2VkLUJ1ZmZlci1PdmVyZmwucGF0Y2gg
-fCA5MyArKysrKysrKysrKysrKysrKysrCiBwYWNrYWdlL25ldC10b29scy9uZXQtdG9vbHMubWsg
-ICAgICAgICAgICAgICAgfCAgMyArCiAyIGZpbGVzIGNoYW5nZWQsIDk2IGluc2VydGlvbnMoKykK
-IGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL25ldC10b29scy8wMDAxLUNWRS0yMDI1LTQ2ODM2
-LWludGVyZmFjZS5jLVN0YWNrLWJhc2VkLUJ1ZmZlci1PdmVyZmwucGF0Y2gKCmRpZmYgLS1naXQg
-YS9wYWNrYWdlL25ldC10b29scy8wMDAxLUNWRS0yMDI1LTQ2ODM2LWludGVyZmFjZS5jLVN0YWNr
-LWJhc2VkLUJ1ZmZlci1PdmVyZmwucGF0Y2ggYi9wYWNrYWdlL25ldC10b29scy8wMDAxLUNWRS0y
-MDI1LTQ2ODM2LWludGVyZmFjZS5jLVN0YWNrLWJhc2VkLUJ1ZmZlci1PdmVyZmwucGF0Y2gKbmV3
-IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAwMC4uMGEwMjc4NWYzOAotLS0gL2Rldi9u
-dWxsCisrKyBiL3BhY2thZ2UvbmV0LXRvb2xzLzAwMDEtQ1ZFLTIwMjUtNDY4MzYtaW50ZXJmYWNl
-LmMtU3RhY2stYmFzZWQtQnVmZmVyLU92ZXJmbC5wYXRjaApAQCAtMCwwICsxLDkzIEBACitGcm9t
-IDdhOGY0MmZiMjAwMTNhMTQ5M2Q4Y2FlMWM0MzQzNmY4NWU2NTZmMmQgTW9uIFNlcCAxNyAwMDow
-MDowMCAyMDAxCitGcm9tOiBaZXBoa2VrcyA8emVwaHlyb2ZmaWNpYWxkaXNjb3JkQGdtYWlsLmNv
-bT4KK0RhdGU6IFR1ZSwgMTMgTWF5IDIwMjUgMTE6MDQ6MTcgKzAyMDAKK1N1YmplY3Q6IFtQQVRD
-SF0gQ1ZFLTIwMjUtNDY4MzY6IGludGVyZmFjZS5jOiBTdGFjay1iYXNlZCBCdWZmZXIgT3ZlcmZs
-b3cgaW4KKyBnZXRfbmFtZSgpCisKK0Nvb3JkaW5hdGVkIGFzIEdIU0EtcGZ3Zi1oNm0zLTYzd2YK
-KworVXBzdHJlYW06IGh0dHBzOi8vZ2l0aHViLmNvbS9lY2tpL25ldC10b29scy9jb21taXQvN2E4
-ZjQyZmIyMDAxM2ExNDkzZDhjYWUxYzQzNDM2Zjg1ZTY1NmYyZAorU2lnbmVkLW9mZi1ieTogUGV0
-ZXIgS29yc2dhYXJkIDxwZXRlckBrb3JzZ2FhcmQuY29tPgorLS0tCisgbGliL2ludGVyZmFjZS5j
-IHwgNjMgKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrLS0tLS0tLS0tLS0tLS0tLS0tLQor
-IDEgZmlsZSBjaGFuZ2VkLCAzOSBpbnNlcnRpb25zKCspLCAyNCBkZWxldGlvbnMoLSkKKworZGlm
-ZiAtLWdpdCBhL2xpYi9pbnRlcmZhY2UuYyBiL2xpYi9pbnRlcmZhY2UuYworaW5kZXggNzFkNDE2
-My4uYTA1NGYxMiAxMDA2NDQKKy0tLSBhL2xpYi9pbnRlcmZhY2UuYworKysrIGIvbGliL2ludGVy
-ZmFjZS5jCitAQCAtMjExLDMyICsyMTEsNDcgQEAgb3V0OgorIH0KKyAKKyBzdGF0aWMgY29uc3Qg
-Y2hhciAqZ2V0X25hbWUoY2hhciAqbmFtZSwgY29uc3QgY2hhciAqcCkKKysvKiBTYWZlIHZlcnNp
-b24g4oCUIGd1YXJhbnRlZXMgYXQgbW9zdCBJRk5BTVNJWuKAkTEgYnl0ZXMgYXJlIGNvcGllZAor
-KyAgIGFuZCB0aGUgZGVzdGluYXRpb24gYnVmZmVyIGlzIGFsd2F5cyBOVUzigJF0ZXJtaW5hdGVk
-LiAgICAgICAgICAgICAqLworIHsKKy0gICAgd2hpbGUgKGlzc3BhY2UoKnApKQorLQlwKys7Cist
-ICAgIHdoaWxlICgqcCkgeworLQlpZiAoaXNzcGFjZSgqcCkpCistCSAgICBicmVhazsKKy0JaWYg
-KCpwID09ICc6JykgewkvKiBjb3VsZCBiZSBhbiBhbGlhcyAqLworLQkJY29uc3QgY2hhciAqZG90
-ID0gcCsrOworLSAJCXdoaWxlICgqcCAmJiBpc2RpZ2l0KCpwKSkgcCsrOworLQkJaWYgKCpwID09
-ICc6JykgeworLQkJCS8qIFllcyBpdCBpcywgYmFja3VwIGFuZCBjb3B5IGl0LiAqLworLQkJCXAg
-PSBkb3Q7CistCQkJKm5hbWUrKyA9ICpwKys7CistCQkJd2hpbGUgKCpwICYmIGlzZGlnaXQoKnAp
-KSB7CistCQkJCSpuYW1lKysgPSAqcCsrOworLQkJCX0KKy0JCX0gZWxzZSB7CistCQkJLyogTm8s
-IGl0IGlzbid0ICovCistCQkJcCA9IGRvdDsKKy0JICAgIH0KKy0JICAgIHArKzsKKy0JICAgIGJy
-ZWFrOworLQl9CistCSpuYW1lKysgPSAqcCsrOworKyAgICBjaGFyICAgICAgICpkc3QgPSBuYW1l
-OyAgICAgICAgICAgICAgICAgLyogY3VycmVudCB3cml0ZSBwdHIgICAgICAgICAgKi8KKysgICAg
-Y29uc3QgY2hhciAqZW5kID0gbmFtZSArIElGTkFNU0laIC0gMTsgIC8qIGxhc3QgYnl0ZSB3ZSBt
-YXkgd3JpdGUgICAgICovCisrCisrICAgIC8qIFNraXAgbGVhZGluZyB3aGl0ZeKAkXNwYWNlLiAq
-LworKyAgICB3aGlsZSAoaXNzcGFjZSgodW5zaWduZWQgY2hhcikqcCkpCisrICAgICAgICArK3A7
-CisrCisrICAgIC8qIENvcHkgdW50aWwgd2hpdGXigJFzcGFjZSwgZW5kIG9mIHN0cmluZywgb3Ig
-YnVmZmVyIGZ1bGwuICovCisrICAgIHdoaWxlICgqcCAmJiAhaXNzcGFjZSgodW5zaWduZWQgY2hh
-cikqcCkgJiYgZHN0IDwgZW5kKSB7CisrICAgICAgICBpZiAoKnAgPT0gJzonKSB7ICAgICAgICAg
-ICAgICAgICAgICAvKiBwb3NzaWJsZSBhbGlhcyB2ZXRoMDoxMjM6ICAqLworKyAgICAgICAgICAg
-IGNvbnN0IGNoYXIgKmRvdCA9IHA7ICAgICAgICAgICAgLyogcmVtZW1iZXIgdGhlIGNvbG9uICAg
-ICAgICAgKi8KKysgICAgICAgICAgICArK3A7CisrICAgICAgICAgICAgd2hpbGUgKCpwICYmIGlz
-ZGlnaXQoKHVuc2lnbmVkIGNoYXIpKnApKQorKyAgICAgICAgICAgICAgICArK3A7CisrCisrICAg
-ICAgICAgICAgaWYgKCpwID09ICc6JykgeyAgICAgICAgICAgICAgICAvKiBjb25maXJtZWQgYWxp
-YXMgICAgICAgICAgICAqLworKyAgICAgICAgICAgICAgICBwID0gZG90OyAgICAgICAgICAgICAg
-ICAgICAgLyogcmV3aW5kIGFuZCBjb3B5IGl0IGFsbCAgICAgKi8KKysKKysgICAgICAgICAgICAg
-ICAgLyogY29weSB0aGUgY29sb24gKi8KKysgICAgICAgICAgICAgICAgaWYgKGRzdCA8IGVuZCkK
-KysgICAgICAgICAgICAgICAgICAgICpkc3QrKyA9ICpwKys7CisrCisrICAgICAgICAgICAgICAg
-IC8qIGNvcHkgdGhlIGRpZ2l0cyAqLworKyAgICAgICAgICAgICAgICB3aGlsZSAoKnAgJiYgaXNk
-aWdpdCgodW5zaWduZWQgY2hhcikqcCkgJiYgZHN0IDwgZW5kKQorKyAgICAgICAgICAgICAgICAg
-ICAgKmRzdCsrID0gKnArKzsKKysKKysgICAgICAgICAgICAgICAgaWYgKCpwID09ICc6JykgICAg
-ICAgICAgICAgIC8qIGNvbnN1bWUgdHJhaWxpbmcgY29sb24gICAgICovCisrICAgICAgICAgICAg
-ICAgICAgICArK3A7CisrICAgICAgICAgICAgfSBlbHNlIHsgICAgICAgICAgICAgIC8qIGlmIHNv
-IHRyZWF0IGFzIG5vcm1hbCAqLworKyAgICAgICAgICAgICAgICBwID0gZG90OworKyAgICAgICAg
-ICAgIH0KKysgICAgICAgICAgICBicmVhazsgICAgICAgICAgICAgICAgICAgICAgICAgIC8qIGlu
-dGVyZmFjZSBuYW1lIGVuZHMgaGVyZSAgICovCisrICAgICAgICB9CisrCisrICAgICAgICAqZHN0
-KysgPSAqcCsrOyAgICAgICAgICAgICAgICAgICAgICAvKiBvcmRpbmFyeSBjaGFyYWN0ZXIgY29w
-eSAgICAqLworICAgICB9CistICAgICpuYW1lKysgPSAnXDAnOworKworKyAgICAqZHN0ID0gJ1ww
-JzsgICAgICAgICAgICAgICAgICAgICAgICAgICAgLyogYWx3YXlzIE5VTOKAkXRlcm1pbmF0ZSAg
-ICAgICAqLworICAgICByZXR1cm4gcDsKKyB9CisgCistLSAKKzIuMzkuNQorCmRpZmYgLS1naXQg
-YS9wYWNrYWdlL25ldC10b29scy9uZXQtdG9vbHMubWsgYi9wYWNrYWdlL25ldC10b29scy9uZXQt
-dG9vbHMubWsKaW5kZXggMDNlMWM3MzQwNi4uYTIyN2Q2NDc3ZiAxMDA2NDQKLS0tIGEvcGFja2Fn
-ZS9uZXQtdG9vbHMvbmV0LXRvb2xzLm1rCisrKyBiL3BhY2thZ2UvbmV0LXRvb2xzL25ldC10b29s
-cy5tawpAQCAtMTIsNiArMTIsOSBAQCBORVRfVE9PTFNfTElDRU5TRSA9IEdQTC0yLjArCiBORVRf
-VE9PTFNfTElDRU5TRV9GSUxFUyA9IENPUFlJTkcKIE5FVF9UT09MU19DUEVfSURfVkFMSUQgPSBZ
-RVMKIAorIyAwMDAxLUNWRS0yMDI1LTQ2ODM2LWludGVyZmFjZS5jLVN0YWNrLWJhc2VkLUJ1ZmZl
-ci1PdmVyZmwucGF0Y2gKK05FVF9UT09MU19JR05PUkVfQ1ZFUyArPSBDVkUtMjAyNS00NjgzNgor
-CiBkZWZpbmUgTkVUX1RPT0xTX0NPTkZJR1VSRV9DTURTCiAJKGNkICQoQEQpOyB5ZXMgIiIgfCAu
-L2NvbmZpZ3VyZS5zaCBjb25maWcuaW4gKQogZW5kZWYKLS0gCjIuMzkuNQoKX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlz
-dApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFp
-bG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+commit: https://git.buildroot.net/buildroot/commit/?id=7acb67fc2ba42428f724445b412a46b75bc4ecf0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Signed-off-by: Brandon Lumbra <brandon.lumbra@sense.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/wpa_supplicant/Config.in         | 7 +++++++
+ package/wpa_supplicant/wpa_supplicant.mk | 4 ++++
+ 2 files changed, 11 insertions(+)
+
+diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
+index e385d762e6..fd15e95be1 100644
+--- a/package/wpa_supplicant/Config.in
++++ b/package/wpa_supplicant/Config.in
+@@ -183,4 +183,11 @@ config BR2_PACKAGE_WPA_SUPPLICANT_SMARTCARD
+ 	  Enable the smart card support. Required for OpenSSL engines
+ 	  to work using PKCS11 and 802.1x
+ 
++config BR2_PACKAGE_WPA_SUPPLICANT_WEP
++	bool "Enable WEP support (deprecated)"
++	help
++	  Enable support for WEP. WEP support is deprecated due to
++	  security concerns, but some systems may want to support WEP
++	  networks.
++
+ endif
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index 9de536b943..fe4bc34d55 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -200,6 +200,10 @@ define WPA_SUPPLICANT_ENABLE_CTRL_IFACE
+ endef
+ endif
+ 
++ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_WEP),y)
++WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_WEP
++endif
++
+ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_WPA_CLIENT_SO),y)
+ WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_BUILD_WPA_CLIENT_SO
+ define WPA_SUPPLICANT_INSTALL_WPA_CLIENT_SO
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
