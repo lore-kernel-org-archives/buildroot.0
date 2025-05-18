@@ -4,48 +4,111 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2E90C3ABC9
-	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 21:07:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E211DC3ABC9
+	for <buildroot@archiver.kernel.org>; Sun, 18 May 2025 21:07:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B29CD40718;
-	Sun, 18 May 2025 21:07:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6833740C28;
+	Sun, 18 May 2025 21:07:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DnvyaTm31nlI; Sun, 18 May 2025 21:07:05 +0000 (UTC)
+ id p0cgxR4pt5jW; Sun, 18 May 2025 21:07:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D6C2F40BE5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B96C540BF8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D6C2F40BE5;
-	Sun, 18 May 2025 21:07:04 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 48D70193
- for <buildroot@buildroot.org>; Sun, 18 May 2025 21:07:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B96C540BF8;
+	Sun, 18 May 2025 21:07:06 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 134011BA
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 21:07:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7E6BA4111D
- for <buildroot@buildroot.org>; Sun, 18 May 2025 21:06:59 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E7F1640BE6
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 21:07:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bXIuW5xgaAog for <buildroot@buildroot.org>;
- Sun, 18 May 2025 21:06:57 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4DF1F40193
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4DF1F40193
- for <buildroot@buildroot.org>; Sun, 18 May 2025 21:06:57 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4637387393; Sun, 18 May 2025 21:06:57 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 18 May 2025 23:06:42 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c09ee07b2c3b3167774c1d20c4685a7366b140cf
-X-Git-Newrev: 06bb701217c9928995c72b001ad4e48441c46144
-X-Patchwork-Hint: ignore
-Message-Id: <20250518210657.4637387393@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/valgrind: bump to version 3.25.0
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PvuaV5OmlD0G for <buildroot@buildroot.org>;
+ Sun, 18 May 2025 21:07:04 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::430; helo=mail-wr1-x430.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D7C4040810
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D7C4040810
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D7C4040810
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 21:07:03 +0000 (UTC)
+Received: by mail-wr1-x430.google.com with SMTP id
+ ffacd0b85a97d-3a361b8a66cso1311414f8f.2
+ for <buildroot@buildroot.org>; Sun, 18 May 2025 14:07:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1747602422; x=1748207222;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=tw2LtODUiSuX7D2Zm/UCUqEfmu6lXx7+YW/UIbt4+Ug=;
+ b=FjzKg79l+hLsKMnphbPLI/zqCoV/qHuwL6Rqywlj0VbPJjBSegREbsMXMqGw/UeVbv
+ mTbv9TpekYbReb7jtlaQpXJXf+YNFSA4Ig8tblFwfC5XcvSlwxTF9y0M9d4ioXMNMGum
+ iD61o2xR9AeKnedpWDvq2Y3twIQ1zHGF3LUQ9dKccUVTCKx3XGGbZPssbsWouyG+T46o
+ Fy1pEVRiHYN/gV/lOKFmI8ajrHMl+UNn6smAWPMys8XD/zmeiZqNDcmArqHUYtsuQ316
+ frkVaRmbrda0ERn6IbXTJg+k8yOh24g+5SbfZap1cQHraQQc34vY2OX9lrWtrTtvMz/Y
+ A3tA==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCWdMgwhBiFVcNesEo9bMJ7rUp0QavFxF8UqkKvHK7KsdL3kioyktxqUc+L3qOAtt3vRPaEf77mMjA8=@buildroot.org
+X-Gm-Message-State: AOJu0YyYdKr2Ym2y+RvBUWVUNrb4ZOg+IEd53DsTW9eI9zvMUVVLKr3g
+ gUJ5z7Y5vMu2RwSp8kwBVRXGLlU66SiZBC1trNjF1uAlUSv6uaEsUKGvbaMRacbyitTqf5i467W
+ boJV8
+X-Gm-Gg: ASbGncul4egxZzASGAV8592tVu4M4hVEcmXDovfLtIv/I/cVhEMLj7p6D6UzOwbKYr+
+ SdULCirBNEDPa/Qqg3ol3sOWTYqBZrGg1y34jpUGZipSujw0V/GXDPXUPuvJQ8ZZJw77x4jgxm5
+ 1vUA3Ls/hAWrOYj/Ki0ycjNJr5Qsd/cILOe3wJgI3ywCuwZ0nc92OmHw2wLIybRHovFNMpHn+Uw
+ 7BThufsfIs/PmKBcRdjJ+wwmaaKPhk/fXfJwg2OFzJXO0wQ09yLHWmVpZLiMOSn7JaWCVN2ibWK
+ cNxJGhhDeGxKduc/bds+wx0MXi6x5axU6H8zfUU9fEp0V8r02c6QdewJnMdCvA6p59YWFFN2hBT
+ joqGEFvVe7ZAnv82ECJGO8isidc8HdZwPyLV/u8Omz2ktc5a7a2EmndHgIo/xt7GkGSKp5tLKVB
+ cD33gymmeobafypQ==
+X-Google-Smtp-Source: AGHT+IGpiitHboqKe/PCC5xUanzCLBHW5BKdOF7d0RkE+7NNEl1wGDtO2GH8RwuinYPV4qv8JxMlIQ==
+X-Received: by 2002:a05:6000:2283:b0:3a1:fa6c:4736 with SMTP id
+ ffacd0b85a97d-3a35c85816cmr10017139f8f.57.1747602421867; 
+ Sun, 18 May 2025 14:07:01 -0700 (PDT)
+Received: from ?IPV6:2a01:cb05:949d:5800:83fd:2592:1c9c:7a4f?
+ (2a01cb05949d580083fd25921c9c7a4f.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:949d:5800:83fd:2592:1c9c:7a4f])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-3a35ca4d224sm10689612f8f.12.2025.05.18.14.07.01
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 18 May 2025 14:07:01 -0700 (PDT)
+Message-ID: <68aebffd-9d96-4b49-97d4-687e9a7ea92f@smile.fr>
+Date: Sun, 18 May 2025 23:07:00 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
+Cc: Daniel Lang <dalang@gmx.at>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Joseph Kogut <joseph.kogut@gmail.com>, Romain Naour
+ <romain.naour@gmail.com>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Valentin Korenblit <valentinkorenblit@gmail.com>,
+ El Mehdi YOUNES <elmehdi.younes@smile.fr>
+References: <20250518115519.3649662-1-bernd@kuhls.net>
+ <20250518115519.3649662-3-bernd@kuhls.net>
+Content-Language: en-US
+In-Reply-To: <20250518115519.3649662-3-bernd@kuhls.net>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile.fr; s=google; t=1747602422; x=1748207222; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=tw2LtODUiSuX7D2Zm/UCUqEfmu6lXx7+YW/UIbt4+Ug=;
+ b=2Q1xsGSGFq8Eh+zKNKW9R8S5qE+FnEW9DuFhTuDFXv5Haa2/kzskzhrj5Hia7WhMQc
+ AJONG92FI1fR6ptzuIZ3ZU0kydHE11oq9eEc4INILnUu8bZVV3sgAvxVOQA8MFeJ2/UE
+ iGURMVyB7+2Bm5CyBDf/niTkYcwDBhPDsXG9g=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
+ header.s=google header.b=2Q1xsGSG
+Subject: Re: [Buildroot] [PATCH v2 3/5] package/spirv-llvm-translator: bump
+ version to 20.1.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -57,85 +120,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Romain Naour via buildroot <buildroot@buildroot.org>
+Reply-To: Romain Naour <romain.naour@smile.fr>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=06bb701217c9928995c72b001ad4e48441c46144
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Release notes:
-https://valgrind.org/docs/manual/dist.news.html
-
-Rebased patches for the new version.
-
-Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/valgrind/0001-workaround-SIGSEGV-on-PPC.patch                 | 2 +-
- .../0002-Define-PTRACE_GETSIGINFO-on-PowerPC-when-not-availab.patch   | 2 +-
- package/valgrind/valgrind.hash                                        | 4 ++--
- package/valgrind/valgrind.mk                                          | 2 +-
- 4 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/package/valgrind/0001-workaround-SIGSEGV-on-PPC.patch b/package/valgrind/0001-workaround-SIGSEGV-on-PPC.patch
-index 8a6003cbae..7bc0dd02c6 100644
---- a/package/valgrind/0001-workaround-SIGSEGV-on-PPC.patch
-+++ b/package/valgrind/0001-workaround-SIGSEGV-on-PPC.patch
-@@ -16,7 +16,7 @@ diff --git a/coregrind/m_machine.c b/coregrind/m_machine.c
- index 6110c93..298a00e 100644
- --- a/coregrind/m_machine.c
- +++ b/coregrind/m_machine.c
--@@ -27,6 +27,10 @@
-+@@ -25,6 +25,10 @@
-     The GNU General Public License is contained in the file COPYING.
-  */
-  
-diff --git a/package/valgrind/0002-Define-PTRACE_GETSIGINFO-on-PowerPC-when-not-availab.patch b/package/valgrind/0002-Define-PTRACE_GETSIGINFO-on-PowerPC-when-not-availab.patch
-index 44adfc4190..5e168ad506 100644
---- a/package/valgrind/0002-Define-PTRACE_GETSIGINFO-on-PowerPC-when-not-availab.patch
-+++ b/package/valgrind/0002-Define-PTRACE_GETSIGINFO-on-PowerPC-when-not-availab.patch
-@@ -19,7 +19,7 @@ diff --git a/coregrind/vgdb-invoker-ptrace.c b/coregrind/vgdb-invoker-ptrace.c
- index d65f59a..bdefac2 100644
- --- a/coregrind/vgdb-invoker-ptrace.c
- +++ b/coregrind/vgdb-invoker-ptrace.c
--@@ -72,6 +72,12 @@
-+@@ -81,6 +81,12 @@
-  #   endif
-  #endif
-  
-diff --git a/package/valgrind/valgrind.hash b/package/valgrind/valgrind.hash
-index 203a0770e1..af45bce9a5 100644
---- a/package/valgrind/valgrind.hash
-+++ b/package/valgrind/valgrind.hash
-@@ -1,7 +1,7 @@
- # From https://valgrind.org/downloads/current.html
--sha1  6fc0470fedc0d85dae3e042297cabd13c6100749  valgrind-3.24.0.tar.bz2
-+sha1  5939b8360d272e89bc7b2fcf5213e57a2080afaf  valgrind-3.25.0.tar.bz2
- # locally computed
--sha256  71aee202bdef1ae73898ccf7e9c315134fa7db6c246063afc503aef702ec03bd  valgrind-3.24.0.tar.bz2
-+sha256  295f60291d6b64c0d90c1ce645634bdc5361d39b0c50ecf9de6385ee77586ecc  valgrind-3.25.0.tar.bz2
- 
- # License files
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
-index f0638f464b..791ba2b504 100644
---- a/package/valgrind/valgrind.mk
-+++ b/package/valgrind/valgrind.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--VALGRIND_VERSION = 3.24.0
-+VALGRIND_VERSION = 3.25.0
- VALGRIND_SITE = https://sourceware.org/pub/valgrind
- VALGRIND_SOURCE = valgrind-$(VALGRIND_VERSION).tar.bz2
- VALGRIND_LICENSE = GPL-2.0, GFDL-1.2
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gQmVybmQsIE1laGRpLCBBbGwsCgpMZSAxOC8wNS8yMDI1IMOgIDEzOjU1LCBCZXJuZCBL
+dWhscyBhIMOpY3JpdMKgOgo+IEZyb206IEVsIE1laGRpIFlPVU5FUyA8ZWxtZWhkaS55b3VuZXNA
+c21pbGUuZnI+Cj4gCj4gVXBkYXRlIHNwaXJ2LWxsdm0tdHJhbnNsYXRvciB0byBhbGlnbiB3aXRo
+IExMVk0gMjAuMS4zCj4gCj4gUmVsZWFzZToKPiBodHRwczovL2dpdGh1Yi5jb20vS2hyb25vc0dy
+b3VwL1NQSVJWLUxMVk0tVHJhbnNsYXRvci9yZWxlYXNlcy90YWcvdjIwLjEuMgo+IAo+IFNpZ25l
+ZC1vZmYtYnk6IEVsIE1laGRpIFlPVU5FUyA8ZWxtZWhkaS55b3VuZXNAc21pbGUuZnI+Cj4gU2ln
+bmVkLW9mZi1ieTogQmVybmQgS3VobHMgPGJlcm5kQGt1aGxzLm5ldD4KPiBbQmVybmQ6IHVzZWQg
+J2dpdCBkZXNjcmliZScgdG8gc2V0IHRoZSB2ZXJzaW9uIG51bWJlcl0KPiAtLS0KPiB2MjogdXNl
+ZCAnZ2l0IGRlc2NyaWJlJyB0byBzZXQgdGhlIHZlcnNpb24gbnVtYmVyCj4gCj4gIHBhY2thZ2Uv
+c3BpcnYtbGx2bS10cmFuc2xhdG9yL3NwaXJ2LWxsdm0tdHJhbnNsYXRvci5oYXNoIHwgMiArLQo+
+ICBwYWNrYWdlL3NwaXJ2LWxsdm0tdHJhbnNsYXRvci9zcGlydi1sbHZtLXRyYW5zbGF0b3IubWsg
+ICB8IDQgKystLQo+ICAyIGZpbGVzIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlv
+bnMoLSkKPiAKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9zcGlydi1sbHZtLXRyYW5zbGF0b3Ivc3Bp
+cnYtbGx2bS10cmFuc2xhdG9yLmhhc2ggYi9wYWNrYWdlL3NwaXJ2LWxsdm0tdHJhbnNsYXRvci9z
+cGlydi1sbHZtLXRyYW5zbGF0b3IuaGFzaAo+IGluZGV4IDQ1MDBmYzRmNjIuLjZjZDQ3NzYyZjcg
+MTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9zcGlydi1sbHZtLXRyYW5zbGF0b3Ivc3BpcnYtbGx2bS10
+cmFuc2xhdG9yLmhhc2gKPiArKysgYi9wYWNrYWdlL3NwaXJ2LWxsdm0tdHJhbnNsYXRvci9zcGly
+di1sbHZtLXRyYW5zbGF0b3IuaGFzaAo+IEBAIC0xLDMgKzEsMyBAQAo+ICAjIGxvY2FsbHkgY2Fs
+Y3VsYXRlZAo+IC1zaGEyNTYgIDBhMDBhNzJhNWIwMDRlZWI3M2Y5Yzk2YzljNmJhMmQ2ZGUyMzJj
+YmYzYzIyYTdiMzIyMDQ3NjA0ZDI0NDAyYmEgIHNwaXJ2LWxsdm0tdHJhbnNsYXRvci12MTUuMC4w
+LTQ2LWdlODJlY2MyYmQ3Mjk1NjA0ZmNmMTgyNGU0N2M5NWZhNmEwOWM2ZTYzLnRhci5nego+ICtz
+aGEyNTYgIGNhODljMzVjYmM1NWNmZTY5YWI5ZmExYTJmM2VlNTg1ZDMwY2IyODVlMDFlMmNhZTMw
+OWZlMGUxZjFkZmQ3OWUgIHNwaXJ2LWxsdm0tdHJhbnNsYXRvci12MjAuMS4yLTctZzgzNGRiMWEx
+OTg1YWMzNmQ1YTNlMWI0YjM0ZGMxY2EzZjkxOWFkNWIudGFyLmd6Cj4gIHNoYTI1NiAgZTNiYzM2
+NDQwZmM5MjdjNjJkNWNjMjRlZmVlZmUyMjVhMTRkNGUzNGZmZWIwYzkyZTQzMDYyNWNjZTllZTQ0
+NCAgTElDRU5TRS5UWFQKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9zcGlydi1sbHZtLXRyYW5zbGF0
+b3Ivc3BpcnYtbGx2bS10cmFuc2xhdG9yLm1rIGIvcGFja2FnZS9zcGlydi1sbHZtLXRyYW5zbGF0
+b3Ivc3BpcnYtbGx2bS10cmFuc2xhdG9yLm1rCj4gaW5kZXggZmZjOGE2M2I4OS4uNmJhNThjMzky
+ZiAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL3NwaXJ2LWxsdm0tdHJhbnNsYXRvci9zcGlydi1sbHZt
+LXRyYW5zbGF0b3IubWsKPiArKysgYi9wYWNrYWdlL3NwaXJ2LWxsdm0tdHJhbnNsYXRvci9zcGly
+di1sbHZtLXRyYW5zbGF0b3IubWsKPiBAQCAtNSw4ICs1LDggQEAKPiAgIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMKPiAgCj4gICMgR2VuZXJhdGUgdmVyc2lvbiBzdHJpbmcgdXNpbmc6Cj4gLSMgICBn
+aXQgZGVzY3JpYmUgLS10YWdzIC0tbWF0Y2ggJ3YxNSonIC0tYWJicmV2PTQwIG9yaWdpbi9sbHZt
+X3JlbGVhc2VfMTUwCj4gLVNQSVJWX0xMVk1fVFJBTlNMQVRPUl9WRVJTSU9OID0gdjE1LjAuMC00
+Ni1nZTgyZWNjMmJkNzI5NTYwNGZjZjE4MjRlNDdjOTVmYTZhMDljNmU2Mwo+ICsjICAgZ2l0IGRl
+c2NyaWJlIC0tdGFncyAtLW1hdGNoICd2MjAqJyAtLWFiYnJldj00MCBvcmlnaW4vbGx2bV9yZWxl
+YXNlXzIwMAo+ICtTUElSVl9MTFZNX1RSQU5TTEFUT1JfVkVSU0lPTiA9IHYyMC4xLjItNy1nODM0
+ZGIxYTE5ODVhYzM2ZDVhM2UxYjRiMzRkYzFjYTNmOTE5YWQ1YgoKQ2FuIHdlIHJlYWxseSBkbyB0
+aGlzIHZlcnNpb24gYnVtcCBiZWZvcmUgdXBkYXRpbmcgbGx2bSB0byAyMC4xIChmb3IgdGhlIHNh
+a2Ugb2YKImNvcnJlY3QgYmlzc2VjdGFiaWxpdHkiKT8KClRoZSBsbHZtIHZlcnNpb24gYnVtcCBw
+YXRjaCBpcyBhbHJlYWR5ICJiaWciLiBBdCBsZWFzdCwgaXQncyBlYXNpZXIgdG8gcmV2aWV3IGFz
+IGlzLgoKQmVzdCByZWdhcmRzLApSb21haW4KCgo+ICBTUElSVl9MTFZNX1RSQU5TTEFUT1JfU0lU
+RSA9ICQoY2FsbCBnaXRodWIsS2hyb25vc0dyb3VwLFNQSVJWLUxMVk0tVHJhbnNsYXRvciwkKFNQ
+SVJWX0xMVk1fVFJBTlNMQVRPUl9WRVJTSU9OKSkKPiAgU1BJUlZfTExWTV9UUkFOU0xBVE9SX0xJ
+Q0VOU0UgPSBOQ1NBCj4gIFNQSVJWX0xMVk1fVFJBTlNMQVRPUl9MSUNFTlNFX0ZJTEVTID0gTElD
+RU5TRS5UWFQKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+CmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9s
+aXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
