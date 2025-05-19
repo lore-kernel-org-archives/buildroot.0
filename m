@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21063C61CE8
-	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 08:39:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9215DC61CE8
+	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 08:39:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E9CEE61562;
-	Thu, 12 Jun 2025 08:39:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 55DDD821E4;
+	Thu, 12 Jun 2025 08:39:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 29d5DQjanUa1; Thu, 12 Jun 2025 08:39:40 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MTPR6gLPcPwR; Thu, 12 Jun 2025 08:39:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A3867615A5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 89B3B82184
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A3867615A5;
-	Thu, 12 Jun 2025 08:39:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 89B3B82184;
+	Thu, 12 Jun 2025 08:39:43 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 8ADCD1E0
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:47 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 5EDEA1E0
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CEF68405B7
+ by smtp2.osuosl.org (Postfix) with ESMTP id F053E42113
  for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mEPHCSwjUGoO for <buildroot@buildroot.org>;
- Thu, 12 Jun 2025 08:38:29 +0000 (UTC)
+ id kAxgPmuA6LjX for <buildroot@buildroot.org>;
+ Thu, 12 Jun 2025 08:38:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EAB124208B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6562A405BE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id EAB124208B
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6562A405BE
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E7B8181008; Thu, 12 Jun 2025 08:38:28 +0000 (UTC)
+ id 631DE82D97; Thu, 12 Jun 2025 08:38:27 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 21 May 2025 19:58:59 +0200
+Date: Mon, 19 May 2025 19:02:53 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fd5628e5dc7d8fb38aa8939421f4bf8ae8530dff
-X-Git-Newrev: c2fdcebc6ee6b589665f9903b997b887bc0327d7
+X-Git-Oldrev: bd0975b9429975aa9362d3be502059645e7b7810
+X-Git-Newrev: 5ef0bfa759bf7b9cf8d9b5097200665054b1c864
 X-Patchwork-Hint: ignore
-Message-Id: <20250612083828.E7B8181008@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libnvme: bump to version 1.14
+Message-Id: <20250612083827.631DE82D97@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dhcpcd: bump version to 10.2.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,107 +64,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c2fdcebc6ee6b589665f9903b997b887bc0327d7
+commit: https://git.buildroot.net/buildroot/commit/?id=5ef0bfa759bf7b9cf8d9b5097200665054b1c864
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add local patch to avoid build failure on examples folder that we don't
-need. That build failure is due to missing bits/pthreadtypes.h on musl and
-since we don't need examples at all let's disable its building by passing
--Dexamples=false.
+License hash changed due to year update.
+https://github.com/NetworkConfiguration/dhcpcd/commit/e143ee18f4e2312e0254002dd27bf1da8bd95f27
 
-For release note, see:
-https://github.com/linux-nvme/libnvme/releases/tag/v1.14
+Release notes:
+https://github.com/NetworkConfiguration/dhcpcd/releases/tag/v10.2.3
+https://github.com/NetworkConfiguration/dhcpcd/releases/tag/v10.2.2
+https://github.com/NetworkConfiguration/dhcpcd/releases/tag/v10.2.1
+https://github.com/NetworkConfiguration/dhcpcd/releases/tag/v10.2.0
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-[Julien: add the "Upstream:" link in patch]
+Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .../0001-Make-examples-build-selectable.patch      | 46 ++++++++++++++++++++++
- package/libnvme/libnvme.hash                       |  2 +-
- package/libnvme/libnvme.mk                         |  3 +-
- 3 files changed, 49 insertions(+), 2 deletions(-)
+ package/dhcpcd/dhcpcd.hash | 6 +++---
+ package/dhcpcd/dhcpcd.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libnvme/0001-Make-examples-build-selectable.patch b/package/libnvme/0001-Make-examples-build-selectable.patch
-new file mode 100644
-index 0000000000..d3f59a3240
---- /dev/null
-+++ b/package/libnvme/0001-Make-examples-build-selectable.patch
-@@ -0,0 +1,46 @@
-+From 6c0b9ad7822d9e9c74b787914cb766d27a358258 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Tue, 20 May 2025 22:34:16 +0200
-+Subject: [PATCH] Make examples build selectable
-+
-+Sometimes we don't need to build examples and increase some dependency we
-+don't have(i.e. bits/pthreadtypes.h in musl) so let's add examples option
-+true by default.
-+
-+Upstream: https://github.com/linux-nvme/libnvme/pull/1014
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ meson.build       | 4 +++-
-+ meson_options.txt | 1 +
-+ 2 files changed, 4 insertions(+), 1 deletion(-)
-+
-+diff --git a/meson.build b/meson.build
-+index 279245ac..4d819178 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -282,7 +282,9 @@ subdir('libnvme')
-+ if get_option('tests')
-+     subdir('test')
-+ endif
-+-subdir('examples')
-++if get_option('examples')
-++    subdir('examples')
-++endif
-+ subdir('doc')
-+ 
-+ ################################################################################
-+diff --git a/meson_options.txt b/meson_options.txt
-+index 051b4ae5..48a93dae 100644
-+--- a/meson_options.txt
-++++ b/meson_options.txt
-+@@ -6,6 +6,7 @@ option('rstdir', type : 'string', value : '', description : 'directory for ReST
-+ 
-+ option('docs', type : 'combo', choices : ['false', 'html', 'man', 'rst', 'all'], description : 'install documentation')
-+ option('docs-build', type : 'boolean', value : false,  description : 'build documentation')
-++option('examples', type : 'boolean', value : true, description : 'build examples')
-+ option('tests', type : 'boolean', value : true, description : 'build tests')
-+ 
-+ option('python', type : 'feature', value: 'auto', description : 'Generate libnvme python bindings')
-+-- 
-+2.39.5
-+
-diff --git a/package/libnvme/libnvme.hash b/package/libnvme/libnvme.hash
-index 9496401c61..ae2c478ebc 100644
---- a/package/libnvme/libnvme.hash
-+++ b/package/libnvme/libnvme.hash
-@@ -1,3 +1,3 @@
- # Locally calculated sha256 checksums
--sha256  f083c21f525644a2bcca6d367d96fab813de880cba9f1746a850f3a8692a5980  libnvme-1.13.tar.gz
-+sha256  a7230d6d4959f26cf0c0ef6c9bb479bd94a8c0ec738bf6e164d66c3dc6397e66  libnvme-1.14.tar.gz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/libnvme/libnvme.mk b/package/libnvme/libnvme.mk
-index 8184c9d0a2..b69e9257cf 100644
---- a/package/libnvme/libnvme.mk
-+++ b/package/libnvme/libnvme.mk
-@@ -4,13 +4,14 @@
+diff --git a/package/dhcpcd/dhcpcd.hash b/package/dhcpcd/dhcpcd.hash
+index 34f6419bf7..d820f5e47a 100644
+--- a/package/dhcpcd/dhcpcd.hash
++++ b/package/dhcpcd/dhcpcd.hash
+@@ -1,4 +1,4 @@
+-# sha256 from https://github.com/NetworkConfiguration/dhcpcd/releases/tag/v10.1.0
+-sha256  abc307c63853da3199baa5c1e15fd5ede9d68d068b2a59ca14c5a6768e9cc3b7  dhcpcd-10.1.0.tar.xz
++# sha256 from https://github.com/NetworkConfiguration/dhcpcd/releases/tag/v10.2.3
++sha256  4137a382d1a203bffdf8e757bbdfd0032433d06e5c69a3785b88b83251f89616  dhcpcd-10.2.3.tar.xz
+ # Locally calculated
+-sha256  224b37cd1ef1365bd2ac9eaec9f32fee94e85dd40f95461ebcb21e758357ac1f  LICENSE
++sha256  3aeab006b01c1573b42d4440d7edad0adfe61ad05848ca82e02e745424a2b4fa  LICENSE
+diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
+index 3a4b0e10d7..10707158d9 100644
+--- a/package/dhcpcd/dhcpcd.mk
++++ b/package/dhcpcd/dhcpcd.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBNVME_VERSION = 1.13
-+LIBNVME_VERSION = 1.14
- LIBNVME_SITE = $(call github,linux-nvme,libnvme,v$(LIBNVME_VERSION))
- LIBNVME_LICENSE = LGPL-2.1
- LIBNVME_LICENSE_FILES = COPYING
- LIBNVME_INSTALL_STAGING = YES
- 
- LIBNVME_CONF_OPTS += \
-+	-Dexamples=false \
- 	-Dtests=false
- 
- ifeq ($(BR2_PACKAGE_PYTHON3),y)
+-DHCPCD_VERSION = 10.1.0
++DHCPCD_VERSION = 10.2.3
+ DHCPCD_SOURCE = dhcpcd-$(DHCPCD_VERSION).tar.xz
+ DHCPCD_SITE = https://github.com/NetworkConfiguration/dhcpcd/releases/download/v$(DHCPCD_VERSION)
+ DHCPCD_DEPENDENCIES = host-pkgconf
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
