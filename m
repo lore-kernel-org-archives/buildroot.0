@@ -1,121 +1,124 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD72EC3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 12:14:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80CCDC3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 12:14:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8A6416147C;
-	Mon, 19 May 2025 12:14:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 455DD803F9;
+	Mon, 19 May 2025 12:14:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UkGaf1t4ajPo; Mon, 19 May 2025 12:14:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9BUbUG166gyZ; Mon, 19 May 2025 12:14:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9B58F61039
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 51CFB81260
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9B58F61039;
-	Mon, 19 May 2025 12:14:45 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 45B7FD4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 12:14:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 51CFB81260;
+	Mon, 19 May 2025 12:14:48 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0582D193
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 12:14:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 31D554111F
- for <buildroot@buildroot.org>; Mon, 19 May 2025 12:14:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 712F1803F9
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 12:14:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9akEIOCn1d8u for <buildroot@buildroot.org>;
- Mon, 19 May 2025 12:14:42 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6YpMbHUXKvDU for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 12:14:43 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.18;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E346E410FF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E346E410FF
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F40948124A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F40948124A
 Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E346E410FF
+ by smtp1.osuosl.org (Postfix) with ESMTPS id F40948124A
  for <buildroot@buildroot.org>; Mon, 19 May 2025 12:14:41 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from haruka.home.arpa ([85.22.126.193]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1N95iH-1v3rD60T6F-015aWT; Mon, 19
- May 2025 14:14:39 +0200
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MORAa-1ubRHn3ka6-00PP5g; Mon, 19
+ May 2025 14:14:38 +0200
 To: buildroot@buildroot.org
-Date: Mon, 19 May 2025 14:14:25 +0200
-Message-ID: <20250519121425.1316837-4-fiona.klute@gmx.de>
+Date: Mon, 19 May 2025 14:14:24 +0200
+Message-ID: <20250519121425.1316837-3-fiona.klute@gmx.de>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250519121425.1316837-1-fiona.klute@gmx.de>
 References: <20250519121425.1316837-1-fiona.klute@gmx.de>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:5SftzXQo5revbVTEhR3IsR7RT4SomOvCWJF0x/6QQcSyhrypW0y
- /yXCzGWdMkkFbbBvc1sDKAsbs8u5R8HPR01GDqfhPpEvoimlBf5XgKP8M+Dosf/VRhRJ/jg
- QY1unO3vBqNv1Rz4erhWsCEHeuh5/1pAoYWRhViauOybnqfi94g80m4gKh6JqcybaD8PB93
- +NpJwAPKjXkveeQRG3ziA==
-UI-OutboundReport: notjunk:1;M01:P0:cKfcS8khZGI=;bmQAzjbnqRm0QcI9CJh3FiCK8/L
- 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
- pURhlL71oyVLed1QfRSw08=
+X-Provags-ID: V03:K1:v9vJwWfRG2xxudAuc8ZN/CH/otfI+P9ppFFC1YR+fWr7J7yrrUP
+ 3V5kEgN0QFUtkNsHLx91+UrGwOyYSNnUP9mfB+v2tbB51CgWCff37Dwn3aAi4FcWQhxHj1b
+ rFT33fbzmKQH3aaMl5tBFcR6QjKVquJvapQ7GJt+5a+HwdcMCmlxaFkau/H4/oavvRFOxOC
+ naRQs62j09ZzkKG5Q5Hxw==
+UI-OutboundReport: notjunk:1;M01:P0:ecPzcIcwDR8=;MnuYIB+TczIH6uX9VlkTqiU+Twv
+ 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
+ wo3MPQn9v73pRTpz4tIV7f2aG+ppPwj8+5
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.de; 
- s=s31663417; t=1747656879; x=1748261679; i=fiona.klute@gmx.de;
- bh=UH5Zk4vgkZuK/ONBcU+/VHddlsZfdxj0qGv8jct/JSU=;
+ s=s31663417; t=1747656878; x=1748261678; i=fiona.klute@gmx.de;
+ bh=4GGYQl/19mtqDrU0SRCPOw5kKLAClOTWUrY5Im8haMo=;
  h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
  References:MIME-Version:Content-Transfer-Encoding:cc:
  content-transfer-encoding:content-type:date:from:message-id:
  mime-version:reply-to:subject:to;
- b=BrGmEbZ74APILvrqWkxXk0sXBBsuuS9SLYUsy6IUhjXfpgNrbgxT0P5i9hnAhYrg
- H8NWam8vywih1rtGrcvipmfIEsUCdw975AbWhZHLH7ZezC6zYwfxAU6Ztm5HQ1z1u
- FRO7Q5Fps+eLSXhbyZIF/Cpjokxcgt25YFgzVO71Rz0IJ5dCltNk9vb3MY/GDhqZD
- lKal8hWlTEvWBe+LCurNVgbDN2NUUYdDJo74hjjw5bPXoMLlqF783krUPQ9kTjzor
- hocg6Ryn1H1z4RAAdGrwMP+XAxT72bKMnODOS0dy9uQatlBtI9fSgVfaug3HugPIm
- +dUZ+Jo5JMxb9i79Wg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=AI2hgAalO9qkX6TSs8FB8bHbzrcmdsPMHkblrjB3vo5TdpKkfH3hRtnAqAJlrus8
+ RgKXtrCn7K7Wx9LhEM2DNnMkn8pJnXCHb+6krIsB5mgmoTyZiyx9/JUpaOmXLf076
+ S4LEBhaTMzj7CCcdFKoUuw1asdBf4IorVTPx/eepPCEO57eQyNxQbE0301L5nJ0x4
+ 5tW8ueO6JOq4/cqftv4gQtIofv2YEZeUgLqFK9bLQMuOVUDBKHhymMujj4FoinMhV
+ i8mn9zFHeT3kVQskfJwOXmpD65FgIr2x83RqFvmU6Gmysd9xPR3vTJMgkfHH9ghS3
+ ybU0hBFh5M+UHCXWoQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
- header.a=rsa-sha256 header.s=s31663417 header.b=BrGmEbZ7
-Subject: [Buildroot] [PATCH v5 4/4] package/libglib2: bump version to 2.84.1
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
+ header.s=s31663417 header.b=AI2hgAal
+Subject: [Buildroot] [PATCH v5 3/4] package/gobject-introspection: bump
+ version to 1.84.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -140,41 +143,150 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
 
-Bug fix release, upstream changelog:
-https://gitlab.gnome.org/GNOME/glib/-/blob/2.84.1/NEWS?ref_type=tags
+GOI now has a build option to disable tests [1], so use that and drop
+the "disable tests" patch.
+
+Meson now checks LD_LIBRARY_PATH during configure and sets the result
+when calling g-ir-scanner [2]. This means overriding it in _NINJA_ENV
+does not work any more, set LD_LIBRARY_PATH in _CONF_ENV instead.
+
+The hash for giscanner/scannerlexer.l changed due to small code
+additions.
+
+Upstream changelog:
+https://gitlab.gnome.org/GNOME/gobject-introspection/-/blob/1.84.0/NEWS?ref_type=tags
+
+[1] https://gitlab.gnome.org/GNOME/gobject-introspection/-/commit/3e41addbd0f22024f63cc9c3fbef04ca16f05364
+[2] https://gitlab.gnome.org/GNOME/gobject-introspection/-/commit/d3f684559facd0edc368e3ac6db95b16e28ed743
 
 Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 ---
-Patch added in v3 (new upstream release).
+Changes v3 -> v4:
+* Fix LD_LIBRARY_PATH for g-ir-scanner
 
- package/libglib2/libglib2.hash | 4 ++--
- package/libglib2/libglib2.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .checkpackageignore                           |  3 +-
+ ...> 0001-Add-rpath-links-to-ccompiler.patch} |  0
+ .../0001-disable-tests.patch                  | 34 -------------------
+ .../gobject-introspection.hash                |  6 ++--
+ .../gobject-introspection.mk                  | 13 ++++---
+ 5 files changed, 13 insertions(+), 43 deletions(-)
+ rename package/gobject-introspection/{0002-Add-rpath-links-to-ccompiler.patch => 0001-Add-rpath-links-to-ccompiler.patch} (100%)
+ delete mode 100644 package/gobject-introspection/0001-disable-tests.patch
 
-diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
-index 9bc244ff22..5985c82d8a 100644
---- a/package/libglib2/libglib2.hash
-+++ b/package/libglib2/libglib2.hash
-@@ -1,4 +1,4 @@
--# https://download.gnome.org/sources/glib/2.84/glib-2.84.0.sha256sum
--sha256  f8823600cb85425e2815cfad82ea20fdaa538482ab74e7293d58b3f64a5aff6a  glib-2.84.0.tar.xz
-+# https://download.gnome.org/sources/glib/2.84/glib-2.84.1.sha256sum
-+sha256  2b4bc2ec49611a5fc35f86aca855f2ed0196e69e53092bab6bb73396bf30789a  glib-2.84.1.tar.xz
- # License files, locally calculated
- sha256  fa6f36630bb1e0c571d34b2bbdf188d08495c9dbf58f28cac112f303fc1f58fb  COPYING
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index a1a3954914..baa75fd10b 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -5,7 +5,7 @@
+diff --git a/.checkpackageignore b/.checkpackageignore
+index fe736e3185..78db0350c0 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -521,8 +521,7 @@ package/gnupg/0001-build-Always-use-EXTERN_UNLESS_MAIN_MODULE-pattern.patch lib_
+ package/gnuplot/0001-configure-add-without-demo-option.patch lib_patch.Upstream
+ package/go/go-src/0001-build.go-explicit-option-for-crosscompilation.patch lib_patch.Upstream
+ package/gob2/0001-dont-include-from-prefix.patch lib_patch.Upstream
+-package/gobject-introspection/0001-disable-tests.patch lib_patch.Upstream
+-package/gobject-introspection/0002-Add-rpath-links-to-ccompiler.patch lib_patch.Upstream
++package/gobject-introspection/0001-Add-rpath-links-to-ccompiler.patch lib_patch.Upstream
+ package/gpsd/S50gpsd Shellcheck lib_sysv.Indent lib_sysv.Variables
+ package/gptfdisk/0001-gptcurses-partially-revert-Tweaks-for-building-on-th.patch lib_patch.Upstream
+ package/graphite2/0001-don-t-install-a-libtool-file-with-static-library.patch lib_patch.Upstream
+diff --git a/package/gobject-introspection/0002-Add-rpath-links-to-ccompiler.patch b/package/gobject-introspection/0001-Add-rpath-links-to-ccompiler.patch
+similarity index 100%
+rename from package/gobject-introspection/0002-Add-rpath-links-to-ccompiler.patch
+rename to package/gobject-introspection/0001-Add-rpath-links-to-ccompiler.patch
+diff --git a/package/gobject-introspection/0001-disable-tests.patch b/package/gobject-introspection/0001-disable-tests.patch
+deleted file mode 100644
+index a39f51617b..0000000000
+--- a/package/gobject-introspection/0001-disable-tests.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From c87faf380ddf44da9d624dabd28178c9065f0f76 Mon Sep 17 00:00:00 2001
+-From: Adam Duskett <aduskett@gmail.com>
+-Date: Mon, 3 Feb 2020 10:07:15 -0800
+-Subject: [PATCH] disable tests
+-
+-If introspection data on the host is not built, meson throws the error:
+-"Unknown variable "typelibs". Because tests are not required, removing
+-the subdir tests altogether fixes this issue.
+-
+-Signed-off-by: Adam Duskett <aduskett@gmail.com>
+----
+- meson.build | 6 ------
+- 1 file changed, 6 deletions(-)
+-
+-diff --git a/meson.build b/meson.build
+-index c2cb577f..65ce7adf 100644
+---- a/meson.build
+-+++ b/meson.build
+-@@ -237,12 +237,6 @@ else
+- endif
+- subdir('docs')
+- 
+--# The tests will also run, which is not possible if they
+--# were built for a different architecture.
+--if not meson.is_cross_build()
+--  subdir('tests')
+--endif
+--
+- install_data('Makefile.introspection', install_dir: join_paths(get_option('datadir'), 'gobject-introspection-1.0'))
+- install_data('m4/introspection.m4', install_dir: join_paths(get_option('datadir'), 'aclocal'))
+- 
+--- 
+-2.25.1
+-
+diff --git a/package/gobject-introspection/gobject-introspection.hash b/package/gobject-introspection/gobject-introspection.hash
+index c39c06d102..044216c65f 100644
+--- a/package/gobject-introspection/gobject-introspection.hash
++++ b/package/gobject-introspection/gobject-introspection.hash
+@@ -1,5 +1,5 @@
+-# From https://download.gnome.org/sources/gobject-introspection/1.82/gobject-introspection-1.82.0.sha256sum
+-sha256  0f5a4c1908424bf26bc41e9361168c363685080fbdb87a196c891c8401ca2f09  gobject-introspection-1.82.0.tar.xz
++# From https://download.gnome.org/sources/gobject-introspection/1.84/gobject-introspection-1.84.0.sha256sum
++sha256  945b57da7ec262e5c266b89e091d14be800cc424277d82a02872b7d794a84779  gobject-introspection-1.84.0.tar.xz
+ sha256  faa2e414bd5f91d2d2c39e85c7cc3f2ccde05c3306f96b404f8ed8cf0266c279  COPYING.LGPL
+ sha256  4c1cedcbb4a12ea964f1160dbbf36099e5a59b96129a99a1a1a61f2cb09271fb  COPYING.GPL
+-sha256  fb538e24d22de4f8dab6b48b862be84469bcc089e1cf98f6f46d6f74f6f44655  giscanner/scannerlexer.l
++sha256  60cf20b6532aa2f5622f753a55672630b789c04174acca361033e6f1ad29f8ab  giscanner/scannerlexer.l
+diff --git a/package/gobject-introspection/gobject-introspection.mk b/package/gobject-introspection/gobject-introspection.mk
+index eb46fb61c1..dbf0ee3fa8 100644
+--- a/package/gobject-introspection/gobject-introspection.mk
++++ b/package/gobject-introspection/gobject-introspection.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIBGLIB2_VERSION_MAJOR = 2.84
--LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).0
-+LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).1
- LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
- LIBGLIB2_SITE = https://download.gnome.org/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
- LIBGLIB2_LICENSE = LGPL-2.1+
+-GOBJECT_INTROSPECTION_VERSION_MAJOR = 1.82
++GOBJECT_INTROSPECTION_VERSION_MAJOR = 1.84
+ GOBJECT_INTROSPECTION_VERSION = $(GOBJECT_INTROSPECTION_VERSION_MAJOR).0
+ GOBJECT_INTROSPECTION_SITE = https://download.gnome.org/sources/gobject-introspection/$(GOBJECT_INTROSPECTION_VERSION_MAJOR)
+ GOBJECT_INTROSPECTION_SOURCE = gobject-introspection-$(GOBJECT_INTROSPECTION_VERSION).tar.xz
+@@ -40,7 +40,9 @@ GOBJECT_INTROSPECTION_NINJA_ENV += \
+ # .gir and .typelib files. g-ir-scanner does not use LDFLAGS, and by default,
+ # links to the system-installed libglib2 path. To remedy this issue, defining
+ # LD_LIBRARY_PATH forces g-ir-scanner to use our host installed libglib2 files.
+-HOST_GOBJECT_INTROSPECTION_NINJA_ENV += \
++# As of gobject-introspection version 1.84.0, Meson records the
++# LD_LIBRARY_PATH set during config and passes it to g-ir-scanner.
++HOST_GOBJECT_INTROSPECTION_CONF_ENV = \
+ 	LD_LIBRARY_PATH="$(if $(LD_LIBRARY_PATH),$(LD_LIBRARY_PATH):)$(HOST_DIR)/lib"
+ 
+ # Use the host gi-scanner to prevent the scanner from generating incorrect
+@@ -51,13 +53,16 @@ GOBJECT_INTROSPECTION_CONF_OPTS = \
+ 	-Dgi_cross_ldd_wrapper="$(STAGING_DIR)/usr/bin/g-ir-scanner-lddwrapper" \
+ 	-Dbuild_introspection_data=true \
+ 	-Ddoctool=disabled \
+-	-Dcairo=disabled
++	-Dcairo=disabled \
++	-Dtests=false
++
++HOST_GOBJECT_INTROSPECTION_CONF_OPTS = -Dtests=false
+ 
+ # GI_SCANNER_DISABLE_CACHE=1 prevents g-ir-scanner from writing cache data to ${HOME}
+ GOBJECT_INTROSPECTION_CONF_ENV = \
+ 	GI_SCANNER_DISABLE_CACHE=1
+ 
+-HOST_GOBJECT_INTROSPECTION_CONF_ENV = \
++HOST_GOBJECT_INTROSPECTION_CONF_ENV += \
+ 	GI_SCANNER_DISABLE_CACHE=1
+ 
+ # Make sure g-ir-tool-template uses the host python.
 -- 
 2.49.0
 
