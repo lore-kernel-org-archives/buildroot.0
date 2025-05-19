@@ -1,52 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B124C2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 16:48:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4641FC2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 16:48:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0003F60F22;
-	Mon, 19 May 2025 16:48:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 181D582ACA;
+	Mon, 19 May 2025 16:48:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T-D__xgMzI57; Mon, 19 May 2025 16:48:15 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id THdx5NYoNk1I; Mon, 19 May 2025 16:48:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3EF6060F36
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4484882C8F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3EF6060F36;
-	Mon, 19 May 2025 16:48:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4484882C8F;
+	Mon, 19 May 2025 16:48:18 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1F9F9193
- for <buildroot@buildroot.org>; Mon, 19 May 2025 16:48:08 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 580C3193
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 16:48:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2687F60BD8
- for <buildroot@buildroot.org>; Mon, 19 May 2025 16:48:07 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2A1AF60BD8
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 16:48:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id myfROz-g6goY for <buildroot@buildroot.org>;
+ id 5GvSW3FpqvUU for <buildroot@buildroot.org>;
  Mon, 19 May 2025 16:48:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6783C60E31
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1549760AED
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6783C60E31
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1549760AED
  for <buildroot@buildroot.org>; Mon, 19 May 2025 16:48:06 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2C917874A9; Mon, 19 May 2025 16:48:06 +0000 (UTC)
+ id F2C1B874A5; Mon, 19 May 2025 16:48:05 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
 Date: Mon, 19 May 2025 18:46:13 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 58cf7c51da3ae4804332f68ee934e153d695d047
-X-Git-Newrev: 5fd75bfb02fefdf23d9fe284ff58ed28487edd8e
+X-Git-Oldrev: 90c5270bac3c3d637ac798a6a8a55de58a2b6b67
+X-Git-Newrev: ccf17145024fff8d56f5240227c8df0c233b12fc
 X-Patchwork-Hint: ignore
-Message-Id: <20250519164806.2C917874A9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/gcc: drop stale hash
+Message-Id: <20250519164805.F2C1B874A5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] toolchain/Config.in: add
+ BR2_TOOLCHAIN_GCC_AT_LEAST_15 blind option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,31 +65,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5fd75bfb02fefdf23d9fe284ff58ed28487edd8e
+commit: https://git.buildroot.net/buildroot/commit/?id=ccf17145024fff8d56f5240227c8df0c233b12fc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The hash for the GCC 10.4.0 tarball should have been removed a long
-time ago, when support for GCC 10.x has been removed.
+In order to add gcc 15 support in follow-up commits, introduce
+BR2_TOOLCHAIN_GCC_AT_LEAST_15 symbol.
 
-Fixes: d37a8f3a2e2a387b102f2982d51aca78bcc09727 ("package/gcc: remove gcc 10.x")
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/gcc/gcc.hash | 2 --
- 1 file changed, 2 deletions(-)
+ toolchain/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
-index 7a473cdc02..00da7dd49b 100644
---- a/package/gcc/gcc.hash
-+++ b/package/gcc/gcc.hash
-@@ -1,7 +1,5 @@
- # From https://gcc.gnu.org/pub/gcc/releases/gcc-8.4.0/sha512.sum
- sha512  6de904f552a02de33b11ef52312bb664396efd7e1ce3bbe37bfad5ef617f133095b3767b4804bc7fe78df335cb53bc83f1ac055baed40979ce4c2c3e46b70280  gcc-8.4.0.tar.xz
--# From https://gcc.gnu.org/pub/gcc/releases/gcc-10.4.0/sha512.sum
--sha512  440c08ca746da450d9a1b35e8fd2305cb27e7e6987cd9d0f7d375f3b1fc9e4b0bd7acb3cd7bf795e72fcbead59cdef5b6c152862f5d35cd9fbfe6902101ce648  gcc-10.4.0.tar.xz
- # From https://gcc.gnu.org/pub/gcc/releases/gcc-13.3.0/sha512.sum
- sha512  ed5f2f4c6ed2c796fcf2c93707159e9dbd3ddb1ba063d549804dd68cdabbb6d550985ae1c8465ae9a336cfe29274a6eb0f42e21924360574ebd8e5d5c7c9a801  gcc-13.3.0.tar.xz
- # From https://gcc.gnu.org/pub/gcc/releases/gcc-14.2.0/sha512.sum
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 89eaa7b618..3063bae2b6 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -811,10 +811,15 @@ config BR2_TOOLCHAIN_GCC_AT_LEAST_14
+ 	bool
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_13
+ 
++config BR2_TOOLCHAIN_GCC_AT_LEAST_15
++	bool
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_14
++
+ # This order guarantees that the highest version is set, as kconfig
+ # stops affecting a value on the first matching default.
+ config BR2_TOOLCHAIN_GCC_AT_LEAST
+ 	string
++	default "15"	if BR2_TOOLCHAIN_GCC_AT_LEAST_15
+ 	default "14"	if BR2_TOOLCHAIN_GCC_AT_LEAST_14
+ 	default "13"	if BR2_TOOLCHAIN_GCC_AT_LEAST_13
+ 	default "12"	if BR2_TOOLCHAIN_GCC_AT_LEAST_12
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
