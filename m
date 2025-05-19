@@ -1,124 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A9F1C3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 03:21:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4067C2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 05:33:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B9A1380E81;
-	Mon, 19 May 2025 03:21:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4B9F060C10;
+	Mon, 19 May 2025 05:33:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id G_EwBeIjyFgk; Mon, 19 May 2025 03:21:44 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Hc1ra18oz0IC; Mon, 19 May 2025 05:33:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF02880EBF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 907BE60BF2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EF02880EBF;
-	Mon, 19 May 2025 03:21:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 907BE60BF2;
+	Mon, 19 May 2025 05:33:29 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id D0C2A193
- for <buildroot@buildroot.org>; Mon, 19 May 2025 03:21:42 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id EADCF193
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 05:33:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CD8F9410C9
- for <buildroot@buildroot.org>; Mon, 19 May 2025 03:21:42 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D0470402BC
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 05:33:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CJ1A5NbmgTo5 for <buildroot@buildroot.org>;
- Mon, 19 May 2025 03:21:42 +0000 (UTC)
-X-Greylist: delayed 303 seconds by postgrey-1.37 at util1.osuosl.org;
- Mon, 19 May 2025 03:21:41 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 960A140F5F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 960A140F5F
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=103.168.172.145;
- helo=fout-a2-smtp.messagingengine.com; envelope-from=iliana@buttslol.net;
- receiver=<UNKNOWN> 
-Received: from fout-a2-smtp.messagingengine.com
- (fout-a2-smtp.messagingengine.com [103.168.172.145])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 960A140F5F
- for <buildroot@buildroot.org>; Mon, 19 May 2025 03:21:41 +0000 (UTC)
-Received: from phl-compute-05.internal (phl-compute-05.phl.internal
- [10.202.2.45])
- by mailfout.phl.internal (Postfix) with ESMTP id 6CAFE13801CF;
- Sun, 18 May 2025 23:16:37 -0400 (EDT)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
- by phl-compute-05.internal (MEProxy); Sun, 18 May 2025 23:16:37 -0400
-X-ME-Sender: <xms:lKIqaJp0Drzw5cbQ_BisiQc7YLGExkKsHlCy_2xoxw4-QkkyXX0mVg>
- <xme:lKIqaLod2GCCdxPHvKrDzeLI_pT6iaqok0blEkkDdCMK-OT7GrO5R5ErwXXFSUMjS
- 96H3NkaZbigSbP3Q3Q>
-X-ME-Received: <xmr:lKIqaGMckhGH3TSmINW5T8I4cqLGQ7nrVtr4rJjPpVm1iyRunKsbR1Ustpi_nl3ItxdpTg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefvddtvdelucetufdoteggodetrf
- dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
- pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
- gvnhhtshculddquddttddmnecujfgurheptggguffhjgffvefgkfhfvffosehtqhhmtdhh
- tddvnecuhfhrohhmpehilhhirghnrgcuvghtrghoihhnuceoihhlihgrnhgrsegsuhhtth
- hslhholhdrnhgvtheqnecuggftrfgrthhtvghrnhepueetiefhgefguefhgeefjeetveel
- ieelleffkedtffdtveetjeeitedttdejuddvnecuffhomhgrihhnpehkvghrnhgvlhdroh
- hrghdpsghuihhlughrohhothdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgr
- rhgrmhepmhgrihhlfhhrohhmpehilhhirghnrgessghuthhtshhlohhlrdhnvghtpdhnsg
- gprhgtphhtthhopeegpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegrrhhnohhu
- thesrhhnohhuthdrsggvpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughroh
- hothdrohhrghdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohht
- lhhinhdrtghomhdprhgtphhtthhopegsvghrnhgusehkuhhhlhhsrdhnvght
-X-ME-Proxy: <xmx:lKIqaE503gpaxMabj8KNdX9sDV9CrCn8sD3gHgBn0kIkzqQJOUCEgQ>
- <xmx:lKIqaI5dYZUCrrSp373NcmonNpPhl9cwac8aYvibYmlbARaODJ0vEg>
- <xmx:lKIqaMgFUfgg4aDH73ciZmAA6pvGGoaBO2qKJdGH4Y5Cz5xeiqe7zw>
- <xmx:lKIqaK63rrweuGAmV2bKdR9rgH4C03S81pG-hsrNwXI1r-advjpEgA>
- <xmx:laIqaBSDRYuCXVH7Bn2NOmJSdkkbpdyu-XOb3pJjK_f6UYa0SekV5WFg>
-Feedback-ID: i86d947dc:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 18 May 2025 23:16:35 -0400 (EDT)
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.700.6.1.9\))
-From: iliana etaoin <iliana@buttslol.net>
-In-Reply-To: <abf4bfef-d537-46e7-8d4d-68e934b7e8a7@rnout.be>
-Date: Sun, 18 May 2025 20:16:24 -0700
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Bernd Kuhls <bernd@kuhls.net>
-Message-Id: <185A5F74-35DD-4F40-B7C3-7AA39E06087D@buttslol.net>
-References: <20250516114626.110630-1-thomas.petazzoni@bootlin.com>
- <abf4bfef-d537-46e7-8d4d-68e934b7e8a7@rnout.be>
-To: Arnout Vandecappelle <arnout@rnout.be>,
- buildroot@buildroot.org
-X-Mailer: Apple Mail (2.3731.700.6.1.9)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=buttslol.net; h=
- cc:cc:content-transfer-encoding:content-type:content-type:date
- :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
- :references:reply-to:subject:subject:to:to; s=fm3; t=1747624597;
- x=1747710997; bh=4Nr0UDiCYw/FEzomC81jghJliZoTmScVSNIw2w4wFDY=; b=
- FPQBT0TTZYlBr35OxCZAys/BDmvtov8nGxCl0Px3RGErJMkZPCIFORokXqm+GRG2
- 8cP6zvJcEGeKJoyNvzI835kdpJhq5K8uF39KwKpKFboS4FlMPg0IQ/3L4OUIGEMp
- P4PzPa511Y9UHDH1MqQzyMKDRCfxSV2s6F8/Ny6hkPSc/1sWtOVhwjnBDsPNzw1T
- E3X4sQUxVee3p91ubPmLufcNQ+q1yAdK7XFq1Cp430iC7ogiWbqCjerb063rXskA
- hSHPeNXWJ3oYWlkuf8TWrEtphfCCtgpjwaUCYqVrGruTQCknlhkjLA45VXaPkIK+
- BkeI8XyjuxoUKy8Sju++9w==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
- messagingengine.com; h=cc:cc:content-transfer-encoding
- :content-type:content-type:date:date:feedback-id:feedback-id
- :from:from:in-reply-to:in-reply-to:message-id:mime-version
- :references:reply-to:subject:subject:to:to:x-me-proxy
- :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1747624597; x=
- 1747710997; bh=4Nr0UDiCYw/FEzomC81jghJliZoTmScVSNIw2w4wFDY=; b=m
- iFaG9ZCJsF6FGeqwn5h0Rtxxn0vItD0z8xVWCOBaxd8VglXyvG/oEnKhTJS+FxGh
- +yhTuyVSH/CtXrHZ62r6nwVR0n4kLibu+G6RAm2MDK4OA+gsoQy84a3PIyeoHj0G
- 1Wx5CV5to7cogOQ4pAwOIhVOyIPQpBrDljrDPJJi2sbpa6WxzeqONuRFjqtWDBEE
- p3Pv9+V+4BqrgaHvEQ8HQxWY+8L+2J136AEcP1WHT9rfDcWTCtraOpyXsLjZnO5r
- /04Lx/uZ3W0VO4x2vQf6P2Dycgs7NyEXnQOlscGlxX99uEBtmNIgY1ctEGRBbl76
- FILIDlugn5qfXvNXGtbtg==
+ id 7Yx10NvvMClZ for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 05:33:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.221.237.222;
+ helo=send127.i.mail.ru; envelope-from=fido_max@inbox.ru; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 648D64018E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 648D64018E
+Received: from send127.i.mail.ru (send127.i.mail.ru [89.221.237.222])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 648D64018E
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 05:33:25 +0000 (UTC)
+Received: by exim-smtp-7b66877447-w854h with esmtpa (envelope-from
+ <fido_max@inbox.ru>)
+ id 1uGt7p-000000008kI-2bbu; Mon, 19 May 2025 08:33:22 +0300
+Message-ID: <994831f7-d311-4cf2-b140-fe99c36dc746@inbox.ru>
+Date: Mon, 19 May 2025 08:33:21 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Peter Korsgaard <peter@korsgaard.com>, buildroot@buildroot.org
+References: <20250517161505.3294288-1-peter@korsgaard.com>
+Content-Language: en-US
+In-Reply-To: <20250517161505.3294288-1-peter@korsgaard.com>
+X-Mailru-Src: smtp
+X-4EC0790: 10
+X-7564579A: 646B95376F6C166E
+X-77F55803: 4F1203BC0FB41BD908BCBE83E15C9C15A4C64FF5B7A185310527C34CE1A9E019182A05F5380850404F935F66BF3F1BBA3DE06ABAFEAF6705856139AD2A3DF9ED8E9A87BD3FA7A4424ED41D986C17A953
+X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE711269A7C2F827F16EA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F7900637FE9EFE935CD7C6AE8638F802B75D45FF914D58D5BE9E6BC1A93B80C6DEB9DEE97C6FB206A91F05B253618A06055246042E070BE324C7D3C4130C020CAC97A361BB0A4F435E46E6718B35066C979671628AA50765F790063783E00425F71A4181389733CBF5DBD5E913377AFFFEAFD269176DF2183F8FC7C0B272A53F9BBAC8E28941B15DA834481FCF19DD082D7633A0EF3E4896CB9E6436389733CBF5DBD5E9D5E8D9A59859A8B6325E13D6FBBA02DFCC7F00164DA146DA6F5DAA56C3B73B237318B6A418E8EAB86D1867E19FE14079C09775C1D3CA48CF17B107DEF921CE791DD303D21008E298D5E8D9A59859A8B6D082881546D9349175ECD9A6C639B01B78DA827A17800CE7D151390FFDBF6399731C566533BA786AA5CC5B56E945C8DA
+X-87b9d050: 1
+X-C1DE0DAB: 0D63561A33F958A556F42DDA69DDE3925002B1117B3ED696ADF044D769FD48ABC81EEE05487B0209823CB91A9FED034534781492E4B8EEADD0953842B444AAC3BDAD6C7F3747799A
+X-C8649E89: 1C3962B70DF3F0ADBF74143AD284FC7177DD89D51EBB7742424CF958EAFF5D571004E42C50DC4CA955A7F0CF078B5EC49A30900B95165D346BEB6F73FB9D1E4A664DD9B14471B259813A649F1CC20A088EE735693F70D57F52624AB74D21797A1D7E09C32AA3244CEA495CE8E3EF49AB77DD89D51EBB7742D4FC13904A15E30FEA455F16B58544A2E30DDF7C44BCB90D57ADA2CBCE38F05762A0BE504FE5E636F1E3461735CEBA253FCF178C6DD14203
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu53w8ahmwBjZKM/YPHZyZHvz5uv+WouB9+ObcCpyrx6l7KImUglyhkEat/+ysWwi0gdhEs0JGjl6ggRWTy1haxBpVdbIX1nthFXMZebaIdHP2ghjoIc/363UZI6Kf1ptIMVT0GoR8ZYDe7QWTycGRvSbY=
+X-Mailru-Sender: 689FA8AB762F7393FE9E42A757851DB6ABE59A84D17259CE0102773862B8F25E5C189CDCD317D2FB90DE4A6105A3658D481B2AED7BCCC0A49AE3A01A4DD0D55C6C99E19F044156F45FEEDEB644C299C0ED14614B50AE0675
+X-Mras: Ok
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=inbox.ru; 
+ s=mail4; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:References
+ :To:Subject:MIME-Version:Date:Message-ID:From:Sender:Reply-To:To:Cc:
+ Content-Type:Content-Transfer-Encoding:Content-ID:Content-Description:
+ Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+ List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
+ List-Archive:X-Cloud-Ids:Disposition-Notification-To;
+ bh=gM6LG+g0ClHBC/8UuNQMtqR3OM2joUgRV3tGlRDCz0c=; t=1747632806; x=1747722806; 
+ b=Uppi0BomF3goAfgo4ypzzo/W3aDupkxZ5dhX7Nf2i1uwmWoZDK0FJ3P6/PRUZW73qL56QUrfn/U
+ pRnTO4zcZ7uaReVKmEQ1oHnDkhZteZY+xQBKqK6CqkMJ4D07Ia1uJM3YwXaCATLWQca6MH8rbZg2U
+ fSzHyWSSscoZuEFVyj7clrmZRMDpgyYrVp9j64j/NEMbKbgm1tdOQkNIbQAEP44T2ZYfVUolf0lLb
+ Xiik1vvdPgJRY8Lw1Vb/t/8t6GGtHEQ3qYyVV+XEjrHEaSbcY/QaMqkjMzA6VG4YGe+OKC5v/D3oc
+ RK9OPkW7qF3EP82Ooz+djiX2aAiGIyqfS8iw==;
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=buttslol.net
+ dmarc=pass (p=reject dis=none)
+ header.from=inbox.ru
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key, unprotected) header.d=buttslol.net
- header.i=@buttslol.net header.a=rsa-sha256 header.s=fm3 header.b=FPQBT0TT; 
  dkim=pass (2048-bit key,
- unprotected) header.d=messagingengine.com header.i=@messagingengine.com
- header.a=rsa-sha256 header.s=fm3 header.b=miFaG9ZC
-Subject: Re: [Buildroot] [PATCH] package/libcap: backport upstream patch to
- fix build on Xtensa
+ unprotected) header.d=inbox.ru header.i=@inbox.ru header.a=rsa-sha256
+ header.s=mail4 header.b=Uppi0Bom
+X-Mailman-Original-Authentication-Results: exim-smtp-7b66877447-w854h;
+ auth=pass
+ smtp.auth=fido_max@inbox.ru smtp.mailfrom=fido_max@inbox.ru
+Subject: Re: [Buildroot] [PATCH] package/postgresql: security bump to
+ version 17.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -130,35 +95,31 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+From: Maxim Kochetkov via buildroot <buildroot@buildroot.org>
+Reply-To: Maxim Kochetkov <fido_max@inbox.ru>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-> On May 18, 2025, at 07:41, Arnout Vandecappelle via buildroot <buildroot@buildroot.org> wrote:
+17.05.2025 19:15, Peter Korsgaard wrote:
+> Fixes the following security issue:
 > 
+> CVE-2025-4207: PostgreSQL GB18030 encoding validation can read one byte past
+> end of allocation for text that fails validation
 > 
+> A buffer over-read in PostgreSQL GB18030 encoding validation allows a
+> database input provider to achieve temporary denial of service on platforms
+> where a 1-byte over-read can elicit process termination.  This affects the
+> database server and also libpq.
 > 
-> On 16/05/2025 13:46, Thomas Petazzoni via buildroot wrote:
->> Following the bump of libcap to version 2.76 in commit
->> e2eb2ee58b9f70ebb83231537cca19bd28fa48de, the build started failing on
->> Xtensa. The bug was reported upstream at
->> https://bugzilla.kernel.org/show_bug.cgi?id=219915 and was
->> subsequently fixed by upstream commit:
->>   https://git.kernel.org/pub/scm/libs/libcap/libcap.git/commit/?id=6cdd8cd72ebcedd6b1b6c989a7e5722d5d87f35c
->> Which we backport in this commit.
->> Fixes:
->>   https://autobuild.buildroot.org/results/b9ff9258f407898eeee80dd8cc4dd1d777f44c06
->> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> https://www.postgresql.org/about/news/postgresql-175-169-1513-1418-and-1321-released-3072/
 > 
-> Applied to 2025.02.x, thanks.
-> 
-> Regards,
-> Arnout
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-2025.02.x still has libcap 2.73. I don't think this patch should have been applied to the stable branch; libcap no longer builds successfully for me in 2025.02.2.
 
-iliana
+Reviewed-by: Maxim Kochetkov <fido_max@inbox.ru>
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
