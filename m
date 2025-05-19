@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FC30C71136
-	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 08:39:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B3AFC61CE8
+	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 08:39:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4F06A6146D;
-	Thu, 12 Jun 2025 08:39:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D9C6D61421;
+	Thu, 12 Jun 2025 08:39:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N6QOW_CyOqyt; Thu, 12 Jun 2025 08:39:20 +0000 (UTC)
+ id 7a4s2IQPWlc2; Thu, 12 Jun 2025 08:39:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8757761220
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 09FE161459
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8757761220;
-	Thu, 12 Jun 2025 08:39:19 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 2B96C1E0
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 09FE161459;
+	Thu, 12 Jun 2025 08:39:22 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 10D0427A
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 190A7406C9
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:34 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 476C641700
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MSMHWR7iZkEm for <buildroot@buildroot.org>;
- Thu, 12 Jun 2025 08:38:33 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wXh7hLiGlwrX for <buildroot@buildroot.org>;
+ Thu, 12 Jun 2025 08:38:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 67E2140794
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 85A1F405C6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 67E2140794
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:33 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 85A1F405C6
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 59BF6811D1; Thu, 12 Jun 2025 08:38:33 +0000 (UTC)
+ id 82B3882D97; Thu, 12 Jun 2025 08:38:27 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 7 Jun 2025 21:44:36 +0200
+Date: Mon, 19 May 2025 19:13:17 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: dba2912be3096ae815c03aa4552dbcbc9cd46f0a
-X-Git-Newrev: d2a82364ac923df26cfcd30edd3d755d90923323
+X-Git-Oldrev: 7f3329b7fd2bf1983c5c48dc514a16d67b2155a3
+X-Git-Newrev: 510481455470dce634594e0bb3b768c02b7506dd
 X-Patchwork-Hint: ignore
-Message-Id: <20250612083833.59BF6811D1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/opencl-icd-loader: new package
+Message-Id: <20250612083827.82B3882D97@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/nmap: bump to version 7.97
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,112 +64,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d2a82364ac923df26cfcd30edd3d755d90923323
+commit: https://git.buildroot.net/buildroot/commit/?id=510481455470dce634594e0bb3b768c02b7506dd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This adds the OpenCL installable client driver (ICD) loader
-which provides the 'libOpenCL.so' shared library needed to
-run OpenCL programs.
+Changelog:
+https://nmap.org/changelog.html#7.97
+https://nmap.org/changelog.html#7.96
 
-Mesa3D can offer opencl implementations (such as rusticl),
-but it does not provide 'libOpenCL.so'.
-
-Without it, programs like 'clinfo' fail to build not
-finding 'libOpenCL.so'.
-
-see:
-https://github.com/KhronosGroup/OpenCL-ICD-Loader
-
-Signed-off-by: El Mehdi YOUNES <elmehdi.younes@smile.fr>
-[Julien: add Medhi in DEVELOPERS for this package]
+Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- DEVELOPERS                                       |  1 +
- package/Config.in                                |  1 +
- package/opencl-icd-loader/Config.in              | 12 ++++++++++++
- package/opencl-icd-loader/opencl-icd-loader.hash |  3 +++
- package/opencl-icd-loader/opencl-icd-loader.mk   | 22 ++++++++++++++++++++++
- 5 files changed, 39 insertions(+)
+ package/nmap/nmap.hash | 6 +++---
+ package/nmap/nmap.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index ccfc8d4e0d..7031087157 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -913,6 +913,7 @@ F:	package/docopt-cpp/
+diff --git a/package/nmap/nmap.hash b/package/nmap/nmap.hash
+index 4f6ea20731..e9bce1a01f 100644
+--- a/package/nmap/nmap.hash
++++ b/package/nmap/nmap.hash
+@@ -1,6 +1,6 @@
+-# From https://nmap.org/dist/sigs/nmap-7.95.tar.bz2.digest.txt (lowercase)
+-sha256  e14ab530e47b5afd88f1c8a2bac7f89cd8fe6b478e22d255c5b9bddb7a1c5778  nmap-7.95.tar.bz2
+-sha512  fd95a8bc627a2b8b507353f761dc9fdc8e880a0dd2d75a51b9cb3ec664318796af9bb16a6ff9a1358bd77ad669c2a54e333be630f201f69287692a7d2d41c17e  nmap-7.95.tar.bz2
++# From https://nmap.org/dist/sigs/nmap-7.97.tar.bz2.digest.txt (lowercase)
++sha256  af98f27925c670c257dd96a9ddf2724e06cb79b2fd1e0d08c9206316be1645c0  nmap-7.97.tar.bz2
++sha512  050241744c311f5fc16297e1698aded2a9fdc78eb7a0954d1c70f7713ef6e1b07f3fcbf28a6a53f43785b1ae710aadf10237d1d0bd8855c6b3c423da4d35961c  nmap-7.97.tar.bz2
  
- N:	El Mehdi YOUNES <elmehdi.younes@smile.fr>
- F:	package/opencl-headers/
-+F:	package/opencl-icd-loader/
+ # Locally calculated
+ sha256  9d9a9a763c0e6145172cfe7d8483e23b38ce60b6c79a82e4894242917bdae6d3  LICENSE
+diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
+index 077840b192..a944627b38 100644
+--- a/package/nmap/nmap.mk
++++ b/package/nmap/nmap.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- N:	Eloi Bail <eloi.bail@savoirfairelinux.com>
- F:	package/bayer2rgb-neon/
-diff --git a/package/Config.in b/package/Config.in
-index 508cca23fc..10f6856dea 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1789,6 +1789,7 @@ menu "Graphics"
- 	source "package/menu-cache/Config.in"
- 	source "package/opencl-clhpp/Config.in"
- 	source "package/opencl-headers/Config.in"
-+	source "package/opencl-icd-loader/Config.in"
- 	source "package/opencv3/Config.in"
- 	source "package/opencv4/Config.in"
- 	source "package/opencv4-contrib/Config.in"
-diff --git a/package/opencl-icd-loader/Config.in b/package/opencl-icd-loader/Config.in
-new file mode 100644
-index 0000000000..405dc5401a
---- /dev/null
-+++ b/package/opencl-icd-loader/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_OPENCL_ICD_LOADER
-+	bool "OpenCL-ICD-Loader"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_PACKAGE_HAS_LIBOPENCL
-+	select BR2_PACKAGE_OPENCL_HEADERS
-+	help
-+	  OpenCL defines an Installable Client Driver (ICD) mechanism to
-+	  allow developers to build applications against an Installable
-+	  Client Driver loader (ICD loader) rather than linking their
-+	  applications against a specific OpenCL implementation.
-+
-+	  https://github.com/KhronosGroup/OpenCL-ICD-Loader
-diff --git a/package/opencl-icd-loader/opencl-icd-loader.hash b/package/opencl-icd-loader/opencl-icd-loader.hash
-new file mode 100644
-index 0000000000..da9f75b63a
---- /dev/null
-+++ b/package/opencl-icd-loader/opencl-icd-loader.hash
-@@ -0,0 +1,3 @@
-+# locally generated
-+sha256  95f2f0cda375b13d2760290df044ebea9c6ff954a7d7faa0867422442c9174dc  OpenCL-ICD-Loader-2024.10.24.tar.gz
-+sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
-diff --git a/package/opencl-icd-loader/opencl-icd-loader.mk b/package/opencl-icd-loader/opencl-icd-loader.mk
-new file mode 100644
-index 0000000000..cb3d7e462d
---- /dev/null
-+++ b/package/opencl-icd-loader/opencl-icd-loader.mk
-@@ -0,0 +1,22 @@
-+################################################################################
-+#
-+# opencl-icd-loader
-+#
-+################################################################################
-+
-+# The opencl-headers, opencl-icd-loader, and opencl-clhpp packages
-+# must always be updated together to compatible versions.
-+# Version desynchronization may result in build or runtime errors.
-+# When updating one of them, make sure to check and update the others.
-+OPENCL_ICD_LOADER_VERSION = 2024.10.24
-+OPENCL_ICD_LOADER_SOURCE = OpenCL-ICD-Loader-$(OPENCL_ICD_LOADER_VERSION).tar.gz
-+OPENCL_ICD_LOADER_SITE = $(call github,KhronosGroup,OpenCL-ICD-Loader,v$(OPENCL_ICD_LOADER_VERSION))
-+OPENCL_ICD_LOADER_LICENSE = Apache-2.0
-+OPENCL_ICD_LOADER_LICENSE_FILES = LICENSE
-+OPENCL_ICD_LOADER_INSTALL_STAGING = YES
-+
-+OPENCL_ICD_LOADER_DEPENDENCIES = opencl-headers
-+
-+OPENCL_ICD_LOADER_CONF_OPTS += -DOPENCL_ICD_LOADER_HEADERS_DIR=$(STAGING_DIR)/usr/include
-+
-+$(eval $(cmake-package))
+-NMAP_VERSION = 7.95
++NMAP_VERSION = 7.97
+ NMAP_SITE = https://nmap.org/dist
+ NMAP_SOURCE = nmap-$(NMAP_VERSION).tar.bz2
+ NMAP_DEPENDENCIES = liblinear libpcap
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
