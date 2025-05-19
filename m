@@ -1,51 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68724C3DA6D
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 07:58:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 016DDC2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 07:58:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3404F405B5;
-	Mon, 19 May 2025 07:58:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B35CB60EC6;
+	Mon, 19 May 2025 07:58:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aID1BAGIAVlC; Mon, 19 May 2025 07:58:24 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id p-8VEUnPdubJ; Mon, 19 May 2025 07:58:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7000F405FA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA04A60EC0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7000F405FA;
-	Mon, 19 May 2025 07:58:24 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id DBB48E4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 07:58:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DA04A60EC0;
+	Mon, 19 May 2025 07:58:25 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1A6AAE4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 07:58:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D838F408D2
- for <buildroot@buildroot.org>; Mon, 19 May 2025 07:58:22 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0043D405FA
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 07:58:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U6yu5MwyQ2U2 for <buildroot@buildroot.org>;
+ id 8oOzmD_m5QHL for <buildroot@buildroot.org>;
  Mon, 19 May 2025 07:58:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A508405FA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F9E7405B5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3A508405FA
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2F9E7405B5
  for <buildroot@buildroot.org>; Mon, 19 May 2025 07:58:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 369148015C; Mon, 19 May 2025 07:58:22 +0000 (UTC)
+ id 28629873CD; Mon, 19 May 2025 07:58:22 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 19 May 2025 09:57:51 +0200
+Date: Mon, 19 May 2025 09:57:25 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 43a74db62155d6adb727e57f29da5341eec56216
-X-Git-Newrev: b55957fa65a551be367c32f2710be56dabb63632
+X-Git-Oldrev: 8a5bab93642fa8ce4649c82fddf63efd4c60a9b8
+X-Git-Newrev: 43a74db62155d6adb727e57f29da5341eec56216
 X-Patchwork-Hint: ignore
-Message-Id: <20250519075822.369148015C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] CHANGES: Update for 2025.02.3
+Message-Id: <20250519075822.28629873CD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] docs/website/{download,
+ news}.html: update for 2025.02.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,28 +66,100 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b55957fa65a551be367c32f2710be56dabb63632
+commit: https://git.buildroot.net/buildroot/commit/?id=43a74db62155d6adb727e57f29da5341eec56216
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-(cherry picked from commit eee9775d124d955b4146f73273ce1fddd82e8f6b)
 ---
- CHANGES | 5 +++++
- 1 file changed, 5 insertions(+)
+ docs/website/download.html | 18 +++++++++---------
+ docs/website/news.html     | 20 ++++++++++++--------
+ 2 files changed, 21 insertions(+), 17 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 14605e8eca..cdf036f7de 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,8 @@
-+2025.02.3, released May 19th, 2025
-+	Build issues and other problems solved for packages:
-+
-+        libcap
-+
- 2025.02.2, released May 18th, 2025
+diff --git a/docs/website/download.html b/docs/website/download.html
+index ff2a615054..5eebc8f54c 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -8,37 +8,37 @@
+     <div class="panel-heading">Download</div>
+     <div class="panel-body">
  
- 	Important / security related fixes:
+-      <h3 style="text-align: center;">Latest stable / long term support release: <b>2025.02.2</b></h3>
++      <h3 style="text-align: center;">Latest stable / long term support release: <b>2025.02.3</b></h3>
+ 
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2025.02.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2025.02.3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2025.02.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2025.02.3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+-	  <h3><a href="/downloads/buildroot-2025.02.2.tar.gz">buildroot-2025.02.2.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2025.02.2.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2025.02.3.tar.gz">buildroot-2025.02.3.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2025.02.3.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2025.02.2.tar.xz"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2025.02.3.tar.xz"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2025.02.2.tar.xz"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2025.02.3.tar.xz"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2025.02.2.tar.xz">buildroot-2025.02.2.tar.xz</a></h3>
+-	  <p><a href="/downloads/buildroot-2025.02.2.tar.xz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2025.02.3.tar.xz">buildroot-2025.02.3.tar.xz</a></h3>
++	  <p><a href="/downloads/buildroot-2025.02.3.tar.xz.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+ <!--
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 6b6edeee09..be620ebf05 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -13,17 +13,21 @@
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
+       <div class="timeline-heading">
+-	<h4 class="timeline-title">2025.02.2 released</h4>
+-	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>22 April 2025</small></p>
++	<h4 class="timeline-title">2025.02.3 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>19 May 2025</small></p>
+       </div>
+       <div class="timeline-body">
+-	<p>The 2025.02.2 bugfix release is out, fixing a number of important /
+-	  security related issues discovered since the 2025.02 release. See the
+-	  <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2025.02.2/CHANGES">CHANGES</a>
+-	  file for more details, read the
+-	  <a href="https://lore.kernel.org/buildroot/49d039c0-8121-4a91-8a69-889376f85c71@rnout.be/T/#u">announcement</a>
++	<p>The 2025.02.3 bugfix release is out, fixing a number of important /
++	  security related issues discovered since the 2025.02 release. It
++	  replaces the 2025.02.2 release which was made the day before but
++	  which was unfortunately broken. See the
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2025.02.3/CHANGES">CHANGES</a>
++	  file for more details, read the announcement for
++	  <a href="https://lore.kernel.org/buildroot/49d039c0-8121-4a91-8a69-889376f85c71@rnout.be/T/#u">2025.02.2</a>
++	  and
++	  <a href="https://lore.kernel.org/buildroot/862f82a4-c0bf-4ee0-b406-872a9c97df4b@rnout.be/T/#u">2025.02.3</a>
+ 	  and go to the <a href="/downloads/">downloads page</a> to pick up the
+-	  <a href="/downloads/buildroot-2025.02.2.tar.xz">2025.02.2 release</a>.</p>
++	  <a href="/downloads/buildroot-2025.02.3.tar.xz">2025.02.3 release</a>.</p>
+       </div>
+     </div>
+   </li>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
