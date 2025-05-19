@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DB10C3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:06:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6552C2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:06:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6E867712CC;
-	Mon, 19 May 2025 11:06:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 03F1A84AEA;
+	Mon, 19 May 2025 11:06:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4tmJxTvCVHNZ; Mon, 19 May 2025 11:06:32 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zYuI8lu-LKCS; Mon, 19 May 2025 11:06:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A2AD06FBEF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3EAFE84AE7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A2AD06FBEF;
-	Mon, 19 May 2025 11:06:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3EAFE84AE7;
+	Mon, 19 May 2025 11:06:31 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 7BC99D4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:49:56 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1EE32E4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:49:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D674E423D7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 906D4423CB
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aI0foKFsfItC for <buildroot@buildroot.org>;
+ id 5yev4xFIgEvm for <buildroot@buildroot.org>;
  Mon, 19 May 2025 10:40:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4BBE2423FD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A2144124F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4BBE2423FD
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7A2144124F
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4A5D8872E7; Mon, 19 May 2025 10:40:11 +0000 (UTC)
+ id 78D3982A2E; Mon, 19 May 2025 10:40:11 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 18 May 2025 23:06:44 +0200
+Date: Mon, 19 May 2025 12:33:23 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b5cd550cfda9f1d2171525bf9df438ef4a1b2059
-X-Git-Newrev: 8a5bab93642fa8ce4649c82fddf63efd4c60a9b8
+X-Git-Oldrev: b55957fa65a551be367c32f2710be56dabb63632
+X-Git-Newrev: 37a715969f778322861a577ab345d364b2df8d97
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104011.4A5D8872E7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/smartmontools: bump
- version to 7.5
+Message-Id: <20250519104011.78D3982A2E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] Update for 2025.05-rc1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,56 +58,200 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8a5bab93642fa8ce4649c82fddf63efd4c60a9b8
+commit: https://git.buildroot.net/buildroot/commit/?id=37a715969f778322861a577ab345d364b2df8d97
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release notes:
-https://www.smartmontools.org/browser/tags/RELEASE_7_5/smartmontools/NEWS
-
-Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/smartmontools/smartmontools.hash | 8 ++++----
- package/smartmontools/smartmontools.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ CHANGES                    | 64 ++++++++++++++++++++++++++++++++++++++++++++++
+ Makefile                   |  4 +--
+ docs/website/download.html | 22 ++++++++--------
+ docs/website/news.html     | 21 +++++++++++++++
+ 4 files changed, 98 insertions(+), 13 deletions(-)
 
-diff --git a/package/smartmontools/smartmontools.hash b/package/smartmontools/smartmontools.hash
-index b4e18f9002..ecc2c9d089 100644
---- a/package/smartmontools/smartmontools.hash
-+++ b/package/smartmontools/smartmontools.hash
-@@ -1,7 +1,7 @@
--# From http://sourceforge.net/projects/smartmontools/files/smartmontools/7.4/
--md5  178d31a6ff5256c093227ab45a3f52aa  smartmontools-7.4.tar.gz
--sha1  b0d7c9ca80768059607b92bf4e373e2822300d3f  smartmontools-7.4.tar.gz
-+# From http://sourceforge.net/projects/smartmontools/files/smartmontools/7.5/
-+md5  38c38b0b82db7fc4906cdd50d15a7931  smartmontools-7.5.tar.gz
-+sha1  9b0ca96931d6184da34d68bbe9a785713f5a8474  smartmontools-7.5.tar.gz
+diff --git a/CHANGES b/CHANGES
+index cdf036f7de..0f36dc70a1 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,67 @@
++2025.05-rc1, released May 19th, 2025
++
++	Fixes all over the tree and package updates.
++
++	Download:
++
++	- Rust updated to version 1.86.0, which has slightly changed
++	  the cargo fetching behaviour, so the generated tarballs now
++	  use a -cargo4 suffix to reflect that.
++
++	- Subversion download logic is now reproducible with non-US
++	  locales
++
++	- Sources can now be fetched from a smb:// location (using
++	  curl).
++
++	Dependencies:
++
++	- AWK is now required on the build host.
++
++	Toolchains:
++
++	- Bootlin ARMv7-A toolchains are now also available for
++	  ARMv8-A CPUs in 32bit mode
++
++	Misc:
++
++	- /etc/resolv.conf symlink now points to /run rather than /tmp
++
++	- support/scripts/pkg-stats can now report stale CVE entries,
++	  E.G. entries in <PKG>_IGNORE_CVES that are no longer needed
++	  after a NVD update.
++
++	New defconfigs: Engicam PX30 SOM, Freescale i.IM 91 EVK and 93
++	Freedom, HiFive Unmatched, Pine64 ROCKPro64 EBBR boot,
++	Raspberrypi 2 in 64bit mode, Sipeed LicheePi 4A
++
++	New packages: aardvark-dns, amazon-ecr-credential-helper,
++	casync-nano, cgroupfs-v2-mount, docker-credential-acr-env,
++	docker-credential-gcr, grout, lowdown, lpac,
++	mender-update-modules, netavark, passt, podman,
++	python-aniso8601, python-cachelib, python-emailproxy,
++	python-flask-caching, python-flask-restx, python-mypy,
++	python-pyproj, python-simple-pid, python-smbus2,
++	python-types-psutil, python-types-setuptools,
++	python-typing-inspection, python-tzlocal,
++	qoriq-ddr-phy-binary, qoriq-firmware-inphi, qoriq-mc-binary,
++	qoriq-mc-utils, sane-airscan, sipeed-lpi4abin, ufs-utils,
++	xilinx-fpgautil
++
++	Issues resolved:
++
++	- openh264's build/ should not be removed
++	  https://gitlab.com/buildroot.org/buildroot/-/issues/64
++
++	- package/dbus: incorrect session bus configuration file..
++	  https://gitlab.com/buildroot.org/buildroot/-/issues/67
++
++	- Update pkcs11-tool to v1.9.1
++	  https://gitlab.com/buildroot.org/buildroot/-/issues/109
++
++	- netsnmp: unexpected header length in /proc/net/snmp...
++	  https://gitlab.com/buildroot.org/buildroot/-/issues/110
++
+ 2025.02.3, released May 19th, 2025
+ 	Build issues and other problems solved for packages:
  
- # Locally computed
--sha256  e9a61f641ff96ca95319edfb17948cd297d0cd3342736b2c49c99d4716fb993d  smartmontools-7.4.tar.gz
-+sha256  690b83ca331378da9ea0d9d61008c4b22dde391387b9bbad7f29387f2595f76e  smartmontools-7.5.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/smartmontools/smartmontools.mk b/package/smartmontools/smartmontools.mk
-index 18a1417681..557aec1efd 100644
---- a/package/smartmontools/smartmontools.mk
-+++ b/package/smartmontools/smartmontools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/Makefile b/Makefile
+index c0a41cabd5..c14023fd98 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,9 +92,9 @@ all:
+ .PHONY: all
  
--SMARTMONTOOLS_VERSION = 7.4
-+SMARTMONTOOLS_VERSION = 7.5
- SMARTMONTOOLS_SITE = http://downloads.sourceforge.net/project/smartmontools/smartmontools/$(SMARTMONTOOLS_VERSION)
- SMARTMONTOOLS_LICENSE = GPL-2.0+
- SMARTMONTOOLS_LICENSE_FILES = COPYING
+ # Set and export the version string
+-export BR2_VERSION := 2025.05-git
++export BR2_VERSION := 2025.05-rc1
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1742234000
++BR2_VERSION_EPOCH = 1747650000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 5eebc8f54c..5e04c347c3 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -75,41 +75,41 @@
+ 	  <p><a href="/downloads/buildroot-2024.11.2.tar.xz.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+-
+-      <h3 style="text-align: center;">Latest release candidate: <b>2025.02-rc2</b></h3>
++-->
++      <h3 style="text-align: center;">Latest release candidate: <b>2025.05-rc1</b></h3>
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2025.02-rc2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2025.05-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2025.02-rc2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2025.05-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2025.02-rc2.tar.gz">buildroot-2025.02-rc2.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2025.02-rc2.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2025.05-rc1.tar.gz">buildroot-2025.05-rc1.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2025.05-rc1.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2025.02-rc2.tar.xz"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2025.05-rc1.tar.xz"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2025.02-rc2.tar.xz"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2025.05-rc1.tar.xz"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2025.02-rc2.tar.xz">buildroot-2025.02-rc2.tar.xz</a></h3>
+-	  <p><a href="/downloads/buildroot-2025.02-rc2.tar.xz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2025.05-rc1.tar.xz">buildroot-2025.05-rc1.tar.xz</a></h3>
++	  <p><a href="/downloads/buildroot-2025.05-rc1.tar.xz.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+--->
++
+       This and earlier releases (and their PGP signatures) can always be downloaded from
+       <a href="/downloads/">http://buildroot.net/downloads/</a>.
+     </div>
+diff --git a/docs/website/news.html b/docs/website/news.html
+index be620ebf05..6d638c889e 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,27 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li>
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2025.05-rc1 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>19 May 2025</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>We have a new release candidate! Lots of changes all over the tree, see the
++          <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2025.05-rc1/CHANGES">CHANGES</a>
++          file for more details.</p>
++
++	<p>Go to the <a href="/downloads/">downloads page</a> to pick up the
++          <a href="/downloads/buildroot-2025.05-rc1.tar.xz">2025.05-rc1
++            release</a>, and report any problems found to the
++          <a href="support.html">mailing list</a> or
++          <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li class="timeline-inverted">
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
