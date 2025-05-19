@@ -1,83 +1,99 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C57FC2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 20:29:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0370FC3ABDD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 21:06:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AD11D806B1;
-	Mon, 19 May 2025 20:29:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5037140D70;
+	Mon, 19 May 2025 21:06:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rXZJq0pME7bx; Mon, 19 May 2025 20:29:17 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id E-NuFXFgt630; Mon, 19 May 2025 21:06:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4B5EF806AF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A48F40DA4
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4B5EF806AF;
-	Mon, 19 May 2025 20:29:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4A48F40DA4;
+	Mon, 19 May 2025 21:06:09 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1F1B8193
- for <buildroot@buildroot.org>; Mon, 19 May 2025 20:29:15 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 4631ED4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 21:06:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1018541048
- for <buildroot@buildroot.org>; Mon, 19 May 2025 20:29:15 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2BBD04192E
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 21:06:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mhuNr2N8ls6W for <buildroot@buildroot.org>;
- Mon, 19 May 2025 20:29:14 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
- helo=relay6-d.mail.gandi.net; envelope-from=luca.ceresoli@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org BD456400BD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BD456400BD
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BD456400BD
- for <buildroot@buildroot.org>; Mon, 19 May 2025 20:29:13 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 45A0E439F0;
- Mon, 19 May 2025 20:29:09 +0000 (UTC)
-Date: Mon, 19 May 2025 22:29:07 +0200
-To: "Frager, Neal" <neal.frager@amd.com>
-Message-ID: <20250519222907.08071cee@booty>
-In-Reply-To: <SA1PR12MB56153F6805BA3F497D3400CEF09CA@SA1PR12MB5615.namprd12.prod.outlook.com>
-References: <20250409064711.3024937-1-neal.frager@amd.com>
- <20250516104213.0ed78643@booty>
- <SA1PR12MB5615919365719A06F37E3ED7F093A@SA1PR12MB5615.namprd12.prod.outlook.com>
- <20250519173419.322a530a@booty>
- <SA1PR12MB56153F6805BA3F497D3400CEF09CA@SA1PR12MB5615.namprd12.prod.outlook.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-redhat-linux-gnu)
+ id 3N5DIKCULPA9 for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 21:06:07 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::229; helo=mail-lj1-x229.google.com;
+ envelope-from=roykollensvendsen@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 406A7400EC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 406A7400EC
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com
+ [IPv6:2a00:1450:4864:20::229])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 406A7400EC
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 21:06:07 +0000 (UTC)
+Received: by mail-lj1-x229.google.com with SMTP id
+ 38308e7fff4ca-328114b262aso30289491fa.3
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 14:06:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1747688765; x=1748293565;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=Bh95CvUFeinZzaS+hB9LuevvM4EX4IWU1wc3ELyd66c=;
+ b=LDHs/yZ+Hh5ILQ7IBEvIMGemqz5CwsV6/cIvdHzc0b030bbpdaw0Ox4GCfCyepmPMH
+ BYjwx/dZDwcKvcxzVv4J4byd2EWngGGUN6BaHUkOyAZM/EJAfOXorZADeos8W7XSvpbP
+ o2+3bqoTbxO1740dvw1pVc6nGZkNqe7HpZD2zE7Ov2uAfof2CsoRoHalXY8TvUwImAFj
+ dW8yFW/jK8LBEDr0gL9I65vfmfSFgkCdi4bTRmAh0Vo9nyBqdUKiKAx/CqBCfLTiIu2F
+ eTsmmNkYxllMrJLxnt8G8snK0uecYcK5XZA1EA6hIQ+A333G2Ww48wGdz+A8inz+fF7r
+ EbRw==
+X-Gm-Message-State: AOJu0YxhUagGUmfa6uWd4CUshN0vOXQ+OWXJgxquZkDgqiT3HJ/Ea7Wx
+ UkD+0z4xJaorRAq/thymCGWOA9N0CN6ACUfVHUiL1Q5qaweaZcvVG0vUKwUfcg==
+X-Gm-Gg: ASbGncuRkmUMj474IOYFDAQDFZAQMNa2CdzuGItzQakoqjearwDd/yDn4doNp9X4qs1
+ O5A7CyJ7oCuto1erByeA4iYcPOBN5Z263Av2Sgt6jogL5accHpTMKuRGVMJMc9w3KmM+790aWqz
+ A7Zge5PHo3TSWaOMGg3KnokhR6+68zyls4vN2x9aEY/R4fQ/Vn/+21OHFFnrdHx3evztGZ8B9pD
+ uEDWReDT8eRjxYDcqWalG8XeIC6e4R/4DIVh2yBppr6jJtiKXZ6+zN8C6FDvB7Dv+yu+oD6/zij
+ wTA0OCsREp0Htj6RqvKEE0VGUHaDY9psXTZj0HDntSKNjtaPuRbS4pp7qb1smto+xIHWR5R7NXG
+ +2uXQiWKr7pXv9QyZ
+X-Google-Smtp-Source: AGHT+IGLYmBd9mstFDuHqAXWkWqvNMraSbdJ11WmWvda2mIXO0g2bfMTWBys9aHHPJWnsc/xb/e37Q==
+X-Received: by 2002:a05:651c:2229:b0:30c:1fc4:418e with SMTP id
+ 38308e7fff4ca-3280779134emr47399011fa.26.1747688764506; 
+ Mon, 19 May 2025 14:06:04 -0700 (PDT)
+Received: from precision7530-arch-roy.lan ([79.161.254.180])
+ by smtp.gmail.com with ESMTPSA id
+ 38308e7fff4ca-328085cfaebsm20181171fa.100.2025.05.19.14.06.03
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 19 May 2025 14:06:03 -0700 (PDT)
+From: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
+To: buildroot@buildroot.org
+Date: Mon, 19 May 2025 23:05:34 +0200
+Message-ID: <20250519210553.265725-1-roykollensvendsen@gmail.com>
+X-Mailer: git-send-email 2.49.0
 MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefvddvfeegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefnuhgtrgcuvegvrhgvshholhhiuceolhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepgeelffefgfehhfdtvdefueefieevkefggfelkeeiudetkeektedvhedukefgvddvnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtvdemieejtdemvddtvddtmegvrgdtudemsggvgedumeelhegvjeemfeegfeemledufegvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeeijedtmedvtddvtdemvggrtddumegsvgegudemleehvgejmeefgeefmeeludefvgdphhgvlhhopegsohhothihpdhmrghilhhfrhhomheplhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepuddtpdhrtghpthhtohepnhgvrghlrdhfrhgrghgvrhesrghmugdrtghomhdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtoheprghrnhhouhhtsehmihhnugdrsggvpdhrtghpt
- hhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtohepphgvthgvrheskhhorhhsghgrrghrugdrtghomhdprhgtphhtthhopehmihgthhgrlhdrshhimhgvkhesrghmugdrtghomhdprhgtphhtthhopehjuhdrohesfhhrvggvrdhfrhdprhgtphhtthhopegsrhgrnhguohhnrdhmrghivghrsegtohhllhhinhhsrdgtohhm
-X-GND-Sasl: luca.ceresoli@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1747686550;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=Eaf1ZZPnX/xKqzbzcJBNM8T7s7IU0Jm90jsnQmx1MQY=;
- b=T4oBSK3OAIF4kMGBub12RQJqBWylECXaVx6OAud3AFSyR+T7s9TMk0ayt/J05trJPt94dD
- gaRJSmnPDgvKTHA1RRRBk9W5JPrha/NXibe7MMjbJ3CgnqH+gh18983I3228nuZ7kt8HGx
- UcWlGYPoXH4qbBiJYSgdbAx2T9ok10HrEQlydIKjtkN1ekA+HMbZ35VOxGd4piCoabeOGs
- K2UfebuUzj1xczbWbMyE3v6oJm69FRVddwN2lAbCKMvych7xA57s3ZQztlV42+hw6zsI7z
- nRl20ASFxc8eWpWfdA9Da5NQUWwkpNl/ekoxMswlHo6mEQkdm3IZQd5E4/vGVA==
+ d=gmail.com; s=20230601; t=1747688765; x=1748293565; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=Bh95CvUFeinZzaS+hB9LuevvM4EX4IWU1wc3ELyd66c=;
+ b=BhaO/pGur3dnNkSs2OqcYaTVy5tpXk59S5kRMeu/M/bnSg6EsyD1UoYCvcvMt/kl1T
+ KF51403smQB6c7+HfR0F1eGOluUCpteOVVnSdPtbc03hEeywA5EYlwoAHBow6UfUCTRD
+ fBeInPCOdWUE+hbrvNkgUBrDdXnwicwBjWihC1i+Kxvg3mGAizyr3jaFZW0lO/5hdUwx
+ RN0SshJzS92o/maz1DavBsFX34quusa3PhQfF7sdAcDA2R4nQBXrwO5vJYvO29faeraG
+ AQ5Ee0XqD4tTAnPoY4UdFLEWCSwmKt9sJI3RHhtNeJbNyOTS2/fDVVHR/9qZMtYKYXme
+ 5xiA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=T4oBSK3O
-Subject: Re: [Buildroot] [PATCH v5 1/3] boot/xilinx-embeddedsw: rename
- toolchain vendor to buildroot
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=BhaO/pGu
+Subject: [Buildroot] [PATCH v2 00/11] Update Qt 6 to 6.9.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -89,142 +105,103 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Luca Ceresoli via buildroot <buildroot@buildroot.org>
-Reply-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: "Erkiaga Elorza, Ibai" <ibai.erkiaga-elorza@amd.com>,
- "arnout@mind.be" <arnout@mind.be>,
- "brandon.maier@collins.com" <brandon.maier@collins.com>,
- "ju.o@free.fr" <ju.o@free.fr>,
- "thomas.petazzoni@bootlin.com" <thomas.petazzoni@bootlin.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>,
- "romain.naour@smile.fr" <romain.naour@smile.fr>, "Simek,
- Michal" <michal.simek@amd.com>
+Cc: Christian Hitz <christian@klarinett.li>,
+ Roy Kollen Svendsen <roykollensvendsen@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Zoltan Gyarmati <zgyarmati@zgyarmati.de>, Baxiche Su <baxiche@gmail.com>,
+ Jesse Van Gavere <jesseevg@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 19 May 2025 16:02:33 +0000
-"Frager, Neal" <neal.frager@amd.com> wrote:
+In v1 of the patchset I avoided build failures by removing the option to
+build for target. Here I try to tackle the issues instead.
 
-> [AMD Official Use Only - AMD Internal Distribution Only]
-> 
-> >  
-> > > This patch renames the bare-metal toolchain vendor used by the
-> > > xilinx-embeddedsw package from Xilinx to Buildroot to be consistent with all
-> > > other toolchains built by Buildroot.
-> > >
-> > > To build the Microblaze applications available with the xilinx-embeddedsw
-> > > package, the following config is now needed:
-> > >
-> > > BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-buildroot-elf"
-> > >
-> > > This change keeps backwards compatibility for users already using the
-> > > following architecture tuple:
-> > >
-> > > BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-xilinx-elf"
-> > >
-> > > Either vendor name is now valid, but the documentation will describe using
-> > > the Buildroot vendor name.
-> > >
-> > > Signed-off-by: Neal Frager <neal.frager@amd.com>
-> > > ---
-> > > V1->V2:
-> > > - xilinx-embeddedsw is now backwards compatible with either vendor name
-> > > V2->V3:
-> > > - split patch into series
-> > > V3->V4:
-> > > - rebase patch
-> > > V4->V5:
-> > > - add deprecation warning for microblazeel-xilinx-elf tuple
-> > > ---
-> > >  boot/xilinx-embeddedsw/Config.in            |  3 ++-
-> > >  boot/xilinx-embeddedsw/xilinx-embeddedsw.mk | 30 ++++++++++++++-------
-> > >  2 files changed, 23 insertions(+), 10 deletions(-)
-> > >
-> > > diff --git a/boot/xilinx-embeddedsw/Config.in b/boot/xilinx-embeddedsw/Config.in
-> > > index a27253d594..31b12baaf2 100644
-> > > --- a/boot/xilinx-embeddedsw/Config.in
-> > > +++ b/boot/xilinx-embeddedsw/Config.in
-> > > @@ -1,4 +1,5 @@
-> > > -comment "xilinx-embeddedsw needs a bare metal toolchain for tuple microblazeel-xilinx-elf"
-> > > +comment "xilinx-embeddedsw needs a bare metal toolchain for tuple microblazeel-buildroot-elf"
-> > > +     depends on BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH != "microblazeel-buildroot-elf"
-> > >       depends on BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH != "microblazeel-xilinx-elf"
-> > >
-> > >  menuconfig BR2_TARGET_XILINX_EMBEDDEDSW
-> > > diff --git a/boot/xilinx-embeddedsw/xilinx-embeddedsw.mk b/boot/xilinx-embeddedsw/xilinx-embeddedsw.mk
-> > > index 7d4fcf8b8f..6e37dc48bd 100644
-> > > --- a/boot/xilinx-embeddedsw/xilinx-embeddedsw.mk
-> > > +++ b/boot/xilinx-embeddedsw/xilinx-embeddedsw.mk
-> > > @@ -12,6 +12,18 @@ XILINX_EMBEDDEDSW_INSTALL_TARGET = NO
-> > >  XILINX_EMBEDDEDSW_INSTALL_IMAGES = YES
-> > >  XILINX_EMBEDDEDSW_DEPENDENCIES = toolchain-bare-metal-buildroot
-> > >
-> > > +ifneq ("$(wildcard $(HOST_DIR)/bin/microblazeel-xilinx-elf-gcc)","")
-> > > +$(warning BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-xilinx-elf" \
-> > > +     will soon be deprecated!)
-> > > +$(warning Please migrate to new bare-metal toolchain config below)  
-> >  
-> > > A warning is not very visible, so it won't be very effective. You
-> > > should really use the same logic that Config.in.legacy uses: error out,
-> > > and clearly state how to migrate, practically. E.g. (untested):  
-> >  
-> > > $(error microblazeel-xilinx-elf in BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH is not supported anymore!)
-> > > $(error Replace microblazeel-xilinx-elf with microblazeel-buildroot-elf in BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH)  
-> >
-> > If I do this, then it means that users must switch immediately to the new
-> > microblazeel-buildroot-elf tuple definition.  My thought about the warning was
-> > that either tuple would be valid for awhile before deprecating the old one.  
-> 
-> > I understand your idea, and I'm sorry I didn't realize from the
-> > beginning and changed my mind only after testing accurately the series.  
-> 
-> > However I think a warning will be unnoticed my many users, and others
-> > might just be lazy and ignore it for as long as they can. So basically
-> > they would never update their defconfigs until forced to do so.  
-> 
-> > It may look a rough attitude, but it's pragmatic, and it is what
-> > happens with Config.in.legacy IIUC: an old symbol is not accepted
-> > starting at a given Buildroot release, but an easy upgrade path is
-> > provided for at least one year after that release. So users upgrading
-> > regularly enough will:  
-> 
-> >  1) upgrade to newer Buildroot release
-> >  2) have a build failure with instructions on how to update
-> >  3) update their defconfig
-> >  4) build successfully
-> >  5) be happy  
-> 
-> > Note the "with instructions on how to update" at step 2. This is a
-> > prerequisite to step 5. :-)  
-> 
-> Hi Luca,
-> 
-> I agree with your strategy of #2 leading to #5, so I will go ahead with
-> deprecating the xilinx vendor name with this patch set.
-> 
-> However, to add the new buildroot vendor name, I have a chicken and
-> egg issue.  If I deprecate the xilinx vendor name while adding the buildroot
-> vendor name, it will cause all the zynqmp defconfigs to have build failures.
-> 
-> Would you be ok of my patch set doing the following?
-> 
-> Patch 1: Add buildroot vendor name with warning messages.
-> Patch 2: Update toolchain-bare-metal help details.
-> Patch 3: Migrate zynqmp defconfigs to new buildroot vendor.
-> Patch 4: Change warning messages to error messages.
+Bernd Kuhls (1):
+  package/qt6/qt6positioning: new package
 
-That would work. But if it makes your life simpler, I guess for this
-specific case it would make sense to have a single commit doing
-everything. I.e. squash all the 4 patches into a single patch.
+Christian Hitz (1):
+  package/qt6/qt6connectivity: new package
 
-Luca
+Jack Rubacha (1):
+  package/qt6/qt6grpc: new package
+
+Roy Kollen Svendsen (8):
+  package/qt6: bump version to 6.9.0
+  package/qt6/qt6sensors: new package
+  package/qt6/qt6speech: new package
+  package/qt6/qt6base: add hidden options needed by qt6tools
+  package/qt6/qt6tools: fix assistant build failure
+  package/qt6/qt6tools: fix designer build failure
+  package/qt6/qt6tools: fix linguist build failure
+  package/qt6/qt6tools: fix assistant build failure
+
+ package/qt6/Config.in                         |  5 ++
+ package/qt6/qt6.mk                            |  4 +-
+ package/qt6/qt6base/Config.in.host            | 14 ++++++
+ package/qt6/qt6base/qt6base.hash              |  4 +-
+ package/qt6/qt6base/qt6base.mk                | 40 +++++++++++++++-
+ package/qt6/qt6charts/qt6charts.hash          |  4 +-
+ package/qt6/qt6connectivity/Config.in         | 17 +++++++
+ .../qt6/qt6connectivity/qt6connectivity.hash  | 11 +++++
+ .../qt6/qt6connectivity/qt6connectivity.mk    | 42 +++++++++++++++++
+ .../qt6/qt6core5compat/qt6core5compat.hash    |  4 +-
+ .../qt6/qt6declarative/qt6declarative.hash    |  4 +-
+ package/qt6/qt6graphs/qt6graphs.hash          |  4 +-
+ package/qt6/qt6grpc/Config.in                 |  7 +++
+ package/qt6/qt6grpc/qt6grpc.hash              | 10 ++++
+ package/qt6/qt6grpc/qt6grpc.mk                | 43 +++++++++++++++++
+ .../qt6languageserver/qt6languageserver.hash  |  4 +-
+ package/qt6/qt6mqtt/qt6mqtt.hash              |  2 +-
+ package/qt6/qt6multimedia/qt6multimedia.hash  | 12 +----
+ package/qt6/qt6multimedia/qt6multimedia.mk    |  8 ----
+ package/qt6/qt6opcua/qt6opcua.hash            |  2 +-
+ package/qt6/qt6positioning/Config.in          |  8 ++++
+ .../qt6/qt6positioning/qt6positioning.hash    | 16 +++++++
+ package/qt6/qt6positioning/qt6positioning.mk  | 47 +++++++++++++++++++
+ package/qt6/qt6quick3d/qt6quick3d.hash        |  6 +--
+ package/qt6/qt6quick3d/qt6quick3d.mk          |  4 +-
+ .../qt6quicktimeline/qt6quicktimeline.hash    |  4 +-
+ package/qt6/qt6scxml/qt6scxml.hash            |  4 +-
+ package/qt6/qt6sensors/Config.in              |  6 +++
+ package/qt6/qt6sensors/qt6sensors.hash        |  7 +++
+ package/qt6/qt6sensors/qt6sensors.mk          | 32 +++++++++++++
+ package/qt6/qt6serialbus/qt6serialbus.hash    |  4 +-
+ package/qt6/qt6serialport/qt6serialport.hash  |  4 +-
+ .../qt6/qt6shadertools/qt6shadertools.hash    |  4 +-
+ package/qt6/qt6speech/Config.in               |  8 ++++
+ package/qt6/qt6speech/qt6speech.hash          | 10 ++++
+ package/qt6/qt6speech/qt6speech.mk            | 37 +++++++++++++++
+ package/qt6/qt6svg/qt6svg.hash                |  5 +-
+ package/qt6/qt6svg/qt6svg.mk                  |  3 +-
+ package/qt6/qt6tools/Config.in                | 40 ++++++++++++++++
+ package/qt6/qt6tools/Config.in.host           | 17 +++++--
+ package/qt6/qt6tools/qt6tools.hash            |  4 +-
+ package/qt6/qt6tools/qt6tools.mk              | 24 ++++++++++
+ .../qt6virtualkeyboard.hash                   |  6 +--
+ package/qt6/qt6wayland/qt6wayland.hash        |  4 +-
+ package/qt6/qt6websockets/qt6websockets.hash  |  4 +-
+ 45 files changed, 479 insertions(+), 70 deletions(-)
+ create mode 100644 package/qt6/qt6connectivity/Config.in
+ create mode 100644 package/qt6/qt6connectivity/qt6connectivity.hash
+ create mode 100644 package/qt6/qt6connectivity/qt6connectivity.mk
+ create mode 100644 package/qt6/qt6grpc/Config.in
+ create mode 100644 package/qt6/qt6grpc/qt6grpc.hash
+ create mode 100644 package/qt6/qt6grpc/qt6grpc.mk
+ create mode 100644 package/qt6/qt6positioning/Config.in
+ create mode 100644 package/qt6/qt6positioning/qt6positioning.hash
+ create mode 100644 package/qt6/qt6positioning/qt6positioning.mk
+ create mode 100644 package/qt6/qt6sensors/Config.in
+ create mode 100644 package/qt6/qt6sensors/qt6sensors.hash
+ create mode 100644 package/qt6/qt6sensors/qt6sensors.mk
+ create mode 100644 package/qt6/qt6speech/Config.in
+ create mode 100644 package/qt6/qt6speech/qt6speech.hash
+ create mode 100644 package/qt6/qt6speech/qt6speech.mk
 
 -- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.49.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
