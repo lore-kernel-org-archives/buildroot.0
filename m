@@ -1,52 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E8F9C3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:06:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4C08C2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:06:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 11F086FCB0;
-	Mon, 19 May 2025 11:06:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E3DF284AFE;
+	Mon, 19 May 2025 11:06:38 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CnAPGLqT2Z55; Mon, 19 May 2025 11:06:37 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 09A7384AF7
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 09A7384AF7;
+	Mon, 19 May 2025 11:06:37 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 161E8D4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:52:38 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id F36B870702
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:52:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S70A3bFhCo7x; Mon, 19 May 2025 11:06:35 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7377F712FB
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7377F712FB;
-	Mon, 19 May 2025 11:06:34 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 50B95E4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:49:57 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E0C2040E2D
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:53 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Tp1agmHRklKa for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:52 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id 14iGjOaqo1IO for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:52:36 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
+ helo=relay7-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 591D542400
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 591D542400
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:11 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5602E873D4; Mon, 19 May 2025 10:40:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 768AF706FE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 768AF706FE
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 768AF706FE
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:52:35 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id DC41D4316E
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:52:31 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1uGy6h-0002Sh-01
+ for buildroot@buildroot.org; Mon, 19 May 2025 12:52:31 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 19 May 2025 09:57:25 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 8a5bab93642fa8ce4649c82fddf63efd4c60a9b8
-X-Git-Newrev: 43a74db62155d6adb727e57f29da5341eec56216
-X-Patchwork-Hint: ignore
-Message-Id: <20250519104011.5602E873D4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] docs/website/{download,
- news}.html: update for 2025.02.3
+Date: Mon, 19 May 2025 12:52:30 +0200
+Message-ID: <875xhwzxch.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-State: clean
+X-GND-Score: 0
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefvdduudekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecunecujfgurhephffvufffkfgfgggtgfesthhqtddttderjeenucfhrhhomheprfgvthgvrhcumfhorhhsghgrrghrugcuoehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmqeenucggtffrrghtthgvrhhnpedvhfejgfefveejffetjeduvdeggeelfeeffeetjeeufffgheetgfduhfevueejheenucffohhmrghinhepsghuihhlughrohhothdrnhgvthdpghhithhlrggsrdgtohhmpdgsuhhilhgurhhoohhtrdhorhhgnecukfhppeekledrvddtjedrudejhedrudegheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeekledrvddtjedrudejhedrudeghedphhgvlhhopeguvghllhdrsggvrdegkegvrhhsrdgukhdpmhgrihhlfhhrohhmpehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmpdhnsggprhgtphhtthhopedupdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrgh
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: [Buildroot] Buildroot 2025.05-rc1 released
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,109 +68,112 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=43a74db62155d6adb727e57f29da5341eec56216
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
----
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 20 ++++++++++++--------
- 2 files changed, 21 insertions(+), 17 deletions(-)
-
-diff --git a/docs/website/download.html b/docs/website/download.html
-index ff2a615054..5eebc8f54c 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -8,37 +8,37 @@
-     <div class="panel-heading">Download</div>
-     <div class="panel-body">
- 
--      <h3 style="text-align: center;">Latest stable / long term support release: <b>2025.02.2</b></h3>
-+      <h3 style="text-align: center;">Latest stable / long term support release: <b>2025.02.3</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2025.02.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2025.02.3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2025.02.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2025.02.3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2025.02.2.tar.gz">buildroot-2025.02.2.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2025.02.2.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2025.02.3.tar.gz">buildroot-2025.02.3.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2025.02.3.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2025.02.2.tar.xz"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2025.02.3.tar.xz"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2025.02.2.tar.xz"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2025.02.3.tar.xz"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2025.02.2.tar.xz">buildroot-2025.02.2.tar.xz</a></h3>
--	  <p><a href="/downloads/buildroot-2025.02.2.tar.xz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2025.02.3.tar.xz">buildroot-2025.02.3.tar.xz</a></h3>
-+	  <p><a href="/downloads/buildroot-2025.02.3.tar.xz.sign">PGP signature</a></p>
- 	</div>
-       </div>
- <!--
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 6b6edeee09..be620ebf05 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -13,17 +13,21 @@
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
-       <div class="timeline-heading">
--	<h4 class="timeline-title">2025.02.2 released</h4>
--	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>22 April 2025</small></p>
-+	<h4 class="timeline-title">2025.02.3 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>19 May 2025</small></p>
-       </div>
-       <div class="timeline-body">
--	<p>The 2025.02.2 bugfix release is out, fixing a number of important /
--	  security related issues discovered since the 2025.02 release. See the
--	  <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2025.02.2/CHANGES">CHANGES</a>
--	  file for more details, read the
--	  <a href="https://lore.kernel.org/buildroot/49d039c0-8121-4a91-8a69-889376f85c71@rnout.be/T/#u">announcement</a>
-+	<p>The 2025.02.3 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2025.02 release. It
-+	  replaces the 2025.02.2 release which was made the day before but
-+	  which was unfortunately broken. See the
-+	  <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2025.02.3/CHANGES">CHANGES</a>
-+	  file for more details, read the announcement for
-+	  <a href="https://lore.kernel.org/buildroot/49d039c0-8121-4a91-8a69-889376f85c71@rnout.be/T/#u">2025.02.2</a>
-+	  and
-+	  <a href="https://lore.kernel.org/buildroot/862f82a4-c0bf-4ee0-b406-872a9c97df4b@rnout.be/T/#u">2025.02.3</a>
- 	  and go to the <a href="/downloads/">downloads page</a> to pick up the
--	  <a href="/downloads/buildroot-2025.02.2.tar.xz">2025.02.2 release</a>.</p>
-+	  <a href="/downloads/buildroot-2025.02.3.tar.xz">2025.02.3 release</a>.</p>
-       </div>
-     </div>
-   </li>
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGksCgpCdWlsZHJvb3QgMjAyNS4wNS1yYzEgaXMgcmVsZWFzZWQgLSBHbyBkb3dubG9hZCBpdCBh
+dDoKCmh0dHBzOi8vYnVpbGRyb290Lm5ldC9kb3dubG9hZHMvYnVpbGRyb290LTIwMjUuMDUtcmMx
+LnRhci5negoKb3IKCmh0dHBzOi8vYnVpbGRyb290Lm5ldC9kb3dubG9hZHMvYnVpbGRyb290LTIw
+MjUuMDUtcmMxLnRhci54egoKT3IgZ2V0IGl0IGZyb20gR2l0OgoKaHR0cHM6Ly9naXRsYWIuY29t
+L2J1aWxkcm9vdC5vcmcvYnVpbGRyb290LmdpdCAoMjAyNS4wNS1yYzEgdGFnKQoKUGxlYXNlIGdp
+dmUgaXQgYSBzcGluIGFuZCByZXBvcnQgYW55IHByb2JsZW1zIHRvIHRoZSBtYWlsaW5nIGxpc3Qg
+b3IKYnVnIHRyYWNrZXIuCgpBIHNsaWdodGx5IHNtYWxsZXIgY3ljbGUgd2l0aCB3aXRoIGEgYml0
+IG1vcmUgdGhhbiA4MDAgY2hhbmdlcyBmcm9tIDEwMwp1bmlxdWUgY29udHJpYnV0b3JzIQoKT2Yg
+bm90ZXdvcnRoeSBuZXcgZmVhdHVyZXMvY2hhbmdlcyB3ZSBoYXZlOgoKRG93bmxvYWQ6CgotIFJ1
+c3QgdXBkYXRlZCB0byB2ZXJzaW9uIDEuODYuMCwgd2hpY2ggaGFzIHNsaWdodGx5IGNoYW5nZWQg
+dGhlIGNhcmdvCiAgZmV0Y2hpbmcgYmVoYXZpb3VyLCBzbyB0aGUgZ2VuZXJhdGVkIHRhcmJhbGxz
+IG5vdyB1c2UgYSAtY2FyZ280IHN1ZmZpeAogIHRvIHJlZmxlY3QgdGhhdC4KCi0gU3VidmVyc2lv
+biBkb3dubG9hZCBsb2dpYyBpcyBub3cgcmVwcm9kdWNpYmxlIHdpdGggbm9uLVVTIGxvY2FsZXMK
+Ci0gU291cmNlcyBjYW4gbm93IGJlIGZldGNoZWQgZnJvbSBhIHNtYjovLyBsb2NhdGlvbiAodXNp
+bmcgY3VybCkuCgpUb29sY2hhaW5zOgoKLSBCb290bGluIEFSTXY3LUEgdG9vbGNoYWlucyBhcmUg
+bm93IGFsc28gYXZhaWxhYmxlIGZvciBBUk12OC1BIENQVXMgaW4KICAzMmJpdCBtb2RlCgpNaXNj
+OgoKLSAvZXRjL3Jlc29sdi5jb25mIHN5bWxpbmsgbm93IHBvaW50cyB0byAvcnVuIHJhdGhlciB0
+aGFuIC90bXAKCi0gc3VwcG9ydC9zY3JpcHRzL3BrZy1zdGF0cyBjYW4gbm93IHJlcG9ydCBzdGFs
+ZSBDVkUgZW50cmllcywgRS5HLgogIGVudHJpZXMgaW4gPFBLRz5fSUdOT1JFX0NWRVMgdGhhdCBh
+cmUgbm8gbG9uZ2VyIG5lZWRlZCBhZnRlciBhIE5WRAogIHVwZGF0ZS4KCk5ldyBkZWZjb25maWdz
+OiBFbmdpY2FtIFBYMzAgU09NLCBGcmVlc2NhbGUgaS5JTSA5MSBFVksgYW5kIDkzIEZyZWVkb20s
+CkhpRml2ZSBVbm1hdGNoZWQsIFBpbmU2NCBST0NLUHJvNjQgRUJCUiBib290LCBSYXNwYmVycnlw
+aSAyIGluIDY0Yml0Cm1vZGUsIFNpcGVlZCBMaWNoZWVQaSA0QQoKTmV3IHBhY2thZ2VzOiBhYXJk
+dmFyay1kbnMsIGFtYXpvbi1lY3ItY3JlZGVudGlhbC1oZWxwZXIsIGNhc3luYy1uYW5vLApjZ3Jv
+dXBmcy12Mi1tb3VudCwgZG9ja2VyLWNyZWRlbnRpYWwtYWNyLWVudiwgZG9ja2VyLWNyZWRlbnRp
+YWwtZ2NyLApncm91dCwgbG93ZG93biwgbHBhYywgbWVuZGVyLXVwZGF0ZS1tb2R1bGVzLCBuZXRh
+dmFyaywgcGFzc3QsIHBvZG1hbiwKcHl0aG9uLWFuaXNvODYwMSwgcHl0aG9uLWNhY2hlbGliLCBw
+eXRob24tZW1haWxwcm94eSwKcHl0aG9uLWZsYXNrLWNhY2hpbmcsIHB5dGhvbi1mbGFzay1yZXN0
+eCwgcHl0aG9uLW15cHksIHB5dGhvbi1weXByb2osCnB5dGhvbi1zaW1wbGUtcGlkLCBweXRob24t
+c21idXMyLCBweXRob24tdHlwZXMtcHN1dGlsLApweXRob24tdHlwZXMtc2V0dXB0b29scywgcHl0
+aG9uLXR5cGluZy1pbnNwZWN0aW9uLCBweXRob24tdHpsb2NhbCwKcW9yaXEtZGRyLXBoeS1iaW5h
+cnksIHFvcmlxLWZpcm13YXJlLWlucGhpLCBxb3JpcS1tYy1iaW5hcnksCnFvcmlxLW1jLXV0aWxz
+LCBzYW5lLWFpcnNjYW4sIHNpcGVlZC1scGk0YWJpbiwgdWZzLXV0aWxzLAp4aWxpbngtZnBnYXV0
+aWwKCkFuZCB0aGUgdXN1YWwgcGFja2FnZSB2ZXJzaW9uIHVwZGF0ZXMgYW5kIGJ1ZyBmaXhlcy4g
+U2VlIHRoZSBDSEFOR0VTCmZpbGUgZm9yIGRldGFpbHM6CgpodHRwczovL2dpdGxhYi5jb20vYnVp
+bGRyb290Lm9yZy9idWlsZHJvb3QvLS9ibG9iLzIwMjUuMDUtcmMxL0NIQU5HRVMKCk1hbnkgdGhh
+bmtzIHRvIHRoZSBwZW9wbGUgY29udHJpYnV0aW5nIHRvIHRoaXMgcmVsZWFzZToKCmdpdCBzaG9y
+dGxvZyAtcyAtbiAyMDI1LjAyLi4KCiAgICA2NglUaG9tYXMgUGV0YXp6b25pCiAgICA1NQlCZXJu
+ZCBLdWhscwogICAgNDcJSnVsaWVuIE9saXZhaW4KICAgIDM4CUphbWVzIEhpbGxpYXJkCiAgICAz
+NglQZXRlciBLb3JzZ2FhcmQKICAgIDMzCVlhbm4gRS4gTU9SSU4KICAgIDMxCURhcmlvIEJpbmFj
+Y2hpCiAgICAzMQlHaXVsaW8gQmVuZXR0aQogICAgMjcJS2FkYW1iaW5pIE5lbWEKICAgIDI3CU1h
+cmN1cyBIb2ZmbWFubgogICAgMjEJR2HDq2wgUE9SVEFZCiAgICAyMAlBZGFtIER1c2tldHQKICAg
+IDIwCVPDqWJhc3RpZW4gU3p5bWFuc2tpCiAgICAxNwlUaG9tYXMgRGV2b29nZHQKICAgIDE3CVRo
+b21hcyBQZXJhbGUKICAgIDE2CVZsYWRpbWlyIE9sdGVhbgogICAgMTUJRmlvbmEgS2x1dGUgKFdJ
+V0EpCiAgICAxNAlSYXBoYcOrbCBNw6lsb3R0ZQogICAgMTMJVGhvbWFzIEJvbm5lZmlsbGUKICAg
+IDExCUdpbGxlcyBUYWxpcwogICAgMTAJQXJub3V0IFZhbmRlY2FwcGVsbGUKICAgICA5CUVsIE1l
+aGRpIFlPVU5FUwogICAgIDgJRnJhbmNvaXMgUGVycmFkCiAgICAgOAlOYXlhYiBTYXllZAogICAg
+IDgJUXVlbnRpbiBTY2h1bHoKICAgICA4CVNjb3R0IEZhbgogICAgIDcJRGFuaWVsIExhbmcKICAg
+ICA3CVRpdG91YW4gQ2hyaXN0b3BoZQogICAgIDcJV2FsZGVtYXIgQnJvZGtvcmIKICAgICA2CUFr
+aGlsZXNoIE5lbWEKICAgICA2CURhbmllbCBDcm93ZQogICAgIDYJRnJhbmNvaXMgRHVnYXN0CiAg
+ICAgNglMYW5jZSBGcmVkcmlja3NvbgogICAgIDYJUm9tYWluIE5hb3VyCiAgICAgNglWaW5jZW50
+IEZhemlvCiAgICAgNQlDaGFybGllIEplbmtpbnMKICAgICA1CUZsb3JpYW4gTGFyeXNjaAogICAg
+IDUJSi4gTmV1c2Now6RmZXIKICAgICA1CU1pY2hhZWwgTm9zdGhvZmYKICAgICA1CVJveSBLb2xs
+ZW4gU3ZlbmRzZW4KICAgICA1CVZpbmNlbnQgU3RlaGzDqQogICAgIDUJWWVnb3IgWWVmcmVtb3YK
+ICAgICA0CUNvbGluIEV2cmFyZAogICAgIDQJSnVhbiBQYWJsbyBNT05URVJPIENBU1RSTwogICAg
+IDQJTWF0dGlhcyBXYWxzdHLDtm0KICAgICA0CU1heGltZSBMZXJveQogICAgIDQJUGF0cmlrIE9s
+c3NvbgogICAgIDMJQWRyaWFuIFBlcmV6IGRlIENhc3RybwogICAgIDMJQW5kcmVhcyBaaWVnbGVy
+CiAgICAgMwlGYWJpbyBFc3RldmFtCiAgICAgMwlHdWlsbGF1bWUgQ2hheWUKICAgICAzCUpvYWNo
+aW0gV2liZXJnCiAgICAgMwlKb3PDqSBMdWlzIFNhbHZhZG9yIFJ1Zm8KICAgICAzCU1heGltIEtv
+Y2hldGtvdgogICAgIDMJUmFwaGFlbCBQYXZsaWRpcwogICAgIDIJQnJhbmRvbiBNYWllcgogICAg
+IDIJQnJ5YW4gQnJhdHRsb2YKICAgICAyCUNoZXJuaWFldiBBbmRyZWkKICAgICAyCUNocmlzdGlh
+biBTdGV3YXJ0CiAgICAgMglGbMOhdmlvIFRhcGFqw7NzCiAgICAgMglHaWxsZXMgQmFyZG91eAog
+ICAgIDIJSGVpa28gVGhpZXJ5CiAgICAgMglKYW4gxIxlcm3DoWsKICAgICAyCUthbmFrIFNoaWxs
+ZWRhcgogICAgIDIJTHVjYSBDZXJlc29saQogICAgIDIJTWFyY2luIE5pZXN0cm9qCiAgICAgMglN
+ZWVuYSBNdXJ0aHkKICAgICAyCU5lYWwgRnJhZ2VyCiAgICAgMglOaWtsYXMgQ2Fzc2VsCiAgICAg
+MglPbGl2aWVyIEJlbmphbWluCiAgICAgMglQZXRyIFZvcmVsCiAgICAgMQlBbGV4IEJlbm7DqWUK
+ICAgICAxCUFsZXhhbmRlciBNdWtoaW4KICAgICAxCUFsZXhpcyBMb3Rob3LDqQogICAgIDEJQW5k
+cmVhcyBLbGluZ2VyCiAgICAgMQlCYWdhcyBTYW5qYXlhCiAgICAgMQlCYXJ1Y2ggU2lhY2gKICAg
+ICAxCUJlbmphbWluIEthbWF0aAogICAgIDEJQm9lcmdlIFN0cnVlbXBmZWwKICAgICAxCUJyYW5k
+b24gTHVtYnJhCiAgICAgMQlDaHJpc3RpYW4gSGl0egogICAgIDEJRG91ZyBLZWhuCiAgICAgMQlG
+ZWxpY2l0YXMgUG9qdGluZ2VyCiAgICAgMQlJYW4gTWVyaW4KICAgICAxCUlzbWFlbCBMdWNlbm8K
+ICAgICAxCUplYW4tTWljaGVsIEhhdXRib2lzCiAgICAgMQlKb24gSGVucmlrIEJqw7hybnN0YWQK
+ICAgICAxCUpvc2VwaCBaaWt1c29va2EgKFpJSykKICAgICAxCUt1bmloaWtvIEhheWFzaGkKICAg
+ICAxCUxhbmcgRGFuaWVsCiAgICAgMQlMYXJzIFdpa21hbgogICAgIDEJTGVvIExpYW5nCiAgICAg
+MQlMdWJvbWlyIFJpbnRlbAogICAgIDEJTWF0aGV1cyBUYXZhcmVzIEJlcm5hcmRpbm8KICAgICAx
+CU1pY2hhZWwgRmlzY2hlcgogICAgIDEJTWljaGFlbCBUcmltYXJjaGkKICAgICAxCU1pY2hhZWwg
+V2FsbGUKICAgICAxCU1pa2EgV2VzdGVyYmVyZwogICAgIDEJTmlraXRhIEtpcnl1c2hpbgogICAg
+IDEJUGV0ZXIgU2VpZGVyZXIKICAgICAxCVRJQU4gWXVhbmhhbwogICAgIDEJVmlhY2hlc2xhdiBC
+b2NoYXJvdgogICAgIDEJ0JvQtdC+0L3QuNC0INCu0YDRjNC10LIgKExlb25pZCBZdXJpZXYpCgpB
+bmQgYSBzcGVjaWFsIHRoYW5rcyB0byBvdXIgcGF0Y2ggcmV2aWV3ZXJzOgoKZ2l0IGxvZyAtLW5v
+LW1lcmdlcyAtLWdyZXAgJyhSZXZpZXdlZHxBY2tlZCktYnk6JyAtRSAtaSBcCiAgLS1mb3JtYXQ9
+IiUodHJhaWxlcnM6dmFsdWVvbmx5PXRydWUsa2V5PVJldmlld2VkLWJ5LGtleT1BY2tlZC1ieSkl
+LUMoKSIgXAogIDIwMjUuMDIuLiB8IHNvcnQgfCB1bmlxIC1jIHwgc29ydCAtbnIKCiAgICAgIDUg
+VmluY2VudCBKYXJkaW4gPHZqYXJkaW5AZnJlZS5mcj4KICAgICAgNCBMdWNhIENlcmVzb2xpIDxs
+dWNhLmNlcmVzb2xpQGJvb3RsaW4uY29tPgogICAgICA0IEJyYW5kb24gTWFpZXIgPGJyYW5kb24u
+bWFpZXJAZ21haWwuY29tPgogICAgICAzIFlhbm4gRS4gTU9SSU4gPHlhbm4ubW9yaW4uMTk5OEBm
+cmVlLmZyPgogICAgICAzIEJyeWFuIEJyYXR0bG9mIDxiYkB0aS5jb20+CiAgICAgIDIgUmFwaGFl
+bCBQYXZsaWRpcyA8cmFwaGFlbC5wYXZsaWRpc0BnbWFpbC5jb20+CiAgICAgIDIgUmFwaGHDq2wg
+R2FsbGFpcy1Qb3UgPHJnYWxsYWlzcG91QGdtYWlsLmNvbT4KICAgICAgMiBOZWFsIEZyYWdlciA8
+bmVhbC5mcmFnZXJAYW1kLmNvbT4KICAgICAgMiBNYXhpbSBLb2NoZXRrb3YgPGZpZG9fbWF4QGlu
+Ym94LnJ1PgogICAgICAyIEZsb3JpYW4gRmFpbmVsbGkgPGYuZmFpbmVsbGlAZ21haWwuY29tPgog
+ICAgICAyIEZhYmlvIEVzdGV2YW0gPGZlc3RldmFtQGdtYWlsLmNvbT4KICAgICAgMiBBZHJpYW4g
+UGVyZXogZGUgQ2FzdHJvIDxhcGVyZXpAaWdhbGlhLmNvbT4KICAgICAgMSBTw6liYXN0aWVuIFN6
+eW1hbnNraSA8c2ViYXN0aWVuLnN6eW1hbnNraUBhcm1hZGV1cy5jb20+CiAgICAgIDEgUm9tYWlu
+IE5hb3VyIDxyb21haW4ubmFvdXJAc21pbGUuZnI+CiAgICAgIDEgRmlvbmEgS2x1dGUgPGZpb25h
+LmtsdXRlQGdteC5kZT4KICAgICAgMSBDaHJpc3RpYW4gU3Rld2FydCA8Y2hyaXN0aWFuQGFwZXJ0
+dXJlLnVzPgogICAgICAxIEJhcnVjaCBTaWFjaCA8YmFydWNoQHRrb3MuY28uaWw+CgpXZSB3aWxs
+IG5vdyBjcmVhdGUgYSBuZXh0IGJyYW5jaCBhbmQgc3RhcnQgbWVyZ2luZyBuZXcgZmVhdHVyZXMg
+Zm9yCjIwMjUuMDggYWxyZWFkeSBpbiBwYXJhbGxlbCB3aXRoIHRoZSAyMDI1LjA1IHN0YWJpbGl6
+YXRpb24uCgpFeHBlY3QgdGhlIGZpbmFsIDIwMjUuMDUgcmVsZWFzZSBhcm91bmQgdGhlIGVuZCBv
+ZiB0aGUgbW9udGggLyBiZWdpbm5pbmcKb2YgSnVuZS4KCi0tIApCeWUsIFBldGVyIEtvcnNnYWFy
+ZApfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJv
+b3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVp
+bGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
