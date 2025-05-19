@@ -1,56 +1,65 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7EC91C2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 12:20:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CC70C2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 12:24:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2E41A61048;
-	Mon, 19 May 2025 12:20:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2BC6981426;
+	Mon, 19 May 2025 12:24:10 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hnRr_mFM7Zgg; Mon, 19 May 2025 12:24:09 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 52DB2813EA
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 52DB2813EA;
+	Mon, 19 May 2025 12:24:09 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id DB7B2193
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 12:24:07 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id CD2FD60FBA
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 12:24:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5jTLNXpHayN8; Mon, 19 May 2025 12:20:44 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4074B60F3B
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4074B60F3B;
-	Mon, 19 May 2025 12:20:44 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 69B77D4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 12:20:42 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4FFEE400F2
- for <buildroot@buildroot.org>; Mon, 19 May 2025 12:20:42 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N1B7_0mnOr9W for <buildroot@buildroot.org>;
- Mon, 19 May 2025 12:20:41 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.21;
+ id 6TH8kBpiSiqx for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 12:24:07 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.20;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4076A4102F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4076A4102F
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4076A4102F
- for <buildroot@buildroot.org>; Mon, 19 May 2025 12:20:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A319660F8E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A319660F8E
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A319660F8E
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 12:24:06 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from [192.168.7.2] ([85.22.126.193]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MNbox-1ua3fL109r-00IGkX; Mon, 19
- May 2025 14:20:36 +0200
-Message-ID: <fd6adc0e-6f2e-436c-961a-d96322a68e73@gmx.de>
-Date: Mon, 19 May 2025 14:20:35 +0200
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N7zFj-1v2kbS18OB-012aHP; Mon, 19
+ May 2025 14:23:53 +0200
+Message-ID: <edfdcc44-495f-445c-b48b-11f281cf2cd1@gmx.de>
+Date: Mon, 19 May 2025 14:23:50 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Fiona Klute via buildroot <buildroot@buildroot.org>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20250414161545.2863615-1-fiona.klute@gmx.de>
- <20250414161545.2863615-2-fiona.klute@gmx.de>
- <20250517172714.691fef81@windsurf>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: El Mehdi YOUNES via buildroot <buildroot@buildroot.org>,
+ El Mehdi YOUNES <elmehdi.younes@smile.fr>,
+ Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Joseph Kogut <joseph.kogut@gmail.com>, David Pierret
+ <david.pierret@smile.fr>, Danilo Bargen <mail@dbrgn.ch>,
+ Graeme Smecher <gsmecher@threespeedlogic.com>,
+ James Hilliard <james.hilliard1@gmail.com>, Sam Voss <sam.voss@gmail.com>,
+ Torben Voltmer <mail@t-voltmer.net>, Saeed Kazemi <kazemi.ms@gmail.com>,
+ Alex Michel <alex.michel@wiedemann-group.com>,
+ Leo Yu-Chi Liang <ycliang@andestech.com>,
+ Mika Westerberg <mika.westerberg@linux.intel.com>
+References: <20250422074738.821755-1-elmehdi.younes@smile.fr>
+ <20250516133236.16e5aa23@windsurf>
+ <4f3b7a04-418b-4563-b556-60c5d6f2c34b@gmx.de>
+ <20250516165051.3f20224d@windsurf>
 Content-Language: en-US, de-DE-1901, de-DE
 Autocrypt: addr=fiona.klute@gmx.de; keydata=
  xsFNBFrLsicBEADA7Px5KipL9zM7AVkZ6/U4QaWQyxhqim6MX88TxZ6KnqFiTSmevecEWbls
@@ -95,79 +104,78 @@ Autocrypt: addr=fiona.klute@gmx.de; keydata=
  bCn+vBDsJwD9Hcht1eVRxnIq745SQ0naL48Q3HGpKdXZpJoBQZ8bSAFhRSb3m+P4PE272rLY
  6FCkqS+UeX7RBpPkkIDoL7WS9HdvDHuQ751D56WkTnIpoF+sgW6tOEcfgFrYf3rVvh6G3B8S
  FPSOJuHYnwzMFrDNxQQKb0uS/j1s2dnlS55MouCvd5pShM5iRFzE7k3CMeS4NkhFim0=
-In-Reply-To: <20250517172714.691fef81@windsurf>
-X-Provags-ID: V03:K1:BpZK2OlZGH3FWtlaWzVTKRSg4X5EDbtszclzk41qIrUoDuvdc8c
- Ae0T+CwFeig8SLgNMGHSA4jDtI1GpCRjAV287QmOy18LvUNX01cuBOXFJtbf9C6yqYh/xUx
- h/T6prUHUzhEm5mrk8+SFa+fvUKtlO25BqULvmTp5/UVLsRjukLRshbttqnDHSqIU/YPrkZ
- GyFpyU0qFTu3yF+InAgUA==
-UI-OutboundReport: notjunk:1;M01:P0:jcw461BZh/Q=;RrP8mVNBtPeaq3pZluIhUtjmmf3
- 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
+In-Reply-To: <20250516165051.3f20224d@windsurf>
+X-Provags-ID: V03:K1:GeP8hkXLXsiHRs0BDjgAXqX0F4uxxMjLBp6RYKQITYjA8OtJXtK
+ HeKiWiGAkUjbZtwHIYpTiYA0/wdcHrw+5NFcIv9VEHhd0pG9vJ5ubhInuCr5zpMZkNhSe9P
+ DZx4raQWuxafXdgP3Pm2RJF4qZB5aXHLx2FgDwnhgUCEqoWos1ud9sDh7M0USQhFJXB5La+
+ DfdG494m3IINEXaTUtq5g==
+UI-OutboundReport: notjunk:1;M01:P0:JvjBIU3CoYw=;WmCwQVew9ozlHqv4B1qYeMI7yOh
+ 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
+ Q==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.de; 
- s=s31663417; t=1747657236; x=1748262036; i=fiona.klute@gmx.de;
- bh=XUPNV9K8mKPx4xzBUV4gEJmx9ORiMN0jc2hjs92krKU=;
+ s=s31663417; t=1747657433; x=1748262233; i=fiona.klute@gmx.de;
+ bh=PJh32sItqoZt6jS6sVxInUqFTErAjuZr+eBuLqXI40o=;
  h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
  References:From:In-Reply-To:Content-Type:
  Content-Transfer-Encoding:cc:content-transfer-encoding:
  content-type:date:from:message-id:mime-version:reply-to:subject:
  to;
- b=Qd+MiNGA0llxPDv8gy/E0AJoWLTKU+SjZHl3h8R0o3DEufQh+eAERO+esvSq4dgd
- 34ptqhF13hIxDyBQ7ZTK+g2lSPI/KgGj+vEYld3snpSK1vQDp3QTlWndSrQw2ofWh
- k9PJUdVGGsWh5HdT7FsujnWclOqFXaYAlhQ+ts2gvwoFV7vqTeXosLMAZuF3InF8j
- Tb2S2VGLEi2hViInMGwFDKAR9lxrI1VGrl+zDw75KMqpCXP8xTI8vjD8Q7ZBItdAR
- N0IotwvXnS2mhH3tjtA6VhRiNzsVRlTPK03pqUfSMLBHqOOxxyAqNH1v4UUmk4eDx
- go41p9qfVBwqCD3avw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=lUvE/xKKjLxNej/mLVAmCVT1M3zCr33p76xDCbeaKJFTRWbC3ftyU82n43QxYbUe
+ HmIOOfCsrfc4gES5UuCw/fxYagGsETQU1iVp4DlUsiG8aAuzvCvNVun+zgxMpUEEK
+ fysk3Is7ZKXAY5+oLpOGAV6zjrFHFYrIrWBss8prm340WW6iFSQyXpv/hcF56m9l/
+ ljlahWgP6qbnvS84AGHvez0wCOyeqxXKxcYIB3jMAHhA6bwRhhHMh3ePxQOS9ykLG
+ VA33uYpPd+2T8ql47/Q3eZyjYi1pjy/E1qXdHQYDPAM2mlYXZO6nLrTU8+1sScoP5
+ JD2ChXyTndn6sK0HKA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
- header.s=s31663417 header.b=Qd+MiNGA
-Subject: Re: [Buildroot] [PATCH v4 2/4] package/python-gobject: fix event
- source registration with Python 3.13
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
+ header.a=rsa-sha256 header.s=s31663417 header.b=lUvE/xKK
+Subject: Re: [Buildroot] [PATCH 0/4] package/rust: rust upgrade to version
+ 1.86.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -186,54 +194,20 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas!
-
-Am 17.05.25 um 17:27 schrieb Thomas Petazzoni:
-> Hello Fiona,
+Am 16.05.25 um 16:50 schrieb Thomas Petazzoni:
+> On Fri, 16 May 2025 15:40:00 +0200
+> Fiona Klute <fiona.klute@gmx.de> wrote:
 > 
-> Thanks for working on this (which we know is a complex topic). However,
-> while the series looks good and I was about to apply it, there's one
-> fairly significant concern below.
+>> it seems my patch to replace deprecated the .cargo/config [1] that was
+>> discussed in that thread [2] has been missed. Is there any chance to
+>> still squeeze it in? The problem is that if applied separately it'll
+>> need a separate version bump for the generated cargo archives, but I'm
+>> not sure if that's avoidable now (as the changes have been pushed
+>> already). :-(
 > 
-> On Mon, 14 Apr 2025 18:15:43 +0200
-> Fiona Klute via buildroot <buildroot@buildroot.org> wrote:
-> 
->> From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
->>
->> Since Python 3.13 BaseSelectorEventLoop.add_reader() and
->> BaseSelectorEventLoop.add_writer() use the mapping returned by
->> selector.get_map() to detect if a file object is already
->> registered. This fails with the implementation in gi.events._Selector
->> if some calls use a file object, and others the raw file descriptor.
->>
->> Full upstream bug report:
->> https://gitlab.gnome.org/GNOME/pygobject/-/issues/689
->>
->> This bug breaks package/python-aiomqtt, because its client object uses
->> file objects in some places for the connection socket, and the file
->> descriptor in others. The result is that the connection attempt times
->> out because source registration fails, and the Future that marks
->> successful connection never resolves.
->>
->> Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
->> ---
->> The bug fixed by this patch is present in 3.50.0 and 3.52.3 alike, the
->> reason for applying the update first is simply that the patch doesn't
->> apply with 3.50.0, and backporting would be unnecessary effort when
->> the update is due anyway.
-> 
-> And actually that doesn't work, and we want exactly the opposite: the
-> fix before the bump. Indeed, the fix is needed for our 2025.02.x LTS
-> branch, which has python-gobject 3.50.0. So we definitely want the fix
-> on 3.50.0 (so that we can backport it to 2025.02.x) and *then* the bump
-> (which would be only on the master branch).
-> 
-> Do you think you could rework your series with this change?
-I've just sent a new version:
-https://patchwork.ozlabs.org/project/buildroot/list/?series=457457
-
-The kind pygobject people backported the patch to their 3.50 branch, so 
-at this point was just a matter of applying that first. :-)
+> Dang, I missed that! Let's see what we can do about this, I'll discuss
+> with the other maintainers.
+Thanks for getting that sorted! :-)
 
 Best regards,
 Fiona
