@@ -4,91 +4,119 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39F94C2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:40:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28A99C2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 12:14:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A10DC83B32;
-	Mon, 19 May 2025 11:40:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BBD6381221;
+	Mon, 19 May 2025 12:14:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9d8-5PQfSlkg; Mon, 19 May 2025 11:40:28 +0000 (UTC)
+ id 9Hs9iERsYxpX; Mon, 19 May 2025 12:14:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7147D80F50
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C204A80A89
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7147D80F50;
-	Mon, 19 May 2025 11:40:28 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 511F1193
- for <buildroot@buildroot.org>; Mon, 19 May 2025 11:40:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C204A80A89;
+	Mon, 19 May 2025 12:14:40 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id C73F0D4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 12:14:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4269880F50
- for <buildroot@buildroot.org>; Mon, 19 May 2025 11:40:27 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id ACFD761039
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 12:14:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RiFaoCa6g0Li for <buildroot@buildroot.org>;
- Mon, 19 May 2025 11:40:26 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::233; helo=mail-lj1-x233.google.com;
- envelope-from=heiko.thiery@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 03BF18366E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 03BF18366E
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com
- [IPv6:2a00:1450:4864:20::233])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 03BF18366E
- for <buildroot@buildroot.org>; Mon, 19 May 2025 11:40:25 +0000 (UTC)
-Received: by mail-lj1-x233.google.com with SMTP id
- 38308e7fff4ca-327ff195303so35161241fa.1
- for <buildroot@buildroot.org>; Mon, 19 May 2025 04:40:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1747654824; x=1748259624;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=hx//78RPWdOZxM6pV/eqwKA0oBgoYdHRcm9eHPZIFms=;
- b=LXckbboCh5HUSSI7uKC1x7mptpDSEhqeVG4JbQ5D+/q/hMUEc54VY4QV6mfzIgfh8u
- VQYhMqI0rTVjyCAtpG2w0NWB7sJHuubogvDJbxBajaOTgthkQhWQyzHriF9wlrUE/skR
- Li++uPqr50/aqg3nP9Hx944rdSc6KL1+SVLENUNVHkevr3VuuBSldIaXiu+svMQQ0uLi
- lhfXw7n7LWT3cbwU1W7A0rN5otlY+/h4Jezf4MXZDGVsq7Ch+xVa1MEKiHHLhwJ7zS+n
- 8O06FTML+OrrJl41pcxV+vuNDafBRuJhS1NhwTG0Ryd+L53FpEIWtaC5I3NEeoIsZzhn
- wa7Q==
-X-Gm-Message-State: AOJu0YznTUPq/mYinBjMcYEsn2UGgrYocwbDvjyuzxe7HzwMXLyinytp
- YitB4Ikw96KmRaCPQCWHt7OEF2AOWc7S6jgpy/A0nwmmbwcMTpmx6pDvcG+/K+gXHj2PtoU0MX+
- mxTlxa1ltIp+Ur7L7JQUraoUw7obHqBiktA==
-X-Gm-Gg: ASbGncuIdfCHXodtScPQdWB4mGTGNGvk/Sfi0u8pQOj+JuizG4bM3/k7vGll2ne0CzQ
- FoRxa4PF4E0DNQDYIrXRgucPkGUvd4vhk+m2cTwneHTkOd0mFdpJhqEt0bzLXt6tJ/SEQpzwdDS
- MeHPE30q6yLqRA6yrAF7IP+Xkm7VA4nMJDbPkt9eZnerNhXx8eLvkRNSAVDRufQQCbbe8=
-X-Google-Smtp-Source: AGHT+IG9n15yRRFmXHtgtqzZGDu8YRWk38zofOGu8uPZl17VLSVSj5i6MkolzVKG0ZxIDBfT7Zp4Tm8L6EB0aSYcWso=
-X-Received: by 2002:a05:651c:552:b0:30a:2a8a:e4b5 with SMTP id
- 38308e7fff4ca-328077917e1mr38509681fa.27.1747654822597; Mon, 19 May 2025
- 04:40:22 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lbPWoRaNZ0XR for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 12:14:38 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.19;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 06A3560FC1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 06A3560FC1
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 06A3560FC1
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 12:14:37 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from haruka.home.arpa ([85.22.126.193]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MLzFr-1uYNoW0Ib3-00IYex; Mon, 19
+ May 2025 14:14:33 +0200
+To: buildroot@buildroot.org
+Date: Mon, 19 May 2025 14:14:22 +0200
+Message-ID: <20250519121425.1316837-1-fiona.klute@gmx.de>
+X-Mailer: git-send-email 2.49.0
 MIME-Version: 1.0
-References: <20250516-mtd-2-3-0-revert-v1-1-7f19b06acf09@collins.com>
-In-Reply-To: <20250516-mtd-2-3-0-revert-v1-1-7f19b06acf09@collins.com>
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Mon, 19 May 2025 13:40:10 +0200
-X-Gm-Features: AX0GCFsE10fVa9ChHd3mao4X7qEHQg_VNdw27CeRbK1MQQGfIF_CLwXI9oTeCPk
-Message-ID: <CAEyMn7bOpnNpME1NSX39QV9FECQaKZ_ACruEjybdQ+0JnxpjOg@mail.gmail.com>
-To: Brandon Maier <brandon.maier@collins.com>
+X-Provags-ID: V03:K1:1r/haS53WgM7kfY2dXmgSSMUiXBYzAOxAiYLrC/64AiKC98yERN
+ tv9oS60KDoS6uW9KpD0iArTh9joOzy4RcXVPnKWVLUth9igNlvD7aqBdla7xK7MNitwbb+T
+ VDGWe2SLwS+/APSWskg6AtDbi/JCPHzUrK848Qd6qrJLQsdDfsjkHNIqff7D2N8SSMTTmOP
+ ge1wsSoyKCMNBtk5nhe1Q==
+UI-OutboundReport: notjunk:1;M01:P0:GQmFFfLZx5A=;6ZwMdvtENWLBve7v6CObkt9Cjuk
+ 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
+ Og8h14VSKBa0i2qbz47AO98wLdp+mEAtJE
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1747654824; x=1748259624; darn=buildroot.org;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=hx//78RPWdOZxM6pV/eqwKA0oBgoYdHRcm9eHPZIFms=;
- b=BOTsuTV21fJFL73PaTHP1mb92wRci5VAALL8JvklIRtWqD9BrgFmDAI7NuByTdbkZc
- xGP/LNGWpzTqRBQVOcjzm/9Za7vN3Xo/agFZdhYDYdSVe7jiXi9/VzwBqMEYU7LIbz2n
- CqU6Bd4SihbupGHb/Kj2LDJtxycgUk+MiYAVf5+lct7JBNto62rS8VM0fLb/5lppOpHU
- 8UHsjagF/3WHSZ4sUIyj684e1bu7nL9IX41J/Ilyhz7m+QQGxCWjN1JGQM5xNMI9hWcY
- RFUja3hcn7yEJSEBmkIORVsuF1dPhfXShk23ydkhxGDz9lNwb34COnhMKmecWvD2kqT/
- 9z/g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=BOTsuTV2
-Subject: Re: [Buildroot] [PATCH] package/mtd: revert update to 2.3.0
+ d=gmx.de; 
+ s=s31663417; t=1747656873; x=1748261673; i=fiona.klute@gmx.de;
+ bh=xjMEhfc9bWH3sFXGfRt0Z/cDENwMvhO3Vwsz5Hom+eY=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
+ MIME-Version:Content-Transfer-Encoding:cc:
+ content-transfer-encoding:content-type:date:from:message-id:
+ mime-version:reply-to:subject:to;
+ b=JB2gPSfCHt0TKER5imyZlJR4reKvmZA0gWTawKqTQOU99iwgQ9keMwSy0MhS5oV/
+ wgfIDag7pwL6QCzz1P6ZBP3yLEwpesz8MWpDvKt29DAZ1eUIKx8BFrEsRihG5cCxh
+ kP55gB9JsCVAKMuiTJVU8NZUVCmoG9H9AFdIV4C/yew0Qd+TJr6gEnHUzdQNqoZ8/
+ kfrmd8vUyBKyLOAwp0Hi3sp7xyh1IUvfvNNrsy4BZfQ2NfCAku2g2zBFVkBPZrhmn
+ Cu5P2SV4cdjESAoH0O9BRJGWrY/FjdXzv9NKpSEGWJqUhkQSjxIskQ4uEdZtOFiO2
+ OV8Zdkq65PZ8q5caBA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=gmx.de
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
+ header.s=s31663417 header.b=JB2gPSfC
+Subject: [Buildroot] [PATCH v5 1/4] package/python-gobject: fix event source
+ registration with Python 3.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -100,269 +128,224 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============8766865505782451593=="
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ "Fiona Klute \(WIWA\)" <fiona.klute@gmx.de>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8766865505782451593==
-Content-Type: multipart/alternative; boundary="000000000000e4194e06357b987c"
+From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
 
---000000000000e4194e06357b987c
-Content-Type: text/plain; charset="UTF-8"
+Since Python 3.13 BaseSelectorEventLoop.add_reader() and
+BaseSelectorEventLoop.add_writer() use the mapping returned by
+selector.get_map() to detect if a file object is already
+registered. This fails with the implementation in gi.events._Selector
+if some calls use a file object, and others the raw file descriptor.
 
-Hi Brandon,
+Full upstream bug report:
+https://gitlab.gnome.org/GNOME/pygobject/-/issues/689
 
-Am Sa., 17. Mai 2025 um 00:30 Uhr schrieb Brandon Maier <
-brandon.maier@collins.com>:
+This bug breaks package/python-aiomqtt, because its client object uses
+file objects in some places for the connection socket, and the file
+descriptor in others. The result is that the connection attempt times
+out because source registration fails, and the Future that marks
+successful connection never resolves.
 
-> The mtd package fails to compile when BR2_PACKAGE_MTD_TESTS=y is enabled
-> with the following error.
->
-> > make[1]: *** No rule to make target
-> > 'tests/ubifs_tools-tests/images/good.gz', needed by 'all-am'.  Stop.
->
-> This issue was reported upstream and a patch submitted. However we can't
-> apply the patch to fix the problem. The issue is that a file is missing
-> from the released tarball, so only a new MTD release can fix it.
->
+This commit adds the fix as backported to PyGObject 3.50 [1] so it can
+be cherry-picked to Buildroot stable versions using that version.
 
-Thank you!
+[1] https://gitlab.gnome.org/GNOME/pygobject/-/merge_requests/423
 
+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+---
+Change v4 -> v5: Reorder patch before version bump to support backport
+to stable, replace patch with version applicable to 3.50.
 
-> This reverts commit 0c230eef9075a37248488ecf0a877012115f7b58.
->
-> Upstream:
-> https://lore.kernel.org/linux-mtd/20250220112554.2150046-1-m.olbrich@pengutronix.de/
-> Reported-by
-> <https://lore.kernel.org/linux-mtd/20250220112554.2150046-1-m.olbrich@pengutronix.de/Reported-by>:
-> Heiko Thiery <heiko.thiery@gmail.com>
-> Signed-off-by: Brandon Maier <brandon.maier@collins.com>
-> ---
->  package/mtd/mtd.hash | 4 ++--
->  package/mtd/mtd.mk   | 9 ++++-----
->  2 files changed, 6 insertions(+), 7 deletions(-)
->
-> diff --git a/package/mtd/mtd.hash b/package/mtd/mtd.hash
-> index
-> 84b9e83bff25814421e40bb9545cfa1af83007eb..0eb90a5118be19ca20c84b1c6d04c22b62330054
-> 100644
-> --- a/package/mtd/mtd.hash
-> +++ b/package/mtd/mtd.hash
-> @@ -1,4 +1,4 @@
->  # Locally calculated after checking pgp signature
-> -# https://infraroot.at/pub/mtd/mtd-utils-2.3.0.tar.bz2.asc
-> -sha256  2db102908b232406ccb20719c0f43b61196aef4534493419fbf98a273c598c10
-> mtd-utils-2.3.0.tar.bz2
-> +# https://infraroot.at/pub/mtd/mtd-utils-2.2.1.tar.bz2.asc
-> +sha256  f7ae20b2eb79ee83441468f0b99d897024cd96ff853eea59106fb1952065c803
-> mtd-utils-2.2.1.tar.bz2
->  sha256  dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa
-> COPYING
-> diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-> index
-> 4ff43a1dce6662d1c5365ce4da1f1a622d80ab7b..77050e7e40b6244c632c8298f6de52de8e2e485b
-> 100644
-> --- a/package/mtd/mtd.mk
-> +++ b/package/mtd/mtd.mk
-> @@ -4,7 +4,7 @@
->  #
->
->  ################################################################################
->
-> -MTD_VERSION = 2.3.0
-> +MTD_VERSION = 2.2.1
->  MTD_SOURCE = mtd-utils-$(MTD_VERSION).tar.bz2
->  MTD_SITE = https://infraroot.at/pub/mtd
->  MTD_LICENSE = GPL-2.0
-> @@ -12,7 +12,6 @@ MTD_LICENSE_FILES = COPYING
->  MTD_CPE_ID_VENDOR = mtd-utils_project
->  MTD_CPE_ID_PRODUCT = mtd-utils
->  MTD_INSTALL_STAGING = YES
-> -MTD_DEPENDENCIES = host-pkgconf
->
->  MTD_LDFLAGS = $(TARGET_LDFLAGS)
->
-> @@ -29,7 +28,7 @@ MTD_CONF_OPTS += --without-lzo
->  endif
->
->  ifeq ($(BR2_PACKAGE_ZLIB),y)
-> -MTD_DEPENDENCIES += zlib
-> +MTD_DEPENDENCIES += host-pkgconf zlib
->  MTD_CONF_OPTS += --with-zlib
->  else
->  MTD_CONF_OPTS += --without-zlib
-> @@ -44,7 +43,7 @@ MTD_CONF_OPTS += --without-jffs
->  endif
->
->  ifeq ($(BR2_PACKAGE_MTD_UBIFS_UTILS),y)
-> -MTD_DEPENDENCIES += util-linux
-> +MTD_DEPENDENCIES += util-linux host-pkgconf
->  MTD_CONF_OPTS += --with-ubifs
->  # crypto needs linux/hash_info.h
->  ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12)$(BR2_PACKAGE_OPENSSL),yy)
-> @@ -84,7 +83,7 @@ else
->  MTD_CONF_OPTS += --without-xattr
->  endif
->
-> -HOST_MTD_DEPENDENCIES = host-pkgconf host-acl host-zlib host-lzo
-> host-util-linux host-zstd
-> +HOST_MTD_DEPENDENCIES = host-acl host-zlib host-lzo host-util-linux
-> host-zstd
->  HOST_MTD_CONF_OPTS = \
->         --with-jffs \
->         --with-ubifs \
->
-> ---
-> base-commit: 6cd8f95346aaf7dd7c26e83d263969e5406420bd
-> change-id: 20250516-mtd-2-3-0-revert-28b5ef1055fc
->
-> Best regards,
-> --
-> Brandon Maier <brandon.maier@collins.com>
->
->
+Change v1 -> v2: Patch has been merged, switch upstream URL from MR to
+commit on main branch.
 
---000000000000e4194e06357b987c
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+ ...tor.get_map-look-up-file-objects-by-.patch | 163 ++++++++++++++++++
+ 1 file changed, 163 insertions(+)
+ create mode 100644 package/python-gobject/0001-gi.events._Selector.get_map-look-up-file-objects-by-.patch
 
-<div dir=3D"ltr"><div dir=3D"ltr">Hi Brandon,</div><br><div class=3D"gmail_=
-quote gmail_quote_container"><div dir=3D"ltr" class=3D"gmail_attr">Am Sa., =
-17. Mai 2025 um 00:30=C2=A0Uhr schrieb Brandon Maier &lt;<a href=3D"mailto:=
-brandon.maier@collins.com">brandon.maier@collins.com</a>&gt;:<br></div><blo=
-ckquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left=
-:1px solid rgb(204,204,204);padding-left:1ex">The mtd package fails to comp=
-ile when BR2_PACKAGE_MTD_TESTS=3Dy is enabled<br>
-with the following error.<br>
-<br>
-&gt; make[1]: *** No rule to make target<br>
-&gt; &#39;tests/ubifs_tools-tests/images/good.gz&#39;, needed by &#39;all-a=
-m&#39;.=C2=A0 Stop.<br>
-<br>
-This issue was reported upstream and a patch submitted. However we can&#39;=
-t<br>
-apply the patch to fix the problem. The issue is that a file is missing<br>
-from the released tarball, so only a new MTD release can fix it.<br></block=
-quote><div><br></div><div>Thank you!</div><div>=C2=A0</div><blockquote clas=
-s=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid r=
-gb(204,204,204);padding-left:1ex">
-This reverts commit 0c230eef9075a37248488ecf0a877012115f7b58.<br>
-<br>
-Upstream: <a href=3D"https://lore.kernel.org/linux-mtd/20250220112554.21500=
-46-1-m.olbrich@pengutronix.de/Reported-by" rel=3D"noreferrer" target=3D"_bl=
-ank">https://lore.kernel.org/linux-mtd/20250220112554.2150046-1-m.olbrich@p=
-engutronix.de/<br>
-Reported-by</a>: Heiko Thiery &lt;<a href=3D"mailto:heiko.thiery@gmail.com"=
- target=3D"_blank">heiko.thiery@gmail.com</a>&gt;<br>
-Signed-off-by: Brandon Maier &lt;<a href=3D"mailto:brandon.maier@collins.co=
-m" target=3D"_blank">brandon.maier@collins.com</a>&gt;<br>
----<br>
-=C2=A0package/mtd/mtd.hash | 4 ++--<br>
-=C2=A0package/mtd/<a href=3D"http://mtd.mk" rel=3D"noreferrer" target=3D"_b=
-lank">mtd.mk</a>=C2=A0 =C2=A0| 9 ++++-----<br>
-=C2=A02 files changed, 6 insertions(+), 7 deletions(-)<br>
-<br>
-diff --git a/package/mtd/mtd.hash b/package/mtd/mtd.hash<br>
-index 84b9e83bff25814421e40bb9545cfa1af83007eb..0eb90a5118be19ca20c84b1c6d0=
-4c22b62330054 100644<br>
---- a/package/mtd/mtd.hash<br>
-+++ b/package/mtd/mtd.hash<br>
-@@ -1,4 +1,4 @@<br>
-=C2=A0# Locally calculated after checking pgp signature<br>
--# <a href=3D"https://infraroot.at/pub/mtd/mtd-utils-2.3.0.tar.bz2.asc" rel=
-=3D"noreferrer" target=3D"_blank">https://infraroot.at/pub/mtd/mtd-utils-2.=
-3.0.tar.bz2.asc</a><br>
--sha256=C2=A0 2db102908b232406ccb20719c0f43b61196aef4534493419fbf98a273c598=
-c10=C2=A0 mtd-utils-2.3.0.tar.bz2<br>
-+# <a href=3D"https://infraroot.at/pub/mtd/mtd-utils-2.2.1.tar.bz2.asc" rel=
-=3D"noreferrer" target=3D"_blank">https://infraroot.at/pub/mtd/mtd-utils-2.=
-2.1.tar.bz2.asc</a><br>
-+sha256=C2=A0 f7ae20b2eb79ee83441468f0b99d897024cd96ff853eea59106fb1952065c=
-803=C2=A0 mtd-utils-2.2.1.tar.bz2<br>
-=C2=A0sha256=C2=A0 dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a2528=
-9852dcaa=C2=A0 COPYING<br>
-diff --git a/package/mtd/<a href=3D"http://mtd.mk" rel=3D"noreferrer" targe=
-t=3D"_blank">mtd.mk</a> b/package/mtd/<a href=3D"http://mtd.mk" rel=3D"nore=
-ferrer" target=3D"_blank">mtd.mk</a><br>
-index 4ff43a1dce6662d1c5365ce4da1f1a622d80ab7b..77050e7e40b6244c632c8298f6d=
-e52de8e2e485b 100644<br>
---- a/package/mtd/<a href=3D"http://mtd.mk" rel=3D"noreferrer" target=3D"_b=
-lank">mtd.mk</a><br>
-+++ b/package/mtd/<a href=3D"http://mtd.mk" rel=3D"noreferrer" target=3D"_b=
-lank">mtd.mk</a><br>
-@@ -4,7 +4,7 @@<br>
-=C2=A0#<br>
-=C2=A0#####################################################################=
-###########<br>
-<br>
--MTD_VERSION =3D 2.3.0<br>
-+MTD_VERSION =3D 2.2.1<br>
-=C2=A0MTD_SOURCE =3D mtd-utils-$(MTD_VERSION).tar.bz2<br>
-=C2=A0MTD_SITE =3D <a href=3D"https://infraroot.at/pub/mtd" rel=3D"noreferr=
-er" target=3D"_blank">https://infraroot.at/pub/mtd</a><br>
-=C2=A0MTD_LICENSE =3D GPL-2.0<br>
-@@ -12,7 +12,6 @@ MTD_LICENSE_FILES =3D COPYING<br>
-=C2=A0MTD_CPE_ID_VENDOR =3D mtd-utils_project<br>
-=C2=A0MTD_CPE_ID_PRODUCT =3D mtd-utils<br>
-=C2=A0MTD_INSTALL_STAGING =3D YES<br>
--MTD_DEPENDENCIES =3D host-pkgconf<br>
-<br>
-=C2=A0MTD_LDFLAGS =3D $(TARGET_LDFLAGS)<br>
-<br>
-@@ -29,7 +28,7 @@ MTD_CONF_OPTS +=3D --without-lzo<br>
-=C2=A0endif<br>
-<br>
-=C2=A0ifeq ($(BR2_PACKAGE_ZLIB),y)<br>
--MTD_DEPENDENCIES +=3D zlib<br>
-+MTD_DEPENDENCIES +=3D host-pkgconf zlib<br>
-=C2=A0MTD_CONF_OPTS +=3D --with-zlib<br>
-=C2=A0else<br>
-=C2=A0MTD_CONF_OPTS +=3D --without-zlib<br>
-@@ -44,7 +43,7 @@ MTD_CONF_OPTS +=3D --without-jffs<br>
-=C2=A0endif<br>
-<br>
-=C2=A0ifeq ($(BR2_PACKAGE_MTD_UBIFS_UTILS),y)<br>
--MTD_DEPENDENCIES +=3D util-linux<br>
-+MTD_DEPENDENCIES +=3D util-linux host-pkgconf<br>
-=C2=A0MTD_CONF_OPTS +=3D --with-ubifs<br>
-=C2=A0# crypto needs linux/hash_info.h<br>
-=C2=A0ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12)$(BR2_PACKAGE_OPENSSL),yy=
-)<br>
-@@ -84,7 +83,7 @@ else<br>
-=C2=A0MTD_CONF_OPTS +=3D --without-xattr<br>
-=C2=A0endif<br>
-<br>
--HOST_MTD_DEPENDENCIES =3D host-pkgconf host-acl host-zlib host-lzo host-ut=
-il-linux host-zstd<br>
-+HOST_MTD_DEPENDENCIES =3D host-acl host-zlib host-lzo host-util-linux host=
--zstd<br>
-=C2=A0HOST_MTD_CONF_OPTS =3D \<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 --with-jffs \<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 --with-ubifs \<br>
-<br>
----<br>
-base-commit: 6cd8f95346aaf7dd7c26e83d263969e5406420bd<br>
-change-id: 20250516-mtd-2-3-0-revert-28b5ef1055fc<br>
-<br>
-Best regards,<br>
--- <br>
-Brandon Maier &lt;<a href=3D"mailto:brandon.maier@collins.com" target=3D"_b=
-lank">brandon.maier@collins.com</a>&gt;<br>
-<br>
-</blockquote></div></div>
-
---000000000000e4194e06357b987c--
-
---===============8766865505782451593==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/python-gobject/0001-gi.events._Selector.get_map-look-up-file-objects-by-.patch b/package/python-gobject/0001-gi.events._Selector.get_map-look-up-file-objects-by-.patch
+new file mode 100644
+index 0000000000..baed785aa5
+--- /dev/null
++++ b/package/python-gobject/0001-gi.events._Selector.get_map-look-up-file-objects-by-.patch
+@@ -0,0 +1,163 @@
++From 3bb03bc5d095cf51c8605521fcc2ce8cad36995f Mon Sep 17 00:00:00 2001
++From: Fiona Klute <fiona.klute@gmx.de>
++Date: Tue, 25 Mar 2025 13:29:04 +0100
++Subject: [PATCH] gi.events._Selector.get_map(): look up file objects by file
++ descriptor
++
++File objects and their underlying file descriptors must be treated as
++equivalent for lookup, or one may incorrectly be treated as not
++registered when the other was used for the registration, leading to
++bugs.
++
++Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
++Upstream: https://gitlab.gnome.org/GNOME/pygobject/-/commit/3bb03bc5d095cf51c8605521fcc2ce8cad36995f
++---
++ gi/events.py         | 36 +++++++++++++++++++++-----
++ tests/test_events.py | 61 ++++++++++++++++++++++++++++++++++++++++++++
++ 2 files changed, 90 insertions(+), 7 deletions(-)
++
++diff --git a/gi/events.py b/gi/events.py
++index 9f00059ec..980cae0fe 100644
++--- a/gi/events.py
+++++ b/gi/events.py
++@@ -28,6 +28,7 @@ import threading
++ import selectors
++ import weakref
++ import warnings
+++from collections.abc import Mapping
++ from contextlib import contextmanager
++ from . import _ossighelper
++ 
++@@ -381,9 +382,33 @@ if sys.platform != 'win32':
++         # Subclass to attach _tag
++         pass
++ 
+++    class _FileObjectMapping(Mapping):
+++        def __init__(self, fd_dict):
+++            self.fd_dict = fd_dict
+++
+++        def __len__(self):
+++            return len(self.fd_dict)
+++
+++        def get(self, fileobj, default=None):
+++            fd = _fileobj_to_fd(fileobj)
+++            return self.fd_dict.get(fd, default)
+++
+++        def __getitem__(self, fileobj):
+++            value = self.get(fileobj)
+++            if value is None:
+++                raise KeyError("{!r} is not registered".format(fileobj))
+++            return value
+++
+++        def __iter__(self):
+++            return iter(self.fd_dict)
+++
++     class _Selector(_SelectorMixin, selectors.BaseSelector):
++         """A Selector for gi.events.GLibEventLoop registering python IO with GLib."""
++ 
+++        def __init__(self, context, loop):
+++            super().__init__(context, loop)
+++            self._map = _FileObjectMapping(self._fd_to_key)
+++
++         def attach(self):
++             self._source.attach(self._loop._context)
++ 
++@@ -432,15 +457,12 @@ if sys.platform != 'win32':
++         # We could override modify, but it is only slightly when the "events" change.
++ 
++         def get_key(self, fileobj):
++-            fd = _fileobj_to_fd(fileobj)
++-            return self._fd_to_key[fd]
+++            return self._map[fileobj]
++ 
++         def get_map(self):
++-            """Return a mapping of file objects to selector keys."""
++-            # Horribly inefficient
++-            # It should never be called and exists just to prevent issues if e.g.
++-            # python decides to use it for debug purposes.
++-            return {k.fileobj: k for k in self._fd_to_key.values()}
+++            """Return a mapping of file objects or file descriptors to
+++            selector keys."""
+++            return self._map
++ 
++ 
++ else:
++diff --git a/tests/test_events.py b/tests/test_events.py
++index 81409abae..c075af095 100644
++--- a/tests/test_events.py
+++++ b/tests/test_events.py
++@@ -45,6 +45,7 @@ import sys
++ import gi
++ import gi.events
++ import asyncio
+++import socket
++ import threading
++ from gi.repository import GLib
++ 
++@@ -262,3 +263,63 @@ class GLibEventLoopPolicyTests(unittest.TestCase):
++         GLib.MainLoop().run()
++ 
++         loop.close()
+++
+++    @unittest.skipIf(sys.platform == 'win32', 'add reader/writer not implemented')
+++    def test_source_fileobj_fd(self):
+++        """Regression test for
+++        https://gitlab.gnome.org/GNOME/pygobject/-/issues/689
+++        """
+++        class Echo:
+++            def __init__(self, sock, expect_bytes):
+++                self.sock = sock
+++                self.sent_bytes = 0
+++                self.expect_bytes = expect_bytes
+++                self.done = asyncio.Future()
+++                self.data = bytes()
+++
+++            def send(self):
+++                if self.done.done():
+++                    return
+++                if self.sent_bytes < len(self.data):
+++                    self.sent_bytes += self.sock.send(
+++                        self.data[self.sent_bytes:])
+++                    print('sent', self.data)
+++                if self.sent_bytes >= self.expect_bytes:
+++                    self.done.set_result(None)
+++                    self.sock.shutdown(socket.SHUT_WR)
+++
+++            def recv(self):
+++                if self.done.done():
+++                    return
+++                self.data += self.sock.recv(self.expect_bytes)
+++                print('received', self.data)
+++                if len(self.data) >= self.expect_bytes:
+++                    self.sock.shutdown(socket.SHUT_RD)
+++
+++        async def run():
+++            loop = asyncio.get_running_loop()
+++            s1, s2 = socket.socketpair()
+++            sample = b'Hello!'
+++            e = Echo(s1, len(sample))
+++            # register using file object and file descriptor
+++            loop.add_reader(s1, e.recv)
+++            loop.add_writer(s1.fileno(), e.send)
+++            s2.sendall(sample)
+++            await asyncio.wait_for(e.done, timeout=2.0)
+++            echo = bytes()
+++            for _ in range(len(sample)):
+++                echo += s2.recv(len(sample))
+++                if len(echo) == len(sample):
+++                    break
+++            # remove using file object and file descriptor
+++            loop.remove_reader(s1)
+++            loop.remove_writer(s1.fileno())
+++            s1.close()
+++            s2.close()
+++            # check if the data was echoed correctly
+++            self.assertEqual(sample, echo)
+++
+++        policy = self.create_policy()
+++        loop = policy.get_event_loop()
+++        loop.run_until_complete(run())
+++        loop.close()
++-- 
++GitLab
++
+-- 
+2.49.0
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8766865505782451593==--
