@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CAD6BC3ABDD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 16:48:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B124C2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 16:48:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8358782223;
-	Mon, 19 May 2025 16:48:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0003F60F22;
+	Mon, 19 May 2025 16:48:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sDfjIhMPVOS2; Mon, 19 May 2025 16:48:13 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id T-D__xgMzI57; Mon, 19 May 2025 16:48:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B8F1982A8F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3EF6060F36
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B8F1982A8F;
-	Mon, 19 May 2025 16:48:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3EF6060F36;
+	Mon, 19 May 2025 16:48:15 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 27C42193
- for <buildroot@buildroot.org>; Mon, 19 May 2025 16:48:07 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1F9F9193
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 16:48:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0CE0960B57
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2687F60BD8
  for <buildroot@buildroot.org>; Mon, 19 May 2025 16:48:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Zrtrp11ZZyfo for <buildroot@buildroot.org>;
+ id myfROz-g6goY for <buildroot@buildroot.org>;
  Mon, 19 May 2025 16:48:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5179560BD8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6783C60E31
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5179560BD8
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6783C60E31
  for <buildroot@buildroot.org>; Mon, 19 May 2025 16:48:06 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3EBD9874AA; Mon, 19 May 2025 16:48:06 +0000 (UTC)
+ id 2C917874A9; Mon, 19 May 2025 16:48:06 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
 Date: Mon, 19 May 2025 18:46:13 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 62e784cb97641b5d09eaab04f81e10982d636bcc
-X-Git-Newrev: b5f14d65cb420685ea636c8541f98eff3b2f3630
+X-Git-Oldrev: 58cf7c51da3ae4804332f68ee934e153d695d047
+X-Git-Newrev: 5fd75bfb02fefdf23d9fe284ff58ed28487edd8e
 X-Patchwork-Hint: ignore
-Message-Id: <20250519164806.3EBD9874AA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/gcc: drop useless
- condition on BR2_GCC_ENABLE_GRAPHITE
+Message-Id: <20250519164806.2C917874A9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/gcc: drop stale hash
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,34 +64,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b5f14d65cb420685ea636c8541f98eff3b2f3630
+commit: https://git.buildroot.net/buildroot/commit/?id=5fd75bfb02fefdf23d9fe284ff58ed28487edd8e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-For a long while now, we only support building GCC >= 8.x, so the
-dependency of BR2_GCC_ENABLE_GRAPHITE on GCC >= 5.x is useless, drop
-it, together with the corresponding Config.in comment.
+The hash for the GCC 10.4.0 tarball should have been removed a long
+time ago, when support for GCC 10.x has been removed.
 
+Fixes: d37a8f3a2e2a387b102f2982d51aca78bcc09727 ("package/gcc: remove gcc 10.x")
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/gcc/Config.in.host | 4 ----
- 1 file changed, 4 deletions(-)
+ package/gcc/gcc.hash | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 8930c2a42a..496ead1e6a 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -128,10 +128,6 @@ config BR2_GCC_ENABLE_OPENMP
- 
- config BR2_GCC_ENABLE_GRAPHITE
- 	bool "Enable graphite support"
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
- 	help
- 	  This option enables the graphite optimizations in the
- 	  compiler.
--
--comment "graphite support needs gcc >= 5.x"
--	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_5
+diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
+index 7a473cdc02..00da7dd49b 100644
+--- a/package/gcc/gcc.hash
++++ b/package/gcc/gcc.hash
+@@ -1,7 +1,5 @@
+ # From https://gcc.gnu.org/pub/gcc/releases/gcc-8.4.0/sha512.sum
+ sha512  6de904f552a02de33b11ef52312bb664396efd7e1ce3bbe37bfad5ef617f133095b3767b4804bc7fe78df335cb53bc83f1ac055baed40979ce4c2c3e46b70280  gcc-8.4.0.tar.xz
+-# From https://gcc.gnu.org/pub/gcc/releases/gcc-10.4.0/sha512.sum
+-sha512  440c08ca746da450d9a1b35e8fd2305cb27e7e6987cd9d0f7d375f3b1fc9e4b0bd7acb3cd7bf795e72fcbead59cdef5b6c152862f5d35cd9fbfe6902101ce648  gcc-10.4.0.tar.xz
+ # From https://gcc.gnu.org/pub/gcc/releases/gcc-13.3.0/sha512.sum
+ sha512  ed5f2f4c6ed2c796fcf2c93707159e9dbd3ddb1ba063d549804dd68cdabbb6d550985ae1c8465ae9a336cfe29274a6eb0f42e21924360574ebd8e5d5c7c9a801  gcc-13.3.0.tar.xz
+ # From https://gcc.gnu.org/pub/gcc/releases/gcc-14.2.0/sha512.sum
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
