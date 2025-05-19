@@ -4,77 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D9ADC3ABDD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 16:53:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A07C8C2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 16:59:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 655FF40CE1;
-	Mon, 19 May 2025 16:53:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6757A40DA4;
+	Mon, 19 May 2025 16:59:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VDX7d3iwZKlC; Mon, 19 May 2025 16:52:59 +0000 (UTC)
+ id aTp86PrF7JF1; Mon, 19 May 2025 16:59:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 90D6540CFC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9CFAE40DBD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 90D6540CFC;
-	Mon, 19 May 2025 16:52:59 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id AEC46D4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 16:52:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9CFAE40DBD;
+	Mon, 19 May 2025 16:59:32 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 17EF7D4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 16:59:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A000240CDD
- for <buildroot@buildroot.org>; Mon, 19 May 2025 16:52:58 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 09EF282A17
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 16:59:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hRB1cqOwHRaq for <buildroot@buildroot.org>;
- Mon, 19 May 2025 16:52:58 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CB4A140CDE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB4A140CDE
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CB4A140CDE
- for <buildroot@buildroot.org>; Mon, 19 May 2025 16:52:57 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id D056C780368;
- Mon, 19 May 2025 18:52:46 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
- via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 19 May 2025 18:52:46 +0200
-MIME-Version: 1.0
-Date: Mon, 19 May 2025 18:52:46 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Rp588zFa9zwT for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 16:59:30 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5D73C82CC7
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5D73C82CC7
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 16:59:30 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 57AD28741C; Mon, 19 May 2025 16:59:30 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Neal Frager <neal.frager@amd.com>
-Cc: buildroot@buildroot.org, ibai.erkiaga-elorza@amd.com,
- luca.ceresoli@bootlin.com, brandon.maier@collins.com,
- thomas.petazzoni@bootlin.com, romain.naour@smile.fr, michal.simek@amd.com,
- arnout@mind.be
-In-Reply-To: <20250505084839.3872523-1-neal.frager@amd.com>
-References: <20250505084839.3872523-1-neal.frager@amd.com>
-User-Agent: Webmail Free/1.6.10
-Message-ID: <91da5ffae5ea8e9533931262f528f830@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1747673575;
- bh=JYnpunrDspgMqriuL/TuFn/rtQTk/IvNp8tAIhvA4gA=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=mgGtgB7DqIv9Wo5N0j6q12hEe37osKqhhWf7m5LNJETxnJCqWn0pkhK0mqYW9EQ4x
- zpT3erSsQveLJQ1HXPlUlAd4Ps+LEDytJ9pl8a+1FRi7XGUdvLwb0mYAyj/cFMKSKv
- I69eRfLZwclY0Hu0DDQcYUHRdKYbVIoKfVgE3BtxqB9PEeUSDvl+eUUv/OLAkStAm4
- 7aRRZt7Q6/LuATJxDchpY8wt01Ulxhk8V2ampr/Q2421kabFyRuSXwhuzYWBIrABAQ
- sz7jBAIgcioMjnR8V0CKkpsgcU/NLNxwVZLP/Wz3w8ee3i7E3ZVnVKlUK6Nfl5E6fk
- DT34XsR17Dhmw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=mgGtgB7D
-Subject: Re: [Buildroot] [PATCH v1 1/1] package/gcc-bare-metal: bump to gcc
- 15.1.0
+To: buildroot@buildroot.org
+Date: Mon, 19 May 2025 18:54:05 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: a4d774781ffef71fea3aae81b4201dd9a6803205
+X-Git-Newrev: bd0975b9429975aa9362d3be502059645e7b7810
+X-Patchwork-Hint: ignore
+Message-Id: <20250519165930.57AD28741C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/luaposix: bump to
+ version 36.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,20 +59,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 05/05/2025 10:48, Neal Frager via buildroot wrote:
-> This patch bumps gcc-bare-metal to gcc 15.1.0.
-> 
-> See here for changes:
-> https://gcc.gnu.org/gcc-15/changes.html
-> 
-> Signed-off-by: Neal Frager <neal.frager@amd.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=bd0975b9429975aa9362d3be502059645e7b7810
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Applied to next, thanks.
+diff LICENSE:
+    -Copyright (C) 2006-2023 luaposix authors
+    +Copyright (C) 2006-2025 luaposix authors
+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/luaposix/luaposix.hash | 4 ++--
+ package/luaposix/luaposix.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/luaposix/luaposix.hash b/package/luaposix/luaposix.hash
+index d54395c29b..fbcc0dd6fa 100644
+--- a/package/luaposix/luaposix.hash
++++ b/package/luaposix/luaposix.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  44e5087cd3c47058f9934b90c0017e4cf870b71619f99707dd433074622debb1  luaposix-36.2.1.tar.gz
+-sha256  ea0fdaae50b0d31a81c2c99f4354264783c71043fd40522feaa40eecc069599b  LICENSE
++sha256  82cd9a96c41a4a3205c050206f0564ff4456f773a8f9ffc9235ff8f1907ca5e6  luaposix-36.3.tar.gz
++sha256  0aaf3d6797693f3ea0ef4df2cb4d43627b00eb08213ead4fb037a8c4a04f8631  LICENSE
+diff --git a/package/luaposix/luaposix.mk b/package/luaposix/luaposix.mk
+index c5d98fbbd4..46be3b42a5 100644
+--- a/package/luaposix/luaposix.mk
++++ b/package/luaposix/luaposix.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LUAPOSIX_VERSION = 36.2.1
++LUAPOSIX_VERSION = 36.3
+ LUAPOSIX_SITE = $(call github,luaposix,luaposix,v$(LUAPOSIX_VERSION))
+ LUAPOSIX_LICENSE = MIT
+ LUAPOSIX_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
