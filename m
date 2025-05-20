@@ -4,74 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EE61C3ABDD
-	for <buildroot@archiver.kernel.org>; Tue, 20 May 2025 12:27:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C8B5C3ABDD
+	for <buildroot@archiver.kernel.org>; Tue, 20 May 2025 14:39:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2804C6086C;
-	Tue, 20 May 2025 12:27:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ED71A60738;
+	Tue, 20 May 2025 14:39:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id H9g7pqe9s5Ls; Tue, 20 May 2025 12:27:10 +0000 (UTC)
+ id IU_WGppm2e8y; Tue, 20 May 2025 14:39:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC3ED6105D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0834B61030
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CC3ED6105D;
-	Tue, 20 May 2025 12:27:10 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 2D12ED4
- for <buildroot@buildroot.org>; Tue, 20 May 2025 12:27:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0834B61030;
+	Tue, 20 May 2025 14:39:54 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 774E5DE
+ for <buildroot@buildroot.org>; Tue, 20 May 2025 14:39:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1312D40375
- for <buildroot@buildroot.org>; Tue, 20 May 2025 12:27:09 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5D75F40118
+ for <buildroot@buildroot.org>; Tue, 20 May 2025 14:39:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yjmjkLUbaRjk for <buildroot@buildroot.org>;
- Tue, 20 May 2025 12:27:08 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
- helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org DCAB84035C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DCAB84035C
-Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DCAB84035C
- for <buildroot@buildroot.org>; Tue, 20 May 2025 12:27:07 +0000 (UTC)
-Received: from [192.168.178.42] (unknown [212.37.174.96])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id 5D1F72C800A0;
- Tue, 20 May 2025 14:27:05 +0200 (CEST)
-Message-ID: <1e718904-658f-4221-bd35-42ab8d263084@bubu1.eu>
-Date: Tue, 20 May 2025 14:27:04 +0200
+ id 6XN9lpt6bKRj for <buildroot@buildroot.org>;
+ Tue, 20 May 2025 14:39:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=136.243.2.102;
+ helo=nyx.n621.de; envelope-from=fl@n621.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4724C403BB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4724C403BB
+Received: from nyx.n621.de (v4gw.hekate.n621.de [136.243.2.102])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4724C403BB
+ for <buildroot@buildroot.org>; Tue, 20 May 2025 14:39:51 +0000 (UTC)
+Received: by nyx.n621.de (Postfix, from userid 1000)
+ id E56D4E0022C; Tue, 20 May 2025 16:39:47 +0200 (CEST)
+Date: Tue, 20 May 2025 16:39:47 +0200
+From: Florian Larysch <fl@n621.de>
+To: Thomas Perale <thomas.perale@mind.be>
+Cc: buildroot@buildroot.org, James Hilliard <james.hilliard1@gmail.com>,
+ Lionel Flandrin <lionel@svkt.org>, arnout@mind.be
+Message-ID: <20250520143947.h3j5i3nblgu4ielq@n621.de>
+References: <20250514150446.968758-1-thomas.perale@mind.be>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Fiona Klute <fiona.klute@gmx.de>, buildroot@buildroot.org
-References: <20250118133740.4001841-1-fiona.klute@gmx.de>
- <8eccd976-c4c1-4fdc-a3c5-340b4a7f979b@gmx.de>
- <6521217e-0d5a-42ae-a315-c533f0f66909@bubu1.eu>
- <031308f4-35e5-451f-8a6d-1e826ad69b75@gmx.de>
-Content-Language: en-US
-In-Reply-To: <031308f4-35e5-451f-8a6d-1e826ad69b75@gmx.de>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=bubu1.eu; s=bubu; 
- t=1747744025; bh=uqZ+kevl0CUMR9oNCrKqMQ7NXiuoPvlfD+Rqgz4y3NU=;
- h=Date:Subject:To:References:From:In-Reply-To;
- b=bYKOwqnJJ5SgFkxppircY0YLNBgtz33szKOItHxM4HlnrpyusKYYmqrh0uD1O4CBJ
- 1jywd5uTxm18YGmC0Q+ZzKxwwHUNUr9nLjN/NA7lwiQkxaMGa85Qe6cJLnM68J0Alk
- oNVaQl0/J5/JU0hUVpcEt9qwXtH0xyDa71Gn38mkjhD+QCYk7XIm7Aj66I1xC19Ou8
- SpAMqihmHZJBv5FntV4G2a4w6AsKF4U0fauDn/8qvDmmeftsgh5dox4hNyFcYjw7BH
- HPuuGt4/nHYnMDqiFjjElLTN2zrkS1p1FNikBDVra9vmdh0YUWLenTgoSWdpN/nJ4G
- /hJHEJLYPqcyA==
+Content-Disposition: inline
+In-Reply-To: <20250514150446.968758-1-thomas.perale@mind.be>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=n621.de; s=dkim; t=1747751987;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ in-reply-to:in-reply-to:references:references;
+ bh=0/j3GD6f+ZoSyD/9JbdtjILzkLIkc35B7KFfdGnjhGw=;
+ b=YJQZI2QMighSwnxQ5Y8uf68/lss5pbomcKP4ykRvM/ERJkFKcFHoabj4j3HHdvTTEVbf4a
+ bRyuXCJDCpsjqGvugj7Yaxh9guQZvADtBzFpVGHubmthRjCjyIxwHWCD2naaGLq7fWV5mP
+ x3HM9Zipot/eB9PBFvzjTqa2NH6ahLU=
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bubu1.eu
+ dmarc=pass (p=none dis=none)
+ header.from=n621.de
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
- header.s=bubu header.b=bYKOwqnJ
-Subject: Re: [Buildroot] [PATCH 1/1] package/wireless-regdb: sysv init
- script to set regdomain
+ dkim=pass (1024-bit key,
+ unprotected) header.d=n621.de header.i=@n621.de header.a=rsa-sha256
+ header.s=dkim header.b=YJQZI2QM
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-flask: security bump to
+ version 3.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,81 +77,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Fiona,
+Hi Thomas,
 
-On 20.05.25 12:34, Fiona Klute wrote:
-> Hi Marcus!
-> 
-> Am 19.05.25 um 21:03 schrieb Marcus Hoffmann via buildroot:
->> Hi Fiona,
->>
->> On 19.05.25 17:37, Fiona Klute via buildroot wrote:
->>> Hi everyone,
->>>
->>> just want to check if there's any interest in merging this. It's 
->>> trivial enough to maintain in an external tree otherwise, I just 
->>> figured it might be useful for anyone who's also using a wireless 
->>> setup that doesn't have a built-in way to set the regulatory domain 
->>> (namely, NetworkManager).
->>
->> We also use NetworkManager but systemd as our init system, so I ended 
->> up writing a udev rule that calls a script, that sets the regulatory 
->> domain. Would be nice to just universally have a solution for this, 
->> but I guess having a SysV initscript is better than not having it?
-> NetworkManager requires udev (eudev) even without systemd, so a udev 
-> rule would actually work for me, too, as long as the script is 
-> configurable. I hadn't really thought about that because I'm setting the 
-> global regulatory domain, not a device one, but for most embedded 
-> systems "set during boot" and "set when a wifi device is added" will be 
-> close enough that the difference doesn't matter.
-> 
-> Anyone who uses wpa_supplicant, iwd, or hostapd can set the country code 
-> in the config there, so I'm not sure if there's much of a need for a 
-> non-udev solution.
+alas, this release changed more than just fixing that security issue. In
+particular, the changes in [1] are breaking the build of 2025.02.x for
+me:
 
-Doesn't NetworkManager use either wpa_supplicant or iwd for managing 
-wireless device? Or does that not (easily) work, if those are controlled 
-though NetworkManager? (we use wpa_supplicant, but only through NM, I 
-think?)
+  * Getting build dependencies for wheel...
+  Unexpected names under [project]: license-files
+  Traceback (most recent call last):
+    File "/home/flarysch/br-test-pkg/bootlin-armv5-uclibc/host/lib/python3.12/site-packages/pyproject_hooks/_in_process/_in_process.py", line 389, in <module>
+      main()
+    File "/home/flarysch/br-test-pkg/bootlin-armv5-uclibc/host/lib/python3.12/site-packages/pyproject_hooks/_in_process/_in_process.py", line 373, in main
+      json_out["return_val"] = hook(**hook_input["kwargs"])
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    File "/home/flarysch/br-test-pkg/bootlin-armv5-uclibc/host/lib/python3.12/site-packages/pyproject_hooks/_in_process/_in_process.py", line 143, in get_requires_for_build_wheel
+      return hook(config_settings)
+             ^^^^^^^^^^^^^^^^^^^^^
+    File "/home/flarysch/br-test-pkg/bootlin-armv5-uclibc/host/lib/python3.12/site-packages/flit_core/buildapi.py", line 23, in get_requires_for_build_wheel
+      info = read_flit_config(pyproj_toml)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    File "/home/flarysch/br-test-pkg/bootlin-armv5-uclibc/host/lib/python3.12/site-packages/flit_core/config.py", line 81, in read_flit_config
+      return prep_toml_config(d, path)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+    File "/home/flarysch/br-test-pkg/bootlin-armv5-uclibc/host/lib/python3.12/site-packages/flit_core/config.py", line 108, in prep_toml_config
+      loaded_cfg = read_pep621_metadata(d['project'], path)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    File "/home/flarysch/br-test-pkg/bootlin-armv5-uclibc/host/lib/python3.12/site-packages/flit_core/config.py", line 529, in read_pep621_metadata
+      _check_type(proj, 'license', dict)
+    File "/home/flarysch/br-test-pkg/bootlin-armv5-uclibc/host/lib/python3.12/site-packages/flit_core/config.py", line 444, in _check_type
+      raise ConfigError(
+  flit_core.config.ConfigError: license field should be <class 'dict'>, not <class 'str'>
+  
+  ERROR Backend subprocess exited when trying to invoke get_requires_for_build_wheel
+  make: *** [package/pkg-generic.mk:273: /home/flarysch/br-test-pkg/bootlin-armv5-uclibc/build/python-flask-3.1.1/.stamp_built] Error 1
 
+This can be reproduced with test-pkg using
 
-> Would you be willing to share your udev rule?
+  BR2_PACKAGE_PYTHON3=y
+  BR2_PACKAGE_PYTHON_FLASK=y
 
-Sure, we currently have these three things:
+As I understand it, this is happening because flask moved its
+pyproject.toml to PEP 639 license expressions but flit only introduced
+support for those in [2], which is part of 3.11.0, which wasn't included
+in 2025.02.2/.3, while the flask bump was.
 
-$ cat rootfs-overlay/usr/lib/udev/rules.d/85-regulatory.rules
-# Set wireless regulatory domain at device creation
+The flit 3.10.1..3.11.0 diff doesn't look to bad, so maybe 2025.02.x
+could pick up the flip bump too? Alternatively, we could revert the
+flask bump and just import the security patch (just [3], if I'm not
+mistaken).
 
-ACTION=="add", SUBSYSTEM=="module", DEVPATH=="/module/cfg80211", 
-RUN+="/usr/bin/set-wireless-regdom"
+Florian
 
-$ cat rootfs-overlay/usr/bin/set-wireless-regdom
-#!/bin/sh
-
-unset WIRELESS_REGDOM
-. /etc/default/wireless-regdom
-[ -n "${WIRELESS_REGDOM}" ] && iw reg set "${WIRELESS_REGDOM}"
-
-$ cat rootfs-overlay/etc/default/wireless-regdom
-#
-# Wireless regulatory domain configuration
-#
-WIRELESS_REGDOM=DE
-
-> 
-> Best regards,
-> Fiona
-> 
-
-Best,
-Marcus
+[1] https://github.com/pallets/flask/commit/0109e496f6ca68de29480fe6413e81b1d3f86aa9
+[2] https://github.com/pypa/flit/commit/640b6ad973e406b352649d36eb35dc208ecbb0ca
+[3] https://github.com/pallets/flask/commit/fb54159861708558b5f5658ebdc14709d984361c
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
