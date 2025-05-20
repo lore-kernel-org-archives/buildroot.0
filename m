@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 169C9C61CE8
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D41CC71148
 	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 08:38:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DEB8F61060;
+	by smtp1.osuosl.org (Postfix) with ESMTP id E710580B90;
 	Thu, 12 Jun 2025 08:38:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WhD4egHCn6eG; Thu, 12 Jun 2025 08:38:39 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4qO0-FxMpMQm; Thu, 12 Jun 2025 08:38:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3EA4C61049
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B5E4481236
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3EA4C61049;
-	Thu, 12 Jun 2025 08:38:39 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 62CE11E0
+	by smtp1.osuosl.org (Postfix) with ESMTP id B5E4481236;
+	Thu, 12 Jun 2025 08:38:40 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id D3DAD1E0
  for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 49AB460B60
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:29 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B8BB580D66
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oOY0xX7gw4n5 for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id u36LQZBwwsYS for <buildroot@buildroot.org>;
  Thu, 12 Jun 2025 08:38:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 63E3F60B42
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E314880D5A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 63E3F60B42
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:28 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E314880D5A
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 608A87FB36; Thu, 12 Jun 2025 08:38:28 +0000 (UTC)
+ id D48277FB36; Thu, 12 Jun 2025 08:38:27 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 20 May 2025 19:27:48 +0200
+Date: Tue, 20 May 2025 19:18:17 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 11818cd07d1ba2794619552788327136b24df9da
-X-Git-Newrev: 10cc2fc1c611c16ed603f3c47a37b5a8f1ade90c
+X-Git-Oldrev: 85e14a916a79424c11e100cf6b3b63262aef6165
+X-Git-Newrev: e8c67b13d86173170282e51bf6469899b1686433
 X-Patchwork-Hint: ignore
-Message-Id: <20250612083828.608A87FB36@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/alsa-lib: bump version to 1.2.14
+Message-Id: <20250612083827.D48277FB36@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gkrellm: bump version to 2.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,139 +64,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=10cc2fc1c611c16ed603f3c47a37b5a8f1ade90c
+commit: https://git.buildroot.net/buildroot/commit/?id=e8c67b13d86173170282e51bf6469899b1686433
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Changelog:
-https://www.alsa-project.org/wiki/Changes_v1.2.13_v1.2.14#alsa-lib
+https://git.srcbox.net/gkrellm/gkrellm/releases/tag/gkrellm-2.4.0
 
-Removed patch 0002 which is included in upstream release.
-
-Remove Kconfig options for alisp which was removed upstream.
+Updated license hash due to copyright year bump:
+https://git.srcbox.net/gkrellm/gkrellm/commit/b6bc5b379564a5df72d3b047df655652976937fb
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-[Julien:
-  - move the legacy option to a new 2025.08 section
-  - add alsa-lib version in Congig.in.legacy comment
-]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- Config.in.legacy                                   |  8 +++++
- ...igure-Make-sequencer-dependent-on-rawmidi.patch | 35 ----------------------
- package/alsa-lib/Config.in                         |  5 ----
- package/alsa-lib/alsa-lib.hash                     |  2 +-
- package/alsa-lib/alsa-lib.mk                       |  5 +---
- 5 files changed, 10 insertions(+), 45 deletions(-)
+ package/gkrellm/gkrellm.hash | 4 ++--
+ package/gkrellm/gkrellm.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 3289bd8385..9681617a3c 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -144,6 +144,14 @@ endif
- 
- ###############################################################################
- 
-+comment "Legacy options removed in 2025.08"
-+
-+config BR2_PACKAGE_ALSA_LIB_ALISP
-+	bool "alsa-lib alisp support removed"
-+	select BR2_LEGACY
-+	help
-+	  Support for alisp was removed from alsa-lib v1.12.14.
-+
- comment "Legacy options removed in 2025.05"
- 
- config BR2_GCC_VERSION_12_X
-diff --git a/package/alsa-lib/0002-configure-Make-sequencer-dependent-on-rawmidi.patch b/package/alsa-lib/0002-configure-Make-sequencer-dependent-on-rawmidi.patch
-deleted file mode 100644
-index fb1d18df36..0000000000
---- a/package/alsa-lib/0002-configure-Make-sequencer-dependent-on-rawmidi.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From: Takashi Iwai <tiwai@suse.de>
--Date: Sun, 24 Nov 2024 08:32:29 +0000 (+0100)
--Subject: configure: Make sequencer dependent on rawmidi
--X-Git-Url: https://git.alsa-project.org/?p=alsa-lib.git;a=commitdiff_plain;h=6880219ad4ba55ae8a94a34b7a987b3369f7c96f
--
--configure: Make sequencer dependent on rawmidi
--
--The sequencer feature requires rawmidi implicitly, and it became more
--obvious with UMP support.  Add the dependency check to configure
--script.
--
--Signed-off-by: Takashi Iwai <tiwai@suse.de>
--
--Upstream: https://git.alsa-project.org/?p=alsa-lib.git;a=commitdiff;h=6880219ad4ba55ae8a94a34b7a987b3369f7c96f
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
--
--diff --git a/configure.ac b/configure.ac
--index 1cd22a59..69aeb978 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -483,6 +483,12 @@ fi
-- AC_SUBST(PYTHON_LIBS)
-- AC_SUBST(PYTHON_INCLUDES)
-- 
--+if test "$build_rawmidi" != "yes"; then
--+  if test "$build_seq" = "yes"; then
--+    AC_ERROR([Cannot enable sequencer without rawmidi])
--+  fi
--+fi
--+
-- AM_CONDITIONAL([BUILD_MIXER], [test x$build_mixer = xyes])
-- AM_CONDITIONAL([BUILD_PCM], [test x$build_pcm = xyes])
-- AM_CONDITIONAL([BUILD_RAWMIDI], [test x$build_rawmidi = xyes])
-diff --git a/package/alsa-lib/Config.in b/package/alsa-lib/Config.in
-index 360122f97f..304f947f83 100644
---- a/package/alsa-lib/Config.in
-+++ b/package/alsa-lib/Config.in
-@@ -73,11 +73,6 @@ config BR2_PACKAGE_ALSA_LIB_UCM
- 	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_ALSA_LIB_MIXER
- 
--config BR2_PACKAGE_ALSA_LIB_ALISP
--	bool "alisp"
--	default y
--	depends on BR2_USE_MMU
--
- config BR2_PACKAGE_ALSA_LIB_OLD_SYMBOLS
- 	bool "old-symbols"
- 	default y
-diff --git a/package/alsa-lib/alsa-lib.hash b/package/alsa-lib/alsa-lib.hash
-index 0533df7954..26d54b6e1b 100644
---- a/package/alsa-lib/alsa-lib.hash
-+++ b/package/alsa-lib/alsa-lib.hash
+diff --git a/package/gkrellm/gkrellm.hash b/package/gkrellm/gkrellm.hash
+index 88624c3366..27ba276efa 100644
+--- a/package/gkrellm/gkrellm.hash
++++ b/package/gkrellm/gkrellm.hash
 @@ -1,4 +1,4 @@
- # Locally calculated
--sha256  8c4ff37553cbe89618e187e4c779f71a9bb2a8b27b91f87ed40987cc9233d8f6  alsa-lib-1.2.13.tar.bz2
-+sha256  be9c88a0b3604367dd74167a2b754a35e142f670292ae47a2fdef27a2ee97a32  alsa-lib-1.2.14.tar.bz2
- sha256  32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b  COPYING
- sha256  bfe16cf823bcff261fc6a062c07ee96660e3c39678f42f39a788a68dbc234ced  aserver/COPYING
-diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
-index 6272fa69df..34c1688e98 100644
---- a/package/alsa-lib/alsa-lib.mk
-+++ b/package/alsa-lib/alsa-lib.mk
+ # Locally computed
+-sha256  1ee0643ed9ed99f88c1504c89d9ccb20780cf29319c904b68e80a8e7c8678c06  gkrellm-2.3.11.tar.bz2
++sha256  6f83665760b936ad4b55f9182b1ec7601faf38a0f25ea1e4bddc9965088f032d  gkrellm-2.4.0.tar.bz2
+ sha256  691de85c3c6eeda5b6982c751548575344739ce4b4418d78905e599359f6c435  COPYING
+-sha256  b81e0c0c3fb2a58f25377388484a1f729abb367f5f2b43e335a6ed3272ce8536  COPYRIGHT
++sha256  a4bb0b604fe7d40ca4469ffd5e2e2de70ff8ece43e47980ab2c8962d5e913330  COPYRIGHT
+diff --git a/package/gkrellm/gkrellm.mk b/package/gkrellm/gkrellm.mk
+index 27a87be190..165b71c7c8 100644
+--- a/package/gkrellm/gkrellm.mk
++++ b/package/gkrellm/gkrellm.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ALSA_LIB_VERSION = 1.2.13
-+ALSA_LIB_VERSION = 1.2.14
- ALSA_LIB_SOURCE = alsa-lib-$(ALSA_LIB_VERSION).tar.bz2
- ALSA_LIB_SITE = https://www.alsa-project.org/files/pub/lib
- ALSA_LIB_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (aserver)
-@@ -52,9 +52,6 @@ endif
- ifneq ($(BR2_PACKAGE_ALSA_LIB_UCM),y)
- ALSA_LIB_CONF_OPTS += --disable-ucm
- endif
--ifneq ($(BR2_PACKAGE_ALSA_LIB_ALISP),y)
--ALSA_LIB_CONF_OPTS += --disable-alisp
--endif
- ifneq ($(BR2_PACKAGE_ALSA_LIB_OLD_SYMBOLS),y)
- ALSA_LIB_CONF_OPTS += --disable-old-symbols
- endif
+-GKRELLM_VERSION = 2.3.11
++GKRELLM_VERSION = 2.4.0
+ GKRELLM_SITE = http://gkrellm.srcbox.net/releases
+ GKRELLM_SOURCE = gkrellm-$(GKRELLM_VERSION).tar.bz2
+ GKRELLM_LICENSE = GPL-3.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
