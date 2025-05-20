@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1996C61CE8
-	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 08:39:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA1E5C7114A
+	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 08:39:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A6B6960D9E;
-	Thu, 12 Jun 2025 08:39:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ABF0061522;
+	Thu, 12 Jun 2025 08:39:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TPJxOma_SAjt; Thu, 12 Jun 2025 08:39:26 +0000 (UTC)
+ id 7D1WfHNDt7dX; Thu, 12 Jun 2025 08:39:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 360866146A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4761161488
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 360866146A;
-	Thu, 12 Jun 2025 08:39:26 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 5AF6B1E0
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4761161488;
+	Thu, 12 Jun 2025 08:39:28 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1D4C11BD
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D45C3407B9
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:36 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 916A141FF5
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uDc2ZH8EgYBS for <buildroot@buildroot.org>;
- Thu, 12 Jun 2025 08:38:36 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nVTWA5WUav2V for <buildroot@buildroot.org>;
+ Thu, 12 Jun 2025 08:38:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E043406C9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CE28C405A7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2E043406C9
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:36 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CE28C405A7
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2060F817E6; Thu, 12 Jun 2025 08:38:36 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id BD81E82D97; Thu, 12 Jun 2025 08:38:27 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 12 Jun 2025 09:59:11 +0200
+Date: Tue, 20 May 2025 19:12:40 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f23c810176305604c54b79611d885547f4e45c23
-X-Git-Newrev: ac53ade1920ec37434ba30ad8c9531f4d36c5166
+X-Git-Oldrev: 6d0a4495b339042f8de1ff9b1ccddbf242756d26
+X-Git-Newrev: 85e14a916a79424c11e100cf6b3b63262aef6165
 X-Patchwork-Hint: ignore
-Message-Id: <20250612083836.2060F817E6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] Merge branch 'next'
+Message-Id: <20250612083827.BD81E82D97@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/grep: bump version to 3.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,11 +64,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ac53ade1920ec37434ba30ad8c9531f4d36c5166
+commit: https://git.buildroot.net/buildroot/commit/?id=85e14a916a79424c11e100cf6b3b63262aef6165
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Patch is too large, so refusing to show it
-Patch is too large, so refusing to show it
+Release notes:
+https://git.savannah.gnu.org/cgit/grep.git/tree/NEWS?h=v3.12
+https://savannah.gnu.org/news/?id=10753
+https://lists.gnu.org/archive/html/info-gnu/2025-04/msg00008.html
+
+Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/grep/grep.hash | 4 ++--
+ package/grep/grep.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/grep/grep.hash b/package/grep/grep.hash
+index a0028a4e2f..fdc1505e36 100644
+--- a/package/grep/grep.hash
++++ b/package/grep/grep.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking signature
+-# https://ftp.gnu.org/gnu/grep/grep-3.11.tar.xz.sig
++# https://ftp.gnu.org/gnu/grep/grep-3.12.tar.xz.sig
+ # using key 155D3FC500C834486D1EEA677FD9FCCB000BEEEE
+-sha256  1db2aedde89d0dea42b16d9528f894c8d15dae4e190b59aecc78f5a951276eab  grep-3.11.tar.xz
++sha256  2649b27c0e90e632eadcd757be06c6e9a4f48d941de51e7c0f83ff76408a07b9  grep-3.12.tar.xz
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
+diff --git a/package/grep/grep.mk b/package/grep/grep.mk
+index 61900bb957..9dff26bafa 100644
+--- a/package/grep/grep.mk
++++ b/package/grep/grep.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GREP_VERSION = 3.11
++GREP_VERSION = 3.12
+ GREP_SITE = $(BR2_GNU_MIRROR)/grep
+ GREP_SOURCE = grep-$(GREP_VERSION).tar.xz
+ GREP_LICENSE = GPL-3.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
