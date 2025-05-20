@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A07BC71136
-	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 08:38:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B8CDC71141
+	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 08:38:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3DF2060D56;
-	Thu, 12 Jun 2025 08:38:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 55CD260757;
+	Thu, 12 Jun 2025 08:38:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id K7xlRu8Llhwu; Thu, 12 Jun 2025 08:38:42 +0000 (UTC)
+ id uXXoU9jx3FAA; Thu, 12 Jun 2025 08:38:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E654D61063
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8BD3B6104A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E654D61063;
-	Thu, 12 Jun 2025 08:38:41 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 128C11E0
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8BD3B6104A;
+	Thu, 12 Jun 2025 08:38:43 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1C70627A
  for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6CDEE405C5
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:27 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id AA7F060B63
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OWej1N8ds16g for <buildroot@buildroot.org>;
- Thu, 12 Jun 2025 08:38:26 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FRa2Ge1G66k7 for <buildroot@buildroot.org>;
+ Thu, 12 Jun 2025 08:38:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8FC22405A2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BDC2D60D79
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8FC22405A2
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:26 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id BDC2D60D79
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8D42682D97; Thu, 12 Jun 2025 08:38:26 +0000 (UTC)
+ id AF50081008; Thu, 12 Jun 2025 08:38:28 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 19 May 2025 18:40:43 +0200
+Date: Tue, 20 May 2025 19:33:26 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5ba0f2cc8ad63b534150040fb84e25938630e515
-X-Git-Newrev: 90c5270bac3c3d637ac798a6a8a55de58a2b6b67
+X-Git-Oldrev: 3ff4826a53b0ebaaea517f71acfe0eacf71a0b99
+X-Git-Newrev: 969bdb9d2e1857589292122adbc75073b1b30cd5
 X-Patchwork-Hint: ignore
-Message-Id: <20250612083826.8D42682D97@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pppd: fix build with gcc-15.x
+Message-Id: <20250612083828.AF50081008@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sudo: bump version to 1.9.16p2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,157 +59,111 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5359948679395380751=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5359948679395380751==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=90c5270bac3c3d637ac798a6a8a55de58a2b6b67
+commit: https://git.buildroot.net/buildroot/commit/?id=969bdb9d2e1857589292122adbc75073b1b30cd5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+For change summary since version 1.9.15p5, see:
+https://www.sudo.ws/releases/stable/#1.9.16p2
+
+For detailed change log, see:
+https://www.sudo.ws/releases/changelog/
+https://github.com/sudo-project/sudo/commits/SUDO_1_9_16p2/
+
+Removed patch which is included in this release.
+
+Updated license hash due to copyright year bump and whitespace fixes:
+https://github.com/sudo-project/sudo/commits/SUDO_1_9_16p2/LICENSE.md
+
+Note: Sudo 1.9.16p2 includes fixes to compile with C23/gcc-15.
+
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[Julien: add links to change logs in commit log]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...2-pppd-Fix-building-session.c-with-GCC-15.patch | 36 ++++++++++
- .../0003-pppdump-Fixed-building-with-GCC-15.patch  | 76 ++++++++++++++++++++++
- 2 files changed, 112 insertions(+)
+ ...ptrace-fix-build-without-precess_vm_readv.patch | 41 ----------------------
+ package/sudo/sudo.hash                             |  4 +--
+ package/sudo/sudo.mk                               |  4 +--
+ 3 files changed, 4 insertions(+), 45 deletions(-)
 
-diff --git a/package/pppd/0002-pppd-Fix-building-session.c-with-GCC-15.patch b/package/pppd/0002-pppd-Fix-building-session.c-with-GCC-15.patch
-new file mode 100644
-index 0000000000..4fcd492562
---- /dev/null
-+++ b/package/pppd/0002-pppd-Fix-building-session.c-with-GCC-15.patch
-@@ -0,0 +1,36 @@
-+From fb769c380eeacf23b64cb3bf7860ba49a0e0eed5 Mon Sep 17 00:00:00 2001
-+From: Khem Raj <raj.khem@gmail.com>
-+Date: Tue, 8 Apr 2025 00:15:57 -0700
-+Subject: [PATCH] pppd: Fix building session.c with GCC 15 (#553)
-+
-+Fixed building with GCC 15 which defaults to C23
-+and find conflicting declration of getspnam() here
-+with the one provided by shadow.h (extern struct spwd *getspnam (const char *__name);)
-+
-+Fixes
-+../../ppp-2.5.2/pppd/session.c: In function 'session_start':
-+../../ppp-2.5.2/pppd/session.c:185:18: error: conflicting types for 'getspnam'; have 'struct spwd *(void)'
-+  185 |     struct spwd *getspnam();
-+      |                  ^~~~~~~~
-+
-+Signed-off-by: Khem Raj <raj.khem@gmail.com>
-+
-+Upstream: https://github.com/ppp-project/ppp/commit/fb769c380eeacf23b64cb3bf7860ba49a0e0eed5
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ pppd/session.c | 1 -
-+ 1 file changed, 1 deletion(-)
-+
-+diff --git a/pppd/session.c b/pppd/session.c
-+index f08d8e19..9cc75389 100644
-+--- a/pppd/session.c
-++++ b/pppd/session.c
-+@@ -182,7 +182,6 @@ session_start(const int flags, const char *user, const char *passwd, const char
-+     char *cbuf;
-+ #ifdef HAVE_SHADOW_H
-+     struct spwd *spwd;
-+-    struct spwd *getspnam();
-+     long now = 0;
-+ #endif /* #ifdef HAVE_SHADOW_H */
-+ #endif /* #ifdef PPP_WITH_PAM */
-diff --git a/package/pppd/0003-pppdump-Fixed-building-with-GCC-15.patch b/package/pppd/0003-pppdump-Fixed-building-with-GCC-15.patch
-new file mode 100644
-index 0000000000..ab7c94e506
---- /dev/null
-+++ b/package/pppd/0003-pppdump-Fixed-building-with-GCC-15.patch
-@@ -0,0 +1,76 @@
-+From 05361692ee7d6260ce5c04c9fa0e5a1aa7565323 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Jaroslav=20=C5=A0karvada?= <jskarvad@redhat.com>
-+Date: Thu, 27 Feb 2025 23:00:16 +0100
-+Subject: [PATCH] pppdump: Fixed building with GCC 15 (#548)
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+GCC 15 defaults to C23 which does not allow K&R declarations.
-+
-+Credit Yaakov Selkowitz in:
-+https://src.fedoraproject.org/rpms/ppp/pull-request/12
-+
-+Signed-off-by: Jaroslav Škarvada <jskarvad@redhat.com>
-+
-+Upstream: https://github.com/ppp-project/ppp/commit/05361692ee7d6260ce5c04c9fa0e5a1aa7565323
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ pppdump/pppdump.c | 20 +++++++-------------
-+ 1 file changed, 7 insertions(+), 13 deletions(-)
-+
-+diff --git a/pppdump/pppdump.c b/pppdump/pppdump.c
-+index c24208af..1534036c 100644
-+--- a/pppdump/pppdump.c
-++++ b/pppdump/pppdump.c
-+@@ -42,14 +42,12 @@ int tot_sent, tot_rcvd;
-+ extern int optind;
-+ extern char *optarg;
-+ 
-+-void dumplog();
-+-void dumpppp();
-+-void show_time();
-++void dumplog(FILE *);
-++void dumpppp(FILE *);
-++void show_time(FILE *, int);
-+ 
-+ int
-+-main(ac, av)
-+-    int ac;
-+-    char **av;
-++main(int ac, char **av)
-+ {
-+     int i;
-+     char *p;
-+@@ -97,8 +95,7 @@ main(ac, av)
-+ }
-+ 
-+ void
-+-dumplog(f)
-+-    FILE *f;
-++dumplog(FILE *f)
-+ {
-+     int c, n, k, col;
-+     int nb, c2;
-+@@ -241,8 +238,7 @@ struct pkt {
-+ unsigned char dbuf[8192];
-+ 
-+ void
-+-dumpppp(f)
-+-    FILE *f;
-++dumpppp(FILE *f)
-+ {
-+     int c, n, k;
-+     int nb, nl, dn, proto, rv;
-+@@ -375,9 +371,7 @@ dumpppp(f)
-+ }
-+ 
-+ void
-+-show_time(f, c)
-+-    FILE *f;
-+-    int c;
-++show_time(FILE *f, int c)
-+ {
-+     time_t t;
-+     int n;
-
---===============5359948679395380751==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/sudo/0001-src-exec_ptrace-fix-build-without-precess_vm_readv.patch b/package/sudo/0001-src-exec_ptrace-fix-build-without-precess_vm_readv.patch
+deleted file mode 100644
+index 446f1d1797..0000000000
+--- a/package/sudo/0001-src-exec_ptrace-fix-build-without-precess_vm_readv.patch
++++ /dev/null
+@@ -1,41 +0,0 @@
+-From 5bbfaa8e68b5ee6f27d4fbfa3c4e789341724f9c Mon Sep 17 00:00:00 2001
+-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-Date: Sat, 17 Feb 2024 17:52:45 +0100
+-Subject: [PATCH] src/exec_ptrace: fix build without precess_vm_readv()
+-
+-Commit 32f4b98f6b4a (sudo frontend: silence most -Wconversion warnings.)
+-broke the build on C libraries that miss process_vm_readv(), like
+-uClibc-ng.
+-
+-Indeed, the ssize_t nwritten is declared guarded by HAVE_PROCESS_VM_READV,
+-but is then re-assigned and used a few lines below, outside any guard.
+-
+-Fix that by always declaring the object, as it is always needed.
+-
+-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+-Upstream: https://github.com/sudo-project/sudo/commit/5bbfaa8e68b5ee6f27d4fbfa3c4e789341724f9c
+----
+- src/exec_ptrace.c | 3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/src/exec_ptrace.c b/src/exec_ptrace.c
+-index 9dd36c275..3d44b82e2 100644
+---- a/src/exec_ptrace.c
+-+++ b/src/exec_ptrace.c
+-@@ -878,11 +878,12 @@ ptrace_write_vec(pid_t pid, struct sudo_ptrace_regs *regs, char **vec,
+-     unsigned long addr, unsigned long strtab)
+- {
+-     const unsigned long strtab0 = strtab;
+-+    ssize_t nwritten;
+-     size_t i;
+-     debug_decl(ptrace_write_vec, SUDO_DEBUG_EXEC);
+-
+- #ifdef HAVE_PROCESS_VM_READV
+--    ssize_t nwritten = ptrace_writev_vec(pid, regs, vec, addr, strtab);
+-+    nwritten = ptrace_writev_vec(pid, regs, vec, addr, strtab);
+-     if (nwritten != -1 || errno != ENOSYS)
+- 	debug_return_ssize_t(nwritten);
+- #endif /* HAVE_PROCESS_VM_READV */
+---
+-2.43.0
+-
+diff --git a/package/sudo/sudo.hash b/package/sudo/sudo.hash
+index 066d3b9de6..ed4e527f36 100644
+--- a/package/sudo/sudo.hash
++++ b/package/sudo/sudo.hash
+@@ -1,4 +1,4 @@
+ # From: https://www.sudo.ws/getting/download/
+-sha256  558d10b9a1991fb3b9fa7fa7b07ec4405b7aefb5b3cb0b0871dbc81e3a88e558  sudo-1.9.15p5.tar.gz
++sha256  976aa56d3e3b2a75593307864288addb748c9c136e25d95a9cc699aafa77239c  sudo-1.9.16p2.tar.gz
+ # Locally calculated
+-sha256  ea33b3971e8e4d9657cd6794a952aaa71b22bd16745f1645455b6ead010e0a28  LICENSE.md
++sha256  a6e4ec823f2ba58f840b0ff5fc5459e4893f46a91bbcd6b2a2d91315de5a2d2b  LICENSE.md
+diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+index 7961a99002..1fe713ab2d 100644
+--- a/package/sudo/sudo.mk
++++ b/package/sudo/sudo.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-SUDO_VERSION_MAJOR = 1.9.15
+-SUDO_VERSION_MINOR = p5
++SUDO_VERSION_MAJOR = 1.9.16
++SUDO_VERSION_MINOR = p2
+ SUDO_VERSION = $(SUDO_VERSION_MAJOR)$(SUDO_VERSION_MINOR)
+ SUDO_SITE = https://www.sudo.ws/sudo/dist
+ SUDO_LICENSE = ISC, BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5359948679395380751==--
