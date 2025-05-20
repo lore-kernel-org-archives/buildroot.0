@@ -1,103 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2F79C3DA6D
-	for <buildroot@archiver.kernel.org>; Tue, 20 May 2025 16:00:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8326C3ABDD
+	for <buildroot@archiver.kernel.org>; Tue, 20 May 2025 17:14:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A2C7540ABB;
-	Tue, 20 May 2025 16:00:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 72BA28196A;
+	Tue, 20 May 2025 17:14:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ds0SqWXQraDb; Tue, 20 May 2025 16:00:01 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id udUlFT9ojJTm; Tue, 20 May 2025 17:14:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F59940B0A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AFDC481852
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5F59940B0A;
-	Tue, 20 May 2025 16:00:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AFDC481852;
+	Tue, 20 May 2025 17:14:28 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id E5D61D4
- for <buildroot@buildroot.org>; Tue, 20 May 2025 15:59:59 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id C9295205
+ for <buildroot@buildroot.org>; Tue, 20 May 2025 17:14:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D6B5B6078C
- for <buildroot@buildroot.org>; Tue, 20 May 2025 15:59:59 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C66EC60787
+ for <buildroot@buildroot.org>; Tue, 20 May 2025 17:14:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1h499Sb1OyVG for <buildroot@buildroot.org>;
- Tue, 20 May 2025 15:59:59 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::436; helo=mail-wr1-x436.google.com;
- envelope-from=gael.portay+rtone@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B5DB560739
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B5DB560739
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B5DB560739
- for <buildroot@buildroot.org>; Tue, 20 May 2025 15:59:58 +0000 (UTC)
-Received: by mail-wr1-x436.google.com with SMTP id
- ffacd0b85a97d-3a362e099cfso624843f8f.2
- for <buildroot@buildroot.org>; Tue, 20 May 2025 08:59:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1747756796; x=1748361596;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=yzYVGJnwXnejpx9PJ33h9ZC1JWOBSIZuSkjhl5SsV+w=;
- b=MA1dT0jlAIpuFwYGoDjKBhErLr0FLrlavGmw1Nyacfthw58CnXuLigEHk38hV45bXZ
- 47h6hsYCpYJoIeORokEadgEtxePUY+O/TEXda/hjUK9DYTdS8vphnrEfv0ugTXUJTbnJ
- zMJW9dfmxj+MI/YVtXOyIUYWqhcivAx6dqhqmC0ocWdt7XnFRN6WCY5oAN+dRDJJ4/N/
- SfJDyFxlbGDt7M0uLcL82kLjG+Lrwm17VgevIQz4robRvgc71jW2qXxd0vzVOPzXcZQn
- PxyNsu2nM6Gyj72FInAEQBHPOVJvxFEA675FTo+74QEW9WkXZ3kyHxMht/6nH33AixTr
- iwsA==
-X-Gm-Message-State: AOJu0Yy0WLL4lWW615Cqwfq4wsWRqmgKc/WoScKCC9v4kFlMft+XUeiC
- 1KvchA5y/Pqzo/9MEYFvsRuV+KsxuFPi44L0HZlQcFUCobs8fZOa+ULhquKqilAdyGU=
-X-Gm-Gg: ASbGncuOGGYl9GhSkMUu2XRJ1ing1AveCeUEz21mbWkN+UtCNWPWmJadxD14s3Sl18h
- bs5MGh5jaMmNcK7B8k9kcy1TDD7pzBm+AXD/dn314YbqxIPUOSyrdwB9TmxXJy/+ZkaiixZhJs0
- jlHrDywUXp/stqGUAVmiPWQhg4hpJsVfjctm2PUo/4D918Y0/VP/R9ZplXhTr3EinpJ2I5jJA2Q
- xTdsAoNrWgdj4f95p+OwgoMcZ8LtSIcyIhtTDhHlm2mDC45+ukigQXDDpjBi4ZC9nWbPB4utwuN
- rzx58kbGieViAH9rJ4b0qKGt4NbaqM8S6NjVQ7yE3b1T53SUjwKEMGvoEA5BmA==
-X-Google-Smtp-Source: AGHT+IG/CYdRwo51xObSbmEDJ2WneprbY6IOtv44KZFgaLXNdpkG3NxEBE/pVukF48sB0nAIUtq7CA==
-X-Received: by 2002:adf:f10e:0:b0:3a3:5c95:573f with SMTP id
- ffacd0b85a97d-3a35c955748mr4673557f8f.3.1747756796113; 
- Tue, 20 May 2025 08:59:56 -0700 (PDT)
-Received: from archlinux.. ([2a01:e0a:ce:f2f0:2a6b:35ff:feb8:77d9])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3a35ca8d005sm17257346f8f.90.2025.05.20.08.59.55
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 20 May 2025 08:59:55 -0700 (PDT)
-From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay+rtone@gmail.com>
-To: buildroot@buildroot.org,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay+rtone@gmail.com>,
- Julien Grossholtz <julien.grossholtz@openest.io>,
- Martin Bark <martin@barkynet.com>
-Date: Tue, 20 May 2025 17:59:46 +0200
-Message-ID: <20250520155946.622481-1-gael.portay+rtone@gmail.com>
-X-Mailer: git-send-email 2.49.0
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1747756796; x=1748361596; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
- bh=yzYVGJnwXnejpx9PJ33h9ZC1JWOBSIZuSkjhl5SsV+w=;
- b=M2hxv2ojy44KEeZbtFjQsaJTQYxTUQ9QLvXxVMUUSDhErRFVHJhF65C7Mv1VU7HD88
- NwQTgxM5UihAbUNiDS7n7lbXo8Th5MKBtJmKOwYxi5CvmL2sI4yCR+1DKRKcYxFsKkA4
- 1FZDuwpK9EKbrYg3CsIh5uO50wZhfepOjNbMehTjUgCIJut9HHBX6EXaL4XRoOw/WVn+
- cusRkNRon2rJxtWW2X6djIFofRE8P3p+Ikdsa2sRaRFTLUWBwPyFdnD9j2YkhnXWvgWB
- CO3giaRmJ1TFcCSAmXzp1rNKKXQXI6qM88cBoESHTBRYnWXVPyol1zAJ4ltputkfIQ8A
- bDgw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=M2hxv2oj
-Subject: [Buildroot] [PATCH v2 1/1] configs/raspberrypicm5io: new defconfig
+ id bRd1y1QtTMFZ for <buildroot@buildroot.org>;
+ Tue, 20 May 2025 17:14:27 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F98C60BAA
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0F98C60BAA
+ for <buildroot@buildroot.org>; Tue, 20 May 2025 17:14:27 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 09B79874DB; Tue, 20 May 2025 17:14:27 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Tue, 20 May 2025 19:12:40 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 6d0a4495b339042f8de1ff9b1ccddbf242756d26
+X-Git-Newrev: 85e14a916a79424c11e100cf6b3b63262aef6165
+X-Patchwork-Hint: ignore
+Message-Id: <20250520171427.09B79874DB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/grep: bump version to
+ 3.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -109,123 +59,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VGhpcyBjb25maWd1cmF0aW9uIGJ1aWxkcyBhbiBpbWFnZSBmb3IgdGhlIENvbXB1dGUgTW9kdWxl
-IDUgSU8gQm9hcmQuCgpOb3RlOiBVbmxpa2UgdGhlIFJhc3BiZXJyeSBQaSA1IGFuZCBpdHMgZGVk
-aWNhdGVkIGRlYnVnIHVhcnQgY29ubmVjdG9yLAp0aGUga2VybmVsIGNvbnNvbGUgb24gQ29tcHV0
-ZSBNb2R1bGUgNSBJTyBCb2FyZCBpcyBiYWNrIHRvIFVBUlQwCih0dHlBTUEwKSBvbiBQSU44IChH
-UElPMTQsIFRYLCB5ZWxsb3cpIGFuZCBQSU4xMCAoR1BJTzE1LCBSWCwgb3JhbmdlKSBvbgp0aGUg
-NDAtcGluIGhlYWRlciwgYXMgdGhlIGZvcm1lciB2ZXJzaW9uIG9mIHRoZSBSYXNwYmVycnkgUGku
-CgpTaWduZWQtb2ZmLWJ5OiBHYcOrbCBQT1JUQVkgPGdhZWwucG9ydGF5K3J0b25lQGdtYWlsLmNv
-bT4KLS0tCgpDaGFuZ2VzIHNpbmNlIHYxOgogLSBNb3ZlIGltcG9ydGFudCBub3RlIGZyb20gY29t
-bWl0IG1lc3NhZ2UgdG8gcmVhZG1lLnR4dAogLSBBZGQgZHRwYXJhbT11YXJ0MF9jb25zb2xlPW9u
-IGluIGNvbmZpZ19jbTVpby50eHQgdG8gbW92ZSBrZXJuZWwKICAgY29uc29sZSB0byBVQVJUMC90
-dHlBTUEwCiAtIFJldXNlIGV4aXN0aW5nIGNtZGxpbmUudHh0IGluIGRlZmNvbmZpZwoKTm90ZTog
-RmlsZSBjbWRsaW5lX2NtNWlvLnR4dCB3YXMgbWlzc2luZyBmcm9tIHYxOyBpdHMgY29udGVudCB3
-YXM6CgoJcm9vdD0vZGV2L21tY2JsazBwMiByb290d2FpdCBjb25zb2xlPXR0eTEKCiBib2FyZC9y
-YXNwYmVycnlwaS9jb25maWdfY201aW8udHh0IHwgMjQgKysrKysrKysrKysrKysrKysrKwogYm9h
-cmQvcmFzcGJlcnJ5cGkvcmVhZG1lLnR4dCAgICAgICB8IDM3ICsrKysrKysrKysrKysrKysrKysr
-KysrKysrKysrKwogYm9hcmQvcmFzcGJlcnJ5cGljbTVpbyAgICAgICAgICAgICB8ICAxICsKIGNv
-bmZpZ3MvcmFzcGJlcnJ5cGljbTVpb19kZWZjb25maWcgfCAzNSArKysrKysrKysrKysrKysrKysr
-KysrKysrKysrCiA0IGZpbGVzIGNoYW5nZWQsIDk3IGluc2VydGlvbnMoKykKIGNyZWF0ZSBtb2Rl
-IDEwMDY0NCBib2FyZC9yYXNwYmVycnlwaS9jb25maWdfY201aW8udHh0CiBjcmVhdGUgbW9kZSAx
-MjAwMDAgYm9hcmQvcmFzcGJlcnJ5cGljbTVpbwogY3JlYXRlIG1vZGUgMTAwNjQ0IGNvbmZpZ3Mv
-cmFzcGJlcnJ5cGljbTVpb19kZWZjb25maWcKCmRpZmYgLS1naXQgYS9ib2FyZC9yYXNwYmVycnlw
-aS9jb25maWdfY201aW8udHh0IGIvYm9hcmQvcmFzcGJlcnJ5cGkvY29uZmlnX2NtNWlvLnR4dApu
-ZXcgZmlsZSBtb2RlIDEwMDY0NAppbmRleCAwMDAwMDAwMDAwLi5iNjZlZmVmNjYxCi0tLSAvZGV2
-L251bGwKKysrIGIvYm9hcmQvcmFzcGJlcnJ5cGkvY29uZmlnX2NtNWlvLnR4dApAQCAtMCwwICsx
-LDI0IEBACisjIFBsZWFzZSBub3RlIHRoYXQgdGhpcyBpcyBvbmx5IGEgc2FtcGxlLCB3ZSByZWNv
-bW1lbmQgeW91IHRvIGNoYW5nZSBpdCB0byBmaXQKKyMgeW91ciBuZWVkcy4KKyMgWW91IHNob3Vs
-ZCBvdmVycmlkZSB0aGlzIGZpbGUgdXNpbmcgQlIyX1BBQ0tBR0VfUlBJX0ZJUk1XQVJFX0NPTkZJ
-R19GSUxFLgorIyBTZWUgaHR0cDovL2J1aWxkcm9vdC5vcmcvbWFudWFsLmh0bWwjcm9vdGZzLWN1
-c3RvbQorIyBhbmQgaHR0cDovL2VsaW51eC5vcmcvUlBpY29uZmlnIGZvciBhIGRlc2NyaXB0aW9u
-IG9mIGNvbmZpZy50eHQgc3ludGF4CisKK2tlcm5lbD1JbWFnZQorCisjIFRvIHVzZSBhbiBleHRl
-cm5hbCBpbml0cmFtZnMgZmlsZQorI2luaXRyYW1mcyByb290ZnMuY3Bpby5negorCisjIERpc2Fi
-bGUgb3ZlcnNjYW4gYXNzdW1pbmcgdGhlIGRpc3BsYXkgc3VwcG9ydHMgZGlzcGxheWluZyB0aGUg
-ZnVsbCByZXNvbHV0aW9uCisjIElmIHRoZSB0ZXh0IHNob3duIG9uIHRoZSBzY3JlZW4gZGlzYXBw
-ZWFycyBvZmYgdGhlIGVkZ2UsIGNvbW1lbnQgdGhpcyBvdXQKK2Rpc2FibGVfb3ZlcnNjYW49MQor
-CisjIGVuYWJsZSBSVEMKK2R0cGFyYW09aTJjX3ZjPW9uCitkdG92ZXJsYXk9aTJjLXJ0YyxwY2Y4
-NTA2M2EsaTJjX2NzaV9kc2kKKworIyBlbmFibGUgZHdjMiBVU0IgY29udHJvbGxlciAoVVNCIDIu
-MCkKK2R0b3ZlcmxheT1kd2MyLGRyX21vZGU9aG9zdAorCisjIEVuYWJsZSBVQVJUMCBmb3Igc2Vy
-aWFsIGNvbnNvbGUgb24gdHR5QU1BMAorZHRwYXJhbT11YXJ0MF9jb25zb2xlPW9uCmRpZmYgLS1n
-aXQgYS9ib2FyZC9yYXNwYmVycnlwaS9yZWFkbWUudHh0IGIvYm9hcmQvcmFzcGJlcnJ5cGkvcmVh
-ZG1lLnR4dAppbmRleCA3ZGRhNjMxMzg3Li4zMWZmNDI0YTgzIDEwMDY0NAotLS0gYS9ib2FyZC9y
-YXNwYmVycnlwaS9yZWFkbWUudHh0CisrKyBiL2JvYXJkL3Jhc3BiZXJyeXBpL3JlYWRtZS50eHQK
-QEAgLTIwLDYgKzIwLDcgQEAgVGhlc2UgaW5zdHJ1Y3Rpb25zIGFwcGx5IHRvIGFsbCBtb2RlbHMg
-b2YgdGhlIFJhc3BiZXJyeSBQaToKICAgLSB0aGUgbW9kZWwgQ000cyAoYWthIFJhc3BiZXJyeSBQ
-aSBDb21wdXRlIE1vZHVsZSA0cykuCiAgIC0gdGhlIG1vZGVsIEI1IChha2EgUmFzcGJlcnJ5IFBp
-IDUpLgogICAtIHRoZSBtb2RlbCA1MDAgKGFrYSBSYXNwYmVycnkgUGkgNTAwKS4KKyAgLSB0aGUg
-bW9kZWwgQ001IChha2EgUmFzcGJlcnJ5IFBpIENvbXB1dGUgTW9kdWxlIDUgYW5kIElPIEJvYXJk
-KS4KIAogSG93IHRvIGJ1aWxkIGl0CiA9PT09PT09PT09PT09PT0KQEAgLTg2LDYgKzg3LDEwIEBA
-IEZvciBtb2RlbCA1IEIgYW5kIDUwMDoKIAogICAkIG1ha2UgcmFzcGJlcnJ5cGk1X2RlZmNvbmZp
-ZwogCitGb3IgbW9kZWwgQ001IChvbiBJTyBCb2FyZCk6CisKKyAgJCBtYWtlIHJhc3BiZXJyeXBp
-Y201aW9fZGVmY29uZmlnCisKIEJ1aWxkIHRoZSByb290ZnMKIC0tLS0tLS0tLS0tLS0tLS0KIApA
-QCAtMTIzLDYgKzEyOCw4IEBAIEFmdGVyIGJ1aWxkaW5nLCB5b3Ugc2hvdWxkIG9idGFpbiB0aGlz
-IHRyZWU6CiAgICAgKy0tIGJjbTI3MTItcnBpLTUtYi5kdGIgICAgICAgICBbMV0KICAgICArLS0g
-YmNtMjcxMmQwLXJwaS01LWIuZHRiICAgICAgIFsxXQogICAgICstLSBiY20yNzEyLXJwaS01MDAu
-ZHRiICAgICAgICAgWzFdCisgICAgKy0tIGJjbTI3MTItcnBpLWNtNS1jbTVpbyAgICAgICBbMV0K
-KyAgICArLS0gYmNtMjcxMi1ycGktY201bC1jbTVpbyAgICAgIFsxXQogICAgICstLSBib290LnZm
-YXQKICAgICArLS0gcm9vdGZzLmV4dDQKICAgICArLS0gcnBpLWZpcm13YXJlLwpAQCAtMTk3LDMg
-KzIwNCwzMyBAQCBmb3IgQ000IG1vZHVsZXMgd2l0aCBlTU1DIG1lbW9yeSBwcm9jZWVkIGFzIGZv
-bGxvd2luZzoKIC0gcG93ZXIgZG93biBDTTQvSU8gQm9hcmQKIC0gcmVtb3ZlIGp1bXBlciBvbiBJ
-TyBCb2FyZCBoZWFkZXIgSjIgdG8gcmUtZW5hYmxlIGVNTUMgYm9vdAogLSBwb3dlciB1cCBDTTQv
-SU8gQm9hcmQKKworQ001IGRlYnVnIFVBUlQKKz09PT09PT09PT09PT09CisKK1RoZSBkZWJ1ZyBV
-QVJUIGhlYWRlciBpcyBub3QgYXNzZW1ibGVkIG9uIHRoZSBDb21wdXRlIE1vZHVsZSA1LgorCisJ
-Mi4yMy4gRGVidWcgVUFSVAorCisJU3BhY2UgaXMgcHJvdmlkZWQgZm9yIHRoZSB1c2VyIHRvIGZp
-dCBhIGRlYnVnIFVBUlQgY29ubmVjdG9yLiBUaGlzCisJY29ubmVjdG9yIHByb3ZpZGVzIHRoZSBz
-YW1lIGZ1bmN0aW9uYWxpdHkgYXMgUmFzcGJlcnJ5IFBpIDUuIFRoZQorCWNvbm5lY3RvciBpcyBh
-IHRocmVlLXBpbiAxbW0gcGl0Y2ggSlNULVNIIGNvbm5lY3RvciwgUGFydCBudW1iZXIKKwlCTTAz
-Qi1TUlNTLVRCLiBUaGUgc2lnbmFscyBhcmUgcmVwbGljYXRlZCBvbiB0aGUgYm90dG9tIGFzIHRl
-c3QgcG9pbnRzLgorCisJQXBwZW5kaXggQjogVGVzdCBQb2ludHMKKworCXwgUmVmZXJlbmNlIHwg
-WCAgIHwgWSAgICB8IE5BTUUgICAgICAgICAgfAorCXwgVFAzNSAgICAgIHwgMTEgIHwgMzcuOCB8
-IERFQlVHX1VBUlRfVFggfAorCXwgVFAzNiAgICAgIHwgOC41IHwgMzcuMSB8IERFQlVHX1VBUlRf
-UlggfAorCisJRGVidWcgVUFSVAorCisJVFAzNSBhbmQgVFAzNiBhcmUgYSBUWCBhbmQgUlggb2Yg
-dGhlIGRlYnVnIFVBUlQuIFRQNDYgc2hvdWxkIGJlIHVzZWQgYXMKKwl0aGUgZ3JvdW5kLiBJdCBp
-cyB2ZXJ5IHVzZWZ1bCB0byBoYXZlIGFjY2VzcyB0byB0aGVzZSBwaW5zIGR1cmluZworCXByb2dy
-YW1taW5nIGFuZCBpbml0aWFsIGJvb3QuCisKK1NlZSBodHRwczovL2RhdGFzaGVldHMucmFzcGJl
-cnJ5cGkuY29tL2NtNS9jbTUtZGF0YXNoZWV0LnBkZi4KKworVGhlIHNpZ25hbHMgYXJlIG5vdCB3
-aXJlZCB1cCB0byAxMDAtcGluIGhlYWRlcnMgZWl0aGVyLiBBbmQgdGh1cywgaXQgaXMKK2ltcG9z
-c2libGUgdG8gb3V0cHV0IGVhcmx5IGJvb3QgdHJhY2VzIGluIHRoZSBFRVBST00gZmlybXdhcmUg
-d2l0aG91dAorYXNzZW1ibGluZyBhIEpTVC1TSCBjb25uZWN0b3IgKG9yIHVzaW5nIHRoZSB0ZXN0
-IHBvaW50cykuCmRpZmYgLS1naXQgYS9ib2FyZC9yYXNwYmVycnlwaWNtNWlvIGIvYm9hcmQvcmFz
-cGJlcnJ5cGljbTVpbwpuZXcgZmlsZSBtb2RlIDEyMDAwMAppbmRleCAwMDAwMDAwMDAwLi5mY2Rh
-ZmM4MWVkCi0tLSAvZGV2L251bGwKKysrIGIvYm9hcmQvcmFzcGJlcnJ5cGljbTVpbwpAQCAtMCww
-ICsxIEBACityYXNwYmVycnlwaQpcIE5vIG5ld2xpbmUgYXQgZW5kIG9mIGZpbGUKZGlmZiAtLWdp
-dCBhL2NvbmZpZ3MvcmFzcGJlcnJ5cGljbTVpb19kZWZjb25maWcgYi9jb25maWdzL3Jhc3BiZXJy
-eXBpY201aW9fZGVmY29uZmlnCm5ldyBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDAwMDAwMDAwMDAu
-LjliZmRlOGY1MDEKLS0tIC9kZXYvbnVsbAorKysgYi9jb25maWdzL3Jhc3BiZXJyeXBpY201aW9f
-ZGVmY29uZmlnCkBAIC0wLDAgKzEsMzUgQEAKK0JSMl9hYXJjaDY0PXkKK0JSMl9jb3J0ZXhfYTc2
-PXkKK0JSMl9UT09MQ0hBSU5fRVhURVJOQUw9eQorQlIyX1RPT0xDSEFJTl9FWFRFUk5BTF9CT09U
-TElOPXkKK0JSMl9UT09MQ0hBSU5fRVhURVJOQUxfQk9PVExJTl9BQVJDSDY0X0dMSUJDX1NUQUJM
-RT15CitCUjJfR0xPQkFMX1BBVENIX0RJUj0iYm9hcmQvcmFzcGJlcnJ5cGkvcGF0Y2hlcyIKK0JS
-Ml9ET1dOTE9BRF9GT1JDRV9DSEVDS19IQVNIRVM9eQorQlIyX1NZU1RFTV9ESENQPSJldGgwIgor
-QlIyX1JPT1RGU19QT1NUX0JVSUxEX1NDUklQVD0iYm9hcmQvcmFzcGJlcnJ5cGljbTVpby9wb3N0
-LWJ1aWxkLnNoIgorQlIyX1JPT1RGU19QT1NUX0lNQUdFX1NDUklQVD0iYm9hcmQvcmFzcGJlcnJ5
-cGljbTVpby9wb3N0LWltYWdlLnNoIgorQlIyX0xJTlVYX0tFUk5FTD15CitCUjJfTElOVVhfS0VS
-TkVMX0NVU1RPTV9UQVJCQUxMPXkKK0JSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1RBUkJBTExfTE9D
-QVRJT049IiQoY2FsbCBnaXRodWIscmFzcGJlcnJ5cGksbGludXgsY2QyMzFkNDc3NWIxNGYyMjg2
-MDZjMDlmMjE5YjQ4MzA4ZjZhYjNhYSkvbGludXgtY2QyMzFkNDc3NWIxNGYyMjg2MDZjMDlmMjE5
-YjQ4MzA4ZjZhYjNhYS50YXIuZ3oiCitCUjJfTElOVVhfS0VSTkVMX0RFRkNPTkZJRz0iYmNtMjcx
-MiIKK0JSMl9MSU5VWF9LRVJORUxfQ09ORklHX0ZSQUdNRU5UX0ZJTEVTPSJib2FyZC9yYXNwYmVy
-cnlwaS9saW51eC00ay1wYWdlLXNpemUuZnJhZ21lbnQiCitCUjJfTElOVVhfS0VSTkVMX0RUU19T
-VVBQT1JUPXkKK0JSMl9MSU5VWF9LRVJORUxfSU5UUkVFX0RUU19OQU1FPSJicm9hZGNvbS9iY20y
-NzEyLXJwaS1jbTUtY201aW8gYnJvYWRjb20vYmNtMjcxMi1ycGktY201bC1jbTVpbyIKK0JSMl9M
-SU5VWF9LRVJORUxfTkVFRFNfSE9TVF9PUEVOU1NMPXkKK0JSMl9QQUNLQUdFX0JVU1lCT1hfU0hP
-V19PVEhFUlM9eQorQlIyX1BBQ0tBR0VfWFo9eQorQlIyX1BBQ0tBR0VfUlBJX0ZJUk1XQVJFPXkK
-K0JSMl9QQUNLQUdFX1JQSV9GSVJNV0FSRV9DT05GSUdfRklMRT0iYm9hcmQvcmFzcGJlcnJ5cGlj
-bTVpby9jb25maWdfY201aW8udHh0IgorQlIyX1BBQ0tBR0VfUlBJX0ZJUk1XQVJFX0NNRExJTkVf
-RklMRT0iYm9hcmQvcmFzcGJlcnJ5cGljbTVpby9jbWRsaW5lLnR4dCIKK0JSMl9QQUNLQUdFX1JQ
-SV9GSVJNV0FSRV9JTlNUQUxMX0RUQl9PVkVSTEFZUz15CitCUjJfUEFDS0FHRV9LTU9EPXkKK0JS
-Ml9QQUNLQUdFX0tNT0RfVE9PTFM9eQorQlIyX1RBUkdFVF9ST09URlNfRVhUMj15CitCUjJfVEFS
-R0VUX1JPT1RGU19FWFQyXzQ9eQorQlIyX1RBUkdFVF9ST09URlNfRVhUMl9TSVpFPSIxMjBNIgor
-IyBCUjJfVEFSR0VUX1JPT1RGU19UQVIgaXMgbm90IHNldAorQlIyX1BBQ0tBR0VfSE9TVF9ET1NG
-U1RPT0xTPXkKK0JSMl9QQUNLQUdFX0hPU1RfR0VOSU1BR0U9eQorQlIyX1BBQ0tBR0VfSE9TVF9L
-TU9EX1haPXkKK0JSMl9QQUNLQUdFX0hPU1RfTVRPT0xTPXkKK0JSMl9QQUNLQUdFX0hPU1RfUkFT
-UEJFUlJZUElfVVNCQk9PVD15Ci0tIAoyLjQ5LjAKCl9fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1
-aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8v
-YnVpbGRyb290Cg==
+commit: https://git.buildroot.net/buildroot/commit/?id=85e14a916a79424c11e100cf6b3b63262aef6165
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Release notes:
+https://git.savannah.gnu.org/cgit/grep.git/tree/NEWS?h=v3.12
+https://savannah.gnu.org/news/?id=10753
+https://lists.gnu.org/archive/html/info-gnu/2025-04/msg00008.html
+
+Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/grep/grep.hash | 4 ++--
+ package/grep/grep.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/grep/grep.hash b/package/grep/grep.hash
+index a0028a4e2f..fdc1505e36 100644
+--- a/package/grep/grep.hash
++++ b/package/grep/grep.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking signature
+-# https://ftp.gnu.org/gnu/grep/grep-3.11.tar.xz.sig
++# https://ftp.gnu.org/gnu/grep/grep-3.12.tar.xz.sig
+ # using key 155D3FC500C834486D1EEA677FD9FCCB000BEEEE
+-sha256  1db2aedde89d0dea42b16d9528f894c8d15dae4e190b59aecc78f5a951276eab  grep-3.11.tar.xz
++sha256  2649b27c0e90e632eadcd757be06c6e9a4f48d941de51e7c0f83ff76408a07b9  grep-3.12.tar.xz
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
+diff --git a/package/grep/grep.mk b/package/grep/grep.mk
+index 61900bb957..9dff26bafa 100644
+--- a/package/grep/grep.mk
++++ b/package/grep/grep.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GREP_VERSION = 3.11
++GREP_VERSION = 3.12
+ GREP_SITE = $(BR2_GNU_MIRROR)/grep
+ GREP_SOURCE = grep-$(GREP_VERSION).tar.xz
+ GREP_LICENSE = GPL-3.0+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
