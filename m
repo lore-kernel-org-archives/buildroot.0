@@ -4,49 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0316FC3ABDD
-	for <buildroot@archiver.kernel.org>; Tue, 20 May 2025 17:43:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC6D9C3ABDD
+	for <buildroot@archiver.kernel.org>; Tue, 20 May 2025 17:43:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CC34040B59;
-	Tue, 20 May 2025 17:43:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C204140B59;
+	Tue, 20 May 2025 17:43:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nMJiPX4VWKwD; Tue, 20 May 2025 17:42:58 +0000 (UTC)
+ id N--0JBZdel23; Tue, 20 May 2025 17:43:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BA2B840B18
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 03B2040B18
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BA2B840B18;
-	Tue, 20 May 2025 17:42:58 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 7B3B9D4
- for <buildroot@buildroot.org>; Tue, 20 May 2025 17:42:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 03B2040B18;
+	Tue, 20 May 2025 17:43:26 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9BFC9D4
+ for <buildroot@buildroot.org>; Tue, 20 May 2025 17:43:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 616CB81DA3
- for <buildroot@buildroot.org>; Tue, 20 May 2025 17:42:57 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 998C44015F
+ for <buildroot@buildroot.org>; Tue, 20 May 2025 17:43:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jAbUk4rH441v for <buildroot@buildroot.org>;
- Tue, 20 May 2025 17:42:56 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7581081D70
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7581081D70
- for <buildroot@buildroot.org>; Tue, 20 May 2025 17:42:56 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6258F87415; Tue, 20 May 2025 17:42:56 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8GZ8V6QKYpXD for <buildroot@buildroot.org>;
+ Tue, 20 May 2025 17:43:24 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0B2CF40153
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B2CF40153
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0B2CF40153
+ for <buildroot@buildroot.org>; Tue, 20 May 2025 17:43:23 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id D12B1B00579;
+ Tue, 20 May 2025 19:43:16 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 20 May 2025 19:43:16 +0200
+MIME-Version: 1.0
+Date: Tue, 20 May 2025 19:43:16 +0200
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Tue, 20 May 2025 19:42:00 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: db1b8130c71cf69ce6e12b6070e3bbb7cce6ff25
-X-Git-Newrev: fd5628e5dc7d8fb38aa8939421f4bf8ae8530dff
-X-Patchwork-Hint: ignore
-Message-Id: <20250520174256.6258F87415@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/raspberrypicm5io: new
+To: =?UTF-8?Q?Ga=C3=ABl_PORTAY?= <gael.portay+rtone@gmail.com>
+Cc: buildroot@buildroot.org, Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>, Julien Grossholtz
+ <julien.grossholtz@openest.io>, Martin Bark <martin@barkynet.com>
+In-Reply-To: <20250520155946.622481-1-gael.portay+rtone@gmail.com>
+References: <20250520155946.622481-1-gael.portay+rtone@gmail.com>
+User-Agent: Webmail Free/1.6.10
+Message-ID: <ef6700dd0b8780c7e5d73b300f3e2ede@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1747763001;
+ bh=vJATT6je1pgEdKYyn1bKzwRoZZHHtTIe6RQKcjxNS7k=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=Je6BnEyI9M09+nNcDVAte2oArxIAOJ8aufsYRaAjyc69cMR83hYobh+X941VMQxlN
+ WUosZissdQTVQ9zqcU0zHjoHnpnHveUdZj5IVoHZnXArKFbUUffaLgyaNfbe7d7/O7
+ Q19vNtzCpmL4naTTW+JJZR+jeNFuDVij00iPqbrcPs8FjsnbVLLh70ZtQ1xEi0D2LO
+ PSnJgWdjrv1Bg/tapjuhvvHAXLXPNFE4+wPsmOe5Ra4p7uKK1hnEkaHKlIiYpJiaww
+ 4Vefw84LPV94SOnvbad1Yyh+h64qp3Oe8Qt3DEgIGWSAIfm4J99nyXf0NhNtsXFnG5
+ Z7XaoPKli2Uxg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Je6BnEyI
+Subject: Re: [Buildroot] [PATCH v2 1/1] configs/raspberrypicm5io: new
  defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -59,188 +84,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6702992029555724551=="
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6702992029555724551==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=fd5628e5dc7d8fb38aa8939421f4bf8ae8530dff
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-This configuration builds an image for the Compute Module 5 IO Board.
-
-Note: Unlike the Raspberry Pi 5 and its dedicated debug uart connector,
-the kernel console on Compute Module 5 IO Board is back to UART0
-(ttyAMA0) on PIN8 (GPIO14, TX, yellow) and PIN10 (GPIO15, RX, orange) on
-the 40-pin header, as the former version of the Raspberry Pi.
-
-Signed-off-by: Gaël PORTAY <gael.portay+rtone@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- board/raspberrypi/config_cm5io.txt | 24 ++++++++++++++++++++++++
- board/raspberrypi/readme.txt       | 37 +++++++++++++++++++++++++++++++++++++
- board/raspberrypicm5io             |  1 +
- configs/raspberrypicm5io_defconfig | 35 +++++++++++++++++++++++++++++++++++
- 4 files changed, 97 insertions(+)
-
-diff --git a/board/raspberrypi/config_cm5io.txt b/board/raspberrypi/config_cm5io.txt
-new file mode 100644
-index 0000000000..b66efef661
---- /dev/null
-+++ b/board/raspberrypi/config_cm5io.txt
-@@ -0,0 +1,24 @@
-+# Please note that this is only a sample, we recommend you to change it to fit
-+# your needs.
-+# You should override this file using BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE.
-+# See http://buildroot.org/manual.html#rootfs-custom
-+# and http://elinux.org/RPiconfig for a description of config.txt syntax
-+
-+kernel=Image
-+
-+# To use an external initramfs file
-+#initramfs rootfs.cpio.gz
-+
-+# Disable overscan assuming the display supports displaying the full resolution
-+# If the text shown on the screen disappears off the edge, comment this out
-+disable_overscan=1
-+
-+# enable RTC
-+dtparam=i2c_vc=on
-+dtoverlay=i2c-rtc,pcf85063a,i2c_csi_dsi
-+
-+# enable dwc2 USB controller (USB 2.0)
-+dtoverlay=dwc2,dr_mode=host
-+
-+# Enable UART0 for serial console on ttyAMA0
-+dtparam=uart0_console=on
-diff --git a/board/raspberrypi/readme.txt b/board/raspberrypi/readme.txt
-index 7dda631387..31ff424a83 100644
---- a/board/raspberrypi/readme.txt
-+++ b/board/raspberrypi/readme.txt
-@@ -20,6 +20,7 @@ These instructions apply to all models of the Raspberry Pi:
-   - the model CM4s (aka Raspberry Pi Compute Module 4s).
-   - the model B5 (aka Raspberry Pi 5).
-   - the model 500 (aka Raspberry Pi 500).
-+  - the model CM5 (aka Raspberry Pi Compute Module 5 and IO Board).
- 
- How to build it
- ===============
-@@ -86,6 +87,10 @@ For model 5 B and 500:
- 
-   $ make raspberrypi5_defconfig
- 
-+For model CM5 (on IO Board):
-+
-+  $ make raspberrypicm5io_defconfig
-+
- Build the rootfs
- ----------------
- 
-@@ -123,6 +128,8 @@ After building, you should obtain this tree:
-     +-- bcm2712-rpi-5-b.dtb         [1]
-     +-- bcm2712d0-rpi-5-b.dtb       [1]
-     +-- bcm2712-rpi-500.dtb         [1]
-+    +-- bcm2712-rpi-cm5-cm5io       [1]
-+    +-- bcm2712-rpi-cm5l-cm5io      [1]
-     +-- boot.vfat
-     +-- rootfs.ext4
-     +-- rpi-firmware/
-@@ -197,3 +204,33 @@ for CM4 modules with eMMC memory proceed as following:
- - power down CM4/IO Board
- - remove jumper on IO Board header J2 to re-enable eMMC boot
- - power up CM4/IO Board
-+
-+CM5 debug UART
-+==============
-+
-+The debug UART header is not assembled on the Compute Module 5.
-+
-+	2.23. Debug UART
-+
-+	Space is provided for the user to fit a debug UART connector. This
-+	connector provides the same functionality as Raspberry Pi 5. The
-+	connector is a three-pin 1mm pitch JST-SH connector, Part number
-+	BM03B-SRSS-TB. The signals are replicated on the bottom as test points.
-+
-+	Appendix B: Test Points
-+
-+	| Reference | X   | Y    | NAME          |
-+	| TP35      | 11  | 37.8 | DEBUG_UART_TX |
-+	| TP36      | 8.5 | 37.1 | DEBUG_UART_RX |
-+
-+	Debug UART
-+
-+	TP35 and TP36 are a TX and RX of the debug UART. TP46 should be used as
-+	the ground. It is very useful to have access to these pins during
-+	programming and initial boot.
-+
-+See https://datasheets.raspberrypi.com/cm5/cm5-datasheet.pdf.
-+
-+The signals are not wired up to 100-pin headers either. And thus, it is
-+impossible to output early boot traces in the EEPROM firmware without
-+assembling a JST-SH connector (or using the test points).
-diff --git a/board/raspberrypicm5io b/board/raspberrypicm5io
-new file mode 120000
-index 0000000000..fcdafc81ed
---- /dev/null
-+++ b/board/raspberrypicm5io
-@@ -0,0 +1 @@
-+raspberrypi
-\ No newline at end of file
-diff --git a/configs/raspberrypicm5io_defconfig b/configs/raspberrypicm5io_defconfig
-new file mode 100644
-index 0000000000..9bfde8f501
---- /dev/null
-+++ b/configs/raspberrypicm5io_defconfig
-@@ -0,0 +1,35 @@
-+BR2_aarch64=y
-+BR2_cortex_a76=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
-+BR2_GLOBAL_PATCH_DIR="board/raspberrypi/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
-+BR2_SYSTEM_DHCP="eth0"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypicm5io/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypicm5io/post-image.sh"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,cd231d4775b14f228606c09f219b48308f6ab3aa)/linux-cd231d4775b14f228606c09f219b48308f6ab3aa.tar.gz"
-+BR2_LINUX_KERNEL_DEFCONFIG="bcm2712"
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/raspberrypi/linux-4k-page-size.fragment"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2712-rpi-cm5-cm5io broadcom/bcm2712-rpi-cm5l-cm5io"
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-+BR2_PACKAGE_XZ=y
-+BR2_PACKAGE_RPI_FIRMWARE=y
-+BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE="board/raspberrypicm5io/config_cm5io.txt"
-+BR2_PACKAGE_RPI_FIRMWARE_CMDLINE_FILE="board/raspberrypicm5io/cmdline.txt"
-+BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS=y
-+BR2_PACKAGE_KMOD=y
-+BR2_PACKAGE_KMOD_TOOLS=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_KMOD_XZ=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-+BR2_PACKAGE_HOST_RASPBERRYPI_USBBOOT=y
-
---===============6702992029555724551==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6702992029555724551==--
+T24gMjAvMDUvMjAyNSAxNzo1OSwgR2HDq2wgUE9SVEFZIHdyb3RlOgo+IFRoaXMgY29uZmlndXJh
+dGlvbiBidWlsZHMgYW4gaW1hZ2UgZm9yIHRoZSBDb21wdXRlIE1vZHVsZSA1IElPIEJvYXJkLgo+
+IAo+IE5vdGU6IFVubGlrZSB0aGUgUmFzcGJlcnJ5IFBpIDUgYW5kIGl0cyBkZWRpY2F0ZWQgZGVi
+dWcgdWFydCBjb25uZWN0b3IsCj4gdGhlIGtlcm5lbCBjb25zb2xlIG9uIENvbXB1dGUgTW9kdWxl
+IDUgSU8gQm9hcmQgaXMgYmFjayB0byBVQVJUMAo+ICh0dHlBTUEwKSBvbiBQSU44IChHUElPMTQs
+IFRYLCB5ZWxsb3cpIGFuZCBQSU4xMCAoR1BJTzE1LCBSWCwgb3JhbmdlKSAKPiBvbgo+IHRoZSA0
+MC1waW4gaGVhZGVyLCBhcyB0aGUgZm9ybWVyIHZlcnNpb24gb2YgdGhlIFJhc3BiZXJyeSBQaS4K
+PiAKPiBTaWduZWQtb2ZmLWJ5OiBHYcOrbCBQT1JUQVkgPGdhZWwucG9ydGF5K3J0b25lQGdtYWls
+LmNvbT4KCkFwcGxpZWQgdG8gbmV4dCwgdGhhbmtzLgpfX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBi
+dWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZv
+L2J1aWxkcm9vdAo=
