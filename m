@@ -1,128 +1,173 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9814C2D0CD
-	for <buildroot@archiver.kernel.org>; Wed, 21 May 2025 07:40:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46931C2D0CD
+	for <buildroot@archiver.kernel.org>; Wed, 21 May 2025 08:38:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2862B613C5;
-	Wed, 21 May 2025 07:40:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EC9D480B74;
+	Wed, 21 May 2025 08:38:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6oEwnBQ8iEsS; Wed, 21 May 2025 07:40:10 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id r6XIHClxyiDm; Wed, 21 May 2025 08:38:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 39F1E613AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0F52D80B50
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 39F1E613AB;
-	Wed, 21 May 2025 07:40:10 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 320C611B
- for <buildroot@buildroot.org>; Wed, 21 May 2025 07:40:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0F52D80B50;
+	Wed, 21 May 2025 08:38:23 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 418ED11B
+ for <buildroot@buildroot.org>; Wed, 21 May 2025 08:38:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1845A613AB
- for <buildroot@buildroot.org>; Wed, 21 May 2025 07:40:09 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 24F0940BB3
+ for <buildroot@buildroot.org>; Wed, 21 May 2025 08:38:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pceUJm6Os8AC for <buildroot@buildroot.org>;
- Wed, 21 May 2025 07:40:08 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bitUKGYuM3oS for <buildroot@buildroot.org>;
+ Wed, 21 May 2025 08:38:20 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.20;
- helo=mout.gmx.net; envelope-from=ps.report@gmx.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 65D7C613C5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 65D7C613C5
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9BAF340A3D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9BAF340A3D
 Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 65D7C613C5
- for <buildroot@buildroot.org>; Wed, 21 May 2025 07:40:06 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9BAF340A3D
+ for <buildroot@buildroot.org>; Wed, 21 May 2025 08:38:19 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from localhost ([82.135.81.28]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MWRRT-1uT2qN43R5-00MyfS; Wed, 21
- May 2025 09:40:05 +0200
-Date: Wed, 21 May 2025 09:40:04 +0200
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Peter Seiderer via buildroot <buildroot@buildroot.org>,
- buildroot@busybox.net, "Yann E. MORIN" <yann.morin.1998@free.fr>
-Message-ID: <20250521094004.4fb92fe1@gmx.net>
-In-Reply-To: <20250518165536.724fb681@windsurf>
-References: <20240506144555.31709-1-ps.report@gmx.net>
- <20250518165536.724fb681@windsurf>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.50; x86_64-suse-linux-gnu)
+Received: from [192.168.7.2] ([85.22.117.134]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N17UQ-1uxyyI2nc2-01528X; Wed, 21
+ May 2025 10:38:16 +0200
+Message-ID: <cdfde78b-a281-4d53-9da4-095a13fae352@gmx.de>
+Date: Wed, 21 May 2025 10:38:15 +0200
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:dh5FosjDY0Qk3BKzVQC9wRUI6w5U9xCBb3ENQQ/uW7PgFyEdZ1f
- om/RLlO9RJKn/Mqpxbkw4aPv3wLUW/pgz7xw6tlFglB3Nue0ZIVfjeYhZzlZbeuezOaSXMt
- 6xhVdCnRsKqQE0z4cAyhkr0S+g6q6sutx0n6pvaINkzI2Ydb0WW2UBf3DTZnHDYq9Ck/CjB
- LqM2XuaBFK4j/jvuTHhuQ==
-UI-OutboundReport: notjunk:1;M01:P0:jse0V/VGbho=;zZ6wS9T/EPEKBlWx/9gDLWrTBSJ
- QpCDiEyY4o+tw3Md+KaQtiGHtb09FxL9eQU8CeMOAM9Y9hVXq3v4b7WrfVDWqD7V7DNtkWZuv
- NKxkRvwhn4Q5Ts73oVOh0vpT41cdiLXlMk4fUquXW8kQVTlPIyL0IuhMcvDtM+5h1sBjoeAXN
- zY1IIvMscPG9Jw1LfSok5n5UaeCFcbs3c44BxpDh4XPuD4g3ZF9J26/yCw5ohOlgjQQDK8Ycv
- 3WbadreUxOBjFmVaFZGRfwdwLbLL40ezbQWgIx53tXnDmy1UsVP9+ma4hwJ0QoXg8flAVm5r5
- Q2NVsHliDZjjyaoOu2BwdJUjr19PMj+vHzLO7ZE31vaG7gf+HzLTmqbCTRsB0kzuYxpLj3D+B
- wIQxW0SElI7L0e5EP4+C0u2ky16D+W+OBgMfL1yQ4NofD/T/AJdFBlhcBJJEWhAiddx1ZmIO0
- zCp6nSx5Odc17BNyMf5ppfqn4Fcldr4DdhmliasB+tXzaQbYDCy293IzGzrqNp/5WODciyPJk
- OBKMl/jzSOdErIEZvi6EFrf/rsJiyTxWTcP23so9r8ums/3pwArKO8PZPbuFZvFQf7vgBw+zr
- f7gfPDB/yb0oTSx7tA1A5RRgBWmR6u5yeyQVGAGWb6QmMWrKmkwOJ3eF1uO9FFUte4Yo21Dfz
- V4vl3rlEsfCB4uhIGcA17lHQMdlq2aKlW/woMC4ZHO0I7F3x/W7bZnQunup7Xk9RNktzDlW7b
- K+EsPSm4AkB5qOhifZHN54wNazB0LhsqFFDsWp9z7PBwooy3RGV/iaAkbYvUBNkon+u5w/6Hv
- PeFo6iiMmrjXkT+Y3IWyhbSdrWfNzxNejbRM7nuflJ8yuh98W93kQH2PbBvheJA34XGo48qkJ
- dUl2BVnmUrTY7FzdY6cmwIteB/yJi2gxg7EQ4t1sIdNJCdAJU5dC8KA/v8jReGl9MIplXCh7d
- wpf7GZCNYF6FdX2FLphmID0ENv2nDdz7/bq+42hCNVesnksLgIILkAdE9qZh7Zjj6d0AMjbra
- Na9un43SqqpW6ZaQTuK9382WAjQpk+9Krb574Uj23Iz4Xh/W457nJjVMkx5NFMFfVQDLVg5it
- JGYZSJXGcs1KowNRcw8w9L2Cp0PkRjfpgkcKl9XWic0dTq+VNx0WBCSkybYq0y5tYp01ogk+v
- u5LZ8sX8Qk/6WRu+QCavaTL9asIquHre25QQlXFbTZLoL8Ob1BK+w2CfsYXGS207x2YiI07N0
- 3tUBcvkdxaKU/Fv9vQvIBRh3rW8QPVEx8oR30bNopvCFmo8WVmnvaIzsWwJnw5Gq+UR5eNmmk
- qXUbx6qEGcbVmtktwF/TXaHxSrwRj7LYvY6bajd8fv918g1ueKCh38Vg6WzkgSV0+WRaxWgPz
- J7O+neEz54Fdxrj3lpa8oNoA7ZU0lyTVD7HFxtEEVtt6XcUw8b/rPmxLesO2BZQRacf6GBFtH
- GAhxQPvmu9x21eBkW8iNHp1YGAWWsDAXiu4O+R0W5YoowcZDPJDMHDYcknzmfL3yolRdMlJFC
- AsllsBpgynww5xG4+iiGMzJrARNOyyviPLjwF3hgfjvzfEIh62c8ufiC3JQax83gf+tMae/uW
- 24CNlDagO69rOluMCxP5ZzmaxieLsyDVC7cZAl8u32BKo5TKkrRRyvu8NcrW3ti47uL6xC5Ce
- J7NCenQwnE7R3QAjhY3FR64zhNcy7vBv6o0nuBRbx8R3fcMxfB5QVFGY7iJg10C9vlBJXAiHb
- 9sjAeMekPpTTS/GWMbr8ti3V/1vau1aTuvEAcuSxbe/9BmIW8gmhlbedWcy3HEraDuyROqxci
- CVue0phWurv9ledVOpWQJSMgVfNsJQJffY7iHc1OQP7UZK/UD4Dfi0Dn+29diy+sbA6op+XLg
- U5Rej8Wu89lGRHrFkdNKDVnlBH0eJsAD1j2yjTSr/kd+0t0mEK3xUKdDLf+lF85rtFJtcu8XJ
- fyy/THwycXIAHDtH1Dgcx85f5v30kwqsyUIhuFjEGHiaJt/60CEcRAulvh7h7SfdR7asMuIO6
- h2KMdf0BM7n1uCBlW5lfejk7oh7cYtT740mxy4WgeSdwKSRb+3LZA3sxNJV4hizvGnY8lDva3
- I2dEVf4oZKoDJGXOXsLjy+mvP+o32x/sm9e9e4GKDS8MGyoYawqlN3A4jBa2Sm2WOjAIgH9x4
- h3jD3p6smrRDlm8GLXsR6nt+1ME9bnzO3nJwX2BRIe7xueqjuq/fXkp+Qu0YM1p2SLJFrnJ1g
- lkX9jHJ9EkQl8G7uJJou6OvA0zHOg+J8NmfjIdDntqMv1iwF8lyDFEL1WthoskY+YNd1FhQR1
- Ujb1Gq1EcRdvT0k6OwO20qQiLDADqQqn+LDvaCbs6pe3vHc5ODeTifuatiyKTIAQL9crF6AS1
- MATD4NHPxBEeaBRvxzM7h2Ocal1aBvWtVPChyY0vfqs5p4ebYsm8uGKjj32sYRNqWQ9ayh1dj
- ZevD3zSVTUgHmM27Cfy3YOHytdPaY4hm3pjpQTkp7ClHIBE4zAUDjCGA3U90c+prXGYB6YXrh
- tJ7tHMleSSIA69ZtpTzaRYqXvAFL1CCFqSRe8lDenMJq57FOzF+ltpatwUpKxCHIp5P6pDJmm
- E9pGhrsoh8WIE0w5aYz/6mOSc9eAVNmt/W/GwpazwZk6uzPGTKZx7U3RaF2NeRTExDTHtFszT
- OcG3FA4Y51KOczKu3ePEuJqe5+71kG0F19/NGvFByrjN/zeSuKIitW9g4PCkgbSwyIQl7/nBD
- cEBtipK0WzOIvodq4UhUrGP7ulwP4Fk/6iTmleJXyCRYIYBJb8hv5BhKcepDEX73Zcr407Hq3
- YcD7H2cv5ZCucmVSoh7onzyCqOI7WxwN3Pio+VgD0ypMv2AwiBuL0qmTUL6Jp49Un86mZOLVN
- 0TF/7SPRjKbPMu0SRRuXnVhS1ImKGkmznkxJzEyGO+UqXe0mmRFAcFyXR4pT5XW6P9VX8aa3V
- ADtmNgzxCnDjV4TMNSUbxWy9q88S12UhWKjc8Ck+SK0Tc8Ela0+gT4fX/yzZLwmIArQ9fdJiL
- gyHWNTX0iFAsSus2vjL6i8dpqI5NO+kC1yyLnti2P++u84a0erha54618ujh+5M/iANW7r4L9
- RSsjBUu7etetwr48D3nZdLnPrNu3NoEvDe5hL2Bk6Z7KgnrD8iMPwkyXGvsEjIcAeS+f0fMqD
- z2qutMXEblVjwfXExznOo1y97
+User-Agent: Mozilla Thunderbird
+To: Marcus Hoffmann <buildroot@bubu1.eu>, buildroot@buildroot.org
+References: <20250118133740.4001841-1-fiona.klute@gmx.de>
+ <8eccd976-c4c1-4fdc-a3c5-340b4a7f979b@gmx.de>
+ <6521217e-0d5a-42ae-a315-c533f0f66909@bubu1.eu>
+ <031308f4-35e5-451f-8a6d-1e826ad69b75@gmx.de>
+ <1e718904-658f-4221-bd35-42ab8d263084@bubu1.eu>
+Content-Language: en-US, de-DE-1901, de-DE
+Autocrypt: addr=fiona.klute@gmx.de; keydata=
+ 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
+In-Reply-To: <1e718904-658f-4221-bd35-42ab8d263084@bubu1.eu>
+X-Provags-ID: V03:K1:pYqaWbaYKRZ3cpigvYWCcKV5iYWYEoLSBUQcyzrs8CeE2WCOwVX
+ lgZdw3hQc7V7zMNNetiW89XbfkvAYFtb6JcQz0DVrp9y0voP+aXYgXpZzRLJL/gp2vZSvg4
+ RR788yu1FuvzEBmxd5EHcn9EN8WHl8Xp4pB56vT4GpNCgSkqUUWA70usiF4YONDTaUWFYQK
+ khsgGVgJ3qKlTCnqHgc2g==
+UI-OutboundReport: notjunk:1;M01:P0:r36z7ygeCc4=;KTvsyOMDsAxLZauxUIe3WsmvBh6
+ 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
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmx.net; 
- s=s31663417; t=1747813205; x=1748418005; i=ps.report@gmx.net;
- bh=xkHrip2xRfY8Mduz2TmbJgoEM+RQLrXT6gbzQVpMepU=;
- h=X-UI-Sender-Class:Date:From:To:Cc:Subject:Message-ID:In-Reply-To:
- References:MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
- content-transfer-encoding:content-type:date:from:message-id:
- mime-version:reply-to:subject:to;
- b=Bfhi/SVJt7sZEfp/XXlyhLwf0xUCyniwJXOiWX8kp7coSFxEqkpxroyUk5v3LFy2
- xYfkuWyCd7u40QP9FeTAgn4JnVBAQJvjuX8MxG8jcxfM3SS7MBp85pi3j8/6w2HbZ
- 90u0kXZFFBamQ05Qu1AFjjJUbmJxM+Xty5tANnhdVO/TBJijZaSEH7MlkRzvS2YdQ
- hZKjMONVt9NwZdUy7FDbcp9B4KZJhuF/Fl7tjpw6BD8XqeodhkaOaKOiFC3T3dQIB
- Fv5lZDPz41PLtMkrwSnNs+RyjWrNlyv/HBLNmS9GnXVqJ4pfW9iL9tBc/IrAD2r6P
- zzgrINL/H4p1XQWf/w==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=gmx.de; 
+ s=s31663417; t=1747816697; x=1748421497; i=fiona.klute@gmx.de;
+ bh=2SKKTHxJly9z9bnwr5KwJefSo+VRsNYcnA0dj74+MnY=;
+ h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:
+ References:From:In-Reply-To:Content-Type:
+ Content-Transfer-Encoding:cc:content-transfer-encoding:
+ content-type:date:from:message-id:mime-version:reply-to:subject:
+ to;
+ b=A1kcBJm/Rl59WILTAS3C0V8e/OW3GlNuc1efhEw/kACp2Y6oYlTLblypbpKW0WJW
+ /OCvjdcyA/Lgj3/mDLqgEYka7oOmuwSBiX0Hm182EWLh868R3+Ro/oiEx9oiRDTta
+ XwYFYysaMtALFSkK+mCcV7rECmW7UQn1BZySalmY73x5gnoAHXdol2iIEwJCXBEEh
+ Odb5giZHX6IJSxE8Ojhi/iCuo2h3vwaqQlLFsOp2H7R/4pgFZs3Lpn4Z5A7CjZ5ST
+ HOrIpWokfypfEhFVC2ji3190M5BovIUuMneHPjobnuRQsVXhQsJkTw/iH1TxNyLei
+ EiNvwJzdODI1aTFt2Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=gmx.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ header.from=gmx.de
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmx.net header.i=ps.report@gmx.net header.a=rsa-sha256
- header.s=s31663417 header.b=Bfhi/SVJ
-Subject: Re: [Buildroot] [PATCH v1 0/8] support/kconfig: bump to
- linux-v6.9-rc5 version
+ unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
+ header.s=s31663417 header.b=A1kcBJm/
+Subject: Re: [Buildroot] [PATCH 1/1] package/wireless-regdb: sysv init
+ script to set regdomain
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -134,100 +179,83 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Peter Seiderer via buildroot <buildroot@buildroot.org>
-Reply-To: Peter Seiderer <ps.report@gmx.net>
-Content-Type: text/plain; charset="us-ascii"
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Thomas,
-
-On Sun, 18 May 2025 16:55:36 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-
-> Hello Peter,
+Am 20.05.25 um 14:27 schrieb Marcus Hoffmann:
+> Hi Fiona,
 > 
-> On Mon,  6 May 2024 16:45:43 +0200
-> Peter Seiderer via buildroot <buildroot@buildroot.org> wrote:
+> On 20.05.25 12:34, Fiona Klute wrote:
+>> Hi Marcus!
+>>
+>> Am 19.05.25 um 21:03 schrieb Marcus Hoffmann via buildroot:
+>>> Hi Fiona,
+>>>
+>>> On 19.05.25 17:37, Fiona Klute via buildroot wrote:
+>>>> Hi everyone,
+>>>>
+>>>> just want to check if there's any interest in merging this. It's 
+>>>> trivial enough to maintain in an external tree otherwise, I just 
+>>>> figured it might be useful for anyone who's also using a wireless 
+>>>> setup that doesn't have a built-in way to set the regulatory domain 
+>>>> (namely, NetworkManager).
+>>>
+>>> We also use NetworkManager but systemd as our init system, so I ended 
+>>> up writing a udev rule that calls a script, that sets the regulatory 
+>>> domain. Would be nice to just universally have a solution for this, 
+>>> but I guess having a SysV initscript is better than not having it?
+>> NetworkManager requires udev (eudev) even without systemd, so a udev 
+>> rule would actually work for me, too, as long as the script is 
+>> configurable. I hadn't really thought about that because I'm setting 
+>> the global regulatory domain, not a device one, but for most embedded 
+>> systems "set during boot" and "set when a wifi device is added" will 
+>> be close enough that the difference doesn't matter.
+>>
+>> Anyone who uses wpa_supplicant, iwd, or hostapd can set the country 
+>> code in the config there, so I'm not sure if there's much of a need 
+>> for a non-udev solution.
 > 
-> > First draft of updating support/kconfig to an actual linux upstream version
-> > (6.9-rc5).  
+> Doesn't NetworkManager use either wpa_supplicant or iwd for managing 
+> wireless device? Or does that not (easily) work, if those are controlled 
+> though NetworkManager? (we use wpa_supplicant, but only through NM, I 
+> think?)
+
+At least for wpa_supplicant NetworkManager makes sure it is the only 
+config source, and doesn't support setting a country code. iwd still 
+reads its own config, though I wouldn't be too surprised if NM changes 
+that as the backend gets improved (for consistency).
+
+>> Would you be willing to share your udev rule?
 > 
-> I was wondering if you had any updates on this patch series? Indeed,
-> updating kconfig would be quite nice, there are some fixes/improvements
-> that we would like to have that were added recently in the Linux kernel
-> kconfig, but that requires updating our support/kconfig code of course.
-
-Quite some time passed ;-), no real update since v2 (see [1]), besides the following
-additional patch in my local git repo:
-
-From 364ccc709b2997f30a4f88770c6d238c04369f31 Mon Sep 17 00:00:00 2001
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 14 May 2024 00:02:31 +0200
-Subject: toolchain-external: do not expand ARCH
-
-- escape ARCH usage to force to not expand at configure time (but at make
-  time), needed for upcoming kconfig update (see upstream commit [1])
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=104daea149c45cc84842ce77a9bd6436d19f3dd8
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
-Changes v2 -> v3:
-  - new patch
-
-diff --git a/support/scripts/gen-bootlin-toolchains b/support/scripts/gen-bootlin-toolchains
-index 502411d4cc..45dd86c942 100755
---- a/support/scripts/gen-bootlin-toolchains
-+++ b/support/scripts/gen-bootlin-toolchains
-@@ -509,7 +509,7 @@ def gen_config_in_options(toolchains, fpath):
-         f.write("if BR2_TOOLCHAIN_EXTERNAL_BOOTLIN\n\n")
- 
-         f.write("config BR2_TOOLCHAIN_EXTERNAL_PREFIX\n")
--        f.write("\tdefault \"$(ARCH)-linux\"\n")
-+        f.write("\tdefault \"\\$(ARCH)-linux\"\n")
- 
-         f.write("\n")
- 
-diff --git a/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options b/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
-index ef3d23d026..d8d54584de 100644
---- a/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
-+++ b/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
-@@ -49,7 +49,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARCH_SUPPORTS
- if BR2_TOOLCHAIN_EXTERNAL_BOOTLIN
- 
- config BR2_TOOLCHAIN_EXTERNAL_PREFIX
--	default "$(ARCH)-linux"
-+	default "\$(ARCH)-linux"
- 
- config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
- 	default "toolchain-external-bootlin"
-diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-index 94ea3b82de..23028188d8 100644
---- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-+++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-@@ -23,7 +23,7 @@ config BR2_TOOLCHAIN_EXTERNAL_REL_BIN_PATH
- 
- config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX
- 	string "Toolchain prefix"
--	default "$(ARCH)-linux"
-+	default "\$(ARCH)-linux"
- 	help
- 	  Component name prefix used by your external toolchain.
-
-
-Not much buildroot work from my side (besides very sporadic contributions ;-) )
-as I have no (payed) buildroot related projects at the moment...
-
-Regards,
-Peter
-
-[1] https://lore.kernel.org/buildroot/20240513091950.30116-1-ps.report@gmx.net/t/#u
-
+> Sure, we currently have these three things:
 > 
-> Thanks a lot!
+> $ cat rootfs-overlay/usr/lib/udev/rules.d/85-regulatory.rules
+> # Set wireless regulatory domain at device creation
 > 
-> Thomas
+> ACTION=="add", SUBSYSTEM=="module", DEVPATH=="/module/cfg80211", RUN+="/ 
+> usr/bin/set-wireless-regdom"
+> 
+> $ cat rootfs-overlay/usr/bin/set-wireless-regdom
+> #!/bin/sh
+> 
+> unset WIRELESS_REGDOM
+> . /etc/default/wireless-regdom
+> [ -n "${WIRELESS_REGDOM}" ] && iw reg set "${WIRELESS_REGDOM}"
+> 
+> $ cat rootfs-overlay/etc/default/wireless-regdom
+> #
+> # Wireless regulatory domain configuration
+> #
+> WIRELESS_REGDOM=DE
+
+Thank you!
+
+Best regards,
+Fiona
 
 _______________________________________________
 buildroot mailing list
