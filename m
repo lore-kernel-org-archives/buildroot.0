@@ -4,74 +4,101 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6579EC54E65
-	for <buildroot@archiver.kernel.org>; Wed, 21 May 2025 20:22:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB58DC54E65
+	for <buildroot@archiver.kernel.org>; Wed, 21 May 2025 22:11:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1601460AC1;
-	Wed, 21 May 2025 20:22:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 37B05612E2;
+	Wed, 21 May 2025 22:11:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9TRtk-HPwsCf; Wed, 21 May 2025 20:22:18 +0000 (UTC)
+ id n16H1lEUkoKt; Wed, 21 May 2025 22:11:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 47B5460C23
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD804612D6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 47B5460C23;
-	Wed, 21 May 2025 20:22:18 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id AED5975B
- for <buildroot@buildroot.org>; Wed, 21 May 2025 20:22:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CD804612D6;
+	Wed, 21 May 2025 22:11:49 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0B4201BF
+ for <buildroot@buildroot.org>; Wed, 21 May 2025 22:11:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A0AB040485
- for <buildroot@buildroot.org>; Wed, 21 May 2025 20:22:16 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 07C6A40B1C
+ for <buildroot@buildroot.org>; Wed, 21 May 2025 22:11:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BN6eGBmtNBSS for <buildroot@buildroot.org>;
- Wed, 21 May 2025 20:22:15 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9414E40454
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9414E40454
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9414E40454
- for <buildroot@buildroot.org>; Wed, 21 May 2025 20:22:15 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 630512003CA;
- Wed, 21 May 2025 22:22:10 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
- via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 21 May 2025 22:22:10 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id X8I4dbBDzKkW for <buildroot@buildroot.org>;
+ Wed, 21 May 2025 22:11:47 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
+ envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9D21A408F8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D21A408F8
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9D21A408F8
+ for <buildroot@buildroot.org>; Wed, 21 May 2025 22:11:45 +0000 (UTC)
+Received: by mail-wm1-x334.google.com with SMTP id
+ 5b1f17b1804b1-441ab63a415so79510895e9.3
+ for <buildroot@buildroot.org>; Wed, 21 May 2025 15:11:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1747865504; x=1748470304;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=UNIzCccxdW7NNL1VyxQ+gUte5la3+snWQaazgGwXVRY=;
+ b=VYKWFLWUf46sQgbudeLDjHqN6fvYdPq1qYbp40LeWsCmt2Gmyplvm99Sa2t/uvjcTj
+ h7fV7uMh/CYRuXTWVlANYrcYWjymmGPrWYWvU+M7FDvnl+dzQPUBcHcR2Vd/KCWaLN2I
+ 0gMksQBnVyyFi5NtURtENnPywgYQkRVrLZzF2dwQhHKTM9/npvB4/yzJRL6SqI0iCcIL
+ ZP9xHu6AR5j0nyTzliIKngkQFf1walLXSuCP8hE8AQSN91jXYA1O7gL6hgci7mgdRcqc
+ RKTxhpgwrhN0QzFB7y+GdtS+OKUf+HbtIZJIUFRO2PvYFQaznZ8BreUd6Y16YZOuVTkM
+ uTkQ==
+X-Gm-Message-State: AOJu0YwiqNzjKe9F+jUlLacH5Lj3k6imd5OJTdboFcf9eDcG6eJVDkMr
+ 08sn7fONw7OKjribuAuIdwYrlIicbjd0jn2nNUB2BSGdK+Qfb0A1X1aHwePb3Sdr9tZRCua3MjH
+ v3qsZi10=
+X-Gm-Gg: ASbGncuVdr1x49R78ZlyVNKFpOLgK0cFdYYTofyjqlqi/IHV+08vbxivW5cJjABVCUC
+ rAA1DlnEaafeioHzKsVsnajJIXBCZLCj31d4IVZm3va0Q8HuglBo0P/UVTBLOnoImwWC86GsMQX
+ e6P0cxNIrploqMmjt85KBgCTtC8TJ23HPF0DrnZnTXKh6YIGYOCLvbcC5R5IivJiH8SIMhKznLU
+ 3Q5O7OWTUFZyTHhtoZ4rBf5aediNlXFiQoXiCircOHrTFa3TPBqP5k5XDMBRRwp4FEKXDub/jYe
+ 81FnmLbvCUfm7JBRD3E33eV89dx9KDW75E9R//UPnYZG9HlDwTz603n/7xfEF8dqylknRcvZUg8
+ hvaRkTMXMi3o26hCScQ==
+X-Google-Smtp-Source: AGHT+IF2y5xLBObvS0gGEQH//GPHn6E4L91J59kYc4Ko05hbE5raPT2oxUe9P/5RULkRGbN99R6lIg==
+X-Received: by 2002:a05:600c:3112:b0:43b:c0fa:f9cd with SMTP id
+ 5b1f17b1804b1-442fd606b99mr212319465e9.7.1747865503864; 
+ Wed, 21 May 2025 15:11:43 -0700 (PDT)
+Received: from dragon.local.ess-mail.com
+ ([2a02:a03f:639d:e501:5db7:a3a4:443e:4828])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-447f6b29633sm87870625e9.8.2025.05.21.15.11.42
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 21 May 2025 15:11:42 -0700 (PDT)
+To: buildroot@buildroot.org
+Date: Thu, 22 May 2025 00:10:47 +0200
+Message-ID: <20250521221047.1297537-1-titouan.christophe@mind.be>
+X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250519150314.4117224-1-titouan.christophe@mind.be>
+References: <20250519150314.4117224-1-titouan.christophe@mind.be>
 MIME-Version: 1.0
-Date: Wed, 21 May 2025 22:22:10 +0200
-From: Julien Olivain <ju.o@free.fr>
-To: Edgar Bonet <bonet@grenoble.cnrs.fr>
-Cc: Buildroot development <buildroot@buildroot.org>, Petr Vorel
- <petr.vorel@gmail.com>
-In-Reply-To: <4a4473d3-56d6-4576-9a8f-5b708a1569df@grenoble.cnrs.fr>
-References: <4a4473d3-56d6-4576-9a8f-5b708a1569df@grenoble.cnrs.fr>
-User-Agent: Webmail Free/1.6.10
-Message-ID: <1f3bc78a69a8ae087f6edebeba0b7017@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1747858932;
- bh=2fzbxsvwc/eSpp8pLtQrjS5k5viMiRDBhMxancS6Fvw=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=r5ucnM3iFPoQo9GAECSUOrr2lWOrSkH74vy82VYC7zVS9r9VQM55M+OWLkhhDxhmk
- SW6/BWrQ9vDtHMnjUumy1lsEhl4LLi2swqjt/wAA9zdHgbPVqGdNRxFhw9PA80twds
- S7btHSGps8Njt5KwcicF7C5VOtR1yKnIdygzngpfkm221+ywv33n9Kw9OKxffxgxy/
- 9Z3Lg7YHinMxtM/swA+14s4HGA50ESiFVuZuzWA/IZMP3+qFq5gvEcOSQvhLUCrd5N
- te0YUpBWmVMpb2T+hP78Gvqjj3nKzM+Mc1fsHdfJ3uxkmekc6sQWV/wLfpc4Rg9JPF
- bN4II1J8+9NPQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=r5ucnM3i
-Subject: Re: [Buildroot] [PATCH 1/1] support/kconfig: fix another compiler
- warning
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1747865504; x=1748470304; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=UNIzCccxdW7NNL1VyxQ+gUte5la3+snWQaazgGwXVRY=;
+ b=fh1mp1RIq4aPQT5IjfWXUjCEf/QiifPFzNQy1tNY1jEr+0sQOfZ7/lZKN4nO9ccrD7
+ BpDFM/FOnQLBDgxQIFO2EbHOCv9A03RqTkwv2rZTWgx2zzh8mTo+GTAondWr5xLfwV56
+ XQwMBGryN1WWaWhTzHiUdoZQcrG8GCHOWQsARM2tfa+s+UbVs2LYPwnoPD5ePcQyJyN1
+ ja52NGdxnX07L89NhjiVavCLRdQnRsxT1NzOPVyI2zszv0qcPQRGeGoBtZiA0iL68/2u
+ STYJ6vMx4vVv0tvI5EJ4wRrjwIwYX2sq3KPr86TOcd2wXSmhVp4aOk1KAo/vuJ4gqQ5M
+ /Q0Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=fh1mp1RI
+Subject: [Buildroot] [PATCH v2 for 2025.02.x] package/python-tornado: apply
+ security patch for CVE-2025-47287
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,56 +110,290 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+From: Titouan Christophe via buildroot <buildroot@buildroot.org>
+Reply-To: Titouan Christophe <titouan.christophe@mind.be>
+Cc: James Hilliard <james.hilliard1@gmail.com>, thomas.perale@mind.be
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgRWRnYXIsCgpUaGFuayB5b3UgZm9yIHRoZSBwYXRjaC4KCk9uIDE5LzA1LzIwMjUgMTE6MTUs
-IEVkZ2FyIEJvbmV0IHZpYSBidWlsZHJvb3Qgd3JvdGU6Cj4gQ29tcGlsaW5nIHdpdGggR0NDIDEz
-LjMgZ2VuZXJhdGVzIHRoaXM6Cj4gCj4gLi91dGlsLmM6IEluIGZ1bmN0aW9uIOKAmGZpbGVfd3Jp
-dGVfZGVw4oCZOgo+IC4vdXRpbC5jOjg2OjI2OiB3YXJuaW5nOiDigJglc+KAmSBkaXJlY3RpdmUg
-d3JpdGluZyAxMCBvciBtb3JlIGJ5dGVzIGludG8gYSAKPiByZWdpb24gb2Ygc2l6ZSBiZXR3ZWVu
-IDEgYW5kIDQwOTcgWy1XZm9ybWF0LW92ZXJmbG93PV0KPiAgICA4NiB8ICAgICAgICAgc3ByaW50
-ZihidWYyLCAiJXMlcyIsIGRpciwgbmFtZSk7Cj4gICAgICAgfCAgICAgICAgICAgICAgICAgICAg
-ICAgICAgXn4KPiAuL3V0aWwuYzo4Njo5OiBub3RlOiDigJhzcHJpbnRm4oCZIG91dHB1dCAxMSBv
-ciBtb3JlIGJ5dGVzIChhc3N1bWluZyA0MTA3KSAKPiBpbnRvIGEgZGVzdGluYXRpb24gb2Ygc2l6
-ZSA0MDk3Cj4gICAgODYgfCAgICAgICAgIHNwcmludGYoYnVmMiwgIiVzJXMiLCBkaXIsIG5hbWUp
-Owo+ICAgICAgIHwgICAgICAgICBefn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fgo+IAo+
-IFRoaXMgaXMgc2ltaWxhciB0byB0aGUgd2FybmluZ3MgZ2VuZXJhdGVkIGJ5IEdDQyA5LjQgYW5k
-IGZpeGVkIGluCj4gMzI0NjEyZDY4ZSAoInN1cHBvcnQva2NvbmZpZzogZml4IGNvbXBpbGVyIHdh
-cm5pbmdzIikuCj4gCj4gQXZvaWQgdGhlIHdhcm5pbmcgYnkgZW5sYXJnaW5nIHRoZSBkZXN0aW5h
-dGlvbiBidWZmZXIgb2YgZnByaW50ZigpLgo+IAo+IFNpZ25lZC1vZmYtYnk6IEVkZ2FyIEJvbmV0
-IDxib25ldEBncmVub2JsZS5jbnJzLmZyPgo+IC0tLQo+ICBzdXBwb3J0L2tjb25maWcvdXRpbC5j
-IHwgMiArLQo+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkK
-PiAKPiBkaWZmIC0tZ2l0IGEvc3VwcG9ydC9rY29uZmlnL3V0aWwuYyBiL3N1cHBvcnQva2NvbmZp
-Zy91dGlsLmMKPiBpbmRleCA4NjY1ZjViYjg5Li44NmNlOTk0MzY3IDEwMDY0NAo+IC0tLSBhL3N1
-cHBvcnQva2NvbmZpZy91dGlsLmMKPiArKysgYi9zdXBwb3J0L2tjb25maWcvdXRpbC5jCj4gQEAg
-LTM1LDcgKzM1LDcgQEAgc3RydWN0IGZpbGUgKmZpbGVfbG9va3VwKGNvbnN0IGNoYXIgKm5hbWUp
-Cj4gIGludCBmaWxlX3dyaXRlX2RlcChjb25zdCBjaGFyICpuYW1lKQo+ICB7Cj4gIAljaGFyICpz
-dHI7Cj4gLQljaGFyIGJ1ZltQQVRIX01BWCsyMF0sIGJ1ZjJbUEFUSF9NQVgrMV0sIGRpcltQQVRI
-X01BWCsxXTsKPiArCWNoYXIgYnVmW1BBVEhfTUFYKzIwXSwgYnVmMltQQVRIX01BWCsxMV0sIGRp
-cltQQVRIX01BWCsxXTsKCkJ1aWxkcm9vdCBpcyBjdXJyZW50bHkgdXNpbmcgYSAocmF0aGVyIG9s
-ZCkgdmVyc2lvbiBvZiBLY29uZmlnCmZyb20gS2VybmVsIDQuMTctcmMyLiBTZWUgWzFdLiBCdWls
-ZHJvb3QgbWFpbnRhaW5zIGEgbGlzdCBvZgpwYXRjaGVzIGFwcGxpZWQgb24gaXQsIGluIFsyXS4K
-ClNlZSBmb3IgZXhhbXBsZSwgYW5vdGhlciBjb21taXQgYWRkaW5nIGEgcGF0Y2ggZm9yIEtjb25m
-aWcgWzNdLgpOb3RlIHRoZSBjb21taXQgaXMgbW9kaWZ5aW5nIHRoZSBzb3VyY2Ugb2Yga2NvbmZp
-ZyBhbmQgaXMgYWxzbwphZGRpbmcgYSBwYXRjaCBpcyB0aGUgZGlyZWN0b3J5LgoKU2luY2UgdGhl
-IHdhcm5pbmcgeW91IHdhbnQgdG8gZml4IGlzIGludHJvZHVjZWQgYnkgb25lIG9mIHRoZSBCdWls
-ZHJvb3QKcGF0Y2ggdG8gYmUgYXBwbGllZCBvbiBLY29uZmlnIGluIFs0XSwgeW91ciBwYXRjaCBz
-aG91bGQgYWxzbwptb2RpZnkgWzRdIHRvIG1ha2Ugc3VyZSB5b3VyIGNoYW5nZSB3aWxsIGJlIHJl
-YmFzZWQgb24gZnV0dXJlIGtjb25maWcKdXBkYXRlcy4KCkNvdWxkIHlvdSBzZW5kIGFuIHVwZGF0
-ZWQgdmVyc2lvbiBvZiB0aGlzIHBhdGNoIGFsc28gdXBkYXRpbmcgdGhlCmtjb25maWcgcGF0Y2gg
-WzNdIHBsZWFzZT8KCj4gIAlzdHJ1Y3Qgc3ltYm9sICpzeW0sICplbnZfc3ltOwo+ICAJc3RydWN0
-IGV4cHIgKmU7Cj4gIAlzdHJ1Y3QgZmlsZSAqZmlsZTsKPiAtLQo+IDIuNDMuMAoKQmVzdCByZWdh
-cmRzLAoKSnVsaWVuLgoKWzFdIApodHRwczovL2dpdGxhYi5jb20vYnVpbGRyb290Lm9yZy9idWls
-ZHJvb3QvLS9ibG9iLzIwMjUuMDUtcmMxL3N1cHBvcnQva2NvbmZpZy9SRUFETUUuYnVpbGRyb290
-ClsyXSAKaHR0cHM6Ly9naXRsYWIuY29tL2J1aWxkcm9vdC5vcmcvYnVpbGRyb290Ly0vdHJlZS8y
-MDI1LjA1LXJjMS9zdXBwb3J0L2tjb25maWcvcGF0Y2hlcz9yZWZfdHlwZT10YWdzClszXSAKaHR0
-cHM6Ly9naXRsYWIuY29tL2J1aWxkcm9vdC5vcmcvYnVpbGRyb290Ly0vY29tbWl0L2Q2NWMxMGMy
-MGFkZDU4ZjE3Y2YxZDdiNmRlOGU3OTAzYjBhYTlkZGMKWzRdIApodHRwczovL2dpdGxhYi5jb20v
-YnVpbGRyb290Lm9yZy9idWlsZHJvb3QvLS9ibG9iLzIwMjUuMDUtcmMxL3N1cHBvcnQva2NvbmZp
-Zy9wYXRjaGVzLzE0LXN1cHBvcnQtb3V0LW9mLXRyZWUtY29uZmlnLnBhdGNoI0wxNzYKX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxp
-bmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5v
-cmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+This fixes the following CVE:
+- CVE-2025-47287: When Tornado's ``multipart/form-data`` parser encounters
+                  certain errors, it logs a warning but continues trying to
+                  parse the remainder of the data. This allows remote
+                  attackers to generate an extremely high volume of logs,
+                  constituting a DoS attack.
+
+This is an alternative to the version bump (6.4.2 -> 6.5), if we don't want
+to include a minor version bump into Buildroot LTS 2025.02.x.
+
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+---
+Changes v1 -> v2:
+- Fix patch not applying correctly
+---
+ ...l-raise-errors-instead-of-logging-in.patch | 234 ++++++++++++++++++
+ package/python-tornado/python-tornado.mk      |   3 +
+ 2 files changed, 237 insertions(+)
+ create mode 100644 package/python-tornado/0001-httputil-raise-errors-instead-of-logging-in.patch
+
+diff --git a/package/python-tornado/0001-httputil-raise-errors-instead-of-logging-in.patch b/package/python-tornado/0001-httputil-raise-errors-instead-of-logging-in.patch
+new file mode 100644
+index 0000000000..85f5852bf7
+--- /dev/null
++++ b/package/python-tornado/0001-httputil-raise-errors-instead-of-logging-in.patch
+@@ -0,0 +1,234 @@
++From cc61050e8f26697463142d99864b562e8470b41d Mon Sep 17 00:00:00 2001
++From: Ben Darnell <ben@bendarnell.com>
++Date: Thu, 8 May 2025 13:29:43 -0400
++Subject: [PATCH] httputil: Raise errors instead of logging in
++ multipart/form-data parsing
++
++We used to continue after logging an error, which allowed repeated
++errors to spam the logs. The error raised here will still be logged,
++but only once per request, consistent with other error handling in
++Tornado.
++
++Upstream: https://github.com/tornadoweb/tornado/commit/b39b892bf78fe8fea01dd45199aa88307e7162f3
++
++CVE: CVE-2025-47287
++
++Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
++---
++ tornado/httputil.py             | 30 +++++++++++-------------------
++ tornado/test/httpserver_test.py |  4 ++--
++ tornado/test/httputil_test.py   | 13 ++++++++-----
++ tornado/web.py                  | 17 +++++++++++++----
++ 4 files changed, 34 insertions(+), 30 deletions(-)
++
++diff --git a/tornado/httputil.py b/tornado/httputil.py
++index 7044aca02..ef460985e 100644
++--- a/tornado/httputil.py
+++++ b/tornado/httputil.py
++@@ -34,7 +34,6 @@
++ from urllib.parse import urlencode, urlparse, urlunparse, parse_qsl
++ 
++ from tornado.escape import native_str, parse_qs_bytes, utf8
++-from tornado.log import gen_log
++ from tornado.util import ObjectDict, unicode_type
++ 
++ 
++@@ -884,25 +883,22 @@ def parse_body_arguments(
++     """
++     if content_type.startswith("application/x-www-form-urlencoded"):
++         if headers and "Content-Encoding" in headers:
++-            gen_log.warning(
++-                "Unsupported Content-Encoding: %s", headers["Content-Encoding"]
+++            raise HTTPInputError(
+++                "Unsupported Content-Encoding: %s" % headers["Content-Encoding"]
++             )
++-            return
++         try:
++             # real charset decoding will happen in RequestHandler.decode_argument()
++             uri_arguments = parse_qs_bytes(body, keep_blank_values=True)
++         except Exception as e:
++-            gen_log.warning("Invalid x-www-form-urlencoded body: %s", e)
++-            uri_arguments = {}
+++            raise HTTPInputError("Invalid x-www-form-urlencoded body: %s" % e) from e
++         for name, values in uri_arguments.items():
++             if values:
++                 arguments.setdefault(name, []).extend(values)
++     elif content_type.startswith("multipart/form-data"):
++         if headers and "Content-Encoding" in headers:
++-            gen_log.warning(
++-                "Unsupported Content-Encoding: %s", headers["Content-Encoding"]
+++            raise HTTPInputError(
+++                "Unsupported Content-Encoding: %s" % headers["Content-Encoding"]
++             )
++-            return
++         try:
++             fields = content_type.split(";")
++             for field in fields:
++@@ -911,9 +907,9 @@ def parse_body_arguments(
++                     parse_multipart_form_data(utf8(v), body, arguments, files)
++                     break
++             else:
++-                raise ValueError("multipart boundary not found")
+++                raise HTTPInputError("multipart boundary not found")
++         except Exception as e:
++-            gen_log.warning("Invalid multipart/form-data: %s", e)
+++            raise HTTPInputError("Invalid multipart/form-data: %s" % e) from e
++ 
++ 
++ def parse_multipart_form_data(
++@@ -942,26 +938,22 @@ def parse_multipart_form_data(
++         boundary = boundary[1:-1]
++     final_boundary_index = data.rfind(b"--" + boundary + b"--")
++     if final_boundary_index == -1:
++-        gen_log.warning("Invalid multipart/form-data: no final boundary")
++-        return
+++        raise HTTPInputError("Invalid multipart/form-data: no final boundary found")
++     parts = data[:final_boundary_index].split(b"--" + boundary + b"\r\n")
++     for part in parts:
++         if not part:
++             continue
++         eoh = part.find(b"\r\n\r\n")
++         if eoh == -1:
++-            gen_log.warning("multipart/form-data missing headers")
++-            continue
+++            raise HTTPInputError("multipart/form-data missing headers")
++         headers = HTTPHeaders.parse(part[:eoh].decode("utf-8"))
++         disp_header = headers.get("Content-Disposition", "")
++         disposition, disp_params = _parse_header(disp_header)
++         if disposition != "form-data" or not part.endswith(b"\r\n"):
++-            gen_log.warning("Invalid multipart/form-data")
++-            continue
+++            raise HTTPInputError("Invalid multipart/form-data")
++         value = part[eoh + 4 : -2]
++         if not disp_params.get("name"):
++-            gen_log.warning("multipart/form-data value missing name")
++-            continue
+++            raise HTTPInputError("multipart/form-data missing name")
++         name = disp_params["name"]
++         if disp_params.get("filename"):
++             ctype = headers.get("Content-Type", "application/unknown")
++diff --git a/tornado/test/httpserver_test.py b/tornado/test/httpserver_test.py
++index 570cb64ca..f197cfef8 100644
++--- a/tornado/test/httpserver_test.py
+++++ b/tornado/test/httpserver_test.py
++@@ -1148,9 +1148,9 @@ def test_gzip_unsupported(self):
++         # Gzip support is opt-in; without it the server fails to parse
++         # the body (but parsing form bodies is currently just a log message,
++         # not a fatal error).
++-        with ExpectLog(gen_log, "Unsupported Content-Encoding"):
+++        with ExpectLog(gen_log, ".*Unsupported Content-Encoding"):
++             response = self.post_gzip("foo=bar")
++-        self.assertEqual(json_decode(response.body), {})
+++        self.assertEqual(response.code, 400)
++ 
++ 
++ class StreamingChunkSizeTest(AsyncHTTPTestCase):
++diff --git a/tornado/test/httputil_test.py b/tornado/test/httputil_test.py
++index 30fbec4d7..7a09beaa3 100644
++--- a/tornado/test/httputil_test.py
+++++ b/tornado/test/httputil_test.py
++@@ -12,7 +12,6 @@
++ )
++ from tornado.escape import utf8, native_str
++ from tornado.log import gen_log
++-from tornado.testing import ExpectLog
++ from tornado.test.util import ignore_deprecation
++ 
++ import copy
++@@ -195,7 +194,9 @@ def test_missing_headers(self):
++             b"\n", b"\r\n"
++         )
++         args, files = form_data_args()
++-        with ExpectLog(gen_log, "multipart/form-data missing headers"):
+++        with self.assertRaises(
+++            HTTPInputError, msg="multipart/form-data missing headers"
+++        ):
++             parse_multipart_form_data(b"1234", data, args, files)
++         self.assertEqual(files, {})
++ 
++@@ -209,7 +210,7 @@ def test_invalid_content_disposition(self):
++             b"\n", b"\r\n"
++         )
++         args, files = form_data_args()
++-        with ExpectLog(gen_log, "Invalid multipart/form-data"):
+++        with self.assertRaises(HTTPInputError, msg="Invalid multipart/form-data"):
++             parse_multipart_form_data(b"1234", data, args, files)
++         self.assertEqual(files, {})
++ 
++@@ -222,7 +223,7 @@ def test_line_does_not_end_with_correct_line_break(self):
++             b"\n", b"\r\n"
++         )
++         args, files = form_data_args()
++-        with ExpectLog(gen_log, "Invalid multipart/form-data"):
+++        with self.assertRaises(HTTPInputError, msg="Invalid multipart/form-data"):
++             parse_multipart_form_data(b"1234", data, args, files)
++         self.assertEqual(files, {})
++ 
++@@ -236,7 +237,9 @@ def test_content_disposition_header_without_name_parameter(self):
++             b"\n", b"\r\n"
++         )
++         args, files = form_data_args()
++-        with ExpectLog(gen_log, "multipart/form-data value missing name"):
+++        with self.assertRaises(
+++            HTTPInputError, msg="multipart/form-data value missing name"
+++        ):
++             parse_multipart_form_data(b"1234", data, args, files)
++         self.assertEqual(files, {})
++ 
++diff --git a/tornado/web.py b/tornado/web.py
++index 0303f547e..2f702d648 100644
++--- a/tornado/web.py
+++++ b/tornado/web.py
++@@ -1801,6 +1801,14 @@ async def _execute(
++         try:
++             if self.request.method not in self.SUPPORTED_METHODS:
++                 raise HTTPError(405)
+++
+++            # If we're not in stream_request_body mode, this is the place where we parse the body.
+++            if not _has_stream_request_body(self.__class__):
+++                try:
+++                    self.request._parse_body()
+++                except httputil.HTTPInputError as e:
+++                    raise HTTPError(400, "Invalid body: %s" % e) from e
+++
++             self.path_args = [self.decode_argument(arg) for arg in args]
++             self.path_kwargs = dict(
++                 (k, self.decode_argument(v, name=k)) for (k, v) in kwargs.items()
++@@ -1992,7 +2000,7 @@ def _has_stream_request_body(cls: Type[RequestHandler]) -> bool:
++ 
++ 
++ def removeslash(
++-    method: Callable[..., Optional[Awaitable[None]]]
+++    method: Callable[..., Optional[Awaitable[None]]],
++ ) -> Callable[..., Optional[Awaitable[None]]]:
++     """Use this decorator to remove trailing slashes from the request path.
++ 
++@@ -2021,7 +2029,7 @@ def wrapper(  # type: ignore
++ 
++ 
++ def addslash(
++-    method: Callable[..., Optional[Awaitable[None]]]
+++    method: Callable[..., Optional[Awaitable[None]]],
++ ) -> Callable[..., Optional[Awaitable[None]]]:
++     """Use this decorator to add a missing trailing slash to the request path.
++ 
++@@ -2445,8 +2453,9 @@ def finish(self) -> None:
++         if self.stream_request_body:
++             future_set_result_unless_cancelled(self.request._body_future, None)
++         else:
+++            # Note that the body gets parsed in RequestHandler._execute so it can be in
+++            # the right exception handler scope.
++             self.request.body = b"".join(self.chunks)
++-            self.request._parse_body()
++             self.execute()
++ 
++     def on_connection_close(self) -> None:
++@@ -3332,7 +3341,7 @@ def transform_chunk(self, chunk: bytes, finishing: bool) -> bytes:
++ 
++ 
++ def authenticated(
++-    method: Callable[..., Optional[Awaitable[None]]]
+++    method: Callable[..., Optional[Awaitable[None]]],
++ ) -> Callable[..., Optional[Awaitable[None]]]:
++     """Decorate methods with this to require that the user be logged in.
++ 
+diff --git a/package/python-tornado/python-tornado.mk b/package/python-tornado/python-tornado.mk
+index 45883b844d..0a33a57ed4 100644
+--- a/package/python-tornado/python-tornado.mk
++++ b/package/python-tornado/python-tornado.mk
+@@ -13,4 +13,7 @@ PYTHON_TORNADO_CPE_ID_VENDOR = tornadoweb
+ PYTHON_TORNADO_CPE_ID_PRODUCT = tornado
+ PYTHON_TORNADO_SETUP_TYPE = setuptools
+ 
++# 0001-httputil-raise-errors-instead-of-logging-in.patch
++PYTHON_TORNADO_IGNORE_CVES += CVE-2025-47287
++
+ $(eval $(python-package))
+-- 
+2.49.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
