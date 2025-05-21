@@ -4,70 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99139C2D0CD
-	for <buildroot@archiver.kernel.org>; Wed, 21 May 2025 18:21:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B0D9C54E71
+	for <buildroot@archiver.kernel.org>; Wed, 21 May 2025 19:07:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 63B7E80D7B;
-	Wed, 21 May 2025 18:21:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4449B80CFF;
+	Wed, 21 May 2025 19:07:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8ooTa3jC0mOX; Wed, 21 May 2025 18:21:08 +0000 (UTC)
+ id aNMHWgGz3g2X; Wed, 21 May 2025 19:07:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F5AF80CE1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 466D2801DA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8F5AF80CE1;
-	Wed, 21 May 2025 18:21:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 272A0758
- for <buildroot@buildroot.org>; Wed, 21 May 2025 18:21:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 466D2801DA;
+	Wed, 21 May 2025 19:07:22 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id E4585758
+ for <buildroot@buildroot.org>; Wed, 21 May 2025 19:07:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 179EF40339
- for <buildroot@buildroot.org>; Wed, 21 May 2025 18:21:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CA016405DD
+ for <buildroot@buildroot.org>; Wed, 21 May 2025 19:07:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ui1F_o9nweJr for <buildroot@buildroot.org>;
- Wed, 21 May 2025 18:21:06 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.155.101;
- helo=smtpdh16-2.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org F07EE400E7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F07EE400E7
-Received: from smtpdh16-2.aruba.it (smtpdh16-2.aruba.it [62.149.155.101])
- by smtp2.osuosl.org (Postfix) with ESMTPS id F07EE400E7
- for <buildroot@buildroot.org>; Wed, 21 May 2025 18:21:03 +0000 (UTC)
-Received: from smtpclient.apple ([84.33.84.190]) by Aruba SMTP with ESMTPSA
- id Ho3oubltPD5sdHo3punTG0; Wed, 21 May 2025 20:21:01 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Mime-Version: 1.0 (1.0)
-Date: Wed, 21 May 2025 20:21:00 +0200
-Message-Id: <17AA5324-5D3E-4976-8637-207289592825@benettiengineering.com>
-References: <94b1e185a5c4c928493a2e96f700b8c5@free.fr>
-Cc: buildroot@buildroot.org
-In-Reply-To: <94b1e185a5c4c928493a2e96f700b8c5@free.fr>
-To: Julien Olivain <ju.o@free.fr>
-X-Mailer: iPhone Mail (22F76)
-X-CMAE-Envelope: MS4xfNhODpUBMJQrAnlaDovN8ISKa8OMFOKr9Qf5f0qc31J+OS8PnEZ0bV6lVGWVzN0ntZudrPvwqcKtLPdJwYkvom+MQ83trbOkXyv+FIR5u8Ath0oULC8h
- j5FkwIXEOoBh7fhMvwfJBc0ml2NV+rQp0X9W0E5dMk9eN6jRkoJyWhZzrG1mrP4njCDMWNTexZj1kZVlZUugI/gyUHFaT813OmwAb+CICupt0Ok3TIo5+WGq
- llYxWIhv3hZDAKf3TDzjeA==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YD2uwf-iumwB for <buildroot@buildroot.org>;
+ Wed, 21 May 2025 19:07:20 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A5715404D4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5715404D4
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A5715404D4
+ for <buildroot@buildroot.org>; Wed, 21 May 2025 19:07:19 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 50B9113F88F;
+ Wed, 21 May 2025 21:07:13 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Wed, 21 May 2025 21:07:13 +0200
+MIME-Version: 1.0
+Date: Wed, 21 May 2025 21:07:13 +0200
+From: Julien Olivain <ju.o@free.fr>
+To: Titouan Christophe <titouan.christophe@mind.be>
+Cc: buildroot@buildroot.org, James Hilliard <james.hilliard1@gmail.com>,
+ thomas.perale@mind.be
+In-Reply-To: <20250519150314.4117224-1-titouan.christophe@mind.be>
+References: <20250519150314.4117224-1-titouan.christophe@mind.be>
+User-Agent: Webmail Free/1.6.10
+Message-ID: <e8e97e2086c469e0c1b93d6455f6991c@free.fr>
+X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1747851661; bh=AjV9xczlWYVwCWZe6NK9hH3PlK+EAoeivVY0GUth8xA=;
- h=Content-Type:From:Mime-Version:Subject:Date:To;
- b=bKt8X6NDx8+D25PNhxmluYb5L3G+duGmlrPf/RbD3Ivfwx3ICBnJw4ET/E21EwXBQ
- P2276A7TNK+tRcUNQTsgiJhz8kiSMx2rKCLvlPStBUCvpBKPmfGV8RyRwv3qC2U7XF
- 3ODirtNQPMxZBOrOcHZcrI8nYEYgc5mVhY9atgNH3fPfarxquSU4v7UKPNUz/HdV0f
- yustlPYNAywsmXtbulU8I/Bo5FZfOKel+1qsqeE0i56PDawOGHn5D30EWNzGjaAypL
- K/VQrvZhZWCABU3G8bvkG40AJ9w1qoU05Y7PR/IQCKG+W6KzS4YMgGFKSvuhqgNF49
- 950Ldd0ccAleg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1747854436;
+ bh=I+LnWsLc+N0y731Ds9SY0xhPm+MrolbIbDIF9bZxfhk=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=LPXThSXh5U+MWYN1dMkxuAdZOL1w/n9Xs3Hu6wAltwoXIiFhIjj9AGV+uMp3rWQNa
+ MU+DMD9b3ToM2HPMcOPbBMbhC4ob1QTTtAy8vJ0e+QvGTbULLBAhcbkTGt2RTZbu0W
+ NaApoiJejArYXz2aP2/HbHLh9ydPFgZ4hUXZmq2/a50EWL05cOLhGcjSpDHMuPQEf4
+ uNacgoPdgiLIGqqgzZGd2eICJabHaYL8vWVyvpE5lhHKXR+8G5yo1tTIjmKasPILAf
+ UiVA2s80DSObOpRfFQO+noEUU9ntgOFr49YPanYPdFm+b3qPbTw0C33APrD3AGDgky
+ O8+ln9c7hTDvQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=temperror header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=bKt8X6ND
-Subject: Re: [Buildroot] [PATCH] package/libnvme: bump to version 1.14
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=LPXThSXh
+Subject: Re: [Buildroot] [PATCH for 2025.02.x] package/python-tornado: apply
+ security patch for CVE-2025-47287
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -79,26 +83,108 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Cj4gSWwgZ2lvcm5vIDIxIG1hZyAyMDI1LCBhbGxlIG9yZSAyMDowMywgSnVsaWVuIE9saXZhaW4g
-PGp1Lm9AZnJlZS5mcj4gaGEgc2NyaXR0bzoKPiAKPiDvu79PbiAyMC8wNS8yMDI1IDIyOjQxLCBH
-aXVsaW8gQmVuZXR0aSB3cm90ZToKPj4gQWRkIGxvY2FsIHBhdGNoIHRvIGF2b2lkIGJ1aWxkIGZh
-aWx1cmUgb24gZXhhbXBsZXMgZm9sZGVyIHRoYXQgd2UgZG9uJ3QKPj4gbmVlZC4gVGhhdCBidWls
-ZCBmYWlsdXJlIGlzIGR1ZSB0byBtaXNzaW5nIGJpdHMvcHRocmVhZHR5cGVzLmggb24gbXVzbCBh
-bmQKPj4gc2luY2Ugd2UgZG9uJ3QgbmVlZCBleGFtcGxlcyBhdCBhbGwgbGV0J3MgZGlzYWJsZSBp
-dHMgYnVpbGRpbmcgYnkgcGFzc2luZwo+PiAtRGV4YW1wbGVzPWZhbHNlLgo+PiBGb3IgcmVsZWFz
-ZSBub3RlLCBzZWU6Cj4+IGh0dHBzOi8vZ2l0aHViLmNvbS9saW51eC1udm1lL2xpYm52bWUvcmVs
-ZWFzZXMvdGFnL3YxLjE0Cj4+IFNpZ25lZC1vZmYtYnk6IEdpdWxpbyBCZW5ldHRpIDxnaXVsaW8u
-YmVuZXR0aUBiZW5ldHRpZW5naW5lZXJpbmcuY29tPgo+IAo+IEFwcGxpZWQgdG8gbmV4dCwgdGhh
-bmtzLgo+IAo+IEZvciBpbmZvLCBJIGFkZGVkIHRoZSBsaW5rIHRvIHRoZSAiVXBzdHJlYW06IiB0
-YWcgaW4gdGhlIHBhdGNoIHdoaWNoIHdhcwo+IG1pc3NpbmcgZm9yIHNvbWUgcmVhc29uLiBTZWU6
-Cj4gaHR0cHM6Ly9naXRsYWIuY29tL2J1aWxkcm9vdC5vcmcvYnVpbGRyb290Ly0vY29tbWl0L2My
-ZmRjZWJjNmVlNmI1ODk2NjVmOTkwM2I5OTdiODg3YmMwMzI3ZDcKPiAKClRoYW5rIHlvdSBKdWxp
-ZW4sIEnigJl2ZSBtaXNzZWQgaXQuCkJlc3QgcmVnYXJkcwpHaXVsaW8KCj4gQmVzdCByZWdhcmRz
-LAo+IAo+IEp1bGllbi4KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0
-cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Hi Titouan,
+
+Thanks for the patch.
+
+Unfortunately, the package patch is not applying as is. See below.
+
+On 19/05/2025 17:03, Titouan Christophe via buildroot wrote:
+> This fixes the following CVE:
+> - CVE-2025-47287: When Tornado's ``multipart/form-data`` parser 
+> encounters
+>                   certain errors, it logs a warning but continues 
+> trying to
+>                   parse the remainder of the data. This allows remote
+>                   attackers to generate an extremely high volume of 
+> logs,
+>                   constituting a DoS attack.
+> 
+> Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+> ---
+> The patch herebelow is an alternative to the version bump of 
+> python-tornado
+> v6.4.2 -> v6.5 proposed in my previous email
+> (https://lists.buildroot.org/pipermail/buildroot/2025-May/779833.html).
+> Indeed, we may not want to perform a minor version bump of that package 
+> in
+> Buildroot LTS 2025.02.x; otherwise simply ignore this patch
+> ---
+>  ...l-raise-errors-instead-of-logging-in.patch | 234 ++++++++++++++++++
+>  package/python-tornado/python-tornado.mk      |   3 +
+>  2 files changed, 237 insertions(+)
+>  create mode 100644 
+> package/python-tornado/0001-httputil-raise-errors-instead-of-logging-in.patch
+> 
+> diff --git 
+> a/package/python-tornado/0001-httputil-raise-errors-instead-of-logging-in.patch 
+> b/package/python-tornado/0001-httputil-raise-errors-instead-of-logging-in.patch
+> new file mode 100644
+> index 0000000000..ee8942ea6d
+> --- /dev/null
+> +++ 
+> b/package/python-tornado/0001-httputil-raise-errors-instead-of-logging-in.patch
+> @@ -0,0 +1,234 @@
+> +From cc61050e8f26697463142d99864b562e8470b41d Mon Sep 17 00:00:00 2001
+> +From: Ben Darnell <ben@bendarnell.com>
+> +Date: Thu, 8 May 2025 13:29:43 -0400
+> +Subject: [PATCH] httputil: Raise errors instead of logging in
+> + multipart/form-data parsing
+> +
+> +We used to continue after logging an error, which allowed repeated
+> +errors to spam the logs. The error raised here will still be logged,
+> +but only once per request, consistent with other error handling in
+> +Tornado.
+> +
+> +Upstream: 
+> https://github.com/tornadoweb/tornado/commit/b39b892bf78fe8fea01dd45199aa88307e7162f3
+> +
+> +CVE: CVE-2025-47287
+> +
+> +Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+> +---
+> + tornado/httputil.py             | 30 +++++++++++-------------------
+> + tornado/test/httpserver_test.py |  4 ++--
+> + tornado/test/httputil_test.py   | 13 ++++++++-----
+> + tornado/web.py                  | 17 +++++++++++++----
+> + 4 files changed, 34 insertions(+), 30 deletions(-)
+> +
+> +diff --git a/tornado/httputil.py b/tornado/httputil.py
+> +index 7044aca02..ef460985e 100644
+> +--- a/tornado/httputil.py
+> ++++ b/tornado/httputil.py
+> +@@ -34,7 +34,6 @@
+> + from urllib.parse import urlencode, urlparse, urlunparse, parse_qsl
+> +
+> + from tornado.escape import native_str, parse_qs_bytes, utf8, 
+> to_unicode
+> +-from tornado.log import gen_log
+
+Running the command:
+
+     make python-tornado-patch
+
+fails here with output:
+
+     >>> python-tornado 6.4.2 Patching
+
+     Applying 0001-httputil-raise-errors-instead-of-logging-in.patch 
+using patch:
+     patching file tornado/httputil.py
+     Hunk #1 FAILED at 34.
+     ...
+
+Could you send an updated patch addressing this issue, please?
+
+Best regards,
+
+Julien.
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
