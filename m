@@ -1,75 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB680C2D0CD
-	for <buildroot@archiver.kernel.org>; Wed, 21 May 2025 18:03:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99139C2D0CD
+	for <buildroot@archiver.kernel.org>; Wed, 21 May 2025 18:21:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B5154606BA;
-	Wed, 21 May 2025 18:03:04 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xXIA9cQVEMB7; Wed, 21 May 2025 18:03:04 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA358606D3
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EA358606D3;
-	Wed, 21 May 2025 18:03:03 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id CC3A0758
- for <buildroot@buildroot.org>; Wed, 21 May 2025 18:03:02 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B20B581341
- for <buildroot@buildroot.org>; Wed, 21 May 2025 18:03:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 63B7E80D7B;
+	Wed, 21 May 2025 18:21:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CEnuwl7UzMTk for <buildroot@buildroot.org>;
- Wed, 21 May 2025 18:03:02 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B59FB81327
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B59FB81327
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B59FB81327
- for <buildroot@buildroot.org>; Wed, 21 May 2025 18:03:01 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id B365678034E;
- Wed, 21 May 2025 20:02:58 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
- via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 21 May 2025 20:02:58 +0200
-MIME-Version: 1.0
-Date: Wed, 21 May 2025 20:02:58 +0200
-From: Julien Olivain <ju.o@free.fr>
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+ id 8ooTa3jC0mOX; Wed, 21 May 2025 18:21:08 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F5AF80CE1
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8F5AF80CE1;
+	Wed, 21 May 2025 18:21:08 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 272A0758
+ for <buildroot@buildroot.org>; Wed, 21 May 2025 18:21:07 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 179EF40339
+ for <buildroot@buildroot.org>; Wed, 21 May 2025 18:21:07 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ui1F_o9nweJr for <buildroot@buildroot.org>;
+ Wed, 21 May 2025 18:21:06 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.155.101;
+ helo=smtpdh16-2.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org F07EE400E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F07EE400E7
+Received: from smtpdh16-2.aruba.it (smtpdh16-2.aruba.it [62.149.155.101])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F07EE400E7
+ for <buildroot@buildroot.org>; Wed, 21 May 2025 18:21:03 +0000 (UTC)
+Received: from smtpclient.apple ([84.33.84.190]) by Aruba SMTP with ESMTPSA
+ id Ho3oubltPD5sdHo3punTG0; Wed, 21 May 2025 20:21:01 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Mime-Version: 1.0 (1.0)
+Date: Wed, 21 May 2025 20:21:00 +0200
+Message-Id: <17AA5324-5D3E-4976-8637-207289592825@benettiengineering.com>
+References: <94b1e185a5c4c928493a2e96f700b8c5@free.fr>
 Cc: buildroot@buildroot.org
-In-Reply-To: <20250520204134.383623-1-giulio.benetti@benettiengineering.com>
-References: <20250520204134.383623-1-giulio.benetti@benettiengineering.com>
-User-Agent: Webmail Free/1.6.10
-Message-ID: <94b1e185a5c4c928493a2e96f700b8c5@free.fr>
-X-Sender: ju.o@free.fr
+In-Reply-To: <94b1e185a5c4c928493a2e96f700b8c5@free.fr>
+To: Julien Olivain <ju.o@free.fr>
+X-Mailer: iPhone Mail (22F76)
+X-CMAE-Envelope: MS4xfNhODpUBMJQrAnlaDovN8ISKa8OMFOKr9Qf5f0qc31J+OS8PnEZ0bV6lVGWVzN0ntZudrPvwqcKtLPdJwYkvom+MQ83trbOkXyv+FIR5u8Ath0oULC8h
+ j5FkwIXEOoBh7fhMvwfJBc0ml2NV+rQp0X9W0E5dMk9eN6jRkoJyWhZzrG1mrP4njCDMWNTexZj1kZVlZUugI/gyUHFaT813OmwAb+CICupt0Ok3TIo5+WGq
+ llYxWIhv3hZDAKf3TDzjeA==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1747850579;
- bh=psldqbEfRfmlEcV1hRMYcGHcdeyy2COnhjmQdMSL6Ok=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=aaro957egBEwTWCO0sc50MtYWjvMq/Q0fbC87+Sn5boFUjRjSEN+EGqaZ300IQyZb
- 0EwxWY2U9c9ykFb2HW1YUyZKZ27RvfGhibYdh0RTkqdobBFeQooayao3V87qhtLCK9
- 0joe+bteQkH9Zt10B0S6IOXbKFRXj9ATnnK7W+pBuM9qe9hvKDLsYS+/ZCE0tvii0m
- tNgXkCD6EQASa8Fv+4vVvXSlaBk/RWGLZ6yXDoX1jaMycC7xWilOcDMRONwdjC0njO
- 4JZz+l/hE2MI6zGWDEz5vK+sGa6q1ej9QhIVknJbg5iTS5dr6E00S8e87aOBHzOMYI
- pV7NRBdmy8h+Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=aruba.it; s=a1; 
+ t=1747851661; bh=AjV9xczlWYVwCWZe6NK9hH3PlK+EAoeivVY0GUth8xA=;
+ h=Content-Type:From:Mime-Version:Subject:Date:To;
+ b=bKt8X6NDx8+D25PNhxmluYb5L3G+duGmlrPf/RbD3Ivfwx3ICBnJw4ET/E21EwXBQ
+ P2276A7TNK+tRcUNQTsgiJhz8kiSMx2rKCLvlPStBUCvpBKPmfGV8RyRwv3qC2U7XF
+ 3ODirtNQPMxZBOrOcHZcrI8nYEYgc5mVhY9atgNH3fPfarxquSU4v7UKPNUz/HdV0f
+ yustlPYNAywsmXtbulU8I/Bo5FZfOKel+1qsqeE0i56PDawOGHn5D30EWNzGjaAypL
+ K/VQrvZhZWCABU3G8bvkG40AJ9w1qoU05Y7PR/IQCKG+W6KzS4YMgGFKSvuhqgNF49
+ 950Ldd0ccAleg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=aaro957e
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=temperror header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=bKt8X6ND
 Subject: Re: [Buildroot] [PATCH] package/libnvme: bump to version 1.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -82,34 +79,26 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 20/05/2025 22:41, Giulio Benetti wrote:
-> Add local patch to avoid build failure on examples folder that we don't
-> need. That build failure is due to missing bits/pthreadtypes.h on musl 
-> and
-> since we don't need examples at all let's disable its building by 
-> passing
-> -Dexamples=false.
-> 
-> For release note, see:
-> https://github.com/linux-nvme/libnvme/releases/tag/v1.14
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-
-Applied to next, thanks.
-
-For info, I added the link to the "Upstream:" tag in the patch which was
-missing for some reason. See:
-https://gitlab.com/buildroot.org/buildroot/-/commit/c2fdcebc6ee6b589665f9903b997b887bc0327d7
-
-Best regards,
-
-Julien.
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Cj4gSWwgZ2lvcm5vIDIxIG1hZyAyMDI1LCBhbGxlIG9yZSAyMDowMywgSnVsaWVuIE9saXZhaW4g
+PGp1Lm9AZnJlZS5mcj4gaGEgc2NyaXR0bzoKPiAKPiDvu79PbiAyMC8wNS8yMDI1IDIyOjQxLCBH
+aXVsaW8gQmVuZXR0aSB3cm90ZToKPj4gQWRkIGxvY2FsIHBhdGNoIHRvIGF2b2lkIGJ1aWxkIGZh
+aWx1cmUgb24gZXhhbXBsZXMgZm9sZGVyIHRoYXQgd2UgZG9uJ3QKPj4gbmVlZC4gVGhhdCBidWls
+ZCBmYWlsdXJlIGlzIGR1ZSB0byBtaXNzaW5nIGJpdHMvcHRocmVhZHR5cGVzLmggb24gbXVzbCBh
+bmQKPj4gc2luY2Ugd2UgZG9uJ3QgbmVlZCBleGFtcGxlcyBhdCBhbGwgbGV0J3MgZGlzYWJsZSBp
+dHMgYnVpbGRpbmcgYnkgcGFzc2luZwo+PiAtRGV4YW1wbGVzPWZhbHNlLgo+PiBGb3IgcmVsZWFz
+ZSBub3RlLCBzZWU6Cj4+IGh0dHBzOi8vZ2l0aHViLmNvbS9saW51eC1udm1lL2xpYm52bWUvcmVs
+ZWFzZXMvdGFnL3YxLjE0Cj4+IFNpZ25lZC1vZmYtYnk6IEdpdWxpbyBCZW5ldHRpIDxnaXVsaW8u
+YmVuZXR0aUBiZW5ldHRpZW5naW5lZXJpbmcuY29tPgo+IAo+IEFwcGxpZWQgdG8gbmV4dCwgdGhh
+bmtzLgo+IAo+IEZvciBpbmZvLCBJIGFkZGVkIHRoZSBsaW5rIHRvIHRoZSAiVXBzdHJlYW06IiB0
+YWcgaW4gdGhlIHBhdGNoIHdoaWNoIHdhcwo+IG1pc3NpbmcgZm9yIHNvbWUgcmVhc29uLiBTZWU6
+Cj4gaHR0cHM6Ly9naXRsYWIuY29tL2J1aWxkcm9vdC5vcmcvYnVpbGRyb290Ly0vY29tbWl0L2My
+ZmRjZWJjNmVlNmI1ODk2NjVmOTkwM2I5OTdiODg3YmMwMzI3ZDcKPiAKClRoYW5rIHlvdSBKdWxp
+ZW4sIEnigJl2ZSBtaXNzZWQgaXQuCkJlc3QgcmVnYXJkcwpHaXVsaW8KCj4gQmVzdCByZWdhcmRz
+LAo+IAo+IEp1bGllbi4KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0
+cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
