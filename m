@@ -1,108 +1,167 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1DCBFC2D0CD
-	for <buildroot@archiver.kernel.org>; Wed, 21 May 2025 13:13:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 723A1C2D0CD
+	for <buildroot@archiver.kernel.org>; Wed, 21 May 2025 17:10:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8D3B261321;
-	Wed, 21 May 2025 13:13:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D65AB83A98;
+	Wed, 21 May 2025 17:10:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rM-i9xU1174N; Wed, 21 May 2025 13:13:13 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bqwpTlx0ktFJ; Wed, 21 May 2025 17:10:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F0B6760B6B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1D474839DC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F0B6760B6B;
-	Wed, 21 May 2025 13:13:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id CE1741F3
- for <buildroot@buildroot.org>; Wed, 21 May 2025 13:13:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1D474839DC;
+	Wed, 21 May 2025 17:10:20 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 187391BF
+ for <buildroot@buildroot.org>; Wed, 21 May 2025 17:10:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CB4CF417A3
- for <buildroot@buildroot.org>; Wed, 21 May 2025 13:13:10 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id F2E4B80C0A
+ for <buildroot@buildroot.org>; Wed, 21 May 2025 17:10:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Bw4L9xUplqPi for <buildroot@buildroot.org>;
- Wed, 21 May 2025 13:13:09 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
- envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B412D409E7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B412D409E7
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B412D409E7
- for <buildroot@buildroot.org>; Wed, 21 May 2025 13:13:07 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- 5b1f17b1804b1-43cfe574976so48911545e9.1
- for <buildroot@buildroot.org>; Wed, 21 May 2025 06:13:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1747833186; x=1748437986;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=UwXynJmLoi9D/IzSzKpzWH2Niwt14mBE5PRg296Vtls=;
- b=RaTdbLXlTrN6Um90FuzM1AnaARAAHB1ZMOiS2L4blJrDLCicZj8bjyCDw8xe7ni/IN
- 2muJ0PzIijOA6zx5iA2JXGlV/q44QyGfxkiLdW5ZNVdWvOxagEPD1nPEBBKZwanjfAxq
- dsMGJT2i624AxowA9P0sgcjWXA8P2qx6n3xpYR55SVwhZrxY08lGdLuFr6C34ii9Dq59
- hftsO19lhfBI3yfwS7eqzndtnrlGtewIZgd0z/kepAE7hF59kd4SC2aUapUEjvnZm7z1
- W5J4eXVpxMNz7lUFFY0lPrNlKds4ZUMIdj+Ht87GiY1W1fvqgYV32dod9KgJw46zzy79
- kRhA==
-X-Gm-Message-State: AOJu0Yzh/zljElXvw6mJDRHapzUrjRN4FBFJdX6K5V3wXyTu14eXbd8j
- MljBjQDOztUXQEGBeTVYcL1YdrL13GK4tEbEG8YQZsW+ta51ks3Nul77827BANXLn7SO3urbwZa
- HoRyLQek=
-X-Gm-Gg: ASbGnctfn/5QI/n6v9xSSpesOYHlOyvkgAZqInBDUZPlYczEaY7Aqejzed2KFwaB15H
- Xu3IRfJlJDyRAP5zpmO7tM677MBo6iVQv4CYYxWhl19B6b1vpjTZkNl8QMxGqtr9bA98/Z3aZm3
- rFqbc1jEf80QVP9dgF3plwHvezArffeXTjI9pdVlwDOqPIr0hPv+yBTv6Cb4c3zohBcEV7bmVSs
- IV2KHXLPp1pfuj+dNRcdNOAybZ4SG9xNAJ5c8QvB+B0awmzCHCeHT+FV4uLuW9yXpmAvoil4JYY
- J4AzUVV2Lk+yyb92mko38TsujeesrPMrL8EN4RsQc/aqkHbbJYiVCkVhr4a4O2blHlRCQ+y6p10
- XJcM0lEGsnLZ4FYQErQzgxWUBP+vbYTmrX2c=
-X-Google-Smtp-Source: AGHT+IFuRniqpZxEGiEWzM9GtmBeFxaz3Sxtl621wTv6zwe1ybBSIROgK1946DJPy5KQXmeO686oHw==
-X-Received: by 2002:a5d:64ee:0:b0:3a3:55e6:eaaf with SMTP id
- ffacd0b85a97d-3a35c8259a5mr18203124f8f.24.1747833185746; 
- Wed, 21 May 2025 06:13:05 -0700 (PDT)
-Received: from ?IPV6:2a02:a03f:639d:e501:5db7:a3a4:443e:4828?
- ([2a02:a03f:639d:e501:5db7:a3a4:443e:4828])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3a361b04236sm18518865f8f.28.2025.05.21.06.13.04
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 21 May 2025 06:13:05 -0700 (PDT)
-Message-ID: <17796dd7-9f0d-40ac-8dbb-2a03b6e88f8d@mind.be>
-Date: Wed, 21 May 2025 15:13:04 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yFyL75DZIdz2 for <buildroot@buildroot.org>;
+ Wed, 21 May 2025 17:10:17 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.19;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A8E42839DC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A8E42839DC
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A8E42839DC
+ for <buildroot@buildroot.org>; Wed, 21 May 2025 17:10:16 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.7.2] ([85.22.117.134]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mt75H-1v6rHD1fLN-00rQiP; Wed, 21
+ May 2025 19:10:14 +0200
+Message-ID: <83e4cd80-884a-4ee3-8e16-d1ec16ec6abc@gmx.de>
+Date: Wed, 21 May 2025 19:10:13 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: buildroot@buildroot.org
-References: <20250514150446.968758-1-thomas.perale@mind.be>
- <20250520143947.h3j5i3nblgu4ielq@n621.de>
-Content-Language: en-US
-In-Reply-To: <20250520143947.h3j5i3nblgu4ielq@n621.de>
+To: daggs <daggs@gmx.com>, buildroot@buildroot.org
+References: <trinity-14131c26-e3d1-4322-b0cd-b9bbf25edd81-1747549977480@3c-app-mailcom-bs14>
+Content-Language: en-US, de-DE-1901, de-DE
+Autocrypt: addr=fiona.klute@gmx.de; keydata=
+ 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
+In-Reply-To: <trinity-14131c26-e3d1-4322-b0cd-b9bbf25edd81-1747549977480@3c-app-mailcom-bs14>
+X-Provags-ID: V03:K1:5XHWZsH/26vb1pT7dVgyKgtp9/rjU/oKvhl3hYfF1cbGwOX4yq7
+ /h8hl++jQNUKOh/Gq9w2a+qsJ3nQVmW+Jcabp42O5yIVGsD+t6KPt8R6Pkd3IuFRzoP6RcR
+ c+U9f1uls/C5C50ul561SoHrm+8u1J/HlTnwkmZKES1MMD3JFWgwiO5snevsrOhADErVOIW
+ 5BCY/KRwRir8QQ7WKtgRA==
+UI-OutboundReport: notjunk:1;M01:P0:EAReTxTio7M=;/qHHMhB+OrI+7dCxxhhSGOeOp4K
+ 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
+ O/tFqR60yiVU4=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1747833186; x=1748437986; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:to:subject:user-agent:mime-version:date:message-id:from
- :to:cc:subject:date:message-id:reply-to;
- bh=UwXynJmLoi9D/IzSzKpzWH2Niwt14mBE5PRg296Vtls=;
- b=F63coTTpd9hp2DuGG+jKL/HGoub0JV2qVGPVFv4m0M7Euu2EGFj4Q+1KT7HN828liR
- q3APtT+Mbu4Rlp4zxa0cL8CUeTHqCjL/rUXacwQngvyphNlx5QLMF6jkryxCoJPCVTiZ
- kJM1cQhv4YQkSCs0flhu/qPDi9HL5DttM1xsvAhnh19oCWydwJ0NF7Kn//IvY/vyR+Sl
- nWtdb4l4QKnS71XqYNw9mogV583M0BKJGbAisDKCcx7wqiXlz9zRzGnN+zRjX50rtC2D
- 3yDmQKnI0Hq9EtOGOKQxDaPXNrSWYYsvvEG30LktK13MiTRLxDoUhm0f+7hJ35RoanSy
- ID6g==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=gmx.de; 
+ s=s31663417; t=1747847414; x=1748452214; i=fiona.klute@gmx.de;
+ bh=ivtznuexM5Jjhcpjkn4F8e8cYbLcDSRBBFJuU+aF/Qc=;
+ h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:
+ References:From:In-Reply-To:Content-Type:
+ Content-Transfer-Encoding:cc:content-transfer-encoding:
+ content-type:date:from:message-id:mime-version:reply-to:subject:
+ to;
+ b=PpktWdidpSAg/eSQq2vJ6WaN0DACeYIFB8xgCfxk0Nz6Icg5FD1swNWcOKUtH37P
+ Pw1wzUVsZ9EnzfzwjrYzyfVeVEy4hFYN9tftM0HsbINNJTqgxQjR8goP9oc06GKm0
+ lzgLavxZTOgIZY/eiudl5Nfs3//UwaPw5plg7HW7X9CcxfFOgyo3gigFktYD9qwjR
+ nL0gh4MagcG9OFTL35T9zrUD+8XDRZtd4yw96+2Dn94iXCwtBoQN8CNVfwhfB3tUF
+ aQ2WfjrhWj4bLcianu7AB//2GaKb/kQWlxIb5sjqE6UEQN+gLcgSqNiuSlHTfN36Y
+ W0aicsYQSYzRy9dUIA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=F63coTTp
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-flask: security bump to
- version 3.1.1
+ header.from=gmx.de
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
+ header.a=rsa-sha256 header.s=s31663417 header.b=PpktWdid
+Subject: Re: [Buildroot] adding service file as part of a image generation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,99 +173,29 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Titouan Christophe via buildroot <buildroot@buildroot.org>
-Reply-To: Titouan Christophe <titouan.christophe@mind.be>
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Florian, Thomas and all,
+Am 18.05.25 um 08:32 schrieb daggs via buildroot:
+> Greetings,
+> 
+> I need to add a custom systemd service file to an image prior to using it, preferable as part of the build
+> is there such support?
 
-On 20/05/25 16:39, Florian Larysch wrote:
-> Hi Thomas,
->
-> alas, this release changed more than just fixing that security issue. In
-> particular, the changes in [1] are breaking the build of 2025.02.x for
-> me:
->
->    * Getting build dependencies for wheel...
+If you want to add (or overwrite) arbitrary files in the image, you can 
+use a rootfs overlay, see the BR2_ROOTFS_OVERLAY option.
 
---- SNIP ---
+If the service file is part of a custom package you install into the 
+image, it might be better to install it from the package (look for 
+LIBFOO_INSTALL_INIT_SYSTEMD in the docs).
 
->    ERROR Backend subprocess exited when trying to invoke get_requires_for_build_wheel
->    make: *** [package/pkg-generic.mk:273: /home/flarysch/br-test-pkg/bootlin-armv5-uclibc/build/python-flask-3.1.1/.stamp_built] Error 1
->
-> This can be reproduced with test-pkg using
->
->    BR2_PACKAGE_PYTHON3=y
->    BR2_PACKAGE_PYTHON_FLASK=y
->
-> As I understand it, this is happening because flask moved its
-> pyproject.toml to PEP 639 license expressions but flit only introduced
-> support for those in [2], which is part of 3.11.0, which wasn't included
-> in 2025.02.2/.3, while the flask bump was.
->
-> The flit 3.10.1..3.11.0 diff doesn't look to bad, so maybe 2025.02.x
-> could pick up the flip bump too?
+Best regards,
+Fiona
 
-I agree with you, bumping flit doesn't look that bad. Also, other packages than Flask could have the "good idea" of changing their build requirement in patchlevel version bumps that also include some security fixes. Thus, I think that having flit>=3.11 in 2025.02.x LTS is better in the long run, as it reduces the patch maintenance burden on the Buildroot "staff"
-
-I therefore suggest to apply https://gitlab.com/buildroot.org/buildroot/-/commit/c5659cebb7b54e2522601824a10c47c0ef73a09f on 2025.02.x. To make sure this wouldn't hurt elsewhere, I applied the commit locally, and then I successfully built all target packages that rely on flit, ie:
-
-BR2_PACKAGE_PYTHON3=y
-BR2_PACKAGE_PYTHON_APISPEC=y
-BR2_PACKAGE_PYTHON_WEASYPRINT=y
-BR2_PACKAGE_PYTHON_CLICK=y
-BR2_PACKAGE_PYTHON_MARSHMALLOW_SQLALCHEMY=y
-BR2_PACKAGE_PYTHON_PACKAGING=y
-BR2_PACKAGE_PYTHON_MORE_ITERTOOLS=y
-BR2_PACKAGE_PYTHON_FLASK=y
-BR2_PACKAGE_PYTHON_IDNA=y
-BR2_PACKAGE_PYTHON_FLASK_SMOREST=y
-BR2_PACKAGE_PYTHON_DOCUTILS=y
-BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS=y
-BR2_PACKAGE_PYTHON_TOMLI=y
-BR2_PACKAGE_PYTHON_CSSSELECT2=y
-BR2_PACKAGE_PYTHON_TINYHTML5=y
-BR2_PACKAGE_PYTHON_ITSDANGEROUS=y
-BR2_PACKAGE_PYTHON_BLINKER=y
-BR2_PACKAGE_PYTHON_ENTRYPOINTS=y
-BR2_PACKAGE_PYTHON_AIOHTTP_REMOTES=y
-BR2_PACKAGE_PYTHON_WERKZEUG=y
-BR2_PACKAGE_PYTHON_MARSHMALLOW=y
-BR2_PACKAGE_PYTHON_WEBARGS=y
-BR2_PACKAGE_PYTHON_TOMLI_W=y
-BR2_PACKAGE_PYTHON_PYPHEN=y
-BR2_PACKAGE_PYTHON_PYDYF=y
-BR2_PACKAGE_PYTHON_TINYCSS2=y
-BR2_PACKAGE_PYTHON_PYPARSING=y
-BR2_PACKAGE_PYTHON_JEEPNEY=y
-BR2_PACKAGE_PYTHON_AIOPROCESSING=y
-BR2_PACKAGE_PYTHON_PATHSPEC=y
-BR2_PACKAGE_PYTHON_AIOLOGSTASH=y
-BR2_PACKAGE_PYTHON_ASYNCCLICK=y
-BR2_PACKAGE_PYTHON_JINJA2=y
-BR2_PACKAGE_PYTHON_ARGH=y
-BR2_PACKAGE_PYTHON_AIOSQLITE=y
-BR2_PACKAGE_PYTHON_SEGNO=y
-
-Kind regards,
-Titouan
-
-> Alternatively, we could revert the
-> flask bump and just import the security patch (just [3], if I'm not
-> mistaken).
->
-> Florian
->
-> [1] https://github.com/pallets/flask/commit/0109e496f6ca68de29480fe6413e81b1d3f86aa9
-> [2] https://github.com/pypa/flit/commit/640b6ad973e406b352649d36eb35dc208ecbb0ca
-> [3] https://github.com/pallets/flask/commit/fb54159861708558b5f5658ebdc14709d984361c
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
