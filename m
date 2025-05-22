@@ -1,77 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56FDDC54E65
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6832BC54756
 	for <buildroot@archiver.kernel.org>; Thu, 22 May 2025 07:18:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0411A83CFE;
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2C86D613AA;
 	Thu, 22 May 2025 07:18:56 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ToUBTUYitOb6; Thu, 22 May 2025 07:18:53 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B035483CFB
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B035483CFB;
-	Thu, 22 May 2025 07:18:53 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id BB83D69
- for <buildroot@buildroot.org>; Thu, 22 May 2025 07:18:49 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A1FD5613A9
- for <buildroot@buildroot.org>; Thu, 22 May 2025 07:18:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nkrNXtMkl6wx for <buildroot@buildroot.org>;
- Thu, 22 May 2025 07:18:48 +0000 (UTC)
+ id qdOboAiml0t8; Thu, 22 May 2025 07:18:55 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2884C613BF
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2884C613BF;
+	Thu, 22 May 2025 07:18:55 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C9B8B69
+ for <buildroot@buildroot.org>; Thu, 22 May 2025 07:18:51 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id BA3E483CA7
+ for <buildroot@buildroot.org>; Thu, 22 May 2025 07:18:50 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DjDccMGNU2ez for <buildroot@buildroot.org>;
+ Thu, 22 May 2025 07:18:50 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
+ client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
  envelope-from=elmehdi.younes@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 949F661389
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 949F661389
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 949F661389
- for <buildroot@buildroot.org>; Thu, 22 May 2025 07:18:48 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id
- ffacd0b85a97d-3a36748920cso4844272f8f.2
- for <buildroot@buildroot.org>; Thu, 22 May 2025 00:18:48 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B76AE83CFB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B76AE83CFB
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B76AE83CFB
+ for <buildroot@buildroot.org>; Thu, 22 May 2025 07:18:49 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ 5b1f17b1804b1-442e9c00bf4so56315265e9.3
+ for <buildroot@buildroot.org>; Thu, 22 May 2025 00:18:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1747898326; x=1748503126;
+ d=1e100.net; s=20230601; t=1747898327; x=1748503127;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=TcbN5YDNLe/yCNITOW2SsR6LAfCU/eZvsL+MgRpFAxk=;
- b=JixKJ9W+Jilnx2xG8fiWsOabKvNm2aHf5NJ6fbDUrkKkgcCK4BqsRhNMqYpUVB12zf
- iDjXGv/OxMPJD1iA+lmJEh5G6dvs49nWpZM+0vht/hB9irBUlg9bMvWV8h5eHbXWLVfm
- aR0fHX1FEiDjyGcnSdUfA9LR6sedt6lkQfht0V6FIYFjn+wsQEETbktQg7XuRcMGYbz4
- +ugUoJWXcjH6PqMx0MPtyid1oRmFRumLPf9Hi+PpPYPHkUMSzzi96vcLuxfqdewXunHE
- YxNXKc685aBog/jFsQF42PKqQEerrggzOF5Q8JAYxgYx+kZMcxPYP+A4YIirkwyC9x/y
- QUfA==
-X-Gm-Message-State: AOJu0YzTj4q7AHT6M25Zr3KJwU7RGevuha6jWOpL5efAsbAx5xzBrbCN
- Jqapv7Bc9kXB+RfCwK0tvKfBsfR32O0E0KEwkX6w1iIpOGqu5AuxbnmAwssZXksvRsOy7wlxGuU
- TTBDb
-X-Gm-Gg: ASbGncuQW8zyMyXc63R5j12N7CntTT9rxJSB5j9X5kqudg8ggYLLweG35Y6x3fexkNy
- ZHt5EL1avZCtC0YVOmeqX/3CZb3B5N/8RA81/cRNcccXjaiX543T6rip1EATq8G6a95Wf9+TVXI
- F+IYZNFYVGUWVSaBTwxhWf9n9pTQt7OFWjaFHTk1SILxn0ReEEi0Zw1rAT1B2EB+kcxyHK+rMpQ
- kKUtl1dSXRD3L7jSDar5mNXfRRMGvhIyMrerZGuKjeXu03nE+frxXRBCb2cEQrPQAE6lmo50mDy
- TTG8AkYsf2s16oFcwOd/qyZUaq760APxoOHjkoQxkQQNenHobAgSOeWHZf8fhNjAkU6KTjFXJdd
- L6UZImKc7wmHHwRiOG50Y0yeSQVV6/1sR4Rj1T2eoENKkxQ==
-X-Google-Smtp-Source: AGHT+IHQq1ym1cFkW9s0YroPGXXqG3YeXp9V3+D80NwEmYzMl6VpilkvBA0yTHgE1xWgNE9w0vOTlA==
-X-Received: by 2002:a05:6000:400f:b0:3a0:b4f1:8bd5 with SMTP id
- ffacd0b85a97d-3a35fe67aa7mr18870564f8f.18.1747898326068; 
- Thu, 22 May 2025 00:18:46 -0700 (PDT)
+ bh=mPA5RBzLLeLfu6F349TbUg4e4buGJ5ygA+jXWMcGCL8=;
+ b=cxa3WRAV6CpXPvTrJjRoefT94iet/3g/bGgx8tMYb7wSW/j8+n6KKVD1gpTl8Mh6Ly
+ WCJgSi+dh+G7zaYE5i1ic3+Nm8d04DDoQt7PcQi155IqSFGd8XjLBWUfyqvpJ1DeFNeQ
+ /ZzmxrMOIVWg2DW7SubpiMOz/EPHFZxaluolI98wbERCrZdhTHdLXyAmqHj41l4WwjT9
+ YSTjjun/lys9M0f8OtinKvEi8bF2oY5wASdTZkwZp1uqsRa0mgqP+zKgLon8KGK1ufCj
+ U8jnIGmtslmTEPlrzD/5JwxDpBcPSJsgAAQBVo2Fk3x1OsRZ09jk9WJB4ilbSTQKaFGW
+ rmkQ==
+X-Gm-Message-State: AOJu0Yzp3CKRB9YvILHRC7fdaJjsDLCZvtogf3Hvvf5pRwnO7Q5YPlJe
+ kitYt3cmdgcX5iEzlB0xFwVJk3/4Q1Q1I7a5tdYBpXAooBMokIUdBVseIiSqpjUREYSyyrI1FuQ
+ BBcc8
+X-Gm-Gg: ASbGnctbnfpZQ/BJJ57CTy8Yv4lJmk+KFptaSxVByYd1NaNZ9njSnLQUgKsPUpunhQa
+ DJGCQ5Wtdgvu7Tpg7bQIctobYeTzJaG+R+vjda0GfpQMjx7A/Q+/6a+MS1i81o3EmSPS4wW8jrQ
+ yGvzJlGGJM+jRhaoroiS9ZaURG1UzycFkLLGGBlL2UIzhd9+ZGGSEUa3GZxlS2OmGVOCqGL2OmZ
+ bHZEQ8UwQ/xCT79Qe0tThGKgzBVf/MysG2JkuseAehxI/XH+/lGiD3V4t8rc5eEKK7Cfy/GLrL7
+ znWjtgwJQDpgPNdJXIqMULQ3ybtinvDZq8QVRKYtFY5GN0VRpHyrFinRgXx3V5UfWIUmoF2oW8Q
+ TTo0I9BNXTVCBcPhXDSbtWH73HuBAGR5mULnGiRAw7UIV7w==
+X-Google-Smtp-Source: AGHT+IGW5Rm1boRAkGGFlkeGODFWXfCHoYBXeH8IaKYMizdTb355O9G3g90ayFFi6y4wXcpHsmvd2A==
+X-Received: by 2002:a05:600c:698c:b0:43c:eeee:b70a with SMTP id
+ 5b1f17b1804b1-442ff029b68mr172781935e9.22.1747898327236; 
+ Thu, 22 May 2025 00:18:47 -0700 (PDT)
 Received: from P-NAN-ABRICOT..
  (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-447f38142f1sm93835655e9.31.2025.05.22.00.18.45
+ 5b1f17b1804b1-447f38142f1sm93835655e9.31.2025.05.22.00.18.46
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 22 May 2025 00:18:45 -0700 (PDT)
+ Thu, 22 May 2025 00:18:47 -0700 (PDT)
 To: buildroot@buildroot.org
 Cc: Daniel Lang <dalang@gmx.at>,
  Giulio Benetti <giulio.benetti@benettiengineering.com>,
@@ -80,30 +80,29 @@ Cc: Daniel Lang <dalang@gmx.at>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Valentin Korenblit <valentinkorenblit@gmail.com>,
  Bernd Kuhls <bernd@kuhls.net>, El Mehdi YOUNES <elmehdi.younes@smile.fr>
-Date: Thu, 22 May 2025 09:18:14 +0200
-Message-ID: <20250522071816.1948188-3-elmehdi.younes@smile.fr>
+Date: Thu, 22 May 2025 09:18:15 +0200
+Message-ID: <20250522071816.1948188-4-elmehdi.younes@smile.fr>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250522071816.1948188-1-elmehdi.younes@smile.fr>
 References: <20250522071816.1948188-1-elmehdi.younes@smile.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1747898326; x=1748503126; darn=buildroot.org;
+ d=smile.fr; s=google; t=1747898327; x=1748503127; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=TcbN5YDNLe/yCNITOW2SsR6LAfCU/eZvsL+MgRpFAxk=;
- b=DXM2+rXYgwO5fDXyEGR9QWONBGIyvGok6nTtfoZ+STM9BzHBKFbYEQ1cXU1E7oy4TY
- fqns9Lhw+LPA2Ds0Mj8fJ1teUJGplk9RzUZ6+ZwIxtCnlHFWl0ngBlcmWIh6QTpquFEw
- ausu+Xxm0er002/oMSdChIIQysjoDBf6gKICc=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=mPA5RBzLLeLfu6F349TbUg4e4buGJ5ygA+jXWMcGCL8=;
+ b=VUZNwoduv/KtzEr+LNDqEkxYqn+RneA60JC/k4s6gmFmXUHcJJwCRHdyXlSmo/TMEo
+ 72vdm4iAKecH8PdcKxuiC32eo+OC8vO9VcBpZGClVHteFVIfgOxrJyk/5NerHZTNWczN
+ eesCEbruUE1wJNBlTOq5GL1Xt7A/In8VKaDvQ=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=DXM2+rXY
-Subject: [Buildroot] [PATCH v3 2/4] package/llvm-project: add llvm-runtimes
- package
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
+ header.a=rsa-sha256 header.s=google header.b=VUZNwodu
+Subject: [Buildroot] [PATCH v3 3/4] package/spirv-{headers,
+ tools}: bump to version 1.4.313.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -122,59 +121,80 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add a new host package to install the CMake modules provided by the
-runtimes archive of LLVM. These modules are required to build components
-like libunwind since upstream refactored the common flag-handling logic
-into a shared file: `HandleFlags.cmake`.
+Update SPIR-V headers and SPIR-V tools to version 1.4.313.0 from the
+Vulkan SDK.
 
-This package extracts and installs the relevant files to
-`$(HOST_DIR)/lib/cmake/llvm`, where other components like libunwind
-will look for them.
+This versions are required for compatibility with updated
+spirv-llvm-translator (v20.1.2).
+The source archive now follows the vulkan-sdk- prefix convention.
 
-see https://github.com/llvm/llvm-project/commit/0af67d167d6c811abf12ad6c27ee34ec1365e5fb
+release:
+https://github.com/KhronosGroup/SPIRV-Headers/releases/tag/vulkan-sdk-1.4.313.0
+https://github.com/KhronosGroup/SPIRV-Tools/releases/tag/vulkan-sdk-1.4.313.0
 
 Signed-off-by: El Mehdi YOUNES <elmehdi.younes@smile.fr>
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-[Mehdi v3: explicitly set version to 20.1.3 for now, it will
-	   be changed in llvm-project bump commit]
+[Bernd:
+ bumped to 1.4.313.0
+ Updated license hash of spirv-headers due to upstream commits:
+ https://github.com/KhronosGroup/SPIRV-Headers/commit/1c9115b562bab79ee2160fbd845f41b815b9f21f
+ https://github.com/KhronosGroup/SPIRV-Headers/commit/23d4a398c2ccca05fc623cca8785ce7741c5345d]
 ---
- .../llvm-runtimes/llvm-runtimes.hash            |  2 ++
- .../llvm-project/llvm-runtimes/llvm-runtimes.mk | 17 +++++++++++++++++
- 2 files changed, 19 insertions(+)
- create mode 100644 package/llvm-project/llvm-runtimes/llvm-runtimes.hash
- create mode 100644 package/llvm-project/llvm-runtimes/llvm-runtimes.mk
+ package/spirv-headers/spirv-headers.hash | 4 ++--
+ package/spirv-headers/spirv-headers.mk   | 4 ++--
+ package/spirv-tools/spirv-tools.hash     | 2 +-
+ package/spirv-tools/spirv-tools.mk       | 4 ++--
+ 4 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/llvm-project/llvm-runtimes/llvm-runtimes.hash b/package/llvm-project/llvm-runtimes/llvm-runtimes.hash
-new file mode 100644
-index 0000000000..66d9e1f336
---- /dev/null
-+++ b/package/llvm-project/llvm-runtimes/llvm-runtimes.hash
-@@ -0,0 +1,2 @@
-+# locally calculated
-+sha256  6394d8f111288c918421756037c10c4f8471325992e37c44cf8811b4e3dde00b  runtimes-20.1.3.src.tar.xz
-diff --git a/package/llvm-project/llvm-runtimes/llvm-runtimes.mk b/package/llvm-project/llvm-runtimes/llvm-runtimes.mk
-new file mode 100644
-index 0000000000..34ac9ece31
---- /dev/null
-+++ b/package/llvm-project/llvm-runtimes/llvm-runtimes.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# llvm-runtimes
-+#
-+################################################################################
-+
-+LLVM_RUNTIMES_VERSION = 20.1.3
-+LLVM_RUNTIMES_SITE = $(LLVM_PROJECT_SITE)
-+LLVM_RUNTIMES_SOURCE = runtimes-$(LLVM_RUNTIMES_VERSION).src.tar.xz
-+LLVM_RUNTIMES_LICENSE = Apache-2.0 with exceptions
-+
-+define HOST_LLVM_RUNTIMES_INSTALL_CMDS
-+        mkdir -p $(HOST_DIR)/lib/cmake/llvm/Modules
-+        cp -Rv $(@D)/cmake/Modules/* $(HOST_DIR)/lib/cmake/llvm
-+endef
-+
-+$(eval $(host-generic-package))
+diff --git a/package/spirv-headers/spirv-headers.hash b/package/spirv-headers/spirv-headers.hash
+index 136f3df733..6e3cc33d6b 100644
+--- a/package/spirv-headers/spirv-headers.hash
++++ b/package/spirv-headers/spirv-headers.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  32b4c6ae6a2fa9b56c2c17233c8056da47e331f76e117729925825ea3e77a739  spirv-headers-1.3.261.1.tar.gz
+-sha256  9b243f6f0bf44e295ff411a0f7b7642d1d0dff7cdc42507e9f7206f439e51b5a  LICENSE
++sha256  f68be549d74afb61600a1e3a7d1da1e6b7437758c8e77d664909f88f302c5ac1  spirv-headers-1.4.313.0.tar.gz
++sha256  ff04ae7e6a468587fe59434fee2e67c0e2a749b592c794b764ff80f30b94a084  LICENSE
+diff --git a/package/spirv-headers/spirv-headers.mk b/package/spirv-headers/spirv-headers.mk
+index 9f84c42b2d..675cef9f16 100644
+--- a/package/spirv-headers/spirv-headers.mk
++++ b/package/spirv-headers/spirv-headers.mk
+@@ -5,8 +5,8 @@
+ ################################################################################
+ 
+ # Keep in sync with spirv-tools version
+-SPIRV_HEADERS_VERSION = 1.3.261.1
+-SPIRV_HEADERS_SITE = $(call github,KhronosGroup,SPIRV-Headers,sdk-$(SPIRV_HEADERS_VERSION))
++SPIRV_HEADERS_VERSION = 1.4.313.0
++SPIRV_HEADERS_SITE = $(call github,KhronosGroup,SPIRV-Headers,vulkan-sdk-$(SPIRV_HEADERS_VERSION))
+ SPIRV_HEADERS_LICENSE = MIT
+ SPIRV_HEADERS_LICENSE_FILES = LICENSE
+ 
+diff --git a/package/spirv-tools/spirv-tools.hash b/package/spirv-tools/spirv-tools.hash
+index 65cb9c619b..de118b378e 100644
+--- a/package/spirv-tools/spirv-tools.hash
++++ b/package/spirv-tools/spirv-tools.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  ead95c626ad482882a141d1aa0ce47b9453871f72c42c0b28d39c82f60a52008  spirv-tools-1.3.261.1.tar.gz
++sha256  6b60f723345ceed5291cceebbcfacf7fea9361a69332261fa08ae57e2a562005  spirv-tools-1.4.313.0.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/spirv-tools/spirv-tools.mk b/package/spirv-tools/spirv-tools.mk
+index 51b1c9f22a..1aa0cc6199 100644
+--- a/package/spirv-tools/spirv-tools.mk
++++ b/package/spirv-tools/spirv-tools.mk
+@@ -5,8 +5,8 @@
+ ################################################################################
+ 
+ # Keep in sync with spirv-headers version
+-SPIRV_TOOLS_VERSION = 1.3.261.1
+-SPIRV_TOOLS_SITE = $(call github,KhronosGroup,SPIRV-Tools,sdk-$(SPIRV_TOOLS_VERSION))
++SPIRV_TOOLS_VERSION = 1.4.313.0
++SPIRV_TOOLS_SITE = $(call github,KhronosGroup,SPIRV-Tools,vulkan-sdk-$(SPIRV_TOOLS_VERSION))
+ SPIRV_TOOLS_LICENSE = Apache-2.0
+ SPIRV_TOOLS_LICENSE_FILES = LICENSE
+ SPIRV_TOOLS_DEPENDENCIES = spirv-headers
 -- 
 2.43.0
 
