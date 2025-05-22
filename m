@@ -1,52 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87908C71136
-	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 08:39:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9FEDAC71141
+	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 08:39:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5686561561;
-	Thu, 12 Jun 2025 08:39:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 74C8081F30;
+	Thu, 12 Jun 2025 08:39:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1I903rF8FZsi; Thu, 12 Jun 2025 08:39:38 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OSMY1rNr1TCD; Thu, 12 Jun 2025 08:39:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6983B61570
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 841EB8217A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6983B61570;
-	Thu, 12 Jun 2025 08:39:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 841EB8217A;
+	Thu, 12 Jun 2025 08:39:39 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 9DEDB1BD
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:45 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id AFAB11BD
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 71368420F1
+ by smtp2.osuosl.org (Postfix) with ESMTP id C33CF420FE
  for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rAJ9sPUcCr6Y for <buildroot@buildroot.org>;
- Thu, 12 Jun 2025 08:38:28 +0000 (UTC)
+ id kZPNRbhXLITi for <buildroot@buildroot.org>;
+ Thu, 12 Jun 2025 08:38:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 99ED9405A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0AC2D405B7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 99ED9405A7
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0AC2D405B7
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9775981008; Thu, 12 Jun 2025 08:38:28 +0000 (UTC)
+ id 0773280588; Thu, 12 Jun 2025 08:38:29 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 20 May 2025 19:31:28 +0200
+Date: Thu, 22 May 2025 20:46:17 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b20b13fd99ddc1fba00232f19412115387d84c31
-X-Git-Newrev: 3ff4826a53b0ebaaea517f71acfe0eacf71a0b99
+X-Git-Oldrev: c2fdcebc6ee6b589665f9903b997b887bc0327d7
+X-Git-Newrev: 40dfe63cce9f6f3d19e1f4cde84a38d33754b131
 X-Patchwork-Hint: ignore
-Message-Id: <20250612083828.9775981008@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libpng: bump version to 1.6.48
+Message-Id: <20250612083829.0773280588@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/wireguard-tools: bump version to
+ 1.0.20250521
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,46 +65,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3ff4826a53b0ebaaea517f71acfe0eacf71a0b99
+commit: https://git.buildroot.net/buildroot/commit/?id=40dfe63cce9f6f3d19e1f4cde84a38d33754b131
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://raw.githubusercontent.com/pnggroup/libpng/v1.6.47/ANNOUNCE
-https://raw.githubusercontent.com/pnggroup/libpng/v1.6.48/ANNOUNCE
+For details, see the announcement:
+https://lists.zx2c4.com/pipermail/wireguard/2025-May/008789.html
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libpng/libpng.hash | 6 +++---
- package/libpng/libpng.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/wireguard-tools/wireguard-tools.hash | 4 ++--
+ package/wireguard-tools/wireguard-tools.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libpng/libpng.hash b/package/libpng/libpng.hash
-index 3fae82b5e7..7e5b33149c 100644
---- a/package/libpng/libpng.hash
-+++ b/package/libpng/libpng.hash
-@@ -1,5 +1,5 @@
--# From https://sourceforge.net/projects/libpng/files/libpng16/1.6.46/
--sha1  11423f5ea270e7bb42dd2d519696adcd016d5df3  libpng-1.6.46.tar.xz
-+# From https://sourceforge.net/projects/libpng/files/libpng16/1.6.48/
-+sha1  132bfa1a68e3d8f741d0b3fe03809e181fe57b7d  libpng-1.6.48.tar.xz
- # Locally computed:
--sha256  f3aa8b7003998ab92a4e9906c18d19853e999f9d3bca9bd1668f54fa81707cb1  libpng-1.6.46.tar.xz
-+sha256  46fd06ff37db1db64c0dc288d78a3f5efd23ad9ac41561193f983e20937ece03  libpng-1.6.48.tar.xz
- sha256  16d9daaafbf63a31a5bdc91d4600972548fef5aaa1244202393288dbd079c49a  LICENSE
-diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
-index e73e0bb686..e215d70f7f 100644
---- a/package/libpng/libpng.mk
-+++ b/package/libpng/libpng.mk
+diff --git a/package/wireguard-tools/wireguard-tools.hash b/package/wireguard-tools/wireguard-tools.hash
+index b3eadec29a..d959d964d4 100644
+--- a/package/wireguard-tools/wireguard-tools.hash
++++ b/package/wireguard-tools/wireguard-tools.hash
+@@ -1,4 +1,4 @@
+-# https://lists.zx2c4.com/pipermail/wireguard/2021-September/007049.html
+-sha256  97ff31489217bb265b7ae850d3d0f335ab07d2652ba1feec88b734bc96bd05ac  wireguard-tools-1.0.20210914.tar.xz
++# https://lists.zx2c4.com/pipermail/wireguard/2025-May/008789.html
++sha256  b6f2628b85b1b23cc06517ec9c74f82d52c4cdbd020f3dd2f00c972a1782950e  wireguard-tools-1.0.20250521.tar.xz
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireguard-tools/wireguard-tools.mk b/package/wireguard-tools/wireguard-tools.mk
+index d76e836a45..958d7a3ef0 100644
+--- a/package/wireguard-tools/wireguard-tools.mk
++++ b/package/wireguard-tools/wireguard-tools.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBPNG_VERSION = 1.6.46
-+LIBPNG_VERSION = 1.6.48
- LIBPNG_SERIES = 16
- LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
- LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng$(LIBPNG_SERIES)/$(LIBPNG_VERSION)
+-WIREGUARD_TOOLS_VERSION = 1.0.20210914
++WIREGUARD_TOOLS_VERSION = 1.0.20250521
+ WIREGUARD_TOOLS_SITE = https://git.zx2c4.com/wireguard-tools/snapshot
+ WIREGUARD_TOOLS_SOURCE = wireguard-tools-$(WIREGUARD_TOOLS_VERSION).tar.xz
+ WIREGUARD_TOOLS_LICENSE = GPL-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
