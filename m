@@ -4,95 +4,99 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C82BC54ED0
-	for <buildroot@archiver.kernel.org>; Fri, 23 May 2025 03:15:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29275C3DA6D
+	for <buildroot@archiver.kernel.org>; Fri, 23 May 2025 07:23:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D669583EF0;
-	Fri, 23 May 2025 03:15:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DFFAA83CA0;
+	Fri, 23 May 2025 07:23:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6NIXC4HOU-Xy; Fri, 23 May 2025 03:15:01 +0000 (UTC)
+ id JBSEUeJw3a-D; Fri, 23 May 2025 07:23:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D29E683ECE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6B07483C42
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D29E683ECE;
-	Fri, 23 May 2025 03:15:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6B07483C42;
+	Fri, 23 May 2025 07:23:25 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 5EF89119
- for <buildroot@buildroot.org>; Fri, 23 May 2025 03:14:59 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id B8753119
+ for <buildroot@buildroot.org>; Fri, 23 May 2025 07:23:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 44A7240162
- for <buildroot@buildroot.org>; Fri, 23 May 2025 03:14:59 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9EBBA402A4
+ for <buildroot@buildroot.org>; Fri, 23 May 2025 07:23:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id maNbgU2-8DcK for <buildroot@buildroot.org>;
- Fri, 23 May 2025 03:14:58 +0000 (UTC)
+ id DfFvMcKRGcFb for <buildroot@buildroot.org>;
+ Fri, 23 May 2025 07:23:23 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42f; helo=mail-wr1-x42f.google.com;
- envelope-from=buildroot.notifications@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 137CF40010
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 137CF40010
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 137CF40010
- for <buildroot@buildroot.org>; Fri, 23 May 2025 03:14:57 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id
- ffacd0b85a97d-3a37ed01aa0so2489526f8f.2
- for <buildroot@buildroot.org>; Thu, 22 May 2025 20:14:57 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
+ envelope-from=elmehdi.younes@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9BF0940217
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9BF0940217
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9BF0940217
+ for <buildroot@buildroot.org>; Fri, 23 May 2025 07:23:22 +0000 (UTC)
+Received: by mail-wm1-x335.google.com with SMTP id
+ 5b1f17b1804b1-441d437cfaaso54843795e9.1
+ for <buildroot@buildroot.org>; Fri, 23 May 2025 00:23:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1747970096; x=1748574896;
- h=date:from:to:subject:content-transfer-encoding:mime-version
- :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+ d=1e100.net; s=20230601; t=1747985000; x=1748589800;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=ZKNPZ/ocMkAxJPoZ5JSFZOlbeoxFDcjjHN8nY0x3k1Q=;
- b=g5NU6PxHmpTUIwd5nCV3sRHIK2o7G8QIQYkBXuD+/piEaHU3UoOZleeq3cTnPynys5
- XRt1fCAiCDKKTohHZW6ApXao5GF0eyTwGKrgJBtOKeeuZ8sm1cu4YLm3J0x61Sfpvb0w
- 91c8XTf36ZodYUbRQ8HlccxwwIEkDNqiUpaso18LaT2okR4gtdBxzE+WPMM/ZZXT4x/Y
- oQRMW6zIxKnpjwV+jT3F0ZB5zuCUSX22HifBWIVUjQsvm6lCavUP3La1AwyeK9J06wpQ
- bti41tWy3+NERJo5/7Zg/4iossvaeLtrrKYVsxtI0zNQWiGCpsx+SBq6316iRNfnXsBE
- f0MA==
-X-Gm-Message-State: AOJu0YwiyQeKyHye7sLLHLe6q3uh9aKokCHuacAO5ej4gM8VFnvKTivX
- 2RTVlttkgIC7hQ07n4SPntZUuvQ9eiZxIVjtQDNRR4Ru0XpZBhiTgFrkNKUg9g==
-X-Gm-Gg: ASbGncuNbOYZcaX6UdlFRfVzPhfxaaolenXBbUNfTSHO4UKF0yekdSEJjDEMDFk6jnz
- M/3/k7Bv9BLUQX4OiYVbKNQEgWJihpJSWcvekk1QUUpMYBr6MGo2+cACpO+2TWx5S49EZKRNGxO
- uAg/fWa7Y7byQRipl1SqdnuNJqm8jwFlUcOW9IVtP2OQ7WVzags89Qk9xVcHFw6eSZ5DS63B2PJ
- RfpMYHj73ngbjn/CPzeYuWhsG7qST37yJmBViipqgJT3xshLEnFVY2AFxqRMIsUtpL8lE6RFCYe
- ZdMScCp/aVyr4VVGpKkpGMCPLaCvkrOTAElcYeETpmK/e05XjCQdrDU=
-X-Google-Smtp-Source: AGHT+IFe3BPiK8hMupHaaRfMjcfjiA8uA/KuOnJHLnSs+CyxbeX+kZ5bVCVSes6C423VLo1fJmQN4A==
-X-Received: by 2002:a5d:4ec8:0:b0:3a3:62fa:fb85 with SMTP id
- ffacd0b85a97d-3a362fafcb2mr20075152f8f.28.1747970095847; 
- Thu, 22 May 2025 20:14:55 -0700 (PDT)
-Received: from [138.201.205.61] ([2a01:4f8:173:1526::2])
+ bh=GrsTgjw5602FMu6+DN4YfRmVWaJte3h0qmHvc8sLd4k=;
+ b=oicSOPEJN4hBAfJKYetBIkl01BJHbLLoHgWidJeTf9Zu+ria7pyv1onCapV8776yoh
+ GS8n5qQfVvYSSIvXMfOopG1T28sstVxRwySwvZwh42shPRHpxhw9gJKHFE6L8pkfE6wg
+ rgwK3a4S1WFAguI831k7s2c4FlKawjEl8DVB6vdxXtkAjljjIWu4sehinn75aHvI39WC
+ ArzCQUzumc5lq3PA84K2FXsgKvKSTL/NApqWoYs/JtNwJuRL42F0NcKi5IzPiVPcqtDt
+ GjBzWrBSD2D2YiYpUAnqTKROcw81ZQR+cys4H9eawoJbo0BpGiV9Tag08IKWCtiW225n
+ PYkw==
+X-Gm-Message-State: AOJu0YxzMlU126i7U1kDvNrDE+Kl5zEQUdyEbOsaAJJKV0j1XHZEtYxe
+ lxWg1qc52xRYWW54BC3rPPhKJTpg9lYc/Q6MprQdLtheJWMco1vsJBI6SeDfq3y+Lp8dV1Vmo9/
+ xWQsb
+X-Gm-Gg: ASbGncuTz90Xn2GjLeanBKnvTrcCGuza1p6WFTzgXmE+at7Jsiv39brrD6uOQahxLdM
+ skCsjxxBWkXTNxAOXjBDQwVsEoAta6anFowmqN4b/e104G5eq9S3OIf2RBe0Rqh95QT28RughyQ
+ ckYMjz+m3UhGJpRIG3aO9VLDj3eWh+ym8ATJ2fLEM2OyYcihYHgXgsPtp/+D9K6Fd20lmDKuoN9
+ wlGj0uC8ApKlXBGCLVWF42wkGjXFQhikKF5TE03uFTlN3x/1hxZ0TRfXlrEr5WHtKFOeL9wUjBg
+ lluwDAxHIDLxb1ishsPVklgewkGvY8J7l3+7boq/GuL1myvmX7PF0UcoTiq7WTir0mNhTt9KPCY
+ FVfdCbjc4ggYGkonTxpt67tIPaKA+iKmETZrkVBkapRFFwGPSR5JwbYdM
+X-Google-Smtp-Source: AGHT+IEG/7E1iZwr6SUbJuqUSb1MMQDe+Cck6bNCtJBAWKgVroLX6abxjVNYfYyaBG1pk77/Sfh18A==
+X-Received: by 2002:a05:600c:3b21:b0:441:b3eb:5720 with SMTP id
+ 5b1f17b1804b1-442ff0396b5mr255247905e9.29.1747985000268; 
+ Fri, 23 May 2025 00:23:20 -0700 (PDT)
+Received: from P-NAN-ABRICOT..
+ (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-442ebd46aa4sm220459815e9.1.2025.05.22.20.14.55
- for <buildroot@buildroot.org>
+ 5b1f17b1804b1-447f38142b8sm128224025e9.30.2025.05.23.00.23.19
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 22 May 2025 20:14:55 -0700 (PDT)
-Message-ID: <682fe82f.050a0220.214850.0787@mx.google.com>
-MIME-Version: 1.0
+ Fri, 23 May 2025 00:23:19 -0700 (PDT)
 To: buildroot@buildroot.org
-From: Buildroot Notifications <buildroot.notifications@gmail.com>
-Date: Fri, 23 May 2025 03:14:55 -0000
+Cc: =?UTF-8?q?Andr=C3=A9=20Zwing?= <nerv@dawncrow.de>,
+ Bernd Kuhls <bernd@kuhls.net>, Romain Naour <romain.naour@gmail.com>,
+ Spenser Gilliland <spenser@gillilanding.com>,
+ El Mehdi YOUNES <elmehdi.younes@smile.fr>
+Date: Fri, 23 May 2025 09:23:05 +0200
+Message-ID: <20250523072305.2052937-1-elmehdi.younes@smile.fr>
+X-Mailer: git-send-email 2.43.0
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1747970096; x=1748574896; darn=buildroot.org;
- h=date:from:to:subject:content-transfer-encoding:mime-version
- :message-id:from:to:cc:subject:date:message-id:reply-to;
- bh=ZKNPZ/ocMkAxJPoZ5JSFZOlbeoxFDcjjHN8nY0x3k1Q=;
- b=XLbX/j9NBdhZd8ln6lY4Xj/xCwFEtipNBcJshTliwow5yaNl44SbXJueJa55FG0Lmf
- T4xLHnFv1m7PCnheargfajOonl/TDE0lam/3SDp56kJ9uNvHSByphvH9X1NQk+EKi6fz
- 58j8XGSRCbkImeUFKq6REYSoyrsDAdsIAzzUScId9NmV6uVnHEqCt1teihjGVTA07fNU
- VhJxOSwdC/wk+XJhDJIToNe9PpSFpTSjElOEsMpKr7pwKQzc+6AwTmfX+rJctMbLvJI/
- uWug28glv/bhYjQx0EjNA5qkhsJ0fDOYjGwkP5LcC9n2p/vcSv8VdhucS3Ts+FUQE+Af
- l8ZA==
+ d=smile.fr; s=google; t=1747985000; x=1748589800; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=GrsTgjw5602FMu6+DN4YfRmVWaJte3h0qmHvc8sLd4k=;
+ b=HLcBjqBZydaUyydzQ40rxG0SrcW4hihBKCTzWkX6y1aOUtK5nEmlJBgG0ArSquSj7P
+ CRWpKKzVVtRzwOp+y0sCBzEb3DHeefr8tpD2hSA6IIFAoggI4dRSfXJb2PII+9Zqs3Mf
+ qttoxoL70eWztdvi/P1ytEMIOtrarWQ4SLQcs=
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=XLbX/j9N
-Subject: [Buildroot] [autobuild.buildroot.org] Daily results for 2025-05-22
+ dkim=pass (1024-bit key,
+ unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
+ header.s=google header.b=HLcBjqBZ
+Subject: [Buildroot] [PATCH v2 1/1] package/mesa3d: bump version to 25.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -104,146 +108,476 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: El Mehdi YOUNES via buildroot <buildroot@buildroot.org>
+Reply-To: El Mehdi YOUNES <elmehdi.younes@smile.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+From: Bernd Kuhls <bernd@kuhls.net>
 
-Autobuild statistics for 2025-05-22
-===================================
+Release notes:
+https://lists.freedesktop.org/archives/mesa-announce/2025-May/000802.html
 
-      branch |  OK | NOK | TIM | TOT |
-  2025.02.x  |  2  |  8  |  0  | 10  |
-    master   | 18  | 29  |  0  | 47  |
-     next    |  2  | 10  |  0  | 12  |
+Note: Mesa3d depends on spirv-tools >= 2024.1
+https://gitlab.freedesktop.org/mesa/mesa/-/commit/fe8a0d35485c77efdb3c4cb6f176f2b3cbe4c65d
+which translates to spirv-tools version 1.3.280.0.
 
-Classification of failures by reason for master
------------------------------------------------
+Note: AMD drivers depend on llvm >= 18:
+https://gitlab.freedesktop.org/mesa/mesa/-/commit/82047fa82f1bbbbd4f1a9b05c034f79a00d85e31
 
-                       unknown | 5 
-              host-uuu-1.5.201 | 2 
-                   perl-5.40.2 | 2 
-                   avrdude-8.0 | 1 
-               bctoolbox-4.4.8 | 1 
-                    bmx7-7.1.1 | 1 
-                   cvs-1.12.13 | 1 
-                elfutils-0.192 | 1 
-  ffmpeg-n6.1.2-27-ge16ff06adb | 1 
-            gdk-pixbuf-2.42.12 | 1 
-           ghostscript-10.05.1 | 1 
-          host-binutils-2.43.1 | 1 
-              host-rust-1.86.0 | 1 
-              libopenssl-3.5.0 | 1 
-              libselinux-3.8.1 | 1 
-           libzenoh-pico-1.2.1 | 1 
-                 netsnmp-5.9.4 | 1 
-pthreadpool-560c60d342a7607... | 1 
-               pulseaudio-17.0 | 1 
-        python-selenium-4.27.1 | 1 
-          sane-airscan-0.99.33 | 1 
-                 siproxd-0.8.3 | 1 
-                   trinity-1.9 | 1 
+Removed patch 0001, not needed anymore due to upstream commit
+https://gitlab.freedesktop.org/mesa/mesa/-/commit/e4eb5e80c316c0af3fff310ca89e1175d81556c1
+which removes the libclc headers include.
 
+Renumbered remaining patches.
 
-Detail of failures for master
------------------------------
+Rebased patch 0002 due to upstream commit
+https://gitlab.freedesktop.org/mesa/mesa/-/commit/6652eb0ec37e3cc3751928cc8180bac0db95f00f
+which renamed meson_options.txt to meson.options.
 
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-  aarch64    |          avrdude-8.0           | NOK | https://autobuild.buildroot.org/results/96b993dd4d7db44d8a35c1ab8a830375fd331daa |     
-   sparc     |        bctoolbox-4.4.8         | NOK | https://autobuild.buildroot.org/results/30679e014d4bf0ab45cb9cf44ac81ec4a3bbaf8f | ORPH
-powerpc64le  |           bmx7-7.1.1           | NOK | https://autobuild.buildroot.org/results/2ec8d4ff23daef27ba28844740f71b896734fd54 | ORPH
-    sh4      |          cvs-1.12.13           | NOK | https://autobuild.buildroot.org/results/0c33f61d4f8de50f1964d3df1b0666fa14ac5260 | ORPH
- powerpc64   |         elfutils-0.192         | NOK | https://autobuild.buildroot.org/results/6dcad7b4c7a88f45b3223bd668bff9e2b5312463 | ORPH
-   arceb     |  ffmpeg-n6.1.2-27-ge16ff06adb  | NOK | https://autobuild.buildroot.org/results/56d25326a2e065ba6cf0633244da89e3ea6c3df7 |     
- microblaze  |       gdk-pixbuf-2.42.12       | NOK | https://autobuild.buildroot.org/results/22cbb508ce1f9adda1f41d2f6d7c60928d801653 | ORPH
-   s390x     |      ghostscript-10.05.1       | NOK | https://autobuild.buildroot.org/results/215ec694eadeca8fe1fb8d89fa4e49955c952ed7 |     
-   x86_64    |      host-binutils-2.43.1      | NOK | https://autobuild.buildroot.org/results/741dc7898bcce5c92c6e042c1bf68b5ea4861fe8 |     
-   x86_64    |        host-rust-1.86.0        | NOK | https://autobuild.buildroot.org/results/c918231feaca465e6f2fb727a02ab581a8bf233e |     
-  powerpc    |        host-uuu-1.5.201        | NOK | https://autobuild.buildroot.org/results/6dc2b0585e8e1900e5a977cd0b9e26b2ee1e90d4 |     
-   x86_64    |        host-uuu-1.5.201        | NOK | https://autobuild.buildroot.org/results/3500f573427545e51bfc4fc708f769966d95bf1e |     
-  riscv64    |        libopenssl-3.5.0        | NOK | https://autobuild.buildroot.org/results/b89bf566f719f806afd1c68509d1d25d8e8de5c3 | ORPH
-    or1k     |        libselinux-3.8.1        | NOK | https://autobuild.buildroot.org/results/442d36a48966c7bf7e27095236c0f7e2cdf44780 |     
-   x86_64    |      libzenoh-pico-1.2.1       | NOK | https://autobuild.buildroot.org/results/91683593d51a3448540de11edf016de403d354ce |     
-    arm      |         netsnmp-5.9.4          | NOK | https://autobuild.buildroot.org/results/6703f5a0e2af3e9a3dbb7ac0b6a1bdf7cb69b81b | ORPH
- microblaze  |          perl-5.40.2           | NOK | https://autobuild.buildroot.org/results/3195d75548d38dc540f3fe472e8131d94582ef9c |     
-    or1k     |          perl-5.40.2           | NOK | https://autobuild.buildroot.org/results/fd1ce12de9c22ad6880ab783dc808bc5194b35a7 |     
-    arm      | pthreadpool-560c60d342a7607... | NOK | https://autobuild.buildroot.org/results/63444dd73af55f8cd07aa057bc6616c4f85c9a87 |     
- microblaze  |        pulseaudio-17.0         | NOK | https://autobuild.buildroot.org/results/4c857e2f4825fbaaedf9ffb1d06ed9b6c1983b09 | ORPH
-  sparc64    |     python-selenium-4.27.1     | NOK | https://autobuild.buildroot.org/results/24b4443f916573d80ae560e1d59dbf55bd718851 |     
-microblazeel |      sane-airscan-0.99.33      | NOK | https://autobuild.buildroot.org/results/97c70a50b9983a68ef53ecc73ff21781cfa900c5 |     
-    or1k     |         siproxd-0.8.3          | NOK | https://autobuild.buildroot.org/results/b9ebabcc40199ded24e31f2c8bc7d7d88dd6762c |     
-    mips     |          trinity-1.9           | NOK | https://autobuild.buildroot.org/results/a10f0e8dc1e646ff4b7447b353b6a016d23c7c75 | ORPH
-  riscv64    |            unknown             | NOK | https://autobuild.buildroot.org/results/933c9d9feeb4732b95d4e6f218f6003248c5e54e |     
-   xtensa    |            unknown             | NOK | https://autobuild.buildroot.org/results/42e016af37902844a168723881fbed6ee72d1cb8 |     
-   sparc     |            unknown             | NOK | https://autobuild.buildroot.org/results/23ce09e68feddd44c87a127944d4316f91221ccd |     
-  riscv64    |            unknown             | NOK | https://autobuild.buildroot.org/results/d54a7f91d683a160060f96551927962682fb229b |     
-  mips64el   |            unknown             | NOK | https://autobuild.buildroot.org/results/00fc65bb14851d58037b25bbe530ec92ab4ae1d4 |     
+Panfrost driver depends on llvm:
+https://gitlab.freedesktop.org/mesa/mesa/-/commit/20970bcd9652ea8727a307ced9b372fad4b89991
+and needs the host tool panfrost_compile which is created by the same
+method as mesa_clc needed by the Iris driver. Refactor the dependencies
+by introducing a blind option BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER
+which is selected by either the iris or the panfrost driver.
 
+vtn_bindgen was replaced by vtn_bindgen2:
+https://gitlab.freedesktop.org/mesa/mesa/-/commit/6d5375017a516f4281ec0b73748582c56a86057a
 
-Classification of failures by reason for 2025.02.x
---------------------------------------------------
+OSMesa was removed upstream:
+https://gitlab.freedesktop.org/mesa/mesa/-/commit/027ccd963b1f8f288bef4224aedcddc1557e4f8a
 
-                       unknown | 2 
- host-softether-4.30-9700-beta | 1 
-                openvpn-2.6.14 | 1 
-package/gstreamer1/gstreame... | 1 
-                   perl-5.40.2 | 1 
-              skalibs-2.14.2.0 | 1 
-          sphinxbase-5prealpha | 1 
+Configure option shared-glapi was removed upstream:
+https://gitlab.freedesktop.org/mesa/mesa/-/commit/e5c76088e9e8834aa277777b41604b2463029a09
+https://gitlab.freedesktop.org/mesa/mesa/-/commit/fefb1a6fb3cff1b227e835c2f67accd33fb96b2a
 
+Removed deprecated and unused configure options gallium-opencl & power8:
+https://gitlab.freedesktop.org/mesa/mesa/-/commit/a0b457aca6cbe94d555ae75864a47bb6a16318a0
+https://gitlab.freedesktop.org/mesa/mesa/-/commit/c4b305079d70790ee9d34a25a2f70759ece96f0d
 
-Detail of failures for 2025.02.x
---------------------------------
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: El Mehdi YOUNES <elmehdi.younes@smile.fr>
+[Mehdi v2: - removed 0001-meson-Set-proper-value-for-LIBCLC_INCLUDEDIR.patch
+           from .checkpackageignore.
+           - removed OSMesa from mesa-demos and wine packages.]
+---
+[Mehdi NOTE: I'm working on adding rusticl support, I have positif
+             results for now on a khadas vim 3 (arm64). But we need
+	     at least LLVM 18 due to several fixes. This is why I'm
+	     not sharing it right now. I'm wating for the merge of
+             llvm-project upgrade patch]
 
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
- microblaze  | host-softether-4.30-9700-beta  | NOK | https://autobuild.buildroot.org/results/d30dc5bf3c756f6b17c7a7316d9ac9c9f977cd00 | ORPH
-   s390x     |         openvpn-2.6.14         | NOK | https://autobuild.buildroot.org/results/1ba7ee52c1da41b6b5f9d3158eed44260b36e470 |     
-microblazeel | package/gstreamer1/gstreame... | NOK | https://autobuild.buildroot.org/results/0a64fcc73ccfe586b0f60c4061999792db67a7ed |     
-   arceb     |          perl-5.40.2           | NOK | https://autobuild.buildroot.org/results/e1c2ed9b3660970d7352f57ef5a0db43855b11ec |     
-    or1k     |        skalibs-2.14.2.0        | NOK | https://autobuild.buildroot.org/results/d9b8d5c33b1bc9387f5bbbf3a036cdbb1db1b79f |     
-    sh4a     |      sphinxbase-5prealpha      | NOK | https://autobuild.buildroot.org/results/f260a912082f1e9d65e415ff309aa28d2321c9cb |     
-powerpc64le  |            unknown             | NOK | https://autobuild.buildroot.org/results/a6db623eaeba57c6a70f2a1204276c22a2786718 |     
- aarch64_be  |            unknown             | NOK | https://autobuild.buildroot.org/results/9bb5006fd8da41bee1b667c67bb5a15495ac27b2 |     
+Signed-off-by: El Mehdi YOUNES <elmehdi.younes@smile.fr>
+---
+ .checkpackageignore                           |  1 -
+ Config.in.legacy                              |  6 +++
+ package/mesa3d-demos/mesa3d-demos.mk          | 11 +----
+ package/mesa3d-headers/mesa3d-headers.mk      |  2 +-
+ ...t-proper-value-for-LIBCLC_INCLUDEDIR.patch | 41 -------------------
+ ...ion-to-disable-optional-neon-suppor.patch} | 10 ++---
+ ...-Include-stddef.h-to-fix-build-erro.patch} |  0
+ ...uild.patch => 0003-Fix-uClibc-build.patch} |  0
+ package/mesa3d/Config.in                      | 24 ++++++-----
+ package/mesa3d/mesa3d.hash                    |  6 +--
+ package/mesa3d/mesa3d.mk                      | 35 ++++++++--------
+ package/wine/wine.mk                          | 10 +----
+ 12 files changed, 50 insertions(+), 96 deletions(-)
+ delete mode 100644 package/mesa3d/0001-meson-Set-proper-value-for-LIBCLC_INCLUDEDIR.patch
+ rename package/mesa3d/{0002-vc4-add-meson-option-to-disable-optional-neon-suppor.patch => 0001-vc4-add-meson-option-to-disable-optional-neon-suppor.patch} (93%)
+ rename package/mesa3d/{0003-src-util-rand_xor-Include-stddef.h-to-fix-build-erro.patch => 0002-src-util-rand_xor-Include-stddef.h-to-fix-build-erro.patch} (100%)
+ rename package/mesa3d/{0004-Fix-uClibc-build.patch => 0003-Fix-uClibc-build.patch} (100%)
 
-
-Classification of failures by reason for next
----------------------------------------------
-
-             libargtable2-2.13 | 2 
-                     daq-2.0.7 | 1 
-                elfutils-0.192 | 1 
-                libesmtp-1.1.0 | 1 
-              libselinux-3.8.1 | 1 
-                libssh2-1.11.0 | 1 
-                  linux-6.14.6 | 1 
-       shadowsocks-libev-3.3.5 | 1 
-                       unknown | 1 
-
-
-Detail of failures for next
----------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    mips     |           daq-2.0.7            | NOK | https://autobuild.buildroot.org/results/e835e0c4aa02d775c592eaa66d063f7cb280b4b6 |     
-   x86_64    |         elfutils-0.192         | NOK | https://autobuild.buildroot.org/results/7ed1d1b59ae18684e68218cb668cc4f45180a753 | ORPH
- aarch64_be  |       libargtable2-2.13        | NOK | https://autobuild.buildroot.org/results/df0e864ff1d72f727bbd434eed72e371766f8886 | ORPH
-   sh4eb     |       libargtable2-2.13        | NOK | https://autobuild.buildroot.org/results/58e7bdf16434c0a1f3d1fa9c1391858b6ce0f76e | ORPH
-  powerpc    |         libesmtp-1.1.0         | NOK | https://autobuild.buildroot.org/results/b8caeb5cf73402cad2fac6017b7902297b5aa7c0 | ORPH
-    or1k     |        libselinux-3.8.1        | NOK | https://autobuild.buildroot.org/results/25f6cecf3af39f06936cd3619b89d4f36e70db83 |     
-  aarch64    |         libssh2-1.11.0         | NOK | https://autobuild.buildroot.org/results/54cbbd817a600e0e2c3571fd9db58b95fa215b6f | ORPH
-   mips64    |          linux-6.14.6          | NOK | https://autobuild.buildroot.org/results/74e93634b3ec51d61cd01829a064999035446f59 | ORPH
-    i686     |    shadowsocks-libev-3.3.5     | NOK | https://autobuild.buildroot.org/results/0a077ee5aca37d3d3aac8da265278c0a83e6cae4 | ORPH
-   xtensa    |            unknown             | NOK | https://autobuild.buildroot.org/results/0ca124d4d4247a7fa9ae6c481f53e88f52081b33 |     
-
-
-
+diff --git a/.checkpackageignore b/.checkpackageignore
+index fe736e3185..93866e8414 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -798,7 +798,6 @@ package/memstat/0001-PATH_MAX.patch lib_patch.Upstream
+ package/mender-connect/S43mender-connect Shellcheck
+ package/menu-cache/0001-Support-gcc10-compilation.patch lib_patch.Upstream
+ package/mesa3d-demos/0001-demos-makes-opengl-an-optional-component.patch lib_patch.Upstream
+-package/mesa3d/0001-meson-Set-proper-value-for-LIBCLC_INCLUDEDIR.patch lib_patch.Upstream
+ package/meson-tools/0001-amlbootenc-gxl-remove-non-std-C-convention-in-for.patch lib_patch.Upstream
+ package/meson/0001-Prefer-ext-static-libs-when-default-library-static.patch lib_patch.Upstream
+ package/meson/0002-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch lib_patch.Upstream
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 54792bc22f..d14e2a16c2 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,12 @@ endif
+ 
+ comment "Legacy options removed in 2025.05"
+ 
++config BR2_PACKAGE_MESA3D_OSMESA_GALLIUM
++	bool "mesa3d OSMesa (Gallium) library support removed"
++	select BR2_LEGACY
++	help
++	  Mesa3d removed the OSMesa (Off-Screen) interface library.
++
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
+ 	bool "mesa Gallium swrast driver was replaced by softpipe"
+ 	select BR2_LEGACY
+diff --git a/package/mesa3d-demos/mesa3d-demos.mk b/package/mesa3d-demos/mesa3d-demos.mk
+index cc0121f6d6..fd4805a728 100644
+--- a/package/mesa3d-demos/mesa3d-demos.mk
++++ b/package/mesa3d-demos/mesa3d-demos.mk
+@@ -11,7 +11,8 @@ MESA3D_DEMOS_DEPENDENCIES = host-pkgconf
+ MESA3D_DEMOS_LICENSE = MIT
+ 
+ MESA3D_DEMOS_CONF_OPTS += \
+-	-Dgles1=disabled
++	-Dgles1=disabled \
++	-Dosmesa=disabled  # BR2_PACKAGE_MESA3D_OSMESA_GALLIUM removed in mesa 25.1
+ 
+ ifeq ($(BR2_PACKAGE_XORG7)$(BR2_PACKAGE_HAS_LIBGL),yy)
+ MESA3D_DEMOS_DEPENDENCIES += libgl libglew libglu xlib_libX11 xlib_libXext
+@@ -52,14 +53,6 @@ endif
+ ifeq ($(BR2_PACKAGE_LIBFREEGLUT),y)
+ MESA3D_DEMOS_DEPENDENCIES += libfreeglut
+ MESA3D_DEMOS_CONF_OPTS += -Dwith-glut=$(STAGING_DIR)/usr
+-# osmesa support depends on glut
+-ifeq ($(BR2_PACKAGE_MESA3D_OSMESA_GALLIUM),y)
+-MESA3D_DEMOS_CONF_OPTS += -Dosmesa=enabled
+-else
+-MESA3D_DEMOS_CONF_OPTS += -Dosmesa=disabled
+-endif
+-else
+-MESA3D_DEMOS_CONF_OPTS += -Dosmesa=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBDECOR)$(BR2_PACKAGE_WAYLAND),yy)
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index cabdbe6595..6817469885 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 25.0.6
++MESA3D_HEADERS_VERSION = 25.1.0
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://archive.mesa3d.org
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/0001-meson-Set-proper-value-for-LIBCLC_INCLUDEDIR.patch b/package/mesa3d/0001-meson-Set-proper-value-for-LIBCLC_INCLUDEDIR.patch
+deleted file mode 100644
+index ff362551ea..0000000000
+--- a/package/mesa3d/0001-meson-Set-proper-value-for-LIBCLC_INCLUDEDIR.patch
++++ /dev/null
+@@ -1,41 +0,0 @@
+-From 7b46756a99aca7f27a45c3b99460f088570f6f53 Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@smile.fr>
+-Date: Wed, 17 Apr 2019 23:07:42 +0200
+-Subject: [PATCH] meson: Set proper value for LIBCLC_INCLUDEDIR
+-
+-LIBCLC_INCLUDEDIR is the location where mesa3d OpenCL implementation
+-will look for OpenCL "headers" on the target, when building the OpenCL
+-kernels.
+-
+-The value returned by pkg-config for includedir is relevant when
+-cross-compiling, on the build machine. But in this specific case, we
+-really need a value that is valid on the target.
+-
+-Those headers are installed by the libclc package in /usr/share so
+-that they are not removed by Buildroot target-finalize logic.
+-
+-Based on the patch for autotools provided by Valentin Korenblit.
+-
+-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+-[rebased for 20.2.0, 20.3.0 & 25.0.0]
+----
+- src/gallium/frontends/clover/meson.build | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/gallium/frontends/clover/meson.build b/src/gallium/frontends/clover/meson.build
+-index 62ac5f5278d..ecdeb39669c 100644
+---- a/src/gallium/frontends/clover/meson.build
+-+++ b/src/gallium/frontends/clover/meson.build
+-@@ -10,7 +10,7 @@
+-   '-DCL_USE_DEPRECATED_OPENCL_2_0_APIS',
+-   '-DCL_USE_DEPRECATED_OPENCL_2_1_APIS',
+-   '-DCL_USE_DEPRECATED_OPENCL_2_2_APIS',
+--  '-DLIBCLC_INCLUDEDIR="@0@/"'.format(dep_clc.get_variable(pkgconfig : 'includedir')),
+-+  '-DLIBCLC_INCLUDEDIR="/usr/share"',
+-   '-DLIBCLC_LIBEXECDIR="@0@/"'.format(dep_clc.get_variable(pkgconfig : 'libexecdir'))
+- ]
+- clover_incs = [inc_include, inc_src, inc_gallium, inc_gallium_aux]
+--- 
+-2.20.1
+-
+diff --git a/package/mesa3d/0002-vc4-add-meson-option-to-disable-optional-neon-suppor.patch b/package/mesa3d/0001-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
+similarity index 93%
+rename from package/mesa3d/0002-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
+rename to package/mesa3d/0001-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
+index 3b9bca0693..04b33a7856 100644
+--- a/package/mesa3d/0002-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
++++ b/package/mesa3d/0001-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
+@@ -10,19 +10,19 @@ to force disabling it at compile time.
+ Upstream: https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/4114
+ Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+-[rebased for 20.2.0, 20.3.0, 21.1.0, 23.1.0, 23.2.0 & 24.3.0]
++[rebased for 20.2.0, 20.3.0, 21.1.0, 23.1.0, 23.2.0, 24.3.0 & 25.1.0]
+ Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ [fix syntax error after previous rebases]
+ ---
+- meson_options.txt                    | 7 +++++++
++ meson.options                        | 7 +++++++
+  src/gallium/drivers/vc4/meson.build  | 4 ++--
+  src/gallium/drivers/vc4/vc4_tiling.h | 4 ++--
+  3 files changed, 11 insertions(+), 4 deletions(-)
+ 
+-diff --git a/meson_options.txt b/meson_options.txt
++diff --git a/meson.options b/meson.options
+ index 8e0bf2a..1cf0e07 100644
+---- a/meson_options.txt
+-+++ b/meson_options.txt
++--- a/meson.options
+++++ b/meson.options
+ @@ -117,6 +117,13 @@ option(
+    description : 'enable gallium va frontend.',
+  )
+diff --git a/package/mesa3d/0003-src-util-rand_xor-Include-stddef.h-to-fix-build-erro.patch b/package/mesa3d/0002-src-util-rand_xor-Include-stddef.h-to-fix-build-erro.patch
+similarity index 100%
+rename from package/mesa3d/0003-src-util-rand_xor-Include-stddef.h-to-fix-build-erro.patch
+rename to package/mesa3d/0002-src-util-rand_xor-Include-stddef.h-to-fix-build-erro.patch
+diff --git a/package/mesa3d/0004-Fix-uClibc-build.patch b/package/mesa3d/0003-Fix-uClibc-build.patch
+similarity index 100%
+rename from package/mesa3d/0004-Fix-uClibc-build.patch
+rename to package/mesa3d/0003-Fix-uClibc-build.patch
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 99cb0b955c..8b61421d98 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -21,6 +21,12 @@ if BR2_PACKAGE_MESA3D
+ config BR2_PACKAGE_MESA3D_NEEDS_ELFUTILS
+ 	bool
+ 
++config BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER
++	bool
++	select BR2_PACKAGE_MESA3D_OPENCL
++	select BR2_PACKAGE_SPIRV_LLVM_TRANSLATOR
++	select BR2_PACKAGE_SPIRV_TOOLS
++
+ config BR2_PACKAGE_MESA3D_LLVM
+ 	bool "llvm support"
+ 	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
+@@ -50,6 +56,7 @@ config BR2_PACKAGE_MESA3D_OPENCL
+ 	bool "OpenCL support"
+ 	depends on BR2_PACKAGE_MESA3D_LLVM
+ 	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600 || \
++		BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST || \
+ 		BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI || \
+ 		BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS
+ 	select BR2_PACKAGE_LLVM_RTTI
+@@ -131,9 +138,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS
+ 	bool "Gallium iris driver"
+ 	depends on BR2_PACKAGE_MESA3D_LLVM
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+-	select BR2_PACKAGE_MESA3D_OPENCL
+-	select BR2_PACKAGE_SPIRV_LLVM_TRANSLATOR
+-	select BR2_PACKAGE_SPIRV_TOOLS
++	select BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER
+ 	help
+ 	  Mesa driver for iris-based Intel GPUs.
+ 
+@@ -171,10 +176,15 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST
+ 	bool "Gallium panfrost driver"
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
++	depends on BR2_PACKAGE_MESA3D_LLVM
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
++	select BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER
+ 	help
+ 	  Mesa driver for ARM Mali Midgard and Bifrost GPUs.
+ 
++comment "panfrost driver needs llvm"
++	depends on !BR2_PACKAGE_MESA3D_LLVM
++
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R300
+ 	bool "Gallium Radeon R300 driver"
+ 	depends on BR2_i386 || BR2_x86_64
+@@ -348,14 +358,6 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_VIRTIO
+ 	help
+ 	  Vulkan VirtIO (venus) driver.
+ 
+-comment "Off-screen Rendering"
+-
+-config BR2_PACKAGE_MESA3D_OSMESA_GALLIUM
+-	bool "OSMesa (Gallium) library"
+-	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SOFTPIPE
+-	help
+-	  The OSMesa API provides functions for off-screen rendering.
+-
+ if BR2_PACKAGE_MESA3D_DRIVER
+ 
+ comment "OpenGL API Support"
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index c94611ff05..40a6e88863 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2025-May/000803.html
+-sha256  0d179e019e3441f5d957330d7abb3b0ef38e6782cc85a382608cd1a4a77fa2e1  mesa-25.0.6.tar.xz
+-sha512  6a0abc8a5bbbb8ffdad7286fc5642f643b1f4183794425ba689c2c9f5c73a4131c8685074241deb1022631b4c1f1c505dbd848190ec60d5d6931e90dd9316e05  mesa-25.0.6.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2025-May/000802.html
++sha256  b1c45888969ee5df997e2542654f735ab1b772924b442f3016d2293414c99c14  mesa-25.1.0.tar.xz
++sha512  40298370727fa1ad6d59be8692dfef01c42e41780816e9b951a05f779c7acca127162d2d3cedfccb7bfe3834b9e917c2b9bc6cb76887488d919cb61741a1da1a  mesa-25.1.0.tar.xz
+ # License
+ sha256  0d1a0472ecc81830e75c20d59b0ea02841e3db21255e0ebad97ab682c54d6615  docs/license.rst
+ sha256  323c587d0ccf10e376f8bf9a7f31fb4ca6078105194b42e0b1e0ee2bc9bde71f  licenses/MIT
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 84d1aae6ef..d067fd45ed 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 25.0.6
++MESA3D_VERSION = 25.1.0
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://archive.mesa3d.org
+ MESA3D_LICENSE = MIT, SGI, Khronos
+@@ -30,10 +30,8 @@ MESA3D_DEPENDENCIES = \
+ 	zlib
+ 
+ MESA3D_CONF_OPTS = \
+-	-Dgallium-opencl=disabled \
+ 	-Dgallium-rusticl=false \
+-	-Dmicrosoft-clc=disabled \
+-	-Dpower8=disabled
++	-Dmicrosoft-clc=disabled
+ 
+ ifeq ($(BR2_PACKAGE_MESA3D_DRIVER)$(BR2_PACKAGE_XORG7),yy)
+ MESA3D_DEPENDENCIES += xlib_libxshmfence
+@@ -65,7 +63,7 @@ endif
+ ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_GLX),y)
+ # Disable-mangling not yet supported by meson build system.
+ # glx:
+-#  dri          : dri based GLX requires at least one DRI driver || dri based GLX requires shared-glapi
++#  dri          : dri based GLX requires at least one DRI driver
+ #  xlib         : xlib conflicts with any dri driver
+ # Always enable glx-direct; without it, many GLX applications don't work.
+ MESA3D_CONF_OPTS += \
+@@ -96,10 +94,12 @@ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV)  += etnaviv
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO) += freedreno
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_I915)     += i915
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS)     += iris
++HOST_MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS) += iris
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA)     += lima
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LLVMPIPE) += llvmpipe
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU)  += nouveau
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST) += panfrost
++HOST_MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST) += panfrost
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R300)     += r300
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600)     += r600
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI) += radeonsi
+@@ -122,7 +122,6 @@ MESA3D_CONF_OPTS += \
+ 	-Dgallium-extra-hud=false
+ else
+ MESA3D_CONF_OPTS += \
+-	-Dshared-glapi=enabled \
+ 	-Dgallium-drivers=$(subst $(space),$(comma),$(MESA3D_GALLIUM_DRIVERS-y)) \
+ 	-Dgallium-extra-hud=true
+ endif
+@@ -135,7 +134,7 @@ ifeq ($(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL),y)
+ MESA3D_DEPENDENCIES += host-python-ply
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS),y)
++ifeq ($(BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER),y)
+ MESA3D_CONF_OPTS += -Dmesa-clc=system -Dprecomp-compiler=system
+ MESA3D_DEPENDENCIES += host-mesa3d spirv-llvm-translator spirv-tools
+ endif
+@@ -151,12 +150,6 @@ endif
+ 
+ # APIs
+ 
+-ifeq ($(BR2_PACKAGE_MESA3D_OSMESA_GALLIUM),y)
+-MESA3D_CONF_OPTS += -Dosmesa=true
+-else
+-MESA3D_CONF_OPTS += -Dosmesa=false
+-endif
+-
+ # Always enable OpenGL:
+ #   - Building OpenGL ES without OpenGL is not supported, so always keep opengl enabled.
+ MESA3D_CONF_OPTS += -Dopengl=true
+@@ -273,11 +266,9 @@ else
+ MESA3D_CONF_OPTS += -Dglvnd=disabled
+ endif
+ 
+-# host-mesa3d is needed by mesa3d only when the Iris Gallium driver is
+-# enabled
+ HOST_MESA3D_CONF_OPTS = \
+ 	-Dglvnd=disabled \
+-	-Dgallium-drivers=iris \
++	-Dgallium-drivers=$(subst $(space),$(comma),$(HOST_MESA3D_GALLIUM_DRIVERS-y)) \
+ 	-Dgallium-vdpau=disabled \
+ 	-Dinstall-mesa-clc=true \
+ 	-Dmesa-clc=enabled \
+@@ -286,6 +277,10 @@ HOST_MESA3D_CONF_OPTS = \
+ 	-Dglx=disabled \
+ 	-Dvulkan-drivers=""
+ 
++ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST),y)
++HOST_MESA3D_CONF_OPTS += -Dtools=panfrost
++endif
++
+ HOST_MESA3D_DEPENDENCIES = \
+ 	host-libclc \
+ 	host-libdrm \
+@@ -293,9 +288,15 @@ HOST_MESA3D_DEPENDENCIES = \
+ 	host-python-pyyaml \
+ 	host-spirv-tools
+ 
++ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST),y)
++HOST_MESA3D_INSTALL_PANFROST_COMPILE = \
++	$(INSTALL) -D -m 0755 $(@D)/buildroot-build/src/panfrost/clc/panfrost_compile $(HOST_DIR)/bin/panfrost_compile
++endif
++
+ define HOST_MESA3D_INSTALL_CMDS
+ 	$(INSTALL) -D -m 0755 $(@D)/buildroot-build/src/compiler/clc/mesa_clc $(HOST_DIR)/bin/mesa_clc
+-	$(INSTALL) -D -m 0755 $(@D)/buildroot-build/src/compiler/spirv/vtn_bindgen $(HOST_DIR)/bin/vtn_bindgen
++	$(INSTALL) -D -m 0755 $(@D)/buildroot-build/src/compiler/spirv/vtn_bindgen2 $(HOST_DIR)/bin/vtn_bindgen2
++	$(HOST_MESA3D_INSTALL_PANFROST_COMPILE)
+ endef
+ 
+ $(eval $(meson-package))
+diff --git a/package/wine/wine.mk b/package/wine/wine.mk
+index efee63a294..380f729585 100644
+--- a/package/wine/wine.mk
++++ b/package/wine/wine.mk
+@@ -33,7 +33,8 @@ WINE_CONF_OPTS = \
+ 	--without-mingw \
+ 	--without-opencl \
+ 	--without-oss \
+-	--without-vulkan
++	--without-vulkan \
++	--without-osmesa  # BR2_PACKAGE_MESA3D_OSMESA_GALLIUM removed in mesa 25.1
+ 
+ # Wine uses a wrapper around gcc, and uses the value of --host to
+ # construct the filename of the gcc to call.  But for external
+@@ -143,13 +144,6 @@ else
+ WINE_CONF_OPTS += --without-v4l2
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_MESA3D_OSMESA_GALLIUM),y)
+-WINE_CONF_OPTS += --with-osmesa
+-WINE_DEPENDENCIES += mesa3d
+-else
+-WINE_CONF_OPTS += --without-osmesa
+-endif
+-
+ ifeq ($(BR2_PACKAGE_PCSC_LITE),y)
+ WINE_CONF_OPTS += --with-pcsclite
+ WINE_DEPENDENCIES += pcsc-lite
 -- 
-https://autobuild.buildroot.org
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
