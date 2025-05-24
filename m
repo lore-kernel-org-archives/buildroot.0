@@ -4,97 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2133C54E71
-	for <buildroot@archiver.kernel.org>; Sat, 24 May 2025 08:05:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB723C54F32
+	for <buildroot@archiver.kernel.org>; Sat, 24 May 2025 12:23:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A3383409FE;
-	Sat, 24 May 2025 08:05:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 198C9408E1;
+	Sat, 24 May 2025 12:23:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jL-DsaFefTur; Sat, 24 May 2025 08:05:18 +0000 (UTC)
+ id udbBQlfto04v; Sat, 24 May 2025 12:23:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C4E0540969
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 157D8408E3
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C4E0540969;
-	Sat, 24 May 2025 08:05:18 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id D1EADCA
- for <buildroot@buildroot.org>; Sat, 24 May 2025 08:05:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 157D8408E3;
+	Sat, 24 May 2025 12:23:03 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C9C9168
+ for <buildroot@buildroot.org>; Sat, 24 May 2025 12:23:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C308760B67
- for <buildroot@buildroot.org>; Sat, 24 May 2025 08:05:17 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BB46381349
+ for <buildroot@buildroot.org>; Sat, 24 May 2025 12:23:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8dz25amBLkEs for <buildroot@buildroot.org>;
- Sat, 24 May 2025 08:05:14 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::436; helo=mail-wr1-x436.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1831060B92
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1831060B92
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1831060B92
- for <buildroot@buildroot.org>; Sat, 24 May 2025 08:05:09 +0000 (UTC)
-Received: by mail-wr1-x436.google.com with SMTP id
- ffacd0b85a97d-3a367ec7840so412314f8f.2
- for <buildroot@buildroot.org>; Sat, 24 May 2025 01:05:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1748073907; x=1748678707;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=PPxrI8CH2rrr/8ehTmaX9FRrb85FBzMrfaKOvdWHFbI=;
- b=esyjoCMUORCBPb4dygYQKHzxerQbq1VJzaePW61sQRtDY9AIHKKdJpGL+bVsLX2+Lh
- LU8k6mL/WAF/osqck4+Hy3g26eShaAUcGW7eczsa15mdkA7whGsAFmlBZbpOlx8KdBdh
- srKLva6xXdzqkBk/Xad9IO8d8TYkC94/HGjl2mxKaYLYRQZkQUMc8yEJK77OIo5dDAzm
- 2zJgAYwtA8Ptp9h9C0t6K/WIiywlGqm8q7cq0hD7HETIqD2IaFeHN7vKAE34S3NvI9v4
- oVXog/aGXoXKQYKd4eQ2E9Ay4x8CYCQ0poeurGJ1joA9IGnXnF5/X/2j5wbOau7GQtEV
- iqnQ==
-X-Gm-Message-State: AOJu0YzGUMntotbHDD3s+bZGwwstSvHGlofzJzFAxpR8WvlS0sJMEZBb
- O4hgZKROwUFinvf99w1Nv28MIgePJSqaWl+kM1rXgOoy3d8xF6w5QcE/WI3AAJ27pcn9/lvFxwv
- vUqlP
-X-Gm-Gg: ASbGncsJ3fMAZHLjFpf6KuwbQ1ZwhDXqL2oTbHOdeRLcx4d29kKxoYIHTH/vsIIETTJ
- kWnKtyouN38T4ERSPCZVgslpufUo0pO1tTG7gGQJi8PqwZBfsRbrZeubBQUHjVQjqemzOCwzg8l
- f4sX0PyzkwXZ74p8jmw96ksQML3v59YeHfLyxwGQMEGFFqVyPAZ6Qpnd+ps1KV+iAxk+zGqxkS9
- 2zSgLidSbsrrH0ArsqcwaSaBEtwIyq7tWnjs8j6xy3mZk81ysDmqv83Fa7nCpofS6Ou29D3yKkN
- 1Z339zjUU+BjmntLZSoaH3BTEL8ySTA+pr956asQYx2TuCDJeYVYml3/gwDo8kF4ZA==
-X-Google-Smtp-Source: AGHT+IGONzhYkLzt8fUmLCewjxZmKwZ8KEfJVDzzimIUukVbvkB0xOkeXT4q9SpmR1yYL2qcApseRA==
-X-Received: by 2002:a05:6000:144f:b0:3a3:7255:dfd0 with SMTP id
- ffacd0b85a97d-3a4cb46cec0mr1710587f8f.17.1748073907405; 
- Sat, 24 May 2025 01:05:07 -0700 (PDT)
-Received: from localhost.localdomain ([79.132.233.61])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3a35ca8ce9asm28868650f8f.86.2025.05.24.01.05.06
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 24 May 2025 01:05:07 -0700 (PDT)
-To: buildroot@buildroot.org
-Date: Sat, 24 May 2025 10:04:46 +0200
-Message-ID: <20250524080446.1185955-1-thomas.perale@mind.be>
-X-Mailer: git-send-email 2.49.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iq-PIxbT7V4Q for <buildroot@buildroot.org>;
+ Sat, 24 May 2025 12:23:01 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
+ helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9232D812F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9232D812F3
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9232D812F3
+ for <buildroot@buildroot.org>; Sat, 24 May 2025 12:22:59 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id BA9D81FCEB;
+ Sat, 24 May 2025 12:22:56 +0000 (UTC)
+Date: Sat, 24 May 2025 14:22:55 +0200
+To: nvd <nvd@nist.gov>
+Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Message-ID: <20250524142255.36be5c43@windsurf>
+In-Reply-To: <BY3PR09MB875642446D6D15414F985131ED98A@BY3PR09MB8756.namprd09.prod.outlook.com>
+References: <20250517181815.02ce0393@windsurf>
+ <BY3PR09MB875642446D6D15414F985131ED98A@BY3PR09MB8756.namprd09.prod.outlook.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
+X-GND-State: clean
+X-GND-Score: -6
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddtgdduudejudculddtuddrgeefvddrtddtmdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucgfrhhlucfvnfffucdlqdeimdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepfeeffeeuheefjeffgfevvdekudehffdugeetfefgteegtddtfffggffhtddtkeevnecuffhomhgrihhnpeguohhvvggtohhtrdhorhhgpdhgihhthhhusgdrtghomhdpsghoohhtlhhinhdrtghomhenucfkphepledvrddvgeehrdduvdekrdduheegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepledvrddvgeehrdduvdekrdduheegpdhhvghlohepfihinhgushhurhhfpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedvpdhrtghpthhtohepnhhvugesnhhishhtrdhgohhvpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrgh
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1748073907; x=1748678707; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=PPxrI8CH2rrr/8ehTmaX9FRrb85FBzMrfaKOvdWHFbI=;
- b=gAUmX1heVo4iwf1gEv7Trh+44hFySSjIpvC/zoxLUJTpnyMBmdUQngEZOgOeKHODz8
- TOUjR8iWvAXh5levFIo84eolAYI8oxHPnn93sKwCr8fmkxlz5Z2Bplitl/IooU1XMtVK
- I7fexxH6kHubUmPqVjQMkaSauTlchTif4LTSrxPcJQpwgKOBwsvPrhcpm7kJsR7QlEPD
- R3uLesd2D3kwjhdLwtgfdQev21AlNJAzwH+dcAL2LdrpOmcgiQ4wBZuz+EPiSruRnAgJ
- lmsYmNpkyfbxBW7E6zNiH2kQNZb3DY61XHNOC/g806mQEUDqU6Xexv7bIMo8rvgBU0Zw
- qJyw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=bootlin.com; s=gm1; t=1748089376;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=7sfN/+UagBZBYgVLYjdGMPQUU4ng2xsdjZspPxORZwE=;
+ b=gsRVsqe4acvDGWTSq2kBT2uEBmAfoJCxZX0jle21reSUmQoi1C/D7Jxn25zYBwG2GX0vEU
+ tpLrJIxmzKdMxBxIeKMfoighJdh7DrmTcaJ8DrQ51prwLENbpI3EJltiJzQzLVCfPTCeQA
+ BlMrW92gZg706A7AiS2oQB2Ec5JpRW8IjYjI9isBJooEMr6j4yhZxSF1Qit4rsX1DtoYqG
+ SRrtZlFTNcBpIAO8J4REZYGixl6FK0I9ejV7NMqw5gfYYKCtbzOWQdNFarMXXhIh2oqr0X
+ 7cH7+QaH6c3O7hmhBAM7XdplmvwBWdrhmmlbxKNH0cQl5gWn7E+ZYrxcqG06DQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=gAUmX1he
-Subject: [Buildroot] [PATCH 2025.02.x] package/libical: fix deprecated CMake
- 4 policy
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=gsRVsqe4
+Subject: Re: [Buildroot] CVE-2022-30550 version range fix
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -106,81 +85,102 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The commit [1] updated the version of libical to version 3.0.20 which
-included a number of build fixes for newer CMake version.
-This patch is not included in the 2025.02.x branch and libical remained
-subject to a number of build error with CMake 4.
+Hello Benjamin,
 
-This patch backport the fix to remove the usage of the now deprecated
-CMP0005 policy with CMake version 4 (see [2]).
+Thanks for the feedback, much appreciated, and thanks for taking into
+account the feedback. At the end of your e-mail, you said "For CPE
+related inquiries we request that you send them to
+cpe_dictionary@nist.gov", does that mean that some of my requests
+should have been sent to cpe_dictionary@nist.gov instead, and if so
+which ones?
 
-[1] 8cdeeb536c package/libical: bump to version 3.0.20
-[2] https://cmake.org/cmake/help/latest/policy/CMP0005.html
+Perhaps you are referring to my request:
 
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
----
- ...ger-support-old-cmake-policy-cmp0005.patch | 42 +++++++++++++++++++
- 1 file changed, 42 insertions(+)
- create mode 100644 package/libical/0003-cmakelists-txt-no-longer-support-old-cmake-policy-cmp0005.patch
+	Subject: Numerous issues in CVEs for the "sox" project
 
-diff --git a/package/libical/0003-cmakelists-txt-no-longer-support-old-cmake-policy-cmp0005.patch b/package/libical/0003-cmakelists-txt-no-longer-support-old-cmake-policy-cmp0005.patch
-new file mode 100644
-index 0000000000..6e21c6d6df
---- /dev/null
-+++ b/package/libical/0003-cmakelists-txt-no-longer-support-old-cmake-policy-cmp0005.patch
-@@ -0,0 +1,42 @@
-+From 7f07ace91faa8b1d578bf5bac2987660f91f31ca Mon Sep 17 00:00:00 2001
-+From: Allen Winter <allen.winter@kdab.com>
-+Date: Sat, 14 Oct 2017 15:49:54 -0400
-+Subject: [PATCH] CMakeLists.txt, src/test/CMakeLists.txt - no longer support
-+ old CMake Policy CMP0005 ISSUE#315
-+
-+Upstream: https://github.com/libical/libical/commit/7f07ace91faa8b1d578bf5bac2987660f91f31ca
-+[thomas: backported to v1.0.1]
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+
-+---
-+ CMakeLists.txt          | 1 -
-+ src/test/CMakeLists.txt | 2 +-
-+ 2 files changed, 1 insertion(+), 2 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index d5aad80c..e2d5de72 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -50,7 +50,6 @@ project(libical C CXX)
-+ 
-+ if(COMMAND cmake_policy)
-+   cmake_policy(SET CMP0003 NEW)
-+-  cmake_policy(SET CMP0005 OLD)
-+ endif()
-+ 
-+ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
-+diff --git a/src/test/CMakeLists.txt b/src/test/CMakeLists.txt
-+index 322b5e40..31ab6199 100644
-+--- a/src/test/CMakeLists.txt
-++++ b/src/test/CMakeLists.txt
-+@@ -6,7 +6,7 @@ include_directories(
-+ 
-+ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
-+ 
-+-set(TEST_DATADIR "\\\"${CMAKE_SOURCE_DIR}/test-data\\\"")
-++set(TEST_DATADIR "\"${CMAKE_SOURCE_DIR}/test-data\"")
-+ add_definitions(-DTEST_DATADIR=${TEST_DATADIR})
-+ 
-+ macro(setprops _name)
-+-- 
-+2.49.0
+ ?
+
+Could you clarify, so that I can make sure I send my requests to the
+right contact?
+
+Thanks a lot this effort on maintaining the NVD!
+
+Best regards,
+
+Thomas
+
+On Fri, 23 May 2025 16:53:39 +0000
+nvd <nvd@nist.gov> wrote:
+
+> Good Afternoon,
+> 
+> Thank you for bringing this to our attention. We appreciate community input in order to provide the most accurate and up-to-date information as possible. After reviewing publicly available information we have made the appropriate modifications to the configuration to list version 2.4.0 as the fixed version. Please allow up to 24 hours for the changes to be reflected on the website and in the data feeds.
+> 
+> For CPE related inquiries we request that you send them to cpe_dictionary@nist.gov.
+> 
+> V/r,
+> Benjamin Wells
+> National Vulnerability Database Team
+> National Institute of Standards and Technology (NIST)
+> nvd@nist.gov
+> 
+> -----Original Message-----
+> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Sent: Saturday, May 17, 2025 12:18 PM
+> To: nvd <nvd@nist.gov>
+> Cc: buildroot@buildroot.org
+> Subject: CVE-2022-30550 version range fix
+> 
+> Hello,
+> 
+> CVE-2022-30550 is documented in your database as affecting versions of dovecot up to 2.3.20.
+> 
+> However, according to
+> https://dovecot.org/pipermail/dovecot-news/2022-July/000477.html, the fix for this issue is:
+> 
+>   https://github.com/dovecot/core/compare/7bad6a24%5E..a1022072.patch
+> 
+> And this commit is only in Dovecot 2.4.0, which means that versions 2.3.21, 2.3.21.1 are affected.
+> 
+> Here is some additional evidence based on the Git repository of Dovecot:
+> 
+> $ git log --format=oneline 2.3.21  | grep "auth: Fix handling passdbs with identical driver/args but"
+> $
+> 
+> So 2.3.21 doesn't have the fix.
+> 
+> $ git log --format=oneline 2.3.21.1  | grep "auth: Fix handling passdbs with identical driver/args but"
+> $
+> 
+> So 2.3.21.1 doesn't have the fix.
+> 
+> $ git log --format=oneline 2.4.0  | grep "auth: Fix handling passdbs with identical driver/args but"
+> 7bad6a24160e34bce8f10e73dbbf9e5fbbcd1904 auth: Fix handling passdbs with identical driver/args but different mechanisms/username_filter
+> 
+> Which means that 2.4.0 has the fix.
+> 
+> Therefore, your entry for CVE-2022-30550 should be fixed to indicate that versions up to (excluding) 2.4.0 are affected.
+> 
+> Thanks for your great work on maintaining this database! It would be create to have a public issue tracker to report issues.
+> 
+> Thomas
+> --
+> Thomas Petazzoni, co-owner and CEO, Bootlin Embedded Linux and Kernel engineering and training
+> https://bootlin.com/
+
+
+
 -- 
-2.49.0
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
