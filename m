@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57FB4C54FB3
-	for <buildroot@archiver.kernel.org>; Sun, 25 May 2025 14:19:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80241C54FB3
+	for <buildroot@archiver.kernel.org>; Sun, 25 May 2025 14:20:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 20D6360612;
-	Sun, 25 May 2025 14:19:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B5FDD6070E;
+	Sun, 25 May 2025 14:19:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5ZxFYHyOqcnZ; Sun, 25 May 2025 14:19:55 +0000 (UTC)
+ id GoYx91tYK0qQ; Sun, 25 May 2025 14:19:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 46D9F6062E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 90D1B60755
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 46D9F6062E;
-	Sun, 25 May 2025 14:19:55 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id A87C12A8
- for <buildroot@buildroot.org>; Sun, 25 May 2025 14:19:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 90D1B60755;
+	Sun, 25 May 2025 14:19:57 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C933219D
+ for <buildroot@buildroot.org>; Sun, 25 May 2025 14:19:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8EFEF4009A
+ by smtp1.osuosl.org (Postfix) with ESMTP id B9FE780AD5
  for <buildroot@buildroot.org>; Sun, 25 May 2025 14:19:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DkdVfBxlC171 for <buildroot@buildroot.org>;
- Sun, 25 May 2025 14:19:51 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vcWUQt_jLTzw for <buildroot@buildroot.org>;
+ Sun, 25 May 2025 14:19:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D60404007D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EED4F80E46
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D60404007D
+ by smtp1.osuosl.org (Postfix) with ESMTP id EED4F80E46
  for <buildroot@buildroot.org>; Sun, 25 May 2025 14:19:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C3B8E87623; Sun, 25 May 2025 14:19:51 +0000 (UTC)
+ id DEA4E87625; Sun, 25 May 2025 14:19:51 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
 Date: Sun, 25 May 2025 16:15:41 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 066f6088723f03cc3fec863d0d48a6e9cf214582
-X-Git-Newrev: df0805618bdf58a072514e042c809989c0fb020d
+X-Git-Oldrev: 737aa40a1c7e98a88fdad0d36b7ab47a4819be1a
+X-Git-Newrev: 395568599c2922fc2b7bfb62a66e81db6767db38
 X-Patchwork-Hint: ignore
-Message-Id: <20250525141951.C3B8E87623@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] support/testing:
- TestClangCompilerRT: Add a kernel fragment for 48 bits virtual adress
+Message-Id: <20250525141951.DEA4E87625@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/spirv-{headers,
+ tools}: bump to version 1.4.313.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,59 +65,84 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=df0805618bdf58a072514e042c809989c0fb020d
+commit: https://git.buildroot.net/buildroot/commit/?id=395568599c2922fc2b7bfb62a66e81db6767db38
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add a kernel fragment to enable
-CONFIG_ARM64_VA_BITS_48 for the AARCH64 QEMU platform in the
-clang compiler -rt runtime test.
+Update SPIR-V headers and SPIR-V tools to version 1.4.313.0 from the
+Vulkan SDK.
 
-Without this setting, this sanitize-based test fails with clang-20
-due to insufficient virtual adress space.
+This versions are required for compatibility with updated
+spirv-llvm-translator (v20.1.2).
+The source archive now follows the vulkan-sdk- prefix convention.
 
-"This might potentially affect ARM platforms with 39-bit address space." from [1]
-
-[1] https://github.com/llvm/llvm-project/commit/a588cfe37ea36ec4fae35a233a13d3557fba86e9
+release:
+https://github.com/KhronosGroup/SPIRV-Headers/releases/tag/vulkan-sdk-1.4.313.0
+https://github.com/KhronosGroup/SPIRV-Tools/releases/tag/vulkan-sdk-1.4.313.0
 
 Signed-off-by: El Mehdi YOUNES <elmehdi.younes@smile.fr>
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[Bernd:
+ bumped to 1.4.313.0
+ Updated license hash of spirv-headers due to upstream commits:
+ https://github.com/KhronosGroup/SPIRV-Headers/commit/1c9115b562bab79ee2160fbd845f41b815b9f21f
+ https://github.com/KhronosGroup/SPIRV-Headers/commit/23d4a398c2ccca05fc623cca8785ce7741c5345d]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- support/testing/tests/package/test_clang.py                        | 5 ++++-
- support/testing/tests/package/test_clang/linux-arm64-va48.fragment | 1 +
- 2 files changed, 5 insertions(+), 1 deletion(-)
+ package/spirv-headers/spirv-headers.hash | 4 ++--
+ package/spirv-headers/spirv-headers.mk   | 4 ++--
+ package/spirv-tools/spirv-tools.hash     | 2 +-
+ package/spirv-tools/spirv-tools.mk       | 4 ++--
+ 4 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/support/testing/tests/package/test_clang.py b/support/testing/tests/package/test_clang.py
-index f36faa059a..a9794a49fa 100644
---- a/support/testing/tests/package/test_clang.py
-+++ b/support/testing/tests/package/test_clang.py
-@@ -7,8 +7,10 @@ FUZZ_TIMEOUT = 120
+diff --git a/package/spirv-headers/spirv-headers.hash b/package/spirv-headers/spirv-headers.hash
+index 136f3df733..6e3cc33d6b 100644
+--- a/package/spirv-headers/spirv-headers.hash
++++ b/package/spirv-headers/spirv-headers.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  32b4c6ae6a2fa9b56c2c17233c8056da47e331f76e117729925825ea3e77a739  spirv-headers-1.3.261.1.tar.gz
+-sha256  9b243f6f0bf44e295ff411a0f7b7642d1d0dff7cdc42507e9f7206f439e51b5a  LICENSE
++sha256  f68be549d74afb61600a1e3a7d1da1e6b7437758c8e77d664909f88f302c5ac1  spirv-headers-1.4.313.0.tar.gz
++sha256  ff04ae7e6a468587fe59434fee2e67c0e2a749b592c794b764ff80f30b94a084  LICENSE
+diff --git a/package/spirv-headers/spirv-headers.mk b/package/spirv-headers/spirv-headers.mk
+index 9f84c42b2d..675cef9f16 100644
+--- a/package/spirv-headers/spirv-headers.mk
++++ b/package/spirv-headers/spirv-headers.mk
+@@ -5,8 +5,8 @@
+ ################################################################################
  
- class TestClangCompilerRT(infra.basetest.BRTest):
-     br2_external = [infra.filepath("tests/package/br2-external/clang-compiler-rt")]
-+    # Without this option the test fails due to insufficient address space for 64-bit allocator
-+    va48_fragment = infra.filepath("tests/package/test_clang/linux-arm64-va48.fragment")
-     config = \
--        """
-+        f"""
-         BR2_aarch64=y
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-@@ -17,6 +19,7 @@ class TestClangCompilerRT(infra.basetest.BRTest):
-         BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.283"
-         BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-         BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-+        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{va48_fragment}"
-         BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-         BR2_PACKAGE_COMPILER_RT=y
-         BR2_PACKAGE_LLVM=y
-diff --git a/support/testing/tests/package/test_clang/linux-arm64-va48.fragment b/support/testing/tests/package/test_clang/linux-arm64-va48.fragment
-new file mode 100644
-index 0000000000..1bafe6e581
---- /dev/null
-+++ b/support/testing/tests/package/test_clang/linux-arm64-va48.fragment
-@@ -0,0 +1 @@
-+CONFIG_ARM64_VA_BITS_48=y
+ # Keep in sync with spirv-tools version
+-SPIRV_HEADERS_VERSION = 1.3.261.1
+-SPIRV_HEADERS_SITE = $(call github,KhronosGroup,SPIRV-Headers,sdk-$(SPIRV_HEADERS_VERSION))
++SPIRV_HEADERS_VERSION = 1.4.313.0
++SPIRV_HEADERS_SITE = $(call github,KhronosGroup,SPIRV-Headers,vulkan-sdk-$(SPIRV_HEADERS_VERSION))
+ SPIRV_HEADERS_LICENSE = MIT
+ SPIRV_HEADERS_LICENSE_FILES = LICENSE
+ 
+diff --git a/package/spirv-tools/spirv-tools.hash b/package/spirv-tools/spirv-tools.hash
+index 65cb9c619b..de118b378e 100644
+--- a/package/spirv-tools/spirv-tools.hash
++++ b/package/spirv-tools/spirv-tools.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  ead95c626ad482882a141d1aa0ce47b9453871f72c42c0b28d39c82f60a52008  spirv-tools-1.3.261.1.tar.gz
++sha256  6b60f723345ceed5291cceebbcfacf7fea9361a69332261fa08ae57e2a562005  spirv-tools-1.4.313.0.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/spirv-tools/spirv-tools.mk b/package/spirv-tools/spirv-tools.mk
+index 51b1c9f22a..1aa0cc6199 100644
+--- a/package/spirv-tools/spirv-tools.mk
++++ b/package/spirv-tools/spirv-tools.mk
+@@ -5,8 +5,8 @@
+ ################################################################################
+ 
+ # Keep in sync with spirv-headers version
+-SPIRV_TOOLS_VERSION = 1.3.261.1
+-SPIRV_TOOLS_SITE = $(call github,KhronosGroup,SPIRV-Tools,sdk-$(SPIRV_TOOLS_VERSION))
++SPIRV_TOOLS_VERSION = 1.4.313.0
++SPIRV_TOOLS_SITE = $(call github,KhronosGroup,SPIRV-Tools,vulkan-sdk-$(SPIRV_TOOLS_VERSION))
+ SPIRV_TOOLS_LICENSE = Apache-2.0
+ SPIRV_TOOLS_LICENSE_FILES = LICENSE
+ SPIRV_TOOLS_DEPENDENCIES = spirv-headers
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
