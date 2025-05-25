@@ -4,49 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B0B9C54E90
-	for <buildroot@archiver.kernel.org>; Sun, 25 May 2025 14:12:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55748C54E90
+	for <buildroot@archiver.kernel.org>; Sun, 25 May 2025 14:15:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 05F546069E;
-	Sun, 25 May 2025 14:12:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E4E7F6065F;
+	Sun, 25 May 2025 14:15:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mieK8FT01FQk; Sun, 25 May 2025 14:12:31 +0000 (UTC)
+ id HSUeIsxeRIcH; Sun, 25 May 2025 14:15:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2D9A160612
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3588860612
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2D9A160612;
-	Sun, 25 May 2025 14:12:31 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id D570768
- for <buildroot@buildroot.org>; Sun, 25 May 2025 14:12:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3588860612;
+	Sun, 25 May 2025 14:15:06 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2E7ED19D
+ for <buildroot@buildroot.org>; Sun, 25 May 2025 14:15:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BBE7260612
- for <buildroot@buildroot.org>; Sun, 25 May 2025 14:12:29 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 202C0405D4
+ for <buildroot@buildroot.org>; Sun, 25 May 2025 14:15:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sN9hsat3lRwR for <buildroot@buildroot.org>;
- Sun, 25 May 2025 14:12:28 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D2FFA605A5
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D2FFA605A5
- for <buildroot@buildroot.org>; Sun, 25 May 2025 14:12:28 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C453F875A9; Sun, 25 May 2025 14:12:28 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Q_v9ve81Ofrb for <buildroot@buildroot.org>;
+ Sun, 25 May 2025 14:15:04 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org DB386403F9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DB386403F9
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id DB386403F9
+ for <buildroot@buildroot.org>; Sun, 25 May 2025 14:15:03 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 45F252003B4;
+ Sun, 25 May 2025 16:14:58 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 25 May 2025 16:14:58 +0200
+MIME-Version: 1.0
+Date: Sun, 25 May 2025 16:14:58 +0200
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 25 May 2025 14:53:13 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b492372436a17ad626ed2a5eff7a5c4f2ed83605
-X-Git-Newrev: 066f6088723f03cc3fec863d0d48a6e9cf214582
-X-Patchwork-Hint: ignore
-Message-Id: <20250525141228.C453F875A9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/uuu: add target support
+To: Amer Alshanawany <amer.alshanawany@openpixelsystems.org>
+Cc: buildroot@buildroot.org, Dario Binacchi
+ <dario.binacchi@amarulasolutions.com>
+In-Reply-To: <20250523164150.69687-2-amer.alshanawany@openpixelsystems.org>
+References: <20250523164150.69687-2-amer.alshanawany@openpixelsystems.org>
+User-Agent: Webmail Free/1.6.10
+Message-ID: <ba6372a4bc9c5b0bd970e3a33179a005@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1748182500;
+ bh=sn5sYe7jrt2gWU63pyWF0yiyI8oGeFhOiwfanPfHbiU=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=Mk/IkaL4Ys5LfyfOtSdUOm1+kcF0ppyS0GWaR9W4rewsUTq/BhSQ7G2RUzk3AJQ7t
+ XWHTC9+PJZmlvSVxx2zWo6Y17QTEXNADXy4fkE9t4yrTDjTuR6IRTsic+VxJGl07Gp
+ d21ufDs2exyw5Q1G+Cl6tls9xHPzX3I7pMIgpiCGmBm8VxdL6WQ4bg0EB0umRNFW5g
+ Iifc/+X8REKj2TJICo1rz4PgRXfROHRf4wzsY/LNgu/TTTLoURnv4euzeQrp/Jf7Pu
+ QbL1btqOe3WySptmaWZu0GmaDv0ctVHdtPgmy3nj4tXLh/GTu7ik93jPWdnQf7vF2q
+ zkI6Cr39UHhlA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=Mk/IkaL4
+Subject: Re: [Buildroot] [PATCH v2] package/uuu: add target support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,91 +83,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=066f6088723f03cc3fec863d0d48a6e9cf214582
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On 23/05/2025 18:41, Amer Alshanawany wrote:
+> Signed-off-by: Amer Alshanawany <amer.alshanawany@openpixelsystems.org>
 
-Signed-off-by: Amer Alshanawany <amer.alshanawany@openpixelsystems.org>
-[Julien:
- - sort Config.in dependencies alphabetically
- - fix "conditional override of variable UUU_CONF_OPTS"
-   check-package error
-]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/Config.in     |  1 +
- package/uuu/Config.in | 23 +++++++++++++++++++++++
- package/uuu/uuu.mk    |  6 ++++++
- 3 files changed, 30 insertions(+)
+Applied to next, with some minor modifications. See:
+https://gitlab.com/buildroot.org/buildroot/-/commit/066f6088723f03cc3fec863d0d48a6e9cf214582
 
-diff --git a/package/Config.in b/package/Config.in
-index 579b5ffc87..ac8951abc2 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2817,6 +2817,7 @@ comment "Utilities"
- 	source "package/tini/Config.in"
- 	source "package/tmux/Config.in"
- 	source "package/ttyd/Config.in"
-+	source "package/uuu/Config.in"
- 	source "package/which/Config.in"
- 	source "package/wlr-randr/Config.in"
- 	source "package/wtfutil/Config.in"
-diff --git a/package/uuu/Config.in b/package/uuu/Config.in
-new file mode 100644
-index 0000000000..6085183ea7
---- /dev/null
-+++ b/package/uuu/Config.in
-@@ -0,0 +1,23 @@
-+config BR2_PACKAGE_UUU
-+	bool "uuu"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_WCHAR # libuuu uses wchar_t
-+	select BR2_PACKAGE_BZIP2
-+	select BR2_PACKAGE_LIBUSB
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_TINYXML2
-+	select BR2_PACKAGE_ZLIB
-+	select BR2_PACKAGE_ZSTD
-+	help
-+	  UUU (Universal Update Utility) is Freescale/NXP I.MX Chip
-+	  image deploy tool. UUU is an evolution of MFGTools
-+	  (aka MFGTools v3).
-+
-+	  https://github.com/nxp-imx/mfgtools
-+
-+comment "uuu needs a toolchain w/ C++14, threads, atomic, wchar"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_ATOMIC \
-+	        || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-diff --git a/package/uuu/uuu.mk b/package/uuu/uuu.mk
-index 4683cbeec1..93d0b97b13 100644
---- a/package/uuu/uuu.mk
-+++ b/package/uuu/uuu.mk
-@@ -9,6 +9,7 @@ UUU_SOURCE = uuu_source-uuu_$(UUU_VERSION).tar.gz
- UUU_SITE = https://github.com/nxp-imx/mfgtools/releases/download/uuu_$(UUU_VERSION)
- UUU_LICENSE = BSD 3-Clause "New" or "Revised" License
- UUU_LICENSE_FILES = LICENSE
-+UUU_DEPENDENCIES = bzip2 libusb openssl tinyxml2 zlib zstd
- HOST_UUU_DEPENDENCIES = \
- 	host-bzip2 \
- 	host-libusb \
-@@ -17,4 +18,9 @@ HOST_UUU_DEPENDENCIES = \
- 	host-zlib \
- 	host-zstd
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+UUU_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
-+endif
-+
-+$(eval $(cmake-package))
- $(eval $(host-cmake-package))
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
