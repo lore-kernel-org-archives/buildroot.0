@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A394C5B549
-	for <buildroot@archiver.kernel.org>; Sat, 31 May 2025 16:55:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E349C5AE59
+	for <buildroot@archiver.kernel.org>; Sat, 31 May 2025 16:55:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 27A466059B;
+	by smtp1.osuosl.org (Postfix) with ESMTP id EBEE382128;
 	Sat, 31 May 2025 16:55:32 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Cl9xR4ftRruR; Sat, 31 May 2025 16:55:30 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7BD4360806
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7BD4360806;
-	Sat, 31 May 2025 16:55:30 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0FF34235
- for <buildroot@buildroot.org>; Sat, 31 May 2025 16:55:15 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BFDFA83BDF
- for <buildroot@buildroot.org>; Sat, 31 May 2025 16:55:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id COzyPm9qbZad for <buildroot@buildroot.org>;
+ id 7CEIPzDid5bO; Sat, 31 May 2025 16:55:32 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F10ED836D5
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id F10ED836D5;
+	Sat, 31 May 2025 16:55:31 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 13F59236
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 16:55:15 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 24A8C401CB
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 16:55:11 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Qvfu6JZ7o_-K for <buildroot@buildroot.org>;
  Sat, 31 May 2025 16:55:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E706E83BEB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A1F38401E9
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E706E83BEB
+ by smtp2.osuosl.org (Postfix) with ESMTP id A1F38401E9
  for <buildroot@buildroot.org>; Sat, 31 May 2025 16:55:09 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E519C87578; Sat, 31 May 2025 16:55:09 +0000 (UTC)
+ id 9FD7F87708; Sat, 31 May 2025 16:55:09 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 26 May 2025 17:46:53 +0200
+Date: Mon, 26 May 2025 17:40:02 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 92d93f321549aab40415d495f80450cf6484c897
-X-Git-Newrev: 73dbdac4267ba0d0b5fbaff695e0eaf029c87927
+X-Git-Oldrev: 0dd1fddb4ca843a37211a28c0a4cf7d95582ca2b
+X-Git-Newrev: 1647e01b8a3d71ccf20565f3a285d55996de6b53
 X-Patchwork-Hint: ignore
-Message-Id: <20250531165509.E519C87578@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] support/testing: new
- dieharder runtime test
+Message-Id: <20250531165509.9FD7F87708@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/pkg-meson: use
+ buildroot-build for build directory
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,78 +66,122 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=73dbdac4267ba0d0b5fbaff695e0eaf029c87927
+commit: https://git.buildroot.net/buildroot/commit/?id=1647e01b8a3d71ccf20565f3a285d55996de6b53
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Note: this test was not working in Buildroot test infrastructure
-before commit [1] was merged, because dieharder has the string "# "
-in its output.
+Fixes https://gitlab.com/buildroot.org/buildroot/-/issues/64
 
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/0cad947b964be5612a182413da136fcf0dc5a1f2
+Some source tarballs (E.G.  libopenh264) may already contain a build/
+subdir, so switch to the more unique bildroot-build for the build directory,
+similar to how it is done for cmake.
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-(cherry picked from commit e9498b4faa28c494c064728d564b43c07b1b0689)
+Signed-off-by: Cherniaev Andrei <dungeonlords789@naver.com>
+Co-Authored-By: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[Peter: reword commit text]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 4e95062f820a64ecd2402115ee552dbcf2874f02)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- DEVELOPERS                                      |  1 +
- support/testing/tests/package/test_dieharder.py | 36 +++++++++++++++++++++++++
- 2 files changed, 37 insertions(+)
+ package/pkg-meson.mk | 26 +++++++++++++-------------
+ 1 file changed, 13 insertions(+), 13 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 0eff5f3308..6a6e4e14a5 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1867,6 +1867,7 @@ F:	support/testing/tests/package/test_cryptsetup.py
- F:	support/testing/tests/package/test_cryptsetup/
- F:	support/testing/tests/package/test_ddrescue.py
- F:	support/testing/tests/package/test_ddrescue/
-+F:	support/testing/tests/package/test_dieharder.py
- F:	support/testing/tests/package/test_dmidecode.py
- F:	support/testing/tests/package/test_dos2unix.py
- F:	support/testing/tests/package/test_dosfstools.py
-diff --git a/support/testing/tests/package/test_dieharder.py b/support/testing/tests/package/test_dieharder.py
-new file mode 100644
-index 0000000000..de09b383b4
---- /dev/null
-+++ b/support/testing/tests/package/test_dieharder.py
-@@ -0,0 +1,36 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestDieharder(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_PACKAGE_DIEHARDER=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+        # Check the program can run (by showing its version)
-+        self.assertRunOk("dieharder -V")
-+
-+        # The birthdays randomness test on the mt19937 random number
-+        # generator with 25 sample is expected to always succeed.
-+        cmd = "dieharder -g mt19937 -d diehard_birthdays -t 25"
-+        output, exit_code = self.emulator.run(cmd, timeout=10)
-+        self.assertEqual(exit_code, 0)
-+        self.assertIn("PASSED", '\n'.join(output))
-+
-+        # The birthdays randomness test on file /dev/zero is expected
-+        # to always fail.
-+        cmd = "dieharder -g file_input_raw -f /dev/zero -d diehard_birthdays -t 25"
-+        output, exit_code = self.emulator.run(cmd, timeout=40)
-+        self.assertEqual(exit_code, 0)
-+        self.assertIn("FAILED", '\n'.join(output))
+diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+index bc805b799c..30271e35e5 100644
+--- a/package/pkg-meson.mk
++++ b/package/pkg-meson.mk
+@@ -147,12 +147,12 @@ $(2)_CXXFLAGS ?= $$(TARGET_CXXFLAGS)
+ #
+ #
+ define $(2)_CONFIGURE_CMDS
+-	rm -rf $$($$(PKG)_SRCDIR)/build
+-	mkdir -p $$($$(PKG)_SRCDIR)/build
++	rm -rf $$($$(PKG)_SRCDIR)/buildroot-build
++	mkdir -p $$($$(PKG)_SRCDIR)/buildroot-build
+ 	sed -e "/^\[binaries\]$$$$/s:$$$$:$$(foreach x,$$($(2)_MESON_EXTRA_BINARIES),\n$$(x)):" \
+ 	    -e "/^\[properties\]$$$$/s:$$$$:$$(foreach x,$$($(2)_MESON_EXTRA_PROPERTIES),\n$$(x)):" \
+ 	    $$(call PKG_MESON_CROSSCONFIG_SED,$(2)_CFLAGS,$(2)_CXXFLAGS,$(2)_LDFLAGS,$(2)_FCFLAGS) \
+-	    > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
++	    > $$($$(PKG)_SRCDIR)/buildroot-build/cross-compilation.conf
+ 	PATH=$$(BR_PATH) \
+ 	CC_FOR_BUILD="$$(HOSTCC)" \
+ 	CXX_FOR_BUILD="$$(HOSTCXX)" \
+@@ -162,21 +162,21 @@ define $(2)_CONFIGURE_CMDS
+ 		--libdir=lib \
+ 		--default-library=$(PKG_MESON_DEFAULT_LIBRARY) \
+ 		--buildtype=$(if $(BR2_ENABLE_RUNTIME_DEBUG),debug,release) \
+-		--cross-file=$$($$(PKG)_SRCDIR)/build/cross-compilation.conf \
++		--cross-file=$$($$(PKG)_SRCDIR)/buildroot-build/cross-compilation.conf \
+ 		-Db_pie=false \
+ 		-Db_staticpic=$(if $(BR2_m68k_cf),false,true) \
+ 		-Dstrip=false \
+ 		-Dbuild.pkg_config_path=$$(HOST_DIR)/lib/pkgconfig \
+ 		-Dbuild.cmake_prefix_path=$$(HOST_DIR)/lib/cmake \
+ 		$$($$(PKG)_CONF_OPTS) \
+-		$$($$(PKG)_SRCDIR) $$($$(PKG)_SRCDIR)/build
++		$$($$(PKG)_SRCDIR) $$($$(PKG)_SRCDIR)/buildroot-build
+ endef
+ else
+ 
+ # Configure package for host
+ define $(2)_CONFIGURE_CMDS
+-	rm -rf $$($$(PKG)_SRCDIR)/build
+-	mkdir -p $$($$(PKG)_SRCDIR)/build
++	rm -rf $$($$(PKG)_SRCDIR)/buildroot-build
++	mkdir -p $$($$(PKG)_SRCDIR)/buildroot-build
+ 	$$(HOST_CONFIGURE_OPTS) \
+ 	$$($$(PKG)_CONF_ENV) $$(MESON) setup \
+ 		--prefix=$$(HOST_DIR) \
+@@ -188,7 +188,7 @@ define $(2)_CONFIGURE_CMDS
+ 		--wrap-mode=nodownload \
+ 		-Dstrip=true \
+ 		$$($$(PKG)_CONF_OPTS) \
+-		$$($$(PKG)_SRCDIR) $$($$(PKG)_SRCDIR)/build
++		$$($$(PKG)_SRCDIR) $$($$(PKG)_SRCDIR)/buildroot-build
+ endef
+ endif
+ endif
+@@ -203,12 +203,12 @@ ifndef $(2)_BUILD_CMDS
+ ifeq ($(4),target)
+ define $(2)_BUILD_CMDS
+ 	$$(TARGET_MAKE_ENV) $$($$(PKG)_NINJA_ENV) \
+-		$$(NINJA) $$(NINJA_OPTS) $$($$(PKG)_NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/build
++		$$(NINJA) $$(NINJA_OPTS) $$($$(PKG)_NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/buildroot-build
+ endef
+ else
+ define $(2)_BUILD_CMDS
+ 	$$(HOST_MAKE_ENV) $$($$(PKG)_NINJA_ENV) \
+-		$$(NINJA) $$(NINJA_OPTS) $$($$(PKG)_NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/build
++		$$(NINJA) $$(NINJA_OPTS) $$($$(PKG)_NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/buildroot-build
+ endef
+ endif
+ endif
+@@ -220,7 +220,7 @@ endif
+ ifndef $(2)_INSTALL_CMDS
+ define $(2)_INSTALL_CMDS
+ 	$$(HOST_MAKE_ENV) $$($$(PKG)_NINJA_ENV) \
+-		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/build install
++		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/buildroot-build install
+ endef
+ endif
+ 
+@@ -231,7 +231,7 @@ endif
+ ifndef $(2)_INSTALL_STAGING_CMDS
+ define $(2)_INSTALL_STAGING_CMDS
+ 	$$(TARGET_MAKE_ENV) $$($$(PKG)_NINJA_ENV) DESTDIR=$$(STAGING_DIR) \
+-		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/build install
++		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/buildroot-build install
+ endef
+ endif
+ 
+@@ -242,7 +242,7 @@ endif
+ ifndef $(2)_INSTALL_TARGET_CMDS
+ define $(2)_INSTALL_TARGET_CMDS
+ 	$$(TARGET_MAKE_ENV) $$($$(PKG)_NINJA_ENV) DESTDIR=$$(TARGET_DIR) \
+-		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/build install
++		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/buildroot-build install
+ endef
+ endif
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
