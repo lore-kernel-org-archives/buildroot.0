@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3B36C5B549
-	for <buildroot@archiver.kernel.org>; Sat, 31 May 2025 16:55:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5655FC5B552
+	for <buildroot@archiver.kernel.org>; Sat, 31 May 2025 16:55:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C141D83CC3;
-	Sat, 31 May 2025 16:55:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 228B840B96;
+	Sat, 31 May 2025 16:55:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q43MBUklN5mf; Sat, 31 May 2025 16:55:24 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2toKUnu_uSvl; Sat, 31 May 2025 16:55:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F0E5883D54
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4CE6141769
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F0E5883D54;
-	Sat, 31 May 2025 16:55:23 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 311EC235
- for <buildroot@buildroot.org>; Sat, 31 May 2025 16:55:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4CE6141769;
+	Sat, 31 May 2025 16:55:25 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0E88C235
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 16:55:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C830D401D4
- for <buildroot@buildroot.org>; Sat, 31 May 2025 16:55:10 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8413940B55
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 16:55:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7vIVhCiGYjHb for <buildroot@buildroot.org>;
- Sat, 31 May 2025 16:55:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fpm8XjMUm1Hp for <buildroot@buildroot.org>;
+ Sat, 31 May 2025 16:55:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8FB4E401E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 41A2840B99
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8FB4E401E7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 41A2840B99
  for <buildroot@buildroot.org>; Sat, 31 May 2025 16:55:09 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8E4B287578; Sat, 31 May 2025 16:55:09 +0000 (UTC)
+ id 3DB7187712; Sat, 31 May 2025 16:55:09 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 26 May 2025 17:37:52 +0200
+Date: Mon, 26 May 2025 17:34:19 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: a7ba0600c500ad9f85d42de93c3ab48f6ae642c2
-X-Git-Newrev: 89b4453ce6c3b1c30a23af44b879d4f2deaab107
+X-Git-Oldrev: 160bbe93ca38a1fa2750f430e73dafe7baf4375d
+X-Git-Newrev: 71010d030bbaf3d389037ec989d1193946eeb697
 X-Patchwork-Hint: ignore
-Message-Id: <20250531165509.8E4B287578@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/protobuf-c: bump
- to version 1.5.2
+Message-Id: <20250531165509.3DB7187712@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/python-jc: bump
+ to 1.25.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,43 +66,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=89b4453ce6c3b1c30a23af44b879d4f2deaab107
+commit: https://git.buildroot.net/buildroot/commit/?id=71010d030bbaf3d389037ec989d1193946eeb697
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Release notes:
-https://github.com/protobuf-c/protobuf-c/releases/tag/v1.5.2
-
-Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 0a645c7592e31593cc10f9b179243f9e914a439e)
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit c38ee456cbf13bd381f2194ae523a088a07b474b)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/protobuf-c/protobuf-c.hash | 2 +-
- package/protobuf-c/protobuf-c.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-jc/python-jc.hash | 4 ++--
+ package/python-jc/python-jc.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/protobuf-c/protobuf-c.hash b/package/protobuf-c/protobuf-c.hash
-index ea7262028c..c7eee9e7e1 100644
---- a/package/protobuf-c/protobuf-c.hash
-+++ b/package/protobuf-c/protobuf-c.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  20d1dc257da96f8ddff8be4dd9779215bbd0a6069ed53bbe9de38fa7629be06b  protobuf-c-1.5.1.tar.gz
-+sha256  e2c86271873a79c92b58fef7ebf8de1aa0df4738347a8bd5d4e65a80a16d0d24  protobuf-c-1.5.2.tar.gz
- sha256  2d1d028bd27f8c85bc970d720519d2069ca6213fcb26b9dea444a7c39d24bbb3  LICENSE
-diff --git a/package/protobuf-c/protobuf-c.mk b/package/protobuf-c/protobuf-c.mk
-index b1e8c25496..3df6a2edad 100644
---- a/package/protobuf-c/protobuf-c.mk
-+++ b/package/protobuf-c/protobuf-c.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-jc/python-jc.hash b/package/python-jc/python-jc.hash
+index d8ee918ac7..6e80024639 100644
+--- a/package/python-jc/python-jc.hash
++++ b/package/python-jc/python-jc.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/jc/json
+-md5  77e798f2c3fbe89c0dbf7b31dc35fc69  jc-1.25.4.tar.gz
+-sha256  a32eaf029c56b582dadae48895f20784d0f84f2fa28a8e2b32f377a8bffa8b39  jc-1.25.4.tar.gz
++md5  40bc4d9fa71e3809c236954a1bd2354f  jc-1.25.5.tar.gz
++sha256  f8ac0e4bc427b0ee8a3bdb07a254cc9df6b6036cd440f6c425e2e519cdbda78a  jc-1.25.5.tar.gz
+ # Locally computed sha256 checksums
+ sha256  6493f2db400f4166ca0956cf192a41aa092bd1396ff463e7fdaf51f257c10497  LICENSE.md
+diff --git a/package/python-jc/python-jc.mk b/package/python-jc/python-jc.mk
+index 9a3754a0fa..16bdc05895 100644
+--- a/package/python-jc/python-jc.mk
++++ b/package/python-jc/python-jc.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PROTOBUF_C_VERSION = 1.5.1
-+PROTOBUF_C_VERSION = 1.5.2
- PROTOBUF_C_SITE = https://github.com/protobuf-c/protobuf-c/releases/download/v$(PROTOBUF_C_VERSION)
- PROTOBUF_C_DEPENDENCIES = host-protobuf-c
- HOST_PROTOBUF_C_DEPENDENCIES = host-protobuf host-pkgconf
+-PYTHON_JC_VERSION = 1.25.4
++PYTHON_JC_VERSION = 1.25.5
+ PYTHON_JC_SOURCE = jc-$(PYTHON_JC_VERSION).tar.gz
+-PYTHON_JC_SITE = https://files.pythonhosted.org/packages/5b/82/146ef4c94297ef87c6a732c92dd57761bea2c2179e1b8ca8a6b9b8dd6ff7
++PYTHON_JC_SITE = https://files.pythonhosted.org/packages/1b/da/f6ec6a79f8dea70671f41d7162cfefdfe97e9c5b6c2227c1737183c05cd6
+ PYTHON_JC_SETUP_TYPE = setuptools
+ PYTHON_JC_LICENSE = MIT, BSD-3-Clause (bundled pbPlist)
+ PYTHON_JC_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
