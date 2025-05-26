@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01583C5B552
-	for <buildroot@archiver.kernel.org>; Sat, 31 May 2025 16:55:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F09DC5AE59
+	for <buildroot@archiver.kernel.org>; Sat, 31 May 2025 16:55:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BF98460BAE;
-	Sat, 31 May 2025 16:55:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EEB9983F0C;
+	Sat, 31 May 2025 16:55:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UPRm1yGepaxA; Sat, 31 May 2025 16:55:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8PQMaKWxac-I; Sat, 31 May 2025 16:55:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D0FEA6085A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 084E983EF6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D0FEA6085A;
-	Sat, 31 May 2025 16:55:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 084E983EF6;
+	Sat, 31 May 2025 16:55:56 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 6D50D127
- for <buildroot@buildroot.org>; Sat, 31 May 2025 16:55:25 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id B3123235
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 16:55:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C646F401EB
+ by smtp2.osuosl.org (Postfix) with ESMTP id E58A9401E1
  for <buildroot@buildroot.org>; Sat, 31 May 2025 16:55:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gxCn3Txt897N for <buildroot@buildroot.org>;
+ id V-mUOs0iVpaq for <buildroot@buildroot.org>;
  Sat, 31 May 2025 16:55:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 862EA401E1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1357B40205
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 862EA401E1
- for <buildroot@buildroot.org>; Sat, 31 May 2025 16:55:09 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1357B40205
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 16:55:10 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 84B5787708; Sat, 31 May 2025 16:55:09 +0000 (UTC)
+ id 11DCB8770B; Sat, 31 May 2025 16:55:10 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 26 May 2025 17:37:47 +0200
+Date: Mon, 26 May 2025 17:48:59 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: deb66592bf0e69c06e8c9509643411f71a939fe7
-X-Git-Newrev: a7ba0600c500ad9f85d42de93c3ab48f6ae642c2
+X-Git-Oldrev: a23909547ff8f82b4e355853ed19ee226a0581d6
+X-Git-Newrev: 4970691c0e5ea16f3fb33df646cced72794272f7
 X-Patchwork-Hint: ignore
-Message-Id: <20250531165509.84B5787708@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/python-uvicorn:
- bump to version 0.34.2
+Message-Id: <20250531165510.11DCB8770B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] boot/grub2/readme.txt:
+ fix loopback mount notes
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,46 +66,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a7ba0600c500ad9f85d42de93c3ab48f6ae642c2
+commit: https://git.buildroot.net/buildroot/commit/?id=4970691c0e5ea16f3fb33df646cced72794272f7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 8701d138ed47b9c667cb31e72a16894468003b9d)
+Commit 7dd56b6cd9 ("boot/grub2/readme.txt: don't specify /dev/loop0")
+changed the description of the loopback mounting to use losetup -f <img>,
+but forgot to add the --show option, causing losetup to not print the
+loopback device name.
+
+Fix that by adding the --show option.
+
+Signed-off-by: Cherniaev Andrei <dungeonlords789@naver.com>
+[Peter: Reword commit message]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit a480ae9ffe74007a92a5a5a7a36bc0d0451cebda)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/python-uvicorn/python-uvicorn.hash | 4 ++--
- package/python-uvicorn/python-uvicorn.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ boot/grub2/readme.txt | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-uvicorn/python-uvicorn.hash b/package/python-uvicorn/python-uvicorn.hash
-index bbaf98dfff..7040ffa37c 100644
---- a/package/python-uvicorn/python-uvicorn.hash
-+++ b/package/python-uvicorn/python-uvicorn.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/uvicorn/json
--md5  9944ee2becd37cb1c1e804a96c34a9e0  uvicorn-0.34.0.tar.gz
--sha256  404051050cd7e905de2c9a7e61790943440b3416f49cb409f965d9dcd0fa73e9  uvicorn-0.34.0.tar.gz
-+md5  4a741214532ec25c04dbb1e926e085f9  uvicorn-0.34.2.tar.gz
-+sha256  0e929828f6186353a80b58ea719861d2629d766293b6d19baf086ba31d4f3328  uvicorn-0.34.2.tar.gz
- # Locally computed sha256 checksums
- sha256  efe1acf3e62fb99c288b0ec73e5a773b7268ef4320fe757ea994214e4b63c371  LICENSE.md
-diff --git a/package/python-uvicorn/python-uvicorn.mk b/package/python-uvicorn/python-uvicorn.mk
-index fbb3937af1..944f683bab 100644
---- a/package/python-uvicorn/python-uvicorn.mk
-+++ b/package/python-uvicorn/python-uvicorn.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_UVICORN_VERSION = 0.34.0
-+PYTHON_UVICORN_VERSION = 0.34.2
- PYTHON_UVICORN_SOURCE = uvicorn-$(PYTHON_UVICORN_VERSION).tar.gz
--PYTHON_UVICORN_SITE = https://files.pythonhosted.org/packages/4b/4d/938bd85e5bf2edeec766267a5015ad969730bb91e31b44021dfe8b22df6c
-+PYTHON_UVICORN_SITE = https://files.pythonhosted.org/packages/a6/ae/9bbb19b9e1c450cf9ecaef06463e40234d98d95bf572fab11b4f19ae5ded
- PYTHON_UVICORN_SETUP_TYPE = hatch
- PYTHON_UVICORN_LICENSE = BSD-3-Clause
- PYTHON_UVICORN_LICENSE_FILES = LICENSE.md
+diff --git a/boot/grub2/readme.txt b/boot/grub2/readme.txt
+index d0999ec390..3b7df3a47d 100644
+--- a/boot/grub2/readme.txt
++++ b/boot/grub2/readme.txt
+@@ -10,7 +10,7 @@ Notes on using Grub2 for BIOS-based platforms
+       is enough free space *before* the first partition to
+       store Grub2. Leaving 1 MB of free space is safe.
+ 3. Setup loop device and loop partitions
+-   loop_dev=$(sudo losetup -f disk.img)
++   loop_dev=$(sudo losetup -f --show disk.img)
+    sudo partx -a "$loop_dev"
+ 4. Prepare the root partition
+    sudo mkfs.ext3 -L root "${loop_dev}p1"
+@@ -65,7 +65,7 @@ Notes on using Grub2 for x86/x86_64 EFI-based platforms
+     - Create a second partition, type 8300, for the root
+       filesystem.
+ 3. Setup loop device and loop partitions
+-   loop_dev=$(sudo losetup -f disk.img)
++   loop_dev=$(sudo losetup -f --show disk.img)
+    sudo partx -a "$loop_dev"
+ 4. Prepare the boot partition
+    sudo mkfs.vfat -n boot "${loop_dev}p1"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
