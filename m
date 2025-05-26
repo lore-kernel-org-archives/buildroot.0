@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB3F1C5B549
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01583C5B552
 	for <buildroot@archiver.kernel.org>; Sat, 31 May 2025 16:55:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7238A41BBF;
+	by smtp3.osuosl.org (Postfix) with ESMTP id BF98460BAE;
 	Sat, 31 May 2025 16:55:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mqj2iBMvWjpH; Sat, 31 May 2025 16:55:53 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UPRm1yGepaxA; Sat, 31 May 2025 16:55:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B008418A3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D0FEA6085A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9B008418A3;
-	Sat, 31 May 2025 16:55:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D0FEA6085A;
+	Sat, 31 May 2025 16:55:54 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 87F00127
- for <buildroot@buildroot.org>; Sat, 31 May 2025 16:55:24 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 6D50D127
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 16:55:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6781D401E0
+ by smtp2.osuosl.org (Postfix) with ESMTP id C646F401EB
  for <buildroot@buildroot.org>; Sat, 31 May 2025 16:55:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lIOVhqh0kPnp for <buildroot@buildroot.org>;
+ id gxCn3Txt897N for <buildroot@buildroot.org>;
  Sat, 31 May 2025 16:55:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C5201401F0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 862EA401E1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C5201401F0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 862EA401E1
  for <buildroot@buildroot.org>; Sat, 31 May 2025 16:55:09 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C398887578; Sat, 31 May 2025 16:55:09 +0000 (UTC)
+ id 84B5787708; Sat, 31 May 2025 16:55:09 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 26 May 2025 17:45:31 +0200
+Date: Mon, 26 May 2025 17:37:47 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: b1ea70d9eabd44b4d14b284b785e450043e3ca10
-X-Git-Newrev: ae31c77be322a221a392380323acb58a0b9586d2
+X-Git-Oldrev: deb66592bf0e69c06e8c9509643411f71a939fe7
+X-Git-Newrev: a7ba0600c500ad9f85d42de93c3ab48f6ae642c2
 X-Patchwork-Hint: ignore
-Message-Id: <20250531165509.C398887578@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] support/testing: new
- python-pydantic-settings runtime test
+Message-Id: <20250531165509.84B5787708@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/python-uvicorn:
+ bump to version 0.34.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,91 +66,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ae31c77be322a221a392380323acb58a0b9586d2
+commit: https://git.buildroot.net/buildroot/commit/?id=a7ba0600c500ad9f85d42de93c3ab48f6ae642c2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
 Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-(cherry picked from commit 5eb46878bd954ec434d288dc97de596676273bb5)
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 8701d138ed47b9c667cb31e72a16894468003b9d)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- DEVELOPERS                                         |  2 ++
- .../package/sample_python_pydantic_settings.py     |  8 +++++
- .../tests/package/test_python_pydantic_settings.py | 35 ++++++++++++++++++++++
- 3 files changed, 45 insertions(+)
+ package/python-uvicorn/python-uvicorn.hash | 4 ++--
+ package/python-uvicorn/python-uvicorn.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 16631bbf0b..0eff5f3308 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2259,10 +2259,12 @@ F:	package/python-ruamel-yaml-clib/
- F:	package/python-waitress/
- F:	support/testing/tests/package/test_python_fastapi.py
- F:	support/testing/tests/package/test_python_pydantic.py
-+F:	support/testing/tests/package/test_python_pydantic_settings.py
- F:	support/testing/tests/package/test_python_ruamel_yaml.py
- F:	support/testing/tests/package/test_python_waitress.py
- F:	support/testing/tests/package/sample_python_fastapi.py
- F:	support/testing/tests/package/sample_python_pydantic.py
-+F:	support/testing/tests/package/sample_python_pydantic_settings.py
- F:	support/testing/tests/package/sample_python_ruamel_yaml.py
+diff --git a/package/python-uvicorn/python-uvicorn.hash b/package/python-uvicorn/python-uvicorn.hash
+index bbaf98dfff..7040ffa37c 100644
+--- a/package/python-uvicorn/python-uvicorn.hash
++++ b/package/python-uvicorn/python-uvicorn.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/uvicorn/json
+-md5  9944ee2becd37cb1c1e804a96c34a9e0  uvicorn-0.34.0.tar.gz
+-sha256  404051050cd7e905de2c9a7e61790943440b3416f49cb409f965d9dcd0fa73e9  uvicorn-0.34.0.tar.gz
++md5  4a741214532ec25c04dbb1e926e085f9  uvicorn-0.34.2.tar.gz
++sha256  0e929828f6186353a80b58ea719861d2629d766293b6d19baf086ba31d4f3328  uvicorn-0.34.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  efe1acf3e62fb99c288b0ec73e5a773b7268ef4320fe757ea994214e4b63c371  LICENSE.md
+diff --git a/package/python-uvicorn/python-uvicorn.mk b/package/python-uvicorn/python-uvicorn.mk
+index fbb3937af1..944f683bab 100644
+--- a/package/python-uvicorn/python-uvicorn.mk
++++ b/package/python-uvicorn/python-uvicorn.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- N:	Marek Belisko <marek.belisko@open-nandra.com>
-diff --git a/support/testing/tests/package/sample_python_pydantic_settings.py b/support/testing/tests/package/sample_python_pydantic_settings.py
-new file mode 100644
-index 0000000000..c98d1ce9c1
---- /dev/null
-+++ b/support/testing/tests/package/sample_python_pydantic_settings.py
-@@ -0,0 +1,8 @@
-+from pydantic_settings import BaseSettings
-+
-+
-+class Settings(BaseSettings):
-+    api_key: str
-+
-+
-+assert Settings().api_key == "ABCD1234"
-diff --git a/support/testing/tests/package/test_python_pydantic_settings.py b/support/testing/tests/package/test_python_pydantic_settings.py
-new file mode 100644
-index 0000000000..608cbbc5b1
---- /dev/null
-+++ b/support/testing/tests/package/test_python_pydantic_settings.py
-@@ -0,0 +1,35 @@
-+import os
-+
-+from tests.package.test_python import TestPythonPackageBase
-+
-+
-+class TestPythonPy3PydanticSettings(TestPythonPackageBase):
-+    __test__ = True
-+    config = """
-+        BR2_arm=y
-+        BR2_cortex_a9=y
-+        BR2_ARM_ENABLE_NEON=y
-+        BR2_ARM_ENABLE_VFP=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_PYDANTIC_SETTINGS=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+    sample_scripts = ["tests/package/sample_python_pydantic_settings.py"]
-+    timeout = 30
-+
-+    def login(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(
-+            arch="armv7", kernel="builtin", options=["-initrd", cpio_file]
-+        )
-+        self.emulator.login()
-+
-+    def run_sample_scripts(self):
-+        """Run sample script while setting an environment variable"""
-+        for script in self.sample_scripts:
-+            cmd = (
-+                "api_key=ABCD1234 " + self.interpreter + " " + os.path.basename(script)
-+            )
-+            self.assertRunOk(cmd, timeout=self.timeout)
+-PYTHON_UVICORN_VERSION = 0.34.0
++PYTHON_UVICORN_VERSION = 0.34.2
+ PYTHON_UVICORN_SOURCE = uvicorn-$(PYTHON_UVICORN_VERSION).tar.gz
+-PYTHON_UVICORN_SITE = https://files.pythonhosted.org/packages/4b/4d/938bd85e5bf2edeec766267a5015ad969730bb91e31b44021dfe8b22df6c
++PYTHON_UVICORN_SITE = https://files.pythonhosted.org/packages/a6/ae/9bbb19b9e1c450cf9ecaef06463e40234d98d95bf572fab11b4f19ae5ded
+ PYTHON_UVICORN_SETUP_TYPE = hatch
+ PYTHON_UVICORN_LICENSE = BSD-3-Clause
+ PYTHON_UVICORN_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
