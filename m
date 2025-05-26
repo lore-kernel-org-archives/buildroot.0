@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31B96C5B549
-	for <buildroot@archiver.kernel.org>; Sat, 31 May 2025 16:55:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C308C5AE59
+	for <buildroot@archiver.kernel.org>; Sat, 31 May 2025 16:55:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 026F241A65;
-	Sat, 31 May 2025 16:55:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4509160825;
+	Sat, 31 May 2025 16:55:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 59WtQslQkX4G; Sat, 31 May 2025 16:55:46 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id F1D-P_6ESlFj; Sat, 31 May 2025 16:55:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 294D641959
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D44A60806
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 294D641959;
-	Sat, 31 May 2025 16:55:46 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 45226235
- for <buildroot@buildroot.org>; Sat, 31 May 2025 16:55:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6D44A60806;
+	Sat, 31 May 2025 16:55:47 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 02C1F127
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 16:55:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7D980401D5
- for <buildroot@buildroot.org>; Sat, 31 May 2025 16:55:11 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1A70B83BEB
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 16:55:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id urV2q2b8-L4Y for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id x07msiAxEm8M for <buildroot@buildroot.org>;
  Sat, 31 May 2025 16:55:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D7D0E401F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 97FB183BB3
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D7D0E401F3
+ by smtp1.osuosl.org (Postfix) with ESMTP id 97FB183BB3
  for <buildroot@buildroot.org>; Sat, 31 May 2025 16:55:09 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D63E187708; Sat, 31 May 2025 16:55:09 +0000 (UTC)
+ id 9680F87703; Sat, 31 May 2025 16:55:09 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 26 May 2025 17:45:49 +0200
+Date: Mon, 26 May 2025 17:38:01 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 6a0a963a9d4d3fdee82a6c0280320ce4f66c7df8
-X-Git-Newrev: 92d93f321549aab40415d495f80450cf6484c897
+X-Git-Oldrev: 89b4453ce6c3b1c30a23af44b879d4f2deaab107
+X-Git-Newrev: 0dd1fddb4ca843a37211a28c0a4cf7d95582ca2b
 X-Patchwork-Hint: ignore
-Message-Id: <20250531165509.D63E187708@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] board/freescale:
- imx9-bootloader-prepare.sh: fix cpu name
+Message-Id: <20250531165509.9680F87703@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/libsndfile:
+ update project home page url
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,58 +66,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=92d93f321549aab40415d495f80450cf6484c897
+commit: https://git.buildroot.net/buildroot/commit/?id=0dd1fddb4ca843a37211a28c0a4cf7d95582ca2b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-This commit replaces "a35" occurrences with "a55" in imx9 bootloader
-preparation script. i.MX9 families have Cortex-A55 processors. See [1].
+The libsndfile package homepage url [1] points to an old site in which
+the last update is for version 1.0.28 (April 2 2017). This site does
+not seem to be maintained anymore.
 
-This change is purely cosmetic and only for correctness, as the
-mkimage_imx8 tool currently uses internally the "a55" identifier as
-an alias for "a35". See [2].
+This commit updates the libsndfile homepage url to [2].
 
-[1] https://www.nxp.com/products/processors-and-microcontrollers/arm-processors/i-mx-applications-processors/i-mx-9-processors:IMX9-PROCESSORS
-[2] https://github.com/nxp-imx/imx-mkimage/blob/lf-6.6.23-2.0.0/src/mkimage_imx8.c#L773
+[1] http://www.mega-nerd.com/libsndfile/
+[2] https://libsndfile.github.io/libsndfile/
 
-Signed-off-by: Juan Pablo MONTERO CASTRO <juanpablo.monterocastro@nxp.com>
-[Julien: reword a bit and add info in commit log]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit a0b51dd088de15ab7a039d7d7476022e826fb4ff)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 8bfdd3305e8db9ebe37b183b318e8f66478f8cae)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- board/freescale/common/imx/imx9-bootloader-prepare.sh | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ package/libsndfile/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/board/freescale/common/imx/imx9-bootloader-prepare.sh b/board/freescale/common/imx/imx9-bootloader-prepare.sh
-index 8ab5a241b0..2db887a785 100755
---- a/board/freescale/common/imx/imx9-bootloader-prepare.sh
-+++ b/board/freescale/common/imx/imx9-bootloader-prepare.sh
-@@ -18,19 +18,19 @@ main ()
+diff --git a/package/libsndfile/Config.in b/package/libsndfile/Config.in
+index 4ccf937691..6fdc7fbd6c 100644
+--- a/package/libsndfile/Config.in
++++ b/package/libsndfile/Config.in
+@@ -5,4 +5,4 @@ config BR2_PACKAGE_LIBSNDFILE
+ 	  containing sampled sound (such as MS Windows WAV and the
+ 	  Apple/SGI AIFF format) through one standard library interface.
  
- 	if grep -Eq "^BR2_TARGET_OPTEE_OS=y$" "${BR2_CONFIG}"; then
- 		"${HOST_DIR}/bin/mkimage_imx8" -soc IMX9 -c \
--			-ap "${BINARIES_DIR}/bl31.bin" a35 ${ATF_LOAD_ADDR} \
--			-ap "${BINARIES_DIR}/u-boot-hash.bin" a35 0x80200000 \
--			-ap "${BINARIES_DIR}/tee.bin" a35 0x96000000 \
-+			-ap "${BINARIES_DIR}/bl31.bin" a55 ${ATF_LOAD_ADDR} \
-+			-ap "${BINARIES_DIR}/u-boot-hash.bin" a55 0x80200000 \
-+			-ap "${BINARIES_DIR}/tee.bin" a55 0x96000000 \
- 			-out "${BINARIES_DIR}/u-boot-atf-container.img"
- 	else
- 		"${HOST_DIR}/bin/mkimage_imx8" -soc IMX9 -c \
--			-ap "${BINARIES_DIR}/bl31.bin" a35 ${ATF_LOAD_ADDR} \
--			-ap "${BINARIES_DIR}/u-boot-hash.bin" a35 0x80200000 \
-+			-ap "${BINARIES_DIR}/bl31.bin" a55 ${ATF_LOAD_ADDR} \
-+			-ap "${BINARIES_DIR}/u-boot-hash.bin" a55 0x80200000 \
- 			-out "${BINARIES_DIR}/u-boot-atf-container.img"
- 	fi
- 
- 	"${HOST_DIR}/bin/mkimage_imx8" -soc IMX9 -append "${BINARIES_DIR}/ahab-container.img" -c \
--		-ap "${BINARIES_DIR}/u-boot-spl-ddr.bin" a35 ${SPL_LOAD_ADDR} \
-+		-ap "${BINARIES_DIR}/u-boot-spl-ddr.bin" a55 ${SPL_LOAD_ADDR} \
- 		-out "${BINARIES_DIR}/imx9-boot-sd.bin"
- 
- 	flashbin_size="$(wc -c "${BINARIES_DIR}/imx9-boot-sd.bin" | awk '{print $1}')"
+-	  http://www.mega-nerd.com/libsndfile/
++	  https://libsndfile.github.io/libsndfile/
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
