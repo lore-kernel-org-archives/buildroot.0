@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A2D5C5AE59
-	for <buildroot@archiver.kernel.org>; Sat, 31 May 2025 17:06:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B140C5B549
+	for <buildroot@archiver.kernel.org>; Sat, 31 May 2025 17:06:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2859083BE8;
-	Sat, 31 May 2025 17:06:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EEF32405AD;
+	Sat, 31 May 2025 17:06:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Gbgg8U4MedGs; Sat, 31 May 2025 17:06:23 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PnRNDeVVTuCN; Sat, 31 May 2025 17:06:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 369B083BC3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 30B29405AE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 369B083BC3;
-	Sat, 31 May 2025 17:06:23 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 114EC117
+	by smtp4.osuosl.org (Postfix) with ESMTP id 30B29405AE;
+	Sat, 31 May 2025 17:06:27 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id C6FE8117
  for <buildroot@buildroot.org>; Sat, 31 May 2025 17:06:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0339183BE8
- for <buildroot@buildroot.org>; Sat, 31 May 2025 17:06:20 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E67AA405AD
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 17:06:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Pzpj-D-ahj_D for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HNN8x7NHzph2 for <buildroot@buildroot.org>;
  Sat, 31 May 2025 17:06:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4785E83BA7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 324CB405AE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4785E83BA7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 324CB405AE
  for <buildroot@buildroot.org>; Sat, 31 May 2025 17:06:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3833187802; Sat, 31 May 2025 17:06:19 +0000 (UTC)
+ id 2245087803; Sat, 31 May 2025 17:06:19 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 26 May 2025 17:50:12 +0200
+Date: Mon, 26 May 2025 17:49:58 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 65ca143c5ca0f96445e94f885767841db3aac30a
-X-Git-Newrev: 9b7d8eb75e499d81fca36a835eff99988d496c80
+X-Git-Oldrev: 3577b8a85e505c11d5a6c79959c57e035939680c
+X-Git-Newrev: 8ef468eea0be22428bfa22f5d48e078d0dda2bbd
 X-Patchwork-Hint: ignore
-Message-Id: <20250531170619.3833187802@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x]
- package/qt6/qt6multimedia: ffmpeg support needs headers >= 5.2
+Message-Id: <20250531170619.2245087803@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/qt6/qt6base: fix
+ build when xcb support is enabled
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,29 +61,32 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1309036819058751653=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1309036819058751653==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=9b7d8eb75e499d81fca36a835eff99988d496c80
+commit: https://git.buildroot.net/buildroot/commit/?id=8ef468eea0be22428bfa22f5d48e078d0dda2bbd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-The V4L2 code in the ffmpeg plugin uses V4L2_PIX_FMT_BGRA32 which was
-only introduced in kernel headers 5.2, in upstream kernel commit
-e25ec9141114c7124eeba09385e272dd76fbe617.
-
 Fixes:
+ERROR: Feature "xcb": Forcing to "ON" breaks its condition:
+QT_FEATURE_thread AND TARGET XCB::XCB AND TEST_xcb_syslibs AND QT_FEATURE_xkbcommon_x11
+Condition values dump:
+QT_FEATURE_thread = "ON"
+TARGET XCB::XCB found
+TEST_xcb_syslibs = "FALSE"
+QT_FEATURE_xkbcommon_x11 not evaluated
 
-/home/thomas/buildroot/buildroot/outputs/qt/build/qt6multimedia-6.8.1/src/plugins/multimedia/ffmpeg/qv4l2camera.cpp:36:43: error: ‘V4L2_PIX_FMT_BGRA
-32’ was not declared in this scope; did you mean ‘V4L2_PIX_FMT_BGR32’?
-   36 |     { QVideoFrameFormat::Format_BGRA8888, V4L2_PIX_FMT_BGRA32  },
-      |                                           ^~~~~~~~~~~~~~~~~~~
-      |                                           V4L2_PIX_FMT_BGR32
+The xcb feature is defined in [2].
 
-when building:
+According to [1] XCB::CURSOR is needed for xcb support.
+
+[1] https://code.qt.io/cgit/qt/qtbase.git/tree/src/gui/configure.cmake?h=6.9.0#n522
+[2] https://code.qt.io/cgit/qt/qtbase.git/tree/src/gui/configure.cmake?h=6.9.0#n1016
+
+This bug was introduced in e634be8906bd64d6a9de1768204d0f03d8d8357a,
+and fixes the build with the following defconfig:
 
  BR2_arm=y
  BR2_cortex_a9=y
@@ -92,54 +95,45 @@ when building:
  BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
  BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_MUSL_STABLE=y
  BR2_PACKAGE_QT6=y
+ BR2_PACKAGE_QT6BASE_GUI=y
  BR2_PACKAGE_QT6BASE_XCB=y
- BR2_PACKAGE_QT6MULTIMEDIA=y
- BR2_PACKAGE_QT6MULTIMEDIA_FFMPEG=y
  BR2_PACKAGE_XORG7=y
 
-at a time when the Bootlin stable toolchain was using Linux 4.19
-headers.
-
+Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-(cherry picked from commit fe783b16b362e4d739ad8583ad6c5c02d626f13a)
+(cherry picked from commit adff0d37ba9cd5f3bf6d1b0faa562a1e097a244b)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/qt6/qt6multimedia/Config.in | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/qt6/qt6base/Config.in  | 1 +
+ package/qt6/qt6base/qt6base.mk | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/package/qt6/qt6multimedia/Config.in b/package/qt6/qt6multimedia/Config.in
-index 3107caa597..f64f60a004 100644
---- a/package/qt6/qt6multimedia/Config.in
-+++ b/package/qt6/qt6multimedia/Config.in
-@@ -28,10 +28,17 @@ config BR2_PACKAGE_QT6MULTIMEDIA_EXAMPLES
- 	help
- 	  This option enables the Qt6 Multimedia examples.
- 
-+comment "ffmpeg plugin needs kernel headers >= 5.2"
-+	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_PULSEAUDIO_HAS_ATOMIC
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2
-+
- config BR2_PACKAGE_QT6MULTIMEDIA_FFMPEG
- 	bool "ffmpeg plugin"
- 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_PULSEAUDIO_HAS_ATOMIC
-+	# V4L2_PIX_FMT_BGRA32
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2
- 	# qt6-multimedia ffmpeg plugin needs
- 	# qt6base-concurrent, PulseAudio and ffmpeg-swcale.
- 	select BR2_PACKAGE_FFMPEG
-
---===============1309036819058751653==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/qt6/qt6base/Config.in b/package/qt6/qt6base/Config.in
+index 96a0416dbd..7f3948ec27 100644
+--- a/package/qt6/qt6base/Config.in
++++ b/package/qt6/qt6base/Config.in
+@@ -61,6 +61,7 @@ config BR2_PACKAGE_QT6BASE_XCB
+ 	depends on BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_LIBXCB
++	select BR2_PACKAGE_XCB_UTIL_CURSOR
+ 	select BR2_PACKAGE_XCB_UTIL_IMAGE
+ 	select BR2_PACKAGE_XCB_UTIL_KEYSYMS
+ 	select BR2_PACKAGE_XCB_UTIL_RENDERUTIL
+diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
+index a4c56da601..39fb440be7 100644
+--- a/package/qt6/qt6base/qt6base.mk
++++ b/package/qt6/qt6base/qt6base.mk
+@@ -211,6 +211,7 @@ QT6BASE_CONF_OPTS += \
+ QT6BASE_DEPENDENCIES += \
+ 	libxcb \
+ 	libxkbcommon \
++	xcb-util-cursor \
+ 	xcb-util-wm \
+ 	xcb-util-image \
+ 	xcb-util-keysyms \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1309036819058751653==--
