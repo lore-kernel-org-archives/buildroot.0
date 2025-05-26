@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2569BC5AE59
-	for <buildroot@archiver.kernel.org>; Sat, 31 May 2025 16:55:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA8E8C5B549
+	for <buildroot@archiver.kernel.org>; Sat, 31 May 2025 16:55:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E7F7B40BAF;
+	by smtp1.osuosl.org (Postfix) with ESMTP id A25D783C60;
 	Sat, 31 May 2025 16:55:12 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P4NokNj3RSu7; Sat, 31 May 2025 16:55:12 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 242E440B91
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 242E440B91;
-	Sat, 31 May 2025 16:55:12 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0B37C236
- for <buildroot@buildroot.org>; Sat, 31 May 2025 16:55:10 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F181883BFC
- for <buildroot@buildroot.org>; Sat, 31 May 2025 16:55:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BFRC-mI2GaoN for <buildroot@buildroot.org>;
+ id 6e2TCnqaza0h; Sat, 31 May 2025 16:55:11 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D9A8583BAF
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id D9A8583BAF;
+	Sat, 31 May 2025 16:55:10 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 077B1235
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 16:55:10 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id ED76460793
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 16:55:09 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hQ2UFKk3IfH0 for <buildroot@buildroot.org>;
  Sat, 31 May 2025 16:55:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 37AE283B6E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 134CD60762
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 37AE283B6E
+ by smtp3.osuosl.org (Postfix) with ESMTP id 134CD60762
  for <buildroot@buildroot.org>; Sat, 31 May 2025 16:55:09 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3561B87708; Sat, 31 May 2025 16:55:09 +0000 (UTC)
+ id 02EF987703; Sat, 31 May 2025 16:55:09 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 26 May 2025 17:34:11 +0200
+Date: Mon, 26 May 2025 10:11:13 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: b76a0177449df3d7f61723a24c8edeaf0eb6a5a9
-X-Git-Newrev: 160bbe93ca38a1fa2750f430e73dafe7baf4375d
+X-Git-Oldrev: 288dd2cc0a8ad8b09d30b6b30c6ef02af5b4b1f6
+X-Git-Newrev: dba7164094870677b7bf17d561170f9189c8e71b
 X-Patchwork-Hint: ignore
-Message-Id: <20250531165509.3561B87708@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/php: bump version
- to 8.3.21
+Message-Id: <20250531165509.02EF987703@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/webkitgtk: bump
+ to 2.48.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,48 +66,112 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=160bbe93ca38a1fa2750f430e73dafe7baf4375d
+commit: https://git.buildroot.net/buildroot/commit/?id=dba7164094870677b7bf17d561170f9189c8e71b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Changelog: https://www.php.net/ChangeLog-8.php#8.3.21
+This bumps webkit to the 2.48 stable series.
 
-Release notes:
-https://news-web.php.net/php.announce/457
-https://news-web.php.net/php.announce/458
+WebKitGTK+ 2.48 highlights:
+https://webkitgtk.org/2025/04/08/webkitgtk-2.48.html
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7f5732a9a020df2cd4e5448a73f165a3b2154cf9)
+News:
+- https://webkitgtk.org/2025/03/14/webkitgtk2.48.0-released.html
+- https://webkitgtk.org/2025/04/02/webkitgtk2.48.1-released.html
+
+And brings some security fixes:
+- https://webkitgtk.org/security/WSA-2025-0002.html
+- https://webkitgtk.org/security/WSA-2025-0003.html
+
+Also,
+
+- Raise the minimal GCC requirement [1],
+which should have been raised by the 2.46.4 bump.
+
+- Handle SPEECH_SYNTHESIS, which has been enabled
+by default in commit [2].
+
+[1] https://github.com/WebKit/WebKit/commit/682ac4ba74c53d0cd488c7a595096224a9abb036
+[2] https://github.com/WebKit/WebKit/commit/10381a8de938024f31935184af470ccbce0b22d9
+
+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 6a47aa648a15b5c0b3d47767e423ccd10f13d3af)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/webkitgtk/Config.in      | 6 +++---
+ package/webkitgtk/webkitgtk.hash | 6 +++---
+ package/webkitgtk/webkitgtk.mk   | 9 ++++++++-
+ 3 files changed, 14 insertions(+), 7 deletions(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index ba9c5bb468..8e3be2dbe1 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  976e4077dd25bec96b5dfe8938052d243bbd838f95368a204896eff12756545f  php-8.3.19.tar.xz
-+sha256  4dfb329f209a552c3716394fc123bb62e80a468b55ce27fc8cb0fd5f30b9dcd6  php-8.3.21.tar.xz
+diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
+index 3594299314..bcb4b12fa3 100644
+--- a/package/webkitgtk/Config.in
++++ b/package/webkitgtk/Config.in
+@@ -16,12 +16,12 @@ config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
  
- # License file
- sha256  b42e4df5e50e6ecda1047d503d6d91d71032d09ed1027ba1ef29eed26f890c5a  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 374fdb2c69..ad42e57d72 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
+-comment "webkitgtk needs libgtk3 and a toolchain w/ C++, wchar, NPTL, dynamic library, gcc >= 10, host gcc >= 4.9"
++comment "webkitgtk needs libgtk3 and a toolchain w/ C++, wchar, NPTL, dynamic library, gcc >= 11, host gcc >= 4.9"
+ 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+ 	depends on !BR2_BINFMT_FLAT
+ 	depends on !BR2_PACKAGE_LIBGTK3 || !BR2_INSTALL_LIBSTDCPP || \
+ 		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_10 || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_11 || \
+ 		!BR2_HOST_GCC_AT_LEAST_4_9
+ 	depends on BR2_USE_MMU
+ 
+@@ -33,7 +33,7 @@ config BR2_PACKAGE_WEBKITGTK
+ 	depends on BR2_HOST_GCC_AT_LEAST_4_9 # icu, host-ruby
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_11
+ 	depends on BR2_USE_WCHAR # icu, libsoup3
+ 	depends on BR2_PACKAGE_LIBGTK3
+ 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index 96100d4c7c..fd9420bad9 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,6 +1,6 @@
+-# From https://www.webkitgtk.org/releases/webkitgtk-2.46.4.tar.xz.sums
+-sha1  10d4dbd222acec30b1d20ee3b7d02c0d9727c5a9  webkitgtk-2.46.4.tar.xz
+-sha256  0eff5f0ab0a2872ec87df62bc32e3289c8af625716ac71e94b298d74e0374176  webkitgtk-2.46.4.tar.xz
++# From https://www.webkitgtk.org/releases/webkitgtk-2.48.1.tar.xz.sums
++sha1  f7939f920f92f6b1395b8573f069d3fb9c085b3f  webkitgtk-2.48.1.tar.xz
++sha256  98efdf21c4cdca0fe0b73ab5a8cb52093b5aa52d9b1b016a93f71dbfa1eb258f  webkitgtk-2.48.1.tar.xz
+ 
+ # Hashes for license files:
+ sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index ec63d093b7..2c22bfb607 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PHP_VERSION = 8.3.19
-+PHP_VERSION = 8.3.21
- PHP_SITE = https://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+-WEBKITGTK_VERSION = 2.46.4
++WEBKITGTK_VERSION = 2.48.1
+ WEBKITGTK_SITE = https://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
+@@ -73,6 +73,13 @@ else
+ WEBKITGTK_CONF_OPTS += -DENABLE_MINIBROWSER=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_FLITE),y)
++WEBKITGTK_CONF_OPTS += -DENABLE_SPEECH_SYNTHESIS=ON
++WEBKITGTK_DEPENDENCIES += flite
++else
++WEBKITGTK_CONF_OPTS += -DENABLE_SPEECH_SYNTHESIS=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_LCMS2),y)
+ WEBKITGTK_CONF_OPTS += -DUSE_LCMS=ON
+ WEBKITGTK_DEPENDENCIES += lcms2
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
