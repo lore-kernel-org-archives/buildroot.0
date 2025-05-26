@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E349C5AE59
-	for <buildroot@archiver.kernel.org>; Sat, 31 May 2025 16:55:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E7C3C5B552
+	for <buildroot@archiver.kernel.org>; Sat, 31 May 2025 16:55:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EBEE382128;
-	Sat, 31 May 2025 16:55:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4DB1441774;
+	Sat, 31 May 2025 16:55:34 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bA0D11AwYA6e; Sat, 31 May 2025 16:55:33 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5889F41784
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5889F41784;
+	Sat, 31 May 2025 16:55:33 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0DD86127
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 16:55:16 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id D6D9283C63
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 16:55:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7CEIPzDid5bO; Sat, 31 May 2025 16:55:32 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F10ED836D5
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F10ED836D5;
-	Sat, 31 May 2025 16:55:31 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 13F59236
- for <buildroot@buildroot.org>; Sat, 31 May 2025 16:55:15 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 24A8C401CB
- for <buildroot@buildroot.org>; Sat, 31 May 2025 16:55:11 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Qvfu6JZ7o_-K for <buildroot@buildroot.org>;
- Sat, 31 May 2025 16:55:10 +0000 (UTC)
+ id BfJUZ9aKbiw9 for <buildroot@buildroot.org>;
+ Sat, 31 May 2025 16:55:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A1F38401E9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 66DD483BAF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A1F38401E9
+ by smtp1.osuosl.org (Postfix) with ESMTP id 66DD483BAF
  for <buildroot@buildroot.org>; Sat, 31 May 2025 16:55:09 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9FD7F87708; Sat, 31 May 2025 16:55:09 +0000 (UTC)
+ id 6554687708; Sat, 31 May 2025 16:55:09 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 26 May 2025 17:40:02 +0200
+Date: Mon, 26 May 2025 17:37:08 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 0dd1fddb4ca843a37211a28c0a4cf7d95582ca2b
-X-Git-Newrev: 1647e01b8a3d71ccf20565f3a285d55996de6b53
+X-Git-Oldrev: d953365412aa80f7651656b1f36d4f7326e4975a
+X-Git-Newrev: 6efa33dac1c081eb7e542469c94add1b9d916136
 X-Patchwork-Hint: ignore
-Message-Id: <20250531165509.9FD7F87708@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/pkg-meson: use
- buildroot-build for build directory
+Message-Id: <20250531165509.6554687708@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/connman: fix
+ CVE-2025-32366
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,122 +66,89 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1647e01b8a3d71ccf20565f3a285d55996de6b53
+commit: https://git.buildroot.net/buildroot/commit/?id=6efa33dac1c081eb7e542469c94add1b9d916136
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Fixes https://gitlab.com/buildroot.org/buildroot/-/issues/64
+In ConnMan through 1.44, parse_rr in dnsproxy.c has a memcpy length
+that depends on an RR RDLENGTH value (i.e., *rdlen=ntohs(rr->rdlen)
+and memcpy(response+offset,*end,*rdlen)). Here, rdlen may be larger
+than the amount of remaining packet data in the current state of
+parsing. As a result, values of stack memory locations may be sent
+over the network in a response.
 
-Some source tarballs (E.G.  libopenh264) may already contain a build/
-subdir, so switch to the more unique bildroot-build for the build directory,
-similar to how it is done for cmake.
+Fixes:
+https://www.cve.org/CVERecord?id=CVE-2025-32366
 
-Signed-off-by: Cherniaev Andrei <dungeonlords789@naver.com>
-Co-Authored-By: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-[Peter: reword commit text]
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 4e95062f820a64ecd2402115ee552dbcf2874f02)
+(cherry picked from commit a8cfe9986c9de8f575dc94e242c0ccc26e03b19d)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/pkg-meson.mk | 26 +++++++++++++-------------
- 1 file changed, 13 insertions(+), 13 deletions(-)
+ ...roxy-Address-CVE-2025-32366-vulnerability.patch | 41 ++++++++++++++++++++++
+ package/connman/connman.mk                         |  3 ++
+ 2 files changed, 44 insertions(+)
 
-diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-index bc805b799c..30271e35e5 100644
---- a/package/pkg-meson.mk
-+++ b/package/pkg-meson.mk
-@@ -147,12 +147,12 @@ $(2)_CXXFLAGS ?= $$(TARGET_CXXFLAGS)
- #
- #
- define $(2)_CONFIGURE_CMDS
--	rm -rf $$($$(PKG)_SRCDIR)/build
--	mkdir -p $$($$(PKG)_SRCDIR)/build
-+	rm -rf $$($$(PKG)_SRCDIR)/buildroot-build
-+	mkdir -p $$($$(PKG)_SRCDIR)/buildroot-build
- 	sed -e "/^\[binaries\]$$$$/s:$$$$:$$(foreach x,$$($(2)_MESON_EXTRA_BINARIES),\n$$(x)):" \
- 	    -e "/^\[properties\]$$$$/s:$$$$:$$(foreach x,$$($(2)_MESON_EXTRA_PROPERTIES),\n$$(x)):" \
- 	    $$(call PKG_MESON_CROSSCONFIG_SED,$(2)_CFLAGS,$(2)_CXXFLAGS,$(2)_LDFLAGS,$(2)_FCFLAGS) \
--	    > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
-+	    > $$($$(PKG)_SRCDIR)/buildroot-build/cross-compilation.conf
- 	PATH=$$(BR_PATH) \
- 	CC_FOR_BUILD="$$(HOSTCC)" \
- 	CXX_FOR_BUILD="$$(HOSTCXX)" \
-@@ -162,21 +162,21 @@ define $(2)_CONFIGURE_CMDS
- 		--libdir=lib \
- 		--default-library=$(PKG_MESON_DEFAULT_LIBRARY) \
- 		--buildtype=$(if $(BR2_ENABLE_RUNTIME_DEBUG),debug,release) \
--		--cross-file=$$($$(PKG)_SRCDIR)/build/cross-compilation.conf \
-+		--cross-file=$$($$(PKG)_SRCDIR)/buildroot-build/cross-compilation.conf \
- 		-Db_pie=false \
- 		-Db_staticpic=$(if $(BR2_m68k_cf),false,true) \
- 		-Dstrip=false \
- 		-Dbuild.pkg_config_path=$$(HOST_DIR)/lib/pkgconfig \
- 		-Dbuild.cmake_prefix_path=$$(HOST_DIR)/lib/cmake \
- 		$$($$(PKG)_CONF_OPTS) \
--		$$($$(PKG)_SRCDIR) $$($$(PKG)_SRCDIR)/build
-+		$$($$(PKG)_SRCDIR) $$($$(PKG)_SRCDIR)/buildroot-build
- endef
- else
+diff --git a/package/connman/0002-dnsproxy-Address-CVE-2025-32366-vulnerability.patch b/package/connman/0002-dnsproxy-Address-CVE-2025-32366-vulnerability.patch
+new file mode 100644
+index 0000000000..9651b2dfe4
+--- /dev/null
++++ b/package/connman/0002-dnsproxy-Address-CVE-2025-32366-vulnerability.patch
+@@ -0,0 +1,41 @@
++From 8d3be0285f1d4667bfe85dba555c663eb3d704b4 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?=EC=8B=A0=EC=9C=A4=EC=A0=9C=28=ED=95=99=EB=B6=80=EC=83=9D-?=
++ =?UTF-8?q?=EC=86=8C=ED=94=84=ED=8A=B8=EC=9B=A8=EC=96=B4=EC=A0=84=EA=B3=B5?=
++ =?UTF-8?q?=29?= <ioerts@kookmin.ac.kr>
++Date: Mon, 12 May 2025 10:48:18 +0200
++Subject: [PATCH] dnsproxy: Address CVE-2025-32366 vulnerability
++
++In Connman parse_rr in dnsproxy.c has a memcpy length
++that depends on an RR RDLENGTH value (i.e., *rdlen=ntohs(rr->rdlen)
++and memcpy(response+offset,*end,*rdlen)). Here, rdlen may be larger
++than the amount of remaining packet data in the current state of
++parsing. As a result, values of stack memory locations may be sent
++over the network in a response.
++
++This patch adds a check to ensure that (*end + *rdlen) does not exceed
++the valid range. If the condition is violated, the function returns
++-EINVAL.
++
++Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
++Upstream: https://git.kernel.org/pub/scm/network/connman/connman.git/commit/?id=8d3be0285f1d4667bfe85dba555c663eb3d704b4
++---
++ src/dnsproxy.c | 3 +++
++ 1 file changed, 3 insertions(+)
++
++diff --git a/src/dnsproxy.c b/src/dnsproxy.c
++index 7ee26d9ff886..1dd2f7f5d47e 100644
++--- a/src/dnsproxy.c
+++++ b/src/dnsproxy.c
++@@ -998,6 +998,9 @@ static int parse_rr(const unsigned char *buf, const unsigned char *start,
++ 	if ((offset + *rdlen) > *response_size)
++ 		return -ENOBUFS;
++ 
+++	if ((*end + *rdlen) > max)
+++		return -EINVAL;
+++
++ 	memcpy(response + offset, *end, *rdlen);
++ 
++ 	*end += *rdlen;
++-- 
++2.43.0
++
+diff --git a/package/connman/connman.mk b/package/connman/connman.mk
+index 5d515c2963..c9637eadf5 100644
+--- a/package/connman/connman.mk
++++ b/package/connman/connman.mk
+@@ -16,6 +16,9 @@ CONNMAN_CPE_ID_VENDOR = intel
+ # 0001-dnsproxy-Fix-NULL-empty-lookup-causing-potential-cra.patch
+ CONNMAN_IGNORE_CVES += CVE-2025-32743
  
- # Configure package for host
- define $(2)_CONFIGURE_CMDS
--	rm -rf $$($$(PKG)_SRCDIR)/build
--	mkdir -p $$($$(PKG)_SRCDIR)/build
-+	rm -rf $$($$(PKG)_SRCDIR)/buildroot-build
-+	mkdir -p $$($$(PKG)_SRCDIR)/buildroot-build
- 	$$(HOST_CONFIGURE_OPTS) \
- 	$$($$(PKG)_CONF_ENV) $$(MESON) setup \
- 		--prefix=$$(HOST_DIR) \
-@@ -188,7 +188,7 @@ define $(2)_CONFIGURE_CMDS
- 		--wrap-mode=nodownload \
- 		-Dstrip=true \
- 		$$($$(PKG)_CONF_OPTS) \
--		$$($$(PKG)_SRCDIR) $$($$(PKG)_SRCDIR)/build
-+		$$($$(PKG)_SRCDIR) $$($$(PKG)_SRCDIR)/buildroot-build
- endef
- endif
- endif
-@@ -203,12 +203,12 @@ ifndef $(2)_BUILD_CMDS
- ifeq ($(4),target)
- define $(2)_BUILD_CMDS
- 	$$(TARGET_MAKE_ENV) $$($$(PKG)_NINJA_ENV) \
--		$$(NINJA) $$(NINJA_OPTS) $$($$(PKG)_NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/build
-+		$$(NINJA) $$(NINJA_OPTS) $$($$(PKG)_NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/buildroot-build
- endef
- else
- define $(2)_BUILD_CMDS
- 	$$(HOST_MAKE_ENV) $$($$(PKG)_NINJA_ENV) \
--		$$(NINJA) $$(NINJA_OPTS) $$($$(PKG)_NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/build
-+		$$(NINJA) $$(NINJA_OPTS) $$($$(PKG)_NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/buildroot-build
- endef
- endif
- endif
-@@ -220,7 +220,7 @@ endif
- ifndef $(2)_INSTALL_CMDS
- define $(2)_INSTALL_CMDS
- 	$$(HOST_MAKE_ENV) $$($$(PKG)_NINJA_ENV) \
--		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/build install
-+		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/buildroot-build install
- endef
- endif
++# 0002-dnsproxy-Address-CVE-2025-32366-vulnerability.patch
++CONNMAN_IGNORE_CVES += CVE-2025-32366
++
+ CONNMAN_CONF_OPTS = --with-dbusconfdir=/etc
  
-@@ -231,7 +231,7 @@ endif
- ifndef $(2)_INSTALL_STAGING_CMDS
- define $(2)_INSTALL_STAGING_CMDS
- 	$$(TARGET_MAKE_ENV) $$($$(PKG)_NINJA_ENV) DESTDIR=$$(STAGING_DIR) \
--		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/build install
-+		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/buildroot-build install
- endef
- endif
- 
-@@ -242,7 +242,7 @@ endif
- ifndef $(2)_INSTALL_TARGET_CMDS
- define $(2)_INSTALL_TARGET_CMDS
- 	$$(TARGET_MAKE_ENV) $$($$(PKG)_NINJA_ENV) DESTDIR=$$(TARGET_DIR) \
--		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/build install
-+		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/buildroot-build install
- endef
- endif
- 
+ ifeq ($(BR2_INIT_SYSTEMD),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
