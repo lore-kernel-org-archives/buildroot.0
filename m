@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9927C5B552
-	for <buildroot@archiver.kernel.org>; Sat, 31 May 2025 16:55:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C5C8C5B549
+	for <buildroot@archiver.kernel.org>; Sat, 31 May 2025 16:55:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A4AB983BA9;
-	Sat, 31 May 2025 16:55:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2886383BF1;
+	Sat, 31 May 2025 16:55:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id d9lyiW-8A3Vu; Sat, 31 May 2025 16:55:35 +0000 (UTC)
+ id N0Q8O9pzStDm; Sat, 31 May 2025 16:55:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A8B1183BA5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 24CF483BF5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A8B1183BA5;
-	Sat, 31 May 2025 16:55:35 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0D708236
- for <buildroot@buildroot.org>; Sat, 31 May 2025 16:55:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 24CF483BF5;
+	Sat, 31 May 2025 16:55:38 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0D604127
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 16:55:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0606C83C8B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6B29A40068
  for <buildroot@buildroot.org>; Sat, 31 May 2025 16:55:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id e4_va8vn6pDp for <buildroot@buildroot.org>;
- Sat, 31 May 2025 16:55:10 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WQnzCTQSIxsp for <buildroot@buildroot.org>;
+ Sat, 31 May 2025 16:55:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2705E83BFC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5743B401D5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2705E83BFC
- for <buildroot@buildroot.org>; Sat, 31 May 2025 16:55:10 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5743B401D5
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 16:55:09 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 257CE87578; Sat, 31 May 2025 16:55:10 +0000 (UTC)
+ id 55C1387703; Sat, 31 May 2025 16:55:09 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 26 May 2025 17:49:35 +0200
+Date: Mon, 26 May 2025 17:34:38 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 276fc22e66f9f9aed490338b967c3aedffd70084
-X-Git-Newrev: 01296fc5a885ad7c55f3641b7b7a4c1fbf4eb646
+X-Git-Oldrev: 818c56920ecbb75c6040c82885e6d095c530c289
+X-Git-Newrev: 10a6440b98cd6c57b26815ff97753ca560c53f9b
 X-Patchwork-Hint: ignore
-Message-Id: <20250531165510.257CE87578@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/audit/S02auditd:
- fix shellcheck and check-package warnings
+Message-Id: <20250531165509.55C1387703@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/connman: fix
+ CVE-2025-32743
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,138 +66,95 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=01296fc5a885ad7c55f3641b7b7a4c1fbf4eb646
+commit: https://git.buildroot.net/buildroot/commit/?id=10a6440b98cd6c57b26815ff97753ca560c53f9b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Fixup S20audit to pass shellcheck -oall and check-package. The file now
-closely resembles package/busybox/S01syslogd.
+In ConnMan through 1.44, the lookup string in ns_resolv in dnsproxy.c
+can be NULL or an empty string when the TC (Truncated) bit is set in
+a DNS response. This allows attackers to cause a denial of service
+(application crash) or possibly execute arbitrary code, because those
+lookup values lead to incorrect length calculations and incorrect
+memcpy operations.
 
-Tested with qemu_x86_64_defconfig. start, stop, restart, reload, and rotate
-all work with busybox ash shell.
+Fixes:
+https://www.cve.org/CVERecord?id=CVE-2025-32743
 
-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-[Arnout: remove it from .checkpackageignore]
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-(cherry picked from commit cbabeb507744e220f5edaabb3a1549c1399adad6)
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+[Julien: add link to cve]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 6c4da559ccad17acad5e638aba888543cf4245d0)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- .checkpackageignore     |  1 -
- package/audit/S02auditd | 66 ++++++++++++++++++++++++++++++++-----------------
- 2 files changed, 44 insertions(+), 23 deletions(-)
+ ...x-NULL-empty-lookup-causing-potential-cra.patch | 46 ++++++++++++++++++++++
+ package/connman/connman.mk                         |  3 ++
+ 2 files changed, 49 insertions(+)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 2758b62f8b..fc682e5105 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -280,7 +280,6 @@ package/asterisk/0004-install-samples-need-the-data-files.patch lib_patch.Upstre
- package/at/0001-Makefile.in-fix-make-install-for-non-root-don-t-stri.patch lib_patch.Upstream
- package/at/S99at lib_sysv.Indent lib_sysv.Variables
- package/attr/0001-build-with-older-GCCs.patch lib_patch.Upstream
--package/audit/S02auditd Shellcheck lib_sysv.Variables
- package/aufs-util/0001-remove-user-settings.patch lib_patch.Upstream
- package/aufs-util/0002-no-check-ver.patch lib_patch.Upstream
- package/aufs-util/0003-no-strip-lib.patch lib_patch.Upstream
-diff --git a/package/audit/S02auditd b/package/audit/S02auditd
-index dd3dc22d6d..f32f01714e 100644
---- a/package/audit/S02auditd
-+++ b/package/audit/S02auditd
-@@ -8,52 +8,74 @@
- #              will be sent to syslog.
- #
+diff --git a/package/connman/0001-dnsproxy-Fix-NULL-empty-lookup-causing-potential-cra.patch b/package/connman/0001-dnsproxy-Fix-NULL-empty-lookup-causing-potential-cra.patch
+new file mode 100644
+index 0000000000..9c1274e43c
+--- /dev/null
++++ b/package/connman/0001-dnsproxy-Fix-NULL-empty-lookup-causing-potential-cra.patch
+@@ -0,0 +1,46 @@
++From d90b911f6760959bdf1393c39fe8d1118315490f Mon Sep 17 00:00:00 2001
++From: Praveen Kumar <praveen.kumar@windriver.com>
++Date: Thu, 24 Apr 2025 11:39:29 +0000
++Subject: [PATCH] dnsproxy: Fix NULL/empty lookup causing potential crash
++
++In ConnMan through 1.44, the lookup string in ns_resolv in dnsproxy.c
++can be NULL or an empty string when the TC (Truncated) bit is set in
++a DNS response. This allows attackers to cause a denial of service
++(application crash) or possibly execute arbitrary code, because those
++lookup values lead to incorrect length calculations and incorrect
++memcpy operations.
++
++This patch includes a check to make sure loookup value is valid before
++using it. This helps avoid unexpected value when the input is empty or
++incorrect.
++
++Fixes: CVE-2025-32743
++
++Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
++Upstream: https://git.kernel.org/pub/scm/network/connman/connman.git/commit/?id=d90b911f6760959bdf1393c39fe8d1118315490f
++---
++ src/dnsproxy.c | 7 ++++++-
++ 1 file changed, 6 insertions(+), 1 deletion(-)
++
++diff --git a/src/dnsproxy.c b/src/dnsproxy.c
++index f28a5d7551a4..7ee26d9ff886 100644
++--- a/src/dnsproxy.c
+++++ b/src/dnsproxy.c
++@@ -1685,8 +1685,13 @@ static int ns_resolv(struct server_data *server, struct request_data *req,
++ 				gpointer request, gpointer name)
++ {
++ 	int sk = -1;
+++	int err;
++ 	const char *lookup = (const char *)name;
++-	int err = ns_try_resolv_from_cache(req, request, lookup);
+++
+++	if (!lookup || strlen(lookup) == 0)
+++		return -EINVAL;
+++
+++	err = ns_try_resolv_from_cache(req, request, lookup);
++ 
++ 	if (err > 0)
++ 		/* cache hit */
++-- 
++2.43.0
++
+diff --git a/package/connman/connman.mk b/package/connman/connman.mk
+index 2c5be8252c..5d515c2963 100644
+--- a/package/connman/connman.mk
++++ b/package/connman/connman.mk
+@@ -13,6 +13,9 @@ CONNMAN_LICENSE = GPL-2.0
+ CONNMAN_LICENSE_FILES = COPYING
+ CONNMAN_CPE_ID_VENDOR = intel
  
--NAME=auditd
--DAEMON=/usr/sbin/${NAME}
--CONFIG=/etc/audit/auditd.conf
--PIDFILE=/var/run/${NAME}.pid
-+DAEMON="auditd"
-+PIDFILE="/var/run/${DAEMON}.pid"
++# 0001-dnsproxy-Fix-NULL-empty-lookup-causing-potential-cra.patch
++CONNMAN_IGNORE_CVES += CVE-2025-32743
++
+ CONNMAN_CONF_OPTS = --with-dbusconfdir=/etc
  
- start(){
--	printf "Starting ${NAME}: "
-+	printf "Starting %s: " "${DAEMON}"
- 
- 	# Create dir to store log files in if one doesn't exist. Create
- 	# the directory with SELinux permissions if possible
--	command -v selabel_lookup >/dev/null 2>&1
--	if [ $? = 0 ]; then
--		mkdir -p /var/log/audit -Z `selabel_lookup -b file -k /var/log/audit | cut -d ' ' -f 3`
-+	if command -v selabel_lookup >/dev/null 2>&1; then
-+		audit_log_selable="$(selabel_lookup -b file -k /var/log/audit | cut -d ' ' -f 3)"
-+		mkdir -p /var/log/audit -Z "${audit_log_selable}"
- 	else
- 		mkdir -p /var/log/audit
- 	fi
- 
--	# Run audit daemon executable
--	start-stop-daemon -S -q -p ${PIDFILE} --exec ${DAEMON}
--
--	if [ $? = 0 ]; then
-+	start-stop-daemon --start --background --make-pidfile \
-+		--pidfile "${PIDFILE}" --exec "/usr/sbin/${DAEMON}"
-+	status=$?
-+	if [ "${status}" -eq 0 ]; then
- 		# Load the default rules
- 		test -f /etc/audit/rules.d/audit.rules && /usr/sbin/auditctl -R /etc/audit/rules.d/audit.rules >/dev/null
- 		echo "OK"
- 	else
- 		echo "FAIL"
- 	fi
-+	return "${status}"
- }
- 
- stop(){
--	printf "Stopping ${NAME}: "
--
--	start-stop-daemon -K -q -p ${PIDFILE}
--	[ $? = 0 ] && echo "OK" || echo "FAIL"
-+	printf "Stopping %s: " "${DAEMON}"
-+	start-stop-daemon --stop --pidfile "${PIDFILE}" --exec "/usr/sbin/${DAEMON}"
-+	status=$?
-+	if [ "${status}" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+		return "${status}"
-+	fi
-+	while start-stop-daemon --stop --test --quiet --pidfile "${PIDFILE}" \
-+		--exec "/sbin/${DAEMON}"; do
-+		sleep 0.1
-+	done
-+	rm -f "${PIDFILE}"
-+	return "${status}"
- }
- 
- reload(){
--	printf "Reloading ${NAME} configuration: "
--	start-stop-daemon --stop -s 1 -p ${PIDFILE} 1>/dev/null
--	[ $? = 0 ] && echo "OK" || echo "FAIL"
-+	printf "Reloading %s configuration: " "${DAEMON}"
-+	start-stop-daemon --stop --signal HUP --pidfile "${PIDFILE}" 1>/dev/null
-+	status=$?
-+	if [ "${status}" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "${status}"
- }
- 
- rotate(){
--	printf "Rotating ${NAME} logs: "
--	start-stop-daemon --stop -s 10 -p ${PIDFILE} 1>/dev/null
--	[ $? = 0 ] && echo "OK" || echo "FAIL"
-+	printf "Rotating %s logs: " "${DAEMON}"
-+	start-stop-daemon --stop --signal SIGUSR1 --pidfile "${PIDFILE}" 1>/dev/null
-+	status=$?
-+	if [ "${status}" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "${status}"
- }
- 
- case "$1" in
+ ifeq ($(BR2_INIT_SYSTEMD),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
