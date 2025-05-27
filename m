@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ACD10C5B549
-	for <buildroot@archiver.kernel.org>; Sat, 31 May 2025 17:06:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA227C5B552
+	for <buildroot@archiver.kernel.org>; Sat, 31 May 2025 17:06:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7D17C40C3A;
-	Sat, 31 May 2025 17:06:41 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8xZjZkQHKR-7; Sat, 31 May 2025 17:06:40 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB07F40C99
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AB07F40C99;
-	Sat, 31 May 2025 17:06:40 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 16AFB117
- for <buildroot@buildroot.org>; Sat, 31 May 2025 17:06:25 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BE27883BE4
- for <buildroot@buildroot.org>; Sat, 31 May 2025 17:06:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AEF3D8403E;
+	Sat, 31 May 2025 17:06:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9Dloz232-tWQ for <buildroot@buildroot.org>;
+ id GzDfygRgaCnn; Sat, 31 May 2025 17:06:42 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E74F784047
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id E74F784047;
+	Sat, 31 May 2025 17:06:41 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 65926127
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 17:06:25 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id A33D060793
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 17:06:20 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iDZ7BRba_zNx for <buildroot@buildroot.org>;
  Sat, 31 May 2025 17:06:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A727583BE3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C91ED607F0
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A727583BE3
+ by smtp3.osuosl.org (Postfix) with ESMTP id C91ED607F0
  for <buildroot@buildroot.org>; Sat, 31 May 2025 17:06:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A5197861E5; Sat, 31 May 2025 17:06:19 +0000 (UTC)
+ id C774D87803; Sat, 31 May 2025 17:06:19 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 26 May 2025 19:06:41 +0200
+Date: Tue, 27 May 2025 18:24:04 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 094cede2001ab015fdfdc1354a672c2b26837bbe
-X-Git-Newrev: c837d8bd43ee37c71a6d14068e134c41e884675f
+X-Git-Oldrev: 48515f26cd5a6dda649757fa3c95c27cc1ad24f6
+X-Git-Newrev: 47713b4ac9a38c57d6e38601c0c6a030ee777b7e
 X-Patchwork-Hint: ignore
-Message-Id: <20250531170619.A5197861E5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/dlib: bump
- version to 19.24.9
+Message-Id: <20250531170619.C774D87803@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/qt5webengine: add
+ missing opus dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,48 +61,56 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============2901254500778772818=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c837d8bd43ee37c71a6d14068e134c41e884675f
+--===============2901254500778772818==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=47713b4ac9a38c57d6e38601c0c6a030ee777b7e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 9f212f3897f808f64003d7365b116850d2d263d9)
+The package opus is selected but it is not listed in the dependencies.
+
+This adds opus to QT5WEBENGINE_DEPENDENCIES.
+
+Fixes:
+
+	$ make qt5webengine
+	(...)
+	ERROR: Feature 'webengine-system-opus' was enabled, but the pre-condition 'config.unix && libs.webengine-opus' failed.
+
+Signed-off-by: Gaël PORTAY <gael.portay@rtone.fr>
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+(cherry picked from commit 7319e4af19c8af1a90c7b2c95914dcb313033cbb)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/dlib/dlib.hash | 2 +-
- package/dlib/dlib.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/qt5/qt5webengine/qt5webengine.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/dlib/dlib.hash b/package/dlib/dlib.hash
-index af206386b8..350f30dc26 100644
---- a/package/dlib/dlib.hash
-+++ b/package/dlib/dlib.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  22513c353ec9c153300c394050c96ca9d088e02966ac0f639e989e50318c82d6  dlib-19.24.6.tar.gz
-+sha256  65ff8debc3ffea84430bdd4992982082caf505404e16d986b7493c00f96f44e9  dlib-19.24.9.tar.gz
+diff --git a/package/qt5/qt5webengine/qt5webengine.mk b/package/qt5/qt5webengine/qt5webengine.mk
+index a97d918cfd..6b656a7536 100644
+--- a/package/qt5/qt5webengine/qt5webengine.mk
++++ b/package/qt5/qt5webengine/qt5webengine.mk
+@@ -78,6 +78,7 @@ QT5WEBENGINE_DEPENDENCIES += \
+ 	libvpx \
+ 	libxml2 \
+ 	libxslt \
++	opus \
+ 	snappy \
+ 	webp
  
- # Hashes for license files
- sha256  50c1c5978d490c7f13062d91c4b89affc83774f87bc4568a714f748b62a5b216  dlib/external/libjpeg/README
-diff --git a/package/dlib/dlib.mk b/package/dlib/dlib.mk
-index 4eb0002775..0c93130d34 100644
---- a/package/dlib/dlib.mk
-+++ b/package/dlib/dlib.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DLIB_VERSION = 19.24.6
-+DLIB_VERSION = 19.24.9
- DLIB_SITE = $(call github,davisking,dlib,v$(DLIB_VERSION))
- DLIB_CMAKE_BACKEND = ninja
- DLIB_INSTALL_STAGING = YES
+
+--===============2901254500778772818==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2901254500778772818==--
