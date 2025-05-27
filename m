@@ -4,89 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA1B2C54ED1
-	for <buildroot@archiver.kernel.org>; Tue, 27 May 2025 14:16:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9C84C54ED1
+	for <buildroot@archiver.kernel.org>; Tue, 27 May 2025 15:23:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 86DA5606D3;
-	Tue, 27 May 2025 14:16:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 825FC60644;
+	Tue, 27 May 2025 15:23:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MfrXYXquON8k; Tue, 27 May 2025 14:16:16 +0000 (UTC)
+ id PVoBAfp0ivrQ; Tue, 27 May 2025 15:23:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 85D2B607E8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A4B6F60A81
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 85D2B607E8;
-	Tue, 27 May 2025 14:16:16 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id B175D28B
- for <buildroot@buildroot.org>; Tue, 27 May 2025 14:16:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A4B6F60A81;
+	Tue, 27 May 2025 15:23:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id F265219D
+ for <buildroot@buildroot.org>; Tue, 27 May 2025 15:23:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A34AC607E8
- for <buildroot@buildroot.org>; Tue, 27 May 2025 14:16:15 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D819C80999
+ for <buildroot@buildroot.org>; Tue, 27 May 2025 15:23:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gpQJ0bAngClI for <buildroot@buildroot.org>;
- Tue, 27 May 2025 14:16:14 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.126.236;
- helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2011D606D3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2011D606D3
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.236])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2011D606D3
- for <buildroot@buildroot.org>; Tue, 27 May 2025 14:16:13 +0000 (UTC)
-X-CSE-ConnectionGUID: JEKmDCDkRAyVmgPNb5ZAsA==
-X-CSE-MsgGUID: hVRzlV+GRKip7tJxld3LEQ==
-Received: from unknown (HELO opfedv1rlp0a.nor.fr.ftgroup) ([x.x.x.x]) by
- smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 27 May 2025 16:16:11 +0200
-Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv1rlp0a.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 May 2025 16:16:11 +0200
-Received: from yd-6wlzhs3 [x.x.x.x] by
- OPE16NORMBX305.corporate.adroot.infra.ftgroup
- [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39;
- Tue, 27 May 2025 16:16:09 +0200
-Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
- Tue, 27 May 2025 16:16:09 +0200
-X-CSE-ConnectionGUID: v9IDwI0ZTQOSiq22LJdwPg==
-X-CSE-MsgGUID: PFkPElheSnWlE6EpCMKDPA==
-X-IronPort-AV: E=Sophos;i="6.15,318,1739833200"; d="scan'208";a="295179466"
-From: <yann.morin@orange.com>
-To: <buildroot@buildroot.org>
-CC: <yann.morin@orange.com>
-Date: Tue, 27 May 2025 16:16:09 +0200
-Message-ID: <0cc8c132abc7f2117de95906fc1ae4729100c564.1748355369.git.yann.morin@orange.com>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tXjkEWPTA1Mi for <buildroot@buildroot.org>;
+ Tue, 27 May 2025 15:23:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=136.243.2.102;
+ helo=nyx.n621.de; envelope-from=fl@n621.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DD2DF808C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD2DF808C2
+Received: from nyx.n621.de (v4gw.hekate.n621.de [136.243.2.102])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DD2DF808C2
+ for <buildroot@buildroot.org>; Tue, 27 May 2025 15:23:50 +0000 (UTC)
+Received: from charybdis.. (localhost [127.0.0.1])
+ by nyx.n621.de (Postfix) with ESMTP id DB874E001C6;
+ Tue, 27 May 2025 17:23:46 +0200 (CEST)
+From: Florian Larysch <fl@n621.de>
+To: buildroot@buildroot.org
+Cc: Florian Larysch <fl@n621.de>
+Date: Tue, 27 May 2025 17:23:38 +0200
+Message-ID: <20250527152342.4288-1-fl@n621.de>
+X-Mailer: git-send-email 2.49.0
 MIME-Version: 1.0
-X-Originating-IP: [10.115.26.52]
-X-ClientProxiedBy: OPE16NORMBX304.corporate.adroot.infra.ftgroup
- (10.115.26.13) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
- (10.115.27.10)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1748355374; x=1779891374;
- h=from:to:cc:subject:date:message-id:mime-version:
- content-transfer-encoding;
- bh=SJyXQOPDEnQmaDDStbQAMX+5nAW6F/9djcvXeYMcfvk=;
- b=kjK63/24uoIqmutZFTSXmj0noEerOg7s/K6Ah8nQxsGpNZO4A5AUkiqw
- 5oJi3gYka6DG4r/7QbWaggSsmXU9G1UtXDniLSJnihU2EJXQz51TTEPkW
- tvO02H/Wz8TseOy/Sv0Bhd1iH7e8IPD1CKmIn+p8oN4uppdJQUWfkzNFd
- In74VKLi24o1l26xyftnuup0MdhrSdE0JiyxxYXnLR8V2izO56CgnfsHx
- MQY44iOnlVRV+7SG8fBi+ii0cwgB/iaNPI+6VHR1LhQbGSoom1D3asN3m
- 7Qj1V++RqMFQiekM0n0H8QZmjXmv5trMa2RJmupwdtNa4YhCwWlirCexL
- Q==;
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=n621.de; s=dkim; t=1748359426;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=6mJtqWlS44c1TmVb88LynhAVB76FyyT83l77Yzl6Hsg=;
+ b=fIRROJH63HdQgO3pB0dtoGWjPDKULfNmsGwQXoG53J99SWbXfCx17DpN7mBYu0NLDc/TqV
+ lLOBsZ+78cRX9D+PQlAAknqJyQrHnqRRu9qN/POz8uQN+aaGsv3y6i1SeyzNsF8eATx5cM
+ rdrsClBDLvIYtHqnRrQz/YfMLi1+jfE=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=orange.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
- header.s=orange002 header.b=kjK63/24
-Subject: [Buildroot] [PATCH] package/gpsd: bump to 3.26.1
+ header.from=n621.de
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=n621.de header.i=@n621.de header.a=rsa-sha256
+ header.s=dkim header.b=fIRROJH6
+Subject: [Buildroot] [PATCH 1/1] package/network-manager: make cryptography
+ library optional
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -103,150 +80,92 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: "Yann E. MORIN" <yann.morin@orange.com>
+The network-manager package currently pulls in either gnutls or libnss,
+neither of which are very common and it might be the only reason why
+they are present on a system.
 
-Support for RTCM104v2 and v3, as well as for ublox, are now
-unconditionally built, so drop our corresponding options. No
-needfor legacy options: users that had those enabled will
-still get them.
+However, most of NetworkManager works just fine without any cryptography
+support, it only seems to be used in test cases and 802.1X support code.
 
-Support for Oceanserver has been dropped upstream, so drop our
-option and add legacy handlimg to infrom users they should
-complain upstream if they needed it (very unlikely).
+Make the crypto backend configurable and optional to make it possible to
+avoid this dependency while keeping the default behavior the same.
 
-Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+Signed-off-by: Florian Larysch <fl@n621.de>
 ---
- Config.in.legacy       |  6 ++++++
- package/gpsd/Config.in | 20 --------------------
- package/gpsd/gpsd.hash |  2 +-
- package/gpsd/gpsd.mk   | 14 +-------------
- 4 files changed, 8 insertions(+), 34 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 54792bc22f..fbdfacddfd 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,12 @@ endif
- 
- comment "Legacy options removed in 2025.05"
- 
-+config BR2_PACKAGE_GPSD_OCEANSERVER
-+	bool "gpsd OceanServer removed upstream"
-+	select BR2_LEGACY
-+	help
-+	  Support for OceanServer has been removed in gpsd upstream.
+The select vs depends on thing is a bit hacky because I've tried to set
+it up in a way that keeps the existing behavior for backwards
+compatibility. I'm not even sure if this is the best way to go about it
+or if all the options should maybe just depend on the respective
+libraries to make it less implicit.
+
+ package/network-manager/Config.in          | 22 +++++++++++++++++++++-
+ package/network-manager/network-manager.mk |  6 ++++--
+ 2 files changed, 25 insertions(+), 3 deletions(-)
+
+diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
+index b388c573fe..4557174b7d 100644
+--- a/package/network-manager/Config.in
++++ b/package/network-manager/Config.in
+@@ -10,7 +10,6 @@ config BR2_PACKAGE_NETWORK_MANAGER
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	select BR2_PACKAGE_DBUS
+-	select BR2_PACKAGE_GNUTLS if !BR2_PACKAGE_LIBNSS
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_LIBNDP
+ 	select BR2_PACKAGE_UTIL_LINUX
+@@ -58,6 +57,27 @@ config BR2_PACKAGE_NETWORK_MANAGER_OVS
+ 	select BR2_PACKAGE_JANSSON
+ 	help
+ 	  This option enables support for OpenVSwitch
 +
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
- 	bool "mesa Gallium swrast driver was replaced by softpipe"
- 	select BR2_LEGACY
-diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
-index fa4dc7a814..0848f8181a 100644
---- a/package/gpsd/Config.in
-+++ b/package/gpsd/Config.in
-@@ -166,26 +166,11 @@ config BR2_PACKAGE_GPSD_NMEA2000
- 	help
- 	  NMEA2000/CAN support
- 
--config BR2_PACKAGE_GPSD_OCEANSERVER
--	bool "OceanServer"
--	help
--	  OceanServer Digital Compass support
--
- config BR2_PACKAGE_GPSD_ONCORE
- 	bool "OnCore"
- 	help
- 	  OnCore support
- 
--config BR2_PACKAGE_GPSD_RTCM104V2
--	bool "RTCM104 v2"
--	help
--	  RTCM104 v2 support
--
--config BR2_PACKAGE_GPSD_RTCM104V3
--	bool "RTCM104 v3"
--	help
--	  RTCM104 v3 support
--
- config BR2_PACKAGE_GPSD_SIRF
- 	bool "SiRF"
- 	help
-@@ -216,11 +201,6 @@ config BR2_PACKAGE_GPSD_TRUE_NORTH
- 	help
- 	  True North Technologies support
- 
--config BR2_PACKAGE_GPSD_UBX
--	bool "UBX"
--	help
--	  uBlox UBX binary support
--
- endif  # GPSD_DAEMON
- 
- config BR2_PACKAGE_GPSD_CLIENTS
-diff --git a/package/gpsd/gpsd.hash b/package/gpsd/gpsd.hash
-index 15e1181ed9..984ddab125 100644
---- a/package/gpsd/gpsd.hash
-+++ b/package/gpsd/gpsd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  b368b6a305e3f7a6382d23a0cbfc1d78923060b6b7f54cf7987a73c7b4a9afc2  gpsd-3.25.tar.gz
-+sha256  dc7e465968c1540e61bc57c7586d6a57a0047212a014efdad348f907bc2e0990  gpsd-3.26.1.tar.gz
- sha256  fdf339997bbca9eaf507476b82fbcac608fc39a3d89b86b51e16db4c9f933716  COPYING
-diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
-index 8f87766dcc..1b20210c49 100644
---- a/package/gpsd/gpsd.mk
-+++ b/package/gpsd/gpsd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GPSD_VERSION = 3.25
-+GPSD_VERSION = 3.26.1
- GPSD_SITE = http://download-mirror.savannah.gnu.org/releases/gpsd
- GPSD_LICENSE = BSD-2-Clause
- GPSD_LICENSE_FILES = COPYING
-@@ -120,18 +120,9 @@ endif
- ifneq ($(BR2_PACKAGE_GPSD_NMEA2000),y)
- GPSD_SCONS_OPTS += nmea2000=no
++choice
++	prompt "Crypto backend"
++	default BR2_PACKAGE_NETWORK_MANAGER_CRYPTO_GNUTLS if !BR2_PACKAGE_LIBNSS
++	default BR2_PACKAGE_NETWORK_MANAGER_CRYPTO_LIBNSS if BR2_PACKAGE_LIBNSS
++	help
++	  Select which library (if any) is used to provide cryptographic
++	  operations for 802.1X, for example.
++
++config BR2_PACKAGE_NETWORK_MANAGER_CRYPTO_GNUTLS
++	bool "gnutls"
++	select BR2_PACKAGE_GNUTLS
++
++config BR2_PACKAGE_NETWORK_MANAGER_CRYPTO_LIBNSS
++	bool "libnss"
++	depends on BR2_PACKAGE_LIBNSS
++
++config BR2_PACKAGE_NETWORK_MANAGER_CRYPTO_NONE
++	bool "none"
++
++endchoice
  endif
--ifneq ($(BR2_PACKAGE_GPSD_OCEANSERVER),y)
--GPSD_SCONS_OPTS += oceanserver=no
--endif
- ifneq ($(BR2_PACKAGE_GPSD_ONCORE),y)
- GPSD_SCONS_OPTS += oncore=no
- endif
--ifneq ($(BR2_PACKAGE_GPSD_RTCM104V2),y)
--GPSD_SCONS_OPTS += rtcm104v2=no
--endif
--ifneq ($(BR2_PACKAGE_GPSD_RTCM104V3),y)
--GPSD_SCONS_OPTS += rtcm104v3=no
--endif
- ifneq ($(BR2_PACKAGE_GPSD_SIRF),y)
- GPSD_SCONS_OPTS += sirf=no
- endif
-@@ -150,9 +141,6 @@ endif
- ifneq ($(BR2_PACKAGE_GPSD_TRUE_NORTH),y)
- GPSD_SCONS_OPTS += tnt=no
- endif
--ifneq ($(BR2_PACKAGE_GPSD_UBX),y)
--GPSD_SCONS_OPTS += ublox=no
--endif
  
- # Features
- ifeq ($(BR2_PACKAGE_GPSD_SQUELCH),y)
+ comment "NetworkManager needs udev /dev management and a glibc or musl toolchain w/ headers >= 5.4, dynamic library, wchar, threads, gcc >= 4.9"
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index ab3a437838..14119f8fa2 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -76,12 +76,14 @@ else
+ NETWORK_MANAGER_CONF_OPTS += -Dconcheck=false
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBNSS),y)
++ifeq ($(BR2_PACKAGE_NETWORK_MANAGER_CRYPTO_LIBNSS),y)
+ NETWORK_MANAGER_DEPENDENCIES += libnss
+ NETWORK_MANAGER_CONF_OPTS += -Dcrypto=nss
+-else
++else ifeq ($(BR2_PACKAGE_NETWORK_MANAGER_CRYPTO_GNUTLS),y)
+ NETWORK_MANAGER_DEPENDENCIES += gnutls
+ NETWORK_MANAGER_CONF_OPTS += -Dcrypto=gnutls
++else ifeq ($(BR2_PACKAGE_NETWORK_MANAGER_CRYPTO_NONE),y)
++NETWORK_MANAGER_CONF_OPTS += -Dcrypto=null
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBPSL),y)
 -- 
-2.34.1
-
-____________________________________________________________________________________________________________
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
+2.49.0
 
 _______________________________________________
 buildroot mailing list
