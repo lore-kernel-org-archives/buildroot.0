@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 390D6C5B549
-	for <buildroot@archiver.kernel.org>; Wed,  4 Jun 2025 18:28:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5DD29C5B543
+	for <buildroot@archiver.kernel.org>; Wed,  4 Jun 2025 18:28:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F3C73616B7;
-	Wed,  4 Jun 2025 18:28:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2A326417A6;
+	Wed,  4 Jun 2025 18:28:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9ViUxiQ5CAFy; Wed,  4 Jun 2025 18:28:42 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4WwrjhQ_EeqU; Wed,  4 Jun 2025 18:28:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 08AB5616DA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F3CC40E3C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 08AB5616DA;
-	Wed,  4 Jun 2025 18:28:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4F3CC40E3C;
+	Wed,  4 Jun 2025 18:28:43 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 3143E1A6
- for <buildroot@buildroot.org>; Wed,  4 Jun 2025 18:28:21 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 2610C1A6
+ for <buildroot@buildroot.org>; Wed,  4 Jun 2025 18:28:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F379D4015E
- for <buildroot@buildroot.org>; Wed,  4 Jun 2025 18:28:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3354140084
+ for <buildroot@buildroot.org>; Wed,  4 Jun 2025 18:28:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IW3VOHsXfjRX for <buildroot@buildroot.org>;
+ id gBMZXqGMoH5p for <buildroot@buildroot.org>;
  Wed,  4 Jun 2025 18:28:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 486C34014E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6012D4017C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 486C34014E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6012D4017C
  for <buildroot@buildroot.org>; Wed,  4 Jun 2025 18:27:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4640886517; Wed,  4 Jun 2025 18:27:58 +0000 (UTC)
+ id 5E72686517; Wed,  4 Jun 2025 18:27:58 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 27 May 2025 18:28:08 +0200
+Date: Tue, 27 May 2025 18:28:24 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 9258aa168c701ae0fb46a702941aa7cb453f2103
-X-Git-Newrev: 3e99a1ed42dfc6dbf3e222840a1d953851fa7702
+X-Git-Oldrev: 8b59257b822ffa77c394819d63edc3c52d0c6b7f
+X-Git-Newrev: 36e25128937644488b0864b2386991a7e96dcf62
 X-Patchwork-Hint: ignore
-Message-Id: <20250604182758.4640886517@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/sox: add fix for
- CVE-2022-31650, CVE-2023-26590
+Message-Id: <20250604182758.5E72686517@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/tinyxml: set
+ TINYXML_CPE_ID_VERSION
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,109 +66,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3e99a1ed42dfc6dbf3e222840a1d953851fa7702
+commit: https://git.buildroot.net/buildroot/commit/?id=36e25128937644488b0864b2386991a7e96dcf62
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Patch comes from Debian. The CVEs are not reported by pkg-stats
-because the NVD database has associated it to the sox_project:sox
-vendor/product CPE. This has been reported to NVD:
+With the recent addition in pkg-stats to detect stale ignore CVE
+entries, the CVE-2021-42260 ignore CVE entry is reported as
+stale. This is because TINYXML_VERSION is 2.6.2_2, and the CVE is
+annotated as affecting versions up to and including 2.6.2.
 
-  https://lore.kernel.org/buildroot/20250517220322.4da9bdb3@windsurf/
+But in fact, 2.6.2_2 is a special version from the Kodi community, but
+it's close to the 2.6.2 release, and CVE-2021-42260 is not fixed in
+it. To get meaningful results, let's tell our CVE checking logic that
+the tinyxml version is 2.6.2 by setting TINYXML_CPE_ID_VERSION (we're
+splitting on the _ and keeping the part before).
+
+Because we're now setting TINYXML_CPE_ID_VERSION, we must drop
+TINYXML_CPE_ID_VALID to avoid a check-package warning.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 34cb164b7e83635e7f3afac226fc6d4a94efafe5)
+(cherry picked from commit 677b24ebaf154aaa0af59d34e91471b95d9a861b)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...f-reject-implausibly-large-number-of-chan.patch | 63 ++++++++++++++++++++++
- package/sox/sox.mk                                 |  5 ++
- 2 files changed, 68 insertions(+)
+ package/tinyxml/tinyxml.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/sox/0009-formats-aiff-reject-implausibly-large-number-of-chan.patch b/package/sox/0009-formats-aiff-reject-implausibly-large-number-of-chan.patch
-new file mode 100644
-index 0000000000..fd1d210da1
---- /dev/null
-+++ b/package/sox/0009-formats-aiff-reject-implausibly-large-number-of-chan.patch
-@@ -0,0 +1,63 @@
-+From 452bfd55096e24ff5eb4a5eb491c70125ce05be8 Mon Sep 17 00:00:00 2001
-+From: Helmut Grohne <helmut@subdivi.de>
-+Date: Sat, 17 May 2025 22:55:32 +0200
-+Subject: [PATCH] formats+aiff: reject implausibly large number of channels
-+
-+Bug: https://sourceforge.net/p/sox/bugs/360/
-+Bug-Debian: https://bugs.debian.org/1012516
-+
-+Upstream: https://sourceforge.net/p/sox/bugs/360/
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ src/aiff.c      |  5 +++++
-+ src/formats_i.c | 10 ++++++++--
-+ 2 files changed, 13 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/aiff.c b/src/aiff.c
-+index 3a152c58..6de94f32 100644
-+--- a/src/aiff.c
-++++ b/src/aiff.c
-+@@ -619,6 +619,11 @@ int lsx_aiffstartwrite(sox_format_t * ft)
-+            At 48 kHz, 16 bits stereo, this gives ~3 hours of audio.
-+            Sorry, the AIFF format does not provide for an indefinite
-+            number of samples. */
-++        if (ft->signal.channels >= (0x7f000000 / (ft->encoding.bits_per_sample >> 3)))
-++        {
-++                lsx_fail_errno(ft, SOX_EOF, "too many channels for AIFF header");
-++                return SOX_EOF;
-++        }
-+         return(aiffwriteheader(ft, (uint64_t) 0x7f000000 / ((ft->encoding.bits_per_sample>>3)*ft->signal.channels)));
-+ }
-+ 
-+diff --git a/src/formats_i.c b/src/formats_i.c
-+index 7048040d..6a7c27e3 100644
-+--- a/src/formats_i.c
-++++ b/src/formats_i.c
-+@@ -19,6 +19,7 @@
-+  */
-+ 
-+ #include "sox_i.h"
-++#include <limits.h>
-+ #include <string.h>
-+ #include <sys/stat.h>
-+ #include <stdarg.h>
-+@@ -60,9 +61,14 @@ int lsx_check_read_params(sox_format_t * ft, unsigned channels,
-+   if (ft->seekable)
-+     ft->data_start = lsx_tell(ft);
-+ 
-+-  if (channels && ft->signal.channels && ft->signal.channels != channels)
-++  if (channels && ft->signal.channels && ft->signal.channels != channels) {
-+     lsx_warn("`%s': overriding number of channels", ft->filename);
-+-  else ft->signal.channels = channels;
-++  } else if (channels > SHRT_MAX) {
-++    lsx_fail_errno(ft, EINVAL, "implausibly large number of channels");
-++    return SOX_EOF;
-++  } else {
-++    ft->signal.channels = channels;
-++  }
-+ 
-+   if (rate && ft->signal.rate && ft->signal.rate != rate)
-+     lsx_warn("`%s': overriding sample rate", ft->filename);
-+-- 
-+2.49.0
-+
-diff --git a/package/sox/sox.mk b/package/sox/sox.mk
-index 384d012763..f76a338661 100644
---- a/package/sox/sox.mk
-+++ b/package/sox/sox.mk
-@@ -74,6 +74,11 @@ SOX_IGNORE_CVES += CVE-2021-23159 CVE-2021-23172 CVE-2023-34318
- # due to the change of CPE ID to libsox_project:libsox in the NVD database
- SOX_IGNORE_CVES += CVE-2021-40426
+diff --git a/package/tinyxml/tinyxml.mk b/package/tinyxml/tinyxml.mk
+index 01c25f7c1c..c6150b13fe 100644
+--- a/package/tinyxml/tinyxml.mk
++++ b/package/tinyxml/tinyxml.mk
+@@ -12,7 +12,7 @@ TINYXML_AUTORECONF = YES
+ TINYXML_INSTALL_STAGING = YES
+ TINYXML_LICENSE = Zlib
+ TINYXML_LICENSE_FILES = README
+-TINYXML_CPE_ID_VALID = YES
++TINYXML_CPE_ID_VERSION = $(firstword $(subst _,$(space),$(TINYXML_VERSION)))
  
-+# 0009-formats-aiff-reject-implausibly-large-number-of-chan.patch
-+# This entry is NOT stale, those CVEs are not reported by pkg-stats
-+# due to the change of CPE ID to sox_project:sox in the NVD database
-+SOX_IGNORE_CVES += CVE-2022-31650 CVE-2023-26590
-+
- SOX_CONF_OPTS = \
- 	--with-distro="Buildroot" \
- 	--disable-stack-protector
+ # 0001-In-stamp-always-advance-the-pointer-if-p-0xef.patch
+ TINYXML_IGNORE_CVES += CVE-2021-42260
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
