@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90719C5B543
-	for <buildroot@archiver.kernel.org>; Wed,  4 Jun 2025 18:28:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01927C5B552
+	for <buildroot@archiver.kernel.org>; Wed,  4 Jun 2025 18:28:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5D5D640E92;
-	Wed,  4 Jun 2025 18:28:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C4E1583B9E;
+	Wed,  4 Jun 2025 18:28:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UM6syUotLrw2; Wed,  4 Jun 2025 18:28:39 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CTzxkxdGrNp5; Wed,  4 Jun 2025 18:28:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80F984134F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BAC4183BFB
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 80F984134F;
-	Wed,  4 Jun 2025 18:28:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BAC4183BFB;
+	Wed,  4 Jun 2025 18:28:40 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 86D1DDA
- for <buildroot@buildroot.org>; Wed,  4 Jun 2025 18:28:19 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 4C3C2DA
+ for <buildroot@buildroot.org>; Wed,  4 Jun 2025 18:28:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DD2E140268
+ by smtp2.osuosl.org (Postfix) with ESMTP id E65B64022B
  for <buildroot@buildroot.org>; Wed,  4 Jun 2025 18:28:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QiBBpzdCoDFI for <buildroot@buildroot.org>;
+ id OAoRKJ7EOiEs for <buildroot@buildroot.org>;
  Wed,  4 Jun 2025 18:28:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B7BC4022B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 501F04015E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8B7BC4022B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 501F04015E
  for <buildroot@buildroot.org>; Wed,  4 Jun 2025 18:27:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 89B35876DC; Wed,  4 Jun 2025 18:27:58 +0000 (UTC)
+ id 4E778876CD; Wed,  4 Jun 2025 18:27:58 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 27 May 2025 18:33:13 +0200
+Date: Tue, 27 May 2025 18:28:13 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: bf96128043ec63bc04851a61c4fb64240fc3e79f
-X-Git-Newrev: 2ceb26cd1356dfb1a74929334989112231c3a48c
+X-Git-Oldrev: 3e99a1ed42dfc6dbf3e222840a1d953851fa7702
+X-Git-Newrev: 08f272db555993483d911cc535b292505ed40e0a
 X-Patchwork-Hint: ignore
-Message-Id: <20250604182758.89B35876DC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/openvmtools:
- needs libxcrypt with glibc
+Message-Id: <20250604182758.4E778876CD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/sox: add fix for
+ CVE-2022-31651
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,54 +66,85 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2ceb26cd1356dfb1a74929334989112231c3a48c
+commit: https://git.buildroot.net/buildroot/commit/?id=08f272db555993483d911cc535b292505ed40e0a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Fixes:
-http://autobuild.buildroot.net/results/b3b66d7dff38ca6fb0be9a98d98db721ee98ef1b
+Patch comes from Debian. The CVEs are not reported by pkg-stats
+because the NVD database has associated it to the sox_project:sox
+vendor/product CPE. This has been reported to NVD:
 
-Fix the following build failure raised since bump of glibc to version
-2.39 in commit b5680f53d60acf8ff6010082f873438a39bd5d97:
+  https://lore.kernel.org/buildroot/20250517220322.4da9bdb3@windsurf/
 
-checking for crypt in -lcrypt... no
-configure: error: libcrypt not found. Please install the libc/libcrypt devel package(s).
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 3615c268997e7c86e7f3499c66949ffe4d61db17)
+(cherry picked from commit c678e334e04d9563c05c786832db7473456572db)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/openvmtools/Config.in      | 1 +
- package/openvmtools/openvmtools.mk | 4 ++++
- 2 files changed, 5 insertions(+)
+ .../sox/0010-formats-reject-implausible-rate.patch | 39 ++++++++++++++++++++++
+ package/sox/sox.mk                                 |  5 +++
+ 2 files changed, 44 insertions(+)
 
-diff --git a/package/openvmtools/Config.in b/package/openvmtools/Config.in
-index b62e5d0361..e6a2cd4a54 100644
---- a/package/openvmtools/Config.in
-+++ b/package/openvmtools/Config.in
-@@ -16,6 +16,7 @@ config BR2_PACKAGE_OPENVMTOOLS
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_LIBDNET
- 	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
- 	help
- 	  Open Virtual Machine Tools for VMware guest OS
- 
-diff --git a/package/openvmtools/openvmtools.mk b/package/openvmtools/openvmtools.mk
-index 3106b9ecd6..a4ff1fd71a 100644
---- a/package/openvmtools/openvmtools.mk
-+++ b/package/openvmtools/openvmtools.mk
-@@ -35,6 +35,10 @@ ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
- OPENVMTOOLS_DEPENDENCIES += libtirpc
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBXCRYPT),y)
-+OPENVMTOOLS_DEPENDENCIES += libxcrypt
-+endif
+diff --git a/package/sox/0010-formats-reject-implausible-rate.patch b/package/sox/0010-formats-reject-implausible-rate.patch
+new file mode 100644
+index 0000000000..5e60b62011
+--- /dev/null
++++ b/package/sox/0010-formats-reject-implausible-rate.patch
+@@ -0,0 +1,39 @@
++From 6af0a8b32df4d7a83fd52a963a20e6e321f10fd6 Mon Sep 17 00:00:00 2001
++From: Helmut Grohne <helmut@subdivi.de>
++Date: Sat, 17 May 2025 23:05:33 +0200
++Subject: [PATCH] formats: reject implausible rate
 +
- # When libfuse is available, openvmtools can build vmblock-fuse, so
- # make sure that libfuse gets built first
- ifeq ($(BR2_PACKAGE_LIBFUSE),y)
++Bug: https://sourceforge.net/p/sox/bugs/360/
++Bug-Debian: https://bugs.debian.org/1012516
++
++Upstream: https://sourceforge.net/p/sox/bugs/360/
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ src/formats_i.c | 10 ++++++++--
++ 1 file changed, 8 insertions(+), 2 deletions(-)
++
++diff --git a/src/formats_i.c b/src/formats_i.c
++index 6a7c27e3..5f5ef979 100644
++--- a/src/formats_i.c
+++++ b/src/formats_i.c
++@@ -70,9 +70,15 @@ int lsx_check_read_params(sox_format_t * ft, unsigned channels,
++     ft->signal.channels = channels;
++   }
++ 
++-  if (rate && ft->signal.rate && ft->signal.rate != rate)
+++  if (rate && ft->signal.rate && ft->signal.rate != rate) {
++     lsx_warn("`%s': overriding sample rate", ft->filename);
++-  else ft->signal.rate = rate;
+++  /* Since NaN comparisons yield false, the negation rejects them. */
+++  } else if (!(rate > 0)) {
+++    lsx_fail_errno(ft, EINVAL, "invalid rate value");
+++    return SOX_EOF;
+++  } else {
+++    ft->signal.rate = rate;
+++  }
++ 
++   if (encoding && ft->encoding.encoding && ft->encoding.encoding != encoding)
++     lsx_warn("`%s': overriding encoding type", ft->filename);
++-- 
++2.49.0
++
+diff --git a/package/sox/sox.mk b/package/sox/sox.mk
+index f76a338661..c0d903f9d4 100644
+--- a/package/sox/sox.mk
++++ b/package/sox/sox.mk
+@@ -79,6 +79,11 @@ SOX_IGNORE_CVES += CVE-2021-40426
+ # due to the change of CPE ID to sox_project:sox in the NVD database
+ SOX_IGNORE_CVES += CVE-2022-31650 CVE-2023-26590
+ 
++# 0010-formats-reject-implausible-rate.patch
++# This entry is NOT stale, those CVEs are not reported by pkg-stats
++# due to the change of CPE ID to sox_project:sox in the NVD database
++SOX_IGNORE_CVES += CVE-2022-31651
++
+ SOX_CONF_OPTS = \
+ 	--with-distro="Buildroot" \
+ 	--disable-stack-protector
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
