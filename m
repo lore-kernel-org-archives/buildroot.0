@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2AE76C5B552
-	for <buildroot@archiver.kernel.org>; Wed,  4 Jun 2025 18:28:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2FE7C5B549
+	for <buildroot@archiver.kernel.org>; Wed,  4 Jun 2025 18:28:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E4DF260C06;
-	Wed,  4 Jun 2025 18:28:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7D0E840D25;
+	Wed,  4 Jun 2025 18:28:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YqKha5rWBMr3; Wed,  4 Jun 2025 18:28:21 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id k6ALooaLOL9e; Wed,  4 Jun 2025 18:28:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 062D461517
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A3D3F40D26
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 062D461517;
-	Wed,  4 Jun 2025 18:28:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A3D3F40D26;
+	Wed,  4 Jun 2025 18:28:22 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 5F93EDA
- for <buildroot@buildroot.org>; Wed,  4 Jun 2025 18:28:05 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 6FD631A6
+ for <buildroot@buildroot.org>; Wed,  4 Jun 2025 18:28:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4FC124008B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8B037400A1
  for <buildroot@buildroot.org>; Wed,  4 Jun 2025 18:28:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CHGWNl1ADhVr for <buildroot@buildroot.org>;
+ id G9FkoQUyS3pZ for <buildroot@buildroot.org>;
  Wed,  4 Jun 2025 18:27:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2B9CA400FC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 33F7A40112
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2B9CA400FC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 33F7A40112
  for <buildroot@buildroot.org>; Wed,  4 Jun 2025 18:27:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 29F40876CD; Wed,  4 Jun 2025 18:27:58 +0000 (UTC)
+ id 32437876E0; Wed,  4 Jun 2025 18:27:58 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 27 May 2025 18:27:49 +0200
+Date: Tue, 27 May 2025 18:27:55 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 956024af8e81be69dd0495304e0e1901e365bddb
-X-Git-Newrev: 2a5f036192bbd8dd29a61f014a355f4baa53b0c4
+X-Git-Oldrev: 2a5f036192bbd8dd29a61f014a355f4baa53b0c4
+X-Git-Newrev: e2f856d18d7f226a219ef7e1de5c65ddc6db771e
 X-Patchwork-Hint: ignore
-Message-Id: <20250604182758.29F40876CD@busybox.osuosl.org>
+Message-Id: <20250604182758.32437876E0@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2025.02.x] package/sox: add fix for
- CVE-2021-3643 CVE-2021-23210
+ CVE-2021-23159, CVE-2021-23172, CVE-2023-34318
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,76 +66,80 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2a5f036192bbd8dd29a61f014a355f4baa53b0c4
+commit: https://git.buildroot.net/buildroot/commit/?id=e2f856d18d7f226a219ef7e1de5c65ddc6db771e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-This fix is included in Debian's sox package. The CVE is not reported
-by pkg-stats because the NVD database has associated it to the
-sox_project:sox vendor/product CPE. This has been reported to NVD:
+This fix is integrated in Debian. The CVEs are not reported by pkg-stats
+because the NVD database has associated it to the sox_project:sox
+vendor/product CPE. This has been reported to NVD:
 
   https://lore.kernel.org/buildroot/20250517220322.4da9bdb3@windsurf/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit b93b80245d9aa8853d6590ca1d2bbd02b1550a54)
+(cherry picked from commit 14aa0f5ec143eeb8a96160b5538945eedd801da1)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...dth-should-never-be-0-to-avoid-division-b.patch | 34 ++++++++++++++++++++++
- package/sox/sox.mk                                 |  5 ++++
- 2 files changed, 39 insertions(+)
+ package/sox/0007-hcom-validate-dictsize.patch | 38 +++++++++++++++++++++++++++
+ package/sox/sox.mk                            |  5 ++++
+ 2 files changed, 43 insertions(+)
 
-diff --git a/package/sox/0006-voc-word-width-should-never-be-0-to-avoid-division-b.patch b/package/sox/0006-voc-word-width-should-never-be-0-to-avoid-division-b.patch
+diff --git a/package/sox/0007-hcom-validate-dictsize.patch b/package/sox/0007-hcom-validate-dictsize.patch
 new file mode 100644
-index 0000000000..94298b7ae5
+index 0000000000..722b64675b
 --- /dev/null
-+++ b/package/sox/0006-voc-word-width-should-never-be-0-to-avoid-division-b.patch
-@@ -0,0 +1,34 @@
-+From ad8ecfbdd9ff184b60600a115247a6aa947d0215 Mon Sep 17 00:00:00 2001
++++ b/package/sox/0007-hcom-validate-dictsize.patch
+@@ -0,0 +1,38 @@
++From 54455f59305d9ce94cc73100bc2dd542865fed4b Mon Sep 17 00:00:00 2001
 +From: Helmut Grohne <helmut@subdivi.de>
-+Date: Sat, 17 May 2025 22:10:00 +0200
-+Subject: [PATCH] voc: word width should never be 0 to avoid division by zero
++Date: Sat, 17 May 2025 22:33:16 +0200
++Subject: [PATCH] hcom: validate dictsize
 +
-+Bug: https://sourceforge.net/p/sox/bugs/351/
-+Bug-Debian: https://bugs.debian.org/1010374
++Bug: https://sourceforge.net/p/sox/bugs/350/
++Bug: https://sourceforge.net/p/sox/bugs/352/
++Bug-Debian: https://bugs.debian.org/1021133
++Bug-Debian: https://bugs.debian.org/1021134
 +
-+This patch fixes both CVE-2021-3643 and CVE-2021-23210.
++This patch fixes both CVE-2021-23159 and CVE-2021-23172.
 +
-+Upstream: https://sourceforge.net/p/sox/bugs/351/
++Upstream: https://sourceforge.net/p/sox/bugs/350/
++Upstream: https://sourceforge.net/p/sox/bugs/352/
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 +---
-+ src/voc.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
++ src/hcom.c | 5 +++++
++ 1 file changed, 5 insertions(+)
 +
-+diff --git a/src/voc.c b/src/voc.c
-+index a75639e9..0ca07f94 100644
-+--- a/src/voc.c
-++++ b/src/voc.c
-+@@ -625,6 +625,10 @@ static int getblock(sox_format_t * ft)
-+         v->rate = new_rate_32;
-+         ft->signal.rate = new_rate_32;
-+         lsx_readb(ft, &uc);
-++        if (uc <= 1) {
-++          lsx_fail_errno(ft, SOX_EFMT, "2 bits per word required");
-++          return (SOX_EOF);
++diff --git a/src/hcom.c b/src/hcom.c
++index 594c8706..9e8b03c6 100644
++--- a/src/hcom.c
+++++ b/src/hcom.c
++@@ -141,6 +141,11 @@ static int startread(sox_format_t * ft)
++                 return (SOX_EOF);
++         }
++         lsx_readw(ft, &dictsize);
+++        if (dictsize == 0 || dictsize > 511)
+++        {
+++                lsx_fail_errno(ft, SOX_EHDR, "Implausible dictionary size in HCOM header");
+++                return SOX_EOF;
 ++        }
-+         v->size = uc;
-+         lsx_readb(ft, &uc);
-+         if (v->channels != -1 && uc != v->channels) {
++ 
++         /* Translate to sox parameters */
++         ft->encoding.encoding = SOX_ENCODING_HCOM;
 +-- 
 +2.49.0
 +
 diff --git a/package/sox/sox.mk b/package/sox/sox.mk
-index d8a0d7d1df..eba166f68b 100644
+index eba166f68b..6ce9ed3508 100644
 --- a/package/sox/sox.mk
 +++ b/package/sox/sox.mk
-@@ -59,6 +59,11 @@ SOX_IGNORE_CVES += CVE-2019-8357
- # sox-14.4.2-44-g7b6a8892
- SOX_IGNORE_CVES += CVE-2019-13590
+@@ -64,6 +64,11 @@ SOX_IGNORE_CVES += CVE-2019-13590
+ # due to the change of CPE ID to sox_project:sox in the NVD database
+ SOX_IGNORE_CVES += CVE-2021-3643 CVE-2021-23210
  
-+# 0006-voc-word-width-should-never-be-0-to-avoid-division-b.patch
++# 0007-hcom-validate-dictsize.patch
 +# This entry is NOT stale, those CVEs are not reported by pkg-stats
 +# due to the change of CPE ID to sox_project:sox in the NVD database
-+SOX_IGNORE_CVES += CVE-2021-3643 CVE-2021-23210
++SOX_IGNORE_CVES += CVE-2021-23159 CVE-2021-23172 CVE-2023-34318
 +
  SOX_CONF_OPTS = \
  	--with-distro="Buildroot" \
