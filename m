@@ -4,50 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5085CC3ABB2
-	for <buildroot@archiver.kernel.org>; Wed, 28 May 2025 14:56:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3562C3ABB2
+	for <buildroot@archiver.kernel.org>; Wed, 28 May 2025 14:56:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F29EB4087C;
-	Wed, 28 May 2025 14:56:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 175204085F;
+	Wed, 28 May 2025 14:56:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XpUeVsM8C2IP; Wed, 28 May 2025 14:56:54 +0000 (UTC)
+ id AKpVEpu2byFE; Wed, 28 May 2025 14:56:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 33EDE4085D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 700EF40860
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 33EDE4085D;
-	Wed, 28 May 2025 14:56:54 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id D6B09B66
- for <buildroot@buildroot.org>; Wed, 28 May 2025 14:56:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 700EF40860;
+	Wed, 28 May 2025 14:56:55 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 13F57B66
+ for <buildroot@buildroot.org>; Wed, 28 May 2025 14:56:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C82A840851
- for <buildroot@buildroot.org>; Wed, 28 May 2025 14:56:52 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0598880BAE
+ for <buildroot@buildroot.org>; Wed, 28 May 2025 14:56:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YbD6TJHFulvJ for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nc4EtJuzJyBO for <buildroot@buildroot.org>;
  Wed, 28 May 2025 14:56:52 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.178.249;
  helo=mslow3.mail.gandi.net; envelope-from=kory.maincent@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D02AE40850
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D02AE40850
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E8CB780B9C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E8CB780B9C
 Received: from mslow3.mail.gandi.net (mslow3.mail.gandi.net [217.70.178.249])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D02AE40850
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E8CB780B9C
  for <buildroot@buildroot.org>; Wed, 28 May 2025 14:56:51 +0000 (UTC)
 Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
  [217.70.183.197])
- by mslow3.mail.gandi.net (Postfix) with ESMTP id 04C37580D6A
+ by mslow3.mail.gandi.net (Postfix) with ESMTP id 0C3EF585C7B
  for <buildroot@buildroot.org>; Wed, 28 May 2025 14:28:57 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D7EDD43A23;
- Wed, 28 May 2025 14:28:52 +0000 (UTC)
-Date: Wed, 28 May 2025 16:28:48 +0200
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 4D24043A33;
+ Wed, 28 May 2025 14:28:51 +0000 (UTC)
+Date: Wed, 28 May 2025 16:28:45 +0200
+Message-Id: <20250528-fix_license-v1-0-b59a638b0495@bootlin.com>
 MIME-Version: 1.0
-Message-Id: <20250528-fix_license-v1-3-b59a638b0495@bootlin.com>
-References: <20250528-fix_license-v1-0-b59a638b0495@bootlin.com>
-In-Reply-To: <20250528-fix_license-v1-0-b59a638b0495@bootlin.com>
+X-B4-Tracking: v=1; b=H4sIAJ0dN2gC/x2MQQqAIBAAvyJ7TjDFrL4SEaFrLYSFCxGEf086D
+ sPMC4yZkGEUL2S8ielMFdpGgN/XtKGkUBm00lZZ7WSkZznIY2KUsVfGddrY4AeoxZWx6v82zaV
+ 8jXQwF10AAAA=
 To: buildroot@buildroot.org
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
  Alistair Francis <alistair@alistair23.me>, Dick Olsson <hi@senzilla.io>, 
@@ -57,30 +58,28 @@ Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
 X-Mailer: b4 0.15-dev-8cb71
 X-GND-State: clean
 X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddtgddvfeehtdculddtuddrgeefvddrtddtmdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephfffufggtgfgkfhfjgfvvefosehtjeertdertdejnecuhfhrohhmpefmohhrhicuofgrihhntggvnhhtuceokhhorhihrdhmrghinhgtvghnthessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepvefgvdfgkeetgfefgfegkedugffghfdtffeftdeuteehjedtvdelvddvleehtdevnecukfhppeeltddrkeelrdduieefrdduvdejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepledtrdekledrudeifedruddvjedphhgvlhhopegluddvjedrtddruddrudgnpdhmrghilhhfrhhomhepkhhorhihrdhmrghinhgtvghnthessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepkedprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdprhgtphhtthhopehkohhrhidrmhgrihhntggvnhhtsegsohhothhlihhnrdgtohhmpdhrtghpthhtohepghgvohhmrghtshhisehgmhgrihhlrdgtohhmpdhrtghpthhtoheprghlihhsthgrihhrsegrlhhishhtrghirhdvfedrmhgvpdhrtghpthhtohepvghtihgvn
- hhnvgdrtggrrhhrihgvrhgvsehfohhsshdrshhtrdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehsphgurgifshhonhesghhmrghilhdrtghomhdprhgtphhtthhopehhihesshgvnhiiihhllhgrrdhioh
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddtgddvfeehtdculddtuddrgeefvddrtddtmdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffufffkgggtgffvvefosehtkeertdertdejnecuhfhrohhmpefmohhrhicuofgrihhntggvnhhtuceokhhorhihrdhmrghinhgtvghnthessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepudeggfduffethfdtgeehtdeiieeuveelleduieeiteejkeetheelheefteeugfegnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppeeltddrkeelrdduieefrdduvdejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepledtrdekledrudeifedruddvjedphhgvlhhopegluddvjedrtddruddrudgnpdhmrghilhhfrhhomhepkhhorhihrdhmrghinhgtvghnthessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepkedprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdprhgtphhtthhopehkohhrhidrmhgrihhntggvnhhtsegsohhothhlihhnrdgtohhmpdhrtghpthhtohepghgvohhmrghtshhisehgmhgrihhlrdgtohhmpdhrtghpthhtoheprghlihhsthgrihhrsegrlhhishhtrghir
+ hdvfedrmhgvpdhrtghpthhtohepvghtihgvnhhnvgdrtggrrhhrihgvrhgvsehfohhsshdrshhtrdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehsphgurgifshhonhesghhmrghilhdrtghomhdprhgtphhtthhopehhihesshgvnhiiihhllhgrrdhioh
 X-GND-Sasl: kory.maincent@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1748442533;
+ d=bootlin.com; s=gm1; t=1748442531;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=JmBfPv6CaGGe2s5OesmPULwnuFiFM5ogJ7QzxRBGESw=;
- b=FHq14pNNu84TVqI0Tu2jNTTYWSI6+h7yJwDPn87f4EUSEaB9kCGRY+0dZgv/xWEhARQk31
- ntDs4N3UJrpALOPZlD87H3qwpHzfx71zMLBAxi1edTx9POh+3X0LASJhEw7oGSxLWL6kCH
- 9eYdjy6eawg4hv7lqIT0CSBh0a7r58aoFFFdC3BD/oJjxtPCmDWydbqH4mPV3dq7lZuf1B
- xosovxaUoiZIkQitNcaFRsqsb0ZhuSjEJq1nRRKusQOJ6rfiaX8GaOxgH/Ys+hVLdoPS9x
- mw4TtZkZ7CuXwY2INSZYpn+3Z2YIxLRgidVWHkFq3wSzPm+qVCtOZr7h2HyMLA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ content-transfer-encoding:content-transfer-encoding;
+ bh=KCESTELjjyKgftH0O9dBn1Ogxxrsxw9uVZUyIo6MSIo=;
+ b=WLLUwFACSA/ypsExFXKVwK1ioaNkED1NQqIBR/ZvlbMmvG39KSniEXzjyLs31nlfBxz5qW
+ lWZ3T8BBP5FwQni6Ut+CRCjuwY5k5/ly4geXXpOizwdnT4Fp/4gEBP5QqETuAqDqcbRgvW
+ Gwz5f/QTOi6cE7K0ndE80W+imkYAsHDguGwFBcbQkIHX7O8Hl2/j5IwWVZKKHm0kye6Tof
+ VZYe4ooZQz3WHdzY5pNsyrAH6/oD6tYlC7JbWzxF6R92MOXIH7jVlPax46mCPUbyeByYrS
+ pMGQ27ISBleYSlfWdupeLKsncvqL506gFIPOiS2IOIR8Z+tfX3XzgiFSFd+/dw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=FHq14pNN
-Subject: [Buildroot] [PATCH 3/7] optee-os: Add support for custom license
- files
+ header.s=gm1 header.b=WLLUwFAC
+Subject: [Buildroot] [PATCH 0/7] Add support for custom license files path
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,61 +93,43 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Kory Maincent via buildroot <buildroot@buildroot.org>
 Reply-To: Kory Maincent <kory.maincent@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The OP-TEE OS package was not providing any license file when a custom
-Linux version was selected.
-
-Fix this by adding a Kconfig option to specify the license file,
-with a default value set to the commonly used license paths.
-
-Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
----
- boot/optee-os/Config.in   | 7 +++++++
- boot/optee-os/optee-os.mk | 4 +---
- 2 files changed, 8 insertions(+), 3 deletions(-)
-
-diff --git a/boot/optee-os/Config.in b/boot/optee-os/Config.in
-index 433dae90d8..c3fc61d8cd 100644
---- a/boot/optee-os/Config.in
-+++ b/boot/optee-os/Config.in
-@@ -86,6 +86,13 @@ config BR2_TARGET_OPTEE_OS_VERSION
- 	default BR2_TARGET_OPTEE_OS_CUSTOM_REPO_VERSION \
- 				if BR2_TARGET_OPTEE_OS_CUSTOM_GIT
- 
-+config BR2_TARGET_OPTEE_OS_LICENSE_FILES
-+	string "OP-TEE OS license files"
-+	default "LICENSE"
-+	help
-+	  A space-separated list of license files related to the OP-TEE OS
-+	  package.
-+
- config BR2_TARGET_OPTEE_OS_NEEDS_DTC
- 	bool "OP-TEE OS needs dtc"
- 	select BR2_PACKAGE_HOST_DTC
-diff --git a/boot/optee-os/optee-os.mk b/boot/optee-os/optee-os.mk
-index 25c917e2fc..1639597407 100644
---- a/boot/optee-os/optee-os.mk
-+++ b/boot/optee-os/optee-os.mk
-@@ -6,9 +6,7 @@
- 
- OPTEE_OS_VERSION = $(call qstrip,$(BR2_TARGET_OPTEE_OS_VERSION))
- OPTEE_OS_LICENSE = BSD-2-Clause
--ifeq ($(BR2_TARGET_OPTEE_OS_LATEST),y)
--OPTEE_OS_LICENSE_FILES = LICENSE
--endif
-+OPTEE_OS_LICENSE_FILES = $(call qstrip,$(BR2_TARGET_OPTEE_OS_LICENSE_FILES))
- 
- OPTEE_OS_CPE_ID_PREFIX = cpe:2.3:o
- OPTEE_OS_CPE_ID_VENDOR = linaro
-
--- 
-2.43.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+U2V2ZXJhbCBwYWNrYWdlcyB3ZXJlIG5vdCBwcm92aWRpbmcgYW55IGxpY2Vuc2UgZmlsZSB3aGVu
+IGEgY3VzdG9tCnJlcG9zaXRvcnkgb3IgdmVyc2lvbiB3YXMgc2VsZWN0ZWQuCgpGaXggdGhpcyBi
+eSBhZGRpbmcgYSBLY29uZmlnIG9wdGlvbiB0byBzcGVjaWZ5IHRoZSBsaWNlbnNlIGZpbGUsCndp
+dGggYSBkZWZhdWx0IHZhbHVlIHNldCB0byB0aGUgY29tbW9ubHkgdXNlZCBsaWNlbnNlIHBhdGhz
+LgoKU2lnbmVkLW9mZi1ieTogS29yeSBNYWluY2VudCA8a29yeS5tYWluY2VudEBib290bGluLmNv
+bT4KLS0tCktvcnkgTWFpbmNlbnQgKDcpOgogICAgICBsaW51eDogQWRkIHN1cHBvcnQgZm9yIGN1
+c3RvbSBsaWNlbnNlIGZpbGVzCiAgICAgIHVib290OiBBZGQgc3VwcG9ydCBmb3IgY3VzdG9tIGxp
+Y2Vuc2UgZmlsZXMKICAgICAgb3B0ZWUtb3M6IEFkZCBzdXBwb3J0IGZvciBjdXN0b20gbGljZW5z
+ZSBmaWxlcwogICAgICBvcGVuc2JpOiBBZGQgc3VwcG9ydCBmb3IgY3VzdG9tIGxpY2Vuc2UgZmls
+ZXMKICAgICAgYmFyZWJveDogQWRkIHN1cHBvcnQgZm9yIGN1c3RvbSBsaWNlbnNlIGZpbGVzCiAg
+ICAgIGFybS10cnVzdGVkLWZpcm13YXJlOiBBZGQgc3VwcG9ydCBmb3IgY3VzdG9tIGxpY2Vuc2Ug
+ZmlsZXMKICAgICAgYXQ5MWJvb3RzdHJhcDM6IEFkZCBzdXBwb3J0IGZvciBjdXN0b20gbGljZW5z
+ZSBmaWxlcwoKIGJvb3QvYXJtLXRydXN0ZWQtZmlybXdhcmUvQ29uZmlnLmluICAgICAgICAgICAg
+ICAgfCA3ICsrKysrKysKIGJvb3QvYXJtLXRydXN0ZWQtZmlybXdhcmUvYXJtLXRydXN0ZWQtZmly
+bXdhcmUubWsgfCA4ICsrLS0tLS0tCiBib290L2F0OTFib290c3RyYXAzL0NvbmZpZy5pbiAgICAg
+ICAgICAgICAgICAgICAgIHwgOCArKysrKysrKwogYm9vdC9hdDkxYm9vdHN0cmFwMy9hdDkxYm9v
+dHN0cmFwMy5tayAgICAgICAgICAgICB8IDIgKy0KIGJvb3QvYmFyZWJveC9Db25maWcuaW4gICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgfCA3ICsrKysrKysKIGJvb3QvYmFyZWJveC9iYXJlYm94
+Lm1rICAgICAgICAgICAgICAgICAgICAgICAgICAgfCA0ICstLS0KIGJvb3Qvb3BlbnNiaS9Db25m
+aWcuaW4gICAgICAgICAgICAgICAgICAgICAgICAgICAgfCA3ICsrKysrKysKIGJvb3Qvb3BlbnNi
+aS9vcGVuc2JpLm1rICAgICAgICAgICAgICAgICAgICAgICAgICAgfCA0ICstLS0KIGJvb3Qvb3B0
+ZWUtb3MvQ29uZmlnLmluICAgICAgICAgICAgICAgICAgICAgICAgICAgfCA3ICsrKysrKysKIGJv
+b3Qvb3B0ZWUtb3Mvb3B0ZWUtb3MubWsgICAgICAgICAgICAgICAgICAgICAgICAgfCA0ICstLS0K
+IGJvb3QvdWJvb3QvQ29uZmlnLmluICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCA3ICsr
+KysrKysKIGJvb3QvdWJvb3QvdWJvb3QubWsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+fCA0ICstLS0KIGxpbnV4L0NvbmZpZy5pbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgfCA3ICsrKysrKysKIGxpbnV4L2xpbnV4Lm1rICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgfCA4ICsrLS0tLS0tCiAxNCBmaWxlcyBjaGFuZ2VkLCA1OSBpbnNlcnRpb25zKCsp
+LCAyNSBkZWxldGlvbnMoLSkKLS0tCmJhc2UtY29tbWl0OiA5ZDkyYzdlM2ZmODBmOGM5YTJkMDVh
+MTQxYjM0ZGZiMTY0ZTdlODFmCmNoYW5nZS1pZDogMjAyNTA1MjctZml4X2xpY2Vuc2UtZjgwMzc2
+MjM1ZGM5CgpCZXN0IHJlZ2FyZHMsCi0tIApLw7ZyeSBNYWluY2VudCwgQm9vdGxpbgpFbWJlZGRl
+ZCBMaW51eCBhbmQga2VybmVsIGVuZ2luZWVyaW5nCmh0dHBzOi8vYm9vdGxpbi5jb20KCl9fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWls
+aW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qu
+b3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
