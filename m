@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6E18C5AE59
-	for <buildroot@archiver.kernel.org>; Wed, 28 May 2025 19:53:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB3BBC3ABB2
+	for <buildroot@archiver.kernel.org>; Wed, 28 May 2025 19:55:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9681B81B72;
-	Wed, 28 May 2025 19:53:02 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 81A452q4IxmL; Wed, 28 May 2025 19:53:02 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D592181BA9
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D592181BA9;
-	Wed, 28 May 2025 19:53:01 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 8C2B3B66
- for <buildroot@buildroot.org>; Wed, 28 May 2025 19:52:54 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D07AE40895
- for <buildroot@buildroot.org>; Wed, 28 May 2025 19:52:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B960440BE0;
+	Wed, 28 May 2025 19:55:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Z09-t7JwgyX0 for <buildroot@buildroot.org>;
- Wed, 28 May 2025 19:52:52 +0000 (UTC)
+ id LOrOsHksUgeb; Wed, 28 May 2025 19:55:24 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5CA4E4075A
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5CA4E4075A;
+	Wed, 28 May 2025 19:55:24 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id EA29B127
+ for <buildroot@buildroot.org>; Wed, 28 May 2025 19:55:22 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id DAA1A81B53
+ for <buildroot@buildroot.org>; Wed, 28 May 2025 19:55:22 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xG5XDLggCcAw for <buildroot@buildroot.org>;
+ Wed, 28 May 2025 19:55:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F75340A9B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF5DC8118E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3F75340A9B
- for <buildroot@buildroot.org>; Wed, 28 May 2025 19:52:52 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CF5DC8118E
+ for <buildroot@buildroot.org>; Wed, 28 May 2025 19:55:21 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3039285D1A; Wed, 28 May 2025 19:52:52 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id ABFAA8765D; Wed, 28 May 2025 19:55:21 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 28 May 2025 21:52:28 +0200
+Date: Wed, 28 May 2025 21:54:10 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a9bfc39660b1e56b5fcba64f0563b0e607dcabb7
-X-Git-Newrev: b6b96b7bdca6f989f26b4c3aea0c15d064bd3120
+X-Git-Oldrev: c9355a3869e3d735df90fc1c012108fdca72ac78
+X-Git-Newrev: 43dcaa19a0a8549df39f51ab6782840834ea79a8
 X-Patchwork-Hint: ignore
-Message-Id: <20250528195252.3039285D1A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/systemd: fix systemd-boot
- installation
+Message-Id: <20250528195521.ABFAA8765D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] board: bsh: imx8mn-bsh-smm-s2: fix U-Boot
+ startup
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,41 +60,419 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============3477285569537924821=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b6b96b7bdca6f989f26b4c3aea0c15d064bd3120
+--===============3477285569537924821==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=43dcaa19a0a8549df39f51ab6782840834ea79a8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When the meson build directory was changed to buildroot-build in
-4e95062f820a64ecd2402115ee552dbcf2874f02 we forgot to update the
-install path for the systemd-boot efi binary.
+Commit e3329a1e8203 ("configs/imx8mn_bsh_smm_s2[_pro]: bump Linux to
+6.12.23 and U-Boot to 2025.04") broke the U-Boot boot process on the
+BSH SMM S2 board. I didn’t notice it because I mistakenly tested the
+patch on the SMM S2PRO board, which boots from eMMC instead of NAND.
+Next time, I won’t forget to test on both boards :).
 
-Fixes:
-/usr/bin/install: cannot stat '/home/buildroot/buildroot/output/build/systemd-256.7/build/src/boot/efi/systemd-bootx64.efi': No such file or directory
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Fixes: e3329a1e8203 ("configs/imx8mn_bsh_smm_s2[_pro]: bump Linux to 6.12.23 and U-Boot to 2025.04")
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/systemd/systemd.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...0001-arm-imx-imx8m-soc-fix-the-macro-name.patch |  45 ++++++
+ ...imx-imx8m-soc-replace-ifdef-by-IS_ENABLED.patch | 178 +++++++++++++++++++++
+ ...Kconfig-support-U-Boot-load-from-raw-NAND.patch |  49 ++++++
+ ...mx-spl_imx_romapi-support-raw-NAND-sector.patch |  42 +++++
+ ...x8mn_bsh_smm_s2-load-U-Boot-from-raw-NAND.patch |  32 ++++
+ 5 files changed, 346 insertions(+)
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 337d52b1f2..71fe0de550 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -646,7 +646,7 @@ SYSTEMD_CONF_OPTS += -Dbootloader=enabled
- 
- SYSTEMD_BOOT_EFI_ARCH = $(call qstrip,$(BR2_PACKAGE_SYSTEMD_BOOT_EFI_ARCH))
- define SYSTEMD_INSTALL_BOOT_FILES
--	$(INSTALL) -D -m 0644 $(@D)/build/src/boot/efi/systemd-boot$(SYSTEMD_BOOT_EFI_ARCH).efi \
-+	$(INSTALL) -D -m 0644 $(@D)/buildroot-build/src/boot/efi/systemd-boot$(SYSTEMD_BOOT_EFI_ARCH).efi \
- 		$(BINARIES_DIR)/efi-part/EFI/BOOT/boot$(SYSTEMD_BOOT_EFI_ARCH).efi
- 	$(INSTALL) -D -m 0644 $(SYSTEMD_PKGDIR)/boot-files/loader.conf \
- 		$(BINARIES_DIR)/efi-part/loader/loader.conf
+diff --git a/board/bsh/common/imx8mn-bsh-smm-s2/patches/uboot/0001-arm-imx-imx8m-soc-fix-the-macro-name.patch b/board/bsh/common/imx8mn-bsh-smm-s2/patches/uboot/0001-arm-imx-imx8m-soc-fix-the-macro-name.patch
+new file mode 100644
+index 0000000000..6d53dddfb8
+--- /dev/null
++++ b/board/bsh/common/imx8mn-bsh-smm-s2/patches/uboot/0001-arm-imx-imx8m-soc-fix-the-macro-name.patch
+@@ -0,0 +1,45 @@
++From f7cddc4c6f4e4da57c6500cd0d88ea06e937b239 Mon Sep 17 00:00:00 2001
++From: Michael Trimarchi <michael@amarulasolutions.com>
++Date: Thu, 15 May 2025 17:09:51 +0200
++Subject: [PATCH] arm: imx: imx8m: soc: fix the macro name
++
++The function arch_spl_mmc_get_uboot_raw_sector() was never compiled,
++even when the option CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_USE_PARTITION was
++enabled. So rename the macro SYS_MMCSD_RAW_MODE_U_BOOT_USE_PARTITION to
++CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_USE_PARTITION.
++
++Fixes: 2a00d73d081a ("spl: mmc: Try to clean up raw-mode options")
++Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
++Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
++Reviewed-by: Quentin Schulz <quentin.schulz@cherry.de>
++Reviewed-by: Peng Fan <peng.fan@nxp.com>
++Upstream: https://source.denx.de/u-boot/u-boot/-/commit/f7cddc4c6f4e4da57c6500cd0d88ea06e937b239
++---
++ arch/arm/mach-imx/imx8m/soc.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/arch/arm/mach-imx/imx8m/soc.c b/arch/arm/mach-imx/imx8m/soc.c
++index 567e8e9e81a0..806adcf145fa 100644
++--- a/arch/arm/mach-imx/imx8m/soc.c
+++++ b/arch/arm/mach-imx/imx8m/soc.c
++@@ -791,7 +791,7 @@ int boot_mode_getprisec(void)
++ #endif
++ 
++ #if defined(CONFIG_IMX8MN) || defined(CONFIG_IMX8MP)
++-#ifdef SYS_MMCSD_RAW_MODE_U_BOOT_USE_PARTITION
+++#ifdef CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_USE_PARTITION
++ #define IMG_CNTN_SET1_OFFSET	GENMASK(22, 19)
++ unsigned long arch_spl_mmc_get_uboot_raw_sector(struct mmc *mmc,
++ 						unsigned long raw_sect)
++@@ -826,7 +826,7 @@ unsigned long arch_spl_mmc_get_uboot_raw_sector(struct mmc *mmc,
++ 
++ 	return raw_sect;
++ }
++-#endif /* SYS_MMCSD_RAW_MODE_U_BOOT_USE_PARTITION */
+++#endif /* CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_USE_PARTITION */
++ #endif
++ 
++ bool is_usb_boot(void)
++-- 
++2.43.0
++
+diff --git a/board/bsh/common/imx8mn-bsh-smm-s2/patches/uboot/0002-arm-imx-imx8m-soc-replace-ifdef-by-IS_ENABLED.patch b/board/bsh/common/imx8mn-bsh-smm-s2/patches/uboot/0002-arm-imx-imx8m-soc-replace-ifdef-by-IS_ENABLED.patch
+new file mode 100644
+index 0000000000..5f57c69481
+--- /dev/null
++++ b/board/bsh/common/imx8mn-bsh-smm-s2/patches/uboot/0002-arm-imx-imx8m-soc-replace-ifdef-by-IS_ENABLED.patch
+@@ -0,0 +1,178 @@
++From 4c82eeab9840983693791117aa75f7bd7fbc805b Mon Sep 17 00:00:00 2001
++From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
++Date: Thu, 15 May 2025 17:09:52 +0200
++Subject: [PATCH] arm: imx: imx8m: soc: replace ifdef by IS_ENABLED()
++
++Standardize on using the IS_ENABLED macro.
++
++Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
++Reviewed-by: Peng Fan <peng.fan@nxp.com>
++Upstream: https://source.denx.de/u-boot/u-boot/-/commit/4c82eeab9840983693791117aa75f7bd7fbc805b
++---
++ arch/arm/mach-imx/imx8m/soc.c | 40 +++++++++++++++++------------------
++ 1 file changed, 20 insertions(+), 20 deletions(-)
++
++diff --git a/arch/arm/mach-imx/imx8m/soc.c b/arch/arm/mach-imx/imx8m/soc.c
++index 806adcf145fa..3cdb71a25284 100644
++--- a/arch/arm/mach-imx/imx8m/soc.c
+++++ b/arch/arm/mach-imx/imx8m/soc.c
++@@ -38,7 +38,7 @@
++ 
++ DECLARE_GLOBAL_DATA_PTR;
++ 
++-#if defined(CONFIG_IMX_HAB)
+++#if IS_ENABLED(CONFIG_IMX_HAB)
++ struct imx_fuse const imx_sec_config_fuse = {
++ 	.bank = 1,
++ 	.word = 3,
++@@ -52,7 +52,7 @@ struct imx_fuse const imx_field_return_fuse = {
++ 
++ int timer_init(void)
++ {
++-#ifdef CONFIG_XPL_BUILD
+++#if IS_ENABLED(CONFIG_XPL_BUILD)
++ 	struct sctr_regs *sctr = (struct sctr_regs *)SYSCNT_CTRL_BASE_ADDR;
++ 	unsigned long freq = readl(&sctr->cntfid0);
++ 
++@@ -110,7 +110,7 @@ void set_wdog_reset(struct wdog_regs *wdog)
++ 	setbits_le16(&wdog->wcr, WDOG_WDT_MASK | WDOG_WDZST_MASK);
++ }
++ 
++-#ifdef CONFIG_ARMV8_PSCI
+++#if IS_ENABLED(CONFIG_ARMV8_PSCI)
++ #define PTE_MAP_NS	PTE_BLOCK_NS
++ #else
++ #define PTE_MAP_NS	0
++@@ -700,11 +700,11 @@ int arch_cpu_init(void)
++ 	return 0;
++ }
++ 
++-#if defined(CONFIG_IMX8MN) || defined(CONFIG_IMX8MP)
+++#if IS_ENABLED(CONFIG_IMX8MN) || IS_ENABLED(CONFIG_IMX8MP)
++ struct rom_api *g_rom_api = (struct rom_api *)0x980;
++ #endif
++ 
++-#if defined(CONFIG_IMX8M)
+++#if IS_ENABLED(CONFIG_IMX8M)
++ #include <spl.h>
++ int imx8m_detect_secondary_image_boot(void)
++ {
++@@ -790,8 +790,8 @@ int boot_mode_getprisec(void)
++ }
++ #endif
++ 
++-#if defined(CONFIG_IMX8MN) || defined(CONFIG_IMX8MP)
++-#ifdef CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_USE_PARTITION
+++#if IS_ENABLED(CONFIG_IMX8MN) || IS_ENABLED(CONFIG_IMX8MP)
+++#if IS_ENABLED(CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_USE_PARTITION)
++ #define IMG_CNTN_SET1_OFFSET	GENMASK(22, 19)
++ unsigned long arch_spl_mmc_get_uboot_raw_sector(struct mmc *mmc,
++ 						unsigned long raw_sect)
++@@ -834,7 +834,7 @@ bool is_usb_boot(void)
++ 	return get_boot_device() == USB_BOOT;
++ }
++ 
++-#ifdef CONFIG_OF_SYSTEM_SETUP
+++#if IS_ENABLED(CONFIG_OF_SYSTEM_SETUP)
++ bool check_fdt_new_path(void *blob)
++ {
++ 	const char *soc_path = "/soc@0";
++@@ -880,7 +880,7 @@ add_status:
++ 	return 0;
++ }
++ 
++-#ifdef CONFIG_IMX8MQ
+++#if IS_ENABLED(CONFIG_IMX8MQ)
++ bool check_dcss_fused(void)
++ {
++ 	struct ocotp_regs *ocotp = (struct ocotp_regs *)OCOTP_BASE_ADDR;
++@@ -1026,7 +1026,7 @@ int disable_vpu_nodes(void *blob)
++ 		return -EPERM;
++ }
++ 
++-#ifdef CONFIG_IMX8MN_LOW_DRIVE_MODE
+++#if IS_ENABLED(CONFIG_IMX8MN_LOW_DRIVE_MODE)
++ static int low_drive_gpu_freq(void *blob)
++ {
++ 	static const char *nodes_path_8mn[] = {
++@@ -1311,7 +1311,7 @@ int ft_system_setup(void *blob, struct bd_info *bd)
++ 		"/cpus/cpu@3",
++ 	};
++ 
++-#ifdef CONFIG_IMX8MQ
+++#if IS_ENABLED(CONFIG_IMX8MQ)
++ 	int i = 0;
++ 	int rc;
++ 	int nodeoff;
++@@ -1387,7 +1387,7 @@ usb_modify_speed:
++ 	if (is_imx8md())
++ 		disable_cpu_nodes(blob, nodes_path, 2, 4);
++ 
++-#elif defined(CONFIG_IMX8MM)
+++#elif IS_ENABLED(CONFIG_IMX8MM)
++ 	if (is_imx8mml() || is_imx8mmdl() ||  is_imx8mmsl())
++ 		disable_vpu_nodes(blob);
++ 
++@@ -1396,10 +1396,10 @@ usb_modify_speed:
++ 	else if (is_imx8mms() || is_imx8mmsl())
++ 		disable_cpu_nodes(blob, nodes_path, 3, 4);
++ 
++-#elif defined(CONFIG_IMX8MN)
+++#elif IS_ENABLED(CONFIG_IMX8MN)
++ 	if (is_imx8mnl() || is_imx8mndl() ||  is_imx8mnsl())
++ 		disable_gpu_nodes(blob);
++-#ifdef CONFIG_IMX8MN_LOW_DRIVE_MODE
+++#if IS_ENABLED(CONFIG_IMX8MN_LOW_DRIVE_MODE)
++ 	else {
++ 		int ldm_gpu = low_drive_gpu_freq(blob);
++ 
++@@ -1415,7 +1415,7 @@ usb_modify_speed:
++ 	else if (is_imx8mns() || is_imx8mnsl() || is_imx8mnus())
++ 		disable_cpu_nodes(blob, nodes_path, 3, 4);
++ 
++-#elif defined(CONFIG_IMX8MP)
+++#elif IS_ENABLED(CONFIG_IMX8MP)
++ 	if (is_imx8mpul()) {
++ 		/* Disable GPU */
++ 		disable_gpu_nodes(blob);
++@@ -1471,7 +1471,7 @@ void reset_cpu(void)
++ }
++ #endif
++ 
++-#if defined(CONFIG_ARCH_MISC_INIT)
+++#if IS_ENABLED(CONFIG_ARCH_MISC_INIT)
++ int arch_misc_init(void)
++ {
++ 	if (IS_ENABLED(CONFIG_FSL_CAAM)) {
++@@ -1487,8 +1487,8 @@ int arch_misc_init(void)
++ }
++ #endif
++ 
++-#if defined(CONFIG_XPL_BUILD)
++-#if defined(CONFIG_IMX8MQ) || defined(CONFIG_IMX8MM) || defined(CONFIG_IMX8MN)
+++#if IS_ENABLED(CONFIG_XPL_BUILD)
+++#if IS_ENABLED(CONFIG_IMX8MQ) || IS_ENABLED(CONFIG_IMX8MM) || IS_ENABLED(CONFIG_IMX8MN)
++ bool serror_need_skip = true;
++ 
++ void do_error(struct pt_regs *pt_regs)
++@@ -1523,7 +1523,7 @@ void do_error(struct pt_regs *pt_regs)
++ #endif
++ #endif
++ 
++-#if defined(CONFIG_IMX8MN) || defined(CONFIG_IMX8MP)
+++#if IS_ENABLED(CONFIG_IMX8MN) || IS_ENABLED(CONFIG_IMX8MP)
++ enum env_location arch_env_get_location(enum env_operation op, int prio)
++ {
++ 	enum boot_device dev = get_boot_device();
++@@ -1571,7 +1571,7 @@ enum env_location arch_env_get_location(enum env_operation op, int prio)
++ 
++ #endif
++ 
++-#ifdef CONFIG_IMX_BOOTAUX
+++#if IS_ENABLED(CONFIG_IMX_BOOTAUX)
++ const struct rproc_att hostmap[] = {
++ 	/* aux core , host core,  size */
++ 	{ 0x00000000, 0x007e0000, 0x00020000 },
++-- 
++2.43.0
++
+diff --git a/board/bsh/common/imx8mn-bsh-smm-s2/patches/uboot/0003-spl-Kconfig-support-U-Boot-load-from-raw-NAND.patch b/board/bsh/common/imx8mn-bsh-smm-s2/patches/uboot/0003-spl-Kconfig-support-U-Boot-load-from-raw-NAND.patch
+new file mode 100644
+index 0000000000..4e8ade441a
+--- /dev/null
++++ b/board/bsh/common/imx8mn-bsh-smm-s2/patches/uboot/0003-spl-Kconfig-support-U-Boot-load-from-raw-NAND.patch
+@@ -0,0 +1,49 @@
++From 8acea298bb82c38b20855cd46a46b9e418dc1fb0 Mon Sep 17 00:00:00 2001
++From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
++Date: Tue, 20 May 2025 10:54:16 +0200
++Subject: [PATCH] spl: Kconfig: support U-Boot load from raw NAND
++
++Commit 2a00d73d081a ("spl: mmc: Try to clean up raw-mode options") breaks
++the boot of the BSH SMM S2 board. As stated in the commit itself, "Some
++boards use this value even though MMC is not enabled in SPL, for example
++imx8mn_bsh_smm_s2".
++
++Support load of the U-Boot image from raw NAND sector. This is equivalent
++to load from MMC raw sector.
++
++Fixes: 2a00d73d081a ("spl: mmc: Try to clean up raw-mode options")
++Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
++Upstream: https://source.denx.de/u-boot/u-boot/-/commit/8acea298bb82c38b20855cd46a46b9e418dc1fb0
++---
++ common/spl/Kconfig | 15 +++++++++++++++
++ 1 file changed, 15 insertions(+)
++
++diff --git a/common/spl/Kconfig b/common/spl/Kconfig
++index aa3a85eea54d..77cf04d38ed0 100644
++--- a/common/spl/Kconfig
+++++ b/common/spl/Kconfig
++@@ -974,6 +974,21 @@ config SPL_NAND_SUPPORT
++ 	  This enables the drivers in drivers/mtd/nand/raw as part of an SPL
++ 	  build.
++ 
+++config SPL_NAND_RAW_U_BOOT_USE_SECTOR
+++	bool "NAND raw mode: by sector"
+++	depends on SPL_NAND_SUPPORT
+++	select SPL_LOAD_BLOCK
+++	help
+++	  Use sector number for specifying U-Boot location on NAND in
+++	  raw mode.
+++
+++config SPL_NAND_RAW_U_BOOT_SECTOR
+++	hex "Address on the NAND to load U-Boot from"
+++	depends on SPL_NAND_RAW_U_BOOT_USE_SECTOR
+++	help
+++	  Address on the NAND to load U-Boot from, when the NAND is being used
+++	  in raw mode. Units: NAND disk sectors (1 sector = 512 bytes).
+++
++ config SPL_NAND_RAW_ONLY
++ 	bool "Support to boot only raw u-boot.bin images"
++ 	depends on SPL_NAND_SUPPORT
++-- 
++2.43.0
++
+diff --git a/board/bsh/common/imx8mn-bsh-smm-s2/patches/uboot/0004-imx-spl_imx_romapi-support-raw-NAND-sector.patch b/board/bsh/common/imx8mn-bsh-smm-s2/patches/uboot/0004-imx-spl_imx_romapi-support-raw-NAND-sector.patch
+new file mode 100644
+index 0000000000..cc35a76f88
+--- /dev/null
++++ b/board/bsh/common/imx8mn-bsh-smm-s2/patches/uboot/0004-imx-spl_imx_romapi-support-raw-NAND-sector.patch
+@@ -0,0 +1,42 @@
++From 24d98fa63bbcb21988e4e822f11686319502fb1f Mon Sep 17 00:00:00 2001
++From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
++Date: Tue, 20 May 2025 10:54:17 +0200
++Subject: [PATCH] imx: spl_imx_romapi: support raw NAND sector
++
++Commit 2a00d73d081a ("spl: mmc: Try to clean up raw-mode options") breaks
++the boot of the BSH SMM S2 board. As stated in the dropped comment, "Some
++boards use this value even though MMC is not enabled in SPL, for example
++imx8mn_bsh_smm_s2".
++
++Support load of the U-Boot image from raw NAND sector.
++
++Fixes: 2a00d73d081a ("spl: mmc: Try to clean up raw-mode options")
++Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
++Upstream: https://source.denx.de/u-boot/u-boot/-/commit/24d98fa63bbcb21988e4e822f11686319502fb1f
++---
++ arch/arm/mach-imx/spl_imx_romapi.c | 8 +++-----
++ 1 file changed, 3 insertions(+), 5 deletions(-)
++
++diff --git a/arch/arm/mach-imx/spl_imx_romapi.c b/arch/arm/mach-imx/spl_imx_romapi.c
++index 3982f4cca184..b7008df8e35a 100644
++--- a/arch/arm/mach-imx/spl_imx_romapi.c
+++++ b/arch/arm/mach-imx/spl_imx_romapi.c
++@@ -35,12 +35,10 @@ ulong __weak spl_romapi_get_uboot_base(u32 image_offset, u32 rom_bt_dev)
++ {
++ 	u32 sector = 0;
++ 
++-	/*
++-	 * Some boards use this value even though MMC is not enabled in SPL, for
++-	 * example imx8mn_bsh_smm_s2
++-	 */
++-#ifdef CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_USE_SECTOR
+++#if IS_ENABLED(CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_USE_SECTOR)
++ 	sector = CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_SECTOR;
+++#elif IS_ENABLED(CONFIG_SPL_NAND_RAW_U_BOOT_USE_SECTOR)
+++	sector = CONFIG_SPL_NAND_RAW_U_BOOT_SECTOR;
++ #endif
++ 
++ 	return image_offset + sector * 512 - 0x8000;
++-- 
++2.43.0
++
+diff --git a/board/bsh/common/imx8mn-bsh-smm-s2/patches/uboot/0005-configs-imx8mn_bsh_smm_s2-load-U-Boot-from-raw-NAND.patch b/board/bsh/common/imx8mn-bsh-smm-s2/patches/uboot/0005-configs-imx8mn_bsh_smm_s2-load-U-Boot-from-raw-NAND.patch
+new file mode 100644
+index 0000000000..61eccd51ff
+--- /dev/null
++++ b/board/bsh/common/imx8mn-bsh-smm-s2/patches/uboot/0005-configs-imx8mn_bsh_smm_s2-load-U-Boot-from-raw-NAND.patch
+@@ -0,0 +1,32 @@
++From dce71922df352b0eb1b6cc3d40c374ad80a7d6c5 Mon Sep 17 00:00:00 2001
++From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
++Date: Tue, 20 May 2025 10:54:18 +0200
++Subject: [PATCH] configs: imx8mn_bsh_smm_s2: load U-Boot from raw NAND
++
++Commit 2a00d73d081a ("spl: mmc: Try to clean up raw-mode options") breaks
++the boot of the BSH SMM S2 board. Add options to load U-Boot from raw NAND
++sector.
++
++Fixes: 2a00d73d081a ("spl: mmc: Try to clean up raw-mode options")
++Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
++Upstream: https://source.denx.de/u-boot/u-boot/-/commit/dce71922df352b0eb1b6cc3d40c374ad80a7d6c5
++---
++ configs/imx8mn_bsh_smm_s2_defconfig | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/configs/imx8mn_bsh_smm_s2_defconfig b/configs/imx8mn_bsh_smm_s2_defconfig
++index 9ffcd3b221c3..1c11d4705419 100644
++--- a/configs/imx8mn_bsh_smm_s2_defconfig
+++++ b/configs/imx8mn_bsh_smm_s2_defconfig
++@@ -47,6 +47,8 @@ CONFIG_SPL_DMA=y
++ CONFIG_SPL_I2C=y
++ CONFIG_SPL_MTD=y
++ CONFIG_SPL_NAND_SUPPORT=y
+++CONFIG_SPL_NAND_RAW_U_BOOT_USE_SECTOR=y
+++CONFIG_SPL_NAND_RAW_U_BOOT_SECTOR=0x300
++ CONFIG_SPL_NAND_BASE=y
++ CONFIG_SPL_NAND_IDENT=y
++ CONFIG_SPL_POWER=y
++-- 
++2.43.0
++
+
+--===============3477285569537924821==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3477285569537924821==--
