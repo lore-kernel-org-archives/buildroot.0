@@ -1,52 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA9A7C71136
-	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 08:40:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03554C61CE8
+	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 08:40:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9004061656;
+	by smtp1.osuosl.org (Postfix) with ESMTP id C8FBB833A7;
 	Thu, 12 Jun 2025 08:40:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ml9E3c0IYA6g; Thu, 12 Jun 2025 08:40:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8xcP-xhAG2KS; Thu, 12 Jun 2025 08:40:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F12486165B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DEADE83342
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F12486165B;
-	Thu, 12 Jun 2025 08:40:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DEADE83342;
+	Thu, 12 Jun 2025 08:40:19 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 634511BD
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:39:09 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 911D51BD
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:39:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E7E73405C6
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:31 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5581B4214C
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ltFTkrti64yD for <buildroot@buildroot.org>;
+ id ASWORcJaBYFm for <buildroot@buildroot.org>;
  Thu, 12 Jun 2025 08:38:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 29C7F405C8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D85B442140
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 29C7F405C8
+ by smtp2.osuosl.org (Postfix) with ESMTP id D85B442140
  for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 279D4828E3; Thu, 12 Jun 2025 08:38:30 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+ id D5784817E6; Thu, 12 Jun 2025 08:38:30 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 27 May 2025 20:53:23 +0200
+Date: Fri, 30 May 2025 21:36:58 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 48c5ae7395a5ca74dc77470098d873b0e4dfe987
-X-Git-Newrev: 119c72cf3a54c7abba5db6654654a893f570ceb0
+X-Git-Oldrev: 4850405d8aa2b4f7aeb84a0db7cd3369a727d214
+X-Git-Newrev: 22e25b6d4c674fb898acc27dd64a27902eeef792
 X-Patchwork-Hint: ignore
-Message-Id: <20250612083830.279D4828E3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/strace: bump version to 6.15
+Message-Id: <20250612083830.D5784817E6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/fwts: bump to version 25.05.00
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,50 +57,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=119c72cf3a54c7abba5db6654654a893f570ceb0
+commit: https://git.buildroot.net/buildroot/commit/?id=22e25b6d4c674fb898acc27dd64a27902eeef792
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://github.com/strace/strace/releases/tag/v6.15
+See release announce:
+https://lists.ubuntu.com/archives/fwts-devel/2025-May/014005.html
 
-Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/strace/strace.hash | 4 ++--
- package/strace/strace.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/fwts/fwts.hash | 2 +-
+ package/fwts/fwts.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/strace/strace.hash b/package/strace/strace.hash
-index 10de7e7563..9bccae7108 100644
---- a/package/strace/strace.hash
-+++ b/package/strace/strace.hash
+diff --git a/package/fwts/fwts.hash b/package/fwts/fwts.hash
+index b578b96778..3657d87707 100644
+--- a/package/fwts/fwts.hash
++++ b/package/fwts/fwts.hash
 @@ -1,5 +1,5 @@
- # Locally calculated after checking signature with RSA key 0xA8041FA839E16E36
--# https://strace.io/files/6.14/strace-6.14.tar.xz.asc
--sha256  244f3b5c20a32854ca9b7ca7a3ee091dd3d4bd20933a171ecee8db486c77d3c9  strace-6.14.tar.xz
-+# https://strace.io/files/6.15/strace-6.15.tar.xz.asc
-+sha256  8552dfab08abc22a0f2048c98fd9541fd4d71b6882507952780dab7c7c512f51  strace-6.15.tar.xz
- sha256  ca2a0994c57e48b16828008c80cdb626e471b6b59116a8443b2ce4e3c77ddc3b  COPYING
- sha256  7c379436436a562834aa7d2f5dcae1f80a25230fa74201046ca1fba4367d39aa  LGPL-2.1-or-later
-diff --git a/package/strace/strace.mk b/package/strace/strace.mk
-index ee0e7dcf4a..bd7d73c78c 100644
---- a/package/strace/strace.mk
-+++ b/package/strace/strace.mk
+ # Hash from: https://fwts.ubuntu.com/release/SHA256SUMS
+-sha256  6e4f795a7b5c7e549515901e197fedba200ee9fd06c8a62f9f49db24301f280b  fwts-V25.03.00.tar.gz
++sha256  06802ac4fed7b6de989417c9726180c77cdc7253d4434b83e43104f4b7f65492  fwts-V25.05.00.tar.gz
+ 
+ # Hash for license file
+ sha256  77a5f0ea48e53ee8d67aecc7759cf468bcd340c1caca711ed4307b477a93fb47  debian/copyright
+diff --git a/package/fwts/fwts.mk b/package/fwts/fwts.mk
+index dd1c16317f..d3ba761982 100644
+--- a/package/fwts/fwts.mk
++++ b/package/fwts/fwts.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--STRACE_VERSION = 6.14
-+STRACE_VERSION = 6.15
- STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
- STRACE_SITE = https://github.com/strace/strace/releases/download/v$(STRACE_VERSION)
- STRACE_LICENSE = LGPL-2.1+
+-FWTS_VERSION = 25.03.00
++FWTS_VERSION = 25.05.00
+ FWTS_SOURCE = fwts-V$(FWTS_VERSION).tar.gz
+ FWTS_SITE = https://fwts.ubuntu.com/release
+ FWTS_STRIP_COMPONENTS = 0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
