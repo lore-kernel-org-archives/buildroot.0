@@ -1,71 +1,101 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6BB1C5AD49
-	for <buildroot@archiver.kernel.org>; Fri, 30 May 2025 22:11:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 637A6C5AD49
+	for <buildroot@archiver.kernel.org>; Fri, 30 May 2025 22:29:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6234760FF4;
-	Fri, 30 May 2025 22:11:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0E38383E28;
+	Fri, 30 May 2025 22:29:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6hp5h1qpeNBo; Fri, 30 May 2025 22:11:43 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GspmN4Es0taR; Fri, 30 May 2025 22:29:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 70BE560FDA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3BC9B83E2B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 70BE560FDA;
-	Fri, 30 May 2025 22:11:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3BC9B83E2B;
+	Fri, 30 May 2025 22:29:26 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 0CEA4234
- for <buildroot@buildroot.org>; Fri, 30 May 2025 22:11:41 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 33F86236
+ for <buildroot@buildroot.org>; Fri, 30 May 2025 22:29:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F24B9400F4
- for <buildroot@buildroot.org>; Fri, 30 May 2025 22:11:40 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2624540177
+ for <buildroot@buildroot.org>; Fri, 30 May 2025 22:29:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oZftc4qaGNAJ for <buildroot@buildroot.org>;
- Fri, 30 May 2025 22:11:40 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=136.243.2.102;
- helo=nyx.n621.de; envelope-from=fl@n621.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0B63E40054
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B63E40054
-Received: from nyx.n621.de (v4gw.hekate.n621.de [136.243.2.102])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0B63E40054
- for <buildroot@buildroot.org>; Fri, 30 May 2025 22:11:39 +0000 (UTC)
-Received: by nyx.n621.de (Postfix, from userid 1000)
- id 9D080E0023B; Sat, 31 May 2025 00:11:36 +0200 (CEST)
-Date: Sat, 31 May 2025 00:11:36 +0200
-From: Florian Larysch <fl@n621.de>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-Message-ID: <20250530221136.jnf4d76j4fidh6aw@n621.de>
-References: <20250527152342.4288-1-fl@n621.de>
- <20250530220125.3b1c7c5f@windsurf>
+ id IP9czN3HBZh2 for <buildroot@buildroot.org>;
+ Fri, 30 May 2025 22:29:24 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::62a; helo=mail-pl1-x62a.google.com;
+ envelope-from=kadambini.nema@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5A68840054
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5A68840054
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com
+ [IPv6:2607:f8b0:4864:20::62a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5A68840054
+ for <buildroot@buildroot.org>; Fri, 30 May 2025 22:29:24 +0000 (UTC)
+Received: by mail-pl1-x62a.google.com with SMTP id
+ d9443c01a7336-2351227b098so17083055ad.2
+ for <buildroot@buildroot.org>; Fri, 30 May 2025 15:29:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1748644163; x=1749248963;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=UNfcmdGg11BFli/QIOUydXAUd/uKrgYYW4SMr6ErRrw=;
+ b=MyK+jdcsaTyCsxVDgapLoVIFITdeZmfqwCkOw911NvkdaIwG0rf5PfAl9ufxhuynCq
+ zprjvs0lbYgJXoxq/fJkoCBdlZbbcY8qgyFMxmRqeowz7ibJ1/Hc9cRXo4ADVQiR0Jds
+ f/D7eKOFjtevPHEZhZ0HGpkCat0UrpG0hYW3LmKCea6sJA0Nhug2H5dnb02g3Vu/o/mc
+ rfq0sPK+f9rngZ25173y7+KaIhw90w/zdbd23SDmqUl/gBklhoxUCT77AJD5Ot4J4Vcv
+ dMMPmKcO5sV/kYU739dwK0DU4HhdmJKLDfZNhhTyENcScOjCQc8TzkszVNZr5scjVw+y
+ nTGQ==
+X-Gm-Message-State: AOJu0YxI25oqvjnqRH5+X9bdaO5oGtNAAwYpsQygBajEMjxnaA1id4Wh
+ 4TYb3Xlv9X+I8sPrGxGE8X/0xYUOwZ5IegJwxb1/DIbSRwFgIpMoeUaAFFtYGMhh
+X-Gm-Gg: ASbGncsFJVp+hM5EuBuu6Kkx3AH20pb2QynNq+r4JLROexq4lW08VEoe/cElkJbekbB
+ BmGJltiFnclV2GEij9+jhWT7Y4kw0Uf/Po2DGUFrJYcUL7FiIU1zs8+xsk1NX/bM8i7jT4NsaeL
+ 2cDSNz0LChLs8DV8rfeVYSKSy4kXyfHyETVWjPVXlgrh2HFnaaKKFTubdZ7DRlEVE183C2IKQLz
+ bRvokseIvBWPbXohf8fgYGP7d9m3DbG/nPOEPADm3+7dQcQ7RWss2XxDZ18tw/DQ1JNSBGVRyOs
+ PZa1fUIUXMO8J+xrw7lCiqt0prRbAhh53ieHaQiJs9q1IOsAyFd7XqJyswSx1wlenqbFn5yqmer
+ DLIvGyrnTBsQVjEryWVS+rt0aWAEtS/R99fUApsAua7ppWHnoPwdXl6ZUEhY=
+X-Google-Smtp-Source: AGHT+IHefvYBejvC9gZ+EeIXhlzjH+yfJQ0QZeI4THhTWhdFBJiCdHg8KpavrkPU9tb75ZjDs67CQQ==
+X-Received: by 2002:a17:902:cf05:b0:234:98eb:8eda with SMTP id
+ d9443c01a7336-235291e872bmr87284105ad.28.1748644163091; 
+ Fri, 30 May 2025 15:29:23 -0700 (PDT)
+Received: from localhost.localdomain (ip72-203-121-181.oc.oc.cox.net.
+ [72.203.121.181]) by smtp.gmail.com with ESMTPSA id
+ d9443c01a7336-23506bdce12sm33177055ad.99.2025.05.30.15.29.22
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 30 May 2025 15:29:22 -0700 (PDT)
+From: Kadambini Nema <kadambini.nema@gmail.com>
+To: buildroot@buildroot.org
+Cc: Pierre-Jean Texier <texier.pj2@gmail.com>,
+ Kadambini Nema <kadambini.nema@gmail.com>
+Date: Fri, 30 May 2025 15:29:19 -0700
+Message-Id: <20250530222919.594540-1-kadambini.nema@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20250530220125.3b1c7c5f@windsurf>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=n621.de; s=dkim; t=1748643096;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- in-reply-to:in-reply-to:references:references;
- bh=TMS20T1FbadFhNdrrRjnMelYkxpHc5nkqvO1DfAjTlU=;
- b=LYOQnaQ15LM0HzKEKJehIeQE2AXnxzG4Pg+yw9a6FpJOg+vbHsSs4YKh63HZRJ/CtW3FD/
- YCQbwkyrXG97oE9K+LewkLXm+YI4GtwJqKFmc0IGdkcsKi0tkZ699mgmWwinYoXe+itKkY
- q5AO4nDB9frG131yVwIGyakvsE5Jrlw=
+ d=gmail.com; s=20230601; t=1748644163; x=1749248963; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=UNfcmdGg11BFli/QIOUydXAUd/uKrgYYW4SMr6ErRrw=;
+ b=atjrR4+HhzjfxFamWAxDncjJu631/FNFuS1cn75rwkWJFz62bf77l33ClImJKhUe5x
+ iw9uz2opZPVXSgAJ7BGewk31JXioU66/5x3peUXyVmHC5NAWzFJweBc7VlYWKH9eIhF+
+ 7HqnPnRgSs0QSJV9V0dTeVWXwZjOx4BIXQbX9Khv2f0AlVWwYq0uSFwD8Fp+BYbyRqtD
+ KuuveqauQ0QPtYcdmz14Yvw1speOsq+RzusoZEYZMAqtUxK35BkwhOjrrXl0skX8pAGB
+ PPRKoz/BzArUCRMdyzSaNnAJwR1luP6y+RD+yZs9expoNinBirQAg2lvgHBdjAwEIlqZ
+ skXg==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=n621.de
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=n621.de header.i=@n621.de header.a=rsa-sha256
- header.s=dkim header.b=LYOQnaQ1
-Subject: Re: [Buildroot] [PATCH 1/1] package/network-manager: make
- cryptography library optional
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=atjrR4+H
+Subject: [Buildroot] [PATCH 1/1] package/tree: bump to version 2.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,53 +112,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas,
+Changelog:
+https://github.com/Old-Man-Programmer/tree/blob/2.2.1/CHANGES
 
-thank you for your comments!
+Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
+---
+ package/tree/tree.hash | 2 +-
+ package/tree/tree.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Fri, May 30, 2025 at 10:01:25PM +0200, Thomas Petazzoni wrote:
-> Indeed, we have two conflicting goals:
-> (1) Not break backward compatibility. [...] 
-> (2) Have minimal dependencies by default [...]
-> And I think my preference goes to (2) in this situation.
+diff --git a/package/tree/tree.hash b/package/tree/tree.hash
+index 9ef48b1e77..16ada077f3 100644
+--- a/package/tree/tree.hash
++++ b/package/tree/tree.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  d3c3d55f403af7c76556546325aa1eca90b918cbaaf6d3ab60a49d8367ab90d5  tree-2.1.1.tgz
++sha256  68ac45dc78c0c311ada06200ffc3c285e74223ba208061f8d15ffac25e44b2ec  tree-2.2.1.tgz
+ sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  LICENSE
+diff --git a/package/tree/tree.mk b/package/tree/tree.mk
+index 479a172a72..4b48f4cf48 100644
+--- a/package/tree/tree.mk
++++ b/package/tree/tree.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TREE_VERSION = 2.1.1
++TREE_VERSION = 2.2.1
+ TREE_SOURCE = tree-$(TREE_VERSION).tgz
+ TREE_SITE = http://oldmanprogrammer.net/tar/tree
+ TREE_LICENSE = GPL-2.0+
+-- 
+2.25.1
 
-Okay great, I think that's the preferable option too if breaking
-compatibility is fine. I'll send a new version of the patch.
-
-Is there a list of breaking changes I should add to?
-
-> We might discuss whether gnutls should take priority on libnss if both
-> are available. Maybe NM documents that one is "better" over the other?
-
-I haven't found any explicit statements to either effect. Support for
-both libraries has been present from day one back in 2007.
-
-Data points in favor of libnss:
-
- - It's the default value in the NM build system, so it would be the
-   preferred backend if both are available
-
- - It's probably the more mature of the two, given that it's being used
-   in Mozilla products
-
-Data points in favor of gnutls:
-
- - While both backends seem feature-equivalent, the
-   _nm_crypto_verify_pkcs8 function is stubbed out in the libnss code[1]
-
- - Both Debian and Fedora explicitly select gnutls in their packages. I
-   can't find the reasoning for Debian but at least for Fedora it seems
-   to have been a conscious choice[2].
-
-Given what it's actually used for in the code base, I don't think the
-choice really matters much when both options are available. I'd slightly
-lean towards gnutls just because it's marginally more feature-complete.
-How do you feel about this?
-
-Florian
-
-[1] https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/blob/36f8de25c487fe1570a19fe917c85ec065b0339e/src/libnm-crypto/nm-crypto-nss.c#L523-540
-[2] https://src.fedoraproject.org/rpms/NetworkManager/c/29a9c41beafb5e549c10bfb50ee23ee47bdbc42f?branch=rawhide
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
