@@ -1,52 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9151C5B543
-	for <buildroot@archiver.kernel.org>; Fri, 30 May 2025 19:54:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8B68C5AD49
+	for <buildroot@archiver.kernel.org>; Fri, 30 May 2025 19:54:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9171840E10;
-	Fri, 30 May 2025 19:54:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B5F7D60DA4;
+	Fri, 30 May 2025 19:54:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JhkN1inGir_l; Fri, 30 May 2025 19:54:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9zIgSPQGFvF9; Fri, 30 May 2025 19:54:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B928740C6F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 010D860DC6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B928740C6F;
-	Fri, 30 May 2025 19:54:08 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 72D25920
+	by smtp3.osuosl.org (Postfix) with ESMTP id 010D860DC6;
+	Fri, 30 May 2025 19:54:10 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id A23C2236
  for <buildroot@buildroot.org>; Fri, 30 May 2025 19:54:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 64C3083CA1
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8939B60D8F
  for <buildroot@buildroot.org>; Fri, 30 May 2025 19:54:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id twaR6pucnJb8 for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WyOw2_BICkJn for <buildroot@buildroot.org>;
  Fri, 30 May 2025 19:54:06 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
+ helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A480D83C92
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A480D83C92
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 9891060D77
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9891060D77
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9891060D77
  for <buildroot@buildroot.org>; Fri, 30 May 2025 19:54:06 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8D27B878A0; Fri, 30 May 2025 19:54:06 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 30 May 2025 21:52:43 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 2c87a81dec00b027d4e7ab38a36804110cfec736
-X-Git-Newrev: 5cff68d42c80e2ce619a3dc7c0f6c87d0f037e8f
-X-Patchwork-Hint: ignore
-Message-Id: <20250530195406.8D27B878A0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/timescaledb: bump
- version to 2.20.0
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2CC1A1F433;
+ Fri, 30 May 2025 19:54:03 +0000 (UTC)
+Date: Fri, 30 May 2025 21:54:02 +0200
+To: Scott Fan <fancp2007@gmail.com>
+Cc: buildroot@buildroot.org, Maxim Kochetkov <fido_max@inbox.ru>
+Message-ID: <20250530215402.72d91835@windsurf>
+In-Reply-To: <20250519060531.982830-1-fancp2007@gmail.com>
+References: <20250519060531.982830-1-fancp2007@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-State: clean
+X-GND-Score: 0
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddtgddvleeltdculddtuddrgeefvddrtddtmdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepkeeiieefffehvdeludeigfevveekvdejhfeihfeuhefgueefffetveejtdfhudelnecuffhomhgrihhnpehgihhthhhusgdrtghomhdptghhrghnghgvlhhoghdrmhgupdgsohhothhlihhnrdgtohhmnecukfhppedvrgdtudemtggsudeimeefleemkegtugejmegvuddtleemledvtdgtmedvfedvkeemieejvddvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgduieemfeelmeektggujeemvgdutdelmeelvddttgemvdefvdekmeeijedvvddphhgvlhhopeifihhnughsuhhrfhdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepfedprhgtphhtthhopehfrghntghpvddttdejsehgmhgrihhlrdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrg
+ hdprhgtphhtthhopehfihguohgpmhgrgiesihhnsghogidrrhhu
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1748634844;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=C7MLVQ32yBBnIS1pmlnWu+p9M8+GL13rEiDp6g4yulc=;
+ b=CTFT8LXaL/zalghUYmDE2TbX4H3gwpuUgZUnjeqDE9RunLDvSQl5Ga6rGbkBSiSYJDstnP
+ 1rab0VbjX6cRM/iiWEq61RRtoVnJTMYgnH5fFBZiOc+GzjVtLcUjV52nDN4+mtsuvTYJc7
+ RKiS9ANIPCK1HfE7sbhh0ddhbWNSn4tZ8MzU55TTmxQaKBk4WRauQYhdaweM4SGiMgcO2j
+ iTBCbuIds/3MJ/dVetFjGSDewkVGcC+PSgeXRpo/aMp1N9G5NW+sr8ECrNRd1nRX7FkOR2
+ AUtPrSCOtL+76RDQkb1wonv89M5aLM6safQ4Q+EmYaGcPXZ3mgVRkTfyVBob3g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=CTFT8LXa
+Subject: Re: [Buildroot] [PATCH] package/timescaledb: bump version to 2.20.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,60 +87,34 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5cff68d42c80e2ce619a3dc7c0f6c87d0f037e8f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Mon, 19 May 2025 14:05:29 +0800
+Scott Fan <fancp2007@gmail.com> wrote:
 
-Release notes: https://github.com/timescale/timescaledb/blob/2.20.0/CHANGELOG.md
+> Release notes: https://github.com/timescale/timescaledb/blob/2.20.0/CHANGELOG.md
+> 
+> Add the PG_PATH variable to ensure that CMake can find the "pg_config" program.
+> Otherwise, the following error will be reported.
+> CMake Error at CMakeLists.txt:85 (message):
+>   Unable to find 'pg_config'
+> 
+> Signed-off-by: Scott Fan <fancp2007@gmail.com>
+> ---
+>  package/timescaledb/timescaledb.hash | 2 +-
+>  package/timescaledb/timescaledb.mk   | 3 ++-
+>  2 files changed, 3 insertions(+), 2 deletions(-)
 
-Add the PG_PATH variable to ensure that CMake can find the "pg_config" program.
-Otherwise, the following error will be reported.
-CMake Error at CMakeLists.txt:85 (message):
-  Unable to find 'pg_config'
+Applied to next, thanks.
 
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
-Reviewed-by: Maxim Kochetkov <fido_max@inbox.ru>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/timescaledb/timescaledb.hash | 2 +-
- package/timescaledb/timescaledb.mk   | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/package/timescaledb/timescaledb.hash b/package/timescaledb/timescaledb.hash
-index 3318d4614f..4ca325b2d7 100644
---- a/package/timescaledb/timescaledb.hash
-+++ b/package/timescaledb/timescaledb.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  ef2c9019f3e292f77e274a95386e550cb8c358ec0e053f6b7097565f61381e01  timescaledb-2.19.3.tar.gz
-+sha256  b6ac4c29ef29e93249fcc25bf193dab2637422797360b12e00fd73067138a953  timescaledb-2.20.0.tar.gz
- sha256  0378e0948feefd85f579319c74d6e2b671194037f550c7176ef26649d94c895b  LICENSE
-diff --git a/package/timescaledb/timescaledb.mk b/package/timescaledb/timescaledb.mk
-index 024a72d4f4..00e2eb81ea 100644
---- a/package/timescaledb/timescaledb.mk
-+++ b/package/timescaledb/timescaledb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TIMESCALEDB_VERSION = 2.19.3
-+TIMESCALEDB_VERSION = 2.20.0
- TIMESCALEDB_SITE = $(call github,timescale,timescaledb,$(TIMESCALEDB_VERSION))
- TIMESCALEDB_LICENSE = Apache-2.0
- TIMESCALEDB_LICENSE_FILES = LICENSE
-@@ -23,6 +23,7 @@ TIMESCALEDB_CONF_OPTS = \
- 	-DPG_PKGLIBDIR=lib/postgresql \
- 	-DPG_SHAREDIR=share/postgresql \
- 	-DPG_BINDIR=bin \
-+	-DPG_PATH="$(STAGING_DIR)/usr" \
- 	-DPG_CPPFLAGS="$(TARGET_CPPFLAGS) " \
- 	-DPG_CFLAGS="$(TARGET_CFLAGS) " \
- 	-DPG_LDFLAGS="$(TARGET_LDFLAGS) " \
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
