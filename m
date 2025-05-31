@@ -4,68 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68E0AC5B549
-	for <buildroot@archiver.kernel.org>; Sat, 31 May 2025 16:42:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8D8EC5AE59
+	for <buildroot@archiver.kernel.org>; Sat, 31 May 2025 16:43:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 37220409DB;
-	Sat, 31 May 2025 16:42:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AC90E40B1A;
+	Sat, 31 May 2025 16:43:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4DInDK8Ic_Rx; Sat, 31 May 2025 16:42:54 +0000 (UTC)
+ id DSEL8_ZeoBpz; Sat, 31 May 2025 16:43:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 668A040891
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BCADE409DB
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 668A040891;
-	Sat, 31 May 2025 16:42:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3CEA8127
- for <buildroot@buildroot.org>; Sat, 31 May 2025 16:42:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BCADE409DB;
+	Sat, 31 May 2025 16:43:10 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id C1FBA235
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 16:43:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 229BC832B0
- for <buildroot@buildroot.org>; Sat, 31 May 2025 16:42:53 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BF516409DB
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 16:43:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id R7vRFLEYcnpY for <buildroot@buildroot.org>;
- Sat, 31 May 2025 16:42:52 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gNtsEpXUjBpd for <buildroot@buildroot.org>;
+ Sat, 31 May 2025 16:43:08 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
  helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 489C283298
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 489C283298
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org BAB3540891
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BAB3540891
 Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 489C283298
- for <buildroot@buildroot.org>; Sat, 31 May 2025 16:42:52 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BAB3540891
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 16:43:07 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 4105C1C0D7C; Sat, 31 May 2025 18:42:50 +0200 (CEST)
-Message-ID: <0bdae30c-bca1-43e3-bf49-4581603c2d0c@rnout.be>
-Date: Sat, 31 May 2025 18:42:48 +0200
+ with ESMTPSA id A79781C0D7C; Sat, 31 May 2025 18:43:05 +0200 (CEST)
+Message-ID: <1aead601-3662-4519-b1e9-c65aa8f22006@rnout.be>
+Date: Sat, 31 May 2025 18:43:04 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 To: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
  buildroot@buildroot.org
 Cc: Martin Bark <martin@barkynet.com>, linux-amarula@amarulasolutions.com
-References: <20250512163253.1521000-1-dario.binacchi@amarulasolutions.com>
+References: <20250513080956.1578804-1-dario.binacchi@amarulasolutions.com>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20250512163253.1521000-1-dario.binacchi@amarulasolutions.com>
+In-Reply-To: <20250513080956.1578804-1-dario.binacchi@amarulasolutions.com>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1748709770; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1748709785; h=from:subject:date:message-id:to:cc:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=dDHedexVDO1rrxM6X0C0o0QmcoU7HuD74MK5NnBNMDY=;
- b=b7y5hSYePOzDS7qHF1KV8EX+3qaiHhr/TBOKna2NfGnqm4NI5+zO6Od+f27ag5hkzF3q9w
- Sx4FSiLgT3DAcTcWKVaIrBgDSho+OIZ2v3X/Wck7FGXZvQQZ2+BE6SQe8fNPjChsToqVSp
- xzzFSiCqSFj/PX8ubPkp10KMOCXC7HUsk0umDw1A4cgdWsqnLxn125LXb+Z52abUGQ30yE
- fKR4ngwMBhd8yROzZuQ5ZPnZ4bUFDf0BoZXkpJ6LaL3Uaqxsu00WA/9GqK5HkeuUcwtxYY
- QmSWQ3f31jIS+T6sBnPlfxpyJ87oEmXMLQ1G6rNRTBi+hnD2CEOSMCOV6PWvWw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=eNJfvFhsgbs6DLGe0Bal8J43G8gHkuzSp8uGg1AtKH4=;
+ b=dPV5UhQS38+wEpOtp7vmffLkIhJH81ZFeOrGzEKWgmZG51UDyMqpIV4ZTfOVqaWYW38nCQ
+ 2fDJLw7KT1ALX6S/5LDeGLsjsTKjxnmqMlFoB9P9FvCST3Ur+f1h3ZwmgE862QKnVU4vTs
+ PtzOajz6SUG7zS4BG+eUFUXxmhp5OzVRacH+KZUn58O4nbA2B60rcAKsy6HWjk4uUP9dg4
+ B0gaW7y+8WkbGSq2PVBLGD+hySsz9O5EBzlbbFWT6knIVgITUB8TcYlXIlK+jE6S0X+Axf
+ A7kcsFirVd07kWHewwDKfLQdL36nCvzw33zhOOn2Npwb6ZGRR0WOi6mcB/e5Fg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=b7y5hSYe
-Subject: Re: [Buildroot] [PATCH 1/2] package/connman: bump to version 1.44
+ header.a=rsa-sha256 header.s=dkim header.b=dPV5UhQS
+Subject: Re: [Buildroot] [PATCH 1/1] package/connman: fix CVE-2025-32366
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,63 +86,91 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 12/05/2025 18:32, Dario Binacchi wrote:
-> Release notes:
+On 13/05/2025 10:09, Dario Binacchi wrote:
+> In ConnMan through 1.44, parse_rr in dnsproxy.c has a memcpy length
+> that depends on an RR RDLENGTH value (i.e., *rdlen=ntohs(rr->rdlen)
+> and memcpy(response+offset,*end,*rdlen)). Here, rdlen may be larger
+> than the amount of remaining packet data in the current state of
+> parsing. As a result, values of stack memory locations may be sent
+> over the network in a response.
 > 
-> - ver 1.44:
->    * Fix issue with handling oFono context integration.
->    * Fix issue with handling web context for online detection.
->    * Fix issue with handling flags used when deleting routes.
->    * Fix issue with handling PAC proxy integration.
-> 
-> - ver 1.43:
->    * Fix issue with device creation when using LTE.
->    * Fix issue with regulatory domain when powering up.
->    * Fix issue with resolving ISO3166 code from timezone data.
->    * Fix issue with handling DNS proxy zero termination of buffers.
->    * Fix issue with handling DHCP packet length in L3 mode.
->    * Fix issue with handling DHCP upper length checks.
->    * Fix issue with handling IPv6 and URL parsing.
->    * Fix issue with handling online check updates.
->    * Fix issue with handling proxy method and WISPr.
->    * Fix issue with handling default gateway setup.
->    * Add support for low-priority default routes.
+> Fixes:
+> https://www.cve.org/CVERecord?id=CVE-2025-32366
 > 
 > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
-  Applied both to 2025.02.x, thanks.
+  Applied to 2025.02.x, thanks.
 
   Regards,
   Arnout
 
 > ---
->   package/connman/connman.hash | 2 +-
->   package/connman/connman.mk   | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
+>   ...Address-CVE-2025-32366-vulnerability.patch | 41 +++++++++++++++++++
+>   package/connman/connman.mk                    |  3 ++
+>   2 files changed, 44 insertions(+)
+>   create mode 100644 package/connman/0002-dnsproxy-Address-CVE-2025-32366-vulnerability.patch
 > 
-> diff --git a/package/connman/connman.hash b/package/connman/connman.hash
-> index ea87f1ea17da..38af1847aef6 100644
-> --- a/package/connman/connman.hash
-> +++ b/package/connman/connman.hash
-> @@ -1,4 +1,4 @@
->   # From https://www.kernel.org/pub/linux/network/connman/sha256sums.asc
-> -sha256  a3e6bae46fc081ef2e9dae3caa4f7649de892c3de622c20283ac0ca81423c2aa  connman-1.42.tar.xz
-> +sha256  2be2b00321632b775f9eff713acd04ef21e31fbf388f6ebf45512ff4289574ff  connman-1.44.tar.xz
->   # Locally computed
->   sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
+> diff --git a/package/connman/0002-dnsproxy-Address-CVE-2025-32366-vulnerability.patch b/package/connman/0002-dnsproxy-Address-CVE-2025-32366-vulnerability.patch
+> new file mode 100644
+> index 000000000000..9651b2dfe473
+> --- /dev/null
+> +++ b/package/connman/0002-dnsproxy-Address-CVE-2025-32366-vulnerability.patch
+> @@ -0,0 +1,41 @@
+> +From 8d3be0285f1d4667bfe85dba555c663eb3d704b4 Mon Sep 17 00:00:00 2001
+> +From: =?UTF-8?q?=EC=8B=A0=EC=9C=A4=EC=A0=9C=28=ED=95=99=EB=B6=80=EC=83=9D-?=
+> + =?UTF-8?q?=EC=86=8C=ED=94=84=ED=8A=B8=EC=9B=A8=EC=96=B4=EC=A0=84=EA=B3=B5?=
+> + =?UTF-8?q?=29?= <ioerts@kookmin.ac.kr>
+> +Date: Mon, 12 May 2025 10:48:18 +0200
+> +Subject: [PATCH] dnsproxy: Address CVE-2025-32366 vulnerability
+> +
+> +In Connman parse_rr in dnsproxy.c has a memcpy length
+> +that depends on an RR RDLENGTH value (i.e., *rdlen=ntohs(rr->rdlen)
+> +and memcpy(response+offset,*end,*rdlen)). Here, rdlen may be larger
+> +than the amount of remaining packet data in the current state of
+> +parsing. As a result, values of stack memory locations may be sent
+> +over the network in a response.
+> +
+> +This patch adds a check to ensure that (*end + *rdlen) does not exceed
+> +the valid range. If the condition is violated, the function returns
+> +-EINVAL.
+> +
+> +Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> +Upstream: https://git.kernel.org/pub/scm/network/connman/connman.git/commit/?id=8d3be0285f1d4667bfe85dba555c663eb3d704b4
+> +---
+> + src/dnsproxy.c | 3 +++
+> + 1 file changed, 3 insertions(+)
+> +
+> +diff --git a/src/dnsproxy.c b/src/dnsproxy.c
+> +index 7ee26d9ff886..1dd2f7f5d47e 100644
+> +--- a/src/dnsproxy.c
+> ++++ b/src/dnsproxy.c
+> +@@ -998,6 +998,9 @@ static int parse_rr(const unsigned char *buf, const unsigned char *start,
+> + 	if ((offset + *rdlen) > *response_size)
+> + 		return -ENOBUFS;
+> +
+> ++	if ((*end + *rdlen) > max)
+> ++		return -EINVAL;
+> ++
+> + 	memcpy(response + offset, *end, *rdlen);
+> +
+> + 	*end += *rdlen;
+> +--
+> +2.43.0
+> +
 > diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-> index 142a6583ad3c..2c5be8252c6e 100644
+> index 5d515c296319..c9637eadf5aa 100644
 > --- a/package/connman/connman.mk
 > +++ b/package/connman/connman.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
+> @@ -16,6 +16,9 @@ CONNMAN_CPE_ID_VENDOR = intel
+>   # 0001-dnsproxy-Fix-NULL-empty-lookup-causing-potential-cra.patch
+>   CONNMAN_IGNORE_CVES += CVE-2025-32743
 >   
-> -CONNMAN_VERSION = 1.42
-> +CONNMAN_VERSION = 1.44
->   CONNMAN_SOURCE = connman-$(CONNMAN_VERSION).tar.xz
->   CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman
->   CONNMAN_DEPENDENCIES = libglib2 dbus
+> +# 0002-dnsproxy-Address-CVE-2025-32366-vulnerability.patch
+> +CONNMAN_IGNORE_CVES += CVE-2025-32366
+> +
+>   CONNMAN_CONF_OPTS = --with-dbusconfdir=/etc
+>   
+>   ifeq ($(BR2_INIT_SYSTEMD),y)
 
 _______________________________________________
 buildroot mailing list
