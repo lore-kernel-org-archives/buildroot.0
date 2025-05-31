@@ -1,52 +1,124 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D76B2C5AE59
-	for <buildroot@archiver.kernel.org>; Sat, 31 May 2025 17:06:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F089C5AE59
+	for <buildroot@archiver.kernel.org>; Sat, 31 May 2025 17:26:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A8E1184087;
-	Sat, 31 May 2025 17:06:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D142740546;
+	Sat, 31 May 2025 17:26:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CY3wlm6PDpft; Sat, 31 May 2025 17:06:47 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9Ga9rK0rervA; Sat, 31 May 2025 17:26:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B038684073
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 020FC404E6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B038684073;
-	Sat, 31 May 2025 17:06:47 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 08B13127
- for <buildroot@buildroot.org>; Sat, 31 May 2025 17:06:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 020FC404E6;
+	Sat, 31 May 2025 17:26:14 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9DD7D127
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 17:26:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 34C8683BCF
- for <buildroot@buildroot.org>; Sat, 31 May 2025 17:06:21 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8FF5A40068
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 17:26:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id um_E8RrMz4pI for <buildroot@buildroot.org>;
- Sat, 31 May 2025 17:06:20 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C093C83BE7
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C093C83BE7
- for <buildroot@buildroot.org>; Sat, 31 May 2025 17:06:19 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BF1CA861E5; Sat, 31 May 2025 17:06:19 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TPzBlNJ0IAG2 for <buildroot@buildroot.org>;
+ Sat, 31 May 2025 17:26:11 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.21;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1727F4004A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1727F4004A
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1727F4004A
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 17:26:10 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from haruka.home.arpa ([85.22.114.90]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MaJ3t-1uQfAw2EU9-00PiZH; Sat, 31
+ May 2025 19:26:07 +0200
 To: buildroot@buildroot.org
-Date: Tue, 27 May 2025 18:22:52 +0200
-X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 12d906c34370f82768d603f19d968b9a6d19d5bf
-X-Git-Newrev: 48515f26cd5a6dda649757fa3c95c27cc1ad24f6
-X-Patchwork-Hint: ignore
-Message-Id: <20250531170619.BF1CA861E5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/qt5webengine: fix
- no executable stack link issue on arm
+Date: Sat, 31 May 2025 19:25:48 +0200
+Message-ID: <20250531172549.2664496-1-fiona.klute@gmx.de>
+X-Mailer: git-send-email 2.49.0
+MIME-Version: 1.0
+X-Provags-ID: V03:K1:UUOH1FbeV4Xq8cBSBZRfuIT97WbYRP9mvpJkkmjLCPtMHUBldWd
+ utp+f2BBZatJhUeB+gNRJtZVWQbzhAJWB4bqmMAaHYPSgtqR7sq4MlDyyQXuLdBtnZ7iQvJ
+ 530Yicz6XBzvqta8iSswIxJTpDqwdCY9P2ehvhksGcHkU4qcJG/TuwBmYAwqLtbA5oaBXR+
+ khXjMRvqQoC7gS7o1jpFg==
+UI-OutboundReport: notjunk:1;M01:P0:bI2vieWYoUQ=;vEOGa3oX+VaBDKOVwj4LExDVYvL
+ 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
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmx.de; 
+ s=s31663417; t=1748712368; x=1749317168; i=fiona.klute@gmx.de;
+ bh=LEBUwUbfTuI6+u1W+VVJKfzhHhu/R4FhASDZtIXmLlM=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
+ MIME-Version:Content-Transfer-Encoding:cc:
+ content-transfer-encoding:content-type:date:from:message-id:
+ mime-version:reply-to:subject:to;
+ b=jSEgAcu7gwjRx8PRxwIbJNHW8brcx+wWnzFRc0lhn6ugbuJIJ46i17DIg/8jNFbX
+ wbSD9NR1UXhZDfW0qGa+b/qE6JjLykYDio8MBBhyRp6iDq4wJCt/4OdoocK9n/CEw
+ II6oeM5cqx9AR67fyyZdCOsA8QfSMHwEcBknCAppHjUb8/UyU2EUx9y73rf1WKrDc
+ VbqCR1DTQSYmQyB1D6gTGxv7hsazR0QbdSAR1nzXCnlq5Lk1nIfdcyjR2C2B50aYm
+ OCaUyZ1I22X1Ms96XccjpQkvmWgfjaMSnHsrxV9Z64ip66ULTocORcGALXuCvlqkm
+ aPYIKTgayCpEtIlFpQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=gmx.de
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
+ header.s=s31663417 header.b=jSEgAcu7
+Subject: [Buildroot] [PATCH next 1/2] package/python-aiomqtt: bump version
+ to 2.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,148 +130,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1244741651018241059=="
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Fiona Klute <fiona.klute@gmx.de>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1244741651018241059==
-Content-Type: text/plain
+From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=48515f26cd5a6dda649757fa3c95c27cc1ad24f6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
+Aiomqtt switched its build system to hatchling with 2.3.1, change
+PYTHON_AIOMQTT_SETUP_TYPE and dependencies accordingly.
 
-TL;DR; This turns the configure flag -no-feature-webengine-noexecstack
-to -feature-webengine-noexecstack to workaround a link issue on ARM
-32-bit if chromium requests for an executable stack.
-
-And now, the long story...
-
-The configure flag -no-feature-webengine-noexecstack was introduced with
-commit 675cbaf9aa (package/qt5/qt5webengine: bump to version 5.15.8).
-
-That configure flag controls the feature webengine-noexecstack[1][2];
-the -no-feature-webengine-noexecstack causes qmake to **NOT** append the
-linker flags -Wl,-z,noexecstack[3] to QMAKE_LFLAGS.
-
-It results in the linkage issue below on ARM 32-bit at the creation of
-its Qt module, i.e. after qmake has built the chromium third party via
-gn:
-
-	ulimit -n 4096 && /home/gportay/src/buildroot/output/host/bin/arm-buildroot-linux-gnueabihf-g++ --sysroot=/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot @/home/gportay/src/buildroot/output/build/qt5webengine-5.15.14/src/core/release/QtWebEngineCore_o.rsp -Wl,--start-group @/home/gportay/src/buildroot/output/build/qt5webengine-5.15.14/src/core/release/QtWebEngineCore_a.rsp -Wl,--end-group -Wl,--fatal-warnings -Wl,--build-id=sha1 -fPIC -Wl,-z,relro -Wl,-z,now -Wl,-z,defs -Wl,-O2 -Wl,--gc-sections --sysroot=/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot --sysroot=/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot -Wl,-O1 -Wl,--enable-new-dtags -Wl,-whole-archive -lqtwebenginecoreapi -Wl,-no-whole-archive -Wl,--no-undefined -Wl,--version-script,QtWebEngineCore.version -Wl,-O1 -Wl,--enable-new-dtags -shared -Wl,-soname,libQt5WebEngineCore.so.5 -o libQt5WebEngineCore.so.5.15.14   -latomic /home/gporta
- y/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libQt5Quick.so /home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libQt5Gui.so /home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libQt5QmlModels.so /home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libQt5WebChannel.so /home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libQt5Qml.so /home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libQt5Network.so /home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libQt5Core.so -lpthread -L/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib -latomic -lGLESv2 -lpthread -ldl -lrt -lnss3 -lnssutil3 -lsmime3 -lplds4 -lplc4 -lnspr4 -levent -lresolv -ljpeg -lopus -lm -lz -lvpx -lpng16 -lwebp -lwebpmux -lwebpdemux -lfreetype -lexpat -lfontcon
- fig -lharfbuzz-subset -lharfbuzz -lsnappy -lxml2 -lxslt -ldbus-1 -L/home/gportay/src/buildroot/output/build/qt5webengine-5.15.14/src/core/api/release -lGLESv2 -lrt -lpthread -ldl
-	/home/gportay/src/buildroot/output/host/lib/gcc/arm-buildroot-linux-gnueabihf/13.3.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: warning: /home/gportay/src/buildroot/output/build/qt5webengine-5.15.14/src/core/release/obj/third_party/blink/renderer/platform/heap/asm/asm/SaveRegisters_arm.o: missing .note.GNU-stack section implies executable stack
-	/home/gportay/src/buildroot/output/host/lib/gcc/arm-buildroot-linux-gnueabihf/13.3.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
-	collect2: error: ld returned 1 exit status
-
-The link succeeds if the missing linker flags are appended manually to
-the command-line:
-
-	ulimit -n 4096 && /home/gportay/src/buildroot/output/host/bin/arm-buildroot-linux-gnueabihf-g++ --sysroot=/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot @/home/gportay/src/buildroot/output/build/qt5webengine-5.15.14/src/core/release/QtWebEngineCore_o.rsp -Wl,--start-group @/home/gportay/src/buildroot/output/build/qt5webengine-5.15.14/src/core/release/QtWebEngineCore_a.rsp -Wl,--end-group -Wl,--fatal-warnings -Wl,--build-id=sha1 -fPIC -Wl,-z,relro -Wl,-z,now -Wl,-z,defs -Wl,-O2 -Wl,--gc-sections --sysroot=/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot --sysroot=/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot -Wl,-O1 -Wl,--enable-new-dtags -Wl,-whole-archive -lqtwebenginecoreapi -Wl,-no-whole-archive -Wl,--no-undefined -Wl,--version-script,QtWebEngineCore.version -Wl,-O1 -Wl,--enable-new-dtags -shared -Wl,-soname,libQt5WebEngineCore.so.5 -o libQt5WebEngineCore.so.5.15.14   -latomic /home/gporta
- y/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libQt5Quick.so /home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libQt5Gui.so /home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libQt5QmlModels.so /home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libQt5WebChannel.so /home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libQt5Qml.so /home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libQt5Network.so /home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libQt5Core.so -lpthread -L/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib -latomic -lGLESv2 -lpthread -ldl -lrt -lnss3 -lnssutil3 -lsmime3 -lplds4 -lplc4 -lnspr4 -levent -lresolv -ljpeg -lopus -lvpx -lm -lpng16 -lwebp -lwebpmux -lwebpdemux -lfreetype -lexpat -lfontconfig 
- -lharfbuzz-subset -lharfbuzz -lsnappy -lxml2 -lxslt -ldbus-1 -L/home/gportay/src/buildroot/output/build/qt5webengine-5.15.14/src/core/api/release -lGLESv2 -lrt -lpthread -ldl -Wl,-z,noexecstack && echo completed
-	completed
-
-Note: The configure flag is not forwarded to chromium in any manner; its
-scope is limited to the Qt WebEngine module. That configure flag appears
-to be a workaround if the does not assemble, compile and link the Elf
-object correctly[4][5].
-
-The linker flag -z noexecstack is responsible for marking the object as
-not requiring an executable stack by adding the section .note.GNU-stack
-in the Elf object.
-
-The file SaveRegisters_arm.S is assembled from the command-line below;
-there is no noexecstack flag set:
-
-	/home/gportay/src/buildroot/output/host/bin/arm-buildroot-linux-gnueabihf-gcc -MMD -MF obj/third_party/blink/renderer/platform/heap/asm/asm/SaveRegisters_arm.o.d -DARM=1 -DUSE_UDEV -DUSE_AURA=1 -DUSE_NSS_CERTS=1 -DUSE_OZONE=1 -DOFFICIAL_BUILD -DTOOLKIT_QT -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -DNO_UNWIND_TABLES -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -DCR_SYSROOT_HASH=c2e54f675b83a61301dcdb22e8e7a2b85c01d58c -DNDEBUG -DNVALGRIND -DDYNAMIC_ANNOTATIONS_ENABLED=0 -Igen -I../../3rdparty/chromium -fPIC -fno-strict-aliasing --param=ssp-buffer-size=4 -fstack-protector -fno-unwind-tables -fno-asynchronous-unwind-tables -fPIC -pipe -pthread -std=gnu11 -march=armv7-a -mfloat-abi=hard -mtune=generic-armv7-a -mfpu=vfpv3-d16 -marm -g0 --sysroot=/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot -c ../../3rdparty/chromium/third_party/blink/renderer/platform/heap/asm/SaveRegisters_arm.S -o obj/third_party/blink/renderer/platform/heap/as
- m/asm/SaveRegisters_arm.o
-
-The GNU assembler supports the assembler flag -Wa,--{,no}execstack to
-require, or not, an executable stack for the object to assemble.
-
-The BUILD.gn does **NOT** set it for the assembler files of the blink
-third-party; but it does it for boringssl[6] (see also the project file
-CMakeLists.txt[7]).
-
-See below what readelf says if the file is assembled manually with the
-flag --noexecstack:
-
-	$ /home/gportay/src/buildroot/output/host/bin/arm-buildroot-linux-gnueabihf-gcc -MMD -MF obj/third_party/blink/renderer/platform/heap/asm/asm/SaveRegisters_arm.o.d -DARM=1 -DUSE_UDEV -DUSE_AURA=1 -DUSE_NSS_CERTS=1 -DUSE_OZONE=1 -DOFFICIAL_BUILD -DTOOLKIT_QT -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -DNO_UNWIND_TABLES -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -DCR_SYSROOT_HASH=c2e54f675b83a61301dcdb22e8e7a2b85c01d58c -DNDEBUG -DNVALGRIND -DDYNAMIC_ANNOTATIONS_ENABLED=0 -Igen -I../../3rdparty/chromium -fPIC -fno-strict-aliasing --param=ssp-buffer-size=4 -fstack-protector -fno-unwind-tables -fno-asynchronous-unwind-tables -fPIC -pipe -pthread -std=gnu11 -march=armv7-a -mfloat-abi=hard -mtune=generic-armv7-a -mfpu=vfpv3-d16 -marm -g0 --sysroot=/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot -c ../../3rdparty/chromium/third_party/blink/renderer/platform/heap/asm/SaveRegisters_arm.S -o obj/third_party/blink/renderer/platform/heap/
- asm/asm/SaveRegisters_arm.o -Wa,--noexecstack
-
-	$ readelf -a /home/gportay/src/buildroot/output/build/qt5webengine-5.15.14/src/core/release/obj/third_party/blink/renderer/platform/heap/asm/asm/SaveRegisters_arm.o
-	(...)
-	Section Headers:
-	  [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al
-	  (...)
-	  [ 4] .note.GNU-stack   PROGBITS        00000000 000058 000000 00      0   0  1
-
-The section the linker claims for is now part of the Elf object; and
-qmake is now able to link its Qt WebEngine module.
-
-Note: Alternatively, the patching the file SaveRegisters_arm.S to set
-explicitly the section in the source file works as well (this reduces
-the impact to the very single file causing the link issue):
-
-	#if defined(__linux__) && defined(__ELF__)
-	.section .note.GNU-stack,"",%progbits
-	#endif
-
-Instead of fixing directly the origin of the issue and setting the
-missing assembler flag -Wa,--noexecstack to blink; this works around the
-link issue by turning on the feature noexecstack to qtwebengine to force
-qmake to link its module using the linker flag -Wl,-z,noexecstack.
-
-[1]: https://github.com/qt/qtwebengine/blob/5.15.14/src/buildtools/configure.json#L353-L357
-[2]: https://github.com/qt/qtwebengine/blob/5.15.14/src/buildtools/configure.json#L720-L724
-[3]: https://github.com/qt/qtwebengine/blob/5.15.14/src/buildtools/config/linking.pri#L61-L62
-[4]: https://github.com/qt/qtwebengine/commit/597359a16a798df3955404200f1fc6833a7425ab
-[5]: https://codereview.qt-project.org/c/qt/qtwebengine/+/263545
-[6]: https://github.com/qt/qtwebengine-chromium/blob/87-based/chromium/third_party/boringssl/src/util/BUILD.toplevel#L64
-[7]: https://github.com/qt/qtwebengine-chromium/blob/87-based/chromium/third_party/boringssl/src/crypto/CMakeLists.txt#L33
-
-Signed-off-by: Gaël PORTAY <gael.portay@rtone.fr>
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-(cherry picked from commit aa017484eaa7410d9cad9e8fd11de2ca613bd288)
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 ---
- package/qt5/qt5webengine/qt5webengine.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/python-aiomqtt/python-aiomqtt.hash | 4 ++--
+ package/python-aiomqtt/python-aiomqtt.mk   | 7 +++----
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/qt5/qt5webengine/qt5webengine.mk b/package/qt5/qt5webengine/qt5webengine.mk
-index 529a83df6c..a97d918cfd 100644
---- a/package/qt5/qt5webengine/qt5webengine.mk
-+++ b/package/qt5/qt5webengine/qt5webengine.mk
-@@ -88,6 +88,7 @@ QT5WEBENGINE_CONF_OPTS += \
- 	-webengine-webp \
- 	-feature-build-qtwebengine-core \
- 	-feature-webengine-core-support \
-+	-feature-webengine-noexecstack \
- 	-feature-webengine-system-dbus \
- 	-feature-webengine-system-fontconfig \
- 	-feature-webengine-system-freetype \
-@@ -117,7 +118,6 @@ QT5WEBENGINE_CONF_OPTS += \
- 	-no-feature-webengine-developer-build \
- 	-no-feature-webengine-full-debug-info \
- 	-no-feature-webengine-native-spellchecker \
--	-no-feature-webengine-noexecstack \
- 	-no-feature-webengine-system-minizip \
- 	-no-feature-webengine-system-gn
+diff --git a/package/python-aiomqtt/python-aiomqtt.hash b/package/python-aiomqtt/python-aiomqtt.hash
+index 12ea86d538..eab5a1938f 100644
+--- a/package/python-aiomqtt/python-aiomqtt.hash
++++ b/package/python-aiomqtt/python-aiomqtt.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/aiomqtt/json
+-md5  e23feb8ad69a1ae3a9701fb1f3c03a3c  aiomqtt-2.3.0.tar.gz
+-sha256  312feebe20bc76dc7c20916663011f3bd37aa6f42f9f687a19a1c58308d80d47  aiomqtt-2.3.0.tar.gz
++md5  9ded3fea036dc979d7855a6b3fd1dc33  aiomqtt-2.4.0.tar.gz
++sha256  ab0f18fc5b7ffaa57451c407417d674db837b00a9c7d953cccd02be64f046c17  aiomqtt-2.4.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  2cdee9e997c759749069649dfb9060fdb885da82bc50c0dcb4841b1dcab0b032  LICENSE
+diff --git a/package/python-aiomqtt/python-aiomqtt.mk b/package/python-aiomqtt/python-aiomqtt.mk
+index 80cecea9e8..c5b932838d 100644
+--- a/package/python-aiomqtt/python-aiomqtt.mk
++++ b/package/python-aiomqtt/python-aiomqtt.mk
+@@ -4,12 +4,11 @@
+ #
+ ################################################################################
  
-
---===============1244741651018241059==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+-PYTHON_AIOMQTT_VERSION = 2.3.0
++PYTHON_AIOMQTT_VERSION = 2.4.0
+ PYTHON_AIOMQTT_SOURCE = aiomqtt-$(PYTHON_AIOMQTT_VERSION).tar.gz
+-PYTHON_AIOMQTT_SITE = https://files.pythonhosted.org/packages/db/c9/168e78bd35b21d9bdbb26178db33a8f265e4a69bb4193e72434e7cb3d1cd
+-PYTHON_AIOMQTT_SETUP_TYPE = poetry
++PYTHON_AIOMQTT_SITE = https://files.pythonhosted.org/packages/45/9a/863bc34c64bc4acb9720a9950bfc77d6f324640cdf1f420bb5d9ee624975
++PYTHON_AIOMQTT_SETUP_TYPE = hatch
+ PYTHON_AIOMQTT_LICENSE = BSD-3-Clause
+ PYTHON_AIOMQTT_LICENSE_FILES = LICENSE
+-PYTHON_AIOMQTT_DEPENDENCIES = host-python-poetry-dynamic-versioning
+ 
+ $(eval $(python-package))
+-- 
+2.49.0
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1244741651018241059==--
