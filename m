@@ -1,124 +1,126 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F089C5AE59
-	for <buildroot@archiver.kernel.org>; Sat, 31 May 2025 17:26:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91C3FC5B549
+	for <buildroot@archiver.kernel.org>; Sat, 31 May 2025 17:26:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D142740546;
-	Sat, 31 May 2025 17:26:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 437CE83C91;
+	Sat, 31 May 2025 17:26:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9Ga9rK0rervA; Sat, 31 May 2025 17:26:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mby_O_3sl7sJ; Sat, 31 May 2025 17:26:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 020FC404E6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 567D283D59
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 020FC404E6;
-	Sat, 31 May 2025 17:26:14 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 9DD7D127
- for <buildroot@buildroot.org>; Sat, 31 May 2025 17:26:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 567D283D59;
+	Sat, 31 May 2025 17:26:15 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5397C117
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 17:26:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8FF5A40068
- for <buildroot@buildroot.org>; Sat, 31 May 2025 17:26:12 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 50F4583D59
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 17:26:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TPzBlNJ0IAG2 for <buildroot@buildroot.org>;
- Sat, 31 May 2025 17:26:11 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.21;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TwB9ecrdqlrP for <buildroot@buildroot.org>;
+ Sat, 31 May 2025 17:26:12 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.20;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1727F4004A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1727F4004A
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1727F4004A
- for <buildroot@buildroot.org>; Sat, 31 May 2025 17:26:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B3D5083C91
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B3D5083C91
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B3D5083C91
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 17:26:11 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from haruka.home.arpa ([85.22.114.90]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MaJ3t-1uQfAw2EU9-00PiZH; Sat, 31
- May 2025 19:26:07 +0200
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MJE27-1ua36w2BHH-00RQBJ; Sat, 31
+ May 2025 19:26:09 +0200
 To: buildroot@buildroot.org
-Date: Sat, 31 May 2025 19:25:48 +0200
-Message-ID: <20250531172549.2664496-1-fiona.klute@gmx.de>
+Date: Sat, 31 May 2025 19:25:49 +0200
+Message-ID: <20250531172549.2664496-2-fiona.klute@gmx.de>
 X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250531172549.2664496-1-fiona.klute@gmx.de>
+References: <20250531172549.2664496-1-fiona.klute@gmx.de>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:UUOH1FbeV4Xq8cBSBZRfuIT97WbYRP9mvpJkkmjLCPtMHUBldWd
- utp+f2BBZatJhUeB+gNRJtZVWQbzhAJWB4bqmMAaHYPSgtqR7sq4MlDyyQXuLdBtnZ7iQvJ
- 530Yicz6XBzvqta8iSswIxJTpDqwdCY9P2ehvhksGcHkU4qcJG/TuwBmYAwqLtbA5oaBXR+
- khXjMRvqQoC7gS7o1jpFg==
-UI-OutboundReport: notjunk:1;M01:P0:bI2vieWYoUQ=;vEOGa3oX+VaBDKOVwj4LExDVYvL
- tJ5dPgS6LksHo1Plcr3325HICIwGgq7r1rUF0ccfryPSVYMX7+CzFZ5KwbTPjAZMQWRRxR6X7
- 0RZEdZntTFJJ9jarSzp5pGVAI4mA6sVhrCB4T50lGObLeDXzhf9EsYvVDFRNwZLloP5fUdvQc
- lK3b00Tlq3vwLuufDVPh+/eBKM78KinPO5RO6w0XUzQ+TaBU44Czv8WdNMQopJOxmCFdnih7w
- A7jpoxfdYQDoMj06hCp92kuz6axz4cXNlBcaBmM++J9BaQbZawxS/i/SSmjl7bhRMkR3opFdM
- dMF53z2opyW6szZqC1UF1yOwjxqBT7i1YpdmVoO+qMY8Xo7sJNUx2ePVwyYDkVOtK2sM4uMs2
- PBZIelsG7VALKenOMY3KLQQ1oTBx09nUrQuU+DtUhT1zk8JO2+zaYn2rffS568hgw6F2joGkP
- vnh+PifJGHo/rzKu/cwEeSZEJvKkft8SEx+7oeqe3dXzlMQaOKxAg23wIEUTPoWaMmI56P9HH
- gTMdvvggOCiiy+S7va6OosiZJCNNNl6UsZk1RGntNCZB8TFm0ezu2/JqKYqmoK8RhMR37zeDg
- XKX5VHZoelJx578ryX+QXB3ajrdKh9AWglUXM3X3og1d90JH1y9F7ifHu8N0Z4/+tfyOgjXug
- s1iblEVa8HJyD1lbbv0q6RWPKQlF6y3LZtCnfB81Kr8gSRuEeu4YmNOyMjq8Wju2VCndlxsWV
- ToWjyIdJ9KqTYETnqZ9bii4OhgxwgbzpCM1rIQ7c1BkM14Zd9nJDPF2v6NhLCzFtN6pFdBXXT
- yLBS+hOHTF0mowfHWVMrxQ8HHoNUhos7Di7ndMv49eRwxywEWuaDoRRR51V1PqMBPkvy8neK7
- uWgK4s79KrPSxGohj5QXvVAJORGuaD05nzGVfwcTXm7ybWVIvCEcRZ+c85udlQtHpNu8aPD6q
- gub+NNcKiVr4K2bWUybOynIE6YQxTh2oqNHlYbAV5xOYt8YMruT4Z926rToRkjepBpNGX9sVl
- hcDBiBU7fpvsDRag++UMFssY/zN/czuGwrW0Ion6GEiqkf0QrautjnIiS9AcMu8BtuMjB9ayi
- VgG+L0sF0gpLs/9Eocj9Yv+W+Y7U+iK0g7ENYw1WPn2BOTyZ4o23BXTuHOKJIQhK109nUYeRt
- xkZlRNIIi5A2XIhGSgMD96PiAj0RxU221JHVJ5a3qE+TYjwcSz9l1TLWAXX61i6EOp0dpz3JU
- LaR7xxcB6t2VpgfgBXVtsQRIXWpY+E8Qz9JgXp6Mr5EAMF2aQrXXgioJ2z7FVZb0jKRmO60p1
- c4Zks8Ytf/4y8sVBCZsYXgIo804LwBWWvUyjygBm3+1qR98pLqnAwKixcts2pb/0XoaGfGITX
- 9r3zIEVo71LduSefKM+d+QRjz0xndFKMqqcuAQOUNk+lJGo3Hu3qeKNKtKkPLKjYVTtx0bVXR
- KgUlqh/u/KhDIU18m1q+wMjqPb6cDzZjiq1If+78O+YVOZs0l5rnWt3VIiRxgeI8kniaM7224
- srNKLlZD23eF6s54j9/mZTA7mmyVKyATlvcvakHYlKsT3UuK79l7SFWP0bXxUxBb1CSUYjw4t
- 01D72aS62w4iN6PEimDy3vh1TFN7ZSuFBpY32u/JLoXCuVhsPofat7jRl1hDigiQAeHmPQf5C
- H94DImoMmTrDFnzcVT1Go0ddu/idLizqAN/5aXc1AXHzw0ZeLm/Z0NjE2rYb2GFgzMOFn5NQ5
- Lp2dRlpVHLuB9T/HBFg4KJ7HJYtMgTQcWN1IdA+h12qVIv6mRKRI+CBT5BQXbF3G/ZcmfCx4V
- 3U6nKHwbmh4FayFNTaWFHdgZnLSY1aCavmBox3IaV0EbJD1A/LCbROWE+1O7qIEB1aNqAqY1X
- JDojoZYfqUUJqsWJrEQqGs5GxowFMeNvnVQKJ410YudhSImzYbZVF6dDUEIAyjz+wDh+L7Vet
- QLciHF1u/r+G9GdjEQwDsxG2Y45PU+BWxB/KhFtlf1HaX7uUJhPsnDs/Zpqm4f5yNxXHqV49k
- 08kWHRBsBenvrayM34mFAzZRSOuV71Uf52N6YNKRKTxTZ4oWvtDUeWiZNN8vlVfLwl0MoBfTc
- trdmIimnRju37T4g1baWDrjUfqqsmY0FphNhtckRcZmWeHfncwydkJWb+Tt9EYUx/mIHZWxRI
- BYxTIJ3geuM98WO7RCrb4L5+QWwKqnc9rUXOBet2Z7xZBpRFpIorjwICPnCSMHXwQ2d/jORuA
- uM9orth+9rrBM+CKdEe46SBunEf/w2zotZMTaKP+YrVXMke1RcH2jcKviGeKvmE9/2ksZf1eJ
- jcd+3cf0YIVgT50py5NC/NVWtXw21CWgJBzsdkq4kQAXK68A7QW8ASRUOniRRFrfbRFfRIc4i
- 6bcEsDMbCj61O7gSJgx+XQrcw9xWYg8ymmIkBiGegZGpy3ocgOBOyt8BqtByjnCLvN7ezYRJ8
- JByBwl4rsqQAfNtxBxC/hKdQBfyt6jvLsgQC5Sl0i8ByhngVz89QF8M1BrNsTtxyi9KrMpZME
- gDVAulW7UevK+U3tGHWRwhlpi54DCufzW+uE+J0jSb+sRGl4E12XmKDy3KYUQtvU86OvzRxoz
- GI91bG7WFjl+wIYRcASuH+FRpaa93LUfM0V6wmbuuMxXWRdLmZPWysJ1OEB+YwmkWtJQYUmSr
- eiagoHMXuyNKBu1NWM+Ef18RPSR4Ybywx2xmJl5s2Rf4b/Srs20gf3MdKR2EjmIbpf8a54WzV
- +x+dRwAIQdy4xACjdPWOdA/SQ1Oc4EQwcE+i54xPzqREchU78g1JYn6fCQIlJ4wuClum6bYTH
- wy26JPN/y4V8xYzjjitLuwUJ9LDbkWIXZzoeEo2tLskJr1fyyiV3mtrHM0v7vkS6new31Lk1j
- +3SdGMEccWb/IgBj952c3r9wl7WdCggeGDVmtvYQeIlC+5vSjj0tZrSea5wvT2iu0h63JFYi7
- tP8IprvT1MnnqvAibJq3P9kurF+RN+dlUIpfQDoq3bNd5H+pgNsDp1UP0Xq5l3EapKJ6kUCeA
- a9O4msRdVQWC0znNwIuohE62+QNqM2gQ8UGjKKkwWRLviZAs+Gccz3ApTCKRz1ukIeTits6xi
- 5asxp5TyvHjNeQN0GFpuod8VynK+DJ/wzt79Gpe4zYNikaSi5WN3hFVXFT9Yu6+olseXQjUMB
- +QFjMlHh+U6eh+LKbqH+Czn91zo7FEnRqj0oITVIyR87wW1wv6tPrnrhXiBfr3yyCdsNOwyj2
- GCulYQ4JyoZB8IlyH5QOJ04rGU7S0TXowTVPNzNvQh0wrarvwiwLU8T3Bzs=
+X-Provags-ID: V03:K1:42T2a9C/0Q/zZh3CUeoasRjUsjKWBiiYhrTo7ESbYIYpyPm54M9
+ j3qvtcaBBoNOoKXxpFwgzrhTLlFDrj0ImrWS3QEGHaBhU+KAlKeha0Ks3yf2pbAxma3q+HG
+ E5WNTNSvQ4nJEKfMo9ehJjDyFgCZJ4j+19QRwyDTnqEw088HI3AHODLCifZAs7S1ekZ+4jY
+ LM7LMkKzWkx6DxRPtD+VQ==
+UI-OutboundReport: notjunk:1;M01:P0:NEPHv/P6o8s=;RKHC0s+Sd6rDhboIMUxXCJ4r6WD
+ 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
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.de; 
- s=s31663417; t=1748712368; x=1749317168; i=fiona.klute@gmx.de;
- bh=LEBUwUbfTuI6+u1W+VVJKfzhHhu/R4FhASDZtIXmLlM=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
- MIME-Version:Content-Transfer-Encoding:cc:
+ s=s31663417; t=1748712369; x=1749317169; i=fiona.klute@gmx.de;
+ bh=4rbTYW7XFWjXY5D4ON2wMgAHTsCOaP8p1ogij3csfWo=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
+ References:MIME-Version:Content-Transfer-Encoding:cc:
  content-transfer-encoding:content-type:date:from:message-id:
  mime-version:reply-to:subject:to;
- b=jSEgAcu7gwjRx8PRxwIbJNHW8brcx+wWnzFRc0lhn6ugbuJIJ46i17DIg/8jNFbX
- wbSD9NR1UXhZDfW0qGa+b/qE6JjLykYDio8MBBhyRp6iDq4wJCt/4OdoocK9n/CEw
- II6oeM5cqx9AR67fyyZdCOsA8QfSMHwEcBknCAppHjUb8/UyU2EUx9y73rf1WKrDc
- VbqCR1DTQSYmQyB1D6gTGxv7hsazR0QbdSAR1nzXCnlq5Lk1nIfdcyjR2C2B50aYm
- OCaUyZ1I22X1Ms96XccjpQkvmWgfjaMSnHsrxV9Z64ip66ULTocORcGALXuCvlqkm
- aPYIKTgayCpEtIlFpQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=ikek4Z/hTTRJ8M+MAPDE4av8takI53B+1MvBIF4RJ+yk73rIlVDM1SvC1PSnuW19
+ JTuXi5PVa8toGqbDVZ7a7C55YBSHN8qa14+aftpzhJhsx5ieOkO5sO2YbOxykfkti
+ k+8TnaCJTekB0dqV/UA4mq7cShbIX6l0VO2NSycBB29FR95wOdEdxtgawQcrhVjup
+ QWdacVWBdDIt29q9jampmjhjDvcLvooO8AKtOSZDQwOCjq+41FJBnWVZP49D6YN92
+ BEWqaoj9lvmTuLuosg/Drl/DhQhW7XuMBYL6HY+xgmN05USQCr+RXKIgiNuzs6FrF
+ JRLGxDgC/pYdAuOyCw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
- header.s=s31663417 header.b=jSEgAcu7
-Subject: [Buildroot] [PATCH next 1/2] package/python-aiomqtt: bump version
- to 2.4.0
+ header.s=s31663417 header.b=ikek4Z/h
+Subject: [Buildroot] [PATCH next 2/2] package/python-{dunamai,
+ poetry-dynamic-versioning}: remove packages
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -141,47 +143,108 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
 
-Aiomqtt switched its build system to hatchling with 2.3.1, change
-PYTHON_AIOMQTT_SETUP_TYPE and dependencies accordingly.
+Both packages where added as host-only dependencies to build
+package/python-aiomqtt, and are not used by any other package. With
+aiomqtt switching to hatchling they are not needed any more.
 
 Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 ---
- package/python-aiomqtt/python-aiomqtt.hash | 4 ++--
- package/python-aiomqtt/python-aiomqtt.mk   | 7 +++----
- 2 files changed, 5 insertions(+), 6 deletions(-)
+I certainly don't mind these packages staying if anyone else has a use
+for them, otherwise I think it's best to remove them to minimize
+maintenance effort. Without the dependency from aiomqtt I won't notice
+if they break.
 
-diff --git a/package/python-aiomqtt/python-aiomqtt.hash b/package/python-aiomqtt/python-aiomqtt.hash
-index 12ea86d538..eab5a1938f 100644
---- a/package/python-aiomqtt/python-aiomqtt.hash
-+++ b/package/python-aiomqtt/python-aiomqtt.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aiomqtt/json
--md5  e23feb8ad69a1ae3a9701fb1f3c03a3c  aiomqtt-2.3.0.tar.gz
--sha256  312feebe20bc76dc7c20916663011f3bd37aa6f42f9f687a19a1c58308d80d47  aiomqtt-2.3.0.tar.gz
-+md5  9ded3fea036dc979d7855a6b3fd1dc33  aiomqtt-2.4.0.tar.gz
-+sha256  ab0f18fc5b7ffaa57451c407417d674db837b00a9c7d953cccd02be64f046c17  aiomqtt-2.4.0.tar.gz
- # Locally computed sha256 checksums
- sha256  2cdee9e997c759749069649dfb9060fdb885da82bc50c0dcb4841b1dcab0b032  LICENSE
-diff --git a/package/python-aiomqtt/python-aiomqtt.mk b/package/python-aiomqtt/python-aiomqtt.mk
-index 80cecea9e8..c5b932838d 100644
---- a/package/python-aiomqtt/python-aiomqtt.mk
-+++ b/package/python-aiomqtt/python-aiomqtt.mk
-@@ -4,12 +4,11 @@
- #
- ################################################################################
- 
--PYTHON_AIOMQTT_VERSION = 2.3.0
-+PYTHON_AIOMQTT_VERSION = 2.4.0
- PYTHON_AIOMQTT_SOURCE = aiomqtt-$(PYTHON_AIOMQTT_VERSION).tar.gz
--PYTHON_AIOMQTT_SITE = https://files.pythonhosted.org/packages/db/c9/168e78bd35b21d9bdbb26178db33a8f265e4a69bb4193e72434e7cb3d1cd
--PYTHON_AIOMQTT_SETUP_TYPE = poetry
-+PYTHON_AIOMQTT_SITE = https://files.pythonhosted.org/packages/45/9a/863bc34c64bc4acb9720a9950bfc77d6f324640cdf1f420bb5d9ee624975
-+PYTHON_AIOMQTT_SETUP_TYPE = hatch
- PYTHON_AIOMQTT_LICENSE = BSD-3-Clause
- PYTHON_AIOMQTT_LICENSE_FILES = LICENSE
--PYTHON_AIOMQTT_DEPENDENCIES = host-python-poetry-dynamic-versioning
- 
- $(eval $(python-package))
+ DEVELOPERS                                     |  2 --
+ package/python-dunamai/python-dunamai.hash     |  5 -----
+ package/python-dunamai/python-dunamai.mk       | 15 ---------------
+ .../python-poetry-dynamic-versioning.hash      |  5 -----
+ .../python-poetry-dynamic-versioning.mk        | 18 ------------------
+ 5 files changed, 45 deletions(-)
+ delete mode 100644 package/python-dunamai/python-dunamai.hash
+ delete mode 100644 package/python-dunamai/python-dunamai.mk
+ delete mode 100644 package/python-poetry-dynamic-versioning/python-poetry-dynamic-versioning.hash
+ delete mode 100644 package/python-poetry-dynamic-versioning/python-poetry-dynamic-versioning.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d471b9ab6f..665b74ff53 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1115,8 +1115,6 @@ N:	Fiona Klute <fiona.klute@gmx.de>
+ F:	package/*/S*
+ F:	package/panel-mipi-dbi-firmware/
+ F:	package/python-aiomqtt/
+-F:	package/python-dunamai/
+-F:	package/python-poetry-dynamic-versioning/
+ F:	package/python-pyasynchat/
+ F:	package/python-pyasyncore/
+ F:	support/testing/tests/package/sample_python_networkmanager_goi.py
+diff --git a/package/python-dunamai/python-dunamai.hash b/package/python-dunamai/python-dunamai.hash
+deleted file mode 100644
+index 9c0fcc1810..0000000000
+--- a/package/python-dunamai/python-dunamai.hash
++++ /dev/null
+@@ -1,5 +0,0 @@
+-# md5, sha256 from https://pypi.org/pypi/dunamai/json
+-md5  5aa5f8aa470a4e8f67430b1a8a6ff801  dunamai-1.23.0.tar.gz
+-sha256  a163746de7ea5acb6dacdab3a6ad621ebc612ed1e528aaa8beedb8887fccd2c4  dunamai-1.23.0.tar.gz
+-# Locally computed sha256 checksums
+-sha256  cd75c5564078e3aadf662a9df3d23430f4705dfeedebbd0ebbeef53998ad94a8  LICENSE
+diff --git a/package/python-dunamai/python-dunamai.mk b/package/python-dunamai/python-dunamai.mk
+deleted file mode 100644
+index ba422f5b2f..0000000000
+--- a/package/python-dunamai/python-dunamai.mk
++++ /dev/null
+@@ -1,15 +0,0 @@
+-################################################################################
+-#
+-# python-dunamai
+-#
+-################################################################################
+-
+-PYTHON_DUNAMAI_VERSION = 1.23.0
+-PYTHON_DUNAMAI_SOURCE = dunamai-$(PYTHON_DUNAMAI_VERSION).tar.gz
+-PYTHON_DUNAMAI_SITE = https://files.pythonhosted.org/packages/06/4e/a5c8c337a1d9ac0384298ade02d322741fb5998041a5ea74d1cd2a4a1d47
+-PYTHON_DUNAMAI_SETUP_TYPE = poetry
+-PYTHON_DUNAMAI_LICENSE = MIT
+-PYTHON_DUNAMAI_LICENSE_FILES = LICENSE
+-HOST_PYTHON_DUNAMAI_DEPENDENCIES = host-python-packaging
+-
+-$(eval $(host-python-package))
+diff --git a/package/python-poetry-dynamic-versioning/python-poetry-dynamic-versioning.hash b/package/python-poetry-dynamic-versioning/python-poetry-dynamic-versioning.hash
+deleted file mode 100644
+index 7e0675cabb..0000000000
+--- a/package/python-poetry-dynamic-versioning/python-poetry-dynamic-versioning.hash
++++ /dev/null
+@@ -1,5 +0,0 @@
+-# md5, sha256 from https://pypi.org/pypi/poetry-dynamic-versioning/json
+-md5  d3d35766974dc0e040d73f7dcc15cc5f  poetry_dynamic_versioning-1.6.0.tar.gz
+-sha256  568b728eeb7b2c4a3b818565bbaffc2128bde68ad037152d464b92975f45ce70  poetry_dynamic_versioning-1.6.0.tar.gz
+-# Locally computed sha256 checksums
+-sha256  cd75c5564078e3aadf662a9df3d23430f4705dfeedebbd0ebbeef53998ad94a8  LICENSE
+diff --git a/package/python-poetry-dynamic-versioning/python-poetry-dynamic-versioning.mk b/package/python-poetry-dynamic-versioning/python-poetry-dynamic-versioning.mk
+deleted file mode 100644
+index 6ff596bca2..0000000000
+--- a/package/python-poetry-dynamic-versioning/python-poetry-dynamic-versioning.mk
++++ /dev/null
+@@ -1,18 +0,0 @@
+-################################################################################
+-#
+-# python-poetry-dynamic-versioning
+-#
+-################################################################################
+-
+-PYTHON_POETRY_DYNAMIC_VERSIONING_VERSION = 1.6.0
+-PYTHON_POETRY_DYNAMIC_VERSIONING_SOURCE = poetry_dynamic_versioning-$(PYTHON_POETRY_DYNAMIC_VERSIONING_VERSION).tar.gz
+-PYTHON_POETRY_DYNAMIC_VERSIONING_SITE = https://files.pythonhosted.org/packages/d3/f9/97b14cae52513ee028f1e81aad8a44e3a8f5a5d47570b48219431e131989
+-PYTHON_POETRY_DYNAMIC_VERSIONING_SETUP_TYPE = poetry
+-PYTHON_POETRY_DYNAMIC_VERSIONING_LICENSE = MIT
+-PYTHON_POETRY_DYNAMIC_VERSIONING_LICENSE_FILES = LICENSE
+-HOST_PYTHON_POETRY_DYNAMIC_VERSIONING_DEPENDENCIES = \
+-	host-python-dunamai \
+-	host-python-jinja2 \
+-	host-python-tomlkit
+-
+-$(eval $(host-python-package))
 -- 
 2.49.0
 
