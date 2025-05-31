@@ -1,74 +1,106 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB485C5B549
-	for <buildroot@archiver.kernel.org>; Sat, 31 May 2025 16:57:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9EFD8C5AE59
+	for <buildroot@archiver.kernel.org>; Sat, 31 May 2025 17:05:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9C44383CB5;
-	Sat, 31 May 2025 16:57:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 66D16409F3;
+	Sat, 31 May 2025 17:05:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id laSERF1yC_s7; Sat, 31 May 2025 16:57:49 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sIJOVWPNyhJr; Sat, 31 May 2025 17:05:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B150383B95
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AAA5B40AA8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B150383B95;
-	Sat, 31 May 2025 16:57:49 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id F3057235
- for <buildroot@buildroot.org>; Sat, 31 May 2025 16:57:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AAA5B40AA8;
+	Sat, 31 May 2025 17:05:23 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 33DB5117
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 17:05:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D93A26072E
- for <buildroot@buildroot.org>; Sat, 31 May 2025 16:57:47 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2577040AA8
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 17:05:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JnpjjVSkYNTw for <buildroot@buildroot.org>;
- Sat, 31 May 2025 16:57:47 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
- helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 18056607FA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 18056607FA
-Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 18056607FA
- for <buildroot@buildroot.org>; Sat, 31 May 2025 16:57:47 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 0F70E1C0D69; Sat, 31 May 2025 18:57:45 +0200 (CEST)
-Message-ID: <a48d9389-f3a2-4f2f-818b-c23cefbaf0ad@rnout.be>
-Date: Sat, 31 May 2025 18:57:42 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id myq8sdIYdje9 for <buildroot@buildroot.org>;
+ Sat, 31 May 2025 17:05:21 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::432; helo=mail-wr1-x432.google.com;
+ envelope-from=stefan.nickl@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 44BEB409F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 44BEB409F3
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 44BEB409F3
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 17:05:21 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id
+ ffacd0b85a97d-3a375d758a0so2517959f8f.0
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 10:05:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1748711119; x=1749315919;
+ h=mime-version:user-agent:content-transfer-encoding:references
+ :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=MNagHLdpYbVMuLWRKY01THty6z9ikv0FH2J7oe19yM8=;
+ b=HbwTpJu2vDyvuQ6WCmMLVJep6MRLGWHXKmqvOm1IVp8MtkE4fXP9yS1u0u5GObd9KX
+ X2HJ65s/QuxcWWx6GcBkuzZqK5WI49X7luG0gsXVVEadaUnsN3XPrHvtgx+JKgnT1enP
+ 1+A8e8SaSUVa5GosBEZ0JzFzpRK7RmzNVYw+gifXbo4w4FSQjISiG1vRZjViFVVRo8q1
+ 6tYljYC6JzrCoMEjHUfIxXBjOiWegja8S2+TW7a4kDY05HaYazVfAz6OZ8VVZych3r0X
+ pT5vztFFC2J4Dpqw58p9EcpqeQcomVutQCYVgy5RNJp0IPBN4tCk2QeY08LkMEtQnrjJ
+ gFuA==
+X-Gm-Message-State: AOJu0YwGjWhkH8AprVRZVozQ0ppCCDhvgp05yP/0YJI3ZtoVk6WWXU+d
+ +N0Mhq0dIok9qxB05bg0U30o0sVQMqaJPXSvFzPyPQIdutTRM71Q/2wudkU20A==
+X-Gm-Gg: ASbGncuQ9icPchclbK/zL0Wi3YYnmhyFAUXLoWwbnbHoa4SPn42apmgphc0Ub1oOWNd
+ qP9HieIradsCmWaLSsbjFn3A1Q0dKnNEgj+SkcFjqnv5gdQwL8GNnxFNIy1M33oaXgXUkbyfFdm
+ IDh5DULYu5LpTRsy2Gu21AbGEIDDzK3jesPdeT/Fwfg+/ke/vnC571shwK8twnmQigf+ABPcFf2
+ g6tajHik/msquOYMLfgsOfCw++f8RJ2SqwhiPT07mkrJyCd4UXwLa3CSeXdgWtNfJeCsu2zRybS
+ H5vpmheo/i4oxIA40t27WgfYMhxOBsji3G2EQSQx9vI5cc9f++GOuIRPXtws+JVaiB7Egvi3qVP
+ /AYbHdB94pG+TRXXBE9rDx5NczCbzQSIckpSjKPMh6btbFd+lMYh+/9+atWfd3FQa7Xm2Wj6is7
+ huXckt1a5gnQ==
+X-Google-Smtp-Source: AGHT+IHVK891G5sArNVrWkx0hVIBm6sLrhq/RrHcwEx031dg6JUvpdbSE/+zQgzhtKf2bLwZXxJSgA==
+X-Received: by 2002:a05:6000:40ca:b0:3a4:f72a:b18a with SMTP id
+ ffacd0b85a97d-3a4fe18708dmr2020025f8f.26.1748711119112; 
+ Sat, 31 May 2025 10:05:19 -0700 (PDT)
+Received: from ?IPv6:2003:d1:973f:f600:2879:4b00:19d2:def9?
+ (p200300d1973ff60028794b0019d2def9.dip0.t-ipconnect.de.
+ [2003:d1:973f:f600:2879:4b00:19d2:def9])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-3a4f009f865sm8462658f8f.81.2025.05.31.10.05.18
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 31 May 2025 10:05:18 -0700 (PDT)
+Message-ID: <f20a8e9711025d8cebb71b8b0d93ece783e9be50.camel@gmail.com>
+From: Stefan Nickl <stefan.nickl@gmail.com>
+To: Thomas Devoogdt <thomas@devoogdt.com>
+Cc: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Date: Sat, 31 May 2025 19:05:17 +0200
+In-Reply-To: <CACXRmJjfEMb4zGfoWxbDLsV4aw7a3cp+PiJXRuE9kdfKYUmOcQ@mail.gmail.com>
+References: <CACXRmJjfEMb4zGfoWxbDLsV4aw7a3cp+PiJXRuE9kdfKYUmOcQ@mail.gmail.com>
+User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Buildroot List <buildroot@buildroot.org>
-Cc: Roy Kollen Svendsen <roykollensvendsen@gmail.com>,
- Baxiche Su <baxiche@gmail.com>, Jesse Van Gavere <jesseevg@gmail.com>
-References: <20250516210452.342275-1-thomas.petazzoni@bootlin.com>
- <20250516210452.342275-3-thomas.petazzoni@bootlin.com>
-Content-Language: en-GB, fr-BE
-In-Reply-To: <20250516210452.342275-3-thomas.petazzoni@bootlin.com>
-X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rnout.be; s=dkim; 
- t=1748710665; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=Ie6NeYzxp5rflGfUFwjqx8dJ9TatcN4yPq541VsOtQs=;
- b=H3efgquwlCWwosd423/hABDwavyZ8+Ixxadk+dQQadP3AT7/jDPWcQNsT+yQv0npLCaZyn
- 5XM93rEf83S/8diMZRHIkzxDfME/DJU+cRhHMQKd2hHY52+9/+gIqOG9U9xTftwlyuZqE6
- Eiv0euaLOP8Y0uP2zrj4naiZL/3NRunQQuee7bOKvkAewokd4M983DVvGtZ/lpBHOcmw3K
- m3dzHPFDqiWnIz8CoTU/wW8/j7h74KjDBRI32EtBGNiHR6o6uHDeKqYxiG8wyW0ZUQVqrp
- bjMuTXfz4bIsE9QOFKTuPy6DVyatZ3EBIofQl9JqqZCAbxPm10hx5r4tBrrLxA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=H3efgquw
-Subject: Re: [Buildroot] [PATCH 2/4] package/qt6/qt6multimedia: fix ffmpeg
- plugin build for x11
+ d=gmail.com; s=20230601; t=1748711119; x=1749315919; darn=buildroot.org;
+ h=mime-version:user-agent:content-transfer-encoding:references
+ :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+ :date:message-id:reply-to;
+ bh=MNagHLdpYbVMuLWRKY01THty6z9ikv0FH2J7oe19yM8=;
+ b=GYype4fGyC+OOoSuKtp1QEdGtzYOsSMK5t46R5j2q2GOc911bKdpO5Th3kDOhfXRi7
+ CJXsdTteE0opSKvujPyC8WyoOou/lM9cmTcGEPkEpaJF5g83W33nh/2w7I9MbrsL+xK2
+ c3786yGyYRCDMLRnIJNc6M4E6usM/t8hqTImLsgdjy5EGZygY8kBprRW+PbIhfBzq8th
+ jXn4UQmJuR3QIrDNaDghFpjBviEI8xQrfoE9V72xnTuZwFSzdDIV/Yw4TLUVexN6RHdG
+ PWZKVDH6wXHgBI0tAF9uw3T1YFcQH5jD85rDl0L9z/sbj3SWAhRC4EdTSSZkeLKWU0n+
+ 8Z6Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=GYype4fG
+Subject: Re: [Buildroot] [PATCH 1/1] Add gh site method for GitHub cli
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -80,87 +112,25 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-
-
-On 16/05/2025 23:04, Thomas Petazzoni via buildroot wrote:
-> From: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
-> 
-> The following defconfig:
-> 
-> BR2_arm=y
-> BR2_cortex_a9=y
-> BR2_ARM_ENABLE_VFP=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-> BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_MUSL_STABLE=y
-> BR2_PACKAGE_QT6=y
-> BR2_PACKAGE_QT6BASE_XCB=y
-> BR2_PACKAGE_QT6MULTIMEDIA=y
-> BR2_PACKAGE_QT6MULTIMEDIA_FFMPEG=y
-> BR2_PACKAGE_XORG7=y
-> 
-> would fail to build, due to <X11/extensions/Xext.h> being not found,
-> and then <X11/extensions/Xrandr.h> being not found. Fix that up by
-> introducing the necessary dependencies.
-> 
-> There are no build failures reported for qt6multimedia in the
-> autobuilders, so there is no reference to a build failure.
-> 
-> Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-  Applied to 2025.02.x, thanks.
-
-  Regards,
-  Arnout
-
-> ---
->   package/qt6/qt6multimedia/Config.in        | 5 +++++
->   package/qt6/qt6multimedia/qt6multimedia.mk | 6 ++++++
->   2 files changed, 11 insertions(+)
-> 
-> diff --git a/package/qt6/qt6multimedia/Config.in b/package/qt6/qt6multimedia/Config.in
-> index ae555f98ea..3107caa597 100644
-> --- a/package/qt6/qt6multimedia/Config.in
-> +++ b/package/qt6/qt6multimedia/Config.in
-> @@ -38,6 +38,11 @@ config BR2_PACKAGE_QT6MULTIMEDIA_FFMPEG
->   	select BR2_PACKAGE_FFMPEG_SWSCALE
->   	select BR2_PACKAGE_QT6BASE_CONCURRENT
->   	select BR2_PACKAGE_QT6MULTIMEDIA_PULSEAUDIO
-> +	# libxext/libxrandr are needed for ffmpeg plugin to build with
-> +	# X11 support:
-> +	# https://code.qt.io/cgit/qt/qtmultimedia.git/tree/src/plugins/multimedia/ffmpeg/CMakeLists.txt?h=6.8.1#n198
-> +	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
-> +	select BR2_PACKAGE_XLIB_LIBXRANDR if BR2_PACKAGE_XORG7
->   	help
->   	  This option enables ffmpeg media backend.
->   
-> diff --git a/package/qt6/qt6multimedia/qt6multimedia.mk b/package/qt6/qt6multimedia/qt6multimedia.mk
-> index 98ab2ec4be..c2a9d250cf 100644
-> --- a/package/qt6/qt6multimedia/qt6multimedia.mk
-> +++ b/package/qt6/qt6multimedia/qt6multimedia.mk
-> @@ -66,6 +66,12 @@ endif
->   ifeq ($(BR2_PACKAGE_QT6MULTIMEDIA_FFMPEG),y)
->   QT6MULTIMEDIA_CONF_OPTS += -DFEATURE_ffmpeg=ON
->   QT6MULTIMEDIA_DEPENDENCIES += ffmpeg
-> +# libxext/libxrandr are needed for ffmpeg plugin to build with X11
-> +# support:
-> +# https://code.qt.io/cgit/qt/qtmultimedia.git/tree/src/plugins/multimedia/ffmpeg/CMakeLists.txt?h=6.8.1#n198
-> +ifeq ($(BR2_PACKAGE_XORG7),y)
-> +QT6MULTIMEDIA_DEPENDENCIES += xlib_libXext xlib_libXrandr
-> +endif
->   else
->   QT6MULTIMEDIA_CONF_OPTS += -DFEATURE_ffmpeg=OFF
->   endif
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gU2F0LCAyMDI1LTA1LTMxIGF0IDA5OjQ1ICswMjAwLCBUaG9tYXMgRGV2b29nZHQgd3JvdGU6
+Cj4gPiA+IFRoZSBtYWluIGFkdmFudGFnZSBpcyB0aGF0IGl0IGFsc28gd29ya3MgZm9yIHByaXZh
+dGUgR2l0SHViCj4gPiA+IHJlcG9zaXRvcmllcyBhZnRlciBsb2dnaW5nIGluIHdpdGggImdoIGF1
+dGggbG9naW4iLgo+IAo+IElmIHlvdSBoYXZlIHRvIGNhbGwgImdoIGF1dGggbG9naW4iIG9uIHlv
+dXIgc2VydmVyLCB3aHkgZG9uJ3QgeW91Cj4gY2FsbCAiZ2ggYXV0aCBzZXR1cC1naXQiLiBUaGlz
+IGNvbW1hbmQgd2lsbCByZWdpc3RlciBhIGhlbHBlciBzY3JpcHQKPiB0byB5b3VyIGdsb2JhbCBn
+aXQgY29uZmlndXJhdGlvbiwgZG9pbmcgZXhhY3RseSB3aGF0IHlvdSB3YW50LiBOYW1lbHkKPiBh
+ZGRpbmcgdGhlIHJlbGV2YW50IGhlYWRlcnMgdG8geW91ciBnaXQgaHR0cHMgY2FsbHMuwqAKPiAK
+PiBodHRwczovL2NsaS5naXRodWIuY29tL21hbnVhbC9naF9hdXRoX3NldHVwLWdpdAoKVGhhbmtz
+IGZvciB0aGUgYWR2aWNlLCBidXQgd2hhdCBJIHJlYWxseSB3YW50IGlzIGEgY2Fub25pY2FsIGFy
+Y2hpdmUKZG93bmxvYWQgKGFuZCBJIHRoaW5rIHRoZSBjb3JvbGxhcmllcyB0byB0aGF0IHdpdGgg
+Z2l0aHViIGhhdmUgYmVlbgpzdWZmaWNpZW50bHkgZGlzY3Vzc2VkIGJlZm9yZSkgaW5zdGVhZCBv
+ZiBnaXQgY2xvbmUuCgpSZWd1bGFyICJGT09fU0lURSA9ICQoY2FsbCBnaXRodWIuLi4pIiwgbm8g
+ZXhwZW5zaXZlIGxvY2FsIGNsb25lCm9wZXJhdGlvbiwgbm8gYnIxL2dpdDQvZ2l0NSBmaWxlcyBl
+dGMuCgpDaGVlcnMsIFN0ZWZhbgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3Jn
+Cmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
