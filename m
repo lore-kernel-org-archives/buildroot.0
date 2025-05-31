@@ -1,71 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5FD9C5B549
-	for <buildroot@archiver.kernel.org>; Sat, 31 May 2025 16:46:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39F21C5B549
+	for <buildroot@archiver.kernel.org>; Sat, 31 May 2025 16:47:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AB3B140B73;
-	Sat, 31 May 2025 16:46:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 09E756069D;
+	Sat, 31 May 2025 16:47:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id I3xcqM0okktw; Sat, 31 May 2025 16:46:46 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hWY9IEtR1A3h; Sat, 31 May 2025 16:47:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD5CD406A8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2303B60751
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CD5CD406A8;
-	Sat, 31 May 2025 16:46:45 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id B35FA235
- for <buildroot@buildroot.org>; Sat, 31 May 2025 16:46:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2303B60751;
+	Sat, 31 May 2025 16:47:08 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 43AD6235
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 16:47:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A576D401CB
- for <buildroot@buildroot.org>; Sat, 31 May 2025 16:46:44 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2AE4160751
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 16:47:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D1eOTnka-spf for <buildroot@buildroot.org>;
- Sat, 31 May 2025 16:46:44 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FNo9NKGD0JJz for <buildroot@buildroot.org>;
+ Sat, 31 May 2025 16:47:05 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
  helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org BE98A40068
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BE98A40068
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 29A666072E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 29A666072E
 Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BE98A40068
- for <buildroot@buildroot.org>; Sat, 31 May 2025 16:46:43 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 29A666072E
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 16:47:05 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id A3B651C0D8B; Sat, 31 May 2025 18:46:41 +0200 (CEST)
-Message-ID: <70b48688-729e-42c2-b28f-9420a5ea63b8@rnout.be>
-Date: Sat, 31 May 2025 18:46:37 +0200
+ with ESMTPSA id ED7E91C00BA; Sat, 31 May 2025 18:47:02 +0200 (CEST)
+Message-ID: <111575be-02b1-4bd8-9598-24ebc491625d@rnout.be>
+Date: Sat, 31 May 2025 18:47:01 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
-Cc: Bernd Kuhls <bernd@kuhls.net>
-References: <20250509095901.24008-1-ju.o@free.fr>
+To: Cherniaev Andrei <dungeonlords789@naver.com>, buildroot@buildroot.org
+Cc: Thomas Petazzoni <1089203+tpetazzoni@users.noreply.github.com>,
+ Eric Le Bihan <eric.le.bihan.dev@free.fr>
+References: <20250309162614.2549737-1-dungeonlords789@naver.com>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20250509095901.24008-1-ju.o@free.fr>
+In-Reply-To: <20250309162614.2549737-1-dungeonlords789@naver.com>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1748710001; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1748710023; h=from:subject:date:message-id:to:cc:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=W3vmunh/f3dbRk82BxS0tP0IALQXR3y9aSmoHWzPQVo=;
- b=WxDM2bZuCl7sanGqQuBsfbX23veq0J3C7WsAbMCpux00OpscDiPQgw3i8Tz2w6Sde7CHAn
- Ne8CLfy11UV6zjsmN67LNjTueDFRPc3up5fsM5HcvLyuH3qm+hXHD3rRF4DJ859KuHJyOM
- 6tzjpvhcK1ZpEYTuNvo/Z/ShwXrIa6oGFuZ7sovRaRhagdLvtz5fZwkm/eateML5U75/xf
- diCE9DO292blW2sdbk96X7FBPgW7+oeG3S/W8jA4NnyL+bQ3Let+BBZwvNT4eiOAyl0ijz
- qpHfw/JIrlfKEqZP/Wa9ctZYYdElVsKOtqeg0lt9jYDLUDi5eDch19JwRJkTMA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=Q4FLfTOzraeA/34Pysp2P5SEO9umw6M/nkikQjl2YHs=;
+ b=EENIERFL6tweuJ44+pIxh7gdXjyvdSZMBaNbe2JTN50lRf67R/c37MNK0RiSnp+gQ01QQQ
+ H1yk0LsErGhNdYwdWdQMGmtC0faaapFVRWSDzPYcaVgWGIKTMBwBgIOf5MfUnPVPQ1mJLv
+ 7pBOSVPKXcL4V7v5T1T28DalKy9XAX8aKb0XrjBdD+Y7B5J3/Cegb69XhYxq28PgVckfnL
+ iWR9PfUTCAsSyIEpeLqAkqNB0xMAhxEH3TEPW93GSvEkVSodpH4MzjJYmHc+Pxu0q5JAol
+ mJviKtcv9GUWeXAWJxfI8pG/dO+1u69EeFrT8fNpKKZjkhs9yeNVJpdyvQQWmA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=WxDM2bZu
-Subject: Re: [Buildroot] [PATCH 1/1] package/libsndfile: update project home
- page url
+ header.a=rsa-sha256 header.s=dkim header.b=EENIERFL
+Subject: Re: [Buildroot] [PATCH 1/2] package/pkg-meson: change build sub-dir
+ name
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,37 +87,118 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 09/05/2025 11:59, Julien Olivain wrote:
-> The libsndfile package homepage url [1] points to an old site in which
-> the last update is for version 1.0.28 (April 2 2017). This site does
-> not seem to be maintained anymore.
+On 09/03/2025 17:26, Cherniaev Andrei wrote:
+> I encountered a situation where build/ is not empty folder so when all files in build/ was removed by buildroot I was not able to use meson, example https://gitlab.com/buildroot.org/buildroot/-/issues/64
+> The choice of "build" as the build sub-directorty is a bit stupid.
 > 
-> This commit updates the libsndfile homepage url to [2].
-> 
-> [1] http://www.mega-nerd.com/libsndfile/
-> [2] https://libsndfile.github.io/libsndfile/
+> Co-Authored-By: Thomas Petazzoni <1089203+tpetazzoni@users.noreply.github.com>
 
   Applied to 2025.02.x, thanks.
 
   Regards,
   Arnout
 
-> 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
 > ---
->   package/libsndfile/Config.in | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>   package/pkg-meson.mk | 26 +++++++++++++-------------
+>   1 file changed, 13 insertions(+), 13 deletions(-)
 > 
-> diff --git a/package/libsndfile/Config.in b/package/libsndfile/Config.in
-> index 4ccf937691..6fdc7fbd6c 100644
-> --- a/package/libsndfile/Config.in
-> +++ b/package/libsndfile/Config.in
-> @@ -5,4 +5,4 @@ config BR2_PACKAGE_LIBSNDFILE
->   	  containing sampled sound (such as MS Windows WAV and the
->   	  Apple/SGI AIFF format) through one standard library interface.
+> diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+> index bc805b799c..30271e35e5 100644
+> --- a/package/pkg-meson.mk
+> +++ b/package/pkg-meson.mk
+> @@ -147,12 +147,12 @@ $(2)_CXXFLAGS ?= $$(TARGET_CXXFLAGS)
+>   #
+>   #
+>   define $(2)_CONFIGURE_CMDS
+> -	rm -rf $$($$(PKG)_SRCDIR)/build
+> -	mkdir -p $$($$(PKG)_SRCDIR)/build
+> +	rm -rf $$($$(PKG)_SRCDIR)/buildroot-build
+> +	mkdir -p $$($$(PKG)_SRCDIR)/buildroot-build
+>   	sed -e "/^\[binaries\]$$$$/s:$$$$:$$(foreach x,$$($(2)_MESON_EXTRA_BINARIES),\n$$(x)):" \
+>   	    -e "/^\[properties\]$$$$/s:$$$$:$$(foreach x,$$($(2)_MESON_EXTRA_PROPERTIES),\n$$(x)):" \
+>   	    $$(call PKG_MESON_CROSSCONFIG_SED,$(2)_CFLAGS,$(2)_CXXFLAGS,$(2)_LDFLAGS,$(2)_FCFLAGS) \
+> -	    > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
+> +	    > $$($$(PKG)_SRCDIR)/buildroot-build/cross-compilation.conf
+>   	PATH=$$(BR_PATH) \
+>   	CC_FOR_BUILD="$$(HOSTCC)" \
+>   	CXX_FOR_BUILD="$$(HOSTCXX)" \
+> @@ -162,21 +162,21 @@ define $(2)_CONFIGURE_CMDS
+>   		--libdir=lib \
+>   		--default-library=$(PKG_MESON_DEFAULT_LIBRARY) \
+>   		--buildtype=$(if $(BR2_ENABLE_RUNTIME_DEBUG),debug,release) \
+> -		--cross-file=$$($$(PKG)_SRCDIR)/build/cross-compilation.conf \
+> +		--cross-file=$$($$(PKG)_SRCDIR)/buildroot-build/cross-compilation.conf \
+>   		-Db_pie=false \
+>   		-Db_staticpic=$(if $(BR2_m68k_cf),false,true) \
+>   		-Dstrip=false \
+>   		-Dbuild.pkg_config_path=$$(HOST_DIR)/lib/pkgconfig \
+>   		-Dbuild.cmake_prefix_path=$$(HOST_DIR)/lib/cmake \
+>   		$$($$(PKG)_CONF_OPTS) \
+> -		$$($$(PKG)_SRCDIR) $$($$(PKG)_SRCDIR)/build
+> +		$$($$(PKG)_SRCDIR) $$($$(PKG)_SRCDIR)/buildroot-build
+>   endef
+>   else
 >   
-> -	  http://www.mega-nerd.com/libsndfile/
-> +	  https://libsndfile.github.io/libsndfile/
+>   # Configure package for host
+>   define $(2)_CONFIGURE_CMDS
+> -	rm -rf $$($$(PKG)_SRCDIR)/build
+> -	mkdir -p $$($$(PKG)_SRCDIR)/build
+> +	rm -rf $$($$(PKG)_SRCDIR)/buildroot-build
+> +	mkdir -p $$($$(PKG)_SRCDIR)/buildroot-build
+>   	$$(HOST_CONFIGURE_OPTS) \
+>   	$$($$(PKG)_CONF_ENV) $$(MESON) setup \
+>   		--prefix=$$(HOST_DIR) \
+> @@ -188,7 +188,7 @@ define $(2)_CONFIGURE_CMDS
+>   		--wrap-mode=nodownload \
+>   		-Dstrip=true \
+>   		$$($$(PKG)_CONF_OPTS) \
+> -		$$($$(PKG)_SRCDIR) $$($$(PKG)_SRCDIR)/build
+> +		$$($$(PKG)_SRCDIR) $$($$(PKG)_SRCDIR)/buildroot-build
+>   endef
+>   endif
+>   endif
+> @@ -203,12 +203,12 @@ ifndef $(2)_BUILD_CMDS
+>   ifeq ($(4),target)
+>   define $(2)_BUILD_CMDS
+>   	$$(TARGET_MAKE_ENV) $$($$(PKG)_NINJA_ENV) \
+> -		$$(NINJA) $$(NINJA_OPTS) $$($$(PKG)_NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/build
+> +		$$(NINJA) $$(NINJA_OPTS) $$($$(PKG)_NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/buildroot-build
+>   endef
+>   else
+>   define $(2)_BUILD_CMDS
+>   	$$(HOST_MAKE_ENV) $$($$(PKG)_NINJA_ENV) \
+> -		$$(NINJA) $$(NINJA_OPTS) $$($$(PKG)_NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/build
+> +		$$(NINJA) $$(NINJA_OPTS) $$($$(PKG)_NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/buildroot-build
+>   endef
+>   endif
+>   endif
+> @@ -220,7 +220,7 @@ endif
+>   ifndef $(2)_INSTALL_CMDS
+>   define $(2)_INSTALL_CMDS
+>   	$$(HOST_MAKE_ENV) $$($$(PKG)_NINJA_ENV) \
+> -		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/build install
+> +		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/buildroot-build install
+>   endef
+>   endif
+>   
+> @@ -231,7 +231,7 @@ endif
+>   ifndef $(2)_INSTALL_STAGING_CMDS
+>   define $(2)_INSTALL_STAGING_CMDS
+>   	$$(TARGET_MAKE_ENV) $$($$(PKG)_NINJA_ENV) DESTDIR=$$(STAGING_DIR) \
+> -		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/build install
+> +		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/buildroot-build install
+>   endef
+>   endif
+>   
+> @@ -242,7 +242,7 @@ endif
+>   ifndef $(2)_INSTALL_TARGET_CMDS
+>   define $(2)_INSTALL_TARGET_CMDS
+>   	$$(TARGET_MAKE_ENV) $$($$(PKG)_NINJA_ENV) DESTDIR=$$(TARGET_DIR) \
+> -		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/build install
+> +		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/buildroot-build install
+>   endef
+>   endif
+>   
 
 _______________________________________________
 buildroot mailing list
