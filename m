@@ -1,73 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4923EC5AE59
-	for <buildroot@archiver.kernel.org>; Sat, 31 May 2025 16:40:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 483E0C5B549
+	for <buildroot@archiver.kernel.org>; Sat, 31 May 2025 16:41:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 181F16069D;
-	Sat, 31 May 2025 16:40:12 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rN3dbU9avy5w; Sat, 31 May 2025 16:40:11 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 568C460743
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 568C460743;
-	Sat, 31 May 2025 16:40:11 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id E3A9E235
- for <buildroot@buildroot.org>; Sat, 31 May 2025 16:40:09 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E102640A31
- for <buildroot@buildroot.org>; Sat, 31 May 2025 16:40:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0D0E740869;
+	Sat, 31 May 2025 16:41:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PVRZNF-tgjcb for <buildroot@buildroot.org>;
- Sat, 31 May 2025 16:40:09 +0000 (UTC)
+ id grgVLaWAIpVN; Sat, 31 May 2025 16:41:15 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C9CF407D1
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2C9CF407D1;
+	Sat, 31 May 2025 16:41:15 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id B47E9235
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 16:41:12 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id A664440660
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 16:41:12 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6aXqhwOA_kKr for <buildroot@buildroot.org>;
+ Sat, 31 May 2025 16:41:11 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
  helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1B8D8409E8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B8D8409E8
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B07A040659
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B07A040659
 Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1B8D8409E8
- for <buildroot@buildroot.org>; Sat, 31 May 2025 16:40:09 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B07A040659
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 16:41:11 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 1F6381C00B7; Sat, 31 May 2025 18:40:07 +0200 (CEST)
-Message-ID: <00fa5a92-a754-45a2-926d-e01cdabfe4cc@rnout.be>
-Date: Sat, 31 May 2025 18:40:05 +0200
+ with ESMTPSA id AB0CA1C0D6C; Sat, 31 May 2025 18:41:09 +0200 (CEST)
+Message-ID: <3e75f47f-f8ab-4078-82c7-63fe54d49b80@rnout.be>
+Date: Sat, 31 May 2025 18:41:08 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Christian Stewart <christian@aperture.us>, buildroot@buildroot.org
-Cc: Julien Olivain <ju.o@free.fr>, Bernd Kuhls <bernd@kuhls.net>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20250404182407.45244-1-christian@aperture.us>
+To: Thomas Perale <thomas.perale@mind.be>, buildroot@buildroot.org
+References: <20250524080446.1185955-1-thomas.perale@mind.be>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20250404182407.45244-1-christian@aperture.us>
+In-Reply-To: <20250524080446.1185955-1-thomas.perale@mind.be>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1748709607; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1748709669; h=from:subject:date:message-id:to:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=MqW5OjipLQkcofw4J/rehmcb45xsS5PPMinPdTyXVu0=;
- b=SSYZNEw2BKb8JtJQ/29XpszF+yg5FW05xmISEaCKE/UUZhWl2Jq7xfBfCdChyr1ByovRIn
- tGKe9hGckrSDAGRXSGWZ9vqRUi/q9Vq13dJAacWrHd6WC4SqMubbxCgfnCgXfD71hCfdz/
- /XMjvUAZMyb5zTOImZpRfSf3+EYuxYb/QPDW6Ks2DJ1Y04zUuE1cGGYhclHlYV530hfQrO
- sX1YoaC8dYaueoNtXstwxHa6o8YQOq4Htb5xX0pxx1dslvMA40qN8iacpd0wjmm6UpEC87
- jJUqEfmfX3ceZDJjJjTw2c8ibZwtgLth+SBVJ/XfDuc4ZKgWqtgH6hdI6AOeYw==
+ bh=sMQTgw3F04iAwnqNPGcIM2WXPuyJKnF6bQ15BSTF4DU=;
+ b=NY+amZrC7wLQ1QtY1k1PHU/R+Dhw1Hr+6w0Z9H9D+I1EaSJnhn4VIazzBU+jk5u6W7LhRt
+ sNv+g3ooRHZfK+rIzbOo/Vr3STnt7lNbnm+hjJQtJlIdZKd89WxwEWniTYI9j6wXEahCg0
+ /t1njxzaVlvABcSQhlWHa9xUUk/uzIG0MgoxbuW6UpB1meEeBDnIm9mv3jvWht5SKsVCI1
+ eHZlW5ddNbxNzazt1XmZiFCmX2WKLDZqQhIGuWqWyC8fP0nZT5iKML7opo7ine/blko86j
+ BQW7zQIShvCNJZVQfV997hBL5p+cAfntfOvA//NA8qZHRHN7rjjoHc6XDAcIRg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=SSYZNEw2
-Subject: Re: [Buildroot] [PATCH v1 1/1] package/pkg-cmake.mk: force config
- version >=3.5
+ header.a=rsa-sha256 header.s=dkim header.b=NY+amZrC
+Subject: Re: [Buildroot] [PATCH 2025.02.x] package/libical: fix deprecated
+ CMake 4 policy
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -88,49 +85,78 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 04/04/2025 20:24, Christian Stewart via buildroot wrote:
-> Some packages have CMakeLists.txt requiring CMake <3.5.
+On 24/05/2025 10:04, Thomas Perale via buildroot wrote:
+> The commit [1] updated the version of libical to version 3.0.20 which
+> included a number of build fixes for newer CMake version.
+> This patch is not included in the 2025.02.x branch and libical remained
+> subject to a number of build error with CMake 4.
 > 
-> Newer CMake forces at minimum version 3.5, leading to build failures:
+> This patch backport the fix to remove the usage of the now deprecated
+> CMP0005 policy with CMake version 4 (see [2]).
 > 
-> https://github.com/skiffos/SkiffOS/actions/runs/14208988354/job/39812576139#step:8:638
-> https://github.com/skiffos/SkiffOS/actions/runs/14211566256/job/39819600184#step:8:26664
+> [1] 8cdeeb536c package/libical: bump to version 3.0.20
+> [2] https://cmake.org/cmake/help/latest/policy/CMP0005.html
 > 
-> Add the suggested build flag to force version 3.5.x and fix the error:
-> 
->    -DCMAKE_POLICY_VERSION_MINIMUM=3.5
-> 
-> This is applied to all cmake packages to force 3.5 as a minimum.
-> 
-> Signed-off-by: Christian Stewart <christian@aperture.us>
+> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
   Applied to 2025.02.x, thanks.
-
-  On master, we will fix the packages with patches, but on the LTS branch it's 
-easier to use this workaround.
 
   Regards,
   Arnout
 
 > ---
->   package/pkg-cmake.mk | 4 ++++
->   1 file changed, 4 insertions(+)
+>   ...ger-support-old-cmake-policy-cmp0005.patch | 42 +++++++++++++++++++
+>   1 file changed, 42 insertions(+)
+>   create mode 100644 package/libical/0003-cmakelists-txt-no-longer-support-old-cmake-policy-cmp0005.patch
 > 
-> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-> index c7032312fb..7bff3851cf 100644
-> --- a/package/pkg-cmake.mk
-> +++ b/package/pkg-cmake.mk
-> @@ -53,6 +53,10 @@ define inner-cmake-package
->   
->   $(3)_SUPPORTS_IN_SOURCE_BUILD ?= YES
->   
-> +# Some packages requires CMake 3.0.0 but latest CMake requires >=3.5
-> +# Set the policy version minimum to force these packages to 3.5 or greater.
-> +$(2)_CONF_OPTS += -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+> diff --git a/package/libical/0003-cmakelists-txt-no-longer-support-old-cmake-policy-cmp0005.patch b/package/libical/0003-cmakelists-txt-no-longer-support-old-cmake-policy-cmp0005.patch
+> new file mode 100644
+> index 0000000000..6e21c6d6df
+> --- /dev/null
+> +++ b/package/libical/0003-cmakelists-txt-no-longer-support-old-cmake-policy-cmp0005.patch
+> @@ -0,0 +1,42 @@
+> +From 7f07ace91faa8b1d578bf5bac2987660f91f31ca Mon Sep 17 00:00:00 2001
+> +From: Allen Winter <allen.winter@kdab.com>
+> +Date: Sat, 14 Oct 2017 15:49:54 -0400
+> +Subject: [PATCH] CMakeLists.txt, src/test/CMakeLists.txt - no longer support
+> + old CMake Policy CMP0005 ISSUE#315
 > +
->   # The default backend, unless specified by the package
->   $(3)_CMAKE_BACKEND ?= make
->   
+> +Upstream: https://github.com/libical/libical/commit/7f07ace91faa8b1d578bf5bac2987660f91f31ca
+> +[thomas: backported to v1.0.1]
+> +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+> +
+> +---
+> + CMakeLists.txt          | 1 -
+> + src/test/CMakeLists.txt | 2 +-
+> + 2 files changed, 1 insertion(+), 2 deletions(-)
+> +
+> +diff --git a/CMakeLists.txt b/CMakeLists.txt
+> +index d5aad80c..e2d5de72 100644
+> +--- a/CMakeLists.txt
+> ++++ b/CMakeLists.txt
+> +@@ -50,7 +50,6 @@ project(libical C CXX)
+> +
+> + if(COMMAND cmake_policy)
+> +   cmake_policy(SET CMP0003 NEW)
+> +-  cmake_policy(SET CMP0005 OLD)
+> + endif()
+> +
+> + set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
+> +diff --git a/src/test/CMakeLists.txt b/src/test/CMakeLists.txt
+> +index 322b5e40..31ab6199 100644
+> +--- a/src/test/CMakeLists.txt
+> ++++ b/src/test/CMakeLists.txt
+> +@@ -6,7 +6,7 @@ include_directories(
+> +
+> + set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
+> +
+> +-set(TEST_DATADIR "\\\"${CMAKE_SOURCE_DIR}/test-data\\\"")
+> ++set(TEST_DATADIR "\"${CMAKE_SOURCE_DIR}/test-data\"")
+> + add_definitions(-DTEST_DATADIR=${TEST_DATADIR})
+> +
+> + macro(setprops _name)
+> +--
+> +2.49.0
 
 _______________________________________________
 buildroot mailing list
