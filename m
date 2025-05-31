@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4EC4C71136
-	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 08:38:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92B6EC61CE8
+	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 08:38:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 92CCE81F39;
-	Thu, 12 Jun 2025 08:38:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6411C6126F;
+	Thu, 12 Jun 2025 08:38:59 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id V4MKrXZIKskR; Thu, 12 Jun 2025 08:38:57 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5DB2A610DF
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5DB2A610DF;
+	Thu, 12 Jun 2025 08:38:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7F3F71BD
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:32 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 665FC80DE2
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WGRvgDx9tUgB; Thu, 12 Jun 2025 08:38:56 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 94AF081E07
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 94AF081E07;
-	Thu, 12 Jun 2025 08:38:56 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 09D541E0
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:33 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D6EE6405D4
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:27 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kSYhCpb0gFVu for <buildroot@buildroot.org>;
- Thu, 12 Jun 2025 08:38:27 +0000 (UTC)
+ id XWFySPeM_yQh for <buildroot@buildroot.org>;
+ Thu, 12 Jun 2025 08:38:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2468440077
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A41EF80D5A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2468440077
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:27 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A41EF80D5A
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:31 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2203682D97; Thu, 12 Jun 2025 08:38:27 +0000 (UTC)
+ id A0DBC805F4; Thu, 12 Jun 2025 08:38:31 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 19 May 2025 18:46:13 +0200
+Date: Sat, 31 May 2025 12:40:25 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5fd75bfb02fefdf23d9fe284ff58ed28487edd8e
-X-Git-Newrev: 62e784cb97641b5d09eaab04f81e10982d636bcc
+X-Git-Oldrev: c12e81951dc3c07436cca3ea7d22039a6a9fa0ef
+X-Git-Newrev: c64e397f47394832d84138da65e76606968d31c7
 X-Patchwork-Hint: ignore
-Message-Id: <20250612083827.2203682D97@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gcc: drop dead code related to
- BR2_GCC_SUPPORTS_LIBCILKRTS
+Message-Id: <20250612083831.A0DBC805F4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/msmtp: bump version to 1.8.29
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,70 +64,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=62e784cb97641b5d09eaab04f81e10982d636bcc
+commit: https://git.buildroot.net/buildroot/commit/?id=c64e397f47394832d84138da65e76606968d31c7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The libcilkrts library was removed from gcc 8.x, and gcc 8.x is the
-oldest version we allow building (to still support PowerPC SPE). So it
-means the BR2_GCC_SUPPORTS_LIBCILKRTS is basically dead code because:
+Release notes:
+https://marlam.de/msmtp/news/msmtp-1-8-29/
 
-	default y if !BR2_TOOLCHAIN_GCC_AT_LEAST_8
-
-Will never evaluate to 'y' in current Buildroot.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/gcc/Config.in.host         |  5 -----
- package/gcc/gcc-final/gcc-final.mk | 19 -------------------
- 2 files changed, 24 deletions(-)
+ package/msmtp/msmtp.hash | 4 ++--
+ package/msmtp/msmtp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 4258debbd1..8930c2a42a 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -51,11 +51,6 @@ config BR2_GCC_VERSION_15_X
+diff --git a/package/msmtp/msmtp.hash b/package/msmtp/msmtp.hash
+index a7cd70364c..2aadb92700 100644
+--- a/package/msmtp/msmtp.hash
++++ b/package/msmtp/msmtp.hash
+@@ -1,7 +1,7 @@
+ # Locally calculated after checking signature
+-# https://marlam.de/msmtp/releases/msmtp-1.8.28.tar.xz.sig
++# https://marlam.de/msmtp/releases/msmtp-1.8.29.tar.xz.sig
+ # with key 2F61B4828BBA779AECB3F32703A2A4AB1E32FD34
+-sha256  3a57f155f54e4860f7dd42138d9bea1af615b99dfab5ab4cd728fc8c09a647a4  msmtp-1.8.28.tar.xz
++sha256  13a78f3c6034b33008a7f2474fdddd0deaf7db6da89d0791d3d75eae721220d7  msmtp-1.8.29.tar.xz
  
- endchoice
+ # Hash for license file:
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/msmtp/msmtp.mk b/package/msmtp/msmtp.mk
+index 92fddbe8f3..9073fffe76 100644
+--- a/package/msmtp/msmtp.mk
++++ b/package/msmtp/msmtp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--# libcilkrts was introduced in gcc 4.9 and removed in gcc 8.x
--config BR2_GCC_SUPPORTS_LIBCILKRTS
--	bool
--	default y if !BR2_TOOLCHAIN_GCC_AT_LEAST_8
--
- config BR2_GCC_SUPPORTS_DLANG
- 	bool
- 	default y if BR2_aarch64
-diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-index 99d7047b5f..43aea72420 100644
---- a/package/gcc/gcc-final/gcc-final.mk
-+++ b/package/gcc/gcc-final/gcc-final.mk
-@@ -85,25 +85,6 @@ else
- HOST_GCC_FINAL_GCC_LIB_DIR = $(HOST_DIR)/$(GNU_TARGET_NAME)/lib*
- endif
- 
--ifeq ($(BR2_GCC_SUPPORTS_LIBCILKRTS),y)
--
--# libcilkrts does not support v8
--ifeq ($(BR2_sparc),y)
--HOST_GCC_FINAL_CONF_OPTS += --disable-libcilkrts
--endif
--
--# Pthreads are required to build libcilkrts
--ifeq ($(BR2_PTHREADS_NONE),y)
--HOST_GCC_FINAL_CONF_OPTS += --disable-libcilkrts
--endif
--
--ifeq ($(BR2_STATIC_LIBS),y)
--# disable libcilkrts as there is no static version
--HOST_GCC_FINAL_CONF_OPTS += --disable-libcilkrts
--endif
--
--endif # BR2_GCC_SUPPORTS_LIBCILKRTS
--
- # Disable shared libs like libstdc++ if we do static since it confuses linking
- ifeq ($(BR2_STATIC_LIBS),y)
- HOST_GCC_FINAL_CONF_OPTS += --disable-shared
+-MSMTP_VERSION = 1.8.28
++MSMTP_VERSION = 1.8.29
+ MSMTP_SITE = https://marlam.de/msmtp/releases
+ MSMTP_SOURCE = msmtp-$(MSMTP_VERSION).tar.xz
+ MSMTP_DEPENDENCIES = host-pkgconf
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
