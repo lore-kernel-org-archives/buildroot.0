@@ -1,70 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 193CFC5AE59
-	for <buildroot@archiver.kernel.org>; Sat, 31 May 2025 16:41:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68E0AC5B549
+	for <buildroot@archiver.kernel.org>; Sat, 31 May 2025 16:42:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C9347607CC;
-	Sat, 31 May 2025 16:41:56 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NawA1AuxCy6j; Sat, 31 May 2025 16:41:56 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 02976607C0
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 02976607C0;
-	Sat, 31 May 2025 16:41:56 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 9FB44235
- for <buildroot@buildroot.org>; Sat, 31 May 2025 16:41:54 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 914B940AE3
- for <buildroot@buildroot.org>; Sat, 31 May 2025 16:41:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 37220409DB;
+	Sat, 31 May 2025 16:42:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id goagY-s-Jcqn for <buildroot@buildroot.org>;
- Sat, 31 May 2025 16:41:53 +0000 (UTC)
+ id 4DInDK8Ic_Rx; Sat, 31 May 2025 16:42:54 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 668A040891
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 668A040891;
+	Sat, 31 May 2025 16:42:54 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3CEA8127
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 16:42:53 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 229BC832B0
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 16:42:53 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id R7vRFLEYcnpY for <buildroot@buildroot.org>;
+ Sat, 31 May 2025 16:42:52 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
  helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9953440A54
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9953440A54
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 489C283298
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 489C283298
 Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9953440A54
- for <buildroot@buildroot.org>; Sat, 31 May 2025 16:41:53 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 489C283298
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 16:42:52 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 933101C0D7C; Sat, 31 May 2025 18:41:51 +0200 (CEST)
-Message-ID: <f4f5f601-bdc0-45e1-9766-4a807187a4dd@rnout.be>
-Date: Sat, 31 May 2025 18:41:50 +0200
+ with ESMTPSA id 4105C1C0D7C; Sat, 31 May 2025 18:42:50 +0200 (CEST)
+Message-ID: <0bdae30c-bca1-43e3-bf49-4581603c2d0c@rnout.be>
+Date: Sat, 31 May 2025 18:42:48 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Marcus Hoffmann <buildroot@bubu1.eu>, buildroot@buildroot.org
-Cc: James Hilliard <james.hilliard1@gmail.com>, Marcus Hoffmann <bubu@bubu1.eu>
-References: <20250512125000.1099442-1-buildroot@bubu1.eu>
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ buildroot@buildroot.org
+Cc: Martin Bark <martin@barkynet.com>, linux-amarula@amarulasolutions.com
+References: <20250512163253.1521000-1-dario.binacchi@amarulasolutions.com>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20250512125000.1099442-1-buildroot@bubu1.eu>
+In-Reply-To: <20250512163253.1521000-1-dario.binacchi@amarulasolutions.com>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1748709711; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1748709770; h=from:subject:date:message-id:to:cc:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=r9WvUc/rmNeArjpvCRnZ/ImUpSyLInAtdFHUabJqZX0=;
- b=WXZG6dHOkRfja9CyKir5/EbaKCg8cYSnZYw2/QIWCx2SHdQ+rj+uBGxcVpvtnEK40SHmAZ
- OjlqSzsR+0NcPldMKsmhFotcNoqTz1KUHKZWLLDIVc5J1DvpbxcaI9qAIMeTPpXmhjo6/K
- W2ruUTv9gMPqyNcqgaIAcyVQ/BPhwLRKNDJ1OqWkpmC0CWyoUcqptj2VEk3puTKMNkyVua
- fa1i2a+JREZYpGKZT6HfWH2mLcxwOeOeMIN3rrNITrELA36a0aXHxpezDD+kTJgo9Ml47f
- lyk7B1nEnmlMEMPzSS9vTtIUAV1EbDSRWxh/bN+rx2mT9PbZho5p6ZAVVkrKqQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=dDHedexVDO1rrxM6X0C0o0QmcoU7HuD74MK5NnBNMDY=;
+ b=b7y5hSYePOzDS7qHF1KV8EX+3qaiHhr/TBOKna2NfGnqm4NI5+zO6Od+f27ag5hkzF3q9w
+ Sx4FSiLgT3DAcTcWKVaIrBgDSho+OIZ2v3X/Wck7FGXZvQQZ2+BE6SQe8fNPjChsToqVSp
+ xzzFSiCqSFj/PX8ubPkp10KMOCXC7HUsk0umDw1A4cgdWsqnLxn125LXb+Z52abUGQ30yE
+ fKR4ngwMBhd8yROzZuQ5ZPnZ4bUFDf0BoZXkpJ6LaL3Uaqxsu00WA/9GqK5HkeuUcwtxYY
+ QmSWQ3f31jIS+T6sBnPlfxpyJ87oEmXMLQ1G6rNRTBi+hnD2CEOSMCOV6PWvWw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=WXZG6dHO
-Subject: Re: [Buildroot] [PATCH] package/python-jc: bump to 1.25.5
+ header.a=rsa-sha256 header.s=dkim header.b=b7y5hSYe
+Subject: Re: [Buildroot] [PATCH 1/2] package/connman: bump to version 1.44
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,47 +86,63 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 12/05/2025 14:49, Marcus Hoffmann via buildroot wrote:
-> Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-> ---
+On 12/05/2025 18:32, Dario Binacchi wrote:
+> Release notes:
+> 
+> - ver 1.44:
+>    * Fix issue with handling oFono context integration.
+>    * Fix issue with handling web context for online detection.
+>    * Fix issue with handling flags used when deleting routes.
+>    * Fix issue with handling PAC proxy integration.
+> 
+> - ver 1.43:
+>    * Fix issue with device creation when using LTE.
+>    * Fix issue with regulatory domain when powering up.
+>    * Fix issue with resolving ISO3166 code from timezone data.
+>    * Fix issue with handling DNS proxy zero termination of buffers.
+>    * Fix issue with handling DHCP packet length in L3 mode.
+>    * Fix issue with handling DHCP upper length checks.
+>    * Fix issue with handling IPv6 and URL parsing.
+>    * Fix issue with handling online check updates.
+>    * Fix issue with handling proxy method and WISPr.
+>    * Fix issue with handling default gateway setup.
+>    * Add support for low-priority default routes.
+> 
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
-  Applied to 2025.02.x, thanks.
+  Applied both to 2025.02.x, thanks.
 
   Regards,
   Arnout
 
->   package/python-jc/python-jc.hash | 4 ++--
->   package/python-jc/python-jc.mk   | 4 ++--
->   2 files changed, 4 insertions(+), 4 deletions(-)
+> ---
+>   package/connman/connman.hash | 2 +-
+>   package/connman/connman.mk   | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/python-jc/python-jc.hash b/package/python-jc/python-jc.hash
-> index d8ee918ac7..6e80024639 100644
-> --- a/package/python-jc/python-jc.hash
-> +++ b/package/python-jc/python-jc.hash
-> @@ -1,5 +1,5 @@
->   # md5, sha256 from https://pypi.org/pypi/jc/json
-> -md5  77e798f2c3fbe89c0dbf7b31dc35fc69  jc-1.25.4.tar.gz
-> -sha256  a32eaf029c56b582dadae48895f20784d0f84f2fa28a8e2b32f377a8bffa8b39  jc-1.25.4.tar.gz
-> +md5  40bc4d9fa71e3809c236954a1bd2354f  jc-1.25.5.tar.gz
-> +sha256  f8ac0e4bc427b0ee8a3bdb07a254cc9df6b6036cd440f6c425e2e519cdbda78a  jc-1.25.5.tar.gz
->   # Locally computed sha256 checksums
->   sha256  6493f2db400f4166ca0956cf192a41aa092bd1396ff463e7fdaf51f257c10497  LICENSE.md
-> diff --git a/package/python-jc/python-jc.mk b/package/python-jc/python-jc.mk
-> index 9a3754a0fa..16bdc05895 100644
-> --- a/package/python-jc/python-jc.mk
-> +++ b/package/python-jc/python-jc.mk
-> @@ -4,9 +4,9 @@
+> diff --git a/package/connman/connman.hash b/package/connman/connman.hash
+> index ea87f1ea17da..38af1847aef6 100644
+> --- a/package/connman/connman.hash
+> +++ b/package/connman/connman.hash
+> @@ -1,4 +1,4 @@
+>   # From https://www.kernel.org/pub/linux/network/connman/sha256sums.asc
+> -sha256  a3e6bae46fc081ef2e9dae3caa4f7649de892c3de622c20283ac0ca81423c2aa  connman-1.42.tar.xz
+> +sha256  2be2b00321632b775f9eff713acd04ef21e31fbf388f6ebf45512ff4289574ff  connman-1.44.tar.xz
+>   # Locally computed
+>   sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
+> diff --git a/package/connman/connman.mk b/package/connman/connman.mk
+> index 142a6583ad3c..2c5be8252c6e 100644
+> --- a/package/connman/connman.mk
+> +++ b/package/connman/connman.mk
+> @@ -4,7 +4,7 @@
 >   #
 >   ################################################################################
 >   
-> -PYTHON_JC_VERSION = 1.25.4
-> +PYTHON_JC_VERSION = 1.25.5
->   PYTHON_JC_SOURCE = jc-$(PYTHON_JC_VERSION).tar.gz
-> -PYTHON_JC_SITE = https://files.pythonhosted.org/packages/5b/82/146ef4c94297ef87c6a732c92dd57761bea2c2179e1b8ca8a6b9b8dd6ff7
-> +PYTHON_JC_SITE = https://files.pythonhosted.org/packages/1b/da/f6ec6a79f8dea70671f41d7162cfefdfe97e9c5b6c2227c1737183c05cd6
->   PYTHON_JC_SETUP_TYPE = setuptools
->   PYTHON_JC_LICENSE = MIT, BSD-3-Clause (bundled pbPlist)
->   PYTHON_JC_LICENSE_FILES = LICENSE.md
+> -CONNMAN_VERSION = 1.42
+> +CONNMAN_VERSION = 1.44
+>   CONNMAN_SOURCE = connman-$(CONNMAN_VERSION).tar.xz
+>   CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman
+>   CONNMAN_DEPENDENCIES = libglib2 dbus
 
 _______________________________________________
 buildroot mailing list
