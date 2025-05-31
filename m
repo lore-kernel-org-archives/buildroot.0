@@ -1,75 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F7FAC5AD49
-	for <buildroot@archiver.kernel.org>; Tue,  3 Jun 2025 06:22:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70487C5AD49
+	for <buildroot@archiver.kernel.org>; Tue,  3 Jun 2025 06:22:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B98E1614F7;
-	Tue,  3 Jun 2025 06:22:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2FA6D41CC2;
+	Tue,  3 Jun 2025 06:22:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v605ka7YarhX; Tue,  3 Jun 2025 06:22:04 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id e0upH-w3diKB; Tue,  3 Jun 2025 06:22:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ECE1C6103F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 35B84414C3
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ECE1C6103F;
-	Tue,  3 Jun 2025 06:22:03 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 4C57EDA
- for <buildroot@buildroot.org>; Tue,  3 Jun 2025 06:22:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 35B84414C3;
+	Tue,  3 Jun 2025 06:22:12 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id F1A2615F
+ for <buildroot@buildroot.org>; Tue,  3 Jun 2025 06:22:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 378306103F
- for <buildroot@buildroot.org>; Tue,  3 Jun 2025 06:22:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DF9B14113A
+ for <buildroot@buildroot.org>; Tue,  3 Jun 2025 06:22:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KkpCgJsEiYfC for <buildroot@buildroot.org>;
- Tue,  3 Jun 2025 06:22:00 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id J0inTr50WmZ5 for <buildroot@buildroot.org>;
+ Tue,  3 Jun 2025 06:22:01 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
  helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8894260FF7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8894260FF7
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 904614113C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 904614113C
 Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8894260FF7
- for <buildroot@buildroot.org>; Tue,  3 Jun 2025 06:22:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 904614113C
+ for <buildroot@buildroot.org>; Tue,  3 Jun 2025 06:22:01 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id D0ABF1C140E; Tue,  3 Jun 2025 08:21:55 +0200 (CEST)
-Message-ID: <6f7dfbe1-2a63-43b0-8d73-9ee81cd20de3@rnout.be>
-Date: Sat, 31 May 2025 18:57:49 +0200
+ with ESMTPSA id 658A41C1416; Tue,  3 Jun 2025 08:21:59 +0200 (CEST)
+Message-ID: <c9f4204c-e1bc-4554-b43c-dfdab7e2e5c8@rnout.be>
+Date: Sat, 31 May 2025 18:59:34 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Buildroot List <buildroot@buildroot.org>
-Cc: Roy Kollen Svendsen <roykollensvendsen@gmail.com>,
- Baxiche Su <baxiche@gmail.com>, Jesse Van Gavere <jesseevg@gmail.com>
-References: <20250516210452.342275-1-thomas.petazzoni@bootlin.com>
- <20250516210452.342275-4-thomas.petazzoni@bootlin.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+References: <20250517143506.7974486F5C@busybox.osuosl.org>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20250516210452.342275-4-thomas.petazzoni@bootlin.com>
+In-Reply-To: <20250517143506.7974486F5C@busybox.osuosl.org>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1748931717; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1748931719; h=from:subject:date:message-id:to:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=/C+rKGYlHcFMrQbg7i2jnf5NGMccBBgovj9y8OaocZ4=;
- b=Mrpu63xmY6/KWGhEzLNVaXKBtyaGx+Tj5W4paOxIGlytgYTq+DLUBEezNrZna5TT8RWcB5
- 85u09+1W57k8o8e42kUBEHoCVhqIezxR6TJa1gJTA5oJpQT+tMcmUMpqZylB2P6koSdvBl
- E2VZLdktTyAnj5COdioCH82jBBJ2vcLnqaNCMclqgrrcmkpTUEBdj1Gi91eC8ezysEWvaG
- EeuwfGKVvhC9tkdxtIolng3U7ChlXxfOqyLTYv98SM0jdE1ShBSrl9W/CEjZAywU2vtB4x
- Imir3OQBaiIGz/JYI05BKeN3x8sgxPJxM5BNLt+qF2m4uLpLqoTh7c4uB7dVdg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=nXLugvfSd+r8gpdsgI/iuZVg1Sg9XUdGpVCtTmPO+ko=;
+ b=WrgfjP3vYv+dExd9PmMVRZb4fHBNdnEtuwrfquQAsaFHZ0bczKjaUrizcQKhFi5Uzn+3I+
+ W61o/hyiQAj6wcBbvN1Q6B1yNBZBaYll7axFW0KsfWaqmimQSIanTwRYsrs4+Qim73OmN3
+ kSOyY8Qj0m+xXlJ+90gLFyuS32Mfb4ZI33g+VjBOGhVDjU7gTgesk2oGqJKIRu0itEtbiY
+ V0hsLj4Zqo/G/JlPsv7jU2hRiQ171OgPZkgofahdbdiuyKn7vcXYRbfEseJJzo5tl0xu86
+ 0vK74he4FTJJpc8WiRpp/Al9ohTuscQCCQ5QP9+nHfd/+5tQUhfHCqrtihZdOw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
- header.s=dkim header.b=Mrpu63xm
-Subject: Re: [Buildroot] [PATCH 3/4] package/qt6/qt6multimedia: ffmpeg
- support needs headers >= 5.2
+ header.s=dkim header.b=WrgfjP3v
+Subject: Re: [Buildroot] [git commit] package/rpm: backport fix for GCC 14.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,52 +78,124 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@rnout.be>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-CgpPbiAxNi8wNS8yMDI1IDIzOjA0LCBUaG9tYXMgUGV0YXp6b25pIHZpYSBidWlsZHJvb3Qgd3Jv
-dGU6Cj4gVGhlIFY0TDIgY29kZSBpbiB0aGUgZmZtcGVnIHBsdWdpbiB1c2VzIFY0TDJfUElYX0ZN
-VF9CR1JBMzIgd2hpY2ggd2FzCj4gb25seSBpbnRyb2R1Y2VkIGluIGtlcm5lbCBoZWFkZXJzIDUu
-MiwgaW4gdXBzdHJlYW0ga2VybmVsIGNvbW1pdAo+IGUyNWVjOTE0MTExNGM3MTI0ZWViYTA5Mzg1
-ZTI3MmRkNzZmYmU2MTcuCj4gCj4gRml4ZXM6Cj4gCj4gL2hvbWUvdGhvbWFzL2J1aWxkcm9vdC9i
-dWlsZHJvb3Qvb3V0cHV0cy9xdC9idWlsZC9xdDZtdWx0aW1lZGlhLTYuOC4xL3NyYy9wbHVnaW5z
-L211bHRpbWVkaWEvZmZtcGVnL3F2NGwyY2FtZXJhLmNwcDozNjo0MzogZXJyb3I6IOKAmFY0TDJf
-UElYX0ZNVF9CR1JBCj4gMzLigJkgd2FzIG5vdCBkZWNsYXJlZCBpbiB0aGlzIHNjb3BlOyBkaWQg
-eW91IG1lYW4g4oCYVjRMMl9QSVhfRk1UX0JHUjMy4oCZPwo+ICAgICAzNiB8ICAgICB7IFFWaWRl
-b0ZyYW1lRm9ybWF0OjpGb3JtYXRfQkdSQTg4ODgsIFY0TDJfUElYX0ZNVF9CR1JBMzIgIH0sCj4g
-ICAgICAgIHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXn5+fn5+
-fn5+fn5+fn5+fn5+fgo+ICAgICAgICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgIFY0TDJfUElYX0ZNVF9CR1IzMgo+IAo+IHdoZW4gYnVpbGRpbmc6Cj4gCj4gICBC
-UjJfYXJtPXkKPiAgIEJSMl9jb3J0ZXhfYTk9eQo+ICAgQlIyX0FSTV9FTkFCTEVfVkZQPXkKPiAg
-IEJSMl9UT09MQ0hBSU5fRVhURVJOQUw9eQo+ICAgQlIyX1RPT0xDSEFJTl9FWFRFUk5BTF9CT09U
-TElOPXkKPiAgIEJSMl9UT09MQ0hBSU5fRVhURVJOQUxfQk9PVExJTl9BUk1WN19FQUJJSEZfTVVT
-TF9TVEFCTEU9eQo+ICAgQlIyX1BBQ0tBR0VfUVQ2PXkKPiAgIEJSMl9QQUNLQUdFX1FUNkJBU0Vf
-WENCPXkKPiAgIEJSMl9QQUNLQUdFX1FUNk1VTFRJTUVESUE9eQo+ICAgQlIyX1BBQ0tBR0VfUVQ2
-TVVMVElNRURJQV9GRk1QRUc9eQo+ICAgQlIyX1BBQ0tBR0VfWE9SRzc9eQo+IAo+IGF0IGEgdGlt
-ZSB3aGVuIHRoZSBCb290bGluIHN0YWJsZSB0b29sY2hhaW4gd2FzIHVzaW5nIExpbnV4IDQuMTkK
-PiBoZWFkZXJzLgo+IAo+IFNpZ25lZC1vZmYtYnk6IFRob21hcyBQZXRhenpvbmkgPHRob21hcy5w
-ZXRhenpvbmlAYm9vdGxpbi5jb20+CgogIEFwcGxpZWQgdG8gMjAyNS4wMi54LCB0aGFua3MuCgog
-IFJlZ2FyZHMsCiAgQXJub3V0Cgo+IC0tLQo+ICAgcGFja2FnZS9xdDYvcXQ2bXVsdGltZWRpYS9D
-b25maWcuaW4gfCA3ICsrKysrKysKPiAgIDEgZmlsZSBjaGFuZ2VkLCA3IGluc2VydGlvbnMoKykK
-PiAKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9xdDYvcXQ2bXVsdGltZWRpYS9Db25maWcuaW4gYi9w
-YWNrYWdlL3F0Ni9xdDZtdWx0aW1lZGlhL0NvbmZpZy5pbgo+IGluZGV4IDMxMDdjYWE1OTcuLmY2
-NGY2MGEwMDQgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9xdDYvcXQ2bXVsdGltZWRpYS9Db25maWcu
-aW4KPiArKysgYi9wYWNrYWdlL3F0Ni9xdDZtdWx0aW1lZGlhL0NvbmZpZy5pbgo+IEBAIC0yOCwx
-MCArMjgsMTcgQEAgY29uZmlnIEJSMl9QQUNLQUdFX1FUNk1VTFRJTUVESUFfRVhBTVBMRVMKPiAg
-IAloZWxwCj4gICAJICBUaGlzIG9wdGlvbiBlbmFibGVzIHRoZSBRdDYgTXVsdGltZWRpYSBleGFt
-cGxlcy4KPiAgIAo+ICtjb21tZW50ICJmZm1wZWcgcGx1Z2luIG5lZWRzIGtlcm5lbCBoZWFkZXJz
-ID49IDUuMiIKPiArCWRlcGVuZHMgb24gQlIyX1BBQ0tBR0VfRkZNUEVHX0FSQ0hfU1VQUE9SVFMK
-PiArCWRlcGVuZHMgb24gQlIyX1BBQ0tBR0VfUFVMU0VBVURJT19IQVNfQVRPTUlDCj4gKwlkZXBl
-bmRzIG9uICFCUjJfVE9PTENIQUlOX0hFQURFUlNfQVRfTEVBU1RfNV8yCj4gKwo+ICAgY29uZmln
-IEJSMl9QQUNLQUdFX1FUNk1VTFRJTUVESUFfRkZNUEVHCj4gICAJYm9vbCAiZmZtcGVnIHBsdWdp
-biIKPiAgIAlkZXBlbmRzIG9uIEJSMl9QQUNLQUdFX0ZGTVBFR19BUkNIX1NVUFBPUlRTCj4gICAJ
-ZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9QVUxTRUFVRElPX0hBU19BVE9NSUMKPiArCSMgVjRMMl9Q
-SVhfRk1UX0JHUkEzMgo+ICsJZGVwZW5kcyBvbiBCUjJfVE9PTENIQUlOX0hFQURFUlNfQVRfTEVB
-U1RfNV8yCj4gICAJIyBxdDYtbXVsdGltZWRpYSBmZm1wZWcgcGx1Z2luIG5lZWRzCj4gICAJIyBx
-dDZiYXNlLWNvbmN1cnJlbnQsIFB1bHNlQXVkaW8gYW5kIGZmbXBlZy1zd2NhbGUuCj4gICAJc2Vs
-ZWN0IEJSMl9QQUNLQUdFX0ZGTVBFRwoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290
-Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJv
-b3QK
+
+
+On 17/05/2025 16:34, Thomas Petazzoni via buildroot wrote:
+> commit: https://git.buildroot.net/buildroot/commit/?id=67e10ac8988b2b7217f424dc56f5128fb627a37d
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> 
+> GCC 14.x brought some more strict checks on pointer types, causing a
+> build issue in the rpm package when python support is enabled. These
+> issues have been fixed upstream, initially because Clang >= 16 also
+> added similar stricter checks.
+> 
+> The build issue goes like this:
+> 
+> header-py.c:744:9: error: initialization of 'Py_hash_t (*)(PyObject *)' {aka 'int (*)(struct _object *)'} from incompatible pointer type 'long int (*)(PyObject *)' {aka 'long int (*)(struct _object *)'} [-Wincompatible-pointer-types]
+>    744 |         hdr_hash,                       /* tp_hash */
+>        |         ^~~~~~~~
+> header-py.c:744:9: note: (near initialization for 'hdr_Type.tp_hash')
+> make[3]: *** [Makefile:664: header-py.lo] Error 1
+> make[3]: *** Waiting for unfinished jobs....
+> 
+> It never happened in the autobuilders, but it can be reproduced with
+> the following configuration:
+> 
+> BR2_arm=y
+> BR2_cortex_a9=y
+> BR2_ARM_ENABLE_VFP=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+> BR2_PACKAGE_LUA=y
+> BR2_PACKAGE_PYTHON3=y
+> BR2_PACKAGE_RPM=y
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+  Applied to 2025.02.x, thanks.
+
+  Regards,
+  Arnout
+
+> ---
+>   ...thon-3.2-compatible-object-hash-slot-type.patch | 58 ++++++++++++++++++++++
+>   1 file changed, 58 insertions(+)
+> 
+> diff --git a/package/rpm/0002-Use-Python-3.2-compatible-object-hash-slot-type.patch b/package/rpm/0002-Use-Python-3.2-compatible-object-hash-slot-type.patch
+> new file mode 100644
+> index 0000000000..cf9865ea3f
+> --- /dev/null
+> +++ b/package/rpm/0002-Use-Python-3.2-compatible-object-hash-slot-type.patch
+> @@ -0,0 +1,58 @@
+> +From a0a937a454b2f82eae7ed3b4436614e64ef63e2d Mon Sep 17 00:00:00 2001
+> +From: Panu Matilainen <pmatilai@redhat.com>
+> +Date: Mon, 13 Mar 2023 12:41:11 +0200
+> +Subject: [PATCH] Use Python >= 3.2 compatible object hash slot type
+> +
+> +Python 3.2 changed the object hash type to make them pointer-width on
+> +all platforms - an incompatible change but apparently 3.2 was early enough
+> +in the 3.x days for such changes: https://bugs.python.org/issue9778
+> +
+> +The hash vs pointer size mismatch has quietly been there all along but
+> +clang >= 16 started treating this as an error, causing failed builds.
+> +The fix is easy and obvious enough, but this requires us to bump the
+> +minimum Python version from 3.1 to 3.2. Which thankfully is old enough that
+> +we can do without having to care or introduce build-time compatibility
+> +workarounds.
+> +
+> +Suggested-by: Khem Raj <raj.khem@gmail.com>
+> +Upstream: 45103f84764b2a293b068eb0f59456f553ec45d8
+> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> +---
+> + INSTALL            | 4 ++--
+> + python/header-py.c | 4 ++--
+> + 2 files changed, 4 insertions(+), 4 deletions(-)
+> +
+> +diff --git a/INSTALL b/INSTALL
+> +index 13d0d8a83..528c1e5c0 100644
+> +--- a/INSTALL
+> ++++ b/INSTALL
+> +@@ -66,8 +66,8 @@ These are available from
+> +     http://www.bzip.org
+> +     http://tukaani.org/xz/
+> +
+> +-If you want to build the Python bindings to RPM library, it can be enabled
+> +-with --enable-python option to configure. You'll need to have Python >= 3.1
+> ++Python bindings to RPM library are built by default, but it can be disabled
+> ++with -DENABLE_PYTHON=OFF. You'll need to have Python >= 3.2
+> + runtime and C API development environment installed.
+> + Python is available from:
+> +     http://www.python.org/
+> +diff --git a/python/header-py.c b/python/header-py.c
+> +index 0aed0c926..c15503f35 100644
+> +--- a/python/header-py.c
+> ++++ b/python/header-py.c
+> +@@ -316,9 +316,9 @@ static PyObject * hdr_dsOfHeader(PyObject * s)
+> +                                  "(Oi)", s, RPMTAG_NEVR);
+> + }
+> +
+> +-static long hdr_hash(PyObject * h)
+> ++static Py_hash_t hdr_hash(PyObject * h)
+> + {
+> +-    return (long) h;
+> ++    return (Py_hash_t) h;
+> + }
+> +
+> + static PyObject * hdr_reduce(hdrObject *s)
+> +--
+> +2.49.0
+> +
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
