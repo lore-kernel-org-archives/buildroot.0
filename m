@@ -1,106 +1,107 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10E58C5AE59
-	for <buildroot@archiver.kernel.org>; Sat, 31 May 2025 21:24:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 478EFC5B552
+	for <buildroot@archiver.kernel.org>; Sat, 31 May 2025 21:24:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B92ED606C8;
-	Sat, 31 May 2025 21:24:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 036A0840E5;
+	Sat, 31 May 2025 21:24:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VuudDMLYwl7K; Sat, 31 May 2025 21:24:50 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8GeWS9w5KBb3; Sat, 31 May 2025 21:24:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1193F60A9E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 42320840E1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1193F60A9E;
-	Sat, 31 May 2025 21:24:50 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 2D743117
- for <buildroot@buildroot.org>; Sat, 31 May 2025 21:24:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 42320840E1;
+	Sat, 31 May 2025 21:24:52 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id B4CD1117
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 21:24:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1F3184176B
- for <buildroot@buildroot.org>; Sat, 31 May 2025 21:24:48 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9B33A840E1
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 21:24:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 60lx6eN6Bn0H for <buildroot@buildroot.org>;
- Sat, 31 May 2025 21:24:47 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id na3LIcRO1vCd for <buildroot@buildroot.org>;
+ Sat, 31 May 2025 21:24:49 +0000 (UTC)
 Received-SPF: None (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62a; helo=mail-ej1-x62a.google.com;
+ client-ip=2a00:1450:4864:20::62f; helo=mail-ej1-x62f.google.com;
  envelope-from=stephan@asklandd.dk; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0F0554173B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0F0554173B
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com
- [IPv6:2a00:1450:4864:20::62a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0F0554173B
- for <buildroot@buildroot.org>; Sat, 31 May 2025 21:24:46 +0000 (UTC)
-Received: by mail-ej1-x62a.google.com with SMTP id
- a640c23a62f3a-ad89d8a270fso886465766b.1
- for <buildroot@buildroot.org>; Sat, 31 May 2025 14:24:46 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E0D35840DF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E0D35840DF
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com
+ [IPv6:2a00:1450:4864:20::62f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E0D35840DF
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 21:24:48 +0000 (UTC)
+Received: by mail-ej1-x62f.google.com with SMTP id
+ a640c23a62f3a-ad89d8a270fso886468466b.1
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 14:24:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1748726685; x=1749331485;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=IeXTIqjcC3xgEsYbyTNXM/Qyyd71szuwHs/SNZu1bTA=;
- b=wn8z9LSWYy2PiqKuQx4umyf4hHZ+dKBMJV0agNUDocxzny8tDp0OQbgmiOJLCLr6vd
- Yc7OWq7+AHqpPwnH5YurHP86kPVzKW2KSl3nbITu/oOI/PM/SXtZDBQWfFzAwaJkDb4E
- TQ+lsTHTMrIsTtF9NmOftRO5EEEJgkAM8E++S82S8JTCAjluTdbhV4WZP6XTTrRyTO+4
- Wskq/pc3syOqmiDYW634keMPnLCHeGL31KUE3IDUpGz/v3Y82WfbVgtP9y5rv1XjJDAW
- feY+6JZRoWXChnjXjI+HW/a1oC+z2WQ1CZ/+DHQumDHaE5HcDm0cWP1eMU7ai24DYkOh
- 6Ofw==
-X-Gm-Message-State: AOJu0YxUlw58VTpOKIgC0QOzNNCQsz7twOHrMeHzm5UsrRjA1cIQ7brO
- fDaAgc+QxtzIqdqs5pd1BOkJzg5Iwzrthpsu4/vFzFDWzNf7fmthuSZnHEX/zH+AG8RoQ8OCQSI
- P04zWuuo=
-X-Gm-Gg: ASbGncsPbtQYWnOCEvqeFTKAUVVZCZhfgF6ncI6utHT4eBaupvcQpNXRMz1du9yaeki
- XYo4BfLLYOFKhP+L6kOa4xPP6KtW/RXwJzLBvcowZOSluEF/J15ig/1ihCycQI7c/qka+7VTB0S
- 6Jn9XSPS2VoFSzhkQYxsFslUszKMVedYVxuZTvuiUOaQRfJmAjwkc+E00O34xM1HzDxFjWcIRO2
- +e7LYmpqWYSN2r/Q7zgN/e35RSQXEALXX3Xs69mCGiaW3XAApWYJKYHcwxlekjW39e+qK/ccb7/
- BHFtQX9n4lBgl6Cg71ILr07NyzIZfY5xCDi2fja4HFsA+ZF/eDCtIuOpxv1aArS6bNLsJ7QdUd3
- foca5ga8V193kPSs984QJWTwv1juEwlvFtPNobgI=
-X-Google-Smtp-Source: AGHT+IGq7S7BvHG5vwROp3v6rNvlXdX7wneXPeIA6SoTstHwMaZ5oTIp6NyAv0fdDxDkBmToOHL7FQ==
-X-Received: by 2002:a17:906:d550:b0:ad2:e08:e9e2 with SMTP id
- a640c23a62f3a-adb32daf0bcmr642543966b.27.1748726684438; 
- Sat, 31 May 2025 14:24:44 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1748726687; x=1749331487;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=qMCtmNWE9U8LIMQngNnbbrfBgdAH35eel3YImb3Y2Qg=;
+ b=O9LtQDciz3+nrbAdtWwKLB83xAMxbk89SWx2GV5ikIa6wBeF9zI7mngi6bbsYdAtCs
+ yos9ZVzJ9uy/yVabFVB8NCGYRL2g/7ptgKZJ2jb0g3nyeM6cpFKBD0BKsuGt0lJ9nzO4
+ zzgi9E1wFY18wGJIsBS3ZKO9SYVXffvRqnDfMMqjHg+GRrgpHvh85BOdiLdM4UHrwVv5
+ 4p8tbHcfu+ioSKn8GpJKUQGt6vRRK2WdKuEP3Gfowm3EXhGL3+iIutbhWyPAiLELsmc1
+ TOvMer9/3mhz/vVAriFbyVAwDPdNWdWCwEyqBECPvlr1O4UJVYJwisygIMFsPobtRy7y
+ roWA==
+X-Gm-Message-State: AOJu0YwJFU0PQxX9GzZ+0Ny970SZPWvYbSr51UNFmBgCoGUWXa9w/dgK
+ RYqeW/dyU+K8WSlw7C9b8zhgUyL0ND8jm3v9ngnxv4t7+HSLzoqVf89GYpEOFkHJs+cOkWaT5YA
+ z5mMgRpo=
+X-Gm-Gg: ASbGncvL/v+1fpMz6iW9cjiIwg23DWbfWoxGMsG+H7Fchgb4wOx7Ko6h9GFTXLxlNSo
+ TbrFNg7im5ON66IdrkqyjyYIo0y4pXAjDSToPG6zOjcfUfTI8K1EH1kvYbgIU+FN0+7qJKtE2B+
+ keTrna4iyn4tP6gYNwU1OZ1RFzS/nStH5dL4IZSlmLrcfa3R7ukEKW8Hu/MQWJBdVU+dJigybGX
+ bqYvPlpBZCoM4umokI6JgrCmyFVAxnwwnDTTV3CRtsLPaxdtGkB8zoAniRArJWqh4AV8mSdO2mx
+ paQdiRJe7xGhDziR/YIHn0ijj77VQaC9BOGaPE2iRao9CL2ab/85+qeJGn2Q/uz2H4ypN9MoWnl
+ bIMxuB8PYhuWwziF/KN8lt7bZxbIE
+X-Google-Smtp-Source: AGHT+IHnl3haqRAQHBiNsa5ZrIuaQjX0Ield23/KUESJdO3C2eZYqMOTGsAoZlYEu0V8lErsY/ybLw==
+X-Received: by 2002:a17:906:6a1a:b0:aca:d29e:53f1 with SMTP id
+ a640c23a62f3a-adb3292eabfmr768430266b.12.1748726686996; 
+ Sat, 31 May 2025 14:24:46 -0700 (PDT)
 Received: from localhost.localdomain (85.184.166.47.static.dhcp.aura-net.dk.
  [85.184.166.47]) by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-ada5e2befdbsm552358566b.97.2025.05.31.14.24.43
+ a640c23a62f3a-ada5e2befdbsm552358566b.97.2025.05.31.14.24.46
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 31 May 2025 14:24:44 -0700 (PDT)
+ Sat, 31 May 2025 14:24:46 -0700 (PDT)
 From: Stephan Henningsen <stephan@asklandd.dk>
 To: buildroot@buildroot.org
 Cc: Stephan Henningsen <stephan+buildroot@asklandd.dk>,
- Stephan Henningsen <stephan@asklandd.dk>, Fiona Klute <fiona.klute@gmx.de>
-Date: Sat, 31 May 2025 23:24:33 +0200
-Message-ID: <20250531212436.2788813-1-stephan@asklandd.dk>
+ Stephan Henningsen <stephan@asklandd.dk>
+Date: Sat, 31 May 2025 23:24:34 +0200
+Message-ID: <20250531212436.2788813-2-stephan@asklandd.dk>
 X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250531212436.2788813-1-stephan@asklandd.dk>
+References: <20250531212436.2788813-1-stephan@asklandd.dk>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=asklandd-dk.20230601.gappssmtp.com; s=20230601; t=1748726685; x=1749331485;
+ d=asklandd-dk.20230601.gappssmtp.com; s=20230601; t=1748726687; x=1749331487;
  darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=IeXTIqjcC3xgEsYbyTNXM/Qyyd71szuwHs/SNZu1bTA=;
- b=S208B+yE0ixiCrl1miAHiPJeE1gDEMX/JfcU+kRfEFgBYA0bFxptopzt5CY8v2Yf2t
- uyGWoOMSRTmCR6aDGLvRs2KjOOvpVElBFh1qRF4N4H5fqE6lXKWRdqm5QutLuWp0ywft
- m8BSOBHezAd5RldTwX0484aVRVqvm8qavO7fVDUDzNsvHQea/xCc+KniEk3xpHugqumV
- 73tmeVbox31SShZnRqdfp6pMZW7Sx9NVT5P2ai7qFfZ4yrsLnGnt/tYuu3P8dVzCHr1Q
- +UNAIeruLYIpNaFf7elvFCgCqdpNXRp5440DEjmDDGWUB3zNfKZkFanzZNZk+xKSTGGj
- B+Jw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=qMCtmNWE9U8LIMQngNnbbrfBgdAH35eel3YImb3Y2Qg=;
+ b=Xe0UqjQOmjpjBxKRJGfqGYngHvcxHj7/yv+RsHVwMLeSkqzCu6+LsoXPD44fyt5f9W
+ j2zvABbtUI0uMjvvyU4zM5wZU+1fGO5U5/k4AIAH3ZRSxVZ3sqrzwBytDjGhCD1DD+Zf
+ oZoy5fuGZ266QQPrn+EAmhhYvnYtJEVnHsjDdnAWx+yxhD+zcAVeTvu0kA3ViCVI+BGS
+ z//iVRPLMEnOPsRP6Wx6xyRNppfp7j7IV0/7k6VTayzub4kSWHYQNLvMrvNGNAG568rI
+ z1U9+xL+nT62BPF1kgeYYZ/J1bJJ8eTMOvVcP2NNwx0HmfluO/FURmtW4lbOCFxnzGUj
+ YIkg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=fail (p=none dis=none)
  header.from=asklandd.dk
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=asklandd-dk.20230601.gappssmtp.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=asklandd-dk.20230601.gappssmtp.com
  header.i=@asklandd-dk.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=S208B+yE
-Subject: [Buildroot] [PATCH 1/2] package/busybox: fix path for crond binary
- in S50crond during stop
+ header.s=20230601 header.b=Xe0UqjQO
+Subject: [Buildroot] [PATCH 2/2] package/lvm2: bump to version 2.03.31
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,25 +120,40 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Stephan Henningsen <stephan+buildroot@asklandd.dk>
 
-Signed-off-by: Stephan Henningsen <stephan+buildroot@asklandd.dk>
+This includes, amongst other things, the restoration of support
+for LVM_SUPPRESS_FD_WARNINGS.
+
 Signed-off-by: Stephan Henningsen <stephan@asklandd.dk>
 ---
- package/busybox/S50crond | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/lvm2/lvm2.hash | 3 ++-
+ package/lvm2/lvm2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/busybox/S50crond b/package/busybox/S50crond
-index 74a0c0849b..7083a36cb0 100644
---- a/package/busybox/S50crond
-+++ b/package/busybox/S50crond
-@@ -36,7 +36,7 @@ stop() {
- 		echo "FAIL"
- 	fi
- 	while start-stop-daemon --stop --test --quiet --pidfile "$PIDFILE" \
--		--exec "/sbin/$DAEMON"; do
-+		--exec "/usr/sbin/$DAEMON"; do
- 		sleep 0.1
- 	done
- 	rm -f "$PIDFILE"
+diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
+index 1abaeb0497..8492c150cd 100644
+--- a/package/lvm2/lvm2.hash
++++ b/package/lvm2/lvm2.hash
+@@ -1,5 +1,6 @@
+ # From https://sourceware.org/ftp/lvm2/sha512.sum
+-sha512  02607797f067b2b26d615b9a182ad70017e61d436e3866acf820a04154e503fb59114e9a4540a273d9f570d0337332ca995fb3be83c11eadaca53c1b826eb810  LVM2.2.03.27.tgz
++sha512  254131e28b22d55531d211886afbfdc219e77a4df802e3ec9b66d889ff22bf6d0a6c2df9c5ff017592d92e1dce0f658a6628fb321c1e90152ff7257492218242  LVM2.2.03.31.tgz
++
+ # Locally computed sha256 checksums
+ sha256  e76fbcd2fb97cf202da330301327754d2db5c58b5b4bebd3a8a749393e7603d1  COPYING
+ sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING.LIB
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index 2fc24be60e..3a1dded55f 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LVM2_VERSION = 2.03.27
++LVM2_VERSION = 2.03.31
+ LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
+ LVM2_SITE = https://sourceware.org/ftp/lvm2
+ LVM2_INSTALL_STAGING = YES
 -- 
 2.49.0
 
