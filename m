@@ -4,76 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 744CCC5AE59
-	for <buildroot@archiver.kernel.org>; Sat, 31 May 2025 08:26:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F39CBC5AE59
+	for <buildroot@archiver.kernel.org>; Sat, 31 May 2025 08:34:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1C39D6078C;
-	Sat, 31 May 2025 08:26:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BC49560791;
+	Sat, 31 May 2025 08:34:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id r56u-QTL1uVM; Sat, 31 May 2025 08:26:30 +0000 (UTC)
+ id nZdqx0oJp-eE; Sat, 31 May 2025 08:34:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 64AC4607AC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 05B986077F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 64AC4607AC;
-	Sat, 31 May 2025 08:26:30 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 86FF1117
- for <buildroot@buildroot.org>; Sat, 31 May 2025 08:26:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 05B986077F;
+	Sat, 31 May 2025 08:34:48 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 02C60117
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 08:34:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6D06C607AC
- for <buildroot@buildroot.org>; Sat, 31 May 2025 08:26:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E890240025
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 08:34:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8lvD5r4eYSik for <buildroot@buildroot.org>;
- Sat, 31 May 2025 08:26:27 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
- helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ja0CJfLKIUb5 for <buildroot@buildroot.org>;
+ Sat, 31 May 2025 08:34:46 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 497EB6078C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 497EB6078C
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 497EB6078C
- for <buildroot@buildroot.org>; Sat, 31 May 2025 08:26:26 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4B4CB43122;
- Sat, 31 May 2025 08:26:23 +0000 (UTC)
-Date: Sat, 31 May 2025 10:26:21 +0200
-To: Adam Duskett <adam.duskett@amarulasolutions.com>
-Cc: buildroot@buildroot.org, Marek Belisko <marek.belisko@open-nandra.com>
-Message-ID: <20250531102621.043c9e75@windsurf>
-In-Reply-To: <20250516074455.1473051-1-adam.duskett@amarulasolutions.com>
-References: <20250516074455.1473051-1-adam.duskett@amarulasolutions.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddtgdefudegvdculddtuddrgeefvddrtddtmdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthejredtredtvdenucfhrhhomhepvfhhohhmrghsucfrvghtrgiiiihonhhiuceothhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeltdegvdejheegtefgueffgfelhfekvdefudevieeileetleeitdefgfeugffghfenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegtsgduieemfeelmeektggujeemvgdutdelmeelvddttgemvdefvdekmeeijedvvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudeimeefleemkegtugejmegvuddtleemledvtdgtmedvfedvkeemieejvddvpdhhvghlohepfihinhgushhurhhfpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeefpdhrtghpthhtoheprggurghmrdguuhhskhgvthhtsegrmhgrrhhulhgrshholhhuthhiohhnshdrtghomhdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhil
- hgurhhoohhtrdhorhhgpdhrtghpthhtohepmhgrrhgvkhdrsggvlhhishhkohesohhpvghnqdhnrghnughrrgdrtghomh
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1748679983;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=MQAZpjAvxIPzkcrJDDzy+c2k63nl0rpTdtT8GGyaTyc=;
- b=YwreieACkudFrsswca82llja4I0qNyqibfrdfpCjAs2QbGWO2fjqO8YJt4aB4n1UOCbTJN
- kktsKZj+AiBcNXRctBsBmuJ49t5ciVc7PHea+xlL3Cqyo+ImeSgzjkls2QjBHvQ0tQmqNg
- ZimLfdXujUQI/GAfyWjdEPiL8SZz5KSE3nTAah+O0hErzthVBdpKcosTsSv/evsHoWcEHW
- S4oaNKTMi6fjoJ7vwHKCxwybNdW/OZQl5o+qC6ljoTMskSvt5RZ19wLApWXsrbNFHfY1TY
- Nt35lstJIyLF22OZa+uRJCsRTipUzAQCW9IJdhdXlBR2DOL5w03JJr0Kk4GxvA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=YwreieAC
-Subject: Re: [Buildroot] [PATCH 1/1] package/polkit: bump version to 126
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 46C3440111
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 46C3440111
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 08:34:46 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 3414F876DF; Sat, 31 May 2025 08:34:46 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 31 May 2025 10:34:12 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: b9a9930de0c873e68de1c8242ff9281d87eda722
+X-Git-Newrev: 52e1049491294e314bacd44ef960360c0f3b521a
+X-Patchwork-Hint: ignore
+Message-Id: <20250531083446.3414F876DF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/sipeed-lpi4abin:
+ upgrade to newer version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,36 +60,50 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 16 May 2025 09:44:55 +0200
-Adam Duskett <adam.duskett@amarulasolutions.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=52e1049491294e314bacd44ef960360c0f3b521a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Drop the -Djs_engine=duktape option as mozjs support has been removed entirely
-> and as such, the option no longer exists.
-> 
-> Tested with `./support/testing/run-tests tests.package.test_polkit`
-> Both tests pass.
-> 
-> Also tested with `./utils/test-pkg -p polkit -a`
-> 40 builds, 8 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
-> 
-> Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-> ---
->  package/polkit/polkit.hash | 2 +-
->  package/polkit/polkit.mk   | 5 ++---
->  2 files changed, 3 insertions(+), 4 deletions(-)
+One single commit upstream:
 
-Applied to next, thanks.
+    sbi: add debian prebuilt v1.6 & remove vendor 0.9 sbi & update mainline opensbi
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+      * mainline opensbi commit: 140844b3bd4a6f2919ccd2ff5e93c6222a4f71fb
+      * mainline opensbi-h commit: 83f3e406cf48a0228c0e0738758d48ccfcbb6ae9
+
+Signed-off-by: Kanak Shilledar <kanakshilledar111@protonmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/sipeed-lpi4abin/sipeed-lpi4abin.hash | 2 +-
+ package/sipeed-lpi4abin/sipeed-lpi4abin.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/sipeed-lpi4abin/sipeed-lpi4abin.hash b/package/sipeed-lpi4abin/sipeed-lpi4abin.hash
+index 9d66be164b..7281f38cd2 100644
+--- a/package/sipeed-lpi4abin/sipeed-lpi4abin.hash
++++ b/package/sipeed-lpi4abin/sipeed-lpi4abin.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256  a1c608a7b0cc641d39666a07d8bb1a73ded35385316989c3e8182d968ed89b3e  sipeed-lpi4abin-44ec4e1cc82141963842ec45db0d1617f9f07e75-git4.tar.gz
++sha256  c0c2daed3c56ba30a26d81986dfa041101c58db994372d601f126cab8fa01013  sipeed-lpi4abin-725756411ecc20f2c2dbc5ea6b8e5aacc6f83aad-git4.tar.gz
+diff --git a/package/sipeed-lpi4abin/sipeed-lpi4abin.mk b/package/sipeed-lpi4abin/sipeed-lpi4abin.mk
+index f2338576d8..59ef9ff918 100644
+--- a/package/sipeed-lpi4abin/sipeed-lpi4abin.mk
++++ b/package/sipeed-lpi4abin/sipeed-lpi4abin.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SIPEED_LPI4ABIN_VERSION = 44ec4e1cc82141963842ec45db0d1617f9f07e75
++SIPEED_LPI4ABIN_VERSION = 725756411ecc20f2c2dbc5ea6b8e5aacc6f83aad
+ SIPEED_LPI4ABIN_SITE = https://github.com/revyos/th1520-boot-firmware.git
+ SIPEED_LPI4ABIN_SITE_METHOD = git
+ SIPEED_LPI4ABIN_LICENSE = PROPRIETARY
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
