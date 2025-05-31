@@ -1,73 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90796C5AE59
-	for <buildroot@archiver.kernel.org>; Sat, 31 May 2025 16:54:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E250FC5B549
+	for <buildroot@archiver.kernel.org>; Sat, 31 May 2025 16:55:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4FDB740B55;
-	Sat, 31 May 2025 16:54:45 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pRPuTLQgMDob; Sat, 31 May 2025 16:54:44 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 705DE40B56
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 705DE40B56;
-	Sat, 31 May 2025 16:54:44 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id C441C235
- for <buildroot@buildroot.org>; Sat, 31 May 2025 16:54:42 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AA8756072E
- for <buildroot@buildroot.org>; Sat, 31 May 2025 16:54:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A9A9B6059B;
+	Sat, 31 May 2025 16:55:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P_8QxMLZxB6z for <buildroot@buildroot.org>;
- Sat, 31 May 2025 16:54:42 +0000 (UTC)
+ id NUdKIBbxVAhP; Sat, 31 May 2025 16:55:03 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A87AC60640
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id A87AC60640;
+	Sat, 31 May 2025 16:55:03 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 91DB1127
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 16:55:02 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 83944401D4
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 16:55:02 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3A8oWE5TczQE for <buildroot@buildroot.org>;
+ Sat, 31 May 2025 16:55:01 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
  helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org ECAB860640
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ECAB860640
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 702BF40068
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 702BF40068
 Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
- by smtp3.osuosl.org (Postfix) with ESMTPS id ECAB860640
- for <buildroot@buildroot.org>; Sat, 31 May 2025 16:54:41 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 702BF40068
+ for <buildroot@buildroot.org>; Sat, 31 May 2025 16:55:01 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id DEF291C00E6; Sat, 31 May 2025 18:54:39 +0200 (CEST)
-Message-ID: <3f85eeeb-58ab-4c36-9d7a-abd4e0f616f4@rnout.be>
-Date: Sat, 31 May 2025 18:54:38 +0200
+ with ESMTPSA id 7E23C1C00EF; Sat, 31 May 2025 18:54:59 +0200 (CEST)
+Message-ID: <f5109c84-e4cd-4478-9012-03412d1fae2e@rnout.be>
+Date: Sat, 31 May 2025 18:54:58 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Adam Duskett <adam.duskett@amarulasolutions.com>, buildroot@buildroot.org
-Cc: Marcus Folkesson <marcus.folkesson@gmail.com>,
- Antoine Tenart <atenart@kernel.org>, Fiona Klute <fiona.klute@gmx.de>
-References: <20250515121027.561571-1-adam.duskett@amarulasolutions.com>
- <20250515121027.561571-2-adam.duskett@amarulasolutions.com>
+To: buildroot@buildroot.org
+Cc: stefan.nickl@gmail.com
+References: <20250516211429.763211-1-arnout@rnout.be>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20250515121027.561571-2-adam.duskett@amarulasolutions.com>
+In-Reply-To: <20250516211429.763211-1-arnout@rnout.be>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1748710480; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1748710499; h=from:subject:date:message-id:to:cc:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=ZuO47rJJRCOE0zCr61D7Ix4O9geYa7DtBTx+NY59Y0M=;
- b=VefMrndyvpfClpGyc+2qZKSbr7LlXxtVJLvdSemwd9bo7UuVn9QNzaQTJ+13S7ZIweXjeA
- VY/8nTfCvRKw3AE4hCQ6V6zsI6LEhY/QchesDEms33SurrRZgOakqr9xpJTvRyMMJSkTTb
- KZTpikQiDIRG+LCLsIFmVBjW3NLVvYUiapTLJf5Hg1+HAelCYLqVZxX4msXOlrIOelHMrD
- r/S8bWB5spcib/t7LQNnLX+CrsQhN21ZZ6jz+Zw9ztFl3xVXFxpPAStTCUEkiDmGgQtk+s
- xt91bGJ+OkNEgSlXNPlwO9EmG1p53t2v3ExAsTFI2Dh9qT6/ti6Y+Sq3ODb2zg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=54RXR7lWZJlB0HltvCir0+4uaD6ZveBiireqOVE9eBo=;
+ b=Z6WAYnmWAfzYJYgkl2tQLcGcKQ75QfV7ZtL3h6Y0kOiKEBep8AfV9M8QMpqo/QucbTD0JL
+ mVEHE22uRTR16KnND1wYNukeMSVqUt5Y/EzLpx1ZLA8arJG4D/ns35m8MWsVHbxU4KWQ18
+ lA7dlPcqXBpnSi3Gam6lt0DC8WCwSuDzrrcAIjj5R5R83Mlf1Jz8XPgR1GZwTDuGOhyGQX
+ hRC8I42m+TUCJvl4eO88SOrZHzm5+M4G2ROVT538yHMKNahaZhKk22k/Q5xeEs/Eh71SAp
+ JvvDGTDGIwFDNRwZupJnoz405E6ykwHIm2haZvfFk/VVmjVeMXh5BHNtmMFyaQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=VefMrndy
-Subject: Re: [Buildroot] [PATCH 01/10] package/audit/S02auditd: fix
- shellcheck and check-package warnings
+ header.a=rsa-sha256 header.s=dkim header.b=Z6WAYnmW
+Subject: Re: [Buildroot] [PATCH] docs/manual/adding-packages-tips.adoc: add
+ section about private repositories
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -88,14 +86,23 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 15/05/2025 14:10, Adam Duskett wrote:
-> Fixup S20audit to pass shellcheck -oall and check-package. The file now
-> closely resembles package/busybox/S01syslogd.
+On 16/05/2025 23:14, Arnout Vandecappelle wrote:
+> Buildroot packaging pretty much assumes that the sources it downloads
+> are publicly available. In general, however, Buildroot is also used to
+> download sources from private repositories. Nowadays, that mostly means
+> from a github or gitlab instance.
 > 
-> Tested with qemu_x86_64_defconfig. start, stop, restart, reload, and rotate
-> all work with busybox ash shell.
+> Although git-over-ssh can be used for that, this poses a problem for CI,
+> because the CI runners integrated with github and gitlab only have
+> access to the repository itself, not to other private repositories. And
+> creating ssh keypairs for CI runners is tricky.
 > 
-> Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+> Therefore, document how standard tools can be used to make private
+> repositories available both to developers and to CI. There are quite a
+> few alternative approaches possible, but they're more complicated or
+> less generically applicable.
+> 
+> Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 
   Applied to 2025.02.x, thanks.
 
@@ -103,110 +110,92 @@ On 15/05/2025 14:10, Adam Duskett wrote:
   Arnout
 
 > ---
->   package/audit/S02auditd | 66 +++++++++++++++++++++++++++--------------
->   1 file changed, 44 insertions(+), 22 deletions(-)
+>   docs/manual/adding-packages-tips.adoc | 75 +++++++++++++++++++++++++++
+>   1 file changed, 75 insertions(+)
 > 
-> diff --git a/package/audit/S02auditd b/package/audit/S02auditd
-> index dd3dc22d6d..f32f01714e 100644
-> --- a/package/audit/S02auditd
-> +++ b/package/audit/S02auditd
-> @@ -8,52 +8,74 @@
->   #              will be sent to syslog.
->   #
->   
-> -NAME=auditd
-> -DAEMON=/usr/sbin/${NAME}
-> -CONFIG=/etc/audit/auditd.conf
-> -PIDFILE=/var/run/${NAME}.pid
-> +DAEMON="auditd"
-> +PIDFILE="/var/run/${DAEMON}.pid"
->   
->   start(){
-> -	printf "Starting ${NAME}: "
-> +	printf "Starting %s: " "${DAEMON}"
->   
->   	# Create dir to store log files in if one doesn't exist. Create
->   	# the directory with SELinux permissions if possible
-> -	command -v selabel_lookup >/dev/null 2>&1
-> -	if [ $? = 0 ]; then
-> -		mkdir -p /var/log/audit -Z `selabel_lookup -b file -k /var/log/audit | cut -d ' ' -f 3`
-> +	if command -v selabel_lookup >/dev/null 2>&1; then
-> +		audit_log_selable="$(selabel_lookup -b file -k /var/log/audit | cut -d ' ' -f 3)"
-> +		mkdir -p /var/log/audit -Z "${audit_log_selable}"
->   	else
->   		mkdir -p /var/log/audit
->   	fi
->   
-> -	# Run audit daemon executable
-> -	start-stop-daemon -S -q -p ${PIDFILE} --exec ${DAEMON}
-> -
-> -	if [ $? = 0 ]; then
-> +	start-stop-daemon --start --background --make-pidfile \
-> +		--pidfile "${PIDFILE}" --exec "/usr/sbin/${DAEMON}"
-> +	status=$?
-> +	if [ "${status}" -eq 0 ]; then
->   		# Load the default rules
->   		test -f /etc/audit/rules.d/audit.rules && /usr/sbin/auditctl -R /etc/audit/rules.d/audit.rules >/dev/null
->   		echo "OK"
->   	else
->   		echo "FAIL"
->   	fi
-> +	return "${status}"
->   }
->   
->   stop(){
-> -	printf "Stopping ${NAME}: "
-> -
-> -	start-stop-daemon -K -q -p ${PIDFILE}
-> -	[ $? = 0 ] && echo "OK" || echo "FAIL"
-> +	printf "Stopping %s: " "${DAEMON}"
-> +	start-stop-daemon --stop --pidfile "${PIDFILE}" --exec "/usr/sbin/${DAEMON}"
-> +	status=$?
-> +	if [ "${status}" -eq 0 ]; then
-> +		echo "OK"
-> +	else
-> +		echo "FAIL"
-> +		return "${status}"
-> +	fi
-> +	while start-stop-daemon --stop --test --quiet --pidfile "${PIDFILE}" \
-> +		--exec "/sbin/${DAEMON}"; do
-> +		sleep 0.1
-> +	done
-> +	rm -f "${PIDFILE}"
-> +	return "${status}"
->   }
->   
->   reload(){
-> -	printf "Reloading ${NAME} configuration: "
-> -	start-stop-daemon --stop -s 1 -p ${PIDFILE} 1>/dev/null
-> -	[ $? = 0 ] && echo "OK" || echo "FAIL"
-> +	printf "Reloading %s configuration: " "${DAEMON}"
-> +	start-stop-daemon --stop --signal HUP --pidfile "${PIDFILE}" 1>/dev/null
-> +	status=$?
-> +	if [ "${status}" -eq 0 ]; then
-> +		echo "OK"
-> +	else
-> +		echo "FAIL"
-> +	fi
-> +	return "${status}"
->   }
->   
->   rotate(){
-> -	printf "Rotating ${NAME} logs: "
-> -	start-stop-daemon --stop -s 10 -p ${PIDFILE} 1>/dev/null
-> -	[ $? = 0 ] && echo "OK" || echo "FAIL"
-> +	printf "Rotating %s logs: " "${DAEMON}"
-> +	start-stop-daemon --stop --signal SIGUSR1 --pidfile "${PIDFILE}" 1>/dev/null
-> +	status=$?
-> +	if [ "${status}" -eq 0 ]; then
-> +		echo "OK"
-> +	else
-> +		echo "FAIL"
-> +	fi
-> +	return "${status}"
->   }
->   
->   case "$1" in
+> diff --git a/docs/manual/adding-packages-tips.adoc b/docs/manual/adding-packages-tips.adoc
+> index 85400c0f31f..91888898a84 100644
+> --- a/docs/manual/adding-packages-tips.adoc
+> +++ b/docs/manual/adding-packages-tips.adoc
+> @@ -253,3 +253,78 @@ FOO_SOURCE = foo-$(FOO_VERSION).tar.bz2
+>   If there is a specific tarball uploaded by the upstream developers in
+>   +https://gitlab.com/<project>/releases/+, do not use this macro, but
+>   rather use directly the link to the tarball.
+> +
+> +[[accessing-private-repos]]
+> +==== Accessing a private repository for a package
+> +
+> +If you want to create a package in a br2-external tree and its source
+> +is in a private repository (e.g. on gitlab, github, bitbucket, ...),
+> +you have to write it in a way that it is buildable both by developers
+> +and in CI. This poses a challenge, because you need to authenticate in
+> +order to access it.
+> +
+> +There are several ways you can approach this. The following two are the
+> +most practical ones.
+> +
+> +===== Using ssh and +insteadOf+
+> +
+> +Configure your private packages to use ssh.
+> +
+> +----
+> +FOO_SITE = git@githosting.com:/<group>/<package>.git
+> +----
+> +
+> +Developers already have an ssh key installed so they can access it
+> +this way. The only limitation is that if they build in docker, they
+> +have to make sure the ssh key is accessible from within the container.
+> +Either mount the ssh directory into the countainer by passing the
+> +options +-v ~/.ssh:<homedir>/.ssh+, or load the private key into
+> +ssh-agent and pass +--mount type=bind,source=$SSH_AUTH_SOCK,target=/ssh-agent
+> +--env SSH_AUTH_SOCK=/ssh-agent+
+> +
+> +CI builders typically will not have an ssh key that allows
+> +access to other repositories. For those, you'll need to generate an
+> +access token. Then you configure git to replace the ssh access with https
+> +access. As a preparation step in CI, run the following command.
+> +
+> +----
+> +git config --global url."https://<token>:x-oauth-basic@githosting.com/".insteadOf "https://githosting.com/"
+> +----
+> +
+> +The way to use a token for basic authentication differs between different
+> +git hosting providers, and sometimes between different types of tokens.
+> +Consult your provider's documentation to find out how to access git over
+> +https with a token.
+> +
+> +===== Use https and +.netrc+
+> +
+> +If, for any reason, developers don't have an ssh key already, then it may
+> +be simpler to use https authentication. For this, every developer will
+> +have to generate a token that has (read) access to all relevant repositories.
+> +Some git hosting providers have a command-line utility that can generate
+> +such a token, otherwise you'll need to generate it in the web interface. The
+> +token has a limited lifetime so you'll need to regularly refresh it.
+> +
+> +To make sure the token is used in the Buildroot build, add it to +~/.netrc+
+> +
+> +----
+> +machine githosting.com
+> +    login <username>
+> +    password <token>
+> +----
+> +
+> +The +<username>+ and +<password>+ to use are again different for different
+> +git hosting providers.
+> +
+> +In CI, generate the +.netrc+ file as a preparation step.
+> +
+> +Configure your private packages to use https.
+> +
+> +----
+> +FOO_SITE = https://githosting.com/<group>/<package>.git
+> +----
+> +
+> +Both wget (https) and git will use +.netrc+ to get login information. This
+> +approach is potentially somewhat less secure because +.netrc+ cannot be
+> +password-protected. The advantage is that users and CI use the exact same
+> +way of providing credentials.
 
 _______________________________________________
 buildroot mailing list
