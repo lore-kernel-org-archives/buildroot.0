@@ -4,104 +4,104 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0DF4BC54FB3
-	for <buildroot@archiver.kernel.org>; Sun,  1 Jun 2025 10:41:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E78EC5B549
+	for <buildroot@archiver.kernel.org>; Sun,  1 Jun 2025 10:41:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A1BCB41E02;
-	Sun,  1 Jun 2025 10:41:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 32A0441E0A;
+	Sun,  1 Jun 2025 10:41:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nssEm-kCiVZ6; Sun,  1 Jun 2025 10:41:52 +0000 (UTC)
+ id jEJybdcqMPNT; Sun,  1 Jun 2025 10:41:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9537441DDD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C07A741DDC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9537441DDD;
-	Sun,  1 Jun 2025 10:41:49 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 71D32222
- for <buildroot@buildroot.org>; Sun,  1 Jun 2025 10:41:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C07A741DDC;
+	Sun,  1 Jun 2025 10:41:53 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2B555127
+ for <buildroot@buildroot.org>; Sun,  1 Jun 2025 10:41:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6EE4440441
- for <buildroot@buildroot.org>; Sun,  1 Jun 2025 10:41:48 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1C50360A51
+ for <buildroot@buildroot.org>; Sun,  1 Jun 2025 10:41:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JGCRh-YVdjPm for <buildroot@buildroot.org>;
- Sun,  1 Jun 2025 10:41:47 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id o8ktDpi35EsU for <buildroot@buildroot.org>;
+ Sun,  1 Jun 2025 10:41:51 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::129; helo=mail-lf1-x129.google.com;
+ client-ip=2a00:1450:4864:20::131; helo=mail-lf1-x131.google.com;
  envelope-from=roykollensvendsen@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4D0094044B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4D0094044B
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com
- [IPv6:2a00:1450:4864:20::129])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4D0094044B
- for <buildroot@buildroot.org>; Sun,  1 Jun 2025 10:41:47 +0000 (UTC)
-Received: by mail-lf1-x129.google.com with SMTP id
- 2adb3069b0e04-553241d30b3so3896896e87.3
- for <buildroot@buildroot.org>; Sun, 01 Jun 2025 03:41:47 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0DA93606E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0DA93606E7
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com
+ [IPv6:2a00:1450:4864:20::131])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0DA93606E7
+ for <buildroot@buildroot.org>; Sun,  1 Jun 2025 10:41:50 +0000 (UTC)
+Received: by mail-lf1-x131.google.com with SMTP id
+ 2adb3069b0e04-55324587a53so5243053e87.0
+ for <buildroot@buildroot.org>; Sun, 01 Jun 2025 03:41:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1748774505; x=1749379305;
+ d=1e100.net; s=20230601; t=1748774509; x=1749379309;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=BER8G/zRKkoB5SZVNBU1lGgvhOgBUWdcgSb+YrjpbsI=;
- b=hu6x+szae85ZA4EyKVHw9X8zovCZSgjUAFxOi+8Eoo8H8PnSqA4QDxwDB9B1i8p+wG
- tnvgrr6DNPx+H4fDsZPwDCI77gZ/Iqhe3ufs1JsH3HdGOlOIvUpQe3kYYnu83rt7DGhi
- MQHAxCe5Ysc8QzjbKRwCmFSe/U2J0Q08LX7ECM+L6hGPlpA1k0bejwQ6yE7LAbq4UG78
- ctpzQDpiOZ0coDm8+SXhy410HvejPxYCYaAd43P12GikX+jh3zozTiNw3IMUMQ7Cghrr
- vEIEZgLzxkyY8uy5c1ENk3TvEv3cyGp8HgFSiHRq+dXASLpvrtnHVikfsNbMppryfkwN
- zZYA==
-X-Gm-Message-State: AOJu0Yw0Td0f+NVHBCTey9iKYDE3fT0AIWyHGthGLV+VMd+l+qEdWbAf
- KRXHYp7fHFzhBzuak77XbdlLUXzeKTmyBHs4CbnfzoyQDfhBpOHa/5LwxEq5Sw==
-X-Gm-Gg: ASbGncsR/yccosP7ob5oDvoeMbvYxy99MW61a/OiWHXf1SNazIIDtzF5wzMmRS7B7Ub
- KmLVab1vy9hF9M6oP+77boXhIEE/wf2L35h5z1uc6irspgiHCU7QWb33/IpLTn8Tbaj8OTcL8Kg
- NFGZeIHqSiApFdzow3JtXqNsKSUfjBKMBm5DeDfKQrk8MLTyFtRuwVHRiRuvRKAFCeEhol3oJWG
- gHLLqkdytMbbz+y6uGpgv/ZJ4ct9j4KJ2hDLkePEuuuAfqWnkmIne8KFnDc+ICD4m54V32GUQa9
- eqKnYiS/XPIcWe7fKqSU5QXwWBLkAnz0RNRysbBQVbbJ6/P1u2h5dDsa/YCInZqBiONrVxvIFgD
- KKhdfqIcbCA==
-X-Google-Smtp-Source: AGHT+IHnI6lEdv8b7wJoY/MtczbmcrI16jXL6IXZc0dw9S8gge2DMnuO9qLN3VJerkmEBCnco6qbMg==
-X-Received: by 2002:a05:6512:1041:b0:551:f0ce:80e3 with SMTP id
- 2adb3069b0e04-55342f78da2mr1009145e87.25.1748774504894; 
- Sun, 01 Jun 2025 03:41:44 -0700 (PDT)
+ bh=fAQEgoiOH4EBCStNdc+PJrg2RWow+edS/2/Hu0AZxKA=;
+ b=Yjugak4q3UPRsw4LN+n5apuLv+MX76kojKBj+VKVK7TolLcA7X/cGsyvUkjeh5qVNK
+ OT8Mvmdbi195uUtMesnP2Glrru58vzAosB2qnCGi4uji5GISbRSeyitQZNoyCRWUj269
+ rCy+2+a4QznP70t+XrfKQWUgtYtsy3k+Gy7Qc02pI3ZySTOqvFt4H5DaauzDp4ZjTb0Q
+ IApQu9lRdAOYQJZv/p2+vVBEQ/pCHpw0rhySdiynzdZmfW+z0np0wXF1YDFE05j5dSTn
+ F5TyWbP/nxrh77+brkxKdVXGQGw/zewW+e9MoMzvvdxl3k8VV7CNf2e5sSaf4RktvbwD
+ 1MfA==
+X-Gm-Message-State: AOJu0YwHjb28QsTNKnEVLDLtu1n4mSXggkk/RgOS59C3LyBJhR//B5Uq
+ TQkd4UP4MTiSfwMncLPCoQEsNMtIH6mUiSyWviuU9pkApR3YVP88nvouVKgLpw==
+X-Gm-Gg: ASbGncsVLlWKW0P1gCYkWhHT2+kAESDhIHiOItII7CzgoglbOdZjNurACm5cygovirf
+ SiuHkK9NQoZN7S9m6Dn5xG+GNm0LtCxiqTx5d7pH3Zh/orTd2ZXueH+pugNRkDWO9Wp4catUh9a
+ DZ9Gc4UvIN0G0ScENksM6sFki7J0cziBy9CFls4CTZ4HLegYtGyZVKccZC81an6ZWaRzttfK5J4
+ OxuJOowC1qQ8+005guNghf7Kjg2bN7XdYjOd7IOePuTcxUzZ6b0UvEAOxd8/YakWGXQIZAZU+TD
+ 8ZpipTl90V+yBLWz/MCfGgAesyJ7068Ckuy0h8LArM3edkmSSR4d60+iGL90ep7IhKsdzqE361o
+ 7AArr2Mry5zHXwu4GOR10
+X-Google-Smtp-Source: AGHT+IE9ePHAHTZqJwoNrFKKGAqJRca/NC8pm1/kHK5I+G8nexhNp4kVSlGEM5THhulwO7WHyDtVzw==
+X-Received: by 2002:a05:6512:3b86:b0:54a:c4af:15 with SMTP id
+ 2adb3069b0e04-5533ba8be3emr2903600e87.19.1748774508614; 
+ Sun, 01 Jun 2025 03:41:48 -0700 (PDT)
 Received: from precision7530-arch-roy.lan
  ([2a01:799:1a22:4401:9825:b52b:4cba:665e])
  by smtp.gmail.com with ESMTPSA id
- 2adb3069b0e04-553379378easm1266670e87.240.2025.06.01.03.41.43
+ 2adb3069b0e04-553379378easm1266670e87.240.2025.06.01.03.41.47
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 01 Jun 2025 03:41:43 -0700 (PDT)
+ Sun, 01 Jun 2025 03:41:48 -0700 (PDT)
 From: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
 To: buildroot@buildroot.org
 Cc: Jesse Van Gavere <jesseevg@gmail.com>,
  Roy Kollen Svendsen <roykollensvendsen@gmail.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Christian Hitz <christian.hitz@bbv.ch>
-Date: Sun,  1 Jun 2025 12:41:24 +0200
-Message-ID: <20250601104133.3238551-3-roykollensvendsen@gmail.com>
+ Jack Rubacha <rubacha.jack03@gmail.com>
+Date: Sun,  1 Jun 2025 12:41:26 +0200
+Message-ID: <20250601104133.3238551-5-roykollensvendsen@gmail.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250601104133.3238551-1-roykollensvendsen@gmail.com>
 References: <20250601104133.3238551-1-roykollensvendsen@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1748774505; x=1749379305; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1748774509; x=1749379309; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=BER8G/zRKkoB5SZVNBU1lGgvhOgBUWdcgSb+YrjpbsI=;
- b=ShRzJ9dk8YORNyyN8HYuZCTa/d/YWU+zVQ2g5qqNtNASR+h2S6+z9WJiJNesG1bZQn
- Rp9TjIg3Px/Nm7pwkPkL/lONJzaUb5GyHRdy4uW7xZs0KcT25RruRTWkLgWSER41psI3
- I3nYUb6mtkWm5688iiDuIB4f6IKXllqeLVMlIKI248JEM/aN28vKHfRhJ31JpABBJIGg
- PLHtonEZSeJp8sQfBPwAo9B/JGg/JMGYb8WijpHNvB5bcaNZDk5k2nr8HuZs+Igk5pcf
- uUWxY3nev2pPs+qudxrCfEbZr1PpJ+vsrpd28VrJoWckQ5kNDgroETbqWAPTQK6RuC+W
- AJ6g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=fAQEgoiOH4EBCStNdc+PJrg2RWow+edS/2/Hu0AZxKA=;
+ b=GM6dQO4PlFj1gxvclCGDQDXMorZ5XCOF21qzuCQpuKMjlV9vY99iMmZ8lM0G+xA5hK
+ KZQGaAf2ajLHAj7KpbngAZkfr4FlvJ/HsfBl8nJ/vO3YeTKhXsfo3sedGKrWGYr5opL2
+ UUYsArB5sF+MkqFvnQhuSYAXCAjX11RiwlcOCORUEp88hhIu9Ojq6NzBcvm7FYP4C5KP
+ vFpfEbgUKvzkeRf8SpW0/ABrjEM0sm7wm+QzxhoUGEXmlWpz0FuqNJGMKXZvOzByGFjE
+ YmyQ8cuxZyplme8B6Id02I8JIcBRh+P1HqbjO57LmMkdi6dra/jOWR4gzAU86wNLvekX
+ 4UoQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=ShRzJ9dk
-Subject: [Buildroot] [PATCH v4 2/6] package/qt6/qt6connectivity: new package
+ header.a=rsa-sha256 header.s=20230601 header.b=GM6dQO4P
+Subject: [Buildroot] [PATCH v4 4/6] package/qt6/qt6grpc: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,120 +118,112 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Christian Hitz <christian.hitz@bbv.ch>
+From: Jack Rubacha <rubacha.jack03@gmail.com>
 
-Signed-off-by: Christian Hitz <christian.hitz@bbv.ch>
+Adds the QT GRPC module (containing Qt Protobuf as well).
+
+Signed-off-by: Jack Rubacha <rubacha.jack03@gmail.com>
 Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
 ---
- package/qt6/Config.in                         |  1 +
- package/qt6/qt6connectivity/Config.in         | 17 ++++++++
- .../qt6/qt6connectivity/qt6connectivity.hash  | 11 +++++
- .../qt6/qt6connectivity/qt6connectivity.mk    | 42 +++++++++++++++++++
- 4 files changed, 71 insertions(+)
- create mode 100644 package/qt6/qt6connectivity/Config.in
- create mode 100644 package/qt6/qt6connectivity/qt6connectivity.hash
- create mode 100644 package/qt6/qt6connectivity/qt6connectivity.mk
+ package/qt6/Config.in            |  1 +
+ package/qt6/qt6grpc/Config.in    |  7 ++++++
+ package/qt6/qt6grpc/qt6grpc.hash | 10 ++++++++
+ package/qt6/qt6grpc/qt6grpc.mk   | 43 ++++++++++++++++++++++++++++++++
+ 4 files changed, 61 insertions(+)
+ create mode 100644 package/qt6/qt6grpc/Config.in
+ create mode 100644 package/qt6/qt6grpc/qt6grpc.hash
+ create mode 100644 package/qt6/qt6grpc/qt6grpc.mk
 
 diff --git a/package/qt6/Config.in b/package/qt6/Config.in
-index 10594691cf..3597417ef7 100644
+index 6b7152d902..c1ea543242 100644
 --- a/package/qt6/Config.in
 +++ b/package/qt6/Config.in
-@@ -45,6 +45,7 @@ if BR2_PACKAGE_QT6
- 
- source "package/qt6/qt6base/Config.in"
- source "package/qt6/qt6charts/Config.in"
-+source "package/qt6/qt6connectivity/Config.in"
+@@ -49,6 +49,7 @@ source "package/qt6/qt6connectivity/Config.in"
  source "package/qt6/qt6core5compat/Config.in"
  source "package/qt6/qt6declarative/Config.in"
  source "package/qt6/qt6graphs/Config.in"
-diff --git a/package/qt6/qt6connectivity/Config.in b/package/qt6/qt6connectivity/Config.in
++source "package/qt6/qt6grpc/Config.in"
+ source "package/qt6/qt6languageserver/Config.in"
+ source "package/qt6/qt6mqtt/Config.in"
+ source "package/qt6/qt6multimedia/Config.in"
+diff --git a/package/qt6/qt6grpc/Config.in b/package/qt6/qt6grpc/Config.in
 new file mode 100644
-index 0000000000..ba329d732e
+index 0000000000..3d82cfcb0c
 --- /dev/null
-+++ b/package/qt6/qt6connectivity/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_QT6CONNECTIVITY
-+	bool "qt6connectivity"
-+	depends on BR2_PACKAGE_NEARD || BR2_PACKAGE_BLUEZ5_UTILS
-+	select BR2_PACKAGE_QT6BASE_NETWORK
-+	select BR2_PACKAGE_QT6BASE_DBUS
++++ b/package/qt6/qt6grpc/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_QT6GRPC
++	bool "qt6grpc"
 +	help
-+	  Qt is a cross-platform application and UI framework for
-+	  developers using C++.
++	  This package provides the Qt GRPC and Protobuf modules:
 +
-+	  Qt Connectivity module provides support for Bluetooth/NFC
-+	  peripherials.
-+
-+	  https://doc.qt.io/qt-6/qtbluetooth-index.html
-+	  https://doc.qt.io/qt-6/qtnfc-index.html
-+
-+comment "qt6connectivity needs neard and/or bluez5_utils"
-+	depends on !BR2_PACKAGE_NEARD && !BR2_PACKAGE_BLUEZ5_UTILS
-diff --git a/package/qt6/qt6connectivity/qt6connectivity.hash b/package/qt6/qt6connectivity/qt6connectivity.hash
++	  https://doc.qt.io/qt-6/qtgrpc-index.html
++	  https://code.qt.io/cgit/qt/qtgrpc.git/
+diff --git a/package/qt6/qt6grpc/qt6grpc.hash b/package/qt6/qt6grpc/qt6grpc.hash
 new file mode 100644
-index 0000000000..3c1d9964a4
+index 0000000000..6e003cb525
 --- /dev/null
-+++ b/package/qt6/qt6connectivity/qt6connectivity.hash
-@@ -0,0 +1,11 @@
-+# Hash from: https://download.qt.io/official_releases/qt/6.9/6.9.0/submodules/qtconnectivity-everywhere-src-6.9.0.tar.xz.sha256
-+sha256  ff402f8dacb2b9f9308afcea67118ae1645ce6466f2d41a8d5c12fd2fa168598  qtconnectivity-everywhere-src-6.9.0.tar.xz
++++ b/package/qt6/qt6grpc/qt6grpc.hash
+@@ -0,0 +1,10 @@
++# Hash from: https://download.qt.io/official_releases/qt/6.9/6.9.0/submodules/qtgrpc-everywhere-src-6.9.0.tar.xz.sha256
++sha256  3957e076181ac0d9a8f9fca93ec49e1e5e143e39eee1ec3feee10ca13f64b137  qtgrpc-everywhere-src-6.9.0.tar.xz
 +
 +# Hashes for license files:
-+sha256  e3ba223bb1423f0aad8c3dfce0fe3148db48926d41e6fbc3afbbf5ff9e1c89cb  LICENSES/Apache-2.0.txt
++sha256  e3ba223bb1423f0aad8c3dfce0fe3148db48926d41e6fbc3afbbf5ff9e1c89cb  LICENSE.Apache-2.0.txt
 +sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
 +sha256  110535522396708cea37c72a802c5e7e81391139f5f7985631c93ef242b206a4  LICENSES/GFDL-1.3-no-invariants-only.txt
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0-only.txt
 +sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSES/GPL-3.0-only.txt
-+sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSES/LGPL-3.0-only.txt
++sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSES/LicenseRef-protobuf.txt
 +sha256  40678d338ce53cd93f8b22b281a2ecbcaa3ee65ce60b25ffb0c462b0530846b2  LICENSES/Qt-GPL-exception-1.0.txt
-diff --git a/package/qt6/qt6connectivity/qt6connectivity.mk b/package/qt6/qt6connectivity/qt6connectivity.mk
+diff --git a/package/qt6/qt6grpc/qt6grpc.mk b/package/qt6/qt6grpc/qt6grpc.mk
 new file mode 100644
-index 0000000000..4d77b2328b
+index 0000000000..8b1c511fef
 --- /dev/null
-+++ b/package/qt6/qt6connectivity/qt6connectivity.mk
-@@ -0,0 +1,42 @@
++++ b/package/qt6/qt6grpc/qt6grpc.mk
+@@ -0,0 +1,43 @@
 +################################################################################
 +#
-+# qt6connectivity
++# qt6grpc
 +#
 +################################################################################
 +
-+QT6CONNECTIVITY_VERSION = $(QT6_VERSION)
-+QT6CONNECTIVITY_SITE = $(QT6_SITE)
-+QT6CONNECTIVITY_SOURCE = qtconnectivity-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6CONNECTIVITY_VERSION).tar.xz
-+QT6CONNECTIVITY_INSTALL_STAGING = YES
-+QT6CONNECTIVITY_SUPPORTS_IN_SOURCE_BUILD = NO
++QT6GRPC_VERSION = $(QT6_VERSION)
++QT6GRPC_SITE = $(QT6_SITE)
++QT6GRPC_SOURCE = qtgrpc-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6GRPC_VERSION).tar.xz
++QT6GRPC_INSTALL_STAGING = YES
++QT6GRPC_SUPPORTS_IN_SOURCE_BUILD = NO
++QT6GRPC_CMAKE_BACKEND = ninja
++QT6GRPC_LICENSE = GPL-3.0-only
 +
-+QT6CONNECTIVITY_CMAKE_BACKEND = ninja
-+
-+QT6CONNECTIVITY_LICENSE = \
-+	GPL-2.0 or GPL-3.0 or LGPL-3.0, \
-+	GPL-3.0 with Qt GPL exception 1.0 (sdpscanner), \
-+	BSD-3-Clause (build system, examples), \
-+	Apache-2.0 (examples), \
-+	GPL-3.0, GFDL-1.3 no invariants (docs)
-+
-+QT6CONNECTIVITY_LICENSE_FILES = \
-+	LICENSES/Apache-2.0.txt \
++QT6GRPC_LICENSE_FILES = \
++	LICENSE.Apache-2.0.txt \
 +	LICENSES/BSD-3-Clause.txt \
 +	LICENSES/GFDL-1.3-no-invariants-only.txt \
-+	LICENSES/GPL-2.0-only.txt \
 +	LICENSES/GPL-3.0-only.txt \
-+	LICENSES/LGPL-3.0-only.txt \
++	LICENSES/LicenseRef-protobuf.txt \
 +	LICENSES/Qt-GPL-exception-1.0.txt
 +
-+QT6CONNECTIVITY_CONF_OPTS = \
-+	-DQT_HOST_PATH=$(HOST_DIR) \
++QT6GRPC_CONF_OPTS = \
 +	-DBUILD_WITH_PCH=OFF \
 +	-DQT_BUILD_EXAMPLES=OFF \
-+	-DQT_BUILD_TESTS=OFF
++	-DQT_BUILD_TESTS=OFF \
++	-DQT_HOST_PATH=$(HOST_DIR)
 +
-+QT6CONNECTIVITY_DEPENDENCIES = \
++QT6GRPC_DEPENDENCIES = \
++	host-pkgconf \
++	host-qt6grpc \
 +	qt6base
 +
-+QT6CONNECTIVITY_DEPENDENCIES += $(if $(BR2_PACKAGE_BLUEZ5_UTILS),bluez5_utils)
++ifeq ($(BR2_PACKAGE_QT6DECLARATIVE),y)
++QT6GRPC_DEPENDENCIES += qt6declarative
++endif
++
++HOST_QT6GRPC_DEPENDENCIES = \
++	host-protobuf \
++	host-qt6base
 +
 +$(eval $(cmake-package))
++$(eval $(host-cmake-package))
 -- 
 2.49.0
 
