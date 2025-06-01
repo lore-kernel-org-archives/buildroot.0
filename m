@@ -4,105 +4,104 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BA60C5B552
-	for <buildroot@archiver.kernel.org>; Sun,  1 Jun 2025 10:13:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E7E6C5B549
+	for <buildroot@archiver.kernel.org>; Sun,  1 Jun 2025 10:13:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3608541DE9;
-	Sun,  1 Jun 2025 10:13:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DC72741E28;
+	Sun,  1 Jun 2025 10:13:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JZj2pvRL6s4p; Sun,  1 Jun 2025 10:13:31 +0000 (UTC)
+ id TJ7lCAIW0Klu; Sun,  1 Jun 2025 10:13:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4D4E241DFE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D86B741E0E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4D4E241DFE;
-	Sun,  1 Jun 2025 10:13:31 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id E21AF222
- for <buildroot@buildroot.org>; Sun,  1 Jun 2025 10:13:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D86B741E0E;
+	Sun,  1 Jun 2025 10:13:32 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id D34C41F7
+ for <buildroot@buildroot.org>; Sun,  1 Jun 2025 10:13:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C8847400AB
- for <buildroot@buildroot.org>; Sun,  1 Jun 2025 10:13:29 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C51AC814BD
+ for <buildroot@buildroot.org>; Sun,  1 Jun 2025 10:13:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Nb0lUU12-5OU for <buildroot@buildroot.org>;
- Sun,  1 Jun 2025 10:13:29 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id o8b5o7uKYvER for <buildroot@buildroot.org>;
+ Sun,  1 Jun 2025 10:13:30 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
  client-ip=2a00:1450:4864:20::12a; helo=mail-lf1-x12a.google.com;
  envelope-from=roykollensvendsen@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9C9374005C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9C9374005C
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C4D8181B58
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C4D8181B58
 Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com
  [IPv6:2a00:1450:4864:20::12a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9C9374005C
- for <buildroot@buildroot.org>; Sun,  1 Jun 2025 10:13:28 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C4D8181B58
+ for <buildroot@buildroot.org>; Sun,  1 Jun 2025 10:13:29 +0000 (UTC)
 Received: by mail-lf1-x12a.google.com with SMTP id
- 2adb3069b0e04-5532e0ad84aso4289847e87.2
- for <buildroot@buildroot.org>; Sun, 01 Jun 2025 03:13:28 -0700 (PDT)
+ 2adb3069b0e04-54998f865b8so3296890e87.3
+ for <buildroot@buildroot.org>; Sun, 01 Jun 2025 03:13:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1748772806; x=1749377606;
+ d=1e100.net; s=20230601; t=1748772808; x=1749377608;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=5naTyxS497QlhgbCfbVrlvbFHLEpVuucSxLIBQhqZUk=;
- b=Lt5aLcyeuCHtecyDD85aIp7FIYaXGALKxIijj/ft50SM3T7xka+cZTTE49RVJ/URxX
- dVFZMIRFwfxi3Ogm5fuutLbkr3C70QDmatuBs345cAiIjgMzugmcZvyzAOtkO1cDYCyd
- 0/kMhkVzKOV0GbacYAt4tF6/a+6O4oMiuGeGidwSEmWQTCCf0xrctHYuyJMlUsO2DyU9
- 24m4SmY2yKPrpCkMl+lgvNUSBPJ6TKJesvGXfHqr2CW3D2UX30jZ0HdQai4LvfaIOMDz
- t0arLVudHN06jkAly50OKaD39Qzgq6ZBpQJEyVDtpYydW+8X2orN+4aosGMySCNbeSZn
- vVMA==
-X-Gm-Message-State: AOJu0Ywguf4pKaUB5uN0Syzz4+5ZFiBc/eeURlkKPRrBLljJvOUypT0d
- ZMuRRjgL0dzEG595kg0vhwN0pIxgrqQh+DPRmKpZMvSnkY4GGQVUTbI6dEUq1Q==
-X-Gm-Gg: ASbGncspb7oo25ggcu643YDaPKjs/JLARWNH6k993WYuVxYyXwy1Jn4q97b/RonNr/m
- HU31qpMvfgCoaqYOY5eZoQqSA8zRM+8lXg4V+JE9DFNsw6meRSOq9BaQFyWkB4Rk9BjOsJ3tHs0
- LF0vZQGPfDpfjjl3Tvc5Huw528O/PVfdVp4XheFl3v2aYoVNvFsW6SBaddhySpNxRe/i2JgTbgE
- hkzBRVZJdIxpo/FF+/S92cNkelmahWMZ4Zeih27PUgAiXya4lPym12J3WqDP/9argPDBu58/UmP
- rJlG+JEUPeNObDktG3nm5BWOYv6KpGZgWJFgvWewhBRgBWXBYsthdoqiXpZKjc4Ius/XUN/9/AV
- KljNRQ8XVkA==
-X-Google-Smtp-Source: AGHT+IEgYGITHZlylaPHrRG5Oivx+VsvHX/aGoi4r80tALhrgKqEoFCd3b4Yn5YrK5MWJKNvFEhDnA==
-X-Received: by 2002:a05:6512:3d28:b0:553:268e:5006 with SMTP id
- 2adb3069b0e04-5534318ea8bmr1013294e87.55.1748772805904; 
- Sun, 01 Jun 2025 03:13:25 -0700 (PDT)
+ bh=1WXNenG94H71EQ6eEkDhXaMp8m4Z/vF5dphfCL+LbEQ=;
+ b=fmy5KEOjr7CnDbkJmUcoi9nvvDfR4eG5XOhws9Kb0BpUkcQhcjD6LH/JSvpRiPMiJV
+ iansWd7FjloHgaehliPlDxpWlSs82aQ87ZpJfb0hQz1kI5B57jR5GwxOUn1wgxMpTXe/
+ PBrcjT5hUkTemwo55AKmmt/CpF5wgILpYssnx6RfEIwv4P+AxgfGWR9LZRmPAJ5j/rTU
+ qpF1MLlyQTI8S4IgpcvIPILXmwk38To77yK71vMuL+vxfOSPPvmOCSlzjXZ/qtB+XZRi
+ SGEsBGnrt53abtfnJGjLu3d9pzhg8NmJYICD+1S0LZNZVHPz/r5RKmMlRyXx9d9ONcii
+ 4/lA==
+X-Gm-Message-State: AOJu0YxLQ8wpAV4bINdmLOON7ZJpHKuTP7F5KfDR8m2b9506KaZ3dh0u
+ po7ngtRz/y4BWg8P04n4WqqLQKuELFVgeGdHPkOquLj2Cl2cy95KKtU+BM/AGw==
+X-Gm-Gg: ASbGncvsb1UTX/6oChmyrn7ySpDvrt1d3VBjrZK/ho+RabIktnjfSIQbqwqvFgeDUVb
+ kJk7vObuGkenop9Kvn32b0b2KrHbx797A4hUuGqoLwwTGgrwc1oN704Vp865BTNnrjj7T+YCGfJ
+ xYD5LcSxa1rXnWVXjUkvVY6p1RWPALd+5CX+794CzPqrEwkhzNWyoVU7Db0QTIsPXSMZdvLbeM8
+ PiF7TEP5vmLOt4KeYFhaT4B6yUmY3sJ963pSZpn/Hekw95pmjhgsBnr1lyyBRr3w4pCXNlMTqbx
+ GeXhRVRIdVFkN29ZeWuomUEfK8vb7qmxNRa8R48RwvayG/Ukhq19b9SvjBDWLnBBPxFsCyiJZSN
+ +16XrLrD6ZoS0gF60LMnf
+X-Google-Smtp-Source: AGHT+IG797khr0FTsuB4JqBrDFvqaOBtCHA1QthUXD47s6Ix7i0sH7NkokS8a0m/N0wJZJqBU9Z+wg==
+X-Received: by 2002:a05:6512:2355:b0:553:32f3:7ed0 with SMTP id
+ 2adb3069b0e04-5533b930938mr3191154e87.36.1748772807513; 
+ Sun, 01 Jun 2025 03:13:27 -0700 (PDT)
 Received: from precision7530-arch-roy.lan
  ([2a01:799:1a22:4401:9825:b52b:4cba:665e])
  by smtp.gmail.com with ESMTPSA id
- 2adb3069b0e04-553378a0031sm1237404e87.64.2025.06.01.03.13.24
+ 2adb3069b0e04-553378a0031sm1237404e87.64.2025.06.01.03.13.26
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 01 Jun 2025 03:13:24 -0700 (PDT)
+ Sun, 01 Jun 2025 03:13:27 -0700 (PDT)
 From: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
 To: buildroot@buildroot.org
 Cc: Jesse Van Gavere <jesseevg@gmail.com>,
  Roy Kollen Svendsen <roykollensvendsen@gmail.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun,  1 Jun 2025 12:12:59 +0200
-Message-ID: <20250601101305.3198541-6-roykollensvendsen@gmail.com>
+Date: Sun,  1 Jun 2025 12:13:00 +0200
+Message-ID: <20250601101305.3198541-7-roykollensvendsen@gmail.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250601101305.3198541-1-roykollensvendsen@gmail.com>
 References: <20250601101305.3198541-1-roykollensvendsen@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1748772806; x=1749377606; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1748772808; x=1749377608; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=5naTyxS497QlhgbCfbVrlvbFHLEpVuucSxLIBQhqZUk=;
- b=Ndu9snIPffoGSmjnRw1GkgifEfw9OqWVwb3U6NTef2CIcOJPlri08Qvb/LCmMel4FB
- QlBiWx7FU/AmbGYrrZd3f1fcUKKu4ND7HdyuOXhnpcNNEHh8lkEB592MFdY+vnnTNfoU
- ljWS6wZyvCDrzzqWKKjX1HrK+9/YGdknkD+i0BzCJeliQ9aKaTHVpgDAriLNdHln+8pw
- pBQDzTIYBYuH2/MG206CRd/tRWwUhcrJkrKYqBrCgwARGgqeaF0Fuz04vqQasmSDEFji
- c5K7k+SgiMF1I+9poM1Q1HkPXLLhTCf3vUoTLbe3v5q9uMfpUYfKpPZs4iLFmq+eHsY2
- 92Lw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=1WXNenG94H71EQ6eEkDhXaMp8m4Z/vF5dphfCL+LbEQ=;
+ b=SmaHw3IHNZQ/a4rSrZuba8B/d7dTDOIn8DGM/5UYOGL2W6rA/BTKGe+vjnF8GJNtIC
+ dV7hLJH1Npn1JsgdgVtKe/3SYjwSI/Sp9aqz8fDtGTmzsHSNlOFjK95nPwy3crffhVX0
+ 6d2w3twpI+dsbUWjl9VNyDDICXwN7PxRYVQ0KozVSoOjKgVoXhdzYVzjzwiEphbmqQYM
+ h2nuMY/A0GYrrWeP7HyDb0yzN28RUvg49Xuo5WXsEuGjkgCVwHHxbS8Xf9L5SEYGP8Un
+ FsG+eBYkRemxJdhCcSeoVsERVs58nTRdw0+qx6UULLVxT7BTO9oNQ3xmlj82YrTG4iYq
+ v7Rg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=Ndu9snIP
-Subject: [Buildroot] [PATCH v2 5/6] package/qt6/qt6tools: fix assistant
- build failure
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=SmaHw3IH
+Subject: [Buildroot] [PATCH v2 6/6] package/qt6/qt6tools: build without
+ clang support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -120,53 +119,45 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Fixes:
-<...>/output/build/host-qt6tools-6.8.1/src/assistant/help/qhelpenginecore.cpp:11:10:
-fatal error: QtConcurrent/qtconcurrentrun.h: Ingen slik fil eller filkatalog
-   11 | #include <QtConcurrent/qtconcurrentrun.h>
-      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-
-The above error can be triggered by the following defconfig:
-BR2_arm=y
-BR2_cortex_a9=y
-BR2_ARM_ENABLE_VFP=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_MUSL_STABLE=y
-BR2_PACKAGE_QT6=y
-BR2_PACKAGE_QT6TOOLS=y
-BR2_PACKAGE_QT6TOOLS_ASSISTANT=y
+If external clang is available on the host system, the buildsystem tries
+to use it. The result will be unpredictable. We can't use the version of
+clang that is shipped with buildroot either, because it is too old. See:
+https://code.qt.io/cgit/qt/qttools.git/tree/.cmake.conf?h=6.8.1. So we
+disable clang support in qt6tools for now.
 
 Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
 ---
- package/qt6/qt6tools/Config.in      | 1 +
- package/qt6/qt6tools/Config.in.host | 1 +
- 2 files changed, 2 insertions(+)
+ package/qt6/qt6tools/qt6tools.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/package/qt6/qt6tools/Config.in b/package/qt6/qt6tools/Config.in
-index f03ddf29a5..f33ee13cee 100644
---- a/package/qt6/qt6tools/Config.in
-+++ b/package/qt6/qt6tools/Config.in
-@@ -17,6 +17,7 @@ if BR2_PACKAGE_QT6TOOLS
- config BR2_PACKAGE_QT6TOOLS_ASSISTANT
- 	bool "assistant"
- 	select BR2_PACKAGE_HOST_QT6TOOLS_ASSISTANT # qhelpgenerator
-+	select BR2_PACKAGE_QT6BASE_CONCURRENT
- 	select BR2_PACKAGE_QT6BASE_GUI
- 	select BR2_PACKAGE_QT6BASE_NETWORK # https://code.qt.io/cgit/qt/qttools.git/tree/configure.cmake?h=6.8.1#n45
- 	select BR2_PACKAGE_QT6BASE_PNG # https://code.qt.io/cgit/qt/qttools.git/tree/configure.cmake?h=6.8.1#n45
-diff --git a/package/qt6/qt6tools/Config.in.host b/package/qt6/qt6tools/Config.in.host
-index 0ea214168d..0e2a13d457 100644
---- a/package/qt6/qt6tools/Config.in.host
-+++ b/package/qt6/qt6tools/Config.in.host
-@@ -15,6 +15,7 @@ if BR2_PACKAGE_HOST_QT6TOOLS
+diff --git a/package/qt6/qt6tools/qt6tools.mk b/package/qt6/qt6tools/qt6tools.mk
+index 2e3268558e..fb248d3971 100644
+--- a/package/qt6/qt6tools/qt6tools.mk
++++ b/package/qt6/qt6tools/qt6tools.mk
+@@ -33,6 +33,12 @@ QT6TOOLS_CONF_OPTS = \
+ 	-DQT_BUILD_EXAMPLES=OFF \
+ 	-DQT_BUILD_TESTS=OFF
  
- config BR2_PACKAGE_HOST_QT6TOOLS_ASSISTANT
- 	bool "host assistant"
-+	select BR2_PACKAGE_HOST_QT6BASE_CONCURRENT
- 	select BR2_PACKAGE_HOST_QT6BASE_GUI
- 	select BR2_PACKAGE_HOST_QT6BASE_NETWORK # https://code.qt.io/cgit/qt/qttools.git/tree/configure.cmake?h=6.8.1#n45
- 	select BR2_PACKAGE_HOST_QT6BASE_PNG # https://code.qt.io/cgit/qt/qttools.git/tree/configure.cmake?h=6.8.1#n45
++# Disable clang support in qt6tools for now, as version 17 is needed:
++# https://code.qt.io/cgit/qt/qttools.git/tree/.cmake.conf?h=6.8.1
++# This also prevents qt6tools from using a random external clang if i
++# finds one on the host system.
++QT6TOOLS_CONF_OPTS += -DFEATURE_clang=OFF
++
+ QT6TOOLS_DEPENDENCIES = \
+ 	qt6base \
+ 	host-qt6tools
+@@ -63,6 +69,10 @@ HOST_QT6TOOLS_CONF_OPTS = \
+ 	-DQT_BUILD_EXAMPLES=OFF \
+ 	-DQT_BUILD_TESTS=OFF
+ 
++# Disable clang support in qt6tools for now, as version 17 is needed:
++# https://code.qt.io/cgit/qt/qttools.git/tree/.cmake.conf?h=6.8.1
++HOST_QT6TOOLS_CONF_OPTS += -DFEATURE_clang=OFF
++
+ HOST_QT6TOOLS_DEPENDENCIES = host-qt6base
+ 
+ ifeq ($(BR2_PACKAGE_HOST_QT6TOOLS_ASSISTANT),y)
 -- 
 2.49.0
 
