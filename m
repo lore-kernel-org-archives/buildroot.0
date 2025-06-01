@@ -4,100 +4,103 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02B83C54FB3
-	for <buildroot@archiver.kernel.org>; Sun,  1 Jun 2025 08:02:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2330C54FB3
+	for <buildroot@archiver.kernel.org>; Sun,  1 Jun 2025 08:02:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9653781ED3;
-	Sun,  1 Jun 2025 08:02:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BA475818DC;
+	Sun,  1 Jun 2025 08:02:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wZCnbpnwPgN5; Sun,  1 Jun 2025 08:02:28 +0000 (UTC)
+ id WuWtNE4CB2ic; Sun,  1 Jun 2025 08:02:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1E12681EAE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5D1BE81ED6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1E12681EAE;
-	Sun,  1 Jun 2025 08:02:28 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 72AEA127
- for <buildroot@buildroot.org>; Sun,  1 Jun 2025 08:02:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5D1BE81ED6;
+	Sun,  1 Jun 2025 08:02:29 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8963E222
+ for <buildroot@buildroot.org>; Sun,  1 Jun 2025 08:02:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 63D1160A58
- for <buildroot@buildroot.org>; Sun,  1 Jun 2025 08:02:26 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6F71F40DB3
+ for <buildroot@buildroot.org>; Sun,  1 Jun 2025 08:02:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aXY9K1ucfZqm for <buildroot@buildroot.org>;
- Sun,  1 Jun 2025 08:02:25 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id b0j6X7iuebfF for <buildroot@buildroot.org>;
+ Sun,  1 Jun 2025 08:02:26 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::533; helo=mail-ed1-x533.google.com;
+ client-ip=2a00:1450:4864:20::52f; helo=mail-ed1-x52f.google.com;
  envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2EA9C60A5A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2EA9C60A5A
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
- [IPv6:2a00:1450:4864:20::533])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2EA9C60A5A
- for <buildroot@buildroot.org>; Sun,  1 Jun 2025 08:02:24 +0000 (UTC)
-Received: by mail-ed1-x533.google.com with SMTP id
- 4fb4d7f45d1cf-604bde84d0fso5091593a12.3
- for <buildroot@buildroot.org>; Sun, 01 Jun 2025 01:02:24 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 72CEA40DC4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72CEA40DC4
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
+ [IPv6:2a00:1450:4864:20::52f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 72CEA40DC4
+ for <buildroot@buildroot.org>; Sun,  1 Jun 2025 08:02:26 +0000 (UTC)
+Received: by mail-ed1-x52f.google.com with SMTP id
+ 4fb4d7f45d1cf-602346b1997so5641885a12.3
+ for <buildroot@buildroot.org>; Sun, 01 Jun 2025 01:02:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1748764943; x=1749369743;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=Nyu1Lpv0AAkYOtAii0kcKqiVgk3iD9kvA+6ZjAW0Ltc=;
- b=qCLSM9xh62RppKq9R/D6sCcpjWwrmEo1K0XGO9tC4JyTddIYy/8xB6DrevmexBV6es
- QE4wksOHqAhP4Noc5AAZSIfT2CwE0wmxJDy70LjeSUhi3HhISgJZTcPPkV80JyT0nv16
- xfYYQHoqQHDdyYFwyDo6bYw6obJ7yGbMhsChGzmVrcfCW+GJpDuvqUUq1bm6gWfC7uGn
- qPaqm0lz74BriCsZulq1zrGpvauDUZH3lptHJ32GvBY22HR9tb4pzHSMDyrf3meMgVzh
- NJZg5I0TpAcVw9kixjUf+iQiNtDPnFTifaHeVcP/lD7AQvab7/zYSH/3Mbmj4B2B6Smm
- 7Csg==
-X-Gm-Message-State: AOJu0YwCiAkOW4TcFqz9DZpExxIUmyd09ymaclwTeEDPEKs8OuS7IpAK
- STdXGL0oDN86ypf2ukhSti1sYQUh5bIKTfWFYPuOCqlyWQNHjxKW1bdJjXhD0W15n1y8WOQmk4i
- 9n+Mh
-X-Gm-Gg: ASbGncvZgniTcoiqLrQGHb5DV29Tsx7NYzvxkSnvcnmNQDUI/bJeM4oTtjNKAYHXqRL
- ZIhYZdveszQHqrOVvFckhmLuXbUHQYJ3rezQGHpxZuvPKA1+P3GA0VnaF6qRn9X3RDpIm8s1/SI
- HgxwnIMnwOLb8dqjsPVKhP2xMC6Ukj99JAtDCdX1jOmNwT/JpTugdRaLYQfFyEfz9HuWM9MwJUT
- h97bUoCWpQ7xhj9L0mUmxXb5b91VQh2OP8Gt5ECic/caQaJOrFzYwKd9N6bXpkJPR+a6S65N5Od
- VCRLGmGWuDta7u6/FJ/bJDFzkR7lPaQkUao1KEw/Xt7qf7F/OS1PDHlEMYjBb0JG2dW88lenmsR
- bDckHBkUE5SLQ8FYIbQ6K1mcQxBONuveozrnmtGKzHD0QtxhPNprLLDc+CrSRPHGwCVskKtY4/2
- 6MOi78Yi+87mR+
-X-Google-Smtp-Source: AGHT+IHrkIGGbJwbepgXdg3Pca31u0Lh1gl9bsQUcATDlOb01LYrH0X5ullexoxxw+VBbil++GIqrg==
-X-Received: by 2002:a17:907:9691:b0:ad9:db54:ba40 with SMTP id
- a640c23a62f3a-adb322a3634mr910151566b.32.1748764942491; 
- Sun, 01 Jun 2025 01:02:22 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1748764944; x=1749369744;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=SsFXkm8Q6Wov6znOUVbytPNp1DebBy0u+oxhYFEgdQA=;
+ b=A3oAFIhY8wuLmVujbSdY3NkhCkpWmp07LW3qxiGKUqH3L3gGHShD/cXeJRh3ynNhPY
+ j3HOy/d/oTtcjVwM12jhyiLNTvSHkUh+Gwur+GR3MNgG+xddJNSCN9qO2wXc0JR9SHrI
+ 53LdTSwC6ewKVeuiwrmgOnszHswrVEMADKXUYEH/M+c9siQk1HdHTzyxuS6L7LDiciaw
+ m/bZ/G3f6rDyCCGoo21u3eXmT8KT8zgy1TQdmeeC5QAnCJedz8d5NOPByvKCtVBaeBSQ
+ pvlNXj9hYjh6fAesJNNarg6Ih0+0dDFfK/xpMEfe3KgV0ZMgvAHaoGvcxwDKMN39J0EB
+ edWQ==
+X-Gm-Message-State: AOJu0Yyfy3Dcbp06PX7kfhLNQzCn3nf3MvJufAXMWDSpKKLL3eII9oNR
+ TVrdFk31g9y9ktHah58MepVvz0dxZYY/CsfVBNTsWt5KlhjpEBi+P4n3McrJCwfTymulT9THSV/
+ q1yF7
+X-Gm-Gg: ASbGncteQ3lGFQlS7crl1ebqSMzcKFGFcD+ALHbzGNjrTdxEdPOOVpzYlOn3XQJQ4eG
+ EZ2PGiqlQD/yDInkBisN33KFGMfbinRWsOIAYITOBQuCiajhFMgADo/t41i5T2jhP15l3bGu7/Q
+ CVGg0HFEus4xEYMUJwX0Qxhb5FwyxoKgcVTAH/S3szmkuNfUrpJmtlk+6bN/EiyXVHiiaPQrVYL
+ qHaTmp9b9CHwYB8h9T2Z94CvvkW1jU9lwOtQHHWYSNHN8dVvMgcwpCxK4+b/vgJnWLlFsGpZjx0
+ UfkR18JhKbPYwCbxyBjpaJWaN/0Atwq2nmFHlBbtZKmJ46KpAvlUfuQDjjIh0omRcxCXkBuZ0K0
+ JRspzXpEFSz5z1GpsvUCfij8O1GEwctpm1cYJfpenDplYw5Z3zcbMhsuv1RPBb6ZiaRluumH5UG
+ bDoCfZ3JwgAvdRF6b1j2DOIYw=
+X-Google-Smtp-Source: AGHT+IH12PRcs0R+tCIJ0J/a76x21LUr/Fxr09ByWIjkY/SM88NxcC4ekcUw+SiqK/hDM6YeBpD8zw==
+X-Received: by 2002:a17:907:2cc7:b0:ad9:6350:c1e2 with SMTP id
+ a640c23a62f3a-adb36c114efmr781712966b.49.1748764944160; 
+ Sun, 01 Jun 2025 01:02:24 -0700 (PDT)
 Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
  (host-87-5-95-99.retail.telecomitalia.it. [87.5.95.99])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-ada5e2bf051sm610866766b.122.2025.06.01.01.02.21
+ a640c23a62f3a-ada5e2bf051sm610866766b.122.2025.06.01.01.02.22
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 01 Jun 2025 01:02:22 -0700 (PDT)
+ Sun, 01 Jun 2025 01:02:23 -0700 (PDT)
 From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
 Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
  linux-amarula@amarulasolutions.com
-Date: Sun,  1 Jun 2025 10:02:16 +0200
-Message-ID: <20250601080217.2514549-1-dario.binacchi@amarulasolutions.com>
+Date: Sun,  1 Jun 2025 10:02:17 +0200
+Message-ID: <20250601080217.2514549-2-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250601080217.2514549-1-dario.binacchi@amarulasolutions.com>
+References: <20250601080217.2514549-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1748764943; x=1749369743;
+ d=amarulasolutions.com; s=google; t=1748764944; x=1749369744;
  darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Nyu1Lpv0AAkYOtAii0kcKqiVgk3iD9kvA+6ZjAW0Ltc=;
- b=S6LTVDyfJqx+OBbG2QMHuIKlBYeWoDhMhmUx7rcGwO3miqWSEkpAWgCZngu32RM4KD
- Klz7fv5TaK7QYEnoTFabm0Peq/iwB61TBwhjS7/QHAQoJNjmjHCtv2mCBTJykjnVsTIp
- 2lupsLK3QofLRO7Ot9jhAd90H3oOuCRLp5rUw=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=SsFXkm8Q6Wov6znOUVbytPNp1DebBy0u+oxhYFEgdQA=;
+ b=lrkCMN3/EEBzfGhfdQfb6j6or8goQofQTiLeAWyESF5kZxA7aLi1nwj3UONj7mWYsh
+ yS7l/XfLdJna1eKzQXRhsfsVce3PZDGA3F4zyZ0bQ1nzuYZ7DXgMZ9hUiLojJ6RAQcM/
+ sBm13w2UEXct+G9IyngdepCbKZuHXn0o2F3yo=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=S6LTVDyf
-Subject: [Buildroot] [PATCH v2 1/2] package/pocketpy: new package
+ header.a=rsa-sha256 header.s=google header.b=lrkCMN3/
+Subject: [Buildroot] [PATCH v2 2/2] package/canopenterm: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,101 +117,149 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-It is a portable Python 3.x interpreter, written in C11. It has no
-dependencies other than the C standard library, which can be easily
-integrated into your C/C++ project
+CANopenTerm is an open-source tool for developing, testing, and
+analyzing CANopen CC networks and devices. It provides a technical,
+no-nonsense solution for professionals working with CAN CC-based
+networks. Additionally, it supports SAE J1939 and OBD-II protocols,
+making it versatile for various applications.
+
+Version v1.0.10 was chosen because it is the last one requiring SDL2.
+Indeed version v1.0.11 depends on SDL3.
+
+Tested on STM32MP257F-EV1
 
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
-Changes v1 -> v2:
- - mv staging commands under POCKETPY_INSTALL_STAGING_CMDS hook.
-
- DEVELOPERS                     |  1 +
- package/Config.in              |  1 +
- package/pocketpy/Config.in     |  8 ++++++++
- package/pocketpy/pocketpy.hash |  3 +++
- package/pocketpy/pocketpy.mk   | 25 +++++++++++++++++++++++++
- 5 files changed, 38 insertions(+)
- create mode 100644 package/pocketpy/Config.in
- create mode 100644 package/pocketpy/pocketpy.hash
- create mode 100644 package/pocketpy/pocketpy.mk
+ DEVELOPERS                                    |  1 +
+ package/Config.in                             |  1 +
+ ...allation-when-BUILD_YOCTO-is-enabled.patch | 39 +++++++++++++++++++
+ package/canopenterm/Config.in                 | 15 +++++++
+ package/canopenterm/canopenterm.hash          |  3 ++
+ package/canopenterm/canopenterm.mk            | 15 +++++++
+ 6 files changed, 74 insertions(+)
+ create mode 100644 package/canopenterm/0001-Fix-exe-installation-when-BUILD_YOCTO-is-enabled.patch
+ create mode 100644 package/canopenterm/Config.in
+ create mode 100644 package/canopenterm/canopenterm.hash
+ create mode 100644 package/canopenterm/canopenterm.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index d471b9ab6f90..771c5cf31322 100644
+index 771c5cf31322..8d2ac722a78e 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -811,6 +811,7 @@ F:	package/armadillo/
+@@ -809,6 +809,7 @@ F:	configs/stm32f769_disco_sd_defconfig
+ F:	package/aespipe/
+ F:	package/armadillo/
  F:	package/babeld/
++F:	package/canopenterm/
  F:	package/iana-assignments/
  F:	package/inih/
-+F:	package/pocketpy/
- F:	package/sscep/
- F:	package/tinyinit/
- F:	package/ufs-utils/
+ F:	package/pocketpy/
 diff --git a/package/Config.in b/package/Config.in
-index 579b5ffc87d5..9aad65488a6c 100644
+index 9aad65488a6c..413ac3ef8b3c 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -968,6 +968,7 @@ if BR2_STATIC_LIBS
- comment "External PHP extensions need a toolchain w/ dynamic library"
- endif
- endif
-+	source "package/pocketpy/Config.in"
- 	source "package/python3/Config.in"
- if BR2_PACKAGE_PYTHON3
- menu "External python modules"
-diff --git a/package/pocketpy/Config.in b/package/pocketpy/Config.in
+@@ -2467,6 +2467,7 @@ endif
+ 	source "package/c-icap-modules/Config.in"
+ 	source "package/can-utils/Config.in"
+ 	source "package/cannelloni/Config.in"
++	source "package/canopenterm/Config.in"
+ 	source "package/casync/Config.in"
+ 	source "package/casync-nano/Config.in"
+ 	source "package/cfm/Config.in"
+diff --git a/package/canopenterm/0001-Fix-exe-installation-when-BUILD_YOCTO-is-enabled.patch b/package/canopenterm/0001-Fix-exe-installation-when-BUILD_YOCTO-is-enabled.patch
 new file mode 100644
-index 000000000000..70ebf79ba1f3
+index 000000000000..55d15afbbc95
 --- /dev/null
-+++ b/package/pocketpy/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_POCKETPY
-+	bool "pocketpy"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	help
-+	  pocketpy is a portable Python 3.x interpreter,
-+	  written in C11.
++++ b/package/canopenterm/0001-Fix-exe-installation-when-BUILD_YOCTO-is-enabled.patch
+@@ -0,0 +1,39 @@
++From fc150187a2e2ce777e757405eb1d67235fc68d75 Mon Sep 17 00:00:00 2001
++From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
++Date: Thu, 8 May 2025 15:24:38 +0200
++Subject: [PATCH] Fix exe installation when BUILD_YOCTO is enabled
 +
-+	  https://github.com/pocketpy/pocketpy
-diff --git a/package/pocketpy/pocketpy.hash b/package/pocketpy/pocketpy.hash
++While building CanopenTerm in Buildroot, with the BUILD_YOCTO option
++enabled (yes, really :)), the following error is raised:
++
++CMake Error at output/build/canopenterm-1.0.10/cmake_install.cmake:114 (file):
++  file INSTALL cannot find
++  "buildroot/output/build/canopenterm-1.0.10/CANopenTerm":
++  No such file or directory.
++
++Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
++Upstream: https://github.com/CANopenTerm/CANopenTerm/pull/95
++---
++ cmake/os_linux.cmake | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/cmake/os_linux.cmake b/cmake/os_linux.cmake
++index 7c1f8185b2a2..f149bd03fe92 100644
++--- a/cmake/os_linux.cmake
+++++ b/cmake/os_linux.cmake
++@@ -104,10 +104,10 @@ if (BUILD_YOCTO)
++             DESTINATION /usr/share/CANopenTerm/scripts/utils
++             FILES_MATCHING PATTERN "*")
++ 
++-    install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/CANopenTerm
+++    install(PROGRAMS ${CMAKE_CURRENT_SOURCE_DIR}/export/CANopenTerm
++             DESTINATION /usr/bin)
++ 
++-    install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/codb2json
+++    install(PROGRAMS ${CMAKE_CURRENT_SOURCE_DIR}/export/codb2json
++             DESTINATION /usr/bin)
++ 
++     return()
++-- 
++2.43.0
++
+diff --git a/package/canopenterm/Config.in b/package/canopenterm/Config.in
 new file mode 100644
-index 000000000000..aabd5f077a2b
+index 000000000000..2a7a3be29ba5
 --- /dev/null
-+++ b/package/pocketpy/pocketpy.hash
++++ b/package/canopenterm/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_CANOPENTERM
++	bool "canopenterm"
++	depends on BR2_PACKAGE_CJSON
++	depends on BR2_PACKAGE_INIH
++	depends on BR2_PACKAGE_LIBSOCKETCAN
++	depends on BR2_PACKAGE_LUA
++	depends on BR2_PACKAGE_POCKETPY
++	depends on BR2_PACKAGE_READLINE
++	depends on BR2_PACKAGE_SDL2
++	help
++	  CANopenTerm is an open-source tool for developing,
++	  testing, and analyzing CANopen CC networks and
++	  devices.
++
++	  https://github.com/CANopenTerm/CANopenTerm
+diff --git a/package/canopenterm/canopenterm.hash b/package/canopenterm/canopenterm.hash
+new file mode 100644
+index 000000000000..8c403e9bb6af
+--- /dev/null
++++ b/package/canopenterm/canopenterm.hash
 @@ -0,0 +1,3 @@
 +# locally computed
-+sha256  5e07994d66311a6b5ac032cc5243aaabe3ab318946971e7fa1cd0614934efc81  pocketpy-2.0.8.tar.gz
-+sha256  d3a2bf8ca609a75941e980e62c13cf5a21aeaa4a2502822934d282fe7de5d319  LICENSE
-diff --git a/package/pocketpy/pocketpy.mk b/package/pocketpy/pocketpy.mk
++sha256  9de6f472b749f08a5ea9a836604507cd56c71f818a4141a2b989423fbb7beb80  canopenterm-1.0.10.tar.gz
++sha256  cc555368040b92e77b14289b367ccbebf88344367188862680d40cc885636d3a  LICENSE.md
+diff --git a/package/canopenterm/canopenterm.mk b/package/canopenterm/canopenterm.mk
 new file mode 100644
-index 000000000000..20a8e9ad1e20
+index 000000000000..115b032d57b0
 --- /dev/null
-+++ b/package/pocketpy/pocketpy.mk
-@@ -0,0 +1,25 @@
++++ b/package/canopenterm/canopenterm.mk
+@@ -0,0 +1,15 @@
 +################################################################################
 +#
-+# pocketpy
++# canopenterm
 +#
 +################################################################################
 +
-+POCKETPY_VERSION = 2.0.8
-+POCKETPY_SITE = $(call github,pocketpy,pocketpy,v$(POCKETPY_VERSION))
-+POCKETPY_LICENSE = MIT
-+POCKETPY_LICENSE_FILES = LICENSE
-+POCKETPY_INSTALL_STAGING = YES
++CANOPENTERM_VERSION = 1.0.10
++CANOPENTERM_SITE = $(call github,CANopenTerm,CANopenTerm,v$(CANOPENTERM_VERSION))
++CANOPENTERM_LICENSE = MIT
++CANOPENTERM_LICENSE_FILES = LICENSE.md
++CANOPENTERM_DEPENDENCIES = cjson inih libsocketcan lua pocketpy readline sdl2
 +
-+POCKETPY_CONF_OPTS = -DPK_BUILD_SHARED_LIB=ON
-+
-+define POCKETPY_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/libpocketpy.so* $(TARGET_DIR)/usr/lib
-+endef
-+
-+define POCKETPY_INSTALL_STAGING_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/libpocketpy.so* $(STAGING_DIR)/usr/lib
-+	$(INSTALL) -m 755 -d $(STAGING_DIR)/usr/include/pocketpy
-+	cp -r $(@D)/include/* $(STAGING_DIR)/usr/include/pocketpy
-+endef
++CANOPENTERM_CONF_OPTS = -DBUILD_YOCTO=ON -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_FIND_DEBUG_MODE=ON
 +
 +$(eval $(cmake-package))
 -- 
