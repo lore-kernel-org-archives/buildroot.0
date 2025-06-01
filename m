@@ -1,108 +1,107 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BF7DC5B549
-	for <buildroot@archiver.kernel.org>; Sun,  1 Jun 2025 10:13:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B1E4C54FB3
+	for <buildroot@archiver.kernel.org>; Sun,  1 Jun 2025 10:13:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CBDAB6086A;
-	Sun,  1 Jun 2025 10:13:23 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3UZ-bxpvC6UL; Sun,  1 Jun 2025 10:13:23 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0DB19606C2
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0DB19606C2;
-	Sun,  1 Jun 2025 10:13:23 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 9C0971F7
- for <buildroot@buildroot.org>; Sun,  1 Jun 2025 10:13:21 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8C53040AFE
- for <buildroot@buildroot.org>; Sun,  1 Jun 2025 10:13:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 26E4F41DD6;
+	Sun,  1 Jun 2025 10:13:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id evKyL_dGth3B for <buildroot@buildroot.org>;
- Sun,  1 Jun 2025 10:13:20 +0000 (UTC)
+ id MUJx6M4NZ6Nb; Sun,  1 Jun 2025 10:13:24 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5A0C641DBB
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5A0C641DBB;
+	Sun,  1 Jun 2025 10:13:24 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 40CF5222
+ for <buildroot@buildroot.org>; Sun,  1 Jun 2025 10:13:23 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3DAC581B58
+ for <buildroot@buildroot.org>; Sun,  1 Jun 2025 10:13:23 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5IGbVKdEmlrn for <buildroot@buildroot.org>;
+ Sun,  1 Jun 2025 10:13:22 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::134; helo=mail-lf1-x134.google.com;
+ client-ip=2a00:1450:4864:20::130; helo=mail-lf1-x130.google.com;
  envelope-from=roykollensvendsen@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6608541DD0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6608541DD0
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com
- [IPv6:2a00:1450:4864:20::134])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6608541DD0
- for <buildroot@buildroot.org>; Sun,  1 Jun 2025 10:13:20 +0000 (UTC)
-Received: by mail-lf1-x134.google.com with SMTP id
- 2adb3069b0e04-54e98f73850so3789608e87.1
- for <buildroot@buildroot.org>; Sun, 01 Jun 2025 03:13:20 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 42062814BD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 42062814BD
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com
+ [IPv6:2a00:1450:4864:20::130])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 42062814BD
+ for <buildroot@buildroot.org>; Sun,  1 Jun 2025 10:13:22 +0000 (UTC)
+Received: by mail-lf1-x130.google.com with SMTP id
+ 2adb3069b0e04-5532f9ac219so4037166e87.1
+ for <buildroot@buildroot.org>; Sun, 01 Jun 2025 03:13:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1748772798; x=1749377598;
+ d=1e100.net; s=20230601; t=1748772800; x=1749377600;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=ED9IqSjkW3qGwpM9RYCLMdB10X5/wTL085hCtU8RNGg=;
- b=r0Rt4tWuIngxTjIkKAkqGPesuR/HhMIDjZdBotPcVoAIuULjcIpxbeQ1ygSuWBbJn+
- 6K8BC01iscwPKyiMTH4ALGPdCFTu6a7/LFFxk1zOA+awCs5UqT8EKhv6v106dwLJsOpl
- k55QGuOF8ChlMOM6mxMNdOVXrJJ66JE72iLa+x1ZglPhei5frkBc+3AKV2a05DJU5IAe
- Yf3VnJFOar4mHHdcoXLk8++oPvU8m6RtssJEWhMNaCd/Ma2jlSOjAVFbBlvCfDs9QrVH
- ijS078A3vvjJTSMondBdLmDvjRY9gEI24zY2E0kw+SxYYwBfy6Ojpa8FZrcX9s7sVJDY
- V1fQ==
-X-Gm-Message-State: AOJu0Yw1ZFCHvfntNxJsoD/1BWlQ3NFpNg6KzlfYqc7dv6ql9qFoZCnF
- kolDv7zIF2+ER/p0oc/jeLqnyiU5lyE1eKr996erfiIwsL9Xc4f4tuGZQO4cbg==
-X-Gm-Gg: ASbGnctV53zraKXfZYxGbVrXRhPNuUBkg8AnX14kYvI90n59jtdR8/XvsTF4zfu9g13
- TrDTv6CyPEWSjuzSs/KLS1QG4z9W7C5WWthGKKSM1vm8qwFttq5quWKlpd52Tj1B3q9jkoHu6eG
- XFBKjfAwTNY3D3p4MsqGeHa0VNVtEPxqZOcl5XcEZSl9qNbyP4bKp53cyb6uqEtjmKoMLVk1U28
- 1x6lAacS7r2yIsLx9suid6wKHBZuaZcKJq235EgMTCt03HMUYGeuPgaIet9IEh3hpJYpyzXS3Ch
- uB0fhuSMRG9kAdL0CTka5SzoxonRXw26PxanWRlJBHP3wtuuyrQGCKOSgQJm1nGOGKeOADTKpyF
- knEoYY7/xdUWTVE9DZDvmigdlLdM+LSs=
-X-Google-Smtp-Source: AGHT+IFG3q91E4Gid9WB7q0+odHgWMzKssXb0wrkyNUgBiH0t/0SxGncQQCckkLoryvoN5+JulXKfA==
-X-Received: by 2002:a05:6512:3a8c:b0:553:267e:914e with SMTP id
- 2adb3069b0e04-55342f52102mr987795e87.1.1748772797872; 
- Sun, 01 Jun 2025 03:13:17 -0700 (PDT)
+ bh=QTmqjls+OikcY8HxqziQ5lKySzOEswY5CPCEPyoSLhc=;
+ b=N9K8Vu+hijROQQCEWHaeYKYOnPWR7jCncQXFsxmJXeGQDO+5IqR9xjQp/QZs+x0weg
+ URNxz+Toqyj31xoQ0ZY4HQ2zljbvfamzpmV+/OFs19YthTduJHOJrgp+HBG/OqUYzc1O
+ 8EqNG/dzw7+fc+kFXXzt3kZmDk9eRefp17ERBjpWZGw69jW+hFISTLbjD8IREgThmHvd
+ ULsqJpnXkW4xOXFOS72OjwjcpySm5NJd74j70lQw4g+/SHPZuYKnpUocZ7xqtBtXrCqg
+ 6xMdh6Db3KLrG9JAs16rKr0jttrflMpxr/dIg8QrK5KWs6qogSDdAPNYrBUAVY51slQ8
+ nFxw==
+X-Gm-Message-State: AOJu0YzBceKVyGbEY20S8xkHQuBaIDsZcSEA5ZpBhRb+YkAbzs8AQCZ1
+ 0X6ZC4EWx6t3CJhsSig+aHJQsYns62G8wCYMMkm7Od7Ci95ZCHXQCYvodnndrQ==
+X-Gm-Gg: ASbGncvLY4RrrJ4xPOAW53FGt5NiOi/JTlPqIiS7Q3rK82GAg1Ms5B/DTbsLVl16gn4
+ HCGKR2BZxlsnSG6B3jfShyS0vq8sOGjkcrzs443L3ouzi/Fd2zBHSVBkGO8ueBgjPT4rFC4wli3
+ V+c78InXcrFV78/L6KQMpsIg08l+EXG1+asGAY285sTXBgAKE83l35ajB4trjI6ts/IW6uxic93
+ ZbLY7px2wjbKoiMIm7aBw9ea6djDDu5GWIwZ9XdfJhWa9+N5DJJeve2W9ZAOG4vQZ+4ksg+sv2T
+ Vo3yzfvkADga6KVdcayGFNC+Z2LFgHCy4st+hUsVPzoJiCqQv1QIGmV/mm4noKMUFKJ9jvNKW/M
+ 9vECT1OQHRw==
+X-Google-Smtp-Source: AGHT+IH27m7e4b7jAMiovoXRyJX0ojdNX29Vhvr13eevBpwyZZeV0JsPmm7SLA9gGgjX3MdF/ds64w==
+X-Received: by 2002:a05:6512:3b11:b0:553:2989:1720 with SMTP id
+ 2adb3069b0e04-5533b8e1096mr2912303e87.2.1748772799701; 
+ Sun, 01 Jun 2025 03:13:19 -0700 (PDT)
 Received: from precision7530-arch-roy.lan
  ([2a01:799:1a22:4401:9825:b52b:4cba:665e])
  by smtp.gmail.com with ESMTPSA id
- 2adb3069b0e04-553378a0031sm1237404e87.64.2025.06.01.03.13.15
+ 2adb3069b0e04-553378a0031sm1237404e87.64.2025.06.01.03.13.18
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 01 Jun 2025 03:13:16 -0700 (PDT)
+ Sun, 01 Jun 2025 03:13:19 -0700 (PDT)
 From: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
 To: buildroot@buildroot.org
 Cc: Jesse Van Gavere <jesseevg@gmail.com>,
  Roy Kollen Svendsen <roykollensvendsen@gmail.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun,  1 Jun 2025 12:12:55 +0200
-Message-ID: <20250601101305.3198541-2-roykollensvendsen@gmail.com>
+Date: Sun,  1 Jun 2025 12:12:56 +0200
+Message-ID: <20250601101305.3198541-3-roykollensvendsen@gmail.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250601101305.3198541-1-roykollensvendsen@gmail.com>
 References: <20250601101305.3198541-1-roykollensvendsen@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1748772798; x=1749377598; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1748772800; x=1749377600; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=ED9IqSjkW3qGwpM9RYCLMdB10X5/wTL085hCtU8RNGg=;
- b=Tzf/a1dzsKxZhjgQzXl3NlbuGfU+dHi7qguvaoa0nW1Y8NqXBw+6dPxXRNY/Sa9rSk
- O7MaqVYJA9a5ZNvHLQCBbgW6xUpn+Jg7KM2XyxGEg0oxxHyqRu/D+PRPhOiDw0Y5y4yB
- G4q3P5+igHkZsJfXunuQyYgeivAx7/ftk7YdMDRK3fqlzKD9ZBIwlC7KM4FSJm5BWrxi
- 3cO+w039MgY5dsN4Cs03RqbK+KRuMXyV5bbKF+Ifl4lwuBgwyxds1lJvX+MKE/AvP0Pp
- 2dYdj7yztsUTpyUBl43QVJwBrcNeWY2r7EuJkX8txZaFfANDh5V5WKxzOT6rHRzYpQ8d
- RIQg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=QTmqjls+OikcY8HxqziQ5lKySzOEswY5CPCEPyoSLhc=;
+ b=PTR/C5RwcaZ9piTuFstU13CA9NH35yZKqS6NtI9MxL9K/EJ6L47Zc3cQKBefOwhX2d
+ feKLuljU1VR0rFNnhkm182E5DxWsvrkVGsmbhi056C2IX0BNhx3gDKCKrl8SsdXaR1+7
+ NPqOFBCfr5ChtgMopf42xNn5MR/FDr6XJ2YZN0uEmu4lm7+8npoKBD+k0tgf8TA/JTPZ
+ HXLbxN10tqVn1R/8mJ2xAnLmYnPLt+YU3s4Pzyhls5oIJNpFh7yumzKB/GYyVL/kxQrK
+ mln0iEK/plZxayaHRl4H5K2Mh4qsl7nH/BQr1OfcJB+StXS59/2OpOIU+YMmSY09wLxw
+ wWAQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=Tzf/a1dz
-Subject: [Buildroot] [PATCH v2 1/6] package/qt6/qt6base: add hidden options
- needed by qt6tools
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=PTR/C5Rw
+Subject: [Buildroot] [PATCH v2 2/6] package/qt6/qt6tools: fix linguist build
+ failure
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,109 +118,75 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Fixes:
+-- Could NOT find Qt6LinguistTools (missing: Qt6LinguistTools_DIR)
+CMake Error at <...>/output/build/qt6base-6.8.1/cmake/QtToolHelpers.cmake:768 (message):
+  Failed to find the host tool "Qt6::lconvert".  It is part of the
+  Qt6LinguistTools package, but the package could not be found.  Make sure
+  you have built and installed the host Linguist module, which will ensure
+  the creation of the Qt6LinguistTools package.
+Call Stack (most recent call first):
+  <...>/output/build/qt6base-6.8.1/cmake/QtToolHelpers.cmake:83 (qt_internal_find_tool)
+  src/linguist/lconvert/CMakeLists.txt:9 (qt_internal_add_tool)
+
+The above error can be triggered by the following defconfig:
+BR2_arm=y
+BR2_cortex_a9=y
+BR2_ARM_ENABLE_VFP=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_MUSL_STABLE=y
+BR2_PACKAGE_QT6=y
+BR2_PACKAGE_QT6BASE_GUI=y
+BR2_PACKAGE_QT6BASE_PNG=y
+BR2_PACKAGE_QT6BASE_WIDGETS=y
+BR2_PACKAGE_QT6TOOLS=y
+
 Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
 ---
- package/qt6/qt6base/Config.in.host | 14 +++++++++++
- package/qt6/qt6base/qt6base.mk     | 40 ++++++++++++++++++++++++++++--
- 2 files changed, 52 insertions(+), 2 deletions(-)
+ package/qt6/qt6tools/Config.in   | 14 ++++++++++++++
+ package/qt6/qt6tools/qt6tools.mk |  6 ++++++
+ 2 files changed, 20 insertions(+)
 
-diff --git a/package/qt6/qt6base/Config.in.host b/package/qt6/qt6base/Config.in.host
-index e38e99fbaf..89e78127ef 100644
---- a/package/qt6/qt6base/Config.in.host
-+++ b/package/qt6/qt6base/Config.in.host
-@@ -11,6 +11,16 @@ config BR2_PACKAGE_HOST_QT6BASE_GUI
- config BR2_PACKAGE_HOST_QT6BASE_NETWORK
- 	bool
+diff --git a/package/qt6/qt6tools/Config.in b/package/qt6/qt6tools/Config.in
+index 1828e5f043..8fff08b3e6 100644
+--- a/package/qt6/qt6tools/Config.in
++++ b/package/qt6/qt6tools/Config.in
+@@ -11,3 +11,17 @@ config BR2_PACKAGE_QT6TOOLS
+ 	  and design of applications.
  
-+# https://code.qt.io/cgit/qt/qttools.git/tree/configure.cmake?h=6.8.1#n45
-+config BR2_PACKAGE_HOST_QT6BASE_PNG
-+	bool
+ 	  https://github.com/qt/qttools
 +
-+# https://code.qt.io/cgit/qt/qttools.git/tree/src/assistant/CMakeLists.txt?h=6.8.1#n4
-+config BR2_PACKAGE_HOST_QT6BASE_PRINTSUPPORT
-+	bool
-+	# yes, print support needs widgets
-+	depends on BR2_PACKAGE_HOST_QT6BASE_WIDGETS
++if BR2_PACKAGE_QT6TOOLS
 +
- # Select this if you need host qt6 tools that require the Qt::Test module
- # (e.g. qmltestrunner).
- config BR2_PACKAGE_HOST_QT6BASE_TEST
-@@ -21,5 +31,9 @@ config BR2_PACKAGE_HOST_QT6BASE_TEST
- config BR2_PACKAGE_HOST_QT6BASE_SQL
- 	bool
- 
-+# https://code.qt.io/cgit/qt/qttools.git/tree/configure.cmake?h=6.8.1#n45
-+config BR2_PACKAGE_HOST_QT6BASE_SQLITE
-+	bool
++config BR2_PACKAGE_QT6TOOLS_LINGUIST
++	bool "linguist"
++	select BR2_PACKAGE_HOST_QT6TOOLS_LINGUIST_TOOLS # lconvert is needed for linguist to build
++	select BR2_PACKAGE_QT6BASE_GUI
++	select BR2_PACKAGE_QT6BASE_PNG # https://code.qt.io/cgit/qt/qttools.git/tree/src/linguist/CMakeLists.txt?h=6.8.1#n17
++	select BR2_PACKAGE_QT6BASE_WIDGETS # https://code.qt.io/cgit/qt/qttools.git/tree/src/linguist/CMakeLists.txt?h=6.8.1#n17
++	help
++	  Tool for translating Qt applications, including editors and
++	  utilities for managing translation files.
 +
- config BR2_PACKAGE_HOST_QT6BASE_WIDGETS
- 	bool
-diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
-index 39fb440be7..b0d480e360 100644
---- a/package/qt6/qt6base/qt6base.mk
-+++ b/package/qt6/qt6base/qt6base.mk
-@@ -112,16 +112,35 @@ HOST_QT6BASE_CONF_OPTS += \
- 	-DFEATURE_xcb=OFF \
- 	-DFEATURE_opengl=OFF -DINPUT_opengl=no \
- 	-DFEATURE_harfbuzz=OFF \
--	-DFEATURE_png=OFF \
- 	-DFEATURE_gif=OFF \
- 	-DFEATURE_jpeg=OFF \
--	-DFEATURE_printsupport=OFF \
- 	-DFEATURE_kms=OFF \
- 	-DFEATURE_fontconfig=OFF \
- 	-DFEATURE_libinput=OFF \
- 	-DFEATURE_tslib=OFF \
- 	-DFEATURE_eglfs=OFF
- 
-+# The PNG feature is required by qt6tools (qhelpgenerator and assistant):
-+# https://code.qt.io/cgit/qt/qttools.git/tree/configure.cmake?h=6.8.1#n45
-+ifeq ($(BR2_PACKAGE_HOST_QT6BASE_PNG),y)
-+HOST_QT6BASE_CONF_OPTS += \
-+	-DFEATURE_png=ON \
-+	-DFEATURE_system_png=ON
-+HOST_QT6BASE_DEPENDENCIES += libpng
-+else
-+HOST_QT6BASE_CONF_OPTS += -DFEATURE_png=OFF
 +endif
-+
-+# The print support feature is required by qt6tools (qhelpgenerator and assistant):
-+# https://code.qt.io/cgit/qt/qttools.git/tree/src/assistant/CMakeLists.txt?h=6.8.1#n4
-+ifeq ($(BR2_PACKAGE_HOST_QT6BASE_PRINTSUPPORT),y)
-+HOST_QT6BASE_CONF_OPTS += \
-+	-DFEATURE_printsupport=ON \
-+	-DFEATURE_cups=OFF
-+else
-+HOST_QT6BASE_CONF_OPTS += -DFEATURE_printsupport=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_HOST_QT6BASE_WIDGETS),y)
- HOST_QT6BASE_CONF_OPTS += -DFEATURE_widgets=ON
- else
-@@ -144,6 +163,23 @@ endif
- # available.
- ifeq ($(BR2_PACKAGE_HOST_QT6BASE_SQL),y)
- HOST_QT6BASE_CONF_OPTS += -DFEATURE_sql=ON
-+HOST_QT6BASE_CONF_OPTS += \
-+	-DFEATURE_sql_db2=OFF \
-+	-DFEATURE_sql_ibase=OFF \
-+	-DFEATURE_sql_oci=OFF \
-+	-DFEATURE_sql_odbc=OFF
-+
-+# The SQLite plugin is required by qt6tools (qhelpgenerator and assistant):
-+# https://code.qt.io/cgit/qt/qttools.git/tree/configure.cmake?h=6.8.1#n45
-+ifeq ($(BR2_PACKAGE_HOST_QT6BASE_SQLITE),y)
-+HOST_QT6BASE_CONF_OPTS += \
-+	-DFEATURE_sql_sqlite=ON \
-+	-DFEATURE_system_sqlite=ON
-+HOST_QT6BASE_DEPENDENCIES += sqlite
-+else
-+HOST_QT6BASE_CONF_OPTS += -DFEATURE_sql_sqlite=OFF
-+endif
-+
- else
- HOST_QT6BASE_CONF_OPTS += -DFEATURE_sql=OFF
+diff --git a/package/qt6/qt6tools/qt6tools.mk b/package/qt6/qt6tools/qt6tools.mk
+index b063f08887..25cbb82c84 100644
+--- a/package/qt6/qt6tools/qt6tools.mk
++++ b/package/qt6/qt6tools/qt6tools.mk
+@@ -41,6 +41,12 @@ ifeq ($(BR2_PACKAGE_QT6DECLARATIVE),y)
+ QT6TOOLS_DEPENDENCIES += qt6declarative
  endif
+ 
++ifeq ($(BR2_PACKAGE_QT6TOOLS_LINGUIST),y)
++QT6TOOLS_CONF_OPTS += -DFEATURE_linguist=ON
++else
++QT6TOOLS_CONF_OPTS += -DFEATURE_linguist=OFF
++endif
++
+ HOST_QT6TOOLS_CONF_OPTS = \
+ 	-DQT_BUILD_EXAMPLES=OFF \
+ 	-DQT_BUILD_TESTS=OFF
 -- 
 2.49.0
 
