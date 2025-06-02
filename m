@@ -1,202 +1,156 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0E11C5AD49
-	for <buildroot@archiver.kernel.org>; Mon,  2 Jun 2025 11:09:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 183F3C5AD49
+	for <buildroot@archiver.kernel.org>; Mon,  2 Jun 2025 11:23:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 82C928137D;
-	Mon,  2 Jun 2025 11:09:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B3032409D0;
+	Mon,  2 Jun 2025 11:23:25 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7n6b2t2hmyvF; Mon,  2 Jun 2025 11:23:24 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BAEF440AAC
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id BAEF440AAC;
+	Mon,  2 Jun 2025 11:23:24 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id E6828222
+ for <buildroot@buildroot.org>; Mon,  2 Jun 2025 11:23:23 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id D814B8154B
+ for <buildroot@buildroot.org>; Mon,  2 Jun 2025 11:23:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JJiodor4NWxw; Mon,  2 Jun 2025 11:09:12 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C391781367
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C391781367;
-	Mon,  2 Jun 2025 11:09:12 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 977D1127
- for <buildroot@buildroot.org>; Mon,  2 Jun 2025 11:09:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7D739608AC
- for <buildroot@buildroot.org>; Mon,  2 Jun 2025 11:09:11 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cCaYsMRPZ6hY for <buildroot@buildroot.org>;
- Mon,  2 Jun 2025 11:09:10 +0000 (UTC)
-X-Greylist: delayed 518 seconds by postgrey-1.37 at util1.osuosl.org;
- Mon, 02 Jun 2025 11:09:10 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6D3116075B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D3116075B
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.132.181.66;
- helo=mx07-0035d101.pphosted.com; envelope-from=gilles.bardoux@sagemcom.com;
- receiver=<UNKNOWN> 
-Received: from mx07-0035d101.pphosted.com (mx07-0035d101.pphosted.com
- [185.132.181.66])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6D3116075B
- for <buildroot@buildroot.org>; Mon,  2 Jun 2025 11:09:10 +0000 (UTC)
-Received: from pps.filterd (m0166235.ppops.net [127.0.0.1])
- by mx07-0035d101.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5523spS0013832
- for <buildroot@buildroot.org>; Mon, 2 Jun 2025 13:00:30 +0200
-Received: from pr0p264cu014.outbound.protection.outlook.com
- (mail-francecentralazon11022142.outbound.protection.outlook.com
- [40.107.161.142])
- by mx07-0035d101.pphosted.com (PPS) with ESMTPS id 470527h3rf-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
- for <buildroot@buildroot.org>; Mon, 02 Jun 2025 13:00:30 +0200 (MEST)
+ id XKqBEGFeoUd7 for <buildroot@buildroot.org>;
+ Mon,  2 Jun 2025 11:23:22 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a01:111:f403:2414::613;
+ helo=nam11-bn8-obe.outbound.protection.outlook.com;
+ envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 26E1D8156C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 26E1D8156C
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com
+ (mail-bn8nam11on20613.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:2414::613])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 26E1D8156C
+ for <buildroot@buildroot.org>; Mon,  2 Jun 2025 11:23:21 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=omf3UHQRYT0cnFS3bPFy2Tq1KPuEh3pih50pIULjL6Ab/ka1JduKjrrvATQNKiHc7PUK8VoFWrsJlSjhrU7b5FMRoLp4NUeAZorkBs+pVUo7G0uucwiF0GiRbs1j0yUn3PnPdFi0NFvIAUNBzTKVSKvqMI6eGCI/k7/+E1R201reHyI0Qf6tkeOCWVkCjgggn5jp1rv3Ajynn5NdVMhLldHgJFfBgjmk0xTQNgCOetJ1pUUmCh4PZIKEgYmo7KpjHRpB1GCKI7TpoupoMIdCaDtAYaEc6NR3e9gTMK4uwpzZPpVnFs/GqcuSarzvv7sYsyt0KlXvLuZEV+J5d2Mq+g==
+ b=pqEL4vsA9vEOCYdg5YvRfDPc94YICjfMccJCozumWD3xIvaUpajiqcTI03ZK+M4zLmIALRUHTG54USxcA8Ik1FF417rSdgInfPaySh/eK9RzcJR6ciF3M74VSyrJwYaER3qyLNXWAxmkrOjQ102LDI6t0HPJzMqhJlO+f1iZkQ2LV37tNs1tytEXhalUROgI5ALn4PpafH8EhV1ThZY1zrwsT4VCstqmr764a7iBkC+jBRPVZ+2su1qAbRkqU/uDXaYsjVkOijgLn60dKUVP+nyWiXfqphFPqs8CTjQEvJk59nCH+1q0PPaWCuvnjxfR7UWW6tzmOoqK+VfElxd58w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/YFB9Bf5eQb3OBCUiozWwMtjbJy2uyLQHwlgdMiRceE=;
- b=bYLHBETAxUYevcpKz06bho4xkAe19Vo8WPqTip+875vBmGt8caPmqWJaSYiY26LG3hM/lDGci1sRK7SDH6Zt0ns4yWySIqIY6oIblYme9Yx/L57wzpl/+ZVKjn9ikodusXYTfc64d10L1sVaQO7mnZNmdpZWFIeyS9ZZRsNe0mFWqbljfoO+a1gK9k+YXBDm/IBRDlb3QsDYP1sYiEA3xh0Zvnv/hLiGB/NE/WaD8CLK9S/Bi6ayxpoQ2UX4cXYMsnmceoTe2L+DRcir9VtIXDAojEfJD/mY0wmCMUr1mymsLSQDLHt8WMl0MVLOVX8iec/eBePbL2apmlffQhjavw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=sagemcom.com; dmarc=pass action=none header.from=sagemcom.com;
- dkim=pass header.d=sagemcom.com; arc=none
-Received: from PAZP264MB3183.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1f3::9)
- by MR1PPF699502CC1.FRAP264.PROD.OUTLOOK.COM (2603:10a6:508:1::233) with
+ bh=YrU604w7AqE1jJ6E451x2IkKNvFeo9oc4ifUc8/YEek=;
+ b=JlFoGBF/IxCwbXc/w1x0JdbA5Svj/biHIASPVF7Cx8JqZMcJg0S9UfnpHRmS1L3Vf7x2fJ1LpEzLAlBk8uf518cL5lvjgvcgOlfQ7rJ1HiAh5psQgZtTLCNyaBhgOQdAMbbG/qfhkCqA0/9CPEhzAtDl+Khlob64/NLa/G9aANh0Kl2bYK1U+ffTBu525Qud4X5cc2RiqY6lNvNOWrT5ZaX/aME4O3KhquZDq1IdicgDtYYfE34LOC81EogbNzKOc2K103jxMnrwzRpx1eAkz2D4L2AGhAioYe4rqyCv3OPjyv4DROGRutbiSg3gNq4V61pBN/V1pfq5MkzN57NKTg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+Received: from DM6PR18CA0026.namprd18.prod.outlook.com (2603:10b6:5:15b::39)
+ by SA3PR12MB8439.namprd12.prod.outlook.com (2603:10b6:806:2f7::9) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8769.37; Mon, 2 Jun
- 2025 11:00:27 +0000
-Received: from PAZP264MB3183.FRAP264.PROD.OUTLOOK.COM
- ([fe80::5e6f:3831:f41e:93f1]) by PAZP264MB3183.FRAP264.PROD.OUTLOOK.COM
- ([fe80::5e6f:3831:f41e:93f1%5]) with mapi id 15.20.8792.033; Mon, 2 Jun 2025
- 11:00:27 +0000
-To: buildroot@buildroot.org
-Cc: Gilles Bardoux <gilles.bardoux@sagemcom.com>
-Date: Mon,  2 Jun 2025 13:00:06 +0200
-Message-Id: <20250602110006.3257934-1-gilles.bardoux@sagemcom.com>
-X-Mailer: git-send-email 2.39.5
-X-ClientProxiedBy: PA7P264CA0345.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:102:39a::13) To PAZP264MB3183.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:102:1f3::9)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8769.22; Mon, 2 Jun
+ 2025 11:23:12 +0000
+Received: from DS1PEPF00017094.namprd03.prod.outlook.com
+ (2603:10b6:5:15b:cafe::ee) by DM6PR18CA0026.outlook.office365.com
+ (2603:10b6:5:15b::39) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8746.31 via Frontend Transport; Mon,
+ 2 Jun 2025 11:23:11 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ DS1PEPF00017094.mail.protection.outlook.com (10.167.17.137) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8792.29 via Frontend Transport; Mon, 2 Jun 2025 11:23:11 +0000
+Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 2 Jun
+ 2025 06:23:10 -0500
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB05.amd.com
+ (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 2 Jun
+ 2025 06:23:10 -0500
+Received: from xirengwts09.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
+ Transport; Mon, 2 Jun 2025 06:23:08 -0500
+To: <buildroot@buildroot.org>
+Date: Mon, 2 Jun 2025 12:23:07 +0100
+Message-ID: <20250602112307.4185883-1-neal.frager@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Received-SPF: None (SATLEXMB05.amd.com: neal.frager@amd.com does not designate
+ permitted sender hosts)
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAZP264MB3183:EE_|MR1PPF699502CC1:EE_
-X-MS-Office365-Filtering-Correlation-Id: f9d0fd30-2d91-4c61-c394-08dda1c4ae99
+X-MS-TrafficTypeDiagnostic: DS1PEPF00017094:EE_|SA3PR12MB8439:EE_
+X-MS-Office365-Filtering-Correlation-Id: 838701e6-0307-40d7-57d9-08dda1c7db96
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
- ARA:13230040|376014|52116014|1800799024|366016|38350700014; 
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?MZo8vGBKslcUE+jPDVFpIYU4OfZ+vRhIlHy1lsnooSgiyo24TBDpXsWFrUum?=
- =?us-ascii?Q?vOvrfT8SrRuI/dTfNBrAas/98Z/mCL7F6c4+22pMReAhnCgabtrU4JspidLv?=
- =?us-ascii?Q?lvvjX2tEpX8d7vcXxFYcnXmIubJMzafRGUMqGBhaFIQ0kly9Mmzg8Zh2cDAG?=
- =?us-ascii?Q?xqrxuTdEsYPD/3GR0Euqxd8N8lWJQED3Fetc6fLzooyo82Uqnaki1jwb2bN3?=
- =?us-ascii?Q?iKvIsHTmT/BY4ZLLz/bILUAWer93rGOaXkcxWxnbhD22YxEbBPl37szekdRl?=
- =?us-ascii?Q?jTGj6noezzm36L8LOgguxNQvLlWYkn6yE448pio5BJhh/RU1dazqznqxODiZ?=
- =?us-ascii?Q?fSxz8xaKsuNNOa677+VKohTM6AcfMhAuVCdDvgOhp3osISBcWYkOrkWE7fm1?=
- =?us-ascii?Q?aEMAu8V93/AQTmczH5tGOgwT1DVM4WdW9wr9RQRsHE7sRdsnmjvQdTuZaxqW?=
- =?us-ascii?Q?8ZhYY2i1I3OenJ+jtXFoFgMQ1n+BKRi6i1/h8hqk9/EThXtPJlafJlOoMNNw?=
- =?us-ascii?Q?TZkrnF0XUtTc+eTprVFNVTwMFMe7Pc3+71BuRj51mIO6qqfUp3QfAQCFQQ9F?=
- =?us-ascii?Q?oBgUHeb41CjaPyQHkgnBRsfravlrTkEp42XUKInznXsRLZx3nthYUN44i73X?=
- =?us-ascii?Q?SGfu2cusa5gM3+c+useARX+6tEEKwV9u2fn48WUuwenI+0AaGOJK6Kyz9bYF?=
- =?us-ascii?Q?mkdGY9cmYmYMbDWjSjhhZh1Mccm8flojSInNoAhmNLHGuVexZBx/YBYzM5kj?=
- =?us-ascii?Q?TQRJKOjSEchB+Ve++GGbe/8qrxrYrZ3gNPvd8BOZUMqMAs+5u8cExBcxstbU?=
- =?us-ascii?Q?bjftYci1dQn0OaJKSIgb4p617mqm6HvqKLuD2LgNuO5zh96IWDIgY8qXg3uF?=
- =?us-ascii?Q?lc632EsYb0U2KlcDlUP4IMNvI9LyCkmr4MTM5fUj4eFxQ+b/B/PJTG8mlHdT?=
- =?us-ascii?Q?mel5J5Y/YmnCmf+2Ldi63YnhYKsgIWBSJa/MN1otW4nwFTcRCAAEjc47tt91?=
- =?us-ascii?Q?p/L4bTgMW8yLKmBjN0DYugMwhG3k564kDl1rMXOhUBLWp4mr3f+1OppKmerM?=
- =?us-ascii?Q?pdyUrYCx5Z1qgESS3rAbJMD2GJzS0qYeFTihtpmzks3RL5gyS2WRMCiTs2it?=
- =?us-ascii?Q?2RENVZhNmRv5/QAaOH8tBKDb5IZ7cu1TGLL9NCRBWrx3YvF9a4GiYSE89ahl?=
- =?us-ascii?Q?+sqHUWOZzMtYy3bT88FoucCMQuaNTErkeoBifxL+s4DR7jDrtEq2Nxi9M7s7?=
- =?us-ascii?Q?89O3hLwcSq12WWX6aJJ/n2x83qIU0kptEFhpYU6tPF0aHwfUynBY0KUfsfty?=
- =?us-ascii?Q?ggVIKWoang1d3Hp+cK507S/1ZR/ivperj4044AipWHc5TNBdqoxKFqb+Y5Rp?=
- =?us-ascii?Q?/Oie1aIzWsapt3ORPev7y35uxtE5/wA9CfE65I1kdzneFXbE+rb77Dmxlby9?=
- =?us-ascii?Q?aqTNrs42PJ1RjS0WeiV8rwiIdyXrmH8vzq6fciMtL4tHn6VRKMmYMzLsAPNn?=
- =?us-ascii?Q?ime2c3fjtfSA8qg=3D?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:PAZP264MB3183.FRAP264.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
- SFS:(13230040)(376014)(52116014)(1800799024)(366016)(38350700014); DIR:OUT;
- SFP:1102; 
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?3/KihbfQs2K/R1pFF4O2145oRkwzJEh8+j2RqMJvQUjEMALQtCHAFCrbIwYD?=
- =?us-ascii?Q?RqJCOeRRvheQZouOt+BlmIwTRZor3Xgy9P+1vRtpkkAb5jZUr8MMX6alrj3U?=
- =?us-ascii?Q?ZqM86Qu/c1u5/NphQ6e4kcZ1LtaCUTUFj7cQUCnZauOJc+rV8qXTESVBZKYH?=
- =?us-ascii?Q?tQ6PJ4puytZlFIkXP0Kqv6xuEUCdxczig8ctkbuVjSNIXQCIGsDf7nLV+gOv?=
- =?us-ascii?Q?ibRfO6/ONy3cdW7AfJn7PfE4sjCgd/PXwMNbL8OYK9AFJDfQ4kz91FcyqMGK?=
- =?us-ascii?Q?/8UOiif1RboFhW7F/5KPKJJFRjjjRv+VTcFlKgBPEWLJg4m4GbyPvyMHioB/?=
- =?us-ascii?Q?Ca6lwapajsUVYXtdACJX6ZoWGsqONGrNQnfPlG9q6Kc++xEQ+IUFlbzi8iZr?=
- =?us-ascii?Q?Np2wJsCbGy1K/CT9ptMTdU8RWiVwOMdz2ORAYe5HWSvR1M1T2vmH0ugUCc2W?=
- =?us-ascii?Q?nXoS25OQuJ3Ou+S5AytZbXM9WsfzixsIq289lql3goQlaykOl+xITQdmqR5t?=
- =?us-ascii?Q?WWuXoiDUZX/2gEPlFU/9L6PPK7GgtQnqF4MwYzt6D+8sKXdf7+ZVtmfVrgaV?=
- =?us-ascii?Q?sLbxUUMdZNbu4Q79z7F2KymXfQvYU3Bmvu6Trb+64qCOjeONKAfpmghNmESN?=
- =?us-ascii?Q?dfSnylrTDNCDkPboZLbtzMXswwk3L3XOcNcgPDFWFQ+xSqEFS9zNyQ4hVJen?=
- =?us-ascii?Q?u0YtcM0rhLaEFMU8iCByJN4w96gpMz2KbzGUg7MKeKGETu2mzVKXdY4bSj5k?=
- =?us-ascii?Q?Fd3ejmOe09LJy1qF2sFARRv6RvKiI+MoZjU6iRmt2EuU6ovi0NJjZsbXJ83K?=
- =?us-ascii?Q?S6khcmvpqUaYDuri7k1X1ypis+HDHeSdRYIHW02Jr2AGM5zMwzCwKNoJ+MCT?=
- =?us-ascii?Q?WGuq8LYwQK2G99QmQhNDImuGQzOUINGzr2eC4zo3hizHneZyAfEjPmi1F6Ev?=
- =?us-ascii?Q?Bp+gEUhpfsQoLmx2/+yx1+da0MeOUopHgkveku01C0HVm+Gorr5TLL2kTFjz?=
- =?us-ascii?Q?1tKYDD7XQ/OUpnvuFQb9a6qCRXQaWEY90r2iyhEQBmOLr6l9mPHoINNix5JI?=
- =?us-ascii?Q?FRdIAOeqFyz+X3ElsFlpXFiY9jQh8NeesSi1hD3wukBGvwqvr2XFAq8ZbQpJ?=
- =?us-ascii?Q?HKgYl5PNxNCbr6XHTl4MceDdeIXr6nCBgPXr0skT6hj8QsbQQyxsqzkoMkU2?=
- =?us-ascii?Q?Aj0i685oFbSrKBn3vL6/jVSt0S8FwAdUc+BfJ3tiuKYl8uiXNkQYl2FhdZAk?=
- =?us-ascii?Q?Zin1LwsT1DZ9qCOxXw4+pA8UXNJrnTF/EruTAUTZn364aLPt4lNZroljPa0Q?=
- =?us-ascii?Q?TIKJ7ss5uId7eWKgXtLCZCrrdZmRIeH4xweDO4IdL6vthajIF1gRHdVGPCGh?=
- =?us-ascii?Q?iTVdGZsoG5Rh70Wm7TI29OqkeC+PTrJylqd1Kv0cYKfiowJSK5CYO7qQ9MLT?=
- =?us-ascii?Q?4kk2mb+oURoHZF/mBHgI/uqa75pAx0fLJJ/IuHqFIAwy61fAediBGu52laGO?=
- =?us-ascii?Q?5D4jQHezGxH00t0MpJOI8pAkgWbAlIsjETYCAV64/0cKKr5cZChbGGURlu9h?=
- =?us-ascii?Q?kAXwIDKSTTLz1AMPzYJ3JlZhFfUomLi9gCDPC4v9MFz6Xim88ltab6YVO3ei?=
- =?us-ascii?Q?IQ=3D=3D?=
-X-OriginatorOrg: sagemcom.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f9d0fd30-2d91-4c61-c394-08dda1c4ae99
-X-MS-Exchange-CrossTenant-AuthSource: PAZP264MB3183.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2025 11:00:27.3107 (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f9ffeb1d-70f1-4c2c-b7e6-d080242df8d3
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: eQkQ3sDhJNafjvHT8Ig/WVKTieWJqVl1KP/QERB+SY/BMhpVNpoabKcWD8RiRMIu0qEda9HCOasoz8tE1aNVbwT3v6l2yDoNTv3OWQKqsh4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR1PPF699502CC1
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjAyMDA5NCBTYWx0ZWRfX776JyBLZRok3
- UWWfAsmNzQKw/GraZP+Mqq0hLSOBLqWbB1G7oQ9p/LrrdZzVnVin0b1y+jTSoz5kbMVUOwDljCf
- npySH+iaBYQOQHcKbraErslzYz4sAM4OkLgzJdjnLtmFKmov39cQ028UALENM6/SGh//TR10lW5
- 6LceR4N9m4xZPCg1ealDfW+HGHMI21gfzlr5QzAMRR93yYgg6SnBFAq39AdsI+H0tKuXE7+PEc4
- l9wUPiu1b8LT/YlOSHv2OO5c8VGNmm/C5FbJYdya/EwCcgl1NleJ4pA4GiAUWbkod1pkT3n/KQo
- gif1stprCt0NP8AIfgL4NjOirRX4eJHY22K335acrMH2241dRI78lzWweyogv5UxhOO4vBfdo+d
- dkxmD0NhqMl7dKaZRoac5PhSkRznGREjLRqQHBt6bXuv//g2Q5b3jgn58I428ozBY+J049AA
-X-Authority-Analysis: v=2.4 cv=dIOmmPZb c=1 sm=1 tr=0 ts=683d844e cx=c_pps
- a=xvhvfIbTdVFexAtu6In1EQ==:117 a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19
- a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19
- a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19
- a=xqWC_Br6kY4A:10 a=6IFa9wvqVegA:10 a=cWJNfkV6-HgA:10 a=Yh41P-WkAAAA:8
- a=Joi1bp7DNvzZmJBCSoIA:9 a=t-YQpmI8WX82GxrYqon6:22
-X-Proofpoint-GUID: 4UKpnNMS4sTfMf_x9BTcCUTxIzL5Fmfo
-X-Proofpoint-ORIG-GUID: 4UKpnNMS4sTfMf_x9BTcCUTxIzL5Fmfo
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-06-02_04,2025-05-30_01,2025-03-28_01
+ ARA:13230040|82310400026|1800799024|36860700013|376014|13003099007|41080700001;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?tPtN6vplKeOXi28mH3FF5eM+0PiY4qB73gtTArPA2ysFVFNVL6zELSYfxpBk?=
+ =?us-ascii?Q?cY2S55z/MwfXTfs8M2twu7KYskkXvP8rMwnS0guMP5ypiO3Lax77TY0ZSbsb?=
+ =?us-ascii?Q?Eit4QSiwZamLwaH1OlJJnmSOETWlMPr+h8JJr+ltY+tqRy+h/Q5We06a6C1a?=
+ =?us-ascii?Q?u9uQEeE3LsmRGwcC41Bf616KTwSguDy0rB+J/T02xAx6NzX3d8fNhmRO7Nn4?=
+ =?us-ascii?Q?RwZPYcqe/x2MfW5wjWCv/QxqFfORfttBVPzBROq7bANdMn4pkHok6EIRZi8B?=
+ =?us-ascii?Q?V7vkQGF6V0DUUDyVpzXuGKsSTZ5xjGxf+vxZ+LXMijT9PQdbbxqSndiyZhGQ?=
+ =?us-ascii?Q?XY0VG6gzHBQaLBgratYOit82xYYZeNEeroYu3LjzfqitttPAC+bbXow757YJ?=
+ =?us-ascii?Q?sFwvJW2HHPzG8/peS+OpRFMzyQ8Ura28Qz+8vtGbmP5CknuuyidRpLLggSTf?=
+ =?us-ascii?Q?iN4+Oc1eCOaFFbIaGzZ4Kdh+uAMEdlKCoNy5DQ4FBMSS2Qy/rGX8ayTMnfwF?=
+ =?us-ascii?Q?LBBp1DK9qE7Ml2e+AusBEEgjd4QDdcbhq3Dq2Hj2tYY0qivsLz+8YUXtRzeh?=
+ =?us-ascii?Q?u7X2bVRpw+UTuWmEREBmS+KZUHu814Go6wU+CqQ0n0jVF2HF0a/g/qUoKGBM?=
+ =?us-ascii?Q?sZfSfeB7Oou7gg9ID8TXcFbcmFSuecujP5fMF7srPw2gRvnXvdFt6Rc3vIaX?=
+ =?us-ascii?Q?4G7bZ/hlfbiWNQldPKNgFQJ5T0l32+pWNGz1TOLou7ALIHVq7Kyz6xdZpu6h?=
+ =?us-ascii?Q?d1KLsP96MLav4Gmo/BXkjWK/vxh0X2LViEzz7pMd/40Hfi7m8yHhLsgpg2f7?=
+ =?us-ascii?Q?xZSE0K8DnBPj8Ki1iEi8il/bNviFYxhuYFaRXBX+xNHFrZR4pGnNt6yP5KPU?=
+ =?us-ascii?Q?NhIeF2ziBCzGEofM2lDlPqU7SW2ndGtq8xb3rVHg2pZzjGioG+tEWIuybH/j?=
+ =?us-ascii?Q?xPeJDCJwmI7K8v+eJOgu+15pRS3IHGW2lcDAHLItpWwb1us1viOE/PGfxSsw?=
+ =?us-ascii?Q?eie32xaWbNxNOHk3oHGTgVNjlnNmYt1Zc4EcmtIC1P2GvXGCAh24ACHjsRVv?=
+ =?us-ascii?Q?5S0jAHeHwBV02gfFHO8mgtHMwNkDhP453fpVCdZ08+PbhzZinMKdTDaeYYcs?=
+ =?us-ascii?Q?Ieggv91e8A54Em5Erp1VFNGPiHmpN4VcypjPCgVXTBiYZBY43pILbvoy1zBd?=
+ =?us-ascii?Q?/6DYi33n95uJdcNjKImNiarMzDtyOiV0FPbN51KqDjVmbefeKfjCvg/xuIxJ?=
+ =?us-ascii?Q?2RES/2qkPD7ZVfwE2emHbyEpgSG7stL+468hqgadJ/bJialcYFI4ff1kNzM6?=
+ =?us-ascii?Q?mnX5EmpqnctJm/eYPxHyxzrvkoMaREHWFVeOKNVaA5ZZQUjSwPmnLuEHxT3F?=
+ =?us-ascii?Q?x3KMuhNicU3trYix4Zkv7PBQCcS1cNJCmMWsICyO11wj9RLYtW2+2r6lxmUg?=
+ =?us-ascii?Q?fLOiq4Zfw/dvEMa8hlhoNKFBvT1MSSEbWCjNvP+wlqQ1o8IKfeGmrbyKSQbw?=
+ =?us-ascii?Q?Wq1XSjRNWdl0Kr0q5lR9TPHu0ZQSwOADmHo7?=
+X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
+ IPV:CAL; SFV:NSPM; H:SATLEXMB03.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
+ SFS:(13230040)(82310400026)(1800799024)(36860700013)(376014)(13003099007)(41080700001);
+ DIR:OUT; SFP:1101; 
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2025 11:23:11.0300 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 838701e6-0307-40d7-57d9-08dda1c7db96
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
+ Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF00017094.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB8439
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sagemcom.com; h=
- cc:content-transfer-encoding:content-type:date:from:message-id
- :mime-version:subject:to; s=s1024; bh=ujaAVx5tkClyzbq0A/yjFYf5gZ
- dTihmqoh6mCri7hEs=; b=Zv2rDZstK2xiAeS9sTa/3iBaYVDtA3OBwglPCajbyG
- CIXOPUzWLkzspiRsGhVIco80yf/aIkU59IwE7/WJjfbgxSdtTvtSGxYL248Hmfte
- 2jb3NVdQGlU4bGh9IXEFfsxyzRvZz2tj5VYVg9k39JIJOom7Uw1kQkv2selXXT3i
- Z7D6UmmDoCKsgjJRqODlTRkfVe6Z9YstcvTJIPhdlt/8tPzRb9EaonFS7R7faVez
- LjOszX4bCshpFrtfVY23dQTJyMo331k3z7D35b7oNbad3XbwSm4o603+QuOMnO7W
- VRhEWJ7OqcJkUuBY29M795Z1/w8SGG+TTMK9nrY2MWyA==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sagemcom365.onmicrosoft.com; s=selector1-sagemcom365-onmicrosoft-com;
+ d=amd.com; s=selector1; 
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/YFB9Bf5eQb3OBCUiozWwMtjbJy2uyLQHwlgdMiRceE=;
- b=xzQhJfwOLaQpVqXct+Iy6mTWQlfPZtYZeuGsLogWTYH8GYpuxvE7dw6ZYS5eUqoTDj/MqODb9DoQjIhPUnWBekg+YNquVcUF9bmxsAfuXHHuMDi1xZptY3p+CqM+51Jl/K/LR7fK7GBFkGqKbnO/niD3FoFBeIpKUE8aZB1Mhjo=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=YrU604w7AqE1jJ6E451x2IkKNvFeo9oc4ifUc8/YEek=;
+ b=LzDWs2bRcMuzy2E6ZI2iziNYSKkEf/oqvKIF/dFVJxFVhrFkzwx/E4dtGlplv+qUpQFGyJOmlsBxE6YhQ1sz+b29xRzB/Nx6wR3sfJ1ej+iFld0EMpeISG08DJKuUDndetZf5SakMbcLWxtevu/rPf8OgaynkkSa1FTH7ns2TWQ=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=sagemcom.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key, unprotected) header.d=sagemcom.com
- header.i=@sagemcom.com header.a=rsa-sha256 header.s=s1024 header.b=Zv2rDZst; 
- dkim=fail reason="signature verification failed" (1024-bit key,
- unprotected) header.d=sagemcom365.onmicrosoft.com
- header.i=@sagemcom365.onmicrosoft.com header.a=rsa-sha256
- header.s=selector1-sagemcom365-onmicrosoft-com header.b=xzQhJfwO
-Subject: [Buildroot] [PATCH 1/1] Makefile: strip even non-writable files
+ header.from=amd.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
+ header.s=selector1 header.b=LzDWs2bR
+Subject: [Buildroot] [PATCH v1 1/1] package/bootgen: Re-apply fix build on
+ machines with modern flex
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -208,108 +162,125 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Gilles Bardoux via buildroot <buildroot@buildroot.org>
-Reply-To: Gilles Bardoux <gilles.bardoux@sagemcom.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Neal Frager via buildroot <buildroot@buildroot.org>
+Reply-To: Neal Frager <neal.frager@amd.com>
+Cc: ibai.erkiaga-elorza@amd.com, luca.ceresoli@bootlin.com,
+ Neal Frager <neal.frager@amd.com>, brandon.maier@collins.com, ju.o@free.fr,
+ thomas.petazzoni@bootlin.com, romain.naour@smile.fr, michal.simek@amd.com
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Q3VycmVudGx5LCBmaWxlcyB3aXRob3V0IHdyaXRlIHBlcm1pc3Npb24gYXJlIG5vdCBzdHJpcHBl
-ZC4KU2luY2UgY2FsbGluZyBhIGZpbmQgZXhlYyBzY3JpcHQgZm9yIGFsbCB0aGUgZWxmIGZpbGVz
-IHdvdWxkIGJlCnNsb3dlciB0aGFuIGRvaW5nIGl0IG9ubHkgZm9yIHRoZSBmaWxlcyB3aXRob3V0
-IHdyaXRlIHBlcm1pc3Npb24sCnRoZSBTVFJJUF9GSU5EX0NNRCBoYXMgYmVlbiBzcGxpdCBpbnRv
-IHR3byBmaW5kczoKIC0gb25lIGZvciB0aGUgZmlsZXMgd2l0aCB3cml0ZSBwZXJtaXNzaW9uIGZv
-ciB0aGUgY3VycmVudCB1c2VyLAogICB3aXRob3V0IGFuIGV4ZWMgc2NyaXB0CiAtIG9uZSBmb3Ig
-dGhlIGZpbGVzIHdpdG91dCB3cml0ZSBwZXJtaXNzaW9uIGZvciB0aGUgY3VycmVudCB1c2VyCiAg
-IGNhbGxpbmcgdGhlIGV4ZWMgc2NyaXB0ClRoZSBmaW5kIGV4ZWMgc2NyaXB0IChub24td3JpdGFi
-bGUtZmlsZS1jbWQtd3JhcHBlcikgaGFzIGJlZW4gbWFkZQphcyBnZW5lcmljIGFzIHBvc3NpYmxl
-LiBJdCBkb2VzIGEgY2htb2QgdSt3IGJlZm9yZSB0aGUgY29tbWFuZCAoaGVyZQphIHN0cmlwKSBh
-bmQgcmVzdG9yZXMgdGhlIG9yaWdpbmFsIGZpbGUgcGVybWlzc2lvbnMgYWZ0ZXJ3YXJkcy4KVGhl
-IGZpbmQgY29tbWFuZCBmb3Igc3BlY2lhbCBmaWxlcyAobGlicHRocmVhZCBhbmQgbGQtKi5zbykg
-d2FzIG5vdApzcGxpdCwgYmVjYXVzZSBpdCBjb25jZXJucyBvbmx5IGEgZmV3IGZpbGVzLiBTbyB0
-aGUgZmluZCBleGVjIHNjcmlwdAppcyBjYWxsZWQgaW4gYWxsIGNhc2VzIGZvciB0aGVzZSBmaWxl
-cy4KClNpZ25lZC1vZmYtYnk6IEdpbGxlcyBCYXJkb3V4IDxnaWxsZXMuYmFyZG91eEBzYWdlbWNv
-bS5jb20+Ci0tLQogTWFrZWZpbGUgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-IHwgMjAgKysrKysrKystLQogc3VwcG9ydC9zY3JpcHRzL25vbi13cml0YWJsZS1maWxlLWNtZC13
-cmFwcGVyIHwgMzcgKysrKysrKysrKysrKysrKysrKwogMiBmaWxlcyBjaGFuZ2VkLCA1MyBpbnNl
-cnRpb25zKCspLCA0IGRlbGV0aW9ucygtKQogY3JlYXRlIG1vZGUgMTAwNzU1IHN1cHBvcnQvc2Ny
-aXB0cy9ub24td3JpdGFibGUtZmlsZS1jbWQtd3JhcHBlcgoKZGlmZiAtLWdpdCBhL01ha2VmaWxl
-IGIvTWFrZWZpbGUKaW5kZXggZjkwYjgzNGVkMi4uY2YyYjUxNzkzOCAxMDA2NDQKLS0tIGEvTWFr
-ZWZpbGUKKysrIGIvTWFrZWZpbGUKQEAgLTYzNywxNyArNjM3LDI4IEBAIFNUUklQX0ZJTkRfQ09N
-TU9OX0NNRCA9IFwKICMgICBhcHBsaWNhdGlvbnMgYW5kIGxpYnJhcmllcy4gTm9ybWFsbHkga2Vy
-bmVsIG1vZHVsZXMgYXJlIGFscmVhZHkgZXhjbHVkZWQKICMgICBieSB0aGUgZXhlY3V0YWJsZSBw
-ZXJtaXNzaW9uIGNoZWNrLCBzbyB0aGUgZXhwbGljaXQgZXhjbHVzaW9uIGlzIG9ubHkKICMgICBk
-b25lIGZvciBrZXJuZWwgbW9kdWxlcyB3aXRoIGluY29ycmVjdCBwZXJtaXNzaW9ucy4KLVNUUklQ
-X0ZJTkRfQ01EID0gXAorU1RSSVBfRklORF9XUklUQUJMRV9DTUQgPSBcCiAJJChTVFJJUF9GSU5E
-X0NPTU1PTl9DTUQpIFwKIAktdHlwZSBmIFwoIC1wZXJtIC8xMTEgLW8gLW5hbWUgJyouc28qJyBc
-KSBcCiAJLW5vdCBcKCAkKGNhbGwgZmluZGZpbGVjbGF1c2VzLGxpYnB0aHJlYWQqLnNvKiBsZC0q
-LnNvKiAqLmtvKSBcKSBcCisJLXdyaXRhYmxlIFwKIAktcHJpbnQwCiAKKyMgU3RyaXBwaW5nIGZv
-ciBub24gd3JpdGFibGVzIGZpbGVzCitTVFJJUF9GSU5EX05PVF9XUklUQUJMRV9DTUQgPSBcCisJ
-V1JBUFBFRF9DTUQ9IiQoU1RSSVBDTUQpIiBcCisJJChTVFJJUF9GSU5EX0NPTU1PTl9DTUQpIFwK
-KwktdHlwZSBmIFwoIC1wZXJtIC8xMTEgLW8gLW5hbWUgJyouc28qJyBcKSBcCisJLW5vdCBcKCAk
-KGNhbGwgZmluZGZpbGVjbGF1c2VzLGxpYnB0aHJlYWQqLnNvKiBsZC0qLnNvKiAqLmtvKSBcKSBc
-CisJLW5vdCAtd3JpdGFibGUgXAorCS1leGVjICQoVE9QRElSKS9zdXBwb3J0L3NjcmlwdHMvbm9u
-LXdyaXRhYmxlLWZpbGUtY21kLXdyYXBwZXIge30gXDsKKwogIyBTcGVjaWFsIHN0cmlwcGluZyAo
-b25seSBkZWJ1Z2dpbmcgc3ltYm9scykgZm9yIGxpYnB0aHJlYWQgYW5kIGxkLSouc28uCiBTVFJJ
-UF9GSU5EX1NQRUNJQUxfTElCU19DTUQgPSBcCisJV1JBUFBFRF9DTUQ9IiQoU1RSSVBDTUQpICQo
-U1RSSVBfU1RSSVBfREVCVUcpIiBcCiAJJChTVFJJUF9GSU5EX0NPTU1PTl9DTUQpIFwKIAlcKCAt
-bmFtZSAnbGQtKi5zbyonIC1vIC1uYW1lICdsaWJwdGhyZWFkKi5zbyonIFwpIFwKLQktcHJpbnQw
-CisJLWV4ZWMgJChUT1BESVIpL3N1cHBvcnQvc2NyaXB0cy9ub24td3JpdGFibGUtZmlsZS1jbWQt
-d3JhcHBlciB7fSBcOwogCiAjIEdlbmVyYXRlIGxvY2FsZSBkYXRhLgogaWZlcSAoJChCUjJfVE9P
-TENIQUlOX1VTRVNfR0xJQkMpLHkpCkBAIC03NTYsOCArNzY3LDkgQEAgZW5kaWYKIGlmbmVxICgk
-KEJSMl9FTkFCTEVfREVCVUcpOiQoQlIyX1NUUklQX3N0cmlwKSx5OikKIAlybSAtcmYgJChUQVJH
-RVRfRElSKS9saWIvZGVidWcgJChUQVJHRVRfRElSKS91c3IvbGliL2RlYnVnCiBlbmRpZgotCSQo
-U1RSSVBfRklORF9DTUQpIHwgeGFyZ3MgLTAgJChTVFJJUENNRCkgMj4vZGV2L251bGwgfHwgdHJ1
-ZQotCSQoU1RSSVBfRklORF9TUEVDSUFMX0xJQlNfQ01EKSB8IHhhcmdzIC0wIC1yICQoU1RSSVBD
-TUQpICQoU1RSSVBfU1RSSVBfREVCVUcpIDI+L2Rldi9udWxsIHx8IHRydWUKKwkkKFNUUklQX0ZJ
-TkRfV1JJVEFCTEVfQ01EKSB8IHhhcmdzIC0wICQoU1RSSVBDTUQpIDI+L2Rldi9udWxsIHx8IHRy
-dWUKKwkkKFNUUklQX0ZJTkRfTk9UX1dSSVRBQkxFX0NNRCkgMj4vZGV2L251bGwgfHwgdHJ1ZQor
-CSQoU1RSSVBfRklORF9TUEVDSUFMX0xJQlNfQ01EKSAyPi9kZXYvbnVsbCB8fCB0cnVlCiAKIAl0
-ZXN0IC1mICQoVEFSR0VUX0RJUikvZXRjL2xkLnNvLmNvbmYgJiYgXAogCQl7IGVjaG8gIkVSUk9S
-OiB3ZSBzaG91bGRuJ3QgaGF2ZSBhIC9ldGMvbGQuc28uY29uZiBmaWxlIjsgZXhpdCAxOyB9IHx8
-IHRydWUKZGlmZiAtLWdpdCBhL3N1cHBvcnQvc2NyaXB0cy9ub24td3JpdGFibGUtZmlsZS1jbWQt
-d3JhcHBlciBiL3N1cHBvcnQvc2NyaXB0cy9ub24td3JpdGFibGUtZmlsZS1jbWQtd3JhcHBlcgpu
-ZXcgZmlsZSBtb2RlIDEwMDc1NQppbmRleCAwMDAwMDAwMDAwLi5lZmJiZWI2ZTdjCi0tLSAvZGV2
-L251bGwKKysrIGIvc3VwcG9ydC9zY3JpcHRzL25vbi13cml0YWJsZS1maWxlLWNtZC13cmFwcGVy
-CkBAIC0wLDAgKzEsMzcgQEAKKyMhL3Vzci9iaW4vZW52IGJhc2gKKwordXNhZ2UoKSB7CisgIGNh
-dCA8PEVPRiA+JjIKK1VzYWdlOiAgJHswfSBGSUxFCisKK0Rlc2NyaXB0aW9uOgorCisgICAgVGhp
-cyBzY3JpcHQgcnVucyBXUkFQUEVEX0NNRCB3aXRoIHRoZSBmaWxlIGdpdmVuIGluIGFyZ3VtZW50
-LCBhZGRpbmcgdGhlIHdyaXRlIHBlcm1pc3Npb24gdGVtcG9yYXJpbHkgZHVyaW5nIHRoaXMgYWN0
-aW9uLgorCitBcmd1bWVudHM6CisKKyAgICBGSUxFICAgICAgICAgZmlsZSBwYXRoIHRvIGdpdmUg
-dG8gdGhlIGNvbW1hbmQKKworRW52aXJvbm1lbnQ6CisKKyAgICBXUkFQUEVEX0NNRCAgY29yZSBj
-b21tYW5kIHRvIHJ1biBpbiBiZXR3ZWVuIHRoZSBjaG1vZHMKKworUmV0dXJuczogICAgICAgICAw
-CisKK0VPRgorfQorCitoZWxwZXIoKSB7CisgICAgbG9jYWwgZmlsZT0iJHsxfSIKKworICAgICMg
-bWFrZSBmaWxlcyB3cml0YWJsZSBpZiBuZWNlc3NhcnkKKyAgICBjaGFuZ2VkPSIkKGNobW9kIC1j
-IHUrdyAiJHtmaWxlfSIpIgorCisgICAgIyBhY3Rpb24gb24gdGhlIGZpbGUKKyAgICAke1dSQVBQ
-RURfQ01EfSAiJHtmaWxlfSIKKworICAgICMgcmVzdG9yZSB0aGUgb3JpZ2luYWwgcGVybWlzc2lv
-bgorICAgIHRlc3QgIiR7Y2hhbmdlZH0iICE9ICIiICYmIGNobW9kIHUtdyAiJHtmaWxlfSIKK30K
-K2hlbHBlciAiJHtAfSIKK2V4aXQgMAotLSAKMi4zOS41CgoKX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpDZSBjb3Vy
-cmllbCBldCBsZXMgZG9jdW1lbnRzIHF1aSBsdWkgc29udCBqb2ludHMgc29udCwgc2F1ZiBtZW50
-aW9uIGNvbnRyYWlyZSwgcHLDqXN1bcOpcyBkZSBuYXR1cmUgY29uZmlkZW50aWVsbGUgZXQgZGVz
-dGluw6llcyDDoCBsJ3VzYWdlIGV4Y2x1c2lmIGR1IG91IGRlcyBkZXN0aW5hdGFpcmUocykgbWVu
-dGlvbm7DqShzKS4gU2kgdm91cyBuJ8OqdGVzIHBhcyBsZSBvdSBsZXMgZGVzdGluYXRhaXJlKHMp
-LCB2b3VzIMOqdGVzIGluZm9ybcOpKGUpIHF1ZSB0b3V0ZSBkaXZ1bGdhdGlvbiwgcmVwcm9kdWN0
-aW9uLCBkaXN0cmlidXRpb24sIHRvdXRlIGF1dHJlIGRpZmZ1c2lvbiBvdSB1dGlsaXNhdGlvbiBk
-ZSBjZXR0ZSBjb21tdW5pY2F0aW9uIG91IGRlIHRvdXQgb3UgcGFydGllIGRlIGNlcyBpbmZvcm1h
-dGlvbnMgZXN0IHN0cmljdGVtZW50IGludGVyZGl0ZSwgc2F1ZiBhY2NvcmQgcHLDqWFsYWJsZSBk
-ZSBs4oCZZXhww6lkaXRldXIuIFNpIGNlIG1lc3NhZ2Ugdm91cyBhIMOpdMOpIHRyYW5zbWlzIHBh
-ciBlcnJldXIsIG1lcmNpIGTigJlpbW3DqWRpYXRlbWVudCBlbiBpbmZvcm1lciBsJ2V4cMOpZGl0
-ZXVyIGV0IHN1cHByaW1lciBkZSB2b3RyZSBzeXN0w6htZSBpbmZvcm1hdGlxdWUgY2UgY291cnJp
-ZWwgYWluc2kgcXVlIHRvdXMgbGVzIGRvY3VtZW50cyBxdWkgeSBzb250IGF0dGFjaMOpcy4gRW4g
-dm91cyByZW1lcmNpYW50IGRlIHZvdHJlIGNvb3DDqXJhdGlvbi4KClRoaXMgZW1haWwgYW5kIGFu
-eSBhdHRhY2hlZCBkb2N1bWVudHMgYXJlLCB1bmxlc3Mgb3RoZXJ3aXNlIHN0YXRlZCwgcHJlc3Vt
-ZWQgdG8gYmUgY29uZmlkZW50aWFsIGFuZCBpbnRlbmRlZCBmb3IgdGhlIGV4Y2x1c2l2ZSB1c2Ug
-b2YgdGhlIHJlY2lwaWVudChzKSBtZW50aW9uZWQuIElmIHlvdSBhcmUgbm90IHRoZSByZWNpcGll
-bnQocyksIHlvdSBhcmUgaW5mb3JtZWQgdGhhdCBhbnkgZGlzY2xvc3VyZSwgcmVwcm9kdWN0aW9u
-LCBkaXN0cmlidXRpb24sIGFueSBvdGhlciBkaXNzZW1pbmF0aW9uIG9yIHVzZSBvZiB0aGlzIGNv
-bW11bmljYXRpb24gb3IgYWxsIG9yIHBhcnQgb2YgdGhpcyBpbmZvcm1hdGlvbiBpcyBzdHJpY3Rs
-eSBwcm9oaWJpdGVkLCB1bmxlc3MgYWdyZWVkIGJlZm9yZWhhbmQgYnkgdGhlIHNlbmRlci4gSWYg
-eW91IGhhdmUgcmVjZWl2ZWQgdGhpcyBlLW1haWwgaW4gZXJyb3IsIHBsZWFzZSBpbW1lZGlhdGVs
-eSBhZHZpc2UgdGhlIHNlbmRlciBhbmQgZGVsZXRlIHRoaXMgZS1tYWlsIGFuZCBhbGwgdGhlIGF0
-dGFjaGVkIGRvY3VtZW50cyBmcm9tIHlvdXIgY29tcHV0ZXIgc3lzdGVtLiBUaGFua2luZyB5b3Ug
-Zm9yIHlvdXIgY29vcGVyYXRpb24uCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5v
-cmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290
-Cg==
+With bootgen 2025.1, the directory structure was re-done.  In the process of
+doing this, the source files in the bisonflex directory lost the fix below
+which had been applied on an earlier version of bootgen for the issue below.
+
+Bootgen embeds an old version of flex, but uses the system include syntax
+(#include <>) to reference it, causing conflicts on systems with the
+development headers for a modern flex version installed, leading to build
+issues like:
+
+../bisonflex/bif.yy.cpp: In member function 'virtual int BIF::FlexScanner::yylex()':
+../bisonflex/bif.yy.cpp:1608:18: error: no match for 'operator=' (operand types are 'std::istream' {aka 'std::basic_istream'} and 'std::istream*' {aka 'std::basic_istream*'})
+
+Fix it by using normal local #include statements by:
+
+sed -i 's/<FlexLexer.h>/"FlexLexer.h"/g' *
+
+This patch re-adds the patch to fix this to buildroot.
+
+Fixes: https://autobuild.buildroot.org/results/056384322246877253cd8d0781717ce495cbe769/
+Upstream: patch submitted to AMD internal jira process
+
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+---
+ ...x-build-on-machines-with-modern-flex.patch | 72 +++++++++++++++++++
+ 1 file changed, 72 insertions(+)
+ create mode 100644 package/bootgen/0001-bisonflex-Fix-build-on-machines-with-modern-flex.patch
+
+diff --git a/package/bootgen/0001-bisonflex-Fix-build-on-machines-with-modern-flex.patch b/package/bootgen/0001-bisonflex-Fix-build-on-machines-with-modern-flex.patch
+new file mode 100644
+index 0000000000..187514f6b7
+--- /dev/null
++++ b/package/bootgen/0001-bisonflex-Fix-build-on-machines-with-modern-flex.patch
+@@ -0,0 +1,72 @@
++From e7e341b7ba6fa9fb875718e8740b03c2041278e8 Mon Sep 17 00:00:00 2001
++From: Neal Frager <neal.frager@amd.com>
++Date: Mon, 2 Jun 2025 12:09:13 +0100
++Subject: [PATCH 1/1] bisonflex: Fix build on machines with modern flex
++
++With bootgen 2025.1, the directory structure was re-done.  In the process of
++doing this, the source files in the bisonflex directory lost the fix below
++which had been applied on an earlier version of bootgen:
++
++Bootgen embeds an old version of flex, but uses the system include syntax
++(#include <>) to reference it, causing conflicts on systems with the
++development headers for a modern flex version installed, leading to build
++issues like:
++
++../bisonflex/bif.yy.cpp: In member function 'virtual int BIF::FlexScanner::yylex()':
++../bisonflex/bif.yy.cpp:1608:18: error: no match for 'operator=' (operand types are 'std::istream' {aka 'std::basic_istream'} and 'std::istream*' {aka 'std::basic_istream*'})
++
++Fix it by using normal local #include statements by:
++
++sed -i 's/<FlexLexer.h>/"FlexLexer.h"/g' *
++
++Upstream: submitted to AMD internal jira process
++
++Signed-off-by: Neal Frager <neal.frager@amd.com>
++---
++ bisonflex/bif.yy.cpp        | 2 +-
++ bisonflex/cmdoptions.yy.cpp | 2 +-
++ bisonflex/reginit.yy.cpp    | 2 +-
++ 3 files changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/bisonflex/bif.yy.cpp b/bisonflex/bif.yy.cpp
++index 8d4d364..35f0aa5 100755
++--- a/bisonflex/bif.yy.cpp
+++++ b/bisonflex/bif.yy.cpp
++@@ -379,7 +379,7 @@ typedef unsigned char YY_CHAR;
++ 
++ #define yytext_ptr yytext
++ 
++-#include <FlexLexer.h>
+++#include "FlexLexer.h"
++ 
++ int yyFlexLexer::yywrap() { return 1; }
++ int yyFlexLexer::yylex()
++diff --git a/bisonflex/cmdoptions.yy.cpp b/bisonflex/cmdoptions.yy.cpp
++index 661d7f3..a76ac81 100755
++--- a/bisonflex/cmdoptions.yy.cpp
+++++ b/bisonflex/cmdoptions.yy.cpp
++@@ -379,7 +379,7 @@ typedef unsigned char YY_CHAR;
++ 
++ #define yytext_ptr yytext
++ 
++-#include <FlexLexer.h>
+++#include "FlexLexer.h"
++ 
++ int yyFlexLexer::yywrap() { return 1; }
++ int yyFlexLexer::yylex()
++diff --git a/bisonflex/reginit.yy.cpp b/bisonflex/reginit.yy.cpp
++index d830734..dede473 100755
++--- a/bisonflex/reginit.yy.cpp
+++++ b/bisonflex/reginit.yy.cpp
++@@ -379,7 +379,7 @@ typedef unsigned char YY_CHAR;
++ 
++ #define yytext_ptr yytext
++ 
++-#include <FlexLexer.h>
+++#include "FlexLexer.h"
++ 
++ int yyFlexLexer::yywrap() { return 1; }
++ int yyFlexLexer::yylex()
++-- 
++2.25.1
++
+-- 
+2.25.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
