@@ -4,101 +4,96 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1782AC54FB3
-	for <buildroot@archiver.kernel.org>; Mon,  2 Jun 2025 09:29:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BF09C5AD49
+	for <buildroot@archiver.kernel.org>; Mon,  2 Jun 2025 10:14:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A96EA811B0;
-	Mon,  2 Jun 2025 09:29:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7C9C18195C;
+	Mon,  2 Jun 2025 10:14:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Xx0s8zh-fJxq; Mon,  2 Jun 2025 09:29:32 +0000 (UTC)
+ id QG1b97rLI8I7; Mon,  2 Jun 2025 10:14:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DE44F811A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 772CA81819
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DE44F811A7;
-	Mon,  2 Jun 2025 09:29:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 772CA81819;
+	Mon,  2 Jun 2025 10:14:50 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 56D7A1F7
- for <buildroot@buildroot.org>; Mon,  2 Jun 2025 09:29:30 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 868C31F7
+ for <buildroot@buildroot.org>; Mon,  2 Jun 2025 10:14:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4826160E32
- for <buildroot@buildroot.org>; Mon,  2 Jun 2025 09:29:30 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6C89861011
+ for <buildroot@buildroot.org>; Mon,  2 Jun 2025 10:14:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DXi73AXMo91v for <buildroot@buildroot.org>;
- Mon,  2 Jun 2025 09:29:29 +0000 (UTC)
+ id Bv05pDqyC4hj for <buildroot@buildroot.org>;
+ Mon,  2 Jun 2025 10:14:47 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
- envelope-from=elmehdi.younes@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8594F60DEC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8594F60DEC
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8594F60DEC
- for <buildroot@buildroot.org>; Mon,  2 Jun 2025 09:29:29 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id
- 5b1f17b1804b1-451d7b50815so7748925e9.2
- for <buildroot@buildroot.org>; Mon, 02 Jun 2025 02:29:29 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::636; helo=mail-ej1-x636.google.com;
+ envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4CE7760E00
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4CE7760E00
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com
+ [IPv6:2a00:1450:4864:20::636])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4CE7760E00
+ for <buildroot@buildroot.org>; Mon,  2 Jun 2025 10:14:47 +0000 (UTC)
+Received: by mail-ej1-x636.google.com with SMTP id
+ a640c23a62f3a-ac3eb3fdd2eso811242066b.0
+ for <buildroot@buildroot.org>; Mon, 02 Jun 2025 03:14:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1748856567; x=1749461367;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=IBqj7b87f3rRc1hbwAT+bnyPSl8TAUyGIKLA6lNL8r8=;
- b=oESaH27OTD5IkEBCB5AEOZsXeya1Is3/STzD4Usqhkx0tC24/vDicag9KXdFw/S9LR
- ClxMiioMRVuyy63RLPwPcim4tgynyFS9zVc12146ZaxWo9KKvydmyxw1VMc8+4Pd+eQo
- lo6a8rUYEtxSdAJg2TXZMsAJPk+hU+VdP7GLaJFqHVkZgkYB3pNZDHmzx7REIqa5Pg2Z
- qvxlCBuSSHCP+Spzhsn4CebQXC+WT/oOH5EcFdVX2ujOi0JnOkpFbsPSH5V3LBc4nFka
- VOWsIz0MovBNmvXftRcrTJBdGno+p74ZYG80QNbF0FWjHWcuHNajDrrlS3nXO/Q1haSn
- qdrQ==
-X-Gm-Message-State: AOJu0YzeuTOxqAiREvZ7fe3tFffsNwOTIUjtViD7AOn8uZjBNH4myTSK
- gl6NCdA0NTCmmnM1M3+SSnc8nb5qC1UzVlv5+R8a7YtvUd3eoo4YhplFexUkgDHPipUHQcSVDU0
- 8SEBX
-X-Gm-Gg: ASbGncveJI2VQson4f8vvgaX8WMOsIbFLrQBE9cF7qxSHnhdVTcDxGbw9ZIsct7Y0Kr
- YoNYsrobPv/yJYrrgfdQwSqZuEvBBBPHxqQqUy2sCWHq2lfSkHqO3J7AFIL4Lw6lcpgNC9lVuvv
- 4n/xDcZourDK1KwD9YtlA20Yx3E0Wbeedvt4WoQYFRwukU5pN90N5m52CLWZzF8xJP4x+C+Hced
- 4Ny4FGIm6XpRMdnIKY1EKcy78hEXAWwXifvPGeeornZGNKeVpyICHpNkjzpV1rcv+L2DyME4OOh
- HFdYyyfUtBIEbqK6DxwTra25QxtJs29JFjNhMVG67gqub8ayTm7xUkbEF2jr4rdW+ZvsRZNbcAw
- Brx4uewI653KZ9UFbJf/nZAoraFuFTrFgkLpuow71+EBGe32tq8UW3pl6
-X-Google-Smtp-Source: AGHT+IERwHgLh1pMlj8PQe1Lg+GlOk2Qgk9K4950YUqBTPPpUKyYyqil/rNyRBRNe5tOTp7g4GNGbA==
-X-Received: by 2002:a05:600c:3e06:b0:43d:b3:f95 with SMTP id
- 5b1f17b1804b1-450d888b0femr72415435e9.28.1748856567113; 
- Mon, 02 Jun 2025 02:29:27 -0700 (PDT)
-Received: from P-NAN-ABRICOT..
- (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3a4f009757fsm14316229f8f.78.2025.06.02.02.29.26
+ d=1e100.net; s=20230601; t=1748859285; x=1749464085;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=0UwN4s2/N8Kje+aPWcRMCIuzlrBMONR8lNJbmbyZ4JY=;
+ b=YYnwbyg/kWfdWZtkrGbpmndpZKtS2cs08qRcbajV5aOFdAcM8FIzrgyMaynhvtMfyS
+ D5fh1Ajyp9fLz/POgRYa1Hw94ADk1hcRnYfOzCquyNSG8RwHNa53bmp3OggqREhPf/fc
+ X6K9FRQl+2lyPF76YDp9MUbUR9rZz0hMDd5WEDBX8Zgc1sr2dXooWbaSYNsJKvyU6zgR
+ 0DBmJCUn+mH5/coOYGwVel+Yu/ouX9wNJtcauzMm1kF3z5f/CW8qjfJN2AtcdASF9Jz7
+ IFTrCDMLTj2w697YLjoiSs2VhmtuI6HxW5iSwx1JKIA0J3zpAc4vTtRtI8IM4nSfZq7T
+ yzDA==
+X-Gm-Message-State: AOJu0YyS8HH3uGJVj55XyYb9h4tv4x+atBY7+xruex09GjP932I6Xj8T
+ oEOnrdtHX32IDdqZsg3n3xrIQwf4JFWjM4Js2R/z9jtPjMTzf5S/nANuCXH2xA==
+X-Gm-Gg: ASbGncvof5q7DyJjZ+lmgjI+XDtKU6xKZ9IjiQb0y2U67iyLu4fUlQ2Ik0gpn4ZZaqQ
+ fSgVEmlGiVtJkWncPY65NQCNNip+AMJDQFyb/EChGyv+bySK33OUwYWrJpPt9436mhQ1Sns7z+F
+ fsT128LAp6tfBWEPdjeOMbz1JBlHbRP7IN5JPKdYBo5MY55mXd637J2oDiIr4wvIZO4IaipVd+D
+ feIViHmsClVS1dfeNe2PQgnONC5kmRhhLiuznAZIbAQXT/iHY2wPAi6/DZfB3YRfTbv+AIr9GFR
+ 08p517D/3vyMruTHB4L3wa9SM+S2GwNwZrotYhvuHbUjWKzoveaJD92DLbhQE4oKapNoGaaCWdG
+ ooMhahJlypp9DBQNbnSzB/VpKfzxO3Z56
+X-Google-Smtp-Source: AGHT+IFyzUygY31uN1ViEYyjyziyTDF5Ta7QFnBoyNjva6n6hLwO6U3+b9/jKhu2QoKuy7Npdydw/Q==
+X-Received: by 2002:a17:907:7209:b0:ad8:9bcd:300d with SMTP id
+ a640c23a62f3a-adb32264b4dmr1236598966b.10.1748859284523; 
+ Mon, 02 Jun 2025 03:14:44 -0700 (PDT)
+Received: from development2.visionsystems.local (mail.visionsystems.de.
+ [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-ada5dd043a9sm768438466b.89.2025.06.02.03.14.43
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 02 Jun 2025 02:29:26 -0700 (PDT)
+ Mon, 02 Jun 2025 03:14:43 -0700 (PDT)
+From: yegorslists@googlemail.com
 To: buildroot@buildroot.org
-Cc: dalang@gmx.at, joseph.kogut@gmail.com, romain.naour@gmail.com,
- valentinkorenblit@gmail.com, El Mehdi YOUNES <elmehdi.younes@smile.fr>
-Date: Mon,  2 Jun 2025 11:28:54 +0200
-Message-ID: <20250602092854.19981-1-elmehdi.younes@smile.fr>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250602035936.904546-2-dalang@gmx.at>
-References: <20250602035936.904546-2-dalang@gmx.at>
+Date: Mon,  2 Jun 2025 12:14:35 +0200
+Message-Id: <20250602101435.764559-1-yegorslists@googlemail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1748856567; x=1749461367; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=IBqj7b87f3rRc1hbwAT+bnyPSl8TAUyGIKLA6lNL8r8=;
- b=K5gecfm7t0JS+Xubjwx+lBES7hCfOYl43i1l2KiSjOP7V0Dcq6xIV9cuZvV67CFhjp
- rHGRatCBXo7AOmvxGt4t6ZjpuE0CSi6nQit+NGBo1jsTrqVSOkUGxpEvABRv0GUioeJR
- MrZivjtPg22Yl0S+njPJkxlEkrrNxhhPduduA=
+ d=googlemail.com; s=20230601; t=1748859285; x=1749464085; darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=0UwN4s2/N8Kje+aPWcRMCIuzlrBMONR8lNJbmbyZ4JY=;
+ b=MnwBgQBI5BI+DlMbORYPE/nXC+sEidbClb+xSJQkjJDDC0gxxduMUWNJbRA378lh1V
+ 7nM0LoY8x7lUnsehNumYeJj/3uqadl+oQCy6v379y3VmE88qZnsum4jw+l/867q/h+JK
+ tjoAWWRSOmXKp8IJeU3GRgS+cA57ZtdvfnOhaS4GIvNXqvv48aAauzKwv3CIRe3gG9O4
+ lLbfg+dBiQEObOfSb6XCBykWBFG+STe31vsno4TbwjINxVkPp82PoK87aS4Cvem8pxjn
+ KsWr2kbLK2rk5GqsxcUPnAw0Mc/xOP+JpbbLldar86uf8OcayUoiGSKI7njEi/PkaN+V
+ wGgQ==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=smile.fr
+ dmarc=pass (p=quarantine dis=none)
+ header.from=googlemail.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=K5gecfm7
-Subject: [Buildroot] [PATCH next] package/llvm-project/clang: remove merge
- artifacts
+ dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=MnwBgQBI
+Subject: [Buildroot] [PATCH] package/libftdi1: fix static building
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -110,21 +105,130 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: El Mehdi YOUNES via buildroot <buildroot@buildroot.org>
-Reply-To: El Mehdi YOUNES <elmehdi.younes@smile.fr>
+Cc: Daniel Sangue <daniel.sangue@sangue.ch>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Daniel,
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Thanks for the correction!
+Restore the following patch, as the upstream still cannot produce static
+only libraries:
 
-Reviewed-by: El Mehdi YOUNES <elmehdi.younes@smile.fr>
+0001-cmake-use-the-standard-CMake-flag-to-drive-the-share.patch
 
-Best regards,
-Mehdi
+Fixes:
+
+https://autobuild.buildroot.org/results/07744b67b53d2b25e78e0f61b511a342677e2abb/
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ ...andard-CMake-flag-to-drive-the-share.patch | 93 +++++++++++++++++++
+ 1 file changed, 93 insertions(+)
+ create mode 100644 package/libftdi1/0001-cmake-use-the-standard-CMake-flag-to-drive-the-share.patch
+
+diff --git a/package/libftdi1/0001-cmake-use-the-standard-CMake-flag-to-drive-the-share.patch b/package/libftdi1/0001-cmake-use-the-standard-CMake-flag-to-drive-the-share.patch
+new file mode 100644
+index 0000000000..856587b7a6
+--- /dev/null
++++ b/package/libftdi1/0001-cmake-use-the-standard-CMake-flag-to-drive-the-share.patch
+@@ -0,0 +1,93 @@
++From b0ea5773c90e36654da37562a03e62d9a66575bf Mon Sep 17 00:00:00 2001
++From: Samuel Martin <s.martin49@gmail.com>
++Date: Sun, 25 Jan 2015 09:45:04 +0100
++Subject: [PATCH] cmake: use the standard CMake flag to drive the shared object
++ build
++
++Remove the STATICLIBS CMake option (and the code handling it) and let
++the standard CMake flags drive the shared object build.
++
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++[Fabrice: update for 1.5]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ CMakeOptions.txt      |  1 -
++ ftdipp/CMakeLists.txt | 14 +-------------
++ src/CMakeLists.txt    | 13 +------------
++ 3 files changed, 2 insertions(+), 26 deletions(-)
++
++diff --git a/CMakeOptions.txt b/CMakeOptions.txt
++index 07b5887..b780ffd 100644
++--- a/CMakeOptions.txt
+++++ b/CMakeOptions.txt
++@@ -1,4 +1,3 @@
++-option ( STATICLIBS "Build static libraries" ON )
++ option ( BUILD_TESTS "Build unit tests with Boost Unit Test framework" OFF )
++ option ( DOCUMENTATION "Generate API documentation with Doxygen" OFF )
++ option ( EXAMPLES "Build example programs" ON )
++diff --git a/ftdipp/CMakeLists.txt b/ftdipp/CMakeLists.txt
++index 360a831..df88569 100644
++--- a/ftdipp/CMakeLists.txt
+++++ b/ftdipp/CMakeLists.txt
++@@ -11,7 +11,7 @@ include_directories(BEFORE ${CMAKE_CURRENT_BINARY_DIR}
++ include_directories(${Boost_INCLUDE_DIRS})
++ 
++ # Shared library
++-add_library(ftdipp1 SHARED ${cpp_sources})
+++add_library(ftdipp1 ${cpp_sources})
++ 
++ math(EXPR VERSION_FIXUP "${MAJOR_VERSION} + 1")    # Compatibility with previous releases
++ set_target_properties(ftdipp1 PROPERTIES VERSION ${VERSION_FIXUP}.${MINOR_VERSION}.0 SOVERSION 3)
++@@ -28,18 +28,6 @@ install ( TARGETS ftdipp1
++           ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
++ )
++ 
++-# Static library
++-if ( STATICLIBS )
++-  add_library(ftdipp1-static STATIC ${cpp_sources})
++-  set_target_properties(ftdipp1-static PROPERTIES OUTPUT_NAME "ftdipp1")
++-  set_target_properties(ftdipp1-static PROPERTIES CLEAN_DIRECT_OUTPUT 1)
++-
++-  install ( TARGETS ftdipp1-static
++-            ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
++-            COMPONENT staticlibs
++-  )
++-endif ()
++-
++ install ( FILES ${cpp_headers}
++           DESTINATION include/${PROJECT_NAME}
++           COMPONENT headers
++diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
++index e145af1..ca7efa4 100644
++--- a/src/CMakeLists.txt
+++++ b/src/CMakeLists.txt
++@@ -21,7 +21,7 @@ configure_file(ftdi_version_i.h.in "${CMAKE_CURRENT_BINARY_DIR}/ftdi_version_i.h
++ set(c_sources     ${CMAKE_CURRENT_SOURCE_DIR}/ftdi.c ${CMAKE_CURRENT_SOURCE_DIR}/ftdi_stream.c CACHE INTERNAL "List of c sources" )
++ set(c_headers     ${CMAKE_CURRENT_SOURCE_DIR}/ftdi.h CACHE INTERNAL "List of c headers" )
++ 
++-add_library(ftdi1 SHARED ${c_sources})
+++add_library(ftdi1 ${c_sources})
++ 
++ math(EXPR VERSION_FIXUP "${MAJOR_VERSION} + 1")    # Compatibility with previous releases
++ set_target_properties(ftdi1 PROPERTIES VERSION ${VERSION_FIXUP}.${MINOR_VERSION}.0 SOVERSION 2)
++@@ -38,17 +38,6 @@ install ( TARGETS ftdi1
++           ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
++ )
++ 
++-if ( STATICLIBS )
++-  add_library(ftdi1-static STATIC ${c_sources})
++-  target_link_libraries(ftdi1-static ${LIBUSB_LIBRARIES})
++-  set_target_properties(ftdi1-static PROPERTIES OUTPUT_NAME "ftdi1")
++-  set_target_properties(ftdi1-static PROPERTIES CLEAN_DIRECT_OUTPUT 1)
++-  install ( TARGETS ftdi1-static
++-            ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
++-            COMPONENT staticlibs
++-  )
++-endif ()
++-
++ install ( FILES ${c_headers}
++           DESTINATION include/${PROJECT_NAME}
++           COMPONENT headers
++-- 
++2.34.1
++
+-- 
+2.34.1
 
 _______________________________________________
 buildroot mailing list
