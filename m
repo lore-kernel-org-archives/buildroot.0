@@ -4,49 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7377EC5AD49
-	for <buildroot@archiver.kernel.org>; Mon,  2 Jun 2025 20:16:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7AAEC5B555
+	for <buildroot@archiver.kernel.org>; Mon,  2 Jun 2025 20:17:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1EEF681272;
-	Mon,  2 Jun 2025 20:16:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7B5F4812FD;
+	Mon,  2 Jun 2025 20:17:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TtmWoM9TlRff; Mon,  2 Jun 2025 20:16:26 +0000 (UTC)
+ id SsPcvFd7gxPp; Mon,  2 Jun 2025 20:17:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 530578126C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A8089812A3
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 530578126C;
-	Mon,  2 Jun 2025 20:16:26 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 2FBD315F
- for <buildroot@buildroot.org>; Mon,  2 Jun 2025 20:16:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A8089812A3;
+	Mon,  2 Jun 2025 20:17:00 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4E5EE15F
+ for <buildroot@buildroot.org>; Mon,  2 Jun 2025 20:16:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 224FE40F41
- for <buildroot@buildroot.org>; Mon,  2 Jun 2025 20:16:25 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 40CFF40B54
+ for <buildroot@buildroot.org>; Mon,  2 Jun 2025 20:16:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id C1W_Fv54h5t4 for <buildroot@buildroot.org>;
- Mon,  2 Jun 2025 20:16:24 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E2BA640AB7
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E2BA640AB7
- for <buildroot@buildroot.org>; Mon,  2 Jun 2025 20:16:23 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D15FE8790C; Mon,  2 Jun 2025 20:16:23 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7kNVdkYZ9xPl for <buildroot@buildroot.org>;
+ Mon,  2 Jun 2025 20:16:58 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 51D4C40BF2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 51D4C40BF2
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 51D4C40BF2
+ for <buildroot@buildroot.org>; Mon,  2 Jun 2025 20:16:58 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 22C7013F8B8;
+ Mon,  2 Jun 2025 22:16:54 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 02 Jun 2025 22:16:54 +0200
+MIME-Version: 1.0
+Date: Mon, 02 Jun 2025 22:16:54 +0200
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Mon, 2 Jun 2025 21:59:47 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 521920831ceedb28389802c8d9ceedfb685a7be2
-X-Git-Newrev: fe4533fd0d060adb7772fb365468afdcfadc8a22
-X-Patchwork-Hint: ignore
-Message-Id: <20250602201623.D15FE8790C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/iputils: security bump version to
+To: Petr Vorel <petr.vorel@gmail.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250602172812.512003-1-petr.vorel@gmail.com>
+References: <20250602172812.512003-1-petr.vorel@gmail.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <b6299a04c12fe329f3ace81b304dff6e@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1748895415;
+ bh=2/OTjeosY02jgu69onu6BHfWP6URSQt/P+KHcBB70fk=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=r6uU4fDsfXJK14f7oY+x6v9T8A6aIymRMtdw/VHiQl8pL5ZzEhVnR/qmmczTQeCeL
+ S69Uwr1SrGyKQyHYCzIsAR4fJpVcNyDLSQeTr76y5JTMLLjVwWy7pORG9fG0nmReAI
+ a0Fz6PFuhvZ2luq6CuHPvjdni0SeSA8r3NU+20+SLx9QfkSSQtkqL89WaSQ8mbLJ6n
+ o3GxcTISpGbOXqDl/+8gv/RDmH6LMe98iTaqy1+DR7k9WXLXMqyYLR5sNaFXwClgu7
+ 2FbLgLk+KTKnwns5xs8Fz8kela9BJMDoJyYoTf9xSQIte33UIXMn6IMULfYnFv9Q2Y
+ PxRicOoeKFXvw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=r6uU4fDs
+Subject: Re: [Buildroot] [PATCH 1/1] package/iputils: bump version to
  20250602
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -59,58 +83,29 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fe4533fd0d060adb7772fb365468afdcfadc8a22
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 02/06/2025 19:28, Petr Vorel wrote:
+> https://github.com/iputils/iputils/releases/tag/20250602
+> 
+> Security release, fixes CVE-2025-47268 and CVE-2025-48964.
+> 
+> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 
-https://github.com/iputils/iputils/releases/tag/20250602
+Applied to master, thanks.
 
-Security release, fixes CVE-2025-47268 and CVE-2025-48964.
+For info, I added the mention "security" in the commit title.
+This helps LTS branch maintainers to identify security fixes.
 
-https://www.cve.org/CVERecord?id=CVE-2025-47268
-https://www.cve.org/CVERecord?id=CVE-2025-48964
+I also completed the test-pkg in gitlab CI:
+https://gitlab.com/jolivain/buildroot/-/pipelines/1849623723
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-[Julien:
- - add "security" mention in commit log title
- - add link to CVEs
-]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/iputils/iputils.hash | 4 ++--
- package/iputils/iputils.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Best regards,
 
-diff --git a/package/iputils/iputils.hash b/package/iputils/iputils.hash
-index 6baf433dcb..daa5f81a85 100644
---- a/package/iputils/iputils.hash
-+++ b/package/iputils/iputils.hash
-@@ -1,5 +1,5 @@
--# https://github.com/iputils/iputils/releases/download/20240905/sha256sums.asc
--sha256  599cda8e3f5f7ce4c612456ab1101369da8f79aa0f83c8e877290a1c7bb56010  iputils-20240905.tar.gz
-+# https://github.com/iputils/iputils/releases/download/20250602/sha256sums.asc
-+sha256  178f316c3f102f7c7445dee8bb851838f11214a68b3d5d4788972d8b35dcbbe5  iputils-20250602.tar.gz
- # Locally computed
- sha256  2c9f29d982c48665c30b3adaf400c048988fd256eb91c691e351eb3b6a8b2036  LICENSE
- sha256  9acc4bc871a4742550158e3696dcb381953172ef808d04ca248184f9f6322712  Documentation/LICENSE.BSD3
-diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-index ec8c24e4e0..391f0e1938 100644
---- a/package/iputils/iputils.mk
-+++ b/package/iputils/iputils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IPUTILS_VERSION = 20240905
-+IPUTILS_VERSION = 20250602
- IPUTILS_SITE = https://github.com/iputils/iputils/releases/download/$(IPUTILS_VERSION)
- IPUTILS_LICENSE = GPL-2.0+, BSD-3-Clause
- IPUTILS_LICENSE_FILES = LICENSE Documentation/LICENSE.BSD3 Documentation/LICENSE.GPL2
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
