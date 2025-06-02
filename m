@@ -1,100 +1,101 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96943C5B555
-	for <buildroot@archiver.kernel.org>; Mon,  2 Jun 2025 17:28:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7714FC5B555
+	for <buildroot@archiver.kernel.org>; Mon,  2 Jun 2025 17:29:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1CCCF61408;
-	Mon,  2 Jun 2025 17:28:24 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gscbpVAwzyV5; Mon,  2 Jun 2025 17:28:22 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 19DCD600C7
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 19DCD600C7;
-	Mon,  2 Jun 2025 17:28:22 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 095BC1F7
- for <buildroot@buildroot.org>; Mon,  2 Jun 2025 17:28:21 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EEEFF819D2
- for <buildroot@buildroot.org>; Mon,  2 Jun 2025 17:28:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 285CC81AC4;
+	Mon,  2 Jun 2025 17:29:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZlHkUmlzN8Hq for <buildroot@buildroot.org>;
- Mon,  2 Jun 2025 17:28:20 +0000 (UTC)
+ id 4VrhxWNXWrrS; Mon,  2 Jun 2025 17:29:17 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C5FE81BF4
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6C5FE81BF4;
+	Mon,  2 Jun 2025 17:29:17 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id DA8E415F
+ for <buildroot@buildroot.org>; Mon,  2 Jun 2025 17:29:15 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id C109081AC4
+ for <buildroot@buildroot.org>; Mon,  2 Jun 2025 17:29:15 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wsx_dA-nMhAY for <buildroot@buildroot.org>;
+ Mon,  2 Jun 2025 17:29:15 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
+ client-ip=2a00:1450:4864:20::42d; helo=mail-wr1-x42d.google.com;
  envelope-from=petr.vorel@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 21CD081AC4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 21CD081AC4
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 21CD081AC4
- for <buildroot@buildroot.org>; Mon,  2 Jun 2025 17:28:19 +0000 (UTC)
-Received: by mail-wm1-x32c.google.com with SMTP id
- 5b1f17b1804b1-450cea01b9cso19199655e9.0
- for <buildroot@buildroot.org>; Mon, 02 Jun 2025 10:28:19 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 27681819D2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 27681819D2
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 27681819D2
+ for <buildroot@buildroot.org>; Mon,  2 Jun 2025 17:29:15 +0000 (UTC)
+Received: by mail-wr1-x42d.google.com with SMTP id
+ ffacd0b85a97d-3a3771c0f8cso2864277f8f.3
+ for <buildroot@buildroot.org>; Mon, 02 Jun 2025 10:29:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1748885298; x=1749490098;
+ d=1e100.net; s=20230601; t=1748885353; x=1749490153;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=d2Oj4/XE6eNwxszjMVoDJsLYssmG90P87sNgaEZ1W+w=;
- b=nZVv01AxH2xDtUGO1pzHmyURn0uUcqs8AynhKyFPDtr0Kv5ZUj0BUDldE30bMLApHu
- dLc/DVBpru4YTlIU55arvFZ0E1hPDKl4BtG2MAh31JMnuSsgR+/mYC/yEgBMHmvbt3gF
- 4ZgP/q9VAM4lUQLSO5BrIB3VR5zed1POExsiluHRxcXsdwD0vW6jdiniE79Xks9LPw26
- ktMm5d2cITX23OWahtgRJaNO/t+q77esLeqw/R5YxR09bNjLXQLcgJJfHI3Gs+hJmPhG
- 4w+wBwEfpCC6qi2wkKwVaVt7UT0dp4tKixq8DDAIMD7qS0A39i05MMLPWe45JAKlkIHz
- 8Mkw==
-X-Gm-Message-State: AOJu0Yw81xA9DCorZ4bHkhILCnw5ggaObOceuu3C+kWTzutPZyW5terv
- 3mo1v27o2wiHltBgESXp1y57ARUDVIMtFxZNuwmc8ir2YEb+B/KpJ4B0lVLrVw==
-X-Gm-Gg: ASbGnctMlKRaBZtc0f1XVNh8nmB3uifaFDa1j54p34Pz8mQNbWLX5HpvMQucktAW+QG
- LddJH6FYSLJGXcP6KW2ks3Mw2Tk0o8hF93b0DN2FTFCXHIs9bUy0cfIvOPfPXIdxpsot5oQ1vwn
- NB+R8fpQhLBcztRFUYvtivixpGT/ELK7stupOxAxUjnHjNllo1ucCKv0Lw541sYZMCsR436CdaK
- idA0w91YyUXU9nMGE33iO2SA96uxPNOOx+auVF4KwfHpmHyogVN2lP1aL1T6rqyOduRAnj1zZFu
- c12YGl4FJr9GyL24D4tzTeb5ExxYRHwaqkDg+gcmOfqnwK1GVZ8fVDXtNQi4hbswpg==
-X-Google-Smtp-Source: AGHT+IHDM2o+VavEn7aBPkqJN9HZZMbGke5qf6dz1wyMQvmIjQ59QRaN7rVg3zGSIBa/+Iq8bPegfg==
-X-Received: by 2002:a05:600c:46cb:b0:442:e109:3032 with SMTP id
- 5b1f17b1804b1-450d8867f91mr104687965e9.24.1748885297775; 
- Mon, 02 Jun 2025 10:28:17 -0700 (PDT)
+ bh=Tn9OopSHguCMaav/o1CMY0dkMnpUd8u9qgHwBt+59OY=;
+ b=oqR4Ou3bJGsN+Akl5ldtTvOrle/c4wdr2Bfg8RGc4rHHe15BXQ4GpnmRFJ0qgrdC4Y
+ gx+M99sv7qftQyiUKkXhW46LKz3i0TKCow7VA+pjQjdO5Ojju07sV0KoMz/YE7V8v5x+
+ k2xhBoSGG2/1fVFVI8IeS1j9Htnnd9JyYuNxMvxgZPNfKXbn5ksheNxvHqddoeSe5iR+
+ 8F2Z8ausuSS/tY3lCDM4nK8uPbORk/ZzBwbC3Hpf4L9C/AOMTVPTCHOfRJ65uimmzyvf
+ t2Npn3q7WgWQVj0Xt50mLZ5gqk8kD9Wk5/2kQ4PvJ91z0EybiMVg+dkW5ccvEpfms/xk
+ flSQ==
+X-Gm-Message-State: AOJu0YxAELm8ySN+rxSQyXsgCVW5VZfbad3G6CLvchsSFsh82azP+MGi
+ ztQm8duZknFcY/r2LJQ19/OBFfA7Y8AOPcNxW849EXlk+kf6Hdeqg/GDfXk7Bg==
+X-Gm-Gg: ASbGncsfaBlExl4+1icLEEbWZjM5h4nduPIuSnzBrSAg9pUav6kuIy0UhY/v75sMUfl
+ 9QLMfjx24K+mHbFUaGKJcV3/T4LfQc/SH4teP8S1Kcoqey69QJGpOupb2HQ26oYDJkVNEn7/FAN
+ MvgxJeMA+tE3n9j6fsjDVIDxRKqKERlYQwlDyTBvW5hBRZOftmdpu4DrkuyqO7v7B4VEFWtiHO5
+ UzpJZC9cSSC3iuyjH3+rX56a4HPy1esHn+HK5DM6od6nDEtWjq+IPcjuDKzvf7ymfgF8h+eB6Bg
+ nI5Qe+xm453XLJ5umPH1efkFGMhuGtVJ0UH0Dj9xaYooU+cNo5TJqHDX0GrcYVJ8uw==
+X-Google-Smtp-Source: AGHT+IFtXgeOvntMYGdyt2iRr54TLf+/1BVcAXFnxDvosDa2spK9303hCf21iduV2JymoWt7RtSf9A==
+X-Received: by 2002:a05:6000:1a8a:b0:3a4:eac6:e320 with SMTP id
+ ffacd0b85a97d-3a4f89a5ab7mr10591744f8f.3.1748885352794; 
+ Mon, 02 Jun 2025 10:29:12 -0700 (PDT)
 Received: from x230.suse.cz (gw1.ms-free.net. [185.243.124.10])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-450d7fa21e4sm134052475e9.11.2025.06.02.10.28.16
+ ffacd0b85a97d-3a4efe740bbsm15635915f8f.54.2025.06.02.10.29.12
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 02 Jun 2025 10:28:17 -0700 (PDT)
+ Mon, 02 Jun 2025 10:29:12 -0700 (PDT)
 From: Petr Vorel <petr.vorel@gmail.com>
 To: buildroot@buildroot.org
 Cc: Petr Vorel <petr.vorel@gmail.com>,
 	Julien Olivain <ju.o@free.fr>
-Date: Mon,  2 Jun 2025 19:28:12 +0200
-Message-ID: <20250602172812.512003-1-petr.vorel@gmail.com>
+Date: Mon,  2 Jun 2025 19:29:07 +0200
+Message-ID: <20250602172908.515944-1-petr.vorel@gmail.com>
 X-Mailer: git-send-email 2.49.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1748885298; x=1749490098; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1748885353; x=1749490153; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=d2Oj4/XE6eNwxszjMVoDJsLYssmG90P87sNgaEZ1W+w=;
- b=b7PjHprKdYxF5NhNtqCFxicWqkGe1DWUIncgW0IuSv47CGKJGG1QqV0VpDLtMrHtjB
- fAI8qyorvqBmBP63tiaNlAWnZhYHz42W/GK/zK31fcLq8tFKwDHgUZcxwdwNsmT2XGf0
- JWZovNMslDnMuHvf9N9JOj9MVkZIq5ZzrnP+n9DuCyX/0KaKPNMo05qfwKfciIgLsKwG
- oNVts8rPDiCZeYs7+4cxC/sxMdxk+aymHxD06fgDDyS7hypPdhJ4FHe0PzToTVO3gymn
- 41XOlwzgzl6u0wr8cDw/vVPnfBczhEr+nIroHrI3WeUZXmXiHgVgwq0/P5g4MWSeWxAa
- raqA==
+ bh=Tn9OopSHguCMaav/o1CMY0dkMnpUd8u9qgHwBt+59OY=;
+ b=dSQSm1FqRn2MyndmQaM7ROeehgOtsmBoOYY/K+w+aF2LMOYsyx3SRN/PyjdThwuXA0
+ nGXFGkYVaa+Wzg92EaNiZilNfyMsyaOmVrGBq0QD8glg88f8Jit6J9qaA+3Jz3QkR0Ju
+ ojRRXRtj6HUXbvtTxYhg5DI+gi2sHy7+QEHkl4oafQ0xRQhkV4wn9ukBzV9aX2Fza1T5
+ FAKTOOKTVT6xxq9SFtAZF7sT+A3N7/11lIsFKK6w7KHE3LP+5myStrRXaVKQWBsdAlaF
+ EcbkhJ+MCpUBixbrAPXyoWECG0EKpcJARUOiVxmtXtxjKyxejAiP1tTOI4/u/tQc31Bp
+ 7b1A==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=b7PjHprK
-Subject: [Buildroot] [PATCH 1/1] package/iputils: bump version to 20250602
+ header.a=rsa-sha256 header.s=20230601 header.b=dSQSm1Fq
+Subject: [Buildroot] [PATCH 1/2] package/ltp-testsuite: keep
+ rt_tgsigqueueinfo01.c for musl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -111,49 +112,27 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/iputils/iputils/releases/tag/20250602
+rt_tgsigqueueinfo01.c compilation has been fixed in 20250130, don't
+needed to be removed any more.
 
-Security release, fixes CVE-2025-47268 and CVE-2025-48964.
-
+Fixes: 2bbcda7c0e ("package/ltp-testsuite: bump version to 20250130")
 Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 ---
-At least minimal test:
-bootlin-armv5-uclibc [1/6]: OK
+ package/ltp-testsuite/ltp-testsuite.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-(continue testing)
-
-Kind regards,
-Petr
-
- package/iputils/iputils.hash | 4 ++--
- package/iputils/iputils.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/iputils/iputils.hash b/package/iputils/iputils.hash
-index 6baf433dcb..daa5f81a85 100644
---- a/package/iputils/iputils.hash
-+++ b/package/iputils/iputils.hash
-@@ -1,5 +1,5 @@
--# https://github.com/iputils/iputils/releases/download/20240905/sha256sums.asc
--sha256  599cda8e3f5f7ce4c612456ab1101369da8f79aa0f83c8e877290a1c7bb56010  iputils-20240905.tar.gz
-+# https://github.com/iputils/iputils/releases/download/20250602/sha256sums.asc
-+sha256  178f316c3f102f7c7445dee8bb851838f11214a68b3d5d4788972d8b35dcbbe5  iputils-20250602.tar.gz
- # Locally computed
- sha256  2c9f29d982c48665c30b3adaf400c048988fd256eb91c691e351eb3b6a8b2036  LICENSE
- sha256  9acc4bc871a4742550158e3696dcb381953172ef808d04ca248184f9f6322712  Documentation/LICENSE.BSD3
-diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-index ec8c24e4e0..391f0e1938 100644
---- a/package/iputils/iputils.mk
-+++ b/package/iputils/iputils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+index f6098037c0..f5d577e444 100644
+--- a/package/ltp-testsuite/ltp-testsuite.mk
++++ b/package/ltp-testsuite/ltp-testsuite.mk
+@@ -77,7 +77,6 @@ LTP_TESTSUITE_UNSUPPORTED_TEST_CASES_$(BR2_TOOLCHAIN_USES_UCLIBC) += \
  
--IPUTILS_VERSION = 20240905
-+IPUTILS_VERSION = 20250602
- IPUTILS_SITE = https://github.com/iputils/iputils/releases/download/$(IPUTILS_VERSION)
- IPUTILS_LICENSE = GPL-2.0+, BSD-3-Clause
- IPUTILS_LICENSE_FILES = LICENSE Documentation/LICENSE.BSD3 Documentation/LICENSE.GPL2
+ LTP_TESTSUITE_UNSUPPORTED_TEST_CASES_$(BR2_TOOLCHAIN_USES_MUSL) += \
+ 	testcases/kernel/syscalls/fmtmsg/fmtmsg01.c \
+-	testcases/kernel/syscalls/rt_tgsigqueueinfo/rt_tgsigqueueinfo01.c \
+ 	testcases/kernel/syscalls/timer_create/timer_create01.c \
+ 	testcases/kernel/syscalls/timer_create/timer_create03.c
+ 
 -- 
 2.49.0
 
