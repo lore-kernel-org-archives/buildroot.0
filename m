@@ -1,67 +1,102 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A797DC5AD49
-	for <buildroot@archiver.kernel.org>; Mon,  2 Jun 2025 11:47:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3C3DC5AD49
+	for <buildroot@archiver.kernel.org>; Mon,  2 Jun 2025 11:55:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7343681024;
-	Mon,  2 Jun 2025 11:47:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9A1D241DA3;
+	Mon,  2 Jun 2025 11:55:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7HVsYofnT5Lm; Mon,  2 Jun 2025 11:47:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UPXzzxR9brqO; Mon,  2 Jun 2025 11:55:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C27081003
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B9C3640D10
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9C27081003;
-	Mon,  2 Jun 2025 11:47:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B9C3640D10;
+	Mon,  2 Jun 2025 11:55:35 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 71DD9222
- for <buildroot@buildroot.org>; Mon,  2 Jun 2025 11:47:07 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 5D542222
+ for <buildroot@buildroot.org>; Mon,  2 Jun 2025 11:55:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 62E6481003
- for <buildroot@buildroot.org>; Mon,  2 Jun 2025 11:47:07 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 43C8A810CA
+ for <buildroot@buildroot.org>; Mon,  2 Jun 2025 11:55:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id grE1aw-Nlv4e for <buildroot@buildroot.org>;
- Mon,  2 Jun 2025 11:47:07 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
- helo=relay5-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8FFE580FF5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8FFE580FF5
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8FFE580FF5
- for <buildroot@buildroot.org>; Mon,  2 Jun 2025 11:47:06 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id DDEB6439FE;
- Mon,  2 Jun 2025 11:47:01 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1uM3d7-006ZGr-0h;
- Mon, 02 Jun 2025 13:47:01 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Neal Frager <neal.frager@amd.com>
-References: <20250530164017.473549-1-neal.frager@amd.com>
-Date: Mon, 02 Jun 2025 13:47:01 +0200
-In-Reply-To: <20250530164017.473549-1-neal.frager@amd.com> (Neal Frager's
- message of "Fri, 30 May 2025 17:40:17 +0100")
-Message-ID: <87h60ypdqi.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+ id JM1xQLNIitfg for <buildroot@buildroot.org>;
+ Mon,  2 Jun 2025 11:55:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
+ envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 005F580FA7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 005F580FA7
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 005F580FA7
+ for <buildroot@buildroot.org>; Mon,  2 Jun 2025 11:55:32 +0000 (UTC)
+Received: by mail-wm1-x334.google.com with SMTP id
+ 5b1f17b1804b1-451dbe494d6so9296135e9.1
+ for <buildroot@buildroot.org>; Mon, 02 Jun 2025 04:55:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1748865331; x=1749470131;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:to
+ :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=1Wy6smAfMoz8L2+9TjYr90BmSCkFOu2/Wso1ABnefmc=;
+ b=wnx8nlN5/R6o94f/ln5TmBVx957/VxeJCxsiE5evziQCg1OoGii5+a2nbeRtZirf5j
+ 7yi3Vdev8LCDnKRBKq2lyfuov424+dYLgTpt1HBaHXerInZkifW92kMXiI+dnAzsP1Un
+ yqnyvvtzBeoFoTQaWg4MQkrqG1huKnxBclxjCNzfab6EWSiD9CC3shbMYxYhwGFPcjcs
+ 7qp82D1oSg6CZPu/oEbXzNF1cPXPX1ywiDbu4q6X41fjbm/KcWXkX38RMh6tNWZlnLfp
+ 60r8MwiMbc2RE2Z62Ph3cqJwQImvTiqdNsfMeYqs5LtPWMBEsxL5OnoCPSZWnm3ZqMBw
+ v1Dg==
+X-Gm-Message-State: AOJu0YxVib/EZbo8ndh/j6YycDRCH/AdWpeSgjx6z6SnCsqxj+n3ZmTj
+ rvGDrFGcN4c+JvUj5vCzWIeTUu1HsDIcMTGBVvKK9LrfOWALkzM5mi5vqZVxGelLjUnvR88Y3+Z
+ yBgom
+X-Gm-Gg: ASbGncshpTvUx0Zs/ow9eHcL0nEYfNQriQXSlZhqj7sB0Vu3q1bBYufSPsvPG2op742
+ W5RqcREnLCRZ8BXNqzQMFLIB4F2MjUnUVRTzzryx64Ie8RbPYIRSX72ZA/OHMy5VVqK8aMjKw24
+ kxV2WO+tVAG5YaZXgqbz4jHCPcX14+P2nvcy3zu+EI3jTzwfVCVY5Hv0v929mTZVu2URcH/58oX
+ pYVK8Ekocm1h0RWPbiqCg/y2jPV04fmL2mUvCZ43olV8mOt0YF21O8IpeyQcRJPMfyle+y4mshN
+ Hon3JmBrz6B0/4snwYwOfRwJ78Wyvt3k7mw06F/vTDY60GEfvbh4dC5XQAuW0T4pb1dxdmkFd6F
+ zv39MGjg9PiNsF5vubiIw3i6pOGQ3HGgvHZNaNEl3zkk=
+X-Google-Smtp-Source: AGHT+IE3wfEzaSG+GKSJET5quvKqk7/iuau7GKyPt4GkEgm+jgmggdDU48CgCVIWQuSGXEWJ3xhEFA==
+X-Received: by 2002:a05:600c:3596:b0:43c:fdbe:4398 with SMTP id
+ 5b1f17b1804b1-4511ecb9ca6mr60340235e9.6.1748865330708; 
+ Mon, 02 Jun 2025 04:55:30 -0700 (PDT)
+Received: from dragon.local.ess-mail.com
+ (ip-94-140-185-241.reverse.destiny.be. [94.140.185.241])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-450d8000d5dsm120604285e9.26.2025.06.02.04.55.30
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 02 Jun 2025 04:55:30 -0700 (PDT)
+To: buildroot@buildroot.org
+Date: Mon,  2 Jun 2025 13:55:18 +0200
+Message-ID: <20250602115518.521408-1-titouan.christophe@mind.be>
+X-Mailer: git-send-email 2.49.0
 MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddtgdefjeehkeculddtuddrgeefvddrtddtmdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufhffjgfkfgggtgesthdttddttdertdenucfhrhhomheprfgvthgvrhcumfhorhhsghgrrghrugcuoehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmqeenucggtffrrghtthgvrhhnpeetgfelveffveehtdevgeefjeeiudduledtffehgefgleekteektedutdfhleeiueenucfkphepkedvrddugeefrdelhedrvddvtdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeekvddrudegfedrleehrddvvddtpdhhvghlohepuggvlhhlrdgsvgdrgeekvghrshdrughkpdhmrghilhhfrhhomhepphgvthgvrheskhhorhhsghgrrghrugdrtghomhdpnhgspghrtghpthhtohepuddtpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopegrrhhnohhuthesrhhnohhuthdrsggvpdhrtghpthhtoheplhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomhdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdprhgtphhtthhopehjuhdrohesfhhrvggvrdhfr
- hdprhgtphhtthhopegsrhgrnhguohhnrdhmrghivghrsegtohhllhhinhhsrdgtohhmpdhrtghpthhtoheprhhomhgrihhnrdhnrghouhhrsehsmhhilhgvrdhfrhdprhgtphhtthhopehnvggrlhdrfhhrrghgvghrsegrmhgurdgtohhm
-X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1748865331; x=1749470131; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:to
+ :from:from:to:cc:subject:date:message-id:reply-to;
+ bh=1Wy6smAfMoz8L2+9TjYr90BmSCkFOu2/Wso1ABnefmc=;
+ b=MJYws4W2x3RiNSw493uzTmQk3cYPutIvcQzanlxpvoraK24JuKBbNqICTEO2XzPLhM
+ MtxDHKhnWAP+rYkXam8+3Wbxcy80HTr663Rlfdt9CZI58pEe+iSBC6qqH+QYAxywGJy1
+ qGyQajuHa9rHIgl1xl7WOna2aitvJiE/jJk0ELSsRb9eDN7HyekiogcK6SkMN2mQjtLB
+ E5T7JsBXrs94LY4GX8jDV1lqlu4QMRNWENh7F7hWyh+kUacfLx5tMC9djOe/jc570nzX
+ htpQRBf2r9Ttu8olSBqrKMEqcsk5KGLVcIq9DzwLpj0k1xBjyeNLHozLzyKZp/Iii2D2
+ eaPw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH v1 1/1] package/bootgen: bump to
- xilinx_v2025.1
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=MJYws4W2
+Subject: [Buildroot] [PATCH for 2025.02.x] package/redis: security bump to
+ v7.2.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -73,85 +108,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: ibai.erkiaga-elorza@amd.com, luca.ceresoli@bootlin.com,
- buildroot@buildroot.org, brandon.maier@collins.com, ju.o@free.fr,
- thomas.petazzoni@bootlin.com, romain.naour@smile.fr, michal.simek@amd.com
+From: Titouan Christophe via buildroot <buildroot@buildroot.org>
+Reply-To: Titouan Christophe <titouan.christophe@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Neal" == Neal Frager <neal.frager@amd.com> writes:
+This fixes the following CVEs:
 
- > Bump bootgen to xilinx_v2025.1 release.
- > With version 2025.1, bootgen executable is now in the build/bin dir, so
- > the install step is changed accordingly.
+- CVE-2025-27151: redis-check-aof may lead to stack overflow and potential RCE
+                  https://www.cve.org/CVERecord?id=CVE-2025-27151
 
-It could be interesting to add a shortlog of the (fairly limited) amount
-of changes done:
+- CVE-2025-21605: An unauthenticated client can cause an unlimited growth of
+                  output buffers
+                  https://www.cve.org/CVERecord?id=CVE-2025-21605
 
-git shortlog --no-merges xilinx_v2024.2..xilinx_v2025.1
-Shaik Salauddin (4):
-      Latest versal specific changes push to main branch for 2025.1
-      RDI version update to 2025.1
-      Adding placeholder in build directory for bootgen bin generation
-      Fix for sdcard bootup failure in zynmp/zynq
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+---
+ package/redis/redis.hash | 2 +-
+ package/redis/redis.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-bsaihema (2):
-      merged and restructured code for versal_2ve_2vm and spartanus+
-      optional data fix for versal_2ve_2vm
-
-Please also document why the LICENSE hash changed, E.G. LICENSE file
-changed by a conversion from DOS to UNIX newlines by commit 86b862096bcb
-(merged and restructured code for versal_2ve_2vm and spartanus+), no
-content change.
-
-
- > Signed-off-by: Neal Frager <neal.frager@amd.com>
- > ---
- >  package/bootgen/bootgen.hash | 4 ++--
- >  package/bootgen/bootgen.mk   | 4 ++--
- >  2 files changed, 4 insertions(+), 4 deletions(-)
-
- > diff --git a/package/bootgen/bootgen.hash b/package/bootgen/bootgen.hash
- > index d040a2e280..7670a5d1ee 100644
- > --- a/package/bootgen/bootgen.hash
- > +++ b/package/bootgen/bootgen.hash
- > @@ -1,3 +1,3 @@
- >  # Locally calculated
- > -sha256  2c8345a3bea4fcec6ceb6c8f8e727a610aaca3ec71cdf7f892d7f89f88438650  bootgen-xilinx_v2024.2.tar.gz
- > -sha256  4da5f5eff0592e5d275f1871faf9e9a4fc0f6346027bfb777fa59d0aa6a59aa3  LICENSE
- > +sha256  3de43a331e10b2a8079d4681ad72cef4884bc3a09250d3d80811d677f3ffe560  bootgen-xilinx_v2025.1.tar.gz
- > +sha256  36e278ff2cc9ef95154a923bf4a9450414f358779045ae4f863c8d77fb18dbdb  LICENSE
- > diff --git a/package/bootgen/bootgen.mk b/package/bootgen/bootgen.mk
- > index 51eacde462..939872b29c 100644
- > --- a/package/bootgen/bootgen.mk
- > +++ b/package/bootgen/bootgen.mk
- > @@ -4,7 +4,7 @@
- >  #
- >  ################################################################################
+diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+index e01fc6a601..158931bb89 100644
+--- a/package/redis/redis.hash
++++ b/package/redis/redis.hash
+@@ -1,5 +1,5 @@
+ # From https://github.com/redis/redis-hashes/blob/master/README
+-sha256  72c081e3b8cfae7144273d26d76736f08319000af46c01515cad5d29765cead5  redis-7.2.7.tar.gz
++sha256  2343cc49db3beb9d2925a44e13032805a608821a58f25bd874c84881115a20b7  redis-7.2.9.tar.gz
  
- > -BOOTGEN_VERSION = xilinx_v2024.2
- > +BOOTGEN_VERSION = xilinx_v2025.1
- >  BOOTGEN_SITE = $(call github,Xilinx,bootgen,$(BOOTGEN_VERSION))
- >  HOST_BOOTGEN_DEPENDENCIES = host-openssl host-pkgconf
- >  BOOTGEN_LICENSE = Apache-2.0
- > @@ -19,7 +19,7 @@ define HOST_BOOTGEN_BUILD_CMDS
- >  endef
+ # Locally calculated
+ sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index 7eb30abc4c..7c847690a9 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- >  define HOST_BOOTGEN_INSTALL_CMDS
- > -	$(INSTALL) -m 0755 -D $(@D)/bootgen $(HOST_DIR)/bin/bootgen
- > +	$(INSTALL) -m 0755 -D $(@D)/build/bin/bootgen $(HOST_DIR)/bin/bootgen
- >  endef
- 
- >  $(eval $(host-generic-package))
- > -- 
-
- > 2.25.1
-
-
+-REDIS_VERSION = 7.2.7
++REDIS_VERSION = 7.2.9
+ REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
+ REDIS_LICENSE_FILES = COPYING
 -- 
-Bye, Peter Korsgaard
+2.49.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
