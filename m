@@ -1,95 +1,155 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F4091C54FB3
-	for <buildroot@archiver.kernel.org>; Mon,  2 Jun 2025 06:55:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05F0CC5B549
+	for <buildroot@archiver.kernel.org>; Mon,  2 Jun 2025 07:56:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 98E8980AFB;
-	Mon,  2 Jun 2025 06:55:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A2BAE60E06;
+	Mon,  2 Jun 2025 07:56:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 68Pp1jxG7_5V; Mon,  2 Jun 2025 06:55:26 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pWH9s9Imxrmt; Mon,  2 Jun 2025 07:56:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A7E2B80AF7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D42BF60E0A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A7E2B80AF7;
-	Mon,  2 Jun 2025 06:55:26 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 662D51F7
- for <buildroot@buildroot.org>; Mon,  2 Jun 2025 06:55:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D42BF60E0A;
+	Mon,  2 Jun 2025 07:56:02 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 27874127
+ for <buildroot@buildroot.org>; Mon,  2 Jun 2025 07:56:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5799480AF6
- for <buildroot@buildroot.org>; Mon,  2 Jun 2025 06:55:25 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0DAF54057B
+ for <buildroot@buildroot.org>; Mon,  2 Jun 2025 07:56:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QbCJSNpSXaGe for <buildroot@buildroot.org>;
- Mon,  2 Jun 2025 06:55:24 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.123;
- helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 21EE980AF7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 21EE980AF7
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.123])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 21EE980AF7
- for <buildroot@buildroot.org>; Mon,  2 Jun 2025 06:55:23 +0000 (UTC)
-X-CSE-ConnectionGUID: OVBVYMXWTii27CPhOJZTUw==
-X-CSE-MsgGUID: YBBT7goDQz2z+HHBodu8JQ==
-Received: from unknown (HELO opfedv3rlp0a.nor.fr.ftgroup) ([x.x.x.x]) by
- smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 02 Jun 2025 08:55:21 +0200
-Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv3rlp0a.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 02 Jun 2025 08:55:20 +0200
-Received: from yd-6wlzhs3 [x.x.x.x] by
- OPE16NORMBX305.corporate.adroot.infra.ftgroup
- [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39;
- Mon, 2 Jun 2025 08:55:19 +0200
-Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
- Mon, 02 Jun 2025 08:55:18 +0200
-From: yann.morin@orange.com
-X-CSE-ConnectionGUID: AcBP/Y2SRniPTVI8pIvfZw==
-X-CSE-MsgGUID: TpgxB9AcSwC1PPpORlfjPA==
-X-IronPort-AV: E=Sophos;i="6.16,202,1744063200"; d="scan'208";a="295704924"
-Date: Mon, 2 Jun 2025 08:55:18 +0200
-To: Julien Olivain <ju.o@free.fr>
-CC: <buildroot@buildroot.org>
-Message-ID: <aD1K1vCLJt7/3/i4@yd-6wlzhs3>
-References: <0cc8c132abc7f2117de95906fc1ae4729100c564.1748355369.git.yann.morin@orange.com>
- <7c0c1993b8789a5c5e2af275c8dc9882@free.fr>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id v-njewLyAN6f for <buildroot@buildroot.org>;
+ Mon,  2 Jun 2025 07:56:00 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a01:111:f403:2416::622;
+ helo=nam11-co1-obe.outbound.protection.outlook.com;
+ envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 301054059A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 301054059A
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com
+ (mail-co1nam11on20622.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:2416::622])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 301054059A
+ for <buildroot@buildroot.org>; Mon,  2 Jun 2025 07:55:59 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=wOWcRebgeekEcKbN9ULnkp0+9BL5PUyIXLnVWw2sqUvYGatnyPetxvZ4jBNAqFV/+jwKN45/qV73L9Eah7UU3SSbJZ+EfB5fgp5w4k/IrSQUFWKuohpYBVHj6225rLYSSl56//7JhBeioOZ1v4RXZMhXXm3vF0lEE3bISOSclWhNS/PAkbxR2XOsrVi0hPyuoCsUujvGp8iaQy3KCvSZ+NBGWIgVjM86LO2YtT9QSm+hJGZ/v3O7t8Fo1aC5KjbBxu6SCz/ph1kOZuxzYP5FRudGMHD92Amf8nST53b0fii/6HGRg6VTCWmTFG2nIQwzTS1htGICJVln6PQk4EgeVw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0O0PVk6E3o1qS/E19hEYtRzYRrDDTYeL0viakHdpHI0=;
+ b=tgOndTYlrPRp2yUe+Li3r9dCTcSFqoVNX0ZCQRjVH+bakxxgVKRYWj2Ivswoj2JeIaHEtx2R+3X/UoOOcS8NXHzQzV3j+Pewojjl8ktM1JOQHXj9Grzvid9VNJqIhdnDL8ZzNlWgREUav95AJ0wDk0Jv+nO7y+zdhItj1JNRqBlgnVSUzM4gPYi6SnTjHUHO2S1D1ZerNfn+HFV2Vh23QCi9N6Y0itAjDgtmcFzqrNP3Ij05VhD0OxAOI/XJEdD/rHsViRlBhBKQWj4ejFq8dhgxj+vGfDiAHKmvo9T/fNyyfxHduLxuMWHsaFZ9AX6ZyD+YgWQApvL3VYmsp7kS5A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+Received: from MW4PR03CA0065.namprd03.prod.outlook.com (2603:10b6:303:b6::10)
+ by MW4PR12MB6873.namprd12.prod.outlook.com (2603:10b6:303:20c::17)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8769.31; Mon, 2 Jun
+ 2025 07:55:55 +0000
+Received: from SJ5PEPF000001E8.namprd05.prod.outlook.com
+ (2603:10b6:303:b6:cafe::e2) by MW4PR03CA0065.outlook.office365.com
+ (2603:10b6:303:b6::10) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8769.18 via Frontend Transport; Mon,
+ 2 Jun 2025 07:55:54 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ SJ5PEPF000001E8.mail.protection.outlook.com (10.167.242.196) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8792.29 via Frontend Transport; Mon, 2 Jun 2025 07:55:54 +0000
+Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 2 Jun
+ 2025 02:55:53 -0500
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB06.amd.com
+ (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 2 Jun
+ 2025 02:55:53 -0500
+Received: from xirengwts09.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
+ Transport; Mon, 2 Jun 2025 02:55:52 -0500
+To: <buildroot@buildroot.org>
+Date: Mon, 2 Jun 2025 08:55:50 +0100
+Message-ID: <20250602075550.3792505-1-neal.frager@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <7c0c1993b8789a5c5e2af275c8dc9882@free.fr>
-X-Originating-IP: [10.115.26.50]
-X-ClientProxiedBy: OPE16NORMBX401.corporate.adroot.infra.ftgroup
- (10.115.26.14) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
- (10.115.27.10)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ5PEPF000001E8:EE_|MW4PR12MB6873:EE_
+X-MS-Office365-Filtering-Correlation-Id: 82c99ac8-1c5e-4c28-13b7-08dda1aae6d9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+ ARA:13230040|82310400026|376014|36860700013|1800799024|41080700001; 
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?Rvjm0nmsTY15xs9cFdTZxx1ddUYiLBz8pkbRf0/AFZcvHjhXio7cmyyhxm05?=
+ =?us-ascii?Q?vzn+QTd8H3nq93pT3U9Zf3TacCw3i5ATXBcwZ8qRPCmPS+eGulfwc0V85JeO?=
+ =?us-ascii?Q?VvUV0X82DrUUz9Tver4aqwUnfpWJcvOfeBuyJ6rki+XW2j+mAy5VDK7+5DmU?=
+ =?us-ascii?Q?5V69KLDbhiujNAsqL2msXqFibtA0Nzm1zk8zFLOzWzm4RquddWbtU2tuiLqK?=
+ =?us-ascii?Q?Yfz4BibhF892w9oExmy6zS9Mla4FW5DAoDYe/Thyt/2vV+KdyyodYhjIgW7R?=
+ =?us-ascii?Q?/EgadusQGRFUwLyqKCG7qteiPbnf9nPctuwoMPThnwZjcVfmAHwbp507x9iD?=
+ =?us-ascii?Q?EmKno1gyuWpX/dbsQwsN+EjlREY2vkRR+naFIHZnw+VgpOm0rcwZR7yqgxhG?=
+ =?us-ascii?Q?nB+ibccjAlHfPtySnN75Az5y7P4Gu0AzknilWa3XpLC/tdQRRNWMABx4PboC?=
+ =?us-ascii?Q?BX7TwDxYMerfZOuTDt9OW8biBXIAfVz/wR3jabHMfVom1f92HLtCof8kE1pi?=
+ =?us-ascii?Q?TOdGaB1bKd8fxriDNcI7So1uX51lztZ3dBfO5n6SrsWEioblSVvfrrJDHTCX?=
+ =?us-ascii?Q?JwwnQkHSVJhwoUSPIs7DjIr2jLTf0KOWWqaay7Q7rC6/mWHyD6Zv92qaT1oD?=
+ =?us-ascii?Q?+V3OTqCLT6qEChHv1+19Yfpely4BPjQOEj4K5Z4xYUODprjDqATdS9y3p5aR?=
+ =?us-ascii?Q?CpHDuhED/DFG8AFoONPyAZrk9irpmnrqF8zxMkEI5MRawOc28y07nKTrvK9s?=
+ =?us-ascii?Q?KUq8YfrmaTvMrEuhxEys2s7S5bsfVnlxedspOmAKyJi+4R1VXEiuBi7TLj+G?=
+ =?us-ascii?Q?nTEMBExIK0kGIrphuQ2BtFuYtrpl3An+H8fNd5zLqqkLJP4Tv1HSTMIv+TsW?=
+ =?us-ascii?Q?vw9EYVaWfJyw5CGZoXM1qcJll1na8Sxq81obAPlbQYHRKA0emGBNr2hoYEPo?=
+ =?us-ascii?Q?HriulBOzbtPO7sOXRBgohvRH+cvXWgL67b5V6GBSmgMXOaG3fZYWvC2iP9Xw?=
+ =?us-ascii?Q?xT5md+veipCHiKaQwZigEN+irSFusG/iRRH2DhW+lSHdr8mnC/StyOIh7EFf?=
+ =?us-ascii?Q?AT21qhyg6wMHeWvx7c7LGr3gaavyyuq5kn10j4VmjoGymwYh/RUWe+uaWKqJ?=
+ =?us-ascii?Q?+IHFuwy/YFCFyfJuYNOEraDoUu7tCslv+nYZNgWUD8XgbNwc8qJWo6W1LDnn?=
+ =?us-ascii?Q?iJ2Bi4ZZ0srpW1n4UI/uYi8m6JtUZfGA1RUqgv5HUyKjwtPvM3i8GSzNVSo6?=
+ =?us-ascii?Q?Wr/f0MuNeWMQzNR6L30Cd+xaYVgIppIO0vpMgPBoqhdlS+1slezqSm4YYnLU?=
+ =?us-ascii?Q?UBqOSkF2HGO3Q3JBS6ZPFsY+Xe/h6CHXX7m77qaW4BZ6mPPfH/AClqahh49E?=
+ =?us-ascii?Q?kb8KT0ywasBSoZ13ZpvuU/7GmFD6n/BNwie5k0JJsaJ2FcwD/cxajnIFd1j0?=
+ =?us-ascii?Q?/iVG1XsBPyHewFy7sCbtLgwa2tzU7VBJaCWJdtqgexRluEMm7SWKjjYRVcBI?=
+ =?us-ascii?Q?Fm6z6yKFSDzr/RE3cgNa6MCTlMCgl9g1ermyEbXMxMyPmEfIgFcHWDxFJAbI?=
+ =?us-ascii?Q?WAVwHxGy6Qrc47y57ww=3D?=
+X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
+ IPV:CAL; SFV:NSPM; H:SATLEXMB03.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
+ SFS:(13230040)(82310400026)(376014)(36860700013)(1800799024)(41080700001);
+ DIR:OUT; SFP:1101; 
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2025 07:55:54.4710 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 82c99ac8-1c5e-4c28-13b7-08dda1aae6d9
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
+ Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: SJ5PEPF000001E8.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB6873
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1748847324; x=1780383324;
- h=date:to:cc:subject:message-id:references:mime-version:
- in-reply-to:content-transfer-encoding:from;
- bh=CUlWrFaHdgw3xgCGl2k5AFtweAWJwgpfTXfEruSSMWo=;
- b=IAEA0YiY/DH6p7Kxa4O3J/STYZY8koRu4TEU7p850/i7AvsrsWaAtnRd
- Z7RxL5xJtdp78YV4VSJhsoBaKh38Db4b3+6WeM0xvk9JhXdzu456vfeKf
- becRc9v0za9/uAT5cKwt3KjwPo/OAhyPGAeBOYg8N7epr3/0DJmpuYq/Q
- zZQvadcUDajR6NCmt7sFqwr2vXv8Gs0BYl0eEvOsTpuBaIhW2kTGHcQt5
- wSAF6Pmh0vxayirUoOv/DjSp34NUKMZkTn3Ap3d9hjI+BMqaT2i4yTZYv
- E32qDK6DyKk4yuUyZ6vANXG3lDPSCpSS5kE2GGW+0kHu3HixbhwpQXEU1
- A==;
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=orange.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
- header.s=orange002 header.b=IAEA0YiY
-Subject: Re: [Buildroot] [PATCH] package/gpsd: bump to 3.26.1
+ d=amd.com; s=selector1; 
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0O0PVk6E3o1qS/E19hEYtRzYRrDDTYeL0viakHdpHI0=;
+ b=CR1+V7K07lN4yVWXJtMiiRjAcOha3veoh5+PmYq+rzY2WpFeKbSoRMI4Fyuf7Bg+chAoJJ8Brtcb3vxzEu3+/Ss9JPyGV9srK97SgSJX9yeGfhXzjDz189OgJzhDHqreffNu0ryz5tDEvM+EufXwdaSJJLXyeRsy7jxDIm/Rt3s=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=amd.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
+ header.s=selector1 header.b=CR1+V7K0
+Subject: [Buildroot] [PATCH v1 1/1] package/xilinx-fpgautil: bump to
+ xlnx-rel-v2025.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -101,72 +161,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Neal Frager via buildroot <buildroot@buildroot.org>
+Reply-To: Neal Frager <neal.frager@amd.com>
+Cc: ibai.erkiaga-elorza@amd.com, luca.ceresoli@bootlin.com,
+ Neal Frager <neal.frager@amd.com>, brandon.maier@collins.com, ju.o@free.fr,
+ thomas.petazzoni@bootlin.com, romain.naour@smile.fr, michal.simek@amd.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Julien, All,
+This patch bumps the xilinx-fpgautil package to version xlnx-rel-v2025.1.
 
-On 2025-05-28 22:56 +0200, Julien Olivain spake thusly:
-> On 27/05/2025 16:16, yann.morin@orange.com wrote:
-> > From: "Yann E. MORIN" <yann.morin@orange.com>
-[--SNIP--]
-> > -GPSD_VERSION = 3.25
-> > +GPSD_VERSION = 3.26.1
-> This new version fails in the gpsd runtime test.
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+---
+ package/xilinx-fpgautil/xilinx-fpgautil.hash | 2 +-
+ package/xilinx-fpgautil/xilinx-fpgautil.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Damned... I forgot about that runtime test...
-
-> There is
-> apparently a change of behavior in "gpsfake" in UDP mode, which works
-> for the first client connection, but fails for subsequent calls.
-> I bisected this behavior change to upstream commit:
-> https://gitlab.com/gpsd/gpsd/-/commit/5c080c35fc3d981172a5e4af34d0d92854a5433a
-[--SNIP--]
-> Do you think this behavior change is an upstream bug?
-
-Definitely.
-
-> If yes, it would be nice to fix this upstream. Otherwise, we should
-> slightly modify the runtime test (like removing the gpsctl invocation,
-> if gpsfake udp does not support more that one client connection).
-> What do you think?
-
-I'll open an issue upstream, but last time I did, err.. Let's say the
-experience was far from thrilling... But thanks for your simple and
-obvious reproducer; that will hopefully help.
-
-We can switch the runtime test over to TCP mode (if it's not broken...)
-to workaround the issue in the meantime...
-
-I'll look at that as soon as possible.
-
-Thank you for the feedback!
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/xilinx-fpgautil/xilinx-fpgautil.hash b/package/xilinx-fpgautil/xilinx-fpgautil.hash
+index 1329b9ad70..d214fd4269 100644
+--- a/package/xilinx-fpgautil/xilinx-fpgautil.hash
++++ b/package/xilinx-fpgautil/xilinx-fpgautil.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  439a3681d8efa9641ab39c7645836b9ac78b2fdb36242f9bc94c1f3dfb2d9c4e  xilinx-fpgautil-xlnx-rel-v2024.2_update3.tar.gz
++sha256  a0185fda33a538379eb5ae48253f721037485be85c51555e2ad49e322d389429  xilinx-fpgautil-xlnx-rel-v2025.1.tar.gz
+ sha256  89807acf2309bd285f033404ee78581602f3cd9b819a16ac2f0e5f60ff4a473e  COPYING.MIT
+diff --git a/package/xilinx-fpgautil/xilinx-fpgautil.mk b/package/xilinx-fpgautil/xilinx-fpgautil.mk
+index 6f42b4799f..d41af96ee5 100644
+--- a/package/xilinx-fpgautil/xilinx-fpgautil.mk
++++ b/package/xilinx-fpgautil/xilinx-fpgautil.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XILINX_FPGAUTIL_VERSION = xlnx-rel-v2024.2_update3
++XILINX_FPGAUTIL_VERSION = xlnx-rel-v2025.1
+ XILINX_FPGAUTIL_SITE = $(call github,Xilinx,meta-xilinx,$(XILINX_FPGAUTIL_VERSION))
+ XILINX_FPGAUTIL_LICENSE = MIT
+ XILINX_FPGAUTIL_LICENSE_FILES = COPYING.MIT
 -- 
-                                        ____________
-.-----------------.--------------------:       _    :------------------.
-|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
-|                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
-| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
-| yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
-'--------------------------------------:______/_____:------------------'
+2.25.1
 
-____________________________________________________________________________________________________________
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
