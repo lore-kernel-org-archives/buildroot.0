@@ -4,69 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 404C1C5B543
-	for <buildroot@archiver.kernel.org>; Wed,  4 Jun 2025 17:15:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE7DDC5B543
+	for <buildroot@archiver.kernel.org>; Wed,  4 Jun 2025 17:15:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DCDBB80999;
-	Wed,  4 Jun 2025 17:15:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 74A6C80B69;
+	Wed,  4 Jun 2025 17:15:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id L1tO0oYJgnaa; Wed,  4 Jun 2025 17:15:49 +0000 (UTC)
+ id 9SvdFhIf-5zV; Wed,  4 Jun 2025 17:15:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B9EEA808B0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F2516808B0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B9EEA808B0;
-	Wed,  4 Jun 2025 17:15:49 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 151A6DA
- for <buildroot@buildroot.org>; Wed,  4 Jun 2025 17:15:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F2516808B0;
+	Wed,  4 Jun 2025 17:15:50 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7F4E51A4
+ for <buildroot@buildroot.org>; Wed,  4 Jun 2025 17:15:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E780141FB4
- for <buildroot@buildroot.org>; Wed,  4 Jun 2025 17:15:47 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 660A66164F
+ for <buildroot@buildroot.org>; Wed,  4 Jun 2025 17:15:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YWtVP2L1UweQ for <buildroot@buildroot.org>;
- Wed,  4 Jun 2025 17:15:46 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mgWKES9iFLmq for <buildroot@buildroot.org>;
+ Wed,  4 Jun 2025 17:15:48 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
  helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9E32141FC1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9E32141FC1
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4C0CE61638
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4C0CE61638
 Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9E32141FC1
- for <buildroot@buildroot.org>; Wed,  4 Jun 2025 17:15:46 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4C0CE61638
+ for <buildroot@buildroot.org>; Wed,  4 Jun 2025 17:15:48 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 25C791C1064; Wed,  4 Jun 2025 19:15:15 +0200 (CEST)
-Message-ID: <c6e7feb3-dd02-4825-b85f-98991acfd910@rnout.be>
-Date: Wed, 4 Jun 2025 19:15:10 +0200
+ with ESMTPSA id BABD81C0D86; Wed,  4 Jun 2025 19:15:45 +0200 (CEST)
+Message-ID: <f7a2db6c-3cc2-4140-8ede-7f69a91c9c6d@rnout.be>
+Date: Wed, 4 Jun 2025 19:15:31 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Thomas Perale <thomas.perale@mind.be>, buildroot@buildroot.org
-Cc: Marcin Bis <marcin@bis.org.pl>
-References: <20250514163836.984647-1-thomas.perale@mind.be>
+To: =?UTF-8?B?UmFwaGHDq2wgTcOpbG90dGU=?= <raphael.melotte@mind.be>,
+ buildroot@buildroot.org
+Cc: Sen Hastings <sen@hastings.org>
+References: <20250423152906.1017522-1-raphael.melotte@mind.be>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20250514163836.984647-1-thomas.perale@mind.be>
+In-Reply-To: <20250423152906.1017522-1-raphael.melotte@mind.be>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1749057322; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1749057346; h=from:subject:date:message-id:to:cc:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=wR258uWYi5XXNM91FTH273QX7Pa9eDdRPB2jXp6Ywa0=;
- b=W6dOMmm6kqdt6L5ZNZRssfe3wrSvrDsxDQysNZluwudXksUW0m88XddaTGcR7XkdRYcagL
- fAe3mKXT2BacPehDpdI1rA95KHBVJpS7d8hsYw4nwlQSc28jL151ZAB+/J2UxgxWMJXTjM
- tS+imwkyqTv8JhLkZAauzbuUhVsp335A/QyhttdXVm183xfhdw0JOAVfffB1V7XR6lV81l
- 4HvN7D/Gmag3DDogylnocQw75mwdoj20hXBq1ovC8KfSDma9MVMd2DrtPMPYNj1xlH43on
- 8I6niZfz6Rj2JKBr8alANfr2xVOcsIEvsr55HhOx+xjabTCJypoXZp3FddmAVQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=WzB/mOpxLap/+DeWaPa82e5OMhmxgTFmKRy4XFPzjHA=;
+ b=DCWs4VGibY0SRJ2Ltz9eqwucITR5vkUZGuh/TOaQEolhicb/GyYn2pQBnegeQBRmeogvbh
+ ZmlkziN6m06+YEEtfnl7N6spi+dyyqbJ+7w5gTeOZ99V1+8pEclAHLZwhqr0lvIh6MQJjJ
+ 4PlNgewZOlj8KTOdX+mnk3TpBDOtI/MUtiCCHa8eHqwLW8dD/lZz3AcNCHcvliYH2wzzVC
+ zStxS9czi5IOXTGr8ppxLBfqX0UWbf4oRc+L18pCSKYXZFiMEk9FNmaXCIXfBjp8JIwEDR
+ VaJRLngAtibMk/XGbFDDGJsG/V502lVeK1Xa3tjMxU2nGQLR7EFVL11p0u/rRg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
- header.s=dkim header.b=W6dOMmm6
-Subject: Re: [Buildroot] [PATCH 1/1] package/bluez5_utils: fix build w/ HoG
- and w/o HID
+ header.s=dkim header.b=DCWs4VGi
+Subject: Re: [Buildroot] [RFC PATCH 1/1] support/scripts/pkg-stats: add
+ support for reporting stale CVE entries
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -80,331 +81,143 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@rnout.be>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-
-
-On 14/05/2025 18:38, Thomas Perale via buildroot wrote:
-> When building the bluez5_utils package with HoG plugin without enabling
-> the HID plugin the following linker error would occur:
-> 
-> ```
-> /workdir/instance-0/output-1/per-package/bluez5_utils/host/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/13.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: profiles/input/bluetoothd-hog.o: in function `hog_disconnect':
-> hog.c:(.text.hog_disconnect+0x12): undefined reference to `input_get_userspace_hid'
-> collect2: error: ld returned 1 exit status
-> ```
-> 
-> This patch adds two upstream commits that decouple both the HID
-> and the HoG plugin.
-> 
-> As a consequence of this patch the HID plugin can be compiled without
-> the HoG one as well but to keep the compatibility the same in buildroot
-> the selection of the HoG plugin is kept when selecting the HID plugin.
-> 
-> The error can be reproduced with the following defconfig
-> 
-> ```
-> BR2_arm=y
-> BR2_cortex_a7=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-> BR2_PACKAGE_BLUEZ5_UTILS=y
-> BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HOG=y
-> ```
-> 
-> Fixes: https://autobuild.buildroot.org/results/78e/78ed7664f3a2dd5858fd71bd63836c822c106cc0
-> 
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-
-  Applied to 2025.02.x, thanks.
-
-  Regards,
-  Arnout
-
-> ---
->   ...03-input-fix-HID-compilation-w-o-HoG.patch | 140 ++++++++++++++++++
->   ...04-input-fix-HoG-compilation-w-o-HID.patch | 120 +++++++++++++++
->   2 files changed, 260 insertions(+)
->   create mode 100644 package/bluez5_utils/0003-input-fix-HID-compilation-w-o-HoG.patch
->   create mode 100644 package/bluez5_utils/0004-input-fix-HoG-compilation-w-o-HID.patch
-> 
-> diff --git a/package/bluez5_utils/0003-input-fix-HID-compilation-w-o-HoG.patch b/package/bluez5_utils/0003-input-fix-HID-compilation-w-o-HoG.patch
-> new file mode 100644
-> index 0000000000..941e9fb68f
-> --- /dev/null
-> +++ b/package/bluez5_utils/0003-input-fix-HID-compilation-w-o-HoG.patch
-> @@ -0,0 +1,140 @@
-> +From b111b5e15eb74e08b74cb3c7e91bcb21f54be4c7 Mon Sep 17 00:00:00 2001
-> +From: Thomas Perale <thomas.perale@mind.be>
-> +Date: Thu, 1 May 2025 18:35:35 +0200
-> +Subject: input: fix HID compilation w/o HoG
-> +
-> +Commit [1] introduced a dependency with the HID plugin in the HoG code
-> +As a result, building with --enable-hid --disable-hog caused linker
-> +errors due to undefined references to HoG-related functions:
-> +
-> +```
-> +> ./configure --enable-hid --disable-hog
-> +...
-> +> make
-> +...
-> +  CCLD     src/bluetoothd
-> +/usr/bin/ld: profiles/input/bluetoothd-manager.o: in function `input_init':
-> +/home/../bluez/profiles/input/manager.c:122:(.text.input_init+0x1c8): undefined reference to `input_set_auto_sec'
-> +collect2: error: ld returned 1 exit status
-> +make[1]: *** [Makefile:6376: src/bluetoothd] Error 1
-> +```
-> +
-> +This patch moves the reading of the HOG specific configuration of the
-> +'input.conf' file: LEAutoSecurity, to the HoG plugin file.
-> +
-> +[1] f2778f587 input: Add LEAutoSecurity setting to input.conf
-> +
-> +Upstream: https://git.kernel.org/pub/scm/bluetooth/bluez.git/commit/?id=b111b5e15eb74e08b74cb3c7e91bcb21f54be4c7
-> +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-> +---
-> + profiles/input/device.h  |  1 -
-> + profiles/input/hog.c     | 40 +++++++++++++++++++++++++++++++++++-----
-> + profiles/input/manager.c | 11 +----------
-> + 3 files changed, 36 insertions(+), 16 deletions(-)
-> +
-> +diff --git a/profiles/input/device.h b/profiles/input/device.h
-> +index 7b87ce5903..036a88980e 100644
-> +--- a/profiles/input/device.h
-> ++++ b/profiles/input/device.h
-> +@@ -25,7 +25,6 @@ void input_set_userspace_hid(char *state);
-> + uint8_t input_get_userspace_hid(void);
-> + void input_set_classic_bonded_only(bool state);
-> + bool input_get_classic_bonded_only(void);
-> +-void input_set_auto_sec(bool state);
-> +
-> + int input_device_register(struct btd_service *service);
-> + void input_device_unregister(struct btd_service *service);
-> +diff --git a/profiles/input/hog.c b/profiles/input/hog.c
-> +index 017e320f07..f82648fec8 100644
-> +--- a/profiles/input/hog.c
-> ++++ b/profiles/input/hog.c
-> +@@ -57,11 +57,6 @@ static gboolean suspend_supported = FALSE;
-> + static bool auto_sec = true;
-> + static struct queue *devices = NULL;
-> +
-> +-void input_set_auto_sec(bool state)
-> +-{
-> +-	auto_sec = state;
-> +-}
-> +-
-> + static void hog_device_accept(struct hog_device *dev, struct gatt_db *db)
-> + {
-> + 	char name[248];
-> +@@ -228,10 +223,45 @@ static struct btd_profile hog_profile = {
-> + 	.auto_connect	= true,
-> + };
-> +
-> ++static void hog_read_config(void)
-> ++{
-> ++	const char filename[] = CONFIGDIR "/input.conf";
-> ++	GKeyFile *config;
-> ++	GError *err = NULL;
-> ++	bool config_auto_sec;
-> ++
-> ++	config = g_key_file_new();
-> ++	if (!config) {
-> ++		error("Failed to allocate memory for config");
-> ++		return;
-> ++	}
-> ++
-> ++	if (!g_key_file_load_from_file(config, filename, 0, &err)) {
-> ++		if (!g_error_matches(err, G_FILE_ERROR, G_FILE_ERROR_NOENT))
-> ++			error("Parsing %s failed: %s", filename, err->message);
-> ++		g_error_free(err);
-> ++		g_key_file_free(config);
-> ++		return;
-> ++	}
-> ++
-> ++	config_auto_sec = g_key_file_get_boolean(config, "General",
-> ++					"LEAutoSecurity", &err);
-> ++	if (!err) {
-> ++		DBG("input.conf: LEAutoSecurity=%s",
-> ++				config_auto_sec ? "true" : "false");
-> ++		auto_sec = config_auto_sec;
-> ++	} else
-> ++		g_clear_error(&err);
-> ++
-> ++	g_key_file_free(config);
-> ++}
-> ++
-> + static int hog_init(void)
-> + {
-> + 	int err;
-> +
-> ++	hog_read_config();
-> ++
-> + 	err = suspend_init(suspend_callback, resume_callback);
-> + 	if (err < 0)
-> + 		error("Loading suspend plugin failed: %s (%d)", strerror(-err),
-> +diff --git a/profiles/input/manager.c b/profiles/input/manager.c
-> +index 95ca0a7ee5..1c0b6122a1 100644
-> +--- a/profiles/input/manager.c
-> ++++ b/profiles/input/manager.c
-> +@@ -85,7 +85,7 @@ static int input_init(void)
-> + 	config = load_config_file(CONFIGDIR "/input.conf");
-> + 	if (config) {
-> + 		int idle_timeout;
-> +-		gboolean classic_bonded_only, auto_sec;
-> ++		gboolean classic_bonded_only;
-> + 		char *uhid_enabled;
-> +
-> + 		idle_timeout = g_key_file_get_integer(config, "General",
-> +@@ -115,15 +115,6 @@ static int input_init(void)
-> + 		} else
-> + 			g_clear_error(&err);
-> +
-> +-		auto_sec = g_key_file_get_boolean(config, "General",
-> +-						"LEAutoSecurity", &err);
-> +-		if (!err) {
-> +-			DBG("input.conf: LEAutoSecurity=%s",
-> +-					auto_sec ? "true" : "false");
-> +-			input_set_auto_sec(auto_sec);
-> +-		} else
-> +-			g_clear_error(&err);
-> +-
-> + 	}
-> +
-> + 	btd_profile_register(&input_profile);
-> +--
-> +cgit 1.2.3-korg
-> +
-> diff --git a/package/bluez5_utils/0004-input-fix-HoG-compilation-w-o-HID.patch b/package/bluez5_utils/0004-input-fix-HoG-compilation-w-o-HID.patch
-> new file mode 100644
-> index 0000000000..b2824e5e18
-> --- /dev/null
-> +++ b/package/bluez5_utils/0004-input-fix-HoG-compilation-w-o-HID.patch
-> @@ -0,0 +1,120 @@
-> +From 9c52188d753002a6afd6ae145f921a2ff52c1c81 Mon Sep 17 00:00:00 2001
-> +From: Thomas Perale <thomas.perale@mind.be>
-> +Date: Thu, 1 May 2025 18:35:36 +0200
-> +Subject: input: fix HoG compilation w/o HID
-> +
-> +Commit [1] introduced a dependency with the HID plugin in the HoG code
-> +As a result, building with --disable-hid --enable-hog caused linker
-> +errors due to undefined references to HID-related functions:
-> +
-> +```
-> +> ./configure --disable-hid --enable-hog
-> +> make
-> +/usr/bin/ld: profiles/input/bluetoothd-hog.o: in function `hog_accept':
-> +/home/../bluez/profiles/input/hog.c:184:(.text.hog_accept+0xbb): undefined reference to `input_get_auto_sec'
-> +/usr/bin/ld: profiles/input/bluetoothd-hog.o: in function `hog_disconnect':
-> +/home/../bluez/profiles/input/hog.c:205:(.text.hog_disconnect+0x12): undefined reference to `input_get_userspace_hid'
-> +collect2: error: ld returned 1 exit status
-> +make[1]: *** [Makefile:6344: src/bluetoothd] Error 1
-> +make: *** [Makefile:4695: all] Error 2
-> +```
-> +
-> +This patch duplicate the read of the 'UserspaceHID=persist' config entry
-> +in the HoG plugin file to remove the dependency on the HID plugin files.
-> +
-> +[1] 1782bfd79 input: Add support for UserspaceHID=persist
-> +
-> +Fixes: https://github.com/bluez/bluez/issues/1228
-> +
-> +Upstream: https://git.kernel.org/pub/scm/bluetooth/bluez.git/commit/?id=9c52188d753002a6afd6ae145f921a2ff52c1c81
-> +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-> +---
-> + profiles/input/device.c |  5 -----
-> + profiles/input/device.h |  1 -
-> + profiles/input/hog.c    | 14 ++++++++++++--
-> + 3 files changed, 12 insertions(+), 8 deletions(-)
-> +
-> +diff --git a/profiles/input/device.c b/profiles/input/device.c
-> +index a7bc4d44fa..3642cc3267 100644
-> +--- a/profiles/input/device.c
-> ++++ b/profiles/input/device.c
-> +@@ -112,11 +112,6 @@ void input_set_userspace_hid(char *state)
-> + 		error("Unknown value '%s'", state);
-> + }
-> +
-> +-uint8_t input_get_userspace_hid(void)
-> +-{
-> +-	return uhid_state;
-> +-}
-> +-
-> + void input_set_classic_bonded_only(bool state)
-> + {
-> + 	classic_bonded_only = state;
-> +diff --git a/profiles/input/device.h b/profiles/input/device.h
-> +index 036a88980e..9056695026 100644
-> +--- a/profiles/input/device.h
-> ++++ b/profiles/input/device.h
-> +@@ -22,7 +22,6 @@ struct input_conn;
-> +
-> + void input_set_idle_timeout(int timeout);
-> + void input_set_userspace_hid(char *state);
-> +-uint8_t input_get_userspace_hid(void);
-> + void input_set_classic_bonded_only(bool state);
-> + bool input_get_classic_bonded_only(void);
-> +
-> +diff --git a/profiles/input/hog.c b/profiles/input/hog.c
-> +index f82648fec8..a3c876cf9f 100644
-> +--- a/profiles/input/hog.c
-> ++++ b/profiles/input/hog.c
-> +@@ -40,7 +40,6 @@
-> + #include "src/shared/gatt-client.h"
-> + #include "src/plugin.h"
-> +
-> +-#include "device.h"
-> + #include "suspend.h"
-> + #include "attrib/att.h"
-> + #include "attrib/gattrib.h"
-> +@@ -55,6 +54,7 @@ struct hog_device {
-> +
-> + static gboolean suspend_supported = FALSE;
-> + static bool auto_sec = true;
-> ++static bool uhid_state_persist = false;
-> + static struct queue *devices = NULL;
-> +
-> + static void hog_device_accept(struct hog_device *dev, struct gatt_db *db)
-> +@@ -203,7 +203,7 @@ static int hog_disconnect(struct btd_service *service)
-> + {
-> + 	struct hog_device *dev = btd_service_get_user_data(service);
-> +
-> +-	if (input_get_userspace_hid() == UHID_PERSIST)
-> ++	if (uhid_state_persist)
-> + 		bt_hog_detach(dev->hog, false);
-> + 	else
-> + 		bt_hog_detach(dev->hog, true);
-> +@@ -229,6 +229,7 @@ static void hog_read_config(void)
-> + 	GKeyFile *config;
-> + 	GError *err = NULL;
-> + 	bool config_auto_sec;
-> ++	char *uhid_enabled;
-> +
-> + 	config = g_key_file_new();
-> + 	if (!config) {
-> +@@ -253,6 +254,15 @@ static void hog_read_config(void)
-> + 	} else
-> + 		g_clear_error(&err);
-> +
-> ++	uhid_enabled = g_key_file_get_string(config, "General",
-> ++					"UserspaceHID", &err);
-> ++	if (!err) {
-> ++		DBG("input.conf: UserspaceHID=%s", uhid_enabled);
-> ++		uhid_state_persist = strcasecmp(uhid_enabled, "persist") == 0;
-> ++		free(uhid_enabled);
-> ++	} else
-> ++		g_clear_error(&err);
-> ++
-> + 	g_key_file_free(config);
-> + }
-> +
-> +--
-> +cgit 1.2.3-korg
-> +
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+CgpPbiAyMy8wNC8yMDI1IDE3OjI5LCBSYXBoYcOrbCBNw6lsb3R0ZSB2aWEgYnVpbGRyb290IHdy
+b3RlOgo+IFRoZSBOVkQgZGF0YWJhc2UgY29udGFpbnMgc29tZSBDUEVzIHRoYXQgYXJlIHdyb25n
+bHkgbm90IGFzc29jaWF0ZWQKPiB3aXRoIGFueSB2ZXJzaW9uIG51bWJlci4gVGhleSBhcmUgZm9y
+IGV4YW1wbGUgc29tZXRpbWVzIGFzc29jaWF0ZWQKPiB3aXRoIHZlcnkgb2xkIENWRXMuCj4gVGhv
+c2UgQ1BFcyBhcmUgYW5ub3lpbmcsIGJlY2F1c2UgdGhleSBwb2xsdXRlIG91ciBwa2ctc3RhdCBD
+VkUgcmVzdWx0cwo+IHdpdGggQ1ZFIGVudHJpZXMgd2hpY2ggYWN0dWFsbHkgZG9uJ3QgYWZmZWN0
+IHVzLgo+IAo+IFRoZSBwcm9wZXIgd2F5IHRvIHNvbHZlIGl0IGlzLCBhbmQgc2hvdWxkIHJlbWFp
+biwgdG8gZml4IHRoZSBOVkQKPiBkYXRhYmFzZSBieSByZXBvcnRpbmcgdGhlc2UgaXNzdWVzLiBI
+YXZpbmcgdG8gZGVhbCB3aXRoIGEgbG90IG9mCj4gQ1ZFcy9DUEVzLCB0aGUgTlZEIGRhdGFiYXNl
+IGlzIGhvd2V2ZXIgc2xvdyB0byBiZSB1cGRhdGVkLgo+IAo+IFRvIHJlZHVjZSB0aGUgbm9pc2Ug
+aW4gb3VyIHBrZy1zdGF0cyByZXN1bHRzIGluIHRoZSBtZWFudGltZSwgb25lCj4gcG9zc2liaWxp
+dHkgaXMgdG8gYWRkIDxQS0dfSUdOT1JFX0NWRVM+IGVudHJpZXMgZm9yIHRob3NlIENWRXMuICBU
+aGlzCj4gaG93ZXZlciBjb21lcyB3aXRoIHRoZSBkb3duc2lkZSB0aGF0IGV2ZW4gb25jZSB0aGUg
+TlZEIGRhdGFiYXNlIGdldHMKPiBmaXhlZCwgdGhvc2UgaWdub3JlZCBlbnRyaWVzIHJpc2sgcmVt
+YWluaW5nIGluIEJ1aWxkcm9vdCBmb3JldmVyCj4gYmVjYXVzZSB0aGV5IGFyZSB1bmRldGVjdGVk
+Lgo+IAo+IFRoaXMgY29tbWl0IHRyaWVzIHRvIGFkZHJlc3MgdGhpcyBkb3duc2lkZSBieSBjaGVj
+a2luZyBmb3IgYW5kCj4gcmVwb3J0aW5nIENWRXMgdGhhdCBhcmUgaWdub3JlZCBpbiBCdWlsZHJv
+b3QsIGJ1dCB3aGVyZSB0aGUKPiBOVkQgcmVwb3J0cyBvdXIgcGFja2FnZSB2ZXJzaW9uIGFzIHVu
+YWZmZWN0ZWQuIFRob3NlIENWRXMgd2lsbCBhcHBlYXIKPiBpbiB0aGUgJ0NWRXMgSWdub3JlZCcg
+Y29sdW1uIGFzICcoc3RhbGUpJywgYW5kIHRoZSBjZWxsIHdpbGwgYmUKPiBjb2xvcmVkIHRoZSBz
+YW1lIHdheSB3YXJuaW5ncyBhcmUuIFRoaXMgc2hvdWxkIGFsbG93IHVzIHRvIGRldGVjdCBhbmQK
+PiByZW1vdmUgdGhvc2UgZW50cmllcy4KPiAKPiBJdCBjYW4gYmUgdGVzdGVkIGZvciBleGFtcGxl
+IGJ5IGFkZGluZyB0aGUgZm9sbG93aW5nIHZhcmlhYmxlIHRvIHRoZQo+IGFwYWNoZSBwYWNrYWdl
+IChmb3IgYSBDVkUgdGhhdCB3YXMgcmVjZW50bHkgZml4ZWQgaW4gdGhlIE5WRCBkYXRhYmFzZSk6
+Cj4gQVBBQ0hFX0lHTk9SRV9DVkVTID0gQ1ZFLTE5OTktMDIzNgo+IAo+IFNpZ25lZC1vZmYtYnk6
+IFJhcGhhw6tsIE3DqWxvdHRlIDxyYXBoYWVsLm1lbG90dGVAbWluZC5iZT4KCiAgQXBwbGllZCB0
+byAyMDI1LjAyLngsIHRoYW5rcy4KCiAgUmVnYXJkcywKICBBcm5vdXQKCj4gLS0tCj4gICBzdXBw
+b3J0L3NjcmlwdHMvY3ZlLnB5ICAgIHwgIDQgKy0tLQo+ICAgc3VwcG9ydC9zY3JpcHRzL3BrZy1z
+dGF0cyB8IDM2ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrLS0tLQo+ICAgMiBmaWxl
+cyBjaGFuZ2VkLCAzMyBpbnNlcnRpb25zKCspLCA3IGRlbGV0aW9ucygtKQo+IAo+IGRpZmYgLS1n
+aXQgYS9zdXBwb3J0L3NjcmlwdHMvY3ZlLnB5IGIvc3VwcG9ydC9zY3JpcHRzL2N2ZS5weQo+IGlu
+ZGV4IDVhZjZlMGM0M2YuLmZlMmUzZjc3MTIgMTAwNzU1Cj4gLS0tIGEvc3VwcG9ydC9zY3JpcHRz
+L2N2ZS5weQo+ICsrKyBiL3N1cHBvcnQvc2NyaXB0cy9jdmUucHkKPiBAQCAtMTkwLDEzICsxOTAs
+MTEgQEAgY2xhc3MgQ1ZFOgo+ICAgICAgICAgICAiIiJUaGUgc2V0IG9mIENQRSBwcm9kdWN0cyBy
+ZWZlcnJlZCBieSB0aGlzIENWRSBkZWZpbml0aW9uIiIiCj4gICAgICAgICAgIHJldHVybiBzZXQo
+Y3BlX3Byb2R1Y3QocFsnaWQnXSkgZm9yIHAgaW4gc2VsZi5lYWNoX2NwZSgpKQo+ICAgCj4gLSAg
+ICBkZWYgYWZmZWN0cyhzZWxmLCBuYW1lLCB2ZXJzaW9uLCBjdmVfaWdub3JlX2xpc3QsIGNwZWlk
+PU5vbmUpOgo+ICsgICAgZGVmIGFmZmVjdHMoc2VsZiwgbmFtZSwgdmVyc2lvbiwgY3BlaWQ9Tm9u
+ZSk6Cj4gICAgICAgICAgICIiIgo+ICAgICAgICAgICBUcnVlIGlmIHRoZSBCdWlsZHJvb3QgUGFj
+a2FnZSBvYmplY3QgcGFzc2VkIGFzIGFyZ3VtZW50IGlzIGFmZmVjdGVkCj4gICAgICAgICAgIGJ5
+IHRoaXMgQ1ZFLgo+ICAgICAgICAgICAiIiIKPiAtICAgICAgICBpZiBzZWxmLmlkZW50aWZpZXIg
+aW4gY3ZlX2lnbm9yZV9saXN0Ogo+IC0gICAgICAgICAgICByZXR1cm4gc2VsZi5DVkVfRE9FU05U
+X0FGRkVDVAo+ICAgCj4gICAgICAgICAgIHBrZ192ZXJzaW9uID0gZGlzdHV0aWxzLnZlcnNpb24u
+TG9vc2VWZXJzaW9uKHZlcnNpb24pCj4gICAgICAgICAgIGlmIG5vdCBoYXNhdHRyKHBrZ192ZXJz
+aW9uLCAidmVyc2lvbiIpOgo+IGRpZmYgLS1naXQgYS9zdXBwb3J0L3NjcmlwdHMvcGtnLXN0YXRz
+IGIvc3VwcG9ydC9zY3JpcHRzL3BrZy1zdGF0cwo+IGluZGV4IGMxMzRlMWVjMDYuLmFjODQ3MjE2
+N2UgMTAwNzU1Cj4gLS0tIGEvc3VwcG9ydC9zY3JpcHRzL3BrZy1zdGF0cwo+ICsrKyBiL3N1cHBv
+cnQvc2NyaXB0cy9wa2ctc3RhdHMKPiBAQCAtMTIyLDYgKzEyMiw3IEBAIGNsYXNzIFBhY2thZ2U6
+Cj4gICAgICAgICAgIHNlbGYuY3ZlcyA9IGxpc3QoKQo+ICAgICAgICAgICBzZWxmLmlnbm9yZWRf
+Y3ZlcyA9IGxpc3QoKQo+ICAgICAgICAgICBzZWxmLnVuc3VyZV9jdmVzID0gbGlzdCgpCj4gKyAg
+ICAgICAgc2VsZi5zdGFsZV9jdmVfaWdub3JlcyA9IGxpc3QoKQo+ICAgICAgICAgICBzZWxmLmxh
+dGVzdF92ZXJzaW9uID0geydzdGF0dXMnOiBSTV9BUElfU1RBVFVTX0VSUk9SLCAndmVyc2lvbic6
+IE5vbmUsICdpZCc6IE5vbmV9Cj4gICAgICAgICAgIHNlbGYuc3RhdHVzID0ge30KPiAgIAo+IEBA
+IC02MzgsNyArNjM5LDE4IEBAIGRlZiBjaGVja19wYWNrYWdlX2N2ZV9hZmZlY3RzKGN2ZSwgY3Bl
+X3Byb2R1Y3RfcGtncyk6Cj4gICAgICAgICAgIGlmIHByb2R1Y3Qgbm90IGluIGNwZV9wcm9kdWN0
+X3BrZ3M6Cj4gICAgICAgICAgICAgICBjb250aW51ZQo+ICAgICAgICAgICBmb3IgcGtnIGluIGNw
+ZV9wcm9kdWN0X3BrZ3NbcHJvZHVjdF06Cj4gLSAgICAgICAgICAgIGN2ZV9zdGF0dXMgPSBjdmUu
+YWZmZWN0cyhwa2cubmFtZSwgcGtnLmN1cnJlbnRfdmVyc2lvbiwgcGtnLmlnbm9yZWRfY3Zlcywg
+cGtnLmNwZWlkKQo+ICsgICAgICAgICAgICBjdmVfc3RhdHVzID0gY3ZlLmFmZmVjdHMocGtnLm5h
+bWUsIHBrZy5jdXJyZW50X3ZlcnNpb24sIHBrZy5jcGVpZCkKPiArCj4gKyAgICAgICAgICAgIGlm
+IGN2ZS5pZGVudGlmaWVyIGluIHBrZy5pZ25vcmVkX2N2ZXM6Cj4gKyAgICAgICAgICAgICAgICBp
+ZiBjdmVfc3RhdHVzID09IGN2ZS5DVkVfRE9FU05UX0FGRkVDVDoKPiArICAgICAgICAgICAgICAg
+ICAgICAjIFdlIGhhdmUgYW4gaWdub3JlIGVudHJ5IGZvciBhIENWRSB3aGljaCBpcwo+ICsgICAg
+ICAgICAgICAgICAgICAgICMgYWxyZWFkeSByZXBvcnRlZCBhcyAnbm90IGFmZmVjdGVkJy4gVGhp
+cyBtaWdodAo+ICsgICAgICAgICAgICAgICAgICAgICMgaGFwcGVuIGZvciBleGFtcGxlIHdoZW4g
+dGhlIE5WRCBkYXRhYmFzZSBkb2Vzbid0Cj4gKyAgICAgICAgICAgICAgICAgICAgIyBpbml0aWFs
+bHkgaW5jbHVkZSB2ZXJzaW9uIG51bWJlcnMgZm9yIGEgQ1BFLCBhbmQKPiArICAgICAgICAgICAg
+ICAgICAgICAjIGxhdGVyIGZpeGVzIGl0LiBTdG9yZSBpdCBzbyB0aGF0IHdlIGNhbiByZXBvcnQK
+PiArICAgICAgICAgICAgICAgICAgICAjIGl0Lgo+ICsgICAgICAgICAgICAgICAgICAgIHBrZy5z
+dGFsZV9jdmVfaWdub3Jlcy5hcHBlbmQoY3ZlLmlkZW50aWZpZXIpCj4gKyAgICAgICAgICAgICAg
+ICBjdmVfc3RhdHVzID0gY3ZlLkNWRV9ET0VTTlRfQUZGRUNUCj4gICAgICAgICAgICAgICBpZiBj
+dmVfc3RhdHVzID09IGN2ZS5DVkVfQUZGRUNUUzoKPiAgICAgICAgICAgICAgICAgICBwa2cuY3Zl
+cy5hcHBlbmQoY3ZlLmlkZW50aWZpZXIpCj4gICAgICAgICAgICAgICBlbGlmIGN2ZV9zdGF0dXMg
+PT0gY3ZlLkNWRV9VTktOT1dOOgo+IEBAIC02NzAsNiArNjgyLDggQEAgZGVmIGNoZWNrX3BhY2th
+Z2VfY3ZlcyhudmRfcGF0aCwgcGFja2FnZXMpOgo+ICAgICAgICAgICBpZiAnY3ZlJyBub3QgaW4g
+cGtnLnN0YXR1czoKPiAgICAgICAgICAgICAgIGlmIHBrZy5jdmVzIG9yIHBrZy51bnN1cmVfY3Zl
+czoKPiAgICAgICAgICAgICAgICAgICBwa2cuc3RhdHVzWydjdmUnXSA9ICgiZXJyb3IiLCAiYWZm
+ZWN0ZWQgYnkgQ1ZFcyIpCj4gKyAgICAgICAgICAgIGVsaWYgcGtnLnN0YWxlX2N2ZV9pZ25vcmVz
+Ogo+ICsgICAgICAgICAgICAgICAgcGtnLnN0YXR1c1snY3ZlJ10gPSAoIndhcm5pbmciLCAiaGFz
+IHN0YWxlIENWRSBpZ25vcmVzIikKPiAgICAgICAgICAgICAgIGVsc2U6Cj4gICAgICAgICAgICAg
+ICAgICAgcGtnLnN0YXR1c1snY3ZlJ10gPSAoIm9rIiwgIm5vdCBhZmZlY3RlZCBieSBDVkVzIikK
+PiAgIAo+IEBAIC03MTIsMTAgKzcyNiwxMyBAQCBkZWYgY2FsY3VsYXRlX3N0YXRzKHBhY2thZ2Vz
+KToKPiAgICAgICAgICAgc3RhdHNbInBhdGNoZXMiXSArPSBwa2cucGF0Y2hfY291bnQKPiAgICAg
+ICAgICAgc3RhdHNbInRvdGFsLWN2ZXMiXSArPSBsZW4ocGtnLmN2ZXMpCj4gICAgICAgICAgIHN0
+YXRzWyJ0b3RhbC11bnN1cmUtY3ZlcyJdICs9IGxlbihwa2cudW5zdXJlX2N2ZXMpCj4gKyAgICAg
+ICAgc3RhdHNbInRvdGFsLXN0YWxlLWN2ZS1pZ25vcmVzIl0gKz0gbGVuKHBrZy5zdGFsZV9jdmVf
+aWdub3JlcykKPiAgICAgICAgICAgaWYgbGVuKHBrZy5jdmVzKSAhPSAwOgo+ICAgICAgICAgICAg
+ICAgc3RhdHNbInBrZy1jdmVzIl0gKz0gMQo+ICAgICAgICAgICBpZiBsZW4ocGtnLnVuc3VyZV9j
+dmVzKSAhPSAwOgo+ICAgICAgICAgICAgICAgc3RhdHNbInBrZy11bnN1cmUtY3ZlcyJdICs9IDEK
+PiArICAgICAgICBpZiBsZW4ocGtnLnN0YWxlX2N2ZV9pZ25vcmVzKSAhPSAwOgo+ICsgICAgICAg
+ICAgICBzdGF0c1sicGtnLXN0YWxlLWN2ZS1pZ25vcmVzIl0gKz0gMQo+ICAgICAgICAgICBpZiBw
+a2cuY3BlaWQ6Cj4gICAgICAgICAgICAgICBzdGF0c1siY3BlLWlkIl0gKz0gMQo+ICAgICAgICAg
+ICBlbHNlOgo+IEBAIC04NjcsNyArODg0LDcgQEAgZnVuY3Rpb24gZXhwYW5kRmllbGQoZmllbGRJ
+ZCl7Cj4gICAgLndyb25nLCAubG90c29mcGF0Y2hlcywgLmludmFsaWRfdXJsLCAudmVyc2lvbi1u
+ZWVkcy11cGRhdGUsIC5jcGUtbm9rLCAuY3ZlLW5vayB7Cj4gICAgICBiYWNrZ3JvdW5kOiAjZmY5
+YTY5Owo+ICAgIH0KPiAtIC5zb21lcGF0Y2hlcywgLnNvbWV3YXJuaW5ncywgLm1pc3NpbmdfdXJs
+LCAudmVyc2lvbi11bmtub3duLCAuY3BlLXVua25vd24sIC5jdmUtdW5rbm93biB7Cj4gKyAuc29t
+ZXBhdGNoZXMsIC5zb21ld2FybmluZ3MsIC5taXNzaW5nX3VybCwgLnZlcnNpb24tdW5rbm93biwg
+LmNwZS11bmtub3duLCAuY3ZlLXVua25vd24sIC5jdmUtc3RhbGUgewo+ICAgICAgYmFja2dyb3Vu
+ZDogI2ZmZDg3MDsKPiAgICB9Cj4gICAgLmN2ZV9pZ25vcmVkLCAudmVyc2lvbi1lcnJvciB7Cj4g
+QEAgLTEwODAsMTAgKzEwOTcsMTcgQEAgZGVmIGR1bXBfaHRtbF9wa2coZiwgcGtnKToKPiAgICAg
+ICBkaXZfY2xhc3MgPSBbImNlbnRlcmVkIGRhdGEgaWdub3JlZF9jdmVzIl0KPiAgICAgICBkaXZf
+Y2xhc3MuYXBwZW5kKGYnX3twa2dfY3NzX2NsYXNzfScpCj4gICAgICAgaWYgcGtnLmlnbm9yZWRf
+Y3ZlczoKPiAtICAgICAgICBkaXZfY2xhc3MuYXBwZW5kKCJjdmVfaWdub3JlZCIpCj4gKyAgICAg
+ICAgaWYgcGtnLnN0YWxlX2N2ZV9pZ25vcmVzOgo+ICsgICAgICAgICAgICBkaXZfY2xhc3MuYXBw
+ZW5kKCJjdmUtc3RhbGUiKQo+ICsgICAgICAgIGVsc2U6Cj4gKyAgICAgICAgICAgIGRpdl9jbGFz
+cy5hcHBlbmQoImN2ZV9pZ25vcmVkIikKPiAgICAgICBmLndyaXRlKGYnICA8ZGl2IGlkPSJ7ZGF0
+YV9maWVsZF9pZH0iIGNsYXNzPSJ7IiAiLmpvaW4oZGl2X2NsYXNzKX0iPlxuJykKPiAgICAgICBm
+b3IgaWdub3JlZF9jdmUgaW4gcGtnLmlnbm9yZWRfY3ZlczoKPiAtICAgICAgICBmLndyaXRlKGYn
+ICAgIDxhIGhyZWY9Imh0dHBzOi8vc2VjdXJpdHktdHJhY2tlci5kZWJpYW4ub3JnL3RyYWNrZXIv
+e2lnbm9yZWRfY3ZlfSI+e2lnbm9yZWRfY3ZlfTwvYT48YnIvPlxuJykKPiArICAgICAgICBpZiBp
+Z25vcmVkX2N2ZSBpbiBwa2cuc3RhbGVfY3ZlX2lnbm9yZXM6Cj4gKyAgICAgICAgICAgIGYud3Jp
+dGUoZiIiIiAgICA8YSBocmVmPSJodHRwczovL3NlY3VyaXR5LXRyYWNrZXIuZGViaWFuLm9yZy90
+cmFja2VyL3tpZ25vcmVkX2N2ZX0iPntpZ25vcmVkX2N2ZX0iIiIKPiArICAgICAgICAgICAgICAg
+ICAgICAiIiI8aT4oc3RhbGUpPC9pPjwvYT48YnIvPlxuIiIiKQo+ICsgICAgICAgIGVsc2U6Cj4g
+KyAgICAgICAgICAgIGYud3JpdGUoZicgICAgPGEgaHJlZj0iaHR0cHM6Ly9zZWN1cml0eS10cmFj
+a2VyLmRlYmlhbi5vcmcvdHJhY2tlci97aWdub3JlZF9jdmV9Ij57aWdub3JlZF9jdmV9PC9hPjxi
+ci8+XG4nKQo+ICAgICAgIGYud3JpdGUoIiAgPC9kaXY+XG4iKQo+ICAgCj4gICAgICAgIyBDUEUg
+SUQKPiBAQCAtMTE5Myw2ICsxMjE3LDEwIEBAIGRlZiBkdW1wX2h0bWxfc3RhdHMoZiwgc3RhdHMp
+Ogo+ICAgICAgICAgICAgICAgc3RhdHNbInBrZy11bnN1cmUtY3ZlcyJdKQo+ICAgICAgIGYud3Jp
+dGUoJzxkaXYgY2xhc3M9ImRhdGEiPlRvdGFsIG51bWJlciBvZiB1bnN1cmUgQ1ZFcyBhZmZlY3Rp
+bmcgYWxsIHBhY2thZ2VzPC9kaXY+PGRpdiBjbGFzcz0iZGF0YSI+JXM8L2Rpdj5cbicgJQo+ICAg
+ICAgICAgICAgICAgc3RhdHNbInRvdGFsLXVuc3VyZS1jdmVzIl0pCj4gKyAgICBmLndyaXRlKCc8
+ZGl2IGNsYXNzPSJkYXRhIj5QYWNrYWdlcyB3aXRoIHN0YWxlIENWRSBpZ25vcmVzPC9kaXY+PGRp
+diBjbGFzcz0iZGF0YSI+JXM8L2Rpdj5cbicgJQo+ICsgICAgICAgICAgICBzdGF0c1sicGtnLXN0
+YWxlLWN2ZS1pZ25vcmVzIl0pCj4gKyAgICBmLndyaXRlKCc8ZGl2IGNsYXNzPSJkYXRhIj5Ub3Rh
+bCBudW1iZXIgb2Ygc3RhbGUgQ1ZFIGlnbm9yZXMgYWZmZWN0aW5nIGFsbCBwYWNrYWdlczwvZGl2
+PjxkaXYgY2xhc3M9ImRhdGEiPiVzPC9kaXY+XG4nICUKPiArICAgICAgICAgICAgc3RhdHNbInRv
+dGFsLXN0YWxlLWN2ZS1pZ25vcmVzIl0pCj4gICAgICAgZi53cml0ZSgnPGRpdiBjbGFzcz0iZGF0
+YSI+UGFja2FnZXMgd2l0aCBDUEUgSUQ8L2Rpdj48ZGl2IGNsYXNzPSJkYXRhIj4lczwvZGl2Plxu
+JyAlCj4gICAgICAgICAgICAgICBzdGF0c1siY3BlLWlkIl0pCj4gICAgICAgZi53cml0ZSgnPGRp
+diBjbGFzcz0iZGF0YSI+UGFja2FnZXMgd2l0aG91dCBDUEUgSUQ8L2Rpdj48ZGl2IGNsYXNzPSJk
+YXRhIj4lczwvZGl2PlxuJyAlCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3Jn
+Cmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
