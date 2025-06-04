@@ -1,70 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F03BC5B549
-	for <buildroot@archiver.kernel.org>; Wed,  4 Jun 2025 18:23:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E33EC5B543
+	for <buildroot@archiver.kernel.org>; Wed,  4 Jun 2025 18:24:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 101CA60E51;
-	Wed,  4 Jun 2025 18:23:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 57D9940B3F;
+	Wed,  4 Jun 2025 18:24:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id W02BJj2KacJx; Wed,  4 Jun 2025 18:23:03 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PFg5Jyv6jQVF; Wed,  4 Jun 2025 18:24:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1F93560E4F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8044240AF3
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1F93560E4F;
-	Wed,  4 Jun 2025 18:23:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8044240AF3;
+	Wed,  4 Jun 2025 18:24:21 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id EF54FDA
- for <buildroot@buildroot.org>; Wed,  4 Jun 2025 18:23:01 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 2D45D1A6
+ for <buildroot@buildroot.org>; Wed,  4 Jun 2025 18:24:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EC83280DB8
- for <buildroot@buildroot.org>; Wed,  4 Jun 2025 18:23:01 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 136348346C
+ for <buildroot@buildroot.org>; Wed,  4 Jun 2025 18:24:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id e19TgF4SR2s3 for <buildroot@buildroot.org>;
- Wed,  4 Jun 2025 18:23:01 +0000 (UTC)
+ id VoZEvOD6yIcS for <buildroot@buildroot.org>;
+ Wed,  4 Jun 2025 18:24:19 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
  helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BCD3780E18
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BCD3780E18
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3E10083300
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3E10083300
 Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BCD3780E18
- for <buildroot@busybox.net>; Wed,  4 Jun 2025 18:23:00 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3E10083300
+ for <buildroot@buildroot.org>; Wed,  4 Jun 2025 18:24:19 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id DA76C1C0D5B; Wed,  4 Jun 2025 20:22:50 +0200 (CEST)
-Message-ID: <451686ff-1683-4b64-93b1-37dc50804bc4@rnout.be>
-Date: Wed, 4 Jun 2025 20:22:47 +0200
+ with ESMTPSA id 423D91C0198; Wed,  4 Jun 2025 20:24:17 +0200 (CEST)
+Message-ID: <d5ff3a38-b224-453d-906a-b7bc1c9e275c@rnout.be>
+Date: Wed, 4 Jun 2025 20:24:16 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Francois Perrad <francois.perrad@gadz.org>, buildroot@busybox.net
-References: <20250321062358.3955810-1-francois.perrad@gadz.org>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+References: <20250518164542.7511F87172@busybox.osuosl.org>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20250321062358.3955810-1-francois.perrad@gadz.org>
+In-Reply-To: <20250518164542.7511F87172@busybox.osuosl.org>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1749061371; h=from:subject:date:message-id:to:mime-version:content-type:
+ t=1749061457; h=from:subject:date:message-id:to:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=yYFaEa09tE0UnhEUrFPk8xZ9jyS1+LTiAjdADL6J1l4=;
- b=RRp8K6QbN9+ULXP4pElot2qeBpcCnq/+4AkX1AlrxPXOFDxLGTFUgfDbbAsse8MOeFH79P
- NkHJs4dFv2FU780eSlub8D1vWLnWrTuPzAe0BXY5wjAu3CtOk3tBAiOduUzDAI6gONYaKX
- u6PSvYvk35wwMQBHOG9ZJGbyb4iCze4RYeLtgVNxdAcGP8VqJqTkHbRokb4Mxse0LjZzHe
- qDO9O+dTUpSlI0aD1nFKRUhjgWrQaQTuZ0X/MlE8wsALGromWgav/NYiBNuOpeahFird6o
- ulLt+qgaMNgo+lw/SSunF1z2nEE+jKAAxCrpFK5skqz/uaZw2DoM+6NDLgCmkg==
+ bh=IowraujM9Osf0eWhbZp78Q/kG9kKP/suJhdDzsO9vkE=;
+ b=aoRTaXkFNjVyRVFO4LdL71o/wOPGiq+GMHqAPV1ZJJtfR2CTuQquTsAi72hrgqNKmA0EzU
+ 5nrqsLNzWrkgAKgPKDG7lMjeoyyH69TZcEez34+2N/4M+fyl8XRINMsR7H+MGouucvvkre
+ LPhRpsh1NldV/j/d7AZkQuQvmdwz0gbPFCmkB2/7T30NLirT3I2HKGra41ByV7kxd1MNEY
+ lzzxdelIV7omAkGxwEMOXY3u1GVbacqwoq8QEP65h7o63r9h3SnCO3+y8B7HMuDe9JoS/M
+ carVj4/LIJ0p1GRrR8cRZlmUO9ZFGffvxeqAnduXYagLyE0O0ZkbaEMxlC19hA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=RRp8K6Qb
-Subject: Re: [Buildroot] [RFC PATCH]
- docs/manual/customize-directory-structure: add a custom top Makefile
+ header.a=rsa-sha256 header.s=dkim header.b=aoRTaXkF
+Subject: Re: [Buildroot] [git commit] package/samba4: needs libxcrypt
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,117 +84,74 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 21/03/2025 07:23, Francois Perrad via buildroot wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+On 18/05/2025 18:45, Thomas Petazzoni via buildroot wrote:
+> commit: https://git.buildroot.net/buildroot/commit/?id=6c3f01fde12730defcc238fe9b065b30086e066b
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> 
+> Since the bump of Samba to version 4.21.4 in commit
+> 716461af945e89af56eea4a3936c4a2adc7fdb4d, <crypt.h> is needed, due to
+> upstream comit 0dccda38f27b3bbda5d2a4de588a333ff554651a. Since
+> <crypt.h> is no longer provided by glibc, a dependency on libxcrypt is
+> needed, to avoid the following build failure:
+> 
+> ../../lib/util/util_crypt.c:5:10: fatal error: crypt.h: No such file or directory
+>      5 | #include <crypt.h>
+>        |          ^~~~~~~~~
+> compilation terminated.
+> 
+> This has not been detected by the autobuilders, presumably because a
+> lot of glibc configurations end up having libxcrypt selected by other
+> packages, but the issue is reproducible by building:
+> 
+> BR2_arm=y
+> BR2_cortex_a9=y
+> BR2_ARM_ENABLE_VFP=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+> BR2_PACKAGE_SAMBA4=y
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
   Applied to 2025.02.x, thanks.
+
+  BTW does this close https://gitlab.com/buildroot.org/buildroot/-/issues/86 ?
 
   Regards,
   Arnout
 
 > ---
->   .../manual/customize-directory-structure.adoc | 84 +++++++++++++++++++
->   1 file changed, 84 insertions(+)
+>   package/samba4/Config.in | 1 +
+>   package/samba4/samba4.mk | 1 +
+>   2 files changed, 2 insertions(+)
 > 
-> diff --git a/docs/manual/customize-directory-structure.adoc b/docs/manual/customize-directory-structure.adoc
-> index e0eecb564..b0beebb40 100644
-> --- a/docs/manual/customize-directory-structure.adoc
-> +++ b/docs/manual/customize-directory-structure.adoc
-> @@ -49,6 +49,7 @@ to you.
->   |           +-- package2.mk
->   |
->   +-- Config.in (if using a br2-external tree)
-> ++-- Makefile (if using a custom top makefile)
->   +-- external.mk (if using a br2-external tree)
->   +-- external.desc (if using a br2-external tree)
->   ----
-> @@ -109,3 +110,86 @@ BR2_GLOBAL_PATCH_DIR="board/<company>/common/patches board/<company>/fooboard/pa
->   
->   then first the patches from the 'common' layer would be applied,
->   followed by the patches from the 'fooboard' layer.
-> +
-> +==== Custom top Makefile
-> +
-> +Here, a custom Makefile for your project which adds some new targets,
-> +on the top of all Buildroot targets.
-> +
-> +The variable +BOARD+ needs to be adjusted to your project.
-> +
-> +With the variable +BUILDROOT+, it is easy to upgrade the Buildroot version
-> +used by your project.
-> +
-> +----
-> +BOARD?=<boardname>
-> +BUILDROOT:=buildroot-2025.02
-> +OUTPUT:=output_$(BOARD)
-> +SD?=/dev/sdX
-> +
-> +export BR2_DL_DIR=$(CURDIR)/download
-> +
-> +all: $(BOARD)
-> +
-> +.PHONY: buildroot
-> +buildroot: $(BUILDROOT)
-> +
-> +.PHONY: buildroot-clean
-> +buildroot-clean:
-> +	rm -rf $(BUILDROOT)
-> +
-> +.PHONY: conf
-> +conf: $(OUTPUT)/.config
-> +
-> +.PHONY: conf-clean
-> +conf-clean:
-> +	rm -f $(OUTPUT)/.config
-> +
-> +.PHONY: board
-> +board: $(BOARD)
-> +
-> +.PHONY: board-clean
-> +board-clean:
-> +	rm -rf $(OUTPUT)
-> +
-> +.PHONY: dd
-> +dd:
-> +	@mount | grep $(SD)
-> +	sudo dd status=progress if=$(OUTPUT)/images/sdcard.img of=$(SD)
-> +	sync
-> +	sync
-> +
-> +$(BR2_DL_DIR)/buildroot/$(BUILDROOT).tar.xz:
-> +	mkdir -p $(BR2_DL_DIR)/buildroot
-> +	cd $(BR2_DL_DIR)/buildroot && wget https://buildroot.org/downloads/$(BUILDROOT).tar.xz
-> +
-> +$(BUILDROOT): $(BR2_DL_DIR)/buildroot/$(BUILDROOT).tar.xz
-> +	tar xfJ $(BR2_DL_DIR)/buildroot/$(BUILDROOT).tar.xz
-> +	touch $(BUILDROOT)
-> +	# here, apply patches against the Buildroot official tarball
-> +
-> +$(OUTPUT)/.config: $(BUILDROOT)
-> +	$(MAKE) -C $(BUILDROOT) O=$(CURDIR)/$(OUTPUT) defconfig BR2_DEFCONFIG=../configs/$(BOARD)_defconfig BR2_EXTERNAL=..
-> +
-> +.PHONY: $(BOARD)
-> +$(BOARD): $(OUTPUT)/.config
-> +	$(MAKE) -C $(BUILDROOT) O=$(CURDIR)/$(OUTPUT)
-> +
-> +# delegate all other targets to the Buildroot makefile
-> +%:
-> +	$(MAKE) -C $(BUILDROOT) O=$(CURDIR)/$(OUTPUT) $@
-> +----
-> +
-> +Now, an example of work session.
-> +
-> +----
-> + $ make buildroot       # custom
-> + $ make conf            # custom
-> + $ make nconfig         # Buildroot
-> + $ make savedefconfig   # Buildroot
-> + $ make source          # Buildroot
-> + $ make board           # custom
-> + $ make dd              # custom
-> +
-> + $ make help            # Buildroot
-> +----
+> diff --git a/package/samba4/Config.in b/package/samba4/Config.in
+> index 36ec656168..6aff82bb3d 100644
+> --- a/package/samba4/Config.in
+> +++ b/package/samba4/Config.in
+> @@ -17,6 +17,7 @@ config BR2_PACKAGE_SAMBA4
+>   	select BR2_PACKAGE_GNUTLS
+>   	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+>   	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
+> +	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
+>   	select BR2_PACKAGE_POPT
+>   	select BR2_PACKAGE_ZLIB
+>   	help
+> diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+> index ac3141f3d9..828de56fc8 100644
+> --- a/package/samba4/samba4.mk
+> +++ b/package/samba4/samba4.mk
+> @@ -22,6 +22,7 @@ SAMBA4_DEPENDENCIES = \
+>   	$(if $(BR2_PACKAGE_LIBCAP),libcap) \
+>   	$(if $(BR2_PACKAGE_LIBGLIB2),libglib2) \
+>   	$(if $(BR2_PACKAGE_READLINE),readline) \
+> +	$(if $(BR2_PACKAGE_LIBXCRYPT),libxcrypt) \
+>   	$(TARGET_NLS_DEPENDENCIES)
+>   SAMBA4_CFLAGS = $(TARGET_CFLAGS)
+>   SAMBA4_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
 _______________________________________________
 buildroot mailing list
