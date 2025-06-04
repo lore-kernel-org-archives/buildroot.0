@@ -1,73 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30BF4C5B543
-	for <buildroot@archiver.kernel.org>; Wed,  4 Jun 2025 18:25:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B15DAC5B543
+	for <buildroot@archiver.kernel.org>; Wed,  4 Jun 2025 18:26:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 01FC160E50;
-	Wed,  4 Jun 2025 18:25:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7E949406F6;
+	Wed,  4 Jun 2025 18:26:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QiBaE9V5No-S; Wed,  4 Jun 2025 18:25:34 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5FVTBaPqunoX; Wed,  4 Jun 2025 18:26:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 12FC860E0B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 730EF406F7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 12FC860E0B;
-	Wed,  4 Jun 2025 18:25:34 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 0E1FEDA
- for <buildroot@buildroot.org>; Wed,  4 Jun 2025 18:25:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 730EF406F7;
+	Wed,  4 Jun 2025 18:26:21 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7E57FDA
+ for <buildroot@buildroot.org>; Wed,  4 Jun 2025 18:26:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E8CB040084
- for <buildroot@buildroot.org>; Wed,  4 Jun 2025 18:25:32 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 700E4809B9
+ for <buildroot@buildroot.org>; Wed,  4 Jun 2025 18:26:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tTJJA58khn9a for <buildroot@buildroot.org>;
- Wed,  4 Jun 2025 18:25:32 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TCLcaMA2njCt for <buildroot@buildroot.org>;
+ Wed,  4 Jun 2025 18:26:19 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
  helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org DA9CB40050
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DA9CB40050
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1360E80D35
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1360E80D35
 Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DA9CB40050
- for <buildroot@buildroot.org>; Wed,  4 Jun 2025 18:25:31 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1360E80D35
+ for <buildroot@buildroot.org>; Wed,  4 Jun 2025 18:26:18 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id C58471C0198; Wed,  4 Jun 2025 20:25:29 +0200 (CEST)
-Message-ID: <ae7ca193-9e5b-41ec-859b-5955ee326ede@rnout.be>
-Date: Wed, 4 Jun 2025 20:25:28 +0200
+ with ESMTPSA id E6FDD1C010A; Wed,  4 Jun 2025 20:26:16 +0200 (CEST)
+Message-ID: <0ce022f4-6c61-4842-b6f6-d4d37aaa2716@rnout.be>
+Date: Wed, 4 Jun 2025 20:26:15 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 To: Titouan Christophe <titouan.christophe@mind.be>, buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Romain Naour <romain.naour@gmail.com>, thomas.perale@mind.be
-References: <20250519140042.4019332-1-titouan.christophe@mind.be>
+Cc: James Hilliard <james.hilliard1@gmail.com>, thomas.perale@mind.be
+References: <20250519150314.4117224-1-titouan.christophe@mind.be>
+ <20250521221047.1297537-1-titouan.christophe@mind.be>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20250519140042.4019332-1-titouan.christophe@mind.be>
+In-Reply-To: <20250521221047.1297537-1-titouan.christophe@mind.be>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1749061530; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1749061577; h=from:subject:date:message-id:to:cc:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=30SlatGAP9Vl1swzoHqIxQ23MkUSNkaEnX6jHBDn81Y=;
- b=JEj7ckTlndJdFKCEqLBzblYTb6/JccP6bRkC/1ZXd5LSq5ALbl4vDbHvBILC/uTQY6LtVF
- s0pS8CXjNADMNCJaChTjCEQU6l1tQEX8PMQynQUtO1ls7GgakxOrRl+QiNDjU3x4sqiQWQ
- 9oEYzLZi9A3O5ZjBCPzPJu9FV8K4wG8GdDcw5FuU5mhpf1w98bG0IWjikNJwXgDz70fT6M
- 5gxHgfAXvBkvjS925HfXA2fxU/jucNDKsiOyAa7x4rI3TxuBoOO/4i2CNnSVNUmzX6v2oS
- 7tSBUUYSsZfU0VVRE9PPyKpMHGfh/z4nYR35El617oaG9rYZm0+qE4f5Aw6AMQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=MABJzHm5S0eMQm+VRqsCwqoSRxEukY1u+6mGHx+kpow=;
+ b=PlERWWoGqw7Nm4g9UxFFiP+Ua5nTFDtmxpwuDNirZCf5H9AGKy+XRXrae7H7lDvtOctVvY
+ 42dHQJvED0SIJEzwHSLU2liejiJRr0YzX1pN+ds3ZjDaxU3p1LgroSWir0pP4pK2Kw68xS
+ 8DNBnQWOAfxe6pZQ7hcf0oCqxmMYr71I0nB7SNPecogOk2dQV+IA1R704MX4L6b4tPt2Mv
+ F7mBxApNFGYL/Abnw6y5kN5q3YpOp3TdkrdLdbHTX8hZ42Au2B3psyyqxp4i2+FVyz5UaN
+ aCpVXgCefxpDAToFjUIv6WePCsNzEdkmu7nL7Gxrqs1gldmsJP50doCSt84svw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=fail reason="signature verification failed" (2048-bit key)
- header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256 header.s=dkim
- header.b=JEj7ckTl
-Subject: Re: [Buildroot] [PATCH] package/binutils: apply security patch for
- CVE-2025-3198
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
+ header.a=rsa-sha256 header.s=dkim header.b=PlERWWoG
+Subject: Re: [Buildroot] [PATCH v2 for 2025.02.x] package/python-tornado:
+ apply security patch for CVE-2025-47287
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -88,16 +87,16 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 19/05/2025 16:00, Titouan Christophe via buildroot wrote:
-> This fixes a memory leaks that affects both binutils 2.43 and 2.44,
-> see https://www.cve.org/CVERecord?id=CVE-2025-3198
+On 22/05/2025 00:10, Titouan Christophe via buildroot wrote:
+> This fixes the following CVE:
+> - CVE-2025-47287: When Tornado's ``multipart/form-data`` parser encounters
+>                    certain errors, it logs a warning but continues trying to
+>                    parse the remainder of the data. This allows remote
+>                    attackers to generate an extremely high volume of logs,
+>                    constituting a DoS attack.
 > 
-> Fixes the following CVE:
-> - CVE-2025-3198: A vulnerability has been found in GNU Binutils 2.43/2.44
->                   and classified as problematic. Affected by this
->                   vulnerability is the function display_info of the file
->                   binutils/bucomm.c of the component objdump.
->                   The manipulation leads to memory leak.
+> This is an alternative to the version bump (6.4.2 -> 6.5), if we don't want
+> to include a minor version bump into Buildroot LTS 2025.02.x.
 > 
 > Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 
@@ -107,101 +106,266 @@ On 19/05/2025 16:00, Titouan Christophe via buildroot wrote:
   Arnout
 
 > ---
->   .../2.43.1/0003-objdump-memleak.patch         | 31 +++++++++++++++++++
->   .../binutils/2.44/0003-objdump-memleak.patch  | 31 +++++++++++++++++++
->   package/binutils/binutils.mk                  |  3 ++
->   3 files changed, 65 insertions(+)
->   create mode 100644 package/binutils/2.43.1/0003-objdump-memleak.patch
->   create mode 100644 package/binutils/2.44/0003-objdump-memleak.patch
+> Changes v1 -> v2:
+> - Fix patch not applying correctly
+> ---
+>   ...l-raise-errors-instead-of-logging-in.patch | 234 ++++++++++++++++++
+>   package/python-tornado/python-tornado.mk      |   3 +
+>   2 files changed, 237 insertions(+)
+>   create mode 100644 package/python-tornado/0001-httputil-raise-errors-instead-of-logging-in.patch
 > 
-> diff --git a/package/binutils/2.43.1/0003-objdump-memleak.patch b/package/binutils/2.43.1/0003-objdump-memleak.patch
+> diff --git a/package/python-tornado/0001-httputil-raise-errors-instead-of-logging-in.patch b/package/python-tornado/0001-httputil-raise-errors-instead-of-logging-in.patch
 > new file mode 100644
-> index 0000000000..1b1632093d
+> index 0000000000..85f5852bf7
 > --- /dev/null
-> +++ b/package/binutils/2.43.1/0003-objdump-memleak.patch
-> @@ -0,0 +1,31 @@
-> +From ba6ad3a18cb26b79e0e3b84c39f707535bbc344d Mon Sep 17 00:00:00 2001
-> +From: Alan Modra <amodra@gmail.com>
-> +Date: Wed, 19 Feb 2025 07:58:54 +1030
-> +Subject: [PATCH] PR32716, objdump -i memory leak
+> +++ b/package/python-tornado/0001-httputil-raise-errors-instead-of-logging-in.patch
+> @@ -0,0 +1,234 @@
+> +From cc61050e8f26697463142d99864b562e8470b41d Mon Sep 17 00:00:00 2001
+> +From: Ben Darnell <ben@bendarnell.com>
+> +Date: Thu, 8 May 2025 13:29:43 -0400
+> +Subject: [PATCH] httputil: Raise errors instead of logging in
+> + multipart/form-data parsing
 > +
-> +PR binutils/32716
-> +* bucomm.c (display_info): Free arg.info.
+> +We used to continue after logging an error, which allowed repeated
+> +errors to spam the logs. The error raised here will still be logged,
+> +but only once per request, consistent with other error handling in
+> +Tornado.
 > +
-> +Upstream: https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;h=ba6ad3a18cb26b79e0e3b84c39f707535bbc344d
+> +Upstream: https://github.com/tornadoweb/tornado/commit/b39b892bf78fe8fea01dd45199aa88307e7162f3
 > +
-> +CVE: CVE-2025-3198
+> +CVE: CVE-2025-47287
+> +
 > +Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 > +---
-> + binutils/bucomm.c | 1 +
-> + 1 file changed, 1 insertion(+)
+> + tornado/httputil.py             | 30 +++++++++++-------------------
+> + tornado/test/httpserver_test.py |  4 ++--
+> + tornado/test/httputil_test.py   | 13 ++++++++-----
+> + tornado/web.py                  | 17 +++++++++++++----
+> + 4 files changed, 34 insertions(+), 30 deletions(-)
 > +
-> +diff --git a/binutils/bucomm.c b/binutils/bucomm.c
-> +index ccf54099154..d4554737db1 100644
-> +--- a/binutils/bucomm.c
-> ++++ b/binutils/bucomm.c
-> +@@ -435,6 +435,7 @@ display_info (void)
-> +   if (!arg.error)
-> +     display_target_tables (&arg);
+> +diff --git a/tornado/httputil.py b/tornado/httputil.py
+> +index 7044aca02..ef460985e 100644
+> +--- a/tornado/httputil.py
+> ++++ b/tornado/httputil.py
+> +@@ -34,7 +34,6 @@
+> + from urllib.parse import urlencode, urlparse, urlunparse, parse_qsl
 > +
-> ++  free (arg.info);
-> +   return arg.error;
-> + }
-> + 
-> +--
-> +2.43.5
+> + from tornado.escape import native_str, parse_qs_bytes, utf8
+> +-from tornado.log import gen_log
+> + from tornado.util import ObjectDict, unicode_type
 > +
-> diff --git a/package/binutils/2.44/0003-objdump-memleak.patch b/package/binutils/2.44/0003-objdump-memleak.patch
-> new file mode 100644
-> index 0000000000..1b1632093d
-> --- /dev/null
-> +++ b/package/binutils/2.44/0003-objdump-memleak.patch
-> @@ -0,0 +1,31 @@
-> +From ba6ad3a18cb26b79e0e3b84c39f707535bbc344d Mon Sep 17 00:00:00 2001
-> +From: Alan Modra <amodra@gmail.com>
-> +Date: Wed, 19 Feb 2025 07:58:54 +1030
-> +Subject: [PATCH] PR32716, objdump -i memory leak
 > +
-> +PR binutils/32716
-> +* bucomm.c (display_info): Free arg.info.
+> +@@ -884,25 +883,22 @@ def parse_body_arguments(
+> +     """
+> +     if content_type.startswith("application/x-www-form-urlencoded"):
+> +         if headers and "Content-Encoding" in headers:
+> +-            gen_log.warning(
+> +-                "Unsupported Content-Encoding: %s", headers["Content-Encoding"]
+> ++            raise HTTPInputError(
+> ++                "Unsupported Content-Encoding: %s" % headers["Content-Encoding"]
+> +             )
+> +-            return
+> +         try:
+> +             # real charset decoding will happen in RequestHandler.decode_argument()
+> +             uri_arguments = parse_qs_bytes(body, keep_blank_values=True)
+> +         except Exception as e:
+> +-            gen_log.warning("Invalid x-www-form-urlencoded body: %s", e)
+> +-            uri_arguments = {}
+> ++            raise HTTPInputError("Invalid x-www-form-urlencoded body: %s" % e) from e
+> +         for name, values in uri_arguments.items():
+> +             if values:
+> +                 arguments.setdefault(name, []).extend(values)
+> +     elif content_type.startswith("multipart/form-data"):
+> +         if headers and "Content-Encoding" in headers:
+> +-            gen_log.warning(
+> +-                "Unsupported Content-Encoding: %s", headers["Content-Encoding"]
+> ++            raise HTTPInputError(
+> ++                "Unsupported Content-Encoding: %s" % headers["Content-Encoding"]
+> +             )
+> +-            return
+> +         try:
+> +             fields = content_type.split(";")
+> +             for field in fields:
+> +@@ -911,9 +907,9 @@ def parse_body_arguments(
+> +                     parse_multipart_form_data(utf8(v), body, arguments, files)
+> +                     break
+> +             else:
+> +-                raise ValueError("multipart boundary not found")
+> ++                raise HTTPInputError("multipart boundary not found")
+> +         except Exception as e:
+> +-            gen_log.warning("Invalid multipart/form-data: %s", e)
+> ++            raise HTTPInputError("Invalid multipart/form-data: %s" % e) from e
 > +
-> +Upstream: https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;h=ba6ad3a18cb26b79e0e3b84c39f707535bbc344d
 > +
-> +CVE: CVE-2025-3198
-> +Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-> +---
-> + binutils/bucomm.c | 1 +
-> + 1 file changed, 1 insertion(+)
+> + def parse_multipart_form_data(
+> +@@ -942,26 +938,22 @@ def parse_multipart_form_data(
+> +         boundary = boundary[1:-1]
+> +     final_boundary_index = data.rfind(b"--" + boundary + b"--")
+> +     if final_boundary_index == -1:
+> +-        gen_log.warning("Invalid multipart/form-data: no final boundary")
+> +-        return
+> ++        raise HTTPInputError("Invalid multipart/form-data: no final boundary found")
+> +     parts = data[:final_boundary_index].split(b"--" + boundary + b"\r\n")
+> +     for part in parts:
+> +         if not part:
+> +             continue
+> +         eoh = part.find(b"\r\n\r\n")
+> +         if eoh == -1:
+> +-            gen_log.warning("multipart/form-data missing headers")
+> +-            continue
+> ++            raise HTTPInputError("multipart/form-data missing headers")
+> +         headers = HTTPHeaders.parse(part[:eoh].decode("utf-8"))
+> +         disp_header = headers.get("Content-Disposition", "")
+> +         disposition, disp_params = _parse_header(disp_header)
+> +         if disposition != "form-data" or not part.endswith(b"\r\n"):
+> +-            gen_log.warning("Invalid multipart/form-data")
+> +-            continue
+> ++            raise HTTPInputError("Invalid multipart/form-data")
+> +         value = part[eoh + 4 : -2]
+> +         if not disp_params.get("name"):
+> +-            gen_log.warning("multipart/form-data value missing name")
+> +-            continue
+> ++            raise HTTPInputError("multipart/form-data missing name")
+> +         name = disp_params["name"]
+> +         if disp_params.get("filename"):
+> +             ctype = headers.get("Content-Type", "application/unknown")
+> +diff --git a/tornado/test/httpserver_test.py b/tornado/test/httpserver_test.py
+> +index 570cb64ca..f197cfef8 100644
+> +--- a/tornado/test/httpserver_test.py
+> ++++ b/tornado/test/httpserver_test.py
+> +@@ -1148,9 +1148,9 @@ def test_gzip_unsupported(self):
+> +         # Gzip support is opt-in; without it the server fails to parse
+> +         # the body (but parsing form bodies is currently just a log message,
+> +         # not a fatal error).
+> +-        with ExpectLog(gen_log, "Unsupported Content-Encoding"):
+> ++        with ExpectLog(gen_log, ".*Unsupported Content-Encoding"):
+> +             response = self.post_gzip("foo=bar")
+> +-        self.assertEqual(json_decode(response.body), {})
+> ++        self.assertEqual(response.code, 400)
 > +
-> +diff --git a/binutils/bucomm.c b/binutils/bucomm.c
-> +index ccf54099154..d4554737db1 100644
-> +--- a/binutils/bucomm.c
-> ++++ b/binutils/bucomm.c
-> +@@ -435,6 +435,7 @@ display_info (void)
-> +   if (!arg.error)
-> +     display_target_tables (&arg);
 > +
-> ++  free (arg.info);
-> +   return arg.error;
-> + }
-> + 
-> +--
-> +2.43.5
+> + class StreamingChunkSizeTest(AsyncHTTPTestCase):
+> +diff --git a/tornado/test/httputil_test.py b/tornado/test/httputil_test.py
+> +index 30fbec4d7..7a09beaa3 100644
+> +--- a/tornado/test/httputil_test.py
+> ++++ b/tornado/test/httputil_test.py
+> +@@ -12,7 +12,6 @@
+> + )
+> + from tornado.escape import utf8, native_str
+> + from tornado.log import gen_log
+> +-from tornado.testing import ExpectLog
+> + from tornado.test.util import ignore_deprecation
 > +
-> diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-> index fd6fc3de8d..2b5064d739 100644
-> --- a/package/binutils/binutils.mk
-> +++ b/package/binutils/binutils.mk
-> @@ -31,6 +31,9 @@ BINUTILS_LICENSE = GPL-3.0+, libiberty LGPL-2.1+
->   BINUTILS_LICENSE_FILES = COPYING3 COPYING.LIB
->   BINUTILS_CPE_ID_VENDOR = gnu
+> + import copy
+> +@@ -195,7 +194,9 @@ def test_missing_headers(self):
+> +             b"\n", b"\r\n"
+> +         )
+> +         args, files = form_data_args()
+> +-        with ExpectLog(gen_log, "multipart/form-data missing headers"):
+> ++        with self.assertRaises(
+> ++            HTTPInputError, msg="multipart/form-data missing headers"
+> ++        ):
+> +             parse_multipart_form_data(b"1234", data, args, files)
+> +         self.assertEqual(files, {})
+> +
+> +@@ -209,7 +210,7 @@ def test_invalid_content_disposition(self):
+> +             b"\n", b"\r\n"
+> +         )
+> +         args, files = form_data_args()
+> +-        with ExpectLog(gen_log, "Invalid multipart/form-data"):
+> ++        with self.assertRaises(HTTPInputError, msg="Invalid multipart/form-data"):
+> +             parse_multipart_form_data(b"1234", data, args, files)
+> +         self.assertEqual(files, {})
+> +
+> +@@ -222,7 +223,7 @@ def test_line_does_not_end_with_correct_line_break(self):
+> +             b"\n", b"\r\n"
+> +         )
+> +         args, files = form_data_args()
+> +-        with ExpectLog(gen_log, "Invalid multipart/form-data"):
+> ++        with self.assertRaises(HTTPInputError, msg="Invalid multipart/form-data"):
+> +             parse_multipart_form_data(b"1234", data, args, files)
+> +         self.assertEqual(files, {})
+> +
+> +@@ -236,7 +237,9 @@ def test_content_disposition_header_without_name_parameter(self):
+> +             b"\n", b"\r\n"
+> +         )
+> +         args, files = form_data_args()
+> +-        with ExpectLog(gen_log, "multipart/form-data value missing name"):
+> ++        with self.assertRaises(
+> ++            HTTPInputError, msg="multipart/form-data value missing name"
+> ++        ):
+> +             parse_multipart_form_data(b"1234", data, args, files)
+> +         self.assertEqual(files, {})
+> +
+> +diff --git a/tornado/web.py b/tornado/web.py
+> +index 0303f547e..2f702d648 100644
+> +--- a/tornado/web.py
+> ++++ b/tornado/web.py
+> +@@ -1801,6 +1801,14 @@ async def _execute(
+> +         try:
+> +             if self.request.method not in self.SUPPORTED_METHODS:
+> +                 raise HTTPError(405)
+> ++
+> ++            # If we're not in stream_request_body mode, this is the place where we parse the body.
+> ++            if not _has_stream_request_body(self.__class__):
+> ++                try:
+> ++                    self.request._parse_body()
+> ++                except httputil.HTTPInputError as e:
+> ++                    raise HTTPError(400, "Invalid body: %s" % e) from e
+> ++
+> +             self.path_args = [self.decode_argument(arg) for arg in args]
+> +             self.path_kwargs = dict(
+> +                 (k, self.decode_argument(v, name=k)) for (k, v) in kwargs.items()
+> +@@ -1992,7 +2000,7 @@ def _has_stream_request_body(cls: Type[RequestHandler]) -> bool:
+> +
+> +
+> + def removeslash(
+> +-    method: Callable[..., Optional[Awaitable[None]]]
+> ++    method: Callable[..., Optional[Awaitable[None]]],
+> + ) -> Callable[..., Optional[Awaitable[None]]]:
+> +     """Use this decorator to remove trailing slashes from the request path.
+> +
+> +@@ -2021,7 +2029,7 @@ def wrapper(  # type: ignore
+> +
+> +
+> + def addslash(
+> +-    method: Callable[..., Optional[Awaitable[None]]]
+> ++    method: Callable[..., Optional[Awaitable[None]]],
+> + ) -> Callable[..., Optional[Awaitable[None]]]:
+> +     """Use this decorator to add a missing trailing slash to the request path.
+> +
+> +@@ -2445,8 +2453,9 @@ def finish(self) -> None:
+> +         if self.stream_request_body:
+> +             future_set_result_unless_cancelled(self.request._body_future, None)
+> +         else:
+> ++            # Note that the body gets parsed in RequestHandler._execute so it can be in
+> ++            # the right exception handler scope.
+> +             self.request.body = b"".join(self.chunks)
+> +-            self.request._parse_body()
+> +             self.execute()
+> +
+> +     def on_connection_close(self) -> None:
+> +@@ -3332,7 +3341,7 @@ def transform_chunk(self, chunk: bytes, finishing: bool) -> bytes:
+> +
+> +
+> + def authenticated(
+> +-    method: Callable[..., Optional[Awaitable[None]]]
+> ++    method: Callable[..., Optional[Awaitable[None]]],
+> + ) -> Callable[..., Optional[Awaitable[None]]]:
+> +     """Decorate methods with this to require that the user be logged in.
+> +
+> diff --git a/package/python-tornado/python-tornado.mk b/package/python-tornado/python-tornado.mk
+> index 45883b844d..0a33a57ed4 100644
+> --- a/package/python-tornado/python-tornado.mk
+> +++ b/package/python-tornado/python-tornado.mk
+> @@ -13,4 +13,7 @@ PYTHON_TORNADO_CPE_ID_VENDOR = tornadoweb
+>   PYTHON_TORNADO_CPE_ID_PRODUCT = tornado
+>   PYTHON_TORNADO_SETUP_TYPE = setuptools
 >   
-> +# 0003-objdump-memleak.patch
-> +BINUTILS_IGNORE_CVES += CVE-2025-3198
+> +# 0001-httputil-raise-errors-instead-of-logging-in.patch
+> +PYTHON_TORNADO_IGNORE_CVES += CVE-2025-47287
 > +
->   ifeq ($(BINUTILS_FROM_GIT),y)
->   BINUTILS_DEPENDENCIES += host-flex host-bison
->   HOST_BINUTILS_DEPENDENCIES += host-flex host-bison
+>   $(eval $(python-package))
 
 _______________________________________________
 buildroot mailing list
