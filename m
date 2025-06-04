@@ -1,53 +1,100 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70026C5B559
-	for <buildroot@archiver.kernel.org>; Wed,  4 Jun 2025 12:58:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1A16C5B543
+	for <buildroot@archiver.kernel.org>; Wed,  4 Jun 2025 12:59:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2253F41D26;
-	Wed,  4 Jun 2025 12:58:51 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cKG_-_5BerE4; Wed,  4 Jun 2025 12:58:50 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 407C341CF2
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 407C341CF2;
-	Wed,  4 Jun 2025 12:58:50 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 92625DA
- for <buildroot@buildroot.org>; Wed,  4 Jun 2025 12:58:49 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 845DC81BA8
- for <buildroot@buildroot.org>; Wed,  4 Jun 2025 12:58:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4CA5181361;
+	Wed,  4 Jun 2025 12:59:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LcWFUUU0ysIc for <buildroot@buildroot.org>;
- Wed,  4 Jun 2025 12:58:48 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD96B81361
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id DD96B81361
- for <buildroot@buildroot.org>; Wed,  4 Jun 2025 12:58:48 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CCA7A8794B; Wed,  4 Jun 2025 12:58:48 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id rHTqk6fvXwQa; Wed,  4 Jun 2025 12:59:11 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E0DF81BA8
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7E0DF81BA8;
+	Wed,  4 Jun 2025 12:59:11 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id BDEC9DA
+ for <buildroot@buildroot.org>; Wed,  4 Jun 2025 12:59:10 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id A426881BA8
+ for <buildroot@buildroot.org>; Wed,  4 Jun 2025 12:59:10 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Y_vMCxH8b3YB for <buildroot@buildroot.org>;
+ Wed,  4 Jun 2025 12:59:10 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::229; helo=mail-lj1-x229.google.com;
+ envelope-from=konstantin.menyaev@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E925B81361
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E925B81361
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com
+ [IPv6:2a00:1450:4864:20::229])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E925B81361
+ for <buildroot@buildroot.org>; Wed,  4 Jun 2025 12:59:09 +0000 (UTC)
+Received: by mail-lj1-x229.google.com with SMTP id
+ 38308e7fff4ca-32ac42bb4e4so15789581fa.0
+ for <buildroot@buildroot.org>; Wed, 04 Jun 2025 05:59:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1749041947; x=1749646747;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=HpgfRSgMsdxgIgeJT8wbU3tohDAf/hiE0USjJVPsrNg=;
+ b=EqdKhkiPIf7nPaZaFf0r3+zREbsLLYgdq3IkZCceVwa5uiPrZQjgnm2WbNo4eX1i+b
+ McpB3608ASw0FsXnAzUggztPDix+zbHhGrZqynnYsReFV4Dp0kYaJhbHtyABQtZRQSEO
+ KIprBUsksnSysSNMAYPvtn6QK3DipZlCAuLzuMduoFywsqUnPmVRdDU3RUZKVt6vnVbx
+ VzpzU1gGlC5enVqOBlZviXL1GYnnsAK5sQR7j4l7pduZF9UjzMUi/h0BI/1WNcuYhL20
+ RxO+Bg+Dz+3EQ56WaK6nypcw9OYT+3uc5HYCaGi98KC/JEf1qNqybdsRogrYXfjELlo9
+ n5Sw==
+X-Gm-Message-State: AOJu0Yx98JyvL6LGsulRQHN9kUg1I+xZpaD80argm7DmQGwXXxU/fhOt
+ WzbMu723MjY3DL/rLbTzWkDnH9PaYWgEYDNykUarwmJqk4fYCGcE4GHB4zNKIk80
+X-Gm-Gg: ASbGncsJzd0GHiLgpvpRMoEBwDdzqHhh8ir2qYMvDK4ppNteCtTHYG8JiC48HGsjibk
+ hx79feqsktwS6OukHWnOwFkt8OqA4W9wS617twACnIp0YfT6qEVOKLre3+Bx7QRl6OJhzq2924O
+ BVXhRARYswU3mlhXoIi5oQfjrD/JmIRKKf3au7yK0cDn4HEHojx/Y4Y4JX1G8iCq1VqRwVFxGVj
+ +it7JAfehs1uKT8NNpVt/+rhlShDeAgQgCUDZ3wZDiI/I204zpy++woFgc+i2azJCxL0O6M7f4J
+ SWK5552ILzTY/UjBal07UrFwzTeiknJqbq5enZN8K0CTm/e2tFtfzbMB833ujngFgCRgRSfBoD0
+ 3eMsTlb9rtDTF6yQBuNlpCKRPHxaOj+WdVA==
+X-Google-Smtp-Source: AGHT+IHDcni01kFUKygyx+vN9aaRj3+y7RX9EEtta0wFjWTfpDujve7Zwvt5FO2uRnqpRNNeFTIgFw==
+X-Received: by 2002:a05:651c:1445:b0:32a:82d7:6d58 with SMTP id
+ 38308e7fff4ca-32ac7158a0amr8454271fa.12.1749041947164; 
+ Wed, 04 Jun 2025 05:59:07 -0700 (PDT)
+Received: from localhost.localdomain (46-138-23-227.dynamic.spd-mgts.ru.
+ [46.138.23.227]) by smtp.gmail.com with ESMTPSA id
+ 38308e7fff4ca-32a85b337a0sm22452801fa.24.2025.06.04.05.59.06
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 04 Jun 2025 05:59:06 -0700 (PDT)
+From: Konstantin Menyaev <konstantin.menyaev@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 4 Jun 2025 14:56:21 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e5865fec7e5451d7112a6c3c01ca310d6d8bd682
-X-Git-Newrev: 1dfe081a19e7e3618d0583d6e1554786939bab4e
-X-Patchwork-Hint: ignore
-Message-Id: <20250604125848.CCA7A8794B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libcurl: security bump to version
- 8.14.1
+Cc: Konstantin Menyaev <konstantin.menyaev@gmail.com>
+Date: Wed,  4 Jun 2025 15:58:56 +0300
+Message-ID: <20250604125856.1337861-1-konstantin.menyaev@gmail.com>
+X-Mailer: git-send-email 2.49.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1749041947; x=1749646747; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=HpgfRSgMsdxgIgeJT8wbU3tohDAf/hiE0USjJVPsrNg=;
+ b=Cxo3hOe5N+CS8tUjBnhfRJWqw2HIPOkGIGvLdoeBDmMXyO3gMg7s2hwLQrtgKUNyGR
+ 2llTMZyUTQBq4mq7e23H5fGVqG/bKDwQ1QM7TgLAjqx5sDO6lW0APvFZ+WI5WgJakOZn
+ 79IcLDvLdFph+yYX2+of+1z5NbTS6FQd6cu7Gj+E0U//GF1Tn36etaZijEW0YpJyLmvH
+ c755W6QvZP6cT11vOa9KQGXNugCXqbaEvPFKMhCWjHhsjjMQs/Q9bIMcsPIMEn7jyAiy
+ NqlYgiynFZwsoAOGN4By82VQoCDxRXVgV4raF916uj0qFL9zB7CZzmIGU6oZ3FoD9/45
+ 0isQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=Cxo3hOe5
+Subject: [Buildroot] [PATCH 1/1] package/dhcpcd: make privsep configurable
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,73 +106,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1dfe081a19e7e3618d0583d6e1554786939bab4e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Privilege separation mode is undesirable in some use cases.
+Let's allow the user to disable it, at least.
 
-Fixes the following security issues:
-- CVE-2025-5025:
-  No QUIC certificate pinning with wolfSSL.
-  https://curl.se/docs/CVE-2025-5025.html
-
-- CVE-2025-4947:
-  QUIC certificate check skip with wolfSSL.
-  https://curl.se/docs/CVE-2025-4947.html
-
-- CVE-2025-5399:
-  WebSocket endless loop
-  https://curl.se/docs/CVE-2025-5399.html
-
-Changelog:
-https://curl.se/ch/8.14.0.html
-https://curl.se/ch/8.14.1.html
-
-Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
-[Peter: bump to 8.14.1 instead]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Konstantin Menyaev <konstantin.menyaev@gmail.com>
 ---
- package/libcurl/libcurl.hash | 4 ++--
- package/libcurl/libcurl.mk   | 3 ++-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/dhcpcd/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index 388ddc1418..a463e1db4e 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://curl.se/download/curl-8.13.0.tar.xz.asc
-+# https://curl.se/download/curl-8.14.1.tar.xz.asc
- # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
--sha256  4a093979a3c2d02de2fbc00549a32771007f2e78032c6faa5ecd2f7a9e152025  curl-8.13.0.tar.xz
-+sha256  f4619a1e2474c4bbfedc88a7c2191209c8334b48fa1f4e53fd584cc12e9120dd  curl-8.14.1.tar.xz
- sha256  e18f1989333b70044b2adfb7dc2f905d0119dbdcac3bc9f4bc9d540e3a29de5b  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 5f04fc381f..68d638609b 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/dhcpcd/Config.in b/package/dhcpcd/Config.in
+index f55e613071..9658a460a4 100644
+--- a/package/dhcpcd/Config.in
++++ b/package/dhcpcd/Config.in
+@@ -12,7 +12,7 @@ config BR2_PACKAGE_DHCPCD
+ if BR2_PACKAGE_DHCPCD
  
--LIBCURL_VERSION = 8.13.0
-+LIBCURL_VERSION = 8.14.1
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
-@@ -14,6 +14,7 @@ LIBCURL_LICENSE = curl
- LIBCURL_LICENSE_FILES = COPYING
- LIBCURL_CPE_ID_VENDOR = haxx
- LIBCURL_INSTALL_STAGING = YES
-+LIBCURL_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
- 
- # We disable NTLM delegation to winbinds ntlm_auth ('--disable-ntlm-wb')
- # support because it uses fork(), which doesn't work on non-MMU platforms.
+ config BR2_PACKAGE_DHCPCD_ENABLE_PRIVSEP
+-	bool
++	bool "Enable privilege separation"
+ 	default y
+ 	depends on BR2_USE_MMU
+ 	# Audit headers were only added in recent kernels for some arches
+-- 
+2.49.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
