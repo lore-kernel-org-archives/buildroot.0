@@ -1,53 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BEF5C5B549
-	for <buildroot@archiver.kernel.org>; Wed,  4 Jun 2025 17:04:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 404C1C5B543
+	for <buildroot@archiver.kernel.org>; Wed,  4 Jun 2025 17:15:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 302B841C5C;
-	Wed,  4 Jun 2025 17:04:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DCDBB80999;
+	Wed,  4 Jun 2025 17:15:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5JPxqFZrcyot; Wed,  4 Jun 2025 17:04:29 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id L1tO0oYJgnaa; Wed,  4 Jun 2025 17:15:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E6D041C33
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B9EEA808B0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4E6D041C33;
-	Wed,  4 Jun 2025 17:04:29 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 35C191A4
- for <buildroot@buildroot.org>; Wed,  4 Jun 2025 17:04:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B9EEA808B0;
+	Wed,  4 Jun 2025 17:15:49 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 151A6DA
+ for <buildroot@buildroot.org>; Wed,  4 Jun 2025 17:15:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 277B541C33
- for <buildroot@buildroot.org>; Wed,  4 Jun 2025 17:04:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E780141FB4
+ for <buildroot@buildroot.org>; Wed,  4 Jun 2025 17:15:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M0RYueBLN3xi for <buildroot@buildroot.org>;
- Wed,  4 Jun 2025 17:04:27 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5388441C4F
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5388441C4F
- for <buildroot@buildroot.org>; Wed,  4 Jun 2025 17:04:27 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 41C6E8772E; Wed,  4 Jun 2025 17:04:27 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 4 Jun 2025 19:03:39 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0f99f5def92c210a278734c9fdc48d1d323aa298
-X-Git-Newrev: bdcc1299cc48b3aec917959f3a3cd4058790c2f3
-X-Patchwork-Hint: ignore
-Message-Id: <20250604170427.41C6E8772E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-django: security bump to
- 5.2.2
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YWtVP2L1UweQ for <buildroot@buildroot.org>;
+ Wed,  4 Jun 2025 17:15:46 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
+ helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9E32141FC1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9E32141FC1
+Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9E32141FC1
+ for <buildroot@buildroot.org>; Wed,  4 Jun 2025 17:15:46 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 25C791C1064; Wed,  4 Jun 2025 19:15:15 +0200 (CEST)
+Message-ID: <c6e7feb3-dd02-4825-b85f-98991acfd910@rnout.be>
+Date: Wed, 4 Jun 2025 19:15:10 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Thomas Perale <thomas.perale@mind.be>, buildroot@buildroot.org
+Cc: Marcin Bis <marcin@bis.org.pl>
+References: <20250514163836.984647-1-thomas.perale@mind.be>
+Content-Language: en-GB, fr-BE
+In-Reply-To: <20250514163836.984647-1-thomas.perale@mind.be>
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=rnout.be; s=dkim; 
+ t=1749057322; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:in-reply-to:references;
+ bh=wR258uWYi5XXNM91FTH273QX7Pa9eDdRPB2jXp6Ywa0=;
+ b=W6dOMmm6kqdt6L5ZNZRssfe3wrSvrDsxDQysNZluwudXksUW0m88XddaTGcR7XkdRYcagL
+ fAe3mKXT2BacPehDpdI1rA95KHBVJpS7d8hsYw4nwlQSc28jL151ZAB+/J2UxgxWMJXTjM
+ tS+imwkyqTv8JhLkZAauzbuUhVsp335A/QyhttdXVm183xfhdw0JOAVfffB1V7XR6lV81l
+ 4HvN7D/Gmag3DDogylnocQw75mwdoj20hXBq1ovC8KfSDma9MVMd2DrtPMPYNj1xlH43on
+ 8I6niZfz6Rj2JKBr8alANfr2xVOcsIEvsr55HhOx+xjabTCJypoXZp3FddmAVQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=rnout.be
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
+ header.s=dkim header.b=W6dOMmm6
+Subject: Re: [Buildroot] [PATCH 1/1] package/bluez5_utils: fix build w/ HoG
+ and w/o HID
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,71 +78,333 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8138187424474856190=="
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8138187424474856190==
-Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bdcc1299cc48b3aec917959f3a3cd4058790c2f3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Django 5.2.2 fixes a security issue with severity “low” and several bugs in 5.2.1.
+On 14/05/2025 18:38, Thomas Perale via buildroot wrote:
+> When building the bluez5_utils package with HoG plugin without enabling
+> the HID plugin the following linker error would occur:
+> 
+> ```
+> /workdir/instance-0/output-1/per-package/bluez5_utils/host/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/13.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: profiles/input/bluetoothd-hog.o: in function `hog_disconnect':
+> hog.c:(.text.hog_disconnect+0x12): undefined reference to `input_get_userspace_hid'
+> collect2: error: ld returned 1 exit status
+> ```
+> 
+> This patch adds two upstream commits that decouple both the HID
+> and the HoG plugin.
+> 
+> As a consequence of this patch the HID plugin can be compiled without
+> the HoG one as well but to keep the compatibility the same in buildroot
+> the selection of the HoG plugin is kept when selecting the HID plugin.
+> 
+> The error can be reproduced with the following defconfig
+> 
+> ```
+> BR2_arm=y
+> BR2_cortex_a7=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+> BR2_PACKAGE_BLUEZ5_UTILS=y
+> BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HOG=y
+> ```
+> 
+> Fixes: https://autobuild.buildroot.org/results/78e/78ed7664f3a2dd5858fd71bd63836c822c106cc0
+> 
+> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
-Fixes: CVE-2025-48432: Potential log injection via unescaped request path
+  Applied to 2025.02.x, thanks.
 
-Full Release notes:
-https://docs.djangoproject.com/en/5.2/releases/5.2.2/
+  Regards,
+  Arnout
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-django/python-django.hash | 4 ++--
- package/python-django/python-django.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index 32a9ce13b8..14ed13fd6c 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/django/json
--md5  317174c6e0593c40e58ec1bd428b1091  django-5.2.1.tar.gz
--sha256  57fe1f1b59462caed092c80b3dd324fd92161b620d59a9ba9181c34746c97284  django-5.2.1.tar.gz
-+md5  782577f532efab32f8119a7071f55d04  django-5.2.2.tar.gz
-+sha256  85852e517f84435e9b13421379cd6c43ef5b48a9c8b391d29a26f7900967e952  django-5.2.2.tar.gz
- # Locally computed sha256 checksums
- sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
- sha256  dcac1c86cb7ab491702bdb4c41be680fafde51536748cc8aaee3840eec53ed17  django/contrib/gis/measure.py
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index 9d08c8e1c9..e36ab5385d 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--PYTHON_DJANGO_VERSION = 5.2.1
-+PYTHON_DJANGO_VERSION = 5.2.2
- PYTHON_DJANGO_SOURCE = django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/ac/10/0d546258772b8f31398e67c85e52c66ebc2b13a647193c3eef8ee433f1a8
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/39/17/4567ee12bb84114c544d5c4a792e7226db517ac78f552111e9dc62d1de14
- PYTHON_DJANGO_LICENSE = BSD-3-Clause, MIT (jquery, utils/archive.py), BSD-2-Clause (inlines.js)
- PYTHON_DJANGO_LICENSE_FILES = LICENSE \
- 	django/contrib/gis/measure.py \
-
---===============8138187424474856190==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+> ---
+>   ...03-input-fix-HID-compilation-w-o-HoG.patch | 140 ++++++++++++++++++
+>   ...04-input-fix-HoG-compilation-w-o-HID.patch | 120 +++++++++++++++
+>   2 files changed, 260 insertions(+)
+>   create mode 100644 package/bluez5_utils/0003-input-fix-HID-compilation-w-o-HoG.patch
+>   create mode 100644 package/bluez5_utils/0004-input-fix-HoG-compilation-w-o-HID.patch
+> 
+> diff --git a/package/bluez5_utils/0003-input-fix-HID-compilation-w-o-HoG.patch b/package/bluez5_utils/0003-input-fix-HID-compilation-w-o-HoG.patch
+> new file mode 100644
+> index 0000000000..941e9fb68f
+> --- /dev/null
+> +++ b/package/bluez5_utils/0003-input-fix-HID-compilation-w-o-HoG.patch
+> @@ -0,0 +1,140 @@
+> +From b111b5e15eb74e08b74cb3c7e91bcb21f54be4c7 Mon Sep 17 00:00:00 2001
+> +From: Thomas Perale <thomas.perale@mind.be>
+> +Date: Thu, 1 May 2025 18:35:35 +0200
+> +Subject: input: fix HID compilation w/o HoG
+> +
+> +Commit [1] introduced a dependency with the HID plugin in the HoG code
+> +As a result, building with --enable-hid --disable-hog caused linker
+> +errors due to undefined references to HoG-related functions:
+> +
+> +```
+> +> ./configure --enable-hid --disable-hog
+> +...
+> +> make
+> +...
+> +  CCLD     src/bluetoothd
+> +/usr/bin/ld: profiles/input/bluetoothd-manager.o: in function `input_init':
+> +/home/../bluez/profiles/input/manager.c:122:(.text.input_init+0x1c8): undefined reference to `input_set_auto_sec'
+> +collect2: error: ld returned 1 exit status
+> +make[1]: *** [Makefile:6376: src/bluetoothd] Error 1
+> +```
+> +
+> +This patch moves the reading of the HOG specific configuration of the
+> +'input.conf' file: LEAutoSecurity, to the HoG plugin file.
+> +
+> +[1] f2778f587 input: Add LEAutoSecurity setting to input.conf
+> +
+> +Upstream: https://git.kernel.org/pub/scm/bluetooth/bluez.git/commit/?id=b111b5e15eb74e08b74cb3c7e91bcb21f54be4c7
+> +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+> +---
+> + profiles/input/device.h  |  1 -
+> + profiles/input/hog.c     | 40 +++++++++++++++++++++++++++++++++++-----
+> + profiles/input/manager.c | 11 +----------
+> + 3 files changed, 36 insertions(+), 16 deletions(-)
+> +
+> +diff --git a/profiles/input/device.h b/profiles/input/device.h
+> +index 7b87ce5903..036a88980e 100644
+> +--- a/profiles/input/device.h
+> ++++ b/profiles/input/device.h
+> +@@ -25,7 +25,6 @@ void input_set_userspace_hid(char *state);
+> + uint8_t input_get_userspace_hid(void);
+> + void input_set_classic_bonded_only(bool state);
+> + bool input_get_classic_bonded_only(void);
+> +-void input_set_auto_sec(bool state);
+> +
+> + int input_device_register(struct btd_service *service);
+> + void input_device_unregister(struct btd_service *service);
+> +diff --git a/profiles/input/hog.c b/profiles/input/hog.c
+> +index 017e320f07..f82648fec8 100644
+> +--- a/profiles/input/hog.c
+> ++++ b/profiles/input/hog.c
+> +@@ -57,11 +57,6 @@ static gboolean suspend_supported = FALSE;
+> + static bool auto_sec = true;
+> + static struct queue *devices = NULL;
+> +
+> +-void input_set_auto_sec(bool state)
+> +-{
+> +-	auto_sec = state;
+> +-}
+> +-
+> + static void hog_device_accept(struct hog_device *dev, struct gatt_db *db)
+> + {
+> + 	char name[248];
+> +@@ -228,10 +223,45 @@ static struct btd_profile hog_profile = {
+> + 	.auto_connect	= true,
+> + };
+> +
+> ++static void hog_read_config(void)
+> ++{
+> ++	const char filename[] = CONFIGDIR "/input.conf";
+> ++	GKeyFile *config;
+> ++	GError *err = NULL;
+> ++	bool config_auto_sec;
+> ++
+> ++	config = g_key_file_new();
+> ++	if (!config) {
+> ++		error("Failed to allocate memory for config");
+> ++		return;
+> ++	}
+> ++
+> ++	if (!g_key_file_load_from_file(config, filename, 0, &err)) {
+> ++		if (!g_error_matches(err, G_FILE_ERROR, G_FILE_ERROR_NOENT))
+> ++			error("Parsing %s failed: %s", filename, err->message);
+> ++		g_error_free(err);
+> ++		g_key_file_free(config);
+> ++		return;
+> ++	}
+> ++
+> ++	config_auto_sec = g_key_file_get_boolean(config, "General",
+> ++					"LEAutoSecurity", &err);
+> ++	if (!err) {
+> ++		DBG("input.conf: LEAutoSecurity=%s",
+> ++				config_auto_sec ? "true" : "false");
+> ++		auto_sec = config_auto_sec;
+> ++	} else
+> ++		g_clear_error(&err);
+> ++
+> ++	g_key_file_free(config);
+> ++}
+> ++
+> + static int hog_init(void)
+> + {
+> + 	int err;
+> +
+> ++	hog_read_config();
+> ++
+> + 	err = suspend_init(suspend_callback, resume_callback);
+> + 	if (err < 0)
+> + 		error("Loading suspend plugin failed: %s (%d)", strerror(-err),
+> +diff --git a/profiles/input/manager.c b/profiles/input/manager.c
+> +index 95ca0a7ee5..1c0b6122a1 100644
+> +--- a/profiles/input/manager.c
+> ++++ b/profiles/input/manager.c
+> +@@ -85,7 +85,7 @@ static int input_init(void)
+> + 	config = load_config_file(CONFIGDIR "/input.conf");
+> + 	if (config) {
+> + 		int idle_timeout;
+> +-		gboolean classic_bonded_only, auto_sec;
+> ++		gboolean classic_bonded_only;
+> + 		char *uhid_enabled;
+> +
+> + 		idle_timeout = g_key_file_get_integer(config, "General",
+> +@@ -115,15 +115,6 @@ static int input_init(void)
+> + 		} else
+> + 			g_clear_error(&err);
+> +
+> +-		auto_sec = g_key_file_get_boolean(config, "General",
+> +-						"LEAutoSecurity", &err);
+> +-		if (!err) {
+> +-			DBG("input.conf: LEAutoSecurity=%s",
+> +-					auto_sec ? "true" : "false");
+> +-			input_set_auto_sec(auto_sec);
+> +-		} else
+> +-			g_clear_error(&err);
+> +-
+> + 	}
+> +
+> + 	btd_profile_register(&input_profile);
+> +--
+> +cgit 1.2.3-korg
+> +
+> diff --git a/package/bluez5_utils/0004-input-fix-HoG-compilation-w-o-HID.patch b/package/bluez5_utils/0004-input-fix-HoG-compilation-w-o-HID.patch
+> new file mode 100644
+> index 0000000000..b2824e5e18
+> --- /dev/null
+> +++ b/package/bluez5_utils/0004-input-fix-HoG-compilation-w-o-HID.patch
+> @@ -0,0 +1,120 @@
+> +From 9c52188d753002a6afd6ae145f921a2ff52c1c81 Mon Sep 17 00:00:00 2001
+> +From: Thomas Perale <thomas.perale@mind.be>
+> +Date: Thu, 1 May 2025 18:35:36 +0200
+> +Subject: input: fix HoG compilation w/o HID
+> +
+> +Commit [1] introduced a dependency with the HID plugin in the HoG code
+> +As a result, building with --disable-hid --enable-hog caused linker
+> +errors due to undefined references to HID-related functions:
+> +
+> +```
+> +> ./configure --disable-hid --enable-hog
+> +> make
+> +/usr/bin/ld: profiles/input/bluetoothd-hog.o: in function `hog_accept':
+> +/home/../bluez/profiles/input/hog.c:184:(.text.hog_accept+0xbb): undefined reference to `input_get_auto_sec'
+> +/usr/bin/ld: profiles/input/bluetoothd-hog.o: in function `hog_disconnect':
+> +/home/../bluez/profiles/input/hog.c:205:(.text.hog_disconnect+0x12): undefined reference to `input_get_userspace_hid'
+> +collect2: error: ld returned 1 exit status
+> +make[1]: *** [Makefile:6344: src/bluetoothd] Error 1
+> +make: *** [Makefile:4695: all] Error 2
+> +```
+> +
+> +This patch duplicate the read of the 'UserspaceHID=persist' config entry
+> +in the HoG plugin file to remove the dependency on the HID plugin files.
+> +
+> +[1] 1782bfd79 input: Add support for UserspaceHID=persist
+> +
+> +Fixes: https://github.com/bluez/bluez/issues/1228
+> +
+> +Upstream: https://git.kernel.org/pub/scm/bluetooth/bluez.git/commit/?id=9c52188d753002a6afd6ae145f921a2ff52c1c81
+> +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+> +---
+> + profiles/input/device.c |  5 -----
+> + profiles/input/device.h |  1 -
+> + profiles/input/hog.c    | 14 ++++++++++++--
+> + 3 files changed, 12 insertions(+), 8 deletions(-)
+> +
+> +diff --git a/profiles/input/device.c b/profiles/input/device.c
+> +index a7bc4d44fa..3642cc3267 100644
+> +--- a/profiles/input/device.c
+> ++++ b/profiles/input/device.c
+> +@@ -112,11 +112,6 @@ void input_set_userspace_hid(char *state)
+> + 		error("Unknown value '%s'", state);
+> + }
+> +
+> +-uint8_t input_get_userspace_hid(void)
+> +-{
+> +-	return uhid_state;
+> +-}
+> +-
+> + void input_set_classic_bonded_only(bool state)
+> + {
+> + 	classic_bonded_only = state;
+> +diff --git a/profiles/input/device.h b/profiles/input/device.h
+> +index 036a88980e..9056695026 100644
+> +--- a/profiles/input/device.h
+> ++++ b/profiles/input/device.h
+> +@@ -22,7 +22,6 @@ struct input_conn;
+> +
+> + void input_set_idle_timeout(int timeout);
+> + void input_set_userspace_hid(char *state);
+> +-uint8_t input_get_userspace_hid(void);
+> + void input_set_classic_bonded_only(bool state);
+> + bool input_get_classic_bonded_only(void);
+> +
+> +diff --git a/profiles/input/hog.c b/profiles/input/hog.c
+> +index f82648fec8..a3c876cf9f 100644
+> +--- a/profiles/input/hog.c
+> ++++ b/profiles/input/hog.c
+> +@@ -40,7 +40,6 @@
+> + #include "src/shared/gatt-client.h"
+> + #include "src/plugin.h"
+> +
+> +-#include "device.h"
+> + #include "suspend.h"
+> + #include "attrib/att.h"
+> + #include "attrib/gattrib.h"
+> +@@ -55,6 +54,7 @@ struct hog_device {
+> +
+> + static gboolean suspend_supported = FALSE;
+> + static bool auto_sec = true;
+> ++static bool uhid_state_persist = false;
+> + static struct queue *devices = NULL;
+> +
+> + static void hog_device_accept(struct hog_device *dev, struct gatt_db *db)
+> +@@ -203,7 +203,7 @@ static int hog_disconnect(struct btd_service *service)
+> + {
+> + 	struct hog_device *dev = btd_service_get_user_data(service);
+> +
+> +-	if (input_get_userspace_hid() == UHID_PERSIST)
+> ++	if (uhid_state_persist)
+> + 		bt_hog_detach(dev->hog, false);
+> + 	else
+> + 		bt_hog_detach(dev->hog, true);
+> +@@ -229,6 +229,7 @@ static void hog_read_config(void)
+> + 	GKeyFile *config;
+> + 	GError *err = NULL;
+> + 	bool config_auto_sec;
+> ++	char *uhid_enabled;
+> +
+> + 	config = g_key_file_new();
+> + 	if (!config) {
+> +@@ -253,6 +254,15 @@ static void hog_read_config(void)
+> + 	} else
+> + 		g_clear_error(&err);
+> +
+> ++	uhid_enabled = g_key_file_get_string(config, "General",
+> ++					"UserspaceHID", &err);
+> ++	if (!err) {
+> ++		DBG("input.conf: UserspaceHID=%s", uhid_enabled);
+> ++		uhid_state_persist = strcasecmp(uhid_enabled, "persist") == 0;
+> ++		free(uhid_enabled);
+> ++	} else
+> ++		g_clear_error(&err);
+> ++
+> + 	g_key_file_free(config);
+> + }
+> +
+> +--
+> +cgit 1.2.3-korg
+> +
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8138187424474856190==--
