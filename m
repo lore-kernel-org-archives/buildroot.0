@@ -1,70 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55BF4C5B543
-	for <buildroot@archiver.kernel.org>; Wed,  4 Jun 2025 18:21:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1880AC5B549
+	for <buildroot@archiver.kernel.org>; Wed,  4 Jun 2025 18:22:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1430560E50;
-	Wed,  4 Jun 2025 18:21:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CBB3C40AF3;
+	Wed,  4 Jun 2025 18:22:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id r3ECBnKkzoxT; Wed,  4 Jun 2025 18:21:57 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yCOqTSGW7sLV; Wed,  4 Jun 2025 18:22:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 24C6C60C14
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7AB8340AB1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 24C6C60C14;
-	Wed,  4 Jun 2025 18:21:57 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 214D41A6
- for <buildroot@buildroot.org>; Wed,  4 Jun 2025 18:21:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7AB8340AB1;
+	Wed,  4 Jun 2025 18:22:48 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 712621A6
+ for <buildroot@buildroot.org>; Wed,  4 Jun 2025 18:22:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1212E4005B
- for <buildroot@buildroot.org>; Wed,  4 Jun 2025 18:21:55 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5763140834
+ for <buildroot@buildroot.org>; Wed,  4 Jun 2025 18:22:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j68F2rvLqjaj for <buildroot@buildroot.org>;
- Wed,  4 Jun 2025 18:21:54 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9AGTi-Jbmgup for <buildroot@buildroot.org>;
+ Wed,  4 Jun 2025 18:22:45 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
  helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2121C40050
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2121C40050
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org F197D409A8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F197D409A8
 Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2121C40050
- for <buildroot@buildroot.org>; Wed,  4 Jun 2025 18:21:54 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id F197D409A8
+ for <buildroot@buildroot.org>; Wed,  4 Jun 2025 18:22:44 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 29CE51C0D4C; Wed,  4 Jun 2025 20:21:52 +0200 (CEST)
-Message-ID: <beff6d7a-66e4-42cf-a2e3-cd7ffc1e123b@rnout.be>
-Date: Wed, 4 Jun 2025 20:21:50 +0200
+ with ESMTPSA id 5C43E1C010A; Wed,  4 Jun 2025 20:22:30 +0200 (CEST)
+Message-ID: <c2c46a0a-d8ec-421a-9dfd-40d9408ce33d@rnout.be>
+Date: Wed, 4 Jun 2025 20:22:19 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 To: Peter Korsgaard <peter@korsgaard.com>, buildroot@buildroot.org
-References: <20250518132419.4171795-1-peter@korsgaard.com>
+Cc: Karoly Kasza <kaszak@gmail.com>
+References: <20250517190834.3476656-1-peter@korsgaard.com>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20250518132419.4171795-1-peter@korsgaard.com>
+In-Reply-To: <20250517190834.3476656-1-peter@korsgaard.com>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1749061312; h=from:subject:date:message-id:to:mime-version:content-type:
+ t=1749061350; h=from:subject:date:message-id:to:cc:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=826DmR3OND+LrGMw+ayKOwY8pJsOHcOwwzATUNsJmQE=;
- b=NEOGMBpXj05QsDyt7xj+wWMxbWg7egNqKIhp01oi1lkezgX4K/xpGmHnflVafaT5LSlfU8
- c3JbMawOv9sOUFain3fMQzTqJ7kFqTLfXGawQzJxTJi/GHDXarak8/Emxykg9gDQNutUYy
- oD5EyzbFiHUn7/bNBOWy3RBypVej6Ly/HVs/ZriimlTcQkvP/P/2JyqQR/OaK6Xsy2NgE/
- k2VLu0wZ5UW8buSw8nrRy11cX4r8hLxYB9A+/TdzzYQ0gz7vh7mITzIaihlm2e4wpGoBM/
- ReprQtrFpqCSnJ6SoTcmyHP8qH9b26MlJeNTkhCR/R8hpkwahuZCqfjwO7v2pw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=QXsbNnLmfSjH1UcUgMsuYJPM2DSFPz1rfgsf8t0DyX0=;
+ b=kEOGojLcxj4Uq4P4V20QtzQswJCqF16LTrFRsqV917QG1ptiOjdf3Q/8TvmTMXgtCV4MfN
+ d77M8b0wMLkWWg5JJ94unXBUCsFsvq3vBvb1EBh4NAfKNncAG6SboRJSHG1sxz35ljYL0O
+ u+wLMoVk49E4T7gBPfnBP5WkQzH8es5xpVVtRQ2+0e/GlFTNukIHhCm4mTXPiUK77ApA1L
+ uMTnMQLaByaHw3NomNQJXaDKQMIxL9GKti7CJocjOpQCn5ab+m10AYVee5j3KuT+l0lf4u
+ /rd+0BlDpahCPWSaT4BzrHOKXUhfi2ZhLnRdduoIDG/Y4UnVlg0DJ2lf8xfYHg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=NEOGMBpX
-Subject: Re: [Buildroot] [PATCH] package/net-tools: add upstream security
- fix for CVE-2025-46836
+ header.a=rsa-sha256 header.s=dkim header.b=kEOGojLc
+Subject: Re: [Buildroot] [PATCH] package/openvmtools: add upstream security
+ patch for CVE-2025-22247
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -78,94 +79,441 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@rnout.be>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-CgpPbiAxOC8wNS8yMDI1IDE1OjI0LCBQZXRlciBLb3JzZ2FhcmQgd3JvdGU6Cj4gRml4ZXMgdGhl
-IGZvbGxvd2luZyBzZWN1cml0eSBpc3N1ZToKPiAKPiBDVkUtMjAyNS00NjgzNjogU3RhY2stYmFz
-ZWQgQnVmZmVyIE92ZXJmbG93IGluIG5ldC10b29scyAoZ2V0X25hbWUpCj4gCj4gaHR0cHM6Ly9n
-aXRodWIuY29tL2Vja2kvbmV0LXRvb2xzL3NlY3VyaXR5L2Fkdmlzb3JpZXMvR0hTQS1wZndmLWg2
-bTMtNjN3Zgo+IAo+IFNpZ25lZC1vZmYtYnk6IFBldGVyIEtvcnNnYWFyZCA8cGV0ZXJAa29yc2dh
-YXJkLmNvbT4KCiAgQXBwbGllZCB0byAyMDI1LjAyLngsIHRoYW5rcy4KCiAgUmVnYXJkcywKICBB
-cm5vdXQKCj4gLS0tCj4gICAuLi5udGVyZmFjZS5jLVN0YWNrLWJhc2VkLUJ1ZmZlci1PdmVyZmwu
-cGF0Y2ggfCA5MyArKysrKysrKysrKysrKysrKysrCj4gICBwYWNrYWdlL25ldC10b29scy9uZXQt
-dG9vbHMubWsgICAgICAgICAgICAgICAgfCAgMyArCj4gICAyIGZpbGVzIGNoYW5nZWQsIDk2IGlu
-c2VydGlvbnMoKykKPiAgIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL25ldC10b29scy8wMDAx
-LUNWRS0yMDI1LTQ2ODM2LWludGVyZmFjZS5jLVN0YWNrLWJhc2VkLUJ1ZmZlci1PdmVyZmwucGF0
-Y2gKPiAKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9uZXQtdG9vbHMvMDAwMS1DVkUtMjAyNS00Njgz
-Ni1pbnRlcmZhY2UuYy1TdGFjay1iYXNlZC1CdWZmZXItT3ZlcmZsLnBhdGNoIGIvcGFja2FnZS9u
-ZXQtdG9vbHMvMDAwMS1DVkUtMjAyNS00NjgzNi1pbnRlcmZhY2UuYy1TdGFjay1iYXNlZC1CdWZm
-ZXItT3ZlcmZsLnBhdGNoCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAwMDAwMDAw
-Li4wYTAyNzg1ZjM4Cj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBiL3BhY2thZ2UvbmV0LXRvb2xzLzAw
-MDEtQ1ZFLTIwMjUtNDY4MzYtaW50ZXJmYWNlLmMtU3RhY2stYmFzZWQtQnVmZmVyLU92ZXJmbC5w
-YXRjaAo+IEBAIC0wLDAgKzEsOTMgQEAKPiArRnJvbSA3YThmNDJmYjIwMDEzYTE0OTNkOGNhZTFj
-NDM0MzZmODVlNjU2ZjJkIE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQo+ICtGcm9tOiBaZXBoa2Vr
-cyA8emVwaHlyb2ZmaWNpYWxkaXNjb3JkQGdtYWlsLmNvbT4KPiArRGF0ZTogVHVlLCAxMyBNYXkg
-MjAyNSAxMTowNDoxNyArMDIwMAo+ICtTdWJqZWN0OiBbUEFUQ0hdIENWRS0yMDI1LTQ2ODM2OiBp
-bnRlcmZhY2UuYzogU3RhY2stYmFzZWQgQnVmZmVyIE92ZXJmbG93IGluCj4gKyBnZXRfbmFtZSgp
-Cj4gKwo+ICtDb29yZGluYXRlZCBhcyBHSFNBLXBmd2YtaDZtMy02M3dmCj4gKwo+ICtVcHN0cmVh
-bTogaHR0cHM6Ly9naXRodWIuY29tL2Vja2kvbmV0LXRvb2xzL2NvbW1pdC83YThmNDJmYjIwMDEz
-YTE0OTNkOGNhZTFjNDM0MzZmODVlNjU2ZjJkCj4gK1NpZ25lZC1vZmYtYnk6IFBldGVyIEtvcnNn
-YWFyZCA8cGV0ZXJAa29yc2dhYXJkLmNvbT4KPiArLS0tCj4gKyBsaWIvaW50ZXJmYWNlLmMgfCA2
-MyArKysrKysrKysrKysrKysrKysrKysrKysrKysrKystLS0tLS0tLS0tLS0tLS0tLS0tCj4gKyAx
-IGZpbGUgY2hhbmdlZCwgMzkgaW5zZXJ0aW9ucygrKSwgMjQgZGVsZXRpb25zKC0pCj4gKwo+ICtk
-aWZmIC0tZ2l0IGEvbGliL2ludGVyZmFjZS5jIGIvbGliL2ludGVyZmFjZS5jCj4gK2luZGV4IDcx
-ZDQxNjMuLmEwNTRmMTIgMTAwNjQ0Cj4gKy0tLSBhL2xpYi9pbnRlcmZhY2UuYwo+ICsrKysgYi9s
-aWIvaW50ZXJmYWNlLmMKPiArQEAgLTIxMSwzMiArMjExLDQ3IEBAIG91dDoKPiArIH0KPiArCj4g
-KyBzdGF0aWMgY29uc3QgY2hhciAqZ2V0X25hbWUoY2hhciAqbmFtZSwgY29uc3QgY2hhciAqcCkK
-PiArKy8qIFNhZmUgdmVyc2lvbiDigJQgZ3VhcmFudGVlcyBhdCBtb3N0IElGTkFNU0la4oCRMSBi
-eXRlcyBhcmUgY29waWVkCj4gKysgICBhbmQgdGhlIGRlc3RpbmF0aW9uIGJ1ZmZlciBpcyBhbHdh
-eXMgTlVM4oCRdGVybWluYXRlZC4gICAgICAgICAgICAgKi8KPiArIHsKPiArLSAgICB3aGlsZSAo
-aXNzcGFjZSgqcCkpCj4gKy0JcCsrOwo+ICstICAgIHdoaWxlICgqcCkgewo+ICstCWlmIChpc3Nw
-YWNlKCpwKSkKPiArLQkgICAgYnJlYWs7Cj4gKy0JaWYgKCpwID09ICc6JykgewkvKiBjb3VsZCBi
-ZSBhbiBhbGlhcyAqLwo+ICstCQljb25zdCBjaGFyICpkb3QgPSBwKys7Cj4gKy0gCQl3aGlsZSAo
-KnAgJiYgaXNkaWdpdCgqcCkpIHArKzsKPiArLQkJaWYgKCpwID09ICc6Jykgewo+ICstCQkJLyog
-WWVzIGl0IGlzLCBiYWNrdXAgYW5kIGNvcHkgaXQuICovCj4gKy0JCQlwID0gZG90Owo+ICstCQkJ
-Km5hbWUrKyA9ICpwKys7Cj4gKy0JCQl3aGlsZSAoKnAgJiYgaXNkaWdpdCgqcCkpIHsKPiArLQkJ
-CQkqbmFtZSsrID0gKnArKzsKPiArLQkJCX0KPiArLQkJfSBlbHNlIHsKPiArLQkJCS8qIE5vLCBp
-dCBpc24ndCAqLwo+ICstCQkJcCA9IGRvdDsKPiArLQkgICAgfQo+ICstCSAgICBwKys7Cj4gKy0J
-ICAgIGJyZWFrOwo+ICstCX0KPiArLQkqbmFtZSsrID0gKnArKzsKPiArKyAgICBjaGFyICAgICAg
-ICpkc3QgPSBuYW1lOyAgICAgICAgICAgICAgICAgLyogY3VycmVudCB3cml0ZSBwdHIgICAgICAg
-ICAgKi8KPiArKyAgICBjb25zdCBjaGFyICplbmQgPSBuYW1lICsgSUZOQU1TSVogLSAxOyAgLyog
-bGFzdCBieXRlIHdlIG1heSB3cml0ZSAgICAgKi8KPiArKwo+ICsrICAgIC8qIFNraXAgbGVhZGlu
-ZyB3aGl0ZeKAkXNwYWNlLiAqLwo+ICsrICAgIHdoaWxlIChpc3NwYWNlKCh1bnNpZ25lZCBjaGFy
-KSpwKSkKPiArKyAgICAgICAgKytwOwo+ICsrCj4gKysgICAgLyogQ29weSB1bnRpbCB3aGl0ZeKA
-kXNwYWNlLCBlbmQgb2Ygc3RyaW5nLCBvciBidWZmZXIgZnVsbC4gKi8KPiArKyAgICB3aGlsZSAo
-KnAgJiYgIWlzc3BhY2UoKHVuc2lnbmVkIGNoYXIpKnApICYmIGRzdCA8IGVuZCkgewo+ICsrICAg
-ICAgICBpZiAoKnAgPT0gJzonKSB7ICAgICAgICAgICAgICAgICAgICAvKiBwb3NzaWJsZSBhbGlh
-cyB2ZXRoMDoxMjM6ICAqLwo+ICsrICAgICAgICAgICAgY29uc3QgY2hhciAqZG90ID0gcDsgICAg
-ICAgICAgICAvKiByZW1lbWJlciB0aGUgY29sb24gICAgICAgICAqLwo+ICsrICAgICAgICAgICAg
-KytwOwo+ICsrICAgICAgICAgICAgd2hpbGUgKCpwICYmIGlzZGlnaXQoKHVuc2lnbmVkIGNoYXIp
-KnApKQo+ICsrICAgICAgICAgICAgICAgICsrcDsKPiArKwo+ICsrICAgICAgICAgICAgaWYgKCpw
-ID09ICc6JykgeyAgICAgICAgICAgICAgICAvKiBjb25maXJtZWQgYWxpYXMgICAgICAgICAgICAq
-Lwo+ICsrICAgICAgICAgICAgICAgIHAgPSBkb3Q7ICAgICAgICAgICAgICAgICAgICAvKiByZXdp
-bmQgYW5kIGNvcHkgaXQgYWxsICAgICAqLwo+ICsrCj4gKysgICAgICAgICAgICAgICAgLyogY29w
-eSB0aGUgY29sb24gKi8KPiArKyAgICAgICAgICAgICAgICBpZiAoZHN0IDwgZW5kKQo+ICsrICAg
-ICAgICAgICAgICAgICAgICAqZHN0KysgPSAqcCsrOwo+ICsrCj4gKysgICAgICAgICAgICAgICAg
-LyogY29weSB0aGUgZGlnaXRzICovCj4gKysgICAgICAgICAgICAgICAgd2hpbGUgKCpwICYmIGlz
-ZGlnaXQoKHVuc2lnbmVkIGNoYXIpKnApICYmIGRzdCA8IGVuZCkKPiArKyAgICAgICAgICAgICAg
-ICAgICAgKmRzdCsrID0gKnArKzsKPiArKwo+ICsrICAgICAgICAgICAgICAgIGlmICgqcCA9PSAn
-OicpICAgICAgICAgICAgICAvKiBjb25zdW1lIHRyYWlsaW5nIGNvbG9uICAgICAqLwo+ICsrICAg
-ICAgICAgICAgICAgICAgICArK3A7Cj4gKysgICAgICAgICAgICB9IGVsc2UgeyAgICAgICAgICAg
-ICAgLyogaWYgc28gdHJlYXQgYXMgbm9ybWFsICovCj4gKysgICAgICAgICAgICAgICAgcCA9IGRv
-dDsKPiArKyAgICAgICAgICAgIH0KPiArKyAgICAgICAgICAgIGJyZWFrOyAgICAgICAgICAgICAg
-ICAgICAgICAgICAgLyogaW50ZXJmYWNlIG5hbWUgZW5kcyBoZXJlICAgKi8KPiArKyAgICAgICAg
-fQo+ICsrCj4gKysgICAgICAgICpkc3QrKyA9ICpwKys7ICAgICAgICAgICAgICAgICAgICAgIC8q
-IG9yZGluYXJ5IGNoYXJhY3RlciBjb3B5ICAgICovCj4gKyAgICAgfQo+ICstICAgICpuYW1lKysg
-PSAnXDAnOwo+ICsrCj4gKysgICAgKmRzdCA9ICdcMCc7ICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgIC8qIGFsd2F5cyBOVUzigJF0ZXJtaW5hdGUgICAgICAgKi8KPiArICAgICByZXR1cm4gcDsK
-PiArIH0KPiArCj4gKy0tCj4gKzIuMzkuNQo+ICsKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9uZXQt
-dG9vbHMvbmV0LXRvb2xzLm1rIGIvcGFja2FnZS9uZXQtdG9vbHMvbmV0LXRvb2xzLm1rCj4gaW5k
-ZXggMDNlMWM3MzQwNi4uYTIyN2Q2NDc3ZiAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL25ldC10b29s
-cy9uZXQtdG9vbHMubWsKPiArKysgYi9wYWNrYWdlL25ldC10b29scy9uZXQtdG9vbHMubWsKPiBA
-QCAtMTIsNiArMTIsOSBAQCBORVRfVE9PTFNfTElDRU5TRSA9IEdQTC0yLjArCj4gICBORVRfVE9P
-TFNfTElDRU5TRV9GSUxFUyA9IENPUFlJTkcKPiAgIE5FVF9UT09MU19DUEVfSURfVkFMSUQgPSBZ
-RVMKPiAgIAo+ICsjIDAwMDEtQ1ZFLTIwMjUtNDY4MzYtaW50ZXJmYWNlLmMtU3RhY2stYmFzZWQt
-QnVmZmVyLU92ZXJmbC5wYXRjaAo+ICtORVRfVE9PTFNfSUdOT1JFX0NWRVMgKz0gQ1ZFLTIwMjUt
-NDY4MzYKPiArCj4gICBkZWZpbmUgTkVUX1RPT0xTX0NPTkZJR1VSRV9DTURTCj4gICAJKGNkICQo
-QEQpOyB5ZXMgIiIgfCAuL2NvbmZpZ3VyZS5zaCBjb25maWcuaW4gKQo+ICAgZW5kZWYKCl9fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWls
-aW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qu
-b3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+
+
+On 17/05/2025 21:08, Peter Korsgaard wrote:
+> Fixes the following security issue:
+> 
+> CVE-2025-22247: open-vm-tools contains an insecure file handling
+> vulnerability.
+> 
+> https://github.com/vmware/open-vm-tools/tree/CVE-2025-22247.patch
+> 
+> The upstream patch needs to be applied with -p2, so drop the open-vm-tools
+> prefix (sed -i 's|open-vm-tools/||g') and include it here.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+  Applied to 2025.02.x, thanks.
+
+  Regards,
+  Arnout
+
+> ---
+>   ...-2025-22247-1100-1225-VGAuth-updates.patch | 382 ++++++++++++++++++
+>   package/openvmtools/openvmtools.mk            |   3 +
+>   2 files changed, 385 insertions(+)
+>   create mode 100644 package/openvmtools/0014-CVE-2025-22247-1100-1225-VGAuth-updates.patch
+> 
+> diff --git a/package/openvmtools/0014-CVE-2025-22247-1100-1225-VGAuth-updates.patch b/package/openvmtools/0014-CVE-2025-22247-1100-1225-VGAuth-updates.patch
+> new file mode 100644
+> index 0000000000..f47fabb71b
+> --- /dev/null
+> +++ b/package/openvmtools/0014-CVE-2025-22247-1100-1225-VGAuth-updates.patch
+> @@ -0,0 +1,382 @@
+> +From 2a2607c6bd94ae22a937fd2adde7472d9a6d506c Mon Sep 17 00:00:00 2001
+> +From: John Wolfe <john.wolfe@broadcom.com>
+> +Date: Mon, 5 May 2025 16:10:07 -0700
+> +Subject: [PATCH] Validate user names and file paths
+> +
+> +Prevent usage of illegal characters in user names and file paths.
+> +Also, disallow unexpected symlinks in file paths.
+> +
+> +This patch contains changes to common source files not applicable
+> +to open-vm-tools.
+> +
+> +All files being updated should be consider to have the copyright to
+> +be updated to:
+> +
+> + * Copyright (c) XXXX-2025 Broadcom. All Rights Reserved.
+> + * The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+> +
+> +The 2025 Broadcom copyright information update is not part of this
+> +patch set to allow the patch to be easily applied to previous
+> +open-vm-tools source releases.
+> +
+> +Upstream: https://github.com/vmware/blob/CVE-2025-22247.patch/CVE-2025-22247-1100-1225-VGAuth-updates.patch
+> +Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> +---
+> + vgauth/common/VGAuthUtil.c      | 33 +++++++++
+> + vgauth/common/VGAuthUtil.h      |  2 +
+> + vgauth/common/prefs.h           |  3 +
+> + vgauth/common/usercheck.c       | 28 +++++--
+> + vgauth/serviceImpl/alias.c      | 74 ++++++++++++++++++-
+> + vgauth/serviceImpl/service.c    | 27 +++++++
+> + vgauth/serviceImpl/serviceInt.h |  1 +
+> + 7 files changed, 160 insertions(+), 8 deletions(-)
+> +
+> +diff --git a/vgauth/common/VGAuthUtil.c b/vgauth/common/VGAuthUtil.c
+> +index 76383c462..9c2adb8d0 100644
+> +--- a/vgauth/common/VGAuthUtil.c
+> ++++ b/vgauth/common/VGAuthUtil.c
+> +@@ -309,3 +309,36 @@ Util_Assert(const char *cond,
+> + #endif
+> +    g_assert(0);
+> + }
+> ++
+> ++
+> ++/*
+> ++ ******************************************************************************
+> ++ * Util_Utf8CaseCmp --                                                   */ /**
+> ++ *
+> ++ * Case insensitive comparison for utf8 strings which can have non-ascii
+> ++ * characters.
+> ++ *
+> ++ * @param[in]  str1      Null terminated utf8 string.
+> ++ * @param[in]  str2      Null terminated utf8 string.
+> ++ *
+> ++ ******************************************************************************
+> ++ */
+> ++
+> ++int
+> ++Util_Utf8CaseCmp(const gchar *str1,
+> ++                 const gchar *str2)
+> ++{
+> ++   int ret;
+> ++   gchar *str1Case;
+> ++   gchar *str2Case;
+> ++
+> ++   str1Case = g_utf8_casefold(str1, -1);
+> ++   str2Case = g_utf8_casefold(str2, -1);
+> ++
+> ++   ret = g_strcmp0(str1Case, str2Case);
+> ++
+> ++   g_free(str1Case);
+> ++   g_free(str2Case);
+> ++
+> ++   return ret;
+> ++}
+> +diff --git a/vgauth/common/VGAuthUtil.h b/vgauth/common/VGAuthUtil.h
+> +index f7f3aa216..ef32a91da 100644
+> +--- a/vgauth/common/VGAuthUtil.h
+> ++++ b/vgauth/common/VGAuthUtil.h
+> +@@ -105,4 +105,6 @@ gboolean Util_CheckExpiration(const GTimeVal *start, unsigned int duration);
+> +
+> + void Util_Assert(const char *cond, const char *file, int lineNum);
+> +
+> ++int Util_Utf8CaseCmp(const gchar *str1, const gchar *str2);
+> ++
+> + #endif
+> +diff --git a/vgauth/common/prefs.h b/vgauth/common/prefs.h
+> +index ff116928c..7cddb3e17 100644
+> +--- a/vgauth/common/prefs.h
+> ++++ b/vgauth/common/prefs.h
+> +@@ -165,6 +165,9 @@ msgCatalog = /etc/vmware-tools/vgauth/messages
+> + /** Where the localized version of the messages were installed. */
+> + #define VGAUTH_PREF_LOCALIZATION_DIR        "msgCatalog"
+> +
+> ++/** If symlinks or junctions are allowed in alias store file path */
+> ++#define VGAUTH_PREF_ALLOW_SYMLINKS  "allowSymlinks"
+> ++
+> + /*
+> +  * Pref values
+> +  */
+> +diff --git a/vgauth/common/usercheck.c b/vgauth/common/usercheck.c
+> +index 31eeb5a77..145f1f056 100644
+> +--- a/vgauth/common/usercheck.c
+> ++++ b/vgauth/common/usercheck.c
+> +@@ -78,6 +78,8 @@
+> +  * Solaris as well, but that path is untested.
+> +  */
+> +
+> ++#define MAX_USER_NAME_LEN 256
+> ++
+> + /*
+> +  * A single retry works for the LDAP case, but try more often in case NIS
+> +  * or something else has a related issue.  Note that a bad username/uid won't
+> +@@ -354,17 +356,29 @@ Usercheck_UsernameIsLegal(const gchar *userName)
+> +     *
+> +     */
+> +    size_t len;
+> +-#ifdef _WIN32
+> +-   // allow '\' in for Windows domain usernames
+> +-   char *illegalChars = "<>/";
+> +-#else
+> +-   char *illegalChars = "\\<>/";
+> +-#endif
+> ++   size_t i = 0;
+> ++   int backSlashCnt = 0;
+> ++   /*
+> ++    * As user names are used to generate its alias store file name/path, it
+> ++    * should not contain path traversal characters ('/' and '\').
+> ++    */
+> ++   char *illegalChars = "<>/\\";
+> +
+> +    len = strlen(userName);
+> +-   if (strcspn(userName, illegalChars) != len) {
+> ++   if (len > MAX_USER_NAME_LEN) {
+> +       return FALSE;
+> +    }
+> ++
+> ++   while ((i += strcspn(userName + i, illegalChars)) < len) {
+> ++      /*
+> ++       * One backward slash is allowed for domain\username separator.
+> ++       */
+> ++      if (userName[i] != '\\' || ++backSlashCnt > 1) {
+> ++         return FALSE;
+> ++      }
+> ++      ++i;
+> ++   }
+> ++
+> +    return TRUE;
+> + }
+> +
+> +diff --git a/vgauth/serviceImpl/alias.c b/vgauth/serviceImpl/alias.c
+> +index b28351eea..687d1b373 100644
+> +--- a/vgauth/serviceImpl/alias.c
+> ++++ b/vgauth/serviceImpl/alias.c
+> +@@ -41,6 +41,7 @@
+> + #include "certverify.h"
+> + #include "VGAuthProto.h"
+> + #include "vmxlog.h"
+> ++#include "VGAuthUtil.h"
+> +
+> + // puts the identity store in an easy to find place
+> + #undef WIN_TEST_MODE
+> +@@ -66,6 +67,7 @@
+> + #define ALIASSTORE_FILE_PREFIX   "user-"
+> + #define ALIASSTORE_FILE_SUFFIX   ".xml"
+> +
+> ++static gboolean allowSymlinks = FALSE;
+> + static gchar *aliasStoreRootDir = DEFAULT_ALIASSTORE_ROOT_DIR;
+> +
+> + #ifdef _WIN32
+> +@@ -252,6 +254,12 @@ mapping file layout:
+> +
+> +  */
+> +
+> ++#ifdef _WIN32
+> ++#define ISPATHSEP(c)  ((c) == '\\' || (c) == '/')
+> ++#else
+> ++#define ISPATHSEP(c)  ((c) == '/')
+> ++#endif
+> ++
+> +
+> + /*
+> +  ******************************************************************************
+> +@@ -466,6 +474,7 @@ ServiceLoadFileContentsWin(const gchar *fileName,
+> +    gunichar2 *fileNameW = NULL;
+> +    BOOL ok;
+> +    DWORD bytesRead;
+> ++   gchar *realPath = NULL;
+> +
+> +    *fileSize = 0;
+> +    *contents = NULL;
+> +@@ -622,6 +631,22 @@ ServiceLoadFileContentsWin(const gchar *fileName,
+> +       goto done;
+> +    }
+> +
+> ++   if (!allowSymlinks) {
+> ++      /*
+> ++       * Check if fileName is real path.
+> ++       */
+> ++      if ((realPath = ServiceFileGetPathByHandle(hFile)) == NULL) {
+> ++         err = VGAUTH_E_FAIL;
+> ++         goto done;
+> ++      }
+> ++      if (Util_Utf8CaseCmp(realPath, fileName) != 0) {
+> ++         Warning("%s: Real path (%s) is not same as file path (%s)\n",
+> ++                 __FUNCTION__, realPath, fileName);
+> ++         err = VGAUTH_E_FAIL;
+> ++         goto done;
+> ++      }
+> ++   }
+> ++
+> +    /*
+> +     * Now finally read the contents.
+> +     */
+> +@@ -650,6 +675,7 @@ done:
+> +       CloseHandle(hFile);
+> +    }
+> +    g_free(fileNameW);
+> ++   g_free(realPath);
+> +
+> +    return err;
+> + }
+> +@@ -672,6 +698,7 @@ ServiceLoadFileContentsPosix(const gchar *fileName,
+> +    gchar *buf;
+> +    gchar *bp;
+> +    int fd = -1;
+> ++   gchar realPath[PATH_MAX] = { 0 };
+> +
+> +    *fileSize = 0;
+> +    *contents = NULL;
+> +@@ -817,6 +844,23 @@ ServiceLoadFileContentsPosix(const gchar *fileName,
+> +       goto done;
+> +    }
+> +
+> ++   if (!allowSymlinks) {
+> ++      /*
+> ++       * Check if fileName is real path.
+> ++       */
+> ++      if (realpath(fileName, realPath) == NULL) {
+> ++         Warning("%s: realpath() failed. errno (%d)\n", __FUNCTION__, errno);
+> ++         err = VGAUTH_E_FAIL;
+> ++         goto done;
+> ++      }
+> ++      if (g_strcmp0(realPath, fileName) != 0) {
+> ++         Warning("%s: Real path (%s) is not same as file path (%s)\n",
+> ++                 __FUNCTION__, realPath, fileName);
+> ++         err = VGAUTH_E_FAIL;
+> ++         goto done;
+> ++      }
+> ++   }
+> ++
+> +    /*
+> +     * All sanity checks passed; read the bits.
+> +     */
+> +@@ -2803,8 +2847,13 @@ ServiceAliasRemoveAlias(const gchar *reqUserName,
+> +
+> +    /*
+> +     * We don't verify the user exists in a Remove operation, to allow
+> +-    * cleanup of deleted user's stores.
+> ++    * cleanup of deleted user's stores, but we do check whether the
+> ++    * user name is legal or not.
+> +     */
+> ++   if (!Usercheck_UsernameIsLegal(userName)) {
+> ++      Warning("%s: Illegal user name '%s'\n", __FUNCTION__, userName);
+> ++      return VGAUTH_E_FAIL;
+> ++   }
+> +
+> +    if (!CertVerify_IsWellFormedPEMCert(pemCert)) {
+> +       return VGAUTH_E_INVALID_CERTIFICATE;
+> +@@ -3036,6 +3085,16 @@ ServiceAliasQueryAliases(const gchar *userName,
+> +    }
+> + #endif
+> +
+> ++   /*
+> ++    * We don't verify the user exists in a Query operation to allow
+> ++    * cleaning up after a deleted user, but we do check whether the
+> ++    * user name is legal or not.
+> ++    */
+> ++   if (!Usercheck_UsernameIsLegal(userName)) {
+> ++      Warning("%s: Illegal user name '%s'\n", __FUNCTION__, userName);
+> ++      return VGAUTH_E_FAIL;
+> ++   }
+> ++
+> +    err = AliasLoadAliases(userName, num, aList);
+> +    if (VGAUTH_E_OK != err) {
+> +       Warning("%s: failed to load Aliases for '%s'\n", __FUNCTION__, userName);
+> +@@ -3294,6 +3353,7 @@ ServiceAliasInitAliasStore(void)
+> +    VGAuthError err = VGAUTH_E_OK;
+> +    gboolean saveBadDir = FALSE;
+> +    char *defaultDir = NULL;
+> ++   size_t len;
+> +
+> + #ifdef _WIN32
+> +    {
+> +@@ -3324,6 +3384,10 @@ ServiceAliasInitAliasStore(void)
+> +    defaultDir = g_strdup(DEFAULT_ALIASSTORE_ROOT_DIR);
+> + #endif
+> +
+> ++   allowSymlinks = Pref_GetBool(gPrefs,
+> ++                                VGAUTH_PREF_ALLOW_SYMLINKS,
+> ++                                VGAUTH_PREF_GROUP_NAME_SERVICE,
+> ++                                FALSE);
+> +    /*
+> +     * Find the alias store directory.  This allows an installer to put
+> +     * it somewhere else if necessary.
+> +@@ -3337,6 +3401,14 @@ ServiceAliasInitAliasStore(void)
+> +                                       VGAUTH_PREF_GROUP_NAME_SERVICE,
+> +                                       defaultDir);
+> +
+> ++   /*
+> ++    * Remove the trailing separator if any from aliasStoreRootDir path.
+> ++    */
+> ++   len = strlen(aliasStoreRootDir);
+> ++   if (ISPATHSEP(aliasStoreRootDir[len - 1])) {
+> ++      aliasStoreRootDir[len - 1] = '\0';
+> ++   }
+> ++
+> +    Log("Using '%s' for alias store root directory\n", aliasStoreRootDir);
+> +
+> +    g_free(defaultDir);
+> +diff --git a/vgauth/serviceImpl/service.c b/vgauth/serviceImpl/service.c
+> +index d4716526c..e053ed0fa 100644
+> +--- a/vgauth/serviceImpl/service.c
+> ++++ b/vgauth/serviceImpl/service.c
+> +@@ -28,6 +28,7 @@
+> + #include "VGAuthUtil.h"
+> + #ifdef _WIN32
+> + #include "winUtil.h"
+> ++#include <glib.h>
+> + #endif
+> +
+> + static ServiceStartListeningForIOFunc startListeningIOFunc = NULL;
+> +@@ -283,9 +284,35 @@ static gchar *
+> + ServiceUserNameToPipeName(const char *userName)
+> + {
+> +    gchar *escapedName = ServiceEncodeUserName(userName);
+> ++#ifdef _WIN32
+> ++   /*
+> ++    * Adding below pragma only in windows to suppress the compile time warning
+> ++    * about unavailability of g_uuid_string_random() since compiler flag
+> ++    * GLIB_VERSION_MAX_ALLOWED is defined to GLIB_VERSION_2_34.
+> ++    * TODO: Remove below pragma when GLIB_VERSION_MAX_ALLOWED is bumped up to
+> ++    * or greater than GLIB_VERSION_2_52.
+> ++    */
+> ++#pragma warning(suppress : 4996)
+> ++   gchar *uuidStr = g_uuid_string_random();
+> ++   /*
+> ++    * Add a unique suffix to avoid a name collision with an existing named pipe
+> ++    * created by someone else (intentionally or by accident).
+> ++    * This is not needed for Linux; name collisions on sockets are already
+> ++    * avoided there since (1) file system paths to VGAuthService sockets are in
+> ++    * a directory that is writable only by root and (2) VGAuthService unlinks a
+> ++    * socket path before binding it to a newly created socket.
+> ++    */
+> ++   gchar *pipeName = g_strdup_printf("%s-%s-%s",
+> ++                                     SERVICE_PUBLIC_PIPE_NAME,
+> ++                                     escapedName,
+> ++                                     uuidStr);
+> ++
+> ++   g_free(uuidStr);
+> ++#else
+> +    gchar *pipeName = g_strdup_printf("%s-%s",
+> +                                      SERVICE_PUBLIC_PIPE_NAME,
+> +                                      escapedName);
+> ++#endif
+> +
+> +    g_free(escapedName);
+> +    return pipeName;
+> +diff --git a/vgauth/serviceImpl/serviceInt.h b/vgauth/serviceImpl/serviceInt.h
+> +index ef49f42c2..c37f42fa6 100644
+> +--- a/vgauth/serviceImpl/serviceInt.h
+> ++++ b/vgauth/serviceImpl/serviceInt.h
+> +@@ -441,6 +441,7 @@ VGAuthError ServiceFileVerifyAdminGroupOwnedByHandle(const HANDLE hFile);
+> + VGAuthError ServiceFileVerifyEveryoneReadableByHandle(const HANDLE hFile);
+> + VGAuthError ServiceFileVerifyUserAccessByHandle(const HANDLE hFile,
+> +                                                 const char *userName);
+> ++gchar *ServiceFileGetPathByHandle(HANDLE hFile);
+> + #else
+> + VGAuthError ServiceFileVerifyFileOwnerAndPerms(const char *fileName,
+> +                                                const char *userName,
+> +--
+> +2.43.5
+> +
+> diff --git a/package/openvmtools/openvmtools.mk b/package/openvmtools/openvmtools.mk
+> index 3106b9ecd6..bc547a8af7 100644
+> --- a/package/openvmtools/openvmtools.mk
+> +++ b/package/openvmtools/openvmtools.mk
+> @@ -16,6 +16,9 @@ OPENVMTOOLS_CPE_ID_PRODUCT = tools
+>   # 0013-Properly-check-authorization-on-incoming-guestOps-re.patch
+>   OPENVMTOOLS_IGNORE_CVES += CVE-2022-31676
+>   
+> +# 0014-CVE-2025-22247-1100-1225-VGAuth-updates.patch
+> +OPENVMTOOLS_IGNORE_CVES += CVE-2025-22247
+> +
+>   # configure.ac is patched
+>   OPENVMTOOLS_AUTORECONF = YES
+>   OPENVMTOOLS_CONF_OPTS = --with-dnet \
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
