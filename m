@@ -1,66 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5007C5AE59
-	for <buildroot@archiver.kernel.org>; Thu,  5 Jun 2025 05:48:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3405CC5AE59
+	for <buildroot@archiver.kernel.org>; Thu,  5 Jun 2025 05:48:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7EAC7607A2;
-	Thu,  5 Jun 2025 05:48:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E168E40B06;
+	Thu,  5 Jun 2025 05:48:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id g8DfYBCPT5ga; Thu,  5 Jun 2025 05:48:45 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8mvpg1VYKnod; Thu,  5 Jun 2025 05:48:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AB82260785
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1538A40B0A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AB82260785;
-	Thu,  5 Jun 2025 05:48:45 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0CB0D1A4
- for <buildroot@buildroot.org>; Thu,  5 Jun 2025 05:48:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1538A40B0A;
+	Thu,  5 Jun 2025 05:48:49 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id E4FF1DA
+ for <buildroot@buildroot.org>; Thu,  5 Jun 2025 05:48:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F26ED60789
- for <buildroot@buildroot.org>; Thu,  5 Jun 2025 05:48:43 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CBF2540B06
+ for <buildroot@buildroot.org>; Thu,  5 Jun 2025 05:48:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XJZu-G6rbrpX for <buildroot@buildroot.org>;
- Thu,  5 Jun 2025 05:48:43 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xN4H9tvCTnr7 for <buildroot@buildroot.org>;
+ Thu,  5 Jun 2025 05:48:46 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:200a::62a;
- helo=nam12-mw2-obe.outbound.protection.outlook.com;
+ client-ip=2a01:111:f403:2418::615;
+ helo=nam12-bn8-obe.outbound.protection.outlook.com;
  envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B7B3F606B0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B7B3F606B0
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com
- (mail-mw2nam12on2062a.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:200a::62a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B7B3F606B0
- for <buildroot@buildroot.org>; Thu,  5 Jun 2025 05:48:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org BE9E140B01
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE9E140B01
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com
+ (mail-bn8nam12on20615.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:2418::615])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BE9E140B01
+ for <buildroot@buildroot.org>; Thu,  5 Jun 2025 05:48:45 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=lM2HHyovDeaLZz9Ur4lb98Q/dIXGnX7MG4z7NnJPmh6durea8QJYO3a3wolE2IsZiunbOMzg7fXzPVelRV3ygUVAY5pJBT6xCBgf0/xKmxM4T4ETpyCys8DE6dsTTIkOOwoYCtGfMNnrVDVGMWYJOpkc8Dce9PBKUs5MFKhYaWMRK3Uu1hrSjgJygmUNwwEDVjYfUTVFflSjhry452YXVP72bnFlaZ8c9F9LQvXmb0WxnhVLHGUr3qJ3w+C0mVsMrY5MfL+Lj2dluwYuByGi4WtVuYi9fS4XkZM/InPC3Be1CQaFwDru5N/ebs9ng1x4Pbwb5lul+qzX/TgRGf+HCA==
+ b=uU/ewICzV5TndxXYwITkU+OuPYKrTp63CABsvPPSQxo6QQaRnjifX88zn2k/aQyH5iqMypE8/zu5tlWkrQ8E0eDtrm37a9RYlp4etK9miUNDh3leWrhEbJuxSqi2888232Xt3xRA240H4RIr2KCwOp53aKW1oKNqYOEkJZHrpCAjVaOlRQH7kTcw3aDKWAYN/FRQync+ui4VokX3mILv/lJhAwx9Uyc94CskPNnNDmaTPdbJrqIHtqcjSKFp0NhooP3a1jeil090gor00umLV2XGullY/pWiodCClg6UHIQUCodfa+gS3nEzVnuXuI6ese0+pFH5Yu7Uuea3bRHz3w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XI4WP7mvelM2e/cDmxmyaqgRUdrw6D4grPsOinokaVg=;
- b=WWMZ7A8LV9fjnpA3thmL/X0N0hfrjTX5OrIbsWrLpnzZGskQ6to2wx2YYlHssyGZGRzICs5JOWb7CPUYOHwZ79RZpogofxZzxlWo9XftF7e1riG1Zfo0wrtaiiRz4hqgFKmZqcCHJMe1SjAXwbgmXwdNBM3yBpprTLRoPvME4tHJcnQkPG1ZUibRPvfBc2296pR88gn1tAtqfR4zu0vMX0JBdINr8Je8ZrntkNG0GU55GlDCI22nSmaU0svOJ3nZuO0Ba93O2cAEtxoLYQOiDINcXD9OBey7fQG4lb6K/eBCKADgtMz2UM4/6XM1dx7Yoj2zJAYvKiOpfWhUkU12ag==
+ bh=s4wQOUPQjTsCd+24iLFC5sqFpa8k1APw2ppz2RtULLk=;
+ b=tf74Es8vg9EEjXCQ/WLQvy30hQsNcj50SiZNNUjMF9BL7wmiIN9Fw5aKKHCqzdjkoBaPyzih4hpNf38RpcXl9mraoHe+c7j6dCgUwRKM7J0H40sK7s/pO+NrDJfDRddcfsZ2/k4LnVAEFYvzKJNRsgGePNCBI2Ip+D+G/u/5R+Ym15Eiizvmhusp2FeZq06/upVZh9+FHC0xM+PGVLmDbdrpkY3lq19GXsQFwsZ/I293UoSq8zgEen6KijFkuvR20gD/yHcqg5dje/8HZVWAOgeYXZ5XR2iqjSIwX87oSW2GPoNEmbv0NBlzc37hl913Ta249j55uT+coGPo9cd1wA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
-Received: from CH5PR05CA0010.namprd05.prod.outlook.com (2603:10b6:610:1f0::22)
- by SN7PR12MB7250.namprd12.prod.outlook.com (2603:10b6:806:2aa::21)
- with Microsoft SMTP Server (version=TLS1_2,
+Received: from CH5PR05CA0014.namprd05.prod.outlook.com (2603:10b6:610:1f0::24)
+ by DM4PR12MB6207.namprd12.prod.outlook.com (2603:10b6:8:a6::10) with
+ Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8792.34; Thu, 5 Jun
  2025 05:48:36 +0000
 Received: from DS3PEPF000099D6.namprd04.prod.outlook.com
- (2603:10b6:610:1f0:cafe::b4) by CH5PR05CA0010.outlook.office365.com
- (2603:10b6:610:1f0::22) with Microsoft SMTP Server (version=TLS1_3,
+ (2603:10b6:610:1f0:cafe::d9) by CH5PR05CA0014.outlook.office365.com
+ (2603:10b6:610:1f0::24) with Microsoft SMTP Server (version=TLS1_3,
  cipher=TLS_AES_256_GCM_SHA384) id 15.20.8835.9 via Frontend Transport; Thu, 5
- Jun 2025 05:48:35 +0000
+ Jun 2025 05:48:36 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -70,86 +70,86 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
 Received: from SATLEXMB03.amd.com (165.204.84.17) by
  DS3PEPF000099D6.mail.protection.outlook.com (10.167.17.7) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8792.29 via Frontend Transport; Thu, 5 Jun 2025 05:48:34 +0000
-Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB03.amd.com
+ 15.20.8792.29 via Frontend Transport; Thu, 5 Jun 2025 05:48:36 +0000
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB03.amd.com
  (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 5 Jun
  2025 00:48:33 -0500
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB06.amd.com
- (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 5 Jun
- 2025 00:48:31 -0500
 Received: from xirengwts09.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
- Transport; Thu, 5 Jun 2025 00:48:30 -0500
+ Transport; Thu, 5 Jun 2025 00:48:32 -0500
 To: <buildroot@buildroot.org>
-Date: Thu, 5 Jun 2025 06:48:24 +0100
-Message-ID: <20250605054828.4181912-1-neal.frager@amd.com>
+Date: Thu, 5 Jun 2025 06:48:25 +0100
+Message-ID: <20250605054828.4181912-2-neal.frager@amd.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20250605054828.4181912-1-neal.frager@amd.com>
+References: <20250605054828.4181912-1-neal.frager@amd.com>
 MIME-Version: 1.0
+Received-SPF: None (SATLEXMB03.amd.com: neal.frager@amd.com does not designate
+ permitted sender hosts)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS3PEPF000099D6:EE_|SN7PR12MB7250:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2c5333c3-1c3a-471b-fa2d-08dda3f49c73
+X-MS-TrafficTypeDiagnostic: DS3PEPF000099D6:EE_|DM4PR12MB6207:EE_
+X-MS-Office365-Filtering-Correlation-Id: ec79cac3-2d06-4853-920b-08dda3f49d63
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
- ARA:13230040|82310400026|36860700013|376014|1800799024|13003099007|41080700001;
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?VoGs09cQ3Tl7sMuaeaKTmWXZxZegUuMOEux//WpppPi/fUUg5O1WKLIa5Om2?=
- =?us-ascii?Q?EjNdCmA6GXlMBzJG1SfeNklv3c6I1eRfkrioHLy+BrAs+ccIbhiL1Z3mk4dv?=
- =?us-ascii?Q?aT3WHvo+byCnTHwp8FPZZMLJOsIM5/yF7w62QxD3uTIxnbIfwx+4JpbXmQs4?=
- =?us-ascii?Q?17GIfWA43TDmvDTkENGo01nxelrBiKK5eCTfUOC1OGW5qYppUnf6Y3rVinEv?=
- =?us-ascii?Q?78+00/v2EWIYsCChCQHcWyA3tVE+qJei6La7YfA3eB/IjV/X4E1IOiw42gUu?=
- =?us-ascii?Q?Ih4S+chtXUTFBOZD5WTCmCJzJZuG84oMh/TIVnQlXW1B1QvkTK4aNb0JsiFD?=
- =?us-ascii?Q?veE3lfNN4YZj2EZ3lGkY/VATe70q9VnOlml0XONJDg0qyO08M8G7T1tR4sg4?=
- =?us-ascii?Q?my8XARDvc3wMgxd6dYblb3X4Jzk9X9ZPkaB1a0WPEmM6s67f/V3C1lt23I4P?=
- =?us-ascii?Q?0mQUWwiivoCHG5NFYSdugrlA19eWtTEF2rt+vlcXuV25NVtdLdtih7cb5CSC?=
- =?us-ascii?Q?2GXrvyAWh1auD9J45c4A8s2xehXga8t/qryvxKKrtnfJ3iGV/PT3Wb5p73ty?=
- =?us-ascii?Q?XyOyRWAOC0lz73qPVqsWCgYCPXQ8cyCcQptEqWQ/jNYzAt5uEDjHA0k98wEO?=
- =?us-ascii?Q?uCsEEwCQyJ/0NYpO7xiVblUGvaY9SRWUAiCTciY9V56SmaG+V1MKscG9mz8k?=
- =?us-ascii?Q?SK1nzo2qJCuX8oFtlBvlbQ+S8c19msV3jygF4wnIYBSb097Pt1jsk/YH7EuR?=
- =?us-ascii?Q?zbSaakNdlIl1ozQ473hVKteL6lri6kQEbvCkeQS/Ir0VqVZVYoqZI0k55Amu?=
- =?us-ascii?Q?Cp5O5+o1idnxA+fH3caejzUGbtl4/4kPEpHXFma6+zZJbUShso3r5h/OTV3J?=
- =?us-ascii?Q?61G3WclqcEInFpNdITAnaiiiWsHpxr2t+uUPpsG53nqMavl1OSaa+1HCobIo?=
- =?us-ascii?Q?GUOW389GFon/KzX3IY+GIFLparu72Z9pdscSAxATjTTKQECqZhup2vVArGtz?=
- =?us-ascii?Q?HpIyjI10VdDOt6si4U/dNJHMZacL8oUFkYUuPy5tacENM30/OCML5SwKMlNd?=
- =?us-ascii?Q?4gLurGdKh7H6NoHeKbjsFitj7B5D63gygOKEJJHw3BBG5ufLNbYmHpao179/?=
- =?us-ascii?Q?kzSYMc7LGo1TT9ikRkJiFf9V88NeVbJTnH6mTFKVNlPWuLoucWL9ga30oO7Z?=
- =?us-ascii?Q?3854H7PK8Q5TVbAmSoGqLiBH5JQsn0JQR21uKVTIbr6EyEpBTHiluCoEoPFv?=
- =?us-ascii?Q?DMYNDjKEi0eUNYfX/IzXcXhOt0hUK1z3YdVyXAfONF1FnRwCltcU78TOd2ND?=
- =?us-ascii?Q?w2Z4LkvsPwwiA3pofWveI/ClTpXlz21I7KUXfUGgLdCbnCo1aUMFKfkKUp0v?=
- =?us-ascii?Q?svRlVHctEPwpKwjmvdRSTzTzkteDy4iwdCTY7J410ThVLUUUESkX9OxBnxDY?=
- =?us-ascii?Q?jDzDt5jtY9N5bM3vG4gEjOerA3zIkRMgbm/kZoWNIZaYqiyupEoaOu/OfhmL?=
- =?us-ascii?Q?/kcCEUPwFLkaGDSxkWeREEptiq99B21RPIIlVd1v65rX2kp1crVYOpcntZeF?=
- =?us-ascii?Q?1ygU08r25vS98z25Jcg=3D?=
+ ARA:13230040|36860700013|82310400026|376014|1800799024|13003099007|41080700001;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?aznEi/z9fBKLtDmG/3/zdT25FLL56+iTDHQsa9YEhtasTiLaOn6bP/3VoVfk?=
+ =?us-ascii?Q?hi0i0nEgoMo+1iAalK77dRLMP6Vv11MqbMJpOk5f6yMddCp05i+4Pz03LzEH?=
+ =?us-ascii?Q?bXKZl86cfvRimlfG03N8bGoD47OjxWPHx0Zj/GkOqnY4lhJeDcmeXnITHD9V?=
+ =?us-ascii?Q?79sfrd3FFYy3jy3ksRzuBxbPWPYIjpJy4OyBblN6GRRmlqs7Jj5F9R1b8re2?=
+ =?us-ascii?Q?z1mP7WfJSK5+2Tpbf7c896aQwMeXZ37amTPtGaKiS5XTLYTnCfPihDqvQth+?=
+ =?us-ascii?Q?l4vDVsI9TDqXqY9nJnTO3uhQxCPdBIbl94XRDqNYxY9/EDn2E206XkWdRKt8?=
+ =?us-ascii?Q?bLehh3SrmyzQn2lAYLEWN2Mgp9ubBx0d5hKDJhHomXZWh007+TMfFBEI4/ZX?=
+ =?us-ascii?Q?rmMIIdGUKW/hwydFhLdsTjPGR/CFZ0phLI0KPYsT/Y7jrMlw62QTYcknASOW?=
+ =?us-ascii?Q?oOxfmGXdVrNhf72G3YnNHVKSt0DHEUOC3wWmLXL55trL/SBSLq23yup9rUcG?=
+ =?us-ascii?Q?COc5o2Snh0SywMkHXndegsuKev/U0BJ27OaPar4KmpJpnHdwpZv9C0nahkOh?=
+ =?us-ascii?Q?rzb+FiLDB510i8JeG7+u4wC4ynHl3rfqmQh13+TmRQoF2qk0eiwpRT2n71xa?=
+ =?us-ascii?Q?uC2t7d2E8wHVTATvXAY98bFRBo3YHBkeDhi4TwjKx5GuWxeZcpPi6tCCp2k2?=
+ =?us-ascii?Q?TjJx9vDydZFtuZSZVii+tzz8/sHVa35GNirBdb+sTAwBi9GOMBvrkbsH67wP?=
+ =?us-ascii?Q?Dl0rsG1aFzyEAenW7FeX341M+BzffR9Zji2f6TGganN3uZqC9OAB+8MRFmfw?=
+ =?us-ascii?Q?iCT6JEIvyQUPbCuEozt2J48fT38u7Pde8hv6VZgHF3pIEIpJt7qk1IQJ1Rnh?=
+ =?us-ascii?Q?2jVUhbhXxHjJZImLWp/KO0IhlxFGPBgr03/rFSTNo03UkGhQOUhDLMPuFzwy?=
+ =?us-ascii?Q?CR24W0R59OxtQkFQciPEIM4n8BaOsLPjS/oay/kJOARc187BYmG2PYMXwAP4?=
+ =?us-ascii?Q?wUDKzgGUTH2xnLDxfafTAlqt0GaD0PeR0aW3zz7OGyXBHiHAO91qwnl8zljZ?=
+ =?us-ascii?Q?Wese/aE6ccgtlVFkmrA7R+KVdlswoEROI8v4DrFvL5aOXHHsyjWotFuLLDCR?=
+ =?us-ascii?Q?hTbSAR8gZu3W1KTYKVMFMjdorJO/4fV1z+Uwcvay3PgnRgdHCN66CYmc3luC?=
+ =?us-ascii?Q?JAt2F/H0xBOSyVxgrVUssdoqJDbMshlnYXxCfqDcMwmRktM7jqaCk2ePNUKz?=
+ =?us-ascii?Q?ArPzulEBjilpk2IG5N/6j/30DYTAvJik26XUtczuWynpKZM1/we1fwXz3Gc8?=
+ =?us-ascii?Q?+acs92RXjPQ68uycWj1uKnvEiWdhASoEDXT7l4W9Woe6qa11DOhCChBsN4yG?=
+ =?us-ascii?Q?qNaz85FdE3pUx5G+Bk6PyIxsIgD1Uk2VknTm8ZUivHfqaV4mkdeLnwCRiqim?=
+ =?us-ascii?Q?MAflVuF5SpDASUlO0NB5pg4byixPI5y4+sfLmlHOK7WfdbK/1F0avyXnknk+?=
+ =?us-ascii?Q?52LkaBIAReKATVBqOWH6UJ790Zw0MLM5fbPyIsRmVNcNqdBz3wZyRLiGYprb?=
+ =?us-ascii?Q?Ht02U1PXDsmedl3r9VU=3D?=
 X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
  IPV:CAL; SFV:NSPM; H:SATLEXMB03.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
- SFS:(13230040)(82310400026)(36860700013)(376014)(1800799024)(13003099007)(41080700001);
+ SFS:(13230040)(36860700013)(82310400026)(376014)(1800799024)(13003099007)(41080700001);
  DIR:OUT; SFP:1101; 
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jun 2025 05:48:34.7860 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2c5333c3-1c3a-471b-fa2d-08dda3f49c73
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jun 2025 05:48:36.3568 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ec79cac3-2d06-4853-920b-08dda3f49d63
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
  Helo=[SATLEXMB03.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource: DS3PEPF000099D6.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7250
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6207
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amd.com; s=selector1; 
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XI4WP7mvelM2e/cDmxmyaqgRUdrw6D4grPsOinokaVg=;
- b=dJXnxzs/NjYdOj/KY7Ep/3lVAmytuuVotzmoIb9vaTfL4xAtxSTZqJtjnxpIPQVfTRXz4URd2DY/ug2qBA72Ey6MbqYn/VdsKhMYXidS7n16KSO98CWPDuFq69FEfO5bHDR4F8Q16pASjtUl8HAI2Oue65Qd/pMMrZdwfXhXrh4=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=s4wQOUPQjTsCd+24iLFC5sqFpa8k1APw2ppz2RtULLk=;
+ b=plCRYIaI45T2M0k4SFPgfFk1qO/9vc6yL+B6lyiTF//kdoNI6tOxcJHDgCQNHyT5Fvo8Lj5FST/s7BPbjv5GK6ZlWZ45LnKrDhlpxdyvDPCkjG+OSbd1qqOjtdYRGH0oLM05latgYqtkBzVw/OOjaGazYrTPBZImk/171iJXaaI=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=amd.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=dJXnxzs/
-Subject: [Buildroot] [PATCH v1 1/5] boot/xilinx-prebuilt: add support for
- xilinx_v2025.1
+ header.s=selector1 header.b=plCRYIaI
+Subject: [Buildroot] [PATCH v1 2/5] configs/versal_vek280_defconfig: bump to
+ xilinx-v2025.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -171,30 +171,79 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch adds support for version xilinx_v2025.1 without changing the
-default version.  This way, the zynqmp and versal defconfigs can bump
-individually from xilinx_v2024.2 to xilinx_v2025.1.
+This patch bumps the versal_vek280_defconfig to xilinx-v2025.1 which includes
+the following updates:
+
+- ATF v2.12
+- Linux v6.12.10
+- PLM xilinx_v2025.1
+- PSMFW xilinx_v2025.1
+- U-Boot v2025.01
+
+The Xilinx specific Linux 6.12 patch has been added to this defconfig:
+board/xilinx/linux_6.12/patches/linux/0001-include-uapi-linux-xlnx-ai-engine.h-fix-CONFIG_XILIN.patch
 
 Signed-off-by: Neal Frager <neal.frager@amd.com>
 ---
-Please only apply this series after the following two series has been applied:
+Please only apply this series after the following two series have been applied:
 https://patchwork.ozlabs.org/project/buildroot/list/?series=459217
 https://patchwork.ozlabs.org/project/buildroot/list/?series=459345
 ---
- boot/xilinx-prebuilt/xilinx-prebuilt.hash | 1 +
- 1 file changed, 1 insertion(+)
+ configs/versal_vek280_defconfig | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/boot/xilinx-prebuilt/xilinx-prebuilt.hash b/boot/xilinx-prebuilt/xilinx-prebuilt.hash
-index 35f7070e5f..8e8940e5ed 100644
---- a/boot/xilinx-prebuilt/xilinx-prebuilt.hash
-+++ b/boot/xilinx-prebuilt/xilinx-prebuilt.hash
-@@ -1,5 +1,6 @@
- # Locally calculated
- sha256  86ee9629366aa8c0d70b87202152a793804ed4090e3a6fdac4eaf855bcc4d458  xilinx-prebuilt-xilinx_v2024.2_update1.tar.gz
-+sha256  b9e2572885ad12243e10d48d9fccb24771a528b9f27aae1b29b45f0806ce9f1f  xilinx-prebuilt-xilinx_v2025.1.tar.gz
- 
- # Locally calculated
- sha256  7b2074b607264a07347e1a7ef0323229585942793469f34b2cf9628f7623e05f  LICENSE
+diff --git a/configs/versal_vek280_defconfig b/configs/versal_vek280_defconfig
+index 1d83e55499..25fdeabe69 100644
+--- a/configs/versal_vek280_defconfig
++++ b/configs/versal_vek280_defconfig
+@@ -1,16 +1,16 @@
+ BR2_aarch64=y
+ BR2_cortex_a72=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
+ BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
+ BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-xilinx-elf"
+-BR2_GLOBAL_PATCH_DIR="board/versal/vek280/patches board/xilinx/patches"
++BR2_GLOBAL_PATCH_DIR="board/versal/vek280/patches board/xilinx/patches board/xilinx/linux_6.12/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/versal/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/versal/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="ttyAMA0,115200 mmcblk0p2"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_merge_6.6.70)/xlnx_rebase_v6.6_LTS_merge_6.6.70.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.12_LTS_2025.1)/xlnx_rebase_v6.12_LTS_2025.1.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/versal-vek280-revB"
+@@ -21,13 +21,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.10_2024.2)/xlnx_rebase_v2.10_2024.2.tar.gz"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.12_2025.1)/xlnx_rebase_v2.12_2025.1.tar.gz"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="versal"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2024.01_2024.2)/xlnx_rebase_v2024.01_2024.2.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2025.01_2025.1)/xlnx_rebase_v2025.01_2025.1.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_versal_virt"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+@@ -38,9 +38,11 @@ BR2_TARGET_UBOOT_FORMAT_DTB=y
+ BR2_TARGET_UBOOT_FORMAT_REMAKE_ELF=y
+ BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=versal-vek280-revB"
+ BR2_TARGET_XILINX_EMBEDDEDSW=y
++BR2_TARGET_XILINX_EMBEDDEDSW_VERSION="xilinx_v2025.1"
+ BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM=y
+ BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PSMFW=y
+ BR2_TARGET_XILINX_PREBUILT=y
++BR2_TARGET_XILINX_PREBUILT_VERSION="xilinx_v2025.1"
+ BR2_TARGET_XILINX_PREBUILT_VERSAL=y
+ BR2_TARGET_XILINX_PREBUILT_BOARD="vek280"
+ BR2_PACKAGE_HOST_BOOTGEN=y
 -- 
 2.25.1
 
