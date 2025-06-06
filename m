@@ -4,50 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56A22C61DB2
-	for <buildroot@archiver.kernel.org>; Fri,  6 Jun 2025 19:54:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97309C5AD49
+	for <buildroot@archiver.kernel.org>; Fri,  6 Jun 2025 19:56:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 154C160B78;
-	Fri,  6 Jun 2025 19:54:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 41E2D60B5A;
+	Fri,  6 Jun 2025 19:56:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EGmYqAfvBJtx; Fri,  6 Jun 2025 19:54:22 +0000 (UTC)
+ id Hh0K3xkD-yUI; Fri,  6 Jun 2025 19:56:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 16DA260B86
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 82BC060B86
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 16DA260B86;
-	Fri,  6 Jun 2025 19:54:22 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id DAD4BC8
- for <buildroot@buildroot.org>; Fri,  6 Jun 2025 19:54:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 82BC060B86;
+	Fri,  6 Jun 2025 19:56:01 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 434FF1F2
+ for <buildroot@buildroot.org>; Fri,  6 Jun 2025 19:56:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CC1B84016B
- for <buildroot@buildroot.org>; Fri,  6 Jun 2025 19:54:19 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 349274093D
+ for <buildroot@buildroot.org>; Fri,  6 Jun 2025 19:56:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gsC7OahzMvKc for <buildroot@buildroot.org>;
- Fri,  6 Jun 2025 19:54:19 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 11031400F5
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 11031400F5
- for <buildroot@buildroot.org>; Fri,  6 Jun 2025 19:54:19 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F3CB9879BE; Fri,  6 Jun 2025 19:54:18 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1XjoLDrFrGas for <buildroot@buildroot.org>;
+ Fri,  6 Jun 2025 19:55:59 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7A2FE40932
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A2FE40932
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7A2FE40932
+ for <buildroot@buildroot.org>; Fri,  6 Jun 2025 19:55:58 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id CBD9760137;
+ Fri,  6 Jun 2025 21:55:54 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 06 Jun 2025 21:55:54 +0200
+MIME-Version: 1.0
+Date: Fri, 06 Jun 2025 21:55:54 +0200
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Fri, 6 Jun 2025 21:52:33 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 110cd929322727d31351d2f4b8e5bbe81b000bf3
-X-Git-Newrev: e0bd9bafb4371b3405f728b45824ca54babed162
-X-Patchwork-Hint: ignore
-Message-Id: <20250606195418.F3CB9879BE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/fluent-bit: bump to
- 4.0.3
+To: Thomas Devoogdt <thomas@devoogdt.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250603195828.1189582-1-thomas@devoogdt.com>
+References: <20250603195828.1189582-1-thomas@devoogdt.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <54c91c1054ef8a3d32bfa29b8d542817@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1749239756;
+ bh=Y5E5kbfDz0wbhEf0/6MMIh2x2saziNmJMvlgmh426SE=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=he8MVUEz07t4dDxnaI7pEFOH0v1QWXdg122cj3ZgFsiYaCiEbyTbypKlQyJqTJw8J
+ xZA/OiOVUZfJVzN6V1fsTfUgSviv9KEP7FcWEp3G8AxmWUatRBLhST6Avq6RkQkGS2
+ CBmZsCzDt8UtlgMQFV1pc124knwEVFKGDyG6icEkHfpu+utAlxKO8TgTcBAMbxKk/E
+ OrtICX2gdx6+51NyjFUip2JFcp1cTuzFlfft2YYJv9uBt7NhcLqYmSpLmApz7IxIbm
+ h2ykfjv0KKDX0NMUd62QogpRzMsOGP3EkX1Az6C6dwm5vEh+FEux3Tvz7smN/aw1Yw
+ r9/iRp7VXC+kA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=he8MVUEz
+Subject: Re: [Buildroot] [PATCH 1/2] package/msgpack-c: add new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,141 +81,26 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e0bd9bafb4371b3405f728b45824ca54babed162
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On 03/06/2025 21:58, Thomas Devoogdt wrote:
+> MessagePack ships both in a C++ and a C variant. Add the latter to 
+> Buildroot.
+> This will be used by fluent-bit.
+> 
+> Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
 
-News:
-- https://fluentbit.io/announcements/v4.0.3/
+Series applied to next, thanks.
+For info, I added a note to clarify the C/C++ variants in Config.in. 
+See:
+https://gitlab.com/buildroot.org/buildroot/-/commit/110cd929322727d31351d2f4b8e5bbe81b000bf3
 
-Other remarks:
-- Dropped 0003-lib-miniz-only-require-a-C-compiler.patch
-  as it is upstream. [1]
+Best regards,
 
-- Added msgpack-c as a system dependency since this has been
-  added to buildroot.
-
-- Added sqlite as system dependency as it can't really be
-  disabled otherwise due to an upstream compile bug. [2]
-
-- Sorted the config entries while at it.
-
-[1] https://github.com/fluent/fluent-bit/pull/10315
-[2] https://github.com/fluent/fluent-bit/issues/9757
-
-Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- .../0003-lib-miniz-only-require-a-C-compiler.patch | 31 ----------------------
- package/fluent-bit/Config.in                       |  6 +++--
- package/fluent-bit/fluent-bit.hash                 |  2 +-
- package/fluent-bit/fluent-bit.mk                   |  8 +++---
- 4 files changed, 10 insertions(+), 37 deletions(-)
-
-diff --git a/package/fluent-bit/0003-lib-miniz-only-require-a-C-compiler.patch b/package/fluent-bit/0003-lib-miniz-only-require-a-C-compiler.patch
-deleted file mode 100644
-index 29c2d9e220..0000000000
---- a/package/fluent-bit/0003-lib-miniz-only-require-a-C-compiler.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--From abb3b388aaf7ea72ea1fcad77ead52f15a0cf543 Mon Sep 17 00:00:00 2001
--From: Thomas Devoogdt <thomas@devoogdt.com>
--Date: Tue, 1 Apr 2025 22:56:00 +0200
--Subject: [PATCH] lib: miniz: only require a C compiler
--
--Commit https://github.com/richgel999/miniz/commit/05ab4dc05c9d1e1f951f5849b659e2c7e291a620
--"Add some catch2 tests" dropped that C flag, but should instead only have added a simple
--enable_language call for the tests only.
--
--Upstream: https://github.com/richgel999/miniz/commit/383e551cccf41fc2ce1177712d6a37a85d936642
--Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
-----
-- lib/miniz/CMakeLists.txt | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/lib/miniz/CMakeLists.txt b/lib/miniz/CMakeLists.txt
--index 859133ad0..f3d80f80a 100644
----- a/lib/miniz/CMakeLists.txt
--+++ b/lib/miniz/CMakeLists.txt
--@@ -7,7 +7,7 @@ if(DEFINED PROJECT_NAME)
-- endif()
-- 
-- if(CMAKE_MINOR_VERSION LESS 12)
---  project(miniz)
--+  project(miniz C)
--   # see issue https://gitlab.kitware.com/cmake/cmake/merge_requests/1799
-- else()
--   project(miniz C)
---- 
--2.43.0
--
-diff --git a/package/fluent-bit/Config.in b/package/fluent-bit/Config.in
-index 71488afd73..aeae034b2a 100644
---- a/package/fluent-bit/Config.in
-+++ b/package/fluent-bit/Config.in
-@@ -4,12 +4,14 @@ config BR2_PACKAGE_FLUENT_BIT
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_STATIC_LIBS # dlfcn.h
- 	select BR2_PACKAGE_C_ARES
-+	select BR2_PACKAGE_LIBOPENSSL_ENGINES # needed by bundled librdkafka
-+	select BR2_PACKAGE_LIBYAML
-+	select BR2_PACKAGE_MSGPACK_C
- 	select BR2_PACKAGE_MUSL_FTS if !BR2_TOOLCHAIN_USES_GLIBC
- 	select BR2_PACKAGE_NGHTTP2
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
--	select BR2_PACKAGE_LIBOPENSSL_ENGINES # needed by bundled librdkafka
--	select BR2_PACKAGE_LIBYAML
-+	select BR2_PACKAGE_SQLITE
- 	select BR2_PACKAGE_ZSTD
- 	help
- 	  Fast and Lightweight Logs and Metrics processor.
-diff --git a/package/fluent-bit/fluent-bit.hash b/package/fluent-bit/fluent-bit.hash
-index 37943c6a4f..ec820416ed 100644
---- a/package/fluent-bit/fluent-bit.hash
-+++ b/package/fluent-bit/fluent-bit.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  aa0577ba7251081c8d5398b2a905b5b0585bb657ca13b39a5e12931437516f08  fluent-bit-4.0.2.tar.gz
-+sha256  c7d276238d25242467218941842d8cd4df6cfa52cc9379ae5755220cdefd1dc1  fluent-bit-4.0.3.tar.gz
- sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
-diff --git a/package/fluent-bit/fluent-bit.mk b/package/fluent-bit/fluent-bit.mk
-index 23b899e1dd..3e7e04907e 100644
---- a/package/fluent-bit/fluent-bit.mk
-+++ b/package/fluent-bit/fluent-bit.mk
-@@ -4,14 +4,14 @@
- #
- ################################################################################
- 
--FLUENT_BIT_VERSION = 4.0.2
-+FLUENT_BIT_VERSION = 4.0.3
- FLUENT_BIT_SITE = $(call github,fluent,fluent-bit,v$(FLUENT_BIT_VERSION))
- FLUENT_BIT_LICENSE = Apache-2.0
- FLUENT_BIT_LICENSE_FILES = LICENSE
- FLUENT_BIT_CPE_ID_VENDOR = treasuredata
- FLUENT_BIT_CPE_ID_PRODUCT = fluent_bit
--FLUENT_BIT_DEPENDENCIES = c-ares host-bison host-flex libyaml nghttp2 openssl \
--	zstd
-+FLUENT_BIT_DEPENDENCIES = c-ares host-bison host-flex libyaml msgpack-c \
-+	nghttp2 openssl sqlite zstd
- 
- FLUENT_BIT_CMAKE_BACKEND = ninja
- 
-@@ -22,7 +22,9 @@ FLUENT_BIT_CONF_OPTS += \
- 	-DFLB_EXAMPLES=No \
- 	-DFLB_CHUNK_TRACE=No \
- 	-DFLB_PREFER_SYSTEM_LIB_CARES=Yes \
-+	-DFLB_PREFER_SYSTEM_LIB_MSGPACK=Yes \
- 	-DFLB_PREFER_SYSTEM_LIB_NGHTTP2=Yes \
-+	-DFLB_PREFER_SYSTEM_LIB_SQLITE=Yes \
- 	-DFLB_PREFER_SYSTEM_LIB_ZSTD=Yes
- 
- ifeq ($(BR2_PACKAGE_FLUENT_BIT_WASM),y)
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
