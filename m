@@ -1,76 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 450A2C61CE7
-	for <buildroot@archiver.kernel.org>; Fri,  6 Jun 2025 18:01:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 111B8C5AD49
+	for <buildroot@archiver.kernel.org>; Fri,  6 Jun 2025 19:54:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 01D2885068;
-	Fri,  6 Jun 2025 18:01:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AEB1B408E2;
+	Fri,  6 Jun 2025 19:54:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hv6EmhdTJEys; Fri,  6 Jun 2025 18:01:04 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TkcwCBiZ_FAA; Fri,  6 Jun 2025 19:54:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3811685063
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C2C0340CFE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3811685063;
-	Fri,  6 Jun 2025 18:01:04 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 67EF21F2
- for <buildroot@buildroot.org>; Fri,  6 Jun 2025 18:01:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C2C0340CFE;
+	Fri,  6 Jun 2025 19:54:20 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id C1FB2C8
+ for <buildroot@buildroot.org>; Fri,  6 Jun 2025 19:54:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 464A781280
- for <buildroot@buildroot.org>; Fri,  6 Jun 2025 18:01:02 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id AC068408E2
+ for <buildroot@buildroot.org>; Fri,  6 Jun 2025 19:54:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UCgztrDoYHgC for <buildroot@buildroot.org>;
- Fri,  6 Jun 2025 18:01:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 431C685061
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 431C685061
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 431C685061
- for <buildroot@buildroot.org>; Fri,  6 Jun 2025 18:01:01 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 1DD3A19F54D;
- Fri,  6 Jun 2025 20:00:57 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
- via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 06 Jun 2025 20:00:57 +0200
-MIME-Version: 1.0
-Date: Fri, 06 Jun 2025 20:00:57 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id q2RHdgoJj0SQ for <buildroot@buildroot.org>;
+ Fri,  6 Jun 2025 19:54:19 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 03A8D40849
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 03A8D40849
+ for <buildroot@buildroot.org>; Fri,  6 Jun 2025 19:54:19 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E34F487A98; Fri,  6 Jun 2025 19:54:18 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: yann.morin@orange.com
-Cc: buildroot@buildroot.org
-In-Reply-To: <aD1K1vCLJt7/3/i4@yd-6wlzhs3>
-References: <0cc8c132abc7f2117de95906fc1ae4729100c564.1748355369.git.yann.morin@orange.com>
- <7c0c1993b8789a5c5e2af275c8dc9882@free.fr> <aD1K1vCLJt7/3/i4@yd-6wlzhs3>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <2a3ddf239d7e5422e401019cb91ecace@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1749232858;
- bh=88OnIcKWyu4sOdliDZ8BPLC/VAJa6KNMnA14mPBRL/Q=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=agJbtKra/vN/yiFYMYK3CvzskkWd7Ssy90gVrSU133bRiNgdkC4XUqrBzXApPjD+F
- /57TrcdhFZN3unZfdYyRZubYqX4MNGOYc8t8ua5RZGwRR4P7cYufksQtSylfwNQvRQ
- fn+S/ak0ss/QWbhvm+V+ujSVMgBTFfpSJTuv3U62oplh8NKPAqPkK2V2FXyFp6iDHG
- 6Zwk0eqvAUBQVscc1nkf0F+wcDMx+wnPq1Td8QEwrFgWLgdI5BMoP+9qisGKoIW31H
- bVTvnCZkOpHIwR/rW8YjGm7StHjWhif+V8dxX+d91yvnPYu/VPfYVyQZ0LengudeBf
- IYb0IaXapmwog==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=agJbtKra
-Subject: Re: [Buildroot] [PATCH] package/gpsd: bump to 3.26.1
+To: buildroot@buildroot.org
+Date: Fri, 6 Jun 2025 21:50:28 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 9188bf42e4e9adde2fd71242843d9207b33c786f
+X-Git-Newrev: 110cd929322727d31351d2f4b8e5bbe81b000bf3
+X-Patchwork-Hint: ignore
+Message-Id: <20250606195418.E34F487A98@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/msgpack-c: add new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,56 +59,111 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Yann,
+commit: https://git.buildroot.net/buildroot/commit/?id=110cd929322727d31351d2f4b8e5bbe81b000bf3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On 02/06/2025 08:55, yann.morin@orange.com wrote:
-> Julien, All,
-> 
-> On 2025-05-28 22:56 +0200, Julien Olivain spake thusly:
->> On 27/05/2025 16:16, yann.morin@orange.com wrote:
->> > From: "Yann E. MORIN" <yann.morin@orange.com>
-> [--SNIP--]
->> > -GPSD_VERSION = 3.25
->> > +GPSD_VERSION = 3.26.1
->> This new version fails in the gpsd runtime test.
-> 
-> Damned... I forgot about that runtime test...
-> 
->> There is
->> apparently a change of behavior in "gpsfake" in UDP mode, which works
->> for the first client connection, but fails for subsequent calls.
->> I bisected this behavior change to upstream commit:
->> https://gitlab.com/gpsd/gpsd/-/commit/5c080c35fc3d981172a5e4af34d0d92854a5433a
-> [--SNIP--]
->> Do you think this behavior change is an upstream bug?
-> 
-> Definitely.
-> 
->> If yes, it would be nice to fix this upstream. Otherwise, we should
->> slightly modify the runtime test (like removing the gpsctl invocation,
->> if gpsfake udp does not support more that one client connection).
->> What do you think?
-> 
-> I'll open an issue upstream, but last time I did, err.. Let's say the
-> experience was far from thrilling... But thanks for your simple and
-> obvious reproducer; that will hopefully help.
-> 
-> We can switch the runtime test over to TCP mode (if it's not broken...)
-> to workaround the issue in the meantime...
+MessagePack ships both in a C++ and a C variant. Add the latter to
+Buildroot. This will be used by fluent-bit.
 
-I tried your suggestion to switch the runtime test to TCP, and it is
-working around this bug. So I applied this patch to next, including
-this modification. See:
-https://gitlab.com/buildroot.org/buildroot/-/commit/9188bf42e4e9adde2fd71242843d9207b33c786f
+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+[Julien:
+ - switch homepage URL to use https
+ - add a note in package/msgpack{,-c}/Config.in to clarify C/C++
+   variants
+]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/Config.in                |  1 +
+ package/msgpack-c/Config.in      | 12 ++++++++++++
+ package/msgpack-c/msgpack-c.hash |  4 ++++
+ package/msgpack-c/msgpack-c.mk   | 18 ++++++++++++++++++
+ package/msgpack/Config.in        |  3 +++
+ 5 files changed, 38 insertions(+)
 
-Best regards,
-
-Julien.
+diff --git a/package/Config.in b/package/Config.in
+index 6e9846cee5..a46c459ff5 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2305,6 +2305,7 @@ endif
+ 	source "package/mpfr/Config.in"
+ 	source "package/mpir/Config.in"
+ 	source "package/msgpack/Config.in"
++	source "package/msgpack-c/Config.in"
+ 	source "package/musl-compat-headers/Config.in"
+ 	source "package/musl-fts/Config.in"
+ 	source "package/neon-2-sse/Config.in"
+diff --git a/package/msgpack-c/Config.in b/package/msgpack-c/Config.in
+new file mode 100644
+index 0000000000..76dfe19614
+--- /dev/null
++++ b/package/msgpack-c/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_MSGPACK_C
++	bool "msgpack-c"
++	help
++	  MessagePack is an efficient binary serialization format.
++
++	  It lets you exchange data among multiple languages like JSON
++	  but it's faster and smaller.
++
++	  Note: this package is the C variant of msgpack-c. For the
++	  C++ variant, use the "msgpack" Buildroot package.
++
++	  https://msgpack.org/
+diff --git a/package/msgpack-c/msgpack-c.hash b/package/msgpack-c/msgpack-c.hash
+new file mode 100644
+index 0000000000..e4fe61f424
+--- /dev/null
++++ b/package/msgpack-c/msgpack-c.hash
+@@ -0,0 +1,4 @@
++# Locally computed:
++sha256  c23c4070dbe01f46044bf70c5349f29453d655935b6dc710714c008bca0825a7  msgpack-c-6.1.0.tar.gz
++sha256  664550b43996452a5a2c7471bb0ff77185a58c69ccafa60f983dc4c162e1ee22  COPYING
++sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE_1_0.txt
+diff --git a/package/msgpack-c/msgpack-c.mk b/package/msgpack-c/msgpack-c.mk
+new file mode 100644
+index 0000000000..f12dcb085f
+--- /dev/null
++++ b/package/msgpack-c/msgpack-c.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# msgpack-c
++#
++################################################################################
++
++MSGPACK_C_VERSION = 6.1.0
++MSGPACK_C_SITE = $(call github,msgpack,msgpack-c,c-$(MSGPACK_C_VERSION))
++MSGPACK_C_LICENSE = BSL-1.0
++MSGPACK_C_LICENSE_FILES = COPYING LICENSE_1_0.txt
++MSGPACK_C_INSTALL_STAGING = YES
++MSGPACK_C_CONF_OPTS = -DMSGPACK_BUILD_EXAMPLES=OFF -DMSGPACK_BUILD_TESTS=OFF
++
++ifeq ($(BR2_STATIC_LIBS),y)
++MSGPACK_C_CONF_OPTS += -DMSGPACK_ENABLE_SHARED=OFF
++endif
++
++$(eval $(cmake-package))
+diff --git a/package/msgpack/Config.in b/package/msgpack/Config.in
+index b7ae35a0c6..da67956a10 100644
+--- a/package/msgpack/Config.in
++++ b/package/msgpack/Config.in
+@@ -8,6 +8,9 @@ config BR2_PACKAGE_MSGPACK
+ 	  It lets you exchange data among multiple languages like JSON
+ 	  but it's faster and smaller.
+ 
++	  Note: this package is the C++ variant of msgpack. For the
++	  C variant, use the "msgpack-c" Buildroot package.
++
+ 	  http://msgpack.org/
+ 
+ comment "msgpack needs a toolchain w/ C++"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
