@@ -1,105 +1,102 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1803C5B559
-	for <buildroot@archiver.kernel.org>; Fri,  6 Jun 2025 07:02:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7D7BC5B549
+	for <buildroot@archiver.kernel.org>; Fri,  6 Jun 2025 08:01:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 948C884EF8;
-	Fri,  6 Jun 2025 07:02:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5FF89407DE;
+	Fri,  6 Jun 2025 08:01:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 14J7_5c6NGJ6; Fri,  6 Jun 2025 07:02:18 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Y5o2MKZoy67R; Fri,  6 Jun 2025 08:01:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B2C5984EE6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8E06040702
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B2C5984EE6;
-	Fri,  6 Jun 2025 07:02:18 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id D357DD3
- for <buildroot@buildroot.org>; Fri,  6 Jun 2025 07:02:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8E06040702;
+	Fri,  6 Jun 2025 08:01:21 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7DD38D3
+ for <buildroot@buildroot.org>; Fri,  6 Jun 2025 08:01:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C1C3640143
- for <buildroot@buildroot.org>; Fri,  6 Jun 2025 07:02:16 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6F83F60809
+ for <buildroot@buildroot.org>; Fri,  6 Jun 2025 08:01:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QnkRiadzZPSu for <buildroot@buildroot.org>;
- Fri,  6 Jun 2025 07:02:16 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Tl1VhWs8G59y for <buildroot@buildroot.org>;
+ Fri,  6 Jun 2025 08:01:18 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::433; helo=mail-wr1-x433.google.com;
- envelope-from=elmehdi.younes@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1DEA940042
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1DEA940042
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
- [IPv6:2a00:1450:4864:20::433])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1DEA940042
- for <buildroot@buildroot.org>; Fri,  6 Jun 2025 07:02:15 +0000 (UTC)
-Received: by mail-wr1-x433.google.com with SMTP id
- ffacd0b85a97d-3a525eee2e3so1247399f8f.2
- for <buildroot@buildroot.org>; Fri, 06 Jun 2025 00:02:15 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
+ envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4AFDF6065D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4AFDF6065D
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4AFDF6065D
+ for <buildroot@buildroot.org>; Fri,  6 Jun 2025 08:01:17 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ 5b1f17b1804b1-450cea01b9cso5605345e9.0
+ for <buildroot@buildroot.org>; Fri, 06 Jun 2025 01:01:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1749193333; x=1749798133;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=annWRYCb4ZaGzNItTvLE7pZwTyLI0rmhTIDEKwE0sHw=;
- b=NiimG3WmdEpPIJT0mYKTZ9kBrrDSYULG16yBVzHdQclYDw20QI2q8PlfKiOAFTHTjV
- WOHIyUIj7GC0XKDvmkpdnSrOj5guF3upQEWp0sdbP7Y6laygq/gTLdgdB5igBE0h3PzM
- tAoKkE3X7U82IhverqPRVmYy3Y2AeTWWKtvXfIBJ9GHAboETxUMumoHc1KMThSCHgADU
- 1jJzTgGOj2GS2fPV0PdYCIlBOjUg4pY/3Mw+uymSDhkun3iAwEks7hFSa1lU7XGdN665
- Xdoag5edxIOHdF61CipmMCvY70jI/mhChhmeOupYfBnvGN/EIAHMJMrUqpVGfYHvAKf6
- mGZQ==
-X-Gm-Message-State: AOJu0Yx8H5EUp5TzOp6T9QR9fU9ur9gLNYgZ+G9cecOl7peHO1K3XVHO
- P/ib6AExM2Gea/OBK91vMldm/LL/7NzmUoDJbG9/MovwBc1V4fbfTNbXjqo+DX03AOsE6GQJjst
- /uhbI
-X-Gm-Gg: ASbGncucc5wtnX5NwLRZ80AoV5a3BHVjg9CDDw2YB09oQXIKdRbTNSi02S4lRHIAvVk
- DzhUjUTtzYxWyRBJH5U44pajy/pXeem3EuHBhHtatT2CCwdVvTlEmtFLdlcCaI0tvbhMwFUtdBe
- ElHuhzABNDNPhKhLfbHTd4xrMyuh8Zbp8C7lZ+78a2VHfVIYMN5gqctyljjLR3SWC7HhQtsOryZ
- vLLpJJV4uqVG7WRUi9+UXxycL/Ap1cCDSrv+8xDD7FKfbBTuw78wFWJsf9KXfzKlEAEQPTLl/Jk
- am7lMoST2s0Ke12hYmxV4XrvD9ybaMSFLwJWRTg0Tlf8aSpYHT1IPVsQXEHPPMoH15TfvMZmrsb
- w1tInc+8VnFR/lGV51NodeV0C2Vpm71GUnHBntg+DGntPoA==
-X-Google-Smtp-Source: AGHT+IEfOnMSL9TbUhrUB2Jnv53sAo9cSwt/O5etCTXSsEdVT6W1S42RObdRl5wjNTwfM3nAKJ/EAg==
-X-Received: by 2002:a05:6000:144b:b0:3a4:e6b4:9c4b with SMTP id
- ffacd0b85a97d-3a5317849cbmr1909011f8f.1.1749193333359; 
- Fri, 06 Jun 2025 00:02:13 -0700 (PDT)
-Received: from P-NAN-ABRICOT..
- (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
+ d=1e100.net; s=20230601; t=1749196875; x=1749801675;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=NCqtLym7cLPsMnQV/+EUAIgPA4CHqDa0QMDMlm3obOo=;
+ b=wWi7UOw/z9qjg8JW2JIqzVQlZCiMBTnjs9y2p6MdeYGezBe+HeXUUmA2PV1QlVc2G9
+ uwGgdb13duxz4jx44oknFa7rNKIwO/Gj2CyYI7PEYYCtmA/HvotXdTHM4ga0+ePMR6aX
+ pZzZT+xRtwo5XXhQO2/TmHkK1j2ofvet/lS87xQo4ijBHIAzuKsrx7qll9ueQ3V+BAuY
+ Q4AiISoTjfv9NVJ0NvNKh/xk4liso1zjSwDYsjgcfsbK6ejM2/qsayrwhheYA3PKMlbO
+ jTyNfmDt5PbQbbiSRR3WQMPhpB8u8ZB+tDOoGZsi/K7OC6FnQMvVDtinChV9l6/bOHo7
+ Mj1Q==
+X-Gm-Message-State: AOJu0YzIkk5OywGydxLD36woSWhwhMLJ+Xk9QY1E+a0QPK6OlEekJ1Cy
+ N5INc3EjUPihEDqn3J8Okhjf/pmjWPT0Vn2Yyn3IMYToS18ktRSkp1hs0BWkTD2BiOQAvGra9UD
+ EYlzA
+X-Gm-Gg: ASbGncvKCQcfgO7Sh2SLKZGxB4Wmwjhw917Gx8ZdxdDbTCNX4DmFhc8aucSvdjLGlAA
+ vQLoGkELGvXdCBwaE90f0LHYEnl1mBwzML8/R7OHnEA+TDX3qrDL6qXnXKjK1lm1bln0e1LYlRs
+ CLXHAdFYFBn1EBsCX5O11UfN40Wr8uWWc+OLWXheQCZu69yzVixgFqnI2FAATnNCVlqz9k93OYA
+ oIpqlNl7M9z2A30+UZaRCQb/iT36fvA1I2Cz7fUQBdw1uJouUv7c0j6G2EJoqRbE6022Avq8V9c
+ UK9siZ9i3mERLFa9l7Ke75NAUwwgmXv6B/RFoeV9RpNl3T28d4oOXPSkPYbtLGXwkFnVIZa5UXB
+ oAev2OnOZ4P/d/4eitlCx2hq4YxwF3TNpxGpbdUTrCV8vBg4LFo5pGw==
+X-Google-Smtp-Source: AGHT+IEo6iLvzP7pe7u/B7PWxy38kiSKVVcq+HMRCadwOax9mMSxKpKxiX1ZXi0bNYGVxfWmoI7kOQ==
+X-Received: by 2002:a05:6000:288c:b0:3a4:cf40:ff37 with SMTP id
+ ffacd0b85a97d-3a531882247mr2068114f8f.6.1749196875532; 
+ Fri, 06 Jun 2025 01:01:15 -0700 (PDT)
+Received: from dragon.local.ess-mail.com
+ (ip-94-140-185-241.reverse.destiny.be. [94.140.185.241])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3a53229d96fsm1035353f8f.7.2025.06.06.00.02.12
+ ffacd0b85a97d-3a5323b67ccsm1141455f8f.40.2025.06.06.01.01.14
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 06 Jun 2025 00:02:13 -0700 (PDT)
+ Fri, 06 Jun 2025 01:01:15 -0700 (PDT)
 To: buildroot@buildroot.org
-Cc: Bernd Kuhls <bernd@kuhls.net>, Gilles Talis <gilles.talis@gmail.com>,
- Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- El Mehdi YOUNES <elmehdi.younes@smile.fr>
-Date: Fri,  6 Jun 2025 09:01:52 +0200
-Message-ID: <20250606070152.396438-6-elmehdi.younes@smile.fr>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250606070152.396438-1-elmehdi.younes@smile.fr>
-References: <20250606070152.396438-1-elmehdi.younes@smile.fr>
+Date: Fri,  6 Jun 2025 10:00:51 +0200
+Message-ID: <20250606080051.976890-1-titouan.christophe@mind.be>
+X-Mailer: git-send-email 2.49.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1749193333; x=1749798133; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=annWRYCb4ZaGzNItTvLE7pZwTyLI0rmhTIDEKwE0sHw=;
- b=tFtG4c72goDTyhvR1glUriktu2V04vZKt8W5KZKua1txct85ciQD/t7f5j51Ks4thL
- vfJm4zrhH4jShOCioqTLXwO8vGlkMMib3TX0SNF47ry+KL1ICtI5VUMKngjx9cfaxVwR
- s+TR5XkWaRx9LgdAzqxtOtz+AsZbivR7SV2lI=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
- header.a=rsa-sha256 header.s=google header.b=tFtG4c72
-Subject: [Buildroot] [PATCH 5/5] support/testing: add runtime test for
- Rusticl
+ d=mind.be; s=google; t=1749196875; x=1749801675; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=NCqtLym7cLPsMnQV/+EUAIgPA4CHqDa0QMDMlm3obOo=;
+ b=AWozQ45bcoq8QSWoiRQV9d7GXDlRmYqUcOWRR8W5l0SR9N9ZcpwZ2ljELvBSNhQaN8
+ NTe60/l+usKYUIizEClLqdAhstL7k93VqSohudBn4OUs89/2tMR8Oww0rQDdo2voqFqI
+ mkooJGWfnNWQVmDNzKtkhpvnR16GifxpV5uJgXX8yx5u1lw4uihSOR24PnmQOvIY+aJt
+ P/Jaw9QWBMlHWkn6q7g8g7Q50W5g32v9zD4iDV7ExkaSmgyW4xi21YGjOSlLzrFvOcTo
+ C/cjdUvjDJfvl1czVEzzdEX0JSaVG1IfwZMnNY2upJjRpocM9XcR5qs1Cz5uESwvkcaq
+ M6YA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=AWozQ45b
+Subject: [Buildroot] [PATCH for 2025.02.x] package/python-django: security
+ bump to v5.1.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -111,88 +108,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: El Mehdi YOUNES via buildroot <buildroot@buildroot.org>
-Reply-To: El Mehdi YOUNES <elmehdi.younes@smile.fr>
+From: Titouan Christophe via buildroot <buildroot@buildroot.org>
+Reply-To: Titouan Christophe <titouan.christophe@mind.be>
+Cc: James Hilliard <james.hilliard1@gmail.com>, thomas.perale@mind.be,
+ Oli Vogt <oli.vogt.pub01@gmail.com>, Marcus Hoffmann <bubu@bubu1.eu>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-this test verifies that clinfo correctly detcts
-the rustiCL platform and llvmpipe as device.
+This fixes the following CVE:
 
-We check:
-	- exit code.
-	- Platform name matches rusticl.
-	- Device name matches llvmpipe.
+- CVE-2025-48432: An issue was discovered in Django 5.2 before 5.2.2,
+                  5.1 before 5.1.10, and 4.2 before 4.2.22.
+                  Internal HTTP response logging does not escape request.path,
+                  which allows remote attackers to potentially manipulate log
+                  output via crafted URLs.
+                  This may lead to log injection or forgery when logs are
+                  viewed in terminals or processed by external systems.
 
-Signed-off-by: El Mehdi YOUNES <elmehdi.younes@smile.fr>
+See https://www.cve.org/CVERecord?id=CVE-2025-48432
+
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- support/testing/tests/package/test_rusticl.py | 53 +++++++++++++++++++
- 1 file changed, 53 insertions(+)
- create mode 100644 support/testing/tests/package/test_rusticl.py
+ package/python-django/python-django.hash | 4 ++--
+ package/python-django/python-django.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/support/testing/tests/package/test_rusticl.py b/support/testing/tests/package/test_rusticl.py
-new file mode 100644
-index 0000000000..d8f05a8636
---- /dev/null
-+++ b/support/testing/tests/package/test_rusticl.py
-@@ -0,0 +1,53 @@
-+import os
-+import infra.basetest
-+
-+RUSTICL_TIMEOUT = 180
-+
-+
-+class TestRusticl(infra.basetest.BRTest):
-+    config = """
-+        BR2_aarch64=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.31"
-+        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-+        BR2_PACKAGE_MESA3D=y
-+        BR2_PACKAGE_MESA3D_LLVM=y
-+        BR2_PACKAGE_MESA3D_OPENCL=y
-+        BR2_PACKAGE_MESA3D_RUSTICL=y
-+        BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LLVMPIPE=y
-+        BR2_PACKAGE_CLINFO=y
-+        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+        BR2_TARGET_ROOTFS_EXT2=y
-+        BR2_TARGET_ROOTFS_EXT2_SIZE="1024M"
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+    """
-+
-+    def login(self):
-+        img = os.path.join(self.builddir, "images", "rootfs.ext2")
-+        kern = os.path.join(self.builddir, "images", "Image")
-+        self.emulator.boot(
-+            arch="aarch64",
-+            kernel=kern,
-+            kernel_cmdline=["root=/dev/vda console=ttyAMA0"],
-+            options=[
-+                "-M", "virt",
-+                "-cpu", "cortex-a57",
-+                "-m", "512",
-+                "-drive", f"file={img},if=virtio,format=raw"
-+            ]
-+        )
-+        self.emulator.login()
-+
-+    def test_run(self):
-+        self.login()
-+
-+        # check the output exit code
-+        output, exit_code = self.emulator.run("RUSTICL_ENABLE=llvmpipe clinfo", RUSTICL_TIMEOUT)
-+        self.assertEqual(exit_code, 0)
-+        # also check if platform name is rusticl and device name is llvmpipe
-+        self.assertRegex("\n".join(output), r"Platform Name\s+rusticl")
-+        self.assertRegex("\n".join(output), r"Device Name\s+llvmpipe")
+diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+index 57b9e9fb0e..330fdf8238 100644
+--- a/package/python-django/python-django.hash
++++ b/package/python-django/python-django.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/django/json
+-md5  da93c81fcaf2e0b4dab3cf44e7564c7c  django-5.1.9.tar.gz
+-sha256  565881bdd0eb67da36442e9ac788bda90275386b549070d70aee86327781a4fc  django-5.1.9.tar.gz
++md5  d3b7a04b581dec5d74769df44e0ddbd1  django-5.1.10.tar.gz
++sha256  73e5d191421d177803dbd5495d94bc7d06d156df9561f4eea9e11b4994c07137  django-5.1.10.tar.gz
+ # Locally computed sha256 checksums
+ sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+index fd8a4eb9e8..1b769af62a 100644
+--- a/package/python-django/python-django.mk
++++ b/package/python-django/python-django.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-PYTHON_DJANGO_VERSION = 5.1.9
++PYTHON_DJANGO_VERSION = 5.1.10
+ PYTHON_DJANGO_SOURCE = django-$(PYTHON_DJANGO_VERSION).tar.gz
+ # The official Django site has an unpractical URL
+-PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/10/08/2e6f05494b3fc0a3c53736846034f882b82ee6351791a7815bbb45715d79
++PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/73/ca/1c724be89e603eb8b5587ea24c63a8c30094c8ff4d990780b5033ee15c40
+ PYTHON_DJANGO_LICENSE = BSD-3-Clause
+ PYTHON_DJANGO_LICENSE_FILES = LICENSE
+ PYTHON_DJANGO_CPE_ID_VENDOR = djangoproject
 -- 
-2.43.0
+2.49.0
 
 _______________________________________________
 buildroot mailing list
