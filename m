@@ -1,53 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73E53C5AD49
-	for <buildroot@archiver.kernel.org>; Fri,  6 Jun 2025 17:34:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4B9CC61CE7
+	for <buildroot@archiver.kernel.org>; Fri,  6 Jun 2025 17:35:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 43DED85001;
-	Fri,  6 Jun 2025 17:34:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9C76440841;
+	Fri,  6 Jun 2025 17:35:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id E2_C0_BFaXBA; Fri,  6 Jun 2025 17:34:33 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DkuyY8ntpA9H; Fri,  6 Jun 2025 17:35:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8A0338500A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D9A2C406BC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8A0338500A;
-	Fri,  6 Jun 2025 17:34:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D9A2C406BC;
+	Fri,  6 Jun 2025 17:35:23 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 307031F2
- for <buildroot@buildroot.org>; Fri,  6 Jun 2025 17:34:32 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id B5BC7C8
+ for <buildroot@buildroot.org>; Fri,  6 Jun 2025 17:35:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1A54940442
- for <buildroot@buildroot.org>; Fri,  6 Jun 2025 17:34:32 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A7C6840442
+ for <buildroot@buildroot.org>; Fri,  6 Jun 2025 17:35:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4nmi6hgh4ETH for <buildroot@buildroot.org>;
- Fri,  6 Jun 2025 17:34:31 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6FCC5403F6
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6FCC5403F6
- for <buildroot@buildroot.org>; Fri,  6 Jun 2025 17:34:31 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6882C879E2; Fri,  6 Jun 2025 17:34:31 +0000 (UTC)
+ id RD9ZVAF14NIc for <buildroot@buildroot.org>;
+ Fri,  6 Jun 2025 17:35:22 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org CB18E403F6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CB18E403F6
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id CB18E403F6
+ for <buildroot@buildroot.org>; Fri,  6 Jun 2025 17:35:21 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 9863A2003D3;
+ Fri,  6 Jun 2025 19:35:16 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 06 Jun 2025 19:35:16 +0200
+MIME-Version: 1.0
+Date: Fri, 06 Jun 2025 19:35:16 +0200
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Fri, 6 Jun 2025 19:22:38 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a11529525c1d4ed91c7a0a83d538694e8d00ed5f
-X-Git-Newrev: 18b5a86e1b91034350795c22d0941d30d4de86f9
-X-Patchwork-Hint: ignore
-Message-Id: <20250606173431.6882C879E2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/frr: bump version to
- 10.3.1
+To: Kadambini Nema <kadambini.nema@gmail.com>
+Cc: buildroot@buildroot.org, Vadim Kochan <vadim4j@gmail.com>
+In-Reply-To: <20250605071233.195370-1-kadambini.nema@gmail.com>
+References: <20250605071233.195370-1-kadambini.nema@gmail.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <168733e6b4c60c880c66a2b10b1715ec@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1749231318;
+ bh=z+goYXV1htxNtkuxu85w09n8td0jC2eLt6LFqM5aTe8=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=YobudqHjh5WU0KIpQRa7iyOExMrOPUadEm+yZcA6beQNIY6Aimmlp6pbxYnhIWMZo
+ /IDnM7bq7qBJo7aw6FoyxEfU0Y3yemRwe+ano4syalJ/wk+UtOdPINLi7iMJLAT1uV
+ NRh3yvi2SmKs69hVPTohCwRTZaB0LwVfT2tK9NBV3icugLnjeiZTnZZ4W1s4wCWppk
+ 8j3qPmlKO/dyj9uvBTkLYHhIHrl5fVhKNUKiE3vN74HjVyw8rF36/zNvV2SfRd/dQQ
+ e3b5qpkcpP8w46/wjB8bArKvmgBABvIzMG97UZrYsGfVT3DY28Gk9U9msDzxDSmgA3
+ RLgOF/mhZEWfQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=YobudqHj
+Subject: Re: [Buildroot] [PATCH 1/1] package/frr: bump version to 10.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,49 +82,18 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=18b5a86e1b91034350795c22d0941d30d4de86f9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On 05/06/2025 09:12, Kadambini Nema wrote:
+> Release notes:
+> https://github.com/FRRouting/frr/releases/tag/frr-10.3.1
+> 
+> Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
 
-Release notes:
-https://github.com/FRRouting/frr/releases/tag/frr-10.3.1
-
-Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/frr/frr.hash | 2 +-
- package/frr/frr.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/frr/frr.hash b/package/frr/frr.hash
-index 7786cc8009..414aaec7dd 100644
---- a/package/frr/frr.hash
-+++ b/package/frr/frr.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  0f10aca9074c773c12be8a07382c7560d625d4a2c842d82261d18bb8f4b26f6c  frr-10.3.tar.gz
-+sha256  df4bc4f644f93be09f75c0e0e325b2f6a3ee6d1c6db429b6f36874e88a66ee33  frr-10.3.1.tar.gz
- sha256  7bf053957d6c38e39a06a112c60ff35b228d3bd03edbe8c9a03508b051128d16  COPYING
- sha256  f9e0c21faf738da586281c0beaad3cd56204c19085a10fe05e4d3d7f8b5863d2  doc/licenses/BSD-2-Clause
- sha256  aca297b8fd3a43e3bb200f1e2e043c0db6c897325f5ff7f23f7530302a6bf713  doc/licenses/BSD-3-Clause
-diff --git a/package/frr/frr.mk b/package/frr/frr.mk
-index 78979e2beb..23a2ca6037 100644
---- a/package/frr/frr.mk
-+++ b/package/frr/frr.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FRR_VERSION = 10.3
-+FRR_VERSION = 10.3.1
- FRR_SITE = $(call github,FRRouting,frr,frr-$(FRR_VERSION))
- FRR_LICENSE = GPL-2.0+
- FRR_LICENSE_FILES = \
+Applied to next, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
