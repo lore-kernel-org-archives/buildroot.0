@@ -1,102 +1,104 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9CE1AC5B549
-	for <buildroot@archiver.kernel.org>; Fri,  6 Jun 2025 07:02:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABACFC5B555
+	for <buildroot@archiver.kernel.org>; Fri,  6 Jun 2025 07:02:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3D054606D7;
-	Fri,  6 Jun 2025 07:02:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 42FC940C09;
+	Fri,  6 Jun 2025 07:02:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rp6KMB4k0rIf; Fri,  6 Jun 2025 07:02:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GYzMucxLWAhJ; Fri,  6 Jun 2025 07:02:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 499DE60738
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C81E40C17
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 499DE60738;
-	Fri,  6 Jun 2025 07:02:10 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id F24441A4
- for <buildroot@buildroot.org>; Fri,  6 Jun 2025 07:02:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8C81E40C17;
+	Fri,  6 Jun 2025 07:02:12 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 85DBDD3
+ for <buildroot@buildroot.org>; Fri,  6 Jun 2025 07:02:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D1ED240143
- for <buildroot@buildroot.org>; Fri,  6 Jun 2025 07:02:08 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7830640143
+ for <buildroot@buildroot.org>; Fri,  6 Jun 2025 07:02:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q5E1fuVaBIRH for <buildroot@buildroot.org>;
- Fri,  6 Jun 2025 07:02:08 +0000 (UTC)
+ id 4YCdJKq9wupk for <buildroot@buildroot.org>;
+ Fri,  6 Jun 2025 07:02:09 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
+ client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
  envelope-from=elmehdi.younes@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org AFBEA40042
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AFBEA40042
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id AFBEA40042
- for <buildroot@buildroot.org>; Fri,  6 Jun 2025 07:02:07 +0000 (UTC)
-Received: by mail-wr1-x42b.google.com with SMTP id
- ffacd0b85a97d-3a510432236so1363666f8f.0
- for <buildroot@buildroot.org>; Fri, 06 Jun 2025 00:02:07 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 663C740042
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 663C740042
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 663C740042
+ for <buildroot@buildroot.org>; Fri,  6 Jun 2025 07:02:09 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id
+ 5b1f17b1804b1-442f4a3a4d6so10082165e9.0
+ for <buildroot@buildroot.org>; Fri, 06 Jun 2025 00:02:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1749193325; x=1749798125;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=fag83ivDIG4U8zZQNKuP7A1geXbNxpxVACazJP6q5jM=;
- b=AFknxUDH08968BmshZjyaBsMf2I7W84sQS19yJdIjDcGSaIZoGqNCHEEFajUvTaiwZ
- c9D1uuYz7xJ+en8ITyC8mQEEGmTI+RW+fPF6QxncvPNBk37ZyxTFavSsHI4QjoxcBJde
- HJVHcml/CFD155jdTZMwie/FuSGsycr2PVv/FImFPs6FL7oQNMVBWxU4AorVrk9YR5kC
- pFqx692OqkFtq8sWR74BIVDChkDeiBKMWy4L50v7LKQk9V97uuMKqZdUeq9jieIrj9p3
- 9wTqsXVrGRYI2Dloq7uiziOz7Mji3lcEi8h22EH0rzbOw3T2BUCHmRfxp2c+ktT+RHxy
- uPEw==
-X-Gm-Message-State: AOJu0YyVNFCzgX7Ume6u8cXjQTtVwQoF/4U1uVYgh2uNUSagqDpxq33F
- V9L3KEddoI6ZGfo7liA/EP0JPQbH93FqCZBtMI3VBpfyxl2vPNYXisyVgN3GlLBwpBj6uFstB+8
- yGeAF
-X-Gm-Gg: ASbGncs9hCCihcQeH4uqUqBYFgk/Qr77VzgsHw5lQC3IjYGkck2T/jG1OJ8ODuCLEPE
- VfR+Aj/4dmuLgB+l1SQ1Wd1hx2uGQWKu/rE+xbAy/GVWTMstbFKkVLG6aX+rf1J+0KrY9KyeanX
- fQ1eHk6SiRRlZzLhQ/ARVEwWi3QgMI2jSQWLNW4P5E9U+l3HaPl/n9A1ljJY0n5/mE0gjghJgI+
- W0+EXgsQoT99f3ppaHPSL1bKzYQZAmughtG689/0pQyYVYHcunx15s8rJzh7EsqK7ie5zdKojSE
- zIbRiovg5x0/EtgWsCthA0XNPgQeXa6oD7moLwX43qGhgQoiBK0T66hQwKEInGYGONE2UcepIWz
- d4ujbs1MUdTwc8/P69hz20VKzoebOGeley9pMML8I4jW6VG5i9jDjQWey
-X-Google-Smtp-Source: AGHT+IEbRlGczUMmG6zjNVK00o53sBXh1epjFLvuORe0Jcuu46ijzQD0iVtpKhfFn0lxUsTNkfZtHw==
-X-Received: by 2002:a05:6000:26c8:b0:3a3:7077:aba1 with SMTP id
- ffacd0b85a97d-3a531ce677bmr1716346f8f.48.1749193324830; 
- Fri, 06 Jun 2025 00:02:04 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1749193327; x=1749798127;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=SHLa4AEgROJbAf/2lg51M2sFoEnH10zqygPROigRsy4=;
+ b=B4awM3/tEeOF+KovVoOqo6gSLutR1vr9dEIoNaoyCfvYPGTPmb469/L2LZxMTGLnuG
+ w3JjIFbA+JGZyQXZJaBta/CfNXafDVF5ylCMc9UlabZQ9Mf6VUEwZlJ6JB6aofxwIPDy
+ oFCLFCH+/IVsJ4ZfNoFEf5SPklRjtOm7VkVAQSzeO/0LGfEnqRgs8OPZkRdRNIy+DtmV
+ kIGpAhGMRRH5JWFT6lsiFJYdBbNmzjyfxgsV3u++UaI8+ECXr8FccTwAUHcj/DgQJ76g
+ 04s7yvQoqLRIzk+gWDwxOvHuatmIeG1qLv60IJmViStzGnbqDs5Gn9Gq/jUb207exu83
+ SFQg==
+X-Gm-Message-State: AOJu0Yz5BLUddvdy14gfg7gc5Sul3clxa4WLjcbTMHBlH0vLvb0d6bDE
+ sGpWyRDhUmQ2f+GuDJkC3bd0a5nLAzjoanWQXwweTrekgAZYGCKfExb5ojVIALJ8NAA+t0v7xu5
+ OTKNg
+X-Gm-Gg: ASbGncuaq59y9R2WY7MeO/JefmRMyvVWYLfA54vVR7yauLKjs1yjGVZer1PuYorhqTI
+ +p4B54ZPTjsZrz3hyYkh+H+QSnxiwWXr09I6eYqZLBSZm1I2QQexuCEab55NmwDHRl5cOJmEnRD
+ lmXhvMWIC6BcnG4ig61pGWfmXWDOUNnnePOQpzM1xwNPoSMuAYkQ7dVZgx59nOH0YxjfbEuEttw
+ skvxfp1jQS9lXz56iO04kvhuIjhw+H5no1xzbA0La42Rlc2wF2Nct7bCGwyURv+ozBIBR0vArJc
+ 3ntkJ+sBx5SBYj4u2+LtaMSbQcOuSmcWm58XSam16ErJXm9MF4crcm8n1TeZmaMncsbeR8vGKb2
+ W7QCDFgHJsKBBPvxVN/ecc9K+Q2NaNSJNU6Kmsls1L/7A3W9QDD+TIXIddZIg0oOxF1g=
+X-Google-Smtp-Source: AGHT+IG4S+YFvpMRe7JaXeKfWHSEkJziomMnSRESsJM8kkE4LR67wJjZ1x15BDy+gqr49PjP6eAAPg==
+X-Received: by 2002:a05:600c:828f:b0:439:5f04:4f8d with SMTP id
+ 5b1f17b1804b1-452015833b8mr22228585e9.12.1749193327108; 
+ Fri, 06 Jun 2025 00:02:07 -0700 (PDT)
 Received: from P-NAN-ABRICOT..
  (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3a53229d96fsm1035353f8f.7.2025.06.06.00.02.04
+ ffacd0b85a97d-3a53229d96fsm1035353f8f.7.2025.06.06.00.02.06
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 06 Jun 2025 00:02:04 -0700 (PDT)
+ Fri, 06 Jun 2025 00:02:06 -0700 (PDT)
 To: buildroot@buildroot.org
 Cc: Bernd Kuhls <bernd@kuhls.net>, Gilles Talis <gilles.talis@gmail.com>,
  Romain Naour <romain.naour@gmail.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  El Mehdi YOUNES <elmehdi.younes@smile.fr>
-Date: Fri,  6 Jun 2025 09:01:47 +0200
-Message-ID: <20250606070152.396438-1-elmehdi.younes@smile.fr>
+Date: Fri,  6 Jun 2025 09:01:48 +0200
+Message-ID: <20250606070152.396438-2-elmehdi.younes@smile.fr>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250606070152.396438-1-elmehdi.younes@smile.fr>
+References: <20250606070152.396438-1-elmehdi.younes@smile.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1749193325; x=1749798125; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=fag83ivDIG4U8zZQNKuP7A1geXbNxpxVACazJP6q5jM=;
- b=AG+iYfkDPjWRwfOaVjFB3nPwzRFvB5eGyx4y8O649nd6aEGM2GYn248OPX0bf2xFrM
- TwZ2uVz+pZ0BPgEPDSiZldiE+8VqUe3Mht/f8KtQC4oAH1awezMkw2Lc+hWL6/HWeRoc
- z/VEDSM2/mrFWd2vlBfKwXWh02f6o/O+u25Gg=
+ d=smile.fr; s=google; t=1749193327; x=1749798127; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=SHLa4AEgROJbAf/2lg51M2sFoEnH10zqygPROigRsy4=;
+ b=t48kLIN8JCaGN2diVmZ8wY/l4zQssWXa9wiu85Kc5HWKHZkPu1NpSfmxBMolI25P5k
+ PjR/+s22ATY9NzT2j8abC15u/0yK3NhoS+L+rEwl/MreqlbopRj2nfmZGlcGbVaPbFrw
+ Av0j+GLJoLQsupVQvHwIYpJuvgjOBRt2hHTMg=
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=smile.fr
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=AG+iYfkD
-Subject: [Buildroot] [PATCH/NEXT 0/5] RustiCL support
+ dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
+ header.a=rsa-sha256 header.s=google header.b=t48kLIN8
+Subject: [Buildroot] [PATCH 1/5] package/opencl-clhpp: bump version to latest
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,76 +117,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Until now OpenCL support in Buildroot has been limited by the absence
-of a modern, upstream-maintained OpenCL implementation that integrates
-cleanly with Mesa and Gallium-based drives. The old clover backend
-in Mesa is deprecated and will be removed in Mesa 25.2. [1]
+Bump opencl-clhpp to the latest version "v2024.10.24".
 
-RustiCL is a new implementation of openCL written entirely in Rust and 
-integrated directly into Mesa. This brings OpenCL to a much broader set of
-hardware in Buildroot.
+https://github.com/KhronosGroup/OpenCL-CLHPP/releases/tag/v2024.10.24
 
-By introducing RustiCL, Buildroot gains:
+Signed-off-by: El Mehdi YOUNES <elmehdi.younes@smile.fr>
+---
+ package/opencl-clhpp/opencl-clhpp.hash | 2 +-
+ package/opencl-clhpp/opencl-clhpp.mk   | 7 ++++++-
+ 2 files changed, 7 insertions(+), 2 deletions(-)
 
- - A modern OpenCL implementation maintained in Mesa.
- - The ability to run OpenCL applications on supported GPUs and even in 
-   software using llvmpipe
-
-This opens the door to GPU computing. For example, OpenCV can be built
-with openCL support to benefit from GPU acceleration in real-time image
-analysis, object detection... Also any other parallel workloads using buildroot.
-
-This feature has been tested for now on a Khadas vim 3 with an ARM G52 MP4 GPU
-that is well detected using panfrost driver. 
-
-We also add a runtime test using clinfo to test rusticl using llvmpipe driver on 
-Qemu. 
-
-OpenCL headers are installed by opencl-headers package only while using RustiCL.
-In other cases, such as when using proprietary drivers, the vendors typically provide
-their own headers, wich means there is no conflict with opencl-headers package as this 
-package is only used when opencl-icd-loader is selected, which in turn is only for RustiCL.
-
-Note: At the time of this submission, a fix for Mesa 25 is still not merged yet. 
-      Once it is, this series will likely conflict with it.
-      The goal of this v1 is to collect feedback and suggestions.
-      A v2 will be sent afterward, rebased on to of the updated Mesa fix and 
-      with any conflicts resolved [2]
-
-[1] https://gitlab.freedesktop.org/mesa/mesa/-/commit/5844dea31620f36c41ac738e17fefd57084b2dbb#feedf4d0444f717d7227468a9529c2cf9740b6fd
-[2] http://patchwork.ozlabs.org/project/buildroot/patch/20250601204529.787544-2-bernd@kuhls.net/
-
-Best regards, 
-Mehdi
-
-El Mehdi YOUNES (5):
-  package/opencl-clhpp: bump version to latest
-  package/opencl-headers: new package
-  package/opencl-icd-loader: new package
-  package/mesa3d: add RustiCL support
-  support/testing: add runtime test for Rusticl
-
- package/Config.in                             |  2 +
- package/mesa3d/Config.in                      | 37 +++++++++++--
- package/mesa3d/mesa3d.mk                      | 22 +++++++-
- package/opencl-clhpp/opencl-clhpp.hash        |  2 +-
- package/opencl-clhpp/opencl-clhpp.mk          |  7 ++-
- package/opencl-headers/Config.in              |  6 +++
- package/opencl-headers/opencl-headers.hash    |  3 ++
- package/opencl-headers/opencl-headers.mk      | 26 +++++++++
- package/opencl-icd-loader/Config.in           | 12 +++++
- .../opencl-icd-loader/opencl-icd-loader.hash  |  3 ++
- .../opencl-icd-loader/opencl-icd-loader.mk    | 22 ++++++++
- support/testing/tests/package/test_rusticl.py | 53 +++++++++++++++++++
- 12 files changed, 188 insertions(+), 7 deletions(-)
- create mode 100644 package/opencl-headers/Config.in
- create mode 100644 package/opencl-headers/opencl-headers.hash
- create mode 100644 package/opencl-headers/opencl-headers.mk
- create mode 100644 package/opencl-icd-loader/Config.in
- create mode 100644 package/opencl-icd-loader/opencl-icd-loader.hash
- create mode 100644 package/opencl-icd-loader/opencl-icd-loader.mk
- create mode 100644 support/testing/tests/package/test_rusticl.py
-
+diff --git a/package/opencl-clhpp/opencl-clhpp.hash b/package/opencl-clhpp/opencl-clhpp.hash
+index 184444a53a..add8563757 100644
+--- a/package/opencl-clhpp/opencl-clhpp.hash
++++ b/package/opencl-clhpp/opencl-clhpp.hash
+@@ -1,3 +1,3 @@
+ # Locally Computed
+-sha256  22921fd23ca72a21ac5592861d64e7ea53cd8a705fccd73905911f8489519a0b  opencl-clhpp-2024.05.08.tar.gz
++sha256  51aebe848514b3bc74101036e111f8ee98703649eec7035944831dc6e05cec14  opencl-clhpp-2024.10.24.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
+diff --git a/package/opencl-clhpp/opencl-clhpp.mk b/package/opencl-clhpp/opencl-clhpp.mk
+index 2b5d5afa4b..4bff6ad73a 100644
+--- a/package/opencl-clhpp/opencl-clhpp.mk
++++ b/package/opencl-clhpp/opencl-clhpp.mk
+@@ -4,7 +4,12 @@
+ #
+ ################################################################################
+ 
+-OPENCL_CLHPP_VERSION = 2024.05.08
++# The opencl-headers, opencl-icd-loader, and opencl-clhpp packages
++# must always be updated together to compatible versions.
++# Version desynchronization may result in build or runtime errors.
++# When updating one of them, make sure to check and update the others.
++
++OPENCL_CLHPP_VERSION = 2024.10.24
+ OPENCL_CLHPP_SITE = $(call github,KhronosGroup,OpenCL-CLHPP,v$(OPENCL_CLHPP_VERSION))
+ OPENCL_CLHPP_LICENSE = Apache-2.0
+ OPENCL_CLHPP_LICENSE_FILES = LICENSE.txt
 -- 
 2.43.0
 
