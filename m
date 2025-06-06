@@ -4,49 +4,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E4BFC61DB2
-	for <buildroot@archiver.kernel.org>; Fri,  6 Jun 2025 20:08:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3CDEC61CE7
+	for <buildroot@archiver.kernel.org>; Fri,  6 Jun 2025 20:08:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2162A40889;
-	Fri,  6 Jun 2025 20:08:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7306F40889;
+	Fri,  6 Jun 2025 20:08:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zuzRsws73xOT; Fri,  6 Jun 2025 20:08:09 +0000 (UTC)
+ id UaqQ-NTfuPAg; Fri,  6 Jun 2025 20:08:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5802D408A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B043A40903
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5802D408A7;
-	Fri,  6 Jun 2025 20:08:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3B6D81F2
- for <buildroot@buildroot.org>; Fri,  6 Jun 2025 20:08:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B043A40903;
+	Fri,  6 Jun 2025 20:08:38 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5F5261F2
+ for <buildroot@buildroot.org>; Fri,  6 Jun 2025 20:08:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2DDA481127
- for <buildroot@buildroot.org>; Fri,  6 Jun 2025 20:08:07 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 50A1560B5A
+ for <buildroot@buildroot.org>; Fri,  6 Jun 2025 20:08:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wxr0IsEwHHRs for <buildroot@buildroot.org>;
- Fri,  6 Jun 2025 20:08:06 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6AC4C81104
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6AC4C81104
- for <buildroot@buildroot.org>; Fri,  6 Jun 2025 20:08:06 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 52C2087A98; Fri,  6 Jun 2025 20:08:06 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yR0mOzjEzWak for <buildroot@buildroot.org>;
+ Fri,  6 Jun 2025 20:08:36 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6CF5160632
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6CF5160632
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6CF5160632
+ for <buildroot@buildroot.org>; Fri,  6 Jun 2025 20:08:36 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id E880DB0054E;
+ Fri,  6 Jun 2025 22:08:30 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 06 Jun 2025 22:08:30 +0200
+MIME-Version: 1.0
+Date: Fri, 06 Jun 2025 22:08:30 +0200
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Fri, 6 Jun 2025 22:05:07 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d48c27f1cd1122a469c7b8117a915c3d0aaa66fc
-X-Git-Newrev: 7966ac6058ba29c064ed8b461dcf9fc8512cd425
-X-Patchwork-Hint: ignore
-Message-Id: <20250606200806.52C2087A98@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qoriq-mc-utils: fix target install
+To: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Cc: buildroot@buildroot.org, Vladimir Oltean <olteanv@gmail.com>,
+ oss@ew.tq-group.com
+In-Reply-To: <21834b48ff096e427bdb722be447f4ea8a770135.1749133483.git.matthias.schiffer@tq-group.com>
+References: <21834b48ff096e427bdb722be447f4ea8a770135.1749133483.git.matthias.schiffer@tq-group.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <51a4386808ce4b242092d02a3907f10e@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1749240514;
+ bh=v6EOnLUbOM5imVg3mAz176RApGVoLGHjugN7bm73EtY=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=vFY0gHQSA9gECxaeqdwbcSzOwtFaOHk8GxTFs82B40TVSeKUqukiOQInRQ5TOwedG
+ SGk00aXOEIEjDlnyBeZlUiY+hoj9FJ5mP2T4PNlmNA2uKXHJVGD785MSaWyDS6FxvM
+ kRXmLNezN9tUWZRnhAVCKBRiGgnjVc6lA63N1H3ptWNr5aWG1ME2f+xYHs37exnULd
+ YEecHm0R6r1Uk/zuxbRPXAbsEO8H0GQpfy8JjMjhOuUKREFbglbcpCqnZxTLgZhQR3
+ KjvK3bve5yvgC2/cZChy7ScqnR3+TGZEnKYafb9LvChoZmLzD3nJX889+KM6D6QUZv
+ fhzIgorPPENhw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=vFY0gHQS
+Subject: Re: [Buildroot] [PATCH 1/2] package/qoriq-mc-binary: fix target
+ install
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,44 +84,17 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7966ac6058ba29c064ed8b461dcf9fc8512cd425
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 05/06/2025 16:32, Matthias Schiffer wrote:
+> The check was referencing an incorrect variable name.
+> 
+> Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
 
-- The check was referencing an incorrect variable name
-- In the `$(QORIQ_MC_UTILS_DPC_FILES) $(QORIQ_MC_UTILS_DPL_FILES)` case,
-  the target directory needs to be created first
-
-Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/qoriq-mc-utils/qoriq-mc-utils.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/package/qoriq-mc-utils/qoriq-mc-utils.mk b/package/qoriq-mc-utils/qoriq-mc-utils.mk
-index 29a0d3c560..63390ad6de 100644
---- a/package/qoriq-mc-utils/qoriq-mc-utils.mk
-+++ b/package/qoriq-mc-utils/qoriq-mc-utils.mk
-@@ -16,11 +16,12 @@ QORIQ_MC_UTILS_DPL_FILES = $(call qstrip,$(BR2_PACKAGE_QORIQ_MC_UTILS_DPL_CUSTOM
- QORIQ_MC_UTILS_DPL_INTREE = $(call qstrip,$(BR2_PACKAGE_QORIQ_MC_UTILS_DPL_INTREE))
- QORIQ_MC_UTILS_INSTALL_PATH = $(call qstrip,$(BR2_PACKAGE_QORIQ_MC_UTILS_TARGET_INSTALL_PATH))
- 
--ifeq ($(QORIQ_MC_UTILS_TARGET_INSTALL_PATH),)
-+ifeq ($(QORIQ_MC_UTILS_INSTALL_PATH),)
- QORIQ_MC_UTILS_INSTALL_TARGET = NO
- endif
- 
- define QORIQ_MC_UTILS_INSTALL_FILES
-+	$(INSTALL) -d $(1)
- 	$(foreach file, $(QORIQ_MC_UTILS_DPC_FILES) $(QORIQ_MC_UTILS_DPL_FILES), \
- 		PATH=$(BR_PATH) dtc -I dts -O dtb $(file).dts -o $(1)/$(notdir $(file)).dtb
- 	)
+Series applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
