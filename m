@@ -1,129 +1,172 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C27FC5B543
-	for <buildroot@archiver.kernel.org>; Sat,  7 Jun 2025 17:10:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95164C5B543
+	for <buildroot@archiver.kernel.org>; Sat,  7 Jun 2025 17:15:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9E12B60B56;
-	Sat,  7 Jun 2025 17:10:04 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nLFlao12hogM; Sat,  7 Jun 2025 17:10:03 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 972C460B77
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 972C460B77;
-	Sat,  7 Jun 2025 17:10:03 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id BEDF61A4
- for <buildroot@buildroot.org>; Sat,  7 Jun 2025 17:10:02 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9E0CE81A2B
- for <buildroot@buildroot.org>; Sat,  7 Jun 2025 17:10:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 61AC381235;
+	Sat,  7 Jun 2025 17:15:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zHk45nAZkd_H for <buildroot@buildroot.org>;
- Sat,  7 Jun 2025 17:10:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.18;
+ id RIOU3KUzcjiH; Sat,  7 Jun 2025 17:15:14 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 92D9781260
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 92D9781260;
+	Sat,  7 Jun 2025 17:15:14 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 248F11A4
+ for <buildroot@buildroot.org>; Sat,  7 Jun 2025 17:15:13 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1029B60B70
+ for <buildroot@buildroot.org>; Sat,  7 Jun 2025 17:15:13 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9UOUHVf217b1 for <buildroot@buildroot.org>;
+ Sat,  7 Jun 2025 17:15:12 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.19;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E6ECB816E7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E6ECB816E7
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E6ECB816E7
- for <buildroot@buildroot.org>; Sat,  7 Jun 2025 17:09:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A5D2C60B56
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A5D2C60B56
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A5D2C60B56
+ for <buildroot@buildroot.org>; Sat,  7 Jun 2025 17:15:11 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from haruka.home.arpa ([85.22.120.224]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MDQeK-1uWAVv1XyY-009voh; Sat, 07
- Jun 2025 19:09:57 +0200
-To: buildroot@buildroot.org
-Cc: Bernd Kuhls <bernd@kuhls.net>, Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- Fiona Klute <fiona.klute@gmx.de>
-Date: Sat,  7 Jun 2025 19:09:36 +0200
-Message-ID: <20250607170936.1502446-3-fiona.klute@gmx.de>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250607170936.1502446-1-fiona.klute@gmx.de>
-References: <20250607170936.1502446-1-fiona.klute@gmx.de>
+Received: from [192.168.7.2] ([85.22.120.224]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MKbkM-1u7Okb1diG-00Jk0a; Sat, 07
+ Jun 2025 19:15:09 +0200
+Message-ID: <cdae5c9c-6041-4d47-8374-7c0a28539cd7@gmx.de>
+Date: Sat, 7 Jun 2025 19:15:08 +0200
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:8OU7u222WU3ai5iiTAkQHhnCQaZ2P9aNjQJMug84oSDjXQHoXqZ
- KE0Jc/AdiQTRTMzEwjEDzNi6gCYYV06LT1CF8AsxesFg5AB9cXYPcgdop0MIO/8vsi0f2nN
- GhDzW+MOAlU5HbxUpgQ8iPM3+/eS8f5XUoXzWtytuj+jRFrbilz0bzwLE2kt6Iqvj8jRJ/R
- SdLrgKPGNCFT//nrvHVaw==
-UI-OutboundReport: notjunk:1;M01:P0:LhaiPRFKdA0=;uRBn3mgJtprRcxjgcQANTQaoFC1
- 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
- 4kTercjOwRSfMHcnKAignjwcX4brQ==
+User-Agent: Mozilla Thunderbird
+To: buildroot@buildroot.org
+Cc: Bernd Kuhls <bernd@kuhls.net>, Eric Le Bihan <eric.le.bihan.dev@free.fr>
+References: <20250607170936.1502446-1-fiona.klute@gmx.de>
+Content-Language: en-US, de-DE-1901, de-DE
+Autocrypt: addr=fiona.klute@gmx.de; keydata=
+ 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
+In-Reply-To: <20250607170936.1502446-1-fiona.klute@gmx.de>
+X-Provags-ID: V03:K1:PgkP4T4wK59DL8cH6DjYmvkTqcXh1/XZyzSg6DemRr16pepkG+j
+ 61ucgBYhUY1ZyBzAg2vy2TRG5YFJ3koLooUJtPfX2RTHyCzAkhwqyMedt/v5HqUaQ+vNPnd
+ Q3U66JgSZ3ydR891GhZoDez+EoqPZQYaQu6oGgXkiLP30cVj2LpcaNYMUp/+XU9thik6F+A
+ NC8ILh5lc1C5Bi2oHjLSQ==
+UI-OutboundReport: notjunk:1;M01:P0:r0P/hhGWhVw=;xFSrhXDqwjAAErQ9wkJs03K5OF2
+ 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
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.de; 
- s=s31663417; t=1749316197; x=1749920997; i=fiona.klute@gmx.de;
- bh=SroAFGsaKvsRD3+XjmROeygEiOpCtHkLovOo4ONw5mo=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
- References:MIME-Version:Content-Transfer-Encoding:cc:
- content-transfer-encoding:content-type:date:from:message-id:
- mime-version:reply-to:subject:to;
- b=OJNSy0q4rbnmhjTSOXF33m6MP8fyzkCzyDnIP3jyrb9+LuK5Jl9YzWfRudJngDqz
- /F6tEVNKso0Y2P+PqDXTshJ5Pl7bbzS5x/jSO9FSXTNIQ1L+zu6AuKk4N/bO5BU29
- QO4aepSZWpgNvcb4+EUN2YWChV8RJ/AlCwwU7XyM8AKGhGTs+H55ZyS8F+K1ZRhIN
- jzOj9pgK/aLgBXZKDLUDqiqhW1TfM2OguBP0OCfsN91iI34z8ZNFbHI8ONK5IxAqi
- HzLmNmB1nK+rqNucFfB5153CIAW/uiHZMuJDy3uZMuZ/yhTzFH/RJrtG1xusOfltN
- bRS5CUl43KvHO85z7w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ s=s31663417; t=1749316509; x=1749921309; i=fiona.klute@gmx.de;
+ bh=j36iOCgSvi9uZi0TUQL5m6lfRBDbx8jCykeBXoO40XE=;
+ h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+ References:From:In-Reply-To:Content-Type:
+ Content-Transfer-Encoding:cc:content-transfer-encoding:
+ content-type:date:from:message-id:mime-version:reply-to:subject:
+ to;
+ b=UD9dpdm900xmPNUVnq/PgM+Pk8vX3nv+wN+E1WarK35dTDJpQ36hz3yLiDMtQvXq
+ IUrpijlsM/I0HzU4phpFcuL9W+Z9Y6f0x2RDJZPK4uXQe1Ub8uW99kgoYwgi3y52N
+ 6fZ/GApfdJHmc94LDdaREN3kVxe4YYUZwLEwJ3qa8ARcaM/2xV7hTKs8UcwWoMFB1
+ G10WpB4imUSHbd0222RZiDmmkjzuCxSWCm0p2UQTmG8TSawOd34xlrFpSTiWPK5ST
+ BIjL6JyU4+nyOVGGStGbC0S7IJ+0ayhEiCP99YgjzljaOzN428xh8VvaqsAWX6rw1
+ +bR/hmMk0aprjlMHKQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
- header.s=s31663417 header.b=OJNSy0q4
-Subject: [Buildroot] [PATCH 3/3] package/eudev: refactor init script and
- rename it to S10udevd
+ header.s=s31663417 header.b=UD9dpdm9
+Subject: Re: [Buildroot] [PATCH 1/3] package/eudev: remove obsolete
+ --disable-introspection configure flag
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -137,232 +180,53 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Fiona Klute via buildroot <buildroot@buildroot.org>
 Reply-To: Fiona Klute <fiona.klute@gmx.de>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This brings the script in line with current init script standards, and
-fixes all make check-package warnings. Other notable changes:
+Am 07.06.25 um 19:09 schrieb Fiona Klute:
+> It was removed from eudev with version 1.5.1, when introspection
+> became part of the gudev option [1]. This has in turn been removed and
+> replaced by package/libgudev, yet somehow the flag stayed. Remove it
+> to remove a warning during configure stage.
+> 
+> [1] https://github.com/eudev-project/eudev/commit/d5d6a7f3040992f853eb23eb1bafac3b77891c2d
+> 
+> Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+> Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 
-* Use start-stop-daemon to create a PID file, so we can monitor shutdown.
+Sorry, please drop the second s-o-b line when applying for all patches 
+of the series, that was caused by a "-s" in the "git format-patch" 
+command that shouldn't have been there. These are non-sponsored patches.
 
-* Use "udevadm control --exit" to implement stop, instead of "killall".
+Best regards,
+Fiona
 
-* Do not require /etc/udev/udev.conf to exist, the default contains
-  only comments and udevd works without.
-
-* Do not parse /etc/udev/udev.conf, the udev_root configuration option
-  it was used for has been removed in version 1.5.1 [1].
-
-* Implement reload using udevadm.
-
-[1] https://github.com/eudev-project/eudev/commit/6ada823a9a0979ea145fd70add1007c21caa45c0
-
-Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
-Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
----
- .checkpackageignore    |  1 -
- package/eudev/S10udev  | 54 ------------------------
- package/eudev/S10udevd | 96 ++++++++++++++++++++++++++++++++++++++++++
- package/eudev/eudev.mk |  4 +-
- 4 files changed, 98 insertions(+), 57 deletions(-)
- delete mode 100644 package/eudev/S10udev
- create mode 100644 package/eudev/S10udevd
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 2ad44d854f..5df1b0d0a6 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -427,7 +427,6 @@ package/elfutils/0002-Really-make-Werror-conditional-to-BUILD_WERROR.patch lib_p
- package/erlang-rebar/0001-src-rebar_port_compiler-add-fPIC-to-LDFLAGS-by-defau.patch lib_patch.Upstream
- package/espeak/0001-Fix-build-of-shared-library-on-architectures-needing.patch lib_patch.Upstream
- package/espeak/0002-tr_languages-cast-string_ordinal-init-values.patch lib_patch.Upstream
--package/eudev/S10udev Shellcheck lib_sysv.ConsecutiveEmptyLines lib_sysv.Indent lib_sysv.Variables
- package/evemu/0001-Include-limits.h-for-PATH_MAX.patch lib_patch.Upstream
- package/evemu/0002-evemu-Update-struct-input_event.patch lib_patch.Upstream
- package/evemu/0003-src-evemu.c-fix-build-with-kernels-4.16.patch lib_patch.Upstream
-diff --git a/package/eudev/S10udev b/package/eudev/S10udev
-deleted file mode 100644
-index 6f20fc51f5..0000000000
---- a/package/eudev/S10udev
-+++ /dev/null
-@@ -1,54 +0,0 @@
--#!/bin/sh
--#
--# udev	This is a minimal non-LSB version of a UDEV startup script.  It
--#	was derived by stripping down the udev-058 LSB version for use
--#	with buildroot on embedded hardware using Linux 2.6.34+ kernels.
--#
--#	You may need to customize this for your system's resource limits
--#	(including startup time!) and administration.  For example, if
--#	your early userspace has a custom initramfs or initrd you might
--#	need /dev much earlier; or without hotpluggable busses (like USB,
--#	PCMCIA, MMC/SD, and so on) your /dev might be static after boot.
--#
--#	This script assumes your system boots right into the eventual root
--#	filesystem, and that init runs this udev script before any programs
--#	needing more device nodes than the bare-bones set -- /dev/console,
--#	/dev/zero, /dev/null -- that's needed to boot and run this script.
--#
--
--DAEMON="udevd"
--
--SETTLE_TIMEOUT=30
--UDEVD_ARGS="-d"
--
--# shellcheck source=/dev/null
--[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
--
--# Check for config file and read it
--UDEV_CONFIG=/etc/udev/udev.conf
--test -r $UDEV_CONFIG || exit 6
--. $UDEV_CONFIG
--
--case "$1" in
--    start)
--        printf "Populating %s using udev: " "${udev_root:-/dev}"
--        [ -e /proc/sys/kernel/hotplug ] && printf '\000\000\000\000' > /proc/sys/kernel/hotplug
--        /sbin/udevd $UDEVD_ARGS || { echo "FAIL"; exit 1; }
--        udevadm trigger --type=subsystems --action=add
--        udevadm trigger --type=devices --action=add
--        udevadm settle --timeout=$SETTLE_TIMEOUT || echo "udevadm settle failed"
--        echo "done"
--        ;;
--    stop)
--        # Stop execution of events
--        udevadm control --stop-exec-queue
--        killall udevd
--        ;;
--    *)
--        echo "Usage: $0 {start|stop}"
--        exit 1
--        ;;
--esac
--
--
--exit 0
-diff --git a/package/eudev/S10udevd b/package/eudev/S10udevd
-new file mode 100644
-index 0000000000..8bb8f6eb3a
---- /dev/null
-+++ b/package/eudev/S10udevd
-@@ -0,0 +1,96 @@
-+#!/bin/sh
-+#
-+# udev	This is a minimal non-LSB version of a UDEV startup script.  It
-+#	was derived by stripping down the udev-058 LSB version for use
-+#	with buildroot on embedded hardware using Linux 2.6.34+ kernels.
-+#
-+#	You may need to customize this for your system's resource limits
-+#	(including startup time!) and administration.  For example, if
-+#	your early userspace has a custom initramfs or initrd you might
-+#	need /dev much earlier; or without hotpluggable busses (like USB,
-+#	PCMCIA, MMC/SD, and so on) your /dev might be static after boot.
-+#
-+#	This script assumes your system boots right into the eventual root
-+#	filesystem, and that init runs this udev script before any programs
-+#	needing more device nodes than the bare-bones set -- /dev/console,
-+#	/dev/zero, /dev/null -- that's needed to boot and run this script.
-+#
-+
-+DAEMON="udevd"
-+PIDFILE="/var/run/$DAEMON.pid"
-+
-+SETTLE_TIMEOUT=30
-+UDEVD_ARGS=""
-+
-+# shellcheck source=/dev/null
-+[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
-+
-+start() {
-+	printf "Starting %s: " "$DAEMON"
-+	[ -e /proc/sys/kernel/hotplug ] && printf '\000\000\000\000' > /proc/sys/kernel/hotplug
-+	# shellcheck disable=SC2086 # we need the word splitting
-+	start-stop-daemon --start --background --make-pidfile \
-+		--pidfile "$PIDFILE" --exec "/sbin/$DAEMON" \
-+		-- $UDEVD_ARGS
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	udevadm trigger --type=subsystems --action=add
-+	udevadm trigger --type=devices --action=add
-+	udevadm settle --timeout=$SETTLE_TIMEOUT || echo "udevadm settle failed"
-+	return "$status"
-+}
-+
-+stop() {
-+	printf "Stopping %s: " "$DAEMON"
-+	udevadm control --exit
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+		return "$status"
-+	fi
-+	while start-stop-daemon --stop --test --quiet --pidfile "$PIDFILE" \
-+		--exec "/sbin/$DAEMON"; do
-+		sleep 0.1
-+	done
-+	rm -f "$PIDFILE"
-+	return "$status"
-+}
-+
-+restart() {
-+	stop
-+	start
-+}
-+
-+reload() {
-+	printf "Reloading %s config: " "$DAEMON"
-+	udevadm control --reload
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
-+}
-+
-+case "$1" in
-+	start)
-+		start;;
-+	stop)
-+		stop;;
-+	restart)
-+		restart;;
-+	reload)
-+		reload;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart|reload}"
-+		exit 1
-+esac
-+
-+exit $?
-diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
-index e9884f52d5..1a56cfd2f0 100644
---- a/package/eudev/eudev.mk
-+++ b/package/eudev/eudev.mk
-@@ -52,10 +52,10 @@ EUDEV_CONF_OPTS += --disable-selinux
- endif
- 
- define EUDEV_INSTALL_INIT_SYSV
--	$(INSTALL) -D -m 0755 package/eudev/S10udev $(TARGET_DIR)/etc/init.d/S10udev
-+	$(INSTALL) -D -m 0755 package/eudev/S10udevd $(TARGET_DIR)/etc/init.d/S10udevd
- endef
- 
--# Avoid installing S10udev with openrc, as the service is started by a unit
-+# Avoid installing S10udevd with openrc, as the service is started by a unit
- # from the udev-gentoo-scripts package.
- define EUDEV_INSTALL_INIT_OPENRC
- 	@:
--- 
-2.49.0
+> ---
+>   package/eudev/eudev.mk | 2 --
+>   1 file changed, 2 deletions(-)
+> 
+> diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
+> index 8318bc1ed4..99c9f0dcab 100644
+> --- a/package/eudev/eudev.mk
+> +++ b/package/eudev/eudev.mk
+> @@ -14,7 +14,6 @@ EUDEV_CONF_OPTS = \
+>   	--disable-manpages \
+>   	--sbindir=/sbin \
+>   	--libexecdir=/lib \
+> -	--disable-introspection \
+>   	--enable-kmod \
+>   	--enable-blkid
+>   
+> @@ -71,7 +70,6 @@ HOST_EUDEV_CONF_OPTS = \
+>   	--with-rootlibdir=/lib \
+>   	--sysconfdir=/etc \
+>   	--disable-blkid \
+> -	--disable-introspection \
+>   	--disable-kmod \
+>   	--disable-manpages \
+>   	--disable-rule-generator \
 
 _______________________________________________
 buildroot mailing list
