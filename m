@@ -4,123 +4,124 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBA5CC61CE8
-	for <buildroot@archiver.kernel.org>; Sat,  7 Jun 2025 17:10:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72584C61CE8
+	for <buildroot@archiver.kernel.org>; Sat,  7 Jun 2025 17:10:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 896F581700;
-	Sat,  7 Jun 2025 17:10:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3996481A27;
+	Sat,  7 Jun 2025 17:10:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 482aMpyPrDGO; Sat,  7 Jun 2025 17:09:59 +0000 (UTC)
+ id 1RIZ09u8gVha; Sat,  7 Jun 2025 17:10:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2A993816E0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 40FEC81749
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2A993816E0;
-	Sat,  7 Jun 2025 17:09:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 40FEC81749;
+	Sat,  7 Jun 2025 17:10:00 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 450A31F2
- for <buildroot@buildroot.org>; Sat,  7 Jun 2025 17:09:57 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id BC6BD1A4
+ for <buildroot@buildroot.org>; Sat,  7 Jun 2025 17:09:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2A70240582
- for <buildroot@buildroot.org>; Sat,  7 Jun 2025 17:09:57 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B9C9B40510
+ for <buildroot@buildroot.org>; Sat,  7 Jun 2025 17:09:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CmmgVdymxpL8 for <buildroot@buildroot.org>;
- Sat,  7 Jun 2025 17:09:56 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.18;
+ id n8c0wRDkXlhT for <buildroot@buildroot.org>;
+ Sat,  7 Jun 2025 17:09:58 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.19;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E4F454054C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E4F454054C
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E4F454054C
- for <buildroot@buildroot.org>; Sat,  7 Jun 2025 17:09:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B0C894051D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0C894051D
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B0C894051D
+ for <buildroot@buildroot.org>; Sat,  7 Jun 2025 17:09:57 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from haruka.home.arpa ([85.22.120.224]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M42jK-1uNx3I1Shk-000bsT; Sat, 07
- Jun 2025 19:09:52 +0200
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MOA3P-1uD9PG2FTd-00P7wy; Sat, 07
+ Jun 2025 19:09:55 +0200
 To: buildroot@buildroot.org
 Cc: Bernd Kuhls <bernd@kuhls.net>, Eric Le Bihan <eric.le.bihan.dev@free.fr>,
  Fiona Klute <fiona.klute@gmx.de>
-Date: Sat,  7 Jun 2025 19:09:34 +0200
-Message-ID: <20250607170936.1502446-1-fiona.klute@gmx.de>
+Date: Sat,  7 Jun 2025 19:09:35 +0200
+Message-ID: <20250607170936.1502446-2-fiona.klute@gmx.de>
 X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250607170936.1502446-1-fiona.klute@gmx.de>
+References: <20250607170936.1502446-1-fiona.klute@gmx.de>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:RsA2U0b8GFiU8bMfFKFRKERCts37hr+0A69z46n6r1QmHfslq9i
- g9IgdUzTuUK6aC7X188Hy8yffU7q8b6sl6RZi+x4FCH+srqYDybKmkPXMkLxEYJdmpsZbtc
- 656rR7giH2+Oe1oi/AKaKbhs7L84x5XMRVzeDFLXpXQIo9Xot9v9W4ONoRRen8RI0R9Xep5
- mH0JxY/21r+arJBtyJA8A==
-UI-OutboundReport: notjunk:1;M01:P0:8QPFMGnyBtI=;nv+TtKNntF9xCW98dVq148/7Eua
- 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
+X-Provags-ID: V03:K1:I9P/O7fhGmgBrbG3v2U6rlgQXTtz+5V90gkDu6ruDF40UUpziG8
+ L2JIVxfS95axyR/ZkcEZmfUIRtGNasPwEFOUmeAO+Nzv4P68rQ/1EfxvFz33sANrgj/Dp8m
+ 3JPUuY3UyedU/Iid7svpm+CK3/eazxGOWu8bpHg5lctAM7Aqi0KidxphbBeULNzfW/I+T3m
+ boQiuf1jtzugtdqOvk/8g==
+UI-OutboundReport: notjunk:1;M01:P0:huCzPhmW32g=;o0GV6lEKSQoe2eSEKoFA2nIbrc+
+ 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
+ 8tQavfeOtXvIGt75
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.de; 
- s=s31663417; t=1749316192; x=1749920992; i=fiona.klute@gmx.de;
- bh=2sBNAheIJS7+UwfmFx9Cnpeszvy0hrVyI8MXShmimMM=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
- MIME-Version:Content-Transfer-Encoding:cc:
+ s=s31663417; t=1749316195; x=1749920995; i=fiona.klute@gmx.de;
+ bh=coevUl5iFeOH4fzwihcZKaSRQ4sLJGIbEeE9uGYuxdo=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
+ References:MIME-Version:Content-Transfer-Encoding:cc:
  content-transfer-encoding:content-type:date:from:message-id:
  mime-version:reply-to:subject:to;
- b=l+0vIW8VVWJ3/eonWBEsb4G4Rig/Lpwsd4lEFHZbPPPwbo8ilIHcyrc02fLW5EQJ
- BkQirTQXA8UoiAyrzNF7Wmz4tJPnJzTMQYFttyUXHqdEnckeRi5o1zrDZZzkSg6PV
- k7AhSqn6wqwbZuZI/VgUG3WyBDkHVhe+rn3HOjQ+h+0NggX16RbY8paXL/JJnLlWD
- qjTzzOTwxqxLuxN7isKMYTsUvUq48iPBKRauL17yWayRks0dCS8wgXtErAOIXCJ3E
- GB2bBoEvJmfnNXreSGRDMgVUq4Mudb3xU9ZI8gyz7SuW95xf9aw/kEK/tQE4C9WNW
- WoU+p2hfO1pBILS+Pw==
+ b=r7Ky39Rfz9Efj1KSpzo9P2EARQcP07HSg1j+0B/0Bt9mTIBSE0dgWo5sYVEcxFVA
+ 1dbZe/maCotJWXUo/nMMGMfz4RG622h6HcKDsyqWI0LTR29KoelxRtodgZU5Fyrwy
+ OjAZdqfKcUvBWRyDgl0HhlaTzMCiudWeiDzpv6ZX/XG/FSovStDjdZPMTcqsp/zuS
+ 1V+OwYHrDfIGaV81o4dAFkAGbH/9a3PgvNdW0jJUCbG2g2wF5Bdq4/JEDuHihHOkA
+ 2SMPo6n0cy5WVYakydzY4hRj1OqLBRkWH4Vx1tD0BM1qhoHnrVbThMuwm3rIWxfsB
+ 3aPe04CjDDWmSXWbKw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.de
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
- header.s=s31663417 header.b=l+0vIW8V
-Subject: [Buildroot] [PATCH 1/3] package/eudev: remove obsolete
- --disable-introspection configure flag
+ dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
+ header.a=rsa-sha256 header.s=s31663417 header.b=r7Ky39Rf
+Subject: [Buildroot] [PATCH 2/3] package/eudev: install hwdb.bin to
+ libexecdir
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -139,39 +140,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-It was removed from eudev with version 1.5.1, when introspection
-became part of the gudev option [1]. This has in turn been removed and
-replaced by package/libgudev, yet somehow the flag stayed. Remove it
-to remove a warning during configure stage.
+The hwdb sources are always deleted from the rootfs image (see commit
+07aa585aa6517eeb7f805b4d84a9667be4b3e259), so the resulting hwdb.bin
+is installed package data, not user configuration. The name of the
+"--usr" flag to "udevadm hwdb" may be confusing, but it chooses the
+libexecdir location, whether that is in /usr or not.
 
-[1] https://github.com/eudev-project/eudev/commit/d5d6a7f3040992f853eb23eb1bafac3b77891c2d
+Eudev checks both locations and prefers the one in /etc if it exists,
+so overriding the configuration in an installed system is possible as
+before, with the advantage that /etc/udev/hwdb.bin (if any) can be
+deleted to restore defaults.
 
 Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
 Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 ---
- package/eudev/eudev.mk | 2 --
- 1 file changed, 2 deletions(-)
+ package/eudev/eudev.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
-index 8318bc1ed4..99c9f0dcab 100644
+index 99c9f0dcab..e9884f52d5 100644
 --- a/package/eudev/eudev.mk
 +++ b/package/eudev/eudev.mk
-@@ -14,7 +14,6 @@ EUDEV_CONF_OPTS = \
- 	--disable-manpages \
- 	--sbindir=/sbin \
- 	--libexecdir=/lib \
--	--disable-introspection \
- 	--enable-kmod \
- 	--enable-blkid
+@@ -82,7 +82,7 @@ define HOST_EUDEV_INSTALL_CMDS
+ endef
  
-@@ -71,7 +70,6 @@ HOST_EUDEV_CONF_OPTS = \
- 	--with-rootlibdir=/lib \
- 	--sysconfdir=/etc \
- 	--disable-blkid \
--	--disable-introspection \
- 	--disable-kmod \
- 	--disable-manpages \
- 	--disable-rule-generator \
+ define HOST_EUDEV_BUILD_HWDB
+-	$(HOST_DIR)/bin/udevadm hwdb --update --root $(TARGET_DIR)
++	$(HOST_DIR)/bin/udevadm hwdb --update --usr --root $(TARGET_DIR)
+ endef
+ HOST_EUDEV_TARGET_FINALIZE_HOOKS += HOST_EUDEV_BUILD_HWDB
+ 
 -- 
 2.49.0
 
