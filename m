@@ -4,77 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31C20C61CE7
-	for <buildroot@archiver.kernel.org>; Sat,  7 Jun 2025 22:10:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55897C61CE7
+	for <buildroot@archiver.kernel.org>; Sat,  7 Jun 2025 22:25:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 07ADB406B0;
-	Sat,  7 Jun 2025 22:10:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 09BDE4099B;
+	Sat,  7 Jun 2025 22:25:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IklbC5U0vem6; Sat,  7 Jun 2025 22:10:25 +0000 (UTC)
+ id f0CD17e9gfem; Sat,  7 Jun 2025 22:25:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 38BC5407D1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 46E99409A3
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 38BC5407D1;
-	Sat,  7 Jun 2025 22:10:25 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0FE0AC8
- for <buildroot@buildroot.org>; Sat,  7 Jun 2025 22:10:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 46E99409A3;
+	Sat,  7 Jun 2025 22:25:45 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id E1CE31A4
+ for <buildroot@buildroot.org>; Sat,  7 Jun 2025 22:25:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 01BD080FFD
- for <buildroot@buildroot.org>; Sat,  7 Jun 2025 22:10:24 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DDE7660F0E
+ for <buildroot@buildroot.org>; Sat,  7 Jun 2025 22:25:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eF0l5ENRgqvw for <buildroot@buildroot.org>;
- Sat,  7 Jun 2025 22:10:23 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E5085810E8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E5085810E8
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E5085810E8
- for <buildroot@buildroot.org>; Sat,  7 Jun 2025 22:10:22 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 1C1E62003CA;
- Sun,  8 Jun 2025 00:10:14 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
- via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 08 Jun 2025 00:10:13 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UwIgTxUeU68m for <buildroot@buildroot.org>;
+ Sat,  7 Jun 2025 22:25:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::52e; helo=mail-pg1-x52e.google.com;
+ envelope-from=kadambini.nema@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3A8EF60F15
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A8EF60F15
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com
+ [IPv6:2607:f8b0:4864:20::52e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3A8EF60F15
+ for <buildroot@buildroot.org>; Sat,  7 Jun 2025 22:25:43 +0000 (UTC)
+Received: by mail-pg1-x52e.google.com with SMTP id
+ 41be03b00d2f7-b0b2d0b2843so2130444a12.2
+ for <buildroot@buildroot.org>; Sat, 07 Jun 2025 15:25:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1749335142; x=1749939942;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=Hw52nYM0eepZTb1T2qSGhisFBXgEfsKvj9wDqmqubMA=;
+ b=tTL3t/s631G2u/rZ11SWDzwQyOBt9X/+AQqe7X/5TiTQmjcpL8EaN1Y5VAH+pnQJ3I
+ iAPkll/gi8NqF4PkVyiwjSsr4cqqAH6t9zW5LleOM/KST9JvLxkwynYSMZlgLZWtWaqA
+ PlO6CTKOrxAMxiTElmaRFjVocThEUX4Db3BJOAcE4n6cfZBNh7/005OemavlXsCU4jn5
+ f/+CRPSw6e+Q6q2f23/4pvSGycHfKU6E+Ip5V8pxlr2vgqPHykUAW7Doy8l0UtX4xcni
+ FVMuS7fui96k7Qj7wb6XNcZlAer1lujVhERy+MK77W573Qtt4nAdFD6zAsEhUK8pVN1l
+ Gfnw==
+X-Gm-Message-State: AOJu0Yy3bb0IsBNFtGFgk7WaaHwgeNdWMw2x4+PKB95TVlvnlymUfiYC
+ sOVYuXgomdHw5XPB2quSm+HAo/AhSsRRd/u7QHxBmuSyoDgwuEARv4NiUspqrJhS
+X-Gm-Gg: ASbGncuCj4bwcVeVYZHyGxgIJL/PuV/myOg+2kfa38cHtNcmwT61cjyFoYisJG7zmuX
+ ZFrTI6q3jYFULw0potpqV7aYD9BFeyhM6I5XS0qcUdXGGFxmJP0GpLyQdooZg1xBzYf3C/coto5
+ o83LNnKd9vZbFs5VyBNalE5lKyoaq9NIxKIp60/jqo4DWSFt4rvgOioRcJNGpnkTldbSn/Bdqn6
+ MwzE6CAzBQDzXjaCr7epS/xWhVqnzDfENbsSGiJsLfNRR6RcgVY1l392BOgqj6kqd6r5beGqHAZ
+ mlGt+aDnbDDjzDcg0lu50N70OKGa+cXlJ1RXjeX8Izf0i9ct20bji216D8IHvsL7bPKzNp9gOo9
+ JnyQFiyOD5nLf5NVnwJToy0MVRmYLYf+5ZYk+xHXgAU2VHG1x
+X-Google-Smtp-Source: AGHT+IGW3h/89++1EBFIIdoktnpeCtjY/FocXrXeO0DiJ4PB0y7mZKsqJDCa0wbILRpMSuqbWjfRHw==
+X-Received: by 2002:a17:90b:4c4e:b0:313:27e5:7ff1 with SMTP id
+ 98e67ed59e1d1-313472d3204mr10739305a91.1.1749335141869; 
+ Sat, 07 Jun 2025 15:25:41 -0700 (PDT)
+Received: from localhost.localdomain (ip72-203-121-181.oc.oc.cox.net.
+ [72.203.121.181]) by smtp.gmail.com with ESMTPSA id
+ d9443c01a7336-23603077fcbsm31741065ad.47.2025.06.07.15.25.40
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 07 Jun 2025 15:25:41 -0700 (PDT)
+From: Kadambini Nema <kadambini.nema@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat,  7 Jun 2025 15:25:38 -0700
+Message-Id: <20250607222538.50866-1-kadambini.nema@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Date: Sun, 08 Jun 2025 00:10:13 +0200
-From: Julien Olivain <ju.o@free.fr>
-To: El Mehdi YOUNES <elmehdi.younes@smile.fr>
-Cc: buildroot@buildroot.org, Bernd Kuhls <bernd@kuhls.net>, Gilles Talis
- <gilles.talis@gmail.com>, Romain Naour <romain.naour@gmail.com>, Thomas
- Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20250606070152.396438-2-elmehdi.younes@smile.fr>
-References: <20250606070152.396438-1-elmehdi.younes@smile.fr>
- <20250606070152.396438-2-elmehdi.younes@smile.fr>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <4c18396723de648f7adc81ef1d93579f@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1749334219;
- bh=6zhiWWz44AGr5giO7BEYgfu9Io4ImcEUkLD9kIbhQn4=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=qVw+v1OOAjYt/ddxKqiZQ0Q8axRI5E8o0Z2sGK8QJR6o4n3mkAZuyiywZ0tEGK810
- B1liUhwN0MORsj+mn7a9KpC7flPWcoiS63iVMNCV6IE4JwqVF3wvxa0miRSieyrhq4
- 2MJv8hl2RKKb4uvplVvYkxvHhp2E8XpsfOW7Z0HgYXJdv8dNZJvqBbr0w1TVRHn7X9
- 1cpR2lt9nWAKa2J1ToOMVL2TCBZiZBBacmA2HtHjygH9g5kOwnMXwd7Csb3ol5yOtN
- GUuPT48UTN+X58j5TDgrqo+h9SiQ1BUzWSG8IPh0g7QOXGGD7V9/PujeR49gn0dBav
- i8zBKbQCxmpXw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1749335142; x=1749939942; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=Hw52nYM0eepZTb1T2qSGhisFBXgEfsKvj9wDqmqubMA=;
+ b=JxFei/UvqDLovyxTtyh8pX9F+r4WFxFN7RDq2dyAl+TngF3oGxUIAuWQMeBm0prgSW
+ B1VsBV4jde9R67em4DvMm6l/Y0oGIpSz/HN8REnDRud7XuH/WUdClbUIzaN0k3MoCv1x
+ vmZvMMvxkj6Ps5zL2sn3lc1AHlEMRdvYos2l/vjhAvuFFWrY5j28gsf29JU/C58ykONQ
+ RjUZwvVmsgvonMpaM62RvL7cHTt+1pvyD8v0WxB0mXxhKoeugsqdYsuh/HyrJvrGEW9T
+ 28FT/GYPZSKzLVwqteOtb46fPW9msmJEueEeyq1hS8SQGa+Pk67cIFFF4lTcCGe0j640
+ pTNg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=qVw+v1OO
-Subject: Re: [Buildroot] [PATCH 1/5] package/opencl-clhpp: bump version to
- latest
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=JxFei/Uv
+Subject: [Buildroot] [PATCH 1/1] package/libgit2: bump version to 1.9.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,44 +106,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Kadambini Nema <kadambini.nema@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Mehdi,
+Release notes:
+https://github.com/libgit2/libgit2/releases/tag/v1.9.1
 
-On 06/06/2025 09:01, El Mehdi YOUNES via buildroot wrote:
-> Bump opencl-clhpp to the latest version "v2024.10.24".
-> 
-> https://github.com/KhronosGroup/OpenCL-CLHPP/releases/tag/v2024.10.24
-> 
-> Signed-off-by: El Mehdi YOUNES <elmehdi.younes@smile.fr>
+Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
+---
+ package/libgit2/libgit2.hash | 2 +-
+ package/libgit2/libgit2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thanks for this series!
+diff --git a/package/libgit2/libgit2.hash b/package/libgit2/libgit2.hash
+index 3f11309750..8c9b210581 100644
+--- a/package/libgit2/libgit2.hash
++++ b/package/libgit2/libgit2.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  75b27d4d6df44bd34e2f70663cfd998f5ec41e680e1e593238bbe517a84c7ed2  libgit2-1.9.0.tar.gz
++sha256  14cab3014b2b7ad75970ff4548e83615f74d719afe00aa479b4a889c1e13fc00  libgit2-1.9.1.tar.gz
+ sha256  e3712465634e97cfd850822a4eb5ac7d2f8a10f753189366d5a2060046f28288  COPYING
+diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
+index 4026ac1f7c..f615484edb 100644
+--- a/package/libgit2/libgit2.mk
++++ b/package/libgit2/libgit2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBGIT2_VERSION = 1.9.0
++LIBGIT2_VERSION = 1.9.1
+ LIBGIT2_SITE = $(call github,libgit2,libgit2,v$(LIBGIT2_VERSION))
+ LIBGIT2_LICENSE = \
+ 	GPL-2.0 with linking exception, \
+-- 
+2.25.1
 
-I applied it to the branch next, with some minor changes.
-
-For the new packages and runtime test you introduced, I added an
-entry for you in DEVELOPERS. Please add yourself to other packages
-of interest (for example mesa3d, opencl-clhpp, ...). See:
-https://buildroot.org/downloads/manual/manual.html#DEVELOPERS
-
-Also, I renamed the test_rusticl.py file to test_mesa3d.py, because
-the actual package being tested is mesa3d (and there is no rusticl
-package). I also changed the test name to TestMesa3DRusticl. This way
-the full test name becomes:
-tests.package.test_mesa3d.TestMesa3DRusticl
-This reflects that "Rusticl" is a test case for a configuration of the
-mesa3d package.
-
-Since Mesa3D is one of the most complex package in Buildroot, due
-to the number of configurations, this test_mesa3d.py could be improved
-to include many more configurations.
-
-Best regards,
-
-Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
