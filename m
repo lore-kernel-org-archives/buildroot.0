@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B3AFC61CE8
-	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 08:39:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D35B7C71136
+	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 08:39:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D9C6D61421;
-	Thu, 12 Jun 2025 08:39:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 913DF614B1;
+	Thu, 12 Jun 2025 08:39:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7a4s2IQPWlc2; Thu, 12 Jun 2025 08:39:23 +0000 (UTC)
+ id wUcv3Tf7PWcp; Thu, 12 Jun 2025 08:39:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 09FE161459
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 67EC26104C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 09FE161459;
-	Thu, 12 Jun 2025 08:39:22 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 10D0427A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 67EC26104C;
+	Thu, 12 Jun 2025 08:39:23 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 308341E0
  for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 476C641700
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:28 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3209440794
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wXh7hLiGlwrX for <buildroot@buildroot.org>;
- Thu, 12 Jun 2025 08:38:27 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SNlQMNuY84uo for <buildroot@buildroot.org>;
+ Thu, 12 Jun 2025 08:38:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 85A1F405C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5709640708
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 85A1F405C6
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:27 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5709640708
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 82B3882D97; Thu, 12 Jun 2025 08:38:27 +0000 (UTC)
+ id 4863A805F4; Thu, 12 Jun 2025 08:38:33 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 19 May 2025 19:13:17 +0200
+Date: Sat, 7 Jun 2025 21:39:20 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7f3329b7fd2bf1983c5c48dc514a16d67b2155a3
-X-Git-Newrev: 510481455470dce634594e0bb3b768c02b7506dd
+X-Git-Oldrev: 2f4a9223765ea3c4fe3160fb8db80cea8c17e6c7
+X-Git-Newrev: dba2912be3096ae815c03aa4552dbcbc9cd46f0a
 X-Patchwork-Hint: ignore
-Message-Id: <20250612083827.82B3882D97@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/nmap: bump to version 7.97
+Message-Id: <20250612083833.4863A805F4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/opencl-headers: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,47 +64,118 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=510481455470dce634594e0bb3b768c02b7506dd
+commit: https://git.buildroot.net/buildroot/commit/?id=dba2912be3096ae815c03aa4552dbcbc9cd46f0a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog:
-https://nmap.org/changelog.html#7.97
-https://nmap.org/changelog.html#7.96
+Add the "opencl-headers" package to install the OpenCL C API headers,
+which are required at build time by consumers such as
+opencl-icd-loader.
 
-Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
+While Mesa provides these headers internally, they are not installed
+by default since clover and opencl-gallium are deprecated and will
+be removed starting from mesa 25.2
+
+And since we should install them manually from mesa, it is better
+use external headers. This ensures these headers are always
+available and up-to-date independently from those provided by Mesa,
+folowing the same logic used for "opencl-clhpp".
+
+see:
+https://github.com/KhronosGroup/OpenCL-ICD-Loader#dependencies
+https://gitlab.freedesktop.org/mesa/mesa/-/tree/main/include/CL
+https://github.com/KhronosGroup/OpenCL-Headers
+https://gitlab.freedesktop.org/mesa/mesa/-/commit/5844dea31620f36c41ac738e17fefd57084b2dbb#feedf4d0444f717d7227468a9529c2cf9740b6fd
+
+Signed-off-by: El Mehdi YOUNES <elmehdi.younes@smile.fr>
+[Julien: add Medhi in DEVELOPERS for this package]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/nmap/nmap.hash | 6 +++---
- package/nmap/nmap.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ DEVELOPERS                                 |  3 +++
+ package/Config.in                          |  1 +
+ package/opencl-headers/Config.in           |  6 ++++++
+ package/opencl-headers/opencl-headers.hash |  3 +++
+ package/opencl-headers/opencl-headers.mk   | 26 ++++++++++++++++++++++++++
+ 5 files changed, 39 insertions(+)
 
-diff --git a/package/nmap/nmap.hash b/package/nmap/nmap.hash
-index 4f6ea20731..e9bce1a01f 100644
---- a/package/nmap/nmap.hash
-+++ b/package/nmap/nmap.hash
-@@ -1,6 +1,6 @@
--# From https://nmap.org/dist/sigs/nmap-7.95.tar.bz2.digest.txt (lowercase)
--sha256  e14ab530e47b5afd88f1c8a2bac7f89cd8fe6b478e22d255c5b9bddb7a1c5778  nmap-7.95.tar.bz2
--sha512  fd95a8bc627a2b8b507353f761dc9fdc8e880a0dd2d75a51b9cb3ec664318796af9bb16a6ff9a1358bd77ad669c2a54e333be630f201f69287692a7d2d41c17e  nmap-7.95.tar.bz2
-+# From https://nmap.org/dist/sigs/nmap-7.97.tar.bz2.digest.txt (lowercase)
-+sha256  af98f27925c670c257dd96a9ddf2724e06cb79b2fd1e0d08c9206316be1645c0  nmap-7.97.tar.bz2
-+sha512  050241744c311f5fc16297e1698aded2a9fdc78eb7a0954d1c70f7713ef6e1b07f3fcbf28a6a53f43785b1ae710aadf10237d1d0bd8855c6b3c423da4d35961c  nmap-7.97.tar.bz2
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 548185cbf8..ccfc8d4e0d 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -911,6 +911,9 @@ F:	configs/acmesystems_acqua_a5_512mb_defconfig
+ N:	Eero Aaltonen <eero.aaltonen@vaisala.com>
+ F:	package/docopt-cpp/
  
- # Locally calculated
- sha256  9d9a9a763c0e6145172cfe7d8483e23b38ce60b6c79a82e4894242917bdae6d3  LICENSE
-diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
-index 077840b192..a944627b38 100644
---- a/package/nmap/nmap.mk
-+++ b/package/nmap/nmap.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NMAP_VERSION = 7.95
-+NMAP_VERSION = 7.97
- NMAP_SITE = https://nmap.org/dist
- NMAP_SOURCE = nmap-$(NMAP_VERSION).tar.bz2
- NMAP_DEPENDENCIES = liblinear libpcap
++N:	El Mehdi YOUNES <elmehdi.younes@smile.fr>
++F:	package/opencl-headers/
++
+ N:	Eloi Bail <eloi.bail@savoirfairelinux.com>
+ F:	package/bayer2rgb-neon/
+ F:	package/gstreamer1/gst1-plugins-bayer2rgb-neon/
+diff --git a/package/Config.in b/package/Config.in
+index a46c459ff5..508cca23fc 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1788,6 +1788,7 @@ menu "Graphics"
+ 	source "package/libwpe/Config.in"
+ 	source "package/menu-cache/Config.in"
+ 	source "package/opencl-clhpp/Config.in"
++	source "package/opencl-headers/Config.in"
+ 	source "package/opencv3/Config.in"
+ 	source "package/opencv4/Config.in"
+ 	source "package/opencv4-contrib/Config.in"
+diff --git a/package/opencl-headers/Config.in b/package/opencl-headers/Config.in
+new file mode 100644
+index 0000000000..677349f727
+--- /dev/null
++++ b/package/opencl-headers/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_OPENCL_HEADERS
++	bool "opencl-headers"
++	help
++	  C language headers for the OpenCL API
++
++	  https://github.com/KhronosGroup/OpenCL-Headers
+diff --git a/package/opencl-headers/opencl-headers.hash b/package/opencl-headers/opencl-headers.hash
+new file mode 100644
+index 0000000000..bd8697e43d
+--- /dev/null
++++ b/package/opencl-headers/opencl-headers.hash
+@@ -0,0 +1,3 @@
++#Locally generated
++sha256  159f2a550592bae49859fee83d372acd152328fdf95c0dcd8b9409f8fad5db93  OpenCL-Headers-2024.10.24.tar.gz
++sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/opencl-headers/opencl-headers.mk b/package/opencl-headers/opencl-headers.mk
+new file mode 100644
+index 0000000000..388a86e02e
+--- /dev/null
++++ b/package/opencl-headers/opencl-headers.mk
+@@ -0,0 +1,26 @@
++################################################################################
++#
++# opencl-headers
++#
++################################################################################
++
++# The opencl-headers, opencl-icd-loader, and opencl-clhpp packages
++# must always be updated together to compatible versions.
++# Version desynchronization may result in build or runtime errors.
++# When updating one of them, make sure to check and update the others.
++
++OPENCL_HEADERS_VERSION = 2024.10.24
++OPENCL_HEADERS_SOURCE = OpenCL-Headers-$(OPENCL_HEADERS_VERSION).tar.gz
++OPENCL_HEADERS_SITE = $(call github,KhronosGroup,OpenCL-Headers,v$(OPENCL_HEADERS_VERSION))
++OPENCL_HEADERS_LICENSE = Apache-2.0
++OPENCL_HEADERS_LICENSE_FILES = LICENSE
++OPENCL_HEADERS_INSTALL_STAGING = YES
++OPENCL_HEADERS_INSTALL_TARGET = NO
++
++define OPENCL_HEADERS_INSTALL_STAGING_CMDS
++	mkdir -p $(STAGING_DIR)/usr/include/CL
++	$(INSTALL) -D -m 0644 $(@D)/CL/* \
++		$(STAGING_DIR)/usr/include/CL
++endef
++
++$(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
