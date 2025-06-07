@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0C9EC71141
-	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 08:39:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7B32C71136
+	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 08:39:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 886CD60EF5;
-	Thu, 12 Jun 2025 08:39:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BBB8C6143E;
+	Thu, 12 Jun 2025 08:39:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2ENhQfJZskA1; Thu, 12 Jun 2025 08:39:15 +0000 (UTC)
+ id a0F9wbbDmiFo; Thu, 12 Jun 2025 08:39:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CBA3161220
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 22E6B61421
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CBA3161220;
-	Thu, 12 Jun 2025 08:39:14 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 073EC1E0
+	by smtp3.osuosl.org (Postfix) with ESMTP id 22E6B61421;
+	Thu, 12 Jun 2025 08:39:18 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 10D04443
  for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5D7C860FBC
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:33 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id EE3D281A27
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id voqwa7KUp6Cd for <buildroot@buildroot.org>;
- Thu, 12 Jun 2025 08:38:32 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MA20jSc2sf7c for <buildroot@buildroot.org>;
+ Thu, 12 Jun 2025 08:38:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 410F260F77
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B77F80D5A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 410F260F77
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:32 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7B77F80D5A
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 32318805F4; Thu, 12 Jun 2025 08:38:32 +0000 (UTC)
+ id 68852817E6; Thu, 12 Jun 2025 08:38:33 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 1 Jun 2025 22:45:40 +0200
+Date: Sat, 7 Jun 2025 22:47:25 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 18a4a48255280761d395068d024f54d7934ffb09
-X-Git-Newrev: 7d8d48cd2ba1396ea146e94020939f4dfe08c5cb
+X-Git-Oldrev: d2a82364ac923df26cfcd30edd3d755d90923323
+X-Git-Newrev: fc7c7d74aa619fa22608436f26b706e83af8d9fc
 X-Patchwork-Hint: ignore
-Message-Id: <20250612083832.32318805F4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/systemd: bump to version 257.5
+Message-Id: <20250612083833.68852817E6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mesa3d: add RustiCL support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,173 +59,223 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1458243622778940958=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7d8d48cd2ba1396ea146e94020939f4dfe08c5cb
+--===============1458243622778940958==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=fc7c7d74aa619fa22608436f26b706e83af8d9fc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Noteable changes:
-  - Add -Dipe=false and -Dsysupdated=disabled as defaults to CONF_OPTS and
-    HOST_CONF_OPTS. If another user has a use for either, they can submit a
-    patch at a later date.
+RustiCL is an OpenCL implementation written entirely in
+RUST and integrated into Mesa3D. It enables the use of OpenCL
+programs on top of existing Gallium drivers. RustiCL is a
+modern and maintainable replacement for the old C-implemention
+Clover.
 
-  - systemd-networkd now requires kernel >= 5.4 due to the inclusion of the
-    sockios.h header, which uses the SIOCGSTAMP_OLD macro. This macro was first
-    introduced in kernel 5.2, but the official README recommends 5.4 as a
-    baseline, so stick with that. Due to this change:
-      - systemd-networkd now depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
-      - default y only if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
-      - Add a section in migrating.adoc about the new requirement
+To build Rusticl in Mesa3D, the following components are required:
 
-  - The sha256sum of README.md changed due to the addition of some CentOS CI
-    lines.
+  - host-rustc (Rust compiler)
+  - host-rust-bindgen (for generating bindings)
+  - spirv-tools
+  - spirv-llvm-translator (providing libLLVMSPIRVLib.so matching the LLVM version)
+  - LLVM built with libclc and -DLLVM_ENABLE_DUMP=ON
+  - Mesa headers via mesa-clc-bundle-headers=enabled
+  - There is a known meson bug and in order to fix it we set -Drust_std=2021, see:
+    https://docs.mesa3d.org/rusticl.html#known-issues
+    https://github.com/mesonbuild/meson/issues/10664
 
-  - Add the new license file LICENSES/alg-sha1-public-domain.txt.
+More details in the Mesa documentation:
+https://docs.mesa3d.org/rusticl.html
 
-For change log, see:
-https://github.com/systemd/systemd/blob/v257.5/NEWS
+Rusticl is the provider of OpenCL in Buildroot.
+However, Mesa does not provide the `libOpenCL.so` library itself.
+We therefore depend on the `opencl-icd-loader` package to
+install this loader in the toolchain sysroot, so that other
+OpenCL-dependent packages can build and link against it.
 
-Tested with `./utils/test-pkg -p systemd -a`
-40 builds, 28 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+Without the ICD loader, only `libRustiOpenCL.so` is available and
+tools like `clinfo` or `clpeak` fail.
 
-Tested with `./support/testing/run-tests tests.init.test_systemd`
-All tests passed
+- 'Dmesa-clc-bundle-headers=enabled' ensures that the OpenCL header
+   files are bundled and available in the target. Without this,
+   runtime compilation of OpenCL kernels via clpeak or clinfo fails
+   with:
+	fatal error: 'opencl-c-base.h' file not found
 
-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-Reviewed-by: Marcus Hoffmann <buildroot@bubu1.eu>
-[Julien: add link to change log in commit log]
+see https://gitlab.freedesktop.org/mesa/mesa/-/commit/3619611b31bade726b3dd3d0583ff41a5794cad3
+
+We add a Rust compiler override to Meson to use Buildroot’s
+host Rust toolchain using MESA3D_MESON_EXTRA_BINARIES.
+Rusticl requires Meson to invoke rustc with the correct target and linker:
+    * 'rust=['$(HOST_DIR)/bin/rustc','--target=$(RUSTC_TARGET_NAME)']'
+    * 'rust_ld='$(TARGET_CROSS)gcc''
+Another solution was proposed to set rust and rust_ld globally in
+cross-compilation.conf, we prefer to define them locally within mesa
+for now to ensure precise control over the rust toolchain behavior
+during the Mesa build.
+
+see https://lore.kernel.org/buildroot/ZcOeEMfwX4XlRXO7@landeda/
+
+Currently, we should always use RUSTICL_ENABLE= driver to use rusticl.
+More information:
+https://docs.mesa3d.org/envvars.html#envvar-RUSTICL_ENABLE
+
+Signed-off-by: El Mehdi YOUNES <elmehdi.younes@smile.fr>
+[Julien: add references to meson bug]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- docs/manual/migrating.adoc   |  7 +++++++
- package/systemd/Config.in    | 12 +++++++++---
- package/systemd/systemd.hash |  5 +++--
- package/systemd/systemd.mk   |  8 ++++++--
- 4 files changed, 25 insertions(+), 7 deletions(-)
+ package/mesa3d/Config.in | 37 +++++++++++++++++++++++++++++++++----
+ package/mesa3d/mesa3d.mk | 25 ++++++++++++++++++++++++-
+ 2 files changed, 57 insertions(+), 5 deletions(-)
 
-diff --git a/docs/manual/migrating.adoc b/docs/manual/migrating.adoc
-index ac40197147..4e6225a987 100644
---- a/docs/manual/migrating.adoc
-+++ b/docs/manual/migrating.adoc
-@@ -215,3 +215,10 @@ Cargo.lock file mandatory and the change from +.cargo/config+ to
- +.cargo/config.toml+, tarballs generated by Cargo-fetched packages
- have changed. Therefore the suffix of such tarballs has been changed
- from +-cargo2+ to +-cargo4+.
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 8b61421d98..f932c8daa2 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -50,19 +50,43 @@ comment "llvm support needs a toolchain not affected by GCC bug 64735"
+ 	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+ 
+-# clang and libclc dependencies are satisfied by
+-# BR2_PACKAGE_MESA3D_LLVM
+-config BR2_PACKAGE_MESA3D_OPENCL
++menuconfig BR2_PACKAGE_MESA3D_OPENCL
+ 	bool "OpenCL support"
+ 	depends on BR2_PACKAGE_MESA3D_LLVM
+ 	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600 || \
+ 		BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST || \
+ 		BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI || \
+-		BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS
++		BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS || \
++		BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS && \
++		BR2_PACKAGE_MESA3D_RUSTICL_SUPPORTED_DRIVER
+ 	select BR2_PACKAGE_LLVM_RTTI
+ 	select BR2_PACKAGE_CLANG
+ 	select BR2_PACKAGE_LIBCLC
+ 	select BR2_PACKAGE_HAS_LIBOPENCL
++if BR2_PACKAGE_MESA3D_OPENCL
++# libclc dependency is satisfied by
++# BR2_PACKAGE_MESA3D_LLVM
++config BR2_PACKAGE_MESA3D_RUSTICL
++	bool "RustiCL"
++	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_MESA3D_RUSTICL_SUPPORTED_DRIVER
++	select BR2_PACKAGE_HOST_RUSTC
++	select BR2_PACKAGE_LLVM_DUMP
++	select BR2_PACKAGE_SPIRV_TOOLS
++	select BR2_PACKAGE_SPIRV_LLVM_TRANSLATOR
++	select BR2_PACKAGE_OPENCL_ICD_LOADER
++	help
++	  RustiCL is an OpenCL implementation written in Rust.
++	  By default, devices are disabled in RustiCL. If you want
++	  to enable a device, you need to set the environment variable
++	  RUSTICL_ENABLE to the driver you are using.
 +
-+[[migrating-systemd]]
-+=== Migrating to 2025.08
++	  https://docs.mesa3d.org/envvars.html#envvar-RUSTICL_ENABLE
 +
-+In 2025.08, starting with systemd version 257, systemd-networkd requires kernel
-+5.4 or later. If you are still using a kernel older than 5.4, please update
-+your kernel or use an alternative network manager.
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index 851b91aeba..320d416203 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -52,9 +52,11 @@ menuconfig BR2_PACKAGE_SYSTEMD
- 	  an elaborate transactional dependency-based service control
- 	  logic.  It can work as a drop-in replacement for sysvinit.
++endif # BR2_PACKAGE_MESA3D_OPENCL
++
++config BR2_PACKAGE_MESA3D_RUSTICL_SUPPORTED_DRIVER
++	bool
  
--	  Kernel versions below 4.15 ("recommended baseline") have
-+	  Kernel versions below 5.4 ("recommended baseline") have
- 	  significant gaps in functionality and are not recommended
--	  for use with this version of systemd.
-+	  for use with this version of systemd. (e.g. lack race-free
-+	  process tracking by pidfd, systemd-networkd, and new mount
-+	  API support).
- 
- 	  Systemd requires a Linux kernel >= 3.15 with the following
- 	  options enabled:
-@@ -354,7 +356,8 @@ config BR2_PACKAGE_SYSTEMD_MYHOSTNAME
- 
- config BR2_PACKAGE_SYSTEMD_NETWORKD
- 	bool "enable network manager"
--	default y
-+	default y if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
+ # inform the .mk file of gallium or vulkan driver selection
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+@@ -139,6 +163,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS
+ 	depends on BR2_PACKAGE_MESA3D_LLVM
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	select BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER
++	select BR2_PACKAGE_MESA3D_RUSTICL_SUPPORTED_DRIVER
  	help
- 	  systemd-networkd is a system service that manages networks.
- 	  It detects and configures network devices as they appear, as
-@@ -365,6 +368,9 @@ config BR2_PACKAGE_SYSTEMD_NETWORKD
+ 	  Mesa driver for iris-based Intel GPUs.
  
- 	  https://www.freedesktop.org/software/systemd/man/systemd-networkd.html
- 
-+comment "systemd-networkd needs a toolchain with kernel headers >= 5.4"
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
-+
- config BR2_PACKAGE_SYSTEMD_OOMD
- 	bool "enable out-of-memory killer"
+@@ -157,6 +182,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LLVMPIPE
+ 	bool "Gallium llvmpipe driver"
+ 	depends on BR2_PACKAGE_MESA3D_LLVM
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
++	select BR2_PACKAGE_MESA3D_RUSTICL_SUPPORTED_DRIVER
  	help
-diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
-index 976d88c1f5..ca7ff360b5 100644
---- a/package/systemd/systemd.hash
-+++ b/package/systemd/systemd.hash
-@@ -1,7 +1,8 @@
- # sha256 locally computed
--sha256  896d76ff65c88f5fd9e42f90d152b0579049158a163431dd77cdc57748b1d7b0  systemd-256.7.tar.gz
-+sha256  4d65f9482608cf9f7823df42a6d7796f0e0dfcfb94301df75effff86d40da33e  systemd-257.5.tar.gz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
-+sha256  c9e7bf5b7c243c719b8b43c36158effb9b54c5e80abc9d82e4b2d4b2a4aa64ad  LICENSES/alg-sha1-public-domain.txt
- sha256  e5a8645ad94aab24e312dd0c6be2aa54236eb9374480b1b14ea5c61598874fd5  LICENSES/BSD-2-Clause.txt
- sha256  83bb6bd9ccd2cf5230cb1807ed16258289768dc4d9cb80069a814e04415a1275  LICENSES/BSD-3-Clause.txt
- sha256  a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499  LICENSES/CC0-1.0.txt
-@@ -12,4 +13,4 @@ sha256  8a6fc0879cecc0b96bf4c08159b9d733bf0f15fcf32879aec98c4ffd05424554  LICENS
- sha256  b85dcd3e453d05982552c52b5fc9e0bdd6d23c6f8e844b984a88af32570b0cc0  LICENSES/MIT.txt
- sha256  2a98749f6bec00dfaed86fa9c1edea871aaae4f11ee4d100b671aaf4ce353a73  LICENSES/murmurhash2-public-domain.txt
- sha256  1a7adaa2c86cedfd6c7f5c0c7c72fd6d3e02cd0c9593f21fdb53c89bb2b130ec  LICENSES/OFL-1.1.txt
--sha256  3df2dfbb09215ab1aecdd3c91d7fbe02fee4a0e75ef8967a25d1a6fe3b8abc06  LICENSES/README.md
-+sha256  8f3141489df84100440efa9911603e83757ff97f26f737e1d7fa2b25207a7905  LICENSES/README.md
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 337d52b1f2..a6a2f5a818 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -19,7 +19,7 @@
- # - Diff sysusers.d with the previous version
- # - Diff factory/etc/nsswitch.conf with the previous version
- #   (details are often sprinkled around in README and manpages)
--SYSTEMD_VERSION = 256.7
-+SYSTEMD_VERSION = 257.5
- SYSTEMD_SITE = $(call github,systemd,systemd,v$(SYSTEMD_VERSION))
- SYSTEMD_LICENSE = \
- 	LGPL-2.1+, \
-@@ -35,6 +35,7 @@ SYSTEMD_LICENSE = \
- SYSTEMD_LICENSE_FILES = \
- 	LICENSE.GPL2 \
- 	LICENSE.LGPL2.1 \
-+	LICENSES/alg-sha1-public-domain.txt \
- 	LICENSES/BSD-2-Clause.txt \
- 	LICENSES/BSD-3-Clause.txt \
- 	LICENSES/CC0-1.0.txt \
-@@ -73,6 +74,7 @@ SYSTEMD_CONF_OPTS += \
- 	-Dfirst-boot-full-preset=false \
- 	-Didn=true \
- 	-Dima=false \
-+	-Dipe=false \
- 	-Dkexec-path=/usr/sbin/kexec \
- 	-Dkmod-path=/usr/bin/kmod \
- 	-Dldconfig=false \
-@@ -99,6 +101,7 @@ SYSTEMD_CONF_OPTS += \
- 	-Dfuzz-tests=false \
- 	-Dinstall-tests=false \
- 	-Dlog-message-verification=disabled \
-+	-Dsysupdated=disabled \
- 	-Dtmpfiles=true \
- 	-Dukify=disabled \
- 	-Dbpf-framework=disabled \
-@@ -1011,7 +1014,8 @@ HOST_SYSTEMD_CONF_OPTS = \
- 	-Dopenssl=disabled \
- 	-Dp11kit=disabled \
- 	-Dlibfido2=disabled \
--	-Dpcre2=disabled
-+	-Dpcre2=disabled \
-+	-Dsysupdated=disabled
+ 	  This is a llvm opengl implementation using the Gallium3D
+ 	  infrastructure.
+@@ -170,6 +196,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
+ 	select BR2_PACKAGE_LIBDRM_NOUVEAU
+ 	select BR2_PACKAGE_MESA3D_NEEDS_XA
+ 	select BR2_PACKAGE_LLVM_RTTI if BR2_PACKAGE_MESA3D_LLVM
++	select BR2_PACKAGE_MESA3D_RUSTICL_SUPPORTED_DRIVER
+ 	help
+ 	  Supports all Nvidia GPUs.
  
- HOST_SYSTEMD_DEPENDENCIES = \
- 	$(BR2_COREUTILS_HOST_DEPENDENCY) \
+@@ -179,6 +206,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST
+ 	depends on BR2_PACKAGE_MESA3D_LLVM
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	select BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER
++	select BR2_PACKAGE_MESA3D_RUSTICL_SUPPORTED_DRIVER
+ 	help
+ 	  Mesa driver for ARM Mali Midgard and Bifrost GPUs.
+ 
+@@ -229,6 +257,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI
+ 	select BR2_PACKAGE_LLVM_AMDGPU
+ 	select BR2_PACKAGE_ELFUTILS
+ 	select BR2_PACKAGE_MESA3D_NEEDS_ELFUTILS
++	select BR2_PACKAGE_MESA3D_RUSTICL_SUPPORTED_DRIVER
+ 	help
+ 	  Driver for ATI/AMD Radeon HD7000/HD8000/Rx200 GPUs.
+ 
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 203c5a18c3..000b9150f1 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -30,7 +30,6 @@ MESA3D_DEPENDENCIES = \
+ 	zlib
+ 
+ MESA3D_CONF_OPTS = \
+-	-Dgallium-rusticl=false \
+ 	-Dmicrosoft-clc=disabled
+ 
+ ifeq ($(BR2_PACKAGE_MESA3D_DRIVER)$(BR2_PACKAGE_XORG7),yy)
+@@ -56,6 +55,30 @@ MESA3D_PROVIDES += libopencl
+ MESA3D_DEPENDENCIES += clang libclc
+ endif
+ 
++ifeq ($(BR2_PACKAGE_MESA3D_RUSTICL),y)
++MESA3D_DEPENDENCIES += \
++	host-rustc \
++	host-rust-bindgen \
++	spirv-tools \
++	spirv-llvm-translator \
++	opencl-icd-loader
++
++# rust_std is defined here to workaround a known meson bug. See:
++# https://docs.mesa3d.org/rusticl.html#known-issues
++# https://github.com/mesonbuild/meson/issues/10664
++MESA3D_CONF_OPTS += \
++	-Dgallium-rusticl=true \
++	-Drust_std=2021 \
++	-Dmesa-clc-bundle-headers=enabled
++
++MESA3D_MESON_EXTRA_BINARIES += \
++	rust=['$(HOST_DIR)/bin/rustc','--target=$(RUSTC_TARGET_NAME)'] \
++	rust_ld='$(TARGET_CROSS)gcc'
++
++else
++MESA3D_CONF_OPTS += -Dgallium-rusticl=false
++endif
++
+ ifeq ($(BR2_PACKAGE_MESA3D_NEEDS_ELFUTILS),y)
+ MESA3D_DEPENDENCIES += elfutils
+ endif
+
+--===============1458243622778940958==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1458243622778940958==--
