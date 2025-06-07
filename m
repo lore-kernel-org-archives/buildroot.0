@@ -1,100 +1,102 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55897C61CE7
-	for <buildroot@archiver.kernel.org>; Sat,  7 Jun 2025 22:25:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E215CC5B543
+	for <buildroot@archiver.kernel.org>; Sat,  7 Jun 2025 22:29:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 09BDE4099B;
-	Sat,  7 Jun 2025 22:25:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9FF5480EA5;
+	Sat,  7 Jun 2025 22:29:00 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dXt5nBjXt26m; Sat,  7 Jun 2025 22:29:00 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DB53A81210
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id DB53A81210;
+	Sat,  7 Jun 2025 22:28:59 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1BEB81A4
+ for <buildroot@buildroot.org>; Sat,  7 Jun 2025 22:28:58 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 020AC40A0A
+ for <buildroot@buildroot.org>; Sat,  7 Jun 2025 22:28:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id f0CD17e9gfem; Sat,  7 Jun 2025 22:25:45 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 46E99409A3
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 46E99409A3;
-	Sat,  7 Jun 2025 22:25:45 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id E1CE31A4
- for <buildroot@buildroot.org>; Sat,  7 Jun 2025 22:25:43 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DDE7660F0E
- for <buildroot@buildroot.org>; Sat,  7 Jun 2025 22:25:43 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UwIgTxUeU68m for <buildroot@buildroot.org>;
- Sat,  7 Jun 2025 22:25:43 +0000 (UTC)
+ id QtMnxtNuZ5NH for <buildroot@buildroot.org>;
+ Sat,  7 Jun 2025 22:28:57 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::52e; helo=mail-pg1-x52e.google.com;
+ client-ip=2607:f8b0:4864:20::536; helo=mail-pg1-x536.google.com;
  envelope-from=kadambini.nema@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3A8EF60F15
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A8EF60F15
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com
- [IPv6:2607:f8b0:4864:20::52e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3A8EF60F15
- for <buildroot@buildroot.org>; Sat,  7 Jun 2025 22:25:43 +0000 (UTC)
-Received: by mail-pg1-x52e.google.com with SMTP id
- 41be03b00d2f7-b0b2d0b2843so2130444a12.2
- for <buildroot@buildroot.org>; Sat, 07 Jun 2025 15:25:43 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org F090E409A3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F090E409A3
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com
+ [IPv6:2607:f8b0:4864:20::536])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id F090E409A3
+ for <buildroot@buildroot.org>; Sat,  7 Jun 2025 22:28:56 +0000 (UTC)
+Received: by mail-pg1-x536.google.com with SMTP id
+ 41be03b00d2f7-b2c2c762a89so2161544a12.0
+ for <buildroot@buildroot.org>; Sat, 07 Jun 2025 15:28:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1749335142; x=1749939942;
+ d=1e100.net; s=20230601; t=1749335336; x=1749940136;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=Hw52nYM0eepZTb1T2qSGhisFBXgEfsKvj9wDqmqubMA=;
- b=tTL3t/s631G2u/rZ11SWDzwQyOBt9X/+AQqe7X/5TiTQmjcpL8EaN1Y5VAH+pnQJ3I
- iAPkll/gi8NqF4PkVyiwjSsr4cqqAH6t9zW5LleOM/KST9JvLxkwynYSMZlgLZWtWaqA
- PlO6CTKOrxAMxiTElmaRFjVocThEUX4Db3BJOAcE4n6cfZBNh7/005OemavlXsCU4jn5
- f/+CRPSw6e+Q6q2f23/4pvSGycHfKU6E+Ip5V8pxlr2vgqPHykUAW7Doy8l0UtX4xcni
- FVMuS7fui96k7Qj7wb6XNcZlAer1lujVhERy+MK77W573Qtt4nAdFD6zAsEhUK8pVN1l
- Gfnw==
-X-Gm-Message-State: AOJu0Yy3bb0IsBNFtGFgk7WaaHwgeNdWMw2x4+PKB95TVlvnlymUfiYC
- sOVYuXgomdHw5XPB2quSm+HAo/AhSsRRd/u7QHxBmuSyoDgwuEARv4NiUspqrJhS
-X-Gm-Gg: ASbGncuCj4bwcVeVYZHyGxgIJL/PuV/myOg+2kfa38cHtNcmwT61cjyFoYisJG7zmuX
- ZFrTI6q3jYFULw0potpqV7aYD9BFeyhM6I5XS0qcUdXGGFxmJP0GpLyQdooZg1xBzYf3C/coto5
- o83LNnKd9vZbFs5VyBNalE5lKyoaq9NIxKIp60/jqo4DWSFt4rvgOioRcJNGpnkTldbSn/Bdqn6
- MwzE6CAzBQDzXjaCr7epS/xWhVqnzDfENbsSGiJsLfNRR6RcgVY1l392BOgqj6kqd6r5beGqHAZ
- mlGt+aDnbDDjzDcg0lu50N70OKGa+cXlJ1RXjeX8Izf0i9ct20bji216D8IHvsL7bPKzNp9gOo9
- JnyQFiyOD5nLf5NVnwJToy0MVRmYLYf+5ZYk+xHXgAU2VHG1x
-X-Google-Smtp-Source: AGHT+IGW3h/89++1EBFIIdoktnpeCtjY/FocXrXeO0DiJ4PB0y7mZKsqJDCa0wbILRpMSuqbWjfRHw==
-X-Received: by 2002:a17:90b:4c4e:b0:313:27e5:7ff1 with SMTP id
- 98e67ed59e1d1-313472d3204mr10739305a91.1.1749335141869; 
- Sat, 07 Jun 2025 15:25:41 -0700 (PDT)
+ bh=35oe3dHRDhj/WaTq37pZn2f+6xVcyMrZut/WxkgLIQU=;
+ b=M14Y9nVl0PwP/eRH49inf5DpCnz3IQ4Y1ZWGieXkq+xuvhBYWPeU7z458N1ANq7PTK
+ sTzKpoNiscohNP3FAhh9UwLr0LKtiju/bqfuz9PBwe9/2QnloC/PF8tGZYV1PxLkswFk
+ LF/Of9drWGsClj0zIpbXowwH62eJKi8lI0DCxSDgzyR/GXzySr2Lkb/xX7Yd4I2L6KZj
+ lFkGIv7AQQEbyKGwVHTOAQ5GSRUUAgT6np03xloMQxhVJ+thrElGSZz2H828+mk1zMsl
+ JXK7ABRJ1fyntzhtMwTSQeHhsW1lkn+GsdtuPyeWs9qAJxRDGL2l0FJhAOIPGZCNp9Xn
+ NKbw==
+X-Gm-Message-State: AOJu0Yza6QdrcXBFKkUKWPLY/3J8ynw2fQXh46JFj0bVkzzi7IPmc+Vy
+ E1igKxrglqX9HnjaccAWE24wrlGvhjS4dBmeaBdxhcpr2jXIVSY5gN7DzBcfxnCk
+X-Gm-Gg: ASbGncsThYC25+i3pxccUJOd4puSEatAZaej/w7cYx3UlkdR1kvTL/bP05Vo7U0GT7S
+ e3BYt2Qoq3nywR3bynGiWyLQLXGBkmJYVg6akngMq6ZHr4nmAj0HrObY4uXf8bTGeD5eDUSeSlN
+ 1rkTb8B8Sh12tML3RpuKqql2d91JQ43PgqUmE9P32Rkb1H72g7XcLpx4v6Gl9LLMclxy0a7qLAx
+ q+XMDbP7C4Iz+2p4ppFr4AXg6mmbg/6ZThs1Tu9zMmKjANGFcbWsMxUd0nmXZd3YZT5WF7DOlM2
+ KoIeX3R+To9wxSI7cns0BB+pzMyvKsIusO+8MBCGW6VhiRQh4Yr2T3lS2s1HTOONSlWSxBtPwN7
+ /lv/Onx2SE63BJxcMqEW9RPz9zFjXki6HrKg12vfRaYpZXbAI
+X-Google-Smtp-Source: AGHT+IFVmubaW3kTFawZA3mw2t2HzxkvXsqTXMf2wC/L+xEbY9V+HsebshDRwQMyGBmrKBF9QGp9tw==
+X-Received: by 2002:a17:902:fc4b:b0:231:ea68:4e2a with SMTP id
+ d9443c01a7336-23601d74a23mr125732155ad.34.1749335335783; 
+ Sat, 07 Jun 2025 15:28:55 -0700 (PDT)
 Received: from localhost.localdomain (ip72-203-121-181.oc.oc.cox.net.
  [72.203.121.181]) by smtp.gmail.com with ESMTPSA id
- d9443c01a7336-23603077fcbsm31741065ad.47.2025.06.07.15.25.40
+ 98e67ed59e1d1-3134b13ba54sm3144674a91.38.2025.06.07.15.28.54
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 07 Jun 2025 15:25:41 -0700 (PDT)
+ Sat, 07 Jun 2025 15:28:55 -0700 (PDT)
 From: Kadambini Nema <kadambini.nema@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat,  7 Jun 2025 15:25:38 -0700
-Message-Id: <20250607222538.50866-1-kadambini.nema@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Kadambini Nema <kadambini.nema@gmail.com>
+Date: Sat,  7 Jun 2025 15:28:49 -0700
+Message-Id: <20250607222849.53009-1-kadambini.nema@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1749335142; x=1749939942; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1749335336; x=1749940136; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Hw52nYM0eepZTb1T2qSGhisFBXgEfsKvj9wDqmqubMA=;
- b=JxFei/UvqDLovyxTtyh8pX9F+r4WFxFN7RDq2dyAl+TngF3oGxUIAuWQMeBm0prgSW
- B1VsBV4jde9R67em4DvMm6l/Y0oGIpSz/HN8REnDRud7XuH/WUdClbUIzaN0k3MoCv1x
- vmZvMMvxkj6Ps5zL2sn3lc1AHlEMRdvYos2l/vjhAvuFFWrY5j28gsf29JU/C58ykONQ
- RjUZwvVmsgvonMpaM62RvL7cHTt+1pvyD8v0WxB0mXxhKoeugsqdYsuh/HyrJvrGEW9T
- 28FT/GYPZSKzLVwqteOtb46fPW9msmJEueEeyq1hS8SQGa+Pk67cIFFF4lTcCGe0j640
- pTNg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=35oe3dHRDhj/WaTq37pZn2f+6xVcyMrZut/WxkgLIQU=;
+ b=hKRmt0flmy8QFvNWSGVzblulGlWIgfKi76shYf0Wi0K2xLoSQcjpRBMp0m372rcy79
+ ZRgJSVTZ9yZv+jQTDZ7GJBdUWYNMgcZRJrE54ATKk207hMawPC7TeVEa8bR2DtEGeMht
+ dkFPKJcKsZRA3j2TxlxUrebv/l7zuGXmaM6Nu9doXKQG7Q1HySaU8Aw3nUJgRzRcnjq1
+ BFOj1k1HZylvS92ZtmciuEmwQ7Q5FvtykRWEMXvig03dUbwF+bCC+JAfqx2TXHNMzNUj
+ XUDNnqXMb1hpr4IV5YsukwJ/CwGRCWHknGqOAOqyd79Zjav9kmGZ/vL/dYakAlMHl6xI
+ 16Qw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=JxFei/Uv
-Subject: [Buildroot] [PATCH 1/1] package/libgit2: bump version to 1.9.1
+ header.s=20230601 header.b=hKRmt0fl
+Subject: [Buildroot] [PATCH 1/1] package/whois: bump to version 5.6.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -106,43 +108,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Kadambini Nema <kadambini.nema@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://github.com/libgit2/libgit2/releases/tag/v1.9.1
+Changelog:
+https://github.com/rfc1036/whois/blob/v5.6.2/debian/changelog
 
 Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
 ---
- package/libgit2/libgit2.hash | 2 +-
- package/libgit2/libgit2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/whois/whois.hash | 6 +++---
+ package/whois/whois.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libgit2/libgit2.hash b/package/libgit2/libgit2.hash
-index 3f11309750..8c9b210581 100644
---- a/package/libgit2/libgit2.hash
-+++ b/package/libgit2/libgit2.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  75b27d4d6df44bd34e2f70663cfd998f5ec41e680e1e593238bbe517a84c7ed2  libgit2-1.9.0.tar.gz
-+sha256  14cab3014b2b7ad75970ff4548e83615f74d719afe00aa479b4a889c1e13fc00  libgit2-1.9.1.tar.gz
- sha256  e3712465634e97cfd850822a4eb5ac7d2f8a10f753189366d5a2060046f28288  COPYING
-diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
-index 4026ac1f7c..f615484edb 100644
---- a/package/libgit2/libgit2.mk
-+++ b/package/libgit2/libgit2.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/whois/whois.hash b/package/whois/whois.hash
+index 6b1a3f4cc6..49ded707b8 100644
+--- a/package/whois/whois.hash
++++ b/package/whois/whois.hash
+@@ -1,6 +1,6 @@
+-# From https://snapshot.debian.org/archive/debian/20250527T144819Z/pool/main/w/whois/whois_5.6.1.dsc
+-sha1  4c10bcc05b610bfd5a5c9c4465c97cf117826c2b  whois_5.6.1.tar.xz
+-sha256  86b4d99d1ea219d2eaa20257b9c549642f101393b4b9369c391370a39341fc32  whois_5.6.1.tar.xz
++# From https://snapshot.debian.org/archive/debian/20250607T082433Z/pool/main/w/whois/whois_5.6.2.dsc
++sha1  6095840107fcaf5339a7c9840c153ad3f29a7ffc  whois_5.6.2.tar.xz
++sha256  7fbcbc00b7aa321ac1af28a85d86d3ce7b11db1d4a2317b25407be04e506ead0  whois_5.6.2.tar.xz
+ 
+ # Hash for license file:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/whois/whois.mk b/package/whois/whois.mk
+index a6ed54ab89..9451aa195d 100644
+--- a/package/whois/whois.mk
++++ b/package/whois/whois.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--LIBGIT2_VERSION = 1.9.0
-+LIBGIT2_VERSION = 1.9.1
- LIBGIT2_SITE = $(call github,libgit2,libgit2,v$(LIBGIT2_VERSION))
- LIBGIT2_LICENSE = \
- 	GPL-2.0 with linking exception, \
+-WHOIS_VERSION = 5.6.1
+-WHOIS_SITE = https://snapshot.debian.org/archive/debian/20250527T144819Z/pool/main/w/whois
++WHOIS_VERSION = 5.6.2
++WHOIS_SITE = https://snapshot.debian.org/archive/debian/20250607T082433Z/pool/main/w/whois
+ WHOIS_SOURCE = whois_$(WHOIS_VERSION).tar.xz
+ WHOIS_DEPENDENCIES = \
+ 	host-pkgconf \
 -- 
 2.25.1
 
