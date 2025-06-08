@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F9A5C61CE7
-	for <buildroot@archiver.kernel.org>; Sun,  8 Jun 2025 13:48:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8248DC5AD49
+	for <buildroot@archiver.kernel.org>; Sun,  8 Jun 2025 13:48:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DB1BC409BD;
-	Sun,  8 Jun 2025 13:48:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 48D57813A3;
+	Sun,  8 Jun 2025 13:48:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id k3tbuvZHDhVF; Sun,  8 Jun 2025 13:48:32 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9Tn9vfA8hNGw; Sun,  8 Jun 2025 13:48:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E13040A5A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6A26D810B9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1E13040A5A;
-	Sun,  8 Jun 2025 13:48:32 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 5D5A81A4
- for <buildroot@buildroot.org>; Sun,  8 Jun 2025 13:48:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6A26D810B9;
+	Sun,  8 Jun 2025 13:48:33 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1E2FB1A4
+ for <buildroot@buildroot.org>; Sun,  8 Jun 2025 13:48:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 442CE40A1F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 82D7C60B6F
  for <buildroot@buildroot.org>; Sun,  8 Jun 2025 13:48:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rOKd5qKIxlgM for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZBAZZ-Gf8Y06 for <buildroot@buildroot.org>;
  Sun,  8 Jun 2025 13:48:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 84CF8409BD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BFC0560DDF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 84CF8409BD
+ by smtp3.osuosl.org (Postfix) with ESMTP id BFC0560DDF
  for <buildroot@buildroot.org>; Sun,  8 Jun 2025 13:48:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 819F187A99; Sun,  8 Jun 2025 13:48:25 +0000 (UTC)
+ id B0D5787A99; Sun,  8 Jun 2025 13:48:25 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 8 Jun 2025 15:36:04 +0200
+Date: Sun, 8 Jun 2025 15:43:17 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e0a7ddecbe14b83107cb1f39fa593b889da3f244
-X-Git-Newrev: 66dc76de82cdee83f379d499c82b51d46e265f90
+X-Git-Oldrev: 992cea79eb336d9989c004b25e04d75281f8354a
+X-Git-Newrev: 26c4821638eff99f8676b3072e5c9bb3267562b7
 X-Patchwork-Hint: ignore
-Message-Id: <20250608134825.819F187A99@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libusb: bump version
- to 1.0.29
+Message-Id: <20250608134825.B0D5787A99@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/diffutils: bump
+ version to 3.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +65,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=66dc76de82cdee83f379d499c82b51d46e265f90
+commit: https://git.buildroot.net/buildroot/commit/?id=26c4821638eff99f8676b3072e5c9bb3267562b7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Release notes:
-https://github.com/libusb/libusb/releases/tag/v1.0.29
+Version 3.12 - https://lists.gnu.org/archive/html/info-gnu/2025-04/msg00005.html
+Version 3.11 - https://lists.gnu.org/archive/html/info-gnu/2025-02/msg00003.html
 
-Changelog:
-https://github.com/libusb/libusb/blob/v1.0.29/ChangeLog#L4
+Fix the following error seen during cross-compilation error by assuming that
+strcasecmp function is always available.
+- "configure: error: cannot run test program while cross compiling"
 
 Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libusb/libusb.hash | 2 +-
- package/libusb/libusb.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/diffutils/diffutils.hash | 6 +++---
+ package/diffutils/diffutils.mk   | 3 ++-
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/libusb/libusb.hash b/package/libusb/libusb.hash
-index 3d51244b2c..4c76609930 100644
---- a/package/libusb/libusb.hash
-+++ b/package/libusb/libusb.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  966bb0d231f94a474eaae2e67da5ec844d3527a1f386456394ff432580634b29  libusb-1.0.28.tar.bz2
-+sha256  5977fc950f8d1395ccea9bd48c06b3f808fd3c2c961b44b0c2e6e29fc3a70a85  libusb-1.0.29.tar.bz2
- sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING
-diff --git a/package/libusb/libusb.mk b/package/libusb/libusb.mk
-index 3d809bfb6e..95ce8b17df 100644
---- a/package/libusb/libusb.mk
-+++ b/package/libusb/libusb.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/diffutils/diffutils.hash b/package/diffutils/diffutils.hash
+index df160a124d..81a3bdd1ff 100644
+--- a/package/diffutils/diffutils.hash
++++ b/package/diffutils/diffutils.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.gnu.org/archive/html/info-gnu/2023-05/msg00009.html
+-sha1  c16a9cf107ad1f0f791b6d00852dc5e961c1c451  diffutils-3.10.tar.xz
++# From https://lists.gnu.org/archive/html/info-gnu/2025-04/msg00005.html
++sha1  c2f302726d2709c6881c4657430a671abe5eedfa  diffutils-3.12.tar.xz
+ # Locally calculated after checking pgp signature
+-sha256  90e5e93cc724e4ebe12ede80df1634063c7a855692685919bfe60b556c9bd09e  diffutils-3.10.tar.xz
++sha256  7c8b7f9fc8609141fdea9cece85249d308624391ff61dedaf528fcb337727dfd  diffutils-3.12.tar.xz
+ # Locally calculated
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/diffutils/diffutils.mk b/package/diffutils/diffutils.mk
+index 1119266863..8ab74ce583 100644
+--- a/package/diffutils/diffutils.mk
++++ b/package/diffutils/diffutils.mk
+@@ -4,13 +4,14 @@
+ #
  ################################################################################
  
- LIBUSB_VERSION_MAJOR = 1.0
--LIBUSB_VERSION = $(LIBUSB_VERSION_MAJOR).28
-+LIBUSB_VERSION = $(LIBUSB_VERSION_MAJOR).29
- LIBUSB_SOURCE = libusb-$(LIBUSB_VERSION).tar.bz2
- LIBUSB_SITE = https://github.com/libusb/libusb/releases/download/v$(LIBUSB_VERSION)
- LIBUSB_LICENSE = LGPL-2.1+
+-DIFFUTILS_VERSION = 3.10
++DIFFUTILS_VERSION = 3.12
+ DIFFUTILS_SOURCE = diffutils-$(DIFFUTILS_VERSION).tar.xz
+ DIFFUTILS_SITE = $(BR2_GNU_MIRROR)/diffutils
+ DIFFUTILS_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+ DIFFUTILS_LICENSE = GPL-3.0+
+ DIFFUTILS_LICENSE_FILES = COPYING
+ DIFFUTILS_CPE_ID_VENDOR = gnu
++DIFFUTILS_CONF_ENV += gl_cv_func_strcasecmp_works=yes
+ 
+ # Since glibc >= 2.26, don't try to use getopt_long replacement bundled
+ # with diffutils. It will conflict with the one from glibc.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
