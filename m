@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBED3C71141
-	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 08:41:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13B47C71143
+	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 08:41:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AF5C061B29;
+	by smtp1.osuosl.org (Postfix) with ESMTP id E1AC283A8A;
 	Thu, 12 Jun 2025 08:41:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UdAmipDD5Dnk; Thu, 12 Jun 2025 08:41:07 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pmz9ZQ2HIW7z; Thu, 12 Jun 2025 08:41:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C24C561B16
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE7DB82F13
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C24C561B16;
-	Thu, 12 Jun 2025 08:41:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CE7DB82F13;
+	Thu, 12 Jun 2025 08:41:07 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 504131E0
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:39:43 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 4F2261E0
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:39:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8317542239
+ by smtp2.osuosl.org (Postfix) with ESMTP id B1D494223D
  for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HI8Cbf14nu5D for <buildroot@buildroot.org>;
+ id k8vxdCD_bcBx for <buildroot@buildroot.org>;
  Thu, 12 Jun 2025 08:38:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7977A42187
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 876F8421B6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7977A42187
+ by smtp2.osuosl.org (Postfix) with ESMTP id 876F8421B6
  for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 76866805F4; Thu, 12 Jun 2025 08:38:33 +0000 (UTC)
+ id 852CA811D1; Thu, 12 Jun 2025 08:38:33 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 7 Jun 2025 22:47:35 +0200
+Date: Sun, 8 Jun 2025 15:27:59 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fc7c7d74aa619fa22608436f26b706e83af8d9fc
-X-Git-Newrev: 22798b5978de5fc32a1111da6d8f321fae95282d
+X-Git-Oldrev: 22798b5978de5fc32a1111da6d8f321fae95282d
+X-Git-Newrev: eb21ab5c712c751356dda716ae2da91293e09471
 X-Patchwork-Hint: ignore
-Message-Id: <20250612083833.76866805F4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing: add runtime test for
- Mesa3D Rusticl
+Message-Id: <20250612083833.852CA811D1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/whois: bump to version 5.6.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,99 +64,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=22798b5978de5fc32a1111da6d8f321fae95282d
+commit: https://git.buildroot.net/buildroot/commit/?id=eb21ab5c712c751356dda716ae2da91293e09471
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This test verifies that clinfo correctly detects the rustiCL platform
-and llvmpipe as device.
+Changelog:
+https://github.com/rfc1036/whois/blob/v5.6.2/debian/changelog
 
-We check:
-  - exit code,
-  - Platform name matches rusticl,
-  - Device name matches llvmpipe.
-
-Signed-off-by: El Mehdi YOUNES <elmehdi.younes@smile.fr>
-[Julien:
- - rename file to test_mesa3d.py
- - add Medhi in DEVELOPERS for this test file
-]
+Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- DEVELOPERS                                   |  1 +
- support/testing/tests/package/test_mesa3d.py | 53 ++++++++++++++++++++++++++++
- 2 files changed, 54 insertions(+)
+ package/whois/whois.hash | 6 +++---
+ package/whois/whois.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 7031087157..9e31f6b515 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -914,6 +914,7 @@ F:	package/docopt-cpp/
- N:	El Mehdi YOUNES <elmehdi.younes@smile.fr>
- F:	package/opencl-headers/
- F:	package/opencl-icd-loader/
-+F:	support/testing/tests/package/test_mesa3d.py
+diff --git a/package/whois/whois.hash b/package/whois/whois.hash
+index 6b1a3f4cc6..49ded707b8 100644
+--- a/package/whois/whois.hash
++++ b/package/whois/whois.hash
+@@ -1,6 +1,6 @@
+-# From https://snapshot.debian.org/archive/debian/20250527T144819Z/pool/main/w/whois/whois_5.6.1.dsc
+-sha1  4c10bcc05b610bfd5a5c9c4465c97cf117826c2b  whois_5.6.1.tar.xz
+-sha256  86b4d99d1ea219d2eaa20257b9c549642f101393b4b9369c391370a39341fc32  whois_5.6.1.tar.xz
++# From https://snapshot.debian.org/archive/debian/20250607T082433Z/pool/main/w/whois/whois_5.6.2.dsc
++sha1  6095840107fcaf5339a7c9840c153ad3f29a7ffc  whois_5.6.2.tar.xz
++sha256  7fbcbc00b7aa321ac1af28a85d86d3ce7b11db1d4a2317b25407be04e506ead0  whois_5.6.2.tar.xz
  
- N:	Eloi Bail <eloi.bail@savoirfairelinux.com>
- F:	package/bayer2rgb-neon/
-diff --git a/support/testing/tests/package/test_mesa3d.py b/support/testing/tests/package/test_mesa3d.py
-new file mode 100644
-index 0000000000..f5133c2eef
---- /dev/null
-+++ b/support/testing/tests/package/test_mesa3d.py
-@@ -0,0 +1,53 @@
-+import os
-+import infra.basetest
-+
-+RUSTICL_TIMEOUT = 180
-+
-+
-+class TestMesa3DRusticl(infra.basetest.BRTest):
-+    config = """
-+        BR2_aarch64=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.31"
-+        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-+        BR2_PACKAGE_MESA3D=y
-+        BR2_PACKAGE_MESA3D_LLVM=y
-+        BR2_PACKAGE_MESA3D_OPENCL=y
-+        BR2_PACKAGE_MESA3D_RUSTICL=y
-+        BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LLVMPIPE=y
-+        BR2_PACKAGE_CLINFO=y
-+        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+        BR2_TARGET_ROOTFS_EXT2=y
-+        BR2_TARGET_ROOTFS_EXT2_SIZE="1024M"
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+    """
-+
-+    def login(self):
-+        img = os.path.join(self.builddir, "images", "rootfs.ext2")
-+        kern = os.path.join(self.builddir, "images", "Image")
-+        self.emulator.boot(
-+            arch="aarch64",
-+            kernel=kern,
-+            kernel_cmdline=["root=/dev/vda console=ttyAMA0"],
-+            options=[
-+                "-M", "virt",
-+                "-cpu", "cortex-a57",
-+                "-m", "512",
-+                "-drive", f"file={img},if=virtio,format=raw"
-+            ]
-+        )
-+        self.emulator.login()
-+
-+    def test_run(self):
-+        self.login()
-+
-+        # check the output exit code
-+        output, exit_code = self.emulator.run("RUSTICL_ENABLE=llvmpipe clinfo", RUSTICL_TIMEOUT)
-+        self.assertEqual(exit_code, 0)
-+        # also check if platform name is rusticl and device name is llvmpipe
-+        self.assertRegex("\n".join(output), r"Platform Name\s+rusticl")
-+        self.assertRegex("\n".join(output), r"Device Name\s+llvmpipe")
+ # Hash for license file:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/whois/whois.mk b/package/whois/whois.mk
+index a6ed54ab89..9451aa195d 100644
+--- a/package/whois/whois.mk
++++ b/package/whois/whois.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-WHOIS_VERSION = 5.6.1
+-WHOIS_SITE = https://snapshot.debian.org/archive/debian/20250527T144819Z/pool/main/w/whois
++WHOIS_VERSION = 5.6.2
++WHOIS_SITE = https://snapshot.debian.org/archive/debian/20250607T082433Z/pool/main/w/whois
+ WHOIS_SOURCE = whois_$(WHOIS_VERSION).tar.xz
+ WHOIS_DEPENDENCIES = \
+ 	host-pkgconf \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
