@@ -1,77 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBCDAC5AD49
-	for <buildroot@archiver.kernel.org>; Sun,  8 Jun 2025 15:14:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4472C5AD49
+	for <buildroot@archiver.kernel.org>; Sun,  8 Jun 2025 17:21:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B1A6D60B43;
-	Sun,  8 Jun 2025 15:14:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 58792409B0;
+	Sun,  8 Jun 2025 17:21:50 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rxcBX2-o86kb; Sun,  8 Jun 2025 17:21:49 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80C34409AD
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 80C34409AD;
+	Sun,  8 Jun 2025 17:21:49 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9F49E1F2
+ for <buildroot@buildroot.org>; Sun,  8 Jun 2025 17:21:48 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8680660E9D
+ for <buildroot@buildroot.org>; Sun,  8 Jun 2025 17:21:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id haDTDEgu7-ig; Sun,  8 Jun 2025 15:14:52 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E833B60F5C
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E833B60F5C;
-	Sun,  8 Jun 2025 15:14:51 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 12C74C8
- for <buildroot@buildroot.org>; Sun,  8 Jun 2025 15:14:50 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EAEBE813B5
- for <buildroot@buildroot.org>; Sun,  8 Jun 2025 15:14:49 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dUYriXmPODH2 for <buildroot@buildroot.org>;
- Sun,  8 Jun 2025 15:14:49 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0CFC9812BE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0CFC9812BE
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0CFC9812BE
- for <buildroot@buildroot.org>; Sun,  8 Jun 2025 15:14:48 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id CEEAB13F8C2;
- Sun,  8 Jun 2025 17:14:42 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
- via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 08 Jun 2025 17:14:42 +0200
+ id mYkotcSB26zo for <buildroot@buildroot.org>;
+ Sun,  8 Jun 2025 17:21:47 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
+ helo=smtp4-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A6644605CB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A6644605CB
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A6644605CB
+ for <buildroot@buildroot.org>; Sun,  8 Jun 2025 17:21:47 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:93aa:5000:c0e7:5e2f:eef4:db82])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPSA id 908DE19F54D;
+ Sun,  8 Jun 2025 19:21:42 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 08 Jun 2025 19:21:31 +0200
+Date: Sun, 8 Jun 2025 19:21:31 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Julien Olivain <ju.o@free.fr>
+Cc: buildroot@buildroot.org
+Message-ID: <aEXGm8MHcqJ9MTPV@landeda>
+References: <20250608105628.13576-1-ju.o@free.fr>
 MIME-Version: 1.0
-Date: Sun, 08 Jun 2025 17:14:42 +0200
-From: Julien Olivain <ju.o@free.fr>
-To: Kadambini Nema <kadambini.nema@gmail.com>
-Cc: buildroot@buildroot.org, Giulio Benetti
- <giulio.benetti@benettiengineering.com>, Romain Naour
- <romain.naour@gmail.com>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20250531002216.595139-1-kadambini.nema@gmail.com>
-References: <20250531002216.595139-1-kadambini.nema@gmail.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <47333bb8db7c8a97aeb7802e956f6ca9@free.fr>
-X-Sender: ju.o@free.fr
+Content-Disposition: inline
+In-Reply-To: <20250608105628.13576-1-ju.o@free.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1749395687;
- bh=LKd73n+XmH3GSly/LH+muI2D4p4pH9l79izoDryybDk=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=DVYSPNdf3NSwid2tywmqTXlYCh1nqfirL14lIVCF21IyfmIT4BFTxH1Ug98aZxnkZ
- uFK5w0AUPQ6ctFnuFQXZYL8oDR9w4nUptrwtzjxW85dTVQtV76qCnE8QbY1jR/Fi3a
- 1+BoFokeBOGxKvFS0+c9OG+MMNOLuFUDZYGMkk3D4N57EIUpuQKhKajwk1RT1tNpN1
- ctEPdPExM7nhv3ap8Hn5VgrodKcntBl65Ug8bMAxzri525LMdG06riweCnolL7TWei
- EoT3a5ck7tB/P4UAy/qAZNQzqBXIu17VVUzcru8Ye/TUPS1Pms85EtdtR8JuA2MNR2
- 57Z7A1uptjx8w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1749403304;
+ bh=9w09Bo/cvmpeFnY53dd9bbj3dCjUCBUWamfpxphfq0M=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=kQEtLoF5M3VhQk7VMO54vACw8j5PwMWrji0LPaQP+Fxbu8DWyYijd3iYBBGsCFBJP
+ ShgJSgbTNMB/hLFFbLFzuc5MxhS7/y3jbqn4Ak2msVrFc6gPxWNoSSwchb4zYl1mHz
+ P/fMTE3X3u4/rO0Twq5g1obyQ8TkmQnah/QPPdeHaQVt5l87Z+wGxgAKhm0/kCsBVr
+ tLDMKpyZSwQ4mvsEtduJYDaqjwvfLHfCE4RP5ZA9GOVu+SBzOpJB1z535UcYIol4vX
+ 6iu8X52PStbIMi3OA2kEDcAjdiecvDzp0/pX0iWd8hZWjYJuCcz7p3xJPpqe2uODj9
+ lY7d2vZconCaQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=DVYSPNdf
-Subject: Re: [Buildroot] [PATCH 1/1] package/gcc: update to 14.3.0
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=kQEtLoF5
+Subject: Re: [Buildroot] [PATCH 1/1] system/Config.in: add missing MMU
+ dependency for catatonit
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,33 +82,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 31/05/2025 02:22, Kadambini Nema wrote:
-> Release announcement:
-> https://gcc.gnu.org/pipermail/gcc-announce/2025/000186.html
+Julien, All,
+
+On 2025-06-08 12:56 +0200, Julien Olivain spake thusly:
+> BR2_INIT_CATATONIT config, introduced in Buildroot commit [1] selects
+> BR2_PACKAGE_CATATONIT but forgot to propagate the MMU dependency.
 > 
-> List of bugs which were resolved in 14.3.0:
-> https://gcc.gnu.org/bugzilla/buglist.cgi?bug_status=RESOLVED&resolution=FIXED&target_milestone=14.3
+> This commit fixes that.
 > 
-> Drop upstream patch 
-> 0003-libquadmath-Fix-up-libquadmath-math-sqrtq.c-compilat.patch
-> https://gcc.gnu.org/cgit/gcc/commit/?h=releases/gcc-14&id=8581982e8c977f7158d5fed5131caf0aae330403
+> Fixes:
 > 
-> Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
+>     WARNING: unmet direct dependencies detected for BR2_PACKAGE_CATATONIT
+>       Depends on [n]: BR2_USE_MMU [=n]
+>       Selected by [y]:
+>       - BR2_INIT_CATATONIT [=y] && <choice>
+> 
+> [1] https://gitlab.com/buildroot.org/buildroot/-/commit/6dc177bee8b7fe1ae1607bd7c0819b0dc63397d7
+> 
+> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
 
-Applied to next, after rebasing and fixing conflicts.
+Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
-I also fixed the dropped patch upstream merge URL, which was incorrect. 
-See:
-https://gitlab.com/buildroot.org/buildroot/-/commit/e9227311d9a63c9a829316e2ffb91cb70ed127f1
+Thanks!
 
-Best regards,
+Regards,
+Yann E. MORIN.
 
-Julien.
+> ---
+>  system/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/system/Config.in b/system/Config.in
+> index 8ff6c7213e..da9e20a35c 100644
+> --- a/system/Config.in
+> +++ b/system/Config.in
+> @@ -151,6 +151,7 @@ comment "Special purpose (read help)"
+>  
+>  config BR2_INIT_CATATONIT
+>  	bool "catatonit"
+> +	depends on BR2_USE_MMU # catatonit
+>  	select BR2_PACKAGE_CATATONIT
+>  	select BR2_PACKAGE_SKELETON_INIT_NONE if BR2_ROOTFS_SKELETON_DEFAULT
+>  	help
+> -- 
+> 2.49.0
+> 
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
