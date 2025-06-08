@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A466C71136
-	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 08:40:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 811F2C61CE8
+	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 08:40:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 23DF081EB5;
-	Thu, 12 Jun 2025 08:40:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 57AED83A5D;
+	Thu, 12 Jun 2025 08:40:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ptaqzqc_M-22; Thu, 12 Jun 2025 08:40:44 +0000 (UTC)
+ id sKZUCTq7QQqW; Thu, 12 Jun 2025 08:40:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 881B383A5C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7005C83A77
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 881B383A5C;
-	Thu, 12 Jun 2025 08:40:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7005C83A77;
+	Thu, 12 Jun 2025 08:40:48 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id A5EDC1BD
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:39:29 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 6AAE61BD
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:39:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0B1A142200
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6A41242216
  for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qP3j-klwthR4 for <buildroot@buildroot.org>;
- Thu, 12 Jun 2025 08:38:32 +0000 (UTC)
+ id 47_6vehZcSDT for <buildroot@buildroot.org>;
+ Thu, 12 Jun 2025 08:38:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E9F07405C8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 96953421BD
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E9F07405C8
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:31 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 96953421BD
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E701B805F4; Thu, 12 Jun 2025 08:38:31 +0000 (UTC)
+ id 9420E805F4; Thu, 12 Jun 2025 08:38:33 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 1 Jun 2025 16:52:59 +0200
+Date: Sun, 8 Jun 2025 15:29:31 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9357dc5694a6566d064175d946546b652cd23d60
-X-Git-Newrev: 577c08ca25f6d892db6bc37fcc7f1e9d7a330046
+X-Git-Oldrev: eb21ab5c712c751356dda716ae2da91293e09471
+X-Git-Newrev: c87d34badb8ed82f90d2028755403881018d4473
 X-Patchwork-Hint: ignore
-Message-Id: <20250612083831.E701B805F4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/lvm2: bump to version 2.03.31
+Message-Id: <20250612083833.9420E805F4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libgit2: bump version to 1.9.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,48 +64,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=577c08ca25f6d892db6bc37fcc7f1e9d7a330046
+commit: https://git.buildroot.net/buildroot/commit/?id=c87d34badb8ed82f90d2028755403881018d4473
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This includes, amongst other things, the restoration of support
-for LVM_SUPPRESS_FD_WARNINGS.
+Release notes:
+https://github.com/libgit2/libgit2/releases/tag/v1.9.1
 
-For change log, see:
-https://gitlab.com/lvmteam/lvm2/-/blob/v2_03_31/WHATS_NEW
-
-Signed-off-by: Stephan Henningsen <stephan@asklandd.dk>
-[Julien: add link to change log]
+Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/lvm2/lvm2.hash | 3 ++-
- package/lvm2/lvm2.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/libgit2/libgit2.hash | 2 +-
+ package/libgit2/libgit2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
-index 1abaeb0497..8492c150cd 100644
---- a/package/lvm2/lvm2.hash
-+++ b/package/lvm2/lvm2.hash
-@@ -1,5 +1,6 @@
- # From https://sourceware.org/ftp/lvm2/sha512.sum
--sha512  02607797f067b2b26d615b9a182ad70017e61d436e3866acf820a04154e503fb59114e9a4540a273d9f570d0337332ca995fb3be83c11eadaca53c1b826eb810  LVM2.2.03.27.tgz
-+sha512  254131e28b22d55531d211886afbfdc219e77a4df802e3ec9b66d889ff22bf6d0a6c2df9c5ff017592d92e1dce0f658a6628fb321c1e90152ff7257492218242  LVM2.2.03.31.tgz
-+
- # Locally computed sha256 checksums
- sha256  e76fbcd2fb97cf202da330301327754d2db5c58b5b4bebd3a8a749393e7603d1  COPYING
- sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING.LIB
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index 2fc24be60e..3a1dded55f 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
+diff --git a/package/libgit2/libgit2.hash b/package/libgit2/libgit2.hash
+index 3f11309750..8c9b210581 100644
+--- a/package/libgit2/libgit2.hash
++++ b/package/libgit2/libgit2.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  75b27d4d6df44bd34e2f70663cfd998f5ec41e680e1e593238bbe517a84c7ed2  libgit2-1.9.0.tar.gz
++sha256  14cab3014b2b7ad75970ff4548e83615f74d719afe00aa479b4a889c1e13fc00  libgit2-1.9.1.tar.gz
+ sha256  e3712465634e97cfd850822a4eb5ac7d2f8a10f753189366d5a2060046f28288  COPYING
+diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
+index 4026ac1f7c..f615484edb 100644
+--- a/package/libgit2/libgit2.mk
++++ b/package/libgit2/libgit2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LVM2_VERSION = 2.03.27
-+LVM2_VERSION = 2.03.31
- LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
- LVM2_SITE = https://sourceware.org/ftp/lvm2
- LVM2_INSTALL_STAGING = YES
+-LIBGIT2_VERSION = 1.9.0
++LIBGIT2_VERSION = 1.9.1
+ LIBGIT2_SITE = $(call github,libgit2,libgit2,v$(LIBGIT2_VERSION))
+ LIBGIT2_LICENSE = \
+ 	GPL-2.0 with linking exception, \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
