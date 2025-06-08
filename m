@@ -1,75 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FCDBC5AD49
-	for <buildroot@archiver.kernel.org>; Sun,  8 Jun 2025 13:50:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76DE3C5B552
+	for <buildroot@archiver.kernel.org>; Sun,  8 Jun 2025 15:11:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4559A401C6;
-	Sun,  8 Jun 2025 13:50:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2D9BB60F8E;
+	Sun,  8 Jun 2025 15:11:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Q2cJaoNY3GxY; Sun,  8 Jun 2025 13:50:42 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IkZJH7aWxk_5; Sun,  8 Jun 2025 15:11:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D2D04074A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE9EC60EC9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8D2D04074A;
-	Sun,  8 Jun 2025 13:50:42 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id F366A1F2
- for <buildroot@buildroot.org>; Sun,  8 Jun 2025 13:50:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AE9EC60EC9;
+	Sun,  8 Jun 2025 15:11:26 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 67A04C8
+ for <buildroot@buildroot.org>; Sun,  8 Jun 2025 15:11:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E5BA24074A
- for <buildroot@buildroot.org>; Sun,  8 Jun 2025 13:50:41 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4909060B43
+ for <buildroot@buildroot.org>; Sun,  8 Jun 2025 15:11:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LMZNXC_vqTAV for <buildroot@buildroot.org>;
- Sun,  8 Jun 2025 13:50:41 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1E659401C6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E659401C6
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1E659401C6
- for <buildroot@buildroot.org>; Sun,  8 Jun 2025 13:50:40 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 1010419F59C;
- Sun,  8 Jun 2025 15:50:37 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
- via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 08 Jun 2025 15:50:37 +0200
-MIME-Version: 1.0
-Date: Sun, 08 Jun 2025 15:50:37 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id k6LeRNxp22ck for <buildroot@buildroot.org>;
+ Sun,  8 Jun 2025 15:11:24 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1459F60EC9
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1459F60EC9
+ for <buildroot@buildroot.org>; Sun,  8 Jun 2025 15:11:24 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id F2B448123A; Sun,  8 Jun 2025 15:11:23 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Kadambini Nema <kadambini.nema@gmail.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250606204152.13551-1-kadambini.nema@gmail.com>
-References: <20250606204152.13551-1-kadambini.nema@gmail.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <da0e42b6d8b08ae995b19b9d5313aa24@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1749390639;
- bh=T8CInNtDal6QE4aU9yOdjEH25AKVVGQ88xFMl30E7v4=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=YbfDvPBClFJZQa/wFqijI9ZckEUhiSxJu4YFC034CztIwsBqUmolrgTaEyLhR/uyZ
- e1+mLiMctcFgjHToNXl+7/ES5rXyWfyAN0EupWQydW2tab0LEnDn+rNE1c14NU9Be2
- LA3RUxLjNgonD80nz2o02k16ee+YERNy7lxa0ZNbX+jXnLrqI5Uu84nJt4/VpRsvPq
- D655Apt0ICwL1T7EzBCGcujMKk0VDXkJy7ibUPV3EiVl5RFQYbPQZB6m/YtYneh7Yc
- OPtVjHM0D35I+Sd/rmrsXRfxVDdIYNNjyvPda02tCI4q9/qR8f8vCckI+kjCNlGBsJ
- F4iaPBOBQsSxw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=YbfDvPBC
-Subject: Re: [Buildroot] [PATCH 1/1] package/diffutils: bump version to 3.12
+To: buildroot@buildroot.org
+Date: Sun, 8 Jun 2025 16:14:38 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 26c4821638eff99f8676b3072e5c9bb3267562b7
+X-Git-Newrev: 0b8b72d2fe2c8fa6a9d2859ceb8d29b6389cf894
+X-Patchwork-Hint: ignore
+Message-Id: <20250608151123.F2B448123A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/gcc: update to 13.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,26 +58,85 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 06/06/2025 22:41, Kadambini Nema wrote:
-> Release notes:
-> Version 3.12 - 
-> https://lists.gnu.org/archive/html/info-gnu/2025-04/msg00005.html
-> Version 3.11 - 
-> https://lists.gnu.org/archive/html/info-gnu/2025-02/msg00003.html
-> 
-> Fix the following error seen during cross-compilation error by assuming 
-> that
-> strcasecmp function is always available.
-> - "configure: error: cannot run test program while cross compiling"
-> 
-> Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=0b8b72d2fe2c8fa6a9d2859ceb8d29b6389cf894
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Applied to next, thanks.
+Release announcement:
+https://gcc.gnu.org/pipermail/gcc-announce/2025/000187.html
+
+Changelog:
+https://gcc.gnu.org/bugzilla/buglist.cgi?bug_status=RESOLVED&resolution=FIXED&target_milestone=13.4
+
+Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
+[Julien: fix check-package error by fixing .checkpackageignore entry]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ .checkpackageignore                                                   | 2 +-
+ .../0001-disable-split-stack-for-non-thread-builds.patch              | 0
+ .../0002-RISC-V-fix-build-issue-with-gcc-4.9.x.patch                  | 0
+ .../0003-Remove-crypt-and-crypt_r-interceptors.patch                  | 0
+ package/gcc/Config.in.host                                            | 2 +-
+ package/gcc/gcc.hash                                                  | 4 ++--
+ 6 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index a76f02bcb3..935e0b5b9f 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -475,7 +475,7 @@ package/ftop/0001-overflow.patch lib_patch.Upstream
+ package/fwts/0001-build-do-not-use-Werror.patch lib_patch.Upstream
+ package/fxdiv/0001-CMake-don-t-enable-CXX-unless-building-tests-benchma.patch lib_patch.Upstream
+ package/fxload/0001-fix-static-build.patch lib_patch.Upstream
+-package/gcc/13.3.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
++package/gcc/13.4.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
+ package/gcc/14.2.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
+ package/gcc/15.1.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
+ package/gcc/8.4.0/0001-xtensa-fix-PR-target-91880.patch lib_patch.Upstream
+diff --git a/package/gcc/13.3.0/0001-disable-split-stack-for-non-thread-builds.patch b/package/gcc/13.4.0/0001-disable-split-stack-for-non-thread-builds.patch
+similarity index 100%
+rename from package/gcc/13.3.0/0001-disable-split-stack-for-non-thread-builds.patch
+rename to package/gcc/13.4.0/0001-disable-split-stack-for-non-thread-builds.patch
+diff --git a/package/gcc/13.3.0/0002-RISC-V-fix-build-issue-with-gcc-4.9.x.patch b/package/gcc/13.4.0/0002-RISC-V-fix-build-issue-with-gcc-4.9.x.patch
+similarity index 100%
+rename from package/gcc/13.3.0/0002-RISC-V-fix-build-issue-with-gcc-4.9.x.patch
+rename to package/gcc/13.4.0/0002-RISC-V-fix-build-issue-with-gcc-4.9.x.patch
+diff --git a/package/gcc/13.3.0/0003-Remove-crypt-and-crypt_r-interceptors.patch b/package/gcc/13.4.0/0003-Remove-crypt-and-crypt_r-interceptors.patch
+similarity index 100%
+rename from package/gcc/13.3.0/0003-Remove-crypt-and-crypt_r-interceptors.patch
+rename to package/gcc/13.4.0/0003-Remove-crypt-and-crypt_r-interceptors.patch
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 496ead1e6a..83176684a1 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -71,7 +71,7 @@ config BR2_GCC_SUPPORTS_DLANG
+ config BR2_GCC_VERSION
+ 	string
+ 	default "8.4.0"     if BR2_GCC_VERSION_POWERPC_SPE
+-	default "13.3.0"    if BR2_GCC_VERSION_13_X
++	default "13.4.0"    if BR2_GCC_VERSION_13_X
+ 	default "14.2.0"    if BR2_GCC_VERSION_14_X
+ 	default "15.1.0"    if BR2_GCC_VERSION_15_X
+ 	default "arc-2023.09-release" if BR2_GCC_VERSION_ARC
+diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
+index 00da7dd49b..76699a7b0f 100644
+--- a/package/gcc/gcc.hash
++++ b/package/gcc/gcc.hash
+@@ -1,7 +1,7 @@
+ # From https://gcc.gnu.org/pub/gcc/releases/gcc-8.4.0/sha512.sum
+ sha512  6de904f552a02de33b11ef52312bb664396efd7e1ce3bbe37bfad5ef617f133095b3767b4804bc7fe78df335cb53bc83f1ac055baed40979ce4c2c3e46b70280  gcc-8.4.0.tar.xz
+-# From https://gcc.gnu.org/pub/gcc/releases/gcc-13.3.0/sha512.sum
+-sha512  ed5f2f4c6ed2c796fcf2c93707159e9dbd3ddb1ba063d549804dd68cdabbb6d550985ae1c8465ae9a336cfe29274a6eb0f42e21924360574ebd8e5d5c7c9a801  gcc-13.3.0.tar.xz
++# From https://gcc.gnu.org/pub/gcc/releases/gcc-13.4.0/sha512.sum
++sha512  9b4b83ecf51ef355b868608b8d257b2fa435c06d2719cb86657a7c2c2a0828ff4ce04e9bac1055bbcad8ed5b4da524cafaef654785e23a50233d95d89201e35f  gcc-13.4.0.tar.xz
+ # From https://gcc.gnu.org/pub/gcc/releases/gcc-14.2.0/sha512.sum
+ sha512  932bdef0cda94bacedf452ab17f103c0cb511ff2cec55e9112fc0328cbf1d803b42595728ea7b200e0a057c03e85626f937012e49a7515bc5dd256b2bf4bc396  gcc-14.2.0.tar.xz
+ # From https://gcc.gnu.org/pub/gcc/releases/gcc-15.1.0/sha512.sum
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
