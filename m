@@ -1,73 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56701C5AD49
-	for <buildroot@archiver.kernel.org>; Sun,  8 Jun 2025 11:57:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61558C5AD49
+	for <buildroot@archiver.kernel.org>; Sun,  8 Jun 2025 13:17:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0F46A40BBB;
-	Sun,  8 Jun 2025 11:57:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E658160AF6;
+	Sun,  8 Jun 2025 13:17:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BiXvp0MAiZMJ; Sun,  8 Jun 2025 11:57:23 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xcG8Ff1avxIp; Sun,  8 Jun 2025 13:17:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1DDB2409A1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0BEC2607C7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1DDB2409A1;
-	Sun,  8 Jun 2025 11:57:23 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 790E3C8
- for <buildroot@buildroot.org>; Sun,  8 Jun 2025 11:57:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0BEC2607C7;
+	Sun,  8 Jun 2025 13:17:50 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3ECF51F2
+ for <buildroot@buildroot.org>; Sun,  8 Jun 2025 13:17:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5FB5F40BFC
- for <buildroot@buildroot.org>; Sun,  8 Jun 2025 11:57:21 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2C15D80E6E
+ for <buildroot@buildroot.org>; Sun,  8 Jun 2025 13:17:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bchgnaJalJHN for <buildroot@buildroot.org>;
- Sun,  8 Jun 2025 11:57:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=220.197.31.3;
- helo=m16.mail.163.com; envelope-from=andyshrk@163.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 608F34041B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 608F34041B
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
- by smtp2.osuosl.org (Postfix) with ESMTP id 608F34041B
- for <buildroot@buildroot.org>; Sun,  8 Jun 2025 11:57:18 +0000 (UTC)
-Received: from ProDesk.. (unknown [])
- by gzga-smtp-mtada-g1-1 (Coremail) with SMTP id
- _____wD3V2n9dkVo0I7sGw--.24883S2; 
- Sun, 08 Jun 2025 19:41:53 +0800 (CST)
-From: Andy Yan <andyshrk@163.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tQPhFJahWRsw for <buildroot@buildroot.org>;
+ Sun,  8 Jun 2025 13:17:47 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5E62580E8E
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5E62580E8E
+ for <buildroot@buildroot.org>; Sun,  8 Jun 2025 13:17:47 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 4D59387943; Sun,  8 Jun 2025 13:17:47 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Cc: ju.o@free.fr,
-	Andy Yan <andyshrk@163.com>
-Date: Sun,  8 Jun 2025 19:41:22 +0800
-Message-ID: <20250608114143.405210-1-andyshrk@163.com>
-X-Mailer: git-send-email 2.43.0
-MIME-Version: 1.0
-X-CM-TRANSID: _____wD3V2n9dkVo0I7sGw--.24883S2
-X-Coremail-Antispam: 1Uf129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
- VFW2AGmfu7bjvjm3AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvjfU16pBUUUUU
-X-Originating-IP: [58.22.7.114]
-X-CM-SenderInfo: 5dqg52xkunqiywtou0bp/xtbBkBNmXmhFccxpBgABsF
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=163.com; 
- s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version:
- Content-Type; bh=e3Dp3bcekBnWeD/8EtC+XX7pTIle5OnasVuftOAvhJg=;
- b=mTYzeANSCsSlOzuy/CiGfW9dlVKI1Cm3uYJGvDvnhYb7TnHWtLnqMdeuKShwHn
- Zp9ffuNgl3qkSF/GMo0veXcLRhsSt9weOfi93CDQC4H7+zkY54UiKVgXlyAVW1o6
- cne17Pv98+i08Up4ckJdPx05MCeArr++wbZkaXvtOVrwk=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=163.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256
- header.s=s110527 header.b=mTYzeANS
-Subject: [Buildroot] [PATCH v2] configs/coolpi_4b: new defconfig
+Date: Sun, 8 Jun 2025 15:14:49 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 0fce7a9623315cd58750df984b3b9d630eda1700
+X-Git-Newrev: fa45c47fcb022445114fe4ff70018e634076d109
+X-Patchwork-Hint: ignore
+Message-Id: <20250608131747.4D59387943@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ghostscript: fix build with host
+ GCC 15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -79,240 +59,86 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============1195547155527559663=="
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1195547155527559663==
-Content-Type: text/plain; charset=all
-Content-Transfer-Encoding: 8bit
+commit: https://git.buildroot.net/buildroot/commit/?id=fa45c47fcb022445114fe4ff70018e634076d109
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-CoolPi 4B is a rk3588s based SBC[0].
-Specification:
-- Rockchip RK3588S
-- LPDDR4 2/4/8/16 GB
-- TF scard slot
-- eMMC 8/32/64/128 GB module
-- Gigabit ethernet drived by PCIE with RTL8111HS
-- HDMI Type D out
-- Mini DP out
-- USB 2.0 Host x 2
-- USB 3.0 OTG x 1
-- USB 3.0 Host x 1
-- WIFI/BT module AIC8800
-- 40 pin header
+Fix the following autobuild error on configs with host GCC15.
 
-[0]https://www.cool-pi.com/product/cp4b/
+```
+/workdir/instance-0/output-1/host/bin/ccache /usr/bin/gcc   -O2 -DNDEBUG -Wall -Wstrict-prototypes -Wundef -Wmissing-declarations -Wmissing-prototypes -Wwrite-strings -fno-strict-aliasing -Werror=declaration-after-statement -fno-builtin -fno-common -Werror=return-type -Wno-unused-local-typedefs -DHAVE_STDINT_H=1 -DHAVE_DIRENT_H=1 -DHAVE_SYS_DIR_H=1 -DHAVE_SYS_TIME_H=1 -DHAVE_SYS_TIMES_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_LIBDL=1 -DGX_COLOR_INDEX_TYPE="unsigned long long" -D__USE_UNIX98=1 -DHAVE_SNPRINTF  -O2 -I/workdir/instance-0/output-1/host/include -L/workdir/instance-0/output-1/host/lib -Wl,-rpath,/workdir/instance-0/output-1/host/lib -DNOCONTRIB -DHAVE_RESTRICT=1 -DHAVE_LIMITS_H=1 -DHAVE_STRING_H=1 -fno-strict-aliasing -O2 -I/workdir/instance-0/output-1/host/include -L/workdir/instance-0/output-1/host/lib -Wl,-rpath,/workdir/instance-0/output-1/host/lib -DHAVE_POPEN_PROTO=1  -I./base -o ./obj/aux/genconf ./base/genconf.c   -lz
+In file included from ./base/genconf.c:18:
+./base/stdpre.h:348:13: error: 'bool' cannot be defined via 'typedef'
+  348 | typedef int bool;
+      |             ^~~~
+./base/stdpre.h:348:13: note: 'bool' is a keyword with '-std=c23' onwards
+./base/stdpre.h:348:1: warning: useless type name in empty declaration
+  348 | typedef int bool;
+      | ^~~~~~~
+```
 
-Signed-off-by: Andy Yan <andyshrk@163.com>
+This is due to the change in the default C language version in GCC15.
 
+The patch included is not exactly the same as the upstream one, it only
+picks the part that fix the `bool` definition and dropped the declaration
+type changes.
+
+Fixes: https://autobuild.buildroot.org/results/9c6/9c6cbff256635c6ab4be4c5b7bf18f9d3c4b46681
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
+ ...0001-Fix-compatibility-with-C23-compilers.patch | 36 ++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
-Changes in v2:
-- Align website address.
-- Fix shellcheck warnings
-- Remove weston,gstreamer and some other packages
-
- board/coolpi/coolpi-4b/extlinux.conf |  4 ++
- board/coolpi/coolpi-4b/genimage.cfg  | 35 +++++++++++++++++
- board/coolpi/coolpi-4b/post-image.sh |  7 ++++
- board/coolpi/coolpi-4b/readme.txt    | 57 ++++++++++++++++++++++++++++
- configs/coolpi_4b_defconfig          | 39 +++++++++++++++++++
- 5 files changed, 142 insertions(+)
- create mode 100644 board/coolpi/coolpi-4b/extlinux.conf
- create mode 100644 board/coolpi/coolpi-4b/genimage.cfg
- create mode 100755 board/coolpi/coolpi-4b/post-image.sh
- create mode 100644 board/coolpi/coolpi-4b/readme.txt
- create mode 100644 configs/coolpi_4b_defconfig
-
-diff --git a/board/coolpi/coolpi-4b/extlinux.conf b/board/coolpi/coolpi-4b/extlinux.conf
+diff --git a/package/ghostscript/0001-Fix-compatibility-with-C23-compilers.patch b/package/ghostscript/0001-Fix-compatibility-with-C23-compilers.patch
 new file mode 100644
-index 0000000000..466ab1eed6
+index 0000000000..0dfca9cfa2
 --- /dev/null
-+++ b/board/coolpi/coolpi-4b/extlinux.conf
-@@ -0,0 +1,4 @@
-+label coolpi-4b-buildroot
-+  kernel /Image.gz
-+  devicetree /rk3588s-coolpi-4b.dtb
-+  append root=/dev/mmcblk1p2 rw rootfstype=ext4 earlycon earlyprintk console=ttyS2,1500000n8 rootwait
-diff --git a/board/coolpi/coolpi-4b/genimage.cfg b/board/coolpi/coolpi-4b/genimage.cfg
-new file mode 100644
-index 0000000000..826d899c95
---- /dev/null
-+++ b/board/coolpi/coolpi-4b/genimage.cfg
-@@ -0,0 +1,35 @@
-+# SD card image for Cool PI 4b
++++ b/package/ghostscript/0001-Fix-compatibility-with-C23-compilers.patch
+@@ -0,0 +1,36 @@
++From ae940946473ceb8c5353bc6e7f04673c6e60502d Mon Sep 17 00:00:00 2001
++From: Alex Cherepanov <alex@coscript.biz>
++Date: Thu, 3 Apr 2025 17:19:41 +0100
++Subject: Bug 708160: Fix compatibility with C23 compilers
 +
-+image boot.vfat {
-+	vfat {
-+		files = {
-+			"Image.gz",
-+			"rk3588s-coolpi-4b.dtb",
-+			"extlinux"
-+		}
-+	}
-+	size = 32M
-+}
++Upstream: https://cgit.ghostscript.com/cgi-bin/cgit.cgi/ghostpdl.git/commit/?id=ae940946473ceb8c5353bc6e7f04673c6e60502d
++[thomas: Only backport the bool typedef condition]
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++---
++ base/stdpre.h              |  6 ++++--
++ 1 files changed, 4 insertions(+), 2 deletions(-)
 +
-+image sdcard.img {
-+	hdimage {
-+		partition-table-type = "hybrid"
-+	}
++diff --git a/base/stdpre.h b/base/stdpre.h
++index dda30b6a4..2f9c84e0d 100644
++--- a/base/stdpre.h
+++++ b/base/stdpre.h
++@@ -1,4 +1,4 @@
++-/* Copyright (C) 2001-2023 Artifex Software, Inc.
+++/* Copyright (C) 2001-2025 Artifex Software, Inc.
++    All Rights Reserved.
 +
-+	partition uboot {
-+		in-partition-table = "false"
-+		image = "u-boot-rockchip.bin"
-+		offset = 32K
-+	}
++    This software is provided AS-IS with no warranty, either express or
++@@ -341,7 +341,9 @@ typedef signed char schar;
++  * and the MetroWerks C++ compiler insists that bool be equivalent to
++  * unsigned char.
++  */
++-#ifndef __cplusplus
+++
+++/* C23 has bool as a builtin type. */
+++#if !defined(__cplusplus) && (!defined(__STDC_VERSION__) || __STDC_VERSION__ < 202311L)
++ #ifdef __BEOS__
++ typedef unsigned char bool;
++ #else
++--
++cgit v1.2.3
 +
-+	partition boot {
-+		partition-type = "0xC"
-+		bootable = "true"
-+		image = "boot.vfat"
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext2"
-+	}
-+}
-diff --git a/board/coolpi/coolpi-4b/post-image.sh b/board/coolpi/coolpi-4b/post-image.sh
-new file mode 100755
-index 0000000000..65b79e81c8
---- /dev/null
-+++ b/board/coolpi/coolpi-4b/post-image.sh
-@@ -0,0 +1,7 @@
-+#!/usr/bin/env bash
-+set -e
-+
-+BOARD_DIR="$(dirname "$0")"
-+gzip -fk "${BINARIES_DIR}/Image"
-+install -m 0644 -D "$BOARD_DIR/extlinux.conf" "$BINARIES_DIR/extlinux/extlinux.conf"
-+support/scripts/genimage.sh -c board/coolpi/coolpi-4b/genimage.cfg
-diff --git a/board/coolpi/coolpi-4b/readme.txt b/board/coolpi/coolpi-4b/readme.txt
-new file mode 100644
-index 0000000000..7213ab3bae
---- /dev/null
-+++ b/board/coolpi/coolpi-4b/readme.txt
-@@ -0,0 +1,57 @@
-+Cool Pi 4B
-+==============
-+https://www.cool-pi.com/product/cp4b/
-+
-+Build:
-+======
-+  $ make coolpi_4b_defconfig
-+  $ make
-+
-+Files created in output directory
-+=================================
-+
-+output/images
-+.
-+output/images/
-+├── boot.vfat
-+├── extlinux
-+│   └── extlinux.conf
-+├── Image
-+├── Image.gz
-+├── rk3588_bl31_v1.40.elf
-+├── rk3588_ddr_lp4_2112MHz_lp5_2736MHz_v1.12.bin
-+├── rk3588s-coolpi-4b.dtb
-+├── rootfs.ext2
-+├── rootfs.ext4 -> rootfs.ext2
-+├── rootfs.tar
-+├── sdcard.img
-+├── u-boot.bin
-+└── u-boot-rockchip.bin
-+
-+Creating bootable SD card:
-+==========================
-+
-+Simply invoke (as root)
-+
-+sudo dd if=output/images/sdcard.img of=/dev/sdX && sync
-+
-+Where X is your SD card device.
-+
-+Booting:
-+========
-+
-+Serial console:
-+---------------
-+The Cool Pi 4B has a 40-pin GPIO header.
-+
-+The Uart pins are as follows:
-+
-+pin 6:  gnd
-+pin 8:  tx
-+pin 10: rx
-+
-+Baudrate for this board is 1500000.
-+
-+Login:
-+------
-+Enter 'root' as login user, and the prompt is ready.
-diff --git a/configs/coolpi_4b_defconfig b/configs/coolpi_4b_defconfig
-new file mode 100644
-index 0000000000..25ae188157
---- /dev/null
-+++ b/configs/coolpi_4b_defconfig
-@@ -0,0 +1,39 @@
-+BR2_aarch64=y
-+BR2_cortex_a76_a55=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_14=y
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
-+BR2_TARGET_GENERIC_HOSTNAME="coolpi"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to the CoolPi 4B"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/coolpi/coolpi-4b/post-image.sh"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.14.10"
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3588s-coolpi-4b"
-+BR2_LINUX_KERNEL_DTB_OVERLAY_SUPPORT=y
-+BR2_PACKAGE_LINUX_FIRMWARE=y
-+BR2_PACKAGE_LINUX_FIRMWARE_RTL_8169=y
-+BR2_PACKAGE_LINUX_FIRMWARE_ARM_MALI_CSF=y
-+BR2_PACKAGE_ROCKCHIP_RKBIN=y
-+BR2_PACKAGE_ROCKCHIP_RKBIN_TPL_FILENAME="bin/rk35/rk3588_ddr_lp4_2112MHz_lp5_2400MHz_v1.18.bin"
-+BR2_PACKAGE_ROCKCHIP_RKBIN_BL31_FILENAME="bin/rk35/rk3588_bl31_v1.48.elf"
-+BR2_PACKAGE_LIBDRM=y
-+BR2_PACKAGE_LIBDRM_INSTALL_TESTS=y
-+BR2_PACKAGE_OPENSSH=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="512M"
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.04"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="coolpi-4b-rk3588s"
-+BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-+BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS=y
-+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_NEEDS_ROCKCHIP_RKBIN=y
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
--- 
-2.43.0
-
-base-commit: 00f0fca15a696eafae688b58c0df220ef5a2e2dc
-branch: board-upsteam
-
-
---===============1195547155527559663==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1195547155527559663==--
