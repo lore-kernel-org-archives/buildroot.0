@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FE19C61CE8
-	for <buildroot@archiver.kernel.org>; Mon,  9 Jun 2025 22:08:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC369C5B552
+	for <buildroot@archiver.kernel.org>; Mon,  9 Jun 2025 22:08:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EAE9E41EA0;
-	Mon,  9 Jun 2025 22:08:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8E34D41ECD;
+	Mon,  9 Jun 2025 22:08:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uTwUog2TcKVT; Mon,  9 Jun 2025 22:08:28 +0000 (UTC)
+ id TqYnm8-5QdGY; Mon,  9 Jun 2025 22:08:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB22341EB3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A43BF41ED0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AB22341EB3;
-	Mon,  9 Jun 2025 22:08:27 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 600D41A4
- for <buildroot@buildroot.org>; Mon,  9 Jun 2025 22:08:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A43BF41ED0;
+	Mon,  9 Jun 2025 22:08:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 113F6CD
+ for <buildroot@buildroot.org>; Mon,  9 Jun 2025 22:08:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4056741E44
+ by smtp4.osuosl.org (Postfix) with ESMTP id D682141E44
  for <buildroot@buildroot.org>; Mon,  9 Jun 2025 22:08:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7TNL9c33uEiL for <buildroot@buildroot.org>;
+ id apFIfsHIfCvD for <buildroot@buildroot.org>;
  Mon,  9 Jun 2025 22:08:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1732441E5B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3BC4341E5E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1732441E5B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3BC4341E5E
  for <buildroot@buildroot.org>; Mon,  9 Jun 2025 22:08:10 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0466487CE8; Mon,  9 Jun 2025 22:08:10 +0000 (UTC)
+ id 29C7A87BFE; Mon,  9 Jun 2025 22:08:10 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 9 Jun 2025 21:39:20 +0200
+Date: Mon, 9 Jun 2025 21:41:30 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a63081b5f8e9af4665cb707d688be109805e3c3f
-X-Git-Newrev: d6683c6d1fab3282caeabfd93487b5aee288df41
+X-Git-Oldrev: d6683c6d1fab3282caeabfd93487b5aee288df41
+X-Git-Newrev: b6a1582b8e0c8e516a3c81b3dfef2605efad4c06
 X-Patchwork-Hint: ignore
-Message-Id: <20250609220810.0466487CE8@busybox.osuosl.org>
+Message-Id: <20250609220810.29C7A87BFE@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/next]
- configs/versal_vck190_defconfig: bump to xilinx-v2025.1
+ configs/versal_vpk180_defconfig: bump to xilinx-v2025.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,10 +65,10 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d6683c6d1fab3282caeabfd93487b5aee288df41
+commit: https://git.buildroot.net/buildroot/commit/?id=b6a1582b8e0c8e516a3c81b3dfef2605efad4c06
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This patch bumps the versal_vck190_defconfig to xilinx-v2025.1 which includes
+This patch bumps the versal_vpk180_defconfig to xilinx-v2025.1 which includes
 the following updates:
 
 - ATF v2.12
@@ -83,13 +83,13 @@ board/xilinx/linux_6.12/patches/linux/0001-include-uapi-linux-xlnx-ai-engine.h-f
 Signed-off-by: Neal Frager <neal.frager@amd.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- configs/versal_vck190_defconfig | 12 +++++++-----
+ configs/versal_vpk180_defconfig | 12 +++++++-----
  1 file changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/configs/versal_vck190_defconfig b/configs/versal_vck190_defconfig
-index 5cdfcb4b96..f9c5d266f5 100644
---- a/configs/versal_vck190_defconfig
-+++ b/configs/versal_vck190_defconfig
+diff --git a/configs/versal_vpk180_defconfig b/configs/versal_vpk180_defconfig
+index f6f977ec88..c82412ccc4 100644
+--- a/configs/versal_vpk180_defconfig
++++ b/configs/versal_vpk180_defconfig
 @@ -1,16 +1,16 @@
  BR2_aarch64=y
  BR2_cortex_a72=y
@@ -109,7 +109,7 @@ index 5cdfcb4b96..f9c5d266f5 100644
 +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.12_LTS_2025.1)/xlnx_rebase_v6.12_LTS_2025.1.tar.gz"
  BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
  BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/versal-vck190-rev1.1"
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/versal-vpk180-revA"
 @@ -21,13 +21,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
  # BR2_TARGET_ROOTFS_TAR is not set
  BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
@@ -128,7 +128,7 @@ index 5cdfcb4b96..f9c5d266f5 100644
  BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
 @@ -38,9 +38,11 @@ BR2_TARGET_UBOOT_FORMAT_DTB=y
  BR2_TARGET_UBOOT_FORMAT_REMAKE_ELF=y
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=versal-vck190-rev1.1"
+ BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=versal-vpk180-revA"
  BR2_TARGET_XILINX_EMBEDDEDSW=y
 +BR2_TARGET_XILINX_EMBEDDEDSW_VERSION="xilinx_v2025.1"
  BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM=y
@@ -136,8 +136,8 @@ index 5cdfcb4b96..f9c5d266f5 100644
  BR2_TARGET_XILINX_PREBUILT=y
 +BR2_TARGET_XILINX_PREBUILT_VERSION="xilinx_v2025.1"
  BR2_TARGET_XILINX_PREBUILT_VERSAL=y
+ BR2_TARGET_XILINX_PREBUILT_BOARD="vpk180"
  BR2_PACKAGE_HOST_BOOTGEN=y
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
