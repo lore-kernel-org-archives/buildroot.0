@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C87DC71141
-	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 08:41:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11F4CC71141
+	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 08:41:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0358683C24;
-	Thu, 12 Jun 2025 08:41:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CCD9F83C35;
+	Thu, 12 Jun 2025 08:41:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rSkxu74TbPBu; Thu, 12 Jun 2025 08:41:46 +0000 (UTC)
+ id RmPDF4mT2UAN; Thu, 12 Jun 2025 08:41:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2B9408217D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7E7283C1F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2B9408217D;
-	Thu, 12 Jun 2025 08:41:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D7E7283C1F;
+	Thu, 12 Jun 2025 08:41:48 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 2A43C1BD
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:40:12 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 22DB227A
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:40:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 529D242235
+ by smtp2.osuosl.org (Postfix) with ESMTP id A1B164221A
  for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hessGUc7k9ci for <buildroot@buildroot.org>;
- Thu, 12 Jun 2025 08:38:32 +0000 (UTC)
+ id KLw6I-NcE2tp for <buildroot@buildroot.org>;
+ Thu, 12 Jun 2025 08:38:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7057042185
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7FE21421D8
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7057042185
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:32 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7FE21421D8
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6D301811D1; Thu, 12 Jun 2025 08:38:32 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 7D93C805F4; Thu, 12 Jun 2025 08:38:35 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 4 Jun 2025 15:16:54 +0200
+Date: Mon, 9 Jun 2025 21:36:37 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 64203d87ace0389bfebfca08338bb619748cf518
-X-Git-Newrev: e34b75aeebdb0cac4137fa7cf80febb603c63444
+X-Git-Oldrev: ad327ba29e998e67be5c8e173b288174a6b3bbe4
+X-Git-Newrev: c7cdc2c7d72331452cdee4dceaf0b89367c6080f
 X-Patchwork-Hint: ignore
-Message-Id: <20250612083832.6D301811D1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/dhcpcd: bump version to 10.2.4
+Message-Id: <20250612083835.7D93C805F4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] boot/xilinx-prebuilt: add support for
+ xilinx_v2025.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,43 +65,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e34b75aeebdb0cac4137fa7cf80febb603c63444
+commit: https://git.buildroot.net/buildroot/commit/?id=c7cdc2c7d72331452cdee4dceaf0b89367c6080f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://github.com/NetworkConfiguration/dhcpcd/releases/tag/v10.2.4
+This patch adds support for version xilinx_v2025.1 without changing the
+default version.  This way, the zynqmp and versal defconfigs can bump
+individually from xilinx_v2024.2 to xilinx_v2025.1.
 
-Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/dhcpcd/dhcpcd.hash | 4 ++--
- package/dhcpcd/dhcpcd.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ boot/xilinx-prebuilt/xilinx-prebuilt.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/dhcpcd/dhcpcd.hash b/package/dhcpcd/dhcpcd.hash
-index d820f5e47a..a5d80b135d 100644
---- a/package/dhcpcd/dhcpcd.hash
-+++ b/package/dhcpcd/dhcpcd.hash
-@@ -1,4 +1,4 @@
--# sha256 from https://github.com/NetworkConfiguration/dhcpcd/releases/tag/v10.2.3
--sha256  4137a382d1a203bffdf8e757bbdfd0032433d06e5c69a3785b88b83251f89616  dhcpcd-10.2.3.tar.xz
-+# sha256 from https://github.com/NetworkConfiguration/dhcpcd/releases/tag/v10.2.4
-+sha256  6721e606609226dbf4d864a78802a9e96beec0ee034a1bd84138b3e037bba7d9  dhcpcd-10.2.4.tar.xz
+diff --git a/boot/xilinx-prebuilt/xilinx-prebuilt.hash b/boot/xilinx-prebuilt/xilinx-prebuilt.hash
+index 35f7070e5f..8e8940e5ed 100644
+--- a/boot/xilinx-prebuilt/xilinx-prebuilt.hash
++++ b/boot/xilinx-prebuilt/xilinx-prebuilt.hash
+@@ -1,5 +1,6 @@
  # Locally calculated
- sha256  3aeab006b01c1573b42d4440d7edad0adfe61ad05848ca82e02e745424a2b4fa  LICENSE
-diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
-index 10707158d9..5504914003 100644
---- a/package/dhcpcd/dhcpcd.mk
-+++ b/package/dhcpcd/dhcpcd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ sha256  86ee9629366aa8c0d70b87202152a793804ed4090e3a6fdac4eaf855bcc4d458  xilinx-prebuilt-xilinx_v2024.2_update1.tar.gz
++sha256  b9e2572885ad12243e10d48d9fccb24771a528b9f27aae1b29b45f0806ce9f1f  xilinx-prebuilt-xilinx_v2025.1.tar.gz
  
--DHCPCD_VERSION = 10.2.3
-+DHCPCD_VERSION = 10.2.4
- DHCPCD_SOURCE = dhcpcd-$(DHCPCD_VERSION).tar.xz
- DHCPCD_SITE = https://github.com/NetworkConfiguration/dhcpcd/releases/download/v$(DHCPCD_VERSION)
- DHCPCD_DEPENDENCIES = host-pkgconf
+ # Locally calculated
+ sha256  7b2074b607264a07347e1a7ef0323229585942793469f34b2cf9628f7623e05f  LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
