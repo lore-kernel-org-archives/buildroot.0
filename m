@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0219C71136
-	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 08:41:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 032D4C71143
+	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 08:41:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 764B840825;
-	Thu, 12 Jun 2025 08:41:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C32EE83BA5;
+	Thu, 12 Jun 2025 08:41:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ngH0dzr456Et; Thu, 12 Jun 2025 08:41:26 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nrDULAXf-8Be; Thu, 12 Jun 2025 08:41:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 83FFA40821
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E953583B97
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 83FFA40821;
-	Thu, 12 Jun 2025 08:41:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E953583B97;
+	Thu, 12 Jun 2025 08:41:27 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 680051E0
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:39:58 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0D8091E0
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:39:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 014D342230
+ by smtp2.osuosl.org (Postfix) with ESMTP id 20C6841700
  for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1DEMPiZqoHEW for <buildroot@buildroot.org>;
- Thu, 12 Jun 2025 08:38:34 +0000 (UTC)
+ id ggPwC9KU0nZa for <buildroot@buildroot.org>;
+ Thu, 12 Jun 2025 08:38:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 659DF42210
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1E95B421F1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 659DF42210
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:34 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1E95B421F1
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 61B9F805F4; Thu, 12 Jun 2025 08:38:34 +0000 (UTC)
+ id 1C2E6805F4; Thu, 12 Jun 2025 08:38:35 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 9 Jun 2025 19:27:35 +0200
+Date: Mon, 9 Jun 2025 21:25:03 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 147ec434eb1d8c101ab63cb269b31af2cf2f45eb
-X-Git-Newrev: b55e05f858b9c95ef41704a1285331aad2201227
+X-Git-Oldrev: 6c95df7404b04b324a631ddbaa4dc7bc605666e8
+X-Git-Newrev: 1106a1006b692b2344c0210655bbaceb5480a776
 X-Patchwork-Hint: ignore
-Message-Id: <20250612083834.61B9F805F4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/{versal,
- zynqmp}_*: migrate to microblazeel-buildroot-elf tuple
+Message-Id: <20250612083835.1C2E6805F4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] board/zynqmp/kria: remove kria specific
+ u-boot patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,144 +65,66 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b55e05f858b9c95ef41704a1285331aad2201227
+commit: https://git.buildroot.net/buildroot/commit/?id=1106a1006b692b2344c0210655bbaceb5480a776
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch migrates all the versal and zynqmp defconfigs to use the
-microblazeel-buildroot-elf arch tuple for the toolchain-bare-metal-buildroot
-toolchain.
+Now that all 3 zynqmp_kria defconfigs have bumped to xilinx_v2025.1, the kria
+specific u-boot patch can be removed.
 
 Signed-off-by: Neal Frager <neal.frager@amd.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- configs/versal_vck190_defconfig     | 2 +-
- configs/versal_vek280_defconfig     | 2 +-
- configs/versal_vpk180_defconfig     | 2 +-
- configs/zynqmp_kria_kd240_defconfig | 2 +-
- configs/zynqmp_kria_kr260_defconfig | 2 +-
- configs/zynqmp_kria_kv260_defconfig | 2 +-
- configs/zynqmp_zcu102_defconfig     | 2 +-
- configs/zynqmp_zcu104_defconfig     | 2 +-
- configs/zynqmp_zcu106_defconfig     | 2 +-
- 9 files changed, 9 insertions(+), 9 deletions(-)
+ .../0001-video-zynqmp-add-support-for-reset.patch  | 42 ----------------------
+ 1 file changed, 42 deletions(-)
 
-diff --git a/configs/versal_vck190_defconfig b/configs/versal_vck190_defconfig
-index 368133e916..5cdfcb4b96 100644
---- a/configs/versal_vck190_defconfig
-+++ b/configs/versal_vck190_defconfig
-@@ -2,7 +2,7 @@ BR2_aarch64=y
- BR2_cortex_a72=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
- BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
--BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-xilinx-elf"
-+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-buildroot-elf"
- BR2_GLOBAL_PATCH_DIR="board/xilinx/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/versal/post-build.sh"
-diff --git a/configs/versal_vek280_defconfig b/configs/versal_vek280_defconfig
-index 1d83e55499..ae33dbeb75 100644
---- a/configs/versal_vek280_defconfig
-+++ b/configs/versal_vek280_defconfig
-@@ -2,7 +2,7 @@ BR2_aarch64=y
- BR2_cortex_a72=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
- BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
--BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-xilinx-elf"
-+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-buildroot-elf"
- BR2_GLOBAL_PATCH_DIR="board/versal/vek280/patches board/xilinx/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/versal/post-build.sh"
-diff --git a/configs/versal_vpk180_defconfig b/configs/versal_vpk180_defconfig
-index 7729c655c3..f6f977ec88 100644
---- a/configs/versal_vpk180_defconfig
-+++ b/configs/versal_vpk180_defconfig
-@@ -2,7 +2,7 @@ BR2_aarch64=y
- BR2_cortex_a72=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
- BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
--BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-xilinx-elf"
-+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-buildroot-elf"
- BR2_GLOBAL_PATCH_DIR="board/xilinx/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/versal/post-build.sh"
-diff --git a/configs/zynqmp_kria_kd240_defconfig b/configs/zynqmp_kria_kd240_defconfig
-index 4ba4be861f..46473d654b 100644
---- a/configs/zynqmp_kria_kd240_defconfig
-+++ b/configs/zynqmp_kria_kd240_defconfig
-@@ -1,7 +1,7 @@
- BR2_aarch64=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
- BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
--BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-xilinx-elf"
-+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-buildroot-elf"
- BR2_GLOBAL_PATCH_DIR="board/zynqmp/patches board/zynqmp/kria/patches board/xilinx/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh"
-diff --git a/configs/zynqmp_kria_kr260_defconfig b/configs/zynqmp_kria_kr260_defconfig
-index fdd868bbb5..b18b96ba9d 100644
---- a/configs/zynqmp_kria_kr260_defconfig
-+++ b/configs/zynqmp_kria_kr260_defconfig
-@@ -1,7 +1,7 @@
- BR2_aarch64=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
- BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
--BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-xilinx-elf"
-+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-buildroot-elf"
- BR2_GLOBAL_PATCH_DIR="board/zynqmp/patches board/zynqmp/kria/patches board/xilinx/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh"
-diff --git a/configs/zynqmp_kria_kv260_defconfig b/configs/zynqmp_kria_kv260_defconfig
-index ff03f87b54..27c782dca7 100644
---- a/configs/zynqmp_kria_kv260_defconfig
-+++ b/configs/zynqmp_kria_kv260_defconfig
-@@ -1,7 +1,7 @@
- BR2_aarch64=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
- BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
--BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-xilinx-elf"
-+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-buildroot-elf"
- BR2_GLOBAL_PATCH_DIR="board/zynqmp/patches board/zynqmp/kria/patches board/xilinx/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh"
-diff --git a/configs/zynqmp_zcu102_defconfig b/configs/zynqmp_zcu102_defconfig
-index 856c1d896d..cbb30fe9ae 100644
---- a/configs/zynqmp_zcu102_defconfig
-+++ b/configs/zynqmp_zcu102_defconfig
-@@ -1,7 +1,7 @@
- BR2_aarch64=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
- BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
--BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-xilinx-elf"
-+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-buildroot-elf"
- BR2_GLOBAL_PATCH_DIR="board/zynqmp/patches board/xilinx/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh"
-diff --git a/configs/zynqmp_zcu104_defconfig b/configs/zynqmp_zcu104_defconfig
-index c21058be74..608ba15b6f 100644
---- a/configs/zynqmp_zcu104_defconfig
-+++ b/configs/zynqmp_zcu104_defconfig
-@@ -1,7 +1,7 @@
- BR2_aarch64=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
- BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
--BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-xilinx-elf"
-+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-buildroot-elf"
- BR2_GLOBAL_PATCH_DIR="board/zynqmp/patches board/xilinx/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh"
-diff --git a/configs/zynqmp_zcu106_defconfig b/configs/zynqmp_zcu106_defconfig
-index 5e13c39a1a..c659bd086a 100644
---- a/configs/zynqmp_zcu106_defconfig
-+++ b/configs/zynqmp_zcu106_defconfig
-@@ -1,7 +1,7 @@
- BR2_aarch64=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
- BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
--BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-xilinx-elf"
-+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-buildroot-elf"
- BR2_GLOBAL_PATCH_DIR="board/zynqmp/patches board/xilinx/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh"
+diff --git a/board/zynqmp/kria/patches/uboot/0001-video-zynqmp-add-support-for-reset.patch b/board/zynqmp/kria/patches/uboot/0001-video-zynqmp-add-support-for-reset.patch
+deleted file mode 100644
+index ded030b3b2..0000000000
+--- a/board/zynqmp/kria/patches/uboot/0001-video-zynqmp-add-support-for-reset.patch
++++ /dev/null
+@@ -1,42 +0,0 @@
+-From: Michal Simek <michal.simek@amd.com>
+-Date: Mon, 9 Dec 2024 12:11:50 +0100
+-Subject: [PATCH] video: zynqmp: Add support for reset
+-
+-In Kria SOM configuration DP is under reset and access to DP is causing
+-hang that's why call reset at probe to avoid this situation.
+-
+-Signed-off-by: Michal Simek <michal.simek@amd.com>
+-Link: https://lore.kernel.org/r/0504474a91a9839828aecd37f8855fd154cdf2e1.1733742708.git.michal.simek@amd.com
+-Upstream: https://github.com/u-boot/u-boot/commit/8b81010a2fe385524b58bea9116f1b6954c3d2bd
+----
+- drivers/video/zynqmp/zynqmp_dpsub.c | 6 ++++++
+- 1 file changed, 6 insertions(+)
+-
+-diff --git a/drivers/video/zynqmp/zynqmp_dpsub.c b/drivers/video/zynqmp/zynqmp_dpsub.c
+-index 76abfeac4433..52af23c3c835 100644
+---- a/drivers/video/zynqmp/zynqmp_dpsub.c
+-+++ b/drivers/video/zynqmp/zynqmp_dpsub.c
+-@@ -11,6 +11,7 @@
+- #include <dm.h>
+- #include <errno.h>
+- #include <generic-phy.h>
+-+#include <reset.h>
+- #include <stdlib.h>
+- #include <video.h>
+- #include <wait_bit.h>
+-@@ -2093,10 +2094,15 @@ static int zynqmp_dpsub_probe(struct udevice *dev)
+- {
+- 	struct video_priv *uc_priv = dev_get_uclass_priv(dev);
+- 	struct zynqmp_dpsub_priv *priv = dev_get_priv(dev);
+-+	struct reset_ctl_bulk resets;
+- 	struct clk clk;
+- 	int ret;
+- 	int mode = RGBA8888;
+- 
+-+	ret = reset_get_bulk(dev, &resets);
+-+	if (!ret)
+-+		reset_deassert_bulk(&resets);
+-+
+- 	ret = clk_get_by_name(dev, "dp_apb_clk", &clk);
+- 	if (ret < 0) {
+- 		dev_err(dev, "failed to get clock\n");
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
