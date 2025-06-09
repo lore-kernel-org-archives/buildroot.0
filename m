@@ -1,78 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 859A3C5B552
-	for <buildroot@archiver.kernel.org>; Mon,  9 Jun 2025 21:36:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5085C5B552
+	for <buildroot@archiver.kernel.org>; Mon,  9 Jun 2025 22:08:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5622F41DD8;
-	Mon,  9 Jun 2025 21:36:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6D4FF61563;
+	Mon,  9 Jun 2025 22:08:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id J_O48lKgr-Hu; Mon,  9 Jun 2025 21:36:46 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aax9ulvB9Pkh; Mon,  9 Jun 2025 22:08:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9449441DE1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 906846154F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9449441DE1;
-	Mon,  9 Jun 2025 21:36:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 906846154F;
+	Mon,  9 Jun 2025 22:08:05 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 650FECD
- for <buildroot@buildroot.org>; Mon,  9 Jun 2025 21:36:45 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 6EA52CD
+ for <buildroot@buildroot.org>; Mon,  9 Jun 2025 22:08:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 548EF41DE1
- for <buildroot@buildroot.org>; Mon,  9 Jun 2025 21:36:45 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5FCBD41E3E
+ for <buildroot@buildroot.org>; Mon,  9 Jun 2025 22:08:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MWVQdweW_5zM for <buildroot@buildroot.org>;
- Mon,  9 Jun 2025 21:36:44 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4FE7B41DD8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4FE7B41DD8
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4FE7B41DD8
- for <buildroot@buildroot.org>; Mon,  9 Jun 2025 21:36:43 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 38F2719F57E;
- Mon,  9 Jun 2025 23:36:33 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
- via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 09 Jun 2025 23:36:33 +0200
-MIME-Version: 1.0
-Date: Mon, 09 Jun 2025 23:36:33 +0200
+ id zsY9FUvqYn-t for <buildroot@buildroot.org>;
+ Mon,  9 Jun 2025 22:08:03 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B53441E33
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9B53441E33
+ for <buildroot@buildroot.org>; Mon,  9 Jun 2025 22:08:03 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 9051B87CE1; Mon,  9 Jun 2025 22:08:03 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Neal Frager <neal.frager@amd.com>
-Cc: buildroot@buildroot.org, ibai.erkiaga-elorza@amd.com,
- luca.ceresoli@bootlin.com, brandon.maier@collins.com,
- thomas.petazzoni@bootlin.com, romain.naour@smile.fr, michal.simek@amd.com
-In-Reply-To: <20250602135056.404165-1-neal.frager@amd.com>
-References: <20250602135056.404165-1-neal.frager@amd.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <8902c231686bbdd1587d44d53d707759@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1749505000;
- bh=Y89+rKoOQweSqJtO9VlDUkYqM/EZ0lQTyt80aliTIio=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=neRnXHFUwDGjJ4wLmIKVigp+sJ990N+WtWVnG9iyGyC5j+EThTJCfcQY3BWKRq6A3
- MDOHlSCcr1h2q5WYiTjLC00Q4TXbsgYsWsaHTEe3UDkVBrgtGffiQsJBf6C0k6Zk1+
- WS7RiQJhAEUbuGNfYBMae9M5FsWctZ5IXem5kEYqsQfjLqk3svvcTkeas29Z8W/phB
- Hjp7l6GeW2cutcIXFO6ejS2T2H6UCugAoAJH4XYstUxMQZZTD/YRRQfRy/MDANCs5g
- 89utZMGM2jSwG8g+6I5MIDle6xT6HuTAJ5BiRIfE/wH9JeDH411O2kB4trMdy3A2ys
- LWyIPNJeXCyag==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=neRnXHFU
-Subject: Re: [Buildroot] [PATCH v1 1/5] board/xilinx: add xilinx_v2025.1
- support
+To: buildroot@buildroot.org
+Date: Mon, 9 Jun 2025 20:23:29 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 8297f41ded82cc3be0e0cd2aef5d228cb4cc7f86
+X-Git-Newrev: b52ff3766a576752c09b21778a4c767e287e818b
+X-Patchwork-Hint: ignore
+Message-Id: <20250609220803.9051B87CE1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] boot/xilinx-embeddedsw: add
+ support for xilinx_v2025.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,55 +59,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 02/06/2025 15:50, Neal Frager via buildroot wrote:
-> Add hashes for xilinx_v2025.1 release.
-> 
-> xilinx_v2025.1 release includes:
->  - atf 2.12
->  - linux 6.12.10
->  - uboot 2025.01
-> 
-> In addition, the xilinx_v2025.1 linux kernel release tag has a Kconfig 
-> leak
-> of the CONFIG_XILINX_AIE option.  This patch adds a patch that is 
-> specific to
-> the Xilinx Linux 6.12.10 release which fixes the problem by moving the 
-> changes
-> implemented by the CONFIG_XILINX_AIE option from the exposed uapi 
-> header file
-> to the Linux internal header file.
-> 
-> The patch has been added to the board/xilinx/linux_6.12/patches 
-> directory, so
-> that it will only be applied when a user specifies they wish to build 
-> the
-> xilinx_v2025.1 release or they use a defconfig that has migrated to 
-> this
-> release.
-> 
-> Since the header file that causes the issue is not yet mainline, this 
-> patch
-> has been "upstreamed" to the Xilinx linux-xlnx repo via the AMD 
-> internal jira
-> process.
-> 
-> Upstream: internal AMD jira process
-> 
-> Signed-off-by: Neal Frager <neal.frager@amd.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=b52ff3766a576752c09b21778a4c767e287e818b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Series applied to next, thanks.
+This patch adds support for version xilinx_v2025.1 without changing the
+default version.  This way, the zynqmp and versal defconfigs can bump
+individually from xilinx_v2024.2 to xilinx_v2025.1.
 
-For info, I fixed two minor check-package errors. See:
-https://gitlab.com/buildroot.org/buildroot/-/commit/93c4e7bdbfd50d4ac1bb23ff48147728881eda7a
+In addition, new software apps were added to the Xilinx/embedddedsw repo.
+While they do not change the buildroot xilinx-embeddedsw boot package, the
+version xilinx_v2025.1 has a new license.txt file.  For this reason, this
+patch adds a hash file for the xilinx_v2025.1 version, so that both the
+default xilinx_v2024.2 and xilinx_v2025.1 versions will have independent
+hashes for their license.txt files.
 
-Best regards,
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ boot/xilinx-embeddedsw/xilinx_v2025.1/xilinx-embeddedsw.hash | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Julien.
+diff --git a/boot/xilinx-embeddedsw/xilinx_v2025.1/xilinx-embeddedsw.hash b/boot/xilinx-embeddedsw/xilinx_v2025.1/xilinx-embeddedsw.hash
+new file mode 100644
+index 0000000000..0a42bab314
+--- /dev/null
++++ b/boot/xilinx-embeddedsw/xilinx_v2025.1/xilinx-embeddedsw.hash
+@@ -0,0 +1,5 @@
++# Locally calculated
++sha256  867b7c7652f754d1a3d6edfe76e53223670e2b4c7e4144d4db1604403d68f616  xilinx-embeddedsw-xilinx_v2025.1.tar.gz
++
++# Locally calculated
++sha256  fbee87edd32cf203fdd7925f0bab15c98e2dc1e0d61e70867f1190dc4a605b12  license.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
