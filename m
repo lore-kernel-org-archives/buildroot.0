@@ -1,52 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69359C61CE8
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C687C71141
 	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 08:41:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3D94360FB8;
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6131083B62;
 	Thu, 12 Jun 2025 08:41:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mUzidR7bdmsA; Thu, 12 Jun 2025 08:41:21 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Emv8R65NGxLn; Thu, 12 Jun 2025 08:41:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 552FE61B3E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2355083B42
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 552FE61B3E;
-	Thu, 12 Jun 2025 08:41:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2355083B42;
+	Thu, 12 Jun 2025 08:41:20 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 400F21E0
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:39:54 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 3C54F1BD
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:39:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A9B1C42228
+ by smtp2.osuosl.org (Postfix) with ESMTP id A0D80420D4
  for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WwhpwKVYgq_O for <buildroot@buildroot.org>;
- Thu, 12 Jun 2025 08:38:32 +0000 (UTC)
+ id YJPM7-v9a63W for <buildroot@buildroot.org>;
+ Thu, 12 Jun 2025 08:38:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 91F5142118
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 31C3042230
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 91F5142118
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:32 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 31C3042230
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8FD5480FF9; Thu, 12 Jun 2025 08:38:32 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 2ED46811D1; Thu, 12 Jun 2025 08:38:35 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 4 Jun 2025 21:45:32 +0200
+Date: Mon, 9 Jun 2025 21:26:34 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fe73ae0905d6cf4e5c980e702e6b6a209e5b15e3
-X-Git-Newrev: 507160c281a25c30436fd185fc1ccf127e849ae6
+X-Git-Oldrev: 1106a1006b692b2344c0210655bbaceb5480a776
+X-Git-Newrev: 26528569d3075a6d0cb038c99657593a84f17270
 X-Patchwork-Hint: ignore
-Message-Id: <20250612083832.8FD5480FF9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/msmtp: bump version to 1.8.30
+Message-Id: <20250612083835.2ED46811D1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/zynqmp_zcu102_defconfig: bump to
+ xilinx-v2025.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,46 +65,79 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=507160c281a25c30436fd185fc1ccf127e849ae6
+commit: https://git.buildroot.net/buildroot/commit/?id=26528569d3075a6d0cb038c99657593a84f17270
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://marlam.de/msmtp/news/msmtp-1-8-30/
+This patch bumps the zynqmp_zcu102_defconfig to xilinx-v2025.1 which
+includes the following updates:
 
-Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+- ATF v2.12
+- Linux v6.12.10
+- PMUFW xilinx_v2025.1
+- U-Boot v2025.01
+
+The Xilinx specific Linux 6.12 patch has been added to this defconfig:
+board/xilinx/linux_6.12/patches/linux/0001-include-uapi-linux-xlnx-ai-engine.h-fix-CONFIG_XILIN.patch
+
+The zynqmp specific u-boot binman patches are also included with the
+xilinx-v2025.1 release tag, so these patches can also be removed.
+
+The following patches have thus been removed from the defconfig:
+board/zynqmp/patches/uboot/*
+
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/msmtp/msmtp.hash | 4 ++--
- package/msmtp/msmtp.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ configs/zynqmp_zcu102_defconfig | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/msmtp/msmtp.hash b/package/msmtp/msmtp.hash
-index 2aadb92700..4ac80bb1b2 100644
---- a/package/msmtp/msmtp.hash
-+++ b/package/msmtp/msmtp.hash
-@@ -1,7 +1,7 @@
- # Locally calculated after checking signature
--# https://marlam.de/msmtp/releases/msmtp-1.8.29.tar.xz.sig
-+# https://marlam.de/msmtp/releases/msmtp-1.8.30.tar.xz.sig
- # with key 2F61B4828BBA779AECB3F32703A2A4AB1E32FD34
--sha256  13a78f3c6034b33008a7f2474fdddd0deaf7db6da89d0791d3d75eae721220d7  msmtp-1.8.29.tar.xz
-+sha256  f826a3c500c4dfeed814685097cead9b2b3dca5a2ec3897967cb9032570fa9ab  msmtp-1.8.30.tar.xz
- 
- # Hash for license file:
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/msmtp/msmtp.mk b/package/msmtp/msmtp.mk
-index 9073fffe76..c391ce8204 100644
---- a/package/msmtp/msmtp.mk
-+++ b/package/msmtp/msmtp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MSMTP_VERSION = 1.8.29
-+MSMTP_VERSION = 1.8.30
- MSMTP_SITE = https://marlam.de/msmtp/releases
- MSMTP_SOURCE = msmtp-$(MSMTP_VERSION).tar.xz
- MSMTP_DEPENDENCIES = host-pkgconf
+diff --git a/configs/zynqmp_zcu102_defconfig b/configs/zynqmp_zcu102_defconfig
+index cbb30fe9ae..1d4debc8e4 100644
+--- a/configs/zynqmp_zcu102_defconfig
++++ b/configs/zynqmp_zcu102_defconfig
+@@ -1,15 +1,15 @@
+ BR2_aarch64=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
+ BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
+ BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-buildroot-elf"
+-BR2_GLOBAL_PATCH_DIR="board/zynqmp/patches board/xilinx/patches"
++BR2_GLOBAL_PATCH_DIR="board/xilinx/patches board/xilinx/linux_6.12/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS0,115200 mmcblk0p2"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_merge_6.6.70)/xlnx_rebase_v6.6_LTS_merge_6.6.70.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.12_LTS_2025.1)/xlnx_rebase_v6.12_LTS_2025.1.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-zcu102-rev1.0"
+@@ -20,13 +20,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.10_2024.2)/xlnx_rebase_v2.10_2024.2.tar.gz"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.12_2025.1)/xlnx_rebase_v2.12_2025.1.tar.gz"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="zynqmp"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2024.01_2024.2)/xlnx_rebase_v2024.01_2024.2.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2025.01_2025.1)/xlnx_rebase_v2025.01_2025.1.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynqmp_virt"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+@@ -43,6 +43,7 @@ BR2_TARGET_UBOOT_ZYNQMP_PMUFW_EMBEDDEDSW=y
+ BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/zcu102/pm_cfg_obj.c"
+ BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynqmp-zcu102-rev1.0"
+ BR2_TARGET_XILINX_EMBEDDEDSW=y
++BR2_TARGET_XILINX_EMBEDDEDSW_VERSION="xilinx_v2025.1"
+ BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW=y
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
