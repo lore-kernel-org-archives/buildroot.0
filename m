@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4C1CC71141
-	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 08:41:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2AB4EC61CE8
+	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 08:41:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 95AB140493;
-	Thu, 12 Jun 2025 08:41:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 02F8583B1A;
+	Thu, 12 Jun 2025 08:41:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dBeS1wHvmObv; Thu, 12 Jun 2025 08:41:10 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5sQJzX-TfpWR; Thu, 12 Jun 2025 08:41:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9BDCA406BE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F2CCC83B1B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9BDCA406BE;
-	Thu, 12 Jun 2025 08:41:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F2CCC83B1B;
+	Thu, 12 Jun 2025 08:41:11 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 732C51E0
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:39:46 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 8815B1E0
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:39:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D8C8D42240
+ by smtp2.osuosl.org (Postfix) with ESMTP id E767E42241
  for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EqvgugbOHpf7 for <buildroot@buildroot.org>;
- Thu, 12 Jun 2025 08:38:34 +0000 (UTC)
+ id cDqJbAqFZRKj for <buildroot@buildroot.org>;
+ Thu, 12 Jun 2025 08:38:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1FAF240077
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 912534221A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1FAF240077
+ by smtp2.osuosl.org (Postfix) with ESMTP id 912534221A
  for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1D50B817E6; Thu, 12 Jun 2025 08:38:34 +0000 (UTC)
+ id 8E4CC811D1; Thu, 12 Jun 2025 08:38:34 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 9 Jun 2025 19:02:38 +0200
+Date: Mon, 9 Jun 2025 20:21:07 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6646d0b90f9a70240103b8dff9779a905a81c10e
-X-Git-Newrev: a0a92928dbbfa17e054208c6156e65b70ac5380b
+X-Git-Oldrev: f91854dfaf38d3ee5f5a24541c3138e956a6c3f4
+X-Git-Newrev: 93c4e7bdbfd50d4ac1bb23ff48147728881eda7a
 X-Patchwork-Hint: ignore
-Message-Id: <20250612083834.1D50B817E6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] boot/xilinx-prebuilt: add segmented config
- support
+Message-Id: <20250612083834.8E4CC811D1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] board/xilinx: add xilinx_v2025.1 support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,124 +64,204 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a0a92928dbbfa17e054208c6156e65b70ac5380b
+commit: https://git.buildroot.net/buildroot/commit/?id=93c4e7bdbfd50d4ac1bb23ff48147728881eda7a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-AMD has created a new segmented configuration for Versal products.  It splits
-the Vivado hardware design into two PDI files, one containing the minimal
-required configuration for the DDR and booting the processors, and a second PDI
-file which contains the rest of the FPGA design and can be loaded at run-time
-via U-boot or Linux.
+Add hashes for xilinx_v2025.1 release.
 
-The file names generated when using the Vivado Segmented Configuration are as
-follows:
+xilinx_v2025.1 release includes:
+ - atf 2.12
+ - linux 6.12.10
+ - uboot 2025.01
 
-<design>_boot.pdi - Minimal DDR and PS config for booting
-<design>_pld.pdi - Remainder of FPGA design to be loaded at run-time
+In addition, the xilinx_v2025.1 linux kernel release tag has a Kconfig leak
+of the CONFIG_XILINX_AIE option.  This patch adds a patch that is specific to
+the Xilinx Linux 6.12.10 release which fixes the problem by moving the changes
+implemented by the CONFIG_XILINX_AIE option from the exposed uapi header file
+to the Linux internal header file.
 
-Since two PDI files will be included in the XSA file when using Segmented
-Configuration, the xilinx-prebuilt package needs to be updated to support
-this feature.
+The patch has been added to the board/xilinx/linux_6.12/patches directory, so
+that it will only be applied when a user specifies they wish to build the
+xilinx_v2025.1 release or they use a defconfig that has migrated to this
+release.
 
-For Buildroot purposes, the <design>_boot.pdi is the file that needs to be
-included in the boot.bin for booting the processors, so this patch checks
-for a file named *boot*.pdi which will indicate that Segmented Configuration
-is being used and will make sure to use the <design>_boot.pdi file and not
-the <design>_pld.pdi file when generating the boot.bin image.
+Since the header file that causes the issue is not yet mainline, this patch
+has been "upstreamed" to the Xilinx linux-xlnx repo via the AMD internal jira
+process.
 
-If no pdi files contain the word "boot" in the filename, it can be assumed
-that Segmented Configuration is not being used, so the single file *.pdi
-method is the appropriate one for this case, and this patch is thus
-backwards compatible with prior designs not using Segmented Configuration.
-
-Also, Segmented Configuration is going to become the default mode for Versal
-products, so the xilinx-prebuilt github location will also soon have two PDI
-files for each board.  For this reason, this patch is also handling Segmented
-Configuration for files downloaded from the xilinx-prebuilt repo.
-
-For further information about the AMD Segmented Configuration, please see the
-github tutorial below.
-
-https://github.com/Xilinx/Vivado-Design-Tutorials/tree/2024.2/Versal/Boot_and_Config/Segmented_Configuration
+Upstream: internal AMD jira process
 
 Signed-off-by: Neal Frager <neal.frager@amd.com>
 Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+[Julien: fix check-package errors:
+ - remove numbering in patch subject
+ - add "Upstream:" tag in patch
+]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- boot/xilinx-prebuilt/xilinx-prebuilt.mk | 36 ++++++++++++++++++++++++---------
- 1 file changed, 26 insertions(+), 10 deletions(-)
+ ...i-linux-xlnx-ai-engine.h-fix-CONFIG_XILIN.patch | 127 +++++++++++++++++++++
+ .../arm-trusted-firmware/arm-trusted-firmware.hash |   1 +
+ board/xilinx/patches/linux/linux.hash              |   1 +
+ board/xilinx/patches/uboot/uboot.hash              |   1 +
+ 4 files changed, 130 insertions(+)
 
-diff --git a/boot/xilinx-prebuilt/xilinx-prebuilt.mk b/boot/xilinx-prebuilt/xilinx-prebuilt.mk
-index 72273f0d2f..4d1dfc5ca0 100644
---- a/boot/xilinx-prebuilt/xilinx-prebuilt.mk
-+++ b/boot/xilinx-prebuilt/xilinx-prebuilt.mk
-@@ -28,9 +28,6 @@ XILINX_PREBUILT_BOARD = $(call qstrip,$(BR2_TARGET_XILINX_PREBUILT_BOARD))
- XILINX_PREBUILT_BOARD_DIR = $(@D)/$(XILINX_PREBUILT_BOARD)-$(XILINX_PREBUILT_FAMILY)
- 
- ifeq ($(BR2_TARGET_XILINX_PREBUILT_VERSAL),y)
--# We need the *.pdi glob, because the file has different names for the
--# different boards, but there is only one, and it has to be named
--# vpl_gen_fixed.pdi when installed.
- ifeq ($(BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA),y)
- XILINX_PREBUILT_PLM = $(@D)/pdi_files/gen_files/plm.elf
- # Unlike the psmfw.elf file for Xilinx development boards,
-@@ -39,11 +36,33 @@ XILINX_PREBUILT_PLM = $(@D)/pdi_files/gen_files/plm.elf
- # so to support current and future AMD Vivado versions, the filename
- # psm*fw.elf is used.
- XILINX_PREBUILT_PSMFW = $(@D)/pdi_files/static_files/psm*fw.elf
--XILINX_PREBUILT_PDI = $(@D)/*.pdi
-+# We need the *.pdi glob, because the file has different names for the
-+# different boards, and it has to be named vpl_gen_fixed.pdi when installed.
-+# If Segmented Configuration is used, there will be two pdi files and we need
-+# the file that has "_boot.pdi" in the filename.
-+define XILINX_PREBUILT_INSTALL_VERSAL_XSA_BOOT_PDI
-+	$(INSTALL) -D -m 0644 \
-+		$(if $(wildcard $(@D)/*_boot.pdi), \
-+			$(@D)/*_boot.pdi, \
-+			$(@D)/*.pdi \
-+		) \
-+		$(BINARIES_DIR)/vpl_gen_fixed.pdi
-+endef
- else # BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA
- XILINX_PREBUILT_PLM = $(XILINX_PREBUILT_BOARD_DIR)/plm.elf
- XILINX_PREBUILT_PSMFW = $(XILINX_PREBUILT_BOARD_DIR)/psmfw.elf
--XILINX_PREBUILT_PDI = $(XILINX_PREBUILT_BOARD_DIR)/*.pdi
-+# We need the *.pdi glob, because the file has different names for the
-+# different boards, and it has to be named vpl_gen_fixed.pdi when installed.
-+# If Segmented Configuration is used, there will be two pdi files and we need
-+# the file that has "_boot.pdi" in the filename.
-+define XILINX_PREBUILT_INSTALL_VERSAL_BOOT_PDI
-+	$(INSTALL) -D -m 0644 \
-+		$(if $(wildcard $(XILINX_PREBUILT_BOARD_DIR)/*_boot.pdi), \
-+			$(XILINX_PREBUILT_BOARD_DIR)/*_boot.pdi, \
-+			$(XILINX_PREBUILT_BOARD_DIR)/*.pdi \
-+		) \
-+		$(BINARIES_DIR)/vpl_gen_fixed.pdi
-+endef
- endif # BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA
- 
- ifneq ($(BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM),y)
-@@ -60,10 +79,6 @@ define XILINX_PREBUILT_INSTALL_VERSAL_PSMFW
- endef
- endif # !BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PSMFW
- 
--define XILINX_PREBUILT_INSTALL_VERSAL_PDI
--	$(INSTALL) -D -m 0644 $(XILINX_PREBUILT_PDI) \
--		$(BINARIES_DIR)/vpl_gen_fixed.pdi
--endef
- else # BR2_TARGET_XILINX_PREBUILT_VERSAL
- ifneq ($(BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW),y)
- define XILINX_PREBUILT_INSTALL_ZYNQMP_PMUFW
-@@ -76,7 +91,8 @@ endif # BR2_TARGET_XILINX_PREBUILT_VERSAL
- define XILINX_PREBUILT_INSTALL_IMAGES_CMDS
- 	$(XILINX_PREBUILT_INSTALL_VERSAL_PLM)
- 	$(XILINX_PREBUILT_INSTALL_VERSAL_PSMFW)
--	$(XILINX_PREBUILT_INSTALL_VERSAL_PDI)
-+	$(XILINX_PREBUILT_INSTALL_VERSAL_BOOT_PDI)
-+	$(XILINX_PREBUILT_INSTALL_VERSAL_XSA_BOOT_PDI)
- 	$(XILINX_PREBUILT_INSTALL_ZYNQMP_PMUFW)
- endef
- 
+diff --git a/board/xilinx/linux_6.12/patches/linux/0001-include-uapi-linux-xlnx-ai-engine.h-fix-CONFIG_XILIN.patch b/board/xilinx/linux_6.12/patches/linux/0001-include-uapi-linux-xlnx-ai-engine.h-fix-CONFIG_XILIN.patch
+new file mode 100644
+index 0000000000..e9dfee9f97
+--- /dev/null
++++ b/board/xilinx/linux_6.12/patches/linux/0001-include-uapi-linux-xlnx-ai-engine.h-fix-CONFIG_XILIN.patch
+@@ -0,0 +1,127 @@
++From 333678d7b9edc29e8148411d48f70950b1b614c1 Mon Sep 17 00:00:00 2001
++From: Neal Frager <neal.frager@amd.com>
++Date: Mon, 2 Jun 2025 11:07:03 +0100
++Subject: [PATCH] include/uapi/linux/xlnx-ai-engine.h: fix
++ CONFIG_XILINX_AIE leak
++
++Linux Kconfig options should not be exposed to user space.  This patch fixes
++a Linux kernel leak of the CONFIG_XILINX_AIE option by moving the changes
++implemented by the CONFIG_XILINX_AIE from the uapi header file to the local
++Linux kernel header file.
++
++Upstream: internal AMD jira process
++Signed-off-by: Neal Frager <neal.frager@amd.com>
++---
++ include/linux/xlnx-ai-engine.h      | 37 +++++++++++++++++++++++++
++ include/uapi/linux/xlnx-ai-engine.h | 42 -----------------------------
++ 2 files changed, 37 insertions(+), 42 deletions(-)
++
++diff --git a/include/linux/xlnx-ai-engine.h b/include/linux/xlnx-ai-engine.h
++index 44a1e40ef9b8..10905dc84ae9 100644
++--- a/include/linux/xlnx-ai-engine.h
+++++ b/include/linux/xlnx-ai-engine.h
++@@ -171,6 +171,13 @@ static inline u32 aie_get_error_category(struct aie_error *err)
++ 	return err->category;
++ }
++ 
+++int aie_partition_write_privileged_mem(struct device *dev, size_t offset, size_t len, void *data);
+++int aie_partition_read_privileged_mem(struct device *dev, size_t offset, size_t len, void *data);
+++bool aie_partition_check_noc_aximm(struct device *dev, struct aie_location *loc);
+++int aie_partition_check_uc_aximm(struct device *dev, struct aie_location *loc);
+++int aie_partition_uc_zeroize_mem(struct device *dev, struct aie_location *loc, u32 regval);
+++int aie_load_cert(struct device *dev, unsigned char *elf_addr);
+++
++ #else
++ static inline bool aie_partition_is_available(struct aie_partition_req *req)
++ {
++@@ -271,5 +278,35 @@ static inline int aie_part_rscmgr_set_static_range(struct device *dev,
++ 	return -EINVAL;
++ }
++ 
+++int aie_partition_write_privileged_mem(struct device *dev, size_t offset, size_t len, void *data)
+++{
+++	return -EINVAL;
+++}
+++
+++int aie_partition_read_privileged_mem(struct device *dev, size_t offset, size_t len, void *data)
+++{
+++	return -EINVAL;
+++}
+++
+++bool aie_partition_check_noc_aximm(struct device *dev, struct aie_location *loc)
+++{
+++	return false;
+++}
+++
+++int aie_partition_check_uc_aximm(struct device *dev, struct aie_location *loc)
+++{
+++	return 0;
+++}
+++
+++int aie_partition_uc_zeroize_mem(struct device *dev, struct aie_location *loc, u32 regval)
+++{
+++	return -EINVAL;
+++}
+++
+++int aie_load_cert(struct device *dev, unsigned char *elf_addr)
+++{
+++	return -EINVAL;
+++}
+++
++ #endif /* CONFIG_XILINX_AIE */
++ #endif
++diff --git a/include/uapi/linux/xlnx-ai-engine.h b/include/uapi/linux/xlnx-ai-engine.h
++index 424c5f4c4097..1680aed8ad85 100644
++--- a/include/uapi/linux/xlnx-ai-engine.h
+++++ b/include/uapi/linux/xlnx-ai-engine.h
++@@ -781,47 +781,5 @@ struct aie_rsc_user_stat_array {
++  */
++ #define AIE_UPDATE_SHIMDMA_DMABUF_BD_ADDR_IOCTL	_IOW(AIE_IOCTL_BASE, 0x1e, \
++ 						struct aie_dmabuf_bd_args)
++-#if IS_ENABLED(CONFIG_XILINX_AIE)
++-
++-int aie_partition_write_privileged_mem(struct device *dev, size_t offset, size_t len, void *data);
++-int aie_partition_read_privileged_mem(struct device *dev, size_t offset, size_t len, void *data);
++-bool aie_partition_check_noc_aximm(struct device *dev, struct aie_location *loc);
++-int aie_partition_check_uc_aximm(struct device *dev, struct aie_location *loc);
++-int aie_partition_uc_zeroize_mem(struct device *dev, struct aie_location *loc, u32 regval);
++-int aie_load_cert(struct device *dev, unsigned char *elf_addr);
++-
++-#else /* IS_ENABLED(CONFIG_XILINX_AIE) */
++-
++-int aie_partition_write_privileged_mem(struct device *dev, size_t offset, size_t len, void *data)
++-{
++-	return -EINVAL;
++-}
++-
++-int aie_partition_read_privileged_mem(struct device *dev, size_t offset, size_t len, void *data)
++-{
++-	return -EINVAL;
++-}
++-
++-bool aie_partition_check_noc_aximm(struct device *dev, struct aie_location *loc)
++-{
++-	return false;
++-}
++-
++-int aie_partition_check_uc_aximm(struct device *dev, struct aie_location *loc)
++-{
++-	return 0;
++-}
++-
++-int aie_partition_uc_zeroize_mem(struct device *dev, struct aie_location *loc, u32 regval)
++-{
++-	return -EINVAL;
++-}
++-
++-int aie_load_cert(struct device *dev, unsigned char *elf_addr)
++-{
++-	return -EINVAL;
++-}
++-
++-#endif /* IS_ENABLED(CONFIG_XILINX_AIE) */
++ 
++ #endif
++-- 
++2.25.1
++
+diff --git a/board/xilinx/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/xilinx/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+index 15cceebb80..2ef3825bb9 100644
+--- a/board/xilinx/patches/arm-trusted-firmware/arm-trusted-firmware.hash
++++ b/board/xilinx/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+ sha256  a45390c9e1d584a389abd37ee49dce3f8d3b41718b1fd7c977608b5387a38955  xlnx_rebase_v2.10_2024.2.tar.gz
++sha256  4d16661f367adb8713113acb420a1ad5f611ce6a309e98005a8ea3273511f03d  xlnx_rebase_v2.12_2025.1.tar.gz
+diff --git a/board/xilinx/patches/linux/linux.hash b/board/xilinx/patches/linux/linux.hash
+index a970a878c2..0022390aa6 100644
+--- a/board/xilinx/patches/linux/linux.hash
++++ b/board/xilinx/patches/linux/linux.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+ sha256  b726226e8784d92049190f19768d393eccf3ad111c7a2e685bb29cfa1bdf1f70  xlnx_rebase_v6.6_LTS_merge_6.6.70.tar.gz
++sha256  25795c354f30a3358506ab02deeac99e7f79850804c52d6c3d5539fd310f0491  xlnx_rebase_v6.12_LTS_2025.1.tar.gz
+diff --git a/board/xilinx/patches/uboot/uboot.hash b/board/xilinx/patches/uboot/uboot.hash
+index de0e6adad1..56ee166378 100644
+--- a/board/xilinx/patches/uboot/uboot.hash
++++ b/board/xilinx/patches/uboot/uboot.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+ sha256  f1a86ccdbe60bac89177a24bbfd56fc6e8e67823669f0997de563c3cc0ea4dd1  xlnx_rebase_v2024.01_2024.2.tar.gz
++sha256  b86d6f07d16a83ed0bdbd9b9439e099afc87ba7dfb77246e2472183848e2ea93  xlnx_rebase_v2025.01_2025.1.tar.gz
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
