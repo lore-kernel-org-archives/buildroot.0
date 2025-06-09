@@ -1,52 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13B47C71143
-	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 08:41:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD6DBC61CE8
+	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 08:41:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E1AC283A8A;
-	Thu, 12 Jun 2025 08:41:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 576FB612F3;
+	Thu, 12 Jun 2025 08:41:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pmz9ZQ2HIW7z; Thu, 12 Jun 2025 08:41:07 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Fa9Q4c2cpI8w; Thu, 12 Jun 2025 08:41:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE7DB82F13
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E6B8F61B2D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CE7DB82F13;
-	Thu, 12 Jun 2025 08:41:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E6B8F61B2D;
+	Thu, 12 Jun 2025 08:41:08 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 4F2261E0
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:39:44 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 62EC91E0
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:39:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B1D494223D
+ by smtp2.osuosl.org (Postfix) with ESMTP id C7D134223F
  for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id k8vxdCD_bcBx for <buildroot@buildroot.org>;
- Thu, 12 Jun 2025 08:38:33 +0000 (UTC)
+ id Zx89wHbMdJ5e for <buildroot@buildroot.org>;
+ Thu, 12 Jun 2025 08:38:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 876F8421B6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9ED744221D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 876F8421B6
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:33 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9ED744221D
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 08:38:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 852CA811D1; Thu, 12 Jun 2025 08:38:33 +0000 (UTC)
+ id 9CADB805F4; Thu, 12 Jun 2025 08:38:34 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 8 Jun 2025 15:27:59 +0200
+Date: Mon, 9 Jun 2025 20:21:07 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 22798b5978de5fc32a1111da6d8f321fae95282d
-X-Git-Newrev: eb21ab5c712c751356dda716ae2da91293e09471
+X-Git-Oldrev: 93c4e7bdbfd50d4ac1bb23ff48147728881eda7a
+X-Git-Newrev: 7794d36c0600f3d9bc891ddb0b70627a18eb079a
 X-Patchwork-Hint: ignore
-Message-Id: <20250612083833.852CA811D1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/whois: bump to version 5.6.2
+Message-Id: <20250612083834.9CADB805F4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/zynq_zc702_defconfig: bump to
+ xilinx-v2025.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,48 +65,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eb21ab5c712c751356dda716ae2da91293e09471
+commit: https://git.buildroot.net/buildroot/commit/?id=7794d36c0600f3d9bc891ddb0b70627a18eb079a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog:
-https://github.com/rfc1036/whois/blob/v5.6.2/debian/changelog
+This patch bumps the zynq_zc702_defconfig to xilinx-v2025.1 which includes
+the following updates:
 
-Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
+- Linux v6.12.10
+- U-Boot v2025.01
+
+The xilinx-v2025.1 Linux 6.12.10 release tag requires a patch to fix a
+leak of the Kconfig CONFIG_XILINX_AIE, so this patch is now included.
+
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/whois/whois.hash | 6 +++---
- package/whois/whois.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ configs/zynq_zc702_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/whois/whois.hash b/package/whois/whois.hash
-index 6b1a3f4cc6..49ded707b8 100644
---- a/package/whois/whois.hash
-+++ b/package/whois/whois.hash
-@@ -1,6 +1,6 @@
--# From https://snapshot.debian.org/archive/debian/20250527T144819Z/pool/main/w/whois/whois_5.6.1.dsc
--sha1  4c10bcc05b610bfd5a5c9c4465c97cf117826c2b  whois_5.6.1.tar.xz
--sha256  86b4d99d1ea219d2eaa20257b9c549642f101393b4b9369c391370a39341fc32  whois_5.6.1.tar.xz
-+# From https://snapshot.debian.org/archive/debian/20250607T082433Z/pool/main/w/whois/whois_5.6.2.dsc
-+sha1  6095840107fcaf5339a7c9840c153ad3f29a7ffc  whois_5.6.2.tar.xz
-+sha256  7fbcbc00b7aa321ac1af28a85d86d3ce7b11db1d4a2317b25407be04e506ead0  whois_5.6.2.tar.xz
- 
- # Hash for license file:
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/whois/whois.mk b/package/whois/whois.mk
-index a6ed54ab89..9451aa195d 100644
---- a/package/whois/whois.mk
-+++ b/package/whois/whois.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--WHOIS_VERSION = 5.6.1
--WHOIS_SITE = https://snapshot.debian.org/archive/debian/20250527T144819Z/pool/main/w/whois
-+WHOIS_VERSION = 5.6.2
-+WHOIS_SITE = https://snapshot.debian.org/archive/debian/20250607T082433Z/pool/main/w/whois
- WHOIS_SOURCE = whois_$(WHOIS_VERSION).tar.xz
- WHOIS_DEPENDENCIES = \
- 	host-pkgconf \
+diff --git a/configs/zynq_zc702_defconfig b/configs/zynq_zc702_defconfig
+index 4c6361a9b7..ac3304f293 100644
+--- a/configs/zynq_zc702_defconfig
++++ b/configs/zynq_zc702_defconfig
+@@ -2,14 +2,14 @@ BR2_arm=y
+ BR2_cortex_a9=y
+ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
+-BR2_GLOBAL_PATCH_DIR="board/xilinx/patches"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
++BR2_GLOBAL_PATCH_DIR="board/xilinx/patches board/xilinx/linux_6.12/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynq/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynq/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_merge_6.6.70)/xlnx_rebase_v6.6_LTS_merge_6.6.70.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.12_LTS_2025.1)/xlnx_rebase_v6.12_LTS_2025.1.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
+ BR2_LINUX_KERNEL_UIMAGE=y
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
+@@ -22,7 +22,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2024.01_2024.2)/xlnx_rebase_v2024.01_2024.2.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2025.01_2025.1)/xlnx_rebase_v2025.01_2025.1.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynq_virt"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
