@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B6B5C5B552
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F9E7C677C4
 	for <buildroot@archiver.kernel.org>; Mon,  9 Jun 2025 22:08:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CA53441E51;
-	Mon,  9 Jun 2025 22:08:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 165116156E;
+	Mon,  9 Jun 2025 22:08:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tg7P6Kx-C1S1; Mon,  9 Jun 2025 22:08:13 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 13CqAw3Nm5yJ; Mon,  9 Jun 2025 22:08:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 199F641E42
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 35ECF61571
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 199F641E42;
-	Mon,  9 Jun 2025 22:08:13 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id E1290CD
- for <buildroot@buildroot.org>; Mon,  9 Jun 2025 22:08:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 35ECF61571;
+	Mon,  9 Jun 2025 22:08:15 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id E97B91A4
+ for <buildroot@buildroot.org>; Mon,  9 Jun 2025 22:08:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AF5154008B
- for <buildroot@buildroot.org>; Mon,  9 Jun 2025 22:08:04 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id DB71380EEE
+ for <buildroot@buildroot.org>; Mon,  9 Jun 2025 22:08:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3zEh5ObACoPZ for <buildroot@buildroot.org>;
- Mon,  9 Jun 2025 22:08:04 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BELFsPvH8gzZ for <buildroot@buildroot.org>;
+ Mon,  9 Jun 2025 22:08:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EF1D541EB7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 21E8780F1F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id EF1D541EB7
- for <buildroot@buildroot.org>; Mon,  9 Jun 2025 22:08:03 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 21E8780F1F
+ for <buildroot@buildroot.org>; Mon,  9 Jun 2025 22:08:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E27A987CE3; Mon,  9 Jun 2025 22:08:03 +0000 (UTC)
+ id F3F7587CE3; Mon,  9 Jun 2025 22:08:06 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 9 Jun 2025 20:31:00 +0200
+Date: Mon, 9 Jun 2025 21:25:03 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 7f0a8fc51e10a1ee36c10c357beffa43e6a250bf
-X-Git-Newrev: 95d9900266683130cb1005a45bd7d73e342fb995
+X-Git-Oldrev: 6c95df7404b04b324a631ddbaa4dc7bc605666e8
+X-Git-Newrev: 1106a1006b692b2344c0210655bbaceb5480a776
 X-Patchwork-Hint: ignore
-Message-Id: <20250609220803.E27A987CE3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- configs/zynqmp_kria_kd240_defconfig: bump to xilinx-v2025.1
+Message-Id: <20250609220806.F3F7587CE3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] board/zynqmp/kria: remove kria
+ specific u-boot patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,86 +65,66 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=95d9900266683130cb1005a45bd7d73e342fb995
+commit: https://git.buildroot.net/buildroot/commit/?id=1106a1006b692b2344c0210655bbaceb5480a776
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This patch bumps the zynqmp_kria_kd240_defconfig to xilinx-v2025.1 which
-includes the following updates:
-
-- ATF v2.12
-- Linux v6.12.10
-- PMUFW xilinx_v2025.1
-- U-Boot v2025.01
-
-The Xilinx specific Linux 6.12 patch has been added to this defconfig:
-board/xilinx/linux_6.12/patches/linux/0001-include-uapi-linux-xlnx-ai-engine.h-fix-CONFIG_XILIN.patch
-
-The kria specific u-boot patch is no longer necessary, as it is
-included with the xilinx-v2025.1 release tag.
-
-The following patch has thus been removed from the defconfig:
-board/zynqmp/kria/patches/uboot/0001-video-zynqmp-add-support-for-reset.patch
-
-The zynqmp specific u-boot binman patches are also included with the
-xilinx-v2025.1 release tag, so these patches can also be removed.
-
-The following patches have thus been removed from the defconfig:
-board/zynqmp/patches/uboot/*
+Now that all 3 zynqmp_kria defconfigs have bumped to xilinx_v2025.1, the kria
+specific u-boot patch can be removed.
 
 Signed-off-by: Neal Frager <neal.frager@amd.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- configs/zynqmp_kria_kd240_defconfig | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ .../0001-video-zynqmp-add-support-for-reset.patch  | 42 ----------------------
+ 1 file changed, 42 deletions(-)
 
-diff --git a/configs/zynqmp_kria_kd240_defconfig b/configs/zynqmp_kria_kd240_defconfig
-index 46473d654b..8e7034105f 100644
---- a/configs/zynqmp_kria_kd240_defconfig
-+++ b/configs/zynqmp_kria_kd240_defconfig
-@@ -1,15 +1,15 @@
- BR2_aarch64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
- BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-buildroot-elf"
--BR2_GLOBAL_PATCH_DIR="board/zynqmp/patches board/zynqmp/kria/patches board/xilinx/patches"
-+BR2_GLOBAL_PATCH_DIR="board/xilinx/patches board/xilinx/linux_6.12/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS1,115200 sda2"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_merge_6.6.70)/xlnx_rebase_v6.6_LTS_merge_6.6.70.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.12_LTS_2025.1)/xlnx_rebase_v6.12_LTS_2025.1.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-smk-k24-revA-sck-kd-g-revA"
-@@ -20,14 +20,14 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.10_2024.2)/xlnx_rebase_v2.10_2024.2.tar.gz"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.12_2025.1)/xlnx_rebase_v2.12_2025.1.tar.gz"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="zynqmp"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="ZYNQMP_CONSOLE=cadence1"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2024.01_2024.2)/xlnx_rebase_v2024.01_2024.2.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2025.01_2025.1)/xlnx_rebase_v2025.01_2025.1.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynqmp_kria"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-@@ -44,6 +44,7 @@ BR2_TARGET_UBOOT_ZYNQMP_PMUFW_EMBEDDEDSW=y
- BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/kria/kd240/pm_cfg_obj.c"
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynqmp-smk-k24-revA"
- BR2_TARGET_XILINX_EMBEDDEDSW=y
-+BR2_TARGET_XILINX_EMBEDDEDSW_VERSION="xilinx_v2025.1"
- BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW=y
- BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW_USER_CFLAGS="-DK24_SOM"
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
+diff --git a/board/zynqmp/kria/patches/uboot/0001-video-zynqmp-add-support-for-reset.patch b/board/zynqmp/kria/patches/uboot/0001-video-zynqmp-add-support-for-reset.patch
+deleted file mode 100644
+index ded030b3b2..0000000000
+--- a/board/zynqmp/kria/patches/uboot/0001-video-zynqmp-add-support-for-reset.patch
++++ /dev/null
+@@ -1,42 +0,0 @@
+-From: Michal Simek <michal.simek@amd.com>
+-Date: Mon, 9 Dec 2024 12:11:50 +0100
+-Subject: [PATCH] video: zynqmp: Add support for reset
+-
+-In Kria SOM configuration DP is under reset and access to DP is causing
+-hang that's why call reset at probe to avoid this situation.
+-
+-Signed-off-by: Michal Simek <michal.simek@amd.com>
+-Link: https://lore.kernel.org/r/0504474a91a9839828aecd37f8855fd154cdf2e1.1733742708.git.michal.simek@amd.com
+-Upstream: https://github.com/u-boot/u-boot/commit/8b81010a2fe385524b58bea9116f1b6954c3d2bd
+----
+- drivers/video/zynqmp/zynqmp_dpsub.c | 6 ++++++
+- 1 file changed, 6 insertions(+)
+-
+-diff --git a/drivers/video/zynqmp/zynqmp_dpsub.c b/drivers/video/zynqmp/zynqmp_dpsub.c
+-index 76abfeac4433..52af23c3c835 100644
+---- a/drivers/video/zynqmp/zynqmp_dpsub.c
+-+++ b/drivers/video/zynqmp/zynqmp_dpsub.c
+-@@ -11,6 +11,7 @@
+- #include <dm.h>
+- #include <errno.h>
+- #include <generic-phy.h>
+-+#include <reset.h>
+- #include <stdlib.h>
+- #include <video.h>
+- #include <wait_bit.h>
+-@@ -2093,10 +2094,15 @@ static int zynqmp_dpsub_probe(struct udevice *dev)
+- {
+- 	struct video_priv *uc_priv = dev_get_uclass_priv(dev);
+- 	struct zynqmp_dpsub_priv *priv = dev_get_priv(dev);
+-+	struct reset_ctl_bulk resets;
+- 	struct clk clk;
+- 	int ret;
+- 	int mode = RGBA8888;
+- 
+-+	ret = reset_get_bulk(dev, &resets);
+-+	if (!ret)
+-+		reset_deassert_bulk(&resets);
+-+
+- 	ret = clk_get_by_name(dev, "dp_apb_clk", &clk);
+- 	if (ret < 0) {
+- 		dev_err(dev, "failed to get clock\n");
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
