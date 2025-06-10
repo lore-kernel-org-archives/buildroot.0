@@ -1,102 +1,102 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B41CC5B552
-	for <buildroot@archiver.kernel.org>; Tue, 10 Jun 2025 12:29:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96CC1C5B543
+	for <buildroot@archiver.kernel.org>; Tue, 10 Jun 2025 12:29:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 484F460652;
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2D058417D4;
 	Tue, 10 Jun 2025 12:29:44 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id J09QB7Kbnnbx; Tue, 10 Jun 2025 12:29:43 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5EF6760DA3
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5EF6760DA3;
-	Tue, 10 Jun 2025 12:29:43 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id C0BBF1F2
- for <buildroot@buildroot.org>; Tue, 10 Jun 2025 12:29:40 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A748841BF0
- for <buildroot@buildroot.org>; Tue, 10 Jun 2025 12:29:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tju-2XOu8dH3 for <buildroot@buildroot.org>;
+ id oP6qA_-t4PWf; Tue, 10 Jun 2025 12:29:42 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CBB9741BF0
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id CBB9741BF0;
+	Tue, 10 Jun 2025 12:29:40 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 08199183
+ for <buildroot@buildroot.org>; Tue, 10 Jun 2025 12:29:40 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id E3585401FE
+ for <buildroot@buildroot.org>; Tue, 10 Jun 2025 12:29:39 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aJlmrY-uWqHy for <buildroot@buildroot.org>;
  Tue, 10 Jun 2025 12:29:39 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::133; helo=mail-lf1-x133.google.com;
+ client-ip=2a00:1450:4864:20::131; helo=mail-lf1-x131.google.com;
  envelope-from=roykollensvendsen@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 70E12418E4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 70E12418E4
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com
- [IPv6:2a00:1450:4864:20::133])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 70E12418E4
- for <buildroot@buildroot.org>; Tue, 10 Jun 2025 12:29:37 +0000 (UTC)
-Received: by mail-lf1-x133.google.com with SMTP id
- 2adb3069b0e04-54e98f73850so5765481e87.1
- for <buildroot@buildroot.org>; Tue, 10 Jun 2025 05:29:37 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D751640139
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D751640139
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com
+ [IPv6:2a00:1450:4864:20::131])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D751640139
+ for <buildroot@buildroot.org>; Tue, 10 Jun 2025 12:29:38 +0000 (UTC)
+Received: by mail-lf1-x131.google.com with SMTP id
+ 2adb3069b0e04-5532a30ac45so4994427e87.0
+ for <buildroot@buildroot.org>; Tue, 10 Jun 2025 05:29:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1749558575; x=1750163375;
+ d=1e100.net; s=20230601; t=1749558577; x=1750163377;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=/NnCyXL6ZuS7oGZHZmLx2EdummGpPdyILVGBigG1f6U=;
- b=tN10DZjDa7J2X0uwaKZLjBchpNAdf3WE+4E187Q0bFCx7u7fvktx2Lq70Vi9FhY8XD
- KZBXkXbWm/y1HNIv5anVhERPzPmfEQirC2dcuxur855FmftrSoGsLqbv1rxH6VKIEh8c
- yXHUaJJZ0T+lowT1qFTTG9eHxhS7XFJXWrsfIhryTR8ddphRFGhbs7x+G4Lepq57HqQL
- 2g7OxVCU05PXMKeHyA31rKvjgIUg5MFuX5+cZ2KLbHr0JHxvxBOTJ3dKGLKxKrdOtrdH
- ZsSnzHyLybMOeFfXgRIz1MwC1KVbaGeUTPAzeq8TwL2jx5pxqtBoQVpmEuMKh/Oo+AY6
- Rq6w==
-X-Gm-Message-State: AOJu0YzaCcbOt8zudU4fODRGGCBh0w3MNH9pQiIlO7kGFID6fSCAfw61
- 1eQ7Qsck0cGMCn/VWkACW2eLojY4NXw+lPDeq3Asv1mZrzKo9k6j98ljw1Dlag==
-X-Gm-Gg: ASbGncu6ksEcxXmCIDPn4i0y9VTgIZtyRCflNFqIYUKEGsjhpm/74aWKXDfNzdCgla9
- n3XeqopH4+ZdYvI+67PFMU+XP5PynTgUelM/5xXDp3AaHVGtBj0n5OSj37xpcXsd9OSyRFWPg+C
- 1y9G3LXb4dyU63vxhtYgiw12nuXRcYtHE2Fte7uHWcsQVRKtu0P7S//b8LYV+Y3A8X0L3m+VrQu
- qN/yhTKcv0045Bdy8xw9RryfotIHAUj4a3xwOZeiwFkJkqxYWYjstPNfaBtBZPUbsobYVrqYV7B
- TYIBPZ5te9Vt7UXm56IBXA9DO5Hzq2Gkpb010iaUQNnvuYyA7f1sQ+47yac/6WiP6ZUvOQx3mnc
- 3ZpIzD9y8F8/xe5Ll
-X-Google-Smtp-Source: AGHT+IFVXdiFtJs3cjQRUdul2XOblPoEYO0XjfI3jqTr/Mw3vSNsWqHW5QSlGhGpLjzxbJ2BhYdkkw==
-X-Received: by 2002:a05:6512:3f17:b0:553:2e76:710f with SMTP id
- 2adb3069b0e04-55366c33751mr4107892e87.53.1749558574840; 
- Tue, 10 Jun 2025 05:29:34 -0700 (PDT)
+ bh=gdinZPqeSYhPCKockLHChmzVBZUYlOLCe5slzCSf2nw=;
+ b=EoeuODGfBItWA9zpbki4g2s6ulh+1yIWYkOg+RBN6C5+vBYaqNVdYoI1p55blPtTut
+ F0r6ydeHwmwTV1tVZqpqX7bO6tzHuZoV8PhFdGn7fQ5ttZPY6g7ypvI3XDOpd8R3zdSx
+ nTLz3dBKc32fJdEf/aT7b9LQSPbBj2GQl57KCrk57gdo6nHxVLBMrQL3q9teolzb4oih
+ FJ9OkSO2uuh/pzrNBRoEmO3QfipeJV56Z/I6HwWp9eX6VDV4gE7Y591VHIT4oJDBMk96
+ EkTMDJ8zpe+tVF0zy9KIMeDlEoB9+c6NIEwg4odpF/uMFzOkhaW3PbqAY2xVoiqHMiKA
+ q5Wg==
+X-Gm-Message-State: AOJu0YzK1BZi6gHYSPYpI8lPWcFRafnka+0pXSKcxVXjSqWWl5NJk3sn
+ j/d9uwzll9cX+BEmQaG9alit/jkKNxIao4+nWUYmmuvi3fXcgumpn//KFjIy4Q==
+X-Gm-Gg: ASbGncv2M6hEDHq3hN1DnMm1j4BlDJUs65Y6BbkbH/IE1yGupeixcWKeBJl1ImccfM8
+ o7oVOyWiXfIuk1LA2gCbFWRVYgkZ7/3B2DPchxyXAhZMmxBQoROpHb7iDGV72rfum4d5CCYT8Nm
+ ZnnPGq9uLK2H9USQS0TWFehKrcVaAm+7G0QqX4TdtFPJntgeLIxc+CF6jJvSMYJLuz2zYx9DUn0
+ +tyZwmsqWzY3trT/OPfyXOfbWnki1nVsm4St3fyRMlgcL1Uxvr3bsnAblPlE7QWo6v1NDe0vNXe
+ WKSxvZdqkqQOD7A+ydLF/lOhjBiaQBwQhtBlq2dSGIOWS0EhF15kER9FUXP02wLLROiL0W2SpYM
+ of5KoZWBIgucHA36+
+X-Google-Smtp-Source: AGHT+IGXB+DKNAwAiYUNJboHMVY3vhOb2yaaNkMKMsZitC0SFM2Eqqnhm9UOefew5U7yQZvgXJz+GA==
+X-Received: by 2002:a05:6512:1091:b0:552:21db:8f5b with SMTP id
+ 2adb3069b0e04-553931e6c7bmr967454e87.27.1749558576488; 
+ Tue, 10 Jun 2025 05:29:36 -0700 (PDT)
 Received: from precision7530-arch-roy.lan ([79.161.254.180])
  by smtp.gmail.com with ESMTPSA id
- 2adb3069b0e04-553677224cbsm1514875e87.139.2025.06.10.05.29.33
+ 2adb3069b0e04-553677224cbsm1514875e87.139.2025.06.10.05.29.35
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 10 Jun 2025 05:29:34 -0700 (PDT)
+ Tue, 10 Jun 2025 05:29:35 -0700 (PDT)
 From: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 10 Jun 2025 14:29:18 +0200
-Message-ID: <20250610122924.431830-4-roykollensvendsen@gmail.com>
+Date: Tue, 10 Jun 2025 14:29:19 +0200
+Message-ID: <20250610122924.431830-5-roykollensvendsen@gmail.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250610122924.431830-1-roykollensvendsen@gmail.com>
 References: <20250610122924.431830-1-roykollensvendsen@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1749558575; x=1750163375; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1749558577; x=1750163377; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=/NnCyXL6ZuS7oGZHZmLx2EdummGpPdyILVGBigG1f6U=;
- b=g4b/fHQkXNkkXUrX86FfmBm1ZrvQ6zUHCCvguQjHZu3Vj2p00I0EsHE8fAOOKap9el
- lemdgL7Zssce/x42aUPYxPhH3aRyV4Ax9XrhlNwgoXeEMC+YWWuQcyZaOZSsCVdz5/go
- vnwUls6qAQB9OwwdalXNb5OjjR8TtzTpzyw7S8ASkuDaBWSnc347UHi3TN2h4aos93F9
- ksbc08dQVcSYn2GZEmRlbvI0YDuCMJNiqW7/RYPpImM20MiZUhuLr98/uSQQN9h+7ZW+
- m44POY2NzJLLF/M8BVjxfaSDLkf1ioTlFM1zybb9DQcQQ3kg1xbv5PkId5W4PDbre7A6
- K/mQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=gdinZPqeSYhPCKockLHChmzVBZUYlOLCe5slzCSf2nw=;
+ b=feQ1TObZJW5FduZrc/pnoTVe9z8xgjExRIchCpGLuvwQlpDA+ou/4iNhndYGgQIzG3
+ ejnzYS9K4An0hHhpZ2NV8yI3FeWNqGuh56iJrLMlTfJOtn78OF1Fu/I2WVxmxm8BVIMU
+ F/bWGiv0rjo+pPP/mqhihLG8yD6kZzCdnlSVqFE+nUcXb6qT6Mzb83r0X+ncmzzzoMoM
+ b1rVJ3739o9De7s1pgiNd677AhxWVbsuhnfLhDmREuhgoHqOu1sIc/+4JfYa2lnF5ikX
+ xjrN2Zat1VrYli8FDHTAY/qoP6cFrxap3ehffVjdaRpsUnj4q5WgbrC5qaaEpjk+Jycv
+ dpdQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=g4b/fHQk
-Subject: [Buildroot] [PATCH 4/6] package/qt6/qt6grpc: new package
+ header.a=rsa-sha256 header.s=20230601 header.b=feQ1TObZ
+Subject: [Buildroot] [PATCH 5/6] package/qt6/qt6sensors: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -110,7 +110,6 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Christian Hitz <christian@klarinett.li>,
  Roy Kollen Svendsen <roykollensvendsen@gmail.com>,
- Jack Rubacha <rubacha.jack03@gmail.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Zoltan Gyarmati <zgyarmati@zgyarmati.de>, Baxiche Su <baxiche@gmail.com>,
  Jesse Van Gavere <jesseevg@gmail.com>
@@ -119,112 +118,92 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Jack Rubacha <rubacha.jack03@gmail.com>
-
-Adds the QT GRPC module (containing Qt Protobuf as well).
-
-Signed-off-by: Jack Rubacha <rubacha.jack03@gmail.com>
 Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
 ---
- package/qt6/Config.in            |  1 +
- package/qt6/qt6grpc/Config.in    |  7 ++++++
- package/qt6/qt6grpc/qt6grpc.hash | 10 ++++++++
- package/qt6/qt6grpc/qt6grpc.mk   | 43 ++++++++++++++++++++++++++++++++
- 4 files changed, 61 insertions(+)
- create mode 100644 package/qt6/qt6grpc/Config.in
- create mode 100644 package/qt6/qt6grpc/qt6grpc.hash
- create mode 100644 package/qt6/qt6grpc/qt6grpc.mk
+ package/qt6/Config.in                  |  1 +
+ package/qt6/qt6sensors/Config.in       |  6 +++++
+ package/qt6/qt6sensors/qt6sensors.hash |  7 ++++++
+ package/qt6/qt6sensors/qt6sensors.mk   | 32 ++++++++++++++++++++++++++
+ 4 files changed, 46 insertions(+)
+ create mode 100644 package/qt6/qt6sensors/Config.in
+ create mode 100644 package/qt6/qt6sensors/qt6sensors.hash
+ create mode 100644 package/qt6/qt6sensors/qt6sensors.mk
 
 diff --git a/package/qt6/Config.in b/package/qt6/Config.in
-index 6b7152d902..c1ea543242 100644
+index c1ea543242..05f0540db0 100644
 --- a/package/qt6/Config.in
 +++ b/package/qt6/Config.in
-@@ -49,6 +49,7 @@ source "package/qt6/qt6connectivity/Config.in"
- source "package/qt6/qt6core5compat/Config.in"
- source "package/qt6/qt6declarative/Config.in"
- source "package/qt6/qt6graphs/Config.in"
-+source "package/qt6/qt6grpc/Config.in"
- source "package/qt6/qt6languageserver/Config.in"
- source "package/qt6/qt6mqtt/Config.in"
- source "package/qt6/qt6multimedia/Config.in"
-diff --git a/package/qt6/qt6grpc/Config.in b/package/qt6/qt6grpc/Config.in
+@@ -58,6 +58,7 @@ source "package/qt6/qt6positioning/Config.in"
+ source "package/qt6/qt6quick3d/Config.in"
+ source "package/qt6/qt6quicktimeline/Config.in"
+ source "package/qt6/qt6scxml/Config.in"
++source "package/qt6/qt6sensors/Config.in"
+ source "package/qt6/qt6serialbus/Config.in"
+ source "package/qt6/qt6serialport/Config.in"
+ source "package/qt6/qt6shadertools/Config.in"
+diff --git a/package/qt6/qt6sensors/Config.in b/package/qt6/qt6sensors/Config.in
 new file mode 100644
-index 0000000000..3d82cfcb0c
+index 0000000000..db87e437b2
 --- /dev/null
-+++ b/package/qt6/qt6grpc/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_QT6GRPC
-+	bool "qt6grpc"
++++ b/package/qt6/qt6sensors/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_QT6SENSORS
++	bool "qt6sensors"
 +	help
-+	  This package provides the Qt GRPC and Protobuf modules:
++	  This package provides the Qt Sensors module:
 +
-+	  https://doc.qt.io/qt-6/qtgrpc-index.html
-+	  https://code.qt.io/cgit/qt/qtgrpc.git/
-diff --git a/package/qt6/qt6grpc/qt6grpc.hash b/package/qt6/qt6grpc/qt6grpc.hash
++	  https://doc.qt.io/qt-6/qtsensors-index.html
+diff --git a/package/qt6/qt6sensors/qt6sensors.hash b/package/qt6/qt6sensors/qt6sensors.hash
 new file mode 100644
-index 0000000000..bbf30f2a2d
+index 0000000000..ace6d8d191
 --- /dev/null
-+++ b/package/qt6/qt6grpc/qt6grpc.hash
-@@ -0,0 +1,10 @@
-+# Hash from: https://download.qt.io/official_releases/qt/6.9/6.9.1/submodules/qtgrpc-everywhere-src-6.9.1.tar.xz.sha256
-+sha256  c34c869e203289b0fd695a1e5391840bc51b919a8b55e1ed1ff36b4cb923a750  qtgrpc-everywhere-src-6.9.1.tar.xz
++++ b/package/qt6/qt6sensors/qt6sensors.hash
+@@ -0,0 +1,7 @@
++# Hash from: https://download.qt.io/official_releases/qt/6.9/6.9.1/submodules/qtsensors-everywhere-src-6.9.1.tar.xz.sha256
++sha256  f04b131acacfd42dfe056bd5861ff1e12e2ab57b3e20332becefa3644a409c6c  qtsensors-everywhere-src-6.9.1.tar.xz
 +
 +# Hashes for license files:
-+sha256  e3ba223bb1423f0aad8c3dfce0fe3148db48926d41e6fbc3afbbf5ff9e1c89cb  LICENSE.Apache-2.0.txt
-+sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
-+sha256  110535522396708cea37c72a802c5e7e81391139f5f7985631c93ef242b206a4  LICENSES/GFDL-1.3-no-invariants-only.txt
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0-only.txt
 +sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSES/GPL-3.0-only.txt
-+sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSES/LicenseRef-protobuf.txt
-+sha256  40678d338ce53cd93f8b22b281a2ecbcaa3ee65ce60b25ffb0c462b0530846b2  LICENSES/Qt-GPL-exception-1.0.txt
-diff --git a/package/qt6/qt6grpc/qt6grpc.mk b/package/qt6/qt6grpc/qt6grpc.mk
++sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSES/LGPL-3.0-only.txt
+diff --git a/package/qt6/qt6sensors/qt6sensors.mk b/package/qt6/qt6sensors/qt6sensors.mk
 new file mode 100644
-index 0000000000..8b1c511fef
+index 0000000000..c06b31c45e
 --- /dev/null
-+++ b/package/qt6/qt6grpc/qt6grpc.mk
-@@ -0,0 +1,43 @@
++++ b/package/qt6/qt6sensors/qt6sensors.mk
+@@ -0,0 +1,32 @@
 +################################################################################
 +#
-+# qt6grpc
++# qt6sensors
 +#
 +################################################################################
 +
-+QT6GRPC_VERSION = $(QT6_VERSION)
-+QT6GRPC_SITE = $(QT6_SITE)
-+QT6GRPC_SOURCE = qtgrpc-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6GRPC_VERSION).tar.xz
-+QT6GRPC_INSTALL_STAGING = YES
-+QT6GRPC_SUPPORTS_IN_SOURCE_BUILD = NO
-+QT6GRPC_CMAKE_BACKEND = ninja
-+QT6GRPC_LICENSE = GPL-3.0-only
++QT6SENSORS_VERSION = $(QT6_VERSION)
++QT6SENSORS_SITE = $(QT6_SITE)
++QT6SENSORS_SOURCE = qtsensors-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6SENSORS_VERSION).tar.xz
++QT6SENSORS_INSTALL_STAGING = YES
++QT6SENSORS_SUPPORTS_IN_SOURCE_BUILD = NO
++QT6SENSORS_CMAKE_BACKEND = ninja
++QT6SENSORS_LICENSE = LGPL-3.0 or GPL-2.0 or GPL-3.0 (modules, plugins)
 +
-+QT6GRPC_LICENSE_FILES = \
-+	LICENSE.Apache-2.0.txt \
-+	LICENSES/BSD-3-Clause.txt \
-+	LICENSES/GFDL-1.3-no-invariants-only.txt \
++QT6SENSORS_LICENSE_FILES = \
++	LICENSES/GPL-2.0-only.txt \
 +	LICENSES/GPL-3.0-only.txt \
-+	LICENSES/LicenseRef-protobuf.txt \
-+	LICENSES/Qt-GPL-exception-1.0.txt
++	LICENSES/LGPL-3.0-only.txt
 +
-+QT6GRPC_CONF_OPTS = \
++QT6SENSORS_CONF_OPTS = \
 +	-DBUILD_WITH_PCH=OFF \
 +	-DQT_BUILD_EXAMPLES=OFF \
 +	-DQT_BUILD_TESTS=OFF \
 +	-DQT_HOST_PATH=$(HOST_DIR)
 +
-+QT6GRPC_DEPENDENCIES = \
-+	host-pkgconf \
-+	host-qt6grpc \
-+	qt6base
++QT6SENSORS_DEPENDENCIES = qt6base
 +
 +ifeq ($(BR2_PACKAGE_QT6DECLARATIVE),y)
-+QT6GRPC_DEPENDENCIES += qt6declarative
++QT6SENSORS_DEPENDENCIES += qt6declarative
 +endif
 +
-+HOST_QT6GRPC_DEPENDENCIES = \
-+	host-protobuf \
-+	host-qt6base
-+
 +$(eval $(cmake-package))
-+$(eval $(host-cmake-package))
 -- 
 2.49.0
 
