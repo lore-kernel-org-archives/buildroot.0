@@ -1,153 +1,183 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8314C5B543
-	for <buildroot@archiver.kernel.org>; Tue, 10 Jun 2025 05:29:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6937AC5B552
+	for <buildroot@archiver.kernel.org>; Tue, 10 Jun 2025 05:57:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5437B6070C;
-	Tue, 10 Jun 2025 05:29:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2192680C41;
+	Tue, 10 Jun 2025 05:57:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CDqzIYakFAse; Tue, 10 Jun 2025 05:29:18 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aZkEop3IBu_4; Tue, 10 Jun 2025 05:57:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4568E60783
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5C27080826
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4568E60783;
-	Tue, 10 Jun 2025 05:29:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5C27080826;
+	Tue, 10 Jun 2025 05:57:37 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1FEDDCD
- for <buildroot@buildroot.org>; Tue, 10 Jun 2025 05:29:17 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 467B6237
+ for <buildroot@buildroot.org>; Tue, 10 Jun 2025 05:57:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 120B960783
- for <buildroot@buildroot.org>; Tue, 10 Jun 2025 05:29:17 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 371CC60774
+ for <buildroot@buildroot.org>; Tue, 10 Jun 2025 05:57:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id F_FCFigLy4MB for <buildroot@buildroot.org>;
- Tue, 10 Jun 2025 05:29:16 +0000 (UTC)
+ id odchieJ0gNSB for <buildroot@buildroot.org>;
+ Tue, 10 Jun 2025 05:57:35 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:2413::613;
- helo=nam10-dm6-obe.outbound.protection.outlook.com;
+ client-ip=2a01:111:f403:2418::61e;
+ helo=nam12-bn8-obe.outbound.protection.outlook.com;
  envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org EA40B6070C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA40B6070C
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com
- (mail-dm6nam10on20613.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:2413::613])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EA40B6070C
- for <buildroot@buildroot.org>; Tue, 10 Jun 2025 05:29:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1601560619
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1601560619
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com
+ (mail-bn8nam12on2061e.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:2418::61e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1601560619
+ for <buildroot@buildroot.org>; Tue, 10 Jun 2025 05:57:34 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=pY3ofG+wDNqGw63u1h7lbjviSAB9u+GdVk+yzT+PkH2SEKnCGJ7syw5hVSCjUkodmxhd7og2zitWeL9mgbi72BXnF6+FaGFxi5kzsKOWTJkSP+oclUeBPpFmOeJiv4WAS7xheMl9H2FiypCaHfaOMHHAGeLFUvU34f2QB/cob45Syj6Iqyq5vrqbXSTBRY9aKRIxS4HiTCcjDLKg+S3WZ4nM+lNGaynOofdLMTRA+UyQYqOc6E+qcr4k4rZacEINmUEkDPcYxEEMpoEVDUXBAUZ4aTL3Zxt4hNEUVJwV1vd9KVEUBZb9HBk0ksUieGOfAnccct065hXxHLEmeS3Jiw==
+ b=ngzge1PDvsw94N8sdrtCQ/opJORLOSK7/q52QNFUIXyP0Vk4fX1sGthUzzVNElxzW0YGzg/BAUsF7Fc5IkY9g4RQcSV80oEO/6S5ncatBxS8OGOPMQsBOL9dIYYFdFGxrdgX0cWMiQEvfkEn0IDuIj3gh5ROzau8cbHqqxWZYDoxe2Ckf1cydWQPGfn6LeEGWvzOeve9zl50542UuOsDg+/4Kk96/Xz1f5HXwFJSii7CQ+3qXiJDjp5HBPyaJSqJswHlMfS3w3hqkbATIKT08swrj3YLO1+YGRjHh8fHethSgQZYq+Ap+rSWyFoY7tYviA36t1qtQAtX2iuLhpbRsA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YQ1eefrttUEYx3M26u9IuqpBKiYIQw5HOYFJxZH34zY=;
- b=KrhXEJWgkHgyagykuIkZqkRoNW/0h0i/SqNKj2UbFwXcNKHACWPRjGWiBQUwzaU/zeNRhPoIU+MM6AgxIYO6/WUotOaRvYRrzUJYlwWvNyE56vfBs7W0YeUp0QRod4sOlvfFhrlWTMYXBtbviWHPAen8B1NSzdpaOk6l/CkGeJAaniTTtFS69eK7vLJPjqYvRhrJxORl590jJBOAqFwJoOfQGyNYBh5DPNMTRP1kpZ020NNvJMML8FEQegEmFvCa7KwAZsafPxWYW7rYmjR2nH8d63Q9Ynth7seUD4k0ntDD94Gdk82TeNThKj2vS1z5MxtmvTkgFUDwBvqI3UlajQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-Received: from BL1PR13CA0021.namprd13.prod.outlook.com (2603:10b6:208:256::26)
- by PH7PR12MB7889.namprd12.prod.outlook.com (2603:10b6:510:27f::10)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8792.36; Tue, 10 Jun
- 2025 05:29:10 +0000
-Received: from BN2PEPF00004FBF.namprd04.prod.outlook.com
- (2603:10b6:208:256:cafe::1a) by BL1PR13CA0021.outlook.office365.com
- (2603:10b6:208:256::26) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8835.17 via Frontend Transport; Tue,
- 10 Jun 2025 05:29:09 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- BN2PEPF00004FBF.mail.protection.outlook.com (10.167.243.185) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8835.15 via Frontend Transport; Tue, 10 Jun 2025 05:29:08 +0000
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 10 Jun
- 2025 00:29:07 -0500
-Received: from xirengwts09.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
- Transport; Tue, 10 Jun 2025 00:29:06 -0500
-To: <buildroot@buildroot.org>
-Date: Tue, 10 Jun 2025 06:29:04 +0100
-Message-ID: <20250610052904.2449000-1-neal.frager@amd.com>
-X-Mailer: git-send-email 2.25.1
+ bh=D3XpxCm7PvGjlkKSQpCXdcaL8ZryNYTl1Lef2WJ3Lzs=;
+ b=giXcwEM6rRIHahB4PzRq9KhgeKb1SNTebhn+nhLV7cIl8Rbzxa9AIsZzWJPPPbhzXVRAHsXhy0FhzHXgqi/1l1u5MOowv3LEkEPK0Q5nT4UzoTfgp2yYgTJ5OW86c50lAGFrk+a3yPnDrNFV0Dwi4c6gJLo/qwSYgep64M0/e6IEDq39zXBc4BieEqYCDy3kRZWGhk4xUk1s1bi3HXnOwLXTDBBk31wphIXCn0i6SRM9QYV6055vNcDacC+3QWwOuCLH/VkdllLJvkdtFQmfU7dqAJ1ANFUdwoYlSjxztyY9fI/m9LVnv5GZGVzrU7Gd4XiYMcqpJFHJdFDiCm473A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+Received: from SA1PR12MB5615.namprd12.prod.outlook.com (2603:10b6:806:229::17)
+ by DM4PR12MB6542.namprd12.prod.outlook.com (2603:10b6:8:89::8) with
+ Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8792.34; Tue, 10 Jun 2025 05:57:30 +0000
+Received: from SA1PR12MB5615.namprd12.prod.outlook.com
+ ([fe80::7557:587c:4ec:1913]) by SA1PR12MB5615.namprd12.prod.outlook.com
+ ([fe80::7557:587c:4ec:1913%6]) with mapi id 15.20.8792.034; Tue, 10 Jun 2025
+ 05:57:30 +0000
+To: Julien Olivain <ju.o@free.fr>, "thomas.petazzoni@bootlin.com"
+ <thomas.petazzoni@bootlin.com>
+CC: "buildroot@buildroot.org" <buildroot@buildroot.org>, "Erkiaga Elorza,
+ Ibai" <ibai.erkiaga-elorza@amd.com>, "luca.ceresoli@bootlin.com"
+ <luca.ceresoli@bootlin.com>, "brandon.maier@collins.com"
+ <brandon.maier@collins.com>, "romain.naour@smile.fr" <romain.naour@smile.fr>, 
+ "Simek, Michal" <michal.simek@amd.com>
+Thread-Topic: [Buildroot] [PATCH v1 1/5] boot/xilinx-prebuilt: add support for
+ xilinx_v2025.1
+Thread-Index: AQHb1d17/RoIx/yLCEit50h80i1Fk7P7a4+AgACAVnA=
+Date: Tue, 10 Jun 2025 05:57:29 +0000
+Message-ID: <SA1PR12MB56153CE78D06255C22A29513F06AA@SA1PR12MB5615.namprd12.prod.outlook.com>
+References: <20250605054828.4181912-1-neal.frager@amd.com>
+ <f70d093a5f7d73c8c6bcb15472a5e330@free.fr>
+In-Reply-To: <f70d093a5f7d73c8c6bcb15472a5e330@free.fr>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_ActionId=0c575883-4edf-4e79-80ea-faffc1a5bae6;
+ MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_ContentBits=0;
+ MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Enabled=true;
+ MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Method=Standard;
+ MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Name=AMD
+ Internal Distribution Only;
+ MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_SetDate=2025-06-10T05:52:13Z;
+ MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+ MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Tag=10, 3, 0, 1;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1PR12MB5615:EE_|DM4PR12MB6542:EE_
+x-ms-office365-filtering-correlation-id: c970a3a9-219d-490f-13bb-08dda7e3af7b
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+ ARA:13230040|1800799024|376014|366016|38070700018|41080700001; 
+x-microsoft-antispam-message-info: =?us-ascii?Q?TgGdDOyuq9HD6MtWxZ6oooHQttJjI5vXVh9wzbdiNLtqWP2cgRn3k+gzhK8W?=
+ =?us-ascii?Q?NldWHfenRPAfp8MH1E7ekxBxxy6spCdLVjI9Davouf6glppMdZY+9qB5Smi2?=
+ =?us-ascii?Q?w7ZFf57+DTpJTwTJ41ibjoNAjqI10fdNRRvCDr2DvScIlPZn5xqGuSHCjLRO?=
+ =?us-ascii?Q?nhaybAMXSPmUOr7IxXygPT29sp/ftrPUsrRDkXbzRnxNgYztBXsrbBk30AO/?=
+ =?us-ascii?Q?WT4XNNjTQ9C7E5hDHYZ/VseznKDMK6NL4mauFEmxUdVhQ86u21ebaiGUwbEy?=
+ =?us-ascii?Q?ACzfrHas1+vE4VJlExQ5QCRt9YYlGmfK/cxR5yGE6P7vV6v/sXvDuCXvaGRY?=
+ =?us-ascii?Q?g0c/pjSENoQplNvFdHmdfL5z0p4PBq3nAdrKq7bqeNcS+Sc/e5pQfxlcNOJn?=
+ =?us-ascii?Q?EaC/l7zo6x+05UmY4tKTlaDOw2v+bhwQ2IQs6X73T2Ul8XojUxb1eWxTx+uE?=
+ =?us-ascii?Q?ecIr3i9WDYSFhictdQbFjvfbXlFjC7P2LKt8DWob1skQE4CRx0HtwuwuBccW?=
+ =?us-ascii?Q?cs1o4//jyG6llSlGvbyASXwnDbY+D3ZqQX4RhmCLC6gq92mVyc2qNalrrLKz?=
+ =?us-ascii?Q?j1YjX2T3GhghiVflafT1O74plAMtOcvsq9nfRaOQbL/qVLEa8NZyb6Kyb/O9?=
+ =?us-ascii?Q?8O9Qxu/IU1SvHSMcxkwiUe6MlkFl33bsSaD5VOLR+TvGd76+ApFxBEWQLFeZ?=
+ =?us-ascii?Q?PT5kju/ooiK6UvGao3ES8Da3MRuFIRFFmuD69h47TdFXa5KFNBfTVhPuklJ6?=
+ =?us-ascii?Q?Gy0mz7NhoGZi+Pfeg1VAMrtRaYOpBVHg4RLrB6DbTze2pVVtj/gIGUZLareo?=
+ =?us-ascii?Q?57botQy4c+W7LZK3EwemNN/0uNu86yW2nGi6nTURuDrTjWASaMdG0VA3H8qV?=
+ =?us-ascii?Q?2juLTSJtLaGq0zAF3FUmEEFrx8s/OP7BcteJPLRF3FqJJVC8W0VPAXrkJvOU?=
+ =?us-ascii?Q?TRO+8+Y4c986DVK3y19hh2SOLJtfzVeFGEOxTpFUsE3g5RFdubRjN/mwKX6B?=
+ =?us-ascii?Q?VWofgXSspWO96c4lQfI8HV+GyzAiFhqwVUwV4L7Sa+DfoeUef1z/Cm8YdXg5?=
+ =?us-ascii?Q?noiQ3LywD/jHOp7+f5lW7LUrZ7RLyPKWp9NG1y8ZN4JsjbMEXCIe/xSIfGR/?=
+ =?us-ascii?Q?5SID6uuJ0/D+pAp66geBEJ/rZizH8+ZcJBlf+XZ34MHbf4KntCpBvYUK3Wig?=
+ =?us-ascii?Q?WziY1oqb6BbVwVpRckv1apPJ3y3j/vE5U08fH0KhOOKR14T/zx+5Vufb9bYG?=
+ =?us-ascii?Q?+wgqSM3BoohxRlCW0MtUqxwjjv0VIpR8QxnryMKnGR+J6j47E4iJ5I5NVDAL?=
+ =?us-ascii?Q?NAcW8T0qRmTipVZW9rRR5R5OI2lEEE8Ckh3O5fjxiEAbSZcb2ltZnQU+xL5K?=
+ =?us-ascii?Q?ioS4BXspKWT8SjIValiWyrHL/NWRMiIEDiIpkpHWVvyDcK7B3SWtx6i5nQYO?=
+ =?us-ascii?Q?8gROoZVb/cQMsqRJ5eK2sWLY2GiX4Jnr99OO7SLkFp4g9L80ylD/YA=3D=3D?=
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:SA1PR12MB5615.namprd12.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230040)(1800799024)(376014)(366016)(38070700018)(41080700001); DIR:OUT;
+ SFP:1101; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?BzovRhu48lFfbRzphbAzxLEKsYgMS04bQKtoQv4zIvUq401X7YnZm7ToZJPt?=
+ =?us-ascii?Q?Dva6E0PYQLXng/3AKgmSKQY5fFKA97wCR+ak1ksipVx/CePf39Jgk+DHSToW?=
+ =?us-ascii?Q?zV5lHhBhPfS1nm13BUT/C7Q38axH4BYlwBG8Amgfub0JFZTOAXH5GFbajF94?=
+ =?us-ascii?Q?obpqXrdcudpmdGb4e5AjH2IiJ3iNEeoi/q7nDQIu+k09TYcxbjdCKS1x0Qvo?=
+ =?us-ascii?Q?o0x4peoET9S8sLGE8nQrdj4qXZRv+l1lV0Cb3XQ4VJ5M10/miUZucfmmfI7S?=
+ =?us-ascii?Q?2Le7t6+HHh9jEiZbWZrQCgBuBy3SogUAIm0Lub1PZ9zNIJ5t1j6XomNRVH6H?=
+ =?us-ascii?Q?/kcS3nczYw6knmO64SFOj7CjwrrdVabw+6JjM9lcw0Ec9wXOLOXLbaRR+oZ2?=
+ =?us-ascii?Q?qE8OWKcoqKo9HIGeh3uJ4V55VClegtgpokJlLanJF1dXMwsMsukwIBTdsTYd?=
+ =?us-ascii?Q?vxu7oYGma5ZDjb4th66Zf6aWvZIJHe1tbtRSC49JEalx+blwr/pqyMynNmmF?=
+ =?us-ascii?Q?Mrh+/TYvCA/AXeYJtvdLVj3SRVbUg5aYcwj1elLmF7bCsuLYfUuIxlQaZtRS?=
+ =?us-ascii?Q?cHLcCcWN2Zzv/cHSgSeTODNYkRrXIq6qXv/nyNYLUp2hOJrZuHvVXCZnz8l6?=
+ =?us-ascii?Q?tt7azOuVp4O69HPP/x/UC4qI8xMunV2hU5kvMqqde2UC9u20WJBLMz7ePLd7?=
+ =?us-ascii?Q?j54qvvV663lYhbOr4K8YkP8IIqYEfaGlcJR/8SygOMcmIvnF6NFGth7n0X2W?=
+ =?us-ascii?Q?YS5XcsuUbDFp/uSqkuyOtddW7Vbcsxa1izzWYHahW8myiVNrfw25tiSNtsZR?=
+ =?us-ascii?Q?xbj1i79QisHKAG69+WiN33lAZgq5eGqGiVZ7h+sunI/9Q35OQ5E+trTCTGPM?=
+ =?us-ascii?Q?9sKQRoZYQXBVA6gwQfarJMX8g7xd2DXpoXtJgQfXamLrQO1gugijbKDkqTL8?=
+ =?us-ascii?Q?Bvl6tGf/K7QRHT+zx1AB+jcwWqtGKQwdc5oUtoot/nilFwgWqSzw3K4Fpueu?=
+ =?us-ascii?Q?Py3v5Q2rQJM2GQRGl5Suuuwvd0zDBKrBZL1IOVaDAduWSh3C/d2e9c/umOF9?=
+ =?us-ascii?Q?mXfAt+zSk32SAzWuxG1OFxyGqEDlNJ9rTGqQLYhA3WrVrWMUvVFGuwGBb2q+?=
+ =?us-ascii?Q?gnLD1b1kPsZFV9VXO8RMUhSy14fA2yS5WPl333A0NW0cJ4ArdO8kq8ovXITq?=
+ =?us-ascii?Q?vzLuo0fz5MZATBxPf8f5Yq0lGZMdijXc54GDhjzHpRLlFuIB6J1t8LsOYz/u?=
+ =?us-ascii?Q?pB6WxJgIp+PRRegDWp9MwEkRidmgyuKdveFrbC5STMXqdpKQ5NNmXPiWafWj?=
+ =?us-ascii?Q?NPwiYjCTjqkb+ThqbKXW/6TpTK55IPaOo4vvdUHECKs0oDv+Q6P0Iyvki4A4?=
+ =?us-ascii?Q?buGDSEmnjITQPGx4djX69x2CClaRxsqH39Hs8Zlk/G7b6EHgQ9T3ipoM+Z/H?=
+ =?us-ascii?Q?6SpOUxnC2dhFIRH8KHCZVxKgdYrOJwvHu9axO3E8A5DpYiqHwk0f/3KOkz8U?=
+ =?us-ascii?Q?sfRClkyhoRpNNUfPDqTWwigjuEExsTArp9M4+MOTcM2ddtWNqyjaMHv4p6Nh?=
+ =?us-ascii?Q?taCwu+0Qgscja89h5XY=3D?=
 MIME-Version: 1.0
-Received-SPF: None (SATLEXMB03.amd.com: neal.frager@amd.com does not designate
- permitted sender hosts)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN2PEPF00004FBF:EE_|PH7PR12MB7889:EE_
-X-MS-Office365-Filtering-Correlation-Id: 66b41c27-58e7-4783-815c-08dda7dfb956
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
- ARA:13230040|36860700013|82310400026|1800799024|376014|41080700001; 
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?luZflnUja9SzjXQN1uFAtAljQtxcPUembj8Th2vO3DMitlEzsJm+6ahsVGM2?=
- =?us-ascii?Q?XZWH0/pohsLSy+SJ1TJqn8zgxW1JhdvkL7fiJTGmCxZKeVHxNxV4E/+VwV7D?=
- =?us-ascii?Q?4tMQ6ed+qgjNRLC+EqyE/W1Ms8hr6d+Wgbarogny0tIOZB6WgmrmxCctruVi?=
- =?us-ascii?Q?2762UAKWe6TeN/tP0VmBkHUBxrEYBmu5qLopa9V4r26JDZge43GXuYRJYtUP?=
- =?us-ascii?Q?YBbGYNdr1S8wyx3zWsGqbs2cSFZjInLcT/Hb1SyVoe9jIrAfH+CDQv/uMCdr?=
- =?us-ascii?Q?lnjrd+BLBjXiEcXw53rAMqNnqDppeUHIW3MO+HJrom3THk/k0vfldlJzZbyo?=
- =?us-ascii?Q?hHoTYSqcE5Rc7tEeUQmLjD9V7+iGOBIgCkXZVmmEV7U6loJVrY53eA5wTYqJ?=
- =?us-ascii?Q?zy2OkwcqYcnxMFrmwouHh0XvG7u+tiPYYfWSkXqHIjVE71En+GY32bM95wVd?=
- =?us-ascii?Q?N71KX4cNAPqZCPm5OHQsk1PB+Tz035eQP1PnBmwesze0UTtCSkf2g5eIFv6m?=
- =?us-ascii?Q?zTOw7UDz6ywo3sXxYtHG5DyMQLjqb6hr+jofATdj9omF9XcJDTOMCzIZZojn?=
- =?us-ascii?Q?gVBAQFNGuakHnzo6sXnHKsrd+JzYw9Wy9NqA8yJW6SucYxSfF+GF4wS3uQh8?=
- =?us-ascii?Q?aW6dncyoawXooTJlFJ/pjcTOslJq2ATdZXazVz/Z43PG+luQ3GKljbi4gC+i?=
- =?us-ascii?Q?7zd208bm7Gfd0SP3VZ7Lm2D0+vN7ZWtugmE+kN1RMCxYa8toCwjEev36RkKd?=
- =?us-ascii?Q?uQB2d2nHGBx4GqYlAR2UwfYJ45bN/NJsPRJeW1dU5A1R67KSCoPihq8FGqEY?=
- =?us-ascii?Q?I5GHR+hO1bG4NF5w5UtQNeYox+j+y2evHiZKZDu1Y34IgZ5VpcGkweAatlMC?=
- =?us-ascii?Q?996CBT2voL3ExVJgEeEJ1Sp8LD3hc+O+Rv6ciO6Of33JPrs2GU7zijdcRa2W?=
- =?us-ascii?Q?Vb0QxlQbA96vdhUV9zDKllth52kTs7dDdXSLe9ixHKdQDzUpX25xY8vhq79l?=
- =?us-ascii?Q?zpmDSS2ei1XJug9truQYPLyp+3qjGGjMWK9mmQZUk1yoE7LCFqDc/2tWI0X+?=
- =?us-ascii?Q?wtfSWm2chqVLzKlBXbOQ4hhsObbbiy7rTgv2apWdyXV7SsUbMMw3IxBXraYw?=
- =?us-ascii?Q?ZhRKigp1qdxBxq3PZzkA0q8NLRrD5e9s4p6Zf2wtVWC4sZ3MrlXFS1Ia3irG?=
- =?us-ascii?Q?FsUS/AHUw7EPLHUBkJKsFnmWcPZ0HgQXSV3AQy0617EVDEQ/HHBo53bEmBre?=
- =?us-ascii?Q?Bei3tqMsjnG6doQNJ1mEqqlZlSbdG3/jlgrQUoCnJHICC1MIBxUDJvkvg2d1?=
- =?us-ascii?Q?S2wllngEhTfEtbznOlypEmVKVfQbl5PVU9WZEbKLKH2CVGpp9T+Vj7bwIGRd?=
- =?us-ascii?Q?iQnUgLGYyCy1tRofsuJ6dLX825348+/VnnFN15IDIt6LYjHJVmmz04+bQRcx?=
- =?us-ascii?Q?G2JPJ0QGFXSqcDTWYDPN+0Q0wIGlhnu266/jLgVxlxCbBe0u7n57SbT2Ki82?=
- =?us-ascii?Q?xDwl0m6aqyKUQKVECKSaoAfenRYmKfW5sBpO8yL1S22k7EQD5m2gSrDtpDwi?=
- =?us-ascii?Q?2tXL6bRSqfofYwiibX0=3D?=
-X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
- IPV:CAL; SFV:NSPM; H:SATLEXMB03.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
- SFS:(13230040)(36860700013)(82310400026)(1800799024)(376014)(41080700001);
- DIR:OUT; SFP:1101; 
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jun 2025 05:29:08.5054 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 66b41c27-58e7-4783-815c-08dda7dfb956
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
- Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN2PEPF00004FBF.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7889
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR12MB5615.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c970a3a9-219d-490f-13bb-08dda7e3af7b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jun 2025 05:57:29.9812 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 16wjEDjcc9riv2OQFdZZUgWDU3lRw+XKIpc84+ue+t9jGII2WxHQEjgDpeTF7FC1
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6542
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amd.com; s=selector1; 
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YQ1eefrttUEYx3M26u9IuqpBKiYIQw5HOYFJxZH34zY=;
- b=gCh0QwIdl7TnRAqrF8bNNNJ5P/N5AqlPdXdKDTmNwjfk6fZXH/FrnVTK8LLFJIbN9pABjMbX+38oKUG66BtyLpMbGr1w1NtjjGpJPrJzeIdrWSGtDx0Rke6N4B5MOB5qMjqi9fQKCrXjw5XbBE9HlC/oLDNxaK+jgAYGiAjuZ60=
+ bh=D3XpxCm7PvGjlkKSQpCXdcaL8ZryNYTl1Lef2WJ3Lzs=;
+ b=xJjwe5WOovHAUTs9CFeLkk/GW8y7/eu8bGTo6QUjrD3tIwE2HhIgsyTIrE5wnD4P5xGw8XJAMsKIJ+udijmPJoUGi7BKeS9Y1XwWrfgd45G8IaCdWSuiRxfAAT2k/FLEfqOIi7Xa5uVBisedYL5brpp0ZxiV/1MnvV3nS7Vw0Bg=
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=amd.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=gCh0QwId
-Subject: [Buildroot] [PATCH v1 1/1] boot/xilinx-embeddedsw: bump default to
- xilinx_v2025.1
+ header.s=selector1 header.b=xJjwe5WO
+X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Subject: Re: [Buildroot] [PATCH v1 1/5] boot/xilinx-prebuilt: add support
+ for xilinx_v2025.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -159,186 +189,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Neal Frager via buildroot <buildroot@buildroot.org>
-Reply-To: Neal Frager <neal.frager@amd.com>
-Cc: ibai.erkiaga-elorza@amd.com, luca.ceresoli@bootlin.com,
- Neal Frager <neal.frager@amd.com>, brandon.maier@collins.com, ju.o@free.fr,
- thomas.petazzoni@bootlin.com, romain.naour@smile.fr, michal.simek@amd.com
+From: "Frager, Neal via buildroot" <buildroot@buildroot.org>
+Reply-To: "Frager, Neal" <neal.frager@amd.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Now that all zynqmp and versal defconfigs have bumped to version
-xilinx_v2025.1, the xilinx-embeddedsw default version can also be bumped
-to xilinx_v2025.1.
+[AMD Official Use Only - AMD Internal Distribution Only]
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
----
-This patch is to be applied to the next branch.
----
- boot/xilinx-embeddedsw/Config.in                             | 2 +-
- boot/xilinx-embeddedsw/xilinx-embeddedsw.hash                | 4 ++--
- boot/xilinx-embeddedsw/xilinx_v2025.1/xilinx-embeddedsw.hash | 5 -----
- configs/versal_vck190_defconfig                              | 1 -
- configs/versal_vek280_defconfig                              | 1 -
- configs/versal_vpk180_defconfig                              | 1 -
- configs/zynqmp_kria_kd240_defconfig                          | 1 -
- configs/zynqmp_kria_kr260_defconfig                          | 1 -
- configs/zynqmp_kria_kv260_defconfig                          | 1 -
- configs/zynqmp_zcu102_defconfig                              | 1 -
- configs/zynqmp_zcu104_defconfig                              | 1 -
- configs/zynqmp_zcu106_defconfig                              | 1 -
- 12 files changed, 3 insertions(+), 17 deletions(-)
- delete mode 100644 boot/xilinx-embeddedsw/xilinx_v2025.1/xilinx-embeddedsw.hash
+Hi Julien, Thomas,
 
-diff --git a/boot/xilinx-embeddedsw/Config.in b/boot/xilinx-embeddedsw/Config.in
-index 98d39331fe..12924edf44 100644
---- a/boot/xilinx-embeddedsw/Config.in
-+++ b/boot/xilinx-embeddedsw/Config.in
-@@ -21,7 +21,7 @@ if BR2_TARGET_XILINX_EMBEDDEDSW
- 
- config BR2_TARGET_XILINX_EMBEDDEDSW_VERSION
- 	string "xilinx-embeddedsw version"
--	default "xilinx_v2024.2"
-+	default "xilinx_v2025.1"
- 	help
- 	  Release version of Xilinx/embeddedsw.
- 	  Must be xilinx_v2023.1 or newer.
-diff --git a/boot/xilinx-embeddedsw/xilinx-embeddedsw.hash b/boot/xilinx-embeddedsw/xilinx-embeddedsw.hash
-index f9eb6f7984..0a42bab314 100644
---- a/boot/xilinx-embeddedsw/xilinx-embeddedsw.hash
-+++ b/boot/xilinx-embeddedsw/xilinx-embeddedsw.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  550ba0b206848adb0085bc1ca5a6b6731681335c92912afb4a6a8dbb4c489a0c  xilinx-embeddedsw-xilinx_v2024.2.tar.gz
-+sha256  867b7c7652f754d1a3d6edfe76e53223670e2b4c7e4144d4db1604403d68f616  xilinx-embeddedsw-xilinx_v2025.1.tar.gz
- 
- # Locally calculated
--sha256  12bf8dad928a59644758825758b0c9d42d54478f5b04c8beb714d6f792450849  license.txt
-+sha256  fbee87edd32cf203fdd7925f0bab15c98e2dc1e0d61e70867f1190dc4a605b12  license.txt
-diff --git a/boot/xilinx-embeddedsw/xilinx_v2025.1/xilinx-embeddedsw.hash b/boot/xilinx-embeddedsw/xilinx_v2025.1/xilinx-embeddedsw.hash
-deleted file mode 100644
-index 0a42bab314..0000000000
---- a/boot/xilinx-embeddedsw/xilinx_v2025.1/xilinx-embeddedsw.hash
-+++ /dev/null
-@@ -1,5 +0,0 @@
--# Locally calculated
--sha256  867b7c7652f754d1a3d6edfe76e53223670e2b4c7e4144d4db1604403d68f616  xilinx-embeddedsw-xilinx_v2025.1.tar.gz
--
--# Locally calculated
--sha256  fbee87edd32cf203fdd7925f0bab15c98e2dc1e0d61e70867f1190dc4a605b12  license.txt
-diff --git a/configs/versal_vck190_defconfig b/configs/versal_vck190_defconfig
-index 623646610f..8ccd63c1cc 100644
---- a/configs/versal_vck190_defconfig
-+++ b/configs/versal_vck190_defconfig
-@@ -38,7 +38,6 @@ BR2_TARGET_UBOOT_FORMAT_DTB=y
- BR2_TARGET_UBOOT_FORMAT_REMAKE_ELF=y
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=versal-vck190-rev1.1"
- BR2_TARGET_XILINX_EMBEDDEDSW=y
--BR2_TARGET_XILINX_EMBEDDEDSW_VERSION="xilinx_v2025.1"
- BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM=y
- BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PSMFW=y
- BR2_TARGET_XILINX_PREBUILT=y
-diff --git a/configs/versal_vek280_defconfig b/configs/versal_vek280_defconfig
-index 0c65ef36fa..3b600d5a10 100644
---- a/configs/versal_vek280_defconfig
-+++ b/configs/versal_vek280_defconfig
-@@ -38,7 +38,6 @@ BR2_TARGET_UBOOT_FORMAT_DTB=y
- BR2_TARGET_UBOOT_FORMAT_REMAKE_ELF=y
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=versal-vek280-revB"
- BR2_TARGET_XILINX_EMBEDDEDSW=y
--BR2_TARGET_XILINX_EMBEDDEDSW_VERSION="xilinx_v2025.1"
- BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM=y
- BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PSMFW=y
- BR2_TARGET_XILINX_PREBUILT=y
-diff --git a/configs/versal_vpk180_defconfig b/configs/versal_vpk180_defconfig
-index e938aadeaf..882a0f5937 100644
---- a/configs/versal_vpk180_defconfig
-+++ b/configs/versal_vpk180_defconfig
-@@ -38,7 +38,6 @@ BR2_TARGET_UBOOT_FORMAT_DTB=y
- BR2_TARGET_UBOOT_FORMAT_REMAKE_ELF=y
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=versal-vpk180-revA"
- BR2_TARGET_XILINX_EMBEDDEDSW=y
--BR2_TARGET_XILINX_EMBEDDEDSW_VERSION="xilinx_v2025.1"
- BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM=y
- BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PSMFW=y
- BR2_TARGET_XILINX_PREBUILT=y
-diff --git a/configs/zynqmp_kria_kd240_defconfig b/configs/zynqmp_kria_kd240_defconfig
-index 8e7034105f..363a3d7f4b 100644
---- a/configs/zynqmp_kria_kd240_defconfig
-+++ b/configs/zynqmp_kria_kd240_defconfig
-@@ -44,7 +44,6 @@ BR2_TARGET_UBOOT_ZYNQMP_PMUFW_EMBEDDEDSW=y
- BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/kria/kd240/pm_cfg_obj.c"
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynqmp-smk-k24-revA"
- BR2_TARGET_XILINX_EMBEDDEDSW=y
--BR2_TARGET_XILINX_EMBEDDEDSW_VERSION="xilinx_v2025.1"
- BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW=y
- BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW_USER_CFLAGS="-DK24_SOM"
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
-diff --git a/configs/zynqmp_kria_kr260_defconfig b/configs/zynqmp_kria_kr260_defconfig
-index 41661a69de..7b56018dd1 100644
---- a/configs/zynqmp_kria_kr260_defconfig
-+++ b/configs/zynqmp_kria_kr260_defconfig
-@@ -44,7 +44,6 @@ BR2_TARGET_UBOOT_ZYNQMP_PMUFW_EMBEDDEDSW=y
- BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/kria/kr260/pm_cfg_obj.c"
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynqmp-smk-k26-revA"
- BR2_TARGET_XILINX_EMBEDDEDSW=y
--BR2_TARGET_XILINX_EMBEDDEDSW_VERSION="xilinx_v2025.1"
- BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW=y
- BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW_USER_CFLAGS="-DK26_SOM"
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
-diff --git a/configs/zynqmp_kria_kv260_defconfig b/configs/zynqmp_kria_kv260_defconfig
-index 0275edf30e..e9564e57e9 100644
---- a/configs/zynqmp_kria_kv260_defconfig
-+++ b/configs/zynqmp_kria_kv260_defconfig
-@@ -44,7 +44,6 @@ BR2_TARGET_UBOOT_ZYNQMP_PMUFW_EMBEDDEDSW=y
- BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/kria/kv260/pm_cfg_obj.c"
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynqmp-smk-k26-revA"
- BR2_TARGET_XILINX_EMBEDDEDSW=y
--BR2_TARGET_XILINX_EMBEDDEDSW_VERSION="xilinx_v2025.1"
- BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW=y
- BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW_USER_CFLAGS="-DK26_SOM"
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
-diff --git a/configs/zynqmp_zcu102_defconfig b/configs/zynqmp_zcu102_defconfig
-index 1d4debc8e4..f316d54e3f 100644
---- a/configs/zynqmp_zcu102_defconfig
-+++ b/configs/zynqmp_zcu102_defconfig
-@@ -43,7 +43,6 @@ BR2_TARGET_UBOOT_ZYNQMP_PMUFW_EMBEDDEDSW=y
- BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/zcu102/pm_cfg_obj.c"
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynqmp-zcu102-rev1.0"
- BR2_TARGET_XILINX_EMBEDDEDSW=y
--BR2_TARGET_XILINX_EMBEDDEDSW_VERSION="xilinx_v2025.1"
- BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW=y
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
-diff --git a/configs/zynqmp_zcu104_defconfig b/configs/zynqmp_zcu104_defconfig
-index 2eabe2e959..174567125f 100644
---- a/configs/zynqmp_zcu104_defconfig
-+++ b/configs/zynqmp_zcu104_defconfig
-@@ -43,7 +43,6 @@ BR2_TARGET_UBOOT_ZYNQMP_PMUFW_EMBEDDEDSW=y
- BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/zcu104/pm_cfg_obj.c"
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynqmp-zcu104-revC"
- BR2_TARGET_XILINX_EMBEDDEDSW=y
--BR2_TARGET_XILINX_EMBEDDEDSW_VERSION="xilinx_v2025.1"
- BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW=y
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
-diff --git a/configs/zynqmp_zcu106_defconfig b/configs/zynqmp_zcu106_defconfig
-index a62c7975bd..aa0b49d0f5 100644
---- a/configs/zynqmp_zcu106_defconfig
-+++ b/configs/zynqmp_zcu106_defconfig
-@@ -43,7 +43,6 @@ BR2_TARGET_UBOOT_ZYNQMP_PMUFW_EMBEDDEDSW=y
- BR2_TARGET_UBOOT_ZYNQMP_PM_CFG="board/zynqmp/zcu106/pm_cfg_obj.c"
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynqmp-zcu106-rev1.0"
- BR2_TARGET_XILINX_EMBEDDEDSW=y
--BR2_TARGET_XILINX_EMBEDDEDSW_VERSION="xilinx_v2025.1"
- BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW=y
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
--- 
-2.25.1
+--- snip ---
 
+> Also, as a comment for future defconfig maintenance, we are trying to
+> move the defconfigs to use a stable Bootlin external toolchain. See
+> for example the commit:
+> https://gitlab.com/buildroot.org/buildroot/-/commit/310ab7d53393288aba5c574c49a6cae1bf1e1a1d
+
+I see that the Linux headers config is removed when migrating the rasberrypi
+defconfigs from the buildroot toolchain to the bootlin toolchain.  I get that
+glibc is already built, so the Linux headers are not needed for glibc, but
+what about user space applications?  Do we really want to remove Linux headers
+from the defconfigs?
+
+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
+
+I am wondering whether or not to keep Linux headers with the Xilinx defconfigs,
+so I would appreciate your input.
+
+Thanks!
+
+> So it would nice to do this switch during one of the next updates,
+> to make sure this change is runtime tested.
+
+Best regards,
+Neal Frager
+AMD
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
