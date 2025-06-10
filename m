@@ -4,50 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0027C71134
-	for <buildroot@archiver.kernel.org>; Tue, 10 Jun 2025 21:52:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA21EC61DB2
+	for <buildroot@archiver.kernel.org>; Tue, 10 Jun 2025 21:52:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A72A183E16;
-	Tue, 10 Jun 2025 21:52:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7E38A80CD5;
+	Tue, 10 Jun 2025 21:52:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2P7hbXncGSAh; Tue, 10 Jun 2025 21:51:59 +0000 (UTC)
+ id BNVbb_CZ64OC; Tue, 10 Jun 2025 21:52:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C831283E13
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BFF1B80CDD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C831283E13;
-	Tue, 10 Jun 2025 21:51:59 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 32C64183
- for <buildroot@buildroot.org>; Tue, 10 Jun 2025 21:51:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BFF1B80CDD;
+	Tue, 10 Jun 2025 21:52:42 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 12F631F2
+ for <buildroot@buildroot.org>; Tue, 10 Jun 2025 21:52:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 24BCD83DFB
- for <buildroot@buildroot.org>; Tue, 10 Jun 2025 21:51:55 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id ED150400E7
+ for <buildroot@buildroot.org>; Tue, 10 Jun 2025 21:52:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LmT5RoZIXdy8 for <buildroot@buildroot.org>;
- Tue, 10 Jun 2025 21:51:53 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 67F1583DFA
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 67F1583DFA
- for <buildroot@buildroot.org>; Tue, 10 Jun 2025 21:51:53 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5836487BEE; Tue, 10 Jun 2025 21:51:53 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4PdfxrJCN873 for <buildroot@buildroot.org>;
+ Tue, 10 Jun 2025 21:52:40 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E2D7140069
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E2D7140069
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E2D7140069
+ for <buildroot@buildroot.org>; Tue, 10 Jun 2025 21:52:39 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id 0B9445FFB4;
+ Tue, 10 Jun 2025 23:52:28 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 10 Jun 2025 23:52:28 +0200
+MIME-Version: 1.0
+Date: Tue, 10 Jun 2025 23:52:28 +0200
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Tue, 10 Jun 2025 23:49:43 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ac35596c5a7de26c9ec954b10806634b33afa466
-X-Git-Newrev: 4e0ce46594693c342a5ca15692fbdd6b2899d54d
-X-Patchwork-Hint: ignore
-Message-Id: <20250610215153.5836487BEE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/zynqmp_*: move to
- external Bootlin stable toolchain
+To: Neal Frager <neal.frager@amd.com>
+Cc: buildroot@buildroot.org, ibai.erkiaga-elorza@amd.com,
+ luca.ceresoli@bootlin.com, brandon.maier@collins.com,
+ thomas.petazzoni@bootlin.com, romain.naour@smile.fr, michal.simek@amd.com
+In-Reply-To: <20250610052904.2449000-1-neal.frager@amd.com>
+References: <20250610052904.2449000-1-neal.frager@amd.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <45480e15d07b1a146ec7f0b0f77a0d4a@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1749592356;
+ bh=gFga01DIhtk5CJE2UIDNZ13n0yRpj9w8ga9TeHIcZ9M=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=opTJLhrWCjJf3pCAF/ztfoEkpuHLq3jT2g7uYzKIHWM/OAKr5rK+LFkTEaSieMTKN
+ SYIJtBSPXC0IaseqSm2FwyeXL9Ohv8yoe4S1fJaGVDI9PEcDdiJjyB/2+WjuaS/onj
+ bUgbW7VHlrH2RtxmWhDuwzsxLb78z/9Nla5RrLBCi6imkOY4OolZXboY9I/ZIcI+2J
+ w83FcK34koGhYXDrWKHO2RhasgW3orbzBmi9blSwmBRZdbuTrall1XKybCBPvC6vjv
+ X9+LUVt5F5Kdlopg0f4X9Tv9DaSlfKYNJ19JaUpYDJQjVsqicZPCzKbnjG78OpogBZ
+ FaF4F5dTaoB6A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=opTJLhrW
+Subject: Re: [Buildroot] [PATCH v1 1/1] boot/xilinx-embeddedsw: bump default
+ to xilinx_v2025.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,112 +85,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e0ce46594693c342a5ca15692fbdd6b2899d54d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On 10/06/2025 07:29, Neal Frager via buildroot wrote:
+> Now that all zynqmp and versal defconfigs have bumped to version
+> xilinx_v2025.1, the xilinx-embeddedsw default version can also be 
+> bumped
+> to xilinx_v2025.1.
+> 
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
 
-This moves the zynqmp defconfigs to the Bootlin glibc stable external toolchain
-as per[1].
-
-[1]: https://elinux.org/Buildroot:DeveloperDaysELCE2024#Rules_for_defconfigs
-
-This patch has been run-tested on the zcu106 evaluation board.
-This patch has been run-tested on the kv260 starter kit.
-
-Signed-off-by: Neal Frager <neal.frager@amd.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- configs/zynqmp_kria_kd240_defconfig | 4 +++-
- configs/zynqmp_kria_kr260_defconfig | 4 +++-
- configs/zynqmp_kria_kv260_defconfig | 4 +++-
- configs/zynqmp_zcu102_defconfig     | 4 +++-
- configs/zynqmp_zcu104_defconfig     | 4 +++-
- configs/zynqmp_zcu106_defconfig     | 4 +++-
- 6 files changed, 18 insertions(+), 6 deletions(-)
-
-diff --git a/configs/zynqmp_kria_kd240_defconfig b/configs/zynqmp_kria_kd240_defconfig
-index 363a3d7f4b..90ccfe9a79 100644
---- a/configs/zynqmp_kria_kd240_defconfig
-+++ b/configs/zynqmp_kria_kd240_defconfig
-@@ -1,5 +1,7 @@
- BR2_aarch64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
- BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
- BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-buildroot-elf"
- BR2_GLOBAL_PATCH_DIR="board/xilinx/patches board/xilinx/linux_6.12/patches"
-diff --git a/configs/zynqmp_kria_kr260_defconfig b/configs/zynqmp_kria_kr260_defconfig
-index 7b56018dd1..ae63bf487f 100644
---- a/configs/zynqmp_kria_kr260_defconfig
-+++ b/configs/zynqmp_kria_kr260_defconfig
-@@ -1,5 +1,7 @@
- BR2_aarch64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
- BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
- BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-buildroot-elf"
- BR2_GLOBAL_PATCH_DIR="board/xilinx/patches board/xilinx/linux_6.12/patches"
-diff --git a/configs/zynqmp_kria_kv260_defconfig b/configs/zynqmp_kria_kv260_defconfig
-index e9564e57e9..805c7f054e 100644
---- a/configs/zynqmp_kria_kv260_defconfig
-+++ b/configs/zynqmp_kria_kv260_defconfig
-@@ -1,5 +1,7 @@
- BR2_aarch64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
- BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
- BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-buildroot-elf"
- BR2_GLOBAL_PATCH_DIR="board/xilinx/patches board/xilinx/linux_6.12/patches"
-diff --git a/configs/zynqmp_zcu102_defconfig b/configs/zynqmp_zcu102_defconfig
-index f316d54e3f..7d4187684f 100644
---- a/configs/zynqmp_zcu102_defconfig
-+++ b/configs/zynqmp_zcu102_defconfig
-@@ -1,5 +1,7 @@
- BR2_aarch64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
- BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
- BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-buildroot-elf"
- BR2_GLOBAL_PATCH_DIR="board/xilinx/patches board/xilinx/linux_6.12/patches"
-diff --git a/configs/zynqmp_zcu104_defconfig b/configs/zynqmp_zcu104_defconfig
-index 174567125f..ccadf6183b 100644
---- a/configs/zynqmp_zcu104_defconfig
-+++ b/configs/zynqmp_zcu104_defconfig
-@@ -1,5 +1,7 @@
- BR2_aarch64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
- BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
- BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-buildroot-elf"
- BR2_GLOBAL_PATCH_DIR="board/xilinx/patches board/xilinx/linux_6.12/patches"
-diff --git a/configs/zynqmp_zcu106_defconfig b/configs/zynqmp_zcu106_defconfig
-index aa0b49d0f5..8630a40510 100644
---- a/configs/zynqmp_zcu106_defconfig
-+++ b/configs/zynqmp_zcu106_defconfig
-@@ -1,5 +1,7 @@
- BR2_aarch64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
- BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
- BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-buildroot-elf"
- BR2_GLOBAL_PATCH_DIR="board/xilinx/patches board/xilinx/linux_6.12/patches"
+Applied to next, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
