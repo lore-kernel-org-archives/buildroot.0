@@ -4,68 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A6BAC71136
-	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 20:09:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCD14C71136
+	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 20:10:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E02CD83BBB;
-	Thu, 12 Jun 2025 20:09:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7749383C25;
+	Thu, 12 Jun 2025 20:10:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 36676vf9NP3R; Thu, 12 Jun 2025 20:09:51 +0000 (UTC)
+ id USlGUj4WwYvI; Thu, 12 Jun 2025 20:10:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E4ADB83BA4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B74683C15
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E4ADB83BA4;
-	Thu, 12 Jun 2025 20:09:50 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 8D75C183
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:09:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7B74683C15;
+	Thu, 12 Jun 2025 20:10:09 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id CB90E183
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:10:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7F61160E0E
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:09:49 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B277F83BF4
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:10:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ksL-czhMFPmC for <buildroot@buildroot.org>;
- Thu, 12 Jun 2025 20:09:48 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0k6nqT_T3Wiv for <buildroot@buildroot.org>;
+ Thu, 12 Jun 2025 20:10:07 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
  helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 9070160A4B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9070160A4B
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B6A2F83BC3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B6A2F83BC3
 Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9070160A4B
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:09:48 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B6A2F83BC3
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:10:06 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 80BC81C10A0; Thu, 12 Jun 2025 22:09:46 +0200 (CEST)
-Message-ID: <b82d6f43-e309-4ac6-8b5b-f5dababe38a0@rnout.be>
-Date: Thu, 12 Jun 2025 22:09:45 +0200
+ with ESMTPSA id 6A39F1C116B; Thu, 12 Jun 2025 22:10:04 +0200 (CEST)
+Message-ID: <d6e94ff7-8dd6-4c55-9558-2adff51816a0@rnout.be>
+Date: Thu, 12 Jun 2025 22:10:02 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Peter Korsgaard <peter@korsgaard.com>, buildroot@buildroot.org
-Cc: Thomas Perale <thomas.perale@mind.be>,
- Christian Stewart <christian@aperture.us>
-References: <20250607121948.2175315-1-peter@korsgaard.com>
+To: Thomas Perale <thomas.perale@mind.be>, buildroot@buildroot.org
+Cc: Bernd Kuhls <bernd@kuhls.net>
+References: <20250608101422.883807-1-thomas.perale@mind.be>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20250607121948.2175315-1-peter@korsgaard.com>
+In-Reply-To: <20250608101422.883807-1-thomas.perale@mind.be>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1749758986; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1749759004; h=from:subject:date:message-id:to:cc:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=nrWqQeLVY2rgJsh2z7ce1CKnIVd92W/VwctZVMxFstQ=;
- b=TTfSPfrJYU+/hfnALukbi4yUiMTk67F1z0g9zZQoHymxpXR964hTwI84Nv8gzFnmzeINxo
- Br4p825ERCSblJm7Zikn9PVqwIVa0DnKe9xuuQ+EvMeINkgrM8OiXKaX0vnn8k6EnyzfW+
- fTH18k/ZcPmJ//42tB4lXSlR54f1/G9rdcakzWkgbEWkOwdRwK5C8nXQoi0ivnsjAOjzzx
- Mpyaa6B7d2eXcJ/Ku2ID+FZGfxFH2S4rP/5IgU+x5mj0eJTwWPZXTs99u5ihhG1eeDHKjA
- /v87i9zcH2NvE89ZnHtcU6+J0GMrZhzFtbR1+mXJcdpv9A2bbuyCRTpXmsU0FA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=xdZwJqWZKzUqdXMNItT4obKJY4usdtdHTAU45/kPn1o=;
+ b=BqQJoOo5wIdIJ4NmyXYGz/Dr5NwyKaWKc9S1qngAN635g0dVBy5X4rfmLcr4vvvKOOsnz9
+ A787mUcQ0rflnOS/eWy+6QauQ6c2x+swdLwXl/toWGArsOy110nO8J+xKZLbjwiKAURt5v
+ HA32Nw2anevbRSoN/oOtckAMm/h9bnXc45LPLY3ZJyUjHLNEzvL0B2kUcyfdntxWbV1J/3
+ hgmnmqePNxWsUfwtG54KECrMPiyq3SB6rSA171Q74T4/Q8R3oOXe2wIY1YvryKXTz7ar/U
+ 9ASxt2gUqpf+AaCTxmTqpk18DtReWkvoWKaUc++J8h9DT8aYhv0wk51V8uOFZA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=TTfSPfrJ
-Subject: Re: [Buildroot] [PATCH] package/go: security bump to version 1.23.10
+ header.a=rsa-sha256 header.s=dkim header.b=BqQJoOo5
+Subject: Re: [Buildroot] [PATCH 1/1] package/ghostscript: fix build with
+ host GCC 15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,36 +86,30 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 07/06/2025 14:19, Peter Korsgaard via buildroot wrote:
-> go1.23.9 (released 2025-05-06) includes fixes to the runtime and the linker.
+On 08/06/2025 12:14, Thomas Perale via buildroot wrote:
+> Fix the following autobuild error on configs with host GCC15.
 > 
-> go1.23.10 (released 2025-06-05) includes security fixes to the net/http and
-> os packages, as well as bug fixes to the linker.
+> ```
+> /workdir/instance-0/output-1/host/bin/ccache /usr/bin/gcc   -O2 -DNDEBUG -Wall -Wstrict-prototypes -Wundef -Wmissing-declarations -Wmissing-prototypes -Wwrite-strings -fno-strict-aliasing -Werror=declaration-after-statement -fno-builtin -fno-common -Werror=return-type -Wno-unused-local-typedefs -DHAVE_STDINT_H=1 -DHAVE_DIRENT_H=1 -DHAVE_SYS_DIR_H=1 -DHAVE_SYS_TIME_H=1 -DHAVE_SYS_TIMES_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_LIBDL=1 -DGX_COLOR_INDEX_TYPE="unsigned long long" -D__USE_UNIX98=1 -DHAVE_SNPRINTF  -O2 -I/workdir/instance-0/output-1/host/include -L/workdir/instance-0/output-1/host/lib -Wl,-rpath,/workdir/instance-0/output-1/host/lib -DNOCONTRIB -DHAVE_RESTRICT=1 -DHAVE_LIMITS_H=1 -DHAVE_STRING_H=1 -fno-strict-aliasing -O2 -I/workdir/instance-0/output-1/host/include -L/workdir/instance-0/output-1/host/lib -Wl,-rpath,/workdir/instance-0/output-1/host/lib -DHAVE_POPEN_PROTO=1  -I./base -o ./obj/aux/genconf ./base/genconf.c   -lz
+> In file included from ./base/genconf.c:18:
+> ./base/stdpre.h:348:13: error: 'bool' cannot be defined via 'typedef'
+>    348 | typedef int bool;
+>        |             ^~~~
+> ./base/stdpre.h:348:13: note: 'bool' is a keyword with '-std=c23' onwards
+> ./base/stdpre.h:348:1: warning: useless type name in empty declaration
+>    348 | typedef int bool;
+>        | ^~~~~~~
+> ```
 > 
-> Fixes the following security vulnerabilities:
+> This is due to the change in the default C language version in GCC15.
 > 
-> - CVE-2025-4673: net/http: sensitive headers not cleared on cross-origin
->    redirect
+> The patch included is not exactly the same as the upstream one, it only
+> picks the part that fix the `bool` definition and dropped the declaration
+> type changes.
 > 
->    Proxy-Authorization and Proxy-Authenticate headers persisted on
->    cross-origin redirects potentially leaking sensitive information
+> Fixes: https://autobuild.buildroot.org/results/9c6/9c6cbff256635c6ab4be4c5b7bf18f9d3c4b46681
 > 
-> - CVE-2025-0913: os: inconsistent handling of O_CREATE|O_EXCL on Unix and
->    Windows
-> 
->    os.OpenFile(path, os.O_CREATE|O_EXCL) behaved differently on Unix and
->    Windows systems when the target path was a dangling symlink.  On Unix
->    systems, OpenFile with O_CREATE and O_EXCL flags never follows symlinks.
->    On Windows, when the target path was a symlink to a nonexistent location,
->    OpenFile would create a file in that location.
-> 
-> - CVE-2025-22874: crypto/x509: usage of ExtKeyUsageAny disables policy validation
-> 
->    Calling Verify with a VerifyOptions.KeyUsages that contains ExtKeyUsageAny
->    unintentionally disabled policy validation.  This only affected
->    certificate chains which contain policy graphs, which are rather uncommon.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
   Applied to 2025.02.x, thanks.
 
@@ -123,44 +117,52 @@ On 07/06/2025 14:19, Peter Korsgaard via buildroot wrote:
   Arnout
 
 > ---
->   package/go/go.hash | 14 +++++++-------
->   package/go/go.mk   |  2 +-
->   2 files changed, 8 insertions(+), 8 deletions(-)
+>   ...Fix-compatibility-with-C23-compilers.patch | 36 +++++++++++++++++++
+>   1 file changed, 36 insertions(+)
+>   create mode 100644 package/ghostscript/0001-Fix-compatibility-with-C23-compilers.patch
 > 
-> diff --git a/package/go/go.hash b/package/go/go.hash
-> index 48ba6b7fd9..62e0772e2e 100644
-> --- a/package/go/go.hash
-> +++ b/package/go/go.hash
-> @@ -1,9 +1,9 @@
->   # sha256 checksum from https://go.dev/dl/
-> -sha256  0ca1f1e37ea255e3ce283af3f4e628502fb444587da987a5bb96d6c6f15930d4  go1.23.8.src.tar.gz
-> -sha256  714b9d004063bfa27686f9ff0e5648bb190b3a5bc1e86b0aa16c134d8d8c315f  go1.23.8.linux-386.tar.gz
-> -sha256  45b87381172a58d62c977f27c4683c8681ef36580abecd14fd124d24ca306d3f  go1.23.8.linux-amd64.tar.gz
-> -sha256  9d6d938422724a954832d6f806d397cf85ccfde8c581c201673e50e634fdc992  go1.23.8.linux-arm64.tar.gz
-> -sha256  d14e0bea9fb25344a0460f395880d5589bbcd413ffd5555be48e46c0de084437  go1.23.8.linux-armv6l.tar.gz
-> -sha256  0cadab469e612b159f5f68b1a30d75aa7b7e1ed5292746005a6a3c8ff04e6f35  go1.23.8.linux-ppc64le.tar.gz
-> -sha256  cbe954ee534eb02aa782639716d8c25706dd171445f7c8336bd2fc0b8f6fe38e  go1.23.8.linux-s390x.tar.gz
-> +sha256  800a7ae1bff179a227b653a2f644517c800443b8b4abf3273af5e1cb7113de59  go1.23.10.src.tar.gz
-> +sha256  ded3c0a8d6d2a0ea5e7599c49678efa05cda139d31baaaf7d8d536a9e4cc19b2  go1.23.10.linux-386.tar.gz
-> +sha256  535f9f81802499f2a7dbfa70abb8fda3793725fcc29460f719815f6e10b5fd60  go1.23.10.linux-amd64.tar.gz
-> +sha256  bfb1f1df7173f44648ee070a39ab0481068632f595305a699d89cd56a33b8081  go1.23.10.linux-arm64.tar.gz
-> +sha256  b6e00c9a72406d394b9f167e74670e28b72ed559cca8115b21be1cb9d5316cb4  go1.23.10.linux-armv6l.tar.gz
-> +sha256  8fb94455cfa5e9a5e8af2bfbc7323a6fed2dabaffda1a69dae5dd41b669bbb57  go1.23.10.linux-ppc64le.tar.gz
-> +sha256  7d0e8651eb54fce5cfe2d4b412ddfa50144ce21907f72192a6549ffe03db4e1f  go1.23.10.linux-s390x.tar.gz
->   sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-> diff --git a/package/go/go.mk b/package/go/go.mk
-> index d618a7a262..744bb0d3ba 100644
-> --- a/package/go/go.mk
-> +++ b/package/go/go.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
->   
-> -GO_VERSION = 1.23.8
-> +GO_VERSION = 1.23.10
->   
->   HOST_GO_GOPATH = $(HOST_DIR)/share/go-path
->   HOST_GO_HOST_CACHE = $(HOST_DIR)/share/host-go-cache
+> diff --git a/package/ghostscript/0001-Fix-compatibility-with-C23-compilers.patch b/package/ghostscript/0001-Fix-compatibility-with-C23-compilers.patch
+> new file mode 100644
+> index 0000000000..0dfca9cfa2
+> --- /dev/null
+> +++ b/package/ghostscript/0001-Fix-compatibility-with-C23-compilers.patch
+> @@ -0,0 +1,36 @@
+> +From ae940946473ceb8c5353bc6e7f04673c6e60502d Mon Sep 17 00:00:00 2001
+> +From: Alex Cherepanov <alex@coscript.biz>
+> +Date: Thu, 3 Apr 2025 17:19:41 +0100
+> +Subject: Bug 708160: Fix compatibility with C23 compilers
+> +
+> +Upstream: https://cgit.ghostscript.com/cgi-bin/cgit.cgi/ghostpdl.git/commit/?id=ae940946473ceb8c5353bc6e7f04673c6e60502d
+> +[thomas: Only backport the bool typedef condition]
+> +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+> +---
+> + base/stdpre.h              |  6 ++++--
+> + 1 files changed, 4 insertions(+), 2 deletions(-)
+> +
+> +diff --git a/base/stdpre.h b/base/stdpre.h
+> +index dda30b6a4..2f9c84e0d 100644
+> +--- a/base/stdpre.h
+> ++++ b/base/stdpre.h
+> +@@ -1,4 +1,4 @@
+> +-/* Copyright (C) 2001-2023 Artifex Software, Inc.
+> ++/* Copyright (C) 2001-2025 Artifex Software, Inc.
+> +    All Rights Reserved.
+> +
+> +    This software is provided AS-IS with no warranty, either express or
+> +@@ -341,7 +341,9 @@ typedef signed char schar;
+> +  * and the MetroWerks C++ compiler insists that bool be equivalent to
+> +  * unsigned char.
+> +  */
+> +-#ifndef __cplusplus
+> ++
+> ++/* C23 has bool as a builtin type. */
+> ++#if !defined(__cplusplus) && (!defined(__STDC_VERSION__) || __STDC_VERSION__ < 202311L)
+> + #ifdef __BEOS__
+> + typedef unsigned char bool;
+> + #else
+> +--
+> +cgit v1.2.3
+> +
 
 _______________________________________________
 buildroot mailing list
