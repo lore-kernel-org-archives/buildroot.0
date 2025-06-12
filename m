@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F3AAC71136
-	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 19:56:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E35FC71136
+	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 19:57:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D526640942;
-	Thu, 12 Jun 2025 19:56:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F06B2405CF;
+	Thu, 12 Jun 2025 19:57:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id up0SvTZxgAjk; Thu, 12 Jun 2025 19:56:53 +0000 (UTC)
+ id BsA2Oo0ni4lp; Thu, 12 Jun 2025 19:57:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CBE2440923
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 27535406F5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CBE2440923;
-	Thu, 12 Jun 2025 19:56:53 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id E89AB1BD
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 19:56:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 27535406F5;
+	Thu, 12 Jun 2025 19:57:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 234AD1BD
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 19:57:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CE7E460DA5
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 19:56:52 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 202D480BBF
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 19:57:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n5emF6OPYzHj for <buildroot@buildroot.org>;
- Thu, 12 Jun 2025 19:56:52 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rjsjVe5EZpGx for <buildroot@buildroot.org>;
+ Thu, 12 Jun 2025 19:57:44 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
  helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C1BE060E1A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C1BE060E1A
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3C96880BBC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3C96880BBC
 Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C1BE060E1A
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 19:56:51 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3C96880BBC
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 19:57:44 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id BC9581C00EF; Thu, 12 Jun 2025 21:56:49 +0200 (CEST)
-Message-ID: <97c27f03-fbc0-49d6-9353-0c7049f0e41f@rnout.be>
-Date: Thu, 12 Jun 2025 21:56:48 +0200
+ with ESMTPSA id 4951C1C0F87; Thu, 12 Jun 2025 21:57:42 +0200 (CEST)
+Message-ID: <e8fd0ba4-9bf6-4fb7-adab-e3aea828a5e6@rnout.be>
+Date: Thu, 12 Jun 2025 21:57:41 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Titouan Christophe <titouan.christophe@mind.be>, buildroot@buildroot.org
-References: <20250526142413.29398-1-titouan.christophe@mind.be>
+To: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+References: <20250526203501.126937-1-ju.o@free.fr>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20250526142413.29398-1-titouan.christophe@mind.be>
+In-Reply-To: <20250526203501.126937-1-ju.o@free.fr>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1749758209; h=from:subject:date:message-id:to:mime-version:content-type:
+ t=1749758262; h=from:subject:date:message-id:to:cc:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=w6wJGO8bPuhV57tUIF6HX6P7Z5Rn5I9ukbE9B/Ccx+8=;
- b=kQwEq5ZfbMVCqLQbmPU1yhiimKgtRISV7jTOkBA035yFyRvRG7Yr9x5BP8+jw7LQ/TRuhP
- oUyBD4SakU0ArTjIc2ZHbZrln0N9NBnlO9eXQab9SJ4pjTas7bMXbmet6GQMfGnLyKjr9Y
- syqrMe26A7a8Xx+JWMykahQFJ2GhXLqmPS4gD3cftQ3djkgYMXgHRKyqbGm4765QUoZcuR
- Z1E6M25584oSK05qNuC+ZYYnK/rT/UXx+FYUF81nUl8GSZn5QYRdhrvneTrBMBpgGqP8qO
- Y/ngDHGaFGTsiDqmgtjm/MLXzHsb0HJS/vVfijcZnQir/SFfuO8V/JXEEbSjiQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=zpE4VyLONMpscRBB/PadxtCrfpktXh50Qz36R+Yn0hc=;
+ b=SVzffBACRK1mRvJnXQ9JbGKzcIjz5Rnt6OVi3+zvKrKQmADPWTbqmk8DWFDh4HaMqteerL
+ Gxp3/p0vuGFBLglu4BXPnKYfq0VjlvRJ5DnJH3TQkc0onpbspt6Zu6VFemPmAkioOr8sSS
+ vJG6MVuO2Xjo67reo2rjG4PunwAnrn9F2xPYfXc6lgm691zknP+ikbsVAJIDZ8IcNwMwe1
+ dQaAkDAeTYJD/iNHf5rcxTYZaff1KaKSwFpDgwg/hFcYrMTgdWQusLL4ns7YjXNTjPc1W4
+ tW8IwZJeHCdaQ1iEt0RI1lSsYC5QAm3rwHuyHPCZDu6oowsRL5E5wu0ET1ECBA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=kQwEq5Zf
-Subject: Re: [Buildroot] [PATCH] package/assimp: apply security patches for
- CVE-2025-3015, 3016
+ header.a=rsa-sha256 header.s=dkim header.b=SVzffBAC
+Subject: Re: [Buildroot] [PATCH 1/1] package/esp-hosted: fix legal-info
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,28 +85,29 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 26/05/2025 16:24, Titouan Christophe via buildroot wrote:
-> Fixes the following CVEs:
-> - CVE-2025-3015: A vulnerability classified as critical has been found in
->                   Open Asset Import Library Assimp 5.4.3. This affects the
->                   function Assimp::ASEImporter::BuildUniqueRepresentation of
->                   the file code/AssetLib/ASE/ASELoader.cpp of the component
->                   ASE File Handler. The manipulation of the argument mIndices
->                   leads to out-of-bounds read. It is possible to initiate the
->                   attack remotely. The exploit has been disclosed to the
->                   public and may be used.
->      See: https://www.cve.org/CVERecord?id=CVE-2025-3015
+On 26/05/2025 22:35, Julien Olivain wrote:
+> The esp-hosted package was introduced in [1] defining the variable
+> ESP_HOSTED_LICENSE_FILE (singular). The name should be
+> ESP_HOSTED_LICENSE_FILES (plural). This typo makes the license file
+> being ignored during a "make legal-info" which shows a warning at
+> the end:
 > 
-> - CVE-2025-3016: A vulnerability classified as problematic was found in
->                   Open Asset Import Library Assimp 5.4.3. This vulnerability
->                   affects the function Assimp::MDLImporter::ParseTextureColorData
->                   of the file code/AssetLib/MDL/MDLMaterialLoader.cpp of the
->                   component MDL File Handler. The manipulation of the argument
->                   mWidth/mHeight leads to resource consumption.
->                   The attack can be initiated remotely
->      See: https://www.cve.org/CVERecord?id=CVE-2025-3016
+>      WARNING: esp-hosted-9a2312b0b: cannot save license (ESP_HOSTED_LICENSE_FILES not defined)
 > 
-> Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+> Fixing the variable name also reveals the license file path was
+> incorrect. The "esp_hosted_ng/host/" directory prefix is missing.
+> Finally, setting the correct path shows the hash was wrong (it was
+> the hash of the Apache-2.0 [2] file, which corresponds to another
+> unused code portion). So the license file hash is also changed to
+> correspond to the correct GPL-2.0 license file.
+> 
+> This commit fixes all the needed esp-hosted legal-info.
+> 
+> [1] https://gitlab.com/buildroot.org/buildroot/-/commit/7b2e5e6550aed4f79461919c6a59e00741eb4b11
+> [2] https://github.com/espressif/esp-hosted/blob/release/ng-v1.0.4.0.0/LICENSES/Apache-2.0
+> 
+> Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
 
   Applied to 2025.02.x, thanks.
 
@@ -114,112 +115,32 @@ On 26/05/2025 16:24, Titouan Christophe via buildroot wrote:
   Arnout
 
 > ---
->   ...ASE-fix-possible-out-of-bound-access.patch | 29 +++++++++++++
->   .../0004-MDL-limit-max-texture-sizes.patch    | 41 +++++++++++++++++++
->   package/assimp/assimp.mk                      |  6 +++
->   3 files changed, 76 insertions(+)
->   create mode 100644 package/assimp/0003-ASE-fix-possible-out-of-bound-access.patch
->   create mode 100644 package/assimp/0004-MDL-limit-max-texture-sizes.patch
+>   package/esp-hosted/esp-hosted.hash | 2 +-
+>   package/esp-hosted/esp-hosted.mk   | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/assimp/0003-ASE-fix-possible-out-of-bound-access.patch b/package/assimp/0003-ASE-fix-possible-out-of-bound-access.patch
-> new file mode 100644
-> index 0000000000..427b7a4888
-> --- /dev/null
-> +++ b/package/assimp/0003-ASE-fix-possible-out-of-bound-access.patch
-> @@ -0,0 +1,29 @@
-> +From 65c95bf3207b81fe522811d45780d72ed41d9c1e Mon Sep 17 00:00:00 2001
-> +From: Kim Kulling <kim.kulling@googlemail.com>
-> +Date: Wed, 12 Mar 2025 20:17:38 +0100
-> +Subject: [PATCH] ASE: Fix possible out of bound access.
-> +
-> +Upstream: https://github.com/assimp/assimp/pull/6045
-> +
-> +CVE: CVE-2025-3015
-> +
-> +Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-> +---
-> + code/AssetLib/ASE/ASELoader.cpp | 4 ++++
-> + 1 file changed, 4 insertions(+)
-> +
-> +diff --git a/code/AssetLib/ASE/ASELoader.cpp b/code/AssetLib/ASE/ASELoader.cpp
-> +index eb6b37dc9b..c63edcf6bf 100644
-> +--- a/code/AssetLib/ASE/ASELoader.cpp
-> ++++ b/code/AssetLib/ASE/ASELoader.cpp
-> +@@ -731,6 +731,10 @@ void ASEImporter::BuildUniqueRepresentation(ASE::Mesh &mesh) {
-> +     unsigned int iCurrent = 0, fi = 0;
-> +     for (std::vector<ASE::Face>::iterator i = mesh.mFaces.begin(); i != mesh.mFaces.end(); ++i, ++fi) {
-> +         for (unsigned int n = 0; n < 3; ++n, ++iCurrent) {
-> ++            const uint32_t curIndex = (*i).mIndices[n];
-> ++            if (curIndex >= mesh.mPositions.size()) {
-> ++                throw DeadlyImportError("ASE: Invalid vertex index in face ", fi, ".");
-> ++            }
-> +             mPositions[iCurrent] = mesh.mPositions[(*i).mIndices[n]];
-> +
-> +             // add texture coordinates
-> diff --git a/package/assimp/0004-MDL-limit-max-texture-sizes.patch b/package/assimp/0004-MDL-limit-max-texture-sizes.patch
-> new file mode 100644
-> index 0000000000..ae7e54f35d
-> --- /dev/null
-> +++ b/package/assimp/0004-MDL-limit-max-texture-sizes.patch
-> @@ -0,0 +1,41 @@
-> +From 5d2a7482312db2e866439a8c05a07ce1e718bed1 Mon Sep 17 00:00:00 2001
-> +From: Kim Kulling <kimkulling@users.noreply.github.com>
-> +Date: Wed, 12 Mar 2025 21:29:33 +0100
-> +Subject: [PATCH] MDL: Limit max texture sizes
-> +
-> +- closes https://github.com/assimp/assimp/issues/6022
-> +
-> +Upstream: https://github.com/assimp/assimp/pull/6046
-> +
-> +CVE: CVE-2025-3016
-> +
-> +Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-> +---
-> + code/AssetLib/MDL/MDLMaterialLoader.cpp | 7 +++++++
-> + 1 file changed, 7 insertions(+)
-> +
-> +diff --git a/code/AssetLib/MDL/MDLMaterialLoader.cpp b/code/AssetLib/MDL/MDLMaterialLoader.cpp
-> +index 2cac8a1e26..2e09992e89 100644
-> +--- a/code/AssetLib/MDL/MDLMaterialLoader.cpp
-> ++++ b/code/AssetLib/MDL/MDLMaterialLoader.cpp
-> +@@ -209,6 +209,8 @@ void MDLImporter::CreateTexture_3DGS_MDL4(const unsigned char *szData,
-> +     return;
-> + }
-> +
-> ++static const uint32_t MaxTextureSize = 4096;
-> ++
-> + // ------------------------------------------------------------------------------------------------
-> + // Load color data of a texture and convert it to our output format
-> + void MDLImporter::ParseTextureColorData(const unsigned char *szData,
-> +@@ -219,6 +221,11 @@ void MDLImporter::ParseTextureColorData(const unsigned char *szData,
-> +
-> +     // allocate storage for the texture image
-> +     if (do_read) {
-> ++        // check for max texture sizes
-> ++        if (pcNew->mWidth > MaxTextureSize || pcNew->mHeight > MaxTextureSize) {
-> ++            throw DeadlyImportError("Invalid MDL file. A texture is too big.");
-> ++        }
-> ++
-> +         if(pcNew->mWidth != 0 && pcNew->mHeight > UINT_MAX/pcNew->mWidth) {
-> +             throw DeadlyImportError("Invalid MDL file. A texture is too big.");
-> +         }
-> diff --git a/package/assimp/assimp.mk b/package/assimp/assimp.mk
-> index a4614a01a2..39ad234546 100644
-> --- a/package/assimp/assimp.mk
-> +++ b/package/assimp/assimp.mk
-> @@ -16,6 +16,12 @@ ASSIMP_INSTALL_STAGING = YES
->   # 0002-Fix-use-after-free-in-the-CallbackToLogRedirector-59.patch
->   ASSIMP_IGNORE_CVES += CVE-2024-48423
+> diff --git a/package/esp-hosted/esp-hosted.hash b/package/esp-hosted/esp-hosted.hash
+> index 8de3c00190..fee82b00e0 100644
+> --- a/package/esp-hosted/esp-hosted.hash
+> +++ b/package/esp-hosted/esp-hosted.hash
+> @@ -1,3 +1,3 @@
+>   # Locally calculated
+>   sha256  66c07e2f69d8a10fb111b6df27fbe3558734d660207a54391c46eea3e12b29ee  esp-hosted-9a2312b0b2630e41bacb3091faaba489cb43b0ab.tar.gz
+> -sha256  ed57d96d27be775b22f9571d3724ef84e0d0b8f24b805ec7f87a32189de19a9c  LICENSE
+> +sha256  f6b78c087c3ebdf0f3c13415070dd480a3f35d8fc76f3d02180a407c1c812f79  esp_hosted_ng/host/LICENSE
+> diff --git a/package/esp-hosted/esp-hosted.mk b/package/esp-hosted/esp-hosted.mk
+> index 4c249eec46..475d32da43 100644
+> --- a/package/esp-hosted/esp-hosted.mk
+> +++ b/package/esp-hosted/esp-hosted.mk
+> @@ -8,7 +8,7 @@ ESP_HOSTED_VERSION = 9a2312b0b2630e41bacb3091faaba489cb43b0ab
+>   ESP_HOSTED_SITE = $(call github,espressif,esp-hosted,$(ESP_HOSTED_VERSION))
+>   ESP_HOSTED_DEPENDENCIES = linux
+>   ESP_HOSTED_LICENSE = GPL-2.0
+> -ESP_HOSTED_LICENSE_FILE = LICENSE
+> +ESP_HOSTED_LICENSE_FILES = esp_hosted_ng/host/LICENSE
+>   ESP_HOSTED_MODULE_SUBDIRS = esp_hosted_ng/host
 >   
-> +# 0003-ASE-fix-possible-out-of-bound-access.patch
-> +ASSIMP_IGNORE_CVES += CVE-2025-3015
-> +
-> +# 0004-MDL-limit-max-texture-sizes.patch
-> +ASSIMP_IGNORE_CVES += CVE-2025-3016
-> +
->   # relocation truncated to fit: R_68K_GOT16O. We also need to disable
->   # optimizations to not run into "Error: value -43420 out of range"
->   # assembler issues.
+>   define ESP_HOSTED_LINUX_CONFIG_FIXUPS
 
 _______________________________________________
 buildroot mailing list
