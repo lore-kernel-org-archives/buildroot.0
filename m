@@ -4,68 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A62CAC61CE8
-	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 19:56:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F3AAC71136
+	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 19:56:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7A7B240914;
-	Thu, 12 Jun 2025 19:56:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D526640942;
+	Thu, 12 Jun 2025 19:56:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Am4tMz4M3SiW; Thu, 12 Jun 2025 19:56:41 +0000 (UTC)
+ id up0SvTZxgAjk; Thu, 12 Jun 2025 19:56:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C941408D0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CBE2440923
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7C941408D0;
-	Thu, 12 Jun 2025 19:56:41 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id A94191BD
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 19:56:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CBE2440923;
+	Thu, 12 Jun 2025 19:56:53 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id E89AB1BD
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 19:56:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9A4E181B58
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 19:56:39 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CE7E460DA5
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 19:56:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YpP1L_oLZCAH for <buildroot@buildroot.org>;
- Thu, 12 Jun 2025 19:56:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id n5emF6OPYzHj for <buildroot@buildroot.org>;
+ Thu, 12 Jun 2025 19:56:52 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
  helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9F8F483BE8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9F8F483BE8
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C1BE060E1A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C1BE060E1A
 Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9F8F483BE8
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 19:56:38 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C1BE060E1A
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 19:56:51 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 2270D1C0D69; Thu, 12 Jun 2025 21:56:36 +0200 (CEST)
-Message-ID: <59a05081-92aa-44a0-a3a4-bc6a2a3bf479@rnout.be>
-Date: Thu, 12 Jun 2025 21:56:34 +0200
+ with ESMTPSA id BC9581C00EF; Thu, 12 Jun 2025 21:56:49 +0200 (CEST)
+Message-ID: <97c27f03-fbc0-49d6-9353-0c7049f0e41f@rnout.be>
+Date: Thu, 12 Jun 2025 21:56:48 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- buildroot@buildroot.org
-Cc: linux-amarula@amarulasolutions.com
-References: <20250526161403.1305438-1-dario.binacchi@amarulasolutions.com>
+To: Titouan Christophe <titouan.christophe@mind.be>, buildroot@buildroot.org
+References: <20250526142413.29398-1-titouan.christophe@mind.be>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20250526161403.1305438-1-dario.binacchi@amarulasolutions.com>
+In-Reply-To: <20250526142413.29398-1-titouan.christophe@mind.be>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1749758196; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1749758209; h=from:subject:date:message-id:to:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=Zls/5gGtzaV03INi3EejauNXHZznyLSIjhDcaIC/quQ=;
- b=aescUATBG22W/q6Zc+OS2TG4ZHgaKl8RmfnMVD0u7tM2Yo5o5zlGKzpranuGJQXtCijP2v
- ON35l/ZVZB/hb3yXjZ0WmPXOOpiT4UiT1UCd17u5zjeyBEop66ldtT8hcTHHFwErK81ZcM
- Nd+EcVr7MpS6BpYpy7ZP1x9m2IW4xHVaRC9vbhyO5Z1tiejyqCwmrCvuEQRBovVVIRNl0x
- ESN6tBKrMtQhMu1wnmq9Wtcor/0kaQnrr/APV/Vk4mnHqVnIMKQ5Kva4gEeAhqkahnwWUD
- cnLjjiUrhyFoIxWz4KN+Cqghk6hqok7UgARBJsFiSx8buefcWZA7AxENhU8Ocg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=w6wJGO8bPuhV57tUIF6HX6P7Z5Rn5I9ukbE9B/Ccx+8=;
+ b=kQwEq5ZfbMVCqLQbmPU1yhiimKgtRISV7jTOkBA035yFyRvRG7Yr9x5BP8+jw7LQ/TRuhP
+ oUyBD4SakU0ArTjIc2ZHbZrln0N9NBnlO9eXQab9SJ4pjTas7bMXbmet6GQMfGnLyKjr9Y
+ syqrMe26A7a8Xx+JWMykahQFJ2GhXLqmPS4gD3cftQ3djkgYMXgHRKyqbGm4765QUoZcuR
+ Z1E6M25584oSK05qNuC+ZYYnK/rT/UXx+FYUF81nUl8GSZn5QYRdhrvneTrBMBpgGqP8qO
+ Y/ngDHGaFGTsiDqmgtjm/MLXzHsb0HJS/vVfijcZnQir/SFfuO8V/JXEEbSjiQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=aescUATB
-Subject: Re: [Buildroot] [PATCH 1/1] package/uuu: fix gcc-15 compile errors
+ header.a=rsa-sha256 header.s=dkim header.b=kQwEq5Zf
+Subject: Re: [Buildroot] [PATCH] package/assimp: apply security patches for
+ CVE-2025-3015, 3016
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,33 +85,28 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 26/05/2025 18:14, Dario Binacchi wrote:
-> Fix the following compilation errors:
+On 26/05/2025 16:24, Titouan Christophe via buildroot wrote:
+> Fixes the following CVEs:
+> - CVE-2025-3015: A vulnerability classified as critical has been found in
+>                   Open Asset Import Library Assimp 5.4.3. This affects the
+>                   function Assimp::ASEImporter::BuildUniqueRepresentation of
+>                   the file code/AssetLib/ASE/ASELoader.cpp of the component
+>                   ASE File Handler. The manipulation of the argument mIndices
+>                   leads to out-of-bounds read. It is possible to initiate the
+>                   attack remotely. The exploit has been disclosed to the
+>                   public and may be used.
+>      See: https://www.cve.org/CVERecord?id=CVE-2025-3015
 > 
-> In file included from /workdir/instance-0/output-1/build/host-uuu-1.5.201/libuuu/sdps.cpp:32:
-> /workdir/instance-0/output-1/build/host-uuu-1.5.201/libuuu/sdps.h:52:9: error: 'uint32_t' does not name a type
->     52 |         uint32_t m_offset = 0;
->        |         ^~~~~~~~
-> /workdir/instance-0/output-1/build/host-uuu-1.5.201/libuuu/sdps.h:33:1: note: 'uint32_t' is defined in header '<cstdint>'; this is probably fixable by adding '#include <cstdint>'
->     32 | #include "cmd.h"
->    +++ |+#include <cstdint>
->     33 |
-> /workdir/instance-0/output-1/build/host-uuu-1.5.201/libuuu/sdps.h:53:9: error: 'uint64_t' does not name a type
->     53 |         uint64_t m_scan_limited = UINT64_MAX;
->        |         ^~~~~~~~
-> /workdir/instance-0/output-1/build/host-uuu-1.5.201/libuuu/sdps.h:53:9: note: 'uint64_t' is defined in header '<cstdint>'; this is probably fixable by adding '#include <cstdint>'
-> /workdir/instance-0/output-1/build/host-uuu-1.5.201/libuuu/sdps.h: In constructor 'SDPSCmd::SDPSCmd(char*)':
-> /workdir/instance-0/output-1/build/host-uuu-1.5.201/libuuu/sdps.h:41:47: error: 'm_offset' was not declared in this scope
->     41 |                 insert_param_info("-offset", &m_offset, Param::Type::e_uint32);
+> - CVE-2025-3016: A vulnerability classified as problematic was found in
+>                   Open Asset Import Library Assimp 5.4.3. This vulnerability
+>                   affects the function Assimp::MDLImporter::ParseTextureColorData
+>                   of the file code/AssetLib/MDL/MDLMaterialLoader.cpp of the
+>                   component MDL File Handler. The manipulation of the argument
+>                   mWidth/mHeight leads to resource consumption.
+>                   The attack can be initiated remotely
+>      See: https://www.cve.org/CVERecord?id=CVE-2025-3016
 > 
-> Fixes:
-> - https://autobuild.buildroot.org/results/b7b/b7bd052a0137a2e2d5606d66a0dc563789999364/
-> - https://autobuild.buildroot.org/results/350/3500f573427545e51bfc4fc708f769966d95bf1e/
-> - https://autobuild.buildroot.org/results/6dc/6dc2b0585e8e1900e5a977cd0b9e26b2ee1e90d4/
-> - https://autobuild.buildroot.org/results/d1f/d1f82cae003cddefae0c49f673768cd8601449f2/
-> - https://autobuild.buildroot.org/results/9ed/9edc245d0a03089812d631708a4294ff293a461d/
-> 
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 
   Applied to 2025.02.x, thanks.
 
@@ -120,49 +114,112 @@ On 26/05/2025 18:14, Dario Binacchi wrote:
   Arnout
 
 > ---
->   ...libuuu-sdps-fix-gcc15-compile-errors.patch | 33 +++++++++++++++++++
->   1 file changed, 33 insertions(+)
->   create mode 100644 package/uuu/0001-libuuu-sdps-fix-gcc15-compile-errors.patch
+>   ...ASE-fix-possible-out-of-bound-access.patch | 29 +++++++++++++
+>   .../0004-MDL-limit-max-texture-sizes.patch    | 41 +++++++++++++++++++
+>   package/assimp/assimp.mk                      |  6 +++
+>   3 files changed, 76 insertions(+)
+>   create mode 100644 package/assimp/0003-ASE-fix-possible-out-of-bound-access.patch
+>   create mode 100644 package/assimp/0004-MDL-limit-max-texture-sizes.patch
 > 
-> diff --git a/package/uuu/0001-libuuu-sdps-fix-gcc15-compile-errors.patch b/package/uuu/0001-libuuu-sdps-fix-gcc15-compile-errors.patch
+> diff --git a/package/assimp/0003-ASE-fix-possible-out-of-bound-access.patch b/package/assimp/0003-ASE-fix-possible-out-of-bound-access.patch
 > new file mode 100644
-> index 000000000000..a3c1d85fc07d
+> index 0000000000..427b7a4888
 > --- /dev/null
-> +++ b/package/uuu/0001-libuuu-sdps-fix-gcc15-compile-errors.patch
-> @@ -0,0 +1,33 @@
-> +From 142448e55386b88adf5b1d7e6206df1ca6784708 Mon Sep 17 00:00:00 2001
-> +From: Bruno Thomsen <bruno.thomsen@gmail.com>
-> +Date: Sat, 1 Mar 2025 14:32:41 +0100
-> +Subject: [PATCH] libuuu/sdps: fix gcc15 compile errors
+> +++ b/package/assimp/0003-ASE-fix-possible-out-of-bound-access.patch
+> @@ -0,0 +1,29 @@
+> +From 65c95bf3207b81fe522811d45780d72ed41d9c1e Mon Sep 17 00:00:00 2001
+> +From: Kim Kulling <kim.kulling@googlemail.com>
+> +Date: Wed, 12 Mar 2025 20:17:38 +0100
+> +Subject: [PATCH] ASE: Fix possible out of bound access.
 > +
-> +This gcc 15 error happens on Fedora 42.
+> +Upstream: https://github.com/assimp/assimp/pull/6045
 > +
-> +error: uint32_t does not name a type
+> +CVE: CVE-2025-3015
 > +
-> +error: uint64_t does not name a type
-> +
-> +Signed-off-by: Bruno Thomsen <bruno.thomsen@gmail.com>
-> +Upstream: https://github.com/nxp-imx/mfgtools/commit/142448e55386b88adf5b1d7e6206df1ca6784708
-> +Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> +Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 > +---
-> + libuuu/sdps.h | 1 +
-> + 1 file changed, 1 insertion(+)
+> + code/AssetLib/ASE/ASELoader.cpp | 4 ++++
+> + 1 file changed, 4 insertions(+)
 > +
-> +diff --git a/libuuu/sdps.h b/libuuu/sdps.h
-> +index b82f9d71c981..667a477ee48f 100644
-> +--- a/libuuu/sdps.h
-> ++++ b/libuuu/sdps.h
-> +@@ -30,6 +30,7 @@
-> + */
+> +diff --git a/code/AssetLib/ASE/ASELoader.cpp b/code/AssetLib/ASE/ASELoader.cpp
+> +index eb6b37dc9b..c63edcf6bf 100644
+> +--- a/code/AssetLib/ASE/ASELoader.cpp
+> ++++ b/code/AssetLib/ASE/ASELoader.cpp
+> +@@ -731,6 +731,10 @@ void ASEImporter::BuildUniqueRepresentation(ASE::Mesh &mesh) {
+> +     unsigned int iCurrent = 0, fi = 0;
+> +     for (std::vector<ASE::Face>::iterator i = mesh.mFaces.begin(); i != mesh.mFaces.end(); ++i, ++fi) {
+> +         for (unsigned int n = 0; n < 3; ++n, ++iCurrent) {
+> ++            const uint32_t curIndex = (*i).mIndices[n];
+> ++            if (curIndex >= mesh.mPositions.size()) {
+> ++                throw DeadlyImportError("ASE: Invalid vertex index in face ", fi, ".");
+> ++            }
+> +             mPositions[iCurrent] = mesh.mPositions[(*i).mIndices[n]];
 > +
-> + #include "cmd.h"
-> ++#include <cstdint>
+> +             // add texture coordinates
+> diff --git a/package/assimp/0004-MDL-limit-max-texture-sizes.patch b/package/assimp/0004-MDL-limit-max-texture-sizes.patch
+> new file mode 100644
+> index 0000000000..ae7e54f35d
+> --- /dev/null
+> +++ b/package/assimp/0004-MDL-limit-max-texture-sizes.patch
+> @@ -0,0 +1,41 @@
+> +From 5d2a7482312db2e866439a8c05a07ce1e718bed1 Mon Sep 17 00:00:00 2001
+> +From: Kim Kulling <kimkulling@users.noreply.github.com>
+> +Date: Wed, 12 Mar 2025 21:29:33 +0100
+> +Subject: [PATCH] MDL: Limit max texture sizes
 > +
-> + class SDPSCmd : public CmdBase
-> + {
-> +--
-> +2.43.0
+> +- closes https://github.com/assimp/assimp/issues/6022
 > +
+> +Upstream: https://github.com/assimp/assimp/pull/6046
+> +
+> +CVE: CVE-2025-3016
+> +
+> +Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+> +---
+> + code/AssetLib/MDL/MDLMaterialLoader.cpp | 7 +++++++
+> + 1 file changed, 7 insertions(+)
+> +
+> +diff --git a/code/AssetLib/MDL/MDLMaterialLoader.cpp b/code/AssetLib/MDL/MDLMaterialLoader.cpp
+> +index 2cac8a1e26..2e09992e89 100644
+> +--- a/code/AssetLib/MDL/MDLMaterialLoader.cpp
+> ++++ b/code/AssetLib/MDL/MDLMaterialLoader.cpp
+> +@@ -209,6 +209,8 @@ void MDLImporter::CreateTexture_3DGS_MDL4(const unsigned char *szData,
+> +     return;
+> + }
+> +
+> ++static const uint32_t MaxTextureSize = 4096;
+> ++
+> + // ------------------------------------------------------------------------------------------------
+> + // Load color data of a texture and convert it to our output format
+> + void MDLImporter::ParseTextureColorData(const unsigned char *szData,
+> +@@ -219,6 +221,11 @@ void MDLImporter::ParseTextureColorData(const unsigned char *szData,
+> +
+> +     // allocate storage for the texture image
+> +     if (do_read) {
+> ++        // check for max texture sizes
+> ++        if (pcNew->mWidth > MaxTextureSize || pcNew->mHeight > MaxTextureSize) {
+> ++            throw DeadlyImportError("Invalid MDL file. A texture is too big.");
+> ++        }
+> ++
+> +         if(pcNew->mWidth != 0 && pcNew->mHeight > UINT_MAX/pcNew->mWidth) {
+> +             throw DeadlyImportError("Invalid MDL file. A texture is too big.");
+> +         }
+> diff --git a/package/assimp/assimp.mk b/package/assimp/assimp.mk
+> index a4614a01a2..39ad234546 100644
+> --- a/package/assimp/assimp.mk
+> +++ b/package/assimp/assimp.mk
+> @@ -16,6 +16,12 @@ ASSIMP_INSTALL_STAGING = YES
+>   # 0002-Fix-use-after-free-in-the-CallbackToLogRedirector-59.patch
+>   ASSIMP_IGNORE_CVES += CVE-2024-48423
+>   
+> +# 0003-ASE-fix-possible-out-of-bound-access.patch
+> +ASSIMP_IGNORE_CVES += CVE-2025-3015
+> +
+> +# 0004-MDL-limit-max-texture-sizes.patch
+> +ASSIMP_IGNORE_CVES += CVE-2025-3016
+> +
+>   # relocation truncated to fit: R_68K_GOT16O. We also need to disable
+>   # optimizations to not run into "Error: value -43420 out of range"
+>   # assembler issues.
 
 _______________________________________________
 buildroot mailing list
