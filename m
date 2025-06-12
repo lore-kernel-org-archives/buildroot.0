@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DCD99C71136
-	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 20:12:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDA2FC71149
+	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 20:12:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B262940A35;
-	Thu, 12 Jun 2025 20:12:52 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M0MmW5hYc4x2; Thu, 12 Jun 2025 20:12:51 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E0CF40A2E
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0E0CF40A2E;
-	Thu, 12 Jun 2025 20:12:51 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0E16C1BD
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:12:35 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C3EE483C29
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:12:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C3A4D839E5;
+	Thu, 12 Jun 2025 20:12:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p26ayJKLwo3f for <buildroot@buildroot.org>;
+ id nx8vpaGRWV0K; Thu, 12 Jun 2025 20:12:53 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DC89681F80
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id DC89681F80;
+	Thu, 12 Jun 2025 20:12:52 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0ECE727A
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:12:35 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id C0F4840978
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:12:30 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uskEGfluFEjD for <buildroot@buildroot.org>;
  Thu, 12 Jun 2025 20:12:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0295883BE8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 882F440979
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0295883BE8
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:12:30 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 882F440979
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:12:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 00F3583563; Thu, 12 Jun 2025 20:12:30 +0000 (UTC)
+ id 8686983554; Thu, 12 Jun 2025 20:12:29 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 12 Jun 2025 14:40:56 +0200
+Date: Thu, 12 Jun 2025 14:40:30 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: ed5585a03cd633e6e4e630b6010b508bac01fce3
-X-Git-Newrev: 78a9b41dede403baa4fceef5a455f8154fd58f0f
+X-Git-Oldrev: da8b43bc92af7bcc482896e4d18d71251f89a6e4
+X-Git-Newrev: cd567301def1b48dbc0d9c51b7b693ffe13906bf
 X-Patchwork-Hint: ignore
-Message-Id: <20250612201230.00F3583563@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/go: security bump
- to version 1.23.10
+Message-Id: <20250612201229.8686983554@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/qt5/qt5webengine:
+ fix thumb detection logic
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,85 +61,127 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1141159944878739847=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=78a9b41dede403baa4fceef5a455f8154fd58f0f
+--===============1141159944878739847==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=cd567301def1b48dbc0d9c51b7b693ffe13906bf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-go1.23.9 (released 2025-05-06) includes fixes to the runtime and the linker.
+Add a patch that removes part of the logic that attempts to detect if
+thumb is supported. This logic simply doesn't work at all in the
+Buildroot context. In fact, thumb is supported on all 32-bit ARM on
+which we can build qt5webengine.
 
-go1.23.10 (released 2025-06-05) includes security fixes to the net/http and
-os packages, as well as bug fixes to the linker.
+Fixes:
+WARNING: Thumb instruction set is required to build ffmpeg for QtWebEngine.
+[...]
+FAILED: obj/third_party/ffmpeg/ffmpeg_internal/vp8.o
+[...] -c ../../3rdparty/chromium/third_party/ffmpeg/libavcodec/vp8.c -o obj/third_party/ffmpeg/ffmpeg_internal/vp8.o
+{standard input}: Assembler messages:
+{standard input}:1119: Error: bad instruction `ldrhcs r0,[ip],#2'
+{standard input}:1156: Error: bad instruction `ldrhcs r9,[ip],#2'
+{standard input}:1190: Error: bad instruction `ldrhcs lr,[ip],#2'
+{standard input}:1253: Error: bad instruction `ldrhcs r9,[r7],#2'
+[...]
 
-Fixes the following security vulnerabilities:
-
-- CVE-2025-4673: net/http: sensitive headers not cleared on cross-origin
-  redirect
-
-  Proxy-Authorization and Proxy-Authenticate headers persisted on
-  cross-origin redirects potentially leaking sensitive information
-
-- CVE-2025-0913: os: inconsistent handling of O_CREATE|O_EXCL on Unix and
-  Windows
-
-  os.OpenFile(path, os.O_CREATE|O_EXCL) behaved differently on Unix and
-  Windows systems when the target path was a dangling symlink.  On Unix
-  systems, OpenFile with O_CREATE and O_EXCL flags never follows symlinks.
-  On Windows, when the target path was a symlink to a nonexistent location,
-  OpenFile would create a file in that location.
-
-- CVE-2025-22874: crypto/x509: usage of ExtKeyUsageAny disables policy validation
-
-  Calling Verify with a VerifyOptions.KeyUsages that contains ExtKeyUsageAny
-  unintentionally disabled policy validation.  This only affected
-  certificate chains which contain policy graphs, which are rather uncommon.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 00f0fca15a696eafae688b58c0df220ef5a2e2dc)
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+Cc: Gaël PORTAY <gael.portay@rtone.fr>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 2b2120dc4a56c88314f8d94546c9a9120bb45527)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/go/go.hash | 14 +++++++-------
- package/go/go.mk   |  2 +-
- 2 files changed, 8 insertions(+), 8 deletions(-)
+ ...ri-remove-some-of-the-thumb-detection-log.patch | 69 ++++++++++++++++++++++
+ 1 file changed, 69 insertions(+)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 48ba6b7fd9..62e0772e2e 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,9 +1,9 @@
- # sha256 checksum from https://go.dev/dl/
--sha256  0ca1f1e37ea255e3ce283af3f4e628502fb444587da987a5bb96d6c6f15930d4  go1.23.8.src.tar.gz
--sha256  714b9d004063bfa27686f9ff0e5648bb190b3a5bc1e86b0aa16c134d8d8c315f  go1.23.8.linux-386.tar.gz
--sha256  45b87381172a58d62c977f27c4683c8681ef36580abecd14fd124d24ca306d3f  go1.23.8.linux-amd64.tar.gz
--sha256  9d6d938422724a954832d6f806d397cf85ccfde8c581c201673e50e634fdc992  go1.23.8.linux-arm64.tar.gz
--sha256  d14e0bea9fb25344a0460f395880d5589bbcd413ffd5555be48e46c0de084437  go1.23.8.linux-armv6l.tar.gz
--sha256  0cadab469e612b159f5f68b1a30d75aa7b7e1ed5292746005a6a3c8ff04e6f35  go1.23.8.linux-ppc64le.tar.gz
--sha256  cbe954ee534eb02aa782639716d8c25706dd171445f7c8336bd2fc0b8f6fe38e  go1.23.8.linux-s390x.tar.gz
-+sha256  800a7ae1bff179a227b653a2f644517c800443b8b4abf3273af5e1cb7113de59  go1.23.10.src.tar.gz
-+sha256  ded3c0a8d6d2a0ea5e7599c49678efa05cda139d31baaaf7d8d536a9e4cc19b2  go1.23.10.linux-386.tar.gz
-+sha256  535f9f81802499f2a7dbfa70abb8fda3793725fcc29460f719815f6e10b5fd60  go1.23.10.linux-amd64.tar.gz
-+sha256  bfb1f1df7173f44648ee070a39ab0481068632f595305a699d89cd56a33b8081  go1.23.10.linux-arm64.tar.gz
-+sha256  b6e00c9a72406d394b9f167e74670e28b72ed559cca8115b21be1cb9d5316cb4  go1.23.10.linux-armv6l.tar.gz
-+sha256  8fb94455cfa5e9a5e8af2bfbc7323a6fed2dabaffda1a69dae5dd41b669bbb57  go1.23.10.linux-ppc64le.tar.gz
-+sha256  7d0e8651eb54fce5cfe2d4b412ddfa50144ce21907f72192a6549ffe03db4e1f  go1.23.10.linux-s390x.tar.gz
- sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index d618a7a262..744bb0d3ba 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GO_VERSION = 1.23.8
-+GO_VERSION = 1.23.10
- 
- HOST_GO_GOPATH = $(HOST_DIR)/share/go-path
- HOST_GO_HOST_CACHE = $(HOST_DIR)/share/host-go-cache
+diff --git a/package/qt5/qt5webengine/0003-configure.pri-remove-some-of-the-thumb-detection-log.patch b/package/qt5/qt5webengine/0003-configure.pri-remove-some-of-the-thumb-detection-log.patch
+new file mode 100644
+index 0000000000..57ed3558bc
+--- /dev/null
++++ b/package/qt5/qt5webengine/0003-configure.pri-remove-some-of-the-thumb-detection-log.patch
+@@ -0,0 +1,69 @@
++From b00f7b41ffdee03f9982287d61c2fa21ebee5e6b Mon Sep 17 00:00:00 2001
++From: Arnout Vandecappelle <arnout@rnout.be>
++Date: Sat, 17 May 2025 22:09:32 +0200
++Subject: [PATCH] configure.pri: remove some of the thumb detection logic
++
++The hasThumbFlag test has a roundabout way of discovering whether thumb
++is available. It looks at the -mthumb and -marm flag (which does make
++some sense), but then it tries to look at -march to determine which ARM
++architecture version is used. That test doesn't work if GCC is
++configured for a default target architecture and no -march is passed on
++the command line.
++
++In Buildroot, we don't pass any -mthumb, -marm or -march in CFLAGS
++because all of that is included in the toolchain wrapper. Therefore, the
++logic has nothing to determine the target ARM ISA version and returns
++false.
++
++As a result, nothing is passed down to gn, and gn adds -marm to the
++build. There is in fact a warning about this:
++
++    WARNING: Thumb instruction set is required to build ffmpeg for QtWebEngine.
++
++but since it's just a warning, it gets ignored.
++
++Indeed, the build does fail (when ffmpeg is built, i.e. when
++BR2_PACKAGE_QT5WEBENGINE_PROPRIETARY_CODECS is enabled) with:
++
++    FAILED: obj/third_party/ffmpeg/ffmpeg_internal/vp8.o
++    [...]
++    {standard input}: Assembler messages:
++    {standard input}:1119: Error: bad instruction `ldrhcs r0,[ip],#2'
++    {standard input}:1156: Error: bad instruction `ldrhcs r9,[ip],#2'
++
++In practice, the architecture version doesn't really matter, because all
++the architectures supported by JSCore have thumb.
++
++Therefore, remove the logic for detecting if the CPU architecture
++supports thumb. Do keep the -marm and -mthumb logic, even though in
++Buildroot it doesn't do anything, and the warning gets ignored.
++
++Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
++Upstream: It's not clear if the same logic about JSCore applies in
++upstream, so not sent.
++---
++ configure.pri | 8 --------
++ 1 file changed, 8 deletions(-)
++
++diff --git a/configure.pri b/configure.pri
++index 8da334c83..3ff298e9f 100644
++--- a/configure.pri
+++++ b/configure.pri
++@@ -370,14 +370,6 @@ defineTest(qtConfTest_hasThumbFlag) {
++     !isEmpty(FLAG): return(true)
++     FLAG = $$qtwebengine_extractCFlag("-marm")
++     !isEmpty(FLAG): return(false)
++-
++-    MARCH = $$qtwebengine_extractCFlag("-march=.*")
++-    MARMV = $$replace(MARCH, "armv",)
++-    !isEmpty(MARMV) {
++-        MARMV = $$split(MARMV,)
++-        MARMV = $$member(MARMV, 0)
++-    }
++-    if (isEmpty(MARMV) | lessThan(MARMV, 7)): return(false)
++     # no flag assume mthumb
++     return(true)
++ }
++-- 
++2.49.0
++
+
+--===============1141159944878739847==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1141159944878739847==--
