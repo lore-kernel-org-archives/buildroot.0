@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0352AC61CE8
-	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 20:26:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5237DC71136
+	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 20:27:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C4EA440759;
-	Thu, 12 Jun 2025 20:26:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1C470408E8;
+	Thu, 12 Jun 2025 20:27:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id APgHhcDuX-uZ; Thu, 12 Jun 2025 20:26:51 +0000 (UTC)
+ id ecaUsZYkoy1N; Thu, 12 Jun 2025 20:27:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA83640760
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4EBE3408E5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DA83640760;
-	Thu, 12 Jun 2025 20:26:50 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id EEDA4183
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:26:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4EBE3408E5;
+	Thu, 12 Jun 2025 20:27:03 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 26A0B183
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:27:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D511A60B77
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:26:49 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0D5B183ABE
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:27:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id asev5p9Q5xri for <buildroot@buildroot.org>;
- Thu, 12 Jun 2025 20:26:49 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5bEEzjgo7e2D for <buildroot@buildroot.org>;
+ Thu, 12 Jun 2025 20:27:01 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
  helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0E52E60E0D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E52E60E0D
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4021183A9F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4021183A9F
 Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0E52E60E0D
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:26:48 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4021183A9F
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:27:01 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 101631C0D69; Thu, 12 Jun 2025 22:26:47 +0200 (CEST)
-Message-ID: <e46f7849-f162-44e0-81bc-43d87f2d53b9@rnout.be>
-Date: Thu, 12 Jun 2025 22:26:45 +0200
+ with ESMTPSA id E653F1C0D69; Thu, 12 Jun 2025 22:26:56 +0200 (CEST)
+Message-ID: <256bdd8f-7748-4313-a4a7-d4b99e9fdcce@rnout.be>
+Date: Thu, 12 Jun 2025 22:26:55 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 To: Peter Korsgaard <peter@korsgaard.com>, buildroot@buildroot.org
-References: <20250604131633.672108794B@busybox.osuosl.org>
+References: <20250607190703.2408025-1-peter@korsgaard.com>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20250604131633.672108794B@busybox.osuosl.org>
+In-Reply-To: <20250607190703.2408025-1-peter@korsgaard.com>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1749760007; h=from:subject:date:message-id:to:mime-version:content-type:
+ t=1749760017; h=from:subject:date:message-id:to:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=D94b92O0bYijmY8ERI73f2Uh+SL1W/nkSgxf1mxYYME=;
- b=S8nN4o/NltmgJ+3iV+TkatzAb3Pk4GaVGm8FD7M0VqdAQXOIYDAoenCgDL21+A9sBazjsA
- VFx1F2CLl4gouVDpP655OPilCHs9kIiAksAUMhOy7mzzKvmpi8EacnBMk2cn6tu6cczHN7
- EXmhrSqaXfA+etOVPudDfZgXtyvw36rDKuvE6NdoOSV/waUnvnmZzjSyEYD0/6yCLX0BvS
- pgogQs8HM0Z8fTscBF0iWVZLCBzasp85rVbz2kGiTxgk0hPm34kw5WdKxX2aVzegt/8V3K
- 9J729/bqJRuWX17lDFSLlkjHgRgWmiPvZgNTmHxL39zyeu4I2qdsa1DX74/M2A==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=wSyXJAZgdAyEj7fIetQw3ldyQHsdnp+e/v2C9vpwI+0=;
+ b=FdMfsFpLmCB0nepLeNkXzvaC1UKA9SoaAzESQ2IYiqEvoqhBMwh9bWcfNdorgEcw+KczIS
+ 3pPzOypMrYS7TuLLGRxVUTnN8oGAKsKHxqfVW2u5WB07MkuhQTQt0mxPZzfZqGpOAuZhKZ
+ 4yKJkXDt4SnqvXuTCpbY81cIbJBXq0gBAMbwKRet+CHymlgnu120lqnfJ5o14jCi8YgaR0
+ +NUxgPldpG25T2xZnKAPmhozI7dUcELWmO824HS1AYxv3TrW7HKririjbhJkuh3oxA1FD3
+ i7wMZkGf1snbuOEVeBkuJy3AgXV2QsaI5ruZDPNiA3E0kAD5NixvphYuWB7tdg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=S8nN4o/N
-Subject: Re: [Buildroot] [git commit] package/libcurl: drop _GNU_SOURCE
- workaround
+ header.a=rsa-sha256 header.s=dkim header.b=FdMfsFpL
+Subject: Re: [Buildroot] [PATCH] package/libcurl: fix build w/ threads +
+ c-ares
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,15 +85,17 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 04/06/2025 15:14, Peter Korsgaard wrote:
-> commit: https://git.buildroot.net/buildroot/commit/?id=e6567881e46a6cdf5dc8758992bd447e58821d4d
-> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 07/06/2025 21:07, Peter Korsgaard via buildroot wrote:
+> Fixes:
+> https://autobuild.buildroot.net/results/680b825b93989e6aef247593c198094a6ed916f7/
 > 
-> This was needed for 8.14.0, but got fixed in 8.14.1 with:
+> Since curl 8.14.0 with commit d364f1347f05 ("configure: catch asking for
+> double resolver without https-rr"), configure errors out when
+> --enabled-threaded-resolver is used together with --enable-ares (unless the
+> experimental HTTPS-RR support is enabled), so disable the threaded resolver
+> when c-ares is enabled.
 > 
-> https://github.com/curl/curl/issues/17512
-> 
-> So drop it again.
+> https://github.com/curl/curl/commit/d364f1347f05c53eea5d25a15b4ad8a62ecc85b8
 > 
 > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
@@ -103,25 +105,24 @@ On 04/06/2025 15:14, Peter Korsgaard wrote:
   Arnout
 
 > ---
->   package/libcurl/libcurl.mk | 1 -
->   1 file changed, 1 deletion(-)
+>   package/libcurl/libcurl.mk | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
 > 
 > diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-> index 68d638609b..8501910ac5 100644
+> index 8501910ac5..5a3a668f06 100644
 > --- a/package/libcurl/libcurl.mk
 > +++ b/package/libcurl/libcurl.mk
-> @@ -14,7 +14,6 @@ LIBCURL_LICENSE = curl
->   LIBCURL_LICENSE_FILES = COPYING
->   LIBCURL_CPE_ID_VENDOR = haxx
->   LIBCURL_INSTALL_STAGING = YES
-> -LIBCURL_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
+> @@ -36,7 +36,9 @@ LIBCURL_CONF_OPTS = \
+>   # https://nvd.nist.gov/vuln/detail/CVE-2024-32928
+>   LIBCURL_IGNORE_CVES += CVE-2024-32928
 >   
->   # We disable NTLM delegation to winbinds ntlm_auth ('--disable-ntlm-wb')
->   # support because it uses fork(), which doesn't work on non-MMU platforms.
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+> -ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+> +# threaded resolver cannot be used with c-ares
+> +# https://github.com/curl/curl/commit/d364f1347f05c53eea5d25a15b4ad8a62ecc85b8
+> +ifeq ($(BR2_TOOLCHAIN_HAS_THREADS)x$(BR2_PACKAGE_C_ARES)),yx)
+>   LIBCURL_CONF_OPTS += --enable-threaded-resolver
+>   else
+>   LIBCURL_CONF_OPTS += --disable-threaded-resolver
 
 _______________________________________________
 buildroot mailing list
