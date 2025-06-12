@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C970AC61CE8
-	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 20:13:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B1CFC7114A
+	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 20:13:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9AC4B83D07;
-	Thu, 12 Jun 2025 20:13:20 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eGKPKvCc5-qb; Thu, 12 Jun 2025 20:13:20 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7BBB83D1D
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D7BBB83D1D;
-	Thu, 12 Jun 2025 20:13:19 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 04C0A1BD
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:12:49 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 417BD4097B
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:12:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 21D7F40BC6;
+	Thu, 12 Jun 2025 20:13:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EvV-hgSgIfG3 for <buildroot@buildroot.org>;
+ id 9dqSoUE6P697; Thu, 12 Jun 2025 20:13:21 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39D6D40BC9
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 39D6D40BC9;
+	Thu, 12 Jun 2025 20:13:21 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0D7ED183
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:12:50 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4F392409AF
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:12:34 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id m_x43d5tmDto for <buildroot@buildroot.org>;
  Thu, 12 Jun 2025 20:12:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2A34540995
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 222E640933
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2A34540995
+ by smtp4.osuosl.org (Postfix) with ESMTP id 222E640933
  for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:12:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 289F183554; Thu, 12 Jun 2025 20:12:30 +0000 (UTC)
+ id 208AA8354A; Thu, 12 Jun 2025 20:12:30 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 12 Jun 2025 14:41:07 +0200
+Date: Thu, 12 Jun 2025 14:41:05 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 86e01fe7ccbc4df14daf8300c61e5702ea6053bc
-X-Git-Newrev: ec1fe1110ad61c26f565137a43aae7f53e823678
+X-Git-Oldrev: 776bbc3d1c07a58092434f6c9c6ec04fef402fda
+X-Git-Newrev: 86e01fe7ccbc4df14daf8300c61e5702ea6053bc
 X-Patchwork-Hint: ignore
-Message-Id: <20250612201230.289F183554@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/iputils: bump
- version 20250605
+Message-Id: <20250612201230.208AA8354A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/dovecot: add
+ missing mariadb dependencies for mysql support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,46 +66,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ec1fe1110ad61c26f565137a43aae7f53e823678
+commit: https://git.buildroot.net/buildroot/commit/?id=86e01fe7ccbc4df14daf8300c61e5702ea6053bc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Bugfix release:
-https://github.com/iputils/iputils/releases/tag/20250605
+Buildroot commit [1] removed mysql and replaced it by mariadb in all
+packages, but did not propagated all dependencies.
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+This commit fixes the issue.
+
+Fixes:
+
+    WARNING: unmet direct dependencies detected for BR2_PACKAGE_MARIADB
+      Depends on [n]: BR2_INSTALL_LIBSTDCPP [=y] && !BR2_STATIC_LIBS [=n] && BR2_USE_MMU [=y] && BR2_TOOLCHAIN_HAS_THREADS [=y] && (BR2_TOOLCHAIN_HAS_ATOMIC [=n] || BR2_TOOLCHAIN_HAS_SYNC_8 [=n]) && BR2_USE_WCHAR [=y]
+      Selected by [y]:
+      - BR2_PACKAGE_DOVECOT_MYSQL [=y] && BR2_PACKAGE_DOVECOT [=y] && BR2_INSTALL_LIBSTDCPP [=y] && BR2_TOOLCHAIN_HAS_THREADS [=y]
+
+[1] https://gitlab.com/buildroot.org/buildroot/-/commit/8708f3a23a7e28fdb04fc57406e13e6b7ff4a337
+
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 34611327b8585178b7ff148b57397b4557e7455a)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 6967ed93b6fcefd5f4cd5ad12ce80dfb63e1200f)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/iputils/iputils.hash | 4 ++--
- package/iputils/iputils.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/dovecot/Config.in | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/package/iputils/iputils.hash b/package/iputils/iputils.hash
-index daa5f81a85..2f83d397ce 100644
---- a/package/iputils/iputils.hash
-+++ b/package/iputils/iputils.hash
-@@ -1,5 +1,5 @@
--# https://github.com/iputils/iputils/releases/download/20250602/sha256sums.asc
--sha256  178f316c3f102f7c7445dee8bb851838f11214a68b3d5d4788972d8b35dcbbe5  iputils-20250602.tar.gz
-+# https://github.com/iputils/iputils/releases/download/20250605/sha256sums.asc
-+sha256  475c643e5f55b302286267b97d3ce0f47ca3489ced8aa0401b1eeb1e68228d6b  iputils-20250605.tar.gz
- # Locally computed
- sha256  2c9f29d982c48665c30b3adaf400c048988fd256eb91c691e351eb3b6a8b2036  LICENSE
- sha256  9acc4bc871a4742550158e3696dcb381953172ef808d04ca248184f9f6322712  Documentation/LICENSE.BSD3
-diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-index 391f0e1938..842fdb8478 100644
---- a/package/iputils/iputils.mk
-+++ b/package/iputils/iputils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/dovecot/Config.in b/package/dovecot/Config.in
+index 517040fad6..e109ce6be8 100644
+--- a/package/dovecot/Config.in
++++ b/package/dovecot/Config.in
+@@ -21,12 +21,16 @@ config BR2_PACKAGE_DOVECOT_MYSQL
+ 	bool "mysql support"
+ 	depends on BR2_INSTALL_LIBSTDCPP # mariadb
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # mariadb
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC || BR2_TOOLCHAIN_HAS_SYNC_8 # mariadb
++	depends on BR2_USE_WCHAR # mariadb
+ 	select BR2_PACKAGE_MARIADB
+ 	help
+ 	  Enable MySQL support.
  
--IPUTILS_VERSION = 20250602
-+IPUTILS_VERSION = 20250605
- IPUTILS_SITE = https://github.com/iputils/iputils/releases/download/$(IPUTILS_VERSION)
- IPUTILS_LICENSE = GPL-2.0+, BSD-3-Clause
- IPUTILS_LICENSE_FILES = LICENSE Documentation/LICENSE.BSD3 Documentation/LICENSE.GPL2
+-comment "mysql support needs a toolchain w/ C++, threads"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++comment "mysql support needs a toolchain w/ C++, threads, wchar"
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC || BR2_TOOLCHAIN_HAS_SYNC_8
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_USE_WCHAR
+ 
+ config BR2_PACKAGE_DOVECOT_SQLITE
+ 	bool "sqlite support"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
