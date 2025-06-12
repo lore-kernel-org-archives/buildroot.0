@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 800FDC71149
-	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 20:12:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DCD99C71136
+	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 20:12:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2BA0F40A83;
-	Thu, 12 Jun 2025 20:12:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B262940A35;
+	Thu, 12 Jun 2025 20:12:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ecVfT50eKHbQ; Thu, 12 Jun 2025 20:12:49 +0000 (UTC)
+ id M0MmW5hYc4x2; Thu, 12 Jun 2025 20:12:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 495BD40995
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0E0CF40A2E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 495BD40995;
-	Thu, 12 Jun 2025 20:12:49 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0A98327A
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:12:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0E0CF40A2E;
+	Thu, 12 Jun 2025 20:12:51 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0E16C1BD
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:12:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A8CDF40944
+ by smtp1.osuosl.org (Postfix) with ESMTP id C3EE483C29
  for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:12:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Fq_odLBGqvGH for <buildroot@buildroot.org>;
- Thu, 12 Jun 2025 20:12:29 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id p26ayJKLwo3f for <buildroot@buildroot.org>;
+ Thu, 12 Jun 2025 20:12:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7FF6E40978
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0295883BE8
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7FF6E40978
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:12:29 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0295883BE8
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:12:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7E5B58354A; Thu, 12 Jun 2025 20:12:29 +0000 (UTC)
+ id 00F3583563; Thu, 12 Jun 2025 20:12:30 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 12 Jun 2025 14:40:28 +0200
+Date: Thu, 12 Jun 2025 14:40:56 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 345f56ebe07cbb0fb800ae3dd9e014c54d824384
-X-Git-Newrev: da8b43bc92af7bcc482896e4d18d71251f89a6e4
+X-Git-Oldrev: ed5585a03cd633e6e4e630b6010b508bac01fce3
+X-Git-Newrev: 78a9b41dede403baa4fceef5a455f8154fd58f0f
 X-Patchwork-Hint: ignore
-Message-Id: <20250612201229.7E5B58354A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x]
- package/qt5/qt5webengine-chromium: fix build with host GCC 15
+Message-Id: <20250612201230.00F3583563@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/go: security bump
+ to version 1.23.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,130 +66,79 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=da8b43bc92af7bcc482896e4d18d71251f89a6e4
+commit: https://git.buildroot.net/buildroot/commit/?id=78a9b41dede403baa4fceef5a455f8154fd58f0f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Ideally we should update our version of qt5webengine-chromium first,
-we're more than 600 commits behind on the stable branch from KDE.
-However, this is a quick fix solution that allows us to build the
-current state in Fedora 42.
+go1.23.9 (released 2025-05-06) includes fixes to the runtime and the linker.
 
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit c9ae932c94e84f325d1d1d87e00965559263a8c6)
-[thomas: rename patch from 0012-.. to 0011-..]
+go1.23.10 (released 2025-06-05) includes security fixes to the net/http and
+os packages, as well as bug fixes to the linker.
+
+Fixes the following security vulnerabilities:
+
+- CVE-2025-4673: net/http: sensitive headers not cleared on cross-origin
+  redirect
+
+  Proxy-Authorization and Proxy-Authenticate headers persisted on
+  cross-origin redirects potentially leaking sensitive information
+
+- CVE-2025-0913: os: inconsistent handling of O_CREATE|O_EXCL on Unix and
+  Windows
+
+  os.OpenFile(path, os.O_CREATE|O_EXCL) behaved differently on Unix and
+  Windows systems when the target path was a dangling symlink.  On Unix
+  systems, OpenFile with O_CREATE and O_EXCL flags never follows symlinks.
+  On Windows, when the target path was a symlink to a nonexistent location,
+  OpenFile would create a file in that location.
+
+- CVE-2025-22874: crypto/x509: usage of ExtKeyUsageAny disables policy validation
+
+  Calling Verify with a VerifyOptions.KeyUsages that contains ExtKeyUsageAny
+  unintentionally disabled policy validation.  This only affected
+  certificate chains which contain policy graphs, which are rather uncommon.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 00f0fca15a696eafae688b58c0df220ef5a2e2dc)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...Include-cstdint-for-uintptr_t-uint8_t-etc.patch | 101 +++++++++++++++++++++
- 1 file changed, 101 insertions(+)
+ package/go/go.hash | 14 +++++++-------
+ package/go/go.mk   |  2 +-
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/package/qt5/qt5webengine-chromium/0011-Include-cstdint-for-uintptr_t-uint8_t-etc.patch b/package/qt5/qt5webengine-chromium/0011-Include-cstdint-for-uintptr_t-uint8_t-etc.patch
-new file mode 100644
-index 0000000000..f68f266e39
---- /dev/null
-+++ b/package/qt5/qt5webengine-chromium/0011-Include-cstdint-for-uintptr_t-uint8_t-etc.patch
-@@ -0,0 +1,101 @@
-+From 80ddc04dd2398611afd8eafd89f5a6cd81b82363 Mon Sep 17 00:00:00 2001
-+From: Arnout Vandecappelle <arnout@rnout.be>
-+Date: Sun, 18 May 2025 09:59:24 +0200
-+Subject: [PATCH] Include <cstdint> for uintptr_t, uint8_t, etc.
-+
-+GCC 15 adheres more strictly to the standard about which type is defined
-+in which header. As such, uintptr_t, uint8_t, etc. are  no longer
-+available unless cstdint is included.
-+
-+Add #include <cstdint> in the files that gave errors with GCC 15
-+
-+Most (all?) of these fixes are already upstream, but spread out over
-+various commits that don't necessarily apply to our version. Fixing it
-+ourselves is simpler.
-+
-+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-+Upstream: N/A, already fixed and we're very far behind
-+---
-+ chromium/base/task/thread_pool.h                                 | 1 +
-+ chromium/net/tools/huffman_trie/trie_entry.h                     | 1 +
-+ .../transport_security_state_entry.h                             | 1 +
-+ .../perfetto/include/perfetto/ext/tracing/core/slice.h           | 1 +
-+ .../perfetto/include/perfetto/tracing/tracing_backend.h          | 1 +
-+ .../perfetto/src/trace_processor/importers/gzip/gzip_utils.h     | 1 +
-+ 6 files changed, 6 insertions(+)
-+
-+diff --git a/chromium/base/task/thread_pool.h b/chromium/base/task/thread_pool.h
-+index 085c249ba58e6..afc674ca7f6fb 100644
-+--- a/chromium/base/task/thread_pool.h
-++++ b/chromium/base/task/thread_pool.h
-+@@ -5,6 +5,7 @@
-+ #ifndef BASE_TASK_THREAD_POOL_H_
-+ #define BASE_TASK_THREAD_POOL_H_
-+ 
-++#include <cstdint>
-+ #include <memory>
-+ #include <utility>
-+ 
-+diff --git a/chromium/net/tools/huffman_trie/trie_entry.h b/chromium/net/tools/huffman_trie/trie_entry.h
-+index fe70260f981f2..eac6a7fc2499d 100644
-+--- a/chromium/net/tools/huffman_trie/trie_entry.h
-++++ b/chromium/net/tools/huffman_trie/trie_entry.h
-+@@ -5,6 +5,7 @@
-+ #ifndef NET_TOOLS_HUFFMAN_TRIE_TRIE_ENTRY_H_
-+ #define NET_TOOLS_HUFFMAN_TRIE_TRIE_ENTRY_H_
-+ 
-++#include <cstdint>
-+ #include <memory>
-+ #include <string>
-+ #include <vector>
-+diff --git a/chromium/net/tools/transport_security_state_generator/transport_security_state_entry.h b/chromium/net/tools/transport_security_state_generator/transport_security_state_entry.h
-+index 59059d88f6df2..fe15bb7429f6d 100644
-+--- a/chromium/net/tools/transport_security_state_generator/transport_security_state_entry.h
-++++ b/chromium/net/tools/transport_security_state_generator/transport_security_state_entry.h
-+@@ -5,6 +5,7 @@
-+ #ifndef NET_TOOLS_TRANSPORT_SECURITY_STATE_GENERATOR_TRANSPORT_SECURITY_STATE_ENTRY_H_
-+ #define NET_TOOLS_TRANSPORT_SECURITY_STATE_GENERATOR_TRANSPORT_SECURITY_STATE_ENTRY_H_
-+ 
-++#include <cstdint>
-+ #include <map>
-+ #include <memory>
-+ #include <string>
-+diff --git a/chromium/third_party/perfetto/include/perfetto/ext/tracing/core/slice.h b/chromium/third_party/perfetto/include/perfetto/ext/tracing/core/slice.h
-+index 4ce66fdeadc3a..3f3932b228737 100644
-+--- a/chromium/third_party/perfetto/include/perfetto/ext/tracing/core/slice.h
-++++ b/chromium/third_party/perfetto/include/perfetto/ext/tracing/core/slice.h
-+@@ -20,6 +20,7 @@
-+ #include <stddef.h>
-+ #include <string.h>
-+ 
-++#include <cstdint>
-+ #include <memory>
-+ #include <string>
-+ #include <vector>
-+diff --git a/chromium/third_party/perfetto/include/perfetto/tracing/tracing_backend.h b/chromium/third_party/perfetto/include/perfetto/tracing/tracing_backend.h
-+index 67b0d2eb51e0d..3c2462de588dd 100644
-+--- a/chromium/third_party/perfetto/include/perfetto/tracing/tracing_backend.h
-++++ b/chromium/third_party/perfetto/include/perfetto/tracing/tracing_backend.h
-+@@ -17,6 +17,7 @@
-+ #ifndef INCLUDE_PERFETTO_TRACING_TRACING_BACKEND_H_
-+ #define INCLUDE_PERFETTO_TRACING_TRACING_BACKEND_H_
-+ 
-++#include <cstdint>
-+ #include <memory>
-+ #include <string>
-+ 
-+diff --git a/chromium/third_party/perfetto/src/trace_processor/importers/gzip/gzip_utils.h b/chromium/third_party/perfetto/src/trace_processor/importers/gzip/gzip_utils.h
-+index 624363ff66f90..68783e879c8e0 100644
-+--- a/chromium/third_party/perfetto/src/trace_processor/importers/gzip/gzip_utils.h
-++++ b/chromium/third_party/perfetto/src/trace_processor/importers/gzip/gzip_utils.h
-+@@ -18,6 +18,7 @@
-+ #define SRC_TRACE_PROCESSOR_IMPORTERS_GZIP_GZIP_UTILS_H_
-+ 
-+ #include <memory>
-++#include <cstdint>
-+ 
-+ struct z_stream_s;
-+ 
-+-- 
-+2.49.0
-+
+diff --git a/package/go/go.hash b/package/go/go.hash
+index 48ba6b7fd9..62e0772e2e 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,9 +1,9 @@
+ # sha256 checksum from https://go.dev/dl/
+-sha256  0ca1f1e37ea255e3ce283af3f4e628502fb444587da987a5bb96d6c6f15930d4  go1.23.8.src.tar.gz
+-sha256  714b9d004063bfa27686f9ff0e5648bb190b3a5bc1e86b0aa16c134d8d8c315f  go1.23.8.linux-386.tar.gz
+-sha256  45b87381172a58d62c977f27c4683c8681ef36580abecd14fd124d24ca306d3f  go1.23.8.linux-amd64.tar.gz
+-sha256  9d6d938422724a954832d6f806d397cf85ccfde8c581c201673e50e634fdc992  go1.23.8.linux-arm64.tar.gz
+-sha256  d14e0bea9fb25344a0460f395880d5589bbcd413ffd5555be48e46c0de084437  go1.23.8.linux-armv6l.tar.gz
+-sha256  0cadab469e612b159f5f68b1a30d75aa7b7e1ed5292746005a6a3c8ff04e6f35  go1.23.8.linux-ppc64le.tar.gz
+-sha256  cbe954ee534eb02aa782639716d8c25706dd171445f7c8336bd2fc0b8f6fe38e  go1.23.8.linux-s390x.tar.gz
++sha256  800a7ae1bff179a227b653a2f644517c800443b8b4abf3273af5e1cb7113de59  go1.23.10.src.tar.gz
++sha256  ded3c0a8d6d2a0ea5e7599c49678efa05cda139d31baaaf7d8d536a9e4cc19b2  go1.23.10.linux-386.tar.gz
++sha256  535f9f81802499f2a7dbfa70abb8fda3793725fcc29460f719815f6e10b5fd60  go1.23.10.linux-amd64.tar.gz
++sha256  bfb1f1df7173f44648ee070a39ab0481068632f595305a699d89cd56a33b8081  go1.23.10.linux-arm64.tar.gz
++sha256  b6e00c9a72406d394b9f167e74670e28b72ed559cca8115b21be1cb9d5316cb4  go1.23.10.linux-armv6l.tar.gz
++sha256  8fb94455cfa5e9a5e8af2bfbc7323a6fed2dabaffda1a69dae5dd41b669bbb57  go1.23.10.linux-ppc64le.tar.gz
++sha256  7d0e8651eb54fce5cfe2d4b412ddfa50144ce21907f72192a6549ffe03db4e1f  go1.23.10.linux-s390x.tar.gz
+ sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index d618a7a262..744bb0d3ba 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GO_VERSION = 1.23.8
++GO_VERSION = 1.23.10
+ 
+ HOST_GO_GOPATH = $(HOST_DIR)/share/go-path
+ HOST_GO_HOST_CACHE = $(HOST_DIR)/share/host-go-cache
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
