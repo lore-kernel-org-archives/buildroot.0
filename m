@@ -1,71 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FF1BC71136
-	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 20:06:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8D18C71136
+	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 20:07:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5CB0A83BEC;
-	Thu, 12 Jun 2025 20:06:38 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P_kAT1iL_5U3; Thu, 12 Jun 2025 20:06:37 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 80597839E9
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 80597839E9;
-	Thu, 12 Jun 2025 20:06:37 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 7836A183
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:06:36 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 692E2408D0
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:06:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A9A01408D0;
+	Thu, 12 Jun 2025 20:07:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id X-AkBTvsc4_v for <buildroot@buildroot.org>;
- Thu, 12 Jun 2025 20:06:35 +0000 (UTC)
+ id orwX-vrTdgyt; Thu, 12 Jun 2025 20:07:38 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F15C040913
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id F15C040913;
+	Thu, 12 Jun 2025 20:07:37 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id AE413183
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:07:36 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 94B9A8082B
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:07:36 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9BfHh_w0Rygr for <buildroot@buildroot.org>;
+ Thu, 12 Jun 2025 20:07:36 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
  helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9ADB840800
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9ADB840800
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BFC0480726
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BFC0480726
 Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9ADB840800
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:06:35 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BFC0480726
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:07:35 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id D40CD1C107D; Thu, 12 Jun 2025 22:06:33 +0200 (CEST)
-Message-ID: <463c57fa-3981-45f4-97da-bea62bb32c45@rnout.be>
-Date: Thu, 12 Jun 2025 22:06:32 +0200
+ with ESMTPSA id C4C251C107D; Thu, 12 Jun 2025 22:07:33 +0200 (CEST)
+Message-ID: <cc633395-f0b6-4fce-a06b-de26f5570599@rnout.be>
+Date: Thu, 12 Jun 2025 22:07:32 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Petr Vorel <petr.vorel@gmail.com>, buildroot@buildroot.org
-Cc: Julien Olivain <ju.o@free.fr>
-References: <20250602172812.512003-1-petr.vorel@gmail.com>
+To: Daniel Lang <dalang@gmx.at>, buildroot@buildroot.org
+Cc: Bernd Kuhls <bernd@kuhls.net>, Luca Ceresoli <luca.ceresoli@bootlin.com>
+References: <20250602184049.933226-1-dalang@gmx.at>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20250602172812.512003-1-petr.vorel@gmail.com>
+In-Reply-To: <20250602184049.933226-1-dalang@gmx.at>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1749758794; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1749758853; h=from:subject:date:message-id:to:cc:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=cydb5aIWn6ImFLfpEGIXEciIUnd8VcDv5p3WOEzBBfs=;
- b=hN6/PZWcD8nJ92aF3dpyjWTWfpl/Ps0byTSKYUtW17aPu6kKSML5ZFGh5WpyRMkt045RpJ
- s3Uweor57JHI2UX40GagovL5xYfVWkfjfFffnGsP8UMCJo8XQg0UQk7yHFkRt/yy62gZwu
- +xF8RWo9vTCSNkv0GS7fR84w/r6Z+VSFLZKkTGAn7HIViJxjWIlpGrCmhyXj4DsNxdRcmL
- fKvjUUOC5585ZqiIcg1jcm+t4dD4XAogyrfGY91UElR9woh2cBzo7gbFDjmew5gqIgcvxE
- p7UzSCrSduM9aOYTSdpf0xBJg8qe2OA/SCJIU4xiTKDbdSYzi8bOC9u8owq+4g==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=JT1OSM1NF3O1WYqUvDejeBCuENsePiuGeq7SBE+J32o=;
+ b=LTgCairuKrKsB2AMAi6AiikeYx7Wn1oyQ0v8/U+XbVsHuWBXYbO+6zx285Seci2CjFKxou
+ DR8jkO0ux1QFH5zCXBEQf3ND70wHeljQ1IGh+NPPWoPOC+Y2reaguytsHkMdYGD3hkUzh3
+ 2Hyxf9/uvAA7wKXrFMRENtm7Hy11aWsy2QFJVHFqtaJhNZ9dzdb8YtLyGfSa+fyYJVY5TM
+ wwB7xGIICAzII595IWPWu4PCXJl9Nottn/R9HiaanhZkOiRY8+/vnO4JTw2e05A63e3xG9
+ oC6N5eg/OGx4MzYtt/77qo/cPFmDet8qtM9gZ9LECNfp6cGHiWNXo2hacpp6RA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=hN6/PZWc
-Subject: Re: [Buildroot] [PATCH 1/1] package/iputils: bump version to
- 20250602
+ header.a=rsa-sha256 header.s=dkim header.b=LTgCairu
+Subject: Re: [Buildroot] [PATCH] package/exim: drop stale CVE-2022-3559
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,12 +85,11 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 02/06/2025 19:28, Petr Vorel wrote:
-> https://github.com/iputils/iputils/releases/tag/20250602
+On 02/06/2025 20:40, Daniel Lang via buildroot wrote:
+> The CVE database was updated and includes the additional "up to
+> (including) 4.97" version information.
 > 
-> Security release, fixes CVE-2025-47268 and CVE-2025-48964.
-> 
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+> Signed-off-by: Daniel Lang <dalang@gmx.at>
 
   Applied to 2025.02.x, thanks.
 
@@ -99,43 +97,24 @@ On 02/06/2025 19:28, Petr Vorel wrote:
   Arnout
 
 > ---
-> At least minimal test:
-> bootlin-armv5-uclibc [1/6]: OK
+>   package/exim/exim.mk | 4 ----
+>   1 file changed, 4 deletions(-)
 > 
-> (continue testing)
-> 
-> Kind regards,
-> Petr
-> 
->   package/iputils/iputils.hash | 4 ++--
->   package/iputils/iputils.mk   | 2 +-
->   2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/iputils/iputils.hash b/package/iputils/iputils.hash
-> index 6baf433dcb..daa5f81a85 100644
-> --- a/package/iputils/iputils.hash
-> +++ b/package/iputils/iputils.hash
-> @@ -1,5 +1,5 @@
-> -# https://github.com/iputils/iputils/releases/download/20240905/sha256sums.asc
-> -sha256  599cda8e3f5f7ce4c612456ab1101369da8f79aa0f83c8e877290a1c7bb56010  iputils-20240905.tar.gz
-> +# https://github.com/iputils/iputils/releases/download/20250602/sha256sums.asc
-> +sha256  178f316c3f102f7c7445dee8bb851838f11214a68b3d5d4788972d8b35dcbbe5  iputils-20250602.tar.gz
->   # Locally computed
->   sha256  2c9f29d982c48665c30b3adaf400c048988fd256eb91c691e351eb3b6a8b2036  LICENSE
->   sha256  9acc4bc871a4742550158e3696dcb381953172ef808d04ca248184f9f6322712  Documentation/LICENSE.BSD3
-> diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-> index ec8c24e4e0..391f0e1938 100644
-> --- a/package/iputils/iputils.mk
-> +++ b/package/iputils/iputils.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
+> diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+> index 6fa16e69a2..3afe553caa 100644
+> --- a/package/exim/exim.mk
+> +++ b/package/exim/exim.mk
+> @@ -13,10 +13,6 @@ EXIM_CPE_ID_VENDOR = exim
+>   EXIM_SELINUX_MODULES = exim mta
+>   EXIM_DEPENDENCIES = host-berkeleydb host-pcre2 pcre2 berkeleydb host-pkgconf
 >   
-> -IPUTILS_VERSION = 20240905
-> +IPUTILS_VERSION = 20250602
->   IPUTILS_SITE = https://github.com/iputils/iputils/releases/download/$(IPUTILS_VERSION)
->   IPUTILS_LICENSE = GPL-2.0+, BSD-3-Clause
->   IPUTILS_LICENSE_FILES = LICENSE Documentation/LICENSE.BSD3 Documentation/LICENSE.GPL2
+> -# Incorrect NVD database, reported at
+> -# https://lore.kernel.org/buildroot/20250517183423.07951665@windsurf/
+> -EXIM_IGNORE_CVES += CVE-2022-3559
+> -
+>   # Modify a variable value. It must already exist in the file, either
+>   # commented or not.
+>   define exim-config-change # variable-name, variable-value
 
 _______________________________________________
 buildroot mailing list
