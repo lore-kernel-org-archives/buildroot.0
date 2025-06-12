@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1708C71149
-	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 20:13:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E13A3C71136
+	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 20:13:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 875DF40B94;
-	Thu, 12 Jun 2025 20:13:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7E94640A69;
+	Thu, 12 Jun 2025 20:13:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nkvKnlm-tExE; Thu, 12 Jun 2025 20:13:12 +0000 (UTC)
+ id VJ7SaltopYxl; Thu, 12 Jun 2025 20:13:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B76C740B8A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2397940B84
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B76C740B8A;
-	Thu, 12 Jun 2025 20:13:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2397940B84;
+	Thu, 12 Jun 2025 20:13:14 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 01C9B1BD
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:12:44 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0541E1BD
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:12:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1A22E4097F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8A3CF40983
  for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:12:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hTT8fjO50rAM for <buildroot@buildroot.org>;
+ id 0SBWJcvicGjx for <buildroot@buildroot.org>;
  Thu, 12 Jun 2025 20:12:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9851B4097B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A1D07408E5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9851B4097B
+ by smtp4.osuosl.org (Postfix) with ESMTP id A1D07408E5
  for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:12:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 967B78354A; Thu, 12 Jun 2025 20:12:29 +0000 (UTC)
+ id A01AC83554; Thu, 12 Jun 2025 20:12:29 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 12 Jun 2025 14:40:34 +0200
+Date: Thu, 12 Jun 2025 14:40:36 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 190426a830ca0c9bc15dd4dce2772483a058c1fd
-X-Git-Newrev: 77eda2778ddca5b93e1122934d3bf10e0b87bccc
+X-Git-Oldrev: 77eda2778ddca5b93e1122934d3bf10e0b87bccc
+X-Git-Newrev: bf54b97d5e827c1bf786a75f14e1ddadc0217215
 X-Patchwork-Hint: ignore
-Message-Id: <20250612201229.967B78354A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/busybox: fix path
- for crond binary in S50crond during stop
+Message-Id: <20250612201229.A01AC83554@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] support/testing: add tree
+ runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,32 +66,89 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=77eda2778ddca5b93e1122934d3bf10e0b87bccc
+commit: https://git.buildroot.net/buildroot/commit/?id=bf54b97d5e827c1bf786a75f14e1ddadc0217215
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Signed-off-by: Stephan Henningsen <stephan+buildroot@asklandd.dk>
-Signed-off-by: Stephan Henningsen <stephan@asklandd.dk>
-Reviewed-by: Fiona Klute <fiona.klute@gmx.de>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 4ee019524109f6246d592befb0b0d8f6efb306f5)
+(cherry picked from commit 9d3b9d2220398d8d843151ca95101ccdcf091bb5)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/busybox/S50crond | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ DEVELOPERS                                 |  1 +
+ support/testing/tests/package/test_tree.py | 54 ++++++++++++++++++++++++++++++
+ 2 files changed, 55 insertions(+)
 
-diff --git a/package/busybox/S50crond b/package/busybox/S50crond
-index 74a0c0849b..7083a36cb0 100644
---- a/package/busybox/S50crond
-+++ b/package/busybox/S50crond
-@@ -36,7 +36,7 @@ stop() {
- 		echo "FAIL"
- 	fi
- 	while start-stop-daemon --stop --test --quiet --pidfile "$PIDFILE" \
--		--exec "/sbin/$DAEMON"; do
-+		--exec "/usr/sbin/$DAEMON"; do
- 		sleep 0.1
- 	done
- 	rm -f "$PIDFILE"
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 5b5513cf4c..2bd3b9448d 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2009,6 +2009,7 @@ F:	support/testing/tests/package/test_tesseract_ocr.py
+ F:	support/testing/tests/package/test_thttpd.py
+ F:	support/testing/tests/package/test_trace_cmd.py
+ F:	support/testing/tests/package/test_trace_cmd/
++F:	support/testing/tests/package/test_tree.py
+ F:	support/testing/tests/package/test_unbound.py
+ F:	support/testing/tests/package/test_unbound/
+ F:	support/testing/tests/package/test_usbip.py
+diff --git a/support/testing/tests/package/test_tree.py b/support/testing/tests/package/test_tree.py
+new file mode 100644
+index 0000000000..3865932642
+--- /dev/null
++++ b/support/testing/tests/package/test_tree.py
+@@ -0,0 +1,54 @@
++import json
++import os
++import xml.etree.ElementTree as ET
++
++import infra.basetest
++
++
++class TestTree(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_TREE=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++
++        self.assertRunOk("tree --version")
++
++        # Simple invocations on a path.
++        self.assertRunOk("tree /usr")
++        self.assertRunOk("tree -d /usr")
++        self.assertRunOk("tree -dx /")
++
++        # Check we see the /usr/bin/tree file in the output.
++        out, ret = self.emulator.run("tree -f /usr")
++        self.assertEqual(ret, 0)
++        self.assertIn("/usr/bin/tree", "\n".join(out))
++
++        # Check we can parse the JSON output and the summary report.
++        out, ret = self.emulator.run("tree -J /usr")
++        self.assertEqual(ret, 0)
++        json_str = "\n".join(out)
++        json_data = json.loads(json_str)
++        # Report is the last element.
++        json_report = json_data[-1]
++        self.assertEqual(json_report["type"], "report")
++        self.assertGreater(json_report["directories"], 0)
++        self.assertGreater(json_report["files"], 0)
++
++        # Check we can parse the XML output and the summary report.
++        out, ret = self.emulator.run("tree -X /usr")
++        self.assertEqual(ret, 0)
++        xml_str = "\n".join(out)
++        xml_root = ET.fromstring(xml_str)
++        self.assertEqual(xml_root.tag, "tree")
++        xml_report = xml_root.find("report")
++        self.assertGreater(int(xml_report.find("directories").text), 0)
++        self.assertGreater(int(xml_report.find("files").text), 0)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
