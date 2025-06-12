@@ -4,68 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4D2CC61CE8
-	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 19:54:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6D0EC71136
+	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 19:54:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8DE094090C;
-	Thu, 12 Jun 2025 19:54:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9AFDC40907;
+	Thu, 12 Jun 2025 19:54:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tNvez-39IcDo; Thu, 12 Jun 2025 19:54:09 +0000 (UTC)
+ id ORksZE5UeCFy; Thu, 12 Jun 2025 19:54:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 983AA40905
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D0D14408D3
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 983AA40905;
-	Thu, 12 Jun 2025 19:54:09 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id B49051BD
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 19:54:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D0D14408D3;
+	Thu, 12 Jun 2025 19:54:34 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 586A21BD
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 19:54:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B1416408D0
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 19:54:08 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4A06A8176B
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 19:54:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Z2VK2X_9GKlg for <buildroot@buildroot.org>;
- Thu, 12 Jun 2025 19:54:08 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uNxZzRnVSWQ9 for <buildroot@buildroot.org>;
+ Thu, 12 Jun 2025 19:54:32 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
  helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B2093408D3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B2093408D3
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 529758175C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 529758175C
 Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B2093408D3
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 19:54:07 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 529758175C
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 19:54:32 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 466991C0D69; Thu, 12 Jun 2025 21:54:04 +0200 (CEST)
-Message-ID: <d04b7598-49be-48df-9259-11e0400d2c13@rnout.be>
-Date: Thu, 12 Jun 2025 21:54:02 +0200
+ with ESMTPSA id 17C031C0D69; Thu, 12 Jun 2025 21:54:25 +0200 (CEST)
+Message-ID: <9e4bce27-d101-4d7b-a020-81827f60b35d@rnout.be>
+Date: Thu, 12 Jun 2025 21:54:24 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
-References: <20250516192540.84EF986D6D@busybox.osuosl.org>
+To: Titouan Christophe <titouan.christophe@mind.be>, buildroot@buildroot.org
+References: <20250602115518.521408-1-titouan.christophe@mind.be>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20250516192540.84EF986D6D@busybox.osuosl.org>
+In-Reply-To: <20250602115518.521408-1-titouan.christophe@mind.be>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1749758044; h=from:subject:date:message-id:to:mime-version:content-type:
+ t=1749758066; h=from:subject:date:message-id:to:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=JRt6Xa2gDpPezGcQm1hVP/9hj/rREAcm/GHn53V58nU=;
- b=EIjth8a8yN84+Fm39CWhkTl+CGJ0YGisE0UVEnaKD3v2SkKJy9gYFJ55taonyCnTya+e4n
- zgUvJ8H2mmUkOVGvlb88eRvWNF8z9+TEfXDG/qpTlzz4VKXzPqwwpGjJZ8ZtnRPRmzpvuY
- MRaRfDsJpbUB+1V5RetNZUDtDetvaISSKyFflyQPORiTbeNB7zu9Cxiz2ndgvulytYQlgd
- FbZ5p5MwIbhxaPHiynM4Ilxd2O6SHXGoqRktHYjHYeUUNWdSwrFZT8PYA18IAy2zXybQyo
- KvtvqGXhB68q/E3rIEHA3kv571+DTP0KIjPLivrqtRyfZZm+bdQa0zZsZ59YTw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=ryHicpU0PzwaqkKkRycxxuu2zKqM7V04CBc8m43gvRY=;
+ b=jpk9UbCqW5kmR9tF+77DMNfR2u0ugDd3MWhNH+IO0CUNLgAZlY+T3yoe6QTd2NO7q3kkvv
+ iARkesE3D3saAwAx/E8az3EXJ/hmQbyJ4GOsIdZFem5VA+pHNt6qvkaw/Vvw6igFnTpCaf
+ m7DOd0+NiTwfJZGS+Hjsjg9dp7f/JJjbv06noaErNaR7k8JyrQ6zqDJrGR4r2Ilfrc4vuL
+ SqrKjcAMovDHDezleTINHegf/m4ug9Ig1Uw0waXSHRUOZwHeV5PUUmlTSXYrDv3QaP4Rax
+ 0MmQqnwpyglxk/5CetBGehBIiVD504UtF9x7gRMtVYu1HZeyIub7qB/O76vdBA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
- header.s=dkim header.b=EIjth8a8
-Subject: Re: [Buildroot] [git commit] package/freescale-imx/Config.in:
- introduce i.MX91 silicon revision
+ header.s=dkim header.b=jpk9UbCq
+Subject: Re: [Buildroot] [PATCH for 2025.02.x] package/redis: security bump
+ to v7.2.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,58 +86,52 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 16/05/2025 21:24, Julien Olivain wrote:
-> commit: https://git.buildroot.net/buildroot/commit/?id=0645c83cd6a6d2caf1fdc62cbed81023fb509a2a
-> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 02/06/2025 13:55, Titouan Christophe via buildroot wrote:
+> This fixes the following CVEs:
 > 
-> This commit introduces the silicon revision number configuration.
-> This value will be used by packages for specific configurations
-> (such as security firmware).
+> - CVE-2025-27151: redis-check-aof may lead to stack overflow and potential RCE
+>                    https://www.cve.org/CVERecord?id=CVE-2025-27151
 > 
-> Signed-off-by: Juan Pablo MONTERO CASTRO <juanpablo.monterocastro@nxp.com>
-> [Julien: split original commit 1/3]
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> - CVE-2025-21605: An unauthenticated client can cause an unlimited growth of
+>                    output buffers
+>                    https://www.cve.org/CVERecord?id=CVE-2025-21605
+> 
+> Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 
-  Applied to 2025.02.x, thanks. I should have done that way earlier already, 
-before cherry-picking original commit 2/3...
+  Applied to 2025.02.x, thanks.
 
   Regards,
   Arnout
 
 > ---
->   package/freescale-imx/Config.in | 15 +++++++++++++++
->   1 file changed, 15 insertions(+)
+>   package/redis/redis.hash | 2 +-
+>   package/redis/redis.mk   | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
-> index 6d196a052d..77d6547cec 100644
-> --- a/package/freescale-imx/Config.in
-> +++ b/package/freescale-imx/Config.in
-> @@ -93,6 +93,21 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8ULPA2
+> diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+> index e01fc6a601..158931bb89 100644
+> --- a/package/redis/redis.hash
+> +++ b/package/redis/redis.hash
+> @@ -1,5 +1,5 @@
+>   # From https://github.com/redis/redis-hashes/blob/master/README
+> -sha256  72c081e3b8cfae7144273d26d76736f08319000af46c01515cad5d29765cead5  redis-7.2.7.tar.gz
+> +sha256  2343cc49db3beb9d2925a44e13032805a608821a58f25bd874c84881115a20b7  redis-7.2.9.tar.gz
 >   
->   endchoice
+>   # Locally calculated
+>   sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
+> diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+> index 7eb30abc4c..7c847690a9 100644
+> --- a/package/redis/redis.mk
+> +++ b/package/redis/redis.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
 >   
-> +choice
-> +	prompt "i.MX 91 Silicon Revision"
-> +	default BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX91A0
-> +	depends on BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX91
-> +	help
-> +	  Some packages related to the selected i.MX platform need to
-> +	  know the silicon revision of the platform they will run on.
-> +
-> +	  Note - mismatches may result in a failure to boot!
-> +
-> +config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX91A0
-> +	bool "imx91a0"
-> +
-> +endchoice
-> +
->   choice
->   	prompt "i.MX 93 Silicon Revision"
->   	default BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX93A1
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+> -REDIS_VERSION = 7.2.7
+> +REDIS_VERSION = 7.2.9
+>   REDIS_SITE = http://download.redis.io/releases
+>   REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
+>   REDIS_LICENSE_FILES = COPYING
 
 _______________________________________________
 buildroot mailing list
