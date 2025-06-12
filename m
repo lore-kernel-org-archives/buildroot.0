@@ -1,127 +1,129 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44013C71136
-	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 09:42:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5958C71136
+	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 09:42:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E653840680;
-	Thu, 12 Jun 2025 09:42:09 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KhpQRWM8N7mp; Thu, 12 Jun 2025 09:42:09 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2EF7640769
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2EF7640769;
-	Thu, 12 Jun 2025 09:42:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 215051BD
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 09:42:08 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F26CA81455
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 09:42:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5684A8146D;
+	Thu, 12 Jun 2025 09:42:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dTHi0tokIkP3 for <buildroot@buildroot.org>;
- Thu, 12 Jun 2025 09:42:07 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.20;
+ id qEkGJyrs5c2w; Thu, 12 Jun 2025 09:42:12 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7863A81455
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7863A81455;
+	Thu, 12 Jun 2025 09:42:12 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 89490183
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 09:42:10 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7AA5F404E0
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 09:42:10 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9_VyfRyd0Fht for <buildroot@buildroot.org>;
+ Thu, 12 Jun 2025 09:42:09 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.21;
  helo=mout.gmx.net; envelope-from=ps.report@gmx.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E138B81434
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E138B81434
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E138B81434
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 09:42:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1D7A940077
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1D7A940077
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1D7A940077
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 09:42:08 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from localhost.fritz.box ([82.135.81.170]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MpUUm-1vAo1m2gTU-00foXj; Thu, 12
- Jun 2025 11:42:02 +0200
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mj8qj-1v4VZo0lBl-00mjUA; Thu, 12
+ Jun 2025 11:42:05 +0200
 To: buildroot@buildroot.org
 Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
  Pierre-Jean Texier <texier.pj2@gmail.com>,
  Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 12 Jun 2025 11:41:56 +0200
-Message-ID: <20250612094157.680899-1-ps.report@gmx.net>
+Date: Thu, 12 Jun 2025 11:41:57 +0200
+Message-ID: <20250612094157.680899-2-ps.report@gmx.net>
 X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250612094157.680899-1-ps.report@gmx.net>
+References: <20250612094157.680899-1-ps.report@gmx.net>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:O9AHlNSqRr8iAgBbiLBcvX7RONgQM9Yb+8mdgrHCKYrsCraTdjX
- Zd2MDmByOPoOt+aGCz+L8duOze3vkacEhs7B6XSjmcORqhmKjq1tpfAoBHF/Up89tBhBwvQ
- W9Jsuzz/M12DPIFPCn1TdYhq75qLsrF+C3JXaQ8N/NsDmsX3Udt30xWZje5yYxDvinOnmCt
- BsAYbTbNucHrXsITMVx6A==
-UI-OutboundReport: notjunk:1;M01:P0:Gnql2IhE6iI=;0seYHN980YRT4iI7bljxBUh9P/6
- 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
- UDaNu/2ZDpLw02G0
+X-Provags-ID: V03:K1:ZNDZNePLOUnrTpfoJH2SSH6WCtVCIF3k3CMkER0XjjJA90/zT18
+ LHjRHtRoEIwditnH988YfZEa4pBtcM8aQGPxjHSfGykamY6yDkThIdbPjsZvlXcnbealb1W
+ KnnVU7davx6QKwrukK0pX/BkiBnjdqKoS+SvBqqV0006zPy2u1xp1KZjUK0kB5DQVlt3JyY
+ bRgC5L8+zIAOlZHyIgqzA==
+UI-OutboundReport: notjunk:1;M01:P0:TVDFDJoHBIM=;4fwrEfclwMaysomRDk7J5VfB9sQ
+ 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
+ f1nCCYleff33h/pK
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.net; 
- s=s31663417; t=1749721322; x=1750326122; i=ps.report@gmx.net;
- bh=+YlYAzV1LdssW3VBVVanMXUVbQGu833V6xaGjJIT4pw=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
- MIME-Version:Content-Transfer-Encoding:cc:
+ s=s31663417; t=1749721325; x=1750326125; i=ps.report@gmx.net;
+ bh=e09dEINllTqKbb/CWsBNtNL9J8PYQjv9C6BOUzpKQhQ=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
+ References:MIME-Version:Content-Transfer-Encoding:cc:
  content-transfer-encoding:content-type:date:from:message-id:
  mime-version:reply-to:subject:to;
- b=KFc/7IeC66BUtIo8xTsQ7LKAwsftwKfthhywaygtS4fx2FF51S/hVYOQ2XRornPK
- S4gvmHMaJHnViri2jT3jG8lakK+G/eBXJRZI2cw/I12wYcsv/m5/iwUyvaTZwSX3C
- IRXkuWwkyaM5zmvPifmN4kBkkdqUVCemgFxBAsYolqPmSBAIHIjvCilEwSLSigQtV
- MsAPxmgzkrdXXHrVZDXF3JTPI35gqxK+OlA1IcHoO+BHtNF79Zj+a8OQmHy22TjiG
- Ra7K0t/YaWpc4Y8upinWOfuw1l7tXuQ/2biCZ+s5kJ0bpALws57bjvu8HIbeeGJiZ
- f7Veoqs+0AAoQ8xirg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=s16ETBAPUugQsmbJ0q6p/UNaxpndcDKvjcj5GW1O6xaOqsiSby4xto+xmc9dBTPN
+ oyPTSmmGZzwNOKJHdLQ0FNO8Al8nXwXpnf9oc1spjcfAa5ZZAdh9nMchTCxgXtnon
+ +B1aOznCEW8UhlToJkCDXPNrADxen+J3S0DxUVq38gC0kUmEgaWDq7J+ewxGCwW3a
+ JgooQOGJyZ3PSw1UIXZcJsbGv9Dc5iDx1bRPriT31hpzlyHkzoZuML+gF/s4eoAuG
+ wB6jy2IGo7rOhRDj1mg/4IgDsFmlLF15/SGcwIFDFnZlmSTS+tYZm1fMewgmk4BIA
+ wF4gSihRPDFsJj3YDQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmx.net header.i=ps.report@gmx.net header.a=rsa-sha256
- header.s=s31663417 header.b=KFc/7IeC
-Subject: [Buildroot] [PATCH v1 1/2] package/mongoose: enable IPv6 support by
- default
+ header.s=s31663417 header.b=s16ETBAP
+Subject: [Buildroot] [PATCH v1 2/2] package/mongoose: add builtin/wolfssl
+ TLS support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -140,26 +142,103 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- enable IPv6 support by default
+Change from implicit none/mbedtls/openssl support to explicit none/builtin/
+mbedtls/openssl/wolfssl support via choice menu.
+
+- add MG_TLS_BUILTIN support (available since 7.13, upstream commit [1])
+- add MG_TLS_WOLFSSL support (available since 7.14, upstream commit [2] and [3])
+
+[1] https://github.com/cesanta/mongoose/commit/a0e66fb9e6c5c174ecf556bce9ef38e49d1abc30
+[2] https://github.com/cesanta/mongoose/commit/dc09851ac824e578bdb5fa751a31ddbba1e70adc
+[3] https://github.com/cesanta/mongoose/commit/9dc3d0998129f8dadd0ff7b7981e725e9e620b21
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/mongoose/mongoose.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/mongoose/Config.in   | 40 ++++++++++++++++++++++++++++++++++++
+ package/mongoose/mongoose.mk | 17 +++++++++------
+ 2 files changed, 51 insertions(+), 6 deletions(-)
 
+diff --git a/package/mongoose/Config.in b/package/mongoose/Config.in
+index 22b385d457..5ca5b0b150 100644
+--- a/package/mongoose/Config.in
++++ b/package/mongoose/Config.in
+@@ -8,6 +8,46 @@ config BR2_PACKAGE_MONGOOSE
+ 
+ 	  https://github.com/cesanta/mongoose
+ 
++if BR2_PACKAGE_MONGOOSE
++
++choice
++	prompt "TLS support"
++	help
++	  Select none, builtin, mbedtls or openssl.
++
++config BR2_PACKAGE_MONGOOSE_TLS_NONE
++	bool "none"
++	help
++	  Disable mongoose TLS support.
++
++config BR2_PACKAGE_MONGOOSE_TLS_BUILTIN
++	bool "builtin"
++	help
++	  Enable mongoose builtin TLS support.
++
++config BR2_PACKAGE_MONGOOSE_TLS_MBEDTLS
++	bool "mbedtls"
++	select BR2_PACKAGE_MBEDTLS
++	help
++	  Enable mongoose mbedtls TLS support.
++
++config BR2_PACKAGE_MONGOOSE_TLS_OPENSSL
++	bool "openssl"
++	select BR2_PACKAGE_OPENSSL
++	help
++	  Enable mongoose openssl TLS support.
++
++config BR2_PACKAGE_MONGOOSE_TLS_WOLFSSL
++	bool "wolfssl"
++	depends on BR2_PACKAGE_WOLFSSL_ASM_SUPPORTS
++	select BR2_PACKAGE_WOLFSSL
++	help
++	  Enable mongoose wolfssl TLS support.
++
++endchoice
++
++endif
++
+ comment "mongoose needs a toolchain w/ threads"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
 diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
-index c74330e5fd..02dd04f327 100644
+index 02dd04f327..d9d0e8f669 100644
 --- a/package/mongoose/mongoose.mk
 +++ b/package/mongoose/mongoose.mk
-@@ -13,7 +13,7 @@ MONGOOSE_INSTALL_STAGING = YES
- # static library
- MONGOOSE_INSTALL_TARGET = NO
+@@ -15,14 +15,19 @@ MONGOOSE_INSTALL_TARGET = NO
  
--MONGOOSE_CFLAGS = $(TARGET_CFLAGS) -std=gnu99
-+MONGOOSE_CFLAGS = $(TARGET_CFLAGS) -std=gnu99 -DMG_ENABLE_IPV6=1
+ MONGOOSE_CFLAGS = $(TARGET_CFLAGS) -std=gnu99 -DMG_ENABLE_IPV6=1
  
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- MONGOOSE_DEPENDENCIES += openssl
+-ifeq ($(BR2_PACKAGE_OPENSSL),y)
+-MONGOOSE_DEPENDENCIES += openssl
+-MONGOOSE_CFLAGS += -DMG_TLS=MG_TLS_OPENSSL
+-else ifeq ($(BR2_PACKAGE_MBEDTLS),y)
++ifeq ($(BR2_PACKAGE_MONGOOSE_TLS_NONE),y)
++MONGOOSE_CFLAGS += -DMG_TLS=MG_TLS_NONE
++else ifeq ($(BR2_PACKAGE_MONGOOSE_TLS_BUILTIN),y)
++MONGOOSE_CFLAGS += -DMG_TLS=MG_TLS_BUILTIN
++else ifeq ($(BR2_PACKAGE_MONGOOSE_TLS_MBEDTLS),y)
+ MONGOOSE_DEPENDENCIES += mbedtls
+ MONGOOSE_CFLAGS += -DMG_TLS=MG_TLS_MBED
+-else
+-MONGOOSE_CFLAGS += -DMG_TLS=MG_TLS_NONE
++else ifeq ($(BR2_PACKAGE_MONGOOSE_TLS_OPENSSL),y)
++MONGOOSE_DEPENDENCIES += openssl
++MONGOOSE_CFLAGS += -DMG_TLS=MG_TLS_OPENSSL
++else ifeq ($(BR2_PACKAGE_MONGOOSE_TLS_WOLFSSL),y)
++MONGOOSE_DEPENDENCIES += wolfssl
++MONGOOSE_CFLAGS += -DMG_TLS=MG_TLS_WOLFSSL
+ endif
+ 
+ define MONGOOSE_BUILD_CMDS
 -- 
 2.49.0
 
