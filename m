@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35D5CC61CE8
-	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 20:12:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC4FDC71149
+	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 20:12:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0BD1340A8C;
-	Thu, 12 Jun 2025 20:12:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9FF0083BEC;
+	Thu, 12 Jun 2025 20:12:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id E9WEWlND51d5; Thu, 12 Jun 2025 20:12:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mpjGgJOwGBPg; Thu, 12 Jun 2025 20:12:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1AB6440AAC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CBF89839E0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1AB6440AAC;
-	Thu, 12 Jun 2025 20:12:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CBF89839E0;
+	Thu, 12 Jun 2025 20:12:56 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0F47A27A
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:12:36 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 02B2C1BD
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:12:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 75F1383C13
+ by smtp1.osuosl.org (Postfix) with ESMTP id 92E7383C16
  for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:12:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CLN_wWnD4W5m for <buildroot@buildroot.org>;
- Thu, 12 Jun 2025 20:12:30 +0000 (UTC)
+ id EaLuSwzmPSl2 for <buildroot@buildroot.org>;
+ Thu, 12 Jun 2025 20:12:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 19D2783BE9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AABDE83BF9
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 19D2783BE9
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:12:30 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id AABDE83BF9
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:12:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 184B983563; Thu, 12 Jun 2025 20:12:30 +0000 (UTC)
+ id A921383563; Thu, 12 Jun 2025 20:12:29 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 12 Jun 2025 14:41:02 +0200
+Date: Thu, 12 Jun 2025 14:40:38 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: ff8c9c5897243348dc090b6446cc3241ad1ecff0
-X-Git-Newrev: 776bbc3d1c07a58092434f6c9c6ec04fef402fda
+X-Git-Oldrev: bf54b97d5e827c1bf786a75f14e1ddadc0217215
+X-Git-Newrev: bc90d131d63021a4a6ab98a163077275a38bdb25
 X-Patchwork-Hint: ignore
-Message-Id: <20250612201230.184B983563@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x]
- package/gstreamer1/gst1-plugins-bad: webrtc needs sync_4
+Message-Id: <20250612201229.A921383563@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/iputils: security
+ bump version to 20250602
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,54 +66,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=776bbc3d1c07a58092434f6c9c6ec04fef402fda
+commit: https://git.buildroot.net/buildroot/commit/?id=bc90d131d63021a4a6ab98a163077275a38bdb25
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Commit [1] "package/gstreamer1/gst1-plugins-bad: bump version
-to 1.24.11" added new requirements for webrtc which selects the
-sctp plugin, but forgot to propagate its dependencies. The sctp
-plugin depends on BR2_TOOLCHAIN_HAS_SYNC_4.
+https://github.com/iputils/iputils/releases/tag/20250602
 
-This commit fixes this issue.
+Security release, fixes CVE-2025-47268 and CVE-2025-48964.
 
-Fixes:
+https://www.cve.org/CVERecord?id=CVE-2025-47268
+https://www.cve.org/CVERecord?id=CVE-2025-48964
 
-    WARNING: unmet direct dependencies detected for BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SCTP
-      Depends on [n]: BR2_PACKAGE_GSTREAMER1 [=y] && BR2_PACKAGE_GST1_PLUGINS_BAD [=y] && BR2_TOOLCHAIN_HAS_SYNC_4 [=n]
-      Selected by [y]:
-      - BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTC [=y] && BR2_PACKAGE_GSTREAMER1 [=y] && BR2_PACKAGE_GST1_PLUGINS_BAD [=y] && !BR2_STATIC_LIBS [=n]
-
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/90b3cfedf44cc92289746aa30e439be409ca3747
-
-Cc: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+[Julien:
+ - add "security" mention in commit log title
+ - add link to CVEs
+]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit e34a113b32bec1c4713cdd3500ea47490fb11a71)
+(cherry picked from commit fe4533fd0d060adb7772fb365468afdcfadc8a22)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/gstreamer1/gst1-plugins-bad/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/iputils/iputils.hash | 4 ++--
+ package/iputils/iputils.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index 4c4e993714..89db860f87 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -659,6 +659,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBP
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTC
- 	bool "webrtc"
- 	depends on !BR2_STATIC_LIBS # libnice -> gnutls
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # gst1-plugins-bad sctp
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE # libgstsdp
- 	select BR2_PACKAGE_LIBNICE
- 	select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DTLS
-@@ -669,6 +670,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTC
+diff --git a/package/iputils/iputils.hash b/package/iputils/iputils.hash
+index 6baf433dcb..daa5f81a85 100644
+--- a/package/iputils/iputils.hash
++++ b/package/iputils/iputils.hash
+@@ -1,5 +1,5 @@
+-# https://github.com/iputils/iputils/releases/download/20240905/sha256sums.asc
+-sha256  599cda8e3f5f7ce4c612456ab1101369da8f79aa0f83c8e877290a1c7bb56010  iputils-20240905.tar.gz
++# https://github.com/iputils/iputils/releases/download/20250602/sha256sums.asc
++sha256  178f316c3f102f7c7445dee8bb851838f11214a68b3d5d4788972d8b35dcbbe5  iputils-20250602.tar.gz
+ # Locally computed
+ sha256  2c9f29d982c48665c30b3adaf400c048988fd256eb91c691e351eb3b6a8b2036  LICENSE
+ sha256  9acc4bc871a4742550158e3696dcb381953172ef808d04ca248184f9f6322712  Documentation/LICENSE.BSD3
+diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
+index ec8c24e4e0..391f0e1938 100644
+--- a/package/iputils/iputils.mk
++++ b/package/iputils/iputils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- comment "webrtc needs a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTCDSP
- 	bool "webrtcdsp"
+-IPUTILS_VERSION = 20240905
++IPUTILS_VERSION = 20250602
+ IPUTILS_SITE = https://github.com/iputils/iputils/releases/download/$(IPUTILS_VERSION)
+ IPUTILS_LICENSE = GPL-2.0+, BSD-3-Clause
+ IPUTILS_LICENSE_FILES = LICENSE Documentation/LICENSE.BSD3 Documentation/LICENSE.GPL2
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
