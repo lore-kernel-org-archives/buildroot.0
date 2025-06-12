@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91B4EC71136
-	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 20:03:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE0B3C61CE8
+	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 20:03:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 617E8408FA;
-	Thu, 12 Jun 2025 20:03:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A1C3D4090C;
+	Thu, 12 Jun 2025 20:03:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0VehX9yFF2z4; Thu, 12 Jun 2025 20:03:05 +0000 (UTC)
+ id mCIuFJZFDCFo; Thu, 12 Jun 2025 20:03:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C72A4089F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B6B374089F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7C72A4089F;
-	Thu, 12 Jun 2025 20:03:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0BBF21BD
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:03:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B6B374089F;
+	Thu, 12 Jun 2025 20:03:26 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 38A5C183
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:03:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F1CE080C2D
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:03:04 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2ABF780C7A
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:03:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CGS1Taoyd4-I for <buildroot@buildroot.org>;
- Thu, 12 Jun 2025 20:03:04 +0000 (UTC)
+ id uCd2xfRiZ7Bg for <buildroot@buildroot.org>;
+ Thu, 12 Jun 2025 20:03:25 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
  helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1A1C680C06
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1A1C680C06
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4694580C78
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4694580C78
 Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1A1C680C06
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:03:04 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4694580C78
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 20:03:25 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 31CB41C0E09; Thu, 12 Jun 2025 22:03:02 +0200 (CEST)
-Message-ID: <a741ab74-af99-4555-9f88-63443836dd78@rnout.be>
-Date: Thu, 12 Jun 2025 22:03:00 +0200
+ with ESMTPSA id 463191C0E09; Thu, 12 Jun 2025 22:03:23 +0200 (CEST)
+Message-ID: <9a1bcbab-0ccc-4fa0-9645-203a6c13e94a@rnout.be>
+Date: Thu, 12 Jun 2025 22:03:22 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Peter Korsgaard <peter@korsgaard.com>, buildroot@buildroot.org
-References: <20250528195252.4D25E87758@busybox.osuosl.org>
+To: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
+References: <20250522195330.622072-1-ju.o@free.fr>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20250528195252.4D25E87758@busybox.osuosl.org>
+In-Reply-To: <20250522195330.622072-1-ju.o@free.fr>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1749758582; h=from:subject:date:message-id:to:mime-version:content-type:
+ t=1749758603; h=from:subject:date:message-id:to:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=NYkYbqcyGHwaoNtZ7sowtjAW2bKdOtA+JRpLkuoMUVc=;
- b=kon1wUTHSJs23kqeh29KKoyI+Qk6H0IJCTCvw4wzycyGpPIu1ldu2Zo1T2yPxEaiO9Wda6
- SgsqpIG73U0zy0bttnIpxDqDMCDMyOS7Vr2Y88L64jaHFpQKE+GAoFNoHyio6FMG3X/ieh
- w4temE5XtX7MfgT0rulVHzN5RIdVv3jxcG59JFR2ulqMBGiYh2eWDDlkgOG8C4juIAdVJx
- jNAHdnOSO4/FLeif8wADwY8PmNk5LvYaUYHRznitPbj/BfKGPMDkRqPtJmhw2aRUi1myGF
- roKcCmfQnq4imE9Bt2iuAn4XoF4DDjoyBqlwxLth5TV1iBUshMHHvZL0K/Ooug==
+ bh=6gOst+9VVnv4LdyzRC2Pf/QGz9Zxvfy3n5EQnnbpG6E=;
+ b=H0gPpSiFV0QI6JMLHeP23AJ8UF/ryEJN+SXJR+Dy/DtvZTlYUuOYrN/o77BcsTHYYrKz6m
+ ZTPvQZsDO72yVLZ6Hr08oxcDk8MfF5OnG7LlWfzjM2iEOYa3peU2haDes1h2JOoctqjEoB
+ +rVdGLap0aMG/eyMeRkD61XN9OhXajpIxZPqoO4vCV3nEq0x1JExnu09hz87x/RM6Co4y7
+ 7YLOyAtzXXX48rL8pFWyjEvamAblPr6tt7M84mNGMHDN1SZ0kxO8kMk5MynxZJEe6VM6nI
+ WM50uoT52tgsbfmVEdY+NElPDLgpSdMjQkWSjXexP2eWPaQFMonLNYzFWeaUtA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=kon1wUTH
-Subject: Re: [Buildroot] [git commit] package/libcamera: correct build
- directory for IPA stripping
+ header.a=rsa-sha256 header.s=dkim header.b=H0gPpSiF
+Subject: Re: [Buildroot] [PATCH 1/1] support/testing: test_timezone: fix
+ test by setting a fixed time
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,15 +85,28 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 28/05/2025 21:52, Peter Korsgaard wrote:
-> commit: https://git.buildroot.net/buildroot/commit/?id=c9355a3869e3d735df90fc1c012108fdca72ac78
-> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 22/05/2025 21:53, Julien Olivain wrote:
+> Since Buildroot commit [1], the runtime test emulator infra is setting
+> the emulated system date to the host date.
 > 
-> Commit 4e95062f8 ("package/pkg-meson: use buildroot-build for build
-> directory") changed the build directory for meson packages to
-> 'buildroot-build', so update the find invocation to match.
+> While this is desired in general, this behaviour is introducing a
+> variability in the test execution. Depending if the test is executed
+> during winter or summer time, the output of the command "date +%Z"
+> will produce a different output.
 > 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> This commit fixes the issue by setting a fixed date and time on the
+> emulated system. The date is fixed to Unix Epoch plus one hour. This
+> is because Linux cannot set the system date to a value less than the
+> system uptime. So we cannot set the time back to Unix Epoch with the
+> command "date -s @0" (this would result to a EINVAL Invalid argument).
+> 
+> Fixes:
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/9922589073
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/9922589081
+> 
+> [1] https://gitlab.com/buildroot.org/buildroot/-/commit/cf8641b73e7f1577637bfef0ece78dd519b25d19
+> 
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
 
   Applied to 2025.02.x, thanks.
 
@@ -101,26 +114,41 @@ On 28/05/2025 21:52, Peter Korsgaard wrote:
   Arnout
 
 > ---
->   package/libcamera/libcamera.mk | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+> Patch tested in:
+> https://gitlab.com/jolivain/buildroot/-/pipelines/1832009356
+> ---
+>   support/testing/tests/core/test_timezone.py | 18 ++++++++++++++++++
+>   1 file changed, 18 insertions(+)
 > 
-> diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
-> index d732424015..1cd7a22952 100644
-> --- a/package/libcamera/libcamera.mk
-> +++ b/package/libcamera/libcamera.mk
-> @@ -130,7 +130,7 @@ endif
->   # otherwise the signature won't match the shlib on the rootfs. Since meson
->   # install target is signing the shlibs, we need to strip them before.
->   LIBCAMERA_STRIP_FIND_CMD = \
-> -	find $(@D)/build/src/ipa \
-> +	find $(@D)/buildroot-build/src/ipa \
->   	$(if $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES)), \
->   		-not \( $(call findfileclauses,$(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) ) \
->   	-type f -name 'ipa_*.so' -print0
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+> diff --git a/support/testing/tests/core/test_timezone.py b/support/testing/tests/core/test_timezone.py
+> index bf4a47fcde..bfb9604f66 100644
+> --- a/support/testing/tests/core/test_timezone.py
+> +++ b/support/testing/tests/core/test_timezone.py
+> @@ -9,6 +9,24 @@ def boot_armv5_cpio(emulator, builddir):
+>                     options=["-initrd", img])
+>       emulator.login()
+>   
+> +    # emulator.login() sets the emulated system date to the host
+> +    # date. In general, this is desirable (for correct SSL certificate
+> +    # behaviors, for example).
+> +    #
+> +    # This timezone runtime test checks that a Buildroot configuration
+> +    # is reflected in the generated system at runtime, using the
+> +    # standard "date" command. To make sure this test is stable in
+> +    # time (i.e. output is independent to the date/time the test is
+> +    # executed due to daylight saving time changes), we reset the
+> +    # system date to a constant value.
+> +    #
+> +    # We cannot set the system date to a value less than the system
+> +    # uptime. So we cannot set the time back to Unix Epoch with the
+> +    # command "date -s @0" (this would result to a EINVAL Invalid
+> +    # argument). Instead, we set the time at 1 hour after Epoch. This
+> +    # is sufficient as the emulated system takes few seconds to start.
+> +    emulator.run("date -s @3600")
+> +
+>   
+>   class TestNoTimezone(infra.basetest.BRTest):
+>       config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
 
 _______________________________________________
 buildroot mailing list
