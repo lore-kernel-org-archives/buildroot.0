@@ -1,53 +1,153 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BB8CC61CE8
-	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 10:36:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97076C71136
+	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 11:34:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A6D1D60B20;
-	Thu, 12 Jun 2025 10:36:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 375874080E;
+	Thu, 12 Jun 2025 11:34:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N-QvhXlWE2d4; Thu, 12 Jun 2025 10:36:44 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mYC42h4ocKb4; Thu, 12 Jun 2025 11:34:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 11D8F60B51
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 19A4040807
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 11D8F60B51;
-	Thu, 12 Jun 2025 10:36:44 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id E11251E0
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 10:36:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 19A4040807;
+	Thu, 12 Jun 2025 11:34:17 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 55518183
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 11:34:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D322860B51
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 10:36:42 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3AF6460D70
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 11:34:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XrjtyN24ROxp for <buildroot@buildroot.org>;
- Thu, 12 Jun 2025 10:36:41 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7722D60B20
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7722D60B20
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 10:36:41 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7074882D53; Thu, 12 Jun 2025 10:36:41 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Thu, 12 Jun 2025 12:36:07 +0200
-X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: fcde5363aa35220a1f201159a05de652ec6f811f
-X-Git-Newrev: 51fc7d63b9a315d6659cb17ecdc4b7a6857af2be
-X-Patchwork-Hint: ignore
-Message-Id: <20250612103641.7074882D53@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/libssh2: bump to
- version 1.11.1
+ id EBvoJqrIUBRY for <buildroot@buildroot.org>;
+ Thu, 12 Jun 2025 11:34:13 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a01:111:f403:2415::624;
+ helo=nam11-dm6-obe.outbound.protection.outlook.com;
+ envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A7BF660C07
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A7BF660C07
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com
+ (mail-dm6nam11on20624.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:2415::624])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A7BF660C07
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 11:34:13 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=N3eMKdTlkDwbVWrN70Rfkmh4mERdipENSkn1fIItySxCl1WCHhp7QVQKEL/UmO3fz+XQcsyb4xbBVLtQDYmE4llsBZnV/jCF4ql5ezTMKXOCr87TQYXvnlEc3zYCXiJGNZOiDL4UymswGl/2MihuOO400T8Z/LFxg05r6uSp6J8EBhtsBBJLIyI0KLov4YtgeG6cymqATSqvobKPqF73sUauZTjaCEe9gbKa5XcQgM8XuTq/hQKG3QUie2IGPk2MU8UXFmCutbqZzGzh0P5Wu9e9XYW/GK7p95ICks0P4m+tMjmAsErIW7CLPXnnipe825WNCAw5F9Ueqoi6AocdMA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tp9L64wnxEajQGospwGS3aZGp8gNp8mdpTHKgm6o6J0=;
+ b=Qm710zBqBeOGUZDwKEegEnZPAj+1F6G1EzVbo7QWmGQ2c/3cOLI2+2DSpxmVYUr5l8Uv6z+CuDuxw6hVeglQiUof3wh3M/IUALpDwi0xJkt1ISYllfMh0nBuSMUF8PjQJKdkNXDD42MDhrWvQ+Wjbx5virab0ZNd0URQEDFiq22zPqF9XcxgfR8TsYHswClR2teAXGU0l86XxFhOglYQz8EM2n+QVzt7+pvmj3qeH3ThE7szh8xTEVzMXwJx0jq3mAZSFzgK1kKnYg+1Y/mC0Jx7DHbtDLTjrBI4pqrEmiH2QstZJwK3kzoXIzUUjmG7sbfOfiw5OTeZqZXKirSWLw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+Received: from BLAPR03CA0064.namprd03.prod.outlook.com (2603:10b6:208:329::9)
+ by CY5PR12MB6405.namprd12.prod.outlook.com (2603:10b6:930:3e::17)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8792.36; Thu, 12 Jun
+ 2025 11:34:09 +0000
+Received: from BN2PEPF000044A5.namprd04.prod.outlook.com
+ (2603:10b6:208:329:cafe::d3) by BLAPR03CA0064.outlook.office365.com
+ (2603:10b6:208:329::9) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8835.23 via Frontend Transport; Thu,
+ 12 Jun 2025 11:34:09 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN2PEPF000044A5.mail.protection.outlook.com (10.167.243.104) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8835.15 via Frontend Transport; Thu, 12 Jun 2025 11:34:08 +0000
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 12 Jun
+ 2025 06:34:07 -0500
+Received: from xirengwts09.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
+ Transport; Thu, 12 Jun 2025 06:34:06 -0500
+To: <buildroot@buildroot.org>
+Date: Thu, 12 Jun 2025 12:34:04 +0100
+Message-ID: <20250612113404.1565705-1-neal.frager@amd.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Received-SPF: None (SATLEXMB04.amd.com: neal.frager@amd.com does not designate
+ permitted sender hosts)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN2PEPF000044A5:EE_|CY5PR12MB6405:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3450ff22-c4fb-4029-9325-08dda9a50b77
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+ ARA:13230040|376014|36860700013|1800799024|82310400026|41080700001; 
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?SGcqs0X9LfuqmMnH/t1fTzvWv7F5O68x+q2Iqf05pklcZDNlhMhHbXLwK7y2?=
+ =?us-ascii?Q?+nywxgh8TE3bJKaWclR0Js0P+YWX0qCMAsoKwvQhI+dY6fZJgZQF6kx0f8/X?=
+ =?us-ascii?Q?aVm5a5T8lNwyMitpWE9T7WpRVq0u1E5zj4I0N6X4nGyfGlIX9bcJTA5UBJPf?=
+ =?us-ascii?Q?pgj53Bf3FCVhV29nUmuY5wvqDrIc9toOxuvPTD+mnIgIfqlCgQ4qietqQole?=
+ =?us-ascii?Q?t+lkb1Q8pjTvJCqTqUOtxlGT1xAW5/7fsCbNO6QgkHH1nWV9c19PJ8AizVmX?=
+ =?us-ascii?Q?38c/Gk+zUQ9zhwcOqcVrI4iR+w5hSNWPJRu+HGU6dpFhIBs0SChfk8aqJZQb?=
+ =?us-ascii?Q?HALVKd+AzAzQEARo/8/1pB0jtwSM83XhETc3s6N6lfn8YcGX0FONnZ/Aj60G?=
+ =?us-ascii?Q?usj9wsiqqPh+yKPg5Fjctu2Sd/XeMeiMwFD/Q1dlTeC//rK6Eg7RVms3CkRC?=
+ =?us-ascii?Q?aa8AovKjkS5+zjc07J0xO4CVtflhVSTdP6mhVX9DFbuZJowdzkAZ0P8Xd5XE?=
+ =?us-ascii?Q?nN7anLjUHIm4Lo28rFGpb3wWUodjt/+6cYJ9P6LQ/2mM7wbm5x33twEJGKk7?=
+ =?us-ascii?Q?6Fz8zZKK0i3xDoJ/onmHbbOL2+d4cu/7hPxmRRvINKhazWCcb9zsQqF72Vdn?=
+ =?us-ascii?Q?R2tHiKi8w8IOMlD5GKF/2BnJsJI0IKCDXABFuv7OBdd+oIvXmeE5mZn3ao2G?=
+ =?us-ascii?Q?fw7QkWsgRbd51K4c8JU+ImOeLa9ocmHFO3w/pdtmBn4AjlpDkkhOijzfKwWo?=
+ =?us-ascii?Q?jS4tj3cPTkfZ5lhotbrvHGoek6CkSmE6bzx8oLLby99Kfj7RcFuu8GHXnuNV?=
+ =?us-ascii?Q?ZjLh26x3Adci1BFb3WSrFCn8g5IAVoUUNSiRH9BTAGmAEWEyBNfRfwuIPG/P?=
+ =?us-ascii?Q?W5BT3QxtH/tsIfXdjOafIR6hh1rJ8KMJCUuoXmcVItLfvWv823ioX4L22ZJH?=
+ =?us-ascii?Q?lwb2AysSqYQ7qX1mIZp4vtyeO3nedXQPCPtKSTtrWERHyiPQbHUVBRQasL6c?=
+ =?us-ascii?Q?zTG1zsg3Z8Z0Dnm+GlEy+tHofDCX1nnb+OOn5xRdP8ypYt3840fD0qCWiVit?=
+ =?us-ascii?Q?+qeN3lfTBc+iEPzYqP9s9wtR5CuHy5mewOYrcOoEdHD9ioXTV6q1DahOALke?=
+ =?us-ascii?Q?SFWMhoGp53tXRXwD99C1JCqejBIoSaTYuRGs56zvXKHQazOTYOP0qFtajakS?=
+ =?us-ascii?Q?mdmJJAjA2Hk02j/0fl6NQ8nu+NMvVAnLVm2zswb2ua+reqJf6VBqRlVZrLPC?=
+ =?us-ascii?Q?txOJVeEdUA3oQ+tAlgfDBiKmYlUeLGx7EWoo+rDgK9Hqd6It2zcKkxiaiIdK?=
+ =?us-ascii?Q?4qxATmDM+M+3qtubtnSG9XhD8MIQRKKqtluazXXfijjiJXNfXBRXijBWgidx?=
+ =?us-ascii?Q?KHxpG3RbWZD+CHcn5fVrJxksKnrxVy2D6RdDuq1lASZcIMtSKZCShfS9OYXZ?=
+ =?us-ascii?Q?QykCMSqArwMdmBjszfyUb4CjV7Asf87qSguZQyOTuw7/vppwDRH9dC7X41zl?=
+ =?us-ascii?Q?ztw1+wyAycc440vtKyaRx/m484JWRgz2HtD/q/NXQ7MPZ7d/y10tVrNUQOHM?=
+ =?us-ascii?Q?SAfa8FIXdQC6R59TJqs=3D?=
+X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
+ IPV:CAL; SFV:NSPM; H:SATLEXMB04.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
+ SFS:(13230040)(376014)(36860700013)(1800799024)(82310400026)(41080700001);
+ DIR:OUT; SFP:1101; 
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2025 11:34:08.3122 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3450ff22-c4fb-4029-9325-08dda9a50b77
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
+ Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN2PEPF000044A5.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6405
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amd.com; s=selector1; 
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tp9L64wnxEajQGospwGS3aZGp8gNp8mdpTHKgm6o6J0=;
+ b=CEDiw12RUryB4zTJicynHJ0X7Y46FLL/iXlaFhblWYmmW+xfcls0Mlp8IJnogjri0bx59EZ08s/CxkpTB1Somr8BLzd8JgTlK2GpXkFYOOgJ006L2/vlRkb2THrw8WVyau7VHJPofIXgPGv18QvRKQgF7lP5MaF8FljaBdLXJ6w=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=amd.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
+ header.s=selector1 header.b=CEDiw12R
+Subject: [Buildroot] [PATCH v1 1/1] board/xilinx/linux_6.12: rename dir to
+ linux_6.12.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,656 +159,225 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Neal Frager via buildroot <buildroot@buildroot.org>
+Reply-To: Neal Frager <neal.frager@amd.com>
+Cc: ibai.erkiaga-elorza@amd.com, luca.ceresoli@bootlin.com,
+ Neal Frager <neal.frager@amd.com>, brandon.maier@collins.com, ju.o@free.fr,
+ thomas.petazzoni@bootlin.com, romain.naour@smile.fr, michal.simek@amd.com,
+ romain.naour@gmail.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=51fc7d63b9a315d6659cb17ecdc4b7a6857af2be
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
+The following patch is specific to the Xilinx Linux 6.12.10 release, and will
+not apply to all Linux 6.12 releases.  Starting with the next release based on
+Linux 6.12.30, this patch will already be included.
 
-Release notes: https://libssh2.org/changes.html#1.11.1
+For this reason, it is better to change the directory name to linux_6.12.10,
+so that it is clear that it is only to be used with the Xilinx 2025.1 release
+based on Linux 6.12.10 and not future Linux 6.12 releases.
 
-Among other things, this release includes the patches previously carried
-by Buildroot and also has fixes for build issues with mbedTLS 3.6.x. It
-also includes a purely cosmetic copyright bump[1].
+So this patch moves:
+board/xilinx/linux_6.12/patches/linux/0001-include-uapi-linux-xlnx-ai-engine.h-fix-CONFIG_XILIN.patch
+to:
+board/xilinx/linux_6.12.10/patches/linux/0001-include-uapi-linux-xlnx-ai-engine.h-fix-CONFIG_XILIN.patch
 
-Builds with test-pkg against all three crypto providers.
-
-Fixes: https://autobuild.buildroot.org/results/306/30699f986c6bcd1ab247d92c4ba0999f09aa226f
-
-[1] https://github.com/libssh2/libssh2/commit/187d89bb0740400e8fa0b5f1441d089392797f53
-
-Signed-off-by: Florian Larysch <fl@n621.de>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 980b8c7e54a67fba18b36e42adce3aea41e435bd)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Neal Frager <neal.frager@amd.com>
 ---
- ...-use-more-size_t-to-sync-up-with-crypto-h.patch | 106 -----
- ...KEX-to-fix-CVE-2023-48795-Terrapin-Attack.patch | 467 ---------------------
- package/libssh2/libssh2.hash                       |   4 +-
- package/libssh2/libssh2.mk                         |   5 +-
- 4 files changed, 3 insertions(+), 579 deletions(-)
+ ...1-include-uapi-linux-xlnx-ai-engine.h-fix-CONFIG_XILIN.patch | 0
+ configs/versal_vck190_defconfig                                 | 2 +-
+ configs/versal_vek280_defconfig                                 | 2 +-
+ configs/versal_vpk180_defconfig                                 | 2 +-
+ configs/zynq_microzed_defconfig                                 | 2 +-
+ configs/zynq_zc702_defconfig                                    | 2 +-
+ configs/zynq_zc706_defconfig                                    | 2 +-
+ configs/zynq_zed_defconfig                                      | 2 +-
+ configs/zynqmp_kria_kd240_defconfig                             | 2 +-
+ configs/zynqmp_kria_kr260_defconfig                             | 2 +-
+ configs/zynqmp_kria_kv260_defconfig                             | 2 +-
+ configs/zynqmp_zcu102_defconfig                                 | 2 +-
+ configs/zynqmp_zcu104_defconfig                                 | 2 +-
+ configs/zynqmp_zcu106_defconfig                                 | 2 +-
+ 14 files changed, 13 insertions(+), 13 deletions(-)
+ rename board/xilinx/{linux_6.12 => linux_6.12.10}/patches/linux/0001-include-uapi-linux-xlnx-ai-engine.h-fix-CONFIG_XILIN.patch (100%)
 
-diff --git a/package/libssh2/0001-mbedtls-use-more-size_t-to-sync-up-with-crypto-h.patch b/package/libssh2/0001-mbedtls-use-more-size_t-to-sync-up-with-crypto-h.patch
-deleted file mode 100644
-index 3cac133864..0000000000
---- a/package/libssh2/0001-mbedtls-use-more-size_t-to-sync-up-with-crypto-h.patch
-+++ /dev/null
-@@ -1,106 +0,0 @@
--From 1153ebdeba563ac657b525edd6bf6da68b1fe5e2 Mon Sep 17 00:00:00 2001
--From: Viktor Szakats <commit@vsz.me>
--Date: Tue, 30 May 2023 17:28:03 +0000
--Subject: [PATCH] mbedtls: use more `size_t` to sync up with `crypto.h`
--
--Ref: 5a96f494ee0b00282afb2db2e091246fc5e1774a #846 #879
--
--Fixes #1053
--Closes #1054
--
--Upstream: https://github.com/libssh2/libssh2/commit/1153ebdeba563ac657b525edd6bf6da68b1fe5e2
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- src/mbedtls.c | 14 ++++++++------
-- src/mbedtls.h | 13 ++++++-------
-- 2 files changed, 14 insertions(+), 13 deletions(-)
--
--diff --git a/src/mbedtls.c b/src/mbedtls.c
--index e387cdb19..cd14a4bd8 100644
----- a/src/mbedtls.c
--+++ b/src/mbedtls.c
--@@ -186,7 +186,7 @@ _libssh2_mbedtls_cipher_dtor(_libssh2_cipher_ctx *ctx)
-- int
-- _libssh2_mbedtls_hash_init(mbedtls_md_context_t *ctx,
--                            mbedtls_md_type_t mdtype,
---                           const unsigned char *key, unsigned long keylen)
--+                           const unsigned char *key, size_t keylen)
-- {
--     const mbedtls_md_info_t *md_info;
--     int ret, hmac;
--@@ -221,7 +221,7 @@ _libssh2_mbedtls_hash_final(mbedtls_md_context_t *ctx, unsigned char *hash)
-- }
-- 
-- int
---_libssh2_mbedtls_hash(const unsigned char *data, unsigned long datalen,
--+_libssh2_mbedtls_hash(const unsigned char *data, size_t datalen,
--                       mbedtls_md_type_t mdtype, unsigned char *hash)
-- {
--     const mbedtls_md_info_t *md_info;
--@@ -497,8 +497,9 @@ int
-- _libssh2_mbedtls_rsa_sha2_verify(libssh2_rsa_ctx * rsactx,
--                                  size_t hash_len,
--                                  const unsigned char *sig,
---                                 unsigned long sig_len,
---                                 const unsigned char *m, unsigned long m_len)
--+                                 size_t sig_len,
--+                                 const unsigned char *m,
--+                                 size_t m_len)
-- {
--     int ret;
--     int md_type;
--@@ -548,8 +549,9 @@ _libssh2_mbedtls_rsa_sha2_verify(libssh2_rsa_ctx * rsactx,
-- int
-- _libssh2_mbedtls_rsa_sha1_verify(libssh2_rsa_ctx * rsactx,
--                                  const unsigned char *sig,
---                                 unsigned long sig_len,
---                                 const unsigned char *m, unsigned long m_len)
--+                                 size_t sig_len,
--+                                 const unsigned char *m,
--+                                 size_t m_len)
-- {
--     return _libssh2_mbedtls_rsa_sha2_verify(rsactx, SHA_DIGEST_LENGTH,
--                                             sig, sig_len, m, m_len);
--diff --git a/src/mbedtls.h b/src/mbedtls.h
--index d9592f721..03484da17 100644
----- a/src/mbedtls.h
--+++ b/src/mbedtls.h
--@@ -478,12 +478,12 @@ _libssh2_mbedtls_cipher_dtor(_libssh2_cipher_ctx *ctx);
-- int
-- _libssh2_mbedtls_hash_init(mbedtls_md_context_t *ctx,
--                            mbedtls_md_type_t mdtype,
---                           const unsigned char *key, unsigned long keylen);
--+                           const unsigned char *key, size_t keylen);
-- 
-- int
-- _libssh2_mbedtls_hash_final(mbedtls_md_context_t *ctx, unsigned char *hash);
-- int
---_libssh2_mbedtls_hash(const unsigned char *data, unsigned long datalen,
--+_libssh2_mbedtls_hash(const unsigned char *data, size_t datalen,
--                       mbedtls_md_type_t mdtype, unsigned char *hash);
-- 
-- _libssh2_bn *
--@@ -526,9 +526,8 @@ _libssh2_mbedtls_rsa_new_private_frommemory(libssh2_rsa_ctx **rsa,
-- int
-- _libssh2_mbedtls_rsa_sha1_verify(libssh2_rsa_ctx *rsa,
--                                  const unsigned char *sig,
---                                 unsigned long sig_len,
---                                 const unsigned char *m,
---                                 unsigned long m_len);
--+                                 size_t sig_len,
--+                                 const unsigned char *m, size_t m_len);
-- int
-- _libssh2_mbedtls_rsa_sha1_sign(LIBSSH2_SESSION *session,
--                                libssh2_rsa_ctx *rsa,
--@@ -540,8 +539,8 @@ int
-- _libssh2_mbedtls_rsa_sha2_verify(libssh2_rsa_ctx * rsactx,
--                                  size_t hash_len,
--                                  const unsigned char *sig,
---                                 unsigned long sig_len,
---                                 const unsigned char *m, unsigned long m_len);
--+                                 size_t sig_len,
--+                                 const unsigned char *m, size_t m_len);
-- int
-- _libssh2_mbedtls_rsa_sha2_sign(LIBSSH2_SESSION *session,
--                                libssh2_rsa_ctx *rsa,
-diff --git a/package/libssh2/0002-src-add-strict-KEX-to-fix-CVE-2023-48795-Terrapin-Attack.patch b/package/libssh2/0002-src-add-strict-KEX-to-fix-CVE-2023-48795-Terrapin-Attack.patch
-deleted file mode 100644
-index 8187719477..0000000000
---- a/package/libssh2/0002-src-add-strict-KEX-to-fix-CVE-2023-48795-Terrapin-Attack.patch
-+++ /dev/null
-@@ -1,467 +0,0 @@
--From 3a80751dce7b7d98b9d9006fb37213a1e4af7ac5 Mon Sep 17 00:00:00 2001
--From: Michael Buckley <michael@buckleyisms.com>
--Date: Thu, 30 Nov 2023 15:08:02 -0800
--Subject: [PATCH] src: add 'strict KEX' to fix CVE-2023-48795 "Terrapin Attack"
--
--Refs:
--https://terrapin-attack.com/
--https://seclists.org/oss-sec/2023/q4/292
--https://osv.dev/list?ecosystem=&q=CVE-2023-48795
--https://github.com/advisories/GHSA-45x7-px36-x8w8
--https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-48795
--
--Fixes #1290
--Closes #1291
--
--Upstream: https://github.com/libssh2/libssh2/commit/d34d9258b8420b19ec3f97b4cc5bf7aa7d98e35a
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Dario: make the patch to be applied with fuzz factor 0]
--Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-----
-- src/kex.c          | 63 +++++++++++++++++++++++------------
-- src/libssh2_priv.h | 18 +++++++---
-- src/packet.c       | 83 +++++++++++++++++++++++++++++++++++++++++++---
-- src/packet.h       |  2 +-
-- src/session.c      |  3 ++
-- src/transport.c    | 12 ++++++-
-- 6 files changed, 149 insertions(+), 32 deletions(-)
--
--diff --git a/src/kex.c b/src/kex.c
--index d4034a0a953e..b4b748cac4ee 100644
----- a/src/kex.c
--+++ b/src/kex.c
--@@ -3037,6 +3037,13 @@ kex_method_extension_negotiation = {
--     0,
-- };
-- 
--+static const LIBSSH2_KEX_METHOD
--+kex_method_strict_client_extension = {
--+    "kex-strict-c-v00@openssh.com",
--+    NULL,
--+    0,
--+};
--+
-- static const LIBSSH2_KEX_METHOD *libssh2_kex_methods[] = {
-- #if LIBSSH2_ED25519
--     &kex_method_ssh_curve25519_sha256,
--@@ -3055,6 +3062,7 @@ static const LIBSSH2_KEX_METHOD *libssh2_kex_methods[] = {
--     &kex_method_diffie_helman_group1_sha1,
--     &kex_method_diffie_helman_group_exchange_sha1,
--     &kex_method_extension_negotiation,
--+    &kex_method_strict_client_extension,
--     NULL
-- };
-- 
--@@ -3307,13 +3315,13 @@ static int kexinit(LIBSSH2_SESSION * session)
--     return 0;
-- }
-- 
---/* kex_agree_instr
--+/* _libssh2_kex_agree_instr
--  * Kex specific variant of strstr()
--  * Needle must be preceded by BOL or ',', and followed by ',' or EOL
--  */
---static unsigned char *
---kex_agree_instr(unsigned char *haystack, size_t haystack_len,
---                const unsigned char *needle, size_t needle_len)
--+unsigned char *
--+_libssh2_kex_agree_instr(unsigned char *haystack, size_t haystack_len,
--+                         const unsigned char *needle, size_t needle_len)
-- {
--     unsigned char *s;
--     unsigned char *end_haystack;
--@@ -3398,7 +3406,7 @@ static int kex_agree_hostkey(LIBSSH2_SESSION * session,
--         while(s && *s) {
--             unsigned char *p = (unsigned char *) strchr((char *) s, ',');
--             size_t method_len = (p ? (size_t)(p - s) : strlen((char *) s));
---            if(kex_agree_instr(hostkey, hostkey_len, s, method_len)) {
--+            if(_libssh2_kex_agree_instr(hostkey, hostkey_len, s, method_len)) {
--                 const LIBSSH2_HOSTKEY_METHOD *method =
--                     (const LIBSSH2_HOSTKEY_METHOD *)
--                     kex_get_method_by_name((char *) s, method_len,
--@@ -3432,9 +3440,9 @@ static int kex_agree_hostkey(LIBSSH2_SESSION * session,
--     }
-- 
--     while(hostkeyp && (*hostkeyp) && (*hostkeyp)->name) {
---        s = kex_agree_instr(hostkey, hostkey_len,
---                            (unsigned char *) (*hostkeyp)->name,
---                            strlen((*hostkeyp)->name));
--+        s = _libssh2_kex_agree_instr(hostkey, hostkey_len,
--+                                     (unsigned char *) (*hostkeyp)->name,
--+                                     strlen((*hostkeyp)->name));
--         if(s) {
--             /* So far so good, but does it suit our purposes? (Encrypting vs
--                Signing) */
--@@ -3468,6 +3476,12 @@ static int kex_agree_kex_hostkey(LIBSSH2_SESSION * session, unsigned char *kex,
-- {
--     const LIBSSH2_KEX_METHOD **kexp = libssh2_kex_methods;
--     unsigned char *s;
--+    const unsigned char *strict =
--+        (unsigned char *)"kex-strict-s-v00@openssh.com";
--+
--+    if(_libssh2_kex_agree_instr(kex, kex_len, strict, 28)) {
--+        session->kex_strict = 1;
--+    }
-- 
--     if(session->kex_prefs) {
--         s = (unsigned char *) session->kex_prefs;
--@@ -3475,7 +3489,7 @@ static int kex_agree_kex_hostkey(LIBSSH2_SESSION * session, unsigned char *kex,
--         while(s && *s) {
--             unsigned char *q, *p = (unsigned char *) strchr((char *) s, ',');
--             size_t method_len = (p ? (size_t)(p - s) : strlen((char *) s));
---            q = kex_agree_instr(kex, kex_len, s, method_len);
--+            q = _libssh2_kex_agree_instr(kex, kex_len, s, method_len);
--             if(q) {
--                 const LIBSSH2_KEX_METHOD *method = (const LIBSSH2_KEX_METHOD *)
--                     kex_get_method_by_name((char *) s, method_len,
--@@ -3509,9 +3523,9 @@ static int kex_agree_kex_hostkey(LIBSSH2_SESSION * session, unsigned char *kex,
--     }
-- 
--     while(*kexp && (*kexp)->name) {
---        s = kex_agree_instr(kex, kex_len,
---                            (unsigned char *) (*kexp)->name,
---                            strlen((*kexp)->name));
--+        s = _libssh2_kex_agree_instr(kex, kex_len,
--+                                     (unsigned char *) (*kexp)->name,
--+                                     strlen((*kexp)->name));
--         if(s) {
--             /* We've agreed on a key exchange method,
--              * Can we agree on a hostkey that works with this kex?
--@@ -3555,7 +3569,7 @@ static int kex_agree_crypt(LIBSSH2_SESSION * session,
--             unsigned char *p = (unsigned char *) strchr((char *) s, ',');
--             size_t method_len = (p ? (size_t)(p - s) : strlen((char *) s));
-- 
---            if(kex_agree_instr(crypt, crypt_len, s, method_len)) {
--+            if(_libssh2_kex_agree_instr(crypt, crypt_len, s, method_len)) {
--                 const LIBSSH2_CRYPT_METHOD *method =
--                     (const LIBSSH2_CRYPT_METHOD *)
--                     kex_get_method_by_name((char *) s, method_len,
--@@ -3577,9 +3591,9 @@ static int kex_agree_crypt(LIBSSH2_SESSION * session,
--     }
-- 
--     while(*cryptp && (*cryptp)->name) {
---        s = kex_agree_instr(crypt, crypt_len,
---                            (unsigned char *) (*cryptp)->name,
---                            strlen((*cryptp)->name));
--+        s = _libssh2_kex_agree_instr(crypt, crypt_len,
--+                                     (unsigned char *) (*cryptp)->name,
--+                                     strlen((*cryptp)->name));
--         if(s) {
--             endpoint->crypt = *cryptp;
--             return 0;
--@@ -3619,7 +3633,7 @@ static int kex_agree_mac(LIBSSH2_SESSION * session,
--             unsigned char *p = (unsigned char *) strchr((char *) s, ',');
--             size_t method_len = (p ? (size_t)(p - s) : strlen((char *) s));
-- 
---            if(kex_agree_instr(mac, mac_len, s, method_len)) {
--+            if(_libssh2_kex_agree_instr(mac, mac_len, s, method_len)) {
--                 const LIBSSH2_MAC_METHOD *method = (const LIBSSH2_MAC_METHOD *)
--                     kex_get_method_by_name((char *) s, method_len,
--                                            (const LIBSSH2_COMMON_METHOD **)
--@@ -3640,8 +3654,9 @@ static int kex_agree_mac(LIBSSH2_SESSION * session,
--     }
-- 
--     while(*macp && (*macp)->name) {
---        s = kex_agree_instr(mac, mac_len, (unsigned char *) (*macp)->name,
---                            strlen((*macp)->name));
--+        s = _libssh2_kex_agree_instr(mac, mac_len,
--+                                     (unsigned char *) (*macp)->name,
--+                                     strlen((*macp)->name));
--         if(s) {
--             endpoint->mac = *macp;
--             return 0;
--@@ -3672,7 +3687,7 @@ static int kex_agree_comp(LIBSSH2_SESSION *session,
--             unsigned char *p = (unsigned char *) strchr((char *) s, ',');
--             size_t method_len = (p ? (size_t)(p - s) : strlen((char *) s));
-- 
---            if(kex_agree_instr(comp, comp_len, s, method_len)) {
--+            if(_libssh2_kex_agree_instr(comp, comp_len, s, method_len)) {
--                 const LIBSSH2_COMP_METHOD *method =
--                     (const LIBSSH2_COMP_METHOD *)
--                     kex_get_method_by_name((char *) s, method_len,
--@@ -3694,8 +3709,9 @@ static int kex_agree_comp(LIBSSH2_SESSION *session,
--     }
-- 
--     while(*compp && (*compp)->name) {
---        s = kex_agree_instr(comp, comp_len, (unsigned char *) (*compp)->name,
---                            strlen((*compp)->name));
--+        s = _libssh2_kex_agree_instr(comp, comp_len,
--+                                     (unsigned char *) (*compp)->name,
--+                                     strlen((*compp)->name));
--         if(s) {
--             endpoint->comp = *compp;
--             return 0;
--@@ -3876,6 +3892,7 @@ _libssh2_kex_exchange(LIBSSH2_SESSION * session, int reexchange,
--                 session->local.kexinit = key_state->oldlocal;
--                 session->local.kexinit_len = key_state->oldlocal_len;
--                 key_state->state = libssh2_NB_state_idle;
--+                session->state &= ~LIBSSH2_STATE_INITIAL_KEX;
--                 session->state &= ~LIBSSH2_STATE_KEX_ACTIVE;
--                 session->state &= ~LIBSSH2_STATE_EXCHANGING_KEYS;
--                 return -1;
--@@ -3901,6 +3918,7 @@ _libssh2_kex_exchange(LIBSSH2_SESSION * session, int reexchange,
--                 session->local.kexinit = key_state->oldlocal;
--                 session->local.kexinit_len = key_state->oldlocal_len;
--                 key_state->state = libssh2_NB_state_idle;
--+                session->state &= ~LIBSSH2_STATE_INITIAL_KEX;
--                 session->state &= ~LIBSSH2_STATE_KEX_ACTIVE;
--                 session->state &= ~LIBSSH2_STATE_EXCHANGING_KEYS;
--                 return -1;
--@@ -3949,6 +3967,7 @@ _libssh2_kex_exchange(LIBSSH2_SESSION * session, int reexchange,
--         session->remote.kexinit = NULL;
--     }
-- 
--+    session->state &= ~LIBSSH2_STATE_INITIAL_KEX;
--     session->state &= ~LIBSSH2_STATE_KEX_ACTIVE;
--     session->state &= ~LIBSSH2_STATE_EXCHANGING_KEYS;
-- 
--diff --git a/src/libssh2_priv.h b/src/libssh2_priv.h
--index 82c3afe250b0..ee1d8b5c2b9b 100644
----- a/src/libssh2_priv.h
--+++ b/src/libssh2_priv.h
--@@ -699,6 +699,9 @@ struct _LIBSSH2_SESSION
--     /* key signing algorithm preferences -- NULL yields server order */
--     char *sign_algo_prefs;
-- 
--+    /* Whether to use the OpenSSH Strict KEX extension */
--+    int kex_strict;
--+
--     /* (remote as source of data -- packet_read ) */
--     libssh2_endpoint_data remote;
-- 
--@@ -870,6 +873,7 @@ struct _LIBSSH2_SESSION
--     int fullpacket_macstate;
--     size_t fullpacket_payload_len;
--     int fullpacket_packet_type;
--+    uint32_t fullpacket_required_type;
-- 
--     /* State variables used in libssh2_sftp_init() */
--     libssh2_nonblocking_states sftpInit_state;
--@@ -910,10 +914,11 @@ struct _LIBSSH2_SESSION
-- };
-- 
-- /* session.state bits */
---#define LIBSSH2_STATE_EXCHANGING_KEYS   0x00000001
---#define LIBSSH2_STATE_NEWKEYS           0x00000002
---#define LIBSSH2_STATE_AUTHENTICATED     0x00000004
---#define LIBSSH2_STATE_KEX_ACTIVE        0x00000008
--+#define LIBSSH2_STATE_INITIAL_KEX       0x00000001
--+#define LIBSSH2_STATE_EXCHANGING_KEYS   0x00000002
--+#define LIBSSH2_STATE_NEWKEYS           0x00000004
--+#define LIBSSH2_STATE_AUTHENTICATED     0x00000008
--+#define LIBSSH2_STATE_KEX_ACTIVE        0x00000010
-- 
-- /* session.flag helpers */
-- #ifdef MSG_NOSIGNAL
--@@ -1144,6 +1149,11 @@ ssize_t _libssh2_send(libssh2_socket_t socket, const void *buffer,
-- int _libssh2_kex_exchange(LIBSSH2_SESSION * session, int reexchange,
--                           key_exchange_state_t * state);
-- 
--+unsigned char *_libssh2_kex_agree_instr(unsigned char *haystack,
--+                                        size_t haystack_len,
--+                                        const unsigned char *needle,
--+                                        size_t needle_len);
--+
-- /* Let crypt.c/hostkey.c expose their method structs */
-- const LIBSSH2_CRYPT_METHOD **libssh2_crypt_methods(void);
-- const LIBSSH2_HOSTKEY_METHOD **libssh2_hostkey_methods(void);
--diff --git a/src/packet.c b/src/packet.c
--index b5b41981a108..35d4d39eff87 100644
----- a/src/packet.c
--+++ b/src/packet.c
--@@ -605,14 +605,13 @@ authagent_exit:
--  * layer when it has received a packet.
--  *
--  * The input pointer 'data' is pointing to allocated data that this function
--- * is asked to deal with so on failure OR success, it must be freed fine.
--- * The only exception is when the return code is LIBSSH2_ERROR_EAGAIN.
--+ * will be freed unless return the code is LIBSSH2_ERROR_EAGAIN.
--  *
--  * This function will always be called with 'datalen' greater than zero.
--  */
-- int
-- _libssh2_packet_add(LIBSSH2_SESSION * session, unsigned char *data,
---                    size_t datalen, int macstate)
--+                    size_t datalen, int macstate, uint32_t seq)
-- {
--     int rc = 0;
--     unsigned char *message = NULL;
--@@ -657,6 +656,70 @@ _libssh2_packet_add(LIBSSH2_SESSION * session, unsigned char *data,
--         break;
--     }
-- 
--+    if(session->state & LIBSSH2_STATE_INITIAL_KEX) {
--+        if(msg == SSH_MSG_KEXINIT) {
--+            if(!session->kex_strict) {
--+                if(datalen < 17) {
--+                    LIBSSH2_FREE(session, data);
--+                    session->packAdd_state = libssh2_NB_state_idle;
--+                    return _libssh2_error(session,
--+                                          LIBSSH2_ERROR_BUFFER_TOO_SMALL,
--+                                          "Data too short extracting kex");
--+                }
--+                else {
--+                    const unsigned char *strict =
--+                    (unsigned char *)"kex-strict-s-v00@openssh.com";
--+                    struct string_buf buf;
--+                    unsigned char *algs = NULL;
--+                    size_t algs_len = 0;
--+
--+                    buf.data = (unsigned char *)data;
--+                    buf.dataptr = buf.data;
--+                    buf.len = datalen;
--+                    buf.dataptr += 17; /* advance past type and cookie */
--+
--+                    if(_libssh2_get_string(&buf, &algs, &algs_len)) {
--+                        LIBSSH2_FREE(session, data);
--+                        session->packAdd_state = libssh2_NB_state_idle;
--+                        return _libssh2_error(session,
--+                                              LIBSSH2_ERROR_BUFFER_TOO_SMALL,
--+                                              "Algs too short");
--+                    }
--+
--+                    if(algs_len == 0 ||
--+                       _libssh2_kex_agree_instr(algs, algs_len, strict, 28)) {
--+                        session->kex_strict = 1;
--+                    }
--+                }
--+            }
--+
--+            if(session->kex_strict && seq) {
--+                LIBSSH2_FREE(session, data);
--+                session->socket_state = LIBSSH2_SOCKET_DISCONNECTED;
--+                session->packAdd_state = libssh2_NB_state_idle;
--+                libssh2_session_disconnect(session, "strict KEX violation: "
--+                                           "KEXINIT was not the first packet");
--+
--+                return _libssh2_error(session, LIBSSH2_ERROR_SOCKET_DISCONNECT,
--+                                      "strict KEX violation: "
--+                                      "KEXINIT was not the first packet");
--+            }
--+        }
--+
--+        if(session->kex_strict && session->fullpacket_required_type &&
--+            session->fullpacket_required_type != msg) {
--+            LIBSSH2_FREE(session, data);
--+            session->socket_state = LIBSSH2_SOCKET_DISCONNECTED;
--+            session->packAdd_state = libssh2_NB_state_idle;
--+            libssh2_session_disconnect(session, "strict KEX violation: "
--+                                       "unexpected packet type");
--+
--+            return _libssh2_error(session, LIBSSH2_ERROR_SOCKET_DISCONNECT,
--+                                  "strict KEX violation: "
--+                                  "unexpected packet type");
--+        }
--+    }
--+
--     if(session->packAdd_state == libssh2_NB_state_allocated) {
--         /* A couple exceptions to the packet adding rule: */
--         switch(msg) {
--@@ -1341,6 +1404,15 @@ _libssh2_packet_ask(LIBSSH2_SESSION * session, unsigned char packet_type,
-- 
--             return 0;
--         }
--+        else if(session->kex_strict &&
--+                (session->state & LIBSSH2_STATE_INITIAL_KEX)) {
--+            libssh2_session_disconnect(session, "strict KEX violation: "
--+                                       "unexpected packet type");
--+
--+            return _libssh2_error(session, LIBSSH2_ERROR_SOCKET_DISCONNECT,
--+                                  "strict KEX violation: "
--+                                  "unexpected packet type");
--+        }
--         packet = _libssh2_list_next(&packet->node);
--     }
--     return -1;
--@@ -1402,7 +1474,10 @@ _libssh2_packet_require(LIBSSH2_SESSION * session, unsigned char packet_type,
--     }
-- 
--     while(session->socket_state == LIBSSH2_SOCKET_CONNECTED) {
---        int ret = _libssh2_transport_read(session);
--+        int ret;
--+        session->fullpacket_required_type = packet_type;
--+        ret = _libssh2_transport_read(session);
--+        session->fullpacket_required_type = 0;
--         if(ret == LIBSSH2_ERROR_EAGAIN)
--             return ret;
--         else if(ret < 0) {
--diff --git a/src/packet.h b/src/packet.h
--index 79018bcf1d55..6ea100a5cfb3 100644
----- a/src/packet.h
--+++ b/src/packet.h
--@@ -71,6 +71,6 @@ int _libssh2_packet_burn(LIBSSH2_SESSION * session,
-- int _libssh2_packet_write(LIBSSH2_SESSION * session, unsigned char *data,
--                           unsigned long data_len);
-- int _libssh2_packet_add(LIBSSH2_SESSION * session, unsigned char *data,
---                        size_t datalen, int macstate);
--+                        size_t datalen, int macstate, uint32_t seq);
-- 
-- #endif /* __LIBSSH2_PACKET_H */
--diff --git a/src/session.c b/src/session.c
--index a4d602bad002..f4bafb57b2a6 100644
----- a/src/session.c
--+++ b/src/session.c
--@@ -464,6 +464,8 @@ libssh2_session_init_ex(LIBSSH2_ALLOC_FUNC((*my_alloc)),
--         session->abstract = abstract;
--         session->api_timeout = 0; /* timeout-free API by default */
--         session->api_block_mode = 1; /* blocking API by default */
--+        session->state = LIBSSH2_STATE_INITIAL_KEX;
--+        session->fullpacket_required_type = 0;
--         session->packet_read_timeout = LIBSSH2_DEFAULT_READ_TIMEOUT;
--         session->flag.quote_paths = 1; /* default behavior is to quote paths
--                                           for the scp subsystem */
--@@ -1186,6 +1188,7 @@ libssh2_session_disconnect_ex(LIBSSH2_SESSION *session, int reason,
--                               const char *desc, const char *lang)
-- {
--     int rc;
--+    session->state &= ~LIBSSH2_STATE_INITIAL_KEX;
--     session->state &= ~LIBSSH2_STATE_EXCHANGING_KEYS;
--     BLOCK_ADJUST(rc, session,
--                  session_disconnect(session, reason, desc, lang));
--diff --git a/src/transport.c b/src/transport.c
--index 6d902d3372b4..3b30ff848726 100644
----- a/src/transport.c
--+++ b/src/transport.c
--@@ -187,6 +187,7 @@ fullpacket(LIBSSH2_SESSION * session, int encrypted /* 1 or 0 */ )
--     struct transportpacket *p = &session->packet;
--     int rc;
--     int compressed;
--+    uint32_t seq = session->remote.seqno;
-- 
--     if(session->fullpacket_state == libssh2_NB_state_idle) {
--         session->fullpacket_macstate = LIBSSH2_MAC_CONFIRMED;
--@@ -318,7 +319,7 @@ fullpacket(LIBSSH2_SESSION * session, int encrypted /* 1 or 0 */ )
--     if(session->fullpacket_state == libssh2_NB_state_created) {
--         rc = _libssh2_packet_add(session, p->payload,
--                                  session->fullpacket_payload_len,
---                                 session->fullpacket_macstate);
--+                                 session->fullpacket_macstate, seq);
--         if(rc == LIBSSH2_ERROR_EAGAIN)
--             return rc;
--         if(rc) {
--@@ -329,6 +330,11 @@ fullpacket(LIBSSH2_SESSION * session, int encrypted /* 1 or 0 */ )
-- 
--     session->fullpacket_state = libssh2_NB_state_idle;
-- 
--+    if(session->kex_strict &&
--+        session->fullpacket_packet_type == SSH_MSG_NEWKEYS) {
--+        session->remote.seqno = 0;
--+    }
--+
--     return session->fullpacket_packet_type;
-- }
-- 
--@@ -1091,6 +1097,10 @@ int _libssh2_transport_send(LIBSSH2_SESSION *session,
-- 
--     session->local.seqno++;
-- 
--+    if(session->kex_strict && data[0] == SSH_MSG_NEWKEYS) {
--+        session->local.seqno = 0;
--+    }
--+
--     ret = LIBSSH2_SEND(session, p->outbuf, total_length,
--                        LIBSSH2_SOCKET_SEND_FLAGS(session));
--     if(ret < 0)
---- 
--2.43.0
--
-diff --git a/package/libssh2/libssh2.hash b/package/libssh2/libssh2.hash
-index b5bc571f86..bf04c5acab 100644
---- a/package/libssh2/libssh2.hash
-+++ b/package/libssh2/libssh2.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  a488a22625296342ddae862de1d59633e6d446eff8417398e06674a49be3d7c2  libssh2-1.11.0.tar.xz
--sha256  fda5e2522c58ba1f31c9f2044747616457466f4aebec16ade4af86e3a16a8e02  COPYING
-+sha256  9954cb54c4f548198a7cbebad248bdc87dd64bd26185708a294b2b50771e3769  libssh2-1.11.1.tar.xz
-+sha256  f7f9633cf9ff2f1333f3d7ce46973a8716a4d2a2815ad56f30d437d5fea7bafe  COPYING
-diff --git a/package/libssh2/libssh2.mk b/package/libssh2/libssh2.mk
-index b2c07cbf30..1702d94c79 100644
---- a/package/libssh2/libssh2.mk
-+++ b/package/libssh2/libssh2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBSSH2_VERSION = 1.11.0
-+LIBSSH2_VERSION = 1.11.1
- LIBSSH2_SOURCE= libssh2-$(LIBSSH2_VERSION).tar.xz
- LIBSSH2_SITE = https://www.libssh2.org/download
- LIBSSH2_LICENSE = BSD
-@@ -13,9 +13,6 @@ LIBSSH2_CPE_ID_VENDOR = libssh2
- LIBSSH2_INSTALL_STAGING = YES
- LIBSSH2_CONF_OPTS = --disable-examples-build --disable-rpath
- 
--# 0002-src-add-strict-KEX-to-fix-CVE-2023-48795-Terrapin-Attack.patch
--LIBSSH2_IGNORE_CVES += CVE-2023-48795
--
- ifeq ($(BR2_PACKAGE_LIBSSH2_MBEDTLS),y)
- LIBSSH2_DEPENDENCIES += mbedtls
- LIBSSH2_CONF_OPTS += --with-libmbedcrypto-prefix=$(STAGING_DIR)/usr \
+diff --git a/board/xilinx/linux_6.12/patches/linux/0001-include-uapi-linux-xlnx-ai-engine.h-fix-CONFIG_XILIN.patch b/board/xilinx/linux_6.12.10/patches/linux/0001-include-uapi-linux-xlnx-ai-engine.h-fix-CONFIG_XILIN.patch
+similarity index 100%
+rename from board/xilinx/linux_6.12/patches/linux/0001-include-uapi-linux-xlnx-ai-engine.h-fix-CONFIG_XILIN.patch
+rename to board/xilinx/linux_6.12.10/patches/linux/0001-include-uapi-linux-xlnx-ai-engine.h-fix-CONFIG_XILIN.patch
+diff --git a/configs/versal_vck190_defconfig b/configs/versal_vck190_defconfig
+index 9b5fbc254f..c9d99876d5 100644
+--- a/configs/versal_vck190_defconfig
++++ b/configs/versal_vck190_defconfig
+@@ -5,7 +5,7 @@ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
+ BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
+ BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-buildroot-elf"
+-BR2_GLOBAL_PATCH_DIR="board/xilinx/patches board/xilinx/linux_6.12/patches"
++BR2_GLOBAL_PATCH_DIR="board/xilinx/patches board/xilinx/linux_6.12.10/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/versal/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/versal/post-image.sh"
+diff --git a/configs/versal_vek280_defconfig b/configs/versal_vek280_defconfig
+index ffa0dd86e6..4aa25f8d67 100644
+--- a/configs/versal_vek280_defconfig
++++ b/configs/versal_vek280_defconfig
+@@ -5,7 +5,7 @@ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
+ BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
+ BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-buildroot-elf"
+-BR2_GLOBAL_PATCH_DIR="board/versal/vek280/patches board/xilinx/patches board/xilinx/linux_6.12/patches"
++BR2_GLOBAL_PATCH_DIR="board/versal/vek280/patches board/xilinx/patches board/xilinx/linux_6.12.10/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/versal/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/versal/post-image.sh"
+diff --git a/configs/versal_vpk180_defconfig b/configs/versal_vpk180_defconfig
+index e0966cc986..500298c2f4 100644
+--- a/configs/versal_vpk180_defconfig
++++ b/configs/versal_vpk180_defconfig
+@@ -5,7 +5,7 @@ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
+ BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
+ BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-buildroot-elf"
+-BR2_GLOBAL_PATCH_DIR="board/xilinx/patches board/xilinx/linux_6.12/patches"
++BR2_GLOBAL_PATCH_DIR="board/xilinx/patches board/xilinx/linux_6.12.10/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/versal/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/versal/post-image.sh"
+diff --git a/configs/zynq_microzed_defconfig b/configs/zynq_microzed_defconfig
+index fb324b5a3c..87a06fa255 100644
+--- a/configs/zynq_microzed_defconfig
++++ b/configs/zynq_microzed_defconfig
+@@ -5,7 +5,7 @@ BR2_ARM_ENABLE_VFP=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_STABLE=y
+-BR2_GLOBAL_PATCH_DIR="board/xilinx/patches board/xilinx/linux_6.12/patches"
++BR2_GLOBAL_PATCH_DIR="board/xilinx/patches board/xilinx/linux_6.12.10/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynq/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynq/post-image.sh"
+diff --git a/configs/zynq_zc702_defconfig b/configs/zynq_zc702_defconfig
+index f908a39a7f..afc13db1d4 100644
+--- a/configs/zynq_zc702_defconfig
++++ b/configs/zynq_zc702_defconfig
+@@ -5,7 +5,7 @@ BR2_ARM_ENABLE_VFP=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_STABLE=y
+-BR2_GLOBAL_PATCH_DIR="board/xilinx/patches board/xilinx/linux_6.12/patches"
++BR2_GLOBAL_PATCH_DIR="board/xilinx/patches board/xilinx/linux_6.12.10/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynq/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynq/post-image.sh"
+diff --git a/configs/zynq_zc706_defconfig b/configs/zynq_zc706_defconfig
+index 7d7f468805..e0ebedf0de 100644
+--- a/configs/zynq_zc706_defconfig
++++ b/configs/zynq_zc706_defconfig
+@@ -5,7 +5,7 @@ BR2_ARM_ENABLE_VFP=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_STABLE=y
+-BR2_GLOBAL_PATCH_DIR="board/xilinx/patches board/xilinx/linux_6.12/patches"
++BR2_GLOBAL_PATCH_DIR="board/xilinx/patches board/xilinx/linux_6.12.10/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynq/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynq/post-image.sh"
+diff --git a/configs/zynq_zed_defconfig b/configs/zynq_zed_defconfig
+index 1a5d48e424..a9fe0d352c 100644
+--- a/configs/zynq_zed_defconfig
++++ b/configs/zynq_zed_defconfig
+@@ -5,7 +5,7 @@ BR2_ARM_ENABLE_VFP=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_STABLE=y
+-BR2_GLOBAL_PATCH_DIR="board/xilinx/patches board/xilinx/linux_6.12/patches"
++BR2_GLOBAL_PATCH_DIR="board/xilinx/patches board/xilinx/linux_6.12.10/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynq/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynq/post-image.sh"
+diff --git a/configs/zynqmp_kria_kd240_defconfig b/configs/zynqmp_kria_kd240_defconfig
+index 90ccfe9a79..2925e9324e 100644
+--- a/configs/zynqmp_kria_kd240_defconfig
++++ b/configs/zynqmp_kria_kd240_defconfig
+@@ -4,7 +4,7 @@ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
+ BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
+ BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-buildroot-elf"
+-BR2_GLOBAL_PATCH_DIR="board/xilinx/patches board/xilinx/linux_6.12/patches"
++BR2_GLOBAL_PATCH_DIR="board/xilinx/patches board/xilinx/linux_6.12.10/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
+diff --git a/configs/zynqmp_kria_kr260_defconfig b/configs/zynqmp_kria_kr260_defconfig
+index ae63bf487f..8858c7cb20 100644
+--- a/configs/zynqmp_kria_kr260_defconfig
++++ b/configs/zynqmp_kria_kr260_defconfig
+@@ -4,7 +4,7 @@ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
+ BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
+ BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-buildroot-elf"
+-BR2_GLOBAL_PATCH_DIR="board/xilinx/patches board/xilinx/linux_6.12/patches"
++BR2_GLOBAL_PATCH_DIR="board/xilinx/patches board/xilinx/linux_6.12.10/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
+diff --git a/configs/zynqmp_kria_kv260_defconfig b/configs/zynqmp_kria_kv260_defconfig
+index 805c7f054e..c1d5fa186e 100644
+--- a/configs/zynqmp_kria_kv260_defconfig
++++ b/configs/zynqmp_kria_kv260_defconfig
+@@ -4,7 +4,7 @@ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
+ BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
+ BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-buildroot-elf"
+-BR2_GLOBAL_PATCH_DIR="board/xilinx/patches board/xilinx/linux_6.12/patches"
++BR2_GLOBAL_PATCH_DIR="board/xilinx/patches board/xilinx/linux_6.12.10/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
+diff --git a/configs/zynqmp_zcu102_defconfig b/configs/zynqmp_zcu102_defconfig
+index 7d4187684f..84d6f353eb 100644
+--- a/configs/zynqmp_zcu102_defconfig
++++ b/configs/zynqmp_zcu102_defconfig
+@@ -4,7 +4,7 @@ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
+ BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
+ BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-buildroot-elf"
+-BR2_GLOBAL_PATCH_DIR="board/xilinx/patches board/xilinx/linux_6.12/patches"
++BR2_GLOBAL_PATCH_DIR="board/xilinx/patches board/xilinx/linux_6.12.10/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
+diff --git a/configs/zynqmp_zcu104_defconfig b/configs/zynqmp_zcu104_defconfig
+index ccadf6183b..182bd68589 100644
+--- a/configs/zynqmp_zcu104_defconfig
++++ b/configs/zynqmp_zcu104_defconfig
+@@ -4,7 +4,7 @@ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
+ BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
+ BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-buildroot-elf"
+-BR2_GLOBAL_PATCH_DIR="board/xilinx/patches board/xilinx/linux_6.12/patches"
++BR2_GLOBAL_PATCH_DIR="board/xilinx/patches board/xilinx/linux_6.12.10/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
+diff --git a/configs/zynqmp_zcu106_defconfig b/configs/zynqmp_zcu106_defconfig
+index 8630a40510..ea1abd1e35 100644
+--- a/configs/zynqmp_zcu106_defconfig
++++ b/configs/zynqmp_zcu106_defconfig
+@@ -4,7 +4,7 @@ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
+ BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
+ BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-buildroot-elf"
+-BR2_GLOBAL_PATCH_DIR="board/xilinx/patches board/xilinx/linux_6.12/patches"
++BR2_GLOBAL_PATCH_DIR="board/xilinx/patches board/xilinx/linux_6.12.10/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
+-- 
+2.25.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
