@@ -4,68 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 588C8C71136
-	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 19:56:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A62CAC61CE8
+	for <buildroot@archiver.kernel.org>; Thu, 12 Jun 2025 19:56:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2DF9E4090D;
-	Thu, 12 Jun 2025 19:56:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7A7B240914;
+	Thu, 12 Jun 2025 19:56:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JIDMwCduhiar; Thu, 12 Jun 2025 19:56:22 +0000 (UTC)
+ id Am4tMz4M3SiW; Thu, 12 Jun 2025 19:56:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 27A8B40907
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C941408D0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 27A8B40907;
-	Thu, 12 Jun 2025 19:56:22 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 21000183
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 19:56:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7C941408D0;
+	Thu, 12 Jun 2025 19:56:41 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id A94191BD
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 19:56:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 122B460AA5
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 19:56:21 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9A4E181B58
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 19:56:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rzM4MSFRE0Wn for <buildroot@buildroot.org>;
- Thu, 12 Jun 2025 19:56:20 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YpP1L_oLZCAH for <buildroot@buildroot.org>;
+ Thu, 12 Jun 2025 19:56:38 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
  helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 22DBC60DA5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 22DBC60DA5
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9F8F483BE8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9F8F483BE8
 Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 22DBC60DA5
- for <buildroot@buildroot.org>; Thu, 12 Jun 2025 19:56:20 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9F8F483BE8
+ for <buildroot@buildroot.org>; Thu, 12 Jun 2025 19:56:38 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id EC0991C0D69; Thu, 12 Jun 2025 21:56:17 +0200 (CEST)
-Message-ID: <a3463371-1152-499c-90b6-03182b067add@rnout.be>
-Date: Thu, 12 Jun 2025 21:56:16 +0200
+ with ESMTPSA id 2270D1C0D69; Thu, 12 Jun 2025 21:56:36 +0200 (CEST)
+Message-ID: <59a05081-92aa-44a0-a3a4-bc6a2a3bf479@rnout.be>
+Date: Thu, 12 Jun 2025 21:56:34 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
-References: <20250605044209.3347446-1-bernd@kuhls.net>
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ buildroot@buildroot.org
+Cc: linux-amarula@amarulasolutions.com
+References: <20250526161403.1305438-1-dario.binacchi@amarulasolutions.com>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20250605044209.3347446-1-bernd@kuhls.net>
+In-Reply-To: <20250526161403.1305438-1-dario.binacchi@amarulasolutions.com>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1749758178; h=from:subject:date:message-id:to:mime-version:content-type:
+ t=1749758196; h=from:subject:date:message-id:to:cc:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=DUx1C0dmgQcPQPKxIcY6103dAZUSn+WiQ1ybhTsOlnE=;
- b=NfxS3x7/pR+xnJ0iwY64CVsfQL48AON1yV/GE8Tl0iFA4olc2Al20ZQ8JjbGl4tiIs5SWn
- A6/nwk6kNL5wOQmXQ/6brW80PDUlhA+jdA5C3EpDGr6HMa5Lo74WIdokUWc0dJ/6WbRW14
- rMzdNE+MMHIb7RpVS6owBuIaL2vgdzYtrQridBOsKCloG5IHP0Tvq5Sr335yYgL1U07W1K
- R26Ye5Y+WrXYSTJB1tSNG1jwwIA1shNgKO5U1+UAuqHaCIKu7atxUffF4HdgVmFg7GzSxR
- ffoAEAFoxec624k51sfJJxoVltZfqOK3f7dsxG6nn+C0t4JVLp8aEn1Sv0ALtw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=Zls/5gGtzaV03INi3EejauNXHZznyLSIjhDcaIC/quQ=;
+ b=aescUATBG22W/q6Zc+OS2TG4ZHgaKl8RmfnMVD0u7tM2Yo5o5zlGKzpranuGJQXtCijP2v
+ ON35l/ZVZB/hb3yXjZ0WmPXOOpiT4UiT1UCd17u5zjeyBEop66ldtT8hcTHHFwErK81ZcM
+ Nd+EcVr7MpS6BpYpy7ZP1x9m2IW4xHVaRC9vbhyO5Z1tiejyqCwmrCvuEQRBovVVIRNl0x
+ ESN6tBKrMtQhMu1wnmq9Wtcor/0kaQnrr/APV/Vk4mnHqVnIMKQ5Kva4gEeAhqkahnwWUD
+ cnLjjiUrhyFoIxWz4KN+Cqghk6hqok7UgARBJsFiSx8buefcWZA7AxENhU8Ocg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
- header.s=dkim header.b=NfxS3x7/
-Subject: Re: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 5.{4, 10,
- 15}.x / 6.{1, 6, 12, 14}.x series
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
+ header.a=rsa-sha256 header.s=dkim header.b=aescUATB
+Subject: Re: [Buildroot] [PATCH 1/1] package/uuu: fix gcc-15 compile errors
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,82 +86,83 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 05/06/2025 06:42, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+On 26/05/2025 18:14, Dario Binacchi wrote:
+> Fix the following compilation errors:
+> 
+> In file included from /workdir/instance-0/output-1/build/host-uuu-1.5.201/libuuu/sdps.cpp:32:
+> /workdir/instance-0/output-1/build/host-uuu-1.5.201/libuuu/sdps.h:52:9: error: 'uint32_t' does not name a type
+>     52 |         uint32_t m_offset = 0;
+>        |         ^~~~~~~~
+> /workdir/instance-0/output-1/build/host-uuu-1.5.201/libuuu/sdps.h:33:1: note: 'uint32_t' is defined in header '<cstdint>'; this is probably fixable by adding '#include <cstdint>'
+>     32 | #include "cmd.h"
+>    +++ |+#include <cstdint>
+>     33 |
+> /workdir/instance-0/output-1/build/host-uuu-1.5.201/libuuu/sdps.h:53:9: error: 'uint64_t' does not name a type
+>     53 |         uint64_t m_scan_limited = UINT64_MAX;
+>        |         ^~~~~~~~
+> /workdir/instance-0/output-1/build/host-uuu-1.5.201/libuuu/sdps.h:53:9: note: 'uint64_t' is defined in header '<cstdint>'; this is probably fixable by adding '#include <cstdint>'
+> /workdir/instance-0/output-1/build/host-uuu-1.5.201/libuuu/sdps.h: In constructor 'SDPSCmd::SDPSCmd(char*)':
+> /workdir/instance-0/output-1/build/host-uuu-1.5.201/libuuu/sdps.h:41:47: error: 'm_offset' was not declared in this scope
+>     41 |                 insert_param_info("-offset", &m_offset, Param::Type::e_uint32);
+> 
+> Fixes:
+> - https://autobuild.buildroot.org/results/b7b/b7bd052a0137a2e2d5606d66a0dc563789999364/
+> - https://autobuild.buildroot.org/results/350/3500f573427545e51bfc4fc708f769966d95bf1e/
+> - https://autobuild.buildroot.org/results/6dc/6dc2b0585e8e1900e5a977cd0b9e26b2ee1e90d4/
+> - https://autobuild.buildroot.org/results/d1f/d1f82cae003cddefae0c49f673768cd8601449f2/
+> - https://autobuild.buildroot.org/results/9ed/9edc245d0a03089812d631708a4294ff293a461d/
+> 
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
-  Applied to 2025.02.x, thanks, without 6.14.
+  Applied to 2025.02.x, thanks.
 
   Regards,
   Arnout
 
 > ---
->   linux/Config.in                      |  2 +-
->   linux/linux.hash                     | 14 +++++++-------
->   package/linux-headers/Config.in.host | 14 +++++++-------
->   3 files changed, 15 insertions(+), 15 deletions(-)
+>   ...libuuu-sdps-fix-gcc15-compile-errors.patch | 33 +++++++++++++++++++
+>   1 file changed, 33 insertions(+)
+>   create mode 100644 package/uuu/0001-libuuu-sdps-fix-gcc15-compile-errors.patch
 > 
-> diff --git a/linux/Config.in b/linux/Config.in
-> index 7552aa4d6c..ddd6515446 100644
-> --- a/linux/Config.in
-> +++ b/linux/Config.in
-> @@ -137,7 +137,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
->   
->   config BR2_LINUX_KERNEL_VERSION
->   	string
-> -	default "6.14.8" if BR2_LINUX_KERNEL_LATEST_VERSION
-> +	default "6.14.10" if BR2_LINUX_KERNEL_LATEST_VERSION
->   	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
->   	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
->   	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-> diff --git a/linux/linux.hash b/linux/linux.hash
-> index 104d42288f..b69793bf63 100644
-> --- a/linux/linux.hash
-> +++ b/linux/linux.hash
-> @@ -1,12 +1,12 @@
->   # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
-> -sha256  62b12ecd3075a357eb320935657de84e01552803717dad383fa7cc3aa4aa2905  linux-6.14.8.tar.xz
-> -sha256  df046a48971e40ce0b2e003e7e55b6b1e7da2912120eb216d5d6c8450c9cf82e  linux-6.12.30.tar.xz
-> -sha256  1d82a82642d281c31d86f7301bc55e12a8a9f9c04532e249ef8ae6fe7dc237ec  linux-6.6.92.tar.xz
-> -sha256  5779f9caca77f7bfe3c3923b4d760041318db0303de93b2d4691d60e4d41eb74  linux-6.1.140.tar.xz
-> +sha256  de8b97cfeae74c22f832ee4ca2333c157cc978d98baa122f0ee9c01796a2fe43  linux-6.14.10.tar.xz
-> +sha256  a9b020721778384507010177d3929e7d4058f7f6120f05a99d56b5c5c0346a70  linux-6.12.32.tar.xz
-> +sha256  0d79ff359635e9f009f1e330deed5f3aefd8c452b80660bffdc504b877797719  linux-6.6.93.tar.xz
-> +sha256  bc3c45faf6f5f0450666c75fa9dad9bc7c0cf7c7cba0dbd94e5cfdc58229c116  linux-6.1.141.tar.xz
->   # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
-> -sha256  9c3e98c6dcc7dca7c2e9dd51423eaf0581f5e100d0f04c23bc29f21913dac1d9  linux-5.15.184.tar.xz
-> -sha256  1fc82737e0e4f0ae0b40f91a00c68f3cb75362e6ae54623ec64b41a51cde0f25  linux-5.10.237.tar.xz
-> -sha256  34589340c7d76c0de91965e5242f61e9f9f3bacd03e8e34239e5d4660d45372d  linux-5.4.293.tar.xz
-> +sha256  3d03eb798910f32929f7fda5a56e4bb1a121f10bde320d6f3063639c009313dc  linux-5.15.185.tar.xz
-> +sha256  07c852940dc2dc03fe84f7fcf697648d7cba11c62d20504380492ba07aa46bb6  linux-5.10.238.tar.xz
-> +sha256  c879d0ba817aaa0fde318d58d7e1f141d9c29bd8569a96b73159ebc448077b99  linux-5.4.294.tar.xz
->   # Locally computed
->   sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
->   sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
-> diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-> index ccaad58e44..efe50f98df 100644
-> --- a/package/linux-headers/Config.in.host
-> +++ b/package/linux-headers/Config.in.host
-> @@ -440,13 +440,13 @@ endchoice
->   
->   config BR2_DEFAULT_KERNEL_HEADERS
->   	string
-> -	default "5.4.293"	if BR2_KERNEL_HEADERS_5_4
-> -	default "5.10.237"	if BR2_KERNEL_HEADERS_5_10
-> -	default "5.15.184"	if BR2_KERNEL_HEADERS_5_15
-> -	default "6.1.140"	if BR2_KERNEL_HEADERS_6_1
-> -	default "6.6.92"	if BR2_KERNEL_HEADERS_6_6
-> -	default "6.12.30"	if BR2_KERNEL_HEADERS_6_12
-> -	default "6.14.8"	if BR2_KERNEL_HEADERS_6_14
-> +	default "5.4.294"	if BR2_KERNEL_HEADERS_5_4
-> +	default "5.10.238"	if BR2_KERNEL_HEADERS_5_10
-> +	default "5.15.185"	if BR2_KERNEL_HEADERS_5_15
-> +	default "6.1.141"	if BR2_KERNEL_HEADERS_6_1
-> +	default "6.6.93"	if BR2_KERNEL_HEADERS_6_6
-> +	default "6.12.32"	if BR2_KERNEL_HEADERS_6_12
-> +	default "6.14.10"	if BR2_KERNEL_HEADERS_6_14
->   	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
->   	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
->   	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+> diff --git a/package/uuu/0001-libuuu-sdps-fix-gcc15-compile-errors.patch b/package/uuu/0001-libuuu-sdps-fix-gcc15-compile-errors.patch
+> new file mode 100644
+> index 000000000000..a3c1d85fc07d
+> --- /dev/null
+> +++ b/package/uuu/0001-libuuu-sdps-fix-gcc15-compile-errors.patch
+> @@ -0,0 +1,33 @@
+> +From 142448e55386b88adf5b1d7e6206df1ca6784708 Mon Sep 17 00:00:00 2001
+> +From: Bruno Thomsen <bruno.thomsen@gmail.com>
+> +Date: Sat, 1 Mar 2025 14:32:41 +0100
+> +Subject: [PATCH] libuuu/sdps: fix gcc15 compile errors
+> +
+> +This gcc 15 error happens on Fedora 42.
+> +
+> +error: uint32_t does not name a type
+> +
+> +error: uint64_t does not name a type
+> +
+> +Signed-off-by: Bruno Thomsen <bruno.thomsen@gmail.com>
+> +Upstream: https://github.com/nxp-imx/mfgtools/commit/142448e55386b88adf5b1d7e6206df1ca6784708
+> +Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> +---
+> + libuuu/sdps.h | 1 +
+> + 1 file changed, 1 insertion(+)
+> +
+> +diff --git a/libuuu/sdps.h b/libuuu/sdps.h
+> +index b82f9d71c981..667a477ee48f 100644
+> +--- a/libuuu/sdps.h
+> ++++ b/libuuu/sdps.h
+> +@@ -30,6 +30,7 @@
+> + */
+> +
+> + #include "cmd.h"
+> ++#include <cstdint>
+> +
+> + class SDPSCmd : public CmdBase
+> + {
+> +--
+> +2.43.0
+> +
 
 _______________________________________________
 buildroot mailing list
