@@ -4,99 +4,99 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F7C0C61DB2
-	for <buildroot@archiver.kernel.org>; Fri, 13 Jun 2025 11:06:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86290C71151
+	for <buildroot@archiver.kernel.org>; Fri, 13 Jun 2025 11:06:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0753240A89;
-	Fri, 13 Jun 2025 11:06:18 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wNWWaaYyRprR; Fri, 13 Jun 2025 11:06:17 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CED5640A73
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CED5640A73;
+	by smtp4.osuosl.org (Postfix) with ESMTP id 47A8640A6D;
 	Fri, 13 Jun 2025 11:06:16 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 9F63E1BD
- for <buildroot@buildroot.org>; Fri, 13 Jun 2025 11:06:10 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 28FD0409D2
- for <buildroot@buildroot.org>; Fri, 13 Jun 2025 11:06:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yFXyPQDnN3op for <buildroot@buildroot.org>;
- Fri, 13 Jun 2025 11:06:08 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
- envelope-from=fabien.lehoussel@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 29042409D3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29042409D3
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 29042409D3
+ id VDbH92u5oFo1; Fri, 13 Jun 2025 11:06:15 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 51A4E40A73
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 51A4E40A73;
+	Fri, 13 Jun 2025 11:06:15 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 230621DC
+ for <buildroot@buildroot.org>; Fri, 13 Jun 2025 11:06:09 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id F284540A4D
  for <buildroot@buildroot.org>; Fri, 13 Jun 2025 11:06:08 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- 5b1f17b1804b1-43edecbfb46so15187085e9.0
- for <buildroot@buildroot.org>; Fri, 13 Jun 2025 04:06:08 -0700 (PDT)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id E8LKHUgW0F9c for <buildroot@buildroot.org>;
+ Fri, 13 Jun 2025 11:06:06 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::436; helo=mail-wr1-x436.google.com;
+ envelope-from=fabien.lehoussel@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CE343409D2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE343409D2
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CE343409D2
+ for <buildroot@buildroot.org>; Fri, 13 Jun 2025 11:06:05 +0000 (UTC)
+Received: by mail-wr1-x436.google.com with SMTP id
+ ffacd0b85a97d-3a548a73ff2so1964659f8f.0
+ for <buildroot@buildroot.org>; Fri, 13 Jun 2025 04:06:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1749812766; x=1750417566;
+ d=1e100.net; s=20230601; t=1749812763; x=1750417563;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=O5egw11CHZbvZvY8Ckqzl1pxKLJAdRlIWoYVYrscnJA=;
- b=ofZwhPJd2cB0VC1uEQw8gnGgk6uQr0NNRzeadAm0DYB5ulLzEZe0cNfK10xObjOrBE
- GyyIcGQlBt1P/gHyt2JwwDgraVwnJspa+7EwCllz8coOyuH1SvfbMnPTyDjd/5cdo238
- cu9m4Td6o670J2bfRrXYiRaylOC87MEJCEfPGxBHD9f8kmmznNvSZXLRQrpn7T+YO1PL
- dUHQKKHpPqzX7TrARddJTaQJ86t2xfSbWKJl8uPKyvLCxy2d5SitmyfZC93LGXnWxMFA
- E7LeebrN7Xm6YvoAKFCjTMvfACDck6uBYwPXuwy5kgRUkfIGd14AE1J8/TwJMYqFvQo5
- S5Cw==
-X-Gm-Message-State: AOJu0Yx682cJY3fQcF+LtDRWktx7J/mkSaAw9SYqv+AdxEDCI3H0mJPA
- i3kVELToN1eh+fTj+o3w18CZnQskY6Dclnw9u2aDT3m4e9Hx66DCRIWnErreeV6Cuu+MyJohsd4
- De4wH
-X-Gm-Gg: ASbGncsHNMt5WTl4QEzsuFasBmDlqMZtXgoasDXG4dT9UGrigkL+uwL035U986UN9/e
- 2saHXZJVxIAm+Limb/RLAPP6cmJVFJZaFdZ3KSn/B/oJC+J8ENMG+kuGU+hX3UPIK8Up7I12n4l
- ndOqGUy1/1BfNIhRV7/hptDTsz7jq65C72Prznj81u4DQrJSQ7O/aw1AYBtpCXbLO2gSNH4SizN
- iSOgQXZZfT4ntIrv8+A9wByJoLoy7Gsdwl6PCdYLpVrXCSFy2G9yb6F16bLoiWc2xsXzF/JWBnq
- rMCp+yghjuRzwZjWCwBDTEMcQUQbCfmPlZeGjPWOeGVF6n2JjN5QG+FckAwzlZI7ufevlX4lJVs
+ bh=fo0J63oCpGdiVDIeGW5hqAWLqMuVXD8rvWF1MKOInLI=;
+ b=uUMCLcbM2Klf47B784tSObyQXEx4Z9zzqp7kWyS6fM0iG4C2dFrKeht1p9rhUqF/jD
+ K1Y1gIY7CUfde1MqJJTBZEjGUjeXKcejzjzNj4R+b0if7vNOvqwQf+oW5c4H29duIcKJ
+ QSJZtFBMMPvYozXDUH5eNTzE+b5nDJNKKEZNoCeY5658dTqJw3xIk5Yqx5WgxCpxyKsW
+ xeSs9yHwi5gAh0hnJo9dwN/tczCfcYvukPOBhp+ILpnffc+Wj7mGviGvgi+e/7I2KQ8h
+ TF4o6QPVBnpnnAFf0wq+kPluNvJHJTwD8/06haaSk/JYQQjYwVgnHuN3CmgBL/B1uzTQ
+ 78bQ==
+X-Gm-Message-State: AOJu0YzwteBVcE3ehqDIIfHsDxSurC6qPSfCqwG6lgbff7qdio4swDnB
+ hZMMozpZhkklbx9bzC7B26NQpCVmoY47hVMnbY6O6p4L1dU9DL/iB8SHKHnGJ8GcI0sEOU/6Bvx
+ xIH+y
+X-Gm-Gg: ASbGncu+ShdSiEFC41cQzx6uXcMXQfDDAhNbnGUzgaytQaoLp/CBS8ca2D3AMS9+tjd
+ wTmPqsB0Vk+56AKzt3dsquooRogYdQlG6Zh45WMEQ3LDE1lxWhrpeU8url1rfWNOKBWlGmXrC9g
+ Rkd0UUlq7fVwvLlTqY/0WxZf8ncTxo437tt9/zUrOh2+vP0BDnkvpf+N+HxXUNU1KG7D93QwDxA
+ vIw/0/fUg39NPl6YT/w9a9dq8j4YOE6vBh/WDxmXc/h7xzfnLB0DayKX5uo9OovfBHs1c7l4mlm
+ qb9uzjoiRfFLo7Lp1U9vyAXVMtL1WKZGaN8moAL4Xk/0JIU5PQkGKdXnidOKyo0S+3PitHj9scI
  =
-X-Google-Smtp-Source: AGHT+IEIuEUbUgkC5GoVnLUKs/3ceVTjny9VGdph0i2tmFWHAKN+YR7rt0XivTRDxzsQXYWVz8qKtQ==
-X-Received: by 2002:a05:600c:530d:b0:441:d4e8:76cd with SMTP id
- 5b1f17b1804b1-45334b7be4cmr23447855e9.29.1749812765927; 
- Fri, 13 Jun 2025 04:06:05 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFOSA2CTCckfe9UlIYQ0EzCG1YAX9L1BeKUaDTru+BuTBCSdNqTfnjK+76OeuaMxO59hTc+2Q==
+X-Received: by 2002:a5d:64c9:0:b0:3a4:e65d:5d8c with SMTP id
+ ffacd0b85a97d-3a56873b421mr2268977f8f.40.1749812763416; 
+ Fri, 13 Jun 2025 04:06:03 -0700 (PDT)
 Received: from NV4XMB-ME-MZ.. ([2a01:e0a:943:83d0:e0a4:5913:a608:fb7f])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3a568a7f8f9sm2060459f8f.42.2025.06.13.04.06.05
+ ffacd0b85a97d-3a568a7f8f9sm2060459f8f.42.2025.06.13.04.06.03
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 13 Jun 2025 04:06:05 -0700 (PDT)
+ Fri, 13 Jun 2025 04:06:03 -0700 (PDT)
 To: buildroot@buildroot.org
 Cc: Thomas Perale <thomas.perale@mind.be>,
  Fabien Lehoussel <fabien.lehoussel@smile.fr>
-Date: Fri, 13 Jun 2025 13:05:59 +0200
-Message-ID: <20250613110559.2665663-7-fabien.lehoussel@smile.fr>
+Date: Fri, 13 Jun 2025 13:05:55 +0200
+Message-ID: <20250613110559.2665663-3-fabien.lehoussel@smile.fr>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250613110559.2665663-1-fabien.lehoussel@smile.fr>
 References: <20250613110559.2665663-1-fabien.lehoussel@smile.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1749812766; x=1750417566; darn=buildroot.org;
+ d=smile.fr; s=google; t=1749812763; x=1750417563; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=O5egw11CHZbvZvY8Ckqzl1pxKLJAdRlIWoYVYrscnJA=;
- b=ff9dufsGlNdbQzx/cdqEStpuysaKTsi96Em2vcAu3uldzoODlhoo+1KfakRvUT3SM8
- QpKT+bcngxX6LmI+z6jYv3bMsD2ZPJS7tu6bqTGa6CNLkraPWqR8IYOtrtQUeG2oBllJ
- Hlb8XbJhAAOnFYzC5/qMHest6aOuusuf/idD0=
+ bh=fo0J63oCpGdiVDIeGW5hqAWLqMuVXD8rvWF1MKOInLI=;
+ b=Zb4IqOaBug353YV/IRywLrbGLLzsiCkpTfHC0vNBJvzv4C8idy8W+cGCpiEBLG+jjp
+ 0jmc9WFNE8QFGWl6+IyMDRC3p5gC1/sBzBFVLZ9AjESBKRLeEs1FCw6xdAQMd+sfE5kn
+ 7RQl5zJKU+WZOv1jagnRJVGWnLqkpN1u0u4Ls=
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=smile.fr
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
- header.a=rsa-sha256 header.s=google header.b=ff9dufsG
-Subject: [Buildroot] [PATCH 7/7] utils/generate-cyclonedx: mark CVEs as
- 'resolved' instead of 'in-triage'
+ header.a=rsa-sha256 header.s=google header.b=Zb4IqOaB
+Subject: [Buildroot] [PATCH 3/7] utils/generate-cyclonedx: move metadata
+ section to top level
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,33 +115,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changes the status of CVE entries in the generated SBOM from 'in-triage'
-to 'resolved' to accurately reflect that these vulnerabilities have been
-addressed through patches applied in Buildroot recipes.
-
-This provides a more accurate security posture in vulnerability tracking
-systems and reduces false positives during security scans.
-
 Signed-off-by: Fabien Lehoussel <fabien.lehoussel@smile.fr>
 ---
- utils/generate-cyclonedx | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ utils/generate-cyclonedx | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
 diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
-index 30c0d48857..a9998e3fb6 100755
+index 2c234e1a45..a069f467b6 100755
 --- a/utils/generate-cyclonedx
 +++ b/utils/generate-cyclonedx
-@@ -234,8 +234,8 @@ def cyclonedx_vulnerabilities(show_info_dict):
-             "url": "https://nvd.nist.gov/"
-         },
-         "analysis": {
--            "state": "in_triage",
--            "detail": f"The CVE '{cve}' has been marked as ignored by Buildroot"
-+            "state": "resolved",
-+            "detail": f"The CVE '{cve}' has been marked as resolved by Buildroot (patch applied)"
-         },
-         "affects": [
-             {"ref": bomref} for bomref in components
+@@ -301,6 +301,14 @@ def main():
+         "bomFormat": "CycloneDX",
+         "$schema": f"http://cyclonedx.org/schema/bom-{CYCLONEDX_VERSION}.schema.json",
+         "specVersion": f"{CYCLONEDX_VERSION}",
++        "metadata": {
++            "component": {
++                "bom-ref": "buildroot",
++                "name": "buildroot",
++                "type": "firmware",
++                "version": f"{BR2_VERSION_FULL}",
++            },
++        },
+         "components": [
+             cyclonedx_component(name, comp) for name, comp in filtered_show_info_dict.items()
+         ],
+@@ -310,14 +318,6 @@ def main():
+               for ref in filtered_show_info_dict],
+         ],
+         "vulnerabilities": cyclonedx_vulnerabilities(show_info_dict),
+-        "metadata": {
+-            "component": {
+-                "bom-ref": "buildroot",
+-                "name": "buildroot",
+-                "type": "firmware",
+-                "version": f"{BR2_VERSION_FULL}",
+-            },
+-        },
+     }
+ 
+     args.out_file.write(json.dumps(cyclonedx_dict, indent=2))
 -- 
 2.43.0
 
