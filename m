@@ -1,99 +1,102 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8011CC61DB2
-	for <buildroot@archiver.kernel.org>; Fri, 13 Jun 2025 11:06:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB54AC71135
+	for <buildroot@archiver.kernel.org>; Fri, 13 Jun 2025 11:06:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 26B23842CD;
-	Fri, 13 Jun 2025 11:06:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8BAF140A4E;
+	Fri, 13 Jun 2025 11:06:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5cxlAi_4xV_l; Fri, 13 Jun 2025 11:06:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RH1QZ-H_L3kg; Fri, 13 Jun 2025 11:06:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 55A51842C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB432409D2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 55A51842C2;
-	Fri, 13 Jun 2025 11:06:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 63662183
- for <buildroot@buildroot.org>; Fri, 13 Jun 2025 11:06:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AB432409D2;
+	Fri, 13 Jun 2025 11:06:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 113F21BD
+ for <buildroot@buildroot.org>; Fri, 13 Jun 2025 11:06:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 55071842C8
- for <buildroot@buildroot.org>; Fri, 13 Jun 2025 11:06:08 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 038C44040E
+ for <buildroot@buildroot.org>; Fri, 13 Jun 2025 11:06:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Qi26dDxJz5Bo for <buildroot@buildroot.org>;
- Fri, 13 Jun 2025 11:06:04 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0xRsnZihPrPn for <buildroot@buildroot.org>;
+ Fri, 13 Jun 2025 11:06:07 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
+ client-ip=2a00:1450:4864:20::432; helo=mail-wr1-x432.google.com;
  envelope-from=fabien.lehoussel@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5B578842C0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5B578842C0
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5B578842C0
- for <buildroot@buildroot.org>; Fri, 13 Jun 2025 11:06:04 +0000 (UTC)
-Received: by mail-wm1-x32c.google.com with SMTP id
- 5b1f17b1804b1-451d7b50815so16568205e9.2
- for <buildroot@buildroot.org>; Fri, 13 Jun 2025 04:06:04 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 65B5E40059
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 65B5E40059
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 65B5E40059
+ for <buildroot@buildroot.org>; Fri, 13 Jun 2025 11:06:07 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id
+ ffacd0b85a97d-3a5257748e1so1513527f8f.2
+ for <buildroot@buildroot.org>; Fri, 13 Jun 2025 04:06:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1749812762; x=1750417562;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=0rTcWMZrBSikKxIqAlX67n+xC9BJ5JJ47RNgEtACZBM=;
- b=Q7Gq/ZQgjyjLaWI2Ax36jEMYwCPO3jP6EEXWQJG3S82BdvgeFKLivJ5g7i5HGJuZMD
- 4ulX52u8fLy/7bZRh61lzZKr6rVpk+OyTH5TTL8s80N1GjyPK67f651KKv61wtNSZzNW
- p0l/loHzF3SdR5S4CD81H26YcVHG3gIJwOAfLZRogRuOCUeAir5ExnIe43tHX470uT9i
- qNIMfN5c5y4P388eVaajeIbuRG/MyTXDZYLY9JCkVmPqU9kbERMnb8V1PwXl8m/eKkTk
- Xu/U3udEus9VkHTz6hA4ureX8nIRG3+ObsQYsRoHGsF9inrSru7+Ns3Wz7elVQbw3JIz
- 0E6w==
-X-Gm-Message-State: AOJu0Yzz8UPQn1ijXakqTpSXPzAXM66LZ1HQ9P0EzJd7Lw+fFRn/n15v
- EjoJwQ82JO2ZcMR03wKXvaoLD+Ksi8Cij4KwZQ68LyyY/ThZlry5DNZEk0XJumGiZHQYZ8te9gB
- uaWDy
-X-Gm-Gg: ASbGncsVTS0uLBxiLLs76DOoEANV80MVW/Gyad4StP/RQdtHKhUGytu6Mafxr7Ivj1N
- t4pVjCjlgW51NtX2kLNA0Cv9NGIYL8vpPcCfcBSg9yw6ITFUoS9eyjhnYweQf9ZkgQ3qprhTGzP
- DnORkoXYCo6Z4/FeGkjkrrPmG9ZDYdyMS4eavPz/cFHs/5cZ3VmVfqPNsGWg580RTePBbaZK8IX
- dqIOkaPhLFNy6+CvyweShg/HoTqA2GS9uRwldQcZycyZyGQOaOkYEuhOjXC4yRkxXtth9qfpoUi
- 7NNCv6Os7dpysIfdPwPM5k8r8IBnp2aUSGQubAJ1ZQr797W24DYbhyTiK3QPKHtANF1IoxK1/c0
+ d=1e100.net; s=20230601; t=1749812765; x=1750417565;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=/wZzI/2WDZCta1mGn/vPr+M4t1Y8kyAyXbp2UjKh3j8=;
+ b=OBgpGM2ojK7MOxqRNEpGtKdOAFw505YziM6XxZlP+0dj94yUpNDdtObG9I7ACD/7so
+ BipbPGqv6QemiSi5hVByvFQZl1AM77hVs0P++gVh9JqCmIOH9B6ycvWRUJWCAN2W8iiw
+ hWtt2q2pDNFL9lLw+zFfJE2ZS9RLFRxJyzX6DBs7tTUunc335E+MBJtnzbjObicIKe7R
+ EESCMZX/mvc4aNRMhqiIzf4GUOuZ3O5QX+t5AmmJiovpcPzka8L9h6T136356tQcZ1G2
+ zTv+ToluxVrELtThrPDaT556SP015cEFzS7WdwHg1soqSVZFOFkLwpo87c+6NGZTc+V2
+ DpbQ==
+X-Gm-Message-State: AOJu0YzAQ+SbtlRimIZRtu7BI3qGVkZiCmuCBaaJT7Wfxxhd3dNjXwuG
+ 1LEchV9SIxBinHpL8AKtzNuevzYetIr7qwCsbj+326jnlzFZqt+9sLEmE7/96Ti2xSlSYEm0Y6b
+ PpjeQ
+X-Gm-Gg: ASbGncsMbTQpfHPtN8hr8ZAD9Sn5KPXsV5aEPJ4Ah/coT6+OJeOM6b2RCjniNYswJy7
+ Jubv9kFht8nbYgw11v1cHjrkQrIf4hfLRKd1/IVFCvwm8JhnIlNF5bdiu7FSidfKZ21vpJJ/Pjs
+ cvOGsuJyfqB6Jjy8cHoRObz5UgPojOq4w09vtrynOTrYdMZr9jaMwtWfyFzqaANbDnNbIxLhBIb
+ xLLqCmNmCAz3DPxZ5C6P0w8130ncL4xsKdP6pOCPiJOu2LqTm52px9FFrgGkZ1WxF8C+oTA13GJ
+ 0a665I99LSKfcxpJMDLa1T9v97e6NVQEzdJXVKkvMTYLGu2nEgpie6D6xZ/LdCkjGZlYRhcRAdU
  =
-X-Google-Smtp-Source: AGHT+IHsWonLwOrIHb0P7gmueWRnOE+GRZW/w6MVV87BGVhqgQg8Qn7ZgExIIfeTgq1ljetw9JcL0A==
-X-Received: by 2002:a05:600c:34ce:b0:440:54ef:dfdc with SMTP id
- 5b1f17b1804b1-45334b02c0fmr25944625e9.8.1749812761963; 
- Fri, 13 Jun 2025 04:06:01 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEdrAbQCM9zIl4W6twpW5J4308pMSzlAgdqm33D6iOKBSN3H2NvH3KJa0DW/UslE8eBYA9I+A==
+X-Received: by 2002:a05:6000:4024:b0:3a4:eef9:818a with SMTP id
+ ffacd0b85a97d-3a56875d38emr2593425f8f.27.1749812765057; 
+ Fri, 13 Jun 2025 04:06:05 -0700 (PDT)
 Received: from NV4XMB-ME-MZ.. ([2a01:e0a:943:83d0:e0a4:5913:a608:fb7f])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3a568a7f8f9sm2060459f8f.42.2025.06.13.04.06.01
+ ffacd0b85a97d-3a568a7f8f9sm2060459f8f.42.2025.06.13.04.06.04
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 13 Jun 2025 04:06:01 -0700 (PDT)
+ Fri, 13 Jun 2025 04:06:04 -0700 (PDT)
 To: buildroot@buildroot.org
 Cc: Thomas Perale <thomas.perale@mind.be>,
  Fabien Lehoussel <fabien.lehoussel@smile.fr>
-Date: Fri, 13 Jun 2025 13:05:53 +0200
-Message-ID: <20250613110559.2665663-1-fabien.lehoussel@smile.fr>
+Date: Fri, 13 Jun 2025 13:05:58 +0200
+Message-ID: <20250613110559.2665663-6-fabien.lehoussel@smile.fr>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250613110559.2665663-1-fabien.lehoussel@smile.fr>
+References: <20250613110559.2665663-1-fabien.lehoussel@smile.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1749812762; x=1750417562; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=0rTcWMZrBSikKxIqAlX67n+xC9BJ5JJ47RNgEtACZBM=;
- b=mhRQZrb13OZnn8L5JNsNa/H7Ilu0hqYslPhcrRmDYh4a4sSBSefNecVn4lrqa1gaU0
- Lho5PUXOLmebBIK3Ka6HCQCbcoTWY7zrJkYv4gyVKAotFJ+ara3l5j56zC6wHYER2PRf
- cluWgv6Sv7SbZiO4m4mY7EAbIhTBApS8nGd+M=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=smile.fr; s=google; t=1749812765; x=1750417565; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=/wZzI/2WDZCta1mGn/vPr+M4t1Y8kyAyXbp2UjKh3j8=;
+ b=AbKSLjmJZJyzC8NDgEiBKg2Fbj2SNGt1TQznB+WTDqCa4QAnKtwuqcpKUV8IU32NeN
+ t21r6RoeIChDgqYGNX8gOzuNxtot0b7mSa0tbIAT9lixrodOzy4ZoAF598PBCh2z1L69
+ mBLVdhjzctDtH8P+2Kl6LI40qu3s637fP3wlY=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
- header.a=rsa-sha256 header.s=google header.b=mhRQZrb1
-Subject: [Buildroot] [PATCH 1/7] utils/generate-cyclonedx: add option to
- filter host packages
+ header.a=rsa-sha256 header.s=google header.b=AbKSLjmJ
+Subject: [Buildroot] [PATCH 6/7] utils/generate-cyclonedx: add source field
+ to CVE entries
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -112,45 +115,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Adds a new command-line option '--no-host-packages' that allows users
-to exclude host packages from the generated SBOM. This is useful when
-focusing on target packages only, resulting in a more concise and
-relevant software bill of materials.
+Adds the required source field to CVE entries in the generated SBOM.
+This field is mandatory for compatibility with DependencyTrack and
+other vulnerability tracking tools, ensuring proper integration with
+security scanning workflows.
+
+The generated SBOM has been validated with sbom-utility
+(https://github.com/CycloneDX/sbom-utility) and DependencyTrack
+(https://dependencytrack.org/) to ensure full compatibility.
 
 Signed-off-by: Fabien Lehoussel <fabien.lehoussel@smile.fr>
 ---
- utils/generate-cyclonedx | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ utils/generate-cyclonedx | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
-index 46f68ac63d..08c591e86b 100755
+index 1cbeca01ad..30c0d48857 100755
 --- a/utils/generate-cyclonedx
 +++ b/utils/generate-cyclonedx
-@@ -279,6 +279,8 @@ def main():
-                         default=sys.stdout)
-     parser.add_argument("--virtual", default=False, action='store_true',
-                         help="This option includes virtual packages to the CycloneDX output")
-+    parser.add_argument("--no-host-packages", default=False, action='store_true',
-+                        help="This option excludes host packages from the CycloneDX output")
+@@ -229,6 +229,10 @@ def cyclonedx_vulnerabilities(show_info_dict):
  
-     args = parser.parse_args()
- 
-@@ -288,11 +290,12 @@ def main():
- 
-     show_info_dict = json.load(args.in_file)
- 
--    # Remove rootfs and virtual packages if not explicitly included
-+    # Remove rootfs, host (if not included) and virtual packages (if not included)
-     # from the cli arguments
-     filtered_show_info_dict = {k: v for k, v in show_info_dict.items()
--                               if ("rootfs" not in v["type"]) and (args.virtual or v["virtual"] is False)}
--
-+                               if ("rootfs" not in v["type"]) and 
-+                                  (args.virtual or v["virtual"] is False) and
-+                                  (not args.no_host_packages or "host" not in v["type"])}
-     cyclonedx_dict = {
-         "bomFormat": "CycloneDX",
-         "$schema": f"http://cyclonedx.org/schema/bom-{CYCLONEDX_VERSION}.schema.json",
+     return [{
+         "id": cve,
++        "source": {
++            "name": "NVD",
++            "url": "https://nvd.nist.gov/"
++        },
+         "analysis": {
+             "state": "in_triage",
+             "detail": f"The CVE '{cve}' has been marked as ignored by Buildroot"
 -- 
 2.43.0
 
