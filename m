@@ -1,74 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A2D2C71136
-	for <buildroot@archiver.kernel.org>; Fri, 13 Jun 2025 19:54:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF97EC71136
+	for <buildroot@archiver.kernel.org>; Fri, 13 Jun 2025 21:15:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 893BF80ED4;
-	Fri, 13 Jun 2025 19:54:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 712C8404A6;
+	Fri, 13 Jun 2025 21:15:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TRGqy9hajSzs; Fri, 13 Jun 2025 19:54:45 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KCVT6G8gv6nM; Fri, 13 Jun 2025 21:15:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A73B88112D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 82E25404B6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A73B88112D;
-	Fri, 13 Jun 2025 19:54:45 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id E5EB4183
- for <buildroot@buildroot.org>; Fri, 13 Jun 2025 19:54:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 82E25404B6;
+	Fri, 13 Jun 2025 21:15:15 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id D28B41BD
+ for <buildroot@buildroot.org>; Fri, 13 Jun 2025 21:15:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D701360EFA
- for <buildroot@buildroot.org>; Fri, 13 Jun 2025 19:54:43 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C4BE8404B6
+ for <buildroot@buildroot.org>; Fri, 13 Jun 2025 21:15:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OzCcpfS2XzdJ for <buildroot@buildroot.org>;
- Fri, 13 Jun 2025 19:54:43 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
- helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D46BA60B8F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D46BA60B8F
-Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D46BA60B8F
- for <buildroot@buildroot.org>; Fri, 13 Jun 2025 19:54:42 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 636161C00D6; Fri, 13 Jun 2025 21:54:38 +0200 (CEST)
-Message-ID: <7b8c1766-43fb-4331-98c0-61ea8ee215eb@rnout.be>
-Date: Fri, 13 Jun 2025 21:54:36 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Fabien Lehoussel <fabien.lehoussel@smile.fr>, buildroot@buildroot.org
-Cc: Thomas Perale <thomas.perale@mind.be>, Vincent Jardin <vjardin@free.fr>,
- Titouan Christophe <titouan.christophe@mind.be>
-References: <20250613110559.2665663-1-fabien.lehoussel@smile.fr>
- <20250613110559.2665663-7-fabien.lehoussel@smile.fr>
-Content-Language: en-GB, fr-BE
-In-Reply-To: <20250613110559.2665663-7-fabien.lehoussel@smile.fr>
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rnout.be; s=dkim; 
- t=1749844478; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=PPfVFVDWZiNTQynRRN+t3pkU91Kiw5jDYM7wQDaU7KY=;
- b=gVHn/uhnVhWPQJuzFjAijb6dK9cCMgXu3B16F8KG6QKGqcbNUSiRAtMyqHtzLNKRgpIvMX
- j6oKv36k7bYJprxlMowIO6/lmT+fO2z1kDpeb4OLm3SDCGNO2zwmhZ0qQqsZW+rOhtDkBo
- sUrm+0SlU0Us0FLLBprMQAzYyPqW4s4VhcuP2A+NCbsPfV+eqt0+lTEifynb6ss3KFI2Wn
- w9CFpB9XOD8gCjDPjI96eNzS7q/hm9UcK+0P++wJAJPQTnSFdFc6k5LxcyloMIUdRoo/Ys
- hRpJoDWnZDEr+AsQeGoGpcvapxX9nd+XfjCv6Va+GY40hGPfACxf3acgLZjOZw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
- header.s=dkim header.b=gVHn/uhn
-Subject: Re: [Buildroot] [PATCH 7/7] utils/generate-cyclonedx: mark CVEs as
- 'resolved' instead of 'in-triage'
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RVm7IsCn-UdC for <buildroot@buildroot.org>;
+ Fri, 13 Jun 2025 21:15:13 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F3B65404A6
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id F3B65404A6
+ for <buildroot@buildroot.org>; Fri, 13 Jun 2025 21:15:12 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E399283602; Fri, 13 Jun 2025 21:15:12 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Fri, 13 Jun 2025 23:13:00 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 9aff5cb69799b742a7d5de4cc845e519eddcd664
+X-Git-Newrev: c7f3ea0e1a6f0598f04abbd30284bbab3a47cd47
+X-Patchwork-Hint: ignore
+Message-Id: <20250613211512.E399283602@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/{mesa3d,
+ mesa3d-headers}: bump version to 25.1.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -80,72 +59,81 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============0383225176285392004=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+--===============0383225176285392004==
+Content-Type: text/plain
 
+commit: https://git.buildroot.net/buildroot/commit/?id=c7f3ea0e1a6f0598f04abbd30284bbab3a47cd47
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 13/06/2025 13:05, Fabien Lehoussel via buildroot wrote:
-> Changes the status of CVE entries in the generated SBOM from 'in-triage'
-> to 'resolved' to accurately reflect that these vulnerabilities have been
-> addressed through patches applied in Buildroot recipes.
+For the release announces since 25.1.1, see:
+25.1.2: https://lists.freedesktop.org/archives/mesa-announce/2025-June/000806.html
+25.1.3: https://lists.freedesktop.org/archives/mesa-announce/2025-June/000807.html
 
-  We discussed this in the FOSDEM developer meeting, with Thomas, Vincent and 
-myself (all in Cc).
+Signed-off-by: Alex Bennée <alex.bennee@linaro.org>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[Julien: add links to release announces]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 6 +++---
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-  The reasoning behind in-triage was that we don't actually know if it was 
-resolved, resolved with pedigree, false positive, or not affected. In fact, 
-"resolved" is the least likely (it means that the vulnerability was resolved 
-through some other measure than changing the software, e.g. by changing some 
-other component to make sure the vulnerability becomes unexploitable).
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 45b7e9084a..2ce0465a08 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 25.1.1
++MESA3D_HEADERS_VERSION = 25.1.3
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://archive.mesa3d.org
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index ee99e8b635..c01d6ae762 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2025-May/000804.html
+-sha256  cf942a18b7b9e9b88524dcbf0b31fed3cde18e6d52b3375b0ab6587a14415bce  mesa-25.1.1.tar.xz
+-sha512  8000fec61da3b7c0355b74458c52f8faeb562398a1882d68cd31a253848edd3333072521ec52f8c5c1a62d909afd6667803d43cb54027d0af3d944f1add27aae  mesa-25.1.1.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2025-June/000807.html
++sha256  ffcb6cadb5fd356d56008e6308641dfe4b2929f30139f6585436ca6e3cddba7f  mesa-25.1.3.tar.xz
++sha512  20b72ac4e39e559e36be07f003707cf5e25c5ebac22746d71438edecb9d911f5341373b1632ff08c00b57ac15fc880ce5a203ab9165e5e71057816be31344fd7  mesa-25.1.3.tar.xz2
+ # License
+ sha256  0d1a0472ecc81830e75c20d59b0ea02841e3db21255e0ebad97ab682c54d6615  docs/license.rst
+ sha256  323c587d0ccf10e376f8bf9a7f31fb4ca6078105194b42e0b1e0ee2bc9bde71f  licenses/MIT
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 000b9150f1..76789f647e 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 25.1.1
++MESA3D_VERSION = 25.1.3
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://archive.mesa3d.org
+ MESA3D_LICENSE = MIT, SGI, Khronos
 
-  In addition, we felt that it was better for the downstream to re-evaluate if 
-the vulnerability is really resolved (or not applicable or whatever). That is 
-perhaps not ambitious enough though.
-
-  Finally, we felt that for any state other than in_triage, the other fields (at 
-the very least "justification") should also be filled in.
-
-  We concluded that "in_triage" was the best option to start with. The detail 
-should give a hint for manual review that it really was ignored by Buildroot 
-upstream. The idea was that you'd be able to use some tool to keep track of your 
-own analysis, and merge that with re-generated SBoM from CycloneDX. I'm not sure 
-if that really works - Titouan (in Cc) has been working on something similar, 
-perhaps he can comment.
-
-  Regards,
-  Arnout
-
-> 
-> This provides a more accurate security posture in vulnerability tracking
-> systems and reduces false positives during security scans.
-> 
-> Signed-off-by: Fabien Lehoussel <fabien.lehoussel@smile.fr>
-> ---
->   utils/generate-cyclonedx | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
-> index 30c0d48857..a9998e3fb6 100755
-> --- a/utils/generate-cyclonedx
-> +++ b/utils/generate-cyclonedx
-> @@ -234,8 +234,8 @@ def cyclonedx_vulnerabilities(show_info_dict):
->               "url": "https://nvd.nist.gov/"
->           },
->           "analysis": {
-> -            "state": "in_triage",
-> -            "detail": f"The CVE '{cve}' has been marked as ignored by Buildroot"
-> +            "state": "resolved",
-> +            "detail": f"The CVE '{cve}' has been marked as resolved by Buildroot (patch applied)"
->           },
->           "affects": [
->               {"ref": bomref} for bomref in components
+--===============0383225176285392004==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0383225176285392004==--
