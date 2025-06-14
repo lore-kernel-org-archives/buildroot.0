@@ -1,78 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FDA6C71141
-	for <buildroot@archiver.kernel.org>; Sat, 14 Jun 2025 11:05:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA77CC71141
+	for <buildroot@archiver.kernel.org>; Sat, 14 Jun 2025 11:10:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 19D1C4051D;
-	Sat, 14 Jun 2025 11:05:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7C0A780895;
+	Sat, 14 Jun 2025 11:10:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id L-PZ8XtLCfbz; Sat, 14 Jun 2025 11:05:38 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4BsJmxXxxbY1; Sat, 14 Jun 2025 11:10:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 186CE40531
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9CFAB80F87
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 186CE40531;
-	Sat, 14 Jun 2025 11:05:38 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id D9501177
- for <buildroot@buildroot.org>; Sat, 14 Jun 2025 11:05:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9CFAB80F87;
+	Sat, 14 Jun 2025 11:10:08 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id C26761A4
+ for <buildroot@buildroot.org>; Sat, 14 Jun 2025 11:10:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C04044042E
- for <buildroot@buildroot.org>; Sat, 14 Jun 2025 11:05:36 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B43BE608C7
+ for <buildroot@buildroot.org>; Sat, 14 Jun 2025 11:10:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id O3rRw1DSxtl2 for <buildroot@buildroot.org>;
- Sat, 14 Jun 2025 11:05:36 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C01D240022
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C01D240022
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C01D240022
- for <buildroot@buildroot.org>; Sat, 14 Jun 2025 11:05:35 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id 6D668780316;
- Sat, 14 Jun 2025 13:05:30 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
- via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 14 Jun 2025 13:05:30 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZVRIO4Wz-AGz for <buildroot@buildroot.org>;
+ Sat, 14 Jun 2025 11:10:06 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org CBD536081F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CBD536081F
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CBD536081F
+ for <buildroot@buildroot.org>; Sat, 14 Jun 2025 11:10:05 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p4fd6cb5b.dip0.t-ipconnect.de [79.214.203.91])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id E6859A4C0B20;
+ Sat, 14 Jun 2025 13:10:02 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:52350)
+ by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
+ (envelope-from <bernd@kuhls.net>) id 1uQOlu-000000008E1-46fk;
+ Sat, 14 Jun 2025 11:10:02 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Cc: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
+Date: Sat, 14 Jun 2025 13:10:02 +0200
+Message-Id: <20250614111002.66221-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
-Date: Sat, 14 Jun 2025 13:05:30 +0200
-From: Julien Olivain <ju.o@free.fr>
-To: =?UTF-8?Q?Alex_Benn=C3=A9e?= <alex.bennee@linaro.org>
-Cc: buildroot@buildroot.org, Heiko Thiery <heiko.thiery@gmail.com>, Ricardo
- Martincoski <ricardo.martincoski@datacom.com.br>
-In-Reply-To: <20250611111640.702572-6-alex.bennee@linaro.org>
-References: <20250611111640.702572-1-alex.bennee@linaro.org>
- <20250611111640.702572-6-alex.bennee@linaro.org>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <82117b1a9e3d87c2943d8d6e02a48be3@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1749899133;
- bh=usOKMjnRS6Pg643q3uK+LWargt7zwUasp1AmX/atXAs=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=uOg/aHFDt0HnLogoa+EmkTmFDsZIycPtd7Hybz7+HRasGI4lj5a6CmlFx4qnftHfr
- cp4HzZlmG0TbMVB4nwJuoOG5JeFW5X1DOPvnJvLbLz1Ua26Z17+qN61qeVW6jg6mep
- KUsk/N5GLf8MsqsxiWKOKlj6nkb1e7PDZRck3TH3RNqtoIEU6gugCwyNjKelVUwo8W
- iFcmJwibEhWANlZptCZ+Hu2WDnc2LN8MYZ6TdsLsOV/KnkJ1NYHkInWs3qxzFCfJE5
- JiNU77c+CBDAA10AEje7/UbMXi+5CE871cxKeOBIv8qPIS5wuQfzg29wQta+9HO6lO
- fkn+kSkfATZuQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Spamd-Bar: +
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202506031021; t=1749899402;
+ bh=dgq4n1Xas0bAz9Gcr8y79Emq4qNAAwrMzKwyhwgpSv8=;
+ h=From:To:Cc:Subject:Date:From;
+ b=YTUq5QKdT8zhtv+nfUMXCNDublhWt2PJTgAXMNMYaChXizaja9KR50+HbVgrIAfIX
+ I4KwyjKqv4M4Sdw9t2AujlJSnei3PIAdbKKQ/rce301IDpPO/ugR3glcchqobokah6
+ y+Q8z7USNEXkhgDnipZaUtA0v6NuVJh1R9fJqme5gFqKTd8fQ5YJXgqFN/qVYiIplD
+ Kt2Fo2Rs8b8FIlUqRxQOQkLGO43HEO6YHy0aZplsaNfRktWo+90mV84sm6M7EcL6SO
+ cBBAbF6/cbEFdWfWl3ypjXn13DwYUr1vFLxh9U1AeUEkWMXon1OgFiV/vFOxFE86PJ
+ 2SLLtOqYNfHew==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=uOg/aHFD
-Subject: Re: [Buildroot] [PATCH v6 5/5] support/testing: add test for vkmark
- package
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202506031021 header.b=YTUq5QKd
+Subject: [Buildroot] [PATCH 1/1] package/libebur128: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,135 +81,152 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgQWxleCwKClRoYW5rcyBmb3IgdGhlIHBhdGNoISAgSSBoYXZlIGZldyBjb21tZW50cywgc2Vl
-IGJlbG93LgoKT24gMTEvMDYvMjAyNSAxMzoxNiwgQWxleCBCZW5uw6llIHdyb3RlOgo+IFRvIHRl
-c3QgdmttYXJrIHdlIG5lZWQgYSBoZWFkbGVzcyBXZXN0b24gY29tcG9zaXRvciBzbyB3ZSBjYW4g
-cnVuIHRoZQo+IHRlc3Qgd2l0aG91dCBtZXNzaW5nIGFyb3VuZCB3aXRoIGFjdHVhbCBkaXNwbGF5
-cy4gQmVjYXVzZSB0byBydW4gcHJvcGVyCj4gYWNjZWxlcmF0ZWQgVnVsa2FuIHBhc3MtdGhyb3Vn
-aCB5b3UgbmVlZCBhIG1vZGVybiBRRU1VIHdlIGFsc28gZW5hYmxlZAo+IHRoZSBWVUxLQU5fRFJJ
-VkVSX1NXUkFTVCBkcml2ZXIuIFRoaXMgd2lsbCBhbGxvdyB1cyB0byBydW4gdmttYXJrCj4gdW5k
-ZXIgQ0kgYW5kIG90aGVyIHBsYWNlcyB3aGVyZSB3ZSBkb24ndCBoYXZlIGEgdmVyeSBtb2Rlcm4g
-aG9zdAo+IHN5c3RlbS4KPiAKPiBTaWduZWQtb2ZmLWJ5OiBBbGV4IEJlbm7DqWUgPGFsZXguYmVu
-bmVlQGxpbmFyby5vcmc+Cj4gCj4gLS0tCj4gdjUKPiAgIC0gc2ltcGxpZnkgcGFja2FnZSBsaXN0
-Cj4gICAtIGFkZCBTV1JBU1QgZHJpdmVyIGZvciBmYWxsLWJhY2sKPiAgIC0gZG9uJ3QgdXNlIGFj
-Y2VsZXJhdGVkIGRldmljZSBpbiB0ZXN0LCBkb2N1bWVudCB0aGUgZGlmZmVyZW5jZQo+IHY0Cj4g
-ICAtIGFkZCBCUjJfUEFDS0FHRV9XRVNUT05fU0hFTExfS0lPU0s9eQo+IHYzCj4gICAtIGZpeCBv
-cmRlcmluZyBvZiBzZWxlY3QvZGVwZW5kIGFzIHN1Z2dlc3RlZCBieSBjaGVjay1wYWNrYWdlCj4g
-ICAtIGZpeCBzb21lIGZsYWtlOCBjb21wbGFpbnRzCj4gdjIKPiAgIC0gYWRkIG92ZXJsYXkgaW1h
-Z2UKPiAgIC0gZW5zdXJlIHdlIGV4cG9zZSBESVNQTEFZL0RCVVMgZW52IHZhcnMKPiAgIC0gc2hv
-cnRlbiBydW50aW1lIG9mIHZrbWFyawo+IC0tLQo+ICBzdXBwb3J0L3Rlc3RpbmcvaW5mcmEvZW11
-bGF0b3IucHkgICAgICAgICAgICAgfCAgNCArLQo+ICBzdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFj
-a2FnZS90ZXN0X3ZrbWFyay5weSAgfCA4MCArKysrKysrKysrKysrKysrKysrCj4gIC4uLi9ldGMv
-cHJvZmlsZS5kLzEwLXhkZy1ydW50aW1lLnNoICAgICAgICAgICB8ICAxICsKPiAgMyBmaWxlcyBj
-aGFuZ2VkLCA4NCBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pCj4gIGNyZWF0ZSBtb2RlIDEw
-MDY0NCBzdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS90ZXN0X3ZrbWFyay5weQo+ICBjcmVh
-dGUgbW9kZSAxMDA2NDQgCj4gc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF92a21h
-cmsvcm9vdGZzLW92ZXJsYXkvZXRjL3Byb2ZpbGUuZC8xMC14ZGctcnVudGltZS5zaAo+IAo+IGRp
-ZmYgLS1naXQgYS9zdXBwb3J0L3Rlc3RpbmcvaW5mcmEvZW11bGF0b3IucHkgCj4gYi9zdXBwb3J0
-L3Rlc3RpbmcvaW5mcmEvZW11bGF0b3IucHkKPiBpbmRleCAzNzAyZWUyZDQ4Li5hNmZlOTYxM2I3
-IDEwMDY0NAo+IC0tLSBhL3N1cHBvcnQvdGVzdGluZy9pbmZyYS9lbXVsYXRvci5weQo+ICsrKyBi
-L3N1cHBvcnQvdGVzdGluZy9pbmZyYS9lbXVsYXRvci5weQo+IEBAIC0xMjEsNyArMTIxLDkgQEAg
-Y2xhc3MgRW11bGF0b3Iob2JqZWN0KToKPiAgICAgICAgICBob3N0X2JpbiA9IG9zLnBhdGguam9p
-bihzZWxmLmJ1aWxkZGlyLCAiaG9zdCIsICJiaW4iKQo+ICAgICAgICAgIGJyX3BhdGggPSBob3N0
-X2JpbiArIG9zLnBhdGhzZXAgKyBvcy5lbnZpcm9uWyJQQVRIIl0KPiAgICAgICAgICBxZW11X2Vu
-diA9IHsiUUVNVV9BVURJT19EUlYiOiAibm9uZSIsCj4gLSAgICAgICAgICAgICAgICAgICAgIlBB
-VEgiOiBicl9wYXRofQo+ICsgICAgICAgICAgICAgICAgICAgICJQQVRIIjogYnJfcGF0aCwKPiAr
-ICAgICAgICAgICAgICAgICAgICAiREJVU19TRVNTSU9OX0JVU19BRERSRVNTIjogCj4gb3MuZW52
-aXJvblsiREJVU19TRVNTSU9OX0JVU19BRERSRVNTIl0sCj4gKyAgICAgICAgICAgICAgICAgICAg
-IkRJU1BMQVkiOiBvcy5lbnZpcm9uWyJESVNQTEFZIl19CgpDb3VsZCB5b3UgbW92ZSB0aG9zZSBl
-bXVsYXRvci5weSBjaGFuZ2VzIGluIGEgc2VwYXJhdGUgcGF0Y2gsIHBsZWFzZT8KSSBhbSBub3Qg
-c3VyZSB3ZSB3YW50IHRvIGluY2x1ZGUgaXQgZm9yIG5vdywgd2hpbGUgdGhlIFZ1bGthbiBTV1JB
-U1QKcGFydCBjb3VsZCBiZSBtZXJnZWQgc29vbmVyLgoKPiAgICAgICAgICBwZXhwZWN0LnJ1bihm
-IntxZW11X2NtZFswXX0gLS12ZXJzaW9uIiwKPiAgICAgICAgICAgICAgICAgICAgICBlbmNvZGlu
-Zz0ndXRmLTgnLAo+ICAgICAgICAgICAgICAgICAgICAgIGxvZ2ZpbGU9c2VsZi5sb2dmaWxlLAo+
-IGRpZmYgLS1naXQgYS9zdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS90ZXN0X3ZrbWFyay5w
-eSAKPiBiL3N1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3RfdmttYXJrLnB5Cj4gbmV3
-IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAwMDAwMDAwLi44MGNhYTAxZmRjCj4gLS0tIC9k
-ZXYvbnVsbAo+ICsrKyBiL3N1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3RfdmttYXJr
-LnB5Cj4gQEAgLTAsMCArMSw4MCBAQAo+ICtpbXBvcnQgb3MKPiArCj4gK2ltcG9ydCBpbmZyYS5i
-YXNldGVzdAo+ICsKPiArVlVMS0FOSU5GT19USU1FT1VUID0gMTIwCj4gKwo+ICsKPiArY2xhc3Mg
-VGVzdFZrTWFyayhpbmZyYS5iYXNldGVzdC5CUlRlc3QpOgoKVGVjaG5pY2FsbHksIHRoaXMgdGVz
-dCBjb3ZlcnMgbWVzYTNkICh2dWxrYW4gc3dyYXN0KSwgdmttYXJrLAp3ZXN0b24sIC4uLiAgQnV0
-IEkgdGhpbmsgdGhlIG1vc3QgaW1wb3J0YW50IGNvbmZpZ3VyYXRpb24gYmVpbmcKdGVzdGVkIGlz
-IG1lc2EzZCBlbmFibGluZyBhIFZ1bGthbiAoc3dyYXN0KSBkcml2ZXIuIE90aGVyIHByb2dyYW1z
-CmFyZSBzdXBwb3J0aW5nIHRvb2xzLgoKU28sIEkgdGhpbmsgaXQgd291bGQgYmUgYmV0dGVyIHRv
-IHJlbmFtZSBhbmQgbW92ZSB0aGlzIHRlc3QgYXMgYQpzdWItY2FzZSBpbiBzdXBwb3J0L3Rlc3Rp
-bmcvdGVzdHMvcGFja2FnZS90ZXN0X21lc2EzZC5weSBpbiBhIGNsYXNzCm5hbWVkIGZvciBleGFt
-cGxlIFRlc3RNZXNhM0RWdWxrYW4uCgo+ICsgICAgY29uZmlnID0gXAo+ICsgICAgICAgICIiIgo+
-ICsgICAgICAgIEJSMl9hYXJjaDY0PXkKPiArICAgICAgICBCUjJfY29ydGV4X2E3Mj15Cj4gKyAg
-ICAgICAgQlIyX1RPT0xDSEFJTl9FWFRFUk5BTD15Cj4gKyAgICAgICAgQlIyX09QVElNSVpFX1M9
-eQo+ICsgICAgICAgIEJSMl9ST09URlNfREVWSUNFX0NSRUFUSU9OX0RZTkFNSUNfRVVERVY9eQo+
-ICsgICAgICAgIEJSMl9ST09URlNfTUVSR0VEX1VTUj15Cj4gKyAgICAgICAgQlIyX0xJTlVYX0tF
-Uk5FTD15Cj4gKyAgICAgICAgQlIyX0xJTlVYX0tFUk5FTF9VU0VfQ1VTVE9NX0NPTkZJRz15Cj4g
-KyAgICAgICAgCj4gQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fQ09ORklHX0ZJTEU9ImJvYXJkL3Fl
-bXUvYWFyY2g2NC12aXJ0L2xpbnV4LmNvbmZpZyIKPiArICAgICAgICBCUjJfUEFDS0FHRV9EQlVT
-PXkKPiArICAgICAgICBCUjJfUEFDS0FHRV9MSUJNRD15Cj4gKyAgICAgICAgQlIyX1BBQ0tBR0Vf
-TUVTQTNEPXkKPiArICAgICAgICBCUjJfUEFDS0FHRV9NRVNBM0RfR0FMTElVTV9EUklWRVJfVklS
-R0w9eQo+ICsgICAgICAgIEJSMl9QQUNLQUdFX01FU0EzRF9MTFZNPXkKPiArICAgICAgICBCUjJf
-UEFDS0FHRV9NRVNBM0RfT1BFTkdMX0VTPXkKPiArICAgICAgICBCUjJfUEFDS0FHRV9NRVNBM0Rf
-VlVMS0FOX0RSSVZFUl9TV1JBU1Q9eQo+ICsgICAgICAgIEJSMl9QQUNLQUdFX01FU0EzRF9WVUxL
-QU5fRFJJVkVSX1ZJUlRJTz15Cj4gKyAgICAgICAgQlIyX1BBQ0tBR0VfVVRJTF9MSU5VWF9BR0VU
-VFk9eQo+ICsgICAgICAgIEJSMl9QQUNLQUdFX1VUSUxfTElOVVhfQklOQVJJRVM9eQo+ICsgICAg
-ICAgIEJSMl9QQUNLQUdFX1ZLTUFSSz15Cj4gKyAgICAgICAgQlIyX1BBQ0tBR0VfVlVMS0FOX1RP
-T0xTPXkKPiArICAgICAgICBCUjJfUEFDS0FHRV9XRVNUT049eQo+ICsgICAgICAgIEJSMl9QQUNL
-QUdFX1dFU1RPTl9ERUZBVUxUX0RSTT15Cj4gKyAgICAgICAgQlIyX1BBQ0tBR0VfV0VTVE9OX0hF
-QURMRVNTPXkKPiArICAgICAgICBCUjJfUEFDS0FHRV9XRVNUT05fU0hFTExfS0lPU0s9eQo+ICsg
-ICAgICAgIEJSMl9UQVJHRVRfR0VORVJJQ19HRVRUWV9QT1JUPSJ0dHlBTUEwIgo+ICsgICAgICAg
-IEJSMl9UQVJHRVRfUk9PVEZTX0VYVDI9eQo+ICsgICAgICAgIEJSMl9UQVJHRVRfUk9PVEZTX0VY
-VDJfU0laRT0iMjUwTSIKPiArICAgICAgICBCUjJfUk9PVEZTX09WRVJMQVk9Int9Igo+ICsgICAg
-ICAgICIiIi5mb3JtYXQoCj4gKyAgICAgICAgICBpbmZyYS5maWxlcGF0aCgidGVzdHMvcGFja2Fn
-ZS90ZXN0X3ZrbWFyay9yb290ZnMtb3ZlcmxheSIpKQo+ICsKPiArICAgIGRlZiBsb2dpbihzZWxm
-KToKPiArICAgICAgICBpbWcgPSBvcy5wYXRoLmpvaW4oc2VsZi5idWlsZGRpciwgImltYWdlcyIs
-ICJyb290ZnMuZXh0MiIpCj4gKyAgICAgICAga2VybiA9IG9zLnBhdGguam9pbihzZWxmLmJ1aWxk
-ZGlyLCAiaW1hZ2VzIiwgIkltYWdlIikKPiArCj4gKyAgICAgICAgIyBXZSBoYXZlIGJ1aWx0IHRo
-ZSBpbWFnZSB0byBjb250YWluIGJvdGggdGhlIFNXUkFTVCBhbmQKPiArICAgICAgICAjIFZJUlRJ
-TyB2dWxrYW4gZHJpdmVycy4gSG93ZXZlciB0byB0ZXN0IHdpdGggcHJvcGVyIHBhc3MKPiArICAg
-ICAgICAjIHRocm91Z2ggeW91IG5lZWQgYSBtb2Rlcm4gUUVNVSB3aXRoIFZlbnVzIHN1cHBvcnQu
-Cj4gKyAgICAgICAgIwo+ICsgICAgICAgICMgVGhhdCB3b3VsZCBtb2RpZnkgdGhlIGNvbW1hbmQg
-bGluZSB0bzoKPiArICAgICAgICAjICAgLWRpc3BsYXkgZGJ1cyxnbD1vbgo+ICsgICAgICAgICMg
-ICAtZGV2aWNlIHZpcnRpby1ncHUtZ2wtcGNpLGhvc3RtZW09NEcsYmxvYj1vbix2ZW51cz1vbgo+
-ICsgICAgICAgICMKPiArICAgICAgICBzZWxmLmVtdWxhdG9yLmJvb3QoYXJjaD0iYWFyY2g2NCIs
-Cj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgIGtlcm5lbD1rZXJuLAo+ICsgICAgICAgICAg
-ICAgICAgICAgICAgICAgICBrZXJuZWxfY21kbGluZT1bInJvb3Q9L2Rldi92ZGEgCj4gY29uc29s
-ZT10dHlBTUEwIl0sCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgIG9wdGlvbnM9WyItTSIs
-ICJ2aXJ0IiwgIi1jcHUiLCAKPiAiY29ydGV4LWE3MiIsICItbSIsICI1MTIiLAo+ICsgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAiLWRyaXZlIiwKPiArICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgCj4gZiJmaWxlPXtpbWd9LGlmPXZpcnRpbyxmb3JtYXQ9cmF3
-IiwKPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIi1kaXNwbGF5IiwgImVn
-bC1oZWFkbGVzcyIsCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICItZGlz
-cGxheSIsICJkYnVzIiwKPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIi1k
-ZXZpY2UiLCAidmlydGlvLWdwdS1wY2kiXSkKCkkgZG9uJ3QgdGhpbmsgd2Ugd2lsbCBiZSBhYmxl
-IHRvIGtlZXAgdGhvc2UgIi1kaXNwbGF5IiBvcHRpb25zLAphcyB0aGV5IG5lZWQgdG8gYmUgcGFp
-cmVkIHdpdGggZWl0aGVyIFZOQyBvciBTUElDRSBkaXNwbGF5cy4KSSB3aWxsIHRlc3QgdGhhdCBp
-biB0aGUgdXBkYXRlZCBzZXJpZXMgZml4aW5nIHRoZSB2a21hcmsgYnVpbGQgaXNzdWUKaW4gdGhl
-IGRvY2tlciByZWZlcmVuY2UgaW1hZ2UuIE1heWJlIHRoZXkgY291bGQgYmUgbW92ZWQgaW4gdGhl
-CmNvbW1lbnQganVzdCBiZWZvcmUsIHRvIGFsbG93IGRvaW5nIHRoZSB2aXJ0aW8gY2FzZSBieSBz
-dGFydGluZwpxZW11IG91dHNpZGUgdGhlIEJ1aWxkcm9vdCBydW4tdGVzdHMgc2NyaXB0LgoKV2hh
-dCBkbyB5b3UgdGhpbms/Cgo+ICsKPiArICAgICAgICBzZWxmLmVtdWxhdG9yLmxvZ2luKCkKPiAr
-Cj4gKyAgICBkZWYgdGVzdF9ydW4oc2VsZik6Cj4gKyAgICAgICAgc2VsZi5sb2dpbigpCj4gKwo+
-ICsgICAgICAgICMgVGhlIHRlc3QgY2FzZSB2ZXJpZmllcyB0aGF0IFZ1bGthbiBpcyBlbmFibGVk
-IGFuZCB2a21hcmsgY2FuIAo+IHJ1bgo+ICsgICAgICAgIGNtZCA9ICJ3ZXN0b24gLUIgaGVhZGxl
-c3MgLS1yZW5kZXJlciBnbCAtLXNoZWxsIGtpb3NrIC0tIAo+IHZrbWFyayAtYiA6ZHVyYXRpb249
-MS4wIgo+ICsgICAgICAgIG91dHB1dCwgZXhpdF9jb2RlID0gc2VsZi5lbXVsYXRvci5ydW4oY21k
-LCBWVUxLQU5JTkZPX1RJTUVPVVQpCj4gKyAgICAgICAgc2VsZi5hc3NlcnRFcXVhbChleGl0X2Nv
-ZGUsIDApCj4gKwo+ICsgICAgICAgICMgY2hlY2sgd2UgZ290IHRvIHRoZSBlbmQgYW5kIGVtaXR0
-ZWQgYSBzY29yZQo+ICsgICAgICAgIGZvdW5kX3ZrbWFyayA9IEZhbHNlCj4gKyAgICAgICAgZm9y
-IGxpbmUgaW4gb3V0cHV0Ogo+ICsgICAgICAgICAgICBmb3VuZF92a21hcmsgfD0gInZrbWFyayBT
-Y29yZToiIGluIGxpbmUKPiArCj4gKyAgICAgICAgc2VsZi5hc3NlcnRFcXVhbChmb3VuZF92a21h
-cmssIFRydWUpCj4gZGlmZiAtLWdpdCAKPiBhL3N1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdl
-L3Rlc3RfdmttYXJrL3Jvb3Rmcy1vdmVybGF5L2V0Yy9wcm9maWxlLmQvMTAteGRnLXJ1bnRpbWUu
-c2ggCj4gYi9zdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS90ZXN0X3ZrbWFyay9yb290ZnMt
-b3ZlcmxheS9ldGMvcHJvZmlsZS5kLzEwLXhkZy1ydW50aW1lLnNoCj4gbmV3IGZpbGUgbW9kZSAx
-MDA2NDQKPiBpbmRleCAwMDAwMDAwMDAwLi41ZTBjY2IxZDNlCj4gLS0tIC9kZXYvbnVsbAo+ICsr
-KyAKPiBiL3N1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3RfdmttYXJrL3Jvb3Rmcy1v
-dmVybGF5L2V0Yy9wcm9maWxlLmQvMTAteGRnLXJ1bnRpbWUuc2gKPiBAQCAtMCwwICsxIEBACj4g
-K2V4cG9ydCBYREdfUlVOVElNRV9ESVI9L3RtcAo+IC0tCj4gMi40Ny4yCgpDb3VsZCB5b3Ugc2Vu
-ZCBhbiB1cGRhdGVkIHBhdGNoIGFkZHJlc3NpbmcgdGhvc2UgY29tbWVudHMsIHBsZWFzZT8KCkJl
-c3QgcmVnYXJkcywKCkp1bGllbi4KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9y
-ZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+libebur128 was added to buildroot in July 2016 with commit
+a32d29cd84789d7406022c7bb9861e5bda530013 to provide an external
+dependency for ffmpeg.
+
+ffmpeg removed this external dependency and switched to an internal
+version in November 2016 with upstream commit
+http://git.videolan.org/?p=ffmpeg.git;a=commitdiff;h=005d058f4230f3207ebcf1131df7426d4f57392f
+which was first included in ffmpeg version 3.3.
+
+Buildroot bumped ffmpeg to version 3.3 in April 2017 with commit
+21d93a1351ca8d4e5185c22a81becdaf08a9bdd3 and forgot to remove the
+dependency to libebur128.
+
+This went unnoticed until libebur128 fails to build with cmake 4.x.
+Upstream saw its last commit four years ago. Instead of fixing an
+unused package we removed it from buildroot.
+
+Fixes:
+https://autobuild.buildroot.org/results/e629bd151cc539f01b909e44d07e17451a29ba27/
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ Config.in.legacy                   |  6 ++++++
+ DEVELOPERS                         |  1 -
+ package/Config.in                  |  1 -
+ package/ffmpeg/ffmpeg.mk           |  4 ----
+ package/libebur128/Config.in       | 13 -------------
+ package/libebur128/libebur128.hash |  3 ---
+ package/libebur128/libebur128.mk   | 13 -------------
+ 7 files changed, 6 insertions(+), 35 deletions(-)
+ delete mode 100644 package/libebur128/Config.in
+ delete mode 100644 package/libebur128/libebur128.hash
+ delete mode 100644 package/libebur128/libebur128.mk
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 3084e7336e..c94bc1a226 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,12 @@ endif
+ 
+ comment "Legacy options removed in 2025.08"
+ 
++config BR2_PACKAGE_LIBEBUR128
++	bool "libebur128 has been removed"
++	select BR2_LEGACY
++	help
++	  The libebur128 package has been removed from Buildroot.
++
+ config BR2_KERNEL_HEADERS_6_14
+ 	bool "kernel headers version 6.14.x are no longer supported"
+ 	select BR2_LEGACY
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 0478e47c98..e664f35a28 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -412,7 +412,6 @@ F:	package/libdvbcsa/
+ F:	package/libdvdcss/
+ F:	package/libdvdnav/
+ F:	package/libdvdread/
+-F:	package/libebur128/
+ F:	package/libfreeglut/
+ F:	package/libfribidi/
+ F:	package/libg7221/
+diff --git a/package/Config.in b/package/Config.in
+index 99a5e2928e..af32b39e44 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1555,7 +1555,6 @@ menu "Audio/Sound"
+ 	source "package/libcodec2/Config.in"
+ 	source "package/libcue/Config.in"
+ 	source "package/libcuefile/Config.in"
+-	source "package/libebur128/Config.in"
+ 	source "package/libg7221/Config.in"
+ 	source "package/libgsm/Config.in"
+ 	source "package/libid3tag/Config.in"
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 5c00ba2dff..30cf7020de 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -243,10 +243,6 @@ FFMPEG_CONF_OPTS += --disable-openssl
+ endif
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_FFMPEG_GPL)$(BR2_PACKAGE_LIBEBUR128),yy)
+-FFMPEG_DEPENDENCIES += libebur128
+-endif
+-
+ ifeq ($(BR2_PACKAGE_LIBDRM),y)
+ FFMPEG_CONF_OPTS += --enable-libdrm
+ FFMPEG_DEPENDENCIES += libdrm
+diff --git a/package/libebur128/Config.in b/package/libebur128/Config.in
+deleted file mode 100644
+index 0d68b39d53..0000000000
+--- a/package/libebur128/Config.in
++++ /dev/null
+@@ -1,13 +0,0 @@
+-config BR2_PACKAGE_LIBEBUR128
+-	bool "libebur128"
+-	# build system has no support to disable shared linking
+-	# leading to a build error with a static-only toolchain
+-	depends on !BR2_STATIC_LIBS
+-	help
+-	  libebur128 is a library that implements the EBU R 128 standard
+-	  for loudness normalization.
+-
+-	  https://github.com/jiixyj/libebur128
+-
+-comment "libebur128 needs a toolchain w/ dynamic library"
+-	depends on BR2_STATIC_LIBS
+diff --git a/package/libebur128/libebur128.hash b/package/libebur128/libebur128.hash
+deleted file mode 100644
+index 9c8c9e0c31..0000000000
+--- a/package/libebur128/libebur128.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally computed
+-sha256  baa7fc293a3d4651e244d8022ad03ab797ca3c2ad8442c43199afe8059faa613  libebur128-1.2.6.tar.gz
+-sha256  d6b4754bb67bdd08b97d5d11b2d7434997a371585a78fe77007149df3af8d09c  COPYING
+diff --git a/package/libebur128/libebur128.mk b/package/libebur128/libebur128.mk
+deleted file mode 100644
+index b7272fa7e1..0000000000
+--- a/package/libebur128/libebur128.mk
++++ /dev/null
+@@ -1,13 +0,0 @@
+-################################################################################
+-#
+-# libebur128
+-#
+-################################################################################
+-
+-LIBEBUR128_VERSION = 1.2.6
+-LIBEBUR128_SITE = $(call github,jiixyj,libebur128,v$(LIBEBUR128_VERSION))
+-LIBEBUR128_LICENSE = MIT
+-LIBEBUR128_LICENSE_FILES = COPYING
+-LIBEBUR128_INSTALL_STAGING = YES
+-
+-$(eval $(cmake-package))
+-- 
+2.39.5
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
