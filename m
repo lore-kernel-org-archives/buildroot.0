@@ -1,75 +1,73 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65917C71141
-	for <buildroot@archiver.kernel.org>; Sat, 14 Jun 2025 13:41:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FB5FC71135
+	for <buildroot@archiver.kernel.org>; Sat, 14 Jun 2025 13:42:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 397E240830;
-	Sat, 14 Jun 2025 13:41:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5F40660B9E;
+	Sat, 14 Jun 2025 13:42:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HeYq-_6ZgyFg; Sat, 14 Jun 2025 13:41:58 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id skU2M3Mtm7X6; Sat, 14 Jun 2025 13:42:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 66A9F4059C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9913F60AD0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 66A9F4059C;
-	Sat, 14 Jun 2025 13:41:58 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id A5E6C151
- for <buildroot@buildroot.org>; Sat, 14 Jun 2025 13:41:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9913F60AD0;
+	Sat, 14 Jun 2025 13:42:38 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4F6B1151
+ for <buildroot@buildroot.org>; Sat, 14 Jun 2025 13:42:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8C71D80F60
- for <buildroot@buildroot.org>; Sat, 14 Jun 2025 13:41:57 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 414888087C
+ for <buildroot@buildroot.org>; Sat, 14 Jun 2025 13:42:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MVaNBQK76hRx for <buildroot@buildroot.org>;
- Sat, 14 Jun 2025 13:41:57 +0000 (UTC)
+ id T7zZGXcT6ve7 for <buildroot@buildroot.org>;
+ Sat, 14 Jun 2025 13:42:36 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BC4BE80F5E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BC4BE80F5E
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7072580854
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7072580854
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BC4BE80F5E
- for <buildroot@buildroot.org>; Sat, 14 Jun 2025 13:41:56 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7072580854
+ for <buildroot@buildroot.org>; Sat, 14 Jun 2025 13:42:36 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a08ea.dip0.t-ipconnect.de [91.58.8.234])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id E13C2A4C0C64;
- Sat, 14 Jun 2025 15:41:54 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:44674)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 3F204A4C0C64
+ for <buildroot@buildroot.org>; Sat, 14 Jun 2025 15:42:34 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:34636)
  by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
- (envelope-from <bernd@kuhls.net>) id 1uQR8s-000000000FC-0Jxi;
- Sat, 14 Jun 2025 13:41:54 +0000
+ (envelope-from <bernd@kuhls.net>) id 1uQR9V-000000000MK-1Zwi
+ for buildroot@buildroot.org; Sat, 14 Jun 2025 13:42:33 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: =?UTF-8?q?C=C3=A9dric=20Ch=C3=A9pied?= <cedric.chepied@gmail.com>
-Date: Sat, 14 Jun 2025 15:41:54 +0200
-Message-Id: <20250614134154.678799-1-bernd@kuhls.net>
+Date: Sat, 14 Jun 2025 15:42:33 +0200
+Message-Id: <20250614134233.678855-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
 X-Spamd-Bar: +++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202506031021; t=1749908514;
- bh=vL6FcivAMGtf6gzOPeF0mTJltjkuxD8ToXmXcQyFvas=;
- h=From:To:Cc:Subject:Date:From;
- b=Bm2T/n2zlyFanE+Onfc5YTUd03XvrO90xt4ZxuNa4cW1tXvEIkiWtrPKYpStTRcqb
- cAMrqk8suoXw3RXVoXIotIFaqVgfeLb7FZwFcwn1mMUI+IeGOptxeGvHLfsTt9HelQ
- SqDV7X4ezeveDGMBWHk9ONn/D/8s2VZ6tQ/j429lS31rYBZtsunArGeVqpP/J61sjt
- EF4+gruP8gN3mnl1vfxyW1M3bdt/wIasuPIfbz/2C4Snb23LTKjM2fbGtK8M9obkmz
- vOV4Bzr1gf6uJgnuPipJecULeEZWoj7+F2GS8n4sqbykWH6PKD0v9Xvaf2M6xS4Tt+
- MG/U1QKvUqXBQ==
+ s=kas202506031021; t=1749908554;
+ bh=UPDbdoxpg1DqpnoCR2oo0wlWiZ1T6lY9Ooni2ulA4j8=;
+ h=From:To:Subject:Date:From;
+ b=m2gDzP5HPt38evLc5reD0XE+5BOcoLo9EigjmfX21sg6aLXsEkivLG6/2gfjIn+EZ
+ CjuKD+yv9f5gF+0ESTNPvugrBTCxe/fYlMFZUoPMHYw5O9r3k8HSG4MnVf8kharnki
+ w9ipo/rACFyrnKl0bISxRml7dVZq96205/ouQu8mFDbVvBvcQbwpGvFDQ4vVdRUrmX
+ J8CgYre5NO+x75Vdp5IsrpcoxuMsHjzxzTNPMbTDS7jhfKlEO5a7hGXU4GKD4kCgXq
+ nmi2RrXRwL+FsgVp2i+TMs3JOJ8PKOXcvGMQPDURh5ZScILPB8gaqeLgT10DjfG4B6
+ ui8+c9V85fUiw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202506031021 header.b=Bm2T/n2z
-Subject: [Buildroot] [PATCH 1/1] package/znc: bump version to 1.10.0
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202506031021 header.b=m2gDzP5H
+Subject: [Buildroot] [PATCH 1/1] package/fetchmail: bump version to 6.5.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,36 +84,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes: https://github.com/znc/znc/blob/master/ChangeLog.md
+Updated license hash due to copyright year bump:
+https://sourceforge.net/p/fetchmail/git/ci/62a11ca4064e5b59e57ca7a8fce08c82af259731/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/znc/znc.hash | 2 +-
- package/znc/znc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/fetchmail/fetchmail.hash | 6 +++---
+ package/fetchmail/fetchmail.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/znc/znc.hash b/package/znc/znc.hash
-index 7bac128af9..985849acf8 100644
---- a/package/znc/znc.hash
-+++ b/package/znc/znc.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  e8a7cf80e19aad510b4e282eaf61b56bc30df88ea2e0f64fadcdd303c4894f3c  znc-1.9.1.tar.gz
-+sha256  be65ad9b62ef545a7e9486f2f74134edc53ba513ad43a69d9d8b476605336b19  znc-1.10.0.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/znc/znc.mk b/package/znc/znc.mk
-index ec6287e6de..c0614f3e87 100644
---- a/package/znc/znc.mk
-+++ b/package/znc/znc.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/fetchmail/fetchmail.hash b/package/fetchmail/fetchmail.hash
+index f52dbed3d9..2a67bc1e22 100644
+--- a/package/fetchmail/fetchmail.hash
++++ b/package/fetchmail/fetchmail.hash
+@@ -1,4 +1,4 @@
+-# From https://sourceforge.net/p/fetchmail/mailman/message/59113044/
+-sha256  8fd0477408620ae382c1d0ef83d8946a95e5be0c2e582dd4ebe55cba513a45fe  fetchmail-6.5.2.tar.xz
++# From https://sourceforge.net/p/fetchmail/mailman/message/59193648/
++sha256  d74e893b78ef29ebef375ab7e726d2977140f8f1208f5905569395cbdae4c23d  fetchmail-6.5.3.tar.xz
+ # Locally computed:
+-sha256  1d5eb054414ceb75e018e2830d2c2b61d3ac0df02d5376330766237a091ea771  COPYING
++sha256  e5768c44445cf051dd88e0cf8bfc16d81f7b1a7cc28f4e0204a4f8d81cd16977  COPYING
+diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
+index ef91196d63..e3fad2f4c4 100644
+--- a/package/fetchmail/fetchmail.mk
++++ b/package/fetchmail/fetchmail.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--ZNC_VERSION = 1.9.1
-+ZNC_VERSION = 1.10.0
- ZNC_SITE = http://znc.in/releases/archive
- ZNC_LICENSE = Apache-2.0
- ZNC_LICENSE_FILES = LICENSE
+ FETCHMAIL_VERSION_MAJOR = 6.5
+-FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).2
++FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).3
+ FETCHMAIL_SOURCE = fetchmail-$(FETCHMAIL_VERSION).tar.xz
+ FETCHMAIL_SITE = https://downloads.sourceforge.net/project/fetchmail/branch_$(FETCHMAIL_VERSION_MAJOR)
+ FETCHMAIL_LICENSE = GPL-2.0; some exceptions are mentioned in COPYING
 -- 
 2.39.5
 
