@@ -4,122 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33406C71135
-	for <buildroot@archiver.kernel.org>; Sat, 14 Jun 2025 15:54:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4EA3C7114A
+	for <buildroot@archiver.kernel.org>; Sat, 14 Jun 2025 20:51:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A5CAA40394;
-	Sat, 14 Jun 2025 15:54:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4B547406CA;
+	Sat, 14 Jun 2025 20:51:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sCB9luj2FrCV; Sat, 14 Jun 2025 15:54:54 +0000 (UTC)
+ id 2D5_odOQYEwg; Sat, 14 Jun 2025 20:51:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E491540886
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5EDBA406DC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E491540886;
-	Sat, 14 Jun 2025 15:54:53 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 7DEBB151
- for <buildroot@buildroot.org>; Sat, 14 Jun 2025 15:54:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5EDBA406DC;
+	Sat, 14 Jun 2025 20:51:07 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 05B1D151
+ for <buildroot@buildroot.org>; Sat, 14 Jun 2025 20:51:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 63AB48116F
- for <buildroot@buildroot.org>; Sat, 14 Jun 2025 15:54:52 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DF64760AA0
+ for <buildroot@buildroot.org>; Sat, 14 Jun 2025 20:51:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1gTAtZJK1zGI for <buildroot@buildroot.org>;
- Sat, 14 Jun 2025 15:54:51 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=202.12.124.155;
- helo=fhigh-b4-smtp.messagingengine.com; envelope-from=jiaxun.yang@flygoat.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A70F980FA8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A70F980FA8
-Received: from fhigh-b4-smtp.messagingengine.com
- (fhigh-b4-smtp.messagingengine.com [202.12.124.155])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A70F980FA8
- for <buildroot@buildroot.org>; Sat, 14 Jun 2025 15:54:51 +0000 (UTC)
-Received: from phl-compute-02.internal (phl-compute-02.phl.internal
- [10.202.2.42])
- by mailfhigh.stl.internal (Postfix) with ESMTP id 8208325400D5;
- Sat, 14 Jun 2025 11:54:50 -0400 (EDT)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
- by phl-compute-02.internal (MEProxy); Sat, 14 Jun 2025 11:54:50 -0400
-X-ME-Sender: <xms:SZtNaACg7LES5HtgIGIuEGfvn8G-bAW0ohS6aNLr5v66UPTRODE89w>
- <xme:SZtNaCg8diFgkJ3CU18n-bGFu8D9bvMLL3NqQK-cNcvxgPefOUsheilpJl9vzmYlM
- Jf85O9NEiELSt4B14w>
-X-ME-Received: <xmr:SZtNaDnlo5XxpSiWX2wFsybjBCoURIgU2BPn1m4KeRyPVOrEnf1xvXXAIZ4Vaaxu32Hg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddugddvuddvgecutefuodetggdotefrod
- ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
- uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
- hnthhsucdlqddutddtmdenucfjughrpegtggfuhfgjffevgffkfhfvofesthhqmhdthhdt
- jeenucfhrhhomheplfhirgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflh
- ihghhorghtrdgtohhmqeenucggtffrrghtthgvrhhnpedutdejffetteefkeejieehfeeu
- ieeguedtveeijeeviefhffelvdfgudeihfdvtdenucevlhhushhtvghrufhiiigvpedtne
- curfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorght
- rdgtohhmpdhnsggprhgtphhtthhopeeipdhmohguvgepshhmthhpohhuthdprhgtphhtth
- hopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdprhgtphht
- thhopehrohhmrghinhdrnhgrohhurhesshhmihhlvgdrfhhrpdhrtghpthhtohepsghuih
- hlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehgihhulhhiohdr
- sggvnhgvthhtihessggvnhgvthhtihgvnhhgihhnvggvrhhinhhgrdgtohhmpdhrtghpth
- htoheprhhomhgrihhnrdhnrghouhhrsehgmhgrihhlrdgtohhmpdhrtghpthhtohephhhi
- sehsvghniihilhhlrgdrihho
-X-ME-Proxy: <xmx:SZtNaGw7KfoBwo74cpj2fkMtpKwGw6qkjw4CcYVOqge4V_LTSiFprA>
- <xmx:SZtNaFQZxTqCul0ZZGfKN4Q068re1lOKuS_uWFOJMQaVyWXutzasBg>
- <xmx:SZtNaBbdA823L-btgCyKwgJpfJGfdHquSWKbRrKW3rsikw_1g36tvg>
- <xmx:SZtNaOR3LBoeq9PNF6FQowB1cx8QLYxpxrp2MIrMffpX2DyRzR5NKg>
- <xmx:SptNaEhQv6JIeuHsODUqCFyrx6xhXbHVQK9wi4_-w4_zEh85_GfrHRqA>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 14 Jun 2025 11:54:46 -0400 (EDT)
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.600.51.1.1\))
-From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <20250614151717.0f214ef0@windsurf>
-Date: Sat, 14 Jun 2025 16:54:34 +0100
-Cc: Romain Naour <romain.naour@smile.fr>, buildroot@buildroot.org,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Romain Naour <romain.naour@gmail.com>, Dick Olsson <hi@senzilla.io>
-Message-Id: <B5AF7554-BBA7-4EAD-A065-3BF115BB737B@flygoat.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uMdTV1dqbu_X for <buildroot@buildroot.org>;
+ Sat, 14 Jun 2025 20:51:05 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 9F3996067D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F3996067D
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9F3996067D
+ for <buildroot@buildroot.org>; Sat, 14 Jun 2025 20:51:04 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id C6A6F2003CC;
+ Sat, 14 Jun 2025 22:50:55 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 14 Jun 2025 22:50:55 +0200
+MIME-Version: 1.0
+Date: Sat, 14 Jun 2025 22:50:55 +0200
+From: Julien Olivain <ju.o@free.fr>
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: buildroot@buildroot.org, Giulio Benetti
+ <giulio.benetti@benettiengineering.com>, Romain Naour
+ <romain.naour@gmail.com>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Dick Olsson <hi@senzilla.io>
+In-Reply-To: <20250607-loongarch-v2-7-90bc4fda9080@flygoat.com>
 References: <20250607-loongarch-v2-0-90bc4fda9080@flygoat.com>
- <20250607-loongarch-v2-2-90bc4fda9080@flygoat.com>
- <3807ec63-f603-4a95-9894-93ba95d6e2db@smile.fr>
- <20250614151717.0f214ef0@windsurf>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-X-Mailer: Apple Mail (2.3826.600.51.1.1)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=flygoat.com; h=
- cc:cc:content-transfer-encoding:content-type:content-type:date
- :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
- :references:reply-to:subject:subject:to:to; s=fm2; t=1749916490;
- x=1750002890; bh=0tPeVWukKQZcRNvaIEoaX3Bw3MycIkIcmAzzbz8omV4=; b=
- BWT2+sDVOgi5w9BNEF5uTUH7uZPy9R9WxUUI9WIIewDRlEDsJzc8uvKbg6CMatMO
- wySbDf9/Fwb8PhVsqc0pS+uqQam6UDk0swDw0AyzFYxMEVQxpqq7l9lCE9EtMbCx
- 0PwHCJmNOnV+AAoBJdKmy6608mc347eNJBgwhoPrX0471jcKcUrvA3dSindH7sMv
- dkpSnOxssGgxAI8PKlteXLFBfxJ2+sguyujuUIm6rHQdyQ29rm1o2FFHFtr+zDI+
- qkZ68gPdinuXyQC4riKUsiMiaPHNETA5n1+GHf1BfOB+REmMsIP8DiTFu2QilP36
- EJKSq35gYDyczH/hwcE0bg==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
- messagingengine.com; h=cc:cc:content-transfer-encoding
- :content-type:content-type:date:date:feedback-id:feedback-id
- :from:from:in-reply-to:in-reply-to:message-id:mime-version
- :references:reply-to:subject:subject:to:to:x-me-proxy
- :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1749916490; x=
- 1750002890; bh=0tPeVWukKQZcRNvaIEoaX3Bw3MycIkIcmAzzbz8omV4=; b=k
- CR0OgTHalZH0fk+v3SENmdiMnFdenRBqf7tZbQVB6n7A8N6RJze2xUV0k5OzSvom
- RNpUfW99NnA6OcH29/GJvbRfyjZkUOKRfaUmYad4O3DRicIH0m+fKif04LqReWXd
- 3+JK60YS5wIkGLbQMdjQaR+zbD2c6D9D/kmCelGDJdzLSWJs7aM/IPbmOVimIStf
- vpO20Mjhqmpa2boi5FjsgcWPYpH1IZiuvP7HgtaRxL8DPPRl1JwD82sdHHZ7JciS
- 7sO71UBcV7m3rpCOH/xccR/IbjbnD8IFkfO8lbAZuCiDTot6/xgfQ1hhkMOPMhhS
- aDXrpkQgwPxShl9SzWFnQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ <20250607-loongarch-v2-7-90bc4fda9080@flygoat.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <4bc900c5dbec2b230c7ae7530fcea6a2@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1749934261;
+ bh=GriOIHtPnpB4EEoqJTBBrHW0gNb9mVz0+xQU5C4Wh5U=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=Ll/uxvaPI2dot6B1SKcwwcMXW/kPg+E0SgbhsWTbL5YG4WtEWbhid/A5mFtTGH+Sg
+ Zqfri7ODtL5GYtaOxs2g6wkdUKoLunID6ii8yCfw9ezANge+J+8BbBTolMtJ6ds2eU
+ SUOp5b1K2kiTXliKHthpWhMp3wKOa4zHXQVDepyi9hGa44x83B43PDMI+8vAmmCaNp
+ kubOjhj0Ieozs9EXHnOOZd3qZQYd8UTW51o8Wmcu8hprHVeHFXAPQoZGvkDn3kxiDk
+ Rgp3Yf5wIif206JANGRcB6aCqSUma26RiCG0s/P+R61BuMtpFxcIMoPXU3iXJE4VzJ
+ nP2UVmMggJB/A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=flygoat.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key, unprotected) header.d=flygoat.com
- header.i=@flygoat.com header.a=rsa-sha256 header.s=fm2 header.b=BWT2+sDV; 
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=messagingengine.com header.i=@messagingengine.com
- header.a=rsa-sha256 header.s=fm1 header.b=kCR0OgTH
-Subject: Re: [Buildroot] [PATCH v2 2/9] arch: Introduce LoongArch64
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=Ll/uxvaP
+Subject: Re: [Buildroot] [PATCH v2 7/9] board/loongarch64-efi: Introduce the
+ new board
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,25 +87,168 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Cgo+IDIwMjXlubQ25pyIMTTml6UgMTQ6MTfvvIxUaG9tYXMgUGV0YXp6b25pIDx0aG9tYXMucGV0
-YXp6b25pQGJvb3RsaW4uY29tPiDlhpnpgZPvvJoKPiAKPiBIZWxsbywKCkhpIFRob21hcywKClRo
-YW5rcyBmb3IgcmV2aWV3aW5nIQoKPiAKPiBPbiBTYXQsIDE0IEp1biAyMDI1IDE0OjU0OjA0ICsw
-MjAwCj4gUm9tYWluIE5hb3VyIDxyb21haW4ubmFvdXJAc21pbGUuZnI+IHdyb3RlOgo+IAo+IAo+
-Pj4gK2NvbmZpZyBCUjJfbG9vbmdhcmNoNjQKPj4+ICsgYm9vbCAiTG9vbmdBcmNoNjQiCj4+PiAr
-IHNlbGVjdCBCUjJfVVNFX01NVQo+Pj4gKyBzZWxlY3QgQlIyX0FSQ0hfSVNfNjQgIAo+IAo+IFNp
-bmNlIHlvdSBoYXZlIHRoaXMgc2VsZWN0IEJSMl9BUkNIX0lTXzY0IGhlcmUuLi4KPiAKPj4+ICtj
-b25maWcgQlIyX2xvb25nYXJjaDY0X2dlbmVyaWMKPj4+ICsgYm9vbCAiR2VuZXJpYyBMb29uZ0Fy
-Y2ggNjQtYml0Igo+Pj4gKyBkZXBlbmRzIG9uIEJSMl9BUkNIX0lTXzY0Cj4gCj4gVGhpcyBkZXBl
-bmRzIG9uIGlzIHVzZWxlc3MuCgpUaG9zZSBhcmUgbW9zdGx5IGluIHByZXBhcmF0aW9uIG9mIExv
-b25nQXJjaCAzMiBzdXBwb3J0LCBJIGVudnkgaXQgd291bGQgYmUKaW4gdGhpcyBmaWxlIGFzIHdl
-bGwuCgo+IAo+Pj4gKyBzZWxlY3QgQlIyX0FSQ0hfTkVFRFNfR0NDX0FUX0xFQVNUXzEyICAKPj4g
-Cj4+IFRoaXMgY2FuIGJlIG1vdmVkIHVuZGVyIEJSMl9sb29uZ2FyY2g2NC4KClN1cmUsIHdpbGwg
-ZG8uCgpUaGFua3MuClvigKZdCgotIEppYXh1bgoKX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVp
-bGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9i
-dWlsZHJvb3QK
+Hi Jiaxun, All,
+
+Thanks for the patch!
+
+I have the same kind of comments as I made for the Qemu defconfig in:
+https://lore.kernel.org/buildroot/6d266eec-4ea9-4293-8403-b854bf0ed5b1@smile.fr/T/#ma97fe41097b838cc31078d3e59524e531f8e939d
+
+More specifically:
+
+To follow other Buildroot commits, the commit log title could be
+reworded to:
+
+     configs/loongarch64_efi: new defconfig
+
+On 07/06/2025 20:12, Jiaxun Yang wrote:
+> Introduce bread new loongarch64-efi board, with skeleton
+> from aarch64-efi board.
+> 
+> It corverd most LoongArch64 systems.
+> 
+> Linux 6.12, as the most recent LTS kernel, was chosen
+> to ensure proper architecture support is included.
+> 
+> A developer entry is created for myself for future contacts
+> as well.
+> 
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> ---
+>  DEVELOPERS                                         |  5 ++++
+>  board/loongarch64-efi/genimage-efi.cfg             | 33 
+> +++++++++++++++++++++
+>  board/loongarch64-efi/grub.cfg                     |  6 ++++
+>  .../patches/linux-headers/linux-headers.hash       |  1 +
+>  board/loongarch64-efi/patches/linux/linux.hash     |  2 ++
+>  board/loongarch64-efi/post-image.sh                |  5 ++++
+>  board/loongarch64-efi/readme.txt                   | 34 
+> ++++++++++++++++++++++
+>  configs/loongarch64_efi_defconfig                  | 22 ++++++++++++++
+>  8 files changed, 108 insertions(+)
+> 
+
+[...]
+
+> diff --git a/board/loongarch64-efi/genimage-efi.cfg 
+> b/board/loongarch64-efi/genimage-efi.cfg
+> new file mode 100644
+> index 
+> 0000000000000000000000000000000000000000..95fb59c97c38db772485372a60ee1fe5dad717c6
+> --- /dev/null
+> +++ b/board/loongarch64-efi/genimage-efi.cfg
+> @@ -0,0 +1,33 @@
+> +image efi-part.vfat {
+> +	vfat {
+> +		file EFI {
+> +			image = "efi-part/EFI"
+> +		}
+> +		file vmlinux.efi {
+> +			image = "vmlinux.efi"
+> +		}
+> +	}
+> +
+> +	size = 64M
+> +}
+> +
+> +image disk.img {
+> +	hdimage {
+> +		partition-table-type = "gpt"
+> +	}
+> +
+> +	partition boot {
+> +		image = "efi-part.vfat"
+> +		partition-type-uuid = U
+> +		offset = 32K
+> +		bootable = true
+> +	}
+> +
+> +	partition root {
+> +		# For partition-type-uuid value, see:
+> +		# 
+> https://uapi-group.org/specifications/specs/discoverable_partitions_specification/
+> +		# SD_GPT_ROOT_LOONGARCH64
+> +		partition-type-uuid = 77055800-792c-4f94-b39a-98c91b762bb6
+
+genimage includes aliases for partition type UUIDs. See:
+https://github.com/pengutronix/genimage/blob/v18/image-hd.c#L290
+
+so for readability, this line could be changed to:
+
+      partition-type-uuid = root-loongarch64
+
+> +		image = "rootfs.ext2"
+> +	}
+> +}
+
+[...]
+
+> diff --git a/board/loongarch64-efi/readme.txt 
+> b/board/loongarch64-efi/readme.txt
+> new file mode 100644
+> index 
+> 0000000000000000000000000000000000000000..4c4e06874c1fce1bd8e44cd989b7e971304aa4f0
+> --- /dev/null
+> +++ b/board/loongarch64-efi/readme.txt
+> @@ -0,0 +1,34 @@
+> +The loongarch64_efi_defconfig allows to build a minimal Linux system 
+> that
+> +can boot on all loongarch64 systems providing an EFI firmware.
+> +
+> +This includes almost all Loongson-3 series workstations and servers.
+
+Even if this defconfig is UEFI (meaning it can work on any UEFI
+compatible LoongArch64 board), maybe it would be helpful to have
+few links to actual hardware boards on which this defconfig can be
+reproduced, by Buildroot users.
+
+What hardware did you used to validate this defconfig? Is there a
+"reference board" for LoongArch64?
+
+Usually, we include in Buildroot defconfigs supporting publicly
+available boards.
+
+> +
+> +Building and booting
+> +====================
+> +
+> +$ make loongarch64_efi_defconfig
+> +$ make
+> +
+> +The file output/images/disk.img is a complete disk image that can be
+> +booted, it includes the grub2 bootloader, Linux kernel and root
+> +filesystem.
+> +
+> +Testing under Qemu
+> +==================
+> +
+> +This image can also be tested using Qemu:
+> +
+> +qemu-system-loongarch64 \
+> +	-M virt \
+> +	-cpu la464 \
+> +	-nographic \
+> +	-bios </path/to/QEMU_EFI.fd> \
+> +	-drive file=output/images/disk.img,if=none,format=raw,id=hd0 \
+> +	-device virtio-blk-pci,drive=hd0 \
+> +	-netdev user,id=eth0 \
+> +	-device virtio-net-pci,netdev=eth0
+> +
+> +Note that </path/to/QEMU_EFI.fd> needs to point to a valid loongarch64 
+> UEFI
+> +firmware image for qemu.
+> +It may be provided by your distribution as a edk2-loongarch64 package,
+> +in path such as /usr/share/edk2/loongarch64/QEMU_EFI.fd .
+
+Best regards,
+
+Julien.
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
