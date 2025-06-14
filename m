@@ -1,74 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8EB04C71141
-	for <buildroot@archiver.kernel.org>; Sat, 14 Jun 2025 11:35:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3EACC71141
+	for <buildroot@archiver.kernel.org>; Sat, 14 Jun 2025 11:37:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 37F9C8115A;
-	Sat, 14 Jun 2025 11:35:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9EED4407A0;
+	Sat, 14 Jun 2025 11:37:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5gs1ZTs1pxFO; Sat, 14 Jun 2025 11:35:19 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JnlIePc4Z2_j; Sat, 14 Jun 2025 11:37:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8A512810B3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D776D407F8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8A512810B3;
-	Sat, 14 Jun 2025 11:35:19 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2E7AD151
- for <buildroot@buildroot.org>; Sat, 14 Jun 2025 11:35:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D776D407F8;
+	Sat, 14 Jun 2025 11:37:02 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id D9B13151
+ for <buildroot@buildroot.org>; Sat, 14 Jun 2025 11:37:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 14ADD810B0
- for <buildroot@buildroot.org>; Sat, 14 Jun 2025 11:35:18 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C056C4078D
+ for <buildroot@buildroot.org>; Sat, 14 Jun 2025 11:37:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KDsfRSrTH0Cy for <buildroot@buildroot.org>;
- Sat, 14 Jun 2025 11:35:17 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id F_AGs9udPxC2 for <buildroot@buildroot.org>;
+ Sat, 14 Jun 2025 11:37:01 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1ED0E8108D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1ED0E8108D
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3026C407A0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3026C407A0
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1ED0E8108D
- for <buildroot@buildroot.org>; Sat, 14 Jun 2025 11:35:17 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3026C407A0
+ for <buildroot@buildroot.org>; Sat, 14 Jun 2025 11:37:01 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6cb5b.dip0.t-ipconnect.de [79.214.203.91])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id EFE0EA4C01D4;
- Sat, 14 Jun 2025 13:35:14 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:55818)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 565ADA4C01D4
+ for <buildroot@buildroot.org>; Sat, 14 Jun 2025 13:36:59 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:57438)
  by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
- (envelope-from <bernd@kuhls.net>) id 1uQPAJ-0000000047M-092X;
- Sat, 14 Jun 2025 11:35:14 +0000
+ (envelope-from <bernd@kuhls.net>) id 1uQPBz-000000004Pn-1jHh
+ for buildroot@buildroot.org; Sat, 14 Jun 2025 11:36:59 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 14 Jun 2025 13:35:14 +0200
-Message-Id: <20250614113514.78033-1-bernd@kuhls.net>
+Date: Sat, 14 Jun 2025 13:36:58 +0200
+Message-Id: <20250614113658.80648-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
 X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202506031021; t=1749900914;
- bh=UDldIk3BQwOI31+Uso2KrWqP5Wm6RUoC+HLFoq6h7Mw=;
- h=From:To:Cc:Subject:Date:From;
- b=daMPDQtAH/46IDQIkbvY88miGOWHpafm/MTIvDMuaJb6gMN7tAan5RqbLFq8gO/Ck
- qGQtNPRCFzEpVFSbuTuhV2osg6vvuJM0qvPKgeJCFkHZG0i5y5kNOoGUbwv55oGum7
- nBelzDeoK+dJeWv7zJY5zJ1/GpRdJDgwOR82nT2poQ78CS4+SwYGnQbymtuYIENBmj
- sLHJ2qGFiaDqzOfkZKotLvthsH7bA2Y9IBkICFDOuQOqX1G0nEvoqOh03/+6OykWxf
- Ay0Lh2r7kM5pmeatnhCVwzhtJ9SAIWBxP71Kn5hrWo4zqZ6kmF7LcTGdv0QBcPHyA6
- 5fg51JkpMrBUQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ s=kas202506031021; t=1749901019;
+ bh=kXlZpox4BMZzvrWsAGR183PFiP0j+UmIWzddO3Fd4W8=;
+ h=From:To:Subject:Date:From;
+ b=vt5v4dnKcgD5EQhWT8qhDg9wlnor4kssbKskrAQfjyK8B7Vxs6Anav4zSe62objh2
+ 9CDOZYLPI/isWJ0QDvt7TiFXb8t7jYbvNDU5TnqBoyd59BY5rDe0S3alqdP/Yg5Twb
+ 6yy9deTrlsB5wWx/AiFEaXJVeXPZuFfwG/5hjzuapik1LxuaKbbAjP5coYsGvkPXfO
+ w4cWUtuQDBCscypxq8PQmffzzV7d0QbZ4dBcOnMZE0s2esxkkpSe/X3for9uyAkgxL
+ Ru2Sd2w6wBq+Ns+l4XqoT3WFP7PbkCl+suizYNOMXtFVw+bAmSRNRYAoflHVntsIrB
+ kSjp7L8KXRyig==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202506031021 header.b=daMPDQtA
-Subject: [Buildroot] [PATCH 1/1] package/python-glslang: fix host-python3
- dependency
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202506031021 header.b=vt5v4dnK
+Subject: [Buildroot] [PATCH 1/1] package/kodi: bump version to 21.11.2-Omega
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -80,33 +80,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-python-glslang is a host-only package and the host-python3 dependency
-was wrongly added as target dependency with buildroot commit
-f9fe0cf8f64f8ea48f3ee4af28053d7bea52b61f.
-
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-glslang/python-glslang.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/kodi-pvr-waipu/kodi-pvr-waipu.hash | 2 +-
+ package/kodi-pvr-waipu/kodi-pvr-waipu.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-glslang/python-glslang.mk b/package/python-glslang/python-glslang.mk
-index 94f480e30a..c3e87da94a 100644
---- a/package/python-glslang/python-glslang.mk
-+++ b/package/python-glslang/python-glslang.mk
-@@ -8,6 +8,6 @@ PYTHON_GLSLANG_VERSION = 11.13.0
- PYTHON_GLSLANG_SITE = $(call github,KhronosGroup,glslang,$(PYTHON_GLSLANG_VERSION))
- PYTHON_GLSLANG_LICENSE = BSD-3-Clause
- PYTHON_GLSLANG_LICENSE_FILES = LICENSE.txt
--PYTHON_GLSLANG_DEPENDENCIES = host-python3
-+HOST_PYTHON_GLSLANG_DEPENDENCIES = host-python3
+diff --git a/package/kodi-pvr-waipu/kodi-pvr-waipu.hash b/package/kodi-pvr-waipu/kodi-pvr-waipu.hash
+index 4e02aee58c..c24c90541e 100644
+--- a/package/kodi-pvr-waipu/kodi-pvr-waipu.hash
++++ b/package/kodi-pvr-waipu/kodi-pvr-waipu.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  bbf7fed04150f2e680eeb6e51ab5cdc52b4381702fbe0643fc1f107739f0e2fa  kodi-pvr-waipu-21.10.3-Omega.tar.gz
++sha256  d9b3c79931647b4eac59193583533347500c3c1d9e3becd06a43056c7809a762  kodi-pvr-waipu-21.11.2-Omega.tar.gz
+ sha256  4202d4fb329f58c83ba921b56d7071e37f7df3f15b3820a3a04ef8eee49f54d2  pvr.waipu/LICENSE.txt
+diff --git a/package/kodi-pvr-waipu/kodi-pvr-waipu.mk b/package/kodi-pvr-waipu/kodi-pvr-waipu.mk
+index b83f6eb3f9..1d1592159a 100644
+--- a/package/kodi-pvr-waipu/kodi-pvr-waipu.mk
++++ b/package/kodi-pvr-waipu/kodi-pvr-waipu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- $(eval $(host-cmake-package))
+-KODI_PVR_WAIPU_VERSION = 21.10.3-Omega
++KODI_PVR_WAIPU_VERSION = 21.11.2-Omega
+ KODI_PVR_WAIPU_SITE = $(call github,flubshi,pvr.waipu,$(KODI_PVR_WAIPU_VERSION))
+ KODI_PVR_WAIPU_LICENSE = GPL-2.0+
+ KODI_PVR_WAIPU_LICENSE_FILES = pvr.waipu/LICENSE.txt
 -- 
 2.39.5
 
