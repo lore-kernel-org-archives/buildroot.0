@@ -1,75 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41199C61CE8
-	for <buildroot@archiver.kernel.org>; Sun, 15 Jun 2025 10:19:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5038DC61CE8
+	for <buildroot@archiver.kernel.org>; Sun, 15 Jun 2025 10:25:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0BACB60841;
-	Sun, 15 Jun 2025 10:19:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 17D954065D;
+	Sun, 15 Jun 2025 10:25:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dWO5KDBhYe9Z; Sun, 15 Jun 2025 10:19:35 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6TphDtphUHyA; Sun, 15 Jun 2025 10:25:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 43C81607A1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 40F0540661
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 43C81607A1;
-	Sun, 15 Jun 2025 10:19:35 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 61A5C198
- for <buildroot@buildroot.org>; Sun, 15 Jun 2025 10:19:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 40F0540661;
+	Sun, 15 Jun 2025 10:25:58 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 830DF198
+ for <buildroot@buildroot.org>; Sun, 15 Jun 2025 10:25:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 483A360781
- for <buildroot@buildroot.org>; Sun, 15 Jun 2025 10:19:34 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 697864004E
+ for <buildroot@buildroot.org>; Sun, 15 Jun 2025 10:25:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Cn1o-HepTx_R for <buildroot@buildroot.org>;
- Sun, 15 Jun 2025 10:19:33 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7A088607A1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A088607A1
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7A088607A1
- for <buildroot@buildroot.org>; Sun, 15 Jun 2025 10:19:33 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id CC46513F8BA;
- Sun, 15 Jun 2025 12:19:29 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
- via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 15 Jun 2025 12:19:29 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sPl8VPfhEQ08 for <buildroot@buildroot.org>;
+ Sun, 15 Jun 2025 10:25:56 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 715A140073
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 715A140073
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 715A140073
+ for <buildroot@buildroot.org>; Sun, 15 Jun 2025 10:25:54 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a08ea.dip0.t-ipconnect.de [91.58.8.234])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id C6208A4C0DA9
+ for <buildroot@buildroot.org>; Sun, 15 Jun 2025 12:25:51 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:40170)
+ by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
+ (envelope-from <bernd@kuhls.net>) id 1uQkYg-000000003gZ-30gC
+ for buildroot@buildroot.org; Sun, 15 Jun 2025 10:25:51 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Sun, 15 Jun 2025 12:25:50 +0200
+Message-Id: <20250615102550.26903-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
-Date: Sun, 15 Jun 2025 12:19:29 +0200
-From: Julien Olivain <ju.o@free.fr>
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250614094822.56877-1-bernd@kuhls.net>
-References: <20250614094822.56877-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <501dbbc36ea5837dc6dfea1cd594277e@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1749982771;
- bh=iP7TUD33sNYdp+wrIM/J9Rcr1/7CtpBAK03hcJ3GuOw=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Leyh2I4f5sI3Ig3wUMJkADzA6fUQR9cj/A2F+l8R8HyPnFXGE99fBARftPhagBthn
- 2Oh6lZ9D14jqKAysChQkedn9lbA+rBkGJLE2UP5yWbx84YFOtYqafQ18JeO2peNdWL
- K3eTXUb2TOhqPgyaeXmJ0DvqzOHQwHBwPCp68BTUEoXwU844by3FqUqLfgV8nCbymt
- L9oTNjCV1/q328Zx4XAdmiAhwTak9uyehml3LLYSBkFBsTEGPdZ8UZtmL6lW88Idw1
- u5/azvztlyKW/8TXE+EitVlf1WmjcO59N+CIRLlAq52zQKnj57J1eITRa2Xooyf5fZ
- DtbcHu7XEBMDg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Spamd-Bar: +
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202506031021; t=1749983151;
+ bh=EtDpgi1I65iuu/y7NiRtWcgyEPdxAF9FFLC7M0raW3w=;
+ h=From:To:Subject:Date:From;
+ b=oR1TFfp7vIKWKfzE9sNlKgdq6xsnU3WZsJUbPSf9xX6q+zGziOTXqnZRvE2FvminU
+ YKAGfFUy1c9ihAd3l5V7EzyGNa4MidddAxXnKsk9R3DIw6VKIQ3ktRddTjGP3lU3gG
+ MNIT3rzZjp2n+GiUE4AKFcrcfAWKyOICnUHkghKUdbDRC2R2hXZ5H0F9I9eq7hC/Xr
+ HBkeeueLnM9ermpUmkSqIrowEt/w6OUwUBj5lC9MPpo1Iaeqq2TV6GMfVTkPsVJV1o
+ 9otIDog7SOH++GEWmnFD2KIfDUI7dKP2tOXCa9M2mQkvAVGXDj8o+bHnuiIAK9vB7K
+ 7GMNFkEGI2X8Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Leyh2I4f
-Subject: Re: [Buildroot] [PATCH 1/1] package/bcg729: bump version
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202506031021 header.b=oR1TFfp7
+Subject: [Buildroot] [PATCH 1/1] package/kodi-pvr-waipu: bump version to
+ 21.12.0-Omega
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,33 +81,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 14/06/2025 11:48, Bernd Kuhls wrote:
-> This bump includes three patches which were added since version 1.1.1
-> to the cmake files:
-> https://github.com/BelledonneCommunications/bcg729/commits/master/
-> 
-> One of them fixes build errors with cmake 4.x:
-> https://github.com/BelledonneCommunications/bcg729/commit/e29952e7ceff64de6fc6f8db43e3b326481280be#diff-1e7de1ae2d059d21e1dd75d5812d5a34b0222cef273b7c3a2af62eb747f9d20aL23-L81
-> 
-> Fixes:
-> https://autobuild.buildroot.net/results/118/118349d20eae2dccdadab949065f6bc6471c825e/
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/kodi-pvr-waipu/kodi-pvr-waipu.hash | 2 +-
+ package/kodi-pvr-waipu/kodi-pvr-waipu.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
+diff --git a/package/kodi-pvr-waipu/kodi-pvr-waipu.hash b/package/kodi-pvr-waipu/kodi-pvr-waipu.hash
+index 4e02aee58c..57f76df079 100644
+--- a/package/kodi-pvr-waipu/kodi-pvr-waipu.hash
++++ b/package/kodi-pvr-waipu/kodi-pvr-waipu.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  bbf7fed04150f2e680eeb6e51ab5cdc52b4381702fbe0643fc1f107739f0e2fa  kodi-pvr-waipu-21.10.3-Omega.tar.gz
++sha256  12e5c4e7da4863bddec4ae8528d23af3feece1863c698e8b44f3a04114a1a2f7  kodi-pvr-waipu-21.12.0-Omega.tar.gz
+ sha256  4202d4fb329f58c83ba921b56d7071e37f7df3f15b3820a3a04ef8eee49f54d2  pvr.waipu/LICENSE.txt
+diff --git a/package/kodi-pvr-waipu/kodi-pvr-waipu.mk b/package/kodi-pvr-waipu/kodi-pvr-waipu.mk
+index b83f6eb3f9..f5b9077515 100644
+--- a/package/kodi-pvr-waipu/kodi-pvr-waipu.mk
++++ b/package/kodi-pvr-waipu/kodi-pvr-waipu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_PVR_WAIPU_VERSION = 21.10.3-Omega
++KODI_PVR_WAIPU_VERSION = 21.12.0-Omega
+ KODI_PVR_WAIPU_SITE = $(call github,flubshi,pvr.waipu,$(KODI_PVR_WAIPU_VERSION))
+ KODI_PVR_WAIPU_LICENSE = GPL-2.0+
+ KODI_PVR_WAIPU_LICENSE_FILES = pvr.waipu/LICENSE.txt
+-- 
+2.39.5
 
-For info, I changed _VERSION to use the "git describe --abbrev=40"
-format, for readability. See:
-https://gitlab.com/buildroot.org/buildroot/-/commit/7139ffaf06bde0398cf41fb702241b295ac9ff94
-
-Best regards,
-
-Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
