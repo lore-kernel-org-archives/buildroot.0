@@ -1,52 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA5B7C61CE8
-	for <buildroot@archiver.kernel.org>; Sun, 15 Jun 2025 10:58:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BF3DC71150
+	for <buildroot@archiver.kernel.org>; Sun, 15 Jun 2025 10:58:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BD51260833;
-	Sun, 15 Jun 2025 10:58:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E4EC380B2B;
+	Sun, 15 Jun 2025 10:58:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n_vAzlwgxL_e; Sun, 15 Jun 2025 10:58:29 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QTLIMpsOl8Hl; Sun, 15 Jun 2025 10:58:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA10C607CA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3E34980B68
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EA10C607CA;
-	Sun, 15 Jun 2025 10:58:28 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id B92341A4
- for <buildroot@buildroot.org>; Sun, 15 Jun 2025 10:58:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3E34980B68;
+	Sun, 15 Jun 2025 10:58:40 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id EDEAF198
+ for <buildroot@buildroot.org>; Sun, 15 Jun 2025 10:58:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9EE9240073
- for <buildroot@buildroot.org>; Sun, 15 Jun 2025 10:58:27 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D476380B84
+ for <buildroot@buildroot.org>; Sun, 15 Jun 2025 10:58:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Pi9VsQ4rcwrK for <buildroot@buildroot.org>;
- Sun, 15 Jun 2025 10:58:27 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 035264004E
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 035264004E
- for <buildroot@buildroot.org>; Sun, 15 Jun 2025 10:58:27 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E63E3837A3; Sun, 15 Jun 2025 10:58:26 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sTWtc9BsEprB for <buildroot@buildroot.org>;
+ Sun, 15 Jun 2025 10:58:38 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5439080B68
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5439080B68
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5439080B68
+ for <buildroot@buildroot.org>; Sun, 15 Jun 2025 10:58:38 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 67EF119F5BA;
+ Sun, 15 Jun 2025 12:58:35 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 15 Jun 2025 12:58:35 +0200
+MIME-Version: 1.0
+Date: Sun, 15 Jun 2025 12:58:35 +0200
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 15 Jun 2025 12:54:58 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 01ce4c9f01bfece16f5eb3bb90b0e678af4eb8fb
-X-Git-Newrev: 760412d4bfa71c6c9cc7e2c5fbd1506d9ff2f5dd
-X-Patchwork-Hint: ignore
-Message-Id: <20250615105826.E63E3837A3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/dtv-scan-tables: bump version
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250614134119.678747-1-bernd@kuhls.net>
+References: <20250614134119.678747-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <58856eed36b2a3fc6072bf495ada7646@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1749985116;
+ bh=J3oQH9lpzBG5nQu1GdQlFQOhUxBXcGlX7RTGIdaNQks=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=kvPnzmX3DTfGqSIPX00sKKVZNjso6r0JGEXQBSDXAuCXPmaw1WhhayPzqw6IlcNjk
+ tvZen22fZ9lW/l2WuyCiEuC+aVL8DyfTeBqIseDgrld3S0fBMJlbzytTmBLYOlaG2T
+ 2a8X6FJeMe0WCRdL78gfddZWQ/LBFBN4UxHcuvkFdDS8ET1ECItL7yKUEoXe1RLogo
+ 4vWEe49JEIzJsjROVaBlA4bf2Hi5LsKnVIUEdcypTUi7SVPBbdNpSH7qA4GYtXIklM
+ pZxbiBtLjqAdbvC1cAHTeLtJ/a0DMhfkSlImEuUHebzYmeVgESEHDx2EMrlbHzKe5p
+ fHC2PmLDLSttQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=kvPnzmX3
+Subject: Re: [Buildroot] [PATCH 1/1] package/dtv-scan-tables: bump version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,49 +81,15 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=760412d4bfa71c6c9cc7e2c5fbd1506d9ff2f5dd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 14/06/2025 15:41, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Changelog:
-https://git.linuxtv.org/dtv-scan-tables.git/log/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-[Julien: add link to git change log]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/dtv-scan-tables/dtv-scan-tables.hash | 2 +-
- package/dtv-scan-tables/dtv-scan-tables.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/dtv-scan-tables/dtv-scan-tables.hash b/package/dtv-scan-tables/dtv-scan-tables.hash
-index f110bb6dee..4c5d2b787e 100644
---- a/package/dtv-scan-tables/dtv-scan-tables.hash
-+++ b/package/dtv-scan-tables/dtv-scan-tables.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  a6ffaeec227c35d8afe79b9d7b7a2dd9d3367c33dc1c3d5d5729cebd4973ef48  dtv-scan-tables-7098bdd27548eaf3e5d9485fc68575f88e362daf-git4.tar.gz
-+sha256  39d883bb4b1ae1397977903ef4d18edb083daa2202389bb62499cd8339c21b19  dtv-scan-tables-15661aabc342b72f539d4600ad87df6663e23aa4-git4.tar.gz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
- sha256  4fd46f32582c29007657e2daad8d0a6d954cf4e9d2e47bae8f8d8c32765fc987  COPYING.LGPL
-diff --git a/package/dtv-scan-tables/dtv-scan-tables.mk b/package/dtv-scan-tables/dtv-scan-tables.mk
-index d9e6910abd..5ee12e8bfa 100644
---- a/package/dtv-scan-tables/dtv-scan-tables.mk
-+++ b/package/dtv-scan-tables/dtv-scan-tables.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DTV_SCAN_TABLES_VERSION = 7098bdd27548eaf3e5d9485fc68575f88e362daf
-+DTV_SCAN_TABLES_VERSION = 15661aabc342b72f539d4600ad87df6663e23aa4
- DTV_SCAN_TABLES_SITE = https://git.linuxtv.org/dtv-scan-tables.git
- DTV_SCAN_TABLES_SITE_METHOD = git
- 
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
