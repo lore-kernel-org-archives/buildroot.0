@@ -1,53 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B298C61CE8
-	for <buildroot@archiver.kernel.org>; Sun, 15 Jun 2025 16:05:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2C48C61CE8
+	for <buildroot@archiver.kernel.org>; Sun, 15 Jun 2025 16:16:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1EFE980EB0;
-	Sun, 15 Jun 2025 16:05:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B04FA60E17;
+	Sun, 15 Jun 2025 16:16:43 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hG1B5nOmHhiX; Sun, 15 Jun 2025 16:16:42 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC02B60E9E
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id BC02B60E9E;
+	Sun, 15 Jun 2025 16:16:42 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id D2C1B151
+ for <buildroot@buildroot.org>; Sun, 15 Jun 2025 16:16:40 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id B9DA380E43
+ for <buildroot@buildroot.org>; Sun, 15 Jun 2025 16:16:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2h_wrF_l1cBU; Sun, 15 Jun 2025 16:05:15 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D3CD80E7B
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3D3CD80E7B;
-	Sun, 15 Jun 2025 16:05:15 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 13F2B151
- for <buildroot@buildroot.org>; Sun, 15 Jun 2025 16:05:14 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6239F400AE
- for <buildroot@buildroot.org>; Sun, 15 Jun 2025 16:05:13 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Z8qgHTQ8ij_9 for <buildroot@buildroot.org>;
- Sun, 15 Jun 2025 16:05:12 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 93F6040131
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 93F6040131
- for <buildroot@buildroot.org>; Sun, 15 Jun 2025 16:05:12 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 82D0E83AC1; Sun, 15 Jun 2025 16:05:12 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+ id CYgXZa_Q2wv1 for <buildroot@buildroot.org>;
+ Sun, 15 Jun 2025 16:16:40 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 74F1880DCC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 74F1880DCC
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 74F1880DCC
+ for <buildroot@buildroot.org>; Sun, 15 Jun 2025 16:16:38 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a08ea.dip0.t-ipconnect.de [91.58.8.234])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id BD59FA4C010D
+ for <buildroot@buildroot.org>; Sun, 15 Jun 2025 18:16:35 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:51760)
+ by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
+ (envelope-from <bernd@kuhls.net>) id 1uQq26-000000006MP-44Uq
+ for buildroot@buildroot.org; Sun, 15 Jun 2025 16:16:35 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun, 15 Jun 2025 17:40:16 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: aefdca1e5cf75ef0322b5a9d9052e9fc683f5a41
-X-Git-Newrev: 15996bc4ffed232b238d825351244aeeb31babbd
-X-Patchwork-Hint: ignore
-Message-Id: <20250615160512.82D0E83AC1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-requests: update project
- homepage
+Date: Sun, 15 Jun 2025 18:16:34 +0200
+Message-Id: <20250615161635.2499294-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.5
+MIME-Version: 1.0
+X-Spamd-Bar: +
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202506031021; t=1750004195;
+ bh=S+bmwdq4rDiEj2zC2/SoEd5itDQeokfwo/eKD6U7z7w=;
+ h=From:To:Subject:Date:From;
+ b=g7n8H2B9rIDYNyh5zE/NHypxWh8Jbv1dBUMD2mCRsB+IkBXKX00e/u/Lj3VFgj4Wo
+ GbJNmoS3aeWCdg7pHJ5D4LyOQbf3DG4mx15b1iZ9GfqbHBt8hA7XeVtdohEp8rBYWX
+ +Omv4Tz6JYX2vwB76vjqnJbBvJBJjpqFQ/Ehq1sx0AuNiLMAyBv/KP2R97T3zizC2m
+ 2pIxLJjfyKJAFplIsUAhFpSU3K6USJi2vi1NPI46yPfohJmW9PyC5nLbbvlnmyOaeb
+ lJPXa7IR+9+3SYA8dNlJuh1y9HQkJNd2hFGQk6cc0vx71aEVOthzTwKeXV7IyEr9KF
+ gHPnC91ZQ6fwg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202506031021 header.b=g7n8H2B9
+Subject: [Buildroot] [PATCH 1/2] package/samba4: security bump version to
+ 4.21.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,34 +81,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=15996bc4ffed232b238d825351244aeeb31babbd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Release notes:
+https://www.samba.org/samba/history/samba-4.21.5.html
+https://www.samba.org/samba/history/samba-4.21.6.html
 
-http://www.python-requests.org/ is dead, the project lives on
-https://requests.readthedocs.io/ now.
+Version 4.21.6 fixes CVE-2025-0620:
+https://www.samba.org/samba/security/CVE-2025-0620.html
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/python-requests/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/samba4/samba4.hash | 4 ++--
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-requests/Config.in b/package/python-requests/Config.in
-index 94a44682f4..929b99657c 100644
---- a/package/python-requests/Config.in
-+++ b/package/python-requests/Config.in
-@@ -10,4 +10,4 @@ config BR2_PACKAGE_PYTHON_REQUESTS
- 	  Requests is an Apache2 Licensed HTTP library, written in
- 	  Python, for human beings.
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 86b11b4d1f..6c4205853e 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.21.4.tar.asc
+-sha256  50acf030db0ce6be1ee8a6c3a7636e54576c60a7f814e64becfa840f7b30eced  samba-4.21.4.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.21.6.tar.asc
++sha256  681bad60f57959436350751bc89e893b8c106ac882cc7420f93f419e1d188688  samba-4.21.6.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 828de56fc8..7ba0aa3346 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--	  http://www.python-requests.org/
-+	  https://requests.readthedocs.io
+-SAMBA4_VERSION = 4.21.4
++SAMBA4_VERSION = 4.21.6
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
+-- 
+2.39.5
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
