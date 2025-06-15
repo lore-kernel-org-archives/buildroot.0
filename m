@@ -1,77 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9D19C61CE8
-	for <buildroot@archiver.kernel.org>; Sun, 15 Jun 2025 15:36:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D48AAC71135
+	for <buildroot@archiver.kernel.org>; Sun, 15 Jun 2025 15:57:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BC7C160D57;
-	Sun, 15 Jun 2025 15:36:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 917A18078E;
+	Sun, 15 Jun 2025 15:57:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id geAAwC2Ky_0e; Sun, 15 Jun 2025 15:36:49 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5sRRqfypy4Ep; Sun, 15 Jun 2025 15:57:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F029460833
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AE051806CD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F029460833;
-	Sun, 15 Jun 2025 15:36:48 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id B1154151
- for <buildroot@buildroot.org>; Sun, 15 Jun 2025 15:36:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AE051806CD;
+	Sun, 15 Jun 2025 15:57:41 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 37770151
+ for <buildroot@buildroot.org>; Sun, 15 Jun 2025 15:57:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A1D5360D57
- for <buildroot@buildroot.org>; Sun, 15 Jun 2025 15:36:47 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1E86E400BD
+ for <buildroot@buildroot.org>; Sun, 15 Jun 2025 15:57:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id edQurNu6I7fo for <buildroot@buildroot.org>;
- Sun, 15 Jun 2025 15:36:47 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C9FA4607D3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C9FA4607D3
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C9FA4607D3
- for <buildroot@buildroot.org>; Sun, 15 Jun 2025 15:36:46 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pzRaeOk5aNz7 for <buildroot@buildroot.org>;
+ Sun, 15 Jun 2025 15:57:39 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 20536400AE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 20536400AE
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 20536400AE
+ for <buildroot@buildroot.org>; Sun, 15 Jun 2025 15:57:39 +0000 (UTC)
 Received: from webmail.free.fr (unknown [172.20.246.3])
  (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 4631F13F8A7;
- Sun, 15 Jun 2025 17:36:39 +0200 (CEST)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id EFFF1780515;
+ Sun, 15 Jun 2025 17:57:34 +0200 (CEST)
 Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
  via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 15 Jun 2025 17:36:39 +0200
+ with HTTP (HTTP/1.0 POST); Sun, 15 Jun 2025 17:57:34 +0200
 MIME-Version: 1.0
-Date: Sun, 15 Jun 2025 17:36:39 +0200
+Date: Sun, 15 Jun 2025 17:57:34 +0200
 From: Julien Olivain <ju.o@free.fr>
-To: Marcus Hoffmann <buildroot@bubu1.eu>
-Cc: buildroot@buildroot.org, James Hilliard <james.hilliard1@gmail.com>, Oli
- Vogt <oli.vogt.pub01@gmail.com>, Marcus Hoffmann <bubu@bubu1.eu>
-In-Reply-To: <20250610144753.92545-1-buildroot@bubu1.eu>
-References: <20250610144753.92545-1-buildroot@bubu1.eu>
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250612165912.3473966-1-bernd@kuhls.net>
+References: <20250612165912.3473966-1-bernd@kuhls.net>
 User-Agent: Webmail Free/1.6.11
-Message-ID: <d2e142ed280907fe3dd257e327e4579b@free.fr>
+Message-ID: <17c6fbd08e5d2177fb03101cfaa9b196@free.fr>
 X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1750001803;
- bh=FcK7QykyDRin7VIPl7iQCwDw4mMHEbG4PPco486AWrw=;
+ d=free.fr; s=smtp-20201208; t=1750003056;
+ bh=vDuirlr1BDETm/0LIVKV9qKJ9Ai6unR5k5hrTOjixlY=;
  h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=EN+3PGKq5Odk7yQN2A017tpuzXIylSWq/N398BEQY6GJKv35nezncVOhp33AanaZy
- SX5DS7rgoJ7y+X80pgDfIMkgAwDyDklkr/wjPLLlgtU7X5jOkmQ7ViGtWmt+2NxrfO
- PF2+1Wff9Xv5kl6NWf3Sp3v9Qlo35HwatbKBZ0lO6yKpK+I3dbYnHyCm0nlch7SkhF
- KSW6V1uqJuOkZ1/ZenbImyk6MV+LJGAVDTEzogryvwHd1wYuM5VW/QECLu/eVG7EKZ
- MANA1OMDeSUb51S9mjkeA0FU801RC9jUP/U2jmYFDA/yyzjoxfAYGjfuGpIGXhiFd2
- 89wZ5982MdRVQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=qkAazjw8Dm1j6VVA6Ds0bUa8G5T02Uu3+LhWF1+S6Lrc73nbYPx0dsHn3sWoSkydO
+ o7hzmtUXV6ZdyXhYuNw5NFbqRb1kQe65yidT6jULwSpAbTSk7OZvL5Ry2yKv4nloqx
+ lJ4WMWLx9dgtZbtSURXNhfYTcYfp9qyCx9KUZq5BAwWIb5orBPKpB/wt/yGakvCXBF
+ ND0a5F18fPbDyl6PU3BmtXcL8+5NrRrzs8e0LDVhFBR86etVCSJyl6ixScu23D2L1z
+ Ml5xKCoC8TQ2dYwNN6WYoSzjDxU/cq5OSPXgNNqsBOnle72D+NruLsg+kmnH4tdoKi
+ VjEHltwiYQMPw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=EN+3PGKq
-Subject: Re: [Buildroot] [PATCH] package/python-django: security bump to
- 5.2.3
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=qkAazjw8
+Subject: Re: [Buildroot] [PATCH 1/1] package/samba4: bump version to 4.22.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -88,17 +86,49 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 10/06/2025 16:47, Marcus Hoffmann via buildroot wrote:
-> Followup release to 5.2.2 that completes the mitigations for
-> CVE-2025-48432[1].
-> 
-> Full changelog: https://docs.djangoproject.com/en/5.2/releases/5.2.3/
-> 
-> [1] https://www.djangoproject.com/weblog/2025/jun/10/bugfix-releases/
-> 
-> Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+Hi Bernd,
 
-Applied to master, thanks.
+Thanks for the patch!
+
+On 12/06/2025 18:59, Bernd Kuhls wrote:
+> Release notes:
+> https://www.samba.org/samba/history/samba-4.22.2.html
+
+This 4.22.2 change log mentions it contains a security fix
+for CVE-2025-0620.
+
+The commit title should have been marked as a security bump.
+
+This security fix was also released in version 4.21.6. See:
+https://www.samba.org/samba/history/samba-4.21.6.html
+
+To help the Buildroot LTS maintenance, could you send an updated
+patch series composed of two patches:
+- patch 1/2, security bump from 4.21.4 to 4.21.6
+   to stay in the 4.21.x series.
+   It will be backported to LTS branches
+- patch 2/2, bump from 4.21.6 to 4.22.2
+   please add a note in the commit log that
+   even if the release note mention a CVE fix,
+   it was included in the previous 4.21.6 version
+   in Buildroot.
+
+> https://www.samba.org/samba/history/samba-4.22.1.html
+> https://www.samba.org/samba/history/samba-4.22.0.html
+> 
+> Rebased patch 0001 due to upstream commit
+> https://github.com/samba-team/samba/commit/4dbbfcb00401d7a797154c812587bfe2dda0aea1
+> 
+> An import of the host-python ssl module was added to wscript with 
+> commit
+> https://github.com/samba-team/samba/commit/549f67a9e655149b1ede7e2858836cb7811cc78c
+> Select BR2_PACKAGE_HOST_PYTHON3_SSL to provide the new dependency.
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
