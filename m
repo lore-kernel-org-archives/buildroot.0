@@ -1,52 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B724BC61CE8
-	for <buildroot@archiver.kernel.org>; Sun, 15 Jun 2025 11:41:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C834CC61CE8
+	for <buildroot@archiver.kernel.org>; Sun, 15 Jun 2025 11:42:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7F38F80DF8;
-	Sun, 15 Jun 2025 11:41:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8EA63605E5;
+	Sun, 15 Jun 2025 11:42:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lggr8rW4MHO4; Sun, 15 Jun 2025 11:41:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WyWlpv4eCPV2; Sun, 15 Jun 2025 11:42:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 85A7980E3E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D3339605E6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 85A7980E3E;
-	Sun, 15 Jun 2025 11:41:38 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 5A8291A4
- for <buildroot@buildroot.org>; Sun, 15 Jun 2025 11:41:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D3339605E6;
+	Sun, 15 Jun 2025 11:42:20 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id C4BA8151
+ for <buildroot@buildroot.org>; Sun, 15 Jun 2025 11:42:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4132B400AF
- for <buildroot@buildroot.org>; Sun, 15 Jun 2025 11:41:37 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id ABA3540025
+ for <buildroot@buildroot.org>; Sun, 15 Jun 2025 11:42:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hmZxmYSwsPB8 for <buildroot@buildroot.org>;
- Sun, 15 Jun 2025 11:41:36 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 63F4640025
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 63F4640025
- for <buildroot@buildroot.org>; Sun, 15 Jun 2025 11:41:36 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5155983949; Sun, 15 Jun 2025 11:41:36 +0000 (UTC)
+ id MLPgmwXEzr6V for <buildroot@buildroot.org>;
+ Sun, 15 Jun 2025 11:42:19 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C37F2400AF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C37F2400AF
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C37F2400AF
+ for <buildroot@buildroot.org>; Sun, 15 Jun 2025 11:42:18 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id 1026F5FFB1;
+ Sun, 15 Jun 2025 13:42:15 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 15 Jun 2025 13:42:15 +0200
+MIME-Version: 1.0
+Date: Sun, 15 Jun 2025 13:42:15 +0200
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 15 Jun 2025 13:40:19 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 124273addbb55f7a1d8b0e984c655aa36b1af9a4
-X-Git-Newrev: 1b5f8d04c8798e0d4def0ea2b5dfb20329f2fc38
-X-Patchwork-Hint: ignore
-Message-Id: <20250615114136.5155983949@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/dht: fix cmake4 compatibility
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250614101959.61812-1-bernd@kuhls.net>
+References: <20250614101959.61812-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <d9fd7a30947fea604c97d3e205a33726@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1749987737;
+ bh=5Rcx5gZH0XO2KF//0k0dbhffiCh61E2o0tqUv9lsJGw=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=mUstsDRqewAz3eyf+1mu0Cb47UuxtVyXUVd1ga+8kcVkX7r/64SCd89kVm/v7iI8Z
+ 7k6KL70K1rnuxRNYF7DQN9q6VrKLD5++IxWR8wWLeI+y7eyjVQgYevafuvv5bxvDyY
+ +1o5aWhuuomU14Gzx6wTNVuqdHJJxFuOpOP7yP9p4Ce6YJiEPQ4BdY9lEELIsAOWN7
+ u+YitG3Inh4uPZ+SE6UKyTJ0o93B0xjJ5r60hOWRsHamPxK8QVTSp7cdvmO9hXxmQe
+ DZ4aIOIKrqqEMCJwM1mTo16yzejPQ9nKbaN1a45bGlKBgPgM8sP2BRIUksPI8dKeUg
+ ISrZMUquBzqVQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=mUstsDRq
+Subject: Re: [Buildroot] [PATCH 1/1] package/dht: fix cmake4 compatibility
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,148 +81,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1b5f8d04c8798e0d4def0ea2b5dfb20329f2fc38
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 14/06/2025 12:19, Bernd Kuhls wrote:
+> The only dependee of dht, transmission, forked dht due to upstream
+> rejection of cmake support:
+> https://github.com/jech/dht/pull/50
+> https://github.com/jech/dht/pull/19
+> 
+> A fix was added to this fork for building with cmake 4.x:
+> https://github.com/transmission/dht/commits/post-0.27-transmission/
+> 
+> Instead of adding yet another patch to buildroot we switch to the repo
+> maintained by transmission.
+> 
+> Fixes:
+> https://autobuild.buildroot.org/results/30339a4fdb9c0b608ca3c5ae0692596b21b2fc3f/
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-The only dependee of dht, transmission, forked dht due to upstream
-rejection of cmake support:
-https://github.com/jech/dht/pull/50
-https://github.com/jech/dht/pull/19
+Applied to master, thanks.
 
-A fix was added to this fork for building with cmake 4.x:
-https://github.com/transmission/dht/commits/post-0.27-transmission/
+For info, I switched _VERSION to use the "git describe --abbrev=40" 
+format. See:
+https://gitlab.com/buildroot.org/buildroot/-/commit/1b5f8d04c8798e0d4def0ea2b5dfb20329f2fc38
 
-Instead of adding yet another patch to buildroot we switch to the repo
-maintained by transmission.
+Best regards,
 
-Fixes:
-https://autobuild.buildroot.org/results/30339a4fdb9c0b608ca3c5ae0692596b21b2fc3f/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-[Julien: use "git describe --abbrev=40" format in _VERSION]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- .checkpackageignore          |  1 -
- package/dht/0001-cmake.patch | 67 --------------------------------------------
- package/dht/dht.hash         |  2 +-
- package/dht/dht.mk           |  4 +--
- 4 files changed, 3 insertions(+), 71 deletions(-)
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 8e24c73525..c767d29ca9 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -386,7 +386,6 @@ package/dhcp/S80dhcp-relay Shellcheck lib_sysv.Variables
- package/dhcp/S80dhcp-server Shellcheck lib_sysv.Variables
- package/dhcp/dhclient-script Shellcheck lib_shellscript.TrailingSpace
- package/dhcpcd/S41dhcpcd lib_sysv.Indent lib_sysv.Variables
--package/dht/0001-cmake.patch lib_patch.Upstream
- package/dillo/0001-usr-local-include.patch lib_patch.Upstream
- package/dillo/0002-Fix-openssl-detection.patch lib_patch.Upstream
- package/dillo/0004-fix-build-with-gcc-10.patch lib_patch.Upstream
-diff --git a/package/dht/0001-cmake.patch b/package/dht/0001-cmake.patch
-deleted file mode 100644
-index bbac639044..0000000000
---- a/package/dht/0001-cmake.patch
-+++ /dev/null
-@@ -1,67 +0,0 @@
--From 25e12bb39eea3d433602de6390796fec8a8f3620 Mon Sep 17 00:00:00 2001
--From: Mike Gelfand <mikedld@mikedld.com>
--Date: Sun, 1 Jan 2017 16:23:21 +0300
--Subject: [PATCH] Remove Makefile, add Makefile.am and CMakeLists.txt
--
--Downloaded from transmission repo:
--https://github.com/transmission/dht/commit/25e12bb39eea3d433602de6390796fec8a8f3620
--
--Upstream status: rejected (https://github.com/jech/dht/pull/19)
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- CMakeLists.txt |  9 +++++++++
-- Makefile       |  9 ---------
-- Makefile.am    | 11 +++++++++++
-- 3 files changed, 20 insertions(+), 9 deletions(-)
-- create mode 100644 CMakeLists.txt
-- delete mode 100644 Makefile
-- create mode 100644 Makefile.am
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--new file mode 100644
--index 0000000..6d4aa99
----- /dev/null
--+++ b/CMakeLists.txt
--@@ -0,0 +1,9 @@
--+cmake_minimum_required(VERSION 2.8)
--+project(dht C)
--+
--+add_library(${PROJECT_NAME} STATIC
--+    dht.c
--+)
--+
--+install(TARGETS ${PROJECT_NAME} DESTINATION lib)
--+install(FILES dht.h DESTINATION include/dht)
--diff --git a/Makefile b/Makefile
--deleted file mode 100644
--index e012945..0000000
----- a/Makefile
--+++ /dev/null
--@@ -1,9 +0,0 @@
---CFLAGS = -g -Wall
---LDLIBS = -lcrypt
---
---dht-example: dht-example.o dht.o
---
---all: dht-example
---
---clean:
---	-rm -f dht-example dht-example.o dht-example.id dht.o *~ core
--diff --git a/Makefile.am b/Makefile.am
--new file mode 100644
--index 0000000..2dba648
----- /dev/null
--+++ b/Makefile.am
--@@ -0,0 +1,11 @@
--+AM_CFLAGS = @PTHREAD_CFLAGS@
--+
--+noinst_LIBRARIES = libdht.a
--+libdht_a_SOURCES = dht.c
--+libdht_a_DEPENDENCIES = $(builddir)/include/dht
--+noinst_HEADERS = dht.h
--+EXTRA_DIST = CHANGES CMakeLists.txt dht-example.c LICENCE README
--+
--+$(builddir)/include/dht:
--+	$(MKDIR_P) $(builddir)/include
--+	(cd $(builddir)/include && $(LN_S) $(abs_srcdir) dht)
-diff --git a/package/dht/dht.hash b/package/dht/dht.hash
-index 2b641b9dcb..dec9a97124 100644
---- a/package/dht/dht.hash
-+++ b/package/dht/dht.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  caba469a784a5c359c084099fdc025cfe09b1faec2ba9ba257b7384351c43c0a  dht-0.27.tar.gz
-+sha256  c61493be7f036b59df0c921829f15e5c57b1e29d99bca737923e83d028fd736c  dht-0.27-2-g38c9f261d9b58b76b9eaf85f84ec1b35151a1eac.tar.gz
- sha256  06ce07293caf8c8ddfaf47797ad1fb18d1c040a8375231d8f8a6105cef51a8e6  LICENCE
-diff --git a/package/dht/dht.mk b/package/dht/dht.mk
-index 4f78f027c7..9f4e8b1bbd 100644
---- a/package/dht/dht.mk
-+++ b/package/dht/dht.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--DHT_VERSION = 0.27
--DHT_SITE = $(call github,jech,dht,dht-$(DHT_VERSION))
-+DHT_VERSION = 0.27-2-g38c9f261d9b58b76b9eaf85f84ec1b35151a1eac
-+DHT_SITE = $(call github,transmission,dht,dht-$(DHT_VERSION))
- DHT_LICENSE = MIT
- DHT_LICENSE_FILES = LICENCE
- DHT_INSTALL_STAGING = YES
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
