@@ -4,49 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2BE4C7115A
-	for <buildroot@archiver.kernel.org>; Sun, 15 Jun 2025 20:45:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0271CC7115A
+	for <buildroot@archiver.kernel.org>; Sun, 15 Jun 2025 20:45:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A497760848;
-	Sun, 15 Jun 2025 20:45:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CAA7760F16;
+	Sun, 15 Jun 2025 20:45:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZH8lweoUaq0z; Sun, 15 Jun 2025 20:45:30 +0000 (UTC)
+ id lWf3DuCoX3T3; Sun, 15 Jun 2025 20:45:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D90C9607D7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1E261607AD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D90C9607D7;
-	Sun, 15 Jun 2025 20:45:29 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id C396E151
- for <buildroot@buildroot.org>; Sun, 15 Jun 2025 20:45:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1E261607AD;
+	Sun, 15 Jun 2025 20:45:40 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id DF51C1A4
+ for <buildroot@buildroot.org>; Sun, 15 Jun 2025 20:45:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C1094401E9
- for <buildroot@buildroot.org>; Sun, 15 Jun 2025 20:45:27 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C5C4D80E59
+ for <buildroot@buildroot.org>; Sun, 15 Jun 2025 20:45:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1EsGCzUEuGhV for <buildroot@buildroot.org>;
- Sun, 15 Jun 2025 20:45:25 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C5EFF401CB
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C5EFF401CB
- for <buildroot@buildroot.org>; Sun, 15 Jun 2025 20:45:25 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B08C48398E; Sun, 15 Jun 2025 20:45:25 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id g4No5r8FLAoO for <buildroot@buildroot.org>;
+ Sun, 15 Jun 2025 20:45:38 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3634680E4E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3634680E4E
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3634680E4E
+ for <buildroot@busybox.net>; Sun, 15 Jun 2025 20:45:38 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 5C86A780509;
+ Sun, 15 Jun 2025 22:45:35 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 15 Jun 2025 22:45:35 +0200
+MIME-Version: 1.0
+Date: Sun, 15 Jun 2025 22:45:35 +0200
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 15 Jun 2025 22:44:17 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 30e4f03e90ee3dacb59cd1e184e4ef3b0341ceab
-X-Git-Newrev: 393d7e4d2197696bf0df7c83dc1dd97e3f6253bb
-X-Patchwork-Hint: ignore
-Message-Id: <20250615204525.B08C48398E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/lua: bump to version 5.4.8
+To: Francois Perrad <francois.perrad@gadz.org>
+Cc: buildroot@busybox.net
+In-Reply-To: <20250612102655.1268053-1-francois.perrad@gadz.org>
+References: <20250612102655.1268053-1-francois.perrad@gadz.org>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <e0419e35074e98a09e0cd31d38490405@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1750020336;
+ bh=rDw0usy3ym5UQ2eSJDuUngKLT09846QXMn7Qp9Mt1WQ=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=Ycc8rx1m5RIfHNQsUadLPyv7MFlBL32mOm5QeLHO2svbiVEO83VWRD2ycK/2TQdnA
+ gdSwOzT3+mrDxwB37pqSlqo4T7jdkaXUBJan9o8ixML8LqvgE4MmVLj32kIJ7hCyKJ
+ u6jgmKxNt5wuhTWrzWAWMBN6d2n7n1vO9qIxISurKip6CwzNr2xK1gnwS5xeSRdqAj
+ V0wIV0/J8E45kbxGqTz40/uzLIQE7fVIgJqXr1YqfIISL1hnvWhfxk9Lr4bTw+SXOR
+ b32mJLC591HWhHsZB0RLXCBm0cYYnleyYwQ0eFYg+nuCUBgyVIlWcInW5Rqf8P0Z7Y
+ hDw5SvRyH4K1w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Ycc8rx1m
+Subject: Re: [Buildroot] [PATCH] package/lua: bump to version 5.4.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,77 +81,15 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=393d7e4d2197696bf0df7c83dc1dd97e3f6253bb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 12/06/2025 12:26, Francois Perrad via buildroot wrote:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-For differences with 5.4.7, see:
-https://www.lua.org/work/diffs-lua-5.4.7-lua-5.4.8.html
-
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-[Julien: add link to diff with previous version]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/lua/5.4.7/lua.hash                                  | 5 -----
- package/lua/{5.4.7 => 5.4.8}/0001-root-path.patch           | 0
- package/lua/{5.4.7 => 5.4.8}/0002-shared-libs-for-lua.patch | 0
- package/lua/{5.4.7 => 5.4.8}/0003-linenoise.patch           | 0
- package/lua/5.4.8/lua.hash                                  | 5 +++++
- package/lua/lua.mk                                          | 2 +-
- 6 files changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/package/lua/5.4.7/lua.hash b/package/lua/5.4.7/lua.hash
-deleted file mode 100644
-index d67fdcf6cf..0000000000
---- a/package/lua/5.4.7/lua.hash
-+++ /dev/null
-@@ -1,5 +0,0 @@
--# Hashes from: https://www.lua.org/ftp/
--sha256  9fbf5e28ef86c69858f6d3d34eccc32e911c1a28b4120ff3e84aaa70cfbf1e30  lua-5.4.7.tar.gz
--
--# Locally computed
--sha256  33a975a766520bc54de2d71e45442e504effa0519e331e31ee3fc46eca4f98bd  doc/readme.html
-diff --git a/package/lua/5.4.7/0001-root-path.patch b/package/lua/5.4.8/0001-root-path.patch
-similarity index 100%
-rename from package/lua/5.4.7/0001-root-path.patch
-rename to package/lua/5.4.8/0001-root-path.patch
-diff --git a/package/lua/5.4.7/0002-shared-libs-for-lua.patch b/package/lua/5.4.8/0002-shared-libs-for-lua.patch
-similarity index 100%
-rename from package/lua/5.4.7/0002-shared-libs-for-lua.patch
-rename to package/lua/5.4.8/0002-shared-libs-for-lua.patch
-diff --git a/package/lua/5.4.7/0003-linenoise.patch b/package/lua/5.4.8/0003-linenoise.patch
-similarity index 100%
-rename from package/lua/5.4.7/0003-linenoise.patch
-rename to package/lua/5.4.8/0003-linenoise.patch
-diff --git a/package/lua/5.4.8/lua.hash b/package/lua/5.4.8/lua.hash
-new file mode 100644
-index 0000000000..8494511529
---- /dev/null
-+++ b/package/lua/5.4.8/lua.hash
-@@ -0,0 +1,5 @@
-+# Hashes from: https://www.lua.org/ftp/
-+sha256  4f18ddae154e793e46eeab727c59ef1c0c0c2b744e7b94219710d76f530629ae  lua-5.4.8.tar.gz
-+
-+# Locally computed
-+sha256  3773a4900f3539c56aea9d6cd48d71c8751d495c4abc28472706bb9553d1493c  doc/readme.html
-diff --git a/package/lua/lua.mk b/package/lua/lua.mk
-index 15772dbdf3..455b7e58b2 100644
---- a/package/lua/lua.mk
-+++ b/package/lua/lua.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- ifeq ($(BR2_PACKAGE_LUA_5_4),y)
--LUA_VERSION = 5.4.7
-+LUA_VERSION = 5.4.8
- else ifeq ($(BR2_PACKAGE_LUA_5_3),y)
- LUA_VERSION = 5.3.6
- else
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
