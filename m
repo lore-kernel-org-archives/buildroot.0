@@ -4,49 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 668F5C61CE8
-	for <buildroot@archiver.kernel.org>; Sun, 15 Jun 2025 14:29:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71113C61CE8
+	for <buildroot@archiver.kernel.org>; Sun, 15 Jun 2025 14:29:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2B65B60E2F;
-	Sun, 15 Jun 2025 14:29:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3E75460752;
+	Sun, 15 Jun 2025 14:29:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id W3H9Z8qjOvz1; Sun, 15 Jun 2025 14:29:31 +0000 (UTC)
+ id pRORvuncTUn9; Sun, 15 Jun 2025 14:29:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4936060BF0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 80F0460AB7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4936060BF0;
-	Sun, 15 Jun 2025 14:29:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 097A1198
- for <buildroot@buildroot.org>; Sun, 15 Jun 2025 14:29:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 80F0460AB7;
+	Sun, 15 Jun 2025 14:29:58 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 47DB8198
+ for <buildroot@buildroot.org>; Sun, 15 Jun 2025 14:29:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E40E940643
- for <buildroot@buildroot.org>; Sun, 15 Jun 2025 14:29:29 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2EAF64011A
+ for <buildroot@buildroot.org>; Sun, 15 Jun 2025 14:29:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CCYDcUxVAosY for <buildroot@buildroot.org>;
- Sun, 15 Jun 2025 14:29:29 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E40640628
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4E40640628
- for <buildroot@buildroot.org>; Sun, 15 Jun 2025 14:29:29 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3721E8398B; Sun, 15 Jun 2025 14:29:29 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yPCTrYRE6Tom for <buildroot@buildroot.org>;
+ Sun, 15 Jun 2025 14:29:56 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 689CB400AE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 689CB400AE
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 689CB400AE
+ for <buildroot@buildroot.org>; Sun, 15 Jun 2025 14:29:56 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id 38E2CB0053D;
+ Sun, 15 Jun 2025 16:29:53 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 15 Jun 2025 16:29:53 +0200
+MIME-Version: 1.0
+Date: Sun, 15 Jun 2025 16:29:53 +0200
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 15 Jun 2025 16:22:46 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 52d06dadce48bfdb122f02ff95ce7e700f2f4ce9
-X-Git-Newrev: 1b4b429e89b803823f3659fc175ad117c824fcaa
-X-Patchwork-Hint: ignore
-Message-Id: <20250615142929.3721E8398B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/php: bump version to 8.3.22
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250612165938.3474011-1-bernd@kuhls.net>
+References: <20250612165938.3474011-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <f02d95a01a4451da57e64849c6f67d8c@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1749997794;
+ bh=7mSB6NkcL5oTgRNtbkfNNw/t5JvEAWKfp1S4Xw2g3L4=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=gfEhxbnCkW8iRT/MSpJdDQvipv5nea8BdVIafWMDgxUlnHv1oUhRs/+evJuYRNXYx
+ qThweBanJ3IcBrodwbY987g1FyX9aDyUvSXDDymv54Wfj0+SUxj94I6ZP+/9RLA10h
+ D7bR7YuDCHrVYqv2mwB/eXRKokoH2YBzexAb5RUuGj237bkWUBBUFCK1ah0kJtqQDR
+ 3uniADoNjj3HakrekI5kZzTKGBwUjZCyopszL0CGlkteZYoAaa/QkE6p9Ey9TwZ/p9
+ Bg1sfpevLKn1kWoq9q2/pkcPtmbNFvMGDE99E2fowZqRfVZcJ5NHUxxlrbN54NvCG6
+ ktgICyH+MHwKw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=gfEhxbnC
+Subject: Re: [Buildroot] [PATCH 1/1] package/php: bump version to 8.3.22
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,51 +81,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1b4b429e89b803823f3659fc175ad117c824fcaa
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 12/06/2025 18:59, Bernd Kuhls wrote:
+> Changelog: https://www.php.net/ChangeLog-8.php#8.3.22
+> 
+> Release notes:
+> https://news-web.php.net/php.announce/460
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Changelog: https://www.php.net/ChangeLog-8.php#8.3.22
-
-Release notes:
-https://news-web.php.net/php.announce/460
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 8e3be2dbe1..4260c1e5f4 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  4dfb329f209a552c3716394fc123bb62e80a468b55ce27fc8cb0fd5f30b9dcd6  php-8.3.21.tar.xz
-+sha256  66c86889059bd27ccf460590ca48fcaf3261349cc9bdba2023ac6a265beabf36  php-8.3.22.tar.xz
- 
- # License file
- sha256  b42e4df5e50e6ecda1047d503d6d91d71032d09ed1027ba1ef29eed26f890c5a  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index ad42e57d72..01166bae64 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 8.3.21
-+PHP_VERSION = 8.3.22
- PHP_SITE = https://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
