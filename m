@@ -4,72 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0271CC7115A
-	for <buildroot@archiver.kernel.org>; Sun, 15 Jun 2025 20:45:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59263C71135
+	for <buildroot@archiver.kernel.org>; Sun, 15 Jun 2025 20:52:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CAA7760F16;
-	Sun, 15 Jun 2025 20:45:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 03265605FA;
+	Sun, 15 Jun 2025 20:52:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lWf3DuCoX3T3; Sun, 15 Jun 2025 20:45:40 +0000 (UTC)
+ id nnbgSM09a6uU; Sun, 15 Jun 2025 20:52:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1E261607AD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2DD36605D2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1E261607AD;
-	Sun, 15 Jun 2025 20:45:40 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id DF51C1A4
- for <buildroot@buildroot.org>; Sun, 15 Jun 2025 20:45:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2DD36605D2;
+	Sun, 15 Jun 2025 20:52:19 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 857691A4
+ for <buildroot@buildroot.org>; Sun, 15 Jun 2025 20:52:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C5C4D80E59
- for <buildroot@buildroot.org>; Sun, 15 Jun 2025 20:45:38 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 778E340205
+ for <buildroot@buildroot.org>; Sun, 15 Jun 2025 20:52:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id g4No5r8FLAoO for <buildroot@buildroot.org>;
- Sun, 15 Jun 2025 20:45:38 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3634680E4E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3634680E4E
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3634680E4E
- for <buildroot@busybox.net>; Sun, 15 Jun 2025 20:45:38 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id 5C86A780509;
- Sun, 15 Jun 2025 22:45:35 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
- via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 15 Jun 2025 22:45:35 +0200
-MIME-Version: 1.0
-Date: Sun, 15 Jun 2025 22:45:35 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id H1SOCNbBbA89 for <buildroot@buildroot.org>;
+ Sun, 15 Jun 2025 20:52:16 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B4605401E9
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id B4605401E9
+ for <buildroot@buildroot.org>; Sun, 15 Jun 2025 20:52:16 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 9F87683A8A; Sun, 15 Jun 2025 20:52:16 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Francois Perrad <francois.perrad@gadz.org>
-Cc: buildroot@busybox.net
-In-Reply-To: <20250612102655.1268053-1-francois.perrad@gadz.org>
-References: <20250612102655.1268053-1-francois.perrad@gadz.org>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <e0419e35074e98a09e0cd31d38490405@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1750020336;
- bh=rDw0usy3ym5UQ2eSJDuUngKLT09846QXMn7Qp9Mt1WQ=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Ycc8rx1m5RIfHNQsUadLPyv7MFlBL32mOm5QeLHO2svbiVEO83VWRD2ycK/2TQdnA
- gdSwOzT3+mrDxwB37pqSlqo4T7jdkaXUBJan9o8ixML8LqvgE4MmVLj32kIJ7hCyKJ
- u6jgmKxNt5wuhTWrzWAWMBN6d2n7n1vO9qIxISurKip6CwzNr2xK1gnwS5xeSRdqAj
- V0wIV0/J8E45kbxGqTz40/uzLIQE7fVIgJqXr1YqfIISL1hnvWhfxk9Lr4bTw+SXOR
- b32mJLC591HWhHsZB0RLXCBm0cYYnleyYwQ0eFYg+nuCUBgyVIlWcInW5Rqf8P0Z7Y
- hDw5SvRyH4K1w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Ycc8rx1m
-Subject: Re: [Buildroot] [PATCH] package/lua: bump to version 5.4.8
+To: buildroot@buildroot.org
+Date: Sun, 15 Jun 2025 22:48:23 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 393d7e4d2197696bf0df7c83dc1dd97e3f6253bb
+X-Git-Newrev: 68c8ff2c9521be62681e2a9ead9dccc8d7106d04
+X-Patchwork-Hint: ignore
+Message-Id: <20250615205216.9F87683A8A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cannelloni: bump to version 2.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,15 +58,86 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 12/06/2025 12:26, Francois Perrad via buildroot wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+commit: https://git.buildroot.net/buildroot/commit/?id=68c8ff2c9521be62681e2a9ead9dccc8d7106d04
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+For change log, see:
+
+https://github.com/mguentner/cannelloni/releases/tag/v2.0.0
+
+Bump GCC to at least GCC 8 due to the C++20 requirement.
+
+Add TCP protocol to the package's description.
+
+This release also raise cmake version requirement to 3.15, which fixes
+build failures with host-cmake >= 4.x.
+
+Fixes:
+https://autobuild.buildroot.org/results/87d5ab39a84c51f340875ae365d4f39439e81645/
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+[Julien: add a commit log comment about fixes with host-cmake 4]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/cannelloni/Config.in       | 8 ++++----
+ package/cannelloni/cannelloni.hash | 2 +-
+ package/cannelloni/cannelloni.mk   | 2 +-
+ 3 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/package/cannelloni/Config.in b/package/cannelloni/Config.in
+index e137e60c60..a2a15c0274 100644
+--- a/package/cannelloni/Config.in
++++ b/package/cannelloni/Config.in
+@@ -1,17 +1,17 @@
+ config BR2_PACKAGE_CANNELLONI
+ 	bool "cannelloni"
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # C++20
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_MMU # lksctp-tools
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # lksctp-tools
+ 	depends on !BR2_STATIC_LIBS # lksctp-tools
+ 	help
+-	  A SocketCAN over Ethernet tunnel. The tunnel supports both
++	  A SocketCAN over Ethernet tunnel. The tunnel supports TCP,
+ 	  UDP and SCTP protocols.
+ 
+ 	  https://github.com/mguentner/cannelloni
+ 
+-comment "cannelloni needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.8"
++comment "cannelloni needs a toolchain w/ C++, threads, dynamic library, gcc >= 8"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_TOOLCHAIN_HAS_THREADS
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_8 || !BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU
+diff --git a/package/cannelloni/cannelloni.hash b/package/cannelloni/cannelloni.hash
+index 107415b0ac..625e43d157 100644
+--- a/package/cannelloni/cannelloni.hash
++++ b/package/cannelloni/cannelloni.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  de44b7e327fbf38883f46e51a5afd07de5144f2e44c5f42b7f2f0741165f0b13  cannelloni-1.0.0.tar.gz
++sha256  3dde63727549d4a39154e78b95f4a5dad96af236ca6cef531f347c0b923c74d5  cannelloni-2.0.0.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  gpl-2.0.txt
+diff --git a/package/cannelloni/cannelloni.mk b/package/cannelloni/cannelloni.mk
+index f97a091760..7978cfccf5 100644
+--- a/package/cannelloni/cannelloni.mk
++++ b/package/cannelloni/cannelloni.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CANNELLONI_VERSION = 1.0.0
++CANNELLONI_VERSION = 2.0.0
+ CANNELLONI_SITE = $(call github,mguentner,cannelloni,v$(CANNELLONI_VERSION))
+ CANNELLONI_LICENSE = GPL-2.0
+ CANNELLONI_LICENSE_FILES = gpl-2.0.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
