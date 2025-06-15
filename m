@@ -1,75 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C834CC61CE8
-	for <buildroot@archiver.kernel.org>; Sun, 15 Jun 2025 11:42:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7432BC71135
+	for <buildroot@archiver.kernel.org>; Sun, 15 Jun 2025 13:27:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8EA63605E5;
-	Sun, 15 Jun 2025 11:42:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 21A71803B2;
+	Sun, 15 Jun 2025 13:27:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WyWlpv4eCPV2; Sun, 15 Jun 2025 11:42:21 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DqcgbzZE-x7D; Sun, 15 Jun 2025 13:27:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D3339605E6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 23F5E80D76
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D3339605E6;
-	Sun, 15 Jun 2025 11:42:20 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id C4BA8151
- for <buildroot@buildroot.org>; Sun, 15 Jun 2025 11:42:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 23F5E80D76;
+	Sun, 15 Jun 2025 13:27:31 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 03DC31A4
+ for <buildroot@buildroot.org>; Sun, 15 Jun 2025 13:27:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id ABA3540025
- for <buildroot@buildroot.org>; Sun, 15 Jun 2025 11:42:19 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EAF1940662
+ for <buildroot@buildroot.org>; Sun, 15 Jun 2025 13:27:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MLPgmwXEzr6V for <buildroot@buildroot.org>;
- Sun, 15 Jun 2025 11:42:19 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C37F2400AF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C37F2400AF
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C37F2400AF
- for <buildroot@buildroot.org>; Sun, 15 Jun 2025 11:42:18 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 1026F5FFB1;
- Sun, 15 Jun 2025 13:42:15 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
- via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 15 Jun 2025 13:42:15 +0200
-MIME-Version: 1.0
-Date: Sun, 15 Jun 2025 13:42:15 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9yyzcbIiiH5i for <buildroot@buildroot.org>;
+ Sun, 15 Jun 2025 13:27:28 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C3F04061B
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1C3F04061B
+ for <buildroot@buildroot.org>; Sun, 15 Jun 2025 13:27:28 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id F41768394F; Sun, 15 Jun 2025 13:27:27 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250614101959.61812-1-bernd@kuhls.net>
-References: <20250614101959.61812-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <d9fd7a30947fea604c97d3e205a33726@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1749987737;
- bh=5Rcx5gZH0XO2KF//0k0dbhffiCh61E2o0tqUv9lsJGw=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=mUstsDRqewAz3eyf+1mu0Cb47UuxtVyXUVd1ga+8kcVkX7r/64SCd89kVm/v7iI8Z
- 7k6KL70K1rnuxRNYF7DQN9q6VrKLD5++IxWR8wWLeI+y7eyjVQgYevafuvv5bxvDyY
- +1o5aWhuuomU14Gzx6wTNVuqdHJJxFuOpOP7yP9p4Ce6YJiEPQ4BdY9lEELIsAOWN7
- u+YitG3Inh4uPZ+SE6UKyTJ0o93B0xjJ5r60hOWRsHamPxK8QVTSp7cdvmO9hXxmQe
- DZ4aIOIKrqqEMCJwM1mTo16yzejPQ9nKbaN1a45bGlKBgPgM8sP2BRIUksPI8dKeUg
- ISrZMUquBzqVQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=mUstsDRq
-Subject: Re: [Buildroot] [PATCH 1/1] package/dht: fix cmake4 compatibility
+To: buildroot@buildroot.org
+Date: Sun, 15 Jun 2025 15:20:11 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 1b5f8d04c8798e0d4def0ea2b5dfb20329f2fc38
+X-Git-Newrev: ddf8f81e844ecf2cbc4d84b84561a730c15792ea
+X-Patchwork-Hint: ignore
+Message-Id: <20250615132727.F41768394F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pydantic: bump to 2.11.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,37 +58,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 14/06/2025 12:19, Bernd Kuhls wrote:
-> The only dependee of dht, transmission, forked dht due to upstream
-> rejection of cmake support:
-> https://github.com/jech/dht/pull/50
-> https://github.com/jech/dht/pull/19
-> 
-> A fix was added to this fork for building with cmake 4.x:
-> https://github.com/transmission/dht/commits/post-0.27-transmission/
-> 
-> Instead of adding yet another patch to buildroot we switch to the repo
-> maintained by transmission.
-> 
-> Fixes:
-> https://autobuild.buildroot.org/results/30339a4fdb9c0b608ca3c5ae0692596b21b2fc3f/
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://git.buildroot.net/buildroot/commit/?id=ddf8f81e844ecf2cbc4d84b84561a730c15792ea
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Changelog: https://docs.pydantic.dev/latest/changelog/#v2116-2025-06-13
 
-For info, I switched _VERSION to use the "git describe --abbrev=40" 
-format. See:
-https://gitlab.com/buildroot.org/buildroot/-/commit/1b5f8d04c8798e0d4def0ea2b5dfb20329f2fc38
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/python-pydantic/python-pydantic.hash | 4 ++--
+ package/python-pydantic/python-pydantic.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Best regards,
-
-Julien.
+diff --git a/package/python-pydantic/python-pydantic.hash b/package/python-pydantic/python-pydantic.hash
+index a4be70b503..a97062dd96 100644
+--- a/package/python-pydantic/python-pydantic.hash
++++ b/package/python-pydantic/python-pydantic.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pydantic/json
+-md5  85a84b0930556794ba1e95aa6313c071  pydantic-2.11.5.tar.gz
+-sha256  7f853db3d0ce78ce8bbb148c401c2cdd6431b3473c0cdff2755c7690952a7b7a  pydantic-2.11.5.tar.gz
++md5  0b701b2a411c2747bf976d04f27f695b  pydantic-2.11.6.tar.gz
++sha256  12b45cfb4af17e555d3c6283d0b55271865fb0b43cc16dd0d52749dc7abf70e7  pydantic-2.11.6.tar.gz
+ # Locally computed sha256 checksums
+ sha256  a9e186f3ca16b5eef84318e7a701721351a00cb7b8ae3a4394b67b49e3529ef3  LICENSE
+diff --git a/package/python-pydantic/python-pydantic.mk b/package/python-pydantic/python-pydantic.mk
+index 8b653daaa1..7b0d96bdf3 100644
+--- a/package/python-pydantic/python-pydantic.mk
++++ b/package/python-pydantic/python-pydantic.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PYDANTIC_VERSION = 2.11.5
++PYTHON_PYDANTIC_VERSION = 2.11.6
+ PYTHON_PYDANTIC_SOURCE = pydantic-$(PYTHON_PYDANTIC_VERSION).tar.gz
+-PYTHON_PYDANTIC_SITE = https://files.pythonhosted.org/packages/f0/86/8ce9040065e8f924d642c58e4a344e33163a07f6b57f836d0d734e0ad3fb
++PYTHON_PYDANTIC_SITE = https://files.pythonhosted.org/packages/ef/8f/9af0f46acc943b8c4592d06523f26a150acf6e6e37e8bd5f0ace925e996d
+ PYTHON_PYDANTIC_SETUP_TYPE = hatch
+ PYTHON_PYDANTIC_LICENSE = MIT
+ PYTHON_PYDANTIC_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
