@@ -4,71 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA24FC71136
-	for <buildroot@archiver.kernel.org>; Mon, 16 Jun 2025 19:15:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6373C71159
+	for <buildroot@archiver.kernel.org>; Mon, 16 Jun 2025 19:29:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ABC4F808BA;
-	Mon, 16 Jun 2025 19:15:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B9A3D810F8;
+	Mon, 16 Jun 2025 19:29:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DLx8Nbsq3ChI; Mon, 16 Jun 2025 19:15:33 +0000 (UTC)
+ id 8cWoowTXeHph; Mon, 16 Jun 2025 19:29:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E293C808C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7F27D810F5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E293C808C2;
-	Mon, 16 Jun 2025 19:15:32 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 191C816B
- for <buildroot@buildroot.org>; Mon, 16 Jun 2025 19:15:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7F27D810F5;
+	Mon, 16 Jun 2025 19:29:43 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id A7AFA16B
+ for <buildroot@buildroot.org>; Mon, 16 Jun 2025 19:29:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F39F040A11
- for <buildroot@buildroot.org>; Mon, 16 Jun 2025 19:15:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8570540194
+ for <buildroot@buildroot.org>; Mon, 16 Jun 2025 19:29:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XJVwhNWnM5P6 for <buildroot@buildroot.org>;
- Mon, 16 Jun 2025 19:15:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 39C7D40AC2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39C7D40AC2
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 39C7D40AC2
- for <buildroot@buildroot.org>; Mon, 16 Jun 2025 19:15:30 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a01bf.dip0.t-ipconnect.de [91.58.1.191])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 6AB3CA4C0E99;
- Mon, 16 Jun 2025 21:15:28 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:59920)
- by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
- (envelope-from <bernd@kuhls.net>) id 1uRFIl-0000000057B-3alM;
- Mon, 16 Jun 2025 19:15:28 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 16 Jun 2025 21:15:28 +0200
-Message-Id: <20250616191528.3479725-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.5
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id s0GARKkFl-zE for <buildroot@buildroot.org>;
+ Mon, 16 Jun 2025 19:29:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
+ helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8AD9B400B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8AD9B400B1
+Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8AD9B400B1
+ for <buildroot@buildroot.org>; Mon, 16 Jun 2025 19:29:41 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 804111C00DD; Mon, 16 Jun 2025 21:29:39 +0200 (CEST)
+Message-ID: <c3ccb0e5-0cd6-4dcb-a536-833f04aa9f0c@rnout.be>
+Date: Mon, 16 Jun 2025 21:29:38 +0200
 MIME-Version: 1.0
-X-Spamd-Bar: ++++
+User-Agent: Mozilla Thunderbird
+To: Fabien Lehoussel <fabien.lehoussel@smile.fr>, buildroot@buildroot.org
+Cc: Thomas Perale <thomas.perale@mind.be>
+References: <20250613110559.2665663-1-fabien.lehoussel@smile.fr>
+Content-Language: en-GB, fr-BE
+In-Reply-To: <20250613110559.2665663-1-fabien.lehoussel@smile.fr>
+X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202506031021; t=1750101328;
- bh=puMmSP1QbCdpTE/Hr0FtPgyRO5evfXEM3UMQo7crw1Y=;
- h=From:To:Cc:Subject:Date:From;
- b=v6jooD/QFe/ZS04TVPKAXzKJN77WH3Zxv6brzu7ijG29JnAyikoC2twviDBqrb/SU
- pwYdTK0xqhMYnvcOPlrBZeiB41eifV+iQxc3/OjaKB0a7uAl5FhF25eXu23iz9gOFk
- 8zORTpU/LikV1TSFVHFSZnpzv+MLWgkN9ML0wDoht+OnBKQczi9rEGwj5PXIwLkCfP
- rdrvM0gLHVWz2RJtZAkaoThe8xDkutaohtjyZjQqY4fVzwGh1QsrsvN29WVh10HliF
- D/XMt2twUmDt/iZXCV4FAEjb5A9q+uF9RlAlB8MaFUw5bG+qP528Amtw3t/THyNoI0
- pu05giWFoRUdA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202506031021 header.b=v6jooD/Q
-Subject: [Buildroot] [PATCH 1/1] package/flatbuffers: bump version to 25.2.10
+ d=rnout.be; s=dkim; 
+ t=1750102179; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:in-reply-to:references;
+ bh=rO5WVkXAVkuOHAmJ+wbzOw8udWiWFPKE0lAMwXAjmBM=;
+ b=S8jtMa7SMC+UcTHiyy+7nfrV8ltVeybEhgHGClZpbuM3zxg1LtZvoeB6i4Dh5haxcuv6cD
+ H0dV2x4LBbBdDDaO+pFBpg3AmtU+7INdWxkCkRQcWSl5o9OSx7l/zYj7rtaMYzAjC+iRqL
+ Hyrg5T4QLsko1NvPP9iWr8/tEmWa/mWc9mH0zQ4qy7C5RsIOQmB1UYFSCL6V+6wt1JqocB
+ vxkaqrSzj29bSk+nbZSEOJydWb59X4aEB7AuUYw8HSRDhfLH0MP81bxY16bS2NsBJPm+UP
+ Scbx8PlGee/oqdW/eoB9h2nqT1LMbY4uPSdqtjL8JXW0x5VYwPpOLvSekQA2DA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=rnout.be
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
+ header.s=dkim header.b=S8jtMa7S
+Subject: Re: [Buildroot] [PATCH 1/7] utils/generate-cyclonedx: add option to
+ filter host packages
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -80,46 +78,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://github.com/google/flatbuffers/releases/tag/v25.2.10
-https://github.com/google/flatbuffers/releases/tag/v25.1.24
-https://github.com/google/flatbuffers/releases/tag/v25.1.21
+  Hi Fabien,
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- package/flatbuffers/flatbuffers.hash | 2 +-
- package/flatbuffers/flatbuffers.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 13/06/2025 13:05, Fabien Lehoussel via buildroot wrote:
+> Adds a new command-line option '--no-host-packages' that allows users
+> to exclude host packages from the generated SBOM. This is useful when
+> focusing on target packages only, resulting in a more concise and
+> relevant software bill of materials.
+> 
+> Signed-off-by: Fabien Lehoussel <fabien.lehoussel@smile.fr>
+> ---
+>   utils/generate-cyclonedx | 9 ++++++---
+>   1 file changed, 6 insertions(+), 3 deletions(-)
+> 
+> diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
+> index 46f68ac63d..08c591e86b 100755
+> --- a/utils/generate-cyclonedx
+> +++ b/utils/generate-cyclonedx
+> @@ -279,6 +279,8 @@ def main():
+>                           default=sys.stdout)
+>       parser.add_argument("--virtual", default=False, action='store_true',
+>                           help="This option includes virtual packages to the CycloneDX output")
+> +    parser.add_argument("--no-host-packages", default=False, action='store_true',
+> +                        help="This option excludes host packages from the CycloneDX output")
 
-diff --git a/package/flatbuffers/flatbuffers.hash b/package/flatbuffers/flatbuffers.hash
-index be605f50ad..e7174e326e 100644
---- a/package/flatbuffers/flatbuffers.hash
-+++ b/package/flatbuffers/flatbuffers.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  7e2ef35f1af9e2aa0c6a7d0a09298c2cb86caf3d4f58c0658b306256e5bcab10  flatbuffers-24.12.23.tar.gz
-+sha256  b9c2df49707c57a48fc0923d52b8c73beb72d675f9d44b2211e4569be40a7421  flatbuffers-25.2.10.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/flatbuffers/flatbuffers.mk b/package/flatbuffers/flatbuffers.mk
-index f526d57ab4..d49d01161d 100644
---- a/package/flatbuffers/flatbuffers.mk
-+++ b/package/flatbuffers/flatbuffers.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FLATBUFFERS_VERSION = 24.12.23
-+FLATBUFFERS_VERSION = 25.2.10
- FLATBUFFERS_SITE = $(call github,google,flatbuffers,v$(FLATBUFFERS_VERSION))
- FLATBUFFERS_LICENSE = Apache-2.0
- FLATBUFFERS_LICENSE_FILES = LICENSE
--- 
-2.39.5
+  I feel that this kind of filtering would be more appropriate as an option to 
+`make show-info` rather than in the cyclonedx conversion. The idea was that the 
+actual SBoM is the output of show-info, and generate-cyclonedx just converts 
+from one format to another.
+
+  That said, `make show-info` doesn't conveniently allow additional options, or 
+good command-line help, so it's not that I'm strictly against this approach.
+
+  Regards,
+  Arnout
+
+>   
+>       args = parser.parse_args()
+>   
+> @@ -288,11 +290,12 @@ def main():
+>   
+>       show_info_dict = json.load(args.in_file)
+>   
+> -    # Remove rootfs and virtual packages if not explicitly included
+> +    # Remove rootfs, host (if not included) and virtual packages (if not included)
+>       # from the cli arguments
+>       filtered_show_info_dict = {k: v for k, v in show_info_dict.items()
+> -                               if ("rootfs" not in v["type"]) and (args.virtual or v["virtual"] is False)}
+> -
+> +                               if ("rootfs" not in v["type"]) and
+> +                                  (args.virtual or v["virtual"] is False) and
+> +                                  (not args.no_host_packages or "host" not in v["type"])}
+>       cyclonedx_dict = {
+>           "bomFormat": "CycloneDX",
+>           "$schema": f"http://cyclonedx.org/schema/bom-{CYCLONEDX_VERSION}.schema.json",
 
 _______________________________________________
 buildroot mailing list
