@@ -4,150 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 901ABC71157
-	for <buildroot@archiver.kernel.org>; Tue, 17 Jun 2025 20:58:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93962C71157
+	for <buildroot@archiver.kernel.org>; Tue, 17 Jun 2025 21:02:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 41E1C40947;
-	Tue, 17 Jun 2025 20:58:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5025740967;
+	Tue, 17 Jun 2025 21:02:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Acy8Ofb0LeEc; Tue, 17 Jun 2025 20:58:19 +0000 (UTC)
+ id SKMI0CLVKwNp; Tue, 17 Jun 2025 21:02:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6AC34408A4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 70D7A40950
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6AC34408A4;
-	Tue, 17 Jun 2025 20:58:19 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 42B4C151
- for <buildroot@buildroot.org>; Tue, 17 Jun 2025 20:58:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 70D7A40950;
+	Tue, 17 Jun 2025 21:02:33 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0827416B
+ for <buildroot@buildroot.org>; Tue, 17 Jun 2025 21:02:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3472F60FC1
- for <buildroot@buildroot.org>; Tue, 17 Jun 2025 20:58:18 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E1D4F83A66
+ for <buildroot@buildroot.org>; Tue, 17 Jun 2025 21:02:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PdrcnHWwVnMk for <buildroot@buildroot.org>;
- Tue, 17 Jun 2025 20:58:17 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:2417::619;
- helo=nam12-dm6-obe.outbound.protection.outlook.com;
- envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 28F3A61005
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 28F3A61005
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com
- (mail-dm6nam12on20619.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:2417::619])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 28F3A61005
- for <buildroot@buildroot.org>; Tue, 17 Jun 2025 20:58:17 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=sGilWVVAsFU6YeWCN0RIvmd58RMsbPEbMaAeOvh/jxN3aHUYblDGyIpydHmW5kUGrimOXPnaNPDNUGKo6oZWrZrBZKUfzrfcBJRzZV035ld75H80A8YqxETmmJIoXp0qV74rrEBBy17juHqNZP8q4jB5oFcFMPOH0St93OpQqpS6kuOXnR3THqPrS+07UpdzJ0huRkmVAUaN65C4SLJNcq4WHBrtBJZ30qkMwBJH+25JoUdh9it0nVarGyj3+q0rnl90CTrCMlD6NB6bzF3LgV4YwjDnQxord9gIPJLZ1rDuMrPkVOSO4b9I4S1GkJyzmmLOyIZzSDllobrR1gEq6w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pUBax69WVeVD+z79dfezkQmnjth4hd2hieZN24bnb3w=;
- b=X9dgM5/W8bHMdhW46/Nj29nv38eT5Lkutl+wS4ryqwuEnTfU1DyS2Qz41n3E+L0he0RN0VF4u6lPKp+vI262P7xvPQzkq3rzbJxMwruMV/TVhfL0GdVYwV9X/ayL7p/n9jn2UO+d5L5VZTW8DVnz78Zab4dfCnBLF0mOb3qhC/k9YK5w13GEQMezpKSH/JDIn9mFuZbpNfCt+5BYQwHi7BYdQkdOQcdCFPhCjkNBcW/gNGrj60ZZ62XfXk1FKIvLyiMMX66wDCkuIQhZPmuCeufftBMmPOx5UuAiTXKVSKpz7LRem+vMHeIVTYHlaOJslhi6ksRb4LBcPpMHRBjlVg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-Received: from BYAPR07CA0048.namprd07.prod.outlook.com (2603:10b6:a03:60::25)
- by SN7PR12MB8791.namprd12.prod.outlook.com (2603:10b6:806:32a::12)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8835.28; Tue, 17 Jun
- 2025 20:58:13 +0000
-Received: from CO1PEPF000066E6.namprd05.prod.outlook.com
- (2603:10b6:a03:60:cafe::88) by BYAPR07CA0048.outlook.office365.com
- (2603:10b6:a03:60::25) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8835.25 via Frontend Transport; Tue,
- 17 Jun 2025 20:58:13 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1PEPF000066E6.mail.protection.outlook.com (10.167.249.4) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8835.15 via Frontend Transport; Tue, 17 Jun 2025 20:58:12 +0000
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 17 Jun
- 2025 15:58:05 -0500
-Received: from xirengwts09.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
- Transport; Tue, 17 Jun 2025 15:58:04 -0500
-To: <buildroot@buildroot.org>
-Date: Tue, 17 Jun 2025 21:58:01 +0100
-Message-ID: <20250617205801.2440300-1-neal.frager@amd.com>
-X-Mailer: git-send-email 2.25.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aNt0a3peBXZr for <buildroot@buildroot.org>;
+ Tue, 17 Jun 2025 21:02:31 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1057A83A0C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1057A83A0C
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1057A83A0C
+ for <buildroot@buildroot.org>; Tue, 17 Jun 2025 21:02:30 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a01bf.dip0.t-ipconnect.de [91.58.1.191])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id D246AA4C082C
+ for <buildroot@buildroot.org>; Tue, 17 Jun 2025 23:02:28 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:59538)
+ by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
+ (envelope-from <bernd@kuhls.net>) id 1uRdRs-0000000028b-0qeX
+ for buildroot@buildroot.org; Tue, 17 Jun 2025 21:02:28 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Tue, 17 Jun 2025 23:02:28 +0200
+Message-Id: <20250617210228.1146390-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
-Received-SPF: None (SATLEXMB04.amd.com: neal.frager@amd.com does not designate
- permitted sender hosts)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PEPF000066E6:EE_|SN7PR12MB8791:EE_
-X-MS-Office365-Filtering-Correlation-Id: c68ba597-e59b-415b-d4c7-08ddade1ac3f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
- ARA:13230040|376014|1800799024|82310400026|36860700013|41080700001; 
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?HWt02IMPFDKq9J2P+xiRv4MyoLCPB7YiS8t9fxgwmidaYrzJIDwCfGKVmY6R?=
- =?us-ascii?Q?9OuoTl82we6+4DByd5ASOjkC8iV8zpAdXFc0OwI9fbLNxJNUv6mXFt/RE2fz?=
- =?us-ascii?Q?5C9zYiWHsAuQsxhhE7bGDU78TMQTo3eiVtC5VySO8/n6shrtImz6BI8WaXPD?=
- =?us-ascii?Q?kSIsphhABy9nQSlviI8Td2eS39/JzIHktBbgP5+A2QugkfVBxSagcLN2hEHV?=
- =?us-ascii?Q?2h+xziS3nMlvcgWi0VXsKkEJylmjTvj0VTehzbxt8c37Z72Dr0e5RAg5Iaus?=
- =?us-ascii?Q?XdGY+p+7IcgqbOMvT9opUk1eEZvkXym4HA8fZfHdga4ws78Mp89m4JacVNkH?=
- =?us-ascii?Q?/e708n9JG2YOQiBrRxXFl6+oZHSPwahdJXA9lHoHxVhWxovHQjRe02Xrfwto?=
- =?us-ascii?Q?fU52O2jkoZ0yiJNHhH+djrmgwOaqYExYTM1d2Kw6W6QWAS006/tDuVi98zwR?=
- =?us-ascii?Q?8xZvWTWMimkiDVQM0I1UxatKVlqRrFeB61jpvDN9JLKnAxxnQhIomm+1Mgbm?=
- =?us-ascii?Q?yRDQ2kt6COCqkCTVV1/T+EVHM+2pBXojaC3eaWw3R+wVg2W41XU/s4ANUCov?=
- =?us-ascii?Q?AIB7x+gelSOure+QA4wCAaCnBzuM5bdi6ple7C0R57POmIfbCadTt6o5OpEa?=
- =?us-ascii?Q?sFj1Xp+Nh8TnSiVQ1vkx/9FSkEIpj9mW1CAbzO/pJsh2c0kCe+tIF2ZPTO9P?=
- =?us-ascii?Q?3HmTzTrpWKTZRWrzizujF/E/PySUfStVZ6ImSVlhiMxq9fDKYnZXt64ffINZ?=
- =?us-ascii?Q?mEhCWm2smWSNCiGupvvNushKz6ubof8r8SWWYUrninDRafC/WujBgqPws/ui?=
- =?us-ascii?Q?q6EHiuCJNqnPA/lMZsyVqnO5esu7LPlPBfXSMn3hkZsPMC/jvQDYaoo00Vlf?=
- =?us-ascii?Q?gNbh80TOwMHuedvyY6+oLtkCsz+FBIMzVYPThL9mLdtbc8xL/UdYWF6GOu3M?=
- =?us-ascii?Q?BUHznxlK1I000Fmpc2RIXvbzsxK2kbr+euJT+LQKruGnLcr+GADwaYZj+ZpT?=
- =?us-ascii?Q?yZjyuT6ms3VUMZ9zL//nejtlMT71PTKehI9NH5Wi5Gx4wKpKGExc+af0DZwZ?=
- =?us-ascii?Q?BOfUhxniFBMk2umcNuolrPVyKiFkp9uhgixfI+5P7UctPV+DeUdSjkHLaxWD?=
- =?us-ascii?Q?aKLVi7lsoXmtq49FtDYvgZlREmQo1/jVtvia7oejgepcXAOyw3cP5jM3RPUc?=
- =?us-ascii?Q?A4Xxk8lwuc/K0gHoev0k6R3Y8IpnohRPfAeHumnkLIwsLMF6h6dB2zzhlHl6?=
- =?us-ascii?Q?j4J3sUEs3W6g5Gkzqc0m79ef3Sk20+C2teSLTpfidfwHKWyixiwHyWj6uUT6?=
- =?us-ascii?Q?1fgHEu84Ou9hHtwe77vlEy4fZAyRb8T7ubMitRR9XFphzS/E2vXJFoJEx2w9?=
- =?us-ascii?Q?pmpiPSzX06GKjDPOtgfz8SmJeM1bMMNZeVqcilgkpR57nqWihdlbePDYlp8Q?=
- =?us-ascii?Q?tpJFe4xSL1mMkCDY4M5kATBGNMar4LM2toVmGoPtg6W8mIWZ875bmX9OT057?=
- =?us-ascii?Q?Krl/NJIzB6WZ3OGJQXtQMznu7Gc7aKCwgHoTfngfDlIFtk8XCoK0qBTDqtVQ?=
- =?us-ascii?Q?2inz+mw9kRZr+w7on1lK3dESbmL4AEm3qIcFwBgk?=
-X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
- IPV:CAL; SFV:NSPM; H:SATLEXMB04.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
- SFS:(13230040)(376014)(1800799024)(82310400026)(36860700013)(41080700001);
- DIR:OUT; SFP:1101; 
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jun 2025 20:58:12.4249 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c68ba597-e59b-415b-d4c7-08ddade1ac3f
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
- Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1PEPF000066E6.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB8791
+X-Spamd-Bar: ++++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amd.com; s=selector1; 
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pUBax69WVeVD+z79dfezkQmnjth4hd2hieZN24bnb3w=;
- b=n+79to9UYL3fgPufajhXSZOpY6gyEXxfh410y0fLKg/XoL3QtfBOB4SvXFREZumnVxKYzl2B7Lm+ICtyIkWDxkI7gw8+kmRzG4gF3wd9+wD3AspfXkqR0MJmgYc5jk9nrw5rW2zF8EyPAMSRUMauAN2qtllKdEBEONazsgWtY5s=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=amd.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=n+79to9U
-Subject: [Buildroot] [PATCH v1 1/1] boot/xilinx-embeddedsw: add family
- variant choice
+ d=kuhls.net; 
+ s=kas202506031021; t=1750194148;
+ bh=glMkj8qe+ZvilfVpDKhqVbJ7qDs9VGQbLEcf7bPUARQ=;
+ h=From:To:Subject:Date:From;
+ b=JS6bxwN3HdoDOcUlGyZPbcYzVv06JJyk8Qc0YZ3JiYGHHVZWkc1tC7dZB0tx0ZFX3
+ PhtwPogRWO1i4G3jCZZvGdQte0q4W8WINyDOr7PidR5fm2GUnfkHvmzPhMbKsBq/Cf
+ HldzcXJogLrlXp/A4aDoKtdsWql6GrFE16z0CmQ/64kPXyivuImRr1mmDKeqHYkema
+ JT8BdFMz2jQZPhxIHKD5lkVQFvrjXUIsaLCnze4qnrW7ma2EBmGfXm3Fo43eRneYE6
+ 6IE1DL1IbskyfUQUbr0Su5RdA18IvgsoA84gRGA2DRleVnp+/qX6ILepQbg2kMk4Mj
+ OUyW4YeRTmrLg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202506031021 header.b=JS6bxwN3
+Subject: [Buildroot] [PATCH 1/1] package/libplatform: bump version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -159,130 +79,89 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Neal Frager via buildroot <buildroot@buildroot.org>
-Reply-To: Neal Frager <neal.frager@amd.com>
-Cc: ibai.erkiaga-elorza@amd.com, luca.ceresoli@bootlin.com,
- Neal Frager <neal.frager@amd.com>, brandon.maier@collins.com, ju.o@free.fr,
- thomas.petazzoni@bootlin.com, romain.naour@smile.fr, michal.simek@amd.com,
- romain.naour@gmail.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch adds a family variant choice to xilinx-embeddedsw for two reasons.
+Removed patch which is included in this release:
+https://github.com/Pulse-Eight/platform/commit/e48db06c64613ac76c820511da95228bcd072f64
 
-1. It does not make sense to build a zynqmp_pmufw for a versal platform or
-versal_plm and versal_psmfw applications for a zynqmp platform.  With this
-solution, users can only select applications which are targeted for their
-device family.
+Use upstream-provided license file:
+https://github.com/Pulse-Eight/platform/commit/92220248b11c43a80105567dbb074c5f30b04029
 
-2. Buildroot will soon be adding support for the versal_2ve_2vm second gen
-family. This family has a plm boot application that generates a plm.elf just
-like the current versal platform. If a user was to select both the versal_plm
-and the versal_2ve_2vm_plm, two different plm.elf files will be generated
-causing a conflict at the installation step and a run-time failure when the
-wrong plm.elf gets included in the boot.bin.  By having a family variant,
-only one plm.elf can be built at a time depending on the choice of family
-variant being "versal" or "versal_2ve_2vm".
+This bump includes compatibility with cmake 4.x:
+https://github.com/Pulse-Eight/platform/commit/d7faed1c696b1a6a67f114a63a0f4c085f0f9195
 
-The issue can be seen by comparing the two Makefiles which both create a
-plm.elf.
-
-versal plm:
-https://github.com/Xilinx/embeddedsw/tree/master/lib/sw_apps/versal_plm/src/versal
-
-versal_2ve_2vm plm:
-https://github.com/Xilinx/embeddedsw/tree/master/lib/sw_apps/versal_plm/src/versal_2ve_2vm
-
-Signed-off-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- boot/xilinx-embeddedsw/Config.in | 15 +++++++++++++++
- configs/versal_vck190_defconfig  |  1 +
- configs/versal_vek280_defconfig  |  1 +
- configs/versal_vpk180_defconfig  |  1 +
- 4 files changed, 18 insertions(+)
+ ...require-c-11-as-the-minimum-standard.patch | 26 -------------------
+ package/libplatform/libplatform.hash          |  4 +--
+ package/libplatform/libplatform.mk            |  4 +--
+ 3 files changed, 4 insertions(+), 30 deletions(-)
+ delete mode 100644 package/libplatform/0001-cmake-require-c-11-as-the-minimum-standard.patch
 
-diff --git a/boot/xilinx-embeddedsw/Config.in b/boot/xilinx-embeddedsw/Config.in
-index 0dd6433608..7af8d59929 100644
---- a/boot/xilinx-embeddedsw/Config.in
-+++ b/boot/xilinx-embeddedsw/Config.in
-@@ -28,8 +28,21 @@ config BR2_TARGET_XILINX_EMBEDDEDSW_VERSION
- 	  Release version of Xilinx/embeddedsw.
- 	  Must be xilinx_v2023.1 or newer.
+diff --git a/package/libplatform/0001-cmake-require-c-11-as-the-minimum-standard.patch b/package/libplatform/0001-cmake-require-c-11-as-the-minimum-standard.patch
+deleted file mode 100644
+index b880a31953..0000000000
+--- a/package/libplatform/0001-cmake-require-c-11-as-the-minimum-standard.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-From ad9fcceb6267e737316b616551b7aac3cf676481 Mon Sep 17 00:00:00 2001
+-From: Lukas Rusak <lorusak@gmail.com>
+-Date: Fri, 2 Oct 2020 15:31:36 -0700
+-Subject: [PATCH] [cmake] require c++11 as the minimum standard
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/Pulse-Eight/platform/pull/46]
+----
+- CMakeLists.txt | 4 ++++
+- 1 file changed, 4 insertions(+)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 7144b0b..e9112f9 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -3,6 +3,10 @@ project(p8-platform)
+- cmake_minimum_required(VERSION 2.8.9)
+- enable_language(CXX)
+- 
+-+set(CMAKE_CXX_STANDARD 11)
+-+set(CMAKE_CXX_STANDARD_REQUIRED YES)
+-+set(CMAKE_CXX_EXTENSIONS NO)
+-+
+- set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR})
+- 
+- find_package(Threads REQUIRED)
+diff --git a/package/libplatform/libplatform.hash b/package/libplatform/libplatform.hash
+index 283b435b7c..5fead5eb95 100644
+--- a/package/libplatform/libplatform.hash
++++ b/package/libplatform/libplatform.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  ebee46c76b86b40b703fa913465f5004fa3166eeb6a4794c58fc8a5c25702931  libplatform-a7cd0d5780ed80a4e70480d1650749f29e8a1fb2.tar.gz
+-sha256  80fc66febbb2393c9d518e3eefa4ad9aae15a9b6a84174c0e443ea79eeea5131  src/os.h
++sha256  2ab98ba486b28dd9c31e9f0f8a04eddad12c09ad1951c359fdef475baafba296  libplatform-2748be52ae27e6007ef548b697d4a03ff7de4291.tar.gz
++sha256  0137261d24ce001fc5237aacddd267533e0f150ac23cf21acffea599f7358f7a  LICENSE.md
+diff --git a/package/libplatform/libplatform.mk b/package/libplatform/libplatform.mk
+index 90192369fe..aeded5e9a7 100644
+--- a/package/libplatform/libplatform.mk
++++ b/package/libplatform/libplatform.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
  
-+choice
-+	bool "family variant"
-+	default BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP
-+
-+config BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL
-+	bool "versal"
-+
-+config BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP
-+	bool "zynqmp"
-+
-+endchoice
-+
- config BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM
- 	bool "versal plm"
-+	depends on BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL
- 	help
- 	  Build versal plm application from Xilinx/embeddedsw repo.
- 	  If selected, the xilinx-prebuilt package will not install
-@@ -40,6 +53,7 @@ config BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM
+-LIBPLATFORM_VERSION = a7cd0d5780ed80a4e70480d1650749f29e8a1fb2
++LIBPLATFORM_VERSION = 2748be52ae27e6007ef548b697d4a03ff7de4291
+ LIBPLATFORM_SITE = $(call github,Pulse-Eight,platform,$(LIBPLATFORM_VERSION))
+ LIBPLATFORM_LICENSE = GPL-2.0+
+-LIBPLATFORM_LICENSE_FILES = src/os.h
++LIBPLATFORM_LICENSE_FILES = LICENSE.md
+ LIBPLATFORM_INSTALL_STAGING = YES
  
- config BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PSMFW
- 	bool "versal psmfw"
-+	depends on BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL
- 	help
- 	  Build versal psmfw application from Xilinx/embeddedsw repo.
- 	  If selected, the xilinx-prebuilt package will not install
-@@ -50,6 +64,7 @@ config BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PSMFW
- 
- config BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW
- 	bool "zynqmp pmufw"
-+	depends on BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP
- 	help
- 	  Build zynqmp pmufw application from Xilinx/embeddedsw repo.
- 	  If selected, the xilinx-prebuilt package will not install
-diff --git a/configs/versal_vck190_defconfig b/configs/versal_vck190_defconfig
-index c9d99876d5..44bf9bc376 100644
---- a/configs/versal_vck190_defconfig
-+++ b/configs/versal_vck190_defconfig
-@@ -40,6 +40,7 @@ BR2_TARGET_UBOOT_FORMAT_DTB=y
- BR2_TARGET_UBOOT_FORMAT_REMAKE_ELF=y
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=versal-vck190-rev1.1"
- BR2_TARGET_XILINX_EMBEDDEDSW=y
-+BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL=y
- BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM=y
- BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PSMFW=y
- BR2_TARGET_XILINX_PREBUILT=y
-diff --git a/configs/versal_vek280_defconfig b/configs/versal_vek280_defconfig
-index 4aa25f8d67..0bd24b304f 100644
---- a/configs/versal_vek280_defconfig
-+++ b/configs/versal_vek280_defconfig
-@@ -40,6 +40,7 @@ BR2_TARGET_UBOOT_FORMAT_DTB=y
- BR2_TARGET_UBOOT_FORMAT_REMAKE_ELF=y
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=versal-vek280-revB"
- BR2_TARGET_XILINX_EMBEDDEDSW=y
-+BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL=y
- BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM=y
- BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PSMFW=y
- BR2_TARGET_XILINX_PREBUILT=y
-diff --git a/configs/versal_vpk180_defconfig b/configs/versal_vpk180_defconfig
-index 500298c2f4..746c36fb18 100644
---- a/configs/versal_vpk180_defconfig
-+++ b/configs/versal_vpk180_defconfig
-@@ -40,6 +40,7 @@ BR2_TARGET_UBOOT_FORMAT_DTB=y
- BR2_TARGET_UBOOT_FORMAT_REMAKE_ELF=y
- BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=versal-vpk180-revA"
- BR2_TARGET_XILINX_EMBEDDEDSW=y
-+BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL=y
- BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM=y
- BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PSMFW=y
- BR2_TARGET_XILINX_PREBUILT=y
+ $(eval $(cmake-package))
 -- 
-2.25.1
+2.39.5
 
 _______________________________________________
 buildroot mailing list
