@@ -4,73 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B7EBC71157
-	for <buildroot@archiver.kernel.org>; Tue, 17 Jun 2025 18:58:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 209C0C71136
+	for <buildroot@archiver.kernel.org>; Tue, 17 Jun 2025 19:00:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B77ED80FB2;
-	Tue, 17 Jun 2025 18:58:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D617283B0E;
+	Tue, 17 Jun 2025 19:00:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bb6iVC9_5ocH; Tue, 17 Jun 2025 18:58:11 +0000 (UTC)
+ id kBJmB16JpHGJ; Tue, 17 Jun 2025 19:00:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0C25A80F34
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EBA2483AF4
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0C25A80F34;
-	Tue, 17 Jun 2025 18:58:11 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 711B6D79
- for <buildroot@buildroot.org>; Tue, 17 Jun 2025 18:58:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EBA2483AF4;
+	Tue, 17 Jun 2025 19:00:00 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 82FEAD79
+ for <buildroot@buildroot.org>; Tue, 17 Jun 2025 18:59:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 62E5360FAC
- for <buildroot@buildroot.org>; Tue, 17 Jun 2025 18:58:10 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 73CC283AFA
+ for <buildroot@buildroot.org>; Tue, 17 Jun 2025 18:59:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sz9GNeB05voz for <buildroot@buildroot.org>;
- Tue, 17 Jun 2025 18:58:09 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7C50E60DB7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7C50E60DB7
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7C50E60DB7
- for <buildroot@buildroot.org>; Tue, 17 Jun 2025 18:58:09 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 3C0B62003CA;
- Tue, 17 Jun 2025 20:58:04 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
- via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 17 Jun 2025 20:58:03 +0200
-MIME-Version: 1.0
-Date: Tue, 17 Jun 2025 20:58:03 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9TBcM8Us3RMx for <buildroot@buildroot.org>;
+ Tue, 17 Jun 2025 18:59:58 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB16283AF4
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id CB16283AF4
+ for <buildroot@buildroot.org>; Tue, 17 Jun 2025 18:59:58 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id BA35C83CFF; Tue, 17 Jun 2025 18:59:58 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Fiona Klute <fiona.klute@gmx.de>
-Cc: buildroot@buildroot.org, Fabrice Fontaine <fontaine.fabrice@gmail.com>
-In-Reply-To: <20250617092107.417361-1-fiona.klute@gmx.de>
-References: <20250617092107.417361-1-fiona.klute@gmx.de>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <5f5883094fea0c52ef97c9daade0c51e@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1750186686;
- bh=yEQcnSDq1m7cI7ZZO3GB7ji/F7QzyPK5RxmvGSJiyl4=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=J7ZE0fgCsrgTGnxYh2un4Fla2u/IWKpOResQESSUuoKZO9twxFrSOycmCE+YzmAjk
- l8YVleKWhL1AgJmuJ/ahPq+IWg52hnACsPT8CL+ShhUKfcof/FuirPYBC5EGzUv5ft
- tn2g3USreOR16BvHV8pejHwbho6WuLCVSkx4wXeiVOSACheiBcPM1E7tePO+tPq3QX
- NBy5iZmFlVCQb34Vseadk3xLOCE6NzGnD4gJC3pZ3uQtrjZzYryw/Tv8KG5e4GGgcN
- mNUnz+SyKQ/OyWh86qIa794DZR8ETogPYsvkypx4sn5PTbSGE1ZFEKdah5wHgZZh1q
- og2vUuX3iNQ5Q==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=J7ZE0fgC
-Subject: Re: [Buildroot] [PATCH 1/1] package/libglib2: security bump version
- to 2.84.3
+To: buildroot@buildroot.org
+Date: Tue, 17 Jun 2025 20:58:31 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 0e117dd52c1254a8f46078f98b51d35c63bb439c
+X-Git-Newrev: 55a4c00d739c97debb2e214c962a0b4c46c8db72
+X-Patchwork-Hint: ignore
+Message-Id: <20250617185958.BA35C83CFF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/perl-net-dns: bump version to 1.50
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,23 +58,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 17/06/2025 11:21, Fiona Klute via buildroot wrote:
-> From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
-> 
-> Fixes CVE-2025-6052, see [1] (backport of "gstring: Fix overflow check
-> when expanding the string" [2] to the stable 2.84 series).
-> 
-> [1] https://gitlab.gnome.org/GNOME/glib/-/merge_requests/4656
-> [2] https://gitlab.gnome.org/GNOME/glib/-/merge_requests/4655
-> 
-> Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+commit: https://git.buildroot.net/buildroot/commit/?id=55a4c00d739c97debb2e214c962a0b4c46c8db72
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Changelog: https://metacpan.org/release/NLNETLABS/Net-DNS-1.50/source/Changes
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[Julien: update changelog link to use permalink]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/perl-net-dns/perl-net-dns.hash | 4 ++--
+ package/perl-net-dns/perl-net-dns.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/perl-net-dns/perl-net-dns.hash b/package/perl-net-dns/perl-net-dns.hash
+index 42b6b091e1..3a3693bea0 100644
+--- a/package/perl-net-dns/perl-net-dns.hash
++++ b/package/perl-net-dns/perl-net-dns.hash
+@@ -1,6 +1,6 @@
+ # retrieved by scancpan from https://cpan.metacpan.org/
+-md5  72334908f48a93da40ed13ab9ab0bef4  Net-DNS-1.48.tar.gz
+-sha256  e55f3e71a31c2b856024bf5061b1160b03f879d80135414f38d8220476944753  Net-DNS-1.48.tar.gz
++md5  1ca152f2eec8f66ef4ae7243697197cc  Net-DNS-1.50.tar.gz
++sha256  c660500b9d96e5aa2b16d9f4260b6f9f05b5602d3c4bea0ca39b45bcd02ba993  Net-DNS-1.50.tar.gz
+ 
+ # computed by scancpan
+ sha256  1e44fcf65509b47a251eda0ce1f8bd6aefa13517e38cb1e95b8d36120fb15452  LICENSE
+diff --git a/package/perl-net-dns/perl-net-dns.mk b/package/perl-net-dns/perl-net-dns.mk
+index bdc0410df8..05924c1055 100644
+--- a/package/perl-net-dns/perl-net-dns.mk
++++ b/package/perl-net-dns/perl-net-dns.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PERL_NET_DNS_VERSION = 1.48
++PERL_NET_DNS_VERSION = 1.50
+ PERL_NET_DNS_SOURCE = Net-DNS-$(PERL_NET_DNS_VERSION).tar.gz
+ PERL_NET_DNS_SITE = $(BR2_CPAN_MIRROR)/authors/id/N/NL/NLNETLABS
+ PERL_NET_DNS_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
