@@ -4,123 +4,152 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F3EEC71136
-	for <buildroot@archiver.kernel.org>; Tue, 17 Jun 2025 09:21:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89D5EC71136
+	for <buildroot@archiver.kernel.org>; Tue, 17 Jun 2025 11:50:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C10C2820B4;
-	Tue, 17 Jun 2025 09:21:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2232882037;
+	Tue, 17 Jun 2025 11:50:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tUpqReX15mZi; Tue, 17 Jun 2025 09:21:30 +0000 (UTC)
+ id ekg7VqBQ8Erz; Tue, 17 Jun 2025 11:50:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ED83981F91
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D1A881FF9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ED83981F91;
-	Tue, 17 Jun 2025 09:21:29 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 471D916B
- for <buildroot@buildroot.org>; Tue, 17 Jun 2025 09:21:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3D1A881FF9;
+	Tue, 17 Jun 2025 11:50:16 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id BDBC1D79
+ for <buildroot@buildroot.org>; Tue, 17 Jun 2025 11:50:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4362660B63
- for <buildroot@buildroot.org>; Tue, 17 Jun 2025 09:21:28 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B9A4C81FF9
+ for <buildroot@buildroot.org>; Tue, 17 Jun 2025 11:50:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id h_LJCBi1WRmo for <buildroot@buildroot.org>;
- Tue, 17 Jun 2025 09:21:27 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.21;
- helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E6EC260B3C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E6EC260B3C
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E6EC260B3C
- for <buildroot@buildroot.org>; Tue, 17 Jun 2025 09:21:26 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from haruka.home.arpa ([85.22.115.88]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N1OXT-1uuVce2lwp-00rEx8; Tue, 17
- Jun 2025 11:21:23 +0200
-To: buildroot@buildroot.org
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
-Date: Tue, 17 Jun 2025 11:21:07 +0200
-Message-ID: <20250617092107.417361-1-fiona.klute@gmx.de>
-X-Mailer: git-send-email 2.49.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id E_35gVZIA8Ll for <buildroot@buildroot.org>;
+ Tue, 17 Jun 2025 11:50:15 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a01:111:f403:2409::60b;
+ helo=nam04-dm6-obe.outbound.protection.outlook.com;
+ envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E0C4081FEB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E0C4081FEB
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com
+ (mail-dm6nam04on2060b.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:2409::60b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E0C4081FEB
+ for <buildroot@buildroot.org>; Tue, 17 Jun 2025 11:50:14 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=zHHujv318H4YscXp6Bq5CJeuBZ1u4wT8lRlMtuMEh6c98AocV40zcAq0AJ1V64XgK7TF7wEis+rq3Y8bLRtsPfy8JBvGfA50QaF6LUhh6H2jz4WBI1zvG2IA+ioNsjGkgg9KYOxw7SdAKzYZvAKnVzJy6xSUhkzA9/5TKPtVqKoG7NAyuj8rRiDkkQjAYNSbcCVUKCcyke1LWAWdKxvTGGXJtnOskkMR4MXXbYgh7sSYnEuwTbxoZd4uEJ8IchQgqANI+GOhKdwMcjnSvY1FAlKDcIFZgQZ91umkSzpj+lzPdnCbVh1H+RTMURCyrvFESg0gN+TU6Ml/YXv5xY0SwQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=H0fuNHbm6QXH163Z2eUe6XNYT9kVsn2svTz4yJmaX6A=;
+ b=CboXaXiAjDGEv3i1cuJ8cMLOfUEU1fCZT+nzjPUI7qSrKeC9qchikUeaEPip3RsBvTQOb8vNugRBiWZrdMVXGqC0Tf87Cv96nem5yDW5f817S4RdcoBqA/hpDiqYJm/d/hGho8tFhDkGDlKLe3L00hn5U+q3rUlfxK43qz2uQb5I563GgWSWKeddEtQ8kTByVSRdPXNNarWoS+YQaHa/ZlIUsZZtfO67ejnQLxdiwIxyxH2ONsOTZKzIyXyBd+mEQ36roYdZarNqHWMEvd3cS1Jy/TXhg5kToEQD2PUKkjAMugC4eMTC/UlLD92MUjclaPTsw+8Q/WdMo2V892C++g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+Received: from SJ0PR03CA0367.namprd03.prod.outlook.com (2603:10b6:a03:3a1::12)
+ by CY3PR12MB9630.namprd12.prod.outlook.com (2603:10b6:930:101::14)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8835.19; Tue, 17 Jun
+ 2025 11:50:10 +0000
+Received: from CY4PEPF0000E9D4.namprd03.prod.outlook.com
+ (2603:10b6:a03:3a1:cafe::11) by SJ0PR03CA0367.outlook.office365.com
+ (2603:10b6:a03:3a1::12) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8835.25 via Frontend Transport; Tue,
+ 17 Jun 2025 11:50:09 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ CY4PEPF0000E9D4.mail.protection.outlook.com (10.167.241.139) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8835.15 via Frontend Transport; Tue, 17 Jun 2025 11:50:08 +0000
+Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 17 Jun
+ 2025 06:50:04 -0500
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB06.amd.com
+ (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 17 Jun
+ 2025 06:50:04 -0500
+Received: from xirengwts09.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
+ Transport; Tue, 17 Jun 2025 06:50:02 -0500
+To: <buildroot@buildroot.org>
+Date: Tue, 17 Jun 2025 12:49:59 +0100
+Message-ID: <20250617115000.2001160-1-neal.frager@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:gpo2pDMufU3SQKF8U3gEvv18RHxHz+9j5wu80zsR54ju6DZoEuP
- 0/WUi+9h//k8SU4UW8RIBoAemQis23wdsxhZhWFWx9p38oxp2tcvSRDCklHlbjJ+ormzKYG
- a3/DTVNVnULaWj4iPbOYpOMtag4F7WSVmGUA0h26a2IabY2j7GZPpwxY5ba0LkZehc+rqGp
- xB8ILr7IpYIGyUgjGewFw==
-UI-OutboundReport: notjunk:1;M01:P0:xzbrjC7Vbvo=;RLICjrKGf6Vo4k2GxVe1LODAYyH
- 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
- KUpdEyEn6kAI1gCR
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9D4:EE_|CY3PR12MB9630:EE_
+X-MS-Office365-Filtering-Correlation-Id: e6c4a52a-8ac1-4f7f-96ab-08ddad951c06
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+ ARA:13230040|376014|36860700013|82310400026|1800799024|41080700001; 
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?9RoCTeqFhT9QyqsS/fptVhXxiiZ12nDyyzxXpIAcelyR4rxkLf+RRE/eR/Fz?=
+ =?us-ascii?Q?vjwQ025O/K0TRZLw/R28C69oGsyhF0Q8yiPmmNtDQh/1TGHrZU+e3XjILVhZ?=
+ =?us-ascii?Q?mELOhA0TlPW2P/JXqnxTqU1o8Jy9oZ0hZ7sm02UezyHhCVfHXWkb5xwoD16x?=
+ =?us-ascii?Q?uofsNrLtSkaDRODLP09TgGMJDK9KWd4HgdlwSlzqnYSo5qR6HJ0zq99GQfh3?=
+ =?us-ascii?Q?L+Q0KhnnZE8JVk55L6Uq8EcaAXvGEyjxWBDbVJA+Q+MENaKFD0aux8n/bhxs?=
+ =?us-ascii?Q?8OsVwhqTMMkoK7Qks60k8FvCWWiMe0YZVROfPOlHu1I5n2Mfg2Al8tiTfnh/?=
+ =?us-ascii?Q?uRXxm5/91xpjoPzUmcJbaWbXzHwms0xqka5TqMNgE/o/OuRrv3yI/Z5sV2QH?=
+ =?us-ascii?Q?/PGIK0MUmjqH0uxePyXpGjBtf3Iv//vXq39DDrw3dvJYimNcjx9Bli+vw4HM?=
+ =?us-ascii?Q?nN1fob7YS9ZzTYD5fLt8/4BBKqU7OK3kEjCtw636gYEsHmLsvitWRNdDIv3E?=
+ =?us-ascii?Q?Zl//QZPzfEwdzHYNvuaIqFJzNRmKuPZdDkNs+9XUzL+jxHxheKcVRl/P5qvU?=
+ =?us-ascii?Q?+86wN9Zdoh61AoZO+mRTKBtyNkf4RZGbrsslBcs6jm+o6Y6ZrHQx4PteVooV?=
+ =?us-ascii?Q?bUWrGlt4XE3lH6KGUnwYimixKXnV5QQjWqy+lwg+Sbrqm0h71ujmQeyf4hTH?=
+ =?us-ascii?Q?vIPQ3XNzOrKA2NA1OIWmcJd08c5Udoyc3qumMditwdYD6PIBR0+mCOyo/mR1?=
+ =?us-ascii?Q?a89ouoWI0WFNR1NEeqFzl9lxSen0ZLKsQsE8K3KTgL2oNs8BpmzWNn4iNlrI?=
+ =?us-ascii?Q?D+3rQUFx/N+gDLY6I/uwXmwd9NzoKBKmno/TBEsrj1ucALPuA+mJwRir4+Vh?=
+ =?us-ascii?Q?UzfKjwdVbHQDOgImO9QbUMdr3xgGyDbYwhgK3DGNJji6Nzstt+ypSb8hTE/W?=
+ =?us-ascii?Q?qhiOLIMlFxzHwVz1jrUu/00RTTc2e/y0rt6cWZ2ultckqOhSmYQlCfGxC7cP?=
+ =?us-ascii?Q?p7SlYmaJi4UxBP3RLIcv4S1nIzvPWWS+JSToHglY0EpFlXgd//lUm4YXc9M/?=
+ =?us-ascii?Q?tOO45znk9FXo6E0p8NjVUZa3wgbRsYBFP/nDxpmZ9LOP8dzB9Z6BTuPhZF7+?=
+ =?us-ascii?Q?EhbBV4nalFubi5XOLGpuIA7WJKMVbJA0C11vvqolKlLdW05g3eEpjhXgMQF3?=
+ =?us-ascii?Q?c2DAyNrlPdizv0yHkbBavakt8LHxyHc6rQayNrVT2a4csQUvPZcojjWKmtZZ?=
+ =?us-ascii?Q?XmxQhr7urhX2uw6WW2vrYaC+d/FycFqPejT+y9svcTSsY8IOc4OqHfQuMIpP?=
+ =?us-ascii?Q?DRgKLqrdY2D3o5cnP93jdE29cJ9rfpbcQTFtbzvOuO0eGkWrWwAejXSHHjp9?=
+ =?us-ascii?Q?/bxJLZshb4uB1QAzOvbU2qNNVXLT2nky7gDUy95sapjmLG2q6G6P9+VJMa2D?=
+ =?us-ascii?Q?dylCV+u0C0lfjODi53SpxdDgU2rLwhiqEd+Zzqnx2Umf+uJr02fEGk42nPDh?=
+ =?us-ascii?Q?f1EOZNq8Sr45yNIEsRseqEPt+1qnucpKyVYKoyAUG3tMns2EH98w/TRIF2CH?=
+ =?us-ascii?Q?NHWkr8M6GnS1VTD8yV4=3D?=
+X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
+ IPV:CAL; SFV:NSPM; H:SATLEXMB03.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
+ SFS:(13230040)(376014)(36860700013)(82310400026)(1800799024)(41080700001);
+ DIR:OUT; SFP:1101; 
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jun 2025 11:50:08.7517 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e6c4a52a-8ac1-4f7f-96ab-08ddad951c06
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
+ Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000E9D4.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY3PR12MB9630
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmx.de; 
- s=s31663417; t=1750152084; x=1750756884; i=fiona.klute@gmx.de;
- bh=8nXTjVDk2twnoRaAKKgXyH50gnnQ23O+w0UnnQ6JkG4=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
- MIME-Version:Content-Transfer-Encoding:cc:
- content-transfer-encoding:content-type:date:from:message-id:
- mime-version:reply-to:subject:to;
- b=FA9vDhDCUNPh+iZUAl48jUy9d3dxt3idV+Z3PiBfSMAJhaZgReRTtzUBl7H0+QmW
- aU4eR64+xfy4h+dGQ8QxJqwYfAqJ0DfwFFr2ecx/D8WpMgtOYVancrn7KYbe4/IFz
- eHWwKATSOu/33nEtaJNcA8AIBmqq1ZqcZUtxfDqvvKhvL9CBFZfABEGJ0GsqZsfDU
- UhKxaWATzIijhZEFxtnTWryABYdh6M+edGG2g9PiSYcNxBDqu+Csa/cJv7dqjHdYw
- anVNSfBG/g1PriBUViUGg3+x3ItlwJqKwLZToHjCsDg823Wh9zBCPzZ7ZTpUe4+TK
- NVzeKuef7YMZ/lguAw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=amd.com; s=selector1; 
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=H0fuNHbm6QXH163Z2eUe6XNYT9kVsn2svTz4yJmaX6A=;
+ b=ukOXxX39Zf6B75SZFaAK4izTZu8cowTsZO3OPhHDPaMdrhM5F6/+IZDqt5RNHKydyL1WuC7bWUEk8pkgSYsZNfNoW0fRuGf8ChfUvbhwQPuh5ujj73+lJawdskGy+fYs6fBaxdRVzKrPrAjEWOKSPNVN7oWwuKh8f9ZSZmbbqsM=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
- header.s=s31663417 header.b=FA9vDhDC
-Subject: [Buildroot] [PATCH 1/1] package/libglib2: security bump version to
- 2.84.3
+ header.from=amd.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
+ header.s=selector1 header.b=ukOXxX39
+Subject: [Buildroot] [PATCH v1 1/2] board/zynq: update custom board
+ documentation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -132,53 +161,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Fiona Klute via buildroot <buildroot@buildroot.org>
-Reply-To: Fiona Klute <fiona.klute@gmx.de>
+From: Neal Frager via buildroot <buildroot@buildroot.org>
+Reply-To: Neal Frager <neal.frager@amd.com>
+Cc: ibai.erkiaga-elorza@amd.com, luca.ceresoli@bootlin.com,
+ Neal Frager <neal.frager@amd.com>, brandon.maier@collins.com, ju.o@free.fr,
+ thomas.petazzoni@bootlin.com, romain.naour@smile.fr, michal.simek@amd.com,
+ romain.naour@gmail.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
+The readme.txt file for zynq boards has some outdated information for the
+custom board section.  The custom ps7_init_gpl.c is now defined by
+CONFIG_XILINX_PS_INIT_FILE and Buildroot always puts the Xilinx u-boot builds
+in the output/build/uboot-custom directory.
 
-Fixes CVE-2025-6052, see [1] (backport of "gstring: Fix overflow check
-when expanding the string" [2] to the stable 2.84 series).
+This patch updates the instructions in the readme.txt file accordingly.
 
-[1] https://gitlab.gnome.org/GNOME/glib/-/merge_requests/4656
-[2] https://gitlab.gnome.org/GNOME/glib/-/merge_requests/4655
-
-Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+Signed-off-by: Neal Frager <neal.frager@amd.com>
 ---
- package/libglib2/libglib2.hash | 4 ++--
- package/libglib2/libglib2.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ board/zynq/readme.txt | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
-index bfa74f7505..9ed0b204ee 100644
---- a/package/libglib2/libglib2.hash
-+++ b/package/libglib2/libglib2.hash
-@@ -1,4 +1,4 @@
--# https://download.gnome.org/sources/glib/2.84/glib-2.84.2.sha256sum
--sha256  88e960dd937057407d61fcb3b45a860704b25923c37ae2478b85f2ecb5a4021f  glib-2.84.2.tar.xz
-+# https://download.gnome.org/sources/glib/2.84/glib-2.84.3.sha256sum
-+sha256  aa4f87c3225bf57ca85f320888f7484901a17934ca37023c3bd8435a72db863e  glib-2.84.3.tar.xz
- # License files, locally calculated
- sha256  fa6f36630bb1e0c571d34b2bbdf188d08495c9dbf58f28cac112f303fc1f58fb  COPYING
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index 05f6ac0c20..7eda9742c1 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/board/zynq/readme.txt b/board/zynq/readme.txt
+index b2a4cefedd..87df7236f0 100644
+--- a/board/zynq/readme.txt
++++ b/board/zynq/readme.txt
+@@ -62,7 +62,7 @@ the U-Boot source tree. Without those files, boot.bin will be built
+ successfully but it will not be functional at all. Those files are
+ output from the Xilinx tools, but for convenience, U-Boot includes the
+ default ps7_init_gpl.c/h of popular boards. Those files may need to be
+-updated for any programmable logic customizations which impact
++updated for any programmable logic or DDR customizations which impact
+ ps7_init (clock/pin setup & mapping/AXI bridge setup/etc). See
+ board/xilinx/zynq/ directory of U-Boot for natively supported ps7_init
+ files. If the ps7_init files for your board are not found in U-Boot,
+@@ -72,13 +72,13 @@ you need to add them by yourself.
+     make zynq_zed_defconfig
  
- LIBGLIB2_VERSION_MAJOR = 2.84
--LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).2
-+LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).3
- LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
- LIBGLIB2_SITE = https://download.gnome.org/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
- LIBGLIB2_LICENSE = LGPL-2.1+
+ 2) make uboot-menuconfig
+-    Visit the following menu and enable CONFIG_ZYNQ_CUSTOM_INIT.
++    Visit the following menu and enable CONFIG_XILINX_PS_INIT_FILE
+ 
+     ARM architecture  --->
+-       [*] Use custom ps7_init provided by Xilinx tool
++       [*] Zynq/ZynqMP PS init file(s) location
+ 
+-3) Copy ps7_init_gpl.c/h generated by the Xilinx tools into
+-   output/build/uboot-xilinx-<pkg version>/board/xilinx/zynq/custom_hw_platform/
++3) Copy ps7_init_gpl.c/h generated by the Xilinx Vivado tools into
++   output/build/uboot-custom/board/xilinx/zynq/custom_hw_platform/
+ 
+ 4) make
+ 
 -- 
-2.49.0
+2.25.1
 
 _______________________________________________
 buildroot mailing list
