@@ -4,56 +4,98 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64D5FC71136
-	for <buildroot@archiver.kernel.org>; Tue, 17 Jun 2025 12:32:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A07BAC71157
+	for <buildroot@archiver.kernel.org>; Tue, 17 Jun 2025 13:12:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1D2BE60B51;
-	Tue, 17 Jun 2025 12:32:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5A76960D89;
+	Tue, 17 Jun 2025 13:12:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ErekbBkYaKxh; Tue, 17 Jun 2025 12:32:57 +0000 (UTC)
+ id Wg7ggiEhYkoL; Tue, 17 Jun 2025 13:12:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F09F160D5E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 927AD6087C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F09F160D5E;
-	Tue, 17 Jun 2025 12:32:56 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id D25F5151
- for <buildroot@buildroot.org>; Tue, 17 Jun 2025 12:32:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 927AD6087C;
+	Tue, 17 Jun 2025 13:12:58 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id A7375151
+ for <buildroot@buildroot.org>; Tue, 17 Jun 2025 13:12:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CFBA24003D
- for <buildroot@buildroot.org>; Tue, 17 Jun 2025 12:32:54 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8D4B060760
+ for <buildroot@buildroot.org>; Tue, 17 Jun 2025 13:12:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MaEOQFoIJj67 for <buildroot@buildroot.org>;
- Tue, 17 Jun 2025 12:32:54 +0000 (UTC)
-X-Greylist: delayed 85126 seconds by postgrey-1.37 at util1.osuosl.org;
- Tue, 17 Jun 2025 12:32:53 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C28BB40547
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C28BB40547
-Received-SPF: Neutral (mailfrom) identity=mailfrom; client-ip=54.37.254.54;
- helo=kmf2.trabucayre.com; envelope-from=gwenj@trabucayre.com;
- receiver=<UNKNOWN> 
-Received: from kmf2.trabucayre.com (ns3108948.ip-54-37-254.eu [54.37.254.54])
- by smtp2.osuosl.org (Postfix) with ESMTP id C28BB40547
- for <buildroot@buildroot.org>; Tue, 17 Jun 2025 12:32:53 +0000 (UTC)
-Received: from kmf3.. (localhost [IPv6:::1])
- by kmf2.trabucayre.com (Postfix) with ESMTP id 8A66F16022E;
- Tue, 17 Jun 2025 12:32:50 +0000 (UTC)
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KvIkbj22uShJ for <buildroot@buildroot.org>;
+ Tue, 17 Jun 2025 13:12:55 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
+ envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 738186087C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 738186087C
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 738186087C
+ for <buildroot@buildroot.org>; Tue, 17 Jun 2025 13:12:55 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id
+ ffacd0b85a97d-3a5123c1533so3249819f8f.2
+ for <buildroot@buildroot.org>; Tue, 17 Jun 2025 06:12:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1750165973; x=1750770773;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=VwV/G8Lbhwh9XSe4Z6/E3mJ8/MkW8yJDQN9shChnvR4=;
+ b=uQiAzWCnLYlJ13AWz65mYnCerLLmuVB1vhx4JqU0gLjz6MgcDNSjVZLEPPS9/dU+8O
+ OSAqtBA2zPgEFvT6/82DbRu9EBSUUikA6y9aXNr7cIInqR+SX2iuXQj5+NgqgVBDEKjA
+ 2ifRbSlXGo8PPhngxOR9HK3y1lb3M8sEaGVskL83QGjNakcrztSRjNOm356y/UX6PP8q
+ Zmt5B5dhZlLDYRn7zQ6DAb6I0Z1FoJeTyEN4WQLVjNveoinN8t2RZ1nc4i/Uw61Cyklv
+ EZx40jxjWe3onRUDmTmsZuy9k5w+Mno7MYuK4L3IXtfxGmPL9gdaEk+uUXU0Q5CFOd4n
+ Kljg==
+X-Gm-Message-State: AOJu0YxNt//fKEMY/mqx7J8Pvf93Or27MBUolkcWMDx+fiEQyeKdRDMC
+ 4cFIphJK04TXqey8NdMpsIY/nswkHZsDKF+d9huSTAxOOy3r86JIx7/S00KVGnUcSYTvtX/HW8+
+ jYugm
+X-Gm-Gg: ASbGncttpilzDu79C2b48Pm7EMZBwIwLjNh4/y46JHlQXF3+bjmQeXlMvxEH91ZorBf
+ rDhTDbI5Fy+yA8W6Og40Ppr6BeVbOpPHk6JkN5VCM8jXmYRqgRdHWh7hkOp6X1CdECiI+4OIEYK
+ wJZ399y5eFIr+i48pWraLs6OUxf8qCZvooPvB2fZoWxchyWDxOr1QvWpFWZLDzT12FSwwP4w7If
+ S9Ls5pSTKznlAtLWZjcQFYZ8gT2Et2xCl5Up5dw1hJwvmiwC1AvEY6ivOanYXRKfySXXkpFNAtg
+ 78sqIyGKB6WUT4h5HY0ETfICiLbzTkQgXAFSe6LBWfSxxJXtXwJt+2ncH43vS+zGGRJ78tiJ5h8
+ 5RSdkSmefYeRuMsRaQ5ca2qMVMg==
+X-Google-Smtp-Source: AGHT+IEswzegsEQAj2/4IghxSWhBoFz+6hbx4KWuLlcGUGnsd2UgpM/OA+IHLTsWV42BamjXfUfQ8w==
+X-Received: by 2002:a05:6000:4284:b0:3a4:da87:3a73 with SMTP id
+ ffacd0b85a97d-3a572e8cd82mr10104038f8f.42.1750165973185; 
+ Tue, 17 Jun 2025 06:12:53 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.. ([2.196.43.93])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-4532e172b03sm175202435e9.36.2025.06.17.06.12.52
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 17 Jun 2025 06:12:52 -0700 (PDT)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-Date: Tue, 17 Jun 2025 12:32:49 +0000
-Message-Id: <20250617123249.1359316-1-gwenj@trabucayre.com>
-X-Mailer: git-send-email 2.39.5
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ linux-amarula@amarulasolutions.com
+Date: Tue, 17 Jun 2025 15:12:49 +0200
+Message-ID: <20250617131250.1005533-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=trabucayre.com
-Subject: [Buildroot] [PATCH] package/python-remi: bump to master commit and
- fixes build failure
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amarulasolutions.com; s=google; t=1750165973; x=1750770773;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=VwV/G8Lbhwh9XSe4Z6/E3mJ8/MkW8yJDQN9shChnvR4=;
+ b=i4w7LBDAdo/HcMEX1uu3GkYAcwq2U2aOMDCdw8xFYjIwd9aC6GCLGIoFqI5xGKP5+q
+ 8Ftqh4YWzAt6eNgxadtVbWCO+BG0sOpLkP5KtaLXrQxJCkNqpbALXkX6uFt7lE04g6sT
+ snG0uCv8EapwD+/yrfX6sbGzy+sihxDDGBQfU=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=amarulasolutions.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=i4w7LBDA
+Subject: [Buildroot] [PATCH 1/1] package/ufs-utils: bump to version 6.14.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,136 +112,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Release notes:
+https://github.com/SanDisk-Open-Source/ufs-utils/releases/tag/v6.14.11
 
-REMI hasn't received new release since July 2022 and is currently broken
-with error:
-
-Traceback (most recent call last):
-  File "<string>", line 26, in <module>
-  File "/workdir/instance-0/output-1/host/lib/python3.13/site-packages/setuptools/__init__.py", line 116, in setup
-    _install_setup_requires(attrs)
-    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
-  File "/workdir/instance-0/output-1/host/lib/python3.13/site-packages/setuptools/__init__.py", line 89, in _install_setup_requires
-    _fetch_build_eggs(dist)
-    ~~~~~~~~~~~~~~~~~^^^^^^
-  File "/workdir/instance-0/output-1/host/lib/python3.13/site-packages/setuptools/__init__.py", line 94, in _fetch_build_eggs
-    dist.fetch_build_eggs(dist.setup_requires)
-    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
-  File "/workdir/instance-0/output-1/host/lib/python3.13/site-packages/setuptools/build_meta.py", line 80, in fetch_build_eggs
-    raise SetupRequirementsError(specifier_list)
-setuptools.build_meta.SetupRequirementsError: ['setuptools_scm']
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/workdir/instance-0/output-1/host/lib/python3.13/site-packages/pyproject_hooks/_in_process/_in_process.py", line 389, in <module>
-    main()
-    ~~~~^^
-  File "/workdir/instance-0/output-1/host/lib/python3.13/site-packages/pyproject_hooks/_in_process/_in_process.py", line 373, in main
-    json_out["return_val"] = hook(**hook_input["kwargs"])
-                             ~~~~^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/workdir/instance-0/output-1/host/lib/python3.13/site-packages/pyproject_hooks/_in_process/_in_process.py", line 143, in get_requires_for_build_wheel
-    return hook(config_settings)
-  File "/workdir/instance-0/output-1/host/lib/python3.13/site-packages/setuptools/build_meta.py", line 331, in get_requires_for_build_wheel
-    return self._get_build_requires(config_settings, requirements=[])
-           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/workdir/instance-0/output-1/host/lib/python3.13/site-packages/setuptools/build_meta.py", line 301, in _get_build_requires
-    self.run_setup()
-    ~~~~~~~~~~~~~~^^
-  File "/workdir/instance-0/output-1/host/lib/python3.13/site-packages/setuptools/build_meta.py", line 512, in run_setup
-    super().run_setup(setup_script=setup_script)
-    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/workdir/instance-0/output-1/host/lib/python3.13/site-packages/setuptools/build_meta.py", line 317, in run_setup
-    exec(code, locals())
-    ~~~~^^^^^^^^^^^^^^^^
-  File "<string>", line 31, in <module>
-  File "/workdir/instance-0/output-1/host/lib/python3.13/site-packages/setuptools/__init__.py", line 117, in setup
-    return distutils.core.setup(**attrs)
-           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
-  File "/workdir/instance-0/output-1/host/lib/python3.13/site-packages/setuptools/_distutils/core.py", line 148, in setup
-    _setup_distribution = dist = klass(attrs)
-                                 ~~~~~^^^^^^^
-  File "/workdir/instance-0/output-1/host/lib/python3.13/site-packages/setuptools/dist.py", line 323, in __init__
-    _Distribution.__init__(self, dist_attrs)
-    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
-  File "/workdir/instance-0/output-1/host/lib/python3.13/site-packages/setuptools/_distutils/dist.py", line 309, in __init__
-    self.finalize_options()
-    ~~~~~~~~~~~~~~~~~~~~~^^
-  File "/workdir/instance-0/output-1/host/lib/python3.13/site-packages/setuptools/dist.py", line 786, in finalize_options
-    ep(self)
-    ~~^^^^^^
-  File "/workdir/instance-0/output-1/host/lib/python3.13/site-packages/setuptools/dist.py", line 806, in _finalize_setup_keywords
-    ep.load()(self, ep.name, value)
-    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
-  File "/workdir/instance-0/output-1/host/lib/python3.13/site-packages/setuptools_scm/_integration/setuptools.py", line 82, in version_keyword
-    assert isinstance(value, dict), "version_keyword expects a dict or True"
-           ~~~~~~~~~~^^^^^^^^^^^^^
-AssertionError: version_keyword expects a dict or True
-
-ERROR Backend subprocess exited when trying to invoke get_requires_for_build_wheel
-make: *** [package/pkg-generic.mk:273: /workdir/instance-0/output-1/build/python-remi-2022.7.27/.stamp_built] Error 1
-make: Leaving directory '/workdir/instance-0/buildroot'
-
-Since last release code has been corrected and now build end
-successfully.
-
-Another issue with remi is related to python CGI library no more available with
-python 3.13. This patch also updates Config.in to add a select BR2_PACKAGE_PYTHON_LEGACY_CGI
-
-
-Fix:
-- https://autobuild.buildroot.org/results/f0409533ebdc31e522f2ee2ea8a5acc11dbc7430/
-- https://autobuild.buildroot.org/results/a16cf5105d4b726b5d4136a2d8f82abcfdc0faba/
-- https://autobuild.buildroot.org/results/e7ac28e20ad92863d337e96c225463346ee6c690/
-
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
- package/python-remi/Config.in        | 1 +
- package/python-remi/python-remi.hash | 3 +--
- package/python-remi/python-remi.mk   | 5 ++---
- 3 files changed, 4 insertions(+), 5 deletions(-)
+ package/ufs-utils/ufs-utils.hash | 2 +-
+ package/ufs-utils/ufs-utils.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-remi/Config.in b/package/python-remi/Config.in
-index da2c2f4cfb..2ecd310bf2 100644
---- a/package/python-remi/Config.in
-+++ b/package/python-remi/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_PYTHON_REMI
- 	bool "python-remi"
- 	select BR2_PACKAGE_PYTHON3_SSL # runtime
- 	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
-+	select BR2_PACKAGE_PYTHON_LEGACY_CGI # runtime
- 	help
- 	  Remi is a GUI library for Python applications which transpiles
- 	  an application's interface into HTML to be rendered in a web
-diff --git a/package/python-remi/python-remi.hash b/package/python-remi/python-remi.hash
-index e7937c3914..46bee6e664 100644
---- a/package/python-remi/python-remi.hash
-+++ b/package/python-remi/python-remi.hash
-@@ -1,4 +1,3 @@
--# sha256 from https://pypi.org/pypi/remi/json
--sha256  542df88e174bbd58fe763c49e5c2116f2c8413c1a934731069ed8c17bb9cd64c  remi-2022.7.27.tar.gz
- # Locally computed sha256
-+sha256  8a84941a58952657c7940db2fd3adc6d1ae10a186a02ddc0f1963c353e6108b3  python-remi-18505f6439849c6e01695dd90dbf680d5ffb0a14.tar.gz
- sha256  3df7d3ad8904d7e99fc0810366483a7cbe5a43c13f7f913f1d7e5023f2ff7657  LICENSE
-diff --git a/package/python-remi/python-remi.mk b/package/python-remi/python-remi.mk
-index 419a3441a7..ed0fb2be1d 100644
---- a/package/python-remi/python-remi.mk
-+++ b/package/python-remi/python-remi.mk
-@@ -4,9 +4,8 @@
+diff --git a/package/ufs-utils/ufs-utils.hash b/package/ufs-utils/ufs-utils.hash
+index f825bf5af7c9..39cf6516c6df 100644
+--- a/package/ufs-utils/ufs-utils.hash
++++ b/package/ufs-utils/ufs-utils.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  e79c879a80936c497fd41a61b6da5e34fb848625453e3ca9e0f6e2398f3609bf  ufs-utils-6.13.11.tar.gz
++sha256  b46f1dbd3688d3b72009c54ae789dd60ea386546cd433325c05970208d36c8a3  ufs-utils-6.14.11.tar.gz
+ sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
+diff --git a/package/ufs-utils/ufs-utils.mk b/package/ufs-utils/ufs-utils.mk
+index 60fb2f56ea26..672041a119d3 100644
+--- a/package/ufs-utils/ufs-utils.mk
++++ b/package/ufs-utils/ufs-utils.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_REMI_VERSION = 2022.7.27
--PYTHON_REMI_SOURCE = remi-$(PYTHON_REMI_VERSION).tar.gz
--PYTHON_REMI_SITE = https://files.pythonhosted.org/packages/b7/5c/fca9d9273fc9d5f4ca0bc2f387ca19f8ba9979dcb75617d094e575dc2337
-+PYTHON_REMI_VERSION = 18505f6439849c6e01695dd90dbf680d5ffb0a14
-+PYTHON_REMI_SITE = $(call github,rawpython,remi,$(PYTHON_REMI_VERSION))
- 
- PYTHON_REMI_LICENSE = Apache-2.0
- PYTHON_REMI_LICENSE_FILES = LICENSE
+-UFS_UTILS_VERSION = 6.13.11
++UFS_UTILS_VERSION = 6.14.11
+ UFS_UTILS_SITE = $(call github,SanDisk-Open-Source,ufs-utils,v$(UFS_UTILS_VERSION))
+ UFS_UTILS_LICENSE = GPL-2.0
+ UFS_UTILS_LICENSE_FILES = COPYING
 -- 
-2.47.2
+2.43.0
 
 _______________________________________________
 buildroot mailing list
