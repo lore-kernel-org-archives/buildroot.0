@@ -4,63 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89D5EC71136
-	for <buildroot@archiver.kernel.org>; Tue, 17 Jun 2025 11:50:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E005CC71157
+	for <buildroot@archiver.kernel.org>; Tue, 17 Jun 2025 11:50:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2232882037;
-	Tue, 17 Jun 2025 11:50:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7EC38820A0;
+	Tue, 17 Jun 2025 11:50:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ekg7VqBQ8Erz; Tue, 17 Jun 2025 11:50:16 +0000 (UTC)
+ id auXeG-AsEHrD; Tue, 17 Jun 2025 11:50:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D1A881FF9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8192A8207F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3D1A881FF9;
-	Tue, 17 Jun 2025 11:50:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id BDBC1D79
- for <buildroot@buildroot.org>; Tue, 17 Jun 2025 11:50:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8192A8207F;
+	Tue, 17 Jun 2025 11:50:23 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id E960B16B
+ for <buildroot@buildroot.org>; Tue, 17 Jun 2025 11:50:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B9A4C81FF9
- for <buildroot@buildroot.org>; Tue, 17 Jun 2025 11:50:15 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CFC9E403CF
+ for <buildroot@buildroot.org>; Tue, 17 Jun 2025 11:50:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id E_35gVZIA8Ll for <buildroot@buildroot.org>;
- Tue, 17 Jun 2025 11:50:15 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hDnwYEJFqQkk for <buildroot@buildroot.org>;
+ Tue, 17 Jun 2025 11:50:22 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:2409::60b;
- helo=nam04-dm6-obe.outbound.protection.outlook.com;
+ client-ip=2a01:111:f403:2415::61d;
+ helo=nam11-dm6-obe.outbound.protection.outlook.com;
  envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E0C4081FEB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E0C4081FEB
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com
- (mail-dm6nam04on2060b.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:2409::60b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E0C4081FEB
- for <buildroot@buildroot.org>; Tue, 17 Jun 2025 11:50:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 31EE1403CB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 31EE1403CB
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com
+ (mail-dm6nam11on2061d.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:2415::61d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 31EE1403CB
+ for <buildroot@buildroot.org>; Tue, 17 Jun 2025 11:50:22 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=zHHujv318H4YscXp6Bq5CJeuBZ1u4wT8lRlMtuMEh6c98AocV40zcAq0AJ1V64XgK7TF7wEis+rq3Y8bLRtsPfy8JBvGfA50QaF6LUhh6H2jz4WBI1zvG2IA+ioNsjGkgg9KYOxw7SdAKzYZvAKnVzJy6xSUhkzA9/5TKPtVqKoG7NAyuj8rRiDkkQjAYNSbcCVUKCcyke1LWAWdKxvTGGXJtnOskkMR4MXXbYgh7sSYnEuwTbxoZd4uEJ8IchQgqANI+GOhKdwMcjnSvY1FAlKDcIFZgQZ91umkSzpj+lzPdnCbVh1H+RTMURCyrvFESg0gN+TU6Ml/YXv5xY0SwQ==
+ b=sGrHjbdkYRzBZSIOCaZtEfJRKTOjGfSKSMmdziKXnQCLth9FmNbhMCTgxX4mWYn0zGMrHAooXHCPATziRV6mZ8LZOSZ6+pTUWE2yDn9YSfuz/1du/U8jzI1fAOAFvZPR5+kEg1sGhjwY0su7NZu6iN0Rvmikzeib5CeJwzKl2X/oZo7PwcYdKEawMq0nZmqNu3WuzUPUbqyqVzOV9XmVSCyS0onoeVLC8ICJokwkqfS5dVYmVW9QTzMTY0Hw1e1ygFXbc0lHI+GWmFszHg5qMuFW0Kr/qw/NYGpsZpxk3gFy4gKf1ba/a22G4dIFjxuyGk5YXt3aSZ+V1DEukUQfhA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=H0fuNHbm6QXH163Z2eUe6XNYT9kVsn2svTz4yJmaX6A=;
- b=CboXaXiAjDGEv3i1cuJ8cMLOfUEU1fCZT+nzjPUI7qSrKeC9qchikUeaEPip3RsBvTQOb8vNugRBiWZrdMVXGqC0Tf87Cv96nem5yDW5f817S4RdcoBqA/hpDiqYJm/d/hGho8tFhDkGDlKLe3L00hn5U+q3rUlfxK43qz2uQb5I563GgWSWKeddEtQ8kTByVSRdPXNNarWoS+YQaHa/ZlIUsZZtfO67ejnQLxdiwIxyxH2ONsOTZKzIyXyBd+mEQ36roYdZarNqHWMEvd3cS1Jy/TXhg5kToEQD2PUKkjAMugC4eMTC/UlLD92MUjclaPTsw+8Q/WdMo2V892C++g==
+ bh=fW62jCOMAgJUlyLie78Y3Pr4aISAtNhKoWR1pz/7hhk=;
+ b=P33J3pzPb5eih5XHHXQgqtax2Du5OdXtxqsbzZTJJwKksDBiyzFcDAQG0ZNMOi12d6MQvPrvKTenmBjjbGrNalil+pHXQ5RuijNaqC7pFiRYL9I0DkiJ892lUDM+KpTCZJwQL3nGPPOlZKD8GtwOrSz1I+9G6Wvbips+x2gX04xKqgdXpuny5xPSrA0U55boYhOyg84Cb8L7h3zA3AEk7xrQDc6JSgBOncdFUAnWG4LcznLu13og3PkPV0SGjwSW4TTcosAu36TtVF9gcpKYI/M7Q3tXXPCdfaBwLKLIdny88YinxJXijCfQHNuQW1RJflHYsAZ8sxp91TU1cS2Pnw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
-Received: from SJ0PR03CA0367.namprd03.prod.outlook.com (2603:10b6:a03:3a1::12)
- by CY3PR12MB9630.namprd12.prod.outlook.com (2603:10b6:930:101::14)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8835.19; Tue, 17 Jun
- 2025 11:50:10 +0000
-Received: from CY4PEPF0000E9D4.namprd03.prod.outlook.com
- (2603:10b6:a03:3a1:cafe::11) by SJ0PR03CA0367.outlook.office365.com
- (2603:10b6:a03:3a1::12) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8835.25 via Frontend Transport; Tue,
- 17 Jun 2025 11:50:09 +0000
+Received: from DS7PR03CA0267.namprd03.prod.outlook.com (2603:10b6:5:3b3::32)
+ by SN7PR12MB7105.namprd12.prod.outlook.com (2603:10b6:806:2a0::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8722.23; Tue, 17 Jun
+ 2025 11:50:16 +0000
+Received: from CY4PEPF0000E9CE.namprd03.prod.outlook.com
+ (2603:10b6:5:3b3:cafe::73) by DS7PR03CA0267.outlook.office365.com
+ (2603:10b6:5:3b3::32) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8835.23 via Frontend Transport; Tue,
+ 17 Jun 2025 11:50:16 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -68,87 +68,91 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
 Received: from SATLEXMB03.amd.com (165.204.84.17) by
- CY4PEPF0000E9D4.mail.protection.outlook.com (10.167.241.139) with Microsoft
+ CY4PEPF0000E9CE.mail.protection.outlook.com (10.167.241.133) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8835.15 via Frontend Transport; Tue, 17 Jun 2025 11:50:08 +0000
-Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB03.amd.com
+ 15.20.8835.15 via Frontend Transport; Tue, 17 Jun 2025 11:50:15 +0000
+Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB03.amd.com
  (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 17 Jun
- 2025 06:50:04 -0500
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB06.amd.com
- (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
+ 2025 06:50:07 -0500
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB05.amd.com
+ (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 17 Jun
- 2025 06:50:04 -0500
+ 2025 06:50:06 -0500
 Received: from xirengwts09.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
  (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
- Transport; Tue, 17 Jun 2025 06:50:02 -0500
+ Transport; Tue, 17 Jun 2025 06:50:05 -0500
 To: <buildroot@buildroot.org>
-Date: Tue, 17 Jun 2025 12:49:59 +0100
-Message-ID: <20250617115000.2001160-1-neal.frager@amd.com>
+Date: Tue, 17 Jun 2025 12:50:00 +0100
+Message-ID: <20250617115000.2001160-2-neal.frager@amd.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20250617115000.2001160-1-neal.frager@amd.com>
+References: <20250617115000.2001160-1-neal.frager@amd.com>
 MIME-Version: 1.0
+Received-SPF: None (SATLEXMB05.amd.com: neal.frager@amd.com does not designate
+ permitted sender hosts)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9D4:EE_|CY3PR12MB9630:EE_
-X-MS-Office365-Filtering-Correlation-Id: e6c4a52a-8ac1-4f7f-96ab-08ddad951c06
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9CE:EE_|SN7PR12MB7105:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2df83de6-8f4c-4f82-1b2d-08ddad952039
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
- ARA:13230040|376014|36860700013|82310400026|1800799024|41080700001; 
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?9RoCTeqFhT9QyqsS/fptVhXxiiZ12nDyyzxXpIAcelyR4rxkLf+RRE/eR/Fz?=
- =?us-ascii?Q?vjwQ025O/K0TRZLw/R28C69oGsyhF0Q8yiPmmNtDQh/1TGHrZU+e3XjILVhZ?=
- =?us-ascii?Q?mELOhA0TlPW2P/JXqnxTqU1o8Jy9oZ0hZ7sm02UezyHhCVfHXWkb5xwoD16x?=
- =?us-ascii?Q?uofsNrLtSkaDRODLP09TgGMJDK9KWd4HgdlwSlzqnYSo5qR6HJ0zq99GQfh3?=
- =?us-ascii?Q?L+Q0KhnnZE8JVk55L6Uq8EcaAXvGEyjxWBDbVJA+Q+MENaKFD0aux8n/bhxs?=
- =?us-ascii?Q?8OsVwhqTMMkoK7Qks60k8FvCWWiMe0YZVROfPOlHu1I5n2Mfg2Al8tiTfnh/?=
- =?us-ascii?Q?uRXxm5/91xpjoPzUmcJbaWbXzHwms0xqka5TqMNgE/o/OuRrv3yI/Z5sV2QH?=
- =?us-ascii?Q?/PGIK0MUmjqH0uxePyXpGjBtf3Iv//vXq39DDrw3dvJYimNcjx9Bli+vw4HM?=
- =?us-ascii?Q?nN1fob7YS9ZzTYD5fLt8/4BBKqU7OK3kEjCtw636gYEsHmLsvitWRNdDIv3E?=
- =?us-ascii?Q?Zl//QZPzfEwdzHYNvuaIqFJzNRmKuPZdDkNs+9XUzL+jxHxheKcVRl/P5qvU?=
- =?us-ascii?Q?+86wN9Zdoh61AoZO+mRTKBtyNkf4RZGbrsslBcs6jm+o6Y6ZrHQx4PteVooV?=
- =?us-ascii?Q?bUWrGlt4XE3lH6KGUnwYimixKXnV5QQjWqy+lwg+Sbrqm0h71ujmQeyf4hTH?=
- =?us-ascii?Q?vIPQ3XNzOrKA2NA1OIWmcJd08c5Udoyc3qumMditwdYD6PIBR0+mCOyo/mR1?=
- =?us-ascii?Q?a89ouoWI0WFNR1NEeqFzl9lxSen0ZLKsQsE8K3KTgL2oNs8BpmzWNn4iNlrI?=
- =?us-ascii?Q?D+3rQUFx/N+gDLY6I/uwXmwd9NzoKBKmno/TBEsrj1ucALPuA+mJwRir4+Vh?=
- =?us-ascii?Q?UzfKjwdVbHQDOgImO9QbUMdr3xgGyDbYwhgK3DGNJji6Nzstt+ypSb8hTE/W?=
- =?us-ascii?Q?qhiOLIMlFxzHwVz1jrUu/00RTTc2e/y0rt6cWZ2ultckqOhSmYQlCfGxC7cP?=
- =?us-ascii?Q?p7SlYmaJi4UxBP3RLIcv4S1nIzvPWWS+JSToHglY0EpFlXgd//lUm4YXc9M/?=
- =?us-ascii?Q?tOO45znk9FXo6E0p8NjVUZa3wgbRsYBFP/nDxpmZ9LOP8dzB9Z6BTuPhZF7+?=
- =?us-ascii?Q?EhbBV4nalFubi5XOLGpuIA7WJKMVbJA0C11vvqolKlLdW05g3eEpjhXgMQF3?=
- =?us-ascii?Q?c2DAyNrlPdizv0yHkbBavakt8LHxyHc6rQayNrVT2a4csQUvPZcojjWKmtZZ?=
- =?us-ascii?Q?XmxQhr7urhX2uw6WW2vrYaC+d/FycFqPejT+y9svcTSsY8IOc4OqHfQuMIpP?=
- =?us-ascii?Q?DRgKLqrdY2D3o5cnP93jdE29cJ9rfpbcQTFtbzvOuO0eGkWrWwAejXSHHjp9?=
- =?us-ascii?Q?/bxJLZshb4uB1QAzOvbU2qNNVXLT2nky7gDUy95sapjmLG2q6G6P9+VJMa2D?=
- =?us-ascii?Q?dylCV+u0C0lfjODi53SpxdDgU2rLwhiqEd+Zzqnx2Umf+uJr02fEGk42nPDh?=
- =?us-ascii?Q?f1EOZNq8Sr45yNIEsRseqEPt+1qnucpKyVYKoyAUG3tMns2EH98w/TRIF2CH?=
- =?us-ascii?Q?NHWkr8M6GnS1VTD8yV4=3D?=
+ ARA:13230040|1800799024|36860700013|82310400026|376014|41080700001; 
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?P22kVklBSrddONuxE7H2qDV0GHszjJWroA7jYTFcWl6JcF9ksajDPelmklJV?=
+ =?us-ascii?Q?hvNIjxRR/UDUmHe4zg6Ux3C4DB7D5vSwrJ2MsaVu8iOluWdhlHfutL/LyHo1?=
+ =?us-ascii?Q?mATB7BXWLPNF4mW5cfbshqMMhSWzzZOoo5X7IGI5KXEDk0f30RHhngT99VFi?=
+ =?us-ascii?Q?x0eeDn5tWy7sueOAO8/O8qRBdrFba2m1Wc2r3yAM4ew/D1D9A1gOeG8VGSS2?=
+ =?us-ascii?Q?sW8QZWQhJzMGUfr7iOPDctUWIm9cVHx087jPEFv2IiB95FKZ0alWqi2xZeXS?=
+ =?us-ascii?Q?IKPZ7MoWSBC5ZKO8AhZi6Ig036uYdmVz8nvNudzFc+6KGz2kRQ2q8glwBBhb?=
+ =?us-ascii?Q?TAq/tUfHGNXQBnHWlCmxaPkUTss5Yr0ojYMqz3prgqRRocL9rI7n9onVKPFR?=
+ =?us-ascii?Q?e62Z8TAt4xz6RzFcJpln/sdoscuptOJQfAJbh17gqnhpgcayBm8owE4RZP5C?=
+ =?us-ascii?Q?b8g/g82xfMftzD0WRahzXDQ1+pm7HpQnqLzLTZL7LL4DdFCXoK1le1orNefm?=
+ =?us-ascii?Q?zLP/WHcw1IXEgWvpvyTwE8EW0gO+0LZjD9m65D+S2O4T3Wq4qW3VTydk7dNp?=
+ =?us-ascii?Q?nnLNhcP1oQaFxw8AiT4cyytPxCYuSsJUN6btFuHdFS7v1q74oN4rs2dNpNvO?=
+ =?us-ascii?Q?wWO4iYQCs6VeePYCAh7R5aBsmglh+LoU97HZWrgv+xIEt4w7azzUVGYsyb+k?=
+ =?us-ascii?Q?DRQMgM0ZBjo/JVtIa661kYWf4RNKi5yqftm9cbmqT5xKcuCMSaAKyfJCx1pw?=
+ =?us-ascii?Q?2JS9SGCkLYEUe4C9sOCg5NqoGNi/hoViDQzfVq5rdU6B30/PMSR/mmyns1Xd?=
+ =?us-ascii?Q?LQ7yd7hgaysPka+5O/nyBYD8c9aK25XGYYc/mAsJQ4wYBhZgaH9MNPGn96/z?=
+ =?us-ascii?Q?UKpA0ozMt2We31DMSrng1NmY+hDF72PeMTmP3f8VLNS8NWlVIbs2AhPuHBk7?=
+ =?us-ascii?Q?Y0IiHWpDIQTS9t6kJrMZxkcHyUR/wM6Javdx22JT3WxEXVhR8G5btzxRt4oo?=
+ =?us-ascii?Q?N2MMylly4KWnpuQ4DYDvuJCtCqtdVHpYl5T89QQGrOcqx/loPmEthMCEBc8u?=
+ =?us-ascii?Q?uIXB8mtq/eIELU7XacdxCsX0n2Ls7w31OTNZLN5Cunvn4oUV27mC1/I2igji?=
+ =?us-ascii?Q?LVhjtizIdQL8atb7K5IZY72ktj44whgsh/yQ5bGlt0JMfJVFWI0ctPOaDtjc?=
+ =?us-ascii?Q?vrZGWIhm0FuNKjZ+UBwYVYipM4e255m1KSTTczHvIF3I8YlwLC/JCuT4VIHG?=
+ =?us-ascii?Q?6rp1mjKUrgyaX8P07Dail0/jZUA5sBQah2ArlMcEzbYjqTGnMe/ZkTwJJxJF?=
+ =?us-ascii?Q?IsVpjyyrW6ch/IW2FV0ViQq4UYvH2bUZAEUrVLw86R0o6TDJqQVK9X578pAm?=
+ =?us-ascii?Q?rKrqv3T4ZJz3Cw7qtU+MEYY4KCgJbQ4tjSV2gu4yTpXV72TjbhIZ1rsoatPE?=
+ =?us-ascii?Q?er8TIeuSEKQs0ekINilnzT0cw4lj5tCrsaudnVsN2KlOS0JoA3Ql8nQRtJj/?=
+ =?us-ascii?Q?zu5tpTRRdFlYDpmPUr7Hy/R7N+puC17QsTemZNWSVUw9F14NDQBSlNwjbxNn?=
+ =?us-ascii?Q?4+26yNz1iTGKLutH8Mk=3D?=
 X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
  IPV:CAL; SFV:NSPM; H:SATLEXMB03.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
- SFS:(13230040)(376014)(36860700013)(82310400026)(1800799024)(41080700001);
+ SFS:(13230040)(1800799024)(36860700013)(82310400026)(376014)(41080700001);
  DIR:OUT; SFP:1101; 
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jun 2025 11:50:08.7517 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e6c4a52a-8ac1-4f7f-96ab-08ddad951c06
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jun 2025 11:50:15.7936 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2df83de6-8f4c-4f82-1b2d-08ddad952039
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
  Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000E9D4.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000E9CE.namprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY3PR12MB9630
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7105
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amd.com; s=selector1; 
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=H0fuNHbm6QXH163Z2eUe6XNYT9kVsn2svTz4yJmaX6A=;
- b=ukOXxX39Zf6B75SZFaAK4izTZu8cowTsZO3OPhHDPaMdrhM5F6/+IZDqt5RNHKydyL1WuC7bWUEk8pkgSYsZNfNoW0fRuGf8ChfUvbhwQPuh5ujj73+lJawdskGy+fYs6fBaxdRVzKrPrAjEWOKSPNVN7oWwuKh8f9ZSZmbbqsM=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=fW62jCOMAgJUlyLie78Y3Pr4aISAtNhKoWR1pz/7hhk=;
+ b=eTMsvdKKURforCZ+Qa4S/lBsceADxqFhlLW55PmmrZwUlfX0KOABdyss0HaotQoCiliZvY0qXRWSdIqLhM4jxAP1xrUTtt8VRvNpz1y1+PKrmyZhyOjTbUK6R/2xruTMuh2HNo88LBNUey+/cG1cn7LVs2TOHwwdq2cgkBRoGNc=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=amd.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=ukOXxX39
-Subject: [Buildroot] [PATCH v1 1/2] board/zynq: update custom board
+ header.s=selector1 header.b=eTMsvdKK
+Subject: [Buildroot] [PATCH v1 2/2] board/zynqmp: add custom board
  documentation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -172,49 +176,66 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The readme.txt file for zynq boards has some outdated information for the
-custom board section.  The custom ps7_init_gpl.c is now defined by
-CONFIG_XILINX_PS_INIT_FILE and Buildroot always puts the Xilinx u-boot builds
-in the output/build/uboot-custom directory.
-
-This patch updates the instructions in the readme.txt file accordingly.
+The readme.txt file for zynqmp boards does not have documentation for working
+with custom boards.  This patch adds documentation for custom board support.
 
 Signed-off-by: Neal Frager <neal.frager@amd.com>
 ---
- board/zynq/readme.txt | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ board/zynqmp/readme.txt | 41 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
-diff --git a/board/zynq/readme.txt b/board/zynq/readme.txt
-index b2a4cefedd..87df7236f0 100644
---- a/board/zynq/readme.txt
-+++ b/board/zynq/readme.txt
-@@ -62,7 +62,7 @@ the U-Boot source tree. Without those files, boot.bin will be built
- successfully but it will not be functional at all. Those files are
- output from the Xilinx tools, but for convenience, U-Boot includes the
- default ps7_init_gpl.c/h of popular boards. Those files may need to be
--updated for any programmable logic customizations which impact
+diff --git a/board/zynqmp/readme.txt b/board/zynqmp/readme.txt
+index 3f1b3a80c2..882741b2e7 100644
+--- a/board/zynqmp/readme.txt
++++ b/board/zynqmp/readme.txt
+@@ -65,6 +65,47 @@ Where 'sdX' is the device node of the SD.
+ 
+ Eject the SD card, insert it in the board, and power it up.
+ 
++Support for other boards:
++=========================
++
++If you want to build a system for other boards based on the same SoC, and the
++board is already supported by the upstream kernel and U-Boot, you simply need
++to change the following Buildroot options:
++
++ - Kernel Device Tree file name (BR2_LINUX_KERNEL_INTREE_DTS_NAME)
++ - U-Boot (BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=<dts file name>")
++
++Custom psu_init_gpl.c/h support:
++
++To generate a working boot.bin image, psu_init_gpl.c/h are required in
++the U-Boot source tree. Without those files, boot.bin will be built
++successfully but it will not be functional at all. Those files are
++output from the Xilinx tools, but for convenience, U-Boot includes the
++default psu_init_gpl.c/h of popular boards. Those files may need to be
 +updated for any programmable logic or DDR customizations which impact
- ps7_init (clock/pin setup & mapping/AXI bridge setup/etc). See
- board/xilinx/zynq/ directory of U-Boot for natively supported ps7_init
- files. If the ps7_init files for your board are not found in U-Boot,
-@@ -72,13 +72,13 @@ you need to add them by yourself.
-     make zynq_zed_defconfig
- 
- 2) make uboot-menuconfig
--    Visit the following menu and enable CONFIG_ZYNQ_CUSTOM_INIT.
++psu_init (clock/pin setup & mapping/AXI bridge setup/etc). See
++board/xilinx/zynqmp/ directory of U-Boot for natively supported psu_init
++files. If the psu_init files for your board are not found in U-Boot,
++you need to add them by yourself.
++
++1) Start with a defconfig supported by Buildroot (e.g. ZCU106)
++    make zynqmp_zcu106_defconfig
++
++2) make uboot-menuconfig
 +    Visit the following menu and enable CONFIG_XILINX_PS_INIT_FILE
- 
-     ARM architecture  --->
--       [*] Use custom ps7_init provided by Xilinx tool
++
++    ARM architecture  --->
 +       [*] Zynq/ZynqMP PS init file(s) location
- 
--3) Copy ps7_init_gpl.c/h generated by the Xilinx tools into
--   output/build/uboot-xilinx-<pkg version>/board/xilinx/zynq/custom_hw_platform/
-+3) Copy ps7_init_gpl.c/h generated by the Xilinx Vivado tools into
++
++3) Copy psu_init_gpl.c/h generated by the Xilinx Vivado tools into
 +   output/build/uboot-custom/board/xilinx/zynq/custom_hw_platform/
- 
- 4) make
- 
++
++4) make
++
++Note: The files in step 3 will need to be re-copied after cleaning the
++output directory and at this time, there is no way to save them as
++part of the buildroot configuration, except as a U-Boot patch.
++
+ ==============
+ Important Note
+ ==============
 -- 
 2.25.1
 
