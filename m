@@ -4,49 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0911C7115B
-	for <buildroot@archiver.kernel.org>; Tue, 17 Jun 2025 19:00:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D98BC71136
+	for <buildroot@archiver.kernel.org>; Tue, 17 Jun 2025 19:00:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6D55183B5F;
-	Tue, 17 Jun 2025 19:00:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E7CDA83AFA;
+	Tue, 17 Jun 2025 19:00:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ttsecvpyNEnK; Tue, 17 Jun 2025 19:00:06 +0000 (UTC)
+ id gaP4HoCbK2xz; Tue, 17 Jun 2025 19:00:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6DB6183B49
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 417B083AFD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6DB6183B49;
-	Tue, 17 Jun 2025 19:00:06 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 38E5AD79
- for <buildroot@buildroot.org>; Tue, 17 Jun 2025 19:00:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 417B083AFD;
+	Tue, 17 Jun 2025 19:00:44 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 82ADFD79
+ for <buildroot@buildroot.org>; Tue, 17 Jun 2025 19:00:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1C37183AF4
- for <buildroot@buildroot.org>; Tue, 17 Jun 2025 19:00:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 695F8413E4
+ for <buildroot@buildroot.org>; Tue, 17 Jun 2025 19:00:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qtgCPQd39y1s for <buildroot@buildroot.org>;
- Tue, 17 Jun 2025 18:59:58 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BEDD283AEF
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id BEDD283AEF
- for <buildroot@buildroot.org>; Tue, 17 Jun 2025 18:59:58 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A995583CFE; Tue, 17 Jun 2025 18:59:58 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id txuRPaM-EhaO for <buildroot@buildroot.org>;
+ Tue, 17 Jun 2025 19:00:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 69872413D5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 69872413D5
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 69872413D5
+ for <buildroot@buildroot.org>; Tue, 17 Jun 2025 19:00:41 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 67508780395;
+ Tue, 17 Jun 2025 21:00:38 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 17 Jun 2025 21:00:38 +0200
+MIME-Version: 1.0
+Date: Tue, 17 Jun 2025 21:00:38 +0200
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Tue, 17 Jun 2025 20:58:31 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0b5ad8157a77c78ea61af41fc4997ef75ed36d0e
-X-Git-Newrev: 0e117dd52c1254a8f46078f98b51d35c63bb439c
-X-Patchwork-Hint: ignore
-Message-Id: <20250617185958.A995583CFE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/perl-uri: bump version to 5.32
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250616191334.3479336-1-bernd@kuhls.net>
+References: <20250616191334.3479336-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <bdbd2bffea4229c31395f372ecff3695@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1750186839;
+ bh=IxlCjpXsFYdzkGnAAartdM6Uvff8XMfsSECH/4zo2y8=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=jb0QmLAL4rlRQf0Q35JZAz4f+OsZrsxhgXYFvtDwl6F40c94fbj6hpLIiFPcZGvy3
+ FuKeAeohMcmBql71N9VwpkAR5uC/zyP3grJNHOtkPa2BZKVcWhbZsJcQyiQ5CREI3b
+ +ETfxotgzhGnglA23+ggDAsTNGHD/aWMijyIzZTaRDpRP81KPdp3z0SDLtOuoVq/mu
+ 82/Cf2m4xkJ7TLfYpL2hxGG6gpc7SMnoVMkVlbMgshUHtvgnwa8p3Xq3h2ryQN+OK3
+ Cnn/GMUbJRuZHd2U1F5KbQ6VVTUy5fL9PSUJ9zrj/i3j8nHtLQjNgHPbxzPrdsoyEC
+ h9lwVFavukgFw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=jb0QmLAL
+Subject: Re: [Buildroot] [PATCH 1/1] package/perl-uri: bump version to 5.32
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,51 +82,17 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0e117dd52c1254a8f46078f98b51d35c63bb439c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 16/06/2025 21:13, Bernd Kuhls wrote:
+> Changelog: https://github.com/libwww-perl/URI/blob/master/Changes
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Changelog: https://github.com/libwww-perl/URI/blob/v5.32/Changes
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-[Julien: update changelog link to use tag]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/perl-uri/perl-uri.hash | 4 ++--
- package/perl-uri/perl-uri.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/perl-uri/perl-uri.hash b/package/perl-uri/perl-uri.hash
-index 889c02e9a1..b53479803b 100644
---- a/package/perl-uri/perl-uri.hash
-+++ b/package/perl-uri/perl-uri.hash
-@@ -1,6 +1,6 @@
- # retrieved by scancpan from https://cpan.metacpan.org/
--md5  b5388d5b86e1870a80ad95c153bf41fd  URI-5.31.tar.gz
--sha256  b9c4d58b2614b8611ae03a95a6d60ed996f4b311ef3cd5a937b92f1825ecc564  URI-5.31.tar.gz
-+md5  56aa2bc3efb180eceb4c143378ab4327  URI-5.32.tar.gz
-+sha256  9632067d34e14e0dae2da94631c4f25a387fcc48d06fa29330e8b3c04c4e913d  URI-5.32.tar.gz
- 
- # computed by scancpan
- sha256  a1730c55839ce3c9182c92e3387ba8f683ad6ab8b4a3257553a20c4db194c2cf  LICENSE
-diff --git a/package/perl-uri/perl-uri.mk b/package/perl-uri/perl-uri.mk
-index 40775d19f9..671d1f5a07 100644
---- a/package/perl-uri/perl-uri.mk
-+++ b/package/perl-uri/perl-uri.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PERL_URI_VERSION = 5.31
-+PERL_URI_VERSION = 5.32
- PERL_URI_SOURCE = URI-$(PERL_URI_VERSION).tar.gz
- PERL_URI_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
- PERL_URI_LICENSE = Artistic-1.0-Perl or GPL-1.0+
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
