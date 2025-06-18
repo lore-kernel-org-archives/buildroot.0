@@ -1,62 +1,60 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA536C7115B
-	for <buildroot@archiver.kernel.org>; Wed, 18 Jun 2025 18:26:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CDE27C7115D
+	for <buildroot@archiver.kernel.org>; Wed, 18 Jun 2025 18:26:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 87FCC8112C;
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9FBAD409D7;
+	Wed, 18 Jun 2025 18:26:16 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id s97QY3Gyh0BL; Wed, 18 Jun 2025 18:26:15 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C0646406F8
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id C0646406F8;
 	Wed, 18 Jun 2025 18:26:15 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id B060F151
+ for <buildroot@buildroot.org>; Wed, 18 Jun 2025 18:26:12 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9712381131
+ for <buildroot@buildroot.org>; Wed, 18 Jun 2025 18:26:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 31aL0Lb3ABqr; Wed, 18 Jun 2025 18:26:14 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A60B281136
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A60B281136;
-	Wed, 18 Jun 2025 18:26:14 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 6FA96E2
- for <buildroot@buildroot.org>; Wed, 18 Jun 2025 18:26:12 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 52BC160B39
- for <buildroot@buildroot.org>; Wed, 18 Jun 2025 18:26:12 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q6sdc7j_7WEp for <buildroot@buildroot.org>;
- Wed, 18 Jun 2025 18:26:11 +0000 (UTC)
-X-Greylist: delayed 324 seconds by postgrey-1.37 at util1.osuosl.org;
- Wed, 18 Jun 2025 18:26:09 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B47B560B30
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B47B560B30
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=103.168.172.157;
- helo=fhigh-a6-smtp.messagingengine.com; envelope-from=jiaxun.yang@flygoat.com;
+ id 5ddWP2_2DmCG for <buildroot@buildroot.org>;
+ Wed, 18 Jun 2025 18:26:12 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=103.168.172.147;
+ helo=fout-a4-smtp.messagingengine.com; envelope-from=jiaxun.yang@flygoat.com;
  receiver=<UNKNOWN> 
-Received: from fhigh-a6-smtp.messagingengine.com
- (fhigh-a6-smtp.messagingengine.com [103.168.172.157])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B47B560B30
- for <buildroot@buildroot.org>; Wed, 18 Jun 2025 18:26:09 +0000 (UTC)
-Received: from phl-compute-11.internal (phl-compute-11.phl.internal
- [10.202.2.51])
- by mailfhigh.phl.internal (Postfix) with ESMTP id D4E9211401D8;
- Wed, 18 Jun 2025 14:20:50 -0400 (EDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org EC60281128
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC60281128
+Received: from fout-a4-smtp.messagingengine.com
+ (fout-a4-smtp.messagingengine.com [103.168.172.147])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id EC60281128
+ for <buildroot@buildroot.org>; Wed, 18 Jun 2025 18:26:11 +0000 (UTC)
+Received: from phl-compute-02.internal (phl-compute-02.phl.internal
+ [10.202.2.42])
+ by mailfout.phl.internal (Postfix) with ESMTP id 96309138044A;
+ Wed, 18 Jun 2025 14:20:54 -0400 (EDT)
 Received: from phl-mailfrontend-01 ([10.202.2.162])
- by phl-compute-11.internal (MEProxy); Wed, 18 Jun 2025 14:20:50 -0400
-X-ME-Sender: <xms:ggNTaKKkcEIM5vezJ9RzBPA8ATt3P0MPZ40Of-dSyNz2ZBaodulnew>
- <xme:ggNTaCLBLQdqlHflW47wwN_rGBnTvJO_AMW9UxeIR68zdnwlWw04Z55i-r1hpIjeM
- Zh7eY2NsqAN7Aa0nkg>
-X-ME-Received: <xmr:ggNTaKsfuKhTUbOCs7lnDDC_Y1AM1yLcZgbhiChMaLemECyUYmXnn-2jdMwGuHZApdY9Dzcn0QBZCeQdQIvJaimZFJqVBBpnVjXsHz0JzwSs_nfk-4YkuOa6LdC1YCTXaV9dVHkkfZD938M>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddvgdeffeehucetufdoteggodetrfdotf
+ by phl-compute-02.internal (MEProxy); Wed, 18 Jun 2025 14:20:54 -0400
+X-ME-Sender: <xms:hgNTaOpYJOGoeXucAVPBdXVHOaYcy6PujSIlGlJiRiHAEVUnMCv1yA>
+ <xme:hgNTaMozCrBdem58rAEi1RxQ95Y3ZpfnZHFlg47Xdec1LiS_r1awBz9QN7cNQpl7i
+ ujpPfjgCLLDCf8c2Zg>
+X-ME-Received: <xmr:hgNTaDPhdwARlxNsN_TLcBsHZzMbG7O_8K0xWya8OxdFaoTymv1YaafQV0O_5RDt0S2Y35Cg7m-XHJ9jQfH13DtMI0lbHXCWYnnxWCUf2TFFS6z-j7uZWym4nhPfLk_ZilOy335HoN879TU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddvgdeffeegucetufdoteggodetrfdotf
  fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
  rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
  htshculddquddttddmnecujfgurhephfffufggtgfgkfhfjgfvvefosehtjeertdertdej
  necuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhi
  hgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepvdekiefhfeevkeeuveetfeelffek
- gedugefhtdduudeghfeuveegffegudekjeelnecuvehluhhsthgvrhfuihiivgeptdenuc
+ gedugefhtdduudeghfeuveegffegudekjeelnecuvehluhhsthgvrhfuihiivgepudenuc
  frrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdr
  tghomhdpnhgspghrtghpthhtohepjedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoh
  epthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhrtghpthht
@@ -66,18 +64,18 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddvgdeffeehucetufdoteggod
  htohepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomhdprhgtphhtthhopehh
  ihesshgvnhiiihhllhgrrdhiohdprhgtphhtthhopehrohhmrghinhdrnhgrohhurhessh
  hmihhlvgdrfhhr
-X-ME-Proxy: <xmx:ggNTaPaJYANbz8TFPLiLdGfo9ykwGAy2AO3B4zrUZ7nkqkztCWJAGQ>
- <xmx:ggNTaBaGGev030oCGFYEmZ5N_eE8a2lKY1mgplK74f2Lm2-f4lLfFA>
- <xmx:ggNTaLB3hDkQlN3_9LtNf2nLWxz2AIDQjUwBthPuokJvXTbRXUeOjw>
- <xmx:ggNTaHanzOmQmGbgZDOFXq1wHgjxpDrx25HgaP_gDRMfiX5Do3eakw>
- <xmx:ggNTaExghTEWhOKLTEqylERsPYb2sGauhmYiCwNN-yeR5lro7sW80c_p>
+X-ME-Proxy: <xmx:hgNTaN4gRgEupzRN8PqehxKIXXlQW-YpsGMpE5A5cLvC12xvVVFg2g>
+ <xmx:hgNTaN42T5kkruHmLGpwO1mMbQXncuBlKo9rsI1ZZkuM7eoKyqB75A>
+ <xmx:hgNTaNhslAu--zR7sPMCUwyiz0AxAJhMHUyBHJJfRvoa7YRa6W3eVg>
+ <xmx:hgNTaH75uWEarMH93QrEp-6AEP_KyK31Ig67dlMi13rvIk_WDnFAwg>
+ <xmx:hgNTaAJPOXAXd_31njOTCyMkD_BR2VVHB0Sd2P8-p2hObp5T-Y5Whzia>
 Feedback-ID: ifd894703:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 18 Jun 2025 14:20:49 -0400 (EDT)
+ 18 Jun 2025 14:20:53 -0400 (EDT)
 From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Date: Wed, 18 Jun 2025 19:20:30 +0100
+Date: Wed, 18 Jun 2025 19:20:33 +0100
 MIME-Version: 1.0
-Message-Id: <20250618-loongarch-v3-5-d11baae32eea@flygoat.com>
+Message-Id: <20250618-loongarch-v3-8-d11baae32eea@flygoat.com>
 References: <20250618-loongarch-v3-0-d11baae32eea@flygoat.com>
 In-Reply-To: <20250618-loongarch-v3-0-d11baae32eea@flygoat.com>
 To: buildroot@buildroot.org
@@ -87,51 +85,50 @@ Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
  Dick Olsson <hi@senzilla.io>, Jiaxun Yang <jiaxun.yang@flygoat.com>, 
  Romain Naour <romain.naour@smile.fr>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2010;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2907;
  i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
- bh=Zhskbp8WzjrUNiv7ob6ahXUyH8rjBAWVmAYMo1eqq+0=;
- b=owGbwMvMwCHmXMhTe71c8zDjabUkhoxg5orJRbM9RD9+5ZFckLHsUC63qHB1qH7qq4e7Zwueu
- zb3QvbjjlIWBjEOBlkxRZYQAaW+DY0XF1x/kPUHZg4rE8gQBi5OAZhIkhsjw7JvXhHuXk45Lqnv
- /dirVrs12nW7fXm8rVy1c8vtKSL/TjD8TxecdJ/3Q9fJpUumepwOfPVw53qPDwnWUQJKu6aLr3i
- 7gRMA
+ bh=x51uRgFoqvQanbaEFJ6NAD0sdDJvFXuAFzyUcja2Fp0=;
+ b=owGbwMvMwCHmXMhTe71c8zDjabUkhoxg5sp5k+5s5fXo/uuXpvrB/76U4ZWV8X45sSKcylvE5
+ /LdiKrvKGVhEONgkBVTZAkRUOrb0HhxwfUHWX9g5rAygQxh4OIUgIlozGP4w1Hk9ZTn34P9M9VT
+ onxUDfTdAs+35Vx0vff95CaRr8XCBowMV/OSWM/u3hn/6i37RMnScxN3X5zwg1P5ou0UkeqK9vf
+ /2QA=
 X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
  fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=flygoat.com; h=
  cc:cc:content-transfer-encoding:content-type:content-type:date
  :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
- :references:reply-to:subject:subject:to:to; s=fm2; t=1750270850;
- x=1750357250; bh=zxC09LGy3ZAe+Ae8RuUCdcKTlpVR36yE1yhM6H9W7Hs=; b=
- 3u8VLC7jNsaXNp4olHBUlfOV5oKKveBXoesY+9NeUW748FnXvJMnrrymmqnAclRQ
- 9JMgaKrb+pM/mTPN0MlDf6BCkUSAEweuRj/4K1DsWfbW4k2+f3bSefSUHWIUAHN0
- zR1226Rb6hDYf4tfb1ol113ELWMMbTQSkbCA+a5nSzrbIcCJdzKZtCuiC0DGiRUJ
- AeK6nKzH5Z/Wop3f1IhwUf2XT8hgU1MOddWgvz68Qa4jPeQSh20P00SqTwNT8rk6
- +FjrZzU6a2AtUiniW661uvXC2Sl7LpcpFsWfQK/6xShPhIK42fLs5yeNBxT8WtCl
- P8PSN0Sk7vrHISFWzxAvJA==
+ :references:reply-to:subject:subject:to:to; s=fm2; t=1750270854;
+ x=1750357254; bh=59/q74N+YjSZwKjnfKHG72HhzCoJLblTY3rAy8mgYCI=; b=
+ FRQjB5a8GppeNaedTYNlLID6IQ9E9QTG7YwfW0l502xSqIYZE0xE2cI7rJRI7hwB
+ /VZDKFMXLsayq6BmhvWWU+SvE/Q4hpjxAX8wwf+G4G8sOsYVaC4hHwHhz81KgGuz
+ 8V600JYnivXesmPGW227WUPR0cnvpFgysAGISClCcIzdih4MyHi63pBEuErUrVYF
+ yMl2AQWaA/6W9ZzeojS9l/M2zOIlg5P8ThXicTju3QoVzfyokYESREB+F+tNq1Pt
+ 4bmwrqD4+Y76D976iRoxJtLV3iEI1iw2TfyiFtq0nRsU1i1IhQCRKa1dOktLbAWl
+ CjUEzbi3V+EgTlUe06xOWw==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
  messagingengine.com; h=cc:cc:content-transfer-encoding
  :content-type:content-type:date:date:feedback-id:feedback-id
  :from:from:in-reply-to:in-reply-to:message-id:mime-version
  :references:reply-to:subject:subject:to:to:x-me-proxy
- :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1750270850; x=
- 1750357250; bh=zxC09LGy3ZAe+Ae8RuUCdcKTlpVR36yE1yhM6H9W7Hs=; b=O
- okQann3kcilE3CygGW9mFSMBorZk4ycF84G29OU7QEY3X9rkFz3SegpDFOMpe9KP
- PaRif1rhaKffpZTrkcV9fXtm0TXC5uoIt/wY8cBgrub/T20i9dxQse73YKZVKJGy
- UAXJHD8kty7uLCWXO49p8QQpwEheY5PoC6B+9Pq+3DueOsDrZXw1kftRz6+CBP3j
- MUVKMY04NUiN1X/j2XVe/lphnZMGJ7VdLoaGgAzBAUkrBrrt6H6Z+WE7O7FKzySG
- jFml03hR0XF27yezXLURu6mIxxQHPCx+U4meNVXnAgNUYaVW7k1Tj5mLAtkHKxu0
- pcA+qX2cm4spFRTEhA4ng==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1750270854; x=
+ 1750357254; bh=59/q74N+YjSZwKjnfKHG72HhzCoJLblTY3rAy8mgYCI=; b=d
+ balBBbgwKe+7GNxDbp45rjdjquneqrhlxAG9MOEiLJwKvAmoKe44GFHsnr7qL7hi
+ iifF1QdsOJihiQnA3GkFcEPT9O7LmfxdJp5lIpeoJHE046m8yoZWwh9TMiwhD/v8
+ 75bT0Yuff969v0ppdyQHCJvROoVVY/fUY3cBBmGhSnFI+9Cdm4OHnl2Ux5Bk7Tte
+ LjThPs4B8L7kyh+z1UKV8ZfIwLQiJQwSZv9V9o1PdccPKd9yF0HZzkpgSeKQZEEd
+ ao+ajKS41C2oXsIsY1MCKTcpbGcfXe0ncITjdiy74sqAn25K2LWEm1jBLbVqH144
+ pImedoDGwwOb2OY9/oD3g==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=flygoat.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key, unprotected) header.d=flygoat.com
- header.i=@flygoat.com header.a=rsa-sha256 header.s=fm2 header.b=3u8VLC7j; 
+ header.i=@flygoat.com header.a=rsa-sha256 header.s=fm2 header.b=FRQjB5a8; 
  dkim=pass (2048-bit key,
  unprotected) header.d=messagingengine.com header.i=@messagingengine.com
- header.a=rsa-sha256 header.s=fm1 header.b=OokQann3
-Subject: [Buildroot] [PATCH v3 05/11] linux: Introduce {vmlinux,
- vmlinuz}.efi kernel binary format
+ header.a=rsa-sha256 header.s=fm1 header.b=dbalBBbg
+Subject: [Buildroot] [PATCH v3 08/11] boot/edk2: Add LoongArch64 OVMF support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -148,65 +145,80 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-vmlinux.efi and vmlinuz.efi are standard file names for LoongArch
-EFISTUB kernel.
+LoongArch64 OVMF target is introduced to EDK2 in edk2-202408.
 
-Introduce them to build system.
+Enable architecture support here.
 
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 Reviewed-by: Romain Naour <romain.naour@smile.fr>
 ---
- linux/Config.in | 8 ++++++++
- linux/linux.mk  | 4 ++++
- 2 files changed, 12 insertions(+)
+ boot/edk2/Config.in | 14 +++++++++++++-
+ boot/edk2/edk2.mk   |  6 ++++++
+ 2 files changed, 19 insertions(+), 1 deletion(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index ddd65154464f9949161c04c07a25d5035407e4f1..970cc3b63f1cc95a2f56c6abc30f6ff7571af41b 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -294,6 +294,10 @@ config BR2_LINUX_KERNEL_VMLINUX_BIN
- 	bool "vmlinux.bin"
- 	depends on BR2_mips || BR2_mipsel || BR2_sh
+diff --git a/boot/edk2/Config.in b/boot/edk2/Config.in
+index 4e6e7d122cb550cbf57ce8fde31779e2d2cbc9a9..734826a8be722c1c45ab157b43fee60ebb4a30a0 100644
+--- a/boot/edk2/Config.in
++++ b/boot/edk2/Config.in
+@@ -2,6 +2,7 @@ config BR2_TARGET_EDK2_ARCH_SUPPORTS
+ 	bool
+ 	default y if BR2_aarch64
+ 	default y if BR2_i386
++	default y if BR2_loongarch64
+ 	default y if BR2_RISCV_64
+ 	default y if BR2_x86_64
  
-+config BR2_LINUX_KERNEL_VMLINUX_EFI
-+	bool "vmlinux.efi"
-+	depends on BR2_loongarch64
-+
- config BR2_LINUX_KERNEL_VMLINUX
- 	bool "vmlinux"
- 
-@@ -305,6 +309,10 @@ config BR2_LINUX_KERNEL_VMLINUZ_BIN
- 	bool "vmlinuz.bin"
- 	depends on BR2_mips || BR2_mipsel
- 
-+config BR2_LINUX_KERNEL_VMLINUZ_EFI
-+	bool "vmlinuz.efi"
-+	depends on BR2_loongarch64
-+
- config BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM
- 	bool "custom target"
+@@ -21,6 +22,8 @@ if BR2_TARGET_EDK2
+ choice
+ 	prompt "Platform"
+ 	default BR2_TARGET_EDK2_PLATFORM_OVMF_I386 if BR2_i386
++	default BR2_TARGET_EDK2_PLATFORM_OVMF_LOONGARCH64 if \
++		BR2_loongarch64
+ 	default BR2_TARGET_EDK2_PLATFORM_OVMF_RISCV if BR2_RISCV_64
+ 	default BR2_TARGET_EDK2_PLATFORM_OVMF_X64 if BR2_x86_64
+ 	default BR2_TARGET_EDK2_PLATFORM_ARM_VIRT_QEMU if BR2_aarch64
+@@ -31,7 +34,15 @@ config BR2_TARGET_EDK2_PLATFORM_OVMF_I386
  	help
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 16762ac2e63a9510dccc2f626b7515694e113256..0520394931ce7950a750d4f57dab451377886612 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -262,12 +262,16 @@ else ifeq ($(BR2_LINUX_KERNEL_LINUX_BIN),y)
- LINUX_IMAGE_NAME = linux.bin
- else ifeq ($(BR2_LINUX_KERNEL_VMLINUX_BIN),y)
- LINUX_IMAGE_NAME = vmlinux.bin
-+else ifeq ($(BR2_LINUX_KERNEL_VMLINUX_EFI),y)
-+LINUX_IMAGE_NAME = vmlinux.efi
- else ifeq ($(BR2_LINUX_KERNEL_VMLINUX),y)
- LINUX_IMAGE_NAME = vmlinux
- else ifeq ($(BR2_LINUX_KERNEL_VMLINUZ),y)
- LINUX_IMAGE_NAME = vmlinuz
- else ifeq ($(BR2_LINUX_KERNEL_VMLINUZ_BIN),y)
- LINUX_IMAGE_NAME = vmlinuz.bin
-+else ifeq ($(BR2_LINUX_KERNEL_VMLINUZ_EFI),y)
-+LINUX_IMAGE_NAME = vmlinuz.efi
+ 	  Platform configuration for a generic i386 target.
+ 	  This platform will boot from flash address 0x0.
+-	  It should therefore be used as the first bootloader.
++
++config BR2_TARGET_EDK2_PLATFORM_OVMF_LOONGARCH64
++	bool "LoongArch64"
++	depends on BR2_loongarch64
++	help
++	  Platform configuration for LoongArch QEMU targeting the
++	  Virt machine. This platform will only boot from flash
++	  address 0x1c000000. It should therefore be used as the first
++	  bootloader.
+ 
+ config BR2_TARGET_EDK2_PLATFORM_OVMF_RISCV
+ 	bool "RISC-V"
+@@ -139,6 +150,7 @@ config BR2_TARGET_EDK2_FD_NAME
+ 	default "OVMF" if BR2_TARGET_EDK2_PLATFORM_OVMF_X64
+ 	default "QEMU_EFI" if BR2_TARGET_EDK2_PLATFORM_ARM_VIRT_QEMU
+ 	default "QEMU_EFI" if BR2_TARGET_EDK2_PLATFORM_ARM_VIRT_QEMU_KERNEL
++	default "QEMU_EFI" if BR2_TARGET_EDK2_PLATFORM_OVMF_LOONGARCH64
+ 	default "BL33_AP_UEFI" if BR2_TARGET_EDK2_PLATFORM_ARM_SGI575
+ 	default "FVP_AARCH64_EFI" if BR2_TARGET_EDK2_PLATFORM_ARM_VEXPRESS_FVP_AARCH64
+ 	default "FVP_AARCH64_EFI" if BR2_TARGET_EDK2_PLATFORM_SOCIONEXT_DEVELOPERBOX
+diff --git a/boot/edk2/edk2.mk b/boot/edk2/edk2.mk
+index bc4049b2def3e75a1e95ba85696de77d58335a3e..4540a9bdea88e682dedd02ab43937127e3e464e7 100644
+--- a/boot/edk2/edk2.mk
++++ b/boot/edk2/edk2.mk
+@@ -142,6 +142,12 @@ EDK2_PACKAGE_NAME = OvmfPkg/RiscVVirt
+ EDK2_PLATFORM_NAME = RiscVVirtQemu
+ EDK2_BUILD_DIR = $(EDK2_PLATFORM_NAME)
+ 
++else ifeq ($(BR2_TARGET_EDK2_PLATFORM_OVMF_LOONGARCH64),y)
++EDK2_ARCH = LOONGARCH64
++EDK2_PACKAGE_NAME = OvmfPkg/LoongArchVirt
++EDK2_PLATFORM_NAME = LoongArchVirtQemu
++EDK2_BUILD_DIR = $(EDK2_PLATFORM_NAME)
++
  endif
- # The if-else blocks above are all the image types we know of, and all
- # come from a Kconfig choice, so we know we have LINUX_IMAGE_NAME set
+ 
+ EDK2_BASETOOLS_OPTS = \
 
 -- 
 2.49.0
