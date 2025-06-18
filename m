@@ -1,52 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4267C71157
-	for <buildroot@archiver.kernel.org>; Wed, 18 Jun 2025 20:22:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13709C7115A
+	for <buildroot@archiver.kernel.org>; Wed, 18 Jun 2025 20:23:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8220080BD3;
-	Wed, 18 Jun 2025 20:22:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DCF7860B60;
+	Wed, 18 Jun 2025 20:23:37 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Od17e0v9Vf9b; Wed, 18 Jun 2025 20:23:37 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 19B3160B01
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 19B3160B01;
+	Wed, 18 Jun 2025 20:23:37 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id CE09516B
+ for <buildroot@buildroot.org>; Wed, 18 Jun 2025 20:23:35 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id B408D80EB7
+ for <buildroot@buildroot.org>; Wed, 18 Jun 2025 20:23:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WrOm9yfLC9aY; Wed, 18 Jun 2025 20:22:25 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A4726811E5
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A4726811E5;
-	Wed, 18 Jun 2025 20:22:25 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id B739F16B
- for <buildroot@buildroot.org>; Wed, 18 Jun 2025 20:22:23 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B4A8340BA0
- for <buildroot@buildroot.org>; Wed, 18 Jun 2025 20:22:23 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Y_aoslN-vLDx for <buildroot@buildroot.org>;
- Wed, 18 Jun 2025 20:22:23 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0553940BA1
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0553940BA1
- for <buildroot@buildroot.org>; Wed, 18 Jun 2025 20:22:23 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EA8ED83EB4; Wed, 18 Jun 2025 20:22:22 +0000 (UTC)
+ id BXl2SoopVSEA for <buildroot@buildroot.org>;
+ Wed, 18 Jun 2025 20:23:35 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org EB05A80E13
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB05A80E13
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id EB05A80E13
+ for <buildroot@buildroot.org>; Wed, 18 Jun 2025 20:23:34 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id A5FA0B00571;
+ Wed, 18 Jun 2025 22:23:30 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Wed, 18 Jun 2025 22:23:30 +0200
+MIME-Version: 1.0
+Date: Wed, 18 Jun 2025 22:23:30 +0200
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Wed, 18 Jun 2025 22:21:29 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2bf66daeeac07cf6bff018a2491c9db105219d17
-X-Git-Newrev: cb5d3daf644395e0b31e09974fe2f47f130b4f7c
-X-Patchwork-Hint: ignore
-Message-Id: <20250618202222.EA8ED83EB4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/grout: bump to 0.10.3 version
+To: Maxime Leroy <maxime@leroys.fr>
+Cc: buildroot@buildroot.org, thomas.petazzoni@bootlin.com
+In-Reply-To: <20250618095240.25712-1-maxime@leroys.fr>
+References: <20250618095240.25712-1-maxime@leroys.fr>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <8606649894b9e8acbf2fcd7427a40782@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1750278212;
+ bh=ee0efb7OGVYqUL8Ij+9/wlHKYpOG7ziPXNGhTZHslwk=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=Ur4utUIjuEfzv3qAKwwrqqyUMPK7t2zmmRcosHgwraxWEy+E0PGt7cDwWVZcL1OLB
+ XsvJ1p1+yLzwVISKdPY5KsW9bIdJlUMVpLUrz3ydkH75+JnvfOUrFW3sI3wQ21A3r4
+ pMjRmMyU2th8HXTLYIbsCcc49p5XOVQdjU1CS96D08fTQuilSbdcy7LMZxy3BHkjJz
+ RtM1VuVO8itFwJhSeReArdU+lKkGXrV4lknyzekRXgDCv1cJZHvix0wrgvqAgGRKql
+ H2lawO2RipEF8Tsc+s/4z27FrO6RAcAG/0r13hNO224344XWkGZcvbfr7pyjObxrBG
+ VvFARzVv7sAJQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=Ur4utUIj
+Subject: Re: [Buildroot] [PATCH 1/2] package/grout: bump to 0.10.3 version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,69 +82,26 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cb5d3daf644395e0b31e09974fe2f47f130b4f7c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 18/06/2025 11:52, Maxime Leroy wrote:
+> See the release note of the new version:
+> https://github.com/DPDK/grout/releases/tag/v0.10.3
+> 
+> Locale is not needed anymore for this new version, thus comment on
+> BR2_GENERATE_LOCALE has been removed in consequence.
+> 
+> Signed-off-by: Maxime Leroy <maxime@leroys.fr>
 
-See the release note of the new version:
-https://github.com/DPDK/grout/releases/tag/v0.10.3
+Patch applied to master, thanks.
+I'll review the runtime test later.
 
-Locale is not needed anymore for this new version, thus comment on
-BR2_GENERATE_LOCALE has been removed in consequence.
+Best regards,
 
-Signed-off-by: Maxime Leroy <maxime@leroys.fr>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/grout/Config.in  | 2 --
- package/grout/grout.hash | 4 ++--
- package/grout/grout.mk   | 4 ++--
- 3 files changed, 4 insertions(+), 6 deletions(-)
-
-diff --git a/package/grout/Config.in b/package/grout/Config.in
-index 0ebf772e51..7e6e34e07f 100644
---- a/package/grout/Config.in
-+++ b/package/grout/Config.in
-@@ -18,8 +18,6 @@ config BR2_PACKAGE_GROUT
- 	help
- 	  Graph router based on DPDK
- 
--	  NOTE: grout needs a working UTF-8 locale (BR2_GENERATE_LOCALE)
--
- comment "grout needs a glibc toolchain w/ dynamic library, threads, wchar, gcc >= 4.9, headers >= 4.19"
- 	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_DPDK_ARCH_SUPPORTS
-diff --git a/package/grout/grout.hash b/package/grout/grout.hash
-index 388f600a73..063e518283 100644
---- a/package/grout/grout.hash
-+++ b/package/grout/grout.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  95918642f8bebcaa298bc4128a1522ad837ccfcf3f06b6d9979e0a62c76688d0  grout-0.10.0.tar.gz
--sha256  1e412aae8da58b718c78b3d7a52eb547004384d4347e4746a22ca6af7522930c  LICENSE
-+sha256  9e07275f7d97e9a02f29ac5df2112ca34a0af579e5435d8990ff6339ab30c3ef  grout-0.10.3.tar.gz
-+sha256  1e412aae8da58b718c78b3d7a52eb547004384d4347e4746a22ca6af7522930c  licenses/BSD-3-clause.txt
-diff --git a/package/grout/grout.mk b/package/grout/grout.mk
-index 228601dbec..46d3cf5f0a 100644
---- a/package/grout/grout.mk
-+++ b/package/grout/grout.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--GROUT_VERSION = 0.10.0
-+GROUT_VERSION = 0.10.3
- GROUT_SITE = $(call github,DPDK,grout,v$(GROUT_VERSION))
- GROUT_LICENSE = BSD-3-Clause
--GROUT_LICENSE_FILES = LICENSE
-+GROUT_LICENSE_FILES = licenses/BSD-3-clause.txt
- 
- # Avoid using buildroot commit hash
- GROUT_CONF_ENV = GROUT_VERSION=$(GROUT_VERSION)
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
