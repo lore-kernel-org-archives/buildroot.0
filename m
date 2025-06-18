@@ -1,136 +1,135 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A05CC7115A
-	for <buildroot@archiver.kernel.org>; Wed, 18 Jun 2025 18:26:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5122BC7115B
+	for <buildroot@archiver.kernel.org>; Wed, 18 Jun 2025 18:26:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3077B60B34;
-	Wed, 18 Jun 2025 18:26:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2134740BAB;
+	Wed, 18 Jun 2025 18:26:21 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8JndKRguJM_5; Wed, 18 Jun 2025 18:26:20 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3DEA840BAA
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3DEA840BAA;
+	Wed, 18 Jun 2025 18:26:20 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 39761D94
+ for <buildroot@buildroot.org>; Wed, 18 Jun 2025 18:26:13 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id BC70B60B7C
+ for <buildroot@buildroot.org>; Wed, 18 Jun 2025 18:26:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2NGnkENokoNL; Wed, 18 Jun 2025 18:26:17 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4831160B01
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4831160B01;
-	Wed, 18 Jun 2025 18:26:17 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id D5540151
- for <buildroot@buildroot.org>; Wed, 18 Jun 2025 18:26:12 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D2DEC404A0
- for <buildroot@buildroot.org>; Wed, 18 Jun 2025 18:26:12 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AG1j6TSZr9lI for <buildroot@buildroot.org>;
- Wed, 18 Jun 2025 18:26:10 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=103.168.172.157;
- helo=fhigh-a6-smtp.messagingengine.com; envelope-from=jiaxun.yang@flygoat.com;
+ id ji3u9Xj3oJtu for <buildroot@buildroot.org>;
+ Wed, 18 Jun 2025 18:26:12 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=103.168.172.147;
+ helo=fout-a4-smtp.messagingengine.com; envelope-from=jiaxun.yang@flygoat.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org ED3C3404C9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ED3C3404C9
-Received: from fhigh-a6-smtp.messagingengine.com
- (fhigh-a6-smtp.messagingengine.com [103.168.172.157])
- by smtp2.osuosl.org (Postfix) with ESMTPS id ED3C3404C9
- for <buildroot@buildroot.org>; Wed, 18 Jun 2025 18:26:09 +0000 (UTC)
-Received: from phl-compute-11.internal (phl-compute-11.phl.internal
- [10.202.2.51])
- by mailfhigh.phl.internal (Postfix) with ESMTP id 1D40C11401B1;
- Wed, 18 Jun 2025 14:20:44 -0400 (EDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0406960B6B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0406960B6B
+Received: from fout-a4-smtp.messagingengine.com
+ (fout-a4-smtp.messagingengine.com [103.168.172.147])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0406960B6B
+ for <buildroot@buildroot.org>; Wed, 18 Jun 2025 18:26:11 +0000 (UTC)
+Received: from phl-compute-03.internal (phl-compute-03.phl.internal
+ [10.202.2.43])
+ by mailfout.phl.internal (Postfix) with ESMTP id 9EDE91380381;
+ Wed, 18 Jun 2025 14:20:45 -0400 (EDT)
 Received: from phl-mailfrontend-01 ([10.202.2.162])
- by phl-compute-11.internal (MEProxy); Wed, 18 Jun 2025 14:20:44 -0400
-X-ME-Sender: <xms:egNTaGJd9L7K4NIM2S-sor2RAfC980y06DEpC2Z3UgrStUt9pEd1zg>
- <xme:egNTaOLqPzScThPM9JKBgioLlbx3cWs-4FwvO_gESBITOO1ZFV1IPOSNeUm28fgnC
- 5GbnZ6yY5EHBaQFgxE>
-X-ME-Received: <xmr:egNTaGtm9ifWP2d2vyWav4LzPCUxqHJX8n1r1npKhgAz1qStDh2qcjB2Z6P6T6PrrveECqaS9GLNTWy_3A9wr6OecigeFM0CfGM-DCsDdg21RRohPUY7mQ6j0Y88FOqNUmpbXLpb6O_WXRM>
+ by phl-compute-03.internal (MEProxy); Wed, 18 Jun 2025 14:20:45 -0400
+X-ME-Sender: <xms:fQNTaKos4iGZQSkfQhFtqp17a7myyi4L3sxnWJFCbErQT3XmZYkuZA>
+ <xme:fQNTaIrcG4JMkHNGKBXbtUPjfjfmhUCszHg34hzQOCRc7bHxuc2b7Nc7HAb-kvPfG
+ Ac293mYMrX8JcC7BJk>
+X-ME-Received: <xmr:fQNTaPM6mWBbokuUwtJ7uFkDKWC-m5XVk6PfvA-GxSR6FI2JxZAi2fuc6gZcCPYF-yTc7VJtuNaoIHigR_hW0u4Z5omqfeQf_eJy2CFA3lj9LJV4kUoh_veT_cmnV0lAJGUiJtubkUfOkUU>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddvgdeffeegucetufdoteggodetrfdotf
  fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
  rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
- htshculddquddttddmnecujfgurhephffufffkgggtgffvvefosehtjeertdertdejnecu
- hfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgoh
- grthdrtghomheqnecuggftrfgrthhtvghrnhepgfevffejteegjeeflefgkeetleekhfeu
- gfegvdeuueejkeejteekkedvfffffedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrgh
- enucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgr
- gihunhdrhigrnhhgsehflhihghhorghtrdgtohhmpdhnsggprhgtphhtthhopeekpdhmoh
- guvgepshhmthhpohhuthdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihes
- sghoohhtlhhinhdrtghomhdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurh
- hoohhtrdhorhhgpdhrtghpthhtoheprhhomhgrihhnrdhnrghouhhrsehgmhgrihhlrdgt
- ohhmpdhrtghpthhtohepjhhurdhosehfrhgvvgdrfhhrpdhrtghpthhtohepghhiuhhlih
- hordgsvghnvghtthhisegsvghnvghtthhivghnghhinhgvvghrihhnghdrtghomhdprhgt
- phhtthhopehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmpdhrtghpthhtoh
- ephhhisehsvghniihilhhlrgdrihhopdhrtghpthhtoheprhhomhgrihhnrdhnrghouhhr
- sehsmhhilhgvrdhfrh
-X-ME-Proxy: <xmx:ewNTaLYpdd2BgPlsQ6gq2iQAd4_IsF0_W8d8lR6_maz9xvXFfE8Txg>
- <xmx:ewNTaNYKaBLmlsipvy5w4bVUDPh12zZM2GsAgxaNbAiVazuk4MMyWA>
- <xmx:ewNTaHB9N2J5KXgdSWXD2p9yvmHMcvZY74N5Hcu3294SNBuW7Z0ywQ>
- <xmx:ewNTaDaaMOK21z38-tAP1dzn97DMcx7O7DqAGb1eV9Wbzbh__TUeLQ>
- <xmx:fANTaPIW0wSjSBiwuFnHkkM-h9QIwOm4usXM5AgpK8dszcxWN8Gl8NZ5>
+ htshculddquddttddmnecujfgurhephfffufggtgfgkfhfjgfvvefosehtjeertdertdej
+ necuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhi
+ hgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepvdekiefhfeevkeeuveetfeelffek
+ gedugefhtdduudeghfeuveegffegudekjeelnecuvehluhhsthgvrhfuihiivgeptdenuc
+ frrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdr
+ tghomhdpnhgspghrtghpthhtohepjedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoh
+ epthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhrtghpthht
+ ohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehroh
+ hmrghinhdrnhgrohhurhesghhmrghilhdrtghomhdprhgtphhtthhopehgihhulhhiohdr
+ sggvnhgvthhtihessggvnhgvthhtihgvnhhgihhnvggvrhhinhhgrdgtohhmpdhrtghpth
+ htohepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomhdprhgtphhtthhopehh
+ ihesshgvnhiiihhllhgrrdhiohdprhgtphhtthhopehrohhmrghinhdrnhgrohhurhessh
+ hmihhlvgdrfhhr
+X-ME-Proxy: <xmx:fQNTaJ7XGyPyJCyknvzuwe2gKNdpaqQV5mt_rurh8V_bVoc4lwF80w>
+ <xmx:fQNTaJ6Gfvy4fEG7pqaGUV9e67bPPWhqHtoMXkFSbb9ZsJ-ruj3YwA>
+ <xmx:fQNTaJjhX83UGEarMP-Pn5C9b6o9-Pmkdbvag2J7_-OjvnBpeH6Rbw>
+ <xmx:fQNTaD4vP9EULptaySzAkMQbFI9R2I7ObvHy2LLTO1LZG8YWFummkA>
+ <xmx:fQNTaHQYYAtFy0gzNYszd1EIjo9xZ2HKXu3sOiodWY5PzuVWHCbd9nmD>
 Feedback-ID: ifd894703:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 18 Jun 2025 14:20:41 -0400 (EDT)
+ 18 Jun 2025 14:20:44 -0400 (EDT)
 From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Date: Wed, 18 Jun 2025 19:20:25 +0100
-Message-Id: <20250618-loongarch-v3-0-d11baae32eea@flygoat.com>
+Date: Wed, 18 Jun 2025 19:20:26 +0100
 MIME-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIAGkDU2gC/23Myw6CMBCF4Vchs7ZmMoIWV76HYVFKbwkypiWNh
- PTdraxd/icn3w7JxGAS3JsdoskhBV5qXE4NaK8WZ0SYagMhdXjFm5iZF6ei9kKq0UhJnaSWoP7
- f0djwOaznUNuHtHLcDjrTb/2nZBIoehx1ayfVo8SHnTfHaj1rfsFQSvkCfSDCg6QAAAA=
-X-Change-ID: 20250607-loongarch-8abe88258242
+Message-Id: <20250618-loongarch-v3-1-d11baae32eea@flygoat.com>
+References: <20250618-loongarch-v3-0-d11baae32eea@flygoat.com>
+In-Reply-To: <20250618-loongarch-v3-0-d11baae32eea@flygoat.com>
 To: buildroot@buildroot.org
 Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>, 
  Romain Naour <romain.naour@gmail.com>, 
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
  Dick Olsson <hi@senzilla.io>, Jiaxun Yang <jiaxun.yang@flygoat.com>, 
- Romain Naour <romain.naour@smile.fr>, Julien Olivain <ju.o@free.fr>
+ Romain Naour <romain.naour@smile.fr>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3846;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3859;
  i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
- bh=c0MzKWS0jDTJGHbZF4NpXbKijrKgYlLFKWRUcfJ7KtI=;
- b=owGbwMvMwCHmXMhTe71c8zDjabUkhoxg5kJOs7v3nu1hDfvBudvI+fO0nJB+mY6KpFmMb4MiN
- d/vYdnQUcrCIMbBICumyBIioNS3ofHigusPsv7AzGFlAhnCwMUpABMpC2Rk+DI3PVD30RmPutQD
- b26XX3r73VBCVfat1oGul3yxd7jsihn+qbatuXTrpvKr8z/Tyk0fMt1abB/EuXFdYfCNGYK9IfI
- XmAA=
+ bh=NHUD2AMzifptQNcxu5/fQ/qpS9FVTVQe6stG0X+PcuY=;
+ b=owGbwMvMwCHmXMhTe71c8zDjabUkhoxg5opraaEW/zy3rnxSWbBQZrXn+u3Z8dMqJL++K4+a0
+ RO+KnJJRykLgxgHg6yYIkuIgFLfhsaLC64/yPoDM4eVCWQIAxenAEzk9XeG/3nzmLZzLSixfbzA
+ 20Bd+e+8E+nLlhXGOdzRqam+azVP9wUjw4YVO09btWnmysZ9iVDamLn4qdSLA09NNucZWO/zM37
+ vxA8A
 X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
  fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=flygoat.com; h=
  cc:cc:content-transfer-encoding:content-type:content-type:date
- :date:from:from:in-reply-to:message-id:mime-version:reply-to
- :subject:subject:to:to; s=fm2; t=1750270844; x=1750357244; bh=Kb
- wKJPsx/1GQC/h7lnftQeqWsO+UzbV1SJMGfyGPt5Q=; b=zVp2zRmccGyseU4he1
- 5QSNQpkOeWGACGoZfHUX4kisYRW8z6rHFwyVi3KXLpEVhMizz2E8iNvRPdXwQjT6
- Gn2IEOEdZUg39pVR1XDVKA+Vru/ZJ4tm8OOziCofsoZQvinomLdCjAypTbFiULQ2
- wsCumt/IqSNB6++1jWENhVllLbpq+T+kmjsKjZ44kp4EJR4O2Ld7sHphMxD30fv5
- P1pU73rywZOT19ngvJxnQ5Ci8dom7WREx8NlvPpVzHyo3sfkonFTmRCxqvyop/ag
- SMKx05heGgpgiFkm7rq0NeU/dhyTu2e5jqvF7jEV4Q+mVc9lv5PuigDpcHn8inMZ
- tE/A==
+ :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+ :references:reply-to:subject:subject:to:to; s=fm2; t=1750270845;
+ x=1750357245; bh=zkgXGtX4oUVmLboeSB6XnBf/rMM7JAIfS42+x0XNaNg=; b=
+ lmDrMHr65YUY9D6JiygTa8TncBdePE1iS7/MuUqrOfxwYH2On+LLgZVdTZ4QUJPK
+ doVRMrMJIqg00k3ySPlPEd+ToKKM4oSGEgzNPa2BcMyCkUx0KAFtc+ShokvedNPF
+ YeVxgrc3Xw463qSXUwZliNMeeNYGLiuQbyw/+oioiIP2+tEwZcw2Ri6q8D7aXWbL
+ lbg2So0nhRK3ZlSxtBaPin/0dZFopNoCz6xLqt94aBc6Kfk91GgrHJbEgpnn9gQH
+ UYQsYRq7l6Js6oREkn2m1r+uyUb6Y2UNEZaJG8kPOINJ6SbiCz0YuVYqHlKFdqm1
+ sjFtHLHgoBofR/m3qyz5ug==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
  messagingengine.com; h=cc:cc:content-transfer-encoding
  :content-type:content-type:date:date:feedback-id:feedback-id
- :from:from:in-reply-to:message-id:mime-version:reply-to:subject
- :subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
- fm1; t=1750270844; x=1750357244; bh=KbwKJPsx/1GQC/h7lnftQeqWsO+U
- zbV1SJMGfyGPt5Q=; b=YTbkKwWmTtfBzl0gBikwnngPR+6cMfjZmFFvZg/oQyYQ
- sW4QleZq0FMgE1GlLg5mfwLVdOhdbm7rmLhQ3AIa0FMBCZdFxUWK9LB4pMjIIYj3
- +DEDh/HuwylLM5CHWi7TpuDhmUyBTSgkXO8HBGaOADu3iVQz66EMhjp1t8HMAydg
- uL3sjQq+XWs6oPNWF4i7Utht53RQRzQV8GoVfInz//tZ2Qc5KzQDpD72WdXSvo2c
- EWvspcN6KmXqT+UpzWUJ8C/UtEgIln4vJQUGYRi4/mug0nfvxwfeUhTWFxWvEBj0
- +j3JvK2p1SNhJmQf2jDDDms7W1D9WYQfYGFiq8LFYA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ :from:from:in-reply-to:in-reply-to:message-id:mime-version
+ :references:reply-to:subject:subject:to:to:x-me-proxy
+ :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1750270845; x=
+ 1750357245; bh=zkgXGtX4oUVmLboeSB6XnBf/rMM7JAIfS42+x0XNaNg=; b=l
+ LU5dqWcm6slgVQDrKZWC/EnyRFDcVZdvks38psRTtEO9RRnrRDW3ldwZPXc6Xrfy
+ lX6DxJcre3BiC4f0T8MI9k/0wak+ntnMFKBe3igP/zGBPPaenhYbPEk36updF5LO
+ SBCfB+Elg1bpMkmiqjzinSjg1e2nc8XNGV5foVZ7D0FiSLGVKQtDjZfZ80dQiDNS
+ G3VArDbPdiuYG4JPMnJO+m8tVMXCPk3olD3Y0rJmOWWNT6yv8CpojczoQI1/wrWH
+ lHR3Y3+3r4azLG9ppRn7pdMyo4+x4JPozBUguWsB+Px2WySeNIsQB4sw+/V71NOs
+ JV6IKEt1SrmFo7NBKvwUg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=flygoat.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key, unprotected) header.d=flygoat.com
- header.i=@flygoat.com header.a=rsa-sha256 header.s=fm2 header.b=zVp2zRmc; 
+ header.i=@flygoat.com header.a=rsa-sha256 header.s=fm2 header.b=lmDrMHr6; 
  dkim=pass (2048-bit key,
  unprotected) header.d=messagingengine.com header.i=@messagingengine.com
- header.a=rsa-sha256 header.s=fm1 header.b=YTbkKwWm
-Subject: [Buildroot] [PATCH v3 00/11] LoongArch64 initial support
+ header.a=rsa-sha256 header.s=fm1 header.b=lLU5dqWc
+Subject: [Buildroot] [PATCH v3 01/11] package/gcc: Introduce
+ BR2_GCC_TARGET_SIMD option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -147,94 +146,97 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi all,
+Introduce BR2_GCC_TARGET_SIMD for gcc to handle --with-simd/-msimd
+present at loongarch's gcc options.
 
-This series enabled LoongArch64 support to buildroot.
-
-It added LoongArch bits to toolchain and kernel & grub packages
-and then introduced new loongarch64-efi board as a generic target.
-
-This target is boot tested on Loongson 3A5000 desktop system.
-
-I'll follow up later to enable various packages with architecture
-dependencies.
-
-Please review.
-Thanks!
-
----
-Sorry for taking so long to get back, I was trapped by EDK2 build
-when I was making initial reversion and eventually lost track.
-
-v2 Addressed most comments in v1.
-
-To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Cc: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Dick Olsson <hi@senzilla.io>
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-
+Reviewed-by: Romain Naour <romain.naour@smile.fr>
 ---
-Changes in v3:
-- Address comments in various individial patches
-- Enable test-package
-- Link to v2: https://lore.kernel.org/r/20250607-loongarch-v2-0-90bc4fda9080@flygoat.com
-
+v2: Add missing toolchain wrapper code
 ---
-Jiaxun Yang (11):
-      package/gcc: Introduce BR2_GCC_TARGET_SIMD option
-      arch: Introduce LoongArch64
-      package/glibc: Enable LoongArch64 support
-      package/musl: Enable LoongArch64 support
-      linux: Introduce {vmlinux, vmlinuz}.efi kernel binary format
-      boot/grub2: Introduce loongarch64-efi target
-      configs/loongarch64_efi: new defconfig
-      boot/edk2: Add LoongArch64 OVMF support
-      package/qemu: enable loongarch64 as target package
-      configs/qemu_loongarch64_virt_efi: new defconfig
-      support/config-fragments: Add LoongArch64 toolchain support
+ arch/Config.in                                         | 6 ++++++
+ arch/arch.mk                                           | 1 +
+ package/gcc/gcc.mk                                     | 4 ++++
+ toolchain/toolchain-external/pkg-toolchain-external.mk | 4 ++++
+ toolchain/toolchain-wrapper.c                          | 3 +++
+ 5 files changed, 18 insertions(+)
 
- DEVELOPERS                                         |   7 ++
- arch/Config.in                                     |  20 ++++
- arch/Config.in.loongarch                           | 128 +++++++++++++++++++++
- arch/arch.mk                                       |   1 +
- board/loongarch64-efi/genimage-efi.cfg             |  30 +++++
- board/loongarch64-efi/grub.cfg                     |   6 +
- .../patches/linux-headers/linux-headers.hash       |   1 +
- board/loongarch64-efi/patches/linux/linux.hash     |   2 +
- board/loongarch64-efi/post-image.sh                |   5 +
- board/loongarch64-efi/readme.txt                   |  38 ++++++
- board/qemu/loongarch64-virt-efi/genimage.cfg       |  30 +++++
- board/qemu/loongarch64-virt-efi/grub.cfg           |   6 +
- board/qemu/loongarch64-virt-efi/post-image.sh      |   5 +
- board/qemu/loongarch64-virt-efi/readme.txt         |  31 +++++
- boot/edk2/Config.in                                |  14 ++-
- boot/edk2/edk2.mk                                  |   6 +
- boot/grub2/Config.in                               |  10 ++
- boot/grub2/grub2.mk                                |   9 ++
- configs/loongarch64_efi_defconfig                  |  22 ++++
- configs/qemu_loongarch64_virt_efi_defconfig        |  25 ++++
- linux/Config.in                                    |   8 ++
- linux/linux.mk                                     |   4 +
- package/gcc/gcc.mk                                 |   4 +
- package/glibc/Config.in                            |   2 +
- package/musl/Config.in                             |   1 +
- package/qemu/Config.in.host                        |   1 +
- .../autobuild/br-loongarch64-full-internal.config  |   3 +
- .../autobuild/br-loongarch64-internal-glibc.config |   3 +
- .../autobuild/toolchain-configs.csv                |   2 +
- toolchain/toolchain-buildroot/Config.in            |   4 +
- .../toolchain-external/pkg-toolchain-external.mk   |   4 +
- toolchain/toolchain-wrapper.c                      |   3 +
- 32 files changed, 434 insertions(+), 1 deletion(-)
----
-base-commit: 5080f0af166d2fff26f0c661b0cc7da0b3eaddd8
-change-id: 20250607-loongarch-8abe88258242
+diff --git a/arch/Config.in b/arch/Config.in
+index 6b54c65df9cc7430e9d99e0dd9e29fef3cc527e4..ec720e74e193021ed01749945aed1457ec0789a1 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -349,6 +349,12 @@ config BR2_GCC_TARGET_FPU
+ config BR2_GCC_TARGET_FLOAT_ABI
+ 	string
+ 
++# The value of this option will be passed as --with-simd=<value> when
++# building gcc (internal backend) or -simd=<value> in the toolchain
++# wrapper (external toolchain)
++config BR2_GCC_TARGET_SIMD
++	string
++
+ # The value of this option will be passed as --with-mode=<value> when
+ # building gcc (internal backend) or -m<value> in the toolchain
+ # wrapper (external toolchain)
+diff --git a/arch/arch.mk b/arch/arch.mk
+index 4174d33df548b0f7bc754c89076142c41fe3f867..4a7851a9fdcebc4720415f5b0fba771bb4993ef6 100644
+--- a/arch/arch.mk
++++ b/arch/arch.mk
+@@ -16,6 +16,7 @@ GCC_TARGET_FP32_MODE := $(call qstrip,$(BR2_GCC_TARGET_FP32_MODE))
+ GCC_TARGET_CPU := $(call qstrip,$(BR2_GCC_TARGET_CPU))
+ GCC_TARGET_FPU := $(call qstrip,$(BR2_GCC_TARGET_FPU))
+ GCC_TARGET_FLOAT_ABI := $(call qstrip,$(BR2_GCC_TARGET_FLOAT_ABI))
++GCC_TARGET_SIMD := $(call qstrip,$(BR2_GCC_TARGET_SIMD))
+ GCC_TARGET_MODE := $(call qstrip,$(BR2_GCC_TARGET_MODE))
+ 
+ # Explicitly set LD's "max-page-size" instead of relying on some defaults
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 658f5a6b4fe21fb302333fcff3012e624ce241a7..ea96286c322f6aac0ad26ad633db6b73c544dac0 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -251,6 +251,10 @@ ifneq ($(GCC_TARGET_FLOAT_ABI),)
+ HOST_GCC_COMMON_CONF_OPTS += --with-float=$(GCC_TARGET_FLOAT_ABI)
+ endif
+ 
++ifneq ($(GCC_TARGET_SIMD),)
++HOST_GCC_COMMON_CONF_OPTS += --with-simd=$(GCC_TARGET_SIMD)
++endif
++
+ ifneq ($(GCC_TARGET_MODE),)
+ HOST_GCC_COMMON_CONF_OPTS += --with-mode=$(GCC_TARGET_MODE)
+ endif
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index c08bf0a65391833de840c2f5ca112bb0b7802471..2c2afa76c06920389f10595ddbecb9e0455cecce 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -217,6 +217,10 @@ ifneq ($(GCC_TARGET_FLOAT_ABI),)
+ TOOLCHAIN_EXTERNAL_CFLAGS += -mfloat-abi=$(GCC_TARGET_FLOAT_ABI)
+ TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_FLOAT_ABI='"$(GCC_TARGET_FLOAT_ABI)"'
+ endif
++ifneq ($(GCC_TARGET_SIMD),)
++TOOLCHAIN_EXTERNAL_CFLAGS += -msimd=$(GCC_TARGET_SIMD)
++TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_SIMD='"$(GCC_TARGET_SIMD)"'
++endif
+ ifneq ($(GCC_TARGET_MODE),)
+ TOOLCHAIN_EXTERNAL_CFLAGS += -m$(GCC_TARGET_MODE)
+ TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_MODE='"$(GCC_TARGET_MODE)"'
+diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
+index e644c1e7bb906caa24ea673a865c934f9094a030..a6974ba78f8a53535c6cd6517e1af1bb5ec12431 100644
+--- a/toolchain/toolchain-wrapper.c
++++ b/toolchain/toolchain-wrapper.c
+@@ -74,6 +74,9 @@ static char *predef_args[] = {
+ #ifdef BR_SOFTFLOAT
+ 	"-msoft-float",
+ #endif /* BR_SOFTFLOAT */
++#ifdef BR_SIMD
++	"-msimd=" BR_SIMD,
++#endif
+ #ifdef BR_MODE
+ 	"-m" BR_MODE,
+ #endif
 
-Best regards,
 -- 
-Jiaxun Yang <jiaxun.yang@flygoat.com>
+2.49.0
 
 _______________________________________________
 buildroot mailing list
