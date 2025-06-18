@@ -1,135 +1,133 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14A3BC71157
-	for <buildroot@archiver.kernel.org>; Wed, 18 Jun 2025 18:26:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC083C7115D
+	for <buildroot@archiver.kernel.org>; Wed, 18 Jun 2025 18:26:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D76428114B;
-	Wed, 18 Jun 2025 18:26:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BF51060AF2;
+	Wed, 18 Jun 2025 18:26:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QYIAvtR5KYOU; Wed, 18 Jun 2025 18:26:18 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ee38m8jGnZvB; Wed, 18 Jun 2025 18:26:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB1C78113D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 85B9960BA8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CB1C78113D;
-	Wed, 18 Jun 2025 18:26:18 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 38AB8E2
- for <buildroot@buildroot.org>; Wed, 18 Jun 2025 18:26:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 85B9960BA8;
+	Wed, 18 Jun 2025 18:26:21 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1FE47E2
+ for <buildroot@buildroot.org>; Wed, 18 Jun 2025 18:26:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2A9BA404A0
- for <buildroot@buildroot.org>; Wed, 18 Jun 2025 18:26:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C7BAA60B6B
+ for <buildroot@buildroot.org>; Wed, 18 Jun 2025 18:26:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aQSdmeA-hdgb for <buildroot@buildroot.org>;
- Wed, 18 Jun 2025 18:26:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=103.168.172.147;
- helo=fout-a4-smtp.messagingengine.com; envelope-from=jiaxun.yang@flygoat.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HitnM2-xyryD for <buildroot@buildroot.org>;
+ Wed, 18 Jun 2025 18:26:11 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=103.168.172.157;
+ helo=fhigh-a6-smtp.messagingengine.com; envelope-from=jiaxun.yang@flygoat.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org EB10240499
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EB10240499
-Received: from fout-a4-smtp.messagingengine.com
- (fout-a4-smtp.messagingengine.com [103.168.172.147])
- by smtp2.osuosl.org (Postfix) with ESMTPS id EB10240499
- for <buildroot@buildroot.org>; Wed, 18 Jun 2025 18:26:11 +0000 (UTC)
-Received: from phl-compute-11.internal (phl-compute-11.phl.internal
- [10.202.2.51])
- by mailfout.phl.internal (Postfix) with ESMTP id 6DEE3138046E;
- Wed, 18 Jun 2025 14:20:53 -0400 (EDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org BFD9660AF2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BFD9660AF2
+Received: from fhigh-a6-smtp.messagingengine.com
+ (fhigh-a6-smtp.messagingengine.com [103.168.172.157])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BFD9660AF2
+ for <buildroot@buildroot.org>; Wed, 18 Jun 2025 18:26:09 +0000 (UTC)
+Received: from phl-compute-02.internal (phl-compute-02.phl.internal
+ [10.202.2.42])
+ by mailfhigh.phl.internal (Postfix) with ESMTP id DF6B711401B4;
+ Wed, 18 Jun 2025 14:20:46 -0400 (EDT)
 Received: from phl-mailfrontend-01 ([10.202.2.162])
- by phl-compute-11.internal (MEProxy); Wed, 18 Jun 2025 14:20:53 -0400
-X-ME-Sender: <xms:hQNTaBD7AHEYZv_JZAruv6CVc20f81fRGBz553-_j-uzH2ouIesGBw>
- <xme:hQNTaPhhsZmuLE5EINu-Ya4H4e4MmX-icAmk_qelrX31dSFpeCmJTxOFWA7yIsO-W
- 0Ny_n8V1qGxtkGbqLE>
-X-ME-Received: <xmr:hQNTaMneiya-qViwVHfXH4Hjm55NrJcmOYQW5x3nSxcSY5aLfwkOaysPN_q90WWGq_prQjjSDcMHDaWq23KE_fGJAgYkYfv3PVYDc6vRgowc9KO9x2bOktr4icVp83-1djojVjvORmkxEok>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddvgdeffeehucetufdoteggodetrfdotf
+ by phl-compute-02.internal (MEProxy); Wed, 18 Jun 2025 14:20:46 -0400
+X-ME-Sender: <xms:fgNTaJsU6HLBUH7cELxSYdSV_-8l7GBnj6891PD5OXWRbzAoi8Wa5g>
+ <xme:fgNTaCckLiAqb0R0fs7SRwzhaWry5GBTtYROFM38oaPNetc0FmMUFvODBTqVDkJc0
+ oYwrTaPhi47wfikkmE>
+X-ME-Received: <xmr:fgNTaMzGdEUcMrDbVRfo6t16-8VMOv6_Llkko6kX7V_YYTZEAP_JHjUPy3LxFvh8n66ANkTj-3snAHDsqevaqkNUbfYPvwLSwzvdm5G7tK80qIesxzNtmEWdRG52H9-rMLg_S9jeD_7TZ3U>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddvgdeffeegucetufdoteggodetrfdotf
  fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
  rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
  htshculddquddttddmnecujfgurhephfffufggtgfgkfhfjgfvvefosehtjeertdertdej
  necuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhi
- hgohgrthdrtghomheqnecuggftrfgrthhtvghrnhephfejiedvleekheefhefftedvkefh
- jeeiledthefgvdehffejheektedujeduheeinecuffhomhgrihhnpehkvghrnhgvlhdroh
- hrghdprghrvgifvghlohhonhhghigvthdrtghomhdpghhithhhuhgsrdgtohhmnecuvehl
- uhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrd
- ihrghnghesfhhlhihgohgrthdrtghomhdpnhgspghrtghpthhtohepjedpmhhouggvpehs
- mhhtphhouhhtpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhoth
- hlihhnrdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdr
- ohhrghdprhgtphhtthhopehrohhmrghinhdrnhgrohhurhesghhmrghilhdrtghomhdprh
- gtphhtthhopehgihhulhhiohdrsggvnhgvthhtihessggvnhgvthhtihgvnhhgihhnvggv
- rhhinhhgrdgtohhmpdhrtghpthhtohepjhhirgiguhhnrdihrghnghesfhhlhihgohgrth
- drtghomhdprhgtphhtthhopehhihesshgvnhiiihhllhgrrdhiohdprhgtphhtthhopehr
- ohhmrghinhdrnhgrohhurhesshhmihhlvgdrfhhr
-X-ME-Proxy: <xmx:hQNTaLzd5QdBAWtJCM1yDMYURFLUcXLljnfeZIfq1PEIrP4sujrU-g>
- <xmx:hQNTaGQVqo82Psp82-8HhtAM1DZPwzFrNP0Z32WGlwrnWzYVWc4k4Q>
- <xmx:hQNTaOaPuevdvbpVf5EL75_sV7t8Ccop0OGo0EZiP6cDobdvbG5XTA>
- <xmx:hQNTaHR68KN7FZQcOVuMz_vEr96NgTKEFCZGPmI16gNwNNfaPnKaXg>
- <xmx:hQNTaHIsqUUpaUYbx9EBR3ElrnQZf-wAristlEzpur7WRybqi3Gn1QrS>
+ hgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepgeeljefgtdekjeefhffhueethfeu
+ udeuveeiiedvffejuddttedvteelheegheeinecuffhomhgrihhnpeifihhkihhpvgguih
+ grrdhorhhgpdhlohhonhhgshhonhdrtghnnecuvehluhhsthgvrhfuihiivgeptdenucfr
+ rghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtg
+ homhdpnhgspghrtghpthhtohepiedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohep
+ thhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtoh
+ epsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehrohhm
+ rghinhdrnhgrohhurhesghhmrghilhdrtghomhdprhgtphhtthhopehgihhulhhiohdrsg
+ gvnhgvthhtihessggvnhgvthhtihgvnhhgihhnvggvrhhinhhgrdgtohhmpdhrtghpthht
+ ohepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomhdprhgtphhtthhopehhih
+ esshgvnhiiihhllhgrrdhioh
+X-ME-Proxy: <xmx:fgNTaANZR-6GVI7nsL6nvlJ_xlNPY91-81mP7dNd1rJbza9CvIU0DA>
+ <xmx:fgNTaJ9cYXNSZhWKtooWB8JtrKWVu4JZPUB1qF3A6egjecmdk6s_RQ>
+ <xmx:fgNTaAXmJV_a7EVG2piOiY22VdyDLpZ6jilrm8i9l9SPZTeVVi6hsQ>
+ <xmx:fgNTaKf_BGWX5PpDrXtWVG1mhA4fesK5G2sYqCX_xM6kloNO_nMOkQ>
+ <xmx:fgNTaFoASO-dM7c_uJAbgFX_6NV7ESrd1_a-64rHOBpZQoBvJYWZ4JVA>
 Feedback-ID: ifd894703:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 18 Jun 2025 14:20:52 -0400 (EDT)
+ 18 Jun 2025 14:20:45 -0400 (EDT)
 From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Date: Wed, 18 Jun 2025 19:20:32 +0100
+Date: Wed, 18 Jun 2025 19:20:27 +0100
 MIME-Version: 1.0
-Message-Id: <20250618-loongarch-v3-7-d11baae32eea@flygoat.com>
+Message-Id: <20250618-loongarch-v3-2-d11baae32eea@flygoat.com>
 References: <20250618-loongarch-v3-0-d11baae32eea@flygoat.com>
 In-Reply-To: <20250618-loongarch-v3-0-d11baae32eea@flygoat.com>
 To: buildroot@buildroot.org
 Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>, 
  Romain Naour <romain.naour@gmail.com>, 
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Dick Olsson <hi@senzilla.io>, Jiaxun Yang <jiaxun.yang@flygoat.com>, 
- Romain Naour <romain.naour@smile.fr>
+ Dick Olsson <hi@senzilla.io>, Jiaxun Yang <jiaxun.yang@flygoat.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6713;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5938;
  i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
- bh=QD+nMT1SOuyOabfMKamZijyDld4VGQfUwUP0DAh7D5k=;
- b=owGbwMvMwCHmXMhTe71c8zDjabUkhoxg5krev8X+ulODP/R9mul7K1j9zP71KvesrITiErMnm
- LG0aj/rKGVhEONgkBVTZAkRUOrb0HhxwfUHWX9g5rAygQxh4OIUgIk8Psrwh0O4wV0g8del8osX
- j01tPcLelS6xK3fTE27zR8cfsxp6+zIy9MUzCj+/YfvTJPD06629n87zlrlo1rUvjZv6TItV/Z0
- LLwA=
+ bh=d+FLDtHymye2D8+0CW+chuFvr6sLsR9l6CerBAm1RQM=;
+ b=owGbwMvMwCHmXMhTe71c8zDjabUkhoxg5oo7ctG7dnlNnr367menihXswo9vr71ceerD0RTW5
+ D8+3YKJHaUsDGIcDLJiiiwhAkp9GxovLrj+IOsPzBxWJpAhDFycAjCRwgCG/6Xnfpw+/eKdk0Gm
+ b9sDtvMhL5br2ZXn7jvOblK4P67R8Aojw+WmgENvt3YULHzC0W12eeXFwOeNnG3VaZYKH9a6iIW
+ fYwQA
 X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
  fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=flygoat.com; h=
  cc:cc:content-transfer-encoding:content-type:content-type:date
  :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
- :references:reply-to:subject:subject:to:to; s=fm2; t=1750270853;
- x=1750357253; bh=eNqlxPwNFZMMgLBiUETeterjnxYFgFPvUBw9+A9zWJ0=; b=
- udXE+JnRRUj1JCrLIXuFqt7vo7nZItluStPoESa8kbPHYJ6Q8aWue2MzHxoOqPOq
- /cKR1VX72n6FmV+2ZOFjoCiyDBFBgi8DWBRAN23FZb94Ow4DYJhqWH5ssI+/d2J+
- d6EGGsl0jMQucJYyNdoGrJf5mPtYwIJQmSLvfYETpWgnYHq/IHhie3iRoXZFydIi
- gtC+xjelD120Dyh6CQR0SXSzr7NLiceAqT9Q/rgJmVAPExe08ZagPUPi8KUjPC6U
- sNKb6TFLAHmiewoRHAXwhq/v4k1Fljg0sBwvKU8XijwbaEgd3Dt+QkWHBA8YMvXV
- RmV0hhE0+1LEdJKpkj8odg==
+ :references:reply-to:subject:subject:to:to; s=fm2; t=1750270846;
+ x=1750357246; bh=jhyxKIeluMEuafER31MqztoGtzSwatZIXHYApE4CJwc=; b=
+ u29hjs9kuu2eV3ocQN6tYVtYv4nTqwNQG/954CZrsZedqcVnK7vMAYX+42gbrzMe
+ Ja6QaE+7rcpvuelg6jxbmSzTdtZkYL6DikKffDYRitfdnVGr6M7GGFTYOLLJrOUf
+ qYdfb0051VXMoVhN31/D97M3/KSQZEbaCmkt4xx+nUw8vvy/IiIFOYZuneQNTumH
+ eVva14Y0V3qxE4OTqfHCkhdvqVZprgz8dlFhZnfI/cBNNxlxEVMHjIINC4xqh53c
+ F+WTHO+ilnJV1XZ7zMKYQfSmKHBqurSpIgWaUMPwNKPMIZ7WN+EjwsD/OiDw/AKB
+ km+CWoZYmj3AmWW59c80Vg==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
  messagingengine.com; h=cc:cc:content-transfer-encoding
  :content-type:content-type:date:date:feedback-id:feedback-id
  :from:from:in-reply-to:in-reply-to:message-id:mime-version
  :references:reply-to:subject:subject:to:to:x-me-proxy
- :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1750270853; x=
- 1750357253; bh=eNqlxPwNFZMMgLBiUETeterjnxYFgFPvUBw9+A9zWJ0=; b=j
- 6vC0iZOVg9Y49SXKoBw8i5FhvmraXZ6QsJIUqCei7VR1KTseYPqbokL1o53JJNdm
- fCGKQ1NJ3Dzsjk4xzUPKrQYeniGm5ut+havHaohsu28Q9HqZQ5Pw44zKDWE+fRr5
- sdWTKHXAWL7EleKorBe4Is7HM0n7TZy4M68/o2a7DMTQhOa2qfwi5FQx0SJMx+xm
- J9pB0j1AhOZ3u6g02xS+6S8XMl/3Abd2XC2SQzRyeRGpETR7N1gEK6sQxUitNlus
- rFuWIEOnw5AeLlGC4YZa/Axauqch+lFQNYnW97EgQha018yOwMnOdza7q+rKvRRq
- OxiOUjkBPxc0EaEQHT9uQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1750270846; x=
+ 1750357246; bh=jhyxKIeluMEuafER31MqztoGtzSwatZIXHYApE4CJwc=; b=P
+ qXkiLcW0MHq5Wsk1QdkxAAU3Wjihlzb2G9mFL2zm+4MBhJPthqT+Bm6xvn+SH6Nz
+ W3pOIJSY6Z3ZCCX4uMyGG/n1gCzrN7MitgsCYQJv/trvHDhWT3JQChNHo+vJVkQz
+ KAgeqHgU43Q7sRyyrY+Qd9prak3sYjrsnGuLDX4cI1HZ8YvqxdR5Seg4RDxF7zVN
+ Nd0ubjfAIEB7GL2GfNFukFoth0ZU+rXRoU9r3C2vSVankawSbmFdk6TV2zkELw2D
+ UczwpIJXJRzuOtPrZFYptgGiF+CRBe4VnLXjn98fHpsq3p6/QvL5yP4tsF373KJi
+ gcYfuhqFPcrY922PVRNqA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=flygoat.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key, unprotected) header.d=flygoat.com
- header.i=@flygoat.com header.a=rsa-sha256 header.s=fm2 header.b=udXE+JnR; 
+ header.i=@flygoat.com header.a=rsa-sha256 header.s=fm2 header.b=u29hjs9k; 
  dkim=pass (2048-bit key,
  unprotected) header.d=messagingengine.com header.i=@messagingengine.com
- header.a=rsa-sha256 header.s=fm1 header.b=j6vC0iZO
-Subject: [Buildroot] [PATCH v3 07/11] configs/loongarch64_efi: new defconfig
+ header.a=rsa-sha256 header.s=fm1 header.b=PqXkiLcW
+Subject: [Buildroot] [PATCH v3 02/11] arch: Introduce LoongArch64
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -146,197 +144,216 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Introduce bread new loongarch64-efi board, with skeleton
-from aarch64-efi board.
+Introduce LoongArch64 at architecture level.
 
-It corverd most LoongArch64 systems.
+Config.in.loongarch is prepared for possible loongarch32
+enablement in future, thus BR2_ARCH_IS_64 is being depended
+by some 64bit only options.
 
-Linux 6.12, as the most recent LTS kernel, was chosen
-to ensure proper architecture support is included.
+Internal toolchain is supported, as our minimal binutils
+version is already beyond LoongArch minimal version and
+GCC option is limited by BR2_ARCH_NEEDS_GCC_AT_LEAST_12.
 
-This board config is validated on my Lemote A2101
-Loongson 3A5000 board.
-
-A developer entry is created for myself for future contacts
-as well.
+BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT is selected temporary
+and it's going to be rmoved after we gain libc support.
 
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Reviewed-by: Romain Naour <romain.naour@smile.fr>
---
-v3:
-	- Simplify root partation UUID
-	- Add links about machine & firmware
 ---
- DEVELOPERS                                         |  2 ++
- board/loongarch64-efi/genimage-efi.cfg             | 30 +++++++++++++++++
- board/loongarch64-efi/grub.cfg                     |  6 ++++
- .../patches/linux-headers/linux-headers.hash       |  1 +
- board/loongarch64-efi/patches/linux/linux.hash     |  2 ++
- board/loongarch64-efi/post-image.sh                |  5 +++
- board/loongarch64-efi/readme.txt                   | 38 ++++++++++++++++++++++
- configs/loongarch64_efi_defconfig                  | 22 +++++++++++++
- 8 files changed, 106 insertions(+)
+v2:
+	- Style fixes
+	- add commit message about internal toolchain
+
+v3:
+	- Move GCC dependency to top level
+	- Select BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
+	- Clarify why we depend on BR2_ARCH_IS_64
+---
+ DEVELOPERS               |   3 ++
+ arch/Config.in           |  15 ++++++
+ arch/Config.in.loongarch | 128 +++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 146 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index a406ca6a3de4b46243118c3e1e0363a2c1708836..600cd6c22ff6db57f9ef1da5ba9b6c15b37ca7f8 100644
+index a7bb3bd83460017a183f59d05f6a560d7316a6ac..a406ca6a3de4b46243118c3e1e0363a2c1708836 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1644,6 +1644,8 @@ F:	package/rtty/
+@@ -1642,6 +1642,9 @@ F:	package/libuhttpd/
+ F:	package/libuwsc/
+ F:	package/rtty/
  
- N:	Jiaxun Yang <jiaxun.yang@flygoat.com>
- F:	arch/Config.in.loongarch
-+F:	board/loongarch64-efi
-+F:	configs/loongarch64_efi_defconfig
- 
++N:	Jiaxun Yang <jiaxun.yang@flygoat.com>
++F:	arch/Config.in.loongarch
++
  N:	Joachim Wiberg <troglobit@gmail.com>
  F:	configs/globalscale_espressobin_defconfig
-diff --git a/board/loongarch64-efi/genimage-efi.cfg b/board/loongarch64-efi/genimage-efi.cfg
+ F:	board/globalscale/espressobin/
+diff --git a/arch/Config.in b/arch/Config.in
+index ec720e74e193021ed01749945aed1457ec0789a1..744874362ca73a35d347d3895dd3db7d5e79242b 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -80,6 +80,17 @@ config BR2_i386
+ 	  Intel i386 architecture compatible microprocessor
+ 	  http://en.wikipedia.org/wiki/I386
+ 
++config BR2_loongarch64
++	bool "LoongArch64"
++	select BR2_USE_MMU
++	select BR2_ARCH_IS_64
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_12
++	select BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
++	help
++	  LoongArch64 is 64-bit architecture developed by Loongson.
++	  http://www.loongson.cn/
++	  https://en.wikipedia.org/wiki/Loongson
++
+ config BR2_m68k
+ 	bool "m68k"
+ 	# MMU support is set by the subarchitecture file, arch/Config.in.m68k
+@@ -379,6 +390,10 @@ if BR2_arm || BR2_armeb || BR2_aarch64 || BR2_aarch64_be
+ source "arch/Config.in.arm"
+ endif
+ 
++if BR2_loongarch64
++source "arch/Config.in.loongarch"
++endif
++
+ if BR2_m68k
+ source "arch/Config.in.m68k"
+ endif
+diff --git a/arch/Config.in.loongarch b/arch/Config.in.loongarch
 new file mode 100644
-index 0000000000000000000000000000000000000000..24b9a8d943fcfed223a2f9da0093631503fe1579
+index 0000000000000000000000000000000000000000..4d1f071ca1c390277136fc9536c452a3295e1bc4
 --- /dev/null
-+++ b/board/loongarch64-efi/genimage-efi.cfg
-@@ -0,0 +1,30 @@
-+image efi-part.vfat {
-+	vfat {
-+		file EFI {
-+			image = "efi-part/EFI"
-+		}
-+		file vmlinux.efi {
-+			image = "vmlinux.efi"
-+		}
-+	}
++++ b/arch/Config.in.loongarch
+@@ -0,0 +1,128 @@
++# LoongArch CPU
 +
-+	size = 64M
-+}
++choice
++	prompt "Target Architecture Variant"
++	default BR2_loongarch64_generic if BR2_ARCH_IS_64
 +
-+image disk.img {
-+	hdimage {
-+		partition-table-type = "gpt"
-+	}
++config BR2_loongarch64_generic
++	bool "Generic LoongArch 64-bit"
++	depends on BR2_ARCH_IS_64
++	help
++	  Generic LoongArch 64-bit processor.
 +
-+	partition boot {
-+		image = "efi-part.vfat"
-+		partition-type-uuid = U
-+		offset = 32K
-+		bootable = true
-+	}
++config BR2_loongarch64_v1_0
++	bool "LoongArch64 ISA version 1.0"
++	depends on BR2_ARCH_IS_64
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_13
++	help
++	  LoongArch64 ISA version 1.0 processor.
 +
-+	partition root {
-+		partition-type-uuid = root-loongarch64
-+		image = "rootfs.ext2"
-+	}
-+}
-diff --git a/board/loongarch64-efi/grub.cfg b/board/loongarch64-efi/grub.cfg
-new file mode 100644
-index 0000000000000000000000000000000000000000..2006f6d60d9b4bde1f8a12c87d76476f9401c6ca
---- /dev/null
-+++ b/board/loongarch64-efi/grub.cfg
-@@ -0,0 +1,6 @@
-+/set default="0"
-+set timeout="5"
++config BR2_loongarch64_v1_1
++	bool "LoongArch64 ISA version 1.1"
++	depends on BR2_ARCH_IS_64
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_13
++	help
++	  LoongArch64 ISA version 1.1 processor.
 +
-+menuentry "Buildroot" {
-+	linux /vmlinux.efi root=PARTLABEL=root rootwait console=ttyS0,115200
-+}
-diff --git a/board/loongarch64-efi/patches/linux-headers/linux-headers.hash b/board/loongarch64-efi/patches/linux-headers/linux-headers.hash
-new file mode 120000
-index 0000000000000000000000000000000000000000..5808d92afe89015ae416e941adf041644162d996
---- /dev/null
-+++ b/board/loongarch64-efi/patches/linux-headers/linux-headers.hash
-@@ -0,0 +1 @@
-+../linux/linux.hash
-\ No newline at end of file
-diff --git a/board/loongarch64-efi/patches/linux/linux.hash b/board/loongarch64-efi/patches/linux/linux.hash
-new file mode 100644
-index 0000000000000000000000000000000000000000..381f3427a60dda4476631271787ff752bca52204
---- /dev/null
-+++ b/board/loongarch64-efi/patches/linux/linux.hash
-@@ -0,0 +1,2 @@
-+# From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
-+sha256  a9b020721778384507010177d3929e7d4058f7f6120f05a99d56b5c5c0346a70  linux-6.12.32.tar.xz
-diff --git a/board/loongarch64-efi/post-image.sh b/board/loongarch64-efi/post-image.sh
-new file mode 100755
-index 0000000000000000000000000000000000000000..fdb17ece7003611d0cd6de84ed4dbd14767e5b68
---- /dev/null
-+++ b/board/loongarch64-efi/post-image.sh
-@@ -0,0 +1,5 @@
-+#!/bin/sh
++endchoice
 +
-+BOARD_DIR="$(dirname "$0")"
++choice
++	prompt "FPU Type"
++	default BR2_LOONGARCH_FPU_64
 +
-+cp -f "${BOARD_DIR}/grub.cfg" "${BINARIES_DIR}/efi-part/EFI/BOOT/grub.cfg"
-diff --git a/board/loongarch64-efi/readme.txt b/board/loongarch64-efi/readme.txt
-new file mode 100644
-index 0000000000000000000000000000000000000000..8b92f620f9804be044d152728229e128d4dfbf1c
---- /dev/null
-+++ b/board/loongarch64-efi/readme.txt
-@@ -0,0 +1,38 @@
-+The loongarch64_efi_defconfig allows to build a minimal Linux system that
-+can boot on all loongarch64 systems providing an New World [1] EFI firmware.
++config BR2_LOONGARCH_FPU_64
++	bool "64"
++	help
++	  Allow the use of hardware floating-point instructions for
++	  32-bit and 64-bit operations.
 +
-+This includes almost all LoongArch Loongson-3 series workstations and servers,
-+see [2] for hardware and firmware information.
++config BR2_LOONGARCH_FPU_32
++	bool "32"
++	help
++	  Allow the use of hardware floating-point instructions for
++	  32-bit operations only.
 +
-+Building and booting
-+====================
++config BR2_LOONGARCH_FPU_NONE
++	bool "none"
++	help
++	  Prevent the use of hardware floating-point instructions.
++endchoice
 +
-+$ make loongarch64_efi_defconfig
-+$ make
++choice
++	prompt "SIMD Type"
++	default BR2_LOONGARCH_SIMD_NONE
 +
-+The file output/images/disk.img is a complete disk image that can be
-+booted, it includes the grub2 bootloader, Linux kernel and root
-+filesystem.
++config BR2_LOONGARCH_SIMD_NONE
++	bool "none"
++	help
++	  Prevent the use of hardware SIMD instructions.
 +
-+Testing under Qemu
-+==================
++config BR2_LOONGARCH_SIMD_LSX
++	bool "LSX"
++	help
++	  Enable generating instructions from the 128-bit LoongArch SIMD
++	  Extension (LSX).
 +
-+This image can also be tested using Qemu:
++config BR2_LOONGARCH_SIMD_LASX
++	bool "LASX"
++	help
++	  Enable generating instructions from the 256-bit LoongArch
++	  Advanced SIMD Extension (LASX) and the 128-bit LoongArch
++	  SIMD Extension (LSX).
++endchoice
 +
-+qemu-system-loongarch64 \
-+	-M virt \
-+	-cpu la464 \
-+	-nographic \
-+	-bios </path/to/QEMU_EFI.fd> \
-+	-drive file=output/images/disk.img,if=none,format=raw,id=hd0 \
-+	-device virtio-blk-pci,drive=hd0 \
-+	-netdev user,id=eth0 \
-+	-device virtio-net-pci,netdev=eth0
++choice
++	prompt "Target ABI"
++	default BR2_LOONGARCH_ABI_LP64D if BR2_ARCH_IS_64 && BR2_LOONGARCH_FPU_64
++	default BR2_LOONGARCH_ABI_LP64F if BR2_ARCH_IS_64 && BR2_LOONGARCH_FPU_32
++	default BR2_LOONGARCH_ABI_LP64S if BR2_ARCH_IS_64 && BR2_LOONGARCH_SIMD_NONE
 +
-+Note that </path/to/QEMU_EFI.fd> needs to point to a valid loongarch64 UEFI
-+firmware image for qemu.
-+It may be provided by your distribution as a edk2-loongarch64 package,
-+in path such as /usr/share/edk2/loongarch64/QEMU_EFI.fd .
++config BR2_LOONGARCH_ABI_LP64D
++	bool "lp64d"
++	depends on BR2_ARCH_IS_64
++	depends on BR2_LOONGARCH_FPU_64
 +
-+[1]: https://areweloongyet.com/en/docs/old-and-new-worlds/
-+[2]: https://github.com/loongson/Firmware
-diff --git a/configs/loongarch64_efi_defconfig b/configs/loongarch64_efi_defconfig
-new file mode 100644
-index 0000000000000000000000000000000000000000..c98699330d3cd9907043573465a9c8b189d47384
---- /dev/null
-+++ b/configs/loongarch64_efi_defconfig
-@@ -0,0 +1,22 @@
-+BR2_loongarch64=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_GLOBAL_PATCH_DIR="board/loongarch64-efi/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/loongarch64-efi/post-image.sh support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/loongarch64-efi/genimage-efi.cfg"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.32"
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="200M"
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_TARGET_GRUB2=y
-+BR2_TARGET_GRUB2_LOONGARCH64_EFI=y
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
++config BR2_LOONGARCH_ABI_LP64F
++	bool "lp64f"
++	depends on BR2_ARCH_IS_64
++	depends on BR2_LOONGARCH_FPU_64 || BR2_LOONGARCH_FPU_32
++
++config BR2_LOONGARCH_ABI_LP64S
++	bool "lp64d"
++	depends on BR2_ARCH_IS_64
++endchoice
++
++config BR2_ARCH
++	default "loongarch64" if BR2_ARCH_IS_64
++
++config BR2_NORMALIZED_ARCH
++	default "loongarch"
++
++config BR2_ENDIAN
++	default "LITTLE"
++
++config BR2_GCC_TARGET_ARCH
++	default "loongarch64" if BR2_loongarch64_generic
++	default "la64v1.0" if BR2_loongarch64_v1_0
++	default "la64v1.1" if BR2_loongarch64_v1_1
++
++config BR2_GCC_TARGET_FPU
++	default "64" if BR2_LOONGARCH_FPU_64
++	default "32" if BR2_LOONGARCH_FPU_32
++	default "none" if BR2_LOONGARCH_FPU_NONE
++
++config BR2_GCC_TARGET_SIMD
++	default "lasx" if BR2_LOONGARCH_SIMD_LASX
++	default "lsx" if BR2_LOONGARCH_SIMD_LSX
++	default "none" if BR2_LOONGARCH_FPU_NONE
++
++config BR2_GCC_TARGET_ABI
++	default "lp64d" if BR2_LOONGARCH_ABI_LP64D
++	default "lp64f" if BR2_LOONGARCH_ABI_LP64F
++	default "lp64s" if BR2_LOONGARCH_ABI_LP64S
++
++config BR2_READELF_ARCH_NAME
++	default "LoongArch"
++
++# vim: ft=kconfig
++# -*- mode:kconfig; -*-
 
 -- 
 2.49.0
