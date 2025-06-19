@@ -4,49 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86100C7115D
-	for <buildroot@archiver.kernel.org>; Thu, 19 Jun 2025 18:46:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F39D7C7115B
+	for <buildroot@archiver.kernel.org>; Thu, 19 Jun 2025 18:47:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0F4B660DA3;
-	Thu, 19 Jun 2025 18:46:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C214160638;
+	Thu, 19 Jun 2025 18:47:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eG1hYijHNvMK; Thu, 19 Jun 2025 18:46:21 +0000 (UTC)
+ id PmgKtLu0NFso; Thu, 19 Jun 2025 18:47:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3D4BE60DA6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 04C2A6066A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3D4BE60DA6;
-	Thu, 19 Jun 2025 18:46:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 84FBCE2
- for <buildroot@buildroot.org>; Thu, 19 Jun 2025 18:46:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 04C2A6066A;
+	Thu, 19 Jun 2025 18:47:22 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id D5CBC181
+ for <buildroot@buildroot.org>; Thu, 19 Jun 2025 18:47:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6B66A403FB
- for <buildroot@buildroot.org>; Thu, 19 Jun 2025 18:46:19 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C744B404CA
+ for <buildroot@buildroot.org>; Thu, 19 Jun 2025 18:47:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EH28B6ZAzUBv for <buildroot@buildroot.org>;
- Thu, 19 Jun 2025 18:46:18 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 89A8140265
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 89A8140265
- for <buildroot@buildroot.org>; Thu, 19 Jun 2025 18:46:18 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8024783D32; Thu, 19 Jun 2025 18:46:18 +0000 (UTC)
+ id TspQIZLCmEo5 for <buildroot@buildroot.org>;
+ Thu, 19 Jun 2025 18:47:19 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D7E6140487
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D7E6140487
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D7E6140487
+ for <buildroot@buildroot.org>; Thu, 19 Jun 2025 18:47:18 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 691232003AE;
+ Thu, 19 Jun 2025 20:47:13 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Thu, 19 Jun 2025 20:47:13 +0200
+MIME-Version: 1.0
+Date: Thu, 19 Jun 2025 20:47:13 +0200
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Thu, 19 Jun 2025 20:43:46 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cb5d3daf644395e0b31e09974fe2f47f130b4f7c
-X-Git-Newrev: 6cf4f6cdb663d224bef0b96fedc183b27781a28b
-X-Patchwork-Hint: ignore
-Message-Id: <20250619184618.8024783D32@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gqrx: bump version to 2.17.7
+To: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Cc: buildroot@buildroot.org, Gwenhael Goavec-Merou
+ <gwenhael.goavec-merou@trabucayre.com>
+In-Reply-To: <20250619123410.2152859-1-gwenj@trabucayre.com>
+References: <20250619123410.2152859-1-gwenj@trabucayre.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <9d0ea8bad5c481b736faaab83a359ecc@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1750358835;
+ bh=AKOHmZv7FvZhwYid15V1QBRec61wR/59h2fCAe8IJww=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=Ql29Wf2emHCJsqD1LOVSnr508++jtn7J0xqZwKcEvitk8REw9hKtTW5/BsyBSHzbV
+ e4schb7TrzV0HtvpIEu+QZ3Lhoj8fRfPoKkmJG8Uov3TAD3/+GgJzGFT7ZSK5rhaPc
+ Ihy0hJAQ5Aqpl9TAbOcd1rh2sSNxBKgsZkRxthRAbas8+XLLPeElq7FqLQ2uCvloq5
+ iNFKYXd+jU7z/Y4re115t0ovEjVB6aF7vMQLVcefUlmqkJXJCGI37a2MYwGWoEXcWy
+ cPWe0DSNeZv9cr1HoIbU2xzMzjXtChVQYqm8lhJ27k/1sYAxI/0pE0O8zYERgq5N2R
+ 3quBP5KHvATMQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=Ql29Wf2e
+Subject: Re: [Buildroot] [PATCH] package/gqrx: bump version to 2.17.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,84 +83,24 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6cf4f6cdb663d224bef0b96fedc183b27781a28b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 19/06/2025 14:34, Gwenhael Goavec-Merou wrote:
+> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> 
+> Signed-off-by: Gwenhael Goavec-Merou 
+> <gwenhael.goavec-merou@trabucayre.com>
 
-For v2.17.7 release note, see:
-https://github.com/gqrx-sdr/gqrx/releases/tag/v2.17.7
+Applied to master, thanks.
+I did few minor changes. See:
+https://gitlab.com/buildroot.org/buildroot/-/commit/6cf4f6cdb663d224bef0b96fedc183b27781a28b
 
-For all other release notes since 2.15.9, see:
-https://github.com/gqrx-sdr/gqrx/releases
+Best regards,
 
-This commit also updates the LICENSE-CTK hash after minor
-reformatting in commit [1].
-
-[1] https://github.com/gqrx-sdr/gqrx/commit/9857b1b89f38ed77e6b9bd0525e7dd978eda59fa
-
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-[Julien:
- - add links to release notes in commit log
- - sort _CONF_OPTS alphabetically in gqrx.mk
- - fix LICENSE-CTK hash
-]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/gqrx/Config.in | 1 -
- package/gqrx/gqrx.hash | 4 ++--
- package/gqrx/gqrx.mk   | 6 ++++--
- 3 files changed, 6 insertions(+), 5 deletions(-)
-
-diff --git a/package/gqrx/Config.in b/package/gqrx/Config.in
-index 97f0b7de07..25a8a77d2f 100644
---- a/package/gqrx/Config.in
-+++ b/package/gqrx/Config.in
-@@ -25,7 +25,6 @@ config BR2_PACKAGE_GQRX
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # gnuradio
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_43744 # gnuradio
- 	select BR2_PACKAGE_BOOST
--	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
- 	select BR2_PACKAGE_BOOST_SYSTEM
- 	select BR2_PACKAGE_GNURADIO
- 	select BR2_PACKAGE_GNURADIO_ANALOG
-diff --git a/package/gqrx/gqrx.hash b/package/gqrx/gqrx.hash
-index 567ff947f9..92432bb3e3 100644
---- a/package/gqrx/gqrx.hash
-+++ b/package/gqrx/gqrx.hash
-@@ -1,4 +1,4 @@
- # Locally calculated:
--sha256  4a826b468b2fb38a59cbe1f1b566e62c3114509186a7a25ba27dc92833f3eb44  gqrx-2.15.9.tar.gz
-+sha256  4aaab8a3c185cd99d6dda56d95b8f1b20128a6acfd2e86e0349d432a5fdcbce4  gqrx-2.17.7.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
--sha256  7cc22ce5ee61df62e427ec43b8130de149edee3cafb5af4f18d59b6dc3958faf  LICENSE-CTK
-+sha256  2be14537abf3b54a93c7a78b8a8abee377f48106f9d3bc8f82ad061dc3fe67bf  LICENSE-CTK
-diff --git a/package/gqrx/gqrx.mk b/package/gqrx/gqrx.mk
-index d2518213b8..745edad959 100644
---- a/package/gqrx/gqrx.mk
-+++ b/package/gqrx/gqrx.mk
-@@ -4,13 +4,15 @@
- #
- ################################################################################
- 
--GQRX_VERSION = 2.15.9
-+GQRX_VERSION = 2.17.7
- GQRX_SITE = $(call github,csete,gqrx,v$(GQRX_VERSION))
- GQRX_LICENSE = GPL-3.0+, Apache-2.0
- GQRX_LICENSE_FILES = COPYING LICENSE-CTK
- GQRX_DEPENDENCIES = boost gnuradio gr-osmosdr libsndfile qt5base qt5svg
- 
--GQRX_CONF_OPTS = -DLINUX_AUDIO_BACKEND=Gr-audio
-+GQRX_CONF_OPTS = \
-+	-DFORCE_QT5=ON \
-+	-DLINUX_AUDIO_BACKEND=Gr-audio
- 
- # gqrx can use __atomic builtins, so we need to link with
- # libatomic when available
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
