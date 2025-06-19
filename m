@@ -1,76 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61DC4C7115B
-	for <buildroot@archiver.kernel.org>; Thu, 19 Jun 2025 18:52:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14410C7115D
+	for <buildroot@archiver.kernel.org>; Thu, 19 Jun 2025 19:51:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 24B6660DE9;
-	Thu, 19 Jun 2025 18:52:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 94F89805D0;
+	Thu, 19 Jun 2025 19:51:40 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3YmV1iX4l57k; Thu, 19 Jun 2025 19:51:40 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D3F8E82090
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id D3F8E82090;
+	Thu, 19 Jun 2025 19:51:39 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id EFD01E2
+ for <buildroot@buildroot.org>; Thu, 19 Jun 2025 19:51:38 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id E09EC60E32
+ for <buildroot@buildroot.org>; Thu, 19 Jun 2025 19:51:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eUPkwRuBLMDf; Thu, 19 Jun 2025 18:52:11 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0600B60D97
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0600B60D97;
-	Thu, 19 Jun 2025 18:52:11 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 140DAE2
- for <buildroot@buildroot.org>; Thu, 19 Jun 2025 18:52:09 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0575E4076F
- for <buildroot@buildroot.org>; Thu, 19 Jun 2025 18:52:09 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id y4PwG9bltOCc for <buildroot@buildroot.org>;
- Thu, 19 Jun 2025 18:52:08 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 34E4040767
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 34E4040767
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 34E4040767
- for <buildroot@buildroot.org>; Thu, 19 Jun 2025 18:52:08 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id 430467803A2;
- Thu, 19 Jun 2025 20:52:05 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
- via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Thu, 19 Jun 2025 20:52:05 +0200
+ id XofxG6P-y5Sn for <buildroot@buildroot.org>;
+ Thu, 19 Jun 2025 19:51:38 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.131;
+ helo=smtpcmd12131.aruba.it;
+ envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5251B60E23
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5251B60E23
+Received: from smtpcmd12131.aruba.it (smtpcmd12131.aruba.it [62.149.156.131])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5251B60E23
+ for <buildroot@buildroot.org>; Thu, 19 Jun 2025 19:51:36 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba SMTP with ESMTPSA
+ id SLILuxAPv8eo9SLILu5kHc; Thu, 19 Jun 2025 21:51:33 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: buildroot@buildroot.org
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Joseph Kogut <joseph.kogut@gmail.com>
+Date: Thu, 19 Jun 2025 21:51:31 +0200
+Message-Id: <20250619195132.1986901-2-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250619195132.1986901-1-giulio.benetti@benettiengineering.com>
+References: <20250619195132.1986901-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
-Date: Thu, 19 Jun 2025 20:52:05 +0200
-From: Julien Olivain <ju.o@free.fr>
-To: Romain Naour <romain.naour@smile.fr>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250618212357.189395-1-romain.naour@smile.fr>
-References: <20250618212357.189395-1-romain.naour@smile.fr>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <9fb09648474702a0aea83a7dcc1424a8@free.fr>
-X-Sender: ju.o@free.fr
+X-CMAE-Envelope: MS4xfMw3zORZb9EsRndQwuzkHnt4YjOY6UsNQ1R8JpHqqIQ7qohT4r6cMjlbgZCP0FMc3Y2KEzIhBN/YX26BBFbEWgLyHEwp8S/uH4rqTurBtIYi4ZYBgKbW
+ uQJx5htzZvafP7iAQIheif7g57viSm34sVPYm4NM7ulSJJy+Wn2jkrpVIw/CpDjG08jRR71Xrby4C1ywgpmYD6Nq3FiQmrAHbHSktoTglhJARZy8tvMO7kuX
+ yYmEfkRY0MDqWl1VzSaXEib2FRl4gtHRuwN3twPs9XNt71Ei3M2dPRSkXdaKe1mB/uoNddObVw3P8v6szni0ag==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1750359126;
- bh=u4pnXbhggvLLW2MvQCiQvoAXaILZHJ8XjeEZ6TMsGHU=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=aLuLBcnzvrTArKSz6QZTw/0crtND6HEqLGd5dnrwa4D1/QMS51hdvN51x+K07/NlN
- 8meXfUjOfodhYj96yFskWzUVh4exVrYhg/LIfkIUi1qEf6oL0d/tHEt2y5XcGwRG+f
- M5I7KIm/nxeQnCaZEEy6BCr9J4+FnAEoKC1AVF06nRDFumxCjxO2s6izkvT+CR8BTq
- Px5gaCPIgnfI1ZcDXLLl5PkQdBnI4aHheoBVx7tpJRZt8nNkGXrMh9+Kjd0WHIhlzq
- WSiRQQDP3oPVxUOWiZt9ge/HBX4QIhGnTJanEkIw63guv09iMgwBqqu6QniXN/k4TP
- 5H9H9EF35mMTA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=aruba.it; s=a1; 
+ t=1750362693; bh=w5nGCL6Vqd9YiWimeTDswWNq67oDnF9fSkyX2/nQ/0o=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=ELSrQe8nn35ZuBs6Ma6Lx9NfMND/479hrcAlZFu73CLcnqCur8R22zroax4CW0jGA
+ X42HD+F3XCkaSuCK6sXpkSVmAT5NA8prMYDUtkDJWwpYq3KXCUtQK5ekfuLHAj5dvW
+ 6kv4umEbiQaf7NvdYohZVIoR4Td/vRC8tSY8IZWGm4vXZ3134VOv6eQFyH1aVdVlfY
+ k8XBsbd7aIcCSl3xYHusGpk25nz8OLNfzs/lXGMGbVw2c5QzdFmjgHmLI5hDhd9L4V
+ Ux+jxYyWp0ZRDicF02c/tBQ7egEA22TR2Q3PXTA73niPALhfS2mhcPmmsYLcPGaHtu
+ xO8SV32Jv3V+Q==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=aLuLBcnz
-Subject: Re: [Buildroot] [PATCH] package/squashfs: update URL to source
- archive after Github changes
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=ELSrQe8n
+Subject: [Buildroot] [PATCH] package/libblockdev: security bump to version
+ 3.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,34 +83,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 18/06/2025 23:23, Romain Naour via buildroot wrote:
-> The squashfs 4.6.1 archive hash has been changed suddenly two weeks
-> ago by Github without any intended changes from the squashfs maintainer
-> [1].
-> 
-> The orginal squashfs 4.6.1 archive has been manually uploaded again.
-> 
-> Update the URL to download the archive that match the expected hash.
-> 
-> Since we don't use the github download helper anymore, the squashfs
-> archive name is changed from squashfs-4.6.1.tar.gz to
-> squashfs-tools-4.6.1.tar.gz.
-> 
-> Fixes:
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/10355448207
-> (and many more...)
-> 
-> See:
-> [1] https://github.com/plougher/squashfs-tools/issues/313
-> 
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+This version fixes CVE-2025-6019, see:
+https://github.com/storaged-project/libblockdev/blob/3.3.1/NEWS.rst
 
-Applied to master, thanks.
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ package/libblockdev/libblockdev.hash | 2 +-
+ package/libblockdev/libblockdev.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libblockdev/libblockdev.hash b/package/libblockdev/libblockdev.hash
+index dd6f8b1a27..38450c656d 100644
+--- a/package/libblockdev/libblockdev.hash
++++ b/package/libblockdev/libblockdev.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  c4738e1abedefffe886521f9f0e7a9306c6f50f7691d88e011438c88608bdfa7  libblockdev-3.3.0.tar.gz
++sha256  a2e2e448a19d420480b8cce5e0752197482a65cb62a9ed55d88b237da36600d1  libblockdev-3.3.1.tar.gz
+ sha256  97bdc721d875501b6243a456333fdfdb1ab64d31c4da2554de845caf4674b946  LICENSE
+diff --git a/package/libblockdev/libblockdev.mk b/package/libblockdev/libblockdev.mk
+index 265cee2e28..ecee8dee24 100644
+--- a/package/libblockdev/libblockdev.mk
++++ b/package/libblockdev/libblockdev.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBBLOCKDEV_VERSION = 3.3.0
++LIBBLOCKDEV_VERSION = 3.3.1
+ LIBBLOCKDEV_SITE = https://github.com/storaged-project/libblockdev/releases/download/$(LIBBLOCKDEV_VERSION)
+ LIBBLOCKDEV_LICENSE = LGPL-2.1
+ LIBBLOCKDEV_LICENSE_FILES = LICENSE
+-- 
+2.39.5
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
