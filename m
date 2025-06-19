@@ -1,76 +1,56 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D72E3C7115A
-	for <buildroot@archiver.kernel.org>; Thu, 19 Jun 2025 10:27:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B712FC7115A
+	for <buildroot@archiver.kernel.org>; Thu, 19 Jun 2025 12:34:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 633E08145A;
-	Thu, 19 Jun 2025 10:27:21 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TU-_cSWlV-yM; Thu, 19 Jun 2025 10:27:20 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A11E481418
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A11E481418;
-	Thu, 19 Jun 2025 10:27:20 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 81E7AE2
- for <buildroot@buildroot.org>; Thu, 19 Jun 2025 10:27:18 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6817C40531
- for <buildroot@buildroot.org>; Thu, 19 Jun 2025 10:27:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6ECCE40721;
+	Thu, 19 Jun 2025 12:34:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Qz1NKseMPSZg for <buildroot@buildroot.org>;
- Thu, 19 Jun 2025 10:27:17 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a07:ae80:100:0:185:158:164:11; helo=linux2410.webawere.nl;
- envelope-from=dev@bybram.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 265FE4045F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 265FE4045F
-Received: from linux2410.webawere.nl (linux2410.webawere.nl
- [IPv6:2a07:ae80:100:0:185:158:164:11])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 265FE4045F
- for <buildroot@buildroot.org>; Thu, 19 Jun 2025 10:27:17 +0000 (UTC)
-Received: from 185-047-134-076.jonaz.nl ([185.47.134.76]
- helo=bram-MS-7D25.bybram.com)
- by linux2410.webawere.nl with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
- (Exim 4.98.2) (envelope-from <dev@bybram.com>)
- id 1uSCUH-00000007xQE-11Oy; Thu, 19 Jun 2025 12:27:17 +0200
-From: Bram Oosterhuis <dev@bybram.com>
+ id CcEVYfdpjPbL; Thu, 19 Jun 2025 12:34:17 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A3D55408AC
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id A3D55408AC;
+	Thu, 19 Jun 2025 12:34:17 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9DB8B181
+ for <buildroot@buildroot.org>; Thu, 19 Jun 2025 12:34:15 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8437C4051D
+ for <buildroot@buildroot.org>; Thu, 19 Jun 2025 12:34:15 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Coyj-D6P1Z-E for <buildroot@buildroot.org>;
+ Thu, 19 Jun 2025 12:34:15 +0000 (UTC)
+Received-SPF: Neutral (mailfrom) identity=mailfrom; client-ip=54.37.254.54;
+ helo=kmf2.trabucayre.com; envelope-from=gwenj@trabucayre.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org CD15640169
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CD15640169
+Received: from kmf2.trabucayre.com (ns3108948.ip-54-37-254.eu [54.37.254.54])
+ by smtp2.osuosl.org (Postfix) with ESMTP id CD15640169
+ for <buildroot@buildroot.org>; Thu, 19 Jun 2025 12:34:14 +0000 (UTC)
+Received: from kmf3.. (localhost [IPv6:::1])
+ by kmf2.trabucayre.com (Postfix) with ESMTP id ACC7216022E;
+ Thu, 19 Jun 2025 12:34:11 +0000 (UTC)
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
 To: buildroot@buildroot.org
-Cc: Bram Oosterhuis <dev@bybram.com>
-Date: Thu, 19 Jun 2025 12:27:12 +0200
-Message-Id: <20250619102712.619955-1-dev@bybram.com>
-X-Mailer: git-send-email 2.34.1
+Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Date: Thu, 19 Jun 2025 12:34:10 +0000
+Message-Id: <20250619123410.2152859-1-gwenj@trabucayre.com>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
-X-Authenticated-Id: dev@bybram.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=bybram.com; 
- s=x; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-Id:Date:
- Subject:Cc:To:From:Sender:Reply-To:Content-ID:Content-Description:Resent-Date
- :Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:
- References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:
- List-Owner:List-Archive; bh=mF71Zo9HpTbsCWDhVviB74HP5nm+6LMBbn5ub+JO7/Q=; b=U
- FcTIANz/R/w1SY8AK6AfNA0oo9FLxMyqYnURpE1bn9mGK2rPCOY7sT29eZW9aqcYJhT2yDlnSHdzr
- PBmDFfeov8FgJ13hPCQLtWLXhQLnZxTPcQPdkcu40OjUPkxCzWmkcpaH1UMwno4dJvSNFWFxoytek
- pZOyVuyU4eO/PLO9zxzJ/BA5TKVawzstcWRcnrKf70JjevTC/v5eOP5Bu6H5o1ynN71w+zwoyonzH
- CNsS2HQmPlBqaAtsdnRaMG+KvA+vpX8RmgHtuDfcq9y9lKFZMdqoDOugVuJqWKRZi85+2jBNRL5Xo
- CK3keb5UHonj5xya0QADW19yopXx978Xw==;
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
- header.from=bybram.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bybram.com header.i=@bybram.com header.a=rsa-sha256
- header.s=x header.b=UFcTIANz
-Subject: [Buildroot] [PATCH 1/1] package/libgcrypt: bump to v1.11.1
+ header.from=trabucayre.com
+Subject: [Buildroot] [PATCH] package/gqrx: bump version to 2.17.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,39 +62,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VGhpcyBmaXhlcyAiZXJyb3I6IOKAmGFzbeKAmSBvcGVyYW5kIGhhcyBpbXBvc3NpYmxlIGNvbnN0
-cmFpbnRzIG9yIHRoZXJlIGFyZSBub3QgZW5vdWdoIHJlZ2lzdGVycyIgaWYgYnVpbGQgZm9yIGFy
-bWhmIHdpdGggR0NDMTQuCgpEZXRhaWxzOiBodHRwczovL2Rldi5nbnVwZy5vcmcvVDcyMjYKU2ln
-bmVkLW9mZi1ieTogQnJhbSBPb3N0ZXJodWlzIDxkZXZAYnlicmFtLmNvbT4KLS0tCkJhY2twb3J0
-IHRvOiAyMDI1LjAyLngsIDIwMjUuMDUueAogcGFja2FnZS9saWJnY3J5cHQvbGliZ2NyeXB0Lmhh
-c2ggfCA0ICsrLS0KIHBhY2thZ2UvbGliZ2NyeXB0L2xpYmdjcnlwdC5tayAgIHwgMiArLQogMiBm
-aWxlcyBjaGFuZ2VkLCAzIGluc2VydGlvbnMoKyksIDMgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0
-IGEvcGFja2FnZS9saWJnY3J5cHQvbGliZ2NyeXB0Lmhhc2ggYi9wYWNrYWdlL2xpYmdjcnlwdC9s
-aWJnY3J5cHQuaGFzaAppbmRleCBjZWQ4MDg3Y2E5Li40ODZhMjlkZmMwIDEwMDY0NAotLS0gYS9w
-YWNrYWdlL2xpYmdjcnlwdC9saWJnY3J5cHQuaGFzaAorKysgYi9wYWNrYWdlL2xpYmdjcnlwdC9s
-aWJnY3J5cHQuaGFzaApAQCAtMSw1ICsxLDUgQEAKICMgRnJvbSBodHRwczovL3d3dy5nbnVwZy5v
-cmcvZG93bmxvYWQvaW50ZWdyaXR5X2NoZWNrLmh0bWwKLXNoYTEgIGRkMmM2OGUwNjg1YmI5OTI0
-OWVmZWViMDYwNDZmYWUxNWI1MjE0YmEgIGxpYmdjcnlwdC0xLjExLjAudGFyLmJ6Mgotc2hhMjU2
-ICAwOTEyMGM5ODY3Y2U3ZjIwODFkNmFhYTE3NzUzODZiOThjMmYyZjI0NjEzNTc2MWFhZTQ3ZDgx
-ZjU4Njg1YjljICBsaWJnY3J5cHQtMS4xMS4wLnRhci5iejIKK3NoYTEgIGQzM2ViMjcwY2Q3NGU4
-YzIzZTI2M2ViNWNkYjhmN2RlNzQwZjdiNDkgIGxpYmdjcnlwdC0xLjExLjEudGFyLmJ6Mgorc2hh
-MjU2ICAyNGU5MWM5MTIzYTQ2YzU0ZTgzNzFmM2EzYTI1MDJmMTE5OGYyODkzZmJmYmY1OWFmOTVi
-YzFjMjE0OTliMDBlICBsaWJnY3J5cHQtMS4xMS4xLnRhci5iejIKICMgTG9jYWxseSBjYWxjdWxh
-dGVkCiBzaGEyNTYgIGRjNjI2NTIwZGNkNTNhMjJmNzI3YWYzZWU0MmM3NzBlNTZjOTdhNjRmZTNh
-ZGIwNjM3OTlkOGFiMDMyZmU1NTEgIENPUFlJTkcuTElCCmRpZmYgLS1naXQgYS9wYWNrYWdlL2xp
-YmdjcnlwdC9saWJnY3J5cHQubWsgYi9wYWNrYWdlL2xpYmdjcnlwdC9saWJnY3J5cHQubWsKaW5k
-ZXggNTdlY2E1MDdiMy4uNWY1NmU0MGFjMiAxMDA2NDQKLS0tIGEvcGFja2FnZS9saWJnY3J5cHQv
-bGliZ2NyeXB0Lm1rCisrKyBiL3BhY2thZ2UvbGliZ2NyeXB0L2xpYmdjcnlwdC5tawpAQCAtNCw3
-ICs0LDcgQEAKICMKICMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCiAKLUxJQkdDUllQVF9WRVJTSU9O
-ID0gMS4xMS4wCitMSUJHQ1JZUFRfVkVSU0lPTiA9IDEuMTEuMQogTElCR0NSWVBUX1NPVVJDRSA9
-IGxpYmdjcnlwdC0kKExJQkdDUllQVF9WRVJTSU9OKS50YXIuYnoyCiBMSUJHQ1JZUFRfTElDRU5T
-RSA9IExHUEwtMi4xKwogTElCR0NSWVBUX0xJQ0VOU0VfRklMRVMgPSBDT1BZSU5HLkxJQgotLSAK
-Mi4zNC4xCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpi
-dWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlz
-dHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+---
+ package/gqrx/Config.in | 1 -
+ package/gqrx/gqrx.hash | 2 +-
+ package/gqrx/gqrx.mk   | 5 +++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/gqrx/Config.in b/package/gqrx/Config.in
+index 97f0b7de07..25a8a77d2f 100644
+--- a/package/gqrx/Config.in
++++ b/package/gqrx/Config.in
+@@ -25,7 +25,6 @@ config BR2_PACKAGE_GQRX
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # gnuradio
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_43744 # gnuradio
+ 	select BR2_PACKAGE_BOOST
+-	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
+ 	select BR2_PACKAGE_BOOST_SYSTEM
+ 	select BR2_PACKAGE_GNURADIO
+ 	select BR2_PACKAGE_GNURADIO_ANALOG
+diff --git a/package/gqrx/gqrx.hash b/package/gqrx/gqrx.hash
+index 567ff947f9..154b43db1e 100644
+--- a/package/gqrx/gqrx.hash
++++ b/package/gqrx/gqrx.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated:
+-sha256  4a826b468b2fb38a59cbe1f1b566e62c3114509186a7a25ba27dc92833f3eb44  gqrx-2.15.9.tar.gz
++sha256  4aaab8a3c185cd99d6dda56d95b8f1b20128a6acfd2e86e0349d432a5fdcbce4  gqrx-2.17.7.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+ sha256  7cc22ce5ee61df62e427ec43b8130de149edee3cafb5af4f18d59b6dc3958faf  LICENSE-CTK
+diff --git a/package/gqrx/gqrx.mk b/package/gqrx/gqrx.mk
+index d2518213b8..251b05cdf4 100644
+--- a/package/gqrx/gqrx.mk
++++ b/package/gqrx/gqrx.mk
+@@ -4,13 +4,14 @@
+ #
+ ################################################################################
+ 
+-GQRX_VERSION = 2.15.9
++GQRX_VERSION = 2.17.7
+ GQRX_SITE = $(call github,csete,gqrx,v$(GQRX_VERSION))
+ GQRX_LICENSE = GPL-3.0+, Apache-2.0
+ GQRX_LICENSE_FILES = COPYING LICENSE-CTK
+ GQRX_DEPENDENCIES = boost gnuradio gr-osmosdr libsndfile qt5base qt5svg
+ 
+-GQRX_CONF_OPTS = -DLINUX_AUDIO_BACKEND=Gr-audio
++GQRX_CONF_OPTS = -DLINUX_AUDIO_BACKEND=Gr-audio \
++	-DFORCE_QT5=ON
+ 
+ # gqrx can use __atomic builtins, so we need to link with
+ # libatomic when available
+-- 
+2.39.5
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
