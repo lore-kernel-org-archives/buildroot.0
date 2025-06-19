@@ -1,52 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B31C6C7115B
-	for <buildroot@archiver.kernel.org>; Thu, 19 Jun 2025 23:23:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D743FC7115B
+	for <buildroot@archiver.kernel.org>; Thu, 19 Jun 2025 23:24:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6C35080A80;
-	Thu, 19 Jun 2025 23:23:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9255840B7F;
+	Thu, 19 Jun 2025 23:24:14 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id w5AW8ADzxgK3; Thu, 19 Jun 2025 23:24:14 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D42E740B86
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id D42E740B86;
+	Thu, 19 Jun 2025 23:24:13 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5F58A16B
+ for <buildroot@buildroot.org>; Thu, 19 Jun 2025 23:24:12 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5CAF880A80
+ for <buildroot@buildroot.org>; Thu, 19 Jun 2025 23:24:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1p2F330CK-ft; Thu, 19 Jun 2025 23:23:30 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8BDC580A87
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8BDC580A87;
-	Thu, 19 Jun 2025 23:23:30 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 92D47181
- for <buildroot@buildroot.org>; Thu, 19 Jun 2025 23:23:29 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 795274108B
- for <buildroot@buildroot.org>; Thu, 19 Jun 2025 23:23:29 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KNqb2lR8ngWc for <buildroot@buildroot.org>;
- Thu, 19 Jun 2025 23:23:28 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9E9084002D
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9E9084002D
- for <buildroot@buildroot.org>; Thu, 19 Jun 2025 23:23:28 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8B7A381213; Thu, 19 Jun 2025 23:23:28 +0000 (UTC)
+ id EZcwDJHwQjbl for <buildroot@buildroot.org>;
+ Thu, 19 Jun 2025 23:24:11 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 57C3880AB8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 57C3880AB8
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 57C3880AB8
+ for <buildroot@buildroot.org>; Thu, 19 Jun 2025 23:24:10 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 6951713F86A;
+ Fri, 20 Jun 2025 01:24:05 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 20 Jun 2025 01:24:05 +0200
+MIME-Version: 1.0
+Date: Fri, 20 Jun 2025 01:24:05 +0200
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Fri, 20 Jun 2025 01:22:53 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e374ae03b5cc7f4c99af2b0079f0051e78dbb1ac
-X-Git-Newrev: 0233c854b1845e0070179439a74b3b5245a4b01b
-X-Patchwork-Hint: ignore
-Message-Id: <20250619232328.8B7A381213@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libblockdev: security bump to
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: buildroot@buildroot.org, Joseph Kogut <joseph.kogut@gmail.com>
+In-Reply-To: <20250619195132.1986901-2-giulio.benetti@benettiengineering.com>
+References: <20250619195132.1986901-1-giulio.benetti@benettiengineering.com>
+ <20250619195132.1986901-2-giulio.benetti@benettiengineering.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <ec4c5a97a4318eb10b20a5cb7e0406ec@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1750375447;
+ bh=oQe6WCxYM5rxuVC391a8jX9DZfWjSz6KFwF4yNy9cUw=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=PPAqPIcfVN6HN8TzwW410E1wZHDcpDj3URmPcfrtGL6ysPy4U3bvIuTyl+pB4G28N
+ UKle062fs0s+UJjfgZoXNYb+CdILVm/nWy6lT3XpdfdkYwXB2mk2rIeLP0aVNkTbDH
+ ebUZuidzMpc/CBRSZhLjgLFcZGK0rInyLzFqHmQYgmlyFt1cmrL2El2c2gwi0j7HRx
+ R78e7HTEN31IOmY6C41b35DdJUFFiAjxwXv0Zg9aAGMXIH0trnmUhTPwqfATxJhJe9
+ ygWgiKeqq3w5HBjmaEPyFB60avSpUF+WBkw1rloVjdppWgC/3PnCqEGQ2eN3PH5Icc
+ 1qvdpPk0CrF9Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=PPAqPIcf
+Subject: Re: [Buildroot] [PATCH] package/libblockdev: security bump to
  version 3.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -59,51 +84,18 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0233c854b1845e0070179439a74b3b5245a4b01b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 19/06/2025 21:51, Giulio Benetti wrote:
+> This version fixes CVE-2025-6019, see:
+> https://github.com/storaged-project/libblockdev/blob/3.3.1/NEWS.rst
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-This version fixes CVE-2025-6019, see:
-https://github.com/storaged-project/libblockdev/blob/3.3.1/NEWS.rst
-
-Fixes:
-https://www.cve.org/CVERecord?id=CVE-2025-6019
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-[Julien: add link to CVE]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/libblockdev/libblockdev.hash | 2 +-
- package/libblockdev/libblockdev.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/libblockdev/libblockdev.hash b/package/libblockdev/libblockdev.hash
-index dd6f8b1a27..38450c656d 100644
---- a/package/libblockdev/libblockdev.hash
-+++ b/package/libblockdev/libblockdev.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  c4738e1abedefffe886521f9f0e7a9306c6f50f7691d88e011438c88608bdfa7  libblockdev-3.3.0.tar.gz
-+sha256  a2e2e448a19d420480b8cce5e0752197482a65cb62a9ed55d88b237da36600d1  libblockdev-3.3.1.tar.gz
- sha256  97bdc721d875501b6243a456333fdfdb1ab64d31c4da2554de845caf4674b946  LICENSE
-diff --git a/package/libblockdev/libblockdev.mk b/package/libblockdev/libblockdev.mk
-index 265cee2e28..ecee8dee24 100644
---- a/package/libblockdev/libblockdev.mk
-+++ b/package/libblockdev/libblockdev.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBBLOCKDEV_VERSION = 3.3.0
-+LIBBLOCKDEV_VERSION = 3.3.1
- LIBBLOCKDEV_SITE = https://github.com/storaged-project/libblockdev/releases/download/$(LIBBLOCKDEV_VERSION)
- LIBBLOCKDEV_LICENSE = LGPL-2.1
- LIBBLOCKDEV_LICENSE_FILES = LICENSE
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
