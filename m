@@ -1,103 +1,97 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5483C7115B
-	for <buildroot@archiver.kernel.org>; Thu, 19 Jun 2025 13:53:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E428BC7115A
+	for <buildroot@archiver.kernel.org>; Thu, 19 Jun 2025 14:35:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B5FE06084F;
-	Thu, 19 Jun 2025 13:53:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8EA7A402FD;
+	Thu, 19 Jun 2025 14:35:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cPA00Gs2OfaL; Thu, 19 Jun 2025 13:53:34 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JaPYUngJZabL; Thu, 19 Jun 2025 14:35:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E7C3260B4B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C02B1402D9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E7C3260B4B;
-	Thu, 19 Jun 2025 13:53:33 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 29EEFE2
- for <buildroot@buildroot.org>; Thu, 19 Jun 2025 13:53:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C02B1402D9;
+	Thu, 19 Jun 2025 14:35:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 48DE1E2
+ for <buildroot@buildroot.org>; Thu, 19 Jun 2025 14:35:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0BECA605F0
- for <buildroot@buildroot.org>; Thu, 19 Jun 2025 13:53:31 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2F85640054
+ for <buildroot@buildroot.org>; Thu, 19 Jun 2025 14:35:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id G-LGAUZ-Hl49 for <buildroot@buildroot.org>;
- Thu, 19 Jun 2025 13:53:30 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TZuIssDVJFxK for <buildroot@buildroot.org>;
+ Thu, 19 Jun 2025 14:35:09 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 164E76084F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 164E76084F
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 164E76084F
- for <buildroot@buildroot.org>; Thu, 19 Jun 2025 13:53:29 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id
- 5b1f17b1804b1-453398e90e9so5891085e9.1
- for <buildroot@buildroot.org>; Thu, 19 Jun 2025 06:53:29 -0700 (PDT)
+ client-ip=2607:f8b0:4864:20::e2f; helo=mail-vs1-xe2f.google.com;
+ envelope-from=johanderycke@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 560F140385
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 560F140385
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com
+ [IPv6:2607:f8b0:4864:20::e2f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 560F140385
+ for <buildroot@buildroot.org>; Thu, 19 Jun 2025 14:35:09 +0000 (UTC)
+Received: by mail-vs1-xe2f.google.com with SMTP id
+ ada2fe7eead31-4e9a7bfb3c8so638925137.1
+ for <buildroot@buildroot.org>; Thu, 19 Jun 2025 07:35:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1750341208; x=1750946008;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=pS23MqvRlc+wIMVfBf8NdiBXkhuotrzq0iL++PXSerM=;
- b=sqUF+9o4ouErARzNjlosno130cubwNEoOewslS21dySVVJeOhqBp8QUb+yHLai6mgy
- PqhxYRmPM8GvbPCLXNeOpn/3LLS9c2aMy1O9sraoBWXi6T1kpkh4pSOSLu830mOWbT6l
- CDkVH1rut87Lt9NknyTh/Uv+nQ2qfXyOaaJVGob2fQ8a4i3DRHPp1o0/QjQNkYelBXE1
- CuQEhh/h+jXwiI0+G4AAXTRU4AR8t2kAFf4ss/Tf6Ik+pLMIfFWVGrYcTOdZgX3f1Ir1
- zzFBJ/lSYBE6KKqGtMs+KgOyKpaDurQA+ZsMmc87rC6xwE9NBjlPdTepRoJ8pmkiJuYp
- wHKg==
-X-Gm-Message-State: AOJu0YzoMgXUZnXqi/oKJNcN2Tkx2lhEbIftoMVwpgQPGxBsiGAPHu+F
- ybrBCKVi3MpiztaL0eTcLxVed+j6UhAZea898t8x8POK1fVQaI/kll8dmFplagJwy3IrF2TaUHR
- kAvVH
-X-Gm-Gg: ASbGncvfw65zv0mD7OCInWUAFbT7ncyd3Yd92ednCBdX1qaSk+cHf94JBFvJpJJMMLr
- QOqu0lgpCC4xsCeSI55r4BYuMyMNOzCNS6UNevKJGnH86F+9q4FyLL6DDraJiX0eMM0h8cWcz2O
- fsTp8q47J69ELeHl2S8az7EQehl2LKWXj0AcHnmxYk/b8d+xR+twLEq2BPIwXRN+yXatkW8hyzk
- TlhZWqZ5digKP3NQE/I45OuqLsb3mefUeM84i/h2difnldyfYyoKCkN2hXO2m6ixM6E1BZWqeyC
- OA6vpouYfWOoksdwGjMyiE91UKYyhxtzC0K0U1rzgB5UnrsQuELs+TlsX8yLS60cIfYGJawlXvi
- MzS/ALGGjkYQ=
-X-Google-Smtp-Source: AGHT+IETrUAH5bRxbHfHo1PdJAM3wf38qCcv9T0ySvAdBOGFOsfKK30oMDBQbNm8cpVWUwqBJGjPdQ==
-X-Received: by 2002:a05:600c:3f0c:b0:450:d07e:ee14 with SMTP id
- 5b1f17b1804b1-4533cb3be4bmr222429495e9.17.1750341207828; 
- Thu, 19 Jun 2025 06:53:27 -0700 (PDT)
-Received: from localhost.localdomain ([79.132.233.61])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4535e97b501sm29551665e9.2.2025.06.19.06.53.27
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 19 Jun 2025 06:53:27 -0700 (PDT)
-To: buildroot@buildroot.org
-Cc: Thomas Perale <thomas.perale@mind.be>
-Date: Thu, 19 Jun 2025 15:53:18 +0200
-Message-ID: <20250619135318.406138-1-thomas.perale@mind.be>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <aFKx2lzT2l+lmXtM@yuce-lenovo>
-References: <aFKx2lzT2l+lmXtM@yuce-lenovo>
+ d=1e100.net; s=20230601; t=1750343708; x=1750948508;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=Dkn6YXP3NB0GCpMx6YJQyUtPlLnemNUQD5PBsb+713U=;
+ b=cn99mgIVUYNyrN8NB0ZHiliDXyaNT51m4uQFTn+MrQNxH+3Wh7QuUtoxm1VxXDUrYU
+ NUpKtCI8HeiIl/BG7RVsHFkG99vSQ8507hvcsn/s9q3G/EVsBZk+wjQHJ7y5McXU66kG
+ ruXtaoLRHBxEwtbxzWXf78CkoKHlCzUZ85FJUqI5Ixj/I3tdZM0Uy9WKJPmSHnFPDqTD
+ NsvNu9PrAzPTdTlsbkaJvI7jRdn49Y129+ESCyPYC6cYRSKR5ywpoU1gpkafLOU93y/l
+ qq2Fwk1W13U8A8MDmFnlZL4LZ1UoRLEQNlfsE9IyAuvlP8pBD5O06swtI2C/QfSwovv7
+ WvRg==
+X-Gm-Message-State: AOJu0YyuPR+n/iPNj0xrgNTVo7+aPJbE9aUbypcNwl5n0BPSmXobR14d
+ O2E2XdGoGbaQxzcpY6KHpO+wVx2AKVT/4K2dzOm8oZcu2RXAedpAd7ksIzw4LJDjDRXT8xum0BY
+ Ho5tl9x8voqt2HLrJPm4dVa2Vhb3dxrFP0/Ar
+X-Gm-Gg: ASbGnctj24kq14Y7uth/NLSNSVbtygfbfDMNl0UPWpSY4dlOTOXBo0QsQSzsBnGinT0
+ 0I8napUon2onYpRfLdrdQNpUgYabMdTyjCCmpCgZXmUm0aGVSJ6E59un6e6XnGEwtIwkwVKOIpq
+ DwBOjw2BcVvm65rXq+6kMuf3Gb5GmwKWzCSG+0QpkWEZo=
+X-Google-Smtp-Source: AGHT+IHbHiEOfxpRHvKT0e96hGg6X/0Qt0k9nbdPXMUpLFOMt5fAdVLxEblMYAUR16L32A2evUCttMR9pmeiH/2DmgA=
+X-Received: by 2002:a05:6102:4194:b0:4df:4a04:8d5e with SMTP id
+ ada2fe7eead31-4e7f6118578mr16441285137.8.1750343707740; Thu, 19 Jun 2025
+ 07:35:07 -0700 (PDT)
 MIME-Version: 1.0
+References: <20250613110559.2665663-1-fabien.lehoussel@smile.fr>
+In-Reply-To: <20250613110559.2665663-1-fabien.lehoussel@smile.fr>
+From: Johan Derycke <johanderycke@gmail.com>
+Date: Thu, 19 Jun 2025 16:34:56 +0200
+X-Gm-Features: Ac12FXxOYPhj64S2Qa_RF0WrL7E3p_6TGnVzJ9ZEQxdocKkwuoeqmIsntJzHw1E
+Message-ID: <CAKHhJn1m5fZnPYki3jR0ZWa-2aB3291n3dyLUoQViBM_X5Zc2g@mail.gmail.com>
+To: Fabien Lehoussel <fabien.lehoussel@smile.fr>
+Cc: buildroot@buildroot.org, Thomas Perale <thomas.perale@mind.be>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1750341208; x=1750946008; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=pS23MqvRlc+wIMVfBf8NdiBXkhuotrzq0iL++PXSerM=;
- b=Eu3kB9jrYcsh1nQPns+2eUtQKGaUk6TjEirVrrkhyO3J3dxsQokAg06oBvb9M7u4BF
- yxGIFvKtqQ9iEqgTu+Nf3hJAKqSqGDfHYAzlKOOhkfv/FoUJI6eKUPNqHutygdSGsv1v
- UmD8Ddrv56BvFMeEtIogn4XFpXLICLYOwz1pBuzyYtbMYZeAl2zPjtmMCiSDuPJN/3q2
- PhjPNa13wGbTLBOyyt1UO1GnnKUrgh/vkWXlYYw2Hxr3Jn6x7Zvt3b0RCmo5dvrYUM+W
- KamkqbUffjQzdN6NtxXATK34MlvP4c3aAYGqo9PRY5/0sB1DjWAVVWc+Wu7t0SgnmxxW
- ywbQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Eu3kB9jr
-Subject: Re: [Buildroot] [PATCH 2025.02.x] package/jq: security patch for
+ d=gmail.com; s=20230601; t=1750343708; x=1750948508; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=Dkn6YXP3NB0GCpMx6YJQyUtPlLnemNUQD5PBsb+713U=;
+ b=E7BnT/ql7la4rJ51Uo05Vc6sJpdFzLoFdOe2MTKrpolda22YIWVzw+DcqDg8DysyDo
+ hsh95bOQo6F8ZMruYs+pE2ZluHJxv3MUpVyGKpWOOjdMN5zPHDpuWXlXBpbA6dYMcrgJ
+ lDJp92Z+MfvzZloM24rX1LBiTQS+v4fMX+gcqbvhOBEWjXVzTUMvQ9YXPf3DQTJ8zWlA
+ qxGNc+OGJOIXrfzIkKCuc2NdaZn0nngmmdFdTYrtzOUxYKcQqNCNhc3YDVh+u3+vVb1e
+ PHSXqP4DXo5BppGbDpcHU/v1HyIn6P2b0D+Bhs0pvU0H10IApeF3wkq7KkHswK8PxjHS
+ WRLQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=E7BnT/ql
+Subject: Re: [Buildroot] [PATCH 1/7] utils/generate-cyclonedx: add option to
+ filter host packages
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -109,117 +103,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============3424672548480510805=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-In reply of:
-> Security patch have been fetched from the Nixpkgs [1].
-> 
-> Fixes the following CVE:
-> - CVE-2025-48060: jq is a command-line JSON processor. In versions up to
->  and including 1.7.1, a heap-buffer-overflow is present in function
->   in the jq_fuzz_execute harness from oss-fuzz. This
->  crash happens on file jv.c, line 1456 . As of
->  time of publication, no patched versions are available.
-> 
-> For more information, see:
->   - https://nvd.nist.gov/vuln/detail/CVE-2025-48060
-> 
-> [1] https://github.com/LordGrimmauld/nixpkgs/blob/df21c79bfbb4d5ea50a49231bb8f91ab7afa051d/pkgs/by-name/jq/jq/0005-Fix-heap-buffer-overflow-when-formatting-an-empty-st.patch
-> 
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-> Signed-off-by: Yuce Kurum <yuce.kurum@mind.be>
+--===============3424672548480510805==
+Content-Type: multipart/alternative; boundary="000000000000ef50e40637eda685"
 
-Applied to 2025.02.x. Thanks
+--000000000000ef50e40637eda685
+Content-Type: text/plain; charset="UTF-8"
 
-> ---
->  package/jq/0003-CVE-2025-48060.patch | 50 ++++++++++++++++++++++++++++
->  package/jq/jq.mk                     |  3 ++
->  2 files changed, 53 insertions(+)
->  create mode 100644 package/jq/0003-CVE-2025-48060.patch
-> 
-> diff --git a/package/jq/0003-CVE-2025-48060.patch b/package/jq/0003-CVE-2025-48060.patch
-> new file mode 100644
-> index 0000000000..f2905274f2
-> --- /dev/null
-> +++ b/package/jq/0003-CVE-2025-48060.patch
-> @@ -0,0 +1,50 @@
-> +From d73a79035e1d24011a3363d52bf36b4eaea67aa6 Mon Sep 17 00:00:00 2001
-> +From: itchyny <itchyny@cybozu.co.jp>
-> +Date: Sat, 31 May 2025 11:46:40 +0900
-> +Subject: [PATCH 5/5] Fix heap buffer overflow when formatting an empty string
-> +
-> +The `jv_string_empty` did not properly null-terminate the string data,
-> +which could lead to a heap buffer overflow. The test case of
-> +GHSA-p7rr-28xf-3m5w (`0[""*0]`) was fixed by the commit dc849e9bb74a,
-> +but another case (`0[[]|implode]`) was still vulnerable. This commit
-> +ensures string data is properly null-terminated, and fixes CVE-2025-48060.
-> +
-> +CVE: CVE-2025-48060
-> +Upstream: https://github.com/LordGrimmauld/nixpkgs/blob/df21c79bfbb4d5ea50a49231bb8f91ab7afa051d/pkgs/by-name/jq/jq/0005-Fix-heap-buffer-overflow-when-formatting-an-empty-st.patch
-> +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-> +Signed-off-by: Yuce Kurum <yuce.kurum@mind.be>
-> +---
-> + src/jv.c      | 1 +
-> + tests/jq.test | 4 ++++
-> + 2 files changed, 5 insertions(+)
-> +
-> +diff --git a/src/jv.c b/src/jv.c
-> +index 6e8cdd3..3303286 100644
-> +--- a/src/jv.c
-> ++++ b/src/jv.c
-> +@@ -1121,6 +1121,7 @@ static jv jvp_string_empty_new(uint32_t length) {
-> +   jvp_string* s = jvp_string_alloc(length);
-> +   s->length_hashed = 0;
-> +   memset(s->data, 0, length);
-> ++  s->data[length] = 0;
-> +   jv r = {JVP_FLAGS_STRING, 0, 0, 0, {&s->refcnt}};
-> +   return r;
-> + }
-> +diff --git a/tests/jq.test b/tests/jq.test
-> +index 10b20e3..680706b 100644
-> +--- a/tests/jq.test
-> ++++ b/tests/jq.test
-> +@@ -2042,6 +2042,10 @@ map(try implode catch .)
-> + [123,["a"],[nan]]
-> + ["implode input must be an array","string (\"a\") can't be imploded, unicode codepoint needs to be numeric","number (null) can't be imploded, unicode codepoint needs to be numeric"]
-> + 
-> ++try 0[implode] catch .
-> ++[]
-> ++"Cannot index number with string \"\""
-> ++
-> + # walk
-> + walk(.)
-> + {"x":0}
-> +-- 
-> +2.49.0
-> +
-> diff --git a/package/jq/jq.mk b/package/jq/jq.mk
-> index dbd69f0b16..e21e4376ea 100644
-> --- a/package/jq/jq.mk
-> +++ b/package/jq/jq.mk
-> @@ -17,6 +17,9 @@ JQ_IGNORE_CVES += CVE-2024-23337
->  # 0002-CVE-2024-53427.patch
->  JQ_IGNORE_CVES += CVE-2024-53427
->  
-> +# 0003-CVE-2025-48060.patch
-> +JQ_IGNORE_CVES += CVE-2025-48060
-> +
->  # uses c99 specific features
->  JQ_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=c99"
->  HOST_JQ_CONF_ENV += CFLAGS="$(HOST_CFLAGS) -std=c99"
-> -- 
-> 2.34.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+Hi,
+
+Op vr 13 jun 2025 om 13:06 schreef Fabien Lehoussel via buildroot <
+buildroot@buildroot.org>:
+
+> Adds a new command-line option '--no-host-packages' that allows users
+> to exclude host packages from the generated SBOM. This is useful when
+> focusing on target packages only, resulting in a more concise and
+> relevant software bill of materials.
+>
+>
+Host packages still show up in dependencies.
+"br2_parse_deps_recursively" will need some extra filtering I guess.
+
+Best regards,
+Johan
+
+--000000000000ef50e40637eda685
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div>Hi,</div><br><div class=3D"gmail_quote gmail_quote_co=
+ntainer"><div dir=3D"ltr" class=3D"gmail_attr">Op vr 13 jun 2025 om 13:06 s=
+chreef Fabien Lehoussel via buildroot &lt;<a href=3D"mailto:buildroot@build=
+root.org">buildroot@buildroot.org</a>&gt;:<br></div><blockquote class=3D"gm=
+ail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,=
+204,204);padding-left:1ex">Adds a new command-line option &#39;--no-host-pa=
+ckages&#39; that allows users<br>
+to exclude host packages from the generated SBOM. This is useful when<br>
+focusing on target packages only, resulting in a more concise and<br>
+relevant software bill of materials.<br><br></blockquote><div><br>Host pack=
+ages still show up in dependencies.<br>&quot;br2_parse_deps_recursively&quo=
+t; will need some extra filtering I guess.<br><br>Best regards,</div><div>J=
+ohan</div></div></div>
+
+--000000000000ef50e40637eda685--
+
+--===============3424672548480510805==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3424672548480510805==--
