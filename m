@@ -1,77 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14410C7115D
-	for <buildroot@archiver.kernel.org>; Thu, 19 Jun 2025 19:51:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3520AC77B7A
+	for <buildroot@archiver.kernel.org>; Thu, 19 Jun 2025 19:51:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 94F89805D0;
-	Thu, 19 Jun 2025 19:51:40 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3YmV1iX4l57k; Thu, 19 Jun 2025 19:51:40 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D3F8E82090
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D3F8E82090;
-	Thu, 19 Jun 2025 19:51:39 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id EFD01E2
- for <buildroot@buildroot.org>; Thu, 19 Jun 2025 19:51:38 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E09EC60E32
- for <buildroot@buildroot.org>; Thu, 19 Jun 2025 19:51:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E6DF960E42;
+	Thu, 19 Jun 2025 19:51:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XofxG6P-y5Sn for <buildroot@buildroot.org>;
+ id gZoCSQkgKf9S; Thu, 19 Jun 2025 19:51:41 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2CA3160E34
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2CA3160E34;
+	Thu, 19 Jun 2025 19:51:41 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1832AE2
+ for <buildroot@buildroot.org>; Thu, 19 Jun 2025 19:51:39 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id F25D240A62
+ for <buildroot@buildroot.org>; Thu, 19 Jun 2025 19:51:38 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kcHSQh8S0D1M for <buildroot@buildroot.org>;
  Thu, 19 Jun 2025 19:51:38 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.131;
  helo=smtpcmd12131.aruba.it;
  envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5251B60E23
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5251B60E23
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5267140A5D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5267140A5D
 Received: from smtpcmd12131.aruba.it (smtpcmd12131.aruba.it [62.149.156.131])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5251B60E23
- for <buildroot@buildroot.org>; Thu, 19 Jun 2025 19:51:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5267140A5D
+ for <buildroot@buildroot.org>; Thu, 19 Jun 2025 19:51:35 +0000 (UTC)
 Received: from localhost.localdomain ([84.33.84.190])
  by Aruba SMTP with ESMTPSA
- id SLILuxAPv8eo9SLILu5kHc; Thu, 19 Jun 2025 21:51:33 +0200
+ id SLILuxAPv8eo9SLILu5kHU; Thu, 19 Jun 2025 21:51:33 +0200
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
 Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
  Joseph Kogut <joseph.kogut@gmail.com>
-Date: Thu, 19 Jun 2025 21:51:31 +0200
-Message-Id: <20250619195132.1986901-2-giulio.benetti@benettiengineering.com>
+Date: Thu, 19 Jun 2025 21:51:30 +0200
+Message-Id: <20250619195132.1986901-1-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250619195132.1986901-1-giulio.benetti@benettiengineering.com>
-References: <20250619195132.1986901-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
 X-CMAE-Envelope: MS4xfMw3zORZb9EsRndQwuzkHnt4YjOY6UsNQ1R8JpHqqIQ7qohT4r6cMjlbgZCP0FMc3Y2KEzIhBN/YX26BBFbEWgLyHEwp8S/uH4rqTurBtIYi4ZYBgKbW
  uQJx5htzZvafP7iAQIheif7g57viSm34sVPYm4NM7ulSJJy+Wn2jkrpVIw/CpDjG08jRR71Xrby4C1ywgpmYD6Nq3FiQmrAHbHSktoTglhJARZy8tvMO7kuX
  yYmEfkRY0MDqWl1VzSaXEib2FRl4gtHRuwN3twPs9XNt71Ei3M2dPRSkXdaKe1mB/uoNddObVw3P8v6szni0ag==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1750362693; bh=w5nGCL6Vqd9YiWimeTDswWNq67oDnF9fSkyX2/nQ/0o=;
+ t=1750362693; bh=2etuyavnj0MzI+hi1+KFL9EekNWB7Fg50qkR7s8TdVw=;
  h=From:To:Subject:Date:MIME-Version;
- b=ELSrQe8nn35ZuBs6Ma6Lx9NfMND/479hrcAlZFu73CLcnqCur8R22zroax4CW0jGA
- X42HD+F3XCkaSuCK6sXpkSVmAT5NA8prMYDUtkDJWwpYq3KXCUtQK5ekfuLHAj5dvW
- 6kv4umEbiQaf7NvdYohZVIoR4Td/vRC8tSY8IZWGm4vXZ3134VOv6eQFyH1aVdVlfY
- k8XBsbd7aIcCSl3xYHusGpk25nz8OLNfzs/lXGMGbVw2c5QzdFmjgHmLI5hDhd9L4V
- Ux+jxYyWp0ZRDicF02c/tBQ7egEA22TR2Q3PXTA73niPALhfS2mhcPmmsYLcPGaHtu
- xO8SV32Jv3V+Q==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=K2sOgm7z92zkQ5z9fp7IRFboQVZhU0/IHKj1CIe59g6Owv+PkzEtCA+PtDzRE208n
+ drNh25iA8JF9V9Arcw10oyoJ6+u8Czs2SF58BSGFLP9D6PXnsg7gsy1ISumIW7u4hy
+ TUrE1HW1xKnIgKS75a7DeKGuMYpulXXrSSZEpehyYsFpSnL9VoVrOB9w+3mzybwbfR
+ EjfnaAaeve9tvV3ZxsfGGCvumfZZwyxkLgndxlW1lG23BX4nuNxBLx6t3qFIfe+N4a
+ xU6YH0sYW5Dll99VPzn0blYoWkGFvtaiop5/xeSvs6AXGR6voQvabj2viC9v//ZWHA
+ YZDSWHgQRDWnQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=ELSrQe8n
-Subject: [Buildroot] [PATCH] package/libblockdev: security bump to version
- 3.3.1
+ header.s=a1 header.b=K2sOgm7z
+Subject: [Buildroot] [PATCH] package/libnss: bump version to 3.113
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -88,37 +85,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This version fixes CVE-2025-6019, see:
-https://github.com/storaged-project/libblockdev/blob/3.3.1/NEWS.rst
+For release note, see:
+https://hg-edge.mozilla.org/projects/nss/file/tip/doc/rst/releases/nss_3_113.rst
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/libblockdev/libblockdev.hash | 2 +-
- package/libblockdev/libblockdev.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libblockdev/libblockdev.hash b/package/libblockdev/libblockdev.hash
-index dd6f8b1a27..38450c656d 100644
---- a/package/libblockdev/libblockdev.hash
-+++ b/package/libblockdev/libblockdev.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 00bc5baa45..7fcb75e6ba 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_112_RTM/src/SHA256SUMS
+-sha256  33ae72d43b275957252adc8639e84229d3ae692a57b6191b059d9456b8568a68  nss-3.112.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_113_RTM/src/SHA256SUMS
++sha256  acef06b512d3bd81c87a63b3c8653d258bb689d2191fc0e64decf5a1efa01c0f  nss-3.113.tar.gz
  # Locally calculated
--sha256  c4738e1abedefffe886521f9f0e7a9306c6f50f7691d88e011438c88608bdfa7  libblockdev-3.3.0.tar.gz
-+sha256  a2e2e448a19d420480b8cce5e0752197482a65cb62a9ed55d88b237da36600d1  libblockdev-3.3.1.tar.gz
- sha256  97bdc721d875501b6243a456333fdfdb1ab64d31c4da2554de845caf4674b946  LICENSE
-diff --git a/package/libblockdev/libblockdev.mk b/package/libblockdev/libblockdev.mk
-index 265cee2e28..ecee8dee24 100644
---- a/package/libblockdev/libblockdev.mk
-+++ b/package/libblockdev/libblockdev.mk
+ sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 8d7fc94207..e7b90a75a6 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBBLOCKDEV_VERSION = 3.3.0
-+LIBBLOCKDEV_VERSION = 3.3.1
- LIBBLOCKDEV_SITE = https://github.com/storaged-project/libblockdev/releases/download/$(LIBBLOCKDEV_VERSION)
- LIBBLOCKDEV_LICENSE = LGPL-2.1
- LIBBLOCKDEV_LICENSE_FILES = LICENSE
+-LIBNSS_VERSION = 3.112
++LIBNSS_VERSION = 3.113
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
 -- 
 2.39.5
 
