@@ -1,66 +1,66 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D4C0C7115A
-	for <buildroot@archiver.kernel.org>; Thu, 19 Jun 2025 15:39:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34509C7115B
+	for <buildroot@archiver.kernel.org>; Thu, 19 Jun 2025 15:48:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6920960AD7;
-	Thu, 19 Jun 2025 15:39:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 016A580AB4;
+	Thu, 19 Jun 2025 15:48:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cKJtEALLrhrU; Thu, 19 Jun 2025 15:39:33 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JDR-yaIqaURN; Thu, 19 Jun 2025 15:48:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F85360B1B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 19CF180AF3
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6F85360B1B;
-	Thu, 19 Jun 2025 15:39:33 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 9E8B416B
- for <buildroot@buildroot.org>; Thu, 19 Jun 2025 15:39:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 19CF180AF3;
+	Thu, 19 Jun 2025 15:48:24 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2D904E2
+ for <buildroot@buildroot.org>; Thu, 19 Jun 2025 15:48:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 854C660AD7
- for <buildroot@buildroot.org>; Thu, 19 Jun 2025 15:39:32 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 13E1780AC5
+ for <buildroot@buildroot.org>; Thu, 19 Jun 2025 15:48:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q4ASa5FY65hF for <buildroot@buildroot.org>;
- Thu, 19 Jun 2025 15:39:32 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id K2Jx8Rqt--o7 for <buildroot@buildroot.org>;
+ Thu, 19 Jun 2025 15:48:22 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:2412::62d;
- helo=nam10-mw2-obe.outbound.protection.outlook.com;
+ client-ip=2a01:111:f403:2413::627;
+ helo=nam10-dm6-obe.outbound.protection.outlook.com;
  envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C270B60B1B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C270B60B1B
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com
- (mail-mw2nam10on2062d.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:2412::62d])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C270B60B1B
- for <buildroot@buildroot.org>; Thu, 19 Jun 2025 15:39:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2590C80AB3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2590C80AB3
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com
+ (mail-dm6nam10on20627.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:2413::627])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2590C80AB3
+ for <buildroot@buildroot.org>; Thu, 19 Jun 2025 15:48:21 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=sQs4JPv5GQmGIXWzIV/oEWiU2iRcT4UZEPOlmeaoa8Rk1lyXOjMfkYYKAEhU6+tiIl206ail3xNUoUVd1p+VgFeEF8ZxL026z3xVVxXdnW30YY1nedfvtWRYKbo866vYEhyPkWGEdRo/tTghes9j7BBjSItUIm/YUB4A7GchQLXjmfKXc2LkGo1H0dawuS4b44Wt5/efp8bd+U2/u2ZwAXszi0NuuQCIssZiposaNm3TFT3Su0nx9pPUV+ClQ7nbe/lAoApjwGXvfDrhgpysnG7CbMMWZgfMxkAYzHTdluVtU0kVR9OVsmkxFcOThcuqK1AkvQDtTinpvWzOHAqI/g==
+ b=Vt/invu5U3hd33PLSNhYHSeoZ78jjze8YqwRf3zywNhdgKpbxK24aJb2yGewN94xBjPzKUDchoCue/Vy/RYgzzx+J7yn2GfKZQ6Am8rwpZmGNpaUwuv7Ab2+x48NCCN3tcS72efYJJCaLsXPwRSiwE1SGoXwTuPsphlYI9HOPWJXcwzcjtDZirekq1uElBTAlNMvcKr1LGC42aUbxkLYUFQQ+w/zEAGQ/swbPNNfd4BdYaHe+h9DjyOOuSUWCc3YC7b12asAam9nftuTPVykW1ejm4K/JO62PbZOjfYPbRhqILMTvOxvoOXv6oXkmQmZ3+duNyoeYkaRdlczBof3sg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kF1cyaecb/cPFUv2VdGvXdYjcyspXIuOwWLCSO3IqZ8=;
- b=qCv7o09qXeKRA1ukPIK7xy6jhp0bOFXST8VmzD5Egv7tXD22HC6YR7jYzAR+ToXpWHlmgZzzCwZ3A87z2iheJrYxNVKWA/kAbZkjZRV8twcpQd026N5dm3WlONvVk7Rgz0IrldOBcbz45EmXYc1pEzgzu6HqySvHD+mW4ezjrJucudsj7M8pI+A92tYh+sH9e/vdWMOeeXDHJuBAGTmNPq/aCPaVsnIk7LsCdNbOpwiH7fs/fKQ8YggxRQWlOHVBGevsxRVUf07iyNohn1qHRpZBS6vNJvA3oqw/d5HKMQaDlAJHznM+XhdhjiHxQfDivSRPaEHfhi8YKOla+YjSzg==
+ bh=DJVl7IcifSiD8qSjhUZG5GTNQ+OAZ+dSS/MkypcuNUE=;
+ b=Jkvlilve8DHPR1EvAaly8tgyy3zCVFPuSNQVrjN0AkfjNaQWCMG16Y/7W2TmgIjj8qTTYzqfoPujp4n9EBGfYPMwj7Ug7CAr0XsbxuRrLJMv9iSqCriOvjJx+gc3odxBpA/ciGkaAf6JyPWciaEFnZ6oKO+an95ER0qDqy3ouZA/ART/3pMOocFnjFGjRd7atVKmBbZ4cYONUqWyF9V/D5R7fv3sgCnYqp3CFDfV3LKP1oLyJuW6FSuOWwRu4BlAPoOrJZ8afNiTc3PIi2aZ6ZozA6Sgk3vngJ63365Ss31uydN51OUIB+aSsLQTGMZ+6ee3Wny8lFSf+bl0gs1MOw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
-Received: from SA1PR04CA0013.namprd04.prod.outlook.com (2603:10b6:806:2ce::19)
- by CY8PR12MB8298.namprd12.prod.outlook.com (2603:10b6:930:7c::20)
+Received: from CH0PR03CA0394.namprd03.prod.outlook.com (2603:10b6:610:11b::28)
+ by SA1PR12MB6726.namprd12.prod.outlook.com (2603:10b6:806:255::13)
  with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8835.29; Thu, 19 Jun
- 2025 15:39:27 +0000
-Received: from SA2PEPF00001506.namprd04.prod.outlook.com
- (2603:10b6:806:2ce:cafe::15) by SA1PR04CA0013.outlook.office365.com
- (2603:10b6:806:2ce::19) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8857.23 via Frontend Transport; Thu,
- 19 Jun 2025 15:39:27 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8835.38; Thu, 19 Jun
+ 2025 15:48:18 +0000
+Received: from DS2PEPF00003441.namprd04.prod.outlook.com
+ (2603:10b6:610:11b:cafe::f2) by CH0PR03CA0394.outlook.office365.com
+ (2603:10b6:610:11b::28) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8835.34 via Frontend Transport; Thu,
+ 19 Jun 2025 15:48:18 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -68,90 +68,90 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
 Received: from SATLEXMB03.amd.com (165.204.84.17) by
- SA2PEPF00001506.mail.protection.outlook.com (10.167.242.38) with Microsoft
+ DS2PEPF00003441.mail.protection.outlook.com (10.167.17.68) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8857.21 via Frontend Transport; Thu, 19 Jun 2025 15:39:26 +0000
+ 15.20.8857.21 via Frontend Transport; Thu, 19 Jun 2025 15:48:18 +0000
 Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB03.amd.com
  (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 19 Jun
- 2025 10:39:26 -0500
+ 2025 10:48:16 -0500
 Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB05.amd.com
  (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 19 Jun
- 2025 10:39:26 -0500
+ 2025 10:48:15 -0500
 Received: from xirengwts09.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
  (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
- Transport; Thu, 19 Jun 2025 10:39:24 -0500
+ Transport; Thu, 19 Jun 2025 10:48:14 -0500
 To: <buildroot@buildroot.org>
-Date: Thu, 19 Jun 2025 16:39:22 +0100
-Message-ID: <20250619153922.891360-1-neal.frager@amd.com>
+Date: Thu, 19 Jun 2025 16:48:11 +0100
+Message-ID: <20250619154811.936265-1-neal.frager@amd.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Received-SPF: None (SATLEXMB05.amd.com: neal.frager@amd.com does not designate
  permitted sender hosts)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA2PEPF00001506:EE_|CY8PR12MB8298:EE_
-X-MS-Office365-Filtering-Correlation-Id: 316279f0-afe5-4aac-4bed-08ddaf477950
+X-MS-TrafficTypeDiagnostic: DS2PEPF00003441:EE_|SA1PR12MB6726:EE_
+X-MS-Office365-Filtering-Correlation-Id: ca67f231-0868-4171-3722-08ddaf48b5e9
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
- ARA:13230040|36860700013|82310400026|376014|1800799024|41080700001; 
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?/5aN2l+Ly3wsmkt4sU7A90A0y5xm5LzoBdlZ19uHImytJ0C5Cv3BOFlw/uan?=
- =?us-ascii?Q?R8gPazaILEdmvYXvfZFI8kCcXK6jqeN5DNOwdcEP/DIUw7T12dZuzn8nDh1a?=
- =?us-ascii?Q?hEkWI6Wd7i/+AJVHOJA/c8d8+TYPzz5MbXhH8I2rnVop5yq2LoHr2SsPhzz3?=
- =?us-ascii?Q?4D7f4BqzMiFIfhcf21lOSt+tA/E+gzFOwoUKXYLJ/o+xPWIk60xw9budQ7u4?=
- =?us-ascii?Q?qUO5zhlemMhbJG8K9FgYbvXt0yTZa8A9TEFT6YkOvTZjSZeU8WMcn35iFsN7?=
- =?us-ascii?Q?nj/TZpx6JWs8PDJIfmxIOxzF9vDU8IW0xinkPrU8XD9pFerY8/QFo9U4Hraq?=
- =?us-ascii?Q?245zdLDckBs9n7TTM604ddCvkrlyEXdDNmXLenxX2VMl4Qb9cPdPSvbZITWv?=
- =?us-ascii?Q?TLvRSw/UJ57+K0gu7iDHonWWPBPvHScJMxftbV/EhM4dGTo4Ppqfo8fgJ/Kj?=
- =?us-ascii?Q?NcItP8QFiX9ZCE8NX0a4Vbrg3Qw7Pm0krFAZS5X1SvV3Yygh2JZNFsh2fxfn?=
- =?us-ascii?Q?8JAIuWJfF9xMjK0j1ophTt8QJGu6rFr0+gaoOi8lk1WOnouVyWxA23ZrmEiZ?=
- =?us-ascii?Q?3woglMUPNqjUV7+kCKfK7uAld1rlIuzb0HDoiVoYBzWSZHGCNy8aGISaxG+V?=
- =?us-ascii?Q?UO8bHa+JSfW0UX9W2wRwjUqjxIApLuhmIyhGGgYK+AiIaQjypgstQmKLqtH+?=
- =?us-ascii?Q?e0I5ZDiVrY36bGbRkn4VxRA9NjKTOSLYfCtDyEnLQIrsj8HfOJIYYw1rvFYg?=
- =?us-ascii?Q?fBWOgXaS0FPYATy0RCIe6PfZbKB+TNHa50gxHzIMUx3QzUtF21g+z/EgMCmx?=
- =?us-ascii?Q?1X840pLo/W0rW0od3+XtnmzVbSYb95RK1I33uM080BaWF4/uKprBqqUY3XsA?=
- =?us-ascii?Q?ku74TU5ZY5Ys3EYxJ8+9HxW2fwIvsaIL+/nsdPShRvsviirz3sFUGCjdCTWS?=
- =?us-ascii?Q?e35CAZBr485aDhemq339RVzN2hzjPQkWZtlSbTREB2bfSfXymJSFq5Xd4JTI?=
- =?us-ascii?Q?w0YK9rSciibhAy5YvPGaesJ8HePyf/ioj0gsgM5e3navAgsGn/32ftBZVF/R?=
- =?us-ascii?Q?rmrWEC2vb9ZYze/q5Pn1fdgOsolj3V4BM8GsK34Q/QtX8swQzz7Z71jcv5I1?=
- =?us-ascii?Q?HYxW4VuFrGdET3gr9F2QHuYYI9QOqVsk3O5CwebXbC4BrkDZjR4fVwfPM5qs?=
- =?us-ascii?Q?W5SUe4VNYrRx49MzLpFrBbE84qbmr6CjRE7jGaN8UL4c6EkBpGR4gC5U7hHV?=
- =?us-ascii?Q?CN31tFXp3O+SiVfuvEaX0HEgekxSs1sQxLEtHp2n6ya4Pln0zt7+7Qna86fY?=
- =?us-ascii?Q?9EYsfDW8JKCWw+kApSb7fxt7QQAxBPI/w+1vOLLdPUo4PZIXAkRBllmXQVoT?=
- =?us-ascii?Q?RInhH3ZwUaY2M/cNNa7ete9N2hVF3TV2fqD6HyFTlb54ig/tcd/ZFIzKIP0B?=
- =?us-ascii?Q?FZIjofDQqb9iJcRBOi4HGTJCual/OsLRdAlJWP+U4zjykgK4jDTpISS9Ljg+?=
- =?us-ascii?Q?zYukejJ7oGK8a6iFLIf1IZGnsITr3lj7v50JFwfrD/j5VUxQIAuTTBV9mHNU?=
- =?us-ascii?Q?ffECliH7zRTfsNjl9Xk=3D?=
+ ARA:13230040|36860700013|1800799024|82310400026|376014|41080700001; 
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?4FgYlxVM99ql/m32bfGZlBOJVBR4mQ+iybhIa/+6Avp/wgNGhr6Te8JrIqmX?=
+ =?us-ascii?Q?XP4RDnRrfOuyfADMfd2wbud/YLtGG7P4y1Sc4I6/71Ki268cMiAMtTtxIvKU?=
+ =?us-ascii?Q?gnIjPszRzsnlFEP9Lgofl6T8AlHWqxkI7AYrKpodlSYN43fB9EXLq3YwWHO6?=
+ =?us-ascii?Q?f4Phv5d3kKvN+FZn8iTkM34XXnF8b8VvNOYAS3IEu/Ztf7Edd5uBhOOunlnT?=
+ =?us-ascii?Q?Uh7oJnwXquekUC8HJAnG6F90mK8kSCUDFmdImE4Aq7KlkvS4HiWoKAcCOt/S?=
+ =?us-ascii?Q?9oPo4wwNYiHKwaHl0nk/AGtvELJ70U7kha2cb0dV1k6q0t72a4xDI4RIlROg?=
+ =?us-ascii?Q?1045jc3Pl02MpJdOJHqknm5IQuc61UxWBCtkSFnTmMoOYxQuhrnbavy9S7Sh?=
+ =?us-ascii?Q?yj/ge6Qq8CZG0S+wF44OIRmp2RZNN2LPpyi/msu6m4oIBkohtrQAyZqa/jex?=
+ =?us-ascii?Q?xDXOgGcufdYGwmFk2TyAwRP/oFYWBiiPXDDdW2ljDj5ukl6SySwCgz+b5sUf?=
+ =?us-ascii?Q?2xPbOEyLIipg5p6s8FYMGIAT+rFEC33H3jJJthtr9VAKvXlcpag2CMPMDsRk?=
+ =?us-ascii?Q?jFgv0IRbwX/KH8gtBAPdkXUx8TQjBkbe+vl8fg7IH4/kL4uwGVGU9h6PYTYW?=
+ =?us-ascii?Q?bTR/wpoJ2TGbfBHv+7i4SXrcSmZ18f7PbB+QyCfAFhLe1gIvub9ooA9csa4q?=
+ =?us-ascii?Q?vKNWTicoUTZdlEjckAFP+KFpnj4jZi1geCXzHagCSUAGmZeWIznQV66MZ6l8?=
+ =?us-ascii?Q?XfPd5Y32oigAch4I8heT5xeK0YJYQhIWH0uZSXhGV7PbQ8lW77o1yCv4Lnft?=
+ =?us-ascii?Q?FiB9+bnQvJn7nfeHJGmF8Q+msqP6+xHWqIj93Ex5yXgJ8Gi//HyWnadYFG6O?=
+ =?us-ascii?Q?slKViHbpBuEEuI08eggLedi2+0xuaRjSXDV5Yv/DudWBf290b1RfDpZXb9DP?=
+ =?us-ascii?Q?WfuT4m5nJT2rpAqow1ooihQRh9WYCr0Y8ZaT80T7mbiYre3+kzZkCwTbm7tL?=
+ =?us-ascii?Q?aRnU6bg8czVwdZsmBH8rDhzqZtkXhXeEa+KS/Uf7LcIoVrzDSjW7LvSwJl95?=
+ =?us-ascii?Q?kUq0W4NoAGyrIzkV0KM/lmVYdGeqLwZ0bCEgEDyEF8PuqNz0p+uGFtgMFHO3?=
+ =?us-ascii?Q?cg8DHTT+Z+Ex9Y9WTlLy1wgeS5Y+aqhA/zKQRLoEvFjQW15zIPswo5bYFSU2?=
+ =?us-ascii?Q?PSwQVqJv08yD0xkV/KJgsjRFrBFqXIPd/npYjjNX0QNA+5liHxbjuWFgzIl2?=
+ =?us-ascii?Q?9ATikFTx0hGw+dmw0zf7BN3agSXhSaGpcfkQDdd8WMxvKkx55OTnqKUiIxz5?=
+ =?us-ascii?Q?EYrkgXSvSyex95yaixEFO6DJ59dpD1unGUnlb2YiweszdWxCX2FZKSmemSKT?=
+ =?us-ascii?Q?6eMQz7EUEOxLUJmKKBuxVMJyFg4M0U7ssosKYeRcRKVDp33bApd/K32j7alj?=
+ =?us-ascii?Q?5t29yT6O7hsdcvfPofaMN5AV/bwRWC+RCIRJ2h2WRJBJ6hU9kWXDbDd0fGus?=
+ =?us-ascii?Q?PtBbZUmm8u3Pv+x3WZt2vJhfyQNtfNACKmmoH/BIE5fT5UuiBF0nBYJvFzxv?=
+ =?us-ascii?Q?7tgWciA04/ep40ziRkA=3D?=
 X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
  IPV:CAL; SFV:NSPM; H:SATLEXMB03.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
- SFS:(13230040)(36860700013)(82310400026)(376014)(1800799024)(41080700001);
+ SFS:(13230040)(36860700013)(1800799024)(82310400026)(376014)(41080700001);
  DIR:OUT; SFP:1101; 
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jun 2025 15:39:26.8671 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 316279f0-afe5-4aac-4bed-08ddaf477950
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jun 2025 15:48:18.0178 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ca67f231-0868-4171-3722-08ddaf48b5e9
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
  Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: SA2PEPF00001506.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: DS2PEPF00003441.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB8298
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB6726
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amd.com; s=selector1; 
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kF1cyaecb/cPFUv2VdGvXdYjcyspXIuOwWLCSO3IqZ8=;
- b=wOjI2Bw2Dd2+TFTPAupPVitfwumCQsIgndPudA3jI2ZIe0Liuhv0ToyFNTUv1VfndfqXB9rUxXKXdxGqDwUGEPGgTIYxaiqF+EW5fmJust9tzyDN2MsFm5Hw4U/3GkjB8sZMEKcq7j/E9MsYPQjI+r1atztYqE5rWjW2YRMS7D4=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=DJVl7IcifSiD8qSjhUZG5GTNQ+OAZ+dSS/MkypcuNUE=;
+ b=1zTCG1qxtS1aoAgmuoefsqJAt75NiRm4Hteqr4ZbUIs00So0RqZnOCOzakaVGiNpVaq08ROsRiiu4ecm3wOYVT4KC8fkqMYhVBbPpJurqIiMsj2p+TPXRo8Nsp1yxGZZ7E3c40RFxAW/lpG0Msmgpr6x4K5CMjvmDv7DosNzc4A=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=amd.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=wOjI2Bw2
-Subject: [Buildroot] [PATCH v2 1/1] boot/uboot: add support for custom zynq
- ps7_init_gpl.c
+ header.s=selector1 header.b=1zTCG1qx
+Subject: [Buildroot] [PATCH v1 1/1]
+ toolchain/toolchain-bare-metal-buildroot: add multilib option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -174,142 +174,131 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Zynq, the booloader is responsible for some basic initializations, such as
-enabling peripherals, DDR and configuring pinmuxes. The ps7_init_gpl.c file
-(and optionally, ps7_init_gpl.h) contains the code for such initializations.
+Sometimes the default GCC and newlib libraries built for a given
+architecture tuple are not based on the desired ABI. Since ABI definitions are
+different between architectures, the simplest solution is to allow users to
+build bare-metal toolchains with --enable-multilib. This way, the libraries
+for every available ABI will be built and users will be able to select the
+desired library for their user applications.
 
-Although U-Boot contains ps7_init_gpl.c files for some boards, each of them
-describes only one specific configuration. Users of a different board, or
-needing a different configuration, can generate custom files using the Xilinx
-Vivado development tools.
+This patch adds the option BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_MULTILIB to give
+users the choice to enable multilib, if desired.
 
-This patch adds Buildroot support for custom zynq ps7_init_gpl.c files in the
-same way that is already done for zynqmp when working with custom hardware
-that is not already supported by u-boot.
-
-To test this feature, the following configs can be added to any zynq_defconfig:
-
-BR2_TARGET_UBOOT_ZYNQ=y
-BR2_TARGET_UBOOT_ZYNQ_PS7_INIT_FILE=<path to custom board ps7_init_gpl.c>
+Please note that when using a string of architecture tuples, this option will
+apply to all architectures in the string, so it can significantly increase
+build time.
 
 Signed-off-by: Neal Frager <neal.frager@amd.com>
 ---
-V1->V2:
-- added step for enabling BR2_TARGET_UBOOT_ZYNQ in readme instructions
----
- board/zynq/readme.txt | 21 +++++++++++----------
- boot/uboot/Config.in  | 34 ++++++++++++++++++++++++++++++++++
- boot/uboot/uboot.mk   | 12 ++++++++++++
- 3 files changed, 57 insertions(+), 10 deletions(-)
+ package/binutils-bare-metal/binutils-bare-metal.mk |  8 +++++++-
+ package/gcc-bare-metal/gcc-bare-metal.mk           |  8 +++++++-
+ package/newlib-bare-metal/newlib-bare-metal.mk     |  8 +++++++-
+ toolchain/toolchain-bare-metal-buildroot/Config.in | 14 ++++++++++++++
+ 4 files changed, 35 insertions(+), 3 deletions(-)
 
-diff --git a/board/zynq/readme.txt b/board/zynq/readme.txt
-index 87df7236f0..085f47b09b 100644
---- a/board/zynq/readme.txt
-+++ b/board/zynq/readme.txt
-@@ -71,17 +71,18 @@ you need to add them by yourself.
- 1) Start with a defconfig supported by Buildroot (e.g. Zedboard)
-     make zynq_zed_defconfig
+diff --git a/package/binutils-bare-metal/binutils-bare-metal.mk b/package/binutils-bare-metal/binutils-bare-metal.mk
+index 709d072765..bb04b79c2f 100644
+--- a/package/binutils-bare-metal/binutils-bare-metal.mk
++++ b/package/binutils-bare-metal/binutils-bare-metal.mk
+@@ -21,6 +21,12 @@ HOST_BINUTILS_BARE_METAL_CONF_ENV += MAKEINFO=true
+ HOST_BINUTILS_BARE_METAL_MAKE_OPTS += MAKEINFO=true
+ HOST_BINUTILS_BARE_METAL_INSTALL_OPTS += MAKEINFO=true install
  
--2) make uboot-menuconfig
--    Visit the following menu and enable CONFIG_XILINX_PS_INIT_FILE
-+2) make menuconfig
-+    Visit the following menu to enable BR2_TARGET_UBOOT_ZYNQ
- 
--    ARM architecture  --->
--       [*] Zynq/ZynqMP PS init file(s) location
-+    Bootloaders  --->
-+       U-Boot  --->
-+           [*]   Boot on the Xilinx Zynq SoCs
- 
--3) Copy ps7_init_gpl.c/h generated by the Xilinx Vivado tools into
--   output/build/uboot-custom/board/xilinx/zynq/custom_hw_platform/
-+3) make menuconfig
-+    In the same menu, configure BR2_TARGET_UBOOT_ZYNQ_PS7_INIT_FILE
- 
--4) make
-+    Bootloaders  --->
-+       U-Boot  --->
-+          (<Path to ps7_init_gpl.c>) Custom ps7_init_gpl file
- 
--Note: The files in step 3 will need to be re-copied after cleaning the
--output directory and at this time, there is no way to save them as
--part of the buildroot configuration, except as a U-Boot patch.
-+4) make
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index a2301b7747..adbe8d142d 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -701,6 +701,40 @@ config BR2_TARGET_UBOOT_ZYNQMP_PSU_INIT_FILE
- 
- endif
- 
-+config BR2_TARGET_UBOOT_ZYNQ
-+	bool "Boot on the Xilinx Zynq SoCs"
-+	depends on BR2_arm
-+	help
-+	  Enable options specific to the Xilinx Zynq family of SoCs.
-+
-+config BR2_TARGET_UBOOT_ZYNQ_PS7_INIT_FILE
-+	string "Custom ps7_init_gpl file"
-+	depends on BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG
-+	depends on BR2_TARGET_UBOOT_ZYNQ
-+	help
-+	  On Zynq the booloader is responsible for some basic
-+	  initializations, such as enabling peripherals and
-+	  configuring pinmuxes. The ps7_init_gpl.c file (and,
-+	  optionally, ps7_init_gpl.h) contains the code for such
-+	  initializations.
-+
-+	  Although U-Boot contains ps7_init_gpl.c files for some
-+	  boards, each of them describes only one specific
-+	  configuration. Users of a different board, or needing a
-+	  different configuration, can generate custom files using
-+	  the Xilinx Vivado development tools.
-+
-+	  Set this variable to the path to your ps7_init_gpl.c file
-+	  (e.g. "board/myboard/ps7_init_gpl.c"). ps7_init_gpl.h, if
-+	  needed, should be in the same directory. U-Boot will build
-+	  and link the user-provided file instead of the built-in.
-+
-+	  Leave empty to use the files provided by U-Boot.
-+
-+	  This feature requires commit
-+	  6da4f67ad09cd8b311d77b2b04e557b7ef65b56c from upstream
-+	  U-Boot, available from versions after 2018.07.
-+
- config BR2_TARGET_UBOOT_ALTERA_SOCFPGA_IMAGE_CRC
- 	bool "CRC image for Altera SoC FPGA (mkpimage)"
- 	depends on BR2_arm
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 2796b0a310..c92568a559 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -520,6 +520,17 @@ endif
- 
- endif # BR2_TARGET_UBOOT_ZYNQMP
- 
-+ifeq ($(BR2_TARGET_UBOOT_ZYNQ),y)
-+UBOOT_ZYNQ_PS7_INIT = $(call qstrip,$(BR2_TARGET_UBOOT_ZYNQ_PS7_INIT_FILE))
-+UBOOT_ZYNQ_PS7_INIT_PATH = $(shell readlink -f $(UBOOT_ZYNQ_PS7_INIT))
-+
-+ifneq ($(UBOOT_ZYNQ_PS7_INIT),)
-+define UBOOT_ZYNQ_KCONFIG_PS7_INIT
-+	$(call KCONFIG_SET_OPT,CONFIG_XILINX_PS_INIT_FILE,"$(UBOOT_ZYNQ_PS7_INIT_PATH)")
-+endef
++ifeq ($(BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_MULTILIB),y)
++HOST_BINUTILS_BARE_METAL_MULTILIB = "--enable-multilib"
++else
++HOST_BINUTILS_BARE_METAL_MULTILIB = "--disable-multilib"
 +endif
-+endif # BR2_TARGET_UBOOT_ZYNQ
 +
- define UBOOT_INSTALL_OMAP_IFT_IMAGE
- 	cp -dpf $(@D)/$(UBOOT_BIN_IFT) $(BINARIES_DIR)/
- endef
-@@ -562,6 +573,7 @@ define UBOOT_KCONFIG_FIXUP_CMDS
- 	$(UBOOT_ZYNQMP_KCONFIG_PMUFW)
- 	$(UBOOT_ZYNQMP_KCONFIG_PM_CFG)
- 	$(UBOOT_ZYNQMP_KCONFIG_PSU_INIT)
-+	$(UBOOT_ZYNQ_KCONFIG_PS7_INIT)
- 	$(UBOOT_KCONFIG_DEFAULT_ENV_FILE)
- endef
+ HOST_BINUTILS_BARE_METAL_CONF_OPTS = \
+ 	--prefix=$(HOST_DIR) \
+ 	--sysconfdir=$(HOST_DIR)/etc \
+@@ -31,7 +37,7 @@ HOST_BINUTILS_BARE_METAL_CONF_OPTS = \
+ 	--disable-shared \
+ 	--enable-lto \
+ 	--disable-initfini-array \
+-	--disable-multilib \
++	$(HOST_BINUTILS_BARE_METAL_MULTILIB) \
+ 	--disable-werror
  
+ define HOST_BINUTILS_BARE_METAL_CONFIGURE_CMDS
+diff --git a/package/gcc-bare-metal/gcc-bare-metal.mk b/package/gcc-bare-metal/gcc-bare-metal.mk
+index 17232a8ef1..03938ca81b 100644
+--- a/package/gcc-bare-metal/gcc-bare-metal.mk
++++ b/package/gcc-bare-metal/gcc-bare-metal.mk
+@@ -31,6 +31,12 @@ HOST_GCC_BARE_METAL_MAKE_OPTS = \
+ 
+ HOST_GCC_BARE_METAL_INSTALL_OPTS = install-gcc install-target-libgcc
+ 
++ifeq ($(BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_MULTILIB),y)
++HOST_GCC_BARE_METAL_MULTILIB = "--enable-multilib"
++else
++HOST_GCC_BARE_METAL_MULTILIB = "--disable-multilib"
++endif
++
+ HOST_GCC_BARE_METAL_CONF_OPTS = \
+ 	--prefix=$(HOST_DIR) \
+ 	--sysconfdir=$(HOST_DIR)/etc \
+@@ -49,7 +55,7 @@ HOST_GCC_BARE_METAL_CONF_OPTS = \
+ 	--without-long-double-128 \
+ 	--without-headers \
+ 	--enable-languages=c \
+-	--disable-multilib \
++	$(HOST_GCC_BARE_METAL_MULTILIB) \
+ 	--with-gmp=$(HOST_DIR) \
+ 	--with-mpc=$(HOST_DIR) \
+ 	--with-mpfr=$(HOST_DIR) \
+diff --git a/package/newlib-bare-metal/newlib-bare-metal.mk b/package/newlib-bare-metal/newlib-bare-metal.mk
+index bd740046c9..f1e54d6f9e 100644
+--- a/package/newlib-bare-metal/newlib-bare-metal.mk
++++ b/package/newlib-bare-metal/newlib-bare-metal.mk
+@@ -22,6 +22,12 @@ NEWLIB_BARE_METAL_INSTALL_STAGING = YES
+ NEWLIB_BARE_METAL_INSTALL_TARGET = NO
+ NEWLIB_BARE_METAL_MAKE_OPTS = MAKEINFO=true
+ 
++ifeq ($(BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_MULTILIB),y)
++NEWLIB_BARE_METAL_MULTILIB = "--enable-multilib"
++else
++NEWLIB_BARE_METAL_MULTILIB = "--disable-multilib"
++endif
++
+ NEWLIB_BARE_METAL_CONF_OPTS = \
+ 	--build=$(GNU_HOST_NAME) \
+ 	--prefix=/usr \
+@@ -35,7 +41,7 @@ NEWLIB_BARE_METAL_CONF_OPTS = \
+ 	--enable-newlib-io-long-long \
+ 	--enable-newlib-io-float \
+ 	--enable-newlib-io-long-double \
+-	--disable-multilib \
++	$(NEWLIB_BARE_METAL_MULTILIB) \
+ 	--with-tooldir=/usr
+ 
+ define NEWLIB_BARE_METAL_CONFIGURE_CMDS
+diff --git a/toolchain/toolchain-bare-metal-buildroot/Config.in b/toolchain/toolchain-bare-metal-buildroot/Config.in
+index 19c97410c6..7ba579b570 100644
+--- a/toolchain/toolchain-bare-metal-buildroot/Config.in
++++ b/toolchain/toolchain-bare-metal-buildroot/Config.in
+@@ -12,6 +12,20 @@ config BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH
+ 	  metal toolchain, use the following definition:
+ 	  "microblazeel-buildroot-elf riscv32-buildroot-elf"
+ 
++config BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_MULTILIB
++	bool "Enable multilib"
++	help
++	  Sometimes the default GCC and newlib libraries for a given
++	  architecture are not the desired ABI. Since ABI
++	  definitions are different for each architecture, this
++	  option will enable multilib configuration, so that all
++	  available ABI libraries are built which will guarantee
++	  that the desired version will be available for user
++	  applications.
++
++	  When enabled, this option will apply to all architecture
++	  tuples in the list.
++
+ source "package/newlib-bare-metal/Config.in"
+ 
+ endif # BR2_TOOLCHAIN_BARE_METAL_BUILDROOT
 -- 
 2.25.1
 
