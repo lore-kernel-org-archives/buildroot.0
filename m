@@ -1,95 +1,113 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF59CC7115D
-	for <buildroot@archiver.kernel.org>; Fri, 20 Jun 2025 08:10:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01D40C71155
+	for <buildroot@archiver.kernel.org>; Fri, 20 Jun 2025 10:15:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B35FC60E34;
-	Fri, 20 Jun 2025 08:10:28 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8zjIImnbfDJs; Fri, 20 Jun 2025 08:10:27 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C472660E71
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C472660E71;
-	Fri, 20 Jun 2025 08:10:27 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id C465016B
- for <buildroot@buildroot.org>; Fri, 20 Jun 2025 08:10:25 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B366940DB4
- for <buildroot@buildroot.org>; Fri, 20 Jun 2025 08:10:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B16CF40786;
+	Fri, 20 Jun 2025 10:15:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aNEODAK2HthQ for <buildroot@buildroot.org>;
- Fri, 20 Jun 2025 08:10:25 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.126.236;
- helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6EB0340DC5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6EB0340DC5
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.236])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6EB0340DC5
- for <buildroot@buildroot.org>; Fri, 20 Jun 2025 08:10:24 +0000 (UTC)
-X-CSE-ConnectionGUID: KBoJBxORSuCSsGvQ5HXgmw==
-X-CSE-MsgGUID: tbcbtwtfQxeMDYt7xMDc2A==
-Received: from unknown (HELO opfedv1rlp0f.nor.fr.ftgroup) ([x.x.x.x]) by
- smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 20 Jun 2025 10:10:22 +0200
-Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv1rlp0f.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 20 Jun 2025 10:10:18 +0200
-Received: from yd-6wlzhs3 [x.x.x.x] by
- OPE16NORMBX305.corporate.adroot.infra.ftgroup
- [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39;
- Fri, 20 Jun 2025 10:10:17 +0200
-Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
- Fri, 20 Jun 2025 10:10:16 +0200
-X-CSE-ConnectionGUID: MjO4fi2gQKWk2CEQlvJ3Bw==
-X-CSE-MsgGUID: wnTMPhmnSJColcUekQ7otA==
-X-IronPort-AV: E=Sophos;i="6.16,250,1744063200"; d="scan'208";a="299860631"
-From: <yann.morin@orange.com>
-To: <buildroot@buildroot.org>
-CC: <yann.morin@orange.com>, Christian Stewart <christian@aperture.us>
-Date: Fri, 20 Jun 2025 10:10:11 +0200
-Message-ID: <424c15b5c3a2341e06b32f5481d391542c9437f8.1750407006.git.yann.morin@orange.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1750407006.git.yann.morin@orange.com>
-References: <cover.1750407006.git.yann.morin@orange.com>
+ id YnoMNjWj3ejQ; Fri, 20 Jun 2025 10:15:24 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC38C407D3
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id EC38C407D3;
+	Fri, 20 Jun 2025 10:15:23 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3A2BF16B
+ for <buildroot@buildroot.org>; Fri, 20 Jun 2025 10:15:23 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1C4D840056
+ for <buildroot@buildroot.org>; Fri, 20 Jun 2025 10:15:23 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id htX49ui6qg9B for <buildroot@buildroot.org>;
+ Fri, 20 Jun 2025 10:15:22 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::435; helo=mail-wr1-x435.google.com;
+ envelope-from=romain.naour@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E8CED40024
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E8CED40024
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E8CED40024
+ for <buildroot@buildroot.org>; Fri, 20 Jun 2025 10:15:21 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id
+ ffacd0b85a97d-3a375e72473so766547f8f.0
+ for <buildroot@buildroot.org>; Fri, 20 Jun 2025 03:15:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1750414520; x=1751019320;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=3Ahh8NIfQSg5nmEjlcI/4Ghklabl1pcTLrI/hCU3yG0=;
+ b=NnjI+0o1QGYU1F9kJnsdBOO4+6iP+LgTGlOn9Yd0191ZDiy138cgHUUe/0fgMSlfhU
+ Ra+T8DqgyaDDjPIPiBuBS2hPJA5Au6CC+sAYzbTIXIPuuHFswhZ3NGEn3wyUNg1hvo6e
+ KOB630N7Gr5E52FuC+jmZlP2i/CIGXuTpfkVDKp/ooeKCfut1v8JHbfchjkKzpiNPGdo
+ /jHFIH8RSWYB1jNiHASw3U6KiJUKlCrs7U6/csGDwMx/x5/uSZ1RQUVcCjmqStET40Ha
+ XcMkHRW5K2kEfoZ1kknOGuY8EnEiKNIlFYhMmDmjj1Hw63p6TANO5b08Dazo0SQjvy2N
+ vMXg==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCUFMUB6LHAjeHwdw2Wxc/Zd/CfCgojSzhPBKLeC8/ueVFjnfhXdRoD47IiNPYkw0aUT3uZjLYtrKSc=@buildroot.org
+X-Gm-Message-State: AOJu0Yyeqa7JJWxiIcxg4g3okrPDQrvjdCbBTLU2t/xwVxqQiSLrisCW
+ DEV+raup6SS6y/4FGf7PI3I65uL1HZEQeocSTWqSeH65K8zaTkeJz4GZ
+X-Gm-Gg: ASbGncvCcPZ/oUniZUVt0pTItfRgknyM/V6uJurm3ou4PQt+DwI8UQl3rC/g2I0fhq2
+ 1v4DXxNiyRHaT5Ag1299bT3atgzBxxtzL6BwdthedKSlStq6e9UKfdB50Lfew0e8jm9YuVIQ2zL
+ 9loHBMUXB7n3I8NP+lN72kIHzqrUMM0pxtuJl2dhFpS5P/d8n3EkPNHOHY62rTsWNsd+bmRGz28
+ aLOJKqjRu2BUn1bM1bGtnvBHAv7mZ2TBjeGdx3hauEruHoHio3DwJlwJXzVHzbIbm0qKywhEDpK
+ PXLEbk2yVcKXgSdXPfwKSCaUNqzNrraCNLqY2PsrP6pi6bMubu1GGS2movNTkwya9CNH1KOzdGC
+ gyZoCwYDAjMNB9QgP/TvRExCPcqwrhcerULvZSai6VnwzuswvWcBBXPy72aCSmWKn0QWJfLTHJs
+ fi+mlg8gSDaSs/6O0l4eiQKQFmJg==
+X-Google-Smtp-Source: AGHT+IH554pjuwZjymJlQ4yi8njZlu/HZ18sA7CiqKffnA8S79RRkSLdLACPMoe2HlUbJxn7EjA0wg==
+X-Received: by 2002:adf:e19d:0:b0:3a4:cbc6:9db0 with SMTP id
+ ffacd0b85a97d-3a6d12ea306mr1839977f8f.51.1750414519546; 
+ Fri, 20 Jun 2025 03:15:19 -0700 (PDT)
+Received: from ?IPV6:2a01:cb05:949d:5800:9411:7278:9672:fcde?
+ (2a01cb05949d5800941172789672fcde.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:949d:5800:9411:7278:9672:fcde])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-4535eac8c16sm53753655e9.19.2025.06.20.03.15.17
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Fri, 20 Jun 2025 03:15:18 -0700 (PDT)
+Message-ID: <77d3e45f-d0a1-4c10-85d4-b452d9688b46@gmail.com>
+Date: Fri, 20 Jun 2025 12:15:15 +0200
 MIME-Version: 1.0
-X-Originating-IP: [10.115.26.50]
-X-ClientProxiedBy: OPE16NORMBX208.corporate.adroot.infra.ftgroup (10.115.27.9)
- To OPE16NORMBX305.corporate.adroot.infra.ftgroup
- (10.115.27.10)
+User-Agent: Mozilla Thunderbird
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ buildroot@buildroot.org
+Cc: Joseph Kogut <joseph.kogut@gmail.com>
+References: <20250619195132.1986901-1-giulio.benetti@benettiengineering.com>
+ <20250619195132.1986901-3-giulio.benetti@benettiengineering.com>
+Content-Language: en-US
+From: Romain Naour <romain.naour@gmail.com>
+In-Reply-To: <20250619195132.1986901-3-giulio.benetti@benettiengineering.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1750407025; x=1781943025;
- h=from:to:cc:subject:date:message-id:in-reply-to:
- references:mime-version:content-transfer-encoding;
- bh=2f0DR046xVAl5sagfPnmseTMnihPs7Iae+7w2F3Jkbg=;
- b=jogGc6QmQLt3ME84J+j+oSr8/ESjbQlzdnp2VhoUsty2bJfAbsYIqimI
- S3ovBdDx8gSiW/uIqieVBh+3mHotQQ6cEvmuH4+KYg9b0BVb3vzocVW1G
- 3KVdRIurXKwYdlZB0sQMDveoULj1vky4X8QisgcJyT3fT+fwVH3L7ZolP
- DwIk6D6VbTrBggzxjTaI1BKS+JypkUD6P1ssDxJA9cbCSTsorDFyL6vZg
- OvZ/WZo9D2czLIT9J7+4N/PJAnziocl1zak8OKSjbQCqVbSiW5xahTdlS
- 3ANHlAkH7K8ynb3V6+HEdNLOwEMHdJnazVfzey4hy/lThO/XB2Rxpaqhu
- w==;
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=gmail.com; s=20230601; t=1750414520; x=1751019320; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=3Ahh8NIfQSg5nmEjlcI/4Ghklabl1pcTLrI/hCU3yG0=;
+ b=hAP7XYQh45TjRb4TIEhuTPJwShQCkrXW40bi2b4quqjixKL+OP6ZzRYuho1kxxJXOS
+ 8HrqrVw71ppDvXyvMfKPBs2xb3womyY/mgQNFuBylLPpvgMDM9NLZNvJJNTPgm48eqy/
+ Xzu72vMYQGfT4mNrPmbgbPmBVtmKhnkrs3V4OgWhwJm0sItWLq/E6n/u+FX2OLWRVIxs
+ nXmiXSRJAeRgf8dIlLRfSyId601aorCG2QDkkEt8FQzThpVYEstvNFjwW2z4Aqq2ETq9
+ xg8xUWrn0j2Zv4rvMX9QLcnwDD6DRSAfyGdCEcS8lWRyi4AwqxnkDAcqnJkOSYjPgA4a
+ hXYg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=orange.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
- header.s=orange002 header.b=jogGc6Qm
-Subject: [Buildroot] [PATCH 4/4] package/pkg-golang: catch use of legacy
- FOO_INSTALL_BINS
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=hAP7XYQh
+Subject: Re: [Buildroot] [PATCH] docs/website/support.html: add Benetti
+ Engineering to the commercial support list
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -101,66 +119,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: "Yann E. MORIN" <yann.morin@orange.com>
-
-Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-Cc: Christian Stewart <christian@aperture.us>
----
- docs/manual/migrating.adoc | 5 +++++
- package/pkg-golang.mk      | 6 ++++++
- 2 files changed, 11 insertions(+)
-
-diff --git a/docs/manual/migrating.adoc b/docs/manual/migrating.adoc
-index 4e6225a987..6ecc992502 100644
---- a/docs/manual/migrating.adoc
-+++ b/docs/manual/migrating.adoc
-@@ -222,3 +222,8 @@ from +-cargo2+ to +-cargo4+.
- In 2025.08, starting with systemd version 257, systemd-networkd requires kernel
- 5.4 or later. If you are still using a kernel older than 5.4, please update
- your kernel or use an alternative network manager.
-+
-+[[migrating-golang-packages]]
-+In 2025.08, the +FOO_INSTALL_BINS+ variable for golang packages is no longer
-+supported; the list of binaries to install is automatically derived from
-+the +FOO_BULD_TARGETS+ variable.
-diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
-index ff8d28aa7e..ffd50adecc 100644
---- a/package/pkg-golang.mk
-+++ b/package/pkg-golang.mk
-@@ -40,6 +40,12 @@ GO_BIN = $(HOST_DIR)/bin/go
- 
- define inner-golang-package
- 
-+# Legacy
-+ifneq ($$($(2)_INSTALL_BINS),)
-+$$(error Package $(1) sets $(2)_INSTALL_BINS, which is no longer supported; \
-+see the manual: https://buildroot.org/manual.html#migrating-golang-package )
-+endif
-+
- $(2)_BUILD_OPTS += \
- 	-ldflags "$$($(2)_LDFLAGS)" \
- 	-modcacherw \
--- 
-2.34.1
-
-____________________________________________________________________________________________________________
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gR2l1bGlvLCBBbGwsCgpMZSAxOS8wNi8yMDI1IMOgIDIxOjUxLCBHaXVsaW8gQmVuZXR0
+aSBhIMOpY3JpdMKgOgo+IEFzIEJlbmV0dGkgRW5naW5lZXJpbmcgSSBrZWVwIGNvbnRyaWJ1dGlu
+ZyBzaW5jZSA4IHllYXJzIG1vcmUgb3IgbGVzcyBvbgo+IG1hbnkgcGFja2FnZXMgYW5kIEkndmUg
+bGVhcm50IGEgbG90IGJ5IGpvaW5pbmcgdGhpcyBjb21tdW5pdHkuIE1vc3Qgb2YgYWxsCj4gSSd2
+ZSByZWNlaXZlZCBwcmVjaW91cyByZXZpZXdzIGZyb20gbWFpbnRhaW5lcnMgb2YgdG9kYXkgYW5k
+IHllc3RlcmRheS4KPiBBbHNvLCBmaW5hbGx5IEkndmUgZm91bmQgc29tZSB0aW1lIHRvIGNyZWF0
+ZSBteSBjb21wYW55IGxvZ28gYW5kIHNvIGxldCdzCj4gYWRkIEJlbmV0dGkgRW5naW5lZXJpbmcg
+dG8gY29tbWVyY2lhbCBzdXBwb3J0IHVzaW5nIExpbmtlZEluIHBhZ2UgYXMKPiBwbGFjZWhvbGRl
+ciB1bnRpbCB0aGUgZmluYWwgd2Vic2l0ZSB3aWxsIGJlIHJlYWR5Lgo+IAo+IFNpZ25lZC1vZmYt
+Ynk6IEdpdWxpbyBCZW5ldHRpIDxnaXVsaW8uYmVuZXR0aUBiZW5ldHRpZW5naW5lZXJpbmcuY29t
+PgoKQWNrZWQtYnk6IFJvbWFpbiBOYW91ciA8cm9tYWluLm5hb3VyQGdtYWlsLmNvbT4KCkJlc3Qg
+cmVnYXJkcywKUm9tYWluCgoKPiAtLS0KPiAgLi4uL3dlYnNpdGUvaW1hZ2VzL2JlbmV0dGktZW5n
+aW5lZXJpbmctbG9nby5wbmcgfCBCaW4gMCAtPiA5NzI2OCBieXRlcwo+ICBkb2NzL3dlYnNpdGUv
+c3VwcG9ydC5odG1sICAgICAgICAgICAgICAgICAgICAgICB8ICAgMyArKysKPiAgMiBmaWxlcyBj
+aGFuZ2VkLCAzIGluc2VydGlvbnMoKykKPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IGRvY3Mvd2Vic2l0
+ZS9pbWFnZXMvYmVuZXR0aS1lbmdpbmVlcmluZy1sb2dvLnBuZwo+IAo+IGRpZmYgLS1naXQgYS9k
+b2NzL3dlYnNpdGUvaW1hZ2VzL2JlbmV0dGktZW5naW5lZXJpbmctbG9nby5wbmcgYi9kb2NzL3dl
+YnNpdGUvaW1hZ2VzL2JlbmV0dGktZW5naW5lZXJpbmctbG9nby5wbmcKPiBuZXcgZmlsZSBtb2Rl
+IDEwMDY0NApbLi4uXQo+IAo+IGRpZmYgLS1naXQgYS9kb2NzL3dlYnNpdGUvc3VwcG9ydC5odG1s
+IGIvZG9jcy93ZWJzaXRlL3N1cHBvcnQuaHRtbAo+IGluZGV4IDIxYzZlMGEzNGUuLjljNDQ5ODBl
+NjcgMTAwNjQ0Cj4gLS0tIGEvZG9jcy93ZWJzaXRlL3N1cHBvcnQuaHRtbAo+ICsrKyBiL2RvY3Mv
+d2Vic2l0ZS9zdXBwb3J0Lmh0bWwKPiBAQCAtMTM5LDYgKzEzOSw5IEBACj4gIAkgICAgPGEgaHJl
+Zj0iaHR0cHM6Ly93d3cuYW1hcnVsYXNvbHV0aW9ucy5jb20vc2VydmljZXMvaW50ZWdyYXRlZC1z
+eXN0ZW0vIj4KPiAgCSAgICAgIDxpbWcgc3JjPSJpbWFnZXMvYW1hcnVsYS1zb2x1dGlvbnMtbG9n
+by5wbmciIHN0eWxlPSJtYXgtd2lkdGg6MjAwcHg7IG1hcmdpbi1yaWdodDo0MHB4OyIvPgo+ICAJ
+ICAgIDwvYT4KPiArCSAgICA8YSBocmVmPSJodHRwczovL3d3dy5saW5rZWRpbi5jb20vY29tcGFu
+eS9iZW5ldHRpLWVuZ2luZWVyaW5nLXNhcyI+Cj4gKwkgICAgICA8aW1nIHNyYz0iaW1hZ2VzL2Jl
+bmV0dGktZW5naW5lZXJpbmctbG9nby5wbmciIHN0eWxlPSJtYXgtd2lkdGg6MjYwcHg7IG1hcmdp
+bi1yaWdodDo0MHB4OyIvPgo+ICsJICAgIDwvYT4KPiAgCSAgPC9jZW50ZXI+Cj4gIAk8L2Rpdj4K
+PiAgICAgICAgPC9kaXY+CgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0
+dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
