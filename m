@@ -1,76 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 361BDC7115C
-	for <buildroot@archiver.kernel.org>; Sun, 22 Jun 2025 09:45:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BDC7C7115A
+	for <buildroot@archiver.kernel.org>; Sun, 22 Jun 2025 09:58:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 08205819ED;
-	Sun, 22 Jun 2025 09:45:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CCB9841A52;
+	Sun, 22 Jun 2025 09:58:29 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hr5byJBr2TDK; Sun, 22 Jun 2025 09:58:28 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C4A2641947
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id C4A2641947;
+	Sun, 22 Jun 2025 09:58:28 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id ECE0412C
+ for <buildroot@buildroot.org>; Sun, 22 Jun 2025 09:58:27 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id D6BDD80C4B
+ for <buildroot@buildroot.org>; Sun, 22 Jun 2025 09:58:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YdiENqPGuCKh; Sun, 22 Jun 2025 09:45:52 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4B86981AC1
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4B86981AC1;
-	Sun, 22 Jun 2025 09:45:52 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 12B2EC8
- for <buildroot@buildroot.org>; Sun, 22 Jun 2025 09:45:51 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EDDA2400AB
- for <buildroot@buildroot.org>; Sun, 22 Jun 2025 09:45:50 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MghmQIaW1taB for <buildroot@buildroot.org>;
- Sun, 22 Jun 2025 09:45:50 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 63E484007C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 63E484007C
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 63E484007C
- for <buildroot@buildroot.org>; Sun, 22 Jun 2025 09:45:50 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 4122E19F72F;
- Sun, 22 Jun 2025 11:45:46 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
- via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 22 Jun 2025 11:45:46 +0200
+ id gPzwWLToFD1f for <buildroot@buildroot.org>;
+ Sun, 22 Jun 2025 09:58:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4D8F680C36
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4D8F680C36
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4D8F680C36
+ for <buildroot@buildroot.org>; Sun, 22 Jun 2025 09:58:26 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a0bd3.dip0.t-ipconnect.de [91.58.11.211])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 5F3F3A4C0D9B
+ for <buildroot@buildroot.org>; Sun, 22 Jun 2025 11:58:24 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:33530)
+ by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
+ (envelope-from <bernd@kuhls.net>) id 1uTHSx-0000000044S-1bgD
+ for buildroot@buildroot.org; Sun, 22 Jun 2025 09:58:24 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Sun, 22 Jun 2025 11:58:23 +0200
+Message-Id: <20250622095823.3833147-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
-Date: Sun, 22 Jun 2025 11:45:46 +0200
-From: Julien Olivain <ju.o@free.fr>
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
-In-Reply-To: <20250621190820.516046-1-bernd@kuhls.net>
-References: <20250621190820.516046-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <a1fd8bb474bb2c1b125b5d0a5c3441bf@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1750585548;
- bh=fFh4GlMlV7KWVKiEYqpV4XtnMiwl3Es/Gd+7Z5MsCBw=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=iPGbNKZpoGwtN/xikv6zZiU79TCiV4YsQWpJbtd75dxwKhd8iFkbFYhgn24Alz0fB
- cwsP2j5qXIEyBvlk/Vbz6rhDt3aS5UbHJlkavRy6AKCKrQLoIOI8LxlSLKJg2Mr6lR
- 95H8WGg5LOCh1Yc9u76Xzc9q95dDhxmuriRK1Noab+KquJAPk9qseAB0mj9rushApR
- 38Sk8zL8iGHnQDfZGBKGGMRyXh7eSHC2uoR7n4qeAdcgTQVid0IOMHRrSxzuLPGrMY
- /yTeFjpwHgLPTtVMVguN4bld+z+wwtgvAOOlK/lE6CbckV5IdEveyY3MMfbnwkZx8X
- VZyHneatRGJ1A==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Spamd-Bar: +
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202506031021; t=1750586304;
+ bh=xq2rlGd/4Tu7XfRonFr1qRXKTzbK8/GYKaqB/OzN2D8=;
+ h=From:To:Subject:Date:From;
+ b=rqMhviIP6JNbPU/+ySUAujLCiByKx7ynUt7f+VNxvzAKLfDb3O4NIFooAdZRhWASZ
+ ACFd4vKsm+Z+Y9TAoITCheH5k4qWmvnxADaBWknmVtvBj0P7mMUHdvItIBRJE0MTmf
+ m30JJ+J6w+5jkuvPXqiXsLJgs0Ku3DcrCHcuYt/dMdX6f7oRvUOZ6XhwEO85FMmCLs
+ tMCQNRd+dyRtb68O7X1qDnjnAWJrx9AZGDEzfS3LHRr6PgTb1CXAfF1yuw4ZkbwpB7
+ jQ2oxPfBiJb8cTnoVboO9Gohv5WvWs9xyPDOpnQkWw2t+k4ht2lzGWCRnRYso3WbxL
+ AW73XnpU4s6/g==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=iPGbNKZp
-Subject: Re: [Buildroot] [PATCH 1/2] package/freeswitch: add optional
- support for OpenCV4
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202506031021 header.b=rqMhviIP
+Subject: [Buildroot] [PATCH 1/1] package/freeswitch: fix build with
+ ffmpeg-7.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,15 +81,291 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 21/06/2025 21:08, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+This patch replaces the previous patch allowing to build with ffmpeg 6.x
+with a patch which also allows to build with ffmpeg 7.x.
 
-Series applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/freeswitch/0002-ffmpeg7.patch         | 206 ++++++++++++++++++
+ ...002-mod_av-fix-build-with-ffmpeg-6.0.patch |  48 ----
+ 2 files changed, 206 insertions(+), 48 deletions(-)
+ create mode 100644 package/freeswitch/0002-ffmpeg7.patch
+ delete mode 100644 package/freeswitch/0002-mod_av-fix-build-with-ffmpeg-6.0.patch
+
+diff --git a/package/freeswitch/0002-ffmpeg7.patch b/package/freeswitch/0002-ffmpeg7.patch
+new file mode 100644
+index 0000000000..ac1d3a13af
+--- /dev/null
++++ b/package/freeswitch/0002-ffmpeg7.patch
+@@ -0,0 +1,206 @@
++From ff2e8b475f25a995e085045fc25ba445fb32c57e Mon Sep 17 00:00:00 2001
++From: Korynkai <matt@qmxtech.com>
++Date: Mon, 30 Dec 2024 22:23:33 +0000
++Subject: [PATCH] Fixes related to signalwire/freeswitch#2202
++ AVOutputFormat::priv_data_size is marked private and no longer exists in the
++ public API as of FFMPEG 6.0, but found hidden in AVOutputFormat as part of
++ FFOutputFormat. AVCodecContext::ticks_per_frame was deprecated as of FFMPEG
++ 6.1. libavcodec notes 'do not use avcodec_close()' as of FFMPEG 3.1, use
++ avcodec_free_context() instead. AVFrame::key_frame was deprecated as of
++ FFMPEG 6.1, use AVFrame::flags instead. AVInputFormat::read_seek and
++ AVInputFormat::read_seek2 no longer exists as of FFMPEG 7.0. This seems to
++ only be used for logging purposes, so guard this functionality accordingly.
++
++Upstream: https://github.com/signalwire/freeswitch/pull/2681.patch
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ src/mod/applications/mod_av/avcodec.c  | 27 +++++++++++++++++++++-
++ src/mod/applications/mod_av/avformat.c | 31 +++++++++++++++++++++++---
++ 2 files changed, 54 insertions(+), 4 deletions(-)
++
++diff --git a/src/mod/applications/mod_av/avcodec.c b/src/mod/applications/mod_av/avcodec.c
++index 0293b834467..be864a56744 100644
++--- a/src/mod/applications/mod_av/avcodec.c
+++++ b/src/mod/applications/mod_av/avcodec.c
++@@ -1226,9 +1226,13 @@ static switch_status_t open_encoder(h264_codec_context_t *context, uint32_t widt
++ 	}
++ 
++ 	if (context->encoder_ctx) {
+++#if (LIBAVCODEC_VERSION_INT < AV_VERSION_INT(57,48,101))
++ 		if (avcodec_is_open(context->encoder_ctx)) {
++ 			avcodec_close(context->encoder_ctx);
++ 		}
+++#else
+++		avcodec_free_context(&(context->encoder_ctx));
+++#endif
++ 		av_free(context->encoder_ctx);
++ 		context->encoder_ctx = NULL;
++ 	}
++@@ -1319,9 +1323,13 @@ FF_ENABLE_DEPRECATION_WARNINGS
++ 		}
++ 
++ 		if (context->encoder_ctx) {
+++#if (LIBAVCODEC_VERSION_INT < AV_VERSION_INT(57,48,101))
++ 			if (avcodec_is_open(context->encoder_ctx)) {
++ 				avcodec_close(context->encoder_ctx);
++ 			}
+++#else
+++			avcodec_free_context(&(context->encoder_ctx));
+++#endif
++ 			av_free(context->encoder_ctx);
++ 			context->encoder_ctx = NULL;
++ 		}
++@@ -1557,7 +1565,11 @@ static switch_status_t switch_h264_encode(switch_codec_t *codec, switch_frame_t
++ 		}
++ 
++ 		 avframe->pict_type = AV_PICTURE_TYPE_I;
+++#if (LIBAVUTIL_VERSION_INT < AV_VERSION_INT(58,29,100))
++ 		 avframe->key_frame = 1;
+++#else
+++		 avframe->flags |= AV_FRAME_FLAG_KEY;
+++#endif
++ 		 context->last_keyframe_request = switch_time_now();
++ 	}
++ 
++@@ -1600,9 +1612,14 @@ GCC_DIAG_ON(deprecated-declarations)
++ 		}
++ #endif
++ 
+++#if (LIBAVUTIL_VERSION_INT < AV_VERSION_INT(58,29,100))
++ 	if (context->need_key_frame && avframe->key_frame == 1) {
++-		avframe->pict_type = 0;
++ 		avframe->key_frame = 0;
+++#else
+++	if (context->need_key_frame && avframe->flags & AV_FRAME_FLAG_KEY) {
+++		avframe->flags ^= AV_FRAME_FLAG_KEY;
+++#endif
+++		avframe->pict_type = 0;
++ 		context->need_key_frame = 0;
++ 	}
++ 
++@@ -1862,14 +1879,22 @@ static switch_status_t switch_h264_destroy(switch_codec_t *codec)
++ 
++ 	switch_buffer_destroy(&context->nalu_buffer);
++ 	if (context->decoder_ctx) {
+++#if (LIBAVCODEC_VERSION_INT < AV_VERSION_INT(57,48,101))
++ 		if (avcodec_is_open(context->decoder_ctx)) avcodec_close(context->decoder_ctx);
+++#else
+++		avcodec_free_context(&(context->decoder_ctx));
+++#endif
++ 		av_free(context->decoder_ctx);
++ 	}
++ 
++ 	switch_img_free(&context->img);
++ 
++ 	if (context->encoder_ctx) {
+++#if (LIBAVCODEC_VERSION_INT < AV_VERSION_INT(57,48,101))
++ 		if (avcodec_is_open(context->encoder_ctx)) avcodec_close(context->encoder_ctx);
+++#else
+++		avcodec_free_context(&(context->encoder_ctx));
+++#endif
++ 		av_free(context->encoder_ctx);
++ 	}
++ 
++diff --git a/src/mod/applications/mod_av/avformat.c b/src/mod/applications/mod_av/avformat.c
++index c1e00525300..6fcb51c2079 100644
++--- a/src/mod/applications/mod_av/avformat.c
+++++ b/src/mod/applications/mod_av/avformat.c
++@@ -184,6 +184,16 @@ struct av_file_context {
++ 
++ typedef struct av_file_context av_file_context_t;
++ 
+++#if (LIBAVFORMAT_VERSION_MAJOR >= 60)
+++typedef struct FFOutputFormat {
+++	int priv_data_size;
+++} FFOutputFormat;
+++
+++static inline int priv_data_size(const AVOutputFormat *fmt)
+++{
+++    return ((const struct FFOutputFormat*)fmt)->priv_data_size;
+++}
+++#endif
++ 
++ /**
++  * Fill the provided buffer with a string containing a timestamp
++@@ -455,8 +465,13 @@ static int mod_avformat_alloc_output_context2(AVFormatContext **avctx, const cha
++ 	}
++ 
++ 	s->oformat = oformat;
+++#if (LIBAVFORMAT_VERSION_MAJOR < 60)
++ 	if (s->oformat->priv_data_size > 0) {
++ 		s->priv_data = av_mallocz(s->oformat->priv_data_size);
+++#else
+++	if (priv_data_size(s->oformat) > 0) {
+++		s->priv_data = av_mallocz(priv_data_size(s->oformat));
+++#endif
++ 		if (!s->priv_data) {
++ 			goto nomem;
++ 		}
++@@ -621,7 +636,9 @@ static switch_status_t add_stream(av_file_context_t *context, MediaStream *mst,
++ 		c->rc_initial_buffer_occupancy = buffer_bytes * 8;
++ 
++ 		if (codec_id == AV_CODEC_ID_H264) {
+++#if (LIBAVCODEC_VERSION_INT < AV_VERSION_INT(60,31,102))
++ 			c->ticks_per_frame = 2;
+++#endif
++ 
++ 
++ 			c->flags|=AV_CODEC_FLAG_LOOP_FILTER;   // flags=+loop
++@@ -1410,8 +1427,10 @@ static switch_status_t open_input_file(av_file_context_t *context, switch_file_h
++ 		switch_goto_status(SWITCH_STATUS_FALSE, err);
++ 	}
++ 
+++#if (LIBAVFORMAT_VERSION_MAJOR < 61)
++ 	handle->seekable = context->fc->iformat->read_seek2 ? 1 : (context->fc->iformat->read_seek ? 1 : 0);
++ 	switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_INFO, "file %s is %sseekable\n", filename, handle->seekable ? "" : "not ");
+++#endif
++ 
++ 	/** Get information on the input file (number of streams etc.). */
++ 	if ((error = avformat_find_stream_info(context->fc, opts ? &opts : NULL)) < 0) {
++@@ -1502,7 +1521,11 @@ static switch_status_t open_input_file(av_file_context_t *context, switch_file_h
++ 
++ 		switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_ERROR, "Could not open input audio codec channel 2 (error '%s')\n", get_error_text(error, ebuf, sizeof(ebuf)));
++ 		if ((cc = av_get_codec_context(&context->audio_st[0]))) {
+++#if (LIBAVCODEC_VERSION_INT < AV_VERSION_INT(57,48,101))
++ 			avcodec_close(cc);
+++#else
+++			avcodec_free_context(&cc);
+++#endif
++ 		}
++ 
++ 		context->has_audio = 0;
++@@ -3084,14 +3107,11 @@ static switch_status_t av_file_read_video(switch_file_handle_t *handle, switch_f
++ 	void *pop;
++ 	MediaStream *mst = &context->video_st;
++ 	AVStream *st = mst->st;
++-	int ticks = 0;
++ 	int64_t max_delta = 1 * AV_TIME_BASE; // 1 second
++ 	switch_status_t status = SWITCH_STATUS_SUCCESS;
++ 	double fl_to = 0.02;
++ 	int do_fl = 0;
++ 	int smaller_ts = context->read_fps;
++-	AVCodecContext *c = NULL;
++-	AVCodecParserContext *cp = NULL;
++ 
++ 	if (!context->has_video) return SWITCH_STATUS_FALSE;
++ 
++@@ -3199,6 +3219,10 @@ static switch_status_t av_file_read_video(switch_file_handle_t *handle, switch_f
++ 	}
++ #endif
++ 
+++#if (LIBAVCODEC_VERSION_INT < AV_VERSION_INT(60,31,102))
+++	int ticks = 0;
+++	AVCodecContext *c = NULL;
+++	AVCodecParserContext *cp = NULL;
++ 	if ((c = av_get_codec_context(mst)) && c->time_base.num) {
++ 		cp = av_stream_get_parser(st);
++ 		ticks = cp ? cp->repeat_pict + 1 : c->ticks_per_frame;
++@@ -3210,6 +3234,7 @@ static switch_status_t av_file_read_video(switch_file_handle_t *handle, switch_f
++ 			context->video_start_time, ticks, c ? c->ticks_per_frame : -1, st->time_base.num, st->time_base.den, c ? c->time_base.num : -1, c ? c->time_base.den : -1,
++ 			st->start_time, st->duration == AV_NOPTS_VALUE ? context->fc->duration / AV_TIME_BASE * 1000 : st->duration, st->nb_frames, av_q2d(st->time_base));
++ 	}
+++#endif
++ 
++  again:
++ 
+diff --git a/package/freeswitch/0002-mod_av-fix-build-with-ffmpeg-6.0.patch b/package/freeswitch/0002-mod_av-fix-build-with-ffmpeg-6.0.patch
+deleted file mode 100644
+index bd38d76d85..0000000000
+--- a/package/freeswitch/0002-mod_av-fix-build-with-ffmpeg-6.0.patch
++++ /dev/null
+@@ -1,48 +0,0 @@
+-From 2e75bb8b2c7f70c5d16c9e3d14b1427f4eb80c9c Mon Sep 17 00:00:00 2001
+-From: Korynkai <matt@qmxtech.com>
+-Date: Thu, 17 Aug 2023 21:10:31 +0200
+-Subject: [PATCH] mod_av: fix build with ffmpeg 6.0
+-
+-Upstream: https://github.com/signalwire/freeswitch/issues/2202
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- src/mod/applications/mod_av/avformat.c | 2 ++
+- src/mod/applications/mod_av/mod_av.h   | 1 +
+- 2 files changed, 3 insertions(+)
+-
+-diff --git a/src/mod/applications/mod_av/avformat.c b/src/mod/applications/mod_av/avformat.c
+-index 69475c169f..0a1662aed6 100644
+---- a/src/mod/applications/mod_av/avformat.c
+-+++ b/src/mod/applications/mod_av/avformat.c
+-@@ -455,6 +455,7 @@ static int mod_avformat_alloc_output_context2(AVFormatContext **avctx, const cha
+- 	}
+- 
+- 	s->oformat = oformat;
+-+#if (LIBAVFORMAT_VERSION_MAJOR < LIBAVFORMAT_N)
+- 	if (s->oformat->priv_data_size > 0) {
+- 		s->priv_data = av_mallocz(s->oformat->priv_data_size);
+- 		if (!s->priv_data) {
+-@@ -468,6 +469,7 @@ static int mod_avformat_alloc_output_context2(AVFormatContext **avctx, const cha
+- 	} else {
+- 		s->priv_data = NULL;
+- 	}
+-+#endif
+- 
+- 	if (filename) {
+- #if (LIBAVCODEC_VERSION_INT < AV_VERSION_INT(58,7,100))
+-diff --git a/src/mod/applications/mod_av/mod_av.h b/src/mod/applications/mod_av/mod_av.h
+-index a89e6cb8f7..ef9bd48d73 100644
+---- a/src/mod/applications/mod_av/mod_av.h
+-+++ b/src/mod/applications/mod_av/mod_av.h
+-@@ -42,6 +42,7 @@
+- 
+- #define LIBAVCODEC_V 59
+- #define LIBAVFORMAT_V 59
+-+#define LIBAVFORMAT_N 60
+- #define LIBAVUTIL_V 57
+- 
+- struct mod_av_globals {
+--- 
+-2.39.2
+-
+-- 
+2.39.5
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
