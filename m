@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC9BDC7115A
-	for <buildroot@archiver.kernel.org>; Sun, 22 Jun 2025 10:10:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09FACC77B7C
+	for <buildroot@archiver.kernel.org>; Sun, 22 Jun 2025 10:10:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8739181546;
-	Sun, 22 Jun 2025 10:10:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CDECA40576;
+	Sun, 22 Jun 2025 10:10:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hZjdcJ_vLA8z; Sun, 22 Jun 2025 10:10:04 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3UrZxMD2RNbZ; Sun, 22 Jun 2025 10:10:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E3478169E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B2D4B40596
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8E3478169E;
-	Sun, 22 Jun 2025 10:10:04 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 9C850C8
+	by smtp4.osuosl.org (Postfix) with ESMTP id B2D4B40596;
+	Sun, 22 Jun 2025 10:10:05 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id B693CC8
  for <buildroot@buildroot.org>; Sun, 22 Jun 2025 10:10:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 99A52816DA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9CEAA60BA7
  for <buildroot@buildroot.org>; Sun, 22 Jun 2025 10:10:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QO5ag3BRMmxv for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id t0OEnv7zOBcp for <buildroot@buildroot.org>;
  Sun, 22 Jun 2025 10:10:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C72768169E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B794060B26
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C72768169E
+ by smtp3.osuosl.org (Postfix) with ESMTP id B794060B26
  for <buildroot@buildroot.org>; Sun, 22 Jun 2025 10:10:02 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B6E8484226; Sun, 22 Jun 2025 10:10:02 +0000 (UTC)
+ id A584D840C2; Sun, 22 Jun 2025 10:10:02 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 22 Jun 2025 12:08:34 +0200
+Date: Sun, 22 Jun 2025 11:47:03 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0e1d85930f8376683d64331f5ca96a394b9adef2
-X-Git-Newrev: c6252c2e50b7fe555f62cbf38fdde8ba540f00ea
+X-Git-Oldrev: 3142a7cf31c08e14c0c5bbf5167ee8f26a7c3b32
+X-Git-Newrev: 0e1d85930f8376683d64331f5ca96a394b9adef2
 X-Patchwork-Hint: ignore
-Message-Id: <20250622101002.B6E8484226@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libcamera-apps: bump version to
- v1.7.0-10-ge9645231
+Message-Id: <20250622101002.A584D840C2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libcamera: bump version to 0.5.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,137 +59,228 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5566225961762593805=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5566225961762593805==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=c6252c2e50b7fe555f62cbf38fdde8ba540f00ea
+commit: https://git.buildroot.net/buildroot/commit/?id=0e1d85930f8376683d64331f5ca96a394b9adef2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This version bump is needed for compatibility with the upcoming bump of
-ffmpeg to version 7.1.x.
+Removed patches which are included in this release.
 
-Use the new configure option disable_rpi_features to allow building for
-non-rbpi defconfigs.
+Release notes: https://git.linuxtv.org/libcamera.git/tag/?h=v0.5.1
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-[Julien: use "git describe --tags --abbrev=40" format in _VERSION]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...te-checks-for-disable_rpi_features-option.patch | 52 ++++++++++++++++++++++
- package/libcamera-apps/libcamera-apps.hash         |  2 +-
- package/libcamera-apps/libcamera-apps.mk           | 11 +++--
- 3 files changed, 61 insertions(+), 4 deletions(-)
+ ...t-automatically-build-documentation-if-sp.patch |  51 ----------
+ ...amera-rkisp1-Eliminate-hard-coded-resizer.patch | 113 ---------------------
+ package/libcamera/libcamera.hash                   |   3 +-
+ package/libcamera/libcamera.mk                     |   2 +-
+ 4 files changed, 3 insertions(+), 166 deletions(-)
 
-diff --git a/package/libcamera-apps/0001-core-Update-checks-for-disable_rpi_features-option.patch b/package/libcamera-apps/0001-core-Update-checks-for-disable_rpi_features-option.patch
-new file mode 100644
-index 0000000000..1aba972d13
---- /dev/null
-+++ b/package/libcamera-apps/0001-core-Update-checks-for-disable_rpi_features-option.patch
-@@ -0,0 +1,52 @@
-+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd@kuhls.net>
-+Date: Sat, 21 Jun 2025 18:12:18 +0200
-+Subject: [PATCH] core: Update checks for disable_rpi_features option
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Based on the original commit that added the sync feature there
-+were a few more options that needed the disable_rpi_features
-+code conditionals to ensure compilation against upstream
-+libcamera so add them in to ensure this works.
-+
-+Fixes:
-+../core/rpicam_app.cpp: In member function ‘void RPiCamApp::StartCamera()’:
-+../core/rpicam_app.cpp:642:78: error: ‘controls::rpi’ has not been declared
-+  642 |         if (!controls_.get(controls::ScalerCrop) && !controls_.get(controls::rpi::ScalerCrops))
-+      |                                                                              ^~~
-+../core/rpicam_app.cpp:673:49: error: ‘controls::rpi’ has not been declared
-+  673 |                         controls_.set(controls::rpi::ScalerCrops, libcamera::Span<const Rectangle>(crops.data(), crops.size()));
-+      |                                                 ^~~
-+
-+Upstream: https://github.com/raspberrypi/rpicam-apps/pull/827
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ core/rpicam_app.cpp | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/core/rpicam_app.cpp b/core/rpicam_app.cpp
-+index bed69c0..1db784f 100644
-+--- a/core/rpicam_app.cpp
-++++ b/core/rpicam_app.cpp
-+@@ -637,6 +637,7 @@ void RPiCamApp::StartCamera()
-+ 	// This makes all the Request objects that we shall need.
-+ 	makeRequests();
-+ 
-++#ifndef DISABLE_RPI_FEATURES
-+ 	// Build a list of initial controls that we must set in the camera before starting it.
-+ 	// We don't overwrite anything the application may have set before calling us.
-+ 	if (!controls_.get(controls::ScalerCrop) && !controls_.get(controls::rpi::ScalerCrops))
-+@@ -672,6 +673,7 @@ void RPiCamApp::StartCamera()
-+ 		else
-+ 			controls_.set(controls::rpi::ScalerCrops, libcamera::Span<const Rectangle>(crops.data(), crops.size()));
-+ 	}
-++#endif
-+ 
-+ 	if (!controls_.get(controls::AfWindows) && !controls_.get(controls::AfMetering) &&
-+ 		options_->Get().afWindow_width != 0 && options_->Get().afWindow_height != 0)
-+-- 
-+2.39.5
-+
-diff --git a/package/libcamera-apps/libcamera-apps.hash b/package/libcamera-apps/libcamera-apps.hash
-index 00b499d247..b11ea7fe67 100644
---- a/package/libcamera-apps/libcamera-apps.hash
-+++ b/package/libcamera-apps/libcamera-apps.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  576bcd585f1c8d8bc80e37fa3c8a172e9d1c8406490438cf6d0fbc7ba4996ec1  rpicam-apps-1.5.0.tar.xz
-+sha256  b5535933ebc398616fd1b261fa9e3755dfb419e10ee7866078a8a8d99f54a59a  libcamera-apps-v1.7.0-10-ge9645231008146fa0e75c2b3e0ff8c48ad70511a.tar.gz
- sha256  36dfed86bdef661a0a14ec1a1cc84c771d5a06b6f9b92e9ebb610ba711bd528a  license.txt
-diff --git a/package/libcamera-apps/libcamera-apps.mk b/package/libcamera-apps/libcamera-apps.mk
-index 17983bb8ca..06efb9a960 100644
---- a/package/libcamera-apps/libcamera-apps.mk
-+++ b/package/libcamera-apps/libcamera-apps.mk
-@@ -4,9 +4,8 @@
- #
+diff --git a/package/libcamera/0001-meson-do-not-automatically-build-documentation-if-sp.patch b/package/libcamera/0001-meson-do-not-automatically-build-documentation-if-sp.patch
+deleted file mode 100644
+index c75ff1ce9d..0000000000
+--- a/package/libcamera/0001-meson-do-not-automatically-build-documentation-if-sp.patch
++++ /dev/null
+@@ -1,51 +0,0 @@
+-From ae2b6cb3cac6a38a6c96625915cea4b9cf3fc180 Mon Sep 17 00:00:00 2001
+-From: Quentin Schulz <quentin.schulz@cherry.de>
+-Date: Fri, 4 Apr 2025 18:12:35 +0200
+-Subject: [PATCH] meson: Do not automatically build documentation if
+- sphinx-build-3 is found
+-
+-Commit aba567338b25 ("Documentation: Move all dependencies into
+-features") did an incomplete migration of the documentation boolean
+-option into a documentation feature.
+-
+-If sphinx-build-3 binary is found on the host system, the documentation
+-is built, regardless of the value of the feature option.
+-
+-This makes sure that sphinx-build-3 presence is only checked if the
+-documentation feature is not disabled (which is the default, as it's
+-"auto" by default).
+-
+-This is essential for reproducibility for build systems where
+-sphinx-build-3 may or may not be present when libcamera is built, and
+-also to declutter the generated package if documentation isn't desired.
+-
+-Fixes: aba567338b25 ("Documentation: Move all dependencies into features")
+-Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
+-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+-Reviewed-by: Quentin Schulz <quentin.schulz@cherry.de>
+-Tested-by: Quentin Schulz <quentin.schulz@cherry.de>
+-Reviewed-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+-Upstream: https://git.libcamera.org/libcamera/libcamera.git/commit/?id=ae2b6cb3cac6a38a6c96625915cea4b9cf3fc180
+-Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
+----
+- Documentation/meson.build | 6 ++----
+- 1 file changed, 2 insertions(+), 4 deletions(-)
+-
+-diff --git a/Documentation/meson.build b/Documentation/meson.build
+-index 6158320e..0fc5909d 100644
+---- a/Documentation/meson.build
+-+++ b/Documentation/meson.build
+-@@ -116,10 +116,8 @@ endif
+- # Sphinx
+- #
+- 
+--sphinx = find_program('sphinx-build-3', required : false)
+--if not sphinx.found()
+--    sphinx = find_program('sphinx-build', required : get_option('documentation'))
+--endif
+-+sphinx = find_program('sphinx-build-3', 'sphinx-build',
+-+                      required : get_option('documentation'))
+- 
+- if sphinx.found()
+-     docs_sources = [
+diff --git a/package/libcamera/0002-Revert-libcamera-rkisp1-Eliminate-hard-coded-resizer.patch b/package/libcamera/0002-Revert-libcamera-rkisp1-Eliminate-hard-coded-resizer.patch
+deleted file mode 100644
+index 062736be77..0000000000
+--- a/package/libcamera/0002-Revert-libcamera-rkisp1-Eliminate-hard-coded-resizer.patch
++++ /dev/null
+@@ -1,113 +0,0 @@
+-From 6e24360d3fc91cbeecb4f5cf432cd194bc098618 Mon Sep 17 00:00:00 2001
+-From: Quentin Schulz <quentin.schulz@cherry.de>
+-Date: Thu, 3 Apr 2025 20:09:00 +0200
+-Subject: [PATCH] Revert "libcamera: rkisp1: Eliminate hard-coded resizer
+- limits"
+-
+-This reverts commit e85c7ddd38ce8456ab01c2a73baf9e788f6a462e.
+-
+-Linux kernel predating 6.4 (specifically commit 7cfb35d3a800 ("media:
+-rkisp1: Implement ENUM_FRAMESIZES") do not have the ioctl in rkisp1
+-driver required to dynamically query the resizer limits.
+-
+-Because of that, maxResolution and minResolution are both {0, 0}
+-(default value for Size objects) which means filterSensorResolution()
+-will create an entry for the sensor in sensorSizesMap_ but because the
+-sensor resolution cannot fit inside the min and max resolution of the
+-rkisp1, no size is put into this entry in sensorSizesMap_.
+-On the next call to filterSensorResolution(),
+-sensorSizesMap_.find(sensor) will return the entry but when attempting
+-to call back() on iter->second, it'll trigger an assert because the size
+-array is empty.
+-
+-Linux kernel 6.1 is supported until December 2027, so it seems premature
+-to get rid of those hard-coded resizer limits before this happens.
+-
+-Let's restore the hard-coded resizer limits as fallbacks, actual limits
+-are still queried from the driver on recent enough kernels.
+-
+-Fixes: 761545407c76 ("pipeline: rkisp1: Filter out sensor sizes not supported by the pipeline")
+-Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
+-Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+-Upstream: https://git.libcamera.org/libcamera/libcamera.git/commit/?id=6e24360d3fc91cbeecb4f5cf432cd194bc098618
+-Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
+----
+- src/libcamera/pipeline/rkisp1/rkisp1_path.cpp | 21 +++++++++++++------
+- src/libcamera/pipeline/rkisp1/rkisp1_path.h   |  3 ++-
+- 2 files changed, 17 insertions(+), 7 deletions(-)
+-
+-diff --git a/src/libcamera/pipeline/rkisp1/rkisp1_path.cpp b/src/libcamera/pipeline/rkisp1/rkisp1_path.cpp
+-index eee5b09e..64018dc5 100644
+---- a/src/libcamera/pipeline/rkisp1/rkisp1_path.cpp
+-+++ b/src/libcamera/pipeline/rkisp1/rkisp1_path.cpp
+-@@ -54,8 +54,11 @@ const std::map<PixelFormat, uint32_t> formatToMediaBus = {
+- 
+- } /* namespace */
+- 
+--RkISP1Path::RkISP1Path(const char *name, const Span<const PixelFormat> &formats)
+--	: name_(name), running_(false), formats_(formats), link_(nullptr)
+-+RkISP1Path::RkISP1Path(const char *name, const Span<const PixelFormat> &formats,
+-+		       const Size &minResolution, const Size &maxResolution)
+-+	: name_(name), running_(false), formats_(formats),
+-+	  minResolution_(minResolution), maxResolution_(maxResolution),
+-+	  link_(nullptr)
+- {
+- }
+- 
+-@@ -517,10 +520,12 @@ void RkISP1Path::stop()
+- }
+- 
+- /*
+-- * \todo Remove the hardcoded formats once all users will have migrated to a
+-- * recent enough kernel.
+-+ * \todo Remove the hardcoded resolutions and formats once kernels older than
+-+ * v6.4 will stop receiving LTS support (scheduled for December 2027 for v6.1).
+-  */
+- namespace {
+-+constexpr Size RKISP1_RSZ_MP_SRC_MIN{ 32, 16 };
+-+constexpr Size RKISP1_RSZ_MP_SRC_MAX{ 4416, 3312 };
+- constexpr std::array<PixelFormat, 18> RKISP1_RSZ_MP_FORMATS{
+- 	formats::YUYV,
+- 	formats::NV16,
+-@@ -542,6 +547,8 @@ constexpr std::array<PixelFormat, 18> RKISP1_RSZ_MP_FORMATS{
+- 	formats::SRGGB12,
+- };
+- 
+-+constexpr Size RKISP1_RSZ_SP_SRC_MIN{ 32, 16 };
+-+constexpr Size RKISP1_RSZ_SP_SRC_MAX{ 1920, 1920 };
+- constexpr std::array<PixelFormat, 8> RKISP1_RSZ_SP_FORMATS{
+- 	formats::YUYV,
+- 	formats::NV16,
+-@@ -555,12 +562,14 @@ constexpr std::array<PixelFormat, 8> RKISP1_RSZ_SP_FORMATS{
+- } /* namespace */
+- 
+- RkISP1MainPath::RkISP1MainPath()
+--	: RkISP1Path("main", RKISP1_RSZ_MP_FORMATS)
+-+	: RkISP1Path("main", RKISP1_RSZ_MP_FORMATS,
+-+		     RKISP1_RSZ_MP_SRC_MIN, RKISP1_RSZ_MP_SRC_MAX)
+- {
+- }
+- 
+- RkISP1SelfPath::RkISP1SelfPath()
+--	: RkISP1Path("self", RKISP1_RSZ_SP_FORMATS)
+-+	: RkISP1Path("self", RKISP1_RSZ_SP_FORMATS,
+-+		     RKISP1_RSZ_SP_SRC_MIN, RKISP1_RSZ_SP_SRC_MAX)
+- {
+- }
+- 
+-diff --git a/src/libcamera/pipeline/rkisp1/rkisp1_path.h b/src/libcamera/pipeline/rkisp1/rkisp1_path.h
+-index 2a1ef0ab..430181d3 100644
+---- a/src/libcamera/pipeline/rkisp1/rkisp1_path.h
+-+++ b/src/libcamera/pipeline/rkisp1/rkisp1_path.h
+-@@ -34,7 +34,8 @@ struct V4L2SubdeviceFormat;
+- class RkISP1Path
+- {
+- public:
+--	RkISP1Path(const char *name, const Span<const PixelFormat> &formats);
+-+	RkISP1Path(const char *name, const Span<const PixelFormat> &formats,
+-+		   const Size &minResolution, const Size &maxResolution);
+- 
+- 	bool init(MediaDevice *media);
+- 
+diff --git a/package/libcamera/libcamera.hash b/package/libcamera/libcamera.hash
+index 9f897e023f..bbec9c517d 100644
+--- a/package/libcamera/libcamera.hash
++++ b/package/libcamera/libcamera.hash
+@@ -1,4 +1,5 @@
+-sha256  cea3b5eebc01aa97930ae64989447ca00bad42ff1e0ce71d90d337650dd9e374  libcamera-v0.5.0-git4.tar.gz
++# Locally computed
++sha256  ee2c7086b3c08133bba44856fb9b2ffd1132532150d14da7daecd99ab8a566c2  libcamera-v0.5.1-git4.tar.gz
+ 
+ # license files
+ sha256  fd38b2c053c0cce46d9c5ef3545a6e34d157a240ba99c9b8dca5d37a8147da6c  LICENSES/BSD-2-Clause.txt
+diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
+index 1cd7a22952..a2ff3284d7 100644
+--- a/package/libcamera/libcamera.mk
++++ b/package/libcamera/libcamera.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBCAMERA_APPS_VERSION = 1.5.0
--LIBCAMERA_APPS_SOURCE = rpicam-apps-$(LIBCAMERA_APPS_VERSION).tar.xz
--LIBCAMERA_APPS_SITE = https://github.com/raspberrypi/rpicam-apps/releases/download/v$(LIBCAMERA_APPS_VERSION)
-+LIBCAMERA_APPS_VERSION = v1.7.0-10-ge9645231008146fa0e75c2b3e0ff8c48ad70511a
-+LIBCAMERA_APPS_SITE = $(call github,raspberrypi,rpicam-apps,$(LIBCAMERA_APPS_VERSION))
- LIBCAMERA_APPS_LICENSE = BSD-2-Clause
- LIBCAMERA_APPS_LICENSE_FILES = license.txt
- LIBCAMERA_APPS_DEPENDENCIES = \
-@@ -36,6 +35,12 @@ else
- LIBCAMERA_APPS_CONF_OPTS += -Denable_libav=disabled
- endif
- 
-+ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
-+LIBCAMERA_APPS_CONF_OPTS += -Ddisable_rpi_features=false
-+else
-+LIBCAMERA_APPS_CONF_OPTS += -Ddisable_rpi_features=true
-+endif
-+
- ifeq ($(BR2_PACKAGE_XORG7),y)
- LIBCAMERA_APPS_DEPENDENCIES += \
- 	$(if $(BR2_PACKAGE_LIBEPOXY),libepoxy) \
-
---===============5566225961762593805==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ LIBCAMERA_SITE = https://git.linuxtv.org/libcamera.git
+-LIBCAMERA_VERSION = v0.5.0
++LIBCAMERA_VERSION = v0.5.1
+ LIBCAMERA_SITE_METHOD = git
+ LIBCAMERA_DEPENDENCIES = \
+ 	host-openssl \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5566225961762593805==--
