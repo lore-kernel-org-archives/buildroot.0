@@ -1,73 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 020ECC7115C
-	for <buildroot@archiver.kernel.org>; Sun, 22 Jun 2025 10:04:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC9BDC7115A
+	for <buildroot@archiver.kernel.org>; Sun, 22 Jun 2025 10:10:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C7EA541A53;
-	Sun, 22 Jun 2025 10:04:18 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9jI4MteUDcpj; Sun, 22 Jun 2025 10:04:18 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF05941A65
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EF05941A65;
-	Sun, 22 Jun 2025 10:04:17 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1B5A5C8
- for <buildroot@buildroot.org>; Sun, 22 Jun 2025 10:04:16 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 01A6F80F5B
- for <buildroot@buildroot.org>; Sun, 22 Jun 2025 10:04:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8739181546;
+	Sun, 22 Jun 2025 10:10:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PEYCo81ynSsI for <buildroot@buildroot.org>;
- Sun, 22 Jun 2025 10:04:15 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org CFC7981755
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CFC7981755
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CFC7981755
- for <buildroot@buildroot.org>; Sun, 22 Jun 2025 10:04:14 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a0bd3.dip0.t-ipconnect.de [91.58.11.211])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id E899FA4C0298
- for <buildroot@buildroot.org>; Sun, 22 Jun 2025 12:04:12 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:54010)
- by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
- (envelope-from <bernd@kuhls.net>) id 1uTHYa-0000000054k-0E2d
- for buildroot@buildroot.org; Sun, 22 Jun 2025 10:04:12 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+ id hZjdcJ_vLA8z; Sun, 22 Jun 2025 10:10:04 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E3478169E
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8E3478169E;
+	Sun, 22 Jun 2025 10:10:04 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9C850C8
+ for <buildroot@buildroot.org>; Sun, 22 Jun 2025 10:10:03 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 99A52816DA
+ for <buildroot@buildroot.org>; Sun, 22 Jun 2025 10:10:03 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QO5ag3BRMmxv for <buildroot@buildroot.org>;
+ Sun, 22 Jun 2025 10:10:02 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C72768169E
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id C72768169E
+ for <buildroot@buildroot.org>; Sun, 22 Jun 2025 10:10:02 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B6E8484226; Sun, 22 Jun 2025 10:10:02 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 22 Jun 2025 12:04:12 +0200
-Message-Id: <20250622100412.3836588-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.5
-MIME-Version: 1.0
-X-Spamd-Bar: +++
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202506031021; t=1750586652;
- bh=oJmiVbnjG+8Htk1Bv+hYxUE1f7LKpHr6EKoxSZts28w=;
- h=From:To:Subject:Date:From;
- b=rXJyfO5BTlrJOKCU7C9wD/CFM0VEfwGv8ys85SFGpzGfgzkITq0C3YV/ciEcw1w3R
- 35ZsV1gDkCtGXZiLIpE6a37kLeMQ2jYK2WMF/xZyGGxMSEjKsMD9/2d+DAMQyIcfUM
- VPhDYE0tzGj2WSqVFjkQsF3fzR5y0yYgu9uxYQwLgF6RlRAODAYiXhGiiSqfZn3ik+
- 57/9SKzGpcbsJX6AtiIhg/OWQiCOnI8CjfUSGC+D9RoHZlUTrz7SaF4pu01/GPEmBY
- 4Z6hXobfSW0HSfm84AICj6fojzZBH8RVbAx88XTjJYzGVU6jOS/CS2/f6kh7ZJP44r
- 0rcCRGZWTeJpg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202506031021 header.b=rXJyfO5B
-Subject: [Buildroot] [PATCH 1/1] package/libcrossguid: bump version
+Date: Sun, 22 Jun 2025 12:08:34 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 0e1d85930f8376683d64331f5ca96a394b9adef2
+X-Git-Newrev: c6252c2e50b7fe555f62cbf38fdde8ba540f00ea
+X-Patchwork-Hint: ignore
+Message-Id: <20250622101002.B6E8484226@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libcamera-apps: bump version to
+ v1.7.0-10-ge9645231
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -79,109 +59,138 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============5566225961762593805=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Needed for kodi 22.x.
+--===============5566225961762593805==
+Content-Type: text/plain
 
-Added build fix for >= gcc-13.
+commit: https://git.buildroot.net/buildroot/commit/?id=c6252c2e50b7fe555f62cbf38fdde8ba540f00ea
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Switched build system to cmake following upstream:
-https://github.com/graeme-hill/crossguid/commit/13683c56e559f93d75f8640488aa3335f43443ed
+This version bump is needed for compatibility with the upcoming bump of
+ffmpeg to version 7.1.x.
+
+Use the new configure option disable_rpi_features to allow building for
+non-rbpi defconfigs.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[Julien: use "git describe --tags --abbrev=40" format in _VERSION]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .../0001-pr67-include-missing-cstdint.patch   | 31 +++++++++++++++++++
- package/libcrossguid/libcrossguid.hash        |  2 +-
- package/libcrossguid/libcrossguid.mk          | 19 ++----------
- 3 files changed, 35 insertions(+), 17 deletions(-)
- create mode 100644 package/libcrossguid/0001-pr67-include-missing-cstdint.patch
+ ...te-checks-for-disable_rpi_features-option.patch | 52 ++++++++++++++++++++++
+ package/libcamera-apps/libcamera-apps.hash         |  2 +-
+ package/libcamera-apps/libcamera-apps.mk           | 11 +++--
+ 3 files changed, 61 insertions(+), 4 deletions(-)
 
-diff --git a/package/libcrossguid/0001-pr67-include-missing-cstdint.patch b/package/libcrossguid/0001-pr67-include-missing-cstdint.patch
+diff --git a/package/libcamera-apps/0001-core-Update-checks-for-disable_rpi_features-option.patch b/package/libcamera-apps/0001-core-Update-checks-for-disable_rpi_features-option.patch
 new file mode 100644
-index 0000000000..0986f4e9e5
+index 0000000000..1aba972d13
 --- /dev/null
-+++ b/package/libcrossguid/0001-pr67-include-missing-cstdint.patch
-@@ -0,0 +1,31 @@
-+From 1eb9bea38c320b2b588635cffceaaa2a8d434780 Mon Sep 17 00:00:00 2001
-+From: Khem Raj <raj.khem@gmail.com>
-+Date: Wed, 25 Jan 2023 22:09:26 -0800
-+Subject: [PATCH] include missing <cstdint>
++++ b/package/libcamera-apps/0001-core-Update-checks-for-disable_rpi_features-option.patch
+@@ -0,0 +1,52 @@
++From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd@kuhls.net>
++Date: Sat, 21 Jun 2025 18:12:18 +0200
++Subject: [PATCH] core: Update checks for disable_rpi_features option
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
-+gcc 13 moved some includes around and as a result <cstdint> is no longer transitively
-+included [1]. Explicitly include it for uint{32,64}_t.
++Based on the original commit that added the sync feature there
++were a few more options that needed the disable_rpi_features
++code conditionals to ensure compilation against upstream
++libcamera so add them in to ensure this works.
 +
-+[1] https://gcc.gnu.org/gcc-13/porting_to.html#header-dep-changes
++Fixes:
++../core/rpicam_app.cpp: In member function ‘void RPiCamApp::StartCamera()’:
++../core/rpicam_app.cpp:642:78: error: ‘controls::rpi’ has not been declared
++  642 |         if (!controls_.get(controls::ScalerCrop) && !controls_.get(controls::rpi::ScalerCrops))
++      |                                                                              ^~~
++../core/rpicam_app.cpp:673:49: error: ‘controls::rpi’ has not been declared
++  673 |                         controls_.set(controls::rpi::ScalerCrops, libcamera::Span<const Rectangle>(crops.data(), crops.size()));
++      |                                                 ^~~
 +
-+Signed-off-by: Khem Raj <raj.khem@gmail.com>
-+
-+Upstream: https://github.com/graeme-hill/crossguid/pull/67
++Upstream: https://github.com/raspberrypi/rpicam-apps/pull/827
 +
 +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 +---
-+ include/crossguid/guid.hpp | 1 +
-+ 1 file changed, 1 insertion(+)
++ core/rpicam_app.cpp | 2 ++
++ 1 file changed, 2 insertions(+)
 +
-+diff --git a/include/crossguid/guid.hpp b/include/crossguid/guid.hpp
-+index 61e0f17..70966f2 100644
-+--- a/include/crossguid/guid.hpp
-++++ b/include/crossguid/guid.hpp
-+@@ -29,6 +29,7 @@ THE SOFTWARE.
-+ #include <jni.h>
-+ #endif
++diff --git a/core/rpicam_app.cpp b/core/rpicam_app.cpp
++index bed69c0..1db784f 100644
++--- a/core/rpicam_app.cpp
+++++ b/core/rpicam_app.cpp
++@@ -637,6 +637,7 @@ void RPiCamApp::StartCamera()
++ 	// This makes all the Request objects that we shall need.
++ 	makeRequests();
 + 
-++#include <cstdint>
-+ #include <functional>
-+ #include <iostream>
-+ #include <array>
-diff --git a/package/libcrossguid/libcrossguid.hash b/package/libcrossguid/libcrossguid.hash
-index 17dbe35c71..3f5c56d641 100644
---- a/package/libcrossguid/libcrossguid.hash
-+++ b/package/libcrossguid/libcrossguid.hash
+++#ifndef DISABLE_RPI_FEATURES
++ 	// Build a list of initial controls that we must set in the camera before starting it.
++ 	// We don't overwrite anything the application may have set before calling us.
++ 	if (!controls_.get(controls::ScalerCrop) && !controls_.get(controls::rpi::ScalerCrops))
++@@ -672,6 +673,7 @@ void RPiCamApp::StartCamera()
++ 		else
++ 			controls_.set(controls::rpi::ScalerCrops, libcamera::Span<const Rectangle>(crops.data(), crops.size()));
++ 	}
+++#endif
++ 
++ 	if (!controls_.get(controls::AfWindows) && !controls_.get(controls::AfMetering) &&
++ 		options_->Get().afWindow_width != 0 && options_->Get().afWindow_height != 0)
++-- 
++2.39.5
++
+diff --git a/package/libcamera-apps/libcamera-apps.hash b/package/libcamera-apps/libcamera-apps.hash
+index 00b499d247..b11ea7fe67 100644
+--- a/package/libcamera-apps/libcamera-apps.hash
++++ b/package/libcamera-apps/libcamera-apps.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  022c9f02cc36e865cd8fd0111a597ff2bd91988deeb348dbe2aba64aed1abd99  libcrossguid-8f399e8bd4252be9952f3dfa8199924cc8487ca4.tar.gz
-+sha256  6be27e0b3a4907f0cd3cfadec255ee1b925569e1bd06e67a4d2f4267299b69c4  libcrossguid-ca1bf4b810e2d188d04cb6286f957008ee1b7681.tar.gz
- sha256  779e58787f966a1552f68d5ec041513cef68785dae4a519dbda7bc0b86eda20e  LICENSE
-diff --git a/package/libcrossguid/libcrossguid.mk b/package/libcrossguid/libcrossguid.mk
-index 46d9a9dcc6..3573bdc807 100644
---- a/package/libcrossguid/libcrossguid.mk
-+++ b/package/libcrossguid/libcrossguid.mk
-@@ -4,25 +4,12 @@
+ # Locally computed
+-sha256  576bcd585f1c8d8bc80e37fa3c8a172e9d1c8406490438cf6d0fbc7ba4996ec1  rpicam-apps-1.5.0.tar.xz
++sha256  b5535933ebc398616fd1b261fa9e3755dfb419e10ee7866078a8a8d99f54a59a  libcamera-apps-v1.7.0-10-ge9645231008146fa0e75c2b3e0ff8c48ad70511a.tar.gz
+ sha256  36dfed86bdef661a0a14ec1a1cc84c771d5a06b6f9b92e9ebb610ba711bd528a  license.txt
+diff --git a/package/libcamera-apps/libcamera-apps.mk b/package/libcamera-apps/libcamera-apps.mk
+index 17983bb8ca..06efb9a960 100644
+--- a/package/libcamera-apps/libcamera-apps.mk
++++ b/package/libcamera-apps/libcamera-apps.mk
+@@ -4,9 +4,8 @@
  #
  ################################################################################
  
--LIBCROSSGUID_VERSION = 8f399e8bd4252be9952f3dfa8199924cc8487ca4
-+LIBCROSSGUID_VERSION = ca1bf4b810e2d188d04cb6286f957008ee1b7681
- LIBCROSSGUID_SITE = $(call github,graeme-hill,crossguid,$(LIBCROSSGUID_VERSION))
- LIBCROSSGUID_LICENSE = MIT
- LIBCROSSGUID_LICENSE_FILES = LICENSE
- LIBCROSSGUID_INSTALL_STAGING = YES
--# only a static library
--LIBCROSSGUID_INSTALL_TARGET = NO
- LIBCROSSGUID_DEPENDENCIES = util-linux
-+LIBCROSSGUID_CONF_OPTS = -DCROSSGUID_TESTS=OFF
+-LIBCAMERA_APPS_VERSION = 1.5.0
+-LIBCAMERA_APPS_SOURCE = rpicam-apps-$(LIBCAMERA_APPS_VERSION).tar.xz
+-LIBCAMERA_APPS_SITE = https://github.com/raspberrypi/rpicam-apps/releases/download/v$(LIBCAMERA_APPS_VERSION)
++LIBCAMERA_APPS_VERSION = v1.7.0-10-ge9645231008146fa0e75c2b3e0ff8c48ad70511a
++LIBCAMERA_APPS_SITE = $(call github,raspberrypi,rpicam-apps,$(LIBCAMERA_APPS_VERSION))
+ LIBCAMERA_APPS_LICENSE = BSD-2-Clause
+ LIBCAMERA_APPS_LICENSE_FILES = license.txt
+ LIBCAMERA_APPS_DEPENDENCIES = \
+@@ -36,6 +35,12 @@ else
+ LIBCAMERA_APPS_CONF_OPTS += -Denable_libav=disabled
+ endif
  
--define LIBCROSSGUID_BUILD_CMDS
--	(cd $(@D); $(TARGET_CXX) $(TARGET_CXXFLAGS) -std=c++11 -DGUID_LIBUUID \
--		-c guid.cpp -o guid.o)
--	(cd $(@D); $(TARGET_AR) rvs libcrossguid.a guid.o)
--endef
--
--define LIBCROSSGUID_INSTALL_STAGING_CMDS
--	$(INSTALL) -D -m 644 $(@D)/libcrossguid.a \
--		$(STAGING_DIR)/usr/lib/libcrossguid.a
--	$(INSTALL) -D -m 644 $(@D)/guid.h $(STAGING_DIR)/usr/include/guid.h
--endef
--
--$(eval $(generic-package))
-+$(eval $(cmake-package))
--- 
-2.39.5
++ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
++LIBCAMERA_APPS_CONF_OPTS += -Ddisable_rpi_features=false
++else
++LIBCAMERA_APPS_CONF_OPTS += -Ddisable_rpi_features=true
++endif
++
+ ifeq ($(BR2_PACKAGE_XORG7),y)
+ LIBCAMERA_APPS_DEPENDENCIES += \
+ 	$(if $(BR2_PACKAGE_LIBEPOXY),libepoxy) \
+
+--===============5566225961762593805==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5566225961762593805==--
