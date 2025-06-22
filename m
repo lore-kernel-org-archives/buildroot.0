@@ -4,49 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7021C7115C
-	for <buildroot@archiver.kernel.org>; Sun, 22 Jun 2025 09:43:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61B49C7115C
+	for <buildroot@archiver.kernel.org>; Sun, 22 Jun 2025 09:45:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0F49441793;
-	Sun, 22 Jun 2025 09:43:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 338CE4076A;
+	Sun, 22 Jun 2025 09:45:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fhC6K8QjdMez; Sun, 22 Jun 2025 09:43:41 +0000 (UTC)
+ id SO9KxZX82S9h; Sun, 22 Jun 2025 09:45:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B4C5411FB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE87D40517
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6B4C5411FB;
-	Sun, 22 Jun 2025 09:43:40 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id D6715443
- for <buildroot@buildroot.org>; Sun, 22 Jun 2025 09:43:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BE87D40517;
+	Sun, 22 Jun 2025 09:45:07 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 47F91C8
+ for <buildroot@buildroot.org>; Sun, 22 Jun 2025 09:45:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B8A38400AB
- for <buildroot@buildroot.org>; Sun, 22 Jun 2025 09:43:36 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3970260D87
+ for <buildroot@buildroot.org>; Sun, 22 Jun 2025 09:45:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TjZyLgavbbLu for <buildroot@buildroot.org>;
- Sun, 22 Jun 2025 09:43:36 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0BBBA4007C
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0BBBA4007C
- for <buildroot@buildroot.org>; Sun, 22 Jun 2025 09:43:35 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DB8DD840C5; Sun, 22 Jun 2025 09:43:35 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KDNX2MmVsvHz for <buildroot@buildroot.org>;
+ Sun, 22 Jun 2025 09:45:05 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6C21B60BA7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C21B60BA7
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6C21B60BA7
+ for <buildroot@buildroot.org>; Sun, 22 Jun 2025 09:45:04 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id B1B4413F86A;
+ Sun, 22 Jun 2025 11:45:00 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 22 Jun 2025 11:45:00 +0200
+MIME-Version: 1.0
+Date: Sun, 22 Jun 2025 11:45:00 +0200
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 22 Jun 2025 10:27:37 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 53076f0eba85c53bcbee43cdd81a0d584ba5be22
-X-Git-Newrev: 91714f6052e4162d70ffc1e2a89857da40e7e214
-X-Patchwork-Hint: ignore
-Message-Id: <20250622094335.DB8DD840C5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/opencv3: bump version to 3.4.20
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250621173019.3992829-1-bernd@kuhls.net>
+References: <20250621173019.3992829-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <354f51759498fe2a3086ba233104e327@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1750585501;
+ bh=JSgaQtRnqUVBM6Yl9gw9tgyGFumKfRHZHbbyzLbeqfk=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=QqOTcspXQTqi1IcJGcrId9XaXPepZRNAYlcxWrQitb908XdMfpwn3+P34Kcq2wxE3
+ R3Jwgvod0nujqweSUq0MCpU4bf4MtUjJISVaPPnoxmCHDY//YN2KNi+1iPILBENkRf
+ 2NMelNf5mL0+yXqMM1dUXF8t+BpBsWZBRmFpstcxuSk898TnPn5Hyn5gGK0aShJM2x
+ uxKQwf22ffwzdWPUFZUXh3Dm+oR25UOun4dDOIqSqLYQEOfR9JpkrsFYbnTKIJrPgw
+ C/2lVE86NYaF2GiBOIvo8ypwQhqnuk1L53XejPBRboQG0ZVH80xXjS5jf69g6xRKjC
+ Zky9dBtyynAlQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=QqOTcspX
+Subject: Re: [Buildroot] [PATCH 1/1] package/opencv3: bump version to 3.4.20
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,51 +82,21 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=91714f6052e4162d70ffc1e2a89857da40e7e214
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 21/06/2025 19:30, Bernd Kuhls wrote:
+> Changelog:
+> https://github.com/opencv/opencv/wiki/OpenCV-Change-Logs-v2.2%E2%80%90v4.10#version3420
+> 
+> Updated license hash due to copyright year bump:
+> https://github.com/opencv/opencv/commit/7b7774476e92247c801309387df2ea64465976e3
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Changelog:
-https://github.com/opencv/opencv/wiki/OpenCV-Change-Logs-v2.2%E2%80%90v4.10#version3420
-
-Updated license hash due to copyright year bump:
-https://github.com/opencv/opencv/commit/7b7774476e92247c801309387df2ea64465976e3
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/opencv3/opencv3.hash | 4 ++--
- package/opencv3/opencv3.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/opencv3/opencv3.hash b/package/opencv3/opencv3.hash
-index 3d6fd2ed8a..b378e7050f 100644
---- a/package/opencv3/opencv3.hash
-+++ b/package/opencv3/opencv3.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  9b913e74299ce4416a5c94000da577c592bf670fd53bad16220eb115a0821529  opencv3-3.4.19.tar.gz
--sha256  c1fed9cd2f557ba23a1b37a21e2c90629d1a60bdb61e92d0e79369bb6fca3390  LICENSE
-+sha256  b9eda448a08ba7b10bfd5bd45697056569ebdf7a02070947e1c1f3e8e69280cd  opencv3-3.4.20.tar.gz
-+sha256  3f221dbe2ca9228d6470990ed28e55957e8506335df4620539c4db0dd27a6b4c  LICENSE
-diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
-index 5064496ca6..218174c17e 100644
---- a/package/opencv3/opencv3.mk
-+++ b/package/opencv3/opencv3.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENCV3_VERSION = 3.4.19
-+OPENCV3_VERSION = 3.4.20
- OPENCV3_SITE = $(call github,opencv,opencv,$(OPENCV3_VERSION))
- OPENCV3_INSTALL_STAGING = YES
- OPENCV3_LICENSE = BSD-3-Clause
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
