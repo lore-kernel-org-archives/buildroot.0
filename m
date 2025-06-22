@@ -4,50 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D5DBC7115C
-	for <buildroot@archiver.kernel.org>; Sun, 22 Jun 2025 11:44:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A471CC7115A
+	for <buildroot@archiver.kernel.org>; Sun, 22 Jun 2025 11:45:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B7AB741CA9;
-	Sun, 22 Jun 2025 11:44:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 71BC940C70;
+	Sun, 22 Jun 2025 11:45:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yNz8X0KWxqW6; Sun, 22 Jun 2025 11:44:48 +0000 (UTC)
+ id XTl3G-aTnXiW; Sun, 22 Jun 2025 11:45:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD8F141CA1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B0CD40CEE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AD8F141CA1;
-	Sun, 22 Jun 2025 11:44:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9B0CD40CEE;
+	Sun, 22 Jun 2025 11:45:37 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1577A12C
- for <buildroot@buildroot.org>; Sun, 22 Jun 2025 11:44:47 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id CB71512C
+ for <buildroot@buildroot.org>; Sun, 22 Jun 2025 11:45:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E8D86400F1
- for <buildroot@buildroot.org>; Sun, 22 Jun 2025 11:44:45 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B236840290
+ for <buildroot@buildroot.org>; Sun, 22 Jun 2025 11:45:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id L0LbmyO6aVUk for <buildroot@buildroot.org>;
- Sun, 22 Jun 2025 11:44:44 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0FB9040290
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0FB9040290
- for <buildroot@buildroot.org>; Sun, 22 Jun 2025 11:44:44 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F3E097FD45; Sun, 22 Jun 2025 11:44:43 +0000 (UTC)
+ id 2kr0tRltCWZu for <buildroot@buildroot.org>;
+ Sun, 22 Jun 2025 11:45:36 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1F3F2400F1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1F3F2400F1
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1F3F2400F1
+ for <buildroot@buildroot.org>; Sun, 22 Jun 2025 11:45:35 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id A8C3F7804FD;
+ Sun, 22 Jun 2025 13:45:30 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 22 Jun 2025 13:45:30 +0200
+MIME-Version: 1.0
+Date: Sun, 22 Jun 2025 13:45:30 +0200
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 22 Jun 2025 12:43:00 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 69cb3de4bf0ac1cbf04c8b54cc620bf562f5772d
-X-Git-Newrev: 52664093dee0f280db191c391167848dc5b09745
-X-Patchwork-Hint: ignore
-Message-Id: <20250622114443.F3E097FD45@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/vulkan-{headers, loader,
- tools}: bump to 1.4.317 release
+To: =?UTF-8?Q?Alex_Benn=C3=A9e?= <alex.bennee@linaro.org>
+Cc: buildroot@buildroot.org, Heiko Thiery <heiko.thiery@gmail.com>
+In-Reply-To: <20250618142825.758131-2-alex.bennee@linaro.org>
+References: <20250618142825.758131-1-alex.bennee@linaro.org>
+ <20250618142825.758131-2-alex.bennee@linaro.org>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <b0d35fe3ce64a0bff8c33d0c3d705972@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1750592732;
+ bh=Z6jobcIODC9rbJpgR9WpGTRI6fWVtmdAuWoEJe44iqU=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=sdj4NumDKhl5XKOz51WZrsxLAGspz9icVHpaE2xeodbtuN3+ITUTWMLXuNhcmpfY5
+ fLHmWZdJvdCCfQ/Dl98ofsTs3U7B6iggAIaDmBTHZ7tLNcrEdwCUAKIWJoo5s3HlkQ
+ Yk8Xt+VTOYuybNnNdFPtpn0c4dOU/YAvA5MaICnGka10dTk0QRZggNQ24TA+A2Ph8/
+ V8ciqH+L6Flz4OMhFr7t9CIVNT+LNmGFAlVaOoszHj79dvTQ/EFDBsXn6a3yuy+LCw
+ HPNxVdL4YR/IzxK8eSIwdpQEyfWjhTQFkj6fvRTngNI/VluDOFdAtMvzoVNASwg/wX
+ 9SY21mklTSL3A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=sdj4NumD
+Subject: Re: [Buildroot] [PATCH v7 1/4] package/vulkan-sdk: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,120 +82,19 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3139944765953103829=="
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3139944765953103829==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=52664093dee0f280db191c391167848dc5b09745
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Update to the current release. We now need the recently added
-vulkan-sdk to have access to the volk loader. Update the depends
-comments appropriately.
-
-Signed-off-by: Alex Bennée <alex.bennee@linaro.org>
-[Julien:
- - reword commit log title to use bash brace-expansion style
- - remove "vulkan-sdk" from Kconfig comment
- - remove newline before Kconfig help section
-]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/vulkan-headers/vulkan-headers.hash | 2 +-
- package/vulkan-headers/vulkan-headers.mk   | 2 +-
- package/vulkan-loader/vulkan-loader.hash   | 2 +-
- package/vulkan-tools/Config.in             | 4 ++--
- package/vulkan-tools/vulkan-tools.hash     | 2 +-
- package/vulkan-tools/vulkan-tools.mk       | 3 ++-
- 6 files changed, 8 insertions(+), 7 deletions(-)
-
-diff --git a/package/vulkan-headers/vulkan-headers.hash b/package/vulkan-headers/vulkan-headers.hash
-index b38bfcff47..286639b579 100644
---- a/package/vulkan-headers/vulkan-headers.hash
-+++ b/package/vulkan-headers/vulkan-headers.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  317e467a5fb2eaa6a18b984ec70fdbfaccd93595a3e6f4bcceca7d3fab280505  vulkan-headers-1.3.262.tar.gz
-+sha256  78665959d10b09061d8c3e21db8bf3e8b699e2d3d532fce850a32312dba7228b  vulkan-headers-1.4.317.tar.gz
- sha256  ac24e5ea920e4318e4d02c4086ae51f53cfb03feed06c18df1019e7ada1ec7bc  LICENSE.md
-diff --git a/package/vulkan-headers/vulkan-headers.mk b/package/vulkan-headers/vulkan-headers.mk
-index 20b248364d..52d5b56086 100644
---- a/package/vulkan-headers/vulkan-headers.mk
-+++ b/package/vulkan-headers/vulkan-headers.mk
-@@ -6,7 +6,7 @@
- 
- # Note: changing this version will also affect vulkan-loader and
- # vulkan-tools, so please update those packages as well.
--VULKAN_HEADERS_VERSION = 1.3.262
-+VULKAN_HEADERS_VERSION = 1.4.317
- VULKAN_HEADERS_SITE = $(call github,KhronosGroup,Vulkan-Headers,v$(VULKAN_HEADERS_VERSION))
- VULKAN_HEADERS_LICENSE = Apache-2.0, MIT
- VULKAN_HEADERS_LICENSE_FILES = LICENSE.md
-diff --git a/package/vulkan-loader/vulkan-loader.hash b/package/vulkan-loader/vulkan-loader.hash
-index e09ecda8a9..5bfc02f5c8 100644
---- a/package/vulkan-loader/vulkan-loader.hash
-+++ b/package/vulkan-loader/vulkan-loader.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  3bbaa5ee64058a89949eb777de66ce94bfe3141892514172cfc9451c756802d5  vulkan-loader-1.3.262.tar.gz
-+sha256  e4e18585fe902ee04e86c1cdb2996b686bffef2cab02cb6079221fe69df05af8  vulkan-loader-1.4.317.tar.gz
- sha256  43c0a37e6a0fa7ff3c843b3ec5a4fac84b712558ddac103fbd4c1649662a9ece  LICENSE.txt
-diff --git a/package/vulkan-tools/Config.in b/package/vulkan-tools/Config.in
-index 54fa539dab..f0a4cfee93 100644
---- a/package/vulkan-tools/Config.in
-+++ b/package/vulkan-tools/Config.in
-@@ -1,12 +1,12 @@
- config BR2_PACKAGE_VULKAN_TOOLS
- 	bool "vulkan-tools"
- 	depends on BR2_INSTALL_LIBSTDCPP # vulkan-loader
--	depends on !BR2_STATIC_LIBS # vullan-loader
-+	depends on !BR2_STATIC_LIBS # vulkan-loader, vulkan-sdk
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # vulkan-loader
- 	select BR2_PACKAGE_VULKAN_HEADERS
- 	select BR2_PACKAGE_VULKAN_LOADER
--
-+	select BR2_PACKAGE_VULKAN_SDK
- 	help
- 	  The Khronos official Vulkan Tools and Utilities.
- 
-diff --git a/package/vulkan-tools/vulkan-tools.hash b/package/vulkan-tools/vulkan-tools.hash
-index 24c0697784..504177379b 100644
---- a/package/vulkan-tools/vulkan-tools.hash
-+++ b/package/vulkan-tools/vulkan-tools.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  8c77d02694d0516ae2ba3f3718745647e87e788ef93faabb2e3674ff32608010  vulkan-tools-1.3.262.tar.gz
-+sha256  4586309ab5b2a9584fde62fd85b0ef5bb98b4cdbca9cb1ba3a2b4978dc2f355c  vulkan-tools-1.4.317.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
-diff --git a/package/vulkan-tools/vulkan-tools.mk b/package/vulkan-tools/vulkan-tools.mk
-index 9f5bf46b79..9deeda6086 100644
---- a/package/vulkan-tools/vulkan-tools.mk
-+++ b/package/vulkan-tools/vulkan-tools.mk
-@@ -11,7 +11,8 @@ VULKAN_TOOLS_LICENSE_FILES = LICENSE.txt
- 
- VULKAN_TOOLS_DEPENDENCIES = \
- 	vulkan-headers \
--	vulkan-loader
-+	vulkan-loader \
-+	vulkan-sdk
- 
- VULKAN_TOOLS_CONF_OPTS += \
- 	-DBUILD_CUBE=OFF \
-
---===============3139944765953103829==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3139944765953103829==--
+T24gMTgvMDYvMjAyNSAxNjoyOCwgQWxleCBCZW5uw6llIHdyb3RlOgo+IFRoZSBwcmluY2lwbGUg
+Y29tcG9uZW50IG9mIHRoaXMgaXMgdGhlIG5ldyB2b2xrIG1ldGEtbG9hZGVyIHdoaWNoIGlzCj4g
+cmVxdWlyZWQgZm9yIG1vcmUgcmVjZW50IHZlcnNpb25zIG9mIHZ1bGthbi10b29scy4gVGhlcmUg
+ZG9lcyBzZWVtIHRvCj4gYmUgYSBsaXR0bGUgY29uZnVzaW9uIHdpdGggZ2l0aHViIFJlbGVhc2Vz
+IGxhZ2dpbmcgYmVoaW5kIHRhZ2dlZAo+IHZlcnNpb25zIG9mIHRoZSBzZGsuIEkndmUgZ29uZSBm
+b3IgdGhlIGxhdGVzdCBTREsgdmVyc2lvbiB0byBzdGF5IGFzCj4gY2xvc2VseSBhbGlnbmVkIHRv
+IHRoZSByZXN0IG9mIHRoZSBzeXN0ZW0gYXMgSSBjYW4uCj4gCj4gU2lnbmVkLW9mZi1ieTogQWxl
+eCBCZW5uw6llIDxhbGV4LmJlbm5lZUBsaW5hcm8ub3JnPgoKUGF0Y2ggYXBwbGllZCB0byBtYXN0
+ZXIsIHRoYW5rcy4KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczov
+L2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
