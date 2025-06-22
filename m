@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E352DC7115C
-	for <buildroot@archiver.kernel.org>; Sun, 22 Jun 2025 10:29:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B86EC7115C
+	for <buildroot@archiver.kernel.org>; Sun, 22 Jun 2025 10:29:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B3D0E41C76;
-	Sun, 22 Jun 2025 10:29:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 58E6641C8C;
+	Sun, 22 Jun 2025 10:29:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dJJmhHQWfTpb; Sun, 22 Jun 2025 10:29:40 +0000 (UTC)
+ id Gi9RXinSxEaM; Sun, 22 Jun 2025 10:29:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 02CF541C7E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 95F0E41C9B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 02CF541C7E;
-	Sun, 22 Jun 2025 10:29:40 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 3A413C8
- for <buildroot@buildroot.org>; Sun, 22 Jun 2025 10:29:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 95F0E41C9B;
+	Sun, 22 Jun 2025 10:29:51 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3BC9612C
+ for <buildroot@buildroot.org>; Sun, 22 Jun 2025 10:29:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2C89C60C18
- for <buildroot@buildroot.org>; Sun, 22 Jun 2025 10:29:38 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 394CA40406
+ for <buildroot@buildroot.org>; Sun, 22 Jun 2025 10:29:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id spuL0Prh5nNz for <buildroot@buildroot.org>;
- Sun, 22 Jun 2025 10:29:37 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pri3-5iTgKy2 for <buildroot@buildroot.org>;
+ Sun, 22 Jun 2025 10:29:49 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 480B260DF4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 480B260DF4
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6122D4026E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6122D4026E
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 480B260DF4
- for <buildroot@buildroot.org>; Sun, 22 Jun 2025 10:29:37 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6122D4026E
+ for <buildroot@buildroot.org>; Sun, 22 Jun 2025 10:29:49 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0bd3.dip0.t-ipconnect.de [91.58.11.211])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 3B431A4C2539
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 4C3E3A4C2A6E
  for <buildroot@buildroot.org>; Sun, 22 Jun 2025 12:29:23 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:52188)
  by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
- (envelope-from <bernd@kuhls.net>) id 1uTHww-0000000013Z-1UAC
- for buildroot@buildroot.org; Sun, 22 Jun 2025 10:29:22 +0000
+ (envelope-from <bernd@kuhls.net>) id 1uTHww-0000000013Z-1xDU
+ for buildroot@buildroot.org; Sun, 22 Jun 2025 10:29:23 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun, 22 Jun 2025 12:29:21 +0200
-Message-Id: <20250622102922.3847947-2-bernd@kuhls.net>
+Date: Sun, 22 Jun 2025 12:29:22 +0200
+Message-Id: <20250622102922.3847947-3-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250622102922.3847947-1-bernd@kuhls.net>
 References: <20250622102922.3847947-1-bernd@kuhls.net>
@@ -55,22 +55,22 @@ X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202506031021; t=1750588163;
- bh=Unu5I6A1TyfxdnCmrel4Fw0JtH4w4bZsPyz2jCXztiY=;
+ bh=eMhht8as3Yp9OzypHWYFYlmISUWrV3Ejnrl5cosaIOA=;
  h=From:To:Subject:Date:In-Reply-To:References:From;
- b=QHFYsKduOsL4Bpt3aA1EpkqnI/icLv7QtdA5s+p79DihlCtlwEYGLcjb6EeVBHC5w
- gw5D4pVCWLjRNlz3HRRfYCtuO29fNOad7BCnkmDKbjr695qxrse8iZSXVZ6JtG2cdZ
- yKQX+kZSD145tF9YT0XeVfPijOOMOOxSAd9N1hzmtKDes/fKt35l/vR4Y4YMJBfGX2
- Kfm7CKY2hasFCiUO2JUAXvwu6PSILFV5V3KnuyQDfVfS9QTA/0OQiryxPxqDY+oYbb
- GTY0S84O/jHRYaIWgz3J01Tw2EK3rdaU2nRrgCmRPOvuz5pgmRWWP6OwR+KUuPCxh9
- IJHWmfS/CWAjw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=nHOWhGuBXQLSiht/0D3iHdkisUzt881mVgybJ/Q5tOlYdDLCBWsSoa6wq7RtjJaVF
+ hWeA2NVYncrudDiP0gALBmnFJvofKg2fco35xQZhIGek6CkKZKT9Md8NtLhWvU49Qc
+ cse7PYlChTS7dA4y9R7gTsU43DIsMvMItHaynjuA0ukxCDAjChqgDO/++utARFVyCd
+ ile7QkJjDtObNaP2CKsJ8DJq0OaWIRjL34yHXABN3EJ11XGr20qFkUqJ/SSuIKQzkU
+ 4f8mgJR5GMLUI/0Xus1TkYPfsamhyHJVFY1z9t0zLoAL6wD5GtE6Q+SsKCkQ9uytCC
+ x6YMpuUciB7Hw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202506031021 header.b=QHFYsKdu
-Subject: [Buildroot] [PATCH 2/3] package/ntp: fix build with gcc-14
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202506031021 header.b=nHOWhGuB
+Subject: [Buildroot] [PATCH v2 3/3] package/ntp: add Upstream tag to patch
+ 0001
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,42 +87,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes:
-https://autobuild.buildroot.org/results/114/114a81f216b44a00c5de830e21315df68a62987d/
-
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/ntp/0006-stime.patch | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
- create mode 100644 package/ntp/0006-stime.patch
+v2: fixed typo in subject
 
-diff --git a/package/ntp/0006-stime.patch b/package/ntp/0006-stime.patch
-new file mode 100644
-index 0000000000..7707231cf8
---- /dev/null
-+++ b/package/ntp/0006-stime.patch
-@@ -0,0 +1,21 @@
-+Fix stime build error with gcc-14:
-+
-+machines.c: In function 'ntp_set_tod':
-+machines.c:484:28: error: passing argument 1 of 'stime' from incompatible pointer type [-Wincompatible-pointer-types]
-+  484 |                 rc = stime(&tp); /* lie as bad as SysVR4 */
-+
-+Upstream: https://bugs.ntp.org/show_bug.cgi?id=3981#c2
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+
-+--- a/libntp/machines.c	2025-05-26 18:21:43 +0000
-++++ a/libntp/machines.c	2025-05-26 18:21:43 +0000
-+@@ -478,7 +478,7 @@ 
-+ #endif /* HAVE_SETTIMEOFDAY */
-+ #ifdef HAVE_STIME
-+ 	if (rc && (SET_TOD_STIME == tod || !tod)) {
-+-		long tp = tvp->tv_sec;
-++		time_t tp = tvp->tv_sec;
-+ 
-+ 		errno = 0;
-+ 		rc = stime(&tp); /* lie as bad as SysVR4 */
+ .checkpackageignore                          | 1 -
+ package/ntp/0001-ntp-syscalls-fallback.patch | 3 +--
+ 2 files changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 237ce45b24..55d84f9d44 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -866,7 +866,6 @@ package/norm/0001-protolib-drop-linux-version-check.patch lib_patch.Upstream
+ package/norm/0002-Use-print-as-function-call-for-Python3-compatibility.patch lib_patch.Upstream
+ package/norm/0003-Fix-mixed-tabs-spaces-in-protolib-wscript.patch lib_patch.Upstream
+ package/nss-pam-ldapd/S45nslcd Shellcheck lib_sysv.EmptyLastLine lib_sysv.Indent lib_sysv.Variables
+-package/ntp/0001-ntp-syscalls-fallback.patch lib_patch.Upstream
+ package/ntp/S49ntp.in lib_sysv.Variables
+ package/ntpsec/0001-wscript-remove-checks-for-bsd-string.h-fixes-host-co.patch lib_patch.Upstream
+ package/nuttcp/0001-susv3-legacy.patch lib_patch.Upstream
+diff --git a/package/ntp/0001-ntp-syscalls-fallback.patch b/package/ntp/0001-ntp-syscalls-fallback.patch
+index 46704b9d3f..445efd95e5 100644
+--- a/package/ntp/0001-ntp-syscalls-fallback.patch
++++ b/package/ntp/0001-ntp-syscalls-fallback.patch
+@@ -1,7 +1,6 @@
+ inline ntp syscalls fallback
+ 
+-Reference:
+- https://bugs.ntp.org/show_bug.cgi?id=769
++Upstream: https://bugs.ntp.org/show_bug.cgi?id=769
+ 
+ Signed-off-by: James Knight <james.knight@rockwellcollins.com>
+ ---
 -- 
 2.39.5
 
