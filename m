@@ -1,52 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4995CC77B7C
-	for <buildroot@archiver.kernel.org>; Mon, 23 Jun 2025 16:55:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8EA74C7EE2A
+	for <buildroot@archiver.kernel.org>; Mon, 23 Jun 2025 16:55:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F1532810AC;
-	Mon, 23 Jun 2025 16:55:23 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WHYOvQF03mQx; Mon, 23 Jun 2025 16:55:23 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 193FC810CA
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 193FC810CA;
-	Mon, 23 Jun 2025 16:55:23 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id BAF72154
- for <buildroot@buildroot.org>; Mon, 23 Jun 2025 16:55:21 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AA76A4058F
- for <buildroot@buildroot.org>; Mon, 23 Jun 2025 16:55:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 558A6409D4;
+	Mon, 23 Jun 2025 16:55:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FC8hWcRlHXCE for <buildroot@buildroot.org>;
+ id ZodG33fKdQiN; Mon, 23 Jun 2025 16:55:24 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6CFB8405C5
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6CFB8405C5;
+	Mon, 23 Jun 2025 16:55:24 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id BD5A376D
+ for <buildroot@buildroot.org>; Mon, 23 Jun 2025 16:55:21 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id ABD3A606D5
+ for <buildroot@buildroot.org>; Mon, 23 Jun 2025 16:55:21 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 793QfOOLu3vm for <buildroot@buildroot.org>;
  Mon, 23 Jun 2025 16:55:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 00E3B4054F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE3926064F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 00E3B4054F
- for <buildroot@buildroot.org>; Mon, 23 Jun 2025 16:55:21 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EE3926064F
+ for <buildroot@buildroot.org>; Mon, 23 Jun 2025 16:55:20 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F147880277; Mon, 23 Jun 2025 16:55:20 +0000 (UTC)
+ id E6B2F80DCC; Mon, 23 Jun 2025 16:55:20 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 23 Jun 2025 18:54:45 +0200
+Date: Mon, 23 Jun 2025 18:49:35 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f30bf62f5340e231a6f3245b06856eda062f9346
-X-Git-Newrev: 6b41e499cdd364368563332975485ed46eb7c47c
+X-Git-Oldrev: 1bb4a955fa6acceba3b6aab2e7f5ee2e3bbabc9e
+X-Git-Newrev: f30bf62f5340e231a6f3245b06856eda062f9346
 X-Patchwork-Hint: ignore
-Message-Id: <20250623165520.F147880277@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] docs/website/{download,
- news}.html: update for 2025.02.4
+Message-Id: <20250623165520.E6B2F80DCC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] CHANGES: update for 2025.02.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,96 +65,96 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6b41e499cdd364368563332975485ed46eb7c47c
+commit: https://git.buildroot.net/buildroot/commit/?id=f30bf62f5340e231a6f3245b06856eda062f9346
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+(cherry picked from commit a7eb8e598d617ba03ae756cf3bb6199bb52180b7)
 ---
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+ CHANGES | 72 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 72 insertions(+)
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index efabe51a31..df06bf33d4 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -8,37 +8,37 @@
-     <div class="panel-heading">Download</div>
-     <div class="panel-body">
- 
--      <h3 style="text-align: center;">Latest long term support release: <b>2025.02.3</b></h3>
-+      <h3 style="text-align: center;">Latest long term support release: <b>2025.02.4</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2025.02.3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2025.02.4.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2025.02.3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2025.02.4.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2025.02.3.tar.gz">buildroot-2025.02.3.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2025.02.3.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2025.02.4.tar.gz">buildroot-2025.02.4.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2025.02.4.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2025.02.3.tar.xz"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2025.02.4.tar.xz"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2025.02.3.tar.xz"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2025.02.4.tar.xz"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2025.02.3.tar.xz">buildroot-2025.02.3.tar.xz</a></h3>
--	  <p><a href="/downloads/buildroot-2025.02.3.tar.xz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2025.02.4.tar.xz">buildroot-2025.02.4.tar.xz</a></h3>
-+	  <p><a href="/downloads/buildroot-2025.02.4.tar.xz.sign">PGP signature</a></p>
- 	</div>
-       </div>
- 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index ac4d43aed5..fd8a270651 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li class="timeline-inverted">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2025.02.4 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>19 May 2025</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2025.02.4 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2025.03 release. See the
-+	  <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2025.02.4/CHANGES">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="https://lore.kernel.org/buildroot/b8864d40-6037-4d7e-878a-6674b266c74c@rnout.be/T/#u">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2025.02.4.tar.xz">2025.02.4 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
+diff --git a/CHANGES b/CHANGES
+index 808d62df8d..6ce20522bb 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,75 @@
++2025.02.4, released June 23th, 2025
 +
-   <li>
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
++    Important / security related fixes:
++
++    - assimp: CVE-2025-3015, CVE-2025-3016
++    - binutils: CVE-2025-3198
++    - connman: CVE-2025-32366, CVE-2025-32743
++    - go: CVE-2025-0913, CVE-2025-4673, CVE-2025-22874
++    - iputils: CVE-2025-47268, CVE-2025-48964
++    - jq: CVE-2024-23337, CVE-2025-48060, CVE-2024-53427
++    - libcurl: CVE-2025-4947, CVE-2025-5025, CVE-2025-5399
++    - net-tools: CVE-2025-46836
++    - nodejs: CVE-2025-23165, CVE-2025-23166
++    - openvmtools: CVE-2025-22247
++    - python-django: CVE-2025-48432
++    - python-requests: CVE-2024-47081
++    - python-tornado: CVE-2025-47287
++    - redis: CVE-2025-21605, CVE-2025-27151
++    - samba4: CVE-2025-0620
++    - sox: CVE-2021-23159, CVE-2021-23172, CVE-2021-23210, CVE-2021-3643,
++        CVE-2021-40426, CVE-2022-31650, CVE-2022-31651, CVE-2023-26590,
++        CVE-2023-32627, CVE-2023-34318
++    - webkitgtk: CVE-2025-24223, CVE-2025-31204, CVE-2025-31205,
++        CVE-2025-31206, CVE-2025-31215, CVE-2025-31257
++
++    Updated / fixed packages: alsa-utils, atkmm, atmm2_28, audit,
++    bluez5_utils, busybox, catch2, connman, dbus-glib, dlib, dovecot,
++    esp-hosted, execline, firmware-ele-imx, flex, fluent-bit, freescale-imx,
++    ghostscript, gmrender-resurrect, grub2, gst1-plugins-bad, gtkmm3, iputils,
++    kmsxx, libcamera, libcurl, libglade, libical, libuv, llvm-project,
++    lm-sensors, m4, mesa3d, mongoose, openvmtools, php, protobuf-c,
++    python-django, python-fastapi, python-flit-core, python-jc,
++    python-requests, python-uvicorn, qt5 (declarative, webengine,
++    webengine-chromium), qt6 (base, multimedia, tools), rpm, samba4, spdlog,
++    systemd, uacme, uboot-tools, yasm
++
++    Removed package: libebur128
++
++    Infrastructure updates / fixes:
++
++    - pkg-cmake now forces CMake>=3.5
++    - pkg-meson now uses a dedicated buildroot build directory
++      see https://gitlab.com/buildroot.org/buildroot/-/issues/64
++    - include defconfigs in sub-directories in make list-defconfigs
++    - new manual section about private repositories
++    - pkg-autotools: handle libtool 2.5.x
++    - pkg-cmake: force check_language(CXX) to be false when building w/o C++
++    - pkg-stats: add support for reporting stale CVE entries
++    - add basic support for package file download over smb
++    - toolchain/wrapper: check unsafe paths earlier
++    - test_flutter: drop unneeded vga/vnc stanzas from QEMU invocation
++
++    Test improvements
++
++    - new python-pydantic runtime tests
++    - new dieharder runtime test
++    - test_xen: fix runtime test
++    - test_timezone: fix test by setting a fixed time
++    - new tree runtime test
++
++    Boards fixes
++
++    - imx6ulz-bsh-smm-m2: fix missing U-Boot
++    - freescale: fix cpu name in i.MX9 boards
++    - imx8mn-bsh-smm-s2: erase the entire NAND chip
++    - freescale_t1040d4rdb: fix kernel build
++
++    In addition, thanks to the new stale CVE reporting, reported
++    vulnerabilities have been fixed for the following packages:
++    busybox, dnsmasq, dovecot, exim, exim, freeradius-server, grub2,
++    libopenh264, libssh, netsnmp, ninja, qt5base, ripgrep, sox, tinyxml
++
+ 2025.05, released June 9th, 2025
+ 
+ 	Various fixes.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
