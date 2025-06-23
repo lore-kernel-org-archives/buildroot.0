@@ -1,51 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 942EAC7115B
-	for <buildroot@archiver.kernel.org>; Mon, 23 Jun 2025 20:08:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9EBA6C7115B
+	for <buildroot@archiver.kernel.org>; Mon, 23 Jun 2025 20:10:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 514D660A9B;
-	Mon, 23 Jun 2025 20:08:27 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id k6m3B7oAwcVB; Mon, 23 Jun 2025 20:08:25 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1ED1960AA7
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1ED1960AA7;
-	Mon, 23 Jun 2025 20:08:25 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 6A280154
- for <buildroot@buildroot.org>; Mon, 23 Jun 2025 20:08:24 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5B65840AC0
- for <buildroot@buildroot.org>; Mon, 23 Jun 2025 20:08:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4CC2A40507;
+	Mon, 23 Jun 2025 20:10:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mdVN3-PxZEfd for <buildroot@buildroot.org>;
- Mon, 23 Jun 2025 20:08:23 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7DDA340AB6
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7DDA340AB6
- for <buildroot@buildroot.org>; Mon, 23 Jun 2025 20:08:23 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 69704842A4; Mon, 23 Jun 2025 20:08:23 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 23 Jun 2025 22:06:46 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 333e527682670946cfc83165edf119c6094940fc
-X-Git-Newrev: 942b88e693e27c8ab39dc3e9931aa9d6909a3c7e
-X-Patchwork-Hint: ignore
-Message-Id: <20250623200823.69704842A4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mpv: remove stale patch
+ id LoZ2tEWaQQHY; Mon, 23 Jun 2025 20:10:07 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 87A49404DC
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 87A49404DC;
+	Mon, 23 Jun 2025 20:10:07 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 43E0A12C
+ for <buildroot@buildroot.org>; Mon, 23 Jun 2025 20:10:06 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 35CA960AA4
+ for <buildroot@buildroot.org>; Mon, 23 Jun 2025 20:10:06 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FWZDLxxQgXvl for <buildroot@buildroot.org>;
+ Mon, 23 Jun 2025 20:10:05 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8129D60A9B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8129D60A9B
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8129D60A9B
+ for <buildroot@buildroot.org>; Mon, 23 Jun 2025 20:10:04 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 701AA7804FD;
+ Mon, 23 Jun 2025 22:09:59 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 23 Jun 2025 22:09:59 +0200
+MIME-Version: 1.0
+Date: Mon, 23 Jun 2025 22:09:59 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org, Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
+In-Reply-To: <20250621122724.957110-1-bernd@kuhls.net>
+References: <20250621122724.957110-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <8d977aefff9e013bcf15a1e791d5f66a@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1750709401;
+ bh=NigP3YIeCt9qbzQpl0hH++pGULsVt46HAxba8iUs+QU=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=OB0rB6IgrGuSDBrOnU+JwHhN+A1k4rsuNBHBH8s4oLqQse01eSzW2gcXcsDhCTK9n
+ npjs1L4W/tDUow1Va/H9020DT8mJVgtiih6RwxOxUMJ0cLZUiUCUBpJb3La6epu9DI
+ Q7KR+K1z4Thy7bzi7CHxnjcYu0NiL4FWlYP9JTVXeaJNiglxODuGeCU62o+ZorU37M
+ eCnebMMv6xPEmE8uiD9U1wxqCoanWET0WaLCWtifyd9lQ/hh/yQOhI4/zDholl6INT
+ zkKq4pQepmf9gaPHsAeSsOi6S1X6U/PIAy0JmyUOfeN0D5HY23hxtUGM/Lr5PR//sZ
+ VgagmINwkgOGQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=OB0rB6Ig
+Subject: Re: [Buildroot] [PATCH 1/1] package/mpv: remove stale patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,76 +83,19 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=942b88e693e27c8ab39dc3e9931aa9d6909a3c7e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 21/06/2025 14:27, Bernd Kuhls wrote:
+> Buildroot commit 8f69974c20fbc7dc642be62a0ef3fb2941f5bb35 switched the
+> buildsystem of mpv from waf to meson but forgot to remove a patch which
+> fixed a waf-related build error.
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Buildroot commit 8f69974c20fbc7dc642be62a0ef3fb2941f5bb35 switched the
-buildsystem of mpv from waf to meson but forgot to remove a patch which
-fixed a waf-related build error.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- .checkpackageignore                          |  1 -
- package/mpv/0001-fix-powerpc64-altivec.patch | 32 ----------------------------
- 2 files changed, 33 deletions(-)
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index a4c2243759..237ce45b24 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -811,7 +811,6 @@ package/mono/0001-Fix-linkage-with-a-system-libatomic_ops-shared-library.patch l
- package/mono/0002-Ongoing-work-on-the-cmake-build.patch lib_patch.Upstream
- package/motion/S99motion Shellcheck lib_sysv.Indent lib_sysv.Variables
- package/mpir/0001-mpn-arm-udiv.asm-workaround-binutils-bug-14887.patch lib_patch.Upstream
--package/mpv/0001-fix-powerpc64-altivec.patch lib_patch.Upstream
- package/mraa/0001-include-Declare-gVERSION-global-as-extern.patch lib_patch.Upstream
- package/mrouted/S41mrouted NotExecutable
- package/mrp/S65mrp lib_sysv.Indent lib_sysv.Variables
-diff --git a/package/mpv/0001-fix-powerpc64-altivec.patch b/package/mpv/0001-fix-powerpc64-altivec.patch
-deleted file mode 100644
-index 45983fec8f..0000000000
---- a/package/mpv/0001-fix-powerpc64-altivec.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--Subject: [PATCH] Work around bool type redefinition by altivec
--
--On powerpc64le, the SDL header may include altivec.h and this
--(combined with -std=c99) will cause a compile failure due to bool
--being redefined as a vector type.
--
--Adjust the compiler flags to add -std=gnu99 (which is compatible with
--altivec) when using gcc. The generic flag '-std=c99' is left in place for other
--compilers (in the gcc case it is overridden by the (later) gnu flag).
--
--Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
-----
-- waftools/detections/compiler.py | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/waftools/detections/compiler.py b/waftools/detections/compiler.py
--index 5bbba87..50836a2 100644
----- a/waftools/detections/compiler.py
--+++ b/waftools/detections/compiler.py
--@@ -43,7 +43,8 @@ def __add_gcc_flags__(ctx):
--                        "-Wno-switch", "-Wparentheses", "-Wpointer-arith",
--                        "-Wno-pointer-sign",
--                        # GCC bug 66425
---                       "-Wno-unused-result"]
--+                       "-Wno-unused-result",
--+                       "-std=gnu99"]
-- 
-- def __add_clang_flags__(ctx):
--     ctx.env.CFLAGS += ["-Wno-logical-op-parentheses", "-fcolor-diagnostics",
---- 
--2.10.0.297.gf6727b0
--
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
