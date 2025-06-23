@@ -4,72 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9EBA6C7115B
-	for <buildroot@archiver.kernel.org>; Mon, 23 Jun 2025 20:10:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14AC4C77B7C
+	for <buildroot@archiver.kernel.org>; Mon, 23 Jun 2025 20:27:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4CC2A40507;
-	Mon, 23 Jun 2025 20:10:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BE7B440B8D;
+	Mon, 23 Jun 2025 20:27:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LoZ2tEWaQQHY; Mon, 23 Jun 2025 20:10:07 +0000 (UTC)
+ id Shra3-N81xkb; Mon, 23 Jun 2025 20:27:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 87A49404DC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C00F040B85
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 87A49404DC;
-	Mon, 23 Jun 2025 20:10:07 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 43E0A12C
- for <buildroot@buildroot.org>; Mon, 23 Jun 2025 20:10:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C00F040B85;
+	Mon, 23 Jun 2025 20:27:38 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 615BB12C
+ for <buildroot@buildroot.org>; Mon, 23 Jun 2025 20:27:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 35CA960AA4
- for <buildroot@buildroot.org>; Mon, 23 Jun 2025 20:10:06 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3DACA60689
+ for <buildroot@buildroot.org>; Mon, 23 Jun 2025 20:27:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FWZDLxxQgXvl for <buildroot@buildroot.org>;
- Mon, 23 Jun 2025 20:10:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8129D60A9B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8129D60A9B
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8129D60A9B
- for <buildroot@buildroot.org>; Mon, 23 Jun 2025 20:10:04 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id 701AA7804FD;
- Mon, 23 Jun 2025 22:09:59 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
- via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 23 Jun 2025 22:09:59 +0200
-MIME-Version: 1.0
-Date: Mon, 23 Jun 2025 22:09:59 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
-In-Reply-To: <20250621122724.957110-1-bernd@kuhls.net>
-References: <20250621122724.957110-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <8d977aefff9e013bcf15a1e791d5f66a@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1750709401;
- bh=NigP3YIeCt9qbzQpl0hH++pGULsVt46HAxba8iUs+QU=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=OB0rB6IgrGuSDBrOnU+JwHhN+A1k4rsuNBHBH8s4oLqQse01eSzW2gcXcsDhCTK9n
- npjs1L4W/tDUow1Va/H9020DT8mJVgtiih6RwxOxUMJ0cLZUiUCUBpJb3La6epu9DI
- Q7KR+K1z4Thy7bzi7CHxnjcYu0NiL4FWlYP9JTVXeaJNiglxODuGeCU62o+ZorU37M
- eCnebMMv6xPEmE8uiD9U1wxqCoanWET0WaLCWtifyd9lQ/hh/yQOhI4/zDholl6INT
- zkKq4pQepmf9gaPHsAeSsOi6S1X6U/PIAy0JmyUOfeN0D5HY23hxtUGM/Lr5PR//sZ
- VgagmINwkgOGQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=OB0rB6Ig
-Subject: Re: [Buildroot] [PATCH 1/1] package/mpv: remove stale patch
+ id zKNJ99tfrjdV for <buildroot@buildroot.org>;
+ Mon, 23 Jun 2025 20:27:36 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8507160674
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8507160674
+ for <buildroot@buildroot.org>; Mon, 23 Jun 2025 20:27:36 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 7302B81E1C; Mon, 23 Jun 2025 20:27:36 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 23 Jun 2025 22:10:26 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 942b88e693e27c8ab39dc3e9931aa9d6909a3c7e
+X-Git-Newrev: 7f45d183fed51f9f3781a4a75b3784f441d47e3e
+X-Patchwork-Hint: ignore
+Message-Id: <20250623202736.7302B81E1C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/freeswitch: rework OpenCV4
+ dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,19 +60,60 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 21/06/2025 14:27, Bernd Kuhls wrote:
-> Buildroot commit 8f69974c20fbc7dc642be62a0ef3fb2941f5bb35 switched the
-> buildsystem of mpv from waf to meson but forgot to remove a patch which
-> fixed a waf-related build error.
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://git.buildroot.net/buildroot/commit/?id=7f45d183fed51f9f3781a4a75b3784f441d47e3e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/commit/962081259d91fea1e9a59c1af85d9a85ba45d0dd
+
+Fixes Kconfig warnings:
+
+    WARNING: unmet direct dependencies detected for BR2_PACKAGE_OPENCV4_LIB_OBJDETECT
+      Depends on [n]: BR2_PACKAGE_OPENCV4 [=y] && !BR2_TOOLCHAIN_USES_UCLIBC [=n] && BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS [=n] && BR2_TOOLCHAIN_GCC_AT_LEAST_8 [=y]
+      Selected by [y]:
+      - BR2_PACKAGE_FREESWITCH [=y] && BR2_INSTALL_LIBSTDCPP [=y] && !BR2_STATIC_LIBS [=n] && BR2_TOOLCHAIN_HAS_THREADS [=y] && BR2_USE_MMU [=y] && BR2_USE_WCHAR [=y] && BR2_PACKAGE_OPENCV4 [=y]
+
+Reported-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/freeswitch/Config.in     | 3 ---
+ package/freeswitch/freeswitch.mk | 2 +-
+ 2 files changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/package/freeswitch/Config.in b/package/freeswitch/Config.in
+index 4d700e549f..80d18e064d 100644
+--- a/package/freeswitch/Config.in
++++ b/package/freeswitch/Config.in
+@@ -14,9 +14,6 @@ config BR2_PACKAGE_FREESWITCH
+ 	select BR2_PACKAGE_OPENCV3_LIB_HIGHGUI if BR2_PACKAGE_OPENCV3
+ 	select BR2_PACKAGE_OPENCV3_LIB_IMGPROC if BR2_PACKAGE_OPENCV3
+ 	select BR2_PACKAGE_OPENCV3_LIB_OBJDETECT if BR2_PACKAGE_OPENCV3
+-	select BR2_PACKAGE_OPENCV4_LIB_HIGHGUI if BR2_PACKAGE_OPENCV4
+-	select BR2_PACKAGE_OPENCV4_LIB_IMGPROC if BR2_PACKAGE_OPENCV4
+-	select BR2_PACKAGE_OPENCV4_LIB_OBJDETECT if BR2_PACKAGE_OPENCV4
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_PCRE
+ 	select BR2_PACKAGE_SOFIA_SIP
+diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
+index 02cbacab88..58ebc22298 100644
+--- a/package/freeswitch/freeswitch.mk
++++ b/package/freeswitch/freeswitch.mk
+@@ -283,7 +283,7 @@ FREESWITCH_DEPENDENCIES += opencv3
+ FREESWITCH_ENABLED_MODULES += applications/mod_cv
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_OPENCV4),y)
++ifeq ($(BR2_PACKAGE_OPENCV4_LIB_HIGHGUI)$(BR2_PACKAGE_OPENCV4_LIB_IMGPROC)$(BR2_PACKAGE_OPENCV4_LIB_OBJDETECT),yyy)
+ FREESWITCH_DEPENDENCIES += opencv4
+ FREESWITCH_ENABLED_MODULES += applications/mod_cv
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
