@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A941BC83000
-	for <buildroot@archiver.kernel.org>; Thu, 26 Jun 2025 19:13:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A17DC7EE31
+	for <buildroot@archiver.kernel.org>; Thu, 26 Jun 2025 19:13:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 82C1761240;
-	Thu, 26 Jun 2025 19:13:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4CA7F61292;
+	Thu, 26 Jun 2025 19:13:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fX4xLIB0z250; Thu, 26 Jun 2025 19:13:29 +0000 (UTC)
+ id r9cP4Hnuqvr2; Thu, 26 Jun 2025 19:13:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A259261273
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2668E61244
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A259261273;
-	Thu, 26 Jun 2025 19:13:29 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1D9521CD
- for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:13:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2668E61244;
+	Thu, 26 Jun 2025 19:13:31 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 108D4154
+ for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:13:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1FC7B418F2
+ by smtp3.osuosl.org (Postfix) with ESMTP id 932F060767
  for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:13:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EpQKF3pKYyfn for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9DowsthBjiy1 for <buildroot@buildroot.org>;
  Thu, 26 Jun 2025 19:13:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 47C5A418F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5787B60717
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 47C5A418F3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5787B60717
  for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:13:16 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 354A884547; Thu, 26 Jun 2025 19:13:16 +0000 (UTC)
+ id 47CA08454B; Thu, 26 Jun 2025 19:13:16 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 24 Jun 2025 20:52:51 +0200
+Date: Tue, 24 Jun 2025 20:59:45 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 00d5d387f5b9be4398af4c684150785896ee7b7c
-X-Git-Newrev: 5c96f8d7f846babfdaef689a423ab8aacad048fc
+X-Git-Oldrev: a3b39cf383837d5594f0e87a991939d4a0722367
+X-Git-Newrev: ac4c28953a78b45539ad28d744902c062ddb264a
 X-Patchwork-Hint: ignore
-Message-Id: <20250626191316.354A884547@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/python3: security
- bump to v3.12.11
+Message-Id: <20250626191316.47CA08454B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/ca-certificates:
+ bump to 20250419
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,63 +66,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5c96f8d7f846babfdaef689a423ab8aacad048fc
+commit: https://git.buildroot.net/buildroot/commit/?id=ac4c28953a78b45539ad28d744902c062ddb264a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-This fixes the following CVEs affecting tarfile extraction filters:
+Changelog: https://metadata.ftp-master.debian.org/changelogs//main/c/ca-certificates/ca-certificates_20250419_changelog
 
-- CVE-2024-12718:
-    Bypass extraction filter to modify file metadata outside
-    extraction directory
-
-- CVE-2025-4138:
-    Bypassing extraction filter to create symlinks to arbitrary targets
-    outside extraction directory
-
-- CVE-2025-4330:
-    Extraction filter bypass for linking outside extraction directory
-
-- CVE-2025-4435:
-    Tarfile extracts filtered members when errorlevel=0
-
-- CVE-2025-4517:
-    Arbitrary writes via tarfile realpath overflow
-
-See https://www.python.org/downloads/release/python-31211/
-
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 4a085462e4e782fd2bd2779cd786e8e9f6ef46de)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/python3/python3.hash | 6 +++---
- package/python3/python3.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/ca-certificates/ca-certificates.hash | 2 +-
+ package/ca-certificates/ca-certificates.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python3/python3.hash b/package/python3/python3.hash
-index 2772e33109..923a632165 100644
---- a/package/python3/python3.hash
-+++ b/package/python3/python3.hash
-@@ -1,5 +1,5 @@
--# From https://www.python.org/downloads/release/python-31210/
--md5  0c0a6cce86d7611aed691d61e0599de0  Python-3.12.10.tar.xz
-+# From https://www.python.org/downloads/release/python-31211/
-+md5  9613d56b90d0d0cfd19980c7e2956a06  Python-3.12.11.tar.xz
+diff --git a/package/ca-certificates/ca-certificates.hash b/package/ca-certificates/ca-certificates.hash
+index 363f43e13a..2112badfcc 100644
+--- a/package/ca-certificates/ca-certificates.hash
++++ b/package/ca-certificates/ca-certificates.hash
+@@ -1,4 +1,4 @@
+ # hashes from: $(CA_CERTIFICATES_SITE)/ca-certificates_$(CA_CERTIFICATES_VERSION).dsc :
+-sha256  dd8286d0a9dd35c756fea5f1df3fed1510fb891f376903891b003cd9b1ad7e03  ca-certificates_20241223.tar.xz
++sha256  33b44ef78653ecd3f0f2f13e5bba6be466be2e7da72182f737912b81798ba5d2  ca-certificates_20250419.tar.xz
  # Locally computed
--sha256  07ab697474595e06f06647417d3c7fa97ded07afc1a7e4454c5639919b46eaea  Python-3.12.10.tar.xz
-+sha256  c30bb24b7f1e9a19b11b55a546434f74e739bb4c271a3e3a80ff4380d49f7adb  Python-3.12.11.tar.xz
- sha256  3b2f81fe21d181c499c59a256c8e1968455d6689d269aa85373bfb6af41da3bf  LICENSE
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index 6b3a3e81f3..8bbff066ab 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -5,7 +5,7 @@
+ sha256  e85e1bcad3a915dc7e6f41412bc5bdeba275cadd817896ea0451f2140a93967c  debian/copyright
+diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
+index c354eb037e..b1903f6166 100644
+--- a/package/ca-certificates/ca-certificates.mk
++++ b/package/ca-certificates/ca-certificates.mk
+@@ -4,9 +4,9 @@
+ #
  ################################################################################
  
- PYTHON3_VERSION_MAJOR = 3.12
--PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).10
-+PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).11
- PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
- PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
- PYTHON3_LICENSE = Python-2.0, others
+-CA_CERTIFICATES_VERSION = 20241223
++CA_CERTIFICATES_VERSION = 20250419
+ CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.xz
+-CA_CERTIFICATES_SITE = https://snapshot.debian.org/archive/debian/20241223T143500Z/pool/main/c/ca-certificates
++CA_CERTIFICATES_SITE = https://snapshot.debian.org/archive/debian/20250419T084132Z/pool/main/c/ca-certificates
+ CA_CERTIFICATES_DEPENDENCIES = host-openssl host-python3
+ CA_CERTIFICATES_LICENSE = GPL-2.0+ (script), MPL-2.0 (data)
+ CA_CERTIFICATES_LICENSE_FILES = debian/copyright
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
