@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8708AC7EE33
-	for <buildroot@archiver.kernel.org>; Thu, 26 Jun 2025 19:50:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D423C7EE30
+	for <buildroot@archiver.kernel.org>; Thu, 26 Jun 2025 19:50:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3E7826134F;
+	by smtp3.osuosl.org (Postfix) with ESMTP id AC44261355;
 	Thu, 26 Jun 2025 19:50:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pdx_yQcxPZPv; Thu, 26 Jun 2025 19:49:57 +0000 (UTC)
+ id SjaLu4w9FQMm; Thu, 26 Jun 2025 19:50:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1BE4C612AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 65C1061260
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1BE4C612AB;
-	Thu, 26 Jun 2025 19:49:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 65C1061260;
+	Thu, 26 Jun 2025 19:49:57 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 68A3810A
- for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:49:32 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 79D2410A
+ for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:49:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C54EE8438A
+ by smtp1.osuosl.org (Postfix) with ESMTP id DDF30843D3
  for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:49:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NtjUYwHz8k6H for <buildroot@buildroot.org>;
+ id eDAORU9EzPEI for <buildroot@buildroot.org>;
  Thu, 26 Jun 2025 19:49:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 766CA843D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 81FB5843DD
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 766CA843D8
+ by smtp1.osuosl.org (Postfix) with ESMTP id 81FB5843DD
  for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:49:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 745CB8467E; Thu, 26 Jun 2025 19:49:22 +0000 (UTC)
+ id 7D79B84057; Thu, 26 Jun 2025 19:49:22 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 24 Jun 2025 20:43:45 +0200
+Date: Tue, 24 Jun 2025 20:44:16 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: 4b572de8e5c3f029be2a37c94bd0008173d33f14
-X-Git-Newrev: ebe6cba2b13bf167bbbaf0f20ea2dcf0361f1b5d
+X-Git-Oldrev: ebe6cba2b13bf167bbbaf0f20ea2dcf0361f1b5d
+X-Git-Newrev: 883c977c9a65432b408f33a7d445ba6b16a36647
 X-Patchwork-Hint: ignore
-Message-Id: <20250626194922.745CB8467E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] {linux,
- linux-headers}: bump 6.{6, 12}.x series
+Message-Id: <20250626194922.7D79B84057@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/python-glslang:
+ bump to version 15.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,54 +61,100 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============2414208273443717850=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ebe6cba2b13bf167bbbaf0f20ea2dcf0361f1b5d
+--===============2414208273443717850==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=883c977c9a65432b408f33a7d445ba6b16a36647
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+See changelog:
+https://github.com/KhronosGroup/glslang/blob/15.3.0/CHANGES.md
+
+Fixes build issue: error: ‘uint32_t’ has not been declared, encountered
+on GCC v15, caused by cstdint not being implicitly included.
+
+https://bugs.gentoo.org/937261
+
+This commit also adds host-spriv-tools in _DEPENDENCIES to use the
+version packaged in Buildroot. It also adds
+ALLOW_EXTERNAL_SPIRV_TOOLS=ON in _CONF_OPTS, which was added in upstream
+commit [1], introduced in version 13.0.0.
+
+Also, when trying to build this python-glslang version 15.3.0 on a host
+providing cmake < 3.26, the configuration fails with the error message:
+
+    CMake Error at CMakeLists.txt:345 (add_test):
+      Error evaluating generator expression:
+
+        $<TARGET_RUNTIME_DLL_DIRS:spirv-remap>
+
+      Expression did not evaluate to a known generator expression
+
+This happens in the Buildroot docker reference image, which provides a
+cmake version 3.25. To workaround this issue which happen in glslang
+testing code, this commit disable those tests by adding
+GLSLANG_TESTS=OFF in _CONF_OPTS.
+
+[1] https://github.com/KhronosGroup/glslang/commit/3805888a57c07904b6bbdec639bfe5f078e26342
+
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+[Julien:
+ - resolve merge conflict
+ - update changelog link to use version tag
+ - disable glslang tests
+]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 7a1d7189a0b6436f6915b0c3b14595992039c505)
-[thomas: dropped version 6.15]
+(cherry picked from commit 53076f0eba85c53bcbee43cdd81a0d584ba5be22)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- linux/linux.hash                     | 4 ++--
- package/linux-headers/Config.in.host | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-glslang/python-glslang.hash | 2 +-
+ package/python-glslang/python-glslang.mk   | 8 ++++++--
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/linux/linux.hash b/linux/linux.hash
-index c6b3bb7ee1..150b52fe83 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,7 +1,7 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
- sha256  3f1ccd0a6dc9c9777cb6fcef357c77e4a2386c84c52b6d5bbcda79c16af33b1b  linux-6.14.11.tar.xz
--sha256  c0a575630f2603a20bb0641f8df8f955e46c9d7ac1fae8b54b21316e6b52a254  linux-6.12.33.tar.xz
--sha256  0d79ff359635e9f009f1e330deed5f3aefd8c452b80660bffdc504b877797719  linux-6.6.93.tar.xz
-+sha256  a7f3fe381f67eca4172e9b63efb61a14bd7f9e1278e03603d0ff5a93f270c24d  linux-6.12.34.tar.xz
-+sha256  713981ea26b20b476ba4ce880b76b21294576788d5db1c2188b167bcb06ecc56  linux-6.6.94.tar.xz
- sha256  bc3c45faf6f5f0450666c75fa9dad9bc7c0cf7c7cba0dbd94e5cfdc58229c116  linux-6.1.141.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
- sha256  3d03eb798910f32929f7fda5a56e4bb1a121f10bde320d6f3063639c009313dc  linux-5.15.185.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index e2dc5f8075..7b16293e81 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -444,8 +444,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "5.10.238"	if BR2_KERNEL_HEADERS_5_10
- 	default "5.15.185"	if BR2_KERNEL_HEADERS_5_15
- 	default "6.1.141"	if BR2_KERNEL_HEADERS_6_1
--	default "6.6.93"	if BR2_KERNEL_HEADERS_6_6
--	default "6.12.33"	if BR2_KERNEL_HEADERS_6_12
-+	default "6.6.94"	if BR2_KERNEL_HEADERS_6_6
-+	default "6.12.34"	if BR2_KERNEL_HEADERS_6_12
- 	default "6.14.11"	if BR2_KERNEL_HEADERS_6_14
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+diff --git a/package/python-glslang/python-glslang.hash b/package/python-glslang/python-glslang.hash
+index df9127939e..04ec5313a0 100644
+--- a/package/python-glslang/python-glslang.hash
++++ b/package/python-glslang/python-glslang.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  592c98aeb03b3e81597ddaf83633c4e63068d14b18a766fd11033bad73127162  python-glslang-11.13.0.tar.gz
++sha256  c6c21fe1873c37e639a6a9ac72d857ab63a5be6893a589f34e09a6c757174201  python-glslang-15.3.0.tar.gz
+ sha256  adb783e734e906d1f46db5df29991dbde84bdb0ceab502ac2febb44fe3c2b5f4  LICENSE.txt
+diff --git a/package/python-glslang/python-glslang.mk b/package/python-glslang/python-glslang.mk
+index c3e87da94a..cda95eb8a2 100644
+--- a/package/python-glslang/python-glslang.mk
++++ b/package/python-glslang/python-glslang.mk
+@@ -4,10 +4,14 @@
+ #
+ ################################################################################
+ 
+-PYTHON_GLSLANG_VERSION = 11.13.0
++PYTHON_GLSLANG_VERSION = 15.3.0
+ PYTHON_GLSLANG_SITE = $(call github,KhronosGroup,glslang,$(PYTHON_GLSLANG_VERSION))
+ PYTHON_GLSLANG_LICENSE = BSD-3-Clause
+ PYTHON_GLSLANG_LICENSE_FILES = LICENSE.txt
+-HOST_PYTHON_GLSLANG_DEPENDENCIES = host-python3
++HOST_PYTHON_GLSLANG_DEPENDENCIES = host-python3 host-spirv-tools
++
++HOST_PYTHON_GLSLANG_CONF_OPTS += \
++	-DALLOW_EXTERNAL_SPIRV_TOOLS=ON \
++	-DGLSLANG_TESTS=OFF
+ 
+ $(eval $(host-cmake-package))
+
+--===============2414208273443717850==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2414208273443717850==--
