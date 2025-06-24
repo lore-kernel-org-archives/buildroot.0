@@ -1,79 +1,101 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5068C77B7C
-	for <buildroot@archiver.kernel.org>; Tue, 24 Jun 2025 13:49:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54F0EC77B7C
+	for <buildroot@archiver.kernel.org>; Tue, 24 Jun 2025 14:33:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A6611612A1;
-	Tue, 24 Jun 2025 13:49:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 04C1440C34;
+	Tue, 24 Jun 2025 14:33:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Y1msZ2bk-ChM; Tue, 24 Jun 2025 13:49:29 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cdvPLPcPkSSU; Tue, 24 Jun 2025 14:33:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DBD5060C28
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3386040B3C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DBD5060C28;
-	Tue, 24 Jun 2025 13:49:28 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3E52B43F
- for <buildroot@buildroot.org>; Tue, 24 Jun 2025 13:49:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3386040B3C;
+	Tue, 24 Jun 2025 14:33:15 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9524112C
+ for <buildroot@buildroot.org>; Tue, 24 Jun 2025 14:33:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3015C83ACD
- for <buildroot@buildroot.org>; Tue, 24 Jun 2025 13:49:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 872FA40A7F
+ for <buildroot@buildroot.org>; Tue, 24 Jun 2025 14:33:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zZWdpPApkM_f for <buildroot@buildroot.org>;
- Tue, 24 Jun 2025 13:49:27 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
- helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C6DE3836C5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C6DE3836C5
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C6DE3836C5
- for <buildroot@buildroot.org>; Tue, 24 Jun 2025 13:49:26 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id AB85343978;
- Tue, 24 Jun 2025 13:49:21 +0000 (UTC)
-Date: Tue, 24 Jun 2025 15:49:20 +0200
-To: Fiona Klute <fiona.klute@gmx.de>
-Cc: buildroot@buildroot.org
-Message-ID: <20250624154920.66233d46@windsurf>
-In-Reply-To: <ff205425-ef38-4e02-beff-46394b51801d@gmx.de>
-References: <20250623215546.1850256-1-thomas.petazzoni@bootlin.com>
- <ff205425-ef38-4e02-beff-46394b51801d@gmx.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BpVULlh7s-BH for <buildroot@buildroot.org>;
+ Tue, 24 Jun 2025 14:33:14 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::432; helo=mail-wr1-x432.google.com;
+ envelope-from=raphael.melotte@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9871540203
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9871540203
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9871540203
+ for <buildroot@buildroot.org>; Tue, 24 Jun 2025 14:33:12 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id
+ ffacd0b85a97d-3a589d99963so5305879f8f.1
+ for <buildroot@buildroot.org>; Tue, 24 Jun 2025 07:33:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1750775591; x=1751380391;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=C5cfLkF8nZdKDf8PAJmiCN9dxsKbV2/+EWzeSEGrmcA=;
+ b=kD0NOJkzhqLIaIustyuqleYQnpuKbW+xPkwDRYDl3ZqfQyjXug/4MEvlne9K4Um7Ih
+ Uy8c1Z2CdnupUg0DTH6xiLa9eI01z5jBwikVcGF8KN3DJbzlnRBGAqnl/RudqVE24RnE
+ 3j53jouZjdUvAsdB+XooxlVU/saAIwPilkdrUD7etCkWAKwv5KHAhd3dm0H4Saz2xKIZ
+ jyhtHke60EqVZ/yCICwkoaegys+MoprnHhMNIkjFCQfgSivaetBUMEzknm6bbK5v1cVh
+ Ws9PolnWkBduGsko6NMbyrD0v6rvCaDRo09bg4LGNRSla/Vzk2zwW/fEbLrAtLETM9Y4
+ o5oA==
+X-Gm-Message-State: AOJu0YzvjbiZaS5e4Kq5aPceJr1qKUOthRzMswhVL81nFwFas/j2Vqxp
+ 26ptdMUdifChlophgdIjqtifirJ/cp7gXa/2XGFsPsFSKiV+GDMGTMWVGQY3KxOLrvTgkY0f5lV
+ iFVyF
+X-Gm-Gg: ASbGncvNHTjYGjY+weHghOSEho25KJVSUdlMYZgVLE/8E4e9X0aYozsS3CDr91VnVsh
+ J/AuwyK9SGQnM9WfLzcjqK9ZSVDZu7Luu4k5ccZrzeVtj1IHUEoOfHrXfR67vRkWtnnVAE9DTf7
+ n68xY0YerwANOlEZQyUeXSoORCG5/wKgsaxL6lPynAsEpXWsCkOnD4y48+yorR2rRaxZFk5ELsU
+ +u+M8EAHCpSm3Kh7b68G1eAU//wYcfbmslAX3m+LARWPvKvkm4H16yVa4LecifhNCumjbPI2kOC
+ wUEi5KyE8r/kOx/slk2DcPi+i2IKtt7jtz4mAE/XOXLN4Rc2rfK9ZIHZ8S2XQA5zXNN8F6ShCeT
+ Tt/9TdcF/ncdu6TF8rf03xEBp4I7NE/Rn615aalGto/M+F7esvj0ZsNQrgXrpnpxsTzYY
+X-Google-Smtp-Source: AGHT+IHAr6juewUbFTJ4yTIQgVewRc0c1SfB8PW7M9F53UBMlHiPhmI557aXTJjAkRrD46pBYbGV+g==
+X-Received: by 2002:a05:6000:70d:b0:3a4:d6ed:8e2e with SMTP id
+ ffacd0b85a97d-3a6d12e5d07mr9616443f8f.41.1750775590714; 
+ Tue, 24 Jun 2025 07:33:10 -0700 (PDT)
+Received: from debian-hp-1.local.essensium.com
+ (ip-94-140-185-241.reverse.destiny.be. [94.140.185.241])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-3a6e80f2b8fsm2112510f8f.59.2025.06.24.07.33.09
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 24 Jun 2025 07:33:10 -0700 (PDT)
+To: buildroot@buildroot.org
+Date: Tue, 24 Jun 2025 16:32:34 +0200
+Message-ID: <20250624143236.1286191-1-raphael.melotte@mind.be>
+X-Mailer: git-send-email 2.49.0
 MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddvgddvtddthecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthejredtredtvdenucfhrhhomhepvfhhohhmrghsucfrvghtrgiiiihonhhiuceothhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeejvdejvdfgffevteeiffdugeeiveeliefgffetfeehhfethfeuleefkeejgfefvdenucffohhmrghinhepghhithhhuhgsrdgtohhmpdgsohhothhlihhnrdgtohhmnecukfhppeeltddrkeelrdduieefrdduvdejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepledtrdekledrudeifedruddvjedphhgvlhhopeifihhnughsuhhrfhdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvddprhgtphhtthhopehfihhonhgrrdhklhhuthgvsehgmhigrdguvgdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhg
-X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1750772961;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=YoaH5JR8gbjaj27Ag+QkZOT92LQzZIJj9LTfvZMKLFk=;
- b=QPfWHniBsgBErX6whKnO953mJlrOTUosSjAMAKmhVSW8VpcVuABFf1VJUeGcgBd8Z079mu
- oSTSBt/J8fu3Dx1RV1CsyhzbkILijXxi2FcJohheJFf+Hutzkg3VJAAeS+2Ny7qbNFpnT4
- kbx6QXiMEhgO70gZ+KoELAxKSHkLZyYiXlyh7EN+gu/9x4/UMseAhavLAPrQxczbtngtR7
- MbCL8QW7X06668SlatMbA0dKo3umqXJcS4TtEsqF0M2h8uvBuWCnLkZG3fEdB5gMvlElLN
- fqibNxYM5pdBG/42fZb0s3GWN++9CKBG5ph69iv2bf2L6y2mXmbPLblUOQa3dw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=QPfWHniB
-Subject: Re: [Buildroot] [PATCH] package/squashfs: bump to version 4.7
+ d=mind.be; s=google; t=1750775591; x=1751380391; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=C5cfLkF8nZdKDf8PAJmiCN9dxsKbV2/+EWzeSEGrmcA=;
+ b=ZSEEKk2wLP8HDlV2wbxG6aAAxe7wwbEC1uFptNiQMWl8jdnqsm7cmFezSMqLQOVViZ
+ JmldLcCAh8rvntaZAorwtygY+dHdRUEKt7EvaZnCI7NcniV3XsuTf6O3MbsvxrGwV5wz
+ I5bW2d+liZ+qiybrEQMESspEJap5uqfA3IDYOQ8Dn3p69ItsTFlnMYnzogHiFMy1ZgqY
+ mIUFx2NgHUJEmKDhxS/u01N0duw4f0EmefQynusNhihFEw69VmYeURGM3e4emIncgG5s
+ N/1VdEXHt6ah124dc4gmpYQf8G/OcwRkaU3nNVbLA6toz1L8Nx4R/Za3RUwpeCSotwed
+ 4vhw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=ZSEEKk2w
+Subject: [Buildroot] [PATCH 1/1] package/python-s3transfer: bump to version
+ 0.13.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,55 +107,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: =?utf-8?q?Rapha=C3=ABl_M=C3=A9lotte_via_buildroot?=
+ <buildroot@buildroot.org>
+Reply-To: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 24 Jun 2025 14:10:18 +0200
-Fiona Klute <fiona.klute@gmx.de> wrote:
-
-> Am 23.06.25 um 23:55 schrieb Thomas Petazzoni via buildroot:
-> > See https://github.com/plougher/squashfs-tools/releases/tag/4.7 for
-> > details:
-> > 
-> > 1. Mksquashfs now reads files in parallel from the input directories
-> > 2. Rewritten and improved help system (Mksquashfs/Unsquashfs)
-> > 3. New options for building reproducible filesystems (Mksquash/Sqfstar)
-> > 4. Elimination of "fragment block stall" and -(not-)reproducible options
-> > 5. Other improvements for Mksquashfs/Sqfstar
-> > 6. Other improvements for Unsquashfs/Sqfscat
-> > 7. New environment variable SQFS_CMDLINE (Mksquashfs/Unsquashfs)
-> > 
-> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>  
-> 
-> Building fails with musl due to missing includes, upstream already has 
-> patches for that (both need to be applied):
-> 
-> https://github.com/plougher/squashfs-tools/commit/b6e9f4b62cc3e762ceeddc0fc099f7d65f7b7361
-> https://github.com/plougher/squashfs-tools/commit/05a895b3f996d1ac157d95b04980f5f047e7dbf7
-
-Thanks for reporting this!
-
-> I also noticed a bug that blocks excluding files >1407 KiB when building 
-> a squashfs image, which broke building a certain (intentionally broken) 
-> test image for me: https://github.com/plougher/squashfs-tools/issues/316
-> It's easy enough to work around by filtering the tar archive though, so 
-> I'm not sure if it needs to hold up the update.
-
-That seems pretty annoying. Let's wait for this to be fixed as well.
-Hopefully, they'll make a 4.7.1 release with the fixes.
-
-Thanks again for the very useful feedback!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Q2hhbmdlbG9nOgpodHRwczovL2dpdGh1Yi5jb20vYm90by9zM3RyYW5zZmVyL2Jsb2IvMC4xMy4w
+L0NIQU5HRUxPRy5yc3QKClNpZ25lZC1vZmYtYnk6IFJhcGhhw6tsIE3DqWxvdHRlIDxyYXBoYWVs
+Lm1lbG90dGVAbWluZC5iZT4KLS0tCiBwYWNrYWdlL3B5dGhvbi1zM3RyYW5zZmVyL3B5dGhvbi1z
+M3RyYW5zZmVyLmhhc2ggfCA0ICsrLS0KIHBhY2thZ2UvcHl0aG9uLXMzdHJhbnNmZXIvcHl0aG9u
+LXMzdHJhbnNmZXIubWsgICB8IDQgKystLQogMiBmaWxlcyBjaGFuZ2VkLCA0IGluc2VydGlvbnMo
+KyksIDQgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvcGFja2FnZS9weXRob24tczN0cmFuc2Zl
+ci9weXRob24tczN0cmFuc2Zlci5oYXNoIGIvcGFja2FnZS9weXRob24tczN0cmFuc2Zlci9weXRo
+b24tczN0cmFuc2Zlci5oYXNoCmluZGV4IDk4YjBkZGM1MDYuLjMyNDk5NzNkNDYgMTAwNjQ0Ci0t
+LSBhL3BhY2thZ2UvcHl0aG9uLXMzdHJhbnNmZXIvcHl0aG9uLXMzdHJhbnNmZXIuaGFzaAorKysg
+Yi9wYWNrYWdlL3B5dGhvbi1zM3RyYW5zZmVyL3B5dGhvbi1zM3RyYW5zZmVyLmhhc2gKQEAgLTEs
+NSArMSw1IEBACiAjIG1kNSwgc2hhMjU2IGZyb20gaHR0cHM6Ly9weXBpLm9yZy9weXBpL3MzdHJh
+bnNmZXIvanNvbgotbWQ1ICAwZTdiYmMxN2EyNTU1NjhjOTNhZWE5ZGQ1MmNiOWQ0YiAgczN0cmFu
+c2Zlci0wLjExLjQudGFyLmd6Ci1zaGEyNTYgIDU1OWYxNjE2NThlMWNmMGE5MTFmNDU5NDA1NTJj
+Njk2NzM1ZjVjNzRlNjQzNjJlNTE1ZjMzM2ViZWQ4N2Q2NzkgIHMzdHJhbnNmZXItMC4xMS40LnRh
+ci5negorbWQ1ICBjYTUzZjdhN2JmMDgxNDFmZmI3MmFhNzIxZDFmNmQwMiAgczN0cmFuc2Zlci0w
+LjEzLjAudGFyLmd6CitzaGEyNTYgIGY1ZTZkYjc0ZWI3Nzc2YTM3MjA4MDAxMTEzZWE3YWE5NzY5
+NTM2ODI0MmIzNjRkNzNlOTFjOTgxYWM1MjIxNzcgIHMzdHJhbnNmZXItMC4xMy4wLnRhci5negog
+IyBMb2NhbGx5IGNvbXB1dGVkIHNoYTI1NiBjaGVja3N1bXMKIHNoYTI1NiAgY2ZjNzc0OWI5NmY2
+M2JkMzFjM2M0MmI1YzQ3MWJmNzU2ODE0MDUzZTg0N2MxMGYzZWIwMDM0MTdiYzUyM2QzMCAgTElD
+RU5TRS50eHQKZGlmZiAtLWdpdCBhL3BhY2thZ2UvcHl0aG9uLXMzdHJhbnNmZXIvcHl0aG9uLXMz
+dHJhbnNmZXIubWsgYi9wYWNrYWdlL3B5dGhvbi1zM3RyYW5zZmVyL3B5dGhvbi1zM3RyYW5zZmVy
+Lm1rCmluZGV4IDQ0YTY0ZTg1OWEuLmIzNzg5MDBiYmQgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvcHl0
+aG9uLXMzdHJhbnNmZXIvcHl0aG9uLXMzdHJhbnNmZXIubWsKKysrIGIvcGFja2FnZS9weXRob24t
+czN0cmFuc2Zlci9weXRob24tczN0cmFuc2Zlci5tawpAQCAtNCw5ICs0LDkgQEAKICMKICMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjCiAKLVBZVEhPTl9TM1RSQU5TRkVSX1ZFUlNJT04gPSAwLjExLjQK
+K1BZVEhPTl9TM1RSQU5TRkVSX1ZFUlNJT04gPSAwLjEzLjAKIFBZVEhPTl9TM1RSQU5TRkVSX1NP
+VVJDRSA9IHMzdHJhbnNmZXItJChQWVRIT05fUzNUUkFOU0ZFUl9WRVJTSU9OKS50YXIuZ3oKLVBZ
+VEhPTl9TM1RSQU5TRkVSX1NJVEUgPSBodHRwczovL2ZpbGVzLnB5dGhvbmhvc3RlZC5vcmcvcGFj
+a2FnZXMvMGYvZWMvYWExYTIxNWU1YzEyNmZlNWRlY2JlZTJlMTA3NDY4ZjUxZDljZTE5MGI5NzYz
+Y2I2NDlmNzZiYjQ1OTM4CitQWVRIT05fUzNUUkFOU0ZFUl9TSVRFID0gaHR0cHM6Ly9maWxlcy5w
+eXRob25ob3N0ZWQub3JnL3BhY2thZ2VzL2VkLzVkLzlkY2MxMDBhYmM2NzExZTgyNDdhZjVhYTU2
+MWZjMDdjNGEwNDZmNzJmNjU5YzNhZGVhOWE0NDllMTkxYQogUFlUSE9OX1MzVFJBTlNGRVJfU0VU
+VVBfVFlQRSA9IHNldHVwdG9vbHMKIFBZVEhPTl9TM1RSQU5TRkVSX0xJQ0VOU0UgPSBBcGFjaGUt
+Mi4wCiBQWVRIT05fUzNUUkFOU0ZFUl9MSUNFTlNFX0ZJTEVTID0gTElDRU5TRS50eHQKLS0gCjIu
+NDkuMAoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVp
+bGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3Rz
+LmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
