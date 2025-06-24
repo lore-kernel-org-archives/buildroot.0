@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20803C7EE30
-	for <buildroot@archiver.kernel.org>; Thu, 26 Jun 2025 19:13:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B19D4C7EE33
+	for <buildroot@archiver.kernel.org>; Thu, 26 Jun 2025 19:13:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DF91C6122C;
-	Thu, 26 Jun 2025 19:13:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C00A660784;
+	Thu, 26 Jun 2025 19:13:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ODAbo19-Bc2K; Thu, 26 Jun 2025 19:13:21 +0000 (UTC)
+ id WXCXoE36jUfn; Thu, 26 Jun 2025 19:13:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 20B5761232
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D409F61241
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 20B5761232;
-	Thu, 26 Jun 2025 19:13:21 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 79584154
- for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:13:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D409F61241;
+	Thu, 26 Jun 2025 19:13:22 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0B2D410A
+ for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:13:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6049C40314
+ by smtp4.osuosl.org (Postfix) with ESMTP id 558514191D
  for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:13:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id x3h-hCJoHaMF for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mY37PutoRlXs for <buildroot@buildroot.org>;
  Thu, 26 Jun 2025 19:13:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 43A9C40319
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A6104191C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 43A9C40319
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7A6104191C
  for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:13:16 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3ED9F84549; Thu, 26 Jun 2025 19:13:16 +0000 (UTC)
+ id 6BEC8822B6; Thu, 26 Jun 2025 19:13:16 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 24 Jun 2025 20:59:39 +0200
+Date: Tue, 24 Jun 2025 21:00:13 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 5c96f8d7f846babfdaef689a423ab8aacad048fc
-X-Git-Newrev: a3b39cf383837d5594f0e87a991939d4a0722367
+X-Git-Oldrev: df5f63f7a0614b726954486dc1c6480958db49d2
+X-Git-Newrev: 3045f77545ccf6ae788bc844143808700d4ae189
 X-Patchwork-Hint: ignore
-Message-Id: <20250626191316.3ED9F84549@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/python-glslang:
- fix host-python3 dependency
+Message-Id: <20250626191316.6BEC8822B6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/squashfs: update
+ URL to source archive after Github changes
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,33 +66,62 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a3b39cf383837d5594f0e87a991939d4a0722367
+commit: https://git.buildroot.net/buildroot/commit/?id=3045f77545ccf6ae788bc844143808700d4ae189
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-python-glslang is a host-only package and the host-python3 dependency
-was wrongly added as target dependency with buildroot commit
-f9fe0cf8f64f8ea48f3ee4af28053d7bea52b61f.
+The squashfs 4.6.1 archive hash has been changed suddenly two weeks
+ago by Github without any intended changes from the squashfs maintainer
+[1].
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+The orginal squashfs 4.6.1 archive has been manually uploaded again.
+
+Update the URL to download the archive that match the expected hash.
+
+Since we don't use the github download helper anymore, the squashfs
+archive name is changed from squashfs-4.6.1.tar.gz to
+squashfs-tools-4.6.1.tar.gz.
+
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/10355448207
+(and many more...)
+
+See:
+[1] https://github.com/plougher/squashfs-tools/issues/313
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 27a38cbcadfa77bd6a15927ef04aeb95a260231f)
+(cherry picked from commit e374ae03b5cc7f4c99af2b0079f0051e78dbb1ac)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/python-glslang/python-glslang.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/squashfs/squashfs.hash | 2 +-
+ package/squashfs/squashfs.mk   | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-glslang/python-glslang.mk b/package/python-glslang/python-glslang.mk
-index 94f480e30a..c3e87da94a 100644
---- a/package/python-glslang/python-glslang.mk
-+++ b/package/python-glslang/python-glslang.mk
-@@ -8,6 +8,6 @@ PYTHON_GLSLANG_VERSION = 11.13.0
- PYTHON_GLSLANG_SITE = $(call github,KhronosGroup,glslang,$(PYTHON_GLSLANG_VERSION))
- PYTHON_GLSLANG_LICENSE = BSD-3-Clause
- PYTHON_GLSLANG_LICENSE_FILES = LICENSE.txt
--PYTHON_GLSLANG_DEPENDENCIES = host-python3
-+HOST_PYTHON_GLSLANG_DEPENDENCIES = host-python3
+diff --git a/package/squashfs/squashfs.hash b/package/squashfs/squashfs.hash
+index bc45b4ab5e..c921d638bb 100644
+--- a/package/squashfs/squashfs.hash
++++ b/package/squashfs/squashfs.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  94201754b36121a9f022a190c75f718441df15402df32c2b520ca331a107511c  squashfs-4.6.1.tar.gz
++sha256  94201754b36121a9f022a190c75f718441df15402df32c2b520ca331a107511c  squashfs-tools-4.6.1.tar.gz
  
- $(eval $(host-cmake-package))
+ # License files
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/squashfs/squashfs.mk b/package/squashfs/squashfs.mk
+index b9fbf54b01..f2cb0ab25e 100644
+--- a/package/squashfs/squashfs.mk
++++ b/package/squashfs/squashfs.mk
+@@ -5,7 +5,8 @@
+ ################################################################################
+ 
+ SQUASHFS_VERSION = 4.6.1
+-SQUASHFS_SITE = $(call github,plougher,squashfs-tools,$(SQUASHFS_VERSION))
++SQUASHFS_SOURCE = squashfs-tools-$(SQUASHFS_VERSION).tar.gz
++SQUASHFS_SITE = https://github.com/plougher/squashfs-tools/releases/download/$(SQUASHFS_VERSION)
+ SQUASHFS_LICENSE = GPL-2.0+
+ SQUASHFS_LICENSE_FILES = COPYING
+ SQUASHFS_CPE_ID_VALID = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
