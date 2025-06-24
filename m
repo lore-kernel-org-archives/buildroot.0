@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B19D4C7EE33
-	for <buildroot@archiver.kernel.org>; Thu, 26 Jun 2025 19:13:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA49DC7EE31
+	for <buildroot@archiver.kernel.org>; Thu, 26 Jun 2025 19:13:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C00A660784;
-	Thu, 26 Jun 2025 19:13:23 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WXCXoE36jUfn; Thu, 26 Jun 2025 19:13:23 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D409F61241
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D409F61241;
-	Thu, 26 Jun 2025 19:13:22 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0B2D410A
- for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:13:18 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 558514191D
- for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:13:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7F13E41932;
+	Thu, 26 Jun 2025 19:13:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mY37PutoRlXs for <buildroot@buildroot.org>;
+ id R5qqDEMID1hU; Thu, 26 Jun 2025 19:13:24 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7140141930
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7140141930;
+	Thu, 26 Jun 2025 19:13:24 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3F21010A
+ for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:13:18 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 595CE60767
+ for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:13:17 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DH9pGeLzpo0j for <buildroot@buildroot.org>;
  Thu, 26 Jun 2025 19:13:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A6104191C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6B3256074A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7A6104191C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6B3256074A
  for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:13:16 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6BEC8822B6; Thu, 26 Jun 2025 19:13:16 +0000 (UTC)
+ id 5983E84549; Thu, 26 Jun 2025 19:13:16 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 24 Jun 2025 21:00:13 +0200
+Date: Tue, 24 Jun 2025 21:00:02 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: df5f63f7a0614b726954486dc1c6480958db49d2
-X-Git-Newrev: 3045f77545ccf6ae788bc844143808700d4ae189
+X-Git-Oldrev: 6fb63beb84b6335bdc3742bc9101b146e6fa855d
+X-Git-Newrev: 3b609f1b0cba17493ce792f047af7d790997bd4f
 X-Patchwork-Hint: ignore
-Message-Id: <20250626191316.6BEC8822B6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/squashfs: update
- URL to source archive after Github changes
+Message-Id: <20250626191316.5983E84549@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/libndp: fix build
+ with GCC 14 and musl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,62 +66,72 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3045f77545ccf6ae788bc844143808700d4ae189
+commit: https://git.buildroot.net/buildroot/commit/?id=3b609f1b0cba17493ce792f047af7d790997bd4f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-The squashfs 4.6.1 archive hash has been changed suddenly two weeks
-ago by Github without any intended changes from the squashfs maintainer
-[1].
+Patch has been pending upstream for a while [1], Alpine has merged an
+older version that includes some whitespace damage but is functionally
+equivalent.
 
-The orginal squashfs 4.6.1 archive has been manually uploaded again.
+[1] https://github.com/jpirko/libndp/pull/29
 
-Update the URL to download the archive that match the expected hash.
-
-Since we don't use the github download helper anymore, the squashfs
-archive name is changed from squashfs-4.6.1.tar.gz to
-squashfs-tools-4.6.1.tar.gz.
-
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/10355448207
-(and many more...)
-
-See:
-[1] https://github.com/plougher/squashfs-tools/issues/313
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit e374ae03b5cc7f4c99af2b0079f0051e78dbb1ac)
+(cherry picked from commit 0c2aa35fbef1d4f928433bf61323347d3c54c4e3)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/squashfs/squashfs.hash | 2 +-
- package/squashfs/squashfs.mk   | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ ...patible-pointer-types-with-gcc14-and-musl.patch | 43 ++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
 
-diff --git a/package/squashfs/squashfs.hash b/package/squashfs/squashfs.hash
-index bc45b4ab5e..c921d638bb 100644
---- a/package/squashfs/squashfs.hash
-+++ b/package/squashfs/squashfs.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  94201754b36121a9f022a190c75f718441df15402df32c2b520ca331a107511c  squashfs-4.6.1.tar.gz
-+sha256  94201754b36121a9f022a190c75f718441df15402df32c2b520ca331a107511c  squashfs-tools-4.6.1.tar.gz
- 
- # License files
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/squashfs/squashfs.mk b/package/squashfs/squashfs.mk
-index b9fbf54b01..f2cb0ab25e 100644
---- a/package/squashfs/squashfs.mk
-+++ b/package/squashfs/squashfs.mk
-@@ -5,7 +5,8 @@
- ################################################################################
- 
- SQUASHFS_VERSION = 4.6.1
--SQUASHFS_SITE = $(call github,plougher,squashfs-tools,$(SQUASHFS_VERSION))
-+SQUASHFS_SOURCE = squashfs-tools-$(SQUASHFS_VERSION).tar.gz
-+SQUASHFS_SITE = https://github.com/plougher/squashfs-tools/releases/download/$(SQUASHFS_VERSION)
- SQUASHFS_LICENSE = GPL-2.0+
- SQUASHFS_LICENSE_FILES = COPYING
- SQUASHFS_CPE_ID_VALID = YES
+diff --git a/package/libndp/0001-fix-incompatible-pointer-types-with-gcc14-and-musl.patch b/package/libndp/0001-fix-incompatible-pointer-types-with-gcc14-and-musl.patch
+new file mode 100644
+index 0000000000..6cf97e8afa
+--- /dev/null
++++ b/package/libndp/0001-fix-incompatible-pointer-types-with-gcc14-and-musl.patch
+@@ -0,0 +1,43 @@
++From e821ddbfdff5e1b14846421d9196978ffebac346 Mon Sep 17 00:00:00 2001
++From: oreo639 <oreo6391@gmail.com>
++Date: Sat, 15 Mar 2025 18:38:50 -0700
++Subject: [PATCH] libndp: fix incompatible pointer types with gcc14 and musl
++
++When compiling with gcc14 and musl, the following error is produced:
++libndp.c: In function 'mysendto6':
++libndp.c:212:50: error: passing argument 5 of 'sendto' from incompatible pointer type [-Wincompatible-pointer-types]
++  212 |         ret = sendto(sockfd, buf, buflen, flags, &sin6, sizeof(sin6));
++      |                                                  ^~~~~
++      |                                                  |
++      |                                                  struct sockaddr_in6 *
++In file included from libndp.c:27:
++/usr/include/sys/socket.h:343:49: note: expected 'const struct sockaddr *' but argument is of type 'struct sockaddr_in6 *'
++  343 | ssize_t sendto (int, const void *, size_t, int, const struct sockaddr *, socklen_t);
++      |                                                 ^~~~~~~~~~~~~~~~~~~~~~~
++
++In POSIX, sendto() takes a sockaddr pointer:
++https://pubs.opengroup.org/onlinepubs/009604499/functions/sendto.html
++
++While glibc uses the gcc __transparent_union__ extension to mark them as
++compatible types, musl does not, as such we need to explicitly cast the pointer
++to tell the compiler that it is fine.
++
++Upstream: https://github.com/jpirko/libndp/pull/29
++Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
++---
++ libndp/libndp.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/libndp/libndp.c b/libndp/libndp.c
++index fa20a31..315333a 100644
++--- a/libndp/libndp.c
+++++ b/libndp/libndp.c
++@@ -209,7 +209,7 @@ static int mysendto6(int sockfd, void *buf, size_t buflen, int flags,
++ 	memcpy(&sin6.sin6_addr, addr, sizeof(sin6.sin6_addr));
++ 	sin6.sin6_scope_id = ifindex;
++ resend:
++-	ret = sendto(sockfd, buf, buflen, flags, &sin6, sizeof(sin6));
+++	ret = sendto(sockfd, buf, buflen, flags, (struct sockaddr*)&sin6, sizeof(sin6));
++ 	if (ret == -1) {
++ 		switch(errno) {
++ 		case EINTR:
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
