@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 754ACC7EE30
-	for <buildroot@archiver.kernel.org>; Thu, 26 Jun 2025 19:49:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD136C7EE31
+	for <buildroot@archiver.kernel.org>; Thu, 26 Jun 2025 19:49:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3B13B419A2;
-	Thu, 26 Jun 2025 19:49:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8E7F4612C4;
+	Thu, 26 Jun 2025 19:49:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WFyfVHbi5T2V; Thu, 26 Jun 2025 19:49:43 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gXcRhmpRF24j; Thu, 26 Jun 2025 19:49:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6448F41991
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A15F161243
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6448F41991;
-	Thu, 26 Jun 2025 19:49:43 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1C44910A
+	by smtp3.osuosl.org (Postfix) with ESMTP id A15F161243;
+	Thu, 26 Jun 2025 19:49:44 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 36D8C10A
  for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:49:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C011F4195D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 627E7843B3
  for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:49:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3lA0DzzAo2aY for <buildroot@buildroot.org>;
- Thu, 26 Jun 2025 19:49:21 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pNFzFtg6mHF4 for <buildroot@buildroot.org>;
+ Thu, 26 Jun 2025 19:49:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A78EB4195C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 30D73843CD
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A78EB4195C
- for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:49:21 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 30D73843CD
+ for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:49:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A4BCD8467E; Thu, 26 Jun 2025 19:49:21 +0000 (UTC)
+ id 2ED6384057; Thu, 26 Jun 2025 19:49:22 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 24 Jun 2025 20:37:42 +0200
+Date: Tue, 24 Jun 2025 20:40:57 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: 7b7c8f3346f3da4a0218cddf57dad6668a9346a7
-X-Git-Newrev: 2529507c7f0c51ae60f1cb403ac4c2abc3f5b63d
+X-Git-Oldrev: f22768cd7abb49db2a8c0d8e651f98dc690ca612
+X-Git-Newrev: b057dce157c814b57f40b70db37ffd58bf7ad856
 X-Patchwork-Hint: ignore
-Message-Id: <20250626194921.A4BCD8467E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/bcg729: bump
- version to 1.1.1-3-g8bec1e5fc
+Message-Id: <20250626194922.2ED6384057@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/libndp: fix build
+ with GCC 14 and musl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,51 +66,72 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2529507c7f0c51ae60f1cb403ac4c2abc3f5b63d
+commit: https://git.buildroot.net/buildroot/commit/?id=b057dce157c814b57f40b70db37ffd58bf7ad856
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-This bump includes three patches which were added since version 1.1.1
-to the cmake files:
-https://github.com/BelledonneCommunications/bcg729/commits/master/
+Patch has been pending upstream for a while [1], Alpine has merged an
+older version that includes some whitespace damage but is functionally
+equivalent.
 
-One of them fixes build errors with cmake 4.x:
-https://github.com/BelledonneCommunications/bcg729/commit/e29952e7ceff64de6fc6f8db43e3b326481280be#diff-1e7de1ae2d059d21e1dd75d5812d5a34b0222cef273b7c3a2af62eb747f9d20aL23-L81
+[1] https://github.com/jpirko/libndp/pull/29
 
-Fixes:
-https://autobuild.buildroot.net/results/118/118349d20eae2dccdadab949065f6bc6471c825e/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-[Julien: use "git describe --abbrev=40" format in _VERSION]
+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 7139ffaf06bde0398cf41fb702241b295ac9ff94)
+(cherry picked from commit 0c2aa35fbef1d4f928433bf61323347d3c54c4e3)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/bcg729/bcg729.hash | 2 +-
- package/bcg729/bcg729.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...patible-pointer-types-with-gcc14-and-musl.patch | 43 ++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
 
-diff --git a/package/bcg729/bcg729.hash b/package/bcg729/bcg729.hash
-index 2eb80a0407..75dc6a6452 100644
---- a/package/bcg729/bcg729.hash
-+++ b/package/bcg729/bcg729.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  68599a850535d1b182932b3f86558ac8a76d4b899a548183b062956c5fdc916d  bcg729-1.1.1.tar.gz
-+sha256  62812779c776620f8fa005fc7c6ae14039d7b2efce66cf9af69c426393b5d062  bcg729-1.1.1-3-g8bec1e5fc072f3669e435edd137eb3da6da2eef7.tar.gz
- sha256  1b3782ccad7b8614100cda30d3faf42fc39f2e97932908c543005053b654ca68  LICENSE.txt
-diff --git a/package/bcg729/bcg729.mk b/package/bcg729/bcg729.mk
-index f89e535546..d0eeed5faa 100644
---- a/package/bcg729/bcg729.mk
-+++ b/package/bcg729/bcg729.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BCG729_VERSION = 1.1.1
-+BCG729_VERSION = 1.1.1-3-g8bec1e5fc072f3669e435edd137eb3da6da2eef7
- BCG729_SITE = $(call github,BelledonneCommunications,bcg729,$(BCG729_VERSION))
- BCG729_LICENSE = GPL-3.0+
- BCG729_LICENSE_FILES = LICENSE.txt
+diff --git a/package/libndp/0001-fix-incompatible-pointer-types-with-gcc14-and-musl.patch b/package/libndp/0001-fix-incompatible-pointer-types-with-gcc14-and-musl.patch
+new file mode 100644
+index 0000000000..6cf97e8afa
+--- /dev/null
++++ b/package/libndp/0001-fix-incompatible-pointer-types-with-gcc14-and-musl.patch
+@@ -0,0 +1,43 @@
++From e821ddbfdff5e1b14846421d9196978ffebac346 Mon Sep 17 00:00:00 2001
++From: oreo639 <oreo6391@gmail.com>
++Date: Sat, 15 Mar 2025 18:38:50 -0700
++Subject: [PATCH] libndp: fix incompatible pointer types with gcc14 and musl
++
++When compiling with gcc14 and musl, the following error is produced:
++libndp.c: In function 'mysendto6':
++libndp.c:212:50: error: passing argument 5 of 'sendto' from incompatible pointer type [-Wincompatible-pointer-types]
++  212 |         ret = sendto(sockfd, buf, buflen, flags, &sin6, sizeof(sin6));
++      |                                                  ^~~~~
++      |                                                  |
++      |                                                  struct sockaddr_in6 *
++In file included from libndp.c:27:
++/usr/include/sys/socket.h:343:49: note: expected 'const struct sockaddr *' but argument is of type 'struct sockaddr_in6 *'
++  343 | ssize_t sendto (int, const void *, size_t, int, const struct sockaddr *, socklen_t);
++      |                                                 ^~~~~~~~~~~~~~~~~~~~~~~
++
++In POSIX, sendto() takes a sockaddr pointer:
++https://pubs.opengroup.org/onlinepubs/009604499/functions/sendto.html
++
++While glibc uses the gcc __transparent_union__ extension to mark them as
++compatible types, musl does not, as such we need to explicitly cast the pointer
++to tell the compiler that it is fine.
++
++Upstream: https://github.com/jpirko/libndp/pull/29
++Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
++---
++ libndp/libndp.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/libndp/libndp.c b/libndp/libndp.c
++index fa20a31..315333a 100644
++--- a/libndp/libndp.c
+++++ b/libndp/libndp.c
++@@ -209,7 +209,7 @@ static int mysendto6(int sockfd, void *buf, size_t buflen, int flags,
++ 	memcpy(&sin6.sin6_addr, addr, sizeof(sin6.sin6_addr));
++ 	sin6.sin6_scope_id = ifindex;
++ resend:
++-	ret = sendto(sockfd, buf, buflen, flags, &sin6, sizeof(sin6));
+++	ret = sendto(sockfd, buf, buflen, flags, (struct sockaddr*)&sin6, sizeof(sin6));
++ 	if (ret == -1) {
++ 		switch(errno) {
++ 		case EINTR:
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
