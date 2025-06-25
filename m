@@ -1,76 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 971B4C7EE2A
-	for <buildroot@archiver.kernel.org>; Wed, 25 Jun 2025 13:27:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2AD16C7EE2A
+	for <buildroot@archiver.kernel.org>; Wed, 25 Jun 2025 13:39:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4C9B5614ED;
-	Wed, 25 Jun 2025 13:27:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D46D641DF7;
+	Wed, 25 Jun 2025 13:39:37 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jNa8yRThVk3G; Wed, 25 Jun 2025 13:39:37 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1DB5941D7F
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1DB5941D7F;
+	Wed, 25 Jun 2025 13:39:37 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 89948154
+ for <buildroot@buildroot.org>; Wed, 25 Jun 2025 13:39:35 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 862D461500
+ for <buildroot@buildroot.org>; Wed, 25 Jun 2025 13:39:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wOp183gmWz6G; Wed, 25 Jun 2025 13:27:00 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 63DDC614E2
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 63DDC614E2;
-	Wed, 25 Jun 2025 13:27:00 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 59B8D12C
- for <buildroot@buildroot.org>; Wed, 25 Jun 2025 13:26:59 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 55BA780DF1
- for <buildroot@buildroot.org>; Wed, 25 Jun 2025 13:26:59 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id b67C8PRiMa2H for <buildroot@buildroot.org>;
- Wed, 25 Jun 2025 13:26:58 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.155.133;
- helo=smtpdh18-2.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
+ id oU0aWh4W0B1l for <buildroot@buildroot.org>;
+ Wed, 25 Jun 2025 13:39:35 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=147.173.1.68;
+ helo=mailgw-out1.grenoble.cnrs.fr; envelope-from=bonet@grenoble.cnrs.fr;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E009980DCE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E009980DCE
-Received: from smtpdh18-2.aruba.it (smtpdh18-2.aruba.it [62.149.155.133])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E009980DCE
- for <buildroot@buildroot.org>; Wed, 25 Jun 2025 13:26:56 +0000 (UTC)
-Received: from [172.25.4.128] ([212.103.203.10]) by Aruba SMTP with ESMTPSA
- id UQ9OuJ3l9WAxHUQ9OuP0jx; Wed, 25 Jun 2025 15:26:54 +0200
-Message-ID: <fcb67636-9dc3-41eb-a630-8bd9b097d7c6@benettiengineering.com>
-Date: Wed, 25 Jun 2025 15:26:54 +0200
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 92C4C614E2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92C4C614E2
+Received: from mailgw-out1.grenoble.cnrs.fr (mailgw-out1.grenoble.cnrs.fr
+ [147.173.1.68])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 92C4C614E2
+ for <buildroot@buildroot.org>; Wed, 25 Jun 2025 13:39:33 +0000 (UTC)
+Received: from [IPV6:2a01:e0a:12:eba0:582b:34d4:7c8b:1aa0] (unknown
+ [IPv6:2a01:e0a:12:eba0:582b:34d4:7c8b:1aa0])
+ (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+ key-exchange X25519 server-signature RSA-PSS (2048 bits))
+ (No client certificate requested)
+ by mailgw-out1.grenoble.cnrs.fr (Postfix) with ESMTPSA id B77BAC3C60;
+ Wed, 25 Jun 2025 15:39:29 +0200 (CEST)
+Message-ID: <ee8e9975-90dc-4a98-915a-3ee5659716d5@grenoble.cnrs.fr>
+Date: Wed, 25 Jun 2025 15:39:29 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- buildroot@buildroot.org
-References: <20250625063302.3663685-1-dario.binacchi@amarulasolutions.com>
-Content-Language: en-US
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20250625063302.3663685-1-dario.binacchi@amarulasolutions.com>
-X-CMAE-Envelope: MS4xfD7ar0aZq5vXB9BDrhCdt8qVlPR2HrXz6aByxe3my06AE6fXVOHa9XIkxhHbuZwDvlLbbOvdr30UCYRG4i6x7A79q2w8n3wrLTGC0vigHYOFeH4PwRfu
- A6VQUrHXYr+P0BG84x+mOEEnZfm2rzQX/cGQttsupPp4d21wcvJv+yq1iEyjme7/rZtcYOKKdfQM8rSvFFNod8lO4AxNqd1pLk8FIEcDGOntQQk7RvugHbGG
- YEcUvXymAZmCx0/P7A5h/YeHHZErH0+bjqFV+6kq/pyaUpDLiyVlx2K0wlCIX+0iwSjgGOYHdec1JjRgnPcCLVX3Xg2jo/Qgubi+sZhxGN3RcECR5KNuOXdg
- w/xrUVfyeZbdvIMbg2Cdlv85PbQvrg==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1750858014; bh=YYauyumMuegEL/3cxdKLeJ4OIiJj6iOZW1yfjO6k4n4=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=c2x+f8oOc0bCvzQN6Txazv1ZjY32+Ax91+AQKzNjiWVAKksxCaWrQ1QNOZZZ5fxAU
- GndXfTwEFxOJZcC8PAor3m1C2baFzWJpU9rnTkdLhDwtsURgB8e4RrSau0J1I0dWEt
- Zj3rxr87EuvNPCiwVTOX3gtdIW7XanyOLRK2AmglzJZlB1w4Yvk4dlh1YvzKHnEH1i
- PHyxBvsgJL4nCXI//in6zsqLEyZDUm3rev5Aa6ZCDyCX+9L2ReUtyNdcKRzUFGIAtX
- eRSoNM3jZJfbk0V2UXQrdC1Wg+5GdNEnVkTfZNTt8KPjILBlrDQW9jk7EdmXBQqqdX
- urfPm06O8cKfw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+Content-Language: en-US, fr
+To: Buildroot development <buildroot@buildroot.org>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=grenoble.cnrs.fr; 
+ s=202106-grenoble.cnrs.fr; t=1750858770;
+ bh=kycMb9FjZGx8+4mYXsVEsNC9mWe08irbS9qb45B+jrg=;
+ h=Date:To:Cc:From:Subject:From;
+ b=k81cbxtqP/xy8MYMJA0VnFQpshIAlOaPFEzlwYbTCntn0ynuYDkB5sDmG4GWpT5lY
+ TIa+9tCetOjpYL1Sb2hsfYTCgKoEfJrU8wqu2hrUZU7v0o+yxlLd2oXvkZBXSejfS1
+ C3c5YKMAOz6E4vaKHklYnshyHJaFHLH7om/n4ccHqiVKmOQ+t6z2mfz5MfdWWeRJeX
+ apPaYB2M/AZGGQGeUyOnV/vOSJATvR1kwGS+8z3I6VmgIVV7AHX1wNgfiTw7mV8nWY
+ BIDM32Eom1T7iMepiLFXVs9nvC6J6+JZlbUDsz8sK3Gl26TJyoKBNVI8BVohw0X1nW
+ 7a0CsIC9Vb/zg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=grenoble.cnrs.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=c2x+f8oO
-Subject: Re: [Buildroot] [PATCH 1/1] package/mmc-utils: bump version to 1.0
+ unprotected) header.d=grenoble.cnrs.fr header.i=@grenoble.cnrs.fr
+ header.a=rsa-sha256 header.s=202106-grenoble.cnrs.fr header.b=k81cbxtq
+Subject: [Buildroot] [PATCH 1/1]
+ toolchain/toolchain-external/toolchain-external-custom: add gcc 15 version
+ selection
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,70 +86,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: linux-amarula@amarulasolutions.com
+From: Edgar Bonet via buildroot <buildroot@buildroot.org>
+Reply-To: Edgar Bonet <bonet@grenoble.cnrs.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Dario,
+This patch allows to use an external toolchain based on gcc 15.
 
-On 6/25/25 08:33, Dario Binacchi wrote:
-> This is the first tagged version of the package, so replace commit SHA
-> with version tag.
-> 
-> Change log since last version bump:
-> 
->    d8a8358a7207 mmc-utils: Pass key_mac buffer to rpmb_get_key()
->    a23ad7875b89 mmc-utils: Start to use the generic print_usage function
->    e769d44ecb77 mmc-utils: Introduce a generic print_usage function
->    6586fa5535dc mmc-utils: Simplify and streamline print_help function
->    ec75d4b3b671 mmc-utils: Remove unused adv_help member from struct Command
-> 
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Edgar Bonet <bonet@grenoble.cnrs.fr>
+---
+ .../toolchain-external-custom/Config.in.options               | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Thank you for the patch!
-
-Reviewed-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-
-Kind regards
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+index 7a27714e09..0a4003b57c 100644
+--- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+@@ -46,6 +46,10 @@ choice
+      Set to the gcc version that is used by your external
+      toolchain.
+ 
++config BR2_TOOLCHAIN_EXTERNAL_GCC_15
++   bool "15.x"
++   select BR2_TOOLCHAIN_GCC_AT_LEAST_15
++
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_14
+    bool "14.x"
+    select BR2_TOOLCHAIN_GCC_AT_LEAST_14
 -- 
-Giulio Benetti
-CEO&CTO@Benetti Engineering sas
-https://www.linkedin.com/company/benetti-engineering-sas/
-https://www.linkedin.com/in/giulio-benetti-79975951/
-
-> ---
->   package/mmc-utils/mmc-utils.hash | 2 +-
->   package/mmc-utils/mmc-utils.mk   | 5 ++---
->   2 files changed, 3 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/mmc-utils/mmc-utils.hash b/package/mmc-utils/mmc-utils.hash
-> index 685952a6150b..781bd972d4ba 100644
-> --- a/package/mmc-utils/mmc-utils.hash
-> +++ b/package/mmc-utils/mmc-utils.hash
-> @@ -1,3 +1,3 @@
->   # Locally computed
-> -sha256  e10cd7fded5f248d515fe40e35f73fe491e87e4b608ca857afa40fcb8cda1ae2  mmc-utils-c515ea2e1cebfbf9d81aa6a5c1bf67a79d2a7e58-git4.tar.gz
-> +sha256  39e6a89e06b53f99816f110af6743d1adc82220b26c51b0c3fd0a11ccf4206c2  mmc-utils-1.0.tar.gz
->   sha256  49cd65f67b516078ff7e0dbe639972dad21ed3858246e3969fc8a8fc2a4dca66  README
-> diff --git a/package/mmc-utils/mmc-utils.mk b/package/mmc-utils/mmc-utils.mk
-> index b439c84d474f..9696f2a6dc85 100644
-> --- a/package/mmc-utils/mmc-utils.mk
-> +++ b/package/mmc-utils/mmc-utils.mk
-> @@ -4,9 +4,8 @@
->   #
->   ################################################################################
->   
-> -MMC_UTILS_VERSION = c515ea2e1cebfbf9d81aa6a5c1bf67a79d2a7e58
-> -MMC_UTILS_SITE = https://git.kernel.org/pub/scm/utils/mmc/mmc-utils.git
-> -MMC_UTILS_SITE_METHOD = git
-> +MMC_UTILS_VERSION = 1.0
-> +MMC_UTILS_SITE = https://git.kernel.org/pub/scm/utils/mmc/mmc-utils.git/snapshot
->   MMC_UTILS_LICENSE = GPL-2.0
->   MMC_UTILS_LICENSE_FILES = README
->   
-
+2.43.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
