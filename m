@@ -1,95 +1,73 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29307C7EE30
-	for <buildroot@archiver.kernel.org>; Wed, 25 Jun 2025 10:01:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8539DC7EE30
+	for <buildroot@archiver.kernel.org>; Wed, 25 Jun 2025 12:52:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DA0B083E54;
-	Wed, 25 Jun 2025 10:01:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3EF5160674;
+	Wed, 25 Jun 2025 12:52:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n2e1JssMX4nP; Wed, 25 Jun 2025 10:01:58 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uY6xkcEA1fSq; Wed, 25 Jun 2025 12:52:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EAF4683E7B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7811C60699
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EAF4683E7B;
-	Wed, 25 Jun 2025 10:01:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7811C60699;
+	Wed, 25 Jun 2025 12:52:29 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id DE622154
- for <buildroot@buildroot.org>; Wed, 25 Jun 2025 10:01:55 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id E8F39154
+ for <buildroot@buildroot.org>; Wed, 25 Jun 2025 12:52:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C5552411E0
- for <buildroot@buildroot.org>; Wed, 25 Jun 2025 10:01:55 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DB498417BE
+ for <buildroot@buildroot.org>; Wed, 25 Jun 2025 12:52:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oFCqfs0wOwM6 for <buildroot@buildroot.org>;
- Wed, 25 Jun 2025 10:01:51 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.126.237;
- helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
+ id ys1Qxly7AP_6 for <buildroot@buildroot.org>;
+ Wed, 25 Jun 2025 12:52:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 399844009C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 399844009C
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.237])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 399844009C
- for <buildroot@buildroot.org>; Wed, 25 Jun 2025 10:01:50 +0000 (UTC)
-X-CSE-ConnectionGUID: hfNIgpcKR+mVg2gd/IqEMw==
-X-CSE-MsgGUID: II0OQSjdTcK09XVmw60u+g==
-Received: from unknown (HELO opfedv1rlp0c.nor.fr.ftgroup) ([x.x.x.x]) by
- smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 25 Jun 2025 12:01:48 +0200
-Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv1rlp0c.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 25 Jun 2025 12:01:48 +0200
-Received: from yd-6wlzhs3 [x.x.x.x] by
- OPE16NORMBX305.corporate.adroot.infra.ftgroup
- [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39;
- Wed, 25 Jun 2025 12:01:47 +0200
-Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
- Wed, 25 Jun 2025 12:01:47 +0200
-X-CSE-ConnectionGUID: iWlGvca4Tjupg7Isei3vyQ==
-X-CSE-MsgGUID: CPPQxTI+SYy+Ng7+1R/j+g==
-X-IronPort-AV: E=Sophos;i="6.16,264,1744063200"; d="scan'208";a="305978891"
-From: <yann.morin@orange.com>
-To: <buildroot@buildroot.org>
-CC: <yann.morin@orange.com>
-Date: Wed, 25 Jun 2025 12:01:46 +0200
-Message-ID: <6250e91113bf6a48ab5035b038cad4db1931d57a.1750845702.git.yann.morin@orange.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1750845702.git.yann.morin@orange.com>
-References: <cover.1750845702.git.yann.morin@orange.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 689F240073
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 689F240073
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 689F240073
+ for <buildroot@buildroot.org>; Wed, 25 Jun 2025 12:52:27 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 85336203;
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Wed, 25 Jun 2025 12:52:23 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peko@dell.be.48ers.dk>) id 1uUPby-000RBB-1a;
+ Wed, 25 Jun 2025 14:52:22 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Wed, 25 Jun 2025 14:52:19 +0200
+Message-Id: <20250625125220.104466-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
-X-Originating-IP: [10.115.27.53]
-X-ClientProxiedBy: OPE16NORMBX208.corporate.adroot.infra.ftgroup (10.115.27.9)
- To OPE16NORMBX305.corporate.adroot.infra.ftgroup
- (10.115.27.10)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1750845711; x=1782381711;
- h=from:to:cc:subject:date:message-id:in-reply-to:
- references:mime-version:content-transfer-encoding;
- bh=k+uAihF77GxsdVyOOhzmbi9YHb0+nuHIDlhsWl4uZCU=;
- b=lERgsal4Mi/YTJottVIFHxfKr8za480mg+jcj4d41nF9kR/V3iUD+MpV
- Pt98LCgM6WFkjryG3Ik2z3AEp1Zncr7xCv3C158N/wblxnv0iY3lrjelc
- egGlRJeiOB82awboC5jR6sSFFetr7xFUKrVIWiWJMR1B3xp2f6AKrC9rc
- VkcDE9Ippk4SJEIjtJ4kcuUl46WQZT0MsvIpJIY5iVu/dfsbFb/DW3iHb
- x79nfC8mX8hjMcoMa2dw4RnzCdmP2t8YRnLdA7xBfOXnCKqUQMdA3VHzF
- zoaoRSTBgXcf96jnKngAXKYtY/xUNvshcbLMiCseYY+Fgfub3TZ0rMh0R
- A==;
+X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=ka2xK6NNAqrZE/V1MrECvR5OEN5+VMONC/v5MntR8PMMVGsBXw5g/JEX6tCTeWxGDpkop+f/0uUHgFHOTwuRYL/1PX9DQQkzQTa35ZwjTYy6c19KHCSLBYS4DJ4D+KLcGoSuUN6McSNCHSWzuHMaIxOXCMOBD5aWSgVbHx/fdbbsB5Au6AAVc1AEWhmPiAi2LPua5hMLiDXVmdIzNJLZOwTK0B5pPfc43vSV3o7wFpxJcHIC5QPIDmfiPmrPbK07mJ1f/e12qxEM4hXBzWW7bOdZLtsc+p8Zc4w/aC46SrHXoyB33+F/4RWYEinkdzR+BbXqOW4CyAmucydEPKvSrw==;
+ s=purelymail1; d=purelymail.com; v=1;
+ bh=HKL8DAbVvSPjSUzptwTbz6Iu1NwlAdtw3Esj67Ks2gM=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=orange.com
+ header.from=korsgaard.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
- header.s=orange002 header.b=lERgsal4
-Subject: [Buildroot] [PATCH 1/2] boot/syslinux: fix install with top-level
- parallel build
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail1 header.b=ka2xK6NN
+X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
+Subject: [Buildroot] [PATCH] package/libcurl: unbreak threads + c-ares
+ conditional
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -106,105 +84,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: "Yann E. MORIN" <yann.morin@orange.com>
+Commit 0fce7a9623 ("package/libcurl: fix build w/ threads + c-ares") added a
+conditional for threads + c-ares, but ended up with a end-parenthesis too
+many - so the condition is never true.  Fix that.
 
-syslinux is... special. It is a target package, but it is installed in
-HOST_DIR *in the target install commands*: in addition to the boot files
-that run on the target, syslinux installs a set of host tools that are
-to be used at build time (e.g. extlinux, to prepare bootable media, like
-an iso96660 image). Then, from HOST_DIR, the actual boot files are
-copied into BINARIES_DIR (i.e. images/); we do it that way because the
-boot files are scattered about everywhere in the build tree, while they
-are all packed together in a single directory once installed.
-
-However, there is no dependency between the target and image install
-steps. So, when using top-level parallel builds, there is no guarantee
-that the target install commands are finished before the image install
-commands are started.
-
-We fix that by first installing into a temporary location, as part of
-the build step, and by then copying from there as part of the install
-step. This ensures that the boot files are easily available, without
-needing a dependency on the target install step, that we can't express.
-
-Note that we do not change the actual installation into HOST_DIR: it can
-be set up differently that our temporary location, and we do not want
-to duplicate that setup here (it's going to diverge over time).
-
-Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+Reported-by: Tibault Damman <tibault.damman@basalte.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/syslinux/syslinux.mk | 17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
+ package/libcurl/libcurl.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
-index cc52c49aee..084acc398e 100644
---- a/boot/syslinux/syslinux.mk
-+++ b/boot/syslinux/syslinux.mk
-@@ -56,6 +56,11 @@ SYSLINUX_POST_PATCH_HOOKS += SYSLINUX_CLEANUP
- # syslinux build system has no convenient way to pass CFLAGS,
- # and the internal zlib should take precedence so -I shouldn't
- # be used.
-+# Install in a temporary location that eases final install into
-+# images/ (see corresponding command, below).
-+# Repeat the target, otherwise syslinux will try to build everything
-+# Repeat LD (and CC) as it happens that some binaries are linked at
-+# install-time.
- define SYSLINUX_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE1) \
- 		ASCIIDOC_OK=-1 \
-@@ -70,6 +75,10 @@ define SYSLINUX_BUILD_CMDS
- 		LDFLAGS_FOR_BUILD="$(HOST_LDFLAGS)" \
- 		PYTHON=$(HOST_DIR)/bin/python3 \
- 		$(SYSLINUX_EFI_ARGS) -C $(@D) $(SYSLINUX_TARGET)
-+	$(TARGET_MAKE_ENV) $(MAKE1) $(SYSLINUX_EFI_ARGS) INSTALLROOT=$(@D)/br-root.temp \
-+		CC="$(TARGET_CC)" \
-+		LD="$(TARGET_LD)" \
-+		-C $(@D) $(SYSLINUX_TARGET) install
- endef
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 5a3a668f06..e390c9d1bf 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -38,7 +38,7 @@ LIBCURL_IGNORE_CVES += CVE-2024-32928
  
- # While the actual bootloader is compiled for the target, several
-@@ -77,6 +86,8 @@ endef
- # Repeat the target, otherwise syslinux will try to build everything
- # Repeat LD (and CC) as it happens that some binaries are linked at
- # install-time.
-+# Don't use the temporarily-installed br-root.temp: HOST_DIR may be setup
-+# differently (merged usr, merged bin...)
- define SYSLINUX_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE1) $(SYSLINUX_EFI_ARGS) INSTALLROOT=$(HOST_DIR) \
- 		CC="$(TARGET_CC)" \
-@@ -99,15 +110,15 @@ SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_EFI) += $(SYSLINUX_EFI_BITS)/efi/syslinux.
- 
- SYSLINUX_C32 = $(call qstrip,$(BR2_TARGET_SYSLINUX_C32))
- 
--# We install the c32 modules from the host-installed tree, where they
--# are all neatly installed in a single location, while they are
-+# We install the c32 modules from the temporarily installed tree, where
-+# they are all neatly installed in a single location, while they are
- # scattered around everywhere in the build tree.
- define SYSLINUX_INSTALL_IMAGES_CMDS
- 	for i in $(SYSLINUX_IMAGES-y); do \
- 		$(INSTALL) -D -m 0755 $(@D)/$$i $(BINARIES_DIR)/syslinux/$${i##*/}; \
- 	done
- 	for i in $(SYSLINUX_C32); do \
--		$(INSTALL) -D -m 0755 $(HOST_DIR)/share/syslinux/$${i} \
-+		$(INSTALL) -D -m 0755 $(@D)/br-root.temp/usr/share/syslinux/$${i} \
- 			$(BINARIES_DIR)/syslinux/$${i}; \
- 	done
- endef
+ # threaded resolver cannot be used with c-ares
+ # https://github.com/curl/curl/commit/d364f1347f05c53eea5d25a15b4ad8a62ecc85b8
+-ifeq ($(BR2_TOOLCHAIN_HAS_THREADS)x$(BR2_PACKAGE_C_ARES)),yx)
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS)x$(BR2_PACKAGE_C_ARES),yx)
+ LIBCURL_CONF_OPTS += --enable-threaded-resolver
+ else
+ LIBCURL_CONF_OPTS += --disable-threaded-resolver
 -- 
-2.34.1
-
-____________________________________________________________________________________________________________
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
+2.39.5
 
 _______________________________________________
 buildroot mailing list
