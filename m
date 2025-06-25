@@ -1,75 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8AF70C7EE2A
-	for <buildroot@archiver.kernel.org>; Wed, 25 Jun 2025 17:16:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B36BFC77B7C
+	for <buildroot@archiver.kernel.org>; Wed, 25 Jun 2025 17:19:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3F0DD8420D;
-	Wed, 25 Jun 2025 17:16:59 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IZDynV0nUCdu; Wed, 25 Jun 2025 17:16:58 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 805808420E
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 805808420E;
-	Wed, 25 Jun 2025 17:16:58 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id C1464154
- for <buildroot@buildroot.org>; Wed, 25 Jun 2025 17:16:56 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A5A7B41E9C
- for <buildroot@buildroot.org>; Wed, 25 Jun 2025 17:16:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6D41B41F1F;
+	Wed, 25 Jun 2025 17:19:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id spPb5XfMyzUL for <buildroot@buildroot.org>;
- Wed, 25 Jun 2025 17:16:56 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org DE8E741E25
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE8E741E25
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DE8E741E25
- for <buildroot@buildroot.org>; Wed, 25 Jun 2025 17:16:55 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id BC2122003C8;
- Wed, 25 Jun 2025 19:16:51 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
- via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 25 Jun 2025 19:16:51 +0200
-MIME-Version: 1.0
-Date: Wed, 25 Jun 2025 19:16:51 +0200
-To: =?UTF-8?Q?Rapha=C3=ABl_M=C3=A9lotte?= <raphael.melotte@mind.be>
-Cc: buildroot@buildroot.org, James Hilliard <james.hilliard1@gmail.com>
-In-Reply-To: <20250624143236.1286191-1-raphael.melotte@mind.be>
-References: <20250624143236.1286191-1-raphael.melotte@mind.be>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <459d672c55638405f010e790d37629ce@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1750871814;
- bh=jVYxTYvvUJgXpg62OllTlgTvxW7M+WBzWBMmpmRfADM=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=tbC6i0pD0fPpXGaJPJ0M9MYyFKwzW1mA4GRLG6v+4z/cmb9rPzKMfMUcz+XwhLons
- X8Qu7e9s4NqnV+7A1WyklOCEk+Fo64fHcEsyvaxsEV3GrxrGykEi/L3E0ylNVFpfkL
- dnFXP1NqpJUry6k7A7i9TWLyRBC5NUUIoxMTkD3nycvlyesKb8CNPm/0qal1nYmdF8
- xX2xWhh4qgV2/YUZajl230HBag7+fTsnqtexSR9Z2I0ZWHjA2LvJYKyNip3W/39Aou
- 8kc9l1ynEuJvD1BsEpiQKm9cC1mMUIM71tE2a+7tdTVc9cGuOpSUWHk0AivTU03/+O
- qEubmHq+rrD4g==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=tbC6i0pD
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-s3transfer: bump to
- version 0.13.0
+ id QimkosZrnmur; Wed, 25 Jun 2025 17:18:59 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB71341E25
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id EB71341E25;
+	Wed, 25 Jun 2025 17:18:58 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 74661154
+ for <buildroot@buildroot.org>; Wed, 25 Jun 2025 17:18:58 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 71AD16155A
+ for <buildroot@buildroot.org>; Wed, 25 Jun 2025 17:18:58 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vEuftdgS8_O7 for <buildroot@buildroot.org>;
+ Wed, 25 Jun 2025 17:18:57 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C55C613F1
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6C55C613F1
+ for <buildroot@buildroot.org>; Wed, 25 Jun 2025 17:18:57 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 5BEF484440; Wed, 25 Jun 2025 17:18:57 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 25 Jun 2025 19:17:09 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 813efddd54c0a4650f1a20f1fd4163bd52683b13
+X-Git-Newrev: 2286b6dd1b098ef908e6adc02a52690d85bd72aa
+X-Patchwork-Hint: ignore
+Message-Id: <20250625171857.5BEF484440@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-dotenv: bump to 1.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,15 +59,54 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gMjQvMDYvMjAyNSAxNjozMiwgUmFwaGHDq2wgTcOpbG90dGUgdmlhIGJ1aWxkcm9vdCB3cm90
-ZToKPiBDaGFuZ2Vsb2c6Cj4gaHR0cHM6Ly9naXRodWIuY29tL2JvdG8vczN0cmFuc2Zlci9ibG9i
-LzAuMTMuMC9DSEFOR0VMT0cucnN0Cj4gCj4gU2lnbmVkLW9mZi1ieTogUmFwaGHDq2wgTcOpbG90
-dGUgPHJhcGhhZWwubWVsb3R0ZUBtaW5kLmJlPgoKQXBwbGllZCB0byBtYXN0ZXIsIHRoYW5rcy4K
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290
-IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxk
-cm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+commit: https://git.buildroot.net/buildroot/commit/?id=2286b6dd1b098ef908e6adc02a52690d85bd72aa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Release notes:
+https://github.com/theskumar/python-dotenv/releases/tag/v1.1.1
+
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/python-dotenv/python-dotenv.hash | 4 ++--
+ package/python-dotenv/python-dotenv.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/python-dotenv/python-dotenv.hash b/package/python-dotenv/python-dotenv.hash
+index c591dcf9b9..5b4be41206 100644
+--- a/package/python-dotenv/python-dotenv.hash
++++ b/package/python-dotenv/python-dotenv.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/python-dotenv/json
+-md5  9bdf50416b1c59832d2f77ad6afdf0d8  python_dotenv-1.1.0.tar.gz
+-sha256  41f90bc6f5f177fb41f53e87666db362025010eb28f60a01c9143bfa33a2b2d5  python_dotenv-1.1.0.tar.gz
++md5  b3e9652d1974f8c7574c43f719799f3a  python_dotenv-1.1.1.tar.gz
++sha256  a8a6399716257f45be6a007360200409fce5cda2661e3dec71d23dc15f6189ab  python_dotenv-1.1.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  80619b7049f08c81683ad0e01f08f257a840652dd71ee83146d36658c7d2c2b9  LICENSE
+diff --git a/package/python-dotenv/python-dotenv.mk b/package/python-dotenv/python-dotenv.mk
+index c565a3e681..8f11c5de8d 100644
+--- a/package/python-dotenv/python-dotenv.mk
++++ b/package/python-dotenv/python-dotenv.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_DOTENV_VERSION = 1.1.0
++PYTHON_DOTENV_VERSION = 1.1.1
+ PYTHON_DOTENV_SOURCE = python_dotenv-$(PYTHON_DOTENV_VERSION).tar.gz
+-PYTHON_DOTENV_SITE = https://files.pythonhosted.org/packages/88/2c/7bb1416c5620485aa793f2de31d3df393d3686aa8a8506d11e10e13c5baf
++PYTHON_DOTENV_SITE = https://files.pythonhosted.org/packages/f6/b0/4bc07ccd3572a2f9df7e6782f52b0c6c90dcbb803ac4a167702d7d0dfe1e
+ PYTHON_DOTENV_SETUP_TYPE = setuptools
+ PYTHON_DOTENV_LICENSE = BSD-3-Clause
+ PYTHON_DOTENV_LICENSE_FILES = LICENSE
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
