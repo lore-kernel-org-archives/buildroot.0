@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E715C7EE31
-	for <buildroot@archiver.kernel.org>; Wed, 25 Jun 2025 17:19:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38974C7EE2A
+	for <buildroot@archiver.kernel.org>; Wed, 25 Jun 2025 17:19:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A499C41F45;
-	Wed, 25 Jun 2025 17:19:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0F14141E9C;
+	Wed, 25 Jun 2025 17:19:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OU0ywxPMQXEZ; Wed, 25 Jun 2025 17:19:03 +0000 (UTC)
+ id VKZLIgUloyGI; Wed, 25 Jun 2025 17:19:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A1FED41F2F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5598A41EF1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A1FED41F2F;
-	Wed, 25 Jun 2025 17:19:03 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id A86C2154
- for <buildroot@buildroot.org>; Wed, 25 Jun 2025 17:18:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5598A41EF1;
+	Wed, 25 Jun 2025 17:19:28 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id F0E63154
+ for <buildroot@buildroot.org>; Wed, 25 Jun 2025 17:19:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8DEA541923
- for <buildroot@buildroot.org>; Wed, 25 Jun 2025 17:18:58 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EE7EE41E9C
+ for <buildroot@buildroot.org>; Wed, 25 Jun 2025 17:19:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 642tzJnp4kps for <buildroot@buildroot.org>;
- Wed, 25 Jun 2025 17:18:57 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 62EAD40401
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 62EAD40401
- for <buildroot@buildroot.org>; Wed, 25 Jun 2025 17:18:57 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5281B8442D; Wed, 25 Jun 2025 17:18:57 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 25 Jun 2025 19:17:09 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c0fb057a08ac8e46f6cb6d5f6f95778a9b77343e
-X-Git-Newrev: 813efddd54c0a4650f1a20f1fd4163bd52683b13
-X-Patchwork-Hint: ignore
-Message-Id: <20250625171857.5281B8442D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-fastapi: bump to 0.115.13
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id azKs9MD0LaEj for <buildroot@buildroot.org>;
+ Wed, 25 Jun 2025 17:19:26 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3185B41F24
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3185B41F24
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3185B41F24
+ for <buildroot@buildroot.org>; Wed, 25 Jun 2025 17:19:25 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 4AB0C19F749;
+ Wed, 25 Jun 2025 19:19:22 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Wed, 25 Jun 2025 19:19:22 +0200
+MIME-Version: 1.0
+Date: Wed, 25 Jun 2025 19:19:22 +0200
+To: Marcus Hoffmann <buildroot@bubu1.eu>
+Cc: buildroot@buildroot.org, James Hilliard <james.hilliard1@gmail.com>
+In-Reply-To: <20250624112047.1715407-1-buildroot@bubu1.eu>
+References: <20250624112047.1715407-1-buildroot@bubu1.eu>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <c65ee282effdf306d90ccf3e64e9ce92@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1750871964;
+ bh=7tovawAhZVWyaA1ng2yLVxvlstz79UEtFiYtD2M6aLY=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=X5oP0t5b8bAIZukgIRiXe8gLll0+WkJNFpkGuB4pfv09fYlM5D34kOcgfbg2rWS0i
+ uztm4QH8/uNJY0yf2bzzi6MiDIlNMsawv/iar0YCJKmrt2s6L2YvGxENVi2dyrSE2o
+ KFHOmYKQ0AgbYt5ytcqYha0y2kq4FYZbLf72P9e84ojw6u0AmepfEzCM8J9/uUYZZK
+ p4UsDQ4dMrfZHiKUoFwmHisg2NvglO7d62MZ08OlkVFHMlv/60G8mX+eY8YdYnILO7
+ YqYc+UJf/YrDhqzhJWhFk5qwqQhGVakk+qkhKD3G58g32PM97WkDYQ7Rk1IZSI2lAo
+ 4TSbmdFI5IVhQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=X5oP0t5b
+Subject: Re: [Buildroot] [PATCH] package/python-fastapi: bump to 0.115.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,53 +82,18 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=813efddd54c0a4650f1a20f1fd4163bd52683b13
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 24/06/2025 13:20, Marcus Hoffmann via buildroot wrote:
+> Release Notes:
+> https://github.com/fastapi/fastapi/releases/tag/0.115.13
+> 
+> Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 
-Release Notes:
-https://github.com/fastapi/fastapi/releases/tag/0.115.13
-
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/python-fastapi/python-fastapi.hash | 4 ++--
- package/python-fastapi/python-fastapi.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/python-fastapi/python-fastapi.hash b/package/python-fastapi/python-fastapi.hash
-index 41b208a8a7..ae5b5f84f1 100644
---- a/package/python-fastapi/python-fastapi.hash
-+++ b/package/python-fastapi/python-fastapi.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/fastapi/json
--md5  af68daf64073e04653b314a895aee297  fastapi-0.115.12.tar.gz
--sha256  1e2c2a2646905f9e83d32f04a3f86aff4a286669c6c950ca95b5fd68c2602681  fastapi-0.115.12.tar.gz
-+md5  5d2c702b69f11b6ba4cc9add2419b348  fastapi-0.115.13.tar.gz
-+sha256  55d1d25c2e1e0a0a50aceb1c8705cd932def273c102bff0b1c1da88b3c6eb307  fastapi-0.115.13.tar.gz
- # Locally computed sha256 checksums
- sha256  4ec89ffc81485b97fec584b2d4a961032eeffe834453894fd9c1274906cc744e  LICENSE
-diff --git a/package/python-fastapi/python-fastapi.mk b/package/python-fastapi/python-fastapi.mk
-index 95961972fe..8a605531f7 100644
---- a/package/python-fastapi/python-fastapi.mk
-+++ b/package/python-fastapi/python-fastapi.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_FASTAPI_VERSION = 0.115.12
-+PYTHON_FASTAPI_VERSION = 0.115.13
- PYTHON_FASTAPI_SOURCE = fastapi-$(PYTHON_FASTAPI_VERSION).tar.gz
--PYTHON_FASTAPI_SITE = https://files.pythonhosted.org/packages/f4/55/ae499352d82338331ca1e28c7f4a63bfd09479b16395dce38cf50a39e2c2
-+PYTHON_FASTAPI_SITE = https://files.pythonhosted.org/packages/20/64/ec0788201b5554e2a87c49af26b77a4d132f807a0fa9675257ac92c6aa0e
- PYTHON_FASTAPI_SETUP_TYPE = pep517
- PYTHON_FASTAPI_LICENSE = MIT
- PYTHON_FASTAPI_LICENSE_FILES = LICENSE
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
