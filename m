@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F22F4C7EE31
-	for <buildroot@archiver.kernel.org>; Thu, 26 Jun 2025 19:13:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 927DDC7EE33
+	for <buildroot@archiver.kernel.org>; Thu, 26 Jun 2025 19:13:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A3F274191C;
+	by smtp3.osuosl.org (Postfix) with ESMTP id E325361229;
 	Thu, 26 Jun 2025 19:13:20 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YojkhF9FJgkq; Thu, 26 Jun 2025 19:13:20 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E48DB4191D
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E48DB4191D;
-	Thu, 26 Jun 2025 19:13:19 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 605D5154
- for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:13:17 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5258260782
- for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:13:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 28UxdnTsxTTh for <buildroot@buildroot.org>;
+ id WUxPaRqRxcdd; Thu, 26 Jun 2025 19:13:18 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF2096076A
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id AF2096076A;
+	Thu, 26 Jun 2025 19:13:18 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3EE90154
+ for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:13:17 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3C82241920
+ for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:13:17 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ybAKtXfx3vxt for <buildroot@buildroot.org>;
  Thu, 26 Jun 2025 19:13:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A1CD60767
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8E7C94191D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7A1CD60767
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8E7C94191D
  for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:13:16 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 779878454B; Thu, 26 Jun 2025 19:13:16 +0000 (UTC)
+ id 8AA018454E; Thu, 26 Jun 2025 19:13:16 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 24 Jun 2025 21:00:19 +0200
+Date: Wed, 25 Jun 2025 23:02:36 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 3045f77545ccf6ae788bc844143808700d4ae189
-X-Git-Newrev: 54a1ed543f9d1bc546c1c6b9949cf76489590f27
+X-Git-Oldrev: 9eb5e71313d53e66a3a050027a27575e7555d8f8
+X-Git-Newrev: 06a92ffdcc2ced0411102ca0f9028bcaec86dadb
 X-Patchwork-Hint: ignore
-Message-Id: <20250626191316.779878454B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/libblockdev:
- security bump to version 3.3.1
+Message-Id: <20250626191316.8AA018454E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/haproxy: bump
+ version to 2.6.22
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,47 +66,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=54a1ed543f9d1bc546c1c6b9949cf76489590f27
+commit: https://git.buildroot.net/buildroot/commit/?id=06a92ffdcc2ced0411102ca0f9028bcaec86dadb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-This version fixes CVE-2025-6019, see:
-https://github.com/storaged-project/libblockdev/blob/3.3.1/NEWS.rst
+Changelog: http://www.haproxy.org/download/2.6/src/CHANGELOG
 
-Fixes:
-https://www.cve.org/CVERecord?id=CVE-2025-6019
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-[Julien: add link to CVE]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 0233c854b1845e0070179439a74b3b5245a4b01b)
+Signed-off-by: Fred Lefranc <fred.lefranc+evs@gmail.com>
+[thomas: fixed the '.hash' file from patch to apply]
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/libblockdev/libblockdev.hash | 2 +-
- package/libblockdev/libblockdev.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/haproxy/haproxy.hash | 4 ++--
+ package/haproxy/haproxy.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libblockdev/libblockdev.hash b/package/libblockdev/libblockdev.hash
-index dd6f8b1a27..38450c656d 100644
---- a/package/libblockdev/libblockdev.hash
-+++ b/package/libblockdev/libblockdev.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  c4738e1abedefffe886521f9f0e7a9306c6f50f7691d88e011438c88608bdfa7  libblockdev-3.3.0.tar.gz
-+sha256  a2e2e448a19d420480b8cce5e0752197482a65cb62a9ed55d88b237da36600d1  libblockdev-3.3.1.tar.gz
- sha256  97bdc721d875501b6243a456333fdfdb1ab64d31c4da2554de845caf4674b946  LICENSE
-diff --git a/package/libblockdev/libblockdev.mk b/package/libblockdev/libblockdev.mk
-index 265cee2e28..ecee8dee24 100644
---- a/package/libblockdev/libblockdev.mk
-+++ b/package/libblockdev/libblockdev.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
+index 74390c2ff5..42f340fa80 100644
+--- a/package/haproxy/haproxy.hash
++++ b/package/haproxy/haproxy.hash
+@@ -1,5 +1,5 @@
+-# From: http://www.haproxy.org/download/2.6/src/haproxy-2.6.15.tar.gz.sha256
+-sha256  41f8e1695e92fafdffe39690a68993f1a0f5f7f06931a99e9a153f749ea39cfd  haproxy-2.6.15.tar.gz
++# From: http://www.haproxy.org/download/2.6/src/haproxy-2.6.22.tar.gz.sha256
++sha256  4c0797f450f997dc287d2c7aafa7a0e5b7a2d71593a2cd58e664e8f3aea614fa  haproxy-2.6.22.tar.gz
+ # Locally computed:
+ sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
+ sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
+diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
+index 61a9ebebe4..77195d966b 100644
+--- a/package/haproxy/haproxy.mk
++++ b/package/haproxy/haproxy.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBBLOCKDEV_VERSION = 3.3.0
-+LIBBLOCKDEV_VERSION = 3.3.1
- LIBBLOCKDEV_SITE = https://github.com/storaged-project/libblockdev/releases/download/$(LIBBLOCKDEV_VERSION)
- LIBBLOCKDEV_LICENSE = LGPL-2.1
- LIBBLOCKDEV_LICENSE_FILES = LICENSE
+ HAPROXY_VERSION_MAJOR = 2.6
+-HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).15
++HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).22
+ HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
+ HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
+ HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
