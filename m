@@ -1,51 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57A30C7EE2A
-	for <buildroot@archiver.kernel.org>; Wed, 25 Jun 2025 17:10:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CDE9C7EE2A
+	for <buildroot@archiver.kernel.org>; Wed, 25 Jun 2025 17:11:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 177C484202;
-	Wed, 25 Jun 2025 17:10:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4045F41EF8;
+	Wed, 25 Jun 2025 17:11:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id r_2GkZjt5ruU; Wed, 25 Jun 2025 17:10:58 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id r_sq_mJl0vK4; Wed, 25 Jun 2025 17:11:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3891F841F6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7827041EFA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3891F841F6;
-	Wed, 25 Jun 2025 17:10:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7827041EFA;
+	Wed, 25 Jun 2025 17:11:31 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 65BCE43F
- for <buildroot@buildroot.org>; Wed, 25 Jun 2025 17:10:56 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id E8FD943F
+ for <buildroot@buildroot.org>; Wed, 25 Jun 2025 17:11:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5726461470
- for <buildroot@buildroot.org>; Wed, 25 Jun 2025 17:10:56 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DA3A561470
+ for <buildroot@buildroot.org>; Wed, 25 Jun 2025 17:11:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eZBQQiKoSOpG for <buildroot@buildroot.org>;
- Wed, 25 Jun 2025 17:10:55 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9B55760F76
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9B55760F76
- for <buildroot@buildroot.org>; Wed, 25 Jun 2025 17:10:55 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 95EE48438D; Wed, 25 Jun 2025 17:10:55 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 25 Jun 2025 19:10:00 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3953bd3e9cf1c582d799006f205650033c22db92
-X-Git-Newrev: 72a47cd3a2f1cb8af0acc76e17b35076cd39abac
-X-Patchwork-Hint: ignore
-Message-Id: <20250625171055.95EE48438D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/git: bump to version 2.50.0
+ id UGuvsrdD2PUm for <buildroot@buildroot.org>;
+ Wed, 25 Jun 2025 17:11:29 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1CE6460F76
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1CE6460F76
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1CE6460F76
+ for <buildroot@buildroot.org>; Wed, 25 Jun 2025 17:11:28 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 2985C19F73F;
+ Wed, 25 Jun 2025 19:11:26 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Wed, 25 Jun 2025 19:11:26 +0200
+MIME-Version: 1.0
+Date: Wed, 25 Jun 2025 19:11:26 +0200
+To: Bagas Sanjaya <bagasdotme@gmail.com>
+Cc: Buildroot Development <buildroot@buildroot.org>
+In-Reply-To: <20250624092615.920562-2-bagasdotme@gmail.com>
+References: <20250624092615.920562-2-bagasdotme@gmail.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <9049e8379d20936b3d5986861b7f824c@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1750871487;
+ bh=H6m15xp0tkSQdqiMjq0LaGdWDix9X+PE1MAQZyjylFk=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=PZ0AFr8qHk7l+6gDIZgN3Jr5HncPsGLgLRAdC7Vnqy8+lIjQTfa3UYDz6BssScUEq
+ iaFuuCHxi56vkn3qR/GA3eM/SM5PrBYfnzBEtE35vfD1cxYPLfelVJG8BUKrc/7OcY
+ V3smj4MRQ2jIlvtIFnM2/KVzh2oXBICHVNLJghzNRuoRy6++iRzNHPtR2R8YozGnLP
+ 2x+OEh228F08f77UuuGRmdycznyDN9dlaIk8O1RVXDYIpoEurYSC3pC/9Fgt5m8G7P
+ LMK0ND6TyNOQHexVgAHNgfeaSjzLQ0Hlsc9QSzBFH3IXw0OTzGS7HiuGecMm6N/MEk
+ o/T1FlZhz8C/Q==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=PZ0AFr8q
+Subject: Re: [Buildroot] [PATCH] package/git: bump to version 2.50.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,51 +82,20 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=72a47cd3a2f1cb8af0acc76e17b35076cd39abac
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 24/06/2025 11:26, Bagas Sanjaya wrote:
+> Bump the package version to v2.50.0.
+> 
+> Release notes:
+> https://lore.kernel.org/git/xmqq1prj1umb.fsf@gitster.g/
+> 
+> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
-Bump the package version to v2.50.0.
-
-Release notes:
-https://lore.kernel.org/git/xmqq1prj1umb.fsf@gitster.g/
-
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/git/git.hash | 2 +-
- package/git/git.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/git/git.hash b/package/git/git.hash
-index 6235a8aa0a..b20fe2de0e 100644
---- a/package/git/git.hash
-+++ b/package/git/git.hash
-@@ -1,5 +1,5 @@
- # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
--sha256  618190cf590b7e9f6c11f91f23b1d267cd98c3ab33b850416d8758f8b5a85628  git-2.49.0.tar.xz
-+sha256  dff3c000e400ace3a63b8a6f8b3b76b88ecfdffd4504a04aba4248372cdec045  git-2.50.0.tar.xz
- # Locally calculated
- sha256  5b2198d1645f767585e8a88ac0499b04472164c0d2da22e75ecf97ef443ab32e  COPYING
- sha256  1922f45d2c49e390032c9c0ba6d7cac904087f7cec51af30c2b2ad022ce0e76a  LGPL-2.1
-diff --git a/package/git/git.mk b/package/git/git.mk
-index 68a0fff65f..560590b33b 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GIT_VERSION = 2.49.0
-+GIT_VERSION = 2.50.0
- GIT_SOURCE = git-$(GIT_VERSION).tar.xz
- GIT_SITE = $(BR2_KERNEL_MIRROR)/software/scm/git
- GIT_LICENSE = GPL-2.0, LGPL-2.1+
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
