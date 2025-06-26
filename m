@@ -1,106 +1,107 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FF93C7EE31
-	for <buildroot@archiver.kernel.org>; Thu, 26 Jun 2025 19:54:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9AC4C7EE31
+	for <buildroot@archiver.kernel.org>; Thu, 26 Jun 2025 19:54:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 47840612A7;
-	Thu, 26 Jun 2025 19:54:34 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KCFzc65yxwXQ; Thu, 26 Jun 2025 19:54:33 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 516FA61277
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 516FA61277;
-	Thu, 26 Jun 2025 19:54:33 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id BC68B154
- for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:54:32 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A2176403D0
- for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:54:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8D7B341991;
+	Thu, 26 Jun 2025 19:54:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9IpMIfB8lpFH for <buildroot@buildroot.org>;
- Thu, 26 Jun 2025 19:54:32 +0000 (UTC)
+ id fEYUoZULg0mu; Thu, 26 Jun 2025 19:54:43 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9BCDF40555
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9BCDF40555;
+	Thu, 26 Jun 2025 19:54:43 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7487010A
+ for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:54:42 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5BF4040337
+ for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:54:42 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2cY9oKcvb9jC for <buildroot@buildroot.org>;
+ Thu, 26 Jun 2025 19:54:41 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
+ client-ip=2a00:1450:4864:20::434; helo=mail-wr1-x434.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org BFF8F41991
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BFF8F41991
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
- [IPv6:2a00:1450:4864:20::32e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id BFF8F41991
- for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:54:31 +0000 (UTC)
-Received: by mail-wm1-x32e.google.com with SMTP id
- 5b1f17b1804b1-450ce671a08so8287215e9.3
- for <buildroot@buildroot.org>; Thu, 26 Jun 2025 12:54:31 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2D9E940075
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2D9E940075
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2D9E940075
+ for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:54:41 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id
+ ffacd0b85a97d-3a6e8b1fa37so1395261f8f.2
+ for <buildroot@buildroot.org>; Thu, 26 Jun 2025 12:54:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1750967670; x=1751572470;
+ d=1e100.net; s=20230601; t=1750967679; x=1751572479;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=8aX6nw0Lt/YbofPkdPpKas3GJ41aiJSLWLtMuO2kAYs=;
- b=hNxoINt+MvsUgws28gAgSdEPcmPWqhpJvoUWM2j7uwHJDMjset1bwquJ/4t/K+kT7i
- P1ph3mPgl/Ibzq+rVopc8Y4NorU04Z9EQi9D5aQPp5olmcO7kG3y0oQS71xvdDeoaOBo
- EJ9HWqgpugSsFLogmmd+iTNRxiESUe+bW8adauY3EVV72rpQ6SUm8rbe45MJ7hPRUj//
- bfqHLqBc3tvkCTY6d2+Gr4KA9lwcpiPokVJP0yqDmh0en8tshUwc4+SNC0JYuZNvXByg
- c+vaSQDrPzgSyRNWdhX3CnGpHtO3GsguaVMrUGJoxO1YWTKpyZD/hROaqRi1pi9gZl0Q
- YQ+g==
+ bh=9/xFGrQOa0MHK2bLaFmJ+MMI4fbhqmji+n+nNKY/b9M=;
+ b=dLNRRXR5CgRgnildnD4mmBWW1/g3nvUrwK1umCtIrC8EMBksaoUdfKiKPyseDiXIro
+ SUOoZjUxY+ZqDXlWWbSsSXKRZsvRfa4ZPXBY/6c/Yrgu/uUkokdXVs8yEQ8TPRA13gvk
+ ucGqpUpuxPmlDT5UAExcpdK6SpJGXkqLyXsGxZN4EY4kRc7NS/+7Pcvo6CNXmycBnf7h
+ BBqCyJhp9gbYEB97KW1RIbntLqTGzHh+ngoy7sDbhZyU/nDxCvcjqDkGqY0BktrrhYHf
+ sG3kSyYRz9LuWD11PyLkrhrhtRPFLHpXWs3xyV3CmRrhORRzjy1V92hP15R/7l/clkUO
+ gFuA==
 X-Forwarded-Encrypted: i=1;
- AJvYcCV5aqpbyL0mRklUH6+tyw1RuZ9IPQHm1lPCpMdJJPKYQen5qm0iPq/ZKd9l/pK4xrThoaTIZUqsXYc=@buildroot.org
-X-Gm-Message-State: AOJu0Yy9IBkPBIEhniGCocSOjcpIjkswtjezYv08EmFyvfEmbl4XNMX4
- dVe9G1StizO1wOlkBem9PCdrMhJBVTfCyPIFO+4uwee8Y+SfJXXOW3eu8zFWj0w4yaLXgcCUZxm
- W1ovT
-X-Gm-Gg: ASbGncsullQitOWRGcFCigKq+YjXTYJO1gHh6oJ//dS+Lxkw387lDHuYKlMthuO4TFx
- 5E4oP41wnxzoYhLCwxZMfAUVgd12Icn7+pkKo10OwrZmfARy06BtR9xs+GP/aXkNzCBOz7kEZj6
- wo/MAb5Wwf8TBuq+hG+NGE5fiB4FpYi3FiEhweTUWBuNmTgVj+daWT7Cok4MH5J75mZcrUMWrIW
- MY2kLceU2BKGoxFTzoozMAs5i2DgBfDB7SmfmRt3Rg8FXlxH21I8x9Gi044cwmvJjBHzXtllg8U
- l661AUAIzGkBA7ajvIHwPaJCON6UvbmdJTwi7ucPrx7i59B3+higU03W3Q/k3RDQzav3i9AXeV0
- Fn5Xlp+Mwpd86duajt/Z+OgOTzHwz+jA1
-X-Google-Smtp-Source: AGHT+IEN0CjjJw/tGrF6bL9Q+mQbxZYCkn4FGnA0HAq1xuOd0jID2z7OEc0F9s30Y2rtKfg/Bo2VSA==
-X-Received: by 2002:a05:600c:4e02:b0:43c:f70a:2af0 with SMTP id
- 5b1f17b1804b1-4538ee61fd0mr7590915e9.16.1750967669867; 
- Thu, 26 Jun 2025 12:54:29 -0700 (PDT)
+ AJvYcCV2iXD5plAQW2oOzeqJnbgdWaufoNSqpAgSkeE5i+BROx4T64S1CwVARO2aFGuq2ATQerCLtb8aFu0=@buildroot.org
+X-Gm-Message-State: AOJu0YxC/pVz2XwuFIUq9Gn+UzLHL7yeqtBjW8uHCxvV0wXWYtHzDVDY
+ WsTFmXujOvt8hSEQUz7Xu9W7AslCRTQUhvjE/ubvrnjLZ7V8bpPpI9TMbG9EgJL6cWV+zKDQ4VG
+ 1+kfd
+X-Gm-Gg: ASbGncuYOSYRR4Ql5TBcSzyBsEJUzyYzULl1ogFI3TeC/8Wdqha9cQulCmeEQ6g7OZe
+ Xkb6DVNN8Bn2f6K/+74w8BgrK9OVVWO2PUnBFX/SXMcfR7dissl1m44sPPLra1MGLiXd4+7x3my
+ yZLGpOddYt1gAl8ShPpyuqPfUP+papZtVHQpPhGuhjT1e4m9Y3DHpVSMEydj58AgyzYRmuq44bE
+ RzfO3cy6+2jZ3HI/TtJrWAL/vsYsBm/tLdwC4UW7xju4i1W0v5OQfIlKk8zKvtXPQIR/z+5bCIB
+ vRgX3BxIOpyrxhBI91bAfnaeT0wYnwU4yY5067IqyUIOr7pxdQ2SUZW0M1hwZxyP/+bTKFF3H/8
+ TwbfmxvowNcfsAtzj58EIhtSAd4LYuR6q7Mg1Bm+0ZUc=
+X-Google-Smtp-Source: AGHT+IGSWzHZFS20X4e/opKaTpRXvz7CeiTtvIJpuCL9q3b31APU4BJm1tyaaJVSxOECdri4noOKqQ==
+X-Received: by 2002:a05:6000:25e8:b0:3a4:d31e:4af3 with SMTP id
+ ffacd0b85a97d-3a8fee64e2fmr614417f8f.37.1750967679214; 
+ Thu, 26 Jun 2025 12:54:39 -0700 (PDT)
 Received: from localhost.localdomain (94.105.118.175.dyn.edpnet.net.
  [94.105.118.175]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4538a3fe043sm28254285e9.26.2025.06.26.12.54.29
+ 5b1f17b1804b1-4538327fed8sm27984255e9.1.2025.06.26.12.54.38
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 26 Jun 2025 12:54:29 -0700 (PDT)
-To: Bernd Kuhls <bernd@kuhls.net>
+ Thu, 26 Jun 2025 12:54:38 -0700 (PDT)
+To: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Thu, 26 Jun 2025 21:54:20 +0200
-Message-ID: <20250626195420.15705-1-thomas.perale@mind.be>
+Date: Thu, 26 Jun 2025 21:54:30 +0200
+Message-ID: <20250626195430.15776-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250617210244.1146420-1-bernd@kuhls.net>
-References: <20250617210244.1146420-1-bernd@kuhls.net>
+In-Reply-To: <20250617123249.1359316-1-gwenj@trabucayre.com>
+References: <20250617123249.1359316-1-gwenj@trabucayre.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1750967670; x=1751572470; darn=buildroot.org;
+ d=mind.be; s=google; t=1750967679; x=1751572479; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=8aX6nw0Lt/YbofPkdPpKas3GJ41aiJSLWLtMuO2kAYs=;
- b=SGGqp25nDt/eNsrE3K5qWb+ieUBcF+yeWxyWWuZ0sE9JnQinugDrFJu3clcUWP13zo
- 4Q6tGnnMTZ88U7SdHTtcwTQnJXmEFEuKAl1gYpuDvb4qx2x1zfmgzpisI6tsFMTqEUcd
- hU8IR5Kds19HGxvChsX+3GLxFsSt3gEQ6yuhFqJCl1KKBnPbZ+j09LmwsNGSJVREJOqW
- rPI1knAbZVHZkQ3m4Fd25DeNXvkuJNWfaEMAPxYNP6WH+EpRr7n37pi8pamVzquJ8cQu
- LjNIrn69MpGjMFmort3+zN+PFOvJjaVUDOHCuG+H1BxNghhVLVHjm4FcYU121x1L+dU9
- KRAA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=9/xFGrQOa0MHK2bLaFmJ+MMI4fbhqmji+n+nNKY/b9M=;
+ b=cQfzcqeGgWnkKrLBIzBvOVVImIUUc80qpugxhXnzNau5BeirpkjBSYhpJs+sVx5KPJ
+ 6blmD21xV9bgdcSe1QhDO35qdsf6rl7o+S8zegoWnq8CskHYQjr4FbmZwjkTghXAq7JN
+ uMA/88Wuml//lxvNpt0vAeZcjno8y+CuVZb8xSb9GKCsJeob6mVkUXjPoAXISiX0NjxC
+ sTeEIZ51cHH12KyPIXwnJYEfbnGaMFf8xbYedZ78urjgSGST0zgTx/MhEEgKVy30oCCz
+ X8759wH+isyhon+frqTa31VDoPl5H++amMQgxQR3Rmr7u4sESsWs0aeu5m9jHwzoQBUl
+ TzAg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=SGGqp25n
-Subject: Re: [Buildroot] [PATCH 1/1] package/mjpg-streamer: bump version
+ header.a=rsa-sha256 header.s=google header.b=cQfzcqeG
+Subject: Re: [Buildroot] [PATCH] package/python-remi: bump to master commit
+ and fixes build failure
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -120,83 +121,137 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Add fix to build with cmake 4.x.
+> REMI hasn't received new release since July 2022 and is currently broken
+> with error:
 > 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> Traceback (most recent call last):
+>   File "<string>", line 26, in <module>
+>   File "/workdir/instance-0/output-1/host/lib/python3.13/site-packages/setuptools/__init__.py", line 116, in setup
+>     _install_setup_requires(attrs)
+>     ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+>   File "/workdir/instance-0/output-1/host/lib/python3.13/site-packages/setuptools/__init__.py", line 89, in _install_setup_requires
+>     _fetch_build_eggs(dist)
+>     ~~~~~~~~~~~~~~~~~^^^^^^
+>   File "/workdir/instance-0/output-1/host/lib/python3.13/site-packages/setuptools/__init__.py", line 94, in _fetch_build_eggs
+>     dist.fetch_build_eggs(dist.setup_requires)
+>     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+>   File "/workdir/instance-0/output-1/host/lib/python3.13/site-packages/setuptools/build_meta.py", line 80, in fetch_build_eggs
+>     raise SetupRequirementsError(specifier_list)
+> setuptools.build_meta.SetupRequirementsError: ['setuptools_scm']
+> 
+> During handling of the above exception, another exception occurred:
+> 
+> Traceback (most recent call last):
+>   File "/workdir/instance-0/output-1/host/lib/python3.13/site-packages/pyproject_hooks/_in_process/_in_process.py", line 389, in <module>
+>     main()
+>     ~~~~^^
+>   File "/workdir/instance-0/output-1/host/lib/python3.13/site-packages/pyproject_hooks/_in_process/_in_process.py", line 373, in main
+>     json_out["return_val"] = hook(**hook_input["kwargs"])
+>                              ~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+>   File "/workdir/instance-0/output-1/host/lib/python3.13/site-packages/pyproject_hooks/_in_process/_in_process.py", line 143, in get_requires_for_build_wheel
+>     return hook(config_settings)
+>   File "/workdir/instance-0/output-1/host/lib/python3.13/site-packages/setuptools/build_meta.py", line 331, in get_requires_for_build_wheel
+>     return self._get_build_requires(config_settings, requirements=[])
+>            ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   File "/workdir/instance-0/output-1/host/lib/python3.13/site-packages/setuptools/build_meta.py", line 301, in _get_build_requires
+>     self.run_setup()
+>     ~~~~~~~~~~~~~~^^
+>   File "/workdir/instance-0/output-1/host/lib/python3.13/site-packages/setuptools/build_meta.py", line 512, in run_setup
+>     super().run_setup(setup_script=setup_script)
+>     ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   File "/workdir/instance-0/output-1/host/lib/python3.13/site-packages/setuptools/build_meta.py", line 317, in run_setup
+>     exec(code, locals())
+>     ~~~~^^^^^^^^^^^^^^^^
+>   File "<string>", line 31, in <module>
+>   File "/workdir/instance-0/output-1/host/lib/python3.13/site-packages/setuptools/__init__.py", line 117, in setup
+>     return distutils.core.setup(**attrs)
+>            ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+>   File "/workdir/instance-0/output-1/host/lib/python3.13/site-packages/setuptools/_distutils/core.py", line 148, in setup
+>     _setup_distribution = dist = klass(attrs)
+>                                  ~~~~~^^^^^^^
+>   File "/workdir/instance-0/output-1/host/lib/python3.13/site-packages/setuptools/dist.py", line 323, in __init__
+>     _Distribution.__init__(self, dist_attrs)
+>     ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+>   File "/workdir/instance-0/output-1/host/lib/python3.13/site-packages/setuptools/_distutils/dist.py", line 309, in __init__
+>     self.finalize_options()
+>     ~~~~~~~~~~~~~~~~~~~~~^^
+>   File "/workdir/instance-0/output-1/host/lib/python3.13/site-packages/setuptools/dist.py", line 786, in finalize_options
+>     ep(self)
+>     ~~^^^^^^
+>   File "/workdir/instance-0/output-1/host/lib/python3.13/site-packages/setuptools/dist.py", line 806, in _finalize_setup_keywords
+>     ep.load()(self, ep.name, value)
+>     ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+>   File "/workdir/instance-0/output-1/host/lib/python3.13/site-packages/setuptools_scm/_integration/setuptools.py", line 82, in version_keyword
+>     assert isinstance(value, dict), "version_keyword expects a dict or True"
+>            ~~~~~~~~~~^^^^^^^^^^^^^
+> AssertionError: version_keyword expects a dict or True
+> 
+> ERROR Backend subprocess exited when trying to invoke get_requires_for_build_wheel
+> make: *** [package/pkg-generic.mk:273: /workdir/instance-0/output-1/build/python-remi-2022.7.27/.stamp_built] Error 1
+> make: Leaving directory '/workdir/instance-0/buildroot'
+> 
+> Since last release code has been corrected and now build end
+> successfully.
+> 
+> Another issue with remi is related to python CGI library no more available with
+> python 3.13. This patch also updates Config.in to add a select BR2_PACKAGE_PYTHON_LEGACY_CGI
+> 
+> 
+> Fix:
+> - https://autobuild.buildroot.org/results/f0409533ebdc31e522f2ee2ea8a5acc11dbc7430/
+> - https://autobuild.buildroot.org/results/a16cf5105d4b726b5d4136a2d8f82abcfdc0faba/
+> - https://autobuild.buildroot.org/results/e7ac28e20ad92863d337e96c225463346ee6c690/
+> 
+> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
 Applied to 2025.05.x. Thanks
 
 > ---
->  package/mjpg-streamer/0002-cmake4.patch  | 34 ++++++++++++++++++++++++
->  package/mjpg-streamer/mjpg-streamer.hash |  2 +-
->  package/mjpg-streamer/mjpg-streamer.mk   |  2 +-
->  3 files changed, 36 insertions(+), 2 deletions(-)
->  create mode 100644 package/mjpg-streamer/0002-cmake4.patch
+>  package/python-remi/Config.in        | 1 +
+>  package/python-remi/python-remi.hash | 3 +--
+>  package/python-remi/python-remi.mk   | 5 ++---
+>  3 files changed, 4 insertions(+), 5 deletions(-)
 > 
-> diff --git a/package/mjpg-streamer/0002-cmake4.patch b/package/mjpg-streamer/0002-cmake4.patch
-> new file mode 100644
-> index 0000000000..ed7211ab81
-> --- /dev/null
-> +++ b/package/mjpg-streamer/0002-cmake4.patch
-> @@ -0,0 +1,34 @@
-> +From 0dd9cf8b23fa183a403794e15617237662104d1d Mon Sep 17 00:00:00 2001
-> +From: Stephen L Arnold <nerdboy@gentoo.org>
-> +Date: Mon, 29 Nov 2021 18:13:34 -0800
-> +Subject: [PATCH] fix: update cmake build, fix install, add simple test and
-> + versioning
-> +
-> +Signed-off-by: Stephen L Arnold <nerdboy@gentoo.org>
-> +
-> +Upstream: https://github.com/jacksonliam/mjpg-streamer/pull/333
-> +
-> +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> +[Bernd:
-> + ported cmake version bump from upstream PR to fix build with cmake 4.x]
-> +---
-> + mjpg-streamer-experimental/CMakeLists.txt     | 102 +++++++++++++-----
-> + mjpg-streamer-experimental/Makefile           |  15 +--
-> + .../cmake/FindGphoto2.cmake                   |  20 ++--
-> + .../cmake/mjpg_streamer_utils.cmake           |  22 ++--
-> + mjpg-streamer-experimental/mjpg_streamer.c    |   4 -
-> + mjpg-streamer-experimental/mjpg_streamer.h    |   9 +-
-> + .../plugins/input_ptp2/CMakeLists.txt         |   6 +-
-> + .../plugins/output_http/CMakeLists.txt        |   2 +-
-> + 8 files changed, 117 insertions(+), 63 deletions(-)
-> +
-> +diff --git a/mjpg-streamer-experimental/CMakeLists.txt b/mjpg-streamer-experimental/CMakeLists.txt
-> +index cf26620e..e6e67bc7 100644
-> +--- a/mjpg-streamer-experimental/CMakeLists.txt
-> ++++ b/mjpg-streamer-experimental/CMakeLists.txt
-> +@@ -1,4 +1,4 @@
-> +-cmake_minimum_required(VERSION 2.8.3)
-> ++cmake_minimum_required(VERSION 3.10.0)
-> + set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
-> + 
-> + project("mjpg-streamer" C)
-> diff --git a/package/mjpg-streamer/mjpg-streamer.hash b/package/mjpg-streamer/mjpg-streamer.hash
-> index 164c9b2181..9b06bfebc2 100644
-> --- a/package/mjpg-streamer/mjpg-streamer.hash
-> +++ b/package/mjpg-streamer/mjpg-streamer.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha256  5b427b07c03c2c0468cc782daf1510d315141170246828fcbb7c07f927879973  mjpg-streamer-5a6e0a2db163e6ae9461552b59079870d0959340.tar.gz
-> +sha256  eb4de7fed9f8b15ee6d8ca2b0417aff2854cd018582b7090e28eb0aaa19bc808  mjpg-streamer-310b29f4a94c46652b20c4b7b6e5cf24e532af39.tar.gz
->  sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  mjpg-streamer-experimental/LICENSE
-> diff --git a/package/mjpg-streamer/mjpg-streamer.mk b/package/mjpg-streamer/mjpg-streamer.mk
-> index 46f3f50104..364dfac27d 100644
-> --- a/package/mjpg-streamer/mjpg-streamer.mk
-> +++ b/package/mjpg-streamer/mjpg-streamer.mk
-> @@ -4,7 +4,7 @@
+> diff --git a/package/python-remi/Config.in b/package/python-remi/Config.in
+> index da2c2f4cfb..2ecd310bf2 100644
+> --- a/package/python-remi/Config.in
+> +++ b/package/python-remi/Config.in
+> @@ -2,6 +2,7 @@ config BR2_PACKAGE_PYTHON_REMI
+>  	bool "python-remi"
+>  	select BR2_PACKAGE_PYTHON3_SSL # runtime
+>  	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
+> +	select BR2_PACKAGE_PYTHON_LEGACY_CGI # runtime
+>  	help
+>  	  Remi is a GUI library for Python applications which transpiles
+>  	  an application's interface into HTML to be rendered in a web
+> diff --git a/package/python-remi/python-remi.hash b/package/python-remi/python-remi.hash
+> index e7937c3914..46bee6e664 100644
+> --- a/package/python-remi/python-remi.hash
+> +++ b/package/python-remi/python-remi.hash
+> @@ -1,4 +1,3 @@
+> -# sha256 from https://pypi.org/pypi/remi/json
+> -sha256  542df88e174bbd58fe763c49e5c2116f2c8413c1a934731069ed8c17bb9cd64c  remi-2022.7.27.tar.gz
+>  # Locally computed sha256
+> +sha256  8a84941a58952657c7940db2fd3adc6d1ae10a186a02ddc0f1963c353e6108b3  python-remi-18505f6439849c6e01695dd90dbf680d5ffb0a14.tar.gz
+>  sha256  3df7d3ad8904d7e99fc0810366483a7cbe5a43c13f7f913f1d7e5023f2ff7657  LICENSE
+> diff --git a/package/python-remi/python-remi.mk b/package/python-remi/python-remi.mk
+> index 419a3441a7..ed0fb2be1d 100644
+> --- a/package/python-remi/python-remi.mk
+> +++ b/package/python-remi/python-remi.mk
+> @@ -4,9 +4,8 @@
 >  #
 >  ################################################################################
 >  
-> -MJPG_STREAMER_VERSION = 5a6e0a2db163e6ae9461552b59079870d0959340
-> +MJPG_STREAMER_VERSION = 310b29f4a94c46652b20c4b7b6e5cf24e532af39
->  MJPG_STREAMER_SITE = $(call github,jacksonliam,mjpg-streamer,$(MJPG_STREAMER_VERSION))
->  MJPG_STREAMER_SUBDIR = mjpg-streamer-experimental
->  MJPG_STREAMER_LICENSE = GPL-2.0+
+> -PYTHON_REMI_VERSION = 2022.7.27
+> -PYTHON_REMI_SOURCE = remi-$(PYTHON_REMI_VERSION).tar.gz
+> -PYTHON_REMI_SITE = https://files.pythonhosted.org/packages/b7/5c/fca9d9273fc9d5f4ca0bc2f387ca19f8ba9979dcb75617d094e575dc2337
+> +PYTHON_REMI_VERSION = 18505f6439849c6e01695dd90dbf680d5ffb0a14
+> +PYTHON_REMI_SITE = $(call github,rawpython,remi,$(PYTHON_REMI_VERSION))
+>  
+>  PYTHON_REMI_LICENSE = Apache-2.0
+>  PYTHON_REMI_LICENSE_FILES = LICENSE
 > -- 
-> 2.39.5
+> 2.47.2
 > 
 > _______________________________________________
 > buildroot mailing list
