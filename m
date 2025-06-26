@@ -4,79 +4,102 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13789C77B7F
-	for <buildroot@archiver.kernel.org>; Thu, 26 Jun 2025 08:02:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D767DC7115B
+	for <buildroot@archiver.kernel.org>; Thu, 26 Jun 2025 08:30:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9A28960DC5;
-	Thu, 26 Jun 2025 08:02:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 95268607B9;
+	Thu, 26 Jun 2025 08:30:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gc9alFU3Rene; Thu, 26 Jun 2025 08:02:51 +0000 (UTC)
+ id iRjHeg82x5q9; Thu, 26 Jun 2025 08:30:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 977D060673
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C6E2260DB5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 977D060673;
-	Thu, 26 Jun 2025 08:02:51 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 5BC8C10A
- for <buildroot@buildroot.org>; Thu, 26 Jun 2025 08:02:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C6E2260DB5;
+	Thu, 26 Jun 2025 08:30:21 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id D908610A
+ for <buildroot@buildroot.org>; Thu, 26 Jun 2025 08:30:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4CBE660690
- for <buildroot@buildroot.org>; Thu, 26 Jun 2025 08:02:50 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D2D5B80D17
+ for <buildroot@buildroot.org>; Thu, 26 Jun 2025 08:30:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TlMQUY44F0iI for <buildroot@buildroot.org>;
- Thu, 26 Jun 2025 08:02:49 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
- helo=relay2-d.mail.gandi.net; envelope-from=luca.ceresoli@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 10D9260640
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 10D9260640
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 10D9260640
- for <buildroot@buildroot.org>; Thu, 26 Jun 2025 08:02:48 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B6099442CD;
- Thu, 26 Jun 2025 08:02:44 +0000 (UTC)
-Date: Thu, 26 Jun 2025 10:02:42 +0200
-To: Alexis =?UTF-8?B?TG90aG9yw6k=?= <alexis.lothore@bootlin.com>
-Cc: buildroot@buildroot.org, Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>, Olivier Benjamin
- <olivier.benjamin@bootlin.com>
-Message-ID: <20250626100242.27ab1407@booty>
-In-Reply-To: <20250625-perf_libtraceevent-v1-1-0bf7620bc6c9@bootlin.com>
-References: <20250625-perf_libtraceevent-v1-1-0bf7620bc6c9@bootlin.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-redhat-linux-gnu)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id M7dJI5gNxYjA for <buildroot@buildroot.org>;
+ Thu, 26 Jun 2025 08:30:19 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::435; helo=mail-wr1-x435.google.com;
+ envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 96CE7811DC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 96CE7811DC
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 96CE7811DC
+ for <buildroot@buildroot.org>; Thu, 26 Jun 2025 08:30:18 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id
+ ffacd0b85a97d-3a6cd1a6fecso642822f8f.3
+ for <buildroot@buildroot.org>; Thu, 26 Jun 2025 01:30:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1750926616; x=1751531416;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=Glx5m9fnxIgu9769XaEbH72EKlRk1D91w/jccr/flH4=;
+ b=EU02UFIVsCn7nXuwqFRyxxjvN+ru5ji4R5qenPrUhrbS8ML5+BFbUoFsk7geBf3bxG
+ 7EV3Z+2kl4bGHs9VlQtweYTnQ0vbTcTdLtZrXzouVMZYppG9xNyiRUO7j5WPXz63gkc9
+ AM4u4t+ab28FX0UURd/LvhT1hjzs6ISpEy2SoP0j8kBInqdDih1qaN7ltY8icBkIS3fU
+ w9NVJuzLVvGrOfpWlaFh/2Im5p+PN9uZvMGMyG8Jj+eIx+UB5dqnhEw/BEfzgAh+QZ1U
+ rxhTJ6Qc+70t7TErK1u06XBnQNKZbH86dtEDkfqAQt6QWZh9uicEOAHaJY9eHZUzLee5
+ yqmA==
+X-Gm-Message-State: AOJu0YxjPmqsCCTDm0IjejDBIJ0bNRYNkGfm4yTB2QEiNynlC6NafMSa
+ W38KzfWA4XiWVGGZPIQgwmO/YxlNlXDY5o4szjyI3BaUaB8u5559lZJV6YF8HtuG8LGso+beOIU
+ 4/05A
+X-Gm-Gg: ASbGncuYWSWGjYAODrnpzbhmoNFPAcg2+bwhB7Uz06TJF6FCeHQ5FDHfdgyc5niJrdR
+ FE82cvHGQyHIxqYGtSlF/PscD6fGSDLzuCqqQH0pV7UeAmfpJ4Mlx2nttDW7i/gy+sF84SHORK0
+ hCHzw9pCuT+9SswVY/aI9hlG+DVCPbDJNbL8KotFdO2yXlk/qs9vDFZwWBHT9I+lLAx6UeSFBJT
+ IdRywEAkmFICWI6OAh+qwzRgXYauqlzArpSNGJOltjAwx7ntcqNLzRnVUuM2lryFer+vDkYqkqe
+ Me6svL5yGr6iV7l3fdvDLzp3tIVSyPtArkirNGiU0tCMB4mdREWO16ko58Js/QunJ2tPB9MpWgm
+ ZOM1jMw+TXcDfWkKEKQ==
+X-Google-Smtp-Source: AGHT+IE6noh29Y3esuAtX+72O5RvcZVkTNerTokXODtnZiF7byxOyf3Jb6RRoDFcbGSEE3BYJxpSEg==
+X-Received: by 2002:a05:6000:2dc6:b0:3a6:ec1b:5742 with SMTP id
+ ffacd0b85a97d-3a6ed5dd5famr5046492f8f.22.1750926616486; 
+ Thu, 26 Jun 2025 01:30:16 -0700 (PDT)
+Received: from dragon.local.ess-mail.com
+ ([2a02:a03f:639d:e501:5db7:a3a4:443e:4828])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-3a6e810b5eesm6628823f8f.85.2025.06.26.01.30.16
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 26 Jun 2025 01:30:16 -0700 (PDT)
+To: buildroot@buildroot.org
+Date: Thu, 26 Jun 2025 10:30:05 +0200
+Message-ID: <20250626083005.537882-2-titouan.christophe@mind.be>
+X-Mailer: git-send-email 2.50.0
+In-Reply-To: <20250626083005.537882-1-titouan.christophe@mind.be>
+References: <20250626083005.537882-1-titouan.christophe@mind.be>
 MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddvgddvheduvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthhqredtredtjeenucfhrhhomhepnfhutggrucevvghrvghsohhlihcuoehluhgtrgdrtggvrhgvshholhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpefhteduuefgheehleeihfejjeduvdeltddutddtveeltdfhheeguefgteehkefgffenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucfkphepvdgrtddvmeeijedtmedvtddvtdemvggrtddumegsvgegudemleehvgejmeefgeefmeeludefvgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemieejtdemvddtvddtmegvrgdtudemsggvgedumeelhegvjeemfeegfeemledufegvpdhhvghlohepsghoohhthidpmhgrihhlfhhrohhmpehluhgtrgdrtggvrhgvshholhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeegpdhrtghpthhtoheprghlvgigihhsrdhlohhthhhorhgvsegsohhothhlihhnrdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiio
- hhnihessghoohhtlhhinhdrtghomhdprhgtphhtthhopeholhhivhhivghrrdgsvghnjhgrmhhinhessghoohhtlhhinhdrtghomh
-X-GND-Sasl: luca.ceresoli@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1750924965;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=CAfG0iFa9Y+Y3CgmIs43HoTvW0jq9GvR5U7hzbi5Nz8=;
- b=bG+w3wkrU8omb6v5BhSp5zXZa1Q0RsMKZcuXrHxalcpDC8G69scraFLXtHU5yHWS5OaTNU
- BRHkUmeY3hgcKYNOnbnaIKBprw1LH8fvqQSWeqh0XuPfUbMq+Ul1jYvLRSMLqGq+lhYs+p
- /6zsv6KIue7EA+4JDr30BrMcpNmh4950cG9GoWmV7MuIL0drvy3gr8Ajc83CjiCQwdheBy
- oA6MefRuuN5T8hhDloWS3mMMWjR767GZFNsGSJUYgM7HVYBb3o6eavUJ8n8//dPq9gZrBp
- nVAwr9HS9iJyDPhGcZ2TCbW3NXrhv4ov0rL7+Eaiq7qCugwvZ9RQVji6O8JsVw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=mind.be; s=google; t=1750926616; x=1751531416; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=Glx5m9fnxIgu9769XaEbH72EKlRk1D91w/jccr/flH4=;
+ b=I+40pF4K08gW6R61Uq5DVliEYti8prZBwFlrqM1H4qKawNwZEmhM6lgWSzqJSeSx4j
+ C7/HUX71GUaUdvns7YZrPhwpjwtA7U37/lo3Lt9JJGrgYkWpNQWHu/m/Gco4xStBfdoA
+ YFReWokYz49ZiP4GiC0gmqTiiRQPFYvyiNN3IGFLfVKAkv5hVfAYbAZ5tJFhho8y5zZR
+ CRTiE39UJTAw+3kNEV5bS8ZvDZOm3o1vKJ6VaFqwdqnXYwocm+ZlzhF4blFTlRJrv3HX
+ BxcnGSYpoWnyCqRu3TdZQ76obSl7Ev/BGUZR9zGSXQby+erJ48aD9nTRlKBf7kOwY7a2
+ noUg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=bG+w3wkr
-Subject: Re: [Buildroot] [PATCH] package/linux-tools: perf: build with
- libtraceevent support when it is selected
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=I+40pF4K
+Subject: [Buildroot] [PATCH 2/2] pacakge/libmpeg2: add CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -88,71 +111,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Luca Ceresoli via buildroot <buildroot@buildroot.org>
-Reply-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Titouan Christophe via buildroot <buildroot@buildroot.org>
+Reply-To: Titouan Christophe <titouan.christophe@mind.be>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgQWxleGlzLAoKT24gV2VkLCAyNSBKdW4gMjAyNSAyMjo1NDowMSArMDIwMApBbGV4aXMgTG90
-aG9yw6kgPGFsZXhpcy5sb3Rob3JlQGJvb3RsaW4uY29tPiB3cm90ZToKCj4gV2hlbiB0cnlpbmcg
-dG8gcGVyZm9ybSBhIGN1c3RvbSB1cHJvYmUgcmVjb3JkaW5nIG9uIGEgdGFyZ2V0IHdpdGggcGVy
-Zgo+IGJ1aWx0IGJ5IGJ1aWxkcm9vdCwgdGhlIHJlY29yZGluZyBzdGVwIGZhaWxzIGFzIHBlcmYg
-Y2FuIG5vdCByZWNvcmQKPiB1cHJvYmVzIHdpdGhvdXQgbGlidHJhY2VldmVudCBzdXBwb3J0Ogo+
-IAo+ICAgJCBwZXJmIHByb2JlIC14IGxpbmtlZF9saXN0IGluc2VydF9uYW1lIGluZGV4Cj4gICBU
-YXJnZXQgcHJvZ3JhbSBpcyBjb21waWxlZCB3aXRob3V0IG9wdGltaXphdGlvbi4gU2tpcHBpbmcg
-cHJvbG9ndWUuCj4gICBQcm9iZSBvbiBhZGRyZXNzIDB4ODA4IHRvIGZvcmNlIHByb2JpbmcgYXQg
-dGhlIGZ1bmN0aW9uIGVudHJ5Lgo+IAo+ICAgQWRkZWQgbmV3IGV2ZW50Ogo+ICAgICBwcm9iZV9s
-aW5rZWRfbGlzdDppbnNlcnRfbmFtZSAob24gaW5zZXJ0X25hbWUgaW4gL3Jvb3QvZ2RiL2xpbmtl
-ZF9saXN0IHdpdGggaW5kZXgpCj4gCj4gICBwZXJmIGlzIG5vdCBsaW5rZWQgd2l0aCBsaWJ0cmFj
-ZWV2ZW50LCB0byB1c2UgdGhlIG5ldyBwcm9iZSB5b3UgY2FuIHVzZSB0cmFjZWZzOgo+IAo+ICAg
-ICAgICAgICBjZCAvc3lzL2tlcm5lbC90cmFjaW5nLwo+ICAgICAgICAgICBlY2hvIDEgPiBldmVu
-dHMvcHJvYmVfbGlua2VkX2xpc3QvaW5zZXJ0X25hbWUvZW5hYmxlCj4gICAgICAgICAgIGVjaG8g
-MSA+IHRyYWNpbmdfb24KPiAgICAgICAgICAgY2F0IHRyYWNlX3BpcGUKPiAgICAgICAgICAgQmVm
-b3JlIHJlbW92aW5nIHRoZSBwcm9iZSwgZWNobyAwID4gZXZlbnRzL3Byb2JlX2xpbmtlZF9saXN0
-L2luc2VydF9uYW1lL2VuYWJsZQo+ICAgJCBwZXJmIHJlY29yZCAtZSBwcm9iZV9saW5rZWRfbGlz
-dDppbnNlcnRfbmFtZSAuL2xpbmtlZF9saXN0Cj4gICBldmVudCBzeW50YXggZXJyb3I6ICdwcm9i
-ZV9saW5rZWRfbGlzdDppbnNlcnRfbmFtZScKPiAgICAgICAgICAgICAgICAgICAgICAgIFxfX18g
-dW5zdXBwb3J0ZWQgdHJhY2Vwb2ludAo+IAo+ICAgbGlidHJhY2VldmVudCBpcyBuZWNlc3Nhcnkg
-Zm9yIHRyYWNlcG9pbnQgc3VwcG9ydAo+ICAgUnVuICdwZXJmIGxpc3QnIGZvciBhIGxpc3Qgb2Yg
-dmFsaWQgZXZlbnRzCj4gCj4gICAgVXNhZ2U6IHBlcmYgcmVjb3JkIFs8b3B0aW9ucz5dIFs8Y29t
-bWFuZD5dCj4gICAgICAgb3I6IHBlcmYgcmVjb3JkIFs8b3B0aW9ucz5dIC0tIDxjb21tYW5kPiBb
-PG9wdGlvbnM+XQo+IAo+ICAgICAgIC1lLCAtLWV2ZW50IDxldmVudD4gICBldmVudCBzZWxlY3Rv
-ci4gdXNlICdwZXJmIGxpc3QnIHRvIGxpc3QgYXZhaWxhYmxlIGV2ZW50cwo+IAo+IGxpYnRyYWNl
-ZXZlbnQgc3VwcG9ydCBmb3IgcGVyZiBoYXMgYmVlbiBkaXNhYmxlZCB3aXRoIGNvbW1pdAo+IGI0
-YWI0NWE1YzFkYiAoInBhY2thZ2UvbGludXgtdG9vbHM6IGRpc2FibGUgbGlidHJhY2V2ZW50IGRl
-dGVjdGlvbiIpCj4gYmVjYXVzZSB0aGVyZSB3YXMgbm8gbGlidHJhY2VldmVudCBwYWNrYWdlIGlu
-IGJ1aWxkcm9vdCB0byByZXBsYWNlIHRoZQo+IGZvcm1lciBsaWJ0cmFjZWV2ZW50IHJlbW92ZWQg
-ZnJvbSB0aGUga2VybmVsIHNvdXJjZXMuIFNpbmNlIHRoZW4sIGNvbW1pdAo+IDE0NzRmMWIzNGIx
-NyAoInBhY2thZ2UvbGlidHJhY2VldmVudDogbmV3IHBhY2thZ2UiKSBoYXMgaW50cm9kdWNlZCBh
-Cj4gbGlidHJhY2VldmVudCBwYWNrYWdlLiBXZSBjYW4gdGhlbiBleHBvc2UgYWdhaW4gdGhlIHBv
-c3NpYmlsaXR5IHRvIGJ1aWxkCj4gcGVyZiB3aXRoIGxpYnRyYWNlZXZlbnQgc3VwcG9ydC4KPiAK
-PiBNYWtlIGJ1aWxkcm9vdCBwZXJmIG1ha2VmaWxlIGRldGVjdCBpZiBsaWJ0cmFjZWV2ZW50IHBh
-Y2thZ2UgaGFzIGJlZW4KPiBlbmFibGVkLCBhbmQgaWYgc28sIGFsbG93IHRvIGJ1aWxkIHBlcmYg
-d2l0aCBsaWJ0cmFjZWV2ZW50IHN1cHBvcnQuCj4gCj4gU2lnbmVkLW9mZi1ieTogQWxleGlzIExv
-dGhvcsOpIDxhbGV4aXMubG90aG9yZUBib290bGluLmNvbT4KPiAtLS0KPiBUbzogYnVpbGRyb290
-QGJ1aWxkcm9vdC5vcmcKPiBDYzogVGhvbWFzIFBldGF6em9uaSA8dGhvbWFzLnBldGF6em9uaUBi
-b290bGluLmNvbT4KPiBDYzogTHVjYSBDZXJlc29saSA8bHVjYS5jZXJlc29saUBib290bGluLmNv
-bT4KPiBDYzogT2xpdmllciBCZW5qYW1pbiA8b2xpdmllci5iZW5qYW1pbkBib290bGluLmNvbT4K
-PiAtLS0KPiBJdCBpcyB3b3J0aCBub3RpbmcgdGhhdCB0aGVyZSBpcyBhIGJ1ZyBpbiBwZXJmIG1h
-a2VmaWxlIGtlcm5lbCB0aGF0Cj4gYWZmZWN0cyBtYW55IGtlcm5lbCB2ZXJzaW9ucyAodXAgdG8g
-Ni4xMCkgYW5kIHRoYXQgcHJldmVudHMgcGVyZiBmcm9tCj4gYnVpbGRpbmcgY29ycmVjdGx5IHdo
-ZW4gZW5hYmxpbmcgbGlidHJhY2VldmVudCBzdXBwb3J0IChzZWUgNDQwY2Y3NzYyNWUzCj4gKCJw
-ZXJmOiBidWlsZDogU2V0dXAgUEtHX0NPTkZJR19MSUJESVIgZm9yIGNyb3NzIGNvbXBpbGF0aW9u
-IikgaW4KPiBsaW51eCkuCgpUaGFua3MgZm9yIHRoZSByZXNlYXJjaCEKCkFuZCBhcHBhcmVudGx5
-IHRoZSBtZW50aW9uZWQgY29tbWl0IHdhcyBhcHBsaWVkIGluIDYuMTEgYW5kIG5vdApiYWNrcG9y
-dGVkIHRvIDYuMTAgYW5kIHByZXZpb3VzIHN0YWJsZSByZWxlYXNlcy4KClNob3VsZG4ndCBpdCBi
-ZSBiYWNrcG9ydGVkPyBUaGlzIGxvb2tzIGxpa2UgYSBmaXgsIGRvZXNuJ3QgaXQ/Cgo+IFNob3Vs
-ZCB0aGUgbGlidHJhY2VldmVudCB0aGVuIGJlIGV4cGxpY2l0ZWx5IGVuYWJsZWQgYnkgdGhlCj4g
-dXNlciwgcmF0aGVyIHRoYW4gYXV0b21hdGljYWxseSBlbmFibGluZyBpdCB3aGVuIGxpYnRyYWNl
-ZXZlbnQgcGFja2FnZQo+IGlzIHNlbGVjdGVkID8KClNob3VsZCB0aGUgZml4IGJlIGJhY2twb3J0
-ZWQgdG8gdGhlIGN1cnJlbnRseS1zdXBwb3J0ZWQgc3RhYmxlIGtlcm5lbAp2ZXJzaW9ucywgSSdk
-IHNheSB3ZSBjYW4gYXV0b21hdGljYWxseSBlbmFibGUgbGlidHJhY2VldmVudCBzdXBwb3J0LgpP
-dGhlcndpc2UgSSdtIG5vdCBzdXJlLi4uIE1lbnRpb25pbmcgdGhlIGlzc3VlIGFuZCBwb2ludGlu
-ZyB0byB0aGUgZml4CmNvbW1pdCBpbiB0aGUgS2NvbmZpZyBoZWxwIHRleHQgaXMgYW5vdGhlciBv
-cHRpb24uCgpMdWNhCgotLSAKTHVjYSBDZXJlc29saSwgQm9vdGxpbgpFbWJlZGRlZCBMaW51eCBh
-bmQgS2VybmVsIGVuZ2luZWVyaW5nCmh0dHBzOi8vYm9vdGxpbi5jb20KX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApi
-dWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1h
-bi9saXN0aW5mby9idWlsZHJvb3QK
+At the moment, package stats indicates that libmpeg2 is affected by
+https://nvd.nist.gov/vuln/detail/CVE-2022-37416
+
+However, this CVE applies to a completely different piece of software,
+that has the same name "libmpeg2" [1].
+
+To avoid the confusion, let's add a proper CPE vendor to Buildroot's libmpeg2.
+The library itself does not clearly identify any vendor name, and there isn't
+any existing CPE on the NVD website. Since this library is not updated for
+many years (maybe even before the introduction of the CPE system), but the
+code is somehow related to the Videolan project, let's add this as the
+vendor, which sould solve the matched CVE issue.
+
+[1] https://github.com/ittiam-systems/libmpeg2
+
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+---
+ package/libmpeg2/libmpeg2.mk | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/libmpeg2/libmpeg2.mk b/package/libmpeg2/libmpeg2.mk
+index cab800162c..ec23dff57b 100644
+--- a/package/libmpeg2/libmpeg2.mk
++++ b/package/libmpeg2/libmpeg2.mk
+@@ -16,6 +16,8 @@ LIBMPEG2_INSTALL_STAGING = YES
+ LIBMPEG2_AUTORECONF = YES
+ LIBMPEG2_CONF_OPTS = --without-x --disable-directx
+ 
++LIBMPEG2_CPE_ID_VENDOR = videolan
++
+ ifeq ($(BR2_PACKAGE_SDL),y)
+ LIBMPEG2_CONF_ENV += ac_cv_prog_SDLCONFIG=$(STAGING_DIR)/usr/bin/sdl-config
+ LIBMPEG2_CONF_OPTS += --enable-sdl
+-- 
+2.50.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
