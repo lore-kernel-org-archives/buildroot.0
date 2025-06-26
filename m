@@ -4,102 +4,102 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4630C7EE30
-	for <buildroot@archiver.kernel.org>; Thu, 26 Jun 2025 19:53:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E8FEC7EE31
+	for <buildroot@archiver.kernel.org>; Thu, 26 Jun 2025 19:53:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9E1A4612D7;
-	Thu, 26 Jun 2025 19:53:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DD86D60790;
+	Thu, 26 Jun 2025 19:53:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WGe4phOUsuPP; Thu, 26 Jun 2025 19:53:30 +0000 (UTC)
+ id aq-3U6leLJ4a; Thu, 26 Jun 2025 19:53:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC954612BD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EAB3C612A7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AC954612BD;
-	Thu, 26 Jun 2025 19:53:30 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 73A0410A
- for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:53:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EAB3C612A7;
+	Thu, 26 Jun 2025 19:53:39 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1583D10A
+ for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:53:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 650C7612B5
- for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:53:29 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 04613402A7
+ for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:53:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Vl2e8RtB-Zvl for <buildroot@buildroot.org>;
- Thu, 26 Jun 2025 19:53:28 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kK5ngKhXJXRu for <buildroot@buildroot.org>;
+ Thu, 26 Jun 2025 19:53:38 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
+ client-ip=2a00:1450:4864:20::42c; helo=mail-wr1-x42c.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7367F612A7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7367F612A7
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7367F612A7
- for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:53:28 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id
- 5b1f17b1804b1-45348bff79fso14487595e9.2
- for <buildroot@buildroot.org>; Thu, 26 Jun 2025 12:53:28 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 00CCD40075
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 00CCD40075
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
+ [IPv6:2a00:1450:4864:20::42c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 00CCD40075
+ for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:53:37 +0000 (UTC)
+Received: by mail-wr1-x42c.google.com with SMTP id
+ ffacd0b85a97d-3a50fc819f2so1011410f8f.2
+ for <buildroot@buildroot.org>; Thu, 26 Jun 2025 12:53:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1750967606; x=1751572406;
+ d=1e100.net; s=20230601; t=1750967616; x=1751572416;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=CFNbIe7wWn5EepTH0LKYk0P0clDPT3trq67vGPw7RP4=;
- b=Qotz9omCl6VVO8Yq2kiJOYtLsNHsIIUEXbiSObD8uxlQXreg/E03jCqAAKUkQyAuLc
- VQfji7pUuEPpCcDECef4NJ9ycuORwIak6ljL0qaXzcObSoHSgibY8Lz8DQeTcaa6oTzf
- H83nq8/BcUHzrWekzUIFINbVqttdbZGc86S2lx3JkeyFtastxTDsH2AWgJkDFKG/LE/t
- R15mQlIN9RRztUgji6A21hNV0riuLQJGCh+5QSwP/e2sa3Ooa6azvoi52WZVI8pjBy5K
- vXbmtvjn4ImDdKJLXn5BE4W/Beiie8299RtYtH0hPHsIcEFIEGC1Ip6SUq29g1zMNfNH
- k4Bw==
+ bh=1TY1avbqfXioGSI3ZfKSekXihp6OS5qcNTx80qXEtks=;
+ b=IIGJtaC7ORw7qXejD/AuYYZjHLTwaLaL1YLqRxbSEZIfWxr/iR7azl8q46aOI9SQIP
+ xK5DEno+YnRGAR4+Vd1LPAYbLNpi/30Xl2TvzOcyCsSFJiVzBH2NdmLXgfI2wWPYiAhJ
+ nSGuXP3EGanKXj6dkBwhwh4ipXhoSV9dwbqqSHendIpchwV3oKUGWSwXkFIkw5ntfFwo
+ mTl19PidL4NRXsyot7TpaO+7nM8nkH+zeJFKZw8yLgxCDj/6jgLZRevi/mtKl5qD4baY
+ qNr08FMk8fjjT73itOSBgUKpfi35MqDVjlFMJ4b6Z18pbdSYclil4Ej+elojVJJeQeau
+ hjjA==
 X-Forwarded-Encrypted: i=1;
- AJvYcCVX2qeprZC7fRpO2lTPT8+zA1XfjNqDgRdJd0yU8BdvVnDCwe8wnreCcIBtrZxVlmfkX/MXpF7mR1A=@buildroot.org
-X-Gm-Message-State: AOJu0Yx1xTi54Ht9VUMIITbVcT2lxNckcXdL+4p0VRNeflWTYNvIqCIl
- lS0boVpLC1oJ1g1mgueNGXZuEK0GegUxPwguCDGbVG849Xea8G5ls5EK/tnBPcseVP8=
-X-Gm-Gg: ASbGncshOSg9ePYA83xnjMnMruNAeb/YdNHZZN0vQLxPd6d2RhawGIO/Pug7gJ+cU9T
- fGGr+Rc6YsvJ6UvQvmFNMWpzqwig1nYHOmERhg+V99vZw05n8ZclNHh+pUMdzc+FRlKeNs2ty43
- HAPh590ZUrQCEEgeu2Xj6pmj+kWpqdVSyLa/yhAMD7EkwKNZcCkIuFKQE+wM/hRMU5dlzVN5zly
- 5Q5AELHOmxU/YG4VBzx8fihiZAP3/Xy/jCgroBBGcnWkNm8DlJ+SzLPRP1jQYZJ2TOgRAa/Sef2
- 1erukdqugkMv/5ejktmvl0X3bsuilcO8k0Eh2KuVCS2ZDml8xc9u2fhAzzKVVJO3yW6EO7aQRC8
- OaHPMDLTTTNJGv+5Ojg5dpQ4O0ybham5e
-X-Google-Smtp-Source: AGHT+IExVNF4RFe7g0YEoHnvBZI80eEPHbh8Jn0VZ9gUQw1Rq+I8b1SROjwGAcdUk126xCnFR+xxoQ==
-X-Received: by 2002:a05:600c:8b46:b0:453:1e14:6387 with SMTP id
- 5b1f17b1804b1-4538ee954bdmr5069345e9.32.1750967606425; 
- Thu, 26 Jun 2025 12:53:26 -0700 (PDT)
+ AJvYcCW3QAy6eN9R9lRDnoi5pXKyqCv5nG2q3YgRK7V1uWsAG6/EEGTgn6qWWhBXcOHvEhzOZJouO1Wotrw=@buildroot.org
+X-Gm-Message-State: AOJu0YyDgxZKx4Qy5ysP314IfTsRohv3G4R7B/+GolBDjLfNnKT6uPyV
+ lpna+UMzG2Fr+n/JXowmgZ0JtSkLnj3UKdxUbq5yA2Q0nYmCO9UQQ1dCHI2cBznI0kM=
+X-Gm-Gg: ASbGncvyBl1BLK7H9TtJYckm5lbfZbiflAz0xaawVKVvKH3OHgiiWp8rjdcBf0/gMd7
+ IuVoRmLpoIAxsdG2cHMkqUFmB+qe2eOqUZ0R6LtKGVOhz1ohHbv3o5Kxjl6dhEMeKmaDvkccXmM
+ THMY6rVga88T1JcQQdWUkf7xd0iTd+6el/Ra1VSwY20ZR4QcaDea1mioXSGvFF8pYmUHxuh7ggp
+ VdxCSobHg+lx64lnNZ61yvq5BxI60QbLx3GGsOsAoauiq7GezzYLTf+SJWmZkSznqrj7DA1I38U
+ cOeOezQHm+x340Cr0x31IvZuXHgVx2/YMCwD2Ca+rkAZEsfvDrerGq8oGA85A3olocSuCyeOoNP
+ rBuB8gV6eBiN4ljgeZDsmqlOTB/1LShQF
+X-Google-Smtp-Source: AGHT+IE6oCdI+wbglVJftbBAhCMIlKJXD1HE5nK8WvMx4XwYDrPE7vNvX0HwJN9jU+0KF2esD9w2Lw==
+X-Received: by 2002:a05:6000:18aa:b0:3a8:6260:ea91 with SMTP id
+ ffacd0b85a97d-3a917bc76e5mr544892f8f.40.1750967615864; 
+ Thu, 26 Jun 2025 12:53:35 -0700 (PDT)
 Received: from localhost.localdomain (94.105.118.175.dyn.edpnet.net.
  [94.105.118.175]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-453814a6275sm42226615e9.1.2025.06.26.12.53.25
+ 5b1f17b1804b1-4538a3a72dasm28483175e9.16.2025.06.26.12.53.35
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 26 Jun 2025 12:53:26 -0700 (PDT)
+ Thu, 26 Jun 2025 12:53:35 -0700 (PDT)
 To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Thu, 26 Jun 2025 21:53:17 +0200
-Message-ID: <20250626195317.15109-1-thomas.perale@mind.be>
+Date: Thu, 26 Jun 2025 21:53:26 +0200
+Message-ID: <20250626195326.15181-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250614101959.61812-1-bernd@kuhls.net>
-References: <20250614101959.61812-1-bernd@kuhls.net>
+In-Reply-To: <20250614111002.66221-1-bernd@kuhls.net>
+References: <20250614111002.66221-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1750967606; x=1751572406; darn=buildroot.org;
+ d=mind.be; s=google; t=1750967616; x=1751572416; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=CFNbIe7wWn5EepTH0LKYk0P0clDPT3trq67vGPw7RP4=;
- b=bRJkX+YqJcK9/ZwDMl8iKcuNoFb1EjoZHMrGp7VSk7Kvi897qU/GfSA8gOP0rh5m2r
- 6Ys9P8X9ZL9/DAdyre8wzHZ7N9qOP028tmeTwcJ9ywSNQzHVUSMBxjZpQ4kLeu+LmIOd
- oAYN0AnIPOqES8wZfenvhmihxQJ9ERcjGmPxvaS15GS4U5rE3VOgbYClY1da2TOEPPLw
- lHuSqCsFju/tQI+LOF+X4ZHmVyYjkSObie8RgD/BseqvLa9I/qag7OogqYCEqREQN+k/
- GuUlJROYgDQrOUSiDhdLaqqsdH2ClABPc//u+LsgNKvJtIwcgZQDRIRXFOOyYkfbkbnJ
- r2pg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=1TY1avbqfXioGSI3ZfKSekXihp6OS5qcNTx80qXEtks=;
+ b=BbuPQYl1PyhmHA5LJ5RaHG9s0kfYAPdf8fyVCTztN9iwJdcYz3m0gVq5/dAkrjWEGp
+ 9o/mawfPsCk5N3JF+ffp2E0t6iQKZmAZLEBEEpYDBNBI1npkErCNbTWFqiLfZGIf8RR2
+ p6Em61kPCeJNz9/GD/QMiVlG11O3WABxgQesoM8HvaYNhc1pCrpYGBf6tfHbyoSCZPa4
+ H1oTtBlECxQuZJIFmv/kfAKUhjQSAz8oik1zK3DghGjW1ctgHn6GiL5ZP82Wu9FD4szB
+ kJ9lRjoqn9gXUgd21uPmvR+lkzOCgmJtICmFyM3CuY8z9QR1EXi64sHk9WuMcY37xMcV
+ OFdg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=bRJkX+Yq
-Subject: Re: [Buildroot] [PATCH 1/1] package/dht: fix cmake4 compatibility
+ header.a=rsa-sha256 header.s=google header.b=BbuPQYl1
+Subject: Re: [Buildroot] [PATCH 1/1] package/libebur128: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,141 +119,146 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> The only dependee of dht, transmission, forked dht due to upstream
-> rejection of cmake support:
-> https://github.com/jech/dht/pull/50
-> https://github.com/jech/dht/pull/19
+> libebur128 was added to buildroot in July 2016 with commit
+> a32d29cd84789d7406022c7bb9861e5bda530013 to provide an external
+> dependency for ffmpeg.
 > 
-> A fix was added to this fork for building with cmake 4.x:
-> https://github.com/transmission/dht/commits/post-0.27-transmission/
+> ffmpeg removed this external dependency and switched to an internal
+> version in November 2016 with upstream commit
+> http://git.videolan.org/?p=ffmpeg.git;a=commitdiff;h=005d058f4230f3207ebcf1131df7426d4f57392f
+> which was first included in ffmpeg version 3.3.
 > 
-> Instead of adding yet another patch to buildroot we switch to the repo
-> maintained by transmission.
+> Buildroot bumped ffmpeg to version 3.3 in April 2017 with commit
+> 21d93a1351ca8d4e5185c22a81becdaf08a9bdd3 and forgot to remove the
+> dependency to libebur128.
+> 
+> This went unnoticed until libebur128 fails to build with cmake 4.x.
+> Upstream saw its last commit four years ago. Instead of fixing an
+> unused package we removed it from buildroot.
 > 
 > Fixes:
-> https://autobuild.buildroot.org/results/30339a4fdb9c0b608ca3c5ae0692596b21b2fc3f/
+> https://autobuild.buildroot.org/results/e629bd151cc539f01b909e44d07e17451a29ba27/
 > 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2025.05.x. Thanks
 
 > ---
->  .checkpackageignore          |  1 -
->  package/dht/0001-cmake.patch | 67 ------------------------------------
->  package/dht/dht.hash         |  2 +-
->  package/dht/dht.mk           |  4 +--
->  4 files changed, 3 insertions(+), 71 deletions(-)
->  delete mode 100644 package/dht/0001-cmake.patch
+>  Config.in.legacy                   |  6 ++++++
+>  DEVELOPERS                         |  1 -
+>  package/Config.in                  |  1 -
+>  package/ffmpeg/ffmpeg.mk           |  4 ----
+>  package/libebur128/Config.in       | 13 -------------
+>  package/libebur128/libebur128.hash |  3 ---
+>  package/libebur128/libebur128.mk   | 13 -------------
+>  7 files changed, 6 insertions(+), 35 deletions(-)
+>  delete mode 100644 package/libebur128/Config.in
+>  delete mode 100644 package/libebur128/libebur128.hash
+>  delete mode 100644 package/libebur128/libebur128.mk
 > 
-> diff --git a/.checkpackageignore b/.checkpackageignore
-> index 8e24c73525..c767d29ca9 100644
-> --- a/.checkpackageignore
-> +++ b/.checkpackageignore
-> @@ -386,7 +386,6 @@ package/dhcp/S80dhcp-relay Shellcheck lib_sysv.Variables
->  package/dhcp/S80dhcp-server Shellcheck lib_sysv.Variables
->  package/dhcp/dhclient-script Shellcheck lib_shellscript.TrailingSpace
->  package/dhcpcd/S41dhcpcd lib_sysv.Indent lib_sysv.Variables
-> -package/dht/0001-cmake.patch lib_patch.Upstream
->  package/dillo/0001-usr-local-include.patch lib_patch.Upstream
->  package/dillo/0002-Fix-openssl-detection.patch lib_patch.Upstream
->  package/dillo/0004-fix-build-with-gcc-10.patch lib_patch.Upstream
-> diff --git a/package/dht/0001-cmake.patch b/package/dht/0001-cmake.patch
-> deleted file mode 100644
-> index bbac639044..0000000000
-> --- a/package/dht/0001-cmake.patch
-> +++ /dev/null
-> @@ -1,67 +0,0 @@
-> -From 25e12bb39eea3d433602de6390796fec8a8f3620 Mon Sep 17 00:00:00 2001
-> -From: Mike Gelfand <mikedld@mikedld.com>
-> -Date: Sun, 1 Jan 2017 16:23:21 +0300
-> -Subject: [PATCH] Remove Makefile, add Makefile.am and CMakeLists.txt
-> -
-> -Downloaded from transmission repo:
-> -https://github.com/transmission/dht/commit/25e12bb39eea3d433602de6390796fec8a8f3620
-> -
-> -Upstream status: rejected (https://github.com/jech/dht/pull/19)
-> -
-> -Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ----
-> - CMakeLists.txt |  9 +++++++++
-> - Makefile       |  9 ---------
-> - Makefile.am    | 11 +++++++++++
-> - 3 files changed, 20 insertions(+), 9 deletions(-)
-> - create mode 100644 CMakeLists.txt
-> - delete mode 100644 Makefile
-> - create mode 100644 Makefile.am
-> -
-> -diff --git a/CMakeLists.txt b/CMakeLists.txt
-> -new file mode 100644
-> -index 0000000..6d4aa99
-> ---- /dev/null
-> -+++ b/CMakeLists.txt
-> -@@ -0,0 +1,9 @@
-> -+cmake_minimum_required(VERSION 2.8)
-> -+project(dht C)
-> -+
-> -+add_library(${PROJECT_NAME} STATIC
-> -+    dht.c
-> -+)
-> -+
-> -+install(TARGETS ${PROJECT_NAME} DESTINATION lib)
-> -+install(FILES dht.h DESTINATION include/dht)
-> -diff --git a/Makefile b/Makefile
-> -deleted file mode 100644
-> -index e012945..0000000
-> ---- a/Makefile
-> -+++ /dev/null
-> -@@ -1,9 +0,0 @@
-> --CFLAGS = -g -Wall
-> --LDLIBS = -lcrypt
-> --
-> --dht-example: dht-example.o dht.o
-> --
-> --all: dht-example
-> --
-> --clean:
-> --	-rm -f dht-example dht-example.o dht-example.id dht.o *~ core
-> -diff --git a/Makefile.am b/Makefile.am
-> -new file mode 100644
-> -index 0000000..2dba648
-> ---- /dev/null
-> -+++ b/Makefile.am
-> -@@ -0,0 +1,11 @@
-> -+AM_CFLAGS = @PTHREAD_CFLAGS@
-> -+
-> -+noinst_LIBRARIES = libdht.a
-> -+libdht_a_SOURCES = dht.c
-> -+libdht_a_DEPENDENCIES = $(builddir)/include/dht
-> -+noinst_HEADERS = dht.h
-> -+EXTRA_DIST = CHANGES CMakeLists.txt dht-example.c LICENCE README
-> -+
-> -+$(builddir)/include/dht:
-> -+	$(MKDIR_P) $(builddir)/include
-> -+	(cd $(builddir)/include && $(LN_S) $(abs_srcdir) dht)
-> diff --git a/package/dht/dht.hash b/package/dht/dht.hash
-> index 2b641b9dcb..d5a2f9d842 100644
-> --- a/package/dht/dht.hash
-> +++ b/package/dht/dht.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha256  caba469a784a5c359c084099fdc025cfe09b1faec2ba9ba257b7384351c43c0a  dht-0.27.tar.gz
-> +sha256  c61493be7f036b59df0c921829f15e5c57b1e29d99bca737923e83d028fd736c  dht-38c9f261d9b58b76b9eaf85f84ec1b35151a1eac.tar.gz
->  sha256  06ce07293caf8c8ddfaf47797ad1fb18d1c040a8375231d8f8a6105cef51a8e6  LICENCE
-> diff --git a/package/dht/dht.mk b/package/dht/dht.mk
-> index 4f78f027c7..2c8383266c 100644
-> --- a/package/dht/dht.mk
-> +++ b/package/dht/dht.mk
-> @@ -4,8 +4,8 @@
->  #
->  ################################################################################
+> diff --git a/Config.in.legacy b/Config.in.legacy
+> index 3084e7336e..c94bc1a226 100644
+> --- a/Config.in.legacy
+> +++ b/Config.in.legacy
+> @@ -146,6 +146,12 @@ endif
 >  
-> -DHT_VERSION = 0.27
-> -DHT_SITE = $(call github,jech,dht,dht-$(DHT_VERSION))
-> +DHT_VERSION = 38c9f261d9b58b76b9eaf85f84ec1b35151a1eac
-> +DHT_SITE = $(call github,transmission,dht,$(DHT_VERSION))
->  DHT_LICENSE = MIT
->  DHT_LICENSE_FILES = LICENCE
->  DHT_INSTALL_STAGING = YES
+>  comment "Legacy options removed in 2025.08"
+>  
+> +config BR2_PACKAGE_LIBEBUR128
+> +	bool "libebur128 has been removed"
+> +	select BR2_LEGACY
+> +	help
+> +	  The libebur128 package has been removed from Buildroot.
+> +
+>  config BR2_KERNEL_HEADERS_6_14
+>  	bool "kernel headers version 6.14.x are no longer supported"
+>  	select BR2_LEGACY
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 0478e47c98..e664f35a28 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -412,7 +412,6 @@ F:	package/libdvbcsa/
+>  F:	package/libdvdcss/
+>  F:	package/libdvdnav/
+>  F:	package/libdvdread/
+> -F:	package/libebur128/
+>  F:	package/libfreeglut/
+>  F:	package/libfribidi/
+>  F:	package/libg7221/
+> diff --git a/package/Config.in b/package/Config.in
+> index 99a5e2928e..af32b39e44 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1555,7 +1555,6 @@ menu "Audio/Sound"
+>  	source "package/libcodec2/Config.in"
+>  	source "package/libcue/Config.in"
+>  	source "package/libcuefile/Config.in"
+> -	source "package/libebur128/Config.in"
+>  	source "package/libg7221/Config.in"
+>  	source "package/libgsm/Config.in"
+>  	source "package/libid3tag/Config.in"
+> diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+> index 5c00ba2dff..30cf7020de 100644
+> --- a/package/ffmpeg/ffmpeg.mk
+> +++ b/package/ffmpeg/ffmpeg.mk
+> @@ -243,10 +243,6 @@ FFMPEG_CONF_OPTS += --disable-openssl
+>  endif
+>  endif
+>  
+> -ifeq ($(BR2_PACKAGE_FFMPEG_GPL)$(BR2_PACKAGE_LIBEBUR128),yy)
+> -FFMPEG_DEPENDENCIES += libebur128
+> -endif
+> -
+>  ifeq ($(BR2_PACKAGE_LIBDRM),y)
+>  FFMPEG_CONF_OPTS += --enable-libdrm
+>  FFMPEG_DEPENDENCIES += libdrm
+> diff --git a/package/libebur128/Config.in b/package/libebur128/Config.in
+> deleted file mode 100644
+> index 0d68b39d53..0000000000
+> --- a/package/libebur128/Config.in
+> +++ /dev/null
+> @@ -1,13 +0,0 @@
+> -config BR2_PACKAGE_LIBEBUR128
+> -	bool "libebur128"
+> -	# build system has no support to disable shared linking
+> -	# leading to a build error with a static-only toolchain
+> -	depends on !BR2_STATIC_LIBS
+> -	help
+> -	  libebur128 is a library that implements the EBU R 128 standard
+> -	  for loudness normalization.
+> -
+> -	  https://github.com/jiixyj/libebur128
+> -
+> -comment "libebur128 needs a toolchain w/ dynamic library"
+> -	depends on BR2_STATIC_LIBS
+> diff --git a/package/libebur128/libebur128.hash b/package/libebur128/libebur128.hash
+> deleted file mode 100644
+> index 9c8c9e0c31..0000000000
+> --- a/package/libebur128/libebur128.hash
+> +++ /dev/null
+> @@ -1,3 +0,0 @@
+> -# Locally computed
+> -sha256  baa7fc293a3d4651e244d8022ad03ab797ca3c2ad8442c43199afe8059faa613  libebur128-1.2.6.tar.gz
+> -sha256  d6b4754bb67bdd08b97d5d11b2d7434997a371585a78fe77007149df3af8d09c  COPYING
+> diff --git a/package/libebur128/libebur128.mk b/package/libebur128/libebur128.mk
+> deleted file mode 100644
+> index b7272fa7e1..0000000000
+> --- a/package/libebur128/libebur128.mk
+> +++ /dev/null
+> @@ -1,13 +0,0 @@
+> -################################################################################
+> -#
+> -# libebur128
+> -#
+> -################################################################################
+> -
+> -LIBEBUR128_VERSION = 1.2.6
+> -LIBEBUR128_SITE = $(call github,jiixyj,libebur128,v$(LIBEBUR128_VERSION))
+> -LIBEBUR128_LICENSE = MIT
+> -LIBEBUR128_LICENSE_FILES = COPYING
+> -LIBEBUR128_INSTALL_STAGING = YES
+> -
+> -$(eval $(cmake-package))
 > -- 
 > 2.39.5
 > 
