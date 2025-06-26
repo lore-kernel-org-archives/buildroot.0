@@ -1,105 +1,107 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E38BAC7EE30
-	for <buildroot@archiver.kernel.org>; Thu, 26 Jun 2025 19:54:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00092C7EE31
+	for <buildroot@archiver.kernel.org>; Thu, 26 Jun 2025 19:54:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BC36C406FA;
-	Thu, 26 Jun 2025 19:54:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C6F2761269;
+	Thu, 26 Jun 2025 19:54:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id muXyxVnKhyqa; Thu, 26 Jun 2025 19:54:15 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id o0q3Ysc4TTJN; Thu, 26 Jun 2025 19:54:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D0FEC41991
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C90C612A4
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D0FEC41991;
-	Thu, 26 Jun 2025 19:54:15 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 8FE9B154
- for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:54:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1C90C612A4;
+	Thu, 26 Jun 2025 19:54:24 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 80E9710A
+ for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:54:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8D9CA842D3
- for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:54:14 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 72F3281BB4
+ for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:54:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Xkn9oqguN88x for <buildroot@buildroot.org>;
- Thu, 26 Jun 2025 19:54:13 +0000 (UTC)
+ id uXfnCNlAP3Cp for <buildroot@buildroot.org>;
+ Thu, 26 Jun 2025 19:54:22 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::435; helo=mail-wr1-x435.google.com;
+ client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A134780DA1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A134780DA1
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
- [IPv6:2a00:1450:4864:20::435])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A134780DA1
- for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:54:13 +0000 (UTC)
-Received: by mail-wr1-x435.google.com with SMTP id
- ffacd0b85a97d-3a4f72cba73so1609294f8f.1
- for <buildroot@buildroot.org>; Thu, 26 Jun 2025 12:54:13 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 946E480DA1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 946E480DA1
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 946E480DA1
+ for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:54:22 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ 5b1f17b1804b1-4537fdec33bso9039845e9.1
+ for <buildroot@buildroot.org>; Thu, 26 Jun 2025 12:54:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1750967652; x=1751572452;
+ d=1e100.net; s=20230601; t=1750967661; x=1751572461;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=7nK+BmDHDP6CuHdW4jD7n63ulgnrjbWA5LjmMkmQjdI=;
- b=cPamrPvpsQL9cbvexveE0czWWPHTFaPFp8PfOOB32JuFzeCMKgt4rjqmGLjyKpfPXY
- KRIsGHdO2+PTL+3tqT4WLKfwL2MDO5G488I8vuiaZygSTtHsQZaDrcoe7253f7N5F/sq
- VVPDWRbk5ER0WEamjzFAoRCL5loK9RZ18ry1Yo7tM4CbRbfeHsH4t0WI3At5hiw33GL5
- Nh8KZTG61uIF258TtbVGWwyflw98d+YShk4tzwojePB3WzFavIPj3ocFa119P13oB0cT
- RffCE5d89iKGNDE3nDUsQzvRqr/aSZE2Ry65jzgfzht70/z4MHGSswnX/HdQsyMIZrMY
- N2Ww==
+ bh=ilMmLJG908A9iB59ZYCn+LTKVffnVJEvOooiJ7thck4=;
+ b=PwOvFHI2bZVgfc2cFoyfuy6HHyaVKvqxW1+VT6Z5IXPzpdsi0aqFTAhFBpf0SgayVE
+ /8ZGmiwRNrwSiPWHLrJto/c/UfH+lb68VJlOCnZTYB4yxrfCjx3bgpdrIQ6Qk+21Gsr5
+ MogSczTo+pFqxStQn+8DmauVN3UmKdS04a7mnaq/OGKEfTkIMu89SXtufFn8ZXNAPoeZ
+ gPmd5LbXDMF7SKIva1hQbJHMsC/8o9hPIFxHwRv5CdCmvTJA6p4WP+ryLN0xeywIN/5A
+ gp9DzPrkT/92u6kbh+4BNh2f41zAamyLGTuc1gy5GGGhCu3iCl59s4Yhx3OzOyF43FzE
+ ADUQ==
 X-Forwarded-Encrypted: i=1;
- AJvYcCVUDFOribf4DHZsfJFTSytDeC1TXOL2D0aU7N17gQ0e2NEYG4Lep9vRTqcIhP0fZAHZqw5SUZwjCL8=@buildroot.org
-X-Gm-Message-State: AOJu0YyMYlCD07v4yYm6UL7ZyUMegbSaYtA9sa9VsEyQTFe9DO5yKIiy
- Hd3Yrinl0fHkIhYhEfwnr7C7eZ6YvJRss1FT/Pk4am8lQDpU2CvImpTska9cqNUJsW8=
-X-Gm-Gg: ASbGncuCbpwlqvvaZb/ygAcTDiqCZ7w1JaUKdNKG1djV3SuXxEM3BJ53gKlL4fc0WKf
- 7Ce+bcofP2s6gc3KkIH9DDbkiVDORV09ixpMjEzMJQ3m3c3+Vm8xfidcrA9b0WIdWe7MgLkf/yk
- oPulNIsoL29N+hiSLeem6hgSAEA6lDxPaO9aIFnFAsucxYTAtZLXrhJJyI18qhlgL6+yf72xSXw
- xdT/V9ZXGPYWH5fP/IwNq7gaVlMlUrHEs9UzDbA20KT0Me/C1OonYOhyBq1uz4vitYtXz1IMzp4
- zF3Nsk0t1v2/wl1x38SGOfEKkvEYluxbNFA6NRcVwvuER4YZRLiqNwWO6fxL/mLN4UOyPK3ELa3
- wl0VyDpQnvDiTcFbOpFQ64xjdUqQnySPG
-X-Google-Smtp-Source: AGHT+IFd00NP2VD71DiieLTQ4lXtDxGC06w0cgGMJkkaFLyv9tbClkoWkaO0t3acu1iq1ajcSxgGcg==
-X-Received: by 2002:a05:6000:280f:b0:3a6:d7e6:f281 with SMTP id
- ffacd0b85a97d-3a6f3152ffbmr3017717f8f.22.1750967651643; 
- Thu, 26 Jun 2025 12:54:11 -0700 (PDT)
+ AJvYcCVkI3/uV3At0eBuBAMXoJrLImb94tI4ykdww+HR3FQRsiz2wbN/5zHR0hUzbFsFfiMnwJ/VJ58Ixu4=@buildroot.org
+X-Gm-Message-State: AOJu0YyiClVIcYbcm1ye5yHZ59yu6mKw1W5tiNJznMgnVMrD957WF9qy
+ ZnsOoLYOKVhP/pYhJxfvUL7FYAwHRkVvnc3yrAIsizQXgK/zOeC9VO+j+b74Q4/4k7CR+qu8YJH
+ /YfwG
+X-Gm-Gg: ASbGnctXD9rZZ7QZXQ6Phu0+4JJEW0Blx+lVCqGGCHPEYqrMmRMvSa2n58CannmXf23
+ wDtV4ZFccVI21dZ5835t2+EF7R2gLc/goT+8O+URhPOud7IO1kjo/6bv/HW4qZjsO2Ix+zsk0Ro
+ NRmww2wLy6qEIioMRNNM/WwfE3orzsyfgMH1i2p+fTqPVfJXuFO4JBtdbUNE5MrCANQ+pKpR02w
+ jzuk+zv2eyKqwMNtnH6kRrdgxJlqu42AwlAmkROKPKiNadShMJJQkxHbBlXK5BpKc1cLT77OMrw
+ UgLwhoDaokng54hyAPpNyeu3fEU6ARKvjdY6V7GbyOCeiFttoWD+fr2hqVWGEN92IGaGKvBHzix
+ MQsNyd6n2mfSZ7DkMbnMCFJq48DKinB7G
+X-Google-Smtp-Source: AGHT+IEoDZsDZO4sU0Sx0KCKkz5jl0m4bBEXI+Gycuqc4tSU3jFBoez3DPFHXC9JmjjWPvnmuC0dxA==
+X-Received: by 2002:a05:600c:a41:b0:43c:eeee:b713 with SMTP id
+ 5b1f17b1804b1-4538ee83b1amr5300805e9.20.1750967660592; 
+ Thu, 26 Jun 2025 12:54:20 -0700 (PDT)
 Received: from localhost.localdomain (94.105.118.175.dyn.edpnet.net.
  [94.105.118.175]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3a892e5f8a0sm734088f8f.96.2025.06.26.12.54.11
+ 5b1f17b1804b1-4538f2fec5fsm2160855e9.40.2025.06.26.12.54.20
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 26 Jun 2025 12:54:11 -0700 (PDT)
+ Thu, 26 Jun 2025 12:54:20 -0700 (PDT)
 To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Thu, 26 Jun 2025 21:54:02 +0200
-Message-ID: <20250626195402.15561-1-thomas.perale@mind.be>
+Date: Thu, 26 Jun 2025 21:54:11 +0200
+Message-ID: <20250626195411.15639-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250617210228.1146390-1-bernd@kuhls.net>
-References: <20250617210228.1146390-1-bernd@kuhls.net>
+In-Reply-To: <20250617203439.1053632-1-bernd@kuhls.net>
+References: <20250617203439.1053632-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1750967652; x=1751572452; darn=buildroot.org;
+ d=mind.be; s=google; t=1750967661; x=1751572461; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=7nK+BmDHDP6CuHdW4jD7n63ulgnrjbWA5LjmMkmQjdI=;
- b=f+NBv4Kv8t2lM4NPn3saQbNLQVxq2Cy4umw7WKLyocjfBDyqG+rwsPYSnAcCq1lR3A
- bdBtP3Mn3wFp6IXHXv/dMeenjIcfwQ5ZfgM//SntBVrlsxi36zKKNSKiGRpdTkQlD+16
- 2QJsapHqOtPI+hvDTYW598/P/tkDdv/mtB4Hnti5qTA3wc96tCngP9UPK7xIyZJFYg4h
- 6LcwYeEd+KgaCVVEvteS6BxZ5RbHMQmzt1Q7BDdlX0pLrr+M3RNwYP7a7rQBq5PwmupI
- GJJ2pMZCll+TH1a8+L7VDj8Mmpz80gegYr4pNr2mMTjzjhJuShOKuJ7NpSevOKbbc+m/
- QIng==
+ bh=ilMmLJG908A9iB59ZYCn+LTKVffnVJEvOooiJ7thck4=;
+ b=SCR3vzmE6Q2YYEfFARQrQF1Jv5GbNnJqBHGnDK4vgoAL/lCSzr1k12papbU7Vxl1jA
+ QVYKVq2jVAzMgvFBEXH6lNz87sSJua/IvTDcQJzKiQ7LtcOVM7sWwX114cUsFjd3JqTI
+ NRzr65CXnhP9eG9flaB8DQRNiAQHLRzAeb14m7P/gZuTOjzDHz52wiRc/nsmDtqg2bcl
+ /8+lpJFBfXGNgfKZ/ycTdJUaIC7SobYmDH//gWiIAn6Gu2Y0jGy323DQXm+zWq0kHGC0
+ VP7jvU5kUIXxmtaQod1sJVoRIlSg6is02WabTQc8pwMj2SiFpwtsmCY44ySUDae7TsOg
+ smgw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=f+NBv4Kv
-Subject: Re: [Buildroot] [PATCH 1/1] package/libplatform: bump version
+ header.a=rsa-sha256 header.s=google header.b=SCR3vzmE
+Subject: Re: [Buildroot] [PATCH 1/1] package/lpac: needs libqmi for optional
+ support of libqrtr-glib
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,85 +121,32 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Removed patch which is included in this release:
-> https://github.com/Pulse-Eight/platform/commit/e48db06c64613ac76c820511da95228bcd072f64
+> Buildroot commit dad998a8070bc07838f78453fcb7906fefab22ba added this
+> package but forgot to select libqmi for optional support of libqrtr-glib.
 > 
-> Use upstream-provided license file:
-> https://github.com/Pulse-Eight/platform/commit/92220248b11c43a80105567dbb074c5f30b04029
-> 
-> This bump includes compatibility with cmake 4.x:
-> https://github.com/Pulse-Eight/platform/commit/d7faed1c696b1a6a67f114a63a0f4c085f0f9195
+> Fixes:
+> https://autobuild.buildroot.net/results/95e/95e30d1031912efa200edb9c7b926a31f0abe32f/
 > 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2025.05.x. Thanks
 
 > ---
->  ...require-c-11-as-the-minimum-standard.patch | 26 -------------------
->  package/libplatform/libplatform.hash          |  4 +--
->  package/libplatform/libplatform.mk            |  4 +--
->  3 files changed, 4 insertions(+), 30 deletions(-)
->  delete mode 100644 package/libplatform/0001-cmake-require-c-11-as-the-minimum-standard.patch
+>  package/lpac/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/package/libplatform/0001-cmake-require-c-11-as-the-minimum-standard.patch b/package/libplatform/0001-cmake-require-c-11-as-the-minimum-standard.patch
-> deleted file mode 100644
-> index b880a31953..0000000000
-> --- a/package/libplatform/0001-cmake-require-c-11-as-the-minimum-standard.patch
-> +++ /dev/null
-> @@ -1,26 +0,0 @@
-> -From ad9fcceb6267e737316b616551b7aac3cf676481 Mon Sep 17 00:00:00 2001
-> -From: Lukas Rusak <lorusak@gmail.com>
-> -Date: Fri, 2 Oct 2020 15:31:36 -0700
-> -Subject: [PATCH] [cmake] require c++11 as the minimum standard
-> -
-> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> -[Upstream status: https://github.com/Pulse-Eight/platform/pull/46]
-> ----
-> - CMakeLists.txt | 4 ++++
-> - 1 file changed, 4 insertions(+)
-> -
-> -diff --git a/CMakeLists.txt b/CMakeLists.txt
-> -index 7144b0b..e9112f9 100644
-> ---- a/CMakeLists.txt
-> -+++ b/CMakeLists.txt
-> -@@ -3,6 +3,10 @@ project(p8-platform)
-> - cmake_minimum_required(VERSION 2.8.9)
-> - enable_language(CXX)
-> - 
-> -+set(CMAKE_CXX_STANDARD 11)
-> -+set(CMAKE_CXX_STANDARD_REQUIRED YES)
-> -+set(CMAKE_CXX_EXTENSIONS NO)
-> -+
-> - set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR})
-> - 
-> - find_package(Threads REQUIRED)
-> diff --git a/package/libplatform/libplatform.hash b/package/libplatform/libplatform.hash
-> index 283b435b7c..5fead5eb95 100644
-> --- a/package/libplatform/libplatform.hash
-> +++ b/package/libplatform/libplatform.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha256  ebee46c76b86b40b703fa913465f5004fa3166eeb6a4794c58fc8a5c25702931  libplatform-a7cd0d5780ed80a4e70480d1650749f29e8a1fb2.tar.gz
-> -sha256  80fc66febbb2393c9d518e3eefa4ad9aae15a9b6a84174c0e443ea79eeea5131  src/os.h
-> +sha256  2ab98ba486b28dd9c31e9f0f8a04eddad12c09ad1951c359fdef475baafba296  libplatform-2748be52ae27e6007ef548b697d4a03ff7de4291.tar.gz
-> +sha256  0137261d24ce001fc5237aacddd267533e0f150ac23cf21acffea599f7358f7a  LICENSE.md
-> diff --git a/package/libplatform/libplatform.mk b/package/libplatform/libplatform.mk
-> index 90192369fe..aeded5e9a7 100644
-> --- a/package/libplatform/libplatform.mk
-> +++ b/package/libplatform/libplatform.mk
-> @@ -4,10 +4,10 @@
->  #
->  ################################################################################
+> diff --git a/package/lpac/Config.in b/package/lpac/Config.in
+> index 6cfe11cc67..c754da96d9 100644
+> --- a/package/lpac/Config.in
+> +++ b/package/lpac/Config.in
+> @@ -5,6 +5,7 @@ config BR2_PACKAGE_LPAC
+>  	depends on !BR2_STATIC_LIBS # pcsc-lite
+>  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pcsc-lite
+>  	select BR2_PACKAGE_PCSC_LITE
+> +	select BR2_PACKAGE_LIBQMI if BR2_PACKAGE_LIBQRTR_GLIB
+>  	help
+>  	  C-based eUICC LPA.
 >  
-> -LIBPLATFORM_VERSION = a7cd0d5780ed80a4e70480d1650749f29e8a1fb2
-> +LIBPLATFORM_VERSION = 2748be52ae27e6007ef548b697d4a03ff7de4291
->  LIBPLATFORM_SITE = $(call github,Pulse-Eight,platform,$(LIBPLATFORM_VERSION))
->  LIBPLATFORM_LICENSE = GPL-2.0+
-> -LIBPLATFORM_LICENSE_FILES = src/os.h
-> +LIBPLATFORM_LICENSE_FILES = LICENSE.md
->  LIBPLATFORM_INSTALL_STAGING = YES
->  
->  $(eval $(cmake-package))
 > -- 
 > 2.39.5
 > 
