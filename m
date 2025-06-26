@@ -4,102 +4,102 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8531C7EE31
-	for <buildroot@archiver.kernel.org>; Thu, 26 Jun 2025 19:56:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DDAA7C7EE33
+	for <buildroot@archiver.kernel.org>; Thu, 26 Jun 2025 19:56:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9080C612B1;
-	Thu, 26 Jun 2025 19:56:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B8D3E6128A;
+	Thu, 26 Jun 2025 19:56:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id w3vtX9ra7z_a; Thu, 26 Jun 2025 19:56:14 +0000 (UTC)
+ id XTRLulJ1oVdJ; Thu, 26 Jun 2025 19:56:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C42356129B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F0A596126F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C42356129B;
-	Thu, 26 Jun 2025 19:56:14 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1350110A
- for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:56:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F0A596126F;
+	Thu, 26 Jun 2025 19:56:23 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6115A154
+ for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:56:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EE18D4030D
- for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:56:12 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 46DCA612A0
+ for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:56:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id whivPjlHWHUL for <buildroot@buildroot.org>;
- Thu, 26 Jun 2025 19:56:12 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GdkJAS3VGsdV for <buildroot@buildroot.org>;
+ Thu, 26 Jun 2025 19:56:21 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
+ client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org EA4CD402A7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA4CD402A7
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id EA4CD402A7
- for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:56:11 +0000 (UTC)
-Received: by mail-wr1-x42b.google.com with SMTP id
- ffacd0b85a97d-3a365a6804eso902504f8f.3
- for <buildroot@buildroot.org>; Thu, 26 Jun 2025 12:56:11 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5FDD861220
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5FDD861220
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5FDD861220
+ for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:56:21 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id
+ 5b1f17b1804b1-453608ed113so13661855e9.0
+ for <buildroot@buildroot.org>; Thu, 26 Jun 2025 12:56:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1750967770; x=1751572570;
+ d=1e100.net; s=20230601; t=1750967779; x=1751572579;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=9db+V3Q3u5QJsepwzSuG2DKmCFcLUr6ivPF05/gfIM8=;
- b=iEL96AdKE7KeQ/OWTGIYBhp8GmJRUoGkWOOiximw2f+YwA/hk5UqqbRkNwbzP0E3RZ
- gYe1r8BxzD6CmMkQCH4BbfKXbbPeO29qxZKzs+7S4vGcLinqZK9TYFXkRFpuhcPiW/BW
- plZHK7k+Z8d5kvdkLjpkU0cyYc7XZ6oBrzrPkRJxwPFuPO6T/Zi/uttn4HAJ+/YoFTac
- Y4Q5SpsRnNV4UwkZGx7rjuSULvoelWy77MT8NjF1X6ImQf1QppxFIYP/yafnvGW6VSHS
- tzH1seTEW5hddtvU+pCNTp1WNIND/S0HBqGmOOXgECkhLQ06akw0hgCRMevojEvD8ViC
- CuHQ==
+ bh=3vI5wt8yBS0wGCKLCQd8JAAzHbyCe83UC7n0LeXOFD0=;
+ b=e+W0oDcGad6tHlHKNjF156IaF68EFQ5G+oArCjg7in563I4MB9K641Cd7YLk7lMjnr
+ wq8/jJwMpkxd9IBwkiLl66c0bvj1XAYTVdwp4SSj2yDrGTHQqd9W+c8G3a6nHM3HnJKT
+ mWi/mn1r8H7fSP+ALfrDPGQBdNFnoZrNwhn9Oj4MK+LphgtIwYyEsvWNlI9EF4+hrD2S
+ B3K1RjNYOlZSzptMBR55eeKDt6fPRu979Qemv6kD1ZEax3xRUn2HCRhXicQ2i+q2xbe4
+ qGPlhW1s2DoOM3uX+GA2t+XUpmKPYZCOAP4xqhCnXEp3QrZ/2NAUcANadRdTRmEyNK2g
+ Sj2g==
 X-Forwarded-Encrypted: i=1;
- AJvYcCUyPKFZY7Wo93f7nEaoORcAa3e6cZEVN/b9/D3raG+iKRsrG5qrpAVLU47LPe+8d5qD/rlyy0/3gH0=@buildroot.org
-X-Gm-Message-State: AOJu0Yx9trFlX8wvxLyo9QMl5CdLj4EYXALYEUI0I1xRALvJRrNROLQq
- Ric8vmZCOjwFiv6gg0ZVHrGMonXfwgKZU9BCFkts3D3N9ZjlmRhOtfEcoWOuMTOz+50=
-X-Gm-Gg: ASbGncvoEr647SE5PEj81muXhZtOpU84d5bCl/hYZGBxCE0p2AEZzYCDgR8tpCtNWXF
- a6n3lKQn/QCoPnxBd9r8gcjXXheAm7FwJKcv9qWgQLI1cb+1xDFqIXq/l+EmCL55dy+Tf/T1eGR
- O3m69o1DejFxjkHIvAtXiia2yz8bnRq6uD0L+s7GxQ19bnA1/RmeYVid1UWFvKBhhobS1q8Nl7x
- GUU3dBtb96GEwmKu2s130sjytEtamqBuV8OgcBm/UsQ9OfNh2oSAcNAquQeDMBGijlAGO54JCL6
- +1mTpOgYijbcMPwfgMwvN3a+8RNojIJ9E3ExskUpQl3X0O4fVXwEFI/9uzBeaCbqgWzHDn1VgdR
- 1MXqVcZR1F5qPTzBa15rtBtU28coIvOjP
-X-Google-Smtp-Source: AGHT+IHSg+F1+2lPcWewZDeeN9iAFzM5xgR2NcoXN+8s1N4y6gE1SwZc5uXkZyYgQRMZ10jZdCDdlg==
-X-Received: by 2002:a05:6000:645:b0:3a4:d53d:be20 with SMTP id
- ffacd0b85a97d-3a8fdff4832mr595592f8f.18.1750967769895; 
- Thu, 26 Jun 2025 12:56:09 -0700 (PDT)
+ AJvYcCV5GOv8vFlHC69D121vXAnkaBrgG5MsXdANulHM/mi/son9I74qupZH1O4DkVvXyhHLXmsZee5/8BM=@buildroot.org
+X-Gm-Message-State: AOJu0YzTbfg9329A4uraBOygUW0vBiGgtRJjv7zUOWgNP2DqWpH+wV1H
+ y6xk/srHDppooSZHAemd+T1VE6SwFpDZQgbS9VFi5/aK5cyyFqgRGiwvnBg/Tz/N3ew=
+X-Gm-Gg: ASbGncvc9YJ+EVzp2gBt99Gl+z9MzfSNWjEtm7cA286JT+beGLhHF6XFZuoArY+rgR2
+ 0tTLPvCDA3S84PmpoAlV68Lhz37c+FUSVwgfbQCH+6nkGwPjGeyoAUzTxQMBl5HCUsIkyOt/j8u
+ LAXVtRj6ogyrE7OFvt8jDKrEgF//L0Kn6NlhJk4ZHf1q07cbnQAaWE4JgY1hj0rn2vhm6sLK3JL
+ ppaiU7mHkav+EblvkNG8cnHaHwWXobLUDwmBHMFyQKzWxZZokpgXdByVXi3T+jUr6LV4BT/+dwC
+ IzLIvgEtVjIrN5hPucEGZbqP+jExvwjdZx6spdRuDd7Z4jAg3vv8LBmRQeWgAiQnt+F8cMxf6/B
+ Yw6dEnx56BYoHn72upcm+oBKscmMq8G22u0oYtq+kfKA=
+X-Google-Smtp-Source: AGHT+IErLdsW30aKuljBfLHDw8ATM3JxZpnQ6BuBk9NemEoCFcoms2YNBcXZ+SVTrESO4J1Xku6zUw==
+X-Received: by 2002:a05:6000:25ca:b0:3a4:f744:e00e with SMTP id
+ ffacd0b85a97d-3a8f4548f84mr773877f8f.4.1750967779362; 
+ Thu, 26 Jun 2025 12:56:19 -0700 (PDT)
 Received: from localhost.localdomain (94.105.118.175.dyn.edpnet.net.
  [94.105.118.175]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4538a4235cbsm29227225e9.38.2025.06.26.12.56.08
+ ffacd0b85a97d-3a88c7fa750sm737062f8f.25.2025.06.26.12.56.18
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 26 Jun 2025 12:56:09 -0700 (PDT)
+ Thu, 26 Jun 2025 12:56:19 -0700 (PDT)
 To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Thu, 26 Jun 2025 21:56:00 +0200
-Message-ID: <20250626195600.16315-1-thomas.perale@mind.be>
+Date: Thu, 26 Jun 2025 21:56:10 +0200
+Message-ID: <20250626195610.16374-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250620063114.21344-1-bernd@kuhls.net>
-References: <20250620063114.21344-1-bernd@kuhls.net>
+In-Reply-To: <20250622100333.3836532-1-bernd@kuhls.net>
+References: <20250622100333.3836532-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1750967770; x=1751572570; darn=buildroot.org;
+ d=mind.be; s=google; t=1750967779; x=1751572579; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=9db+V3Q3u5QJsepwzSuG2DKmCFcLUr6ivPF05/gfIM8=;
- b=HA7O1C96F7iu5egbOWdnJdbIWLHv6TbtQXJHcvFTXVtSgcILYv9qEg2YZ3K0w0Gjpb
- 9UjdqksV4a/pFQpHvSyfoPp0B2yvqWAg0yMGN4SjrzA55EFqnQdETM4nAyLt7fRvz6la
- A71tOXxjPeQio0QMQKIRxBEY8esnhV5V0QLyc7nqudqFHWitVxBpP1sggE2Xx1wNNbD1
- 0AF4AAamxiPT+NRcwca8kWov5tX9KPtAmwG0znQtJCBlYSuZd9RX7k9KMsb8QHNL2LCx
- FqlhccOQ8XUCN0hIo/ruYtiLJRE+rU66lqT0eGlmt6a7TSttHa3PO+VScoaQQctNH3Qj
- 9bMA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=3vI5wt8yBS0wGCKLCQd8JAAzHbyCe83UC7n0LeXOFD0=;
+ b=S5EKwUFabfN4511+iSu8kcNdr4SVvM8E7/WCNXsoZxOfFxoB3LzB5TKZzYJGZSGmdv
+ AYzLIgIH0D4B5+icHddN6iV6AtNHJAND5rH42ONKfr0RUgynR2uA87Ugnq35jnAEws/b
+ /6M6X7P6fnxtJWNNjXqJwC9IcgAn7HwP3Ru9G7BydXslBimSfcc4+McAvvkmpAfwI4Wr
+ JpAOBTFINwDZfyMfB5bOpI33wmlC+HwR8z2A9X6J46IlvrVtVnInRMCGvjylzTsgVFCI
+ v5P2e7fVpzFN4DbqMcY5m2pGzqQkCxY19qaNii8bhhIOq8LY5LDRX6rv1qmuVRlr8Iom
+ iklw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=HA7O1C96
-Subject: Re: [Buildroot] [PATCH 1/1] package/clamav: bump version to 1.4.3
+ header.a=rsa-sha256 header.s=google header.b=S5EKwUFa
+Subject: Re: [Buildroot] [PATCH 1/1] package/python3: security bump to 3.13.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,45 +119,48 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
+> 3.13.4 fixes CVE 2024-12718, CVE 2025-4138, CVE 2025-4330, CVE 2025-4435
+> and CVE 2025-4517 but introduced some regressions fixed in 3.13.5.
+> 
 > Release notes:
-> https://blog.clamav.net/2024/08/clamav-140-feature-release-and-clamav.html
-> https://blog.clamav.net/2024/09/clamav-141-132-107-and-010312-security.html
-> https://blog.clamav.net/2025/01/clamav-142-and-108-security-patch.html
-> https://blog.clamav.net/2025/06/clamav-143-and-109-security-patch.html
+> https://www.python.org/downloads/release/python-3135/
+> https://www.python.org/downloads/release/python-3134/
 > 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2025.05.x. Thanks
 
 > ---
->  package/clamav/clamav.hash | 2 +-
->  package/clamav/clamav.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/python3/python3.hash | 6 +++---
+>  package/python3/python3.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
-> index 5989682671..5f83d57661 100644
-> --- a/package/clamav/clamav.hash
-> +++ b/package/clamav/clamav.hash
+> diff --git a/package/python3/python3.hash b/package/python3/python3.hash
+> index b13f5cc742..2ca8ad4930 100644
+> --- a/package/python3/python3.hash
+> +++ b/package/python3/python3.hash
 > @@ -1,5 +1,5 @@
->  # Locally calculated
-> -sha256  5d3a20633bd589f612a71905a4fb50c1ee857cfbe6c72644368cac0030a1eeb4  clamav-1.0.9.tar.gz
-> +sha256  d874cabf3d4765b35b518ef535658a1e6ec74802006a1d613f9f124aa1343210  clamav-1.4.3.tar.gz
->  sha256  0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING.txt
->  sha256  d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING/COPYING.bzip2
->  sha256  dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING/COPYING.file
-> diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
-> index 0a88cc1b9f..93ddfaae5b 100644
-> --- a/package/clamav/clamav.mk
-> +++ b/package/clamav/clamav.mk
-> @@ -4,7 +4,7 @@
->  #
+> -# From https://www.python.org/downloads/release/python-3133/
+> -md5  8bb5f0b8c9d9d7b87d7d98510e8d58e5  Python-3.13.3.tar.xz
+> +# From https://www.python.org/downloads/release/python-3135/
+> +md5  dbaa8833aa736eddbb18a6a6ae0c10fa  Python-3.13.5.tar.xz
+>  # Locally computed
+> -sha256  40f868bcbdeb8149a3149580bb9bfd407b3321cd48f0be631af955ac92c0e041  Python-3.13.3.tar.xz
+> +sha256  93e583f243454e6e9e4588ca2c2662206ad961659863277afcdb96801647d640  Python-3.13.5.tar.xz
+>  sha256  78b12c3a81360b357002334f0e70ea0e92eebf7a9b358805c03c48484945f3bb  LICENSE
+> diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+> index 3e6273a773..ec210ccac8 100644
+> --- a/package/python3/python3.mk
+> +++ b/package/python3/python3.mk
+> @@ -5,7 +5,7 @@
 >  ################################################################################
 >  
-> -CLAMAV_VERSION = 1.0.9
-> +CLAMAV_VERSION = 1.4.3
->  CLAMAV_SITE = https://www.clamav.net/downloads/production
->  CLAMAV_LICENSE = GPL-2.0
->  CLAMAV_LICENSE_FILES = \
+>  PYTHON3_VERSION_MAJOR = 3.13
+> -PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).3
+> +PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).5
+>  PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
+>  PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
+>  PYTHON3_LICENSE = Python-2.0, others
 > -- 
 > 2.39.5
 > 
