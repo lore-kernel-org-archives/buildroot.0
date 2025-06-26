@@ -1,107 +1,105 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A23CC7EE30
-	for <buildroot@archiver.kernel.org>; Thu, 26 Jun 2025 19:53:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 642E7C7EE31
+	for <buildroot@archiver.kernel.org>; Thu, 26 Jun 2025 19:53:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E483F612B5;
-	Thu, 26 Jun 2025 19:53:13 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Q7VFLm3ktR0m; Thu, 26 Jun 2025 19:53:13 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 18E15612A4
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 18E15612A4;
-	Thu, 26 Jun 2025 19:53:13 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 60A7110A
- for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:53:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5249940507
- for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:53:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3BA95406FA;
+	Thu, 26 Jun 2025 19:53:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UVUlgOSImTtr for <buildroot@buildroot.org>;
- Thu, 26 Jun 2025 19:53:10 +0000 (UTC)
+ id GK8U-icgvXh6; Thu, 26 Jun 2025 19:53:22 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 734754198E
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 734754198E;
+	Thu, 26 Jun 2025 19:53:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9D146154
+ for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:53:20 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 833B880D40
+ for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:53:20 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rlvJ5A-qQUd4 for <buildroot@buildroot.org>;
+ Thu, 26 Jun 2025 19:53:19 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
+ client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5C4A940472
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C4A940472
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5C4A940472
- for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:53:10 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id
- 5b1f17b1804b1-451d6ade159so10723465e9.1
- for <buildroot@buildroot.org>; Thu, 26 Jun 2025 12:53:10 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A970780C9A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A970780C9A
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A970780C9A
+ for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:53:19 +0000 (UTC)
+Received: by mail-wm1-x335.google.com with SMTP id
+ 5b1f17b1804b1-4538a2fc7ffso8616505e9.0
+ for <buildroot@buildroot.org>; Thu, 26 Jun 2025 12:53:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1750967588; x=1751572388;
+ d=1e100.net; s=20230601; t=1750967598; x=1751572398;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=78NKmeIUvSVD/xLAOjmJ+TWOn0+Z9ouWqAsewXbK8dE=;
- b=AdSEam+X+mok+ULsm2uPQ64pVjDyvh8dYd9ryOE9yrCFgF5lP6FqFMgM+XeFEsa8e3
- +wfRPZjhthLvdIyj8HMUtW5TgAzg9d3UxTIltnz9W3g89Xd2ApHqjzOy+BwDb7qrSSGj
- eA39d4AZuakY00Z3emcX7TSbif2RW4+bSOKvvnTiquTc1/7xXErUTl/92JjSadrp4WXZ
- aqFpT2u7qLBe1GQ3PTQT0V++sOI6WEDKDb9YsHolOHwAfxjr/UYl36dhucvz26E9O79e
- xsgVEdAxFzrWGi3tY4EcgTdo3YxOw0Ay8y8p9vwkZbF0k5+UWFMfBWEOSoRy6+n1eW2Y
- ht6w==
+ bh=ilRh0lHA3z2pOZsLbbhDNHapy1fiN4hwcEHFW7F90r4=;
+ b=q8xiXb27A38GnO8wltM7X2CryXOU/cDF92SpyEr7/ngV23ZrmWE8Jtq9speNGsrtqL
+ gOMEWrbti5/qRxCnfZsfMwAkgYaY6RSLVZt23zHJnht0icbQjxtpi8m9XEgtqnBMHjXI
+ wxIGIpjTDj3nCZ8KKgg5IXMb1ML6/gIHLn2XaAcANge6RtV1+M84C9BeBd5G7KoVOnvR
+ yxoCUYpUamLSZKPUMfLsKheuRfbCex/8RE1aeY1SuLCpZKoq7elh32JGVgJx8TtxnlgP
+ FbUS3bembVl1oltivm02La0ebWiHTbSG2mjv32LfUX9GiMvMriLpZlQ+DoWdrLirUjDB
+ yrNQ==
 X-Forwarded-Encrypted: i=1;
- AJvYcCX8d5vx+RsGUToXmzIQvN1QPXPkCst5BI/NA486QArCiRIMUCBzd7I33wKaGbod6/McE8xghyQa8XA=@buildroot.org
-X-Gm-Message-State: AOJu0Yx+3mB7uxklhYyJRRq5MN7tzdpBP0XbokkqqWryZhulFh6UHEbM
- 8bsUATvTFprKAR2VQMCct6WAC80gt8FYaB5u08RGumYSNIZLihOB6Oihl5+/JtijvvZvbzSTv64
- InNgO
-X-Gm-Gg: ASbGncvwNPk1aRD+epknT95z4Drv9L+juNr3WDmli4EqHYbzWWtw5BAcoOPyS+Kn0H1
- /6ixCWZSrBgZWqYivmNDn80cvcuvhSykkmjcFW81tULZDg/6o2L+h63C8VEgcSC+Vp2sbTCdUm+
- CBeHs8M49zUtmzZv07HqGuCnKITL498sVMYVk+6ynwn72E4DKFvHojC/YRAS3yaK0p3CKgEP6FU
- dw+7FHy0y0mr6f/WOGVoqU1xGXtrv+6KJCsVSv5mIWOYKncKuU2J3sWNJxAhHgvjQ4/AHawrf5b
- A2MTP6K+bJVSPlTACm+stUOF39SBFSurVRvBo3lyKg7tLGHNLBOzFj70P/i0wvJb4XrEyO87OJJ
- I4GEjAaLPhZtdDO+FXgByxcJ5PUgGy85J
-X-Google-Smtp-Source: AGHT+IHLhg5F9B0Wme5vxUZMI2/T3nDAxtl3RVOCLTONMWe9PnTMgOhjJ9OKOi95yTBSgnMmpneGqg==
-X-Received: by 2002:a05:6000:2d03:b0:3a4:edf5:b952 with SMTP id
- ffacd0b85a97d-3a8ff51fc25mr473464f8f.36.1750967588355; 
- Thu, 26 Jun 2025 12:53:08 -0700 (PDT)
+ AJvYcCVAahr4NWwDQGVToTn6IOE6gukrp7BjxYBNv7Nz92GCMSKPlfx4k/AWZ8lwVyrt9J6s9lMOHYv1gIY=@buildroot.org
+X-Gm-Message-State: AOJu0YwwCQr/WjVH4sZ+5kgZrcRKsrVbcqmRROVJ0VlLD6qkvtVJ8soL
+ 3/Zxb2mqHQZXinTCt3/khaH1GB8B/CP7pqM8KlOA1K6QUDyO4WmwmxcIiqCOZk6mG9g=
+X-Gm-Gg: ASbGncuHIUx2XwfsWpvyKFAbhloDkTXvkOr43XVWh+hKuO8O60shdKa5vohVQh4t7yz
+ vxgL016GDN8i8pabADVA+Vw/rDb27BNihiCXFfQ+blBAUm0M2YGKOmOyPNCfw1hfKRE4SnyJsUa
+ V3z1FnG1rWhTt0KLl8NWBkX67ht9AooLr/GMKINMdhycD3Fncfwe8d2L/VvzO/Q1jn7z/HSqgNz
+ b7Rx4z6Uhq9U/xbZ9LFJixes0yoENUepORa83L7UonZRDqfEimap4hj6yCma+yobL7Elnsd8K1g
+ RtSjMss2SbqWXN4r1GPKBYw/X9/Fm+8PxB213h9G4Uf3jG2XdxD0y3BnfomrfmXiAeAAo/OaR+d
+ 2fxy5hXBil6NOdLQrsBIStJpSAVCqEPK3
+X-Google-Smtp-Source: AGHT+IGbr/bEnKvTNchAbw/4gexKqB5opNpw0v/tDCC9HhanryjUlCx8UMv4+PAT/eYV+wVm+OhQmg==
+X-Received: by 2002:a05:600c:45d1:b0:451:df07:d8e0 with SMTP id
+ 5b1f17b1804b1-4538f2f8bb4mr2664725e9.11.1750967597761; 
+ Thu, 26 Jun 2025 12:53:17 -0700 (PDT)
 Received: from localhost.localdomain (94.105.118.175.dyn.edpnet.net.
  [94.105.118.175]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3a88c7e78e8sm757510f8f.19.2025.06.26.12.53.07
+ 5b1f17b1804b1-4538a390bf8sm29129135e9.4.2025.06.26.12.53.17
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 26 Jun 2025 12:53:07 -0700 (PDT)
-To: yann.morin@orange.com
+ Thu, 26 Jun 2025 12:53:17 -0700 (PDT)
+To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Thu, 26 Jun 2025 21:52:59 +0200
-Message-ID: <20250626195259.14962-1-thomas.perale@mind.be>
+Date: Thu, 26 Jun 2025 21:53:08 +0200
+Message-ID: <20250626195308.15038-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.49.0
-In-Reply-To: <5496754635235785aacbf2f359f2a498d4e02274.1749793479.git.yann.morin@orange.com>
-References: <5496754635235785aacbf2f359f2a498d4e02274.1749793479.git.yann.morin@orange.com>
+In-Reply-To: <20250614094822.56877-1-bernd@kuhls.net>
+References: <20250614094822.56877-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1750967588; x=1751572388; darn=buildroot.org;
+ d=mind.be; s=google; t=1750967598; x=1751572398; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=78NKmeIUvSVD/xLAOjmJ+TWOn0+Z9ouWqAsewXbK8dE=;
- b=Ap+98hkrbjum/ziWn3Hke/8QUYRL2+ktASsIEZiphewP7IRUEnm1/CH72HW2uSnPzM
- KzIKgSzfpBbJqcLvfSSYqQlEtrxrcrSfSwc55Bsyq9Ydq3mLrevq4rAftl6YiAY81H+7
- QTiauRptm5LxtTUKjqlw1T+VZwax08oCcZ1BL2mwdVj76Ewyz8pcc4179EipLIWt3pTO
- kWDmzZc6NlbpkxRhHkSuNH1VnSm4L6xbfMG3gDltOCcic9f7s6hH+1+TXdemfmx9PfYK
- wXvWyK1k+xzpQXQaPenp1jkIgzH0v4wZnDT0oArtpS8ZnxMOrOIcCNIJgQu+S7pdnZKU
- wQYg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=ilRh0lHA3z2pOZsLbbhDNHapy1fiN4hwcEHFW7F90r4=;
+ b=JEJ0tI6fXpmVE3+pqYbDu7FuKDge6uzkX/6Au//edJ6LFx7k+A+9N/lNKcxYSeimM+
+ BAQ1WO+qVIUMimNCp9siD3kprtR5nBv91T1q6B9El46Psfz2BB8UvWOfDfNkJNvT7Ftn
+ yA2HGvno3ZqMdZ80HVXjxtCTLbY2M8D843IVjtXkxkWNslDySmx0W11a2vpO+qi1y8aK
+ tjHbaHspkY+ZwQ1G3SPozCJJpQWbhEp4dHhvMezH6KbXaG+synV6kYYMB+bidYpBM8w+
+ gPNzcdMo88cshzblHGTeb5yC9r1SWIIwKhdiiaJ2AAoXLKB/5U2rYr5hiWiH2RtFYbWu
+ WT1Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Ap+98hkr
-Subject: Re: [Buildroot] [PATCH 1/3] package/amazon-ecr-credential-helper:
- add LICENSE hash
+ header.a=rsa-sha256 header.s=google header.b=JEJ0tI6f
+Subject: Re: [Buildroot] [PATCH 1/1] package/bcg729: bump version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -121,42 +119,49 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> The hash has for the license file been missing since the package was
-> introduced in commit 9a9580622545 (package/amazon-ecr-credential-helper:
-> new package).
+> This bump includes three patches which were added since version 1.1.1
+> to the cmake files:
+> https://github.com/BelledonneCommunications/bcg729/commits/master/
 > 
-> Add it now.
+> One of them fixes build errors with cmake 4.x:
+> https://github.com/BelledonneCommunications/bcg729/commit/e29952e7ceff64de6fc6f8db43e3b326481280be#diff-1e7de1ae2d059d21e1dd75d5812d5a34b0222cef273b7c3a2af62eb747f9d20aL23-L81
 > 
-> Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+> Fixes:
+> https://autobuild.buildroot.net/results/118/118349d20eae2dccdadab949065f6bc6471c825e/
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2025.05.x. Thanks
 
 > ---
->  .../amazon-ecr-credential-helper.hash                            | 1 +
->  1 file changed, 1 insertion(+)
+>  package/bcg729/bcg729.hash | 2 +-
+>  package/bcg729/bcg729.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/amazon-ecr-credential-helper/amazon-ecr-credential-helper.hash b/package/amazon-ecr-credential-helper/amazon-ecr-credential-helper.hash
-> index 6ebcd4e204..eaac8efe35 100644
-> --- a/package/amazon-ecr-credential-helper/amazon-ecr-credential-helper.hash
-> +++ b/package/amazon-ecr-credential-helper/amazon-ecr-credential-helper.hash
-> @@ -1,2 +1,3 @@
->  # Localy computed
->  sha256  53765b3e441a0e785131731d0cee4c0e2b2a22b90e523e9e4ec3e461c0ec5b05  amazon-ecr-credential-helper-v0.9.1-git4-go2.tar.gz
-> +sha256  ce65129252f145d6dd627bc354ccc28ba07c6cd27a8d278b7dcfde3ed6976a5a  LICENSE
+> diff --git a/package/bcg729/bcg729.hash b/package/bcg729/bcg729.hash
+> index 2eb80a0407..13edabe99b 100644
+> --- a/package/bcg729/bcg729.hash
+> +++ b/package/bcg729/bcg729.hash
+> @@ -1,3 +1,3 @@
+>  # Locally computed
+> -sha256  68599a850535d1b182932b3f86558ac8a76d4b899a548183b062956c5fdc916d  bcg729-1.1.1.tar.gz
+> +sha256  62812779c776620f8fa005fc7c6ae14039d7b2efce66cf9af69c426393b5d062  bcg729-8bec1e5fc072f3669e435edd137eb3da6da2eef7.tar.gz
+>  sha256  1b3782ccad7b8614100cda30d3faf42fc39f2e97932908c543005053b654ca68  LICENSE.txt
+> diff --git a/package/bcg729/bcg729.mk b/package/bcg729/bcg729.mk
+> index f89e535546..d7608447ee 100644
+> --- a/package/bcg729/bcg729.mk
+> +++ b/package/bcg729/bcg729.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -BCG729_VERSION = 1.1.1
+> +BCG729_VERSION = 8bec1e5fc072f3669e435edd137eb3da6da2eef7
+>  BCG729_SITE = $(call github,BelledonneCommunications,bcg729,$(BCG729_VERSION))
+>  BCG729_LICENSE = GPL-3.0+
+>  BCG729_LICENSE_FILES = LICENSE.txt
 > -- 
-> 2.34.1
-> 
-> ____________________________________________________________________________________________________________
-> Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-> pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-> a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-> Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-> 
-> This message and its attachments may contain confidential or privileged information that may be protected by law;
-> they should not be distributed, used or copied without authorisation.
-> If you have received this email in error, please notify the sender and delete this message and its attachments.
-> As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-> Thank you.
+> 2.39.5
 > 
 > _______________________________________________
 > buildroot mailing list
