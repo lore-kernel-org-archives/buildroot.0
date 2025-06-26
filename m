@@ -4,100 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C6B8C7EE30
-	for <buildroot@archiver.kernel.org>; Thu, 26 Jun 2025 11:19:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2429AC7EE32
+	for <buildroot@archiver.kernel.org>; Thu, 26 Jun 2025 11:25:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 08CA04038B;
-	Thu, 26 Jun 2025 11:19:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DD1C0404EF;
+	Thu, 26 Jun 2025 11:25:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LQ0uhCSeCIPN; Thu, 26 Jun 2025 11:19:56 +0000 (UTC)
+ id RS2JlHs4swpX; Thu, 26 Jun 2025 11:25:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E9FC440332
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 212BC40663
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E9FC440332;
-	Thu, 26 Jun 2025 11:19:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id B6C8F10A
- for <buildroot@buildroot.org>; Thu, 26 Jun 2025 11:19:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 212BC40663;
+	Thu, 26 Jun 2025 11:25:36 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5EA3D154
+ for <buildroot@buildroot.org>; Thu, 26 Jun 2025 11:25:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9D2748426E
- for <buildroot@buildroot.org>; Thu, 26 Jun 2025 11:19:53 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 44ABA842E4
+ for <buildroot@buildroot.org>; Thu, 26 Jun 2025 11:25:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cNm5R9C8TplH for <buildroot@buildroot.org>;
- Thu, 26 Jun 2025 11:19:51 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
- envelope-from=raphael.melotte@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 061B783ED7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 061B783ED7
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 061B783ED7
- for <buildroot@buildroot.org>; Thu, 26 Jun 2025 11:19:50 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- 5b1f17b1804b1-4537deebb01so4426055e9.0
- for <buildroot@buildroot.org>; Thu, 26 Jun 2025 04:19:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1750936789; x=1751541589;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=ZwRTQD706w71jJzPshPk6ggKkCzCVWCHZqnlVqwg7oM=;
- b=X9H7HOimtNLMU0sFQUQM35Y+5iWCy1Aozdj88ay35satFupSIsl8ZS14kWuCYvVgMX
- LEofbA+tGmHbLCkCHPWPdptAdTeY+M53HhSMab5lawvmXBiWoznNidsubTHTnpThI/s6
- dODXlQInc0b/brzpS27I9JdCEY6gQYIchUiDKzlD/oi1CuD9RzDgX4BVNx8hy+Hv7u/o
- itSv8CBRafxsgekwP69X98LqwN+xKGNwrCb9dKd3ZJoQkdSeXLiLQQ4NQ42rsAuFX3K7
- AwfDAq/mDHHZiPXrNs9mkHru7Yry563Z1k+cGF1VNoqHXJoWNeGw2sLSEiBcwcHTUN+k
- jKMw==
-X-Gm-Message-State: AOJu0YyEf72m+UCZYMl0HSZTpUlRbuCWs8UwfgKIktOf4PMAvrjhLFa/
- TUtaFUthfnkOhQWBxg+Si1rkl4wnPc5ScwSmqoJWTq8KKA8UiszstfFIP/YpzV8pjnkXS1/ac+N
- Wkqz09uM=
-X-Gm-Gg: ASbGncueI2jXaSKAQ4qF218m296WUOEMfKm0qDqFme/XYtz48vxPRHvrg9kUSNWC0me
- cnyUfxZAM2na1h1tztuziB5W0wspNd5maXb6eKqxhiUPuWr7CeDmmG07TdzWoz2d4O5vMuSqZI/
- YvMTAwgWpgATKzGrU6JqDXQCKykkY9W2TtJkmn+7W25rNNuehUM2kKJkMHMdn5RnguVoIIoNEwM
- 4dWlsfY2iqj0rt/AQ8vjtpsU/zR3+iU/A2ug6ZaWmcQ1Ok/QC+Ztdj6P7S//S0UkPNAvVeX1fxh
- KFnw5zSDSAP8qU5F6p320NgO7kdVJWLEZIQOsFBV3BoChqVI+WKcP5L7IUtp5/Y6n3BEANvS7Ip
- M0rzZqA==
-X-Google-Smtp-Source: AGHT+IFytFGbgkcPqjCKj7KGKVQNI+LIOmC3yawGHEUo7goO0BIZigQ3O8Cz+7LPgmgMyTI0f3G7/w==
-X-Received: by 2002:a05:600c:458c:b0:43e:afca:808f with SMTP id
- 5b1f17b1804b1-45381b1bcb3mr77364675e9.31.1750936788895; 
- Thu, 26 Jun 2025 04:19:48 -0700 (PDT)
-Received: from debian-hp-1.fritz.box ([213.211.140.212])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-453823b6c21sm46936145e9.29.2025.06.26.04.19.48
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 26 Jun 2025 04:19:48 -0700 (PDT)
-To: buildroot@buildroot.org
-Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-Date: Thu, 26 Jun 2025 13:19:19 +0200
-Message-ID: <20250626111922.1851579-3-raphael.melotte@mind.be>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250626111922.1851579-1-raphael.melotte@mind.be>
-References: <20250626111922.1851579-1-raphael.melotte@mind.be>
+ id eGVAPePoBhOU for <buildroot@buildroot.org>;
+ Thu, 26 Jun 2025 11:25:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:1600:4:17::8faa;
+ helo=smtp-8faa.mail.infomaniak.ch; envelope-from=foss+buildroot@0leil.net;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6AE26842DC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6AE26842DC
+Received: from smtp-8faa.mail.infomaniak.ch (smtp-8faa.mail.infomaniak.ch
+ [IPv6:2001:1600:4:17::8faa])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6AE26842DC
+ for <buildroot@buildroot.org>; Thu, 26 Jun 2025 11:25:33 +0000 (UTC)
+Received: from smtp-3-0001.mail.infomaniak.ch (smtp-3-0001.mail.infomaniak.ch
+ [10.4.36.108])
+ by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4bSbp333FtzTwL;
+ Thu, 26 Jun 2025 13:20:27 +0200 (CEST)
+Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA
+ id 4bSbp268wczXbw; Thu, 26 Jun 2025 13:20:26 +0200 (CEST)
+From: Quentin Schulz <foss+buildroot@0leil.net>
+Date: Thu, 26 Jun 2025 13:20:18 +0200
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1750936789; x=1751541589; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=ZwRTQD706w71jJzPshPk6ggKkCzCVWCHZqnlVqwg7oM=;
- b=hyD0SQLMciivcArUfe4WLjNr3ri3UE36tEaZny7ELoirsafpxw4/zn8deCbbxbnsA/
- Sl0x8JnokMwi2bUiakCdfwbiinCBo4bvNYcACZrjyiTye2amL/0YNal5YNtd0YmwjWLi
- hFkGT7vXwFFMwvDNskFzMkRI1mYylGCdAnhnxHYuZaesvLKpfuOGcsgHEopbmg4s6Hw1
- itkPEHaLglk/p74BimcSCuqQ0QkKT1YF8VeH5x+cc03s4JcYiqWQhpbXz3zG7G49+dPU
- 5Vt4h6fKrRrOg994Qn95H+8E7xQxNOEVwN3F9Fh37gQDYdt269XiCUY9T5DSPQ7umbLL
- zF4A==
+Message-Id: <20250626-strongswan-misc-martin-v1-1-a4c4da74ba9c@cherry.de>
+References: <20250626-strongswan-misc-martin-v1-0-a4c4da74ba9c@cherry.de>
+In-Reply-To: <20250626-strongswan-misc-martin-v1-0-a4c4da74ba9c@cherry.de>
+To: buildroot@buildroot.org
+Cc: Martin Elshuber <martin.elshuber@cherry.de>, 
+ =?utf-8?q?J=C3=A9r=C3=B4me_Pouiller?= <jezz@sysmic.org>, 
+ Quentin Schulz <quentin.schulz@cherry.de>
+X-Mailer: b4 0.14.2
+X-Infomaniak-Routing: alpha
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=hyD0SQLM
-Subject: [Buildroot] [PATCH 3/3] package/gumbo-parser: bump to version 0.13.1
+ dmarc=none (p=none dis=none)
+ header.from=0leil.net
+Subject: [Buildroot] [PATCH 1/3] package/strongswan: allow to drop unneeded
+ capabilities
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -109,117 +72,83 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?q?Rapha=C3=ABl_M=C3=A9lotte_via_buildroot?=
- <buildroot@buildroot.org>
-Reply-To: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Q2hhbmdlbG9nOgpodHRwczovL2NvZGViZXJnLm9yZy9ndW1iby1wYXJzZXIvZ3VtYm8tcGFyc2Vy
-L3JlbGVhc2VzCgpSZWxlYXNlIDAuMTEuMCBvbndhcmRzIGRyb3BwZWQgdGhlICd2JyB2ZXJzaW9u
-IHByZWZpeCBpbiB0aGUgdGFyYmFsbApuYW1lLCBzbyBkcm9wIGl0IG9uIG91ciBzaWRlIGFzIHdl
-bGwuCgpUaGUgcGF0Y2ggbm8gbG9uZ2VyIGFwcGxpZWQgY2xlYW5seSBhbmQgbmVlZGVkIHRvIGJl
-IHJlZnJlc2hlZC4KSXQgd2FzIGFsc28gc3VibWl0dGVkIHRvIHRoZSBuZXcgdXBzdHJlYW0sIHRo
-ZSB1cHN0cmVhbSBsaW5rIGlzCnVwZGF0ZWQgYWNjb3JkaW5nbHkuCkEgbG9jYWwgdGVzdCBidWls
-ZCB3YXMgZG9uZSB3aXRoIHRoZSB0b29sY2hhaW4gZnJvbSB0aGUgY29uZmlnIHRoYXQKb3JpZ2lu
-YWxseSB0cmlnZ2VyZWQgdGhlIGJ1aWxkIHRvIGZhaWwgZHVlIHRvIGxhY2sgb2YgQysrIHN1cHBv
-cnQ6Cmh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm9yZy9yZXN1bHRzL2EzMmI1ZDNiOTU5NDMz
-ZmQ1YzM1NDM2NjFjMzdmODBkMjdmYmQwMTAKCkl0IGlzIHdvcnRoIG5vdGluZyB0aGF0IHdlIHN0
-aWxsIGJ1aWxkIHVzaW5nIGF1dG90b29scyB3aGljaCBpcwpkZXByZWNhdGVkIGluIHRoaXMgdmVy
-c2lvbiBvZiBndW1iby1wYXJzZXIgKGluIGZhdm9yIG9mIG1lc29uKS4KClNpZ25lZC1vZmYtYnk6
-IFJhcGhhw6tsIE3DqWxvdHRlIDxyYXBoYWVsLm1lbG90dGVAbWluZC5iZT4KLS0tCiAuLi4wMDEt
-Y29uZmlndXJlLmFjLWZpeC1idWlsZC13aXRob3V0LUMucGF0Y2ggfCA1NSArKysrKysrKysrKy0t
-LS0tLS0tCiBwYWNrYWdlL2d1bWJvLXBhcnNlci9ndW1iby1wYXJzZXIuaGFzaCAgICAgICAgfCAg
-MiArLQogcGFja2FnZS9ndW1iby1wYXJzZXIvZ3VtYm8tcGFyc2VyLm1rICAgICAgICAgIHwgIDQg
-Ky0KIDMgZmlsZXMgY2hhbmdlZCwgMzUgaW5zZXJ0aW9ucygrKSwgMjYgZGVsZXRpb25zKC0pCgpk
-aWZmIC0tZ2l0IGEvcGFja2FnZS9ndW1iby1wYXJzZXIvMDAwMS1jb25maWd1cmUuYWMtZml4LWJ1
-aWxkLXdpdGhvdXQtQy5wYXRjaCBiL3BhY2thZ2UvZ3VtYm8tcGFyc2VyLzAwMDEtY29uZmlndXJl
-LmFjLWZpeC1idWlsZC13aXRob3V0LUMucGF0Y2gKaW5kZXggY2Y5MGU2ZjNiMS4uMDExYjkyOWE0
-OCAxMDA2NDQKLS0tIGEvcGFja2FnZS9ndW1iby1wYXJzZXIvMDAwMS1jb25maWd1cmUuYWMtZml4
-LWJ1aWxkLXdpdGhvdXQtQy5wYXRjaAorKysgYi9wYWNrYWdlL2d1bWJvLXBhcnNlci8wMDAxLWNv
-bmZpZ3VyZS5hYy1maXgtYnVpbGQtd2l0aG91dC1DLnBhdGNoCkBAIC0xLDMwICsxLDQ5IEBACi1G
-cm9tIDk2ODk3NTEwN2FmNWY0MzgyZTNlOTQxMGE2MzVlMzJjMTRjZWE3NWYgTW9uIFNlcCAxNyAw
-MDowMDowMCAyMDAxCitGcm9tIGU2ZDk1NTY3NzViMGI4ZjU5N2NlNDhkYzE4YzkwOGIzY2MwOWUy
-YTMgTW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCiBGcm9tOiBGYWJyaWNlIEZvbnRhaW5lIDxmb250
-YWluZS5mYWJyaWNlQGdtYWlsLmNvbT4KIERhdGU6IFdlZCwgMjEgSnVsIDIwMjEgMjM6NDc6MjYg
-KzAyMDAKIFN1YmplY3Q6IFtQQVRDSF0gY29uZmlndXJlLmFjOiBmaXggYnVpbGQgd2l0aG91dCBD
-KysKK01JTUUtVmVyc2lvbjogMS4wCitDb250ZW50LVR5cGU6IHRleHQvcGxhaW47IGNoYXJzZXQ9
-VVRGLTgKK0NvbnRlbnQtVHJhbnNmZXItRW5jb2Rpbmc6IDhiaXQKIAogRml4IHRoZSBmb2xsb3dp
-bmcgYnVpbGQgZmFpbHVyZSByYWlzZWQgb24gdG9vbGNoYWlucyB3aXRob3V0IEMrKzoKIAotY2hl
-Y2tpbmcgd2hldGhlciB0aGUgQysrIGNvbXBpbGVyIHdvcmtzLi4uIG5vCi1jb25maWd1cmU6IGVy
-cm9yOiBpbiBgL2hvbWUvYnVpbGRyb290L2F1dG9idWlsZC9ydW4vaW5zdGFuY2UtMC9vdXRwdXQt
-MS9idWlsZC9ndW1iby1wYXJzZXItMC4xMC4xJzoKLWNvbmZpZ3VyZTogZXJyb3I6IEMrKyBjb21w
-aWxlciBjYW5ub3QgY3JlYXRlIGV4ZWN1dGFibGVzCisgIENYWCAgICAgIGV4YW1wbGVzL2ZpbmRf
-bGlua3MubworL2Jpbi9iYXNoOiBsaW5lIDE6IG5vOiBjb21tYW5kIG5vdCBmb3VuZAorICBDWFgg
-ICAgICBleGFtcGxlcy9jbGVhbl90ZXh0Lm8KKy9iaW4vYmFzaDogbGluZSAxOiBubzogY29tbWFu
-ZCBub3QgZm91bmQKK21ha2VbMl06ICoqKiBbTWFrZWZpbGU6MTA3MTogZXhhbXBsZXMvZmluZF9s
-aW5rcy5vXSBFcnJvciAxMjcKKyAgQ1hYICAgICAgZXhhbXBsZXMvcG9zaXRpb25zX29mX2NsYXNz
-Lm8KK21ha2VbMl06ICoqKiBXYWl0aW5nIGZvciB1bmZpbmlzaGVkIGpvYnMuLi4uCisgIENDICAg
-ICAgIGV4YW1wbGVzL2dldF90aXRsZS5vCisvYmluL2Jhc2g6IGxpbmUgMTogbm86IGNvbW1hbmQg
-bm90IGZvdW5kCittYWtlWzJdOiAqKiogW01ha2VmaWxlOjEwNzE6IGV4YW1wbGVzL2NsZWFuX3Rl
-eHQub10gRXJyb3IgMTI3CittYWtlWzJdOiAqKiogW01ha2VmaWxlOjEwNzE6IGV4YW1wbGVzL3Bv
-c2l0aW9uc19vZl9jbGFzcy5vXSBFcnJvciAxMjcKKyAgQ1hYICAgICAgZXhhbXBsZXMvc2VyaWFs
-aXplLm8KKy9iaW4vYmFzaDogbGluZSAxOiBubzogY29tbWFuZCBub3QgZm91bmQKKyAgQ1hYICAg
-ICAgZXhhbXBsZXMvcHJldHR5cHJpbnQubworbWFrZVsyXTogKioqIFtNYWtlZmlsZToxMDcxOiBl
-eGFtcGxlcy9zZXJpYWxpemUub10gRXJyb3IgMTI3CisvYmluL2Jhc2g6IGxpbmUgMTogbm86IGNv
-bW1hbmQgbm90IGZvdW5kCittYWtlWzJdOiAqKiogW01ha2VmaWxlOjEwNzE6IGV4YW1wbGVzL3By
-ZXR0eXByaW50Lm9dIEVycm9yIDEyNwogCiBGaXhlczoKICAtIGh0dHA6Ly9hdXRvYnVpbGQuYnVp
-bGRyb290Lm9yZy9yZXN1bHRzL2EzMmI1ZDNiOTU5NDMzZmQ1YzM1NDM2NjFjMzdmODBkMjdmYmQw
-MTAKIAogU2lnbmVkLW9mZi1ieTogRmFicmljZSBGb250YWluZSA8Zm9udGFpbmUuZmFicmljZUBn
-bWFpbC5jb20+Ci1bVXBzdHJlYW0gc3RhdHVzOiBodHRwczovL2dpdGh1Yi5jb20vZ29vZ2xlL2d1
-bWJvLXBhcnNlci9wdWxsLzQyNl0KK1tSYXBoYcOrbDogcmVmcmVzaCBwYXRjaCBvbiB0b3Agb2Yg
-MC4xMy4xLCB1cGRhdGUgZGVzY3JpcHRpb25dCitTaWduZWQtb2ZmLWJ5OiBSYXBoYcOrbCBNw6ls
-b3R0ZSA8cmFwaGFlbC5tZWxvdHRlQG1pbmQuYmU+CitbVXBzdHJlYW0gc3RhdHVzOiBodHRwczov
-L2NvZGViZXJnLm9yZy9ndW1iby1wYXJzZXIvZ3VtYm8tcGFyc2VyL3B1bGxzLzI4XQogLS0tCiAg
-TWFrZWZpbGUuYW0gIHwgMiArKwotIGNvbmZpZ3VyZS5hYyB8IDYgKysrKystCi0gMiBmaWxlcyBj
-aGFuZ2VkLCA3IGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkKKyBjb25maWd1cmUuYWMgfCA0
-ICsrKysKKyAyIGZpbGVzIGNoYW5nZWQsIDYgaW5zZXJ0aW9ucygrKQogCiBkaWZmIC0tZ2l0IGEv
-TWFrZWZpbGUuYW0gYi9NYWtlZmlsZS5hbQotaW5kZXggY2I2MjQ1OS4uNWJlYmQ5MiAxMDA2NDQK
-K2luZGV4IGUzZjllZDcuLjhhOTM4NTQgMTAwNjQ0CiAtLS0gYS9NYWtlZmlsZS5hbQogKysrIGIv
-TWFrZWZpbGUuYW0KLUBAIC0xMDUsNyArMTA1LDkgQEAgZ3VtYm9fdGVzdF9ERVBFTkRFTkNJRVMg
-Kz0gY2hlY2stbG9jYWwKLSBndW1ib190ZXN0X0xEQUREICs9IGd0ZXN0L2xpYi9saWJndGVzdC5s
-YSBndGVzdC9saWIvbGliZ3Rlc3RfbWFpbi5sYQorQEAgLTk2LDcgKzk2LDkgQEAgZ3VtYm9fdGVz
-dF9ERVBFTkRFTkNJRVMgKz0gZ3Rlc3QvbGliL2xpYmd0ZXN0LmEgZ3Rlc3QvbGliL2xpYmd0ZXN0
-X21haW4uYQorIGd1bWJvX3Rlc3RfTERBREQgKz0gZ3Rlc3QvbGliL2xpYmd0ZXN0LmEgZ3Rlc3Qv
-bGliL2xpYmd0ZXN0X21haW4uYQogIGVuZGlmCiAgCiAraWYgSEFWRV9FWEFNUExFUwpAQCAtMzQs
-MjAgKzUzLDEwIEBAIGluZGV4IGNiNjI0NTkuLjViZWJkOTIgMTAwNjQ0CiAgQU1fQ1BQRkxBR1Mg
-PSAtSSIkKHNyY2Rpcikvc3JjIgogIAogZGlmZiAtLWdpdCBhL2NvbmZpZ3VyZS5hYyBiL2NvbmZp
-Z3VyZS5hYwotaW5kZXggMzJkYzliOS4uMTcyYTM2YiAxMDA2NDQKK2luZGV4IDU2MzZhMjAuLjZk
-MjFiOTUgMTAwNjQ0CiAtLS0gYS9jb25maWd1cmUuYWMKICsrKyBiL2NvbmZpZ3VyZS5hYwotQEAg
-LTksOCArOSw4IEBAIEFDX0NPTkZJR19TUkNESVIoW3NyYy9wYXJzZXIuY10pCi0gQUNfQ09ORklH
-X0ZJTEVTKFtNYWtlZmlsZSBndW1iby5wY10pCi0gCi0gIyBDaGVja3MgZm9yIHByb2dyYW1zLgot
-LUFDX1BST0dfQ1hYCi0gQUNfUFJPR19DQ19DOTkKLStBQ19QUk9HX0NYWAotIAotICMgQ2hlY2tz
-IGZvciBsaWJyYXJpZXMuCi0gCi1AQCAtMjcsNiArMjcsMTAgQEAgQUNfQ0hFQ0tfTElCKFtndGVz
-dF9tYWluXSwKK0BAIC0yOCw2ICsyOCwxMCBAQCBBQ19DSEVDS19MSUIoW2d0ZXN0X21haW5dLAog
-ICAgICAgICAgICAgICBBTV9DT05ESVRJT05BTChIQVZFX1NIQVJFRF9MSUJHVEVTVCwgW3RydWVd
-KSwKICAgICAgICAgICAgICAgQU1fQ09ORElUSU9OQUwoSEFWRV9TSEFSRURfTElCR1RFU1QsIFtm
-YWxzZV0pKQogIApAQCAtNTksNSArNjgsNSBAQCBpbmRleCAzMmRjOWI5Li4xNzJhMzZiIDEwMDY0
-NAogIEFNX0lOSVRfQVVUT01BS0UoW2ZvcmVpZ24gc3ViZGlyLW9iamVjdHNdKQogIG00X2lmZGVm
-KFtBTV9TSUxFTlRfUlVMRVNdLCBbQU1fU0lMRU5UX1JVTEVTKFt5ZXNdKV0pCiAtLSAKLTIuMzAu
-MgorMi40OS4wCiAKZGlmZiAtLWdpdCBhL3BhY2thZ2UvZ3VtYm8tcGFyc2VyL2d1bWJvLXBhcnNl
-ci5oYXNoIGIvcGFja2FnZS9ndW1iby1wYXJzZXIvZ3VtYm8tcGFyc2VyLmhhc2gKaW5kZXggZWU0
-MWYxNjdhNy4uN2EwOGUwMjEzOSAxMDA2NDQKLS0tIGEvcGFja2FnZS9ndW1iby1wYXJzZXIvZ3Vt
-Ym8tcGFyc2VyLmhhc2gKKysrIGIvcGFja2FnZS9ndW1iby1wYXJzZXIvZ3VtYm8tcGFyc2VyLmhh
-c2gKQEAgLTEsNSArMSw1IEBACiAjIExvY2FsbHkgY29tcHV0ZWQ6Ci1zaGEyNTYgIGQ0ZmQxNThk
-OTk4YWI4MzAyZmEyM2JiMDExMTliNDM0YmJmYWY3MTM5YjU5ZjljNzQ1MzBhNzAzMTc2Y2IyMTMg
-IHYwLjEwLjEudGFyLmd6CitzaGEyNTYgIDFhMDU0ZDFlNTNkNTU2NjQxYTY2NjY1MzcyNDc0MTFh
-NzdiMGMxOGVmNmFkNWRmMjNlMzBkMjEzMTY3NmVmODEgIDAuMTMuMS50YXIuZ3oKIAogIyBIYXNo
-IGZvciBsaWNlbnNlIGZpbGVzOgogc2hhMjU2ICBjNzFkMjM5ZGY5MTcyNmZjNTE5YzZlYjcyZDMx
-OGVjNjU4MjA2MjcyMzJiMmY3OTYyMTllODdkY2YzNWQwYWI0ICBDT1BZSU5HCmRpZmYgLS1naXQg
-YS9wYWNrYWdlL2d1bWJvLXBhcnNlci9ndW1iby1wYXJzZXIubWsgYi9wYWNrYWdlL2d1bWJvLXBh
-cnNlci9ndW1iby1wYXJzZXIubWsKaW5kZXggNzZmY2M4NzZjNS4uMjRlNDc1NzU1MSAxMDA2NDQK
-LS0tIGEvcGFja2FnZS9ndW1iby1wYXJzZXIvZ3VtYm8tcGFyc2VyLm1rCisrKyBiL3BhY2thZ2Uv
-Z3VtYm8tcGFyc2VyL2d1bWJvLXBhcnNlci5tawpAQCAtNCw5ICs0LDkgQEAKICMKICMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjCiAKLUdVTUJPX1BBUlNFUl9WRVJTSU9OID0gMC4xMC4xCitHVU1CT19Q
-QVJTRVJfVkVSU0lPTiA9IDAuMTMuMQogR1VNQk9fUEFSU0VSX1NJVEUgPSBodHRwczovL2NvZGVi
-ZXJnLm9yZy9ndW1iby1wYXJzZXIvZ3VtYm8tcGFyc2VyL2FyY2hpdmUKLUdVTUJPX1BBUlNFUl9T
-T1VSQ0UgPSB2JChHVU1CT19QQVJTRVJfVkVSU0lPTikudGFyLmd6CitHVU1CT19QQVJTRVJfU09V
-UkNFID0gJChHVU1CT19QQVJTRVJfVkVSU0lPTikudGFyLmd6CiBHVU1CT19QQVJTRVJfTElDRU5T
-RSA9IEFwYWNoZS0yLjAKIEdVTUJPX1BBUlNFUl9MSUNFTlNFX0ZJTEVTID0gQ09QWUlORwogR1VN
-Qk9fUEFSU0VSX0lOU1RBTExfU1RBR0lORyA9IFlFUwotLSAKMi40OS4wCgpfX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0
-CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWls
-bWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+From: Quentin Schulz <quentin.schulz@cherry.de>
+
+strongSwan allows to drop unneeded capabilities[1] after the IKE daemon
+has been started, based on libcap, so let's allow that via a config
+option.
+
+While the "native" (capset) way of dropping capabilities is supported,
+it is deprecated so its support is not added in Buildroot.
+
+While the documentation specifically mentions the IKE daemon (charon) as
+being the one impacted by this change, the ifdefery with this autotools
+option exists in various libraries in the source code, hence why this is
+kept independent from the charon Kconfig option status.
+
+[1] https://docs.strongswan.org/docs/latest/install/reducedPrivileges.html#_dropping_capabilities
+Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
+---
+ package/strongswan/Config.in     | 10 ++++++++++
+ package/strongswan/strongswan.mk |  7 ++++++-
+ 2 files changed, 16 insertions(+), 1 deletion(-)
+
+diff --git a/package/strongswan/Config.in b/package/strongswan/Config.in
+index 22caa2a5730df9de446a3fbe6a318a4be1684c21..feaf7142137d7853e62819b18ab2afaadc4d34de 100644
+--- a/package/strongswan/Config.in
++++ b/package/strongswan/Config.in
+@@ -73,6 +73,16 @@ config BR2_PACKAGE_STRONGSWAN_CURL
+ config BR2_PACKAGE_STRONGSWAN_MD4
+ 	bool "Enable MD4 hash algorithm"
+ 
++config BR2_PACKAGE_STRONGSWAN_DROP_CAPS
++	bool "Drop unneeded capabilities after initialization"
++	select BR2_PACKAGE_LIBCAP
++	help
++	  strongSwan supports capability dropping. The IKE charon daemon
++	  is started as root and most of its privileges are dropped
++	  immediately.
++	  After the daemon has been initialized, further unneeded
++	  capabilities are dropped.
++
+ config BR2_PACKAGE_STRONGSWAN_CHARON
+ 	bool "Enable the IKEv1/IKEv2 keying daemon charon"
+ 	default y
+diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
+index 823b58555d3659015448b24c592df2f15bc44158..072d8681d40925b94786f4a31450ff75d8faa015 100644
+--- a/package/strongswan/strongswan.mk
++++ b/package/strongswan/strongswan.mk
+@@ -62,6 +62,10 @@ STRONGSWAN_CONF_OPTS += \
+ 	--with-imcvdir=/usr/lib/ipsec/imcvs \
+ 	--with-dev-headers=/usr/include
+ 
++ifeq ($(BR2_PACKAGE_STRONGSWAN_DROP_CAPS),y)
++STRONGSWAN_CONF_OPTS += --with-capabilities=libcap
++endif
++
+ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ STRONGSWAN_CONF_ENV += LIBS='-latomic'
+ endif
+@@ -75,7 +79,8 @@ STRONGSWAN_DEPENDENCIES += \
+ 	$(if $(BR2_PACKAGE_STRONGSWAN_CURL),libcurl) \
+ 	$(if $(BR2_PACKAGE_STRONGSWAN_TNCCS_11),libxml2) \
+ 	$(if $(BR2_PACKAGE_STRONGSWAN_EAP_SIM_PCSC),pcsc-lite) \
+-	$(if $(BR2_PACKAGE_STRONGSWAN_WOLFSSL),wolfssl)
++	$(if $(BR2_PACKAGE_STRONGSWAN_WOLFSSL),wolfssl) \
++	$(if $(BR2_PACKAGE_STRONGSWAN_DROP_CAPS),libcap)
+ 
+ ifeq ($(BR2_PACKAGE_STRONGSWAN_SQL),y)
+ STRONGSWAN_DEPENDENCIES += \
+
+-- 
+2.49.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
