@@ -1,106 +1,107 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 550FBC7EE31
-	for <buildroot@archiver.kernel.org>; Thu, 26 Jun 2025 19:28:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADD3AC7EE31
+	for <buildroot@archiver.kernel.org>; Thu, 26 Jun 2025 19:29:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1CA8841931;
-	Thu, 26 Jun 2025 19:28:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 69FA96079E;
+	Thu, 26 Jun 2025 19:29:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8NgNMJU-GZZz; Thu, 26 Jun 2025 19:28:56 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZrxC6gYu5-zh; Thu, 26 Jun 2025 19:29:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4039141923
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9300860784
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4039141923;
-	Thu, 26 Jun 2025 19:28:56 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 8D3CD10A
- for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:28:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9300860784;
+	Thu, 26 Jun 2025 19:29:04 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5AB70154
+ for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:29:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 73E1840314
- for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:28:54 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4CA6B81344
+ for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:29:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2tXwg9AtDEiG for <buildroot@buildroot.org>;
- Thu, 26 Jun 2025 19:28:53 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lTquQEBb27f9 for <buildroot@buildroot.org>;
+ Thu, 26 Jun 2025 19:29:02 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
+ client-ip=2a00:1450:4864:20::42d; helo=mail-wr1-x42d.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 07A5040075
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 07A5040075
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
- [IPv6:2a00:1450:4864:20::336])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 07A5040075
- for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:28:52 +0000 (UTC)
-Received: by mail-wm1-x336.google.com with SMTP id
- 5b1f17b1804b1-450ccda1a6eso9620585e9.2
- for <buildroot@buildroot.org>; Thu, 26 Jun 2025 12:28:52 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B25DF812EB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B25DF812EB
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B25DF812EB
+ for <buildroot@buildroot.org>; Thu, 26 Jun 2025 19:29:01 +0000 (UTC)
+Received: by mail-wr1-x42d.google.com with SMTP id
+ ffacd0b85a97d-3a4e742dc97so1708538f8f.0
+ for <buildroot@buildroot.org>; Thu, 26 Jun 2025 12:29:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1750966131; x=1751570931;
+ d=1e100.net; s=20230601; t=1750966140; x=1751570940;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=VC1qLIw3bWi4/Wniz7eowqMgziwtAPvc9V7dAiLPg3M=;
- b=hGDF58nbMh+y1h+tED/opl2M5Nt5UpDmnXJ+g9SNFXLBenhOhVs3lj9kTiDLocKnzM
- UVwrWQaje0a9pVBLHVUmuH8CKdkBuscfSHfAG1/nh13JqNJyr8COow7DLH8EPi71BU1O
- ppAOjZ/x44XMyKOTssBcLbaBVdwdpcC5bOBIBZYVgXe6LF2XAl2fQbWRs9zzqjrUwM2v
- edc+0VgWmtvcMCkLYdj9U90HbUvR7mztI4FYdeyOdtkhTK7XKQYMW75ndwwei2SVajlw
- i7ppJ5r5pCwZkMnDvgGz3k8ANeyE0tNEiMrjjLnJgYogs7fmOcuGP333pNzRumswhDSy
- jy6g==
+ bh=i4MFnbcabVDSvQV6bamiNFY3sbYk7LQUM41b0i/8zNo=;
+ b=DQ/YausUkWK0PhTTItV6We8MrHD5vfnmey2nW3xkCmj42w31gUktk4n37u1HaIZ/j4
+ 1hT0IQ0Fd1bfTiNzkaTfJourCwAcROKL/iHhCRc38d31TA6OXtZ5uFXVBvJLen5qedYZ
+ 2Ff1aHndDc/dqZdKyAol/31f7G4j8RzF+vLG6Ym/eu8ulTybDA27fVdURudPUFS9ngdU
+ L0Y82VBY/4ZiUF1jeHOHNiBfx2Aq8FTRowOmrkfmGFKmqhbLP8Ws1T8E02YwstdpGory
+ WElBUe1ZgqTkI5yzXbG4uXjUyY5WPeMVFScRFyMgaV/iRBX9yhNcEflFUIeUtqfEvwbM
+ /FTw==
 X-Forwarded-Encrypted: i=1;
- AJvYcCXYqExX8w7k3B7/Mcj9RvrUYD92vfUagEuPXRAtUupaRwyqPDR4EXZkx7UsVZiA+A0BuO+ymhq0sco=@buildroot.org
-X-Gm-Message-State: AOJu0YyD6gqTrf49sf6fcn50k2oWxtmZxHC5LmPeFYmeRYK1oyc70yn7
- 2M5hBVtcCjCSIqlL1KAaOS4UhhI1/yv0brxaK6hS3z4TmIijLVBHu4Ps/WPvpgEX/Fk=
-X-Gm-Gg: ASbGncuE0B/rFIWRBPorwjpdLG6PZ3O9idsLNidhqmWnNhbiuOsNYVwRYHFY+hZNZQD
- hjDRHhonrjRaBBiIApStg3JLWT4t4cyEJlD9g1Dj0jVEcson5MsftgZRoie7Ncto6spwZiNyAio
- OIovtN9NuEfbo04RhxhNyvwABeNKR3j7uhYA7/KyljW+xj2wvs1U4OVmFZLZ8qX/PwhUXM+2q/n
- WIvf5W3aqKjZjLTME/VBYBxawvHG5kZeUAqMCkF1TKLz0kN+r9U3NIK9X12fkYixeDwWZXFGP4q
- raIAvjSirS8L6S6agW2FtepOLLEPVuBoj+397OzeiwTlqzoywUKNjLAM5rpBFBrnf/Le7fg7L8A
- x4bzu73TGVOMRzjWCNd9Rhzi+6Y7KBbr2
-X-Google-Smtp-Source: AGHT+IF8mibs2q9BHgyh22C5rNmi2iMTvLoYWTIs9KbH2soEjG7UfgHgffKWrmigR/mG/fZ0dMW62w==
-X-Received: by 2002:a05:600c:4706:b0:453:8bc7:5e53 with SMTP id
- 5b1f17b1804b1-4538edf9e08mr7268425e9.0.1750966130636; 
- Thu, 26 Jun 2025 12:28:50 -0700 (PDT)
+ AJvYcCUMcs8cMZMDSu4B9xJIXAvx1onMqy6NRifu5Ds9CgYFNskrj0E4ZQt4YwKdQZaJKc2z9MIEKZIHrXc=@buildroot.org
+X-Gm-Message-State: AOJu0YwWp3iIWmR9q4Uxb8/X2CE61dleVcN1f5qOWDipzGCz/Sl2GE0Z
+ ZnD/BKxzUcgHGZhyoWLU3dhHMwEXOaKI8ISQwYmVyt+24y6U66A7vLg3BW4zK9Mi8rmUnOJTDAd
+ SucX6
+X-Gm-Gg: ASbGnctE8ZJ7VOa6NzblkIfCWi7NNWubRxB999gRcXSAeoYvVHGr278JodwrXagQ72l
+ oZLyNO5T4K5osv9vCOmiIvVVd5N1Kz+Z5VmdMlsO0a7ZmpjXr4w+J4x/UMpo6FYHdPdJiPJk8ap
+ 7aXlWeIv677eKDYN2Ha3AAR4GWT2UQj++AYRQetg8RhY3mi/SvgTTfEk8MxiWDWmKAjfB0txMzY
+ N64WY+q0ziF14LSTfxf2e5kRFzbY96ucnl1cso8ZU6BRwW2xxi/l+L3Jq/XD9Yfm5zPrKVP0lUT
+ j0KvPJQY/MBJAUSS7kIP/UOB3zP82gyAFuVYg3s++5PgDwQYpB15ccRRk3pP/vjuZ5wKnHdcpOS
+ pI9jBUZ7yxRqFPOrYVOElYy9CnX9ZCK4j
+X-Google-Smtp-Source: AGHT+IGHeIScf/NQJxxvwcST7Yz/iOXqkYfObfWLN6EegdKUkF+hDtT1n9Jv7sNzz+h19Z7tORwdlA==
+X-Received: by 2002:a05:6000:1789:b0:3a0:b565:a2cb with SMTP id
+ ffacd0b85a97d-3a97fcd271amr281272f8f.1.1750966139651; 
+ Thu, 26 Jun 2025 12:28:59 -0700 (PDT)
 Received: from localhost.localdomain (94.105.118.175.dyn.edpnet.net.
  [94.105.118.175]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4538233c1easm57954125e9.3.2025.06.26.12.28.50
+ ffacd0b85a97d-3a892e5963csm663173f8f.79.2025.06.26.12.28.59
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 26 Jun 2025 12:28:50 -0700 (PDT)
-To: Bernd Kuhls <bernd@kuhls.net>
+ Thu, 26 Jun 2025 12:28:59 -0700 (PDT)
+To: Romain Naour <romain.naour@smile.fr>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Thu, 26 Jun 2025 21:28:41 +0200
-Message-ID: <20250626192841.11691-1-thomas.perale@mind.be>
+Date: Thu, 26 Jun 2025 21:28:50 +0200
+Message-ID: <20250626192850.11750-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250618184751.755758-1-bernd@kuhls.net>
-References: <20250618184751.755758-1-bernd@kuhls.net>
+In-Reply-To: <20250618212357.189395-1-romain.naour@smile.fr>
+References: <20250618212357.189395-1-romain.naour@smile.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1750966131; x=1751570931; darn=buildroot.org;
+ d=mind.be; s=google; t=1750966140; x=1751570940; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=VC1qLIw3bWi4/Wniz7eowqMgziwtAPvc9V7dAiLPg3M=;
- b=I/ta1NkRHY/IdtwoAAJq1xTKIOrANaBClxWOTZLfpVa6Fo91PZDhPzZTojwM7jXOKz
- N2IFS+oJNdbtKg9BSrP5B3zFX0WWnRLhwvxAduWPwkE3fwJFNhjJNfFf0Vgkz4HpKjMd
- B19dupbRYac0RgAMG4M8VLFPutFF6w/cc8bdtIAc7cGwKLA1QOAba46v6A2qHhBB7R3k
- XLqOOaozruiA1IIcm5DrzKkPHwn5exqsIItzVo7LZxDh3IxjTX6hRqt22syYTIwOxXXZ
- 19UEmXjF9MpJeutNVZRvfAMSp+BEg0udadVzbxmf9Im/g7Th0E8fnHXyn4STFw7cdBJ3
- +B8g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=i4MFnbcabVDSvQV6bamiNFY3sbYk7LQUM41b0i/8zNo=;
+ b=VPAQQdmbUq+egJl2rjTbmxvZAjJfHlM/TJAcA72yv99jW1KmCwkpVCoLRPO+7ZK7eb
+ uswgMPBsGjgpfUmEuOFFs37tniKEB++O7biHHlS0GQHq4ObuFw3i13zK/HMeuoXU/Fjf
+ vuYXWuaSSnrX+bXapcjEttxXw6SAxnDEVXtKS6VmiOoTuB/ZPm0WLhcZZo1BgXWSg6fh
+ 7R1PYCrCXvj8LKuSrR+qe2tG0mxrl/NdyUowoYW9MVSPKbnv1XxVdJLsZZOPYW9thrM9
+ LtWevOQW81/1nq93xMuILHrDB7T0NIsI9xgRy0ZQvr+6tLsjeL8S3nYQXSH2HkhhjAYm
+ alQg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=I/ta1NkR
-Subject: Re: [Buildroot] [PATCH 1/1] package/clamav: security bump version
- to 1.0.9
+ header.a=rsa-sha256 header.s=google header.b=VPAQQdmb
+Subject: Re: [Buildroot] [PATCH] package/squashfs: update URL to source
+ archive after Github changes
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -120,47 +121,61 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Fixes CVE-2025-20260:
-> "The code flaw was present prior to version 1.0.0, but a change in
->  version 1.0.0 that enables larger allocations based on untrusted data
->  made it possible to trigger this bug."
-> https://blog.clamav.net/2025/06/clamav-143-and-109-security-patch.html
+> The squashfs 4.6.1 archive hash has been changed suddenly two weeks
+> ago by Github without any intended changes from the squashfs maintainer
+> [1].
 > 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> The orginal squashfs 4.6.1 archive has been manually uploaded again.
+> 
+> Update the URL to download the archive that match the expected hash.
+> 
+> Since we don't use the github download helper anymore, the squashfs
+> archive name is changed from squashfs-4.6.1.tar.gz to
+> squashfs-tools-4.6.1.tar.gz.
+> 
+> Fixes:
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/10355448207
+> (and many more...)
+> 
+> See:
+> [1] https://github.com/plougher/squashfs-tools/issues/313
+> 
+> Signed-off-by: Romain Naour <romain.naour@smile.fr>
 
 Applied to 2025.02.x. Thanks
 
 > ---
->  package/clamav/clamav.hash | 2 +-
->  package/clamav/clamav.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/squashfs/squashfs.hash | 2 +-
+>  package/squashfs/squashfs.mk   | 3 ++-
+>  2 files changed, 3 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
-> index b5b10d3a13..5989682671 100644
-> --- a/package/clamav/clamav.hash
-> +++ b/package/clamav/clamav.hash
+> diff --git a/package/squashfs/squashfs.hash b/package/squashfs/squashfs.hash
+> index bc45b4ab5e..c921d638bb 100644
+> --- a/package/squashfs/squashfs.hash
+> +++ b/package/squashfs/squashfs.hash
 > @@ -1,5 +1,5 @@
->  # Locally calculated
-> -sha256  4783f2ab3fc323a887c117c672dc0b4e7ace72d76f8c06e990bd49c3ef58f10a  clamav-1.0.8.tar.gz
-> +sha256  5d3a20633bd589f612a71905a4fb50c1ee857cfbe6c72644368cac0030a1eeb4  clamav-1.0.9.tar.gz
->  sha256  0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING.txt
->  sha256  d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING/COPYING.bzip2
->  sha256  dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING/COPYING.file
-> diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
-> index 42be9be41c..0a88cc1b9f 100644
-> --- a/package/clamav/clamav.mk
-> +++ b/package/clamav/clamav.mk
-> @@ -4,7 +4,7 @@
->  #
+>  # Locally computed
+> -sha256  94201754b36121a9f022a190c75f718441df15402df32c2b520ca331a107511c  squashfs-4.6.1.tar.gz
+> +sha256  94201754b36121a9f022a190c75f718441df15402df32c2b520ca331a107511c  squashfs-tools-4.6.1.tar.gz
+>  
+>  # License files
+>  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+> diff --git a/package/squashfs/squashfs.mk b/package/squashfs/squashfs.mk
+> index b9fbf54b01..f2cb0ab25e 100644
+> --- a/package/squashfs/squashfs.mk
+> +++ b/package/squashfs/squashfs.mk
+> @@ -5,7 +5,8 @@
 >  ################################################################################
 >  
-> -CLAMAV_VERSION = 1.0.8
-> +CLAMAV_VERSION = 1.0.9
->  CLAMAV_SITE = https://www.clamav.net/downloads/production
->  CLAMAV_LICENSE = GPL-2.0
->  CLAMAV_LICENSE_FILES = \
+>  SQUASHFS_VERSION = 4.6.1
+> -SQUASHFS_SITE = $(call github,plougher,squashfs-tools,$(SQUASHFS_VERSION))
+> +SQUASHFS_SOURCE = squashfs-tools-$(SQUASHFS_VERSION).tar.gz
+> +SQUASHFS_SITE = https://github.com/plougher/squashfs-tools/releases/download/$(SQUASHFS_VERSION)
+>  SQUASHFS_LICENSE = GPL-2.0+
+>  SQUASHFS_LICENSE_FILES = COPYING
+>  SQUASHFS_CPE_ID_VALID = YES
 > -- 
-> 2.39.5
+> 2.49.0
 > 
 > _______________________________________________
 > buildroot mailing list
