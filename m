@@ -1,105 +1,102 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D767DC7115B
-	for <buildroot@archiver.kernel.org>; Thu, 26 Jun 2025 08:30:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51063C77B7F
+	for <buildroot@archiver.kernel.org>; Thu, 26 Jun 2025 08:30:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 95268607B9;
-	Thu, 26 Jun 2025 08:30:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 05B70408CC;
+	Thu, 26 Jun 2025 08:30:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iRjHeg82x5q9; Thu, 26 Jun 2025 08:30:21 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PwjRXlmz6LMc; Thu, 26 Jun 2025 08:30:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C6E2260DB5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 03A8740798
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C6E2260DB5;
-	Thu, 26 Jun 2025 08:30:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id D908610A
- for <buildroot@buildroot.org>; Thu, 26 Jun 2025 08:30:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 03A8740798;
+	Thu, 26 Jun 2025 08:30:23 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 077A510A
+ for <buildroot@buildroot.org>; Thu, 26 Jun 2025 08:30:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D2D5B80D17
+ by smtp2.osuosl.org (Postfix) with ESMTP id ED88140176
  for <buildroot@buildroot.org>; Thu, 26 Jun 2025 08:30:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M7dJI5gNxYjA for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ixUiQ9-_O01c for <buildroot@buildroot.org>;
  Thu, 26 Jun 2025 08:30:19 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::435; helo=mail-wr1-x435.google.com;
+ client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
  envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 96CE7811DC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 96CE7811DC
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
- [IPv6:2a00:1450:4864:20::435])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 96CE7811DC
- for <buildroot@buildroot.org>; Thu, 26 Jun 2025 08:30:18 +0000 (UTC)
-Received: by mail-wr1-x435.google.com with SMTP id
- ffacd0b85a97d-3a6cd1a6fecso642822f8f.3
- for <buildroot@buildroot.org>; Thu, 26 Jun 2025 01:30:18 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9505340069
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9505340069
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9505340069
+ for <buildroot@buildroot.org>; Thu, 26 Jun 2025 08:30:17 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ 5b1f17b1804b1-450cf214200so4815875e9.1
+ for <buildroot@buildroot.org>; Thu, 26 Jun 2025 01:30:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20230601; t=1750926616; x=1751531416;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=Glx5m9fnxIgu9769XaEbH72EKlRk1D91w/jccr/flH4=;
- b=EU02UFIVsCn7nXuwqFRyxxjvN+ru5ji4R5qenPrUhrbS8ML5+BFbUoFsk7geBf3bxG
- 7EV3Z+2kl4bGHs9VlQtweYTnQ0vbTcTdLtZrXzouVMZYppG9xNyiRUO7j5WPXz63gkc9
- AM4u4t+ab28FX0UURd/LvhT1hjzs6ISpEy2SoP0j8kBInqdDih1qaN7ltY8icBkIS3fU
- w9NVJuzLVvGrOfpWlaFh/2Im5p+PN9uZvMGMyG8Jj+eIx+UB5dqnhEw/BEfzgAh+QZ1U
- rxhTJ6Qc+70t7TErK1u06XBnQNKZbH86dtEDkfqAQt6QWZh9uicEOAHaJY9eHZUzLee5
- yqmA==
-X-Gm-Message-State: AOJu0YxjPmqsCCTDm0IjejDBIJ0bNRYNkGfm4yTB2QEiNynlC6NafMSa
- W38KzfWA4XiWVGGZPIQgwmO/YxlNlXDY5o4szjyI3BaUaB8u5559lZJV6YF8HtuG8LGso+beOIU
- 4/05A
-X-Gm-Gg: ASbGncuYWSWGjYAODrnpzbhmoNFPAcg2+bwhB7Uz06TJF6FCeHQ5FDHfdgyc5niJrdR
- FE82cvHGQyHIxqYGtSlF/PscD6fGSDLzuCqqQH0pV7UeAmfpJ4Mlx2nttDW7i/gy+sF84SHORK0
- hCHzw9pCuT+9SswVY/aI9hlG+DVCPbDJNbL8KotFdO2yXlk/qs9vDFZwWBHT9I+lLAx6UeSFBJT
- IdRywEAkmFICWI6OAh+qwzRgXYauqlzArpSNGJOltjAwx7ntcqNLzRnVUuM2lryFer+vDkYqkqe
- Me6svL5yGr6iV7l3fdvDLzp3tIVSyPtArkirNGiU0tCMB4mdREWO16ko58Js/QunJ2tPB9MpWgm
- ZOM1jMw+TXcDfWkKEKQ==
-X-Google-Smtp-Source: AGHT+IE6noh29Y3esuAtX+72O5RvcZVkTNerTokXODtnZiF7byxOyf3Jb6RRoDFcbGSEE3BYJxpSEg==
-X-Received: by 2002:a05:6000:2dc6:b0:3a6:ec1b:5742 with SMTP id
- ffacd0b85a97d-3a6ed5dd5famr5046492f8f.22.1750926616486; 
- Thu, 26 Jun 2025 01:30:16 -0700 (PDT)
+ h=content-transfer-encoding:mime-version:message-id:date:subject:to
+ :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=Nw2QHucMLjV0So57Heh/D0z3LkrljqboVfj1vTmPbE8=;
+ b=Ha/03KNfuO9OLQf8IOuwLikG3ZcsAY9pTvX56iw0ME/Mr8LNkDjamrR9W0/2aeNpqn
+ rfJhZ21MT6Swmjz6qKvHYMIddIDHX5yHKsrkZBAEOJDncKt0kwwaOK/FlgzjZz6Mf7LL
+ EtnAD5j0p+Z6PLPy41CrpWuvSxjhwWrdw1Z+HhTJDKFwVobc6RFJmhXlAjt79pa5C4zy
+ aZW62qQVKyaFEvOHVWBXYkG3rnU716o/udZZH8fofEOrfo5QNPiRg1pUolDq9BK33Ugt
+ 0plDtOcnEUh30Z2xwoWVyHea5MHE3pbsg57lzMMaD34Pn9aFl4ku89PEXtDq16iwgbqF
+ MOKA==
+X-Gm-Message-State: AOJu0Yy/JG4r2dfXc5gSkYOtrh66BLCvUpaaAW7//+fK4OxjRjwP8VZ3
+ JtUh1QkbCggUcKFlmIuUlVHwEoQgB0n6pF/TuBs+HOoBU8O3JnAsBv4m/h6hYphbXSYPPseEGns
+ WRedG
+X-Gm-Gg: ASbGncuHGOmRmE+yWK8VHKrIUsRfBQGdEAiDBUj8cFZJgFLSn4fyp7JiXxgdtOIh9QA
+ uo5F+MeFiyUyuo/ThUV7Oi9mqByu3PobxlzVVj5g5u3hMb1cdVhnyaCrZkZt3Y/7YlZ+yC14r4+
+ u3fCul+RrRuVIRx9ZrHkui0ozsM3lnl6y62NJqV1xQFdprE1KWOpJV/Ohm58kBPiHYZYhmMX5fY
+ uyayYf1xNpXLnA40uZEynNsKc9L8Bje4hROA4KDlJThTUOk2FUqPzHulm2zOf6LexNUbFR78WEs
+ bZe/R5l8LISsNhgR+QnnmHq2LQ8tgBxYfCJO1ke5Ui2w6haOJk6BF32J9cv7r1HGN6dUh0sQpvN
+ DeWqhZRSdKYnGEQqMtPnNOkxsE3Z7
+X-Google-Smtp-Source: AGHT+IGT1vzzu5vNCUpIVG4+STW8xVfLxp01MfF/CreC8qp8jwNEBA85FynzE9UzTeaavqwTcUfnVQ==
+X-Received: by 2002:a05:600c:5306:b0:453:6146:1182 with SMTP id
+ 5b1f17b1804b1-45381af52c2mr51173985e9.32.1750926615877; 
+ Thu, 26 Jun 2025 01:30:15 -0700 (PDT)
 Received: from dragon.local.ess-mail.com
  ([2a02:a03f:639d:e501:5db7:a3a4:443e:4828])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3a6e810b5eesm6628823f8f.85.2025.06.26.01.30.16
+ ffacd0b85a97d-3a6e810b5eesm6628823f8f.85.2025.06.26.01.30.15
  for <buildroot@buildroot.org>
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 26 Jun 2025 01:30:16 -0700 (PDT)
+ Thu, 26 Jun 2025 01:30:15 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Thu, 26 Jun 2025 10:30:05 +0200
-Message-ID: <20250626083005.537882-2-titouan.christophe@mind.be>
+Date: Thu, 26 Jun 2025 10:30:04 +0200
+Message-ID: <20250626083005.537882-1-titouan.christophe@mind.be>
 X-Mailer: git-send-email 2.50.0
-In-Reply-To: <20250626083005.537882-1-titouan.christophe@mind.be>
-References: <20250626083005.537882-1-titouan.christophe@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mind.be; s=google; t=1750926616; x=1751531416; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
- :reply-to;
- bh=Glx5m9fnxIgu9769XaEbH72EKlRk1D91w/jccr/flH4=;
- b=I+40pF4K08gW6R61Uq5DVliEYti8prZBwFlrqM1H4qKawNwZEmhM6lgWSzqJSeSx4j
- C7/HUX71GUaUdvns7YZrPhwpjwtA7U37/lo3Lt9JJGrgYkWpNQWHu/m/Gco4xStBfdoA
- YFReWokYz49ZiP4GiC0gmqTiiRQPFYvyiNN3IGFLfVKAkv5hVfAYbAZ5tJFhho8y5zZR
- CRTiE39UJTAw+3kNEV5bS8ZvDZOm3o1vKJ6VaFqwdqnXYwocm+ZlzhF4blFTlRJrv3HX
- BxcnGSYpoWnyCqRu3TdZQ76obSl7Ev/BGUZR9zGSXQby+erJ48aD9nTRlKBf7kOwY7a2
- noUg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:to
+ :from:from:to:cc:subject:date:message-id:reply-to;
+ bh=Nw2QHucMLjV0So57Heh/D0z3LkrljqboVfj1vTmPbE8=;
+ b=PAYppODCd5Vj2u8qOTIc8dW7hOcVLTp6oTtztCyF+k0r4MhWyjGzy7ZRWvJY1E7Iho
+ /bo6VYAdWA5OfuhbIsL9+sg7zdbC7MM3IoNWgNyx/FL43Uy2SnTZ78rCxW6JlijEcdF7
+ V1A6r9r+13w8TwPJsvN6xOm6N5L9lrFwPKgiXupMsjEY2mXUHg2Q8Yldl2AMl+7wjSBC
+ eXZogZZkFUkc5zPhpemsuSb6NcbXNBmqjyjA7Q4usEZZjKtGNkTUyAbJW7FlW+G3yJrm
+ wl3/PZSG4+VQi+NBnDWFfo/JgRQ8bR3IpPYlbIQAjINeRRZsYsYuAeObATstDm6081eX
+ c03w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=I+40pF4K
-Subject: [Buildroot] [PATCH 2/2] pacakge/libmpeg2: add CPE_ID_VENDOR
+ header.s=google header.b=PAYppODC
+Subject: [Buildroot] [PATCH 1/2] package/libmpeg2: switch to videolan Gitlab
+ repository
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,39 +115,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-At the moment, package stats indicates that libmpeg2 is affected by
-https://nvd.nist.gov/vuln/detail/CVE-2022-37416
+The source code archives don't seem to be available anymore from the libmpeg2
+website (Sourceforge) [1], and their SVN repository [2] doesn't seem
+reachable either.
 
-However, this CVE applies to a completely different piece of software,
-that has the same name "libmpeg2" [1].
+This fixes recent autobuilder failures, such as
+https://autobuild.buildroot.net/results/ede/edeef6a480350880b12eebd94654644e43c2670e/
 
-To avoid the confusion, let's add a proper CPE vendor to Buildroot's libmpeg2.
-The library itself does not clearly identify any vendor name, and there isn't
-any existing CPE on the NVD website. Since this library is not updated for
-many years (maybe even before the introduction of the CPE system), but the
-code is somehow related to the Videolan project, let's add this as the
-vendor, which sould solve the matched CVE issue.
-
-[1] https://github.com/ittiam-systems/libmpeg2
+[1] https://libmpeg2.sourceforge.io/
+[2] svn://svn.videolan.org/libmpeg2/trunk
 
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/libmpeg2/libmpeg2.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/libmpeg2/libmpeg2.hash | 2 +-
+ package/libmpeg2/libmpeg2.mk   | 6 +++++-
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
+diff --git a/package/libmpeg2/libmpeg2.hash b/package/libmpeg2/libmpeg2.hash
+index 615d0ea6bf..96b71fb1c8 100644
+--- a/package/libmpeg2/libmpeg2.hash
++++ b/package/libmpeg2/libmpeg2.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  dee22e893cb5fc2b2b6ebd60b88478ab8556cb3b93f9a0d7ce8f3b61851871d4  libmpeg2-0.5.1.tar.gz
++sha256  1b3adfb73e7d34ce9259130683d884b0b1af67572c9fd8229d45f55794b6dc0c  libmpeg2-v41f78cf4d30d0da0a24c8ecbc38b0c9dfd43f871.tar.gz
+ sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
 diff --git a/package/libmpeg2/libmpeg2.mk b/package/libmpeg2/libmpeg2.mk
-index cab800162c..ec23dff57b 100644
+index db9b2f8bbb..cab800162c 100644
 --- a/package/libmpeg2/libmpeg2.mk
 +++ b/package/libmpeg2/libmpeg2.mk
-@@ -16,6 +16,8 @@ LIBMPEG2_INSTALL_STAGING = YES
- LIBMPEG2_AUTORECONF = YES
- LIBMPEG2_CONF_OPTS = --without-x --disable-directx
+@@ -5,7 +5,11 @@
+ ################################################################################
  
-+LIBMPEG2_CPE_ID_VENDOR = videolan
-+
- ifeq ($(BR2_PACKAGE_SDL),y)
- LIBMPEG2_CONF_ENV += ac_cv_prog_SDLCONFIG=$(STAGING_DIR)/usr/bin/sdl-config
- LIBMPEG2_CONF_OPTS += --enable-sdl
+ LIBMPEG2_VERSION = 0.5.1
+-LIBMPEG2_SITE = http://libmpeg2.sourceforge.net/files
++# Gitlab repository does not have a 0.5.1 git tag,
++# use the corresponding commit sha instead
++LIBMPEG2_VERSION_SHA = 41f78cf4d30d0da0a24c8ecbc38b0c9dfd43f871
++LIBMPEG2_SOURCE = libmpeg2-v$(LIBMPEG2_VERSION_SHA).tar.gz
++LIBMPEG2_SITE = https://code.videolan.org/videolan/libmpeg2/-/archive/$(LIBMPEG2_VERSION_SHA)
+ LIBMPEG2_LICENSE = GPL-2.0+
+ LIBMPEG2_LICENSE_FILES = COPYING
+ LIBMPEG2_INSTALL_STAGING = YES
 -- 
 2.50.0
 
