@@ -1,51 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 278D0C7EE32
-	for <buildroot@archiver.kernel.org>; Sat, 28 Jun 2025 10:07:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D576FC54ED1
+	for <buildroot@archiver.kernel.org>; Sat, 28 Jun 2025 10:08:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3C026417D0;
-	Sat, 28 Jun 2025 10:07:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A1C3A60E76;
+	Sat, 28 Jun 2025 10:08:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ol-mYYkqV91C; Sat, 28 Jun 2025 10:07:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id u-08rUV5cCY7; Sat, 28 Jun 2025 10:08:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BAEDB4080F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DC50160E1A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BAEDB4080F;
-	Sat, 28 Jun 2025 10:07:47 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1E9821C9
- for <buildroot@buildroot.org>; Sat, 28 Jun 2025 10:07:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DC50160E1A;
+	Sat, 28 Jun 2025 10:08:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 71FC1154
+ for <buildroot@buildroot.org>; Sat, 28 Jun 2025 10:08:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A693880754
- for <buildroot@buildroot.org>; Sat, 28 Jun 2025 10:07:44 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 58B30400A2
+ for <buildroot@buildroot.org>; Sat, 28 Jun 2025 10:08:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2gy4t63pR2dF for <buildroot@buildroot.org>;
- Sat, 28 Jun 2025 10:07:44 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E10CF8075C
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E10CF8075C
- for <buildroot@buildroot.org>; Sat, 28 Jun 2025 10:07:43 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D0AD6844D9; Sat, 28 Jun 2025 10:07:43 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 28 Jun 2025 12:03:53 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b3b22564d6fcebcdb66a155311086cae91dc92a1
-X-Git-Newrev: 50297207a83cf7640e5cc3ed3500ffb807155bf2
-X-Patchwork-Hint: ignore
-Message-Id: <20250628100743.D0AD6844D9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] board/freescale/mxs: fix Linux booting
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ta65LOQMGeUN for <buildroot@buildroot.org>;
+ Sat, 28 Jun 2025 10:08:08 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B27DA40194
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B27DA40194
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B27DA40194
+ for <buildroot@buildroot.org>; Sat, 28 Jun 2025 10:08:08 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 707CF13F88F;
+ Sat, 28 Jun 2025 12:08:04 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 28 Jun 2025 12:08:04 +0200
+MIME-Version: 1.0
+Date: Sat, 28 Jun 2025 12:08:04 +0200
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250627153545.1461396-1-giulio.benetti@benettiengineering.com>
+References: <20250627153545.1461396-1-giulio.benetti@benettiengineering.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <c76d241fca6033e5ba053926223a1ebd@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1751105285;
+ bh=s1apt1qznR/Hcq3Zg/0pCOnEN9Zaz4WYGu2J00xB5As=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=T/ED4p7/1sIpTvezl6kCyYZHU/oUcLHLycLbqL9XEXaMqru5iQkv3EMm9Rg3kSeYQ
+ nW55c+065fhpjLDIxRx+A+zB7gMcORsuJ6scWMcoHhNStWSARFdRcf8GwDCYFXDqID
+ KiGCciveeSUBowmgvKlwQEU8JH4EHhi0X1vGGbG4D8avIvIsGK1Yfet9qYZ1nwUScJ
+ 606bMUF9Kk77ZzWPy797wmaR6IplAsTEs0p+sT1MSkuP2HKAxMiSYOUQ84NezOSQUV
+ kC0wtuQcJCKlx5L3LuRSk+FLTcroszxKiDP/mNcYor1l8BocCJB8uYbYgeVZyTXthZ
+ p4cpIrbwav6iA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=T/ED4p7/
+Subject: Re: [Buildroot] [PATCH] board/freescale/common/imx/post-image.sh:
+ make it verbose on error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,65 +83,17 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=50297207a83cf7640e5cc3ed3500ffb807155bf2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 27/06/2025 17:35, Giulio Benetti wrote:
+> Add set -e at the top of the script to make it verbose on error.
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-Actually DTB_LIST accepts only file and not files with relative path
-preprended. This leads to have vfat without .dtb files and so Linux
-doesn't start. Let's fix this by including slash in sed command as done
-for mxc as well as basename in front of $dt.dtb to remove possible
-useless folders present in the dts path. Let's also add set -e at the
-top of the script to make it more verbose on error and modify this
-section according to spellcheck as done for mxc.
-
-This commit align this "mxs/post-image.sh" with its "imx/post-image.sh"
-counterpart which was improved for arm64 in commit [1].
-
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/4755bf2bd43a7b4c3bf4f88be790240a01b3116f
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-[Julien:
- - change space indentation to tabs for consistency
- - add note in commit log about imx/post-image.sh
-]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- board/freescale/common/mxs/post-image.sh | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
-
-diff --git a/board/freescale/common/mxs/post-image.sh b/board/freescale/common/mxs/post-image.sh
-index 0bfb835c6e..97c8ee9079 100755
---- a/board/freescale/common/mxs/post-image.sh
-+++ b/board/freescale/common/mxs/post-image.sh
-@@ -1,5 +1,7 @@
- #!/usr/bin/env bash
- 
-+set -e
-+
- #
- # dtb_list extracts the list of DTB files from BR2_LINUX_KERNEL_INTREE_DTS_NAME
- # in ${BR_CONFIG}, then prints the corresponding list of file names for the
-@@ -7,10 +9,12 @@
- #
- dtb_list()
- {
--	local DTB_LIST="$(sed -n 's/^BR2_LINUX_KERNEL_INTREE_DTS_NAME="\([a-z0-9 \-]*\)"$/\1/p' ${BR2_CONFIG})"
-+	local DTB_LIST
-+
-+	DTB_LIST="$(sed -n 's/^BR2_LINUX_KERNEL_INTREE_DTS_NAME="\([\/a-z0-9 \-]*\)"$/\1/p' "${BR2_CONFIG}")"
- 
- 	for dt in $DTB_LIST; do
--		echo -n "\"$dt.dtb\", "
-+		echo -n "\"$(basename "${dt}").dtb\", "
- 	done
- }
- 
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
