@@ -1,75 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3008C54ED1
-	for <buildroot@archiver.kernel.org>; Sat, 28 Jun 2025 09:31:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4911C54ED1
+	for <buildroot@archiver.kernel.org>; Sat, 28 Jun 2025 10:07:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8E3C1844FC;
-	Sat, 28 Jun 2025 09:31:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5BBA3407B0;
+	Sat, 28 Jun 2025 10:07:47 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UQo3eSMljvsR; Sat, 28 Jun 2025 10:07:46 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 933844079D
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 933844079D;
+	Sat, 28 Jun 2025 10:07:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id A7A90154
+ for <buildroot@buildroot.org>; Sat, 28 Jun 2025 10:07:44 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8D70E8082F
+ for <buildroot@buildroot.org>; Sat, 28 Jun 2025 10:07:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uZuPCAv46G7D; Sat, 28 Jun 2025 09:31:00 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B561C81FF5
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B561C81FF5;
-	Sat, 28 Jun 2025 09:31:00 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 869131C9
- for <buildroot@buildroot.org>; Sat, 28 Jun 2025 09:30:58 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 788C9400BB
- for <buildroot@buildroot.org>; Sat, 28 Jun 2025 09:30:58 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 40I0RKXrrpuI for <buildroot@buildroot.org>;
- Sat, 28 Jun 2025 09:30:57 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 35420400A2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 35420400A2
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 35420400A2
- for <buildroot@buildroot.org>; Sat, 28 Jun 2025 09:30:56 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id 370C3B00548;
- Sat, 28 Jun 2025 11:30:52 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
- via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 28 Jun 2025 11:30:52 +0200
-MIME-Version: 1.0
-Date: Sat, 28 Jun 2025 11:30:52 +0200
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250627145819.432279-1-giulio.benetti@benettiengineering.com>
-References: <20250627145819.432279-1-giulio.benetti@benettiengineering.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <4bc76f52bd841425e2a46a65412d2837@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1751103053;
- bh=APhoRJouC2cqplZqnpcXklWNPsNTIKdXHteU3AtBrok=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=qAFuQCdGVPdoG6wszEoDi0yaRpx2wOhpa0kqDGupe3JJCpRm1zNhs78s//LiPLoQ5
- DTPeuMCbqCViING9GfHsIHX2CZS5PFdPde9FOPImjXitBBrNLySGlZ6bjvtgI9bBL4
- X6YKJAQia0YXD9FCw3hmtdIy7G4Qw5bLd7z/xCpycgGPimUGsSTjC3BrcGg1lDQRyT
- adVocZrZ93xqoWWyavP9s84r//oyutHVI96hOf/mYTyYcuhqu2xkYaCd94AjPp/HCE
- qh13aTWXBYoXYrEDyHUd1LCwJjtKz2ki/ZMn9T/PDfMVO05aRwH9qwI6l19KniLOee
- m7gBIpSQXoY9w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=qAFuQCdG
-Subject: Re: [Buildroot] [PATCH] package/cryptsetup: bump version to 2.8.0
+ id MH02jhpSDqgj for <buildroot@buildroot.org>;
+ Sat, 28 Jun 2025 10:07:43 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CDCEE80754
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id CDCEE80754
+ for <buildroot@buildroot.org>; Sat, 28 Jun 2025 10:07:43 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C7711844D6; Sat, 28 Jun 2025 10:07:43 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 28 Jun 2025 11:31:24 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: a717d998038262fbbdc80ef2cbb3e7ed78ea1c66
+X-Git-Newrev: b3b22564d6fcebcdb66a155311086cae91dc92a1
+X-Patchwork-Hint: ignore
+Message-Id: <20250628100743.C7711844D6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] board/freescale/common/imx/post-image.sh:
+ make it verbose on error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,24 +60,35 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 27/06/2025 16:58, Giulio Benetti wrote:
-> Rearrange license files according to upstream.
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=b3b22564d6fcebcdb66a155311086cae91dc92a1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Add set -e at the top of the script to make it verbose on error.
 
-For info, I did minor changes. See:
-https://gitlab.com/buildroot.org/buildroot/-/commit/a717d998038262fbbdc80ef2cbb3e7ed78ea1c66
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ board/freescale/common/imx/post-image.sh | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Best regards,
-
-Julien.
+diff --git a/board/freescale/common/imx/post-image.sh b/board/freescale/common/imx/post-image.sh
+index a440bfb75c..8d9bce5328 100755
+--- a/board/freescale/common/imx/post-image.sh
++++ b/board/freescale/common/imx/post-image.sh
+@@ -1,5 +1,7 @@
+ #!/usr/bin/env bash
+ 
++set -e
++
+ #
+ # dtb_list extracts the list of DTB files from BR2_LINUX_KERNEL_INTREE_DTS_NAME
+ # in ${BR_CONFIG}, then prints the corresponding list of file names for the
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
