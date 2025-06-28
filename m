@@ -4,48 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E745C54ED1
-	for <buildroot@archiver.kernel.org>; Sat, 28 Jun 2025 10:44:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0B26C54ED1
+	for <buildroot@archiver.kernel.org>; Sat, 28 Jun 2025 10:44:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 231D74199F;
-	Sat, 28 Jun 2025 10:44:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A018E4043F;
+	Sat, 28 Jun 2025 10:44:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xaKkB4eOKyJo; Sat, 28 Jun 2025 10:44:35 +0000 (UTC)
+ id Z81QkEvK7stA; Sat, 28 Jun 2025 10:44:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5DFB8419DB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB55D403D7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5DFB8419DB;
-	Sat, 28 Jun 2025 10:44:35 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 22FB6154
- for <buildroot@buildroot.org>; Sat, 28 Jun 2025 10:44:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AB55D403D7;
+	Sat, 28 Jun 2025 10:44:58 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id D23D4154
+ for <buildroot@buildroot.org>; Sat, 28 Jun 2025 10:44:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0958760DFE
- for <buildroot@buildroot.org>; Sat, 28 Jun 2025 10:44:34 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B84A7400E9
+ for <buildroot@buildroot.org>; Sat, 28 Jun 2025 10:44:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ac4B8yS92YLt for <buildroot@buildroot.org>;
- Sat, 28 Jun 2025 10:44:32 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D80FE60B93
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D80FE60B93
- for <buildroot@buildroot.org>; Sat, 28 Jun 2025 10:44:32 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CB165846D1; Sat, 28 Jun 2025 10:44:32 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 28 Jun 2025 12:28:12 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9f2dbf148660f201091604bccc1195b7b787616b
-X-Git-Newrev: 95db5707dff571c7f3485b3aa63bf5977c7bf08d
-X-Patchwork-Hint: ignore
-Message-Id: <20250628104432.CB165846D1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libarchive: security bump to v3.8.1
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id x-iuMsFw7vPM for <buildroot@buildroot.org>;
+ Sat, 28 Jun 2025 10:44:57 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D2DC7400B8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D2DC7400B8
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D2DC7400B8
+ for <buildroot@buildroot.org>; Sat, 28 Jun 2025 10:44:56 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 5E8FD2003A4;
+ Sat, 28 Jun 2025 12:44:52 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 28 Jun 2025 12:44:52 +0200
+MIME-Version: 1.0
+Date: Sat, 28 Jun 2025 12:44:52 +0200
+To: Titouan Christophe <titouan.christophe@mind.be>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250626085444.568020-1-titouan.christophe@mind.be>
+References: <20250623160224.953975-1-titouan.christophe@mind.be>
+ <20250626085444.568020-1-titouan.christophe@mind.be>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <c3c1bd0520b24a2465734ce172c2cbad@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1751107493;
+ bh=7pJc4q6FuegnKDjYmix4b88I57+bBh5BZWB9XMyGZ00=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=vHWqi5B7M2NogO70qJECwjvaHuy+OOX0BcO1Z4SWXMFA0EsyIQHpgbpwgcEm9/icn
+ 7KYVaqlTwj+LEens4kJJJF7zon0xxQR8RSwvMu5ncQ9wlFxjUdklv0n1gDkcT01cn2
+ noRB+nbNBwZUSKPcQIqzeo6YPza/zL59+azDbr7y14lvlGVXeAuak05K97JjsGdReO
+ kDZriIFYr+MIS93u+R756VWuijLxpj3ckQL30opEtS8a2HHmw7J0mg/R79baapKvYI
+ LaXA19o7odBwymXHTNodkA57l8/jd9NN+pVqKCzQtfGRNVVxb2syQC+ZjxDJuXOsH3
+ t2xxNFUS+/YFQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=vHWqi5B7
+Subject: Re: [Buildroot] [PATCH v2] package/libarchive: security bump to
+ v3.8.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,416 +84,61 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=95db5707dff571c7f3485b3aa63bf5977c7bf08d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 26/06/2025 10:54, Titouan Christophe via buildroot wrote:
+> This fixes the following CVEs:
+> 
+> - CVE-2025-5914
+>     Libarchive: double free at archive_read_format_rar_seek_data()
+>     in archive_read_support_format_rar.c
+>     https://www.cve.org/CVERecord?id=CVE-2025-5914
+> 
+> - CVE-2025-5915
+>     Libarchive: heap buffer over read in copy_from_lzss_window()
+>     at archive_read_support_format_rar.c
+>     https://www.cve.org/CVERecord?id=CVE-2025-5915
+> 
+> - CVE-2025-5916
+>     Libarchive: integer overflow while reading warc files
+>     at archive_read_support_format_warc.c
+>     https://www.cve.org/CVERecord?id=CVE-2025-5916
+> 
+> - CVE-2025-5917
+>     Libarchive: off by one error in build_ustar_entry_name()
+>     at archive_write_set_format_pax.c
+>     https://www.cve.org/CVERecord?id=CVE-2025-5917
+> 
+> - CVE-2025-5918
+>     Libarchive: reading past eof may be triggered for piped file 
+> streams
+>     https://www.cve.org/CVERecord?id=CVE-2025-5918
+> 
+> See the release notes:
+> - https://github.com/libarchive/libarchive/releases/tag/v3.8.0
+> - https://github.com/libarchive/libarchive/releases/tag/v3.8.1
+> 
+> In addition to the version bump, the following changes are required:
+> - The COPYING file has been edited upstream because of filename change 
+> on a
+>   sub-licensed component; see
+>   
+> https://github.com/libarchive/libarchive/commit/c26f0377457db392bd57a640e8fe25506120f810
+> - The upstream "sha256sums" is currently unavailable, so the archive 
+> checksum
+>   has been computed locally
+> - Drop patches for libiconv in configure.ac, which has been properly 
+> addressed
+>   upstream in https://github.com/libarchive/libarchive/pull/2611
+> - Following the above, AUTORECONF is not needed any longer
+> - Drop mbedtls patch that has been applied upstream
+> 
+> Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 
-This fixes the following CVEs:
-
-- CVE-2025-5914
-    Libarchive: double free at archive_read_format_rar_seek_data()
-    in archive_read_support_format_rar.c
-    https://www.cve.org/CVERecord?id=CVE-2025-5914
-
-- CVE-2025-5915
-    Libarchive: heap buffer over read in copy_from_lzss_window()
-    at archive_read_support_format_rar.c
-    https://www.cve.org/CVERecord?id=CVE-2025-5915
-
-- CVE-2025-5916
-    Libarchive: integer overflow while reading warc files
-    at archive_read_support_format_warc.c
-    https://www.cve.org/CVERecord?id=CVE-2025-5916
-
-- CVE-2025-5917
-    Libarchive: off by one error in build_ustar_entry_name()
-    at archive_write_set_format_pax.c
-    https://www.cve.org/CVERecord?id=CVE-2025-5917
-
-- CVE-2025-5918
-    Libarchive: reading past eof may be triggered for piped file streams
-    https://www.cve.org/CVERecord?id=CVE-2025-5918
-
-See the release notes:
-- https://github.com/libarchive/libarchive/releases/tag/v3.8.0
-- https://github.com/libarchive/libarchive/releases/tag/v3.8.1
-
-In addition to the version bump, the following changes are required:
-- The COPYING file has been edited upstream because of filename change on a
-  sub-licensed component; see
-  https://github.com/libarchive/libarchive/commit/c26f0377457db392bd57a640e8fe25506120f810
-- The upstream "sha256sums" is currently unavailable, so the archive checksum
-  has been computed locally
-- Drop patches for libiconv in configure.ac, which has been properly addressed
-  upstream in https://github.com/libarchive/libarchive/pull/2611
-- Following the above, AUTORECONF is not needed any longer
-- Drop mbedtls patch that has been applied upstream
-
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...-add-iconv-to-the-.pc-file-if-needed-1825.patch |  31 ---
- ...ols-do-not-add-iconv-for-Requires.private.patch |  27 ---
- ...-Fix-mbedtls-version-3-compatibility-2602.patch | 238 ---------------------
- package/libarchive/libarchive.hash                 |   7 +-
- package/libarchive/libarchive.mk                   |   6 +-
- 5 files changed, 5 insertions(+), 304 deletions(-)
-
-diff --git a/package/libarchive/0001-Revert-Only-add-iconv-to-the-.pc-file-if-needed-1825.patch b/package/libarchive/0001-Revert-Only-add-iconv-to-the-.pc-file-if-needed-1825.patch
-deleted file mode 100644
-index 31ac4b0b5a..0000000000
---- a/package/libarchive/0001-Revert-Only-add-iconv-to-the-.pc-file-if-needed-1825.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--From 3879afd473a256173cc626e16293f3fe8875f2d6 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sat, 6 Jan 2024 09:53:23 +0100
--Subject: [PATCH] Revert "Only add "iconv" to the .pc file if needed (#1825)"
--
--This reverts commit 1f35c466aaa9444335a1b854b0b7223b0d2346c2.
--
--Upstream: no dedicated PR for this revert but there is already plenty of PRs/issues to fix iconv build ...
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- configure.ac | 4 +---
-- 1 file changed, 1 insertion(+), 3 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index 93f7af94..204a4e69 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -455,9 +455,7 @@ if test "x$with_iconv" != "xno"; then
--     AC_CHECK_HEADERS([localcharset.h])
--     am_save_LIBS="$LIBS"
--     LIBS="${LIBS} ${LIBICONV}"
---    if test -n "$LIBICONV"; then
---      LIBSREQUIRED="$LIBSREQUIRED${LIBSREQUIRED:+ }iconv"
---    fi
--+    LIBSREQUIRED="$LIBSREQUIRED${LIBSREQUIRED:+ }iconv"
--     AC_CHECK_FUNCS([locale_charset])
--     LIBS="${am_save_LIBS}"
--     if test "x$ac_cv_func_locale_charset" != "xyes"; then
---- 
--2.43.0
--
-diff --git a/package/libarchive/0002-autotools-do-not-add-iconv-for-Requires.private.patch b/package/libarchive/0002-autotools-do-not-add-iconv-for-Requires.private.patch
-deleted file mode 100644
-index a5b4c86a2f..0000000000
---- a/package/libarchive/0002-autotools-do-not-add-iconv-for-Requires.private.patch
-+++ /dev/null
-@@ -1,27 +0,0 @@
--From 619c1be8d38ff79622db8f66f3b02832795315f9 Mon Sep 17 00:00:00 2001
--From: Christian Hesse <mail@eworm.de>
--Date: Wed, 14 Dec 2022 09:04:39 +0100
--Subject: [PATCH] autotools: do not add iconv for Requires.private
--
--There is no pkgconfig file for iconv, thus things break with this
--change. Let's drop iconv from Requires.private.
--
--Fixes: a83f3d32 ("autotools: Fix static linking when openssl is enabled in windows")
--Upstream: https://github.com/libarchive/libarchive/pull/1817/commits/619c1be8d38ff79622db8f66f3b02832795315f9
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- configure.ac | 1 -
-- 1 file changed, 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index 99bff20d1..f245d0c55 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -455,7 +455,6 @@ if test "x$with_iconv" != "xno"; then
--     AC_CHECK_HEADERS([localcharset.h])
--     am_save_LIBS="$LIBS"
--     LIBS="${LIBS} ${LIBICONV}"
---    LIBSREQUIRED="$LIBSREQUIRED${LIBSREQUIRED:+ }iconv"
--     AC_CHECK_FUNCS([locale_charset])
--     LIBS="${am_save_LIBS}"
--     if test "x$ac_cv_func_locale_charset" != "xyes"; then
-diff --git a/package/libarchive/0003-Fix-mbedtls-version-3-compatibility-2602.patch b/package/libarchive/0003-Fix-mbedtls-version-3-compatibility-2602.patch
-deleted file mode 100644
-index 67fb3ff738..0000000000
---- a/package/libarchive/0003-Fix-mbedtls-version-3-compatibility-2602.patch
-+++ /dev/null
-@@ -1,238 +0,0 @@
--From 26ba5ee5d560d62ad05aa6819608fd21cbb962f9 Mon Sep 17 00:00:00 2001
--From: James Hilliard <james.hilliard1@gmail.com>
--Date: Thu, 15 May 2025 04:56:59 -0600
--Subject: [PATCH] Fix mbedtls version 3 compatibility (#2602)
--
--We need to use the new API for mbedtls 3 compatibility
--
--Fixes #2025
--
--Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
--Upstream: https://github.com/libarchive/libarchive/commit/63d7c24eeaa108ecc2ef258c0505eefdadaaaf35
-----
-- libarchive/archive_digest.c | 72 +++++++++++++++++++++++++++++++++++++
-- 1 file changed, 72 insertions(+)
--
--diff --git a/libarchive/archive_digest.c b/libarchive/archive_digest.c
--index 33518740..03f0edd6 100644
----- a/libarchive/archive_digest.c
--+++ b/libarchive/archive_digest.c
--@@ -235,7 +235,11 @@ static int
-- __archive_md5init(archive_md5_ctx *ctx)
-- {
--   mbedtls_md5_init(ctx);
--+#if MBEDTLS_VERSION_NUMBER > 0x03000000
--+  if (mbedtls_md5_starts(ctx) == 0)
--+#else
--   if (mbedtls_md5_starts_ret(ctx) == 0)
--+#endif
--     return (ARCHIVE_OK);
--   else
--     return (ARCHIVE_FATAL);
--@@ -245,7 +249,11 @@ static int
-- __archive_md5update(archive_md5_ctx *ctx, const void *indata,
--     size_t insize)
-- {
--+#if MBEDTLS_VERSION_NUMBER > 0x03000000
--+  if (mbedtls_md5_update(ctx, indata, insize) == 0)
--+#else
--   if (mbedtls_md5_update_ret(ctx, indata, insize) == 0)
--+#endif
--     return (ARCHIVE_OK);
--   else
--     return (ARCHIVE_FATAL);
--@@ -254,7 +262,11 @@ __archive_md5update(archive_md5_ctx *ctx, const void *indata,
-- static int
-- __archive_md5final(archive_md5_ctx *ctx, void *md)
-- {
--+#if MBEDTLS_VERSION_NUMBER > 0x03000000
--+  if (mbedtls_md5_finish(ctx, md) == 0) {
--+#else
--   if (mbedtls_md5_finish_ret(ctx, md) == 0) {
--+#endif
--     mbedtls_md5_free(ctx);
--     return (ARCHIVE_OK);
--   } else {
--@@ -431,7 +443,11 @@ static int
-- __archive_ripemd160init(archive_rmd160_ctx *ctx)
-- {
--   mbedtls_ripemd160_init(ctx);
--+#if MBEDTLS_VERSION_NUMBER > 0x03000000
--+  if (mbedtls_ripemd160_starts(ctx) == 0)
--+#else
--   if (mbedtls_ripemd160_starts_ret(ctx) == 0)
--+#endif
--     return (ARCHIVE_OK);
--   else
--     return (ARCHIVE_FATAL);
--@@ -441,7 +457,11 @@ static int
-- __archive_ripemd160update(archive_rmd160_ctx *ctx, const void *indata,
--     size_t insize)
-- {
--+#if MBEDTLS_VERSION_NUMBER > 0x03000000
--+  if (mbedtls_ripemd160_update(ctx, indata, insize) == 0)
--+#else
--   if (mbedtls_ripemd160_update_ret(ctx, indata, insize) == 0)
--+#endif
--     return (ARCHIVE_OK);
--   else
--     return (ARCHIVE_FATAL);
--@@ -450,7 +470,11 @@ __archive_ripemd160update(archive_rmd160_ctx *ctx, const void *indata,
-- static int
-- __archive_ripemd160final(archive_rmd160_ctx *ctx, void *md)
-- {
--+#if MBEDTLS_VERSION_NUMBER > 0x03000000
--+  if (mbedtls_ripemd160_finish(ctx, md) == 0) {
--+#else
--   if (mbedtls_ripemd160_finish_ret(ctx, md) == 0) {
--+#endif
--     mbedtls_ripemd160_free(ctx);
--     return (ARCHIVE_OK);
--   } else {
--@@ -622,7 +646,11 @@ static int
-- __archive_sha1init(archive_sha1_ctx *ctx)
-- {
--   mbedtls_sha1_init(ctx);
--+#if MBEDTLS_VERSION_NUMBER > 0x03000000
--+  if (mbedtls_sha1_starts(ctx) == 0)
--+#else
--   if (mbedtls_sha1_starts_ret(ctx) == 0)
--+#endif
--     return (ARCHIVE_OK);
--   else
--     return (ARCHIVE_FATAL);
--@@ -632,7 +660,11 @@ static int
-- __archive_sha1update(archive_sha1_ctx *ctx, const void *indata,
--     size_t insize)
-- {
--+#if MBEDTLS_VERSION_NUMBER > 0x03000000
--+  if (mbedtls_sha1_update(ctx, indata, insize) == 0)
--+#else
--   if (mbedtls_sha1_update_ret(ctx, indata, insize) == 0)
--+#endif
--     return (ARCHIVE_OK);
--   else
--     return (ARCHIVE_FATAL);
--@@ -641,7 +673,11 @@ __archive_sha1update(archive_sha1_ctx *ctx, const void *indata,
-- static int
-- __archive_sha1final(archive_sha1_ctx *ctx, void *md)
-- {
--+#if MBEDTLS_VERSION_NUMBER > 0x03000000
--+  if (mbedtls_sha1_finish(ctx, md) == 0) {
--+#else
--   if (mbedtls_sha1_finish_ret(ctx, md) == 0) {
--+#endif
--     mbedtls_sha1_free(ctx);
--     return (ARCHIVE_OK);
--   } else {
--@@ -890,7 +926,11 @@ static int
-- __archive_sha256init(archive_sha256_ctx *ctx)
-- {
--   mbedtls_sha256_init(ctx);
--+#if MBEDTLS_VERSION_NUMBER > 0x03000000
--+  if (mbedtls_sha256_starts(ctx, 0) == 0)
--+#else
--   if (mbedtls_sha256_starts_ret(ctx, 0) == 0)
--+#endif
--     return (ARCHIVE_OK);
--   else
--     return (ARCHIVE_FATAL);
--@@ -900,7 +940,11 @@ static int
-- __archive_sha256update(archive_sha256_ctx *ctx, const void *indata,
--     size_t insize)
-- {
--+#if MBEDTLS_VERSION_NUMBER > 0x03000000
--+  if (mbedtls_sha256_update(ctx, indata, insize) == 0)
--+#else
--   if (mbedtls_sha256_update_ret(ctx, indata, insize) == 0)
--+#endif
--     return (ARCHIVE_OK);
--   else
--     return (ARCHIVE_FATAL);
--@@ -909,7 +953,11 @@ __archive_sha256update(archive_sha256_ctx *ctx, const void *indata,
-- static int
-- __archive_sha256final(archive_sha256_ctx *ctx, void *md)
-- {
--+#if MBEDTLS_VERSION_NUMBER > 0x03000000
--+  if (mbedtls_sha256_finish(ctx, md) == 0) {
--+#else
--   if (mbedtls_sha256_finish_ret(ctx, md) == 0) {
--+#endif
--     mbedtls_sha256_free(ctx);
--     return (ARCHIVE_OK);
--   } else {
--@@ -1130,7 +1178,11 @@ static int
-- __archive_sha384init(archive_sha384_ctx *ctx)
-- {
--   mbedtls_sha512_init(ctx);
--+#if MBEDTLS_VERSION_NUMBER > 0x03000000
--+  if (mbedtls_sha512_starts(ctx, 1) == 0)
--+#else
--   if (mbedtls_sha512_starts_ret(ctx, 1) == 0)
--+#endif
--     return (ARCHIVE_OK);
--   else
--     return (ARCHIVE_FATAL);
--@@ -1140,7 +1192,11 @@ static int
-- __archive_sha384update(archive_sha384_ctx *ctx, const void *indata,
--     size_t insize)
-- {
--+#if MBEDTLS_VERSION_NUMBER > 0x03000000
--+  if (mbedtls_sha512_update(ctx, indata, insize) == 0)
--+#else
--   if (mbedtls_sha512_update_ret(ctx, indata, insize) == 0)
--+#endif
--     return (ARCHIVE_OK);
--   else
--     return (ARCHIVE_FATAL);
--@@ -1149,7 +1205,11 @@ __archive_sha384update(archive_sha384_ctx *ctx, const void *indata,
-- static int
-- __archive_sha384final(archive_sha384_ctx *ctx, void *md)
-- {
--+#if MBEDTLS_VERSION_NUMBER > 0x03000000
--+  if (mbedtls_sha512_finish(ctx, md) == 0) {
--+#else
--   if (mbedtls_sha512_finish_ret(ctx, md) == 0) {
--+#endif
--     mbedtls_sha512_free(ctx);
--     return (ARCHIVE_OK);
--   } else {
--@@ -1394,7 +1454,11 @@ static int
-- __archive_sha512init(archive_sha512_ctx *ctx)
-- {
--   mbedtls_sha512_init(ctx);
--+#if MBEDTLS_VERSION_NUMBER > 0x03000000
--+  if (mbedtls_sha512_starts(ctx, 0) == 0)
--+#else
--   if (mbedtls_sha512_starts_ret(ctx, 0) == 0)
--+#endif
--     return (ARCHIVE_OK);
--   else
--     return (ARCHIVE_FATAL);
--@@ -1404,7 +1468,11 @@ static int
-- __archive_sha512update(archive_sha512_ctx *ctx, const void *indata,
--     size_t insize)
-- {
--+#if MBEDTLS_VERSION_NUMBER > 0x03000000
--+  if (mbedtls_sha512_update(ctx, indata, insize) == 0)
--+#else
--   if (mbedtls_sha512_update_ret(ctx, indata, insize) == 0)
--+#endif
--     return (ARCHIVE_OK);
--   else
--     return (ARCHIVE_FATAL);
--@@ -1413,7 +1481,11 @@ __archive_sha512update(archive_sha512_ctx *ctx, const void *indata,
-- static int
-- __archive_sha512final(archive_sha512_ctx *ctx, void *md)
-- {
--+#if MBEDTLS_VERSION_NUMBER > 0x03000000
--+  if (mbedtls_sha512_finish(ctx, md) == 0) {
--+#else
--   if (mbedtls_sha512_finish_ret(ctx, md) == 0) {
--+#endif
--     mbedtls_sha512_free(ctx);
--     return (ARCHIVE_OK);
--   } else {
---- 
--2.34.1
--
-diff --git a/package/libarchive/libarchive.hash b/package/libarchive/libarchive.hash
-index d132664e17..b8738e4a99 100644
---- a/package/libarchive/libarchive.hash
-+++ b/package/libarchive/libarchive.hash
-@@ -1,4 +1,5 @@
--# From https://www.libarchive.de/downloads/sha256sums
--sha256  ed8b5732e4cd6e30fae909fb945cad8ff9cb7be5c6cdaa3944ec96e4a200c04c  libarchive-3.7.9.tar.xz
-+# Locally computed after verifying the signature from
-+# https://www.libarchive.de/downloads/libarchive-3.8.1.tar.xz.asc
-+sha256  19f917d42d530f98815ac824d90c7eaf648e9d9a50e4f309c812457ffa5496b5  libarchive-3.8.1.tar.xz
- # Locally computed:
--sha256  b2cdf763345de2de34cebf54394df3c61a105c3b71288603c251f2fa638200ba  COPYING
-+sha256  30e556b3959e3985d66efefec5eaac51d4995053caa1d3cffe6eb916f146f229  COPYING
-diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
-index 7fec01a040..1dafec726b 100644
---- a/package/libarchive/libarchive.mk
-+++ b/package/libarchive/libarchive.mk
-@@ -4,17 +4,13 @@
- #
- ################################################################################
- 
--LIBARCHIVE_VERSION = 3.7.9
-+LIBARCHIVE_VERSION = 3.8.1
- LIBARCHIVE_SOURCE = libarchive-$(LIBARCHIVE_VERSION).tar.xz
- LIBARCHIVE_SITE = https://www.libarchive.de/downloads
- LIBARCHIVE_INSTALL_STAGING = YES
- LIBARCHIVE_LICENSE = BSD-2-Clause, BSD-3-Clause, CC0-1.0, OpenSSL, Apache-2.0
- LIBARCHIVE_LICENSE_FILES = COPYING
- LIBARCHIVE_CPE_ID_VENDOR = libarchive
--# We're patching configure.ac
--LIBARCHIVE_AUTORECONF = YES
--# needed for autoreconf
--LIBARCHIVE_DEPENDENCIES += host-pkgconf
- 
- ifeq ($(BR2_PACKAGE_LIBARCHIVE_BSDTAR),y)
- ifeq ($(BR2_STATIC_LIBS),y)
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
