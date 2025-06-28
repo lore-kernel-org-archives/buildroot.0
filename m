@@ -1,76 +1,73 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C025C54ED1
-	for <buildroot@archiver.kernel.org>; Sat, 28 Jun 2025 15:25:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9CC23C7EE39
+	for <buildroot@archiver.kernel.org>; Sat, 28 Jun 2025 16:16:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2395F6088D;
-	Sat, 28 Jun 2025 15:25:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2F1E081FAF;
+	Sat, 28 Jun 2025 16:16:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Cgs_WN8cBKH9; Sat, 28 Jun 2025 15:25:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uSUpskVWjrjq; Sat, 28 Jun 2025 16:16:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F491608B5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 408E781EEF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5F491608B5;
-	Sat, 28 Jun 2025 15:25:45 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id D78871C9
- for <buildroot@buildroot.org>; Sat, 28 Jun 2025 15:25:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 408E781EEF;
+	Sat, 28 Jun 2025 16:16:41 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 19EB9AF7
+ for <buildroot@buildroot.org>; Sat, 28 Jun 2025 16:16:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C863E608B5
- for <buildroot@buildroot.org>; Sat, 28 Jun 2025 15:25:43 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 003B8409C2
+ for <buildroot@buildroot.org>; Sat, 28 Jun 2025 16:16:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id g1QHXXr7buNm for <buildroot@buildroot.org>;
- Sat, 28 Jun 2025 15:25:43 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id H1s8AlEpOCkE for <buildroot@buildroot.org>;
+ Sat, 28 Jun 2025 16:16:39 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
  helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D6BE46088D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D6BE46088D
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1C705409A9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C705409A9
 Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D6BE46088D
- for <buildroot@buildroot.org>; Sat, 28 Jun 2025 15:25:42 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1C705409A9
+ for <buildroot@buildroot.org>; Sat, 28 Jun 2025 16:16:39 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:656e:cf44:475c:a8d2])
  (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id 7F526B00548;
- Sat, 28 Jun 2025 17:25:38 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
- via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 28 Jun 2025 17:25:38 +0200
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 0AB4DB0057C;
+ Sat, 28 Jun 2025 18:16:30 +0200 (CEST)
+To: buildroot@buildroot.org
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Julien Olivain <ju.o@free.fr>
+Date: Sat, 28 Jun 2025 18:16:20 +0200
+Message-ID: <20250628161620.1866792-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.50.0
 MIME-Version: 1.0
-Date: Sat, 28 Jun 2025 17:25:38 +0200
-To: =?UTF-8?Q?Rapha=C3=ABl_M=C3=A9lotte?= <raphael.melotte@mind.be>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250626111922.1851579-1-raphael.melotte@mind.be>
-References: <20250626111922.1851579-1-raphael.melotte@mind.be>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <cf2bc1b78c3e215d3313450ba34fed9c@free.fr>
-X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1751124339;
- bh=RK2IholyGjWvRE0VNgOycIa0diqSR8gUp28/RSJRgZw=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=ZqJm/iLShvf/MfRYbAxLsjbRT4Efpa/sS4GR+/pt4vCqL/MkXosIr4LIU3d8qLh3/
- f1dCCjo+qcG3qRUwDlFBWDDsbNxIpk3KBhn4GC44b3noqHQRwDf7XmBAaNdWVhAI1q
- bRVaTBMQ6YOKfCcsPoCO5Bs+L1LE7Ky3yiFnYnqw0NweMk7hgyYKSrB0/MhTiRGvAH
- Jp9ld8sD3sVcaNbjd/tCQsgw/nnRhyrVOviMOT01yqrURAulxR6xIE/sYn214K+1Rw
- fztpgwOV4xQEHqhP9sMsRbDQQz7oT42dgA1Z1aPdIsi4tdQk+4b/wrBstCRUTHkhfP
- aEWzmpdzaHi0Q==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1751127396;
+ bh=FW2eS+tfuXXhNc7557pukeRc+11Hc9QrI1zxz75roc0=;
+ h=From:To:Cc:Subject:Date:From;
+ b=uUB3O55i7LCGzfFGKdL8WT/JBK70A25OST4xVbuXjQgUetJqBiaMYqA1yfT8YK9Gn
+ ipYBujhzyiiHXAa0nlesPsPYQmVq2RE79EAI4x6xdzBRWcGRc3HXFjp+iK0Yg1PONQ
+ h5kQ14SgRa0P19mtUk5KtrW8q5C/e6x+Jox+YzX53FEW7/+loa8HP7Gvr/yH66CzEv
+ 3Pyj5m5g8cU1RaBA8JzmJLcHphBVKOsqDYHlgkLt9upHSuE7++l2gPjyJL5oSEjTC7
+ x5cHaWk1zFOA3IdkPOFwTmYumARhcnfI7T7R5nZJONqqMtdNm9RhLebNf0pswd0mgI
+ tFaMx5I+yr/cw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=ZqJm/iLS
-Subject: Re: [Buildroot] [PATCH 1/3] package/gumbo-parser: update upstream
- repository
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=uUB3O55i
+Subject: [Buildroot] [PATCH 1/1] package/gcc/Config.in.host: hide gcc
+ version for unsupported CPUs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,24 +81,79 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gMjYvMDYvMjAyNSAxMzoxOSwgUmFwaGHDq2wgTcOpbG90dGUgdmlhIGJ1aWxkcm9vdCB3cm90
-ZToKPiBEZXZlbG9wbWVudCBvbiBHb29nbGUncyBHaXRIdWIgcmVwb3NpdG9yeSBoYXMgc3RvcHBl
-ZCBhIGxvbmcgdGltZSBhZ28uCj4gQSBmb3JrIGV4aXN0cyBvbiBDb2RlYmVyZywgYW5kIG11bHRp
-cGxlIGRpc3RyaWJ1dGlvbnMgKEZlZG9yYSwgQXJjaAo+IExpbnV4LCAuLi4pIGFyZSBhbHJlYWR5
-IHVzaW5nIGl0IChzZWUgWzFdKS4KPiAKPiBVcGRhdGUgdGhlIHNvdXJjZSBVUkwgdG8gdXNlIHRo
-ZSBuZXcgdXBzdHJlYW0gbG9jYXRpb24uCj4gCj4gVGhlIG5ldyB1cHN0cmVhbSBoYXMgYSBkaWZm
-ZXJlbnQgaGFzaCBmb3IgdGhlIDAuMTAuMSB0YXJiYWxsLCBzbwo+IHVwZGF0ZSBpdCBhcyB3ZWxs
-Lgo+IAo+IFsxXTogaHR0cHM6Ly9yZXBvbG9neS5vcmcvcHJvamVjdC9ndW1iby1wYXJzZXIvdmVy
-c2lvbnMKPiAKPiBTaWduZWQtb2ZmLWJ5OiBSYXBoYcOrbCBNw6lsb3R0ZSA8cmFwaGFlbC5tZWxv
-dHRlQG1pbmQuYmU+CgpTZXJpZXMgYXBwbGllZCB0byBtYXN0ZXIsIHRoYW5rcy4KCkZvciBpbmZv
-LCBJIGZpeGVkIHRoZSBsaWNlbnNlIGZpbGUgcGF0aC4gU2VlOgpodHRwczovL2dpdGxhYi5jb20v
-YnVpbGRyb290Lm9yZy9idWlsZHJvb3QvLS9jb21taXQvNWMxOGViMWE1NWRiZWM0YjZiZjRiN2Qw
-YTlhNGZhMDMzN2NjYzVkOAoKQmVzdCByZWdhcmRzLAoKSnVsaWVuLgpfX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1
-aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFu
-L2xpc3RpbmZvL2J1aWxkcm9vdAo=
+When a new gcc version is introduced, for example gcc 15 in
+commit [1], it should have also added a "depends on
+!BR2_ARCH_NEEDS_GCC_AT_LEAST_15" to the previous gcc version.
+
+This logic is described for external toolchains in commit [2],
+for example. The internal Buildroot toolchains should have the
+same logic. This logic existed for previous gcc version. See for
+example the removal of gcc 12 in commit [3].
+
+There is ususally no problem, because all the three latest active gcc
+versions supports all CPUs present in Buildroot.
+
+However, the commit [4] recently added the support for the Arm
+Cortex-A720 CPU, which needs at least gcc 14. Since there is no
+logic preventing the selection of the gcc version, it is possible
+to select an unsupported gcc version (i.e. gcc 13).
+
+In such a case, the host-gcc-initial package configuration fails
+with output:
+
+    Unknown cpu used in --with-cpu=cortex-a720
+
+This commit fixes the issue by adding those missing dependencies.
+
+Fixes:
+https://autobuild.buildroot.org/results/918b90aee0b65f01efc241622015cb847b4e23a8/
+
+[1] https://gitlab.com/buildroot.org/buildroot/-/commit/75891397abe60dbe3d82a1ec39654ff81d1b1406
+[2] https://gitlab.com/buildroot.org/buildroot/-/commit/f577d8218f3f18016aa084255e337a7f589eeed1
+[3] https://gitlab.com/buildroot.org/buildroot/-/commit/58cf7c51da3ae4804332f68ee934e153d695d047#66f7e875db173e5538d3511c8297acc1ba30da33_27_25
+[4] https://gitlab.com/buildroot.org/buildroot/-/commit/de374e06d856dd5079fc792c883b06563af950b0
+
+Cc: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+When authoring this patch, I was wondering if when adding a new
+gcc version X, we should also introduce the Kconfig symbol
+BR2_ARCH_NEEDS_GCC_AT_LEAST_(X+1) to make sure all the gcc versions
+have their dependencies. What do you think?
+---
+ package/gcc/Config.in.host | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 5e4da0aa85..8640280fdf 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -24,6 +24,7 @@ config BR2_GCC_VERSION_POWERPC_SPE
+ 
+ config BR2_GCC_VERSION_13_X
+ 	bool "gcc 13.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_14
+ 	# powerpc spe support has been deprecated since gcc 8.x.
+ 	# https://gcc.gnu.org/ml/gcc/2018-04/msg00102.html
+ 	depends on !BR2_POWERPC_CPU_HAS_SPE
+@@ -31,6 +32,7 @@ config BR2_GCC_VERSION_13_X
+ 
+ config BR2_GCC_VERSION_14_X
+ 	bool "gcc 14.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_15
+ 	# powerpc spe support has been deprecated since gcc 8.x.
+ 	# https://gcc.gnu.org/ml/gcc/2018-04/msg00102.html
+ 	depends on !BR2_POWERPC_CPU_HAS_SPE
+-- 
+2.50.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
