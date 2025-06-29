@@ -4,49 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11F30C7EE39
-	for <buildroot@archiver.kernel.org>; Sun, 29 Jun 2025 10:15:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE013C7EE30
+	for <buildroot@archiver.kernel.org>; Sun, 29 Jun 2025 10:16:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A48CE61037;
-	Sun, 29 Jun 2025 10:14:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BCE0161010;
+	Sun, 29 Jun 2025 10:16:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ErQ0gjWCpPhX; Sun, 29 Jun 2025 10:14:57 +0000 (UTC)
+ id upmL-qwxteYe; Sun, 29 Jun 2025 10:16:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE2C261016
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D06FE61005
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EE2C261016;
-	Sun, 29 Jun 2025 10:14:56 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 3628B211
- for <buildroot@buildroot.org>; Sun, 29 Jun 2025 10:14:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D06FE61005;
+	Sun, 29 Jun 2025 10:16:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id E7B841C9
+ for <buildroot@buildroot.org>; Sun, 29 Jun 2025 10:16:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2886440106
- for <buildroot@buildroot.org>; Sun, 29 Jun 2025 10:14:54 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CD895411FB
+ for <buildroot@buildroot.org>; Sun, 29 Jun 2025 10:16:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mD44GLafQGAZ for <buildroot@buildroot.org>;
- Sun, 29 Jun 2025 10:14:53 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 45E174009F
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 45E174009F
- for <buildroot@buildroot.org>; Sun, 29 Jun 2025 10:14:53 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 40CA6847B7; Sun, 29 Jun 2025 10:14:53 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 29 Jun 2025 11:52:43 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 90e76818a135417d97869b6292cf0590452c3686
-X-Git-Newrev: 48639f074c31a53d30002ca7273d9c60c0e9490e
-X-Patchwork-Hint: ignore
-Message-Id: <20250629101453.40CA6847B7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] boot/syslinux: add option to install
- lpxelinux
+ id 1-4NmeSwL-yn for <buildroot@buildroot.org>;
+ Sun, 29 Jun 2025 10:16:08 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1C06F41122
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C06F41122
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1C06F41122
+ for <buildroot@buildroot.org>; Sun, 29 Jun 2025 10:16:06 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id B680D13F899;
+ Sun, 29 Jun 2025 12:16:02 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 29 Jun 2025 12:16:02 +0200
+MIME-Version: 1.0
+Date: Sun, 29 Jun 2025 12:16:02 +0200
+To: yann.morin@orange.com
+Cc: buildroot@buildroot.org
+In-Reply-To: <6250e91113bf6a48ab5035b038cad4db1931d57a.1750845702.git.yann.morin@orange.com>
+References: <cover.1750845702.git.yann.morin@orange.com>
+ <6250e91113bf6a48ab5035b038cad4db1931d57a.1750845702.git.yann.morin@orange.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <1b61fab1a3d17e9cb757e12dc9958b51@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1751192163;
+ bh=jNFMuwgtfveIvPvVgHKDrFa94gsZTo/ZHKIhKzNvVsc=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=QHAgWRKg708xzbxcksNFmEvWuFsbpvOvwcgdPMDPFwPTDNu6EQFXrivMegU8P8kuC
+ GyUkarRJJGJQbD6MbSHFmKsiktICZsi+/fMcGbVRzuO896sX+Ac66LWqwyn4QCjKDe
+ 2mP43ZRporDO9tqFXdV2R92xUF+MgWJw3ESl8qqhYEEt0nvOXe5yRUzc/jt4fss/bS
+ IwHga4r+/RTWW5gDVY3csSFTk8dkx2QXW6om6c/WyOBBqNJy8B9tD7XOvyn9vfrf+2
+ npEIr2/qmEVYSgMfq0KacAPJrUZgTspW8HupZpC3tZyew+17mV0WJSf6REQOh8nGDS
+ pM00PwWdye3Fg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=QHAgWRKg
+Subject: Re: [Buildroot] [PATCH 1/2] boot/syslinux: fix install with
+ top-level parallel build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,78 +85,58 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=48639f074c31a53d30002ca7273d9c60c0e9490e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 25/06/2025 12:01, yann.morin@orange.com wrote:
+> From: "Yann E. MORIN" <yann.morin@orange.com>
+> 
+> syslinux is... special. It is a target package, but it is installed in
+> HOST_DIR *in the target install commands*: in addition to the boot 
+> files
+> that run on the target, syslinux installs a set of host tools that are
+> to be used at build time (e.g. extlinux, to prepare bootable media, 
+> like
+> an iso96660 image). Then, from HOST_DIR, the actual boot files are
+> copied into BINARIES_DIR (i.e. images/); we do it that way because the
+> boot files are scattered about everywhere in the build tree, while they
+> are all packed together in a single directory once installed.
+> 
+> However, there is no dependency between the target and image install
+> steps. So, when using top-level parallel builds, there is no guarantee
+> that the target install commands are finished before the image install
+> commands are started.
+> 
+> We fix that by first installing into a temporary location, as part of
+> the build step, and by then copying from there as part of the install
+> step. This ensures that the boot files are easily available, without
+> needing a dependency on the target install step, that we can't express.
+> 
+> Note that we do not change the actual installation into HOST_DIR: it 
+> can
+> be set up differently that our temporary location, and we do not want
+> to duplicate that setup here (it's going to diverge over time).
+> 
+> Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
 
-lpxelinux is like pxelinux, except it allows retrieving the files for
-the kernel (with the KERNEL directive) and initrd (the path to initrd=
-in the APPEND directive) from FTP or HTTP, rather than just from TFTP.
-Using HTTP or FTP is musch faster than TFTP, so the boot time for big
-kernels or big initrds is much shorter than with TFTP.
+Series applied to master, thanks.
 
-Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-[Julien: fix typo in commit title]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- boot/syslinux/Config.in   | 16 ++++++++++++++--
- boot/syslinux/syslinux.mk |  1 +
- 2 files changed, 15 insertions(+), 2 deletions(-)
+For info, I fixed the commit title of patch #2 (by adding the
+missing "l" to lpxelinux).
 
-diff --git a/boot/syslinux/Config.in b/boot/syslinux/Config.in
-index 2891eae013..66baf921d3 100644
---- a/boot/syslinux/Config.in
-+++ b/boot/syslinux/Config.in
-@@ -4,6 +4,7 @@ menuconfig BR2_TARGET_SYSLINUX
- 	# Make sure at least one of the flavors is installed
- 	select BR2_TARGET_SYSLINUX_ISOLINUX \
- 		if !BR2_TARGET_SYSLINUX_PXELINUX && \
-+		   !BR2_TARGET_SYSLINUX_LPXELINUX && \
- 		   !BR2_TARGET_SYSLINUX_MBR && \
- 		   !BR2_TARGET_SYSLINUX_EFI
- 	select BR2_PACKAGE_UTIL_LINUX
-@@ -27,11 +28,22 @@ config BR2_TARGET_SYSLINUX_ISOLINUX
- 	  optical media (CDROM, DVD.)
- 
- config BR2_TARGET_SYSLINUX_PXELINUX
--	bool "install pxelinux"
-+	bool "install pxelinux (TFTP-only)"
- 	select BR2_TARGET_SYSLINUX_LEGACY_BIOS
- 	help
- 	  Install the legacy-BIOS 'pxelinux' image, to boot off
--	  the network using PXE.
-+	  the network using PXE and TFTP.
-+
-+config BR2_TARGET_SYSLINUX_LPXELINUX
-+	bool "install lpxelinux (TFTP, HTTP, FTP)"
-+	select BR2_TARGET_SYSLINUX_LEGACY_BIOS
-+	help
-+	  Install the legacy-BIOS 'lpxelinux' image, to boot off
-+	  the network using PXE, and TFTP, HTTP, or FTP.
-+
-+	  Note: a TFTP server is still required to serve the
-+	  lpxelinux boot image; HTTP or FTP can only be used
-+	  by lpxelinux to retrieve the kernel (and initrd...)
- 
- config BR2_TARGET_SYSLINUX_MBR
- 	bool "install mbr"
-diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
-index 084acc398e..127f6b3cc1 100644
---- a/boot/syslinux/syslinux.mk
-+++ b/boot/syslinux/syslinux.mk
-@@ -105,6 +105,7 @@ SYSLINUX_POST_INSTALL_TARGET_HOOKS += SYSLINUX_POST_INSTALL_CLEANUP
- 
- SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_ISOLINUX) += bios/core/isolinux.bin
- SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_PXELINUX) += bios/core/pxelinux.bin
-+SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_LPXELINUX) += bios/core/lpxelinux.bin
- SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_MBR) += bios/mbr/mbr.bin
- SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_EFI) += $(SYSLINUX_EFI_BITS)/efi/syslinux.efi
- 
+Do you think it would be worth extending the syslinux test to cover
+this new option?
+
+I'm thinking about simply adding BR2_TARGET_SYSLINUX_LPXELINUX=y here:
+https://gitlab.com/buildroot.org/buildroot/-/blob/2025.05/support/testing/tests/boot/test_syslinux.py#L23
+
+If yes, could you send a patch doing that please?
+
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
