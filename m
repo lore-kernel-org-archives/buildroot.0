@@ -4,94 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 296E2C8302D
-	for <buildroot@archiver.kernel.org>; Mon, 30 Jun 2025 09:29:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C048C7EE39
+	for <buildroot@archiver.kernel.org>; Mon, 30 Jun 2025 11:25:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ABF5C80FF4;
-	Mon, 30 Jun 2025 09:29:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 214E784851;
+	Mon, 30 Jun 2025 11:25:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CcbL-loOAaSO; Mon, 30 Jun 2025 09:29:03 +0000 (UTC)
+ id hvaijZhuVtWc; Mon, 30 Jun 2025 11:25:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C6C3E80E53
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 39B6280D5C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C6C3E80E53;
-	Mon, 30 Jun 2025 09:29:03 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id D9AB41C9
- for <buildroot@buildroot.org>; Mon, 30 Jun 2025 09:29:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 39B6280D5C;
+	Mon, 30 Jun 2025 11:25:04 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id B90D11C9
+ for <buildroot@buildroot.org>; Mon, 30 Jun 2025 11:25:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BF3E880FF4
- for <buildroot@buildroot.org>; Mon, 30 Jun 2025 09:29:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9F35140276
+ for <buildroot@buildroot.org>; Mon, 30 Jun 2025 11:25:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Gja3rD0-61b4 for <buildroot@buildroot.org>;
- Mon, 30 Jun 2025 09:29:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.126.239;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ic5YVwThvwgd for <buildroot@buildroot.org>;
+ Mon, 30 Jun 2025 11:25:01 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.121;
  helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8710780E22
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8710780E22
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.239])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8710780E22
- for <buildroot@buildroot.org>; Mon, 30 Jun 2025 09:28:59 +0000 (UTC)
-X-CSE-ConnectionGUID: cV2tgOtKRsa2TFK8g9+Ukw==
-X-CSE-MsgGUID: FT9KdOyfSDi7Xcq/G+YANw==
-Received: from unknown (HELO opfedv1rlp0d.nor.fr.ftgroup) ([x.x.x.x]) by
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3A3E440224
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A3E440224
+Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.121])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3A3E440224
+ for <buildroot@buildroot.org>; Mon, 30 Jun 2025 11:25:00 +0000 (UTC)
+X-CSE-ConnectionGUID: zcfsFgqBSwq2/BuaIvkWBw==
+X-CSE-MsgGUID: 5cFUPSF5Ri+Rcb+OLAQNMg==
+Received: from unknown (HELO opfedv1rlp0e.nor.fr.ftgroup) ([x.x.x.x]) by
  smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 30 Jun 2025 11:28:57 +0200
+ 30 Jun 2025 13:24:59 +0200
 Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv1rlp0d.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 30 Jun 2025 11:28:57 +0200
+ ([x.x.x.x]) by opfedv1rlp0e.nor.fr.ftgroup with
+ ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 30 Jun 2025 13:24:58 +0200
 Received: from yd-6wlzhs3 [x.x.x.x] by
  OPE16NORMBX305.corporate.adroot.infra.ftgroup
  [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.57;
- Mon, 30 Jun 2025 11:28:56 +0200
+ Mon, 30 Jun 2025 13:24:56 +0200
 Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
- Mon, 30 Jun 2025 11:28:55 +0200
+ Mon, 30 Jun 2025 13:24:56 +0200
 From: yann.morin@orange.com
-X-CSE-ConnectionGUID: 331G1Bd/QlmK6zeTLSfx3w==
-X-CSE-MsgGUID: ERMIus7kS8Oh5toFi6GBLg==
-X-IronPort-AV: E=Sophos;i="6.16,277,1744063200"; d="scan'208";a="307910232"
-Date: Mon, 30 Jun 2025 11:28:55 +0200
+X-CSE-ConnectionGUID: eeUTQ3NVQvej1XjfNqYqfQ==
+X-CSE-MsgGUID: V1FUWjwcSqCfJWqlGTcuIQ==
+X-IronPort-AV: E=Sophos;i="6.16,277,1744063200"; d="scan'208";a="303724687"
+Date: Mon, 30 Jun 2025 13:24:56 +0200
 To: Julien Olivain <ju.o@free.fr>
-CC: <buildroot@buildroot.org>
-Message-ID: <aGJY1xO5eNpFV6Pr@yd-6wlzhs3>
-References: <cover.1750845702.git.yann.morin@orange.com>
- <6250e91113bf6a48ab5035b038cad4db1931d57a.1750845702.git.yann.morin@orange.com>
- <1b61fab1a3d17e9cb757e12dc9958b51@free.fr>
+CC: <buildroot@buildroot.org>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <aGJ0COHYseTAS9iW@yd-6wlzhs3>
+References: <cover.1750318763.git.yann.morin@orange.com>
+ <026284a73a78b0273882e10fc31b16b5bac5c566.1750318763.git.yann.morin@orange.com>
+ <1125bc629f55efa54f7a31010f5643b7@free.fr>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <1b61fab1a3d17e9cb757e12dc9958b51@free.fr>
-X-Originating-IP: [10.115.26.52]
-X-ClientProxiedBy: OPE16NORMBX204.corporate.adroot.infra.ftgroup (10.115.26.9)
- To OPE16NORMBX305.corporate.adroot.infra.ftgroup
+In-Reply-To: <1125bc629f55efa54f7a31010f5643b7@free.fr>
+X-Originating-IP: [10.115.27.51]
+X-ClientProxiedBy: OPE16NORMBX305.corporate.adroot.infra.ftgroup
+ (10.115.27.10) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
  (10.115.27.10)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1751275740; x=1782811740;
+ t=1751282702; x=1782818702;
  h=date:to:cc:subject:message-id:references:mime-version:
  in-reply-to:content-transfer-encoding:from;
- bh=BcZ8SxtULehA6cgrE/uaIQdQtmXGUIDPSqX361o7XVc=;
- b=KjNYqpmohM1sLooL5ccZcwiSz8YOeyWNqBkd6DqSWKIu9XXNCAo38aqj
- Kk8+HKkDJ0d7uB+F4a/YutC0IcK2gZDaISfNDykk5xT5G0oTWLWUHTPxL
- O9b8zhQimMaaxI//w/8RgQ+f0fl6/oyWDFpuZbmgb+CePVxzADzenZTSn
- BWJnRgsdfOOM1PWEcU3g2bpySta+2tO+tPiNTU9Vy0BtxEueMrhCsq5G0
- 7f8/btTRtql9pG8xuMB/wxDDfuCxgCK53jAN8y8rgnEthAL9zTjKBPyyG
- qF7I8ZNMH1WdnON67+plDKeOeuO39NwZJDWnf1jh1Ii9Lv95YVEZIBWjj
- g==;
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=QY48nzjOCv5OtoKjQFqzuTVqyFrqEJnl4uVdo9UgtLI=;
+ b=ZFb68zalEy+cvuI1fyikAj/KxV6r6h2NoedoKsWXlGVY+DZHCZnEFiXO
+ /v9lCxWRGR/jMYrR3UlTx/Jn6YhBE6nvKSkz5yveCGXlk3mM4bF1KUV1o
+ Sl+vKVLuEoNDHpuhULKT/vvp0Pze+RFm9fHT1750KyqzRddvPc/lWxi84
+ y4QK/jx/5jrZfmS8CFbx8Mwo9csyLhDfGPECaBAmkHsPuifiLPU74WS/b
+ MDffvqAiYSlZZivRtBdeh+JnclcKY6AP/hoNayMqk0uvHPPLZpqiwkpYZ
+ 2u+A4pvu1ME5xkh+NMmcHMbp85uaTGCu0DsR5NGDDwWF9Rh9nubvZ7OTn
+ w==;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=orange.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
- header.s=orange002 header.b=KjNYqpmo
-Subject: Re: [Buildroot] [PATCH 1/2] boot/syslinux: fix install with
- top-level parallel build
+ header.s=orange002 header.b=ZFb68zal
+Subject: Re: [Buildroot] [PATCH 1/3 v2] package/containers-image-config: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -110,33 +110,43 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Julien, All,
 
-On 2025-06-29 12:16 +0200, Julien Olivain spake thusly:
-> On 25/06/2025 12:01, yann.morin@orange.com wrote:
+On 2025-06-29 18:58 +0200, Julien Olivain spake thusly:
+> On 19/06/2025 09:39, yann.morin@orange.com wrote:
 > > From: "Yann E. MORIN" <yann.morin@orange.com>
-> > We fix that by first installing into a temporary location, as part of
-> > the build step, and by then copying from there as part of the install
-> > step. This ensures that the boot files are easily available, without
-> > needing a dependency on the target install step, that we can't express.
+> > The container/image repository is the standards regpository that drives
+> > the image management in container tools, like podman or skopeo. Besides
+> > a Go library, it also prodvides the template configuration files used
+> > by those tools; those files can also serve as default ones.
 [--SNIP--]
 > Series applied to master, thanks.
-> For info, I fixed the commit title of patch #2 (by adding the
-> missing "l" to lpxelinux).
 
-Woops, thanks! :-)
+\o/
 
-> Do you think it would be worth extending the syslinux test to cover
-> this new option?
-> I'm thinking about simply adding BR2_TARGET_SYSLINUX_LPXELINUX=y here:
-> https://gitlab.com/buildroot.org/buildroot/-/blob/2025.05/support/testing/tests/boot/test_syslinux.py#L23
-> If yes, could you send a patch doing that please?
+> While testing this series, I encountered a build issue which
+> is not introduced by those changes, which is why I applied it.
+[--SNIP--]
+>     In file included from vhost_user.h:14,
+>                      from passt.h:29,
+>                      from qrap.c:36:
+>     virtio.h:13:10: fatal error: linux/vhost_types.h: No such file or
+> directory
+>        13 | #include <linux/vhost_types.h>
+>           |          ^~~~~~~~~~~~~~~~~~~~~
+[--SNIP--]
+> So maybe passt needs a dependency on
+> BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0? I'm a bit surprised as the
+> https://passt.top/passt/about/ website mention a kernel 3.13 and
+> 4.18 compatibility. So maybe it's an upstream bug which just needs
+> to test for the presence of this header.
 
-I pondered it, but that would only test whether lpxelinux builds on not;
-checking that it does work would need a much more complex test. And the
-build test is (suposedly) covered by the autobuilders already.
+Nothing in passt/pasta is configurable; they just build everything.
+So if there's a bug, it's a documentation bug; they even mention a
+kernel 3.8 [0]. However, those requirements are, as I read them, runtime
+requirements, not build-time ones.
 
-If you think that is still important to add lpxelinux to the runtime
-test although it is not actually runtime-tested, then I'll cook up a
-patch...
+So I will send a patch to add a dependency on headers >= 5.0.
+
+[0] https://passt.top/passt/about/#interfaces-and-environment
 
 Regards,
 Yann E. MORIN.
