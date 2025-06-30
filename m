@@ -4,129 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 213E9C8302D
-	for <buildroot@archiver.kernel.org>; Mon, 30 Jun 2025 13:38:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A532C8302D
+	for <buildroot@archiver.kernel.org>; Mon, 30 Jun 2025 14:25:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DCFF040A5A;
-	Mon, 30 Jun 2025 13:38:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C8465406B0;
+	Mon, 30 Jun 2025 14:25:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id a8dXiYgXbkL0; Mon, 30 Jun 2025 13:38:41 +0000 (UTC)
+ id 9ZWvPuqnIGKQ; Mon, 30 Jun 2025 14:25:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 08C634097A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 09D9C4063B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 08C634097A;
-	Mon, 30 Jun 2025 13:38:41 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id B1FA21C9
- for <buildroot@buildroot.org>; Mon, 30 Jun 2025 13:38:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 09D9C4063B;
+	Mon, 30 Jun 2025 14:25:12 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 53E8FDF
+ for <buildroot@buildroot.org>; Mon, 30 Jun 2025 14:25:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A2EB780F7E
- for <buildroot@buildroot.org>; Mon, 30 Jun 2025 13:38:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 45A014063B
+ for <buildroot@buildroot.org>; Mon, 30 Jun 2025 14:25:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6_dmyO2lj1Fb for <buildroot@buildroot.org>;
- Mon, 30 Jun 2025 13:38:39 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::430; helo=mail-wr1-x430.google.com;
- envelope-from=raphael.melotte@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8BC7881EE1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8BC7881EE1
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8BC7881EE1
- for <buildroot@buildroot.org>; Mon, 30 Jun 2025 13:38:37 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id
- ffacd0b85a97d-3a4e742dc97so3455688f8f.0
- for <buildroot@buildroot.org>; Mon, 30 Jun 2025 06:38:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1751290715; x=1751895515;
- h=content-transfer-encoding:in-reply-to:autocrypt:from
- :content-language:references:cc:to:subject:user-agent:mime-version
- :date:message-id:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=+z26oHgu/EbR9hbU7UNf89bTuxmIKMoQWU6nL1xkj7g=;
- b=ZwJMICs+AFoMXfl7zmURjgk61EYEIP0FrrGSIgt848v0922A4M0hvhdH1BmR1jSj08
- I+Gy/bMa2xiFivBHaLLW0HAN43WrBmMzXhJcBGB1SryWvUpcbZvBpzsTJ5t8fNdSCVRZ
- 1uiAijIYe2Q+xdkM1d1IqmhoiLzTiYplQh3HPMmugFriDFV0riej4ITW3jyBGMnoRfj0
- EpPbg2nsJDvMl+iusCg2j5cf3w19zqvFwwYnMJfQF8VWmiS2OHLxbuxqbw0/PGoPtLEx
- Bgv8jSH96+qB80HaYiCJtqHR+OVjkPns2oLZeOdti+0gERP1ETMIFcomc8QRz+1675vf
- K/Xw==
-X-Gm-Message-State: AOJu0Yw7w2tjcW2HsQAbecz53E7ZVp7K/a7CWhsfysLOZ/WYaG47C0Sb
- lPzciEFEnHrfhoKoOZ4dzthRJU0as1lTbHFgJCUUiLCR2oIGfGuh3VAF9ggYhwUk2cuvIVInImq
- Dn2/M2zU=
-X-Gm-Gg: ASbGncvrtSwtK1lo+Qh5v2LY5+XwkLI8wYoKXOrDp4m7w/WyFWr17O2dkiRW4tl5KGu
- hDXrEcoT4neRyMYD7TOhMk7/cqZngXJXedrUP7DMpKZRbIZgcwlkQ9DzH1H8MpTgNvjYwViFXDE
- xpAwn8MekbC9OSvhjD/+V6Hr7sLCMOBX6tLFGwE9JA8QHl3APoxFi54wEeOjG7uWZ+KB3v2sJaO
- ph9RvcGDJcSxYmp9BAGzkxD7hLfXVEhr4NDPc7hRQ/mzLw3VJZa//bO8l1q/umdUSqRCbr0/fKA
- DcSt/cZ476dTLDY+g71+Wahjum+qaGjzXUi6tNAwQFltctnAyJxpztSULQOIolqSobEWTyFtjgE
- =
-X-Google-Smtp-Source: AGHT+IEO07zvHLqJpH4rYvWslHWtrA75Kt/TVsXB8EYSPTZ4P1DDza1zRPyZ1px88ZCpDIO0SRHn8Q==
-X-Received: by 2002:a05:6000:4188:b0:3a5:8934:4959 with SMTP id
- ffacd0b85a97d-3a6f316239amr11075465f8f.27.1751290715360; 
- Mon, 30 Jun 2025 06:38:35 -0700 (PDT)
-Received: from [192.168.178.20] ([213.211.140.212])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-45396f24796sm74123105e9.1.2025.06.30.06.38.34
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 30 Jun 2025 06:38:34 -0700 (PDT)
-Message-ID: <52d86611-aec0-4fc5-a640-3d71483b9230@mind.be>
-Date: Mon, 30 Jun 2025 15:38:34 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3xUOJK2FutgN for <buildroot@buildroot.org>;
+ Mon, 30 Jun 2025 14:25:09 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 829F540602
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 829F540602
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 829F540602
+ for <buildroot@buildroot.org>; Mon, 30 Jun 2025 14:25:08 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -2019417412; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Mon, 30 Jun 2025 14:25:04 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1uWFRP-005PuR-34;
+ Mon, 30 Jun 2025 16:25:03 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20250623215546.1850256-1-thomas.petazzoni@bootlin.com>
+Date: Mon, 30 Jun 2025 16:25:03 +0200
+In-Reply-To: <20250623215546.1850256-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni via buildroot's message of "Mon, 23 Jun 2025 23:55:46
+ +0200")
+Message-ID: <87ecv1park.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Julien Olivain <ju.o@free.fr>
-Cc: buildroot@buildroot.org
-References: <20250627121948.1933049-1-raphael.melotte@mind.be>
- <08585e4962ffe98f9faa307813c19ddc@free.fr>
-Content-Language: en-US
-Autocrypt: addr=raphael.melotte@mind.be; keydata=
- xsBNBF9jhjsBCACmkrLRBR22D1FiSlmQGKiSPPLY0lAYe6/DnBT7OsgiGIOWqmQL1ryGJmxI
- 9PDMDGEBngJ6RyrsVlREt7ugoBEg75CrtYwXdTCB40fEPweceHtWwAQoOS3MDgFhdvd6uZvl
- YWenR6RcbCo/LZaV/novslE1eCnADNChMOkp8jTAA0K2jIlEYexrzO+G3CcrKmo6naVxn56r
- dn0kLnff4f/wvj+1l+J7m6GVL/8ckQ8fVQagLxQ5LHoxhIcOxKH1IEzf+gri/e+16gka7bWE
- 4QUCEeGo/pBYysLinUP/6ArAmWoZXfGH3S0HiLBc/Yf4klnJ1nd6vZmxYKppOmy814+tABEB
- AAHNK1JhcGhhw6tsIE3DqWxvdHRlIDxyYXBoYWVsLm1lbG90dGVAbWluZC5iZT7CwJQEEwEI
- AD4CGwMFCwkIBwIGFQoJCAsCBBYCAwECHgECF4AWIQSjAZBvHnwkHJEj52rDTCsxdUfmrAUC
- Z4ZBYQUJCgPupgAKCRDDTCsxdUfmrC80B/0Y4VeyvIBoHgN2l5Jv9SvAAvPdtDNQBe66aG3X
- 5J8wGOao7jGQQQwd52A/eRRHKf7DaVK8m1aMb82KSwaGp5YAM2TgUg72DvqPb2Nv/NKTjQ41
- mTBKOr0A1JJlhF0fOhOCvi4A4eQFnNt/Awn1id1ZKv7CVErH/AiXfdqF0nwXJ+SgTb7FtQ/R
- sCekSRrrnMiGqFA3W0zeYyZ6liehOCqqmYDwdqbnjjdaYfwEwPMRJCobdt9gpQsFxOWGNPTc
- EtPX6LyDEtF0gbQEdRDiYZ24YBeAydRwycmOiyKiVNnQFkKBw6jas5+7WeoKwnhZ7EEHhIEL
- 6xRlP+ACT4YWIdkCzsBNBF9jhjsBCACcBqvoGcSgHH5io/UF+ouPP3tkr68kp6Ww2Gtnf7gu
- cL9vr9ixKbuobOCs2/1JhQD1fjmrs/Nb7wYUoA+QECkoZbdRLoqaldX0Uf+7no3EtwwSMROV
- EJKBOoRyuW7nH7PzoRmMYDGHqCYTuTfBH8byoh29tjPezyli5n4Zr3JIjmgjgG6jT31uqeDn
- eirLtWta2c2n4o5cPKoVNsZJmbVtuzAz5XHUPHDaLaFnQlaPlGQ1RDvuKVzkZ1maXloa9lND
- TL7dkWoQvq7LtYxRALEhSUU8My2Bxb3B+rRMGS8W+IGAdSvtxiGqDP6W7Ac2mrg13wXf8+fq
- XiYblnHp02PtABEBAAHCwHwEGAEIACYCGwwWIQSjAZBvHnwkHJEj52rDTCsxdUfmrAUCZ4ZB
- 9QUJCgPvOgAKCRDDTCsxdUfmrDrzB/9w+0pSSeHdd+mgOgtjoab23OfHbwkQa86WgdSpx5hR
- U+QdtB9zJErJBA8q5Kq4vBSu+h9V9HaETg1nnpaREbiEo4mX5kiTHCwr51JArBLFMQXGMTqE
- pENpJdaHBZDJqktvcLFBfIzIo2avLMOjAznZBeFimEcKgwouAo9DK5qb61th9hjUBvNvzFjh
- h+mjryTGqe4l0eIRxwPi7uh1d3PCql/InUhXDii3oisu75ss+2aKyRtx1RMLxcj+pD1oheZs
- ib86j6501oe6jZ+FsoUBf6EXcSij4nZlVYtEWsr7vKpPEUdNYCeeAAOuabDWsYRU/Rfl8Myc
- 7ZS5078ic8ic
-In-Reply-To: <08585e4962ffe98f9faa307813c19ddc@free.fr>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1751290715; x=1751895515; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:autocrypt:from
- :content-language:references:cc:to:subject:user-agent:mime-version
- :date:message-id:from:to:cc:subject:date:message-id:reply-to;
- bh=+z26oHgu/EbR9hbU7UNf89bTuxmIKMoQWU6nL1xkj7g=;
- b=ZidanJUKitHDGH03D4TTgf1IlhYsAdeFQMiay3MxgtU0ILsXBJf/xMjw0u+tx/lJjl
- 4jNWCaKcCiLxbVvK2mc1ToZtq/j/84NTaN9UyUv9QprAwTUkJ/Cqlw7kgIpT+bgOo9Af
- EBtDzJjtMe8FqUxCrNVCnXqAXFii1Q0rIrEvgkud1+RHcacs8y0m+nqYbaiM44mmxRID
- NsThSDM70FlAa9xbZQOE2QeFURWbmg44cbuTy03BBf36K18cXZ3nkB9AwB4uSZR26ZUJ
- njlsKVqy4CpIMG+qVWZq6iZq4Kr3Aar4acrB9zQCw6LglYgmaViJq5ZU2X9ykHanMuDB
- 8oSA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=ZidanJUK
-Subject: Re: [Buildroot] [PATCH 1/2] support/testing: add new test for
- nginx-modsecurity
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=iGebJwbNcT2J1eeXhaoIx1mW/zLR/Zp6H8Ix3vPrROEsVK4GKHD/h6gLEld7saP/2rewy0wfqysFvsviEZkGfPXJgUfmmu1C/h27RqBJOtiaxBEDCgOiA0BnmwDREagaJuNh4x3Ys0gXWMVo3B1UqgCIbYrx8othgd7Rvv5TlnzTHxpCMFPjHfwjSIks3VG9zq085fgz9nUFAwxn76nr5rQ+e6gzAQ0FyumPT1X+Mw0IT/po5jrZIZXVbAAtArjshDMgrDU4iRzSfUp4vfFdeanxmJHuvX+JK0EV9Dkiay7Bq3iOWzW/XBLQZuIuz2dk2zg9xxBVr97GKvxwMQPItA==;
+ s=purelymail1; d=purelymail.com; v=1;
+ bh=51KLLdQXz2Qim7qcZsRjD/j5YIkEm13i/+4UHPkp5Qo=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail1 header.b=iGebJwbN
+Subject: Re: [Buildroot] [PATCH] package/squashfs: bump to version 4.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -138,18 +81,26 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?q?Rapha=C3=ABl_M=C3=A9lotte_via_buildroot?=
- <buildroot@buildroot.org>
-Reply-To: =?UTF-8?B?UmFwaGHDq2wgTcOpbG90dGU=?= <raphael.melotte@mind.be>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgSnVsaWVuLAoKT24gNi8yOC8yNSAxNDoyMiwgSnVsaWVuIE9saXZhaW4gd3JvdGU6Cj4gRm9y
-IGluZm8sIEkgZGlkIGZldyBtaW5vciBjaGFuZ2VzLCBzZWU6Cj4gaHR0cHM6Ly9naXRsYWIuY29t
-L2J1aWxkcm9vdC5vcmcvYnVpbGRyb290Ly0vY29tbWl0LzVjZGE4NWNiNTY2YmZjZDlkN2E2YzVi
-ZDcwMWQzMjZhNDdjYjcyNWIKPiAKCkdvb2QgdG8ga25vdyBmb3IgbmV4dCB0aW1lIQoKVGhhbmtz
-LAoKUmFwaGHDq2wKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczov
-L2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+>>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
+
+ > See https://github.com/plougher/squashfs-tools/releases/tag/4.7 for
+ > details:
+
+ > 1. Mksquashfs now reads files in parallel from the input directories
+ > 2. Rewritten and improved help system (Mksquashfs/Unsquashfs)
+ > 3. New options for building reproducible filesystems (Mksquash/Sqfstar)
+
+I didn't look at the code, but is this something we could/should be
+using for BR2_REPRODUCIBLE builds?
+
+-- 
+Bye, Peter Korsgaard
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
