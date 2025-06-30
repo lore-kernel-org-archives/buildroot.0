@@ -1,51 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA200C83030
-	for <buildroot@archiver.kernel.org>; Mon, 30 Jun 2025 20:34:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF69DC83030
+	for <buildroot@archiver.kernel.org>; Mon, 30 Jun 2025 20:37:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 892D46141A;
-	Mon, 30 Jun 2025 20:34:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6F99A41B7E;
+	Mon, 30 Jun 2025 20:37:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fpWV7TsG_s9c; Mon, 30 Jun 2025 20:34:34 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yzAR31IrjQgy; Mon, 30 Jun 2025 20:37:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C2AA66141E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A4C2A41A4F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C2AA66141E;
-	Mon, 30 Jun 2025 20:34:34 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0AFADDF
- for <buildroot@buildroot.org>; Mon, 30 Jun 2025 20:34:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A4C2A41A4F;
+	Mon, 30 Jun 2025 20:37:09 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C4770223
+ for <buildroot@buildroot.org>; Mon, 30 Jun 2025 20:37:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F0BD781222
- for <buildroot@buildroot.org>; Mon, 30 Jun 2025 20:34:33 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id AA20B81361
+ for <buildroot@buildroot.org>; Mon, 30 Jun 2025 20:37:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ra7jE49rb6UJ for <buildroot@buildroot.org>;
- Mon, 30 Jun 2025 20:34:33 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2A1B48107F
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2A1B48107F
- for <buildroot@buildroot.org>; Mon, 30 Jun 2025 20:34:33 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2158C84E3A; Mon, 30 Jun 2025 20:34:33 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 30 Jun 2025 22:20:31 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0c1fa0bce14b2a75e7ede0d6bf6be52d7807684e
-X-Git-Newrev: 901b9e19ed3741d0cc379ff8f145b2294a3bd09b
-X-Patchwork-Hint: ignore
-Message-Id: <20250630203433.2158C84E3A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kvmtool: fix build failure w/ musl
+ id TvzBRoZP-zCV for <buildroot@buildroot.org>;
+ Mon, 30 Jun 2025 20:37:06 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8971F812C7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8971F812C7
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8971F812C7
+ for <buildroot@buildroot.org>; Mon, 30 Jun 2025 20:37:06 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id E42395FF88;
+ Mon, 30 Jun 2025 22:37:01 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 30 Jun 2025 22:37:01 +0200
+MIME-Version: 1.0
+Date: Mon, 30 Jun 2025 22:37:01 +0200
+To: Thomas Perale <thomas.perale@mind.be>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250629200944.889177-1-thomas.perale@mind.be>
+References: <20250629200944.889177-1-thomas.perale@mind.be>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <e3e98609294d7246780c2e2af520d1b7@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1751315823;
+ bh=WoI5bumYBYY4ssu2+Yc9d1bBvv7/mBkrJLQ/C4A0KOA=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=jD9+7ns05Kgpze/W3XWGJSJqgtn4J5AMc5QPR2Wc8D1bG3E8jcOcLtgRmJhnPqujo
+ nV24A4u+hMCgMqAdbrCC2z+5IUMeiBvm7TGC+8jF8qcvyw2cMrIrSkPjygxoGyRtjK
+ yhuZMSvhs4La5WQNTAJknSvr4FkWHkaulUjKcv/z83f+QRWBTaCZoAhCaWhKbu4gVC
+ PllY2GeRPTGndbSKRuw05YrxGShUKRm9jkVAWzFHuEbg4k+cViFNxkIz9vo2m36sBR
+ pVX3hoPFG3vZWvDS4NBn3WZSHK5r+d24GP45T32sk6i9D+SH6ca6ghdMrul8lDTcwe
+ n0GO/rnbn16dQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=jD9+7ns0
+Subject: Re: [Buildroot] [PATCH 1/1] package/kvmtool: fix build failure w/
+ musl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,109 +83,45 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6344997827548054815=="
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6344997827548054815==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=901b9e19ed3741d0cc379ff8f145b2294a3bd09b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The following error occurs on the autobuilder for builds with musl
-libc.
-
-```
-  CC       util/bitmap.o
-In file included from include/linux/bitmap.h:7,
-                 from util/bitmap.c:9:
-include/linux/bitops.h:4:10: fatal error: bits/wordsize.h: No such file or directory
-    4 | #include <bits/wordsize.h>
-      |          ^~~~~~~~~~~~~~~~~
-```
-
-The error occurs because bits/wordsize.h is specific to glibc.
-
-This patch applies an upstream fix that replaces the use of __WORDSIZE
-with an internal macro, making the code portable across different libc.
-
-Fixes: https://autobuild.buildroot.org/results/30d/30d6e407e6a0fc7d85062c2d56008755c70ca733/build-end.log
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...rdsize-h-inclusion-for-musl-compatibility.patch | 52 ++++++++++++++++++++++
- 1 file changed, 52 insertions(+)
-
-diff --git a/package/kvmtool/0001-remove-wordsize-h-inclusion-for-musl-compatibility.patch b/package/kvmtool/0001-remove-wordsize-h-inclusion-for-musl-compatibility.patch
-new file mode 100644
-index 0000000000..3128a23689
---- /dev/null
-+++ b/package/kvmtool/0001-remove-wordsize-h-inclusion-for-musl-compatibility.patch
-@@ -0,0 +1,52 @@
-+From 0592f8f829c843ff5cb2d108c309e32f4f6f5379 Mon Sep 17 00:00:00 2001
-+From: Andre Przywara <andre.przywara@arm.com>
-+Date: Thu, 1 Aug 2024 12:10:54 +0100
-+Subject: remove wordsize.h inclusion (for musl compatibility)
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+The wordsize.h header file and the __WORDSIZE definition do not seem
-+to be universal, the musl libc for instance has the definition in a
-+different header file. This breaks compilation of kvmtool against musl.
-+
-+The two leading underscores suggest a compiler-internal symbol anyway, so
-+let's just remove that particular macro usage entirely, and replace it
-+with the number we really want: the size of a "long" type.
-+
-+Reported-by: J. Neuschäfer <j.neuschaefer@gmx.net>
-+Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-+Reviewed-by: Alexandru Elisei <alexandru.elisei@arm.com>
-+Link: https://lore.kernel.org/r/20240801111054.818765-1-andre.przywara@arm.com
-+Signed-off-by: Will Deacon <will@kernel.org>
-+Upstream: https://git.kernel.org/pub/scm/linux/kernel/git/will/kvmtool.git/commit/?id=0592f8f829c843ff5cb2d108c309e32f4f6f5379
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ include/linux/bitops.h | 6 ++----
-+ 1 file changed, 2 insertions(+), 4 deletions(-)
-+
-+diff --git a/include/linux/bitops.h b/include/linux/bitops.h
-+index ae33922f..ee8fd560 100644
-+--- a/include/linux/bitops.h
-++++ b/include/linux/bitops.h
-+@@ -1,15 +1,13 @@
-+ #ifndef _KVM_LINUX_BITOPS_H_
-+ #define _KVM_LINUX_BITOPS_H_
-+ 
-+-#include <bits/wordsize.h>
-+-
-+ #include <linux/kernel.h>
-+ #include <linux/compiler.h>
-+ #include <asm/hweight.h>
-+ 
-+-#define BITS_PER_LONG __WORDSIZE
-+ #define BITS_PER_BYTE           8
-+-#define BITS_TO_LONGS(nr)       DIV_ROUND_UP(nr, BITS_PER_BYTE * sizeof(long))
-++#define BITS_PER_LONG           (BITS_PER_BYTE * sizeof(long))
-++#define BITS_TO_LONGS(nr)       DIV_ROUND_UP(nr, BITS_PER_LONG)
-+ 
-+ #define BIT_WORD(nr)		((nr) / BITS_PER_LONG)
-+ 
-+-- 
-+cgit 1.2.3-korg
-+
-
---===============6344997827548054815==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6344997827548054815==--
+T24gMjkvMDYvMjAyNSAyMjowOSwgVGhvbWFzIFBlcmFsZSB2aWEgYnVpbGRyb290IHdyb3RlOgo+
+IFRoZSBmb2xsb3dpbmcgZXJyb3Igb2NjdXJzIG9uIHRoZSBhdXRvYnVpbGRlciBmb3IgYnVpbGRz
+IHdpdGggbXVzbAo+IGxpYmMuCj4gCj4gYGBgCj4gICBDQyAgICAgICB1dGlsL2JpdG1hcC5vCj4g
+SW4gZmlsZSBpbmNsdWRlZCBmcm9tIGluY2x1ZGUvbGludXgvYml0bWFwLmg6NywKPiAgICAgICAg
+ICAgICAgICAgIGZyb20gdXRpbC9iaXRtYXAuYzo5Ogo+IGluY2x1ZGUvbGludXgvYml0b3BzLmg6
+NDoxMDogZmF0YWwgZXJyb3I6IGJpdHMvd29yZHNpemUuaDogTm8gc3VjaCBmaWxlIAo+IG9yIGRp
+cmVjdG9yeQo+ICAgICA0IHwgI2luY2x1ZGUgPGJpdHMvd29yZHNpemUuaD4KPiAgICAgICB8ICAg
+ICAgICAgIF5+fn5+fn5+fn5+fn5+fn5+Cj4gYGBgCj4gCj4gVGhlIGVycm9yIG9jY3VycyBiZWNh
+dXNlIGJpdHMvd29yZHNpemUuaCBpcyBzcGVjaWZpYyB0byBnbGliYy4KPiAKPiBUaGlzIHBhdGNo
+IGFwcGxpZXMgYW4gdXBzdHJlYW0gZml4IHRoYXQgcmVwbGFjZXMgdGhlIHVzZSBvZiBfX1dPUkRT
+SVpFCj4gd2l0aCBhbiBpbnRlcm5hbCBtYWNybywgbWFraW5nIHRoZSBjb2RlIHBvcnRhYmxlIGFj
+cm9zcyBkaWZmZXJlbnQgbGliYy4KPiAKPiBGaXhlczogCj4gaHR0cHM6Ly9hdXRvYnVpbGQuYnVp
+bGRyb290Lm9yZy9yZXN1bHRzLzMwZC8zMGQ2ZTQwN2U2YTBmYzdkODUwNjJjMmQ1NjAwODc1NWM3
+MGNhNzMzL2J1aWxkLWVuZC5sb2cKPiBTaWduZWQtb2ZmLWJ5OiBUaG9tYXMgUGVyYWxlIDx0aG9t
+YXMucGVyYWxlQG1pbmQuYmU+CgpBcHBsaWVkIHRvIG1hc3RlciwgdGhhbmtzLgoKV2hpbGUgdGVz
+dGluZyB0aGlzIHBhdGNoLCBJIG5vdGljZWQgaXQgZml4ZWQgdGhlIHJlcG9ydGVkIGlzc3VlCmlu
+IGEgZ2NjMTMgYW5kIG11c2wgbGliYyBjb25maWd1cmF0aW9uLCBidXQgc3dpdGNoaW5nIHRvIGdj
+YzE0CmZhaWxzLgoKSXQgY2FuIGJlIHJlcHJvZHVjZWQgd2l0aDoKCiAgICAgY2F0ID4uY29uZmln
+IDw8RU9GCiAgICAgQlIyX2FhcmNoNjQ9eQogICAgIEJSMl9UT09MQ0hBSU5fRVhURVJOQUw9eQog
+ICAgIEJSMl9UT09MQ0hBSU5fRVhURVJOQUxfQk9PVExJTj15CiAgICAgQlIyX1RPT0xDSEFJTl9F
+WFRFUk5BTF9CT09UTElOX0FBUkNINjRfTVVTTF9CTEVFRElOR19FREdFPXkKICAgICBCUjJfUEFD
+S0FHRV9LVk1UT09MPXkKICAgICBFT0YKICAgICBtYWtlIG9sZGRlZmNvbmZpZwogICAgIG1ha2Ug
+a3ZtdG9vbAoKQ29tcGlsYXRpb24gZmFpbHMgd2l0aCBtZXNzYWdlOgoKICAgICB2ZmlvL2NvcmUu
+YzogSW4gZnVuY3Rpb24g4oCYdmZpb19ncm91cF9nZXRfZm9yX2RlduKAmToKICAgICB2ZmlvL2Nv
+cmUuYzo1Mzc6MjI6IGVycm9yOiBpbXBsaWNpdCBkZWNsYXJhdGlvbiBvZiBmdW5jdGlvbiAK4oCY
+YmFzZW5hbWXigJkgWy1XaW1wbGljaXQtZnVuY3Rpb24tZGVjbGFyYXRpb25dCiAgICAgICA1Mzcg
+fCAgICAgICAgIGdyb3VwX25hbWUgPSBiYXNlbmFtZShncm91cF9wYXRoKTsKICAgICAgICAgICB8
+ICAgICAgICAgICAgICAgICAgICAgIF5+fn5+fn5+CiAgICAgdmZpby9jb3JlLmM6NTM3OjIyOiB3
+YXJuaW5nOiBuZXN0ZWQgZXh0ZXJuIGRlY2xhcmF0aW9uIG9mIOKAmGJhc2VuYW1l4oCZIApbLVdu
+ZXN0ZWQtZXh0ZXJuc10KICAgICB2ZmlvL2NvcmUuYzo1Mzc6MjA6IGVycm9yOiBhc3NpZ25tZW50
+IHRvIOKAmGNoYXIgKuKAmSBmcm9tIOKAmGludOKAmSBtYWtlcyAKcG9pbnRlciBmcm9tIGludGVn
+ZXIgd2l0aG91dCBhIGNhc3QgWy1XaW50LWNvbnZlcnNpb25dCiAgICAgICA1MzcgfCAgICAgICAg
+IGdyb3VwX25hbWUgPSBiYXNlbmFtZShncm91cF9wYXRoKTsKICAgICAgICAgICB8ICAgICAgICAg
+ICAgICAgICAgICBeCgpDb3VsZCB5b3UgaGF2ZSBhIGxvb2ssIHBsZWFzZT8KCkJlc3QgcmVnYXJk
+cywKCkp1bGllbi4KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczov
+L2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
