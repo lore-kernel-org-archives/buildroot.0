@@ -1,77 +1,97 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D596C7EE39
-	for <buildroot@archiver.kernel.org>; Mon, 30 Jun 2025 07:48:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 296E2C8302D
+	for <buildroot@archiver.kernel.org>; Mon, 30 Jun 2025 09:29:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EE36A60DFF;
-	Mon, 30 Jun 2025 07:48:52 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RUTavm1qm_zZ; Mon, 30 Jun 2025 07:48:52 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4359D61150
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4359D61150;
-	Mon, 30 Jun 2025 07:48:52 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 6342FDF
- for <buildroot@buildroot.org>; Mon, 30 Jun 2025 07:48:50 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5486580D92
- for <buildroot@buildroot.org>; Mon, 30 Jun 2025 07:48:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id ABF5C80FF4;
+	Mon, 30 Jun 2025 09:29:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5-tZHgSqZ-mf for <buildroot@buildroot.org>;
- Mon, 30 Jun 2025 07:48:49 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=147.173.1.68;
- helo=mailgw-out1.grenoble.cnrs.fr; envelope-from=bonet@grenoble.cnrs.fr;
+ id CcbL-loOAaSO; Mon, 30 Jun 2025 09:29:03 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C6C3E80E53
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id C6C3E80E53;
+	Mon, 30 Jun 2025 09:29:03 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id D9AB41C9
+ for <buildroot@buildroot.org>; Mon, 30 Jun 2025 09:29:01 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id BF3E880FF4
+ for <buildroot@buildroot.org>; Mon, 30 Jun 2025 09:29:01 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Gja3rD0-61b4 for <buildroot@buildroot.org>;
+ Mon, 30 Jun 2025 09:29:01 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.126.239;
+ helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org CA98F80D75
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CA98F80D75
-Received: from mailgw-out1.grenoble.cnrs.fr (mailgw-out1.grenoble.cnrs.fr
- [147.173.1.68])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CA98F80D75
- for <buildroot@buildroot.org>; Mon, 30 Jun 2025 07:48:48 +0000 (UTC)
-Received: from [147.173.65.159] (unknown [147.173.65.159])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by mailgw-out1.grenoble.cnrs.fr (Postfix) with ESMTPSA id D5896C0FDA;
- Mon, 30 Jun 2025 09:48:40 +0200 (CEST)
-Message-ID: <ad972ec9-1dfb-4b88-906d-53981bd63771@grenoble.cnrs.fr>
-Date: Mon, 30 Jun 2025 09:48:17 +0200
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8710780E22
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8710780E22
+Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.239])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8710780E22
+ for <buildroot@buildroot.org>; Mon, 30 Jun 2025 09:28:59 +0000 (UTC)
+X-CSE-ConnectionGUID: cV2tgOtKRsa2TFK8g9+Ukw==
+X-CSE-MsgGUID: FT9KdOyfSDi7Xcq/G+YANw==
+Received: from unknown (HELO opfedv1rlp0d.nor.fr.ftgroup) ([x.x.x.x]) by
+ smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
+ 30 Jun 2025 11:28:57 +0200
+Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
+ ([x.x.x.x]) by opfedv1rlp0d.nor.fr.ftgroup with
+ ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 30 Jun 2025 11:28:57 +0200
+Received: from yd-6wlzhs3 [x.x.x.x] by
+ OPE16NORMBX305.corporate.adroot.infra.ftgroup
+ [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.57;
+ Mon, 30 Jun 2025 11:28:56 +0200
+Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
+ Mon, 30 Jun 2025 11:28:55 +0200
+From: yann.morin@orange.com
+X-CSE-ConnectionGUID: 331G1Bd/QlmK6zeTLSfx3w==
+X-CSE-MsgGUID: ERMIus7kS8Oh5toFi6GBLg==
+X-IronPort-AV: E=Sophos;i="6.16,277,1744063200"; d="scan'208";a="307910232"
+Date: Mon, 30 Jun 2025 11:28:55 +0200
+To: Julien Olivain <ju.o@free.fr>
+CC: <buildroot@buildroot.org>
+Message-ID: <aGJY1xO5eNpFV6Pr@yd-6wlzhs3>
+References: <cover.1750845702.git.yann.morin@orange.com>
+ <6250e91113bf6a48ab5035b038cad4db1931d57a.1750845702.git.yann.morin@orange.com>
+ <1b61fab1a3d17e9cb757e12dc9958b51@free.fr>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: James Knight <git@jdknight.me>, buildroot@buildroot.org
-References: <20250630023826.1163-1-git@jdknight.me>
-Content-Language: en-US, fr
-In-Reply-To: <20250630023826.1163-1-git@jdknight.me>
+Content-Disposition: inline
+In-Reply-To: <1b61fab1a3d17e9cb757e12dc9958b51@free.fr>
+X-Originating-IP: [10.115.26.52]
+X-ClientProxiedBy: OPE16NORMBX204.corporate.adroot.infra.ftgroup (10.115.26.9)
+ To OPE16NORMBX305.corporate.adroot.infra.ftgroup
+ (10.115.27.10)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=grenoble.cnrs.fr; 
- s=202106-grenoble.cnrs.fr; t=1751269720;
- bh=KNVI4fzJoozfQA/UcsuW/przogH6b/U0OVWI8eg0Xl0=;
- h=Date:Subject:To:References:From:In-Reply-To:From;
- b=nKK2jR+dsl53G67NsHfgoJXLkHHXND7aMfRwesNaP6i/0Dps+3oegLErzyl0IKBmQ
- kGryJ5ooMigl3psp/QUx9eGVohOkO9WhKtk22wizO8/b7iz/yCS78PtATLGDeclIea
- IXoNSMUBq47VopPv4eVnRTmR3ZmXrWfPvbs+KYL9VF7kHmg/XrScao+aANAUCQ1AdV
- I5lJpfBODWgLWlXc1F7ictn6eg2xmhon3eDHkRsmVGEf1m8YZE+T/PWnDW97dOjLXR
- zopfu2B+fRAQirAM7Nm1kVYMnUgOLmog+rOrLc2Ib91V/BhQdqqxWCuK3bFQGzX+Dt
- w/BdzxdbOjo2g==
+ d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
+ t=1751275740; x=1782811740;
+ h=date:to:cc:subject:message-id:references:mime-version:
+ in-reply-to:content-transfer-encoding:from;
+ bh=BcZ8SxtULehA6cgrE/uaIQdQtmXGUIDPSqX361o7XVc=;
+ b=KjNYqpmohM1sLooL5ccZcwiSz8YOeyWNqBkd6DqSWKIu9XXNCAo38aqj
+ Kk8+HKkDJ0d7uB+F4a/YutC0IcK2gZDaISfNDykk5xT5G0oTWLWUHTPxL
+ O9b8zhQimMaaxI//w/8RgQ+f0fl6/oyWDFpuZbmgb+CePVxzADzenZTSn
+ BWJnRgsdfOOM1PWEcU3g2bpySta+2tO+tPiNTU9Vy0BtxEueMrhCsq5G0
+ 7f8/btTRtql9pG8xuMB/wxDDfuCxgCK53jAN8y8rgnEthAL9zTjKBPyyG
+ qF7I8ZNMH1WdnON67+plDKeOeuO39NwZJDWnf1jh1Ii9Lv95YVEZIBWjj
+ g==;
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=grenoble.cnrs.fr
+ dmarc=pass (p=none dis=none)
+ header.from=orange.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=grenoble.cnrs.fr header.i=@grenoble.cnrs.fr
- header.a=rsa-sha256 header.s=202106-grenoble.cnrs.fr header.b=nKK2jR+d
-Subject: Re: [Buildroot] [PATCH 1/1] Makefile: ignore configs/ prefix on
- configuration events
+ unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
+ header.s=orange002 header.b=KjNYqpmo
+Subject: Re: [Buildroot] [PATCH 1/2] boot/syslinux: fix install with
+ top-level parallel build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,30 +103,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Edgar Bonet via buildroot <buildroot@buildroot.org>
-Reply-To: Edgar Bonet <bonet@grenoble.cnrs.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gYWxsIQoKT24gMjAyNS0wNi0zMCwgSmFtZXMgS25pZ2h0IHdyb3RlOgo+IEFsbG93cyBh
-Y2NlcHRpbmcgYm9hcmQgY29uZmlndXJhdGlvbiBldmVudHMgdGhhdCBhcmUgcHJlZml4ZWQgd2l0
-aCBhCj4gYGNvbmZpZ3MvYCBwYXRoLiBUaGlzIHByb3ZpZGVzIGEgY29udmVuaWVuY2UgZm9yIHVz
-ZXJzIHdoZXJlIGl0IGNhbiBiZQo+IHNsaWdodGx5IGVhc2llci9xdWlja2VyIHRvIHV0aWxpemUg
-c2hlbGwgY29tcGxldGlvbiB0byBwcmVwYXJlIGEgYnVpbGQuCj4gRm9yIGV4YW1wbGU6Cj4gCj4g
-ICAgIG1ha2UgY29uZmlncy9xZW11X3NwYXJjNjRfc3VuNHVfZGVmY29uZmlnCj4gCj4gV291bGQg
-YmUgZXF1aXZhbGVudCB0bzoKPiAKPiAgICAgbWFrZSBxZW11X3NwYXJjNjRfc3VuNHVfZGVmY29u
-ZmlnCgpJIGRvbid0IGtub3cgaG93IHRoaXMgaXMgc3VwcG9zZWQgdG8gd29yayBidXQsIGluIG15
-IGV4cGVyaWVuY2UsIHNoZWxsCmNvbXBsZXRpb24gb24gYnVpbGRyb290J3MgbWFrZSB0YXJnZXRz
-IGlzIHBhaW5mdWxseSBzbG93LCBhbmQgZG9lcyBub3QKd29yayB3aXRoIGRlZm9uZmlnIHRhcmdl
-dHMuCgpXaXRoIHRoaXMgcGF0Y2ggYXBwbGllZDoKCiAgICBtYWtlIHFlbTxUQUI+IOKGkiBtYWtl
-IHFlbXUKICAgIG1ha2UgcWVtdV9zcDxUQUI+YXJjNjQ8VEFCPiAgIyBubyBjb21wbGV0aW9uCgog
-ICAgbWFrZSBjb25mPFRBQj4g4oaSIG1ha2UgY29uZmln4pCjICAjIHdoZXJlIOKAnOKQo+KAnSBp
-cyBhIHRyYWlsaW5nIHNwYWNlCiAgICBtYWtlIGNvbmZpZ3MvcWU8VEFCPm11X3NwPFRBQj5hcmM2
-NDxUQUI+ICAjIG5vIGNvbXBsZXRpb24KCkl0IHdvdWxkIGJlIHZlcnkgY29vbCB0byBoYXZlIHVz
-YWJsZSBzaGVsbCBjb21wbGV0aW9uIHRob3VnaC4KCkNvbnRleHQ6IFVidW50dSAyNC4wNCwgYnVp
-bGRyb290IGdpdCBtYXN0ZXIKClJlZ2FyZHMsCgpFZGdhciBCb25ldC4KX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApi
-dWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1h
-bi9saXN0aW5mby9idWlsZHJvb3QK
+Julien, All,
+
+On 2025-06-29 12:16 +0200, Julien Olivain spake thusly:
+> On 25/06/2025 12:01, yann.morin@orange.com wrote:
+> > From: "Yann E. MORIN" <yann.morin@orange.com>
+> > We fix that by first installing into a temporary location, as part of
+> > the build step, and by then copying from there as part of the install
+> > step. This ensures that the boot files are easily available, without
+> > needing a dependency on the target install step, that we can't express.
+[--SNIP--]
+> Series applied to master, thanks.
+> For info, I fixed the commit title of patch #2 (by adding the
+> missing "l" to lpxelinux).
+
+Woops, thanks! :-)
+
+> Do you think it would be worth extending the syslinux test to cover
+> this new option?
+> I'm thinking about simply adding BR2_TARGET_SYSLINUX_LPXELINUX=y here:
+> https://gitlab.com/buildroot.org/buildroot/-/blob/2025.05/support/testing/tests/boot/test_syslinux.py#L23
+> If yes, could you send a patch doing that please?
+
+I pondered it, but that would only test whether lpxelinux builds on not;
+checking that it does work would need a much more complex test. And the
+build test is (suposedly) covered by the autobuilders already.
+
+If you think that is still important to add lpxelinux to the runtime
+test although it is not actually runtime-tested, then I'll cook up a
+patch...
+
+Regards,
+Yann E. MORIN.
+
+-- 
+                                        ____________
+.-----------------.--------------------:       _    :------------------.
+|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
+|                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
+| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
+| yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
+'--------------------------------------:______/_____:------------------'
+
+____________________________________________________________________________________________________________
+Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+
+This message and its attachments may contain confidential or privileged information that may be protected by law;
+they should not be distributed, used or copied without authorisation.
+If you have received this email in error, please notify the sender and delete this message and its attachments.
+As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+Thank you.
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
