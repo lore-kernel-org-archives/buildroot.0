@@ -4,98 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9672EC7EE30
-	for <buildroot@archiver.kernel.org>; Tue,  1 Jul 2025 20:32:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0ECADC83038
+	for <buildroot@archiver.kernel.org>; Tue,  1 Jul 2025 20:41:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6972680DB8;
-	Tue,  1 Jul 2025 20:32:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C58B3849B0;
+	Tue,  1 Jul 2025 20:41:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id V_SUEk-yxNyw; Tue,  1 Jul 2025 20:32:35 +0000 (UTC)
+ id JIWxPLuGO8Dk; Tue,  1 Jul 2025 20:41:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D6EA80D07
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B5F35849B2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7D6EA80D07;
-	Tue,  1 Jul 2025 20:32:35 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3D58E128
- for <buildroot@buildroot.org>; Tue,  1 Jul 2025 20:32:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B5F35849B2;
+	Tue,  1 Jul 2025 20:41:09 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id DB212128
+ for <buildroot@buildroot.org>; Tue,  1 Jul 2025 20:41:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2FA4C80251
- for <buildroot@buildroot.org>; Tue,  1 Jul 2025 20:32:34 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CD97B40316
+ for <buildroot@buildroot.org>; Tue,  1 Jul 2025 20:41:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id l8OMzL9mGKVE for <buildroot@buildroot.org>;
- Tue,  1 Jul 2025 20:32:33 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 24E5D8499F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 24E5D8499F
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 24E5D8499F
- for <buildroot@buildroot.org>; Tue,  1 Jul 2025 20:32:32 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- 5b1f17b1804b1-45363645a8eso42644645e9.1
- for <buildroot@buildroot.org>; Tue, 01 Jul 2025 13:32:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1751401951; x=1752006751;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=tuPUnp5bdQ3oMFmBm7tkVKpFKPAFt7mizJGQXH7VbV0=;
- b=Pe9Zc5CiTM0lQvmoRkFAe626hLHABR83UOSrp04w9jy6oPP89X2PeddYHOC6GMT7rS
- mC0xM4swa+CWMgrWE3PiX0GyL12dOjF78AYJtKScCB/1JwsgJ/fGKR/wxsTOYoETgjZQ
- XnYKC1aWeik40vn8OQnqQCZZrlKpjacPucZbH1orZE7G0F6IZjwrzyKGXxpjzs2nMWD1
- PBjxWu52cyfsRDmExCuWBsN1CXlL6AogQ5bnQpSKE1vrbA3DtxirnvbNl2TIV2nARyFS
- +81sMcDCG3eJd/6aCbyWhPYGqO0n1U+7h9nzmGVS141CRTrn3scG9ZQ1olgeJ+eYiv63
- 5qMg==
-X-Gm-Message-State: AOJu0YwuEFRvxUnNh56b8vdBCQ+bNSFwJ2mvYktDwEVJyUsig+VnJZjR
- Xvn/tIhC9ZVQVF8BnC894RqPF1u29lGRW94L+y/JnjoGTRTaVSythLm+W+3lxkeXdmCAOsJtXlE
- lTDaI
-X-Gm-Gg: ASbGncsyW0l18PbAh8n8qWKdD3dQWlCHF9MjWS88GcIISMHceecs0jg/7a1SgfrnxU0
- VV0GFEL185iIdln1+SV436lY1Zsk5v6yt4896w5xy5wNJFqHEWtEJ0YtJxwnWWMdgWl8lygEv1Z
- 2krfeng5Pmfy/16EdNl5KCx4LDYQ4voWr4gl1YPHNet3rr7jOffyYYrHlB0FDgMsw9YajVlIS3J
- OHMAa0TC0wl/XzRbg/9DnUDwIUrLeqwpti9l0c17XCUDccaOKBpnWPZqpW+lrCOCiLrSlEV6KCF
- K+toviWmdwTyqSDDkzji8JQDUcfnbIHoTU+JELJA3F5NpiLSLCkTBul1cxEa3YKeBtj3T/IHPXb
- pLTUS6rIM7w==
-X-Google-Smtp-Source: AGHT+IHXuT7sACGaKHC1lkYwom0l32dDWC7to0izUhUdPEBw8MHY5d6n9gCMfW6H1GnjPnpJ/Is1Qg==
-X-Received: by 2002:a05:600c:8718:b0:453:6150:de50 with SMTP id
- 5b1f17b1804b1-454a3725a21mr4508905e9.28.1751401950504; 
- Tue, 01 Jul 2025 13:32:30 -0700 (PDT)
-Received: from arch (94.105.118.175.dyn.edpnet.net. [94.105.118.175])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-453b35309casm18277775e9.1.2025.07.01.13.32.29
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 01 Jul 2025 13:32:30 -0700 (PDT)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id j9YZ2bUpojUk for <buildroot@buildroot.org>;
+ Tue,  1 Jul 2025 20:41:06 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC1604008D
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id DC1604008D
+ for <buildroot@buildroot.org>; Tue,  1 Jul 2025 20:41:06 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C8EDA852A6; Tue,  1 Jul 2025 20:41:06 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Tue,  1 Jul 2025 22:32:28 +0200
-Message-ID: <20250701203228.1075726-1-thomas.perale@mind.be>
-X-Mailer: git-send-email 2.50.0
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1751401951; x=1752006751; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=tuPUnp5bdQ3oMFmBm7tkVKpFKPAFt7mizJGQXH7VbV0=;
- b=c/oBjKo0yxKGOZzy2HZI+N/PM8GX7vueQdAv0LzyrNi2QFm+PWBH/kE1b4UMKhFIjk
- VVkaRsE3wimGLuKh3bIP/I7BFJUuX1HGI7F1sxp/uTXux8KvuK+JYlU93beRUFtwl7tw
- hKt7Fnt3UEjNnWP9a4VJGAHMRMOo8O3gTISXbshjrHtaz5p/Aq0IJ1FBsrUk5bY9zC8b
- ISJrdaqVinVM79uZE+Ij8SYNkJ52bM+Nvm023OD0xTJYL5pgshCzlvxN4/2F5wIcQLxo
- Rc2agEa1wVjNU52AIMPElokQ3rjhHcGyS+ffNdVRtZH/OIIlzUW4lRkxtZXzr583tkzH
- vhkw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=c/oBjKo0
-Subject: [Buildroot] [PATCH 1/1] package/daq: fix build with GCC14
+Date: Tue, 1 Jul 2025 22:39:25 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 74d5d8845de45f59e441978e85a0ef4971487c92
+X-Git-Newrev: 394a8fb406fec6bcf65f8f924b107920eb9405fb
+X-Patchwork-Hint: ignore
+Message-Id: <20250701204106.C8EDA852A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/jose: security bump to version 14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -107,94 +57,237 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The daq package fails to build with GCC14 toolchains:
+commit: https://git.buildroot.net/buildroot/commit/?id=394a8fb406fec6bcf65f8f924b107920eb9405fb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-```
-daq_nfq.c: In function 'SetPktHdr':
-daq_nfq.c:395:37: error: passing argument 2 of 'nfq_get_payload' from incompatible pointer type [-Wincompatible-pointer-types]
-  395 |     int len = nfq_get_payload(nfad, (char**)pkt);
-      |                                     ^~~~~~~~~~~
-      |                                     |
-      |                                     char **
-```
+Jose-13 fixed the following security issue:
 
-The issue can be reproduced with the following config:
+- CVE-2023-50967: latchset jose through version 11 allows attackers to cause
+  a denial of service (CPU consumption) via a large p2c (aka PBES2 Count)
+  value.
+  https://github.com/latchset/jose/issues/151
 
-```
-cat > daq.config <<EOF
-BR2_arm=y
-BR2_cortex_a7=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-BR2_PACKAGE_DAQ=y
-BR2_PACKAGE_LIBDNET=y
-BR2_PACKAGE_LIBNETFILTER_QUEUE=y
-EOF
-```
+In addition, jose-14 worked around another DoS issue related to
+decompression:
+https://github.com/latchset/jose/pull/157
 
-This patch port a patch taken from openembedded meta-networking [1] and
-is tested with test-pkg:
+Drop now upstreamed patches:
 
-```
-$ ./utils/test-pkg -c daq.config -p daq
-```
+- 0001-lib-hsh.c-rename-hsh-local-variable.patch: Upstream as of
+  https://github.com/latchset/jose/commit/3d5b287243f87ce0243b23abd690d86c41fc499c
 
-[1] https://layers.openembedded.org/layerindex/recipe/37594/
+- 0002-man-add-option-to-skip-building-man-pages.patch: Upstream after
+  getting reworked to use -Ddocs=disabled as of
+  https://github.com/latchset/jose/commit/786b426df018edf30a53e2d82155df20d13047c1
 
-Fixes: https://autobuild.buildroot.org/results/c69/c69ab134463a18eec65ded836aecf89a5cb4a75c/build-end.log
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+[Julien: remove .checkpackageignore entries to fix check-package errors]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...-fix-incompatible-pointer-type-error.patch | 31 +++++++++++++++++++
- 1 file changed, 31 insertions(+)
- create mode 100644 package/daq/0003-daq-fix-incompatible-pointer-type-error.patch
+ .checkpackageignore                                |  2 -
+ .../0001-lib-hsh.c-rename-hsh-local-variable.patch | 71 ----------------------
+ ...man-add-option-to-skip-building-man-pages.patch | 64 -------------------
+ package/jose/jose.hash                             |  2 +-
+ package/jose/jose.mk                               |  4 +-
+ 5 files changed, 3 insertions(+), 140 deletions(-)
 
-diff --git a/package/daq/0003-daq-fix-incompatible-pointer-type-error.patch b/package/daq/0003-daq-fix-incompatible-pointer-type-error.patch
-new file mode 100644
-index 0000000000..a15d325cd6
---- /dev/null
-+++ b/package/daq/0003-daq-fix-incompatible-pointer-type-error.patch
-@@ -0,0 +1,31 @@
-+Fix daq incompatible pointer type error when gcc option
-+'-Wincompatible-pointer-types is set:
-+
-+| ../../daq-2.0.7/os-daq-modules/daq_nfq.c: In function 'SetPktHdr':
-+| ../../daq-2.0.7/os-daq-modules/daq_nfq.c:394:37: error: passing argument 2
-+   of 'nfq_get_payload' from incompatible pointer type [-Wincompatible-pointer-types]
-+|   394 |     int len = nfq_get_payload(nfad, (char**)pkt);
-+|       |                                     ^~~~~~~~~~~
-+|       |                                     |
-+|       |                                     char **
-+
-+Signed-off-by: Kai Kang <kai.kang@windriver.com>
-+Upstream: https://git.openembedded.org/meta-openembedded/tree/meta-networking/recipes-connectivity/daq/files/daq-fix-incompatible-pointer-type-error.patch?h=master
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ os-daq-modules/daq_nfq.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/os-daq-modules/daq_nfq.c b/os-daq-modules/daq_nfq.c
-+index 4de94b6..a6de2f3 100644
-+--- a/os-daq-modules/daq_nfq.c
-++++ b/os-daq-modules/daq_nfq.c
-+@@ -391,7 +391,7 @@ static inline int SetPktHdr (
-+     DAQ_PktHdr_t* hdr,
-+     uint8_t** pkt
-+ ) {
-+-    int len = nfq_get_payload(nfad, (char**)pkt);
-++    int len = nfq_get_payload(nfad, (unsigned char**)pkt);
-+ 
-+     if ( len <= 0 )
-+         return -1;
--- 
-2.50.0
-
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 53009d0cd8..de311a232f 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -588,8 +588,6 @@ package/irrlicht/0002-makefile-override-LDFLAGS-and-remove-obsolete-X11R6-.patch
+ package/iucode-tool/S00iucode-tool lib_sysv.Variables
+ package/iwd/S40iwd Shellcheck lib_sysv.Variables
+ package/janus-gateway/0001-disable-ssp.patch lib_patch.Upstream
+-package/jose/0001-lib-hsh.c-rename-hsh-local-variable.patch lib_patch.Upstream
+-package/jose/0002-man-add-option-to-skip-building-man-pages.patch lib_patch.Upstream
+ package/kexec-lite/0001-clean-restart.patch lib_patch.Upstream
+ package/keyutils/0001-fix-install-rule.patch lib_patch.Upstream
+ package/keyutils/0002-cifs.patch lib_patch.Sob lib_patch.Upstream
+diff --git a/package/jose/0001-lib-hsh.c-rename-hsh-local-variable.patch b/package/jose/0001-lib-hsh.c-rename-hsh-local-variable.patch
+deleted file mode 100644
+index 0bd259ad8b..0000000000
+--- a/package/jose/0001-lib-hsh.c-rename-hsh-local-variable.patch
++++ /dev/null
+@@ -1,71 +0,0 @@
+-From 591fc6da944ffc29936e0019b2bc225ddc81dbba Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Mon, 20 Nov 2017 22:48:33 +0100
+-Subject: [PATCH] lib/hsh.c: rename hsh local variable
+-
+-The hsh local variable name conflicts with the function prototype of
+-hsh() in hsh.h, causing the following build issues with old compilers
+-(gcc 4.7):
+-
+-hsh.c: In function 'hsh':
+-hsh.c:28:21: error: declaration of 'hsh' shadows a global declaration [-Werror=shadow]
+-hsh.c:26:1: error: shadowed declaration is here [-Werror=shadow]
+-hsh.c: In function 'hsh_buf':
+-hsh.c:60:21: error: declaration of 'hsh' shadows a global declaration [-Werror=shadow]
+-hsh.c:26:1: error: shadowed declaration is here [-Werror=shadow]
+-
+-Therefore, we rename this local variable to _hsh.
+-
+-Submitted-upstream: https://github.com/latchset/jose/pull/51
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- lib/hsh.c | 12 ++++++------
+- 1 file changed, 6 insertions(+), 6 deletions(-)
+-
+-diff --git a/lib/hsh.c b/lib/hsh.c
+-index c59a95f..a2a891b 100644
+---- a/lib/hsh.c
+-+++ b/lib/hsh.c
+-@@ -25,7 +25,7 @@
+- json_t *
+- hsh(jose_cfg_t *cfg, const char *alg, const void *data, size_t dlen)
+- {
+--    jose_io_auto_t *hsh = NULL;
+-+    jose_io_auto_t *_hsh = NULL;
+-     jose_io_auto_t *enc = NULL;
+-     jose_io_auto_t *buf = NULL;
+-     char b[1024] = {};
+-@@ -33,8 +33,8 @@ hsh(jose_cfg_t *cfg, const char *alg, const void *data, size_t dlen)
+- 
+-     buf = jose_io_buffer(cfg, b, &l);
+-     enc = jose_b64_enc_io(buf);
+--    hsh = hsh_io(cfg, alg, enc);
+--    if (!buf || !enc || !hsh || !hsh->feed(hsh, data, dlen) || !hsh->done(hsh))
+-+    _hsh = hsh_io(cfg, alg, enc);
+-+    if (!buf || !enc || !_hsh || !_hsh->feed(_hsh, data, dlen) || !_hsh->done(_hsh))
+-         return NULL;
+- 
+-     return json_stringn(b, l);
+-@@ -57,7 +57,7 @@ hsh_buf(jose_cfg_t *cfg, const char *alg,
+-         const void *data, size_t dlen, void *hash, size_t hlen)
+- {
+-     const jose_hook_alg_t *a = NULL;
+--    jose_io_auto_t *hsh = NULL;
+-+    jose_io_auto_t *_hsh = NULL;
+-     jose_io_auto_t *buf = NULL;
+- 
+-     a = jose_hook_alg_find(JOSE_HOOK_ALG_KIND_HASH, alg);
+-@@ -71,8 +71,8 @@ hsh_buf(jose_cfg_t *cfg, const char *alg,
+-         return SIZE_MAX;
+- 
+-     buf = jose_io_buffer(cfg, hash, &hlen);
+--    hsh = a->hash.hsh(a, cfg, buf);
+--    if (!buf || !hsh || !hsh->feed(hsh, data, dlen) || !hsh->done(hsh))
+-+    _hsh = a->hash.hsh(a, cfg, buf);
+-+    if (!buf || !_hsh || !_hsh->feed(_hsh, data, dlen) || !_hsh->done(_hsh))
+-         return SIZE_MAX;
+- 
+-     return hlen;
+--- 
+-2.13.6
+-
+diff --git a/package/jose/0002-man-add-option-to-skip-building-man-pages.patch b/package/jose/0002-man-add-option-to-skip-building-man-pages.patch
+deleted file mode 100644
+index 3a5ad1eadc..0000000000
+--- a/package/jose/0002-man-add-option-to-skip-building-man-pages.patch
++++ /dev/null
+@@ -1,64 +0,0 @@
+-From 506132d3edc8d062f65fdacf007a15613d27e5c5 Mon Sep 17 00:00:00 2001
+-From: Eneas U de Queiroz <cotequeiroz@gmail.com>
+-Date: Wed, 6 Apr 2022 09:49:48 -0300
+-Subject: [PATCH] man: add option to skip building man pages
+-
+-Add a 'skip_manpages' option to meson, so that man pages do not get
+-built.
+-
+-Signed-off-by: Eneas U de Queiroz <cotequeiroz@gmail.com>
+-[Retrieved from: https://github.com/latchset/jose/pull/115]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- meson.build       | 24 +++++++++++++-----------
+- meson_options.txt |  1 +
+- 2 files changed, 14 insertions(+), 11 deletions(-)
+- create mode 100644 meson_options.txt
+-
+-diff --git a/meson.build b/meson.build
+-index 1edfbe7..9b40efb 100644
+---- a/meson.build
+-+++ b/meson.build
+-@@ -37,7 +37,6 @@ zlib = dependency('zlib')
+- threads = dependency('threads')
+- jansson = dependency('jansson', version: '>=2.10')
+- libcrypto = dependency('libcrypto', version: '>=1.0.2')
+--a2x = find_program('a2x', required: false)
+- 
+- mans = []
+- 
+-@@ -63,14 +62,17 @@ pkg.generate(
+-   requires: 'jansson',
+- )
+- 
+--if a2x.found()
+--  foreach m : mans
+--    custom_target(m.split('/')[-1], input: m + '.adoc', output: m.split('/')[-1],
+--      command: [a2x, '-f', 'manpage', '-D', meson.current_build_dir(), '@INPUT@'],
+--      install_dir: join_paths(get_option('mandir'), 'man' + m.split('.')[-1]),
+--      install: true
+--    )
+--  endforeach
+--else
+--  warning('Will not build man pages due to missing dependencies!')
+-+if not get_option('skip_manpages')
+-+  a2x = find_program('a2x', required: false)
+-+  if a2x.found()
+-+    foreach m : mans
+-+      custom_target(m.split('/')[-1], input: m + '.adoc', output: m.split('/')[-1],
+-+        command: [a2x, '-f', 'manpage', '-D', meson.current_build_dir(), '@INPUT@'],
+-+        install_dir: join_paths(get_option('mandir'), 'man' + m.split('.')[-1]),
+-+        install: true
+-+      )
+-+    endforeach
+-+  else
+-+    warning('Will not build man pages due to missing dependencies!')
+-+  endif
+- endif
+-diff --git a/meson_options.txt b/meson_options.txt
+-new file mode 100644
+-index 0000000..0885515
+---- /dev/null
+-+++ b/meson_options.txt
+-@@ -0,0 +1 @@
+-+option('skip_manpages', type: 'boolean', value: false, description: 'Do not build manpages')
+diff --git a/package/jose/jose.hash b/package/jose/jose.hash
+index 128d26d163..0bee7f46e8 100644
+--- a/package/jose/jose.hash
++++ b/package/jose/jose.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  e272afe7717e22790c383f3164480627a567c714ccb80c1ee96f62c9929d8225  jose-11.tar.xz
++sha256  cee329ef9fce97c4c025604a8d237092f619aaa9f6d35fdf9d8c9052bc1ff95b  jose-14.tar.xz
+ sha256  09e8a9bcec8067104652c168685ab0931e7868f9c8284b66f5ae6edae5f1130b  COPYING
+diff --git a/package/jose/jose.mk b/package/jose/jose.mk
+index 723ebe8bb9..9fd9d1dcaa 100644
+--- a/package/jose/jose.mk
++++ b/package/jose/jose.mk
+@@ -4,13 +4,13 @@
+ #
+ ################################################################################
+ 
+-JOSE_VERSION = 11
++JOSE_VERSION = 14
+ JOSE_SOURCE = jose-$(JOSE_VERSION).tar.xz
+ JOSE_SITE = https://github.com/latchset/jose/releases/download/v$(JOSE_VERSION)
+ JOSE_LICENSE = Apache-2.0
+ JOSE_LICENSE_FILES = COPYING
+ JOSE_INSTALL_STAGING = YES
+ JOSE_DEPENDENCIES = host-pkgconf zlib jansson openssl
+-JOSE_CONF_OPTS = -Dskip_manpages=true
++JOSE_CONF_OPTS = -Ddocs=disabled
+ 
+ $(eval $(meson-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
