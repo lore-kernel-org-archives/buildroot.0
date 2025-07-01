@@ -1,79 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C629AC83038
-	for <buildroot@archiver.kernel.org>; Tue,  1 Jul 2025 14:49:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F2D7C83038
+	for <buildroot@archiver.kernel.org>; Tue,  1 Jul 2025 14:53:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6BE6180BB3;
-	Tue,  1 Jul 2025 14:49:52 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id djfmeRFvqPYS; Tue,  1 Jul 2025 14:49:50 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7978884772
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7978884772;
-	Tue,  1 Jul 2025 14:49:50 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 8B8DD197
- for <buildroot@buildroot.org>; Tue,  1 Jul 2025 14:49:49 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 71BB360DCE
- for <buildroot@buildroot.org>; Tue,  1 Jul 2025 14:49:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E57E760DD2;
+	Tue,  1 Jul 2025 14:53:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yOD8FKqAn_je for <buildroot@buildroot.org>;
- Tue,  1 Jul 2025 14:49:48 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
- helo=relay1-d.mail.gandi.net; envelope-from=luca.ceresoli@bootlin.com;
+ id UfQUDgIGfckT; Tue,  1 Jul 2025 14:53:34 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2162860DC7
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2162860DC7;
+	Tue,  1 Jul 2025 14:53:34 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 83AE5DF
+ for <buildroot@buildroot.org>; Tue,  1 Jul 2025 14:53:32 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6A5C14012A
+ for <buildroot@buildroot.org>; Tue,  1 Jul 2025 14:53:32 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GmxPxwiPRx_1 for <buildroot@buildroot.org>;
+ Tue,  1 Jul 2025 14:53:31 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
+ helo=relay8-d.mail.gandi.net; envelope-from=luca.ceresoli@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6304D60DCD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6304D60DCD
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6304D60DCD
- for <buildroot@buildroot.org>; Tue,  1 Jul 2025 14:49:47 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 30B9343A18;
- Tue,  1 Jul 2025 14:49:44 +0000 (UTC)
-Date: Tue, 1 Jul 2025 16:49:35 +0200
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 36B3240068
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 36B3240068
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 36B3240068
+ for <buildroot@buildroot.org>; Tue,  1 Jul 2025 14:53:30 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B57D744427;
+ Tue,  1 Jul 2025 14:53:25 +0000 (UTC)
+Date: Tue, 1 Jul 2025 16:53:16 +0200
 To: Neal Frager <neal.frager@amd.com>
-Message-ID: <20250701164935.45938f10@booty>
-In-Reply-To: <20250618133621.3047127-1-neal.frager@amd.com>
-References: <20250618133621.3047127-1-neal.frager@amd.com>
+Message-ID: <20250701165316.2b030958@booty>
+In-Reply-To: <20250619153922.891360-1-neal.frager@amd.com>
+References: <20250619153922.891360-1-neal.frager@amd.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-State: clean
 X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddugeektdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthejredtredtvdenucfhrhhomhepnfhutggrucevvghrvghsohhlihcuoehluhgtrgdrtggvrhgvshholhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeglefffefghefhtddvfeeufeeiveekgffgleekieduteekkeetvdehudekgfdvvdenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucfkphephedurddujeelrddutdefrdehheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeehuddrudejledruddtfedrheehpdhhvghlohepsghoohhthidpmhgrihhlfhhrohhmpehluhgtrgdrtggvrhgvshholhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeduuddprhgtphhtthhopehnvggrlhdrfhhrrghgvghrsegrmhgurdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopegrrhhnohhuthesrhhnohhuthdrsggvpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtohepphgvthgvrheskhhor
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddugeekudcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthejredtredtvdenucfhrhhomhepnfhutggrucevvghrvghsohhlihcuoehluhgtrgdrtggvrhgvshholhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeglefffefghefhtddvfeeufeeiveekgffgleekieduteekkeetvdehudekgfdvvdenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucfkphephedurddujeelrddutdefrdehheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeehuddrudejledruddtfedrheehpdhhvghlohepsghoohhthidpmhgrihhlfhhrohhmpehluhgtrgdrtggvrhgvshholhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeduuddprhgtphhtthhopehnvggrlhdrfhhrrghgvghrsegrmhgurdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopegrrhhnohhuthesrhhnohhuthdrsggvpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtohepphgvthgvrheskhhor
  hhsghgrrghrugdrtghomhdprhgtphhtthhopehmihgthhgrlhdrshhimhgvkhesrghmugdrtghomhdprhgtphhtthhopehjuhdrohesfhhrvggvrdhfrhdprhgtphhtthhopegsrhgrnhguohhnrdhmrghivghrsegtohhllhhinhhsrdgtohhm
 X-GND-Sasl: luca.ceresoli@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1751381385;
+ d=bootlin.com; s=gm1; t=1751381607;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=61dCxDj1M6yHPQoU614RjYjGd8dtBf/SzNtPrYqsHNc=;
- b=OuQ8tSKroNZKEF66hQyMYXiIfyI7jQDX7Ns2G+ES3r574FtjlRYL6s2H4rWhj43Uxa742v
- Sd9hYoTPKo4lBvpqLV8a4ORE6iAg0tzdYHvRfaS0Bfsb7ffs+tLTMW8PZD+wtxCnM9D3c+
- XaBzLQyKNRkkMnxoJ974aRV4dihu6mKEVcFdIBUYZ/ky7b59DJcwtRtUepFJRjZVQZWAuS
- lTlpV2RZbaM3kTBC+9ZEwzh7H4NIPt5dOAK+hCwv9dWsTsu+Pg4XEV9W6N36qeB2IFX3JV
- GSFda+JcO89/2vWpLRbFFBjGdb+Gs+YlsqdVp7D5AOdmhbrzxCECP5gec962tw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=rmA818COSThXipv97uSEhkdl8e+ZkRQTVIuilQsYzwA=;
+ b=lRjyhDTixcY93h452fGeoXnEtijYMqHRFugFu2jSxrh1MOxuZvJSEGy59qUq0nH/laa/4Y
+ nn6GtArQAQQrxeLD+TZl0+R1XNOJnCroh7ygPrYKsdqgawVP6npiCiCyfVkWnoBsZnBHVY
+ bgr4nWePdI05axa3gWZQNPXISL40UD4HEzIeF5J6tlM525MQQDVt/Dwpy31K/+UTf1ZU1M
+ Hakj9LhWz4keDNtZPOKdGj9rYKE6jGnSvn32gspJFWM84yHiS8nvTZ1Vx5A4+P6k2TTxbB
+ Ll0iYwnJZwVjwzVJ+JSVt/fs2Gwf3Ug7d71GDKhAakEAeRQkD2kjO7MPiDFuAA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=OuQ8tSKr
-Subject: Re: [Buildroot] [PATCH v1 1/1] board/zynqmp: update custom board
- documentation
+ header.s=gm1 header.b=lRjyhDTi
+Subject: Re: [Buildroot] [PATCH v2 1/1] boot/uboot: add support for custom
+ zynq ps7_init_gpl.c
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,12 +95,26 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 18 Jun 2025 14:36:21 +0100
+On Thu, 19 Jun 2025 16:39:22 +0100
 Neal Frager <neal.frager@amd.com> wrote:
 
-> Update the zynqmp readme.txt file to use BR2_TARGET_UBOOT_ZYNQMP_PSU_INIT_FILE
-> option for configuring custom zynqmp boards with Buildroot.  There is no need
-> for any custom / manual steps since the support is included with Buildroot.
+> On Zynq, the booloader is responsible for some basic initializations, such as
+> enabling peripherals, DDR and configuring pinmuxes. The ps7_init_gpl.c file
+> (and optionally, ps7_init_gpl.h) contains the code for such initializations.
+> 
+> Although U-Boot contains ps7_init_gpl.c files for some boards, each of them
+> describes only one specific configuration. Users of a different board, or
+> needing a different configuration, can generate custom files using the Xilinx
+> Vivado development tools.
+> 
+> This patch adds Buildroot support for custom zynq ps7_init_gpl.c files in the
+> same way that is already done for zynqmp when working with custom hardware
+> that is not already supported by u-boot.
+> 
+> To test this feature, the following configs can be added to any zynq_defconfig:
+> 
+> BR2_TARGET_UBOOT_ZYNQ=y
+> BR2_TARGET_UBOOT_ZYNQ_PS7_INIT_FILE=<path to custom board ps7_init_gpl.c>
 > 
 > Signed-off-by: Neal Frager <neal.frager@amd.com>
 
