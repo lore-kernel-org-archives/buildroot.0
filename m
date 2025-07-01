@@ -4,72 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EACEC83038
-	for <buildroot@archiver.kernel.org>; Tue,  1 Jul 2025 21:03:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2A2BC83038
+	for <buildroot@archiver.kernel.org>; Tue,  1 Jul 2025 21:29:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CB8D541CE6;
-	Tue,  1 Jul 2025 21:03:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 85AE941D71;
+	Tue,  1 Jul 2025 21:29:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 82MuSDP0wilf; Tue,  1 Jul 2025 21:03:23 +0000 (UTC)
+ id md7n4wfTwrne; Tue,  1 Jul 2025 21:29:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F34A841CB4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A3E341D66
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F34A841CB4;
-	Tue,  1 Jul 2025 21:03:22 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 047F4196
- for <buildroot@buildroot.org>; Tue,  1 Jul 2025 21:03:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9A3E341D66;
+	Tue,  1 Jul 2025 21:29:43 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 28CDB128
+ for <buildroot@buildroot.org>; Tue,  1 Jul 2025 21:29:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EA6C440363
- for <buildroot@buildroot.org>; Tue,  1 Jul 2025 21:03:20 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1ACD841D66
+ for <buildroot@buildroot.org>; Tue,  1 Jul 2025 21:29:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OjMswOzrMZTt for <buildroot@buildroot.org>;
- Tue,  1 Jul 2025 21:03:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2D83F40075
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2D83F40075
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2D83F40075
- for <buildroot@buildroot.org>; Tue,  1 Jul 2025 21:03:20 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id 369D678034D;
- Tue,  1 Jul 2025 23:03:17 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
- via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 01 Jul 2025 23:03:17 +0200
-MIME-Version: 1.0
-Date: Tue, 01 Jul 2025 23:03:17 +0200
-To: Thomas Perale <thomas.perale@mind.be>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250701153448.545594-1-thomas.perale@mind.be>
-References: <20250701153448.545594-1-thomas.perale@mind.be>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <0dfeb541e6e4aa4a7f7d6c164c9c4ae7@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1751403798;
- bh=5JVWfjvZ766CkoMCaQ0FeV+4MuiSXuqv7meGDQpDHMU=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=TcMB/breuQheTRfrR6ID96kcxgjVh83X60z8q3MMq7/HUM6NGpQGvxFodlxzUVtuj
- Pb+R9h1ny35b6y+1ycM0z3Pdsgv/BXG69+tDwuGlk53ax/DzX3086G/cRqzoip8IhY
- GdhxU6ixwvaDkLknZfIvevptNFT58LMmsuMJawbGdi+3scmc1ZGomJ8OTezukNbODf
- AgACML+6/8xOy7fZ9cLQ+grnNCybhJVjy0SUveOWtEyBCBa7m9//JFw364Qt2uYCGV
- pKH5gB/p8QU801zQxLaN4JQXBktJaR/4dk7oyUOpBi3yrpE7CtsL9SWLg0IhOSiYvk
- 5Mf6qtONVBVKg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=TcMB/bre
-Subject: Re: [Buildroot] [PATCH] package/net-tools: fix regression
- introduced by CVE fix
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id p0MQo2JVw69C for <buildroot@buildroot.org>;
+ Tue,  1 Jul 2025 21:29:40 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E4E341D24
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5E4E341D24
+ for <buildroot@buildroot.org>; Tue,  1 Jul 2025 21:29:40 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 38BC38557A; Tue,  1 Jul 2025 21:29:40 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 1 Jul 2025 23:05:29 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8b94ff6c6be6311d82bf59c3a13f6d0a886996a1
+X-Git-Newrev: 5d5a4950b578fdc3c16bdb36e213f0e673584dea
+X-Patchwork-Hint: ignore
+Message-Id: <20250701212940.38BC38557A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xwayland: security bump to
+ version 24.1.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,27 +60,109 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 01/07/2025 17:34, Thomas Perale via buildroot wrote:
-> Commit [1] backported an upstream patch to address CVE-2025-46836 that
-> included a regression.
-> Upstream later fixed this regression in commit [2].
-> 
-> This patch add that fix to correct the issue introduced by the original
-> patch.
-> 
-> [1] 323aaa9f54 package/net-tools: add upstream security fix for 
-> CVE-2025-46836
-> [2] 
-> https://sourceforge.net/p/net-tools/code/ci/ddb0e375fb9ca95bb69335540b85bbdaa2714348/
-> 
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+commit: https://git.buildroot.net/buildroot/commit/?id=5d5a4950b578fdc3c16bdb36e213f0e673584dea
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Fixes the following security issues:
+
+- CVE-2025-49175: A flaw was found in the X Rendering extension's
+    handling of animated cursors. If a client provides no cursors, the
+    server assumes at least one is present, leading to an out-of-bounds
+    read and potential crash.
+
+For more information, see:
+    - https://nvd.nist.gov/vuln/detail/CVE-2025-49175
+    - https://gitlab.freedesktop.org/xorg/xserver/-/commit/0885e0b2
+
+- CVE-2025-49176: A flaw was found in the Big Requests extension. The
+    request length is multiplied by 4 before checking against the maximum
+    allowed size, potentially causing an integer overflow and bypassing
+    the size check.
+
+For more information, see:
+    - https://nvd.nist.gov/vuln/detail/CVE-2025-49176
+    - https://gitlab.freedesktop.org/xorg/xserver/-/commit/03731b32
+
+- CVE-2025-49177: A flaw was found in the XFIXES extension. The
+    XFixesSetClientDisconnectMode handler does not validate the request
+    length, allowing a client to read unintended memory from previous
+    requests.
+
+For more information, see:
+    - https://nvd.nist.gov/vuln/detail/CVE-2025-49177
+    - https://gitlab.freedesktop.org/xorg/xserver/-/commit/ab02fb96
+
+- CVE-2025-49178: A flaw was found in the X server's request handling.
+    Non-zero 'bytes to ignore' in a client's request can cause the server
+    to skip processing another client's request, potentially leading to a
+    denial of service.
+
+For more information, see:
+    - https://nvd.nist.gov/vuln/detail/CVE-2025-49178
+    - https://gitlab.freedesktop.org/xorg/xserver/-/commit/d55c54ce
+
+- CVE-2025-49179: A flaw was found in the X Record extension. The
+    RecordSanityCheckRegisterClients function does not check for an
+    integer overflow when computing request length, which allows a client
+    to bypass length checks.
+
+For more information, see:
+    - https://nvd.nist.gov/vuln/detail/CVE-2025-49179
+    - https://gitlab.freedesktop.org/xorg/xserver/-/commit/2bde9ca4
+
+- CVE-2025-49180: A flaw was found in the RandR extension, where the
+    RRChangeProviderProperty function does not properly validate input.
+    This issue leads to an integer overflow when computing the total size
+    to allocate.
+
+For more information, see:
+    - https://nvd.nist.gov/vuln/detail/CVE-2025-49180
+    - https://gitlab.freedesktop.org/xorg/xserver/-/commit/3c3a4b76
+    - https://gitlab.freedesktop.org/xorg/xserver/-/commit/0235121c
+
+For more details on the version bump, see:
+    - Security Advisory https://lists.x.org/archives/xorg/2025-June/062055.html
+    - 24.1.7 https://lists.x.org/archives/xorg/2025-June/062057.html
+    - 24.1.8 https://lists.x.org/archives/xorg/2025-June/062066.html
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/x11r7/xwayland/xwayland.hash | 4 ++--
+ package/x11r7/xwayland/xwayland.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/x11r7/xwayland/xwayland.hash b/package/x11r7/xwayland/xwayland.hash
+index 2a23891752..6cbbea8af5 100644
+--- a/package/x11r7/xwayland/xwayland.hash
++++ b/package/x11r7/xwayland/xwayland.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2025-February/003586.html
+-sha256  737e612ca36bbdf415a911644eb7592cf9389846847b47fa46dc705bd754d2d7  xwayland-24.1.6.tar.xz
++# From https://lists.x.org/archives/xorg/2025-June/062066.html
++sha256  c8908d57c8ed9ceb8293c16ba7ad5af522efaf1ba7e51f9e4cf3c0774d199907  xwayland-24.1.8.tar.xz
+ sha512  b6dcc87f5c4d880cb23216518171a704c2a501803ac2efd9d01760895d755a617cd82313c6516f27a888b0581c64d74e3f8db5c238e1ae0d13da6cc1a547c02f  xwayland-24.1.6.tar.xz
+ 
+ # Locally calculated
+diff --git a/package/x11r7/xwayland/xwayland.mk b/package/x11r7/xwayland/xwayland.mk
+index 47dc0b39e6..e3b6727c19 100644
+--- a/package/x11r7/xwayland/xwayland.mk
++++ b/package/x11r7/xwayland/xwayland.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XWAYLAND_VERSION = 24.1.6
++XWAYLAND_VERSION = 24.1.8
+ XWAYLAND_SOURCE = xwayland-$(XWAYLAND_VERSION).tar.xz
+ XWAYLAND_SITE = https://xorg.freedesktop.org/archive/individual/xserver
+ XWAYLAND_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
