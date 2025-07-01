@@ -4,91 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62EFFC83038
-	for <buildroot@archiver.kernel.org>; Tue,  1 Jul 2025 13:46:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A577FC7EE30
+	for <buildroot@archiver.kernel.org>; Tue,  1 Jul 2025 13:46:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B5ECD614AB;
-	Tue,  1 Jul 2025 13:46:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 67E406115A;
+	Tue,  1 Jul 2025 13:46:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TbkbM8L-NiGU; Tue,  1 Jul 2025 13:46:00 +0000 (UTC)
+ id 1Nbt3OIujmGN; Tue,  1 Jul 2025 13:46:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D4C7611E0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D2EF611E0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1D4C7611E0;
-	Tue,  1 Jul 2025 13:45:59 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 51A36197
- for <buildroot@buildroot.org>; Tue,  1 Jul 2025 13:45:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1D2EF611E0;
+	Tue,  1 Jul 2025 13:46:02 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4E79A197
+ for <buildroot@buildroot.org>; Tue,  1 Jul 2025 13:46:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4398D4139D
- for <buildroot@buildroot.org>; Tue,  1 Jul 2025 13:45:57 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4080041CF7
+ for <buildroot@buildroot.org>; Tue,  1 Jul 2025 13:46:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rNRHZHyKZIGE for <buildroot@buildroot.org>;
- Tue,  1 Jul 2025 13:45:56 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.126.239;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CuVweVqkf2YW for <buildroot@buildroot.org>;
+ Tue,  1 Jul 2025 13:45:59 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.121;
  helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2227E413AB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2227E413AB
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.239])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2227E413AB
- for <buildroot@buildroot.org>; Tue,  1 Jul 2025 13:45:55 +0000 (UTC)
-X-CSE-ConnectionGUID: Qw/uRDFMQuql+3pyTlX9ow==
-X-CSE-MsgGUID: SITubBapRu6c6Loaa+3Wkg==
-Received: from unknown (HELO opfedv1rlp0a.nor.fr.ftgroup) ([x.x.x.x]) by
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 06D8B40D31
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 06D8B40D31
+Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.121])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 06D8B40D31
+ for <buildroot@buildroot.org>; Tue,  1 Jul 2025 13:45:58 +0000 (UTC)
+X-CSE-ConnectionGUID: 6c9xoH5xS3Ohb4cTtRiOLQ==
+X-CSE-MsgGUID: NP/xnHxdQ/GXbV8DRwMSRw==
+Received: from unknown (HELO opfedv1rlp0h.nor.fr.ftgroup) ([x.x.x.x]) by
  smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 01 Jul 2025 15:45:54 +0200
+ 01 Jul 2025 15:45:56 +0200
 Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv1rlp0a.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 01 Jul 2025 15:45:54 +0200
+ ([x.x.x.x]) by opfedv1rlp0h.nor.fr.ftgroup with
+ ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 01 Jul 2025 15:45:56 +0200
 Received: from yd-6wlzhs3 [x.x.x.x] by
  OPE16NORMBX305.corporate.adroot.infra.ftgroup
  [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.57;
- Tue, 1 Jul 2025 15:45:52 +0200
+ Tue, 1 Jul 2025 15:45:54 +0200
 Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
- Tue, 01 Jul 2025 15:45:52 +0200
-X-CSE-ConnectionGUID: Frqky3taTbi2Ue/D6V6buQ==
-X-CSE-MsgGUID: zBPn1O9qRXWxtdt8aOsQ7g==
-X-IronPort-AV: E=Sophos;i="6.16,279,1744063200"; d="scan'208";a="308478189"
+ Tue, 01 Jul 2025 15:45:54 +0200
+X-CSE-ConnectionGUID: ZvQOR+S9Q+KOnrGcuB0w2Q==
+X-CSE-MsgGUID: LDa5MC8nQL2Ygcy3sPjE3g==
+X-IronPort-AV: E=Sophos;i="6.16,279,1744063200"; d="scan'208";a="304286190"
 From: <yann.morin@orange.com>
 To: <buildroot@buildroot.org>
-CC: <yann.morin@orange.com>, Christian Stewart <christian@aperture.us>
-Date: Tue, 1 Jul 2025 15:45:49 +0200
-Message-ID: <d23125d705a0c24ca91071624d507392ecfe7b0d.1751377540.git.yann.morin@orange.com>
+CC: <yann.morin@orange.com>, Angelo Compagnucci
+ <angelo.compagnucci@gmail.com>, Christian Stewart <christian@aperture.us>,
+ James Hilliard <james.hilliard1@gmail.com>
+Date: Tue, 1 Jul 2025 15:45:50 +0200
+Message-ID: <c7c6c70e144a4605161a0aafe77f433d194aa09b.1751377540.git.yann.morin@orange.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1751377540.git.yann.morin@orange.com>
 References: <cover.1751377540.git.yann.morin@orange.com>
 MIME-Version: 1.0
 X-Originating-IP: [10.115.27.53]
-X-ClientProxiedBy: OPE16NORMBX207.corporate.adroot.infra.ftgroup (10.115.27.8)
+X-ClientProxiedBy: OPE16NORMBX104.corporate.adroot.infra.ftgroup (10.115.26.5)
  To OPE16NORMBX305.corporate.adroot.infra.ftgroup
  (10.115.27.10)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1751377556; x=1782913556;
+ t=1751377559; x=1782913559;
  h=from:to:cc:subject:date:message-id:in-reply-to:
  references:mime-version:content-transfer-encoding;
- bh=SBP0/6LpeNit/pUnr0g2zzqMFUI31b535KoZSG7NEVk=;
- b=FHOV7KfldFl4ZSvHPfyS6COxQRcvWwoh0nvHNbzxa40XlyJseKjDSqIG
- jHbgmi9hcwFjMC7C4Ak1q1twwXZxiyLN2jbJpbgpH1XTy4hMetwtxWL5Y
- e7QYuOWjxIg0X+pBbeZhP7OkwwkQVW8O5PWWpOUXobNyIj84H9qRabr/F
- HVWHOBk2l5cIp7xWDiCVsntbSTBPGMvdqRBpsKYi94YXPU/ByAoKFRKwX
- 14nrTv7oxHHSapXmH5YMgWhSPROH07F2mB7IxSYYTU74o4L/ply1Qojsw
- WS01ohoSojrLmI4SxcTL5AYUErECUv+QBoxj3ICgifH9xxw+ixUuAUXB6
+ bh=JQSnuNJTi+A8gbKJV2hlhpAzeTWBP1xQ+kbuWoBKgAg=;
+ b=BhOGpI7GsPUbJOuTxjjGAci35hNeBWFGEbNpWPDpun+nqkJOhRw5w6Z2
+ G701QmtZEBnkx2T7fga1KNkc28y5AuZKxHRXv9Yl9UfXE5NKGbE+ABgYq
+ 33Q3Sv8jSA4o53ZbHvq+VJePkMkok+TJWpIFgFB4uYXRuuci0B9QSBHY1
+ aojX1/AncoXGWKfW0RyoRnA/A6HKUM9cVw+BhY/gXoyig5mlQu979VysM
+ mS4wndxnGrQsfIGUdZEzYJKWujfdEVy6abuxO7+2QzTcN8x6p3NJ00Bkj
+ 1CsACBl8S2bRyMbdP6Hep/Bn9lsQhFrKOlmJuH9nxNmsIZdUVQ+RsxLiT
  A==;
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=orange.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
- header.a=rsa-sha256 header.s=orange002 header.b=FHOV7Kfl
-Subject: [Buildroot] [PATCH 1/4 v2] package/pkg-golang: simplify installing
- multiple binaries
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
+ header.s=orange002 header.b=BhOGpI7G
+Subject: [Buildroot] [PATCH 2/4 v2] package: drop default _INSTALL_BINS in
+ golang-package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -107,108 +110,156 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: "Yann E. MORIN" <yann.morin@orange.com>
 
-Currently, when a golang package defines multiple _BUILD_TARGETS, it has
-to basically repeat the same list in its _INSTALL_BINS.
+Now that the pkg-golang infra automatically sets _INSTALL_BINS by
+default to the list of notdir of _BUILD_TARGETS, there is no need to do
+that in packages anymore.
 
-When a golang package defines multiple _BUILD_TARGETS, the pkg-golang
-infra will forcibly use the basename (the notdir) of each target as the
-name of the generated binary; there is no option to set a per-target
-binary name.
+Most packages were already using the notdir construct, so those are
+trivially fixed; a few had a hard-coded list that matched the built
+targets list, so they too are trivially fixed.
 
-However, the pkg-golang infra by default tries to install a binary named
-after the package rawname. This forces packages to basically repeat the
-same list as their _BUILD_TARGETS to override _INSTALL_BINS, when the
-list of generated binaries is already known to the infra.
-
-We change the pkg-golang infra to better cover such a case:
-
-  - if _BUILD_TARGET is '.' (the default), keep the current scheme:
-    install a single binary named after the package rwaname;
-
-  - if _BUILD_TARGET is not '.', and contains a single word, use the
-    notdir of the built target, but allow the user to override it with
-    _BIN_NAME (the current behaviour);
-
-  - otherwise (_BUILD_TARGETS is set to more than one word), do not
-    allow the user to set _BIN_NAME (it does not make sense), but set
-    _INSTALL_BINS by default to the notdir of _BUILD_TARGETS.
-
-We still allow the user to set _INSTALL_BINS in the last case, to cover
-the case for existing packages; those are going to be "fixed" in the
-following commits.
-
-We now consider that _INSTALL_BINS is an internal implementation details
-that should no longer be exposed to the users, so we drop it from the
-documentation; we rephrase the corresponding part for _BUILD_TARGETS.
+host-mender-artifact was slightly different, in that it explicitly set
+the _BIN_NAME to mender-artifact, which happens to be the default; it
+also set _INSTALL_BINS to _BIN_NAME, so again using the default. This
+package can also be fixed easily.
 
 Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 Cc: Christian Stewart <christian@aperture.us>
----
- docs/manual/adding-packages-golang.adoc | 26 ++++++++++++-------------
- package/pkg-golang.mk                   | 11 +++++++++--
- 2 files changed, 22 insertions(+), 15 deletions(-)
+Cc: James Hilliard <james.hilliard1@gmail.com>
 
-diff --git a/docs/manual/adding-packages-golang.adoc b/docs/manual/adding-packages-golang.adoc
-index 6de0916a83..21b6a122a9 100644
---- a/docs/manual/adding-packages-golang.adoc
-+++ b/docs/manual/adding-packages-golang.adoc
-@@ -94,20 +94,20 @@ therefore only use a few of them, or none.
-   defaults to +.+. We then have two cases:
+---
+Changes v1 -> v2:
+  - account for distribution-registry, new package added after v1 was
+    posted
+---
+ .../amazon-ecr-credential-helper.mk                           | 1 -
+ package/containerd/containerd.mk                              | 1 -
+ package/delve/delve.mk                                        | 2 --
+ package/distribution-registry/distribution-registry.mk        | 1 -
+ package/docker-cli/docker-cli.mk                              | 2 --
+ package/docker-engine/docker-engine.mk                        | 2 --
+ package/mender-artifact/mender-artifact.mk                    | 3 ---
+ package/moby-buildkit/moby-buildkit.mk                        | 4 ----
+ package/tailscale/tailscale.mk                                | 1 -
+ 9 files changed, 17 deletions(-)
+
+diff --git a/package/amazon-ecr-credential-helper/amazon-ecr-credential-helper.mk b/package/amazon-ecr-credential-helper/amazon-ecr-credential-helper.mk
+index acfeea16fb..ad75ed3360 100644
+--- a/package/amazon-ecr-credential-helper/amazon-ecr-credential-helper.mk
++++ b/package/amazon-ecr-credential-helper/amazon-ecr-credential-helper.mk
+@@ -15,6 +15,5 @@ AMAZON_ECR_CREDENTIAL_HELPER_SUBDIR = ecr-login
  
- ** +FOO_BUILD_TARGETS+ is +.+. In this case, we assume only one binary
--   will be produced, and that by default we name it after the package
--   name. If that is not appropriate, the name of the produced binary
--   can be overridden using +FOO_BIN_NAME+.
-+   will be built and installed, and by default we name it after the
-+   package name; if that is not appropriate, the name of the binary can
-+   be overridden using +FOO_BIN_NAME+.
+ AMAZON_ECR_CREDENTIAL_HELPER_GOMOD = ./cli
+ AMAZON_ECR_CREDENTIAL_HELPER_BUILD_TARGETS = docker-credential-ecr-login
+-AMAZON_ECR_CREDENTIAL_HELPER_INSTALL_BINS = docker-credential-ecr-login
  
--** +FOO_BUILD_TARGETS+ is not +.+. In this case, we iterate over the
--   values to build each target, and for each produced a binary that is
--   the non-directory component of the target. For example if
--   +FOO_BUILD_TARGETS = cmd/docker cmd/dockerd+ the binaries produced
--   are +docker+ and +dockerd+.
+ $(eval $(golang-package))
+diff --git a/package/containerd/containerd.mk b/package/containerd/containerd.mk
+index 1f70a26ebf..2ef70ab5d7 100644
+--- a/package/containerd/containerd.mk
++++ b/package/containerd/containerd.mk
+@@ -20,7 +20,6 @@ CONTAINERD_BUILD_TARGETS = \
+ 	cmd/containerd-shim-runc-v2 \
+ 	cmd/ctr
+ 
+-CONTAINERD_INSTALL_BINS = $(notdir $(CONTAINERD_BUILD_TARGETS))
+ CONTAINERD_TAGS = no_aufs
+ 
+ ifeq ($(BR2_PACKAGE_LIBAPPARMOR),y)
+diff --git a/package/delve/delve.mk b/package/delve/delve.mk
+index 408286e3b4..8206721fe2 100644
+--- a/package/delve/delve.mk
++++ b/package/delve/delve.mk
+@@ -12,11 +12,9 @@ DELVE_DEPENDENCIES = host-pkgconf
+ 
+ DELVE_TAGS = cgo
+ DELVE_BUILD_TARGETS = cmd/dlv
+-DELVE_INSTALL_BINS = $(notdir $(DELVE_BUILD_TARGETS))
+ 
+ HOST_DELVE_TAGS = cgo
+ HOST_DELVE_BUILD_TARGETS = cmd/dlv
+-HOST_DELVE_INSTALL_BINS = $(notdir $(HOST_DELVE_BUILD_TARGETS))
+ 
+ $(eval $(golang-package))
+ $(eval $(host-golang-package))
+diff --git a/package/distribution-registry/distribution-registry.mk b/package/distribution-registry/distribution-registry.mk
+index 901b9c40e5..a01a3c1710 100644
+--- a/package/distribution-registry/distribution-registry.mk
++++ b/package/distribution-registry/distribution-registry.mk
+@@ -18,7 +18,6 @@ DISTRIBUTION_REGISTRY_BUILD_TARGETS = cmd/registry
+ # distribution-registry builds and installs the 'registry' executable, but
+ # that name is a bit too generic. Rename it to match the package name.
+ DISTRIBUTION_REGISTRY_BIN_NAME = distribution-registry
+-DISTRIBUTION_REGISTRY_INSTALL_BINS = distribution-registry
+ 
+ # Inject the version as if done by upstream's wrapper Makefile
+ define DISTRIBUTION_REGISTRY_SET_VERSION
+diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
+index e118481838..7386b007cd 100644
+--- a/package/docker-cli/docker-cli.mk
++++ b/package/docker-cli/docker-cli.mk
+@@ -38,6 +38,4 @@ define DOCKER_CLI_FIX_VENDORING
+ endef
+ DOCKER_CLI_POST_EXTRACT_HOOKS += DOCKER_CLI_FIX_VENDORING
+ 
+-DOCKER_CLI_INSTALL_BINS = $(notdir $(DOCKER_CLI_BUILD_TARGETS))
 -
--* +FOO_INSTALL_BINS+ can be used to pass the list of binaries that
--  should be installed in +/usr/bin+ on the target. If
--  +FOO_INSTALL_BINS+ is not specified, it defaults to the lower-case
--  name of package.
-+** +FOO_BUILD_TARGETS+ is not +.+. In this case, it is interpreted as a
-+   space-separated list, and we iterate over the targets to build and
-+   install a binary named after the non-directory component of the
-+   target. For example if +FOO_BUILD_TARGETS = cmd/docker cmd/dockerd+,
-+   the binaries built and installed are +docker+ and +dockerd+. If
-+   +FOO_BUILD_TARGETS+ contains only one target, then it is possible to
-+   override the built and installed binary by setting +FOO_BIN_NAME+,
-+   as above; if +FOO_BUILD_TARGETS+ contains two or more targets, then
-+   it is not possible to override the names of the installed binaries
-+   (use a post-install hook for that).
+ $(eval $(golang-package))
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index c39dc2b440..181975b26b 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
+@@ -70,8 +70,6 @@ define DOCKER_ENGINE_FIX_VENDORING
+ endef
+ DOCKER_ENGINE_POST_EXTRACT_HOOKS += DOCKER_ENGINE_FIX_VENDORING
  
- With the Go infrastructure, all the steps required to build and
- install the packages are already defined, and they generally work well
-diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
-index a4e8bd30cc..ff8d28aa7e 100644
---- a/package/pkg-golang.mk
-+++ b/package/pkg-golang.mk
-@@ -61,9 +61,16 @@ $(2)_BUILD_TARGETS ?= .
- # after each build target building them (below in <pkg>_BUILD_CMDS).
- ifeq ($$($(2)_BUILD_TARGETS),.)
- $(2)_BIN_NAME ?= $$($(2)_RAWNAME)
-+$(2)_INSTALL_BINS ?= $$($(2)_BIN_NAME)
-+else ifeq ($$(words $$($(2)_BUILD_TARGETS)),1)
-+$(2)_BIN_NAME ?= $$(notdir $$($(2)_BUILD_TARGETS))
-+$(2)_INSTALL_BINS ?= $$($(2)_BIN_NAME)
-+else
-+ifneq ($$($(2)_BIN_NAME),)
-+$$(error $(1) sets $(2)_BIN_NAME while there are multiple targets in $(2)_BUILD_TARGETS)
-+endif
-+$(2)_INSTALL_BINS ?= $$(notdir $$($(2)_BUILD_TARGETS))
- endif
+-DOCKER_ENGINE_INSTALL_BINS = $(notdir $(DOCKER_ENGINE_BUILD_TARGETS))
 -
--$(2)_INSTALL_BINS ?= $$($(2)_RAWNAME)
+ define DOCKER_ENGINE_INSTALL_INIT_SYSTEMD
+ 	$(INSTALL) -D -m 0644 $(@D)/contrib/init/systemd/docker.service \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/docker.service
+diff --git a/package/mender-artifact/mender-artifact.mk b/package/mender-artifact/mender-artifact.mk
+index bcab91890a..7d6f0929e2 100644
+--- a/package/mender-artifact/mender-artifact.mk
++++ b/package/mender-artifact/mender-artifact.mk
+@@ -115,7 +115,4 @@ HOST_MENDER_ARTIFACT_GO_ENV += \
  
- # Source files in Go usually use an import path resolved around
- # domain/vendor/software. We infer domain/vendor/software from the upstream URL
+ HOST_MENDER_ARTIFACT_LDFLAGS = -X github.com/mendersoftware/mender-artifact/cli.Version=$(HOST_MENDER_ARTIFACT_VERSION)
+ 
+-HOST_MENDER_ARTIFACT_BIN_NAME = mender-artifact
+-HOST_MENDER_ARTIFACT_INSTALL_BINS = $(HOST_MENDER_ARTIFACT_BIN_NAME)
+-
+ $(eval $(host-golang-package))
+diff --git a/package/moby-buildkit/moby-buildkit.mk b/package/moby-buildkit/moby-buildkit.mk
+index 91560c1ed1..4ae1abde3a 100644
+--- a/package/moby-buildkit/moby-buildkit.mk
++++ b/package/moby-buildkit/moby-buildkit.mk
+@@ -17,12 +17,8 @@ MOBY_BUILDKIT_BUILD_TARGETS = cmd/buildctl cmd/buildkitd
+ MOBY_BUILDKIT_LDFLAGS = \
+ 	-X $(MOBY_BUILDKIT_GOMOD)/version.Version="$(MOBY_BUILDKIT_VERSION)"
+ 
+-MOBY_BUILDKIT_INSTALL_BINS = $(notdir $(MOBY_BUILDKIT_BUILD_TARGETS))
+-
+ HOST_MOBY_BUILDKIT_TAGS = cgo
+ HOST_MOBY_BUILDKIT_BUILD_TARGETS = cmd/buildctl cmd/buildkitd
+ 
+-HOST_MOBY_BUILDKIT_INSTALL_BINS = $(notdir $(HOST_MOBY_BUILDKIT_BUILD_TARGETS))
+-
+ $(eval $(golang-package))
+ $(eval $(host-golang-package))
+diff --git a/package/tailscale/tailscale.mk b/package/tailscale/tailscale.mk
+index 7019b9afc9..8f25b0cbd1 100644
+--- a/package/tailscale/tailscale.mk
++++ b/package/tailscale/tailscale.mk
+@@ -10,7 +10,6 @@ TAILSCALE_LICENSE = BSD-3-Clause
+ TAILSCALE_LICENSE_FILES = LICENSE
+ TAILSCALE_GOMOD = tailscale.com
+ TAILSCALE_BUILD_TARGETS = cmd/tailscale cmd/tailscaled
+-TAILSCALE_INSTALL_BINS = tailscale tailscaled
+ TAILSCALE_LDFLAGS = \
+ 	-X tailscale.com/version.longStamp=$(TAILSCALE_VERSION) \
+ 	-X tailscale.com/version.shortStamp=$(TAILSCALE_VERSION)
 -- 
 2.34.1
 
