@@ -4,72 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C497C8303C
-	for <buildroot@archiver.kernel.org>; Tue,  1 Jul 2025 20:50:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16D41C83038
+	for <buildroot@archiver.kernel.org>; Tue,  1 Jul 2025 20:57:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F3E7B849CB;
-	Tue,  1 Jul 2025 20:50:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C30C080D0D;
+	Tue,  1 Jul 2025 20:57:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QWrZSLXRY8bC; Tue,  1 Jul 2025 20:50:51 +0000 (UTC)
+ id 7TAirmIi2Ui6; Tue,  1 Jul 2025 20:57:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A55780F89
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 476CE80CAE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3A55780F89;
-	Tue,  1 Jul 2025 20:50:51 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 89CDB196
- for <buildroot@buildroot.org>; Tue,  1 Jul 2025 20:50:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 476CE80CAE;
+	Tue,  1 Jul 2025 20:57:37 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 25DA0196
+ for <buildroot@buildroot.org>; Tue,  1 Jul 2025 20:57:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7AD13611D2
- for <buildroot@buildroot.org>; Tue,  1 Jul 2025 20:50:49 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1798D41A63
+ for <buildroot@buildroot.org>; Tue,  1 Jul 2025 20:57:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id okdCynJw7VLv for <buildroot@buildroot.org>;
- Tue,  1 Jul 2025 20:50:48 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MhRDYnaHX6fm for <buildroot@buildroot.org>;
+ Tue,  1 Jul 2025 20:57:35 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 11692611F3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 11692611F3
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 11692611F3
- for <buildroot@buildroot.org>; Tue,  1 Jul 2025 20:50:47 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -58853084; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Tue, 01 Jul 2025 20:50:43 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1uWhwA-007I2O-1y;
- Tue, 01 Jul 2025 22:50:42 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Julien Olivain <ju.o@free.fr>
-Cc: buildroot@buildroot.org
-References: <20250701161508.1622502-1-peter@korsgaard.com>
- <2dd8987fe43ff772e6e99eb04aca8e29@free.fr>
-Date: Tue, 01 Jul 2025 22:50:42 +0200
-In-Reply-To: <2dd8987fe43ff772e6e99eb04aca8e29@free.fr> (Julien Olivain's
- message of "Tue, 01 Jul 2025 22:41:55 +0200")
-Message-ID: <87plejeiu5.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=GCmBIGirOaNFVsI21gGu9JViMBDqiVdquLbW0gn5Gm1pKACYpcaelckAQAxjEdo2Qw99szITnj5tcec5ejCAzHdaT9T0jtsyL/dBaZdOFQVjeZVlLIAYCTgNKdhv4g6Xz6lXkYbvCWaDhHiBhCH23MW/GFR6nhF4FsGwJvD2aEDIpK0vvEhwCybmosWZ36q5/M5ChMy0OIPBONp6trEAmVGEtPDOXVLKrbRuuCBHQelXzSbjbjPd5tXqn24rp0W4WVC0NDpETgJEDEMwaiWFYmpkhN4gWTir5rFgWCQH+sBc3r4fUl1Xcw4RpBdknfrYFoVrNCsesKsRD0akJ9lG6w==;
- s=purelymail2; d=purelymail.com; v=1;
- bh=AQ9cuYx+9zWlO4lojjXx501GSlVPzRuAMtmJTSS8iTM=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail2 header.b=GCmBIGir
-Subject: Re: [Buildroot] [PATCH] package/jose: security bump to version 14
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5B5DB41A18
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5B5DB41A18
+ for <buildroot@buildroot.org>; Tue,  1 Jul 2025 20:57:35 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 4A546852F9; Tue,  1 Jul 2025 20:57:35 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 1 Jul 2025 22:49:44 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 184a1b94a589da215282aec9f515914ba7831804
+X-Git-Newrev: 7006854ce1514c03fe98d57dcaa68629ac800b71
+X-Patchwork-Hint: ignore
+Message-Id: <20250701205735.4A546852F9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-urllib3: security bump to
+ v2.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,41 +58,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Julien" == Julien Olivain <ju.o@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=7006854ce1514c03fe98d57dcaa68629ac800b71
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > On 01/07/2025 18:15, Peter Korsgaard wrote:
- >> Jose-13 fixed the following security issue:
- >> - CVE-2023-50967: latchset jose through version 11 allows attackers
- >> to cause
- >> a denial of service (CPU consumption) via a large p2c (aka PBES2
- >> Count)
- >> value.
- >> https://github.com/latchset/jose/issues/151
- >> In addition, jose-14 worked around another DoS issue related to
- >> decompression:
- >> https://github.com/latchset/jose/pull/157
- >> Drop now upstreamed patches:
- >> - 0001-lib-hsh.c-rename-hsh-local-variable.patch: Upstream as of
- >> https://github.com/latchset/jose/commit/3d5b287243f87ce0243b23abd690d86c41fc499c
- >> - 0002-man-add-option-to-skip-building-man-pages.patch: Upstream
- >> after
- >> getting reworked to use -Ddocs=disabled as of
- >> https://github.com/latchset/jose/commit/786b426df018edf30a53e2d82155df20d13047c1
- >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+For release note, see:
+https://github.com/urllib3/urllib3/releases/tag/2.5.0
 
- > Applied to master, thanks.
+This fixes the following vulnerabilities:
+- CVE-2025-50181:
+    urllib3 redirects are not disabled when retries are disabled on
+    PoolManager instantiation
 
- > For info, I also removed the .checkpackageignore patch entries.
+- CVE-2025-50182:
+    urllib3 does not control redirects in browsers and Node.js
 
-Ups, thanks!
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+[Julien: add link to release note in commit log]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/python-urllib3/python-urllib3.hash | 4 ++--
+ package/python-urllib3/python-urllib3.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/python-urllib3/python-urllib3.hash b/package/python-urllib3/python-urllib3.hash
+index 2391108e26..f4162882f7 100644
+--- a/package/python-urllib3/python-urllib3.hash
++++ b/package/python-urllib3/python-urllib3.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/urllib3/json
+-md5  787104cdecd70e6688713f8a079ffd3f  urllib3-2.4.0.tar.gz
+-sha256  414bc6535b787febd7567804cc015fee39daab8ad86268f1310a9250697de466  urllib3-2.4.0.tar.gz
++md5  2b8a86438e4d35fbc90572dbdb424759  urllib3-2.5.0.tar.gz
++sha256  3fc47733c7e419d4bc3f6b3dc2b4f890bb743906a30d56ba4a5bfa4bbff92760  urllib3-2.5.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  130e3a64d5fdd5d096a752694634a7d9df284469de86e5732100268041e3d686  LICENSE.txt
+diff --git a/package/python-urllib3/python-urllib3.mk b/package/python-urllib3/python-urllib3.mk
+index 7294742909..9ec6c7f3c0 100644
+--- a/package/python-urllib3/python-urllib3.mk
++++ b/package/python-urllib3/python-urllib3.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_URLLIB3_VERSION = 2.4.0
++PYTHON_URLLIB3_VERSION = 2.5.0
+ PYTHON_URLLIB3_SOURCE = urllib3-$(PYTHON_URLLIB3_VERSION).tar.gz
+-PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/8a/78/16493d9c386d8e60e442a35feac5e00f0913c0f4b7c217c11e8ec2ff53e0
++PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/15/22/9ee70a2574a4f4599c47dd506532914ce044817c7752a79b6a51286319bc
+ PYTHON_URLLIB3_LICENSE = MIT
+ PYTHON_URLLIB3_LICENSE_FILES = LICENSE.txt
+ PYTHON_URLLIB3_CPE_ID_VENDOR = python
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
