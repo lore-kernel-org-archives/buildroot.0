@@ -1,101 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C1CFC7EE30
-	for <buildroot@archiver.kernel.org>; Tue,  1 Jul 2025 16:06:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E2ECC83038
+	for <buildroot@archiver.kernel.org>; Tue,  1 Jul 2025 16:15:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4909784317;
-	Tue,  1 Jul 2025 16:06:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0D29740708;
+	Tue,  1 Jul 2025 16:15:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NT6bKcb0v5Za; Tue,  1 Jul 2025 16:06:54 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ch35OYW0oco8; Tue,  1 Jul 2025 16:15:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 780728434A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F3FC24077B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 780728434A;
-	Tue,  1 Jul 2025 16:06:54 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id A2F4C179
- for <buildroot@buildroot.org>; Tue,  1 Jul 2025 16:06:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F3FC24077B;
+	Tue,  1 Jul 2025 16:15:16 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 47311128
+ for <buildroot@buildroot.org>; Tue,  1 Jul 2025 16:15:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 88808611E7
- for <buildroot@buildroot.org>; Tue,  1 Jul 2025 16:06:53 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 38E6160DB6
+ for <buildroot@buildroot.org>; Tue,  1 Jul 2025 16:15:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fAg76BcMY420 for <buildroot@buildroot.org>;
- Tue,  1 Jul 2025 16:06:52 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
- envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 68BC7611C9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 68BC7611C9
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 68BC7611C9
- for <buildroot@buildroot.org>; Tue,  1 Jul 2025 16:06:51 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id
- 5b1f17b1804b1-4537edf2c3cso58415665e9.3
- for <buildroot@buildroot.org>; Tue, 01 Jul 2025 09:06:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1751386010; x=1751990810;
- h=content-transfer-encoding:mime-version:message-id:date:subject:to
- :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=XKsqKSTMpu7NGAvc1TaBN+wujv9CaUKz4uMmTuH2fno=;
- b=TdzuJaXeZwzhjqU3B8Hvk+JiiPKttRS6FVy15U+NbjAw5SsStg95FO3kHVERTngllG
- gHl/oirRPjrKfXy3rqN/hBzJ23CqP4Uo23/lKeNgt695FlYKCUx3kWO+8ry3GpIwuYwC
- vG/Gm3UU33XwOBNAFHP8cYnJ+XEgFFuAs+q5f5rfYEQTs0AeKG+BUZrSbetbhahT0PaD
- q14Vtm6lVVTGQa+xmaCeg5rhcjE5tEIvcOo2GKa82jzcyia2G+tI10DyGm/7URQEBhJx
- 9Y7O4CU/RZkQFV8WheuURfqG/y7NMfy+N7VfeHZBSYaG/86d/EkkML/zQY3GwzqozN3Y
- 1UJw==
-X-Gm-Message-State: AOJu0YzPiXRBxsyEfZklniiYrAtSrLvrSE8yeN5j0UlsrkZdqG2c3wNu
- Dr7Rts+9qaqDTyNMUxbUkdm3F7DgSD1i7FYEYm43tulvWxMMpC8As8oCgb8z0l4M08ZO4CdXBFT
- pqQPT
-X-Gm-Gg: ASbGncuObKu3LUdBut5NtUldokGm4sNeVAL+4l1T/eTqVKsBARpEVLFhMYvBKuwUrh2
- caPogCqGBHiq+UAmBmLUTnQXyKkrG8j//BAiOtIf2aSxoMUEyQpiGbDk9iIvD/zx8vOzqVY9aof
- SjIPsHXRc3cxVFyVv5kPOdH+ERnf7dY8c6CMgad92Teke0wfVqxdmjHDkcfhjstfIAznxCEcZ4M
- 2mByCJF7FjgAwzHMQ2CCjOWiiM2/dQSwfB0z9mVm4zf0hJW4CFs8MoLaHC6LV9XlV9+Qa3BC9pZ
- Z7RoOLq1IZNshJjGYOIys9Lw9qG5qcTjtVg4x8JE2K6/sA+Dg2D4hPV/FSUkfIXba0waNY08Zlm
- uO1mu9ZJBC8dBoy5e/Q==
-X-Google-Smtp-Source: AGHT+IHTfiE14PIm8H9LkMkvtSTz9o7b/xjnucnECF8A6pR5U2Occa29F0f3vVJlJtVsKxYuNyQmYQ==
-X-Received: by 2002:a05:600c:6986:b0:43c:fa24:873e with SMTP id
- 5b1f17b1804b1-4538ee278d6mr173588385e9.13.1751386009366; 
- Tue, 01 Jul 2025 09:06:49 -0700 (PDT)
-Received: from dragon.local.ess-mail.com
- ([2a02:a03f:639d:e501:5db7:a3a4:443e:4828])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-453966eb3e0sm110699045e9.28.2025.07.01.09.06.48
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 01 Jul 2025 09:06:49 -0700 (PDT)
+ id UmCETP3nPCZr for <buildroot@buildroot.org>;
+ Tue,  1 Jul 2025 16:15:14 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 27EBA6081C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 27EBA6081C
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 27EBA6081C
+ for <buildroot@buildroot.org>; Tue,  1 Jul 2025 16:15:13 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -841939334; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Tue, 01 Jul 2025 16:15:10 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peko@dell.be.48ers.dk>) id 1uWddV-006o5d-0a;
+ Tue, 01 Jul 2025 18:15:09 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue,  1 Jul 2025 18:06:35 +0200
-Message-ID: <20250701160635.1271205-1-titouan.christophe@mind.be>
-X-Mailer: git-send-email 2.50.0
+Date: Tue,  1 Jul 2025 18:15:07 +0200
+Message-Id: <20250701161508.1622502-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1751386010; x=1751990810; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:to
- :from:from:to:cc:subject:date:message-id:reply-to;
- bh=XKsqKSTMpu7NGAvc1TaBN+wujv9CaUKz4uMmTuH2fno=;
- b=VXiil5tH0huMnJ1UYmyikPX8MXfT50CiNRAGCdad9TeJiDsYRTztx1gyteIIstUcjy
- CifePfryjSnf6i1LcbOWeN56IzJ0GBs/yn+83d1LfYSjvj3PpYZv7W/pv2u6zgKLDVp+
- sPTW4La/oFoKns0wfFXRBvs5QyqbnKCGYz2PAOI5mkFuUQeGZPLRUdqIFUpS4SF9nOpp
- cmEcTHs0/g//1ObGJIAI8w5oBkS1K3Vvd2qjg6gHc1MXFqlT6WSTwmKQTdkwarwuKxWz
- v4VyIbE1zpFfnZStcs0I7J3dLVwspN3ob/2FIsXtXVwLzpaMEaQRscN7IkhB0T1RDER9
- bLZQ==
+X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=Vwgmj0Ky4nDkp0/xfEpU5ucFljAp8Gsy/3JtqoHCDJ+T8pXKdqTS/6CIyCS6opd1AwIBOJIDm3cYZUmVk636LYxWTYHxJ79zM50QxuSuWDIZwJlywznn/6qqWArEjnopKRP3j2OEU2+PpwfG4t5osmIuuuJ8xIZlq5Tz0AEnIWDag6Fjx2zQ/+muySfXzeswe2DKeXiN1Z7b6sd8KxG6ZCH2+FvkS3VLVTnvSu0q2RFwEhPGmin2Ukhi0lIsmNBm072iGGOwVYl4Ni0sAOd0eu9WjGoWwIIcK7FFicLVV1v1Sn0rjiEfO2Q1ZiPjWaTvCU/PrtBo9OujuSfW5h04oQ==;
+ s=purelymail2; d=purelymail.com; v=1;
+ bh=VpmwpaWIbS+u+/DOD4DHxISOS+PV2pm7ZzpWNfVDu/4=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=VXiil5tH
-Subject: [Buildroot] [PATCH] package/tinyxml: add patch for CVE-2023-34194
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail2 header.b=Vwgmj0Ky
+X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
+Subject: [Buildroot] [PATCH] package/jose: security bump to version 14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -107,79 +78,219 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Titouan Christophe via buildroot <buildroot@buildroot.org>
-Reply-To: Titouan Christophe <titouan.christophe@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This fixes the following vulnerability:
-- CVE-2023-34194:
-    StringEqual in TiXmlDeclaration::Parse in tinyxmlparser.cpp in TinyXML
-    through 2.6.2 has a reachable assertion (and application exit) via a
-    crafted XML document with a '\0' located after whitespace.
+Jose-13 fixed the following security issue:
 
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+- CVE-2023-50967: latchset jose through version 11 allows attackers to cause
+  a denial of service (CPU consumption) via a large p2c (aka PBES2 Count)
+  value.
+  https://github.com/latchset/jose/issues/151
+
+In addition, jose-14 worked around another DoS issue related to
+decompression:
+https://github.com/latchset/jose/pull/157
+
+Drop now upstreamed patches:
+
+- 0001-lib-hsh.c-rename-hsh-local-variable.patch: Upstream as of
+  https://github.com/latchset/jose/commit/3d5b287243f87ce0243b23abd690d86c41fc499c
+
+- 0002-man-add-option-to-skip-building-man-pages.patch: Upstream after
+  getting reworked to use -Ddocs=disabled as of
+  https://github.com/latchset/jose/commit/786b426df018edf30a53e2d82155df20d13047c1
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...e-assertion-via-crafted-XML-document.patch | 33 +++++++++++++++++++
- package/tinyxml/tinyxml.mk                    |  3 ++
- 2 files changed, 36 insertions(+)
- create mode 100644 package/tinyxml/0002-Avoid-reachable-assertion-via-crafted-XML-document.patch
+ ...-lib-hsh.c-rename-hsh-local-variable.patch | 71 -------------------
+ ...dd-option-to-skip-building-man-pages.patch | 64 -----------------
+ package/jose/jose.hash                        |  2 +-
+ package/jose/jose.mk                          |  4 +-
+ 4 files changed, 3 insertions(+), 138 deletions(-)
+ delete mode 100644 package/jose/0001-lib-hsh.c-rename-hsh-local-variable.patch
+ delete mode 100644 package/jose/0002-man-add-option-to-skip-building-man-pages.patch
 
-diff --git a/package/tinyxml/0002-Avoid-reachable-assertion-via-crafted-XML-document.patch b/package/tinyxml/0002-Avoid-reachable-assertion-via-crafted-XML-document.patch
-new file mode 100644
-index 0000000000..802d964e15
---- /dev/null
-+++ b/package/tinyxml/0002-Avoid-reachable-assertion-via-crafted-XML-document.patch
-@@ -0,0 +1,33 @@
-+From: Guilhem Moulin <guilhem@debian.org>
-+Date: Sat, 30 Dec 2023 14:15:54 +0100
-+Subject: Avoid reachable assertion via crafted XML document with a '\0'
-+ located after whitespace
-+
-+Upstream: https://salsa.debian.org/debian/tinyxml/-/raw/2366e1f23d059d4c20c43c54176b6bd78d6a83fc/debian/patches/CVE-2023-34194.patch
-+
-+CVE: CVE-2023-34194
-+
-+Bug: https://www.forescout.com/resources/sierra21-vulnerabilities
-+Bug-Debian: https://bugs.debian.org/1059315
-+Bug-Debian: https://security-tracker.debian.org/tracker/CVE-2023-34194
-+Bug-Debian: https://security-tracker.debian.org/tracker/CVE-2023-40462
-+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-+---
-+ tinyxmlparser.cpp | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/src/tinyxmlparser.cpp b/src/tinyxmlparser.cpp
-+index 8aa0dfa..1601962 100644
-+--- a/src/tinyxmlparser.cpp
-++++ b/src/tinyxmlparser.cpp
-+@@ -1606,6 +1606,10 @@ const char* TiXmlDeclaration::Parse( const char* p, TiXmlParsingData* data, TiXm
-+ 		}
-+ 
-+ 		p = SkipWhiteSpace( p, _encoding );
-++		if ( !p || !*p )
-++		{
-++			break;
-++		}
-+ 		if ( StringEqual( p, "version", true, _encoding ) )
-+ 		{
-+ 			TiXmlAttribute attrib;
-diff --git a/package/tinyxml/tinyxml.mk b/package/tinyxml/tinyxml.mk
-index c6150b13fe..2f57b8a4f1 100644
---- a/package/tinyxml/tinyxml.mk
-+++ b/package/tinyxml/tinyxml.mk
-@@ -17,4 +17,7 @@ TINYXML_CPE_ID_VERSION = $(firstword $(subst _,$(space),$(TINYXML_VERSION)))
- # 0001-In-stamp-always-advance-the-pointer-if-p-0xef.patch
- TINYXML_IGNORE_CVES += CVE-2021-42260
+diff --git a/package/jose/0001-lib-hsh.c-rename-hsh-local-variable.patch b/package/jose/0001-lib-hsh.c-rename-hsh-local-variable.patch
+deleted file mode 100644
+index 0bd259ad8b..0000000000
+--- a/package/jose/0001-lib-hsh.c-rename-hsh-local-variable.patch
++++ /dev/null
+@@ -1,71 +0,0 @@
+-From 591fc6da944ffc29936e0019b2bc225ddc81dbba Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Mon, 20 Nov 2017 22:48:33 +0100
+-Subject: [PATCH] lib/hsh.c: rename hsh local variable
+-
+-The hsh local variable name conflicts with the function prototype of
+-hsh() in hsh.h, causing the following build issues with old compilers
+-(gcc 4.7):
+-
+-hsh.c: In function 'hsh':
+-hsh.c:28:21: error: declaration of 'hsh' shadows a global declaration [-Werror=shadow]
+-hsh.c:26:1: error: shadowed declaration is here [-Werror=shadow]
+-hsh.c: In function 'hsh_buf':
+-hsh.c:60:21: error: declaration of 'hsh' shadows a global declaration [-Werror=shadow]
+-hsh.c:26:1: error: shadowed declaration is here [-Werror=shadow]
+-
+-Therefore, we rename this local variable to _hsh.
+-
+-Submitted-upstream: https://github.com/latchset/jose/pull/51
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- lib/hsh.c | 12 ++++++------
+- 1 file changed, 6 insertions(+), 6 deletions(-)
+-
+-diff --git a/lib/hsh.c b/lib/hsh.c
+-index c59a95f..a2a891b 100644
+---- a/lib/hsh.c
+-+++ b/lib/hsh.c
+-@@ -25,7 +25,7 @@
+- json_t *
+- hsh(jose_cfg_t *cfg, const char *alg, const void *data, size_t dlen)
+- {
+--    jose_io_auto_t *hsh = NULL;
+-+    jose_io_auto_t *_hsh = NULL;
+-     jose_io_auto_t *enc = NULL;
+-     jose_io_auto_t *buf = NULL;
+-     char b[1024] = {};
+-@@ -33,8 +33,8 @@ hsh(jose_cfg_t *cfg, const char *alg, const void *data, size_t dlen)
+- 
+-     buf = jose_io_buffer(cfg, b, &l);
+-     enc = jose_b64_enc_io(buf);
+--    hsh = hsh_io(cfg, alg, enc);
+--    if (!buf || !enc || !hsh || !hsh->feed(hsh, data, dlen) || !hsh->done(hsh))
+-+    _hsh = hsh_io(cfg, alg, enc);
+-+    if (!buf || !enc || !_hsh || !_hsh->feed(_hsh, data, dlen) || !_hsh->done(_hsh))
+-         return NULL;
+- 
+-     return json_stringn(b, l);
+-@@ -57,7 +57,7 @@ hsh_buf(jose_cfg_t *cfg, const char *alg,
+-         const void *data, size_t dlen, void *hash, size_t hlen)
+- {
+-     const jose_hook_alg_t *a = NULL;
+--    jose_io_auto_t *hsh = NULL;
+-+    jose_io_auto_t *_hsh = NULL;
+-     jose_io_auto_t *buf = NULL;
+- 
+-     a = jose_hook_alg_find(JOSE_HOOK_ALG_KIND_HASH, alg);
+-@@ -71,8 +71,8 @@ hsh_buf(jose_cfg_t *cfg, const char *alg,
+-         return SIZE_MAX;
+- 
+-     buf = jose_io_buffer(cfg, hash, &hlen);
+--    hsh = a->hash.hsh(a, cfg, buf);
+--    if (!buf || !hsh || !hsh->feed(hsh, data, dlen) || !hsh->done(hsh))
+-+    _hsh = a->hash.hsh(a, cfg, buf);
+-+    if (!buf || !_hsh || !_hsh->feed(_hsh, data, dlen) || !_hsh->done(_hsh))
+-         return SIZE_MAX;
+- 
+-     return hlen;
+--- 
+-2.13.6
+-
+diff --git a/package/jose/0002-man-add-option-to-skip-building-man-pages.patch b/package/jose/0002-man-add-option-to-skip-building-man-pages.patch
+deleted file mode 100644
+index 3a5ad1eadc..0000000000
+--- a/package/jose/0002-man-add-option-to-skip-building-man-pages.patch
++++ /dev/null
+@@ -1,64 +0,0 @@
+-From 506132d3edc8d062f65fdacf007a15613d27e5c5 Mon Sep 17 00:00:00 2001
+-From: Eneas U de Queiroz <cotequeiroz@gmail.com>
+-Date: Wed, 6 Apr 2022 09:49:48 -0300
+-Subject: [PATCH] man: add option to skip building man pages
+-
+-Add a 'skip_manpages' option to meson, so that man pages do not get
+-built.
+-
+-Signed-off-by: Eneas U de Queiroz <cotequeiroz@gmail.com>
+-[Retrieved from: https://github.com/latchset/jose/pull/115]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- meson.build       | 24 +++++++++++++-----------
+- meson_options.txt |  1 +
+- 2 files changed, 14 insertions(+), 11 deletions(-)
+- create mode 100644 meson_options.txt
+-
+-diff --git a/meson.build b/meson.build
+-index 1edfbe7..9b40efb 100644
+---- a/meson.build
+-+++ b/meson.build
+-@@ -37,7 +37,6 @@ zlib = dependency('zlib')
+- threads = dependency('threads')
+- jansson = dependency('jansson', version: '>=2.10')
+- libcrypto = dependency('libcrypto', version: '>=1.0.2')
+--a2x = find_program('a2x', required: false)
+- 
+- mans = []
+- 
+-@@ -63,14 +62,17 @@ pkg.generate(
+-   requires: 'jansson',
+- )
+- 
+--if a2x.found()
+--  foreach m : mans
+--    custom_target(m.split('/')[-1], input: m + '.adoc', output: m.split('/')[-1],
+--      command: [a2x, '-f', 'manpage', '-D', meson.current_build_dir(), '@INPUT@'],
+--      install_dir: join_paths(get_option('mandir'), 'man' + m.split('.')[-1]),
+--      install: true
+--    )
+--  endforeach
+--else
+--  warning('Will not build man pages due to missing dependencies!')
+-+if not get_option('skip_manpages')
+-+  a2x = find_program('a2x', required: false)
+-+  if a2x.found()
+-+    foreach m : mans
+-+      custom_target(m.split('/')[-1], input: m + '.adoc', output: m.split('/')[-1],
+-+        command: [a2x, '-f', 'manpage', '-D', meson.current_build_dir(), '@INPUT@'],
+-+        install_dir: join_paths(get_option('mandir'), 'man' + m.split('.')[-1]),
+-+        install: true
+-+      )
+-+    endforeach
+-+  else
+-+    warning('Will not build man pages due to missing dependencies!')
+-+  endif
+- endif
+-diff --git a/meson_options.txt b/meson_options.txt
+-new file mode 100644
+-index 0000000..0885515
+---- /dev/null
+-+++ b/meson_options.txt
+-@@ -0,0 +1 @@
+-+option('skip_manpages', type: 'boolean', value: false, description: 'Do not build manpages')
+diff --git a/package/jose/jose.hash b/package/jose/jose.hash
+index 128d26d163..0bee7f46e8 100644
+--- a/package/jose/jose.hash
++++ b/package/jose/jose.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  e272afe7717e22790c383f3164480627a567c714ccb80c1ee96f62c9929d8225  jose-11.tar.xz
++sha256  cee329ef9fce97c4c025604a8d237092f619aaa9f6d35fdf9d8c9052bc1ff95b  jose-14.tar.xz
+ sha256  09e8a9bcec8067104652c168685ab0931e7868f9c8284b66f5ae6edae5f1130b  COPYING
+diff --git a/package/jose/jose.mk b/package/jose/jose.mk
+index 723ebe8bb9..9fd9d1dcaa 100644
+--- a/package/jose/jose.mk
++++ b/package/jose/jose.mk
+@@ -4,13 +4,13 @@
+ #
+ ################################################################################
  
-+# 0002-Avoid-reachable-assertion-via-crafted-XML-document.patch
-+TINYXML_IGNORE_CVES += CVE-2023-34194
-+
- $(eval $(autotools-package))
+-JOSE_VERSION = 11
++JOSE_VERSION = 14
+ JOSE_SOURCE = jose-$(JOSE_VERSION).tar.xz
+ JOSE_SITE = https://github.com/latchset/jose/releases/download/v$(JOSE_VERSION)
+ JOSE_LICENSE = Apache-2.0
+ JOSE_LICENSE_FILES = COPYING
+ JOSE_INSTALL_STAGING = YES
+ JOSE_DEPENDENCIES = host-pkgconf zlib jansson openssl
+-JOSE_CONF_OPTS = -Dskip_manpages=true
++JOSE_CONF_OPTS = -Ddocs=disabled
+ 
+ $(eval $(meson-package))
 -- 
-2.50.0
+2.39.5
 
 _______________________________________________
 buildroot mailing list
