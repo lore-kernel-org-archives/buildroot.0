@@ -4,76 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF72AC83038
-	for <buildroot@archiver.kernel.org>; Tue,  1 Jul 2025 19:37:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FF52C7EE30
+	for <buildroot@archiver.kernel.org>; Tue,  1 Jul 2025 19:44:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A12E66121B;
-	Tue,  1 Jul 2025 19:37:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 51FD6611DA;
+	Tue,  1 Jul 2025 19:44:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Nms67kIoOrbu; Tue,  1 Jul 2025 19:37:17 +0000 (UTC)
+ id R1D1OTzeRnki; Tue,  1 Jul 2025 19:44:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4A77561207
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4CCB36072F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4A77561207;
-	Tue,  1 Jul 2025 19:37:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 10F1F128
- for <buildroot@buildroot.org>; Tue,  1 Jul 2025 19:37:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4CCB36072F;
+	Tue,  1 Jul 2025 19:44:29 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 04A58179
+ for <buildroot@buildroot.org>; Tue,  1 Jul 2025 19:44:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 030C784366
- for <buildroot@buildroot.org>; Tue,  1 Jul 2025 19:37:12 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DF45C6072F
+ for <buildroot@buildroot.org>; Tue,  1 Jul 2025 19:44:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id x97w1Gl78Ico for <buildroot@buildroot.org>;
- Tue,  1 Jul 2025 19:37:09 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.131;
- helo=smtpcmd12131.aruba.it;
- envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 91069842CB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 91069842CB
-Received: from smtpcmd12131.aruba.it (smtpcmd12131.aruba.it [62.149.156.131])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 91069842CB
- for <buildroot@buildroot.org>; Tue,  1 Jul 2025 19:37:07 +0000 (UTC)
-Received: from localhost.localdomain ([84.33.84.190])
- by Aruba SMTP with ESMTPSA
- id WgmvuUCdh8eo9WgmwuM2Fw; Tue, 01 Jul 2025 21:37:06 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id s8J7Lb9Zat4Z for <buildroot@buildroot.org>;
+ Tue,  1 Jul 2025 19:44:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A3A156083A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A3A156083A
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A3A156083A
+ for <buildroot@buildroot.org>; Tue,  1 Jul 2025 19:44:26 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:656e:cf44:475c:a8d2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 676F0B0053E;
+ Tue,  1 Jul 2025 21:44:18 +0200 (CEST)
 To: buildroot@buildroot.org
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Christian Stewart <christian@aperture.us>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Tue,  1 Jul 2025 21:37:03 +0200
-Message-Id: <20250701193705.761121-2-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250701193705.761121-1-giulio.benetti@benettiengineering.com>
-References: <20250701193705.761121-1-giulio.benetti@benettiengineering.com>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Julien Olivain <ju.o@free.fr>
+Date: Tue,  1 Jul 2025 21:44:09 +0200
+Message-ID: <20250701194411.13153-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.50.0
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfNM7FXeX9BVs6OmrdUjdkvdjK5vDf7NoZXFNYfM0U2YLAHoAss4K4ZJsfxSkMvFqZasYpGxZTg8T/OmMlXzJ6ZdvGaf8deaxjAc18aq/vz30SmpUwKMI
- wrQloefsk39aEkxmQq3tLjIO8Dh96KxgtVZU3QQXXz/Mla15HOrSaLGuYjQlcj2TTMtRNKtmYEoJdR6/F2jaYJ43Hw2uKtiOgz3hqhzRJr0nQvpTihfvQ217
- kIwfc9md7sbUbbYV9lAuqE1Tgt2TCDZLoJ2cj6hmuzy+zq/rfJgtBxesXRt9dUENadkxpv0S24od7ui4nwum1506RIhtDPvJEgVcEt7ORyWeeKsfkhzeFNbb
- qB8/jaJA
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1751398626; bh=EDPv8k7hfyFwj5d5LueOITKZ7q+wzFT+tSDzqOt5bcw=;
- h=From:To:Subject:Date:MIME-Version;
- b=nwKcewXnQFupJHHTDd+AsFLi/Q9PlOXEJDt2iuuOHyOWnuKl3vSHVg5FItLU6k2vC
- zOJkVVnPid2EmEM10fLMybEYB5MC1dJN6ci5HnLHEmcZX9/ABXGlmGPDLtj8QivWCg
- wJ5IPoKtJSuKeF+fJoxsglQBYWumQ8txO4V9+HwKBeq4lIYGrJ+PIPRH4Zs0ApFewj
- ITpzVQ8+c3WwxNFg1pCLRLGWluwh3FSLhqdAY129w1NdEp7PRweYoqdRi2aqrAOATP
- wSrqePY8SgId53nBnW8x0zVkHR49RXpHr1ZsLGLEiOWBNd4QX1QOXcpCh2jVR4rl8O
- PohF19CZc3iyw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1751399063;
+ bh=+le69U7xLKDLJm++h5+l1XK0STPxFcDMyVYMwzct2+o=;
+ h=From:To:Cc:Subject:Date:From;
+ b=bnP483/nGLC3qhdH0TQWqjUW+p2fRXI9uLnA0FPIZHeyzAU7TisimZs8vfXLt+eCO
+ LBVWI245thwroIJeSkCFMs8+BxOfj/qC29LYAckVTZcJK11sRUFg20wna9odtblh70
+ t+1Jy8weK+r9gTCRdmIltF68QLOtLAcfkjw/IoI9mYRwS/u0iG8PJ7oY3ntUNoICKD
+ sTgzwblnzBfWo1DiZicSaZDtPTSN2Q3CUekNFEFDRcLFMRZyIV2WegVgN2ruFBYv3A
+ pmBvrV5Qvze22D+/2LmtbYiJKalMJy6Fxvwxa08Slt87NtzHGN/vt6t4OLjEjQwZwT
+ C0OJQdpiZBiuw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=nwKcewXn
-Subject: [Buildroot] [PATCH] package/rtl8723bu: fix build failure with Linux
- 6.15
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=bnP483/n
+Subject: [Buildroot] [PATCH v2 1/3] arch/Config.in: introduce
+ BR2_ARCH_NEEDS_GCC_AT_LEAST_16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,69 +80,88 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Benetti Engineering just took over Larry Finger(lwfinger)'s repository
-rtl8723bu since Larry unfortunately passed away[0](RIP) and there are
-pending PRs that will never be checked as stated here[1]. So basically move
-github user to benetti-engineering-sas and update version with latest that
-fixes build failure with Linux version 6.15. And of course let's update
-package's URL due to the moving.
+gcc 15 was introduced in Buildroot in commit [1].
 
-[0]: https://lwn.net/Articles/979419/
-[1]: https://github.com/lwfinger/rtl8723bu/issues/206
+In Buildroot, a user creates a build configuration in Kconfig
+menus by selecting the CPU architecture and CPU first, then
+a toolchain that support this CPU, then packages and system
+configuration.
 
-Fixes:
-still not occured.
+To make sure those Kconfig menus and choices behave correctly in that
+order, we use a logic in which a CPU selects the Kconfig symbol
+BR2_ARCH_NEEDS_GCC_AT_LEAST_N (with N being the needed gcc version).
+Then, to make sure unsupported gcc version are hidden for a selected
+CPU, a gcc version N has in fact a "depends on
+!BR2_ARCH_NEEDS_GCC_AT_LEAST_(N+1)". For example, Cortex-A710 needs
+at least gcc 12. See [2] and [3].
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+This means that when we introduce the latest gcc version with this
+logic in place, we already need this BR2_ARCH_NEEDS_GCC_AT_LEAST_(N+1)
+symbol defined. Doing so is desirable to avoid forgetting to add it
+later. See for example commit [4], adding those missing dependencies
+for gcc 13 and 14.
+
+Since in Buildroot we currently keep 3 actively maintained gcc
+versions, adding a new gcc version N in Buildroot should:
+- add the BR2_ARCH_NEEDS_GCC_AT_LEAST_(N+1) symbol
+- add package/gcc N
+- switch the default gcc from N-2 to N-1
+- drop package/gcc N-3
+
+Then, once this new gcc N is added, new CPUs supported by that version
+can be introduced, by selecting BR2_ARCH_NEEDS_GCC_AT_LEAST_N.
+
+All this logic will be ready for future gcc versions. This was also
+described in commit log [5].
+
+This commit simply adds the BR2_ARCH_NEEDS_GCC_AT_LEAST_16 symbol.
+
+It is worth mentioning that, at the time of this commit, gcc 16 is not
+released yet. This release number 16 is already known, though. See [6].
+
+For reference, this was discussed in [7].
+
+[1] https://gitlab.com/buildroot.org/buildroot/-/commit/75891397abe60dbe3d82a1ec39654ff81d1b1406
+[2] https://gitlab.com/buildroot.org/buildroot/-/blob/2025.05/arch/Config.in.arm#L514
+[3] https://gitlab.com/buildroot.org/buildroot/-/blob/2025.05/package/gcc/Config.in.host#L27
+[4] https://gitlab.com/buildroot.org/buildroot/-/commit/6f231d3003502282710a0da7ecd98344ec868095
+[5] https://gitlab.com/buildroot.org/buildroot/-/commit/eab17d763c6ca1bf74749e3a793fd044b5e6d457
+[6] https://gcc.gnu.org/gcc-16/changes.html
+[7] https://lore.kernel.org/buildroot/877c0v1sn1.fsf@dell.be.48ers.dk/T/#m45688e25632401029e4c0d989072e1d3e1a59854
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/rtl8723bu/Config.in      | 2 +-
- package/rtl8723bu/rtl8723bu.hash | 2 +-
- package/rtl8723bu/rtl8723bu.mk   | 4 ++--
- 3 files changed, 4 insertions(+), 4 deletions(-)
+Changes v1 -> v2:
+- mention buildroot commit eab17d76 in commit log, which already
+  described this topic.
+---
+ arch/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/rtl8723bu/Config.in b/package/rtl8723bu/Config.in
-index 7c624fc4d4..70d597d23e 100644
---- a/package/rtl8723bu/Config.in
-+++ b/package/rtl8723bu/Config.in
-@@ -5,7 +5,7 @@ config BR2_PACKAGE_RTL8723BU
- 	help
- 	  rtl8723bu wifi driver
+diff --git a/arch/Config.in b/arch/Config.in
+index 6b54c65df9..fa8fe0f5ac 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -311,6 +311,10 @@ config BR2_ARCH_NEEDS_GCC_AT_LEAST_15
+ 	bool
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_14
  
--	  https://github.com/lwfinger/rtl8723bu
-+	  https://github.com/benetti-engineering-sas/rtl8723bu
- 
- comment "rtl8723bu needs a Linux kernel to be built"
- 	depends on !BR2_s390x
-diff --git a/package/rtl8723bu/rtl8723bu.hash b/package/rtl8723bu/rtl8723bu.hash
-index 236b9a6726..c0216dd1eb 100644
---- a/package/rtl8723bu/rtl8723bu.hash
-+++ b/package/rtl8723bu/rtl8723bu.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256  357c78d6f86794d96530155f9ba102e56421efb6fa43eb33daa0fb57354e8215  rtl8723bu-af3a408d6399655b0db23c2c8720436ca725ca47.tar.gz
-+sha256  e50ce66539a5216b91460b8278606874040f3c21ce8afbe1f5e84595dafa6868  rtl8723bu-523cb38e4c62bb181d6b95024884e938835cf8cf.tar.gz
-diff --git a/package/rtl8723bu/rtl8723bu.mk b/package/rtl8723bu/rtl8723bu.mk
-index 0ce8b1afad..05447ecef9 100644
---- a/package/rtl8723bu/rtl8723bu.mk
-+++ b/package/rtl8723bu/rtl8723bu.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--RTL8723BU_VERSION = af3a408d6399655b0db23c2c8720436ca725ca47
--RTL8723BU_SITE = $(call github,lwfinger,rtl8723bu,$(RTL8723BU_VERSION))
-+RTL8723BU_VERSION = 523cb38e4c62bb181d6b95024884e938835cf8cf
-+RTL8723BU_SITE = $(call github,benetti-engineering-sas,rtl8723bu,$(RTL8723BU_VERSION))
- RTL8723BU_LICENSE = GPL-2.0, proprietary (*.bin firmware blobs)
- 
- RTL8723BU_MODULE_MAKE_OPTS = \
++config BR2_ARCH_NEEDS_GCC_AT_LEAST_16
++	bool
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_15
++
+ # The following string values are defined by the individual
+ # Config.in.$ARCH files
+ config BR2_ARCH
 -- 
-2.39.5
+2.50.0
 
 _______________________________________________
 buildroot mailing list
