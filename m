@@ -4,42 +4,42 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31302C7EE30
-	for <buildroot@archiver.kernel.org>; Tue,  1 Jul 2025 19:08:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50C81C83038
+	for <buildroot@archiver.kernel.org>; Tue,  1 Jul 2025 19:08:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0544D611E8;
-	Tue,  1 Jul 2025 19:08:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 01A3361204;
+	Tue,  1 Jul 2025 19:08:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id k9w0CRfpzfB2; Tue,  1 Jul 2025 19:08:51 +0000 (UTC)
+ id A5rJyV8oS6fu; Tue,  1 Jul 2025 19:08:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3796560DCE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A0DB0611EF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3796560DCE;
-	Tue,  1 Jul 2025 19:08:51 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 5E52EB8F
- for <buildroot@buildroot.org>; Tue,  1 Jul 2025 19:08:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A0DB0611EF;
+	Tue,  1 Jul 2025 19:08:52 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4D9D5179
+ for <buildroot@buildroot.org>; Tue,  1 Jul 2025 19:08:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4CC30401D6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7D18C40B26
  for <buildroot@buildroot.org>; Tue,  1 Jul 2025 19:08:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 41P4csnBFvvr for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VXsHEA6vF6-V for <buildroot@buildroot.org>;
  Tue,  1 Jul 2025 19:08:46 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.132;
  helo=smtpcmd12132.aruba.it;
  envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0254340076
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0254340076
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 02A7341740
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 02A7341740
 Received: from smtpcmd12132.aruba.it (smtpcmd12132.aruba.it [62.149.156.132])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0254340076
- for <buildroot@buildroot.org>; Tue,  1 Jul 2025 19:08:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 02A7341740
+ for <buildroot@buildroot.org>; Tue,  1 Jul 2025 19:08:45 +0000 (UTC)
 Received: from localhost.localdomain ([84.33.84.190])
  by Aruba SMTP with ESMTPSA
- id WgLSuTx4S8eo9WgLSuLwxS; Tue, 01 Jul 2025 21:08:43 +0200
+ id WgLSuTx4S8eo9WgLTuLwxg; Tue, 01 Jul 2025 21:08:43 +0200
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
 Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
@@ -47,8 +47,8 @@ Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
  Kris Bahnsen <kris@embeddedTS.com>,
  Louis Aussedat <aussedat.louis@gmail.com>,
  Sergey Matyukevich <geomatsi@gmail.com>
-Date: Tue,  1 Jul 2025 21:08:37 +0200
-Message-Id: <20250701190841.714026-2-giulio.benetti@benettiengineering.com>
+Date: Tue,  1 Jul 2025 21:08:39 +0200
+Message-Id: <20250701190841.714026-4-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250701190841.714026-1-giulio.benetti@benettiengineering.com>
 References: <20250701190841.714026-1-giulio.benetti@benettiengineering.com>
@@ -59,22 +59,23 @@ X-CMAE-Envelope: MS4xfPaetpRX+Y9vzvURDsmOV4hcOQ/rzwSKlnxnMojitVJLGI73DfFBWuqTnjk
  551DdfuINBRJN/R7m0+0ThEpSXT/DJ0kbHf7MejDzv/4CVVQ1QxkqK3upQnKk6UC7hoghr0m
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1751396923; bh=H4wslrLrNMtQWPv/SECWcfLfur/bUFKp7Oj5kRXy368=;
+ t=1751396923; bh=eTimHLdyIgjfJ+FGKQOmnfOaX7F4g6SMpMq/D+5Wfh8=;
  h=From:To:Subject:Date:MIME-Version;
- b=baEMKCunyEp/zpumZTs0pnVjQqdmPrmGoVS0QliVAHyONA/ieXwDdpX3k+1MzpAJg
- YgYREyE1PFU2mavUp/I3NVbDfnWsfBhyCBd+i6Fm3rPQRg3cS1oc56CEg2IIqVLZi+
- AQK6J8tKLUMDvHMnZ7ElxPsz9dP4Gx9SpLhu+Z/xWHZzcG5xmkibztkHRBVJImKHsI
- 9dxJsOosxTeDhCP9vyY+teqDyp/lk0ko8fP8pz/d5TrMCi1GPL2sYpvYo5aK9+9jwv
- qVjPnuJTSfRe+DmLzuR1AcWpieFCCZmOuLSWtOZuvyjKnzpBZlMrct9JwGEv0aQIEs
- tC38s5QOQ/Nzw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=ZsPFOT/T9TqyMQx9KqGniMAa1VoGVLCevLAf77ExnePVxXmv2ARCfpnDyBQulx7fz
+ rU2baU5TQ3dDGzga5cRieoXgrBjrDfj5tSOuQNObnsjYNoUo3N0E73syL+K2LS+FTW
+ JydmwsdbA0/sUCRsTpAPvv3CixHpx5dC/H9ndB1kuzS2wMDJNd6UJRVMVOOCAH1Pzp
+ G/stLyVi5selxTIgRSu6B1IMWnBQxfVGp9pKKviWJz9BJ5YWpNDSCK61WeySw1H8Om
+ KELq7tSJ4lW8RJ7fpaQoUmkMjorT5CFmYLi7i7bonTUX+M2NnN770x5tidvW2zmiDZ
+ xgCZN/SmLyVbA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=baEMKCun
-Subject: [Buildroot] [PATCH] package/rtl8189fs: bump to version 2025-06-21
+ header.s=a1 header.b=ZsPFOT/T
+Subject: [Buildroot] [PATCH] package/rtl8189es: fix build failure with Linux
+ 6.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,38 +92,61 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-With this version we can build with Linux 6.14.
+Add local patch pending upstream to fix build failure with Linux 6.15
 
 Fixes:
 still not occured.
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/rtl8189fs/rtl8189fs.hash | 2 +-
- package/rtl8189fs/rtl8189fs.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../0001-Fix-build-with-Linux-6.15.patch      | 38 +++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+ create mode 100644 package/xr819-xradio/0001-Fix-build-with-Linux-6.15.patch
 
-diff --git a/package/rtl8189fs/rtl8189fs.hash b/package/rtl8189fs/rtl8189fs.hash
-index eedbb46bea..1e1691e535 100644
---- a/package/rtl8189fs/rtl8189fs.hash
-+++ b/package/rtl8189fs/rtl8189fs.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  40a0890d3ea2d6d2b58748a9e05e20a14942c0f7652a0178e7466e8279106345  rtl8189fs-3f34f380715b88e4a3ef049b3a60e2fc69ccc9bd.tar.gz
-+sha256  8209950e00716c4731675bbf5ee6ee8d54b010e70f86245c70d5c85fddee5694  rtl8189fs-d0f15f392570499f3e48f6d157c89cadf393a739.tar.gz
-diff --git a/package/rtl8189fs/rtl8189fs.mk b/package/rtl8189fs/rtl8189fs.mk
-index 800956a927..abd159f22f 100644
---- a/package/rtl8189fs/rtl8189fs.mk
-+++ b/package/rtl8189fs/rtl8189fs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RTL8189FS_VERSION = 3f34f380715b88e4a3ef049b3a60e2fc69ccc9bd
-+RTL8189FS_VERSION = d0f15f392570499f3e48f6d157c89cadf393a739
- RTL8189FS_SITE = $(call github,jwrdegoede,rtl8189ES_linux,$(RTL8189FS_VERSION))
- RTL8189FS_LICENSE = GPL-2.0
- 
+diff --git a/package/xr819-xradio/0001-Fix-build-with-Linux-6.15.patch b/package/xr819-xradio/0001-Fix-build-with-Linux-6.15.patch
+new file mode 100644
+index 0000000000..ce0b3f3908
+--- /dev/null
++++ b/package/xr819-xradio/0001-Fix-build-with-Linux-6.15.patch
+@@ -0,0 +1,38 @@
++From 6e170c96bf50a1088d5dd85fdfd67dc7f83e4eb9 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Tue, 1 Jul 2025 20:51:40 +0200
++Subject: [PATCH] Fix build with Linux 6.15
++
++Commit:
++https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8fa7292fee5c5240402371ea89
++ab285ec856c916
++drops del_timer_sync() in favor of timer_delete_sync() so let's backport
++locally functions del_timer_sync() when Linux version is 6.15.0 or later.
++
++Upstream: https://github.com/fifteenhex/xradio/pull/26
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ xradio.h | 7 +++++++
++ 1 file changed, 7 insertions(+)
++
++diff --git a/xradio.h b/xradio.h
++index e7f60f6..9506986 100644
++--- a/xradio.h
+++++ b/xradio.h
++@@ -47,6 +47,13 @@
++ #include "pm.h"
++ #include "fwio.h"
++ 
+++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 15, 0))
+++static inline int del_timer_sync(struct timer_list *timer)
+++{
+++	return timer_delete_sync(timer);
+++}
+++#endif
+++
++ /* #define ROC_DEBUG */
++ /* hidden ssid is only supported when separate probe resp IE
++    configuration is supported */
++-- 
++2.39.5
++
 -- 
 2.39.5
 
