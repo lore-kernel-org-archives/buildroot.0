@@ -4,101 +4,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70028C7EE30
-	for <buildroot@archiver.kernel.org>; Tue,  1 Jul 2025 19:07:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE98FC7EE30
+	for <buildroot@archiver.kernel.org>; Tue,  1 Jul 2025 19:08:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2186361185;
-	Tue,  1 Jul 2025 19:07:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7957C61185;
+	Tue,  1 Jul 2025 19:08:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MnQ2Vx_scLPf; Tue,  1 Jul 2025 19:07:10 +0000 (UTC)
+ id w7zsTvvgK11r; Tue,  1 Jul 2025 19:08:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3DBE360DCE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE35A60DD0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3DBE360DCE;
-	Tue,  1 Jul 2025 19:07:10 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id A5D20196
- for <buildroot@buildroot.org>; Tue,  1 Jul 2025 19:07:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AE35A60DD0;
+	Tue,  1 Jul 2025 19:08:48 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 50230179
+ for <buildroot@buildroot.org>; Tue,  1 Jul 2025 19:08:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A336F41740
- for <buildroot@buildroot.org>; Tue,  1 Jul 2025 19:07:08 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 424AE40B26
+ for <buildroot@buildroot.org>; Tue,  1 Jul 2025 19:08:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TsLd9FVJ9RAM for <buildroot@buildroot.org>;
- Tue,  1 Jul 2025 19:07:08 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::762; helo=mail-qk1-x762.google.com;
- envelope-from=git@jdknight.me; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CF2B140B26
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CF2B140B26
-Received: from mail-qk1-x762.google.com (mail-qk1-x762.google.com
- [IPv6:2607:f8b0:4864:20::762])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CF2B140B26
- for <buildroot@buildroot.org>; Tue,  1 Jul 2025 19:07:07 +0000 (UTC)
-Received: by mail-qk1-x762.google.com with SMTP id
- af79cd13be357-7d467a1d9e4so113359885a.0
- for <buildroot@buildroot.org>; Tue, 01 Jul 2025 12:07:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1751396826; x=1752001626;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=NleukThbgf/wspzV/j/0KW2r/KRK9oTNHAfnvnmn1W4=;
- b=wQqxp0BBCm5W7i9lgXJnnX3thb2bnIrUd7TlWxOdwUM0X6/d7mxXq65dMHq0RG6GxR
- 7y7rZyDA8Id92HWmmREiNG6AneNxNlhi4N5PnOisJ8tBZ8tcbNivYfA86b4+KKXJIXij
- gBhxhiobBHeRTPs7mUKBlLTi2Yik0MdwK/6VJYSEvHbW8mIVPsK5pJ8379ThhBGWaI/S
- aDj0ZqeAezzWnljzqgxv8DJrFlDfJ4gy4kmRXeRwVqCysY0llR69kg5E33KFPcFA+5Ku
- LTJjqwfHcU7CLCnJk8YGSs7rxB0rbE+5DA2anbNP1aizf0U9Jv/qQXEwUGYNZ2peMsUz
- vIjQ==
-X-Gm-Message-State: AOJu0Yy53tvs2UZPDMu/CBnFxpmSltpMgaGgZn9At21GMK6G9wqgcj6q
- hp9wIa6oiHRQ4HL4EASjZA3J5XdTrIhnZW5f6pkN9X7ZPlR690eNjUcmT2gjjnYvO9dFJv+9gJX
- AOKijfq8dtBNjBxJsL9ZTeJek3dkHjsL/fCJBdtaHoKSbw10=
-X-Gm-Gg: ASbGncuxE3knNxU9Vv5mQeMnoes7y3XEwpYfpu9g8Ga71jDE96UNFbCN5dO3sUyhngQ
- AUv4I6Huhw1sLWMHrDYdVz0ssUsI2ziPqgmB2BfSl/gGKwsvaQ/vlp0sZXepxS68Y1U59PIJWYR
- 1NCbReFvxssGroXgU3ifbhAKtoDKJ+tIJnU4yuwv0k1xRs49+cNU43k6cE5DsV9n+paQkVFXowK
- M1KvDZ4KZWVRJ3rDG/MXBLh3pZHlpAu5+LgpHJhSgIoW9ebr5/ZG5s0N0Jjw+jr+Ulr1EsXyOTM
- O/q4c8xf0bLDxAPiPprAP8lZ/1NZT8CwhJuyR3Ef9Xc=
-X-Google-Smtp-Source: AGHT+IHyMKG641UnwTWHMzwR95iZRuGO6kU5JgVKjz3VMzhMZHWMTqLg0QTpRu0bOu/ol72QWFRaUKkcaicm
-X-Received: by 2002:a05:620a:319c:b0:7d3:a7d9:1120 with SMTP id
- af79cd13be357-7d466e326e4mr643349485a.24.1751396826455; 
- Tue, 01 Jul 2025 12:07:06 -0700 (PDT)
-Received: from localhost.localdomain ([184.144.89.37])
- by smtp-relay.gmail.com with ESMTPS id
- a1e0cc1a2514c-884e8b93940sm109467241.8.2025.07.01.12.07.06
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 01 Jul 2025 12:07:06 -0700 (PDT)
-X-Relaying-Domain: jdknight.me
-From: James Knight <git@jdknight.me>
+ id ZYe1ICYuE_NS for <buildroot@buildroot.org>;
+ Tue,  1 Jul 2025 19:08:46 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.132;
+ helo=smtpcmd12132.aruba.it;
+ envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 04B3F417B3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 04B3F417B3
+Received: from smtpcmd12132.aruba.it (smtpcmd12132.aruba.it [62.149.156.132])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 04B3F417B3
+ for <buildroot@buildroot.org>; Tue,  1 Jul 2025 19:08:44 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba SMTP with ESMTPSA
+ id WgLSuTx4S8eo9WgLSuLwxJ; Tue, 01 Jul 2025 21:08:42 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Cc: James Knight <git@jdknight.me>
-Date: Tue,  1 Jul 2025 15:06:45 -0400
-Message-ID: <20250701190645.2205-1-git@jdknight.me>
-X-Mailer: git-send-email 2.49.0.windows.1
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ James Hilliard <james.hilliard1@gmail.com>,
+ Kris Bahnsen <kris@embeddedTS.com>,
+ Louis Aussedat <aussedat.louis@gmail.com>,
+ Sergey Matyukevich <geomatsi@gmail.com>
+Date: Tue,  1 Jul 2025 21:08:36 +0200
+Message-Id: <20250701190841.714026-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=jdknight-me.20230601.gappssmtp.com; s=20230601; t=1751396826; x=1752001626;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=NleukThbgf/wspzV/j/0KW2r/KRK9oTNHAfnvnmn1W4=;
- b=o/Lu1EL7AQCuPAuOFBOx7QII0+E5TanzuFIuiBcVdeRSEKLfVu1dSzkJTmP9vQySN5
- YgOkY2VvWJcSjH0jN6p6PHIZjSjgHe7TKwwVHboou6nD2PlRK9zRle+5hlFmoqhY2OlD
- kY7JSe6KM67k4d8vknGn5mDM4N1A5wFd8tyGKnLWh8xsenr5zUqKuKIedn1FayjN1Ckx
- bvkJ9BpKPtI29E0Cc3A1iPF+F8DiQ8Q4qknvszubvwZrEaC5ebuca/ZidLjUapIJ1DN0
- KMMpnviWxU2ioyW4zyYwf9UYlkgaiec3yhN8+2Ss3t5hWtnC2jWeomabjDHJfTCoJtL9
- Nbqg==
+X-CMAE-Envelope: MS4xfPzrS4coI34HITms5Cy6a98mkOlUx58IhsEL/P4V0PkvhLSSV6S0OLOQSsGu5m9Cu2VA0N6g4ZYS/EiGug4s7oAzEOFBfMNOtBZHsK9v4bCXTM/sWiHX
+ XuKnpvqrYE0lsLZ6XMhkc+4j5R1DviFMC7U+TU7vf2y7ib528B8ba10127rK6bFZ+QGkf9DiRiUsZGieCKamTzMPkaAp7tDc4szTQmpUxAOwCE0UK1Hxihlb
+ aJkbBlkhelsn+GAIFHRDQ36JmZTGZ63wsk5oetZv7lqhQYfHjC5o0ipN2INWnHykHb0TcAlcD+KEV472gdSIijuq/Els6hT9AT+zMJUQmMbDjubgcc/8A1bF
+ YkdTEQZI1YV9GmHhqq5QMpvR5P92CS8wycOhYWKF3Leb+NrmBakY87ZirWI2EWLiecHzDoXu
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1751396922; bh=JtIRz9sqOqZ86ApZ8pD+Ugtf3KjlYb0t7/js/vyr4bA=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=KmmluUrAt41hQZxx1/EdntsS2g6XwUYnINkD4uf1YjhSVbtMd8FpeiL0zRiIh4u66
+ oHYpkBGxh51uq27ktylsgaJ29gppxDIC/5tRZ88xQNkKmStvJTOpeV3VtntvfK71/g
+ 3TDE7Hepn4QJF+yYzMRCwBlzt/KhlrqhcDZAB9O3xgV3htLzaSMA/SxolXjRPRV+ek
+ T9zagy71zWoZ0OKPrHZ1SNX6ahwqDpKGyKhLx4lr0FnyZ6iKkar442Puhj3PiJCpYR
+ J6fecDj2TaIoIMlHeA4STQBJ5shauec6vBjjQBs8XQktSeKJvyDEqoqkKe9dpy09Sp
+ tNrW+YqejUZCQ==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=jdknight.me
+ dmarc=pass (p=none dis=none)
+ header.from=benettiengineering.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=jdknight-me.20230601.gappssmtp.com
- header.i=@jdknight-me.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=o/Lu1EL7
-Subject: [Buildroot] [PATCH 1/1] utils/test-pkg: stop on sigint
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=KmmluUrA
+Subject: [Buildroot] [PATCH] package/rtl8189es: bump to version 2025-06-21
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,58 +89,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-When SIGINT is issued for a package test run, it will abort the active
-toolchain run then proceed to the next. If a user is running the entire
-default toolchain set (`-a`), they can be required to invoke SIGINT
-multiple times to stop a run.
+With this version we can build with Linux 6.15.
 
-This commit uses a SIGINT hook to flag a shutdown state and stop further
-attempts to run anymore toolchain tests.
+Fixes:
+still not occured.
 
-Signed-off-by: James Knight <git@jdknight.me>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- utils/test-pkg | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ package/rtl8189es/rtl8189es.hash | 3 ++-
+ package/rtl8189es/rtl8189es.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/utils/test-pkg b/utils/test-pkg
-index 19d8713d6a..cd77964252 100755
---- a/utils/test-pkg
-+++ b/utils/test-pkg
-@@ -3,6 +3,11 @@ set -e
- 
- TOOLCHAINS_CSV='support/config-fragments/autobuild/toolchain-configs.csv'
- TEMP_CONF=""
-+abort=0
+diff --git a/package/rtl8189es/rtl8189es.hash b/package/rtl8189es/rtl8189es.hash
+index 28dedca8d3..c0c7a7a0ea 100644
+--- a/package/rtl8189es/rtl8189es.hash
++++ b/package/rtl8189es/rtl8189es.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256  85aa06192594d8e5885eaec72e3792c7816f714d682897ff0cbd0ba48a134dcc  rtl8189es-fcf2a5746e6fe11d9d71337ee5dac6cf43423a97.tar.gz
++sha256  a6a7455bb1533add9ebb3afa8634d85644bcdb76279020b663e6a3f03681aaff  rtl8189es-07f03cf721f5e0317012ece4159834327680ba8b.tar.gz
 +
-+do_abort() {
-+    abort=1
-+}
+diff --git a/package/rtl8189es/rtl8189es.mk b/package/rtl8189es/rtl8189es.mk
+index 49a6ddfd1a..b60b08fe34 100644
+--- a/package/rtl8189es/rtl8189es.mk
++++ b/package/rtl8189es/rtl8189es.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- do_clean() {
-     if [ -n "${TEMP_CONF}" ]; then
-@@ -67,7 +72,8 @@ main() {
-         esac
-     done
+-RTL8189ES_VERSION = fcf2a5746e6fe11d9d71337ee5dac6cf43423a97
++RTL8189ES_VERSION = 07f03cf721f5e0317012ece4159834327680ba8b
+ RTL8189ES_SITE = $(call github,jwrdegoede,rtl8189ES_linux,$(RTL8189ES_VERSION))
+ RTL8189ES_LICENSE = GPL-2.0
  
--    trap do_clean INT TERM HUP EXIT
-+    trap do_abort INT
-+    trap do_clean TERM HUP EXIT
- 
-     if [ -z "${cfg}" ]; then
-         pkg_br_name="${pkg//-/_}"
-@@ -139,6 +145,10 @@ main() {
-         (3) : $((nb_legal++)); printf "FAILED\n";;
-         (4) : $((nb_show++)); printf "FAILED\n";;
-         esac
-+
-+        if [ "${abort}" -eq 1 ]; then
-+            return 1
-+        fi
-     done
- 
-     printf "%d builds, %d skipped, %d build failed, %d legal-info failed, %d show-info failed\n" \
 -- 
-2.49.0.windows.1
+2.39.5
 
 _______________________________________________
 buildroot mailing list
