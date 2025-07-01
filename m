@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EF11C83038
-	for <buildroot@archiver.kernel.org>; Tue,  1 Jul 2025 21:41:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14C0CC7EE30
+	for <buildroot@archiver.kernel.org>; Tue,  1 Jul 2025 21:42:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2ED4541D9D;
-	Tue,  1 Jul 2025 21:41:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BD96B41D93;
+	Tue,  1 Jul 2025 21:42:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8sImEIA0vgIl; Tue,  1 Jul 2025 21:41:39 +0000 (UTC)
+ id nVDc2_8o75GM; Tue,  1 Jul 2025 21:42:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 24A6D41D93
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0799241D9A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 24A6D41D93;
-	Tue,  1 Jul 2025 21:41:39 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id EAA3E179
- for <buildroot@buildroot.org>; Tue,  1 Jul 2025 21:41:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0799241D9A;
+	Tue,  1 Jul 2025 21:42:23 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 14468179
+ for <buildroot@buildroot.org>; Tue,  1 Jul 2025 21:42:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D0698607C3
- for <buildroot@buildroot.org>; Tue,  1 Jul 2025 21:41:37 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 060AA60759
+ for <buildroot@buildroot.org>; Tue,  1 Jul 2025 21:42:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yqz145g43nn5 for <buildroot@buildroot.org>;
- Tue,  1 Jul 2025 21:41:37 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 264656075F
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 264656075F
- for <buildroot@buildroot.org>; Tue,  1 Jul 2025 21:41:37 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0FA8280260; Tue,  1 Jul 2025 21:41:37 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 1 Jul 2025 23:39:58 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5d5a4950b578fdc3c16bdb36e213f0e673584dea
-X-Git-Newrev: 533c0aac289a545d07efc69766227d71d2df9d80
-X-Patchwork-Hint: ignore
-Message-Id: <20250701214137.0FA8280260@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/daq: fix build with GCC14
+ id 7uHK7V28GrDe for <buildroot@buildroot.org>;
+ Tue,  1 Jul 2025 21:42:20 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2279B600D1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2279B600D1
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2279B600D1
+ for <buildroot@buildroot.org>; Tue,  1 Jul 2025 21:42:19 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id F15802003A4;
+ Tue,  1 Jul 2025 23:42:15 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 01 Jul 2025 23:42:15 +0200
+MIME-Version: 1.0
+Date: Tue, 01 Jul 2025 23:42:15 +0200
+To: Thomas Perale <thomas.perale@mind.be>
+Cc: buildroot@buildroot.org, Sergio Prado <sergio.prado@e-labworks.com>
+In-Reply-To: <20250701203228.1075726-1-thomas.perale@mind.be>
+References: <20250701203228.1075726-1-thomas.perale@mind.be>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <3881a859bc827df450d4f6e0383fbf05@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1751406138;
+ bh=EdZrKS+lgIQJ87SjbANq2zHT4LPsPW5p3aVXXMShP3A=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=E8f7IlQAo2ZKzzD4jJ31paPYS5fxjiwBOOy+0RDLN+IlbWO6RiVQg0XtKRMtSZgZU
+ XV6845LoPjRa5qg0aGfBsgHLHz4iAfQ8HEXUcRNn6OgNwbRm6JbMHfR5mzQSdiB0+u
+ U3NFHPl7uVa7T5K3NBtOh32yyTEN1bJcA8b2zJgwovyiha33DReB6CPGFfwCdhjlb+
+ rA94rnMK7RVjL9+ZBwW3gp6Td8pLvHKLUg6/Phg92QT1Luzpu2JXnW3gd2/y5CHCP7
+ Rnr7Q2qdW0ofYEjCU3+4Yb4rhVxW57KxWu0IW4GIKV849abb3vKKqXr40Sjk3In+ct
+ x3nWTpphN7V8w==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=E8f7IlQA
+Subject: Re: [Buildroot] [PATCH 1/1] package/daq: fix build with GCC14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,93 +82,29 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=533c0aac289a545d07efc69766227d71d2df9d80
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 01/07/2025 22:32, Thomas Perale via buildroot wrote:
+> The daq package fails to build with GCC14 toolchains:
+> 
+> ```
+> daq_nfq.c: In function 'SetPktHdr':
+> daq_nfq.c:395:37: error: passing argument 2 of 'nfq_get_payload' from 
+> incompatible pointer type [-Wincompatible-pointer-types]
+>   395 |     int len = nfq_get_payload(nfad, (char**)pkt);
+>       |                                     ^~~~~~~~~~~
+>       |                                     |
+>       |                                     char **
+> ```
+[...]
+> Fixes: 
+> https://autobuild.buildroot.org/results/c69/c69ab134463a18eec65ded836aecf89a5cb4a75c/build-end.log
+> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
-The daq package fails to build with GCC14 toolchains:
-
-```
-daq_nfq.c: In function 'SetPktHdr':
-daq_nfq.c:395:37: error: passing argument 2 of 'nfq_get_payload' from incompatible pointer type [-Wincompatible-pointer-types]
-  395 |     int len = nfq_get_payload(nfad, (char**)pkt);
-      |                                     ^~~~~~~~~~~
-      |                                     |
-      |                                     char **
-```
-
-The issue can be reproduced with the following config:
-
-```
-cat > daq.config <<EOF
-BR2_arm=y
-BR2_cortex_a7=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-BR2_PACKAGE_DAQ=y
-BR2_PACKAGE_LIBDNET=y
-BR2_PACKAGE_LIBNETFILTER_QUEUE=y
-EOF
-```
-
-This patch port a patch taken from openembedded meta-networking [1] and
-is tested with test-pkg:
-
-```
-$ ./utils/test-pkg -c daq.config -p daq
-```
-
-[1] https://layers.openembedded.org/layerindex/recipe/37594/
-
-Fixes: https://autobuild.buildroot.org/results/c69/c69ab134463a18eec65ded836aecf89a5cb4a75c/build-end.log
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...3-daq-fix-incompatible-pointer-type-error.patch | 31 ++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
-
-diff --git a/package/daq/0003-daq-fix-incompatible-pointer-type-error.patch b/package/daq/0003-daq-fix-incompatible-pointer-type-error.patch
-new file mode 100644
-index 0000000000..a15d325cd6
---- /dev/null
-+++ b/package/daq/0003-daq-fix-incompatible-pointer-type-error.patch
-@@ -0,0 +1,31 @@
-+Fix daq incompatible pointer type error when gcc option
-+'-Wincompatible-pointer-types is set:
-+
-+| ../../daq-2.0.7/os-daq-modules/daq_nfq.c: In function 'SetPktHdr':
-+| ../../daq-2.0.7/os-daq-modules/daq_nfq.c:394:37: error: passing argument 2
-+   of 'nfq_get_payload' from incompatible pointer type [-Wincompatible-pointer-types]
-+|   394 |     int len = nfq_get_payload(nfad, (char**)pkt);
-+|       |                                     ^~~~~~~~~~~
-+|       |                                     |
-+|       |                                     char **
-+
-+Signed-off-by: Kai Kang <kai.kang@windriver.com>
-+Upstream: https://git.openembedded.org/meta-openembedded/tree/meta-networking/recipes-connectivity/daq/files/daq-fix-incompatible-pointer-type-error.patch?h=master
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ os-daq-modules/daq_nfq.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/os-daq-modules/daq_nfq.c b/os-daq-modules/daq_nfq.c
-+index 4de94b6..a6de2f3 100644
-+--- a/os-daq-modules/daq_nfq.c
-++++ b/os-daq-modules/daq_nfq.c
-+@@ -391,7 +391,7 @@ static inline int SetPktHdr (
-+     DAQ_PktHdr_t* hdr,
-+     uint8_t** pkt
-+ ) {
-+-    int len = nfq_get_payload(nfad, (char**)pkt);
-++    int len = nfq_get_payload(nfad, (unsigned char**)pkt);
-+ 
-+     if ( len <= 0 )
-+         return -1;
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
