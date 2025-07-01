@@ -4,90 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 155EEC8303A
-	for <buildroot@archiver.kernel.org>; Tue,  1 Jul 2025 13:46:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F911C83038
+	for <buildroot@archiver.kernel.org>; Tue,  1 Jul 2025 13:46:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DDEED6151D;
-	Tue,  1 Jul 2025 13:46:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0D16061201;
+	Tue,  1 Jul 2025 13:46:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tbTH5jGIbWuh; Tue,  1 Jul 2025 13:46:04 +0000 (UTC)
+ id DgghQW8Bi0i4; Tue,  1 Jul 2025 13:46:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 42C4D6150A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 044E161527
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 42C4D6150A;
-	Tue,  1 Jul 2025 13:46:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 044E161527;
+	Tue,  1 Jul 2025 13:46:07 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id D0528179
- for <buildroot@buildroot.org>; Tue,  1 Jul 2025 13:46:01 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id A1933197
+ for <buildroot@buildroot.org>; Tue,  1 Jul 2025 13:46:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B725C41D05
+ by smtp4.osuosl.org (Postfix) with ESMTP id F277C41D01
  for <buildroot@buildroot.org>; Tue,  1 Jul 2025 13:46:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id i_sxyMR1RO8H for <buildroot@buildroot.org>;
+ id iRx2zQCJ6zyJ for <buildroot@buildroot.org>;
  Tue,  1 Jul 2025 13:46:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.123;
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.121;
  helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org AC13940D31
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AC13940D31
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.123])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AC13940D31
- for <buildroot@buildroot.org>; Tue,  1 Jul 2025 13:46:00 +0000 (UTC)
-X-CSE-ConnectionGUID: 1HBmOcWxS96nGGJYWf0+xg==
-X-CSE-MsgGUID: bBQ/J7gOScCy5LbLQCETTQ==
-Received: from unknown (HELO opfedv1rlp0d.nor.fr.ftgroup) ([x.x.x.x]) by
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3E68441C83
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E68441C83
+Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.121])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3E68441C83
+ for <buildroot@buildroot.org>; Tue,  1 Jul 2025 13:45:59 +0000 (UTC)
+X-CSE-ConnectionGUID: qtc55TpkQCqDMLNm0ux2dQ==
+X-CSE-MsgGUID: fHDlCFizTyuUcFageLnxNw==
+Received: from unknown (HELO opfedv1rlp0h.nor.fr.ftgroup) ([x.x.x.x]) by
  smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 01 Jul 2025 15:45:58 +0200
+ 01 Jul 2025 15:45:59 +0200
 Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv1rlp0d.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 01 Jul 2025 15:45:58 +0200
+ ([x.x.x.x]) by opfedv1rlp0h.nor.fr.ftgroup with
+ ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 01 Jul 2025 15:45:59 +0200
 Received: from yd-6wlzhs3 [x.x.x.x] by
  OPE16NORMBX305.corporate.adroot.infra.ftgroup
  [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.57;
- Tue, 1 Jul 2025 15:45:56 +0200
+ Tue, 1 Jul 2025 15:45:57 +0200
 Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
- Tue, 01 Jul 2025 15:45:55 +0200
-X-CSE-ConnectionGUID: 6rpEasFGQNWuGXbUP+78BQ==
-X-CSE-MsgGUID: tlv/SdhUT4Scpe/9NToovA==
-X-IronPort-AV: E=Sophos;i="6.16,279,1744063200"; d="scan'208";a="308617487"
+ Tue, 01 Jul 2025 15:45:57 +0200
+X-CSE-ConnectionGUID: oF/up5o8QVi1NLGotg377A==
+X-CSE-MsgGUID: fNi/VtyFR86W/Z8LOTE1zw==
+X-IronPort-AV: E=Sophos;i="6.16,279,1744063200"; d="scan'208";a="304286229"
 From: <yann.morin@orange.com>
 To: <buildroot@buildroot.org>
 CC: <yann.morin@orange.com>, Christian Stewart <christian@aperture.us>
-Date: Tue, 1 Jul 2025 15:45:51 +0200
-Message-ID: <9bae67a128b0ad2744c28f3dbbd124dc28f5430d.1751377540.git.yann.morin@orange.com>
+Date: Tue, 1 Jul 2025 15:45:52 +0200
+Message-ID: <71793243b832c0c9f397911ce0bdf08e03f660b4.1751377540.git.yann.morin@orange.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1751377540.git.yann.morin@orange.com>
 References: <cover.1751377540.git.yann.morin@orange.com>
 MIME-Version: 1.0
 X-Originating-IP: [10.115.27.53]
-X-ClientProxiedBy: OPE16NORMBX407.corporate.adroot.infra.ftgroup
- (10.115.27.16) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
+X-ClientProxiedBy: OPE16NORMBX101.corporate.adroot.infra.ftgroup (10.115.26.2)
+ To OPE16NORMBX305.corporate.adroot.infra.ftgroup
  (10.115.27.10)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1751377561; x=1782913561;
+ t=1751377560; x=1782913560;
  h=from:to:cc:subject:date:message-id:in-reply-to:
  references:mime-version:content-transfer-encoding;
- bh=EbwlIbNABHamUgLsasvyEyuHQu1xuRmBm5I4Ko6zzes=;
- b=PXxRIDCCj5BPFF8ShuD6E5MkDMH4XAkKCrFpSuIGNfPB7UqbayKuW6Te
- DGx6ZxeuexHs6aV4eEWuNPvh05j9ldOHWOhL5t/TbP4Qq4YKhYENcMQEQ
- 4yr3AL2iBGzGqJHCdBhTG75dga16o/Ihh3XVA9MTO202hyr+KQkTrPyPE
- H7lvPB521a2PIr+FH5OwuFytQbmmSSoNmK4wtcFzyJyjDVBeZ/zV4KcQy
- wl7RyX2QUvzaAfNL2E6ts4UOogHfu/w1qZfxJols8QNNdUUZaeB2fZLit
- 0kwlO0Ny3rxHFmha36kai6024BET4jOxGz92Vw+IBlQ58t2W7YLaYcv0r
- A==;
+ bh=2f0DR046xVAl5sagfPnmseTMnihPs7Iae+7w2F3Jkbg=;
+ b=bb8/sVO8UsXcuv+MENFSSfmUJXtFsBd3DnSknEphA5G473BIVGYKsZwX
+ 499DBAkOtsl1maro9Dt1nj1z0F2cUk3C6Swuch8NaJxuzn4nU5KzurEl4
+ 8XY89KLaz05ZwIvyyiOyPOsFtBicerrv2slV/G1LWOpVmSal/pXKrvnJw
+ Adj6xbACA5oxq80a/r75EMC3iUDSRDZoVCJ26AtbwlNP2o6b7aPQcuptG
+ Q/uhORtgkbRU1oQQ9dm119w7ZqgJWUGjrXMrnXIkpqOEadfbX3dSTWTnF
+ +OCnW2MHr0xsOvYg25krpev4t5F9XX3Del5nTftSJ2Rw/GD3NBvxNcNPf
+ g==;
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=orange.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
- header.a=rsa-sha256 header.s=orange002 header.b=PXxRIDCC
-Subject: [Buildroot] [PATCH 3/4 v2] package/cni-plugin: simplify installation
+ header.a=rsa-sha256 header.s=orange002 header.b=bb8/sVO8
+Subject: [Buildroot] [PATCH 4/4 v2] package/pkg-golang: catch use of legacy
+ FOO_INSTALL_BINS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -106,49 +107,43 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: "Yann E. MORIN" <yann.morin@orange.com>
 
-In all theory, we could iterate over CNI_PLUGINS_INSTALL_BINS, which
-already contains the basenames $(notdir) of the binaries to install,
-but *_INSTALL_BINS is now an internal implementation detail, and
-can't be guaranteed to be stable.
-
-Hence, iterate over the list of targets, and somewhat duplicate the
-install commands from the infra, using make's $(notdir) rather than
-calling to the shell's to call basename.
-
-Note: we need to stop setting _INSTALL_BINS, as a following commit will
-check that it is not explicitly set, and fail otherwise.
-
 Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
 Cc: Christian Stewart <christian@aperture.us>
 ---
- package/cni-plugins/cni-plugins.mk | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ docs/manual/migrating.adoc | 5 +++++
+ package/pkg-golang.mk      | 6 ++++++
+ 2 files changed, 11 insertions(+)
 
-diff --git a/package/cni-plugins/cni-plugins.mk b/package/cni-plugins/cni-plugins.mk
-index bccc1674aa..9a9ecf103b 100644
---- a/package/cni-plugins/cni-plugins.mk
-+++ b/package/cni-plugins/cni-plugins.mk
-@@ -27,7 +27,6 @@ CNI_PLUGINS_BUILD_TARGETS = \
- 	plugins/meta/portmap \
- 	plugins/meta/tuning \
- 	plugins/meta/vrf
--CNI_PLUGINS_INSTALL_BINS = $(CNI_PLUGINS_BUILD_TARGETS)
+diff --git a/docs/manual/migrating.adoc b/docs/manual/migrating.adoc
+index 4e6225a987..6ecc992502 100644
+--- a/docs/manual/migrating.adoc
++++ b/docs/manual/migrating.adoc
+@@ -222,3 +222,8 @@ from +-cargo2+ to +-cargo4+.
+ In 2025.08, starting with systemd version 257, systemd-networkd requires kernel
+ 5.4 or later. If you are still using a kernel older than 5.4, please update
+ your kernel or use an alternative network manager.
++
++[[migrating-golang-packages]]
++In 2025.08, the +FOO_INSTALL_BINS+ variable for golang packages is no longer
++supported; the list of binaries to install is automatically derived from
++the +FOO_BULD_TARGETS+ variable.
+diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
+index ff8d28aa7e..ffd50adecc 100644
+--- a/package/pkg-golang.mk
++++ b/package/pkg-golang.mk
+@@ -40,6 +40,12 @@ GO_BIN = $(HOST_DIR)/bin/go
  
- ifeq ($(BR2_PACKAGE_LIBAPPARMOR),y)
- CNI_PLUGINS_DEPENDENCIES += libapparmor
-@@ -46,9 +45,9 @@ endif
+ define inner-golang-package
  
- define CNI_PLUGINS_INSTALL_TARGET_CMDS
- 	$(INSTALL) -d -m 0755 $(TARGET_DIR)/opt/cni/bin
--	$(foreach d,$(CNI_PLUGINS_INSTALL_BINS),\
--		$(INSTALL) -D -m 0755 $(@D)/bin/$$(basename $(d)) \
--			$(TARGET_DIR)/opt/cni/bin
-+	$(foreach d,$(CNI_PLUGINS_BUILD_TARGETS),\
-+		$(INSTALL) -D -m 0755 $(@D)/bin/$(notdir $(d)) \
-+			$(TARGET_DIR)/opt/cni/bin/$(notdir $(d))
- 	)
- endef
- 
++# Legacy
++ifneq ($$($(2)_INSTALL_BINS),)
++$$(error Package $(1) sets $(2)_INSTALL_BINS, which is no longer supported; \
++see the manual: https://buildroot.org/manual.html#migrating-golang-package )
++endif
++
+ $(2)_BUILD_OPTS += \
+ 	-ldflags "$$($(2)_LDFLAGS)" \
+ 	-modcacherw \
 -- 
 2.34.1
 
