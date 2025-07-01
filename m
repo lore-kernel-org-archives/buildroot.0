@@ -4,158 +4,173 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8756FC7EE30
-	for <buildroot@archiver.kernel.org>; Tue,  1 Jul 2025 09:30:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D87AEC7EE30
+	for <buildroot@archiver.kernel.org>; Tue,  1 Jul 2025 09:40:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3F16B40785;
-	Tue,  1 Jul 2025 09:30:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 977E840559;
+	Tue,  1 Jul 2025 09:40:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xb4BeeY3eSrW; Tue,  1 Jul 2025 09:30:38 +0000 (UTC)
+ id QMQWXLI6qoGM; Tue,  1 Jul 2025 09:40:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E9F141862
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C6A6B405E8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2E9F141862;
-	Tue,  1 Jul 2025 09:30:38 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 76E07DF
- for <buildroot@buildroot.org>; Tue,  1 Jul 2025 09:30:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C6A6B405E8;
+	Tue,  1 Jul 2025 09:40:20 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0233A197
+ for <buildroot@buildroot.org>; Tue,  1 Jul 2025 09:40:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 687C5814DE
- for <buildroot@buildroot.org>; Tue,  1 Jul 2025 09:30:36 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DBD8E60DC3
+ for <buildroot@buildroot.org>; Tue,  1 Jul 2025 09:40:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id drLZ5nifCmHI for <buildroot@buildroot.org>;
- Tue,  1 Jul 2025 09:30:35 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ABC_pDLv9cHh for <buildroot@buildroot.org>;
+ Tue,  1 Jul 2025 09:40:18 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:2418::61a;
- helo=nam12-bn8-obe.outbound.protection.outlook.com;
+ client-ip=2a01:111:f403:2414::615;
+ helo=nam11-bn8-obe.outbound.protection.outlook.com;
  envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0C911829DB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0C911829DB
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com
- (mail-bn8nam12on2061a.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:2418::61a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0C911829DB
- for <buildroot@buildroot.org>; Tue,  1 Jul 2025 09:30:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 06A0D60BD6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 06A0D60BD6
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com
+ (mail-bn8nam11on20615.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:2414::615])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 06A0D60BD6
+ for <buildroot@buildroot.org>; Tue,  1 Jul 2025 09:40:17 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=MKmz+RQWzUV/exnae3T2N2KEjx2WrbnnD4nX1Ex5XIEr7XX9Yo9brEI77qftaCaFYu4xwf9vLEVeBClaVvasX3xN39rZpfwxiTp4TKQsSlzw+EWYrPiTjKssag0OR5P8HE+0zHRL+wK5GkJ4FZclwfXgzKNkS7FaV/K94TAXPz5aBGG35jiUyTyo2SxHBFwveuyWE367tPwRC6tbxvnJ6kBKadGA6FbSP9IR6ccLyBDrPix2Uqyszd3TLGnuSpPsbASyTgMFZE5y7RwhCOLFVueYTMLqAGXucqxRIJafStk4nClRqok3UJi22bnSWPM7tVlNr7SQdwQJCw20PfspJg==
+ b=vqlmnxQFhKGVxs4ANRBvMEQLMT5Tz20K2FuPp2MFU9GGD5E7Nw7L8K+Ff5SVNzSYbRRbhRKniwcIn0+ryqFPDSXT+H7L0kpEEKjbJJykkAl3jQHd9l+Lgxh1V1bdc3xkY38HH+afa55IQZQAWM4bjSWRAP4dSnmlJKG+jnTnbL8AePxK7+Dh+7C+yce0z6UlFMZKSgEwG5f8i55NhMTieq6wcUMU4qA5VPcracgcIG1N1IEdtXmI+SGs3ddUzMuOalSbffBu8ZA5nkdxhPMnPwd/kF8SGG79qw4ajamK9u01ggpblXYIjXx/Zj4yez9k1HjjM2xDLLRNWvEkcjOABQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1iFDQt96ta9rF9K9LYa9jRypMm5eVia7LMbZ5SwYGPs=;
- b=bt1CuW54bIPit3aawKb7r/S9Y0z7xnlxJBVylzVMqpOzNeV2sBIeD/H3KmUVXsfROMCypERGO38BUxdnH3MLw/os3vMYxNJ7eia3+7XLnjZWuuOG0JzgtxgMl2d2tYvLbdI2Jx2OyyY48du9LTosPQaHQ52J9pDdTgmyJGlP3V2BUzSbJreUg1slqfqfPWUU8m6Xq+chnzGWbKFcTAn+drV7KSe1HswAbJGOQNSptgIkNmXGY8vzvWBYXIib3uBH+T9KyBy8QYw92y2YorRJY62QrAKSkp7dEPRhAOI9NM/GvaZIlgfEqXxOFPeIzw6kBaz6S9eeGbQvvE/iCmhH1Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-Received: from MN0PR02CA0003.namprd02.prod.outlook.com (2603:10b6:208:530::6)
- by CH3PR12MB7617.namprd12.prod.outlook.com (2603:10b6:610:140::21)
+ bh=jDPaDLLIr4W56F1D12O49//aUFWRDrBwRjoKbivCQCs=;
+ b=lCMQA37Y72M4Crqf2V6xEsI2b608OLnD4Xx1/s7y766f4ObtPepMIHUpyIca/+XQ/77ZG69Xbr1Yl3ANYcbgU62/E7WJ84J0ZpnNrIze7FJaTGia6wVHpQCpVf4o/IHz26D9V24yQ9ZOFVRPQqtXai9zgkGZMoIqybUDTgSKv7OMU3tIQmWO0J7qtqGMbK6SU+kqZQ3daNLONYLLgXd6CVLta6GVfZmxR1cZ2q2Vswqyp+1g+oZikEKfOv6o0ypp67AkTgfD6EQoQ1dwjEzVLTQ/aRXR61Dk0EXYowForOEo/TeMy5uW7vrRYCTuXl35iJEdXmyj0UT0G9m+XC0J3Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+Received: from SA1PR12MB5615.namprd12.prod.outlook.com (2603:10b6:806:229::17)
+ by IA1PR12MB6041.namprd12.prod.outlook.com (2603:10b6:208:3d7::16)
  with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8880.31; Tue, 1 Jul
- 2025 09:30:28 +0000
-Received: from BL6PEPF0001AB74.namprd02.prod.outlook.com
- (2603:10b6:208:530:cafe::e1) by MN0PR02CA0003.outlook.office365.com
- (2603:10b6:208:530::6) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8901.19 via Frontend Transport; Tue,
- 1 Jul 2025 09:30:28 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- BL6PEPF0001AB74.mail.protection.outlook.com (10.167.242.167) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8901.15 via Frontend Transport; Tue, 1 Jul 2025 09:30:27 +0000
-Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 1 Jul
- 2025 04:30:26 -0500
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB05.amd.com
- (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 1 Jul
- 2025 04:30:26 -0500
-Received: from xirengwts09.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
- Transport; Tue, 1 Jul 2025 04:30:25 -0500
-To: <buildroot@buildroot.org>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8880.25; Tue, 1 Jul
+ 2025 09:40:07 +0000
+Received: from SA1PR12MB5615.namprd12.prod.outlook.com
+ ([fe80::7557:587c:4ec:1913]) by SA1PR12MB5615.namprd12.prod.outlook.com
+ ([fe80::7557:587c:4ec:1913%6]) with mapi id 15.20.8880.027; Tue, 1 Jul 2025
+ 09:40:06 +0000
+To: "buildroot@buildroot.org" <buildroot@buildroot.org>, Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>
 CC: Giulio Benetti <giulio.benetti@benettiengineering.com>, Romain Naour
- <romain.naour@gmail.com>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Neal Frager <neal.frager@amd.com>
-Date: Tue, 1 Jul 2025 10:30:20 +0100
-Message-ID: <20250701093020.371352-2-neal.frager@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20250701093020.371352-1-neal.frager@amd.com>
+ <romain.naour@gmail.com>
+Thread-Topic: [RFC PATCH 2/2] package/gcc: microblaze atomic support
+Thread-Index: AQHb6mrJ8qulatDAWEKyDRCOHk5Ml7QdAusQ
+Date: Tue, 1 Jul 2025 09:40:06 +0000
+Message-ID: <SA1PR12MB5615736E11B75DFA54853ED2F041A@SA1PR12MB5615.namprd12.prod.outlook.com>
 References: <20250701093020.371352-1-neal.frager@amd.com>
+ <20250701093020.371352-2-neal.frager@amd.com>
+In-Reply-To: <20250701093020.371352-2-neal.frager@amd.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Enabled=True;
+ MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+ MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_SetDate=2025-07-01T09:38:18.0000000Z;
+ MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Name=AMD
+ Internal Distribution
+ Only; MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_ContentBits=3;
+ MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Method=Standard
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1PR12MB5615:EE_|IA1PR12MB6041:EE_
+x-ms-office365-filtering-correlation-id: 6caf8b92-082e-415e-13dc-08ddb8834380
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0; ARA:13230040|366016|1800799024|376014|38070700018;
+x-microsoft-antispam-message-info: =?us-ascii?Q?8o8p+YAuRIClJVyL6yjqg29a9rlZxel14KrTNM0pmkKAYC5Xy7yXtDeAbn2w?=
+ =?us-ascii?Q?N+nUBf3ra+yZN7vk8Uann70nAwJWZ1iB7a/XKdtuxxT0bZFk/MSE4LaMUTsg?=
+ =?us-ascii?Q?7Hq8Y7yxPsrKyKBeYp1CDsuyOdEeCH8sL5uBb87GxY62Ba168EmQrvlLEDeC?=
+ =?us-ascii?Q?TTx2Zyrc1NAKuM7V2T6f8DvQN0X6s9tokIzczo3Cjjv6sWU3FUTUd6nHk1zq?=
+ =?us-ascii?Q?7/j7NHi+lhdorOX+AhPsAt1+lcbkXqQDfBsrokd0bo6ywzCBcrzOpusOJoMe?=
+ =?us-ascii?Q?F4Ukucwr9prAvG0SnOLG+/ntIlm3izNDzJws5vK4NmwvyBuae5dZjsIDGe91?=
+ =?us-ascii?Q?seRG10iB9I8+bq5RIHFlJSbPAr2CNX59P+F6Y2TMYv+VG9gOvOeP0+ilKr3h?=
+ =?us-ascii?Q?NI7opGGXiOvRK+iMw3Cy/2KupOHOufazSYMBUSetuXNi60F1abuhkgTwjiIQ?=
+ =?us-ascii?Q?KfLz9pq0qA0mH/IQdu4kIOCDyJLrGHPyLUxNTX9TN/hV6ZzsmrMicAqpAkhR?=
+ =?us-ascii?Q?xT3gZIaeTUXIMgsPUTbVp+mgQMpR36BYWAijpJiCMO3h4Sw32c3AgAmkDC0p?=
+ =?us-ascii?Q?AkWHseTPilmUDfwdhowfvgoVVjMIeSP2bUOos7vzdAOH2bHe2nF9XLmK+zzi?=
+ =?us-ascii?Q?8ZYLot1/GNFOvn07HDtGa/CMZKl5K/ge78R2Vd2YtvXlkHzhvejYcFnFOfgR?=
+ =?us-ascii?Q?3odShM7YlwwrMY262/GEPTQG5vB64evth2zQCuXsOP2RpdziETVmFpc/ple+?=
+ =?us-ascii?Q?Y5+Vy3rZiHQYEJK4CDuxvRX6qIVa7WOBmCHJmcqTcC5V3HD7QrGlPZPToSRz?=
+ =?us-ascii?Q?LXsOMHOyxlj+OIt1LxmODYtH5FyCkaeywn6x8IRXSwTHVbacvrZ+6yrPXmei?=
+ =?us-ascii?Q?ZChu2rXvap0K6lzMwCkGE2CDBMvIn6vVwkzVbQduWV6KxeoUatKvMZh9Wj3b?=
+ =?us-ascii?Q?bbLusXT2sYhKjPgzNgmSk0bKlz9x7WblstSu1YtBsdV+ppTTUcmaBp/X+XGN?=
+ =?us-ascii?Q?j8PiNch+eWbnRAm2GPJqhnso+f9q6WE150lPKHSt9Bjjc9gL8AnQ4DuoZw3l?=
+ =?us-ascii?Q?9puh7GLkS2xSTZapaJTk0FS0+8xf5xnfm5SJoosM8jXGGJJ3bBlTqU2otmZd?=
+ =?us-ascii?Q?FFX80YBjgb90NY8sqstTRCawRSvo4asxyzQOjX246lFRaWFNbBaMPGD/9M8i?=
+ =?us-ascii?Q?dmEmURmj5VSk0N237nAc81GMpeLgmIefDvZhrx9dygnVjOoZEMZK9LDIJ0oe?=
+ =?us-ascii?Q?yyb8p6hLkA4LuLZo1C1BS71id15+oqyS4SPGdoH1GM//Jb5MWyz6dPnQlQvA?=
+ =?us-ascii?Q?epuakmj1DKZwFinCioZho4TDAI0xDpOQ/b0v8upTM5E786cGxENorE1K1bDW?=
+ =?us-ascii?Q?Qm6APx/CjBpXlB6BboWgBZPW7aKUxRq2Dq1PvZvpCIHo5GfGrKYzf3EM9Wfi?=
+ =?us-ascii?Q?qmAQeUKguOKXQg1Sue/GeTqolAcm1vJJYsCZyb0j8Q5OrQ5w2enhLt7fHN/u?=
+ =?us-ascii?Q?tBcuJVCUDicDZHo=3D?=
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:SA1PR12MB5615.namprd12.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230040)(366016)(1800799024)(376014)(38070700018); DIR:OUT; SFP:1101; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?ztObeVzKWq492h/6K9h2A1AcDaIt/40q2DUYK65LnVmVyKkwrgENOXpX7V6E?=
+ =?us-ascii?Q?NVWtC7VLtxaDF4tulE2MQujB6LVFdXDoycRbre54meV1qnQP5WzUM4z27h+J?=
+ =?us-ascii?Q?r8NaRSvRzo1zHPyMkaCCLTncrY0/+yym9Nt3opaEEmR8rICRNLoeNh1WQ4i+?=
+ =?us-ascii?Q?zyK4YWr4zH6PstNYDjIJZwpRwOvm32kN8v5Y7z0MsI0BLhe7aGGFj0wi1lOE?=
+ =?us-ascii?Q?NDQt/0dBdzGN1XmCctcVU6ols7aVaRaSca0oX9BJoJ9ddMXHMZgRxt9jLx4O?=
+ =?us-ascii?Q?Z4fdXTXelapZCyGfmRMMEFBLolF4Zbu0qOetXpFET1UNSBc8Wb9VbO27VZQx?=
+ =?us-ascii?Q?mFqTgoShzuTpmTEEKcy/Nd6R9sT5ezNjNorlQ/qXAFHzcPnFUN7bkHLQ4lp8?=
+ =?us-ascii?Q?wTthGDUNDK+qnqQ2ti2eAsbK+ZuGtTbv0UGu9bQESjOztM1lg+XafnfwvxW7?=
+ =?us-ascii?Q?tFQupmYyVVGu2PUM5P/DIiacOoLRsqd3ib2+OVcO4PxlndinqGgkVsjB5hZw?=
+ =?us-ascii?Q?bgRxicoRaMP5VGxQ9+j37+tOplv+H2BZi5zqQaUHVVuWxH4lgbnwvnce9fzJ?=
+ =?us-ascii?Q?jmSFpqUTNer9BjmG3fMeQ3KkluEFurEesPpWDt0xSSLOtTPPT72Sbs6baqSl?=
+ =?us-ascii?Q?fIQ8xSC5kQuw1J6n1DP8tKDF3CzutGtftPYWrDgenSjS4LU5NB9Nnm0EBN1o?=
+ =?us-ascii?Q?0VdcpTJcbT2dHvCrPa1PMV/gf7gRoQ3th9KLPa4a/ir2VVoM00U1aPwX1Cb2?=
+ =?us-ascii?Q?ta2Y5ra+2XmGDnoaAvGvx5kLte+BeIbjzJDHEgFosUGHAQKleUPqN1SXAaFQ?=
+ =?us-ascii?Q?8zNr4PKrN6fbwoJ6UpEl7w9M/+YZvmIlVI46n70tk/s6P/IMuILOj0xSNXjx?=
+ =?us-ascii?Q?K+BdHlh5SdQba1wRr+BDaNgjoBDQraxmvzYvgBJjHv1JrGAwnrin9rAM0SGP?=
+ =?us-ascii?Q?Q01NZ6z/q4g0/3t2/d6aC6Y4GCQ9n4TUvNu1uxYG+1RpW/OcUYjLY9c9ld3j?=
+ =?us-ascii?Q?wLFtmRI9Az4d/9IjHmjlsbvO+6J4fXL6lmkqj3T7FpkMlAYPYzYZfhEfKuMP?=
+ =?us-ascii?Q?r19Cw2ZA7k6A13IGhGHAAVgMtQKRwbxVi9ZaHVAeSh8lodU5+tibamzhM/6I?=
+ =?us-ascii?Q?h93Bc1htG8yI8cg1Tqzds915u12HefNbm9A4eXvFmKncYn8/13X26aKALDqx?=
+ =?us-ascii?Q?pzU6Gc9YIeJjXEsCpKRWAVWWhgr2ihiNvk1EBXbjjbrmyZMrRsMH2MBdQSX0?=
+ =?us-ascii?Q?btXik0He6erjyuGN0rb2GxEHk+jJxkWhkJ9jtMMW3drRw+rMaRk1pvb7o33N?=
+ =?us-ascii?Q?0WimZseXa8nZEs3UvPLmQwIAAOZi2B8NTcJ6NOUhlBH58zFmoATkdNldQcLx?=
+ =?us-ascii?Q?5w+aJA3+7PxnlWQqiHtX1GislX+am0R1RsCkTvvtNCjU9XCmjYSaHYtHHDQT?=
+ =?us-ascii?Q?zgnsVG+19SYRvEGtDDO//O7cQprwJoFecX8RDcT0PX+UEk4T3t6cLBb2SRKn?=
+ =?us-ascii?Q?uJHYgG9Si7wXxr5IKf8FW45nKeJT+J+QkpZ2bbLUoJK9aLvYu67xwHazn3Hr?=
+ =?us-ascii?Q?18ImfaprRPnh1G+/0Iw=3D?=
 MIME-Version: 1.0
-Received-SPF: None (SATLEXMB05.amd.com: neal.frager@amd.com does not designate
- permitted sender hosts)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL6PEPF0001AB74:EE_|CH3PR12MB7617:EE_
-X-MS-Office365-Filtering-Correlation-Id: 96936c65-8b25-4f1b-7cc8-08ddb881e9f6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
- ARA:13230040|1800799024|82310400026|36860700013|376014|13003099007; 
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?1VbLzesPEa7aN8+vFFVzNs8KHsIFCc9agGJCpXYMJlS5zF25qQHghe1/qf9a?=
- =?us-ascii?Q?D5zuB/It0jWJkmpLuaKA5+iOqOxehsDNmO01IzPe+9JcGPSh6Ca4XadbiyCy?=
- =?us-ascii?Q?pZ7b68P/ZfIfl2uITNxhfGLxseBvpSS9jizetFvYrw9M7bAIYrHQQGf0n9lj?=
- =?us-ascii?Q?7/h7aNVE5kLjCYWbCVoeUSiKl2rl2k3VKmO1x3POQAwC06Gh8J7/26Y6XpLA?=
- =?us-ascii?Q?DBL6Zk4UBwxVzj9avNAzHjnX1z/gQf0R0tU+uF8PsO+1+SfFguCfjTfpkJkY?=
- =?us-ascii?Q?8j+nuimWBq/RIS7hjx+Y8QMoJySukLdW6RqcACuiT0KCME9wYGs0SVRkBoKq?=
- =?us-ascii?Q?2d2zySZZWs0XDcZpWkf7fYLWJby9TmJHSGObSEmjT21fFl4COeNV62Tsipbv?=
- =?us-ascii?Q?DnBCchtru2fjTOvBBQzXXlbsnhUjVdH5iPSMdCuxneD7Rx0DSiC8QhGCKc8+?=
- =?us-ascii?Q?+//cgGFwD0mndWrDW43ra3VPj/Yq84nPRBIU2lJr/Jqzij2V+ZanrY/qR9gS?=
- =?us-ascii?Q?9AddZWX3csp5+ocWWWmTEkYA3KhGr+p4yNNKWAr5CSHic0JgYH0cXA9GV+lh?=
- =?us-ascii?Q?hXBKLjtY66zyJyntHL0vSxJsUZ+NbxQLOgCulTH3tKLhZ34RezXhlBaQRLqO?=
- =?us-ascii?Q?NjWrv4Zx821lWw1STK72ObDLfbZ7ctHNj5SbIKTj2lxjqoTtX6z/34LLcYKD?=
- =?us-ascii?Q?kOUygM5Ael4UWXDqRR2c+QcNKv2K9xhCv+MFt6bjxDUGUoaOrLPwhLrT2HWG?=
- =?us-ascii?Q?h+Z+hMoYC+pZHMDrUXqgBpY1bj2Lx+k3AssYgKElxfUWsO5tukuaXhVleLMe?=
- =?us-ascii?Q?9PG78otPcB4e2dlDe9QmL9lCc1FFO7wqJ0yhF/wvxRYqoxNoQeV7S3Rebht6?=
- =?us-ascii?Q?P0Haob24E8ywWznqY6Z6v0mVWReFBkm22Bxl6z4fCvjN2rte8PXtRGEdeI8y?=
- =?us-ascii?Q?BkQQKSqyZtyKu6KLjVCfLiqxuZIg0kfUXvhQcbIrdHwioo5ti8IrsKkdfXOq?=
- =?us-ascii?Q?aIuB9MQ2QCOSiXUlcKxhHg/enADiHKPJpmNNxAEFhdWx7b+EkFJGNIVi9g7q?=
- =?us-ascii?Q?nbKDjiQGZmPsofbf3HgIFzyrG7568LW5+NBasDzKG2RaWDVnb1l3kVu6xW4M?=
- =?us-ascii?Q?i3lN6DNiOBs9XhK/jP+tVEVzLnnR/C1TIpsiW3B+WJb1n1abQ6F0ngYp8rwW?=
- =?us-ascii?Q?6Y1e92w6LJc0zC03DdSClnIaKx4o9vjF965k3S7vIQBr1rYXxyBbHlwLC2mv?=
- =?us-ascii?Q?eNh+ZsOwyY4zizt06Wz3Dmta/1JldapbFnFNp9JU45nF+fetr+dXooQKPvAd?=
- =?us-ascii?Q?wm4qkZh5Au+Op/s0OmzGC7MIa5OqEAQu/0ZblFhNJWd7hGphkCMQ2VooQsGe?=
- =?us-ascii?Q?wYIrVkZwP2GBKZscYFoSrrZjXQWKbHHHPANOLHDrUTRz+5jn8s9OiSvWwHR8?=
- =?us-ascii?Q?9mYG8yzkS126AKYkan3pzjozBEURG6bL3IPMoINEYbKswHbKTaLeV/A2wtY9?=
- =?us-ascii?Q?rLW8vKyYqj7to2wZlBh8iOaLPZP93m7299IrNr2l2SVmJZRpz0Pyfs6A8A?=
- =?us-ascii?Q?=3D=3D?=
-X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
- IPV:CAL; SFV:NSPM; H:SATLEXMB03.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
- SFS:(13230040)(1800799024)(82310400026)(36860700013)(376014)(13003099007);
- DIR:OUT; SFP:1101; 
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jul 2025 09:30:27.1573 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 96936c65-8b25-4f1b-7cc8-08ddb881e9f6
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
- Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL6PEPF0001AB74.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB7617
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR12MB5615.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6caf8b92-082e-415e-13dc-08ddb8834380
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Jul 2025 09:40:06.9051 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: UExxFNWC1EPERlXrUv5ZlDHWfNzCydre2xLhiLiqc1D3bhrGbebnREXODRcBJhoV
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6041
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amd.com; s=selector1; 
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1iFDQt96ta9rF9K9LYa9jRypMm5eVia7LMbZ5SwYGPs=;
- b=Tf0/ovLbsNOc3bSkX/2r1r/F2hH9sp9FgPahV+URcpPTOn41MJtus+KzdG1WToc0jkJeyl73bu3Gu8G2Ca6wz9YrwJcfTBd6mxIqyucJUvSsBqAbmlgcy7a4U5b7uegwBQ5vBufIMSGztM7XCdxvm0oK8nHJ8KTcIXthWFq6Rxc=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=jDPaDLLIr4W56F1D12O49//aUFWRDrBwRjoKbivCQCs=;
+ b=I+iWqsaclnbMGbT/euynYVV8zg1z0a1N0k8/tfRI3ZrRGhR3AD1YsPwdsW+bRpZSrDaA3V97fpWnkJXZWrbCFchzFeNmOz/5JvZJSQeSbSKz7yVTKBVQpvlq2GzN8Yi201c8ugZqwQzXLajI0Xoeqtf+EARi8F2QbFc6OP9YTx4=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=amd.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=Tf0/ovLb
-Subject: [Buildroot] [RFC PATCH 2/2] package/gcc: microblaze atomic support
+ header.s=selector1 header.b=I+iWqsac
+X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Subject: Re: [Buildroot] [RFC PATCH 2/2] package/gcc: microblaze atomic
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -167,234 +182,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Neal Frager via buildroot <buildroot@buildroot.org>
-Reply-To: Neal Frager <neal.frager@amd.com>
+From: "Frager, Neal via buildroot" <buildroot@buildroot.org>
+Reply-To: "Frager, Neal" <neal.frager@amd.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch adds atomic test and set support for the microblaze arch.  A patch
-is required to use atomic test and set with gcc 14 and 15 which will soon be
-submitted upstream.
+[AMD Official Use Only - AMD Internal Distribution Only]
 
-In order to atomic instructions to work, the microblaze CFLAG
--mxl-barrel-shift must be enabled.
+Hello everyone,
 
-As I have only tested this with gcc 14 so far, I am not sure if I have handled
-all potential cases.  For this reason, I am requesting comment on this patch
-before submitting a final version.
+Today is my last working day before a 3-week vacation, so I will not be able
+to follow up on this patch set.  I assume that fixing this issue should make
+the Buildroot community very happy, so if any of you want to fix up this
+solution and get it applied while I am still away, I am perfectly happy with
+that!
 
-To test this patch:
-$ cat > .config<<EOF
-BR2_microblazeel=y
-BR2_GCC_VERSION_14_X=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PACKAGE_ACPITOOL=y
-EOF
-$ make olddefconfig
-$ make
+Otherwise, I will be back on Monday, July 28th.
 
-Fixes: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=118280
-Upstream: to be done with final version
+Best regards,
+Neal Frager
+AMD
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
----
- ...laze-add-atomic-test-and-set-support.patch | 158 ++++++++++++++++++
- package/gcc/Config.in.host                    |   6 -
- 2 files changed, 158 insertions(+), 6 deletions(-)
- create mode 100644 package/gcc/14.3.0/0003-microblaze-add-atomic-test-and-set-support.patch
 
-diff --git a/package/gcc/14.3.0/0003-microblaze-add-atomic-test-and-set-support.patch b/package/gcc/14.3.0/0003-microblaze-add-atomic-test-and-set-support.patch
-new file mode 100644
-index 0000000000..a79659301d
---- /dev/null
-+++ b/package/gcc/14.3.0/0003-microblaze-add-atomic-test-and-set-support.patch
-@@ -0,0 +1,158 @@
-+From fe1a0a590c4ed079db36c34b0907f0e99c6dd31f Mon Sep 17 00:00:00 2001
-+From: Neal Frager <neal.frager@amd.com>
-+Date: Mon, 30 Jun 2025 10:26:49 +0100
-+Subject: [PATCH] microblaze: add atomic test and set support
-+
-+This patch adds atomic test and set support for the microblaze arch.
-+
-+Upstream: to be done soon
-+
-+Signed-off-by: Neal Frager <neal.frager@amd.com>
-+---
-+ gcc/config/microblaze/microblaze.md |   6 +-
-+ gcc/config/microblaze/sync.md       | 103 +++++++++++++++++++++++-----
-+ 2 files changed, 90 insertions(+), 19 deletions(-)
-+
-+diff --git a/gcc/config/microblaze/microblaze.md b/gcc/config/microblaze/microblaze.md
-+index f1f57e6d702..36d786b1d10 100644
-+--- a/gcc/config/microblaze/microblaze.md
-++++ b/gcc/config/microblaze/microblaze.md
-+@@ -43,6 +43,10 @@
-+   (UNSPEC_TLS           106)    ;; jump table
-+   (UNSPEC_SET_TEXT      107)    ;; set text start
-+   (UNSPEC_TEXT          108)    ;; data text relative
-++  (UNSPECV_CAS_BOOL     201)    ;; compare and swap (bool)
-++  (UNSPECV_CAS_VAL      202)    ;; compare and swap (val)
-++  (UNSPECV_CAS_MEM      203)    ;; compare and swap (mem)
-++  (UNSPECV_ATS          204)    ;; atomic test and set
-+ ])
-+ 
-+ (define_c_enum "unspec" [
-+@@ -79,7 +83,7 @@
-+ ;; bshift 	Shift operations
-+ 
-+ (define_attr "type"
-+-  "unknown,branch,jump,call,load,store,move,arith,darith,imul,idiv,icmp,multi,nop,no_delay_arith,no_delay_load,no_delay_store,no_delay_imul,no_delay_move,bshift,fadd,frsub,fmul,fdiv,fcmp,fsl,fsqrt,fcvt,trap"
-++"unknown,branch,jump,call,load,store,move,arith,darith,imul,idiv,icmp,multi,nop,no_delay_arith,no_delay_load,no_delay_store,no_delay_imul,no_delay_move,bshift,fadd,frsub,fmul,fdiv,fcmp,fsl,fsqrt,fcvt,trap,atomic"
-+   (const_string "unknown"))
-+ 
-+ ;; Main data type used by the insn
-+diff --git a/gcc/config/microblaze/sync.md b/gcc/config/microblaze/sync.md
-+index 939168a2d0e..b5fbe1431cc 100644
-+--- a/gcc/config/microblaze/sync.md
-++++ b/gcc/config/microblaze/sync.md
-+@@ -18,26 +18,93 @@
-+ ;; <http://www.gnu.org/licenses/>.
-+ 
-+ (define_insn "atomic_compare_and_swapsi"
-+-  [(match_operand:SI 0 "register_operand" "=&d")	;; bool output
-+-   (match_operand:SI 1 "register_operand" "=&d")	;; val output
-+-   (match_operand:SI 2 "nonimmediate_operand" "+Q")	;; memory
-+-   (match_operand:SI 3 "register_operand" "d")		;; expected value
-+-   (match_operand:SI 4 "register_operand" "d")		;; desired value
-+-   (match_operand:SI 5 "const_int_operand" "")		;; is_weak
-+-   (match_operand:SI 6 "const_int_operand" "")		;; mod_s
-+-   (match_operand:SI 7 "const_int_operand" "")		;; mod_f
-++[(set (match_operand:SI 0 "register_operand" "=&d")		;; bool output
-++        (unspec_volatile:SI
-++          [(match_operand:SI 2 "nonimmediate_operand" "+Q")	;; memory
-++           (match_operand:SI 3 "register_operand" "d")		;; expected value
-++           (match_operand:SI 4 "register_operand" "d")]		;; desired value
-++          UNSPECV_CAS_BOOL))
-++   (set (match_operand:SI 1 "register_operand" "=&d")		;; val output
-++        (unspec_volatile:SI [(const_int 0)] UNSPECV_CAS_VAL))
-++   (set (match_dup 2)
-++        (unspec_volatile:SI [(const_int 0)] UNSPECV_CAS_MEM))
-++   (match_operand:SI 5 "const_int_operand" "")			;; is_weak
-++   (match_operand:SI 6 "const_int_operand" "")			;; mod_s
-++   (match_operand:SI 7 "const_int_operand" "")			;; mod_f
-+    (clobber (match_scratch:SI 8 "=&d"))]
-+   ""
-+   {
-+-    output_asm_insn ("addc \tr0,r0,r0", operands);
-+-    output_asm_insn ("lwx  \t%1,%y2,r0", operands);
-+-    output_asm_insn ("addic\t%8,r0,0", operands);
-+-    output_asm_insn ("bnei \t%8,.-8", operands);
-+-    output_asm_insn ("cmp  \t%0,%1,%3", operands);
-+-    output_asm_insn ("bnei \t%0,.+16", operands);
-+-    output_asm_insn ("swx  \t%4,%y2,r0", operands);
-+-    output_asm_insn ("addic\t%8,r0,0", operands);
-+-    output_asm_insn ("bnei \t%8,.-28", operands);
-+-    return "";
-++    return "add  \t%0,r0,r0\n\t"
-++      "lwx  \t%1,%y2,r0\n\t"
-++      "addic\t%8,r0,0\n\t"
-++      "bnei \t%8,.-8\n\t"
-++      "cmp  \t%8,%1,%3\n\t"
-++      "bnei \t%8,.+20\n\t"
-++      "swx  \t%4,%y2,r0\n\t"
-++      "addic\t%8,r0,0\n\t"
-++      "bnei \t%8,.-28\n\t"
-++      "addi \t%0,r0,1";
-+   }
-++  [(set_attr "type"	"atomic")
-++  (set_attr "mode"	"SI")
-++  (set_attr "length"	"40")]
-++)
-++
-++;;
-++;; MicroBlaze has no atomic load/store instruction pair for QImode
-++;;
-++;; Use load/store reserved word with necessary mem align,shift,mask magic
-++;;
-++(define_insn "atomic_test_and_set"
-++  [(set (match_operand:QI 0 "register_operand" "=&d")		;; bool output
-++        (unspec_volatile:QI
-++          [(match_operand:QI 1 "nonimmediate_operand" "+Q") ;; memory
-++           (match_operand:SI 2 "const_int_operand" "")   ;; model
-++	  ]
-++	UNSPECV_ATS))
-++   (clobber (match_scratch:SI 3 "=&d")) ; old word
-++   (clobber (match_scratch:SI 4 "=&d")) ; tmp
-++   (clobber (match_scratch:SI 5 "=&d")) ; aligned address
-++   (clobber (match_scratch:SI 6 "=&d")) ; shift
-++   (clobber (match_scratch:SI 7 "=&d")) ; mask
-++   (clobber (match_scratch:SI 8 "=&d")) ; old value
-++  ]
-++  "TARGET_BARREL_SHIFT"
-++  {
-++    return
-++      /* word align memory address, compute shift  */
-++      "andi \t%5,%y1,-4\n\t"
-++      "andi \t%6,%y1,3\n\t"
-++      "bslli \t%6,%6,3\n\t"
-++
-++      /* compute set value and mask */
-++      "addik \t%7,r0,1\n\t"
-++      "bsll \t%7,%7,%6\n\t"
-++
-++      /* Load and reserve word */
-++      "lwx  \t%3,%5,r0\n\t"
-++      "addic\t%4,r0,0\n\t"
-++      "bnei \t%4,.-8\n\t"
-++
-++      /* Compute old value */
-++      "and \t%8,%3,%7\n\t"
-++
-++      /* Test Old Value */
-++      "cmp \t%4,%8,r0\n\t"
-++      "bnei \t%4,.+20\n\t"
-++
-++      /* Compute Set Word */
-++      "or \t%4,%3,%7\n\t"
-++
-++      /* Try Reserved store */
-++      "swx  \t%4,%5,r0\n\t"
-++      "addic\t%4,r0,0\n\t"
-++      "bnei \t%4,.-36\n\t"
-++
-++      /* Set result */
-++      "bsrl \t%0,%8,%6\n\t";
-++  }
-++  [(set_attr "type"	"atomic")
-++  (set_attr "mode"	"QI")
-++  (set_attr "length"	"64")]
-+ )
-+-- 
-+2.25.1
-+
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 8640280fdf..e6c10d3e20 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -36,9 +36,6 @@ config BR2_GCC_VERSION_14_X
- 	# powerpc spe support has been deprecated since gcc 8.x.
- 	# https://gcc.gnu.org/ml/gcc/2018-04/msg00102.html
- 	depends on !BR2_POWERPC_CPU_HAS_SPE
--	# Severely broken on Microblaze
--	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=118280
--	depends on !BR2_microblaze
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_14
- 
- config BR2_GCC_VERSION_15_X
-@@ -46,9 +43,6 @@ config BR2_GCC_VERSION_15_X
- 	# powerpc spe support has been deprecated since gcc 8.x.
- 	# https://gcc.gnu.org/ml/gcc/2018-04/msg00102.html
- 	depends on !BR2_POWERPC_CPU_HAS_SPE
--	# Severely broken on Microblaze
--	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=118280
--	depends on !BR2_microblaze
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_15
- 
- endchoice
--- 
-2.25.1
+> This patch adds atomic test and set support for the microblaze arch.  A patch
+> is required to use atomic test and set with gcc 14 and 15 which will soon be
+> submitted upstream.
+
+> In order to atomic instructions to work, the microblaze CFLAG
+> -mxl-barrel-shift must be enabled.
+
+> As I have only tested this with gcc 14 so far, I am not sure if I have handled
+> all potential cases.  For this reason, I am requesting comment on this patch
+> before submitting a final version.
+
+> To test this patch:
+> $ cat > .config<<EOF
+> BR2_microblazeel=y
+> BR2_GCC_VERSION_14_X=y
+> BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> BR2_PACKAGE_ACPITOOL=y
+> EOF
+> $ make olddefconfig
+> $ make
+
+> Fixes: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=118280
+> Upstream: to be done with final version
+
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
 
 _______________________________________________
 buildroot mailing list
