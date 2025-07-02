@@ -1,77 +1,101 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86980C77B7C
-	for <buildroot@archiver.kernel.org>; Wed,  2 Jul 2025 17:09:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF0F5C77B7C
+	for <buildroot@archiver.kernel.org>; Wed,  2 Jul 2025 17:10:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BC8C941A46;
-	Wed,  2 Jul 2025 17:09:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 912B161011;
+	Wed,  2 Jul 2025 17:10:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T32qQU_XhfdG; Wed,  2 Jul 2025 17:09:11 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NMfCTMzwVysG; Wed,  2 Jul 2025 17:10:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 41CD741895
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A7ADD6073C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 41CD741895;
-	Wed,  2 Jul 2025 17:09:11 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 5E213196
- for <buildroot@buildroot.org>; Wed,  2 Jul 2025 17:09:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A7ADD6073C;
+	Wed,  2 Jul 2025 17:10:39 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 00DC9128
+ for <buildroot@buildroot.org>; Wed,  2 Jul 2025 17:10:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4452683C1E
- for <buildroot@buildroot.org>; Wed,  2 Jul 2025 17:09:09 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DBAB940427
+ for <buildroot@buildroot.org>; Wed,  2 Jul 2025 17:10:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id to-3A5SJYs3M for <buildroot@buildroot.org>;
- Wed,  2 Jul 2025 17:09:08 +0000 (UTC)
-X-Greylist: delayed 1858 seconds by postgrey-1.37 at util1.osuosl.org;
- Wed, 02 Jul 2025 17:09:06 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A667381460
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A667381460
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=213.97.179.56;
- helo=fanzine2.igalia.com; envelope-from=aperez@igalia.com; receiver=<UNKNOWN> 
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A667381460
- for <buildroot@buildroot.org>; Wed,  2 Jul 2025 17:09:05 +0000 (UTC)
-Received: from 91-153-34-249.elisa-laajakaista.fi ([91.153.34.249] helo=kodama)
- by fanzine2.igalia.com with esmtpsa 
- (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
- id 1uX0TD-00BXaf-DN; Wed, 02 Jul 2025 18:38:03 +0200
-Received: from localhost (kodama [local])
- by kodama (OpenSMTPD) with ESMTPA id 2bb36674;
- Wed, 2 Jul 2025 16:38:02 +0000 (UTC)
-From: Adrian Perez de Castro <aperez@igalia.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id f8BbHYggJSzZ for <buildroot@buildroot.org>;
+ Wed,  2 Jul 2025 17:10:37 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org DE14E402BB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DE14E402BB
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DE14E402BB
+ for <buildroot@buildroot.org>; Wed,  2 Jul 2025 17:10:36 +0000 (UTC)
+Received: by mail-wm1-x332.google.com with SMTP id
+ 5b1f17b1804b1-451d41e1ad1so47753025e9.1
+ for <buildroot@buildroot.org>; Wed, 02 Jul 2025 10:10:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1751476234; x=1752081034;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=UWuTaV0a6wTapN4tXpLb9HXNlK91kfrYnJkWRXhzUvM=;
+ b=QHIXEIHy1/OLopFMqH3sX+AnSub092IdVaXX9QB1cZkBXphM0OdUtSP1X2JNZh4KTT
+ bm9M1ZsLNFy/8AVKPf3T55fzxaFNKliaYeIJcHsTYN2wUvLd8mp1c8tbh/HpsFGJ4kkQ
+ ds5IqEcjpUYctmIsxOK5MDHiEHuorvrtcBH53dl2xayAAnopHrJCzommaFD6vtzJxCrS
+ xI3jwp95qFvVs/uy3rOdXlgxpOgZUxo7mjUbi6KuYJrvc5SUaNZo9hB9gwOYpecuMY79
+ Iu6gSQT3sEyk/ZTwrEpRkK1ck3svz4ihUubZ49ox/7g/eKIOTINlziHWZ3nn7uze8+Rk
+ pSdQ==
+X-Gm-Message-State: AOJu0Yx9b4QOR+bx5uODPg4U0F/hYMdi4eKqsJzy4kXA9kZ4fWiIDIay
+ kdcDygqqLQ1WlGxAPEidLHjrbTzLPY2L84RzcOtJn/kirlXyLrcw0GUXyD4qnSfPnuYyvjshb4m
+ qN+oE
+X-Gm-Gg: ASbGncuRM7H3X8li6IqETzM8zkMniAVOqsNkTpqTVJu3mZkygZm6RDzHdMonRpxm4Ym
+ RZ5RO1q9OkhrmGB2qwsemqMDoWPjkOrgz43aFDWRFF+V8Dvf2cQRbS7C6+UD/J0l47RG6CeQWuW
+ +QSq35ix7Acm0arn756RH9hjm4lST5NSxeTP/iISJVtRXAxcHOM6sydoGPvEZeDZNrort7RKS9A
+ fJPUaFeG5S0Irw7g/25251lxs/DZ+YCHWgWZMdBOaqizdQwm8qn2vuL+IFaoBE2vH7UMq83Aj4t
+ 9w0wx9J8jVyTQ/zZHetIOFfSY4T39vtn/KpBd2q+P9aDPl+Coq0YWmFHRQNdbWlRW/DAc+J+WxC
+ xBQWquDzXjw==
+X-Google-Smtp-Source: AGHT+IGbpnWR9XKx+E08+swvSb7Mm3DVxzdSzrMprKCLNFWRZV3VYKLid+trMQgZXK0q7Rq6pesPNA==
+X-Received: by 2002:a05:600c:5309:b0:43b:ca39:6c75 with SMTP id
+ 5b1f17b1804b1-454a9d3ee7bmr5257455e9.16.1751476234560; 
+ Wed, 02 Jul 2025 10:10:34 -0700 (PDT)
+Received: from arch (94.105.118.175.dyn.edpnet.net. [94.105.118.175])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-454a9989423sm3388835e9.19.2025.07.02.10.10.33
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 02 Jul 2025 10:10:33 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Wed,  2 Jul 2025 19:38:01 +0300
-Message-ID: <20250702163802.2754805-1-aperez@igalia.com>
+Date: Wed,  2 Jul 2025 19:10:33 +0200
+Message-ID: <20250702171033.3040749-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.50.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=igalia.com; 
- s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
- Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
- Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
- In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
- List-Post:List-Owner:List-Archive;
- bh=3LlOmY9lUaKuP/wECpcBhkB4zTxuUIaZutJT8Zz7H5Q=; b=GRnpkYQdXjViukVcgKJy32WSIB
- bMG1w5su/8lh7gL5Kk6UVkEvMCWPGnYKNmgeCeDng88fI0Mj2IE0GztuNqhxYZ8MlGTfg2A5N7WZl
- ye3VZoksJiTF3Ht5qDKf2dcvZS/HieAtNVEOcr69YjnDvYgn0FcX0eob0kjBHeYs/VJnESCIe9Lpr
- FieDKr+DX9MrtcQJxKQ3oYNQxS1uJ9syl3/uIiJ7n4uq3BUCv3sBvbetFXlnA78bZmG0noflTkfmi
- 0cmDSEp8zwnTUyWk8zpjah1bmML+8pbqO3O9Av5sQFb7eNJ2eqI4GUSHeGzt6UtkRAEnOHHmc4Usw
- UjQ1GIog==;
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=igalia.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1751476234; x=1752081034; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=UWuTaV0a6wTapN4tXpLb9HXNlK91kfrYnJkWRXhzUvM=;
+ b=DRFoFZeblEsfmCrqyUEYsPFwkw7OdnKx7T0hMxo6cpQb96EsxG2ezemOuS0U8y8k+O
+ oY1YX9E2KJkj5D0NuSRHtcwKlNY3GHPz9vv4gweYuBBVu4anL0JMWWiQmp1iHb4IXjuQ
+ SBYUYoUarwtEaNCThJ76pkqMcuIN1Ra+779mzjrlcmE7Jzudm63ReY1vniyD4gfIuMtR
+ crzjNaZZoKTp8STAjvvSjQ/bqDnjNdxQb9H1g5jqFtJWRTXP0+7qI/qQGFilYOSu8p1O
+ M9ksD0bRGzGsMneMtnUasrLZVIyohn8X4YmWVpq9byhKtR6wiM0aCPq6EZBiTun9xApj
+ V7RA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256
- header.s=20170329 header.b=GRnpkYQd
-Subject: [Buildroot] [PATCH 1/1] package/cog: bump to version 0.18.5
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=DRFoFZeb
+Subject: [Buildroot] [2025.02.x PATCH v2]
+ support/dependencies/check-host-cmake.mk: set host-cmake max version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,66 +107,84 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adrian Perez de Castro <aperez@igalia.com>
+From: Thomas Perale via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Perale <thomas.perale@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This is a small bugfix release, mainly containing event handling fixes
-for Wayland, and the possibility to explicitly configure the gamepad
-support at build time.
+Since the introduction of CMake 4 in several distributions, build errors
+started occurring on those distributions for cmake packages that
+included calls to cmake_minimum_required() or cmake_policy() with a
+version older than 3.50 (see [1]).
 
-Release notes:
+To avoid backporting numerous individual fixes for affected packages,
+commit [2] was previously applied to the LTS branch as a workaround.
 
-  https://wpewebkit.org/release/cog-0.18.5.html
+Following further discussion (see [2][3]), that raised concerns about
+policy changes between CMake versions that could lead to breaking builds
+in non-obvious ways, a different approach was chosen.
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+This patch reverts commit [2] and instead of applying a global
+compatibility variable, we now enforce building host-cmake when the host
+system provides CMake 4 or newer.
+
+[1] https://cmake.org/cmake/help/latest/release/4.0.html#deprecated-and-removed-features
+[2] 70aac2d9e8 package/pkg-cmake.mk: force config version >=3.5
+[3] https://lists.buildroot.org/pipermail/buildroot/2025-May/780262.html
+[4] https://lists.buildroot.org/pipermail/buildroot/2025-June/780372.html
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/cog/cog.hash | 8 ++++----
- package/cog/cog.mk   | 5 ++++-
- 2 files changed, 8 insertions(+), 5 deletions(-)
+v1 -> v2: move the logic in the .sh file
+---
+ package/pkg-cmake.mk                     | 4 ----
+ support/dependencies/check-host-cmake.sh | 9 +++++++++
+ 2 files changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/package/cog/cog.hash b/package/cog/cog.hash
-index b59b5f4795..d513ae72ba 100644
---- a/package/cog/cog.hash
-+++ b/package/cog/cog.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/cog-0.18.4.tar.xz.sums
--md5  0566ab6676b499ebcff372fbe39e24fc  cog-0.18.4.tar.xz
--sha1  2d6f88cfb07eaac1be2bf9954832f19f8a856631  cog-0.18.4.tar.xz
--sha256  31d7079db2eeed790899d2f1f824dd6a54bf30d072d196d737be572f105d99b1  cog-0.18.4.tar.xz
-+# From https://wpewebkit.org/releases/cog-0.18.5.tar.xz.sums
-+md5  3df784f9930353ac4cb2d95fdd56e21d  cog-0.18.5.tar.xz
-+sha1  49a79797fa4d0aa41680095161df7cdb155f8fe9  cog-0.18.5.tar.xz
-+sha256  0ede9d09ab635ac519beec0543378e3fc51b56561a5fb7aa9c0cbca54c31b97c  cog-0.18.5.tar.xz
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index 08fe7c431e..ba287d244a 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -53,10 +53,6 @@ define inner-cmake-package
  
- # Hashes for license files:
- sha256  e6c42d93c68b292bcccf6d2ec3e13da85df90b718ba27c2c2a01053a9d009252  COPYING
-diff --git a/package/cog/cog.mk b/package/cog/cog.mk
-index 7f680bb700..418ed19d86 100644
---- a/package/cog/cog.mk
-+++ b/package/cog/cog.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ $(3)_SUPPORTS_IN_SOURCE_BUILD ?= YES
  
--COG_VERSION = 0.18.4
-+COG_VERSION = 0.18.5
- COG_SITE = https://wpewebkit.org/releases
- COG_SOURCE = cog-$(COG_VERSION).tar.xz
- COG_INSTALL_STAGING = YES
-@@ -45,7 +45,10 @@ COG_CONF_OPTS += -Dcog_dbus_control=user
- endif
+-# Some packages requires CMake 3.0.0 but latest CMake requires >=3.5
+-# Set the policy version minimum to force these packages to 3.5 or greater.
+-$(2)_CONF_OPTS += -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+-
+ # The default backend, unless specified by the package
+ $(3)_CMAKE_BACKEND ?= make
  
- ifeq ($(BR2_PACKAGE_LIBMANETTE),y)
-+COG_CONF_OPTS += -Dlibmanette=enabled
- COG_DEPENDENCIES += libmanette
-+else
-+COG_CONF_OPTS += -Dlibmanette=disabled
- endif
+diff --git a/support/dependencies/check-host-cmake.sh b/support/dependencies/check-host-cmake.sh
+index fadeae9f6b..c7aa16f48d 100755
+--- a/support/dependencies/check-host-cmake.sh
++++ b/support/dependencies/check-host-cmake.sh
+@@ -6,6 +6,9 @@
+ major_min="${1%.*}"
+ minor_min="${1#*.}"
  
- $(eval $(meson-package))
++major_max="4"
++minor_max="0"
++
+ shift
+ 
+ for candidate; do
+@@ -32,6 +35,12 @@ for candidate; do
+     major="${version%.*}"
+     minor="${version#*.}"
+ 
++    if [ ${major} -gt ${major_max} ]; then
++        continue
++    elif [ ${major} -eq ${major_max} -a ${minor} -ge ${minor_max} ]; then
++        continue
++    fi
++
+     if [ ${major} -gt ${major_min} ]; then
+         echo "${cmake}"
+         exit
 -- 
 2.50.0
 
