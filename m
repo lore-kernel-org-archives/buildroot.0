@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3FD62C83030
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A63DBC83F09
 	for <buildroot@archiver.kernel.org>; Fri,  4 Jul 2025 06:21:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0ABFB83D17;
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6B4E160B65;
 	Fri,  4 Jul 2025 06:21:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FcU7rNwIsNLA; Fri,  4 Jul 2025 06:21:36 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sb8a9M84ocgu; Fri,  4 Jul 2025 06:21:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C6D5983D0D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 87E8060AF5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C6D5983D0D;
-	Fri,  4 Jul 2025 06:21:35 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1C38B7AB
+	by smtp3.osuosl.org (Postfix) with ESMTP id 87E8060AF5;
+	Fri,  4 Jul 2025 06:21:37 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2ACFE7AD
  for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:21:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7A74340F06
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7995B60AE2
  for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:21:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id poQ8I8IRAiva for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id x18kTa_lF-VW for <buildroot@buildroot.org>;
  Fri,  4 Jul 2025 06:21:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C8BC40EFD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 19A13608FC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7C8BC40EFD
+ by smtp3.osuosl.org (Postfix) with ESMTP id 19A13608FC
  for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:21:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 56ECC85CCE; Fri,  4 Jul 2025 06:21:26 +0000 (UTC)
+ id 0822E849B1; Fri,  4 Jul 2025 06:21:26 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Jul 2025 09:49:53 +0200
+Date: Wed, 2 Jul 2025 18:38:08 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 4e9e8040ca20426f28a57f8bdb57188cd11c4833
-X-Git-Newrev: a6486068f6930e7ef2694c371d335fb39dbdbbe4
+X-Git-Oldrev: 06a92ffdcc2ced0411102ca0f9028bcaec86dadb
+X-Git-Newrev: 291415ced9c9f76a068ce23244a086d5758c84bd
 X-Patchwork-Hint: ignore
-Message-Id: <20250704062126.56ECC85CCE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/modsecurity2:
- update upstream URLs
+Message-Id: <20250704062126.0822E849B1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/lua: bump to
+ version 5.4.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,74 +61,79 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0118392318017881570=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0118392318017881570==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=a6486068f6930e7ef2694c371d335fb39dbdbbe4
+commit: https://git.buildroot.net/buildroot/commit/?id=291415ced9c9f76a068ce23244a086d5758c84bd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-'https://github.com/SpiderLabs/ModSecurity' now redirects to
-'https://github.com/owasp-modsecurity/ModSecurity', so update our
-URLs accordingly.
+For differences with 5.4.7, see:
+https://www.lua.org/work/diffs-lua-5.4.7-lua-5.4.8.html
 
-Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
-Reviewed-by: Herve Codina <herve.codina@bootlin.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+[Julien: add link to diff with previous version]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 602fb43d34ba1eb97a975848aca3bb8eed1e8e87)
+(cherry picked from commit 393d7e4d2197696bf0df7c83dc1dd97e3f6253bb)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/modsecurity2/Config.in         | 2 +-
- package/modsecurity2/modsecurity2.hash | 2 +-
- package/modsecurity2/modsecurity2.mk   | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/lua/5.4.7/lua.hash                                  | 5 -----
+ package/lua/{5.4.7 => 5.4.8}/0001-root-path.patch           | 0
+ package/lua/{5.4.7 => 5.4.8}/0002-shared-libs-for-lua.patch | 0
+ package/lua/{5.4.7 => 5.4.8}/0003-linenoise.patch           | 0
+ package/lua/5.4.8/lua.hash                                  | 5 +++++
+ package/lua/lua.mk                                          | 2 +-
+ 6 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/modsecurity2/Config.in b/package/modsecurity2/Config.in
-index fb1bfc960e..df5634bf89 100644
---- a/package/modsecurity2/Config.in
-+++ b/package/modsecurity2/Config.in
-@@ -10,4 +10,4 @@ config BR2_PACKAGE_MODSECURITY2
- 	  into HTTP(S) traffic and provides a power rules language and
- 	  API to implement advanced protections.
+diff --git a/package/lua/5.4.7/lua.hash b/package/lua/5.4.7/lua.hash
+deleted file mode 100644
+index d67fdcf6cf..0000000000
+--- a/package/lua/5.4.7/lua.hash
++++ /dev/null
+@@ -1,5 +0,0 @@
+-# Hashes from: https://www.lua.org/ftp/
+-sha256  9fbf5e28ef86c69858f6d3d34eccc32e911c1a28b4120ff3e84aaa70cfbf1e30  lua-5.4.7.tar.gz
+-
+-# Locally computed
+-sha256  33a975a766520bc54de2d71e45442e504effa0519e331e31ee3fc46eca4f98bd  doc/readme.html
+diff --git a/package/lua/5.4.7/0001-root-path.patch b/package/lua/5.4.8/0001-root-path.patch
+similarity index 100%
+rename from package/lua/5.4.7/0001-root-path.patch
+rename to package/lua/5.4.8/0001-root-path.patch
+diff --git a/package/lua/5.4.7/0002-shared-libs-for-lua.patch b/package/lua/5.4.8/0002-shared-libs-for-lua.patch
+similarity index 100%
+rename from package/lua/5.4.7/0002-shared-libs-for-lua.patch
+rename to package/lua/5.4.8/0002-shared-libs-for-lua.patch
+diff --git a/package/lua/5.4.7/0003-linenoise.patch b/package/lua/5.4.8/0003-linenoise.patch
+similarity index 100%
+rename from package/lua/5.4.7/0003-linenoise.patch
+rename to package/lua/5.4.8/0003-linenoise.patch
+diff --git a/package/lua/5.4.8/lua.hash b/package/lua/5.4.8/lua.hash
+new file mode 100644
+index 0000000000..8494511529
+--- /dev/null
++++ b/package/lua/5.4.8/lua.hash
+@@ -0,0 +1,5 @@
++# Hashes from: https://www.lua.org/ftp/
++sha256  4f18ddae154e793e46eeab727c59ef1c0c0c2b744e7b94219710d76f530629ae  lua-5.4.8.tar.gz
++
++# Locally computed
++sha256  3773a4900f3539c56aea9d6cd48d71c8751d495c4abc28472706bb9553d1493c  doc/readme.html
+diff --git a/package/lua/lua.mk b/package/lua/lua.mk
+index 15772dbdf3..455b7e58b2 100644
+--- a/package/lua/lua.mk
++++ b/package/lua/lua.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
--	  https://github.com/SpiderLabs/ModSecurity
-+	  https://github.com/owasp-modsecurity/ModSecurity
-diff --git a/package/modsecurity2/modsecurity2.hash b/package/modsecurity2/modsecurity2.hash
-index 2c77ffd830..fbb7fabb3a 100644
---- a/package/modsecurity2/modsecurity2.hash
-+++ b/package/modsecurity2/modsecurity2.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/SpiderLabs/ModSecurity/releases/download/v2.9.7/modsecurity-2.9.7.tar.gz.sha256
-+# From https://github.com/owasp-modsecurity/ModSecurity/releases/download/v2.9.7/modsecurity-2.9.7.tar.gz.sha256
- sha256  2a28fcfccfef21581486f98d8d5fe0397499749b8380f60ec7bb1c08478e1839  modsecurity-2.9.7.tar.gz
- 
- # Locally computed
-diff --git a/package/modsecurity2/modsecurity2.mk b/package/modsecurity2/modsecurity2.mk
-index 88bbf3bb29..36d6e1a847 100644
---- a/package/modsecurity2/modsecurity2.mk
-+++ b/package/modsecurity2/modsecurity2.mk
-@@ -6,7 +6,7 @@
- 
- MODSECURITY2_VERSION = 2.9.7
- MODSECURITY2_SOURCE = modsecurity-$(MODSECURITY2_VERSION).tar.gz
--MODSECURITY2_SITE = https://github.com/SpiderLabs/ModSecurity/releases/download/v$(MODSECURITY2_VERSION)
-+MODSECURITY2_SITE = https://github.com/owasp-modsecurity/ModSecurity/releases/download/v$(MODSECURITY2_VERSION)
- MODSECURITY2_LICENSE = Apache-2.0
- MODSECURITY2_LICENSE_FILES = LICENSE
- MODSECURITY2_CPE_ID_VENDOR = trustwave
-
---===============0118392318017881570==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ ifeq ($(BR2_PACKAGE_LUA_5_4),y)
+-LUA_VERSION = 5.4.7
++LUA_VERSION = 5.4.8
+ else ifeq ($(BR2_PACKAGE_LUA_5_3),y)
+ LUA_VERSION = 5.3.6
+ else
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0118392318017881570==--
