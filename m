@@ -1,103 +1,107 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18BF8C77B7C
-	for <buildroot@archiver.kernel.org>; Wed,  2 Jul 2025 15:12:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CAE97C77B7C
+	for <buildroot@archiver.kernel.org>; Wed,  2 Jul 2025 16:00:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C2B42606ED;
-	Wed,  2 Jul 2025 15:12:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 820A440884;
+	Wed,  2 Jul 2025 16:00:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SULWAWXIEEeW; Wed,  2 Jul 2025 15:12:52 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id N3KzKaW4t-uI; Wed,  2 Jul 2025 16:00:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0185B6076D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 319CA405F6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0185B6076D;
-	Wed,  2 Jul 2025 15:12:52 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 41110128
- for <buildroot@buildroot.org>; Wed,  2 Jul 2025 15:12:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 319CA405F6;
+	Wed,  2 Jul 2025 16:00:08 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C18F1128
+ for <buildroot@buildroot.org>; Wed,  2 Jul 2025 16:00:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 25BA1414B4
- for <buildroot@buildroot.org>; Wed,  2 Jul 2025 15:12:50 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B2DA28433E
+ for <buildroot@buildroot.org>; Wed,  2 Jul 2025 16:00:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id i4kQ-0l0G2kk for <buildroot@buildroot.org>;
- Wed,  2 Jul 2025 15:12:47 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id n1Ws45pUbslQ for <buildroot@buildroot.org>;
+ Wed,  2 Jul 2025 16:00:05 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
- envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7BDD040FC6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7BDD040FC6
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7BDD040FC6
- for <buildroot@buildroot.org>; Wed,  2 Jul 2025 15:12:46 +0000 (UTC)
-Received: by mail-wr1-x42b.google.com with SMTP id
- ffacd0b85a97d-3a522224582so3688339f8f.3
- for <buildroot@buildroot.org>; Wed, 02 Jul 2025 08:12:46 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
+ envelope-from=elmehdi.younes@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5E0208434B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5E0208434B
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5E0208434B
+ for <buildroot@buildroot.org>; Wed,  2 Jul 2025 16:00:05 +0000 (UTC)
+Received: by mail-wm1-x332.google.com with SMTP id
+ 5b1f17b1804b1-4538bc1cffdso44368115e9.0
+ for <buildroot@buildroot.org>; Wed, 02 Jul 2025 09:00:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1751469164; x=1752073964;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=5ESiTiMIwc+qPjUmNOQC2mnpRj90aOCopMs1R8+jrs8=;
- b=vRB0achdWc6ABsvQ60shx6X+5LXGWnGuMyVvWFXmA9XjKnFuMbj483NLlwWJj1UajJ
- rCK6KJzyxJhh+aFkLUTlPEFqEMFvK8y98aGVy/VAuA9uUZK9QxjNmDLvfrvr4fJJFGcQ
- 993GR0Bpr8NZbeqnsZAuqbkGT6lo7JUj0Dc8Gv99i26nb04v5hQiq6XPGl5Ivnm2GSbf
- skLNb3PyA6f4IAifS5nxG5ldDqK+V3Yri+/L9ZKzzMmEYTZWqeVsL84y1I2gQLVIGESx
- MWkimja+sKYn8zitXqDmsYXsmzRnVWSNOvScRuedY8g2OpKh5exP/N/AXKwEhl39jVbA
- ogZA==
-X-Gm-Message-State: AOJu0Yw51kOD0fw3MEqtSPQIOpVzAA/x1/vdFNXzBg/tMkryuaqYQjjl
- R5edRY5PSVUD2bjTAEWUbBEh18huN8pa9KZR4Yo+LrREtraNVgBEA8F8H2NwAfY9bSr2XAoPsGo
- fBFH0
-X-Gm-Gg: ASbGnctymSJvqaqizd6Qr4Z7Yfzm5IoOiQxGGARNk9OiyKOcfXVZeljH1Ul6jUSo9mY
- 9txN4KMi9a1QFYEGHJ7R+rB9tYHwp+9MXTVogTlCVg1J+hXG6cZLL4G/rcydjb3VDJ+AdnGtj9N
- H2QCDPHCGDmKMU7dZ6XFRS8wKzXpuM1N/tSsL4H2y3AQyCJ4kygNCOaQqz2AwfIodtwEbZ4MXz/
- DA8O7PwVoMyLXeRy4yCVJ256xS2rzfa1hFzcWOiVSHAQt5n4JbQj5EUGGXNNu8lAAcSEbEcQAwd
- PbKnbgaNQB5LZdoOhoDMd4r7ACygT9VyWlR41UjYq9pihgJ63/J4GKe656pHt9L0KJw6uxIwG4g
- X0Y8m5r2O9PLjSLSrwA==
-X-Google-Smtp-Source: AGHT+IEfmUj9dB1Gk1/Nj+52RibFBM0Xkprz+UtMxNIFkC8bcNW0Oy5bYTW6fsU0DEmMwBKgbHskmg==
-X-Received: by 2002:a05:6000:470d:b0:3a6:cfca:efee with SMTP id
- ffacd0b85a97d-3b1fe2de7aemr2401182f8f.17.1751469163328; 
- Wed, 02 Jul 2025 08:12:43 -0700 (PDT)
-Received: from dragon.local.ess-mail.com
- ([2a02:a03f:639d:e501:5db7:a3a4:443e:4828])
+ d=1e100.net; s=20230601; t=1751472003; x=1752076803;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=fUiRYK9yE83EW31ek4MqoyPAWNLsPpcl7I4jvnBNjVI=;
+ b=ci4d4ZlHUfBhLPCbz1YJDRLWuLlsSn+tECayGHLp88dZaHY3WlI/ivpIlkDBtpVCdV
+ V04tnqjNBOBFokhJ9wJ/W78ESquRHWnZXBP6POiP53GVX3OiFd7+bYZWyPqAEf9kZDRI
+ U3OpQMssKcWdm/dcu0g2UZbtV0sctVvw/j98KuLOadKaSzkx4T9jrpuaJz517WbgxKS+
+ FwT3fEMZMJpFKjanfkMzJHxQYnA7Q1TxjXlRD2krN9ZviPWkIuRersvsNYdnjnYMezBw
+ JbBYLCFogRxAIoAQlg3IxXpp1kKAq37ACCr7qA3uV5V0x0+ZhE9fxOpoZznrPqXZsgTx
+ YXGA==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCXjCPbnE1PBwc06oGeax+LIOqS+9jrKXtkGg4egBdm98kOfZLpcqVVyEvbFi/ihP6O9cH8xi+0lR0I=@buildroot.org
+X-Gm-Message-State: AOJu0YyncchpYLowIUlGd+1ryVKmewUG3ttLFQUCFEx4zSJKfoYeg2UW
+ 6LC19ydS1k2XvdVciX6ZsRjf6dzCRHJF0hP43dQlq2SLScTKRguvP1jM2RHe48av1jQ=
+X-Gm-Gg: ASbGncthWP0BlN2sxIPU7spkKvi14+5QXXhpgVHESG51qy1jjIioEbre4AnnOiP+7w3
+ LqlkFPKG4fhIEnSvKXwX9hhgqgStipMZtwymGKlgDA4JHN3RU8JXvj4Xrj/edMsJgYngetZ6lm6
+ weOLzuvmkC8fSR9ooC/stQ/L5jFxzAOfV/qubCAyNyyUxXDPRvg2wKv6uOOTg5NgZ27r6uxdpGt
+ vraSL5rXLfaYlPKf4pMU/LXFg9qFqtnFRGhqn9YYlTBre9HYgpM5FrJX6hbX78mUBTCkGytFXw+
+ 4rJKer07eHJQO3VtHp23Qr8IjNntKOYYbsU//epNp7jdBiwidADHvWI1lX8vNzwI/SC6OfwmE0E
+ n82+YqX9wuzZrhzPlRWxklNfSs470c1oOlHCops5+X2FeHqUayh+C
+X-Google-Smtp-Source: AGHT+IGl3zuDHjGbGs7oPaqXTpd/0zXo7RPz0q5EfNw6nDAlXTsSBI+Dp2/Pf6YqWKQLImEmEJvkyg==
+X-Received: by 2002:a05:600c:1c02:b0:43d:2230:300f with SMTP id
+ 5b1f17b1804b1-454a5c67c8cmr27640505e9.0.1751472002995; 
+ Wed, 02 Jul 2025 09:00:02 -0700 (PDT)
+Received: from [10.5.90.83]
+ (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3a88c80b74csm16260969f8f.45.2025.07.02.08.12.42
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 02 Jul 2025 08:12:42 -0700 (PDT)
-To: buildroot@buildroot.org
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
-	thomas.perale@mind.be
-Date: Wed,  2 Jul 2025 17:12:28 +0200
-Message-ID: <20250702151228.1641390-1-titouan.christophe@mind.be>
-X-Mailer: git-send-email 2.50.0
+ ffacd0b85a97d-3a88c8013fesm16619027f8f.38.2025.07.02.09.00.02
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 02 Jul 2025 09:00:02 -0700 (PDT)
+Message-ID: <961c5101-be6c-499f-8d18-3305262ca11b@smile.fr>
+Date: Wed, 2 Jul 2025 18:00:02 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: James Knight <git@jdknight.me>, buildroot@buildroot.org
+Cc: Daniel Lang <dalang@gmx.at>, Joseph Kogut <joseph.kogut@gmail.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ Valentin Korenblit <valentinkorenblit@gmail.com>
+References: <20250629235342.1609-1-git@jdknight.me>
+Content-Language: en-US
+In-Reply-To: <20250629235342.1609-1-git@jdknight.me>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1751469164; x=1752073964; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=5ESiTiMIwc+qPjUmNOQC2mnpRj90aOCopMs1R8+jrs8=;
- b=f0vOv3/rCkFQxNTymNaQiA9X4jTMMvH96AET4yPTQaGLjQeW3CGL6Tc7cBFGB+pY1C
- WNM1ClEL7qUNv8bXLyjuXj3YpMfD7uJ8QGoVA5y8cYw11mqc4exKC5MWJEf/NOiMDE0Z
- 5MCxhdHG9TT8VUWJkTDIe7nU3v3G8uiGOmvasg6jDOciW3mKjQA1yVObcxKKmsr9YYkG
- m9roHhiTaVBN5jgDoutn8mI6vOI9sy4B3/NeU7VRPvg+u6U1ebogBo6CVe4SE/wZe53i
- v9EsHGYG3ZldXckGiDdvclCBi1OzDuCQUCZkxwL5D8B4zsn+IWmfwzm6pdgUjwAu6e14
- COMQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=f0vOv3/r
-Subject: [Buildroot] [PATCH] package/libsoup: add many security patches
+ d=smile.fr; s=google; t=1751472003; x=1752076803; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=fUiRYK9yE83EW31ek4MqoyPAWNLsPpcl7I4jvnBNjVI=;
+ b=f7SqGxMV6LfaD692gqL61QctaMDI/gjfOuB/dcPSt4UUb7MABN3saEoP1VspWp5Csz
+ mm1Erbs8Wjwcjl0JRnuRVM6y7mOh5NDqYNXAIRHBvDNek5nMdPPynKkyXuY6+h6vhHuK
+ 0+/wC7gawfOw3VgDmRxCxLL4vVfALhYTIBlhA=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
+ header.s=google header.b=f7SqGxMV
+Subject: Re: [Buildroot] [PATCH 1/1] package/llvm-project/clang: use host
+ arch in gcc-install-dir setup
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -109,1335 +113,123 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Titouan Christophe via buildroot <buildroot@buildroot.org>
-Reply-To: Titouan Christophe <titouan.christophe@mind.be>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: El Mehdi YOUNES via buildroot <buildroot@buildroot.org>
+Reply-To: El Mehdi YOUNES <elmehdi.younes@smile.fr>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Import all security patches from OpenEmbedded for libsoup.
-This fixes the following 18 known vulnerabilities:
-
-- CVE-2024-52530:
-    GNOME libsoup before 3.6.0 allows HTTP request smuggling in some
-    configurations because '\0' characters at the end of header names are
-    ignored, i.e., a "Transfer-Encoding\0: chunked" header is treated the
-    same as a "Transfer-Encoding: chunked" header.
-    https://www.cve.org/CVERecord?id=CVE-2024-52530
-
-- CVE-2024-52531:
-    GNOME libsoup before 3.6.1 allows a buffer overflow in applications that
-    perform conversion to UTF-8 in soup_header_parse_param_list_strict.
-    There is a plausible way to reach this remotely via
-    soup_message_headers_get_content_type (e.g., an application may want to
-    retrieve the content type of a request or response).
-    https://www.cve.org/CVERecord?id=CVE-2024-52531
-
-- CVE-2024-52532:
-    GNOME libsoup before 3.6.1 has an infinite loop, and memory consumption.
-    During the reading of certain patterns of WebSocket data from clients.
-    https://www.cve.org/CVERecord?id=CVE-2024-52532
-
-- CVE-2025-2784:
-    Libsoup: heap buffer over-read in `skip_insignificant_space`
-    when sniffing content
-    https://www.cve.org/CVERecord?id=CVE-2025-2784
-
-- CVE-2025-4476:
-    Libsoup: null pointer dereference in libsoup may lead to denial of service
-    https://www.cve.org/CVERecord?id=CVE-2025-4476
-
-- CVE-2025-4948:
-    Libsoup: integer underflow in soup_multipart_new_from_message() leading to
-    denial of service in libsoup
-    https://www.cve.org/CVERecord?id=CVE-2025-4948
-
-- CVE-2025-4969:
-    Libsoup: off-by-one out-of-bounds read in find_boundary() in soup-multipart.c
-    https://www.cve.org/CVERecord?id=CVE-2025-4969
-
-- CVE-2025-32050:
-    Libsoup: integer overflow in append_param_quoted
-    https://www.cve.org/CVERecord?id=CVE-2025-32050
-
-- CVE-2025-32052:
-    Libsoup: heap buffer overflow in sniff_unknown()
-    https://www.cve.org/CVERecord?id=CVE-2025-32052
-
-- CVE-2025-32053:
-    Libsoup: heap buffer overflows in sniff_feed_or_html() and
-    skip_insignificant_space()
-    https://www.cve.org/CVERecord?id=CVE-2025-32053
-
-- CVE-2025-32906:
-    Libsoup: out of bounds reads in soup_headers_parse_request()
-    https://www.cve.org/CVERecord?id=CVE-2025-32906
-
-- CVE-2025-32910:
-    Libsoup: null pointer deference on libsoup via /auth/soup-auth-digest.c
-    through "soup_auth_digest_authenticate" on client when server omits the
-    "realm" parameter in an unauthorized response with digest authentication
-    https://www.cve.org/CVERecord?id=CVE-2025-32910
-
-- CVE-2025-32911:
-    Libsoup: double free on soup_message_headers_get_content_disposition()
-    through "soup-message-headers.c" via "params" ghashtable value
-    https://www.cve.org/CVERecord?id=CVE-2025-32911
-
-- CVE-2025-32912:
-    Libsoup: null pointer dereference in client when server omits the "nonce"
-    parameter in an unauthorized response with digest authentication
-    https://www.cve.org/CVERecord?id=CVE-2025-32912
-
-- CVE-2025-32913:
-    Libsoup: null pointer dereference in
-    soup_message_headers_get_content_disposition when "filename" parameter is
-    present, but has no value in content-disposition header
-    https://www.cve.org/CVERecord?id=CVE-2025-32913
-
-- CVE-2025-32914:
-    Libsoup: oob read on libsoup through function
-    "soup_multipart_new_from_message" in soup-multipart.c leads to crash or
-    exit of process
-    https://www.cve.org/CVERecord?id=CVE-2025-32914
-
-- CVE-2025-46420:
-    Libsoup: memory leak on soup_header_parse_quality_list() via soup-headers.c
-    https://www.cve.org/CVERecord?id=CVE-2025-46420
-
-- CVE-2025-46421:
-    Libsoup: information disclosure may leads libsoup client sends authorization
-    header to a different host when being redirected by a server
-    https://www.cve.org/CVERecord?id=CVE-2025-46421
-
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
----
- .../0003-sniffer-fix-potential-overflow.patch |  60 ++++++++
- ...eaders-Strictly-dont-allow-NUL-bytes.patch |  61 ++++++++
- ...Be-more-robust-against-invalid-input.patch | 137 ++++++++++++++++++
- ...ss-the-frame-as-soon-as-we-read-data.patch |  41 ++++++
- ...0007-Fix-using-int-instead-of-size_t.patch |  33 +++++
- .../0008-Fix-heap-buffer-overflow.patch       |  36 +++++
- .../0009-Fix-heap-buffer-overflow.patch       |  43 ++++++
- ...headers-Handle-parsing-only-newlines.patch |  47 ++++++
- ...th-digest-Handle-missing-realm-nonce.patch |  36 +++++
- ...012-auth-digest-Handle-missing-nonce.patch |  98 +++++++++++++
- .../libsoup/0013-auth-digest-Fix-leak.patch   |  32 ++++
- package/libsoup/0014-CVE-2025-32911.patch     |  78 ++++++++++
- ...015-auth-digest-Handle-missing-nonce.patch |  36 +++++
- package/libsoup/0016-CVE-2025-32914.patch     |  39 +++++
- .../libsoup/0017-auth-digest-fix-crash.patch  |  42 ++++++
- ...p_header_parse_quality_list-Fix-leak.patch |  65 +++++++++
- ...ion-Strip-authentication-credentials.patch |  51 +++++++
- ...oup-multipart-Verify-boundary-limits.patch |  42 ++++++
- ...1-soup-multipart-Verify-array-bounds.patch |  41 ++++++
- package/libsoup/libsoup.mk                    |  37 +++++
- 20 files changed, 1055 insertions(+)
- create mode 100644 package/libsoup/0003-sniffer-fix-potential-overflow.patch
- create mode 100644 package/libsoup/0004-headers-Strictly-dont-allow-NUL-bytes.patch
- create mode 100644 package/libsoup/0005-headers-Be-more-robust-against-invalid-input.patch
- create mode 100644 package/libsoup/0006-websocket-process-the-frame-as-soon-as-we-read-data.patch
- create mode 100644 package/libsoup/0007-Fix-using-int-instead-of-size_t.patch
- create mode 100644 package/libsoup/0008-Fix-heap-buffer-overflow.patch
- create mode 100644 package/libsoup/0009-Fix-heap-buffer-overflow.patch
- create mode 100644 package/libsoup/0010-headers-Handle-parsing-only-newlines.patch
- create mode 100644 package/libsoup/0011-auth-digest-Handle-missing-realm-nonce.patch
- create mode 100644 package/libsoup/0012-auth-digest-Handle-missing-nonce.patch
- create mode 100644 package/libsoup/0013-auth-digest-Fix-leak.patch
- create mode 100644 package/libsoup/0014-CVE-2025-32911.patch
- create mode 100644 package/libsoup/0015-auth-digest-Handle-missing-nonce.patch
- create mode 100644 package/libsoup/0016-CVE-2025-32914.patch
- create mode 100644 package/libsoup/0017-auth-digest-fix-crash.patch
- create mode 100644 package/libsoup/0018-soup_header_parse_quality_list-Fix-leak.patch
- create mode 100644 package/libsoup/0019-session-Strip-authentication-credentials.patch
- create mode 100644 package/libsoup/0020-soup-multipart-Verify-boundary-limits.patch
- create mode 100644 package/libsoup/0021-soup-multipart-Verify-array-bounds.patch
-
-diff --git a/package/libsoup/0003-sniffer-fix-potential-overflow.patch b/package/libsoup/0003-sniffer-fix-potential-overflow.patch
-new file mode 100644
-index 0000000000..16ee2873f9
---- /dev/null
-+++ b/package/libsoup/0003-sniffer-fix-potential-overflow.patch
-@@ -0,0 +1,60 @@
-+From 2eacbd762332795e00692ddab2515c6da23198d3 Mon Sep 17 00:00:00 2001
-+From: Changqing Li <changqing.li@windriver.com>
-+Date: Mon, 12 May 2025 14:06:41 +0800
-+Subject: [PATCH] sniffer: Add better coverage of skip_insignificant_space()
-+
-+CVE: CVE-2025-2784
-+Upstream-Status: Backport
-+[https://gitlab.gnome.org/GNOME/libsoup/-/merge_requests/435/diffs?commit_id=242a10fbb12dbdc12d254bd8fc8669a0ac055304;
-+ https://gitlab.gnome.org/GNOME/libsoup/-/merge_requests/442/diffs?commit_id=c415ad0b6771992e66c70edf373566c6e247089d]
-+
-+Test code is not added since it uses some functions not defined in
-+version 2.74. These tests are not used now, so just ignore them.
-+
-+Patch originally from OpenEmbedded:
-+https://git.openembedded.org/meta-openembedded/plain/meta-oe/recipes-support/libsoup/libsoup-2.4/CVE-2025-2784.patch
-+
-+Signed-off-by: Changqing Li <changqing.li@windriver.com>
-+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-+---
-+ libsoup/soup-content-sniffer.c |  9 +++----
-+ 1 files changed, 3 insertions(+), 4 deletions(-)
-+
-+diff --git a/libsoup/soup-content-sniffer.c b/libsoup/soup-content-sniffer.c
-+index 5f2896e..9554636 100644
-+--- a/libsoup/soup-content-sniffer.c
-++++ b/libsoup/soup-content-sniffer.c
-+@@ -612,8 +612,10 @@ sniff_text_or_binary (SoupContentSniffer *sniffer, SoupBuffer *buffer)
-+ }
-+ 
-+ static gboolean
-+-skip_insignificant_space (const char *resource, int *pos, int resource_length)
-++skip_insignificant_space (const char *resource, gsize *pos, gsize resource_length)
-+ {
-++	if (*pos >= resource_length)
-++		return TRUE;
-+ 	while ((resource[*pos] == '\x09') ||
-+ 	       (resource[*pos] == '\x20') ||
-+ 	       (resource[*pos] == '\x0A') ||
-+@@ -632,7 +634,7 @@ sniff_feed_or_html (SoupContentSniffer *sniffer, SoupBuffer *buffer)
-+ {
-+ 	const char *resource = (const char *)buffer->data;
-+ 	int resource_length = MIN (512, buffer->length);
-+-	int pos = 0;
-++	gsize pos = 0;
-+ 
-+ 	if (resource_length < 3)
-+ 		goto text_html;
-+@@ -642,9 +644,6 @@ sniff_feed_or_html (SoupContentSniffer *sniffer, SoupBuffer *buffer)
-+ 		pos = 3;
-+ 
-+  look_for_tag:
-+-	if (pos > resource_length)
-+-		goto text_html;
-+-
-+ 	if (skip_insignificant_space (resource, &pos, resource_length))
-+ 		goto text_html;
-+
-+-- 
-+2.34.1
-+
-diff --git a/package/libsoup/0004-headers-Strictly-dont-allow-NUL-bytes.patch b/package/libsoup/0004-headers-Strictly-dont-allow-NUL-bytes.patch
-new file mode 100644
-index 0000000000..ec6e0fd871
---- /dev/null
-+++ b/package/libsoup/0004-headers-Strictly-dont-allow-NUL-bytes.patch
-@@ -0,0 +1,61 @@
-+From 4a2bb98e03d79146c729dca52c8d6edc635218ff Mon Sep 17 00:00:00 2001
-+From: Patrick Griffis <pgriffis@igalia.com>
-+Date: Mon, 8 Jul 2024 12:33:15 -0500
-+Subject: [PATCH] headers: Strictly don't allow NUL bytes
-+
-+In the past (2015) this was allowed for some problematic sites. However Chromium also does not allow NUL bytes in either header names or values these days. So this should no longer be a problem.
-+
-+CVE: CVE-2024-52530
-+Upstream-Status: Backport [https://gitlab.gnome.org/GNOME/libsoup/-/merge_requests/402/diffs?commit_id=04df03bc092ac20607f3e150936624d4f536e68b]
-+
-+Patch originally from OpenEmbedded:
-+https://git.openembedded.org/meta-openembedded/tree/meta-oe/recipes-support/libsoup/libsoup-2.4/CVE-2024-52530.patch
-+
-+Signed-off-by: Changqing Li <changqing.li@windriver.com>
-+[Titouan: Remove changes on test files]
-+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-+---
-+ libsoup/soup-headers.c      | 15 +++------
-+ 1 file changed, 4 insertions(+), 11 deletions(-)
-+
-+diff --git a/libsoup/soup-headers.c b/libsoup/soup-headers.c
-+index eec28ad..e5d3c03 100644
-+--- a/libsoup/soup-headers.c
-++++ b/libsoup/soup-headers.c
-+@@ -50,13 +50,14 @@ soup_headers_parse (const char *str, int len, SoupMessageHeaders *dest)
-+ 	 * ignorable trailing whitespace.
-+ 	 */
-+ 
-++	/* No '\0's are allowed */
-++	if (memchr (str, '\0', len))
-++		return FALSE;
-++
-+ 	/* Skip over the Request-Line / Status-Line */
-+ 	headers_start = memchr (str, '\n', len);
-+ 	if (!headers_start)
-+ 		return FALSE;
-+-	/* No '\0's in the Request-Line / Status-Line */
-+-	if (memchr (str, '\0', headers_start - str))
-+-		return FALSE;
-+ 
-+ 	/* We work on a copy of the headers, which we can write '\0's
-+ 	 * into, so that we don't have to individually g_strndup and
-+@@ -68,14 +69,6 @@ soup_headers_parse (const char *str, int len, SoupMessageHeaders *dest)
-+ 	headers_copy[copy_len] = '\0';
-+ 	value_end = headers_copy;
-+ 
-+-	/* There shouldn't be any '\0's in the headers already, but
-+-	 * this is the web we're talking about.
-+-	 */
-+-	while ((p = memchr (headers_copy, '\0', copy_len))) {
-+-		memmove (p, p + 1, copy_len - (p - headers_copy));
-+-		copy_len--;
-+-	}
-+-
-+ 	while (*(value_end + 1)) {
-+ 		name = value_end + 1;
-+ 		name_end = strchr (name, ':');
-+ 
-+-- 
-+2.34.1
-+
-diff --git a/package/libsoup/0005-headers-Be-more-robust-against-invalid-input.patch b/package/libsoup/0005-headers-Be-more-robust-against-invalid-input.patch
-new file mode 100644
-index 0000000000..749ec4c1c2
---- /dev/null
-+++ b/package/libsoup/0005-headers-Be-more-robust-against-invalid-input.patch
-@@ -0,0 +1,137 @@
-+From 12523a592f1216450d18706bcf6c16e0f1ab0ce0 Mon Sep 17 00:00:00 2001
-+From: Changqing Li <changqing.li@windriver.com>
-+Date: Fri, 16 May 2025 13:52:37 +0800
-+Subject: [PATCH] headers: Be more robust against invalid input when
-+ parsing params
-+
-+If you pass invalid input to a function such as soup_header_parse_param_list_strict()
-+it can cause an overflow if it decodes the input to UTF-8.
-+
-+This should never happen with valid UTF-8 input which libsoup's client API
-+ensures, however it's server API does not currently.
-+
-+CVE: CVE-2024-52531
-+Upstream-Status: Backport [https://gitlab.gnome.org/GNOME/libsoup/-/merge_requests/407/diffs?commit_id=a35222dd0bfab2ac97c10e86b95f762456628283]
-+
-+Patch originally from OpenEmbedded:
-+https://git.openembedded.org/meta-openembedded/tree/meta-oe/recipes-support/libsoup/libsoup-2.4/CVE-2024-52531-2.patch
-+
-+Signed-off-by: Changqing Li <changqing.li@windriver.com>
-+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-+---
-+ libsoup/soup-headers.c | 45 +++++++++++++++++++++---------------------
-+ 1 file changed, 23 insertions(+), 22 deletions(-)
-+
-+diff --git a/libsoup/soup-headers.c b/libsoup/soup-headers.c
-+index 67905b2..39e8d34 100644
-+--- a/libsoup/soup-headers.c
-++++ b/libsoup/soup-headers.c
-+@@ -642,8 +642,9 @@ soup_header_contains (const char *header, const char *token)
-+ }
-+ 
-+ static void
-+-decode_quoted_string (char *quoted_string)
-++decode_quoted_string_inplace (GString *quoted_gstring)
-+ {
-++	char *quoted_string = quoted_gstring->str;
-+ 	char *src, *dst;
-+ 
-+ 	src = quoted_string + 1;
-+@@ -657,10 +658,11 @@ decode_quoted_string (char *quoted_string)
-+ }
-+ 
-+ static gboolean
-+-decode_rfc5987 (char *encoded_string)
-++decode_rfc5987_inplace (GString *encoded_gstring)
-+ {
-+ 	char *q, *decoded;
-+ 	gboolean iso_8859_1 = FALSE;
-++	const char *encoded_string = encoded_gstring->str;
-+ 
-+ 	q = strchr (encoded_string, '\'');
-+ 	if (!q)
-+@@ -689,14 +691,7 @@ decode_rfc5987 (char *encoded_string)
-+ 		decoded = utf8;
-+ 	}
-+ 
-+-	/* If encoded_string was UTF-8, then each 3-character %-escape
-+-	 * will be converted to a single byte, and so decoded is
-+-	 * shorter than encoded_string. If encoded_string was
-+-	 * iso-8859-1, then each 3-character %-escape will be
-+-	 * converted into at most 2 bytes in UTF-8, and so it's still
-+-	 * shorter.
-+-	 */
-+-	strcpy (encoded_string, decoded);
-++	g_string_assign (encoded_gstring, decoded);
-+ 	g_free (decoded);
-+ 	return TRUE;
-+ }
-+@@ -706,15 +701,16 @@ parse_param_list (const char *header, char delim, gboolean strict)
-+ {
-+ 	GHashTable *params;
-+ 	GSList *list, *iter;
-+-	char *item, *eq, *name_end, *value;
-+-	gboolean override, duplicated;
-+ 
-+ 	params = g_hash_table_new_full (soup_str_case_hash, 
-+ 					soup_str_case_equal,
-+-					g_free, NULL);
-++					g_free, g_free);
-+ 
-+ 	list = parse_list (header, delim);
-+ 	for (iter = list; iter; iter = iter->next) {
-++ 		char *item, *eq, *name_end;
-++		gboolean override, duplicated;
-++		GString *parsed_value = NULL;
-+ 		item = iter->data;
-+ 		override = FALSE;
-+ 
-+@@ -729,19 +725,19 @@ parse_param_list (const char *header, char delim, gboolean strict)
-+ 
-+ 			*name_end = '\0';
-+ 
-+-			value = (char *)skip_lws (eq + 1);
-++			parsed_value = g_string_new ((char *)skip_lws (eq + 1));
-+ 
-+ 			if (name_end[-1] == '*' && name_end > item + 1) {
-+ 				name_end[-1] = '\0';
-+-				if (!decode_rfc5987 (value)) {
-++				if (!decode_rfc5987_inplace (parsed_value)) {
-++					g_string_free (parsed_value, TRUE);
-+ 					g_free (item);
-+ 					continue;
-+ 				}
-+ 				override = TRUE;
-+-			} else if (*value == '"')
-+-				decode_quoted_string (value);
-+-		} else
-+-			value = NULL;
-++			} else if (parsed_value->str[0] == '"')
-++				decode_quoted_string_inplace (parsed_value);
-++			}
-+ 
-+ 		duplicated = g_hash_table_lookup_extended (params, item, NULL, NULL);
-+ 
-+@@ -749,11 +745,16 @@ parse_param_list (const char *header, char delim, gboolean strict)
-+ 			soup_header_free_param_list (params);
-+ 			params = NULL;
-+ 			g_slist_foreach (iter, (GFunc)g_free, NULL);
-++			if (parsed_value)
-++				g_string_free (parsed_value, TRUE);
-+ 			break;
-+-		} else if (override || !duplicated)
-+-			g_hash_table_replace (params, item, value);
-+-		else
-++		} else if (override || !duplicated) {
-++			g_hash_table_replace (params, item, parsed_value ? g_string_free (parsed_value, FALSE) : NULL);
-++		} else {
-++			if (parsed_value)
-++				g_string_free (parsed_value, TRUE);
-+ 			g_free (item);
-++		}
-+ 	}
-+ 
-+ 	g_slist_free (list);
-+-- 
-+2.34.1
-+
-diff --git a/package/libsoup/0006-websocket-process-the-frame-as-soon-as-we-read-data.patch b/package/libsoup/0006-websocket-process-the-frame-as-soon-as-we-read-data.patch
-new file mode 100644
-index 0000000000..da61e95d80
---- /dev/null
-+++ b/package/libsoup/0006-websocket-process-the-frame-as-soon-as-we-read-data.patch
-@@ -0,0 +1,41 @@
-+From a693d49bff058fc20a448dc4e7d324ff0dc6597e Mon Sep 17 00:00:00 2001
-+From: Ignacio Casal Quinteiro <qignacio@amazon.com>
-+Date: Wed, 11 Sep 2024 11:52:11 +0200
-+Subject: [PATCH 1/3] websocket: process the frame as soon as we read data
-+
-+Otherwise we can enter in a read loop because we were not
-+validating the data until the all the data was read.
-+
-+Fixes #391
-+
-+CVE: CVE-2024-52532
-+Upstream-Status: Backport [https://gitlab.gnome.org/GNOME/libsoup/-/commit/6adc0e3eb74c257ed4e2a23eb4b2774fdb0d67be#f1d67ca0386b145ea201cf88d27f72724d7c6715]
-+
-+Patch originally from OpenEmbedded:
-+https://git.openembedded.org/meta-openembedded/tree/meta-oe/recipes-support/libsoup/libsoup-2.4/CVE-2024-52532-1.patch
-+
-+Signed-off-by: Changqing Li <changqing.li@windriver.com>
-+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-+---
-+ libsoup/soup-websocket-connection.c | 5 ++---
-+ 1 file changed, 2 insertions(+), 3 deletions(-)
-+
-+diff --git a/libsoup/soup-websocket-connection.c b/libsoup/soup-websocket-connection.c
-+index a4095e1..65c1492 100644
-+--- a/libsoup/soup-websocket-connection.c
-++++ b/libsoup/soup-websocket-connection.c
-+@@ -1140,9 +1140,8 @@ soup_websocket_connection_read (SoupWebsocketConnection *self)
-+ 		}
-+ 
-+ 		pv->incoming->len = len + count;
-+-	} while (count > 0);
-+-
-+-	process_incoming (self);
-++		process_incoming (self);
-++	} while (count > 0 && !pv->close_sent && !pv->io_closing);
-+ 
-+ 	if (end) {
-+ 		if (!pv->close_sent || !pv->close_received) {
-+-- 
-+2.34.1
-+
-diff --git a/package/libsoup/0007-Fix-using-int-instead-of-size_t.patch b/package/libsoup/0007-Fix-using-int-instead-of-size_t.patch
-new file mode 100644
-index 0000000000..ef743c4e92
---- /dev/null
-+++ b/package/libsoup/0007-Fix-using-int-instead-of-size_t.patch
-@@ -0,0 +1,33 @@
-+From 5709dfffb6fdc5b66ce001bf82a755ad8ad1d992 Mon Sep 17 00:00:00 2001
-+From: Patrick Griffis <pgriffis@igalia.com>
-+Date: Mon, 28 Oct 2024 12:29:48 -0500
-+Subject: [PATCH] Fix using int instead of size_t for strcspn return
-+
-+CVE: CVE-2025-32050
-+Upstream-Status: Backport [https://gitlab.gnome.org/GNOME/libsoup/-/commit/9bb0a55de55c6940ced811a64fbca82fe93a9323]
-+
-+Patch originally from OpenEmbedded:
-+https://git.openembedded.org/meta-openembedded/tree/meta-oe/recipes-support/libsoup/libsoup-2.4/CVE-2025-32050.patch
-+
-+Signed-off-by: Changqing Li <changqing.li@windriver.com>
-+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-+---
-+ libsoup/soup-headers.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/libsoup/soup-headers.c b/libsoup/soup-headers.c
-+index 9707ca0..67905b2 100644
-+--- a/libsoup/soup-headers.c
-++++ b/libsoup/soup-headers.c
-+@@ -902,7 +902,7 @@ append_param_quoted (GString    *string,
-+ 		     const char *name,
-+ 		     const char *value)
-+ {
-+-	int len;
-++	gsize len;
-+ 
-+ 	g_string_append (string, name);
-+ 	g_string_append (string, "=\"");
-+-- 
-+2.34.1
-+
-diff --git a/package/libsoup/0008-Fix-heap-buffer-overflow.patch b/package/libsoup/0008-Fix-heap-buffer-overflow.patch
-new file mode 100644
-index 0000000000..dc0ce145d2
---- /dev/null
-+++ b/package/libsoup/0008-Fix-heap-buffer-overflow.patch
-@@ -0,0 +1,36 @@
-+From f4a67a9a3033586edaee715d40d5992e02d32893 Mon Sep 17 00:00:00 2001
-+From: Patrick Griffis <pgriffis@igalia.com>
-+Date: Sat, 16 Nov 2024 12:07:30 -0600
-+Subject: [PATCH] Fix heap buffer overflow in soup_content_sniffer_sniff
-+
-+Co-Author: Ar Jun <pkillarjun@protonmail.com>
-+
-+CVE: CVE-2025-32052
-+Upstream-Status: Backport
-+[https://gitlab.gnome.org/GNOME/libsoup/-/commit/f182429e5b1fc034050510da20c93256c4fa9652#500da7cfde649872c49169be34b03a1c42a53ddb]
-+
-+Patch originally from OpenEmbedded:
-+https://git.openembedded.org/meta-openembedded/tree/meta-oe/recipes-support/libsoup/libsoup-2.4/CVE-2025-32052.patch
-+
-+Signed-off-by: Changqing Li <changqing.li@windriver.com>
-+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-+---
-+ libsoup/soup-content-sniffer.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/libsoup/soup-content-sniffer.c b/libsoup/soup-content-sniffer.c
-+index 9554636..eac9e7b 100644
-+--- a/libsoup/soup-content-sniffer.c
-++++ b/libsoup/soup-content-sniffer.c
-+@@ -504,7 +504,7 @@ sniff_unknown (SoupContentSniffer *sniffer, SoupBuffer *buffer,
-+ 			guint index_pattern = 0;
-+ 			gboolean skip_row = FALSE;
-+ 
-+-			while ((index_stream < resource_length) &&
-++			while ((index_stream < resource_length - 1) &&
-+ 			       (index_pattern <= type_row->pattern_length)) {
-+ 				/* Skip insignificant white space ("WS" in the spec) */
-+ 				if (type_row->pattern[index_pattern] == ' ') {
-+-- 
-+2.34.1
-+
-diff --git a/package/libsoup/0009-Fix-heap-buffer-overflow.patch b/package/libsoup/0009-Fix-heap-buffer-overflow.patch
-new file mode 100644
-index 0000000000..b3d0350e1b
---- /dev/null
-+++ b/package/libsoup/0009-Fix-heap-buffer-overflow.patch
-@@ -0,0 +1,43 @@
-+From d9bcffd6cd5e8ec32889a594f7348d67a5101b3a Mon Sep 17 00:00:00 2001
-+From: Changqing Li <changqing.li@windriver.com>
-+Date: Mon, 12 May 2025 13:58:42 +0800
-+Subject: [PATCH] Fix heap buffer overflow in
-+ soup-content-sniffer.c:sniff_feed_or_html()
-+
-+CVE: CVE-2025-32053
-+Upstream-Status: Backport [https://gitlab.gnome.org/GNOME/libsoup/-/commit/eaed42ca8d40cd9ab63764e3d63641180505f40a]
-+
-+Patch originally from OpenEmbedded:
-+https://git.openembedded.org/meta-openembedded/tree/meta-oe/recipes-support/libsoup/libsoup-2.4/CVE-2025-32053.patch
-+
-+Signed-off-by: Changqing Li <changqing.li@windriver.com>
-+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-+---
-+ libsoup/soup-content-sniffer.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/libsoup/soup-content-sniffer.c b/libsoup/soup-content-sniffer.c
-+index 967ec61..5f2896e 100644
-+--- a/libsoup/soup-content-sniffer.c
-++++ b/libsoup/soup-content-sniffer.c
-+@@ -620,7 +620,7 @@ skip_insignificant_space (const char *resource, int *pos, int resource_length)
-+ 	       (resource[*pos] == '\x0D')) {
-+ 		*pos = *pos + 1;
-+ 
-+-		if (*pos > resource_length)
-++		if (*pos >= resource_length)
-+ 			return TRUE;
-+ 	}
-+ 
-+@@ -682,7 +682,7 @@ sniff_feed_or_html (SoupContentSniffer *sniffer, SoupBuffer *buffer)
-+ 		do {
-+ 			pos++;
-+ 
-+-			if (pos > resource_length)
-++			if ((pos + 1) > resource_length)
-+ 				goto text_html;
-+ 		} while (resource[pos] != '>');
-+ 
-+-- 
-+2.34.1
-+
-diff --git a/package/libsoup/0010-headers-Handle-parsing-only-newlines.patch b/package/libsoup/0010-headers-Handle-parsing-only-newlines.patch
-new file mode 100644
-index 0000000000..c088c01035
---- /dev/null
-+++ b/package/libsoup/0010-headers-Handle-parsing-only-newlines.patch
-@@ -0,0 +1,47 @@
-+From 4b8809cca4bbcbf9514314d86227f985362258b0 Mon Sep 17 00:00:00 2001
-+From: Patrick Griffis <pgriffis@igalia.com>
-+Date: Wed, 12 Feb 2025 11:30:02 -0600
-+Subject: [PATCH] headers: Handle parsing only newlines
-+
-+Closes #404
-+Closes #407
-+
-+CVE: CVE-2025-32906
-+Upstream-Status: Backport [https://gitlab.gnome.org/GNOME/libsoup/-/commit/af5b9a4a3945c52b940d5ac181ef51bb12011f1f]
-+
-+Patch originally from OpenEmbedded:
-+https://git.openembedded.org/meta-openembedded/tree/meta-oe/recipes-support/libsoup/libsoup-2.4/CVE-2025-32906.patch
-+
-+Signed-off-by: Changqing Li <changqing.li@windriver.com>
-+[Titouan: Remove changes on test files]
-+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-+---
-+ libsoup/soup-headers.c      |  4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/libsoup/soup-headers.c b/libsoup/soup-headers.c
-+index e5d3c03..87bb3dc 100644
-+--- a/libsoup/soup-headers.c
-++++ b/libsoup/soup-headers.c
-+@@ -185,7 +185,7 @@ soup_headers_parse_request (const char          *str,
-+ 	/* RFC 2616 4.1 "servers SHOULD ignore any empty line(s)
-+ 	 * received where a Request-Line is expected."
-+ 	 */
-+-	while ((*str == '\r' || *str == '\n') && len > 0) {
-++	while (len > 0 && (*str == '\r' || *str == '\n')) {
-+ 		str++;
-+ 		len--;
-+ 	}
-+@@ -369,7 +369,7 @@ soup_headers_parse_response (const char          *str,
-+ 	 * after a response, which we then see prepended to the next
-+ 	 * response on that connection.
-+ 	 */
-+-	while ((*str == '\r' || *str == '\n') && len > 0) {
-++	while (len > 0 && (*str == '\r' || *str == '\n')) {
-+ 		str++;
-+ 		len--;
-+ 	}
-+
-+-- 
-+2.34.1
-+
-diff --git a/package/libsoup/0011-auth-digest-Handle-missing-realm-nonce.patch b/package/libsoup/0011-auth-digest-Handle-missing-realm-nonce.patch
-new file mode 100644
-index 0000000000..9b71b5c35b
---- /dev/null
-+++ b/package/libsoup/0011-auth-digest-Handle-missing-realm-nonce.patch
-@@ -0,0 +1,36 @@
-+From a7e711d0f162c6edc8acad2a96981d4890784ea3 Mon Sep 17 00:00:00 2001
-+From: Changqing Li <changqing.li@windriver.com>
-+Date: Mon, 12 May 2025 17:02:55 +0800
-+Subject: [PATCH] auth-digest: Handle missing realm/nonce in authenticate
-+ header
-+
-+CVE: CVE-2025-32910
-+Upstream-Status: Backport [https://gitlab.gnome.org/GNOME/libsoup/-/merge_requests/417/diffs?commit_id=e40df6d48a1cbab56f5d15016cc861a503423cfe]
-+
-+Patch originally from OpenEmbedded:
-+https://git.openembedded.org/meta-openembedded/tree/meta-oe/recipes-support/libsoup/libsoup-2.4/CVE-2025-32910-1.patch
-+
-+Signed-off-by: Changqing Li <changqing.li@windriver.com>
-+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-+---
-+ libsoup/soup-auth-digest.c |  3 +++
-+ 1 files changed, 3 insertions(+)
-+
-+diff --git a/libsoup/soup-auth-digest.c b/libsoup/soup-auth-digest.c
-+index e8ba990..0ab3499 100644
-+--- a/libsoup/soup-auth-digest.c
-++++ b/libsoup/soup-auth-digest.c
-+@@ -142,6 +142,9 @@ soup_auth_digest_update (SoupAuth *auth, SoupMessage *msg,
-+ 	guint qop_options;
-+ 	gboolean ok = TRUE;
-+ 
-++	 if (!soup_auth_get_realm (auth))
-++		return FALSE;
-++
-+ 	g_free (priv->domain);
-+ 	g_free (priv->nonce);
-+ 	g_free (priv->opaque);
-+ 
-+-- 
-+2.34.1
-+
-diff --git a/package/libsoup/0012-auth-digest-Handle-missing-nonce.patch b/package/libsoup/0012-auth-digest-Handle-missing-nonce.patch
-new file mode 100644
-index 0000000000..f0e59560ee
---- /dev/null
-+++ b/package/libsoup/0012-auth-digest-Handle-missing-nonce.patch
-@@ -0,0 +1,98 @@
-+From eccfca1074fc485a0b60dfb9c8385429a226bf73 Mon Sep 17 00:00:00 2001
-+From: Changqing Li <changqing.li@windriver.com>
-+Date: Fri, 16 May 2025 13:19:38 +0800
-+Subject: [PATCH] auth-digest: Handle missing nonce
-+
-+CVE: CVE-2025-32910
-+Upstream-Status: Backport [https://gitlab.gnome.org/GNOME/libsoup/-/merge_requests/417/diffs?commit_id=405a8a34597a44bd58c4759e7d5e23f02c3b556a]
-+
-+Patch originally from OpenEmbedded:
-+https://git.openembedded.org/meta-openembedded/tree/meta-oe/recipes-support/libsoup/libsoup-2.4/CVE-2025-32910-2.patch
-+
-+Signed-off-by: Changqing Li <changqing.li@windriver.com>
-+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-+---
-+ libsoup/soup-auth-digest.c | 45 ++++++++++++++++++++++++++++----------
-+ 1 files changed, 28 insertions(+), 10 deletions(-)
-+
-+diff --git a/libsoup/soup-auth-digest.c b/libsoup/soup-auth-digest.c
-+index 0ab3499..10a8591 100644
-+--- a/libsoup/soup-auth-digest.c
-++++ b/libsoup/soup-auth-digest.c
-+@@ -132,6 +132,19 @@ soup_auth_digest_get_qop (SoupAuthDigestQop qop)
-+ 	return g_string_free (out, FALSE);
-+ }
-+ 
-++static gboolean
-++validate_params (SoupAuthDigest *auth_digest)
-++{
-++	SoupAuthDigestPrivate *priv = soup_auth_digest_get_instance_private (auth_digest);
-++
-++	if (priv->qop || priv->algorithm == SOUP_AUTH_DIGEST_ALGORITHM_MD5_SESS) {
-++		if (!priv->nonce)
-++			return FALSE;
-++	}
-++
-++	return TRUE;
-++}
-++
-+ static gboolean
-+ soup_auth_digest_update (SoupAuth *auth, SoupMessage *msg,
-+ 			 GHashTable *auth_params)
-+@@ -169,17 +182,22 @@ soup_auth_digest_update (SoupAuth *auth, SoupMessage *msg,
-+ 	if (priv->algorithm == -1)
-+ 		ok = FALSE;
-+ 
-+-	stale = g_hash_table_lookup (auth_params, "stale");
-+-	if (stale && !g_ascii_strcasecmp (stale, "TRUE") && *priv->hex_urp)
-+-		recompute_hex_a1 (priv);
-+-	else {
-+-		g_free (priv->user);
-+-		priv->user = NULL;
-+-		g_free (priv->cnonce);
-+-		priv->cnonce = NULL;
-+-		memset (priv->hex_urp, 0, sizeof (priv->hex_urp));
-+-		memset (priv->hex_a1, 0, sizeof (priv->hex_a1));
-+-        }
-++	if (!validate_params (auth_digest))
-++		ok = FALSE;
-++
-++	if (ok) {
-++		stale = g_hash_table_lookup (auth_params, "stale");
-++		if (stale && !g_ascii_strcasecmp (stale, "TRUE") && *priv->hex_urp)
-++			recompute_hex_a1 (priv);
-++		else {
-++			g_free (priv->user);
-++			priv->user = NULL;
-++			g_free (priv->cnonce);
-++			priv->cnonce = NULL;
-++			memset (priv->hex_urp, 0, sizeof (priv->hex_urp));
-++			memset (priv->hex_a1, 0, sizeof (priv->hex_a1));
-++		}
-++	}
-+ 
-+ 	return ok;
-+ }
-+@@ -359,6 +377,8 @@ soup_auth_digest_compute_response (const char        *method,
-+ 	if (qop) {
-+ 		char tmp[9];
-+ 
-++		g_assert (cnonce);
-++
-+ 		g_snprintf (tmp, 9, "%.8x", nc);
-+ 		g_checksum_update (checksum, (guchar *)tmp, strlen (tmp));
-+ 		g_checksum_update (checksum, (guchar *)":", 1);
-+@@ -422,6 +442,9 @@ soup_auth_digest_get_authorization (SoupAuth *auth, SoupMessage *msg)
-+ 	g_return_val_if_fail (uri != NULL, NULL);
-+ 	url = soup_uri_to_string (uri, TRUE);
-+ 
-++	g_assert (priv->nonce);
-++	g_assert (!priv->qop || priv->cnonce);
-++
-+ 	soup_auth_digest_compute_response (msg->method, url, priv->hex_a1,
-+ 					   priv->qop, priv->nonce,
-+ 					   priv->cnonce, priv->nc,
-+ 
-+-- 
-+2.34.1
-+
-diff --git a/package/libsoup/0013-auth-digest-Fix-leak.patch b/package/libsoup/0013-auth-digest-Fix-leak.patch
-new file mode 100644
-index 0000000000..80c5af774e
---- /dev/null
-+++ b/package/libsoup/0013-auth-digest-Fix-leak.patch
-@@ -0,0 +1,32 @@
-+From 74c95d54fe42041fe161cb74c76d942ffd37a5dd Mon Sep 17 00:00:00 2001
-+From: Changqing Li <changqing.li@windriver.com>
-+Date: Fri, 16 May 2025 13:21:43 +0800
-+Subject: [PATCH] auth-digest: Fix leak
-+
-+CVE: CVE-2025-32910
-+Upstream-Status: Backport [https://gitlab.gnome.org/GNOME/libsoup/-/merge_requests/417/diffs?commit_id=ea16eeacb052e423eb5c3b0b705e5eab34b13832]
-+
-+Patch originally from OpenEmbedded:
-+https://git.openembedded.org/meta-openembedded/tree/meta-oe/recipes-support/libsoup/libsoup-2.4/CVE-2025-32910-3.patch
-+
-+Signed-off-by: Changqing Li <changqing.li@windriver.com>
-+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-+---
-+ libsoup/soup-auth-digest.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/libsoup/soup-auth-digest.c b/libsoup/soup-auth-digest.c
-+index 10a8591..6d965d2 100644
-+--- a/libsoup/soup-auth-digest.c
-++++ b/libsoup/soup-auth-digest.c
-+@@ -66,6 +66,7 @@ soup_auth_digest_finalize (GObject *object)
-+ 	g_free (priv->nonce);
-+ 	g_free (priv->domain);
-+ 	g_free (priv->cnonce);
-++	g_free (priv->opaque);
-+ 
-+ 	memset (priv->hex_urp, 0, sizeof (priv->hex_urp));
-+ 	memset (priv->hex_a1, 0, sizeof (priv->hex_a1));
-+-- 
-+2.34.1
-+
-diff --git a/package/libsoup/0014-CVE-2025-32911.patch b/package/libsoup/0014-CVE-2025-32911.patch
-new file mode 100644
-index 0000000000..28f469968e
---- /dev/null
-+++ b/package/libsoup/0014-CVE-2025-32911.patch
-@@ -0,0 +1,78 @@
-+From 52c5859b82fe79f2c32d883e048d218e0d7f2182 Mon Sep 17 00:00:00 2001
-+From: Changqing Li <changqing.li@windriver.com>
-+Date: Wed, 30 Apr 2025 14:59:55 +0800
-+Subject: [PATCH] CVE-2025-32911
-+
-+CVE: CVE-2025-32911 CVE-2025-32913
-+Upstream-Status: Backport [https://gitlab.gnome.org/GNOME/libsoup/-/merge_requests/422/commits]
-+
-+Patch originally from OpenEmbedded:
-+https://git.openembedded.org/meta-openembedded/tree/meta-oe/recipes-support/libsoup/libsoup-2.4/0001-CVE-2025-32911.patch
-+
-+Signed-off-by: Changqing Li <changqing.li@windriver.com>
-+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-+---
-+ libsoup/soup-message-headers.c | 13 +++++++++----
-+ tests/header-parsing-test.c    | 15 +++++++++++++++
-+ 2 files changed, 24 insertions(+), 4 deletions(-)
-+
-+diff --git a/libsoup/soup-message-headers.c b/libsoup/soup-message-headers.c
-+index 39ad14a..78b2455 100644
-+--- a/libsoup/soup-message-headers.c
-++++ b/libsoup/soup-message-headers.c
-+@@ -1454,10 +1454,15 @@ soup_message_headers_get_content_disposition (SoupMessageHeaders  *hdrs,
-+ 	 */
-+ 	if (params && g_hash_table_lookup_extended (*params, "filename",
-+ 						    &orig_key, &orig_value)) {
-+-		char *filename = strrchr (orig_value, '/');
-+-
-+-		if (filename)
-+-			g_hash_table_insert (*params, g_strdup (orig_key), filename + 1);
-++                if (orig_value) {
-++                        char *filename = strrchr (orig_value, '/');
-++
-++                        if (filename)
-++                                g_hash_table_insert (*params, g_strdup (orig_key), g_strdup(filename + 1));
-++                } else {
-++                        /* filename with no value isn't valid. */
-++                        g_hash_table_remove (*params, "filename");
-++                }
-+ 	}
-+ 	return TRUE;
-+ }
-+diff --git a/tests/header-parsing-test.c b/tests/header-parsing-test.c
-+index 946f118..752196e 100644
-+--- a/tests/header-parsing-test.c
-++++ b/tests/header-parsing-test.c
-+@@ -1034,6 +1034,7 @@ do_param_list_tests (void)
-+ #define RFC5987_TEST_HEADER_FALLBACK "attachment; filename*=Unknown''t%FF%FF%FFst.txt; filename=\"test.txt\""
-+ #define RFC5987_TEST_HEADER_NO_TYPE  "filename=\"test.txt\""
-+ #define RFC5987_TEST_HEADER_NO_TYPE_2  "filename=\"test.txt\"; foo=bar"
-++#define RFC5987_TEST_HEADER_EMPTY_FILENAME ";filename"
-+ 
-+ static void
-+ do_content_disposition_tests (void)
-+@@ -1133,6 +1134,20 @@ do_content_disposition_tests (void)
-+ 	g_assert_cmpstr (filename, ==, RFC5987_TEST_FALLBACK_FILENAME);
-+         parameter2 = g_hash_table_lookup (params, "foo");
-+         g_assert_cmpstr (parameter2, ==, "bar");
-++	g_hash_table_destroy (params);
-++
-++	 /* Empty filename */
-++	soup_message_headers_clear (hdrs);
-++	soup_message_headers_append (hdrs, "Content-Disposition",
-++								 RFC5987_TEST_HEADER_EMPTY_FILENAME);
-++	if (!soup_message_headers_get_content_disposition (hdrs,
-++													   &disposition,
-++													   &params)) {
-++			soup_test_assert (FALSE, "empty filename decoding FAILED");
-++			return;
-++	}
-++	g_free (disposition);
-++	g_assert_false (g_hash_table_contains (params, "filename"));
-+ 	g_hash_table_destroy (params);
-+ 
-+ 	soup_message_headers_free (hdrs);
-+-- 
-+2.34.1
-+
-diff --git a/package/libsoup/0015-auth-digest-Handle-missing-nonce.patch b/package/libsoup/0015-auth-digest-Handle-missing-nonce.patch
-new file mode 100644
-index 0000000000..3850baa493
---- /dev/null
-+++ b/package/libsoup/0015-auth-digest-Handle-missing-nonce.patch
-@@ -0,0 +1,36 @@
-+From 0984dddb11daf14fdf5ca24077cd0ebda796439a Mon Sep 17 00:00:00 2001
-+From: Changqing Li <changqing.li@windriver.com>
-+Date: Fri, 16 May 2025 13:25:32 +0800
-+Subject: [PATCH] auth-digest: Handle missing nonce
-+
-+CVE: CVE-2025-32912
-+Upstream-Status: Backport
-+[https://gitlab.gnome.org/GNOME/libsoup/-/commit/cd077513f267e43ce4b659eb18a1734d8a369992?merge_request_iid=434
-+https://gitlab.gnome.org/GNOME/libsoup/-/commit/910ebdcd3dd82386717a201c13c834f3a63eed7f]
-+
-+Patch originally from OpenEmbedded:
-+https://git.openembedded.org/meta-openembedded/tree/meta-oe/recipes-support/libsoup/libsoup-2.4/CVE-2025-32912.patch
-+
-+Signed-off-by: Changqing Li <changqing.li@windriver.com>
-+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-+---
-+ libsoup/soup-auth-digest.c | 2 +-
-+ 1 files changed, 1 insertions(+), 1 deletion(-)
-+
-+diff --git a/libsoup/soup-auth-digest.c b/libsoup/soup-auth-digest.c
-+index 6d965d2..f1621ec 100644
-+--- a/libsoup/soup-auth-digest.c
-++++ b/libsoup/soup-auth-digest.c
-+@@ -156,7 +156,7 @@ soup_auth_digest_update (SoupAuth *auth, SoupMessage *msg,
-+ 	guint qop_options;
-+ 	gboolean ok = TRUE;
-+ 
-+-	 if (!soup_auth_get_realm (auth))
-++	if (!soup_auth_get_realm (auth) || !g_hash_table_lookup (auth_params, "nonce"))
-+ 		return FALSE;
-+ 
-+ 	g_free (priv->domain);
-+
-+-- 
-+2.34.1
-+
-diff --git a/package/libsoup/0016-CVE-2025-32914.patch b/package/libsoup/0016-CVE-2025-32914.patch
-new file mode 100644
-index 0000000000..213b137c10
---- /dev/null
-+++ b/package/libsoup/0016-CVE-2025-32914.patch
-@@ -0,0 +1,39 @@
-+From ac844b9fc7945c38ea21fb7cf1a49a5c226d7c9c Mon Sep 17 00:00:00 2001
-+From: Changqing Li <changqing.li@windriver.com>
-+Date: Mon, 12 May 2025 16:17:20 +0800
-+Subject: [PATCH] Resolve "(CVE-2025-32914) (#YWH-PGM9867-23) OOB Read on
-+ libsoup through function "soup_multipart_new_from_message" in
-+ soup-multipart.c leads to crash or exit of process"
-+
-+CVE: CVE-2025-32914
-+Upstream-Status: Backport [https://gitlab.gnome.org/GNOME/libsoup/-/merge_requests/450/diffs?commit_id=5bfcf8157597f2d327050114fb37ff600004dbcf]
-+
-+Test code are not added since some functions not aligned with version
-+2.74.3
-+
-+Patch originally from OpenEmbedded:
-+https://git.openembedded.org/meta-openembedded/tree/meta-oe/recipes-support/libsoup/libsoup-2.4/CVE-2025-32914.patch
-+
-+Signed-off-by: Changqing Li <changqing.li@windriver.com>
-+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-+---
-+ libsoup/soup-multipart.c |  2 +-
-+ 1 files changed, 1 insertions(+), 1 deletion(-)
-+
-+diff --git a/libsoup/soup-multipart.c b/libsoup/soup-multipart.c
-+index a7e550f..dd93973 100644
-+--- a/libsoup/soup-multipart.c
-++++ b/libsoup/soup-multipart.c
-+@@ -181,7 +181,7 @@ soup_multipart_new_from_message (SoupMessageHeaders *headers,
-+ 			return NULL;
-+ 		}
-+ 
-+-		split = strstr (start, "\r\n\r\n");
-++		split = g_strstr_len (start, body_end - start, "\r\n\r\n");
-+ 		if (!split || split > end) {
-+ 			soup_multipart_free (multipart);
-+ 			soup_buffer_free (flattened);
-+ 
-+-- 
-+2.34.1
-+
-diff --git a/package/libsoup/0017-auth-digest-fix-crash.patch b/package/libsoup/0017-auth-digest-fix-crash.patch
-new file mode 100644
-index 0000000000..0989b99618
---- /dev/null
-+++ b/package/libsoup/0017-auth-digest-fix-crash.patch
-@@ -0,0 +1,42 @@
-+From 52a0f9234d384b9dab368835b22e5a5a01542168 Mon Sep 17 00:00:00 2001
-+From: Changqing Li <changqing.li@windriver.com>
-+Date: Fri, 16 May 2025 14:16:10 +0800
-+Subject: [PATCH] auth-digest: fix crash in
-+ soup_auth_digest_get_protection_space()
-+
-+We need to validate the Domain parameter in the WWW-Authenticate header.
-+
-+Unfortunately this crash only occurs when listening on default ports 80
-+and 443, so there's no good way to test for this. The test would require
-+running as root.
-+
-+Fixes #440
-+
-+CVE: CVE-2025-4476
-+Upstream-Status: Backport [https://gitlab.gnome.org/GNOME/libsoup/-/commit/e64c221f9c7d09b48b610c5626b3b8c400f0907c?merge_request_iid=457]
-+
-+Patch originally from OpenEmbedded:
-+https://git.openembedded.org/meta-openembedded/tree/meta-oe/recipes-support/libsoup/libsoup-2.4/CVE-2025-4476.patch
-+
-+Signed-off-by: Changqing Li <changqing.li@windriver.com>
-+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-+---
-+ libsoup/soup-auth-digest.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/libsoup/soup-auth-digest.c b/libsoup/soup-auth-digest.c
-+index f1621ec..a2dc560 100644
-+--- a/libsoup/soup-auth-digest.c
-++++ b/libsoup/soup-auth-digest.c
-+@@ -229,7 +229,7 @@ soup_auth_digest_get_protection_space (SoupAuth *auth, SoupURI *source_uri)
-+ 			uri = soup_uri_new (d);
-+ 			if (uri && uri->scheme == source_uri->scheme &&
-+ 			    uri->port == source_uri->port &&
-+-			    !strcmp (uri->host, source_uri->host))
-++			    !g_strcmp0 (uri->host, source_uri->host))
-+ 				dir = g_strdup (uri->path);
-+ 			else
-+ 				dir = NULL;
-+-- 
-+2.34.1
-+
-diff --git a/package/libsoup/0018-soup_header_parse_quality_list-Fix-leak.patch b/package/libsoup/0018-soup_header_parse_quality_list-Fix-leak.patch
-new file mode 100644
-index 0000000000..98d689d1ec
---- /dev/null
-+++ b/package/libsoup/0018-soup_header_parse_quality_list-Fix-leak.patch
-@@ -0,0 +1,65 @@
-+From 81e03c538d6a102406114567f4f1c468033ce2e4 Mon Sep 17 00:00:00 2001
-+From: Patrick Griffis <pgriffis@igalia.com>
-+Date: Thu, 26 Dec 2024 18:31:42 -0600
-+Subject: [PATCH] soup_header_parse_quality_list: Fix leak
-+
-+When iterating over the parsed list we now steal the allocated strings that we want and then free_full the list which may contain remaining strings.
-+
-+CVE: CVE-2025-46420
-+Upstream-Status: Backport [https://gitlab.gnome.org/GNOME/libsoup/-/merge_requests/421/diffs?commit_id=c9083869ec2a3037e6df4bd86b45c419ba295f8e]
-+
-+Patch originally from OpenEmbedded:
-+https://git.openembedded.org/meta-openembedded/tree/meta-oe/recipes-support/libsoup/libsoup-2.4/CVE-2025-46420.patch
-+
-+Signed-off-by: Changqing Li <changqing.li@windriver.com>
-+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-+---
-+ libsoup/soup-headers.c | 11 +++++------
-+ 1 file changed, 5 insertions(+), 6 deletions(-)
-+
-+diff --git a/libsoup/soup-headers.c b/libsoup/soup-headers.c
-+index 87bb3dc..9707ca0 100644
-+--- a/libsoup/soup-headers.c
-++++ b/libsoup/soup-headers.c
-+@@ -528,7 +528,7 @@ soup_header_parse_quality_list (const char *header, GSList **unacceptable)
-+ 	GSList *unsorted;
-+ 	QualityItem *array;
-+ 	GSList *sorted, *iter;
-+-	char *item, *semi;
-++	char *semi;
-+ 	const char *param, *equal, *value;
-+ 	double qval;
-+ 	int n;
-+@@ -541,9 +541,8 @@ soup_header_parse_quality_list (const char *header, GSList **unacceptable)
-+ 	unsorted = soup_header_parse_list (header);
-+ 	array = g_new0 (QualityItem, g_slist_length (unsorted));
-+ 	for (iter = unsorted, n = 0; iter; iter = iter->next) {
-+-		item = iter->data;
-+ 		qval = 1.0;
-+-		for (semi = strchr (item, ';'); semi; semi = strchr (semi + 1, ';')) {
-++		for (semi = strchr (iter->data, ';'); semi; semi = strchr (semi + 1, ';')) {
-+ 			param = skip_lws (semi + 1);
-+ 			if (*param != 'q')
-+ 				continue;
-+@@ -575,15 +574,15 @@ soup_header_parse_quality_list (const char *header, GSList **unacceptable)
-+ 		if (qval == 0.0) {
-+ 			if (unacceptable) {
-+ 				*unacceptable = g_slist_prepend (*unacceptable,
-+-								 item);
-++								 g_steal_pointer (&iter->data));
-+ 			}
-+ 		} else {
-+-			array[n].item = item;
-++			array[n].item = g_steal_pointer (&iter->data);
-+ 			array[n].qval = qval;
-+ 			n++;
-+ 		}
-+ 	}
-+-	g_slist_free (unsorted);
-++	g_slist_free_full (unsorted, g_free);
-+ 
-+ 	qsort (array, n, sizeof (QualityItem), sort_by_qval);
-+ 	sorted = NULL;
-+-- 
-+2.34.1
-+
-diff --git a/package/libsoup/0019-session-Strip-authentication-credentials.patch b/package/libsoup/0019-session-Strip-authentication-credentials.patch
-new file mode 100644
-index 0000000000..c73280eab9
---- /dev/null
-+++ b/package/libsoup/0019-session-Strip-authentication-credentials.patch
-@@ -0,0 +1,51 @@
-+From 5eb225f02bb35de56cfeedd87bde716bf1cb750b Mon Sep 17 00:00:00 2001
-+From: Patrick Griffis <pgriffis@igalia.com>
-+Date: Wed, 5 Feb 2025 16:18:10 -0600
-+Subject: [PATCH] session: Strip authentication credentails on
-+ cross-origin redirect
-+
-+This should match the behavior of Firefox and Safari but not of Chromium.
-+
-+CVE: CVE-2025-46421
-+Upstream-Status: Backport
-+[https://gitlab.gnome.org/GNOME/libsoup/-/merge_requests/436/diffs?commit_id=3e5c26415811f19e7737238bb23305ffaf96f66b]
-+
-+Test code not added since it included some headers not in version 2.74.3
-+
-+Patch originally from OpenEmbedded:
-+https://git.openembedded.org/meta-openembedded/tree/meta-oe/recipes-support/libsoup/libsoup-2.4/CVE-2025-46421.patch
-+
-+Signed-off-by: Changqing Li <changqing.li@windriver.com>
-+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-+---
-+ libsoup/soup-session.c |  8 ++++-
-+ 2 files changed, 85 insertions(+), 1 deletion(-)
-+
-+diff --git a/libsoup/soup-session.c b/libsoup/soup-session.c
-+index 83421ef..8d6ac61 100644
-+--- a/libsoup/soup-session.c
-++++ b/libsoup/soup-session.c
-+@@ -1189,12 +1189,18 @@ soup_session_redirect_message (SoupSession *session, SoupMessage *msg)
-+ 						   SOUP_ENCODING_NONE);
-+ 	}
-+ 
-++	/* Strip all credentials on cross-origin redirect. */
-++	if (!soup_uri_host_equal (soup_message_get_uri (msg), new_uri)) {
-++		soup_message_headers_remove (msg->request_headers, "Authorization");
-++		soup_message_set_auth (msg, NULL);
-++	}
-++
-+ 	soup_message_set_uri (msg, new_uri);
-+ 	soup_uri_free (new_uri);
-+ 
-+ 	soup_session_requeue_message (session, msg);
-+ 	return TRUE;
-+-}
-++}
-+ 
-+ static void
-+ redirect_handler (SoupMessage *msg, gpointer user_data)
-+ 
-+-- 
-+2.34.1
-+
-diff --git a/package/libsoup/0020-soup-multipart-Verify-boundary-limits.patch b/package/libsoup/0020-soup-multipart-Verify-boundary-limits.patch
-new file mode 100644
-index 0000000000..bf9e0933a5
---- /dev/null
-+++ b/package/libsoup/0020-soup-multipart-Verify-boundary-limits.patch
-@@ -0,0 +1,42 @@
-+From dfdc9b3cc73e6fe88cc12792ba00e14642572339 Mon Sep 17 00:00:00 2001
-+From: Milan Crha <mcrha@redhat.com>
-+Date: Thu, 15 May 2025 17:49:11 +0200
-+Subject: [PATCH] soup-multipart: Verify boundary limits for multipart body
-+
-+It could happen that the boundary started at a place which resulted into
-+a negative number, which in an unsigned integer is a very large value.
-+Check the body size is not a negative value before setting it.
-+
-+Closes https://gitlab.gnome.org/GNOME/libsoup/-/issues/449
-+
-+Part-of: <https://gitlab.gnome.org/GNOME/libsoup/-/merge_requests/463>
-+
-+CVE: CVE-2025-4948
-+Upstream-Status: Backport
-+[https://gitlab.gnome.org/GNOME/libsoup/-/merge_requests/463/diffs?commit_id=f2f28afe0b3b2b3009ab67d6874457ec6bac70c0]
-+
-+Patch originally from OpenEmbedded:
-+https://git.openembedded.org/meta-openembedded/tree/meta-oe/recipes-support/libsoup/libsoup-2.4/CVE-2025-4948.patch
-+
-+Signed-off-by: Changqing Li <changqing.li@windriver.com>
-+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-+---
-+ libsoup/soup-multipart.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/libsoup/soup-multipart.c b/libsoup/soup-multipart.c
-+index dd93973..ce2fc10 100644
-+--- a/libsoup/soup-multipart.c
-++++ b/libsoup/soup-multipart.c
-+@@ -214,7 +214,7 @@ soup_multipart_new_from_message (SoupMessageHeaders *headers,
-+ 		 */
-+ 		part_body = soup_buffer_new_subbuffer (flattened,
-+ 						       split - flattened->data,
-+-						       end - 2 - split);
-++						       end - 2 >= split ? end - 2 - split : 0);
-+ 		g_ptr_array_add (multipart->bodies, part_body);
-+ 
-+ 		start = end;
-+-- 
-+2.34.1
-+
-diff --git a/package/libsoup/0021-soup-multipart-Verify-array-bounds.patch b/package/libsoup/0021-soup-multipart-Verify-array-bounds.patch
-new file mode 100644
-index 0000000000..a0097f18f3
---- /dev/null
-+++ b/package/libsoup/0021-soup-multipart-Verify-array-bounds.patch
-@@ -0,0 +1,41 @@
-+From a7d0c58608ed830bedfb6b92aea11e00feb55aa9 Mon Sep 17 00:00:00 2001
-+From: Milan Crha <mcrha@redhat.com>
-+Date: Mon, 19 May 2025 17:48:27 +0200
-+Subject: [PATCH] soup-multipart: Verify array bounds before accessing its
-+ members
-+
-+The boundary could be at a place which, calculated, pointed
-+before the beginning of the array. Check the bounds, to avoid
-+read out of the array bounds.
-+
-+Closes https://gitlab.gnome.org/GNOME/libsoup/-/issues/447
-+
-+CVE: CVE-2025-4969
-+Upstream-Status: Backport
-+[https://gitlab.gnome.org/GNOME/libsoup/-/merge_requests/467/diffs?commit_id=b5b4dd10d4810f0c87b4eaffe88504f06e502f33]
-+
-+Patch originally from OpenEmbedded:
-+https://git.openembedded.org/meta-openembedded/tree/meta-oe/recipes-support/libsoup/libsoup-2.4/CVE-2025-4969.patch
-+
-+Signed-off-by: Changqing Li <changqing.li@windriver.com>
-+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-+---
-+ libsoup/soup-multipart.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/libsoup/soup-multipart.c b/libsoup/soup-multipart.c
-+index ce2fc10..a29cdf0 100644
-+--- a/libsoup/soup-multipart.c
-++++ b/libsoup/soup-multipart.c
-+@@ -108,7 +108,7 @@ find_boundary (const char *start, const char *end,
-+ 			continue;
-+ 
-+ 		/* Check that it's at start of line */
-+-		if (!(b == start || (b[-1] == '\n' && b[-2] == '\r')))
-++		if (!(b == start || (b - start >= 2 && b[-1] == '\n' && b[-2] == '\r')))
-+ 			continue;
-+ 
-+ 		/* Check for "--" or "\r\n" after boundary */
-+-- 
-+2.34.1
-+
-diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
-index 81bf42cabe..4ac88a1178 100644
---- a/package/libsoup/libsoup.mk
-+++ b/package/libsoup/libsoup.mk
-@@ -22,6 +22,43 @@ LIBSOUP_DEPENDENCIES = \
- 	sqlite \
- 	$(TARGET_NLS_DEPENDENCIES)
- 
-+# 0003-sniffer-fix-potential-overflow.patch
-+LIBSOUP_IGNORE_CVES += CVE-2025-2784
-+# 0004-headers-Strictly-dont-allow-NUL-bytes.patch
-+LIBSOUP_IGNORE_CVES += CVE-2024-52530
-+# 0005-headers-Be-more-robust-against-invalid-input.patch
-+LIBSOUP_IGNORE_CVES += CVE-2024-52531
-+# 0006-websocket-process-the-frame-as-soon-as-we-read-data.patch
-+LIBSOUP_IGNORE_CVES += CVE-2024-52532
-+# 0007-Fix-using-int-instead-of-size_t.patch
-+LIBSOUP_IGNORE_CVES += CVE-2025-32050
-+# 0008-Fix-heap-buffer-overflow.patch
-+LIBSOUP_IGNORE_CVES += CVE-2025-32052
-+# 0009-Fix-heap-buffer-overflow.patch
-+LIBSOUP_IGNORE_CVES += CVE-2025-32053
-+# 0010-headers-Handle-parsing-only-newlines.patch
-+LIBSOUP_IGNORE_CVES += CVE-2025-32906
-+# 0011-auth-digest-Handle-missing-realm-nonce.patch
-+# 0012-auth-digest-Handle-missing-nonce.patch
-+# 0013-auth-digest-Fix-leak.patch
-+LIBSOUP_IGNORE_CVES += CVE-2025-32910
-+# 0014-CVE-2025-32911.patch
-+LIBSOUP_IGNORE_CVES += CVE-2025-32911 CVE-2025-32913
-+# 0015-auth-digest-Handle-missing-nonce.patch
-+LIBSOUP_IGNORE_CVES += CVE-2025-32912
-+# 0016-CVE-2025-32914.patch
-+LIBSOUP_IGNORE_CVES += CVE-2025-32914
-+# 0017-auth-digest-fix-crash.patch
-+LIBSOUP_IGNORE_CVES += CVE-2025-4476
-+# 0018-soup_header_parse_quality_list-Fix-leak.patch
-+LIBSOUP_IGNORE_CVES += CVE-2025-46420
-+# 0019-session-Strip-authentication-credentials.patch
-+LIBSOUP_IGNORE_CVES += CVE-2025-46421
-+# 0020-soup-multipart-Verify-boundary-limits.patch
-+LIBSOUP_IGNORE_CVES += CVE-2025-4948
-+# 0021-soup-multipart-Verify-array-bounds.patch
-+LIBSOUP_IGNORE_CVES += CVE-2025-4969
-+
- LIBSOUP_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
- 
- LIBSOUP_CONF_OPTS = \
--- 
-2.50.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gSmFtZXMsIEFsbCwKCkxlIDMwLzA2LzIwMjUgw6AgMDE6NTMsIEphbWVzIEtuaWdodCBh
+IMOpY3JpdMKgOgo+IFdoZW4gY29uZmlndXJpbmcgYC0tZ2NjLWluc3RhbGwtZGlyYCBmb3IgZXh0
+ZXJuYWwgdG9vbGNoYWluCj4gY29uZmlndXJhdGlvbiwgdGFrZSBpbnRvIGNvbnNpZGVyYXRpb24g
+b2YgdGhlIGNvbmZpZ3VyZWQgaG9zdAo+IGFyY2hpdGVjdHVyZSAoYEhPU1RBUkNIYCkgd2hlbiBw
+b3B1bGF0aW5nIHRoZSBleHBlY3RlZCBwYXRoIGZvciBhIEdDQwo+IGluc3RhbGwuIFRoaXMgaXMg
+aGVscCBzZXR1cCByZWdpc3RlciB0aGUgZGVzaXJlZCBHQ0MgYXJjaGl0ZWN0dXJlIGlmIGEKPiBn
+aXZlbiB0b29sY2hhaW4gcGFja2FnZXMgaW5jbHVkZXMgbXVsdGlwbGUgR0NDIGFyY2hpdGVjdHVy
+ZQo+IGluc3RhbGxhdGlvbnMgKGUuZy4gYSBtZXJnZWQgc3RhY2sgb2YgY3Jvc3N0b29sLW5nIGJ1
+aWxkczsgc3RhbmRhbG9uZSwKPiBub24tbXVsdGlsaWIgYnVpbGRzKS4KPgo+IEZvciBleGFtcGxl
+Ogo+Cj4gICAgICDilJTilIDilIAgL29wdC9jb250YWluZXIvbXktdG9vbGNoYWluLTIwMjUuMDEu
+MDEuMTIzNDUvbGliL2djYy8KPiAgICAgICAgICDilJzilIDilIAgYWFyY2g2NC1leGFtcGxlLWxp
+bnV4LWdudS8KPiAgICAgICAgICDilIIgICDilJTilIDilIAgLi4uCj4gICAgICAgICAg4pSc4pSA
+4pSAIGk2ODYtZXhhbXBsZS1saW51eC1nbnUvCj4gICAgICAgICAg4pSCICAg4pSU4pSA4pSAIC4u
+Lgo+ICAgICAgICAgIOKUlOKUgOKUgCB4ODZfNjQtZXhhbXBsZS1saW51eC1nbnUvCj4gICAgICAg
+ICAgICAgIOKUlOKUgOKUgCAuLi4KPgo+IFNpZ25lZC1vZmYtYnk6IEphbWVzIEtuaWdodCA8Z2l0
+QGpka25pZ2h0Lm1lPgo+IC0tLQo+IFRoaXMgcGF0Y2ggd2FzIGNyZWF0ZWQgZHVlIHRvIGEgY29t
+cGlsaW5nIGlzc3VlIGRldGVjdGVkIHdoZW4gYnVpbGRpbmcgbGliY2xjCj4gd2l0aCBhbiBleHRl
+cm5hbCB0b29sY2hhaW4uIEFuIHg4Nl82NCBidWlsZCBmYWlsZWQgd2l0aCB0aGUgbWVzc2FnZToK
+Pgo+ICAgICAgLS0gQnVpbGQgZmlsZXMgaGF2ZSBiZWVuIHdyaXR0ZW4gdG86IC9zcnYvc2hhcmUv
+dGVzdC9vdXRwdXQvYnVpbGQvbGliY2xjLTIwLjEuNwo+ICAgICAgPj4+IGxpYmNsYyAyMC4xLjcg
+QnVpbGRpbmcKPiAgICAgIEdJVF9ESVI9LiBQQVRIPSIvc3J2L3NoYXJlL3Rlc3Qvb3V0cHV0L2hv
+c3QvYmluOi9zcnYvc2hhcmUvdGVzdC9vdXRwdXQvaG9zdC9zYmluOi91c3IvbG9jYWwvc2Jpbjov
+dXNyL2xvY2FsL2JpbjovdXNyL2JpbjovdXNyL2Jpbi9zaXRlX3Blcmw6L3Vzci9iaW4vdmVuZG9y
+X3Blcmw6L3Vzci9iaW4vY29yZV9wZXJsIiAgL3Vzci9iaW4vY21ha2UgLS1idWlsZCAvc3J2L3No
+YXJlL3Rlc3Qvb3V0cHV0L2J1aWxkL2xpYmNsYy0yMC4xLjcvIC1qMTcgLS0KPiAgICAgIFsgIDAl
+XSBHZW5lcmF0aW5nIGNsc3B2LWNvbnZlcnQuY2wKPiAgICAgIFsgIDAlXSBCdWlsZGluZyBDWFgg
+b2JqZWN0IENNYWtlRmlsZXMvcHJlcGFyZV9idWlsdGlucy5kaXIvdXRpbHMvcHJlcGFyZS1idWls
+dGlucy5jcHAubwo+ICAgICAgLi4uCj4gICAgICBbICAxJV0gR2VuZXJhdGluZyBvYmoubGliY2xj
+LmRpci9udnB0eDY0LS0vY2xjL2xpYi9nZW5lcmljL2NvbW1vbi9jbGNfZGVncmVlcy5jbC5iYwo+
+ICAgICAgY2xhbmdjbGFuZ2NsYW5nY2xhbmc6IDogOiA6IGVycm9yOiBlcnJvcjogZXJyb3I6IGVy
+cm9yOiBubyBzdWNoIGZpbGUgb3IgZGlyZWN0b3J5OiAnaTY4Ni1leGFtcGxlLWxpbnV4LWdudScK
+PiAgICAgIG5vIHN1Y2ggZmlsZSBvciBkaXJlY3Rvcnk6ICdpNjg2LWV4YW1wbGUtbGludXgtZ251
+Jwo+ICAgICAgbm8gc3VjaCBmaWxlIG9yIGRpcmVjdG9yeTogJ2k2ODYtZXhhbXBsZS1saW51eC1n
+bnUnCj4gICAgICBjbGFuZzogZXJyb3I6IG5vIHN1Y2ggZmlsZSBvciBkaXJlY3Rvcnk6ICdpNjg2
+LWV4YW1wbGUtbGludXgtZ251Jwo+ICAgICAgY2xhbmc6IGVycm9yOiBubyBzdWNoIGZpbGUgb3Ig
+ZGlyZWN0b3J5OiAnaTY4Ni1leGFtcGxlLWxpbnV4LWdudScKPiAgICAgIGNsYW5nOiBlcnJvcjog
+bm8gc3VjaCBmaWxlIG9yIGRpcmVjdG9yeTogJ2k2ODYtZXhhbXBsZS1saW51eC1nbnUnCgpUaGFu
+a3MgZm9yIHNwb3R0aW5nIHRoYXQgb3V0LCBJIGZvcmdvdCB0aGUgY2FzZSB3aGVuIHRoZSB0b29s
+Y2hhaW4gc3VwcG9ydHMKbW9yZSB0aGFuIG9uZSB0YXJnZXQgYXJjaGl0ZWN0dXJlLiBJbiB0aGlz
+IGNhc2UsIHdpdGggd2hhdCBJIGhhdmUgZG9uZSBiZWZvcmUKaXQgdGFrZXMgdGhlIGZpcnN0IGFy
+Y2hpdGVjdHVyZSBhbmQgdXNlcyBpdC4gSW4gdGhpcyBjYXNlIGl0IGZpbmRzIGFhcmNoNjQgaW5z
+dGVhZApvZiB0aGUgeDg2XzY0ICh5b3VyIHRhcmdldCBhcmNoaXRlY3R1cmUpLgoKPiBXaGVuIG1h
+bnVhbGx5IHJ1bm5pbmcgdGhlIGBjbGFuZ2AgaG9zdCBidWlsZCwgdGhlIGZvbGxvd2luZyBlcnJv
+cnMgd2VyZQo+IHJlcG9ydGVkOgo+Cj4gICAgICAkIC9zcnYvc2hhcmUvdGVzdC9vdXRwdXQvaG9z
+dC9iaW4vY2xhbmcKPiAgICAgIGNsYW5nOiBlcnJvcjogJy9vcHQvY29udGFpbmVyL215LXRvb2xj
+aGFpbi0yMDI1LjAxLjAxLjEyMzQ1L2xpYi9nY2MvYWFyY2g2NC1leGFtcGxlLWxpbnV4LWdudScg
+ZG9lcyBub3QgY29udGFpbiBhIEdDQyBpbnN0YWxsYXRpb24KPiAgICAgIGNsYW5nOiBlcnJvcjog
+bm8gc3VjaCBmaWxlIG9yIGRpcmVjdG9yeTogJ2k2ODYtZXhhbXBsZS1saW51eC1nbnUnCj4gICAg
+ICBjbGFuZzogZXJyb3I6IG5vIHN1Y2ggZmlsZSBvciBkaXJlY3Rvcnk6ICd4ODZfNjQtZXhhbXBs
+ZS1saW51eC1nbnUvL29wdC9jb250YWluZXIvbXktdG9vbGNoYWluLTIwMjUuMDEuMDEuMTIzNDUv
+bGliL2djYy9hYXJjaDY0LWV4YW1wbGUtbGludXgtZ251OicKPiAgICAgIGNsYW5nOiBlcnJvcjog
+bm8gc3VjaCBmaWxlIG9yIGRpcmVjdG9yeTogJzE0LjIuMCcKPiAgICAgIGNsYW5nOiBlcnJvcjog
+bm8gaW5wdXQgZmlsZXMKPgo+IEluc3BlY3RpbmcgdGhlIGNsYW5nIGhvc3QgY29uZmlndXJhdGlv
+biBzaG93ZWQgYW4gaW50ZXJlc3RpbmcgcmVzdWx0Ogo+Cj4gICAgICAkIGNhdCAvc3J2L3NoYXJl
+L3Rlc3Qvb3V0cHV0L2hvc3QvbGliL2NsYW5nLzIwL3g4Nl82NC1idWlsZHJvb3QtbGludXgtZ251
+LmNmZwo+ICAgICAgLS1nY2MtaW5zdGFsbC1kaXI9L29wdC9jb250YWluZXIvbXktdG9vbGNoYWlu
+LTIwMjUuMDEuMDEuMTIzNDUvbGliL2djYy9hYXJjaDY0LWV4YW1wbGUtbGludXgtZ251Cj4gICAg
+ICBpNjg2LWV4YW1wbGUtbGludXgtZ251Cj4gICAgICB4ODZfNjQtZXhhbXBsZS1saW51eC1nbnUv
+L29wdC9jb250YWluZXIvbXktdG9vbGNoYWluLTIwMjUuMDEuMDEuMTIzNDUvbGliL2djYy9hYXJj
+aDY0LWV4YW1wbGUtbGludXgtZ251Ogo+ICAgICAgMTQuMi4wCj4gICAgICAtLXRhcmdldD14ODZf
+NjQtYnVpbGRyb290LWxpbnV4LWdudQo+Cj4gSW5zcGVjdGluZyB0aGUgY2xhbmcgcGFja2FnZSwg
+bm90aWNlZCBgSE9TVF9DTEFOR19JTlNUQUxMX0NPTkZJR19GSUxFYCBzZWFyY2hlcwo+IGZvciBh
+IEdDQyBwYXRoIHVzaW5nOgo+Cj4gICAgICBscyAkKFRPT0xDSEFJTl9FWFRFUk5BTF9JTlNUQUxM
+X0RJUikvbGliL2djYy8KPgo+IEhvd2V2ZXIsIGZvciB0aGUgdG9vbGNoYWluIHBhY2thZ2UgSSB3
+YXMgdXNpbmcsIGl0IGNvbnRhaW5zIG11bHRpcGxlIEdDQyBwYXRoczoKPiAgICAgIAo+ICAgICAg
+JCBscyAvb3B0L2NvbnRhaW5lci9teS10b29sY2hhaW4tMjAyNS4wMS4wMS4xMjM0NS9saWIvZ2Nj
+Lwo+ICAgICAgYWFyY2g2NC1leGFtcGxlLWxpbnV4LWdudSAgaTY4Ni1leGFtcGxlLWxpbnV4LWdu
+dSAgeDg2XzY0LWV4YW1wbGUtbGludXgtZ251Cj4KPiBUbyBzdXBwb3J0IHRoaXMsIG1hZGUgdGhl
+IHR3ZWFrIHRvIGBIT1NUX0NMQU5HX0lOU1RBTExfQ09ORklHX0ZJTEVgIHRvIHVzZSB0aGUKPiBj
+b25maWd1cmVkIHZhbHVlIG9mIGBIT1NUQVJDSGAgd2hlbiBwb3B1bGF0aW5nIHRoZSBwYXRoLiBQ
+ZXJmb3JtZWQgYSByZWluc3RhbGwKPiBvZiBjbGFuZyAoYG1ha2UgaG9zdC1jbGFuZy1yZWluc3Rh
+bGxgKSBhbmQgb2JzZXJ2ZWQgYW4gZXhwZWN0ZWQgcGF0aDoKCkhvd2V2ZXIsIHdlIG11c3QgdXNl
+ICdBUkNIJyBpbnN0ZWFkIG9mICdIT1NUQVJDSCcgdG8gcG9pbnQgb24gdGhlIHRhcmdldCBhcmNo
+aXRldHVyZSAsCm5vdCB0aGUgaG9zdCBidWlsZCBtYWNoaW5lLiBJdCBoYXMgd29ya2VkIG9uIHlv
+dXIgY2FzZSBzaW5jZSB5b3VyICdIT1NUQVJDSCA9IEFSQ0gnLAppZiB5b3UgcnVuIHRoaXMgdXNp
+bmcgeW91ciAnYWFyY2g2NC1leGFtcGxlLWxpbnV4LWdudScsIGl0IHdvbid0IHdvcmsgc2luY2Ug
+eW91IGFyZSB1c2luZwp0aGUgSE9TVEFSQ0ggd2hpY2ggaXMgYW4geDg2XzY0LiBBbHNvLCB5b3Ug
+Y2FuIHRlc3Qgd2l0aCB0aGUgcnVudGltZSBDbGFuZyBDb21waWxlUnQgYXZhaWxhYmxlCnRoYXQg
+dXNlcyBhbiBhYXJjaDY0IHRhcmdldCwgaXQgd29udCB3b3JrIGFsc28gb24gdGhpcyBjYXNlLgoK
+PiAgICAgICQgY2F0ICAvc3J2L3NoYXJlL3Rlc3Qvb3V0cHV0L2hvc3QvbGliL2NsYW5nLzIwL3g4
+Nl82NC1idWlsZHJvb3QtbGludXgtZ251LmNmZwo+ICAgICAgLS1nY2MtaW5zdGFsbC1kaXI9L29w
+dC9jb250YWluZXIvbXktdG9vbGNoYWluLTIwMjUuMDEuMDEuMTIzNDUvbGliL2djYy94ODZfNjQt
+ZXhhbXBsZS1saW51eC1nbnUvMTQuMi4wCj4gICAgICAtLXRhcmdldD14ODZfNjQtYnVpbGRyb290
+LWxpbnV4LWdudQo+Cj4gV2FzIGFibGUgdG8gYnVpbGQgbXkgY29uZmlndXJhdGlvbiBhZnRlcndh
+cmRzLgo+IC0tLQo+ICAgcGFja2FnZS9sbHZtLXByb2plY3QvY2xhbmcvY2xhbmcubWsgfCAzICsr
+LQo+ICAgMSBmaWxlIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQo+Cj4g
+ZGlmZiAtLWdpdCBhL3BhY2thZ2UvbGx2bS1wcm9qZWN0L2NsYW5nL2NsYW5nLm1rIGIvcGFja2Fn
+ZS9sbHZtLXByb2plY3QvY2xhbmcvY2xhbmcubWsKPiBpbmRleCBhNWM4Yjk5MGFhLi44MDBmOGQ5
+ZWYzIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvbGx2bS1wcm9qZWN0L2NsYW5nL2NsYW5nLm1rCj4g
+KysrIGIvcGFja2FnZS9sbHZtLXByb2plY3QvY2xhbmcvY2xhbmcubWsKPiBAQCAtMTE2LDcgKzEx
+Niw4IEBAIGlmZXEgKCQoQlIyX1RPT0xDSEFJTl9FWFRFUk5BTCkseSkKPiAgIGRlZmluZSBIT1NU
+X0NMQU5HX0lOU1RBTExfQ09ORklHX0ZJTEUKPiAgIAlta2RpciAtcCAkKEhPU1RfRElSKS9saWIv
+Y2xhbmcvJChDTEFOR19WRVJTSU9OX01BSk9SKQo+ICAgCXRvdWNoICQoSE9TVF9ESVIpL2xpYi9j
+bGFuZy8kKENMQU5HX1ZFUlNJT05fTUFKT1IpLyQoR05VX1RBUkdFVF9OQU1FKS5jZmcKPiAtCWVj
+aG8gIi0tZ2NjLWluc3RhbGwtZGlyPSQoVE9PTENIQUlOX0VYVEVSTkFMX0lOU1RBTExfRElSKS9s
+aWIvZ2NjLyQkKGxzICQoVE9PTENIQUlOX0VYVEVSTkFMX0lOU1RBTExfRElSKS9saWIvZ2NjLykv
+JCQobHMgJChUT09MQ0hBSU5fRVhURVJOQUxfSU5TVEFMTF9ESVIpL2xpYi9nY2MvJCQobHMgJChU
+T09MQ0hBSU5fRVhURVJOQUxfSU5TVEFMTF9ESVIpL2xpYi9nY2MvKS8pIiA+ICQoSE9TVF9ESVIp
+L2xpYi9jbGFuZy8kKENMQU5HX1ZFUlNJT05fTUFKT1IpLyQoR05VX1RBUkdFVF9OQU1FKS5jZmcK
+PiArCVRSSVBMRVQ9JCQoYmFzZW5hbWUgLWEgJChUT09MQ0hBSU5fRVhURVJOQUxfSU5TVEFMTF9E
+SVIpL2xpYi9nY2MvJChIT1NUQVJDSCkqKTsgXAoKV2UgbXVzdCByZXBsYWNlIGhlcmUgJyQoSE9T
+VEFSQ0gpJyB3aXRoICQoQVJDSCkuCgpBbmQgbWF5YmUgd2UgY2FuIGdvIGZ1cnRoZXIgcmVwbGFj
+aW5nIHRoZSAnKicgYnkgbWF0Y2hpbmcgdGhlICdUQVJHRVRfT1MnIGFuZCAnTElCQycuCldoYXQg
+ZG8geW91IHRoaW5rIGFib3V0IHRoYXQ/Cgo+ICsJZWNobyAiLS1nY2MtaW5zdGFsbC1kaXI9JChU
+T09MQ0hBSU5fRVhURVJOQUxfSU5TVEFMTF9ESVIpL2xpYi9nY2MvJCRUUklQTEVULyQkKGxzICQo
+VE9PTENIQUlOX0VYVEVSTkFMX0lOU1RBTExfRElSKS9saWIvZ2NjLyQkVFJJUExFVC8pIiA+ICQo
+SE9TVF9ESVIpL2xpYi9jbGFuZy8kKENMQU5HX1ZFUlNJT05fTUFKT1IpLyQoR05VX1RBUkdFVF9O
+QU1FKS5jZmcKPiAgIAllY2hvICItLXRhcmdldD0kKEdOVV9UQVJHRVRfTkFNRSkiID4+ICQoSE9T
+VF9ESVIpL2xpYi9jbGFuZy8kKENMQU5HX1ZFUlNJT05fTUFKT1IpLyQoR05VX1RBUkdFVF9OQU1F
+KS5jZmcKPiAgIGVuZGVmCgpCZXN0IHJlZ2FyZHMsCkVsIE1laGRpCgo+ICAgCl9fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxp
+c3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21h
+aWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
