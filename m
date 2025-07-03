@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94E55C83F09
-	for <buildroot@archiver.kernel.org>; Fri,  4 Jul 2025 06:21:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62A97C83F0A
+	for <buildroot@archiver.kernel.org>; Fri,  4 Jul 2025 06:21:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6639483CCD;
-	Fri,  4 Jul 2025 06:21:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 350A483CEB;
+	Fri,  4 Jul 2025 06:21:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id otQrxXI-pPq8; Fri,  4 Jul 2025 06:21:40 +0000 (UTC)
+ id EnQEp5Z9Wpli; Fri,  4 Jul 2025 06:21:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 515F383D2B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2969E83D77
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 515F383D2B;
-	Fri,  4 Jul 2025 06:21:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2969E83D77;
+	Fri,  4 Jul 2025 06:21:43 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 3B0AD7AB
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:21:28 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 16DDA7AD
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:21:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B6BC9404B5
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:21:27 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1DCE640510
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:21:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7fIMNxy2RPJ8 for <buildroot@buildroot.org>;
+ id 4KgbAgmBFt02 for <buildroot@buildroot.org>;
  Fri,  4 Jul 2025 06:21:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B748C40510
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 787DE404E4
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B748C40510
+ by smtp2.osuosl.org (Postfix) with ESMTP id 787DE404E4
  for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:21:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B557E85D08; Fri,  4 Jul 2025 06:21:26 +0000 (UTC)
+ id 767CD85D10; Fri,  4 Jul 2025 06:21:26 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Jul 2025 09:58:54 +0200
+Date: Thu, 3 Jul 2025 09:53:29 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 9d8bde1172930c7979375c1fdccf1dace8071afd
-X-Git-Newrev: f9803959940d1ef7f8c6dbec20aaf9ce6633488d
+X-Git-Oldrev: 4c3660a215d35f22d901afd8564c5c01f665c48c
+X-Git-Newrev: 1ee325b12d4e5ef20997921da43f7e7c58319f71
 X-Patchwork-Hint: ignore
-Message-Id: <20250704062126.B557E85D08@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] support/testing: new
- runtime test for gumbo-parser
+Message-Id: <20250704062126.767CD85D10@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] board/freescale/mxs: fix
+ Linux booting
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,187 +61,67 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0667529812853101415=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0667529812853101415==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=f9803959940d1ef7f8c6dbec20aaf9ce6633488d
+commit: https://git.buildroot.net/buildroot/commit/?id=1ee325b12d4e5ef20997921da43f7e7c58319f71
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-The new test requires a br2-external directory because we compile a
-small test program on the host and install it on the target, but it's
-not useful to have it in the main Buildroot package tree.
+Actually DTB_LIST accepts only file and not files with relative path
+preprended. This leads to have vfat without .dtb files and so Linux
+doesn't start. Let's fix this by including slash in sed command as done
+for mxc as well as basename in front of $dt.dtb to remove possible
+useless folders present in the dts path. Let's also add set -e at the
+top of the script to make it more verbose on error and modify this
+section according to spellcheck as done for mxc.
 
-The test program loads and parses a sample HTML document. Taking
-inspiration from 'examples/get_title.c' in gumbo-parser, it also
-searches for the title of the document just to check that we can do
-more than the parsing.
+This commit align this "mxs/post-image.sh" with its "imx/post-image.sh"
+counterpart which was improved for arm64 in commit [1].
 
-Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
+[1] https://gitlab.com/buildroot.org/buildroot/-/commit/4755bf2bd43a7b4c3bf4f88be790240a01b3116f
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+[Julien:
+ - change space indentation to tabs for consistency
+ - add note in commit log about imx/post-image.sh
+]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit da23be6338c1e82f39475d166407f97511e0b666)
+(cherry picked from commit 50297207a83cf7640e5cc3ed3500ffb807155bf2)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- .../package/br2-external/gumbo-parser/Config.in    |  1 +
- .../br2-external/gumbo-parser/external.desc        |  1 +
- .../package/br2-external/gumbo-parser/external.mk  |  1 +
- .../package/gumbo-parser-test/Config.in            |  7 ++++
- .../package/gumbo-parser-test/gumbo-parser-test.mk | 19 ++++++++++
- .../package/gumbo-parser-test/gumbo_test.c         | 40 ++++++++++++++++++++++
- support/testing/tests/package/test_gumbo_parser.py | 27 +++++++++++++++
- 7 files changed, 96 insertions(+)
+ board/freescale/common/mxs/post-image.sh | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/support/testing/tests/package/br2-external/gumbo-parser/Config.in b/support/testing/tests/package/br2-external/gumbo-parser/Config.in
-new file mode 100644
-index 0000000000..28a97c1dfe
---- /dev/null
-+++ b/support/testing/tests/package/br2-external/gumbo-parser/Config.in
-@@ -0,0 +1 @@
-+source "$BR2_EXTERNAL_GUMBO_PARSER_PATH/package/gumbo-parser-test/Config.in"
-diff --git a/support/testing/tests/package/br2-external/gumbo-parser/external.desc b/support/testing/tests/package/br2-external/gumbo-parser/external.desc
-new file mode 100644
-index 0000000000..4bda9627e9
---- /dev/null
-+++ b/support/testing/tests/package/br2-external/gumbo-parser/external.desc
-@@ -0,0 +1 @@
-+name: GUMBO_PARSER
-diff --git a/support/testing/tests/package/br2-external/gumbo-parser/external.mk b/support/testing/tests/package/br2-external/gumbo-parser/external.mk
-new file mode 100644
-index 0000000000..bdc8b2fc79
---- /dev/null
-+++ b/support/testing/tests/package/br2-external/gumbo-parser/external.mk
-@@ -0,0 +1 @@
-+include $(sort $(wildcard $(BR2_EXTERNAL_GUMBO_PARSER_PATH)/package/*/*.mk))
-diff --git a/support/testing/tests/package/br2-external/gumbo-parser/package/gumbo-parser-test/Config.in b/support/testing/tests/package/br2-external/gumbo-parser/package/gumbo-parser-test/Config.in
-new file mode 100644
-index 0000000000..714d3e0198
---- /dev/null
-+++ b/support/testing/tests/package/br2-external/gumbo-parser/package/gumbo-parser-test/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_GUMBO_PARSER_TEST
-+	bool "gumbo-parser-test"
-+	depends on BR2_PACKAGE_GUMBO_PARSER
-+	help
-+	  Test program for gumbo-parser library.
-+	  This package builds a simple test program that demonstrates
-+	  basic HTML parsing functionality using gumbo-parser.
-diff --git a/support/testing/tests/package/br2-external/gumbo-parser/package/gumbo-parser-test/gumbo-parser-test.mk b/support/testing/tests/package/br2-external/gumbo-parser/package/gumbo-parser-test/gumbo-parser-test.mk
-new file mode 100644
-index 0000000000..111f1977bf
---- /dev/null
-+++ b/support/testing/tests/package/br2-external/gumbo-parser/package/gumbo-parser-test/gumbo-parser-test.mk
-@@ -0,0 +1,19 @@
-+################################################################################
-+#
-+# gumbo-parser-test
-+#
-+################################################################################
+diff --git a/board/freescale/common/mxs/post-image.sh b/board/freescale/common/mxs/post-image.sh
+index 0bfb835c6e..97c8ee9079 100755
+--- a/board/freescale/common/mxs/post-image.sh
++++ b/board/freescale/common/mxs/post-image.sh
+@@ -1,5 +1,7 @@
+ #!/usr/bin/env bash
+ 
++set -e
 +
-+GUMBO_PARSER_TEST_DEPENDENCIES = gumbo-parser
+ #
+ # dtb_list extracts the list of DTB files from BR2_LINUX_KERNEL_INTREE_DTS_NAME
+ # in ${BR_CONFIG}, then prints the corresponding list of file names for the
+@@ -7,10 +9,12 @@
+ #
+ dtb_list()
+ {
+-	local DTB_LIST="$(sed -n 's/^BR2_LINUX_KERNEL_INTREE_DTS_NAME="\([a-z0-9 \-]*\)"$/\1/p' ${BR2_CONFIG})"
++	local DTB_LIST
 +
-+define GUMBO_PARSER_TEST_BUILD_CMDS
-+	$(TARGET_CC) $(TARGET_CFLAGS) -o $(@D)/gumbo_test \
-+		$(GUMBO_PARSER_TEST_PKGDIR)/gumbo_test.c \
-+		$(TARGET_LDFLAGS) -lgumbo
-+endef
-+
-+define GUMBO_PARSER_TEST_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/gumbo_test $(TARGET_DIR)/usr/bin/gumbo_test
-+endef
-+
-+$(eval $(generic-package))
-diff --git a/support/testing/tests/package/br2-external/gumbo-parser/package/gumbo-parser-test/gumbo_test.c b/support/testing/tests/package/br2-external/gumbo-parser/package/gumbo-parser-test/gumbo_test.c
-new file mode 100644
-index 0000000000..f9c9ca4a91
---- /dev/null
-+++ b/support/testing/tests/package/br2-external/gumbo-parser/package/gumbo-parser-test/gumbo_test.c
-@@ -0,0 +1,40 @@
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <gumbo.h>
-+
-+static void search_for_title(GumboNode* node) {
-+    if (node->type != GUMBO_NODE_ELEMENT) {
-+        return;
-+    }
-+
-+    if (node->v.element.tag == GUMBO_TAG_TITLE) {
-+        GumboNode* text = node->v.element.children.data[0];
-+        if (text->type == GUMBO_NODE_TEXT) {
-+            printf("Found title: %s\n", text->v.text.text);
-+        }
-+        return;
-+    }
-+
-+    GumboVector* children = &node->v.element.children;
-+    for (unsigned int i = 0; i < children->length; ++i) {
-+        search_for_title(children->data[i]);
-+    }
-+}
-+
-+int main() {
-+    const char* html = "<html><head><title>Test HTML</title></head><body><p>Hello World</p></body></html>";
-+
-+    GumboOutput* output = gumbo_parse(html);
-+
-+    if (output == NULL) {
-+        printf("HTML parsing failed\n");
-+        return 1;
-+    }
-+
-+    printf("HTML parsing successful\n");
-+    search_for_title(output->root);
-+
-+    gumbo_destroy_output(&kGumboDefaultOptions, output);
-+    return 0;
-+}
-diff --git a/support/testing/tests/package/test_gumbo_parser.py b/support/testing/tests/package/test_gumbo_parser.py
-new file mode 100644
-index 0000000000..efa8ec91a7
---- /dev/null
-+++ b/support/testing/tests/package/test_gumbo_parser.py
-@@ -0,0 +1,27 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestGumboParser(infra.basetest.BRTest):
-+    br2_external = [infra.filepath("tests/package/br2-external/gumbo-parser")]
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_PACKAGE_GUMBO_PARSER=y
-+        BR2_PACKAGE_GUMBO_PARSER_TEST=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+        # Run the test program and check output
-+        out, ret = self.emulator.run("/usr/bin/gumbo_test")
-+        self.assertEqual(ret, 0)
-+        self.assertIn("HTML parsing successful", "\n".join(out))
-+        self.assertIn("Found title: Test HTML", "\n".join(out))
-
---===============0667529812853101415==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
++	DTB_LIST="$(sed -n 's/^BR2_LINUX_KERNEL_INTREE_DTS_NAME="\([\/a-z0-9 \-]*\)"$/\1/p' "${BR2_CONFIG}")"
+ 
+ 	for dt in $DTB_LIST; do
+-		echo -n "\"$dt.dtb\", "
++		echo -n "\"$(basename "${dt}").dtb\", "
+ 	done
+ }
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0667529812853101415==--
