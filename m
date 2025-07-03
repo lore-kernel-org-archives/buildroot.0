@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5AF2CC83F0A
-	for <buildroot@archiver.kernel.org>; Fri,  4 Jul 2025 06:22:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A12A7C83030
+	for <buildroot@archiver.kernel.org>; Fri,  4 Jul 2025 06:22:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 210F883E2A;
-	Fri,  4 Jul 2025 06:22:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 76E1383D1B;
+	Fri,  4 Jul 2025 06:22:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fHELCip1Sin7; Fri,  4 Jul 2025 06:22:12 +0000 (UTC)
+ id CVALJJxwna67; Fri,  4 Jul 2025 06:22:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C00283E1C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EFA5883E0F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6C00283E1C;
-	Fri,  4 Jul 2025 06:22:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EFA5883E0F;
+	Fri,  4 Jul 2025 06:22:11 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1171A1EB
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:21:39 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0FE517AB
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:21:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8D8FD60B8A
+ by smtp3.osuosl.org (Postfix) with ESMTP id C29A860B89
  for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:21:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 572iIL0EPsYi for <buildroot@buildroot.org>;
- Fri,  4 Jul 2025 06:21:27 +0000 (UTC)
+ id 0MIVm15fRHWZ for <buildroot@buildroot.org>;
+ Fri,  4 Jul 2025 06:21:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BF4B260B74
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E14E860B8B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id BF4B260B74
+ by smtp3.osuosl.org (Postfix) with ESMTP id E14E860B8B
  for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:21:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BD68C849B1; Fri,  4 Jul 2025 06:21:26 +0000 (UTC)
+ id DF38A84545; Fri,  4 Jul 2025 06:21:26 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Jul 2025 09:59:23 +0200
+Date: Thu, 3 Jul 2025 10:07:47 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: f9803959940d1ef7f8c6dbec20aaf9ce6633488d
-X-Git-Newrev: e5e602118c7e6365df2fb326c840b75a0689821f
+X-Git-Oldrev: 22d808b108424a540608e5deba0869521e57c64c
+X-Git-Newrev: 87d2320a4563caefe67d1098a9ca3e2999a4036f
 X-Patchwork-Hint: ignore
-Message-Id: <20250704062126.BD68C849B1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x]
- package/gcc/Config.in.host: hide gcc version for unsupported CPUs
+Message-Id: <20250704062126.DF38A84545@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/libgcrypt: bump
+ to v1.11.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,71 +66,71 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e5e602118c7e6365df2fb326c840b75a0689821f
+commit: https://git.buildroot.net/buildroot/commit/?id=87d2320a4563caefe67d1098a9ca3e2999a4036f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-When a new gcc version is introduced, for example gcc 15 in
-commit [1], it should have also added a "depends on
-!BR2_ARCH_NEEDS_GCC_AT_LEAST_15" to the previous gcc version.
+For release note, see:
+https://dev.gnupg.org/T7166
 
-This logic is described for external toolchains in commit [2],
-for example. The internal Buildroot toolchains should have the
-same logic. This logic existed for previous gcc version. See for
-example the removal of gcc 12 in commit [3].
+This version fixes a build error which can happen with 32-bit arm
+configurations.
 
-There is usually no problem, because all the three latest active gcc
-versions supports all CPUs present in Buildroot.
+The issue can be reproduced with commands:
 
-However, the commit [4] recently added the support for the Arm
-Cortex-A720 CPU, which needs at least gcc 14. Since there is no
-logic preventing the selection of the gcc version, it is possible
-to select an unsupported gcc version (i.e. gcc 13).
+    cat >.config <<EOF
+    BR2_arm=y
+    BR2_cortex_a8=y
+    BR2_ARM_INSTRUCTIONS_THUMB2=y
+    BR2_TOOLCHAIN_EXTERNAL=y
+    BR2_PACKAGE_LIBGCRYPT=y
+    EOF
+    make olddefconfig
+    make libgcrypt
 
-In such a case, the host-gcc-initial package configuration fails
-with output:
+Build is failing with output:
 
-    Unknown cpu used in --with-cpu=cortex-a720
+    ec-nist.c: In function '_gcry_mpi_ec_nist256_mod':
+    ec-inline.h:902:5: error: 'asm' operand has impossible constraints or there are not enough registers
+      902 |     __asm__ ("subs %3, %7, %10\n" \
+          |     ^~~~~~~
 
-This commit fixes the issue by adding those missing dependencies.
+Details for this buggix: https://dev.gnupg.org/T7226
 
-Fixes:
-https://autobuild.buildroot.org/results/918b90aee0b65f01efc241622015cb847b4e23a8/
-
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/75891397abe60dbe3d82a1ec39654ff81d1b1406
-[2] https://gitlab.com/buildroot.org/buildroot/-/commit/f577d8218f3f18016aa084255e337a7f589eeed1
-[3] https://gitlab.com/buildroot.org/buildroot/-/commit/58cf7c51da3ae4804332f68ee934e153d695d047#66f7e875db173e5538d3511c8297acc1ba30da33_27_25
-[4] https://gitlab.com/buildroot.org/buildroot/-/commit/de374e06d856dd5079fc792c883b06563af950b0
-
-Cc: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Bram Oosterhuis <dev@bybram.com>
+[Julien: reword commit log]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 6f231d3003502282710a0da7ecd98344ec868095)
+(cherry picked from commit 89ca1bd4f489ff6738f7c317dc6d9cfdbf362bc7)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/gcc/Config.in.host | 2 ++
- 1 file changed, 2 insertions(+)
+ package/libgcrypt/libgcrypt.hash | 4 ++--
+ package/libgcrypt/libgcrypt.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 10fe4bf609..b6b159224e 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -34,6 +34,7 @@ config BR2_GCC_VERSION_12_X
+diff --git a/package/libgcrypt/libgcrypt.hash b/package/libgcrypt/libgcrypt.hash
+index ced8087ca9..486a29dfc0 100644
+--- a/package/libgcrypt/libgcrypt.hash
++++ b/package/libgcrypt/libgcrypt.hash
+@@ -1,5 +1,5 @@
+ # From https://www.gnupg.org/download/integrity_check.html
+-sha1  dd2c68e0685bb99249efeeb06046fae15b5214ba  libgcrypt-1.11.0.tar.bz2
+-sha256  09120c9867ce7f2081d6aaa1775386b98c2f2f246135761aae47d81f58685b9c  libgcrypt-1.11.0.tar.bz2
++sha1  d33eb270cd74e8c23e263eb5cdb8f7de740f7b49  libgcrypt-1.11.1.tar.bz2
++sha256  24e91c9123a46c54e8371f3a3a2502f1198f2893fbfbf59af95bc1c21499b00e  libgcrypt-1.11.1.tar.bz2
+ # Locally calculated
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
+index 57eca507b3..5f56e40ac2 100644
+--- a/package/libgcrypt/libgcrypt.mk
++++ b/package/libgcrypt/libgcrypt.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_GCC_VERSION_13_X
- 	bool "gcc 13.x"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_14
- 	# powerpc spe support has been deprecated since gcc 8.x.
- 	# https://gcc.gnu.org/ml/gcc/2018-04/msg00102.html
- 	depends on !BR2_POWERPC_CPU_HAS_SPE
-@@ -41,6 +42,7 @@ config BR2_GCC_VERSION_13_X
- 
- config BR2_GCC_VERSION_14_X
- 	bool "gcc 14.x"
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_15
- 	# powerpc spe support has been deprecated since gcc 8.x.
- 	# https://gcc.gnu.org/ml/gcc/2018-04/msg00102.html
- 	depends on !BR2_POWERPC_CPU_HAS_SPE
+-LIBGCRYPT_VERSION = 1.11.0
++LIBGCRYPT_VERSION = 1.11.1
+ LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
+ LIBGCRYPT_LICENSE = LGPL-2.1+
+ LIBGCRYPT_LICENSE_FILES = COPYING.LIB
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
