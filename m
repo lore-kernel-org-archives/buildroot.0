@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E1CDC83030
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20B42C83F09
 	for <buildroot@archiver.kernel.org>; Fri,  4 Jul 2025 06:24:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E7C946163D;
+	by smtp1.osuosl.org (Postfix) with ESMTP id C2DDD82030;
 	Fri,  4 Jul 2025 06:24:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pdP5gwJRitXS; Fri,  4 Jul 2025 06:24:53 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ll4FMQ9OLKmK; Fri,  4 Jul 2025 06:24:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 31AC16163A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B872F83DA2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 31AC16163A;
-	Fri,  4 Jul 2025 06:24:53 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 7B45F1EB
+	by smtp1.osuosl.org (Postfix) with ESMTP id B872F83DA2;
+	Fri,  4 Jul 2025 06:24:51 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2A42A7AD
  for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:24:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 33D1E41060
+ by smtp1.osuosl.org (Postfix) with ESMTP id 80CC081BFA
  for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:24:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0BdSUltf85rI for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id n6wtGNabdw-1 for <buildroot@buildroot.org>;
  Fri,  4 Jul 2025 06:24:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 74E514104D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 99AE281B9D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 74E514104D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 99AE281B9D
  for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:24:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 72DFC85E09; Fri,  4 Jul 2025 06:24:32 +0000 (UTC)
+ id 97F3085E0C; Fri,  4 Jul 2025 06:24:32 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Jul 2025 10:53:44 +0200
+Date: Thu, 3 Jul 2025 10:54:06 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: 4aad0cdeef33fd8b9a2d50bba3a1f75aac153077
-X-Git-Newrev: c7221c53dfd1f0b65f7c975470ff2669c15187c8
+X-Git-Oldrev: 32df10e8ff550432fc0104e7311ae98d82dc3ebd
+X-Git-Newrev: bd6305a8f146165abb099154edecb685fb79eb2d
 X-Patchwork-Hint: ignore
-Message-Id: <20250704062432.72DFC85E09@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] Makefile: sort unexport
- lines
+Message-Id: <20250704062432.97F3085E0C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/libbpf: add patch
+ for CVE-2025-29481
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,65 +66,151 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c7221c53dfd1f0b65f7c975470ff2669c15187c8
+commit: https://git.buildroot.net/buildroot/commit/?id=bd6305a8f146165abb099154edecb685fb79eb2d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-The list of environment variables to unexport has grown organically over the
-years and is no longer sorted. Sort it alphabetically for clarity.
+This fixes the following CVE:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+- CVE-2025-29481:
+    Buffer Overflow vulnerability in libbpf 1.5.0 allows a local attacker to
+    execute arbitrary code via the bpf_object__init_prog` function of libbpf.
+
+Fixes:
+https://www.cve.org/CVERecord?id=CVE-2025-29481
+
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+[Julien: add direct link to CVE in commit log]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit da04cfa26ce7da042c40caa94252c566f47a070c)
+(cherry picked from commit fba60c7732a2582e07409c169d6da2fe7053a8bc)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- Makefile | 26 +++++++++++++-------------
- 1 file changed, 13 insertions(+), 13 deletions(-)
+ ...-buffer-overflow-in-bpf_object__init_prog.patch | 103 +++++++++++++++++++++
+ package/libbpf/libbpf.mk                           |   3 +
+ 2 files changed, 106 insertions(+)
 
-diff --git a/Makefile b/Makefile
-index a0ad100980..8cafcaf834 100644
---- a/Makefile
-+++ b/Makefile
-@@ -407,27 +407,27 @@ ifeq ($(BR2_HAVE_DOT_CONFIG),y)
- # Hide troublesome environment variables from sub processes
- #
- ################################################################################
--unexport CROSS_COMPILE
-+unexport AR
- unexport ARCH
- unexport CC
--unexport LD
--unexport AR
--unexport CXX
--unexport CPP
--unexport RANLIB
- unexport CFLAGS
-+unexport CONFIG_SITE
-+unexport CPP
-+unexport CROSS_COMPILE
-+unexport CXX
- unexport CXXFLAGS
-+unexport DEVICE_TREE
-+unexport GCC_COLORS
- unexport GREP_OPTIONS
--unexport TAR_OPTIONS
--unexport CONFIG_SITE
--unexport QMAKESPEC
--unexport TERMINFO
-+unexport LD
- unexport MACHINE
- unexport O
--unexport GCC_COLORS
--unexport PLATFORM
- unexport OS
--unexport DEVICE_TREE
-+unexport PLATFORM
-+unexport QMAKESPEC
-+unexport RANLIB
-+unexport TAR_OPTIONS
-+unexport TERMINFO
+diff --git a/package/libbpf/0001-fix-buffer-overflow-in-bpf_object__init_prog.patch b/package/libbpf/0001-fix-buffer-overflow-in-bpf_object__init_prog.patch
+new file mode 100644
+index 0000000000..2806ff220d
+--- /dev/null
++++ b/package/libbpf/0001-fix-buffer-overflow-in-bpf_object__init_prog.patch
+@@ -0,0 +1,103 @@
++From 806b4e0a9f658d831119cece11a082ba1578b800 Mon Sep 17 00:00:00 2001
++From: Viktor Malik <vmalik@redhat.com>
++Date: Tue, 15 Apr 2025 17:50:14 +0200
++Subject: [PATCH] libbpf: Fix buffer overflow in bpf_object__init_prog
++
++Upstream: https://github.com/libbpf/libbpf/commit/806b4e0a9f658d831119cece11a082ba1578b800
++
++CVE: CVE-2025-29481
++
++As shown in [1], it is possible to corrupt a BPF ELF file such that
++arbitrary BPF instructions are loaded by libbpf. This can be done by
++setting a symbol (BPF program) section offset to a large (unsigned)
++number such that <section start + symbol offset> overflows and points
++before the section data in the memory.
++
++Consider the situation below where:
++- prog_start = sec_start + symbol_offset    <-- size_t overflow here
++- prog_end   = prog_start + prog_size
++
++    prog_start        sec_start        prog_end        sec_end
++        |                |                 |              |
++        v                v                 v              v
++    .....................|################################|............
++
++The report in [1] also provides a corrupted BPF ELF which can be used as
++a reproducer:
++
++    $ readelf -S crash
++    Section Headers:
++      [Nr] Name              Type             Address           Offset
++           Size              EntSize          Flags  Link  Info  Align
++    ...
++      [ 2] uretprobe.mu[...] PROGBITS         0000000000000000  00000040
++           0000000000000068  0000000000000000  AX       0     0     8
++
++    $ readelf -s crash
++    Symbol table '.symtab' contains 8 entries:
++       Num:    Value          Size Type    Bind   Vis      Ndx Name
++    ...
++         6: ffffffffffffffb8   104 FUNC    GLOBAL DEFAULT    2 handle_tp
++
++Here, the handle_tp prog has section offset ffffffffffffffb8, i.e. will
++point before the actual memory where section 2 is allocated.
++
++This is also reported by AddressSanitizer:
++
++    =================================================================
++    ==1232==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x7c7302fe0000 at pc 0x7fc3046e4b77 bp 0x7ffe64677cd0 sp 0x7ffe64677490
++    READ of size 104 at 0x7c7302fe0000 thread T0
++        #0 0x7fc3046e4b76 in memcpy (/lib64/libasan.so.8+0xe4b76)
++        #1 0x00000040df3e in bpf_object__init_prog /src/libbpf/src/libbpf.c:856
++        #2 0x00000040df3e in bpf_object__add_programs /src/libbpf/src/libbpf.c:928
++        #3 0x00000040df3e in bpf_object__elf_collect /src/libbpf/src/libbpf.c:3930
++        #4 0x00000040df3e in bpf_object_open /src/libbpf/src/libbpf.c:8067
++        #5 0x00000040f176 in bpf_object__open_file /src/libbpf/src/libbpf.c:8090
++        #6 0x000000400c16 in main /poc/poc.c:8
++        #7 0x7fc3043d25b4 in __libc_start_call_main (/lib64/libc.so.6+0x35b4)
++        #8 0x7fc3043d2667 in __libc_start_main@@GLIBC_2.34 (/lib64/libc.so.6+0x3667)
++        #9 0x000000400b34 in _start (/poc/poc+0x400b34)
++
++    0x7c7302fe0000 is located 64 bytes before 104-byte region [0x7c7302fe0040,0x7c7302fe00a8)
++    allocated by thread T0 here:
++        #0 0x7fc3046e716b in malloc (/lib64/libasan.so.8+0xe716b)
++        #1 0x7fc3045ee600 in __libelf_set_rawdata_wrlock (/lib64/libelf.so.1+0xb600)
++        #2 0x7fc3045ef018 in __elf_getdata_rdlock (/lib64/libelf.so.1+0xc018)
++        #3 0x00000040642f in elf_sec_data /src/libbpf/src/libbpf.c:3740
++
++The problem here is that currently, libbpf only checks that the program
++end is within the section bounds. There used to be a check
++`while (sec_off < sec_sz)` in bpf_object__add_programs, however, it was
++removed by commit 6245947c1b3c ("libbpf: Allow gaps in BPF program
++sections to support overriden weak functions").
++
++Add a check for detecting the overflow of `sec_off + prog_sz` to
++bpf_object__init_prog to fix this issue.
++
++[1] https://github.com/lmarch2/poc/blob/main/libbpf/libbpf.md
++
++Fixes: 6245947c1b3c ("libbpf: Allow gaps in BPF program sections to support overriden weak functions")
++Reported-by: lmarch2 <2524158037@qq.com>
++Signed-off-by: Viktor Malik <vmalik@redhat.com>
++Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
++Reviewed-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
++Link: https://github.com/lmarch2/poc/blob/main/libbpf/libbpf.md
++Link: https://lore.kernel.org/bpf/20250415155014.397603-1-vmalik@redhat.com
++Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
++---
++ src/libbpf.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/libbpf.c b/src/libbpf.c
++index b2591f5ca..56250b5ac 100644
++--- a/src/libbpf.c
+++++ b/src/libbpf.c
++@@ -896,7 +896,7 @@ bpf_object__add_programs(struct bpf_object *obj, Elf_Data *sec_data,
++ 			return -LIBBPF_ERRNO__FORMAT;
++ 		}
++ 
++-		if (sec_off + prog_sz > sec_sz) {
+++		if (sec_off + prog_sz > sec_sz || sec_off + prog_sz < sec_off) {
++ 			pr_warn("sec '%s': program at offset %zu crosses section boundary\n",
++ 				sec_name, sec_off);
++ 			return -LIBBPF_ERRNO__FORMAT;
+diff --git a/package/libbpf/libbpf.mk b/package/libbpf/libbpf.mk
+index 7fa541ad24..7c8cfbee85 100644
+--- a/package/libbpf/libbpf.mk
++++ b/package/libbpf/libbpf.mk
+@@ -13,6 +13,9 @@ LIBBPF_DEPENDENCIES = host-bison host-flex host-pkgconf elfutils zlib
+ HOST_LIBBPF_DEPENDENCIES = host-bison host-flex host-pkgconf host-elfutils host-zlib
+ LIBBPF_INSTALL_STAGING = YES
  
- GNU_HOST_NAME := $(shell support/gnuconfig/config.guess)
- 
++# 0001-fix-buffer-overflow-in-bpf_object__init_prog.patch
++LIBBPF_IGNORE_CVES += CVE-2025-29481
++
+ define LIBBPF_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) \
+ 		-C $(@D)/src
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
