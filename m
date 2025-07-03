@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62A97C83F0A
-	for <buildroot@archiver.kernel.org>; Fri,  4 Jul 2025 06:21:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29C3CC83030
+	for <buildroot@archiver.kernel.org>; Fri,  4 Jul 2025 06:21:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 350A483CEB;
-	Fri,  4 Jul 2025 06:21:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EF24260B89;
+	Fri,  4 Jul 2025 06:21:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EnQEp5Z9Wpli; Fri,  4 Jul 2025 06:21:43 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2BBDd20rUaqS; Fri,  4 Jul 2025 06:21:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2969E83D77
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1871960B6B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2969E83D77;
-	Fri,  4 Jul 2025 06:21:43 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 16DDA7AD
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:21:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1871960B6B;
+	Fri,  4 Jul 2025 06:21:46 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 19FFA7AB
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:21:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1DCE640510
+ by smtp4.osuosl.org (Postfix) with ESMTP id 24BA640F06
  for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:21:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4KgbAgmBFt02 for <buildroot@buildroot.org>;
- Fri,  4 Jul 2025 06:21:26 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 85q-52CObhly for <buildroot@buildroot.org>;
+ Fri,  4 Jul 2025 06:21:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 787DE404E4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F80140EF6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 787DE404E4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6F80140EF6
  for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:21:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 767CD85D10; Fri,  4 Jul 2025 06:21:26 +0000 (UTC)
+ id 4F2DB85CB9; Fri,  4 Jul 2025 06:21:26 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Jul 2025 09:53:29 +0200
+Date: Thu, 3 Jul 2025 09:49:17 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 4c3660a215d35f22d901afd8564c5c01f665c48c
-X-Git-Newrev: 1ee325b12d4e5ef20997921da43f7e7c58319f71
+X-Git-Oldrev: d6f3fc4db7989df96f87ef149f3dc665d6f199da
+X-Git-Newrev: 4e9e8040ca20426f28a57f8bdb57188cd11c4833
 X-Patchwork-Hint: ignore
-Message-Id: <20250704062126.767CD85D10@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] board/freescale/mxs: fix
- Linux booting
+Message-Id: <20250704062126.4F2DB85CB9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x]
+ package/nginx-modsecurity: update upstream URLs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,67 +61,76 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============2549861420718422476=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ee325b12d4e5ef20997921da43f7e7c58319f71
+--===============2549861420718422476==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=4e9e8040ca20426f28a57f8bdb57188cd11c4833
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Actually DTB_LIST accepts only file and not files with relative path
-preprended. This leads to have vfat without .dtb files and so Linux
-doesn't start. Let's fix this by including slash in sed command as done
-for mxc as well as basename in front of $dt.dtb to remove possible
-useless folders present in the dts path. Let's also add set -e at the
-top of the script to make it more verbose on error and modify this
-section according to spellcheck as done for mxc.
+'https://github.com/SpiderLabs/ModSecurity-nginx' now redirects to
+'https://github.com/owasp-modsecurity/ModSecurity-nginx', so update our
+URLs accordingly.
 
-This commit align this "mxs/post-image.sh" with its "imx/post-image.sh"
-counterpart which was improved for arm64 in commit [1].
-
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/4755bf2bd43a7b4c3bf4f88be790240a01b3116f
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-[Julien:
- - change space indentation to tabs for consistency
- - add note in commit log about imx/post-image.sh
-]
+Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 50297207a83cf7640e5cc3ed3500ffb807155bf2)
+(cherry picked from commit 5d9551d303c953aa34bad4ae6bc47e56f830dfe0)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- board/freescale/common/mxs/post-image.sh | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ package/nginx-modsecurity/Config.in              | 2 +-
+ package/nginx-modsecurity/nginx-modsecurity.hash | 2 +-
+ package/nginx-modsecurity/nginx-modsecurity.mk   | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/board/freescale/common/mxs/post-image.sh b/board/freescale/common/mxs/post-image.sh
-index 0bfb835c6e..97c8ee9079 100755
---- a/board/freescale/common/mxs/post-image.sh
-+++ b/board/freescale/common/mxs/post-image.sh
-@@ -1,5 +1,7 @@
- #!/usr/bin/env bash
+diff --git a/package/nginx-modsecurity/Config.in b/package/nginx-modsecurity/Config.in
+index 0bbf05fad9..94f0ff0a45 100644
+--- a/package/nginx-modsecurity/Config.in
++++ b/package/nginx-modsecurity/Config.in
+@@ -10,7 +10,7 @@ config BR2_PACKAGE_NGINX_MODSECURITY
+ 	  point between nginx and libmodsecurity
+ 	  (ModSecurity v3).
  
-+set -e
-+
- #
- # dtb_list extracts the list of DTB files from BR2_LINUX_KERNEL_INTREE_DTS_NAME
- # in ${BR_CONFIG}, then prints the corresponding list of file names for the
-@@ -7,10 +9,12 @@
- #
- dtb_list()
- {
--	local DTB_LIST="$(sed -n 's/^BR2_LINUX_KERNEL_INTREE_DTS_NAME="\([a-z0-9 \-]*\)"$/\1/p' ${BR2_CONFIG})"
-+	local DTB_LIST
-+
-+	DTB_LIST="$(sed -n 's/^BR2_LINUX_KERNEL_INTREE_DTS_NAME="\([\/a-z0-9 \-]*\)"$/\1/p' "${BR2_CONFIG}")"
+-	  https://github.com/SpiderLabs/ModSecurity-nginx
++	  https://github.com/owasp-modsecurity/ModSecurity-nginx
  
- 	for dt in $DTB_LIST; do
--		echo -n "\"$dt.dtb\", "
-+		echo -n "\"$(basename "${dt}").dtb\", "
- 	done
- }
+ comment "nginx-modsecurity needs a toolchain w/ C++, threads, dynamic library"
+ 	depends on BR2_PACKAGE_NGINX_HTTP
+diff --git a/package/nginx-modsecurity/nginx-modsecurity.hash b/package/nginx-modsecurity/nginx-modsecurity.hash
+index 698dbc7da6..34e7b87f41 100644
+--- a/package/nginx-modsecurity/nginx-modsecurity.hash
++++ b/package/nginx-modsecurity/nginx-modsecurity.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/SpiderLabs/ModSecurity-nginx/releases/download/v1.0.3/modsecurity-nginx-v1.0.3.tar.gz.sha256
++# From https://github.com/owasp-modsecurity/ModSecurity-nginx/releases/download/v1.0.3/modsecurity-nginx-v1.0.3.tar.gz.sha256
+ sha256  ae811c7208ac029cb7a99d6f63e03d3971797607517187f47620df39c1f78add  modsecurity-nginx-v1.0.3.tar.gz
+ # Locally calculated
+ sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
+diff --git a/package/nginx-modsecurity/nginx-modsecurity.mk b/package/nginx-modsecurity/nginx-modsecurity.mk
+index a00c200469..42a50ca39f 100644
+--- a/package/nginx-modsecurity/nginx-modsecurity.mk
++++ b/package/nginx-modsecurity/nginx-modsecurity.mk
+@@ -6,7 +6,7 @@
  
+ NGINX_MODSECURITY_VERSION = 1.0.3
+ NGINX_MODSECURITY_SOURCE = modsecurity-nginx-v$(NGINX_MODSECURITY_VERSION).tar.gz
+-NGINX_MODSECURITY_SITE = https://github.com/SpiderLabs/ModSecurity-nginx/releases/download/v$(NGINX_MODSECURITY_VERSION)
++NGINX_MODSECURITY_SITE = https://github.com/owasp-modsecurity/ModSecurity-nginx/releases/download/v$(NGINX_MODSECURITY_VERSION)
+ NGINX_MODSECURITY_LICENSE = Apache-2.0
+ NGINX_MODSECURITY_LICENSE_FILES = LICENSE
+ NGINX_MODSECURITY_DEPENDENCIES = libmodsecurity
+
+--===============2549861420718422476==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2549861420718422476==--
