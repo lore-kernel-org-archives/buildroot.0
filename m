@@ -4,98 +4,98 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E4D7C77B7C
-	for <buildroot@archiver.kernel.org>; Thu,  3 Jul 2025 08:07:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0EA31C83030
+	for <buildroot@archiver.kernel.org>; Thu,  3 Jul 2025 08:39:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 34C2040520;
-	Thu,  3 Jul 2025 08:07:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 434C940FB1;
+	Thu,  3 Jul 2025 08:39:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0oeA3ovzWFuK; Thu,  3 Jul 2025 08:07:21 +0000 (UTC)
+ id N2wurqsPFUO9; Thu,  3 Jul 2025 08:39:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C5A3F40CEF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2651B40FA4
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C5A3F40CEF;
-	Thu,  3 Jul 2025 08:07:21 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 4E96D193
- for <buildroot@buildroot.org>; Thu,  3 Jul 2025 08:07:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2651B40FA4;
+	Thu,  3 Jul 2025 08:39:32 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 88BD7128
+ for <buildroot@buildroot.org>; Thu,  3 Jul 2025 08:39:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 34C9840137
- for <buildroot@buildroot.org>; Thu,  3 Jul 2025 08:07:20 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6E92040F9D
+ for <buildroot@buildroot.org>; Thu,  3 Jul 2025 08:39:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5AXAwQGIJOK0 for <buildroot@buildroot.org>;
- Thu,  3 Jul 2025 08:07:19 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2gD8RKn9hH2f for <buildroot@buildroot.org>;
+ Thu,  3 Jul 2025 08:39:30 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
- envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 39DBA400B0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 39DBA400B0
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
- [IPv6:2a00:1450:4864:20::334])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 39DBA400B0
- for <buildroot@buildroot.org>; Thu,  3 Jul 2025 08:07:18 +0000 (UTC)
-Received: by mail-wm1-x334.google.com with SMTP id
- 5b1f17b1804b1-453749af004so43087695e9.1
- for <buildroot@buildroot.org>; Thu, 03 Jul 2025 01:07:18 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::62d; helo=mail-ej1-x62d.google.com;
+ envelope-from=tim.soubry@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3C5E640F88
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C5E640F88
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
+ [IPv6:2a00:1450:4864:20::62d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3C5E640F88
+ for <buildroot@buildroot.org>; Thu,  3 Jul 2025 08:39:29 +0000 (UTC)
+Received: by mail-ej1-x62d.google.com with SMTP id
+ a640c23a62f3a-ae36dc91dc7so903839066b.2
+ for <buildroot@buildroot.org>; Thu, 03 Jul 2025 01:39:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1751530036; x=1752134836;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=OQcA+sKDvJlNVo03x121D3rcmDNti2JlGuVG1A3pqzg=;
- b=hFpoaQdYAvd1Wac9Wy+KZM4Kb7i70gboIgUFS2/frw498y9IqrtjBUgNV7rO26m6Kf
- Mm7kXPSK+eT4Z5mk90TI9Jb5Xdmo52Nx/okEyUsQugnq3IdCABwxQ6B6WDmzvndU8IgB
- oDbkNAlFeiAqvuCg0eVPDgzVcC4RBs0wO6PwBHXH+/bmrmTbvlqAjlrAojS9wctrBzaB
- V6VmvU+COEI+XHWtIjUQqyLxOSjCkVB1K0gzZtqie6wWDEIJwv6jgbe8zucX2hi8P/Bs
- X+hSVz4kMaCWzVIBjX7YF6v+hEN8s3za8ddHM+NKcGkiCI+Z7C9s9fyJJ4/68Xmt+Ppn
- rQpw==
-X-Gm-Message-State: AOJu0YzhLOx4v5av46+aJvUVCDu/0fh0jg8WlxDB+yIJKdT8DFS7NueN
- rPamC+lRKVLYI8cmeZOD/f0nOmD+OiAS5RdcCH1KEUletSTQ0IWBjWYzFcbrt7XeI6K5u/yA8tM
- XvIox
-X-Gm-Gg: ASbGncunH3yZmAZ+vtBMr6W4uiSQNqkRvcr2o0dN6DF0Jj54oeSfx+rtuxJyjjuky6H
- yJ0+U5PJ0pqNDzBaKnJoffqkRd5dkadwXAiuLviR1S4zuE6ZW5Lmg1ygNsj67NJahuivrKZyxr+
- StTj9rrLkQJbXsDZFNFjYicyZUAQFm3NDzSvFVfMwZqPjcd8no9Q/wKJQ3/yRcLzjfw59PRtnu9
- 5qFdFs0nTTYEUA4jj+w6Nz7WCES0H3lcYuKiLT+2Au2NMW9w8GbVK+i2E7bQKvC+75dDDk/amSk
- 0oACDttcFZq1UUIf0+QFgUxPEJzTMJwQnJsUsLWmiPFv+snNH6kFqW11xgAt1ZZd73/3FAuMpZA
- LhybRhiHeGx/OOvKocQ==
-X-Google-Smtp-Source: AGHT+IEFSdToCoDKsLlqYXNn9n60gj5xHU4fx8M2czZOeMyaCgBbYGTUA7KyuIZrKZNV65fTXl5XsA==
-X-Received: by 2002:a05:600c:871a:b0:43c:fa24:873e with SMTP id
- 5b1f17b1804b1-454ab5213e6mr17336315e9.13.1751530036409; 
- Thu, 03 Jul 2025 01:07:16 -0700 (PDT)
-Received: from dragon.local.ess-mail.com
- ([2a02:a03f:639d:e501:5db7:a3a4:443e:4828])
+ d=1e100.net; s=20230601; t=1751531967; x=1752136767;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:to
+ :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=A7p5v1vQQk/l80cj9dukjQgjxFQrvgtEuhMH0qArncg=;
+ b=UH8KJ/0+4y5fXh2eTS5JDGI4CUenpVS25F48jZHYJTR+moWf5McINqgI6ehSYuP9j1
+ yHUMN45dqx5GWaTXWMf6UedJ5VdYOnEXzeB8h1QJXcRCVgClOirIw+8e0WBAgLiY7UWe
+ RR7C7526kG8vwOmWQt/Dcxs520xQmehsgqjELx0wrAjwYVbBlRHCYAPKY2/pdkwW40tV
+ PXxkRQ4XVznB76BjuEPM2miCd3f8lQS87u+AJhgJP0ykiZngvH8dI1GIskELEYl9bkUe
+ tmZqjMC2uv54aQkh2c6gtP6xfamVoMalZrg3N0CAxL6xUlr9MqiZh56YWw+U0KZfxeNa
+ rI1A==
+X-Gm-Message-State: AOJu0Yw4s5HNfG3X4vOdP8AVN+eeauZ9iqT3hqHhIK79Yo/FEVsNMaav
+ 7X5fCE4SbL1ElDbjD7B508bD+HnkoEsNDA4puZiC8s4Wx4C5eW07K4Xytsn/lNxqWHL8tF0qO5t
+ Grt04AMw=
+X-Gm-Gg: ASbGncu0/gfwxZ6apYh0lKokCpdxttQRad984HLiTLdhM1W3KTdcyBOvdtpb2YSdcg9
+ aUm50DRiVSLZZfASglUHf04zMqbb8uuFiH8sUwNLV932sk5jpXaALpdcGQAoFR2E9TrFYMCrshF
+ mu+Am06igBMIraPQFurUmA5dBeHHPaqgY8gA21ae3V1wOtJl1TRh+lhdSs1EB1YjQ5iZrhHb8Ne
+ 6CCl9/VQZXvVwSgj0UOvvijbQaNHznjv2YyEswWZeAxqmNSOaigt0vD8CWQ8hMBLdiiEG3vv/U/
+ NA/2tmpiQj8iS+xuNOaUIi4vt5u2liYreYtE9TiIN0hsMckCg77Ukd5kVGlAdkJT269tbCd4R5Y
+ FcA==
+X-Google-Smtp-Source: AGHT+IFlGf3l3PNmYh2lGPjCIA91/6fEwg/YuZkkiLm6GreM7NrqBK0TlIu16kD3xN/fszMVp0wZEw==
+X-Received: by 2002:a17:907:1c13:b0:aca:95e7:9977 with SMTP id
+ a640c23a62f3a-ae3c2d2cfa9mr650619266b.28.1751531967357; 
+ Thu, 03 Jul 2025 01:39:27 -0700 (PDT)
+Received: from localhost.localdomain
+ ([2a02:a03f:65ae:b800:1718:12a8:2587:721f])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-454a999d399sm19498055e9.25.2025.07.03.01.07.15
+ 4fb4d7f45d1cf-60c83223583sm10408551a12.81.2025.07.03.01.39.26
+ for <buildroot@buildroot.org>
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 03 Jul 2025 01:07:16 -0700 (PDT)
+ Thu, 03 Jul 2025 01:39:27 -0700 (PDT)
 To: buildroot@buildroot.org
-Cc: thomas.perale@mind.be
-Date: Thu,  3 Jul 2025 10:07:04 +0200
-Message-ID: <20250703080704.1704843-1-titouan.christophe@mind.be>
-X-Mailer: git-send-email 2.50.0
+Date: Thu,  3 Jul 2025 10:39:18 +0200
+Message-Id: <20250703083918.30310-1-tim.soubry@mind.be>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1751530036; x=1752134836; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=OQcA+sKDvJlNVo03x121D3rcmDNti2JlGuVG1A3pqzg=;
- b=HVa4Bt+iUVzxZHuU54DHSn9yFyrXietCRKXGbghnw2Ct7vfLDdwZBTdABpkc3xRvWC
- LSWG8eNh2U99bBSsv415YfOseODw0r+ZApnZYgwrE5SvCF6hHUaKdZAz0GPO9zgwm7bD
- SglCN0KeVp5DrsSyIztSC0YBcGVre6uT6r/MEovnB0p66ivAj8RcjjvLlJqQRwdBDPVU
- DIdJjixv4e0v+Y0QDzQNmlowM1oTZpjdNfSMAyMSXVpyxcIBC2up8Asb1OFelkmLCOPK
- y3txKhn+UsWZkSnVtF/VksPkKeVziLFuCOwv4wx45jdogvFmhx3tiNh9tZJWX2muCTFy
- 7Tqg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=mind.be; s=google; t=1751531967; x=1752136767; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:to
+ :from:from:to:cc:subject:date:message-id:reply-to;
+ bh=A7p5v1vQQk/l80cj9dukjQgjxFQrvgtEuhMH0qArncg=;
+ b=CAEzBDX6tcLXKPqoYcpW4NDufGuCPVCGB8AzrOwrih9ZSGsouRkXqKLGk6/Cyme1Yt
+ beyAw7O0WdtZAJPlWPfa1nE1eRCp1fDlFygyPSFQLQAPU43lujUMVR3OLiyph0vWAgET
+ x4sgJGC6o6z8hvH3v2i0UITxQYVzTw0oYi4/KAVvfCPyt8aIF/GZC0LG8U6B7/R1p+BU
+ cVQY4ICREyY7GyRT72J2XI3UgtAtcwx2ou3kuIJ7hXFakp4N2FYIyLLS/aAVARWeqhYD
+ ECHWUq9SfDFBRKSeOpUT5G3xMRHUAu9bvcP94lHMgFxbUvvlHmcsBRJVpWX/HR4AX92d
+ F6jw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=HVa4Bt+i
-Subject: [Buildroot] [PATCH] package/tcpreplay: security bump to v4.5.1
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=CAEzBDX6
+Subject: [Buildroot] [PATCH 1/1] package/sox: ignore CVE-2023-34432
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -107,71 +107,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Titouan Christophe via buildroot <buildroot@buildroot.org>
-Reply-To: Titouan Christophe <titouan.christophe@mind.be>
+From: Tim Soubry via buildroot <buildroot@buildroot.org>
+Reply-To: Tim Soubry <tim.soubry@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This fixes the following vulnerabilities:
+Commit [1] introduced a patch addressing CVE-2021-23159. Since then,
+CVE-2023-34432 ([2]) remained the only unresolved CVE reported
+against the sox package in pkg-stat.  This patch adds CVE-2023-34432
+to the list of ignored CVEs for sox, based on the report from the
+Debian Security Tracker ([3]) and the sox issue tracker ([4]), both
+indicate that the patch introduced in [1] also resolves this CVE.
 
-- CVE-2023-4256:
-    Within tcpreplay's tcprewrite, a double free vulnerability has been
-    identified in the tcpedit_dlt_cleanup() function within
-    plugins/dlt_plugins.c. This vulnerability can be exploited by
-    supplying a specifically crafted file to the tcprewrite binary. This
-    flaw enables a local attacker to initiate a Denial of Service (DoS)
-    attack.
-    https://www.cve.org/CVERecord?id=CVE-2023-4256
+[1] e2f856d18d package/sox: add fix for CVE-2021-23159, CVE-2021-23172, CVE-2023-34318
+[2] https://nvd.nist.gov/vuln/detail/CVE-2023-34432)
+[3] https://security-tracker.debian.org/tracker/CVE-2023-34432
+[4] https://sourceforge.net/p/sox/bugs/367/
 
-- CVE-2023-43279:
-    Null Pointer Dereference in mask_cidr6 component at cidr.c in
-    Tcpreplay 4.4.4 allows attackers to crash the application via crafted
-    tcprewrite command.
-    https://www.cve.org/CVERecord?id=CVE-2023-43279
-
-- CVE-2024-22654:
-    tcpreplay v4.4.4 was discovered to contain an infinite loop via the
-    tcprewrite function at get.c.
-    https://www.cve.org/CVERecord?id=CVE-2024-22654
-
-See the release notes:
-https://github.com/appneta/tcpreplay/releases/tag/v4.5.1
-
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+Signed-off-by: Tim Soubry <tim.soubry@mind.be>
 ---
- package/tcpreplay/tcpreplay.hash | 4 ++--
- package/tcpreplay/tcpreplay.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/sox/sox.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/tcpreplay/tcpreplay.hash b/package/tcpreplay/tcpreplay.hash
-index e73e2d2c57..6dc6e48f9a 100644
---- a/package/tcpreplay/tcpreplay.hash
-+++ b/package/tcpreplay/tcpreplay.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://github.com/appneta/tcpreplay/releases/download/v4.4.4/tcpreplay-4.4.4.tar.xz.asc
-+# https://github.com/appneta/tcpreplay/releases/download/v4.5.1/tcpreplay-4.5.1.tar.xz.asc
- # using key 84E4FA215C934A7D97DC76D5E9E2149793BDE17E
--sha256  3ff9753cc43bb15e77832cee657e3030dbcdd957fa247e6abacc605689e24051  tcpreplay-4.4.4.tar.xz
-+sha256  5126613f783062b43f514b05ad981376050a8fee35b03c8de4445ddeefd95049  tcpreplay-4.5.1.tar.xz
- sha256  07cf5e92d475287a7d1663b33097f40cae5adf03ed8920fcd4374e3dfb48c8ad  docs/LICENSE
-diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
-index c5b3f9baa4..17766707e6 100644
---- a/package/tcpreplay/tcpreplay.mk
-+++ b/package/tcpreplay/tcpreplay.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/sox/sox.mk b/package/sox/sox.mk
+index 3c9c939e8c..9fd3f2151c 100644
+--- a/package/sox/sox.mk
++++ b/package/sox/sox.mk
+@@ -67,7 +67,7 @@ SOX_IGNORE_CVES += CVE-2021-3643 CVE-2021-23210
+ # 0007-hcom-validate-dictsize.patch
+ # This entry is NOT stale, those CVEs are not reported by pkg-stats
+ # due to the change of CPE ID to sox_project:sox in the NVD database
+-SOX_IGNORE_CVES += CVE-2021-23159 CVE-2021-23172 CVE-2023-34318
++SOX_IGNORE_CVES += CVE-2021-23159 CVE-2021-23172 CVE-2023-34318 CVE-2023-34432
  
--TCPREPLAY_VERSION = 4.4.4
-+TCPREPLAY_VERSION = 4.5.1
- TCPREPLAY_SITE = https://github.com/appneta/tcpreplay/releases/download/v$(TCPREPLAY_VERSION)
- TCPREPLAY_SOURCE = tcpreplay-$(TCPREPLAY_VERSION).tar.xz
- TCPREPLAY_LICENSE = GPL-3.0
+ # 0008-phere-avoid-integer-underflow.patch
+ # This entry is NOT stale, those CVEs are not reported by pkg-stats
 -- 
-2.50.0
+2.39.5
 
 _______________________________________________
 buildroot mailing list
