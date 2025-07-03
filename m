@@ -1,110 +1,98 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9358CC8303C
-	for <buildroot@archiver.kernel.org>; Wed,  2 Jul 2025 22:37:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03EDFC77B7C
+	for <buildroot@archiver.kernel.org>; Thu,  3 Jul 2025 03:27:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3C858845A1;
-	Wed,  2 Jul 2025 22:37:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7622061078;
+	Thu,  3 Jul 2025 03:27:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p-Ml03O6upwT; Wed,  2 Jul 2025 22:37:12 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zq07NyxFJkDF; Thu,  3 Jul 2025 03:27:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 72E2C845A9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7024D60F45
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 72E2C845A9;
-	Wed,  2 Jul 2025 22:37:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 299B5128
- for <buildroot@buildroot.org>; Wed,  2 Jul 2025 22:37:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7024D60F45;
+	Thu,  3 Jul 2025 03:27:40 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 73A55193
+ for <buildroot@buildroot.org>; Thu,  3 Jul 2025 03:27:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1B36241B85
- for <buildroot@buildroot.org>; Wed,  2 Jul 2025 22:37:11 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5985D4059C
+ for <buildroot@buildroot.org>; Thu,  3 Jul 2025 03:27:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id d8-YESnjYaEs for <buildroot@buildroot.org>;
- Wed,  2 Jul 2025 22:37:10 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id w-zcnRH13eSn for <buildroot@buildroot.org>;
+ Thu,  3 Jul 2025 03:27:38 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 06DB041B83
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 06DB041B83
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 06DB041B83
- for <buildroot@buildroot.org>; Wed,  2 Jul 2025 22:37:09 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id
- ffacd0b85a97d-3a4f379662cso4220502f8f.0
- for <buildroot@buildroot.org>; Wed, 02 Jul 2025 15:37:09 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::633; helo=mail-ej1-x633.google.com;
+ envelope-from=buildroot.notifications@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1689B40029
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1689B40029
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com
+ [IPv6:2a00:1450:4864:20::633])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1689B40029
+ for <buildroot@buildroot.org>; Thu,  3 Jul 2025 03:27:36 +0000 (UTC)
+Received: by mail-ej1-x633.google.com with SMTP id
+ a640c23a62f3a-ae0b6532345so93717066b.1
+ for <buildroot@buildroot.org>; Wed, 02 Jul 2025 20:27:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1751495828; x=1752100628;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=0O/vVltcD8Gv8DIPSc0JXjRwDLJRKjipfgghU7rjsr4=;
- b=WuA3/vcBPiAgPpRapqWaFXWqYb7ULYHZ8z9mRz/wZSj9kTCHNDZAuX5cRcl2UC95df
- dYgcBFHcRorxD7Bstd7zKE9lr9qxPCrF9Mv48nno7xEwO9lOfN0iDpVZaFRmZ2qgpPLy
- 6UA4gx2PxB8SZbno6o2HPSgGMK8ZhfEQ3QYCNIubNvZ4g64y0rZtKbTDix3TgxG+YzUF
- egIGuq04O5Jew1hjTLG4su03m8Tb4gDWsCTHjTJ/DTk75VP/G5eaF5Fz2zffwsmWim6A
- 5qSqimLL/YCE8OHxR5pGlieFIe7bjAIgpJFX875MUkjBMj0t1IoCck8fQMYRUXzScJRU
- frUQ==
-X-Forwarded-Encrypted: i=1;
- AJvYcCV/VSZcf62GtkeV4yegGX9JDqaHy9YhE/yx7q4yUotS2P3MP6qz730XwV4SUtqHEyUU3Ocpd1uftbY=@buildroot.org
-X-Gm-Message-State: AOJu0YzLwMJnGbI5det8uQAlKts41aDjaUi4j1kNTElg2AJ3V+xY3tBL
- 9hfffzulAosuFvazIfIH03bdyRlVLaosfPXKIPDOJE25iUig5pzSLvB2HV79RDOac88=
-X-Gm-Gg: ASbGncuU+35OgzVa5hFr7LgYuwJX+wndHX9C00KRidAooL11eM44PuFRB/BOim0fZBY
- MNfNYY/fH0NLfdAXASd08ZaZnYaRYNL/23q9lISrA2fjnBuvkFxnKebdO+t/Lh98RfXFeJHRK6q
- VU+KtdCrJFkwGgknsxQwlh8P9tqH4SEAFQuiqqMksdg8Sd5fkVnI4SbHTuDekVbblEyKiIMR/i7
- tlZ+HrxdGbctcqRjH0FdlVOdAcKd0pbGEuSXjnBcwSaRZhEuPgiyVXnYmZ6Cbe6O4SS0p2hQ1sD
- h5A+7GQTfooir+nn5AAsrKQhX9G2Wps8GkaScNNDzX/wCDW/aVoIsLLD1GfxxAZe5ujgjRafO+C
- qxSGyozJzfPxD0rpzMJnbdJ1IMClqlTLQPJ/MiwuFjgpfgfoSDT2oLdRGS41lXqxQcD4IT68nSU
- YIUEkSCSJXemiQB/CKBRYbkyNIC6g682r21y4=
-X-Google-Smtp-Source: AGHT+IFp/ADF6PjkiXTXDVVgoixKNnXURGFI7qJQe0yyav+IDU8Gpvr2uL4vOZ7Xuz/qbhIl8WySgA==
-X-Received: by 2002:a05:6000:238a:b0:3a5:27ba:479c with SMTP id
- ffacd0b85a97d-3b200f2104amr3822395f8f.43.1751495827877; 
- Wed, 02 Jul 2025 15:37:07 -0700 (PDT)
-Received: from ?IPV6:2a01:cb05:949d:5800:c97d:3b73:4a46:d823?
- (2a01cb05949d5800c97d3b734a46d823.ipv6.abo.wanadoo.fr.
- [2a01:cb05:949d:5800:c97d:3b73:4a46:d823])
+ d=1e100.net; s=20230601; t=1751513255; x=1752118055;
+ h=date:from:to:subject:content-transfer-encoding:mime-version
+ :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=xR0S7YMYGi4PxT4/jlYVwzRueitFHKmb6vjNEzWz41k=;
+ b=mDK8pjGsm3g1HNHvSKPj8gI9QusU3pd3gTztUSUfWx6B212x15hOGY7Yzxhs3Sx4hs
+ pvXzBz7Lar+eW3Z6kVEkBUYDt8G16uxnPBtwZLVzYBE76GDcxtI4FsEYQIDdLawURzjl
+ YgLLoCd0aGJGxzQJf/eZnMwZ+TiiEXsc0Bhr2fvPumt9M85BZvog49ZQ9MByt1Px1NUx
+ +c7WEOF6kvEsK34MjSHfLgzu2jigX/ewqgQAPUPYoE1l+QwrVqNRwhv4CUeJ2jz21+oh
+ ac9vZ19Cht76RO2dosAqgY25QHkg4D8ny/i+dY9RprWqSnvt5Zqz7xKnsF//qBjCBtUY
+ 2d1Q==
+X-Gm-Message-State: AOJu0Yx0zNDyzXsZD2G33MM/51mUt3ac2ZVL3oZKUUnw/vzIT4reV8Ls
+ gOn+Rb/T8auBup2AfcOQNRmVGB9ixFVpdTDRBt5lLlvhgFKr07gr/saho8EdTA==
+X-Gm-Gg: ASbGncsFORUojcDkzmiSipaydMrqZOUa1CvmIPjNXpdXFv+inRMv0fFiHXXAuFyAyIA
+ 3tfOAG09XjK6+mMgcQgyAvyyqxGPR+kBDWwiy7eIWIEMahcCLrfHH8h7iHvKK1/i2A8Ccqo1Iz/
+ Y8G1cLtUcz0g+gChj92Hb5Cc1uz84bAPlOsmNbfB524CDrS324G+AxfX5UhuNvQQJlXOV+ZYw8e
+ n512NzINWA7GnBS5Agss3FhYrJUSm934Amo2ckN0cxkWbm6XBIEelfHdlE1lCYKcLN7jxOGkuIc
+ EFOke1J36IHeOXnT4e6BxAa8mphSEwsvPJbbeTg3nSRS30j9AJQvOOBA/mjX8/KAng==
+X-Google-Smtp-Source: AGHT+IH9ubNrTqV1F1fKxqh7ciBlc6dqTs2+unNkfcWFR45NZUvmnZuHcHbX49E9yF5RcEwbehu4+A==
+X-Received: by 2002:a17:907:1c97:b0:ae3:c777:6e5e with SMTP id
+ a640c23a62f3a-ae3dd25aca9mr102034166b.19.1751513254644; 
+ Wed, 02 Jul 2025 20:27:34 -0700 (PDT)
+Received: from [138.201.205.61] ([2a01:4f8:173:1526::2])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3a88c7fada5sm17329485f8f.32.2025.07.02.15.37.07
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 02 Jul 2025 15:37:07 -0700 (PDT)
-Message-ID: <7ee26828-4b3d-4942-8c30-8293455c59fc@smile.fr>
-Date: Thu, 3 Jul 2025 00:37:07 +0200
+ a640c23a62f3a-ae353659678sm1189328966b.38.2025.07.02.20.27.34
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 02 Jul 2025 20:27:34 -0700 (PDT)
+Message-ID: <6865f8a6.170a0220.347d30.cec8@mx.google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: =?UTF-8?Q?Alex_Benn=C3=A9e?= <alex.bennee@linaro.org>,
- buildroot@buildroot.org
-Cc: Joseph Kogut <joseph.kogut@gmail.com>,
- Romain Naour <romain.naour@gmail.com>, Daniel Lang <dalang@gmx.at>,
- Valentin Korenblit <valentinkorenblit@gmail.com>
-References: <20250626111642.228223-1-alex.bennee@linaro.org>
- <20250626111642.228223-4-alex.bennee@linaro.org>
-Content-Language: en-US
-In-Reply-To: <20250626111642.228223-4-alex.bennee@linaro.org>
+To: buildroot@buildroot.org
+From: Buildroot Notifications <buildroot.notifications@gmail.com>
+Date: Thu, 03 Jul 2025 03:27:34 -0000
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1751495828; x=1752100628; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=0O/vVltcD8Gv8DIPSc0JXjRwDLJRKjipfgghU7rjsr4=;
- b=HnpxCot86Oc2OzAX25IzSK35eIATb8liGhjE0ADCQ2/pIySqikfgLfDYcqGRIzQu4t
- nAmSzvOW1taBGH8/btdnTwC63bKKNUGaF8CfAxYUuSfHvVDIIGAiJ3IDMuuToewNLbu1
- MNRV1o7mm8NKX0aV1xbN6FiaPDe5tEZ/syKWw=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
- header.a=rsa-sha256 header.s=google header.b=HnpxCot8
-Subject: Re: [Buildroot] [RFC PATCH 3/3] package/llvm-project: reduce the
- build size of llvm
+ d=gmail.com; s=20230601; t=1751513255; x=1752118055; darn=buildroot.org;
+ h=date:from:to:subject:content-transfer-encoding:mime-version
+ :message-id:from:to:cc:subject:date:message-id:reply-to;
+ bh=xR0S7YMYGi4PxT4/jlYVwzRueitFHKmb6vjNEzWz41k=;
+ b=N9ONqiDUSNfSnaReLhA2VGyhBJI1pNz6OteK3tUMABbnDvbbw45b+8f25U63dvUooB
+ vTNXRwICWmLkOuJpuHU0m/EpFFICsC2KZaGr9aKGzd23qedlt0v4aCXnlZMVKh/Ibj7Y
+ ZQUigcKkBY6Uvg1k3xmbwhQQ284BPEFHkAPpxDhRJka5LL42yr1yUhBesxh0tGeiqn+A
+ /kEG99ftPjdhayVBRcN5MPF1M/DD459xmz0xhNRGH1m+BRyUTVLWov17sf2SklR2oGiG
+ fL5MCW21MrZ0DpBIR2j2BmHWPdBSX6hHdmf7eQqDVz8atr9+Pz/tSDdnbKqteMPTUqPD
+ QOaQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=N9ONqiDU
+Subject: [Buildroot] [autobuild.buildroot.org] Daily results for 2025-07-02
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,61 +104,150 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Romain Naour via buildroot <buildroot@buildroot.org>
-Reply-To: Romain Naour <romain.naour@smile.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gQWxleCwgQWxsLAoKTGUgMjYvMDYvMjAyNSDDoCAxMzoxNiwgQWxleCBCZW5uw6llIGEg
-w6ljcml0wqA6Cj4gQWx0aG91Z2ggd2UgcmVxdWVzdCBhIFJlbGVhc2UgYnVpbGQgdGhlIGRlZmF1
-bHQgQ01BS0UgZmxhZ3MgaW4KPiB0b29sY2hhaW4uY21ha2UgaW5jbHVkZSAtT2cgLWczIHdoaWNo
-IGVuYWJsZXMgZGVidWcgc3ltYm9scyBmb3IgdGhlCj4gYnVpbGQgaW5mbGF0aW5nIHRoZSBvdmVy
-YWxsIHNpemUgb2YgdGhpbmdzLgoKQnkgZGVmYXVsdCwgLU8yIC1nMCBpcyB1c2VkIGJ5IEJ1aWxk
-cm9vdC4gSWYgeW91IGhhdmUgLU9nIC1nMyBpbiB0b29sY2hhaW4uY21ha2UKZ2VuZXJhdGVkIGJ5
-IEJ1aWxkcm9vdCwgaXQgbWVhbnMgdGhhdCBCUjJfRU5BQkxFX0RFQlVHLCBCUjJfREVCVUdfMyBh
-bmQKQlIyX09QVElNSVpFX0cgaGF2ZSBiZWVuIHNlbGVjdGVkIGluIHRoZSBCdWlsZHJvb3QgY29u
-ZmlndXJhdGlvbiAoYnkgdGhlIHVzZXIpLgoKPiAKPiBGb3Igbm93IGp1c3QgY29weSB0aG9zZSBk
-ZWZhdWx0cyBpbnRvIHRoZSBwcm9qZWN0IG1rIGZpbGUgYW5kIGRyb3AgdGhlCj4gLU9nIGFuZCAt
-ZzMgbGluZXMuIFRoaXMgZHJvcHMgdGhlIHNpemUgb2YgdGhlIGxsdm0gYnVpbGQgZGlyZWN0b3J5
-IG9uCj4gbXkgYXJtNjQgYnVpbGQgZnJvbSAxN0diIHRvIGEgbW9yZSByZWFzb25hYmxlIDQuNEdi
-Lgo+IAo+IFNpZ25lZC1vZmYtYnk6IEFsZXggQmVubsOpZSA8YWxleC5iZW5uZWVAbGluYXJvLm9y
-Zz4KPiAtLS0KPiAgcGFja2FnZS9sbHZtLXByb2plY3QvbGx2bS9sbHZtLm1rIHwgMTAgKysrKysr
-KysrKwo+ICAxIGZpbGUgY2hhbmdlZCwgMTAgaW5zZXJ0aW9ucygrKQo+IAo+IGRpZmYgLS1naXQg
-YS9wYWNrYWdlL2xsdm0tcHJvamVjdC9sbHZtL2xsdm0ubWsgYi9wYWNrYWdlL2xsdm0tcHJvamVj
-dC9sbHZtL2xsdm0ubWsKPiBpbmRleCA3OGFhNmZlNDY3Li4wMzY4NDA4NGM0IDEwMDY0NAo+IC0t
-LSBhL3BhY2thZ2UvbGx2bS1wcm9qZWN0L2xsdm0vbGx2bS5tawo+ICsrKyBiL3BhY2thZ2UvbGx2
-bS1wcm9qZWN0L2xsdm0vbGx2bS5tawo+IEBAIC0xNjcsNiArMTY3LDE2IEBAIExMVk1fQ09ORl9P
-UFRTICs9IC1ETExWTV9IQVZFX1RGTElURT0iIgo+ICBIT1NUX0xMVk1fQ09ORl9PUFRTICs9IC1E
-Q01BS0VfQlVJTERfVFlQRT1SZWxlYXNlIC1HIE5pbmphCj4gIExMVk1fQ09ORl9PUFRTICs9IC1E
-Q01BS0VfQlVJTERfVFlQRT1SZWxlYXNlIC1HIE5pbmphCj4gIAo+ICsjIFJlZHVjZSB0aGUgb3Bw
-b3J0dW5pdHkgZm9yIGRlZmF1bHQgW0N8Q1hYXV9GTEFHUyB0byBmYXR0ZW4gdGhlIGJ1aWxkCj4g
-K0hPU1RfTExWTV9DT05GX09QVFMgKz0gLURMTFZNX0VOQUJMRV9BU1NFUlRJT05TPU9GRgo+ICtM
-TFZNX0NPTkZfT1BUUyArPSAtRExMVk1fRU5BQkxFX0FTU0VSVElPTlM9T0ZGCj4gCkxMVk1fRU5B
-QkxFX0FTU0VSVElPTlMgaXMgT0ZGIGJ5IGRlZmF1bHQgZXhlcHQgZm9yIGRlYnVnIGJ1aWxkcy4K
-CisKPiArSE9TVF9MTFZNX0NPTkZfT1BUUyArPSAtRENNQUtFX0NfRkxBR1M9Ii1EX0xBUkdFRklM
-RV9TT1VSQ0UgLURfTEFSR0VGSUxFNjRfU09VUkNFIC1EX0ZJTEVfT0ZGU0VUX0JJVFM9NjQgLURf
-Rk9SVElGWV9TT1VSQ0U9MSIKPiArTExWTV9DT05GX09QVFMgKz0gLURDTUFLRV9DX0ZMQUdTPSIt
-RF9MQVJHRUZJTEVfU09VUkNFIC1EX0xBUkdFRklMRTY0X1NPVVJDRSAtRF9GSUxFX09GRlNFVF9C
-SVRTPTY0IC1EX0ZPUlRJRllfU09VUkNFPTEiCj4gKwo+ICtIT1NUX0xMVk1fQ09ORl9PUFRTICs9
-IC1EQ01BS0VfQ1hYX0ZMQUdTPSItRF9MQVJHRUZJTEVfU09VUkNFIC1EX0xBUkdFRklMRTY0X1NP
-VVJDRSAtRF9GSUxFX09GRlNFVF9CSVRTPTY0IC1EX0ZPUlRJRllfU09VUkNFPTEiCj4gK0xMVk1f
-Q09ORl9PUFRTICs9IC1EQ01BS0VfQ1hYX0ZMQUdTPSItRF9MQVJHRUZJTEVfU09VUkNFIC1EX0xB
-UkdFRklMRTY0X1NPVVJDRSAtRF9GSUxFX09GRlNFVF9CSVRTPTY0IC1EX0ZPUlRJRllfU09VUkNF
-PTEiCgpJJ20gbm90IHN1cmUgYWJvdXQgdGhpcyBjaGFuZ2UsIHNpbmNlIGl0IGFsc28gY2hhbmdl
-IGZvciBvdGhlciBCUjJfT1BUSU1JWkVfeApvcHRpb25zIGFuZCB3aGVuIEJSMl9FTkFCTEVfREVC
-VUcgaXMgZGlzYWJsZWQuIFdlIHdhbnQgdG8ga2VlcCB0aGUgb3B0aW1pemF0aW9uCmxldmVsIHNl
-bGVjdGVkIGJ5IHRoZSB1c2VyLgoKV2hhdCBhYm91dCBzb21ldGhpbmcgbGlrZSBrZXhlYyBwYWNr
-YWdlIFsxXSB0byBmb3JjZSB0aGUgb3B0aW1pemF0aW9uIGxldmVsIHRvIGEKbWluaW11bT8KCkkg
-cmVtZW1iZXIgKGJhY2sgaW4gMjAxOCkgbGx2bSBjcmFzaGluZyB3aXRoIERlYnVnIGJ1aWxkIHR5
-cGUsIHRoYXQncyB3aHkgaXQncwpmb3JjZWQgdG8gUmVsZWFzZSB0eXBlIGJ1dCB0aGUgZGVmYXVs
-dCBidWlsZCBvcHRpb25zIHdlcmUgdXNlZCAoLU8yIC1nMCkuCgpbMV0KaHR0cHM6Ly9naXRsYWIu
-Y29tL2J1aWxkcm9vdC5vcmcvYnVpbGRyb290Ly0vYmxvYi9tYXN0ZXIvcGFja2FnZS9rZXhlYy9r
-ZXhlYy5taz9yZWZfdHlwZT1oZWFkcyNMMjMKCkJlc3QgcmVnYXJkcywKUm9tYWluCgoKPiArCj4g
-ICMgQ29tcGlsZSBsbHZtIHdpdGggdGhlIEMrKzE0IChJU08gQysrIDIwMTQgc3RhbmRhcmQpLgo+
-ICBIT1NUX0xMVk1fQ09ORl9PUFRTICs9IC1EQ01BS0VfQ1hYX1NUQU5EQVJEPTE0Cj4gIExMVk1f
-Q09ORl9PUFRTICs9IC1EQ01BS0VfQ1hYX1NUQU5EQVJEPTE0CgpfX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxk
-cm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xp
-c3RpbmZvL2J1aWxkcm9vdAo=
+Hello,
+
+Autobuild statistics for 2025-07-02
+===================================
+
+      branch |  OK | NOK | TIM | TOT |
+  2025.02.x  |  1  |  6  |  0  |  7  |
+  2025.05.x  |  3  |  5  |  0  |  8  |
+    master   |  7  | 39  |  0  | 46  |
+
+Classification of failures by reason for master
+-----------------------------------------------
+
+                   bash-5.2.37 | 4 
+                   cvs-1.12.13 | 3 
+                       unknown | 3 
+                    bmx7-7.1.1 | 2 
+libdbi-drivers-0bfae6c43134... | 2 
+              libopenssl-3.5.0 | 2 
+                   s6-2.13.1.0 | 2 
+           at-spi2-core-2.50.0 | 1 
+               bctoolbox-4.4.8 | 1 
+                  cairo-1.18.4 | 1 
+                  cpulimit-0.2 | 1 
+                  dpdk-24.11.1 | 1 
+                    fcft-3.1.8 | 1 
+firmware-utils-86739f2b3ae9... | 1 
+              host-rust-1.86.0 | 1 
+        liblog4c-localtime-1.0 | 1 
+               libsigrok-0.5.2 | 1 
+                  libva-2.22.0 | 1 
+                   linux-tools | 1 
+                 logsurfer-1.8 | 1 
+                     nut-2.8.3 | 1 
+      passt-2025_02_17.a1e48a0 | 1 
+                   perl-5.40.2 | 1 
+            python-tornado-6.5 | 1 
+          sane-airscan-0.99.33 | 1 
+              tinyssh-20240101 | 1 
+        util-linux-libs-2.40.2 | 1 
+                    wipe-2.3.1 | 1 
+
+
+Detail of failures for master
+-----------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    or1k     |      at-spi2-core-2.50.0       | NOK | https://autobuild.buildroot.org/results/0a5bc91ee9b9fa0094b25095fdaa24f3e76b6a32 |     
+    m68k     |          bash-5.2.37           | NOK | https://autobuild.buildroot.org/results/975e219dbb945bc7027b34b6d7869ecd9f3bbe7c | ORPH
+    i686     |          bash-5.2.37           | NOK | https://autobuild.buildroot.org/results/d78b0f3bf2d84e1ee02ce0eebc45083b3121ca47 | ORPH
+powerpc64le  |          bash-5.2.37           | NOK | https://autobuild.buildroot.org/results/ac3af50250f673a76cef1d9a10376a6080a08ed5 | ORPH
+   armeb     |          bash-5.2.37           | NOK | https://autobuild.buildroot.org/results/f0f859adc1fa5dc748ab8cc15440e3b0ea5d8c43 | ORPH
+ microblaze  |        bctoolbox-4.4.8         | NOK | https://autobuild.buildroot.org/results/7f023e3e2f81c317f6f00fe080ba155451fa6fc8 | ORPH
+    arm      |           bmx7-7.1.1           | NOK | https://autobuild.buildroot.org/results/5d61b2d4b8b5e54aad923bac8895fb67f90d40ee | ORPH
+powerpc64le  |           bmx7-7.1.1           | NOK | https://autobuild.buildroot.org/results/d804ad7d37489c8d71b44e41bd0f0a26e0b5a308 | ORPH
+   xtensa    |          cairo-1.18.4          | NOK | https://autobuild.buildroot.org/results/c1d96d76954da54331152e828c266641ccd415ac |     
+    mips     |          cpulimit-0.2          | NOK | https://autobuild.buildroot.org/results/5308cb8239f31ef39e5c67d65ff1d69cdec1cedc |     
+ powerpc64   |          cvs-1.12.13           | NOK | https://autobuild.buildroot.org/results/101feae3383682b98e41f8cf20a9a254cd460542 | ORPH
+    mips     |          cvs-1.12.13           | NOK | https://autobuild.buildroot.org/results/01dd400c67442fade615f06b724caa63ec04a858 | ORPH
+    or1k     |          cvs-1.12.13           | NOK | https://autobuild.buildroot.org/results/f2ac45c37399ec4f52d9e921d336fea874e5aaea | ORPH
+  aarch64    |          dpdk-24.11.1          | NOK | https://autobuild.buildroot.org/results/70e601403b6740149edbdd9fed2a7f2b0aaf1552 |     
+  mips64el   |           fcft-3.1.8           | NOK | https://autobuild.buildroot.org/results/4939f43cb9e716042e664b30b60ac4c65ea60f7a |     
+   mips64    | firmware-utils-86739f2b3ae9... | NOK | https://autobuild.buildroot.org/results/696113337c227355d891a6c1bd4e170151918824 |     
+   armeb     |        host-rust-1.86.0        | NOK | https://autobuild.buildroot.org/results/f7b439407b3222851ae8ab8db20057416678b127 |     
+  sparc64    | libdbi-drivers-0bfae6c43134... | NOK | https://autobuild.buildroot.org/results/5158c47f2e2f72257654eb83802cbc5539480055 |     
+   s390x     | libdbi-drivers-0bfae6c43134... | NOK | https://autobuild.buildroot.org/results/404b789908a13addf5b9935ffc59f3311e13baa8 |     
+   x86_64    |     liblog4c-localtime-1.0     | NOK | https://autobuild.buildroot.org/results/553d7faea15fd0c59e7fc7773db3b5d7ed5344a8 |     
+  riscv64    |        libopenssl-3.5.0        | NOK | https://autobuild.buildroot.org/results/8d6d68901a0200e0a80a25ee15c7890c6ef2182e | ORPH
+  riscv64    |        libopenssl-3.5.0        | NOK | https://autobuild.buildroot.org/results/987450242f320a50f9a622a925bcfeab230292f2 | ORPH
+ microblaze  |        libsigrok-0.5.2         | NOK | https://autobuild.buildroot.org/results/0659acfb11e36dbf65a9dffcc7a955b0a018bb21 | ORPH
+ aarch64_be  |          libva-2.22.0          | NOK | https://autobuild.buildroot.org/results/18b551ae20a2f2f40c1fb003bb701f53f5daec45 |     
+   mips64    |          linux-tools           | NOK | https://autobuild.buildroot.org/results/8fda01fb22da75c4c756096b9245d67a3fdede94 | ORPH
+   armeb     |         logsurfer-1.8          | NOK | https://autobuild.buildroot.org/results/df2380da0046a49bf78d1c8ffea6f38a9b16e2b3 |     
+   armeb     |           nut-2.8.3            | NOK | https://autobuild.buildroot.org/results/87f5a42784e2613d9349519e4ee0f71de8240f79 |     
+microblazeel |    passt-2025_02_17.a1e48a0    | NOK | https://autobuild.buildroot.org/results/8aa28f6e9a9bf93f3d6f8615c2d484aec0f9f92c | ORPH
+   sparc     |          perl-5.40.2           | NOK | https://autobuild.buildroot.org/results/d15b5f3c01ddddc0a735d464a68c69137620f3c3 |     
+ microblaze  |       python-tornado-6.5       | NOK | https://autobuild.buildroot.org/results/63e5d521ab376dd69e52ec0b18074ae675735024 |     
+ powerpc64   |          s6-2.13.1.0           | NOK | https://autobuild.buildroot.org/results/4e50c95aa8839a01411136c0a4c7017924716a13 |     
+    or1k     |          s6-2.13.1.0           | NOK | https://autobuild.buildroot.org/results/5a9dc595da596ac6e5d3f195a91b5226af9a65f9 |     
+microblazeel |      sane-airscan-0.99.33      | NOK | https://autobuild.buildroot.org/results/e920a2f18a79af8c619bdc966d21587399640d78 |     
+    or1k     |        tinyssh-20240101        | NOK | https://autobuild.buildroot.org/results/1e9eb63f7132317cb1dbc928a723579864232f8b |     
+  aarch64    |            unknown             | NOK | https://autobuild.buildroot.org/results/8645d8b57badc96466c691e0fe64c18aa31db3d2 |     
+    or1k     |            unknown             | NOK | https://autobuild.buildroot.org/results/ceb77cf1b8da19d43b495e099dcfb3fb05af1849 |     
+ microblaze  |            unknown             | NOK | https://autobuild.buildroot.org/results/c62e461ad43828fc5db57cd601aab61226d27998 |     
+   mips64    |     util-linux-libs-2.40.2     | NOK | https://autobuild.buildroot.org/results/3586f691b2d52660b0c43532952bceb44439e226 | ORPH
+   mips64    |           wipe-2.3.1           | NOK | https://autobuild.buildroot.org/results/f4e0f3b39fa3b384b0dcc0b4ce670743cd8c7c88 | ORPH
+
+
+Classification of failures by reason for 2025.02.x
+--------------------------------------------------
+
+                   cvs-1.12.13 | 1 
+               graphene-1.10.8 | 1 
+            host-libp11-0.4.12 | 1 
+                  libnss-3.108 | 1 
+libsvgtiny-ea9d99fc8b231c22... | 1 
+                nushell-0.96.1 | 1 
+
+
+Detail of failures for 2025.02.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    i686     |          cvs-1.12.13           | NOK | https://autobuild.buildroot.org/results/0c31b3141ffacf292ad193a0c21de845eb413c32 | ORPH
+    sh4a     |        graphene-1.10.8         | NOK | https://autobuild.buildroot.org/results/98341de39a08954219e007dd527cdaadd59af387 |     
+ aarch64_be  |       host-libp11-0.4.12       | NOK | https://autobuild.buildroot.org/results/da71db9b04f181b9d2e72df73ac8541709f5a1d4 | ORPH
+   s390x     |          libnss-3.108          | NOK | https://autobuild.buildroot.org/results/f0b72ff8b4e0f6ba0f96521da4dff1d4b4420af4 |     
+   sparc     | libsvgtiny-ea9d99fc8b231c22... | NOK | https://autobuild.buildroot.org/results/c4784e41431a0e36334a9af83e335f0459e38516 | ORPH
+  powerpc    |         nushell-0.96.1         | NOK | https://autobuild.buildroot.org/results/046ea186edbb82a10ecdb134582059d2936a0159 | ORPH
+
+
+Classification of failures by reason for 2025.05.x
+--------------------------------------------------
+
+              libselinux-3.8.1 | 1 
+     linux-5.10.162-cip24-rt10 | 1 
+                setserial-2.17 | 1 
+                tpm2-tss-3.2.2 | 1 
+                       unknown | 1 
+
+
+Detail of failures for 2025.05.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    or1k     |        libselinux-3.8.1        | NOK | https://autobuild.buildroot.org/results/8300765b2b7ce17fc6542ab99345a4f9b175d9b9 |     
+  mips64el   |   linux-5.10.162-cip24-rt10    | NOK | https://autobuild.buildroot.org/results/aeeb2aca9c50d10cf07ef66bb1c2c6a21e95e084 | ORPH
+   sparc     |         setserial-2.17         | NOK | https://autobuild.buildroot.org/results/c9a1a3fefbc7c9ee49eed76acd472ae6d16353eb | ORPH
+   x86_64    |         tpm2-tss-3.2.2         | NOK | https://autobuild.buildroot.org/results/3cf4e7073d94a9530279c694ae3a446c6d8b353d | ORPH
+ aarch64_be  |            unknown             | NOK | https://autobuild.buildroot.org/results/88cb10f8915e2cc16465fd67339ccb9f0048e91f |     
+
+
+
+-- 
+https://autobuild.buildroot.org
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
