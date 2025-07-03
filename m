@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D86F5C83030
-	for <buildroot@archiver.kernel.org>; Fri,  4 Jul 2025 06:24:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B6CFC83F0A
+	for <buildroot@archiver.kernel.org>; Fri,  4 Jul 2025 06:24:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ABDB060E9C;
-	Fri,  4 Jul 2025 06:24:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2440D83D09;
+	Fri,  4 Jul 2025 06:24:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qMwRLQuk22ok; Fri,  4 Jul 2025 06:24:44 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JDxvQ-5hjUCs; Fri,  4 Jul 2025 06:24:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D4CD560BAB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 31BDD81E0C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D4CD560BAB;
-	Fri,  4 Jul 2025 06:24:43 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0EC381EB
+	by smtp1.osuosl.org (Postfix) with ESMTP id 31BDD81E0C;
+	Fri,  4 Jul 2025 06:24:45 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 152BE7AD
  for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:24:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2FEF860AF5
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:24:33 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 072DC4040D
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:24:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3xCj4jEOa3VC for <buildroot@buildroot.org>;
- Fri,  4 Jul 2025 06:24:32 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AEUl9Tcq-_0g for <buildroot@buildroot.org>;
+ Fri,  4 Jul 2025 06:24:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6ABAB60AF2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5592C404E4
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6ABAB60AF2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5592C404E4
  for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:24:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 68CAA85E0B; Fri,  4 Jul 2025 06:24:32 +0000 (UTC)
+ id 4069F85E0D; Fri,  4 Jul 2025 06:24:32 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Jul 2025 10:53:39 +0200
+Date: Thu, 3 Jul 2025 10:51:54 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: 01c2d423443f6a1ef9b97f8cc4446a3f643803cb
-X-Git-Newrev: 4aad0cdeef33fd8b9a2d50bba3a1f75aac153077
+X-Git-Oldrev: 82e4e0d31326b0b64d72c00680116f09c40e2bc6
+X-Git-Newrev: 6fe714bbc3952e587a486f08e2e6bd82bac3f02d
 X-Patchwork-Hint: ignore
-Message-Id: <20250704062432.68CAA85E0B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/python-dotenv:
- bump to 1.1.1
+Message-Id: <20250704062432.4069F85E0D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x]
+ configs/globalscale_espressobin: Bump linux to v5.15.186
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,49 +66,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4aad0cdeef33fd8b9a2d50bba3a1f75aac153077
+commit: https://git.buildroot.net/buildroot/commit/?id=6fe714bbc3952e587a486f08e2e6bd82bac3f02d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-Release notes:
-https://github.com/theskumar/python-dotenv/releases/tag/v1.1.1
+Bump from v5.15.1 to the latest LTS, v5.15.186.
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
+Reviewed-by: Joachim Wiberg <troglobit@gmail.com>
+[Julien: reword commit title]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 2286b6dd1b098ef908e6adc02a52690d85bd72aa)
+(cherry picked from commit 3953bd3e9cf1c582d799006f205650033c22db92)
+[thomas: bump to v5.15.186 instead]
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/python-dotenv/python-dotenv.hash | 4 ++--
- package/python-dotenv/python-dotenv.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ configs/globalscale_espressobin_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/python-dotenv/python-dotenv.hash b/package/python-dotenv/python-dotenv.hash
-index c591dcf9b9..5b4be41206 100644
---- a/package/python-dotenv/python-dotenv.hash
-+++ b/package/python-dotenv/python-dotenv.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/python-dotenv/json
--md5  9bdf50416b1c59832d2f77ad6afdf0d8  python_dotenv-1.1.0.tar.gz
--sha256  41f90bc6f5f177fb41f53e87666db362025010eb28f60a01c9143bfa33a2b2d5  python_dotenv-1.1.0.tar.gz
-+md5  b3e9652d1974f8c7574c43f719799f3a  python_dotenv-1.1.1.tar.gz
-+sha256  a8a6399716257f45be6a007360200409fce5cda2661e3dec71d23dc15f6189ab  python_dotenv-1.1.1.tar.gz
- # Locally computed sha256 checksums
- sha256  80619b7049f08c81683ad0e01f08f257a840652dd71ee83146d36658c7d2c2b9  LICENSE
-diff --git a/package/python-dotenv/python-dotenv.mk b/package/python-dotenv/python-dotenv.mk
-index c565a3e681..8f11c5de8d 100644
---- a/package/python-dotenv/python-dotenv.mk
-+++ b/package/python-dotenv/python-dotenv.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_DOTENV_VERSION = 1.1.0
-+PYTHON_DOTENV_VERSION = 1.1.1
- PYTHON_DOTENV_SOURCE = python_dotenv-$(PYTHON_DOTENV_VERSION).tar.gz
--PYTHON_DOTENV_SITE = https://files.pythonhosted.org/packages/88/2c/7bb1416c5620485aa793f2de31d3df393d3686aa8a8506d11e10e13c5baf
-+PYTHON_DOTENV_SITE = https://files.pythonhosted.org/packages/f6/b0/4bc07ccd3572a2f9df7e6782f52b0c6c90dcbb803ac4a167702d7d0dfe1e
- PYTHON_DOTENV_SETUP_TYPE = setuptools
- PYTHON_DOTENV_LICENSE = BSD-3-Clause
- PYTHON_DOTENV_LICENSE_FILES = LICENSE
+diff --git a/configs/globalscale_espressobin_defconfig b/configs/globalscale_espressobin_defconfig
+index 562e646b70..24bd2e894a 100644
+--- a/configs/globalscale_espressobin_defconfig
++++ b/configs/globalscale_espressobin_defconfig
+@@ -6,7 +6,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/globalscale/espressobin/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.1"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.186"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/globalscale/espressobin/linux-extras.config"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
