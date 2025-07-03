@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4CA0C83F09
-	for <buildroot@archiver.kernel.org>; Fri,  4 Jul 2025 06:24:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20850C83F09
+	for <buildroot@archiver.kernel.org>; Fri,  4 Jul 2025 06:24:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 94D4581E40;
-	Fri,  4 Jul 2025 06:24:38 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S5p0ijki4IYu; Fri,  4 Jul 2025 06:24:38 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D3A9681EC6
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D3A9681EC6;
-	Fri,  4 Jul 2025 06:24:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 171661EB
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:24:33 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F209560B71
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:24:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EB76C60B97;
+	Fri,  4 Jul 2025 06:24:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Kh7H5laLGLPQ for <buildroot@buildroot.org>;
+ id G6rfrfSejudq; Fri,  4 Jul 2025 06:24:39 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8966060B65
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8966060B65;
+	Fri,  4 Jul 2025 06:24:39 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 191D87AD
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:24:33 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id F0D2041060
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:24:32 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jRy-M8vPyLAc for <buildroot@buildroot.org>;
  Fri,  4 Jul 2025 06:24:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E20B608FC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3919441048
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4E20B608FC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3919441048
  for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:24:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4B65085E0B; Fri,  4 Jul 2025 06:24:32 +0000 (UTC)
+ id 361F285E09; Fri,  4 Jul 2025 06:24:32 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Jul 2025 10:53:23 +0200
+Date: Thu, 3 Jul 2025 10:50:49 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: 6fe714bbc3952e587a486f08e2e6bd82bac3f02d
-X-Git-Newrev: 23794fee663231004a7dc77a9ac0057bfebad2c0
+X-Git-Oldrev: 038218fcad2361fd9ab8a1fd5a0c91cbf3727e3c
+X-Git-Newrev: 82e4e0d31326b0b64d72c00680116f09c40e2bc6
 X-Patchwork-Hint: ignore
-Message-Id: <20250704062432.4B65085E0B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/mupdf: update
- homepage URL
+Message-Id: <20250704062432.361F285E09@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/libcurl: unbreak
+ threads + c-ares conditional
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,52 +61,42 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2421462647675430597=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2421462647675430597==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=23794fee663231004a7dc77a9ac0057bfebad2c0
+commit: https://git.buildroot.net/buildroot/commit/?id=82e4e0d31326b0b64d72c00680116f09c40e2bc6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-The current homepage URL leads to an HTTP 404 error.
+Commit 0fce7a9623 ("package/libcurl: fix build w/ threads + c-ares") added a
+conditional for threads + c-ares, but ended up with a end-parenthesis too
+many - so the condition is never true.  Fix that.
 
-Fix it by using the homepage URL currently mentioned in mupdf's git
-repository.
-
-Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit d1ea9a64e68960be7737e641c98c6990a06e72c0)
+Reported-by: Tibault Damman <tibault.damman@basalte.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Reviewed-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 17399baa7c857aadeb52b849ec5e9f32b4f4221d)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/mupdf/Config.in | 2 +-
+ package/libcurl/libcurl.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/mupdf/Config.in b/package/mupdf/Config.in
-index 34c5e7d538..5c0a127a90 100644
---- a/package/mupdf/Config.in
-+++ b/package/mupdf/Config.in
-@@ -14,7 +14,7 @@ config BR2_PACKAGE_MUPDF
- 	help
- 	  MuPDF is a lightweight PDF, XPS, and E-book viewer.
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 5a3a668f06..e390c9d1bf 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -38,7 +38,7 @@ LIBCURL_IGNORE_CVES += CVE-2024-32928
  
--	  https://www.mupdf.com/index.html
-+	  https://www.mupdf.com/
- 
- comment "mupdf needs a toolchain w/ C++, gcc >= 4.9"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-
---===============2421462647675430597==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ # threaded resolver cannot be used with c-ares
+ # https://github.com/curl/curl/commit/d364f1347f05c53eea5d25a15b4ad8a62ecc85b8
+-ifeq ($(BR2_TOOLCHAIN_HAS_THREADS)x$(BR2_PACKAGE_C_ARES)),yx)
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS)x$(BR2_PACKAGE_C_ARES),yx)
+ LIBCURL_CONF_OPTS += --enable-threaded-resolver
+ else
+ LIBCURL_CONF_OPTS += --disable-threaded-resolver
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2421462647675430597==--
