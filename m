@@ -1,74 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24A35C83030
-	for <buildroot@archiver.kernel.org>; Thu,  3 Jul 2025 18:34:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24DFDC83F03
+	for <buildroot@archiver.kernel.org>; Thu,  3 Jul 2025 19:51:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B802983AB1;
-	Thu,  3 Jul 2025 18:34:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B53D240F25;
+	Thu,  3 Jul 2025 19:50:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0HkyY2dW-L4G; Thu,  3 Jul 2025 18:34:16 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ikj7OGvAX9af; Thu,  3 Jul 2025 19:50:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E475283AA0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B522E40A5A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E475283AA0;
-	Thu,  3 Jul 2025 18:34:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B522E40A5A;
+	Thu,  3 Jul 2025 19:50:57 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 8DAFB193
- for <buildroot@buildroot.org>; Thu,  3 Jul 2025 18:34:14 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id C2B06B0A
+ for <buildroot@buildroot.org>; Thu,  3 Jul 2025 19:50:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7406183AA0
- for <buildroot@buildroot.org>; Thu,  3 Jul 2025 18:34:14 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A933783C88
+ for <buildroot@buildroot.org>; Thu,  3 Jul 2025 19:50:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VavWJTjienwQ for <buildroot@buildroot.org>;
- Thu,  3 Jul 2025 18:34:13 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.131;
- helo=smtpcmd04131.aruba.it;
- envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org EC02983A9C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC02983A9C
-Received: from smtpcmd04131.aruba.it (smtpcmd04131.aruba.it [62.149.158.131])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EC02983A9C
- for <buildroot@buildroot.org>; Thu,  3 Jul 2025 18:34:12 +0000 (UTC)
-Received: from localhost.localdomain ([84.33.84.190])
- by Aruba SMTP with ESMTPSA
- id XOl7uqvXpNbHHXOl7uaWdl; Thu, 03 Jul 2025 20:34:09 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+ id dznoj9LsBpNd for <buildroot@buildroot.org>;
+ Thu,  3 Jul 2025 19:50:54 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DCD7883C80
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id DCD7883C80
+ for <buildroot@buildroot.org>; Thu,  3 Jul 2025 19:50:54 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D74A885C7F; Thu,  3 Jul 2025 19:50:54 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Joseph Kogut <joseph.kogut@gmail.com>
-Date: Thu,  3 Jul 2025 20:34:08 +0200
-Message-Id: <20250703183408.654229-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.39.5
-MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfAVYx/SQxoVfux0dr98uHke00NyGu5eNB2/YRi6ed3He+o/Cgl74hjBEnOFWco+VZKzjYqXF05sBxODlX8H6Edw/dSwT7CAgC9NUq8tXFQAhitc61mpL
- o/CkU93wl2LU6f3C8qfc6zM0bvr5h60ISSZV71TxdExX3TrAC7G0Qqgk7awDNX3z+FLgtPvNyyh0U2Dw7o8YMfLlvNV/+fV2oNr9xG4AuaYiX+qHcz2ZVJkv
- CBzNEYimbdijBvuknMiz7vy++iiqodQDgLV9wjPqeEfbr18JWIQT/OheL/FJJaRrV7bPVOtHzj4aFTgKjjqejA==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1751567649; bh=X8qhcLSRpkm2ibaZM0SY5GhsgdnLZTUwnmG0KSRbwlQ=;
- h=From:To:Subject:Date:MIME-Version;
- b=AvJ4OUgPNiTjD0/LHejR4/IKZWi/Gl7doAzQMVDtrp8CWdQJa2NLetRwYhmTHLbh5
- YQqF5ZIHwVkyUrpDIQowPPIbSMz4KfOWO3qh7SHhm5e2MTAsuWsq0JEaX5Bgs0y9bI
- mOVB7Qx/+L86uJMakN3mT4l6CAsibPg2X63VW0NLDR19Zd4/dzrNy7nScz4dF+CzHf
- Bv4LTMqcdL5LtGXmi6pIQMXWN5dTg8a9hZRvTk4lN0GZfwHTVikcwuc1y7tQ3Wh3RR
- VjQ6v1qAORZXMTOEJdoopanN0IQFGIGisYQksaRhZAnoQGBjLdoluaNTQKYnTw+n5P
- ObI7ea/K8Hrag==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=AvJ4OUgP
-Subject: [Buildroot] [PATCH] package/libnss: security bump version to 3.113.1
+Date: Thu, 3 Jul 2025 21:49:20 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: fd04cba20daa5377179c1de841f4f9a1facfc448
+X-Git-Newrev: df60b105b4383893e541224870315b39226d02cd
+X-Patchwork-Hint: ignore
+Message-Id: <20250703195054.D74A885C7F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libp11: fix build w/ host-gcc15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -80,47 +57,123 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For release note, see:
-https://hg-edge.mozilla.org/projects/nss/file/NSS_3_113_1_RTM/doc/rst/releases/nss_3_113_1.rst
+commit: https://git.buildroot.net/buildroot/commit/?id=df60b105b4383893e541224870315b39226d02cd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+The following error appeared on the autobuilder for host using
+host-gcc15:
+
+```
+p11_attr.c: In function 'pkcs11_addattr_bool':
+p11_attr.c:126:25: error: expected identifier or '(' before 'true'
+  126 |         static CK_BBOOL true = CK_TRUE;
+      |                         ^~~~
+p11_attr.c:127:25: error: expected identifier or '(' before 'false'
+  127 |         static CK_BBOOL false = CK_FALSE;
+      |                         ^~~~~
+p11_attr.c:128:44: error: lvalue required as unary '&' operand
+  128 |         pkcs11_addattr(tmpl, type, value ? &true : &false, sizeof(CK_BBOOL));
+      |                                            ^
+p11_attr.c:128:52: error: lvalue required as unary '&' operand
+  128 |         pkcs11_addattr(tmpl, type, value ? &true : &false, sizeof(CK_BBOOL));
+      |                                                    ^
+make[3]: *** [Makefile:646: libp11_la-p11_attr.lo] Error 1
+```
+
+This is due to the change in the default C language version in GCC15.
+
+This patch backport the upstream patch that fix that issue by not using
+the keywords.
+
+Fixes: https://autobuild.buildroot.org/results/da7/da71db9b04f181b9d2e72df73ac8541709f5a1d4
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libnss/libnss.hash | 4 ++--
- package/libnss/libnss.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...02-change-bool-attribute-true-false-names.patch | 67 ++++++++++++++++++++++
+ 1 file changed, 67 insertions(+)
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index 7fcb75e6ba..e0bbc82413 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_113_RTM/src/SHA256SUMS
--sha256  acef06b512d3bd81c87a63b3c8653d258bb689d2191fc0e64decf5a1efa01c0f  nss-3.113.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_113_1_RTM/src/SHA256SUMS
-+sha256  b8c586cc0ac60b76477f62483f664f119c26000a8189dd9ef417df7dbd33a2cc  nss-3.113.1.tar.gz
- # Locally calculated
- sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index e7b90a75a6..d6a9e9e2b1 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBNSS_VERSION = 3.113
-+LIBNSS_VERSION = 3.113.1
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
--- 
-2.39.5
-
+diff --git a/package/libp11/0002-change-bool-attribute-true-false-names.patch b/package/libp11/0002-change-bool-attribute-true-false-names.patch
+new file mode 100644
+index 0000000000..d63ec74590
+--- /dev/null
++++ b/package/libp11/0002-change-bool-attribute-true-false-names.patch
+@@ -0,0 +1,67 @@
++From 89ccb1f097f56a0933f881af051422b8d67e457f Mon Sep 17 00:00:00 2001
++From: dlegault <dlegault@blackberry.com>
++Date: Fri, 2 Sep 2022 12:01:23 -0400
++Subject: [PATCH] Change bool attribute true/false names to _true/_false
++
++This prevents conflicts with true/false defined in stdbool.h
++
++fixes #472
++
++Upstream: https://github.com/OpenSC/libp11/commit/89ccb1f097f56a0933f881af051422b8d67e457f
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++---
++ src/p11_attr.c |  6 +++---
++ src/p11_ec.c   | 14 +++++++-------
++ 2 files changed, 10 insertions(+), 10 deletions(-)
++
++diff --git a/src/p11_attr.c b/src/p11_attr.c
++index d425241a..a420efad 100644
++--- a/src/p11_attr.c
+++++ b/src/p11_attr.c
++@@ -123,9 +123,9 @@ unsigned int pkcs11_addattr(PKCS11_TEMPLATE *tmpl, int type, void *data, size_t
++ 
++ void pkcs11_addattr_bool(PKCS11_TEMPLATE *tmpl, int type, int value)
++ {
++-	static CK_BBOOL true = CK_TRUE;
++-	static CK_BBOOL false = CK_FALSE;
++-	pkcs11_addattr(tmpl, type, value ? &true : &false, sizeof(CK_BBOOL));
+++	static CK_BBOOL _true = CK_TRUE;
+++	static CK_BBOOL _false = CK_FALSE;
+++	pkcs11_addattr(tmpl, type, value ? &_true : &_false, sizeof(CK_BBOOL));
++ }
++ 
++ void pkcs11_addattr_s(PKCS11_TEMPLATE *tmpl, int type, const char *s)
++diff --git a/src/p11_ec.c b/src/p11_ec.c
++index 4fb4efc3..16e3b3af 100644
++--- a/src/p11_ec.c
+++++ b/src/p11_ec.c
++@@ -590,22 +590,22 @@ static int pkcs11_ecdh_derive(unsigned char **out, size_t *outlen,
++ 	CK_MECHANISM mechanism;
++ 	int rv;
++ 
++-	CK_BBOOL true = TRUE;
++-	CK_BBOOL false = FALSE;
+++	CK_BBOOL _true = TRUE;
+++	CK_BBOOL _false = FALSE;
++ 	CK_OBJECT_HANDLE newkey = CK_INVALID_HANDLE;
++ 	CK_OBJECT_CLASS newkey_class= CKO_SECRET_KEY;
++ 	CK_KEY_TYPE newkey_type = CKK_GENERIC_SECRET;
++ 	CK_ULONG newkey_len = key_len;
++ 	CK_OBJECT_HANDLE *tmpnewkey = (CK_OBJECT_HANDLE *)outnewkey;
++ 	CK_ATTRIBUTE newkey_template[] = {
++-		{CKA_TOKEN, &false, sizeof(false)}, /* session only object */
+++		{CKA_TOKEN, &_false, sizeof(_false)}, /* session only object */
++ 		{CKA_CLASS, &newkey_class, sizeof(newkey_class)},
++ 		{CKA_KEY_TYPE, &newkey_type, sizeof(newkey_type)},
++ 		{CKA_VALUE_LEN, &newkey_len, sizeof(newkey_len)},
++-		{CKA_SENSITIVE, &false, sizeof(false) },
++-		{CKA_EXTRACTABLE, &true, sizeof(true) },
++-		{CKA_ENCRYPT, &true, sizeof(true)},
++-		{CKA_DECRYPT, &true, sizeof(true)}
+++		{CKA_SENSITIVE, &_false, sizeof(_false) },
+++		{CKA_EXTRACTABLE, &_true, sizeof(_true) },
+++		{CKA_ENCRYPT, &_true, sizeof(_true)},
+++		{CKA_DECRYPT, &_true, sizeof(_true)}
++ 	};
++ 
++ 	memset(&mechanism, 0, sizeof(mechanism));
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
