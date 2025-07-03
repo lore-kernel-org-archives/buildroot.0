@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBF57C83030
-	for <buildroot@archiver.kernel.org>; Fri,  4 Jul 2025 06:24:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FB43C83F09
+	for <buildroot@archiver.kernel.org>; Fri,  4 Jul 2025 06:24:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AA96F82030;
-	Fri,  4 Jul 2025 06:24:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5A0A0820AA;
+	Fri,  4 Jul 2025 06:24:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eVhKF3vuUOrN; Fri,  4 Jul 2025 06:24:41 +0000 (UTC)
+ id js6rilsBgMC3; Fri,  4 Jul 2025 06:24:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D54D981FEB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3268282031
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D54D981FEB;
-	Fri,  4 Jul 2025 06:24:40 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3270A7AB
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3268282031;
+	Fri,  4 Jul 2025 06:24:42 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id ABB801EB
  for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:24:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 18BB181BFA
+ by smtp2.osuosl.org (Postfix) with ESMTP id 92603404F0
  for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:24:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fnTxyBtU6eUT for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nX3sXRB83nnv for <buildroot@buildroot.org>;
  Fri,  4 Jul 2025 06:24:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6208981A8E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 31A90404B5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6208981A8E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 31A90404B5
  for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:24:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5F79E85E0C; Fri,  4 Jul 2025 06:24:32 +0000 (UTC)
+ id 208AE85E0B; Fri,  4 Jul 2025 06:24:32 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Jul 2025 10:53:34 +0200
+Date: Thu, 3 Jul 2025 10:50:26 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: 1341786226cc6c2a31d2f45eb59d48cbb188d40a
-X-Git-Newrev: 01c2d423443f6a1ef9b97f8cc4446a3f643803cb
+X-Git-Oldrev: 9a34df3678df8bc14c88015f42bfe9aa328fe8bd
+X-Git-Newrev: 20774d8fb402106668e1e97cd7379b8813ae7a37
 X-Patchwork-Hint: ignore
-Message-Id: <20250704062432.5F79E85E0C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/modsecurity2:
- update upstream URLs
+Message-Id: <20250704062432.208AE85E0B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/cifs-utils: bump
+ to version 7.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,74 +61,76 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8539358881592343303=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8539358881592343303==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=01c2d423443f6a1ef9b97f8cc4446a3f643803cb
+commit: https://git.buildroot.net/buildroot/commit/?id=20774d8fb402106668e1e97cd7379b8813ae7a37
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-'https://github.com/SpiderLabs/ModSecurity' now redirects to
-'https://github.com/owasp-modsecurity/ModSecurity', so update our
-URLs accordingly.
+According to
+https://lists.samba.org/archive/samba-technical/2025-June/139484.html:
 
-Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
-Reviewed-by: Herve Codina <herve.codina@bootlin.com>
+A new update, version 7.4, of cifs-utils has been released today.
+Users of cifs-utils version 7.3 on older kernels are encouraged to
+update to 7.4 since it includes a fix for a mount problem with version
+7.3 of cifs-utils on older kernels when using namespaces.
+
+[...]
+
+Detailed list of changes since version 7.3 was released
+----------------------------------------------------------------
+Enzo Matsumiya (1):
+      mount.cifs: retry mount on -EINPROGRESS
+
+Henrique Carvalho (1):
+      cifs.upcall: correctly treat UPTARGET_UNSPECIFIED as UPTARGET_APP
+
+Paulo Alcantara (1):
+      cifs.upcall: fix memory leaks in check_service_ticket_exits()
+
+Pavel Shilovsky (1):
+      cifs-utils: bump version to 7.4
+
+Z. Liu (2):
+      getcifsacl, setcifsacl: use <libgen.h> for basename
+      cifscreds: use <libgen.h> for basename
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 602fb43d34ba1eb97a975848aca3bb8eed1e8e87)
+(cherry picked from commit 4abd7bb9dfde07164a78581f3bc53b50d4fc8532)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/modsecurity2/Config.in         | 2 +-
- package/modsecurity2/modsecurity2.hash | 2 +-
- package/modsecurity2/modsecurity2.mk   | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/cifs-utils/cifs-utils.hash | 2 +-
+ package/cifs-utils/cifs-utils.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/modsecurity2/Config.in b/package/modsecurity2/Config.in
-index fb1bfc960e..df5634bf89 100644
---- a/package/modsecurity2/Config.in
-+++ b/package/modsecurity2/Config.in
-@@ -10,4 +10,4 @@ config BR2_PACKAGE_MODSECURITY2
- 	  into HTTP(S) traffic and provides a power rules language and
- 	  API to implement advanced protections.
+diff --git a/package/cifs-utils/cifs-utils.hash b/package/cifs-utils/cifs-utils.hash
+index ea32d4dca7..e6a5eefeaa 100644
+--- a/package/cifs-utils/cifs-utils.hash
++++ b/package/cifs-utils/cifs-utils.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256  c4e1eb5f4ad880d96e16d95a1cdbc7ec978ab51c5b6d8a20ae09dac638f36dd5  cifs-utils-7.3.tar.bz2
++sha256  53353d05c30b4fc9dac006a8f0c5054cdd8a1834c176313c91e4694025c4b891  cifs-utils-7.4.tar.bz2
  
--	  https://github.com/SpiderLabs/ModSecurity
-+	  https://github.com/owasp-modsecurity/ModSecurity
-diff --git a/package/modsecurity2/modsecurity2.hash b/package/modsecurity2/modsecurity2.hash
-index 2c77ffd830..fbb7fabb3a 100644
---- a/package/modsecurity2/modsecurity2.hash
-+++ b/package/modsecurity2/modsecurity2.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/SpiderLabs/ModSecurity/releases/download/v2.9.7/modsecurity-2.9.7.tar.gz.sha256
-+# From https://github.com/owasp-modsecurity/ModSecurity/releases/download/v2.9.7/modsecurity-2.9.7.tar.gz.sha256
- sha256  2a28fcfccfef21581486f98d8d5fe0397499749b8380f60ec7bb1c08478e1839  modsecurity-2.9.7.tar.gz
+ # Hash for license file:
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
+index 9c029342eb..9e1e822c4c 100644
+--- a/package/cifs-utils/cifs-utils.mk
++++ b/package/cifs-utils/cifs-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Locally computed
-diff --git a/package/modsecurity2/modsecurity2.mk b/package/modsecurity2/modsecurity2.mk
-index 88bbf3bb29..36d6e1a847 100644
---- a/package/modsecurity2/modsecurity2.mk
-+++ b/package/modsecurity2/modsecurity2.mk
-@@ -6,7 +6,7 @@
- 
- MODSECURITY2_VERSION = 2.9.7
- MODSECURITY2_SOURCE = modsecurity-$(MODSECURITY2_VERSION).tar.gz
--MODSECURITY2_SITE = https://github.com/SpiderLabs/ModSecurity/releases/download/v$(MODSECURITY2_VERSION)
-+MODSECURITY2_SITE = https://github.com/owasp-modsecurity/ModSecurity/releases/download/v$(MODSECURITY2_VERSION)
- MODSECURITY2_LICENSE = Apache-2.0
- MODSECURITY2_LICENSE_FILES = LICENSE
- MODSECURITY2_CPE_ID_VENDOR = trustwave
-
---===============8539358881592343303==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-CIFS_UTILS_VERSION = 7.3
++CIFS_UTILS_VERSION = 7.4
+ CIFS_UTILS_SOURCE = cifs-utils-$(CIFS_UTILS_VERSION).tar.bz2
+ CIFS_UTILS_SITE = http://ftp.samba.org/pub/linux-cifs/cifs-utils
+ CIFS_UTILS_LICENSE = GPL-3.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8539358881592343303==--
