@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86D41C83030
-	for <buildroot@archiver.kernel.org>; Fri,  4 Jul 2025 06:22:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FACCC83F09
+	for <buildroot@archiver.kernel.org>; Fri,  4 Jul 2025 06:22:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5E6FC6162A;
-	Fri,  4 Jul 2025 06:22:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1E61883E14;
+	Fri,  4 Jul 2025 06:22:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tflFNKgN2uTj; Fri,  4 Jul 2025 06:22:05 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id k9Tj3pAesSqi; Fri,  4 Jul 2025 06:22:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 817FD6163B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E03BF83E03
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 817FD6163B;
-	Fri,  4 Jul 2025 06:22:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E03BF83E03;
+	Fri,  4 Jul 2025 06:22:03 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0D4E67AB
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:21:37 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 02E517AB
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:21:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EF65D60AF2
+ by smtp3.osuosl.org (Postfix) with ESMTP id A073660B65
  for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:21:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id na8lf1P0unCM for <buildroot@buildroot.org>;
- Fri,  4 Jul 2025 06:21:28 +0000 (UTC)
+ id Qb6jHeZQ8sW6 for <buildroot@buildroot.org>;
+ Fri,  4 Jul 2025 06:21:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 085CE60B91
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D929660B8A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 085CE60B91
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:21:27 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D929660B8A
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:21:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0654B84545; Fri,  4 Jul 2025 06:21:27 +0000 (UTC)
+ id D6DED85D10; Fri,  4 Jul 2025 06:21:26 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Jul 2025 11:21:23 +0200
+Date: Thu, 3 Jul 2025 10:07:20 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 4d73a8b5542c6f075d602470e32ca85939b1614e
-X-Git-Newrev: f11fc147348c77feb687a86e0af0740816e4ead3
+X-Git-Oldrev: f44ee51eb986bf11d5f4d73f4a1af1ae631e1896
+X-Git-Newrev: 22d808b108424a540608e5deba0869521e57c64c
 X-Patchwork-Hint: ignore
-Message-Id: <20250704062127.0654B84545@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/systemd: bump to
- 256.16
+Message-Id: <20250704062126.D6DED85D10@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] boot/syslinux: fix
+ install with top-level parallel build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,45 +66,95 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f11fc147348c77feb687a86e0af0740816e4ead3
+commit: https://git.buildroot.net/buildroot/commit/?id=22d808b108424a540608e5deba0869521e57c64c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Systemd stable versions don't really have release notes, so best we can
-do is link to the diff between the two tags:
+syslinux is... special. It is a target package, but it is installed in
+HOST_DIR *in the target install commands*: in addition to the boot files
+that run on the target, syslinux installs a set of host tools that are
+to be used at build time (e.g. extlinux, to prepare bootable media, like
+an iso96660 image). Then, from HOST_DIR, the actual boot files are
+copied into BINARIES_DIR (i.e. images/); we do it that way because the
+boot files are scattered about everywhere in the build tree, while they
+are all packed together in a single directory once installed.
 
-https://github.com/systemd/systemd/compare/v256.7...v256.16
+However, there is no dependency between the target and image install
+steps. So, when using top-level parallel builds, there is no guarantee
+that the target install commands are finished before the image install
+commands are started.
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+We fix that by first installing into a temporary location, as part of
+the build step, and by then copying from there as part of the install
+step. This ensures that the boot files are easily available, without
+needing a dependency on the target install step, that we can't express.
+
+Note that we do not change the actual installation into HOST_DIR: it can
+be set up differently that our temporary location, and we do not want
+to duplicate that setup here (it's going to diverge over time).
+
+Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 90e76818a135417d97869b6292cf0590452c3686)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/systemd/systemd.hash | 2 +-
- package/systemd/systemd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ boot/syslinux/syslinux.mk | 17 ++++++++++++++---
+ 1 file changed, 14 insertions(+), 3 deletions(-)
 
-diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
-index 976d88c1f5..e16823ca78 100644
---- a/package/systemd/systemd.hash
-+++ b/package/systemd/systemd.hash
-@@ -1,5 +1,5 @@
- # sha256 locally computed
--sha256  896d76ff65c88f5fd9e42f90d152b0579049158a163431dd77cdc57748b1d7b0  systemd-256.7.tar.gz
-+sha256  2600db41d9ebd717ca786d754d17699038147b8fddaf15fc935f775a06c0df92  systemd-256.16.tar.gz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
- sha256  e5a8645ad94aab24e312dd0c6be2aa54236eb9374480b1b14ea5c61598874fd5  LICENSES/BSD-2-Clause.txt
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 71fe0de550..bf0f2c1e90 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -19,7 +19,7 @@
- # - Diff sysusers.d with the previous version
- # - Diff factory/etc/nsswitch.conf with the previous version
- #   (details are often sprinkled around in README and manpages)
--SYSTEMD_VERSION = 256.7
-+SYSTEMD_VERSION = 256.16
- SYSTEMD_SITE = $(call github,systemd,systemd,v$(SYSTEMD_VERSION))
- SYSTEMD_LICENSE = \
- 	LGPL-2.1+, \
+diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
+index cc52c49aee..084acc398e 100644
+--- a/boot/syslinux/syslinux.mk
++++ b/boot/syslinux/syslinux.mk
+@@ -56,6 +56,11 @@ SYSLINUX_POST_PATCH_HOOKS += SYSLINUX_CLEANUP
+ # syslinux build system has no convenient way to pass CFLAGS,
+ # and the internal zlib should take precedence so -I shouldn't
+ # be used.
++# Install in a temporary location that eases final install into
++# images/ (see corresponding command, below).
++# Repeat the target, otherwise syslinux will try to build everything
++# Repeat LD (and CC) as it happens that some binaries are linked at
++# install-time.
+ define SYSLINUX_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE1) \
+ 		ASCIIDOC_OK=-1 \
+@@ -70,6 +75,10 @@ define SYSLINUX_BUILD_CMDS
+ 		LDFLAGS_FOR_BUILD="$(HOST_LDFLAGS)" \
+ 		PYTHON=$(HOST_DIR)/bin/python3 \
+ 		$(SYSLINUX_EFI_ARGS) -C $(@D) $(SYSLINUX_TARGET)
++	$(TARGET_MAKE_ENV) $(MAKE1) $(SYSLINUX_EFI_ARGS) INSTALLROOT=$(@D)/br-root.temp \
++		CC="$(TARGET_CC)" \
++		LD="$(TARGET_LD)" \
++		-C $(@D) $(SYSLINUX_TARGET) install
+ endef
+ 
+ # While the actual bootloader is compiled for the target, several
+@@ -77,6 +86,8 @@ endef
+ # Repeat the target, otherwise syslinux will try to build everything
+ # Repeat LD (and CC) as it happens that some binaries are linked at
+ # install-time.
++# Don't use the temporarily-installed br-root.temp: HOST_DIR may be setup
++# differently (merged usr, merged bin...)
+ define SYSLINUX_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE1) $(SYSLINUX_EFI_ARGS) INSTALLROOT=$(HOST_DIR) \
+ 		CC="$(TARGET_CC)" \
+@@ -99,15 +110,15 @@ SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_EFI) += $(SYSLINUX_EFI_BITS)/efi/syslinux.
+ 
+ SYSLINUX_C32 = $(call qstrip,$(BR2_TARGET_SYSLINUX_C32))
+ 
+-# We install the c32 modules from the host-installed tree, where they
+-# are all neatly installed in a single location, while they are
++# We install the c32 modules from the temporarily installed tree, where
++# they are all neatly installed in a single location, while they are
+ # scattered around everywhere in the build tree.
+ define SYSLINUX_INSTALL_IMAGES_CMDS
+ 	for i in $(SYSLINUX_IMAGES-y); do \
+ 		$(INSTALL) -D -m 0755 $(@D)/$$i $(BINARIES_DIR)/syslinux/$${i##*/}; \
+ 	done
+ 	for i in $(SYSLINUX_C32); do \
+-		$(INSTALL) -D -m 0755 $(HOST_DIR)/share/syslinux/$${i} \
++		$(INSTALL) -D -m 0755 $(@D)/br-root.temp/usr/share/syslinux/$${i} \
+ 			$(BINARIES_DIR)/syslinux/$${i}; \
+ 	done
+ endef
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
