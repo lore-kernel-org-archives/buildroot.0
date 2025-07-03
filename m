@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F9CEC83030
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94E55C83F09
 	for <buildroot@archiver.kernel.org>; Fri,  4 Jul 2025 06:21:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DC01860BBA;
-	Fri,  4 Jul 2025 06:21:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6639483CCD;
+	Fri,  4 Jul 2025 06:21:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jVVYwbZeubCS; Fri,  4 Jul 2025 06:21:42 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id otQrxXI-pPq8; Fri,  4 Jul 2025 06:21:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA40160B71
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 515F383D2B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DA40160B71;
-	Fri,  4 Jul 2025 06:21:41 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0C44C7AB
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:21:29 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0D0A340EF4
+	by smtp1.osuosl.org (Postfix) with ESMTP id 515F383D2B;
+	Fri,  4 Jul 2025 06:21:40 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3B0AD7AB
  for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:21:28 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id B6BC9404B5
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:21:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id r3t3aJSemAH9 for <buildroot@buildroot.org>;
- Fri,  4 Jul 2025 06:21:27 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7fIMNxy2RPJ8 for <buildroot@buildroot.org>;
+ Fri,  4 Jul 2025 06:21:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3DB9640EE7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B748C40510
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3DB9640EE7
+ by smtp2.osuosl.org (Postfix) with ESMTP id B748C40510
  for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:21:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1AEE385CCB; Fri,  4 Jul 2025 06:21:26 +0000 (UTC)
+ id B557E85D08; Fri,  4 Jul 2025 06:21:26 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Jul 2025 09:23:01 +0200
+Date: Thu, 3 Jul 2025 09:58:54 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 5c1230a90bca234259f0496fa1bb9c84d0c5edff
-X-Git-Newrev: 5da15192c3f50bec0d47bb76e0e7c62784ca7d53
+X-Git-Oldrev: 9d8bde1172930c7979375c1fdccf1dace8071afd
+X-Git-Newrev: f9803959940d1ef7f8c6dbec20aaf9ce6633488d
 X-Patchwork-Hint: ignore
-Message-Id: <20250704062126.1AEE385CCB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/cifs-utils: bump
- to version 7.3
+Message-Id: <20250704062126.B557E85D08@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] support/testing: new
+ runtime test for gumbo-parser
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,109 +61,179 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4735602151345198481=="
+Content-Type: multipart/mixed; boundary="===============0667529812853101415=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4735602151345198481==
+--===============0667529812853101415==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5da15192c3f50bec0d47bb76e0e7c62784ca7d53
+commit: https://git.buildroot.net/buildroot/commit/?id=f9803959940d1ef7f8c6dbec20aaf9ce6633488d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Changes 7.1..7.2:
+The new test requires a br2-external directory because we compile a
+small test program on the host and install it on the target, but it's
+not useful to have it in the main Buildroot package tree.
 
-- Security enhancements including support for password rotation,
-  better credential management, and namespaces
-- Various improvements to man pages
+The test program loads and parses a sample HTML document. Taking
+inspiration from 'examples/get_title.c' in gumbo-parser, it also
+searches for the title of the document just to check that we can do
+more than the parsing.
 
-Changes 7.2..7.3:
-
-- Three fixes, including a fix for "guest" mount problem introduced
-  with version 7.2
-
-Our patch is upstream as of 7.2, so we can drop it.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit efdf0cdbcb2cf11d54ef8eee123529f264fe8ce9)
+Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit da23be6338c1e82f39475d166407f97511e0b666)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...ap_ping.c-add-missing-sys-types.h-include.patch | 38 ----------------------
- package/cifs-utils/cifs-utils.hash                 |  2 +-
- package/cifs-utils/cifs-utils.mk                   |  2 +-
- 3 files changed, 2 insertions(+), 40 deletions(-)
+ .../package/br2-external/gumbo-parser/Config.in    |  1 +
+ .../br2-external/gumbo-parser/external.desc        |  1 +
+ .../package/br2-external/gumbo-parser/external.mk  |  1 +
+ .../package/gumbo-parser-test/Config.in            |  7 ++++
+ .../package/gumbo-parser-test/gumbo-parser-test.mk | 19 ++++++++++
+ .../package/gumbo-parser-test/gumbo_test.c         | 40 ++++++++++++++++++++++
+ support/testing/tests/package/test_gumbo_parser.py | 27 +++++++++++++++
+ 7 files changed, 96 insertions(+)
 
-diff --git a/package/cifs-utils/0001-cldap_ping.c-add-missing-sys-types.h-include.patch b/package/cifs-utils/0001-cldap_ping.c-add-missing-sys-types.h-include.patch
-deleted file mode 100644
-index bf7864e01a..0000000000
---- a/package/cifs-utils/0001-cldap_ping.c-add-missing-sys-types.h-include.patch
-+++ /dev/null
-@@ -1,38 +0,0 @@
--From 62297e906149f9d2ca7b187a60f7c5ab99ef5dd5 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Date: Thu, 26 Dec 2024 21:39:05 +0100
--Subject: [PATCH] cldap_ping.c: add missing <sys/types.h> include
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--Fixes:
--
--cldap_ping.c: In function ‘read_dns_string’:
--cldap_ping.c:72:37: error: ‘u_char’ undeclared (first use in this function)
--
--when building with the musl C library, but even with glibc u_char is
--defined in <sys/types.h>, it happens to work with glibc <sys/types.h>
--gets included by another header.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Upstream: https://lore.kernel.org/linux-cifs/20241226204235.2311371-1-thomas.petazzoni@bootlin.com/
-----
-- cldap_ping.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/cldap_ping.c b/cldap_ping.c
--index 9183b27..a603be3 100644
----- a/cldap_ping.c
--+++ b/cldap_ping.c
--@@ -20,6 +20,7 @@
-- #include <talloc.h>
-- #include <string.h>
-- #include <sys/socket.h>
--+#include <sys/types.h>
-- #include <arpa/inet.h>
-- #include <unistd.h>
-- #include <resolv.h>
---- 
--2.47.0
--
-diff --git a/package/cifs-utils/cifs-utils.hash b/package/cifs-utils/cifs-utils.hash
-index 942f8aaa39..ea32d4dca7 100644
---- a/package/cifs-utils/cifs-utils.hash
-+++ b/package/cifs-utils/cifs-utils.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256  a21123f76a4a6a36c9653189ba4918ebdf3cfcd3f9092730a47ff3450b5b5b2a  cifs-utils-7.1.tar.bz2
-+sha256  c4e1eb5f4ad880d96e16d95a1cdbc7ec978ab51c5b6d8a20ae09dac638f36dd5  cifs-utils-7.3.tar.bz2
- 
- # Hash for license file:
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
-index e8eefde275..9c029342eb 100644
---- a/package/cifs-utils/cifs-utils.mk
-+++ b/package/cifs-utils/cifs-utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CIFS_UTILS_VERSION = 7.1
-+CIFS_UTILS_VERSION = 7.3
- CIFS_UTILS_SOURCE = cifs-utils-$(CIFS_UTILS_VERSION).tar.bz2
- CIFS_UTILS_SITE = http://ftp.samba.org/pub/linux-cifs/cifs-utils
- CIFS_UTILS_LICENSE = GPL-3.0+
+diff --git a/support/testing/tests/package/br2-external/gumbo-parser/Config.in b/support/testing/tests/package/br2-external/gumbo-parser/Config.in
+new file mode 100644
+index 0000000000..28a97c1dfe
+--- /dev/null
++++ b/support/testing/tests/package/br2-external/gumbo-parser/Config.in
+@@ -0,0 +1 @@
++source "$BR2_EXTERNAL_GUMBO_PARSER_PATH/package/gumbo-parser-test/Config.in"
+diff --git a/support/testing/tests/package/br2-external/gumbo-parser/external.desc b/support/testing/tests/package/br2-external/gumbo-parser/external.desc
+new file mode 100644
+index 0000000000..4bda9627e9
+--- /dev/null
++++ b/support/testing/tests/package/br2-external/gumbo-parser/external.desc
+@@ -0,0 +1 @@
++name: GUMBO_PARSER
+diff --git a/support/testing/tests/package/br2-external/gumbo-parser/external.mk b/support/testing/tests/package/br2-external/gumbo-parser/external.mk
+new file mode 100644
+index 0000000000..bdc8b2fc79
+--- /dev/null
++++ b/support/testing/tests/package/br2-external/gumbo-parser/external.mk
+@@ -0,0 +1 @@
++include $(sort $(wildcard $(BR2_EXTERNAL_GUMBO_PARSER_PATH)/package/*/*.mk))
+diff --git a/support/testing/tests/package/br2-external/gumbo-parser/package/gumbo-parser-test/Config.in b/support/testing/tests/package/br2-external/gumbo-parser/package/gumbo-parser-test/Config.in
+new file mode 100644
+index 0000000000..714d3e0198
+--- /dev/null
++++ b/support/testing/tests/package/br2-external/gumbo-parser/package/gumbo-parser-test/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_GUMBO_PARSER_TEST
++	bool "gumbo-parser-test"
++	depends on BR2_PACKAGE_GUMBO_PARSER
++	help
++	  Test program for gumbo-parser library.
++	  This package builds a simple test program that demonstrates
++	  basic HTML parsing functionality using gumbo-parser.
+diff --git a/support/testing/tests/package/br2-external/gumbo-parser/package/gumbo-parser-test/gumbo-parser-test.mk b/support/testing/tests/package/br2-external/gumbo-parser/package/gumbo-parser-test/gumbo-parser-test.mk
+new file mode 100644
+index 0000000000..111f1977bf
+--- /dev/null
++++ b/support/testing/tests/package/br2-external/gumbo-parser/package/gumbo-parser-test/gumbo-parser-test.mk
+@@ -0,0 +1,19 @@
++################################################################################
++#
++# gumbo-parser-test
++#
++################################################################################
++
++GUMBO_PARSER_TEST_DEPENDENCIES = gumbo-parser
++
++define GUMBO_PARSER_TEST_BUILD_CMDS
++	$(TARGET_CC) $(TARGET_CFLAGS) -o $(@D)/gumbo_test \
++		$(GUMBO_PARSER_TEST_PKGDIR)/gumbo_test.c \
++		$(TARGET_LDFLAGS) -lgumbo
++endef
++
++define GUMBO_PARSER_TEST_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/gumbo_test $(TARGET_DIR)/usr/bin/gumbo_test
++endef
++
++$(eval $(generic-package))
+diff --git a/support/testing/tests/package/br2-external/gumbo-parser/package/gumbo-parser-test/gumbo_test.c b/support/testing/tests/package/br2-external/gumbo-parser/package/gumbo-parser-test/gumbo_test.c
+new file mode 100644
+index 0000000000..f9c9ca4a91
+--- /dev/null
++++ b/support/testing/tests/package/br2-external/gumbo-parser/package/gumbo-parser-test/gumbo_test.c
+@@ -0,0 +1,40 @@
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <gumbo.h>
++
++static void search_for_title(GumboNode* node) {
++    if (node->type != GUMBO_NODE_ELEMENT) {
++        return;
++    }
++
++    if (node->v.element.tag == GUMBO_TAG_TITLE) {
++        GumboNode* text = node->v.element.children.data[0];
++        if (text->type == GUMBO_NODE_TEXT) {
++            printf("Found title: %s\n", text->v.text.text);
++        }
++        return;
++    }
++
++    GumboVector* children = &node->v.element.children;
++    for (unsigned int i = 0; i < children->length; ++i) {
++        search_for_title(children->data[i]);
++    }
++}
++
++int main() {
++    const char* html = "<html><head><title>Test HTML</title></head><body><p>Hello World</p></body></html>";
++
++    GumboOutput* output = gumbo_parse(html);
++
++    if (output == NULL) {
++        printf("HTML parsing failed\n");
++        return 1;
++    }
++
++    printf("HTML parsing successful\n");
++    search_for_title(output->root);
++
++    gumbo_destroy_output(&kGumboDefaultOptions, output);
++    return 0;
++}
+diff --git a/support/testing/tests/package/test_gumbo_parser.py b/support/testing/tests/package/test_gumbo_parser.py
+new file mode 100644
+index 0000000000..efa8ec91a7
+--- /dev/null
++++ b/support/testing/tests/package/test_gumbo_parser.py
+@@ -0,0 +1,27 @@
++import os
++
++import infra.basetest
++
++
++class TestGumboParser(infra.basetest.BRTest):
++    br2_external = [infra.filepath("tests/package/br2-external/gumbo-parser")]
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_GUMBO_PARSER=y
++        BR2_PACKAGE_GUMBO_PARSER_TEST=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++
++        # Run the test program and check output
++        out, ret = self.emulator.run("/usr/bin/gumbo_test")
++        self.assertEqual(ret, 0)
++        self.assertIn("HTML parsing successful", "\n".join(out))
++        self.assertIn("Found title: Test HTML", "\n".join(out))
 
---===============4735602151345198481==
+--===============0667529812853101415==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -174,4 +244,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============4735602151345198481==--
+--===============0667529812853101415==--
