@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18B7CC83F0A
-	for <buildroot@archiver.kernel.org>; Fri,  4 Jul 2025 06:24:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A03AC83030
+	for <buildroot@archiver.kernel.org>; Fri,  4 Jul 2025 06:24:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DE78F60EC1;
-	Fri,  4 Jul 2025 06:24:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5933E83D98;
+	Fri,  4 Jul 2025 06:24:51 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id he8vFlv-sQ5q; Fri,  4 Jul 2025 06:24:50 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 54E2283D85
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 54E2283D85;
+	Fri,  4 Jul 2025 06:24:50 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1BCEF7AB
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:24:35 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4E2AD60AF2
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:24:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8KE6pyz3gWm3; Fri,  4 Jul 2025 06:24:49 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 00C5860BBB
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 00C5860BBB;
-	Fri,  4 Jul 2025 06:24:49 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 784EE1EB
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:24:34 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 14DFE41068
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:24:33 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6vuu2q9jppVm for <buildroot@buildroot.org>;
+ id uaJhqXSs6wQN for <buildroot@buildroot.org>;
  Fri,  4 Jul 2025 06:24:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 57C7B4104A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 87E5260B13
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 57C7B4104A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 87E5260B13
  for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:24:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 55BEE85E09; Fri,  4 Jul 2025 06:24:32 +0000 (UTC)
+ id 85F1E85E0B; Fri,  4 Jul 2025 06:24:32 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Jul 2025 10:53:29 +0200
+Date: Thu, 3 Jul 2025 10:53:54 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: 23794fee663231004a7dc77a9ac0057bfebad2c0
-X-Git-Newrev: 1341786226cc6c2a31d2f45eb59d48cbb188d40a
+X-Git-Oldrev: 52589e9dd716d88366c6327a03d2233a340384fd
+X-Git-Newrev: 9b21865469b2d4ac929704a2fd9b4d8b68c01fcf
 X-Patchwork-Hint: ignore
-Message-Id: <20250704062432.55BEE85E09@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x]
- package/nginx-modsecurity: update upstream URLs
+Message-Id: <20250704062432.85F1E85E0B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] boot/edk2: add security
+ fix for CVE-2024-38805
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,76 +61,132 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7741056771820830300=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7741056771820830300==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=1341786226cc6c2a31d2f45eb59d48cbb188d40a
+commit: https://git.buildroot.net/buildroot/commit/?id=9b21865469b2d4ac929704a2fd9b4d8b68c01fcf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-'https://github.com/SpiderLabs/ModSecurity-nginx' now redirects to
-'https://github.com/owasp-modsecurity/ModSecurity-nginx', so update our
-URLs accordingly.
+This commit adds a security fix from the upstream commit:
+https://github.com/tianocore/edk2/commit/b3a2f7ff24e156e8c4d694fffff01e95a048c536
 
-Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
+It fixes CVE-2024-38805:
+https://www.cve.org/CVERecord?id=CVE-2024-38805
+Note: at the time of this commit, this CVE is "reserved" by a CNA.
+Details will come later.
+
+See also the associated pull request:
+https://github.com/tianocore/edk2/pull/11042
+
+This commit also adds the corresponding _IGNORE_CVES entry.
+
+Reviewed-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 5d9551d303c953aa34bad4ae6bc47e56f830dfe0)
+(cherry picked from commit 14d07d1914766314afb5d7f9fbdeae10bb459bde)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/nginx-modsecurity/Config.in              | 2 +-
- package/nginx-modsecurity/nginx-modsecurity.hash | 2 +-
- package/nginx-modsecurity/nginx-modsecurity.mk   | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ ...IScsiDxe-Fix-for-out-of-bound-memory-acce.patch | 75 ++++++++++++++++++++++
+ boot/edk2/edk2.mk                                  |  3 +
+ 2 files changed, 78 insertions(+)
 
-diff --git a/package/nginx-modsecurity/Config.in b/package/nginx-modsecurity/Config.in
-index 0bbf05fad9..94f0ff0a45 100644
---- a/package/nginx-modsecurity/Config.in
-+++ b/package/nginx-modsecurity/Config.in
-@@ -10,7 +10,7 @@ config BR2_PACKAGE_NGINX_MODSECURITY
- 	  point between nginx and libmodsecurity
- 	  (ModSecurity v3).
+diff --git a/boot/edk2/0001-NetworkPkg-IScsiDxe-Fix-for-out-of-bound-memory-acce.patch b/boot/edk2/0001-NetworkPkg-IScsiDxe-Fix-for-out-of-bound-memory-acce.patch
+new file mode 100644
+index 0000000000..4cc66eb0fe
+--- /dev/null
++++ b/boot/edk2/0001-NetworkPkg-IScsiDxe-Fix-for-out-of-bound-memory-acce.patch
+@@ -0,0 +1,75 @@
++From 0a3b2a29b96b11fb858974044359c806c6b0a111 Mon Sep 17 00:00:00 2001
++From: Santhosh Kumar V <santhoshkumarv@ami.com>
++Date: Wed, 7 May 2025 18:53:30 +0530
++Subject: [PATCH] NetworkPkg/IScsiDxe:Fix for out of bound memory access for
++ bz4207 (CVE-2024-38805)
++
++In IScsiBuildKeyValueList, check if we have any data left (Len > 0) before advancing the Data pointer and reducing Len.
++Avoids wrapping Len. Also Used SafeUint32SubSafeUint32Sub call to reduce the Len .
++
++Upstream: https://github.com/tianocore/edk2/commit/b3a2f7ff24e156e8c4d694fffff01e95a048c536
++Signed-off-by: santhosh kumar V <santhoshkumarv@ami.com>
++Signed-off-by: Julien Olivain <ju.o@free.fr>
++---
++ NetworkPkg/IScsiDxe/IScsiProto.c | 29 ++++++++++++++++++++++++-----
++ 1 file changed, 24 insertions(+), 5 deletions(-)
++
++diff --git a/NetworkPkg/IScsiDxe/IScsiProto.c b/NetworkPkg/IScsiDxe/IScsiProto.c
++index ef587649a0..53a0ff801d 100644
++--- a/NetworkPkg/IScsiDxe/IScsiProto.c
+++++ b/NetworkPkg/IScsiDxe/IScsiProto.c
++@@ -1880,6 +1880,8 @@ IScsiBuildKeyValueList (
++ {
++   LIST_ENTRY            *ListHead;
++   ISCSI_KEY_VALUE_PAIR  *KeyValuePair;
+++  EFI_STATUS            Status;
+++  UINT32                Result;
++ 
++   ListHead = AllocatePool (sizeof (LIST_ENTRY));
++   if (ListHead == NULL) {
++@@ -1903,9 +1905,14 @@ IScsiBuildKeyValueList (
++       Data++;
++     }
++ 
++-    if (*Data == '=') {
+++    // Here Len must not be zero.
+++    // The value of Len is size of data buffer. Actually, Data is make up of strings.
+++    // AuthMethod=None\0TargetAlias=LIO Target\0 TargetPortalGroupTag=1\0
+++    // (1) Len == 0, *Data != '=' goto ON_ERROR
+++    // (2) *Data == '=', Len != 0 normal case.
+++    // (3) *Data == '=', Len == 0, Between Data and Len are mismatch, Len isn't all size of data, as error.
+++    if ((Len > 0) && (*Data == '=')) {
++       *Data = '\0';
++-
++       Data++;
++       Len--;
++     } else {
++@@ -1915,10 +1922,22 @@ IScsiBuildKeyValueList (
++ 
++     KeyValuePair->Value = Data;
++ 
++-    InsertTailList (ListHead, &KeyValuePair->List);
+++    Status = SafeUint32Add ((UINT32)AsciiStrLen (KeyValuePair->Value), 1, &Result);
+++    if (EFI_ERROR (Status)) {
+++      DEBUG ((DEBUG_ERROR, "%a Memory Overflow is Detected.\n", __func__));
+++      FreePool (KeyValuePair);
+++      goto ON_ERROR;
+++    }
++ 
++-    Data += AsciiStrLen (KeyValuePair->Value) + 1;
++-    Len  -= (UINT32)AsciiStrLen (KeyValuePair->Value) + 1;
+++    Status = SafeUint32Sub (Len, Result, &Len);
+++    if (EFI_ERROR (Status)) {
+++      DEBUG ((DEBUG_ERROR, "%a Out of bound memory access Detected.\n", __func__));
+++      FreePool (KeyValuePair);
+++      goto ON_ERROR;
+++    }
+++
+++    InsertTailList (ListHead, &KeyValuePair->List);
+++    Data += Result;
++   }
++ 
++   return ListHead;
++-- 
++2.49.0
++
+diff --git a/boot/edk2/edk2.mk b/boot/edk2/edk2.mk
+index bc4049b2de..ad88835f8f 100644
+--- a/boot/edk2/edk2.mk
++++ b/boot/edk2/edk2.mk
+@@ -14,6 +14,9 @@ EDK2_DEPENDENCIES = edk2-platforms host-python3 host-acpica host-util-linux
+ EDK2_INSTALL_TARGET = NO
+ EDK2_INSTALL_IMAGES = YES
  
--	  https://github.com/SpiderLabs/ModSecurity-nginx
-+	  https://github.com/owasp-modsecurity/ModSecurity-nginx
- 
- comment "nginx-modsecurity needs a toolchain w/ C++, threads, dynamic library"
- 	depends on BR2_PACKAGE_NGINX_HTTP
-diff --git a/package/nginx-modsecurity/nginx-modsecurity.hash b/package/nginx-modsecurity/nginx-modsecurity.hash
-index 698dbc7da6..34e7b87f41 100644
---- a/package/nginx-modsecurity/nginx-modsecurity.hash
-+++ b/package/nginx-modsecurity/nginx-modsecurity.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/SpiderLabs/ModSecurity-nginx/releases/download/v1.0.3/modsecurity-nginx-v1.0.3.tar.gz.sha256
-+# From https://github.com/owasp-modsecurity/ModSecurity-nginx/releases/download/v1.0.3/modsecurity-nginx-v1.0.3.tar.gz.sha256
- sha256  ae811c7208ac029cb7a99d6f63e03d3971797607517187f47620df39c1f78add  modsecurity-nginx-v1.0.3.tar.gz
- # Locally calculated
- sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
-diff --git a/package/nginx-modsecurity/nginx-modsecurity.mk b/package/nginx-modsecurity/nginx-modsecurity.mk
-index a00c200469..42a50ca39f 100644
---- a/package/nginx-modsecurity/nginx-modsecurity.mk
-+++ b/package/nginx-modsecurity/nginx-modsecurity.mk
-@@ -6,7 +6,7 @@
- 
- NGINX_MODSECURITY_VERSION = 1.0.3
- NGINX_MODSECURITY_SOURCE = modsecurity-nginx-v$(NGINX_MODSECURITY_VERSION).tar.gz
--NGINX_MODSECURITY_SITE = https://github.com/SpiderLabs/ModSecurity-nginx/releases/download/v$(NGINX_MODSECURITY_VERSION)
-+NGINX_MODSECURITY_SITE = https://github.com/owasp-modsecurity/ModSecurity-nginx/releases/download/v$(NGINX_MODSECURITY_VERSION)
- NGINX_MODSECURITY_LICENSE = Apache-2.0
- NGINX_MODSECURITY_LICENSE_FILES = LICENSE
- NGINX_MODSECURITY_DEPENDENCIES = libmodsecurity
-
---===============7741056771820830300==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
++# 0001-NetworkPkg-IScsiDxe-Fix-for-out-of-bound-memory-acce.patch
++EDK2_IGNORE_CVES += CVE-2024-38805
++
+ ifeq ($(BR2_ENABLE_DEBUG),y)
+ EDK2_BUILD_TYPE = DEBUG
+ ifeq ($(BR2_TARGET_EDK2_OVMF_DEBUG_ON_SERIAL),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7741056771820830300==--
