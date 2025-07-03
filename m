@@ -4,71 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25D5FC83030
-	for <buildroot@archiver.kernel.org>; Thu,  3 Jul 2025 20:51:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3EB5DC83F03
+	for <buildroot@archiver.kernel.org>; Thu,  3 Jul 2025 20:52:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CA84E83C43;
-	Thu,  3 Jul 2025 20:51:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 13BE983C2F;
+	Thu,  3 Jul 2025 20:52:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id chAfwu-NGRb7; Thu,  3 Jul 2025 20:51:20 +0000 (UTC)
+ id TVL3H_n5eBdK; Thu,  3 Jul 2025 20:52:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 094A383C2F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5BA0883C56
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 094A383C2F;
-	Thu,  3 Jul 2025 20:51:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5BA0883C56;
+	Thu,  3 Jul 2025 20:52:29 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 80643B0A
- for <buildroot@buildroot.org>; Thu,  3 Jul 2025 20:51:17 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id D035C15F
+ for <buildroot@buildroot.org>; Thu,  3 Jul 2025 20:52:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7212E40BA0
- for <buildroot@buildroot.org>; Thu,  3 Jul 2025 20:51:17 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CD4C441084
+ for <buildroot@buildroot.org>; Thu,  3 Jul 2025 20:52:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id brPZDvnoIvZH for <buildroot@buildroot.org>;
- Thu,  3 Jul 2025 20:51:16 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 88DD94082A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 88DD94082A
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 88DD94082A
- for <buildroot@buildroot.org>; Thu,  3 Jul 2025 20:51:16 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 7A1F05FFBA;
- Thu,  3 Jul 2025 22:51:13 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
- via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Thu, 03 Jul 2025 22:51:13 +0200
-MIME-Version: 1.0
-Date: Thu, 03 Jul 2025 22:51:13 +0200
-To: Thomas Perale <thomas.perale@mind.be>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250703200917.4054251-1-thomas.perale@mind.be>
-References: <20250703200917.4054251-1-thomas.perale@mind.be>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <78db4586ca9c925c099d1dfff81ffda6@free.fr>
-X-Sender: ju.o@free.fr
+ id bCJGqYmCdh-j for <buildroot@buildroot.org>;
+ Thu,  3 Jul 2025 20:52:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.116;
+ helo=smtpcmd03116.aruba.it;
+ envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 66E8841002
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 66E8841002
+Received: from smtpcmd03116.aruba.it (smtpcmd03116.aruba.it [62.149.158.116])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 66E8841002
+ for <buildroot@buildroot.org>; Thu,  3 Jul 2025 20:52:24 +0000 (UTC)
+Received: from smtpclient.apple ([84.33.84.190]) by Aruba SMTP with ESMTPSA
+ id XQususPMNmHkSXQusuvFLO; Thu, 03 Jul 2025 22:52:22 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Mime-Version: 1.0 (1.0)
+Date: Thu, 3 Jul 2025 22:52:21 +0200
+Message-Id: <02E2B42E-A238-41B0-A7D5-274BEB4C143F@benettiengineering.com>
+References: <5b3010b4da5429b622aa62077e167215@free.fr>
+Cc: buildroot@buildroot.org, Joseph Kogut <joseph.kogut@gmail.com>
+In-Reply-To: <5b3010b4da5429b622aa62077e167215@free.fr>
+To: Julien Olivain <ju.o@free.fr>
+X-Mailer: iPhone Mail (22F76)
+X-CMAE-Envelope: MS4xfCusd9kOF/Hn2aY58E5qfGOLydef6gNLFWCd08JthPPGFBAQMIaKdBcC2UyvVHGuBNFJUqosrNaa1+vCCIQ2vWef6KbykAVoYnd/1YrLcs6i4E3nuDj6
+ UFPKcT64ZDPde8M9sXtxJooPUbJ2R1rVanDq97xvcc/ph3WaCyqVN0yZdcflAk4QE5Qh//+QQZObncmOfRUPl9OWSJubjKdi5OVuOV8P5o4MX+OUWOgIUBom
+ YS3t7pKach8oqu65lAHOmfGHHgCk0DHJzbvqBfcssSU=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1751575874;
- bh=sx3c4vb09d/igWsNOzMI/C5aR5XHq1LWDxpOgtZV+bo=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=c2wIYY7mm3jp+TTJgYAobsuuVzSVp2C3eF2SnGf0YDT67cfCpxPgoSdutYaXkrpiI
- GMMybPOaFozar5vGOQWFkF7K5hnWeSaNzplZCL80zMo5ibXzHLkDLbNlWb3llwfcIq
- G8vzCR6FOaOUD2k+JXE/VMe7vqhB3qpMfgt4XfKxhoHqF/2DLUC3RHYfaolR3JYTR4
- 7bfByJaqnuWw0FqmtQIzF0I0W1PM6Bf7TKnMKLhszlRKhy9oxQ0TFBVqViEN1dk1y9
- rmAv+sQElkTmHI+zqRBUuJr63djauGJwNouDQ4NdQL+Uu0JzpKI2QTt/doKaPQBQ21
- MUXwH2+qJxPLA==
+ d=aruba.it; s=a1; 
+ t=1751575942; bh=DQ/mgwxwS4VMX/knwrkQW/Vwqbxh1LCjxUB3JtcHGUc=;
+ h=Content-Type:From:Mime-Version:Subject:Date:To;
+ b=RDfFEFY/LG3+xTjl9RE5h4uYC8H9l3cmY+klTwYwCo8qGZMrEyR41L6pbgPmZglub
+ 44LQaSG7sDi1UbXzh1viuQdbLnn4mT/6fRo3R2g7k5JpNQcksUTRgXdjVK/3tn14d1
+ gyAIVjGo9n/zPxAJ7YmNsvUV3qBWyiUB6GBiv4sCTTfW5XWpDIbysTK2K7WbIqodC4
+ EftQRlJ8ylF8oJaa5SWNS7M9KlWokRlWXInDCw2yCYUAYIUom/p0DD++PdKlwif77R
+ v7BSWRS7SWPBMj9MT5Y6akp0lWwrR72FL4IJDAHnWfvvbgyzYzA9sEyyIBIYdsNxZF
+ 3T5kUitte3W5w==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
+ dmarc=pass (p=none dis=none)
+ header.from=benettiengineering.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=c2wIYY7m
-Subject: Re: [Buildroot] [PATCH] package/fwupd: add CPE identifier
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=RDfFEFY/
+Subject: Re: [Buildroot] [PATCH] package/libnss: security bump version to
+ 3.113.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -80,23 +81,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 03/07/2025 22:09, Thomas Perale via buildroot wrote:
-> The cpe:2.3:a:fwupd:fwupd:*:*:*:*:*:*:*:* is valid for this package.
-> 
-> See 
-> https://nvd.nist.gov/products/cpe/detail/46E1E3C0-2F72-49BA-8374-1FBF203AE0F0
-> 
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-
-Applied to master, thanks.
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgSnVsaWVuLAoKPiBJbCBnaW9ybm8gMyBsdWcgMjAyNSwgYWxsZSBvcmUgMjI6MjgsIEp1bGll
+biBPbGl2YWluIDxqdS5vQGZyZWUuZnI+IGhhIHNjcml0dG86Cj4gCj4g77u/SGkgR2l1bGlvLAo+
+IAo+IFRoYW5rcyBmb3IgdGhlIHBhdGNoIQo+IAo+PiBPbiAwMy8wNy8yMDI1IDIwOjM0LCBHaXVs
+aW8gQmVuZXR0aSB3cm90ZToKPj4gRm9yIHJlbGVhc2Ugbm90ZSwgc2VlOgo+PiBodHRwczovL2hn
+LWVkZ2UubW96aWxsYS5vcmcvcHJvamVjdHMvbnNzL2ZpbGUvTlNTXzNfMTEzXzFfUlRNL2RvYy9y
+c3QvcmVsZWFzZXMvbnNzXzNfMTEzXzEucnN0Cj4gCj4gV2h5IGRpZCB5b3UgbWFya2VkIHRoaXMg
+YnVtcCBhcyAic2VjdXJpdHkgcmVsYXRlZCI/Cj4gCj4gTG9va2luZyBhdCB0aGUgYnVnIHJlZmVy
+ZW5jZSBpbiB0aGUgcmVsZWFzZSBub3RlIFsxXSwgaXQgcmVmZXJzIHRvIGEgYnVnIFsyXQo+IHdo
+aWNoIGZpeGVzIGEgY2VydGlmaWNhdGUuIEluIFszXSwgdGhlICJVc2VyIGltcGFjdCBpZiBkZWNs
+aW5lZCIgaXMgZGVzY3JpYmVkCj4gYXMgIlVzZXJzIG1heSBzZWUgY2VydGlmaWNhdGUgZXJyb3Ig
+cGFnZXMgZm9yIHZhbGlkIGNlcnRpZmljYXRlcyIuCj4gCj4gQ291bGQgeW91IHByb3ZpZGUgYSBy
+ZWZlcmVuY2Ugb3IgYSBqdXN0aWZpY2F0aW9uIHdoeSB5b3UgdGhpbmsgaXQgaXMKPiBhIHNlY3Vy
+aXR5IGJ1bXA/ICBPdGhlcndpc2UsIGlmIHlvdSB0aGluayBpdCdzIG5vdCwgY291bGQgeW91IHNl
+bmQKPiBhbmQgdXBkYXRlZCBwYXRjaCBqdXN0IG1hcmtpbmcgaXQgYXMgYSBub3JtYWwgYnVtcD8K
+CllvdeKAmXJlIGFic29sdXRlbHkgcmlnaHQuIEnigJl2ZSBiZWVuIG1pc2xlYWQgd2hpbGUgY2hl
+Y2tpbmcgdGhlIDIgY29tbWl0cyBpbiBOU1NfM18xMTNf4oCmIGJyYW5jaC4gSXTigJlzIG5vdCBh
+IHNlY3VyaXR5IGJyYW5jaCwgcGFyZG9uLgoKR29pbmcgdG8gc2VuZCB2MiB0b21vcnJvdy4KCktp
+bmQgcmVnYXJkcwpHaXVsaW8KCj4gCj4gQmVzdCByZWdhcmRzLAo+IAo+IEp1bGllbi4KPiAKPiBb
+MV0gaHR0cHM6Ly9oZy1lZGdlLm1vemlsbGEub3JnL3Byb2plY3RzL25zcy9maWxlL05TU18zXzEx
+M18xX1JUTS9kb2MvcnN0L3JlbGVhc2VzL25zc18zXzExM18xLnJzdCNsMzUKPiBbMl0gaHR0cHM6
+Ly9idWd6aWxsYS5tb3ppbGxhLm9yZy9zaG93X2J1Zy5jZ2k/aWQ9MTk3NDI5OQo+IFszXSBodHRw
+czovL2J1Z3ppbGxhLm1vemlsbGEub3JnL3Nob3dfYnVnLmNnaT9pZD0xOTc1MDI3CgpfX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGlu
+ZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9y
+Zy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
