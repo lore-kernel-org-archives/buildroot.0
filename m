@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B69AC83F09
-	for <buildroot@archiver.kernel.org>; Fri,  4 Jul 2025 06:25:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB857C83030
+	for <buildroot@archiver.kernel.org>; Fri,  4 Jul 2025 06:25:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 027A26164E;
-	Fri,  4 Jul 2025 06:25:08 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gZ17Ih787cI6; Fri,  4 Jul 2025 06:25:06 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F2D5B60B91
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F2D5B60B91;
-	Fri,  4 Jul 2025 06:25:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 058AC7AB
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:24:38 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2EB3381AF3
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:24:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 908D683E5A;
+	Fri,  4 Jul 2025 06:25:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ObQwF7B4966P for <buildroot@buildroot.org>;
- Fri,  4 Jul 2025 06:24:32 +0000 (UTC)
+ id iLU3GRuHOY0A; Fri,  4 Jul 2025 06:25:04 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 89F6B83E41
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 89F6B83E41;
+	Fri,  4 Jul 2025 06:25:03 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1056F7AD
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:24:37 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id AFC2560B65
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:24:33 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3kGM8KUSJW07 for <buildroot@buildroot.org>;
+ Fri,  4 Jul 2025 06:24:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BEB8881BB2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EB8B760B6B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id BEB8881BB2
+ by smtp3.osuosl.org (Postfix) with ESMTP id EB8B760B6B
  for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:24:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BD0FD85E0C; Fri,  4 Jul 2025 06:24:32 +0000 (UTC)
+ id E9A9E85E0B; Fri,  4 Jul 2025 06:24:32 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 3 Jul 2025 10:57:21 +0200
+Date: Thu, 3 Jul 2025 10:57:38 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: b9cfe67d8c44207c09ca5cecc798b9ea8a5f104e
-X-Git-Newrev: f58f7d472f4f656afecf5c94154a1aae186ea701
+X-Git-Oldrev: 418051aeb2c0d91c40137efdf178f59e31c2b9dc
+X-Git-Newrev: 140afe490de5e219ceade24cfeab3b5a5e76b973
 X-Patchwork-Hint: ignore
-Message-Id: <20250704062432.BD0FD85E0C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/binutils: fix
- build with gcc 15
+Message-Id: <20250704062432.E9A9E85E0B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x]
+ package/gcc/Config.in.host: hide gcc version for unsupported CPUs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,247 +61,77 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4904909490895827340=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4904909490895827340==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=f58f7d472f4f656afecf5c94154a1aae186ea701
+commit: https://git.buildroot.net/buildroot/commit/?id=140afe490de5e219ceade24cfeab3b5a5e76b973
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-Backport the upstream patch that fixes the following build error when
-compiling for mips with gcc 15:
+When a new gcc version is introduced, for example gcc 15 in
+commit [1], it should have also added a "depends on
+!BR2_ARCH_NEEDS_GCC_AT_LEAST_15" to the previous gcc version.
 
-In file included from mips-opc.c:29:
-mips-opc.c: In function 'decode_mips_operand':
-mips-formats.h:86:7: error: expected identifier or '(' before
-'static_assert'
-   86 |       static_assert[(1 << (SIZE)) == ARRAY_SIZE (MAP)]; \
-         |       ^~~~~~~~~~~~~
+This logic is described for external toolchains in commit [2],
+for example. The internal Buildroot toolchains should have the
+same logic. This logic existed for previous gcc version. See for
+example the removal of gcc 12 in commit [3].
 
-The patch is already part of upstream binutils 2.44, so we only need
-it for 2.42 and 2.43.1.
+There is usually no problem, because all the three latest active gcc
+versions supports all CPUs present in Buildroot.
 
-All 3 versions we have of host-binutils were build-tested using the
-defconfig from the autobuilder failure (see the link below) and gcc 15
-on the host.
+However, the commit [4] recently added the support for the Arm
+Cortex-A720 CPU, which needs at least gcc 14. Since there is no
+logic preventing the selection of the gcc version, it is possible
+to select an unsupported gcc version (i.e. gcc 13).
+
+In such a case, the host-gcc-initial package configuration fails
+with output:
+
+    Unknown cpu used in --with-cpu=cortex-a720
+
+This commit fixes the issue by adding those missing dependencies.
 
 Fixes:
-- https://autobuild.buildroot.org/results/873/873ec25cf01d5f2b9ae7044e0b1d8d8791b781e6/
+https://autobuild.buildroot.org/results/918b90aee0b65f01efc241622015cb847b4e23a8/
 
-Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
+[1] https://gitlab.com/buildroot.org/buildroot/-/commit/75891397abe60dbe3d82a1ec39654ff81d1b1406
+[2] https://gitlab.com/buildroot.org/buildroot/-/commit/f577d8218f3f18016aa084255e337a7f589eeed1
+[3] https://gitlab.com/buildroot.org/buildroot/-/commit/58cf7c51da3ae4804332f68ee934e153d695d047#66f7e875db173e5538d3511c8297acc1ba30da33_27_25
+[4] https://gitlab.com/buildroot.org/buildroot/-/commit/de374e06d856dd5079fc792c883b06563af950b0
+
+Cc: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 430aa91c3d913aa14dba78713e7960c27806c1cd)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 6f231d3003502282710a0da7ecd98344ec868095)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...-std-gnu23-compatibility-wrt-static_asser.patch | 90 ++++++++++++++++++++++
- ...-std-gnu23-compatibility-wrt-static_asser.patch | 90 ++++++++++++++++++++++
- 2 files changed, 180 insertions(+)
+ package/gcc/Config.in.host | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/binutils/2.42/0004-opcodes-fix-std-gnu23-compatibility-wrt-static_asser.patch b/package/binutils/2.42/0004-opcodes-fix-std-gnu23-compatibility-wrt-static_asser.patch
-new file mode 100644
-index 0000000000..f9b870afa2
---- /dev/null
-+++ b/package/binutils/2.42/0004-opcodes-fix-std-gnu23-compatibility-wrt-static_asser.patch
-@@ -0,0 +1,90 @@
-+From 8ebe62f3f0d27806b1bf69f301f5e188b4acd2b4 Mon Sep 17 00:00:00 2001
-+From: Sam James <sam@gentoo.org>
-+Date: Sat, 16 Nov 2024 05:03:52 +0000
-+Subject: [PATCH] opcodes: fix -std=gnu23 compatibility wrt static_assert
-+
-+static_assert is declared in C23 so we can't reuse that identifier:
-+* Define our own static_assert conditionally;
-+
-+* Rename "static assert" hacks to _N as we do already in some places
-+  to avoid a conflict.
-+
-+ChangeLog:
-+	PR ld/32372
-+
-+        * i386-gen.c (static_assert): Define conditionally.
-+        * mips-formats.h (MAPPED_INT): Rename identifier.
-+        (MAPPED_REG): Rename identifier.
-+        (OPTIONAL_MAPPED_REG): Rename identifier.
-+        * s390-opc.c (static_assert): Define conditionally.
-+
-+Upstream: https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=8ebe62f3f0d27806b1bf69f301f5e188b4acd2b4
-+Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
-+---
-+ opcodes/i386-gen.c     | 2 ++
-+ opcodes/mips-formats.h | 6 +++---
-+ opcodes/s390-opc.c     | 2 ++
-+ 3 files changed, 7 insertions(+), 3 deletions(-)
-+
-+diff --git a/opcodes/i386-gen.c b/opcodes/i386-gen.c
-+index 053b66675c5..7ee8a30310c 100644
-+--- a/opcodes/i386-gen.c
-++++ b/opcodes/i386-gen.c
-+@@ -30,7 +30,9 @@
-+ 
-+ /* Build-time checks are preferrable over runtime ones.  Use this construct
-+    in preference where possible.  */
-++#ifndef static_assert
-+ #define static_assert(e) ((void)sizeof (struct { int _:1 - 2 * !(e); }))
-++#endif
-+ 
-+ static const char *program_name = NULL;
-+ static int debug = 0;
-+diff --git a/opcodes/mips-formats.h b/opcodes/mips-formats.h
-+index 90df7100803..c4dec6352bf 100644
-+--- a/opcodes/mips-formats.h
-++++ b/opcodes/mips-formats.h
-+@@ -49,7 +49,7 @@
-+ #define MAPPED_INT(SIZE, LSB, MAP, PRINT_HEX) \
-+   { \
-+     typedef char ATTRIBUTE_UNUSED \
-+-      static_assert[(1 << (SIZE)) == ARRAY_SIZE (MAP)]; \
-++      static_assert_3[(1 << (SIZE)) == ARRAY_SIZE (MAP)]; \
-+     static const struct mips_mapped_int_operand op = { \
-+       { OP_MAPPED_INT, SIZE, LSB }, MAP, PRINT_HEX \
-+     }; \
-+@@ -83,7 +83,7 @@
-+ #define MAPPED_REG(SIZE, LSB, BANK, MAP) \
-+   { \
-+     typedef char ATTRIBUTE_UNUSED \
-+-      static_assert[(1 << (SIZE)) == ARRAY_SIZE (MAP)]; \
-++      static_assert_4[(1 << (SIZE)) == ARRAY_SIZE (MAP)]; \
-+     static const struct mips_reg_operand op = { \
-+       { OP_REG, SIZE, LSB }, OP_REG_##BANK, MAP \
-+     }; \
-+@@ -93,7 +93,7 @@
-+ #define OPTIONAL_MAPPED_REG(SIZE, LSB, BANK, MAP) \
-+   { \
-+     typedef char ATTRIBUTE_UNUSED \
-+-      static_assert[(1 << (SIZE)) == ARRAY_SIZE (MAP)]; \
-++      static_assert_5[(1 << (SIZE)) == ARRAY_SIZE (MAP)]; \
-+     static const struct mips_reg_operand op = { \
-+       { OP_OPTIONAL_REG, SIZE, LSB }, OP_REG_##BANK, MAP \
-+     }; \
-+diff --git a/opcodes/s390-opc.c b/opcodes/s390-opc.c
-+index 9d9f0973e55..49efd714157 100644
-+--- a/opcodes/s390-opc.c
-++++ b/opcodes/s390-opc.c
-+@@ -36,7 +36,9 @@
-+ 
-+ /* Build-time checks are preferrable over runtime ones.  Use this construct
-+    in preference where possible.  */
-++#ifndef static_assert
-+ #define static_assert(e) ((void)sizeof (struct { int _:1 - 2 * !(e); }))
-++#endif
-+ 
-+ #define ARRAY_SIZE(a) (sizeof(a) / sizeof((a)[0]))
-+ 
-+-- 
-+2.34.1
-+
-diff --git a/package/binutils/2.43.1/0004-opcodes-fix-std-gnu23-compatibility-wrt-static_asser.patch b/package/binutils/2.43.1/0004-opcodes-fix-std-gnu23-compatibility-wrt-static_asser.patch
-new file mode 100644
-index 0000000000..f9b870afa2
---- /dev/null
-+++ b/package/binutils/2.43.1/0004-opcodes-fix-std-gnu23-compatibility-wrt-static_asser.patch
-@@ -0,0 +1,90 @@
-+From 8ebe62f3f0d27806b1bf69f301f5e188b4acd2b4 Mon Sep 17 00:00:00 2001
-+From: Sam James <sam@gentoo.org>
-+Date: Sat, 16 Nov 2024 05:03:52 +0000
-+Subject: [PATCH] opcodes: fix -std=gnu23 compatibility wrt static_assert
-+
-+static_assert is declared in C23 so we can't reuse that identifier:
-+* Define our own static_assert conditionally;
-+
-+* Rename "static assert" hacks to _N as we do already in some places
-+  to avoid a conflict.
-+
-+ChangeLog:
-+	PR ld/32372
-+
-+        * i386-gen.c (static_assert): Define conditionally.
-+        * mips-formats.h (MAPPED_INT): Rename identifier.
-+        (MAPPED_REG): Rename identifier.
-+        (OPTIONAL_MAPPED_REG): Rename identifier.
-+        * s390-opc.c (static_assert): Define conditionally.
-+
-+Upstream: https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=8ebe62f3f0d27806b1bf69f301f5e188b4acd2b4
-+Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
-+---
-+ opcodes/i386-gen.c     | 2 ++
-+ opcodes/mips-formats.h | 6 +++---
-+ opcodes/s390-opc.c     | 2 ++
-+ 3 files changed, 7 insertions(+), 3 deletions(-)
-+
-+diff --git a/opcodes/i386-gen.c b/opcodes/i386-gen.c
-+index 053b66675c5..7ee8a30310c 100644
-+--- a/opcodes/i386-gen.c
-++++ b/opcodes/i386-gen.c
-+@@ -30,7 +30,9 @@
-+ 
-+ /* Build-time checks are preferrable over runtime ones.  Use this construct
-+    in preference where possible.  */
-++#ifndef static_assert
-+ #define static_assert(e) ((void)sizeof (struct { int _:1 - 2 * !(e); }))
-++#endif
-+ 
-+ static const char *program_name = NULL;
-+ static int debug = 0;
-+diff --git a/opcodes/mips-formats.h b/opcodes/mips-formats.h
-+index 90df7100803..c4dec6352bf 100644
-+--- a/opcodes/mips-formats.h
-++++ b/opcodes/mips-formats.h
-+@@ -49,7 +49,7 @@
-+ #define MAPPED_INT(SIZE, LSB, MAP, PRINT_HEX) \
-+   { \
-+     typedef char ATTRIBUTE_UNUSED \
-+-      static_assert[(1 << (SIZE)) == ARRAY_SIZE (MAP)]; \
-++      static_assert_3[(1 << (SIZE)) == ARRAY_SIZE (MAP)]; \
-+     static const struct mips_mapped_int_operand op = { \
-+       { OP_MAPPED_INT, SIZE, LSB }, MAP, PRINT_HEX \
-+     }; \
-+@@ -83,7 +83,7 @@
-+ #define MAPPED_REG(SIZE, LSB, BANK, MAP) \
-+   { \
-+     typedef char ATTRIBUTE_UNUSED \
-+-      static_assert[(1 << (SIZE)) == ARRAY_SIZE (MAP)]; \
-++      static_assert_4[(1 << (SIZE)) == ARRAY_SIZE (MAP)]; \
-+     static const struct mips_reg_operand op = { \
-+       { OP_REG, SIZE, LSB }, OP_REG_##BANK, MAP \
-+     }; \
-+@@ -93,7 +93,7 @@
-+ #define OPTIONAL_MAPPED_REG(SIZE, LSB, BANK, MAP) \
-+   { \
-+     typedef char ATTRIBUTE_UNUSED \
-+-      static_assert[(1 << (SIZE)) == ARRAY_SIZE (MAP)]; \
-++      static_assert_5[(1 << (SIZE)) == ARRAY_SIZE (MAP)]; \
-+     static const struct mips_reg_operand op = { \
-+       { OP_OPTIONAL_REG, SIZE, LSB }, OP_REG_##BANK, MAP \
-+     }; \
-+diff --git a/opcodes/s390-opc.c b/opcodes/s390-opc.c
-+index 9d9f0973e55..49efd714157 100644
-+--- a/opcodes/s390-opc.c
-++++ b/opcodes/s390-opc.c
-+@@ -36,7 +36,9 @@
-+ 
-+ /* Build-time checks are preferrable over runtime ones.  Use this construct
-+    in preference where possible.  */
-++#ifndef static_assert
-+ #define static_assert(e) ((void)sizeof (struct { int _:1 - 2 * !(e); }))
-++#endif
-+ 
-+ #define ARRAY_SIZE(a) (sizeof(a) / sizeof((a)[0]))
-+ 
-+-- 
-+2.34.1
-+
-
---===============4904909490895827340==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 10fe4bf609..b6b159224e 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -34,6 +34,7 @@ config BR2_GCC_VERSION_12_X
+ 
+ config BR2_GCC_VERSION_13_X
+ 	bool "gcc 13.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_14
+ 	# powerpc spe support has been deprecated since gcc 8.x.
+ 	# https://gcc.gnu.org/ml/gcc/2018-04/msg00102.html
+ 	depends on !BR2_POWERPC_CPU_HAS_SPE
+@@ -41,6 +42,7 @@ config BR2_GCC_VERSION_13_X
+ 
+ config BR2_GCC_VERSION_14_X
+ 	bool "gcc 14.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_15
+ 	# powerpc spe support has been deprecated since gcc 8.x.
+ 	# https://gcc.gnu.org/ml/gcc/2018-04/msg00102.html
+ 	depends on !BR2_POWERPC_CPU_HAS_SPE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4904909490895827340==--
