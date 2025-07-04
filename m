@@ -1,51 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13F1AC8303D
-	for <buildroot@archiver.kernel.org>; Fri,  4 Jul 2025 21:11:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81BF3C83F03
+	for <buildroot@archiver.kernel.org>; Fri,  4 Jul 2025 21:12:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BFCA7410B6;
-	Fri,  4 Jul 2025 21:11:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 50D7483FEB;
+	Fri,  4 Jul 2025 21:12:03 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DccWmnXV-WmD; Fri,  4 Jul 2025 21:12:02 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 74E9483FC3
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 74E9483FC3;
+	Fri,  4 Jul 2025 21:12:02 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id EFA9315F
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 21:12:00 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id D5C5F41142
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 21:12:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Yp59n-c7iBMK; Fri,  4 Jul 2025 21:11:51 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 114DA4111B
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 114DA4111B;
-	Fri,  4 Jul 2025 21:11:51 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id C31B415F
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 21:11:48 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A455960FA4
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 21:11:48 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eZWexvV3mGzs for <buildroot@buildroot.org>;
- Fri,  4 Jul 2025 21:11:48 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E7A5260DAA
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E7A5260DAA
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 21:11:47 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C574685F56; Fri,  4 Jul 2025 21:11:47 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 4 Jul 2025 23:06:55 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 766b08647c833e2930490ba2ae1168127d757114
-X-Git-Newrev: c10f7dfdb917cba9fcfecd5818adfbee264f4151
-X-Patchwork-Hint: ignore
-Message-Id: <20250704211147.C574685F56@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libogg: bump version to 1.3.6
+ id xIrS2UbDWJ10 for <buildroot@buildroot.org>;
+ Fri,  4 Jul 2025 21:12:00 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org EB11A410B6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB11A410B6
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id EB11A410B6
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 21:11:59 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 0A6B513F88D;
+ Fri,  4 Jul 2025 23:11:56 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 04 Jul 2025 23:11:56 +0200
+MIME-Version: 1.0
+Date: Fri, 04 Jul 2025 23:11:56 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250704165549.3722250-1-bernd@kuhls.net>
+References: <20250704165549.3722250-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <e1777e3c9587be711b9b422cabc92a8b@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1751663518;
+ bh=bW5SntExrn6GhRCytN6R/Ic3nEdsDcjrVhNExGtteN4=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=lebHMS9k7tbDdSbLxpFrZ6Zelz9Qs37CN+u5HIHyGPRsdRXq+dOY2SfVOIR+CmD/x
+ rlavApPk3Qyxat28RkRFridHTijRfPDq5GSVvgZv+PgoFjrKZ3y3UFfY6cCDHgmGJU
+ WUH9Kqo9xXFkgqVfqYLmAnOPUX0g98DI/I7FdBuLISW2Vcggst9jhaQPzoFipdSezH
+ LgEsnP87RzqBFt7dymc8exrDaP3KXdt2zoqrC0zVhkynlyzx1+h3zJjhqGSy7LNuxa
+ 5FxI4G0ISWg3hNpk4h4JauvQsZxeeEXME1BVQ1ExhEo1LIys1AD/jyDQiKN+9QmygF
+ a9Yw3LB9erI7g==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=lebHMS9k
+Subject: Re: [Buildroot] [PATCH 1/1] package/libogg: bump version to 1.3.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,50 +82,18 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c10f7dfdb917cba9fcfecd5818adfbee264f4151
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 04/07/2025 18:55, Bernd Kuhls wrote:
+> Changelog:
+> https://gitlab.xiph.org/xiph/ogg/-/blob/master/CHANGES
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Changelog:
-https://gitlab.xiph.org/xiph/ogg/-/blob/v1.3.6/CHANGES
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-[Julien: update change log url to use tag]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/libogg/libogg.hash | 2 +-
- package/libogg/libogg.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/libogg/libogg.hash b/package/libogg/libogg.hash
-index 9727c1cfaa..d6a775dda8 100644
---- a/package/libogg/libogg.hash
-+++ b/package/libogg/libogg.hash
-@@ -1,5 +1,5 @@
- # From https://www.xiph.org/downloads/
--sha256  c4d91be36fc8e54deae7575241e03f4211eb102afb3fc0775fbbc1b740016705  libogg-1.3.5.tar.xz
-+sha256  5c8253428e181840cd20d41f3ca16557a9cc04bad4a3d04cce84808677fa1061  libogg-1.3.6.tar.xz
- 
- # Hash for license file:
- sha256  d2ab5758336489da61c12cc5bb757da5339c4ae9001f9bb0562b4370249af814  COPYING
-diff --git a/package/libogg/libogg.mk b/package/libogg/libogg.mk
-index 49f9c7b6ac..e23b7b9154 100644
---- a/package/libogg/libogg.mk
-+++ b/package/libogg/libogg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBOGG_VERSION = 1.3.5
-+LIBOGG_VERSION = 1.3.6
- LIBOGG_SOURCE = libogg-$(LIBOGG_VERSION).tar.xz
- LIBOGG_SITE = http://downloads.xiph.org/releases/ogg
- LIBOGG_LICENSE = BSD-3-Clause
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
