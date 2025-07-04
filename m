@@ -1,105 +1,106 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B595C83F09
-	for <buildroot@archiver.kernel.org>; Fri,  4 Jul 2025 06:46:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70EBBC83030
+	for <buildroot@archiver.kernel.org>; Fri,  4 Jul 2025 06:46:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F2F3260BBB;
-	Fri,  4 Jul 2025 06:46:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4678383BA8;
+	Fri,  4 Jul 2025 06:46:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Pjzlk_Pi-GVb; Fri,  4 Jul 2025 06:46:51 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8fqWLES3MqnY; Fri,  4 Jul 2025 06:46:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2BB5060B71
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8111583CC6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2BB5060B71;
-	Fri,  4 Jul 2025 06:46:51 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1B4627AB
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:46:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8111583CC6;
+	Fri,  4 Jul 2025 06:46:55 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 939BC7AB
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:46:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0D6D340FA6
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:46:47 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 84FE083CC6
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:46:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3xD6kQK1J4vM for <buildroot@buildroot.org>;
- Fri,  4 Jul 2025 06:46:46 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0uoa-W8yPGhe for <buildroot@buildroot.org>;
+ Fri,  4 Jul 2025 06:46:52 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
+ client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2B13240F8C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2B13240F8C
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2B13240F8C
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:46:46 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- 5b1f17b1804b1-453608ed113so6201985e9.0
- for <buildroot@buildroot.org>; Thu, 03 Jul 2025 23:46:45 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9AD208361C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9AD208361C
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9AD208361C
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:46:52 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id
+ ffacd0b85a97d-3a4f379662cso476485f8f.0
+ for <buildroot@buildroot.org>; Thu, 03 Jul 2025 23:46:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1751611604; x=1752216404;
+ d=1e100.net; s=20230601; t=1751611610; x=1752216410;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=35j5pusnIv7anu/yfx350nUsJfiiX4Cjah6Gx6lBe+s=;
- b=qVgiuKGOZdibb8PIW6TLDRci15DeAqc1fCpYO56vpVqWvuPy4TBQAst+CWwzq9vr8e
- MBF4XqRTvk54SrVHo0L0n2uxLkEOY7nQRnPwgzj9BwjbkZEGZd/96Wecxw2k+PEqoyyg
- Q9IfU+AH6zFZTc2348Fzqa6HQU9UVGL6EZkqnmK/9O6AcdV0f81ONHxpUIqFmWzdYnE+
- TK8GVgzqUpwXOhwJj1jHIEc7aUUDICPP0fhJkaRk3OwVHpNi2/CuYm2YrlTpPUs0E7es
- DmShk/heU2hwSoDHxcSES1XbuNimw7R38TWXpyZD6EaQWVA9665R0AcFIHzC+AHgKVVZ
- dF5w==
+ bh=L8kvSR80fGJkOwei85bJgFfh6+uHn/srdEHDeoWhpLE=;
+ b=SP3TaKh57e3XuKP2qfAgAWEviyD59LpsPwkZaY446g4VjaRCu6q3B+NIDV0n/eZVjX
+ V3Och3GMV15grDnp5dEj+Dfsu2FEApOrY7mbt2afGcxu9MwrmzXTeu8H+N5LYKv9flJU
+ TBhbeKCxBndkTnGgCD3nCjN2md+AI6f++/9zpjYVsKIQaTI6E9eNRUUGGlCd0b2FAcRk
+ 2w6w20cUdGAm0HZltaJr8I3avofJNaa71QnBhwR9PrdlT4+oi/3dhAsV4w0mZLEgf5aQ
+ wPXtwnlr1CKKPRhtwTD4wwpNg94ZuJuDA9nQn5qY9iggRfuNWEVegeb9cV5crhJ4I9Yz
+ s5sg==
 X-Forwarded-Encrypted: i=1;
- AJvYcCW0E38qTk5gxkKdqsx/wOyQbfJNJWoklgTpD4YetdmleU/YqSdfWbCQuGYuZNi/Vo9wUxHJpDKRD2M=@buildroot.org
-X-Gm-Message-State: AOJu0Yz3fRlc35ruZUzAbwoO3QgqAhKDXwAtcEpmvmjBv7W5Tluw2aJu
- HsGhkppRXiu1p7QZD+TmaMSN81FW4bX8jEsgDwcNDXJhxr/UpLTPjAOQljtRjEARjmg=
-X-Gm-Gg: ASbGncsS/QMRoDmuypmg4AQMN97Kel8J6pH8jeYwou06f7uf7qr9YXmDNminPKWbN4l
- 40kRBiXLKcFOo+xa2ttNxVZ82ExnG1BaNup0tExioa0d1Ynfwg1rM0pFVl+b2JOaFsUyusfOgHy
- 9+TeIIIQ/5z1XsqaQaRpvUuuL7nwqQYQmtw3L7gfkg5aaZ37PitOVgKmRUkipgznSu0XcqJMvH1
- z1GyW31XZdiZoA6FkBR8t6kzyUVguqpGp/nhe3BfI86QbInvinfbu2Z1UPhXp0vFlKQI7PXeIfX
- 1FqHGboyhb5lSwK1Ijq7kupZIl4hU6SjumhcVu4cY+MY0TWB5jOFe+p8IDNZ4IXOev2ZjW0MPa7
- NAsJWQtejwg==
-X-Google-Smtp-Source: AGHT+IGTSnP1AsC7GbJEgacpIGS6haYno2cuznTLiJdRc/fgJqMHHhhOrEmar4t+VZeLkUB6DAQBUA==
-X-Received: by 2002:a05:600c:4e46:b0:44a:b478:1387 with SMTP id
- 5b1f17b1804b1-454b30d9516mr14756965e9.17.1751611604245; 
- Thu, 03 Jul 2025 23:46:44 -0700 (PDT)
+ AJvYcCWlofwpP1YQP9OWgvYfalK+C+eQMspo3dnjqC6zjOsp+mwLLMquBs9VtM9Es/DyObrsecO4sh4IuF4=@buildroot.org
+X-Gm-Message-State: AOJu0YzaJOo0YO1Sa8gba8qUJd3Bh+aAJznTKDMlHWAIEm/jcyHaiugH
+ b6REtjPPwmi82+72HxoJAE86p8v4JqWfRcvOpTxXcWPPXP7FuYlyVniJuJzEf1fI7ewBb4Sl3rv
+ Zx4th
+X-Gm-Gg: ASbGncuhrobIUvTX2TBvb/xmo84Rektq7XCHz1SuUsml3pUOndxx75Q/v33s5y3Gkj0
+ 31QkRNqzj7CKW70UOxqbVUluQJZC7aR+tPEFISuzt6uWEyL7KVdMklDMM1t0zy65MlR5VSSsKx9
+ M36mdp2lcOXPcJiOPlFUCq+FL3mjKNTXv8pfWcYbAtPw3AFqRR1DQuabqBJK52wAdfGNBvWGS7N
+ 6aXI3h7BdHwNe+bzI14cPgex4uEqLaBA2oW1cmn4TzNrwGw+MvL4R6ecl8MdAAy0ymtdI0mhPyD
+ 4EMvidcDL3QCLX3lSl9NrlFX8JDqLcCBLPKKfnpSH52KC2ih5aNi5UEwN4inobQEAqPb4N0T8EY
+ uHetloo2iNXCO476j2D69
+X-Google-Smtp-Source: AGHT+IGuw2K7RnuJNHMxtzMWO0Fgek0vA/ZdiUIsJkiRuJg7JID0rzBsDicHEDRQyfuIHGwjwbvtzg==
+X-Received: by 2002:a05:6000:4311:b0:3a5:24a9:a5d3 with SMTP id
+ ffacd0b85a97d-3b49700e07fmr615464f8f.17.1751611610579; 
+ Thu, 03 Jul 2025 23:46:50 -0700 (PDT)
 Received: from arch (94.105.118.175.dyn.edpnet.net. [94.105.118.175])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3b47285c903sm1660073f8f.90.2025.07.03.23.46.43
+ ffacd0b85a97d-3b471b96534sm1614175f8f.48.2025.07.03.23.46.45
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 03 Jul 2025 23:46:43 -0700 (PDT)
-To: Peter Korsgaard <peter@korsgaard.com>
+ Thu, 03 Jul 2025 23:46:49 -0700 (PDT)
+To: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri,  4 Jul 2025 08:46:43 +0200
-Message-ID: <20250704064643.4064017-1-thomas.perale@mind.be>
+Date: Fri,  4 Jul 2025 08:46:44 +0200
+Message-ID: <20250704064645.4064071-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.50.0
-In-Reply-To: <20250624170834.2819257-1-peter@korsgaard.com>
-References: <20250624170834.2819257-1-peter@korsgaard.com>
+In-Reply-To: <20250624090905.287792-1-raphael.melotte@mind.be>
+References: <20250624090905.287792-1-raphael.melotte@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1751611604; x=1752216404; darn=buildroot.org;
+ d=mind.be; s=google; t=1751611610; x=1752216410; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=35j5pusnIv7anu/yfx350nUsJfiiX4Cjah6Gx6lBe+s=;
- b=LyiisyDked5WOIVldzyIXP7VquQbN0mvJdiMZbvZRR3LtijQPu94hHIPh4Ds9ZW/HY
- 4hgDp1HXH4VbyBnNCY0eKdYs0j5lAgRoAHC4wSabCF+54tD2cbWy3kNklZcPnVKj0FhM
- y60PUm0ZN0Fo5dVbW0QugZrgghriQ85E/A3Qw6nhmlMMMqHiXrrKkgNe5GMgA6xK+feV
- 6DT1G2kOIYs+tX8A7EKT8pJ6r5LnMWSH4dBUwbu0ZuYIywhr92CSbIx+Ve4tgizYTyml
- nWTgyh3xPe4Sxouq+XBYLEQlKersnNcyUTjmGjTFaiIq0qq6TeNc6iT09W3YKCMoHnw8
- AEYw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=L8kvSR80fGJkOwei85bJgFfh6+uHn/srdEHDeoWhpLE=;
+ b=aJCQe8nqPjrvgjwqA9m/ElYJ/J8Gbg+oRriePjayfccQi2PVxBVqhDBemHZo2buWkt
+ LvfMiCYW6S8GPV+41kwgry8Wdlh9DCNYiYQYSpfCA+89mIC/qhANc2QpASQugvht+cBj
+ Z4f6nAbd9ly/iZqbmHpD004wv4b1XZzjRg81eapsgE/LKny+Sx63IkAlPGKQQpHA46Za
+ y/MAhsm7w1ttc/DVkQn83jjyfS0sYR1nGXqjRyF6I40JD43AcGSrm82LBkOauSKvOVdB
+ u5axphdl/PZaOkMfjkpbWYkAtotaxn2R1KddUvm4l002R0WZyDwxDkqueq3Uu6Vywkw3
+ 4o/w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=LyiisyDk
-Subject: Re: [Buildroot] [PATCH 1/2] Makefile: sort unexport lines
+ header.a=rsa-sha256 header.s=google header.b=aJCQe8nq
+Subject: Re: [Buildroot] [PATCH 1/1] package/mupdf: update homepage URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -113,77 +114,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-In reply of:
-> The list of environment variables to unexport has grown organically over the
-> years and is no longer sorted. Sort it alphabetically for clarity.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Applied to 2025.02.x. Thanks
-
-> ---
->  Makefile | 28 ++++++++++++++--------------
->  1 file changed, 14 insertions(+), 14 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 26db176674..a052628ac7 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -407,27 +407,27 @@ ifeq ($(BR2_HAVE_DOT_CONFIG),y)
->  # Hide troublesome environment variables from sub processes
->  #
->  ################################################################################
-> -unexport CROSS_COMPILE
-> +unexport AR
->  unexport ARCH
->  unexport CC
-> -unexport LD
-> -unexport AR
-> -unexport CXX
-> -unexport CPP
-> -unexport RANLIB
->  unexport CFLAGS
-> -unexport CXXFLAGS
-> -unexport GREP_OPTIONS
-> -unexport TAR_OPTIONS
->  unexport CONFIG_SITE
-> -unexport QMAKESPEC
-> -unexport TERMINFO
-> +unexport CPP
-> +unexport CROSS_COMPILE
-> +unexport CXX
-> +unexport CXXFLAGS
-> +unexport DEVICE_TREE
-> +unexport GCC_COLORS
-> +unexport GREP_OPTIONS
-> +unexport LD
->  unexport MACHINE
->  unexport O
-> -unexport GCC_COLORS
-> -unexport PLATFORM
->  unexport OS
-> -unexport DEVICE_TREE
-> +unexport PLATFORM
-> +unexport QMAKESPEC
-> +unexport RANLIB
-> +unexport TAR_OPTIONS
-> +unexport TERMINFO
->  
->  GNU_HOST_NAME := $(shell support/gnuconfig/config.guess)
->  
-> -- 
-> 2.39.5
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SW4gcmVwbHkgb2Y6Cj4gVGhlIGN1cnJlbnQgaG9tZXBhZ2UgVVJMIGxlYWRzIHRvIGFuIEhUVFAg
+NDA0IGVycm9yLgo+IAo+IEZpeCBpdCBieSB1c2luZyB0aGUgaG9tZXBhZ2UgVVJMIGN1cnJlbnRs
+eSBtZW50aW9uZWQgaW4gbXVwZGYncyBnaXQKPiByZXBvc2l0b3J5Lgo+IAo+IFNpZ25lZC1vZmYt
+Ynk6IFJhcGhhw6tsIE3DqWxvdHRlIDxyYXBoYWVsLm1lbG90dGVAbWluZC5iZT4KCkFwcGxpZWQg
+dG8gMjAyNS4wMi54LiBUaGFua3MKCj4gLS0tCj4gIHBhY2thZ2UvbXVwZGYvQ29uZmlnLmluIHwg
+MiArLQo+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkKPiAK
+PiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9tdXBkZi9Db25maWcuaW4gYi9wYWNrYWdlL211cGRmL0Nv
+bmZpZy5pbgo+IGluZGV4IDM0YzVlN2Q1MzguLjVjMGExMjdhOTAgMTAwNjQ0Cj4gLS0tIGEvcGFj
+a2FnZS9tdXBkZi9Db25maWcuaW4KPiArKysgYi9wYWNrYWdlL211cGRmL0NvbmZpZy5pbgo+IEBA
+IC0xNCw3ICsxNCw3IEBAIGNvbmZpZyBCUjJfUEFDS0FHRV9NVVBERgo+ICAJaGVscAo+ICAJICBN
+dVBERiBpcyBhIGxpZ2h0d2VpZ2h0IFBERiwgWFBTLCBhbmQgRS1ib29rIHZpZXdlci4KPiAgCj4g
+LQkgIGh0dHBzOi8vd3d3Lm11cGRmLmNvbS9pbmRleC5odG1sCj4gKwkgIGh0dHBzOi8vd3d3Lm11
+cGRmLmNvbS8KPiAgCj4gIGNvbW1lbnQgIm11cGRmIG5lZWRzIGEgdG9vbGNoYWluIHcvIEMrKywg
+Z2NjID49IDQuOSIKPiAgCWRlcGVuZHMgb24gQlIyX1RPT0xDSEFJTl9IQVNfU1lOQ180Cj4gLS0g
+Cj4gMi40OS4wCj4gCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX18KPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4gYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcK
+PiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290
+IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxk
+cm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
