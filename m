@@ -1,52 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A305AC8303D
-	for <buildroot@archiver.kernel.org>; Fri,  4 Jul 2025 17:07:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6BA0C8303D
+	for <buildroot@archiver.kernel.org>; Fri,  4 Jul 2025 17:07:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7918240C35;
-	Fri,  4 Jul 2025 17:07:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7BCE183FA2;
+	Fri,  4 Jul 2025 17:07:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BLl-utxlHEr9; Fri,  4 Jul 2025 17:07:01 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fJOrCH12mOLX; Fri,  4 Jul 2025 17:07:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 85A8E40B46
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C5E4983EF2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 85A8E40B46;
-	Fri,  4 Jul 2025 17:07:01 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id B18C512E
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 17:06:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C5E4983EF2;
+	Fri,  4 Jul 2025 17:07:20 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9BA4712E
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 17:07:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A3B844088E
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 17:06:59 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 996FC61640
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 17:07:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ONNab1thWegl for <buildroot@buildroot.org>;
- Fri,  4 Jul 2025 17:06:59 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E0588400B3
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E0588400B3
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 17:06:58 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D9C8082784; Fri,  4 Jul 2025 17:06:58 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 4 Jul 2025 19:04:51 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: eee0f6c078e192c7cd66394fb0b58e96cb645499
-X-Git-Newrev: e63181bc0056d7590411763442c7279d71c8315b
-X-Patchwork-Hint: ignore
-Message-Id: <20250704170658.D9C8082784@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/cpulimit: Backport fix for
- function signature
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id X-uad01dP_wR for <buildroot@buildroot.org>;
+ Fri,  4 Jul 2025 17:07:19 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org CA7C96163E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA7C96163E
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CA7C96163E
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 17:07:18 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id E268D5FFC0;
+ Fri,  4 Jul 2025 19:07:13 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 04 Jul 2025 19:07:13 +0200
+MIME-Version: 1.0
+Date: Fri, 04 Jul 2025 19:07:13 +0200
+To: Florian Fainelli <f.fainelli@gmail.com>
+Cc: buildroot@buildroot.org, romain.naour@smile.fr,
+ thomas.petazzoni@bootlin.com
+In-Reply-To: <20250703035752.5032-1-f.fainelli@gmail.com>
+References: <20250703035752.5032-1-f.fainelli@gmail.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <777d2bf568470e09a52f27d10580fa82@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1751648837;
+ bh=UF9OrtmtrC+d2pKfqNhwWHpiFd2ugvJR2NPg4u5s27Y=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=WNJT+Ay7r4Y7tii6rAzdH1Fqj5iAwz7XJf6rH1gJh+5toThOxQ7FxaaygONvwf4I8
+ R3EC7SA3q9iZPVU2vTtZBQBDbLgFVPbTsHuweqtuxtnR/J5BaYDBUjQjDze6SPrgbA
+ O3IB43WizXUU17D0tXZmu+njWxJKTXGxCl5StGI1yep8+I12QZyTRGilPN6pNhcw/z
+ wMCblQhE02JnrGXEfhIk7HC7NZbgXv0Q1nH7AW9c5LDmUDQ/H28IKUQpdQaQI1Y71B
+ eMHtO8PNXs3o1Er51SctWGV9RhU1SgGXH91DSu+mlzy+N0sVjcOJr3C/jNSODqd2tM
+ onDBQZShbG8hw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=WNJT+Ay7
+Subject: Re: [Buildroot] [PATCH] package/cpulimit: Backport fix for function
+ signature
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,83 +84,24 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e63181bc0056d7590411763442c7279d71c8315b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 03/07/2025 05:57, Florian Fainelli wrote:
+> Backport the upstream pull request patch fixing the incorrect function
+> signature passed to pthread_create()
+> 
+> Fixes: 
+> https://autobuild.buildroot.org/results/5308cb8239f31ef39e5c67d65ff1d69cdec1cedc
+> Fixes: 
+> https://autobuild.buildroot.org/results/6722247e3c830558ac0377352d05f4bb1684978d
+> Fixes: 
+> https://autobuild.buildroot.org/results/adc385fe35432be28453b8ed9f40e8a6647a4b28
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 
-Backport the upstream pull request patch fixing the incorrect function
-signature passed to pthread_create()
-
-Fixes: https://autobuild.buildroot.org/results/5308cb8239f31ef39e5c67d65ff1d69cdec1cedc
-Fixes: https://autobuild.buildroot.org/results/6722247e3c830558ac0377352d05f4bb1684978d
-Fixes: https://autobuild.buildroot.org/results/adc385fe35432be28453b8ed9f40e8a6647a4b28
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-[Julien: reformat patch "Upstream:" tag to fix check-package error]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- .../0005-Correct-loop-function-signature.patch     | 49 ++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
-
-diff --git a/package/cpulimit/0005-Correct-loop-function-signature.patch b/package/cpulimit/0005-Correct-loop-function-signature.patch
-new file mode 100644
-index 0000000000..5b7f4a01dd
---- /dev/null
-+++ b/package/cpulimit/0005-Correct-loop-function-signature.patch
-@@ -0,0 +1,49 @@
-+From 74e95c96e8d82e4e374f86142972fcf4305fe1f2 Mon Sep 17 00:00:00 2001
-+From: Florian Fainelli <f.fainelli@gmail.com>
-+Date: Wed, 2 Jul 2025 20:47:58 -0700
-+Subject: [PATCH] Correct loop function signature
-+
-+loop is passed to pthread_create() which requires the following
-+prototype to be used: void *(*start_routine) (void *)
-+
-+Correct the signature to avoid such warnings:
-+
-+In file included from busy.c:3:
-+/home/buildroot/instance-0/output-1/host/mips-buildroot-linux-uclibc/sysroot/usr/include/pthread.h:164:36: note: expected 'void * (*)(void *)' but argument is of type 'void * (*)(void)'
-+  164 |                            void *(*__start_routine) (void *),
-+      |                            ~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
-+busy.c:6:7: note: 'loop' declared here
-+    6 | void *loop()
-+      |       ^~~~
-+
-+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-+Upstream: https://github.com/opsengine/cpulimit/pull/127
-+---
-+ tests/busy.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/tests/busy.c b/tests/busy.c
-+index b3afb7cd853b..93f0bcce67a8 100644
-+--- a/tests/busy.c
-++++ b/tests/busy.c
-+@@ -3,7 +3,7 @@
-+ #include <pthread.h>
-+ #include <unistd.h>
-+ 
-+-void *loop()
-++void *loop(void *)
-+ {
-+ 	while(1);
-+ }
-+@@ -23,7 +23,7 @@ int main(int argc, char **argv) {
-+ 			exit(1);
-+ 		}
-+ 	}
-+-	loop();
-++	loop(NULL);
-+ 	return 0;
-+ }
-+ 
-+-- 
-+2.43.0
-+
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
