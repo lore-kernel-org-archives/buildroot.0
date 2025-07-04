@@ -4,71 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5ECB4C8303D
-	for <buildroot@archiver.kernel.org>; Fri,  4 Jul 2025 21:17:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD0F2C8303D
+	for <buildroot@archiver.kernel.org>; Fri,  4 Jul 2025 21:25:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2E02B41207;
-	Fri,  4 Jul 2025 21:17:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AF4F1407C3;
+	Fri,  4 Jul 2025 21:25:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iCTBXmNfqOfr; Fri,  4 Jul 2025 21:17:09 +0000 (UTC)
+ id nrTO0OjOjmvb; Fri,  4 Jul 2025 21:25:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C02341209
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E604D407D6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5C02341209;
-	Fri,  4 Jul 2025 21:17:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id E430E7AB
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 21:17:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E604D407D6;
+	Fri,  4 Jul 2025 21:25:40 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id EC54012E
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 21:25:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C97AB83F23
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 21:17:07 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D23EF60E1D
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 21:25:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KiQhCzvk_coF for <buildroot@buildroot.org>;
- Fri,  4 Jul 2025 21:17:07 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 01E1883F22
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 01E1883F22
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 01E1883F22
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 21:17:06 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 0694C19F593;
- Fri,  4 Jul 2025 23:17:03 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
- via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 04 Jul 2025 23:17:03 +0200
-MIME-Version: 1.0
-Date: Fri, 04 Jul 2025 23:17:03 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250704165758.3784635-1-bernd@kuhls.net>
-References: <20250704165758.3784635-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <ad4076a044cc6ffe38d3831a077358ea@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1751663825;
- bh=cZlqQcJ4YxYBUbbin/a+e8T3TOaEeTINDfwLalhZtJU=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Ey4MtjH18eut2kE0h6R4S5sYV5aX3s84rZHsK3OO06LLtfCVR5IMYHs6xwuTsMekP
- G1P+ODvATYEJlxPxLE3yZpfzCC5M+Tw0Evx5ejxvhIT0OHs6VVfRnhKH8XtpisimjW
- a+omD6VKNsAWDRHqXE7GRZS06A+mBaF1tY0urIh8YybHrcZ4GCpG2ayx5WZBawUNKm
- CBvtAS6+nvpqikOL95StHKQ4nwFh18eGVOMk2PXNjbUs0efRNIygSizW68zV9gK51I
- E5/BmDpKFd1+evIPjbIZkpKOr0de/g9AQvcigy765NWM1xA0Z/qLnxFpw+9ouRVaob
- tsTQ+p/n+URtQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Ey4MtjH1
-Subject: Re: [Buildroot] [PATCH 1/1] package/opus: bump version to 1.5.2
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rrLsm8pxqc35 for <buildroot@buildroot.org>;
+ Fri,  4 Jul 2025 21:25:39 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2EBEB60C12
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2EBEB60C12
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 21:25:39 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 0D80E85F81; Fri,  4 Jul 2025 21:25:39 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 4 Jul 2025 23:18:25 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b5fc6e232f8de0220ba289e6b99c37492b56ba9f
+X-Git-Newrev: c56e7ef954b29d68d79d7a8110a9057457fd2a31
+X-Patchwork-Hint: ignore
+Message-Id: <20250704212539.0D80E85F81@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/xmrig: bump version to 6.24.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,23 +59,46 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 04/07/2025 18:57, Bernd Kuhls wrote:
-> Release notes:
-> https://opus-codec.org/release/stable/2024/03/04/libopus-1_5.html
-> https://opus-codec.org/release/stable/2024/03/04/libopus-1_5_1.html
-> https://opus-codec.org/release/stable/2024/04/12/libopus-1_5_2.html
-> 
-> Updated license hash due to copyright year bump:
-> https://gitlab.xiph.org/xiph/opus/-/commit/254b5ee7b2e7c89aaddbf7a994fea0563842873f
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://git.buildroot.net/buildroot/commit/?id=c56e7ef954b29d68d79d7a8110a9057457fd2a31
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Changelog: https://github.com/xmrig/xmrig/blob/v6.24.0/CHANGELOG.md
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/xmrig/xmrig.hash | 2 +-
+ package/xmrig/xmrig.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/xmrig/xmrig.hash b/package/xmrig/xmrig.hash
+index 8dc4e3c876..89c8fa1c11 100644
+--- a/package/xmrig/xmrig.hash
++++ b/package/xmrig/xmrig.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  79bf51c11ad3670b8330ca1432c9cdaf84f82b96f94b636e33d253be2b916d20  xmrig-6.22.3.tar.gz
++sha256  3521c592a18ada781d79c919ea6c1b7e5a8bcfe2ec666789bc55fd88a2aee8d3  xmrig-6.24.0.tar.gz
+ sha256  589ed823e9a84c56feb95ac58e7cf384626b9cbf4fda2a907bc36e103de1bad2  LICENSE
+diff --git a/package/xmrig/xmrig.mk b/package/xmrig/xmrig.mk
+index 97113ffe8b..860af71f75 100644
+--- a/package/xmrig/xmrig.mk
++++ b/package/xmrig/xmrig.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XMRIG_VERSION = 6.22.3
++XMRIG_VERSION = 6.24.0
+ XMRIG_SITE = $(call github,xmrig,xmrig,v$(XMRIG_VERSION))
+ XMRIG_LICENSE = GPL-3.0+
+ XMRIG_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
