@@ -4,103 +4,103 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97862C83030
-	for <buildroot@archiver.kernel.org>; Fri,  4 Jul 2025 06:47:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA7C1C83F05
+	for <buildroot@archiver.kernel.org>; Fri,  4 Jul 2025 06:47:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7048483E18;
-	Fri,  4 Jul 2025 06:47:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9154F83DCD;
+	Fri,  4 Jul 2025 06:47:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FSplP43cJrBC; Fri,  4 Jul 2025 06:47:14 +0000 (UTC)
+ id tjkCGDJfLHca; Fri,  4 Jul 2025 06:47:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 75AEF83E07
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DE3CA83E25
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 75AEF83E07;
-	Fri,  4 Jul 2025 06:47:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 5D5BB7AB
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:47:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DE3CA83E25;
+	Fri,  4 Jul 2025 06:47:20 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 100F11EB
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:47:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5B06240FA3
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:47:11 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E5FB583E29
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:47:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mauUrGd4t6Ax for <buildroot@buildroot.org>;
- Fri,  4 Jul 2025 06:47:10 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Xi7BVPFrVsle for <buildroot@buildroot.org>;
+ Fri,  4 Jul 2025 06:47:18 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
+ client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 31A3740F8C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 31A3740F8C
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 31A3740F8C
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:47:08 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id
- 5b1f17b1804b1-453066fad06so3767965e9.2
- for <buildroot@buildroot.org>; Thu, 03 Jul 2025 23:47:08 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DACDA83DC3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DACDA83DC3
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DACDA83DC3
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 06:47:17 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id
+ 5b1f17b1804b1-451d54214adso3581855e9.3
+ for <buildroot@buildroot.org>; Thu, 03 Jul 2025 23:47:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1751611627; x=1752216427;
+ d=1e100.net; s=20230601; t=1751611636; x=1752216436;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=AeqoZQAPPpqDSXQS5imCKbeIjomE5elkBlbUWnviBto=;
- b=eqveULbFQn++Q9acsQCYpFzkxLVR5yeKX8H3PPSe7HSQRzznVDAUGh02iU9gzCEMVA
- GrWF/EuzxxQJQFQ1rA44t8IZHTRVEAPLjHaroPzAGU4ZCvfr9pWfWDQx/ZpsWzCWKlja
- x1yu9139UlVLM72mOzf6zhPJvLwij1cuUWSxJtOO4QDTlBRxaAYgpvxIbm10GLdE4iDk
- SEQXntUgSiY+8kkWoAdkTTRZLXpaRPradSeuScvfU1jdyL6tQe/LZ7//6bn0UO+M4efv
- hHUOiF/rHJH02jynRLxDjNzpbKAbyGa7ihH2ynwAUSyz9Aaiphpqau433Go+yYfCIDhS
- e4rA==
+ bh=XfVnJQvDF9ArwHP9SSu6VIFRsTPeqDZ3Jqayyn+gDtM=;
+ b=WVIILl4QPHmyyfe09bH3PEqZMkskfJAGKQvzXi7poqQS5TWpJDUKGS6crT2wxXFjWR
+ OBxUt38PsLO3wXCZXmJaYVpJsecdD08Ii27Cd2X493aZMTtJgs7kNZX5ZZ/URRCOT1qA
+ PRednmo0snJCbsceChokcDvKjD9V+vYPsRO/XacmBYVaSka9ggytsh3Xq6p8r4Pxe9j3
+ XVuwIWxzuLbsQsL3cdV/sfnIuDC0xE4gzjJXiuolZt2mq9Kx5mO8L9jQXQmUOUVjXY4q
+ QlK2Ybj49tj6vPE9T4LuDckltc1Txa2rkRmqhYziUZHx/tWSw+MDAtXbOOADl48bs4rs
+ 2nYg==
 X-Forwarded-Encrypted: i=1;
- AJvYcCXA7+yhiTzoklgCne6PLk7YgEdbxx4ramfDQuKoDvtfMDSxN0i7g9o6F8OLqhWL86H1gdyJSMZoUG4=@buildroot.org
-X-Gm-Message-State: AOJu0Yxhx2GYucobXkbpTUPvgAhhLBnMW623tr43q/35VcqAOOiEop8I
- pDZbe8azIECyABwqvDlFujk/M+RkcOHc2BeLfKiMm0MtTIX9LwKY+wWHcW7IZ9t72c9VNR/E7aE
- uRB+F
-X-Gm-Gg: ASbGncsX69lqdf7GTtg5Fbk5icOj+BUuGmwP/ooNZPDi2C7afm5kS4avdp7THcfpq9Y
- BauqBuJdSRaq/fx9uUZS78UYTcpCxR1MxxeOBo0Qs2tDwALuvlJfoGGLuSsZ0KzFHV4WsQgEw+0
- ZA2SkthPP4sSQUkiL/DUtSXB5DVFYGtnRTJuka9B1fLvwzACW4kAykw/sF+pkcK5gTEfyJpj6qs
- GT7HfSMErC/euab7HHHUVWf1HZjY7rJEfj9oZgFyGx/9oWddzP2ihJD8odssxMsuQ7FvXNPdbUR
- vTWiirCqUSb+rmnXp06ED1qXNzRMTxBNlYNydYpfhx3wlQKST11Pg9gpd3aBHcamUcLm3jkBWbX
- Z0ex9l9LZhw==
-X-Google-Smtp-Source: AGHT+IEgr4oEKWbtRPUR9diNeAczdXeqbjf+Evl9vEQ15BdsvmFFz5CkXzFn/cPxXzx6W4K3cqaZIg==
-X-Received: by 2002:a05:6000:41eb:b0:3b3:a6c2:1a10 with SMTP id
- ffacd0b85a97d-3b4964eb8c5mr1007964f8f.12.1751611627061; 
- Thu, 03 Jul 2025 23:47:07 -0700 (PDT)
+ AJvYcCWPUE8oJld3EWEeFTXhbQsPB4I8WJonY4BiDu6pBQl6mgAFcxqEr0WogNs8YEoBQjLF7FyuBCJTcPk=@buildroot.org
+X-Gm-Message-State: AOJu0YxPw51YiKIniPhvjelBEJ12Tq/liZHAHhIfq2YLxUVg3LfetSRW
+ 5C96aI17XlzUaMeF7c67De73AYP14PUyunNUOzMVEmzB2ELztrkVRb4gpLsT6siIx9E=
+X-Gm-Gg: ASbGncv28CgVDwihR1cr4AnXF/pqZdFT5yp9nXVh+XknzwoHR4AsAo1PzAM9w5cK5TU
+ 866VcnJFOhmikcNyLFfocDbZzetH6r20U7zngUbcIAgQj7hFquwSlEq11Rmx5MzyR0gPaXeMw89
+ t9I/quw07EHh1H1uhoKrswXDXam+De/GmD5Dw4eh+6VfZGLtA8qe8bfotUoYhbgiR/5AWRnPmcy
+ LAX4qSNgayP0Y2bdhLIHEA+S2d7fz5PEI7VAjpS/23UnQ9sxF8D0P77mmLDB3u9q20HLi1DTw04
+ oPOAO1or3zaMgH3BCufOu3MKuZttv369NJ7PIN9uPXUcudbfcsWqE4EIotJnwkwIoXam5BfkFvP
+ EwailYKYGcFLYyPiV2rjB
+X-Google-Smtp-Source: AGHT+IG5qZZFSlXIFMVBTv/OMtNSLhQHf8l6l2OhPThicEpoAwfKVwdJ/HjSXSR2xKwXk11WCWq6qQ==
+X-Received: by 2002:a05:600c:4f4d:b0:442:f956:53f9 with SMTP id
+ 5b1f17b1804b1-454b3162015mr11851715e9.18.1751611635887; 
+ Thu, 03 Jul 2025 23:47:15 -0700 (PDT)
 Received: from arch (94.105.118.175.dyn.edpnet.net. [94.105.118.175])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-454b4eb4abasm6529125e9.40.2025.07.03.23.47.06
+ ffacd0b85a97d-3b47030c2e8sm1640355f8f.3.2025.07.03.23.47.14
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 03 Jul 2025 23:47:06 -0700 (PDT)
-To: Titouan Christophe <titouan.christophe@mind.be>
+ Thu, 03 Jul 2025 23:47:15 -0700 (PDT)
+To: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri,  4 Jul 2025 08:47:05 +0200
-Message-ID: <20250704064705.4064566-1-thomas.perale@mind.be>
+Date: Fri,  4 Jul 2025 08:47:09 +0200
+Message-ID: <20250704064714.4064679-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.50.0
-In-Reply-To: <20250627151521.776955-1-titouan.christophe@mind.be>
-References: <20250627151521.776955-1-titouan.christophe@mind.be>
+In-Reply-To: <20250627121948.1933049-1-raphael.melotte@mind.be>
+References: <20250627121948.1933049-1-raphael.melotte@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1751611627; x=1752216427; darn=buildroot.org;
+ d=mind.be; s=google; t=1751611636; x=1752216436; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=AeqoZQAPPpqDSXQS5imCKbeIjomE5elkBlbUWnviBto=;
- b=JwtOKDHIVohkTq2UUa7PKzckXMaD13BWlRL1Kb/VbD5ZtPfZUQ/DcZbI9NYQdk1T03
- Hgwwrnwe/Jy4lDggJPjGd1pXwRKdzT+B9ca/lILnqZbXWdI0MVLCL/QJk0A6jnxwODaS
- Zldwr32gXJ90p7LysZuqJzKpADxr/3zQWyBbNkemD0JgQntOr2osLrn3zKyqQ6sMPvIb
- TBYgNt3tHwi0OHHWlNkg2EGnlFgllSqgbnooYsaUrLkBgJJEHKJUKsDYRpOzEVRzaAJj
- c4ZSgajWxOdQjGcRIIrkI5AEMuO6giPhhxq2IpR8c1kOB59+Lh+PB1zusc2pgaviYclZ
- 2Cfg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=XfVnJQvDF9ArwHP9SSu6VIFRsTPeqDZ3Jqayyn+gDtM=;
+ b=M3Ocf8ANnKrc7DMehkkDU6PtR6qKwy7MfGRsdLu+fgalOsoKYRfJ3BZn7uxgrpjwlT
+ xAQzXvEwOx3/ABooOxk8eP/ZPxxAD9f70snNMK12nE5AltvaLLcWWIRbx5dSo1fDG/O2
+ 3ieK87VlK3O3mG9r91I7BJEkeOGSCNcC3mNHGR41uNOqk2hhnxE/MPuYAyACVml0vDnX
+ zZEOHiNTJ4T1AbosZ12dlENcIDafIKeRXic4yvQzSaGOVLMNTzGc/l59T7A+NPDnACKL
+ GlCS8VF8+35baoGO+fknffRwyruX3gqthXi5AUdwpZ2gVthkI+J3icyRe1hpF2e5jIXh
+ b6Kg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=JwtOKDHI
-Subject: Re: [Buildroot] [PATCH] package/libbpf: add patch for CVE-2025-29481
+ header.a=rsa-sha256 header.s=google header.b=M3Ocf8AN
+Subject: Re: [Buildroot] [PATCH 1/2] support/testing: add new test for
+ nginx-modsecurity
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,159 +114,93 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-In reply of:
-> This fixes the following CVE:
-> 
-> - CVE-2025-29481:
->     Buffer Overflow vulnerability in libbpf 1.5.0 allows a local attacker to
->     execute arbitrary code via the bpf_object__init_prog` function of libbpf.
-> 
-> Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-
-Applied to 2025.02.x. Thanks
-
-> ---
->  ...er-overflow-in-bpf_object__init_prog.patch | 103 ++++++++++++++++++
->  package/libbpf/libbpf.mk                      |   3 +
->  2 files changed, 106 insertions(+)
->  create mode 100644 package/libbpf/0001-fix-buffer-overflow-in-bpf_object__init_prog.patch
-> 
-> diff --git a/package/libbpf/0001-fix-buffer-overflow-in-bpf_object__init_prog.patch b/package/libbpf/0001-fix-buffer-overflow-in-bpf_object__init_prog.patch
-> new file mode 100644
-> index 0000000000..2806ff220d
-> --- /dev/null
-> +++ b/package/libbpf/0001-fix-buffer-overflow-in-bpf_object__init_prog.patch
-> @@ -0,0 +1,103 @@
-> +From 806b4e0a9f658d831119cece11a082ba1578b800 Mon Sep 17 00:00:00 2001
-> +From: Viktor Malik <vmalik@redhat.com>
-> +Date: Tue, 15 Apr 2025 17:50:14 +0200
-> +Subject: [PATCH] libbpf: Fix buffer overflow in bpf_object__init_prog
-> +
-> +Upstream: https://github.com/libbpf/libbpf/commit/806b4e0a9f658d831119cece11a082ba1578b800
-> +
-> +CVE: CVE-2025-29481
-> +
-> +As shown in [1], it is possible to corrupt a BPF ELF file such that
-> +arbitrary BPF instructions are loaded by libbpf. This can be done by
-> +setting a symbol (BPF program) section offset to a large (unsigned)
-> +number such that <section start + symbol offset> overflows and points
-> +before the section data in the memory.
-> +
-> +Consider the situation below where:
-> +- prog_start = sec_start + symbol_offset    <-- size_t overflow here
-> +- prog_end   = prog_start + prog_size
-> +
-> +    prog_start        sec_start        prog_end        sec_end
-> +        |                |                 |              |
-> +        v                v                 v              v
-> +    .....................|################################|............
-> +
-> +The report in [1] also provides a corrupted BPF ELF which can be used as
-> +a reproducer:
-> +
-> +    $ readelf -S crash
-> +    Section Headers:
-> +      [Nr] Name              Type             Address           Offset
-> +           Size              EntSize          Flags  Link  Info  Align
-> +    ...
-> +      [ 2] uretprobe.mu[...] PROGBITS         0000000000000000  00000040
-> +           0000000000000068  0000000000000000  AX       0     0     8
-> +
-> +    $ readelf -s crash
-> +    Symbol table '.symtab' contains 8 entries:
-> +       Num:    Value          Size Type    Bind   Vis      Ndx Name
-> +    ...
-> +         6: ffffffffffffffb8   104 FUNC    GLOBAL DEFAULT    2 handle_tp
-> +
-> +Here, the handle_tp prog has section offset ffffffffffffffb8, i.e. will
-> +point before the actual memory where section 2 is allocated.
-> +
-> +This is also reported by AddressSanitizer:
-> +
-> +    =================================================================
-> +    ==1232==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x7c7302fe0000 at pc 0x7fc3046e4b77 bp 0x7ffe64677cd0 sp 0x7ffe64677490
-> +    READ of size 104 at 0x7c7302fe0000 thread T0
-> +        #0 0x7fc3046e4b76 in memcpy (/lib64/libasan.so.8+0xe4b76)
-> +        #1 0x00000040df3e in bpf_object__init_prog /src/libbpf/src/libbpf.c:856
-> +        #2 0x00000040df3e in bpf_object__add_programs /src/libbpf/src/libbpf.c:928
-> +        #3 0x00000040df3e in bpf_object__elf_collect /src/libbpf/src/libbpf.c:3930
-> +        #4 0x00000040df3e in bpf_object_open /src/libbpf/src/libbpf.c:8067
-> +        #5 0x00000040f176 in bpf_object__open_file /src/libbpf/src/libbpf.c:8090
-> +        #6 0x000000400c16 in main /poc/poc.c:8
-> +        #7 0x7fc3043d25b4 in __libc_start_call_main (/lib64/libc.so.6+0x35b4)
-> +        #8 0x7fc3043d2667 in __libc_start_main@@GLIBC_2.34 (/lib64/libc.so.6+0x3667)
-> +        #9 0x000000400b34 in _start (/poc/poc+0x400b34)
-> +
-> +    0x7c7302fe0000 is located 64 bytes before 104-byte region [0x7c7302fe0040,0x7c7302fe00a8)
-> +    allocated by thread T0 here:
-> +        #0 0x7fc3046e716b in malloc (/lib64/libasan.so.8+0xe716b)
-> +        #1 0x7fc3045ee600 in __libelf_set_rawdata_wrlock (/lib64/libelf.so.1+0xb600)
-> +        #2 0x7fc3045ef018 in __elf_getdata_rdlock (/lib64/libelf.so.1+0xc018)
-> +        #3 0x00000040642f in elf_sec_data /src/libbpf/src/libbpf.c:3740
-> +
-> +The problem here is that currently, libbpf only checks that the program
-> +end is within the section bounds. There used to be a check
-> +`while (sec_off < sec_sz)` in bpf_object__add_programs, however, it was
-> +removed by commit 6245947c1b3c ("libbpf: Allow gaps in BPF program
-> +sections to support overriden weak functions").
-> +
-> +Add a check for detecting the overflow of `sec_off + prog_sz` to
-> +bpf_object__init_prog to fix this issue.
-> +
-> +[1] https://github.com/lmarch2/poc/blob/main/libbpf/libbpf.md
-> +
-> +Fixes: 6245947c1b3c ("libbpf: Allow gaps in BPF program sections to support overriden weak functions")
-> +Reported-by: lmarch2 <2524158037@qq.com>
-> +Signed-off-by: Viktor Malik <vmalik@redhat.com>
-> +Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-> +Reviewed-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-> +Link: https://github.com/lmarch2/poc/blob/main/libbpf/libbpf.md
-> +Link: https://lore.kernel.org/bpf/20250415155014.397603-1-vmalik@redhat.com
-> +Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-> +---
-> + src/libbpf.c | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/src/libbpf.c b/src/libbpf.c
-> +index b2591f5ca..56250b5ac 100644
-> +--- a/src/libbpf.c
-> ++++ b/src/libbpf.c
-> +@@ -896,7 +896,7 @@ bpf_object__add_programs(struct bpf_object *obj, Elf_Data *sec_data,
-> + 			return -LIBBPF_ERRNO__FORMAT;
-> + 		}
-> + 
-> +-		if (sec_off + prog_sz > sec_sz) {
-> ++		if (sec_off + prog_sz > sec_sz || sec_off + prog_sz < sec_off) {
-> + 			pr_warn("sec '%s': program at offset %zu crosses section boundary\n",
-> + 				sec_name, sec_off);
-> + 			return -LIBBPF_ERRNO__FORMAT;
-> diff --git a/package/libbpf/libbpf.mk b/package/libbpf/libbpf.mk
-> index 7fa541ad24..7c8cfbee85 100644
-> --- a/package/libbpf/libbpf.mk
-> +++ b/package/libbpf/libbpf.mk
-> @@ -13,6 +13,9 @@ LIBBPF_DEPENDENCIES = host-bison host-flex host-pkgconf elfutils zlib
->  HOST_LIBBPF_DEPENDENCIES = host-bison host-flex host-pkgconf host-elfutils host-zlib
->  LIBBPF_INSTALL_STAGING = YES
->  
-> +# 0001-fix-buffer-overflow-in-bpf_object__init_prog.patch
-> +LIBBPF_IGNORE_CVES += CVE-2025-29481
-> +
->  define LIBBPF_BUILD_CMDS
->  	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) \
->  		-C $(@D)/src
-> -- 
-> 2.50.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SW4gcmVwbHkgb2Y6Cj4gVGhpcyB0ZXN0IHZlcmlmaWVzIHRoYXQgd2UgY2FuIHJ1biBuZ2lueCB3
+aXRoIHRoZSBtb2RzZWN1cml0eQo+IGRpcmVjdGl2ZXMuCj4gSXQgYWxzbyBjaGVja3MgYSB2ZXJ5
+IHNpbXBsZSBydWxlIHRoYXQgYmxvY2tzIHJlcXVlc3RzIGNvbnRhaW5pbmcgdGhlCj4ga2V5d29y
+ZCAiYmxvY2ttZSIuCj4gCj4gU2lnbmVkLW9mZi1ieTogUmFwaGHDq2wgTcOpbG90dGUgPHJhcGhh
+ZWwubWVsb3R0ZUBtaW5kLmJlPgoKQXBwbGllZCB0byAyMDI1LjAyLnguIFRoYW5rcwoKPiAtLS0K
+PiAgREVWRUxPUEVSUyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgKysK
+PiAgLi4uL3Rlc3RzL3BhY2thZ2UvdGVzdF9uZ2lueF9tb2RzZWN1cml0eS5weSAgIHwgMzYgKysr
+KysrKysrKysrKysrKysrKwo+ICAuLi4vb3ZlcmxheS9ldGMvbmdpbngvbW9kc2VjdXJpdHktcnVs
+ZXMuY29uZiAgfCAgNyArKysrCj4gIC4uLi9vdmVybGF5L2V0Yy9uZ2lueC9uZ2lueC5jb25mICAg
+ICAgICAgICAgICB8IDE1ICsrKysrKysrCj4gIDQgZmlsZXMgY2hhbmdlZCwgNjAgaW5zZXJ0aW9u
+cygrKQo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2Uv
+dGVzdF9uZ2lueF9tb2RzZWN1cml0eS5weQo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgc3VwcG9ydC90
+ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF9uZ2lueF9tb2RzZWN1cml0eS9vdmVybGF5L2V0Yy9u
+Z2lueC9tb2RzZWN1cml0eS1ydWxlcy5jb25mCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBzdXBwb3J0
+L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS90ZXN0X25naW54X21vZHNlY3VyaXR5L292ZXJsYXkvZXRj
+L25naW54L25naW54LmNvbmYKPiAKPiBkaWZmIC0tZ2l0IGEvREVWRUxPUEVSUyBiL0RFVkVMT1BF
+UlMKPiBpbmRleCBkMTI3MzY0YTU4Li41NzMxYjRiYmUwIDEwMDY0NAo+IC0tLSBhL0RFVkVMT1BF
+UlMKPiArKysgYi9ERVZFTE9QRVJTCj4gQEAgLTI4NTAsNiArMjg1MCw4IEBAIEY6CXN1cHBvcnQv
+dGVzdGluZy90ZXN0cy9wYWNrYWdlL3NhbXBsZV9weXRob25fc2RidXMucHkKPiAgRjoJc3VwcG9y
+dC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2Uvc2FtcGxlX3B5dGhvbl9zZGJ1c19uZXR3b3JrbWFuYWdl
+ci5weQo+ICBGOglzdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS9zYW1wbGVfcHl0aG9uX3Vy
+bGxpYjMucHkKPiAgRjoJc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF9weXRob25f
+am1lc3BhdGgucHkKPiArRjoJc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF9uZ2lu
+eF9tb2RzZWN1cml0eQo+ICtGOglzdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS90ZXN0X25n
+aW54X21vZHNlY3VyaXR5LnB5Cj4gIEY6CXN1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rl
+c3RfcHl0aG9uX3B5bXVwZGYucHkKPiAgRjoJc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2Uv
+dGVzdF9weXRob25fcnNhLnB5Cj4gIEY6CXN1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rl
+c3RfcHl0aG9uX3MzdHJhbnNmZXIucHkKPiBkaWZmIC0tZ2l0IGEvc3VwcG9ydC90ZXN0aW5nL3Rl
+c3RzL3BhY2thZ2UvdGVzdF9uZ2lueF9tb2RzZWN1cml0eS5weSBiL3N1cHBvcnQvdGVzdGluZy90
+ZXN0cy9wYWNrYWdlL3Rlc3RfbmdpbnhfbW9kc2VjdXJpdHkucHkKPiBuZXcgZmlsZSBtb2RlIDEw
+MDY0NAo+IGluZGV4IDAwMDAwMDAwMDAuLjFiMzRjMDhlMjAKPiAtLS0gL2Rldi9udWxsCj4gKysr
+IGIvc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF9uZ2lueF9tb2RzZWN1cml0eS5w
+eQo+IEBAIC0wLDAgKzEsMzYgQEAKPiAraW1wb3J0IG9zCj4gKwo+ICtpbXBvcnQgaW5mcmEuYmFz
+ZXRlc3QKPiArCj4gKwo+ICtjbGFzcyBUZXN0TmdpbnhNb2RzZWN1cml0eShpbmZyYS5iYXNldGVz
+dC5CUlRlc3QpOgo+ICsgICAgb3ZlcmxheSA9IGluZnJhLmZpbGVwYXRoKCJ0ZXN0cy9wYWNrYWdl
+L3Rlc3RfbmdpbnhfbW9kc2VjdXJpdHkvb3ZlcmxheSIpCj4gKyAgICBjb25maWcgPSBpbmZyYS5i
+YXNldGVzdC5CQVNJQ19UT09MQ0hBSU5fQ09ORklHICsgXAo+ICsgICAgICAgIGYiIiIKPiArICAg
+ICAgICBCUjJfVE9PTENIQUlOX0VYVEVSTkFMPXkKPiArICAgICAgICBCUjJfVE9PTENIQUlOX0VY
+VEVSTkFMX0JPT1RMSU49eQo+ICsgICAgICAgIEJSMl9VU0VfTU1VPXkKPiArICAgICAgICBCUjJf
+VEFSR0VUX1JPT1RGU19DUElPPXkKPiArICAgICAgICBCUjJfVEFSR0VUX1JPT1RGU19DUElPX0da
+SVA9eQo+ICsgICAgICAgIEJSMl9ST09URlNfT1ZFUkxBWT0ie292ZXJsYXl9Igo+ICsgICAgICAg
+IEJSMl9QQUNLQUdFX05HSU5YPXkKPiArICAgICAgICBCUjJfUEFDS0FHRV9OR0lOWF9IVFRQPXkK
+PiArICAgICAgICBCUjJfUEFDS0FHRV9OR0lOWF9NT0RTRUNVUklUWT15Cj4gKyAgICAgICAgIiIi
+Cj4gKwo+ICsgICAgZGVmIHRlc3RfcnVuKHNlbGYpOgo+ICsgICAgICAgIGNwaW9fZmlsZSA9IG9z
+LnBhdGguam9pbihzZWxmLmJ1aWxkZGlyLCAiaW1hZ2VzIiwgInJvb3Rmcy5jcGlvIikKPiArICAg
+ICAgICBzZWxmLmVtdWxhdG9yLmJvb3QoYXJjaD0iYXJtdjUiLAo+ICsgICAgICAgICAgICAgICAg
+ICAgICAgICAgICBrZXJuZWw9ImJ1aWx0aW4iLAo+ICsgICAgICAgICAgICAgICAgICAgICAgICAg
+ICBvcHRpb25zPVsiLWluaXRyZCIsIGNwaW9fZmlsZV0pCj4gKyAgICAgICAgc2VsZi5lbXVsYXRv
+ci5sb2dpbigpCj4gKwo+ICsgICAgICAgIHNlbGYuYXNzZXJ0UnVuT2soIm5naW54IC1WIikKPiAr
+ICAgICAgICBzZWxmLmFzc2VydFJ1bk9rKCJ3Z2V0IGh0dHA6Ly9sb2NhbGhvc3QvaW5kZXguaHRt
+bCIpCj4gKyAgICAgICAgc2VsZi5hc3NlcnRSdW5PaygiZ3JlcCAtRiAnV2VsY29tZSB0byBuZ2lu
+eCEnIGluZGV4Lmh0bWwiKQo+ICsgICAgICAgIGNtZCA9ICJ3Z2V0IC1xIC1PIC9kZXYvbnVsbCAt
+LXNlcnZlci1yZXNwb25zZSAyPiYxICIgXAo+ICsgICAgICAgICAgICAiaHR0cDovL2xvY2FsaG9z
+dC9ibG9ja21lLyAyPiYxIHwgYXdrICcvXiAgSFRUUC97cHJpbnQgJDJ9JyIKPiArICAgICAgICBv
+dXQsIHJldCA9IHNlbGYuZW11bGF0b3IucnVuKGNtZCkKPiArICAgICAgICBzZWxmLmFzc2VydEVx
+dWFsKHJldCwgMCkKPiArICAgICAgICAjIENoZWNrIGZvciBIVFRQIDQwMyBVbmF1dGhvcml6ZWQ6
+Cj4gKyAgICAgICAgc2VsZi5hc3NlcnRFcXVhbChvdXRbMF0sICI0MDMiKQo+IGRpZmYgLS1naXQg
+YS9zdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS90ZXN0X25naW54X21vZHNlY3VyaXR5L292
+ZXJsYXkvZXRjL25naW54L21vZHNlY3VyaXR5LXJ1bGVzLmNvbmYgYi9zdXBwb3J0L3Rlc3Rpbmcv
+dGVzdHMvcGFja2FnZS90ZXN0X25naW54X21vZHNlY3VyaXR5L292ZXJsYXkvZXRjL25naW54L21v
+ZHNlY3VyaXR5LXJ1bGVzLmNvbmYKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAw
+MDAwMDAuLjk0YTEzMmE5YzcKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvc3VwcG9ydC90ZXN0aW5n
+L3Rlc3RzL3BhY2thZ2UvdGVzdF9uZ2lueF9tb2RzZWN1cml0eS9vdmVybGF5L2V0Yy9uZ2lueC9t
+b2RzZWN1cml0eS1ydWxlcy5jb25mCj4gQEAgLTAsMCArMSw3IEBACj4gK1NlY1J1bGVFbmdpbmUg
+T24KPiArU2VjUnVsZSBSRVFVRVNUX1VSSSAiQGNvbnRhaW5zIGJsb2NrbWUiIFwKPiArICAgICJp
+ZDoxMDAwMDEsIFwKPiArICAgIHBoYXNlOjIsIFwKPiArICAgIGRlbnksIFwKPiArICAgIHN0YXR1
+czo0MDMsIFwKPiArICAgIG1zZzonQmxvY2tlZCByZXF1ZXN0IHdpdGggZm9yYmlkZGVuIGtleXdv
+cmQgaW4gVVJJLiciCj4gZGlmZiAtLWdpdCBhL3N1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdl
+L3Rlc3RfbmdpbnhfbW9kc2VjdXJpdHkvb3ZlcmxheS9ldGMvbmdpbngvbmdpbnguY29uZiBiL3N1
+cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3RfbmdpbnhfbW9kc2VjdXJpdHkvb3Zlcmxh
+eS9ldGMvbmdpbngvbmdpbnguY29uZgo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAw
+MDAwMDAwMC4uM2QxYjk5MDU1Nwo+IC0tLSAvZGV2L251bGwKPiArKysgYi9zdXBwb3J0L3Rlc3Rp
+bmcvdGVzdHMvcGFja2FnZS90ZXN0X25naW54X21vZHNlY3VyaXR5L292ZXJsYXkvZXRjL25naW54
+L25naW54LmNvbmYKPiBAQCAtMCwwICsxLDE1IEBACj4gK2V2ZW50cyB7Cj4gKyAgICB3b3JrZXJf
+Y29ubmVjdGlvbnMgMTAyNDsKPiArfQo+ICsKPiAraHR0cCB7Cj4gKyAgICBzZXJ2ZXIgewo+ICsg
+ICAgICAgIG1vZHNlY3VyaXR5IG9uOwo+ICsgICAgICAgIGxpc3RlbiA4MDsKPiArICAgICAgICBs
+b2NhdGlvbiAvIHsKPiArICAgICAgICAgICAgcm9vdCAgIGh0bWw7Cj4gKyAgICAgICAgICAgIGlu
+ZGV4ICBpbmRleC5odG1sIGluZGV4Lmh0bTsKPiArICAgICAgICAgICAgbW9kc2VjdXJpdHlfcnVs
+ZXNfZmlsZSAvZXRjL25naW54L21vZHNlY3VyaXR5LXJ1bGVzLmNvbmY7Cj4gKyAgICAgICAgfQo+
+ICsgICAgfQo+ICt9Cj4gLS0gCj4gMi40OS4wCj4gCj4gX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX18KPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4gYnVpbGRy
+b290QGJ1aWxkcm9vdC5vcmcKPiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9s
+aXN0aW5mby9idWlsZHJvb3QKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpo
+dHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
