@@ -1,74 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B82AC8303D
-	for <buildroot@archiver.kernel.org>; Fri,  4 Jul 2025 20:39:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82575C8303D
+	for <buildroot@archiver.kernel.org>; Fri,  4 Jul 2025 20:43:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3DC7180EE8;
-	Fri,  4 Jul 2025 20:39:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4AB95411E5;
+	Fri,  4 Jul 2025 20:43:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3B_cL0lFN1MV; Fri,  4 Jul 2025 20:39:03 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Uqr690RskZ7K; Fri,  4 Jul 2025 20:43:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D99B820B2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5463E411A9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7D99B820B2;
-	Fri,  4 Jul 2025 20:39:03 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2982415F
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 20:39:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5463E411A9;
+	Fri,  4 Jul 2025 20:43:45 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 511197AB
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 20:43:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0FA8280EE8
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 20:39:02 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 428C3411AB
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 20:43:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ti0auwvVG8Qa for <buildroot@buildroot.org>;
- Fri,  4 Jul 2025 20:39:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3F9CF820B2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F9CF820B2
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3F9CF820B2
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 20:39:00 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 7FA752003DA;
- Fri,  4 Jul 2025 22:38:57 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
- via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 04 Jul 2025 22:38:57 +0200
-MIME-Version: 1.0
-Date: Fri, 04 Jul 2025 22:38:57 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250704165458.3698634-1-bernd@kuhls.net>
-References: <20250704165458.3698634-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <823d520ff95ce67e201db3761fc628cb@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1751661538;
- bh=VKpGHDJmgzmbH0h6qJgQ1ltmAjCBMmUcK+M9LRrPQyY=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Mf2qhhYOiBtXBVaJHuRpsZ1BDbHgTqOMqisNEBzLObDGRh4NnCV73DPV6LCigDecD
- KcvT5ayuf1Nma2kR5uy+yRhh8ZItfvEWMqrJblUDBqqIc/L+/IomWTpStSaVh4LmNZ
- s5f9604SvUAlKFKZeESEuZQbMFnH71eKsPkJHr3QG+gNPGetj6QTgzf6qUebcFtyci
- 27szJq/kWViTlDCGl1CMS1Ej24Hr+wiRvd0xabaGln26Me2Yn0UwSb3I5qoALUrT2t
- 5SQVfl73z/nCIkxfDnyQf81izt2cugl0jSKiC3YNyK+iURblnn3IzXuzGdh5ibY2Be
- zWULBK2J4lC5A==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Mf2qhhYO
-Subject: Re: [Buildroot] [PATCH 1/1] package/taglib: bump version to 2.1.1
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vzvR1iSAo-9x for <buildroot@buildroot.org>;
+ Fri,  4 Jul 2025 20:43:43 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B30B4115C
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8B30B4115C
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 20:43:43 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 65A0781DC2; Fri,  4 Jul 2025 20:43:43 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 4 Jul 2025 22:39:52 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 53be9a71641f7d50582cbb23c8f4c12f363ac998
+X-Git-Newrev: 9225bb4e373c32355b39023ece3c7fde9531aac3
+X-Patchwork-Hint: ignore
+Message-Id: <20250704204343.65A0781DC2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/nettle: bump version to 3.10.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,19 +59,51 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 04/07/2025 18:54, Bernd Kuhls wrote:
-> Release notes:
-> https://taglib.org/#taglib-211-release---june-30-2025
-> https://taglib.org/older.html
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://git.buildroot.net/buildroot/commit/?id=9225bb4e373c32355b39023ece3c7fde9531aac3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Release notes:
+https://lists.gnu.org/archive/html/info-gnu/2025-06/msg00006.html
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/nettle/nettle.hash | 4 ++--
+ package/nettle/nettle.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/nettle/nettle.hash b/package/nettle/nettle.hash
+index 6fb79defbe..b9b998f356 100644
+--- a/package/nettle/nettle.hash
++++ b/package/nettle/nettle.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://ftp.gnu.org/gnu/nettle/nettle-3.10.1.tar.gz.sig
+-sha256  b0fcdd7fc0cdea6e80dcf1dd85ba794af0d5b4a57e26397eee3bc193272d9132  nettle-3.10.1.tar.gz
++# https://ftp.gnu.org/gnu/nettle/nettle-3.10.2.tar.gz.sig
++sha256  fe9ff51cb1f2abb5e65a6b8c10a92da0ab5ab6eaf26e7fc2b675c45f1fb519b5  nettle-3.10.2.tar.gz
+ # Locally calculated
+ sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSERv3
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYINGv2
+diff --git a/package/nettle/nettle.mk b/package/nettle/nettle.mk
+index 477ec71867..93c638a4cd 100644
+--- a/package/nettle/nettle.mk
++++ b/package/nettle/nettle.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NETTLE_VERSION = 3.10.1
++NETTLE_VERSION = 3.10.2
+ NETTLE_SITE = $(BR2_GNU_MIRROR)/nettle
+ NETTLE_DEPENDENCIES = host-m4 gmp
+ NETTLE_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
