@@ -4,72 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C065C8303D
-	for <buildroot@archiver.kernel.org>; Fri,  4 Jul 2025 22:23:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 445F6C83F03
+	for <buildroot@archiver.kernel.org>; Fri,  4 Jul 2025 23:25:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EE49F80DA6;
-	Fri,  4 Jul 2025 22:23:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B429683D0E;
+	Fri,  4 Jul 2025 23:25:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rr_AdgnvmqtI; Fri,  4 Jul 2025 22:23:00 +0000 (UTC)
+ id EH7LXcrtXl_U; Fri,  4 Jul 2025 23:25:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3850380DB9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DA63983C4E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3850380DB9;
-	Fri,  4 Jul 2025 22:23:00 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 72B107AB
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 22:22:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DA63983C4E;
+	Fri,  4 Jul 2025 23:25:05 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3257A12E
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 23:25:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 641F040FFB
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 22:22:59 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 246F0407E1
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 23:25:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sC6_zV81zm6u for <buildroot@buildroot.org>;
- Fri,  4 Jul 2025 22:22:58 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 974B540F9D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 974B540F9D
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 974B540F9D
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 22:22:58 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
+ id ZWobvPxTiPMO for <buildroot@buildroot.org>;
+ Fri,  4 Jul 2025 23:25:03 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 33594407BB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 33594407BB
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 33594407BB
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 23:25:02 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:656e:cf44:475c:a8d2])
  (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 5222219F58A;
- Sat,  5 Jul 2025 00:22:55 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
- via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 05 Jul 2025 00:22:55 +0200
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id B7C46B0054E;
+ Sat,  5 Jul 2025 01:24:57 +0200 (CEST)
+To: buildroot@buildroot.org
+Date: Sat,  5 Jul 2025 01:24:47 +0200
+Message-ID: <20250704232447.2963667-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.50.0
 MIME-Version: 1.0
-Date: Sat, 05 Jul 2025 00:22:55 +0200
-To: James Knight <git@jdknight.me>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250701181946.2106-1-git@jdknight.me>
-References: <20250701181946.2106-1-git@jdknight.me>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <6ee41250ab4318b44d405ff2749fe3dc@free.fr>
-X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1751667776;
- bh=S1zkm7ahMvMgzm9KEF7lHojpPo2hN/ID06ZSvMjiLNE=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=cYWv8dVEubx9ApunWUiq6ZOeS4pKmyD9NOS6BWTQUPu7PmG8bTvJK8pem2Dc+Zxgs
- mfE1a6oxNSyrI29P4Lrp85qq2V2IznYBj6DWaXdoHPrCTQwAD2lk8abiYwtUPCN2gU
- 6IKYAa0zxSDDIYBvXj/jHNYw0C10e2pO2iMYlhH/xW+3WGynGeou9BfBJn1gCljpM5
- eXJmaAfiNBrnBUE/vIyXn4jX8Mque2+P2VYrX8rHNJwBgb4W3dv5BzaZfLLJGVSRNk
- E6Nr006PP57jSSc1ehSYqchxMc/VDlUU9869qk7kOS8l2HSO8y3LpS4hYdME7JIOnj
- gAa1cC8ROxFtw==
+ d=free.fr; s=smtp-20201208; t=1751671500;
+ bh=6AAEvkSFyQJuNK8+YMacRDF+XxZSkcRyU2wqYMFsDKQ=;
+ h=From:To:Cc:Subject:Date:From;
+ b=ZjyJhgOHaTc+KrOHTXfjMHoWaQh4rO0CVU19dcjtpoaGwU/3AbSWIwgzeVIbXGd3c
+ jdOJk30OIROQdmYRpTPuoMPRTXLjAAOnsBUURnHiS1lrlGMyWNZpqDsqd46CjaccYL
+ mCenrzRp4fMRgqb99eXhjFrVcnI7Rmc2nL+7UJX4NRWL42sY5Bpoo4SjY10xWLPvLn
+ vq5oLcLsKQd8QDZd+e1C+UQLhBuY45b5Rolw6X9QL/pvgO4Ctl/zXHYZl0y+x0Njyu
+ b6GsPCFHaDcJjKI1gLe+j2R2NDKupkjcSRm1oVc7ttzlrrMKsXzdAgDIMKoneLJnVd
+ zkGZCmbaErbog==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=free.fr
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=cYWv8dVE
-Subject: Re: [Buildroot] [PATCH 1/1] package/libpqxx: bump to version 7.10.1
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=ZjyJhgOH
+Subject: [Buildroot] [PATCH 1/1] boot/shim: bump to version 16.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,19 +76,46 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+Cc: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 01/07/2025 20:19, James Knight wrote:
-> Note the `COPYING` file has changed due to copyright year bumps.
-> 
-> See also: https://github.com/jtv/libpqxx/blob/master/NEWS
-> 
-> Signed-off-by: James Knight <git@jdknight.me>
+For release note, see:
+https://github.com/rhboot/shim/releases/tag/16.0
 
-Applied to master, thanks.
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ boot/shim/shim.hash | 2 +-
+ boot/shim/shim.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/boot/shim/shim.hash b/boot/shim/shim.hash
+index 5aa4ca06e8..14b0aa64cf 100644
+--- a/boot/shim/shim.hash
++++ b/boot/shim/shim.hash
+@@ -1,3 +1,3 @@
+ # locally computed hash
+-sha256  a79f0a9b89f3681ab384865b1a46ab3f79d88b11b4ca59aa040ab03fffae80a9  shim-15.8.tar.bz2
++sha256  d503f778dc75895d3130da07e2ff23d2393862f95b6cd3d24b10cbd4af847217  shim-16.0.tar.bz2
+ sha256  15edf527919ddcb2f514ab9d16ad07ef219e4bb490e0b79560be510f0c159cc2  COPYRIGHT
+diff --git a/boot/shim/shim.mk b/boot/shim/shim.mk
+index f5b3d1cee6..0e5698b432 100644
+--- a/boot/shim/shim.mk
++++ b/boot/shim/shim.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SHIM_VERSION = 15.8
++SHIM_VERSION = 16.0
+ SHIM_SITE = https://github.com/rhboot/shim/releases/download/$(SHIM_VERSION)
+ SHIM_SOURCE = shim-$(SHIM_VERSION).tar.bz2
+ SHIM_LICENSE = BSD-2-Clause
+-- 
+2.50.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
