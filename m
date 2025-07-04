@@ -1,76 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30F78C8303D
-	for <buildroot@archiver.kernel.org>; Fri,  4 Jul 2025 16:50:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C15BC8303D
+	for <buildroot@archiver.kernel.org>; Fri,  4 Jul 2025 16:51:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 892F1406F9;
-	Fri,  4 Jul 2025 16:50:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 140716162C;
+	Fri,  4 Jul 2025 16:51:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4pSjPMxqPsYF; Fri,  4 Jul 2025 16:50:04 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fAl2xr3576KL; Fri,  4 Jul 2025 16:51:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D1B9440719
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3CDE761624
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D1B9440719;
-	Fri,  4 Jul 2025 16:50:03 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id D81207AB
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 16:50:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3CDE761624;
+	Fri,  4 Jul 2025 16:51:17 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2B24312E
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 16:51:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C9C9A83E00
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 16:50:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 12122400B3
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 16:51:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6-uCYtpPXRtj for <buildroot@buildroot.org>;
- Fri,  4 Jul 2025 16:50:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 19EC3822E2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 19EC3822E2
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 19EC3822E2
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 16:50:00 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id EB98719F734;
- Fri,  4 Jul 2025 18:49:56 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
- via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 04 Jul 2025 18:49:56 +0200
-MIME-Version: 1.0
-Date: Fri, 04 Jul 2025 18:49:56 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250703210124.1519578-1-bernd@kuhls.net>
-References: <20250703210124.1519578-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <3217d74f96ec1a3268a01712a089a766@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1751647798;
- bh=S/YQl8Jib3i9cN1vOaFZmGsKTUjAKm2ccZSHML/eC4g=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Pj0Mgd2siVXCkh1a9iJvy63UysNNFFUxRRmB9haC8PFc1rr/lM7sldl5YezHKNGul
- A9IaRB3LBHoK/IfOUdnBe7jtB5PmX370Boe7g7SfN/KCP0LnRQEHB5pAj5waUiBL+h
- uvtHH7dBbJ20Yw2Yepgzc6aKqQBgBHOIrqjYS6JGfQvOBqWih3kX2nyJGMm+nUARYu
- pIWzJ4hncZWBYufRSaEbtBLh+GF6iYnflTWIAYjuKaLySDesLHTAppcKtW+1KgIEdy
- 7eUL3/ERAJW/YW2lCOrvnyndJc08/1PdZFo023/bU6uy4Qy6vH6OE7SI7Po5pPQO7f
- tOuh/QzqSZ6vA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=Pj0Mgd2s
-Subject: Re: [Buildroot] [PATCH 1/1] package/kodi-pvr-iptvsimple: bump
- version to 21.11.0-Omega
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lC1QNZKR3iGy for <buildroot@buildroot.org>;
+ Fri,  4 Jul 2025 16:51:14 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5984A40089
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5984A40089
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 16:51:14 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 42AAD85E2F; Fri,  4 Jul 2025 16:51:14 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 4 Jul 2025 18:50:20 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 7e81062a707c35f8e39073ff760e18d8628edff6
+X-Git-Newrev: d4cbf1403f191f40b82dd969d9066cefe3e1c395
+X-Patchwork-Hint: ignore
+Message-Id: <20250704165114.42AAD85E2F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libnss: bump version to 3.113.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,15 +59,49 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 03/07/2025 23:01, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://git.buildroot.net/buildroot/commit/?id=d4cbf1403f191f40b82dd969d9066cefe3e1c395
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+For release note, see:
+https://hg-edge.mozilla.org/projects/nss/file/NSS_3_113_1_RTM/doc/rst/releases/nss_3_113_1.rst
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 7fcb75e6ba..e0bbc82413 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_113_RTM/src/SHA256SUMS
+-sha256  acef06b512d3bd81c87a63b3c8653d258bb689d2191fc0e64decf5a1efa01c0f  nss-3.113.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_113_1_RTM/src/SHA256SUMS
++sha256  b8c586cc0ac60b76477f62483f664f119c26000a8189dd9ef417df7dbd33a2cc  nss-3.113.1.tar.gz
+ # Locally calculated
+ sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index afb472f00c..ffadfd9f5d 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNSS_VERSION = 3.113
++LIBNSS_VERSION = 3.113.1
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
