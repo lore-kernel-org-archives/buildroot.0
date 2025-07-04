@@ -4,48 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3347C8303D
-	for <buildroot@archiver.kernel.org>; Fri,  4 Jul 2025 20:31:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6F0EC83F03
+	for <buildroot@archiver.kernel.org>; Fri,  4 Jul 2025 20:31:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 73B4483E30;
-	Fri,  4 Jul 2025 20:31:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A748D83EA3;
+	Fri,  4 Jul 2025 20:31:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZWKcHr--zb18; Fri,  4 Jul 2025 20:31:05 +0000 (UTC)
+ id gild9934bRfn; Fri,  4 Jul 2025 20:31:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 88C7583EA1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EBE5A84076
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 88C7583EA1;
-	Fri,  4 Jul 2025 20:31:05 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id EE1C315F
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 20:31:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EBE5A84076;
+	Fri,  4 Jul 2025 20:31:21 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 16F2715F
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 20:31:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DFF4C41040
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 20:31:04 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id F16B160DDD
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 20:31:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NDxvZ3p-8kZS for <buildroot@buildroot.org>;
- Fri,  4 Jul 2025 20:31:03 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B565B4103F
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B565B4103F
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 20:31:03 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A789B85F09; Fri,  4 Jul 2025 20:31:03 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 4 Jul 2025 22:14:29 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0365490f7db91bf896a0cc5c9034b8727f9b1f34
-X-Git-Newrev: 6baca88959bf14b7d7ef409ce1628c699bcc40c1
-X-Patchwork-Hint: ignore
-Message-Id: <20250704203103.A789B85F09@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/fontconfig: bump version to 2.17.1
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZAsmFQxZ82qb for <buildroot@buildroot.org>;
+ Fri,  4 Jul 2025 20:31:19 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 34EA260DE2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 34EA260DE2
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 34EA260DE2
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 20:31:19 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id D74045FFB4;
+ Fri,  4 Jul 2025 22:31:14 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 04 Jul 2025 22:31:14 +0200
+MIME-Version: 1.0
+Date: Fri, 04 Jul 2025 22:31:14 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250704165417.3683051-1-bernd@kuhls.net>
+References: <20250704165417.3683051-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <db56910908179fe7d52b665d2dcc7ddf@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1751661076;
+ bh=fDDqQjnJrAIvZEoxNIEkecCDuguoiD1llLgAJ2xGyK8=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=adVgyonrrOTOhO/txUBQgF0cUYSERxC7BvE1iq7XovgfgNMUe01NNUfRN3IqY3sg4
+ cF3iinPu3PyQ7whq7tYoM7Qf0FBlkOxYykCqPkD6HHUxEvFjQ2oIXWaY8jhrAsnkpO
+ ts8x3smRjTAFVGhopsoY2058L8zGiD0ytLkJg3usj4uja/mTdOL/JuvKBAuxUebXvF
+ kCLZ8ho2h7vbPx2/f/Kjn8mN/eKxJNqyn70Yk7CfdWF/I2mHJfP1isZJWmKO6qMmIH
+ +2lhVXShkRV1+7lrqXFQks+3HLnqdaHUrDHmHji/vUvOEmsSSLI2wszjxxAf3imf/V
+ Ml/nVl3f6TGSQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=adVgyonr
+Subject: Re: [Buildroot] [PATCH 1/1] package/fontconfig: bump version to
+ 2.17.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,104 +83,30 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6baca88959bf14b7d7ef409ce1628c699bcc40c1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 04/07/2025 18:54, Bernd Kuhls wrote:
+> Removed patch which is included in this release.
+> 
+> Switched _SITE to gitlab:
+> https://lists.freedesktop.org/archives/fontconfig/2025-March/007154.html
+> 
+> Release notes:
+> 2.16.1: 
+> https://lists.freedesktop.org/archives/fontconfig/2025-March/007154.html
+> 2.16.2: 
+> https://lists.freedesktop.org/archives/fontconfig/2025-April/007168.html
+> 2.17.0: 
+> https://lists.freedesktop.org/archives/fontconfig/2025-June/007224.html
+> 2.17.1: 
+> https://lists.freedesktop.org/archives/fontconfig/2025-July/007229.html
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Removed patch which is included in this release.
-
-Switched _SITE to gitlab:
-https://lists.freedesktop.org/archives/fontconfig/2025-March/007154.html
-
-Release notes:
-2.16.1: https://lists.freedesktop.org/archives/fontconfig/2025-March/007154.html
-2.16.2: https://lists.freedesktop.org/archives/fontconfig/2025-April/007168.html
-2.17.0: https://lists.freedesktop.org/archives/fontconfig/2025-June/007224.html
-2.17.1: https://lists.freedesktop.org/archives/fontconfig/2025-July/007229.html
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...uild-explicitly-check-for-pthread-support.patch | 37 ----------------------
- package/fontconfig/fontconfig.hash                 |  4 +--
- package/fontconfig/fontconfig.mk                   |  4 +--
- 3 files changed, 4 insertions(+), 41 deletions(-)
-
-diff --git a/package/fontconfig/0001-meson.build-explicitly-check-for-pthread-support.patch b/package/fontconfig/0001-meson.build-explicitly-check-for-pthread-support.patch
-deleted file mode 100644
-index ca394ab7d5..0000000000
---- a/package/fontconfig/0001-meson.build-explicitly-check-for-pthread-support.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--From 3c9de31dda1a1d44fade7a61e66c989178d6c2a4 Mon Sep 17 00:00:00 2001
--From: Thomas Devoogdt <thomas@devoogdt.com>
--Date: Sun, 26 Jan 2025 10:15:39 +0100
--Subject: [PATCH] meson.build: explicitly check for pthread support
--
--Tested using buildroot. The br-arm-full-nothread fails
--because meson assumes thread support when cross-compiling.
--
--Dependency threads found: YES unknown (cached)
--Has header "pthread.h" : NO
--
--Upstream: https://gitlab.freedesktop.org/fontconfig/fontconfig/-/commit/aad470dad519b6fe3459023b82941b4414b71313
--Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
-----
-- meson.build | 6 ++++--
-- 1 file changed, 4 insertions(+), 2 deletions(-)
--
--diff --git a/meson.build b/meson.build
--index 4439758..07e242b 100644
----- a/meson.build
--+++ b/meson.build
--@@ -383,8 +383,10 @@ endif
-- 
-- if host_machine.system() != 'windows'
--   thread_dep = dependency('threads')
---  conf.set('HAVE_PTHREAD', 1)
---  deps += [thread_dep]
--+  if thread_dep.found() and cc.has_header('pthread.h')
--+    conf.set('HAVE_PTHREAD', 1)
--+    deps += [thread_dep]
--+  endif
-- endif
-- 
-- fc_templatedir = get_option('template-dir')
---- 
--2.43.0
--
-diff --git a/package/fontconfig/fontconfig.hash b/package/fontconfig/fontconfig.hash
-index b9c95d40b2..e6f2e0771c 100644
---- a/package/fontconfig/fontconfig.hash
-+++ b/package/fontconfig/fontconfig.hash
-@@ -1,5 +1,5 @@
--# From https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.16.0.tar.xz.sha256sum
--sha256  6a33dc555cc9ba8b10caf7695878ef134eeb36d0af366041f639b1da9b6ed220  fontconfig-2.16.0.tar.xz
-+# From https://gitlab.freedesktop.org/api/v4/projects/890/packages/generic/fontconfig/2.17.1/fontconfig-2.17.1.tar.xz.sha256sum
-+sha256  9f5cae93f4fffc1fbc05ae99cdfc708cd60dfd6612ffc0512827025c026fa541  fontconfig-2.17.1.tar.xz
- 
- # Locally calculated
- sha256  51a51aa9823704fd90bccc616cdd17ebabb5b2b3e9cbde886ca02c7002288067  COPYING
-diff --git a/package/fontconfig/fontconfig.mk b/package/fontconfig/fontconfig.mk
-index 7ac8872e82..d9f5dbefad 100644
---- a/package/fontconfig/fontconfig.mk
-+++ b/package/fontconfig/fontconfig.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--FONTCONFIG_VERSION = 2.16.0
--FONTCONFIG_SITE = https://www.freedesktop.org/software/fontconfig/release
-+FONTCONFIG_VERSION = 2.17.1
-+FONTCONFIG_SITE = https://gitlab.freedesktop.org/api/v4/projects/890/packages/generic/fontconfig/$(FONTCONFIG_VERSION)
- FONTCONFIG_SOURCE = fontconfig-$(FONTCONFIG_VERSION).tar.xz
- FONTCONFIG_INSTALL_STAGING = YES
- FONTCONFIG_DEPENDENCIES = freetype expat host-pkgconf host-gperf \
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
