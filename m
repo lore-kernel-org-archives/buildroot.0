@@ -1,109 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1FBEC83F03
-	for <buildroot@archiver.kernel.org>; Fri,  4 Jul 2025 18:41:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AF9DC8303D
+	for <buildroot@archiver.kernel.org>; Fri,  4 Jul 2025 19:57:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 79C2340B56;
-	Fri,  4 Jul 2025 18:41:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 04BB460F83;
+	Fri,  4 Jul 2025 19:57:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QPqzcDo7c0zO; Fri,  4 Jul 2025 18:41:12 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 02mBYTZbzsHr; Fri,  4 Jul 2025 19:57:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A151E40B8E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2353E60DE2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A151E40B8E;
-	Fri,  4 Jul 2025 18:41:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 311A57AB
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 18:41:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2353E60DE2;
+	Fri,  4 Jul 2025 19:57:55 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id A4D157AB
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 19:57:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 22A8640B8E
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 18:41:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A1D0041142
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 19:57:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ml4EprSBdoiJ for <buildroot@buildroot.org>;
- Fri,  4 Jul 2025 18:41:11 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::633; helo=mail-ej1-x633.google.com;
- envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9F9E240B56
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F9E240B56
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com
- [IPv6:2a00:1450:4864:20::633])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9F9E240B56
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 18:41:10 +0000 (UTC)
-Received: by mail-ej1-x633.google.com with SMTP id
- a640c23a62f3a-ae3ec622d2fso202685266b.1
- for <buildroot@buildroot.org>; Fri, 04 Jul 2025 11:41:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1751654468; x=1752259268;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=w79dV8nBzWFadoXVR3fRxUTkiLsue+gQnGmFpGMUSEE=;
- b=vG8dDInwaZV5+CVWdPlJQQi4Lmxs2P8k6Fsbx7zPmlcA9YM8irWd3NiEWuyeriK0jh
- uZ7E9VYJDjkx/dJc2XRgGvJ0+iGRtvz6mPNZyDyYKWjw8J2yLHPpVq68+JDdUdD8GdGj
- xvXA3L/7016K6we9k3L9kChfRA5XHxMIoyWy1D4oL/LUxS/f4M892vgaMx9jHJ0f8/GY
- XCcXVTb6xKQWe2FV51tYKY/Mws85T4KajPLILt5p+OA6f3BFOpC/MONqxPfD1cFW/vZ8
- 0+0V1CqqF4CpqDWQ48cbeu2fD6obvc+zxrvggyiuETESZV4AkhdB4CPcye9LnPTGaAgW
- Ppgg==
-X-Gm-Message-State: AOJu0YziwTleC99VXAuxWxnD4cwjbLVW5Q0PKwkTBlqU/5YxKHwvcDrj
- uCTKBqll2we4nxLb3Kj58E4sM3N1bfV8UY5/JmWSC/Q9+0n5KP48SPCi60FK5o0I/B4=
-X-Gm-Gg: ASbGncvJBvN3T/63CnDeknFfFe3Ctf2jTNcPcry8RjUgDv/DErRwJGGDto31swUXFJ+
- KtEotfGTkk3p1g2eqfVcGJGWWW3g1tWQkJUKEAyDDYb2DxibFLpcAj2a8XhZDDazxwX2IfDR45p
- f7e91fYYJJtF8YFweVl6SfDY/+qQbQ/fyV/b2beY7TRHrVTXEsQwYuW1b5a5swxE3yj1tbos6+U
- qEkxHcmwttWBORIWl2kTdGAdO5RVdA9jvx82Vw35qNfYlAw9QsxjOhq4ElY9qPjnCqTQBg+K9oY
- biWEZnV6BnN3yiNgM1dQ1K3Kwfjsuzbdo5f/fSh7Ruw0w8AoiCmc/irgrHdAh3pbkH2y49D5UDx
- 6TFf76tFbn7AEIwqwrAXgr6MoaOyYj5GXrtT0D0x8BkAhbQ==
-X-Google-Smtp-Source: AGHT+IH2XjoxfzJN/NUaOkGNxC40GH3cDz0BlDTjrD0dWK4qloN59o5Xbb52D5iGuAl+VZ53H17wkw==
-X-Received: by 2002:a17:907:961f:b0:ae0:ab3f:36b5 with SMTP id
- a640c23a62f3a-ae3fe457c8cmr368394566b.4.1751654468150; 
- Fri, 04 Jul 2025 11:41:08 -0700 (PDT)
-Received: from ?IPV6:2a02:a03f:639d:e501:5db7:a3a4:443e:4828?
- ([2a02:a03f:639d:e501:5db7:a3a4:443e:4828])
- by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-ae3f66e7d4asm212299766b.23.2025.07.04.11.41.07
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 04 Jul 2025 11:41:07 -0700 (PDT)
-Message-ID: <a85879a1-59d1-4569-bb58-bbf71dffe6a5@mind.be>
-Date: Fri, 4 Jul 2025 20:41:06 +0200
+ id QmyhM5LC_N4s for <buildroot@buildroot.org>;
+ Fri,  4 Jul 2025 19:57:53 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A65314113B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A65314113B
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A65314113B
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 19:57:52 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:656e:cf44:475c:a8d2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 4E5CBB0053D;
+ Fri,  4 Jul 2025 21:57:47 +0200 (CEST)
+To: buildroot@buildroot.org
+Cc: Gilles Talis <gilles.talis@gmail.com>,
+	Julien Olivain <ju.o@free.fr>
+Date: Fri,  4 Jul 2025 21:57:40 +0200
+Message-ID: <20250704195740.1576078-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.50.0
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Julien Olivain <ju.o@free.fr>
-Cc: buildroot@buildroot.org, Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- thomas.perale@mind.be
-References: <20250702151228.1641390-1-titouan.christophe@mind.be>
- <20250704092142.1885856-1-titouan.christophe@mind.be>
- <65c67a53be84ac80cad1b880a956e73a@free.fr>
-Content-Language: en-US
-In-Reply-To: <65c67a53be84ac80cad1b880a956e73a@free.fr>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1751654468; x=1752259268; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=w79dV8nBzWFadoXVR3fRxUTkiLsue+gQnGmFpGMUSEE=;
- b=L3Vp5rFPjbXzrkqEkInCEWK6UI+315rwCFOC/l91LXuoirIo33DYNzca7r6wMa/y0+
- U+1GPS/EEEX4n48oZZyQxJLdZ+Qrxskev8mA6t2i7Kxb3PBZf8bZfPrFe1Wowls5KbLL
- hxZ64WS8ZpW1FwGgXUM5YkYLx9vOSsnpTEBCmL+kRy38nFCNUlEncN0Xw5JpfqZorGFa
- fiFJV+myjEBVnVCMwTXrZPiHTRcpOm+MnD6kKBBzNWFjYaPm7fXX2awD0HNuzn/VrD3i
- mqwoOwTsUH89wwEZiMi9GaDz+Um6f9YvXBP/wItJt7LkRSecO5aAM42HuCVfpjtSSfAS
- 8pfQ==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1751659069;
+ bh=wxR/ruQwGWLlUAzClqhpO9lSYoZ9X1GoULS7y9/euz4=;
+ h=From:To:Cc:Subject:Date:From;
+ b=D1qL51oJF9TeG/h3aIa+bQIUp+jHlAswVTf7kbq62ySUcqq56vhXIg/2UaWrBdYsN
+ V5mw1pEQ/KIKDYWeYzL16xMS4v2Id7lhMiLMWiy7DDRBkd8FMsIrAraONlC3hbvcMI
+ 1O0gmRKcc9/0EGr+v/mfu8iMWBzv/yw/R1L5wpv9gX8wrVyBIYRXclkWItY9+PSyOD
+ fFmwI7KGO1otneNzNgLW5nyiAa8mXKz0YxlO+KgQOZeEnYOu28zFQhS58fzQFiIquM
+ X8wKhZuwq+QS0+4I/fVuhlZ4kqj3SlQsAkzGh4cy8mK1KHoG9nBHokIDBw8kyMCpaE
+ laCoEzQEzEXwg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
+ header.from=free.fr
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=L3Vp5rFP
-Subject: Re: [Buildroot] [PATCH v2] package/libsoup: add many security
- patches
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=D1qL51oJ
+Subject: [Buildroot] [PATCH 1/1] package/clpeak: bump version to 1.1.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,46 +76,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Titouan Christophe via buildroot <buildroot@buildroot.org>
-Reply-To: Titouan Christophe <titouan.christophe@mind.be>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Julien,
+For release notes since 1.1.2, see:
+https://github.com/krrishnarraj/clpeak/releases/tag/1.1.3
+https://github.com/krrishnarraj/clpeak/releases/tag/1.1.4
+https://github.com/krrishnarraj/clpeak/releases/tag/1.1.5
 
-On 4/07/25 19:02, Julien Olivain wrote:
-> On 04/07/2025 11:21, Titouan Christophe via buildroot wrote:
->> Import all security patches from OpenEmbedded for libsoup.
->> This fixes the following 18 known vulnerabilities:
-> [...]
->> Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
->
-> Applied to master, thanks.
-Thank you for reviewing all of this so far !
->
-> I saw that the last package using this libsoup (v2) package is
-> gstd. So maybe it would be nice to update it to use libsoup3.
-> We will avoid piling up those CVE fixes and could even remove
-> this old libsoup package. 
+The package license changed from Unlicensed to Apache-2.0 in upstream
+commit [1]. This commit updates _LICENSE and the license file hash
+accordingly.
 
-Yes indeed, this is what I would have liked to do. Unfortunately, 
-libsoup3 seems to have quite a few breaking changes compared to 
-libsoup2, and updating would require some change in gstd itself.
+[1] https://github.com/krrishnarraj/clpeak/commit/65e572451330b4673712dfec352842f3123a9258
 
-On a positive note - as you've seen yesterday - gvfs was in a similar 
-situation but they moved to libsoup3 upstream, so we could remove one 
-dependency to libsoup2 in Buildroot already 
-(https://gitlab.com/buildroot.org/buildroot/-/commit/3ea1225d4f73025e8ce42264835303a8790c0d01)
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/clpeak/clpeak.hash | 4 ++--
+ package/clpeak/clpeak.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-> Best regards,
->
-> Julien.
-
-Have a nice week-end,
-
-Titouan
+diff --git a/package/clpeak/clpeak.hash b/package/clpeak/clpeak.hash
+index 3db2a2ca6b..0ef30c5a68 100644
+--- a/package/clpeak/clpeak.hash
++++ b/package/clpeak/clpeak.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  7bc7beba6b3307290650abc4f13fe9389b271c1a64601fa333461516950d745b  clpeak-1.1.2.tar.gz
+-sha256  88d9b4eb60579c191ec391ca04c16130572d7eedc4a86daa58bf28c6e14c9bcd  LICENSE
++sha256  31620ef28848108f6868e57e100412aa009399ba2cd021afd3b64563711fa49f  clpeak-1.1.5.tar.gz
++sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
+diff --git a/package/clpeak/clpeak.mk b/package/clpeak/clpeak.mk
+index 616a02c0b4..7756345be6 100644
+--- a/package/clpeak/clpeak.mk
++++ b/package/clpeak/clpeak.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-CLPEAK_VERSION = 1.1.2
++CLPEAK_VERSION = 1.1.5
+ CLPEAK_SITE = $(call github,krrishnarraj,clpeak,$(CLPEAK_VERSION))
+-CLPEAK_LICENSE = Unlicense
++CLPEAK_LICENSE = Apache-2.0
+ CLPEAK_LICENSE_FILES = LICENSE
+ CLPEAK_DEPENDENCIES = libopencl opencl-clhpp
+ 
+-- 
+2.50.0
 
 _______________________________________________
 buildroot mailing list
