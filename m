@@ -4,73 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71E17C8303D
-	for <buildroot@archiver.kernel.org>; Fri,  4 Jul 2025 16:51:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97185C83F03
+	for <buildroot@archiver.kernel.org>; Fri,  4 Jul 2025 16:52:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4023D407FD;
-	Fri,  4 Jul 2025 16:51:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4C9A540F93;
+	Fri,  4 Jul 2025 16:52:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CcHUXZoOd7jH; Fri,  4 Jul 2025 16:51:38 +0000 (UTC)
+ id 0KsI1-0Vvrhe; Fri,  4 Jul 2025 16:52:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8251A40E7D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C08C840F34
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8251A40E7D;
-	Fri,  4 Jul 2025 16:51:38 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 71BE412E
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 16:51:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C08C840F34;
+	Fri,  4 Jul 2025 16:52:01 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 13C8112E
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 16:52:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6389C6162B
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 16:51:37 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EE90A6161B
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 16:52:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j6PxBfwsTk9O for <buildroot@buildroot.org>;
- Fri,  4 Jul 2025 16:51:36 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8F78A6161B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F78A6161B
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8F78A6161B
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 16:51:36 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id D5732B0053D;
- Fri,  4 Jul 2025 18:51:32 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
- via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 04 Jul 2025 18:51:32 +0200
+ id J2RTjwawFh-7 for <buildroot@buildroot.org>;
+ Fri,  4 Jul 2025 16:52:00 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C676B61624
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C676B61624
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C676B61624
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 16:51:58 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p4fd6c6da.dip0.t-ipconnect.de [79.214.198.218])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 3F21CA4C3953
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 18:51:56 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:47690)
+ by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
+ (envelope-from <bernd@kuhls.net>) id 1uXjdk-000000005Rt-0KzX
+ for buildroot@buildroot.org; Fri, 04 Jul 2025 16:51:55 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Fri,  4 Jul 2025 18:51:55 +0200
+Message-Id: <20250704165155.3639008-3-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250704165155.3639008-1-bernd@kuhls.net>
+References: <20250704165155.3639008-1-bernd@kuhls.net>
 MIME-Version: 1.0
-Date: Fri, 04 Jul 2025 18:51:32 +0200
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Cc: buildroot@buildroot.org, Joseph Kogut <joseph.kogut@gmail.com>
-In-Reply-To: <20250704144830.1682903-1-giulio.benetti@benettiengineering.com>
-References: <5b3010b4da5429b622aa62077e167215@free.fr>
- <20250704144830.1682903-1-giulio.benetti@benettiengineering.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <4b4f9c5461b3c9a26ab7e943442c404e@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1751647895;
- bh=cGZyqWL6QUzpGgDm/9VVAwMvFZSmcYMJJMwGD0UYxK4=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=YwDOsXNu4V8us15Qt8N0hLLnKVLoViyvvMUK58pPoXYFNqzvA/+a+KCY1qmP06+0+
- hhEZVzl945BwTpdyW31eXDl0fotaylcO7yFtqNamExcr0fQkXPOsijmStbKNXM+oB6
- wCoa98tgN4TRaUmsmzJxpRk+/3Jdx4s/3yWLdzAr0ld4O2yATYewL8UQ1+wYpZi4uv
- DSxCoIF/X2gWdbi9AXPU7exSXRWhUVAuQZEU3DkrfZu0dKLaPQN8cIxUBvgbZpjKak
- 30g0p3HTac4KpY69z1hNZozoxxY72Mv9EvUHH1J9R7OuEViokeljDTzS8lV3oKaodL
- BPs4LJ9wtkJBQ==
+X-Spamd-Bar: +
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202506031021; t=1751647916;
+ bh=P0t4aF2Yh1QgsLSHD3WRz4wUikxX88YSjLHRpq7NqUw=;
+ h=From:To:Subject:Date:In-Reply-To:References:From;
+ b=mcSTgQ9Bq5OYduhab5LZo34ufZItKb0Neq+NRs5tM4fy7Z8BGVektYXdcWc2S/Lnn
+ sy+5sC0DijZLo151Q/TGVSoPyVMQl7RprM9BVH2eci105P91p0jEzQZ3IjXqPldHjK
+ 4F4GhSAo5Kw9sRwnEE5uckfUyDBe/Sso0gMe6VTaUjpl+Jp/FBoO/pn665uGt9GSk2
+ AcGNY3ksHp8JCy4QJL2RSIlC0VI4gI5NCIZE+urZNpKvlEyFuFUOgxr+hR7Co2kX5Z
+ 6a4O2vcESTxIhU7A5qPTsT0Fwd1QR8ytD3RcJYuSr1E5p8FQtTgvkUXguMeOKepZgt
+ 3d6azOVMerxvg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=YwDOsXNu
-Subject: Re: [Buildroot] [PATCH v2] package/libnss: bump version to 3.113.1
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202506031021 header.b=mcSTgQ9B
+Subject: [Buildroot] [PATCH 3/3] package/intel-vpl-gpu-rt: bump version to
+ 25.2.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,20 +83,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 04/07/2025 16:48, Giulio Benetti wrote:
-> For release note, see:
-> https://hg-edge.mozilla.org/projects/nss/file/NSS_3_113_1_RTM/doc/rst/releases/nss_3_113_1.rst
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash | 2 +-
+ package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
+diff --git a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash
+index a07cb80b73..16a67d732d 100644
+--- a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash
++++ b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  8b37ed5f019d722551b5b5c7a31fa2af3ed0287338fd5c8c18b3a41dac0d4eae  intel-vpl-gpu-rt-25.2.5.tar.gz
++sha256  d236ede2ab87063d0d8d52932779ff446a885b8dc4ef840d1a756c6776ef6fef  intel-vpl-gpu-rt-25.2.6.tar.gz
+ sha256  c31c3cc5fd66d1250dbca1c3d9011a9f874537442ac71c8de80f2f0fed13f297  LICENSE
+diff --git a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk
+index dbb28d2b80..50aca58526 100644
+--- a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk
++++ b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-INTEL_VPL_GPU_RT_VERSION = 25.2.5
++INTEL_VPL_GPU_RT_VERSION = 25.2.6
+ INTEL_VPL_GPU_RT_SITE = $(call github,intel,vpl-gpu-rt,intel-onevpl-$(INTEL_VPL_GPU_RT_VERSION))
+ INTEL_VPL_GPU_RT_LICENSE = MIT
+ INTEL_VPL_GPU_RT_LICENSE_FILES = LICENSE
+-- 
+2.39.5
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
