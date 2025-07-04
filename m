@@ -4,71 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D10FAC8303D
-	for <buildroot@archiver.kernel.org>; Fri,  4 Jul 2025 20:56:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AE14C83F03
+	for <buildroot@archiver.kernel.org>; Fri,  4 Jul 2025 21:05:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9F9BE4116D;
-	Fri,  4 Jul 2025 20:56:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E35F540BD0;
+	Fri,  4 Jul 2025 21:05:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dq8PkbuPdRKS; Fri,  4 Jul 2025 20:56:43 +0000 (UTC)
+ id 9taTpsg7nqTs; Fri,  4 Jul 2025 21:05:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E8C0E4117C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C11040B42
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E8C0E4117C;
-	Fri,  4 Jul 2025 20:56:42 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 5A3357AB
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 20:56:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1C11040B42;
+	Fri,  4 Jul 2025 21:05:40 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id BFF6015F
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 21:05:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 40C4841180
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 20:56:41 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B183E40B1F
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 21:05:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gv1QkYh8v-wc for <buildroot@buildroot.org>;
- Fri,  4 Jul 2025 20:56:40 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 764534116D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 764534116D
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 764534116D
- for <buildroot@buildroot.org>; Fri,  4 Jul 2025 20:56:40 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 4E4C413F8AE;
- Fri,  4 Jul 2025 22:56:37 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
- via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 04 Jul 2025 22:56:37 +0200
-MIME-Version: 1.0
-Date: Fri, 04 Jul 2025 22:56:37 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250704165533.3705065-1-bernd@kuhls.net>
-References: <20250704165533.3705065-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <fd8089f98890a700069ebd3e3a13e13c@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1751662598;
- bh=LTejt5sXSkljrGZp/2DSKyhJL4m8Y+uXqkrolg+CUBI=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Wz6cCoDuzQ7nEtfT4kjv5QuppA3uvvMgHSqRa38m2+zgZrM37BpteBPncA+4tNCkJ
- OFX/xN7GyyofWwcMa2glmUIyelyk2GBSNyO2yN4rn9ov30xbc2vFgeXwZeek3Y/b6g
- k8DlH06VaZZZvMQTeNU+9p1bzANv5rL0ALduZ0km/asGcWK/b2K1Kh4ERKRCgtyy+W
- Dtw9/WP592GDQTomvPSNRZ3jbWH+JLUu88C/YAPqWIyO7VxUqO6blKqjBxbqzQb/9m
- c28xlSarbFXwyUXZ350GFIzuPytYVY3EeA7bQyGTJD69rvnZfHnXkGMyeiytIsJpm/
- rTcAeWcC0hZKA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Wz6cCoDu
-Subject: Re: [Buildroot] [PATCH 1/1] package/ethtool: bump version to 6.15
+ id SO_5ecu3k3BN for <buildroot@buildroot.org>;
+ Fri,  4 Jul 2025 21:05:37 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1AC5440A7B
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1AC5440A7B
+ for <buildroot@buildroot.org>; Fri,  4 Jul 2025 21:05:37 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 152B685F4F; Fri,  4 Jul 2025 21:05:37 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 4 Jul 2025 22:58:16 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 337642e73254398921b68e098755360e290ce1ec
+X-Git-Newrev: 766b08647c833e2930490ba2ae1168127d757114
+X-Patchwork-Hint: ignore
+Message-Id: <20250704210537.152B685F4F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pciutils: bump version to 3.14.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,18 +59,48 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 04/07/2025 18:55, Bernd Kuhls wrote:
-> Changelog:
-> https://git.kernel.org/pub/scm/network/ethtool/ethtool.git/tree/NEWS
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://git.buildroot.net/buildroot/commit/?id=766b08647c833e2930490ba2ae1168127d757114
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Changelog:
+https://git.kernel.org/pub/scm/utils/pciutils/pciutils.git/tree/ChangeLog?h=v3.14.0
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[Julien: update change log url to use tag]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/pciutils/pciutils.hash | 2 +-
+ package/pciutils/pciutils.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/pciutils/pciutils.hash b/package/pciutils/pciutils.hash
+index f6a3f9eef6..9401d046cb 100644
+--- a/package/pciutils/pciutils.hash
++++ b/package/pciutils/pciutils.hash
+@@ -1,3 +1,3 @@
+ # From https://www.kernel.org/pub/software/utils/pciutils/sha256sums.asc
+-sha256  77f11f78298502634d1af50308f15a5788629f6cf45cba376f5009aea4cb4926  pciutils-3.13.0.tar.xz
++sha256  e7713409882813991d2269d125e40dad1f54a019a52b78b3962941c1d4a6f86f  pciutils-3.14.0.tar.xz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/pciutils/pciutils.mk b/package/pciutils/pciutils.mk
+index ea3c21db6a..bd205b1430 100644
+--- a/package/pciutils/pciutils.mk
++++ b/package/pciutils/pciutils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PCIUTILS_VERSION = 3.13.0
++PCIUTILS_VERSION = 3.14.0
+ PCIUTILS_SITE = $(BR2_KERNEL_MIRROR)/software/utils/pciutils
+ PCIUTILS_SOURCE = pciutils-$(PCIUTILS_VERSION).tar.xz
+ PCIUTILS_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
