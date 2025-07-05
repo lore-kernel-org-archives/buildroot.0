@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4148C8303C
-	for <buildroot@archiver.kernel.org>; Sat,  5 Jul 2025 17:47:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B5E3C83F0A
+	for <buildroot@archiver.kernel.org>; Sat,  5 Jul 2025 17:47:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 625376110F;
-	Sat,  5 Jul 2025 17:47:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2D48783A0C;
+	Sat,  5 Jul 2025 17:47:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N-fLdda_fC4A; Sat,  5 Jul 2025 17:47:17 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DacXpIeMi0py; Sat,  5 Jul 2025 17:47:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 02C7C610D3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1161583A45
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 02C7C610D3;
-	Sat,  5 Jul 2025 17:47:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1161583A45;
+	Sat,  5 Jul 2025 17:47:19 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 9793F445
- for <buildroot@buildroot.org>; Sat,  5 Jul 2025 17:47:11 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 70FE312E
+ for <buildroot@buildroot.org>; Sat,  5 Jul 2025 17:47:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BAF9683661
+ by smtp1.osuosl.org (Postfix) with ESMTP id EB85D81186
  for <buildroot@buildroot.org>; Sat,  5 Jul 2025 17:47:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Invg0glpHUYi for <buildroot@buildroot.org>;
- Sat,  5 Jul 2025 17:47:08 +0000 (UTC)
+ id I6QD-EQbct0a for <buildroot@buildroot.org>;
+ Sat,  5 Jul 2025 17:47:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B4CCB81186
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF13983A05
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id B4CCB81186
+ by smtp1.osuosl.org (Postfix) with ESMTP id EF13983A05
  for <buildroot@buildroot.org>; Sat,  5 Jul 2025 17:47:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A26BE85FEA; Sat,  5 Jul 2025 17:47:08 +0000 (UTC)
+ id EC2F085FE9; Sat,  5 Jul 2025 17:47:08 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Sat, 5 Jul 2025 19:45:38 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 286f5bacd750be4855deb60a9f2d183ba4d9ad6f
-X-Git-Newrev: 54895db9c10a26283b25a393cb6c872d72c245d1
+X-Git-Oldrev: c4a4b8552f80c1ce8b0e70fcfae58c74091fbb63
+X-Git-Newrev: 59f661b8faf1ac0892dd46875732b9d5591f1d85
 X-Patchwork-Hint: ignore
-Message-Id: <20250705174708.A26BE85FEA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] arch: Introduce LoongArch64
+Message-Id: <20250705174708.EC2F085FE9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/loongarch64_efi: new defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,213 +65,197 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=54895db9c10a26283b25a393cb6c872d72c245d1
+commit: https://git.buildroot.net/buildroot/commit/?id=59f661b8faf1ac0892dd46875732b9d5591f1d85
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Introduce LoongArch64 at architecture level.
+Introduce bread new loongarch64-efi board, with skeleton
+from aarch64-efi board.
 
-Config.in.loongarch is prepared for possible loongarch32
-enablement in future, thus BR2_ARCH_IS_64 is being depended
-by some 64bit only options.
+It corverd most LoongArch64 systems.
 
-Internal toolchain is supported, as our minimal binutils
-version is already beyond LoongArch minimal version and
-GCC option is limited by BR2_ARCH_NEEDS_GCC_AT_LEAST_12.
+Linux 6.12, as the most recent LTS kernel, was chosen
+to ensure proper architecture support is included.
 
-BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT is selected temporary
-and it's going to be rmoved after we gain libc support.
+This board config is validated on my Lemote A2101
+Loongson 3A5000 board.
+
+A developer entry is created for myself for future contacts
+as well.
 
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-[Julien: fix typo in Kconfig BR2_LOONGARCH_ABI_LP64S prompt
-  replace "lp64d" by "lp64s"]
+Reviewed-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- DEVELOPERS               |   3 ++
- arch/Config.in           |  15 ++++++
- arch/Config.in.loongarch | 128 +++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 146 insertions(+)
+ DEVELOPERS                                         |  2 ++
+ board/loongarch64-efi/genimage-efi.cfg             | 30 +++++++++++++++++
+ board/loongarch64-efi/grub.cfg                     |  6 ++++
+ .../patches/linux-headers/linux-headers.hash       |  1 +
+ board/loongarch64-efi/patches/linux/linux.hash     |  2 ++
+ board/loongarch64-efi/post-image.sh                |  5 +++
+ board/loongarch64-efi/readme.txt                   | 38 ++++++++++++++++++++++
+ configs/loongarch64_efi_defconfig                  | 22 +++++++++++++
+ 8 files changed, 106 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index d2a3e9385b..f232b52867 100644
+index f232b52867..fce7c18474 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1642,6 +1642,9 @@ F:	package/libuhttpd/
- F:	package/libuwsc/
- F:	package/rtty/
+@@ -1644,6 +1644,8 @@ F:	package/rtty/
  
-+N:	Jiaxun Yang <jiaxun.yang@flygoat.com>
-+F:	arch/Config.in.loongarch
-+
+ N:	Jiaxun Yang <jiaxun.yang@flygoat.com>
+ F:	arch/Config.in.loongarch
++F:	board/loongarch64-efi
++F:	configs/loongarch64_efi_defconfig
+ 
  N:	Joachim Wiberg <troglobit@gmail.com>
  F:	configs/globalscale_espressobin_defconfig
- F:	board/globalscale/espressobin/
-diff --git a/arch/Config.in b/arch/Config.in
-index c60c42c1c5..f23fdf65b6 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -80,6 +80,17 @@ config BR2_i386
- 	  Intel i386 architecture compatible microprocessor
- 	  http://en.wikipedia.org/wiki/I386
- 
-+config BR2_loongarch64
-+	bool "LoongArch64"
-+	select BR2_USE_MMU
-+	select BR2_ARCH_IS_64
-+	select BR2_ARCH_NEEDS_GCC_AT_LEAST_12
-+	select BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
-+	help
-+	  LoongArch64 is 64-bit architecture developed by Loongson.
-+	  http://www.loongson.cn/
-+	  https://en.wikipedia.org/wiki/Loongson
-+
- config BR2_m68k
- 	bool "m68k"
- 	# MMU support is set by the subarchitecture file, arch/Config.in.m68k
-@@ -383,6 +394,10 @@ if BR2_arm || BR2_armeb || BR2_aarch64 || BR2_aarch64_be
- source "arch/Config.in.arm"
- endif
- 
-+if BR2_loongarch64
-+source "arch/Config.in.loongarch"
-+endif
-+
- if BR2_m68k
- source "arch/Config.in.m68k"
- endif
-diff --git a/arch/Config.in.loongarch b/arch/Config.in.loongarch
+diff --git a/board/loongarch64-efi/genimage-efi.cfg b/board/loongarch64-efi/genimage-efi.cfg
 new file mode 100644
-index 0000000000..cf2a12ce42
+index 0000000000..24b9a8d943
 --- /dev/null
-+++ b/arch/Config.in.loongarch
-@@ -0,0 +1,128 @@
-+# LoongArch CPU
++++ b/board/loongarch64-efi/genimage-efi.cfg
+@@ -0,0 +1,30 @@
++image efi-part.vfat {
++	vfat {
++		file EFI {
++			image = "efi-part/EFI"
++		}
++		file vmlinux.efi {
++			image = "vmlinux.efi"
++		}
++	}
 +
-+choice
-+	prompt "Target Architecture Variant"
-+	default BR2_loongarch64_generic if BR2_ARCH_IS_64
++	size = 64M
++}
 +
-+config BR2_loongarch64_generic
-+	bool "Generic LoongArch 64-bit"
-+	depends on BR2_ARCH_IS_64
-+	help
-+	  Generic LoongArch 64-bit processor.
++image disk.img {
++	hdimage {
++		partition-table-type = "gpt"
++	}
 +
-+config BR2_loongarch64_v1_0
-+	bool "LoongArch64 ISA version 1.0"
-+	depends on BR2_ARCH_IS_64
-+	select BR2_ARCH_NEEDS_GCC_AT_LEAST_13
-+	help
-+	  LoongArch64 ISA version 1.0 processor.
++	partition boot {
++		image = "efi-part.vfat"
++		partition-type-uuid = U
++		offset = 32K
++		bootable = true
++	}
 +
-+config BR2_loongarch64_v1_1
-+	bool "LoongArch64 ISA version 1.1"
-+	depends on BR2_ARCH_IS_64
-+	select BR2_ARCH_NEEDS_GCC_AT_LEAST_13
-+	help
-+	  LoongArch64 ISA version 1.1 processor.
++	partition root {
++		partition-type-uuid = root-loongarch64
++		image = "rootfs.ext2"
++	}
++}
+diff --git a/board/loongarch64-efi/grub.cfg b/board/loongarch64-efi/grub.cfg
+new file mode 100644
+index 0000000000..2006f6d60d
+--- /dev/null
++++ b/board/loongarch64-efi/grub.cfg
+@@ -0,0 +1,6 @@
++/set default="0"
++set timeout="5"
 +
-+endchoice
++menuentry "Buildroot" {
++	linux /vmlinux.efi root=PARTLABEL=root rootwait console=ttyS0,115200
++}
+diff --git a/board/loongarch64-efi/patches/linux-headers/linux-headers.hash b/board/loongarch64-efi/patches/linux-headers/linux-headers.hash
+new file mode 120000
+index 0000000000..5808d92afe
+--- /dev/null
++++ b/board/loongarch64-efi/patches/linux-headers/linux-headers.hash
+@@ -0,0 +1 @@
++../linux/linux.hash
+\ No newline at end of file
+diff --git a/board/loongarch64-efi/patches/linux/linux.hash b/board/loongarch64-efi/patches/linux/linux.hash
+new file mode 100644
+index 0000000000..381f3427a6
+--- /dev/null
++++ b/board/loongarch64-efi/patches/linux/linux.hash
+@@ -0,0 +1,2 @@
++# From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
++sha256  a9b020721778384507010177d3929e7d4058f7f6120f05a99d56b5c5c0346a70  linux-6.12.32.tar.xz
+diff --git a/board/loongarch64-efi/post-image.sh b/board/loongarch64-efi/post-image.sh
+new file mode 100755
+index 0000000000..fdb17ece70
+--- /dev/null
++++ b/board/loongarch64-efi/post-image.sh
+@@ -0,0 +1,5 @@
++#!/bin/sh
 +
-+choice
-+	prompt "FPU Type"
-+	default BR2_LOONGARCH_FPU_64
++BOARD_DIR="$(dirname "$0")"
 +
-+config BR2_LOONGARCH_FPU_64
-+	bool "64"
-+	help
-+	  Allow the use of hardware floating-point instructions for
-+	  32-bit and 64-bit operations.
++cp -f "${BOARD_DIR}/grub.cfg" "${BINARIES_DIR}/efi-part/EFI/BOOT/grub.cfg"
+diff --git a/board/loongarch64-efi/readme.txt b/board/loongarch64-efi/readme.txt
+new file mode 100644
+index 0000000000..8b92f620f9
+--- /dev/null
++++ b/board/loongarch64-efi/readme.txt
+@@ -0,0 +1,38 @@
++The loongarch64_efi_defconfig allows to build a minimal Linux system that
++can boot on all loongarch64 systems providing an New World [1] EFI firmware.
 +
-+config BR2_LOONGARCH_FPU_32
-+	bool "32"
-+	help
-+	  Allow the use of hardware floating-point instructions for
-+	  32-bit operations only.
++This includes almost all LoongArch Loongson-3 series workstations and servers,
++see [2] for hardware and firmware information.
 +
-+config BR2_LOONGARCH_FPU_NONE
-+	bool "none"
-+	help
-+	  Prevent the use of hardware floating-point instructions.
-+endchoice
++Building and booting
++====================
 +
-+choice
-+	prompt "SIMD Type"
-+	default BR2_LOONGARCH_SIMD_NONE
++$ make loongarch64_efi_defconfig
++$ make
 +
-+config BR2_LOONGARCH_SIMD_NONE
-+	bool "none"
-+	help
-+	  Prevent the use of hardware SIMD instructions.
++The file output/images/disk.img is a complete disk image that can be
++booted, it includes the grub2 bootloader, Linux kernel and root
++filesystem.
 +
-+config BR2_LOONGARCH_SIMD_LSX
-+	bool "LSX"
-+	help
-+	  Enable generating instructions from the 128-bit LoongArch SIMD
-+	  Extension (LSX).
++Testing under Qemu
++==================
 +
-+config BR2_LOONGARCH_SIMD_LASX
-+	bool "LASX"
-+	help
-+	  Enable generating instructions from the 256-bit LoongArch
-+	  Advanced SIMD Extension (LASX) and the 128-bit LoongArch
-+	  SIMD Extension (LSX).
-+endchoice
++This image can also be tested using Qemu:
 +
-+choice
-+	prompt "Target ABI"
-+	default BR2_LOONGARCH_ABI_LP64D if BR2_ARCH_IS_64 && BR2_LOONGARCH_FPU_64
-+	default BR2_LOONGARCH_ABI_LP64F if BR2_ARCH_IS_64 && BR2_LOONGARCH_FPU_32
-+	default BR2_LOONGARCH_ABI_LP64S if BR2_ARCH_IS_64 && BR2_LOONGARCH_SIMD_NONE
++qemu-system-loongarch64 \
++	-M virt \
++	-cpu la464 \
++	-nographic \
++	-bios </path/to/QEMU_EFI.fd> \
++	-drive file=output/images/disk.img,if=none,format=raw,id=hd0 \
++	-device virtio-blk-pci,drive=hd0 \
++	-netdev user,id=eth0 \
++	-device virtio-net-pci,netdev=eth0
 +
-+config BR2_LOONGARCH_ABI_LP64D
-+	bool "lp64d"
-+	depends on BR2_ARCH_IS_64
-+	depends on BR2_LOONGARCH_FPU_64
++Note that </path/to/QEMU_EFI.fd> needs to point to a valid loongarch64 UEFI
++firmware image for qemu.
++It may be provided by your distribution as a edk2-loongarch64 package,
++in path such as /usr/share/edk2/loongarch64/QEMU_EFI.fd .
 +
-+config BR2_LOONGARCH_ABI_LP64F
-+	bool "lp64f"
-+	depends on BR2_ARCH_IS_64
-+	depends on BR2_LOONGARCH_FPU_64 || BR2_LOONGARCH_FPU_32
-+
-+config BR2_LOONGARCH_ABI_LP64S
-+	bool "lp64s"
-+	depends on BR2_ARCH_IS_64
-+endchoice
-+
-+config BR2_ARCH
-+	default "loongarch64" if BR2_ARCH_IS_64
-+
-+config BR2_NORMALIZED_ARCH
-+	default "loongarch"
-+
-+config BR2_ENDIAN
-+	default "LITTLE"
-+
-+config BR2_GCC_TARGET_ARCH
-+	default "loongarch64" if BR2_loongarch64_generic
-+	default "la64v1.0" if BR2_loongarch64_v1_0
-+	default "la64v1.1" if BR2_loongarch64_v1_1
-+
-+config BR2_GCC_TARGET_FPU
-+	default "64" if BR2_LOONGARCH_FPU_64
-+	default "32" if BR2_LOONGARCH_FPU_32
-+	default "none" if BR2_LOONGARCH_FPU_NONE
-+
-+config BR2_GCC_TARGET_SIMD
-+	default "lasx" if BR2_LOONGARCH_SIMD_LASX
-+	default "lsx" if BR2_LOONGARCH_SIMD_LSX
-+	default "none" if BR2_LOONGARCH_FPU_NONE
-+
-+config BR2_GCC_TARGET_ABI
-+	default "lp64d" if BR2_LOONGARCH_ABI_LP64D
-+	default "lp64f" if BR2_LOONGARCH_ABI_LP64F
-+	default "lp64s" if BR2_LOONGARCH_ABI_LP64S
-+
-+config BR2_READELF_ARCH_NAME
-+	default "LoongArch"
-+
-+# vim: ft=kconfig
-+# -*- mode:kconfig; -*-
++[1]: https://areweloongyet.com/en/docs/old-and-new-worlds/
++[2]: https://github.com/loongson/Firmware
+diff --git a/configs/loongarch64_efi_defconfig b/configs/loongarch64_efi_defconfig
+new file mode 100644
+index 0000000000..c98699330d
+--- /dev/null
++++ b/configs/loongarch64_efi_defconfig
+@@ -0,0 +1,22 @@
++BR2_loongarch64=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
++BR2_GLOBAL_PATCH_DIR="board/loongarch64-efi/patches"
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/loongarch64-efi/post-image.sh support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/loongarch64-efi/genimage-efi.cfg"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.32"
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="200M"
++# BR2_TARGET_ROOTFS_TAR is not set
++BR2_TARGET_GRUB2=y
++BR2_TARGET_GRUB2_LOONGARCH64_EFI=y
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
