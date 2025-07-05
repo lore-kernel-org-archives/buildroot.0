@@ -4,71 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7CE0C8303D
-	for <buildroot@archiver.kernel.org>; Sat,  5 Jul 2025 06:18:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA251C8303D
+	for <buildroot@archiver.kernel.org>; Sat,  5 Jul 2025 06:18:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2C06640DB1;
-	Sat,  5 Jul 2025 06:18:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 861B840D34;
+	Sat,  5 Jul 2025 06:18:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id f4JHdcnsYXJf; Sat,  5 Jul 2025 06:18:34 +0000 (UTC)
+ id 8YaKnhMwKpkx; Sat,  5 Jul 2025 06:18:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5646740D26
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A080240D20
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5646740D26;
-	Sat,  5 Jul 2025 06:18:34 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 8D6B215F
- for <buildroot@buildroot.org>; Sat,  5 Jul 2025 06:18:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A080240D20;
+	Sat,  5 Jul 2025 06:18:47 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id BE4487AB
+ for <buildroot@buildroot.org>; Sat,  5 Jul 2025 06:18:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 740C840D20
- for <buildroot@buildroot.org>; Sat,  5 Jul 2025 06:18:32 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id AD15240D34
+ for <buildroot@buildroot.org>; Sat,  5 Jul 2025 06:18:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5y8wM9htNlOD for <buildroot@buildroot.org>;
- Sat,  5 Jul 2025 06:18:31 +0000 (UTC)
+ id 4-22C9hMfsZm for <buildroot@buildroot.org>;
+ Sat,  5 Jul 2025 06:18:44 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D876E40D13
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D876E40D13
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A7DBA40D13
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A7DBA40D13
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D876E40D13
- for <buildroot@buildroot.org>; Sat,  5 Jul 2025 06:18:29 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A7DBA40D13
+ for <buildroot@buildroot.org>; Sat,  5 Jul 2025 06:18:43 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c6da.dip0.t-ipconnect.de [79.214.198.218])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id EA3B3A4C386F
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id F0CC6A4C3950
  for <buildroot@buildroot.org>; Sat,  5 Jul 2025 08:18:25 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:36266)
  by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
- (envelope-from <bernd@kuhls.net>) id 1uXwED-000000007gD-2jZG
+ (envelope-from <bernd@kuhls.net>) id 1uXwED-000000007gD-3Vl1
  for buildroot@buildroot.org; Sat, 05 Jul 2025 06:18:25 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat,  5 Jul 2025 08:18:24 +0200
-Message-Id: <20250705061825.753443-1-bernd@kuhls.net>
+Date: Sat,  5 Jul 2025 08:18:25 +0200
+Message-Id: <20250705061825.753443-2-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250705061825.753443-1-bernd@kuhls.net>
+References: <20250705061825.753443-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: /
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202506031021; t=1751696305;
- bh=biuHcZM71HqyI0I8yURMgJQuevy4Hej1snL0Hen64Kw=;
- h=From:To:Subject:Date:From;
- b=Kv+tqZX9+9pcXRbSjKP257I5DtZLae2v4PgnOsP/lcCBIcz9y6uo8cCd1zYFodtDu
- a5Exc/X4kMEZV5DawwwIxkwOZfXyVqca0DdJzqi90apzBiZNOpwwkXNhwCdwoO4DD5
- Q+sCvds04JR1oNhsv116rnWhcBHyIrDydySYZLEJdu3YUeBJPvVYt2yYJsKNzgG+UB
- zg1QIfR+QsvnJq2FLmDy2twAeEU5kmkgxl4DeI5hpOTV5mQ86TJDdwSR3R90YU/qiO
- WHfT/k9DXqXlJi/eOGpckjzETypbcDk4A2iWKwpab9cwvjWuU7BA6cLKaf7/DAauUO
- b7nIpurWinx5Q==
+ s=kas202506031021; t=1751696306;
+ bh=OmtfME09cBuvExdBbIVZtCC04FPSfTo4JlXi3xcmCW0=;
+ h=From:To:Subject:Date:In-Reply-To:References:From;
+ b=HtQNCwKck3SaDy0QCbFWsr5a/StsW9ceXEah12ukkDB8BYEjQlEnzhcNhEHvbQkjT
+ Y1Aj3Epfqegbl23uz/tvUSX/cW0Bph240DzdhxcNgg/I7wGKb4ozswkw+XnUhRuaSz
+ nqpuRUZ0YtEp4J/weXmI03aS76dXG7llZQnAYpIeZjSgdTlonYVE7lPRCMUkgSxrMz
+ 9VJlsMVqjvM1qaPPpT5jHlvqYu6blRHrJT7GhsBz2OX81ZdDVClG0NgRcxlNi3EG3l
+ ELzi+wXBuaGxDPNxPanlzNwpLMogxrNDE7j9XHmZO10rOOWfIYgaE9itC1vHt/Oc2/
+ 7lGAVtf8IwzLA==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202506031021 header.b=Kv+tqZX9
-Subject: [Buildroot] [PATCH v2 1/2] package/readline: bump version to 8.3
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202506031021 header.b=HtQNCwKc
+Subject: [Buildroot] [PATCH 2/2] package/readline: Use configure options to
+ link with ncurses
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -80,103 +82,81 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Q2hhbmdlbG9nOgpodHRwczovL2NnaXQuZ2l0LnNhdmFubmFoLmdudS5vcmcvY2dpdC9yZWFkbGlu
-ZS5naXQvdHJlZS9ORVdTP2g9cmVhZGxpbmUtOC4zCgpSZW1vdmVkIHBhdGNoIHdoaWNoIGlzIGlu
-Y2x1ZGVkIGluIHRoaXMgcmVsZWFzZS4KCkFkZGVkIHBhdGNoIHRvIGZpeCBidWlsZCB3aXRoIG5v
-bi13Y2hhciB0b29sY2hhaW5zLgoKU2lnbmVkLW9mZi1ieTogQmVybmQgS3VobHMgPGJlcm5kQGt1
-aGxzLm5ldD4KLS0tCnYyOiBBZGRlZCBwYXRjaCB0byBmaXggYnVpbGQgd2l0aCBub24td2NoYXIg
-dG9vbGNoYWlucyAoSnVsaWVuKQoKIC4uLi1GaXgtYnVpbGQtd2l0aC1ub24td2NoYXItdG9vbGNo
-YWlucy5wYXRjaCB8IDQyICsrKysrKysrKysrKysrKysrKysKIC4uLmNoLTEtZml4LWNyYXNoLXdo
-ZW4tcmVhZGxpbmUtaXMtc3Rhci5wYXRjaCB8IDQxIC0tLS0tLS0tLS0tLS0tLS0tLQogcGFja2Fn
-ZS9yZWFkbGluZS9yZWFkbGluZS5oYXNoICAgICAgICAgICAgICAgIHwgIDQgKy0KIHBhY2thZ2Uv
-cmVhZGxpbmUvcmVhZGxpbmUubWsgICAgICAgICAgICAgICAgICB8ICAyICstCiA0IGZpbGVzIGNo
-YW5nZWQsIDQ1IGluc2VydGlvbnMoKyksIDQ0IGRlbGV0aW9ucygtKQogY3JlYXRlIG1vZGUgMTAw
-NjQ0IHBhY2thZ2UvcmVhZGxpbmUvMDAwMS1GaXgtYnVpbGQtd2l0aC1ub24td2NoYXItdG9vbGNo
-YWlucy5wYXRjaAogZGVsZXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvcmVhZGxpbmUvMDAwMi1SZWFk
-bGluZS04LjItcGF0Y2gtMS1maXgtY3Jhc2gtd2hlbi1yZWFkbGluZS1pcy1zdGFyLnBhdGNoCgpk
-aWZmIC0tZ2l0IGEvcGFja2FnZS9yZWFkbGluZS8wMDAxLUZpeC1idWlsZC13aXRoLW5vbi13Y2hh
-ci10b29sY2hhaW5zLnBhdGNoIGIvcGFja2FnZS9yZWFkbGluZS8wMDAxLUZpeC1idWlsZC13aXRo
-LW5vbi13Y2hhci10b29sY2hhaW5zLnBhdGNoCm5ldyBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDAw
-MDAwMDAwMDAuLjJlYzhjOWM2YTEKLS0tIC9kZXYvbnVsbAorKysgYi9wYWNrYWdlL3JlYWRsaW5l
-LzAwMDEtRml4LWJ1aWxkLXdpdGgtbm9uLXdjaGFyLXRvb2xjaGFpbnMucGF0Y2gKQEAgLTAsMCAr
-MSw0MiBAQAorRnJvbSAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwIE1v
-biBTZXAgMTcgMDA6MDA6MDAgMjAwMQorRnJvbTogQmVybmQgS3VobHMgPGJlcm5kQGt1aGxzLm5l
-dD4KK0RhdGU6IFNhdCwgNSBKdWwgMjAyNSAwNzo0ODoyMCArMDIwMAorU3ViamVjdDogW1BBVENI
-XSBGaXggYnVpbGQgd2l0aCBub24td2NoYXIgdG9vbGNoYWlucworTUlNRS1WZXJzaW9uOiAxLjAK
-K0NvbnRlbnQtVHlwZTogdGV4dC9wbGFpbjsgY2hhcnNldD1VVEYtOAorQ29udGVudC1UcmFuc2Zl
-ci1FbmNvZGluZzogOGJpdAorCitDb21taXQgYTdmNTY1MGU2NTQ5ZTFiNWM0ZTJlMWZhMzBlZWUx
-OWRlNmJjYmU3YSBhZGRlZCB0d28gZnVuY3Rpb25zIHRvCittYnV0aWwuYyBidXQgZm9yZ290IHRv
-IGFkZCBkZWZpbmVzIGZvciBIQU5ETEVfTVVMVElCWVRFIGNhdXNpbmcgYnVpbGQKK2Vycm9ycyB3
-aXRoIHRvb2xjaGFpbnMgd2l0aG91dCB3Y2hhciBzdXBwb3J0OgorCisuLi9tYnV0aWwuYzogSW4g
-ZnVuY3Rpb24g4oCYX3JsX21iX3N0cmNhc2VlcW7igJk6CisuLi9tYnV0aWwuYzo1OTQ6MzogZXJy
-b3I6IHVua25vd24gdHlwZSBuYW1lIOKAmG1ic3RhdGVfdOKAmQorCitVcHN0cmVhbTogaHR0cHM6
-Ly9saXN0cy5nbnUub3JnL2FyY2hpdmUvaHRtbC9idWctcmVhZGxpbmUvMjAyNS0wNy9tc2cwMDAw
-Mi5odG1sCisKK1NpZ25lZC1vZmYtYnk6IEJlcm5kIEt1aGxzIDxiZXJuZEBrdWhscy5uZXQ+Cist
-LS0KKyBtYnV0aWwuYyB8IDIgKysKKyAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspCisK
-K2RpZmYgLS1naXQgYS9tYnV0aWwuYyBiL21idXRpbC5jCitpbmRleCA1MjQzZmQ3Li5jMTVmM2Fh
-IDEwMDY0NAorLS0tIGEvbWJ1dGlsLmMKKysrKyBiL21idXRpbC5jCitAQCAtNTg0LDYgKzU4NCw3
-IEBAIF9ybF9maW5kX3ByZXZfbWJjaGFyIChjb25zdCBjaGFyICpzdHJpbmcsIGludCBzZWVkLCBp
-bnQgZmxhZ3MpCisgI2VuZGlmCisgfQorIAorKyNpZiBkZWZpbmVkIChIQU5ETEVfTVVMVElCWVRF
-KQorIC8qIENvbXBhcmUgdGhlIGZpcnN0IE4gY2hhcmFjdGVycyBvZiBTMSBhbmQgUzIgd2l0aG91
-dCByZWdhcmQgdG8gY2FzZS4gSWYKKyAgICBGTEFHUyYxLCBhcHBseSB0aGUgbWFwcGluZyBzcGVj
-aWZpZWQgYnkgY29tcGxldGlvbi1tYXAtY2FzZSBhbmQgbWFrZQorICAgIGAtJyBhbmQgYF8nIGVx
-dWl2YWxlbnQuIFJldHVybnMgMSBpZiB0aGUgc3RyaW5ncyBhcmUgZXF1YWwuICovCitAQCAtNjU4
-LDMgKzY1OSw0IEBAIF9ybF9tYl9jaGFyY2FzZWNtcCAoY29uc3QgY2hhciAqczEsIG1ic3RhdGVf
-dCAqcHMxLCBjb25zdCBjaGFyICpzMiwgbWJzdGF0ZV90ICpwCisgICAgIHJldHVybiAxOworICAg
-cmV0dXJuICh3YzEgPT0gd2MyKTsKKyB9CisrI2VuZGlmIC8qIEhBTkRMRV9NVUxUSUJZVEUgKi8K
-Ky0tIAorMi4zOS41CisKZGlmZiAtLWdpdCBhL3BhY2thZ2UvcmVhZGxpbmUvMDAwMi1SZWFkbGlu
-ZS04LjItcGF0Y2gtMS1maXgtY3Jhc2gtd2hlbi1yZWFkbGluZS1pcy1zdGFyLnBhdGNoIGIvcGFj
-a2FnZS9yZWFkbGluZS8wMDAyLVJlYWRsaW5lLTguMi1wYXRjaC0xLWZpeC1jcmFzaC13aGVuLXJl
-YWRsaW5lLWlzLXN0YXIucGF0Y2gKZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IGMyYzJk
-ODEyNjAuLjAwMDAwMDAwMDAKLS0tIGEvcGFja2FnZS9yZWFkbGluZS8wMDAyLVJlYWRsaW5lLTgu
-Mi1wYXRjaC0xLWZpeC1jcmFzaC13aGVuLXJlYWRsaW5lLWlzLXN0YXIucGF0Y2gKKysrIC9kZXYv
-bnVsbApAQCAtMSw0MSArMCwwIEBACi1Gcm9tIGI4ZDkxZWFiMTI2MDNmYTg4ZTA5NTI0ODg1NWY1
-Zjc3MmQxODJkMDUgTW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCi1Gcm9tOiBDaGV0IFJhbWV5IDxj
-aGV0LnJhbWV5QGNhc2UuZWR1PgotRGF0ZTogV2VkLCA1IE9jdCAyMDIyIDEwOjQxOjE2IC0wNDAw
-Ci1TdWJqZWN0OiBbUEFUQ0hdIFJlYWRsaW5lLTguMiBwYXRjaCAxOiBmaXggY3Jhc2ggd2hlbiBy
-ZWFkbGluZSBpcyBzdGFydGVkIHdpdGgKLSBhbiBpbnZhbGlkIGxvY2FsZSBzcGVjaWZpY2F0aW9u
-Ci0KLVVwc3RyZWFtOiBodHRwczovL2dpdC5zYXZhbm5haC5nbnUub3JnL2NnaXQvcmVhZGxpbmUu
-Z2l0L3BhdGNoLz9pZD03Mjc0ZmFhYmU5N2NlNTNkNmI0NjQyNzJkN2U2YWI2YzEzOTI4MzdiCi1b
-cGV0ZXI6IHN0cmlwcGVkIHVucmVsYXRlZCAuXy5naXRpZ25vcmUgY2hhbmdlXQotU2lnbmVkLW9m
-Zi1ieTogUGV0ZXIgU2VpZGVyZXIgPHBzLnJlcG9ydEBnbXgubmV0PgotLS0tCi0gbmxzLmMgICAg
-ICB8IDQgKysrKwotIHBhdGNobGV2ZWwgfCAyICstCi0gMiBmaWxlcyBjaGFuZ2VkLCA1IGluc2Vy
-dGlvbnMoKyksIDEgZGVsZXRpb24oLSkKLQotZGlmZiAtLWdpdCBhL25scy5jIGIvbmxzLmMKLWlu
-ZGV4IDVjNmExM2IuLjhjMDI3ZDYgMTAwNjQ0Ci0tLS0gYS9ubHMuYwotKysrIGIvbmxzLmMKLUBA
-IC0xNDEsNiArMTQxLDEwIEBAIF9ybF9pbml0X2xvY2FsZSAodm9pZCkKLSAgIGlmIChsc3BlYyA9
-PSAwKQotICAgICBsc3BlYyA9ICIiOwotICAgcmV0ID0gc2V0bG9jYWxlIChMQ19DVFlQRSwgbHNw
-ZWMpOwkvKiBvaywgc2luY2UgaXQgZG9lcyBub3QgY2hhbmdlIGxvY2FsZSAqLwotKyAgaWYgKHJl
-dCA9PSAwIHx8ICpyZXQgPT0gMCkKLSsgICAgcmV0ID0gc2V0bG9jYWxlIChMQ19DVFlQRSwgKGNo
-YXIgKilOVUxMKTsKLSsgIGlmIChyZXQgPT0gMCB8fCAqcmV0ID09IDApCi0rICAgIHJldCA9IFJM
-X0RFRkFVTFRfTE9DQUxFOwotICNlbHNlCi0gICByZXQgPSAobHNwZWMgPT0gMCB8fCAqbHNwZWMg
-PT0gMCkgPyBSTF9ERUZBVUxUX0xPQ0FMRSA6IGxzcGVjOwotICNlbmRpZgotZGlmZiAtLWdpdCBh
-L3BhdGNobGV2ZWwgYi9wYXRjaGxldmVsCi1pbmRleCBkOGM5ZGY3Li5mZGY0NzQwIDEwMDY0NAot
-LS0tIGEvcGF0Y2hsZXZlbAotKysrIGIvcGF0Y2hsZXZlbAotQEAgLTEsMyArMSwzIEBACi0gIyBE
-byBub3QgZWRpdCAtLSBleGlzdHMgb25seSBmb3IgdXNlIGJ5IHBhdGNoCi0gCi0tMAotKzEKLS0t
-IAotMi4zOS4yCi0KZGlmZiAtLWdpdCBhL3BhY2thZ2UvcmVhZGxpbmUvcmVhZGxpbmUuaGFzaCBi
-L3BhY2thZ2UvcmVhZGxpbmUvcmVhZGxpbmUuaGFzaAppbmRleCA2Mjc3NDZkODIxLi45NjFlZjc3
-YTBkIDEwMDY0NAotLS0gYS9wYWNrYWdlL3JlYWRsaW5lL3JlYWRsaW5lLmhhc2gKKysrIGIvcGFj
-a2FnZS9yZWFkbGluZS9yZWFkbGluZS5oYXNoCkBAIC0xLDYgKzEsNiBAQAogIyBMb2NhbGx5IGNh
-bGN1bGF0ZWQgYWZ0ZXIgY2hlY2tpbmcgcGdwIHNpZ25hdHVyZSBmcm9tCi0jIGh0dHBzOi8vZnRw
-LmdudS5vcmcvZ251L3JlYWRsaW5lL3JlYWRsaW5lLTguMi50YXIuZ3ouc2lnCi1zaGEyNTYgIDNm
-ZWI3MTcxZjE2YTg0ZWU4MmNhMThhMzZkN2I5YmUxMDlhNTJjMDRmNDkyYTA1MzMzMWQ3ZDEwOTUw
-MDdjMzUgIHJlYWRsaW5lLTguMi50YXIuZ3oKKyMgaHR0cHM6Ly9mdHAuZ251Lm9yZy9nbnUvcmVh
-ZGxpbmUvcmVhZGxpbmUtOC4zLnRhci5nei5zaWcKK3NoYTI1NiAgZmU1MzgzMjA0NDY3ODI4Y2Q0
-OTVlZThkMWQzYzAzN2E3ZWJhMTM4OWMyMmJjNmEwNDFmNjI3OTc2ZjkwNjFjYyAgcmVhZGxpbmUt
-OC4zLnRhci5negogCiAjIEhhc2ggZm9yIGxpY2Vuc2UgZmlsZQogc2hhMjU2ICA4Y2ViNGI5ZWU1
-YWRlZGRlNDdiMzFlOTc1YzFkOTBjNzNhZDI3YjZiMTY1YTFkY2Q4MGM3YzU0NWViNjViOTAzICBD
-T1BZSU5HCmRpZmYgLS1naXQgYS9wYWNrYWdlL3JlYWRsaW5lL3JlYWRsaW5lLm1rIGIvcGFja2Fn
-ZS9yZWFkbGluZS9yZWFkbGluZS5tawppbmRleCA2NjgxMmRlZTc3Li5mNDZkNjc4M2YxIDEwMDY0
-NAotLS0gYS9wYWNrYWdlL3JlYWRsaW5lL3JlYWRsaW5lLm1rCisrKyBiL3BhY2thZ2UvcmVhZGxp
-bmUvcmVhZGxpbmUubWsKQEAgLTQsNyArNCw3IEBACiAjCiAjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IwogCi1SRUFETElORV9WRVJTSU9OID0gOC4yCitSRUFETElORV9WRVJTSU9OID0gOC4zCiBSRUFE
-TElORV9TSVRFID0gJChCUjJfR05VX01JUlJPUikvcmVhZGxpbmUKIFJFQURMSU5FX0lOU1RBTExf
-U1RBR0lORyA9IFlFUwogUkVBRExJTkVfREVQRU5ERU5DSUVTID0gbmN1cnNlcyBob3N0LWF1dG9j
-b25mCi0tIAoyLjM5LjUKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0
-cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Use configure options to link with ncurses available since version 8.2:
+https://cgit.git.savannah.gnu.org/cgit/readline.git/tree/NEWS?h=readline-8.3#n100
+
+Removed a 14 year-old patch added with buildroot commit
+b864790383b1cb8d51e5202bb750c0a6601b21ab.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ .checkpackageignore                     |  1 -
+ package/readline/0001-curses-link.patch | 18 ------------------
+ package/readline/readline.mk            |  5 ++++-
+ 3 files changed, 4 insertions(+), 20 deletions(-)
+ delete mode 100644 package/readline/0001-curses-link.patch
+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index f5b158c450..298d080475 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -1014,7 +1014,6 @@ package/rapidxml/0001-ensure-internal-print-operations-are-declared-before.patch
+ package/read-edid/0001-Fix-install-file-list.patch lib_patch.Upstream
+ package/read-edid/0002-Fix-compiler-check.patch lib_patch.Upstream
+ package/read-edid/0003-fix-build-with-gcc-10.patch lib_patch.Upstream
+-package/readline/0001-curses-link.patch lib_patch.Upstream
+ package/redis/0001-uclibc.patch lib_patch.Upstream
+ package/redis/0002-largefile-conditional-define.patch lib_patch.Upstream
+ package/redis/0003-redis.conf-adjust-defauts-for-buildroot.patch lib_patch.Upstream
+diff --git a/package/readline/0001-curses-link.patch b/package/readline/0001-curses-link.patch
+deleted file mode 100644
+index 6afc5ba078..0000000000
+--- a/package/readline/0001-curses-link.patch
++++ /dev/null
+@@ -1,18 +0,0 @@
+-link readline directly to ncurses since it needs symbols from it
+-
+-upstream readline does this on purpose (no direct linking), but
+-it doesn't make much sense in a Linux world
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+---- a/support/shobj-conf
+-+++ b/support/shobj-conf
+-@@ -42,7 +42,7 @@
+- SHOBJ_LIBS=
+- 
+- SHLIB_XLDFLAGS=
+--SHLIB_LIBS=
+-+SHLIB_LIBS=-lncurses
+- 
+- SHLIB_DOT='.'
+- SHLIB_LIBPREF='lib'
+diff --git a/package/readline/readline.mk b/package/readline/readline.mk
+index f46d6783f1..f69cbe45e2 100644
+--- a/package/readline/readline.mk
++++ b/package/readline/readline.mk
+@@ -11,7 +11,10 @@ READLINE_DEPENDENCIES = ncurses host-autoconf
+ HOST_READLINE_DEPENDENCIES = host-ncurses host-autoconf
+ READLINE_CONF_ENV = bash_cv_func_sigsetjmp=yes \
+ 	bash_cv_wcwidth_broken=no
+-READLINE_CONF_OPTS = --disable-install-examples
++READLINE_CONF_OPTS = \
++	--disable-install-examples \
++	--with-curses \
++	--with-shared-termcap-library
+ READLINE_LICENSE = GPL-3.0+
+ READLINE_LICENSE_FILES = COPYING
+ READLINE_CPE_ID_VENDOR = gnu
+-- 
+2.39.5
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
