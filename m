@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70489C83030
-	for <buildroot@archiver.kernel.org>; Sat,  5 Jul 2025 17:47:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E4B7C83030
+	for <buildroot@archiver.kernel.org>; Sat,  5 Jul 2025 17:47:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 429DB610AE;
-	Sat,  5 Jul 2025 17:47:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0069960F36;
+	Sat,  5 Jul 2025 17:47:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eM3Kqlgs8_UO; Sat,  5 Jul 2025 17:47:20 +0000 (UTC)
+ id TrPH4qHuwiIa; Sat,  5 Jul 2025 17:47:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 69D6660F36
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C77ED6113E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 69D6660F36;
-	Sat,  5 Jul 2025 17:47:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C77ED6113E;
+	Sat,  5 Jul 2025 17:47:21 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 7374C12E
- for <buildroot@buildroot.org>; Sat,  5 Jul 2025 17:47:13 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 5C05F445
+ for <buildroot@buildroot.org>; Sat,  5 Jul 2025 17:47:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3569283955
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5AE3283963
  for <buildroot@buildroot.org>; Sat,  5 Jul 2025 17:47:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MyX4yX10SCrZ for <buildroot@buildroot.org>;
+ id B0FodCCjdZa4 for <buildroot@buildroot.org>;
  Sat,  5 Jul 2025 17:47:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 074C883A08
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2790283A0C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 074C883A08
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2790283A0C
  for <buildroot@buildroot.org>; Sat,  5 Jul 2025 17:47:09 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 042E2819F0; Sat,  5 Jul 2025 17:47:09 +0000 (UTC)
+ id 239EE819F0; Sat,  5 Jul 2025 17:47:09 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Sat, 5 Jul 2025 19:45:38 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 59f661b8faf1ac0892dd46875732b9d5591f1d85
-X-Git-Newrev: 269bb5d8bfd29cf031e8943f7881cabe96ba3b46
+X-Git-Oldrev: e20271ba37c3a40db1e9ab7317773a10a3940456
+X-Git-Newrev: ef55ca4075081ec2f0f740204d2b44cd1e0cb00f
 X-Patchwork-Hint: ignore
-Message-Id: <20250705174709.042E2819F0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] boot/edk2: Add LoongArch64 OVMF support
+Message-Id: <20250705174709.239EE819F0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/qemu_loongarch64_virt_efi: new
+ defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,84 +66,168 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=269bb5d8bfd29cf031e8943f7881cabe96ba3b46
+commit: https://git.buildroot.net/buildroot/commit/?id=ef55ca4075081ec2f0f740204d2b44cd1e0cb00f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-LoongArch64 OVMF target is introduced to EDK2 in edk2-202408.
-
-Enable architecture support here.
+Add qemu_loongarch64_virt_efi_defconfig, which builds EDK2
+and host QEMU to test LoongArch64 buildroot.
 
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 Reviewed-by: Romain Naour <romain.naour@smile.fr>
+Tested-by: Romain Naour <romain.naour@smile.fr>
+Reviewed-by: Julien Olivain <ju.o@free.fr>
+Tested-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- boot/edk2/Config.in | 14 +++++++++++++-
- boot/edk2/edk2.mk   |  6 ++++++
- 2 files changed, 19 insertions(+), 1 deletion(-)
+ DEVELOPERS                                    |  2 ++
+ board/qemu/loongarch64-virt-efi/genimage.cfg  | 30 ++++++++++++++++++++++++++
+ board/qemu/loongarch64-virt-efi/grub.cfg      |  6 ++++++
+ board/qemu/loongarch64-virt-efi/post-image.sh |  5 +++++
+ board/qemu/loongarch64-virt-efi/readme.txt    | 31 +++++++++++++++++++++++++++
+ configs/qemu_loongarch64_virt_efi_defconfig   | 25 +++++++++++++++++++++
+ 6 files changed, 99 insertions(+)
 
-diff --git a/boot/edk2/Config.in b/boot/edk2/Config.in
-index 635bb0100a..850b9a39de 100644
---- a/boot/edk2/Config.in
-+++ b/boot/edk2/Config.in
-@@ -2,6 +2,7 @@ config BR2_TARGET_EDK2_ARCH_SUPPORTS
- 	bool
- 	default y if BR2_aarch64
- 	default y if BR2_i386
-+	default y if BR2_loongarch64
- 	default y if BR2_RISCV_64
- 	default y if BR2_x86_64
+diff --git a/DEVELOPERS b/DEVELOPERS
+index fce7c18474..99c403686a 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1645,7 +1645,9 @@ F:	package/rtty/
+ N:	Jiaxun Yang <jiaxun.yang@flygoat.com>
+ F:	arch/Config.in.loongarch
+ F:	board/loongarch64-efi
++F:	board/qemu/loongarch64-virt-efi
+ F:	configs/loongarch64_efi_defconfig
++F:	configs/qemu_loongarch64_virt_efi_defconfig
  
-@@ -21,6 +22,8 @@ if BR2_TARGET_EDK2
- choice
- 	prompt "Platform"
- 	default BR2_TARGET_EDK2_PLATFORM_OVMF_I386 if BR2_i386
-+	default BR2_TARGET_EDK2_PLATFORM_OVMF_LOONGARCH64 if \
-+		BR2_loongarch64
- 	default BR2_TARGET_EDK2_PLATFORM_OVMF_RISCV if BR2_RISCV_64
- 	default BR2_TARGET_EDK2_PLATFORM_OVMF_X64 if BR2_x86_64
- 	default BR2_TARGET_EDK2_PLATFORM_ARM_VIRT_QEMU if BR2_aarch64
-@@ -31,7 +34,15 @@ config BR2_TARGET_EDK2_PLATFORM_OVMF_I386
- 	help
- 	  Platform configuration for a generic i386 target.
- 	  This platform will boot from flash address 0x0.
--	  It should therefore be used as the first bootloader.
+ N:	Joachim Wiberg <troglobit@gmail.com>
+ F:	configs/globalscale_espressobin_defconfig
+diff --git a/board/qemu/loongarch64-virt-efi/genimage.cfg b/board/qemu/loongarch64-virt-efi/genimage.cfg
+new file mode 100644
+index 0000000000..24b9a8d943
+--- /dev/null
++++ b/board/qemu/loongarch64-virt-efi/genimage.cfg
+@@ -0,0 +1,30 @@
++image efi-part.vfat {
++	vfat {
++		file EFI {
++			image = "efi-part/EFI"
++		}
++		file vmlinux.efi {
++			image = "vmlinux.efi"
++		}
++	}
 +
-+config BR2_TARGET_EDK2_PLATFORM_OVMF_LOONGARCH64
-+	bool "LoongArch64"
-+	depends on BR2_loongarch64
-+	help
-+	  Platform configuration for LoongArch QEMU targeting the
-+	  Virt machine. This platform will only boot from flash
-+	  address 0x1c000000. It should therefore be used as the first
-+	  bootloader.
- 
- config BR2_TARGET_EDK2_PLATFORM_OVMF_RISCV
- 	bool "RISC-V"
-@@ -125,6 +136,7 @@ config BR2_TARGET_EDK2_FD_NAME
- 	default "OVMF" if BR2_TARGET_EDK2_PLATFORM_OVMF_X64
- 	default "QEMU_EFI" if BR2_TARGET_EDK2_PLATFORM_ARM_VIRT_QEMU
- 	default "QEMU_EFI" if BR2_TARGET_EDK2_PLATFORM_ARM_VIRT_QEMU_KERNEL
-+	default "QEMU_EFI" if BR2_TARGET_EDK2_PLATFORM_OVMF_LOONGARCH64
- 	default "BL33_AP_UEFI" if BR2_TARGET_EDK2_PLATFORM_ARM_SGI575
- 	default "FVP_AARCH64_EFI" if BR2_TARGET_EDK2_PLATFORM_ARM_VEXPRESS_FVP_AARCH64
- 	default "ARMADA_EFI" if BR2_TARGET_EDK2_PLATFORM_SOLIDRUN_ARMADA80X0MCBIN
-diff --git a/boot/edk2/edk2.mk b/boot/edk2/edk2.mk
-index 36bcbfc88b..3612c86fb1 100644
---- a/boot/edk2/edk2.mk
-+++ b/boot/edk2/edk2.mk
-@@ -123,6 +123,12 @@ EDK2_PACKAGE_NAME = OvmfPkg/RiscVVirt
- EDK2_PLATFORM_NAME = RiscVVirtQemu
- EDK2_BUILD_DIR = $(EDK2_PLATFORM_NAME)
- 
-+else ifeq ($(BR2_TARGET_EDK2_PLATFORM_OVMF_LOONGARCH64),y)
-+EDK2_ARCH = LOONGARCH64
-+EDK2_PACKAGE_NAME = OvmfPkg/LoongArchVirt
-+EDK2_PLATFORM_NAME = LoongArchVirtQemu
-+EDK2_BUILD_DIR = $(EDK2_PLATFORM_NAME)
++	size = 64M
++}
 +
- endif
- 
- EDK2_BASETOOLS_OPTS = \
++image disk.img {
++	hdimage {
++		partition-table-type = "gpt"
++	}
++
++	partition boot {
++		image = "efi-part.vfat"
++		partition-type-uuid = U
++		offset = 32K
++		bootable = true
++	}
++
++	partition root {
++		partition-type-uuid = root-loongarch64
++		image = "rootfs.ext2"
++	}
++}
+diff --git a/board/qemu/loongarch64-virt-efi/grub.cfg b/board/qemu/loongarch64-virt-efi/grub.cfg
+new file mode 100644
+index 0000000000..dc3452fe6a
+--- /dev/null
++++ b/board/qemu/loongarch64-virt-efi/grub.cfg
+@@ -0,0 +1,6 @@
++set default="0"
++set timeout="5"
++
++menuentry "Buildroot" {
++	linux /vmlinux.efi root=PARTLABEL=root rootwait console=ttyS0
++}
+diff --git a/board/qemu/loongarch64-virt-efi/post-image.sh b/board/qemu/loongarch64-virt-efi/post-image.sh
+new file mode 100755
+index 0000000000..fdb17ece70
+--- /dev/null
++++ b/board/qemu/loongarch64-virt-efi/post-image.sh
+@@ -0,0 +1,5 @@
++#!/bin/sh
++
++BOARD_DIR="$(dirname "$0")"
++
++cp -f "${BOARD_DIR}/grub.cfg" "${BINARIES_DIR}/efi-part/EFI/BOOT/grub.cfg"
+diff --git a/board/qemu/loongarch64-virt-efi/readme.txt b/board/qemu/loongarch64-virt-efi/readme.txt
+new file mode 100644
+index 0000000000..7c35ee1efe
+--- /dev/null
++++ b/board/qemu/loongarch64-virt-efi/readme.txt
+@@ -0,0 +1,31 @@
++Intro
++=====
++
++This is a LoongArch 64bit UEFI Linux boot demo in QEMU virt machine.
++
++Build
++=====
++
++    make qemu_loongarch64_virt-efi_defconfig
++    make
++
++Emulation
++=========
++
++Run the emulation with:
++
++    qemu-system-loongarch64 \
++        -M virt \
++        -smp 2 \
++        -m 1024 \
++        -nographic \
++        -bios output/images/QEMU_EFI.fd \
++        -drive file=output/images/disk.img,format=raw \
++        -netdev user,id=net0 \
++        -device virtio-net-pci,netdev=net0 # qemu_loongarch64_virt_efi_defconfig
++
++Note: for information, qemu version >= 9.0.0 is needed for this UEFI
++Linux demo. The host-qemu package in Buildroot (enabled in this
++defconfig) is sufficient to run this demo. In case another qemu is
++used (for example, from the host OS), make sure to check the version
++requirement.
+diff --git a/configs/qemu_loongarch64_virt_efi_defconfig b/configs/qemu_loongarch64_virt_efi_defconfig
+new file mode 100644
+index 0000000000..945cb9232d
+--- /dev/null
++++ b/configs/qemu_loongarch64_virt_efi_defconfig
+@@ -0,0 +1,25 @@
++BR2_loongarch64=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
++BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
++BR2_SYSTEM_DHCP="eth0"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/loongarch64-virt-efi/post-image.sh board/qemu/post-image.sh support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG) -c board/qemu/loongarch64-virt-efi/genimage.cfg"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="200M"
++# BR2_TARGET_ROOTFS_TAR is not set
++BR2_TARGET_EDK2=y
++BR2_TARGET_GRUB2=y
++BR2_TARGET_GRUB2_LOONGARCH64_EFI=y
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++BR2_PACKAGE_HOST_QEMU=y
++BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
