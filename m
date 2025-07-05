@@ -4,122 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18C5EC8303D
-	for <buildroot@archiver.kernel.org>; Sat,  5 Jul 2025 13:24:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 521DDC8303C
+	for <buildroot@archiver.kernel.org>; Sat,  5 Jul 2025 13:43:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B121F60D74;
-	Sat,  5 Jul 2025 13:24:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0460A6084F;
+	Sat,  5 Jul 2025 13:43:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sLNToh_-bsRH; Sat,  5 Jul 2025 13:24:46 +0000 (UTC)
+ id SXn691FdvCWn; Sat,  5 Jul 2025 13:43:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E716660BF2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CE395608C9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E716660BF2;
-	Sat,  5 Jul 2025 13:24:45 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id D1F5812E
- for <buildroot@buildroot.org>; Sat,  5 Jul 2025 13:24:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CE395608C9;
+	Sat,  5 Jul 2025 13:43:54 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 92ECB12E
+ for <buildroot@buildroot.org>; Sat,  5 Jul 2025 13:43:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B7BC781959
- for <buildroot@buildroot.org>; Sat,  5 Jul 2025 13:24:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8510B40B53
+ for <buildroot@buildroot.org>; Sat,  5 Jul 2025 13:43:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QFz36Jovw3YD for <buildroot@buildroot.org>;
- Sat,  5 Jul 2025 13:24:44 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=202.12.124.144;
- helo=fout-b1-smtp.messagingengine.com; envelope-from=jiaxun.yang@flygoat.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Uw01lpHtNldE for <buildroot@buildroot.org>;
+ Sat,  5 Jul 2025 13:43:52 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2450481801
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2450481801
-Received: from fout-b1-smtp.messagingengine.com
- (fout-b1-smtp.messagingengine.com [202.12.124.144])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2450481801
- for <buildroot@buildroot.org>; Sat,  5 Jul 2025 13:24:43 +0000 (UTC)
-Received: from phl-compute-06.internal (phl-compute-06.phl.internal
- [10.202.2.46])
- by mailfout.stl.internal (Postfix) with ESMTP id D6E281D0017D;
- Sat,  5 Jul 2025 09:24:42 -0400 (EDT)
-Received: from phl-imap-08 ([10.202.2.84])
- by phl-compute-06.internal (MEProxy); Sat, 05 Jul 2025 09:24:43 -0400
-X-ME-Sender: <xms:mSdpaHzPcJLulvS6JzMNe0fudZCQDyZYwcjmpuw3PRTKEXlK-DP7WQ>
- <xme:mSdpaPTbt8rtSKPXjmchQscXDWArS2dgcZejjtc07o6cePxP_x24q32gqQNAUtC2J
- 54YZK28FKK7drrcr2M>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddvieduhecutefuodetggdotefrod
- ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
- ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
- hrpefoggffhffvvefkjghfufgtgfesthhqredtredtjeenucfhrhhomhepfdflihgrgihu
- nhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenuc
- ggtffrrghtthgvrhhnpeejheefuddvtdfggfdvffekteehhfelgfdvvedvkeeuffefkeeh
- heegvefhveetjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
- hrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmpdhnsggprhgtphht
- thhopeeipdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehgihhulhhiohdrsggvnh
- gvthhtihessggvnhgvthhtihgvnhhgihhnvggvrhhinhhgrdgtohhmpdhrtghpthhtohep
- thhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtoh
- epsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehjuhdr
- ohesfhhrvggvrdhfrhdprhgtphhtthhopehrohhmrghinhdrnhgrohhurhesghhmrghilh
- drtghomhdprhgtphhtthhopehhihesshgvnhiiihhllhgrrdhioh
-X-ME-Proxy: <xmx:mSdpaBU3NtTMBVYqRUxTCgHXYOK2N_dMFdriR5A9oh7XbH7RtNLkuw>
- <xmx:mSdpaBi-0VJjyHkP2rBASsY79Xh02BGRGeBsp7coyVw9kW81QYtN6Q>
- <xmx:mSdpaJBEe_51Bmqf-ZcyskJl7wOc9eK4WdMn9yTI2uQnQaOXZPxMVg>
- <xmx:mSdpaKItvK_cn5j1GIB9zhvl4ckSYw5ECPJNnSTRLdKutA079z0uAw>
- <xmx:midpaPlidFUQOjFnIYB5pGMNxBfkWJnOLdCmh_uH4pg0d2xzx6JtBaUT>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
- id C075A2CE0072; Sat,  5 Jul 2025 09:24:41 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-MIME-Version: 1.0
-X-ThreadId: T071cc8430edced9f
-Date: Sat, 05 Jul 2025 14:24:21 +0100
-From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To: "Julien Olivain" <ju.o@free.fr>
-Cc: buildroot@buildroot.org,
- "Giulio Benetti" <giulio.benetti@benettiengineering.com>,
- "Romain Naour" <romain.naour@gmail.com>,
- "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>,
- "Dick Olsson" <hi@senzilla.io>
-Message-Id: <dbf55473-aede-485c-a896-8d014d103d06@app.fastmail.com>
-In-Reply-To: <3f1060fd8783b35211b3de718d350dd1@free.fr>
-References: <20250618-loongarch-v3-0-d11baae32eea@flygoat.com>
- <20250618-loongarch-v3-2-d11baae32eea@flygoat.com>
- <3f1060fd8783b35211b3de718d350dd1@free.fr>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=flygoat.com; h=
- cc:cc:content-transfer-encoding:content-type:content-type:date
- :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
- :references:reply-to:subject:subject:to:to; s=fm3; t=1751721882;
- x=1751808282; bh=2AK33hHQq61Vddgw1dBosFa9WMdo/ZtrIpzUsOZbSMk=; b=
- n96oh5yZJaBwELhx3gJKwHqRPhJeKOhLE2AmuUNuu5BKUENMDy7OzI3GeNRjuMlf
- 6pb1PjyKaH1K4wOsM/ku22NtHZo2H7GldNxgPmqZoNTrLgZZZFoJzjt/5ynlJaNV
- S60hs3naXayj3ZLDvAtqY5xUz73ls/9LNyQr1eDWT4GjjSbB3zLwqjR/ik2OGB2R
- zzK3ZcqFd5HAH+hHBaJpyB2UV6eDJbg3MPmwUHb27N7hSsxqyYfV/qAyO/EMk8rX
- 5ag3z18ehiuWVd0DVKEOG741Nf1/Zg/BrxH7IUBRWd1zwU3UhvpS+in/YWWBgGw0
- GicEYC6tqnGPE+p09Gdxwg==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
- messagingengine.com; h=cc:cc:content-transfer-encoding
- :content-type:content-type:date:date:feedback-id:feedback-id
- :from:from:in-reply-to:in-reply-to:message-id:mime-version
- :references:reply-to:subject:subject:to:to:x-me-proxy
- :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1751721882; x=
- 1751808282; bh=2AK33hHQq61Vddgw1dBosFa9WMdo/ZtrIpzUsOZbSMk=; b=Z
- c7vg/wXU5gGXqJPH2Kx5EmUxIL3DyYGwAl289/MCgGF6Q6TwtWACMxCa5OKYWALs
- 4LgBsUQ9Jk9EpDe0eTsFqzZfDUU+tSRXkm6uP8SVIMedz8OL5EC0CZEpbhbKYNML
- fw5IX5bvJx5VWfMj/pyLWaWeMWY1jHiOHiytrP7+D+QNLw1Io+EVXHqxvVGeBIMf
- sdCufXbTm5kIi9cqriN9hDpXbUr+cV5z5+I/Kj4wTykhBwwUjjBvks7ObmZHFNxJ
- x4fTIeiQH0h8jahMduzA3t3EMrxQIjQGIJSLTNLPiI6BytROj3JRFvIa+FTVJ0RZ
- 07kJp3h2EhnoM9zYEILSQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=flygoat.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key, unprotected) header.d=flygoat.com
- header.i=@flygoat.com header.a=rsa-sha256 header.s=fm3 header.b=n96oh5yZ; 
- dkim=pass (2048-bit key,
- unprotected) header.d=messagingengine.com header.i=@messagingengine.com
- header.a=rsa-sha256 header.s=fm2 header.b=Zc7vg/wX
-Subject: Re: [Buildroot] [PATCH v3 02/11] arch: Introduce LoongArch64
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 765F540AC2
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 765F540AC2
+ for <buildroot@buildroot.org>; Sat,  5 Jul 2025 13:43:52 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 63CD9852CA; Sat,  5 Jul 2025 13:43:52 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 5 Jul 2025 15:41:50 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8f09106e81ab5ead9d3cb61d000334068b33e04d
+X-Git-Newrev: 78198bc0f35e859e6c6b9162d643702079b31c39
+X-Patchwork-Hint: ignore
+Message-Id: <20250705134352.63CD9852CA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/shadowsocks-libev: fix build w/
+ mbedtls v3.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,21 +58,282 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-CgrlnKgyMDI15bm0N+aciDXml6Xlkajlha0g5LiL5Y2IMToxN++8jEp1bGllbiBPbGl2YWlu5YaZ
-6YGT77yaCj4gSGkgSmlheHVuLAo+CkhpIEp1bGllbiwKCkFsbCBzb3VuZHMgZ29vZCB0byBtZSEg
-TWFueSB0aGFua3MgZm9yIGxvb2tpbmcgaW50byBpdC4KClsuLi5dCgo+IElmIHlvdSBwcm9taXNl
-IHRvIGhlbHAgdXMgZG9pbmcgdGhpcyBtYWludGVuYW5jZSwgSSB0aGluayB3ZSBjb3VsZAo+IHRo
-aXMgc2VyaWVzIG1lcmdlZCBzb29uLgoKU3VyZSwgSSB3aWxsIHRyeSBteSBiZXN0LgoKSSBqdXN0
-IHdhbnQgdG8gbm90ZSB0aGF0IEknbSBhIGhvYmJ5aXN0IHNvIG15IGF2YWlsYWJpbGl0eSBtYXkg
-dmFyeSwKYnV0IGl0IHNob3VsZCBiZSBmaW5lIHRvIGRldm90ZSBhIGNvdXBsZSBvZiBob3VycyBw
-ZXIgd2Vlay4KCkknbGwgbW9uaXRvciBDYyBmcm9tIGJ1aWxkcm9vdCBsaXN0IHByb21wdGx5LgoK
-Pgo+IFdoYXQgZG8geW91IHRoaW5rPwoKVGhhbmtzIGFnYWluLgoKPgo+IEJlc3QgcmVnYXJkcywK
-Pgo+IEp1bGllbi4KCi0tIAotIEppYXh1bgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJv
-b3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxk
-cm9vdAo=
+commit: https://git.buildroot.net/buildroot/commit/?id=78198bc0f35e859e6c6b9162d643702079b31c39
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Since the mbedtls bump to v3.6 [1] the shadowsocks-libev package is
+failling  on the autobuilder:
+
+```
+checking for mbedtls_cipher_setup in -lmbedcrypto... yes
+checking whether mbedtls supports Cipher Feedback mode or not... configure: error: MBEDTLS_CIPHER_MODE_CFB required
+make: *** [package/pkg-generic.mk:263: /workdir/instance-0/output-1/build/shadowsocks-libev-3.3.5/.stamp_configured] Error 1
+make: Leaving directory '/workdir/instance-0/buildroot'
+```
+
+This is due to the breaking changes in the mbedtls API with the version
+bump.
+
+This patch adds the upstream patch [2] that address this issue by verifying
+conditionally the version of mbedtls we are running on to make the API
+calls and includes.
+
+[1] 3481a9643f package/mbedtls: bump to version 3.6.3.1
+[2] https://github.com/shadowsocks/shadowsocks-libev/commit/9afa3cacf947f910be46b69fc5a7a1fdd02fd5e6#
+
+Fixes: https://autobuild.buildroot.org/results/070/070581d95f2739cee3b4cb8252639dd92b5a8421
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ .../0004-fix-mbedtls-3-6-compatibility.patch       | 231 +++++++++++++++++++++
+ 1 file changed, 231 insertions(+)
+
+diff --git a/package/shadowsocks-libev/0004-fix-mbedtls-3-6-compatibility.patch b/package/shadowsocks-libev/0004-fix-mbedtls-3-6-compatibility.patch
+new file mode 100644
+index 0000000000..ca46425c4d
+--- /dev/null
++++ b/package/shadowsocks-libev/0004-fix-mbedtls-3-6-compatibility.patch
+@@ -0,0 +1,231 @@
++From 9afa3cacf947f910be46b69fc5a7a1fdd02fd5e6 Mon Sep 17 00:00:00 2001
++From: Lu jicong <jiconglu58@gmail.com>
++Date: Fri, 10 Jan 2025 22:05:31 +0800
++Subject: [PATCH] Fix in 'mbedtls 3.6.0 ver' compilation failure issue
++
++Fix mbedtls 3.6 compatibility
++
++Co-authored-by: Zxl hhyccc <zxlhhy@gmail.com>
++Signed-off-by: Lu jicong <jiconglu58@gmail.com>
++Upstream: https://github.com/shadowsocks/shadowsocks-libev/commit/9afa3cacf947f910be46b69fc5a7a1fdd02fd5e6
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++---
++ m4/mbedtls.m4 | 20 ++++++++++++++++++++
++ src/aead.c    | 23 +++++++++++------------
++ src/crypto.c  |  2 +-
++ src/crypto.h  |  1 -
++ src/stream.c  | 51 ++++++---------------------------------------------
++ 5 files changed, 38 insertions(+), 59 deletions(-)
++
++diff --git a/m4/mbedtls.m4 b/m4/mbedtls.m4
++index 2c478b960..a795790ca 100644
++--- a/m4/mbedtls.m4
+++++ b/m4/mbedtls.m4
++@@ -31,7 +31,12 @@ AC_DEFUN([ss_MBEDTLS],
++   AC_COMPILE_IFELSE(
++     [AC_LANG_PROGRAM(
++       [[
+++#include <mbedtls/version.h>
+++#if MBEDTLS_VERSION_NUMBER >= 0x03000000
+++#include <mbedtls/mbedtls_config.h>
+++#else
++ #include <mbedtls/config.h>
+++#endif
++       ]],
++       [[
++ #ifndef MBEDTLS_CIPHER_MODE_CFB
++@@ -48,7 +53,12 @@ AC_DEFUN([ss_MBEDTLS],
++   AC_COMPILE_IFELSE(
++     [AC_LANG_PROGRAM(
++       [[
+++#include <mbedtls/version.h>
+++#if MBEDTLS_VERSION_NUMBER >= 0x03000000
+++#include <mbedtls/mbedtls_config.h>
+++#else
++ #include <mbedtls/config.h>
+++#endif
++       ]],
++       [[
++ #ifndef MBEDTLS_ARC4_C
++@@ -64,7 +74,12 @@ AC_DEFUN([ss_MBEDTLS],
++   AC_COMPILE_IFELSE(
++     [AC_LANG_PROGRAM(
++       [[
+++#include <mbedtls/version.h>
+++#if MBEDTLS_VERSION_NUMBER >= 0x03000000
+++#include <mbedtls/mbedtls_config.h>
+++#else
++ #include <mbedtls/config.h>
+++#endif
++       ]],
++       [[
++ #ifndef MBEDTLS_BLOWFISH_C
++@@ -80,7 +95,12 @@ AC_DEFUN([ss_MBEDTLS],
++   AC_COMPILE_IFELSE(
++     [AC_LANG_PROGRAM(
++       [[
+++#include <mbedtls/version.h>
+++#if MBEDTLS_VERSION_NUMBER >= 0x03000000
+++#include <mbedtls/mbedtls_config.h>
+++#else
++ #include <mbedtls/config.h>
+++#endif
++       ]],
++       [[
++ #ifndef MBEDTLS_CAMELLIA_C
++diff --git a/src/aead.c b/src/aead.c
++index 358ec9381..73349da64 100644
++--- a/src/aead.c
+++++ b/src/aead.c
++@@ -177,9 +177,13 @@ aead_cipher_encrypt(cipher_ctx_t *cipher_ctx,
++     // Otherwise, just use the mbedTLS one with crappy AES-NI.
++     case AES192GCM:
++     case AES128GCM:
++-
+++#if MBEDTLS_VERSION_NUMBER < 0x03000000
++         err = mbedtls_cipher_auth_encrypt(cipher_ctx->evp, n, nlen, ad, adlen,
++                                           m, mlen, c, clen, c + mlen, tlen);
+++#else
+++        err = mbedtls_cipher_auth_encrypt_ext(cipher_ctx->evp, n, nlen, ad, adlen,
+++                                              m, mlen, c, mlen + tlen, clen, tlen);
+++#endif
++         *clen += tlen;
++         break;
++     case CHACHA20POLY1305IETF:
++@@ -226,8 +230,13 @@ aead_cipher_decrypt(cipher_ctx_t *cipher_ctx,
++     // Otherwise, just use the mbedTLS one with crappy AES-NI.
++     case AES192GCM:
++     case AES128GCM:
+++#if MBEDTLS_VERSION_NUMBER < 0x03000000
++         err = mbedtls_cipher_auth_decrypt(cipher_ctx->evp, n, nlen, ad, adlen,
++                                           m, mlen - tlen, p, plen, m + mlen - tlen, tlen);
+++#else
+++        err = mbedtls_cipher_auth_decrypt_ext(cipher_ctx->evp, n, nlen, ad, adlen,
+++                                              m, mlen, p, mlen - tlen, plen, tlen);
+++#endif
++         break;
++     case CHACHA20POLY1305IETF:
++         err = crypto_aead_chacha20poly1305_ietf_decrypt(p, &long_plen, NULL, m, mlen,
++@@ -721,17 +730,7 @@ aead_key_init(int method, const char *pass, const char *key)
++     cipher_t *cipher = (cipher_t *)ss_malloc(sizeof(cipher_t));
++     memset(cipher, 0, sizeof(cipher_t));
++ 
++-    if (method >= CHACHA20POLY1305IETF) {
++-        cipher_kt_t *cipher_info = (cipher_kt_t *)ss_malloc(sizeof(cipher_kt_t));
++-        cipher->info             = cipher_info;
++-        cipher->info->base       = NULL;
++-        cipher->info->key_bitlen = supported_aead_ciphers_key_size[method] * 8;
++-        cipher->info->iv_size    = supported_aead_ciphers_nonce_size[method];
++-    } else {
++-        cipher->info = (cipher_kt_t *)aead_get_cipher_type(method);
++-    }
++-
++-    if (cipher->info == NULL && cipher->key_len == 0) {
+++    if (method < CHACHA20POLY1305IETF && aead_get_cipher_type(method) == NULL) {
++         LOGE("Cipher %s not found in crypto library", supported_aead_ciphers[method]);
++         FATAL("Cannot initialize cipher");
++     }
++diff --git a/src/crypto.c b/src/crypto.c
++index b44d8674c..76c426b53 100644
++--- a/src/crypto.c
+++++ b/src/crypto.c
++@@ -103,7 +103,7 @@ crypto_md5(const unsigned char *d, size_t n, unsigned char *md)
++     if (md == NULL) {
++         md = m;
++     }
++-#if MBEDTLS_VERSION_NUMBER >= 0x02070000
+++#if MBEDTLS_VERSION_NUMBER < 0x03000000 && MBEDTLS_VERSION_NUMBER >= 0x02070000
++     if (mbedtls_md5_ret(d, n, md) != 0)
++         FATAL("Failed to calculate MD5");
++ #else
++diff --git a/src/crypto.h b/src/crypto.h
++index 1791551ff..70707932b 100644
++--- a/src/crypto.h
+++++ b/src/crypto.h
++@@ -97,7 +97,6 @@ typedef struct buffer {
++ typedef struct {
++     int method;
++     int skey;
++-    cipher_kt_t *info;
++     size_t nonce_len;
++     size_t key_len;
++     size_t tag_len;
++diff --git a/src/stream.c b/src/stream.c
++index 35d9050b3..b2e2cea82 100644
++--- a/src/stream.c
+++++ b/src/stream.c
++@@ -168,33 +168,6 @@ crypto_stream_xor_ic(uint8_t *c, const uint8_t *m, uint64_t mlen,
++     return 0;
++ }
++ 
++-int
++-cipher_nonce_size(const cipher_t *cipher)
++-{
++-    if (cipher == NULL) {
++-        return 0;
++-    }
++-    return cipher->info->iv_size;
++-}
++-
++-int
++-cipher_key_size(const cipher_t *cipher)
++-{
++-    /*
++-     * Semi-API changes (technically public, morally prnonceate)
++-     * Renamed a few headers to include _internal in the name. Those headers are
++-     * not supposed to be included by users.
++-     * Changed md_info_t into an opaque structure (use md_get_xxx() accessors).
++-     * Changed pk_info_t into an opaque structure.
++-     * Changed cipher_base_t into an opaque structure.
++-     */
++-    if (cipher == NULL) {
++-        return 0;
++-    }
++-    /* From Version 1.2.7 released 2013-04-13 Default Blowfish keysize is now 128-bits */
++-    return cipher->info->key_bitlen / 8;
++-}
++-
++ const cipher_kt_t *
++ stream_get_cipher_type(int method)
++ {
++@@ -642,34 +615,22 @@ stream_key_init(int method, const char *pass, const char *key)
++     cipher_t *cipher = (cipher_t *)ss_malloc(sizeof(cipher_t));
++     memset(cipher, 0, sizeof(cipher_t));
++ 
++-    if (method == SALSA20 || method == CHACHA20 || method == CHACHA20IETF) {
++-        cipher_kt_t *cipher_info = (cipher_kt_t *)ss_malloc(sizeof(cipher_kt_t));
++-        cipher->info             = cipher_info;
++-        cipher->info->base       = NULL;
++-        cipher->info->key_bitlen = supported_stream_ciphers_key_size[method] * 8;
++-        cipher->info->iv_size    = supported_stream_ciphers_nonce_size[method];
++-    } else {
++-        cipher->info = (cipher_kt_t *)stream_get_cipher_type(method);
++-    }
++-
++-    if (cipher->info == NULL && cipher->key_len == 0) {
+++    if (method < SALSA20 && stream_get_cipher_type(method) == NULL) {
++         LOGE("Cipher %s not found in crypto library", supported_stream_ciphers[method]);
++         FATAL("Cannot initialize cipher");
++     }
++ 
++     if (key != NULL)
++-        cipher->key_len = crypto_parse_key(key, cipher->key, cipher_key_size(cipher));
+++        cipher->key_len = crypto_parse_key(key, cipher->key,
+++                                           supported_stream_ciphers_key_size[method]);
++     else
++-        cipher->key_len = crypto_derive_key(pass, cipher->key, cipher_key_size(cipher));
+++        cipher->key_len = crypto_derive_key(pass, cipher->key,
+++                                            supported_stream_ciphers_key_size[method]);
++ 
++     if (cipher->key_len == 0) {
++         FATAL("Cannot generate key and NONCE");
++     }
++-    if (method == RC4_MD5) {
++-        cipher->nonce_len = 16;
++-    } else {
++-        cipher->nonce_len = cipher_nonce_size(cipher);
++-    }
+++    cipher->nonce_len = supported_stream_ciphers_nonce_size[method];
++     cipher->method = method;
++ 
++     return cipher;
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
