@@ -4,48 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7993BC83F03
-	for <buildroot@archiver.kernel.org>; Sun,  6 Jul 2025 11:38:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5583C83F03
+	for <buildroot@archiver.kernel.org>; Sun,  6 Jul 2025 11:38:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 31C1A80EE0;
-	Sun,  6 Jul 2025 11:38:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8C22680DBA;
+	Sun,  6 Jul 2025 11:38:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GZJZnuym9Hio; Sun,  6 Jul 2025 11:38:30 +0000 (UTC)
+ id Nycb4VripkOX; Sun,  6 Jul 2025 11:38:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5FD8580F04
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C85AD81013
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5FD8580F04;
-	Sun,  6 Jul 2025 11:38:30 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id E22FC19C
- for <buildroot@buildroot.org>; Sun,  6 Jul 2025 11:38:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C85AD81013;
+	Sun,  6 Jul 2025 11:38:55 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1FDE919C
+ for <buildroot@buildroot.org>; Sun,  6 Jul 2025 11:38:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D3E1580F36
- for <buildroot@buildroot.org>; Sun,  6 Jul 2025 11:38:29 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0654B608A7
+ for <buildroot@buildroot.org>; Sun,  6 Jul 2025 11:38:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RhQD7JbWNxPq for <buildroot@buildroot.org>;
- Sun,  6 Jul 2025 11:38:29 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 28A2080EE0
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 28A2080EE0
- for <buildroot@buildroot.org>; Sun,  6 Jul 2025 11:38:29 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 044A485F1D; Sun,  6 Jul 2025 11:38:29 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 6 Jul 2025 13:28:58 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1e8be117f0cc935bf7082ce156d9799b4bd14668
-X-Git-Newrev: 196989235e6f0266fca48b6c73c780436c7ebcb0
-X-Patchwork-Hint: ignore
-Message-Id: <20250706113829.044A485F1D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/hddtemp: fix build without nls
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3Em9pqm3WJo2 for <buildroot@buildroot.org>;
+ Sun,  6 Jul 2025 11:38:53 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3B6B06089A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B6B06089A
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3B6B06089A
+ for <buildroot@buildroot.org>; Sun,  6 Jul 2025 11:38:53 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 6EF052003C3;
+ Sun,  6 Jul 2025 13:38:50 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 06 Jul 2025 13:38:50 +0200
+MIME-Version: 1.0
+Date: Sun, 06 Jul 2025 13:38:50 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250706070615.543413-1-bernd@kuhls.net>
+References: <20250706070615.543413-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <a2711ee992220bae12589e06a0a81c11@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1751801931;
+ bh=TZ/RQqYmFYmogxAzE6FQHgsWRL1MYU/KE2Ay6bdqmoI=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=V50oySGwPwncppyhH0kjWC4Te6Ghgqp/Qdq64vl4xr27mk6j9Jc0J4RrUAPbmypO9
+ MpWFQ5jfE/OQvR0cVoJTWg7etF85BAYw8sdBQshO0+sufgfx9LrWtwIHOyJyMJlEoW
+ tutB6A1iWq1pqNG9gPQnF3C+FU59q6rGlDHHDMtHdCOUQ+24Yp4CPfO08CjYgK5MQn
+ uzG08V1/2nkiSnMLhyR4718OvjL+7YQTu1yjwgt2lr8nVrk2UVdLKW85DgutEaqjVh
+ VwRBaiaWuaXu+Z9ZWDEU4D0gR7ILrXR/oqQBqe1MpM0maJlnc3jXTy1PeI9yeLKIBK
+ xFx3T6NNEL6KA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=V50oySGw
+Subject: Re: [Buildroot] [PATCH 1/1] package/hddtemp: fix build without nls
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,82 +83,19 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8212859226753569114=="
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8212859226753569114==
-Content-Type: text/plain
+On 06/07/2025 09:06, Bernd Kuhls wrote:
+> Fixes:
+> https://autobuild.buildroot.org/results/06b44df261318ce1d07f6cb20b26e4ad64222940/
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=196989235e6f0266fca48b6c73c780436c7ebcb0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes:
-https://autobuild.buildroot.org/results/06b44df261318ce1d07f6cb20b26e4ad64222940/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/hddtemp/0001-fix-build-without-nls.patch | 40 ++++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
-
-diff --git a/package/hddtemp/0001-fix-build-without-nls.patch b/package/hddtemp/0001-fix-build-without-nls.patch
-new file mode 100644
-index 0000000000..356b94b010
---- /dev/null
-+++ b/package/hddtemp/0001-fix-build-without-nls.patch
-@@ -0,0 +1,40 @@
-+From c9d0d249ff013d33cf1fd5a586c16ee30095cc90 Mon Sep 17 00:00:00 2001
-+From: Nicolas PARLANT <nicolas.parlant@parhuet.fr>
-+Date: Fri, 14 Feb 2025 10:08:43 +0100
-+Subject: [PATCH] fix build without nls
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+> hddtemp.c: In function ‘main’:
-+> hddtemp.c:274:3: error: implicit declaration of function ‘bindtextdomain’ [-Wimplicit-function-declaration]
-+>   274 |   bindtextdomain (PACKAGE, LOCALEDIR);
-+>       |   ^~~~~~~~~~~~~~
-+> hddtemp.c:275:3: error: implicit declaration of function ‘textdomain’ [-Wimplicit-function-declaration]
-+>   275 |   textdomain (PACKAGE);
-+>       |   ^~~~~~~~~~
-+> make[2]: *** [Makefile:496: hddtemp-hddtemp.o] Error 1
-+
-+Upstream: https://github.com/vitlav/hddtemp/pull/16
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ src/hddtemp.c | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/src/hddtemp.c b/src/hddtemp.c
-+index 64d000e..bfea556 100644
-+--- a/src/hddtemp.c
-++++ b/src/hddtemp.c
-+@@ -270,9 +270,11 @@ int main(int argc, char* argv[]) {
-+   backtrace_sigill();
-+   backtrace_sigbus();
-+ 
-++#if ENABLE_NLS
-+   setlocale (LC_ALL, "");
-+   bindtextdomain (PACKAGE, LOCALEDIR);
-+   textdomain (PACKAGE);
-++#endif
-+ 
-+   show_db = debug = numeric = quiet = wakeup = af_hint = syslog_interval = foreground = 0;
-+   unit = DEFAULT;
-
---===============8212859226753569114==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8212859226753569114==--
