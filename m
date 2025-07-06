@@ -1,108 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60590C83F03
-	for <buildroot@archiver.kernel.org>; Sun,  6 Jul 2025 15:25:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AEC6DC83F03
+	for <buildroot@archiver.kernel.org>; Sun,  6 Jul 2025 15:30:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1EAEF8119C;
-	Sun,  6 Jul 2025 15:25:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 373A660DC7;
+	Sun,  6 Jul 2025 15:30:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9qFLZudEAXJS; Sun,  6 Jul 2025 15:25:02 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id k9qEjCuy2eKI; Sun,  6 Jul 2025 15:30:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F4DB81210
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 54DE660DD2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1F4DB81210;
-	Sun,  6 Jul 2025 15:25:02 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 49C2B19C
- for <buildroot@buildroot.org>; Sun,  6 Jul 2025 15:25:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 54DE660DD2;
+	Sun,  6 Jul 2025 15:30:27 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 020D215F
+ for <buildroot@buildroot.org>; Sun,  6 Jul 2025 15:30:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3BD7340684
- for <buildroot@buildroot.org>; Sun,  6 Jul 2025 15:25:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id F373E400E0
+ for <buildroot@buildroot.org>; Sun,  6 Jul 2025 15:30:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7ItHxPjTgTWv for <buildroot@buildroot.org>;
- Sun,  6 Jul 2025 15:25:00 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::431; helo=mail-wr1-x431.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9A5AB4062E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A5AB4062E
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9A5AB4062E
- for <buildroot@buildroot.org>; Sun,  6 Jul 2025 15:24:59 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id
- ffacd0b85a97d-3a5123c1533so1048011f8f.2
- for <buildroot@buildroot.org>; Sun, 06 Jul 2025 08:24:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1751815497; x=1752420297;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=Mshy3TqcEVsA1MKQPkHvq+e3Ho9qN9SJXE0KKc4vB1Q=;
- b=heXFB5XuPMYVmkeD1UAW0Fee2trcbTeLZYfQ0ONCqeBtq6Au3kQdxvTfE7wiwYamZQ
- x1bizvHxsJnFhPGAcS1Gp1lysl2XW/4JPAl3phM/oFGcvEnRvYZhHX+WW4iSY6XRaXyj
- Laph3CGAWq+bMmkRcYT3O0My52Twja9bQY9KfxWzeB5IASkQKz2hd+wHj+2/PwkDNsCH
- sEB1E4qCpDPBKPdDzXTF9764zjx5s+Xaipf59amgL/OYRErWSmNrLptzrtmU1rKo/EJN
- mioP1/b2+hPP4RgSPhb0xUQf0AQxIOR/5I9qa24FGndogLPsxAaNIQS4n4Wkop7ublUg
- N1JQ==
-X-Forwarded-Encrypted: i=1;
- AJvYcCVEn3sLa3Oc6/A72j9lCpJr+sQOumlkoGuUWXXa2bStbcX+tAGoOLBwRLbS7uguAFF5ieGmOjxOGcg=@buildroot.org
-X-Gm-Message-State: AOJu0YyJ4pyHG4LgCHEYseja3x+KcMNcKBmMdyVh+o47sI8TgtBoSPxo
- dOl3UYd5YcbKhfanDgAUsCDaf7oX08nLQhU0v3dC+BUCjFxJfxpGoBDm7ong8gprkksBXlqZiPZ
- rzive
-X-Gm-Gg: ASbGncsWeBKBZDaOrb+tHZNotbCA0pjYVVn4SfcVqbW5UZ/Yb0uiBOQcd68jZSWLjQ8
- 5yDh9h+nXuvhjfINkWARBMTpBZHDCNfYa51+KDUz7EK+K5LcsPduFmlPopQw+Ee10r0//frKBl1
- bkyWDrPaueP26cDAYyStvDYbnuhz/qBwi0HKJCogujC78ecfrLF1P/r9DaDNVTyd0RfvlaGSJhL
- 7h84xQBSdUQaoKAxfqWoafdLCoNpXl/t4ZwgvTy2iUFaZSytiklN2o4Qpv30Xt1WFBBm7LSBG1I
- SffznGLBbPak4GFavGLL1fYEXwdUvuK5K4xhpU9Oce2wZkW19f1KE/uOwUwsLtaBPaEiTc52Qur
- CkKxaIBsBPjLncLSIx7OHxMcbeaiBurD4J55766llolfPBdPCIGXseb3CIvayPpveq6xNpS4lTf
- 0zWd60i6HkMVr+TCtRq/rE1F+D
-X-Google-Smtp-Source: AGHT+IFRXsuGLPc7g0PCWMm7bvt3F5MfjqOlUXMmPPRSoyjs9JKu6TcWNs3gkWSPA/3gWTMNnyl9DQ==
-X-Received: by 2002:adf:e19a:0:b0:3a4:eb80:762d with SMTP id
- ffacd0b85a97d-3b4964ee8f5mr8423070f8f.56.1751815497341; 
- Sun, 06 Jul 2025 08:24:57 -0700 (PDT)
-Received: from ?IPV6:2a01:cb05:949d:5800:c97d:3b73:4a46:d823?
- (2a01cb05949d5800c97d3b734a46d823.ipv6.abo.wanadoo.fr.
- [2a01:cb05:949d:5800:c97d:3b73:4a46:d823])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3b47285bdf8sm7637157f8f.87.2025.07.06.08.24.56
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 06 Jul 2025 08:24:57 -0700 (PDT)
-Message-ID: <1b1c94c5-7d52-423f-9a99-a10b9b61dbb7@smile.fr>
-Date: Sun, 6 Jul 2025 17:24:56 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- buildroot@buildroot.org
-Cc: linux-amarula@amarulasolutions.com
-References: <20250610115502.2483804-1-dario.binacchi@amarulasolutions.com>
- <20250610115502.2483804-2-dario.binacchi@amarulasolutions.com>
-Content-Language: fr
-In-Reply-To: <20250610115502.2483804-2-dario.binacchi@amarulasolutions.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1751815497; x=1752420297; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=Mshy3TqcEVsA1MKQPkHvq+e3Ho9qN9SJXE0KKc4vB1Q=;
- b=CpkCBIgmXLfd0uhXHrZXHS7QYhe3ZaTfLbFYAvCeb3TbEg5UupMZ1tNpH+IH+EHeHK
- fQT3Tbd6Lk+P2gSvs/fifDESesmUe1lFfk8BwBFEp03jS83/UKazF9lO1F+lOoBwOh1b
- fNYM4b972dQXVjDYbW0vb1QgvsWF6+Nf+KAd4=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
- header.a=rsa-sha256 header.s=google header.b=CpkCBIgm
-Subject: Re: [Buildroot] [PATCH v4 2/2] package/canopenterm: new package
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PBA4wzb-1zQi for <buildroot@buildroot.org>;
+ Sun,  6 Jul 2025 15:30:25 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 16A134005F
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 16A134005F
+ for <buildroot@buildroot.org>; Sun,  6 Jul 2025 15:30:25 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E438386015; Sun,  6 Jul 2025 15:30:24 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 6 Jul 2025 17:25:20 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: c41f953ab9ba262324484a2efe1151d8f543eebd
+X-Git-Newrev: 669f28ac0b4520d088f69f365b0e5bffa5bf7c02
+X-Patchwork-Hint: ignore
+Message-Id: <20250706153024.E438386015@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pocketpy: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,120 +59,189 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Romain Naour via buildroot <buildroot@buildroot.org>
 Reply-To: Romain Naour <romain.naour@smile.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gRGFyaW8sIEFsbCwKCkxlIDEwLzA2LzIwMjUgw6AgMTM6NTUsIERhcmlvIEJpbmFjY2hp
-IGEgw6ljcml0wqA6Cj4gQ0FOb3BlblRlcm0gaXMgYW4gb3Blbi1zb3VyY2UgdG9vbCBmb3IgZGV2
-ZWxvcGluZywgdGVzdGluZywgYW5kCj4gYW5hbHl6aW5nIENBTm9wZW4gQ0MgbmV0d29ya3MgYW5k
-IGRldmljZXMuIEl0IHByb3ZpZGVzIGEgdGVjaG5pY2FsLAo+IG5vLW5vbnNlbnNlIHNvbHV0aW9u
-IGZvciBwcm9mZXNzaW9uYWxzIHdvcmtpbmcgd2l0aCBDQU4gQ0MtYmFzZWQKPiBuZXR3b3Jrcy4g
-QWRkaXRpb25hbGx5LCBpdCBzdXBwb3J0cyBTQUUgSjE5MzkgYW5kIE9CRC1JSSBwcm90b2NvbHMs
-Cj4gbWFraW5nIGl0IHZlcnNhdGlsZSBmb3IgdmFyaW91cyBhcHBsaWNhdGlvbnMuCj4gCj4gVmVy
-c2lvbiB2MS4wLjEwIHdhcyBjaG9zZW4gYmVjYXVzZSBpdCBpcyB0aGUgbGFzdCBvbmUgcmVxdWly
-aW5nIFNETDIuCj4gSW5kZWVkIHZlcnNpb24gdjEuMC4xMSBkZXBlbmRzIG9uIFNETDMuCj4gCj4g
-VGVzdGVkIG9uIFNUTTMyTVAyNTdGLUVWMQo+IAo+IFNpZ25lZC1vZmYtYnk6IERhcmlvIEJpbmFj
-Y2hpIDxkYXJpby5iaW5hY2NoaUBhbWFydWxhc29sdXRpb25zLmNvbT4KPiAtLS0+ICBERVZFTE9Q
-RVJTICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgMSArCj4gIHBhY2thZ2Uv
-Q29uZmlnLmluICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAxICsKPiAgLi4uYWxsYXRp
-b24td2hlbi1CVUlMRF9ZT0NUTy1pcy1lbmFibGVkLnBhdGNoIHwgMzkgKysrKysrKysrKysrKysr
-KysrKwo+ICBwYWNrYWdlL2Nhbm9wZW50ZXJtL0NvbmZpZy5pbiAgICAgICAgICAgICAgICAgfCAx
-NyArKysrKysrKwo+ICBwYWNrYWdlL2Nhbm9wZW50ZXJtL2Nhbm9wZW50ZXJtLmhhc2ggICAgICAg
-ICAgfCAgMyArKwo+ICBwYWNrYWdlL2Nhbm9wZW50ZXJtL2Nhbm9wZW50ZXJtLm1rICAgICAgICAg
-ICAgfCAxNSArKysrKysrCj4gIDYgZmlsZXMgY2hhbmdlZCwgNzYgaW5zZXJ0aW9ucygrKQo+ICBj
-cmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9jYW5vcGVudGVybS8wMDAxLUZpeC1leGUtaW5zdGFs
-bGF0aW9uLXdoZW4tQlVJTERfWU9DVE8taXMtZW5hYmxlZC5wYXRjaAo+ICBjcmVhdGUgbW9kZSAx
-MDA2NDQgcGFja2FnZS9jYW5vcGVudGVybS9Db25maWcuaW4KPiAgY3JlYXRlIG1vZGUgMTAwNjQ0
-IHBhY2thZ2UvY2Fub3BlbnRlcm0vY2Fub3BlbnRlcm0uaGFzaAo+ICBjcmVhdGUgbW9kZSAxMDA2
-NDQgcGFja2FnZS9jYW5vcGVudGVybS9jYW5vcGVudGVybS5tawo+IAo+IGRpZmYgLS1naXQgYS9E
-RVZFTE9QRVJTIGIvREVWRUxPUEVSUwo+IGluZGV4IDQ2ZDI0YWZjZWI3MS4uZDNlZjg5OGYzMjQ0
-IDEwMDY0NAo+IC0tLSBhL0RFVkVMT1BFUlMKPiArKysgYi9ERVZFTE9QRVJTCj4gQEAgLTgwOSw2
-ICs4MDksNyBAQCBGOgljb25maWdzL3N0bTMyZjc2OV9kaXNjb19zZF9kZWZjb25maWcKPiAgRjoJ
-cGFja2FnZS9hZXNwaXBlLwo+ICBGOglwYWNrYWdlL2FybWFkaWxsby8KPiAgRjoJcGFja2FnZS9i
-YWJlbGQvCj4gK0Y6CXBhY2thZ2UvY2Fub3BlbnRlcm0vCj4gIEY6CXBhY2thZ2UvaWFuYS1hc3Np
-Z25tZW50cy8KPiAgRjoJcGFja2FnZS9pbmloLwo+ICBGOglwYWNrYWdlL3BvY2tldHB5Lwo+IGRp
-ZmYgLS1naXQgYS9wYWNrYWdlL0NvbmZpZy5pbiBiL3BhY2thZ2UvQ29uZmlnLmluCj4gaW5kZXgg
-OWFhZDY1NDg4YTZjLi40MTNhYzNlZjhiM2MgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9Db25maWcu
-aW4KPiArKysgYi9wYWNrYWdlL0NvbmZpZy5pbgo+IEBAIC0yNDY3LDYgKzI0NjcsNyBAQCBlbmRp
-Zgo+ICAJc291cmNlICJwYWNrYWdlL2MtaWNhcC1tb2R1bGVzL0NvbmZpZy5pbiIKPiAgCXNvdXJj
-ZSAicGFja2FnZS9jYW4tdXRpbHMvQ29uZmlnLmluIgo+ICAJc291cmNlICJwYWNrYWdlL2Nhbm5l
-bGxvbmkvQ29uZmlnLmluIgo+ICsJc291cmNlICJwYWNrYWdlL2Nhbm9wZW50ZXJtL0NvbmZpZy5p
-biIKPiAgCXNvdXJjZSAicGFja2FnZS9jYXN5bmMvQ29uZmlnLmluIgo+ICAJc291cmNlICJwYWNr
-YWdlL2Nhc3luYy1uYW5vL0NvbmZpZy5pbiIKPiAgCXNvdXJjZSAicGFja2FnZS9jZm0vQ29uZmln
-LmluIgo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2Nhbm9wZW50ZXJtLzAwMDEtRml4LWV4ZS1pbnN0
-YWxsYXRpb24td2hlbi1CVUlMRF9ZT0NUTy1pcy1lbmFibGVkLnBhdGNoIGIvcGFja2FnZS9jYW5v
-cGVudGVybS8wMDAxLUZpeC1leGUtaW5zdGFsbGF0aW9uLXdoZW4tQlVJTERfWU9DVE8taXMtZW5h
-YmxlZC5wYXRjaAo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAwMDAwMDAwMDAwLi41
-NWQxNWFmYmJjOTUKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvcGFja2FnZS9jYW5vcGVudGVybS8w
-MDAxLUZpeC1leGUtaW5zdGFsbGF0aW9uLXdoZW4tQlVJTERfWU9DVE8taXMtZW5hYmxlZC5wYXRj
-aAo+IEBAIC0wLDAgKzEsMzkgQEAKPiArRnJvbSBmYzE1MDE4N2EyZTJjZTc3N2U3NTc0MDVlYjFk
-NjcyMzVmYzY4ZDc1IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQo+ICtGcm9tOiBEYXJpbyBCaW5h
-Y2NoaSA8ZGFyaW8uYmluYWNjaGlAYW1hcnVsYXNvbHV0aW9ucy5jb20+Cj4gK0RhdGU6IFRodSwg
-OCBNYXkgMjAyNSAxNToyNDozOCArMDIwMAo+ICtTdWJqZWN0OiBbUEFUQ0hdIEZpeCBleGUgaW5z
-dGFsbGF0aW9uIHdoZW4gQlVJTERfWU9DVE8gaXMgZW5hYmxlZAo+ICsKPiArV2hpbGUgYnVpbGRp
-bmcgQ2Fub3BlblRlcm0gaW4gQnVpbGRyb290LCB3aXRoIHRoZSBCVUlMRF9ZT0NUTyBvcHRpb24K
-PiArZW5hYmxlZCAoeWVzLCByZWFsbHkgOikpLCB0aGUgZm9sbG93aW5nIGVycm9yIGlzIHJhaXNl
-ZDoKPiArCj4gK0NNYWtlIEVycm9yIGF0IG91dHB1dC9idWlsZC9jYW5vcGVudGVybS0xLjAuMTAv
-Y21ha2VfaW5zdGFsbC5jbWFrZToxMTQgKGZpbGUpOgo+ICsgIGZpbGUgSU5TVEFMTCBjYW5ub3Qg
-ZmluZAo+ICsgICJidWlsZHJvb3Qvb3V0cHV0L2J1aWxkL2Nhbm9wZW50ZXJtLTEuMC4xMC9DQU5v
-cGVuVGVybSI6Cj4gKyAgTm8gc3VjaCBmaWxlIG9yIGRpcmVjdG9yeS4KPiArCj4gK1NpZ25lZC1v
-ZmYtYnk6IERhcmlvIEJpbmFjY2hpIDxkYXJpby5iaW5hY2NoaUBhbWFydWxhc29sdXRpb25zLmNv
-bT4KPiArVXBzdHJlYW06IGh0dHBzOi8vZ2l0aHViLmNvbS9DQU5vcGVuVGVybS9DQU5vcGVuVGVy
-bS9wdWxsLzk1CgpUaGlzIHBhdGNoIGlzIG5vdyBtZXJnZWQuCgo+ICstLS0KPiArIGNtYWtlL29z
-X2xpbnV4LmNtYWtlIHwgNCArKy0tCj4gKyAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCsp
-LCAyIGRlbGV0aW9ucygtKQo+ICsKPiArZGlmZiAtLWdpdCBhL2NtYWtlL29zX2xpbnV4LmNtYWtl
-IGIvY21ha2Uvb3NfbGludXguY21ha2UKPiAraW5kZXggN2MxZjgxODViMmEyLi5mMTQ5YmQwM2Zl
-OTIgMTAwNjQ0Cj4gKy0tLSBhL2NtYWtlL29zX2xpbnV4LmNtYWtlCj4gKysrKyBiL2NtYWtlL29z
-X2xpbnV4LmNtYWtlCj4gK0BAIC0xMDQsMTAgKzEwNCwxMCBAQCBpZiAoQlVJTERfWU9DVE8pCj4g
-KyAgICAgICAgICAgICBERVNUSU5BVElPTiAvdXNyL3NoYXJlL0NBTm9wZW5UZXJtL3NjcmlwdHMv
-dXRpbHMKPiArICAgICAgICAgICAgIEZJTEVTX01BVENISU5HIFBBVFRFUk4gIioiKQo+ICsgCj4g
-Ky0gICAgaW5zdGFsbChQUk9HUkFNUyAke0NNQUtFX0NVUlJFTlRfQklOQVJZX0RJUn0vQ0FOb3Bl
-blRlcm0KPiArKyAgICBpbnN0YWxsKFBST0dSQU1TICR7Q01BS0VfQ1VSUkVOVF9TT1VSQ0VfRElS
-fS9leHBvcnQvQ0FOb3BlblRlcm0KPiArICAgICAgICAgICAgIERFU1RJTkFUSU9OIC91c3IvYmlu
-KQo+ICsgCj4gKy0gICAgaW5zdGFsbChQUk9HUkFNUyAke0NNQUtFX0NVUlJFTlRfQklOQVJZX0RJ
-Un0vY29kYjJqc29uCj4gKysgICAgaW5zdGFsbChQUk9HUkFNUyAke0NNQUtFX0NVUlJFTlRfU09V
-UkNFX0RJUn0vZXhwb3J0L2NvZGIyanNvbgo+ICsgICAgICAgICAgICAgREVTVElOQVRJT04gL3Vz
-ci9iaW4pCj4gKyAKPiArICAgICByZXR1cm4oKQo+ICstLSAKPiArMi40My4wCj4gKwo+IGRpZmYg
-LS1naXQgYS9wYWNrYWdlL2Nhbm9wZW50ZXJtL0NvbmZpZy5pbiBiL3BhY2thZ2UvY2Fub3BlbnRl
-cm0vQ29uZmlnLmluCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAwMDAwMDAwMDAu
-LjA0ODk0ZGI4MTdiNwo+IC0tLSAvZGV2L251bGwKPiArKysgYi9wYWNrYWdlL2Nhbm9wZW50ZXJt
-L0NvbmZpZy5pbgo+IEBAIC0wLDAgKzEsMTcgQEAKPiArY29uZmlnIEJSMl9QQUNLQUdFX0NBTk9Q
-RU5URVJNCj4gKwlib29sICJjYW5vcGVudGVybSIKPiArCWRlcGVuZHMgb24gQlIyX0lOU1RBTExf
-TElCU1REQ1BQICMgcG9ja2V0cHkKPiArCWRlcGVuZHMgb24gIUJSMl9TVEFUSUNfTElCUyAjIHBv
-Y2tldHB5IGFuZCBTREwyCj4gKwlzZWxlY3QgQlIyX1BBQ0tBR0VfQ0pTT04KPiArCXNlbGVjdCBC
-UjJfUEFDS0FHRV9JTklICj4gKwlzZWxlY3QgQlIyX1BBQ0tBR0VfTElCU09DS0VUQ0FOCj4gKwlz
-ZWxlY3QgQlIyX1BBQ0tBR0VfTFVBCgpJIHdhcyBnb2luZyB0byBhcHBseSB0aGlzIHBhdGNoIGJ1
-dCBsdWEgaW50ZXJwcmV0ZXIgY2FuJ3QgYmUgc2VsZWN0ZWQgdGhpcyB3YXkuClRoZSB1c2VyIG11
-c3QgZG8gYSBjaG9pY2UgYmV0d2VlbiBsdWEgNS4xLCA1LjMsIDUuNCBvciBsdWFqaXQsIHNvIGl0
-IHNob3VsZCBiZSBhCiJkZXBlbmRzIG9uIi4KCkJlc3QgcmVnYXJkcywKUm9tYWluCgoKPiArCXNl
-bGVjdCBCUjJfUEFDS0FHRV9QT0NLRVRQWQo+ICsJc2VsZWN0IEJSMl9QQUNLQUdFX1JFQURMSU5F
-Cj4gKwlzZWxlY3QgQlIyX1BBQ0tBR0VfU0RMMgo+ICsJaGVscAo+ICsJICBDQU5vcGVuVGVybSBp
-cyBhbiBvcGVuLXNvdXJjZSB0b29sIGZvciBkZXZlbG9waW5nLAo+ICsJICB0ZXN0aW5nLCBhbmQg
-YW5hbHl6aW5nIENBTm9wZW4gQ0MgbmV0d29ya3MgYW5kCj4gKwkgIGRldmljZXMuCj4gKwo+ICsJ
-ICBodHRwczovL2dpdGh1Yi5jb20vQ0FOb3BlblRlcm0vQ0FOb3BlblRlcm0KPiBkaWZmIC0tZ2l0
-IGEvcGFja2FnZS9jYW5vcGVudGVybS9jYW5vcGVudGVybS5oYXNoIGIvcGFja2FnZS9jYW5vcGVu
-dGVybS9jYW5vcGVudGVybS5oYXNoCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAw
-MDAwMDAwMDAuLjhjNDAzZTliYjZhZgo+IC0tLSAvZGV2L251bGwKPiArKysgYi9wYWNrYWdlL2Nh
-bm9wZW50ZXJtL2Nhbm9wZW50ZXJtLmhhc2gKPiBAQCAtMCwwICsxLDMgQEAKPiArIyBsb2NhbGx5
-IGNvbXB1dGVkCj4gK3NoYTI1NiAgOWRlNmY0NzJiNzQ5ZjA4YTVlYTlhODM2NjA0NTA3Y2Q1NmM3
-MWY4MThhNDE0MWEyYjk4OTQyM2ZiYjdiZWI4MCAgY2Fub3BlbnRlcm0tMS4wLjEwLnRhci5nego+
-ICtzaGEyNTYgIGNjNTU1MzY4MDQwYjkyZTc3YjE0Mjg5YjM2N2NjYmViZjg4MzQ0MzY3MTg4ODYy
-NjgwZDQwY2M4ODU2MzZkM2EgIExJQ0VOU0UubWQKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9jYW5v
-cGVudGVybS9jYW5vcGVudGVybS5tayBiL3BhY2thZ2UvY2Fub3BlbnRlcm0vY2Fub3BlbnRlcm0u
-bWsKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAwMC4uYzM4ODNmZmVm
-NzRkCj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBiL3BhY2thZ2UvY2Fub3BlbnRlcm0vY2Fub3BlbnRl
-cm0ubWsKPiBAQCAtMCwwICsxLDE1IEBACj4gKyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4gKyMK
-PiArIyBjYW5vcGVudGVybQo+ICsjCj4gKyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4gKwo+ICtD
-QU5PUEVOVEVSTV9WRVJTSU9OID0gMS4wLjEwCj4gK0NBTk9QRU5URVJNX1NJVEUgPSAkKGNhbGwg
-Z2l0aHViLENBTm9wZW5UZXJtLENBTm9wZW5UZXJtLHYkKENBTk9QRU5URVJNX1ZFUlNJT04pKQo+
-ICtDQU5PUEVOVEVSTV9MSUNFTlNFID0gTUlUCj4gK0NBTk9QRU5URVJNX0xJQ0VOU0VfRklMRVMg
-PSBMSUNFTlNFLm1kCj4gK0NBTk9QRU5URVJNX0RFUEVOREVOQ0lFUyA9IGNqc29uIGluaWggbGli
-c29ja2V0Y2FuIGx1YSBwb2NrZXRweSByZWFkbGluZSBzZGwyCj4gKwo+ICtDQU5PUEVOVEVSTV9D
-T05GX09QVFMgPSAtREJVSUxEX1lPQ1RPPU9OCj4gKwo+ICskKGV2YWwgJChjbWFrZS1wYWNrYWdl
-KSkKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxk
-cm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5i
-dWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+commit: https://git.buildroot.net/buildroot/commit/?id=669f28ac0b4520d088f69f365b0e5bffa5bf7c02
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+It is a portable Python 3.x interpreter, written in C11. It has no
+dependencies other than the C standard library, which can be easily
+integrated into your C/C++ project
+
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+---
+ DEVELOPERS                          |  1 +
+ package/Config.in                   |  1 +
+ package/pocketpy/0001-fix-371.patch | 73 +++++++++++++++++++++++++++++++++++++
+ package/pocketpy/Config.in          |  9 +++++
+ package/pocketpy/pocketpy.hash      |  3 ++
+ package/pocketpy/pocketpy.mk        | 25 +++++++++++++
+ 6 files changed, 112 insertions(+)
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 99c403686a..899a3003ca 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -810,6 +810,7 @@ F:	package/armadillo/
+ F:	package/babeld/
+ F:	package/iana-assignments/
+ F:	package/inih/
++F:	package/pocketpy/
+ F:	package/sscep/
+ F:	package/tinyinit/
+ F:	package/ufs-utils/
+diff --git a/package/Config.in b/package/Config.in
+index 39d9d6cf3d..9a841082c6 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -969,6 +969,7 @@ if BR2_STATIC_LIBS
+ comment "External PHP extensions need a toolchain w/ dynamic library"
+ endif
+ endif
++	source "package/pocketpy/Config.in"
+ 	source "package/python3/Config.in"
+ if BR2_PACKAGE_PYTHON3
+ menu "External python modules"
+diff --git a/package/pocketpy/0001-fix-371.patch b/package/pocketpy/0001-fix-371.patch
+new file mode 100644
+index 0000000000..6d9e324ba7
+--- /dev/null
++++ b/package/pocketpy/0001-fix-371.patch
+@@ -0,0 +1,73 @@
++From e2e3bdca6e79ce7be5607397c5f0152c28c7500b Mon Sep 17 00:00:00 2001
++From: blueloveTH <blueloveth@foxmail.com>
++Date: Sat, 7 Jun 2025 02:19:55 +0800
++Subject: [PATCH] fix #371
++
++Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
++Upstream: backport from https://github.com/pocketpy/pocketpy/commit/70e824a6b695e963621664589d1d00aeb182c018
++---
++ include/pocketpy/pocketpy.h | 2 +-
++ src/interpreter/vm.c        | 6 ++++--
++ src/public/modules.c        | 2 +-
++ 3 files changed, 6 insertions(+), 4 deletions(-)
++
++diff --git a/include/pocketpy/pocketpy.h b/include/pocketpy/pocketpy.h
++index a44faa41a922..a6cb4f658f73 100644
++--- a/include/pocketpy/pocketpy.h
+++++ b/include/pocketpy/pocketpy.h
++@@ -69,7 +69,7 @@ typedef struct py_Callbacks {
++     /// Used by `print` to output a string.
++     void (*print)(const char*);
++     /// Used by `input` to get a character.
++-    int (*getchar)();
+++    int (*getchr)();
++ } py_Callbacks;
++ 
++ /// Native function signature.
++diff --git a/src/interpreter/vm.c b/src/interpreter/vm.c
++index 2bae82740ac7..2da28fa80730 100644
++--- a/src/interpreter/vm.c
+++++ b/src/interpreter/vm.c
++@@ -29,6 +29,8 @@ static char* pk_default_importfile(const char* path) {
++ 
++ static void pk_default_print(const char* data) { printf("%s", data); }
++ 
+++static int pk_default_getchr() { return getchar(); }
+++
++ static void py_TypeInfo__ctor(py_TypeInfo* self,
++                               py_Name name,
++                               py_Type index,
++@@ -67,7 +69,7 @@ void VM__ctor(VM* self) {
++ 
++     self->callbacks.importfile = pk_default_importfile;
++     self->callbacks.print = pk_default_print;
++-    self->callbacks.getchar = getchar;
+++    self->callbacks.getchr = pk_default_getchr;
++ 
++     self->last_retval = *py_NIL();
++     self->curr_exception = *py_NIL();
++@@ -810,7 +812,7 @@ int py_replinput(char* buf, int max_size) {
++     printf(">>> ");
++ 
++     while(true) {
++-        int c = pk_current_vm->callbacks.getchar();
+++        int c = pk_current_vm->callbacks.getchr();
++         if(c == EOF) return -1;
++ 
++         if(c == '\n') {
++diff --git a/src/public/modules.c b/src/public/modules.c
++index 3efb362701e2..cdfd5549461a 100644
++--- a/src/public/modules.c
+++++ b/src/public/modules.c
++@@ -205,7 +205,7 @@ static bool builtins_input(int argc, py_Ref argv) {
++     c11_sbuf buf;
++     c11_sbuf__ctor(&buf);
++     while(true) {
++-        int c = pk_current_vm->callbacks.getchar();
+++        int c = pk_current_vm->callbacks.getchr();
++         if(c == '\n' || c == '\r') break;
++         if(c == EOF) break;
++         c11_sbuf__write_char(&buf, c);
++-- 
++2.43.0
++
+diff --git a/package/pocketpy/Config.in b/package/pocketpy/Config.in
+new file mode 100644
+index 0000000000..b0bd0cafe0
+--- /dev/null
++++ b/package/pocketpy/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_POCKETPY
++	bool "pocketpy"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_STATIC_LIBS # dlfcn.h
++	help
++	  pocketpy is a portable Python 3.x interpreter,
++	  written in C11.
++
++	  https://github.com/pocketpy/pocketpy
+diff --git a/package/pocketpy/pocketpy.hash b/package/pocketpy/pocketpy.hash
+new file mode 100644
+index 0000000000..aabd5f077a
+--- /dev/null
++++ b/package/pocketpy/pocketpy.hash
+@@ -0,0 +1,3 @@
++# locally computed
++sha256  5e07994d66311a6b5ac032cc5243aaabe3ab318946971e7fa1cd0614934efc81  pocketpy-2.0.8.tar.gz
++sha256  d3a2bf8ca609a75941e980e62c13cf5a21aeaa4a2502822934d282fe7de5d319  LICENSE
+diff --git a/package/pocketpy/pocketpy.mk b/package/pocketpy/pocketpy.mk
+new file mode 100644
+index 0000000000..20a8e9ad1e
+--- /dev/null
++++ b/package/pocketpy/pocketpy.mk
+@@ -0,0 +1,25 @@
++################################################################################
++#
++# pocketpy
++#
++################################################################################
++
++POCKETPY_VERSION = 2.0.8
++POCKETPY_SITE = $(call github,pocketpy,pocketpy,v$(POCKETPY_VERSION))
++POCKETPY_LICENSE = MIT
++POCKETPY_LICENSE_FILES = LICENSE
++POCKETPY_INSTALL_STAGING = YES
++
++POCKETPY_CONF_OPTS = -DPK_BUILD_SHARED_LIB=ON
++
++define POCKETPY_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/libpocketpy.so* $(TARGET_DIR)/usr/lib
++endef
++
++define POCKETPY_INSTALL_STAGING_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/libpocketpy.so* $(STAGING_DIR)/usr/lib
++	$(INSTALL) -m 755 -d $(STAGING_DIR)/usr/include/pocketpy
++	cp -r $(@D)/include/* $(STAGING_DIR)/usr/include/pocketpy
++endef
++
++$(eval $(cmake-package))
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
