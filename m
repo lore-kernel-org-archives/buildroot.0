@@ -1,51 +1,108 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AEC6DC83F03
-	for <buildroot@archiver.kernel.org>; Sun,  6 Jul 2025 15:30:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA95CC83F05
+	for <buildroot@archiver.kernel.org>; Sun,  6 Jul 2025 15:30:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 373A660DC7;
-	Sun,  6 Jul 2025 15:30:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9AAD781EEE;
+	Sun,  6 Jul 2025 15:30:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id k9qEjCuy2eKI; Sun,  6 Jul 2025 15:30:27 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZBHcIpmJsXX6; Sun,  6 Jul 2025 15:30:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 54DE660DD2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9A70081F8C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 54DE660DD2;
-	Sun,  6 Jul 2025 15:30:27 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 020D215F
- for <buildroot@buildroot.org>; Sun,  6 Jul 2025 15:30:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9A70081F8C;
+	Sun,  6 Jul 2025 15:30:31 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5F59E19C
+ for <buildroot@buildroot.org>; Sun,  6 Jul 2025 15:30:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F373E400E0
- for <buildroot@buildroot.org>; Sun,  6 Jul 2025 15:30:25 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 45E0781EEE
+ for <buildroot@buildroot.org>; Sun,  6 Jul 2025 15:30:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PBA4wzb-1zQi for <buildroot@buildroot.org>;
- Sun,  6 Jul 2025 15:30:25 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 16A134005F
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 16A134005F
- for <buildroot@buildroot.org>; Sun,  6 Jul 2025 15:30:25 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E438386015; Sun,  6 Jul 2025 15:30:24 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 6 Jul 2025 17:25:20 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c41f953ab9ba262324484a2efe1151d8f543eebd
-X-Git-Newrev: 669f28ac0b4520d088f69f365b0e5bffa5bf7c02
-X-Patchwork-Hint: ignore
-Message-Id: <20250706153024.E438386015@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pocketpy: new package
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3nOvAWi0eQfE for <buildroot@buildroot.org>;
+ Sun,  6 Jul 2025 15:30:29 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::435; helo=mail-wr1-x435.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0250481F8C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0250481F8C
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0250481F8C
+ for <buildroot@buildroot.org>; Sun,  6 Jul 2025 15:30:27 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id
+ ffacd0b85a97d-3a522224582so858684f8f.3
+ for <buildroot@buildroot.org>; Sun, 06 Jul 2025 08:30:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1751815826; x=1752420626;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=yi5uToUr4uqPFU7Ygk+l5U9TxsHbhXv8ivmv9TZfEFg=;
+ b=xESvZoQtfJ3eD6bLa/LdTcEWzRQDayoxlShAjXR5IaDzBdhTi5IGxefb4e7fD1jaDy
+ gb3g9OUQKYE3T2iv3oRbpQFSViB+XQpecA3In47Iq+DsHYH2DMZXQ8beLTnWQMl/iOF8
+ wLTgmcei933cB2OmSbrK/8cqzIFVrdDi5ZaFXURxfLvs/glOV6sMlBXXmISg72XSvX4D
+ GjTosGhR3NfRarpXlOlgRqxBL5jrZA3eH6gOR8yT/guFsn0/JBf7fETClbyMostNJT5K
+ guFik0rTRyVHAbj4z1gVXBLHK3Gm1WgS5l7Sf42sCa5eO8xwYVekNxx6IGBC2BhaRXcy
+ +lCA==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCX/34HxLWM2NG3qb33f5URzqXbcA7TBn3yvbokV8jyXmiItBPOav4Ha7R8oqx0iozwm5de8y0XFHFs=@buildroot.org
+X-Gm-Message-State: AOJu0Yy7Nk3uLEQT7V1fKWy+R5kQtiZEm0MPNbRXN3G6CrCUdk4ajFq1
+ N3eV/SQHeVwZ1qGxUGtZJ1iAfOo0lLuNyDc1vrNc5GzA2Cc6ykrTagklMBrUN/YxdAmS88zzRUF
+ WY/fB
+X-Gm-Gg: ASbGncvoTJs0EInRp2BcXVc1JvUlyOt4Bb0eQjzfcXD9nmvbL08sJnhcvGy+uaatCgk
+ I1JMUPazgN6Lq7Fg4IUBZlSPzq4Er8GSrbl8YHnCQUciNWXTGeVPJ+HotdSjkFZGoE81y/j3jLz
+ FXQROSurnJZ1zJYQWC5ZaIhRluaUakfcGcAlQWAdULX7YtmcZ+tZGkgIT+3b3qJGKR97hQTrRzR
+ p9VdgYUDUS8p5K/DvEB3ExZNa4yZpwLSJqMTfkknOU8OFzENX3FFUvTGL6CW9nlRKmuzwh8blpu
+ pnUTpV/19V36RulNph4KQnjN7Bqt+fi45+q2otpydixcB11hx2lf1a03+2WWtL3o1A7eP+2UyqA
+ sAV/pa8gPjBnQJu0S9rAJ2ZFpqI4dcthO9dSDb3Rpq2HKeO00cj5XvLfYNEHYue0+xDAWPI9stf
+ q5vX7QfbOdO+50gexz4tGgrKh2
+X-Google-Smtp-Source: AGHT+IHKxewcGsAPf2iW7mTue80C9CBd4a8EXC8f6A5+6iTT2tHYzpCe+X1bT8wJl/5kn3snVsFcUw==
+X-Received: by 2002:a5d:5d0c:0:b0:3a5:2ed2:118e with SMTP id
+ ffacd0b85a97d-3b49aa081famr4357473f8f.9.1751815825616; 
+ Sun, 06 Jul 2025 08:30:25 -0700 (PDT)
+Received: from ?IPV6:2a01:cb05:949d:5800:c97d:3b73:4a46:d823?
+ (2a01cb05949d5800c97d3b734a46d823.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:949d:5800:c97d:3b73:4a46:d823])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-3b471b97376sm7872757f8f.61.2025.07.06.08.30.25
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 06 Jul 2025 08:30:25 -0700 (PDT)
+Message-ID: <618851b8-b139-4950-9560-26bc8394fd2d@smile.fr>
+Date: Sun, 6 Jul 2025 17:30:24 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ buildroot@buildroot.org
+Cc: linux-amarula@amarulasolutions.com
+References: <20250610115502.2483804-1-dario.binacchi@amarulasolutions.com>
+Content-Language: fr
+In-Reply-To: <20250610115502.2483804-1-dario.binacchi@amarulasolutions.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile.fr; s=google; t=1751815826; x=1752420626; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=yi5uToUr4uqPFU7Ygk+l5U9TxsHbhXv8ivmv9TZfEFg=;
+ b=ZtJBTjR6YpXvVxYvVnumpIyLeGi/0zVQz5rKV0gh+4QFpPd/pP/xntvlI67s4OTr4h
+ nmXh1i4xM9m7RAjM6bCHR2QDujFic39w2P7A3lFymyI7hf+T5ugDKPBW6M+QK+40Gg77
+ ED8QdOzq7rbwyujzZEV6LxnnF+KjIXRVZU32o=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
+ header.s=google header.b=ZtJBTjR6
+Subject: Re: [Buildroot] [PATCH v4 1/2] package/pocketpy: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,189 +116,135 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Romain Naour via buildroot <buildroot@buildroot.org>
 Reply-To: Romain Naour <romain.naour@smile.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=669f28ac0b4520d088f69f365b0e5bffa5bf7c02
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-It is a portable Python 3.x interpreter, written in C11. It has no
-dependencies other than the C standard library, which can be easily
-integrated into your C/C++ project
-
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
- DEVELOPERS                          |  1 +
- package/Config.in                   |  1 +
- package/pocketpy/0001-fix-371.patch | 73 +++++++++++++++++++++++++++++++++++++
- package/pocketpy/Config.in          |  9 +++++
- package/pocketpy/pocketpy.hash      |  3 ++
- package/pocketpy/pocketpy.mk        | 25 +++++++++++++
- 6 files changed, 112 insertions(+)
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 99c403686a..899a3003ca 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -810,6 +810,7 @@ F:	package/armadillo/
- F:	package/babeld/
- F:	package/iana-assignments/
- F:	package/inih/
-+F:	package/pocketpy/
- F:	package/sscep/
- F:	package/tinyinit/
- F:	package/ufs-utils/
-diff --git a/package/Config.in b/package/Config.in
-index 39d9d6cf3d..9a841082c6 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -969,6 +969,7 @@ if BR2_STATIC_LIBS
- comment "External PHP extensions need a toolchain w/ dynamic library"
- endif
- endif
-+	source "package/pocketpy/Config.in"
- 	source "package/python3/Config.in"
- if BR2_PACKAGE_PYTHON3
- menu "External python modules"
-diff --git a/package/pocketpy/0001-fix-371.patch b/package/pocketpy/0001-fix-371.patch
-new file mode 100644
-index 0000000000..6d9e324ba7
---- /dev/null
-+++ b/package/pocketpy/0001-fix-371.patch
-@@ -0,0 +1,73 @@
-+From e2e3bdca6e79ce7be5607397c5f0152c28c7500b Mon Sep 17 00:00:00 2001
-+From: blueloveTH <blueloveth@foxmail.com>
-+Date: Sat, 7 Jun 2025 02:19:55 +0800
-+Subject: [PATCH] fix #371
-+
-+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-+Upstream: backport from https://github.com/pocketpy/pocketpy/commit/70e824a6b695e963621664589d1d00aeb182c018
-+---
-+ include/pocketpy/pocketpy.h | 2 +-
-+ src/interpreter/vm.c        | 6 ++++--
-+ src/public/modules.c        | 2 +-
-+ 3 files changed, 6 insertions(+), 4 deletions(-)
-+
-+diff --git a/include/pocketpy/pocketpy.h b/include/pocketpy/pocketpy.h
-+index a44faa41a922..a6cb4f658f73 100644
-+--- a/include/pocketpy/pocketpy.h
-++++ b/include/pocketpy/pocketpy.h
-+@@ -69,7 +69,7 @@ typedef struct py_Callbacks {
-+     /// Used by `print` to output a string.
-+     void (*print)(const char*);
-+     /// Used by `input` to get a character.
-+-    int (*getchar)();
-++    int (*getchr)();
-+ } py_Callbacks;
-+ 
-+ /// Native function signature.
-+diff --git a/src/interpreter/vm.c b/src/interpreter/vm.c
-+index 2bae82740ac7..2da28fa80730 100644
-+--- a/src/interpreter/vm.c
-++++ b/src/interpreter/vm.c
-+@@ -29,6 +29,8 @@ static char* pk_default_importfile(const char* path) {
-+ 
-+ static void pk_default_print(const char* data) { printf("%s", data); }
-+ 
-++static int pk_default_getchr() { return getchar(); }
-++
-+ static void py_TypeInfo__ctor(py_TypeInfo* self,
-+                               py_Name name,
-+                               py_Type index,
-+@@ -67,7 +69,7 @@ void VM__ctor(VM* self) {
-+ 
-+     self->callbacks.importfile = pk_default_importfile;
-+     self->callbacks.print = pk_default_print;
-+-    self->callbacks.getchar = getchar;
-++    self->callbacks.getchr = pk_default_getchr;
-+ 
-+     self->last_retval = *py_NIL();
-+     self->curr_exception = *py_NIL();
-+@@ -810,7 +812,7 @@ int py_replinput(char* buf, int max_size) {
-+     printf(">>> ");
-+ 
-+     while(true) {
-+-        int c = pk_current_vm->callbacks.getchar();
-++        int c = pk_current_vm->callbacks.getchr();
-+         if(c == EOF) return -1;
-+ 
-+         if(c == '\n') {
-+diff --git a/src/public/modules.c b/src/public/modules.c
-+index 3efb362701e2..cdfd5549461a 100644
-+--- a/src/public/modules.c
-++++ b/src/public/modules.c
-+@@ -205,7 +205,7 @@ static bool builtins_input(int argc, py_Ref argv) {
-+     c11_sbuf buf;
-+     c11_sbuf__ctor(&buf);
-+     while(true) {
-+-        int c = pk_current_vm->callbacks.getchar();
-++        int c = pk_current_vm->callbacks.getchr();
-+         if(c == '\n' || c == '\r') break;
-+         if(c == EOF) break;
-+         c11_sbuf__write_char(&buf, c);
-+-- 
-+2.43.0
-+
-diff --git a/package/pocketpy/Config.in b/package/pocketpy/Config.in
-new file mode 100644
-index 0000000000..b0bd0cafe0
---- /dev/null
-+++ b/package/pocketpy/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_POCKETPY
-+	bool "pocketpy"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_STATIC_LIBS # dlfcn.h
-+	help
-+	  pocketpy is a portable Python 3.x interpreter,
-+	  written in C11.
-+
-+	  https://github.com/pocketpy/pocketpy
-diff --git a/package/pocketpy/pocketpy.hash b/package/pocketpy/pocketpy.hash
-new file mode 100644
-index 0000000000..aabd5f077a
---- /dev/null
-+++ b/package/pocketpy/pocketpy.hash
-@@ -0,0 +1,3 @@
-+# locally computed
-+sha256  5e07994d66311a6b5ac032cc5243aaabe3ab318946971e7fa1cd0614934efc81  pocketpy-2.0.8.tar.gz
-+sha256  d3a2bf8ca609a75941e980e62c13cf5a21aeaa4a2502822934d282fe7de5d319  LICENSE
-diff --git a/package/pocketpy/pocketpy.mk b/package/pocketpy/pocketpy.mk
-new file mode 100644
-index 0000000000..20a8e9ad1e
---- /dev/null
-+++ b/package/pocketpy/pocketpy.mk
-@@ -0,0 +1,25 @@
-+################################################################################
-+#
-+# pocketpy
-+#
-+################################################################################
-+
-+POCKETPY_VERSION = 2.0.8
-+POCKETPY_SITE = $(call github,pocketpy,pocketpy,v$(POCKETPY_VERSION))
-+POCKETPY_LICENSE = MIT
-+POCKETPY_LICENSE_FILES = LICENSE
-+POCKETPY_INSTALL_STAGING = YES
-+
-+POCKETPY_CONF_OPTS = -DPK_BUILD_SHARED_LIB=ON
-+
-+define POCKETPY_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/libpocketpy.so* $(TARGET_DIR)/usr/lib
-+endef
-+
-+define POCKETPY_INSTALL_STAGING_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/libpocketpy.so* $(STAGING_DIR)/usr/lib
-+	$(INSTALL) -m 755 -d $(STAGING_DIR)/usr/include/pocketpy
-+	cp -r $(@D)/include/* $(STAGING_DIR)/usr/include/pocketpy
-+endef
-+
-+$(eval $(cmake-package))
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gRGFyaW8sCgpMZSAxMC8wNi8yMDI1IMOgIDEzOjU1LCBEYXJpbyBCaW5hY2NoaSBhIMOp
+Y3JpdMKgOgo+IEl0IGlzIGEgcG9ydGFibGUgUHl0aG9uIDMueCBpbnRlcnByZXRlciwgd3JpdHRl
+biBpbiBDMTEuIEl0IGhhcyBubwo+IGRlcGVuZGVuY2llcyBvdGhlciB0aGFuIHRoZSBDIHN0YW5k
+YXJkIGxpYnJhcnksIHdoaWNoIGNhbiBiZSBlYXNpbHkKPiBpbnRlZ3JhdGVkIGludG8geW91ciBD
+L0MrKyBwcm9qZWN0Cj4gCj4gU2lnbmVkLW9mZi1ieTogRGFyaW8gQmluYWNjaGkgPGRhcmlvLmJp
+bmFjY2hpQGFtYXJ1bGFzb2x1dGlvbnMuY29tPgo+IC0tLQo+IAo+IENoYW5nZXMgdjMgLT4gdjQ6
+Cj4gIC0gUmVwbGFjZSAwMDAxLUZpeC1nZXRjaGFyLWhlbHBlci5wYXRjaCB3aXRoIDAwMDEtZml4
+LTM3MS5wYXRjaC4KPiAKPiBDaGFuZ2VzIHYyIC0+IHYzOgo+ICAtIEFkZCBwYWNrYWdlL3BvY2tl
+dHB5LzAwMDEtRml4LWdldGNoYXItaGVscGVyLnBhdGNoLgo+ICAtIEFkZCBkZXBlbmRzIG9uICFC
+UjJfU1RBVElDX0xJQlMgZm9yIGRsZmNuLmgKPiAKPiBDaGFuZ2VzIHYxIC0+IHYyOgo+ICAtIG12
+IHN0YWdpbmcgY29tbWFuZHMgdW5kZXIgUE9DS0VUUFlfSU5TVEFMTF9TVEFHSU5HX0NNRFMgaG9v
+ay4KPiAKPiAgREVWRUxPUEVSUyAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgMSArCj4gIHBh
+Y2thZ2UvQ29uZmlnLmluICAgICAgICAgICAgICAgICAgIHwgIDEgKwo+ICBwYWNrYWdlL3BvY2tl
+dHB5LzAwMDEtZml4LTM3MS5wYXRjaCB8IDczICsrKysrKysrKysrKysrKysrKysrKysrKysrKysr
+Cj4gIHBhY2thZ2UvcG9ja2V0cHkvQ29uZmlnLmluICAgICAgICAgIHwgIDkgKysrKwo+ICBwYWNr
+YWdlL3BvY2tldHB5L3BvY2tldHB5Lmhhc2ggICAgICB8ICAzICsrCj4gIHBhY2thZ2UvcG9ja2V0
+cHkvcG9ja2V0cHkubWsgICAgICAgIHwgMjUgKysrKysrKysrKwo+ICA2IGZpbGVzIGNoYW5nZWQs
+IDExMiBpbnNlcnRpb25zKCspCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL3BvY2tldHB5
+LzAwMDEtZml4LTM3MS5wYXRjaAo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9wb2NrZXRw
+eS9Db25maWcuaW4KPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvcG9ja2V0cHkvcG9ja2V0
+cHkuaGFzaAo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9wb2NrZXRweS9wb2NrZXRweS5t
+awo+IAo+IGRpZmYgLS1naXQgYS9ERVZFTE9QRVJTIGIvREVWRUxPUEVSUwo+IGluZGV4IGE3YmIz
+YmQ4MzQ2MC4uNDZkMjRhZmNlYjcxIDEwMDY0NAo+IC0tLSBhL0RFVkVMT1BFUlMKPiArKysgYi9E
+RVZFTE9QRVJTCj4gQEAgLTgxMSw2ICs4MTEsNyBAQCBGOglwYWNrYWdlL2FybWFkaWxsby8KPiAg
+RjoJcGFja2FnZS9iYWJlbGQvCj4gIEY6CXBhY2thZ2UvaWFuYS1hc3NpZ25tZW50cy8KPiAgRjoJ
+cGFja2FnZS9pbmloLwo+ICtGOglwYWNrYWdlL3BvY2tldHB5Lwo+ICBGOglwYWNrYWdlL3NzY2Vw
+Lwo+ICBGOglwYWNrYWdlL3Rpbnlpbml0Lwo+ICBGOglwYWNrYWdlL3Vmcy11dGlscy8KPiBkaWZm
+IC0tZ2l0IGEvcGFja2FnZS9Db25maWcuaW4gYi9wYWNrYWdlL0NvbmZpZy5pbgo+IGluZGV4IDU3
+OWI1ZmZjODdkNS4uOWFhZDY1NDg4YTZjIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvQ29uZmlnLmlu
+Cj4gKysrIGIvcGFja2FnZS9Db25maWcuaW4KPiBAQCAtOTY4LDYgKzk2OCw3IEBAIGlmIEJSMl9T
+VEFUSUNfTElCUwo+ICBjb21tZW50ICJFeHRlcm5hbCBQSFAgZXh0ZW5zaW9ucyBuZWVkIGEgdG9v
+bGNoYWluIHcvIGR5bmFtaWMgbGlicmFyeSIKPiAgZW5kaWYKPiAgZW5kaWYKPiArCXNvdXJjZSAi
+cGFja2FnZS9wb2NrZXRweS9Db25maWcuaW4iCj4gIAlzb3VyY2UgInBhY2thZ2UvcHl0aG9uMy9D
+b25maWcuaW4iCj4gIGlmIEJSMl9QQUNLQUdFX1BZVEhPTjMKPiAgbWVudSAiRXh0ZXJuYWwgcHl0
+aG9uIG1vZHVsZXMiCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvcG9ja2V0cHkvMDAwMS1maXgtMzcx
+LnBhdGNoIGIvcGFja2FnZS9wb2NrZXRweS8wMDAxLWZpeC0zNzEucGF0Y2gKPiBuZXcgZmlsZSBt
+b2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAwMC4uNmQ5ZTMyNGJhNzYyCj4gLS0tIC9kZXYv
+bnVsbAo+ICsrKyBiL3BhY2thZ2UvcG9ja2V0cHkvMDAwMS1maXgtMzcxLnBhdGNoCj4gQEAgLTAs
+MCArMSw3MyBAQAo+ICtGcm9tIGUyZTNiZGNhNmU3OWNlN2JlNTYwNzM5N2M1ZjAxNTJjMjhjNzUw
+MGIgTW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCj4gK0Zyb206IGJsdWVsb3ZlVEggPGJsdWVsb3Zl
+dGhAZm94bWFpbC5jb20+Cj4gK0RhdGU6IFNhdCwgNyBKdW4gMjAyNSAwMjoxOTo1NSArMDgwMAo+
+ICtTdWJqZWN0OiBbUEFUQ0hdIGZpeCAjMzcxCj4gKwo+ICtTaWduZWQtb2ZmLWJ5OiBEYXJpbyBC
+aW5hY2NoaSA8ZGFyaW8uYmluYWNjaGlAYW1hcnVsYXNvbHV0aW9ucy5jb20+Cj4gK1Vwc3RyZWFt
+OiBiYWNrcG9ydCBmcm9tIGh0dHBzOi8vZ2l0aHViLmNvbS9wb2NrZXRweS9wb2NrZXRweS9jb21t
+aXQvNzBlODI0YTZiNjk1ZTk2MzYyMTY2NDU4OWQxZDAwYWViMTgyYzAxOAo+ICstLS0KPiArIGlu
+Y2x1ZGUvcG9ja2V0cHkvcG9ja2V0cHkuaCB8IDIgKy0KPiArIHNyYy9pbnRlcnByZXRlci92bS5j
+ICAgICAgICB8IDYgKysrKy0tCj4gKyBzcmMvcHVibGljL21vZHVsZXMuYyAgICAgICAgfCAyICst
+Cj4gKyAzIGZpbGVzIGNoYW5nZWQsIDYgaW5zZXJ0aW9ucygrKSwgNCBkZWxldGlvbnMoLSkKPiAr
+Cj4gK2RpZmYgLS1naXQgYS9pbmNsdWRlL3BvY2tldHB5L3BvY2tldHB5LmggYi9pbmNsdWRlL3Bv
+Y2tldHB5L3BvY2tldHB5LmgKPiAraW5kZXggYTQ0ZmFhNDFhOTIyLi5hNmNiNGY2NThmNzMgMTAw
+NjQ0Cj4gKy0tLSBhL2luY2x1ZGUvcG9ja2V0cHkvcG9ja2V0cHkuaAo+ICsrKysgYi9pbmNsdWRl
+L3BvY2tldHB5L3BvY2tldHB5LmgKPiArQEAgLTY5LDcgKzY5LDcgQEAgdHlwZWRlZiBzdHJ1Y3Qg
+cHlfQ2FsbGJhY2tzIHsKPiArICAgICAvLy8gVXNlZCBieSBgcHJpbnRgIHRvIG91dHB1dCBhIHN0
+cmluZy4KPiArICAgICB2b2lkICgqcHJpbnQpKGNvbnN0IGNoYXIqKTsKPiArICAgICAvLy8gVXNl
+ZCBieSBgaW5wdXRgIHRvIGdldCBhIGNoYXJhY3Rlci4KPiArLSAgICBpbnQgKCpnZXRjaGFyKSgp
+Owo+ICsrICAgIGludCAoKmdldGNocikoKTsKPiArIH0gcHlfQ2FsbGJhY2tzOwo+ICsgCj4gKyAv
+Ly8gTmF0aXZlIGZ1bmN0aW9uIHNpZ25hdHVyZS4KPiArZGlmZiAtLWdpdCBhL3NyYy9pbnRlcnBy
+ZXRlci92bS5jIGIvc3JjL2ludGVycHJldGVyL3ZtLmMKPiAraW5kZXggMmJhZTgyNzQwYWM3Li4y
+ZGEyOGZhODA3MzAgMTAwNjQ0Cj4gKy0tLSBhL3NyYy9pbnRlcnByZXRlci92bS5jCj4gKysrKyBi
+L3NyYy9pbnRlcnByZXRlci92bS5jCj4gK0BAIC0yOSw2ICsyOSw4IEBAIHN0YXRpYyBjaGFyKiBw
+a19kZWZhdWx0X2ltcG9ydGZpbGUoY29uc3QgY2hhciogcGF0aCkgewo+ICsgCj4gKyBzdGF0aWMg
+dm9pZCBwa19kZWZhdWx0X3ByaW50KGNvbnN0IGNoYXIqIGRhdGEpIHsgcHJpbnRmKCIlcyIsIGRh
+dGEpOyB9Cj4gKyAKPiArK3N0YXRpYyBpbnQgcGtfZGVmYXVsdF9nZXRjaHIoKSB7IHJldHVybiBn
+ZXRjaGFyKCk7IH0KPiArKwo+ICsgc3RhdGljIHZvaWQgcHlfVHlwZUluZm9fX2N0b3IocHlfVHlw
+ZUluZm8qIHNlbGYsCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBweV9OYW1lIG5h
+bWUsCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBweV9UeXBlIGluZGV4LAo+ICtA
+QCAtNjcsNyArNjksNyBAQCB2b2lkIFZNX19jdG9yKFZNKiBzZWxmKSB7Cj4gKyAKPiArICAgICBz
+ZWxmLT5jYWxsYmFja3MuaW1wb3J0ZmlsZSA9IHBrX2RlZmF1bHRfaW1wb3J0ZmlsZTsKPiArICAg
+ICBzZWxmLT5jYWxsYmFja3MucHJpbnQgPSBwa19kZWZhdWx0X3ByaW50Owo+ICstICAgIHNlbGYt
+PmNhbGxiYWNrcy5nZXRjaGFyID0gZ2V0Y2hhcjsKPiArKyAgICBzZWxmLT5jYWxsYmFja3MuZ2V0
+Y2hyID0gcGtfZGVmYXVsdF9nZXRjaHI7Cj4gKyAKPiArICAgICBzZWxmLT5sYXN0X3JldHZhbCA9
+ICpweV9OSUwoKTsKPiArICAgICBzZWxmLT5jdXJyX2V4Y2VwdGlvbiA9ICpweV9OSUwoKTsKPiAr
+QEAgLTgxMCw3ICs4MTIsNyBAQCBpbnQgcHlfcmVwbGlucHV0KGNoYXIqIGJ1ZiwgaW50IG1heF9z
+aXplKSB7Cj4gKyAgICAgcHJpbnRmKCI+Pj4gIik7Cj4gKyAKPiArICAgICB3aGlsZSh0cnVlKSB7
+Cj4gKy0gICAgICAgIGludCBjID0gcGtfY3VycmVudF92bS0+Y2FsbGJhY2tzLmdldGNoYXIoKTsK
+PiArKyAgICAgICAgaW50IGMgPSBwa19jdXJyZW50X3ZtLT5jYWxsYmFja3MuZ2V0Y2hyKCk7Cj4g
+KyAgICAgICAgIGlmKGMgPT0gRU9GKSByZXR1cm4gLTE7Cj4gKyAKPiArICAgICAgICAgaWYoYyA9
+PSAnXG4nKSB7Cj4gK2RpZmYgLS1naXQgYS9zcmMvcHVibGljL21vZHVsZXMuYyBiL3NyYy9wdWJs
+aWMvbW9kdWxlcy5jCj4gK2luZGV4IDNlZmIzNjI3MDFlMi4uY2RmZDU1NDk0NjFhIDEwMDY0NAo+
+ICstLS0gYS9zcmMvcHVibGljL21vZHVsZXMuYwo+ICsrKysgYi9zcmMvcHVibGljL21vZHVsZXMu
+Ywo+ICtAQCAtMjA1LDcgKzIwNSw3IEBAIHN0YXRpYyBib29sIGJ1aWx0aW5zX2lucHV0KGludCBh
+cmdjLCBweV9SZWYgYXJndikgewo+ICsgICAgIGMxMV9zYnVmIGJ1ZjsKPiArICAgICBjMTFfc2J1
+Zl9fY3RvcigmYnVmKTsKPiArICAgICB3aGlsZSh0cnVlKSB7Cj4gKy0gICAgICAgIGludCBjID0g
+cGtfY3VycmVudF92bS0+Y2FsbGJhY2tzLmdldGNoYXIoKTsKPiArKyAgICAgICAgaW50IGMgPSBw
+a19jdXJyZW50X3ZtLT5jYWxsYmFja3MuZ2V0Y2hyKCk7Cj4gKyAgICAgICAgIGlmKGMgPT0gJ1xu
+JyB8fCBjID09ICdccicpIGJyZWFrOwo+ICsgICAgICAgICBpZihjID09IEVPRikgYnJlYWs7Cj4g
+KyAgICAgICAgIGMxMV9zYnVmX193cml0ZV9jaGFyKCZidWYsIGMpOwo+ICstLSAKPiArMi40My4w
+Cj4gKwo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3BvY2tldHB5L0NvbmZpZy5pbiBiL3BhY2thZ2Uv
+cG9ja2V0cHkvQ29uZmlnLmluCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAwMDAw
+MDAwMDAuLmIwYmQwY2FmZTAwOAo+IC0tLSAvZGV2L251bGwKPiArKysgYi9wYWNrYWdlL3BvY2tl
+dHB5L0NvbmZpZy5pbgo+IEBAIC0wLDAgKzEsOSBAQAo+ICtjb25maWcgQlIyX1BBQ0tBR0VfUE9D
+S0VUUFkKPiArCWJvb2wgInBvY2tldHB5Igo+ICsJZGVwZW5kcyBvbiBCUjJfSU5TVEFMTF9MSUJT
+VERDUFAKPiArCWRlcGVuZHMgb24gIUJSMl9TVEFUSUNfTElCUyAjIGRsZmNuLmgKPiArCWhlbHAK
+PiArCSAgcG9ja2V0cHkgaXMgYSBwb3J0YWJsZSBQeXRob24gMy54IGludGVycHJldGVyLAo+ICsJ
+ICB3cml0dGVuIGluIEMxMS4KPiArCj4gKwkgIGh0dHBzOi8vZ2l0aHViLmNvbS9wb2NrZXRweS9w
+b2NrZXRweQo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3BvY2tldHB5L3BvY2tldHB5Lmhhc2ggYi9w
+YWNrYWdlL3BvY2tldHB5L3BvY2tldHB5Lmhhc2gKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGlu
+ZGV4IDAwMDAwMDAwMDAwMC4uYWFiZDVmMDc3YTJiCj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBiL3Bh
+Y2thZ2UvcG9ja2V0cHkvcG9ja2V0cHkuaGFzaAo+IEBAIC0wLDAgKzEsMyBAQAo+ICsjIGxvY2Fs
+bHkgY29tcHV0ZWQKPiArc2hhMjU2ICA1ZTA3OTk0ZDY2MzExYTZiNWFjMDMyY2M1MjQzYWFhYmUz
+YWIzMTg5NDY5NzFlN2ZhMWNkMDYxNDkzNGVmYzgxICBwb2NrZXRweS0yLjAuOC50YXIuZ3oKPiAr
+c2hhMjU2ICBkM2EyYmY4Y2E2MDlhNzU5NDFlOTgwZTYyYzEzY2Y1YTIxYWVhYTRhMjUwMjgyMjkz
+NGQyODJmZTdkZTVkMzE5ICBMSUNFTlNFCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvcG9ja2V0cHkv
+cG9ja2V0cHkubWsgYi9wYWNrYWdlL3BvY2tldHB5L3BvY2tldHB5Lm1rCj4gbmV3IGZpbGUgbW9k
+ZSAxMDA2NDQKPiBpbmRleCAwMDAwMDAwMDAwMDAuLjIwYThlOWFkMWUyMAo+IC0tLSAvZGV2L251
+bGwKPiArKysgYi9wYWNrYWdlL3BvY2tldHB5L3BvY2tldHB5Lm1rCj4gQEAgLTAsMCArMSwyNSBA
+QAo+ICsjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo+ICsjCj4gKyMgcG9ja2V0cHkKPiArIwo+ICsj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo+ICsKPiArUE9DS0VUUFlfVkVSU0lPTiA9IDIuMC44Cj4g
+K1BPQ0tFVFBZX1NJVEUgPSAkKGNhbGwgZ2l0aHViLHBvY2tldHB5LHBvY2tldHB5LHYkKFBPQ0tF
+VFBZX1ZFUlNJT04pKQo+ICtQT0NLRVRQWV9MSUNFTlNFID0gTUlUCj4gK1BPQ0tFVFBZX0xJQ0VO
+U0VfRklMRVMgPSBMSUNFTlNFCj4gK1BPQ0tFVFBZX0lOU1RBTExfU1RBR0lORyA9IFlFUwo+ICsK
+PiArUE9DS0VUUFlfQ09ORl9PUFRTID0gLURQS19CVUlMRF9TSEFSRURfTElCPU9OCj4gKwo+ICtk
+ZWZpbmUgUE9DS0VUUFlfSU5TVEFMTF9UQVJHRVRfQ01EUwo+ICsJJChJTlNUQUxMKSAtRCAtbSAw
+NzU1ICQoQEQpL2xpYnBvY2tldHB5LnNvKiAkKFRBUkdFVF9ESVIpL3Vzci9saWIKPiArZW5kZWYK
+Ck5vdGU6Ck9ubHkgbGlicG9ja2V0cHkuc28gZmlsZSBpcyBnZW5lcmF0ZWQsIGl0IHNlZW1zIHRo
+ZXJlIGlzIG5vIHN5bWxpbmsgZ2VuZXJhdGVkLgpGb3Igbm93LCBJIGtlZXAgaXQgYXMgaXMuCgpB
+cHBsaWVkIHRvIG1hc3RlciwgdGhhbmtzLgoKQmVzdCByZWdhcmRzLApSb21haW4KCgo+ICsKPiAr
+ZGVmaW5lIFBPQ0tFVFBZX0lOU1RBTExfU1RBR0lOR19DTURTCj4gKwkkKElOU1RBTEwpIC1EIC1t
+IDA3NTUgJChARCkvbGlicG9ja2V0cHkuc28qICQoU1RBR0lOR19ESVIpL3Vzci9saWIKPiArCSQo
+SU5TVEFMTCkgLW0gNzU1IC1kICQoU1RBR0lOR19ESVIpL3Vzci9pbmNsdWRlL3BvY2tldHB5Cj4g
+KwljcCAtciAkKEBEKS9pbmNsdWRlLyogJChTVEFHSU5HX0RJUikvdXNyL2luY2x1ZGUvcG9ja2V0
+cHkKPiArZW5kZWYKPiArCj4gKyQoZXZhbCAkKGNtYWtlLXBhY2thZ2UpKQoKX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlz
+dApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFp
+bG1hbi9saXN0aW5mby9idWlsZHJvb3QK
