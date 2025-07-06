@@ -1,107 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1C2DC83F05
-	for <buildroot@archiver.kernel.org>; Sun,  6 Jul 2025 12:16:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69095C83F03
+	for <buildroot@archiver.kernel.org>; Sun,  6 Jul 2025 12:33:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BE38760A4F;
-	Sun,  6 Jul 2025 12:16:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 250C181286;
+	Sun,  6 Jul 2025 12:33:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 79llLp3KrclQ; Sun,  6 Jul 2025 12:16:51 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5J34jxmKoK4N; Sun,  6 Jul 2025 12:33:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B4617607CD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 00FB181215
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B4617607CD;
-	Sun,  6 Jul 2025 12:16:51 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id B9B4412E
- for <buildroot@buildroot.org>; Sun,  6 Jul 2025 12:16:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 00FB181215;
+	Sun,  6 Jul 2025 12:33:51 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 82D0D19C
+ for <buildroot@buildroot.org>; Sun,  6 Jul 2025 12:33:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AB54360649
- for <buildroot@buildroot.org>; Sun,  6 Jul 2025 12:16:49 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 72D0340BF1
+ for <buildroot@buildroot.org>; Sun,  6 Jul 2025 12:33:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NPqBY1dHBNCp for <buildroot@buildroot.org>;
- Sun,  6 Jul 2025 12:16:48 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 89D4B607CD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 89D4B607CD
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 89D4B607CD
- for <buildroot@buildroot.org>; Sun,  6 Jul 2025 12:16:48 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- 5b1f17b1804b1-451dbe494d6so25149245e9.1
- for <buildroot@buildroot.org>; Sun, 06 Jul 2025 05:16:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1751804206; x=1752409006;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=96JwLxfsDdYPhYNa4LsMtvUtcw3ik5+J14BvtawdxI0=;
- b=acGKOz55c1mFNrVUnUC7a4lEEUWDJgEzV/9WbtyUwBnhfzozoGQylqgsmthx0yTzI5
- gudgQlUKk4Pb2NWFFzmPIcbjnC4p5dvj21ij+1u35b/4GyV8yejAiZorTVM79ddRRDHF
- tT5UkoTYFgtjWg381h6TNDdL3SnGgeyX7VD69VIvKuuaIJd4RsKdIdMay7Hifxn+QwyT
- KwnY2tueMb+lA8kWW+VtdYsNa3AjEkb9sbFSaSBPlGb8Woq4YwpW5VShhQVsyV7hDN3n
- S3h1v5fAur+RMi6SGO2Zk1a6DMNQ0urlJDPzlv1YPbOmAW1+XXqqwu9ysTL7otpeX16O
- sT1g==
-X-Forwarded-Encrypted: i=1;
- AJvYcCXU31Zv3CQ3zGMiMW46DMk6DCKAWpqC0r93N1OdgLimlEZnh5BLqifQ6fw81FjtzwIgFz4Tjbks918=@buildroot.org
-X-Gm-Message-State: AOJu0YwlQ1P6HUV8gVAibSPNIZJ5P+yQ8sa2lWSs97mFcVnlxbQZIMOC
- 6dVWfX6EQvtSgd9T81bmTaRSGduWAKkmv15Ct0ZFjf5imK+XuuccZnv+1XbC0ugbYyoG4IFMpRT
- Y6DdN
-X-Gm-Gg: ASbGncuGQwakFhu7Z5S9IIuNQWNMOlK+b9cDEDt3mwPN9nCy4JT3TNRHRlO0wId4NgM
- oopoDFMIHy7yKbceyGRginC0N4vEXsX5KJODaBLhUL9eR33hSupqRKnC7G3i0sYN2NTXJR/G+YL
- pdXjj+qL3dvdDf8NOfkZE5Oe4SiomWTzOrAE4nLKy6gmW4+mE4k/+jreX5682F5c9CHE37+VCOC
- 0esKNVT6aL5M+Xh6vy+iNH2GFixhVEMiAM7YfSPsT/MCW3AUyzPyamzUlgE0MlWAhAFkWG+8r4A
- Nd6CnEzi14VUuJInv6lyq046K+/HTYSwLBQ8RWtXad61ozuyzzWi87VOubeklkpw9LfYxv4Ptba
- FDEkgnHtwWeAXNCCqO5G/hw/oFpIflSwO4f1PpQPenpQpZORt53DIQ/rc4GORAU0XCaDvid8gRt
- zIBgKW41rgvxel7RtrzZ2KeNDv
-X-Google-Smtp-Source: AGHT+IG+UVzDdYGQPwuh3Qoa7bHUiybTYLud6mi+nu6a8I/VVDQcUGefBeqeoEt5BvgFvo4P2ItoRw==
-X-Received: by 2002:a05:600c:83cc:b0:454:ab87:a0a0 with SMTP id
- 5b1f17b1804b1-454b4eadc2fmr85909275e9.17.1751804206360; 
- Sun, 06 Jul 2025 05:16:46 -0700 (PDT)
-Received: from ?IPV6:2a01:cb05:949d:5800:c97d:3b73:4a46:d823?
- (2a01cb05949d5800c97d3b734a46d823.ipv6.abo.wanadoo.fr.
- [2a01:cb05:949d:5800:c97d:3b73:4a46:d823])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3b47285dda7sm7522522f8f.99.2025.07.06.05.16.45
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 06 Jul 2025 05:16:46 -0700 (PDT)
-Message-ID: <39f7a00c-7390-4d4f-a2de-86fcd97bc3fa@smile.fr>
-Date: Sun, 6 Jul 2025 14:16:45 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hVEiNA4neXHj for <buildroot@buildroot.org>;
+ Sun,  6 Jul 2025 12:33:48 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org DE12240BE0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE12240BE0
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id DE12240BE0
+ for <buildroot@buildroot.org>; Sun,  6 Jul 2025 12:33:46 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p4fd6c4c9.dip0.t-ipconnect.de [79.214.196.201])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 0811AA4C3805
+ for <buildroot@buildroot.org>; Sun,  6 Jul 2025 14:33:44 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:51870)
+ by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
+ (envelope-from <bernd@kuhls.net>) id 1uYOYx-000000008Fs-47rB
+ for buildroot@buildroot.org; Sun, 06 Jul 2025 12:33:43 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Sun,  6 Jul 2025 14:33:43 +0200
+Message-Id: <20250706123343.1582116-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Maxime Leroy <maxime@leroys.fr>, buildroot@buildroot.org
-Cc: thomas.petazzoni@bootlin.com, ju.o@free.fr
-References: <20250618095240.25712-1-maxime@leroys.fr>
- <20250618095240.25712-2-maxime@leroys.fr>
-Content-Language: fr
-In-Reply-To: <20250618095240.25712-2-maxime@leroys.fr>
+X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1751804206; x=1752409006; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=96JwLxfsDdYPhYNa4LsMtvUtcw3ik5+J14BvtawdxI0=;
- b=eOHdf7U9H/MoTOJs+/jgfvh3QbP+ifoVoIPOryTGYo5HAshUnKAntyTm9kpf90Wg4H
- LGBc0P3o9tEochHyHINtZ4jmp96+00ZL/bQf2kIr9BnDZZodP1ZRt+WJ3Xp+d3ujx0uw
- RVr9Pplm4FWvX5hOl6Jf6bqnqX6z95sz9DeJg=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
- header.a=rsa-sha256 header.s=google header.b=eOHdf7U9
-Subject: Re: [Buildroot] [PATCH 2/2] support/testing: add grout runtime test
+ d=kuhls.net; 
+ s=kas202506031021; t=1751805224;
+ bh=5UNhvlZT6f359iihsakquVotMxYNxjtQWe1ep4nC1SI=;
+ h=From:To:Subject:Date:From;
+ b=gE8CZs2nKtBTNfPVypDtg0vRQJLKX5oR22a+VjuX51qmxU9zrWoNB5t6r+MgkNMWn
+ GIAEH2Ct6Ws5PF/PVJH3VZg+k2WUajlbuOubOS0qcZv8e1nUGEB2GNWvKf0V1yuwgn
+ eiIiMedMNzl1xwetaxx48P6f+8SZvfr3qBYuW1PVvIzf9O5MJG8vq7x8Kz9k9IO6v+
+ X3FJnePu31IBmqhMiUFpOufuf9WGvWUJ4VXW0fUoOmsF5tdAGIlHUEdzscPeT3CfsM
+ z1L8arYUYk4MRrfSZkgetGEKgTuwBCbAIMkQak0B3deSEbo7qAbgSHkxXynyzDOwSz
+ dxhHfDPRb8Erg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202506031021 header.b=gE8CZs2n
+Subject: [Buildroot] [PATCH] package/libva: fix build error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -113,127 +80,272 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Romain Naour via buildroot <buildroot@buildroot.org>
-Reply-To: Romain Naour <romain.naour@smile.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gTWF4aW1lLCBBbGwsCgpMZSAxOC8wNi8yMDI1IMOgIDExOjUyLCBNYXhpbWUgTGVyb3kg
-YSDDqWNyaXTCoDoKPiBUaGlzIGFkZHMgYSBydW50aW1lIHRlc3QgZm9yIEdyb3V0LCBpbnNwaXJl
-ZCBieSB0ZXN0X2RwZGsucHkuCj4gCj4gSXQgdXNlcyB0aGUgc21va2UgdGVzdHMgbm9ybWFsbHkg
-dXNlZCB0byB2YWxpZGF0ZSBkZXZlbG9wbWVudCBvbiBHcm91dC4KPiAKPiBUaGUgc21va2UgdGVz
-dHMgYXJlIGNvcGllZCBpbnRvIHRoZSBpbWFnZSBieSBlbmFibGVkIHRoZSBuZXcgb3B0aW9uCj4g
-QlIyX1BBQ0tBR0VfR1JPVVRfVEVTVFMuCj4gCj4gTm90ZTogRGVwZW5kZW5jaWVzIGhhdmUgYmVl
-biBhZGRlZCBmb3IgdGhlIG5ldyBvcHRpb24gZm9yIGNsYXJpdHkuCj4gVGhleSBoYXZlIGJlZW4g
-Y29tbWVudGVkIG91dCwgYXMgdGhleSBhcmUgYWxyZWFkeSBzYXRpc2ZpZWQgYnkgc2VsZWN0aW5n
-Cj4gQlIyX1BBQ0tBR0VfR1JPVVQuCj4gCj4gU2lnbmVkLW9mZi1ieTogTWF4aW1lIExlcm95IDxt
-YXhpbWVAbGVyb3lzLmZyPgo+IC0tLQo+ICBERVZFTE9QRVJTICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgIHwgIDEgKwo+ICBwYWNrYWdlL2dyb3V0L0NvbmZpZy5pbiAgICAgICAgICAg
-ICAgICAgICAgIHwgMjggKysrKysrKysrKysrKysKPiAgcGFja2FnZS9ncm91dC9ncm91dC5tayAg
-ICAgICAgICAgICAgICAgICAgICB8IDE1ICsrKysrKysrCj4gIHN1cHBvcnQvdGVzdGluZy90ZXN0
-cy9wYWNrYWdlL3Rlc3RfZ3JvdXQucHkgfCA0MiArKysrKysrKysrKysrKysrKysrKysKPiAgNCBm
-aWxlcyBjaGFuZ2VkLCA4NiBpbnNlcnRpb25zKCspCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBzdXBw
-b3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS90ZXN0X2dyb3V0LnB5Cj4gCj4gZGlmZiAtLWdpdCBh
-L0RFVkVMT1BFUlMgYi9ERVZFTE9QRVJTCj4gaW5kZXggZDEyNzM2NGE1OC4uNDJjZmQyMzNkNCAx
-MDA2NDQKPiAtLS0gYS9ERVZFTE9QRVJTCj4gKysrIGIvREVWRUxPUEVSUwo+IEBAIC0yNDE0LDYg
-KzI0MTQsNyBAQCBGOglwYWNrYWdlL2xpbnV4LXRvb2xzL2xpbnV4LXRvb2wtcnRsYS5tay5pbgo+
-ICAKPiAgTjoJTWF4aW1lIExlcm95IDxtYXhpbWVAbGVyb3lzLmZyPgo+ICBGOglwYWNrYWdlL2dy
-b3V0Lwo+ICtGOglzdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS90ZXN0X2dyb3V0LnB5Cj4g
-IAo+ICBOOglNZWVuYSBNdXJ0aHkgPG1lZW5hLm11cnRoeUBhbWFydWxhc29sdXRpb25zLmNvbT4K
-PiAgRjoJYm9hcmQvZW5naWNhbS9weDMwY29yZS8KPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9ncm91
-dC9Db25maWcuaW4gYi9wYWNrYWdlL2dyb3V0L0NvbmZpZy5pbgo+IGluZGV4IDdlNmUzNGUwN2Yu
-LjQzZTNmOWUzNDkgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9ncm91dC9Db25maWcuaW4KPiArKysg
-Yi9wYWNrYWdlL2dyb3V0L0NvbmZpZy5pbgo+IEBAIC0yNiwzICsyNiwzMSBAQCBjb21tZW50ICJn
-cm91dCBuZWVkcyBhIGdsaWJjIHRvb2xjaGFpbiB3LyBkeW5hbWljIGxpYnJhcnksIHRocmVhZHMs
-IHdjaGFyLCBnY2MgPgo+ICAJCSFCUjJfVE9PTENIQUlOX1VTRVNfR0xJQkMgfHwgXAo+ICAJCSFC
-UjJfVE9PTENIQUlOX0dDQ19BVF9MRUFTVF80XzkgfHwgXAo+ICAJCSFCUjJfVE9PTENIQUlOX0hF
-QURFUlNfQVRfTEVBU1RfNF8xOQo+ICsKPiAraWYgQlIyX1BBQ0tBR0VfR1JPVVQKPiArCj4gK2Nv
-bmZpZyBCUjJfUEFDS0FHRV9HUk9VVF9URVNUUwo+ICsJYm9vbCAiSW5zdGFsbCB0ZXN0cyIKCkl0
-IHJlbWluZHMgbWUgdGhlIFRlc3RTeXN0ZW1kIHRlc3QgSSB3YXMgc3VnZ2VzdGluZyBzb21lIHll
-YXJzIGFnbyBbMV0uCgpXaGlsZSBkcGRrLXRlc3QgZG9lc24ndCBoYXZlIGFueSBkZXBlbmRlbmN5
-LCBncm91dCByZXF1aXJlcyBzZXZlcmFsIHNwZWNpZmljCmFkZGl0aW9uYWwgcGFja2FnZXMgaW5z
-dGFsbGVkIHRvIHJ1biB0aGUgdGVzdC4KClRoZSBUZXN0U3lzdGVtZCB0ZXN0IHdhcyByZWplY3Rl
-ZCBmb3IgdGhlIGZvbGxvd2luZyByZWFzb246CgoiVGVzdCBzdWl0ZXMgYXJlIHVzdWFsbHkgbm90
-IG1lYW50IGZvciBkb3duc3RyZWFtIGNvbnN1bXB0aW9ucy4KClllcywgQnVpbGRyb290IGlzIGlu
-IGEgc3BlY2lhbCBzcG90IGFzIGEgZG93bnN0cmVhbSwgaW4gdGhhdCBpdCB0YXJnZXRzCnNvIG1h
-bnkgZGlmZmVyZW50IHRhcmdldHMgdGhhdCB1cHN0cmVhbSBtYXkgbnQgaGF2ZSwgb3IgbWF5IG5v
-dCBiZSBldmVuCmF3YXJlIG9mLiBTdGlsbCwgaXQgaXMgb2YgbXkgb3BpbmlvbiB0aGF0IHdlIHNo
-b3VsZCBub3QgYmUgcmVzcG9uc2libGUKZm9yIGJlaW5nIGFibGUgdG8gcnVuIHRoYXQgdGVzdCBz
-dWl0ZS4KClNvIEkgYW0gbm90IHZlcnkgaW4gZmF2b3VyIG9mIGNhcnJ5aW5nIHN1Y2ggYSB0aGlu
-ZyBpbiBCdWlsZHJvb3QsCnVuZm9ydHVuYXRlbHkuLi4iCgpbMV0gaHR0cHM6Ly9sb3JlLmtlcm5l
-bC5vcmcvYnVpbGRyb290LzIwMjAwNDIzMjAyMDI4LkdRNTAzNUBzY2Flci8KCj4gKwkjIGRlcGVu
-ZHMgb24gQlIyX1VTRV9NTVUgIyBiYXNoLCBpcHV0aWxzLCBuZGlzYzYsIHNvY2F0LAo+ICsJIyBk
-ZXBlbmRzIG9uIEJSMl9UT09MQ0hBSU5fSEVBREVSU19BVF9MRUFTVF8zXzQgIyBpcHJvdXRlMgo+
-ICsJIyBkZXBlbmRzIG9uIEJSMl9UT09MQ0hBSU5fR0NDX0FUX0xFQVNUXzRfNyAjIG5kaXNjNgo+
-ICsJIyBkZXBlbmRzIG9uIEJSMl9UT09MQ0hBSU5fSEVBREVSU19BVF9MRUFTVF8zXzE0ICMgbGlu
-dXgtc2NoZWR1dGlscwo+ICsJc2VsZWN0IEJSMl9QQUNLQUdFX0JBU0gKPiArCXNlbGVjdCBCUjJf
-UEFDS0FHRV9CVVNZQk9YX1NIT1dfT1RIRVJTIGlmIEJSMl9QQUNLQUdFX0JVU1lCT1gKPiArCXNl
-bGVjdCBCUjJfUEFDS0FHRV9JUFJPVVRFMgo+ICsJc2VsZWN0IEJSMl9QQUNLQUdFX0lQVVRJTFMK
-PiArCXNlbGVjdCBCUjJfUEFDS0FHRV9JUFVUSUxTX1BJTkcKPiArCXNlbGVjdCBCUjJfUEFDS0FH
-RV9ORElTQzYKPiArCXNlbGVjdCBCUjJfUEFDS0FHRV9ORElTQzZfUkRJU0M2Cj4gKwlzZWxlY3Qg
-QlIyX1BBQ0tBR0VfU09DQVQKPiArCXNlbGVjdCBCUjJfUEFDS0FHRV9UUkFDRVJPVVRFCj4gKwlz
-ZWxlY3QgQlIyX1BBQ0tBR0VfVVRJTF9MSU5VWAo+ICsJc2VsZWN0IEJSMl9QQUNLQUdFX1VUSUxf
-TElOVVhfU0NIRURVVElMUwoKVGhleSBhcmUgYWxsIHJ1bnRpbWUgZGVwZW5kZW5jaWVzIChhZGQg
-IiMgcnVudGltZSIgY29tbWVudCkuCgo+ICsKPiArCWhlbHAKPiArCSAgSW5zdGFsbCBzbW9rZSB0
-ZXN0cy4KPiArCj4gKwkgIFRoZXNlIHRlc3RzIGNoZWNrIGJhc2ljIGZ1bmN0aW9uYWxpdHkgbGlr
-ZSBwYWNrZXQgZm9yd2FyZGluZywKPiArCSAgU1J2NiwgVkxBTiwgSUNNUCwgZXRjLgo+ICsKPiAr
-ZW5kaWYKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9ncm91dC9ncm91dC5tayBiL3BhY2thZ2UvZ3Jv
-dXQvZ3JvdXQubWsKPiBpbmRleCA0NmQzY2Y1ZjBhLi41MTQwMzY2NjVlIDEwMDY0NAo+IC0tLSBh
-L3BhY2thZ2UvZ3JvdXQvZ3JvdXQubWsKPiArKysgYi9wYWNrYWdlL2dyb3V0L2dyb3V0Lm1rCj4g
-QEAgLTIwLDQgKzIwLDE5IEBAIEdST1VUX0RFUEVOREVOQ0lFUyA9IFwKPiAgCWxpYmVjb2xpIFwK
-PiAgCXV0aWwtbGludXgKPiAgCj4gK2lmZXEgKCQoQlIyX1BBQ0tBR0VfR1JPVVRfVEVTVFMpLHkp
-Cj4gK2RlZmluZSBHUk9VVF9JTlNUQUxMX1RFU1RfU0NSSVBUUwo+ICsJJChJTlNUQUxMKSAtZCAk
-KFRBUkdFVF9ESVIpL3Vzci9zaGFyZS9ncm91dC10ZXN0Lwo+ICsJJChJTlNUQUxMKSAtRCAtbSAw
-NzU1ICQoQEQpL3Ntb2tlLyouc2ggJChUQVJHRVRfRElSKS91c3Ivc2hhcmUvZ3JvdXQtdGVzdAo+
-ICtlbmRlZgo+ICtHUk9VVF9QT1NUX0lOU1RBTExfVEFSR0VUX0hPT0tTICs9IEdST1VUX0lOU1RB
-TExfVEVTVF9TQ1JJUFRTCj4gKwo+ICtkZWZpbmUgR1JPVVRfTElOVVhfQ09ORklHX0ZJWFVQUwo+
-ICsJJChjYWxsIEtDT05GSUdfRU5BQkxFX09QVCxDT05GSUdfVkxBTl84MDIxUSkKPiArCSQoY2Fs
-bCBLQ09ORklHX0VOQUJMRV9PUFQsQ09ORklHX05FVF9JUElQKQo+ICsJJChjYWxsIEtDT05GSUdf
-RU5BQkxFX09QVCxDT05GSUdfSVBWNl9TRUc2X0xXVFVOTkVMKQo+ICsJJChjYWxsIEtDT05GSUdf
-RU5BQkxFX09QVCxDT05GSUdfVFVOKQo+ICtlbmRlZgoKSXMgdGhlc2VzIGtlcm5lbCBvcHRpb25z
-IGFyZSByZWFsbHkgcmVsYXRlZC9uZWVkZWQgdG8gZ3JvdXQgdGVzdHMgb3IgbmVlZGVkIGJ5Cmdy
-b3V0IGlmc2xlZj8KCj4gK2VuZGlmCj4gKwo+ICAkKGV2YWwgJChtZXNvbi1wYWNrYWdlKSkKPiBk
-aWZmIC0tZ2l0IGEvc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF9ncm91dC5weSBi
-L3N1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3RfZ3JvdXQucHkKPiBuZXcgZmlsZSBt
-b2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAuLjI5ZTQwNmFjZWYKPiAtLS0gL2Rldi9udWxs
-Cj4gKysrIGIvc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF9ncm91dC5weQo+IEBA
-IC0wLDAgKzEsNDIgQEAKPiAraW1wb3J0IG9zCj4gKwo+ICtpbXBvcnQgaW5mcmEuYmFzZXRlc3QK
-PiArCj4gKwo+ICtjbGFzcyBUZXN0R3JvdXQoaW5mcmEuYmFzZXRlc3QuQlJUZXN0KToKPiArICAg
-IGNvbmZpZyA9IFwKPiArICAgICAgICAiIiIKPiArICAgICAgICBCUjJfeDg2XzY0PXkKPiArICAg
-ICAgICBCUjJfeDg2X25laGFsZW09eQo+ICsgICAgICAgIEJSMl9UT09MQ0hBSU5fRVhURVJOQUw9
-eQo+ICsgICAgICAgIEJSMl9MSU5VWF9LRVJORUw9eQo+ICsgICAgICAgIEJSMl9MSU5VWF9LRVJO
-RUxfQ1VTVE9NX1ZFUlNJT049eQo+ICsgICAgICAgIEJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZF
-UlNJT05fVkFMVUU9IjYuMTMuOCIKPiArICAgICAgICBCUjJfTElOVVhfS0VSTkVMX1VTRV9DVVNU
-T01fQ09ORklHPXkKPiArICAgICAgICBCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9DT05GSUdfRklM
-RT0iYm9hcmQvcWVtdS94ODZfNjQvbGludXguY29uZmlnIgo+ICsgICAgICAgIEJSMl9MSU5VWF9L
-RVJORUxfTkVFRFNfSE9TVF9MSUJFTEY9eQo+ICsgICAgICAgIEJSMl9QQUNLQUdFX0RQREs9eQo+
-ICsgICAgICAgIEJSMl9QQUNLQUdFX0dST1VUPXkKPiArICAgICAgICBCUjJfUEFDS0FHRV9HUk9V
-VF9URVNUUz15Cj4gKyAgICAgICAgQlIyX1RBUkdFVF9ST09URlNfRVhUMj15Cj4gKyAgICAgICAg
-QlIyX1RBUkdFVF9ST09URlNfRVhUMl9TSVpFPSIzMDBNIgo+ICsgICAgICAgICMgQlIyX1RBUkdF
-VF9ST09URlNfVEFSIGlzIG5vdCBzZXQKPiArICAgICAgICAiIiIKPiArCj4gKyAgICBkZWYgdGVz
-dF9ydW4oc2VsZik6Cj4gKyAgICAgICAgaW1nID0gb3MucGF0aC5qb2luKHNlbGYuYnVpbGRkaXIs
-ICJpbWFnZXMiLCAicm9vdGZzLmV4dDIiKQo+ICsgICAgICAgIGtlcm4gPSBvcy5wYXRoLmpvaW4o
-c2VsZi5idWlsZGRpciwgImltYWdlcyIsICJiekltYWdlIikKPiArICAgICAgICBzZWxmLmVtdWxh
-dG9yLmJvb3QoYXJjaD0ieDg2XzY0IiwKPiArICAgICAgICAgICAgICAgICAgICAgICAgICAga2Vy
-bmVsPWtlcm4sCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgIGtlcm5lbF9jbWRsaW5lPVsi
-cm9vdD0vZGV2L3ZkYSIsICJjb25zb2xlPXR0eVMwIl0sCj4gKyAgICAgICAgICAgICAgICAgICAg
-ICAgICAgIG9wdGlvbnM9WyItY3B1IiwgIk5laGFsZW0iLCAiLW0iLCAiMkciLAo+ICsgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAiLXNtcCIsICI2IiwKPiArICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgIi1kZXZpY2UiLCAidmlydGlvLXJuZy1wY2kiLAo+ICsg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAiLWRyaXZlIiwgZiJmaWxlPXtpbWd9
-LGZvcm1hdD1yYXcsaWY9dmlydGlvIl0pCj4gKyAgICAgICAgc2VsZi5lbXVsYXRvci5sb2dpbigp
-Cj4gKwo+ICsgICAgICAgICMgUmVtb3ZlIGdyYXBoLCBubyBuZWVkcyB0byBjaGVjayB3ZSBjYW4g
-Z2VuZXJhdGUgc3ZnIChvbmx5IGZvciBkZXZlbG9wcGVtZW50KQo+ICsgICAgICAgIHNlbGYuYXNz
-ZXJ0UnVuT2soInJtIC91c3Ivc2hhcmUvZ3JvdXQtdGVzdC9ncmFwaF9zdmdfdGVzdC5zaCIpCj4g
-Kwo+ICsgICAgICAgICMgUnVuIHNtb2tlIHRlc3RzCj4gKyAgICAgICAgc2VsZi5hc3NlcnRSdW5P
-aygiL3Vzci9zaGFyZS9ncm91dC10ZXN0L3J1bi5zaCAuIiwgdGltZW91dD02MDApCgpTaW5jZSBv
-dXIgZ29hbCBpcyB0byBjaGVjayBpZiB0aGUgZ3JvdXQgYmluYXJ5IGlzIGNvcnJlY3RseSBwYWNr
-YWdlZCBpbgpCdWlsZHJvb3QgYW5kIHdvcmtpbmcgZmluZSwgY2FuIHlvdSB0cnkgd2l0aCBhIHNp
-bXBsZXIgdGVzdCBjb21tYW5kPwpBbHNvLCBpdCB3b3VsZCBiZSBldmVuIGJldHRlciB3aXRob3V0
-IGFueSBhZGRpdGlvbmFsIGRlcGVuZGVuY2llcyAoaXQgd291bGQgc2F2ZQp1cyBzb21lIEdpdGxh
-YiBDSSBtaW51dGVzKS4KCkJlc3QgcmVnYXJkcywKUm9tYWluCgoKCl9fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVp
-bGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4v
-bGlzdGluZm8vYnVpbGRyb290Cg==
+Fixes:
+https://autobuild.buildroot.net/results/18b/18b551ae20a2f2f40c1fb003bb701f53f5daec45/
+
+/workdir/instance-0/output-1/host/lib/gcc/aarch64_be-buildroot-linux-gnu/14.3.0/../../../../aarch64_be-buildroot-linux-gnu/bin/ld:
+ va/libva.so.2.2200.0: version node not found for symbol vaCreateSurfaces@VA_API_0.32.0
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ ...a-remove-older-0.32-and-0.33-support.patch | 239 ++++++++++++++++++
+ 1 file changed, 239 insertions(+)
+ create mode 100644 package/libva/0001-va-remove-older-0.32-and-0.33-support.patch
+
+diff --git a/package/libva/0001-va-remove-older-0.32-and-0.33-support.patch b/package/libva/0001-va-remove-older-0.32-and-0.33-support.patch
+new file mode 100644
+index 0000000000..75fb8c9499
+--- /dev/null
++++ b/package/libva/0001-va-remove-older-0.32-and-0.33-support.patch
+@@ -0,0 +1,239 @@
++From 0340bca0ee4f7d66fe029ce4c7fece01c896f00a Mon Sep 17 00:00:00 2001
++From: Carl Zhang <carl.zhang@intel.com>
++Date: Mon, 13 May 2024 16:19:13 +0800
++Subject: [PATCH] va: remove older 0.32 and 0.33 support
++
++libva version 2.x should be compatible with 2.x series , not 1.x series
++and 0.x series
++reserve va_compat.h , because maybe some existing usage refer this file
++
++Upstream: https://github.com/intel/libva/pull/812
++
++Signed-off-by: Carl Zhang <carl.zhang@intel.com>
++[Bernd: rebased after upstream commit
++ https://github.com/intel/libva/commit/a6192260e7cde16ceb9db80eec02b44192087590]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ va/Makefile.am |  4 ---
++ va/libva.syms  |  9 -------
++ va/meson.build |  8 ------
++ va/va_compat.c | 45 -------------------------------
++ va/va_compat.h | 73 +-------------------------------------------------
++ 5 files changed, 1 insertion(+), 138 deletions(-)
++ delete mode 100644 va/libva.syms
++ delete mode 100644 va/va_compat.c
++
++diff --git a/va/Makefile.am b/va/Makefile.am
++index 8d16d422c..4ebf8f09a 100644
++--- a/va/Makefile.am
+++++ b/va/Makefile.am
++@@ -32,7 +32,6 @@ LDADD = \
++ 
++ libva_source_c = \
++ 	va.c			\
++-	va_compat.c		\
++ 	va_str.c		\
++ 	va_trace.c		\
++ 	$(NULL)
++@@ -75,7 +74,6 @@ libva_source_h_priv = \
++ 
++ libva_ldflags = \
++ 	$(LDADD) -no-undefined	\
++-	-Wl,-version-script,${srcdir}/libva.syms \
++ 	$(NULL)
++ 
++ libva_cflags = \
++@@ -91,7 +89,6 @@ noinst_HEADERS			= $(libva_source_h_priv)
++ libva_la_SOURCES		= $(libva_source_c)
++ libva_la_CFLAGS			= $(libva_cflags)
++ libva_la_LDFLAGS		= $(libva_ldflags)
++-libva_la_DEPENDENCIES		= libva.syms
++ libva_la_LIBADD			= $(LIBVA_LIBS)
++ 
++ if USE_DRM
++@@ -146,7 +143,6 @@ DISTCLEANFILES = \
++ 	$(NULL)
++ 
++ EXTRA_DIST = \
++-	libva.syms		\
++ 	va_version.h.in		\
++ 	meson.build		\
++         libva.def               \
++diff --git a/va/libva.syms b/va/libva.syms
++deleted file mode 100644
++index b3f91f935..000000000
++--- a/va/libva.syms
+++++ /dev/null
++@@ -1,9 +0,0 @@
++-VA_API_0.32.0 {
++-    local:
++-        vaCreateSurfaces_0_32_0;
++-};
++-
++-VA_API_0.33.0 {
++-    global:
++-        vaCreateSurfaces;
++-} VA_API_0.32.0;
++diff --git a/va/meson.build b/va/meson.build
++index e15f8fe3e..43db2a3ef 100644
++--- a/va/meson.build
+++++ b/va/meson.build
++@@ -11,7 +11,6 @@ version_file = configure_file(
++ 
++ libva_sources = [
++   'va.c',
++-  'va_compat.c',
++   'va_str.c',
++   'va_trace.c',
++ ]
++@@ -55,15 +54,8 @@ libva_headers_priv = [
++   'va_trace.h',
++ ]
++ 
++-libva_sym = 'libva.syms'
++-libva_sym_arg = '-Wl,-version-script,' + '@0@/@1@'.format(meson.current_source_dir(), libva_sym)
++-
++ libva_link_args = []
++ libva_link_depends = []
++-if cc.links('void vaCreateSurfaces_0_32_0(void) {} void vaCreateSurfaces() {}', name: '-Wl,--version-script', args: ['-shared', libva_sym_arg])
++-  libva_link_args = libva_sym_arg
++-  libva_link_depends = libva_sym
++-endif
++ 
++ install_headers(libva_headers, subdir : 'va')
++ 
++diff --git a/va/va_compat.c b/va/va_compat.c
++deleted file mode 100644
++index 44d69562b..000000000
++--- a/va/va_compat.c
+++++ /dev/null
++@@ -1,45 +0,0 @@
++-/*
++- * Copyright (c) 2007-2011 Intel Corporation. All Rights Reserved.
++- *
++- * Permission is hereby granted, free of charge, to any person obtaining a
++- * copy of this software and associated documentation files (the
++- * "Software"), to deal in the Software without restriction, including
++- * without limitation the rights to use, copy, modify, merge, publish,
++- * distribute, sub license, and/or sell copies of the Software, and to
++- * permit persons to whom the Software is furnished to do so, subject to
++- * the following conditions:
++- *
++- * The above copyright notice and this permission notice (including the
++- * next paragraph) shall be included in all copies or substantial portions
++- * of the Software.
++- *
++- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
++- * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
++- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT.
++- * IN NO EVENT SHALL INTEL AND/OR ITS SUPPLIERS BE LIABLE FOR
++- * ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
++- * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
++- * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
++- */
++-
++-#define VA_COMPAT_DISABLED 1
++-#include "sysdeps.h"
++-#include "va.h"
++-#include "va_compat.h"
++-
++-VAStatus
++-vaCreateSurfaces_0_32_0(
++-    VADisplay    dpy,
++-    int          width,
++-    int          height,
++-    int          format,
++-    int          num_surfaces,
++-    VASurfaceID *surfaces
++-)
++-{
++-    return vaCreateSurfaces(dpy, format, width, height, surfaces, num_surfaces,
++-                            NULL, 0);
++-}
++-#if !defined(_WIN32)
++-VA_CPP_HELPER_ALIAS(vaCreateSurfaces, 0, 32, 0);
++-#endif
++diff --git a/va/va_compat.h b/va/va_compat.h
++index 41a3f73e7..02cf5667e 100644
++--- a/va/va_compat.h
+++++ b/va/va_compat.h
++@@ -36,78 +36,7 @@
++ extern "C" {
++ #endif
++ 
++-/**
++- * \defgroup api_compat Compatibility API
++- *
++- * The Compatibility API allows older programs that are not ported to
++- * the current API to still build and run correctly. In particular,
++- * this exposes older API to allow for backwards source compatibility.
++- *
++- * @{
++- */
++-
++-/**
++- * Makes a string literal out of the macro argument
++- */
++-#define VA_CPP_HELPER_STRINGIFY(x) \
++-    VA_CPP_HELPER_STRINGIFY_(x)
++-#define VA_CPP_HELPER_STRINGIFY_(x) \
++-    #x
++-
++-/**
++- * Concatenates two macro arguments at preprocessing time.
++- */
++-#define VA_CPP_HELPER_CONCAT(a, b) \
++-    VA_CPP_HELPER_CONCAT_(a, b)
++-#define VA_CPP_HELPER_CONCAT_(a, b) \
++-    a ## b
++-
++-/**
++- * Generates the number of macro arguments at preprocessing time.
++- * <http://groups.google.com/group/comp.std.c/browse_thread/thread/77ee8c8f92e4a3fb/346fc464319b1ee5>
++- *
++- * Note: this doesn't work for macros with no arguments
++- */
++-#define VA_CPP_HELPER_N_ARGS(...) \
++-    VA_CPP_HELPER_N_ARGS_(__VA_ARGS__, VA_CPP_HELPER_N_ARGS_LIST_REV())
++-#define VA_CPP_HELPER_N_ARGS_(...) \
++-    VA_CPP_HELPER_N_ARGS_LIST(__VA_ARGS__)
++-#define VA_CPP_HELPER_N_ARGS_LIST(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a12, a13, a14, a15, a16, N, ...) N
++-#define VA_CPP_HELPER_N_ARGS_LIST_REV() \
++-    15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0
++-
++-/**
++- * Generates a versioned function alias.
++- *
++- * VA_CPP_HELPER_ALIAS(vaSomeFunction, 0,32,0) will generate
++- *   .symber vaSomeFunction_0_32_0, vaSomeFunction@VA_API_0.32.0
++- */
++-#define VA_CPP_HELPER_ALIAS(func, major, minor, micro) \
++-    VA_CPP_HELPER_ALIAS_(func, major, minor, micro, "@")
++-#define VA_CPP_HELPER_ALIAS_DEFAULT(func, major, minor, micro) \
++-    VA_CPP_HELPER_ALIAS_(func, major, minor, micro, "@@")
++-#define VA_CPP_HELPER_ALIAS_(func, major, minor, micro, binding)        \
++-    asm(".symver " #func "_" #major "_" #minor "_" #micro ", "          \
++-        #func binding "VA_API_" #major "." #minor "." #micro)
++-
++-/* vaCreateSurfaces() */
++-
++-#ifndef VA_COMPAT_DISABLED
++-#define vaCreateSurfaces(dpy, ...)                                      \
++-    VA_CPP_HELPER_CONCAT(vaCreateSurfaces,                              \
++-                         VA_CPP_HELPER_N_ARGS(dpy, __VA_ARGS__))        \
++-    (dpy, __VA_ARGS__)
++-#endif
++-
++-#define vaCreateSurfaces6(dpy, width, height, format, num_surfaces, surfaces) \
++-    (vaCreateSurfaces)(dpy, format, width, height, surfaces, num_surfaces, \
++-                       NULL, 0)
++-
++-#define vaCreateSurfaces8(dpy, format, width, height, surfaces, num_surfaces, attribs, num_attribs) \
++-    (vaCreateSurfaces)(dpy, format, width, height, surfaces, num_surfaces, \
++-                       attribs, num_attribs)
++-
++-/*@}*/
+++#warning deprecated, keep a empty file because some application may include it
++ 
++ #ifdef __cplusplus
++ }
+-- 
+2.39.5
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
