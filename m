@@ -1,75 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49280C83F03
-	for <buildroot@archiver.kernel.org>; Sun,  6 Jul 2025 20:19:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BFD6C83F03
+	for <buildroot@archiver.kernel.org>; Sun,  6 Jul 2025 20:37:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 17D2482ADD;
-	Sun,  6 Jul 2025 20:19:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D4DA8405BD;
+	Sun,  6 Jul 2025 20:37:52 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3b8iQwqWnD3V; Sun,  6 Jul 2025 20:37:52 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A0194131F
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0A0194131F;
+	Sun,  6 Jul 2025 20:37:52 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id D74CE19C
+ for <buildroot@buildroot.org>; Sun,  6 Jul 2025 20:37:50 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id BD46180D44
+ for <buildroot@buildroot.org>; Sun,  6 Jul 2025 20:37:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ELb1JiAI5X41; Sun,  6 Jul 2025 20:19:09 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5190382AF5
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5190382AF5;
-	Sun,  6 Jul 2025 20:19:09 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id A809C19C
- for <buildroot@buildroot.org>; Sun,  6 Jul 2025 20:19:07 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 99EC9611D7
- for <buildroot@buildroot.org>; Sun,  6 Jul 2025 20:19:07 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DpDCV3v1Wmgd for <buildroot@buildroot.org>;
- Sun,  6 Jul 2025 20:19:07 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A5EA0611D5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A5EA0611D5
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A5EA0611D5
- for <buildroot@buildroot.org>; Sun,  6 Jul 2025 20:19:06 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 5D2862003CC;
- Sun,  6 Jul 2025 22:19:01 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
- via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 06 Jul 2025 22:19:01 +0200
-MIME-Version: 1.0
-Date: Sun, 06 Jul 2025 22:19:01 +0200
-To: Thomas Perale <thomas.perale@mind.be>
-Cc: buildroot@buildroot.org, Jianhui Zhao <zhaojh329@gmail.com>
-In-Reply-To: <20250706180909.1114945-1-thomas.perale@mind.be>
-References: <20250706180909.1114945-1-thomas.perale@mind.be>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <74a86834246b472ac930b54b6f637936@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1751833143;
- bh=FwCGxxRq8pshc/Y770WlNWdZZLzc7NoqrSDsZIv9/4c=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Nmdz++RbmVsIr10BxwL1Unwf7bg+woOmCNYC9k+zbqE1E26yatbVu97MRLzhLudmC
- 6sU/81FIeQDBmY6bfIRolwqWUeVMCEVaCGqG7bBAcrQqzyhjb4n2n+P4LmPXGA6c3Q
- xT+DzSy8v5euXuaA+mCEHaQOJfYBkSIO/JPE62z6fOWIAw4rl1pqY6k6w4asmv+Jyx
- jm3AL7f2FPeyTVEl58400hVwFaG78AtQCy3I0qdwHK/wLdpqb7cS7vSgBC2FYxKuuj
- pF//OP7WM2IBO1Bit+m51CYh62b6ilYQlh2HEhe/eRpCgXO/8qshd6c0byfDTojrRK
- dESt3ypnqj1bg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Nmdz++Rb
-Subject: Re: [Buildroot] [PATCH 1/2] package/libuhttpd: fix build w/ mbedtls
- v3.6
+ id gFIoPqQ9otLt for <buildroot@buildroot.org>;
+ Sun,  6 Jul 2025 20:37:49 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C7BA880CA4
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id C7BA880CA4
+ for <buildroot@buildroot.org>; Sun,  6 Jul 2025 20:37:49 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id AFBC786071; Sun,  6 Jul 2025 20:37:49 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 6 Jul 2025 22:29:45 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 67343d59bfd5f8d07e59dff34f404e2b56f34fea
+X-Git-Newrev: accb006d9b62079b56bc1f1388b558a60dde277a
+X-Patchwork-Hint: ignore
+Message-Id: <20250706203749.AFBC786071@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libheif: security bump version to
+ 1.20.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,59 +60,66 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 06/07/2025 20:09, Thomas Perale via buildroot wrote:
-> Since the mbedtls bump to v3.6 [1] the libuhttpd fails to build with 
-> the
-> following error:
-> 
-> ```
-> [  8%] Building C object src/ssl/CMakeFiles/xssl.dir/mbedtls.c.o
-> .../buildroot/output/build/libuhttpd-3.14.1/src/ssl/mbedtls.c:52:10: 
-> fatal error: mbedtls/certs.h: No such file or directory
->    52 | #include <mbedtls/certs.h>
->       |          ^~~~~~~~~~~~~~~~~
-> compilation terminated.
-> ```
-> 
-> This error can be reproduced with the following config:
-> 
-> ```
-> cat <<EOF >.config
-> BR2_arm=y
-> BR2_cortex_a7=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-> BR2_PACKAGE_MBEDTLS=y
-> BR2_PACKAGE_LIBUHTTPD=y
-> EOF
-> make olddefconfig
-> make
-> ```
-> 
-> The compatibility with mbedtls v3 has been addressed upstream in the
-> zhaojh329/ssl project included as a submodule of libuhttpd [2].
-> 
-> This patch backport this upstream commit to be applied on the submodule
-> directory. This required adaptation of the line numbers (see [3]) and
-> renaming a function reference passed as parameter of
-> 'mbedtls_pk_parse_keyfile' caused by the commit [4].
-> 
-> [1] 3481a9643f package/mbedtls: bump to version 3.6.3.1
-> [2] 
-> https://github.com/zhaojh329/ssl/commit/28cc9b5d98179d161673d20e79333ae5a4864228
-> [3] 
-> https://github.com/zhaojh329/ssl/commit/8092b5a490eedeb042cc1036ebeab6442624cf4c#diff-fbc46fa2db83f8649ccf1f46c6a044473b7b228edc7d4c0f7cc04b5a879f6fb7
-> [4] 
-> https://github.com/zhaojh329/ssl/commit/0e7d2f73d769cc4ddb350381cebb5ef6f27ab653#diff-fbc46fa2db83f8649ccf1f46c6a044473b7b228edc7d4c0f7cc04b5a879f6fb7R92
-> 
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+commit: https://git.buildroot.net/buildroot/commit/?id=accb006d9b62079b56bc1f1388b558a60dde277a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Series applied to master, thanks.
+Release notes: https://github.com/strukturag/libheif/releases
+
+Version 1.19.6 fixes CVE-2025-43966 & CVE-2025-43967:
+https://github.com/strukturag/libheif/releases/tag/v1.19.6
+
+Updated license hash due to upstream commit:
+https://github.com/strukturag/libheif/commit/377a957bd84018f4d27588c989fa5c66935c16ed
+
+Note:
+
+The patch for CVE-2025-43966 fixes libheif/image-items/iden.cc which was
+added in version 1.19.0.
+https://github.com/advisories/GHSA-7g9v-7vc7-pmrw
+
+The patch for CVE-2025-43967 does not apply cleanly to 1.18.2 even after
+renaming "/image-items/" to "/codecs/". Therefore, this patch is not
+backported.
+https://github.com/advisories/GHSA-c48q-x6xw-g5h8
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[Julien: add justification from Bernd why the security fix is not
+  backported]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/libheif/libheif.hash | 4 ++--
+ package/libheif/libheif.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/libheif/libheif.hash b/package/libheif/libheif.hash
+index 26b21e1897..6c129873cb 100644
+--- a/package/libheif/libheif.hash
++++ b/package/libheif/libheif.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  c4002a622bec9f519f29d84bfdc6024e33fd67953a5fb4dc2c2f11f67d5e45bf  libheif-1.18.2.tar.gz
+-sha256  b2eb4f6588b005bebac44cfb2dfd23f6a16c5ca9b8a619a315158b0215a917a3  COPYING
++sha256  55cc76b77c533151fc78ba58ef5ad18562e84da403ed749c3ae017abaf1e2090  libheif-1.20.1.tar.gz
++sha256  fa81ce652315b013359d6e8e4744335f31a50c7c192907176d3632f78a3b4596  COPYING
+diff --git a/package/libheif/libheif.mk b/package/libheif/libheif.mk
+index 4783ada19e..f6e14888eb 100644
+--- a/package/libheif/libheif.mk
++++ b/package/libheif/libheif.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBHEIF_VERSION = 1.18.2
++LIBHEIF_VERSION = 1.20.1
+ LIBHEIF_SITE = https://github.com/strukturag/libheif/releases/download/v$(LIBHEIF_VERSION)
+ LIBHEIF_LICENSE = LGPL-3.0+
+ LIBHEIF_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
