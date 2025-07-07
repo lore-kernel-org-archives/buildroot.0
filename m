@@ -4,97 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB97BC71130
-	for <buildroot@archiver.kernel.org>; Mon,  7 Jul 2025 16:36:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB74BC71130
+	for <buildroot@archiver.kernel.org>; Mon,  7 Jul 2025 16:48:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 77A87614D1;
-	Mon,  7 Jul 2025 16:36:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C0737608B8;
+	Mon,  7 Jul 2025 16:48:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hUW-l6vQcm-B; Mon,  7 Jul 2025 16:36:11 +0000 (UTC)
+ id WM6h2MF8YHrw; Mon,  7 Jul 2025 16:48:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8BC926148C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0553460B6E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8BC926148C;
-	Mon,  7 Jul 2025 16:36:11 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 08A241BF
- for <buildroot@buildroot.org>; Mon,  7 Jul 2025 16:36:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0553460B6E;
+	Mon,  7 Jul 2025 16:48:57 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id BDBAA12E
+ for <buildroot@buildroot.org>; Mon,  7 Jul 2025 16:48:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EDF9E417C5
- for <buildroot@buildroot.org>; Mon,  7 Jul 2025 16:36:09 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A373360B6E
+ for <buildroot@buildroot.org>; Mon,  7 Jul 2025 16:48:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n51OqUls70CZ for <buildroot@buildroot.org>;
- Mon,  7 Jul 2025 16:36:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6CEE641610
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6CEE641610
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6CEE641610
- for <buildroot@buildroot.org>; Mon,  7 Jul 2025 16:36:04 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id
- 5b1f17b1804b1-454aaade1fbso38193695e9.3
- for <buildroot@buildroot.org>; Mon, 07 Jul 2025 09:36:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1751906163; x=1752510963;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=5E7en4+ZWn9FQ2IUqNmblmGfUcQPjYJG0SyqZdd0w0M=;
- b=B06vezOA431LfBaPCjSsnWkurJcUKT1uG/1kBV/fLQbmxGpWFSoBUBS1rdl/TsqS49
- gyPNc50fVoF+Se8eYgKiB4diLzqPt4oVwmaV3RlL6ZkYoJjpqhzBba8HWj7ijBzh2q0i
- Wz4LyIhHJz71GSJgL6OZDcSjSG8lfewwTLZUOVnBSfIkjp3cWUuF/5JU2IgMaL75qVvc
- zLNLrT5+AhNwg5IcFOOBaiSQqO6CcxGOqsRd2ePHdSsGxU0mSSdaehTIipqQrxSPtxB8
- CMZ5ozdVa0Stugvv0y+kMphVNab8CNRalulb1HPcLgDu3mFbp1tF1+6dtzlrcc81pc1g
- HZ4g==
-X-Gm-Message-State: AOJu0Yxh+CM+LjQW5ngMvtviafdPVuyu7ImCd5UjSVqLHCP097qxBSEe
- AKXs71IwSG9f/6dGWgJxF/kX1HH5gsMceNfJ05Q4MNNClZy3J3IQxLp10foEGWimRVS6oqY7mIz
- SAy9w
-X-Gm-Gg: ASbGnctFtb7FFl8TYclNGN5+FvpUWoUtLDWqExURWP2qWL2pwMxeo3gWOgp7HX8XwRv
- cJjen7wboMyVqnII2JSqJ7ijO1OHqPcePs7GJCSRnUWsx7VhknlQ+tygjS1eZmgNoPNTJ0d2uoN
- IDR9U3hJNjXTt8iT3wYhWeTdNXlc9e1+IX+i3Z3MXOQZs60qdjUvNpCuPWhSsit8zOhisyJKOWZ
- 4zs8Sl7lDjgPGtUWmzj92h8dlPGng5/OMCVg/i7g/DHuB3thPDi4NKLbGiFYaCmhGgANkLCupOn
- dV/6MFeCoCXHrpPAX6ViRTr3TXDLP++5pHysALhQAowyENGzhXz1pw9FVf2p3GnI89d6RJaqEfQ
- VOuKRW5HHTA==
-X-Google-Smtp-Source: AGHT+IHwgbdZTwbr9Q8896gWjy4oM2wVtgJ0A6Gbhowcwfs2kF/jhrxI6VaATPgV+TvLx2gLQ1H39w==
-X-Received: by 2002:a05:600c:3555:b0:453:8f6:6383 with SMTP id
- 5b1f17b1804b1-454b4e850ffmr141769595e9.15.1751906162644; 
- Mon, 07 Jul 2025 09:36:02 -0700 (PDT)
-Received: from arch (94.105.118.175.dyn.edpnet.net. [94.105.118.175])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3b471b9651dsm10903745f8f.65.2025.07.07.09.36.01
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 07 Jul 2025 09:36:02 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Xj2PciXKvilH for <buildroot@buildroot.org>;
+ Mon,  7 Jul 2025 16:48:54 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E69E3608B8
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id E69E3608B8
+ for <buildroot@buildroot.org>; Mon,  7 Jul 2025 16:48:53 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id DF75A86107; Mon,  7 Jul 2025 16:48:53 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Romain Naour <romain.naour@gmail.com>
-Date: Mon,  7 Jul 2025 18:36:00 +0200
-Message-ID: <20250707163600.1332626-1-thomas.perale@mind.be>
-X-Mailer: git-send-email 2.50.0
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1751906163; x=1752510963; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=5E7en4+ZWn9FQ2IUqNmblmGfUcQPjYJG0SyqZdd0w0M=;
- b=Z4p2qlqiL8iVSsew+jYXYCtU2xJo9yL6zaEWWC1hreRsRpvZtiLNEZvEvxPhmtRo9f
- +HkP5URPxLb5iYPcxjcQwu/OPW0XhvFkVOMu9Oqka0ErDVOA6qQCpAFcHuh9A2wxLXxd
- GHbYn63+ObThlBNZbqPqEWk2qG+zUpguvGVcEKu+WuHxUOcfinP0sglFEEQhRpuQVEt4
- fd1zQY2U5nG0t8U61lbzb4GoWWN63YMv/rcd1lhsfgQl1N42uqoUXTudJXo3QFOlmCoU
- 62DNVlG/uanCwhWAu+zMBQrXxu/8a3OWmZG7DizOxRXqpo9WUnXyytu+GaQNGKHwdPOO
- GQPg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Z4p2qlqi
-Subject: [Buildroot] [PATCH] package/libiec61850: fix build w/ mbedtls v3.6
+Date: Mon, 7 Jul 2025 18:45:59 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: accb006d9b62079b56bc1f1388b558a60dde277a
+X-Git-Newrev: 279cd778651b2f66122233ef6b958a91a5489027
+X-Patchwork-Hint: ignore
+Message-Id: <20250707164853.DF75A86107@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] arch/loongarch: add lsx/lasx SIMD
+ dependency on fpu64
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -106,65 +58,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Since the mbedtls bump to v3.6 [1] the libiec61850 package is failling
-on the autobuilder with the following error:
+commit: https://git.buildroot.net/buildroot/commit/?id=279cd778651b2f66122233ef6b958a91a5489027
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-```
-[  2%] Building C object hal/CMakeFiles/hal.dir/tls/mbedtls/tls_mbedtls.c.o
-/workdir/instance-0/output-1/build/libiec61850-1.6.0/hal/tls/mbedtls/tls_mbedtls.c: In function 'compareCertificates':
-/workdir/instance-0/output-1/build/libiec61850-1.6.0/hal/tls/mbedtls/tls_mbedtls.c:122:17: error: 'mbedtls_x509_crt' has no member named 'sig'
-  122 |         if (crt1->sig.len == crt2->sig.len)
-      |                 ^~
-/workdir/instance-0/output-1/build/libiec61850-1.6.0/hal/tls/mbedtls/tls_mbedtls.c:122:34: error: 'mbedtls_x509_crt' has no member named 'sig'
-  122 |         if (crt1->sig.len == crt2->sig.len)
-      |                                  ^~
-...
-```
+Since the LoongArch64 introduction in commit [1], the Kconfig menus
+allows selecting lsx and lasx SIMD options independently of the FPU
+configuration.
 
-The logic to support mbedtls v3 is already present on the version
-present in buildroot.
-This patch ensures that the CMake build uses the mbedtls headers and
-libraries provided by buildroot rather than the bundled copy.
+When lsx or lasx SIMD is selected and FPU is "none", host-gcc-initial
+is failing at configuration time, with error:
 
-By setting the following variable the mbedtls v3.6 is correctly found
-during the configuration of the package.
+    --with-simd=lasx conflicts with --with-fpu=none
 
-```
-Found mbedtls 3.6 -> can compile HAL with TLS 1.3 support
-```
+According to the gcc configuration script [2], lsx and lasx values
+are valid only if FPU is 64.
 
-[1] 3481a9643f package/mbedtls: bump to version 3.6.3.1
+This commit adds the missing "depends on BR2_LOONGARCH_FPU_64" for
+BR2_LOONGARCH_SIMD_LSX and BR2_LOONGARCH_SIMD_LASX options.
 
-Fixes: https://autobuild.buildroot.org/results/5fc/5fca384510d2fb9dd1d01736dee34b53339d62ff/build-end.log
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Fixes:
+https://autobuild.buildroot.org/results/d159645dab9206dd46f45e79241fc8a950bd0326/
+
+[1] https://gitlab.com/buildroot.org/buildroot/-/commit/54895db9c10a26283b25a393cb6c872d72c245d1
+[2] https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=gcc/config.gcc;h=a6f6efec4e103301225ef74c2d1159933d1c9cf8;hb=1757c320badc92c0628eafcd07d54585659692ed#l5163
+
+Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libiec61850/libiec61850.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ arch/Config.in.loongarch | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/libiec61850/libiec61850.mk b/package/libiec61850/libiec61850.mk
-index 92b27dc5c2..2bf98f1f3d 100644
---- a/package/libiec61850/libiec61850.mk
-+++ b/package/libiec61850/libiec61850.mk
-@@ -15,6 +15,9 @@ LIBIEC61850_CONF_OPTS = -DBUILD_PYTHON_BINDINGS=OFF
- ifeq ($(BR2_PACKAGE_MBEDTLS),y)
- LIBIEC61850_DEPENDENCIES += mbedtls
- LIBIEC61850_CONF_OPTS += -DCONFIG_USE_EXTERNAL_MBEDTLS_DYNLIB=ON
-+LIBIEC61850_CONF_OPTS += \
-+	-DCONFIG_EXTERNAL_MBEDTLS_DYNLIB_PATH=$(STAGING_DIR)/usr/lib \
-+	-DCONFIG_EXTERNAL_MBEDTLS_INCLUDE_PATH=$(STAGING_DIR)/usr/include
- else
- LIBIEC61850_CONF_OPTS += -DCONFIG_USE_EXTERNAL_MBEDTLS_DYNLIB=OFF
- endif
--- 
-2.50.0
-
+diff --git a/arch/Config.in.loongarch b/arch/Config.in.loongarch
+index cf2a12ce42..1f302364b1 100644
+--- a/arch/Config.in.loongarch
++++ b/arch/Config.in.loongarch
+@@ -59,12 +59,14 @@ config BR2_LOONGARCH_SIMD_NONE
+ 
+ config BR2_LOONGARCH_SIMD_LSX
+ 	bool "LSX"
++	depends on BR2_LOONGARCH_FPU_64
+ 	help
+ 	  Enable generating instructions from the 128-bit LoongArch SIMD
+ 	  Extension (LSX).
+ 
+ config BR2_LOONGARCH_SIMD_LASX
+ 	bool "LASX"
++	depends on BR2_LOONGARCH_FPU_64
+ 	help
+ 	  Enable generating instructions from the 256-bit LoongArch
+ 	  Advanced SIMD Extension (LASX) and the 128-bit LoongArch
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
