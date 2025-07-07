@@ -1,102 +1,128 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA187C83F07
-	for <buildroot@archiver.kernel.org>; Mon,  7 Jul 2025 11:25:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E999C8303C
+	for <buildroot@archiver.kernel.org>; Mon,  7 Jul 2025 11:56:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4E41A60E03;
-	Mon,  7 Jul 2025 11:25:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C123F81F62;
+	Mon,  7 Jul 2025 11:56:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4UiyBm1SKHcv; Mon,  7 Jul 2025 11:25:43 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7dROoQp7kXXb; Mon,  7 Jul 2025 11:56:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 40A01610BD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 14CA681F5D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 40A01610BD;
-	Mon,  7 Jul 2025 11:25:43 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id EC5BA15F
- for <buildroot@buildroot.org>; Mon,  7 Jul 2025 11:25:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 14CA681F5D;
+	Mon,  7 Jul 2025 11:56:20 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id AF4271BF
+ for <buildroot@buildroot.org>; Mon,  7 Jul 2025 11:56:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E92A160BC5
- for <buildroot@buildroot.org>; Mon,  7 Jul 2025 11:25:41 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 95A1281F62
+ for <buildroot@buildroot.org>; Mon,  7 Jul 2025 11:56:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KZz_x-1d88xm for <buildroot@buildroot.org>;
- Mon,  7 Jul 2025 11:25:41 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
- envelope-from=tim.soubry@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B886760B1F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B886760B1F
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B886760B1F
- for <buildroot@buildroot.org>; Mon,  7 Jul 2025 11:25:40 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id
- ffacd0b85a97d-3a53359dea5so1460417f8f.0
- for <buildroot@buildroot.org>; Mon, 07 Jul 2025 04:25:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1751887538; x=1752492338;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=2MnZE+S1xCAh2owzNth+5sbt8yIlyopU6d67aVAqsK0=;
- b=RMLHFzTi4AmFdslDsui78Z03BNnL3qhil4ZKgflbDvkzQJzQphpzyMBSdAgvHJ8UOT
- GvfpYlDOGeMNNZ7lWWmFvxcVM8htF8yHEZV7xL0XZAVsiu6GNtenBUxU52x1726WpyDo
- 5ODHSUMPmFHWviwBGj5BEUXiOhVHcZ1m9cp9ffxDBeOwEKCffB4Roa2oQV73bppQR7pZ
- vuSugAYvkpRKGdqSqL87zPIAY+d3is+c1YA4I9JJ0+3iRAA/+Is86J/x1+p0EK1wrpPw
- 0kmrJF5WuUEUuBvReSkGOsJbm9O5TzxuBNLI4DQH2ptRX9bKAxOv9ZwWz3MGPbo9h8/k
- 9dUA==
-X-Gm-Message-State: AOJu0YwHynMQbGe7tIqbFlF+h6Omu3NNOfQ9e9hi21auwi3FtxMjKMJO
- DO6fIceb9ZXfcmWLz2hhfQOiyOTXkRYDqqP5Kk266g9PJ7z0C5VaBWI7zzlhUk9LmofkfyC9VR0
- 26KeiACk=
-X-Gm-Gg: ASbGncuN7LS0kpeWo6CtqI1DdOKfUuOzb33hjRWwX9Y31Ny+nMzUKS8tIHAs7j90FhL
- 7dD2E95XLNZgYdLB3EJVWsyydndvxO5EiE1aEwbvKEnlPxptgT9st78E2iDr4VbfJFMLZ1mzh3J
- JN7/GjgrH+oumvRlKbxVGTq2IWR3hM1zvvnr1TXqczHZ2mmL0cHWCoWtcDUkiBLm2eGY0AAkIn/
- sQryENzaHIzEY+vXA2u0iRU6S8Qz2paXTa1UuKWr/5D50s2l+apoGi96hnyDDfUqIeDH760eXtn
- nCqnrD6+Rl0X6K2Zek5C5DmEgzuN0j1p/CI9XosHw8xHM/JeHPbY5Ek0oRx5xhsFD+ksaAa7Izd
- 6/HeHVcimDP7hXOdO468QadBBW3LUqGspGQMD5SUAkXnIKg==
-X-Google-Smtp-Source: AGHT+IFT4KzJY4LScZHcoWDoHICxZ3lHvRm/0RDwZWJpPcFoQ1DzlwkE75eY4od+PjLokkUK+RRgBQ==
-X-Received: by 2002:a5d:5d8a:0:b0:3a4:d02e:84af with SMTP id
- ffacd0b85a97d-3b497045fb8mr8491851f8f.58.1751887537740; 
- Mon, 07 Jul 2025 04:25:37 -0700 (PDT)
-Received: from TimMind.local.essensium.com
- (ip-94-140-185-241.reverse.destiny.be. [94.140.185.241])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-454a997af9esm136898435e9.14.2025.07.07.04.25.37
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 07 Jul 2025 04:25:37 -0700 (PDT)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UFtl4Mz-gttP for <buildroot@buildroot.org>;
+ Mon,  7 Jul 2025 11:56:18 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.21;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4F5A281F60
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F5A281F60
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4F5A281F60
+ for <buildroot@buildroot.org>; Mon,  7 Jul 2025 11:56:16 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from haruka.home.arpa ([85.22.121.75]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N49lJ-1uhAT645vV-00sFV0; Mon, 07
+ Jul 2025 13:56:14 +0200
 To: buildroot@buildroot.org
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  7 Jul 2025 13:25:36 +0200
-Message-Id: <20250707112536.1644236-1-tim.soubry@mind.be>
-X-Mailer: git-send-email 2.39.5
+Cc: Pierre-Jean Texier <texier.pj2@gmail.com>,
+ "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
+Date: Mon,  7 Jul 2025 13:55:57 +0200
+Message-ID: <20250707115557.171144-1-fiona.klute@gmx.de>
+X-Mailer: git-send-email 2.50.0
 MIME-Version: 1.0
+X-Provags-ID: V03:K1:BGKs3GX6WC2z1bxUz/jfbGiMHhx1aelEi4r8VN7S5M9cvKFbnOl
+ NDIH60Vexgc0rsAbB3yJSPS9UvUQUDSzPuHLGS15r+KRBM2a08UZTJfYJR+iLTKF/OsX/V8
+ hDWUfZElYZn363bTiwgGQBWHuFWurnrq06ONKuV/4ET+1qHv3PRm/At9R8Jn/zQwj/jdbej
+ d51wNa1OaY+1Lnwb6UARQ==
+UI-OutboundReport: notjunk:1;M01:P0:zsS1UqPZuSQ=;jPftaBP6J7M1TBgDyNlYwUHqEdo
+ 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
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1751887538; x=1752492338; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=2MnZE+S1xCAh2owzNth+5sbt8yIlyopU6d67aVAqsK0=;
- b=MPBxzii+yQ3QR/09VHQ8kSy9DGjV3To8NBKNgUv3dcFI2JnmhmwlEsgxUiSmrciUcY
- Md13k1P6PpKen1ll4ocWJPj/+FHg+MrwNRX4m07uUacnMof94JOCQyGaDnuhGvAxKO+Z
- cmZ0uEwwhjsH0/I0tPyui6P9cM7yI8mV7Kn4LYXbikWLWkciceQZmHaa98xQjd8K9+WL
- 6Q8z7rkVCKd3NBK/6aLsjEB1hwCMT8L0Csm52umRSOl5BVSDmJuKJbQIlxsu4pKsWgkd
- Ie2z4WzLp+pFFxeXkxd4yv73dtp80Jg23Q+S+GnN+PGZ9Xio7nzs7b2DAMeFyIY2fwLB
- LnXw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=gmx.de; 
+ s=s31663417; t=1751889374; x=1752494174; i=fiona.klute@gmx.de;
+ bh=3RVA2pvSXi5jy0KaoqKhu7sOatG9SzKU4P/e02NdoA4=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
+ MIME-Version:Content-Transfer-Encoding:cc:
+ content-transfer-encoding:content-type:date:from:message-id:
+ mime-version:reply-to:subject:to;
+ b=X70wDHZj46F473Ja4GBHTOkW/mXJozn91RHEIJG6F6NigplwhsWVgRGVbKtvaj4x
+ IJFScm3tJ+HSiTOWoL+XcM+BetgzvJ8C4jjF34CykBfh28f0hSGn4oJaW2WBquYz0
+ 5/Y1ZX3BPyX0SmuoWsKynJNUfrKMflnPon8O9/kzonSrH1al1gutTHISlh1sPIJNq
+ nSBE9jL8ODmpPHAbcFwCHGrztVGOpFiXg88vvOQPXZFk4fD4e2/mO3gXVNI6dq/62
+ 1zWJ3G9+3/ysToFnSYKBKE7XDPKUtvtPqI07fyjb94nTxfjGNMjmbo24gD9zho5OC
+ aRAjD+BuSsC5sjiIVA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ header.from=gmx.de
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=MPBxzii+
-Subject: [Buildroot] [PATCH 1/1] package/ncmpc: Fix build error
+ unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
+ header.s=s31663417 header.b=X70wDHZj
+Subject: [Buildroot] [PATCH 1/1] package/genimage: bump version to 19
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -108,255 +134,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Tim Soubry via buildroot <buildroot@buildroot.org>
-Reply-To: Tim Soubry <tim.soubry@mind.be>
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The error appears on autobuilder with the build using GCC14:
-FAILED: ncmpc.p/src_Styles.cxx.o
-In file included from ../src/Styles.cxx:7:
-/home/buildroot/instance-0/output-1/host/microblazeel-buildroot-linux-gnu/sysroot/usr/include/libintl.h:39:14: error: expected unqualified-id before 'const'
-   39 | extern char *gettext (const char *__msgid)
-      |              ^~~~~~~
-/home/buildroot/instance-0/output-1/host/microblazeel-buildroot-linux-gnu/sysroot/usr/include/libintl.h:39:14: error: expected ')' before 'const'
-../src/i18n.h:22:20: note: to match this '('
-   22 | #define gettext(x) (x)
-      |                    ^
-[80/102] Compiling C++ object ncmpc.p/src_xterm_title.cxx.o
-[81/102] Compiling C++ object ncmpc.p/src_db_completion.cxx.o
-[82/102] Compiling C++ object ncmpc.p/src_signals.cxx.o
-ninja: build stopped: subcommand failed.
-make: *** [package/pkg-generic.mk:273: /home/buildroot/instance-0/output-1/build/ncmpc-0.49/.stamp_built] Error 1
-make: Leaving directory '/home/buildroot/instance-0/buildroot'
+From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
 
-Starting GCC14 the C++ standard library includes libintl.h that contains
-a definition of gettext which caused a clash with the definition present
-in ncmpc. This patch resolved this build error seen in [1] by
-backporting an upstream commit [2] that renamed the internal gettext
-implementation.
+This adds support for btrfs partition images, among other things.
 
-Applying the commits of [2], fixes the build error [1].
+Upstream changelog: https://github.com/pengutronix/genimage/releases/tag/v19
 
-[1] https://autobuild.buildroot.org/results/cb2/cb292f2c99cdca742a8f52dbfc25f193fe513c6e/build-end.log
-[2] https://github.com/MusicPlayerDaemon/ncmpc/commit/249b62fc9f5e3a653ebdd22da0d75fbe87069457
-
-Fixes: https://autobuild.buildroot.org/results/cb2/cb292f2c99cdca742a8f52dbfc25f193fe513c6e/build-end.log
-Signed-off-by: Tim Soubry <tim.soubry@mind.be>
+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 ---
- ...cro-my_gettext-do-not-define-gettext.patch | 199 ++++++++++++++++++
- 1 file changed, 199 insertions(+)
- create mode 100644 package/ncmpc/0001-i18n-add-macro-my_gettext-do-not-define-gettext.patch
+ package/genimage/genimage.hash | 3 ++-
+ package/genimage/genimage.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/ncmpc/0001-i18n-add-macro-my_gettext-do-not-define-gettext.patch b/package/ncmpc/0001-i18n-add-macro-my_gettext-do-not-define-gettext.patch
-new file mode 100644
-index 0000000000..737a366e65
---- /dev/null
-+++ b/package/ncmpc/0001-i18n-add-macro-my_gettext-do-not-define-gettext.patch
-@@ -0,0 +1,199 @@
-+From d90e80cf0b3525d780b57d016afaa879e16b0fe4 Mon Sep 17 00:00:00 2001
-+From: Max Kellermann <max@musicpd.org>
-+Date: Tue, 23 Jul 2024 14:15:16 +0200
-+Subject: [PATCH 1/1] i18n: add macro my_gettext(), do not define "gettext"
-+
-+Defining the macro "gettext" can cause breakages if the C++ standard
-+library happens to include libintl.h (which GCC 14 does).
-+
-+Signed-off-by: Tim Soubry <tim.soubry@mind.be>
-+Upstream: https://github.com/MusicPlayerDaemon/ncmpc/commit/249b62fc9f5e3a653ebdd22da0d75fbe87069457
-+---
-+ src/Command.cxx    | 2 +-
-+ src/HelpPage.cxx   | 6 +++---
-+ src/KeyDefPage.cxx | 2 +-
-+ src/SearchPage.cxx | 6 +++---
-+ src/SongPage.cxx   | 8 ++++----
-+ src/TabBar.cxx     | 2 +-
-+ src/i18n.h         | 8 +++-----
-+ 7 files changed, 16 insertions(+), 18 deletions(-)
-+
-+diff --git a/src/Command.cxx b/src/Command.cxx
-+index 1caac250..b12a4a35 100644
-+--- a/src/Command.cxx
-++++ b/src/Command.cxx
-+@@ -238,7 +238,7 @@ get_cmds_max_name_width()
-+ const char *
-+ get_key_description(Command command)
-+ {
-+-	return gettext(cmds[size_t(command)].description);
-++	return my_gettext(cmds[size_t(command)].description);
-+ }
-+ 
-+ const char *
-+diff --git a/src/HelpPage.cxx b/src/HelpPage.cxx
-+index fad0f8c0..c07a20c4 100644
-+--- a/src/HelpPage.cxx
-++++ b/src/HelpPage.cxx
-+@@ -242,7 +242,7 @@ HelpPage::GetListItemText(char *, size_t, unsigned i) const noexcept
-+ 	assert(i < std::size(help_text));
-+ 
-+ 	if (row->text != nullptr)
-+-		return gettext(row->text);
-++		return my_gettext(row->text);
-+ 
-+ 	if (row->command != Command::NONE)
-+ 		return get_key_description(row->command);
-+@@ -272,7 +272,7 @@ HelpPage::PaintListItem(WINDOW *w, unsigned i,
-+ 
-+ 	if (row->command == Command::NONE) {
-+ 		if (row->text != nullptr)
-+-			mvwaddstr(w, y, 6, gettext(row->text));
-++			mvwaddstr(w, y, 6, my_gettext(row->text));
-+ 		else if (row->highlight == 2)
-+ 			mvwhline(w, y, 3, ACS_HLINE, width - 6);
-+ 	} else {
-+@@ -285,7 +285,7 @@ HelpPage::PaintListItem(WINDOW *w, unsigned i,
-+ 		mvwaddch(w, y, 21, ':');
-+ 		mvwaddstr(w, y, 23,
-+ 			  row->text != nullptr
-+-			  ? gettext(row->text)
-++			  ? my_gettext(row->text)
-+ 			  : get_key_description(row->command));
-+ 	}
-+ }
-+diff --git a/src/KeyDefPage.cxx b/src/KeyDefPage.cxx
-+index be638940..dd301d39 100644
-+--- a/src/KeyDefPage.cxx
-++++ b/src/KeyDefPage.cxx
-+@@ -434,7 +434,7 @@ CommandListPage::GetListItemText(char *buffer, size_t size,
-+ 
-+ 	snprintf(buffer + get_cmds_max_name_width(),
-+ 		 size - get_cmds_max_name_width(),
-+-		 " - %s", gettext(get_command_definitions()[idx].description));
-++		 " - %s", my_gettext(get_command_definitions()[idx].description));
-+ 
-+ 	return buffer;
-+ }
-+diff --git a/src/SearchPage.cxx b/src/SearchPage.cxx
-+index 4f2e3228..9ae8436b 100644
-+--- a/src/SearchPage.cxx
-++++ b/src/SearchPage.cxx
-+@@ -142,7 +142,7 @@ public:
-+ 				 " %s : %s [%s]",
-+ 				 GetGlobalKeyBindings().GetKeyNames(Command::SEARCH_MODE).c_str(),
-+ 				 get_key_description(Command::SEARCH_MODE),
-+-				 gettext(mode[options.search_mode].label));
-++				 my_gettext(mode[options.search_mode].label));
-+ 			return buffer;
-+ 		}
-+ 
-+@@ -453,7 +453,7 @@ SearchPage::GetTitle(char *str, size_t size) const noexcept
-+ 			 "%s '%s' [%s]",
-+ 			 _("Search"),
-+ 			 pattern.c_str(),
-+-			 gettext(mode[options.search_mode].label));
-++			 my_gettext(mode[options.search_mode].label));
-+ 	else
-+ 		return _("Search");
-+ 
-+@@ -478,7 +478,7 @@ SearchPage::OnCommand(struct mpdclient &c, Command cmd)
-+ 		if (mode[options.search_mode].label == nullptr)
-+ 			options.search_mode = 0;
-+ 		screen_status_printf(_("Search mode: %s"),
-+-				     gettext(mode[options.search_mode].label));
-++				     my_gettext(mode[options.search_mode].label));
-+ 
-+ 		if (pattern.empty())
-+ 			/* show the new mode in the help text */
-+diff --git a/src/SongPage.cxx b/src/SongPage.cxx
-+index c0830a9e..6d166b13 100644
-+--- a/src/SongPage.cxx
-++++ b/src/SongPage.cxx
-+@@ -174,14 +174,14 @@ static std::unique_ptr<Page>
-+ screen_song_init(ScreenManager &_screen, WINDOW *w, Size size) noexcept
-+ {
-+ 	for (unsigned i = 0; tag_labels[i].label != nullptr; ++i) {
-+-		unsigned width = StringWidthMB(gettext(tag_labels[i].label));
-++		unsigned width = StringWidthMB(my_gettext(tag_labels[i].label));
-+ 		if (width > max_tag_label_width)
-+ 			max_tag_label_width = width;
-+ 	}
-+ 
-+ 	for (unsigned i = 0; i < std::size(stats_labels); ++i) {
-+ 		if (stats_labels[i] != nullptr) {
-+-			unsigned width = StringWidthMB(gettext(stats_labels[i]));
-++			unsigned width = StringWidthMB(my_gettext(stats_labels[i]));
-+ 
-+ 			if (width > max_stats_label_width)
-+ 				max_stats_label_width = width;
-+@@ -267,7 +267,7 @@ get_tag_label(unsigned tag) noexcept
-+ {
-+ 	for (unsigned i = 0; tag_labels[i].label != nullptr; ++i)
-+ 		if (tag_labels[i].tag_type == tag)
-+-			return gettext(tag_labels[i].label);
-++			return my_gettext(tag_labels[i].label);
-+ 
-+ 	assert(tag < MPD_TAG_COUNT);
-+ 	return mpd_tag_name((enum mpd_tag_type)tag);
-+@@ -351,7 +351,7 @@ SongPage::AddSong(const struct mpd_song *song) noexcept
-+ void
-+ SongPage::AppendStatsLine(enum stats_label label, const char *value) noexcept
-+ {
-+-	AppendLine(gettext(stats_labels[label]), value, max_stats_label_width);
-++	AppendLine(my_gettext(stats_labels[label]), value, max_stats_label_width);
-+ }
-+ 
-+ bool
-+diff --git a/src/TabBar.cxx b/src/TabBar.cxx
-+index 426bce12..0518801f 100644
-+--- a/src/TabBar.cxx
-++++ b/src/TabBar.cxx
-+@@ -48,7 +48,7 @@ PaintTabBar(WINDOW *w, const PageMeta &current_page_meta,
-+ 			title = current_page_title;
-+ 
-+ 		if (title == nullptr)
-+-			title = gettext(page->title);
-++			title = my_gettext(page->title);
-+ 
-+ 		PaintPageTab(w, page->command, title,
-+ 			     page == &current_page_meta);
-+diff --git a/src/i18n.h b/src/i18n.h
-+index 8bda456e..7e98c1b0 100644
-+--- a/src/i18n.h
-++++ b/src/i18n.h
-+@@ -1,8 +1,7 @@
-+ // SPDX-License-Identifier: GPL-2.0-or-later
-+ // Copyright The Music Player Daemon Project
-+ 
-+-#ifndef I18N_H
-+-#define I18N_H
-++#pragma once
-+ 
-+ #include "config.h"
-+ 
-+@@ -10,6 +9,7 @@
-+ 
-+ #include <libintl.h> // IWYU pragma: export
-+ 
-++#define my_gettext(x) gettext(x)
-+ #define _(x) gettext(x)
-+ 
-+ #ifdef gettext_noop
-+@@ -19,12 +19,10 @@
-+ #endif
-+ 
-+ #else
-+-#define gettext(x) (x)
-++#define my_gettext(x) (x)
-+ #define  _(x) x
-+ #define N_(x) x
-+ #endif
-+ 
-+ #define YES_TRANSLATION _("y")
-+ #define NO_TRANSLATION _("n")
-+-
-+-#endif
-+-- 
-+2.39.5
-+
+diff --git a/package/genimage/genimage.hash b/package/genimage/genimage.hash
+index 232ba6ef66..7bfd6f5dad 100644
+--- a/package/genimage/genimage.hash
++++ b/package/genimage/genimage.hash
+@@ -1,3 +1,4 @@
++# From https://github.com/pengutronix/genimage/releases/tag/v19
++sha256  7ec4fcb865662a8b2ff20284819044ffa84137bf3ca16fb749701291bc01f108  genimage-19.tar.xz
+ # Locally calculated
+-sha256  ebc3f886c4d80064dd6c6d5e3c2e98e5a670078264108ce2f89ada8a2e13fedd  genimage-18.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/genimage/genimage.mk b/package/genimage/genimage.mk
+index b8ce7ff3c9..5fa34d8eb9 100644
+--- a/package/genimage/genimage.mk
++++ b/package/genimage/genimage.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GENIMAGE_VERSION = 18
++GENIMAGE_VERSION = 19
+ GENIMAGE_SOURCE = genimage-$(GENIMAGE_VERSION).tar.xz
+ GENIMAGE_SITE = https://github.com/pengutronix/genimage/releases/download/v$(GENIMAGE_VERSION)
+ HOST_GENIMAGE_DEPENDENCIES = host-pkgconf host-libconfuse
 -- 
-2.39.5
+2.50.0
 
 _______________________________________________
 buildroot mailing list
