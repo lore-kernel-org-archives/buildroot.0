@@ -4,73 +4,183 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A611C8303C
-	for <buildroot@archiver.kernel.org>; Tue,  8 Jul 2025 21:50:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26649C8303C
+	for <buildroot@archiver.kernel.org>; Tue,  8 Jul 2025 22:25:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 18C0181E25;
-	Tue,  8 Jul 2025 21:50:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C86F281786;
+	Tue,  8 Jul 2025 22:25:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3QBFbfkp5D3v; Tue,  8 Jul 2025 21:50:23 +0000 (UTC)
+ id g0TYLFo--duK; Tue,  8 Jul 2025 22:25:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E2DDB81E18
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C4E09816EE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E2DDB81E18;
-	Tue,  8 Jul 2025 21:50:22 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 2CF3B15F
- for <buildroot@buildroot.org>; Tue,  8 Jul 2025 21:50:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C4E09816EE;
+	Tue,  8 Jul 2025 22:25:33 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0B4D169
+ for <buildroot@buildroot.org>; Tue,  8 Jul 2025 22:25:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1E83840101
- for <buildroot@buildroot.org>; Tue,  8 Jul 2025 21:50:21 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EC845606F2
+ for <buildroot@buildroot.org>; Tue,  8 Jul 2025 22:25:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WC1bCTLodRNo for <buildroot@buildroot.org>;
- Tue,  8 Jul 2025 21:50:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=213.97.179.56;
- helo=fanzine2.igalia.com; envelope-from=aperez@igalia.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 24956400F6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 24956400F6
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 24956400F6
- for <buildroot@buildroot.org>; Tue,  8 Jul 2025 21:50:16 +0000 (UTC)
-Received: from 91-153-34-249.elisa-laajakaista.fi ([91.153.34.249] helo=kodama)
- by fanzine2.igalia.com with esmtpsa 
- (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
- id 1uZGCa-00ECl3-8W; Tue, 08 Jul 2025 23:50:12 +0200
-Received: from localhost (kodama [local])
- by kodama (OpenSMTPD) with ESMTPA id 5c1fd12a;
- Tue, 8 Jul 2025 21:50:11 +0000 (UTC)
-From: Adrian Perez de Castro <aperez@igalia.com>
-To: buildroot@buildroot.org
-Date: Wed,  9 Jul 2025 00:50:09 +0300
-Message-ID: <20250708215011.1213438-1-aperez@igalia.com>
-X-Mailer: git-send-email 2.50.0
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id moFM9IOjxg9Y for <buildroot@buildroot.org>;
+ Tue,  8 Jul 2025 22:25:31 +0000 (UTC)
+X-Greylist: delayed 909 seconds by postgrey-1.37 at util1.osuosl.org;
+ Tue, 08 Jul 2025 22:25:29 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 301DF60803
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 301DF60803
+Received-SPF: Permerror (mailfrom) identity=mailfrom;
+ client-ip=2001:489a:2202:c::61c;
+ helo=usg02-bn3-obe.outbound.protection.office365.us;
+ envelope-from=lhupfer@xes-inc.com; receiver=<UNKNOWN> 
+Received: from USG02-BN3-obe.outbound.protection.office365.us
+ (mail-bn3usg02on061c.outbound.protection.office365.us
+ [IPv6:2001:489a:2202:c::61c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 301DF60803
+ for <buildroot@buildroot.org>; Tue,  8 Jul 2025 22:25:29 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector5401; d=microsoft.com; cv=none;
+ b=M5UdhB29yAJyeKp4WO6ysS67RFfH0D2m9IIW8gJpf7iWhVcLZOXRJF3pCT9LOWBUVhILnINz8cSKLPusHXKworVRYwdTgt849A3ls+b/h69elHDFFsxEWoCcO51Q8c2cJT5Z0wyI5j7QokzBzkBSmmoQyZQi10i7m+D7lvOtd2Q7CHtCpNYmNVNWD3KcKVaPsajFfjYAvO7uq5LTx8vC8UXhJv/hJA8g4NEL/YQbaQsm2qugbmbMltT4P4IhxGALoMSr7C3XjS1G2Rv+O6tzlIi2IhNCXSBnK8whZZsQny+DmsQYRENzfmQN2jTuI3MyKcfTYMbKKExw6Iw38mv1GA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector5401;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=b8cNKo3/OPGwD/lXACGArecDQSvt3pjY7Atq0tL1dBs=;
+ b=WDrAsvSvNhPVoBRf+xCCkPfEFhM7GIq7d1JZ/oTA4KybK/IjKyJQ9EsvEbh/qnsIdbB6IeR/QXQ5L6kU++xvVfv+RcDyFe6j3+6FCKzT2CStRiKDxA6XvrClEPyXX+NVu1+ju0551+hFOuE5Z2/H8LYFpXvx/Mvzq4RERa0rYKVBmekB4Rie/APqvNzwp4z5bXnd401FamjoeL59ntnSCSsfreTEx4yNjEGe8DQIBxuYcVK/TJc0l3i8eJX1Xv+UtSnjwQldIBRzEu4djL/zjT6y5deFE6UzNaZMzbZE+3G184vijA4mfuzq5RGpQGGiy+xTIXVrZaVVg/EJxtDocg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=xes-inc.com; dmarc=pass action=none header.from=xes-inc.com;
+ dkim=pass header.d=xes-inc.com; arc=none
+Received: from SA1P110MB1536.NAMP110.PROD.OUTLOOK.COM (2001:489a:200:190::19)
+ by PH1P110MB1410.NAMP110.PROD.OUTLOOK.COM (2001:489a:200:18d::21)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8901.23; Tue, 8 Jul
+ 2025 22:10:15 +0000
+Received: from SA1P110MB1536.NAMP110.PROD.OUTLOOK.COM
+ ([fe80::1add:dd0f:5e6b:3406]) by SA1P110MB1536.NAMP110.PROD.OUTLOOK.COM
+ ([fe80::1add:dd0f:5e6b:3406%4]) with mapi id 15.20.8880.029; Tue, 8 Jul 2025
+ 22:10:14 +0000
+From: Liam Hupfer <lhupfer@xes-inc.com>
+To: Arnout Vandecappelle <arnout@mind.be>, "buildroot@buildroot.org"
+ <buildroot@buildroot.org>
+Thread-Topic: [Buildroot] [PATCH] package/python3: select host Python 3
+Thread-Index: AQHb8FUU6wjpppEmtUeebMZUw6q4ew==
+Date: Tue, 8 Jul 2025 22:10:14 +0000
+Message-ID: <rchbjpupc56.fsf@xes-inc.com>
+References: <0682724078f4516c3f7992d4c16588a5d1381013.1731702127.git.lhupfer@xes-inc.com>
+ <9b44f888-b884-4de8-9737-a16bf481d1c4@mind.be>
+In-Reply-To: <9b44f888-b884-4de8-9737-a16bf481d1c4@mind.be>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1P110MB1536:EE_|PH1P110MB1410:EE_
+x-ms-office365-filtering-correlation-id: 61a31727-d205-44dc-5f3f-08ddbe6c3709
+x-ms-exchange-atpmessageproperties: SA
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+ ARA:13230040|366016|41320700013|1800799024|38070700018; 
+x-microsoft-antispam-message-info: =?utf-8?B?WjVBbkRxOFdxNGdYbTAvY2lvYThsOWJYL2ZCeFVpTGFKWkg0bS9TMWhIWkNq?=
+ =?utf-8?B?QkdWQlpDQlNycjFWQkxINkdGOHdaaG9oMlo4azNmdjNmM3k1SXpkN28wblN3?=
+ =?utf-8?B?ZFcvWlBxQnFna0NDM1FmQU55UFcwcGNsN1J3WVBPc3Q0bldKL2JaZ0JJR0l5?=
+ =?utf-8?B?MXFYbzJ0TzdJalNjSHRWbVg5ajFoL2pBNmxvcmJhd2pqVGZFWktSREtDOHps?=
+ =?utf-8?B?RFc4aXZpL3E5cVNNT1RraUtiK3UxWmtGN1oxKzIrenBMdFpCMnE2Zk4yZ3ov?=
+ =?utf-8?B?YjFHR0lVT0lka2IwVnhFS0MzZ3VoQVB5U0szaTJQN3hUU1BlWnB6R3ZpOFRZ?=
+ =?utf-8?B?WU1mUkRaV0RwUmptSnUvbm1raHN5YUViZjBrK3RFWnhsMytGY3IrMmZ6T09M?=
+ =?utf-8?B?VlJObDJrTkhLc2l3VDdpZUhiNUMzUVBlSnI5Z1hManNWSEowcWF1S2s0d1Uw?=
+ =?utf-8?B?SHhQUit5djZ4eUVDcjhNSzN1bEJYN2h0ZUhLeXpqUVluRVVQczh4WEFpR0Rs?=
+ =?utf-8?B?TUt6RFhESkV3cTNzdVpVNmM3WFBMWU9zRkRFdXhYS1ppWnRpYXVxNUpNRWFt?=
+ =?utf-8?B?ZHgwWVVVRkVZOGEwalF3QWNPUGtHRlZBT3dUMUxnYUtZTTkvRGtyc2hwQ2Yv?=
+ =?utf-8?B?d09VS2lDSXQ3aWMyeW5XMUNubzE4WlJqK0ZDMG1IeGVNaXZsRU80Q2huamFG?=
+ =?utf-8?B?d1dQRENCVWhGUmN5SkFQYTR5WFV0c0J0UXlzbDhNY3h2TEQ3blpMTFNnNURu?=
+ =?utf-8?B?N3plMmQ3eGZlSUxhcDIrdnNQN0ZLVW5xZU5weS9CdndRbWVWcjdCRG9mMCs5?=
+ =?utf-8?B?VkcwcjV3YkJqTUdxZ0xhQUVpZis2eVpIbXlCRm1YQzBqRWowcExFcDdjdHlX?=
+ =?utf-8?B?REY5SW04T01KSUs1bk05bmtZWkQxQWNDNmQ5T0FVdFJaVDlMZW8vSTRHVHIv?=
+ =?utf-8?B?aVlMT1QwY09mdms1bHZpZ0I0ZmhJZkpubmhmZEg1VG9aWExQZmd6UnpNYUpW?=
+ =?utf-8?B?aHVkN3FWcDkrMmxxaEZIUXZrTHR1WEFsczdyb3l0cjJZM0lIQVIwQnkvdTZl?=
+ =?utf-8?B?bU04NXprcFVUMnNRVGkwYjZmZW02Z0J1Zlc4dUVHN05rcUNuNExoTmhFNmlO?=
+ =?utf-8?B?M1F1dDJmMHU1VDZOa2g0TXJGalZCekpCTHk2bjM4b2V6d0hTWGNjeVpKOWF1?=
+ =?utf-8?B?cXFpMW9aRWNzZmMvdXdsWUNBUGdhc1JlaVY1T1BEWThmYlhvMHcvcjNvV0hu?=
+ =?utf-8?B?MS9IenZEWGFNTmEvUGg4RTJNQXJ2TDJTaHA3ZG1PekQ3T3F4bFJUbTVHT0RL?=
+ =?utf-8?B?RENJVXYzRlZtL1VpSld2bDBBalA1VDM2bHhSUVBJNkpXV1JaRHdMOXRrQnBO?=
+ =?utf-8?B?eVMzUGJQVnhpeWQwS1pyakUxam10SUNEdVV1QXErcTUwWG5WdXBWc3dhVFlJ?=
+ =?utf-8?B?OGE3UmxyQm93SlBWanBhaC9WbSt0bmFON21ENHd0THNjYlUxd0sreTZFcUdP?=
+ =?utf-8?B?TWIwOVRzcDJzcWJzU2prbHA0dVlXa2QrRkdwQnR3Tm56ZkwxYnEvMkNVYTkr?=
+ =?utf-8?B?Y1drVXp2S1R1UVpyaHlLWUpPZyt4MlBrdTVjQWhjclZzMmtGa2RFL2ZOZlgy?=
+ =?utf-8?B?cGdSUTZ1eHhCZXk1STBaL3BwLzZRQ0d6elB5bzlubzBOT29Ccmh1aW9YT1Ar?=
+ =?utf-8?B?RkNadlg5ZWo0anc0MGJIdHBscjhZOEI1QlBPR3BYNHpRbk5pSksrMFFwZXBx?=
+ =?utf-8?B?Q2JvWG9MQU55MnhFelFFR1dlcGhKWWpiWlBUVSt6Qk4vd2ZiZWRONUZ3ODdR?=
+ =?utf-8?B?RTdDZ1BwQXlUcEdBcERWK2lEdWRkcU9rMnREdGxtb295djlzM3FMMC9RbXkx?=
+ =?utf-8?B?Ti9LbTBvQjd1SytWaytSZkJtem16clMzVHZnMko0QWpXbGJ2NEVGYXFpc2x3?=
+ =?utf-8?B?dXBZTWFEWEJycm5pZzVsVmlmVVRlSzkwZ1lnTTN0d1lLWHFxVkdRMkNnVlNa?=
+ =?utf-8?B?OVZDTzhSUlFnPT0=?=
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:SA1P110MB1536.NAMP110.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
+ SFS:(13230040)(366016)(41320700013)(1800799024)(38070700018); DIR:OUT;
+ SFP:1101; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RHdLeHk3Z2JWS3JTc2RyMjJudmRwZVhMSjVVVlRtODg0a0lINnZaZmdyR2Y5?=
+ =?utf-8?B?Rlo1R2t3cndYbjdTSkJXUlFpRjZrMFpGM1V1RkM2QlZjVHpjOEd1VGZ0K1Zh?=
+ =?utf-8?B?cVdtNTJoQ1BhSjZ4VHdnM0xjMDhKY01yUXFtSW1yM25FcjJPK3BNVVA0ZVk4?=
+ =?utf-8?B?Vk0rQk40YmN1cWlrT2FubFN0dHdENHFSMFRURURSTnBVeXc2U1ZtVThyaXVS?=
+ =?utf-8?B?Q056aU9kSWo2YlQ0L05lME9BbU4ycGFPNGZWR0dLWkxEWUVxemNJSzlhVkRE?=
+ =?utf-8?B?alMxS1l1d2tiSktpUENrZGIyN2dOQnIvT3Q2L0d4eWVFSzJaUHpzVitFa2Y1?=
+ =?utf-8?B?ZklTbnp1WklKV1dmTXdZTHZ0WHEyK3p1ODdJSmxmU0duaENqN2g3dWV6eUdj?=
+ =?utf-8?B?bVFhOHdlTTdURFRhTk9Ua2ppb2Z5S1dYUGJJOTJNL3VPWHZCU1EyV216OCtQ?=
+ =?utf-8?B?bFhJZ0VYZGVnb2wyVGU3MWN5Z0NVTWxoRFVQZVNjcEoxNDJ4RkRoOHIrVE1x?=
+ =?utf-8?B?OFdLR0lJbk1jRitRcUVtSmpDVVhPMjNTVGJVekt0eVFnM2ZVdzg4dzNkb3V5?=
+ =?utf-8?B?VDA2b2dHTTlVekllQmNtcHFhdGhsUTMzUlN3bkZhcGwyNWdJN1hOZGNwTEpK?=
+ =?utf-8?B?MnVSL0E1UVRWVmVmMm1FRXBFRXNtNW5PUy9kSkpzcXJEZWJRQkpwWjM5V0Nv?=
+ =?utf-8?B?STlDeC84bzh1UW9nRDJPUmx2KzU4WmkrQVh0dyt5ckpPSjlZSkhkbmJHU2Mx?=
+ =?utf-8?B?YnJSNzNrcGZJV1RjVjU2QUdLOWZpaVJGQm5pdjBrNUVCZE9zUWxVTmQyTFMr?=
+ =?utf-8?B?V2d5UFdNZENjTkFGZGMvdFJieWg0cGxBbnJyY3V4Wlh5TFg2SGM3bUw1UkpS?=
+ =?utf-8?B?djBBUW5WbUIzZWRFY2xVVUwxTDQ5cENyS3VWZlA0Mkk0dGFTRjM1QkNnSmNN?=
+ =?utf-8?B?NlZyV01RT2NNZUxlYlNILzh2aUgrSUJDTE1XcDd1MUs4KzQ4REFTVERlcm9j?=
+ =?utf-8?B?SzFIbDIvMC9zaVZ6anNiZmpmV0NVdktZbytaOXRtRWtZcldqSCt5RFdReWJt?=
+ =?utf-8?B?TGdYU2oydFJLT1BmOGowakZPQWZHNWd5cHQ5bENBekZ6N3p0N0RnR240SjBm?=
+ =?utf-8?B?cU5SZzF5dlc3OC9EQ2h1ZGJ6Mk1KRlZuSWNjcWpiRW9IUjJ3azFyUTVEZE1q?=
+ =?utf-8?B?VkJZdHdOTHBHSTVtbW9NZXhaeHlCbnFQRGJ5NUxMaXorRDZOSys1bm9ydnph?=
+ =?utf-8?B?OFVOUjg2OTNDRVJzVUJHVFovZkQ4dVlGY1BYb1YzMlAwNjlrOFRWZFNBS25j?=
+ =?utf-8?B?N0FCUU5haXBZWFBpWUpYWUZzT2tzV2YyK2pQdXVSNHIyYlZHN1dVZ2Q5T1NZ?=
+ =?utf-8?B?a1NFVFpqMWVVUXFiTFNrTFZNdUNjK2Y2TzhKYzY5ZW9lU0owdm9mQ1lkMGZu?=
+ =?utf-8?B?bEVCMEZURlBRejlDQVR1V2Rnb212THUzaGtIK3ZrVzk1a1J1eHBIdWRFb1VV?=
+ =?utf-8?B?eVV6OHdxQitEejllMlQrNkZxc25kS0lYMjR0VGQ5Ny9JdlVPTWFlekZJakhj?=
+ =?utf-8?B?STNFdEJBUC9reVUzSVltTWFuVWUwaWVYRGJGSzRYTUZ6WnNBOXZKdVhvMytC?=
+ =?utf-8?B?TEVtekR6KzdISkwvU0ZmZ3NBOHpULzdCR3RPbDdDdXZqQTM0TzczUFNrRWZu?=
+ =?utf-8?B?b3VwRGlWWHlLL0h4MGdHTEZ4M21XVmdldjRpSkVyTkQzeUJJTWMzamhZUi90?=
+ =?utf-8?B?aEg0VFI4WnVYMlV4RG04cnJtN1BPZnp4TUpNY0tWT28xZTR6ZDNrUU91bWty?=
+ =?utf-8?B?dGg2ZWVHZFYvK0IwTnRVdnRFZldVQ0Nac2hncVRJTmRRTHAwQXFWVm54SFp3?=
+ =?utf-8?B?U3ZoSXVuMkk4ZGtmbyt3R1J0WjZPbm1lUFhrdXFBUURwY0VzWlBJQldDcDFN?=
+ =?utf-8?B?VDhwYjJCak5TTUM4RlNyUmhJM3FOUkhMWTQ5SXUxNXp0U2FXQ2lZdm5nZ2dq?=
+ =?utf-8?B?M242SDBtUm10WUlwZDJEZEZzMFB2N3g3Nm15MDNLaldxcXJodnF6bWxPVVc2?=
+ =?utf-8?Q?e6UsZ5?=
+Content-ID: <13E3C521974418429835373F66D7971F@NAMP110.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=igalia.com; 
- s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
- Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
- Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
- In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
- List-Post:List-Owner:List-Archive;
- bh=2guN/E2/egYqXtEChlofVzEYBSu6PbuagcVddGoZa4g=; b=gQL55eYWk3ayZqEHPcgy2KYAmM
- 3gtWWTBm9YS8RhLk2zLcbwxAkNHmS9ziX9lgHKM/PMlMkmUspW6q8jCF9QRBrGyDluLKbdy1XpvyQ
- aoViyA+vFYs27c2aqOq8UrRNoFwZckDls5T3iPOlbX1opSYMHtqCSkuKX5xF3hK8nGWA31mAn4NPI
- 1CpeCykpNKYiEnWVmjoTjqh+3KceSV4u7I1jf9GPk4sQqntwn6ET8rjqhPJhIGSU2/J0ElOBYShwT
- zQMzJyfq2nEkNO/PuVlhAKVJUJl2RabZYdfSBgHNO7+Dbd0tRVpb2h3Nl+AsGIBU8+vqRbZL7rEOA
- NKEFHITQ==;
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-OriginatorOrg: xes-inc.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1P110MB1536.NAMP110.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 61a31727-d205-44dc-5f3f-08ddbe6c3709
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Jul 2025 22:10:14.5057 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 2925f1cd-bdc3-4a76-bb38-6159e20a17f1
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH1P110MB1410
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xes-inc.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=b8cNKo3/OPGwD/lXACGArecDQSvt3pjY7Atq0tL1dBs=;
+ b=o6GNc/UMBtzJf+xyFHpPprOMCVlo3vnPKko3OcLiX86aUcXrH2rkn4kfzoj6QCplrn6U0+5yCBfJwp0hNsAd+VEVT9d70T0maDfRzQvPMdI41WbMqxwT2y4dzZ+YsnfNMmGIEcScZOmAa7LWLOMnPxWZd58ydMkoDOnE+En0j0Hv8IueMNultvrIv6Nt7+MHOMJL6bvGWJ0g3PXxbrfDVXjhTXpzMEmSBEFjzkevseyIIA5Gi97HPEf1aPRnEMKYzHlqJODWbnb5hEzKbBFyGOIYRc2xlkFOZYTi2G1d/ib+9lj5orqQf0kAsWi3Cv0oOP1DeWNDgHOPPGq9vNkfmw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=igalia.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ header.from=xes-inc.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256
- header.s=20170329 header.b=gQL55eYW
-Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: security bump to version
- 2.48.3
+ unprotected) header.d=xes-inc.com header.i=@xes-inc.com header.a=rsa-sha256
+ header.s=selector1 header.b=o6GNc/UM
+X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=xes-inc.com;
+Subject: Re: [Buildroot] [PATCH] package/python3: select host Python 3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,261 +192,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adrian Perez de Castro <aperez@igalia.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This bumps WPE WebKit to the 2.48 stable series, skipping over 2.46.
-
-WPE WebKit 2.48 and 2.46 highlights:
-
-- https://wpewebkit.org/blog/2025-04-11-wpewebkit-2.48.html
-- https://wpewebkit.org/blog/2024-wpewebkit-2.46.html
-
-Release notes:
-
-- https://wpewebkit.org/release/wpewebkit-2.48.3.html
-- https://wpewebkit.org/release/wpewebkit-2.48.2.html
-- https://wpewebkit.org/release/wpewebkit-2.48.1.html
-- https://wpewebkit.org/release/wpewebkit-2.48.0.html
-- https://wpewebkit.org/release/wpewebkit-2.46.7.html
-- https://wpewebkit.org/release/wpewebkit-2.46.6.html
-- https://wpewebkit.org/release/wpewebkit-2.46.5.html
-- https://wpewebkit.org/release/wpewebkit-2.46.4.html
-- https://wpewebkit.org/release/wpewebkit-2.46.3.html
-- https://wpewebkit.org/release/wpewebkit-2.46.2.html
-- https://wpewebkit.org/release/wpewebkit-2.46.1.html
-- https://wpewebkit.org/release/wpewebkit-2.46.0.html
-
-Fixes the following security issues:
-
-- From https://wpewebkit.org/security/WSA-2025-0004.html
-  CVE-2025-24223, CVE-2025-31204, CVE-2025-31205, CVE-2025-31206,
-  CVE-2025-31215, CVE-2025-31257
-
-- From https://wpewebkit.org/security/WSA-2025-0003.html
-  CVE-2024-54551, CVE-2025-24208, CVE-2025-24209, CVE-2025-24213,
-  CVE-2025-24216, CVE-2025-24264, CVE-2025-30427
-
-- From https://wpewebkit.org/security/WSA-2025-0002.html
-  CVE-2024-44192, CVE-2024-54467, CVE-2025-24201
-
-- From https://wpewebkit.org/security/WSA-2025-0001.html
-  CVE-2024-27856, CVE-2024-54543, CVE-2024-54658, CVE-2025-24143,
-  CVE-2025-24150, CVE-2025-24158, CVE-2025-24162
-
-- From https://wpewebkit.org/security/WSA-2024-0008.html
-  CVE-2024-54479, CVE-2024-54502, CVE-2024-54505, CVE-2024-54508,
-  CVE-2024-54534
-
-- From https://wpewebkit.org/security/WSA-2024-0007.html
-  CVE-2024-44308, CVE-2024-44309
-
-- From https://wpewebkit.org/security/WSA-2024-0006.html
-  CVE-2024-44185, CVE-2024-44244, CVE-2024-44296
-
-- From https://wpewebkit.org/security/WSA-2024-0005.html
-  CVE-2024-40866, CVE-2024-44187
-
-As for build system changes, the minimum GCC requirement gets raised to
-version 11 [1], the ENABLE_SPEECH_SYNTHESIS option is now enabled by
-default [2] and needs handling, and Skia (bundled with the sources) is
-now preferred on little-endian targets.
-
-[1] https://github.com/WebKit/WebKit/commit/682ac4ba74c53d0cd488c7a595096224a9abb036
-[2] https://github.com/WebKit/WebKit/commit/10381a8de938024f31935184af470ccbce0b22d9
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
----
- ...d-with-USE_SKIA_OPENTYPE_SVG-ON-and-.patch | 44 +++++++++++++++++++
- package/wpewebkit/Config.in                   | 11 ++---
- package/wpewebkit/wpewebkit.hash              |  8 ++--
- package/wpewebkit/wpewebkit.mk                | 27 +++++++++++-
- 4 files changed, 79 insertions(+), 11 deletions(-)
- create mode 100644 package/wpewebkit/0001-WPE-Fix-the-build-with-USE_SKIA_OPENTYPE_SVG-ON-and-.patch
-
-diff --git a/package/wpewebkit/0001-WPE-Fix-the-build-with-USE_SKIA_OPENTYPE_SVG-ON-and-.patch b/package/wpewebkit/0001-WPE-Fix-the-build-with-USE_SKIA_OPENTYPE_SVG-ON-and-.patch
-new file mode 100644
-index 0000000000..8432543e07
---- /dev/null
-+++ b/package/wpewebkit/0001-WPE-Fix-the-build-with-USE_SKIA_OPENTYPE_SVG-ON-and-.patch
-@@ -0,0 +1,44 @@
-+From 94acd1ce0ff2860b19f22ab2d386d7711c9699b7 Mon Sep 17 00:00:00 2001
-+From: Adrian Perez de Castro <aperez@igalia.com>
-+Date: Tue, 8 Jul 2025 21:46:44 +0300
-+Subject: [PATCH] [WPE] Fix the build with USE_SKIA_OPENTYPE_SVG=ON and
-+ USE_SYSPROF_CAPTURE=OFF
-+
-+Unreviewed build fix.
-+
-+When backporting 287859@main the #include for the needed Skia header
-+slipped inside an USE(SYSPROF_CAPTURE) guard. This moves the guards
-+and #include statements to their correct places.
-+
-+* Source/WebKit/WebProcess/wpe/WebProcessMainWPE.cpp:
-+
-+Canonical link: https://commits.webkit.org/290945.273@webkitglib/2.48
-+
-+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-+Upstream: https://github.com/WebKit/WebKit/commit/943d05f0c9b03c053a456c90c2a8817c1f679711
-+---
-+ Source/WebKit/WebProcess/wpe/WebProcessMainWPE.cpp | 5 +++--
-+ 1 file changed, 3 insertions(+), 2 deletions(-)
-+
-+diff --git a/Source/WebKit/WebProcess/wpe/WebProcessMainWPE.cpp b/Source/WebKit/WebProcess/wpe/WebProcessMainWPE.cpp
-+index a06e33fd04f8..5fb245ce0b66 100644
-+--- a/Source/WebKit/WebProcess/wpe/WebProcessMainWPE.cpp
-++++ b/Source/WebKit/WebProcess/wpe/WebProcessMainWPE.cpp
-+@@ -43,11 +43,12 @@
-+ #include <skia/core/SkGraphics.h>
-+ #endif
-+ 
-+-#if USE(SYSPROF_CAPTURE)
-+-#include <wtf/SystemTracing.h>
-+ #if USE(SKIA_OPENTYPE_SVG)
-+ #include <skia/modules/svg/SkSVGOpenTypeSVGDecoder.h>
-+ #endif
-++
-++#if USE(SYSPROF_CAPTURE)
-++#include <wtf/SystemTracing.h>
-+ #endif
-+ 
-+ namespace WebKit {
-+-- 
-+2.50.1
-+
-diff --git a/package/wpewebkit/Config.in b/package/wpewebkit/Config.in
-index 512f7ea672..969590482c 100644
---- a/package/wpewebkit/Config.in
-+++ b/package/wpewebkit/Config.in
-@@ -16,12 +16,12 @@ config BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
- 
--comment "wpewebkit needs a toolchain w/ C++, wchar, NPTL, dynamic library, gcc >= 10, host gcc >= 4.9"
-+comment "wpewebkit needs a toolchain w/ C++, wchar, NPTL, dynamic library, gcc >= 11, host gcc >= 4.9"
- 	depends on BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS
- 	depends on !BR2_BINFMT_FLAT
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
- 		|| !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
--		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_10 \
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_11 \
- 		|| !BR2_HOST_GCC_AT_LEAST_4_9
- 
- comment "wpewebkit needs an OpenGL ES w/ EGL-capable Wayland backend"
-@@ -36,13 +36,13 @@ config BR2_PACKAGE_WPEWEBKIT
- 	depends on BR2_HOST_GCC_AT_LEAST_4_9 # icu, host-ruby
- 	depends on BR2_INSTALL_LIBSTDCPP # harfbuzz, icu
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_11
- 	depends on BR2_USE_WCHAR # icu, libsoup3
- 	depends on BR2_PACKAGE_HAS_LIBGLES # libepoxy
- 	depends on BR2_PACKAGE_HAS_LIBEGL # libepoxy
- 	depends on BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS
--	select BR2_PACKAGE_CAIRO
--	select BR2_PACKAGE_CAIRO_PNG
-+	select BR2_PACKAGE_CAIRO if BR2_ENDIAN = "BIG"
-+	select BR2_PACKAGE_CAIRO_PNG if BR2_ENDIAN = "BIG"
- 	select BR2_PACKAGE_HARFBUZZ
- 	select BR2_PACKAGE_ICU
- 	select BR2_PACKAGE_JPEG
-@@ -56,6 +56,7 @@ config BR2_PACKAGE_WPEWEBKIT
- 	select BR2_PACKAGE_WAYLAND_PROTOCOLS
- 	select BR2_PACKAGE_WEBP
- 	select BR2_PACKAGE_WEBP_DEMUX
-+	select BR2_PACKAGE_WEBP_MUX
- 	select BR2_PACKAGE_WPEBACKEND_FDO
- 	help
- 	  WPE (Web Platform for Embedded) port of the WebKit engine,
-diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
-index 7a7cef15a5..332fd9deaa 100644
---- a/package/wpewebkit/wpewebkit.hash
-+++ b/package/wpewebkit/wpewebkit.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/wpewebkit-2.44.4.tar.xz.sums
--md5  4d91f3ff629c9356dcff866b68a4646f  wpewebkit-2.44.4.tar.xz
--sha1  ef1ea0484e9ec17a362afe9a709fe0754f05cc14  wpewebkit-2.44.4.tar.xz
--sha256  cd6042c63a6f883cc1586e5cea94e846aaaee6a864c14988e8af4ef4f362ba3b  wpewebkit-2.44.4.tar.xz
-+# From https://wpewebkit.org/releases/wpewebkit-2.48.3.tar.xz.sums
-+md5  2d3b7fa3c62886546f918fcc289cabbe  wpewebkit-2.48.3.tar.xz
-+sha1  8a90b9ff8809c99c306defc1a08e50a31a09c590  wpewebkit-2.48.3.tar.xz
-+sha256  807571f07e87823b8fb79564692c9b1ef81ee62edbf51345a15bd0e7e1f2e07b  wpewebkit-2.48.3.tar.xz
- 
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index 6a8e9c637c..796e271ecb 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # The middle number is even for stable releases, odd for development ones.
--WPEWEBKIT_VERSION = 2.44.4
-+WPEWEBKIT_VERSION = 2.48.3
- WPEWEBKIT_SITE = https://wpewebkit.org/releases
- WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
- WPEWEBKIT_INSTALL_STAGING = YES
-@@ -16,7 +16,7 @@ WPEWEBKIT_LICENSE_FILES = \
- WPEWEBKIT_CPE_ID_VENDOR = wpewebkit
- WPEWEBKIT_CPE_ID_PRODUCT = wpe_webkit
- WPEWEBKIT_DEPENDENCIES = host-gperf host-python3 host-ruby host-unifdef \
--	harfbuzz cairo icu jpeg libepoxy libgcrypt libgles libsoup3 libtasn1 \
-+	harfbuzz icu jpeg libepoxy libgcrypt libgles libsoup3 libtasn1 \
- 	libpng libxslt wayland-protocols webp wpebackend-fdo
- 
- WPEWEBKIT_CMAKE_BACKEND = ninja
-@@ -30,6 +30,15 @@ WPEWEBKIT_CONF_OPTS = \
- 	-DENABLE_WEB_RTC=OFF \
- 	-DUSE_ATK=OFF
- 
-+# WPE WebKit uses a bundled copy of Skia since 2.46.0 for
-+# little-endian targets, and Cairo for big-endian ones.
-+ifeq ($(BR2_ENDIAN),"BIG")
-+WPEWEBKIT_DEPENDENCIES += cairo
-+WPEWEBKIT_CONF_OPTS += -DUSE_SKIA=OFF
-+else
-+WPEWEBKIT_CONF_OPTS += -DUSE_SKIA=ON
-+endif
-+
- ifeq ($(BR2_PACKAGE_WPEWEBKIT_SANDBOX),y)
- WPEWEBKIT_CONF_OPTS += \
- 	-DENABLE_BUBBLEWRAP_SANDBOX=ON \
-@@ -79,6 +88,13 @@ else
- WPEWEBKIT_CONF_OPTS += -DENABLE_WEBDRIVER=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_FLITE),y)
-+WPEWEBKIT_CONF_OPTS += -DENABLE_SPEECH_SYNTHESIS=ON
-+WPEWEBKIT_DEPENDENCIES += flite
-+else
-+WPEWEBKIT_CONF_OPTS += -DENABLE_SPEECH_SYNTHESIS=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_LCMS2),y)
- WPEWEBKIT_CONF_OPTS += -DUSE_LCMS=ON
- WPEWEBKIT_DEPENDENCIES += lcms2
-@@ -114,6 +130,13 @@ else
- WPEWEBKIT_CONF_OPTS += -DUSE_JPEGXL=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_SYSPROF),y)
-+WPEWEBKIT_CONF_OPTS += -DUSE_SYSPROF_CAPTURE=ON
-+WPEWEBKIT_DEPENDENCIES += sysprof
-+else
-+WPEWEBKIT_CONF_OPTS += -DUSE_SYSPROF_CAPTURE=OFF
-+endif
-+
- ifeq ($(BR2_INIT_SYSTEMD),y)
- WPEWEBKIT_CONF_OPTS += -DENABLE_JOURNALD_LOG=ON
- WPEWEBKIT_DEPENDENCIES += systemd
--- 
-2.50.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgQXJub3V0LCBzb3JyeSBmb3IgdGhlIGRlbGF5ZWQgcmVzcG9uc2UuDQoNCkFybm91dCBWYW5k
+ZWNhcHBlbGxlIDxhcm5vdXRAbWluZC5iZT4gd3JpdGVzOg0KDQo+IE9uIDE1LzExLzIwMjQgMjE6
+MjMsIExpYW0gSHVwZmVyIHdyb3RlOg0KPj4gQnVpbGRpbmcgUHl0aG9uIGZvciB0aGUgdGFyZ2V0
+IHJlcXVpcmVzIGhvc3QgUHl0aG9uIHZpYQ0KPj4gUFlUSE9OM19ERVBFTkRFTkNJRVMuIEhvc3Qg
+UHl0aG9uIGlzIGV4cG9zZWQgYXMgYSBzdGFuZGFsb25lIEtjb25maWcNCj4+IG9wdGlvbiwgc28g
+d2hlbiBCUjJfUEFDS0FHRV9QWVRIT04zPXksIGl0IGlzIHBvc3NpYmxlIGZvciBob3N0IFB5dGhv
+biB0bw0KPj4gYmUgYnVpbHQgZXZlbiB3aGVuIEJSMl9QQUNLQUdFX0hPU1RfUFlUSE9OMz1uLg0K
+Pg0KPiAgIFdlIGhhdmUgcGxlbnR5IG9mIGhvc3QgcGFja2FnZXMgd2hlcmUgdGhpcyBpcyB0aGUg
+Y2FzZSwgYW5kIGl04oCZcyBub3QgcHJhY3RpY2FsDQo+IHRvIGRvIHRoaXMgY29ycmVjdGx5IGZv
+ciBhbGwgb2YgdGhlbSAoY2ZyLiBlLmcuIEJSMl9QQUNLQUdFX0hPU1RfQ01BS0Ugd2hpY2gNCj4g
+d291bGQgbmVlZCB0byBiZSBzZWxlY3RlZCBmb3IgYWxsIGNtYWtlIHBhY2thZ2VzKS4NCg0KSUlS
+QyB0aGlzIGlzIHRoZSByYXRpb25hbGUgVGhvbWFzIFAgZ2F2ZSBhcyB3ZWxsIG9uIElSQy4gRnJv
+bSBteSBuYcOvdmUNCnBlcnNwZWN0aXZlIEkgZG9u4oCZdCBzZWUgd2h5IGRvaW5nIHRoaXMgZm9y
+IGxhcmdlLCB1bmNvbW1vbiBob3N0IHBhY2thZ2VzDQpsaWtlIFB5dGhvbiBtZWFucyB3ZSBtdXN0
+IGRvIHRoaXMgZm9yIGFsbCBob3N0IHBhY2thZ2VzLiBCdXQgSSBndWVzcw0KaG9zdCBQeXRob24g
+aXMgbm90IHNvIHVuY29tbW9uIGFueW1vcmUgd2l0aCB0aGUgcmlzZSBvZiBNZXNvbiBhbnl3YXku
+DQoNClRvIG1lIGl0IHNlZW1zIHRoZSBLY29uZmlnIGludGVyZmFjZSBzaG91bGQgZXhwb3NlIGFs
+bCBwYWNrYWdlDQpkZXBlbmRlbmNpZXMsIHJhdGhlciB0aGFuIGhhdmluZyBzb21lIGJlIGltcGxp
+Y2l0IGluIHRoZSBtYWtlZmlsZXMuIEkNCndvbmRlciBpZiBpdOKAmXMgZmVhc2libGUgdG8gdGFr
+ZSB0aGUgZXZhbHVhdGVkIE1ha2UgZGF0YWJhc2UgYW5kIHZlcmlmeQ0KdGhhdCBlYWNoIHBhY2th
+Z2UgQkFSIGluIEZPT19ERVBFTkRFTkNJRVMgaGFzIEJBUl9LQ09ORklHX1ZBUiBzZWxlY3RlZA0K
+YnkgRk9PX0tDT05GSUdfVkFSLCBvciBzb21ldGhpbmcgbGlrZSB0aGF0LCBzbyB0aGF0IHRoZSBt
+YWtlZmlsZXMNCmRlc3luY2hyb25pemluZyB3b3VsZCBjYXVzZSBhIENJIGpvYiB0byBmYWlsIChv
+ciBldmVuIG1ha2VmaWxlDQpldmFsdWF0aW9uLCBpZGVhbGx5KS4gSeKAmW0gbm90IHRoYXQgZmFt
+aWxpYXIgd2l0aCB0aGUgQnVpbGRyb290IGludGVybmFscw0KdGhvdWdoIHNvIG1heWJlIHRoYXTi
+gJlzIG5vbnNlbnNpY2FsLg0KDQo+ICAgSG93ZXZlciwgaW4gdGhpcyBwYXJ0aWN1bGFyIGNhc2Us
+IHRoZXJlIGlzIGEgZ29vZCByZWFzb24gdG8gZG8gdGhlIGBzZWxlY3RgOg0KPiBob3N0LXB5dGhv
+bjMgaGFzIHN1Yi1vcHRpb25zLCB3aGljaCBtZWFucyB0aGF0IGEgcGFja2FnZSB0aGF0IHJlcXVp
+cmVzIG9uZSBvZg0KPiB0aG9zZSBzdWItb3B0b2lucyBuZWVkcyB0byBhZGQgdGhlIHNlbGVjdCwg
+d2hpY2ggaXMgYWxzbyBhbm5veWluZy4NCj4NCj4gICBUaGVyZWZvcmUsIGFwcGxpZWQgdG8gbWFz
+dGVyLCB0aGFua3MuDQoNCldvcmtzIGZvciBtZSwgdGhhbmtzIQ0KDQo+ICAgUmVnYXJkcywNCj4g
+ICBBcm5vdXQNCj4NCj4+DQo+PiBTZWxlY3QgaG9zdCBQeXRob24gMyB2aWEgS2NvbmZpZyB0byBl
+eHBvc2Ugd2h5IGl0IGlzIGJ1aWx0LCBzaW1pbGFyIHRvDQo+PiBsaWJmZmkuDQo+Pg0KPj4gU2ln
+bmVkLW9mZi1ieTogTGlhbSBIdXBmZXIgPGxodXBmZXJAeGVzLWluYy5jb20+DQoNCuKAlExpYW0N
+Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9v
+dCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWls
+ZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
