@@ -4,49 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F8AEC83F09
-	for <buildroot@archiver.kernel.org>; Tue,  8 Jul 2025 20:11:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 260C9C83F09
+	for <buildroot@archiver.kernel.org>; Tue,  8 Jul 2025 20:13:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B4805812D4;
-	Tue,  8 Jul 2025 20:11:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AC91980E6E;
+	Tue,  8 Jul 2025 20:13:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S6jJtJCePVhO; Tue,  8 Jul 2025 20:11:27 +0000 (UTC)
+ id Z8ih7Q8fsdU7; Tue,  8 Jul 2025 20:13:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8D9968130E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB457813CE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8D9968130E;
-	Tue,  8 Jul 2025 20:11:27 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 917ED12E
- for <buildroot@buildroot.org>; Tue,  8 Jul 2025 20:11:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EB457813CE;
+	Tue,  8 Jul 2025 20:13:33 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id EC0391BF
+ for <buildroot@buildroot.org>; Tue,  8 Jul 2025 20:13:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 83AB440924
- for <buildroot@buildroot.org>; Tue,  8 Jul 2025 20:11:26 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D1FDF80E02
+ for <buildroot@buildroot.org>; Tue,  8 Jul 2025 20:13:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KVf3GuVsBDkO for <buildroot@buildroot.org>;
- Tue,  8 Jul 2025 20:11:25 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 711E24090D
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 711E24090D
- for <buildroot@buildroot.org>; Tue,  8 Jul 2025 20:11:25 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6A595861CA; Tue,  8 Jul 2025 20:11:25 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 8 Jul 2025 21:56:21 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 250a115c32bcb2146f6a8e51a4e43f5ffecd280c
-X-Git-Newrev: 2c868ca44d44e92c73758fc9381cb54129f1388c
-X-Patchwork-Hint: ignore
-Message-Id: <20250708201125.6A595861CA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/xen: fix build for arm with
- binutils >= 2.41
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id K_tLCmeTzMpm for <buildroot@buildroot.org>;
+ Tue,  8 Jul 2025 20:13:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8D01780E6E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8D01780E6E
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8D01780E6E
+ for <buildroot@buildroot.org>; Tue,  8 Jul 2025 20:13:31 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id C5B745FFB7;
+ Tue,  8 Jul 2025 22:13:25 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 08 Jul 2025 22:13:25 +0200
+MIME-Version: 1.0
+Date: Tue, 08 Jul 2025 22:13:25 +0200
+To: =?UTF-8?Q?Vincent_Stehl=C3=A9?= <vincent.stehle@arm.com>
+Cc: buildroot@buildroot.org, Alistair Francis <alistair@alistair23.me>
+In-Reply-To: <20250708100116.1526394-1-vincent.stehle@arm.com>
+References: <20250708100116.1526394-1-vincent.stehle@arm.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <31c32b88ce9bd52d1126c215b74303f2@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1752005608;
+ bh=qhriK698hw02fGD0YwFtzSpe5ljrlozLjiQU7R2T5+M=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=r6jkA5ofrtusGkKJx2UTbl664BGSOjKRZ6b99ojKRdPKU+Jp4Wh+CzmibE6g4bvvL
+ 7/3mHIdfef/boANzS+d0XyJ5RkyM2FGL0Ygi7u/sAZQVQIvE+qGvj5Cwa7lgkLC6xK
+ 3U0PlFqe38K4qlXiGzCDZhn/WB7GQXIgtnCh+HWdKnb+j0gsw8JkJgC6uxZgosQHnE
+ Rb6Yf01J4mzjI1was8HnuNQDXGkBBuYcjcx4S3sFTDRdnPU3Rwm89KfHl8Z11NoYT6
+ MidZgYLaI70QUHJp+DIGQtBJ/0p4MG11gy4D5Gqe1BQi6nmjFc3cJXVzuPAT+cc8ku
+ 8VLjp5T7M/qOw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=r6jkA5of
+Subject: Re: [Buildroot] [PATCH] package/xen: fix build for arm with
+ external toolchain
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,207 +84,31 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0264284510899395518=="
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0264284510899395518==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=2c868ca44d44e92c73758fc9381cb54129f1388c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Xen currently fails to build for 32-bit Arm v7 with binutils >= 2.41,
-with the following error:
-
-    proc-v7.S:33: Error: junk at end of line, first unrecognized character is `#'
-
-The failure can be reproduced with the commands:
-
-    cat >.config <<EOF
-    BR2_arm=y
-    BR2_cortex_a9=y
-    BR2_ARM_ENABLE_VFP=y
-    BR2_ARM_EABIHF=y
-    BR2_TOOLCHAIN_EXTERNAL=y
-    BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-    BR2_PACKAGE_XEN=y
-    BR2_PACKAGE_XEN_HYPERVISOR=y
-    BR2_PACKAGE_XEN_TOOLS=y
-    EOF
-    make olddefconfig
-    make xen
-
-Backport a patch from Xen 4.18 plus one patch it depends on to fix the
-build.
-
-Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
-Cc: Alistair Francis <alistair@alistair23.me>
-[Julien:
- - reword commit title
- - add commands to reproduce the issue in commit log
- - add missing SoB lines to patches
-]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...-avoid-.rodata-to-be-marked-as-executable.patch | 58 +++++++++++++++++
- ...sing-solaris-syntax-for-.section-directiv.patch | 73 ++++++++++++++++++++++
- 2 files changed, 131 insertions(+)
-
-diff --git a/package/xen/0007-xen-arm32-avoid-.rodata-to-be-marked-as-executable.patch b/package/xen/0007-xen-arm32-avoid-.rodata-to-be-marked-as-executable.patch
-new file mode 100644
-index 0000000000..9c484698ca
---- /dev/null
-+++ b/package/xen/0007-xen-arm32-avoid-.rodata-to-be-marked-as-executable.patch
-@@ -0,0 +1,58 @@
-+From 99314e08c6450a841d4f7155b7ce364e0990df1c Mon Sep 17 00:00:00 2001
-+From: Jan Beulich <jbeulich@suse.com>
-+Date: Fri, 11 Jun 2021 11:19:15 +0200
-+Subject: [PATCH] xen/arm32: avoid .rodata to be marked as executable
-+
-+The section .proc.info lives in .rodata as it doesn't contain any
-+executable code. However, the section is still marked as executable
-+as the consequence .rodata will also be marked executable.
-+
-+Xen doesn't use the ELF permissions to decide the page-table mapping
-+permission. However, this will confuse disassemblers.
-+
-+'#execinstr' is now removed on all the pushsection dealing with
-+.proc.info
-+
-+Signed-off-by: Jan Beulich <jbeulich@suse.com>
-+[julieng: Rework the commit message]
-+Acked-by: Julien Grall <jgrall@amazon.com>
-+Upstream: https://xenbits.xen.org/gitweb/?p=xen.git;a=commitdiff;h=163f47c14737cfa9dfb3240deea356b08caf7614
-+Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
-+---
-+ xen/arch/arm/arm32/proc-v7.S | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/xen/arch/arm/arm32/proc-v7.S b/xen/arch/arm/arm32/proc-v7.S
-+index 46bfc7a..8b418ed 100644
-+--- a/xen/arch/arm/arm32/proc-v7.S
-++++ b/xen/arch/arm/arm32/proc-v7.S
-+@@ -30,7 +30,7 @@ brahma15mp_init:
-+         mcr   CP32(r0, ACTLR)
-+         mov   pc, lr
-+ 
-+-        .section ".proc.info", #alloc, #execinstr
-++        .section ".proc.info", #alloc
-+         .type __v7_ca15mp_proc_info, #object
-+ __v7_ca15mp_proc_info:
-+         .long 0x410FC0F0             /* Cortex-A15 */
-+@@ -39,7 +39,7 @@ __v7_ca15mp_proc_info:
-+         .long caxx_processor
-+         .size __v7_ca15mp_proc_info, . - __v7_ca15mp_proc_info
-+ 
-+-        .section ".proc.info", #alloc, #execinstr
-++        .section ".proc.info", #alloc
-+         .type __v7_ca7mp_proc_info, #object
-+ __v7_ca7mp_proc_info:
-+         .long 0x410FC070             /* Cortex-A7 */
-+@@ -48,7 +48,7 @@ __v7_ca7mp_proc_info:
-+         .long caxx_processor
-+         .size __v7_ca7mp_proc_info, . - __v7_ca7mp_proc_info
-+ 
-+-        .section ".proc.info", #alloc, #execinstr
-++        .section ".proc.info", #alloc
-+         .type __v7_brahma15mp_proc_info, #object
-+ __v7_brahma15mp_proc_info:
-+         .long 0x420F00F0             /* Broadcom Brahma-B15 */
-+-- 
-+2.48.1
-+
-diff --git a/package/xen/0008-arm-Avoid-using-solaris-syntax-for-.section-directiv.patch b/package/xen/0008-arm-Avoid-using-solaris-syntax-for-.section-directiv.patch
-new file mode 100644
-index 0000000000..127c126f99
---- /dev/null
-+++ b/package/xen/0008-arm-Avoid-using-solaris-syntax-for-.section-directiv.patch
-@@ -0,0 +1,73 @@
-+From be0ff8586e38823d6ee08e031c28e5831bbb0991 Mon Sep 17 00:00:00 2001
-+From: Khem Raj <raj.khem@gmail.com>
-+Date: Tue, 1 Aug 2023 10:49:30 -0700
-+Subject: [PATCH] arm: Avoid using solaris syntax for .section directive
-+
-+Assembler from binutils 2.41 will rejects ([1], [2]) the following
-+syntax
-+
-+.section "name", #alloc
-+
-+for any other any target other than ELF SPARC. This means we can't use
-+it in the Arm code.
-+
-+So switch to the GNU syntax
-+
-+.section name [, "flags"[, @type]]
-+
-+[1] https://sourceware.org/bugzilla/show_bug.cgi?id=11601
-+[2] https://sourceware.org/binutils/docs-2.41/as.html#Section
-+
-+Signed-off-by: Khem Raj <raj.khem@gmail.com>
-+Reviewed-by: Michal Orzel <michal.orzel@amd.com>
-+[jgrall: Reword commit message]
-+Acked-by: Julien Grall <jgrall@amazon.com>
-+Upstream: https://xenbits.xen.org/gitweb/?p=xen.git;a=commitdiff;h=dfc490a3740bb7d6889939934afadcb58891fbce
-+Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
-+---
-+ xen/arch/arm/arm32/proc-v7.S | 6 +++---
-+ xen/arch/arm/dtb.S           | 2 +-
-+ 2 files changed, 4 insertions(+), 4 deletions(-)
-+
-+diff --git a/xen/arch/arm/arm32/proc-v7.S b/xen/arch/arm/arm32/proc-v7.S
-+index 8b418ed..9869780 100644
-+--- a/xen/arch/arm/arm32/proc-v7.S
-++++ b/xen/arch/arm/arm32/proc-v7.S
-+@@ -30,7 +30,7 @@ brahma15mp_init:
-+         mcr   CP32(r0, ACTLR)
-+         mov   pc, lr
-+ 
-+-        .section ".proc.info", #alloc
-++        .section .proc.info, "a"
-+         .type __v7_ca15mp_proc_info, #object
-+ __v7_ca15mp_proc_info:
-+         .long 0x410FC0F0             /* Cortex-A15 */
-+@@ -39,7 +39,7 @@ __v7_ca15mp_proc_info:
-+         .long caxx_processor
-+         .size __v7_ca15mp_proc_info, . - __v7_ca15mp_proc_info
-+ 
-+-        .section ".proc.info", #alloc
-++        .section .proc.info, "a"
-+         .type __v7_ca7mp_proc_info, #object
-+ __v7_ca7mp_proc_info:
-+         .long 0x410FC070             /* Cortex-A7 */
-+@@ -48,7 +48,7 @@ __v7_ca7mp_proc_info:
-+         .long caxx_processor
-+         .size __v7_ca7mp_proc_info, . - __v7_ca7mp_proc_info
-+ 
-+-        .section ".proc.info", #alloc
-++        .section .proc.info, "a"
-+         .type __v7_brahma15mp_proc_info, #object
-+ __v7_brahma15mp_proc_info:
-+         .long 0x420F00F0             /* Broadcom Brahma-B15 */
-+diff --git a/xen/arch/arm/dtb.S b/xen/arch/arm/dtb.S
-+index c703aef..8771daf 100644
-+--- a/xen/arch/arm/dtb.S
-++++ b/xen/arch/arm/dtb.S
-+@@ -1,2 +1,2 @@
-+-        .section .dtb,#alloc
-++        .section .dtb, "a"
-+         .incbin CONFIG_DTB_FILE
-+-- 
-+2.48.1
-+
-
---===============0264284510899395518==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0264284510899395518==--
+SGkgVmluY2VudCwKCk9uIDA4LzA3LzIwMjUgMTI6MDEsIFZpbmNlbnQgU3RlaGzDqSB3cm90ZToK
+PiBYZW4gY3VycmVudGx5IGZhaWxzIHRvIGJ1aWxkIGZvciAzMi1iaXQgQXJtIHY3IHdpdGggdGhl
+IGRlZmF1bHQgCj4gZXh0ZXJuYWwKPiB0b29sY2hhaW4sIHdpdGggdGhlIGZvbGxvd2luZyBlcnJv
+cjoKPiAKPiAgIHByb2MtdjcuUzozMzogRXJyb3I6IGp1bmsgYXQgZW5kIG9mIGxpbmUsIGZpcnN0
+IHVucmVjb2duaXplZCAKPiBjaGFyYWN0ZXIgaXMgYCMnCj4gCj4gQmFja3BvcnQgYSBwYXRjaCBm
+cm9tIFhlbiA0LjE4IHBsdXMgb25lIHBhdGNoIGl0IGRlcGVuZHMgb24gdG8gZml4IHRoZQo+IGJ1
+aWxkLgo+IAo+IFNpZ25lZC1vZmYtYnk6IFZpbmNlbnQgU3RlaGzDqSA8dmluY2VudC5zdGVobGVA
+YXJtLmNvbT4KPiBDYzogQWxpc3RhaXIgRnJhbmNpcyA8YWxpc3RhaXJAYWxpc3RhaXIyMy5tZT4K
+CkkgYXBwbGllZCB0aGlzIHBhdGNoIG9uIG1hc3Rlci4gVGhhbmtzIQoKSSBkaWQgZmV3IG1pbm9y
+IGNoYW5nZXM6Ci0gSSByZXdvcmRlZCB0aGUgY29tbWl0IHRpdGxlICh0aGUgcm9vdCBjYXVzZSBp
+cyBub3QgcmVhbGx5CiAgIHJlbGF0ZWQgdG8gdGhlIGZhY3QgdGhlIHRvb2xjaGFpbiBpcyBleHRl
+cm5hbCwgaXQgaXMgaW4gZmFjdAogICBiaW51dGlscyAyLjQxKQotIEkgZml4ZWQgeW91IG1pbmlt
+YWwgY29uZmlnIHRvIGFjdHVhbGx5IHJlcHJvZHVjZSB0aGUgaXNzdWUKICAgZnJvbSBhIGNsZWFu
+IHdvcmsgdHJlZSwgYW5kIGFkZGVkIGl0IHRvIHRoZSBjb21taXQgbG9nLgogICBUaGlzIGNhbiBi
+ZSB1c2VmdWwgZm9yIGZ1cnRoZXIgZGVidWdnaW5nLCBtYWludGVuYW5jZQogICBicmFuY2hlcywg
+ZXRjLgotIEkgYWRkZWQgeW91ciBtaXNzaW5nICJTaWduZWQtb2ZmLWJ5OiIgdGFncyBpbiBwYXRj
+aGVzLgogICBTaW5jZSB5b3UgbWFuaXB1bGF0ZWQgdGhvc2UgcGF0Y2hlcyAoZXZlbiBmb3IgYQog
+ICBzaW1wbGUgY2hlcnJ5LXBpY2svcmViYXNlKSwgd2UgdXN1YWxseSBhZGQgdGhvc2UgdGFncy4K
+ClNlZToKaHR0cHM6Ly9naXRsYWIuY29tL2J1aWxkcm9vdC5vcmcvYnVpbGRyb290Ly0vY29tbWl0
+LzJjODY4Y2E0NGQ0NGU5MmM3Mzc1OGZjOTM4MWNiNTQxMjlmMTM4OGMKCkJlc3QgcmVnYXJkcywK
+Ckp1bGllbi4KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
+YnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xp
+c3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
