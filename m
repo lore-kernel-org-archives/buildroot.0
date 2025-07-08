@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68053C8303C
-	for <buildroot@archiver.kernel.org>; Tue,  8 Jul 2025 20:28:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49C03C8303C
+	for <buildroot@archiver.kernel.org>; Tue,  8 Jul 2025 20:28:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 32B0980D80;
-	Tue,  8 Jul 2025 20:28:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 15CEB80D80;
+	Tue,  8 Jul 2025 20:28:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IRicc1-nSYdt; Tue,  8 Jul 2025 20:28:25 +0000 (UTC)
+ id rNj8ZxxGrYGX; Tue,  8 Jul 2025 20:28:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0E3BC80D86
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4DDAF80E84
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0E3BC80D86;
-	Tue,  8 Jul 2025 20:28:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4DDAF80E84;
+	Tue,  8 Jul 2025 20:28:56 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3881F1BF
- for <buildroot@buildroot.org>; Tue,  8 Jul 2025 20:28:23 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 5400812E
+ for <buildroot@buildroot.org>; Tue,  8 Jul 2025 20:28:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 35A0580D86
- for <buildroot@buildroot.org>; Tue,  8 Jul 2025 20:28:23 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 38FC180E84
+ for <buildroot@buildroot.org>; Tue,  8 Jul 2025 20:28:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DDJH4ulT4gd2 for <buildroot@buildroot.org>;
- Tue,  8 Jul 2025 20:28:22 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4B1CB80D75
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4B1CB80D75
- for <buildroot@buildroot.org>; Tue,  8 Jul 2025 20:28:22 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 24C1A861FA; Tue,  8 Jul 2025 20:28:22 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 8 Jul 2025 22:23:04 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2c868ca44d44e92c73758fc9381cb54129f1388c
-X-Git-Newrev: d28ae8b00b7aa5018ec24809ecc393e7420bc292
-X-Patchwork-Hint: ignore
-Message-Id: <20250708202822.24C1A861FA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ustream-ssl: fix build w/ mbedtls
+ id lchd8qWcOvdj for <buildroot@buildroot.org>;
+ Tue,  8 Jul 2025 20:28:54 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 533FF80D80
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 533FF80D80
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 533FF80D80
+ for <buildroot@buildroot.org>; Tue,  8 Jul 2025 20:28:54 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 20E7313F88F;
+ Tue,  8 Jul 2025 22:28:51 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 08 Jul 2025 22:28:50 +0200
+MIME-Version: 1.0
+Date: Tue, 08 Jul 2025 22:28:50 +0200
+To: Thomas Perale <thomas.perale@mind.be>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250707152021.1275999-1-thomas.perale@mind.be>
+References: <20250707152021.1275999-1-thomas.perale@mind.be>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <d2f1af544c40d5d85686d9258162fee7@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1752006532;
+ bh=01dSKndXsjvRB5xm8g25WcsD95Dnv2xIWlUUtkKjy+8=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=elrL92spgxtog4WVjNI/e3FKWq1GXoJFUwUJodYMLGbzlskmDrijQMbI2MxqfpUJ2
+ 2MQZfRHZJVTr3iiGVaVkMxZFqD39FiPNGQgMQ8r89cX8afgTIQzqcSatS9Y/J622+b
+ MA0ATABcRpZTrbxjFli77iRX4j7QI1FXYBL9ioJ7E8BTg9KzhmpIDjtBWvnAqWk/nR
+ MOpfPPS2sauxoCxnsuLuQzLMMJ6NksIWpQD1zsTpmuNiHbLQAlX98NQQuK/upuybww
+ MK5vUcJ6Pee2vkdyH8dBfkTI2tT2TIrJKbAoVBOkFX06Q8d8EpKbrFv8o/pUNFXkIw
+ d8z6TlP8sa+0g==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=elrL92sp
+Subject: Re: [Buildroot] [PATCH] package/ustream-ssl: fix build w/ mbedtls
  v3.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -60,240 +83,59 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d28ae8b00b7aa5018ec24809ecc393e7420bc292
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 07/07/2025 17:20, Thomas Perale via buildroot wrote:
+> Since the mbedtls bump to v3.6 [1] the ustream-ssl package is failling
+> on the autobuilder with the following error:
+> 
+> ```
+> In file included from 
+> /home/buildroot/instance-0/output-1/build/ustream-ssl-68d09243b6fd4473004b27ff6483352e76e6af1a/ustream-internal.h:25,
+>                  from 
+> /home/buildroot/instance-0/output-1/build/ustream-ssl-68d09243b6fd4473004b27ff6483352e76e6af1a/ustream-ssl.c:25:
+> /home/buildroot/instance-0/output-1/build/ustream-ssl-68d09243b6fd4473004b27ff6483352e76e6af1a/ustream-mbedtls.h:24:10: 
+> fatal error: mbedtls/certs.h: No such file or directory
+>    24 | #include <mbedtls/certs.h>
+>       |          ^~~~~~~~~~~~~~~~~
+> compilation terminated.
+> ```
+> 
+> This error can be reproduced with the following config:
+> 
+> ```
+> cat <<EOF >.config
+> BR2_arm=y
+> BR2_cortex_a7=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+> BR2_PACKAGE_MBEDTLS=y
+> BR2_PACKAGE_USTREAM_SSL=y
+> EOF
+> make olddefconfig
+> make
+> ```
+> 
+> This patch backport upstream commit that address the compatibility with
+> mbedtls v3.6.
+> 
+>  - [2] rename the `_random` function used by the mbedtls functions
+>  - [3] update `mbedtls_pk_parse_keyfile` function to support new 
+> mbedtls
+>      definition and use `mbedtls_pk_get_type`.
+> 
+> [1] 3481a9643f package/mbedtls: bump to version 3.6.3.1
+> [2] 0001-ustream-mbedtls-use-getrandom-instead-of-dev-urandom.patch
+> [3] 0002-ustream-mbedtls-add-compatibility-with-mbed-tls-3-0-0.patch
+> 
+> Fixes: 
+> https://autobuild.buildroot.org/results/c20/c20dac7cbe5def2c6036d2e1d06de0bfea68b57c
+> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
-Since the mbedtls bump to v3.6 [1] the ustream-ssl package is failling
-on the autobuilder with the following error:
-
-```
-In file included from /home/buildroot/instance-0/output-1/build/ustream-ssl-68d09243b6fd4473004b27ff6483352e76e6af1a/ustream-internal.h:25,
-                 from /home/buildroot/instance-0/output-1/build/ustream-ssl-68d09243b6fd4473004b27ff6483352e76e6af1a/ustream-ssl.c:25:
-/home/buildroot/instance-0/output-1/build/ustream-ssl-68d09243b6fd4473004b27ff6483352e76e6af1a/ustream-mbedtls.h:24:10: fatal error: mbedtls/certs.h: No such file or directory
-   24 | #include <mbedtls/certs.h>
-      |          ^~~~~~~~~~~~~~~~~
-compilation terminated.
-```
-
-This error can be reproduced with the following config:
-
-```
-cat <<EOF >.config
-BR2_arm=y
-BR2_cortex_a7=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-BR2_PACKAGE_MBEDTLS=y
-BR2_PACKAGE_USTREAM_SSL=y
-EOF
-make olddefconfig
-make
-```
-
-This patch backport upstream commit that address the compatibility with
-mbedtls v3.6.
-
- - [2] rename the `_random` function used by the mbedtls functions
- - [3] update `mbedtls_pk_parse_keyfile` function to support new mbedtls
-     definition and use `mbedtls_pk_get_type`.
-
-[1] 3481a9643f package/mbedtls: bump to version 3.6.3.1
-[2] 0001-ustream-mbedtls-use-getrandom-instead-of-dev-urandom.patch
-[3] 0002-ustream-mbedtls-add-compatibility-with-mbed-tls-3-0-0.patch
-
-Fixes: https://autobuild.buildroot.org/results/c20/c20dac7cbe5def2c6036d2e1d06de0bfea68b57c
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...dtls-use-getrandom-instead-of-dev-urandom.patch | 88 ++++++++++++++++++++++
- ...tls-add-compatibility-with-mbed-tls-3-0-0.patch | 79 +++++++++++++++++++
- 2 files changed, 167 insertions(+)
-
-diff --git a/package/ustream-ssl/0001-ustream-mbedtls-use-getrandom-instead-of-dev-urandom.patch b/package/ustream-ssl/0001-ustream-mbedtls-use-getrandom-instead-of-dev-urandom.patch
-new file mode 100644
-index 0000000000..2abb7ce3a1
---- /dev/null
-+++ b/package/ustream-ssl/0001-ustream-mbedtls-use-getrandom-instead-of-dev-urandom.patch
-@@ -0,0 +1,88 @@
-+From 498f6e268d4d2b0ad33b430f4ba1abe397d31496 Mon Sep 17 00:00:00 2001
-+From: Hauke Mehrtens <hauke@hauke-m.de>
-+Date: Sun, 19 Feb 2023 21:11:12 +0100
-+Subject: [PATCH] ustream-mbedtls: Use getrandom() instead of /dev/urandom
-+
-+Instead of keeping a file descriptor open just use the getrandom syscall
-+to get random data. This is supported by musl libc, glibc and Linux for
-+some time now.
-+
-+This also improves the error handling in case this function returns not
-+as many bytes as expected.
-+
-+Signed-off-by: Hauke Mehrtens <hauke@hauke-m.de>
-+Reviewed-by: Torsten Duwe <duwe@lst.de>
-+Upstream: https://git.openwrt.org/?p=project/ustream-ssl.git;a=commit;h=498f6e268d4d2b0ad33b430f4ba1abe397d31496
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ ustream-mbedtls.c | 25 ++++++-------------------
-+ 1 file changed, 6 insertions(+), 19 deletions(-)
-+
-+diff --git a/ustream-mbedtls.c b/ustream-mbedtls.c
-+index e79e37b..7fc7874 100644
-+--- a/ustream-mbedtls.c
-++++ b/ustream-mbedtls.c
-+@@ -17,6 +17,7 @@
-+  */
-+ 
-+ #include <sys/types.h>
-++#include <sys/random.h>
-+ #include <fcntl.h>
-+ #include <unistd.h>
-+ #include <stdlib.h>
-+@@ -25,8 +26,6 @@
-+ #include "ustream-ssl.h"
-+ #include "ustream-internal.h"
-+ 
-+-static int urandom_fd = -1;
-+-
-+ static int s_ustream_read(void *ctx, unsigned char *buf, size_t len)
-+ {
-+ 	struct ustream *s = ctx;
-+@@ -66,21 +65,12 @@ __hidden void ustream_set_io(struct ustream_ssl_ctx *ctx, void *ssl, struct ustr
-+ 	mbedtls_ssl_set_bio(ssl, conn, s_ustream_write, s_ustream_read, NULL);
-+ }
-+ 
-+-static bool urandom_init(void)
-++static int _random(void *ctx, unsigned char *out, size_t len)
-+ {
-+-	if (urandom_fd > -1)
-+-		return true;
-++	ssize_t ret;
-+ 
-+-	urandom_fd = open("/dev/urandom", O_RDONLY);
-+-	if (urandom_fd < 0)
-+-		return false;
-+-
-+-	return true;
-+-}
-+-
-+-static int _urandom(void *ctx, unsigned char *out, size_t len)
-+-{
-+-	if (read(urandom_fd, out, len) < 0)
-++	ret = getrandom(out, len, 0);
-++	if (ret < 0 || (size_t)ret != len)
-+ 		return MBEDTLS_ERR_ENTROPY_SOURCE_FAILED;
-+ 
-+ 	return 0;
-+@@ -134,9 +124,6 @@ __ustream_ssl_context_new(bool server)
-+ 	mbedtls_ssl_config *conf;
-+ 	int ep;
-+ 
-+-	if (!urandom_init())
-+-		return NULL;
-+-
-+ 	ctx = calloc(1, sizeof(*ctx));
-+ 	if (!ctx)
-+ 		return NULL;
-+@@ -159,7 +146,7 @@ __ustream_ssl_context_new(bool server)
-+ 
-+ 	mbedtls_ssl_config_defaults(conf, ep, MBEDTLS_SSL_TRANSPORT_STREAM,
-+ 				    MBEDTLS_SSL_PRESET_DEFAULT);
-+-	mbedtls_ssl_conf_rng(conf, _urandom, NULL);
-++	mbedtls_ssl_conf_rng(conf, _random, NULL);
-+ 
-+ 	if (server) {
-+ 		mbedtls_ssl_conf_authmode(conf, MBEDTLS_SSL_VERIFY_NONE);
-+-- 
-+2.30.2
-diff --git a/package/ustream-ssl/0002-ustream-mbedtls-add-compatibility-with-mbed-tls-3-0-0.patch b/package/ustream-ssl/0002-ustream-mbedtls-add-compatibility-with-mbed-tls-3-0-0.patch
-new file mode 100644
-index 0000000000..b9fa4be1a5
---- /dev/null
-+++ b/package/ustream-ssl/0002-ustream-mbedtls-add-compatibility-with-mbed-tls-3-0-0.patch
-@@ -0,0 +1,79 @@
-+From 91666a38b7bd4bd353394986d8343a33ba61d8e2 Mon Sep 17 00:00:00 2001
-+From: Hauke Mehrtens <hauke@hauke-m.de>
-+Date: Sat, 11 Nov 2023 22:13:24 +0100
-+Subject: [PATCH] ustream-mbedtls: Add compatibility with Mbed TLS 3.0.0
-+
-+This adds support for compiling the code against Mbed TLS 3.0.0.
-+It still compiles against Mbed TLS 2.28.
-+
-+The following changes were needed:
-+ * DES and 3DES was removed
-+ * mbedtls_pk_context->pk_info is private, use mbedtls_pk_get_type()
-+   to check if it was initialized
-+ * mbedtls_pk_parse_keyfile() now gets a random callback
-+ * mbedtls/certs.h contains test data and is not installed any more and
-+   not needed.
-+
-+Signed-off-by: Hauke Mehrtens <hauke@hauke-m.de>
-+Upstream: https://git.openwrt.org/?p=project/ustream-ssl.git;a=commit;h=91666a38b7bd4bd353394986d8343a33ba61d8e2
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ ustream-mbedtls.c | 12 +++++++++++-
-+ ustream-mbedtls.h |  1 -
-+ 2 files changed, 11 insertions(+), 2 deletions(-)
-+
-+diff --git a/ustream-mbedtls.c b/ustream-mbedtls.c
-+index 7fc7874..1c70cac 100644
-+--- a/ustream-mbedtls.c
-++++ b/ustream-mbedtls.c
-+@@ -110,9 +110,15 @@ static const int default_ciphersuites_client[] =
-+ 	AES_CBC_CIPHERS(ECDHE_ECDSA),
-+ 	AES_CBC_CIPHERS(ECDHE_RSA),
-+ 	AES_CBC_CIPHERS(DHE_RSA),
-++/* Removed in Mbed TLS 3.0.0 */
-++#ifdef MBEDTLS_TLS_DHE_RSA_WITH_3DES_EDE_CBC_SHA
-+ 	MBEDTLS_TLS_DHE_RSA_WITH_3DES_EDE_CBC_SHA,
-++#endif
-+ 	AES_CIPHERS(RSA),
-++/* Removed in Mbed TLS 3.0.0 */
-++#ifdef MBEDTLS_TLS_RSA_WITH_3DES_EDE_CBC_SHA
-+ 	MBEDTLS_TLS_RSA_WITH_3DES_EDE_CBC_SHA,
-++#endif
-+ 	0
-+ };
-+ 
-+@@ -171,7 +177,7 @@ static void ustream_ssl_update_own_cert(struct ustream_ssl_ctx *ctx)
-+ 	if (!ctx->cert.version)
-+ 		return;
-+ 
-+-	if (!ctx->key.pk_info)
-++	if (mbedtls_pk_get_type(&ctx->key) == MBEDTLS_PK_NONE)
-+ 		return;
-+ 
-+ 	mbedtls_ssl_conf_own_cert(&ctx->conf, &ctx->cert, &ctx->key);
-+@@ -206,7 +212,11 @@ __hidden int __ustream_ssl_set_key_file(struct ustream_ssl_ctx *ctx, const char
-+ {
-+ 	int ret;
-+ 
-++#if (MBEDTLS_VERSION_NUMBER >= 0x03000000)
-++	ret = mbedtls_pk_parse_keyfile(&ctx->key, file, NULL, _random, NULL);
-++#else
-+ 	ret = mbedtls_pk_parse_keyfile(&ctx->key, file, NULL);
-++#endif
-+ 	if (ret)
-+ 		return -1;
-+ 
-+diff --git a/ustream-mbedtls.h b/ustream-mbedtls.h
-+index e622e5e..7e7c699 100644
-+--- a/ustream-mbedtls.h
-++++ b/ustream-mbedtls.h
-+@@ -21,7 +21,6 @@
-+ 
-+ #include <mbedtls/net_sockets.h>
-+ #include <mbedtls/ssl.h>
-+-#include <mbedtls/certs.h>
-+ #include <mbedtls/x509.h>
-+ #include <mbedtls/rsa.h>
-+ #include <mbedtls/error.h>
-+-- 
-+2.30.2
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
