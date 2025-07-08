@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBB54C83F09
-	for <buildroot@archiver.kernel.org>; Tue,  8 Jul 2025 21:02:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A98BC83F0F
+	for <buildroot@archiver.kernel.org>; Tue,  8 Jul 2025 21:03:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9C1C281E4E;
-	Tue,  8 Jul 2025 21:02:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C54A8810D4;
+	Tue,  8 Jul 2025 21:03:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Fuhr9TijPCmQ; Tue,  8 Jul 2025 21:02:14 +0000 (UTC)
+ id cjDrhDGUGCtP; Tue,  8 Jul 2025 21:03:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BC20F81A15
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0590680F47
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BC20F81A15;
-	Tue,  8 Jul 2025 21:02:14 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 971F11BF
- for <buildroot@buildroot.org>; Tue,  8 Jul 2025 21:02:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0590680F47;
+	Tue,  8 Jul 2025 21:03:15 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 748BD15F
+ for <buildroot@buildroot.org>; Tue,  8 Jul 2025 21:03:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 70D93400F6
- for <buildroot@buildroot.org>; Tue,  8 Jul 2025 21:02:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 65FBC40A2F
+ for <buildroot@buildroot.org>; Tue,  8 Jul 2025 21:03:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dt1Qada_jBtA for <buildroot@buildroot.org>;
- Tue,  8 Jul 2025 21:02:11 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C0EF540116
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C0EF540116
- for <buildroot@buildroot.org>; Tue,  8 Jul 2025 21:02:11 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AFB9B84452; Tue,  8 Jul 2025 21:02:11 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 8 Jul 2025 22:58:29 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 30fc97c2c52064fa29ddd811959e630c9c655a92
-X-Git-Newrev: 35708db02403b5066d4efc455e802c666ed01dc9
-X-Patchwork-Hint: ignore
-Message-Id: <20250708210211.AFB9B84452@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/sudo: fix
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nreg53TW3jJj for <buildroot@buildroot.org>;
+ Tue,  8 Jul 2025 21:03:12 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8F22440956
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8F22440956
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8F22440956
+ for <buildroot@buildroot.org>; Tue,  8 Jul 2025 21:03:12 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 5329919F5C2;
+ Tue,  8 Jul 2025 23:03:08 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 08 Jul 2025 23:03:08 +0200
+MIME-Version: 1.0
+Date: Tue, 08 Jul 2025 23:03:08 +0200
+To: Marcus Hoffmann <buildroot@bubu1.eu>
+Cc: buildroot@buildroot.org, Marcus Hoffmann <marcus.hoffmann@othermo.de>
+In-Reply-To: <20250708131418.666495-1-buildroot@bubu1.eu>
+References: <20250708131418.666495-1-buildroot@bubu1.eu>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <5a42b7d1df702de55803090a6f5bdede@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1752008590;
+ bh=GmrpznIIl/oTR3m8EIGK7IR0tkzvoA68vl+o4kDcLJA=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=u1jt9IeNMTBQtX+C5bUQPSQrdijV6+RBMiVjkM9vOkYuKwE59JvYW6Le7f7kXturL
+ UOw23ogjn9aQQcAYiaqgzsUJa8eCj4GluydLeU3YAS5hZgIApUgxYrRJXHbMlo49lN
+ ipEFrwojDHYgcUwgCxZ0w1UPJw58m4w0d3lwcwSGSoVeTEj/EGU59S5GbFPHJ0qa4F
+ I5h/YCTIgZs+OaWPEMQjVDOyi0Y048LJGcocTuwpy+W7jv5fdlag+1ANfas72PheWV
+ cTb8RX3+vTEAaw7v2RNxk0Pbjc9eGUPz09pMKmZ6HseCnvjqy4pFNQKEBUJZCE18qG
+ /V2V6D8zH2JnA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=u1jt9IeN
+Subject: Re: [Buildroot] [PATCH] package/sudo: fix
  SUDO_ENABLE_SUDO_GROUP_RULE following version bump
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -60,45 +83,33 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=35708db02403b5066d4efc455e802c666ed01dc9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 08/07/2025 15:14, Marcus Hoffmann via buildroot wrote:
+> From: Marcus Hoffmann <marcus.hoffmann@othermo.de>
+> 
+> Since the version bump of sudo to 1.9.17p1 [1], the sed command in
+> SUDO_ENABLE_SUDO_GROUP_RULE no longer matches the the line in the
+> example sudoers file shipped with the sudo package.
+> 
+> This commit fixes the regexp to match the new sudoers file.
+> 
+> [1] ee86844e632d5760355154ea4e928c9228f3dfd1
+> 
+> Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 
-Since the version bump of sudo to 1.9.17p1 [1], the sed command in
-SUDO_ENABLE_SUDO_GROUP_RULE no longer matches the the line in the
-example sudoers file shipped with the sudo package. This is due to
-upstream commit [2].
+Applied to master, thanks.
 
-This commit fixes the regexp to match the new sudoers file.
+For info, I added a link to the upstream commit introducing
+the issue. See:
+https://gitlab.com/buildroot.org/buildroot/-/commit/35708db02403b5066d4efc455e802c666ed01dc9
 
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/ee86844e632d5760355154ea4e928c9228f3dfd1
-[2] https://github.com/sudo-project/sudo/commit/7c121ff8340c6fa551ba4997dde9d450cf74e40c
+Best regards,
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-[Julien: add link to upstream commit introducing the issue]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/sudo/sudo.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
-index 4e1405eaf1..f57a86805a 100644
---- a/package/sudo/sudo.mk
-+++ b/package/sudo/sudo.mk
-@@ -73,7 +73,7 @@ define SUDO_USERS
- endef
- 
- define SUDO_ENABLE_SUDO_GROUP_RULE
--	$(SED) '/^# \%sudo\tALL=(ALL:ALL) ALL/s/^# //' $(TARGET_DIR)/etc/sudoers
-+	$(SED) '/^# \%sudo ALL=(ALL:ALL) ALL/s/^# //' $(TARGET_DIR)/etc/sudoers
- endef
- SUDO_POST_INSTALL_TARGET_HOOKS += SUDO_ENABLE_SUDO_GROUP_RULE
- 
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
