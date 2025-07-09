@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67839C83F0A
-	for <buildroot@archiver.kernel.org>; Wed,  9 Jul 2025 18:50:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80E29C83F03
+	for <buildroot@archiver.kernel.org>; Wed,  9 Jul 2025 18:52:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9C94C4065E;
-	Wed,  9 Jul 2025 18:50:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 474DC409B1;
+	Wed,  9 Jul 2025 18:52:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UDkUrKatA04t; Wed,  9 Jul 2025 18:50:02 +0000 (UTC)
+ id 7JL6aV4ZYt3y; Wed,  9 Jul 2025 18:52:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6BF0C40591
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 59486405F0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6BF0C40591;
-	Wed,  9 Jul 2025 18:50:02 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4817112E
- for <buildroot@buildroot.org>; Wed,  9 Jul 2025 18:50:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 59486405F0;
+	Wed,  9 Jul 2025 18:52:54 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 38A5012E
+ for <buildroot@buildroot.org>; Wed,  9 Jul 2025 18:52:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 36ABF813F5
- for <buildroot@buildroot.org>; Wed,  9 Jul 2025 18:50:01 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1F3F680C48
+ for <buildroot@buildroot.org>; Wed,  9 Jul 2025 18:52:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Nwzl1x4P6WtJ for <buildroot@buildroot.org>;
- Wed,  9 Jul 2025 18:50:00 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 558B6813F1
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 558B6813F1
- for <buildroot@buildroot.org>; Wed,  9 Jul 2025 18:50:00 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3E69E86091; Wed,  9 Jul 2025 18:50:00 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 9 Jul 2025 20:48:43 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 09880508cb26260f30608137f697b6bdf11483fa
-X-Git-Newrev: f52e17596dc81a7ae12afbe7a699afdf0ae8e6b2
-X-Patchwork-Hint: ignore
-Message-Id: <20250709185000.3E69E86091@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/sngrep: security bump to v1.8.2
+ id rh4VYf0ShqCq for <buildroot@buildroot.org>;
+ Wed,  9 Jul 2025 18:52:52 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 33B0B80C19
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 33B0B80C19
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 33B0B80C19
+ for <buildroot@buildroot.org>; Wed,  9 Jul 2025 18:52:51 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id C26FF2003B4;
+ Wed,  9 Jul 2025 20:52:47 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Wed, 09 Jul 2025 20:52:47 +0200
+MIME-Version: 1.0
+Date: Wed, 09 Jul 2025 20:52:47 +0200
+To: Titouan Christophe <titouan.christophe@mind.be>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250708113328.2269438-1-titouan.christophe@mind.be>
+References: <20250708113328.2269438-1-titouan.christophe@mind.be>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <8a7d80892bf03ab3e732d0214a43b1f3@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1752087168;
+ bh=2yl4w6jjySFHwA6bV6Q62ruDw96Z8JhCHH/onYNqcdc=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=pG848Zzf+frVJsAHMLYdNW7jhQdm3pwwVYhkKvIUGWMfQZlmo5G1gqzunQDX0OPLF
+ ZAxuHBGfDYGEm0FTLXRP50VfF3K6/Ur1KQnK9fZe0euDe8IWG5U/lbzVCl7knYaiwZ
+ P0tB+5+c6tHo+Mo2abDOIqy1T5BUxeaRAo7PzV3BFqoYVZijcfzUuEhnfBq2igbSPJ
+ 1CtowZMbvOK3XvpomC6BWlN7AY3HP5Dijp+RHkomhKFFpZneHBHWXzctg18s4tAIqc
+ GM5el0/sI2cbvF0LkNhwEWH/hvxVgi/pNWjfMeYUBxNYY5fnOcYSGTDad+/A8NHNaw
+ teFoSIxWnF1Wg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=pG848Zzf
+Subject: Re: [Buildroot] [PATCH] package/sngrep: security bump to v1.8.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,90 +82,39 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4384589938917982162=="
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4384589938917982162==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=f52e17596dc81a7ae12afbe7a699afdf0ae8e6b2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-See the release notes:
-
-- https://github.com/irontec/sngrep/releases/tag/v1.7.0
-- https://github.com/irontec/sngrep/releases/tag/v1.8.0
-- https://github.com/irontec/sngrep/releases/tag/v1.8.1
-- https://github.com/irontec/sngrep/releases/tag/v1.8.2
-
-This fixes the following vulnerabilities:
-
-- CVE-2024-3119:
-    A buffer overflow vulnerability exists in all versions of sngrep since
-    v0.4.2, due to improper handling of 'Call-ID' and 'X-Call-ID' SIP
-    headers. The functions sip_get_callid and sip_get_xcallid in sip.c use
-    the strncpy function to copy header contents into fixed-size buffers
-    without checking the data length. This flaw allows remote attackers to
-    execute arbitrary code or cause a denial of service (DoS) through
-    specially crafted SIP messages.
-    https://www.cve.org/CVERecord?id=CVE-2024-3119
-
-- CVE-2024-3120:
-    A stack-buffer overflow vulnerability exists in all versions of sngrep
-    since v1.4.1. The flaw is due to inadequate bounds checking when
-    copying 'Content-Length' and 'Warning' headers into fixed-size buffers
-    in the sip_validate_packet and sip_parse_extra_headers functions
-    within src/sip.c. This vulnerability allows remote attackers to
-    execute arbitrary code or cause a denial of service (DoS) via crafted
-    SIP messages.
-    https://www.cve.org/CVERecord?id=CVE-2024-3120
-
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/sngrep/sngrep.hash | 6 +++---
- package/sngrep/sngrep.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/sngrep/sngrep.hash b/package/sngrep/sngrep.hash
-index c9b9c8be8d..aea9d95770 100644
---- a/package/sngrep/sngrep.hash
-+++ b/package/sngrep/sngrep.hash
-@@ -1,6 +1,6 @@
--# From https://github.com/irontec/sngrep/releases/download/v1.7.0/sngrep-1.7.0.tar.gz.md5sum
--md5  ee3cc7bd75adeb713411aa678e45ae4c  sngrep-1.7.0.tar.gz
-+# From https://github.com/irontec/sngrep/releases/download/v1.8.2/sngrep-1.8.2.tar.gz.md5sum
-+md5  eb2a398e2e98993ee2a19a3afddfc282  sngrep-1.8.2.tar.gz
- 
- # Locally computed
--sha256  2e5ba3a4d6486ea00bd73d2cceff383ba162dcd6d0170ae74cfa3b1c206e2cb1  sngrep-1.7.0.tar.gz
-+sha256  1cd05bddd531b353e3069c5243e7076b60a3ee907dbbc3c9c2834676ed8c4bac  sngrep-1.8.2.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE
-diff --git a/package/sngrep/sngrep.mk b/package/sngrep/sngrep.mk
-index b86d7e83f0..5399d041b5 100644
---- a/package/sngrep/sngrep.mk
-+++ b/package/sngrep/sngrep.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SNGREP_VERSION = 1.7.0
-+SNGREP_VERSION = 1.8.2
- SNGREP_SITE = \
- 	https://github.com/irontec/sngrep/releases/download/v$(SNGREP_VERSION)
- SNGREP_LICENSE = GPL-3.0+
-
---===============4384589938917982162==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4384589938917982162==--
+T24gMDgvMDcvMjAyNSAxMzozMywgVGl0b3VhbiBDaHJpc3RvcGhlIHZpYSBidWlsZHJvb3Qgd3Jv
+dGU6Cj4gU2VlIHRoZSByZWxlYXNlIG5vdGVzOgo+IAo+IC0gaHR0cHM6Ly9naXRodWIuY29tL2ly
+b250ZWMvc25ncmVwL3JlbGVhc2VzL3RhZy92MS43LjAKPiAtIGh0dHBzOi8vZ2l0aHViLmNvbS9p
+cm9udGVjL3NuZ3JlcC9yZWxlYXNlcy90YWcvdjEuOC4wCj4gLSBodHRwczovL2dpdGh1Yi5jb20v
+aXJvbnRlYy9zbmdyZXAvcmVsZWFzZXMvdGFnL3YxLjguMQo+IC0gaHR0cHM6Ly9naXRodWIuY29t
+L2lyb250ZWMvc25ncmVwL3JlbGVhc2VzL3RhZy92MS44LjIKPiAKPiBUaGlzIGZpeGVzIHRoZSBm
+b2xsb3dpbmcgdnVsbmVyYWJpbGl0aWVzOgo+IAo+IC0gQ1ZFLTIwMjQtMzExOToKPiAgICAgQSBi
+dWZmZXIgb3ZlcmZsb3cgdnVsbmVyYWJpbGl0eSBleGlzdHMgaW4gYWxsIHZlcnNpb25zIG9mIHNu
+Z3JlcCAKPiBzaW5jZQo+ICAgICB2MC40LjIsIGR1ZSB0byBpbXByb3BlciBoYW5kbGluZyBvZiAn
+Q2FsbC1JRCcgYW5kICdYLUNhbGwtSUQnIFNJUAo+ICAgICBoZWFkZXJzLiBUaGUgZnVuY3Rpb25z
+IHNpcF9nZXRfY2FsbGlkIGFuZCBzaXBfZ2V0X3hjYWxsaWQgaW4gc2lwLmMgCj4gdXNlCj4gICAg
+IHRoZSBzdHJuY3B5IGZ1bmN0aW9uIHRvIGNvcHkgaGVhZGVyIGNvbnRlbnRzIGludG8gZml4ZWQt
+c2l6ZSAKPiBidWZmZXJzCj4gICAgIHdpdGhvdXQgY2hlY2tpbmcgdGhlIGRhdGEgbGVuZ3RoLiBU
+aGlzIGZsYXcgYWxsb3dzIHJlbW90ZSBhdHRhY2tlcnMgCj4gdG8KPiAgICAgZXhlY3V0ZSBhcmJp
+dHJhcnkgY29kZSBvciBjYXVzZSBhIGRlbmlhbCBvZiBzZXJ2aWNlIChEb1MpIHRocm91Z2gKPiAg
+ICAgc3BlY2lhbGx5IGNyYWZ0ZWQgU0lQIG1lc3NhZ2VzLgo+ICAgICBodHRwczovL3d3dy5jdmUu
+b3JnL0NWRVJlY29yZD9pZD1DVkUtMjAyNC0zMTE5Cj4gCj4gLSBDVkUtMjAyNC0zMTIwOgo+ICAg
+ICBBIHN0YWNrLWJ1ZmZlciBvdmVyZmxvdyB2dWxuZXJhYmlsaXR5IGV4aXN0cyBpbiBhbGwgdmVy
+c2lvbnMgb2YgCj4gc25ncmVwCj4gICAgIHNpbmNlIHYxLjQuMS4gVGhlIGZsYXcgaXMgZHVlIHRv
+IGluYWRlcXVhdGUgYm91bmRzIGNoZWNraW5nIHdoZW4KPiAgICAgY29weWluZyAnQ29udGVudC1M
+ZW5ndGgnIGFuZCAnV2FybmluZycgaGVhZGVycyBpbnRvIGZpeGVkLXNpemUgCj4gYnVmZmVycwo+
+ICAgICBpbiB0aGUgc2lwX3ZhbGlkYXRlX3BhY2tldCBhbmQgc2lwX3BhcnNlX2V4dHJhX2hlYWRl
+cnMgZnVuY3Rpb25zCj4gICAgIHdpdGhpbiBzcmMvc2lwLmMuIFRoaXMgdnVsbmVyYWJpbGl0eSBh
+bGxvd3MgcmVtb3RlIGF0dGFja2VycyB0bwo+ICAgICBleGVjdXRlIGFyYml0cmFyeSBjb2RlIG9y
+IGNhdXNlIGEgZGVuaWFsIG9mIHNlcnZpY2UgKERvUykgdmlhIAo+IGNyYWZ0ZWQKPiAgICAgU0lQ
+wqBtZXNzYWdlcy4KPiAgICAgaHR0cHM6Ly93d3cuY3ZlLm9yZy9DVkVSZWNvcmQ/aWQ9Q1ZFLTIw
+MjQtMzEyMAo+IAo+IFNpZ25lZC1vZmYtYnk6IFRpdG91YW4gQ2hyaXN0b3BoZSA8dGl0b3Vhbi5j
+aHJpc3RvcGhlQG1pbmQuYmU+CgpBcHBsaWVkIHRvIG1hc3RlciwgdGhhbmtzLgpfX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBs
+aXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9t
+YWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
