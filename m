@@ -1,78 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19F6CC83F09
-	for <buildroot@archiver.kernel.org>; Wed,  9 Jul 2025 13:37:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3F32C83F0A
+	for <buildroot@archiver.kernel.org>; Wed,  9 Jul 2025 14:59:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5BADF60A93;
-	Wed,  9 Jul 2025 13:37:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5C51540874;
+	Wed,  9 Jul 2025 14:59:28 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id exyB-7oposAW; Wed,  9 Jul 2025 14:59:27 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 87244407F4
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 87244407F4;
+	Wed,  9 Jul 2025 14:59:27 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2916C69
+ for <buildroot@buildroot.org>; Wed,  9 Jul 2025 14:59:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 269D0608C2
+ for <buildroot@buildroot.org>; Wed,  9 Jul 2025 14:59:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8RKKpHu_NGe8; Wed,  9 Jul 2025 13:37:25 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A8F5560608
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A8F5560608;
-	Wed,  9 Jul 2025 13:37:25 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id E0D2315F
- for <buildroot@buildroot.org>; Wed,  9 Jul 2025 13:37:23 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C705E814B5
- for <buildroot@buildroot.org>; Wed,  9 Jul 2025 13:37:23 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qqfXCB8HtIYI for <buildroot@buildroot.org>;
- Wed,  9 Jul 2025 13:37:22 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.116;
- helo=smtpcmd11116.aruba.it;
- envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DBE5381CBA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DBE5381CBA
-Received: from smtpcmd11116.aruba.it (smtpcmd11116.aruba.it [62.149.156.116])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DBE5381CBA
- for <buildroot@buildroot.org>; Wed,  9 Jul 2025 13:37:20 +0000 (UTC)
-Received: from [172.25.4.128] ([212.103.203.10]) by Aruba SMTP with ESMTPSA
- id ZUz7uxtiztr9dZUz7uwjV9; Wed, 09 Jul 2025 15:37:18 +0200
-Message-ID: <f92fb29d-be1f-40c0-83bb-d66dfecf0988@benettiengineering.com>
-Date: Wed, 9 Jul 2025 15:37:17 +0200
+ id nJYrMnWwcBQR for <buildroot@buildroot.org>;
+ Wed,  9 Jul 2025 14:59:25 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=136.243.2.102;
+ helo=nyx.n621.de; envelope-from=fl@n621.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 66231608C4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 66231608C4
+Received: from nyx.n621.de (v4gw.hekate.n621.de [136.243.2.102])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 66231608C4
+ for <buildroot@buildroot.org>; Wed,  9 Jul 2025 14:59:24 +0000 (UTC)
+Received: by nyx.n621.de (Postfix, from userid 1000)
+ id C2B65E00444; Wed,  9 Jul 2025 16:59:21 +0200 (CEST)
+Date: Wed, 9 Jul 2025 16:59:21 +0200
+From: Florian Larysch <fl@n621.de>
+To: yann.morin@orange.com
+Cc: Romain Naour <romain.naour@smile.fr>, buildroot@buildroot.org,
+ Christian Stewart <christian@aperture.us>,
+ Thomas Perale <thomas.perale@mind.be>
+Message-ID: <20250709145921.wuzple2z7jrftmjh@n621.de>
+References: <20250611162152.32353-1-fl@n621.de>
+ <402a15d9-f995-4513-9ec7-c2061bf3f955@smile.fr>
+ <20250706171341.azx6v4b6k524gmsw@n621.de>
+ <18ac690e-40e3-420c-8e03-be55aca71ad8@smile.fr>
+ <20250707154308.pchu64peqfpfwxqd@n621.de>
+ <aGym1lIlT5vSN2V8@yd-6wlzhs3>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Jesse Taube <mr.bossman075@gmail.com>, buildroot@buildroot.org
-Cc: stephane.viau@oss.nxp.com, festevam@gmail.com, maeva.manuel@oss.nxp.com,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20250708234739.2969797-1-Mr.Bossman075@gmail.com>
-Content-Language: en-US, it
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20250708234739.2969797-1-Mr.Bossman075@gmail.com>
-X-CMAE-Envelope: MS4xfE6e5FTX1kakLV7Pk89qCxYOYr0UCktPlXgDcKpgFBU5WTv7IUiF0ZzOP8OuylciiQydXcjONdxprfCx3etqlXymzkbWMH89BUAwhGwO+IJKHCv5ZnbQ
- vwJJbGJZfKzlbFJN8o3bFJxiVJOiSt4XP/b71e77+gLc9EpqBDmxMOzi2Qaab2OiHR8XYHJy0ZtPq70/mKH80I6Ky0co79WEmcSjwrM8GOHy+as+Tu+EX3SS
- ss8vo6tyB44qUbL4yl9RL77dWnxxWnkawrHqm+cRfk/A/uwDFRJPzRmXit+qbbo+vbiUr17Dh7Sl+KCjlyc/V5nBkEzNRb8bnWdaGxTEQt+vzijzbnBM/ixQ
- 1UF1RrAlkcfKvFtpG9aAJu3C02HVuwhkVP5wJIBoMvp2oABuBXs=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1752068238; bh=jINA0Eg1EzSpBLd6SGx+CJVDKsCmG1hitCTmYXpQTvo=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=BAQ2fIxM8y1rMIgopWL8UH2j/tldsNPxbprN8sHqgK7WU1OXZh51i3qRWWUsXYlVg
- 6RvPkKuTv9AQMTZ2JXXlMZYmPvZZeaPTYJU/KJAPMxa1tuRfNHqK6rYgi7NnBea8tb
- YaWTV+11KULsbWCi9KR5FK2wR59JdPP4Bowrv7fFZ6C6zSnIxF+TX7PalF03vjIHBt
- vhb1jFX2dOoIrfjvrOMH81pe3pRmJJG7QvUtiw+m/cTxOBYsnhXi5PFSj68icA+W9v
- jTAAnMSHT+SNshsXFqkZqA4UwLU49U8Fwd1+brLdsQYVnuHHzUk05Yc/dedyELVNpM
- 1pLwovQjZAC8Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+Content-Disposition: inline
+In-Reply-To: <aGym1lIlT5vSN2V8@yd-6wlzhs3>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=n621.de; s=dkim; t=1752073161;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ in-reply-to:in-reply-to:references:references;
+ bh=Orcyk638Rqk8peiVNqNJleO+92+AvAC6swiNNRFJAHM=;
+ b=0TirUAk+7ePAufgCjvp2h+7V3h6LRmjcE5j2MqoaEHuUGG6P4awB2i18qIxrytiKBA8sVd
+ 3dIomlzhUqYKDc0T1ELJ/lx5yDYg4RzJR3/ap/ZcNzrj1iXTxzVcgHhuCRJ49gIGlU7yQ/
+ H8ixowZZAzJcKCfz3THiIku7Zqdqd9c=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=BAQ2fIxM
-Subject: Re: [Buildroot] [PATCH] configs/imxrt1050-evk: Switch to use
- extlinux.conf
+ header.from=n621.de
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=n621.de header.i=@n621.de header.a=rsa-sha256
+ header.s=dkim header.b=0TirUAk+
+Subject: Re: [Buildroot] [PATCH 1/1] package/go: make pre-built compiler
+ provide target support too
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,119 +83,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Jesse,
+Hello Yann,
 
-On 7/9/25 01:47, Jesse Taube wrote:
-> Switch to extlinux instead of built in U-Boot script.
-> Drop custom U-Boot fragment and genimage config.
-> 
-> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+On Tue, Jul 08, 2025 at 07:04:22AM +0200, yann.morin@orange.com wrote:
+> So, I've had a go (aha!) at rewriting a commit log as I understood the
+> situation, building upon your initial commit log and trying to account
+> for Romain's comments:
 
-Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Thank you! That does seem more straightforward than the original
+message.
 
-Kind regards
--- 
-Giulio Benetti
-CEO&CTO@Benetti Engineering sas
-https://www.linkedin.com/company/benetti-engineering-sas/
-https://www.linkedin.com/in/giulio-benetti-79975951/
+I think I now realize where the whole confusion was coming from: The
+package in question in our internal tree that made me discover this
+problem in the first place was missing the
+BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS dependency and thus enabling
+"go-bin" *seemed* to work but ended up just building the package for the
+host architecture. I didn't realize that this was caused by a packaging
+problem on our end and not a Buildroot issue (if the dependency had been
+correctly declared, the package would not have been selectable) and I
+ended up dragging this into my commit message (the part about native
+builds).
 
-> ---
->   board/freescale/imxrt1050evk/genimage.cfg       | 17 -----------------
->   .../rootfs_overlay/boot/extlinux/extlinux.conf  |  4 ++++
->   board/freescale/imxrt1050evk/uboot.fragment     |  2 --
->   configs/imxrt1050-evk_defconfig                 |  5 +++--
->   4 files changed, 7 insertions(+), 21 deletions(-)
->   create mode 100644 board/freescale/imxrt1050evk/rootfs_overlay/boot/extlinux/extlinux.conf
->   delete mode 100644 board/freescale/imxrt1050evk/uboot.fragment
-> 
-> diff --git a/board/freescale/imxrt1050evk/genimage.cfg b/board/freescale/imxrt1050evk/genimage.cfg
-> index 64fc8452f8..3a4c4fb792 100644
-> --- a/board/freescale/imxrt1050evk/genimage.cfg
-> +++ b/board/freescale/imxrt1050evk/genimage.cfg
-> @@ -1,14 +1,3 @@
-> -image boot.vfat {
-> -	vfat {
-> -		files = {
-> -			"zImage",
-> -			"imxrt1050-evk.dtb",
-> -		}
-> -	}
-> -
-> -	size = 8M
-> -}
-> -
->   image sdcard.img {
->   	hdimage {
->   	}
-> @@ -27,12 +16,6 @@ image sdcard.img {
->   		size = 512K
->   	}
->   
-> -	partition boot {
-> -		partition-type = 0xc
-> -		bootable = "true"
-> -		image = "boot.vfat"
-> -	}
-> -
->   	partition rootfs {
->   		partition-type = 0x83
->   		image = "rootfs.ext4"
-> diff --git a/board/freescale/imxrt1050evk/rootfs_overlay/boot/extlinux/extlinux.conf b/board/freescale/imxrt1050evk/rootfs_overlay/boot/extlinux/extlinux.conf
-> new file mode 100644
-> index 0000000000..1818d2702d
-> --- /dev/null
-> +++ b/board/freescale/imxrt1050evk/rootfs_overlay/boot/extlinux/extlinux.conf
-> @@ -0,0 +1,4 @@
-> +label buildroot
-> +	kernel /boot/zImage
-> +	devicetree /boot/imxrt1050-evk.dtb
-> +	append console=ttyLP0 root=/dev/mmcblk0p1 rootwait rw
-> diff --git a/board/freescale/imxrt1050evk/uboot.fragment b/board/freescale/imxrt1050evk/uboot.fragment
-> deleted file mode 100644
-> index dd45ca4c29..0000000000
-> --- a/board/freescale/imxrt1050evk/uboot.fragment
-> +++ /dev/null
-> @@ -1,2 +0,0 @@
-> -CONFIG_USE_BOOTCOMMAND=y
-> -CONFIG_BOOTCOMMAND="setenv bootargs console=ttyLP0 root=/dev/mmcblk0p2 rw earlycon rootwait;load mmc 0:1 0x80800000 imxrt1050-evk.dtb;load mmc 0:1 0x80000000 zImage;bootz 0x80000000 - 0x80800000"
-> diff --git a/configs/imxrt1050-evk_defconfig b/configs/imxrt1050-evk_defconfig
-> index 8a515a9260..8bff623602 100644
-> --- a/configs/imxrt1050-evk_defconfig
-> +++ b/configs/imxrt1050-evk_defconfig
-> @@ -1,6 +1,7 @@
->   BR2_arm=y
->   BR2_cortex_m7=y
->   BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_7=y
-> +BR2_ROOTFS_OVERLAY="board/freescale/imxrt1050evk/rootfs_overlay"
->   BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
->   BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/freescale/imxrt1050evk/genimage.cfg"
->   BR2_LINUX_KERNEL=y
-> @@ -9,15 +10,15 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.7"
->   BR2_LINUX_KERNEL_DEFCONFIG="imxrt"
->   BR2_LINUX_KERNEL_DTS_SUPPORT=y
->   BR2_LINUX_KERNEL_INTREE_DTS_NAME="nxp/imx/imxrt1050-evk"
-> +BR2_LINUX_KERNEL_INSTALL_TARGET=y
->   BR2_TARGET_ROOTFS_EXT2=y
->   BR2_TARGET_ROOTFS_EXT2_4=y
->   BR2_TARGET_ROOTFS_EXT2_SIZE="16M"
->   BR2_TARGET_UBOOT=y
->   BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
->   BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-> -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.01"
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.07"
->   BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imxrt1050-evk"
-> -BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/freescale/imxrt1050evk/uboot.fragment"
->   BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
->   BR2_TARGET_UBOOT_FORMAT_IMG=y
->   BR2_TARGET_UBOOT_SPL=y
+Either way, feel free to commit this with your reworded message. Or
+should I send a v2?
 
-
+Florian
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
