@@ -1,83 +1,103 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8980DC83F0A
-	for <buildroot@archiver.kernel.org>; Wed,  9 Jul 2025 15:17:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BF0FC83F0A
+	for <buildroot@archiver.kernel.org>; Wed,  9 Jul 2025 16:36:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 387F84085F;
-	Wed,  9 Jul 2025 15:17:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B0B7381EDE;
+	Wed,  9 Jul 2025 16:36:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id d9Dp0xPLHT2b; Wed,  9 Jul 2025 15:17:35 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PnU48ZzBl5Ve; Wed,  9 Jul 2025 16:36:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 929324086C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DDE5781E3F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 929324086C;
-	Wed,  9 Jul 2025 15:17:35 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id D48E715F
- for <buildroot@buildroot.org>; Wed,  9 Jul 2025 15:17:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DDE5781E3F;
+	Wed,  9 Jul 2025 16:36:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id AE87A15F
+ for <buildroot@buildroot.org>; Wed,  9 Jul 2025 16:36:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D23F4606D3
- for <buildroot@buildroot.org>; Wed,  9 Jul 2025 15:17:33 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A042C81E3F
+ for <buildroot@buildroot.org>; Wed,  9 Jul 2025 16:36:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UbTO7xfPzsqS for <buildroot@buildroot.org>;
- Wed,  9 Jul 2025 15:17:33 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.178.249;
- helo=mslow3.mail.gandi.net; envelope-from=alexis.lothore@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C88126062A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C88126062A
-Received: from mslow3.mail.gandi.net (mslow3.mail.gandi.net [217.70.178.249])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C88126062A
- for <buildroot@buildroot.org>; Wed,  9 Jul 2025 15:17:32 +0000 (UTC)
-Received: from relay15.mail.gandi.net (relay15.mail.gandi.net [217.70.178.235])
- by mslow3.mail.gandi.net (Postfix) with ESMTP id 95120580435
- for <buildroot@buildroot.org>; Wed,  9 Jul 2025 15:04:30 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 19AB144289;
- Wed,  9 Jul 2025 15:04:23 +0000 (UTC)
-Date: Wed, 09 Jul 2025 17:04:14 +0200
-MIME-Version: 1.0
-Message-Id: <20250709-perf_libtraceevent-v2-1-3ea54fbe6b5b@bootlin.com>
-References: <20250709-perf_libtraceevent-v2-0-3ea54fbe6b5b@bootlin.com>
-In-Reply-To: <20250709-perf_libtraceevent-v2-0-3ea54fbe6b5b@bootlin.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id q6P56e_LDcYJ for <buildroot@buildroot.org>;
+ Wed,  9 Jul 2025 16:36:50 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
+ envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6C17781E3E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C17781E3E
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6C17781E3E
+ for <buildroot@buildroot.org>; Wed,  9 Jul 2025 16:36:49 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ 5b1f17b1804b1-453634d8609so312085e9.3
+ for <buildroot@buildroot.org>; Wed, 09 Jul 2025 09:36:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1752079008; x=1752683808;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=8bTRywLUi+aq0mIxp+AdejzxPeKCAvJ+PG5v2SkDQp8=;
+ b=d59VTbuPGU3JNS5wU04HmldwnEnEOVLND1XuIz86h6uIpELi1ytL9CJZ0fNVAIaj4+
+ DnUfWb9kAuF1EhzL52P0wj1H34f5lMpnlnV6+hcDfi4GucsZoYKQ+DV9EAHh+tw1UpYh
+ yRVE0dBDJD6NW9QEr39FgFfyyZl17S0BV6rTAWkRft1G0IUa0/US0TIAHpagnTB1W/vd
+ YLTlhDdKZd4iCRlxKBTUmn0xVjmZKNHUiY4DJ3kFXLB/VExUPF8BuUsG993uC/CeNV+w
+ kWNYb1KiO85dx8H4myynQH/TuxyoNcnREMar/8tLRHkM3FevZsRXrWsi3UMK+wiwPf4k
+ OgNA==
+X-Gm-Message-State: AOJu0Yw/4BPxi4tka8KAQLr3XMGF1Cp+Nijd3C8VMRhyLOUW6G631d/8
+ wcXnrawTJOPaI2AZqm+PuW5QRoPQnOh2k0XYniPy+B1fy7WsEJWq1NVUeYg/6glS5OHxq2Qo504
+ xPjVI
+X-Gm-Gg: ASbGncvgKMRjFUm8qQ7Y/yDXJST6ZC0EuKwtAlAqL9cgrfw4QVVXaDFjYMG4n2GR5zk
+ PoOchvpbWi0FLM3sWSAy5gH8axiX5jBdgEYDgOnV2mbWCy1VdHn5xtaA0HVJsrUMULsipxeri3o
+ ejrQz632u5ryQf3FtkRBWldQDMkPg4erlJyTfA6oDZ8MIUfNIs8WnqsadfRKVWqClKVMgnTr65t
+ 30jvEZY2qXu1f9HttLdCQKyQmwwvj98xy3+Pz32sWZPKy54RthAkDaJsAAyIuYHW4ydax945n/F
+ GzbnWb9r84s0ngXmNnKz2EBetVWOKeQWy6rhKZN3jJu35VxFiEf6vyoJgDHsM7FnebBExqDmUlm
+ XG79/jcvyfsOVKILEOQ==
+X-Google-Smtp-Source: AGHT+IE7zcM4rRJUK4YhRXA9DCFONtVctlH377SUqQ/+zlNuzbBgakUhc8FULamlwT1SoPC2wKoBiQ==
+X-Received: by 2002:a05:600c:358a:b0:450:d00d:cc with SMTP id
+ 5b1f17b1804b1-454dab9e5b2mr10155635e9.2.1752079007644; 
+ Wed, 09 Jul 2025 09:36:47 -0700 (PDT)
+Received: from dragon.local.ess-mail.com
+ ([2a02:a03f:639d:e501:5db7:a3a4:443e:4828])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-454d5032e17sm36911795e9.5.2025.07.09.09.36.46
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 09 Jul 2025 09:36:47 -0700 (PDT)
 To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Luca Ceresoli <luca.ceresoli@bootlin.com>, 
- Olivier Benjamin <olivier.benjamin@bootlin.com>, 
- =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-X-Mailer: b4 0.14.2
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdefjeekjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephfffufggtgfgkfhfjgfvvefosehtkeertdertdejnecuhfhrohhmpeetlhgvgihishcunfhothhhohhrrocuoegrlhgvgihishdrlhhothhhohhrvgessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepgeevgefhteffuefhheekkeelffffvdeugffgveejffdtvdffudehtedtieevteetnecukfhppedvrgdtvdemkeegvdekmeehvggsieemuddvtddumegrfhguieemfehfsggsmegrugdtkeemkehfleeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeekgedvkeemhegvsgeimeduvddtudemrghfugeimeeffhgssgemrggutdekmeekfheliedphhgvlhhopegludelvddrudeikedruddrgeejngdpmhgrihhlfhhrohhmpegrlhgvgihishdrlhhothhhohhrvgessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohephedprhgtphhtthhopehluhgtrgdrtggvrhgvshholhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlu
- ghrohhothdrohhrghdprhgtphhtthhopegrlhgvgihishdrlhhothhhohhrvgessghoohhtlhhinhdrtghomhdprhgtphhtthhopeholhhivhhivghrrdgsvghnjhgrmhhinhessghoohhtlhhinhdrtghomh
+Cc: Bagas Sanjaya <bagasdotme@gmail.com>,
+	thomas.perale@mind.be
+Date: Wed,  9 Jul 2025 18:36:24 +0200
+Message-ID: <20250709163624.115141-1-titouan.christophe@mind.be>
+X-Mailer: git-send-email 2.50.0
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1752073463;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=ds5KtCzrdNQh6bokUMZb3aI6nXsEt39T3+WVgko8v2w=;
- b=MpoIdahWOR6nGkfox8yk7Z8TG8fCFyfCKxxOY0jBSLXrxSmaqyZWUV1iC5YxC+l5As7hH1
- WqRwRogkoAlxIMEWcUq3eVarmNEMYtRCCAchztqugi6P2PSMWQDKnCrY6J6XVeDYMKHtK8
- Cj8W/v69PqIxlHcDzx4ZgrIbepzocvNNsbYzN3pMhwxWbT4ZFHjBmq66wmhkolTlQnpaKT
- 519RXwZTXj+IWOrfpOF19FiWTtdM7tRJ1+SvMBiOPCJDQqHfMmmypgvkoNvreuH3BwxaLs
- 62YPn8tmePBmnWha2Yh1/HyEFLK6cKatFFMuTu4LJL05BLscV8ZKNV2Pje4jOA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=MpoIdahW
-Subject: [Buildroot] [PATCH v2 1/2] package/linux-tools: perf: build with
- libtraceevent support when it is selected
+ d=mind.be; s=google; t=1752079008; x=1752683808; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=8bTRywLUi+aq0mIxp+AdejzxPeKCAvJ+PG5v2SkDQp8=;
+ b=OEhuAwjvI7nlmqHxY3dLXTHBg9Nj3VzYBY8JjKr7PV6TrxfhEQRXa6YHzFdtrCv4S2
+ Ov/BllHlc7cxtD4GGS86si1PabPZLmwOe44bett3/9qe7rRfCaTkPtQMeyhDmCcERVlZ
+ Ds9NTkKXhKnww/sXRhrTEgr581Z5PPh8NrCYZoiMCNY2YIRyQgbsZW3VzqhlvZBGlLVo
+ 3CNG/2v0Myl1UtD0VLWIalv3iUbBvK9nZ6GLUGyhDN6fFoIezteRx8WgokDFNh7zyicn
+ wWGwdm5Q/nlY9F8AR8KAxzHRBn5Yi/RHBJihkYNQRpVQg4lbulPqt4Tgm+URLvfJQyVt
+ usIw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=OEhuAwjv
+Subject: [Buildroot] [PATCH for 2025.02.x] package/git: security bump to
+ v2.48.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -89,65 +109,106 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?q?Alexis_Lothor=C3=A9_via_buildroot?= <buildroot@buildroot.org>
-Reply-To: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Titouan Christophe via buildroot <buildroot@buildroot.org>
+Reply-To: Titouan Christophe <titouan.christophe@mind.be>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-V2hlbiB0cnlpbmcgdG8gcGVyZm9ybSBhIGN1c3RvbSB1cHJvYmUgcmVjb3JkaW5nIG9uIGEgdGFy
-Z2V0IHdpdGggcGVyZgpidWlsdCBieSBidWlsZHJvb3QsIHRoZSByZWNvcmRpbmcgc3RlcCBmYWls
-cyBhcyBwZXJmIGNhbiBub3QgcmVjb3JkCnVwcm9iZXMgd2l0aG91dCBsaWJ0cmFjZWV2ZW50IHN1
-cHBvcnQ6CgogICQgcGVyZiBwcm9iZSAteCBsaW5rZWRfbGlzdCBpbnNlcnRfbmFtZSBpbmRleAog
-IFRhcmdldCBwcm9ncmFtIGlzIGNvbXBpbGVkIHdpdGhvdXQgb3B0aW1pemF0aW9uLiBTa2lwcGlu
-ZyBwcm9sb2d1ZS4KICBQcm9iZSBvbiBhZGRyZXNzIDB4ODA4IHRvIGZvcmNlIHByb2JpbmcgYXQg
-dGhlIGZ1bmN0aW9uIGVudHJ5LgoKICBBZGRlZCBuZXcgZXZlbnQ6CiAgICBwcm9iZV9saW5rZWRf
-bGlzdDppbnNlcnRfbmFtZSAob24gaW5zZXJ0X25hbWUgaW4gL3Jvb3QvZ2RiL2xpbmtlZF9saXN0
-IHdpdGggaW5kZXgpCgogIHBlcmYgaXMgbm90IGxpbmtlZCB3aXRoIGxpYnRyYWNlZXZlbnQsIHRv
-IHVzZSB0aGUgbmV3IHByb2JlIHlvdSBjYW4gdXNlIHRyYWNlZnM6CgogICAgICAgICAgY2QgL3N5
-cy9rZXJuZWwvdHJhY2luZy8KICAgICAgICAgIGVjaG8gMSA+IGV2ZW50cy9wcm9iZV9saW5rZWRf
-bGlzdC9pbnNlcnRfbmFtZS9lbmFibGUKICAgICAgICAgIGVjaG8gMSA+IHRyYWNpbmdfb24KICAg
-ICAgICAgIGNhdCB0cmFjZV9waXBlCiAgICAgICAgICBCZWZvcmUgcmVtb3ZpbmcgdGhlIHByb2Jl
-LCBlY2hvIDAgPiBldmVudHMvcHJvYmVfbGlua2VkX2xpc3QvaW5zZXJ0X25hbWUvZW5hYmxlCiAg
-JCBwZXJmIHJlY29yZCAtZSBwcm9iZV9saW5rZWRfbGlzdDppbnNlcnRfbmFtZSAuL2xpbmtlZF9s
-aXN0CiAgZXZlbnQgc3ludGF4IGVycm9yOiAncHJvYmVfbGlua2VkX2xpc3Q6aW5zZXJ0X25hbWUn
-CiAgICAgICAgICAgICAgICAgICAgICAgXF9fXyB1bnN1cHBvcnRlZCB0cmFjZXBvaW50CgogIGxp
-YnRyYWNlZXZlbnQgaXMgbmVjZXNzYXJ5IGZvciB0cmFjZXBvaW50IHN1cHBvcnQKICBSdW4gJ3Bl
-cmYgbGlzdCcgZm9yIGEgbGlzdCBvZiB2YWxpZCBldmVudHMKCiAgIFVzYWdlOiBwZXJmIHJlY29y
-ZCBbPG9wdGlvbnM+XSBbPGNvbW1hbmQ+XQogICAgICBvcjogcGVyZiByZWNvcmQgWzxvcHRpb25z
-Pl0gLS0gPGNvbW1hbmQ+IFs8b3B0aW9ucz5dCgogICAgICAtZSwgLS1ldmVudCA8ZXZlbnQ+ICAg
-ZXZlbnQgc2VsZWN0b3IuIHVzZSAncGVyZiBsaXN0JyB0byBsaXN0IGF2YWlsYWJsZSBldmVudHMK
-CmxpYnRyYWNlZXZlbnQgc3VwcG9ydCBmb3IgcGVyZiBoYXMgYmVlbiBkaXNhYmxlZCB3aXRoIGNv
-bW1pdApiNGFiNDVhNWMxZGIgKCJwYWNrYWdlL2xpbnV4LXRvb2xzOiBkaXNhYmxlIGxpYnRyYWNl
-dmVudCBkZXRlY3Rpb24iKQpiZWNhdXNlIHRoZXJlIHdhcyBubyBsaWJ0cmFjZWV2ZW50IHBhY2th
-Z2UgaW4gYnVpbGRyb290IHRvIHJlcGxhY2UgdGhlCmZvcm1lciBsaWJ0cmFjZWV2ZW50IHJlbW92
-ZWQgZnJvbSB0aGUga2VybmVsIHNvdXJjZXMuIFNpbmNlIHRoZW4sIGNvbW1pdAoxNDc0ZjFiMzRi
-MTcgKCJwYWNrYWdlL2xpYnRyYWNlZXZlbnQ6IG5ldyBwYWNrYWdlIikgaGFzIGludHJvZHVjZWQg
-YQpsaWJ0cmFjZWV2ZW50IHBhY2thZ2UuIFdlIGNhbiB0aGVuIGV4cG9zZSBhZ2FpbiB0aGUgcG9z
-c2liaWxpdHkgdG8gYnVpbGQKcGVyZiB3aXRoIGxpYnRyYWNlZXZlbnQgc3VwcG9ydC4KCk1ha2Ug
-YnVpbGRyb290IHBlcmYgbWFrZWZpbGUgZGV0ZWN0IGlmIGxpYnRyYWNlZXZlbnQgcGFja2FnZSBo
-YXMgYmVlbgplbmFibGVkLCBhbmQgaWYgc28sIGFsbG93IHRvIGJ1aWxkIHBlcmYgd2l0aCBsaWJ0
-cmFjZWV2ZW50IHN1cHBvcnQuCgpTaWduZWQtb2ZmLWJ5OiBBbGV4aXMgTG90aG9yw6kgPGFsZXhp
-cy5sb3Rob3JlQGJvb3RsaW4uY29tPgotLS0KQ2hhbmdlcyBpbiB2MjoKLSBubyBjaGFuZ2UKLS0t
-CiBwYWNrYWdlL2xpbnV4LXRvb2xzL2xpbnV4LXRvb2wtcGVyZi5tay5pbiB8IDcgKysrKysrLQog
-MSBmaWxlIGNoYW5nZWQsIDYgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQoKZGlmZiAtLWdp
-dCBhL3BhY2thZ2UvbGludXgtdG9vbHMvbGludXgtdG9vbC1wZXJmLm1rLmluIGIvcGFja2FnZS9s
-aW51eC10b29scy9saW51eC10b29sLXBlcmYubWsuaW4KaW5kZXggZDY3MzE4NTcxYWE0ZGVlZmRl
-NWIzOGVmZmUxYWRlMGI4N2Y0NjI3Yi4uMWUxOWVlN2YxYzRlNDZkMjEwYzA3OWQ3OTZmOTQ2MWYy
-YmZhYWUwOCAxMDA2NDQKLS0tIGEvcGFja2FnZS9saW51eC10b29scy9saW51eC10b29sLXBlcmYu
-bWsuaW4KKysrIGIvcGFja2FnZS9saW51eC10b29scy9saW51eC10b29sLXBlcmYubWsuaW4KQEAg
-LTI4LDcgKzI4LDYgQEAgUEVSRl9NQUtFX0ZMQUdTID0gXAogCU5PX0xJQlBFUkw9MSBcCiAJTk9f
-TElCUFlUSE9OPTEgXAogCU5PX0xJQkJJT05JQz0xIFwKLQlOT19MSUJUUkFDRUVWRU5UPTEgXAog
-CU5PX1NIRUxMQ0hFQ0s9MQogCiAjIFdlIG5lZWQgdG8gcGFzcyBhbiBhcmd1bWVudCB0byBsZCBm
-b3Igc2V0dGluZyB0aGUgZW11bGF0aW9uIHdoZW4KQEAgLTEyOCw2ICsxMjcsMTIgQEAgUEVSRl9N
-QUtFX0ZMQUdTICs9IENPUkVTSUdIVD0xCiAjIGJhcmUgImlmZGVmIENPUkVTSUdIVCIgY29uc3Ry
-dWN0cy4KIGVuZGlmCiAKK2lmZXEgKCQoQlIyX1BBQ0tBR0VfTElCVFJBQ0VFVkVOVCkseSkKK1BF
-UkZfREVQRU5ERU5DSUVTICs9IGxpYnRyYWNlZXZlbnQKK2Vsc2UKK1BFUkZfTUFLRV9GTEFHUyAr
-PSBOT19MSUJUUkFDRUVWRU5UPTEKK2VuZGlmCisKICMgV2UgcmVhbGx5IGRvIG5vdCB3YW50IHRv
-IGJ1aWxkIHRoZSBwZXJmIGRvY3VtZW50YXRpb24sIGJlY2F1c2UgaXQKICMgaGFzIHN0cmluZ2Vu
-dCByZXF1aXJlbWVudCBvbiB0aGUgZG9jdW1lbnRhdGlvbiBnZW5lcmF0aW9uIHRvb2xzLAogIyBs
-aWtlIHhtbHRvIGFuZCBhc2NpaWRvYyksIHdoaWNoIG1heSBiZSBsYWdnaW5nIGJlaGluZCBvbiBz
-b21lCgotLSAKMi41MC4wCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0
-dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Read the announcement: https://lwn.net/ml/all/xmqq5xg2wrd1.fsf@gitster.g/
+
+This fixes the following vulnerabilities:
+
+- CVE-2025-27613 (Gitk):
+   When a user clones an untrusted repository and runs Gitk without
+   additional command arguments, any writable file can be created and
+   truncated. The option "Support per-file encoding" must have been
+   enabled. The operation "Show origin of this line" is affected as
+   well, regardless of the option being enabled or not.
+   https://www.cve.org/CVERecord?id=CVE-2025-27613
+
+- CVE-2025-27614 (Gitk):
+   A Git repository can be crafted in such a way that a user who has
+   cloned the repository can be tricked into running any script
+   supplied by the attacker by invoking `gitk filename`, where
+   `filename` has a particular structure.
+   https://www.cve.org/CVERecord?id=CVE-2025-27614
+
+- CVE-2025-46835 (Git GUI):
+   When a user clones an untrusted repository and is tricked into
+   editing a file located in a maliciously named directory in the
+   repository, then Git GUI can create and overwrite any writable
+   file.
+   https://www.cve.org/CVERecord?id=CVE-2025-46835
+
+- CVE-2025-48384:
+   When reading a config value, Git strips any trailing carriage
+   return and line feed (CRLF). When writing a config entry, values
+   with a trailing CR are not quoted, causing the CR to be lost when
+   the config is later read.  When initializing a submodule, if the
+   submodule path contains a trailing CR, the altered path is read
+   resulting in the submodule being checked out to an incorrect
+   location. If a symlink exists that points the altered path to the
+   submodule hooks directory, and the submodule contains an executable
+   post-checkout hook, the script may be unintentionally executed
+   after checkout.
+   https://www.cve.org/CVERecord?id=CVE-2025-48384
+
+- CVE-2025-48385:
+   When cloning a repository Git knows to optionally fetch a bundle
+   advertised by the remote server, which allows the server-side to
+   offload parts of the clone to a CDN. The Git client does not
+   perform sufficient validation of the advertised bundles, which
+   allows the remote side to perform protocol injection.
+   This protocol injection can cause the client to write the fetched
+   bundle to a location controlled by the adversary. The fetched
+   content is fully controlled by the server, which can in the worst
+   case lead to arbitrary code execution.
+   https://www.cve.org/CVERecord?id=CVE-2025-48385
+
+- CVE-2025-48386:
+   The wincred credential helper uses a static buffer (`target`) as a
+   unique key for storing and comparing against internal storage. This
+   credential helper does not properly bounds check the available
+   space remaining in the buffer before appending to it with
+   `wcsncat()`, leading to potential buffer overflows.
+   https://www.cve.org/CVERecord?id=CVE-2025-48386
+
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+---
+ package/git/git.hash | 2 +-
+ package/git/git.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/git/git.hash b/package/git/git.hash
+index 7608cbe176..24286a8705 100644
+--- a/package/git/git.hash
++++ b/package/git/git.hash
+@@ -1,5 +1,5 @@
+ # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
+-sha256  1c5d545f5dc1eb51e95d2c50d98fdf88b1a36ba1fa30e9ae5d5385c6024f82ad  git-2.48.1.tar.xz
++sha256  30ce5660fc6be0453ab0e15ba3f2b69f2325cde0bb447ad2ee1b559f2999e494  git-2.48.2.tar.xz
+ # Locally calculated
+ sha256  5b2198d1645f767585e8a88ac0499b04472164c0d2da22e75ecf97ef443ab32e  COPYING
+ sha256  1922f45d2c49e390032c9c0ba6d7cac904087f7cec51af30c2b2ad022ce0e76a  LGPL-2.1
+diff --git a/package/git/git.mk b/package/git/git.mk
+index de3103f4ff..18d768e900 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GIT_VERSION = 2.48.1
++GIT_VERSION = 2.48.2
+ GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+ GIT_SITE = $(BR2_KERNEL_MIRROR)/software/scm/git
+ GIT_LICENSE = GPL-2.0, LGPL-2.1+
+-- 
+2.50.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
