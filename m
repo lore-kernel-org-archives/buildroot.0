@@ -1,101 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F191C83F03
-	for <buildroot@archiver.kernel.org>; Wed,  9 Jul 2025 19:00:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7952CC83F0A
+	for <buildroot@archiver.kernel.org>; Wed,  9 Jul 2025 19:06:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4808160AD4;
-	Wed,  9 Jul 2025 19:00:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3C46E81170;
+	Wed,  9 Jul 2025 19:06:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HyjS3gha1AjD; Wed,  9 Jul 2025 19:00:10 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yirZNfX2LVmu; Wed,  9 Jul 2025 19:06:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 80BAF60AF4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8382581182
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 80BAF60AF4;
-	Wed,  9 Jul 2025 19:00:10 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id AE1A269
- for <buildroot@buildroot.org>; Wed,  9 Jul 2025 19:00:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8382581182;
+	Wed,  9 Jul 2025 19:06:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 46C6212E
+ for <buildroot@buildroot.org>; Wed,  9 Jul 2025 19:06:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AB43740540
- for <buildroot@buildroot.org>; Wed,  9 Jul 2025 19:00:08 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2DD8981182
+ for <buildroot@buildroot.org>; Wed,  9 Jul 2025 19:06:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GKwQpTumT7HJ for <buildroot@buildroot.org>;
- Wed,  9 Jul 2025 19:00:08 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::736; helo=mail-qk1-x736.google.com;
- envelope-from=justin.m.basinger@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CB71D4054A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB71D4054A
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com
- [IPv6:2607:f8b0:4864:20::736])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CB71D4054A
- for <buildroot@buildroot.org>; Wed,  9 Jul 2025 19:00:07 +0000 (UTC)
-Received: by mail-qk1-x736.google.com with SMTP id
- af79cd13be357-7d3f192a64eso20499085a.2
- for <buildroot@buildroot.org>; Wed, 09 Jul 2025 12:00:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1752087606; x=1752692406;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=0shIw3+KVg32tzMondrU9ZlWqiGd/hyzU5m9S/FYbhk=;
- b=Q/nJRoWtUwlvyFSs2QAGAJG/MjemT7XPDNdco9ZdcnVxfut/thbvkBvo/i8AWg5myO
- e2cKzrPUn5W/94Uvl5OimXZjWBLWYv7uXV1j1zasga/66fEtev2DulDtRr7RQm5RJGOx
- CLb8DHXVQT+CkUP9MLo5lz4j6+pC1x8QC42tZTMErpuoi49Ep+Ou2Q2NN0PIP0u2/LJn
- E4vGBhZRiIgxRB1l9zrvCiR9kdhSEXLhPaPUBXNfditlI71yv2VIopqdHfzH/pyMAmjr
- nMBl1tVyB3L7g96dyTqRkC/ZZhFN5GP6XfNoS2hiDCOB5EoVkR/fwBQXZ8ZxabROeOMl
- FjcA==
-X-Gm-Message-State: AOJu0YyR5DaGWisBE2WZj3DfwtETfTZUe2K5dlOcf24/9Fv3bTOXfaTR
- HK068M6zUmn8DH2Lbt5si95Oas9lrDRs/mjlYvR7rS9y3fQsrzQbjoPwNf4TgBRY
-X-Gm-Gg: ASbGncu3mk8CFHrQ/WtvDumCElex7F1P9wEwf5XODSRX85Uu+XqcrqXzF4bH9hqpl5Y
- 7EZZwBmvYq7hEnhDhWdpqU2qSEKW1dv7Hae3aBqKPf+3xBwEIGtc0SF/rlErf7sf5Q8LHXcR81M
- bZBpplGPeqwZu21VXHAyrQ46ZxfNQZfXZO9kQL5X3qHBbhpgVvb334FbcFwrvj8TGdHd9oySYmE
- 7B1uqhK1WhhsLkG9tuFy9J5Ba/IgNQuvnKyAjX48lXxz+M7kQs+JtjWWrwdro0vfyF4SSa352Bq
- WbCHyhCGZCm6uUwx3kw5Rl0El4RhcELR4sFLTF2JI7H4NVpduSNHRGOeEnVB0g5PNaKzM7Ujcu4
- i2aa/N+eO9KeHaTMAF7Uz8l8RFOnxEAO8EVsGmxkRDPGxGRKqd5lNDHaFO/kZNRJRpq0=
-X-Google-Smtp-Source: AGHT+IEcWMooGw7fB9rMJv8GhIJQmJwkriK7+Z+Xgv4wgOMGoQ6Fv4bLKFFmDhI0SHKNpOv8b+c1HA==
-X-Received: by 2002:a05:6214:410f:b0:702:d6e0:8abb with SMTP id
- 6a1803df08f44-7048b8d9bd8mr52335296d6.20.1752087606117; 
- Wed, 09 Jul 2025 12:00:06 -0700 (PDT)
-Received: from 4309abbe4b05.ynsnsb35uh3ubhr4tvarlepncd.bx.internal.cloudapp.net
- ([172.191.151.55]) by smtp.gmail.com with ESMTPSA id
- 6a1803df08f44-7047e1f58fcsm30807186d6.51.2025.07.09.12.00.05
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 09 Jul 2025 12:00:05 -0700 (PDT)
-From: Justin Basinger <justin.m.basinger@gmail.com>
-To: buildroot@buildroot.org
-Cc: Justin Basinger <justin.m.basinger@gmail.com>
-Date: Wed,  9 Jul 2025 18:59:56 +0000
-Message-ID: <20250709185956.889-1-justin.m.basinger@gmail.com>
-X-Mailer: git-send-email 2.43.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2mZ4Y9JmZtXj for <buildroot@buildroot.org>;
+ Wed,  9 Jul 2025 19:06:44 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B499181170
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B499181170
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B499181170
+ for <buildroot@buildroot.org>; Wed,  9 Jul 2025 19:06:43 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 1CD59780372;
+ Wed,  9 Jul 2025 21:06:41 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Wed, 09 Jul 2025 21:06:41 +0200
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1752087606; x=1752692406; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=0shIw3+KVg32tzMondrU9ZlWqiGd/hyzU5m9S/FYbhk=;
- b=NBa3YbkAzbCrkYEH3coaq7GQ6AM6BCYPYc5P6E1S3f8Uj7q3vdNRQH4/W75965rbld
- ZmSmV7TejJAT+0tSSSB5EdSa8fdWcNMpx4139DXWllLcfRhcOxJ0xAh5gWULYD5vwxMk
- NaJgGTNmpKc0WLYkxR3Q8zjzBjmKS1SDADwK82r3nbPS5JgmRgCAB1/z+BP5hDZF78bp
- ckTNM7T3fC4NwqSY2KtpOg7kR1Orm6C+RG8BOglZBvTLxd3IpfjsaSIxxhnHqEBPRIfS
- xjAE6lTt13Mk2sKwpZEN0PeFDFsjSR2ry3k4lSkbfYqFxytpH+AmeMsptaxAH5xrV8an
- tiCg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=NBa3YbkA
-Subject: [Buildroot] [PATCH] package/libsolv: Adding ability to add build
- option flags
+Date: Wed, 09 Jul 2025 21:06:41 +0200
+To: Fiona Klute <fiona.klute@gmx.de>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250707141052.280200-1-fiona.klute@gmx.de>
+References: <20250707141052.280200-1-fiona.klute@gmx.de>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <dc403e92c6d4e8db306bf79de3d91479@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1752088002;
+ bh=2OzFOL66WYI5Jy00C2Y5HgWp6HHQV64okW3QAuAST6E=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=cGws/RMc+ml6kT/YpmWJia9HDHmFmBST7/Hg4qAJR+z5XxfFtvz5J/f8eo5R6IDQI
+ HDm2GpsgRJUf4kNgufEIlIpaY4aaWdADjeQFtn/c+Ra1jiMVILcXGHKBtNXiz0lSw/
+ k8K0iGvx7PuCyLEzd1Gynbid0o7+H5SYD6Acop2dpC83Ecy9Q0CrPR/uR4ZR54yCCG
+ UpHGNuPTamySmIM9OagMJGo/su56RbK3SsumPjQKQaBXU1ze3qa60/TOwQ4kNnR8Ju
+ L4KGEdeAVlrBDGZpT3kpIqyP43CajlG3oBPa+xqC7KXieRlUo4eIwvFtblC49Bn7sC
+ 85yT3YA8B1Hcg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=cGws/RMc
+Subject: Re: [Buildroot] [PATCH 1/3] package/tpm2-abrmd: bump version to
+ 3.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -107,45 +81,28 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Justin Basinger <justin.m.basinger@gmail.com>
----
- package/libsolv/Config.in  | 6 ++++++
- package/libsolv/libsolv.mk | 2 ++
- 2 files changed, 8 insertions(+)
+On 07/07/2025 16:10, Fiona Klute via buildroot wrote:
+> From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
+> 
+> With 3.0.0 users must be in the tss group to access tpm2-abrmd.
+> 
+> Upstream changelogs since 2.3.3:
+> https://github.com/tpm2-software/tpm2-abrmd/releases/tag/2.4.0
+> https://github.com/tpm2-software/tpm2-abrmd/releases/tag/2.4.1
+> https://github.com/tpm2-software/tpm2-abrmd/releases/tag/3.0.0
+> 
+> Tested with package/tpm2-pkcs11.
+> 
+> Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 
-diff --git a/package/libsolv/Config.in b/package/libsolv/Config.in
-index 1415d2bc2b..b680c9319c 100644
---- a/package/libsolv/Config.in
-+++ b/package/libsolv/Config.in
-@@ -7,3 +7,9 @@ config BR2_PACKAGE_LIBSOLV
- 	  algorithm.
- 
- 	  https://github.com/openSUSE/libsolv
-+
-+config BR2_PACKAGE_LIBSOLV_CONF_OPTS
-+	string "Libsolv option flags"
-+	depends on BR2_PACKAGE_LIBSOLV
-+	help
-+	  Allow the user to add optional build flags in Libsolv
-diff --git a/package/libsolv/libsolv.mk b/package/libsolv/libsolv.mk
-index 2317d3e663..94dc482205 100644
---- a/package/libsolv/libsolv.mk
-+++ b/package/libsolv/libsolv.mk
-@@ -24,4 +24,6 @@ else
- LIBSOLV_CONF_OPTS += -DDISABLE_SHARED=ON
- endif
- 
-+LIBSOLV_CONF_OPTS += $(patsubst "%",%,$(BR2_PACKAGE_LIBSOLV_CONF_OPTS))
-+
- $(eval $(cmake-package))
--- 
-2.43.0
-
+Series applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
