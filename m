@@ -1,102 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3C74C83F03
-	for <buildroot@archiver.kernel.org>; Wed,  9 Jul 2025 16:37:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67839C83F0A
+	for <buildroot@archiver.kernel.org>; Wed,  9 Jul 2025 18:50:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5EA7D6073B;
-	Wed,  9 Jul 2025 16:37:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9C94C4065E;
+	Wed,  9 Jul 2025 18:50:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fLYGl6cYpgbq; Wed,  9 Jul 2025 16:37:00 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UDkUrKatA04t; Wed,  9 Jul 2025 18:50:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 68B1D6075B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6BF0C40591
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 68B1D6075B;
-	Wed,  9 Jul 2025 16:37:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6BF0C40591;
+	Wed,  9 Jul 2025 18:50:02 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 24A1C69
- for <buildroot@buildroot.org>; Wed,  9 Jul 2025 16:36:59 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 4817112E
+ for <buildroot@buildroot.org>; Wed,  9 Jul 2025 18:50:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1329181E80
- for <buildroot@buildroot.org>; Wed,  9 Jul 2025 16:36:59 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 36ABF813F5
+ for <buildroot@buildroot.org>; Wed,  9 Jul 2025 18:50:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0Y8w5SLfSJAb for <buildroot@buildroot.org>;
- Wed,  9 Jul 2025 16:36:57 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
- envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D8CB681E3F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D8CB681E3F
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D8CB681E3F
- for <buildroot@buildroot.org>; Wed,  9 Jul 2025 16:36:55 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id
- 5b1f17b1804b1-450cf0120cdso416365e9.2
- for <buildroot@buildroot.org>; Wed, 09 Jul 2025 09:36:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1752079013; x=1752683813;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=/aflpuS+cF5amaeCbeo1RCQsthbiMfB7uAzVW/ErQFA=;
- b=clheIIyXSVL386toWofwKUQesdWxkNtbdrTuxxmVQsYuIDgPn+Rj33hiptyN0soNtO
- cvrBvd6lQt1pygqXjLimy0Jc6K9g8H10F+3+3Tun+iykbjez+yKIoRfbrRqlWAE2guQa
- YPc8ex6r1DdLLAMqvt7iVV4yexqra+cQI3ukLnXJDtpD8qln3MehEwNYbUkCthgQeaAd
- 427lvW1noHsE54KogQNYWlFp9/4dvA3tlNpYyz8qt0qj6MarPdUjzXDVaYYMRfIuntcz
- NbdLy8tMTxAkyQ78vvIVdlAvyLU2vW/pxwrmS28UdKxKnYlw4/3hN5S//TAbA/z4AaXS
- DeWQ==
-X-Gm-Message-State: AOJu0YzEuqq4nwvibsglRqFNOQymkDCCE4y41Ps2gWglq8yvha3D98fd
- GV6fVvwMbjA1qrosro1TRVlEnpjFLf1LOK5kN3EGmLIsh6GVwskrVY470v9YMnbXZ4rbhKRO1Cu
- 4sr7J
-X-Gm-Gg: ASbGnctwRDKEOViQrovcz0Ob4EkxwnD+cR2VsrY/SGhbz2Acogel7Gx4H7UEIwWSchs
- aOWcgQJfe/kL+IVwxB063I4DFROIPFJIS8xrIacAHJ1otT5y9DJxPmeVUwigN8OE5KdJlzUgpR6
- sqYkivYXYXBr9GbVXb5EMvFScA4JSsYi6sgZtJj8/gmn69Ue+twPAUl442m4kyvSWIJjfyzOpgk
- UpHM3zX7E5D9CsvQ4sEjI+MeEShAt0VctBvRykm1DXTUpvTQA+6q8nMPwL628NfvIewY7DHJkwv
- 5Yfwq0lr/mWvdwStsxNMNesPReAXSKWDi0VZrRZi2uu5LCfSA1BrxK8D0945yBeV8Gz+/sd5/4s
- SFZTeR0fgetSeONPQ2w==
-X-Google-Smtp-Source: AGHT+IFaup82AgWHwY2Peq6GeOuS6Vz7IFexx3xawK7aGrHgXMKkAQ2ukQWnofhkw3eLfGqMOBr3Xg==
-X-Received: by 2002:a05:600c:4f4d:b0:442:faa3:fadb with SMTP id
- 5b1f17b1804b1-454d5c8d41emr29734765e9.2.1752079013399; 
- Wed, 09 Jul 2025 09:36:53 -0700 (PDT)
-Received: from dragon.local.ess-mail.com
- ([2a02:a03f:639d:e501:5db7:a3a4:443e:4828])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-454d68fc1basm24461675e9.10.2025.07.09.09.36.52
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 09 Jul 2025 09:36:53 -0700 (PDT)
+ id Nwzl1x4P6WtJ for <buildroot@buildroot.org>;
+ Wed,  9 Jul 2025 18:50:00 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 558B6813F1
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 558B6813F1
+ for <buildroot@buildroot.org>; Wed,  9 Jul 2025 18:50:00 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 3E69E86091; Wed,  9 Jul 2025 18:50:00 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Bagas Sanjaya <bagasdotme@gmail.com>,
-	thomas.perale@mind.be
-Date: Wed,  9 Jul 2025 18:36:50 +0200
-Message-ID: <20250709163650.115228-1-titouan.christophe@mind.be>
-X-Mailer: git-send-email 2.50.0
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1752079013; x=1752683813; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=/aflpuS+cF5amaeCbeo1RCQsthbiMfB7uAzVW/ErQFA=;
- b=VfC9rrLnDD1JJcVf3m6CX2GgWwTJL1IxDF/ZBr93qIfDhM7UJL5E7qfrG3E5TJ9YY6
- cn1N5ojaOx8pkNFGYN2xVY9AuWnyxTPPprEiZgAuYfbwWlLMt78dBByMVtc2hcY0MTw4
- vjyypGTWPqZVtNXa9uslp23jtpG/v9HWElb9RE7iB1bmt5aV9gvIXsWlxOee6Pxuv+Jh
- H16rDg05hVkC+Ndfz0fODj2Q0UD0Hnvt98NhyXaOjhRTqASZvjB1xqYZAIVzfLfFC5e4
- 79QB28emJ6KLhcYOhkfCSMpn9eQqnB1WIrk1U7fHLAO25RuUlefsv6UrV5z767xvEr9Z
- dPaA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=VfC9rrLn
-Subject: [Buildroot] [PATCH] package/git: security bump to v2.50.1
+Date: Wed, 9 Jul 2025 20:48:43 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 09880508cb26260f30608137f697b6bdf11483fa
+X-Git-Newrev: f52e17596dc81a7ae12afbe7a699afdf0ae8e6b2
+X-Patchwork-Hint: ignore
+Message-Id: <20250709185000.3E69E86091@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sngrep: security bump to v1.8.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -108,106 +57,92 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Titouan Christophe via buildroot <buildroot@buildroot.org>
-Reply-To: Titouan Christophe <titouan.christophe@mind.be>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============4384589938917982162=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Read the announcement: https://lwn.net/ml/all/xmqq5xg2wrd1.fsf@gitster.g/
+--===============4384589938917982162==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=f52e17596dc81a7ae12afbe7a699afdf0ae8e6b2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+See the release notes:
+
+- https://github.com/irontec/sngrep/releases/tag/v1.7.0
+- https://github.com/irontec/sngrep/releases/tag/v1.8.0
+- https://github.com/irontec/sngrep/releases/tag/v1.8.1
+- https://github.com/irontec/sngrep/releases/tag/v1.8.2
 
 This fixes the following vulnerabilities:
 
-- CVE-2025-27613 (Gitk):
-   When a user clones an untrusted repository and runs Gitk without
-   additional command arguments, any writable file can be created and
-   truncated. The option "Support per-file encoding" must have been
-   enabled. The operation "Show origin of this line" is affected as
-   well, regardless of the option being enabled or not.
-   https://www.cve.org/CVERecord?id=CVE-2025-27613
+- CVE-2024-3119:
+    A buffer overflow vulnerability exists in all versions of sngrep since
+    v0.4.2, due to improper handling of 'Call-ID' and 'X-Call-ID' SIP
+    headers. The functions sip_get_callid and sip_get_xcallid in sip.c use
+    the strncpy function to copy header contents into fixed-size buffers
+    without checking the data length. This flaw allows remote attackers to
+    execute arbitrary code or cause a denial of service (DoS) through
+    specially crafted SIP messages.
+    https://www.cve.org/CVERecord?id=CVE-2024-3119
 
-- CVE-2025-27614 (Gitk):
-   A Git repository can be crafted in such a way that a user who has
-   cloned the repository can be tricked into running any script
-   supplied by the attacker by invoking `gitk filename`, where
-   `filename` has a particular structure.
-   https://www.cve.org/CVERecord?id=CVE-2025-27614
-
-- CVE-2025-46835 (Git GUI):
-   When a user clones an untrusted repository and is tricked into
-   editing a file located in a maliciously named directory in the
-   repository, then Git GUI can create and overwrite any writable
-   file.
-   https://www.cve.org/CVERecord?id=CVE-2025-46835
-
-- CVE-2025-48384:
-   When reading a config value, Git strips any trailing carriage
-   return and line feed (CRLF). When writing a config entry, values
-   with a trailing CR are not quoted, causing the CR to be lost when
-   the config is later read.  When initializing a submodule, if the
-   submodule path contains a trailing CR, the altered path is read
-   resulting in the submodule being checked out to an incorrect
-   location. If a symlink exists that points the altered path to the
-   submodule hooks directory, and the submodule contains an executable
-   post-checkout hook, the script may be unintentionally executed
-   after checkout.
-   https://www.cve.org/CVERecord?id=CVE-2025-48384
-
-- CVE-2025-48385:
-   When cloning a repository Git knows to optionally fetch a bundle
-   advertised by the remote server, which allows the server-side to
-   offload parts of the clone to a CDN. The Git client does not
-   perform sufficient validation of the advertised bundles, which
-   allows the remote side to perform protocol injection.
-   This protocol injection can cause the client to write the fetched
-   bundle to a location controlled by the adversary. The fetched
-   content is fully controlled by the server, which can in the worst
-   case lead to arbitrary code execution.
-   https://www.cve.org/CVERecord?id=CVE-2025-48385
-
-- CVE-2025-48386:
-   The wincred credential helper uses a static buffer (`target`) as a
-   unique key for storing and comparing against internal storage. This
-   credential helper does not properly bounds check the available
-   space remaining in the buffer before appending to it with
-   `wcsncat()`, leading to potential buffer overflows.
-   https://www.cve.org/CVERecord?id=CVE-2025-48386
+- CVE-2024-3120:
+    A stack-buffer overflow vulnerability exists in all versions of sngrep
+    since v1.4.1. The flaw is due to inadequate bounds checking when
+    copying 'Content-Length' and 'Warning' headers into fixed-size buffers
+    in the sip_validate_packet and sip_parse_extra_headers functions
+    within src/sip.c. This vulnerability allows remote attackers to
+    execute arbitrary code or cause a denial of service (DoS) via crafted
+    SIP messages.
+    https://www.cve.org/CVERecord?id=CVE-2024-3120
 
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/git/git.hash | 2 +-
- package/git/git.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/sngrep/sngrep.hash | 6 +++---
+ package/sngrep/sngrep.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/git/git.hash b/package/git/git.hash
-index b20fe2de0e..bbd2b4c754 100644
---- a/package/git/git.hash
-+++ b/package/git/git.hash
-@@ -1,5 +1,5 @@
- # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
--sha256  dff3c000e400ace3a63b8a6f8b3b76b88ecfdffd4504a04aba4248372cdec045  git-2.50.0.tar.xz
-+sha256  7e3e6c36decbd8f1eedd14d42db6674be03671c2204864befa2a41756c5c8fc4  git-2.50.1.tar.xz
- # Locally calculated
- sha256  5b2198d1645f767585e8a88ac0499b04472164c0d2da22e75ecf97ef443ab32e  COPYING
- sha256  1922f45d2c49e390032c9c0ba6d7cac904087f7cec51af30c2b2ad022ce0e76a  LGPL-2.1
-diff --git a/package/git/git.mk b/package/git/git.mk
-index 560590b33b..8cbd2787b2 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
+diff --git a/package/sngrep/sngrep.hash b/package/sngrep/sngrep.hash
+index c9b9c8be8d..aea9d95770 100644
+--- a/package/sngrep/sngrep.hash
++++ b/package/sngrep/sngrep.hash
+@@ -1,6 +1,6 @@
+-# From https://github.com/irontec/sngrep/releases/download/v1.7.0/sngrep-1.7.0.tar.gz.md5sum
+-md5  ee3cc7bd75adeb713411aa678e45ae4c  sngrep-1.7.0.tar.gz
++# From https://github.com/irontec/sngrep/releases/download/v1.8.2/sngrep-1.8.2.tar.gz.md5sum
++md5  eb2a398e2e98993ee2a19a3afddfc282  sngrep-1.8.2.tar.gz
+ 
+ # Locally computed
+-sha256  2e5ba3a4d6486ea00bd73d2cceff383ba162dcd6d0170ae74cfa3b1c206e2cb1  sngrep-1.7.0.tar.gz
++sha256  1cd05bddd531b353e3069c5243e7076b60a3ee907dbbc3c9c2834676ed8c4bac  sngrep-1.8.2.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE
+diff --git a/package/sngrep/sngrep.mk b/package/sngrep/sngrep.mk
+index b86d7e83f0..5399d041b5 100644
+--- a/package/sngrep/sngrep.mk
++++ b/package/sngrep/sngrep.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GIT_VERSION = 2.50.0
-+GIT_VERSION = 2.50.1
- GIT_SOURCE = git-$(GIT_VERSION).tar.xz
- GIT_SITE = $(BR2_KERNEL_MIRROR)/software/scm/git
- GIT_LICENSE = GPL-2.0, LGPL-2.1+
--- 
-2.50.0
+-SNGREP_VERSION = 1.7.0
++SNGREP_VERSION = 1.8.2
+ SNGREP_SITE = \
+ 	https://github.com/irontec/sngrep/releases/download/v$(SNGREP_VERSION)
+ SNGREP_LICENSE = GPL-3.0+
+
+--===============4384589938917982162==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4384589938917982162==--
