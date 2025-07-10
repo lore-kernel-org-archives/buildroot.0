@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED9EAC83F1A
-	for <buildroot@archiver.kernel.org>; Fri, 11 Jul 2025 10:21:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86AC8C83F1D
+	for <buildroot@archiver.kernel.org>; Fri, 11 Jul 2025 10:21:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E923183BC2;
-	Fri, 11 Jul 2025 10:21:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1B2ED83BDA;
+	Fri, 11 Jul 2025 10:21:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AXIoD3HCyvol; Fri, 11 Jul 2025 10:21:11 +0000 (UTC)
+ id 9GeVrp7VZvzB; Fri, 11 Jul 2025 10:21:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B6D8883BDA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7F72783C1C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B6D8883BDA;
-	Fri, 11 Jul 2025 10:21:10 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1F5A8968
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7F72783C1C;
+	Fri, 11 Jul 2025 10:21:12 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3D98C199
  for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:21:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6EB8E60B27
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6FB4140DC5
  for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:21:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bQGPv5RL07JU for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ntl9rV1XMSkX for <buildroot@buildroot.org>;
  Fri, 11 Jul 2025 10:21:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B65A560B24
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 90E8740C25
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B65A560B24
+ by smtp4.osuosl.org (Postfix) with ESMTP id 90E8740C25
  for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:21:03 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B468F86380; Fri, 11 Jul 2025 10:21:03 +0000 (UTC)
+ id 814EE86380; Fri, 11 Jul 2025 10:21:03 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 10 Jul 2025 11:34:44 +0200
+Date: Thu, 10 Jul 2025 11:31:30 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: 3536feedeed718087ca757869301ba85b57c5c24
-X-Git-Newrev: 5248c9b80a2de291eeb1878523d5d14f92c74b74
+X-Git-Oldrev: 1fba91af016cefa3c55a426d87c40be2ada89303
+X-Git-Newrev: be116329164676659bb56ea002993bfb468734cb
 X-Patchwork-Hint: ignore
-Message-Id: <20250711102103.B468F86380@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/python-urllib3:
- security bump to v2.5.0
+Message-Id: <20250711102103.814EE86380@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/libavif: security
+ bump to v1.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,58 +66,62 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5248c9b80a2de291eeb1878523d5d14f92c74b74
+commit: https://git.buildroot.net/buildroot/commit/?id=be116329164676659bb56ea002993bfb468734cb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-For release note, see:
-https://github.com/urllib3/urllib3/releases/tag/2.5.0
+Fixes the following security issues:
 
-This fixes the following vulnerabilities:
-- CVE-2025-50181:
-    urllib3 redirects are not disabled when retries are disabled on
-    PoolManager instantiation
+- CVE-2025-48174: makeRoom in stream.c has an integer overflow and
+    resultant buffer overflow in stream->offset+size.
 
-- CVE-2025-50182:
-    urllib3 does not control redirects in browsers and Node.js
+For more information, see:
+  - https://nvd.nist.gov/vuln/detail/CVE-2025-48174
+  - https://github.com/AOMediaCodec/libavif/pull/2768/commits
 
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-[Julien: add link to release note in commit log]
+- CVE-2025-48175: avifImageRGBToYUV in reformat.c has integer overflows
+    in multiplications involving rgbRowBytes, yRowBytes, uRowBytes, and
+    vRowBytes.
+
+For more information, see:
+  - https://nvd.nist.gov/vuln/detail/CVE-2025-48175
+  - https://github.com/AOMediaCodec/libavif/commit/64d956ed5a602f78cebf29da023280944ee92efd
+
+For more details on the version bump, see:
+  - https://github.com/AOMediaCodec/libavif/releases/tag/v1.3.0
+  - https://github.com/AOMediaCodec/libavif/releases/tag/v1.2.1
+  - https://github.com/AOMediaCodec/libavif/releases/tag/v1.2.0
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 7006854ce1514c03fe98d57dcaa68629ac800b71)
+(cherry picked from commit 0c1fa0bce14b2a75e7ede0d6bf6be52d7807684e)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/python-urllib3/python-urllib3.hash | 4 ++--
- package/python-urllib3/python-urllib3.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libavif/libavif.hash | 2 +-
+ package/libavif/libavif.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-urllib3/python-urllib3.hash b/package/python-urllib3/python-urllib3.hash
-index 2391108e26..f4162882f7 100644
---- a/package/python-urllib3/python-urllib3.hash
-+++ b/package/python-urllib3/python-urllib3.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/urllib3/json
--md5  787104cdecd70e6688713f8a079ffd3f  urllib3-2.4.0.tar.gz
--sha256  414bc6535b787febd7567804cc015fee39daab8ad86268f1310a9250697de466  urllib3-2.4.0.tar.gz
-+md5  2b8a86438e4d35fbc90572dbdb424759  urllib3-2.5.0.tar.gz
-+sha256  3fc47733c7e419d4bc3f6b3dc2b4f890bb743906a30d56ba4a5bfa4bbff92760  urllib3-2.5.0.tar.gz
- # Locally computed sha256 checksums
- sha256  130e3a64d5fdd5d096a752694634a7d9df284469de86e5732100268041e3d686  LICENSE.txt
-diff --git a/package/python-urllib3/python-urllib3.mk b/package/python-urllib3/python-urllib3.mk
-index 7294742909..9ec6c7f3c0 100644
---- a/package/python-urllib3/python-urllib3.mk
-+++ b/package/python-urllib3/python-urllib3.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/libavif/libavif.hash b/package/libavif/libavif.hash
+index b26e678abf..c53e0c9f50 100644
+--- a/package/libavif/libavif.hash
++++ b/package/libavif/libavif.hash
+@@ -1,3 +1,3 @@
+-sha256  914662e16245e062ed73f90112fbb4548241300843a7772d8d441bb6859de45b  libavif-1.1.1.tar.gz
++sha256  0a545e953cc049bf5bcf4ee467306a2f113a75110edf59e61248873101cd26c1  libavif-1.3.0.tar.gz
+ 
+ sha256  165abf92cc04b39e80d29cadea7a6a7e8fddf59407d4ad2616507a7ebe8216f9  LICENSE
+diff --git a/package/libavif/libavif.mk b/package/libavif/libavif.mk
+index 0c2a8e4dae..4357566ed1 100644
+--- a/package/libavif/libavif.mk
++++ b/package/libavif/libavif.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_URLLIB3_VERSION = 2.4.0
-+PYTHON_URLLIB3_VERSION = 2.5.0
- PYTHON_URLLIB3_SOURCE = urllib3-$(PYTHON_URLLIB3_VERSION).tar.gz
--PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/8a/78/16493d9c386d8e60e442a35feac5e00f0913c0f4b7c217c11e8ec2ff53e0
-+PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/15/22/9ee70a2574a4f4599c47dd506532914ce044817c7752a79b6a51286319bc
- PYTHON_URLLIB3_LICENSE = MIT
- PYTHON_URLLIB3_LICENSE_FILES = LICENSE.txt
- PYTHON_URLLIB3_CPE_ID_VENDOR = python
+-LIBAVIF_VERSION = 1.1.1
++LIBAVIF_VERSION = 1.3.0
+ LIBAVIF_SITE = $(call github,AOMediaCodec,libavif,v$(LIBAVIF_VERSION))
+ LIBAVIF_LICENSE = BSD-2-Clause, IJG, Apache-2.0
+ LIBAVIF_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
