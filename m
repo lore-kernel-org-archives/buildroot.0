@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C008C83F1D
-	for <buildroot@archiver.kernel.org>; Fri, 11 Jul 2025 10:10:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B175C83F1A
+	for <buildroot@archiver.kernel.org>; Fri, 11 Jul 2025 10:10:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 51B8283B5B;
-	Fri, 11 Jul 2025 10:10:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 73ACD83C39;
+	Fri, 11 Jul 2025 10:10:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PCGv5P8qOkK3; Fri, 11 Jul 2025 10:10:12 +0000 (UTC)
+ id LT0P1Nf1e6f8; Fri, 11 Jul 2025 10:10:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 72EEA83C27
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 08E7683C19
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 72EEA83C27;
-	Fri, 11 Jul 2025 10:10:12 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0D844114
+	by smtp1.osuosl.org (Postfix) with ESMTP id 08E7683C19;
+	Fri, 11 Jul 2025 10:10:14 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 10E11968
  for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:09:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A8AF78203C
- for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:09:53 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3C9256065D
+ for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:09:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cPYuU9GdtQ_v for <buildroot@buildroot.org>;
- Fri, 11 Jul 2025 10:09:52 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YWf1tzdGKtvD for <buildroot@buildroot.org>;
+ Fri, 11 Jul 2025 10:09:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A03F283AE0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D2199608FE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A03F283AE0
- for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:09:52 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D2199608FE
+ for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:09:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9E926818CF; Fri, 11 Jul 2025 10:09:52 +0000 (UTC)
+ id C1A8B86342; Fri, 11 Jul 2025 10:09:51 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 10 Jul 2025 11:22:59 +0200
+Date: Thu, 10 Jul 2025 11:14:28 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 20d7c7cf13143f90068a5d113ba3da8f7e66e35f
-X-Git-Newrev: cebee82f6222be090592b2d877641ca8470ce631
+X-Git-Oldrev: b672f9e988c0d589d3c45816116f13edbfbcda3f
+X-Git-Newrev: 0b54b252dfbcb85b35a70b690ec813f1b710adc8
 X-Patchwork-Hint: ignore
-Message-Id: <20250711100952.9E926818CF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/sox: ignore
- CVE-2023-34432
+Message-Id: <20250711100951.C1A8B86342@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/elfutils:
+ elfutils programs now require a c++ toolchain
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,43 +66,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cebee82f6222be090592b2d877641ca8470ce631
+commit: https://git.buildroot.net/buildroot/commit/?id=0b54b252dfbcb85b35a70b690ec813f1b710adc8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Commit [1] introduced a patch addressing CVE-2021-23159. Since then,
-CVE-2023-34432 ([2]) remained the only unresolved CVE reported
-against the sox package in pkg-stat.  This patch adds CVE-2023-34432
-to the list of ignored CVEs for sox, based on the report from the
-Debian Security Tracker ([3]) and the sox issue tracker ([4]), both
-indicate that the patch introduced in [1] also resolves this CVE.
+The 0.192 release of elfutils introduced the src/srcfiles.cxx program,
+that lists all source files of a given ELF binary. As this is a C++
+program, we need a toolchain that supports it.
 
-[1] 14aa0f5ec1 package/sox: add fix for CVE-2021-23159, CVE-2021-23172, CVE-2023-34318
-[2] https://nvd.nist.gov/vuln/detail/CVE-2023-34432
-[3] https://security-tracker.debian.org/tracker/CVE-2023-34432
-[4] https://sourceforge.net/p/sox/bugs/367/
+Without it, the build system tries to use "no" as the CXX compiler,
+resulting in the following errors :
 
-Signed-off-by: Tim Soubry <tim.soubry@mind.be>
-[Julien: change commit ref [1] to use commit id from master branch]
+  /bin/sh: line 1: no: command not found
+
+as can be seen here for example :
+
+https://autobuild.buildroot.net/results/849/849221c794a469a423857a290db775d150b84900
+
+Add a dependency to a CPP toolchain for the elfutils programs.
+
+Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit e868b974a799073428b7565925507697e049df0a)
+(cherry picked from commit 268d7ad180215b22bc026f57bc11724cacfb8565)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/sox/sox.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/elfutils/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/sox/sox.mk b/package/sox/sox.mk
-index 3c9c939e8c..9fd3f2151c 100644
---- a/package/sox/sox.mk
-+++ b/package/sox/sox.mk
-@@ -67,7 +67,7 @@ SOX_IGNORE_CVES += CVE-2021-3643 CVE-2021-23210
- # 0007-hcom-validate-dictsize.patch
- # This entry is NOT stale, those CVEs are not reported by pkg-stats
- # due to the change of CPE ID to sox_project:sox in the NVD database
--SOX_IGNORE_CVES += CVE-2021-23159 CVE-2021-23172 CVE-2023-34318
-+SOX_IGNORE_CVES += CVE-2021-23159 CVE-2021-23172 CVE-2023-34318 CVE-2023-34432
+diff --git a/package/elfutils/Config.in b/package/elfutils/Config.in
+index 9608ef4905..e866dd448b 100644
+--- a/package/elfutils/Config.in
++++ b/package/elfutils/Config.in
+@@ -24,11 +24,13 @@ if BR2_PACKAGE_ELFUTILS
+ config BR2_PACKAGE_ELFUTILS_PROGS
+ 	bool "Install programs"
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	help
+ 	  This option tells elfutils to not only install the libelf
+ 	  libraries, but also the elfutils programs.
  
- # 0008-phere-avoid-integer-underflow.patch
- # This entry is NOT stale, those CVEs are not reported by pkg-stats
+-comment "elfutils programs needs a glibc toolchain"
+-	depends on !BR2_TOOLCHAIN_USES_GLIBC
++comment "elfutils programs needs a glibc toolchain w/ C++"
++	depends on !BR2_TOOLCHAIN_USES_GLIBC \
++		|| !BR2_INSTALL_LIBSTDCPP
+ 
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
