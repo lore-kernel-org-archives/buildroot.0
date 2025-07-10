@@ -1,75 +1,97 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E27BC83F1A
-	for <buildroot@archiver.kernel.org>; Thu, 10 Jul 2025 20:05:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93D4DC83F1A
+	for <buildroot@archiver.kernel.org>; Thu, 10 Jul 2025 20:23:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2C23C40CA6;
-	Thu, 10 Jul 2025 20:05:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EA6EC613AA;
+	Thu, 10 Jul 2025 20:23:05 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gBTLfVivbzKl; Thu, 10 Jul 2025 20:23:04 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E231C610BB
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id E231C610BB;
+	Thu, 10 Jul 2025 20:23:03 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8A16712E
+ for <buildroot@buildroot.org>; Thu, 10 Jul 2025 20:23:02 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 86F4D40D34;
+ Thu, 10 Jul 2025 20:23:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vk0SQE8nnO2v; Thu, 10 Jul 2025 20:05:55 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8F9DE40C99
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8F9DE40C99;
-	Thu, 10 Jul 2025 20:05:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 266D412E
- for <buildroot@buildroot.org>; Thu, 10 Jul 2025 20:05:53 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0C9E183C6B
- for <buildroot@buildroot.org>; Thu, 10 Jul 2025 20:05:53 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NbkV332u70gL for <buildroot@buildroot.org>;
- Thu, 10 Jul 2025 20:05:52 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 07CF683C5B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 07CF683C5B
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 07CF683C5B
- for <buildroot@buildroot.org>; Thu, 10 Jul 2025 20:05:51 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p54a1bbdd.dip0.t-ipconnect.de [84.161.187.221])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id C133BA4C0258
- for <buildroot@buildroot.org>; Thu, 10 Jul 2025 22:05:49 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:53146)
- by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
- (envelope-from <bernd@kuhls.net>) id 1uZxWf-0000000080f-1kM6
- for buildroot@buildroot.org; Thu, 10 Jul 2025 20:05:49 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+ id c1yUGUqL9u0y; Thu, 10 Jul 2025 20:23:01 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
+ envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 043FC40D2A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 043FC40D2A
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 043FC40D2A
+ for <buildroot@buildroot.org>; Thu, 10 Jul 2025 20:23:00 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id
+ 5b1f17b1804b1-450cf0120cdso11847775e9.2
+ for <buildroot@buildroot.org>; Thu, 10 Jul 2025 13:23:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1752178979; x=1752783779;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=LGDrHhdsN+70vFt0RpVdBhu8eoxz7oO6t/1CVeAtsmI=;
+ b=oFT1LdrKouRGN5HhmiCxOt0PKlkN8x92/COflr/H4evfOJ5wSsGO2TjKpKTf3XfS7z
+ ttu46nxvGJO0dz75l9tVMQGsah8lFlWlltJPFbiVR0rSNGtLqyaWeAFXNJrzwQoepmZf
+ 08BW5QLZGHq1qPaUNvi8LaffGCCjpbY1nUtmNHk0gvBVqhMrAWwRroN1IVGDRHiY4J5Q
+ 9+HS/d3C6TEQmrUZmmXoeyxxJCuEqel4yp+6XGvHU6CDafCZMKRNKhN1I2u7dMWtgbOL
+ YRSk8cWVA1NG4zpz+vBb3UFNdW3M+nX208hT35SFb8GR1kIwbVDgl0kvTOk9Kbe/k3jW
+ Zpgw==
+X-Gm-Message-State: AOJu0YwDC1h1i2uLAAxlq0qBy5PuPmuAj4zjWAYvmoj4NNsUvJUlI9EL
+ zcj5tSCUCUNtSsrEKg3VvBokQtszBlZruiI7DiLrpmnljzgbuhdfRrDfJBXoiQ==
+X-Gm-Gg: ASbGncuE7ZlNdxym6PhHw3wrIwDCoOttx1w1OstfT4rWRwNEPhdpvH3EXrlaPDP0Hnj
+ QLE/WDyka8kQs2jEQg6bu75YpVTZBVnnnVtdpcB1t7cWmdMSvFsI2SzpxAmfFUPfKrVF9CNMjHl
+ NoSAcNRKOuU6qVb7m49DSYP+Pq+nsdu0VLAosW8CT5FwBHL92HJ4WQO50HPvt7MKBEBRNvcqWWY
+ L3AYPBQWZg2DoNugKdsuOCWj8YVyEXT0pZkk3OO+yA2foQ/Na+R9T2wowhd7PVMb5tSMoyNIFn1
+ jCJbLX6D64I/JvgRRDIhRNKOML3An0pkYwC+sDOoDbeRiOslYS8aLsbuVQhQMjHf7nbTFeZG
+X-Google-Smtp-Source: AGHT+IHjGAReZL55D/NK8bdBFsf6LlQZIIWYHeSvZC2PmI9hZI1uP+9c22P4y+k5P2qUzNl5E5ElXg==
+X-Received: by 2002:a05:600c:628d:b0:442:faa3:fadb with SMTP id
+ 5b1f17b1804b1-454e7b603c4mr2263645e9.2.1752178978615; 
+ Thu, 10 Jul 2025 13:22:58 -0700 (PDT)
+Received: from landeda.home ([2a01:cb19:93aa:5000:c0e7:5e2f:eef4:db82])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-3b5e8e0d88dsm2727905f8f.65.2025.07.10.13.22.57
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 10 Jul 2025 13:22:58 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Thu, 10 Jul 2025 22:05:49 +0200
-Message-Id: <20250710200549.3666175-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.5
+Date: Thu, 10 Jul 2025 22:22:57 +0200
+Message-ID: <cover.1752178975.git.yann.morin.1998@free.fr>
+X-Mailer: git-send-email 2.47.0
 MIME-Version: 1.0
-X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202506031021; t=1752177949;
- bh=uXanoze6FJFPTfb8FWRiI0NH+UsFzPEIPgx2bl4LdTk=;
- h=From:To:Subject:Date:From;
- b=thWDdzRYegLscbsCf1r/CmeTgKjeiRB9TodXG0k9+YTHYg/7KpUdXZV99aghIMeXd
- Q3CDsTxgw+BqoYaLK4xhb8q4IrVb1Ip0K0mILn4YQdGFzOApyGT2S+eXgR+sIp0BFq
- gsLl6N8x8DcObdSsjHNKu7lwXG5KymH0eRLudyZda7U29WiUBVHv5VzAySSuAbQxbu
- Dxqz1Bf9cPdY5i8XjMIagG2ZJKrS64+0esoc4XYioYnudrOLQx/AAdM6liwpBW1X8Y
- M3j5oNHJNSUaFgsCs8RSOP4RTDjxV+55tS6dh6zZ4HuJJEajdywhCFaR8beaerxs0T
- gYq/l1YWIW7IQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202506031021 header.b=thWDdzRY
-Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 5.15.x / 6.{1, 6,
- 12, 15}.x series
+ d=gmail.com; s=20230601; t=1752178979; x=1752783779; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+ bh=LGDrHhdsN+70vFt0RpVdBhu8eoxz7oO6t/1CVeAtsmI=;
+ b=NHp9YjFIG4OlDfeT/1u8q41A1gh5sMQQ2yZOtJYX2lmz3JI8zllJv4Yg9cX+zwvMHi
+ LlGeukQ8wdlXcL0syeZKwKFlXGug3LZQAF/L+RUbhhfWI9at42LK2w/bumRdFm9rS3rn
+ 44+zu4fM6klRbteGg1ZwI/AR1GiAgMpcllMHb0hOMzyq6QzKp+8pH8+wWm0MjMyoaq/7
+ Po95+ZCG60pwk3qFMed1sDmuaPCBAXP5mFvmJz1L9OUqUew17zp/PBhJc+Krfb3FbIBv
+ Sf3OAdNSKtMNJp9b9gfv4aL1Cvs4CQvzbdU5XVQnSIatji4A41YtPqmbFcTvJclJEztj
+ jmFg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=fail (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=NHp9YjFI
+Subject: [Buildroot] [PATCH 00/17 v2] system: add support for merged-bin
+ (branch yem/merged-bin)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,75 +103,112 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: "Yann E. MORIN via buildroot" <buildroot@buildroot.org>
+Reply-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Edgar Bonet <bonet@grenoble.cnrs.fr>, Sen Hastings <sen@hastings.org>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Romain Naour <romain.naour@gmail.com>, Arnout Vandecappelle <arnout@mind.be>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Norbert Lange <nolange79@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 10 +++++-----
- package/linux-headers/Config.in.host | 10 +++++-----
- 3 files changed, 11 insertions(+), 11 deletions(-)
+Hello All!
 
-diff --git a/linux/Config.in b/linux/Config.in
-index be22d807ff..f74a0cef53 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -137,7 +137,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.15.5" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.15.6" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index a6cc67ac4e..c3426f6a6c 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,10 +1,10 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  2ca707939c14431232649874d438aa58f11b4b127290fa68d164f8bd79c688b5  linux-6.15.5.tar.xz
--sha256  4a168aed2de5a81aadd90ba2b153860a98d99bfc34651936e17f18e54f01ba8c  linux-6.12.36.tar.xz
--sha256  9ee45843d43adb2e2ac5f6a8cb10a334e39e3e3384af8a0ce383a37f78221bdd  linux-6.6.96.tar.xz
--sha256  e25bdac4d77e6b1079f899e2ecb24c7e850f295e735ea7b5654b900d85c03b0a  linux-6.1.143.tar.xz
-+sha256  2bb586c954277d070c8fdf6d7275faa93b4807d9bf3353b491d8149cca02b4fc  linux-6.15.6.tar.xz
-+sha256  936fdfd2405b5e0ac38d4e094b07772610c22cd478f4bb257c9bf929e762ff95  linux-6.12.37.tar.xz
-+sha256  3b67c170638142da56b7a9c3295f2483b88e8c4d3bc26b2bda63b6cf0cb9ee3b  linux-6.6.97.tar.xz
-+sha256  0f49bda42fbd7506063d537fec7d4d147c373a0324655fdaf2a65a000c9f7acf  linux-6.1.144.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  9c4efdd7ee550d524c017b5dae27725374526311e983661850cd880af671cb2a  linux-5.15.186.tar.xz
-+sha256  21786ee84981418279fcd60ae6ed98ab2f102b5a4a255bd81b881033f0afff14  linux-5.15.187.tar.xz
- sha256  2dfa422b6bbe65a6b352a38129d27de918c3f0f05c72ecdd39d46d657ca0f0db  linux-5.10.239.tar.xz
- sha256  c48158f7735668aac78b9d74bb3616f57a4ea0816ca09f7db83f7834d705b6a9  linux-5.4.295.tar.xz
- # Locally computed
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index db6fb95f8a..5c0ec12287 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -446,11 +446,11 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "5.4.295"	if BR2_KERNEL_HEADERS_5_4
- 	default "5.10.239"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.186"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.143"	if BR2_KERNEL_HEADERS_6_1
--	default "6.6.96"	if BR2_KERNEL_HEADERS_6_6
--	default "6.12.36"	if BR2_KERNEL_HEADERS_6_12
--	default "6.15.5"	if BR2_KERNEL_HEADERS_6_15
-+	default "5.15.187"	if BR2_KERNEL_HEADERS_5_15
-+	default "6.1.144"	if BR2_KERNEL_HEADERS_6_1
-+	default "6.6.97"	if BR2_KERNEL_HEADERS_6_6
-+	default "6.12.37"	if BR2_KERNEL_HEADERS_6_12
-+	default "6.15.6"	if BR2_KERNEL_HEADERS_6_15
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
--- 
-2.39.5
+This series introduces support for so-called merged-bin, where /usr/sbin
+is merged with /sur/bin, as an extra step after merged-usr, now just
+requested, but in a relatively close future required, by systemd.
 
+The series is organised in a few steps:
+
+ 1. patches 1-3 are cleanups in the Kconfig menu, related to the
+    merged-usr prompt, to the defaults for PATH, and to the rationale
+    for selecting merged-usr with systemd; those can be applied without
+    considering the rest of the series;
+
+ 2. then patches 4-9 prepare support/scripts/check-merged-usr.sh to
+    check for more than merged-usr: a good cleanup, and better check the
+    merged state; those patch can also be applied without considering
+    the rest of the series;
+
+ 3. with patches 9-12, support for merged-bin is added, and the merge
+    level of skeleton and overlays properly enforced to match the
+    configured merge setup; those require the two set of patches above
+    to be applied first;
+
+ 4. then, patches 13-16 introduce workarounds for a few packages to
+    properly support merged-bin. For ease of review, those are separate
+    patches, but that means the series _may_ break if the merged-bin
+    support is applied but not the per-package workarounds; those
+    require that all patches above be applied first, of course;
+
+ 5. the last patch makes merged-bin mandatory for systemd and extend the
+    systemd runtime test to catch future tainted flag; again, that
+    requires that everything before is applied, too.
+
+The series was tested with a large set of packages and a large set of
+toolchains, and although it is a critical change, it is still pretty
+well confined to just a few spots.
+
+Changes v1 -> v2:
+  - add Arnout's Acked-by tag where appropriate
+  - totally rewrite the test for merged status
+  - reject unexpectedly merged skeletons or overlays
+  - add runtime test to catch systemd tainted flags
+  - typos
+
+Regards,
+Yann E. MORIN.
+
+
+----------------------------------------------------------------
+Yann E. MORIN (17):
+      system: reword merged-usr prompt
+      system: drop superfluous negative condition for default PATH
+      package/systemd: select merged-usr from package, not init
+      support/scripts: comonalise checking merged status
+      support/scripts: prepare for a more complex check for merged directories
+      support/scripts: also exit in error on improperly merged-usr
+      support/scripts: move merged-usr errors message into check-merged-usr.sh
+      support/scripts: fix and restrict conditions to accept merged dirs
+      support/scripts: rename check-merged-usr.sh
+      support/scripts; teach check-merged what to check
+      system: add support for merged /usr/sbin (aka merged-bin)
+      support/scripts: reject skeletons or overlays that are unexpectedly merged
+      package/coreutils: no need for chroot workaround with merged-bin
+      package/kmod: adjust paths for merged-bin
+      package/util-linux: adjust paths for merged-bin
+      toolchain/external: support merged-bin
+      package/systemd: require merged-bin
+
+ Makefile                                   |  19 ++--
+ package/coreutils/coreutils.mk             |   2 +
+ package/kmod/kmod.mk                       |  12 ++-
+ package/skeleton-custom/skeleton-custom.mk |  25 ++---
+ package/systemd/Config.in                  |   2 +
+ package/util-linux/util-linux.mk           |   8 +-
+ support/scripts/check-merged               | 146 +++++++++++++++++++++++++++++
+ support/scripts/check-merged-usr.sh        |  39 --------
+ support/testing/tests/init/test_systemd.py |  19 ++++
+ system/Config.in                           |  20 ++--
+ system/skeleton/usr/sbin/.empty            |   0
+ system/system.mk                           |  14 ++-
+ toolchain/helpers.mk                       |   8 +-
+ 13 files changed, 232 insertions(+), 82 deletions(-)
+ create mode 100755 support/scripts/check-merged
+ delete mode 100755 support/scripts/check-merged-usr.sh
+ delete mode 100644 system/skeleton/usr/sbin/.empty
+
+--
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
