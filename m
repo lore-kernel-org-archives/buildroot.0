@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A93CBC83F1A
-	for <buildroot@archiver.kernel.org>; Fri, 11 Jul 2025 10:21:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2658C83F1A
+	for <buildroot@archiver.kernel.org>; Fri, 11 Jul 2025 10:21:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6FD9983E2C;
-	Fri, 11 Jul 2025 10:21:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 997FA83E6A;
+	Fri, 11 Jul 2025 10:21:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bdXUC7FstWLi; Fri, 11 Jul 2025 10:21:20 +0000 (UTC)
+ id 5LBHR4iDXX0U; Fri, 11 Jul 2025 10:21:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A08481F7F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 050BC83BA9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5A08481F7F;
-	Fri, 11 Jul 2025 10:21:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 050BC83BA9;
+	Fri, 11 Jul 2025 10:21:22 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 021E1199
- for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:21:08 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 289E91E1
+ for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:21:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F0DD840EB8
- for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:21:04 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2FDC640EB9
+ for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:21:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rqW3dmRZkzsY for <buildroot@buildroot.org>;
+ id sN3CZm6mmb-V for <buildroot@buildroot.org>;
  Fri, 11 Jul 2025 10:21:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE9AD40C6F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D8B0740C81
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id BE9AD40C6F
+ by smtp4.osuosl.org (Postfix) with ESMTP id D8B0740C81
  for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:21:03 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BC9E486337; Fri, 11 Jul 2025 10:21:03 +0000 (UTC)
+ id D6A4786337; Fri, 11 Jul 2025 10:21:03 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 10 Jul 2025 11:34:49 +0200
+Date: Thu, 10 Jul 2025 11:35:03 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: 5248c9b80a2de291eeb1878523d5d14f92c74b74
-X-Git-Newrev: dd100567ed830d3186ba90e85659b98486cc1b75
+X-Git-Oldrev: 1b72e438a7e59c039449d3a2e2d1ddf33a1ee5dd
+X-Git-Newrev: b27c3ef88b08b96bcc411acf7f7442a4e2298070
 X-Patchwork-Hint: ignore
-Message-Id: <20250711102103.BC9E486337@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/net-tools: fix
- regression introduced by CVE fix
+Message-Id: <20250711102103.D6A4786337@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/daq: fix build
+ with GCC14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,76 +66,89 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dd100567ed830d3186ba90e85659b98486cc1b75
+commit: https://git.buildroot.net/buildroot/commit/?id=b27c3ef88b08b96bcc411acf7f7442a4e2298070
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-Commit [1] backported an upstream patch to address CVE-2025-46836 that
-included a regression.
-Upstream later fixed this regression in commit [2].
+The daq package fails to build with GCC14 toolchains:
 
-This patch add that fix to correct the issue introduced by the original
-patch.
+```
+daq_nfq.c: In function 'SetPktHdr':
+daq_nfq.c:395:37: error: passing argument 2 of 'nfq_get_payload' from incompatible pointer type [-Wincompatible-pointer-types]
+  395 |     int len = nfq_get_payload(nfad, (char**)pkt);
+      |                                     ^~~~~~~~~~~
+      |                                     |
+      |                                     char **
+```
 
-[1] 323aaa9f54 package/net-tools: add upstream security fix for CVE-2025-46836
-[2] https://sourceforge.net/p/net-tools/code/ci/ddb0e375fb9ca95bb69335540b85bbdaa2714348/
+The issue can be reproduced with the following config:
 
+```
+cat > daq.config <<EOF
+BR2_arm=y
+BR2_cortex_a7=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+BR2_PACKAGE_DAQ=y
+BR2_PACKAGE_LIBDNET=y
+BR2_PACKAGE_LIBNETFILTER_QUEUE=y
+EOF
+```
+
+This patch port a patch taken from openembedded meta-networking [1] and
+is tested with test-pkg:
+
+```
+$ ./utils/test-pkg -c daq.config -p daq
+```
+
+[1] https://layers.openembedded.org/layerindex/recipe/37594/
+
+Fixes: https://autobuild.buildroot.org/results/c69/c69ab134463a18eec65ded836aecf89a5cb4a75c/build-end.log
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit d3274210f9821cee8a2104bdcdd8e2b45b4ac6f4)
+(cherry picked from commit 533c0aac289a545d07efc69766227d71d2df9d80)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...2025-46836-interface-statistic-regression.patch | 30 ++++++++++++++++++++++
- package/net-tools/net-tools.mk                     |  1 +
- 2 files changed, 31 insertions(+)
+ ...3-daq-fix-incompatible-pointer-type-error.patch | 31 ++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
-diff --git a/package/net-tools/0002-CVE-2025-46836-interface-statistic-regression.patch b/package/net-tools/0002-CVE-2025-46836-interface-statistic-regression.patch
+diff --git a/package/daq/0003-daq-fix-incompatible-pointer-type-error.patch b/package/daq/0003-daq-fix-incompatible-pointer-type-error.patch
 new file mode 100644
-index 0000000000..60cae48aef
+index 0000000000..a15d325cd6
 --- /dev/null
-+++ b/package/net-tools/0002-CVE-2025-46836-interface-statistic-regression.patch
-@@ -0,0 +1,30 @@
-+From ddb0e375fb9ca95bb69335540b85bbdaa2714348 Mon Sep 17 00:00:00 2001
-+From: Bernd Eckenfels <net-tools@lina.inka.de>
-+Date: Sat, 17 May 2025 21:53:23 +0200
-+Subject: [PATCH] Interface statistic regression after 7a8f42fb2
++++ b/package/daq/0003-daq-fix-incompatible-pointer-type-error.patch
+@@ -0,0 +1,31 @@
++Fix daq incompatible pointer type error when gcc option
++'-Wincompatible-pointer-types is set:
 +
-+CVE: CVE-2025-46836
-+Upstream: https://sourceforge.net/p/net-tools/code/ci/ddb0e375fb9ca95bb69335540b85bbdaa2714348/
++| ../../daq-2.0.7/os-daq-modules/daq_nfq.c: In function 'SetPktHdr':
++| ../../daq-2.0.7/os-daq-modules/daq_nfq.c:394:37: error: passing argument 2
++   of 'nfq_get_payload' from incompatible pointer type [-Wincompatible-pointer-types]
++|   394 |     int len = nfq_get_payload(nfad, (char**)pkt);
++|       |                                     ^~~~~~~~~~~
++|       |                                     |
++|       |                                     char **
++
++Signed-off-by: Kai Kang <kai.kang@windriver.com>
++Upstream: https://git.openembedded.org/meta-openembedded/tree/meta-networking/recipes-connectivity/daq/files/daq-fix-incompatible-pointer-type-error.patch?h=master
 +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 +---
-+ lib/interface.c | 5 ++---
-+ 1 file changed, 2 insertions(+), 3 deletions(-)
++ os-daq-modules/daq_nfq.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/lib/interface.c b/lib/interface.c
-+index a054f12..ca4adf1 100644
-+--- a/lib/interface.c
-++++ b/lib/interface.c
-+@@ -239,12 +239,11 @@ static const char *get_name(char *name, const char *p)
-+                 /* copy the digits */
-+                 while (*p && isdigit((unsigned char)*p) && dst < end)
-+                     *dst++ = *p++;
-+-
-+-                if (*p == ':')              /* consume trailing colon     */
-+-                    ++p;
-+             } else {              /* if so treat as normal */
-+                 p = dot;
-+             }
-++            if (*p == ':')                  /* consume trailing colon */
-++                ++p;
-+             break;                          /* interface name ends here   */
-+         }
-diff --git a/package/net-tools/net-tools.mk b/package/net-tools/net-tools.mk
-index a227d6477f..0468a00bf0 100644
---- a/package/net-tools/net-tools.mk
-+++ b/package/net-tools/net-tools.mk
-@@ -13,6 +13,7 @@ NET_TOOLS_LICENSE_FILES = COPYING
- NET_TOOLS_CPE_ID_VALID = YES
- 
- # 0001-CVE-2025-46836-interface.c-Stack-based-Buffer-Overfl.patch
-+# 0002-CVE-2025-46836-interface-statistic-regression.patch
- NET_TOOLS_IGNORE_CVES += CVE-2025-46836
- 
- define NET_TOOLS_CONFIGURE_CMDS
++diff --git a/os-daq-modules/daq_nfq.c b/os-daq-modules/daq_nfq.c
++index 4de94b6..a6de2f3 100644
++--- a/os-daq-modules/daq_nfq.c
+++++ b/os-daq-modules/daq_nfq.c
++@@ -391,7 +391,7 @@ static inline int SetPktHdr (
++     DAQ_PktHdr_t* hdr,
++     uint8_t** pkt
++ ) {
++-    int len = nfq_get_payload(nfad, (char**)pkt);
+++    int len = nfq_get_payload(nfad, (unsigned char**)pkt);
++ 
++     if ( len <= 0 )
++         return -1;
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
