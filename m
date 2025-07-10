@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50BABC83F1A
-	for <buildroot@archiver.kernel.org>; Fri, 11 Jul 2025 10:10:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C008C83F1D
+	for <buildroot@archiver.kernel.org>; Fri, 11 Jul 2025 10:10:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1DC8F60FD7;
-	Fri, 11 Jul 2025 10:10:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 51B8283B5B;
+	Fri, 11 Jul 2025 10:10:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UV2abtZucxT8; Fri, 11 Jul 2025 10:10:11 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PCGv5P8qOkK3; Fri, 11 Jul 2025 10:10:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 325DB60E71
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 72EEA83C27
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 325DB60E71;
-	Fri, 11 Jul 2025 10:10:11 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 53673114
- for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:09:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 72EEA83C27;
+	Fri, 11 Jul 2025 10:10:12 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0D844114
+ for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:09:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CC8BC60E4F
+ by smtp1.osuosl.org (Postfix) with ESMTP id A8AF78203C
  for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:09:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pA7zBHPgLc6t for <buildroot@buildroot.org>;
- Fri, 11 Jul 2025 10:09:53 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cPYuU9GdtQ_v for <buildroot@buildroot.org>;
+ Fri, 11 Jul 2025 10:09:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C24F6065D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A03F283AE0
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1C24F6065D
- for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:09:53 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A03F283AE0
+ for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:09:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1A08886342; Fri, 11 Jul 2025 10:09:53 +0000 (UTC)
+ id 9E926818CF; Fri, 11 Jul 2025 10:09:52 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 10 Jul 2025 11:24:05 +0200
+Date: Thu, 10 Jul 2025 11:22:59 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 80a1a567fcc231a7b37ac7f1b206dddd8d9f4f1c
-X-Git-Newrev: 5bb46c4d42b88a7b0e54549d591db83e386735d5
+X-Git-Oldrev: 20d7c7cf13143f90068a5d113ba3da8f7e66e35f
+X-Git-Newrev: cebee82f6222be090592b2d877641ca8470ce631
 X-Patchwork-Hint: ignore
-Message-Id: <20250711100953.1A08886342@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/hddtemp: fix
- build without nls
+Message-Id: <20250711100952.9E926818CF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/sox: ignore
+ CVE-2023-34432
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,83 +61,49 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5002020523728942456=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5002020523728942456==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=5bb46c4d42b88a7b0e54549d591db83e386735d5
+commit: https://git.buildroot.net/buildroot/commit/?id=cebee82f6222be090592b2d877641ca8470ce631
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Fixes:
-https://autobuild.buildroot.org/results/06b44df261318ce1d07f6cb20b26e4ad64222940/
+Commit [1] introduced a patch addressing CVE-2021-23159. Since then,
+CVE-2023-34432 ([2]) remained the only unresolved CVE reported
+against the sox package in pkg-stat.  This patch adds CVE-2023-34432
+to the list of ignored CVEs for sox, based on the report from the
+Debian Security Tracker ([3]) and the sox issue tracker ([4]), both
+indicate that the patch introduced in [1] also resolves this CVE.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[1] 14aa0f5ec1 package/sox: add fix for CVE-2021-23159, CVE-2021-23172, CVE-2023-34318
+[2] https://nvd.nist.gov/vuln/detail/CVE-2023-34432
+[3] https://security-tracker.debian.org/tracker/CVE-2023-34432
+[4] https://sourceforge.net/p/sox/bugs/367/
+
+Signed-off-by: Tim Soubry <tim.soubry@mind.be>
+[Julien: change commit ref [1] to use commit id from master branch]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 196989235e6f0266fca48b6c73c780436c7ebcb0)
+(cherry picked from commit e868b974a799073428b7565925507697e049df0a)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/hddtemp/0001-fix-build-without-nls.patch | 40 ++++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+ package/sox/sox.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/hddtemp/0001-fix-build-without-nls.patch b/package/hddtemp/0001-fix-build-without-nls.patch
-new file mode 100644
-index 0000000000..356b94b010
---- /dev/null
-+++ b/package/hddtemp/0001-fix-build-without-nls.patch
-@@ -0,0 +1,40 @@
-+From c9d0d249ff013d33cf1fd5a586c16ee30095cc90 Mon Sep 17 00:00:00 2001
-+From: Nicolas PARLANT <nicolas.parlant@parhuet.fr>
-+Date: Fri, 14 Feb 2025 10:08:43 +0100
-+Subject: [PATCH] fix build without nls
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+> hddtemp.c: In function ‘main’:
-+> hddtemp.c:274:3: error: implicit declaration of function ‘bindtextdomain’ [-Wimplicit-function-declaration]
-+>   274 |   bindtextdomain (PACKAGE, LOCALEDIR);
-+>       |   ^~~~~~~~~~~~~~
-+> hddtemp.c:275:3: error: implicit declaration of function ‘textdomain’ [-Wimplicit-function-declaration]
-+>   275 |   textdomain (PACKAGE);
-+>       |   ^~~~~~~~~~
-+> make[2]: *** [Makefile:496: hddtemp-hddtemp.o] Error 1
-+
-+Upstream: https://github.com/vitlav/hddtemp/pull/16
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ src/hddtemp.c | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/src/hddtemp.c b/src/hddtemp.c
-+index 64d000e..bfea556 100644
-+--- a/src/hddtemp.c
-++++ b/src/hddtemp.c
-+@@ -270,9 +270,11 @@ int main(int argc, char* argv[]) {
-+   backtrace_sigill();
-+   backtrace_sigbus();
-+ 
-++#if ENABLE_NLS
-+   setlocale (LC_ALL, "");
-+   bindtextdomain (PACKAGE, LOCALEDIR);
-+   textdomain (PACKAGE);
-++#endif
-+ 
-+   show_db = debug = numeric = quiet = wakeup = af_hint = syslog_interval = foreground = 0;
-+   unit = DEFAULT;
-
---===============5002020523728942456==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/sox/sox.mk b/package/sox/sox.mk
+index 3c9c939e8c..9fd3f2151c 100644
+--- a/package/sox/sox.mk
++++ b/package/sox/sox.mk
+@@ -67,7 +67,7 @@ SOX_IGNORE_CVES += CVE-2021-3643 CVE-2021-23210
+ # 0007-hcom-validate-dictsize.patch
+ # This entry is NOT stale, those CVEs are not reported by pkg-stats
+ # due to the change of CPE ID to sox_project:sox in the NVD database
+-SOX_IGNORE_CVES += CVE-2021-23159 CVE-2021-23172 CVE-2023-34318
++SOX_IGNORE_CVES += CVE-2021-23159 CVE-2021-23172 CVE-2023-34318 CVE-2023-34432
+ 
+ # 0008-phere-avoid-integer-underflow.patch
+ # This entry is NOT stale, those CVEs are not reported by pkg-stats
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5002020523728942456==--
