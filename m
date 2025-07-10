@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC307C83F1A
-	for <buildroot@archiver.kernel.org>; Fri, 11 Jul 2025 10:11:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A7A2C8303C
+	for <buildroot@archiver.kernel.org>; Fri, 11 Jul 2025 10:11:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A3F9A6148F;
-	Fri, 11 Jul 2025 10:11:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 40BDF80CBD;
+	Fri, 11 Jul 2025 10:11:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EbxO9Y4xQXGq; Fri, 11 Jul 2025 10:11:01 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dswU5hCqv7SH; Fri, 11 Jul 2025 10:11:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D191A6129E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 214DA83EA1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D191A6129E;
-	Fri, 11 Jul 2025 10:11:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 214DA83EA1;
+	Fri, 11 Jul 2025 10:10:56 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id EEF1D1E1
- for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:10:20 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id D1187114
+ for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:10:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8A1E040C90
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0FEB740C84
  for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:09:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id djmoxCOZwERg for <buildroot@buildroot.org>;
- Fri, 11 Jul 2025 10:09:52 +0000 (UTC)
+ id D9VW5fzMwzqw for <buildroot@buildroot.org>;
+ Fri, 11 Jul 2025 10:09:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0C48240510
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 45B0B40CAD
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0C48240510
- for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:09:52 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 45B0B40CAD
+ for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:09:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0A57086351; Fri, 11 Jul 2025 10:09:52 +0000 (UTC)
+ id 43AF3862CE; Fri, 11 Jul 2025 10:09:53 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 10 Jul 2025 11:19:28 +0200
+Date: Thu, 10 Jul 2025 16:09:15 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 5258af79bf920ef832b12341f4d04a97fd719dfd
-X-Git-Newrev: 66236201abf291e27e0576aa4875b17044416279
+X-Git-Oldrev: 58cdf8da6324d7f04f1c1c57c41cf18babfc207f
+X-Git-Newrev: 946b7ff2280aab9f848020598a145c6d468858b6
 X-Patchwork-Hint: ignore
-Message-Id: <20250711100952.0A57086351@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/tinyxml: add
- patch for CVE-2023-34194
+Message-Id: <20250711100953.43AF3862CE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x]
+ support/dependencies/check-host-cmake.mk: set host-cmake max version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,75 +66,78 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=66236201abf291e27e0576aa4875b17044416279
+commit: https://git.buildroot.net/buildroot/commit/?id=946b7ff2280aab9f848020598a145c6d468858b6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-This fixes the following vulnerability:
-- CVE-2023-34194:
-    StringEqual in TiXmlDeclaration::Parse in tinyxmlparser.cpp in TinyXML
-    through 2.6.2 has a reachable assertion (and application exit) via a
-    crafted XML document with a '\0' located after whitespace.
+Since the introduction of CMake 4 in several distributions, build errors
+started occurring on those distributions for cmake packages that
+included calls to cmake_minimum_required() or cmake_policy() with a
+version older than 3.50 (see [1]).
 
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 184a1b94a589da215282aec9f515914ba7831804)
+To avoid backporting numerous individual fixes for affected packages,
+commit [2] was previously applied to the LTS branch as a workaround.
+
+Following further discussion (see [2][3]), that raised concerns about
+policy changes between CMake versions that could lead to breaking builds
+in non-obvious ways, a different approach was chosen.
+
+This patch reverts commit [2] and instead of applying a global
+compatibility variable, we now enforce building host-cmake when the host
+system provides CMake 4 or newer.
+
+[1] https://cmake.org/cmake/help/latest/release/4.0.html#deprecated-and-removed-features
+[2] 70aac2d9e8 package/pkg-cmake.mk: force config version >=3.5
+[3] https://lists.buildroot.org/pipermail/buildroot/2025-May/780262.html
+[4] https://lists.buildroot.org/pipermail/buildroot/2025-June/780372.html
+
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...chable-assertion-via-crafted-XML-document.patch | 33 ++++++++++++++++++++++
- package/tinyxml/tinyxml.mk                         |  3 ++
- 2 files changed, 36 insertions(+)
+ package/pkg-cmake.mk                     | 4 ----
+ support/dependencies/check-host-cmake.sh | 9 +++++++++
+ 2 files changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/package/tinyxml/0002-Avoid-reachable-assertion-via-crafted-XML-document.patch b/package/tinyxml/0002-Avoid-reachable-assertion-via-crafted-XML-document.patch
-new file mode 100644
-index 0000000000..802d964e15
---- /dev/null
-+++ b/package/tinyxml/0002-Avoid-reachable-assertion-via-crafted-XML-document.patch
-@@ -0,0 +1,33 @@
-+From: Guilhem Moulin <guilhem@debian.org>
-+Date: Sat, 30 Dec 2023 14:15:54 +0100
-+Subject: Avoid reachable assertion via crafted XML document with a '\0'
-+ located after whitespace
-+
-+Upstream: https://salsa.debian.org/debian/tinyxml/-/raw/2366e1f23d059d4c20c43c54176b6bd78d6a83fc/debian/patches/CVE-2023-34194.patch
-+
-+CVE: CVE-2023-34194
-+
-+Bug: https://www.forescout.com/resources/sierra21-vulnerabilities
-+Bug-Debian: https://bugs.debian.org/1059315
-+Bug-Debian: https://security-tracker.debian.org/tracker/CVE-2023-34194
-+Bug-Debian: https://security-tracker.debian.org/tracker/CVE-2023-40462
-+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-+---
-+ tinyxmlparser.cpp | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/src/tinyxmlparser.cpp b/src/tinyxmlparser.cpp
-+index 8aa0dfa..1601962 100644
-+--- a/src/tinyxmlparser.cpp
-++++ b/src/tinyxmlparser.cpp
-+@@ -1606,6 +1606,10 @@ const char* TiXmlDeclaration::Parse( const char* p, TiXmlParsingData* data, TiXm
-+ 		}
-+ 
-+ 		p = SkipWhiteSpace( p, _encoding );
-++		if ( !p || !*p )
-++		{
-++			break;
-++		}
-+ 		if ( StringEqual( p, "version", true, _encoding ) )
-+ 		{
-+ 			TiXmlAttribute attrib;
-diff --git a/package/tinyxml/tinyxml.mk b/package/tinyxml/tinyxml.mk
-index c6150b13fe..2f57b8a4f1 100644
---- a/package/tinyxml/tinyxml.mk
-+++ b/package/tinyxml/tinyxml.mk
-@@ -17,4 +17,7 @@ TINYXML_CPE_ID_VERSION = $(firstword $(subst _,$(space),$(TINYXML_VERSION)))
- # 0001-In-stamp-always-advance-the-pointer-if-p-0xef.patch
- TINYXML_IGNORE_CVES += CVE-2021-42260
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index 08fe7c431e..ba287d244a 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -53,10 +53,6 @@ define inner-cmake-package
  
-+# 0002-Avoid-reachable-assertion-via-crafted-XML-document.patch
-+TINYXML_IGNORE_CVES += CVE-2023-34194
+ $(3)_SUPPORTS_IN_SOURCE_BUILD ?= YES
+ 
+-# Some packages requires CMake 3.0.0 but latest CMake requires >=3.5
+-# Set the policy version minimum to force these packages to 3.5 or greater.
+-$(2)_CONF_OPTS += -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+-
+ # The default backend, unless specified by the package
+ $(3)_CMAKE_BACKEND ?= make
+ 
+diff --git a/support/dependencies/check-host-cmake.sh b/support/dependencies/check-host-cmake.sh
+index fadeae9f6b..c7aa16f48d 100755
+--- a/support/dependencies/check-host-cmake.sh
++++ b/support/dependencies/check-host-cmake.sh
+@@ -6,6 +6,9 @@
+ major_min="${1%.*}"
+ minor_min="${1#*.}"
+ 
++major_max="4"
++minor_max="0"
 +
- $(eval $(autotools-package))
+ shift
+ 
+ for candidate; do
+@@ -32,6 +35,12 @@ for candidate; do
+     major="${version%.*}"
+     minor="${version#*.}"
+ 
++    if [ ${major} -gt ${major_max} ]; then
++        continue
++    elif [ ${major} -eq ${major_max} -a ${minor} -ge ${minor_max} ]; then
++        continue
++    fi
++
+     if [ ${major} -gt ${major_min} ]; then
+         echo "${cmake}"
+         exit
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
