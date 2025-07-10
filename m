@@ -1,78 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 988FCC83F20
-	for <buildroot@archiver.kernel.org>; Thu, 10 Jul 2025 20:23:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA259C83F1A
+	for <buildroot@archiver.kernel.org>; Thu, 10 Jul 2025 20:23:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5612C80E38;
-	Thu, 10 Jul 2025 20:23:08 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S7NTQ-17mXFM; Thu, 10 Jul 2025 20:23:07 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8A73380DC0
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8A73380DC0;
-	Thu, 10 Jul 2025 20:23:07 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id CEF3212E
- for <buildroot@buildroot.org>; Thu, 10 Jul 2025 20:23:04 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B62BC6137B;
- Thu, 10 Jul 2025 20:23:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BF20D613D0;
+	Thu, 10 Jul 2025 20:23:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1rnonuPg4aak; Thu, 10 Jul 2025 20:23:04 +0000 (UTC)
+ id VU1BzDb_kAOw; Thu, 10 Jul 2025 20:23:09 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ECCCD613DF
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id ECCCD613DF;
+	Thu, 10 Jul 2025 20:23:08 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 79C6A114
+ for <buildroot@buildroot.org>; Thu, 10 Jul 2025 20:23:05 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6079480C28;
+ Thu, 10 Jul 2025 20:23:05 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TJFza9L_p-Kt; Thu, 10 Jul 2025 20:23:04 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::435; helo=mail-wr1-x435.google.com;
+ client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
  envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D7F7660EB5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D7F7660EB5
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
- [IPv6:2a00:1450:4864:20::435])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D7F7660EB5
- for <buildroot@buildroot.org>; Thu, 10 Jul 2025 20:23:03 +0000 (UTC)
-Received: by mail-wr1-x435.google.com with SMTP id
- ffacd0b85a97d-3a6f2c6715fso1414557f8f.1
- for <buildroot@buildroot.org>; Thu, 10 Jul 2025 13:23:03 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 647BE80C2E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 647BE80C2E
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 647BE80C2E
+ for <buildroot@buildroot.org>; Thu, 10 Jul 2025 20:23:04 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id
+ 5b1f17b1804b1-45348bff79fso16358415e9.2
+ for <buildroot@buildroot.org>; Thu, 10 Jul 2025 13:23:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20230601; t=1752178982; x=1752783782;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=YQOLPjRa+rQ9JAMhsAGMeATGGfVj7QpbdzC9qCvtw80=;
- b=UdbfP7N0rhMzm8LogfqcD370MMyjcnTrV0O1U9KiTOnU7GRzQdpOFNbZowXLh+IYNJ
- a7gQIwknigY1a3ksuupNQVX0wnFEakyEyD950kzI8GxTXLdfYuJpsDldJQXXoSlK6Bqw
- siWsOqDbKE61pnEhdY1ohqvgXNwsVAlZrusAtQ7EJuSE5D95eX+Ved65gOHpxx89EJGF
- ToAIgyRoqoSPnhXIKnzuAppdAP1TWvfXkb5Kd28j/c4sVoEG/bUBF79nxcYueGovWU4Y
- 4xk+gFzckgZqpkyJR383kZO5Elk5qTD2ZQLS/5d8+2JGWGgbvtZVe9JvDgLVXvyFgQNq
- GY9A==
-X-Gm-Message-State: AOJu0Yy7BOzUnyXIXfAQMaUvLn93GYSjNKxO/pBOkyO8jHUY9XfEVAeZ
- vpHiu/hT9L5M4L/J/9vVOqGcGvfXte70+4o7FmddtfzWlzthpxikmbwV15fKmg==
-X-Gm-Gg: ASbGncvQ40IZ0jSIkXgZ1H+Sb/Jx7dnmg3THnfmp/8uWfUn6jxJM5xPLJ0W9v+mOHKx
- jz11QF2+h6pu0vvoko+EgcZcvz62MnVjYoBJmHVeeJsngtyRa2HK8anoQTx5IFia+yZLBVZUn5f
- iebMv/tVbCP2GHeprFm/zqzvm5pDFPkbNmDPTJVVGBl3tqnXRW/SF5pENNCYasnrsHk8H9eAkN5
- NzYfV6gA5nwI+vIcjTysidbiPfy6WlhcrkR1Vfg2N+iGD7xEQRzMVUu6gQxssignmWpqz8r4UUx
- ITQ72U7lGg2n+JqfHVtU60MWKLLX8/TDtETdHlvgp+bacWbIKmDuTmEraqnJT88E6hEwTFJm
-X-Google-Smtp-Source: AGHT+IGTYG2VlwBrC9A3vBRHHwU8mJxEfAxsfq/01h12oA9W/R9teiqHgUZkYhnZNzy2Lab3L+P4hg==
-X-Received: by 2002:a05:6000:1ac8:b0:3a5:21c8:af31 with SMTP id
- ffacd0b85a97d-3b5f2dc2178mr89883f8f.16.1752178981533; 
- Thu, 10 Jul 2025 13:23:01 -0700 (PDT)
+ bh=V30e+/AN6MfwBDgWfblCjkJIa1Khb2qZasOj8jQou4g=;
+ b=gkf32WaoVTy+ggWH8LLFXRX06NNY5PyUqQzH1iSRt1+tYlDVSye8nJEbKIlhNr8nha
+ U1ktI2lRp7+54xinI3EAmch4t6deMgWbAfnjt1vzF/Md56Eeas2DwTKWW3OJHwuS+iGX
+ gxrRPCzv8sM4aHlAxnBC2qJGh75QvEcEVSnILE07l0LlFjaKTxjsFO/CZ1vqB4B1Q1fn
+ UfvgqM8oXcEMIeCEkZre5tksNcoQir1OUWgErqj1zDb6KtCBkyBOXIjXzd+tQbOR6ieS
+ wn7HCpdDnhsjrMJ9xlb3hu9yqACCpYmD9d7enrWxIWLasJETUgsbe7YGmboKOcBXLzuG
+ 1o6Q==
+X-Gm-Message-State: AOJu0YzZT1JcbOk3GbiOUSaWJQP2YZLDhe/W/kkmx7ersfBZh5NshSsY
+ CL2ik9ku/UE54QjY7x5wI/hkSOASfvJ3V/ZOVaNff8xyXC4Z8/omyLjKisXjTg==
+X-Gm-Gg: ASbGncuTbms0XGKzVKdk1cbIoMHTj5Tl4AxYygbWcvwZehFr2t9KBXseVkpFy/LmQAm
+ Y8fEFT8Z+jztit4c8NnxCAj/8MiGWeDAYH9dfa2U7LI+m1VFegFtWbFHgeVlVW1OOKol5j7J5Lu
+ pdj0HM8WxLR+O0kwjjkhV99+f3KZsa+cusbAP5el9idZQZ3/ssV8ZH/y2eZ7WJqrMc4DhLbkiSX
+ 9js54ewkzr36VYaItTPLhtu2cjrZK5FIUSetzeLym2aiD25htWQ9p2kAsekoGQi2Xv8Ngfqw/4w
+ TBTBPZ7FifvBKZTlBg3TILUDEFTsoVfkZ0hw5oHep0/zO6y4lOv1NPVzq3ns9DPlgdp7PSyq
+X-Google-Smtp-Source: AGHT+IEAWGP4cuhEEzqz+Ttls45RyPzkC9CMONeDuXcf7ehhG8O+YmYArf22uvlf0bky12bseAKH7A==
+X-Received: by 2002:a05:600c:1547:b0:453:5c30:a1d0 with SMTP id
+ 5b1f17b1804b1-454f4257f2fmr1474925e9.21.1752178982113; 
+ Thu, 10 Jul 2025 13:23:02 -0700 (PDT)
 Received: from landeda.home ([2a01:cb19:93aa:5000:c0e7:5e2f:eef4:db82])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3b5e8bd1997sm2742694f8f.10.2025.07.10.13.23.00
+ ffacd0b85a97d-3b5e8bd1997sm2742694f8f.10.2025.07.10.13.23.01
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
  Thu, 10 Jul 2025 13:23:01 -0700 (PDT)
 To: buildroot@buildroot.org
 Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Norbert Lange <nolange79@gmail.com>, Sen Hastings <sen@hastings.org>,
  Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 10 Jul 2025 22:22:44 +0200
-Message-ID: <90a0958f8624ac64c6ef7a8caa6a9390b77297b3.1752178975.git.yann.morin.1998@free.fr>
+Date: Thu, 10 Jul 2025 22:22:45 +0200
+Message-ID: <d9514460ee4e70a9b10c4c485a1677af3257ee40.1752178975.git.yann.morin.1998@free.fr>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <cover.1752178975.git.yann.morin.1998@free.fr>
 References: <cover.1752178975.git.yann.morin.1998@free.fr>
@@ -82,22 +83,22 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
  :message-id:reply-to;
- bh=YQOLPjRa+rQ9JAMhsAGMeATGGfVj7QpbdzC9qCvtw80=;
- b=KD8y7j1EPfV8TqPwFYJ1Y8OjmlP91+oyjpAo/3Kw50Z+6ZbramiE89dU6C71g0QlTf
- pRkp8law84h425Pr61E9b4IUl4sMyfZ0WIcu3xxddp0lGrl07YSD7nBMw7EROyLJ7LCK
- utU8Kmb8zbrrvMe25hNNUlm6xsMRY9EJ6Emu5aDKRLw92lZGCKs2QeNFyLW7quZsx9c8
- AFHSdG9KoJdBv2EXWM2FWi+KArUem38yTiJrN0FPz14SX6wiVZPlKY/V/2TiwjoCBYg0
- t9SFooTAusMxbX9OWWNKpIboQx2lN2aOWuSOwZ3/nETZesiBCcCwm+HUoN9U+tfQ8ynG
- pBsg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=V30e+/AN6MfwBDgWfblCjkJIa1Khb2qZasOj8jQou4g=;
+ b=HBte+rXr9fsfz0kqmVAAKmuyqMRA+QaljCWCfMNLvnZuA4s81w2okYmuQSYI1z30Ri
+ qurNLanKDUFREhHVDIhh7P+63TKv0epoc3mKG+82r6kBwpICLoOCoDp2W0kNBmetf0zp
+ g4m1ze7QSiZ37jV9cBkAYTOtN4o+cW0ISJNQaRuOAYxJvod82Gs2TT9fqGkplCqMqR6+
+ Dr8HfV+2YihSixD40uuiogT5osykYchl2D7qrHVWKT7MrjEb5AhGQ37v1OGp9HvjK8Qk
+ zsRrvJLYTai0sYwW/1dfHCW9aT63GBSYU6Gor3VwWFwk0ggxkYZfw8Dx5BC8/vAfx9rI
+ Z9DQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=fail (p=quarantine dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=KD8y7j1E
-Subject: [Buildroot] [PATCH 02/17 v2] system: drop superfluous negative
- condition for default PATH
+ header.s=20230601 header.b=HBte+rXr
+Subject: [Buildroot] [PATCH 03/17 v2] package/systemd: select merged-usr
+ from package, not init
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,30 +117,63 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Kconfig applies the default values in the order they are defined, and
-stops at the first which condition is met. In this case, the two
-conditions are mutually exclusive, so we can drop the second one. This
-also makes it obvious there actually is a default value.
+Since version 255, systemd no longer supports split-usr [0].
+
+Move the select from the init system to the package, to explicitly
+expose that fact.
+
+Drop our comment about our design decision, as it no longer applies.
+
+[0] https://github.com/systemd/systemd/blob/v255/NEWS#L7
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Norbert Lange <nolange79@gmail.com>
+Cc: Sen Hastings <sen@hastings.org>
 Acked-by: Arnout Vandecappelle <arnout@mind.be>
----
- system/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
+---
+Changes v1 -> v2:
+  - typo
+---
+ package/systemd/Config.in | 1 +
+ system/Config.in          | 5 -----
+ 2 files changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index 320d416203..0cb10ea3d8 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -24,6 +24,7 @@ menuconfig BR2_PACKAGE_SYSTEMD
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8
+ 	depends on BR2_HOST_GCC_AT_LEAST_8 # host-systemd
++	select BR2_ROOTFS_MERGED_USR
+ 	select BR2_PACKAGE_HAS_UDEV
+ 	select BR2_PACKAGE_DBUS if !BR2_PACKAGE_DBUS_BROKER # runtime
+ 	select BR2_PACKAGE_LIBCAP
 diff --git a/system/Config.in b/system/Config.in
-index 1bc8b61f11..b24004c533 100644
+index b24004c533..32462241a5 100644
 --- a/system/Config.in
 +++ b/system/Config.in
-@@ -535,7 +535,7 @@ endif # BR2_ROOTFS_SKELETON_DEFAULT
- config BR2_SYSTEM_DEFAULT_PATH
- 	string "Set the system's default PATH"
- 	default "/usr/bin:/usr/sbin" if BR2_ROOTFS_MERGED_USR
--	default "/bin:/sbin:/usr/bin:/usr/sbin" if !BR2_ROOTFS_MERGED_USR
-+	default "/bin:/sbin:/usr/bin:/usr/sbin"
- 	help
- 	  Sets the system's default PATH. It is being used in
- 	  /etc/profile in the skeleton-init-common package and by some
+@@ -115,10 +115,6 @@ comment "openrc needs a glibc or musl toolchain w/ dynamic library"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_STATIC_LIBS && BR2_TOOLCHAIN_USES_UCLIBC
+ 
+-# In Buildroot, we decided not to support a split-usr when systemd is
+-# used as an init system. This is a design decision, not a systemd
+-# issue. Thus the select is with BR2_INIT_SYSTEMD (below) rather than
+-# with BR2_PACKAGE_SYSTEMD.
+ config BR2_INIT_SYSTEMD
+ 	bool "systemd"
+ 	depends on BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
+@@ -130,7 +126,6 @@ config BR2_INIT_SYSTEMD
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8
+ 	depends on BR2_HOST_GCC_AT_LEAST_8
+-	select BR2_ROOTFS_MERGED_USR
+ 	select BR2_PACKAGE_SYSTEMD
+ 	select BR2_PACKAGE_SKELETON_INIT_SYSTEMD if BR2_ROOTFS_SKELETON_DEFAULT
+ 
 -- 
 2.47.0
 
