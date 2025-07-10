@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B330EC83F1A
-	for <buildroot@archiver.kernel.org>; Fri, 11 Jul 2025 10:09:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3080C8303C
+	for <buildroot@archiver.kernel.org>; Fri, 11 Jul 2025 10:10:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4E38283B3C;
-	Fri, 11 Jul 2025 10:09:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 74CAE83AE2;
+	Fri, 11 Jul 2025 10:10:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yZaaWuuatbsF; Fri, 11 Jul 2025 10:09:56 +0000 (UTC)
+ id MtwUh7Bjh9fx; Fri, 11 Jul 2025 10:09:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E043F81FC5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9B55E83AFB
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E043F81FC5;
-	Fri, 11 Jul 2025 10:09:55 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id D739F1344
- for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:09:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9B55E83AFB;
+	Fri, 11 Jul 2025 10:09:58 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1616D1E1
+ for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:09:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BCCB640AC8
- for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:09:52 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 081AB60BBD
+ for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:09:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0Y5Sy4eAAmZj for <buildroot@buildroot.org>;
- Fri, 11 Jul 2025 10:09:51 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oHcnKZ4ZXMHn for <buildroot@buildroot.org>;
+ Fri, 11 Jul 2025 10:09:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C711740C9E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F9C96065D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C711740C9E
- for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:09:51 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0F9C96065D
+ for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:09:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B77A286330; Fri, 11 Jul 2025 10:09:51 +0000 (UTC)
+ id 0177086346; Fri, 11 Jul 2025 10:09:52 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 10 Jul 2025 11:14:21 +0200
+Date: Thu, 10 Jul 2025 11:19:20 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 70350cc4efd360b2f0bc37c04d3656220590280d
-X-Git-Newrev: b672f9e988c0d589d3c45816116f13edbfbcda3f
+X-Git-Oldrev: a03e122b4f1ca6ba295204c4fc544e118a45c323
+X-Git-Newrev: 5258af79bf920ef832b12341f4d04a97fd719dfd
 X-Patchwork-Hint: ignore
-Message-Id: <20250711100951.B77A286330@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/elfutils: Show a
- comment explaining that elfutils progs need glibc
+Message-Id: <20250711100952.0177086346@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/jose: security
+ bump to version 14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,33 +66,231 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b672f9e988c0d589d3c45816116f13edbfbcda3f
+commit: https://git.buildroot.net/buildroot/commit/?id=5258af79bf920ef832b12341f4d04a97fd719dfd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-The elfutils programs require Glibc to be used as the C library. Show a
-comment when this libc isn't used in the toolchain.
+Jose-13 fixed the following security issue:
 
-Suggested-by: Yann E. MORIN <yann.morin@orange.com>
-Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
+- CVE-2023-50967: latchset jose through version 11 allows attackers to cause
+  a denial of service (CPU consumption) via a large p2c (aka PBES2 Count)
+  value.
+  https://github.com/latchset/jose/issues/151
+
+In addition, jose-14 worked around another DoS issue related to
+decompression:
+https://github.com/latchset/jose/pull/157
+
+Drop now upstreamed patches:
+
+- 0001-lib-hsh.c-rename-hsh-local-variable.patch: Upstream as of
+  https://github.com/latchset/jose/commit/3d5b287243f87ce0243b23abd690d86c41fc499c
+
+- 0002-man-add-option-to-skip-building-man-pages.patch: Upstream after
+  getting reworked to use -Ddocs=disabled as of
+  https://github.com/latchset/jose/commit/786b426df018edf30a53e2d82155df20d13047c1
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+[Julien: remove .checkpackageignore entries to fix check-package errors]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 52ba3ed65745c52ff454155db0bfe5394619ddb2)
+(cherry picked from commit 394a8fb406fec6bcf65f8f924b107920eb9405fb)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/elfutils/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
+ .checkpackageignore                                |  2 -
+ .../0001-lib-hsh.c-rename-hsh-local-variable.patch | 71 ----------------------
+ ...man-add-option-to-skip-building-man-pages.patch | 64 -------------------
+ package/jose/jose.hash                             |  2 +-
+ package/jose/jose.mk                               |  4 +-
+ 5 files changed, 3 insertions(+), 140 deletions(-)
 
-diff --git a/package/elfutils/Config.in b/package/elfutils/Config.in
-index c355048c6d..9608ef4905 100644
---- a/package/elfutils/Config.in
-+++ b/package/elfutils/Config.in
-@@ -28,4 +28,7 @@ config BR2_PACKAGE_ELFUTILS_PROGS
- 	  This option tells elfutils to not only install the libelf
- 	  libraries, but also the elfutils programs.
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 59e9002255..ea9ed4c48c 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -593,8 +593,6 @@ package/irrlicht/0002-makefile-override-LDFLAGS-and-remove-obsolete-X11R6-.patch
+ package/iucode-tool/S00iucode-tool lib_sysv.Variables
+ package/iwd/S40iwd Shellcheck lib_sysv.Variables
+ package/janus-gateway/0001-disable-ssp.patch lib_patch.Upstream
+-package/jose/0001-lib-hsh.c-rename-hsh-local-variable.patch lib_patch.Upstream
+-package/jose/0002-man-add-option-to-skip-building-man-pages.patch lib_patch.Upstream
+ package/kexec-lite/0001-clean-restart.patch lib_patch.Upstream
+ package/keyutils/0001-fix-install-rule.patch lib_patch.Upstream
+ package/keyutils/0002-cifs.patch lib_patch.Sob lib_patch.Upstream
+diff --git a/package/jose/0001-lib-hsh.c-rename-hsh-local-variable.patch b/package/jose/0001-lib-hsh.c-rename-hsh-local-variable.patch
+deleted file mode 100644
+index 0bd259ad8b..0000000000
+--- a/package/jose/0001-lib-hsh.c-rename-hsh-local-variable.patch
++++ /dev/null
+@@ -1,71 +0,0 @@
+-From 591fc6da944ffc29936e0019b2bc225ddc81dbba Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Mon, 20 Nov 2017 22:48:33 +0100
+-Subject: [PATCH] lib/hsh.c: rename hsh local variable
+-
+-The hsh local variable name conflicts with the function prototype of
+-hsh() in hsh.h, causing the following build issues with old compilers
+-(gcc 4.7):
+-
+-hsh.c: In function 'hsh':
+-hsh.c:28:21: error: declaration of 'hsh' shadows a global declaration [-Werror=shadow]
+-hsh.c:26:1: error: shadowed declaration is here [-Werror=shadow]
+-hsh.c: In function 'hsh_buf':
+-hsh.c:60:21: error: declaration of 'hsh' shadows a global declaration [-Werror=shadow]
+-hsh.c:26:1: error: shadowed declaration is here [-Werror=shadow]
+-
+-Therefore, we rename this local variable to _hsh.
+-
+-Submitted-upstream: https://github.com/latchset/jose/pull/51
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- lib/hsh.c | 12 ++++++------
+- 1 file changed, 6 insertions(+), 6 deletions(-)
+-
+-diff --git a/lib/hsh.c b/lib/hsh.c
+-index c59a95f..a2a891b 100644
+---- a/lib/hsh.c
+-+++ b/lib/hsh.c
+-@@ -25,7 +25,7 @@
+- json_t *
+- hsh(jose_cfg_t *cfg, const char *alg, const void *data, size_t dlen)
+- {
+--    jose_io_auto_t *hsh = NULL;
+-+    jose_io_auto_t *_hsh = NULL;
+-     jose_io_auto_t *enc = NULL;
+-     jose_io_auto_t *buf = NULL;
+-     char b[1024] = {};
+-@@ -33,8 +33,8 @@ hsh(jose_cfg_t *cfg, const char *alg, const void *data, size_t dlen)
+- 
+-     buf = jose_io_buffer(cfg, b, &l);
+-     enc = jose_b64_enc_io(buf);
+--    hsh = hsh_io(cfg, alg, enc);
+--    if (!buf || !enc || !hsh || !hsh->feed(hsh, data, dlen) || !hsh->done(hsh))
+-+    _hsh = hsh_io(cfg, alg, enc);
+-+    if (!buf || !enc || !_hsh || !_hsh->feed(_hsh, data, dlen) || !_hsh->done(_hsh))
+-         return NULL;
+- 
+-     return json_stringn(b, l);
+-@@ -57,7 +57,7 @@ hsh_buf(jose_cfg_t *cfg, const char *alg,
+-         const void *data, size_t dlen, void *hash, size_t hlen)
+- {
+-     const jose_hook_alg_t *a = NULL;
+--    jose_io_auto_t *hsh = NULL;
+-+    jose_io_auto_t *_hsh = NULL;
+-     jose_io_auto_t *buf = NULL;
+- 
+-     a = jose_hook_alg_find(JOSE_HOOK_ALG_KIND_HASH, alg);
+-@@ -71,8 +71,8 @@ hsh_buf(jose_cfg_t *cfg, const char *alg,
+-         return SIZE_MAX;
+- 
+-     buf = jose_io_buffer(cfg, hash, &hlen);
+--    hsh = a->hash.hsh(a, cfg, buf);
+--    if (!buf || !hsh || !hsh->feed(hsh, data, dlen) || !hsh->done(hsh))
+-+    _hsh = a->hash.hsh(a, cfg, buf);
+-+    if (!buf || !_hsh || !_hsh->feed(_hsh, data, dlen) || !_hsh->done(_hsh))
+-         return SIZE_MAX;
+- 
+-     return hlen;
+--- 
+-2.13.6
+-
+diff --git a/package/jose/0002-man-add-option-to-skip-building-man-pages.patch b/package/jose/0002-man-add-option-to-skip-building-man-pages.patch
+deleted file mode 100644
+index 3a5ad1eadc..0000000000
+--- a/package/jose/0002-man-add-option-to-skip-building-man-pages.patch
++++ /dev/null
+@@ -1,64 +0,0 @@
+-From 506132d3edc8d062f65fdacf007a15613d27e5c5 Mon Sep 17 00:00:00 2001
+-From: Eneas U de Queiroz <cotequeiroz@gmail.com>
+-Date: Wed, 6 Apr 2022 09:49:48 -0300
+-Subject: [PATCH] man: add option to skip building man pages
+-
+-Add a 'skip_manpages' option to meson, so that man pages do not get
+-built.
+-
+-Signed-off-by: Eneas U de Queiroz <cotequeiroz@gmail.com>
+-[Retrieved from: https://github.com/latchset/jose/pull/115]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- meson.build       | 24 +++++++++++++-----------
+- meson_options.txt |  1 +
+- 2 files changed, 14 insertions(+), 11 deletions(-)
+- create mode 100644 meson_options.txt
+-
+-diff --git a/meson.build b/meson.build
+-index 1edfbe7..9b40efb 100644
+---- a/meson.build
+-+++ b/meson.build
+-@@ -37,7 +37,6 @@ zlib = dependency('zlib')
+- threads = dependency('threads')
+- jansson = dependency('jansson', version: '>=2.10')
+- libcrypto = dependency('libcrypto', version: '>=1.0.2')
+--a2x = find_program('a2x', required: false)
+- 
+- mans = []
+- 
+-@@ -63,14 +62,17 @@ pkg.generate(
+-   requires: 'jansson',
+- )
+- 
+--if a2x.found()
+--  foreach m : mans
+--    custom_target(m.split('/')[-1], input: m + '.adoc', output: m.split('/')[-1],
+--      command: [a2x, '-f', 'manpage', '-D', meson.current_build_dir(), '@INPUT@'],
+--      install_dir: join_paths(get_option('mandir'), 'man' + m.split('.')[-1]),
+--      install: true
+--    )
+--  endforeach
+--else
+--  warning('Will not build man pages due to missing dependencies!')
+-+if not get_option('skip_manpages')
+-+  a2x = find_program('a2x', required: false)
+-+  if a2x.found()
+-+    foreach m : mans
+-+      custom_target(m.split('/')[-1], input: m + '.adoc', output: m.split('/')[-1],
+-+        command: [a2x, '-f', 'manpage', '-D', meson.current_build_dir(), '@INPUT@'],
+-+        install_dir: join_paths(get_option('mandir'), 'man' + m.split('.')[-1]),
+-+        install: true
+-+      )
+-+    endforeach
+-+  else
+-+    warning('Will not build man pages due to missing dependencies!')
+-+  endif
+- endif
+-diff --git a/meson_options.txt b/meson_options.txt
+-new file mode 100644
+-index 0000000..0885515
+---- /dev/null
+-+++ b/meson_options.txt
+-@@ -0,0 +1 @@
+-+option('skip_manpages', type: 'boolean', value: false, description: 'Do not build manpages')
+diff --git a/package/jose/jose.hash b/package/jose/jose.hash
+index 128d26d163..0bee7f46e8 100644
+--- a/package/jose/jose.hash
++++ b/package/jose/jose.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  e272afe7717e22790c383f3164480627a567c714ccb80c1ee96f62c9929d8225  jose-11.tar.xz
++sha256  cee329ef9fce97c4c025604a8d237092f619aaa9f6d35fdf9d8c9052bc1ff95b  jose-14.tar.xz
+ sha256  09e8a9bcec8067104652c168685ab0931e7868f9c8284b66f5ae6edae5f1130b  COPYING
+diff --git a/package/jose/jose.mk b/package/jose/jose.mk
+index 723ebe8bb9..9fd9d1dcaa 100644
+--- a/package/jose/jose.mk
++++ b/package/jose/jose.mk
+@@ -4,13 +4,13 @@
+ #
+ ################################################################################
  
-+comment "elfutils programs needs a glibc toolchain"
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC
-+
- endif
+-JOSE_VERSION = 11
++JOSE_VERSION = 14
+ JOSE_SOURCE = jose-$(JOSE_VERSION).tar.xz
+ JOSE_SITE = https://github.com/latchset/jose/releases/download/v$(JOSE_VERSION)
+ JOSE_LICENSE = Apache-2.0
+ JOSE_LICENSE_FILES = COPYING
+ JOSE_INSTALL_STAGING = YES
+ JOSE_DEPENDENCIES = host-pkgconf zlib jansson openssl
+-JOSE_CONF_OPTS = -Dskip_manpages=true
++JOSE_CONF_OPTS = -Ddocs=disabled
+ 
+ $(eval $(meson-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
