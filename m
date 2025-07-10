@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 711A2C83F1A
-	for <buildroot@archiver.kernel.org>; Fri, 11 Jul 2025 10:21:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED9EAC83F1A
+	for <buildroot@archiver.kernel.org>; Fri, 11 Jul 2025 10:21:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4599560E4F;
+	by smtp1.osuosl.org (Postfix) with ESMTP id E923183BC2;
+	Fri, 11 Jul 2025 10:21:11 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AXIoD3HCyvol; Fri, 11 Jul 2025 10:21:11 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B6D8883BDA
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id B6D8883BDA;
 	Fri, 11 Jul 2025 10:21:10 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1F5A8968
+ for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:21:05 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6EB8E60B27
+ for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:21:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5NvmcjJeXU47; Fri, 11 Jul 2025 10:21:09 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 711E660B24
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 711E660B24;
-	Fri, 11 Jul 2025 10:21:09 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 0B82D199
- for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:21:05 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 39C37403E4
- for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:21:04 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rITFScfp1Sg5 for <buildroot@buildroot.org>;
+ id bQGPv5RL07JU for <buildroot@buildroot.org>;
  Fri, 11 Jul 2025 10:21:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A0EFD405C8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B65A560B24
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A0EFD405C8
+ by smtp3.osuosl.org (Postfix) with ESMTP id B65A560B24
  for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:21:03 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 91C5986353; Fri, 11 Jul 2025 10:21:03 +0000 (UTC)
+ id B468F86380; Fri, 11 Jul 2025 10:21:03 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 10 Jul 2025 11:31:41 +0200
+Date: Thu, 10 Jul 2025 11:34:44 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: 7569ec2a6ccaddea9679af6ffe77e5edf4c77e4c
-X-Git-Newrev: 5d6d1da5e4da4c4184e16b06c6f8deab9eb8217b
+X-Git-Oldrev: 3536feedeed718087ca757869301ba85b57c5c24
+X-Git-Newrev: 5248c9b80a2de291eeb1878523d5d14f92c74b74
 X-Patchwork-Hint: ignore
-Message-Id: <20250711102103.91C5986353@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] support/testing: enable
- lpxelinux for syslinux runtime test
+Message-Id: <20250711102103.B468F86380@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/python-urllib3:
+ security bump to v2.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,35 +66,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5d6d1da5e4da4c4184e16b06c6f8deab9eb8217b
+commit: https://git.buildroot.net/buildroot/commit/?id=5248c9b80a2de291eeb1878523d5d14f92c74b74
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-The syslinux runtime test (which is in fact a build-only test) ensures
-that syslinux does get build at least once a week (via the gitlab-CI
-weekly pipeline). Runtime testing would need much more work, though, but
-nothing in syslinux is currently runtime tested anyway.
+For release note, see:
+https://github.com/urllib3/urllib3/releases/tag/2.5.0
 
-Reported-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+This fixes the following vulnerabilities:
+- CVE-2025-50181:
+    urllib3 redirects are not disabled when retries are disabled on
+    PoolManager instantiation
+
+- CVE-2025-50182:
+    urllib3 does not control redirects in browsers and Node.js
+
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+[Julien: add link to release note in commit log]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit a6ddf2b91ddd037eaca947fdc99135f63fa0755c)
+(cherry picked from commit 7006854ce1514c03fe98d57dcaa68629ac800b71)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- support/testing/tests/boot/test_syslinux.py | 1 +
- 1 file changed, 1 insertion(+)
+ package/python-urllib3/python-urllib3.hash | 4 ++--
+ package/python-urllib3/python-urllib3.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/support/testing/tests/boot/test_syslinux.py b/support/testing/tests/boot/test_syslinux.py
-index 41152cde7e..17fe904263 100644
---- a/support/testing/tests/boot/test_syslinux.py
-+++ b/support/testing/tests/boot/test_syslinux.py
-@@ -21,6 +21,7 @@ class TestSysLinuxBase(infra.basetest.BRTest):
-         """
-         BR2_TARGET_SYSLINUX=y
-         BR2_TARGET_SYSLINUX_ISOLINUX=y
-+        BR2_TARGET_SYSLINUX_LPXELINUX=y
-         BR2_TARGET_SYSLINUX_PXELINUX=y
-         BR2_TARGET_SYSLINUX_MBR=y
-         """
+diff --git a/package/python-urllib3/python-urllib3.hash b/package/python-urllib3/python-urllib3.hash
+index 2391108e26..f4162882f7 100644
+--- a/package/python-urllib3/python-urllib3.hash
++++ b/package/python-urllib3/python-urllib3.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/urllib3/json
+-md5  787104cdecd70e6688713f8a079ffd3f  urllib3-2.4.0.tar.gz
+-sha256  414bc6535b787febd7567804cc015fee39daab8ad86268f1310a9250697de466  urllib3-2.4.0.tar.gz
++md5  2b8a86438e4d35fbc90572dbdb424759  urllib3-2.5.0.tar.gz
++sha256  3fc47733c7e419d4bc3f6b3dc2b4f890bb743906a30d56ba4a5bfa4bbff92760  urllib3-2.5.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  130e3a64d5fdd5d096a752694634a7d9df284469de86e5732100268041e3d686  LICENSE.txt
+diff --git a/package/python-urllib3/python-urllib3.mk b/package/python-urllib3/python-urllib3.mk
+index 7294742909..9ec6c7f3c0 100644
+--- a/package/python-urllib3/python-urllib3.mk
++++ b/package/python-urllib3/python-urllib3.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_URLLIB3_VERSION = 2.4.0
++PYTHON_URLLIB3_VERSION = 2.5.0
+ PYTHON_URLLIB3_SOURCE = urllib3-$(PYTHON_URLLIB3_VERSION).tar.gz
+-PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/8a/78/16493d9c386d8e60e442a35feac5e00f0913c0f4b7c217c11e8ec2ff53e0
++PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/15/22/9ee70a2574a4f4599c47dd506532914ce044817c7752a79b6a51286319bc
+ PYTHON_URLLIB3_LICENSE = MIT
+ PYTHON_URLLIB3_LICENSE_FILES = LICENSE.txt
+ PYTHON_URLLIB3_CPE_ID_VENDOR = python
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
