@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16AF8C8303C
-	for <buildroot@archiver.kernel.org>; Fri, 11 Jul 2025 10:10:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE9D4C83F1A
+	for <buildroot@archiver.kernel.org>; Fri, 11 Jul 2025 10:10:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DA51483C1C;
-	Fri, 11 Jul 2025 10:10:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BF32D6065D;
+	Fri, 11 Jul 2025 10:10:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wSO8-_8rz6WY; Fri, 11 Jul 2025 10:10:47 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id m1dY0rljbZJO; Fri, 11 Jul 2025 10:10:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9DCDD83EA4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC0BF6129E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9DCDD83EA4;
-	Fri, 11 Jul 2025 10:10:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CC0BF6129E;
+	Fri, 11 Jul 2025 10:10:50 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id EA5A9114
- for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:10:08 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id B94CF114
+ for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:10:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7F6BC40C79
+ by smtp2.osuosl.org (Postfix) with ESMTP id D134F40C9D
  for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:09:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id StTu6wtGXB8w for <buildroot@buildroot.org>;
+ id JmdY_G4Texgc for <buildroot@buildroot.org>;
  Fri, 11 Jul 2025 10:09:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3DC2840CA2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B898A40C8C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3DC2840CA2
- for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:09:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B898A40C8C
+ for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:09:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3BEB985CB8; Fri, 11 Jul 2025 10:09:53 +0000 (UTC)
+ id B6B8D818CF; Fri, 11 Jul 2025 10:09:52 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 10 Jul 2025 11:50:09 +0200
+Date: Thu, 10 Jul 2025 11:23:14 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: bbc0cdb21fd96565a54a9ad35b65b455cb690c49
-X-Git-Newrev: 58cdf8da6324d7f04f1c1c57c41cf18babfc207f
+X-Git-Oldrev: 7fa8047b0f279f558703a3dcd76277e5c323ead6
+X-Git-Newrev: a84ffe2e29f77c6f0c0f2023c9981f9354a1f583
 X-Patchwork-Hint: ignore
-Message-Id: <20250711100953.3BEB985CB8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/systemd: bump to
- 256.17
+Message-Id: <20250711100952.B6B8D818CF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/python-future:
+ add CPE identifier
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,42 +66,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=58cdf8da6324d7f04f1c1c57c41cf18babfc207f
+commit: https://git.buildroot.net/buildroot/commit/?id=a84ffe2e29f77c6f0c0f2023c9981f9354a1f583
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Changes: https://github.com/systemd/systemd/compare/v256.16...v256.17
+The cpe:2.3:a:pythoncharmers:python-future:*:*:*:*:*:*:*:* is
+valid for this package.
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+See https://nvd.nist.gov/products/cpe/detail/6E3F033B-5565-461B-8450-D23E68419313
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 96899dd6920c451e6cba412da4cb8959f62b10bf)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/systemd/systemd.hash | 2 +-
- package/systemd/systemd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-future/python-future.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
-index e16823ca78..0c75657898 100644
---- a/package/systemd/systemd.hash
-+++ b/package/systemd/systemd.hash
-@@ -1,5 +1,5 @@
- # sha256 locally computed
--sha256  2600db41d9ebd717ca786d754d17699038147b8fddaf15fc935f775a06c0df92  systemd-256.16.tar.gz
-+sha256  72568721e2f373463054875fb788190e367327e1a46eef7de6bc73657aa7cbcb  systemd-256.17.tar.gz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
- sha256  e5a8645ad94aab24e312dd0c6be2aa54236eb9374480b1b14ea5c61598874fd5  LICENSES/BSD-2-Clause.txt
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index bf0f2c1e90..126ce7716f 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -19,7 +19,7 @@
- # - Diff sysusers.d with the previous version
- # - Diff factory/etc/nsswitch.conf with the previous version
- #   (details are often sprinkled around in README and manpages)
--SYSTEMD_VERSION = 256.16
-+SYSTEMD_VERSION = 256.17
- SYSTEMD_SITE = $(call github,systemd,systemd,v$(SYSTEMD_VERSION))
- SYSTEMD_LICENSE = \
- 	LGPL-2.1+, \
+diff --git a/package/python-future/python-future.mk b/package/python-future/python-future.mk
+index 698863a13d..6276440c40 100644
+--- a/package/python-future/python-future.mk
++++ b/package/python-future/python-future.mk
+@@ -10,5 +10,6 @@ PYTHON_FUTURE_SITE = https://files.pythonhosted.org/packages/a7/b2/4140c69c6a664
+ PYTHON_FUTURE_SETUP_TYPE = setuptools
+ PYTHON_FUTURE_LICENSE = MIT
+ PYTHON_FUTURE_LICENSE_FILES = LICENSE.txt
++PYTHON_FUTURE_CPE_ID_VENDOR = pythoncharmers
+ 
+ $(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
