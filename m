@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B175C83F1A
-	for <buildroot@archiver.kernel.org>; Fri, 11 Jul 2025 10:10:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68F62C83F1D
+	for <buildroot@archiver.kernel.org>; Fri, 11 Jul 2025 10:10:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 73ACD83C39;
-	Fri, 11 Jul 2025 10:10:15 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LT0P1Nf1e6f8; Fri, 11 Jul 2025 10:10:14 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 08E7683C19
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 08E7683C19;
-	Fri, 11 Jul 2025 10:10:14 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 10E11968
- for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:09:56 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3C9256065D
- for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:09:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3E53860F89;
+	Fri, 11 Jul 2025 10:10:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YWf1tzdGKtvD for <buildroot@buildroot.org>;
+ id 7DyP01fiTy1b; Fri, 11 Jul 2025 10:10:15 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 724A160D50
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 724A160D50;
+	Fri, 11 Jul 2025 10:10:15 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4B635114
+ for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:09:56 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 068854067B
+ for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:09:54 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4PZc9GwUeH3s for <buildroot@buildroot.org>;
  Fri, 11 Jul 2025 10:09:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D2199608FE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C00B3401C7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D2199608FE
+ by smtp2.osuosl.org (Postfix) with ESMTP id C00B3401C7
  for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:09:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C1A8B86342; Fri, 11 Jul 2025 10:09:51 +0000 (UTC)
+ id ACEBF862CE; Fri, 11 Jul 2025 10:09:51 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 10 Jul 2025 11:14:28 +0200
+Date: Thu, 10 Jul 2025 11:14:15 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: b672f9e988c0d589d3c45816116f13edbfbcda3f
-X-Git-Newrev: 0b54b252dfbcb85b35a70b690ec813f1b710adc8
+X-Git-Oldrev: f11fc147348c77feb687a86e0af0740816e4ead3
+X-Git-Newrev: 70350cc4efd360b2f0bc37c04d3656220590280d
 X-Patchwork-Hint: ignore
-Message-Id: <20250711100951.C1A8B86342@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/elfutils:
- elfutils programs now require a c++ toolchain
+Message-Id: <20250711100951.ACEBF862CE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x]
+ package/gstreamer1/gstreamer1-editing-services: fix COPYING hash
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,52 +66,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0b54b252dfbcb85b35a70b690ec813f1b710adc8
+commit: https://git.buildroot.net/buildroot/commit/?id=70350cc4efd360b2f0bc37c04d3656220590280d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-The 0.192 release of elfutils introduced the src/srcfiles.cxx program,
-that lists all source files of a given ELF binary. As this is a C++
-program, we need a toolchain that supports it.
+With the version bump to v1.24.11 (see [1]) the license hash changed for
+the gstreamer1-editing-services package (see [2]).
 
-Without it, the build system tries to use "no" as the CXX compiler,
-resulting in the following errors :
+This patch update the hash accordingly.
 
-  /bin/sh: line 1: no: command not found
+Fixes: https://autobuild.buildroot.org/results/9e1/9e1807cf5ac7bb69ae9bbe7a6a71411eb500188c/build-end.log
 
-as can be seen here for example :
+[1] fd00502ee0 package/gstreamer1/gstreamer1-editing-services: bump version to 1.24.11
+[2] https://salsa.debian.org/gstreamer-team/gstreamer-editing-services1.0/-/commit/2a56edb6af3409ebdca39a96f310b43e0d780be0
 
-https://autobuild.buildroot.net/results/849/849221c794a469a423857a290db775d150b84900
-
-Add a dependency to a CPP toolchain for the elfutils programs.
-
-Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 268d7ad180215b22bc026f57bc11724cacfb8565)
+(cherry picked from commit fc1387b4a5c4eb88dccac4a3b639462366f2b65f)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/elfutils/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ .../gstreamer1-editing-services/gstreamer1-editing-services.hash      | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/elfutils/Config.in b/package/elfutils/Config.in
-index 9608ef4905..e866dd448b 100644
---- a/package/elfutils/Config.in
-+++ b/package/elfutils/Config.in
-@@ -24,11 +24,13 @@ if BR2_PACKAGE_ELFUTILS
- config BR2_PACKAGE_ELFUTILS_PROGS
- 	bool "Install programs"
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	help
- 	  This option tells elfutils to not only install the libelf
- 	  libraries, but also the elfutils programs.
+diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
+index 584d235451..501ea22144 100644
+--- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
++++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
+@@ -2,5 +2,5 @@
+ sha256  85fd74dab259e137a95ab4427e009dd853f4ca82874500cb5493c33bcef1ef08  gst-editing-services-1.24.11.tar.xz
  
--comment "elfutils programs needs a glibc toolchain"
--	depends on !BR2_TOOLCHAIN_USES_GLIBC
-+comment "elfutils programs needs a glibc toolchain w/ C++"
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC \
-+		|| !BR2_INSTALL_LIBSTDCPP
- 
- endif
+ # Hashes for license files:
+-sha256  f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a  COPYING
+-sha256  f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a  COPYING.LIB
++sha256  ad2eec519ebd4b5df86ea84dff24ae3bfa2edea846a703b58902dd221ae375db  COPYING
++sha256  ad2eec519ebd4b5df86ea84dff24ae3bfa2edea846a703b58902dd221ae375db  COPYING.LIB
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
