@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9973C8303C
-	for <buildroot@archiver.kernel.org>; Fri, 11 Jul 2025 10:21:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99E30C83F1D
+	for <buildroot@archiver.kernel.org>; Fri, 11 Jul 2025 10:21:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7DADF83F80;
-	Fri, 11 Jul 2025 10:21:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6F15D83F9F;
+	Fri, 11 Jul 2025 10:21:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yMI9e30ZCgJG; Fri, 11 Jul 2025 10:21:53 +0000 (UTC)
+ id jRxaTtUDyMjT; Fri, 11 Jul 2025 10:21:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E589F83F75
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C9E383F86
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E589F83F75;
-	Fri, 11 Jul 2025 10:21:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8C9E383F86;
+	Fri, 11 Jul 2025 10:21:55 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id A3F88199
- for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:21:31 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id BFFA31E1
+ for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:21:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EF3E240DB1
- for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:21:06 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4CD8E40CAC
+ for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:21:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bVA04BAOPluK for <buildroot@buildroot.org>;
- Fri, 11 Jul 2025 10:21:05 +0000 (UTC)
+ id eRPNdXUu1bfx for <buildroot@buildroot.org>;
+ Fri, 11 Jul 2025 10:21:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 909FB40E48
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C74E240E95
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 909FB40E48
+ by smtp4.osuosl.org (Postfix) with ESMTP id C74E240E95
  for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:21:04 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8EA1E86377; Fri, 11 Jul 2025 10:21:04 +0000 (UTC)
+ id C420386377; Fri, 11 Jul 2025 10:21:04 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 10 Jul 2025 11:39:28 +0200
+Date: Thu, 10 Jul 2025 11:39:56 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: 9e0870e09e04582bb5190ade1aa60305df89626f
-X-Git-Newrev: ac8b1ac4467219cbde762e844e5c23c244f8523f
+X-Git-Oldrev: 869270f6ba77fb522f38434d05997019394273da
+X-Git-Newrev: 9b2aa912c0a4dd63c73ff33d1e4b484d5c91da15
 X-Patchwork-Hint: ignore
-Message-Id: <20250711102104.8EA1E86377@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x]
- package/shadowsocks-libev: fix build w/ mbedtls v3.6
+Message-Id: <20250711102104.C420386377@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] boot/at91bootstrap3: fix
+ build with host GCC 15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,281 +61,149 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8142906882642590245=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ac8b1ac4467219cbde762e844e5c23c244f8523f
+--===============8142906882642590245==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=9b2aa912c0a4dd63c73ff33d1e4b484d5c91da15
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-Since the mbedtls bump to v3.6 [1] the shadowsocks-libev package is
-failling  on the autobuilder:
+Building at91bootstrap3 with GCC 15 fails with:
 
-```
-checking for mbedtls_cipher_setup in -lmbedcrypto... yes
-checking whether mbedtls supports Cipher Feedback mode or not... configure: error: MBEDTLS_CIPHER_MODE_CFB required
-make: *** [package/pkg-generic.mk:263: /workdir/instance-0/output-1/build/shadowsocks-libev-3.3.5/.stamp_configured] Error 1
-make: Leaving directory '/workdir/instance-0/buildroot'
-```
+    include/types.h:23:23: error: ‘bool’ cannot be defined via ‘typedef’
+       23 | typedef unsigned char bool;
+          |                       ^~~~
+    include/types.h:23:23: note: ‘bool’ is a keyword with ‘-std=c23’ onwards
 
-This is due to the breaking changes in the mbedtls API with the version
-bump.
+This is due to GCC 15 defaulting to the C23 language dialect.
 
-This patch adds the upstream patch [2] that address this issue by verifying
-conditionally the version of mbedtls we are running on to make the API
-calls and includes.
-
-[1] 3481a9643f package/mbedtls: bump to version 3.6.3.1
-[2] https://github.com/shadowsocks/shadowsocks-libev/commit/9afa3cacf947f910be46b69fc5a7a1fdd02fd5e6#
-
-Fixes: https://autobuild.buildroot.org/results/070/070581d95f2739cee3b4cb8252639dd92b5a8421
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 78198bc0f35e859e6c6b9162d643702079b31c39)
+Signed-off-by: Edgar Bonet <bonet@grenoble.cnrs.fr>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+(cherry picked from commit 500678593fee1cdf61220f7d32b1ecdf9607afef)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- .../0004-fix-mbedtls-3-6-compatibility.patch       | 231 +++++++++++++++++++++
- 1 file changed, 231 insertions(+)
+ ...es.h-conditionally-define-bool-false-and-.patch | 47 ++++++++++++++++++++++
+ ...es.h-conditionally-define-bool-false-and-.patch | 46 +++++++++++++++++++++
+ 2 files changed, 93 insertions(+)
 
-diff --git a/package/shadowsocks-libev/0004-fix-mbedtls-3-6-compatibility.patch b/package/shadowsocks-libev/0004-fix-mbedtls-3-6-compatibility.patch
+diff --git a/boot/at91bootstrap3/v3.10.3/0001-include-types.h-conditionally-define-bool-false-and-.patch b/boot/at91bootstrap3/v3.10.3/0001-include-types.h-conditionally-define-bool-false-and-.patch
 new file mode 100644
-index 0000000000..ca46425c4d
+index 0000000000..352c1c0a43
 --- /dev/null
-+++ b/package/shadowsocks-libev/0004-fix-mbedtls-3-6-compatibility.patch
-@@ -0,0 +1,231 @@
-+From 9afa3cacf947f910be46b69fc5a7a1fdd02fd5e6 Mon Sep 17 00:00:00 2001
-+From: Lu jicong <jiconglu58@gmail.com>
-+Date: Fri, 10 Jan 2025 22:05:31 +0800
-+Subject: [PATCH] Fix in 'mbedtls 3.6.0 ver' compilation failure issue
++++ b/boot/at91bootstrap3/v3.10.3/0001-include-types.h-conditionally-define-bool-false-and-.patch
+@@ -0,0 +1,47 @@
++From 908c65678867565a934ea5a967bfe7e204d1ccaf Mon Sep 17 00:00:00 2001
++From: Edgar Bonet <bonet@grenoble.cnrs.fr>
++Date: Wed, 25 Jun 2025 11:13:43 +0200
++Subject: [PATCH] include/types.h: conditionally define bool, false and true
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
-+Fix mbedtls 3.6 compatibility
++include/types.h typedefs ‘bool’ and macro-defines ‘false’ and ‘true’.
++However, since C23, these are predefine keywords. As C23 is the default
++C dialect for GCC 15, building with this compiler fails with:
 +
-+Co-authored-by: Zxl hhyccc <zxlhhy@gmail.com>
-+Signed-off-by: Lu jicong <jiconglu58@gmail.com>
-+Upstream: https://github.com/shadowsocks/shadowsocks-libev/commit/9afa3cacf947f910be46b69fc5a7a1fdd02fd5e6
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++    include/types.h:23:23: error: ‘bool’ cannot be defined via ‘typedef’
++       23 | typedef unsigned char bool;
++          |                       ^~~~
++    include/types.h:23:23: note: ‘bool’ is a keyword with ‘-std=c23’ onwards
++
++Fix this build failure by only defining ‘bool’, ‘false’ and ‘true’ on C
++dialects older than C23.
++
++Upstream: https://github.com/linux4sam/at91bootstrap/pull/188
++[Edgar: backport to v3.10.3]
++
++Signed-off-by: Edgar Bonet <bonet@grenoble.cnrs.fr>
 +---
-+ m4/mbedtls.m4 | 20 ++++++++++++++++++++
-+ src/aead.c    | 23 +++++++++++------------
-+ src/crypto.c  |  2 +-
-+ src/crypto.h  |  1 -
-+ src/stream.c  | 51 ++++++---------------------------------------------
-+ 5 files changed, 38 insertions(+), 59 deletions(-)
++ include/types.h | 3 +++
++ 1 file changed, 3 insertions(+)
 +
-+diff --git a/m4/mbedtls.m4 b/m4/mbedtls.m4
-+index 2c478b960..a795790ca 100644
-+--- a/m4/mbedtls.m4
-++++ b/m4/mbedtls.m4
-+@@ -31,7 +31,12 @@ AC_DEFUN([ss_MBEDTLS],
-+   AC_COMPILE_IFELSE(
-+     [AC_LANG_PROGRAM(
-+       [[
-++#include <mbedtls/version.h>
-++#if MBEDTLS_VERSION_NUMBER >= 0x03000000
-++#include <mbedtls/mbedtls_config.h>
-++#else
-+ #include <mbedtls/config.h>
-++#endif
-+       ]],
-+       [[
-+ #ifndef MBEDTLS_CIPHER_MODE_CFB
-+@@ -48,7 +53,12 @@ AC_DEFUN([ss_MBEDTLS],
-+   AC_COMPILE_IFELSE(
-+     [AC_LANG_PROGRAM(
-+       [[
-++#include <mbedtls/version.h>
-++#if MBEDTLS_VERSION_NUMBER >= 0x03000000
-++#include <mbedtls/mbedtls_config.h>
-++#else
-+ #include <mbedtls/config.h>
-++#endif
-+       ]],
-+       [[
-+ #ifndef MBEDTLS_ARC4_C
-+@@ -64,7 +74,12 @@ AC_DEFUN([ss_MBEDTLS],
-+   AC_COMPILE_IFELSE(
-+     [AC_LANG_PROGRAM(
-+       [[
-++#include <mbedtls/version.h>
-++#if MBEDTLS_VERSION_NUMBER >= 0x03000000
-++#include <mbedtls/mbedtls_config.h>
-++#else
-+ #include <mbedtls/config.h>
-++#endif
-+       ]],
-+       [[
-+ #ifndef MBEDTLS_BLOWFISH_C
-+@@ -80,7 +95,12 @@ AC_DEFUN([ss_MBEDTLS],
-+   AC_COMPILE_IFELSE(
-+     [AC_LANG_PROGRAM(
-+       [[
-++#include <mbedtls/version.h>
-++#if MBEDTLS_VERSION_NUMBER >= 0x03000000
-++#include <mbedtls/mbedtls_config.h>
-++#else
-+ #include <mbedtls/config.h>
-++#endif
-+       ]],
-+       [[
-+ #ifndef MBEDTLS_CAMELLIA_C
-+diff --git a/src/aead.c b/src/aead.c
-+index 358ec9381..73349da64 100644
-+--- a/src/aead.c
-++++ b/src/aead.c
-+@@ -177,9 +177,13 @@ aead_cipher_encrypt(cipher_ctx_t *cipher_ctx,
-+     // Otherwise, just use the mbedTLS one with crappy AES-NI.
-+     case AES192GCM:
-+     case AES128GCM:
-+-
-++#if MBEDTLS_VERSION_NUMBER < 0x03000000
-+         err = mbedtls_cipher_auth_encrypt(cipher_ctx->evp, n, nlen, ad, adlen,
-+                                           m, mlen, c, clen, c + mlen, tlen);
-++#else
-++        err = mbedtls_cipher_auth_encrypt_ext(cipher_ctx->evp, n, nlen, ad, adlen,
-++                                              m, mlen, c, mlen + tlen, clen, tlen);
-++#endif
-+         *clen += tlen;
-+         break;
-+     case CHACHA20POLY1305IETF:
-+@@ -226,8 +230,13 @@ aead_cipher_decrypt(cipher_ctx_t *cipher_ctx,
-+     // Otherwise, just use the mbedTLS one with crappy AES-NI.
-+     case AES192GCM:
-+     case AES128GCM:
-++#if MBEDTLS_VERSION_NUMBER < 0x03000000
-+         err = mbedtls_cipher_auth_decrypt(cipher_ctx->evp, n, nlen, ad, adlen,
-+                                           m, mlen - tlen, p, plen, m + mlen - tlen, tlen);
-++#else
-++        err = mbedtls_cipher_auth_decrypt_ext(cipher_ctx->evp, n, nlen, ad, adlen,
-++                                              m, mlen, p, mlen - tlen, plen, tlen);
-++#endif
-+         break;
-+     case CHACHA20POLY1305IETF:
-+         err = crypto_aead_chacha20poly1305_ietf_decrypt(p, &long_plen, NULL, m, mlen,
-+@@ -721,17 +730,7 @@ aead_key_init(int method, const char *pass, const char *key)
-+     cipher_t *cipher = (cipher_t *)ss_malloc(sizeof(cipher_t));
-+     memset(cipher, 0, sizeof(cipher_t));
++diff --git a/include/types.h b/include/types.h
++index 1246a4df..2c1a41cf 100644
++--- a/include/types.h
+++++ b/include/types.h
++@@ -42,8 +42,11 @@ typedef signed long long s64;
++ typedef unsigned long size_t;
++ typedef signed long ssize_t;
 + 
-+-    if (method >= CHACHA20POLY1305IETF) {
-+-        cipher_kt_t *cipher_info = (cipher_kt_t *)ss_malloc(sizeof(cipher_kt_t));
-+-        cipher->info             = cipher_info;
-+-        cipher->info->base       = NULL;
-+-        cipher->info->key_bitlen = supported_aead_ciphers_key_size[method] * 8;
-+-        cipher->info->iv_size    = supported_aead_ciphers_nonce_size[method];
-+-    } else {
-+-        cipher->info = (cipher_kt_t *)aead_get_cipher_type(method);
-+-    }
-+-
-+-    if (cipher->info == NULL && cipher->key_len == 0) {
-++    if (method < CHACHA20POLY1305IETF && aead_get_cipher_type(method) == NULL) {
-+         LOGE("Cipher %s not found in crypto library", supported_aead_ciphers[method]);
-+         FATAL("Cannot initialize cipher");
-+     }
-+diff --git a/src/crypto.c b/src/crypto.c
-+index b44d8674c..76c426b53 100644
-+--- a/src/crypto.c
-++++ b/src/crypto.c
-+@@ -103,7 +103,7 @@ crypto_md5(const unsigned char *d, size_t n, unsigned char *md)
-+     if (md == NULL) {
-+         md = m;
-+     }
-+-#if MBEDTLS_VERSION_NUMBER >= 0x02070000
-++#if MBEDTLS_VERSION_NUMBER < 0x03000000 && MBEDTLS_VERSION_NUMBER >= 0x02070000
-+     if (mbedtls_md5_ret(d, n, md) != 0)
-+         FATAL("Failed to calculate MD5");
-+ #else
-+diff --git a/src/crypto.h b/src/crypto.h
-+index 1791551ff..70707932b 100644
-+--- a/src/crypto.h
-++++ b/src/crypto.h
-+@@ -97,7 +97,6 @@ typedef struct buffer {
-+ typedef struct {
-+     int method;
-+     int skey;
-+-    cipher_kt_t *info;
-+     size_t nonce_len;
-+     size_t key_len;
-+     size_t tag_len;
-+diff --git a/src/stream.c b/src/stream.c
-+index 35d9050b3..b2e2cea82 100644
-+--- a/src/stream.c
-++++ b/src/stream.c
-+@@ -168,33 +168,6 @@ crypto_stream_xor_ic(uint8_t *c, const uint8_t *m, uint64_t mlen,
-+     return 0;
-+ }
+++/* bool, false and true are predefined since C23. */
+++#if __STDC_VERSION__ < 202311L
++ typedef unsigned char bool;
++ #define false	0U
++ #define true	1U
+++#endif
 + 
-+-int
-+-cipher_nonce_size(const cipher_t *cipher)
-+-{
-+-    if (cipher == NULL) {
-+-        return 0;
-+-    }
-+-    return cipher->info->iv_size;
-+-}
-+-
-+-int
-+-cipher_key_size(const cipher_t *cipher)
-+-{
-+-    /*
-+-     * Semi-API changes (technically public, morally prnonceate)
-+-     * Renamed a few headers to include _internal in the name. Those headers are
-+-     * not supposed to be included by users.
-+-     * Changed md_info_t into an opaque structure (use md_get_xxx() accessors).
-+-     * Changed pk_info_t into an opaque structure.
-+-     * Changed cipher_base_t into an opaque structure.
-+-     */
-+-    if (cipher == NULL) {
-+-        return 0;
-+-    }
-+-    /* From Version 1.2.7 released 2013-04-13 Default Blowfish keysize is now 128-bits */
-+-    return cipher->info->key_bitlen / 8;
-+-}
-+-
-+ const cipher_kt_t *
-+ stream_get_cipher_type(int method)
-+ {
-+@@ -642,34 +615,22 @@ stream_key_init(int method, const char *pass, const char *key)
-+     cipher_t *cipher = (cipher_t *)ss_malloc(sizeof(cipher_t));
-+     memset(cipher, 0, sizeof(cipher_t));
++ #endif /* TYPES_H_ */
++-- 
++2.43.0
++
+diff --git a/boot/at91bootstrap3/v4.0.0/0001-include-types.h-conditionally-define-bool-false-and-.patch b/boot/at91bootstrap3/v4.0.0/0001-include-types.h-conditionally-define-bool-false-and-.patch
+new file mode 100644
+index 0000000000..772a808690
+--- /dev/null
++++ b/boot/at91bootstrap3/v4.0.0/0001-include-types.h-conditionally-define-bool-false-and-.patch
+@@ -0,0 +1,46 @@
++From 4aab60e634d588dffbd3154fd0cfce78272b750a Mon Sep 17 00:00:00 2001
++From: Edgar Bonet <bonet@grenoble.cnrs.fr>
++Date: Wed, 25 Jun 2025 11:13:43 +0200
++Subject: [PATCH] include/types.h: conditionally define bool, false and true
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++include/types.h typedefs ‘bool’ and macro-defines ‘false’ and ‘true’.
++However, since C23, these are predefine keywords. As C23 is the default
++C dialect for GCC 15, building with this compiler fails with:
++
++    include/types.h:23:23: error: ‘bool’ cannot be defined via ‘typedef’
++       23 | typedef unsigned char bool;
++          |                       ^~~~
++    include/types.h:23:23: note: ‘bool’ is a keyword with ‘-std=c23’ onwards
++
++Fix this build failure by only defining ‘bool’, ‘false’ and ‘true’ on C
++dialects older than C23.
++
++Upstream: https://github.com/linux4sam/at91bootstrap/pull/188
++
++Signed-off-by: Edgar Bonet <bonet@grenoble.cnrs.fr>
++---
++ include/types.h | 3 +++
++ 1 file changed, 3 insertions(+)
++
++diff --git a/include/types.h b/include/types.h
++index 950b1a46..0ad9ae61 100644
++--- a/include/types.h
+++++ b/include/types.h
++@@ -20,8 +20,11 @@ typedef signed long long s64;
++ typedef unsigned long size_t;
++ typedef signed long ssize_t;
 + 
-+-    if (method == SALSA20 || method == CHACHA20 || method == CHACHA20IETF) {
-+-        cipher_kt_t *cipher_info = (cipher_kt_t *)ss_malloc(sizeof(cipher_kt_t));
-+-        cipher->info             = cipher_info;
-+-        cipher->info->base       = NULL;
-+-        cipher->info->key_bitlen = supported_stream_ciphers_key_size[method] * 8;
-+-        cipher->info->iv_size    = supported_stream_ciphers_nonce_size[method];
-+-    } else {
-+-        cipher->info = (cipher_kt_t *)stream_get_cipher_type(method);
-+-    }
-+-
-+-    if (cipher->info == NULL && cipher->key_len == 0) {
-++    if (method < SALSA20 && stream_get_cipher_type(method) == NULL) {
-+         LOGE("Cipher %s not found in crypto library", supported_stream_ciphers[method]);
-+         FATAL("Cannot initialize cipher");
-+     }
+++/* bool, false and true are predefined since C23. */
+++#if __STDC_VERSION__ < 202311L
++ typedef unsigned char bool;
++ #define false	0U
++ #define true	1U
+++#endif
 + 
-+     if (key != NULL)
-+-        cipher->key_len = crypto_parse_key(key, cipher->key, cipher_key_size(cipher));
-++        cipher->key_len = crypto_parse_key(key, cipher->key,
-++                                           supported_stream_ciphers_key_size[method]);
-+     else
-+-        cipher->key_len = crypto_derive_key(pass, cipher->key, cipher_key_size(cipher));
-++        cipher->key_len = crypto_derive_key(pass, cipher->key,
-++                                            supported_stream_ciphers_key_size[method]);
-+ 
-+     if (cipher->key_len == 0) {
-+         FATAL("Cannot generate key and NONCE");
-+     }
-+-    if (method == RC4_MD5) {
-+-        cipher->nonce_len = 16;
-+-    } else {
-+-        cipher->nonce_len = cipher_nonce_size(cipher);
-+-    }
-++    cipher->nonce_len = supported_stream_ciphers_nonce_size[method];
-+     cipher->method = method;
-+ 
-+     return cipher;
++ #endif /* TYPES_H_ */
++-- 
++2.43.0
++
+
+--===============8142906882642590245==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8142906882642590245==--
