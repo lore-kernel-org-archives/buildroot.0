@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75941C8303C
-	for <buildroot@archiver.kernel.org>; Fri, 11 Jul 2025 10:10:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81757C83F1D
+	for <buildroot@archiver.kernel.org>; Fri, 11 Jul 2025 10:10:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 43B7260BBD;
-	Fri, 11 Jul 2025 10:10:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4E30883DF3;
+	Fri, 11 Jul 2025 10:10:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2wN3pHw5Osxq; Fri, 11 Jul 2025 10:10:28 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Qvv0heDYNMdC; Fri, 11 Jul 2025 10:10:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4A8F260D4E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7674383E4E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4A8F260D4E;
-	Fri, 11 Jul 2025 10:10:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7674383E4E;
+	Fri, 11 Jul 2025 10:10:29 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id A965E1E1
- for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:10:00 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0D3FE1E1
+ for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:10:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 99FBF40C7B
+ by smtp2.osuosl.org (Postfix) with ESMTP id C2E6F405C8
  for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:09:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Of01rcQpzEOb for <buildroot@buildroot.org>;
- Fri, 11 Jul 2025 10:09:52 +0000 (UTC)
+ id uhDtZGy_dr-d for <buildroot@buildroot.org>;
+ Fri, 11 Jul 2025 10:09:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2D78E405C8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B0C5040C8B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2D78E405C8
+ by smtp2.osuosl.org (Postfix) with ESMTP id B0C5040C8B
  for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:09:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2B93C862CE; Fri, 11 Jul 2025 10:09:52 +0000 (UTC)
+ id AED6185CB8; Fri, 11 Jul 2025 10:09:52 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 10 Jul 2025 11:19:59 +0200
+Date: Thu, 10 Jul 2025 11:23:09 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 0bccce38482bb66c9478a080255cf2f468c166aa
-X-Git-Newrev: 35a43b924abe6f620124018b55c45aabeefa2aa4
+X-Git-Oldrev: 5c2d451002a1c856011b21538a014f69aff226ef
+X-Git-Newrev: 7fa8047b0f279f558703a3dcd76277e5c323ead6
 X-Patchwork-Hint: ignore
-Message-Id: <20250711100952.2B93C862CE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x]
- package/x11r7/xserver_xorg-server: security bump to version 21.1.18
+Message-Id: <20250711100952.AED6185CB8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/python-multipart:
+ add CPE identifier
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,105 +66,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=35a43b924abe6f620124018b55c45aabeefa2aa4
+commit: https://git.buildroot.net/buildroot/commit/?id=7fa8047b0f279f558703a3dcd76277e5c323ead6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Fixes the following security issues:
+The cpe:2.3:a:fastapiexpert:python-multipart:0.0.20:*:*:*:*:*:*:* is
+valid for this package.
 
-- CVE-2025-49175: A flaw was found in the X Rendering extension's
-  handling of animated cursors. If a client provides no cursors, the
-  server assumes at least one is present, leading to an out-of-bounds
-  read and potential crash.
-
-For more information, see:
-  - https://nvd.nist.gov/vuln/detail/CVE-2025-49175
-  - https://gitlab.freedesktop.org/xorg/xserver/-/commit/0885e0b2
-
-- CVE-2025-49176: A flaw was found in the Big Requests extension. The
-  request length is multiplied by 4 before checking against the maximum
-  allowed size, potentially causing an integer overflow and bypassing
-  the size check.
-
-For more information, see:
-  - https://nvd.nist.gov/vuln/detail/CVE-2025-49176
-  - https://gitlab.freedesktop.org/xorg/xserver/-/commit/03731b32
-
-- CVE-2025-49177: A flaw was found in the XFIXES extension. The
-  XFixesSetClientDisconnectMode handler does not validate the request
-  length, allowing a client to read unintended memory from previous
-  requests.
-
-For more information, see:
-  - https://nvd.nist.gov/vuln/detail/CVE-2025-49177
-  - https://gitlab.freedesktop.org/xorg/xserver/-/commit/ab02fb96
-
-- CVE-2025-49178: A flaw was found in the X server's request handling.
-  Non-zero 'bytes to ignore' in a client's request can cause the server
-  to skip processing another client's request, potentially leading to a
-  denial of service.
-
-For more information, see:
-  - https://nvd.nist.gov/vuln/detail/CVE-2025-49178
-  - https://gitlab.freedesktop.org/xorg/xserver/-/commit/d55c54ce
-
-- CVE-2025-49179: A flaw was found in the X Record extension. The
-  RecordSanityCheckRegisterClients function does not check for an
-  integer overflow when computing request length, which allows a client
-  to bypass length checks.
-
-For more information, see:
-  - https://nvd.nist.gov/vuln/detail/CVE-2025-49179
-  - https://gitlab.freedesktop.org/xorg/xserver/-/commit/2bde9ca4
-
-- CVE-2025-49180: A flaw was found in the RandR extension, where the
-  RRChangeProviderProperty function does not properly validate input.
-  This issue leads to an integer overflow when computing the total size
-  to allocate.
-
-For more information, see:
-  - https://nvd.nist.gov/vuln/detail/CVE-2025-49180
-  - https://gitlab.freedesktop.org/xorg/xserver/-/commit/3c3a4b76
-  - https://gitlab.freedesktop.org/xorg/xserver/-/commit/0235121c
-
-For more details on the version bump, see:
-  - Security Advisory https://lists.x.org/archives/xorg/2025-June/062055.html
-  - 21.1.17 https://lists.x.org/archives/xorg/2025-June/062056.html
-  - 21.1.18 https://lists.x.org/archives/xorg/2025-June/062066.html
+See https://nvd.nist.gov/products/cpe/detail/8C38E43A-00AD-4851-9AC9-80408FF89F52
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 8b94ff6c6be6311d82bf59c3a13f6d0a886996a1)
+(cherry picked from commit de8cc1ae504da1c66b70b5cc29e562f20e34841a)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/x11r7/xserver_xorg-server/xserver_xorg-server.hash | 4 ++--
- package/x11r7/xserver_xorg-server/xserver_xorg-server.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-multipart/python-multipart.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-index abf1c83c75..7d373850d0 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-@@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2025-February/003585.html
--sha256  59fa52b63f6f8747ee2c4716decb29ced249c4c574e2a18c96b7d3b1420f7fd9  xorg-server-21.1.16.tar.gz
-+# From https://lists.x.org/archives/xorg/2025-June/062065.html
-+sha256  c8591ceb70b177440062406542fe52ba60212f217f27f8f802dd20373ca9e74b  xorg-server-21.1.18.tar.gz
- sha512  d0cd176e4c7273b6870999a3d008ed282fd5609acb2e0919c16447af3a5b2228d8592424388a8ace67acf216cdfae3a2d52f7a7ba81f6071467c61d57f32f314  xorg-server-21.1.16.tar.gz
- # Locally calculated
- sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index afb79b223e..f480c1c0ac 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/python-multipart/python-multipart.mk b/package/python-multipart/python-multipart.mk
+index 8c49e2df9c..8e11f5f6cd 100644
+--- a/package/python-multipart/python-multipart.mk
++++ b/package/python-multipart/python-multipart.mk
+@@ -10,5 +10,6 @@ PYTHON_MULTIPART_SITE = https://files.pythonhosted.org/packages/f3/87/f44d7c9f27
+ PYTHON_MULTIPART_SETUP_TYPE = hatch
+ PYTHON_MULTIPART_LICENSE = Apache-2.0
+ PYTHON_MULTIPART_LICENSE_FILES = LICENSE.txt
++PYTHON_MULTIPART_CPE_ID_VENDOR = fastapiexpert
  
--XSERVER_XORG_SERVER_VERSION = 21.1.16
-+XSERVER_XORG_SERVER_VERSION = 21.1.18
- XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.gz
- XSERVER_XORG_SERVER_SITE = https://xorg.freedesktop.org/archive/individual/xserver
- XSERVER_XORG_SERVER_LICENSE = MIT
+ $(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
