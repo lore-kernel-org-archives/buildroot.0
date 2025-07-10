@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A946DC8303C
-	for <buildroot@archiver.kernel.org>; Fri, 11 Jul 2025 10:10:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50BABC83F1A
+	for <buildroot@archiver.kernel.org>; Fri, 11 Jul 2025 10:10:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 79C4083AED;
-	Fri, 11 Jul 2025 10:10:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1DC8F60FD7;
+	Fri, 11 Jul 2025 10:10:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iUF85h0uPp7o; Fri, 11 Jul 2025 10:10:10 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UV2abtZucxT8; Fri, 11 Jul 2025 10:10:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0768183B1F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 325DB60E71
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0768183B1F;
-	Fri, 11 Jul 2025 10:10:10 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1C85F114
+	by smtp3.osuosl.org (Postfix) with ESMTP id 325DB60E71;
+	Fri, 11 Jul 2025 10:10:11 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 53673114
  for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:09:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9B525401B6
+ by smtp3.osuosl.org (Postfix) with ESMTP id CC8BC60E4F
  for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:09:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n1rA5HGD61U1 for <buildroot@buildroot.org>;
- Fri, 11 Jul 2025 10:09:52 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pA7zBHPgLc6t for <buildroot@buildroot.org>;
+ Fri, 11 Jul 2025 10:09:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3F0EE4067B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C24F6065D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3F0EE4067B
- for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:09:52 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1C24F6065D
+ for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:09:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3D3F886342; Fri, 11 Jul 2025 10:09:52 +0000 (UTC)
+ id 1A08886342; Fri, 11 Jul 2025 10:09:53 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 10 Jul 2025 11:20:09 +0200
+Date: Thu, 10 Jul 2025 11:24:05 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 5954dc2520d8e01d6a33e5d22121be9330c63619
-X-Git-Newrev: 1a76f160986de46c1a2be49ad96dfb80b24c102d
+X-Git-Oldrev: 80a1a567fcc231a7b37ac7f1b206dddd8d9f4f1c
+X-Git-Newrev: 5bb46c4d42b88a7b0e54549d591db83e386735d5
 X-Patchwork-Hint: ignore
-Message-Id: <20250711100952.3D3F886342@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/daq: fix build
- with GCC14
+Message-Id: <20250711100953.1A08886342@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/hddtemp: fix
+ build without nls
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,95 +61,83 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============5002020523728942456=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1a76f160986de46c1a2be49ad96dfb80b24c102d
+--===============5002020523728942456==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=5bb46c4d42b88a7b0e54549d591db83e386735d5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-The daq package fails to build with GCC14 toolchains:
+Fixes:
+https://autobuild.buildroot.org/results/06b44df261318ce1d07f6cb20b26e4ad64222940/
 
-```
-daq_nfq.c: In function 'SetPktHdr':
-daq_nfq.c:395:37: error: passing argument 2 of 'nfq_get_payload' from incompatible pointer type [-Wincompatible-pointer-types]
-  395 |     int len = nfq_get_payload(nfad, (char**)pkt);
-      |                                     ^~~~~~~~~~~
-      |                                     |
-      |                                     char **
-```
-
-The issue can be reproduced with the following config:
-
-```
-cat > daq.config <<EOF
-BR2_arm=y
-BR2_cortex_a7=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-BR2_PACKAGE_DAQ=y
-BR2_PACKAGE_LIBDNET=y
-BR2_PACKAGE_LIBNETFILTER_QUEUE=y
-EOF
-```
-
-This patch port a patch taken from openembedded meta-networking [1] and
-is tested with test-pkg:
-
-```
-$ ./utils/test-pkg -c daq.config -p daq
-```
-
-[1] https://layers.openembedded.org/layerindex/recipe/37594/
-
-Fixes: https://autobuild.buildroot.org/results/c69/c69ab134463a18eec65ded836aecf89a5cb4a75c/build-end.log
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 533c0aac289a545d07efc69766227d71d2df9d80)
+(cherry picked from commit 196989235e6f0266fca48b6c73c780436c7ebcb0)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...3-daq-fix-incompatible-pointer-type-error.patch | 31 ++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
+ package/hddtemp/0001-fix-build-without-nls.patch | 40 ++++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
 
-diff --git a/package/daq/0003-daq-fix-incompatible-pointer-type-error.patch b/package/daq/0003-daq-fix-incompatible-pointer-type-error.patch
+diff --git a/package/hddtemp/0001-fix-build-without-nls.patch b/package/hddtemp/0001-fix-build-without-nls.patch
 new file mode 100644
-index 0000000000..a15d325cd6
+index 0000000000..356b94b010
 --- /dev/null
-+++ b/package/daq/0003-daq-fix-incompatible-pointer-type-error.patch
-@@ -0,0 +1,31 @@
-+Fix daq incompatible pointer type error when gcc option
-+'-Wincompatible-pointer-types is set:
++++ b/package/hddtemp/0001-fix-build-without-nls.patch
+@@ -0,0 +1,40 @@
++From c9d0d249ff013d33cf1fd5a586c16ee30095cc90 Mon Sep 17 00:00:00 2001
++From: Nicolas PARLANT <nicolas.parlant@parhuet.fr>
++Date: Fri, 14 Feb 2025 10:08:43 +0100
++Subject: [PATCH] fix build without nls
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
-+| ../../daq-2.0.7/os-daq-modules/daq_nfq.c: In function 'SetPktHdr':
-+| ../../daq-2.0.7/os-daq-modules/daq_nfq.c:394:37: error: passing argument 2
-+   of 'nfq_get_payload' from incompatible pointer type [-Wincompatible-pointer-types]
-+|   394 |     int len = nfq_get_payload(nfad, (char**)pkt);
-+|       |                                     ^~~~~~~~~~~
-+|       |                                     |
-+|       |                                     char **
++> hddtemp.c: In function ‘main’:
++> hddtemp.c:274:3: error: implicit declaration of function ‘bindtextdomain’ [-Wimplicit-function-declaration]
++>   274 |   bindtextdomain (PACKAGE, LOCALEDIR);
++>       |   ^~~~~~~~~~~~~~
++> hddtemp.c:275:3: error: implicit declaration of function ‘textdomain’ [-Wimplicit-function-declaration]
++>   275 |   textdomain (PACKAGE);
++>       |   ^~~~~~~~~~
++> make[2]: *** [Makefile:496: hddtemp-hddtemp.o] Error 1
 +
-+Signed-off-by: Kai Kang <kai.kang@windriver.com>
-+Upstream: https://git.openembedded.org/meta-openembedded/tree/meta-networking/recipes-connectivity/daq/files/daq-fix-incompatible-pointer-type-error.patch?h=master
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++Upstream: https://github.com/vitlav/hddtemp/pull/16
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 +---
-+ os-daq-modules/daq_nfq.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ src/hddtemp.c | 2 ++
++ 1 file changed, 2 insertions(+)
 +
-+diff --git a/os-daq-modules/daq_nfq.c b/os-daq-modules/daq_nfq.c
-+index 4de94b6..a6de2f3 100644
-+--- a/os-daq-modules/daq_nfq.c
-++++ b/os-daq-modules/daq_nfq.c
-+@@ -391,7 +391,7 @@ static inline int SetPktHdr (
-+     DAQ_PktHdr_t* hdr,
-+     uint8_t** pkt
-+ ) {
-+-    int len = nfq_get_payload(nfad, (char**)pkt);
-++    int len = nfq_get_payload(nfad, (unsigned char**)pkt);
++diff --git a/src/hddtemp.c b/src/hddtemp.c
++index 64d000e..bfea556 100644
++--- a/src/hddtemp.c
+++++ b/src/hddtemp.c
++@@ -270,9 +270,11 @@ int main(int argc, char* argv[]) {
++   backtrace_sigill();
++   backtrace_sigbus();
 + 
-+     if ( len <= 0 )
-+         return -1;
+++#if ENABLE_NLS
++   setlocale (LC_ALL, "");
++   bindtextdomain (PACKAGE, LOCALEDIR);
++   textdomain (PACKAGE);
+++#endif
++ 
++   show_db = debug = numeric = quiet = wakeup = af_hint = syslog_interval = foreground = 0;
++   unit = DEFAULT;
+
+--===============5002020523728942456==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5002020523728942456==--
