@@ -4,123 +4,101 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E601C83F17
-	for <buildroot@archiver.kernel.org>; Thu, 10 Jul 2025 10:42:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D60EAC83F24
+	for <buildroot@archiver.kernel.org>; Thu, 10 Jul 2025 11:28:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2C04C83B74;
-	Thu, 10 Jul 2025 10:42:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8690782F06;
+	Thu, 10 Jul 2025 11:28:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6SoEr-R_1bLr; Thu, 10 Jul 2025 10:42:10 +0000 (UTC)
+ id Ms7LbbOjc-6a; Thu, 10 Jul 2025 11:28:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E33B83B1A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B17D480E7D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8E33B83B1A;
-	Thu, 10 Jul 2025 10:42:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B17D480E7D;
+	Thu, 10 Jul 2025 11:28:56 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id E16D212E
- for <buildroot@buildroot.org>; Thu, 10 Jul 2025 10:42:08 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 4FE5F69
+ for <buildroot@buildroot.org>; Thu, 10 Jul 2025 11:28:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BE74961193
- for <buildroot@buildroot.org>; Thu, 10 Jul 2025 10:42:08 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 35F6A60F04
+ for <buildroot@buildroot.org>; Thu, 10 Jul 2025 11:28:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U39R7Nn8iXjn for <buildroot@buildroot.org>;
- Thu, 10 Jul 2025 10:42:08 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=202.12.124.157;
- helo=fhigh-b6-smtp.messagingengine.com; envelope-from=jiaxun.yang@flygoat.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 63C1360761
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 63C1360761
-Received: from fhigh-b6-smtp.messagingengine.com
- (fhigh-b6-smtp.messagingengine.com [202.12.124.157])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 63C1360761
- for <buildroot@buildroot.org>; Thu, 10 Jul 2025 10:42:07 +0000 (UTC)
-Received: from phl-compute-01.internal (phl-compute-01.phl.internal
- [10.202.2.41])
- by mailfhigh.stl.internal (Postfix) with ESMTP id 91CDE7A01CF;
- Thu, 10 Jul 2025 06:42:06 -0400 (EDT)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
- by phl-compute-01.internal (MEProxy); Thu, 10 Jul 2025 06:42:06 -0400
-X-ME-Sender: <xms:_phvaFrsUjfOqixfBSaDbN2BqeQ3o1LRWkGAPYckYdlERNpwEc36bw>
- <xme:_phvaBQxNNlhTznAiNYDcsZJDhunLKlvzzjyajLAxKLS0azU-dUtOpm9-BLV0M0-B
- _5IDGIWkbrlMFbkWKI>
-X-ME-Received: <xmr:_phvaCPVkqf9Meju5PH_GnaxgbzzUB0MDQrOASe_bOVaUTgut93x1ETynv83IuNM6IufotJDPfOQVu2B5vzEV16cXlBCyN69GJOj8C1LQCEXsKjZvdaksiV_Os3JYrKdJMkHMiaw_K-ecY8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdegtddvfecutefuodetggdotefrod
- ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
- ihhlohhuthemuceftddtnecunecujfgurhephfffufggtgfgkfhfjgfvvefosehtjeertd
- ertdejnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghes
- fhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepvdekiefhfeevkeeuveetfe
- elffekgedugefhtdduudeghfeuveegffegudekjeelnecuvehluhhsthgvrhfuihiivgep
- tdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgoh
- grthdrtghomhdpnhgspghrtghpthhtohepfedpmhhouggvpehsmhhtphhouhhtpdhrtghp
- thhtohepjhhurdhosehfrhgvvgdrfhhrpdhrtghpthhtohepjhhirgiguhhnrdihrghngh
- esfhhlhihgohgrthdrtghomhdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgu
- rhhoohhtrdhorhhg
-X-ME-Proxy: <xmx:_phvaEM6xE_AFXlb5zwUDQkFFHY_hLel4NUZ5xVIQJ1e1CfPlX6jyg>
- <xmx:_phvaCuEc_tLEgxDeGJZe0PwGyv01Ys4I7a1kSxrb7Y7MLu6CUeLiA>
- <xmx:_phvaOVj82R8GpozsasFb6Sj-cUlBAioSZm6pmHY90W4U1rl1RYXBw>
- <xmx:_phvaKvHDl8EetMBoBy5J2gfixJ2LvjPfpodoQMwjoQpXyuE2TpMXg>
- <xmx:_phvaItEgbfvtoWne4GYgs-ddoksQL8gSO8lkKipVQtunZGhZ7C0AYwE>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 10 Jul 2025 06:42:05 -0400 (EDT)
-From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Date: Thu, 10 Jul 2025 11:41:57 +0100
-MIME-Version: 1.0
-Message-Id: <20250710-loongarch-fabi-v2-2-72fcf95c8b65@flygoat.com>
-References: <20250710-loongarch-fabi-v2-0-72fcf95c8b65@flygoat.com>
-In-Reply-To: <20250710-loongarch-fabi-v2-0-72fcf95c8b65@flygoat.com>
+ id ZxLo3IyvXdLZ for <buildroot@buildroot.org>;
+ Thu, 10 Jul 2025 11:28:54 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
+ envelope-from=tim.soubry@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4303960B17
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4303960B17
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4303960B17
+ for <buildroot@buildroot.org>; Thu, 10 Jul 2025 11:28:53 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id
+ ffacd0b85a97d-3a531fcaa05so467413f8f.3
+ for <buildroot@buildroot.org>; Thu, 10 Jul 2025 04:28:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1752146931; x=1752751731;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=mY7sxzhmT6O1HQuIvb17scgctsqh5kXpgM6sgFflA7g=;
+ b=qDviTzotYadUdIbwkwCvE6rI/12kUlV2HqebGvjSnZM+rbI7V8FZNYBjDlkfZJJkOi
+ hDafArdqdAbWFL4M2aWM9m7lfBTECCjSWSn7+unkxCw67xduZoeswQiOUzDBhYjiVkmY
+ dWXYv+rm/ewyG+t0uypo8biADXYehoEgapqY8FLb9IxwHRtc1ku/r+MGR7HiDm41Q6/G
+ CToYdbbIHgMMOA+QgYU2qlrhxA0zaComT+LaDjE6A9El9D5M5Ji800Wrxy/dc3L1WHDR
+ OmQht9N7yQ2IUVKli9AzTGUXKYWjluiUIAncWapoxfHIPh+/ekh+yYKJEp9jQEMoK0MX
+ 98Jw==
+X-Gm-Message-State: AOJu0YwFBemgI+VtDFtwoC7WzA11ApfQfyEBvYwOM68XuI7V0V0NXLp8
+ 5uoxNjSWL3o2fSNVMFMi6SUbB938vAZ8IvVTYgJcOEfa+w9iAFejhIZV2cSRNgMErc064gdHq2i
+ 4emXYegg=
+X-Gm-Gg: ASbGncueX7x+Vj0mv3+SWYztFeD42uWCoPyidYuTYgfjB255JCIM10vHodPJUQ+gQXc
+ 4KMmuKv6P8RfREz+vPSqIU93wygFP3tWBJAnK25PCy78NKwhEJxLMtQRui5zqx+MqUmY5AmDmiX
+ IM4tgTOiYyGMQlecmSjp1bAcgjEq2arZ6/HLtrUTXUIKnPEliDn2NdE2fqkDa8Ssn2KEpP8U9Fh
+ O7dPySB4p9KCyUPohU1bA4q9pd8ErvaJK86I82yg+5C9JbHGt0GnDX/ns4sKqL8jLwiLkdJpw/I
+ Rqsz2FU47q2tAQWIWHoYFPvDj6HLUsGpM7EaRh7CXzh3iPls+HuObTWr8AyywZlm7b2/jqVVSWr
+ Lj1dfkeq72dzaY6c5Jsq3SgyVpXRHQOF1lysb28BgKAvQ8/nik0A8SS6XZw==
+X-Google-Smtp-Source: AGHT+IGMiWBH1syCda8ZpR94WDQklgZPI0i7wmrk5pNYISS5EWtPgfkR1UUubrBDv4XeWBnTRrP+Vg==
+X-Received: by 2002:a05:6000:1886:b0:3a5:39ee:2619 with SMTP id
+ ffacd0b85a97d-3b5e86cf341mr2130211f8f.47.1752146931455; 
+ Thu, 10 Jul 2025 04:28:51 -0700 (PDT)
+Received: from TimMind.telenet.be
+ (ptr-377wgeyf4tq7vco44vbx.18120a2.ip6.access.telenet.be.
+ [2a02:181f:0:4023:f979:8572:d806:db9d])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-3b5e8e0d5easm1608263f8f.48.2025.07.10.04.28.50
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 10 Jul 2025 04:28:51 -0700 (PDT)
 To: buildroot@buildroot.org
-Cc: Julien Olivain <ju.o@free.fr>, Jiaxun Yang <jiaxun.yang@flygoat.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=986;
- i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
- bh=nOm4fEKFxWETiP8j9W39FBZs+OKaHFP0iclY757s4N8=;
- b=owGbwMvMwCHmXMhTe71c8zDjabUkhoz8Gb/a/pScL34x9U2Y/Nwzx89otOS8K/r65dsCsaLO1
- h0CiwLXdJSyMIhxMMiKKbKECCj1bWi8uOD6g6w/MHNYmUCGMHBxCsBEllUw/DNdsnJGt+n2LbOF
- lvne4rtR3dTssbmL7WnnJ5vtERvk6hgY/go//6Pw34ixecYEnwU8O9RjF+Qq+ptyf2pemn3keF/
- jJ2YA
-X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
- fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 10 Jul 2025 13:28:49 +0200
+Message-Id: <20250710112849.341011-1-tim.soubry@mind.be>
+X-Mailer: git-send-email 2.39.5
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=flygoat.com; h=
- cc:cc:content-transfer-encoding:content-type:content-type:date
- :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
- :references:reply-to:subject:subject:to:to; s=fm3; t=1752144126;
- x=1752230526; bh=jcf4iW1Enxi1Jqw3OWs0RTZWvf7h4JgVCvoHvW1gXrM=; b=
- DS4ohjiJ2F1gwUerI9olV2PEwMJsZCNXEqHMRhv9wznNQCgKm4jppZaZlQkKpJIN
- Rts/jG/I9SBJ52iNn5wCj8+sXzPsIEqgQ7WAl32RIxH8oQ+vWxdaNlrUcRGDnOA2
- CiRdh9IY2Ju977u7gYcJrnlTUl+O5KE+HwnU0ZIVAGJQEb/+KYoIg8mJNkBvJqHW
- D/tkO3g17VVPNhTakOwptKLHSadseUW0fVx94dtCi1JwyVyXUVO1NWsdK5d3H9ff
- +mQCjS521JBEF52yf1MgCYNx9ECnLEgfJ/ESRDiqe7rKSa/WO64z6gCGJZZUTNKz
- RY6v6Smoc/UF/HW9AHPaTA==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
- messagingengine.com; h=cc:cc:content-transfer-encoding
- :content-type:content-type:date:date:feedback-id:feedback-id
- :from:from:in-reply-to:in-reply-to:message-id:mime-version
- :references:reply-to:subject:subject:to:to:x-me-proxy
- :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1752144126; x=
- 1752230526; bh=jcf4iW1Enxi1Jqw3OWs0RTZWvf7h4JgVCvoHvW1gXrM=; b=f
- R2Yj+HreqM+9XVGI4E73BWazD7GKMbhiEySb5B6H/9tYpq4kEvn/6wYbXikmA+dU
- wApT6Tft9CFTi8/yXWumoyV39fTITtUVoFTTHIk5VimZspQvN0OQtpC1QgkmUzXH
- KYjGa9MQUfsg+zr0EVo8VQnIIMUOS9HzYK5DwCaKjYWjd7fenaUw9BkQnc4p8bCB
- oXVx2o49pHh2p5hFLhwyPeM6bN+GgmBdYH8eZNbusaLdY6WXq+r3mW7LcuYP2TA/
- drTBZAOou36NATMXfPZ5L2JhYiGeFdUUhWF6aVP0anQkUHdOlJl7Mnu8DwTi/jpF
- 8bkW1Icxr8qPvXpREAd8Q==
+ d=mind.be; s=google; t=1752146931; x=1752751731; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=mY7sxzhmT6O1HQuIvb17scgctsqh5kXpgM6sgFflA7g=;
+ b=QLknWEtpcQLFIUCfn1tbwAa3PRXAXFO+o7nHKw6Jb3q5FyR+8z8CfGRz/cT9Rsbzu1
+ aiqeKw36JN4VW2J1FlBDbAAkApfjrlVxF+gw75jZabYvkYDJIzbTzdJXu3WgM/umYEbA
+ V7Fdyllk68Hb076YPLpSbwVwpuSuhk5T0rP6cM7BGNhQOTxtRRdkewxjaVW9p/faOugi
+ Qn4OG8f0hC2WJb6NS5Trf3o7gOfrHMjz6o8iXEp3wRPfH8tFYiY3B+RT20z/eYZwnG0/
+ sICDxuYb2a5+WtgBDWuoGOuAIHk7A1Ffv89K8dThU2VcHyxytQhikIXG/lbhEzDt2m6T
+ 5tTg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=flygoat.com
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key, unprotected) header.d=flygoat.com
- header.i=@flygoat.com header.a=rsa-sha256 header.s=fm3 header.b=DS4ohjiJ; 
  dkim=pass (2048-bit key,
- unprotected) header.d=messagingengine.com header.i=@messagingengine.com
- header.a=rsa-sha256 header.s=fm2 header.b=fR2Yj+Hr
-Subject: [Buildroot] [PATCH v2 2/3] arch/loongarch: Mark lp64f and lp64s as
- broken
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=QLknWEtp
+Subject: [Buildroot] [PATCH 1/1] package/libhtp: security bump to version
+ 0.5.49
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -132,43 +110,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Tim Soubry via buildroot <buildroot@buildroot.org>
+Reply-To: Tim Soubry <tim.soubry@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Toolchain failed to bootstrap with LP64F and LP64S toolchain.
+Fixes a potential Denial of Service as described in [1].
+Release notes:
+https://github.com/OISF/libhtp/releases/tag/0.5.49
 
-Mark it as broken at the moment to allow time for investigation.
+[1] https://github.com/OISF/libhtp/security/advisories/GHSA-rqqp-24ch-248f
 
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Signed-off-by: Tim Soubry <tim.soubry@mind.be>
 ---
- arch/Config.in.loongarch | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/libhtp/libhtp.hash | 2 +-
+ package/libhtp/libhtp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/Config.in.loongarch b/arch/Config.in.loongarch
-index 1f302364b13b10183638da230a4735a7d7b7f46e..c11d8dc79f0e76526948d2befbfae722fbc1b0ed 100644
---- a/arch/Config.in.loongarch
-+++ b/arch/Config.in.loongarch
-@@ -87,11 +87,15 @@ config BR2_LOONGARCH_ABI_LP64D
- config BR2_LOONGARCH_ABI_LP64F
- 	bool "lp64f"
- 	depends on BR2_ARCH_IS_64
-+	# Failed to build host GCC initial, pending investigation
-+	depends on BR2_BROKEN
- 	depends on BR2_LOONGARCH_FPU_64 || BR2_LOONGARCH_FPU_32
+diff --git a/package/libhtp/libhtp.hash b/package/libhtp/libhtp.hash
+index 1809bc93a3..2e93586f7a 100644
+--- a/package/libhtp/libhtp.hash
++++ b/package/libhtp/libhtp.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  7f0719732fd0c82f9915e3df27e31548798590ad624fbad24f58b50885248ab8  libhtp-0.5.48.tar.gz
++sha256  214395f8b42011154e133dfb4e94d15e4e3e3e12535e744a4c1eec8687d12c18  libhtp-0.5.49.tar.gz
+ sha256  87c93904e5434c81622ea690c2b90097b9f162aaa92a96542649a157dbf98d15  LICENSE
+diff --git a/package/libhtp/libhtp.mk b/package/libhtp/libhtp.mk
+index 8735f593d9..bb6559bc92 100644
+--- a/package/libhtp/libhtp.mk
++++ b/package/libhtp/libhtp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_LOONGARCH_ABI_LP64S
- 	bool "lp64s"
- 	depends on BR2_ARCH_IS_64
-+	# GCC can't find the right library path, pending investigation
-+	depends on BR2_BROKEN
- endchoice
- 
- config BR2_ARCH
-
+-LIBHTP_VERSION = 0.5.48
++LIBHTP_VERSION = 0.5.49
+ LIBHTP_SITE = $(call github,OISF,libhtp,$(LIBHTP_VERSION))
+ LIBHTP_LICENSE = BSD-3-Clause
+ LIBHTP_LICENSE_FILES = LICENSE
 -- 
-2.49.0
+2.39.5
 
 _______________________________________________
 buildroot mailing list
