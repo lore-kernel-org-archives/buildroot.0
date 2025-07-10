@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92097C83F1A
-	for <buildroot@archiver.kernel.org>; Fri, 11 Jul 2025 10:22:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E963C83F1A
+	for <buildroot@archiver.kernel.org>; Fri, 11 Jul 2025 10:22:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5AAB3614C0;
-	Fri, 11 Jul 2025 10:22:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6504A6072A;
+	Fri, 11 Jul 2025 10:22:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yeq_vHGrhbUx; Fri, 11 Jul 2025 10:22:08 +0000 (UTC)
+ id xoiqgu72ZGMz; Fri, 11 Jul 2025 10:22:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D08A9614C1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9B24861480
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D08A9614C1;
-	Fri, 11 Jul 2025 10:22:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9B24861480;
+	Fri, 11 Jul 2025 10:22:11 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4459B199
- for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:21:41 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1E2061E1
+ for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:21:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8074240E79
- for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:21:08 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1CBA140E9E
+ for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:21:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1TEJRsUXewFp for <buildroot@buildroot.org>;
- Fri, 11 Jul 2025 10:21:06 +0000 (UTC)
+ id HnMskyBqK5IM for <buildroot@buildroot.org>;
+ Fri, 11 Jul 2025 10:21:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9BAEB40C4E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6966B40DEA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9BAEB40C4E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6966B40DEA
  for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:21:04 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9980986337; Fri, 11 Jul 2025 10:21:04 +0000 (UTC)
+ id 6752186337; Fri, 11 Jul 2025 10:21:04 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 10 Jul 2025 11:39:32 +0200
+Date: Thu, 10 Jul 2025 11:39:04 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: ac8b1ac4467219cbde762e844e5c23c244f8523f
-X-Git-Newrev: 99726cdafea8d79d5657d860b2b5c1ffa4189254
+X-Git-Oldrev: aab7ddec16a664122b1cb9734bd99c5363974bb2
+X-Git-Newrev: a073d51398fb0691cf53b5608a9b487a4b60afb5
 X-Patchwork-Hint: ignore
-Message-Id: <20250711102104.9980986337@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/bmx7: fix build
- w/ mbedtls v3.6
+Message-Id: <20250711102104.6752186337@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/libsoup: add many
+ security patches
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,1743 +66,1292 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=99726cdafea8d79d5657d860b2b5c1ffa4189254
+commit: https://git.buildroot.net/buildroot/commit/?id=a073d51398fb0691cf53b5608a9b487a4b60afb5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-Since the mbedtls bump to v3.6 [1] the bmx7 package is failling on the
-autobuilder:
+Import all security patches from OpenEmbedded for libsoup.
+This fixes the following 18 known vulnerabilities:
 
-```
-/workdir/instance-0/output-1/host/bin/xtensa-buildroot-linux-uclibc-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mlongcalls -mauto-litpools -Os -g3  -pedantic -W -Wall -Wstrict-prototypes -Wno-unused-parameter -Os -g3 -std=gnu99 -DGIT_REV=\"0\" -DAVL_5XLINKED -DDEBUG_MALLOC -DCORE_LIMIT=20000      -pedantic -W -Wall -Wstrict-prototypes -Wno-unused-parameter -Os -g3 -std=gnu99 -DGIT_REV=\"0\" -DAVL_5XLINKED -DDEBUG_MALLOC -DCORE_LIMIT=20000       -c crypt.c -o crypt.o
-crypt.c:66:10: fatal error: mbedtls/compat-1.3.h: No such file or directory
-   66 | #include "mbedtls/compat-1.3.h"
-      |          ^~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-```
+- CVE-2024-52530:
+    GNOME libsoup before 3.6.0 allows HTTP request smuggling in some
+    configurations because '\0' characters at the end of header names are
+    ignored, i.e., a "Transfer-Encoding\0: chunked" header is treated the
+    same as a "Transfer-Encoding: chunked" header.
+    https://www.cve.org/CVERecord?id=CVE-2024-52530
 
-This patch includes a set of upstream patches that address the
-compatibility with the v3.6 of mbedtls.
+- CVE-2024-52531:
+    GNOME libsoup before 3.6.1 allows a buffer overflow in applications that
+    perform conversion to UTF-8 in soup_header_parse_param_list_strict.
+    There is a plausible way to reach this remotely via
+    soup_message_headers_get_content_type (e.g., an application may want to
+    retrieve the content type of a request or response).
+    https://www.cve.org/CVERecord?id=CVE-2024-52531
 
-[1] 3481a9643f package/mbedtls: bump to version 3.6.3.1
+- CVE-2024-52532:
+    GNOME libsoup before 3.6.1 has an infinite loop, and memory consumption.
+    During the reading of certain patterns of WebSocket data from clients.
+    https://www.cve.org/CVERecord?id=CVE-2024-52532
 
-Fixes: https://autobuild.buildroot.org/results/b77/b776e34d1c5bc3904ea7138bd6c4ac17a1f0fd34/
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+- CVE-2025-2784:
+    Libsoup: heap buffer over-read in `skip_insignificant_space`
+    when sniffing content
+    https://www.cve.org/CVERecord?id=CVE-2025-2784
+
+- CVE-2025-4476:
+    Libsoup: null pointer dereference in libsoup may lead to denial of service
+    https://www.cve.org/CVERecord?id=CVE-2025-4476
+
+- CVE-2025-4948:
+    Libsoup: integer underflow in soup_multipart_new_from_message() leading to
+    denial of service in libsoup
+    https://www.cve.org/CVERecord?id=CVE-2025-4948
+
+- CVE-2025-4969:
+    Libsoup: off-by-one out-of-bounds read in find_boundary() in soup-multipart.c
+    https://www.cve.org/CVERecord?id=CVE-2025-4969
+
+- CVE-2025-32050:
+    Libsoup: integer overflow in append_param_quoted
+    https://www.cve.org/CVERecord?id=CVE-2025-32050
+
+- CVE-2025-32052:
+    Libsoup: heap buffer overflow in sniff_unknown()
+    https://www.cve.org/CVERecord?id=CVE-2025-32052
+
+- CVE-2025-32053:
+    Libsoup: heap buffer overflows in sniff_feed_or_html() and
+    skip_insignificant_space()
+    https://www.cve.org/CVERecord?id=CVE-2025-32053
+
+- CVE-2025-32906:
+    Libsoup: out of bounds reads in soup_headers_parse_request()
+    https://www.cve.org/CVERecord?id=CVE-2025-32906
+
+- CVE-2025-32910:
+    Libsoup: null pointer deference on libsoup via /auth/soup-auth-digest.c
+    through "soup_auth_digest_authenticate" on client when server omits the
+    "realm" parameter in an unauthorized response with digest authentication
+    https://www.cve.org/CVERecord?id=CVE-2025-32910
+
+- CVE-2025-32911:
+    Libsoup: double free on soup_message_headers_get_content_disposition()
+    through "soup-message-headers.c" via "params" ghashtable value
+    https://www.cve.org/CVERecord?id=CVE-2025-32911
+
+- CVE-2025-32912:
+    Libsoup: null pointer dereference in client when server omits the "nonce"
+    parameter in an unauthorized response with digest authentication
+    https://www.cve.org/CVERecord?id=CVE-2025-32912
+
+- CVE-2025-32913:
+    Libsoup: null pointer dereference in
+    soup_message_headers_get_content_disposition when "filename" parameter is
+    present, but has no value in content-disposition header
+    https://www.cve.org/CVERecord?id=CVE-2025-32913
+
+- CVE-2025-32914:
+    Libsoup: oob read on libsoup through function
+    "soup_multipart_new_from_message" in soup-multipart.c leads to crash or
+    exit of process
+    https://www.cve.org/CVERecord?id=CVE-2025-32914
+
+- CVE-2025-46420:
+    Libsoup: memory leak on soup_header_parse_quality_list() via soup-headers.c
+    https://www.cve.org/CVERecord?id=CVE-2025-46420
+
+- CVE-2025-46421:
+    Libsoup: information disclosure may leads libsoup client sends authorization
+    header to a different host when being redirected by a server
+    https://www.cve.org/CVERecord?id=CVE-2025-46421
+
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit c32230fe35c6c962d954a214a7018a2f51c04a1d)
+(cherry picked from commit eee0f6c078e192c7cd66394fb0b58e96cb645499)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...-mbedtls-2-8-0-without-mbedtls-compat-1-3.patch | 786 +++++++++++++++++++++
- .../bmx7/0005-towards-mbedtls-3-6-0-support.patch  | 468 ++++++++++++
- ...s-3-6-0-also-disable-no-further-supported.patch | 396 +++++++++++
- ...-mbedtls-3-6-0-based-on-mbedtls-version-h.patch |  32 +
- 4 files changed, 1682 insertions(+)
+ .../0003-sniffer-fix-potential-overflow.patch      |  59 +++++++++
+ ...004-headers-Strictly-dont-allow-NUL-bytes.patch |  60 +++++++++
+ ...ders-Be-more-robust-against-invalid-input.patch | 136 +++++++++++++++++++++
+ ...process-the-frame-as-soon-as-we-read-data.patch |  40 ++++++
+ .../0007-Fix-using-int-instead-of-size_t.patch     |  32 +++++
+ .../libsoup/0008-Fix-heap-buffer-overflow.patch    |  35 ++++++
+ .../libsoup/0009-Fix-heap-buffer-overflow.patch    |  42 +++++++
+ ...0010-headers-Handle-parsing-only-newlines.patch |  46 +++++++
+ ...11-auth-digest-Handle-missing-realm-nonce.patch |  35 ++++++
+ .../0012-auth-digest-Handle-missing-nonce.patch    |  97 +++++++++++++++
+ package/libsoup/0013-auth-digest-Fix-leak.patch    |  31 +++++
+ package/libsoup/0014-CVE-2025-32911.patch          |  77 ++++++++++++
+ .../0015-auth-digest-Handle-missing-nonce.patch    |  35 ++++++
+ package/libsoup/0016-CVE-2025-32914.patch          |  38 ++++++
+ package/libsoup/0017-auth-digest-fix-crash.patch   |  41 +++++++
+ ...8-soup_header_parse_quality_list-Fix-leak.patch |  64 ++++++++++
+ ...-session-Strip-authentication-credentials.patch |  50 ++++++++
+ ...020-soup-multipart-Verify-boundary-limits.patch |  41 +++++++
+ .../0021-soup-multipart-Verify-array-bounds.patch  |  40 ++++++
+ package/libsoup/libsoup.mk                         |  37 ++++++
+ 20 files changed, 1036 insertions(+)
 
-diff --git a/package/bmx7/0004-support-mbedtls-2-8-0-without-mbedtls-compat-1-3.patch b/package/bmx7/0004-support-mbedtls-2-8-0-without-mbedtls-compat-1-3.patch
+diff --git a/package/libsoup/0003-sniffer-fix-potential-overflow.patch b/package/libsoup/0003-sniffer-fix-potential-overflow.patch
 new file mode 100644
-index 0000000000..5cbb66f65f
+index 0000000000..13fa5b7ce2
 --- /dev/null
-+++ b/package/bmx7/0004-support-mbedtls-2-8-0-without-mbedtls-compat-1-3.patch
-@@ -0,0 +1,786 @@
-+From a47d8d55717a74a2b399c612dc5a17df8d039125 Mon Sep 17 00:00:00 2001
-+From: Axel Neumann <axel@notmail.org>
-+Date: Fri, 17 May 2024 07:07:00 +0200
-+Subject: [PATCH] Support mbedtls-2.8.0 without mbedtls/compat-1.3.h . Purge
-+ Polarssl support
++++ b/package/libsoup/0003-sniffer-fix-potential-overflow.patch
+@@ -0,0 +1,59 @@
++From 2eacbd762332795e00692ddab2515c6da23198d3 Mon Sep 17 00:00:00 2001
++From: Changqing Li <changqing.li@windriver.com>
++Date: Mon, 12 May 2025 14:06:41 +0800
++Subject: [PATCH] sniffer: Add better coverage of skip_insignificant_space()
 +
-+Upstream: https://github.com/bmx-routing/bmx7/commit/a47d8d55717a74a2b399c612dc5a17df8d039125
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++CVE: CVE-2025-2784
++Upstream-Status: Backport
++[https://gitlab.gnome.org/GNOME/libsoup/-/merge_requests/435/diffs?commit_id=242a10fbb12dbdc12d254bd8fc8669a0ac055304;
++ https://gitlab.gnome.org/GNOME/libsoup/-/merge_requests/442/diffs?commit_id=c415ad0b6771992e66c70edf373566c6e247089d]
++
++Test code is not added since it uses some functions not defined in
++version 2.74. These tests are not used now, so just ignore them.
++
++Upstream: https://git.openembedded.org/meta-openembedded/plain/meta-oe/recipes-support/libsoup/libsoup-2.4/CVE-2025-2784.patch
++
++Signed-off-by: Changqing Li <changqing.li@windriver.com>
++Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 +---
-+ src/crypt.c | 357 +++++++++++++++++-----------------------------------
-+ src/crypt.h |  11 +-
-+ 2 files changed, 115 insertions(+), 253 deletions(-)
++ libsoup/soup-content-sniffer.c |  9 +++----
++ 1 files changed, 3 insertions(+), 4 deletions(-)
 +
-+diff --git a/src/crypt.c b/src/crypt.c
-+index 004b8e7..9270b75 100644
-+--- a/src/crypt.c
-++++ b/src/crypt.c
-+@@ -37,34 +37,17 @@ static uint8_t shaClean = NO;
-+ 
-+ static CRYPTRSA_T *my_PrivKey = NULL;
-+ 
-+-#if (CRYPTLIB >= POLARSSL_MIN && CRYPTLIB <= POLARSSL_MAX) || (CRYPTLIB >= MBEDTLS_MIN && CRYPTLIB <= MBEDTLS_MAX)
-+-
-+-#if (CRYPTLIB >= POLARSSL_MIN && CRYPTLIB <= POLARSSL_MAX)
-+-/******************* accessing polarssl: *************************************/
-+-#include "polarssl/config.h"
-+-#include "polarssl/sha256.h"
-+-
-+-#include "polarssl/entropy.h"
-+-//#include "polarssl/entropy_poll.h"
-+-
-+-#include "polarssl/error.h"
-+-#include "polarssl/md.h"
-+-#include "polarssl/dhm.h"
-+-#include "polarssl/rsa.h"
-+-#include "polarssl/ctr_drbg.h"
-+-
-+-#include "polarssl/x509.h"
-+-#if CRYPTLIB <= POLARSSL_1_2_9
-+-#include "polarssl/x509write.h"
-+-#elif CRYPTLIB >= POLARSSL_1_3_3
-+-#include "polarssl/pk.h"
-+-#endif
-+ 
-+-#elif (CRYPTLIB >= MBEDTLS_MIN && CRYPTLIB <= MBEDTLS_MAX)
-++#if (CRYPTLIB >= MBEDTLS_MIN && CRYPTLIB <= MBEDTLS_MAX)
-+ /******************* accessing mbedtls: *************************************/
-+ 
-+-#include "mbedtls/compat-1.3.h"
-++#if (CRYPTLIB >= MBEDTLS_2_8_0 && CRYPTLIB < MBEDTLS_3_0_0)
-++//#include "mbedtls/compat-1.3.h"
-+ #include "mbedtls/config.h"
-++#elif (CRYPTLIB >= MBEDTLS_3_0_0 && CRYPTLIB < MBEDTLS_MAX)
-++#include "mbedtls/compat-2.x.h"
-++#endif
-++
-+ #include "mbedtls/sha256.h"
-+ #include "mbedtls/entropy.h"
-+ #include "mbedtls/error.h"
-+@@ -75,10 +58,10 @@ static CRYPTRSA_T *my_PrivKey = NULL;
-+ 
-+ #endif
-+ 
-+-static entropy_context entropy_ctx;
-+-static ctr_drbg_context ctr_drbg;
-++static mbedtls_entropy_context entropy_ctx;
-++static mbedtls_ctr_drbg_context ctr_drbg;
-++static mbedtls_sha256_context sha_ctx;
-+ 
-+-static sha256_context sha_ctx;
-+ 
-+ uint8_t cryptDhmKeyTypeByLen(int len)
-+ {
-+@@ -111,7 +94,7 @@ void cryptDhmKeyFree(CRYPTDHM_T **cryptKey)
-+ 		return;
-+ 
-+ 	if ((*cryptKey)->backendKey) {
-+-		dhm_free((dhm_context*) ((*cryptKey)->backendKey));
-++		mbedtls_dhm_free((mbedtls_dhm_context*) ((*cryptKey)->backendKey));
-+ 		debugFree((*cryptKey)->backendKey, -300828);
-+ 	}
-+ 
-+@@ -129,25 +112,25 @@ void cryptDhmKeyFree(CRYPTDHM_T **cryptKey)
-+  *  http://www.cl.cam.ac.uk/~rja14/Papers/psandqs.pdf
-+  *  http://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2005-2643
-+  */
-+-static int _cryptDhmCheckRange(const mpi *param, const mpi *P)
-++static int _cryptDhmCheckRange(const mbedtls_mpi *param, const mbedtls_mpi *P)
-+ {
-+-	mpi L, U;
-++	mbedtls_mpi L, U;
-+ 	int ret = FAILURE; //POLARSSL_ERR_DHM_BAD_INPUT_DATA;
-+ 
-+-	mpi_init(&L);
-+-	mpi_init(&U);
-++	mbedtls_mpi_init(&L);
-++	mbedtls_mpi_init(&U);
-+ 
-+ 	if (
-+-		mpi_lset(&L, 2) == 0 &&
-+-		mpi_sub_int(&U, P, 2) == 0 &&
-+-		mpi_cmp_mpi(param, &L) >= 0 &&
-+-		mpi_cmp_mpi(param, &U) <= 0) {
-++		mbedtls_mpi_lset(&L, 2) == 0 &&
-++		mbedtls_mpi_sub_int(&U, P, 2) == 0 &&
-++		mbedtls_mpi_cmp_mpi(param, &L) >= 0 &&
-++		mbedtls_mpi_cmp_mpi(param, &U) <= 0) {
-+ 
-+ 		ret = SUCCESS;
-+ 	}
-+ 
-+-	mpi_free(&L);
-+-	mpi_free(&U);
-++	mbedtls_mpi_free(&L);
-++	mbedtls_mpi_free(&U);
-+ 	return( ret);
++diff --git a/libsoup/soup-content-sniffer.c b/libsoup/soup-content-sniffer.c
++index 5f2896e..9554636 100644
++--- a/libsoup/soup-content-sniffer.c
+++++ b/libsoup/soup-content-sniffer.c
++@@ -612,8 +612,10 @@ sniff_text_or_binary (SoupContentSniffer *sniffer, SoupBuffer *buffer)
 + }
 + 
-+@@ -158,20 +141,12 @@ CRYPTDHM_T *cryptDhmKeyMake(uint8_t keyType, uint8_t attempt)
-+ 	char *goto_error_code = NULL;
-+ 	int keyLen = 0;
-+ 	CRYPTDHM_T *key = debugMallocReset(sizeof(CRYPTDHM_T), -300829);
-+-	dhm_context *dhm = debugMallocReset(sizeof(dhm_context), -300830);
-+-#if !(CRYPTLIB >= MBEDTLS_2_8_0 && CRYPTLIB <= MBEDTLS_MAX)
-+-	char *pptr = NULL;
-+-	char *gptr = NULL;
-+-#endif
-++	mbedtls_dhm_context *dhm = debugMallocReset(sizeof(mbedtls_dhm_context), -300830);
-+ 	int pSize = 0;
-+ 	int xSize = 0;
-+ 	int gxSize = 0;
-+ 	int count = 0;
++ static gboolean
++-skip_insignificant_space (const char *resource, int *pos, int resource_length)
+++skip_insignificant_space (const char *resource, gsize *pos, gsize resource_length)
++ {
+++	if (*pos >= resource_length)
+++		return TRUE;
++ 	while ((resource[*pos] == '\x09') ||
++ 	       (resource[*pos] == '\x20') ||
++ 	       (resource[*pos] == '\x0A') ||
++@@ -632,7 +634,7 @@ sniff_feed_or_html (SoupContentSniffer *sniffer, SoupBuffer *buffer)
++ {
++ 	const char *resource = (const char *)buffer->data;
++ 	int resource_length = MIN (512, buffer->length);
++-	int pos = 0;
+++	gsize pos = 0;
 + 
-+-#if CRYPTLIB >= POLARSSL_1_3_9
-+-	// in older versions, if dhm_init() exist, it only zero-memsets the dhm context
-+-	dhm_init(dhm);
-+-#endif
-+ 	key->backendKey = dhm;
++ 	if (resource_length < 3)
++ 		goto text_html;
++@@ -642,9 +644,6 @@ sniff_feed_or_html (SoupContentSniffer *sniffer, SoupBuffer *buffer)
++ 		pos = 3;
 + 
-+ 	if (!(keyType))
-+@@ -179,58 +154,36 @@ CRYPTDHM_T *cryptDhmKeyMake(uint8_t keyType, uint8_t attempt)
-+ 	if ((keyLen = cryptDhmKeyLenByType(keyType)) <= 0)
-+ 		goto_error(finish, "Invalid size");
++  look_for_tag:
++-	if (pos > resource_length)
++-		goto text_html;
++-
++ 	if (skip_insignificant_space (resource, &pos, resource_length))
++ 		goto text_html;
++
++-- 
++2.34.1
++
+diff --git a/package/libsoup/0004-headers-Strictly-dont-allow-NUL-bytes.patch b/package/libsoup/0004-headers-Strictly-dont-allow-NUL-bytes.patch
+new file mode 100644
+index 0000000000..120358b5fa
+--- /dev/null
++++ b/package/libsoup/0004-headers-Strictly-dont-allow-NUL-bytes.patch
+@@ -0,0 +1,60 @@
++From 4a2bb98e03d79146c729dca52c8d6edc635218ff Mon Sep 17 00:00:00 2001
++From: Patrick Griffis <pgriffis@igalia.com>
++Date: Mon, 8 Jul 2024 12:33:15 -0500
++Subject: [PATCH] headers: Strictly don't allow NUL bytes
++
++In the past (2015) this was allowed for some problematic sites. However Chromium also does not allow NUL bytes in either header names or values these days. So this should no longer be a problem.
++
++CVE: CVE-2024-52530
++Upstream-Status: Backport [https://gitlab.gnome.org/GNOME/libsoup/-/merge_requests/402/diffs?commit_id=04df03bc092ac20607f3e150936624d4f536e68b]
++
++Upstream: https://git.openembedded.org/meta-openembedded/tree/meta-oe/recipes-support/libsoup/libsoup-2.4/CVE-2024-52530.patch
++
++Signed-off-by: Changqing Li <changqing.li@windriver.com>
++[Titouan: Remove changes on test files]
++Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
++---
++ libsoup/soup-headers.c      | 15 +++------
++ 1 file changed, 4 insertions(+), 11 deletions(-)
++
++diff --git a/libsoup/soup-headers.c b/libsoup/soup-headers.c
++index eec28ad..e5d3c03 100644
++--- a/libsoup/soup-headers.c
+++++ b/libsoup/soup-headers.c
++@@ -50,13 +50,14 @@ soup_headers_parse (const char *str, int len, SoupMessageHeaders *dest)
++ 	 * ignorable trailing whitespace.
++ 	 */
 + 
-+-#if (CRYPTLIB >= POLARSSL_MIN && CRYPTLIB <= POLARSSL_MAX)
-+-	if (keyType == CRYPT_DHM1024_TYPE) {
-+-		pptr = POLARSSL_DHM_RFC5114_MODP_1024_P;
-+-		gptr = POLARSSL_DHM_RFC5114_MODP_1024_G;
-+-	} else if (keyType == CRYPT_DHM2048_TYPE) {
-+-		pptr = POLARSSL_DHM_RFC3526_MODP_2048_P;
-+-		gptr = POLARSSL_DHM_RFC3526_MODP_2048_G;
-+-	} else if (keyType == CRYPT_DHM3072_TYPE) {
-+-		pptr = POLARSSL_DHM_RFC3526_MODP_3072_P;
-+-		gptr = POLARSSL_DHM_RFC3526_MODP_3072_G;
-+-#elif (CRYPTLIB >= MBEDTLS_MIN && CRYPTLIB < MBEDTLS_2_8_0)
-+-	if (keyType == CRYPT_DHM2048_TYPE) {
-+-		pptr = MBEDTLS_DHM_RFC3526_MODP_2048_P;
-+-		gptr = MBEDTLS_DHM_RFC3526_MODP_2048_G;
-+-	} else if (keyType == CRYPT_DHM3072_TYPE) {
-+-		pptr = MBEDTLS_DHM_RFC3526_MODP_3072_P;
-+-		gptr = MBEDTLS_DHM_RFC3526_MODP_3072_G;
-+-#elif (CRYPTLIB >= MBEDTLS_2_8_0 && CRYPTLIB <= MBEDTLS_MAX)
-+ 
-+ 	if (keyType == CRYPT_DHM2048_TYPE) {
-+ 		static const unsigned char modp2048P[(2048/8)] = MBEDTLS_DHM_RFC3526_MODP_2048_P_BIN;
-+ 		static const unsigned char modp2048G[1] = MBEDTLS_DHM_RFC3526_MODP_2048_G_BIN;
-+-		if ((ret = mpi_read_binary(&dhm->P, modp2048P, sizeof(modp2048P) )) != 0 || (ret = mpi_read_binary(&dhm->G, modp2048G, sizeof(modp2048G))) != 0)
-+-			goto_error(finish, "Failed setting dhm parameters!");
+++	/* No '\0's are allowed */
+++	if (memchr (str, '\0', len))
+++		return FALSE;
 ++
-++		if ((ret = mbedtls_mpi_read_binary(&dhm->P, modp2048P, sizeof(modp2048P) )) != 0 || (ret = mbedtls_mpi_read_binary(&dhm->G, modp2048G, sizeof(modp2048G))) != 0)
-++			goto_error(finish, "Failed reading dhm2048 parameters!");
++ 	/* Skip over the Request-Line / Status-Line */
++ 	headers_start = memchr (str, '\n', len);
++ 	if (!headers_start)
++ 		return FALSE;
++-	/* No '\0's in the Request-Line / Status-Line */
++-	if (memchr (str, '\0', headers_start - str))
++-		return FALSE;
 + 
-+ 	} else if (keyType == CRYPT_DHM3072_TYPE) {
-+ 		static const unsigned char modp3072P[(3072/8)] = MBEDTLS_DHM_RFC3526_MODP_3072_P_BIN;
-+ 		static const unsigned char modp3072G[1] = MBEDTLS_DHM_RFC3526_MODP_3072_G_BIN;
-+-		if ((ret = mpi_read_binary(&dhm->P, modp3072P, sizeof(modp3072P) )) != 0 || (ret = mpi_read_binary(&dhm->G, modp3072G, sizeof(modp3072G))) != 0)
-+-			goto_error(finish, "Failed setting dhm parameters!");
-+-#endif
-++		if ((ret = mbedtls_mpi_read_binary(&dhm->P, modp3072P, sizeof(modp3072P) )) != 0 || (ret = mbedtls_mpi_read_binary(&dhm->G, modp3072G, sizeof(modp3072G))) != 0)
-++			goto_error(finish, "Failed reading dhm3072 parameters!");
-+ 	} else {
-+ 		goto_error(finish, "Unsupported dhm type!");
++ 	/* We work on a copy of the headers, which we can write '\0's
++ 	 * into, so that we don't have to individually g_strndup and
++@@ -68,14 +69,6 @@ soup_headers_parse (const char *str, int len, SoupMessageHeaders *dest)
++ 	headers_copy[copy_len] = '\0';
++ 	value_end = headers_copy;
++ 
++-	/* There shouldn't be any '\0's in the headers already, but
++-	 * this is the web we're talking about.
++-	 */
++-	while ((p = memchr (headers_copy, '\0', copy_len))) {
++-		memmove (p, p + 1, copy_len - (p - headers_copy));
++-		copy_len--;
++-	}
++-
++ 	while (*(value_end + 1)) {
++ 		name = value_end + 1;
++ 		name_end = strchr (name, ':');
++ 
++-- 
++2.34.1
++
+diff --git a/package/libsoup/0005-headers-Be-more-robust-against-invalid-input.patch b/package/libsoup/0005-headers-Be-more-robust-against-invalid-input.patch
+new file mode 100644
+index 0000000000..0665182d0a
+--- /dev/null
++++ b/package/libsoup/0005-headers-Be-more-robust-against-invalid-input.patch
+@@ -0,0 +1,136 @@
++From 12523a592f1216450d18706bcf6c16e0f1ab0ce0 Mon Sep 17 00:00:00 2001
++From: Changqing Li <changqing.li@windriver.com>
++Date: Fri, 16 May 2025 13:52:37 +0800
++Subject: [PATCH] headers: Be more robust against invalid input when
++ parsing params
++
++If you pass invalid input to a function such as soup_header_parse_param_list_strict()
++it can cause an overflow if it decodes the input to UTF-8.
++
++This should never happen with valid UTF-8 input which libsoup's client API
++ensures, however it's server API does not currently.
++
++CVE: CVE-2024-52531
++Upstream-Status: Backport [https://gitlab.gnome.org/GNOME/libsoup/-/merge_requests/407/diffs?commit_id=a35222dd0bfab2ac97c10e86b95f762456628283]
++
++Upstream: https://git.openembedded.org/meta-openembedded/tree/meta-oe/recipes-support/libsoup/libsoup-2.4/CVE-2024-52531-2.patch
++
++Signed-off-by: Changqing Li <changqing.li@windriver.com>
++Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
++---
++ libsoup/soup-headers.c | 45 +++++++++++++++++++++---------------------
++ 1 file changed, 23 insertions(+), 22 deletions(-)
++
++diff --git a/libsoup/soup-headers.c b/libsoup/soup-headers.c
++index 67905b2..39e8d34 100644
++--- a/libsoup/soup-headers.c
+++++ b/libsoup/soup-headers.c
++@@ -642,8 +642,9 @@ soup_header_contains (const char *header, const char *token)
++ }
++ 
++ static void
++-decode_quoted_string (char *quoted_string)
+++decode_quoted_string_inplace (GString *quoted_gstring)
++ {
+++	char *quoted_string = quoted_gstring->str;
++ 	char *src, *dst;
++ 
++ 	src = quoted_string + 1;
++@@ -657,10 +658,11 @@ decode_quoted_string (char *quoted_string)
++ }
++ 
++ static gboolean
++-decode_rfc5987 (char *encoded_string)
+++decode_rfc5987_inplace (GString *encoded_gstring)
++ {
++ 	char *q, *decoded;
++ 	gboolean iso_8859_1 = FALSE;
+++	const char *encoded_string = encoded_gstring->str;
++ 
++ 	q = strchr (encoded_string, '\'');
++ 	if (!q)
++@@ -689,14 +691,7 @@ decode_rfc5987 (char *encoded_string)
++ 		decoded = utf8;
 + 	}
 + 
-+-#if !(CRYPTLIB >= MBEDTLS_2_8_0 && CRYPTLIB <= MBEDTLS_MAX)
-+-	if ((ret = mpi_read_string(&dhm->P, 16, pptr)) != 0 || (ret = mpi_read_string(&dhm->G, 16, gptr)) != 0)
-+-		goto_error(finish, "Failed setting dhm parameters!");
-+-#endif
-+-	if (mpi_cmp_int(&dhm->P, 0) == 0)
-++	if (mbedtls_mpi_cmp_int(&dhm->P, 0) == 0)
-+ 		goto_error(finish, "Empty dhm->P");
++-	/* If encoded_string was UTF-8, then each 3-character %-escape
++-	 * will be converted to a single byte, and so decoded is
++-	 * shorter than encoded_string. If encoded_string was
++-	 * iso-8859-1, then each 3-character %-escape will be
++-	 * converted into at most 2 bytes in UTF-8, and so it's still
++-	 * shorter.
++-	 */
++-	strcpy (encoded_string, decoded);
+++	g_string_assign (encoded_gstring, decoded);
++ 	g_free (decoded);
++ 	return TRUE;
++ }
++@@ -706,15 +701,16 @@ parse_param_list (const char *header, char delim, gboolean strict)
++ {
++ 	GHashTable *params;
++ 	GSList *list, *iter;
++-	char *item, *eq, *name_end, *value;
++-	gboolean override, duplicated;
 + 
-+ 	// Generate X as large as possible ( < P )
-+-	if ((pSize = mpi_size(&dhm->P)) != keyLen)
-++	if ((pSize = mbedtls_mpi_size(&dhm->P)) != keyLen)
-+ 		goto_error(finish, "Invalid P size");
++ 	params = g_hash_table_new_full (soup_str_case_hash, 
++ 					soup_str_case_equal,
++-					g_free, NULL);
+++					g_free, g_free);
 + 
-+ 	do {
-+-		if ((ret = mpi_fill_random(&dhm->X, pSize, ctr_drbg_random, &ctr_drbg)) != 0)
-++		if ((ret = mbedtls_mpi_fill_random(&dhm->X, pSize, mbedtls_ctr_drbg_random, &ctr_drbg)) != 0)
-+ 			goto_error(finish, "Failed allocating randomness");
++ 	list = parse_list (header, delim);
++ 	for (iter = list; iter; iter = iter->next) {
+++ 		char *item, *eq, *name_end;
+++		gboolean override, duplicated;
+++		GString *parsed_value = NULL;
++ 		item = iter->data;
++ 		override = FALSE;
 + 
-+-		while (mpi_cmp_mpi(&dhm->X, &dhm->P) >= 0) {
-+-			if ((ret = mpi_shift_r(&dhm->X, 1)) != 0)
-++		while (mbedtls_mpi_cmp_mpi(&dhm->X, &dhm->P) >= 0) {
-++			if ((ret = mbedtls_mpi_shift_r(&dhm->X, 1)) != 0)
-+ 				goto_error(finish, "Failed shifting dhm->X param");
++@@ -729,19 +725,19 @@ parse_param_list (const char *header, char delim, gboolean strict)
++ 
++ 			*name_end = '\0';
++ 
++-			value = (char *)skip_lws (eq + 1);
+++			parsed_value = g_string_new ((char *)skip_lws (eq + 1));
++ 
++ 			if (name_end[-1] == '*' && name_end > item + 1) {
++ 				name_end[-1] = '\0';
++-				if (!decode_rfc5987 (value)) {
+++				if (!decode_rfc5987_inplace (parsed_value)) {
+++					g_string_free (parsed_value, TRUE);
++ 					g_free (item);
++ 					continue;
++ 				}
++ 				override = TRUE;
++-			} else if (*value == '"')
++-				decode_quoted_string (value);
++-		} else
++-			value = NULL;
+++			} else if (parsed_value->str[0] == '"')
+++				decode_quoted_string_inplace (parsed_value);
+++			}
++ 
++ 		duplicated = g_hash_table_lookup_extended (params, item, NULL, NULL);
++ 
++@@ -749,11 +745,16 @@ parse_param_list (const char *header, char delim, gboolean strict)
++ 			soup_header_free_param_list (params);
++ 			params = NULL;
++ 			g_slist_foreach (iter, (GFunc)g_free, NULL);
+++			if (parsed_value)
+++				g_string_free (parsed_value, TRUE);
++ 			break;
++-		} else if (override || !duplicated)
++-			g_hash_table_replace (params, item, value);
++-		else
+++		} else if (override || !duplicated) {
+++			g_hash_table_replace (params, item, parsed_value ? g_string_free (parsed_value, FALSE) : NULL);
+++		} else {
+++			if (parsed_value)
+++				g_string_free (parsed_value, TRUE);
++ 			g_free (item);
+++		}
++ 	}
++ 
++ 	g_slist_free (list);
++-- 
++2.34.1
++
+diff --git a/package/libsoup/0006-websocket-process-the-frame-as-soon-as-we-read-data.patch b/package/libsoup/0006-websocket-process-the-frame-as-soon-as-we-read-data.patch
+new file mode 100644
+index 0000000000..de33ac7b53
+--- /dev/null
++++ b/package/libsoup/0006-websocket-process-the-frame-as-soon-as-we-read-data.patch
+@@ -0,0 +1,40 @@
++From a693d49bff058fc20a448dc4e7d324ff0dc6597e Mon Sep 17 00:00:00 2001
++From: Ignacio Casal Quinteiro <qignacio@amazon.com>
++Date: Wed, 11 Sep 2024 11:52:11 +0200
++Subject: [PATCH] websocket: process the frame as soon as we read data
++
++Otherwise we can enter in a read loop because we were not
++validating the data until the all the data was read.
++
++Fixes #391
++
++CVE: CVE-2024-52532
++Upstream-Status: Backport [https://gitlab.gnome.org/GNOME/libsoup/-/commit/6adc0e3eb74c257ed4e2a23eb4b2774fdb0d67be#f1d67ca0386b145ea201cf88d27f72724d7c6715]
++
++Upstream: https://git.openembedded.org/meta-openembedded/tree/meta-oe/recipes-support/libsoup/libsoup-2.4/CVE-2024-52532-1.patch
++
++Signed-off-by: Changqing Li <changqing.li@windriver.com>
++Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
++---
++ libsoup/soup-websocket-connection.c | 5 ++---
++ 1 file changed, 2 insertions(+), 3 deletions(-)
++
++diff --git a/libsoup/soup-websocket-connection.c b/libsoup/soup-websocket-connection.c
++index a4095e1..65c1492 100644
++--- a/libsoup/soup-websocket-connection.c
+++++ b/libsoup/soup-websocket-connection.c
++@@ -1140,9 +1140,8 @@ soup_websocket_connection_read (SoupWebsocketConnection *self)
 + 		}
 + 
-+@@ -240,13 +193,13 @@ CRYPTDHM_T *cryptDhmKeyMake(uint8_t keyType, uint8_t attempt)
-+ 	} while ((ret = _cryptDhmCheckRange(&dhm->X, &dhm->P)) != SUCCESS);
-+ 
-+ 	// Calculate GX = G^X mod P
-+-	if (mpi_exp_mod(&dhm->GX, &dhm->G, &dhm->X, &dhm->P, &dhm->RP) != 0)
-++	if (mbedtls_mpi_exp_mod(&dhm->GX, &dhm->G, &dhm->X, &dhm->P, &dhm->RP) != 0)
-+ 		goto_error(finish, "Failed creating GX modulo");
-+-	if (((int) (dhm->len = mpi_size(&dhm->P))) != keyLen)
-++	if (((int) (dhm->len = mbedtls_mpi_size(&dhm->P))) != keyLen)
-+ 		goto_error(finish, "Invalid len");
-+-	if ((xSize = mpi_size(&dhm->X)) != keyLen)
-++	if ((xSize = mbedtls_mpi_size(&dhm->X)) != keyLen)
-+ 		goto_error(finish, "Invalid X size");
-+-	if ((gxSize = mpi_size(&dhm->GX)) != keyLen)
-++	if ((gxSize = mbedtls_mpi_size(&dhm->GX)) != keyLen)
-+ 		goto_error(finish, "Invalid GX size");
-+ 	if ((ret = _cryptDhmCheckRange(&dhm->GX, &dhm->P)) != SUCCESS)
-+ 		goto_error(finish, "Invalid GX range");
-+@@ -277,19 +230,19 @@ void cryptDhmPubKeyGetRaw(CRYPTDHM_T* key, uint8_t* buff, uint16_t buffLen)
-+ 	assertion_dbg(-502719, (key && buff && buffLen && key->rawGXType && buffLen == key->rawGXLen),
-+ 		"Failed: key=%d buff=%d buffLen=%d key.GXLen=%d", !!key, !!buff, buffLen, key ? key->rawGXLen : 0);
-+ 
-+-	dhm_context *dhm = key->backendKey;
-++	mbedtls_dhm_context *dhm = key->backendKey;
-+ 
-+-	assertion_dbg(-502720, (dhm && buffLen == mpi_size(&dhm->GX) && buffLen == dhm->len),
-+-		"Failed: dhm.GXlen=%zd dhm.len=%zd", dhm ? mpi_size(&dhm->GX) : 0, dhm ? dhm->len : 0);
-++	assertion_dbg(-502720, (dhm && buffLen == mbedtls_mpi_size(&dhm->GX) && buffLen == dhm->len),
-++		"Failed: dhm.GXlen=%zd dhm.len=%zd", dhm ? mbedtls_mpi_size(&dhm->GX) : 0, dhm ? dhm->len : 0);
-+ 
-+-	mpi_write_binary(&dhm->GX, buff, key->rawGXLen);
-++	mbedtls_mpi_write_binary(&dhm->GX, buff, key->rawGXLen);
-+ }
-+ 
-+ STATIC_FUNC
-+ IDM_T cryptDhmKeyCheck(CRYPTDHM_T *key)
-+ {
-+ 	char *goto_error_code = NULL;
-+-	dhm_context *dhm = NULL;
-++	mbedtls_dhm_context *dhm = NULL;
-+ 	uint8_t keyType = 0;
-+ 	int keyLen = 0;
-+ 	int pSize = 0;
-+@@ -297,7 +250,7 @@ IDM_T cryptDhmKeyCheck(CRYPTDHM_T *key)
-+ 	int gxSize = 0;
-+ 	int gySize = 0;
-+ 
-+-	if (!(dhm = (dhm_context *) key->backendKey))
-++	if (!(dhm = (mbedtls_dhm_context *) key->backendKey))
-+ 		goto_error(finish, "Missing backend key");
-+ 	if (!(keyType = key->rawGXType))
-+ 		goto_error(finish, "Missing type");
-+@@ -305,13 +258,13 @@ IDM_T cryptDhmKeyCheck(CRYPTDHM_T *key)
-+ 		goto_error(finish, "Invalid size");
-+ 	if ((int) dhm->len != keyLen)
-+ 		goto_error(finish, "Invalid len");
-+-	if ((pSize = mpi_size(&dhm->P)) != keyLen)
-++	if ((pSize = mbedtls_mpi_size(&dhm->P)) != keyLen)
-+ 		goto_error(finish, "Invalid P size");
-+-	if ((xSize = mpi_size(&dhm->X)) != keyLen)
-++	if ((xSize = mbedtls_mpi_size(&dhm->X)) != keyLen)
-+ 		goto_error(finish, "Invalid X size");
-+-	if ((gxSize = mpi_size(&dhm->GX)) != keyLen)
-++	if ((gxSize = mbedtls_mpi_size(&dhm->GX)) != keyLen)
-+ 		goto_error(finish, "Invalid GX size");
-+-	if ((gySize = mpi_size(&dhm->GY)) != keyLen)
-++	if ((gySize = mbedtls_mpi_size(&dhm->GY)) != keyLen)
-+ 		goto_error(finish, "Invalid GY size");
-+ 	if (_cryptDhmCheckRange(&dhm->GX, &dhm->P) != SUCCESS)
-+ 		goto_error(finish, "Invalid GX range");
-+@@ -333,7 +286,7 @@ CRYPTSHA_T *cryptDhmSecretForNeigh(CRYPTDHM_T *myDhm, uint8_t *neighRawKey, uint
-+ 	uint8_t keyType = 0;
-+ 	int ret = 0;
-+ 	CRYPTSHA_T *secret = NULL;
-+-	dhm_context *dhm = NULL;
-++	mbedtls_dhm_context *dhm = NULL;
-+ 	uint8_t buff[CRYPT_DHM_MAX_LEN];
-+ 	size_t n = 0;
-+ 
-+@@ -343,17 +296,13 @@ CRYPTSHA_T *cryptDhmSecretForNeigh(CRYPTDHM_T *myDhm, uint8_t *neighRawKey, uint
-+ 	if (((keyType = cryptDhmKeyTypeByLen(neighRawKeyLen)) != myDhm->rawGXType) || ((n = dhm->len) != neighRawKeyLen) || (sizeof(buff) < neighRawKeyLen))
-+ 		goto_error(finish, "Wrong type or keyLength");
-+ 
-+-	if ((ret = mpi_read_binary(&dhm->GY, neighRawKey, neighRawKeyLen)) != 0)
-++	if ((ret = mbedtls_mpi_read_binary(&dhm->GY, neighRawKey, neighRawKeyLen)) != 0)
-+ 		goto_error(finish, "Invalid GY");
-+ 
-+ 	if (cryptDhmKeyCheck(myDhm) != SUCCESS)
-+ 		goto_error(finish, "Failed key check");
-+ 
-+-#if (CRYPTLIB >= POLARSSL_MIN && CRYPTLIB <= POLARSSL_MAX)
-+-	if ((ret = dhm_calc_secret(dhm, buff, &n, ctr_drbg_random, &ctr_drbg)) != 0)
-+-#elif (CRYPTLIB >= MBEDTLS_MIN && CRYPTLIB <= MBEDTLS_MAX)
-+-	if ((ret = dhm_calc_secret(dhm, buff, sizeof(buff), &n, ctr_drbg_random, &ctr_drbg)) != 0)
-+-#endif
-++	if ((ret = mbedtls_dhm_calc_secret(dhm, buff, sizeof(buff), &n, mbedtls_ctr_drbg_random, &ctr_drbg)) != 0)
-+ 		goto_error(finish, "Failed calculating secret");
-+ 
-+ 	if (n > neighRawKeyLen || n < ((neighRawKeyLen / 4)*3))
-+@@ -368,8 +317,8 @@ CRYPTSHA_T *cryptDhmSecretForNeigh(CRYPTDHM_T *myDhm, uint8_t *neighRawKey, uint
-+ 		dbgf(((goto_error_code || n != neighRawKeyLen) ? DBGL_SYS : DBGL_CHANGES), ((goto_error_code || n != neighRawKeyLen) ? DBGT_WARN : DBGT_INFO),
-+ 		"%s n=%zd neighKeyLen=%d myKeyLen=%d", goto_error_code, n, neighRawKeyLen, myDhm->rawGXLen);
-+ 
-+-		mpi_free(&dhm->GY);
-+-		mpi_free(&dhm->K);
-++		mbedtls_mpi_free(&dhm->GY);
-++		mbedtls_mpi_free(&dhm->K);
-+ 		memset(buff, 0, sizeof(buff));
-+ 		return secret; }
-+ }
-+@@ -381,14 +330,10 @@ void cryptRsaKeyFree(CRYPTRSA_T **cryptKey)
-+ 		return;
-+ 
-+ 	if ((*cryptKey)->backendKey) {
-+-		rsa_free((rsa_context*) ((*cryptKey)->backendKey));
-++		mbedtls_rsa_free((mbedtls_rsa_context*) ((*cryptKey)->backendKey));
-+ 		debugFree((*cryptKey)->backendKey, -300612);
-+ 	}
-+ 
-+-	//	if ((*cryptKey)->__rawKey) {
-+-	//		debugFree((*cryptKey)->__rawKey, -300613);
-+-	//	}
++ 		pv->incoming->len = len + count;
++-	} while (count > 0);
 +-
-+ 	debugFree((*cryptKey), -300614);
-+ 
-+ 	*cryptKey = NULL;
-+@@ -397,15 +342,15 @@ void cryptRsaKeyFree(CRYPTRSA_T **cryptKey)
-+ int cryptRsaPubKeyGetRaw(CRYPTRSA_T *key, uint8_t *buff, uint16_t buffLen)
-+ {
-+ 
-+-	rsa_context *rsa;
-++	mbedtls_rsa_context *rsa;
-+ 	if (!key || !buff || !buffLen ||
-+ 		!key->rawKeyType || (buffLen != key->rawKeyLen) ||
-+-		!(rsa = (rsa_context*) key->backendKey) || buffLen != mpi_size(&rsa->N) || buffLen != rsa->len) {
-++		!(rsa = (mbedtls_rsa_context*) key->backendKey) || buffLen != mbedtls_mpi_size(&rsa->N) || buffLen != rsa->len) {
-+ 
-+ 		return FAILURE;
-+ 	}
-+ 
-+-	if (mpi_write_binary(&rsa->N, buff, buffLen) != 0)
-++	if (mbedtls_mpi_write_binary(&rsa->N, buff, buffLen) != 0)
-+ 		return FAILURE;
-+ 
-+ 	return SUCCESS;
-+@@ -420,16 +365,16 @@ CRYPTRSA_T *cryptRsaPubKeyFromRaw(uint8_t *rawKey, uint16_t rawKeyLen)
-+ 
-+ 	CRYPTRSA_T *cryptKey = debugMallocReset(sizeof(CRYPTRSA_T), -300615);
-+ 
-+-	cryptKey->backendKey = debugMalloc(sizeof(rsa_context), -300620);
-++	cryptKey->backendKey = debugMalloc(sizeof(mbedtls_rsa_context), -300620);
-+ 
-+-	rsa_context *rsa = (rsa_context*) cryptKey->backendKey;
-++	mbedtls_rsa_context *rsa = (mbedtls_rsa_context*) cryptKey->backendKey;
-+ 
-+-	rsa_init(rsa, RSA_PKCS_V15, 0);
-++	mbedtls_rsa_init(rsa, MBEDTLS_RSA_PKCS_V15, 0);
-+ 
-+ 
-+ 	if (
-+-		(mpi_read_binary(&rsa->N, rawKey, rawKeyLen)) ||
-+-		(mpi_read_binary(&rsa->E, (uint8_t*) & e, sizeof(e)))
-++		(mbedtls_mpi_read_binary(&rsa->N, rawKey, rawKeyLen)) ||
-++		(mbedtls_mpi_read_binary(&rsa->E, (uint8_t*) & e, sizeof(e)))
-+ 		) {
-+ 		cryptRsaKeyFree(&cryptKey);
-+ 		return NULL;
-+@@ -439,7 +384,6 @@ CRYPTRSA_T *cryptRsaPubKeyFromRaw(uint8_t *rawKey, uint16_t rawKeyLen)
-+ 	cryptKey->rawKeyLen = rawKeyLen;
-+ 	cryptKey->rawKeyType = cryptRsaKeyTypeByLen(rawKeyLen);
-+ 
-+-
-+ #ifdef EXTREME_PARANOIA
-+ 	uint8_t buff[rawKeyLen];
-+ 	memset(buff, 0, rawKeyLen);
-+@@ -448,10 +392,6 @@ CRYPTRSA_T *cryptRsaPubKeyFromRaw(uint8_t *rawKey, uint16_t rawKeyLen)
-+ 	assertion(-502722, (memcmp(rawKey, buff, rawKeyLen) == 0));
-+ #endif
-+ 
-+-
-+-	//	cryptKey->__rawKey = debugMalloc(rawKeyLen,-300618);
-+-	//	memcpy(cryptKey->__rawKey, rawKey, rawKeyLen);
-+-
-+ 	return cryptKey;
-+ }
-+ 
-+@@ -460,10 +400,10 @@ int cryptRsaPubKeyCheck(CRYPTRSA_T *pubKey)
-+ 	assertion(-502141, (pubKey));
-+ 	assertion(-502142, (pubKey->backendKey));
-+ 
-+-	rsa_context *rsa = (rsa_context*) pubKey->backendKey;
-++	mbedtls_rsa_context *rsa = (mbedtls_rsa_context*) pubKey->backendKey;
-+ 
-+-	if (!rsa->len || (int) rsa->len != cryptRsaKeyLenByType(pubKey->rawKeyType) || rsa->len != pubKey->rawKeyLen || rsa->len != mpi_size(&rsa->N) ||
-+-		rsa_check_pubkey((rsa_context*) pubKey->backendKey)) {
-++	if (!rsa->len || (int) rsa->len != cryptRsaKeyLenByType(pubKey->rawKeyType) || rsa->len != pubKey->rawKeyLen || rsa->len != mbedtls_mpi_size(&rsa->N) ||
-++		mbedtls_rsa_check_pubkey((mbedtls_rsa_context*) pubKey->backendKey)) {
-+ 
-+ 		return FAILURE;
-+ 	}
-+@@ -512,48 +452,35 @@ CRYPTRSA_T *cryptRsaKeyFromDer(char *keyPath)
-+ 
-+ 	CRYPTRSA_T *privKey = debugMallocReset(sizeof(CRYPTRSA_T), -300619);
-+ 	CRYPTRSA_T *pubKey = NULL;
-+-	privKey->backendKey = debugMallocReset(sizeof(rsa_context), -300620);
-++	privKey->backendKey = debugMallocReset(sizeof(mbedtls_rsa_context), -300620);
-+ 
-+-	rsa_context *rsa = privKey->backendKey;
-++	mbedtls_rsa_context *rsa = privKey->backendKey;
-+ 	int ret = 0;
-+ 	int keyType = 0;
-+ 	int keyLen = 0;
-+ 	uint8_t keyBuff[CRYPT_RSA_MAX_LEN];
-+ 
-+-#if CRYPTLIB <= POLARSSL_1_2_9
-+-	if (
-+-		(ret = x509parse_keyfile(rsa, keyPath, "")) ||
-+-		(ret = rsa_check_privkey(rsa))
-+-		) {
-+-		dbgf_sys(DBGT_ERR, "failed opening private key=%s err=%d", keyPath, ret);
-+-		cryptRsaKeyFree(&privKey);
-+-		return NULL;
-+-	}
-+-#elif CRYPTLIB >= POLARSSL_1_3_3
-+-	pk_context pk;
-+-	pk_init(&pk);
-+-	rsa_init(rsa, RSA_PKCS_V15, 0);
-++	mbedtls_pk_context pk;
-++	mbedtls_pk_init(&pk);
-++	mbedtls_rsa_init(rsa, MBEDTLS_RSA_PKCS_V15, 0);
-+ 
-+ 	if (
-+-		((ret = pk_parse_keyfile(&pk, keyPath, "")) != 0) ||
-+-		((ret = rsa_copy(rsa, pk_rsa(pk))) != 0) ||
-+-		((ret = rsa_check_privkey(rsa)) != 0)
-++		((ret = mbedtls_pk_parse_keyfile(&pk, keyPath, "")) != 0) ||
-++		((ret = mbedtls_rsa_copy(rsa, mbedtls_pk_rsa(pk))) != 0) ||
-++		((ret = mbedtls_rsa_check_privkey(rsa)) != 0)
-+ 		) {
-+ 		dbgf_sys(DBGT_ERR, "failed opening private key=%s keyLen=%d keyType=%d err=-%X", keyPath, keyLen, keyType, -ret);
-+-		pk_free(&pk);
-++		mbedtls_pk_free(&pk);
-+ 		cryptRsaKeyFree(&privKey);
-+ 		return NULL;
-+ 	}
-+-	pk_free(&pk);
-++	mbedtls_pk_free(&pk);
-+ 
-+-#else
-+-#error "Please fix CRYPTLIB"
-+-#endif
-+ 
-+ 	//cryptKeyAddRaw(ckey);
-+ 
-+ 	if (
-+-		((keyLen = mpi_size(&rsa->N)) <= 0) ||
-++		((keyLen = mbedtls_mpi_size(&rsa->N)) <= 0) ||
-+ 		!(keyType = cryptRsaKeyTypeByLen(keyLen)) ||
-+ 		!(privKey->rawKeyType = keyType) ||
-+ 		!(privKey->rawKeyLen = keyLen) ||
-+@@ -595,29 +522,16 @@ int cryptRsaKeyMakeDer(int32_t keyType, char *path)
-+ 
-+ 	memset(derBuf, 0, CRYPT_DER_BUF_SZ);
-+ 
-+-#if CRYPTLIB <= POLARSSL_1_2_9
-+-	rsa_context rsa;
-+-	rsa_init(&rsa, RSA_PKCS_V15, 0);
-++	mbedtls_pk_context pk;
-++	mbedtls_pk_init(&pk);
-++	mbedtls_pk_setup(&pk, mbedtls_pk_info_from_type(MBEDTLS_PK_RSA));
-+ 
-+-	if ((ret = rsa_gen_key(&rsa, ctr_drbg_random, &ctr_drbg, keyBitSize, CRYPT_KEY_E_VAL)))
-++	if ((ret = mbedtls_rsa_gen_key(mbedtls_pk_rsa(pk), mbedtls_ctr_drbg_random, &ctr_drbg, keyBitSize, CRYPT_KEY_E_VAL)) ||
-++		(ret = mbedtls_rsa_check_privkey(mbedtls_pk_rsa(pk))))
-+ 		goto_error(finish, "Failed making rsa key! ret=%d");
-+ 
-+-	if ((derSz = x509_write_key_der(derBuf, sizeof(derBuf), &rsa)) < 0)
-++	if ((derSz = mbedtls_pk_write_key_der(&pk, derBuf, sizeof(derBuf))) <= 0)
-+ 		goto_error(finish, "Failed translating rsa key to der! derSz=%d");
-+-#elif CRYPTLIB >= POLARSSL_1_3_3
-+-	pk_context pk;
-+-	pk_init(&pk);
-+-	pk_init_ctx(&pk, pk_info_from_type(POLARSSL_PK_RSA));
-+-
-+-	if ((ret = rsa_gen_key(pk_rsa(pk), ctr_drbg_random, &ctr_drbg, keyBitSize, CRYPT_KEY_E_VAL)) ||
-+-		(ret = rsa_check_privkey(pk_rsa(pk))))
-+-		goto_error(finish, "Failed making rsa key! ret=%d");
-+-
-+-	if ((derSz = pk_write_key_der(&pk, derBuf, sizeof(derBuf))) <= 0)
-+-		goto_error(finish, "Failed translating rsa key to der! derSz=%d");
-+-#else
-+-#error "Please fix CRYPTLIB"
-+-#endif
-+ 
-+ 	unsigned char *derStart = derBuf + sizeof(derBuf) - derSz;
-+ 
-+@@ -629,13 +543,7 @@ int cryptRsaKeyMakeDer(int32_t keyType, char *path)
-+ 	{
-+ 		memset(derBuf, 0, CRYPT_DER_BUF_SZ);
-+ 
-+-#if CRYPTLIB <= POLARSSL_1_2_9
-+-		rsa_free(&rsa);
-+-#elif CRYPTLIB >= POLARSSL_1_3_3
-+-		pk_free(&pk);
-+-#else
-+-#error "Please fix CRYPTLIB"
-+-#endif
-++		mbedtls_pk_free(&pk);
-+ 
-+ 		if (keyFile)
-+ 			fclose(keyFile);
-+@@ -656,10 +564,10 @@ CRYPTRSA_T *cryptRsaKeyMake(uint8_t keyType)
-+ 	char *goto_error_code = NULL;
-+ 	CRYPTRSA_T *key = debugMallocReset(sizeof(CRYPTRSA_T), -300642);
-+ 
-+-	rsa_context *rsa = debugMallocReset(sizeof(rsa_context), -300643);
-+-	rsa_init(rsa, RSA_PKCS_V15, 0);
-++	mbedtls_rsa_context *rsa = debugMallocReset(sizeof(mbedtls_rsa_context), -300643);
-++	mbedtls_rsa_init(rsa, MBEDTLS_RSA_PKCS_V15, 0);
-+ 
-+-	if ((ret = rsa_gen_key(rsa, ctr_drbg_random, &ctr_drbg, (keyLen * 8), CRYPT_KEY_E_VAL)))
-++	if ((ret = mbedtls_rsa_gen_key(rsa, mbedtls_ctr_drbg_random, &ctr_drbg, (keyLen * 8), CRYPT_KEY_E_VAL)))
-+ 		goto_error(finish, "Failed making rsa key!");
-+ 
-+ 	key->backendKey = rsa;
-+@@ -679,17 +587,17 @@ CRYPTRSA_T *cryptRsaKeyMake(uint8_t keyType)
-+ 
-+ 		return key; }
-+ }
-+-#endif
-++
-+ 
-+ int cryptRsaEncrypt(uint8_t *in, size_t inLen, uint8_t *out, size_t *outLen, CRYPTRSA_T *pubKey)
-+ {
-+ 
-+-	rsa_context *pk = pubKey->backendKey;
-++	mbedtls_rsa_context *pk = pubKey->backendKey;
-+ 
-+-	assertion(-502723, (mpi_size(&pk->N) == pubKey->rawKeyLen));
-++	assertion(-502723, (mbedtls_mpi_size(&pk->N) == pubKey->rawKeyLen));
-+ 	assertion(-502145, (*outLen >= pubKey->rawKeyLen));
-+ 
-+-	if (rsa_pkcs1_encrypt(pk, ctr_drbg_random, &ctr_drbg, RSA_PUBLIC, inLen, in, out))
-++	if (mbedtls_rsa_pkcs1_encrypt(pk, mbedtls_ctr_drbg_random, &ctr_drbg, MBEDTLS_RSA_PUBLIC, inLen, in, out))
-+ 		return FAILURE;
-+ 
-+ 	*outLen = pubKey->rawKeyLen;
-+@@ -701,19 +609,12 @@ int cryptRsaEncrypt(uint8_t *in, size_t inLen, uint8_t *out, size_t *outLen, CRY
-+ int cryptRsaDecrypt(uint8_t *in, size_t inLen, uint8_t *out, size_t *outLen)
-+ {
-+ 
-+-	rsa_context *pk = my_PrivKey->backendKey;
-++	mbedtls_rsa_context *pk = my_PrivKey->backendKey;
-+ 
-+-	assertion(-502724, (mpi_size(&pk->N) == my_PrivKey->rawKeyLen));
-++	assertion(-502724, (mbedtls_mpi_size(&pk->N) == my_PrivKey->rawKeyLen));
-+ 	assertion(-502146, (inLen >= my_PrivKey->rawKeyLen));
-+-#if CRYPTLIB == POLARSSL_1_2_5
-+-	if (rsa_pkcs1_decrypt(pk, RSA_PRIVATE, &inLen, in, out, *outLen))
-++	if (mbedtls_rsa_pkcs1_decrypt(pk, mbedtls_ctr_drbg_random, &ctr_drbg, MBEDTLS_RSA_PRIVATE, &inLen, in, out, *outLen))
-+ 		return FAILURE;
-+-#elif CRYPTLIB >= POLARSSL_1_2_9
-+-	if (rsa_pkcs1_decrypt(pk, ctr_drbg_random, &ctr_drbg, RSA_PRIVATE, &inLen, in, out, *outLen))
-+-		return FAILURE;
-+-#else
-+-#error "Please fix CRYPTLIB"
-+-#endif
-+ 	*outLen = inLen;
-+ 
-+ 	return SUCCESS;
-+@@ -725,20 +626,13 @@ int cryptRsaSign(CRYPTSHA_T *inSha, uint8_t *out, size_t outLen, CRYPTRSA_T *cry
-+ 	if (!cryptKey)
-+ 		cryptKey = my_PrivKey;
-+ 
-+-	rsa_context *pk = cryptKey->backendKey;
-++	mbedtls_rsa_context *pk = cryptKey->backendKey;
-+ 
-+ 	if (outLen < cryptKey->rawKeyLen)
-+ 		return FAILURE;
-+ 
-+-#if CRYPTLIB <= POLARSSL_1_2_9
-+-	if (rsa_pkcs1_sign(pk, ctr_drbg_random, &ctr_drbg, RSA_PRIVATE, SIG_RSA_SHA224, sizeof(CRYPTSHA_T), (uint8_t*) inSha, out))
-++	if (mbedtls_rsa_pkcs1_sign(pk, mbedtls_ctr_drbg_random, &ctr_drbg, MBEDTLS_RSA_PRIVATE, MBEDTLS_MD_SHA224, sizeof(CRYPTSHA_T), (uint8_t*) inSha, out))
-+ 		return FAILURE;
-+-#elif CRYPTLIB >= POLARSSL_1_3_3
-+-	if (rsa_pkcs1_sign(pk, ctr_drbg_random, &ctr_drbg, RSA_PRIVATE, POLARSSL_MD_SHA224, sizeof(CRYPTSHA_T), (uint8_t*) inSha, out))
-+-		return FAILURE;
-+-#else
-+-#error "Please fix CRYPTLIB"
-+-#endif
-+ 
-+ 	return SUCCESS;
-+ }
-+@@ -746,23 +640,12 @@ int cryptRsaSign(CRYPTSHA_T *inSha, uint8_t *out, size_t outLen, CRYPTRSA_T *cry
-+ int cryptRsaVerify(uint8_t *sign, size_t signLen, CRYPTSHA_T *plainSha, CRYPTRSA_T *pubKey)
-+ {
-+ 
-+-	rsa_context *pk = pubKey->backendKey;
-++	mbedtls_rsa_context *pk = pubKey->backendKey;
-+ 
-+ 	assertion(-502147, (signLen == pubKey->rawKeyLen));
-+ 
-+-#if CRYPTLIB == POLARSSL_1_2_5
-+-	if (rsa_pkcs1_verify(pk, RSA_PUBLIC, SIG_RSA_SHA224, sizeof(CRYPTSHA_T), (uint8_t*) plainSha, sign))
-+-		return FAILURE;
-+-#elif CRYPTLIB == POLARSSL_1_2_9
-+-	if (rsa_pkcs1_verify(pk, ctr_drbg_random, &ctr_drbg, RSA_PUBLIC, SIG_RSA_SHA224, sizeof(CRYPTSHA_T), (uint8_t*) plainSha, sign))
-++	if (mbedtls_rsa_pkcs1_verify(pk, mbedtls_ctr_drbg_random, &ctr_drbg, MBEDTLS_RSA_PUBLIC, MBEDTLS_MD_SHA224, sizeof(CRYPTSHA_T), (uint8_t*) plainSha, sign))
-+ 		return FAILURE;
-+-#elif CRYPTLIB >= POLARSSL_1_3_3
-+-	if (rsa_pkcs1_verify(pk, ctr_drbg_random, &ctr_drbg, RSA_PUBLIC, POLARSSL_MD_SHA224, sizeof(CRYPTSHA_T), (uint8_t*) plainSha, sign))
-+-		return FAILURE;
-+-#else
-+-#error "Please fix CRYPTLIB"
-+-#endif
-+-
-+ 
-+ 	return SUCCESS;
-+ }
-+@@ -770,18 +653,18 @@ int cryptRsaVerify(uint8_t *sign, size_t signLen, CRYPTSHA_T *plainSha, CRYPTRSA
-+ void cryptRand(void *out, uint32_t outLen)
-+ {
-+ 
-+-	assertion(-502139, ENTROPY_BLOCK_SIZE > sizeof(CRYPTSHA_T));
-++	assertion(-502139, MBEDTLS_ENTROPY_BLOCK_SIZE > sizeof(CRYPTSHA_T));
-+ 
-+ 	if (outLen <= sizeof(CRYPTSHA_T)) {
-+ 
-+-		if (entropy_func(&entropy_ctx, out, outLen) != 0)
-++		if (mbedtls_entropy_func(&entropy_ctx, out, outLen) != 0)
-+ 			cleanup_all(-502148);
-+ 	} else {
-+ 
-+ 		CRYPTSHA_T seed[2];
-+ 		uint32_t outPos;
-+ 
-+-		if (entropy_func(&entropy_ctx, (void*) &seed[0], sizeof(CRYPTSHA_T)) != 0)
-++		if (mbedtls_entropy_func(&entropy_ctx, (void*) &seed[0], sizeof(CRYPTSHA_T)) != 0)
-+ 			cleanup_all(-502140);
-+ 
-+ 		cryptShaAtomic(&seed[0], sizeof(CRYPTSHA_T), &seed[1]);
-+@@ -799,20 +682,14 @@ void cryptRand(void *out, uint32_t outLen)
-+ STATIC_FUNC
-+ void cryptRngInit(void)
-+ {
-+-
-+ 	int ret;
-+ 
-+ 	fflush(stdout);
-+-	entropy_init(&entropy_ctx);
-++	mbedtls_entropy_init(&entropy_ctx);
-+ 
-+-#if (CRYPTLIB >= POLARSSL_MIN && CRYPTLIB <= POLARSSL_MAX)
-+-	if ((ret = ctr_drbg_init(&ctr_drbg, entropy_func, &entropy_ctx, NULL, 0)) != 0)
-+-		cleanup_all(-502149);
-+-#elif (CRYPTLIB >= MBEDTLS_MIN && CRYPTLIB <= MBEDTLS_MAX)
-+ 	mbedtls_ctr_drbg_init(&ctr_drbg);
-+-	if ((ret = mbedtls_ctr_drbg_seed(&ctr_drbg, entropy_func, &entropy_ctx, NULL, 0)) != 0)
-++	if ((ret = mbedtls_ctr_drbg_seed(&ctr_drbg, mbedtls_entropy_func, &entropy_ctx, NULL, 0)) != 0)
-+ 		cleanup_all(-502149);
-+-#endif
-+ 
-+ 	int test = 0;
-+ 
-+@@ -829,22 +706,14 @@ void cryptRngFree(void)
-+ STATIC_FUNC
-+ void cryptShaInit(void)
-+ {
-+-#if CRYPTLIB < POLARSSL_1_3_9
-+-	memset(&sha_ctx, 0, sizeof(sha_ctx));
-+-#else
-+-	sha256_init(&sha_ctx);
-+-#endif
-++	mbedtls_sha256_init(&sha_ctx);
-+ 	shaClean = YES;
-+ }
-+ 
-+ STATIC_FUNC
-+ void cryptShaFree(void)
-+ {
-+-#if CRYPTLIB < POLARSSL_1_3_9
-+-	memset(&sha_ctx, 0, sizeof(sha_ctx));
-+-#else
-+-	sha256_free(&sha_ctx);
-+-#endif
-++	mbedtls_sha256_free(&sha_ctx);
-+ }
-+ 
-+ void cryptShaAtomic(void *in, int32_t len, CRYPTSHA_T *sha)
-+@@ -855,14 +724,14 @@ void cryptShaAtomic(void *in, int32_t len, CRYPTSHA_T *sha)
-+ 
-+ 	unsigned char output[32];
-+ 
-+-#if (CRYPTLIB >= MBEDTLS_2_8_0 && CRYPTLIB <= MBEDTLS_MAX)
-++#if (CRYPTLIB >= MBEDTLS_2_8_0 && CRYPTLIB < MBEDTLS_3_0_0)
-+ 	mbedtls_sha256_starts_ret(&sha_ctx, 1/*is224*/);
-+ 	mbedtls_sha256_update_ret(&sha_ctx, in, len);
-+ 	mbedtls_sha256_finish_ret(&sha_ctx, output);
-+ #else
-+-	sha256_starts(&sha_ctx, 1/*is224*/);
-+-	sha256_update(&sha_ctx, in, len);
-+-	sha256_finish(&sha_ctx, output);
-++	mbedtls_sha256_starts(&sha_ctx, 1/*is224*/);
-++	mbedtls_sha256_update(&sha_ctx, in, len);
-++	mbedtls_sha256_finish(&sha_ctx, output);
-+ #endif
-+ 	memcpy(sha, output, sizeof(CRYPTSHA_T));
-+ 	memset(output, 0, sizeof(output));
-+@@ -875,12 +744,12 @@ void cryptShaNew(void *in, int32_t len)
-+ 	assertion(-502034, (in && len > 0 && !memcmp(in, in, len)));
-+ 	shaClean = NO;
-+ 
-+-#if (CRYPTLIB >= MBEDTLS_2_8_0 && CRYPTLIB <= MBEDTLS_MAX)
-++#if (CRYPTLIB >= MBEDTLS_2_8_0 && CRYPTLIB < MBEDTLS_3_0_0)
-+ 	mbedtls_sha256_starts_ret(&sha_ctx, 1/*is224*/);
-+ 	mbedtls_sha256_update_ret(&sha_ctx, in, len);
-+ #else
-+-	sha256_starts(&sha_ctx, 1/*is224*/);
-+-	sha256_update(&sha_ctx, in, len);
-++	mbedtls_sha256_starts(&sha_ctx, 1/*is224*/);
-++	mbedtls_sha256_update(&sha_ctx, in, len);
-+ #endif
-+ }
-+ 
-+@@ -890,10 +759,10 @@ void cryptShaUpdate(void *in, int32_t len)
-+ 	assertion(-502035, (shaClean == NO));
-+ 	assertion(-502036, (in && len > 0 && !memcmp(in, in, len)));
-+ 
-+-#if (CRYPTLIB >= MBEDTLS_2_8_0 && CRYPTLIB <= MBEDTLS_MAX)
-++#if (CRYPTLIB >= MBEDTLS_2_8_0 && CRYPTLIB < MBEDTLS_3_0_0)
-+ 	mbedtls_sha256_update_ret(&sha_ctx, in, len);
-+ #else
-+-	sha256_update(&sha_ctx, in, len);
-++	mbedtls_sha256_update(&sha_ctx, in, len);
-+ #endif
-+ }
-+ 
-+@@ -904,10 +773,10 @@ void cryptShaFinal(CRYPTSHA_T *sha)
-+ 	assertion(-502038, (sha));
-+ 	unsigned char output[32];
-+ 
-+-#if (CRYPTLIB >= MBEDTLS_2_8_0 && CRYPTLIB <= MBEDTLS_MAX)
-++#if (CRYPTLIB >= MBEDTLS_2_8_0 && CRYPTLIB < MBEDTLS_3_0_0)
-+ 	mbedtls_sha256_finish_ret(&sha_ctx, output);
-+ #else
-+-	sha256_finish(&sha_ctx, output);
-++	mbedtls_sha256_finish(&sha_ctx, output;)
-+ #endif
-+ 	memcpy(sha, output, sizeof(CRYPTSHA_T));
-+ 	memset(output, 0, sizeof(output));
-+diff --git a/src/crypt.h b/src/crypt.h
-+index bcc91db..da34d4e 100644
-+--- a/src/crypt.h
-++++ b/src/crypt.h
-+@@ -19,20 +19,13 @@
-+  * Alternative cryptographic libraries are:
-+  * libtomcrypt, gcrypt, cyassl
-+  */
-+-
-+-#define POLARSSL_MIN   1000
-+-#define POLARSSL_1_2_5 1125
-+-#define POLARSSL_1_2_9 1129
-+-#define POLARSSL_1_3_3 1133
-+-#define POLARSSL_1_3_4 1134
-+-#define POLARSSL_1_3_9 1139
-+-#define POLARSSL_MAX   1999
-+-
-+ #define MBEDTLS_MIN    2000
-+ #define MBEDTLS_2_4_0  2240
-+ #define MBEDTLS_2_6_0  2260
-+ #define MBEDTLS_2_7_0  2270
-+ #define MBEDTLS_2_8_0  2280
-++#define MBEDTLS_3_0_0  2300
-++#define MBEDTLS_3_6_0  2360
-+ #define MBEDTLS_MAX    2999
-+ 
-+ #ifndef CRYPTLIB
-diff --git a/package/bmx7/0005-towards-mbedtls-3-6-0-support.patch b/package/bmx7/0005-towards-mbedtls-3-6-0-support.patch
++-	process_incoming (self);
+++		process_incoming (self);
+++	} while (count > 0 && !pv->close_sent && !pv->io_closing);
++ 
++ 	if (end) {
++ 		if (!pv->close_sent || !pv->close_received) {
++-- 
++2.34.1
++
+diff --git a/package/libsoup/0007-Fix-using-int-instead-of-size_t.patch b/package/libsoup/0007-Fix-using-int-instead-of-size_t.patch
 new file mode 100644
-index 0000000000..b73976c133
+index 0000000000..b057e8de98
 --- /dev/null
-+++ b/package/bmx7/0005-towards-mbedtls-3-6-0-support.patch
-@@ -0,0 +1,468 @@
-+From d4a53a37f82b43abf9509bcb8922ced6c182e59e Mon Sep 17 00:00:00 2001
-+From: Axel Neumann <axel@notmail.org>
-+Date: Sat, 18 May 2024 07:47:08 +0200
-+Subject: [PATCH] Towards mbedtls-3.6.0 support
++++ b/package/libsoup/0007-Fix-using-int-instead-of-size_t.patch
+@@ -0,0 +1,32 @@
++From 5709dfffb6fdc5b66ce001bf82a755ad8ad1d992 Mon Sep 17 00:00:00 2001
++From: Patrick Griffis <pgriffis@igalia.com>
++Date: Mon, 28 Oct 2024 12:29:48 -0500
++Subject: [PATCH] Fix using int instead of size_t for strcspn return
 +
-+Upstream: https://github.com/bmx-routing/bmx7/commit/d4a53a37f82b43abf9509bcb8922ced6c182e59e
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++CVE: CVE-2025-32050
++Upstream-Status: Backport [https://gitlab.gnome.org/GNOME/libsoup/-/commit/9bb0a55de55c6940ced811a64fbca82fe93a9323]
++
++Upstream: https://git.openembedded.org/meta-openembedded/tree/meta-oe/recipes-support/libsoup/libsoup-2.4/CVE-2025-32050.patch
++
++Signed-off-by: Changqing Li <changqing.li@windriver.com>
++Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 +---
-+ src/crypt.c | 215 +++++++++++++++++++++++++++++++++++++---------------
-+ src/crypt.h |   3 +-
-+ 2 files changed, 154 insertions(+), 64 deletions(-)
++ libsoup/soup-headers.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/src/crypt.c b/src/crypt.c
-+index 9270b75..91543ef 100644
-+--- a/src/crypt.c
-++++ b/src/crypt.c
-+@@ -1,5 +1,5 @@
-+ /*
-+- * Copyright (c) 2010  Axel Neumann
-++ * Copyright (c) 2024  Axel Neumann
-+  * This program is free software; you can redistribute it and/or
-+  * modify it under the terms of version 2 of the GNU General Public
-+  * License as published by the Free Software Foundation.
-+@@ -46,6 +46,7 @@ static CRYPTRSA_T *my_PrivKey = NULL;
-+ #include "mbedtls/config.h"
-+ #elif (CRYPTLIB >= MBEDTLS_3_0_0 && CRYPTLIB < MBEDTLS_MAX)
-+ #include "mbedtls/compat-2.x.h"
-++//#include "mbedtls/md.h"
-+ #endif
++diff --git a/libsoup/soup-headers.c b/libsoup/soup-headers.c
++index 9707ca0..67905b2 100644
++--- a/libsoup/soup-headers.c
+++++ b/libsoup/soup-headers.c
++@@ -902,7 +902,7 @@ append_param_quoted (GString    *string,
++ 		     const char *name,
++ 		     const char *value)
++ {
++-	int len;
+++	gsize len;
 + 
-+ #include "mbedtls/sha256.h"
-+@@ -143,9 +144,7 @@ CRYPTDHM_T *cryptDhmKeyMake(uint8_t keyType, uint8_t attempt)
-+ 	CRYPTDHM_T *key = debugMallocReset(sizeof(CRYPTDHM_T), -300829);
-+ 	mbedtls_dhm_context *dhm = debugMallocReset(sizeof(mbedtls_dhm_context), -300830);
-+ 	int pSize = 0;
-+-	int xSize = 0;
-+-	int gxSize = 0;
-+-	int count = 0;
-++	unsigned char dummyPubKeyBuff[CRYPT_DHM_MAX_LEN];
++ 	g_string_append (string, name);
++ 	g_string_append (string, "=\"");
++-- 
++2.34.1
++
+diff --git a/package/libsoup/0008-Fix-heap-buffer-overflow.patch b/package/libsoup/0008-Fix-heap-buffer-overflow.patch
+new file mode 100644
+index 0000000000..ece24baba2
+--- /dev/null
++++ b/package/libsoup/0008-Fix-heap-buffer-overflow.patch
+@@ -0,0 +1,35 @@
++From f4a67a9a3033586edaee715d40d5992e02d32893 Mon Sep 17 00:00:00 2001
++From: Patrick Griffis <pgriffis@igalia.com>
++Date: Sat, 16 Nov 2024 12:07:30 -0600
++Subject: [PATCH] Fix heap buffer overflow in soup_content_sniffer_sniff
++
++Co-Author: Ar Jun <pkillarjun@protonmail.com>
++
++CVE: CVE-2025-32052
++Upstream-Status: Backport
++[https://gitlab.gnome.org/GNOME/libsoup/-/commit/f182429e5b1fc034050510da20c93256c4fa9652#500da7cfde649872c49169be34b03a1c42a53ddb]
++
++Upstream: https://git.openembedded.org/meta-openembedded/tree/meta-oe/recipes-support/libsoup/libsoup-2.4/CVE-2025-32052.patch
++
++Signed-off-by: Changqing Li <changqing.li@windriver.com>
++Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
++---
++ libsoup/soup-content-sniffer.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/libsoup/soup-content-sniffer.c b/libsoup/soup-content-sniffer.c
++index 9554636..eac9e7b 100644
++--- a/libsoup/soup-content-sniffer.c
+++++ b/libsoup/soup-content-sniffer.c
++@@ -504,7 +504,7 @@ sniff_unknown (SoupContentSniffer *sniffer, SoupBuffer *buffer,
++ 			guint index_pattern = 0;
++ 			gboolean skip_row = FALSE;
 + 
-+ 	key->backendKey = dhm;
++-			while ((index_stream < resource_length) &&
+++			while ((index_stream < resource_length - 1) &&
++ 			       (index_pattern <= type_row->pattern_length)) {
++ 				/* Skip insignificant white space ("WS" in the spec) */
++ 				if (type_row->pattern[index_pattern] == ' ') {
++-- 
++2.34.1
++
+diff --git a/package/libsoup/0009-Fix-heap-buffer-overflow.patch b/package/libsoup/0009-Fix-heap-buffer-overflow.patch
+new file mode 100644
+index 0000000000..440b7c308a
+--- /dev/null
++++ b/package/libsoup/0009-Fix-heap-buffer-overflow.patch
+@@ -0,0 +1,42 @@
++From d9bcffd6cd5e8ec32889a594f7348d67a5101b3a Mon Sep 17 00:00:00 2001
++From: Changqing Li <changqing.li@windriver.com>
++Date: Mon, 12 May 2025 13:58:42 +0800
++Subject: [PATCH] Fix heap buffer overflow in
++ soup-content-sniffer.c:sniff_feed_or_html()
++
++CVE: CVE-2025-32053
++Upstream-Status: Backport [https://gitlab.gnome.org/GNOME/libsoup/-/commit/eaed42ca8d40cd9ab63764e3d63641180505f40a]
++
++Upstream: https://git.openembedded.org/meta-openembedded/tree/meta-oe/recipes-support/libsoup/libsoup-2.4/CVE-2025-32053.patch
++
++Signed-off-by: Changqing Li <changqing.li@windriver.com>
++Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
++---
++ libsoup/soup-content-sniffer.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/libsoup/soup-content-sniffer.c b/libsoup/soup-content-sniffer.c
++index 967ec61..5f2896e 100644
++--- a/libsoup/soup-content-sniffer.c
+++++ b/libsoup/soup-content-sniffer.c
++@@ -620,7 +620,7 @@ skip_insignificant_space (const char *resource, int *pos, int resource_length)
++ 	       (resource[*pos] == '\x0D')) {
++ 		*pos = *pos + 1;
 + 
-+@@ -154,63 +153,57 @@ CRYPTDHM_T *cryptDhmKeyMake(uint8_t keyType, uint8_t attempt)
-+ 	if ((keyLen = cryptDhmKeyLenByType(keyType)) <= 0)
-+ 		goto_error(finish, "Invalid size");
-+ 
-++	mbedtls_mpi dhm_P, dhm_G;
-++	mbedtls_mpi_init(&dhm_P);
-++	mbedtls_mpi_init(&dhm_G);
-++    mbedtls_dhm_init(dhm);
-+ 
-+ 	if (keyType == CRYPT_DHM2048_TYPE) {
-+ 		static const unsigned char modp2048P[(2048/8)] = MBEDTLS_DHM_RFC3526_MODP_2048_P_BIN;
-+ 		static const unsigned char modp2048G[1] = MBEDTLS_DHM_RFC3526_MODP_2048_G_BIN;
-+ 
-+-		if ((ret = mbedtls_mpi_read_binary(&dhm->P, modp2048P, sizeof(modp2048P) )) != 0 || (ret = mbedtls_mpi_read_binary(&dhm->G, modp2048G, sizeof(modp2048G))) != 0)
-+-			goto_error(finish, "Failed reading dhm2048 parameters!");
-++		if (   (ret = mbedtls_mpi_read_binary(&dhm_P, modp2048P, sizeof(modp2048P) )) != 0
-++			|| (ret = mbedtls_mpi_read_binary(&dhm_G, modp2048G, sizeof(modp2048G))) != 0)
-++			goto_error(finish, "Failed setting dhm2048 parameters!");
-+ 
-+ 	} else if (keyType == CRYPT_DHM3072_TYPE) {
-+ 		static const unsigned char modp3072P[(3072/8)] = MBEDTLS_DHM_RFC3526_MODP_3072_P_BIN;
-+ 		static const unsigned char modp3072G[1] = MBEDTLS_DHM_RFC3526_MODP_3072_G_BIN;
-+-		if ((ret = mbedtls_mpi_read_binary(&dhm->P, modp3072P, sizeof(modp3072P) )) != 0 || (ret = mbedtls_mpi_read_binary(&dhm->G, modp3072G, sizeof(modp3072G))) != 0)
-+-			goto_error(finish, "Failed reading dhm3072 parameters!");
-++
-++		if (   (ret = mbedtls_mpi_read_binary(&dhm_P, modp3072P, sizeof(modp3072P) )) != 0
-++			|| (ret = mbedtls_mpi_read_binary(&dhm_G, modp3072G, sizeof(modp3072G))) != 0)
-++			goto_error(finish, "Failed setting dhm3072 parameters!");
-++
-+ 	} else {
-+ 		goto_error(finish, "Unsupported dhm type!");
++-		if (*pos > resource_length)
+++		if (*pos >= resource_length)
++ 			return TRUE;
 + 	}
 + 
-+-	if (mbedtls_mpi_cmp_int(&dhm->P, 0) == 0)
-++	if (mbedtls_mpi_cmp_int(&dhm_P, 0) == 0)
-+ 		goto_error(finish, "Empty dhm->P");
++@@ -682,7 +682,7 @@ sniff_feed_or_html (SoupContentSniffer *sniffer, SoupBuffer *buffer)
++ 		do {
++ 			pos++;
 + 
-+-	// Generate X as large as possible ( < P )
-+-	if ((pSize = mbedtls_mpi_size(&dhm->P)) != keyLen)
-++	if ((pSize = mbedtls_mpi_size(&dhm_P)) != keyLen)
-+ 		goto_error(finish, "Invalid P size");
++-			if (pos > resource_length)
+++			if ((pos + 1) > resource_length)
++ 				goto text_html;
++ 		} while (resource[pos] != '>');
 + 
-+-	do {
-+-		if ((ret = mbedtls_mpi_fill_random(&dhm->X, pSize, mbedtls_ctr_drbg_random, &ctr_drbg)) != 0)
-+-			goto_error(finish, "Failed allocating randomness");
-+-
-+-		while (mbedtls_mpi_cmp_mpi(&dhm->X, &dhm->P) >= 0) {
-+-			if ((ret = mbedtls_mpi_shift_r(&dhm->X, 1)) != 0)
-+-				goto_error(finish, "Failed shifting dhm->X param");
-+-		}
-+-
-+-		if ((ret = count++) > 10)
-+-			goto_error(finish, "Failed creating dhm->X param");
-++#if (CRYPTLIB >= MBEDTLS_2_8_0 && CRYPTLIB < MBEDTLS_3_0_0)
-++#elif (CRYPTLIB >= MBEDTLS_3_0_0 && CRYPTLIB < MBEDTLS_MAX)
-++	if ((pSize = mbedtls_dhm_get_len(dhm)) != keyLen)
-++		goto_error(finish, "Invalid P size");
-++#endif
-+ 
-+-	} while ((ret = _cryptDhmCheckRange(&dhm->X, &dhm->P)) != SUCCESS);
-++	if ((ret = mbedtls_dhm_set_group(dhm, &dhm_P, &dhm_G) != 0))
-++		goto_error(finish, "Failed grouping dhm parameters!");
-+ 
-+-	// Calculate GX = G^X mod P
-+-	if (mbedtls_mpi_exp_mod(&dhm->GX, &dhm->G, &dhm->X, &dhm->P, &dhm->RP) != 0)
-+-		goto_error(finish, "Failed creating GX modulo");
-+-	if (((int) (dhm->len = mbedtls_mpi_size(&dhm->P))) != keyLen)
-+-		goto_error(finish, "Invalid len");
-+-	if ((xSize = mbedtls_mpi_size(&dhm->X)) != keyLen)
-+-		goto_error(finish, "Invalid X size");
-+-	if ((gxSize = mbedtls_mpi_size(&dhm->GX)) != keyLen)
-+-		goto_error(finish, "Invalid GX size");
-+-	if ((ret = _cryptDhmCheckRange(&dhm->GX, &dhm->P)) != SUCCESS)
-+-		goto_error(finish, "Invalid GX range");
-++    if ((ret = mbedtls_dhm_make_public(dhm, (int) keyLen, dummyPubKeyBuff, keyLen,
-++                                       mbedtls_ctr_drbg_random, &ctr_drbg)) != 0)
-++		goto_error(finish, "Failed creating dhm key pair");
-+ 
-+ 	key->rawGXType = keyType;
-+ 	key->rawGXLen = keyLen;
-+ 
-+ finish:
-+ 	dbgf(goto_error_code ? DBGL_SYS : DBGL_CHANGES, goto_error_code ? DBGT_ERR : DBGT_INFO,
-+-		"%s ret=%d keyType=%d keyLen=%d pSize=%d xSize=%d gxSize=%d count=%d attempt=%d",
-+-		goto_error_code, ret, keyType, keyLen, pSize, xSize, gxSize, count, attempt);
-++		"%s ret=%d keyType=%d keyLen=%d pSize=%d attempt=%d",
-++		goto_error_code, ret, keyType, keyLen, pSize, attempt);
-+ 
-+ 	if (goto_error_code) {
-+ 		cryptDhmKeyFree(&key);
-+@@ -222,6 +215,9 @@ CRYPTDHM_T *cryptDhmKeyMake(uint8_t keyType, uint8_t attempt)
-+ 		return NULL;
++-- 
++2.34.1
++
+diff --git a/package/libsoup/0010-headers-Handle-parsing-only-newlines.patch b/package/libsoup/0010-headers-Handle-parsing-only-newlines.patch
+new file mode 100644
+index 0000000000..b6b3f4f37f
+--- /dev/null
++++ b/package/libsoup/0010-headers-Handle-parsing-only-newlines.patch
+@@ -0,0 +1,46 @@
++From 4b8809cca4bbcbf9514314d86227f985362258b0 Mon Sep 17 00:00:00 2001
++From: Patrick Griffis <pgriffis@igalia.com>
++Date: Wed, 12 Feb 2025 11:30:02 -0600
++Subject: [PATCH] headers: Handle parsing only newlines
++
++Closes #404
++Closes #407
++
++CVE: CVE-2025-32906
++Upstream-Status: Backport [https://gitlab.gnome.org/GNOME/libsoup/-/commit/af5b9a4a3945c52b940d5ac181ef51bb12011f1f]
++
++Upstream: https://git.openembedded.org/meta-openembedded/tree/meta-oe/recipes-support/libsoup/libsoup-2.4/CVE-2025-32906.patch
++
++Signed-off-by: Changqing Li <changqing.li@windriver.com>
++[Titouan: Remove changes on test files]
++Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
++---
++ libsoup/soup-headers.c      |  4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/libsoup/soup-headers.c b/libsoup/soup-headers.c
++index e5d3c03..87bb3dc 100644
++--- a/libsoup/soup-headers.c
+++++ b/libsoup/soup-headers.c
++@@ -185,7 +185,7 @@ soup_headers_parse_request (const char          *str,
++ 	/* RFC 2616 4.1 "servers SHOULD ignore any empty line(s)
++ 	 * received where a Request-Line is expected."
++ 	 */
++-	while ((*str == '\r' || *str == '\n') && len > 0) {
+++	while (len > 0 && (*str == '\r' || *str == '\n')) {
++ 		str++;
++ 		len--;
 + 	}
++@@ -369,7 +369,7 @@ soup_headers_parse_response (const char          *str,
++ 	 * after a response, which we then see prepended to the next
++ 	 * response on that connection.
++ 	 */
++-	while ((*str == '\r' || *str == '\n') && len > 0) {
+++	while (len > 0 && (*str == '\r' || *str == '\n')) {
++ 		str++;
++ 		len--;
++ 	}
++
++-- 
++2.34.1
++
+diff --git a/package/libsoup/0011-auth-digest-Handle-missing-realm-nonce.patch b/package/libsoup/0011-auth-digest-Handle-missing-realm-nonce.patch
+new file mode 100644
+index 0000000000..8c7610237d
+--- /dev/null
++++ b/package/libsoup/0011-auth-digest-Handle-missing-realm-nonce.patch
+@@ -0,0 +1,35 @@
++From a7e711d0f162c6edc8acad2a96981d4890784ea3 Mon Sep 17 00:00:00 2001
++From: Changqing Li <changqing.li@windriver.com>
++Date: Mon, 12 May 2025 17:02:55 +0800
++Subject: [PATCH] auth-digest: Handle missing realm/nonce in authenticate
++ header
++
++CVE: CVE-2025-32910
++Upstream-Status: Backport [https://gitlab.gnome.org/GNOME/libsoup/-/merge_requests/417/diffs?commit_id=e40df6d48a1cbab56f5d15016cc861a503423cfe]
++
++Upstream: https://git.openembedded.org/meta-openembedded/tree/meta-oe/recipes-support/libsoup/libsoup-2.4/CVE-2025-32910-1.patch
++
++Signed-off-by: Changqing Li <changqing.li@windriver.com>
++Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
++---
++ libsoup/soup-auth-digest.c |  3 +++
++ 1 files changed, 3 insertions(+)
++
++diff --git a/libsoup/soup-auth-digest.c b/libsoup/soup-auth-digest.c
++index e8ba990..0ab3499 100644
++--- a/libsoup/soup-auth-digest.c
+++++ b/libsoup/soup-auth-digest.c
++@@ -142,6 +142,9 @@ soup_auth_digest_update (SoupAuth *auth, SoupMessage *msg,
++ 	guint qop_options;
++ 	gboolean ok = TRUE;
 + 
-++	mbedtls_mpi_free(&dhm_G);
-++	mbedtls_mpi_free(&dhm_P);
+++	 if (!soup_auth_get_realm (auth))
+++		return FALSE;
 ++
-+ 	return key;
++ 	g_free (priv->domain);
++ 	g_free (priv->nonce);
++ 	g_free (priv->opaque);
++ 
++-- 
++2.34.1
++
+diff --git a/package/libsoup/0012-auth-digest-Handle-missing-nonce.patch b/package/libsoup/0012-auth-digest-Handle-missing-nonce.patch
+new file mode 100644
+index 0000000000..7749491fd3
+--- /dev/null
++++ b/package/libsoup/0012-auth-digest-Handle-missing-nonce.patch
+@@ -0,0 +1,97 @@
++From eccfca1074fc485a0b60dfb9c8385429a226bf73 Mon Sep 17 00:00:00 2001
++From: Changqing Li <changqing.li@windriver.com>
++Date: Fri, 16 May 2025 13:19:38 +0800
++Subject: [PATCH] auth-digest: Handle missing nonce
++
++CVE: CVE-2025-32910
++Upstream-Status: Backport [https://gitlab.gnome.org/GNOME/libsoup/-/merge_requests/417/diffs?commit_id=405a8a34597a44bd58c4759e7d5e23f02c3b556a]
++
++Upstream: https://git.openembedded.org/meta-openembedded/tree/meta-oe/recipes-support/libsoup/libsoup-2.4/CVE-2025-32910-2.patch
++
++Signed-off-by: Changqing Li <changqing.li@windriver.com>
++Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
++---
++ libsoup/soup-auth-digest.c | 45 ++++++++++++++++++++++++++++----------
++ 1 files changed, 28 insertions(+), 10 deletions(-)
++
++diff --git a/libsoup/soup-auth-digest.c b/libsoup/soup-auth-digest.c
++index 0ab3499..10a8591 100644
++--- a/libsoup/soup-auth-digest.c
+++++ b/libsoup/soup-auth-digest.c
++@@ -132,6 +132,19 @@ soup_auth_digest_get_qop (SoupAuthDigestQop qop)
++ 	return g_string_free (out, FALSE);
 + }
 + 
-+@@ -231,9 +227,14 @@ void cryptDhmPubKeyGetRaw(CRYPTDHM_T* key, uint8_t* buff, uint16_t buffLen)
-+ 		"Failed: key=%d buff=%d buffLen=%d key.GXLen=%d", !!key, !!buff, buffLen, key ? key->rawGXLen : 0);
-+ 
-+ 	mbedtls_dhm_context *dhm = key->backendKey;
-+-
-++#if (CRYPTLIB >= MBEDTLS_2_8_0 && CRYPTLIB < MBEDTLS_3_0_0)
-+ 	assertion_dbg(-502720, (dhm && buffLen == mbedtls_mpi_size(&dhm->GX) && buffLen == dhm->len),
-+ 		"Failed: dhm.GXlen=%zd dhm.len=%zd", dhm ? mbedtls_mpi_size(&dhm->GX) : 0, dhm ? dhm->len : 0);
-++#elif (CRYPTLIB >= MBEDTLS_3_0_0 && CRYPTLIB < MBEDTLS_MAX)
-++	assertion_dbg(-502720, (dhm && buffLen == mbedtls_dhm_get_len(dhm)),
-++		"Failed: dhm.len=%zd", dhm ? mbedtls_dhm_get_len(dhm) : 0);
-++#endif
+++static gboolean
+++validate_params (SoupAuthDigest *auth_digest)
+++{
+++	SoupAuthDigestPrivate *priv = soup_auth_digest_get_instance_private (auth_digest);
 ++
-+ 
-+ 	mbedtls_mpi_write_binary(&dhm->GX, buff, key->rawGXLen);
-+ }
-+@@ -256,6 +257,7 @@ IDM_T cryptDhmKeyCheck(CRYPTDHM_T *key)
-+ 		goto_error(finish, "Missing type");
-+ 	if ((keyLen = cryptDhmKeyLenByType(keyType)) <= 0)
-+ 		goto_error(finish, "Invalid size");
-++#if (CRYPTLIB >= MBEDTLS_2_8_0 && CRYPTLIB < MBEDTLS_3_0_0)
-+ 	if ((int) dhm->len != keyLen)
-+ 		goto_error(finish, "Invalid len");
-+ 	if ((pSize = mbedtls_mpi_size(&dhm->P)) != keyLen)
-+@@ -270,6 +272,10 @@ IDM_T cryptDhmKeyCheck(CRYPTDHM_T *key)
-+ 		goto_error(finish, "Invalid GX range");
-+ 	if (_cryptDhmCheckRange(&dhm->GY, &dhm->P) != SUCCESS)
-+ 		goto_error(finish, "Invalid GY range");
-++#elif (CRYPTLIB >= MBEDTLS_3_0_0 && CRYPTLIB < MBEDTLS_MAX)
-++	if ((pSize = mbedtls_dhm_get_len(dhm)) != keyLen)
-++		goto_error(finish, "Invalid len");
-++#endif
-+ 
-+ 	return SUCCESS;
-+ 
-+@@ -293,10 +299,17 @@ CRYPTSHA_T *cryptDhmSecretForNeigh(CRYPTDHM_T *myDhm, uint8_t *neighRawKey, uint
-+ 	if (!myDhm || !(dhm = myDhm->backendKey) || !myDhm->rawGXType)
-+ 		goto_error(finish, "Disabled dhm link signing");
-+ 
-+-	if (((keyType = cryptDhmKeyTypeByLen(neighRawKeyLen)) != myDhm->rawGXType) || ((n = dhm->len) != neighRawKeyLen) || (sizeof(buff) < neighRawKeyLen))
-+-		goto_error(finish, "Wrong type or keyLength");
-++	if (((keyType = cryptDhmKeyTypeByLen(neighRawKeyLen)) != myDhm->rawGXType))
-++		goto_error(finish, "Wrong type");
-+ 
-+-	if ((ret = mbedtls_mpi_read_binary(&dhm->GY, neighRawKey, neighRawKeyLen)) != 0)
-++#if (CRYPTLIB >= MBEDTLS_2_8_0 && CRYPTLIB < MBEDTLS_3_0_0)
-++	if (((n = dhm->len) != neighRawKeyLen) || (sizeof(buff) < neighRawKeyLen))
-++		goto_error(finish, "Wrong keyLength");
-++#elif (CRYPTLIB >= MBEDTLS_3_0_0 && CRYPTLIB < MBEDTLS_MAX)
-++	if (((n = mbedtls_dhm_get_len(dhm)) != neighRawKeyLen) || (sizeof(buff) < neighRawKeyLen))
-++		goto_error(finish, "Wrong keyLength");
-++#endif
-++	if ((ret = mbedtls_dhm_read_public(dhm, neighRawKey, neighRawKeyLen)) != 0)
-+ 		goto_error(finish, "Invalid GY");
-+ 
-+ 	if (cryptDhmKeyCheck(myDhm) != SUCCESS)
-+@@ -311,14 +324,13 @@ CRYPTSHA_T *cryptDhmSecretForNeigh(CRYPTDHM_T *myDhm, uint8_t *neighRawKey, uint
-+ 	secret = debugMallocReset(sizeof(CRYPTSHA_T), -300831);
-+ 	cryptShaAtomic(buff, n, secret);
-+ 
-+-
-+ finish:
-+ 	{
-+ 		dbgf(((goto_error_code || n != neighRawKeyLen) ? DBGL_SYS : DBGL_CHANGES), ((goto_error_code || n != neighRawKeyLen) ? DBGT_WARN : DBGT_INFO),
-+ 		"%s n=%zd neighKeyLen=%d myKeyLen=%d", goto_error_code, n, neighRawKeyLen, myDhm->rawGXLen);
-+ 
-+-		mbedtls_mpi_free(&dhm->GY);
-+-		mbedtls_mpi_free(&dhm->K);
-++//		mbedtls_mpi_free(&dhm->GY);
-++//		mbedtls_mpi_free(&dhm->K);
-+ 		memset(buff, 0, sizeof(buff));
-+ 		return secret; }
-+ }
-+@@ -345,12 +357,21 @@ int cryptRsaPubKeyGetRaw(CRYPTRSA_T *key, uint8_t *buff, uint16_t buffLen)
-+ 	mbedtls_rsa_context *rsa;
-+ 	if (!key || !buff || !buffLen ||
-+ 		!key->rawKeyType || (buffLen != key->rawKeyLen) ||
-+-		!(rsa = (mbedtls_rsa_context*) key->backendKey) || buffLen != mbedtls_mpi_size(&rsa->N) || buffLen != rsa->len) {
-++		!(rsa = (mbedtls_rsa_context*) key->backendKey) ||
-++#if (CRYPTLIB >= MBEDTLS_2_8_0 && CRYPTLIB < MBEDTLS_3_0_0)
-++		buffLen != mbedtls_mpi_size(&rsa->N) || buffLen != rsa->len ||
-++#elif (CRYPTLIB >= MBEDTLS_3_0_0 && CRYPTLIB < MBEDTLS_MAX)
-++#endif
-++		buffLen != mbedtls_rsa_get_len(rsa)
-++	   ) {
-+ 
-+ 		return FAILURE;
-+ 	}
-+ 
-+-	if (mbedtls_mpi_write_binary(&rsa->N, buff, buffLen) != 0)
-++	mbedtls_mpi mpi_N;
-++	mbedtls_mpi_init(&mpi_N);
-++	mbedtls_rsa_export(rsa, &mpi_N, NULL, NULL, NULL, NULL);
-++	if (mbedtls_mpi_write_binary(&mpi_N, buff, buffLen) != 0)
-+ 		return FAILURE;
-+ 
-+ 	return SUCCESS;
-+@@ -368,10 +389,11 @@ CRYPTRSA_T *cryptRsaPubKeyFromRaw(uint8_t *rawKey, uint16_t rawKeyLen)
-+ 	cryptKey->backendKey = debugMalloc(sizeof(mbedtls_rsa_context), -300620);
-+ 
-+ 	mbedtls_rsa_context *rsa = (mbedtls_rsa_context*) cryptKey->backendKey;
-++	mbedtls_mpi rsa_N, rsa_E;
-+ 
-+-	mbedtls_rsa_init(rsa, MBEDTLS_RSA_PKCS_V15, 0);
-+-
-+-
-++#if (CRYPTLIB >= MBEDTLS_2_8_0 && CRYPTLIB < MBEDTLS_3_0_0)
-++	mbedtls_rsa_init(rsa, MBEDTLS_RSA_PKCS_V15, MBEDTLS_MD_NONE);
-++	/*
-+ 	if (
-+ 		(mbedtls_mpi_read_binary(&rsa->N, rawKey, rawKeyLen)) ||
-+ 		(mbedtls_mpi_read_binary(&rsa->E, (uint8_t*) & e, sizeof(e)))
-+@@ -379,8 +401,23 @@ CRYPTRSA_T *cryptRsaPubKeyFromRaw(uint8_t *rawKey, uint16_t rawKeyLen)
-+ 		cryptRsaKeyFree(&cryptKey);
-+ 		return NULL;
-+ 	}
-++	*/
-++#elif (CRYPTLIB >= MBEDTLS_3_0_0 && CRYPTLIB < MBEDTLS_MAX)
-++	mbedtls_rsa_init(rsa);
-++#endif
-++	mbedtls_mpi_init(&rsa_N);
-++	mbedtls_mpi_init(&rsa_E);
+++	if (priv->qop || priv->algorithm == SOUP_AUTH_DIGEST_ALGORITHM_MD5_SESS) {
+++		if (!priv->nonce)
+++			return FALSE;
+++	}
 ++
-++	if (
-++		(mbedtls_mpi_read_binary(&rsa_N, rawKey, rawKeyLen)) ||
-++		(mbedtls_mpi_read_binary(&rsa_E, (uint8_t*)&e, sizeof(e))) ||
-++		(mbedtls_rsa_import(rsa, &rsa_N, NULL, NULL, NULL, &rsa_E))
-++	) {
-++		cryptRsaKeyFree(&cryptKey);
-++		return NULL;
+++	return TRUE;
+++}
+++
++ static gboolean
++ soup_auth_digest_update (SoupAuth *auth, SoupMessage *msg,
++ 			 GHashTable *auth_params)
++@@ -169,17 +182,22 @@ soup_auth_digest_update (SoupAuth *auth, SoupMessage *msg,
++ 	if (priv->algorithm == -1)
++ 		ok = FALSE;
++ 
++-	stale = g_hash_table_lookup (auth_params, "stale");
++-	if (stale && !g_ascii_strcasecmp (stale, "TRUE") && *priv->hex_urp)
++-		recompute_hex_a1 (priv);
++-	else {
++-		g_free (priv->user);
++-		priv->user = NULL;
++-		g_free (priv->cnonce);
++-		priv->cnonce = NULL;
++-		memset (priv->hex_urp, 0, sizeof (priv->hex_urp));
++-		memset (priv->hex_a1, 0, sizeof (priv->hex_a1));
++-        }
+++	if (!validate_params (auth_digest))
+++		ok = FALSE;
+++
+++	if (ok) {
+++		stale = g_hash_table_lookup (auth_params, "stale");
+++		if (stale && !g_ascii_strcasecmp (stale, "TRUE") && *priv->hex_urp)
+++			recompute_hex_a1 (priv);
+++		else {
+++			g_free (priv->user);
+++			priv->user = NULL;
+++			g_free (priv->cnonce);
+++			priv->cnonce = NULL;
+++			memset (priv->hex_urp, 0, sizeof (priv->hex_urp));
+++			memset (priv->hex_a1, 0, sizeof (priv->hex_a1));
+++		}
 ++	}
 + 
-+-	rsa->len = rawKeyLen;
-++	assertion(-500000, (mbedtls_rsa_get_len(rsa) == rawKeyLen));
-+ 	cryptKey->rawKeyLen = rawKeyLen;
-+ 	cryptKey->rawKeyType = cryptRsaKeyTypeByLen(rawKeyLen);
++ 	return ok;
++ }
++@@ -359,6 +377,8 @@ soup_auth_digest_compute_response (const char        *method,
++ 	if (qop) {
++ 		char tmp[9];
 + 
-+@@ -401,9 +438,16 @@ int cryptRsaPubKeyCheck(CRYPTRSA_T *pubKey)
-+ 	assertion(-502142, (pubKey->backendKey));
-+ 
-+ 	mbedtls_rsa_context *rsa = (mbedtls_rsa_context*) pubKey->backendKey;
-++	size_t len = mbedtls_rsa_get_len(rsa);
-+ 
-+-	if (!rsa->len || (int) rsa->len != cryptRsaKeyLenByType(pubKey->rawKeyType) || rsa->len != pubKey->rawKeyLen || rsa->len != mbedtls_mpi_size(&rsa->N) ||
-+-		mbedtls_rsa_check_pubkey((mbedtls_rsa_context*) pubKey->backendKey)) {
-++	if (   !len
-++	    || (int) len != cryptRsaKeyLenByType(pubKey->rawKeyType)
-++		|| len != pubKey->rawKeyLen
-++#if (CRYPTLIB >= MBEDTLS_2_8_0 && CRYPTLIB < MBEDTLS_3_0_0)
-++		|| len != mbedtls_mpi_size(&rsa->N)
-++#elif (CRYPTLIB >= MBEDTLS_3_0_0 && CRYPTLIB < MBEDTLS_MAX)
-++#endif
-++		|| mbedtls_rsa_check_pubkey((mbedtls_rsa_context*) pubKey->backendKey)) {
-+ 
-+ 		return FAILURE;
-+ 	}
-+@@ -462,10 +506,18 @@ CRYPTRSA_T *cryptRsaKeyFromDer(char *keyPath)
-+ 
-+ 	mbedtls_pk_context pk;
-+ 	mbedtls_pk_init(&pk);
-+-	mbedtls_rsa_init(rsa, MBEDTLS_RSA_PKCS_V15, 0);
-++#if (CRYPTLIB >= MBEDTLS_2_8_0 && CRYPTLIB < MBEDTLS_3_0_0)
-++	mbedtls_rsa_init(rsa, MBEDTLS_RSA_PKCS_V15, MBEDTLS_MD_NONE);
-++#elif (CRYPTLIB >= MBEDTLS_3_0_0 && CRYPTLIB < MBEDTLS_MAX)
-++	mbedtls_rsa_init(rsa);
-++#endif
-+ 
-+ 	if (
-+-		((ret = mbedtls_pk_parse_keyfile(&pk, keyPath, "")) != 0) ||
-++#if (CRYPTLIB >= MBEDTLS_2_8_0 && CRYPTLIB < MBEDTLS_3_0_0)
-++			((ret = mbedtls_pk_parse_keyfile(&pk, keyPath, "")) != 0) ||
-++#elif (CRYPTLIB >= MBEDTLS_3_0_0 && CRYPTLIB < MBEDTLS_MAX)
-++			((ret = mbedtls_pk_parse_keyfile(&pk, keyPath, "", mbedtls_ctr_drbg_random, &ctr_drbg)) != 0) ||
-++#endif
-+ 		((ret = mbedtls_rsa_copy(rsa, mbedtls_pk_rsa(pk))) != 0) ||
-+ 		((ret = mbedtls_rsa_check_privkey(rsa)) != 0)
-+ 		) {
-+@@ -478,9 +530,8 @@ CRYPTRSA_T *cryptRsaKeyFromDer(char *keyPath)
-+ 
-+ 
-+ 	//cryptKeyAddRaw(ckey);
-+-
-+ 	if (
-+-		((keyLen = mbedtls_mpi_size(&rsa->N)) <= 0) ||
-++		((keyLen = mbedtls_rsa_get_len(rsa)) <= 0) ||
-+ 		!(keyType = cryptRsaKeyTypeByLen(keyLen)) ||
-+ 		!(privKey->rawKeyType = keyType) ||
-+ 		!(privKey->rawKeyLen = keyLen) ||
-+@@ -490,6 +541,10 @@ CRYPTRSA_T *cryptRsaKeyFromDer(char *keyPath)
-+ 		cryptRsaKeyFree(&privKey);
-+ 		return NULL;
-+ 	}
-++#if (CRYPTLIB >= MBEDTLS_2_8_0 && CRYPTLIB < MBEDTLS_3_0_0)
-++	assertion(-502723, (((int)mbedtls_mpi_size(&rsa->N)) == keyLen));
-++#elif (CRYPTLIB >= MBEDTLS_3_0_0 && CRYPTLIB < MBEDTLS_MAX)
-++#endif
-+ 
-+ 	my_PrivKey = privKey;
-+ 	return pubKey;
-+@@ -565,7 +620,12 @@ CRYPTRSA_T *cryptRsaKeyMake(uint8_t keyType)
-+ 	CRYPTRSA_T *key = debugMallocReset(sizeof(CRYPTRSA_T), -300642);
-+ 
-+ 	mbedtls_rsa_context *rsa = debugMallocReset(sizeof(mbedtls_rsa_context), -300643);
-+-	mbedtls_rsa_init(rsa, MBEDTLS_RSA_PKCS_V15, 0);
+++		g_assert (cnonce);
 ++
-++#if (CRYPTLIB >= MBEDTLS_2_8_0 && CRYPTLIB < MBEDTLS_3_0_0)
-++	mbedtls_rsa_init(rsa, MBEDTLS_RSA_PKCS_V15, MBEDTLS_MD_NONE);
-++#elif (CRYPTLIB >= MBEDTLS_3_0_0 && CRYPTLIB < MBEDTLS_MAX)
-++	mbedtls_rsa_init(rsa);
-++#endif
++ 		g_snprintf (tmp, 9, "%.8x", nc);
++ 		g_checksum_update (checksum, (guchar *)tmp, strlen (tmp));
++ 		g_checksum_update (checksum, (guchar *)":", 1);
++@@ -422,6 +442,9 @@ soup_auth_digest_get_authorization (SoupAuth *auth, SoupMessage *msg)
++ 	g_return_val_if_fail (uri != NULL, NULL);
++ 	url = soup_uri_to_string (uri, TRUE);
 + 
-+ 	if ((ret = mbedtls_rsa_gen_key(rsa, mbedtls_ctr_drbg_random, &ctr_drbg, (keyLen * 8), CRYPT_KEY_E_VAL)))
-+ 		goto_error(finish, "Failed making rsa key!");
-+@@ -591,30 +651,37 @@ CRYPTRSA_T *cryptRsaKeyMake(uint8_t keyType)
-+ 
-+ int cryptRsaEncrypt(uint8_t *in, size_t inLen, uint8_t *out, size_t *outLen, CRYPTRSA_T *pubKey)
-+ {
-+-
-+ 	mbedtls_rsa_context *pk = pubKey->backendKey;
-+-
-+-	assertion(-502723, (mbedtls_mpi_size(&pk->N) == pubKey->rawKeyLen));
-+ 	assertion(-502145, (*outLen >= pubKey->rawKeyLen));
-++	assertion(-502723, (mbedtls_rsa_get_len(pk) == pubKey->rawKeyLen));
-+ 
-++#if (CRYPTLIB >= MBEDTLS_2_8_0 && CRYPTLIB < MBEDTLS_3_0_0)
-+ 	if (mbedtls_rsa_pkcs1_encrypt(pk, mbedtls_ctr_drbg_random, &ctr_drbg, MBEDTLS_RSA_PUBLIC, inLen, in, out))
-+ 		return FAILURE;
-++#elif (CRYPTLIB >= MBEDTLS_3_0_0 && CRYPTLIB < MBEDTLS_MAX)
-++	if (mbedtls_rsa_pkcs1_encrypt(pk, mbedtls_ctr_drbg_random, &ctr_drbg, inLen, in, out))
-++		return FAILURE;
-++#endif
-+ 
-+ 	*outLen = pubKey->rawKeyLen;
-+ 
-+ 	return SUCCESS;
-+-
-+ }
-+ 
-+ int cryptRsaDecrypt(uint8_t *in, size_t inLen, uint8_t *out, size_t *outLen)
-+ {
-+-
-+ 	mbedtls_rsa_context *pk = my_PrivKey->backendKey;
-++	assertion(-502146, (inLen >= my_PrivKey->rawKeyLen));
-++	assertion(-502724, (mbedtls_rsa_get_len(pk) == my_PrivKey->rawKeyLen));
-+ 
-++#if (CRYPTLIB >= MBEDTLS_2_8_0 && CRYPTLIB < MBEDTLS_3_0_0)
-+ 	assertion(-502724, (mbedtls_mpi_size(&pk->N) == my_PrivKey->rawKeyLen));
-+-	assertion(-502146, (inLen >= my_PrivKey->rawKeyLen));
-+ 	if (mbedtls_rsa_pkcs1_decrypt(pk, mbedtls_ctr_drbg_random, &ctr_drbg, MBEDTLS_RSA_PRIVATE, &inLen, in, out, *outLen))
-+ 		return FAILURE;
-++#elif (CRYPTLIB >= MBEDTLS_3_0_0 && CRYPTLIB < MBEDTLS_MAX)
-++	if (mbedtls_rsa_pkcs1_decrypt(pk, mbedtls_ctr_drbg_random, &ctr_drbg, &inLen, in, out, *outLen))
-++		return FAILURE;
-++#endif
-+ 	*outLen = inLen;
-+ 
-+ 	return SUCCESS;
-+@@ -631,8 +698,13 @@ int cryptRsaSign(CRYPTSHA_T *inSha, uint8_t *out, size_t outLen, CRYPTRSA_T *cry
-+ 	if (outLen < cryptKey->rawKeyLen)
-+ 		return FAILURE;
-+ 
-++#if (CRYPTLIB >= MBEDTLS_2_8_0 && CRYPTLIB < MBEDTLS_3_0_0)
-+ 	if (mbedtls_rsa_pkcs1_sign(pk, mbedtls_ctr_drbg_random, &ctr_drbg, MBEDTLS_RSA_PRIVATE, MBEDTLS_MD_SHA224, sizeof(CRYPTSHA_T), (uint8_t*) inSha, out))
-+ 		return FAILURE;
-++#elif (CRYPTLIB >= MBEDTLS_3_0_0 && CRYPTLIB < MBEDTLS_MAX)
-++	if (mbedtls_rsa_pkcs1_sign(pk, mbedtls_ctr_drbg_random, &ctr_drbg, MBEDTLS_MD_SHA224, sizeof(CRYPTSHA_T), (uint8_t*) inSha, out))
-++		return FAILURE;
-++#endif
-+ 
-+ 	return SUCCESS;
-+ }
-+@@ -643,9 +715,26 @@ int cryptRsaVerify(uint8_t *sign, size_t signLen, CRYPTSHA_T *plainSha, CRYPTRSA
-+ 	mbedtls_rsa_context *pk = pubKey->backendKey;
-+ 
-+ 	assertion(-502147, (signLen == pubKey->rawKeyLen));
-++/*
-++    mbedtls_rsa_context rsa;
-++    mbedtls_mpi N, E;
-++    mbedtls_rsa_init(&rsa);
-++    mbedtls_mpi_init(&N);
-++    mbedtls_mpi_init(&E);
+++	g_assert (priv->nonce);
+++	g_assert (!priv->qop || priv->cnonce);
 ++
-++    if ((ret = mbedtls_mpi_read_file(&N, 16, f)) != 0 ||
-++        (ret = mbedtls_mpi_read_file(&E, 16, f)) != 0 ||
-++        (ret = mbedtls_rsa_import(&rsa, &N, NULL, NULL, NULL, &E) != 0))
-++    	return FAILURE;
-++*/
++ 	soup_auth_digest_compute_response (msg->method, url, priv->hex_a1,
++ 					   priv->qop, priv->nonce,
++ 					   priv->cnonce, priv->nc,
 + 
-++#if (CRYPTLIB >= MBEDTLS_2_8_0 && CRYPTLIB < MBEDTLS_3_0_0)
-+ 	if (mbedtls_rsa_pkcs1_verify(pk, mbedtls_ctr_drbg_random, &ctr_drbg, MBEDTLS_RSA_PUBLIC, MBEDTLS_MD_SHA224, sizeof(CRYPTSHA_T), (uint8_t*) plainSha, sign))
-+ 		return FAILURE;
-++#elif (CRYPTLIB >= MBEDTLS_3_0_0 && CRYPTLIB < MBEDTLS_MAX)
-++	if (mbedtls_rsa_pkcs1_verify(pk, MBEDTLS_MD_SHA224, sizeof(CRYPTSHA_T), (uint8_t*) plainSha, sign))
-++		return FAILURE;
-++#endif
-+ 
-+ 	return SUCCESS;
-+ }
-+@@ -776,7 +865,7 @@ void cryptShaFinal(CRYPTSHA_T *sha)
-+ #if (CRYPTLIB >= MBEDTLS_2_8_0 && CRYPTLIB < MBEDTLS_3_0_0)
-+ 	mbedtls_sha256_finish_ret(&sha_ctx, output);
-+ #else
-+-	mbedtls_sha256_finish(&sha_ctx, output;)
-++	mbedtls_sha256_finish(&sha_ctx, output);
-+ #endif
-+ 	memcpy(sha, output, sizeof(CRYPTSHA_T));
-+ 	memset(output, 0, sizeof(output));
-+diff --git a/src/crypt.h b/src/crypt.h
-+index da34d4e..119c788 100644
-+--- a/src/crypt.h
-++++ b/src/crypt.h
-+@@ -1,5 +1,5 @@
-+ /*
-+- * Copyright (c) 2010  Axel Neumann
-++ * Copyright (c) 2024  Axel Neumann
-+  * This program is free software; you can redistribute it and/or
-+  * modify it under the terms of version 2 of the GNU General Public
-+  * License as published by the Free Software Foundation.
-+@@ -30,6 +30,7 @@
-+ 
-+ #ifndef CRYPTLIB
-+ #define CRYPTLIB MBEDTLS_2_8_0
-++//#define CRYPTLIB MBEDTLS_3_6_0
-+ #endif
-+ 
-+ #define CRYPT_DER_BUF_SZ 16000
-diff --git a/package/bmx7/0006-support-mbedtls-3-6-0-also-disable-no-further-supported.patch b/package/bmx7/0006-support-mbedtls-3-6-0-also-disable-no-further-supported.patch
++-- 
++2.34.1
++
+diff --git a/package/libsoup/0013-auth-digest-Fix-leak.patch b/package/libsoup/0013-auth-digest-Fix-leak.patch
 new file mode 100644
-index 0000000000..6fb67096f1
+index 0000000000..b7d5ec4de3
 --- /dev/null
-+++ b/package/bmx7/0006-support-mbedtls-3-6-0-also-disable-no-further-supported.patch
-@@ -0,0 +1,396 @@
-+From fb45b7d30899ee295a0580cdab6710b510150f73 Mon Sep 17 00:00:00 2001
-+From: Axel Neumann <axel@notmail.org>
-+Date: Sat, 18 May 2024 14:00:49 +0200
-+Subject: [PATCH] Support mbedtls-3.6.0 Also disable no-further-supported
-+ RSA896
++++ b/package/libsoup/0013-auth-digest-Fix-leak.patch
+@@ -0,0 +1,31 @@
++From 74c95d54fe42041fe161cb74c76d942ffd37a5dd Mon Sep 17 00:00:00 2001
++From: Changqing Li <changqing.li@windriver.com>
++Date: Fri, 16 May 2025 13:21:43 +0800
++Subject: [PATCH] auth-digest: Fix leak
 +
-+Upstream: https://github.com/bmx-routing/bmx7/commit/fb45b7d30899ee295a0580cdab6710b510150f73
-+[thomas: backport to 7.1.1]
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++CVE: CVE-2025-32910
++Upstream-Status: Backport [https://gitlab.gnome.org/GNOME/libsoup/-/merge_requests/417/diffs?commit_id=ea16eeacb052e423eb5c3b0b705e5eab34b13832]
++
++Upstream: https://git.openembedded.org/meta-openembedded/tree/meta-oe/recipes-support/libsoup/libsoup-2.4/CVE-2025-32910-3.patch
++
++Signed-off-by: Changqing Li <changqing.li@windriver.com>
++Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 +---
-+ src/Common.mk |  2 +-
-+ src/crypt.c   | 71 ++++++++++++++++++++++++---------------------------
-+ src/crypt.h   |  4 +--
-+ src/msg.c     |  6 ++---
-+ src/sec.c     | 28 ++++++++++++--------
-+ src/sec.h     | 18 ++++++-------
-+ 6 files changed, 67 insertions(+), 62 deletions(-)
++ libsoup/soup-auth-digest.c | 1 +
++ 1 file changed, 1 insertion(+)
 +
-+diff --git a/src/Common.mk b/src/Common.mk
-+index 32b2d34..c73df44 100644
-+--- a/src/Common.mk
-++++ b/src/Common.mk
-+@@ -2,7 +2,7 @@ GIT_REV ?= $(shell [ -r .git ] && git --no-pager log -n 1 --oneline | cut -d " "
++diff --git a/libsoup/soup-auth-digest.c b/libsoup/soup-auth-digest.c
++index 10a8591..6d965d2 100644
++--- a/libsoup/soup-auth-digest.c
+++++ b/libsoup/soup-auth-digest.c
++@@ -66,6 +66,7 @@ soup_auth_digest_finalize (GObject *object)
++ 	g_free (priv->nonce);
++ 	g_free (priv->domain);
++ 	g_free (priv->cnonce);
+++	g_free (priv->opaque);
++ 
++ 	memset (priv->hex_urp, 0, sizeof (priv->hex_urp));
++ 	memset (priv->hex_a1, 0, sizeof (priv->hex_a1));
++-- 
++2.34.1
 +
-+ CFLAGS += -pedantic -W -Wall -Wstrict-prototypes -Wno-unused-parameter -Os -g3 -std=gnu99 -DGIT_REV=\"$(GIT_REV)\"
-+ # CFLAGS += -DHAVE_CONFIG_H
-+-# CFLAGS += -DCRYPTLIB=MBEDTLS_2_4_0 # POLARSSL_1_2_5 POLARSSL_1_2_9 POLARSSL_1_3_3 POLARSSL_1_3_4 CYASSL_2_8_0
-++# CFLAGS += -DCRYPTLIB=MBEDTLS_2_8_0 # -DCRYPTLIB=MBEDTLS_3_6_0
+diff --git a/package/libsoup/0014-CVE-2025-32911.patch b/package/libsoup/0014-CVE-2025-32911.patch
+new file mode 100644
+index 0000000000..102acb4af3
+--- /dev/null
++++ b/package/libsoup/0014-CVE-2025-32911.patch
+@@ -0,0 +1,77 @@
++From 52c5859b82fe79f2c32d883e048d218e0d7f2182 Mon Sep 17 00:00:00 2001
++From: Changqing Li <changqing.li@windriver.com>
++Date: Wed, 30 Apr 2025 14:59:55 +0800
++Subject: [PATCH] CVE-2025-32911
 +
-+ # optional defines:
-+ # CFLAGS += -static
-+diff --git a/src/crypt.c b/src/crypt.c
-+index 91543ef..69918a1 100644
-+--- a/src/crypt.c
-++++ b/src/crypt.c
-+@@ -66,18 +66,16 @@ static mbedtls_sha256_context sha_ctx;
++CVE: CVE-2025-32911 CVE-2025-32913
++Upstream-Status: Backport [https://gitlab.gnome.org/GNOME/libsoup/-/merge_requests/422/commits]
 +
-+ uint8_t cryptDhmKeyTypeByLen(int len)
-+ {
-+-	return len == CRYPT_DHM1024_LEN ? CRYPT_DHM1024_TYPE : (
-+-		len == CRYPT_DHM2048_LEN ? CRYPT_DHM2048_TYPE : (
-++	return len == CRYPT_DHM2048_LEN ? CRYPT_DHM2048_TYPE : (
-+ 		len == CRYPT_DHM3072_LEN ? CRYPT_DHM3072_TYPE : (
-+-		0)));
-++		0));
-+ }
++Upstream: https://git.openembedded.org/meta-openembedded/tree/meta-oe/recipes-support/libsoup/libsoup-2.4/0001-CVE-2025-32911.patch
 +
-+ uint16_t cryptDhmKeyLenByType(int type)
-+ {
-+-	return type == CRYPT_DHM1024_TYPE ? CRYPT_DHM1024_LEN : (
-+-		type == CRYPT_DHM2048_TYPE ? CRYPT_DHM2048_LEN : (
-++	return type == CRYPT_DHM2048_TYPE ? CRYPT_DHM2048_LEN : (
-+ 		type == CRYPT_DHM3072_TYPE ? CRYPT_DHM3072_LEN : (
-+-		0)));
-++		0));
-+ }
++Signed-off-by: Changqing Li <changqing.li@windriver.com>
++Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
++---
++ libsoup/soup-message-headers.c | 13 +++++++++----
++ tests/header-parsing-test.c    | 15 +++++++++++++++
++ 2 files changed, 24 insertions(+), 4 deletions(-)
 +
-+ char *cryptDhmKeyTypeAsString(int type)
-+@@ -104,6 +102,7 @@ void cryptDhmKeyFree(CRYPTDHM_T **cryptKey)
-+ 	*cryptKey = NULL;
-+ }
-+
-++#if (CRYPTLIB >= MBEDTLS_2_8_0 && CRYPTLIB < MBEDTLS_3_0_0)
-+ /*
-+  * Verify sanity of parameter with regards to P
-+  *
-+@@ -134,10 +133,10 @@ static int _cryptDhmCheckRange(const mbedtls_mpi *param, const mbedtls_mpi *P)
-+ 	mbedtls_mpi_free(&U);
-+ 	return( ret);
-+ }
-++#endif
-+
-+ CRYPTDHM_T *cryptDhmKeyMake(uint8_t keyType, uint8_t attempt)
-+ {
++diff --git a/libsoup/soup-message-headers.c b/libsoup/soup-message-headers.c
++index 39ad14a..78b2455 100644
++--- a/libsoup/soup-message-headers.c
+++++ b/libsoup/soup-message-headers.c
++@@ -1454,10 +1454,15 @@ soup_message_headers_get_content_disposition (SoupMessageHeaders  *hdrs,
++ 	 */
++ 	if (params && g_hash_table_lookup_extended (*params, "filename",
++ 						    &orig_key, &orig_value)) {
++-		char *filename = strrchr (orig_value, '/');
 +-
-+ 	int ret = 0;
-+ 	char *goto_error_code = NULL;
-+ 	int keyLen = 0;
-+@@ -184,11 +183,6 @@ CRYPTDHM_T *cryptDhmKeyMake(uint8_t keyType, uint8_t attempt)
-+ 	if ((pSize = mbedtls_mpi_size(&dhm_P)) != keyLen)
-+ 		goto_error(finish, "Invalid P size");
-+
-+-#if (CRYPTLIB >= MBEDTLS_2_8_0 && CRYPTLIB < MBEDTLS_3_0_0)
-+-#elif (CRYPTLIB >= MBEDTLS_3_0_0 && CRYPTLIB < MBEDTLS_MAX)
-+-	if ((pSize = mbedtls_dhm_get_len(dhm)) != keyLen)
-+-		goto_error(finish, "Invalid P size");
-+-#endif
-+
-+ 	if ((ret = mbedtls_dhm_set_group(dhm, &dhm_P, &dhm_G) != 0))
-+ 		goto_error(finish, "Failed grouping dhm parameters!");
-+@@ -197,19 +191,25 @@ CRYPTDHM_T *cryptDhmKeyMake(uint8_t keyType, uint8_t attempt)
-+                                        mbedtls_ctr_drbg_random, &ctr_drbg)) != 0)
-+ 		goto_error(finish, "Failed creating dhm key pair");
-+
-++#if (CRYPTLIB >= MBEDTLS_2_8_0 && CRYPTLIB < MBEDTLS_3_0_0)
-++#elif (CRYPTLIB >= MBEDTLS_3_0_0 && CRYPTLIB < MBEDTLS_MAX)
-++	if ((pSize = mbedtls_dhm_get_len(dhm)) != keyLen)
-++		goto_error(finish, "Invalid dhm len");
-++#endif
++-		if (filename)
++-			g_hash_table_insert (*params, g_strdup (orig_key), filename + 1);
+++                if (orig_value) {
+++                        char *filename = strrchr (orig_value, '/');
 ++
-+ 	key->rawGXType = keyType;
-+ 	key->rawGXLen = keyLen;
-+
-+ finish:
-+ 	dbgf(goto_error_code ? DBGL_SYS : DBGL_CHANGES, goto_error_code ? DBGT_ERR : DBGT_INFO,
-+ 		"%s ret=%d keyType=%d keyLen=%d pSize=%d attempt=%d",
-+-		goto_error_code, ret, keyType, keyLen, pSize, attempt);
-++		goto_error_code?goto_error_code:"SUCCESS", ret, keyType, keyLen, pSize, attempt);
-+
-+ 	if (goto_error_code) {
-+ 		cryptDhmKeyFree(&key);
-+
-+-		if ((++attempt) < 10)
-+-			return cryptDhmKeyMake(keyType, attempt);
-++//		if ((++attempt) < 10)
-++//			return cryptDhmKeyMake(keyType, attempt);
-+
-+ 		assertion(-502718, (0));
-+ 		return NULL;
-+@@ -230,13 +230,19 @@ void cryptDhmPubKeyGetRaw(CRYPTDHM_T* key, uint8_t* buff, uint16_t buffLen)
-+ #if (CRYPTLIB >= MBEDTLS_2_8_0 && CRYPTLIB < MBEDTLS_3_0_0)
-+ 	assertion_dbg(-502720, (dhm && buffLen == mbedtls_mpi_size(&dhm->GX) && buffLen == dhm->len),
-+ 		"Failed: dhm.GXlen=%zd dhm.len=%zd", dhm ? mbedtls_mpi_size(&dhm->GX) : 0, dhm ? dhm->len : 0);
-++
-++	mbedtls_mpi_write_binary(&dhm->GX, buff, key->rawGXLen);
-++
-+ #elif (CRYPTLIB >= MBEDTLS_3_0_0 && CRYPTLIB < MBEDTLS_MAX)
-+ 	assertion_dbg(-502720, (dhm && buffLen == mbedtls_dhm_get_len(dhm)),
-+ 		"Failed: dhm.len=%zd", dhm ? mbedtls_dhm_get_len(dhm) : 0);
-+-#endif
-+-
-+
-+-	mbedtls_mpi_write_binary(&dhm->GX, buff, key->rawGXLen);
-++	mbedtls_mpi mpi_GX;
-++	mbedtls_mpi_init(&mpi_GX);
-++	mbedtls_dhm_get_value(dhm, MBEDTLS_DHM_PARAM_GX, &mpi_GX);
-++	mbedtls_mpi_write_binary(&mpi_GX, buff, key->rawGXLen);
-++	mbedtls_mpi_free(&mpi_GX);
-++#endif
+++                        if (filename)
+++                                g_hash_table_insert (*params, g_strdup (orig_key), g_strdup(filename + 1));
+++                } else {
+++                        /* filename with no value isn't valid. */
+++                        g_hash_table_remove (*params, "filename");
+++                }
++ 	}
++ 	return TRUE;
 + }
++diff --git a/tests/header-parsing-test.c b/tests/header-parsing-test.c
++index 946f118..752196e 100644
++--- a/tests/header-parsing-test.c
+++++ b/tests/header-parsing-test.c
++@@ -1034,6 +1034,7 @@ do_param_list_tests (void)
++ #define RFC5987_TEST_HEADER_FALLBACK "attachment; filename*=Unknown''t%FF%FF%FFst.txt; filename=\"test.txt\""
++ #define RFC5987_TEST_HEADER_NO_TYPE  "filename=\"test.txt\""
++ #define RFC5987_TEST_HEADER_NO_TYPE_2  "filename=\"test.txt\"; foo=bar"
+++#define RFC5987_TEST_HEADER_EMPTY_FILENAME ";filename"
++ 
++ static void
++ do_content_disposition_tests (void)
++@@ -1133,6 +1134,20 @@ do_content_disposition_tests (void)
++ 	g_assert_cmpstr (filename, ==, RFC5987_TEST_FALLBACK_FILENAME);
++         parameter2 = g_hash_table_lookup (params, "foo");
++         g_assert_cmpstr (parameter2, ==, "bar");
+++	g_hash_table_destroy (params);
+++
+++	 /* Empty filename */
+++	soup_message_headers_clear (hdrs);
+++	soup_message_headers_append (hdrs, "Content-Disposition",
+++								 RFC5987_TEST_HEADER_EMPTY_FILENAME);
+++	if (!soup_message_headers_get_content_disposition (hdrs,
+++													   &disposition,
+++													   &params)) {
+++			soup_test_assert (FALSE, "empty filename decoding FAILED");
+++			return;
+++	}
+++	g_free (disposition);
+++	g_assert_false (g_hash_table_contains (params, "filename"));
++ 	g_hash_table_destroy (params);
++ 
++ 	soup_message_headers_free (hdrs);
++-- 
++2.34.1
 +
-+ STATIC_FUNC
-+@@ -247,9 +253,6 @@ IDM_T cryptDhmKeyCheck(CRYPTDHM_T *key)
-+ 	uint8_t keyType = 0;
-+ 	int keyLen = 0;
-+ 	int pSize = 0;
-+-	int xSize = 0;
-+-	int gxSize = 0;
-+-	int gySize = 0;
+diff --git a/package/libsoup/0015-auth-digest-Handle-missing-nonce.patch b/package/libsoup/0015-auth-digest-Handle-missing-nonce.patch
+new file mode 100644
+index 0000000000..79fd727a55
+--- /dev/null
++++ b/package/libsoup/0015-auth-digest-Handle-missing-nonce.patch
+@@ -0,0 +1,35 @@
++From 0984dddb11daf14fdf5ca24077cd0ebda796439a Mon Sep 17 00:00:00 2001
++From: Changqing Li <changqing.li@windriver.com>
++Date: Fri, 16 May 2025 13:25:32 +0800
++Subject: [PATCH] auth-digest: Handle missing nonce
 +
-+ 	if (!(dhm = (mbedtls_dhm_context *) key->backendKey))
-+ 		goto_error(finish, "Missing backend key");
-+@@ -262,11 +265,11 @@ IDM_T cryptDhmKeyCheck(CRYPTDHM_T *key)
-+ 		goto_error(finish, "Invalid len");
-+ 	if ((pSize = mbedtls_mpi_size(&dhm->P)) != keyLen)
-+ 		goto_error(finish, "Invalid P size");
-+-	if ((xSize = mbedtls_mpi_size(&dhm->X)) != keyLen)
-++	if ((pSize = mbedtls_mpi_size(&dhm->X)) != keyLen)
-+ 		goto_error(finish, "Invalid X size");
-+-	if ((gxSize = mbedtls_mpi_size(&dhm->GX)) != keyLen)
-++	if ((pSize = mbedtls_mpi_size(&dhm->GX)) != keyLen)
-+ 		goto_error(finish, "Invalid GX size");
-+-	if ((gySize = mbedtls_mpi_size(&dhm->GY)) != keyLen)
-++	if ((pSize = mbedtls_mpi_size(&dhm->GY)) != keyLen)
-+ 		goto_error(finish, "Invalid GY size");
-+ 	if (_cryptDhmCheckRange(&dhm->GX, &dhm->P) != SUCCESS)
-+ 		goto_error(finish, "Invalid GX range");
-+@@ -280,8 +283,7 @@ IDM_T cryptDhmKeyCheck(CRYPTDHM_T *key)
-+ 	return SUCCESS;
++CVE: CVE-2025-32912
++Upstream-Status: Backport
++[https://gitlab.gnome.org/GNOME/libsoup/-/commit/cd077513f267e43ce4b659eb18a1734d8a369992?merge_request_iid=434
++https://gitlab.gnome.org/GNOME/libsoup/-/commit/910ebdcd3dd82386717a201c13c834f3a63eed7f]
 +
-+ finish:
-+-	dbgf_track(DBGT_WARN, "%s keyType=%d keyLen=%d dhmLen=%zd pSize=%d xSize=%d gxSize=%d gySize=%d",
-+-		goto_error_code, keyType, keyLen, dhm ? dhm->len : 0, pSize, xSize, gxSize, gySize);
-++	dbgf_track(DBGT_WARN, "%s keyType=%d keyLen=%d dhmLen=%zd", goto_error_code, keyType, keyLen, pSize);
++Upstream: https://git.openembedded.org/meta-openembedded/tree/meta-oe/recipes-support/libsoup/libsoup-2.4/CVE-2025-32912.patch
 +
-+ 	return FAILURE;
-+ }
-+@@ -641,7 +643,8 @@ finish:
++Signed-off-by: Changqing Li <changqing.li@windriver.com>
++Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
++---
++ libsoup/soup-auth-digest.c | 2 +-
++ 1 files changed, 1 insertions(+), 1 deletion(-)
 +
-+ 			cryptRsaKeyFree(&key);
++diff --git a/libsoup/soup-auth-digest.c b/libsoup/soup-auth-digest.c
++index 6d965d2..f1621ec 100644
++--- a/libsoup/soup-auth-digest.c
+++++ b/libsoup/soup-auth-digest.c
++@@ -156,7 +156,7 @@ soup_auth_digest_update (SoupAuth *auth, SoupMessage *msg,
++ 	guint qop_options;
++ 	gboolean ok = TRUE;
++ 
++-	 if (!soup_auth_get_realm (auth))
+++	if (!soup_auth_get_realm (auth) || !g_hash_table_lookup (auth_params, "nonce"))
++ 		return FALSE;
++ 
++ 	g_free (priv->domain);
 +
-+-			dbgf_sys(DBGT_ERR, "%s ret=%d", goto_error_code, ret);
-++			dbgf_sys(DBGT_ERR, "%s ret=%d len=%d", goto_error_code, ret, keyLen);
-++			assertion(-500000, 0);
++-- 
++2.34.1
++
+diff --git a/package/libsoup/0016-CVE-2025-32914.patch b/package/libsoup/0016-CVE-2025-32914.patch
+new file mode 100644
+index 0000000000..3bb206bfc3
+--- /dev/null
++++ b/package/libsoup/0016-CVE-2025-32914.patch
+@@ -0,0 +1,38 @@
++From ac844b9fc7945c38ea21fb7cf1a49a5c226d7c9c Mon Sep 17 00:00:00 2001
++From: Changqing Li <changqing.li@windriver.com>
++Date: Mon, 12 May 2025 16:17:20 +0800
++Subject: [PATCH] Resolve "(CVE-2025-32914) (#YWH-PGM9867-23) OOB Read on
++ libsoup through function "soup_multipart_new_from_message" in
++ soup-multipart.c leads to crash or exit of process"
++
++CVE: CVE-2025-32914
++Upstream-Status: Backport [https://gitlab.gnome.org/GNOME/libsoup/-/merge_requests/450/diffs?commit_id=5bfcf8157597f2d327050114fb37ff600004dbcf]
++
++Test code are not added since some functions not aligned with version
++2.74.3
++
++Upstream: https://git.openembedded.org/meta-openembedded/tree/meta-oe/recipes-support/libsoup/libsoup-2.4/CVE-2025-32914.patch
++
++Signed-off-by: Changqing Li <changqing.li@windriver.com>
++Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
++---
++ libsoup/soup-multipart.c |  2 +-
++ 1 files changed, 1 insertions(+), 1 deletion(-)
++
++diff --git a/libsoup/soup-multipart.c b/libsoup/soup-multipart.c
++index a7e550f..dd93973 100644
++--- a/libsoup/soup-multipart.c
+++++ b/libsoup/soup-multipart.c
++@@ -181,7 +181,7 @@ soup_multipart_new_from_message (SoupMessageHeaders *headers,
 + 			return NULL;
 + 		}
++ 
++-		split = strstr (start, "\r\n\r\n");
+++		split = g_strstr_len (start, body_end - start, "\r\n\r\n");
++ 		if (!split || split > end) {
++ 			soup_multipart_free (multipart);
++ 			soup_buffer_free (flattened);
++ 
++-- 
++2.34.1
 +
-+@@ -923,28 +926,22 @@ int cryptShasEqual(CRYPTSHA_T *shaA, CRYPTSHA_T *shaB)
-+
-+ uint8_t cryptRsaKeyTypeByLen(int len)
-+ {
-+-	return len == CRYPT_RSA512_LEN ? CRYPT_RSA512_TYPE : (
-+-		len == CRYPT_RSA768_LEN ? CRYPT_RSA768_TYPE : (
-+-		len == CRYPT_RSA896_LEN ? CRYPT_RSA896_TYPE : (
-+-		len == CRYPT_RSA1024_LEN ? CRYPT_RSA1024_TYPE : (
-++	return len == CRYPT_RSA1024_LEN ? CRYPT_RSA1024_TYPE : (
-+ 		len == CRYPT_RSA1536_LEN ? CRYPT_RSA1536_TYPE : (
-+ 		len == CRYPT_RSA2048_LEN ? CRYPT_RSA2048_TYPE : (
-+ 		len == CRYPT_RSA3072_LEN ? CRYPT_RSA3072_TYPE : (
-+ 		len == CRYPT_RSA4096_LEN ? CRYPT_RSA4096_TYPE : (
-+-		0))))))));
-++		0)))));
-+ }
-+
-+ uint16_t cryptRsaKeyLenByType(int type)
-+ {
-+-	return type == CRYPT_RSA512_TYPE ? CRYPT_RSA512_LEN : (
-+-		type == CRYPT_RSA768_TYPE ? CRYPT_RSA768_LEN : (
-+-		type == CRYPT_RSA896_TYPE ? CRYPT_RSA896_LEN : (
-+-		type == CRYPT_RSA1024_TYPE ? CRYPT_RSA1024_LEN : (
-++	return 	type == CRYPT_RSA1024_TYPE ? CRYPT_RSA1024_LEN : (
-+ 		type == CRYPT_RSA1536_TYPE ? CRYPT_RSA1536_LEN : (
-+ 		type == CRYPT_RSA2048_TYPE ? CRYPT_RSA2048_LEN : (
-+ 		type == CRYPT_RSA3072_TYPE ? CRYPT_RSA3072_LEN : (
-+ 		type == CRYPT_RSA4096_TYPE ? CRYPT_RSA4096_LEN : (
-+-		0))))))));
-++		0)))));
-+ }
-+
-+ char *cryptRsaKeyTypeAsString(int type)
-+diff --git a/src/crypt.h b/src/crypt.h
-+index 119c788..cae8df7 100644
-+--- a/src/crypt.h
-++++ b/src/crypt.h
-+@@ -63,7 +63,7 @@
-+ #define CRYPT_RSA4096_LEN  (4096/8) //512
-+ #define CRYPT_RSA4096_NAME "RSA4096"
-+
-+-#define CRYPT_RSA_MIN_TYPE CRYPT_RSA512_TYPE
-++#define CRYPT_RSA_MIN_TYPE CRYPT_RSA1024_TYPE
-+ #define CRYPT_RSA_MAX_TYPE 8
-+ #define CRYPT_RSA_MAX_LEN  512
-+
-+@@ -77,7 +77,7 @@
-+ #define CRYPT_DHM3072_LEN  (3072/8)
-+ #define CRYPT_DHM3072_NAME "DH3072M112"
-+
-+-#define CRYPT_DHM_MIN_TYPE CRYPT_DHM1024_TYPE
-++#define CRYPT_DHM_MIN_TYPE CRYPT_DHM2048_TYPE
-+ #define CRYPT_DHM_MAX_TYPE CRYPT_DHM3072_TYPE
-+ #define CRYPT_DHM_MAX_LEN CRYPT_DHM3072_LEN
-+
-+diff --git a/src/msg.c b/src/msg.c
-+index e04358c..22c22da 100644
-+--- a/src/msg.c
-++++ b/src/msg.c
-+@@ -924,9 +924,9 @@ void tx_packets(void *unused)
-+ 			assertion(-502442, (it.frame_type < FRAME_TYPE_SIGNATURE_ADV || it.frame_type > FRAME_TYPE_OGM_AGG_SQN_ADV));
-+ 			assertion(-502443, (!it.frame_cache_msgs_size));
-+ 			assertion(-500430, (it.frames_out_pos)); // single message larger than MAX_UDPD_SIZE
-+-			assertion_dbg(-502444, IMPLIES((it.frame_type > FRAME_TYPE_OGM_AGG_SQN_ADV),
-+-				it.frames_out_pos > (int) (FRM_SIGN_VERS_SIZE_MIN + ((my_RsaLinkKey && !my_DhmLinkKey) ? my_RsaLinkKey->rawKeyLen : 0))),
-+-				"%d %d %lu %d+%d", it.frame_type, it.frames_out_pos, FRM_SIGN_VERS_SIZE_MIN, !!my_DhmLinkKey, (my_RsaLinkKey ? my_RsaLinkKey->rawKeyLen : 0));
-++//			assertion_dbg(-502444, IMPLIES((it.frame_type > FRAME_TYPE_OGM_AGG_SQN_ADV),
-++//				it.frames_out_pos > (int) (FRM_SIGN_VERS_SIZE_MIN + ((my_RsaLinkKey && !my_DhmLinkKey) ? my_RsaLinkKey->rawKeyLen : 0))),
-++//				"%d %d %lu %d+%d", it.frame_type, it.frames_out_pos, FRM_SIGN_VERS_SIZE_MIN, !!my_DhmLinkKey, (my_RsaLinkKey ? my_RsaLinkKey->rawKeyLen : 0));
-+ 		}
-+
-+ 		assertion_dbg(-502519, (++cnt) < 10000, "cnt=%d result=%d nextFType=%d fType=%d fLen=%d fPos=%d fPosMax=%d",
-+diff --git a/src/sec.c b/src/sec.c
-+index bbd65cf..cde3813 100644
-+--- a/src/sec.c
-++++ b/src/sec.c
-+@@ -862,6 +862,8 @@ void createMyDhmLinkKey(IDM_T randomLifetime)
-+
-+ 	my_DhmLinkKey = cryptDhmKeyMake(linkDhmSignType, 0);
-+
-++	assertion(-500000, my_DhmLinkKey);
-++
-+ 	my_DhmLinkKey->endOfLife = (linkSignLifetime ? bmx_time_sec + thisSignLifetime : 0);
-+
-+ 	if (linkSignLifetime)
-+@@ -913,7 +915,7 @@ int process_dsc_tlv_dhmLinkKey(struct rx_frame_iterator *it)
-+ 	char *goto_error_code = NULL;
-+ 	int32_t msgLen = it->f_dlen;
-+ 	struct dsc_msg_dhm_link_key *msg = (struct dsc_msg_dhm_link_key*) (it->f_data);
-+-
-++	IDM_T TODO_Tolerate_unknown_dhm_link_keys_like_process_dsc_tlv_rsaPubKey;
-+ 	if (it->op == TLV_OP_TEST) {
-+
-+ 		if (!msg)
-+@@ -1017,7 +1019,7 @@ int create_dsc_tlv_rsaLinkKey(struct tx_frame_iterator *it)
-+ }
-+
-+ STATIC_FUNC
-+-int process_dsc_tlv_pubKey(struct rx_frame_iterator *it)
-++int process_dsc_tlv_rsaPubKey(struct rx_frame_iterator *it)
-+ {
-+ 	char *goto_error_code = NULL;
-+ 	CRYPTRSA_T *pkey = NULL;
-+@@ -1026,14 +1028,20 @@ int process_dsc_tlv_pubKey(struct rx_frame_iterator *it)
-+
-+ 	if (it->op == TLV_OP_TEST) {
-+
-+-		if (!msg || !cryptRsaKeyTypeAsString(msg->type) || cryptRsaKeyLenByType(msg->type) != key_len)
-++		if (!msg)
-+ 			goto_error(finish, "1");
-+
-+-		if (!(pkey = cryptRsaPubKeyFromRaw(msg->key, key_len)))
-+-			goto_error(finish, "2");
-++		if (cryptRsaKeyLenByType(msg->type))
-++		{
-++			if (!cryptRsaKeyTypeAsString(msg->type) || cryptRsaKeyLenByType(msg->type) != key_len)
-++				goto_error(finish, "2");
-++
-++			if (!(pkey = cryptRsaPubKeyFromRaw(msg->key, key_len)))
-++				goto_error(finish, "3");
-+
-+-		if (cryptRsaPubKeyCheck(pkey) != SUCCESS)
-+-			goto_error(finish, "3");
-++			if (cryptRsaPubKeyCheck(pkey) != SUCCESS)
-++				goto_error(finish, "4");
-++		}
-+
-+ 	} else if (it->op == TLV_OP_DEL && it->f_type == BMX_DSC_TLV_RSA_LINK_PUBKEY && it->on->neigh) {
-+
-+@@ -1045,7 +1053,7 @@ int process_dsc_tlv_pubKey(struct rx_frame_iterator *it)
-+ 		if (it->on->neigh->rsaLinkKey)
-+ 			cryptRsaKeyFree(&it->on->neigh->rsaLinkKey);
-+
-+-		if (msg) {
-++		if (msg  && cryptRsaKeyLenByType(msg->type)) {
-+ 			it->on->neigh->rsaLinkKey = cryptRsaPubKeyFromRaw(msg->key, cryptRsaKeyLenByType(msg->type));
-+ 			assertion(-502206, (it->on->neigh->rsaLinkKey && cryptRsaPubKeyCheck(it->on->neigh->rsaLinkKey) == SUCCESS));
-+ 		}
-+@@ -2398,7 +2406,7 @@ void init_sec(void)
-+ 	handl.dextReferencing = (int32_t*) & fref_always_l1;
-+ 	handl.dextCompression = (int32_t*) & never_fzip;
-+ 	handl.tx_frame_handler = create_dsc_tlv_nodeKey;
-+-	handl.rx_frame_handler = process_dsc_tlv_pubKey;
-++	handl.rx_frame_handler = process_dsc_tlv_rsaPubKey;
-+ 	handl.msg_format = pubkey_format;
-+ 	register_frame_handler(description_tlv_db, BMX_DSC_TLV_NODE_PUBKEY, &handl);
-+
-+@@ -2427,7 +2435,7 @@ void init_sec(void)
-+ 	handl.dextReferencing = (int32_t*) & fref_always_l1;
-+ 	handl.dextCompression = (int32_t*) & never_fzip;
-+ 	handl.tx_frame_handler = create_dsc_tlv_rsaLinkKey;
-+-	handl.rx_frame_handler = process_dsc_tlv_pubKey;
-++	handl.rx_frame_handler = process_dsc_tlv_rsaPubKey;
-+ 	handl.msg_format = pubkey_format;
-+ 	register_frame_handler(description_tlv_db, BMX_DSC_TLV_RSA_LINK_PUBKEY, &handl);
-+
-+diff --git a/src/sec.h b/src/sec.h
-+index 2266a29..5619a37 100644
-+--- a/src/sec.h
-++++ b/src/sec.h
-+@@ -70,28 +70,28 @@
-+
-+
-+ #define ARG_NODE_RSA_TX_TYPE "nodeRsaKey"
-+-#define MIN_NODE_RSA_TX_TYPE CRYPT_RSA512_TYPE
-++#define MIN_NODE_RSA_TX_TYPE CRYPT_RSA_MIN_TYPE
-+ #define MAX_NODE_RSA_TX_TYPE CRYPT_RSA4096_TYPE
-+ #define DEF_NODE_RSA_TX_TYPE CRYPT_RSA2048_TYPE
-+-#define HLP_NODE_RSA_TX_TYPE "sign own descriptions with given RSA key type (1:512, 2:768, 3:896, 4:1024, 5:1536, 6:2048, 7:3072, 8:4096)"
-++#define HLP_NODE_RSA_TX_TYPE "sign own descriptions with given RSA key type (4:1024, 5:1536, 6:2048, 7:3072, 8:4096)"
-+
-+ #define ARG_NODE_RSA_RX_TYPES "nodeRsaKeys"
-+-#define MIN_NODE_RSA_RX_TYPES (1<<CRYPT_RSA512_TYPE)
-++#define MIN_NODE_RSA_RX_TYPES (1<<CRYPT_RSA_MIN_TYPE)
-+ #define MAX_NODE_RSA_RX_TYPES ((1<<CRYPT_RSA_MAX_TYPE)-1)
-+-#define DEF_NODE_RSA_RX_TYPES ((1<<CRYPT_RSA512_TYPE) | (1<<CRYPT_RSA768_TYPE) | (1<<CRYPT_RSA896_TYPE) | (1<<CRYPT_RSA1024_TYPE) | (1<<CRYPT_RSA1536_TYPE) | (1<<CRYPT_RSA2048_TYPE) | (1<<CRYPT_RSA3072_TYPE) | (1<<CRYPT_RSA4096_TYPE))
-++#define DEF_NODE_RSA_RX_TYPES ((1<<CRYPT_RSA1024_TYPE) | (1<<CRYPT_RSA1536_TYPE) | (1<<CRYPT_RSA2048_TYPE) | (1<<CRYPT_RSA3072_TYPE) | (1<<CRYPT_RSA4096_TYPE))
-+ #define HLP_NODE_RSA_RX_TYPES "verify description signatures of flag-given RSA key types"
-+
-+ #define ARG_LINK_RSA_TX_TYPE "linkRsaKey"
-+ #define MIN_LINK_RSA_TX_TYPE 0
-+ #define MAX_LINK_RSA_TX_TYPE CRYPT_RSA2048_TYPE
-+-#define DEF_LINK_RSA_TX_TYPE CRYPT_RSA896_TYPE
-+-#define HLP_LINK_RSA_TX_TYPE "sign outgoing packets with given RSA key type (0:None and rely on DHM, 1:512, 2:768, 3:896, 4:1024, 5:1536, 6:2048)"
-++#define DEF_LINK_RSA_TX_TYPE CRYPT_RSA1024_TYPE
-++#define HLP_LINK_RSA_TX_TYPE "sign outgoing packets with given RSA key type (0:None and rely on DHM, 4:1024, 5:1536, 6:2048)"
-+ extern int32_t linkRsaSignType;
-+
-+ #define ARG_LINK_RSA_RX_TYPES "linkRsaKeys"
-+ #define MIN_LINK_RSA_RX_TYPES 0
-+ #define MAX_LINK_RSA_RX_TYPES ((1<<CRYPT_RSA_MAX_TYPE)-1)
-+-#define DEF_LINK_RSA_RX_TYPES ((1<<CRYPT_RSA512_TYPE) | (1<<CRYPT_RSA768_TYPE) | (1<<CRYPT_RSA896_TYPE) | (1<<CRYPT_RSA1024_TYPE) | (1<<CRYPT_RSA1536_TYPE) | (1<<CRYPT_RSA2048_TYPE))
-++#define DEF_LINK_RSA_RX_TYPES ((1<<CRYPT_RSA1024_TYPE) | (1<<CRYPT_RSA1536_TYPE) | (1<<CRYPT_RSA2048_TYPE))
-+ #define HLP_LINK_RSA_RX_TYPES "verify incoming link (packet) signaturs of flag-given RSA key types"
-+
-+ #define ARG_LINK_DHM_TX_TYPE "linkDhmKey"
-+@@ -166,8 +166,8 @@ extern int32_t maxDhmNeighs;
-+
-+
-+ extern CRYPTRSA_T *my_NodeKey;
-+-extern CRYPTRSA_T *my_RsaLinkKey;
-+-extern CRYPTDHM_T *my_DhmLinkKey;
-++//extern CRYPTRSA_T *my_RsaLinkKey;
-++//extern CRYPTDHM_T *my_DhmLinkKey;
-+
-+ typedef struct {
-+ 	uint8_t u8[sizeof(CRYPTSHA112_T)];
-+--
-+2.50.0
-diff --git a/package/bmx7/0007-detect-mbedtls-2-8-0-or-mbedtls-3-6-0-based-on-mbedtls-version-h.patch b/package/bmx7/0007-detect-mbedtls-2-8-0-or-mbedtls-3-6-0-based-on-mbedtls-version-h.patch
+diff --git a/package/libsoup/0017-auth-digest-fix-crash.patch b/package/libsoup/0017-auth-digest-fix-crash.patch
 new file mode 100644
-index 0000000000..ed9a0354e4
+index 0000000000..f73cdf6614
 --- /dev/null
-+++ b/package/bmx7/0007-detect-mbedtls-2-8-0-or-mbedtls-3-6-0-based-on-mbedtls-version-h.patch
-@@ -0,0 +1,32 @@
-+From 9020896f89006bc5d3487222eefc7ddea9e8b2bd Mon Sep 17 00:00:00 2001
-+From: Axel Neumann <axel@notmail.org>
-+Date: Sun, 19 May 2024 07:53:57 +0200
-+Subject: [PATCH] Detect mbedtls-2.8.0 or mbedtls-3.6.0 based on
-+ mbedtls/version.h
++++ b/package/libsoup/0017-auth-digest-fix-crash.patch
+@@ -0,0 +1,41 @@
++From 52a0f9234d384b9dab368835b22e5a5a01542168 Mon Sep 17 00:00:00 2001
++From: Changqing Li <changqing.li@windriver.com>
++Date: Fri, 16 May 2025 14:16:10 +0800
++Subject: [PATCH] auth-digest: fix crash in
++ soup_auth_digest_get_protection_space()
 +
-+Upstream: https://github.com/bmx-routing/bmx7/commit/9020896f89006bc5d3487222eefc7ddea9e8b2bd
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++We need to validate the Domain parameter in the WWW-Authenticate header.
++
++Unfortunately this crash only occurs when listening on default ports 80
++and 443, so there's no good way to test for this. The test would require
++running as root.
++
++Fixes #440
++
++CVE: CVE-2025-4476
++Upstream-Status: Backport [https://gitlab.gnome.org/GNOME/libsoup/-/commit/e64c221f9c7d09b48b610c5626b3b8c400f0907c?merge_request_iid=457]
++
++Upstream: https://git.openembedded.org/meta-openembedded/tree/meta-oe/recipes-support/libsoup/libsoup-2.4/CVE-2025-4476.patch
++
++Signed-off-by: Changqing Li <changqing.li@windriver.com>
++Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 +---
-+ src/crypt.h | 8 ++++++--
-+ 1 file changed, 6 insertions(+), 2 deletions(-)
++ libsoup/soup-auth-digest.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/src/crypt.h b/src/crypt.h
-+index cae8df7..2dff0da 100644
-+--- a/src/crypt.h
-++++ b/src/crypt.h
-+@@ -28,9 +28,13 @@
-+ #define MBEDTLS_3_6_0  2360
-+ #define MBEDTLS_MAX    2999
++diff --git a/libsoup/soup-auth-digest.c b/libsoup/soup-auth-digest.c
++index f1621ec..a2dc560 100644
++--- a/libsoup/soup-auth-digest.c
+++++ b/libsoup/soup-auth-digest.c
++@@ -229,7 +229,7 @@ soup_auth_digest_get_protection_space (SoupAuth *auth, SoupURI *source_uri)
++ 			uri = soup_uri_new (d);
++ 			if (uri && uri->scheme == source_uri->scheme &&
++ 			    uri->port == source_uri->port &&
++-			    !strcmp (uri->host, source_uri->host))
+++			    !g_strcmp0 (uri->host, source_uri->host))
++ 				dir = g_strdup (uri->path);
++ 			else
++ 				dir = NULL;
++-- 
++2.34.1
++
+diff --git a/package/libsoup/0018-soup_header_parse_quality_list-Fix-leak.patch b/package/libsoup/0018-soup_header_parse_quality_list-Fix-leak.patch
+new file mode 100644
+index 0000000000..5dfe074d91
+--- /dev/null
++++ b/package/libsoup/0018-soup_header_parse_quality_list-Fix-leak.patch
+@@ -0,0 +1,64 @@
++From 81e03c538d6a102406114567f4f1c468033ce2e4 Mon Sep 17 00:00:00 2001
++From: Patrick Griffis <pgriffis@igalia.com>
++Date: Thu, 26 Dec 2024 18:31:42 -0600
++Subject: [PATCH] soup_header_parse_quality_list: Fix leak
++
++When iterating over the parsed list we now steal the allocated strings that we want and then free_full the list which may contain remaining strings.
++
++CVE: CVE-2025-46420
++Upstream-Status: Backport [https://gitlab.gnome.org/GNOME/libsoup/-/merge_requests/421/diffs?commit_id=c9083869ec2a3037e6df4bd86b45c419ba295f8e]
++
++Upstream: https://git.openembedded.org/meta-openembedded/tree/meta-oe/recipes-support/libsoup/libsoup-2.4/CVE-2025-46420.patch
++
++Signed-off-by: Changqing Li <changqing.li@windriver.com>
++Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
++---
++ libsoup/soup-headers.c | 11 +++++------
++ 1 file changed, 5 insertions(+), 6 deletions(-)
++
++diff --git a/libsoup/soup-headers.c b/libsoup/soup-headers.c
++index 87bb3dc..9707ca0 100644
++--- a/libsoup/soup-headers.c
+++++ b/libsoup/soup-headers.c
++@@ -528,7 +528,7 @@ soup_header_parse_quality_list (const char *header, GSList **unacceptable)
++ 	GSList *unsorted;
++ 	QualityItem *array;
++ 	GSList *sorted, *iter;
++-	char *item, *semi;
+++	char *semi;
++ 	const char *param, *equal, *value;
++ 	double qval;
++ 	int n;
++@@ -541,9 +541,8 @@ soup_header_parse_quality_list (const char *header, GSList **unacceptable)
++ 	unsorted = soup_header_parse_list (header);
++ 	array = g_new0 (QualityItem, g_slist_length (unsorted));
++ 	for (iter = unsorted, n = 0; iter; iter = iter->next) {
++-		item = iter->data;
++ 		qval = 1.0;
++-		for (semi = strchr (item, ';'); semi; semi = strchr (semi + 1, ';')) {
+++		for (semi = strchr (iter->data, ';'); semi; semi = strchr (semi + 1, ';')) {
++ 			param = skip_lws (semi + 1);
++ 			if (*param != 'q')
++ 				continue;
++@@ -575,15 +574,15 @@ soup_header_parse_quality_list (const char *header, GSList **unacceptable)
++ 		if (qval == 0.0) {
++ 			if (unacceptable) {
++ 				*unacceptable = g_slist_prepend (*unacceptable,
++-								 item);
+++								 g_steal_pointer (&iter->data));
++ 			}
++ 		} else {
++-			array[n].item = item;
+++			array[n].item = g_steal_pointer (&iter->data);
++ 			array[n].qval = qval;
++ 			n++;
++ 		}
++ 	}
++-	g_slist_free (unsorted);
+++	g_slist_free_full (unsorted, g_free);
 + 
-+-#ifndef CRYPTLIB
-++#include "mbedtls/version.h"
-++#ifndef MBEDTLS_VERSION_NUMBER
-+ #define CRYPTLIB MBEDTLS_2_8_0
-+-//#define CRYPTLIB MBEDTLS_3_6_0
-++#elif (MBEDTLS_VERSION_NUMBER >= 0x01000000 && MBEDTLS_VERSION_NUMBER < 0x03000000)
-++#define CRYPTLIB MBEDTLS_2_8_0
-++#elif (MBEDTLS_VERSION_NUMBER >= 0x03000000)
-++#define CRYPTLIB MBEDTLS_3_6_0
-+ #endif
++ 	qsort (array, n, sizeof (QualityItem), sort_by_qval);
++ 	sorted = NULL;
++-- 
++2.34.1
++
+diff --git a/package/libsoup/0019-session-Strip-authentication-credentials.patch b/package/libsoup/0019-session-Strip-authentication-credentials.patch
+new file mode 100644
+index 0000000000..4e766d066f
+--- /dev/null
++++ b/package/libsoup/0019-session-Strip-authentication-credentials.patch
+@@ -0,0 +1,50 @@
++From 5eb225f02bb35de56cfeedd87bde716bf1cb750b Mon Sep 17 00:00:00 2001
++From: Patrick Griffis <pgriffis@igalia.com>
++Date: Wed, 5 Feb 2025 16:18:10 -0600
++Subject: [PATCH] session: Strip authentication credentails on
++ cross-origin redirect
++
++This should match the behavior of Firefox and Safari but not of Chromium.
++
++CVE: CVE-2025-46421
++Upstream-Status: Backport
++[https://gitlab.gnome.org/GNOME/libsoup/-/merge_requests/436/diffs?commit_id=3e5c26415811f19e7737238bb23305ffaf96f66b]
++
++Test code not added since it included some headers not in version 2.74.3
++
++Upstream: https://git.openembedded.org/meta-openembedded/tree/meta-oe/recipes-support/libsoup/libsoup-2.4/CVE-2025-46421.patch
++
++Signed-off-by: Changqing Li <changqing.li@windriver.com>
++Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
++---
++ libsoup/soup-session.c |  8 ++++-
++ 2 files changed, 85 insertions(+), 1 deletion(-)
++
++diff --git a/libsoup/soup-session.c b/libsoup/soup-session.c
++index 83421ef..8d6ac61 100644
++--- a/libsoup/soup-session.c
+++++ b/libsoup/soup-session.c
++@@ -1189,12 +1189,18 @@ soup_session_redirect_message (SoupSession *session, SoupMessage *msg)
++ 						   SOUP_ENCODING_NONE);
++ 	}
 + 
-+ #define CRYPT_DER_BUF_SZ 16000
+++	/* Strip all credentials on cross-origin redirect. */
+++	if (!soup_uri_host_equal (soup_message_get_uri (msg), new_uri)) {
+++		soup_message_headers_remove (msg->request_headers, "Authorization");
+++		soup_message_set_auth (msg, NULL);
+++	}
+++
++ 	soup_message_set_uri (msg, new_uri);
++ 	soup_uri_free (new_uri);
++ 
++ 	soup_session_requeue_message (session, msg);
++ 	return TRUE;
++-}
+++}
++ 
++ static void
++ redirect_handler (SoupMessage *msg, gpointer user_data)
++ 
++-- 
++2.34.1
++
+diff --git a/package/libsoup/0020-soup-multipart-Verify-boundary-limits.patch b/package/libsoup/0020-soup-multipart-Verify-boundary-limits.patch
+new file mode 100644
+index 0000000000..e6b8b2fb97
+--- /dev/null
++++ b/package/libsoup/0020-soup-multipart-Verify-boundary-limits.patch
+@@ -0,0 +1,41 @@
++From dfdc9b3cc73e6fe88cc12792ba00e14642572339 Mon Sep 17 00:00:00 2001
++From: Milan Crha <mcrha@redhat.com>
++Date: Thu, 15 May 2025 17:49:11 +0200
++Subject: [PATCH] soup-multipart: Verify boundary limits for multipart body
++
++It could happen that the boundary started at a place which resulted into
++a negative number, which in an unsigned integer is a very large value.
++Check the body size is not a negative value before setting it.
++
++Closes https://gitlab.gnome.org/GNOME/libsoup/-/issues/449
++
++Part-of: <https://gitlab.gnome.org/GNOME/libsoup/-/merge_requests/463>
++
++CVE: CVE-2025-4948
++Upstream-Status: Backport
++[https://gitlab.gnome.org/GNOME/libsoup/-/merge_requests/463/diffs?commit_id=f2f28afe0b3b2b3009ab67d6874457ec6bac70c0]
++
++Upstream: https://git.openembedded.org/meta-openembedded/tree/meta-oe/recipes-support/libsoup/libsoup-2.4/CVE-2025-4948.patch
++
++Signed-off-by: Changqing Li <changqing.li@windriver.com>
++Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
++---
++ libsoup/soup-multipart.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/libsoup/soup-multipart.c b/libsoup/soup-multipart.c
++index dd93973..ce2fc10 100644
++--- a/libsoup/soup-multipart.c
+++++ b/libsoup/soup-multipart.c
++@@ -214,7 +214,7 @@ soup_multipart_new_from_message (SoupMessageHeaders *headers,
++ 		 */
++ 		part_body = soup_buffer_new_subbuffer (flattened,
++ 						       split - flattened->data,
++-						       end - 2 - split);
+++						       end - 2 >= split ? end - 2 - split : 0);
++ 		g_ptr_array_add (multipart->bodies, part_body);
++ 
++ 		start = end;
++-- 
++2.34.1
++
+diff --git a/package/libsoup/0021-soup-multipart-Verify-array-bounds.patch b/package/libsoup/0021-soup-multipart-Verify-array-bounds.patch
+new file mode 100644
+index 0000000000..7cd2a2c036
+--- /dev/null
++++ b/package/libsoup/0021-soup-multipart-Verify-array-bounds.patch
+@@ -0,0 +1,40 @@
++From a7d0c58608ed830bedfb6b92aea11e00feb55aa9 Mon Sep 17 00:00:00 2001
++From: Milan Crha <mcrha@redhat.com>
++Date: Mon, 19 May 2025 17:48:27 +0200
++Subject: [PATCH] soup-multipart: Verify array bounds before accessing its
++ members
++
++The boundary could be at a place which, calculated, pointed
++before the beginning of the array. Check the bounds, to avoid
++read out of the array bounds.
++
++Closes https://gitlab.gnome.org/GNOME/libsoup/-/issues/447
++
++CVE: CVE-2025-4969
++Upstream-Status: Backport
++[https://gitlab.gnome.org/GNOME/libsoup/-/merge_requests/467/diffs?commit_id=b5b4dd10d4810f0c87b4eaffe88504f06e502f33]
++
++Upstream: https://git.openembedded.org/meta-openembedded/tree/meta-oe/recipes-support/libsoup/libsoup-2.4/CVE-2025-4969.patch
++
++Signed-off-by: Changqing Li <changqing.li@windriver.com>
++Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
++---
++ libsoup/soup-multipart.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/libsoup/soup-multipart.c b/libsoup/soup-multipart.c
++index ce2fc10..a29cdf0 100644
++--- a/libsoup/soup-multipart.c
+++++ b/libsoup/soup-multipart.c
++@@ -108,7 +108,7 @@ find_boundary (const char *start, const char *end,
++ 			continue;
++ 
++ 		/* Check that it's at start of line */
++-		if (!(b == start || (b[-1] == '\n' && b[-2] == '\r')))
+++		if (!(b == start || (b - start >= 2 && b[-1] == '\n' && b[-2] == '\r')))
++ 			continue;
++ 
++ 		/* Check for "--" or "\r\n" after boundary */
++-- 
++2.34.1
++
+diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
+index 81bf42cabe..4ac88a1178 100644
+--- a/package/libsoup/libsoup.mk
++++ b/package/libsoup/libsoup.mk
+@@ -22,6 +22,43 @@ LIBSOUP_DEPENDENCIES = \
+ 	sqlite \
+ 	$(TARGET_NLS_DEPENDENCIES)
+ 
++# 0003-sniffer-fix-potential-overflow.patch
++LIBSOUP_IGNORE_CVES += CVE-2025-2784
++# 0004-headers-Strictly-dont-allow-NUL-bytes.patch
++LIBSOUP_IGNORE_CVES += CVE-2024-52530
++# 0005-headers-Be-more-robust-against-invalid-input.patch
++LIBSOUP_IGNORE_CVES += CVE-2024-52531
++# 0006-websocket-process-the-frame-as-soon-as-we-read-data.patch
++LIBSOUP_IGNORE_CVES += CVE-2024-52532
++# 0007-Fix-using-int-instead-of-size_t.patch
++LIBSOUP_IGNORE_CVES += CVE-2025-32050
++# 0008-Fix-heap-buffer-overflow.patch
++LIBSOUP_IGNORE_CVES += CVE-2025-32052
++# 0009-Fix-heap-buffer-overflow.patch
++LIBSOUP_IGNORE_CVES += CVE-2025-32053
++# 0010-headers-Handle-parsing-only-newlines.patch
++LIBSOUP_IGNORE_CVES += CVE-2025-32906
++# 0011-auth-digest-Handle-missing-realm-nonce.patch
++# 0012-auth-digest-Handle-missing-nonce.patch
++# 0013-auth-digest-Fix-leak.patch
++LIBSOUP_IGNORE_CVES += CVE-2025-32910
++# 0014-CVE-2025-32911.patch
++LIBSOUP_IGNORE_CVES += CVE-2025-32911 CVE-2025-32913
++# 0015-auth-digest-Handle-missing-nonce.patch
++LIBSOUP_IGNORE_CVES += CVE-2025-32912
++# 0016-CVE-2025-32914.patch
++LIBSOUP_IGNORE_CVES += CVE-2025-32914
++# 0017-auth-digest-fix-crash.patch
++LIBSOUP_IGNORE_CVES += CVE-2025-4476
++# 0018-soup_header_parse_quality_list-Fix-leak.patch
++LIBSOUP_IGNORE_CVES += CVE-2025-46420
++# 0019-session-Strip-authentication-credentials.patch
++LIBSOUP_IGNORE_CVES += CVE-2025-46421
++# 0020-soup-multipart-Verify-boundary-limits.patch
++LIBSOUP_IGNORE_CVES += CVE-2025-4948
++# 0021-soup-multipart-Verify-array-bounds.patch
++LIBSOUP_IGNORE_CVES += CVE-2025-4969
++
+ LIBSOUP_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
+ 
+ LIBSOUP_CONF_OPTS = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
