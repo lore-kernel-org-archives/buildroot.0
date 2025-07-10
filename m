@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EBC1C8303C
-	for <buildroot@archiver.kernel.org>; Fri, 11 Jul 2025 10:10:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04736C83F1A
+	for <buildroot@archiver.kernel.org>; Fri, 11 Jul 2025 10:10:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E37D483EDB;
-	Fri, 11 Jul 2025 10:10:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CFB8C61438;
+	Fri, 11 Jul 2025 10:10:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TfTch2KtvynQ; Fri, 11 Jul 2025 10:10:50 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AQUfa6ihcpUX; Fri, 11 Jul 2025 10:10:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 496BF83EBC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DEDE261489
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 496BF83EBC;
-	Fri, 11 Jul 2025 10:10:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DEDE261489;
+	Fri, 11 Jul 2025 10:10:54 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id D9050114
- for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:10:11 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id CE2EC114
+ for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:10:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9986640C7C
- for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:09:55 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9DC2C40266
+ for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:09:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PjIo8v1aQ1qX for <buildroot@buildroot.org>;
+ id s5wCidLXS96C for <buildroot@buildroot.org>;
  Fri, 11 Jul 2025 10:09:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2D33940C9E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D3FDC40C90
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2D33940C9E
- for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:09:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D3FDC40C90
+ for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:09:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2B6F9862CE; Fri, 11 Jul 2025 10:09:53 +0000 (UTC)
+ id D2287862CE; Fri, 11 Jul 2025 10:09:52 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 10 Jul 2025 11:24:14 +0200
+Date: Thu, 10 Jul 2025 11:23:32 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 47f0034f187f4828fb067d3d6f70ed0ac415a61f
-X-Git-Newrev: f9fb5cb85cb6d8e411db70225930a4d93a4cfe1a
+X-Git-Oldrev: 2427d060f9a3ae8b11b50fac196712e86cd8648e
+X-Git-Newrev: 1bcb3d53b3b244775ca173e8e7ae920781681b7f
 X-Patchwork-Hint: ignore
-Message-Id: <20250711100953.2B6F9862CE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/libuhttpd: fix
- build w/ mbedtls v3.6
+Message-Id: <20250711100952.D2287862CE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/cpulimit:
+ Backport fix for function signature
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,126 +66,79 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f9fb5cb85cb6d8e411db70225930a4d93a4cfe1a
+commit: https://git.buildroot.net/buildroot/commit/?id=1bcb3d53b3b244775ca173e8e7ae920781681b7f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Since the mbedtls bump to v3.6 [1] the libuhttpd fails to build with the
-following error:
+Backport the upstream pull request patch fixing the incorrect function
+signature passed to pthread_create()
 
-```
-[  8%] Building C object src/ssl/CMakeFiles/xssl.dir/mbedtls.c.o
-.../buildroot/output/build/libuhttpd-3.14.1/src/ssl/mbedtls.c:52:10: fatal error: mbedtls/certs.h: No such file or directory
-   52 | #include <mbedtls/certs.h>
-      |          ^~~~~~~~~~~~~~~~~
-compilation terminated.
-```
-
-This error can be reproduced with the following config:
-
-```
-cat <<EOF >.config
-BR2_arm=y
-BR2_cortex_a7=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-BR2_PACKAGE_MBEDTLS=y
-BR2_PACKAGE_LIBUHTTPD=y
-EOF
-make olddefconfig
-make
-```
-
-The compatibility with mbedtls v3 has been addressed upstream in the
-zhaojh329/ssl project included as a submodule of libuhttpd [2].
-
-This patch backport this upstream commit to be applied on the submodule
-directory. This required adaptation of the line numbers (see [3]) and
-renaming a function reference passed as parameter of
-'mbedtls_pk_parse_keyfile' caused by the commit [4].
-
-[1] 3481a9643f package/mbedtls: bump to version 3.6.3.1
-[2] https://github.com/zhaojh329/ssl/commit/28cc9b5d98179d161673d20e79333ae5a4864228
-[3] https://github.com/zhaojh329/ssl/commit/8092b5a490eedeb042cc1036ebeab6442624cf4c#diff-fbc46fa2db83f8649ccf1f46c6a044473b7b228edc7d4c0f7cc04b5a879f6fb7
-[4] https://github.com/zhaojh329/ssl/commit/0e7d2f73d769cc4ddb350381cebb5ef6f27ab653#diff-fbc46fa2db83f8649ccf1f46c6a044473b7b228edc7d4c0f7cc04b5a879f6fb7R92
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Fixes: https://autobuild.buildroot.org/results/5308cb8239f31ef39e5c67d65ff1d69cdec1cedc
+Fixes: https://autobuild.buildroot.org/results/6722247e3c830558ac0377352d05f4bb1684978d
+Fixes: https://autobuild.buildroot.org/results/adc385fe35432be28453b8ed9f40e8a6647a4b28
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+[Julien: reformat patch "Upstream:" tag to fix check-package error]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 1a8e8686235657b71819003ebef7c8dcaf8daf1c)
+(cherry picked from commit e63181bc0056d7590411763442c7279d71c8315b)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...004-add-compatibility-with-mbed-tls-3-0-0.patch | 64 ++++++++++++++++++++++
- 1 file changed, 64 insertions(+)
+ .../0005-Correct-loop-function-signature.patch     | 49 ++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
 
-diff --git a/package/libuhttpd/0004-add-compatibility-with-mbed-tls-3-0-0.patch b/package/libuhttpd/0004-add-compatibility-with-mbed-tls-3-0-0.patch
+diff --git a/package/cpulimit/0005-Correct-loop-function-signature.patch b/package/cpulimit/0005-Correct-loop-function-signature.patch
 new file mode 100644
-index 0000000000..1f45d4634c
+index 0000000000..5b7f4a01dd
 --- /dev/null
-+++ b/package/libuhttpd/0004-add-compatibility-with-mbed-tls-3-0-0.patch
-@@ -0,0 +1,64 @@
-+From 28cc9b5d98179d161673d20e79333ae5a4864228 Mon Sep 17 00:00:00 2001
-+From: Jianhui Zhao <zhaojh329@gmail.com>
-+Date: Sat, 4 May 2024 19:40:07 +0800
-+Subject: [PATCH] Add compatibility with Mbed TLS 3.0.0
++++ b/package/cpulimit/0005-Correct-loop-function-signature.patch
+@@ -0,0 +1,49 @@
++From 74e95c96e8d82e4e374f86142972fcf4305fe1f2 Mon Sep 17 00:00:00 2001
++From: Florian Fainelli <f.fainelli@gmail.com>
++Date: Wed, 2 Jul 2025 20:47:58 -0700
++Subject: [PATCH] Correct loop function signature
 +
-+Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
-+Upstream: https://github.com/zhaojh329/ssl/commit/28cc9b5d98179d161673d20e79333ae5a4864228
-+[thomas: 
-+  - Apply to submodule directory
-+  - Rename 'urandom' to '_urandom'
-+  - Adapt line numbers
-+]
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++loop is passed to pthread_create() which requires the following
++prototype to be used: void *(*start_routine) (void *)
++
++Correct the signature to avoid such warnings:
++
++In file included from busy.c:3:
++/home/buildroot/instance-0/output-1/host/mips-buildroot-linux-uclibc/sysroot/usr/include/pthread.h:164:36: note: expected 'void * (*)(void *)' but argument is of type 'void * (*)(void)'
++  164 |                            void *(*__start_routine) (void *),
++      |                            ~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
++busy.c:6:7: note: 'loop' declared here
++    6 | void *loop()
++      |       ^~~~
++
++Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
++Upstream: https://github.com/opsengine/cpulimit/pull/127
 +---
-+ src/ssl/mbedtls.c | 11 +++++++++--
-+ 1 file changed, 9 insertions(+), 2 deletions(-)
++ tests/busy.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
 +
-+diff --git a/src/ssl/mbedtls.c b/src/ssl/mbedtls.c
-+index 2e02e1c..cad7e00 100644
-+--- a/src/ssl/mbedtls.c
-++++ b/src/ssl/mbedtls.c
-+@@ -49,7 +49,6 @@
-+ #include "ssl.h"
++diff --git a/tests/busy.c b/tests/busy.c
++index b3afb7cd853b..93f0bcce67a8 100644
++--- a/tests/busy.c
+++++ b/tests/busy.c
++@@ -3,7 +3,7 @@
++ #include <pthread.h>
++ #include <unistd.h>
 + 
-+ #include <mbedtls/ssl.h>
-+-#include <mbedtls/certs.h>
-+ #include <mbedtls/x509.h>
-+ #include <mbedtls/rsa.h>
-+ #include <mbedtls/error.h>
-+@@ -136,9 +135,13 @@ static const int default_ciphersuites_client[] =
-+     AES_CBC_CIPHERS(ECDHE_ECDSA),
-+     AES_CBC_CIPHERS(ECDHE_RSA),
-+     AES_CBC_CIPHERS(DHE_RSA),
-++#ifdef MBEDTLS_TLS_DHE_RSA_WITH_3DES_EDE_CBC_SHA
-+     MBEDTLS_TLS_DHE_RSA_WITH_3DES_EDE_CBC_SHA,
-++#endif
-+     AES_CIPHERS(RSA),
-++#ifdef MBEDTLS_TLS_RSA_WITH_3DES_EDE_CBC_SHA
-+     MBEDTLS_TLS_RSA_WITH_3DES_EDE_CBC_SHA,
-++#endif
-+     0
-+ };
-+ 
-+@@ -221,7 +224,7 @@ static void ssl_update_own_cert(struct ssl_context *ctx)
-+     if (!ctx->cert.version)
-+         return;
-+ 
-+-    if (!ctx->key.pk_info)
-++    if (mbedtls_pk_get_type(&ctx->key) == MBEDTLS_PK_NONE)
-+         return;
-+ 
-+     mbedtls_ssl_conf_own_cert(&ctx->conf, &ctx->cert, &ctx->key);
-+@@ -258,7 +261,11 @@ int ssl_load_key_file(struct ssl_context *ctx, const char *file)
++-void *loop()
+++void *loop(void *)
 + {
-+     int ret;
++ 	while(1);
++ }
++@@ -23,7 +23,7 @@ int main(int argc, char **argv) {
++ 			exit(1);
++ 		}
++ 	}
++-	loop();
+++	loop(NULL);
++ 	return 0;
++ }
 + 
-++#if (MBEDTLS_VERSION_NUMBER >= 0x03000000)
-++    ret = mbedtls_pk_parse_keyfile(&ctx->key, file, NULL, _urandom, NULL);
-++#else
-+     ret = mbedtls_pk_parse_keyfile(&ctx->key, file, NULL);
-++#endif
-+     if (ret)
-+         return -1;
-+ 
++-- 
++2.43.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
