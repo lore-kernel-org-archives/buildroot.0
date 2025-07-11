@@ -4,102 +4,102 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A49EC8303C
-	for <buildroot@archiver.kernel.org>; Fri, 11 Jul 2025 10:44:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E0BFC83F1D
+	for <buildroot@archiver.kernel.org>; Fri, 11 Jul 2025 10:44:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 18FBA61420;
-	Fri, 11 Jul 2025 10:44:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 248A060ED7;
+	Fri, 11 Jul 2025 10:44:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id X-eErYhF5vFf; Fri, 11 Jul 2025 10:44:43 +0000 (UTC)
+ id FTgBTp35lPRj; Fri, 11 Jul 2025 10:44:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2CD4960E32
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E212061407
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2CD4960E32;
-	Fri, 11 Jul 2025 10:44:43 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id BA5341E1
- for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:44:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E212061407;
+	Fri, 11 Jul 2025 10:44:45 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4A6BF199
+ for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:44:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5B4538217E
- for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:44:38 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3114D40251
+ for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:44:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uQBPZOKxE_aY for <buildroot@buildroot.org>;
- Fri, 11 Jul 2025 10:44:37 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OytZ-ccnis20 for <buildroot@buildroot.org>;
+ Fri, 11 Jul 2025 10:44:39 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42d; helo=mail-wr1-x42d.google.com;
+ client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2C4CE82A28
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2C4CE82A28
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2C4CE82A28
- for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:44:37 +0000 (UTC)
-Received: by mail-wr1-x42d.google.com with SMTP id
- ffacd0b85a97d-3a4fd1ba177so1317584f8f.0
- for <buildroot@buildroot.org>; Fri, 11 Jul 2025 03:44:36 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 446E940094
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 446E940094
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 446E940094
+ for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:44:39 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ 5b1f17b1804b1-4537fdec33bso11669405e9.1
+ for <buildroot@buildroot.org>; Fri, 11 Jul 2025 03:44:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1752230675; x=1752835475;
+ d=1e100.net; s=20230601; t=1752230677; x=1752835477;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=1J/WEujfAIu5F3EEslB5jsuP1HgihLeUMQfP2zCpImk=;
- b=bhVw3WdrzpszgA/z939tOVz3p5OYhyxFjDTUer27P53IB2zn3TZv/PAjFElqe/BdUq
- NiAU3lILxheG7qvSOhFynH+ngoZFW7EFdwifM7I3SMvbVdUFBrZ729atQ3tk6zLHX7NX
- QrVlAqRaSv3Cgev5F4DE/5tONstC3ITjqKf+nWBzOyZsVMnfvf6l/81OKk+qX999u2SR
- 3tFn9B6AtX2W2ogdxWqyvNIL/TZRPVI5UvHeuE2O1l1UwfJeN4xBcTGG9EqejRYbJRZr
- Oy2oMvsoFhCD441TGJvBXWr8YbPTGByB1IlMFs0UcNklDMr67U2KLnkJMTKmJnRlKOZI
- TT7g==
+ bh=BP7QRlee1/DO90KrTwcARnRMHoRdZGC6ddxZFe3tlbM=;
+ b=cEeuKItOCU2I1P0ooAPZu/NBBfhxbviRsPG8i1xmLF8uLwlu0ZXvlFF0cd8afoicRP
+ oJay8hv5voTArmBgqqCvPueUJCLQwXcLGTyE2ZbVqAryN7xAkpFXyZimQN8uqyEP3mwh
+ XNieXtVojwObtMdjVwzlyMo/8zkBZfMZBx5QPvHyMAp6p06zbxguwX4hrM/ERr6M/64h
+ SmWB12N6f6291Q5UGFtUUCqhGSK7+agfE6/Bf/3gV3XSk29NPByNmFbNcjLWeH1iaadF
+ QaHqsq3KxG3+awXzYdVe8NrUYgY8/4pG7eNDQpsJD/EBs2FHSgoYOwbD8o7dK1lgx9DZ
+ p7mg==
 X-Forwarded-Encrypted: i=1;
- AJvYcCXuHT1QgSpdeWWbpDNC8zED5YVAiXzs5zJU2G8T4z1TZHisZOwa5dn2IV8yGGA68eMZQFfVaqu9ZjY=@buildroot.org
-X-Gm-Message-State: AOJu0YxaN9OMIfosKEKyQciI3D+Wy/yOZkzV6mPlhNH5s+PTO5/STsX9
- 2GXDuL97StNXdXd5P1/DBKbtOJa7lRygGi9t2baVDKge7XOrrJdTSUFiNP7LpRMIKd9PXEOKA/4
- 5QBio
-X-Gm-Gg: ASbGncvIPt+PlL/Tdq8qV6mRBpLTZJqP90ZYBdHYOL2dBceGiVq3CFF2SCnyAncXny0
- /D5/elsZGk1g4v4XTbngWCTr5wdIww6Cx6o+nlUFMGfjjMfovJC+0ljuNVLJQERUKnKaF9IRKoB
- d+6ssFYONJ7ldWPRBQQ+dcnyrTpYS2cgI8yDCJRT9G0f5qqDIWFxegpvfBqcemIyz49FpbwMXj5
- OErP4UEDyENr+Wh3UELeK2MQI3u0zGbxiDT6uI3/88jaQl7S8ch6kxxv1IB0TIAh6QLPxtW1PFU
- sn6K+FG0nwRTVE6or1JYj6ngc2q87QAqMcf7yNiOloKPM4cXQING77N43LUkF/C6PJ2Yzx0tq8d
- HAFtP1hrC6qlTnw==
-X-Google-Smtp-Source: AGHT+IEfwmUIC3n343DSB2h2Jx2T3HpNmvuhlqhXr7HW/TOE9kdqM8b2wn/D/T/l9QFkVeL82DMbKQ==
-X-Received: by 2002:a05:6000:21c9:b0:3a5:2b1e:c49b with SMTP id
- ffacd0b85a97d-3b5e7f4356fmr4038008f8f.29.1752230675101; 
- Fri, 11 Jul 2025 03:44:35 -0700 (PDT)
+ AJvYcCXvR/hPap3sSX8unhRG/ttAYaf0+8dHOlAix6XiDyBlCGNXUXpVED6qcTSMyJxbdKYGDBZMGbjqTwU=@buildroot.org
+X-Gm-Message-State: AOJu0YzMxOuXm5p5BiF026ZMamwmAH1p61L1/Cr8AajvXYL2mnZE/LWF
+ d+QOprCM49mZDj3l54M6vv6u18abPHBHDu+uLRSKiINP5iX6WHGYto2KKempHrvxulI=
+X-Gm-Gg: ASbGncubHYu9/emFZ891Ea46O1+8WHXNp4deCYLslSAhpMT3POCnTnk20F1fLKCesBI
+ zzEFTko2VehcLoIryJaNkkH9lWUM3TCkZLaKpsUP03vGvKLPh8hxpl9+aORjo5vX4xlxPgsqtnf
+ BsqmGAYMHD5w53B7vgz5LGrLV3a31nWaRgwIB5jSe/GxBhjBkZ6CNbGbylyLU9kpzdu5ZbsWL6/
+ Tds7VK84KKKWCrnAnH04NCfoRPEhdrljq6WhvlgO7IxpZVoguBzNorL3cOXsoIzCM8wke7CUQdM
+ VEJKW69n8QOiN+nISIA26b0VxJQD/F5flTswR2hFzuUKHuGK7QHh39fEBFS3x9/X6jzIBnXib9q
+ J9vsAVKg1T+GFCg==
+X-Google-Smtp-Source: AGHT+IHHzpJBxjG3Zio3l6rVPpJtwMGX34qht5FTNQ8p7FdIfRLLrNYqve6rJXrVb9BK+lxr84QbPw==
+X-Received: by 2002:a05:600c:c176:b0:43c:eeee:b713 with SMTP id
+ 5b1f17b1804b1-454ec263d7cmr18464675e9.20.1752230677270; 
+ Fri, 11 Jul 2025 03:44:37 -0700 (PDT)
 Received: from arch ([79.132.233.65]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-454dd4b32d8sm43337865e9.17.2025.07.11.03.44.34
+ 5b1f17b1804b1-454dd437fb0sm43961195e9.5.2025.07.11.03.44.36
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 11 Jul 2025 03:44:34 -0700 (PDT)
-To: Peter Korsgaard <peter@korsgaard.com>
+ Fri, 11 Jul 2025 03:44:36 -0700 (PDT)
+To: Titouan Christophe <titouan.christophe@mind.be>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 11 Jul 2025 12:44:34 +0200
-Message-ID: <20250711104434.823288-1-thomas.perale@mind.be>
+Date: Fri, 11 Jul 2025 12:44:36 +0200
+Message-ID: <20250711104436.823387-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250701161508.1622502-1-peter@korsgaard.com>
-References: <20250701161508.1622502-1-peter@korsgaard.com>
+In-Reply-To: <20250701162116.1319941-1-titouan.christophe@mind.be>
+References: <20250701162116.1319941-1-titouan.christophe@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1752230675; x=1752835475; darn=buildroot.org;
+ d=mind.be; s=google; t=1752230677; x=1752835477; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=1J/WEujfAIu5F3EEslB5jsuP1HgihLeUMQfP2zCpImk=;
- b=ehk54UP2+BjA/rzrPFXjhA+MfGTxgeVElWJtJcQYJOGVxAYsxCneXC8NpaXPAhvrD9
- AvgpwBkS2MVonS6VfBlgEsLkeEXDlmd8nrh7RXnaimV8H9DBLn3xWNHU1ZAZivxGuYnw
- k/8FyLC2PerHCokMI9zM8Qia9L70IyzHqOzH22OV1n4cRFjAHz0nhwux2pG0R3U7OHag
- NtLA7kDoqyDlVxsmxkoRoC7LUopXtu2h5PADSmNn9hljRCLPxTrkL4PRhTcS63KmVnK7
- D/YXlBcy7hs+IAyauh5Z6Ips9GuZljn3FT0tZkXS93cDWgf5cj3VXJ+CriP/j3JVBRhV
- J2GQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=BP7QRlee1/DO90KrTwcARnRMHoRdZGC6ddxZFe3tlbM=;
+ b=XWHymXfdbfPNl8MYWonWHGlNUe/fUJnpD0ARIKAtNiLmpm1uFMVUUaEea91ToP5fac
+ L5S1z3ej7APiaj8dZjNH05d50Vj8DU/A17YH/31Ouk6KujxqeUv8AdyuLINE6dLWHc0k
+ gMGOduMOwyu/jyA+Kis61OI3JnwZ4YQ5Kj9uAAgZyvt3fJmG8eYN937yBP8nUjRddKrx
+ cTZW/yVJ/tLEmLYh9tx9xeWctstuK7nl2sCd1SXtm4SRjZmrd7Z7/zk9vtkGgrJgXjjd
+ bvfSQFaEiNvV1XiCJGiDYdD5r1zzAsRqoAYiB1IlMZTGQtg+9CkjW4QqGvKltUH2oMb5
+ OlTQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=ehk54UP2
-Subject: Re: [Buildroot] [PATCH] package/jose: security bump to version 14
+ header.a=rsa-sha256 header.s=google header.b=XWHymXfd
+Subject: Re: [Buildroot] [PATCH] package/python-urllib3: security bump to
+ v2.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,217 +119,53 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Jose-13 fixed the following security issue:
+> This fixes the following vulnerabilities:
+> - CVE-2025-50181:
+>     urllib3 redirects are not disabled when retries are disabled on
+>     PoolManager instantiation
 > 
-> - CVE-2023-50967: latchset jose through version 11 allows attackers to cause
->   a denial of service (CPU consumption) via a large p2c (aka PBES2 Count)
->   value.
->   https://github.com/latchset/jose/issues/151
+> - CVE-2025-50182:
+>     urllib3 does not control redirects in browsers and Node.js
 > 
-> In addition, jose-14 worked around another DoS issue related to
-> decompression:
-> https://github.com/latchset/jose/pull/157
-> 
-> Drop now upstreamed patches:
-> 
-> - 0001-lib-hsh.c-rename-hsh-local-variable.patch: Upstream as of
->   https://github.com/latchset/jose/commit/3d5b287243f87ce0243b23abd690d86c41fc499c
-> 
-> - 0002-man-add-option-to-skip-building-man-pages.patch: Upstream after
->   getting reworked to use -Ddocs=disabled as of
->   https://github.com/latchset/jose/commit/786b426df018edf30a53e2d82155df20d13047c1
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 
 Applied to 2025.02.x & 2025.05.x. Thanks
 
 > ---
->  ...-lib-hsh.c-rename-hsh-local-variable.patch | 71 -------------------
->  ...dd-option-to-skip-building-man-pages.patch | 64 -----------------
->  package/jose/jose.hash                        |  2 +-
->  package/jose/jose.mk                          |  4 +-
->  4 files changed, 3 insertions(+), 138 deletions(-)
->  delete mode 100644 package/jose/0001-lib-hsh.c-rename-hsh-local-variable.patch
->  delete mode 100644 package/jose/0002-man-add-option-to-skip-building-man-pages.patch
+>  package/python-urllib3/python-urllib3.hash | 4 ++--
+>  package/python-urllib3/python-urllib3.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/jose/0001-lib-hsh.c-rename-hsh-local-variable.patch b/package/jose/0001-lib-hsh.c-rename-hsh-local-variable.patch
-> deleted file mode 100644
-> index 0bd259ad8b..0000000000
-> --- a/package/jose/0001-lib-hsh.c-rename-hsh-local-variable.patch
-> +++ /dev/null
-> @@ -1,71 +0,0 @@
-> -From 591fc6da944ffc29936e0019b2bc225ddc81dbba Mon Sep 17 00:00:00 2001
-> -From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> -Date: Mon, 20 Nov 2017 22:48:33 +0100
-> -Subject: [PATCH] lib/hsh.c: rename hsh local variable
-> -
-> -The hsh local variable name conflicts with the function prototype of
-> -hsh() in hsh.h, causing the following build issues with old compilers
-> -(gcc 4.7):
-> -
-> -hsh.c: In function 'hsh':
-> -hsh.c:28:21: error: declaration of 'hsh' shadows a global declaration [-Werror=shadow]
-> -hsh.c:26:1: error: shadowed declaration is here [-Werror=shadow]
-> -hsh.c: In function 'hsh_buf':
-> -hsh.c:60:21: error: declaration of 'hsh' shadows a global declaration [-Werror=shadow]
-> -hsh.c:26:1: error: shadowed declaration is here [-Werror=shadow]
-> -
-> -Therefore, we rename this local variable to _hsh.
-> -
-> -Submitted-upstream: https://github.com/latchset/jose/pull/51
-> -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ----
-> - lib/hsh.c | 12 ++++++------
-> - 1 file changed, 6 insertions(+), 6 deletions(-)
-> -
-> -diff --git a/lib/hsh.c b/lib/hsh.c
-> -index c59a95f..a2a891b 100644
-> ---- a/lib/hsh.c
-> -+++ b/lib/hsh.c
-> -@@ -25,7 +25,7 @@
-> - json_t *
-> - hsh(jose_cfg_t *cfg, const char *alg, const void *data, size_t dlen)
-> - {
-> --    jose_io_auto_t *hsh = NULL;
-> -+    jose_io_auto_t *_hsh = NULL;
-> -     jose_io_auto_t *enc = NULL;
-> -     jose_io_auto_t *buf = NULL;
-> -     char b[1024] = {};
-> -@@ -33,8 +33,8 @@ hsh(jose_cfg_t *cfg, const char *alg, const void *data, size_t dlen)
-> - 
-> -     buf = jose_io_buffer(cfg, b, &l);
-> -     enc = jose_b64_enc_io(buf);
-> --    hsh = hsh_io(cfg, alg, enc);
-> --    if (!buf || !enc || !hsh || !hsh->feed(hsh, data, dlen) || !hsh->done(hsh))
-> -+    _hsh = hsh_io(cfg, alg, enc);
-> -+    if (!buf || !enc || !_hsh || !_hsh->feed(_hsh, data, dlen) || !_hsh->done(_hsh))
-> -         return NULL;
-> - 
-> -     return json_stringn(b, l);
-> -@@ -57,7 +57,7 @@ hsh_buf(jose_cfg_t *cfg, const char *alg,
-> -         const void *data, size_t dlen, void *hash, size_t hlen)
-> - {
-> -     const jose_hook_alg_t *a = NULL;
-> --    jose_io_auto_t *hsh = NULL;
-> -+    jose_io_auto_t *_hsh = NULL;
-> -     jose_io_auto_t *buf = NULL;
-> - 
-> -     a = jose_hook_alg_find(JOSE_HOOK_ALG_KIND_HASH, alg);
-> -@@ -71,8 +71,8 @@ hsh_buf(jose_cfg_t *cfg, const char *alg,
-> -         return SIZE_MAX;
-> - 
-> -     buf = jose_io_buffer(cfg, hash, &hlen);
-> --    hsh = a->hash.hsh(a, cfg, buf);
-> --    if (!buf || !hsh || !hsh->feed(hsh, data, dlen) || !hsh->done(hsh))
-> -+    _hsh = a->hash.hsh(a, cfg, buf);
-> -+    if (!buf || !_hsh || !_hsh->feed(_hsh, data, dlen) || !_hsh->done(_hsh))
-> -         return SIZE_MAX;
-> - 
-> -     return hlen;
-> --- 
-> -2.13.6
-> -
-> diff --git a/package/jose/0002-man-add-option-to-skip-building-man-pages.patch b/package/jose/0002-man-add-option-to-skip-building-man-pages.patch
-> deleted file mode 100644
-> index 3a5ad1eadc..0000000000
-> --- a/package/jose/0002-man-add-option-to-skip-building-man-pages.patch
-> +++ /dev/null
-> @@ -1,64 +0,0 @@
-> -From 506132d3edc8d062f65fdacf007a15613d27e5c5 Mon Sep 17 00:00:00 2001
-> -From: Eneas U de Queiroz <cotequeiroz@gmail.com>
-> -Date: Wed, 6 Apr 2022 09:49:48 -0300
-> -Subject: [PATCH] man: add option to skip building man pages
-> -
-> -Add a 'skip_manpages' option to meson, so that man pages do not get
-> -built.
-> -
-> -Signed-off-by: Eneas U de Queiroz <cotequeiroz@gmail.com>
-> -[Retrieved from: https://github.com/latchset/jose/pull/115]
-> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ----
-> - meson.build       | 24 +++++++++++++-----------
-> - meson_options.txt |  1 +
-> - 2 files changed, 14 insertions(+), 11 deletions(-)
-> - create mode 100644 meson_options.txt
-> -
-> -diff --git a/meson.build b/meson.build
-> -index 1edfbe7..9b40efb 100644
-> ---- a/meson.build
-> -+++ b/meson.build
-> -@@ -37,7 +37,6 @@ zlib = dependency('zlib')
-> - threads = dependency('threads')
-> - jansson = dependency('jansson', version: '>=2.10')
-> - libcrypto = dependency('libcrypto', version: '>=1.0.2')
-> --a2x = find_program('a2x', required: false)
-> - 
-> - mans = []
-> - 
-> -@@ -63,14 +62,17 @@ pkg.generate(
-> -   requires: 'jansson',
-> - )
-> - 
-> --if a2x.found()
-> --  foreach m : mans
-> --    custom_target(m.split('/')[-1], input: m + '.adoc', output: m.split('/')[-1],
-> --      command: [a2x, '-f', 'manpage', '-D', meson.current_build_dir(), '@INPUT@'],
-> --      install_dir: join_paths(get_option('mandir'), 'man' + m.split('.')[-1]),
-> --      install: true
-> --    )
-> --  endforeach
-> --else
-> --  warning('Will not build man pages due to missing dependencies!')
-> -+if not get_option('skip_manpages')
-> -+  a2x = find_program('a2x', required: false)
-> -+  if a2x.found()
-> -+    foreach m : mans
-> -+      custom_target(m.split('/')[-1], input: m + '.adoc', output: m.split('/')[-1],
-> -+        command: [a2x, '-f', 'manpage', '-D', meson.current_build_dir(), '@INPUT@'],
-> -+        install_dir: join_paths(get_option('mandir'), 'man' + m.split('.')[-1]),
-> -+        install: true
-> -+      )
-> -+    endforeach
-> -+  else
-> -+    warning('Will not build man pages due to missing dependencies!')
-> -+  endif
-> - endif
-> -diff --git a/meson_options.txt b/meson_options.txt
-> -new file mode 100644
-> -index 0000000..0885515
-> ---- /dev/null
-> -+++ b/meson_options.txt
-> -@@ -0,0 +1 @@
-> -+option('skip_manpages', type: 'boolean', value: false, description: 'Do not build manpages')
-> diff --git a/package/jose/jose.hash b/package/jose/jose.hash
-> index 128d26d163..0bee7f46e8 100644
-> --- a/package/jose/jose.hash
-> +++ b/package/jose/jose.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha256  e272afe7717e22790c383f3164480627a567c714ccb80c1ee96f62c9929d8225  jose-11.tar.xz
-> +sha256  cee329ef9fce97c4c025604a8d237092f619aaa9f6d35fdf9d8c9052bc1ff95b  jose-14.tar.xz
->  sha256  09e8a9bcec8067104652c168685ab0931e7868f9c8284b66f5ae6edae5f1130b  COPYING
-> diff --git a/package/jose/jose.mk b/package/jose/jose.mk
-> index 723ebe8bb9..9fd9d1dcaa 100644
-> --- a/package/jose/jose.mk
-> +++ b/package/jose/jose.mk
-> @@ -4,13 +4,13 @@
+> diff --git a/package/python-urllib3/python-urllib3.hash b/package/python-urllib3/python-urllib3.hash
+> index 2391108e26..f4162882f7 100644
+> --- a/package/python-urllib3/python-urllib3.hash
+> +++ b/package/python-urllib3/python-urllib3.hash
+> @@ -1,5 +1,5 @@
+>  # md5, sha256 from https://pypi.org/pypi/urllib3/json
+> -md5  787104cdecd70e6688713f8a079ffd3f  urllib3-2.4.0.tar.gz
+> -sha256  414bc6535b787febd7567804cc015fee39daab8ad86268f1310a9250697de466  urllib3-2.4.0.tar.gz
+> +md5  2b8a86438e4d35fbc90572dbdb424759  urllib3-2.5.0.tar.gz
+> +sha256  3fc47733c7e419d4bc3f6b3dc2b4f890bb743906a30d56ba4a5bfa4bbff92760  urllib3-2.5.0.tar.gz
+>  # Locally computed sha256 checksums
+>  sha256  130e3a64d5fdd5d096a752694634a7d9df284469de86e5732100268041e3d686  LICENSE.txt
+> diff --git a/package/python-urllib3/python-urllib3.mk b/package/python-urllib3/python-urllib3.mk
+> index 7294742909..9ec6c7f3c0 100644
+> --- a/package/python-urllib3/python-urllib3.mk
+> +++ b/package/python-urllib3/python-urllib3.mk
+> @@ -4,9 +4,9 @@
 >  #
 >  ################################################################################
 >  
-> -JOSE_VERSION = 11
-> +JOSE_VERSION = 14
->  JOSE_SOURCE = jose-$(JOSE_VERSION).tar.xz
->  JOSE_SITE = https://github.com/latchset/jose/releases/download/v$(JOSE_VERSION)
->  JOSE_LICENSE = Apache-2.0
->  JOSE_LICENSE_FILES = COPYING
->  JOSE_INSTALL_STAGING = YES
->  JOSE_DEPENDENCIES = host-pkgconf zlib jansson openssl
-> -JOSE_CONF_OPTS = -Dskip_manpages=true
-> +JOSE_CONF_OPTS = -Ddocs=disabled
->  
->  $(eval $(meson-package))
+> -PYTHON_URLLIB3_VERSION = 2.4.0
+> +PYTHON_URLLIB3_VERSION = 2.5.0
+>  PYTHON_URLLIB3_SOURCE = urllib3-$(PYTHON_URLLIB3_VERSION).tar.gz
+> -PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/8a/78/16493d9c386d8e60e442a35feac5e00f0913c0f4b7c217c11e8ec2ff53e0
+> +PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/15/22/9ee70a2574a4f4599c47dd506532914ce044817c7752a79b6a51286319bc
+>  PYTHON_URLLIB3_LICENSE = MIT
+>  PYTHON_URLLIB3_LICENSE_FILES = LICENSE.txt
+>  PYTHON_URLLIB3_CPE_ID_VENDOR = python
 > -- 
-> 2.39.5
+> 2.50.0
 > 
 > _______________________________________________
 > buildroot mailing list
