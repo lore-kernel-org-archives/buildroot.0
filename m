@@ -1,105 +1,105 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C4DEC8303C
-	for <buildroot@archiver.kernel.org>; Fri, 11 Jul 2025 10:45:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30128C83F1D
+	for <buildroot@archiver.kernel.org>; Fri, 11 Jul 2025 10:45:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1EF3183C49;
-	Fri, 11 Jul 2025 10:45:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ED8B761502;
+	Fri, 11 Jul 2025 10:45:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hE3KmVUmKgLU; Fri, 11 Jul 2025 10:45:07 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gYFJdYA1vaMd; Fri, 11 Jul 2025 10:45:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B7F483C51
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4C64A61437
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1B7F483C51;
-	Fri, 11 Jul 2025 10:45:07 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id D3939199
- for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:45:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4C64A61437;
+	Fri, 11 Jul 2025 10:45:08 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 37900199
+ for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:45:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D0E7E40251
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0D1D340549
  for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:45:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DqMzzimO4-0a for <buildroot@buildroot.org>;
- Fri, 11 Jul 2025 10:45:00 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ma1mhPd-gtVs for <buildroot@buildroot.org>;
+ Fri, 11 Jul 2025 10:44:58 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
+ client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D955D40094
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D955D40094
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
- [IPv6:2a00:1450:4864:20::334])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D955D40094
- for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:44:59 +0000 (UTC)
-Received: by mail-wm1-x334.google.com with SMTP id
- 5b1f17b1804b1-4537deebb01so10909755e9.0
- for <buildroot@buildroot.org>; Fri, 11 Jul 2025 03:44:59 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9448240517
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9448240517
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9448240517
+ for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:44:58 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id
+ 5b1f17b1804b1-455ecacfc32so1546265e9.3
+ for <buildroot@buildroot.org>; Fri, 11 Jul 2025 03:44:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1752230698; x=1752835498;
+ d=1e100.net; s=20230601; t=1752230697; x=1752835497;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=8xHPJzgsl2+N5CHPdmbIea2bRgZBmT1mks0IIe1O57s=;
- b=E6xhYOkc+XMdiy7gccrflQagDU2UEgGBYUF0dYivUK79hVNbE+ThXY20stO+u65eKc
- P0xMt1r3ZyMlxQiLqSQ8JRGo+bjASEF5M1kCCe+5tLyvKjnZA+4hpyuD2NB+VUySZ5Kh
- e8+JdGukdBcgkX2a0iY18nGLrY37ZUIXfgH44Gh4HaaNG4fN/8vgnxbz5+fl2Oled8MY
- xYeFGtmAz8Ofg7WRu45YJZwAeJYgnDIVyyFEua9F+J25Yx6QFRk8fHGE7hj+FJ5KUmku
- VS8PQB6JK+CUqxrUwxo7oKTvvevd2vH6fcF8jOEN4VPCcZHLfmciiYybZgnSyvUeFCm/
- tVww==
+ bh=U00xWa/qATlUK8lCmUaVVtYjgeiaAwaPP/xE9I3GgZQ=;
+ b=Vo+ksYqWdgQWWO7HdX0TgGF7MHMrNvZmsWZVGYv0N+Tk09PU0SRmLzcM792KOZ9pXF
+ J+1DMtF+mDcdIOtm+8FOhnNoBqrdxE5J6FK9Flnp+fQbHzT9T/aye1sAQZ9Z900nEfor
+ UhHGcNfomHDAPv+ScUhMFGd1gn7JQVwltWokNupUB0lIPHVnoNCOnD/gxN2KQH9iYLZT
+ wA7K5+Z4FfnlqCJKRwg02HnJwlhubFL21I6AEHLIIKUebwC/TmAJTLviDigNGItZ/aVP
+ 1IAAoyQiZchvAric0uteyQ8ea/3gqKTjqAfoo0SyuXFo7wNU/Msw0OyMH5gsYq0eBTHB
+ GL5A==
 X-Forwarded-Encrypted: i=1;
- AJvYcCWDxCTf3O/PkZngqelxAgeX3oBsVf707Lk1g2Dz3juhZTWZMjgDHqEKZugiJo8p59OC0S2NfgPTKn4=@buildroot.org
-X-Gm-Message-State: AOJu0Yyf1TdI9TD8d51x+OflF8jgdyVWGM8ja3H5Kml/qE8jGRqXXLtI
- NrmHWoM3GO5PdDiMyi4Li6a6QGJHm4c4WjUs28uzZUDiDOsFpZLCMRJk9RCuRETZa2k=
-X-Gm-Gg: ASbGncvdVzl0dD//H7bFULUiH/GbBKwTvoaTuhZB88M9TboaMHjSyuyTlThyJ/Da6bZ
- FYPFNH36RUeq6diJMHjwn8bS/VQR5NmXljbdNjHfouLYozMIm+vqescPCo30dBvSy0FZeSQIRWE
- hvSrmdbm0/6RAEXbvSIXTyvhN0k3xgF78X9xz0b15G4Eq5qLU/kjajiBWEtmjcTF9WT/VwAZC4g
- dNRlVCD4OKvF9FQ/hHr81Dnw6Oj0ilJx8+6Fdq5t1hbbaKtF0J8aMUoKKBm89m1Sx9yIjnpda3G
- eXqfpTFDBsN5jX20uYI9mbINnc3KGpbPdDizHRwBv8hfb49Ouo78BhQas7+VIdX9S7YgNp2AQqQ
- 7jJj3T+f+6Bxucw==
-X-Google-Smtp-Source: AGHT+IFsSFk542IdIjvD4X9cWRmNjjAafVebtFL1ZM7d2B1xIXQ0b41bCmIySj6mv6PCtLCuG36SHw==
-X-Received: by 2002:a05:600c:8b75:b0:450:cf46:5510 with SMTP id
- 5b1f17b1804b1-454f426190amr21261575e9.29.1752230697716; 
- Fri, 11 Jul 2025 03:44:57 -0700 (PDT)
+ AJvYcCXEPyKHP4HA2AVKhWu3rC4af9XODfKxdg7pjletu0HMs5aSBK1+3/yViowYBw54PeJXDnYlXmrd5IA=@buildroot.org
+X-Gm-Message-State: AOJu0YwqSMB1evAONtW1XS6VLoFcJ5TfV66JD5un/KELYJWW1afQpuCn
+ 6E3dZc5XNRAd4JcdkrNFr3agHN2vcq8ir6zpbuTvWsfZ2uCn5WmDiW5Svws7cN155wZjbeH0m9d
+ ce1SY
+X-Gm-Gg: ASbGncvOeOxmXs9paXPut7gxPMDw9GSS2YtkAmaJzJjzq5uRJ26GXWEgqA57w9R3hco
+ w0E38e1WgBf2PeP6FmoTfnnJvKn+JP0u5Lx+pcO+N7lw1tqjqY4E2BgcJDI407B6Dnw5n8pyvBm
+ MgFd35A1IU6FfgZZ8IS7OkBCTLJyTeZISGfZd3rHio6GBFEjC/NdBVTlVLKy3dzLL2DS4mHQ/fB
+ XIHZpbOCsqZD2buI722P4I61xBJNHZTcIjTZivLsg8U82XBA98aWpMhPWbdeErcuqdUH9RaGw2o
+ KwmsRRzQd9baEzESKQuuEz/CDN924QcncmaSfLNoI2E1DYtsHZhHdndRNaVTmMwV9LdfdLtsEaV
+ OPaJcvEHvglstxA==
+X-Google-Smtp-Source: AGHT+IG0WQmHMor9K/EfZbNLddwsGl9TctbFe5fjEePa0jGrZsToCN0feFFtUOPXm414jU1ZMUl8wg==
+X-Received: by 2002:a05:600c:3105:b0:442:d9fc:7de with SMTP id
+ 5b1f17b1804b1-45565ed632dmr16188795e9.22.1752230696606; 
+ Fri, 11 Jul 2025 03:44:56 -0700 (PDT)
 Received: from arch ([79.132.233.65]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-454d50fb874sm83524665e9.28.2025.07.11.03.44.57
+ 5b1f17b1804b1-455e6d57013sm9997685e9.32.2025.07.11.03.44.56
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 11 Jul 2025 03:44:57 -0700 (PDT)
+ Fri, 11 Jul 2025 03:44:56 -0700 (PDT)
 To: Titouan Christophe <titouan.christophe@mind.be>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Fri, 11 Jul 2025 12:44:56 +0200
-Message-ID: <20250711104456.824198-1-thomas.perale@mind.be>
+Date: Fri, 11 Jul 2025 12:44:55 +0200
+Message-ID: <20250711104455.824148-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250703091134.1716980-1-titouan.christophe@mind.be>
-References: <20250703091134.1716980-1-titouan.christophe@mind.be>
+In-Reply-To: <20250703103316.1727024-1-titouan.christophe@mind.be>
+References: <20250703103316.1727024-1-titouan.christophe@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1752230698; x=1752835498; darn=buildroot.org;
+ d=mind.be; s=google; t=1752230697; x=1752835497; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=8xHPJzgsl2+N5CHPdmbIea2bRgZBmT1mks0IIe1O57s=;
- b=bx4Oin9Vl6CIASTA7IZotiSbw45XtHpRoe0Zzbxfeddw/0JZsbQdZnwoxp0Kn+XDZn
- GJutWagZdDeI0d7uDUvkqNsKoImdTKJwud3lSibuwDC6hEfyLtktRA/3DRh0w6nCTbB/
- nTVDnFI9zzlJeWGZJ+Y+LspdrwCKu6W3eRlOBDB8n2Es+zl84Yq8+hM4Ykd7k8+7mVeB
- Ow5pCHcfOlx/MuRYh99qvcGVkWSXR305OaRCpq/Bkmrnqopb7d2T3YKntnBYIQkSrCW4
- I0tVMGVF7akr1rpAfy2HrE3y7E4exvAGkiDze+BZzmYFnLL8TzKY5LmURc1RsR6WstMX
- E22Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=U00xWa/qATlUK8lCmUaVVtYjgeiaAwaPP/xE9I3GgZQ=;
+ b=cEh5guZwNO/G24JwGN/yM68Izbma0ljR78jMTEVDm5f1sQWgJiDm0FtB1ZHeSHbE9h
+ dP0hnaoM6pxTlNdwdtojPThOG2w/78rUo7NpTL7o4/3QAE5//ReFSUY4tl5u49m3+XAO
+ XywKUvgjg3hbneFmlxsNQtReKuplQufMU9qxr6lA4o0DK4mZbmMHJyVC51Lix5HGvYKQ
+ FHwMm72++OxOqIwxTcb2X50boSeWH9zT9SHUsI1ZRoQsAQ1DlleuVv0ICnGExg0TvinO
+ IRqFrWEzhvHzoSFUYUCRqlHNQLDmLIXFFLlS+SYPSMkGTATvhUAuvSqWmu9cExkOBeWS
+ v80Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=bx4Oin9V
-Subject: Re: [Buildroot] [PATCH] package/php: ignore CVE-2024-3566 that only
- affects Windows
+ header.a=rsa-sha256 header.s=google header.b=cEh5guZw
+Subject: Re: [Buildroot] [PATCH] package/libolm: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,28 +119,123 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
+> Upstream has explicitely stated that libolm is now deprecated.
+> Since no other package depend on libolm, we can easily remove it from
+> Buildroot. If any user is interested in this feature, we can add its
+> successor: vodozemac.
+> 
+> More information here:
+> https://gitlab.matrix.org/matrix-org/olm#important-libolm-is-now-deprecated
+> 
 > Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 
 Applied to 2025.02.x & 2025.05.x. Thanks
 
 > ---
->  package/php/php.mk | 3 +++
->  1 file changed, 3 insertions(+)
+>  Config.in.legacy           |  7 +++++++
+>  DEVELOPERS                 |  1 -
+>  package/Config.in          |  1 -
+>  package/libolm/Config.in   | 12 ------------
+>  package/libolm/libolm.hash |  3 ---
+>  package/libolm/libolm.mk   | 18 ------------------
+>  6 files changed, 7 insertions(+), 35 deletions(-)
+>  delete mode 100644 package/libolm/Config.in
+>  delete mode 100644 package/libolm/libolm.hash
+>  delete mode 100644 package/libolm/libolm.mk
 > 
-> diff --git a/package/php/php.mk b/package/php/php.mk
-> index 01166bae64..a049d90fde 100644
-> --- a/package/php/php.mk
-> +++ b/package/php/php.mk
-> @@ -15,6 +15,9 @@ PHP_LICENSE = PHP-3.01
->  PHP_LICENSE_FILES = LICENSE
->  PHP_CPE_ID_VENDOR = php
+> diff --git a/Config.in.legacy b/Config.in.legacy
+> index 23d7da13b4..4bc917ce00 100644
+> --- a/Config.in.legacy
+> +++ b/Config.in.legacy
+> @@ -146,6 +146,13 @@ endif
 >  
-> +# Only affects the Windows operating system
-> +PHP_IGNORE_CVES += CVE-2024-3566
+>  comment "Legacy options removed in 2025.08"
+>  
+> +config BR2_PACKAGE_LIBOLM
+> +	bool "libolm has been removed"
+> +	select BR2_LEGACY
+> +	help
+> +	  libolm is deprecated and has been removed from Buildroot.
+> +	  https://gitlab.matrix.org/matrix-org/olm#important-libolm-is-now-deprecated
 > +
->  PHP_CONF_OPTS = \
->  	--mandir=/usr/share/man \
->  	--infodir=/usr/share/info \
+>  config BR2_PACKAGE_LIBWEBSOCK
+>  	bool "libwebsock has been removed"
+>  	select BR2_LEGACY
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index e6285ab35d..d2a3e9385b 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1267,7 +1267,6 @@ F:	package/httping/
+>  F:	package/iozone/
+>  F:	package/leptonica/
+>  F:	package/libeXosip2/
+> -F:	package/libolm/
+>  F:	package/libosip2/
+>  F:	package/ocrad/
+>  F:	package/opencl-clhpp/
+> diff --git a/package/Config.in b/package/Config.in
+> index 5109ebed78..39d9d6cf3d 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1630,7 +1630,6 @@ menu "Crypto"
+>  	source "package/libmd/Config.in"
+>  	source "package/libmhash/Config.in"
+>  	source "package/libnss/Config.in"
+> -	source "package/libolm/Config.in"
+>  	source "package/libp11/Config.in"
+>  	source "package/libscrypt/Config.in"
+>  	source "package/libsecret/Config.in"
+> diff --git a/package/libolm/Config.in b/package/libolm/Config.in
+> deleted file mode 100644
+> index a863216d5c..0000000000
+> --- a/package/libolm/Config.in
+> +++ /dev/null
+> @@ -1,12 +0,0 @@
+> -config BR2_PACKAGE_LIBOLM
+> -	bool "libolm"
+> -	depends on BR2_INSTALL_LIBSTDCPP
+> -	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+> -	help
+> -	  libolm is an implementation of the Double Ratchet
+> -	  cryptographic ratchet in C++
+> -
+> -	  https://gitlab.matrix.org/matrix-org/olm
+> -
+> -comment "libolm needs a toolchain w/ C++, gcc >= 4.8"
+> -	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+> diff --git a/package/libolm/libolm.hash b/package/libolm/libolm.hash
+> deleted file mode 100644
+> index a95115d2fe..0000000000
+> --- a/package/libolm/libolm.hash
+> +++ /dev/null
+> @@ -1,3 +0,0 @@
+> -# locally computed
+> -sha256  1e90f9891009965fd064be747616da46b232086fe270b77605ec9bda34272a68  olm-3.2.16.tar.gz
+> -sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
+> diff --git a/package/libolm/libolm.mk b/package/libolm/libolm.mk
+> deleted file mode 100644
+> index 5c8bcd1f59..0000000000
+> --- a/package/libolm/libolm.mk
+> +++ /dev/null
+> @@ -1,18 +0,0 @@
+> -################################################################################
+> -#
+> -# libolm
+> -#
+> -################################################################################
+> -
+> -LIBOLM_VERSION = 3.2.16
+> -LIBOLM_SOURCE = olm-$(LIBOLM_VERSION).tar.gz
+> -LIBOLM_SITE = https://gitlab.matrix.org/matrix-org/olm/-/archive/$(LIBOLM_VERSION)
+> -LIBOLM_LICENSE = Apache-2.0
+> -LIBOLM_LICENSE_FILES = LICENSE
+> -LIBOLM_CPE_ID_VENDOR = matrix
+> -LIBOLM_CPE_ID_PRODUCT = olm
+> -LIBOLM_INSTALL_STAGING = YES
+> -
+> -LIBOLM_CONF_OPTS = -DOLM_TESTS=OFF
+> -
+> -$(eval $(cmake-package))
 > -- 
 > 2.50.0
 > 
