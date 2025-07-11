@@ -4,99 +4,98 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 379C6C8303C
-	for <buildroot@archiver.kernel.org>; Fri, 11 Jul 2025 06:15:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E8DDC8303C
+	for <buildroot@archiver.kernel.org>; Fri, 11 Jul 2025 06:45:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E0AD580CB3;
-	Fri, 11 Jul 2025 06:15:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3647E83DA4;
+	Fri, 11 Jul 2025 06:45:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P6n7VSvowyEW; Fri, 11 Jul 2025 06:15:18 +0000 (UTC)
+ id 0wwXwS-pjiRZ; Fri, 11 Jul 2025 06:45:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 05BF380CAA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6801F820D3
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 05BF380CAA;
-	Fri, 11 Jul 2025 06:15:18 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 9E7CE1E1
- for <buildroot@buildroot.org>; Fri, 11 Jul 2025 06:15:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6801F820D3;
+	Fri, 11 Jul 2025 06:45:38 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id DA58C1E1
+ for <buildroot@buildroot.org>; Fri, 11 Jul 2025 06:45:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8425E40162
- for <buildroot@buildroot.org>; Fri, 11 Jul 2025 06:15:16 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CB11C820D3
+ for <buildroot@buildroot.org>; Fri, 11 Jul 2025 06:45:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vrvdYl7W4Aw0 for <buildroot@buildroot.org>;
- Fri, 11 Jul 2025 06:15:15 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id a-3zd26_b19u for <buildroot@buildroot.org>;
+ Fri, 11 Jul 2025 06:45:36 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::533; helo=mail-ed1-x533.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0FAA3400FB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0FAA3400FB
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
- [IPv6:2a00:1450:4864:20::533])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0FAA3400FB
- for <buildroot@buildroot.org>; Fri, 11 Jul 2025 06:15:14 +0000 (UTC)
-Received: by mail-ed1-x533.google.com with SMTP id
- 4fb4d7f45d1cf-60789b450ceso3329912a12.2
- for <buildroot@buildroot.org>; Thu, 10 Jul 2025 23:15:14 -0700 (PDT)
+ client-ip=2607:f8b0:4864:20::42c; helo=mail-pf1-x42c.google.com;
+ envelope-from=fancp2007@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2001D820A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2001D820A7
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com
+ [IPv6:2607:f8b0:4864:20::42c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2001D820A7
+ for <buildroot@buildroot.org>; Fri, 11 Jul 2025 06:45:34 +0000 (UTC)
+Received: by mail-pf1-x42c.google.com with SMTP id
+ d2e1a72fcca58-747c2cc3419so1687956b3a.2
+ for <buildroot@buildroot.org>; Thu, 10 Jul 2025 23:45:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1752214512; x=1752819312;
+ d=1e100.net; s=20230601; t=1752216334; x=1752821134;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=xP6pI1ipg9Jb9V5ehPJXM9ApjxlayrrLoTQiLknglms=;
- b=hNdyO2hIjLGnvuK8/Mo/AdO2DYmvZYAQUxUPtI/Bk2cmZnrYYMrzJbsiHM8GSU34wv
- kVSh1EJu1HAJ3IhSNxuSpufv7nNkmu3kxPtyEHxZRjDCTqHehTbZ2Q3FuGhkTxc58aDX
- MgoYspfpUTgrgQAD4iqD2WqHte2VZmPXffGJO1SJUpaJ/BQqOnD/uCGJ7/0I1gmkyzvm
- QsIJM2erHEjZqWZwltqi3Q9hwLFp3Dv8yBENzvkWUQVj2+B8IBkjGidRRn0H1pjSkiiE
- cyu+zEvm0jzHmdXhkYiOGrarfy2uNSlX3stS8LQypU2Je+ZteASVhy7UlnwdMo9Na49J
- MHfw==
-X-Gm-Message-State: AOJu0YzE4Iz2BsMr7dAnlX64zHkW3+bB7Ce2NKtKUlpd/VmeoshrdhPu
- XycyoFbUSuOlnY5rDwq+zMUskPHWcdQIveI0tsJ1pc9o/t8K1QNmtUU8zZ9EOZZCMPiSfqMkVED
- 0lasF
-X-Gm-Gg: ASbGncvaNfAefGb+sCr+srzAlva1OJTwbWZbOuK5RQizX6vmzTdV0lbOVkRyIfrEvgJ
- yknYlKQTcpFFCpKq/OptJjOLtTWpC1ERBYZ7YldKVg13rzwLAdFnRZ/Rhm6jvo6QomEqZKCh96B
- 2CmfGET/FyXS013t5hHweU3frZagzmQ3lZhb6bpEUTv+9XE15erY7Oz9Yhvzwd826EvT9h1p8GY
- aQzhuM+GQLixC23H6uQEWwTVzgnjldMYmCQ+y4l67YanpzsU/Gw+f+dk6Cyi3ilA2tmcs1eLwK2
- khlP8Xx4YfoCjcoz6NKWwOvBMh5fp7S0Dj+YWcbj4q34OuCZ5R5nrEdr/KXlYVPZ8stYt5JOeYY
- qA4Mqrw0zK466OOxRcrrO/HmcBCoY0G783ife+WUp9epJqyqG9/eEPPzS4GK2moZk7n8ydtjpxY
- qfSvlkEkVASOwfWv3aYxrA8bo3WYiL34qtLpsbPBf7avYJrvNY84fRXbVgkQ==
-X-Google-Smtp-Source: AGHT+IFZY+feIXI/IxPJVxEL7/JWrTjg+iDyyLD8Qn+YFlDNjfPcepJD/6nkR2956p6pT6xA6AY8Xw==
-X-Received: by 2002:a05:6402:254f:b0:60e:f46:326d with SMTP id
- 4fb4d7f45d1cf-611e851680dmr1478001a12.33.1752214512460; 
- Thu, 10 Jul 2025 23:15:12 -0700 (PDT)
-Received: from dario-ThinkPad-P14s-Gen-5.homenet.telecomitalia.it
- (host-87-5-95-99.retail.telecomitalia.it. [87.5.95.99])
- by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-611db7d59e3sm1023311a12.44.2025.07.10.23.15.11
+ bh=pvO0a39SYWlc9Jzu904DY+Nl6KumZTZQmke8emF4V1c=;
+ b=xBfUKiKZOSSuXnbQ2F09UZCOKlMjS8+xoulLfPw8ooJ7FHBzbYaDty7LJ/QhBfClj8
+ J2vfuIfpWutwyorMyxFGRPlw4HMkM4dTFKHGms0jQ2Zbgj2FsMbzSZ432rn136gjJh2u
+ 2NrKkQtZa5yKEc2xGt9CCE3KN+91JtgbO/yrqOaBazG+g8mOYyezTWfuNgAccIbgr+7y
+ uryx7CkfrIglGBsf0/4rcqVtgjtCkI0ddax5bE27gyFLZwddIk1SctR/RQ6x0B9d+3fk
+ dvdDRFW2XYmp2wNaPRSRG5hWOuCyl3Ds9AygDJn/17nuQuujrh8pZlwNAOKBo9I6MqxN
+ Li0A==
+X-Gm-Message-State: AOJu0YxLYEJKzSMlvhoMJyv91nBB85NmgoMIkvsomC/YMrURq4IUZfnU
+ 9GZDlEw4GPVQX1245yL1fHoBMsxB4xQ1Gmk0o4D/nqBUEI+VUZpSnI082JfuMw==
+X-Gm-Gg: ASbGncuHM0YYqQTmYXb0dHhBOrkMA4VCyP0Q1rOawZrWtwSyaAQEYvOc1C0bNutoePj
+ plrl3SBY3NDuHQfY+V5BmGJZIUG3Ji7j5W7LgspB0cJ6cIP2sYVyr4WUUYQOiOoNmKguxuhvEVq
+ rWE0RhHof1w/iC58i4+QyXqP+kSZ9yIypsGUky5KnULupeJDd4eM1FuaZXg5wgNSZPdBiF6kO+H
+ Nw1AwqqGmKki5p+OPjkBKl5inHGCSOt34LUVvTi21mR/jKwQkZvNV/B38eQzlKjhmhmgYTVCgYi
+ OmaOSoF3V5v5sFqDiRk0wqdxRS0zg9n6gWvX0NP4Yt8ca7nignLaooQf1yGGF6jWOHXr/R3IMgo
+ UJF5HbdvpM1M76GOuFMU=
+X-Google-Smtp-Source: AGHT+IEljKLV+EVwQ1JAPmiOmctgO6estXTAnnZDJ8xIysNdT3e33ksIU/MShs4WMgEIVPR81YeBfQ==
+X-Received: by 2002:aa7:8887:0:b0:74d:247f:fae4 with SMTP id
+ d2e1a72fcca58-74ee0bb5748mr2869138b3a.4.1752216333829; 
+ Thu, 10 Jul 2025 23:45:33 -0700 (PDT)
+Received: from localhost ([66.112.214.180]) by smtp.gmail.com with ESMTPSA id
+ d2e1a72fcca58-74eb9e069b7sm4889736b3a.55.2025.07.10.23.45.32
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 10 Jul 2025 23:15:12 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+ Thu, 10 Jul 2025 23:45:33 -0700 (PDT)
+From: Scott Fan <fancp2007@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 11 Jul 2025 08:15:08 +0200
-Message-ID: <20250711061509.1772371-1-dario.binacchi@amarulasolutions.com>
+Cc: Scott Fan <fancp2007@gmail.com>,
+	Maxim Kochetkov <fido_max@inbox.ru>
+Date: Fri, 11 Jul 2025 14:45:24 +0800
+Message-ID: <20250711064526.456324-1-fancp2007@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1752214512; x=1752819312;
- darn=buildroot.org; 
+ d=gmail.com; s=20230601; t=1752216334; x=1752821134; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=xP6pI1ipg9Jb9V5ehPJXM9ApjxlayrrLoTQiLknglms=;
- b=ex64sZRtz5EhwdgoprSx3UFX4unvV6Q/ipYhYj2PqzayR+ngFC9VOkgPS+Mk/C6+UD
- eFd2jsmLcFmxVhlhrE1OrJwvu8bMxrSPzzr5r30/G4lLbWCJ4DFbQ6ylXJJnr9u8exe4
- wUH8yOWU08GrJ/nXIOcz6J6e4Ql8+VY2yzLCo=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=pvO0a39SYWlc9Jzu904DY+Nl6KumZTZQmke8emF4V1c=;
+ b=apbZbklvbgALQXYDvjgChm/UW4a3QU0TZ2QOfwtU7bmBCsbRxWpIimwgF3HBOFA7oe
+ VE5+d8nT3Yuk6pCCh5uIIVRraVUVnT6QKayrt2FTKsdjJ48dcvVtdII1migFoy3uo2qt
+ cjarRVZSwEEb+sMWWm9z1M0qK/0NJHCGWu3yNW56aZlpB2LW+tda/YgEm0W9PuBkI2Lj
+ ljkzswR5VVicHRXgFnNVW8DW9OYVakU1lgJgeEnpHrWEoqebHT2eVNAdU/WNlHvlpOE3
+ 9ARZ8DKcHz+oFeq45G8KSPvoOVTzzG4HZOWVrbeqVQvTsbZtbBH/mcyUOaJN3BHEQXB3
+ QC1g==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=ex64sZRt
-Subject: [Buildroot] [PATCH 1/1] configs/beaglebone: bump Linux to
- 6.12.23-ti-arm32-r11 and U-Boot to 2025.07
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=apbZbklv
+Subject: [Buildroot] [PATCH] package/timescaledb: bump version to 2.21.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -108,63 +107,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- linux-amarula@amarulasolutions.com, Lothar Felten <lothar.felten@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The patch bumps the Linux kernel to version 6.12.23-ti-arm32-r11 and
-U-Boot to version 2025.07.
+Release notes: https://github.com/timescale/timescaledb/blob/2.21.0/CHANGELOG.md
 
-Tested on beaglebone black.
-
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Scott Fan <fancp2007@gmail.com>
 ---
- board/beagleboard/beaglebone/patches/linux/linux.hash | 2 +-
- board/beagleboard/beaglebone/patches/uboot/uboot.hash | 2 +-
- configs/beaglebone_defconfig                          | 4 ++--
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ package/timescaledb/timescaledb.hash | 2 +-
+ package/timescaledb/timescaledb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/board/beagleboard/beaglebone/patches/linux/linux.hash b/board/beagleboard/beaglebone/patches/linux/linux.hash
-index 5f6bd2bec165..f2c09d9872c2 100644
---- a/board/beagleboard/beaglebone/patches/linux/linux.hash
-+++ b/board/beagleboard/beaglebone/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
+diff --git a/package/timescaledb/timescaledb.hash b/package/timescaledb/timescaledb.hash
+index 440c5a1371..a1945c6ff3 100644
+--- a/package/timescaledb/timescaledb.hash
++++ b/package/timescaledb/timescaledb.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
--sha256  203743e32c9fba3bb9f965c1b3799977961a9d25071d6d482d96d74adfdbaadb  linux-6.12.17-ti-arm32-r9.tar.gz
-+sha256  3654ca31003d90d20b195b23f8d60b78fcffbf0fd7fed6116c22719e20ac933d  linux-6.12.23-ti-arm32-r11.tar.gz
-diff --git a/board/beagleboard/beaglebone/patches/uboot/uboot.hash b/board/beagleboard/beaglebone/patches/uboot/uboot.hash
-index 80ea21b7cb4c..440526977bd9 100644
---- a/board/beagleboard/beaglebone/patches/uboot/uboot.hash
-+++ b/board/beagleboard/beaglebone/patches/uboot/uboot.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  439d3bef296effd54130be6a731c5b118be7fddd7fcc663ccbc5fb18294d8718  u-boot-2025.04.tar.bz2
-+sha256  0f933f6c5a426895bf306e93e6ac53c60870e4b54cda56d95211bec99e63bec7  u-boot-2025.07.tar.bz2
-diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
-index b4035215dea1..bb63fda37592 100644
---- a/configs/beaglebone_defconfig
-+++ b/configs/beaglebone_defconfig
-@@ -10,7 +10,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/beagleboard/beaglebone/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,beagleboard,linux,6.12.17-ti-arm32-r9)/linux-6.12.17-ti-arm32-r9.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,beagleboard,linux,6.12.23-ti-arm32-r11)/linux-6.12.23-ti-arm32-r11.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bb.org"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="ti/omap/am335x-evm ti/omap/am335x-bone ti/omap/am335x-boneblack ti/omap/am335x-bonegreen ti/omap/am335x-evmsk ti/omap/am335x-boneblue ti/omap/am335x-boneblack-wireless ti/omap/am335x-bonegreen-wireless"
-@@ -24,7 +24,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.04"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.07"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am335x_evm"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+-sha256  31418d888c2a26cd034cd91fcd51be3bb0108d907de9bf9e8bfebfbf20af7766  timescaledb-2.20.3.tar.gz
++sha256  08e44c875618ed5ffa0d5b968b268d437952a3847403ef70a0bf44d9e59f3c30  timescaledb-2.21.0.tar.gz
+ sha256  0378e0948feefd85f579319c74d6e2b671194037f550c7176ef26649d94c895b  LICENSE
+diff --git a/package/timescaledb/timescaledb.mk b/package/timescaledb/timescaledb.mk
+index 37c249ee9f..fcb766c042 100644
+--- a/package/timescaledb/timescaledb.mk
++++ b/package/timescaledb/timescaledb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TIMESCALEDB_VERSION = 2.20.3
++TIMESCALEDB_VERSION = 2.21.0
+ TIMESCALEDB_SITE = $(call github,timescale,timescaledb,$(TIMESCALEDB_VERSION))
+ TIMESCALEDB_LICENSE = Apache-2.0
+ TIMESCALEDB_LICENSE_FILES = LICENSE
 -- 
 2.43.0
 
