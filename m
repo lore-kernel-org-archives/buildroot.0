@@ -4,99 +4,102 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5994FC83F1A
-	for <buildroot@archiver.kernel.org>; Fri, 11 Jul 2025 10:45:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41A78C8303C
+	for <buildroot@archiver.kernel.org>; Fri, 11 Jul 2025 10:45:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 250396142C;
+	by smtp3.osuosl.org (Postfix) with ESMTP id D0C0F61507;
 	Fri, 11 Jul 2025 10:45:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6Q2tjKdmUx9F; Fri, 11 Jul 2025 10:45:13 +0000 (UTC)
+ id GTKOC8Gy92zc; Fri, 11 Jul 2025 10:45:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9667D60ED7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B3EEB614FF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9667D60ED7;
-	Fri, 11 Jul 2025 10:45:12 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 714DE968
- for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:45:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B3EEB614FF;
+	Fri, 11 Jul 2025 10:45:09 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1324C199
+ for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:45:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5585D60E7B
- for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:45:04 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EDF5840510
+ for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:45:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zi4cue8WUEn5 for <buildroot@buildroot.org>;
- Fri, 11 Jul 2025 10:45:03 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iAzYBOk3nCRm for <buildroot@buildroot.org>;
+ Fri, 11 Jul 2025 10:45:01 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
+ client-ip=2a00:1450:4864:20::52f; helo=mail-ed1-x52f.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2EA856129E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2EA856129E
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2EA856129E
- for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:45:03 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id
- 5b1f17b1804b1-45526dec171so5957845e9.2
- for <buildroot@buildroot.org>; Fri, 11 Jul 2025 03:45:02 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1612940094
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1612940094
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
+ [IPv6:2a00:1450:4864:20::52f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1612940094
+ for <buildroot@buildroot.org>; Fri, 11 Jul 2025 10:45:00 +0000 (UTC)
+Received: by mail-ed1-x52f.google.com with SMTP id
+ 4fb4d7f45d1cf-60dffae17f3so2864634a12.1
+ for <buildroot@buildroot.org>; Fri, 11 Jul 2025 03:45:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1752230701; x=1752835501;
+ d=1e100.net; s=20230601; t=1752230699; x=1752835499;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=uj2LvYoRq30/FRIHXkKQsYvn/PesI2kCkhgcOjMj0U8=;
- b=pegbCElxO8XyZKLWltY0u3lAYk/xBnK9u/XuZyQ6R7RncYtkaMP263eUgNgoVxUpDe
- HvgtIaYvEinkaRONPJ3YJll6aNRgcaX+g2xLeDQDyGahnrUGr6g5m7I0VB+ODGFNZl9z
- ni0XS87cDqyvWvpQ5LO00ztt6L40MDcnfKRg1m0VbnV3BNzwFeTNvEU9RR9S4ggmgDOi
- Y8zLkHox1Z3jtd5QYfsdgDOK/goUKLy8TYhtYe3YO0jtCsfWGd/vkwvCdp0gJEE4q9xY
- SncvnoPWCwf9adwsTm3f8InK52A7++jtzBA8ResJKfmweXWmA6HX32tIoheTA7I5Djbj
- gwDA==
-X-Gm-Message-State: AOJu0YzJhFXRKbJhO52UnFa+3vNTpF8Tf96XIr+idkffXkYebU0PhwmN
- AUdKOZz9DSQo9jbAA0nZ4BcZ/YCWx3SsPnDYb7H/uaFc349v5BcQVT7YGSTuDUpz+hHhPBz6FZF
- 0ETJa
-X-Gm-Gg: ASbGncv0fLUmubEITN+XbqFlaWA0oiHT+pVfq05fsBnfJ4pEE6s/qrwDfQoM7DyqkME
- gmoJNwwgannjZQHamNBxIqgGQyaHnB8CcGPkr4JhWHOXUvis59czzBCMb4m9RrhoQdCWNXnZqPQ
- SsR/0auq9Mf+jt/h/q3AuLEJOcRFUWdkotVuXI4OtaSIa7lddgTZYSHgWKXNml3K2dN4woQUBtX
- bMH9xmRp52Wdk4w7gp84wccZOkci5E1Qyobo8tw1LQCA3kqFHKO6I5+dchYR9MS0YSjx8resdaI
- aX3i5V82u7XTEHPdVn19RIDvYqfl0DeakF/nRg6pFmSLM7Gi/vA9GgNamKjqyIhS2Njd0MJPFgs
- neg8WqdbbDAvDDA==
-X-Google-Smtp-Source: AGHT+IEMIEkY1xuotOY3p5hh/OiDW7husEESJZrVf924jFGLa1oESSgIeWjZR0tZrUXzdyzjd4uQOQ==
-X-Received: by 2002:a05:6000:4211:b0:3a4:e7b7:3851 with SMTP id
- ffacd0b85a97d-3b5f2e3c04emr1693586f8f.58.1752230701111; 
- Fri, 11 Jul 2025 03:45:01 -0700 (PDT)
+ bh=7Hgy1kNLIkVcxPnpj77IGM90Ub3EULChT6NTal3CY9Y=;
+ b=P/N0sbybBRX9Q3WOoEkR6jQ2pkCkCNHcPTSiX+UBLpilV9TXW9Z1Kzf+6wUa/mXoiB
+ xGWHdccBwBu/JN3V9pfPBodisWPrFt02zVfs81Bajh6waGs/ArxelKn6zIqCcOPu2CKR
+ xKQi/8xto2jKv+rwrkEXKqN8dQb8BdVg98vUF6OCZ2LZkHtGyizxxN9yx3rqibhnCZRG
+ gLAEMH2yFK/F9boI7ic5LChhfYX68ShMmb+3PT2AXZBGT2TXc4T75OCum+iC4Biswufd
+ vGkplR6UrgYRVXLE2qdeigjXWHMp04NjVNriVg7SvL4r7vIvNbJGbIS9Y44h6RCeVWb+
+ nV8w==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCUQJPzstn40ge4o0rCot2L9zzBVSDM3mkfO6K2DPCCjrFoPWodbI3XmcG2gpVuuBEO0yn/fSh5eEEQ=@buildroot.org
+X-Gm-Message-State: AOJu0YwpcppYSYA+KNcJiMoKM/YuU1c6c2l1hAm3gT/+K0rjQE6JgtQZ
+ SVt/d+JJMUPy4ohqg6YYZzUQupbHh1Ou/XhrkzwdozvRB1RW3uZ1Xvq2dCwUolYkaa0=
+X-Gm-Gg: ASbGnct7XLpZswnRXENL6rsfv/amLB3LDc/y3NVmeFbeC2DfEkae/3Z0ynK0IaHplFU
+ +krOL5Tb7pDTk2MXZBm7Gl0UjWhtMUuFzb/lWLt21kChsi7ozwY8R6xAYjUhjWJ7Xe2CbTbZFjW
+ fDjEOAwtVzLxpQW1+IuDPMKO9dE1oQrBTLZczS+2qSyIvnnJY4OkiDJ8tCz1EbYh2iJeVftHAdZ
+ hXbjj3H06rWeArcWlShez6hruOWfXUefqYgPr+S8v4qer/ESma1Eyh0egtJ3+hmX3WqtPi0Td1Q
+ vv1WFcOWhnxH7eLyhxTb0VhpeM9udv46RHIw3+OJdJkFVjVWKnkXa43H0VmBIFkcGY9vcUz7zpQ
+ v1u6usO5BJ/tHjugl9MxPpK0a
+X-Google-Smtp-Source: AGHT+IGBDLFx52HKm7aLJ42sIrARq9TtdIbY5j00I6Iev5FQTqYXhuYXIzQinnCLz2a8pdsZVTc0cA==
+X-Received: by 2002:a17:907:1a4f:b0:ad8:a935:b8ff with SMTP id
+ a640c23a62f3a-ae6fc200bcfmr165844766b.31.1752230699003; 
+ Fri, 11 Jul 2025 03:44:59 -0700 (PDT)
 Received: from arch ([79.132.233.65]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3b5e8bd1741sm4187442f8f.18.2025.07.11.03.45.00
+ a640c23a62f3a-ae6e82de902sm278325966b.147.2025.07.11.03.44.58
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 11 Jul 2025 03:45:00 -0700 (PDT)
-To: Thomas Perale <thomas.perale@mind.be>
-Cc: buildroot@buildroot.org
-Date: Fri, 11 Jul 2025 12:45:00 +0200
-Message-ID: <20250711104500.824351-1-thomas.perale@mind.be>
+ Fri, 11 Jul 2025 03:44:58 -0700 (PDT)
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: Thomas Perale <thomas.perale@mind.be>,
+	buildroot@buildroot.org
+Date: Fri, 11 Jul 2025 12:44:57 +0200
+Message-ID: <20250711104457.824252-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250703200917.4054251-2-thomas.perale@mind.be>
-References: <20250703200917.4054251-2-thomas.perale@mind.be>
+In-Reply-To: <20250703210056.1519541-1-bernd@kuhls.net>
+References: <20250703210056.1519541-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1752230701; x=1752835501; darn=buildroot.org;
+ d=mind.be; s=google; t=1752230699; x=1752835499; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=uj2LvYoRq30/FRIHXkKQsYvn/PesI2kCkhgcOjMj0U8=;
- b=X3GcO1DUJg+w3b2sOa1JhRoTMY221LwdIU0gqthIEBRVq0MoC1T8nFBnSEBcsthFgJ
- LetDMggocnAaJ881xXx/QpcXNc//dRC6hoT5e4g1wB2I9C1fBW8Sn9pRdmh2cKHdaLWX
- WdtnnVEUGv9CNIDrfeNHF9MhERRF6RaOy+FiuWblEGDfa/cP6vfJDMSU0H70BjCCHdA1
- bOnxfk7U9WZ0VaWZ06i42KkjdeGbhEzNGC+JeqGTehPv5kJZB6MJrwxwhwO/e73zTWPM
- 6it4qBKmLBqKjQx56K/5wq3IK6eoSLWVQzPNhrs5jfjXB8Ts4rSSIHoHAiEROOXej07Q
- YmnQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=7Hgy1kNLIkVcxPnpj77IGM90Ub3EULChT6NTal3CY9Y=;
+ b=XnFFWf+E61IAIKJNkE7efaZ8kQWRkYuDTUhOFDk562+AUWrU80ylYzH5AA8mivth++
+ g7uSZ4uHrwxZ4DjVwvO5pUORUiPMhPptsC/HQc1MOELKdUCS5pJpcOIuxJwagTt2MEtf
+ md+ZyZ+1DbOIkwSg755Gi0m9sZqcv1FRWwL+E+XezdViLYp3h5pdbK7lwaxmXvrqSSLH
+ 0FFBltP+BPMRV2I4hd6hUi/vJOxVUjrbQ9LMABS2tgjD8Z9rPT5vXNfEulIeAqkbAjuu
+ tSK2Jk/3jpGoibGQYddayW0dLzfZ+RyVrVKeALe/xKAl34MIylMxCIubdLC3bBGaBJCf
+ q4kQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=X3GcO1DU
-Subject: Re: [Buildroot] [PATCH] package/python-multipart: add CPE identifier
+ header.a=rsa-sha256 header.s=google header.b=XnFFWf+E
+Subject: Re: [Buildroot] [PATCH 1/1] package/php: security bump version to
+ 8.3.23
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,34 +119,46 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> The cpe:2.3:a:fastapiexpert:python-multipart:0.0.20:*:*:*:*:*:*:* is
-> valid for this package.
+> Changelog: https://www.php.net/ChangeLog-8.php#PHP_8_3
 > 
-> See https://nvd.nist.gov/products/cpe/detail/8C38E43A-00AD-4851-9AC9-80408FF89F52
+> Fixes CVE-2025-1735, CVE-2025-6491 & CVE-2025-1220:
+> https://news-web.php.net/php.announce/465
 > 
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2025.02.x & 2025.05.x. Thanks
 
 > ---
-> See for instance https://nvd.nist.gov/vuln/detail/CVE-2024-24762
-> ---
->  package/python-multipart/python-multipart.mk | 1 +
->  1 file changed, 1 insertion(+)
+>  package/php/php.hash | 2 +-
+>  package/php/php.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/python-multipart/python-multipart.mk b/package/python-multipart/python-multipart.mk
-> index 8c49e2df9c..8e11f5f6cd 100644
-> --- a/package/python-multipart/python-multipart.mk
-> +++ b/package/python-multipart/python-multipart.mk
-> @@ -10,5 +10,6 @@ PYTHON_MULTIPART_SITE = https://files.pythonhosted.org/packages/f3/87/f44d7c9f27
->  PYTHON_MULTIPART_SETUP_TYPE = hatch
->  PYTHON_MULTIPART_LICENSE = Apache-2.0
->  PYTHON_MULTIPART_LICENSE_FILES = LICENSE.txt
-> +PYTHON_MULTIPART_CPE_ID_VENDOR = fastapiexpert
+> diff --git a/package/php/php.hash b/package/php/php.hash
+> index 4260c1e5f4..29162bd008 100644
+> --- a/package/php/php.hash
+> +++ b/package/php/php.hash
+> @@ -1,5 +1,5 @@
+>  # From https://www.php.net/downloads.php
+> -sha256  66c86889059bd27ccf460590ca48fcaf3261349cc9bdba2023ac6a265beabf36  php-8.3.22.tar.xz
+> +sha256  08be64700f703bca6ff1284bf1fdaffa37ae1b9734b6559f8350248e8960a6db  php-8.3.23.tar.xz
 >  
->  $(eval $(python-package))
+>  # License file
+>  sha256  b42e4df5e50e6ecda1047d503d6d91d71032d09ed1027ba1ef29eed26f890c5a  LICENSE
+> diff --git a/package/php/php.mk b/package/php/php.mk
+> index a049d90fde..b431d839fb 100644
+> --- a/package/php/php.mk
+> +++ b/package/php/php.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -PHP_VERSION = 8.3.22
+> +PHP_VERSION = 8.3.23
+>  PHP_SITE = https://www.php.net/distributions
+>  PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+>  PHP_INSTALL_STAGING = YES
 > -- 
-> 2.50.0
+> 2.39.5
 > 
 > _______________________________________________
 > buildroot mailing list
