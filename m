@@ -1,104 +1,104 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6099CC83F1A
-	for <buildroot@archiver.kernel.org>; Fri, 11 Jul 2025 12:06:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A017EC83F1A
+	for <buildroot@archiver.kernel.org>; Fri, 11 Jul 2025 12:06:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 19D5960D4E;
-	Fri, 11 Jul 2025 12:06:11 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id J4VNAYfObhyV; Fri, 11 Jul 2025 12:06:10 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4DFEF60D50
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4DFEF60D50;
-	Fri, 11 Jul 2025 12:06:10 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id C8FCB1E1
- for <buildroot@buildroot.org>; Fri, 11 Jul 2025 12:06:08 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BA86240A02
- for <buildroot@buildroot.org>; Fri, 11 Jul 2025 12:06:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7202640F0E;
+	Fri, 11 Jul 2025 12:06:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8M0CW4-dv8j2 for <buildroot@buildroot.org>;
- Fri, 11 Jul 2025 12:06:08 +0000 (UTC)
+ id oEQ0JgnWxQEP; Fri, 11 Jul 2025 12:06:45 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9877B40A77
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9877B40A77;
+	Fri, 11 Jul 2025 12:06:45 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 48FE4114
+ for <buildroot@buildroot.org>; Fri, 11 Jul 2025 12:06:44 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3AB6860D50
+ for <buildroot@buildroot.org>; Fri, 11 Jul 2025 12:06:44 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id C44ffS5JaEG3 for <buildroot@buildroot.org>;
+ Fri, 11 Jul 2025 12:06:43 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::529; helo=mail-ed1-x529.google.com;
+ client-ip=2a00:1450:4864:20::629; helo=mail-ej1-x629.google.com;
  envelope-from=heiko.thiery@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 63EF240A1F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 63EF240A1F
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
- [IPv6:2a00:1450:4864:20::529])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 63EF240A1F
- for <buildroot@buildroot.org>; Fri, 11 Jul 2025 12:06:07 +0000 (UTC)
-Received: by mail-ed1-x529.google.com with SMTP id
- 4fb4d7f45d1cf-607cc1a2bd8so3282475a12.2
- for <buildroot@buildroot.org>; Fri, 11 Jul 2025 05:06:07 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 88E4760D4E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 88E4760D4E
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
+ [IPv6:2a00:1450:4864:20::629])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 88E4760D4E
+ for <buildroot@buildroot.org>; Fri, 11 Jul 2025 12:06:43 +0000 (UTC)
+Received: by mail-ej1-x629.google.com with SMTP id
+ a640c23a62f3a-ae0e0271d82so368468666b.3
+ for <buildroot@buildroot.org>; Fri, 11 Jul 2025 05:06:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1752235565; x=1752840365;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=M3FbuPlr6/SuwaO0gHUDcIF6SsWwYpSdV+RqVKIBEbg=;
- b=Q2rdWqduufBkzEjkQ+BYdDROCK6F86N1JaK1xI6vG/PMsv7lcXEVEurA0GBZvbG52T
- OA+6VQEUr0Jjet9SCq5pn1iKns0unGSxLvqxBxRvK7WpEtspW35P6JgZpEf9+twt+3uq
- IE1kzwYI93omXMpBBOUwwt5aOCWDIW8a+UOXLI8hcs+g9NpcBWlCapi9E1+yY1nmjblc
- 0SiDQj4W8IpN4FEJo+2Ds/+KLlnWv3Gm0PGXkjb08nmXXbrp53Ir+evQ0bWNd2M4S44g
- PcGGItJr3SvG3vPeQ4YqCcwlcDFTjFFMjEzq00izQ5iTMP0PQZu/INPNHpFSNQWkdTcd
- JOEA==
-X-Gm-Message-State: AOJu0Yzt1qXKJDGRsrnNtxqiJYSwCprseEHOV8dMiBO/NlnToFSJtZ+y
- YqD6W/0GwM+p6i6+YXRx6FVphi4Ez8PqkQSZghjpKzjzBWBhKBkuyeebyeVnnw==
-X-Gm-Gg: ASbGncvwA8w7CYzX3v9NAE1kSEHAwa2RivuasAlZKG/8PGQwNtOJu2SQWZGfbbx7ASf
- lBdW0zfk+kIEAdJJSKZ6NRQjyO5dhvPUhQODg+oSUdyhCZsur2b2y0S1/WQjcLwTynT6HlFLmbx
- FC2JN4j4Hm9H6P3x7oC1Z0v49Bm0A34J11lstyZEBDL7mKiVQJ0V42IJw0i8RTkkplkQw0bJtWj
- fwN5qSklUuJsM5fhdGbxAp2o49CzMNRZScGgVyRG6DwqBJdf4z8jvb53LbWr4O/NSYECr0zkFno
- FyEqUteAMzSElwaqIki0zMmVaUN5or3FnWe1qsmqKEBz3gwVDvruHV+dEIgSH6FJGn1lQsxMSFo
- +6mH4acUH9PVdNbrIryN0QXu6W4PMVa8JSSFUtA==
-X-Google-Smtp-Source: AGHT+IFOrqXQPcrVp1hInH+NPDWnvlDaM8tMO6lOMC6HyNHqS9bsBmwB4esHZg1lTRdgk/BBf25fSg==
-X-Received: by 2002:a05:6402:35d5:b0:601:ad95:ca6d with SMTP id
- 4fb4d7f45d1cf-611e763839cmr2649491a12.8.1752235563695; 
- Fri, 11 Jul 2025 05:06:03 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1752235601; x=1752840401;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=dG/RekkPIhbPpmn+7EEpaidH+VSjPlJGCLVotdQsUdY=;
+ b=jPqVinDeOTvuIlL6PuaZeTMOp2FbDdy7sfTpgOBj21sWVSZ7s2XIHvCjtwyUfuRMfe
+ AMiMABm0vg/kKWSGHS2/8fbW8f955tAmNS8KKEadA4DlF1GjiXyz6ffLOfFZ2FfYktjf
+ /oiIR1mUBW/10dp2d23yqR359kyxQ7FoJk/qt/3d2Afg0MuS+5zIopSFZbcnBLQcyjN9
+ /PgyPSvdDjVOue6fsy8LPC8FkF8p9cmz9x4qO7o+SvRwL+w2HrKo6vnQisJZSpKOOUz+
+ Ejy8Yf7kwdfzR+Zar3skHej70KKOgp4vyWthGT5rK6+yHUdBbDfM/lNwG0NyEgKzDm+f
+ gtug==
+X-Gm-Message-State: AOJu0YzCCUcSTDzR/d5w6cWebB8csbRQ6frtReANS5i/FqMfq++AMXoH
+ xJrJqZrzUTRIcArs3QyxRXHYDa7G4GEk+aJnDZR4A1fvzodsCxeiWJLgCqd+jA==
+X-Gm-Gg: ASbGncubPC+6g90qsjOY9ue2BNe2+a54sWQKdMghVJaREbNZZU0ZGx5LEsA6hoDJC2L
+ RTsmpEWLGKGVq9Jes+teBMeqL3wgLDob7njIiy8/QCtq++n2U/bzOW7qbQ7geBT3xhwXps8EMTM
+ FoDOKLr0mfba0MxAii7QGz5HZBZheKLt9Gb2ez01joBPhb6iXXTOd0cvTixqPT2NbhltEQ0j/Nx
+ 24R+hBZmwXxrEOuQHy/xgI/yH8PMNugQvxoVL0lqqO01JXFxjScQ4yM63GOvJZqltQLwPxYsWJQ
+ kR1pcDtZtn7umoQsKhR3BvtLihOzvurs6dNbYZtQ2cHOMJvEbEHnMhakpc+dK0asmJZReR0MBrh
+ XFPUUHkYU2g/FMMdzgdF/c1XZhdj+cLOfnUeqBQ==
+X-Google-Smtp-Source: AGHT+IE2kKJdndi75z9Juvgpvas/c/p62QCBDEojZiIPn0/7BvDbx2LvJm0FYNM7AI78wi5FxRpnag==
+X-Received: by 2002:a17:906:c115:b0:ae0:d201:a333 with SMTP id
+ a640c23a62f3a-ae6fbf20e11mr304104666b.30.1752235600867; 
+ Fri, 11 Jul 2025 05:06:40 -0700 (PDT)
 Received: from hthiery.kontron.local ([77.21.162.101])
  by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-611d50d6715sm1595944a12.6.2025.07.11.05.06.02
+ a640c23a62f3a-ae6e8264fbcsm285331666b.75.2025.07.11.05.06.39
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 11 Jul 2025 05:06:03 -0700 (PDT)
+ Fri, 11 Jul 2025 05:06:40 -0700 (PDT)
 From: Heiko Thiery <heiko.thiery@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 11 Jul 2025 14:05:46 +0200
-Message-Id: <20250711120544.315926-2-heiko.thiery@gmail.com>
+Cc: Bernd Kuhls <bernd@kuhls.net>, Romain Naour <romain.naour@gmail.com>,
+ Bryan Brattlof <bb@ti.com>, Michael Walle <michael@walle.cc>,
+ Heiko Thiery <heiko.thiery@gmail.com>
+Date: Fri, 11 Jul 2025 14:06:26 +0200
+Message-Id: <20250711120625.316250-1-heiko.thiery@gmail.com>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250711120544.315926-1-heiko.thiery@gmail.com>
-References: <20250711120544.315926-1-heiko.thiery@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1752235565; x=1752840365; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=M3FbuPlr6/SuwaO0gHUDcIF6SsWwYpSdV+RqVKIBEbg=;
- b=U07dXXkbcp3g+cu12gKJHl7iCcM27KxZXVy70bKXjfDB53YQBXqGf3To0TBis5gIxd
- XudchWU4prAWFlI2zg4nrcHjJPrf48bx4LLEVjr59G30SYqxR39Bpq6I2+fAlS5YW/fI
- r5yDNQ5+x6lKOh32aoXzzt/VkhGFD2w0kubHejfJCfJupzz7F9vxBiiS2G9T/ZYKJjS5
- 7uqaN+hXQfJ1PBIU+vfZxRlGllQ24NhoS0hWDvKJSI5QRpDg/rwlMqOm6XFe98t+PyAq
- iqQxtRZQNB4GyL1g5OE2S/76JLchZ/Pwwh9Q4hydEx6oGWXIbeU8O42qqjJBJ4QBoCY3
- vfgw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=gmail.com; s=20230601; t=1752235601; x=1752840401; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=dG/RekkPIhbPpmn+7EEpaidH+VSjPlJGCLVotdQsUdY=;
+ b=k/cXIhkrzm/m0tZ6HAGvptxlFlLtKtrniWoBvUsgmq0gOW5zSK5kielOL+QeID2HX1
+ QCdeOLHzPn96/wgHcxH+XFhIV6NEhyhdvCFoGXdfGke9nvMLBYt2lZ/UNH7J9aX9FJqA
+ 5EoB+rsUrOez/Lv4NQVdhgmQDr9gVE6ReQO7YzXTDlk29XfSKfEAq1e9fMreho0278Qb
+ GFGsaZLFZWRbKSWFoPPDQw4SINZ2FPIyZUwuTuje0HBC7XpqBOQAKzI7K9MvAkX5h7yW
+ UrGASde9DWAhp7oida62w5V3cr1SkJqw5y5VAoqvfDfp8/ef9AyB3OA+l4es4O9UlEvN
+ UmoQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=U07dXXkb
-Subject: [Buildroot] [PATCH] package/linux-firmware: add support for PowerVR
- rogue
+ header.s=20230601 header.b=k/cXIhkr
+Subject: [Buildroot] [PATCH] package/mesa3d: add support for imagination
+ vulkan driver
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -110,54 +110,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd@kuhls.net>, Michael Walle <michael@walle.cc>,
- Bryan Brattlof <bb@ti.com>, Heiko Thiery <heiko.thiery@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This "powervr" directory has been present in linux-firmware since
-version 20231211.
+This adds the experimental vulkan support for the PowerVR rogue
+architecture.
 
 Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 ---
- package/linux-firmware/Config.in         | 5 +++++
- package/linux-firmware/linux-firmware.mk | 5 +++++
- 2 files changed, 10 insertions(+)
+ package/mesa3d/Config.in | 8 ++++++++
+ package/mesa3d/mesa3d.mk | 1 +
+ 2 files changed, 9 insertions(+)
 
-diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index 34f3fb7691..54910df6fd 100644
---- a/package/linux-firmware/Config.in
-+++ b/package/linux-firmware/Config.in
-@@ -729,6 +729,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_ARM_MALI_CSF
- 	  Firmware files for Arm Mali 10th generation GPU
- 	  needed by the linux panthor kernel driver.
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index b5c1d92d68..7ec8fd2f76 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -359,6 +359,14 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_BROADCOM
+ 	help
+ 	  Vulkan broadcom driver.
  
-+config BR2_PACKAGE_LINUX_FIRMWARE_POWERVR_ROGUE
-+	bool "PowerVR Technologies Rogue GPU firmware"
++config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_IMAGINATION
++	bool "Vulkan imagination driver (experimental)"
++	depends on BR2_arm || BR2_aarch64
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libxshmfence
++	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
 +	help
-+	  Firmware files for PowerVR Technologies Rogue video cards.
++	  Vulkan imagination driver.
 +
- endmenu
- 
- menu "Serial adapters firmware"
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 38212e12ac..b9fd471e85 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -931,6 +931,11 @@ LINUX_FIRMWARE_FILES += arm/mali/arch*/mali_csffw.bin
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.mali_csffw
- endif
- 
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_POWERVR_ROGUE),y)
-+LINUX_FIRMWARE_DIRS += powervr
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.powervr
-+endif
-+
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_RP2),y)
- LINUX_FIRMWARE_FILES += rp2.fw
- endif
+ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
+ 	bool "Vulkan Intel driver"
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 998fd25584..716e11044b 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -135,6 +135,7 @@ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL)    += virgl
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ZINK)     += zink
+ # Vulkan Drivers
+ MESA3D_VULKAN_DRIVERS-$(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_BROADCOM) += broadcom
++MESA3D_VULKAN_DRIVERS-$(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_IMAGINATION) += imagination-experimental
+ MESA3D_VULKAN_DRIVERS-$(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL)   += intel
+ MESA3D_VULKAN_DRIVERS-$(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_SWRAST) += swrast
+ MESA3D_VULKAN_DRIVERS-$(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_VIRTIO) += virtio
 -- 
 2.39.5
 
