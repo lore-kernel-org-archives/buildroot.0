@@ -4,49 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43E4BC83F1D
-	for <buildroot@archiver.kernel.org>; Sat, 12 Jul 2025 22:00:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC9F8C83F10
+	for <buildroot@archiver.kernel.org>; Sat, 12 Jul 2025 22:01:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6C28D612FC;
-	Sat, 12 Jul 2025 22:00:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B3832612CC;
+	Sat, 12 Jul 2025 22:01:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id O3GaHeB986oD; Sat, 12 Jul 2025 22:00:42 +0000 (UTC)
+ id VrzxVSGRjX87; Sat, 12 Jul 2025 22:01:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4EF10612C8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA08C6129A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4EF10612C8;
-	Sat, 12 Jul 2025 22:00:42 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 82D4CDF
- for <buildroot@buildroot.org>; Sat, 12 Jul 2025 22:00:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DA08C6129A;
+	Sat, 12 Jul 2025 22:01:08 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 46536106
+ for <buildroot@buildroot.org>; Sat, 12 Jul 2025 22:01:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6696C81E8D
- for <buildroot@buildroot.org>; Sat, 12 Jul 2025 22:00:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2C755411D1
+ for <buildroot@buildroot.org>; Sat, 12 Jul 2025 22:01:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1LiS7Rwupi8O for <buildroot@buildroot.org>;
- Sat, 12 Jul 2025 22:00:38 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F99081E89
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8F99081E89
- for <buildroot@buildroot.org>; Sat, 12 Jul 2025 22:00:37 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6CD6E86446; Sat, 12 Jul 2025 22:00:37 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 12 Jul 2025 23:48:02 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0df4585100358976434238cc64825cfbc505fc02
-X-Git-Newrev: bb1a5689459a6f6fead0c0cfec0052cafa77d2c3
-X-Patchwork-Hint: ignore
-Message-Id: <20250712220037.6CD6E86446@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libxml2: add patch for
- CVE-2025-49795
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Y5v_etFQlgMC for <buildroot@buildroot.org>;
+ Sat, 12 Jul 2025 22:01:05 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4AA4D411C7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4AA4D411C7
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4AA4D411C7
+ for <buildroot@buildroot.org>; Sat, 12 Jul 2025 22:01:05 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id 8BA16B0056A;
+ Sun, 13 Jul 2025 00:01:01 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 13 Jul 2025 00:01:01 +0200
+MIME-Version: 1.0
+Date: Sun, 13 Jul 2025 00:01:01 +0200
+To: Tim Soubry <tim.soubry@mind.be>
+Cc: buildroot@buildroot.org, Pierre-Jean Texier <texier.pj2@gmail.com>
+In-Reply-To: <20250709151542.2605609-1-tim.soubry@mind.be>
+References: <20250709151542.2605609-1-tim.soubry@mind.be>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <7b8d6b96d00beaf8168713ffdf287fdd@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1752357663;
+ bh=KTiQVcjlHvA7vgaSL0Irt1MYbvBin3H5bp+Nqlsi0vs=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=e6o1UX1MUsfI1daZ1hoYmrf6ObYY4X8bFAVcVYnX0ZGKBGCDGei7wwegnI1jZU7BO
+ bt6mRS7zIM8BCZZojoY80OiyebdqPWg+reg3dQ+j1fz68MjQbTd/uTBOvj4XqLpabn
+ v6Te2uMziRIvq54g4Y8aNvHyctplFXgrZdLRaVCJ07YfuqVm/7HC02gSJWm3sGN5RH
+ /dmKKf4DblkkJZ0tuHxqsGKf6kK2ps2XfoP1E+LdHVd6dc0PLUGkZ8LDhdV7LQ53Rp
+ RMlVOjueJRJ7rkMTneUKBf5ZEzQ6wIGxXt81NYxvK96XKiOPwiDEvY0A7FEuYz7tTg
+ vPK/PACY/7opQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=e6o1UX1M
+Subject: Re: [Buildroot] [PATCH 1/3] package/libxml2: add patch for
+ CVE-2025-6021
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,119 +83,26 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bb1a5689459a6f6fead0c0cfec0052cafa77d2c3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 09/07/2025 17:15, Tim Soubry via buildroot wrote:
+> This fixes an integer overflow vulnerability [1], in libxml2 version
+> 2.13 by backporting the commit [2] from libxml2 2.14. This commit uses
+> the SIZE_MAX macro, for which stdint.h was included in tree.c, as done 
+> in [3].
+> 
+> [1] https://nvd.nist.gov/vuln/detail/CVE-2025-6021
+> [2] 
+> https://gitlab.gnome.org/GNOME/libxml2/-/commit/ad346c9a249c4b380bf73c460ad3e81135c5d781
+> [3] 
+> https://git.openembedded.org/openembedded-core/tree/meta/recipes-core/libxml/libxml2/CVE-2025-6021.patch
+> 
+> Signed-off-by: Tim Soubry <tim.soubry@mind.be>
 
-This patch mitigates CVE-2025-49795 [1] by backporting the commit [2] to
-libxml2 2.13.
-
-[1] https://nvd.nist.gov/vuln/detail/cve-2025-49795
-[2] https://gitlab.gnome.org/GNOME/libxml2/-/commit/499bcb78ab389f60c2fd634ce410d4bb85c18765
-[3] https://security-tracker.debian.org/tracker/CVE-2025-49795
-
-Signed-off-by: Tim Soubry <tim.soubry@mind.be>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...Fix-null-pointer-dereference-leading-to-D.patch | 70 ++++++++++++++++++++++
- package/libxml2/libxml2.mk                         |  3 +
- 2 files changed, 73 insertions(+)
-
-diff --git a/package/libxml2/0003-Schematron-Fix-null-pointer-dereference-leading-to-D.patch b/package/libxml2/0003-Schematron-Fix-null-pointer-dereference-leading-to-D.patch
-new file mode 100644
-index 0000000000..38b3e9be41
---- /dev/null
-+++ b/package/libxml2/0003-Schematron-Fix-null-pointer-dereference-leading-to-D.patch
-@@ -0,0 +1,70 @@
-+From 4df1c80c4edc51ecb9f2f574203128a06fd31406 Mon Sep 17 00:00:00 2001
-+From: Michael Mann <mmann78@netscape.net>
-+Date: Sat, 21 Jun 2025 12:11:30 -0400
-+Subject: [PATCH] Schematron: Fix null pointer dereference leading to DoS
-+
-+(CVE-2025-49795)
-+
-+Fixes #932
-+
-+Upstream: https://gitlab.gnome.org/GNOME/libxml2/-/commit/499bcb78ab389f60c2fd634ce410d4bb85c18765
-+CVE: CVE-2025-49795
-+Signed-off-by: Tim Soubry <tim.soubry@mind.be>
-+---
-+ result/schematron/zvon16_0.err | 1 +
-+ schematron.c                   | 2 ++
-+ test/schematron/zvon16.sct     | 7 +++++++
-+ test/schematron/zvon16_0.xml   | 5 +++++
-+ 4 files changed, 15 insertions(+)
-+ create mode 100644 result/schematron/zvon16_0.err
-+ create mode 100644 test/schematron/zvon16.sct
-+ create mode 100644 test/schematron/zvon16_0.xml
-+
-+diff --git a/result/schematron/zvon16_0.err b/result/schematron/zvon16_0.err
-+new file mode 100644
-+index 00000000..465cf2eb
-+--- /dev/null
-++++ b/result/schematron/zvon16_0.err
-+@@ -0,0 +1 @@
-++xmlSchematronParse: could not load './test/schematron/zvon16.sct'
-+\ No newline at end of file
-+diff --git a/schematron.c b/schematron.c
-+index 426300c8..b51b20e1 100644
-+--- a/schematron.c
-++++ b/schematron.c
-+@@ -1509,6 +1509,8 @@ xmlSchematronFormatReport(xmlSchematronValidCtxtPtr ctxt,
-+             select = xmlGetNoNsProp(child, BAD_CAST "select");
-+             comp = xmlXPathCtxtCompile(ctxt->xctxt, select);
-+             eval = xmlXPathCompiledEval(comp, ctxt->xctxt);
-++            if (eval == NULL)
-++                return ret;
-+ 
-+             switch (eval->type) {
-+             case XPATH_NODESET: {
-+diff --git a/test/schematron/zvon16.sct b/test/schematron/zvon16.sct
-+new file mode 100644
-+index 00000000..4d24c054
-+--- /dev/null
-++++ b/test/schematron/zvon16.sct
-+@@ -0,0 +1,7 @@
-++<sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron"
-++	<sch:pattern id="TestPattern">
-++		<sch:rule context="book">
-++			<sch:report test="not(@available)">Book <sch:value-of select="falae()"/> test</sch:report>
-++		</sch:rule>
-++	</sch:pattern>
-++</sch:schema>
-+diff --git a/test/schematron/zvon16_0.xml b/test/schematron/zvon16_0.xml
-+new file mode 100644
-+index 00000000..551e2d65
-+--- /dev/null
-++++ b/test/schematron/zvon16_0.xml
-+@@ -0,0 +1,5 @@
-++<library>
-++	<book title="Test Book" id="bk101">
-++		<author>Test Author</author>
-++	</book>
-++</library>
-+-- 
-+2.39.5
-+
-diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
-index a4373a691a..0149ba1f0a 100644
---- a/package/libxml2/libxml2.mk
-+++ b/package/libxml2/libxml2.mk
-@@ -21,6 +21,9 @@ LIBXML2_IGNORE_CVES += CVE-2025-6021
- #0002-schematron-Fix-memory-safety-issues-in-xmlSchematron.patch
- LIBXML2_IGNORE_CVES += CVE-2025-49794 CVE-2025-49796
- 
-+#0003-Schematron-Fix-null-pointer-dereference-leading-to-D.patch
-+LIBXML2_IGNORE_CVES += CVE-2025-49795
-+
- # relocation truncated to fit: R_68K_GOT16O
- ifeq ($(BR2_m68k_cf),y)
- LIBXML2_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -mxgot"
+Series applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
