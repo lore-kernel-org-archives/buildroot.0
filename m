@@ -1,77 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3ADE7C83F10
-	for <buildroot@archiver.kernel.org>; Sat, 12 Jul 2025 11:53:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07B31C83F10
+	for <buildroot@archiver.kernel.org>; Sat, 12 Jul 2025 12:43:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 039A941178;
-	Sat, 12 Jul 2025 11:53:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A292781189;
+	Sat, 12 Jul 2025 12:43:28 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0MTVdZ0puPTM; Sat, 12 Jul 2025 12:43:27 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D4C4381103
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id D4C4381103;
+	Sat, 12 Jul 2025 12:43:26 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1F73A106
+ for <buildroot@buildroot.org>; Sat, 12 Jul 2025 12:43:25 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0588A40C8A
+ for <buildroot@buildroot.org>; Sat, 12 Jul 2025 12:43:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RfqiLNN1Nctr; Sat, 12 Jul 2025 11:53:34 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 022704116B
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 022704116B;
-	Sat, 12 Jul 2025 11:53:34 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 5F96C1CC
- for <buildroot@buildroot.org>; Sat, 12 Jul 2025 11:53:33 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 512A16070B
- for <buildroot@buildroot.org>; Sat, 12 Jul 2025 11:53:33 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wRBDbedrxDlt for <buildroot@buildroot.org>;
- Sat, 12 Jul 2025 11:53:32 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 731E5606D7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 731E5606D7
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 731E5606D7
- for <buildroot@buildroot.org>; Sat, 12 Jul 2025 11:53:32 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
+ id meCecsRHN_b3 for <buildroot@buildroot.org>;
+ Sat, 12 Jul 2025 12:43:24 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 30017406B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 30017406B1
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 30017406B1
+ for <buildroot@buildroot.org>; Sat, 12 Jul 2025 12:43:23 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
  (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id 92212780368;
- Sat, 12 Jul 2025 13:53:26 +0200 (CEST)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id 6096C5FFB1;
+ Sat, 12 Jul 2025 14:43:15 +0200 (CEST)
 Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
  via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 12 Jul 2025 13:53:26 +0200
+ with HTTP (HTTP/1.0 POST); Sat, 12 Jul 2025 14:43:15 +0200
 MIME-Version: 1.0
-Date: Sat, 12 Jul 2025 13:53:26 +0200
+Date: Sat, 12 Jul 2025 14:43:15 +0200
 To: Heiko Thiery <heiko.thiery@gmail.com>
-Cc: buildroot@buildroot.org, Bernd Kuhls <bernd@kuhls.net>, Michael Walle
- <michael@walle.cc>, Bryan Brattlof <bb@ti.com>
-In-Reply-To: <20250711120544.315926-2-heiko.thiery@gmail.com>
-References: <20250711120544.315926-1-heiko.thiery@gmail.com>
- <20250711120544.315926-2-heiko.thiery@gmail.com>
+Cc: buildroot@buildroot.org, Bernd Kuhls <bernd@kuhls.net>, Romain Naour
+ <romain.naour@gmail.com>, Bryan Brattlof <bb@ti.com>, Michael Walle
+ <michael@walle.cc>
+In-Reply-To: <20250711120625.316250-1-heiko.thiery@gmail.com>
+References: <20250711120625.316250-1-heiko.thiery@gmail.com>
 User-Agent: Webmail Free/1.6.11
-Message-ID: <11f9e821cdf9106557a006c973654036@free.fr>
+Message-ID: <a2186a22be0f15499a563c1aa6d6d57f@free.fr>
 X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1752321210;
- bh=Z0hrQKZHRqbUCbTalxRcsFdAA4sj19vto/52IgwvtYA=;
+ d=free.fr; s=smtp-20201208; t=1752324201;
+ bh=WgYFUhxnfF1+jurVpRDjrEHO/aJ5qKIKtj03PTpRcC8=;
  h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Mnipcry0mFDC8MC4XMai6HLwrqFDeHeHlQj2RvQ30pXFR4Bnejq2lF7Abieerjxyg
- dLEMywmbRsHCgB7SAmUWWBMKHdCyyLpsTLAU/QTUqPAPAWFzw9r8Q+u80tbZEkDuJX
- zWC+R/rjkZZ/gp2R6HSRiPV9PAgGRLF+bfmgfYp6OLDWcY1xWWQ0x7PIx80IwVSQk9
- VCWNH6pSXaN7CVGLz4QjGSVsFS1sbbzq52K4EgRf9xmyER+ghk4Wc8ZSZRhw9GV5Jy
- qqWRrOpGjpJtNp7gAivfeBY7biKQ3qcr7ehDo/XLVWy4qBe3er37xoxvMWYPovf4Kg
- Sl4dvXSbhkfWQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=ghpIJgMi5VQbyK78HUPjN7Gq6Sx0N4dBPTFavz1pwFlbc2xEb1y97tTBPN2kq6cKZ
+ mmZtB/6aNwZnqn68XMPtynbWKqKitVESm3EVxY25xPyD0sAA1v4BLC6aXv7AU7ggJv
+ UIJTYktJmtfeXIRtQophE7LaCoP2uoq7FgkGDMRpRCW1cn1/fIDva4FI/jL0qXTBXs
+ i5W3mtKpHTeJHkJrOOrqoR3FmztdVBKf5TfJDKQxzqzKBt02vDeXTRM4RMFMOsMkCf
+ BYhgGThkAGK10GbwoMLhk5GXa0FVIXtCbK+P+bDwaeBw++YjGLRVeQZJbKBOqpq8HS
+ 1HzYeecZlQdpw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Mnipcry0
-Subject: Re: [Buildroot] [PATCH] package/linux-firmware: add support for
- PowerVR rogue
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=ghpIJgMi
+Subject: Re: [Buildroot] [PATCH] package/mesa3d: add support for imagination
+ vulkan driver
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,65 +94,50 @@ Hi Heiko,
 
 Thanks for the patch.
 
-On 11/07/2025 14:05, Heiko Thiery wrote:
-> This "powervr" directory has been present in linux-firmware since
-> version 20231211.
+On 11/07/2025 14:06, Heiko Thiery wrote:
+> This adds the experimental vulkan support for the PowerVR rogue
+> architecture.
 > 
 > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 > ---
->  package/linux-firmware/Config.in         | 5 +++++
->  package/linux-firmware/linux-firmware.mk | 5 +++++
->  2 files changed, 10 insertions(+)
+>  package/mesa3d/Config.in | 8 ++++++++
+>  package/mesa3d/mesa3d.mk | 1 +
+>  2 files changed, 9 insertions(+)
 > 
-> diff --git a/package/linux-firmware/Config.in 
-> b/package/linux-firmware/Config.in
-> index 34f3fb7691..54910df6fd 100644
-> --- a/package/linux-firmware/Config.in
-> +++ b/package/linux-firmware/Config.in
-> @@ -729,6 +729,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_ARM_MALI_CSF
->  	  Firmware files for Arm Mali 10th generation GPU
->  	  needed by the linux panthor kernel driver.
+> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+> index b5c1d92d68..7ec8fd2f76 100644
+> --- a/package/mesa3d/Config.in
+> +++ b/package/mesa3d/Config.in
+> @@ -359,6 +359,14 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_BROADCOM
+>  	help
+>  	  Vulkan broadcom driver.
 > 
-> +config BR2_PACKAGE_LINUX_FIRMWARE_POWERVR_ROGUE
-> +	bool "PowerVR Technologies Rogue GPU firmware"
+> +config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_IMAGINATION
+> +	bool "Vulkan imagination driver (experimental)"
+> +	depends on BR2_arm || BR2_aarch64
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libxshmfence
+
+BR2_PACKAGE_XLIB_LIBXSHMFENCE is selected by BR2_PACKAGE_MESA3D_DRIVER
+only if BR2_PACKAGE_XORG7 is also selected. See:
+https://gitlab.com/buildroot.org/buildroot/-/blob/2025.05/package/mesa3d/Config.in#L72
+
+In that case, why this dependency is not:
+
+     depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # 
+libxshmfence
+
+like most of the other drivers?
+
+Could you update this dependency or add an explanation please?
+
+> +	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
 > +	help
-> +	  Firmware files for PowerVR Technologies Rogue video cards.
+> +	  Vulkan imagination driver.
 > +
->  endmenu
-> 
->  menu "Serial adapters firmware"
-> diff --git a/package/linux-firmware/linux-firmware.mk 
-> b/package/linux-firmware/linux-firmware.mk
-> index 38212e12ac..b9fd471e85 100644
-> --- a/package/linux-firmware/linux-firmware.mk
-> +++ b/package/linux-firmware/linux-firmware.mk
-> @@ -931,6 +931,11 @@ LINUX_FIRMWARE_FILES += 
-> arm/mali/arch*/mali_csffw.bin
->  LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.mali_csffw
->  endif
-> 
-> +ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_POWERVR_ROGUE),y)
-> +LINUX_FIRMWARE_DIRS += powervr
-> +LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.powervr
-
-Running "make linux-firmware-legal-info" with this firmware selected
-generates a warning/error:
-
-     ERROR: No hash found for LICENSE.powervr
-
-Could you add the hash for this new file, please? In:
-https://gitlab.com/buildroot.org/buildroot/-/blob/master/package/linux-firmware/linux-firmware.hash
-
-
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_RP2),y)
->  LINUX_FIRMWARE_FILES += rp2.fw
->  endif
-> --
-> 2.39.5
-
-Could you send an updated patch series, please?
+>  config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
+>  	bool "Vulkan Intel driver"
+>  	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # 
+> libxshmfence
 
 Best regards,
 
