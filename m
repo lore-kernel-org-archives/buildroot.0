@@ -4,75 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B4E5C83F10
-	for <buildroot@archiver.kernel.org>; Sat, 12 Jul 2025 15:29:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5588C83F10
+	for <buildroot@archiver.kernel.org>; Sat, 12 Jul 2025 15:30:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 019A5410E7;
-	Sat, 12 Jul 2025 15:29:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A77AB40D22;
+	Sat, 12 Jul 2025 15:30:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hi-AgbMvMeoh; Sat, 12 Jul 2025 15:29:48 +0000 (UTC)
+ id HDI0PJmZqBPm; Sat, 12 Jul 2025 15:30:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39E8D40D15
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A51B340D15
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 39E8D40D15;
-	Sat, 12 Jul 2025 15:29:48 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 12C021CC
- for <buildroot@buildroot.org>; Sat, 12 Jul 2025 15:29:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A51B340D15;
+	Sat, 12 Jul 2025 15:30:56 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5346D68
+ for <buildroot@buildroot.org>; Sat, 12 Jul 2025 15:30:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id ED2EF81141
- for <buildroot@buildroot.org>; Sat, 12 Jul 2025 15:29:46 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3979840D15
+ for <buildroot@buildroot.org>; Sat, 12 Jul 2025 15:30:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rUndEFG-VpuQ for <buildroot@buildroot.org>;
- Sat, 12 Jul 2025 15:29:46 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F3F9D810E9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F3F9D810E9
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F3F9D810E9
- for <buildroot@buildroot.org>; Sat, 12 Jul 2025 15:29:45 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id 03F8FB0053E;
- Sat, 12 Jul 2025 17:29:35 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
- via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 12 Jul 2025 17:29:35 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vNRu2I3yCC7Y for <buildroot@buildroot.org>;
+ Sat, 12 Jul 2025 15:30:53 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=136.143.188.15;
+ helo=sender4-op-o15.zoho.com; envelope-from=dev@matt-silva.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 415BD409A5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 415BD409A5
+Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com
+ [136.143.188.15])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 415BD409A5
+ for <buildroot@buildroot.org>; Sat, 12 Jul 2025 15:30:53 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; t=1752334247; cv=none; 
+ d=zohomail.com; s=zohoarc; 
+ b=eRPENpjT9/5rxxJUkio9EdZfgjc9+n7g3wZoFMFpL1h4yNGcewzkcFryEQTqQjyW7/VdWYaUYCA3qmYkWf5BKPWqcO+pZtFZIeye5sjBa4iu0Q6hpWOIjZuoS/BUonNdKUbHVKttTSmsUWhaYrOZ+C9m+PqEfJIjn/YXrppCj2w=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com;
+ s=zohoarc; t=1752334247;
+ h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To;
+ bh=Svpvhgu/iv8kPOzDDXOYbdRtl+2ExAFHTeLl/HaGFWo=; 
+ b=hyhKCQY98lSzaqxCxo3hEGnLBDX1KhyhcmLJ/RdYYizky+iGmoRgVDDnqnQ+6OMEsX2ZVCoiBxNUw1ExjbVE/koOy8joPamcvOXddbkEnHhMxVmVDUPwrArHWp+zATEWnCJlRmHKno84zG98dpVvaYhOzsGebi0Hqw0JZ2XSrc0=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+ dkim=pass  header.i=matt-silva.com;
+ spf=pass  smtp.mailfrom=dev@matt-silva.com;
+ dmarc=pass header.from=<dev@matt-silva.com>
+Received: by mx.zohomail.com with SMTPS id 1752334245747640.5293044086947;
+ Sat, 12 Jul 2025 08:30:45 -0700 (PDT)
+From: Matt Silva <dev@matt-silva.com>
+To: buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Matt Silva <dev@matt-silva.com>
+Date: Sat, 12 Jul 2025 11:30:32 -0400
+Message-ID: <20250712153032.14697-1-dev@matt-silva.com>
+X-Mailer: git-send-email 2.50.0
 MIME-Version: 1.0
-Date: Sat, 12 Jul 2025 17:29:35 +0200
-To: Jesse Taube <mr.bossman075@gmail.com>
-Cc: buildroot@buildroot.org, Giulio Benetti
- <giulio.benetti@benettiengineering.com>, stephane.viau@oss.nxp.com,
- festevam@gmail.com, maeva.manuel@oss.nxp.com, Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20250708234739.2969797-1-Mr.Bossman075@gmail.com>
-References: <20250708234739.2969797-1-Mr.Bossman075@gmail.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <3f8181f38fc425accf8bec12508de767@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1752334182;
- bh=J6xHicDcd6J6UdKYekBNwr7EG6idc4y3Aes/VxeyIrY=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Z/qQgNfAnPmhazvdPS0/VAuV/5gt5eC++dAsCpZbTjP9rYNYvXEI5OQYtCYf3ocr/
- aQhz12glho6oxJuEbZNdKE0tNSgXYJDL1UAzg4RCdwgv4z/NbXh47cdZqs7DPouHQF
- Pq7jmZ8QTGn3TZp5fdYVDwOi1DSpRuJ+aZTMDbGQ2E4ZQQSGOfwp8PQOx8RYSOGy6I
- NgDjBtpzzET0t7dbPawrGMpvk+7T60obBOc83FMwvcZS2YVI2ov+r8tfA+kO4BOYTx
- iJ2iYuLzwGnKrQGOxlaI9DGtmOiAeE6KHFploYNr2k+AGd97IikR0E2C13/ALwlUqG
- 9OGozJiEcJQGg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Z/qQgNfA
-Subject: Re: [Buildroot] [PATCH] configs/imxrt1050-evk: Switch to use
- extlinux.conf
+X-ZohoMailClient: External
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; t=1752334247; 
+ s=zoho; d=matt-silva.com; i=dev@matt-silva.com;
+ h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
+ bh=Svpvhgu/iv8kPOzDDXOYbdRtl+2ExAFHTeLl/HaGFWo=;
+ b=BIFaqz/r5hS7rzaeGPFNc6SEBKbNga5272as13BdDZC8CgJIjtE6FNuzd1hiZZDh
+ mIculQ1QEuxRdG7J6V96IRKoiMTsyiq7OG/hEtkZ2psQnLQKgws/+kpoN1mTdXl7iH1
+ fLMRnyY554JPrIqMFSUz2KoDe4ig1o6EM8Waji14=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=matt-silva.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=matt-silva.com header.i=dev@matt-silva.com
+ header.a=rsa-sha256 header.s=zoho header.b=BIFaqz/r
+Subject: [Buildroot] [PATCH 1/1] package/partclone: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,52 +88,255 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Jesse,
+Partclone provides utilities to back up and restore used blocks of a
+partition and it is designed for higher compatibility of the file system
+by using existing libraries.
 
-On 09/07/2025 01:47, Jesse Taube wrote:
-> Switch to extlinux instead of built in U-Boot script.
-> Drop custom U-Boot fragment and genimage config.
-> 
-> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+Signed-off-by: Matt Silva <dev@matt-silva.com>
+---
+ package/Config.in                |   1 +
+ package/partclone/Config.in      |  84 ++++++++++++++++++++++++
+ package/partclone/partclone.hash |   6 ++
+ package/partclone/partclone.mk   | 106 +++++++++++++++++++++++++++++++
+ 4 files changed, 197 insertions(+)
+ create mode 100644 package/partclone/Config.in
+ create mode 100644 package/partclone/partclone.hash
+ create mode 100644 package/partclone/partclone.mk
 
-Applied to master, thanks.
+diff --git a/package/Config.in b/package/Config.in
+index 9a841082c6..23436e751f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -244,6 +244,7 @@ menu "Filesystem and flash utilities"
+ 	source "package/nfs-utils/Config.in"
+ 	source "package/nilfs-utils/Config.in"
+ 	source "package/ntfs-3g/Config.in"
++	source "package/partclone/Config.in"
+ 	source "package/sp-oops-extract/Config.in"
+ 	source "package/squashfs/Config.in"
+ 	source "package/sshfs/Config.in"
+diff --git a/package/partclone/Config.in b/package/partclone/Config.in
+new file mode 100644
+index 0000000000..83ebfa1213
+--- /dev/null
++++ b/package/partclone/Config.in
+@@ -0,0 +1,84 @@
++config BR2_PACKAGE_PARTCLONE
++	bool "partclone"
++	select BR2_PACKAGE_OPENSSL
++	help
++	  Partclone provides utilities to backup a partition smartly and
++	  it is designed for higher compatibility of the file system by
++	  using existing library.
++
++	  https://github.com/Thomas-Tsai/partclone
++
++if BR2_PACKAGE_PARTCLONE
++
++config BR2_PACKAGE_PARTCLONE_FAT
++	bool "fat"
++	help
++	  Include support for the FAT filesystem
++
++config BR2_PACKAGE_PARTCLONE_EXFAT
++	bool "exfat"
++	select BR2_PACKAGE_EXFATPROGS
++	help
++	  Include support for the exFAT filesystem
++
++config BR2_PACKAGE_PARTCLONE_EXT
++	bool "ext"
++	select BR2_PACKAGE_E2FSPROGS
++	help
++	  Include support for the ext2/3/4 filesystems
++
++config BR2_PACKAGE_PARTCLONE_NTFS
++	bool "ntfs"
++	select BR2_PACKAGE_NTFS_3G
++	help
++	  Include support for the NTFS filesystem
++
++config BR2_PACKAGE_PARTCLONE_XFS
++	bool "xfs"
++	depends on BR2_PACKAGE_XFSPROGS
++	help
++	  Include support for the XFS filesystem
++
++comment "xfs support depends on xfsprogs"
++	depends on !BR2_PACKAGE_XFSPROGS
++
++config BR2_PACKAGE_PARTCLONE_BTRFS
++	bool "btrfs"
++	select BR2_PACKAGE_BTRFS_PROGS
++	help
++	  Include support for the BTRFS filesystem
++
++config BR2_PACKAGE_PARTCLONE_F2FS
++	bool "f2fs"
++	select BR2_PACKAGE_F2FS_TOOLS
++	help
++	  Include support for the F2FS filesystem
++
++config BR2_PACKAGE_PARTCLONE_HFSP
++	bool "hfsp"
++	help
++	  Include support for the HFS Plus filesystem
++
++config BR2_PACKAGE_PARTCLONE_FUSE
++	bool "fuse"
++	select BR2_PACKAGE_LIBFUSE
++	help
++	  Include FUSE support
++
++config BR2_PACKAGE_PARTCLONE_MINIX
++	bool "minix"
++	help
++	  Include support for the Minix filesystem
++
++config BR2_PACKAGE_PARTCLONE_APFS
++	bool "apfs"
++	help
++	  Include support for the APFS filesystem
++
++config BR2_PACKAGE_PARTCLONE_NILFS2
++	bool "nilfs2"
++	select BR2_PACKAGE_NILFS_UTILS
++	help
++	  Include support for the NILFS2 filesystem
++
++endif
+diff --git a/package/partclone/partclone.hash b/package/partclone/partclone.hash
+new file mode 100644
+index 0000000000..b73883d3fd
+--- /dev/null
++++ b/package/partclone/partclone.hash
+@@ -0,0 +1,6 @@
++# locally caluclated
++sha256  b7e35a01331a05ec44133f2ec4a097ffb3c005653c0b601279b18dea55ef3b0f  partclone-0.3.37.tar.gz
++
++# license files, locally calculated
++sha256  5380427a1d822444a47a742cf47f5fffbe89519da037c1b150a897c968ed355e  AUTHORS
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/partclone/partclone.mk b/package/partclone/partclone.mk
+new file mode 100644
+index 0000000000..15d3c7b1fb
+--- /dev/null
++++ b/package/partclone/partclone.mk
+@@ -0,0 +1,106 @@
++################################################################################
++#
++# partclone
++#
++################################################################################
++
++PARTCLONE_VERSION = 0.3.37
++PARTCLONE_SITE = $(call github,Thomas-Tsai,partclone,$(PARTCLONE_VERSION))
++PARTCLONE_LICENSE = GPL-2.0+
++PARTCLONE_LICENSE_FILES = AUTHORS COPYING
++
++PARTCLONE_DEPENDENCIES = openssl
++
++# The following features are not supported as they have dependencies that aren't
++# in buildroot:
++#  --enable_reiserfs
++#  --enable_reiser4
++#  --enable_ufs: there is an existing "ufs-utils" package in buildroot; however,
++#                that package is for "Universal Flash Storage" devices, and the
++#                package partclone requires is for "Unix File System"
++#  --enable_vmfs
++#  --enable_jfs
++
++ifeq ($(BR2_PACKAGE_PARTCLONE_FAT),y)
++PARTCLONE_CONF_OPTS += --enable-fat
++else
++PARTCLONE_CONF_OPTS += --disable-fat
++endif
++
++ifeq ($(BR2_PACKAGE_PARTCLONE_EXFAT),y)
++PARTCLONE_DEPENDENCIES += exfatprogs
++PARTCLONE_CONF_OPTS += --enable-exfat
++else
++PARTCLONE_CONF_OPTS += --disable-exfat
++endif
++
++ifeq ($(BR2_PACKAGE_PARTCLONE_EXT),y)
++PARTCLONE_DEPENDENCIES += e2fsprogs
++PARTCLONE_CONF_OPTS += --enable-extfs
++else
++PARTCLONE_CONF_OPTS += --disable-extfs
++endif
++
++ifeq ($(BR2_PACKAGE_PARTCLONE_NTFS),y)
++PARTCLONE_DEPENDENCIES += ntfs-3g
++PARTCLONE_CONF_OPTS += --enable-ntfs
++else
++PARTCLONE_CONF_OPTS += --disable-ntfs
++endif
++
++ifeq ($(BR2_PACKAGE_PARTCLONE_XFS),y)
++PARTCLONE_DEPENDENCIES += xfsprogs
++PARTCLONE_CONF_OPTS += --enable-xfs
++else
++PARTCLONE_CONF_OPTS += --disable-xfs
++endif
++
++ifeq ($(BR2_PACKAGE_PARTCLONE_BTRFS),y)
++PARTCLONE_DEPENDENCIES += btrfs-progs
++PARTCLONE_CONF_OPTS += --enable-btrfs
++else
++PARTCLONE_CONF_OPTS += --disable-brtfs
++endif
++
++ifeq ($(BR2_PACKAGE_PARTCLONE_F2FS),y)
++PARTCLONE_DEPENDENCIES += f2fs-tools
++PARTCLONE_CONF_OPTS += --enable-f2fs
++else
++PARTCLONE_CONF_OPTS += --disable-f2fs
++endif
++
++ifeq ($(BR2_PACKAGE_PARTCLONE_HFSP),y)
++PARTCLONE_CONF_OPTS += --enable-hfsp
++else
++PARTCLONE_CONF_OPTS += --disable-hfsp
++endif
++
++ifeq ($(BR2_PACKAGE_PARTCLONE_FUSE),y)
++PARTCLONE_DEPENDENCIES += libfuse
++PARTCLONE_CONF_OPTS += --enable-fuse
++else
++PARTCLONE_CONF_OPTS += --disable-fuse
++endif
++
++ifeq ($(BR2_PACKAGE_PARTCLONE_MINIX),y)
++PARTCLONE_CONF_OPTS += --enable-minix
++else
++PARTCLONE_CONF_OPTS += --disable-minix
++endif
++
++ifeq ($(BR2_PACKAGE_PARTCLONE_APFS),y)
++PARTCLONE_CONF_OPTS += --enable-apfs
++else
++PARTCLONE_CONF_OPTS += --disable-apfs
++endif
++
++ifeq ($(BR2_PACKAGE_PARTCLONE_NILFS2),y)
++PARTCLONE_DEPENDENCIES += nilfs-utils
++PARTCLONE_CONF_OPTS += --enable-nilfs2
++else
++PARTCLONE_CONF_OPTS += --disable-nilfs2
++endif
++
++PARTCLONE_AUTORECONF = YES
++
++$(eval $(autotools-package))
+-- 
+2.50.0
 
-I mentioned the uboot bump in the commit title.
-
-I also needed to add:
-BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-
-without it, building the defconfig in the docker reference
-image was failing with error:
-
-     error: command 'swig' failed: No such file or directory
-
-See:
-https://gitlab.com/buildroot.org/buildroot/-/commit/051d145137ae86f040742478ece1529c65123a1f
-
-As a suggestion of followup updates for this defconfig,
-could you consider:
-
-- enabling BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
-See for example commit:
-https://gitlab.com/buildroot.org/buildroot/-/commit/683681261b19a0ea541e55ae7d5497ccf05e40a9
-
-- enabling bootlin external stable toolchain
-See for example commit:
-https://gitlab.com/buildroot.org/buildroot/-/commit/dd3ef914867dca5e429bb25ee14445fb0c87baa5
-
-- updating to a newer kernel LTS version, e.g 6.12.y series,
-
-Best regards,
-
-Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
