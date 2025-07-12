@@ -1,51 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67449C83F20
-	for <buildroot@archiver.kernel.org>; Sat, 12 Jul 2025 11:22:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8458CC83F10
+	for <buildroot@archiver.kernel.org>; Sat, 12 Jul 2025 11:23:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 221EC60A89;
-	Sat, 12 Jul 2025 11:22:41 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HfFa78Rbm_Fs; Sat, 12 Jul 2025 11:22:40 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3293460A88
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3293460A88;
-	Sat, 12 Jul 2025 11:22:40 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 8B26B106
- for <buildroot@buildroot.org>; Sat, 12 Jul 2025 11:22:39 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7172980824
- for <buildroot@buildroot.org>; Sat, 12 Jul 2025 11:22:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3BFAE80BBE;
+	Sat, 12 Jul 2025 11:23:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id V6hRa5x2UxhU for <buildroot@buildroot.org>;
- Sat, 12 Jul 2025 11:22:38 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B8E61808AC
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id B8E61808AC
- for <buildroot@buildroot.org>; Sat, 12 Jul 2025 11:22:38 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A71E88633E; Sat, 12 Jul 2025 11:22:38 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 12 Jul 2025 13:15:00 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 793c5ad89de81c656a51779e042f39dd0f9b4dc7
-X-Git-Newrev: b4ce212da1558a68c8648022f8b5bfb6ff8b5d57
-X-Patchwork-Hint: ignore
-Message-Id: <20250712112238.A71E88633E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libmanette: bump to version 0.2.12
+ id yXT1uNzTM5Ip; Sat, 12 Jul 2025 11:23:04 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 716D880B7C
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 716D880B7C;
+	Sat, 12 Jul 2025 11:23:04 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id AAEE1106
+ for <buildroot@buildroot.org>; Sat, 12 Jul 2025 11:23:03 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 914AF80B0E
+ for <buildroot@buildroot.org>; Sat, 12 Jul 2025 11:23:03 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sxMpGl0A_G6C for <buildroot@buildroot.org>;
+ Sat, 12 Jul 2025 11:23:03 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BF66480B06
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF66480B06
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BF66480B06
+ for <buildroot@buildroot.org>; Sat, 12 Jul 2025 11:23:02 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 53E2913F880;
+ Sat, 12 Jul 2025 13:22:59 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 12 Jul 2025 13:22:59 +0200
+MIME-Version: 1.0
+Date: Sat, 12 Jul 2025 13:22:59 +0200
+To: Adrian Perez de Castro <aperez@igalia.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250711132433.2813842-1-aperez@igalia.com>
+References: <20250711132433.2813842-1-aperez@igalia.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <761f938a0add70de599a3aa6c757819c@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1752319380;
+ bh=p1pPq/HId1kwKGI9a/MA00N+Bgxe6wtgaLhI0W8C+Ww=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=r02RkotIqMe+Zo7mu+uuRzmgAKzjWTpa00pDyQBVYov+h/PFpOBeex1MhNivjYb7R
+ ocZr/uFXCaK+JCvPhhTC4O9uk8rNFaOJO+qD+3L7jh1hzNRSGLv955BOO6PnOYFxWx
+ UTpXPMq/NYhP1M8Pl+4kr7eEZ48axdlELdYjqA1GAXJ6n1QRkWE/2mHoW7odM8ZBOX
+ tmg4GT/H/BrNXkJfZsIDWxGZc9JjMnhLFm3Pzfbq05IJC+4QhQTNLVeNPB1IP9Isns
+ nb+l9K3kzSyNeui7kmFaPWKSrvf373joxmjnUzuO+81rbhh29/KPxnUbReSg/x7RvB
+ gsuIXqLjthxdA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=r02RkotI
+Subject: Re: [Buildroot] [PATCH 1/1] package/libmanette: bump to version
+ 0.2.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,52 +83,20 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b4ce212da1558a68c8648022f8b5bfb6ff8b5d57
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 11/07/2025 15:24, Adrian Perez de Castro wrote:
+> Bugfix release, mainly adds dead zone for the Steam Deck analog sticks.
+> Release notes:
+> 
+>   https://gitlab.gnome.org/GNOME/libmanette/-/blob/0.2.12/NEWS
+> 
+> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 
-Bugfix release, mainly adds dead zone for the Steam Deck analog sticks.
-Release notes:
-
-  https://gitlab.gnome.org/GNOME/libmanette/-/blob/0.2.12/NEWS
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/libmanette/libmanette.hash | 4 ++--
- package/libmanette/libmanette.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/libmanette/libmanette.hash b/package/libmanette/libmanette.hash
-index 0ec6077c2c..dac0d3707e 100644
---- a/package/libmanette/libmanette.hash
-+++ b/package/libmanette/libmanette.hash
-@@ -1,5 +1,5 @@
--# From https://download.gnome.org/sources/libmanette/0.2/libmanette-0.2.11.sha256sum
--sha256  b812b94e08632ba62a30960a8de29217a73a2fff5da2f12acc8a5d4771a49a70  libmanette-0.2.11.tar.xz
-+# From https://download.gnome.org/sources/libmanette/0.2/libmanette-0.2.12.sha256sum
-+sha256  48b349267180f1dc34d405a9e1e90ba16f054a19ce907930e679493d911ea1d8  libmanette-0.2.12.tar.xz
- 
- # Locally calculated
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/libmanette/libmanette.mk b/package/libmanette/libmanette.mk
-index 44beef836f..b67f2cc086 100644
---- a/package/libmanette/libmanette.mk
-+++ b/package/libmanette/libmanette.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIBMANETTE_VERSION_MAJOR = 0.2
--LIBMANETTE_VERSION = $(LIBMANETTE_VERSION_MAJOR).11
-+LIBMANETTE_VERSION = $(LIBMANETTE_VERSION_MAJOR).12
- LIBMANETTE_SOURCE = libmanette-$(LIBMANETTE_VERSION).tar.xz
- LIBMANETTE_SITE = https://download.gnome.org/sources/libmanette/$(LIBMANETTE_VERSION_MAJOR)
- LIBMANETTE_LICENSE = LGPL-2.1+
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
