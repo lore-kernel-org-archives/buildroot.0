@@ -1,52 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25383C83F10
-	for <buildroot@archiver.kernel.org>; Sat, 12 Jul 2025 15:27:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B4E5C83F10
+	for <buildroot@archiver.kernel.org>; Sat, 12 Jul 2025 15:29:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CC2EB80BB6;
-	Sat, 12 Jul 2025 15:27:49 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q-fAnKoEHLar; Sat, 12 Jul 2025 15:27:48 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D34CF80B71
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D34CF80B71;
-	Sat, 12 Jul 2025 15:27:47 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 2F28E1CC
- for <buildroot@buildroot.org>; Sat, 12 Jul 2025 15:27:46 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2102140D22
- for <buildroot@buildroot.org>; Sat, 12 Jul 2025 15:27:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 019A5410E7;
+	Sat, 12 Jul 2025 15:29:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jz0rtfcx48Nu for <buildroot@buildroot.org>;
- Sat, 12 Jul 2025 15:27:45 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3908840CC8
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3908840CC8
- for <buildroot@buildroot.org>; Sat, 12 Jul 2025 15:27:45 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2550A863DE; Sat, 12 Jul 2025 15:27:45 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 12 Jul 2025 17:24:49 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8f427b78a922b32d2b81d3a28b66ef27933fe417
-X-Git-Newrev: 051d145137ae86f040742478ece1529c65123a1f
-X-Patchwork-Hint: ignore
-Message-Id: <20250712152745.2550A863DE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/imxrt1050-evk: bump U-Boot and
- switch to use extlinux.conf
+ id hi-AgbMvMeoh; Sat, 12 Jul 2025 15:29:48 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39E8D40D15
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 39E8D40D15;
+	Sat, 12 Jul 2025 15:29:48 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 12C021CC
+ for <buildroot@buildroot.org>; Sat, 12 Jul 2025 15:29:47 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id ED2EF81141
+ for <buildroot@buildroot.org>; Sat, 12 Jul 2025 15:29:46 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rUndEFG-VpuQ for <buildroot@buildroot.org>;
+ Sat, 12 Jul 2025 15:29:46 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F3F9D810E9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F3F9D810E9
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id F3F9D810E9
+ for <buildroot@buildroot.org>; Sat, 12 Jul 2025 15:29:45 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id 03F8FB0053E;
+ Sat, 12 Jul 2025 17:29:35 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 12 Jul 2025 17:29:35 +0200
+MIME-Version: 1.0
+Date: Sat, 12 Jul 2025 17:29:35 +0200
+To: Jesse Taube <mr.bossman075@gmail.com>
+Cc: buildroot@buildroot.org, Giulio Benetti
+ <giulio.benetti@benettiengineering.com>, stephane.viau@oss.nxp.com,
+ festevam@gmail.com, maeva.manuel@oss.nxp.com, Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>
+In-Reply-To: <20250708234739.2969797-1-Mr.Bossman075@gmail.com>
+References: <20250708234739.2969797-1-Mr.Bossman075@gmail.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <3f8181f38fc425accf8bec12508de767@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1752334182;
+ bh=J6xHicDcd6J6UdKYekBNwr7EG6idc4y3Aes/VxeyIrY=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=Z/qQgNfAnPmhazvdPS0/VAuV/5gt5eC++dAsCpZbTjP9rYNYvXEI5OQYtCYf3ocr/
+ aQhz12glho6oxJuEbZNdKE0tNSgXYJDL1UAzg4RCdwgv4z/NbXh47cdZqs7DPouHQF
+ Pq7jmZ8QTGn3TZp5fdYVDwOi1DSpRuJ+aZTMDbGQ2E4ZQQSGOfwp8PQOx8RYSOGy6I
+ NgDjBtpzzET0t7dbPawrGMpvk+7T60obBOc83FMwvcZS2YVI2ov+r8tfA+kO4BOYTx
+ iJ2iYuLzwGnKrQGOxlaI9DGtmOiAeE6KHFploYNr2k+AGd97IikR0E2C13/ALwlUqG
+ 9OGozJiEcJQGg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Z/qQgNfA
+Subject: Re: [Buildroot] [PATCH] configs/imxrt1050-evk: Switch to use
+ extlinux.conf
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,115 +86,50 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=051d145137ae86f040742478ece1529c65123a1f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Jesse,
 
-Switch to extlinux instead of built in U-Boot script.
-Drop custom U-Boot fragment and genimage config.
-Update U-Boot from 2024.01 to 2025.07. This new U-Boot now
-requires BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y in the defconfig.
+On 09/07/2025 01:47, Jesse Taube wrote:
+> Switch to extlinux instead of built in U-Boot script.
+> Drop custom U-Boot fragment and genimage config.
+> 
+> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
 
-Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
-Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-[Julien:
- - mention U-Boot bump in commit log
- - add BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- board/freescale/imxrt1050evk/genimage.cfg               | 17 -----------------
- .../rootfs_overlay/boot/extlinux/extlinux.conf          |  4 ++++
- board/freescale/imxrt1050evk/uboot.fragment             |  2 --
- configs/imxrt1050-evk_defconfig                         |  6 ++++--
- 4 files changed, 8 insertions(+), 21 deletions(-)
+Applied to master, thanks.
 
-diff --git a/board/freescale/imxrt1050evk/genimage.cfg b/board/freescale/imxrt1050evk/genimage.cfg
-index 64fc8452f8..3a4c4fb792 100644
---- a/board/freescale/imxrt1050evk/genimage.cfg
-+++ b/board/freescale/imxrt1050evk/genimage.cfg
-@@ -1,14 +1,3 @@
--image boot.vfat {
--	vfat {
--		files = {
--			"zImage",
--			"imxrt1050-evk.dtb",
--		}
--	}
--
--	size = 8M
--}
--
- image sdcard.img {
- 	hdimage {
- 	}
-@@ -27,12 +16,6 @@ image sdcard.img {
- 		size = 512K
- 	}
- 
--	partition boot {
--		partition-type = 0xc
--		bootable = "true"
--		image = "boot.vfat"
--	}
--
- 	partition rootfs {
- 		partition-type = 0x83
- 		image = "rootfs.ext4"
-diff --git a/board/freescale/imxrt1050evk/rootfs_overlay/boot/extlinux/extlinux.conf b/board/freescale/imxrt1050evk/rootfs_overlay/boot/extlinux/extlinux.conf
-new file mode 100644
-index 0000000000..1818d2702d
---- /dev/null
-+++ b/board/freescale/imxrt1050evk/rootfs_overlay/boot/extlinux/extlinux.conf
-@@ -0,0 +1,4 @@
-+label buildroot
-+	kernel /boot/zImage
-+	devicetree /boot/imxrt1050-evk.dtb
-+	append console=ttyLP0 root=/dev/mmcblk0p1 rootwait rw
-diff --git a/board/freescale/imxrt1050evk/uboot.fragment b/board/freescale/imxrt1050evk/uboot.fragment
-deleted file mode 100644
-index dd45ca4c29..0000000000
---- a/board/freescale/imxrt1050evk/uboot.fragment
-+++ /dev/null
-@@ -1,2 +0,0 @@
--CONFIG_USE_BOOTCOMMAND=y
--CONFIG_BOOTCOMMAND="setenv bootargs console=ttyLP0 root=/dev/mmcblk0p2 rw earlycon rootwait;load mmc 0:1 0x80800000 imxrt1050-evk.dtb;load mmc 0:1 0x80000000 zImage;bootz 0x80000000 - 0x80800000"
-diff --git a/configs/imxrt1050-evk_defconfig b/configs/imxrt1050-evk_defconfig
-index 8a515a9260..fce2b831f3 100644
---- a/configs/imxrt1050-evk_defconfig
-+++ b/configs/imxrt1050-evk_defconfig
-@@ -1,6 +1,7 @@
- BR2_arm=y
- BR2_cortex_m7=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_7=y
-+BR2_ROOTFS_OVERLAY="board/freescale/imxrt1050evk/rootfs_overlay"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/freescale/imxrt1050evk/genimage.cfg"
- BR2_LINUX_KERNEL=y
-@@ -9,15 +10,16 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.7"
- BR2_LINUX_KERNEL_DEFCONFIG="imxrt"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="nxp/imx/imxrt1050-evk"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_ROOTFS_EXT2_SIZE="16M"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.07"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imxrt1050-evk"
--BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/freescale/imxrt1050evk/uboot.fragment"
-+BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
+I mentioned the uboot bump in the commit title.
+
+I also needed to add:
+BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+
+without it, building the defconfig in the docker reference
+image was failing with error:
+
+     error: command 'swig' failed: No such file or directory
+
+See:
+https://gitlab.com/buildroot.org/buildroot/-/commit/051d145137ae86f040742478ece1529c65123a1f
+
+As a suggestion of followup updates for this defconfig,
+could you consider:
+
+- enabling BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+See for example commit:
+https://gitlab.com/buildroot.org/buildroot/-/commit/683681261b19a0ea541e55ae7d5497ccf05e40a9
+
+- enabling bootlin external stable toolchain
+See for example commit:
+https://gitlab.com/buildroot.org/buildroot/-/commit/dd3ef914867dca5e429bb25ee14445fb0c87baa5
+
+- updating to a newer kernel LTS version, e.g 6.12.y series,
+
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
