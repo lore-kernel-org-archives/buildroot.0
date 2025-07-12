@@ -1,76 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D978C83F10
-	for <buildroot@archiver.kernel.org>; Sat, 12 Jul 2025 11:50:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3ADE7C83F10
+	for <buildroot@archiver.kernel.org>; Sat, 12 Jul 2025 11:53:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 40A6682105;
-	Sat, 12 Jul 2025 11:50:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 039A941178;
+	Sat, 12 Jul 2025 11:53:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aftl9rL5OibT; Sat, 12 Jul 2025 11:50:32 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RfqiLNN1Nctr; Sat, 12 Jul 2025 11:53:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4BEDF82106
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 022704116B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4BEDF82106;
-	Sat, 12 Jul 2025 11:50:32 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id B76EB1CC
- for <buildroot@buildroot.org>; Sat, 12 Jul 2025 11:50:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 022704116B;
+	Sat, 12 Jul 2025 11:53:34 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5F96C1CC
+ for <buildroot@buildroot.org>; Sat, 12 Jul 2025 11:53:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A8D178210B
- for <buildroot@buildroot.org>; Sat, 12 Jul 2025 11:50:30 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 512A16070B
+ for <buildroot@buildroot.org>; Sat, 12 Jul 2025 11:53:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cdWBwq6NW7lZ for <buildroot@buildroot.org>;
- Sat, 12 Jul 2025 11:50:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A9EDA82103
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A9EDA82103
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A9EDA82103
- for <buildroot@buildroot.org>; Sat, 12 Jul 2025 11:50:29 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wRBDbedrxDlt for <buildroot@buildroot.org>;
+ Sat, 12 Jul 2025 11:53:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 731E5606D7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 731E5606D7
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 731E5606D7
+ for <buildroot@buildroot.org>; Sat, 12 Jul 2025 11:53:32 +0000 (UTC)
 Received: from webmail.free.fr (unknown [172.20.246.3])
  (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id E9D20B00563;
- Sat, 12 Jul 2025 13:50:22 +0200 (CEST)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 92212780368;
+ Sat, 12 Jul 2025 13:53:26 +0200 (CEST)
 Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
  via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 12 Jul 2025 13:50:22 +0200
+ with HTTP (HTTP/1.0 POST); Sat, 12 Jul 2025 13:53:26 +0200
 MIME-Version: 1.0
-Date: Sat, 12 Jul 2025 13:50:22 +0200
+Date: Sat, 12 Jul 2025 13:53:26 +0200
 To: Heiko Thiery <heiko.thiery@gmail.com>
 Cc: buildroot@buildroot.org, Bernd Kuhls <bernd@kuhls.net>, Michael Walle
  <michael@walle.cc>, Bryan Brattlof <bb@ti.com>
-In-Reply-To: <20250711120544.315926-1-heiko.thiery@gmail.com>
+In-Reply-To: <20250711120544.315926-2-heiko.thiery@gmail.com>
 References: <20250711120544.315926-1-heiko.thiery@gmail.com>
+ <20250711120544.315926-2-heiko.thiery@gmail.com>
 User-Agent: Webmail Free/1.6.11
-Message-ID: <102698839fae8d39fcc32a1fd1c4976a@free.fr>
+Message-ID: <11f9e821cdf9106557a006c973654036@free.fr>
 X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1752321027;
- bh=cMhaj3DmfvfY08anLRfihNU9GSrmBZH6IdUS4dU23c4=;
+ d=free.fr; s=smtp-20201208; t=1752321210;
+ bh=Z0hrQKZHRqbUCbTalxRcsFdAA4sj19vto/52IgwvtYA=;
  h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=EHxR/avHXDlphQKAvCBRoB5BESeoMYrEAxAMN1Ny2zI+zqoF4dF7PDbZRDZUAcyzu
- t082i0V6VNFtrAZQrH4aSBaRf+y2MUyqdPXGH8vTs5xdA0+0GANcXLMKzDofQvd2fG
- RUQXlmNnetsbwSmXBas3NcHOvX0+esL4ewMCgVO+OZr0DitOaYKMnb5SoXj9zmlXIO
- ecsHlcZnOZjGLxK4JM61TGFWhiL27s1cEs0td1n4FXnzRGEzrbMOtjxSw0g+EuW6KX
- 2RjlljbAqbipEs+h/UpgHRToD8T06Gdno52IRsXJUGGVGNCrRmgNyoDYY7jWwtAegR
- Mdf6zPThgIaWQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=Mnipcry0mFDC8MC4XMai6HLwrqFDeHeHlQj2RvQ30pXFR4Bnejq2lF7Abieerjxyg
+ dLEMywmbRsHCgB7SAmUWWBMKHdCyyLpsTLAU/QTUqPAPAWFzw9r8Q+u80tbZEkDuJX
+ zWC+R/rjkZZ/gp2R6HSRiPV9PAgGRLF+bfmgfYp6OLDWcY1xWWQ0x7PIx80IwVSQk9
+ VCWNH6pSXaN7CVGLz4QjGSVsFS1sbbzq52K4EgRf9xmyER+ghk4Wc8ZSZRhw9GV5Jy
+ qqWRrOpGjpJtNp7gAivfeBY7biKQ3qcr7ehDo/XLVWy4qBe3er37xoxvMWYPovf4Kg
+ Sl4dvXSbhkfWQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=EHxR/avH
-Subject: Re: [Buildroot] [PATCH] package/linux-firmware: add option for
- Chips&Media Wave 521C
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Mnipcry0
+Subject: Re: [Buildroot] [PATCH] package/linux-firmware: add support for
+ PowerVR rogue
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,72 +95,64 @@ Hi Heiko,
 Thanks for the patch.
 
 On 11/07/2025 14:05, Heiko Thiery wrote:
-> Add an option to install the firmware files for Chips&Media Wave 521C
-> video processor used in the TI K3 architecture.
-> 
-> This "cnm/wave521c_k3_codec_fw.bin" file has been present in 
-> linux-firmware
-> since version 20221109.
+> This "powervr" directory has been present in linux-firmware since
+> version 20231211.
 > 
 > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 > ---
->  package/linux-firmware/Config.in         | 6 ++++++
+>  package/linux-firmware/Config.in         | 5 +++++
 >  package/linux-firmware/linux-firmware.mk | 5 +++++
->  2 files changed, 11 insertions(+)
+>  2 files changed, 10 insertions(+)
 > 
 > diff --git a/package/linux-firmware/Config.in 
 > b/package/linux-firmware/Config.in
-> index 54910df6fd..778dfef8a0 100644
+> index 34f3fb7691..54910df6fd 100644
 > --- a/package/linux-firmware/Config.in
 > +++ b/package/linux-firmware/Config.in
-> @@ -33,6 +33,12 @@ config BR2_PACKAGE_LINUX_FIRMWARE_AMDGPU
->  	help
->  	  Firmware files for AMD GPU video cards.
+> @@ -729,6 +729,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_ARM_MALI_CSF
+>  	  Firmware files for Arm Mali 10th generation GPU
+>  	  needed by the linux panthor kernel driver.
 > 
-> +config BR2_PACKAGE_LINUX_FIRMWARE_CNM_WAVE521C_K3_CODEC
-> +	bool "Chips&Media Wave 521C codec IP for K3"
+> +config BR2_PACKAGE_LINUX_FIRMWARE_POWERVR_ROGUE
+> +	bool "PowerVR Technologies Rogue GPU firmware"
 > +	help
-> +	  Firmware files for the Chips&Media Wave521C decoder
-> +	  needed by the Linux TI j721s2-wave521c driver.
+> +	  Firmware files for PowerVR Technologies Rogue video cards.
 > +
->  config BR2_PACKAGE_LINUX_FIRMWARE_I915
->  	bool "Intel i915 video card firmware"
->  	help
+>  endmenu
+> 
+>  menu "Serial adapters firmware"
 > diff --git a/package/linux-firmware/linux-firmware.mk 
 > b/package/linux-firmware/linux-firmware.mk
-> index b9fd471e85..904c14ba10 100644
+> index 38212e12ac..b9fd471e85 100644
 > --- a/package/linux-firmware/linux-firmware.mk
 > +++ b/package/linux-firmware/linux-firmware.mk
-> @@ -25,6 +25,11 @@ LINUX_FIRMWARE_DIRS += amdgpu
->  LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.amdgpu
+> @@ -931,6 +931,11 @@ LINUX_FIRMWARE_FILES += 
+> arm/mali/arch*/mali_csffw.bin
+>  LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.mali_csffw
 >  endif
 > 
-> +ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_CNM_WAVE521C_K3_CODEC),y)
-> +LINUX_FIRMWARE_FILES += cnm/wave521c_k3_codec_fw.bin
-> +LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.cnm
+> +ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_POWERVR_ROGUE),y)
+> +LINUX_FIRMWARE_DIRS += powervr
+> +LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.powervr
 
 Running "make linux-firmware-legal-info" with this firmware selected
-fails with error:
+generates a warning/error:
 
-     cp: cannot stat 
-'/buildroot/output/build/linux-firmware-20250627/LICENSE.cnm': No such 
-file or directory
+     ERROR: No hash found for LICENSE.powervr
 
-This is because the license file is named LICENCE.cnm
-(with 'C' instead of 'S'). See:
-https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/tree/LICENCE.cnm?h=20250627
-
-Also, there is a warning that there is no hash for that file. Could
-you make to also add the hash for this new file, please? In:
+Could you add the hash for this new file, please? In:
 https://gitlab.com/buildroot.org/buildroot/-/blob/master/package/linux-firmware/linux-firmware.hash
+
 
 > +endif
 > +
->  ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_I915),y)
->  LINUX_FIRMWARE_DIRS += i915
->  LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.i915
+>  ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_RP2),y)
+>  LINUX_FIRMWARE_FILES += rp2.fw
+>  endif
 > --
 > 2.39.5
+
+Could you send an updated patch series, please?
 
 Best regards,
 
