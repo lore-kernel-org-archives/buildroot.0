@@ -1,98 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BDF3FC83F1D
-	for <buildroot@archiver.kernel.org>; Sat, 12 Jul 2025 15:17:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25383C83F10
+	for <buildroot@archiver.kernel.org>; Sat, 12 Jul 2025 15:27:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8EA9141196;
-	Sat, 12 Jul 2025 15:17:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CC2EB80BB6;
+	Sat, 12 Jul 2025 15:27:49 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id q-fAnKoEHLar; Sat, 12 Jul 2025 15:27:48 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D34CF80B71
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id D34CF80B71;
+	Sat, 12 Jul 2025 15:27:47 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2F28E1CC
+ for <buildroot@buildroot.org>; Sat, 12 Jul 2025 15:27:46 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2102140D22
+ for <buildroot@buildroot.org>; Sat, 12 Jul 2025 15:27:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NuBQglC4YLZV; Sat, 12 Jul 2025 15:17:25 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B8F1441168
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B8F1441168;
-	Sat, 12 Jul 2025 15:17:25 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1D0C51CC
- for <buildroot@buildroot.org>; Sat, 12 Jul 2025 15:17:24 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 03F8260600
- for <buildroot@buildroot.org>; Sat, 12 Jul 2025 15:17:24 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EcInMWyzl2Bu for <buildroot@buildroot.org>;
- Sat, 12 Jul 2025 15:17:23 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::432; helo=mail-pf1-x432.google.com;
- envelope-from=michael@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3C85160607
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C85160607
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com
- [IPv6:2607:f8b0:4864:20::432])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3C85160607
- for <buildroot@buildroot.org>; Sat, 12 Jul 2025 15:17:23 +0000 (UTC)
-Received: by mail-pf1-x432.google.com with SMTP id
- d2e1a72fcca58-74ad4533ac5so3411342b3a.0
- for <buildroot@buildroot.org>; Sat, 12 Jul 2025 08:17:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1752333442; x=1752938242;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=NFy3k1NG/lnmS4WK8W0/m5L0+hX1NcRfqIvdTnipI+o=;
- b=hFJI1sRp2owVehgICs/1b8rpGskYNeo0AGSJBdueexelYrH7roqUyiThklT/089XjN
- 2/xg14G7zjZ9DixR/URBlN9PuT92/dOmWIAG/WjG1u2Jy8ECfQflsv9byggZxPLthmM0
- 4fHhvWB00DYw3uYyan2SwHXCB1/MURTG8Hr1zcRfsx8Pb53QJ4+IbG96WU/EIKNsBtFn
- F1ItKjSXwc8shgiGRCY6iTPiWNBCzkRukasr7cDMJR5iCt6Vk+cp/SvYBB51xX+l3u6Y
- hrBds4e3chJirnlgvtyXyL4tHEuFOwCOfl8V0BWrPFI8kuy8IKuecMZWRq4laGlBZBHM
- H36g==
-X-Gm-Message-State: AOJu0Yxu4xfuLFx9zyMcr1gW5OB4+BjWO4JuXrVgvfLS9Qrc8w38D27r
- 7U8UwTDVQRuUfvKLNkDKnIVovcbh1d0n5/BSp/Z8XK2ZUmwEq62uK2UtYrv50Wt/TkderdLfjkC
- E9qBUm8KrJoFaNErunbK7/a1OlvV9H2KLH+Cz4v8ZqQ==
-X-Gm-Gg: ASbGncum7HlwyE1EZ1iTIyIemW/ci7tJlpuU6XksVGt6vYoSxHsEDNq57YEz02ZtUH4
- 2+ghdobGJ0ayFB8cMHvCV92eGzUtdJuJ6pOeD2qQzQuqKwQIcBpL6yuuyRzbjuGKle+CrFbdOjF
- Ps+XpA+9BQfGCXh2zd/n6DtnEyv/kbayQ2wxlUmKJQp/kFQ9nS46Aq9wd+IJtPYmP8siD3s6xKm
- FxwDGG2zA==
-X-Google-Smtp-Source: AGHT+IGhtLMdekLwWtz6lEhfPUyt9zBLFBuqC6PwDFm21A97UAAJk88iaaUE0b1hLSLzN5jeK705j15/jYwkFfHMpZA=
-X-Received: by 2002:a17:902:d4c3:b0:234:1e11:95a3 with SMTP id
- d9443c01a7336-23de2fc72f0mr169613425ad.13.1752333442404; Sat, 12 Jul 2025
- 08:17:22 -0700 (PDT)
-MIME-Version: 1.0
-References: <20250707060509.617632-1-michael@amarulasolutions.com>
- <83eaeb2bb828dbee6df88117947d6676@free.fr>
-In-Reply-To: <83eaeb2bb828dbee6df88117947d6676@free.fr>
-From: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-Date: Sat, 12 Jul 2025 17:17:09 +0200
-X-Gm-Features: Ac12FXx4YIHtqqA__vDDviDTI_jq9WtlAIF6FI5JniKpZoNdlOx7sKkBDhlZudw
-Message-ID: <CAOf5uwm-9GCyp+LdhS2PpbAgL-FncLJb1_FZrJOkuimyp=_VfA@mail.gmail.com>
-To: Julien Olivain <ju.o@free.fr>
-Cc: buildroot@buildroot.org, Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1752333442; x=1752938242;
- darn=buildroot.org; 
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=NFy3k1NG/lnmS4WK8W0/m5L0+hX1NcRfqIvdTnipI+o=;
- b=Wj9LxLq1MJn557M2pmg1ZB8+qCSz/b5+lShn8qmJTXwDPHw48S8DZ0k0SoXRFi1Kyp
- m8yqmZZrzUebvJiHJ+Z+3b01lYp5qmcRIY4YKfnGz8+84WuAhjqOVR0WCvDBLJ32dNub
- NFOu1SiXP4+hD2aXlEfMaopzgJWeQFNifl3VY=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=Wj9LxLq1
-Subject: Re: [Buildroot] [PATCH] package/python-spidev: bump to version 3.7
+ id jz0rtfcx48Nu for <buildroot@buildroot.org>;
+ Sat, 12 Jul 2025 15:27:45 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3908840CC8
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3908840CC8
+ for <buildroot@buildroot.org>; Sat, 12 Jul 2025 15:27:45 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2550A863DE; Sat, 12 Jul 2025 15:27:45 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 12 Jul 2025 17:24:49 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8f427b78a922b32d2b81d3a28b66ef27933fe417
+X-Git-Newrev: 051d145137ae86f040742478ece1529c65123a1f
+X-Patchwork-Hint: ignore
+Message-Id: <20250712152745.2550A863DE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/imxrt1050-evk: bump U-Boot and
+ switch to use extlinux.conf
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -104,26 +58,118 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgSnVsaWVuCgpPbiBNb24sIEp1bCA3LCAyMDI1IGF0IDc6MDTigK9QTSBKdWxpZW4gT2xpdmFp
-biA8anUub0BmcmVlLmZyPiB3cm90ZToKPgo+IE9uIDA3LzA3LzIwMjUgMDg6MDUsIE1pY2hhZWwg
-VHJpbWFyY2hpIHdyb3RlOgo+ID4gVGhpcyBpcyBqdXN0IGEgbWlub3IgdXBncmFkZSBmb3IgZml4
-ZWQgZGVwcmVjYXRpb24gd2FybmluZwo+ID4KPiA+IFNpZ25lZC1vZmYtYnk6IE1pY2hhZWwgVHJp
-bWFyY2hpIDxtaWNoYWVsQGFtYXJ1bGFzb2x1dGlvbnMuY29tPgo+Cj4gQXBwbGllZCB0byBtYXN0
-ZXIsIHRoYW5rcy4KPgo+IEZvciBpbmZvLCBJIGZpeGVkIHRoZSBoYXNoIGZpbGUgc3BhY2luZyB0
-byByZXNvbHZlIGEgY2hlY2stcGFja2FnZQo+IGVycm9yLgo+IFNlZToKPiBodHRwczovL2dpdGxh
-Yi5jb20vYnVpbGRyb290Lm9yZy9idWlsZHJvb3QvLS9jb21taXQvM2M0NjU0OWY4OTA5NzdhODA1
-ZWNiZjQ2MGJiMmYwMjJmNDgyZmVhYQo+CgpUaGFuayB5b3UgLCBJIHdpbGwgdHJ5IHRvIHB1dCBt
-b3JlIGF0dGVudGlvbiBuZXh0IHRpbWUKCk1pY2hhZWwKCj4gQmVzdCByZWdhcmRzLAo+Cj4gSnVs
-aWVuLgoKCgotLSAKTWljaGFlbCBOYXp6YXJlbm8gVHJpbWFyY2hpCkNvLUZvdW5kZXIgJiBDaGll
-ZiBFeGVjdXRpdmUgT2ZmaWNlcgpNLiArMzkgMzQ3IDkxMyAyMTcwCm1pY2hhZWxAYW1hcnVsYXNv
-bHV0aW9ucy5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwoKQW1hcnVsYSBT
-b2x1dGlvbnMgQlYKSm9vcCBHZWVzaW5rd2VnIDEyNSwgMTExNCBBQiwgQW1zdGVyZGFtLCBOTApU
-LiArMzEgKDApODUgMTExIDkxNzIKaW5mb0BhbWFydWxhc29sdXRpb25zLmNvbQp3d3cuYW1hcnVs
-YXNvbHV0aW9ucy5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRw
-czovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+commit: https://git.buildroot.net/buildroot/commit/?id=051d145137ae86f040742478ece1529c65123a1f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Switch to extlinux instead of built in U-Boot script.
+Drop custom U-Boot fragment and genimage config.
+Update U-Boot from 2024.01 to 2025.07. This new U-Boot now
+requires BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y in the defconfig.
+
+Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+[Julien:
+ - mention U-Boot bump in commit log
+ - add BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ board/freescale/imxrt1050evk/genimage.cfg               | 17 -----------------
+ .../rootfs_overlay/boot/extlinux/extlinux.conf          |  4 ++++
+ board/freescale/imxrt1050evk/uboot.fragment             |  2 --
+ configs/imxrt1050-evk_defconfig                         |  6 ++++--
+ 4 files changed, 8 insertions(+), 21 deletions(-)
+
+diff --git a/board/freescale/imxrt1050evk/genimage.cfg b/board/freescale/imxrt1050evk/genimage.cfg
+index 64fc8452f8..3a4c4fb792 100644
+--- a/board/freescale/imxrt1050evk/genimage.cfg
++++ b/board/freescale/imxrt1050evk/genimage.cfg
+@@ -1,14 +1,3 @@
+-image boot.vfat {
+-	vfat {
+-		files = {
+-			"zImage",
+-			"imxrt1050-evk.dtb",
+-		}
+-	}
+-
+-	size = 8M
+-}
+-
+ image sdcard.img {
+ 	hdimage {
+ 	}
+@@ -27,12 +16,6 @@ image sdcard.img {
+ 		size = 512K
+ 	}
+ 
+-	partition boot {
+-		partition-type = 0xc
+-		bootable = "true"
+-		image = "boot.vfat"
+-	}
+-
+ 	partition rootfs {
+ 		partition-type = 0x83
+ 		image = "rootfs.ext4"
+diff --git a/board/freescale/imxrt1050evk/rootfs_overlay/boot/extlinux/extlinux.conf b/board/freescale/imxrt1050evk/rootfs_overlay/boot/extlinux/extlinux.conf
+new file mode 100644
+index 0000000000..1818d2702d
+--- /dev/null
++++ b/board/freescale/imxrt1050evk/rootfs_overlay/boot/extlinux/extlinux.conf
+@@ -0,0 +1,4 @@
++label buildroot
++	kernel /boot/zImage
++	devicetree /boot/imxrt1050-evk.dtb
++	append console=ttyLP0 root=/dev/mmcblk0p1 rootwait rw
+diff --git a/board/freescale/imxrt1050evk/uboot.fragment b/board/freescale/imxrt1050evk/uboot.fragment
+deleted file mode 100644
+index dd45ca4c29..0000000000
+--- a/board/freescale/imxrt1050evk/uboot.fragment
++++ /dev/null
+@@ -1,2 +0,0 @@
+-CONFIG_USE_BOOTCOMMAND=y
+-CONFIG_BOOTCOMMAND="setenv bootargs console=ttyLP0 root=/dev/mmcblk0p2 rw earlycon rootwait;load mmc 0:1 0x80800000 imxrt1050-evk.dtb;load mmc 0:1 0x80000000 zImage;bootz 0x80000000 - 0x80800000"
+diff --git a/configs/imxrt1050-evk_defconfig b/configs/imxrt1050-evk_defconfig
+index 8a515a9260..fce2b831f3 100644
+--- a/configs/imxrt1050-evk_defconfig
++++ b/configs/imxrt1050-evk_defconfig
+@@ -1,6 +1,7 @@
+ BR2_arm=y
+ BR2_cortex_m7=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_7=y
++BR2_ROOTFS_OVERLAY="board/freescale/imxrt1050evk/rootfs_overlay"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/freescale/imxrt1050evk/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+@@ -9,15 +10,16 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.7"
+ BR2_LINUX_KERNEL_DEFCONFIG="imxrt"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="nxp/imx/imxrt1050-evk"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_ROOTFS_EXT2_SIZE="16M"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imxrt1050-evk"
+-BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/freescale/imxrt1050evk/uboot.fragment"
++BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
