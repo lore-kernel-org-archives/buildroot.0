@@ -1,75 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05F33C83F17
-	for <buildroot@archiver.kernel.org>; Sun, 13 Jul 2025 09:40:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C511AC83F17
+	for <buildroot@archiver.kernel.org>; Sun, 13 Jul 2025 10:31:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7591540557;
-	Sun, 13 Jul 2025 09:40:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3321F813D8;
+	Sun, 13 Jul 2025 10:31:44 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mtIPlnQ5v5id; Sun, 13 Jul 2025 10:31:43 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3C61B81A73
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3C61B81A73;
+	Sun, 13 Jul 2025 10:31:43 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id CB3B2106
+ for <buildroot@buildroot.org>; Sun, 13 Jul 2025 10:31:41 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id BD4D440851
+ for <buildroot@buildroot.org>; Sun, 13 Jul 2025 10:31:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EkIS4R_xduMy; Sun, 13 Jul 2025 09:40:18 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B305406BE
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6B305406BE;
-	Sun, 13 Jul 2025 09:40:18 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id AD385106
- for <buildroot@buildroot.org>; Sun, 13 Jul 2025 09:40:16 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 93E40400E3
- for <buildroot@buildroot.org>; Sun, 13 Jul 2025 09:40:16 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LKHqHA78Yiv6 for <buildroot@buildroot.org>;
- Sun, 13 Jul 2025 09:40:15 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 740A54009B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 740A54009B
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 740A54009B
- for <buildroot@buildroot.org>; Sun, 13 Jul 2025 09:40:15 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 0008713F861;
- Sun, 13 Jul 2025 11:40:10 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
- via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 13 Jul 2025 11:40:10 +0200
+ id iRbxBHPrma6M for <buildroot@buildroot.org>;
+ Sun, 13 Jul 2025 10:31:40 +0000 (UTC)
+X-Greylist: delayed 87701 seconds by postgrey-1.37 at util1.osuosl.org;
+ Sun, 13 Jul 2025 10:31:39 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E905D4083F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E905D4083F
+Received-SPF: None (mailfrom) identity=mailfrom;
+ client-ip=2a01:4f8:151:30a2::163; helo=serv15.avernis.de;
+ envelope-from=br015@umbiko.net; receiver=<UNKNOWN> 
+Received: from serv15.avernis.de (serv15.avernis.de
+ [IPv6:2a01:4f8:151:30a2::163])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E905D4083F
+ for <buildroot@buildroot.org>; Sun, 13 Jul 2025 10:31:39 +0000 (UTC)
+Received: by serv15.avernis.de (Postfix) with ESMTPSA id 3F25DBDE404F;
+ Sun, 13 Jul 2025 12:31:35 +0200 (CEST)
+From: Andreas Ziegler <br015@umbiko.net>
+To: buildroot@buildroot.org
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Andreas Ziegler <br015@umbiko.net>
+Date: Sun, 13 Jul 2025 12:30:47 +0200
+Message-ID: <20250713103047.1826080-1-br015@umbiko.net>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-Date: Sun, 13 Jul 2025 11:40:10 +0200
-To: Scott Fan <fancp2007@gmail.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250713040046.105851-1-fancp2007@gmail.com>
-References: <20250713040046.105851-1-fancp2007@gmail.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <5b83e70659b9312b93bde3b1610620fe@free.fr>
-X-Sender: ju.o@free.fr
+X-Virus-Scanned: clamav-milter 1.0.7 at serv15.avernis.de
+X-Virus-Status: Clean
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1752399612;
- bh=8BKPIwOhXyPuzba9ydWEqCvmWK9FRpGQpSIiUuA38RQ=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=HLlL21fXSDBZxy2roUEej7M2TofXZEr078CEGHBzvpCugjiEGUrT8oMcWIMye68Ql
- YH6hBTXAycq0b91dAJ/jVHZdcsyf5hLyK4/qQcl1CRCnHo81Y6jEMtW5e2g9y2KHAM
- zwHNU5frSRpVAaM1jKRf9A1nxX9uEyTiE6VtGxJQ7Rr3BrPtgykp+NfHevQl5YEeGL
- dQ3TgTEa+LnylQ7N0dKP2r6WPP2GDm686OcJL8PBJ1GExKRNdwBMXzN7d1PvDweiUe
- IkvQ6SNseKBLfcwbOrOcPCEZqYASl+PHQrFPxDzc20/W3OQBxQNNax1m/NgUmPRzl0
- yZhQH7hEmEV7g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=HLlL21fX
-Subject: Re: [Buildroot] [PATCH] package/chrony: bump to version 4.7
+ d=umbiko.net; s=mail; 
+ t=1752402695; bh=jPEKtOFqK/mzEj0StldpqKWfHJqr0I6HiJIp/Fx+hSY=;
+ h=From:To:Cc:Subject:Date;
+ b=aCkZLVNqx87wZnv7bmMomiC344fjXiFhkARpdXYw5YfgZB+o9Z8v/12CEZ8kDP7lP
+ TNZsdMlNh4byRRXE7mkuBByVLjVMuR0QIa5uM8+f9EgtiziNW2O4cJLFsZBUsVO0iS
+ +/z0jasoduMa+WfU/M6xQd8V+Faz4y16Ma/zZFKw=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=umbiko.net
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=umbiko.net header.i=@umbiko.net header.a=rsa-sha256
+ header.s=mail header.b=aCkZLVNq
+Subject: [Buildroot] [PATCH 1/1] package/libmpdclient: update version to 2.23
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,78 +78,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Scott,
+Version 2.23 change log: 
 
-Thanks for the patch.
+* support MPD protocol 0.24.0
+  - allow window for listplaylist and listplaylistinfo
+  - command "playlistlength", "protocol", "stickertypes",
+            "stickernamestypes", "searchplaylist"
+  - tag "ShowMovement"
+  - new sticker find api
+  - new subcommands for "tagtypes": "available", "reset"
+* Support open end for mpd_search_add_window
+* format floating-point numbers with the POSIX localew
 
-On 13/07/2025 06:00, Scott Fan wrote:
-> Release notes: https://chrony-project.org/news.html
+Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+Tested-by: Andreas Ziegler <br015@umbiko.net>
+---
+ package/libmpdclient/libmpdclient.hash | 2 +-
+ package/libmpdclient/libmpdclient.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-We can read in this release note:
-"Drop support for building without POSIX threads".
+diff --git a/package/libmpdclient/libmpdclient.hash b/package/libmpdclient/libmpdclient.hash
+index 626c383402..f963421efc 100644
+--- a/package/libmpdclient/libmpdclient.hash
++++ b/package/libmpdclient/libmpdclient.hash
+@@ -1,5 +1,5 @@
+ # Verified against http://www.musicpd.org/download/libmpdclient/2/libmpdclient-2.22.tar.xz.sig, sha256 locally computed
+-sha256  eac15b82b5ba5ed0648af580221eb74657394f7fe768e966d9e9ebb27435429f  libmpdclient-2.22.tar.xz
++sha256  4a1b6c7f783d8cac3d3b8e4cbe9ad021c45491e383de3b893ea4eedefbc71607  libmpdclient-2.23.tar.xz
+ 
+ # Hash for license files:
+ sha256  fd38b2c053c0cce46d9c5ef3545a6e34d157a240ba99c9b8dca5d37a8147da6c  LICENSES/BSD-2-Clause.txt
+diff --git a/package/libmpdclient/libmpdclient.mk b/package/libmpdclient/libmpdclient.mk
+index 371bc20dbf..85e42eb44d 100644
+--- a/package/libmpdclient/libmpdclient.mk
++++ b/package/libmpdclient/libmpdclient.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBMPDCLIENT_VERSION_MAJOR = 2
+-LIBMPDCLIENT_VERSION = $(LIBMPDCLIENT_VERSION_MAJOR).22
++LIBMPDCLIENT_VERSION = $(LIBMPDCLIENT_VERSION_MAJOR).23
+ LIBMPDCLIENT_SOURCE = libmpdclient-$(LIBMPDCLIENT_VERSION).tar.xz
+ LIBMPDCLIENT_SITE = http://www.musicpd.org/download/libmpdclient/$(LIBMPDCLIENT_VERSION_MAJOR)
+ LIBMPDCLIENT_INSTALL_STAGING = YES
+-- 
+2.43.0
 
-Indeed, pthread was made a hard requirement in upstream commit:
-https://gitlab.com/chrony/chrony/-/commit/75bbccf518c617150ffaee30c7f229172b28353f
-included in this new version.
-
-For that reason, this bump fail to build with toolchains without
-threads. See:
-https://gitlab.com/jolivain/buildroot/-/pipelines/1923986229
-
-Could you send an updated version of this patch taking into
-account this new dependency please?
-
-> Signed-off-by: Scott Fan <fancp2007@gmail.com>
-> ---
->  package/chrony/chrony.hash | 4 ++--
->  package/chrony/chrony.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/chrony/chrony.hash b/package/chrony/chrony.hash
-> index 25535e723e..75555fed9e 100644
-> --- a/package/chrony/chrony.hash
-> +++ b/package/chrony/chrony.hash
-> @@ -1,5 +1,5 @@
->  # Locally calculated after checking pgp signature
-> -# https://chrony-project.org/releases/chrony-4.6.1-tar-gz-asc.txt
-> -sha256  
-> 571ff73fbf0ae3097f0604eca2e00b1d8bb2e91affe1a3494785ff21d6199c5c  
-> chrony-4.6.1.tar.gz
-> +# https://chrony-project.org/releases/chrony-4.7-tar-gz-asc.txt
-> +sha256  
-> c0de41a8c051e5d32b101b5f7014b98ca978b18e592f30ce6840b6d4602d947b  
-> chrony-4.7.tar.gz
->  # Locally calculated
->  sha256  
-> ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  
-> COPYING
-> diff --git a/package/chrony/chrony.mk b/package/chrony/chrony.mk
-> index 642e1d8fd6..f2aca81d60 100644
-> --- a/package/chrony/chrony.mk
-> +++ b/package/chrony/chrony.mk
-> @@ -4,7 +4,7 @@
->  #
->  
-> ################################################################################
-> 
-> -CHRONY_VERSION = 4.6.1
-> +CHRONY_VERSION = 4.7
->  CHRONY_SITE = https://chrony-project.org/releases
->  CHRONY_LICENSE = GPL-2.0
->  CHRONY_LICENSE_FILES = COPYING
-> --
-> 2.43.0
-
-Best regards,
-
-Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
