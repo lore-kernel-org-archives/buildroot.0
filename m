@@ -1,75 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A667AC83F1D
-	for <buildroot@archiver.kernel.org>; Sun, 13 Jul 2025 11:06:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5ED20C83F1D
+	for <buildroot@archiver.kernel.org>; Sun, 13 Jul 2025 11:06:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4DD6840A21;
-	Sun, 13 Jul 2025 11:06:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 249218195D;
+	Sun, 13 Jul 2025 11:06:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Tkt7AjQlVM7u; Sun, 13 Jul 2025 11:06:06 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id j9INm3StsLkS; Sun, 13 Jul 2025 11:06:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F09E640A27
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B3C181970
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F09E640A27;
-	Sun, 13 Jul 2025 11:06:05 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 27B625E
- for <buildroot@buildroot.org>; Sun, 13 Jul 2025 11:06:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3B3C181970;
+	Sun, 13 Jul 2025 11:06:19 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 265D05E
+ for <buildroot@buildroot.org>; Sun, 13 Jul 2025 11:06:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 38EF440A27
- for <buildroot@buildroot.org>; Sun, 13 Jul 2025 11:06:03 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0D04440A2C
+ for <buildroot@buildroot.org>; Sun, 13 Jul 2025 11:06:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rJkHsQulivbu for <buildroot@buildroot.org>;
- Sun, 13 Jul 2025 11:06:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7B0A340A2E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B0A340A2E
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7B0A340A2E
- for <buildroot@buildroot.org>; Sun, 13 Jul 2025 11:06:01 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 4FA485FF88;
- Sun, 13 Jul 2025 13:05:55 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
- via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 13 Jul 2025 13:05:55 +0200
-MIME-Version: 1.0
-Date: Sun, 13 Jul 2025 13:05:55 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
-In-Reply-To: <20250621173157.4048801-1-bernd@kuhls.net>
-References: <20250621173157.4048801-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <8452100bc181bc62bc849384a3e0a9e9@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1752404758;
- bh=AkYo7UtlQCF6pUiTBAPS0de4UbYowIorfhkZydzDbug=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=GYv79Vlf/l3D4Bm/LS2E/93QDr7SMIv8ynyoDrxJ3efFxRseTV6bg7qxCysLMXz+T
- fzrjE0gFO3Z/HJvkJUybRqV7p/COxCWxEhQvPxFFDaYzd/+Sswot4VJ2JQdRs8OnyD
- xBNbe7f/xsiPbPeuKGSCLNtMgJ722nYlMGR0q8PjNeOgWXmBu60h2Q25I1gjItKLF+
- mAAsRLk6XgrJEqCtYyxJD/xgiLgZJXoLpebtb6ccFnIOzYA1x+4cqmIOQN+a7VBDdq
- PVWGud1L8tRy4lqKhyhhsU0vo4iZkx+eWquOkNNpeSJNAmhYUkr8xQXvRQt9J0xsgR
- W2Hqxku0D0OZA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=GYv79Vlf
-Subject: Re: [Buildroot] [PATCH 1/1] package/squeezelite: bump version
+ id 4MqdsDFPSYAi for <buildroot@buildroot.org>;
+ Sun, 13 Jul 2025 11:06:16 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 35A0440A21
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 35A0440A21
+ for <buildroot@buildroot.org>; Sun, 13 Jul 2025 11:06:16 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 14B6D86357; Sun, 13 Jul 2025 11:06:16 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 13 Jul 2025 13:00:51 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 9135a8a5aa1cedee9f5e3b38338f3a1f12e54607
+X-Git-Newrev: aa187f62d6ef55f990fbe245d03f73c9b96ed5aa
+X-Patchwork-Hint: ignore
+Message-Id: <20250713110616.14B6D86357@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/minidlna: Fix build with ffmpeg-7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,21 +59,75 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 21/06/2025 19:31, Bernd Kuhls wrote:
-> Update license hash due to various copyright year bumps:
-> https://github.com/ralph-irving/squeezelite/commits/master/LICENSE.txt
-> 
-> This version bump is needed for compatibility with the upcoming bump of
-> ffmpeg to version 7.1.x.
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://git.buildroot.net/buildroot/commit/?id=aa187f62d6ef55f990fbe245d03f73c9b96ed5aa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ .../0001-libav.h-fix-build-with-ffmpeg-7.0.patch   | 48 ++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
+
+diff --git a/package/minidlna/0001-libav.h-fix-build-with-ffmpeg-7.0.patch b/package/minidlna/0001-libav.h-fix-build-with-ffmpeg-7.0.patch
+new file mode 100644
+index 0000000000..888c867f36
+--- /dev/null
++++ b/package/minidlna/0001-libav.h-fix-build-with-ffmpeg-7.0.patch
+@@ -0,0 +1,48 @@
++From 5f698d645d71782c78e6495efd3b5e982f7db8c4 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd@kuhls.net>
++Date: Sat, 13 Apr 2024 15:03:34 +0200
++Subject: [PATCH] libav.h: fix build with ffmpeg 7.0
++
++The old bitmask-based channel layout API was removed:
++https://git.videolan.org/?p=ffmpeg.git;a=blob_plain;f=doc/APIchanges;hb=n7.0
++
++Upstream: https://sourceforge.net/p/minidlna/patches/204/
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ libav.h | 10 ++++++++++
++ 1 file changed, 10 insertions(+)
++
++diff --git a/libav.h b/libav.h
++index b69752c..d5a3358 100644
++--- a/libav.h
+++++ b/libav.h
++@@ -174,7 +174,12 @@ lav_get_interlaced(AVStream *s)
++ #define lav_codec_tag(s) s->codecpar->codec_tag
++ #define lav_sample_rate(s) s->codecpar->sample_rate
++ #define lav_bit_rate(s) s->codecpar->bit_rate
+++#if LIBAVCODEC_VERSION_MAJOR > 52 || \
+++    (LIBAVCODEC_VERSION_MAJOR >= 52 && LIBAVCODEC_VERSION_MINOR >= 113)
+++#define lav_channels(s) s->codecpar->ch_layout.nb_channels
+++#else
++ #define lav_channels(s) s->codecpar->channels
+++#endif
++ #define lav_width(s) s->codecpar->width
++ #define lav_height(s) s->codecpar->height
++ #define lav_profile(s) s->codecpar->profile
++@@ -186,7 +191,12 @@ lav_get_interlaced(AVStream *s)
++ #define lav_codec_tag(s) s->codec->codec_tag
++ #define lav_sample_rate(s) s->codec->sample_rate
++ #define lav_bit_rate(s) s->codec->bit_rate
+++#if LIBAVCODEC_VERSION_MAJOR > 52 || \
+++    (LIBAVCODEC_VERSION_MAJOR >= 52 && LIBAVCODEC_VERSION_MINOR >= 113)
+++#define lav_channels(s) s->codec->ch_layout.nb_channels
+++#else
++ #define lav_channels(s) s->codec->channels
+++#endif
++ #define lav_width(s) s->codec->width
++ #define lav_height(s) s->codec->height
++ #define lav_profile(s) s->codec->profile
++-- 
++2.39.2
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
