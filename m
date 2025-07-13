@@ -4,49 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D09BC83F1D
-	for <buildroot@archiver.kernel.org>; Sun, 13 Jul 2025 11:32:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59283C83F17
+	for <buildroot@archiver.kernel.org>; Sun, 13 Jul 2025 11:32:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0D3114087D;
-	Sun, 13 Jul 2025 11:32:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2EFA540983;
+	Sun, 13 Jul 2025 11:32:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id l-GFm5WyTr1q; Sun, 13 Jul 2025 11:32:17 +0000 (UTC)
+ id FxfKgymWc7n9; Sun, 13 Jul 2025 11:32:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 15E9C4088B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 47BDF40975
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 15E9C4088B;
-	Sun, 13 Jul 2025 11:32:17 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 0117B106
- for <buildroot@buildroot.org>; Sun, 13 Jul 2025 11:32:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 47BDF40975;
+	Sun, 13 Jul 2025 11:32:53 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id AEB125E
+ for <buildroot@buildroot.org>; Sun, 13 Jul 2025 11:32:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F2A2240135
- for <buildroot@buildroot.org>; Sun, 13 Jul 2025 11:32:15 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 949FD4096A
+ for <buildroot@buildroot.org>; Sun, 13 Jul 2025 11:32:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pZMmJJrMX2Mr for <buildroot@buildroot.org>;
- Sun, 13 Jul 2025 11:32:15 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 123AA40083
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 123AA40083
- for <buildroot@buildroot.org>; Sun, 13 Jul 2025 11:32:15 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F1ED78645A; Sun, 13 Jul 2025 11:32:14 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 13 Jul 2025 13:25:15 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 68751909a9a5060dc7e3f5e52aa72675721d8905
-X-Git-Newrev: c61d7d61b1e3fe143569938f7c63b01a24169830
-X-Patchwork-Hint: ignore
-Message-Id: <20250713113214.F1ED78645A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libcrossguid: bump version to
- v0.2.2-52-gca1bf4b
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jVzPzAhgmMss for <buildroot@buildroot.org>;
+ Sun, 13 Jul 2025 11:32:50 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B47634095E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B47634095E
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B47634095E
+ for <buildroot@buildroot.org>; Sun, 13 Jul 2025 11:32:50 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id E865813F879;
+ Sun, 13 Jul 2025 13:32:47 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 13 Jul 2025 13:32:47 +0200
+MIME-Version: 1.0
+Date: Sun, 13 Jul 2025 13:32:47 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250622100412.3836588-1-bernd@kuhls.net>
+References: <20250622100412.3836588-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <e7a1ed7c27118b52a4ae8299648dcb91@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1752406369;
+ bh=2P6cdW1pV15EJthSSrlgRTAS7hSWEcAixiSobs1nPKs=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=kMo2L5pjfB6vDhvqjLtdv2ioCLbI0emNpxS/jUBKaK4e9nPdGXJHYDzcj6NDYyym2
+ FM7IpEf4lmcCwHjN+lRjOlG8IMdPJjxUV9YU/sB84w3Pu17DXoOnZjYmUKqMeCDf9u
+ y1dFZTIWaCos091zA3geCr07I+IVQITpY/OcEP1law0XINvfiXIZgUTByt47/eEFLT
+ FXMU4sImQHzs1JKlbGnfGTKJOGE8V6Bdn09SewsGlgwVfyz6FEhD3tgK2I4guUVYmw
+ lOnx8NejLX+TZTK1Mri0g6yqXIVHsi0TKXN1ul55XcwSlOYJA++RwoDVHlhCWxx/Pg
+ LHqq78J8qDXTg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=kMo2L5pj
+Subject: Re: [Buildroot] [PATCH 1/1] package/libcrossguid: bump version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,110 +82,31 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c61d7d61b1e3fe143569938f7c63b01a24169830
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 22/06/2025 12:04, Bernd Kuhls wrote:
+> Needed for kodi 22.x.
+> 
+> Added build fix for >= gcc-13.
+> 
+> Switched build system to cmake following upstream:
+> https://github.com/graeme-hill/crossguid/commit/13683c56e559f93d75f8640488aa3335f43443ed
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Needed for kodi 22.x.
+Applied to master, thanks.
 
-Added build fix for >= gcc-13.
+For info, I switched _VERSION to use the
+"git describe --tags --abbrev=40" format, since upstream
+has an old tag. See:
+https://gitlab.com/buildroot.org/buildroot/-/commit/c61d7d61b1e3fe143569938f7c63b01a24169830
 
-Switched build system to cmake following upstream:
-https://github.com/graeme-hill/crossguid/commit/13683c56e559f93d75f8640488aa3335f43443ed
+Best regards,
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-[Julien: use "git describe --tags --abbrev=40" format for _VERSION]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- .../0001-pr67-include-missing-cstdint.patch        | 31 ++++++++++++++++++++++
- package/libcrossguid/libcrossguid.hash             |  2 +-
- package/libcrossguid/libcrossguid.mk               | 19 +++----------
- 3 files changed, 35 insertions(+), 17 deletions(-)
-
-diff --git a/package/libcrossguid/0001-pr67-include-missing-cstdint.patch b/package/libcrossguid/0001-pr67-include-missing-cstdint.patch
-new file mode 100644
-index 0000000000..0986f4e9e5
---- /dev/null
-+++ b/package/libcrossguid/0001-pr67-include-missing-cstdint.patch
-@@ -0,0 +1,31 @@
-+From 1eb9bea38c320b2b588635cffceaaa2a8d434780 Mon Sep 17 00:00:00 2001
-+From: Khem Raj <raj.khem@gmail.com>
-+Date: Wed, 25 Jan 2023 22:09:26 -0800
-+Subject: [PATCH] include missing <cstdint>
-+
-+gcc 13 moved some includes around and as a result <cstdint> is no longer transitively
-+included [1]. Explicitly include it for uint{32,64}_t.
-+
-+[1] https://gcc.gnu.org/gcc-13/porting_to.html#header-dep-changes
-+
-+Signed-off-by: Khem Raj <raj.khem@gmail.com>
-+
-+Upstream: https://github.com/graeme-hill/crossguid/pull/67
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ include/crossguid/guid.hpp | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/include/crossguid/guid.hpp b/include/crossguid/guid.hpp
-+index 61e0f17..70966f2 100644
-+--- a/include/crossguid/guid.hpp
-++++ b/include/crossguid/guid.hpp
-+@@ -29,6 +29,7 @@ THE SOFTWARE.
-+ #include <jni.h>
-+ #endif
-+ 
-++#include <cstdint>
-+ #include <functional>
-+ #include <iostream>
-+ #include <array>
-diff --git a/package/libcrossguid/libcrossguid.hash b/package/libcrossguid/libcrossguid.hash
-index 17dbe35c71..f65c25732d 100644
---- a/package/libcrossguid/libcrossguid.hash
-+++ b/package/libcrossguid/libcrossguid.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  022c9f02cc36e865cd8fd0111a597ff2bd91988deeb348dbe2aba64aed1abd99  libcrossguid-8f399e8bd4252be9952f3dfa8199924cc8487ca4.tar.gz
-+sha256  6be27e0b3a4907f0cd3cfadec255ee1b925569e1bd06e67a4d2f4267299b69c4  libcrossguid-v0.2.2-52-gca1bf4b810e2d188d04cb6286f957008ee1b7681.tar.gz
- sha256  779e58787f966a1552f68d5ec041513cef68785dae4a519dbda7bc0b86eda20e  LICENSE
-diff --git a/package/libcrossguid/libcrossguid.mk b/package/libcrossguid/libcrossguid.mk
-index 46d9a9dcc6..c77f21ab26 100644
---- a/package/libcrossguid/libcrossguid.mk
-+++ b/package/libcrossguid/libcrossguid.mk
-@@ -4,25 +4,12 @@
- #
- ################################################################################
- 
--LIBCROSSGUID_VERSION = 8f399e8bd4252be9952f3dfa8199924cc8487ca4
-+LIBCROSSGUID_VERSION = v0.2.2-52-gca1bf4b810e2d188d04cb6286f957008ee1b7681
- LIBCROSSGUID_SITE = $(call github,graeme-hill,crossguid,$(LIBCROSSGUID_VERSION))
- LIBCROSSGUID_LICENSE = MIT
- LIBCROSSGUID_LICENSE_FILES = LICENSE
- LIBCROSSGUID_INSTALL_STAGING = YES
--# only a static library
--LIBCROSSGUID_INSTALL_TARGET = NO
- LIBCROSSGUID_DEPENDENCIES = util-linux
-+LIBCROSSGUID_CONF_OPTS = -DCROSSGUID_TESTS=OFF
- 
--define LIBCROSSGUID_BUILD_CMDS
--	(cd $(@D); $(TARGET_CXX) $(TARGET_CXXFLAGS) -std=c++11 -DGUID_LIBUUID \
--		-c guid.cpp -o guid.o)
--	(cd $(@D); $(TARGET_AR) rvs libcrossguid.a guid.o)
--endef
--
--define LIBCROSSGUID_INSTALL_STAGING_CMDS
--	$(INSTALL) -D -m 644 $(@D)/libcrossguid.a \
--		$(STAGING_DIR)/usr/lib/libcrossguid.a
--	$(INSTALL) -D -m 644 $(@D)/guid.h $(STAGING_DIR)/usr/include/guid.h
--endef
--
--$(eval $(generic-package))
-+$(eval $(cmake-package))
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
