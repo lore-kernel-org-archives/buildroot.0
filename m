@@ -4,48 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72505C83F1B
-	for <buildroot@archiver.kernel.org>; Mon, 14 Jul 2025 13:44:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11A10C83F1B
+	for <buildroot@archiver.kernel.org>; Mon, 14 Jul 2025 13:44:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2AE6F60A9E;
-	Mon, 14 Jul 2025 13:44:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DB64A60A54;
+	Mon, 14 Jul 2025 13:44:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id m7jr4bGu1-sP; Mon, 14 Jul 2025 13:44:05 +0000 (UTC)
+ id wOG3HuskBFGE; Mon, 14 Jul 2025 13:44:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 43CB960A74
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 266CB60A9E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 43CB960A74;
-	Mon, 14 Jul 2025 13:44:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 266CB60A9E;
+	Mon, 14 Jul 2025 13:44:18 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 41628AF7
- for <buildroot@buildroot.org>; Mon, 14 Jul 2025 13:44:04 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 68AD3DF
+ for <buildroot@buildroot.org>; Mon, 14 Jul 2025 13:44:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E5328412C9
- for <buildroot@buildroot.org>; Mon, 14 Jul 2025 13:44:03 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5A429412D1
+ for <buildroot@buildroot.org>; Mon, 14 Jul 2025 13:44:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mwTZooDD4HLY for <buildroot@buildroot.org>;
- Mon, 14 Jul 2025 13:44:03 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E66940A96
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3E66940A96
- for <buildroot@buildroot.org>; Mon, 14 Jul 2025 13:44:03 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2C9B67FCBA; Mon, 14 Jul 2025 13:44:03 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 14 Jul 2025 15:29:28 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6c80b71c8c661ce62cfa800ed558dba31baa5dbb
-X-Git-Newrev: b67ca753c9dc1634c9633202209b21d105931ec0
-X-Patchwork-Hint: ignore
-Message-Id: <20250714134403.2C9B67FCBA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-flit-core: bump to 3.12
+ id 9cXpfUGKKKSZ for <buildroot@buildroot.org>;
+ Mon, 14 Jul 2025 13:44:15 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7885040B44
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7885040B44
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7885040B44
+ for <buildroot@buildroot.org>; Mon, 14 Jul 2025 13:44:15 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 83B5B2003CC;
+ Mon, 14 Jul 2025 15:44:11 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 14 Jul 2025 15:44:11 +0200
+MIME-Version: 1.0
+Date: Mon, 14 Jul 2025 15:44:11 +0200
+To: Marcus Hoffmann <buildroot@bubu1.eu>
+Cc: buildroot@buildroot.org, James Hilliard <james.hilliard1@gmail.com>
+In-Reply-To: <20250714131944.51753-1-buildroot@bubu1.eu>
+References: <20250714131944.51753-1-buildroot@bubu1.eu>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <6fcef77d1161f1e6b6c3de2e3a5b616c@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1752500653;
+ bh=xwb1usd8ei3sORqEuH8r2TOMJo5uYhMwWFer7qgWrJo=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=RaopO9E4MG6bMnjw5fzMLKin5fOQqoaENBnDhtMv+YFMRRXX+DX6W0fv3Im3PnYN2
+ 8eVe2HJgyzeAF68p4yziFglnUWcb5iA0wjH/p5M2oYosbSrGvk+xXeYyT2v+DaUGp7
+ hUqlRFy3+kGudMcSiICAP6CwUbnDyz1FRk4sETeoXGE77wDGYZvr5eYpA87DFSn+Nz
+ Jk0jMGr8kPFOgZrEvAaBpt7vXnBZVhToF2sOwbdS166thuFXmZx5Rq+D4x1LJ9PK5v
+ /mFC9id/5htDAoAKRtdDCQThTZEiE2tQ7hsy7+zZNai9dx5PMzgVmTcegoZA2kOMkU
+ 5f0jRJaXi6YYQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=RaopO9E4
+Subject: Re: [Buildroot] [PATCH] package/python-flit-core: bump to 3.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,54 +83,18 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b67ca753c9dc1634c9633202209b21d105931ec0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 14/07/2025 15:19, Marcus Hoffmann via buildroot wrote:
+> Release notes:
+> https://flit.pypa.io/en/stable/history.html#version-3-12
+> 
+> Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 
-Release notes:
-https://flit.pypa.io/en/stable/history.html#version-3-12
-
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/python-flit-core/python-flit-core.hash | 6 +++---
- package/python-flit-core/python-flit-core.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/package/python-flit-core/python-flit-core.hash b/package/python-flit-core/python-flit-core.hash
-index 80f8d915fe..580a99edf0 100644
---- a/package/python-flit-core/python-flit-core.hash
-+++ b/package/python-flit-core/python-flit-core.hash
-@@ -1,5 +1,5 @@
--# md5, sha256 from https://pypi.org/pypi/flit_core/json
--md5  6d677b1acef1769c4c7156c7508e0dbd  flit_core-3.11.0.tar.gz
--sha256  6ceeee3219e9d2ea282041f3e027c441597b450b33007cb81168e887b6113a8f  flit_core-3.11.0.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/flit-core/json
-+md5  c538415c1f27bd69cbbbf3cdd5135d39  flit_core-3.12.0.tar.gz
-+sha256  18f63100d6f94385c6ed57a72073443e1a71a4acb4339491615d0f16d6ff01b2  flit_core-3.12.0.tar.gz
- # Locally computed sha256 checksums
- sha256  35b4f1dec512e617077fd6980dbb43ef8c2887adc5d0185edb4c04da175dd816  LICENSE
-diff --git a/package/python-flit-core/python-flit-core.mk b/package/python-flit-core/python-flit-core.mk
-index e46453443c..ee958cece5 100644
---- a/package/python-flit-core/python-flit-core.mk
-+++ b/package/python-flit-core/python-flit-core.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_FLIT_CORE_VERSION = 3.11.0
-+PYTHON_FLIT_CORE_VERSION = 3.12.0
- PYTHON_FLIT_CORE_SOURCE = flit_core-$(PYTHON_FLIT_CORE_VERSION).tar.gz
--PYTHON_FLIT_CORE_SITE = https://files.pythonhosted.org/packages/bc/18/b9b81cab2b8f63e6e7f72e1ba2766a0454fcd563e7a77b8299cb917ba805
-+PYTHON_FLIT_CORE_SITE = https://files.pythonhosted.org/packages/69/59/b6fc2188dfc7ea4f936cd12b49d707f66a1cb7a1d2c16172963534db741b
- PYTHON_FLIT_CORE_LICENSE = BSD-3-Clause
- PYTHON_FLIT_CORE_LICENSE_FILES = LICENSE
- PYTHON_FLIT_CORE_SETUP_TYPE = flit-bootstrap
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
