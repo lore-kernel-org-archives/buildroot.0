@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9BF9C83F1B
-	for <buildroot@archiver.kernel.org>; Mon, 14 Jul 2025 09:46:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23E24C83F1B
+	for <buildroot@archiver.kernel.org>; Mon, 14 Jul 2025 09:46:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6809760A54;
-	Mon, 14 Jul 2025 09:46:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 58C0861448;
+	Mon, 14 Jul 2025 09:46:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qqeZqt1Q88pL; Mon, 14 Jul 2025 09:46:29 +0000 (UTC)
+ id rMq_h_5pj4W8; Mon, 14 Jul 2025 09:46:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B19E610DF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E51BC61421
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8B19E610DF;
-	Mon, 14 Jul 2025 09:46:29 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 78528DF
+	by smtp3.osuosl.org (Postfix) with ESMTP id E51BC61421;
+	Mon, 14 Jul 2025 09:46:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 84D21AF7
  for <buildroot@buildroot.org>; Mon, 14 Jul 2025 09:46:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 753A56085F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6B3DE40B7A
  for <buildroot@buildroot.org>; Mon, 14 Jul 2025 09:46:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1kSWfNJTsE50 for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id P-8Xz8YfAawA for <buildroot@buildroot.org>;
  Mon, 14 Jul 2025 09:46:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A350460A54
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B508940B4B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A350460A54
+ by smtp4.osuosl.org (Postfix) with ESMTP id B508940B4B
  for <buildroot@buildroot.org>; Mon, 14 Jul 2025 09:46:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9B8D9864EE; Mon, 14 Jul 2025 09:46:27 +0000 (UTC)
+ id A5197864F1; Mon, 14 Jul 2025 09:46:27 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 14 Jul 2025 11:18:18 +0200
+Date: Mon, 14 Jul 2025 11:18:22 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 557692a05f752d2881f3312d6e24c82e5eeaae22
-X-Git-Newrev: 9189e74ef87af5b26fe94cac8096b4883ace8f99
+X-Git-Oldrev: 9189e74ef87af5b26fe94cac8096b4883ace8f99
+X-Git-Newrev: 8d1d851d78269383a548e9440146d4f9d16f5e29
 X-Patchwork-Hint: ignore
-Message-Id: <20250714094627.9B8D9864EE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-typing-extensions: bump to
- 4.14.1
+Message-Id: <20250714094627.A5197864F1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-typing-extensions: update
+ description
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,46 +66,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9189e74ef87af5b26fe94cac8096b4883ace8f99
+commit: https://git.buildroot.net/buildroot/commit/?id=8d1d851d78269383a548e9440146d4f9d16f5e29
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changes: https://github.com/python/typing_extensions/releases/tag/4.14.1
+Minimum python version is now 3.9, but also it's not really relevant to
+mention this in the package description.
 
 Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-typing-extensions/python-typing-extensions.hash | 4 ++--
- package/python-typing-extensions/python-typing-extensions.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-typing-extensions/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/python-typing-extensions/python-typing-extensions.hash b/package/python-typing-extensions/python-typing-extensions.hash
-index 1d38e3491a..c422691dab 100644
---- a/package/python-typing-extensions/python-typing-extensions.hash
-+++ b/package/python-typing-extensions/python-typing-extensions.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/typing-extensions/json
--md5  06244b2d61784c4d1d85900927514f36  typing_extensions-4.14.0.tar.gz
--sha256  8676b788e32f02ab42d9e7c61324048ae4c6d844a399eebace3d4979d75ceef4  typing_extensions-4.14.0.tar.gz
-+md5  da52c877660b1760771ce7553f729c5d  typing_extensions-4.14.1.tar.gz
-+sha256  38b39f4aeeab64884ce9f74c94263ef78f3c22467c8724005483154c26648d36  typing_extensions-4.14.1.tar.gz
- # Locally computed sha256 checksums
- sha256  3b2f81fe21d181c499c59a256c8e1968455d6689d269aa85373bfb6af41da3bf  LICENSE
-diff --git a/package/python-typing-extensions/python-typing-extensions.mk b/package/python-typing-extensions/python-typing-extensions.mk
-index 1ad8d210a5..9ed8b71ff2 100644
---- a/package/python-typing-extensions/python-typing-extensions.mk
-+++ b/package/python-typing-extensions/python-typing-extensions.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/python-typing-extensions/Config.in b/package/python-typing-extensions/Config.in
+index 35b88f34f1..e1d46b60c0 100644
+--- a/package/python-typing-extensions/Config.in
++++ b/package/python-typing-extensions/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS
+ 	bool "python-typing-extensions"
+ 	help
+-	  Backported and Experimental Type Hints for Python 3.5+.
++	  Backported and experimental type hints for Python.
  
--PYTHON_TYPING_EXTENSIONS_VERSION = 4.14.0
-+PYTHON_TYPING_EXTENSIONS_VERSION = 4.14.1
- PYTHON_TYPING_EXTENSIONS_SOURCE = typing_extensions-$(PYTHON_TYPING_EXTENSIONS_VERSION).tar.gz
--PYTHON_TYPING_EXTENSIONS_SITE = https://files.pythonhosted.org/packages/d1/bc/51647cd02527e87d05cb083ccc402f93e441606ff1f01739a62c8ad09ba5
-+PYTHON_TYPING_EXTENSIONS_SITE = https://files.pythonhosted.org/packages/98/5a/da40306b885cc8c09109dc2e1abd358d5684b1425678151cdaed4731c822
- PYTHON_TYPING_EXTENSIONS_SETUP_TYPE = flit
- PYTHON_TYPING_EXTENSIONS_LICENSE = Python-2.0
- PYTHON_TYPING_EXTENSIONS_LICENSE_FILES = LICENSE
+ 	  https://github.com/python/typing_extensions
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
