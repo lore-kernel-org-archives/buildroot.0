@@ -1,99 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F42AC83F17
-	for <buildroot@archiver.kernel.org>; Mon, 14 Jul 2025 08:18:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62E22C83F17
+	for <buildroot@archiver.kernel.org>; Mon, 14 Jul 2025 09:11:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D9B2A80D4F;
-	Mon, 14 Jul 2025 08:18:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 14A1D6140F;
+	Mon, 14 Jul 2025 09:11:58 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NKD6SXT7bKMP; Mon, 14 Jul 2025 09:11:57 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3342E60A3B
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3342E60A3B;
+	Mon, 14 Jul 2025 09:11:57 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id B75B85E
+ for <buildroot@buildroot.org>; Mon, 14 Jul 2025 09:11:55 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id A8F9D81F83
+ for <buildroot@buildroot.org>; Mon, 14 Jul 2025 09:11:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FpXt2js4S1TT; Mon, 14 Jul 2025 08:18:01 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0084280D0A
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0084280D0A;
-	Mon, 14 Jul 2025 08:18:01 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7F474967
- for <buildroot@buildroot.org>; Mon, 14 Jul 2025 08:17:58 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 74C2C40409
- for <buildroot@buildroot.org>; Mon, 14 Jul 2025 08:17:55 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sEz9aRKXMsTo for <buildroot@buildroot.org>;
- Mon, 14 Jul 2025 08:17:54 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org EE9F8403FF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE9F8403FF
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
- [IPv6:2a00:1450:4864:20::32b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id EE9F8403FF
- for <buildroot@buildroot.org>; Mon, 14 Jul 2025 08:17:53 +0000 (UTC)
-Received: by mail-wm1-x32b.google.com with SMTP id
- 5b1f17b1804b1-45348bff79fso48279925e9.2
- for <buildroot@buildroot.org>; Mon, 14 Jul 2025 01:17:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1752481071; x=1753085871;
- h=content-transfer-encoding:mime-version:message-id:date:subject:to
- :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=pzuwwFvJx6wM4LgVKL49QRMWuDhmhBUWBHQj8ANhujU=;
- b=xOrR5w2mPcdWh9nYtAzjwyHm83fM6B1zxe0BAh3GXRRSASWp/cZ+TGySGBwv87+spf
- hLfUpmmxF1L6xbSG/17DUzIhq+j04H6dQ/bOogzwAGwelY/262XcnNsu2bo1XMu2VnMs
- wa/IlbfbySvjlNoB0SaS9Djlv4avKD5QGBMoG7J+6lnaEEtk3tbsdPdEIqZcg7SPo26p
- TtY9H1AhHCwu+klA6KFBU4oj22w4gnBhE0fJuDVEV+Qduxtz2kwQNq94MkEd2jbsoxXx
- nI6V3JJ4Z8nbu0+dQRLSUJ2GpiB10I2IKLttLpMWwyWYJMsrKPaGk6zSh+N2KjQsSQrz
- XFww==
-X-Gm-Message-State: AOJu0YzxPRhNWYS+QQBJZjabbtZSWZTukurRQJC5rdaKdJWavkJSTbYR
- zxBoXrZRiR/KOFR0mivaWdcBr/qpnogjUpxt3kfj1O6qCNvhAvIBu7SHY+wcPGvR/fD6nzxVA/w
- FsZ0/
-X-Gm-Gg: ASbGncvkR/E4IQdjowu/PYDTalz9TRHb6SLqgfrodG1LgvFOL3s7bYE8nSRpR4rLYmg
- k0e5t9N1hHwyusseC52D6E91acl2LsgDHlq8Mt11BIUOHbqPBJk5KE0WAogmJuTQV8pVpX3+32z
- DZ8+LJrN0Rne6z4HvsmTlPXP8wCbgHBwi1kslljBUGxfP2BenetpbBrhF1A4tfVSsGJ+y4GDONm
- dtt80b026a2K5JV0a5dyZF55FEXOZIdDDWcoMd7HJUVD3np6O58NLN7SUd5lvmtJDvbjOe3NGQe
- iIHquKIAXYPG3IF/HKQVR16ryLeyjcBd+dlO6rZDNRpKCmexrYKcsBew062bNrZHKkeIxsGY2mK
- qRht2lBmkWIWmKQ==
-X-Google-Smtp-Source: AGHT+IHXDxfxoVIJhbdPJ//drvosk1K+KgP2m0UeQdT05f15guDufdfbb+CYkygrqvMZ1jSXK0RZIg==
-X-Received: by 2002:a05:600c:34d1:b0:456:1d4e:c127 with SMTP id
- 5b1f17b1804b1-4561d4ec409mr13140585e9.8.1752481071106; 
- Mon, 14 Jul 2025 01:17:51 -0700 (PDT)
-Received: from arch ([79.132.233.65]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-455f13ec67asm85796505e9.4.2025.07.14.01.17.50
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 14 Jul 2025 01:17:50 -0700 (PDT)
+ id 0laQ2U6-V5pX for <buildroot@buildroot.org>;
+ Mon, 14 Jul 2025 09:11:55 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
+ helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7061781F6A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7061781F6A
+Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7061781F6A
+ for <buildroot@buildroot.org>; Mon, 14 Jul 2025 09:11:53 +0000 (UTC)
+Received: from tuxedoOT.fritz.box (unknown [212.37.174.96])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+ (No client certificate requested)
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id 6AA772C84ABF;
+ Mon, 14 Jul 2025 11:11:51 +0200 (CEST)
 To: buildroot@buildroot.org
-Date: Mon, 14 Jul 2025 10:17:49 +0200
-Message-ID: <20250714081749.83051-1-thomas.perale@mind.be>
-X-Mailer: git-send-email 2.50.1
+Date: Mon, 14 Jul 2025 11:11:47 +0200
+Message-ID: <20250714091150.17718-1-buildroot@bubu1.eu>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1752481071; x=1753085871; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:to
- :from:from:to:cc:subject:date:message-id:reply-to;
- bh=pzuwwFvJx6wM4LgVKL49QRMWuDhmhBUWBHQj8ANhujU=;
- b=SadMIzVuy6qd0OCNYs3t4XnS+kSvGM0H2TQg8Q30ChCJgn3YwvQpI9YU+cp+H2OvSw
- yqZiBlKaXpB+4O+dvMCee+BPgxi9QkWu+o5p1d8qFB/8bQLugPTml0+fez2CUAZZRvCO
- yAGvhlyRPhT8IGqOSGsSlbB6k6q3wugEDtuXj1imX18fTyn5GOyod0/HVCiurjIL681X
- vLCf/v56Bx8lQci7IZf39Qng56886WlQluBzYf/ui4Pdm5JDgUm7DMSuyekz6GNWEOjQ
- 7X6j9TNnTBU+eyApXFxXZdvF5is6oUToZ5bejCkNP+N94tI5z5DrRgmuPYg08sWYpUv1
- r+Tg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=bubu1.eu; s=bubu; 
+ t=1752484311; bh=hbf+47t4mmkQqSBbAzX4LUA1XQc8LxjFt7d/wmbkVb8=;
+ h=From:To:Cc:Subject:Date;
+ b=V7or+JNC7NGrNz8ogRA1Ww8ttYQBtMI8B1Mh6wJBsRNsl9GGe6gowqZU7zxQs0Umm
+ B/z8TPZaexLV8tLBQXkDMDAKlKP4I0JQi/lxm2HfFlTggnIxeFCAAMWzIbGevGKVWK
+ MAb1CX6mcxL6zBUYEohb7PTTdALegzwhEXgRzgu1zGIZVh8QhssUl7VlFH3qnviTGW
+ w803Kbf96Y2tT0+RM9afxUiYN/uwRT59ckQrqfOYhVJxb2LhCBGpVYGC8b4LOEXwiC
+ 3lyauW/rtFqELrxL+fBHHtUCgXcbecRrw9x/OKDfmGXZSAS/QOGZid+aNb8M4oHgar
+ Zt2DzLmmroCbQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bubu1.eu
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=SadMIzVu
-Subject: [Buildroot] [PATCH] package/libesmtp: bump to upstream version
+ unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
+ header.s=bubu header.b=V7or+JNC
+Subject: [Buildroot] [PATCH 1/2] package/python-typing-extensions: bump to
+ 4.14.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -105,71 +77,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
+From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Marcin Niestroj <m.niestroj@grinn-global.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-When building libesmtp on the autobuilder, the following error occurs:
+Changes: https://github.com/python/typing_extensions/releases/tag/4.14.1
 
-/workdir/instance-0/output-1/per-package/libesmtp/host/bin/arc-linux-gcc -Ilibesmtp.so.6.2.0.p -I. -I.. -I/workdir/instance-0/output-1/per-package/libesmtp/host/arc-buildroot-linux-gnu/sysroot/usr/include -fdiagnostics-color=always -Wall -Winvalid-pch -std=c11 -O3 -D_POSIX_C_SOURCE=200809L -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -g0 -D_FORTIFY_SOURCE=2 -fPIC -pthread -MD -MQ libesmtp.so.6.2.0.p/smtp-api.c.o -MF libesmtp.so.6.2.0.p/smtp-api.c.o.d -o libesmtp.so.6.2.0.p/smtp-api.c.o -c ../smtp-api.c
-../smtp-api.c: In function 'smtp_version':
-../smtp-api.c:1183:7: error: implicit declaration of function 'strlcpy'; did you mean 'strncpy'? [-Wimplicit-function-declaration]
- 1183 |   if (strlcpy (buf, v, len) > len)
-      |       ^~~~~~~
-      |       strncpy
-
-This error has been fixed upstream in commit [1], but no new release has
-been made since.
-This patch update the package version to fetch the latest upstream commit.
-
-For the changes, see:
-
- - https://github.com/libesmtp/libESMTP/compare/v1.1.0...335ee8d2fa5cb7d30db7b818ec05563ad139ee2f
-
-[1] https://github.com/libesmtp/libESMTP/commit/972eb547493357681b1b7012ef20618e6831cfde
-
-Fixes: https://autobuild.buildroot.org/results/ced/ceda012506edccda1727904eb3327017b07e27d8
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 ---
- package/libesmtp/libesmtp.hash | 2 +-
- package/libesmtp/libesmtp.mk   | 6 +++---
+ .../python-typing-extensions/python-typing-extensions.hash    | 4 ++--
+ package/python-typing-extensions/python-typing-extensions.mk  | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libesmtp/libesmtp.hash b/package/libesmtp/libesmtp.hash
-index 596ed4eaca..ed301257df 100644
---- a/package/libesmtp/libesmtp.hash
-+++ b/package/libesmtp/libesmtp.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  32bc3614ca12d21c7d933f32d43410e8744b6f91fdca7732da9877a385e4e6c3  libesmtp-1.1.0.tar.gz
-+sha256  144aece0077db6a2bd655d3d9558c714c9defd30a2d52c6e85ed54457d712daf  libesmtp-335ee8d2fa5cb7d30db7b818ec05563ad139ee2f.tar.gz
- sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING.GPL
- sha256  20c17d8b8c48a600800dfd14f95d5cb9ff47066a9641ddeab48dc54aec96e331  LICENSE
-diff --git a/package/libesmtp/libesmtp.mk b/package/libesmtp/libesmtp.mk
-index 6456e83e10..e861ad4ac6 100644
---- a/package/libesmtp/libesmtp.mk
-+++ b/package/libesmtp/libesmtp.mk
-@@ -4,12 +4,12 @@
+diff --git a/package/python-typing-extensions/python-typing-extensions.hash b/package/python-typing-extensions/python-typing-extensions.hash
+index 1d38e3491a..c422691dab 100644
+--- a/package/python-typing-extensions/python-typing-extensions.hash
++++ b/package/python-typing-extensions/python-typing-extensions.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/typing-extensions/json
+-md5  06244b2d61784c4d1d85900927514f36  typing_extensions-4.14.0.tar.gz
+-sha256  8676b788e32f02ab42d9e7c61324048ae4c6d844a399eebace3d4979d75ceef4  typing_extensions-4.14.0.tar.gz
++md5  da52c877660b1760771ce7553f729c5d  typing_extensions-4.14.1.tar.gz
++sha256  38b39f4aeeab64884ce9f74c94263ef78f3c22467c8724005483154c26648d36  typing_extensions-4.14.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  3b2f81fe21d181c499c59a256c8e1968455d6689d269aa85373bfb6af41da3bf  LICENSE
+diff --git a/package/python-typing-extensions/python-typing-extensions.mk b/package/python-typing-extensions/python-typing-extensions.mk
+index 1ad8d210a5..9ed8b71ff2 100644
+--- a/package/python-typing-extensions/python-typing-extensions.mk
++++ b/package/python-typing-extensions/python-typing-extensions.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBESMTP_VERSION = 1.1.0
--LIBESMTP_SITE = $(call github,libesmtp,libESMTP,v$(LIBESMTP_VERSION))
-+LIBESMTP_VERSION = 335ee8d2fa5cb7d30db7b818ec05563ad139ee2f
-+LIBESMTP_SITE = $(call github,libesmtp,libESMTP,$(LIBESMTP_VERSION))
- LIBESMTP_INSTALL_STAGING = YES
- LIBESMTP_LICENSE = GPL-2.0+ (examples), LGPL-2.1+ (library)
- LIBESMTP_LICENSE_FILES = COPYING.GPL LICENSE
--LIBESMTP_CPE_ID_VALID = YES
-+LIBESMTP_CPE_ID_VERSION = 1.1.0
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- LIBESMTP_CONF_OPTS += -Dtls=enabled
+-PYTHON_TYPING_EXTENSIONS_VERSION = 4.14.0
++PYTHON_TYPING_EXTENSIONS_VERSION = 4.14.1
+ PYTHON_TYPING_EXTENSIONS_SOURCE = typing_extensions-$(PYTHON_TYPING_EXTENSIONS_VERSION).tar.gz
+-PYTHON_TYPING_EXTENSIONS_SITE = https://files.pythonhosted.org/packages/d1/bc/51647cd02527e87d05cb083ccc402f93e441606ff1f01739a62c8ad09ba5
++PYTHON_TYPING_EXTENSIONS_SITE = https://files.pythonhosted.org/packages/98/5a/da40306b885cc8c09109dc2e1abd358d5684b1425678151cdaed4731c822
+ PYTHON_TYPING_EXTENSIONS_SETUP_TYPE = flit
+ PYTHON_TYPING_EXTENSIONS_LICENSE = Python-2.0
+ PYTHON_TYPING_EXTENSIONS_LICENSE_FILES = LICENSE
 -- 
-2.50.1
+2.43.0
 
 _______________________________________________
 buildroot mailing list
