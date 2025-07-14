@@ -1,100 +1,99 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2128BC83F17
-	for <buildroot@archiver.kernel.org>; Mon, 14 Jul 2025 06:14:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F42AC83F17
+	for <buildroot@archiver.kernel.org>; Mon, 14 Jul 2025 08:18:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BBAFB61194;
-	Mon, 14 Jul 2025 06:14:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D9B2A80D4F;
+	Mon, 14 Jul 2025 08:18:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P4joBHc0gWoC; Mon, 14 Jul 2025 06:14:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FpXt2js4S1TT; Mon, 14 Jul 2025 08:18:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BF0AA61196
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0084280D0A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BF0AA61196;
-	Mon, 14 Jul 2025 06:14:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id CA632DF
- for <buildroot@buildroot.org>; Mon, 14 Jul 2025 06:14:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0084280D0A;
+	Mon, 14 Jul 2025 08:18:01 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7F474967
+ for <buildroot@buildroot.org>; Mon, 14 Jul 2025 08:17:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BBED361194
- for <buildroot@buildroot.org>; Mon, 14 Jul 2025 06:14:36 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 74C2C40409
+ for <buildroot@buildroot.org>; Mon, 14 Jul 2025 08:17:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gE6k_5Lbqut9 for <buildroot@buildroot.org>;
- Mon, 14 Jul 2025 06:14:36 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sEz9aRKXMsTo for <buildroot@buildroot.org>;
+ Mon, 14 Jul 2025 08:17:54 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::22e; helo=mail-lj1-x22e.google.com;
- envelope-from=heiko.thiery@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org AD8FE6090C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AD8FE6090C
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com
- [IPv6:2a00:1450:4864:20::22e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id AD8FE6090C
- for <buildroot@buildroot.org>; Mon, 14 Jul 2025 06:14:35 +0000 (UTC)
-Received: by mail-lj1-x22e.google.com with SMTP id
- 38308e7fff4ca-32ce1b2188dso34956131fa.3
- for <buildroot@buildroot.org>; Sun, 13 Jul 2025 23:14:35 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org EE9F8403FF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE9F8403FF
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EE9F8403FF
+ for <buildroot@buildroot.org>; Mon, 14 Jul 2025 08:17:53 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id
+ 5b1f17b1804b1-45348bff79fso48279925e9.2
+ for <buildroot@buildroot.org>; Mon, 14 Jul 2025 01:17:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1752473673; x=1753078473;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=PdmIL4xdkFmAjogi4u2o9tWoXi2UU17dFu32s74bg3Y=;
- b=Hg1aLF8EL05wpTnAeFcwCkzvs4jOMOBOoZ3Wm3zBGXhQWb8k0HtBv8xajS1xAlCtlj
- WzysPVU5rA9mRR5KwA+zQX+FT67ZeH3oeXI5xCgp2REMlsKEmCqiKxK2kodnMZdCtS3l
- E6gsl3DvVOT+Oo4AG5cEEJR0x2OE9n/9vv0ExAglkBRgbqwiiN5jY16Lyj55LcNHUDHp
- 4Y6Rt3w4OtdXRrOMUG+meee/JiBW0R+LrKOIifm8XWWVBLAizxE7tqqyk4uaU6wZA6Iq
- 9GvOt//IMg9xc1LYNJ773Up10+82D86z3NPETEaoZwMxTKKogH5TZz5eLD8jBjfPjR1E
- x2wQ==
-X-Gm-Message-State: AOJu0YwcJ6omfFjUPasI0MA/2HlBBGT/TKCtdrkByG9QhSvpTap0XJI5
- 6KF2cBEnducRdp2/JBuXMbj7mvEiISEy+A1N01OXF5SyB9MG/rsLChFuSu9D2jMYd12lfrmyIDn
- zYq6MfNsQHgk0vqYYy9wwd97g9eOGAcI=
-X-Gm-Gg: ASbGnctddLgs8zxhcgGG1gFKpiUX5PXyP6uYS+IXNE7bgQ0BOI/DwwYd9NX2SfPWzkJ
- zzzXlPRxUR1iKEQ7cpVO3uA1BsF12iJZhQo4LxHQzMV3J5rIlCi1k2LMBGa+gGiJVTMIByu7SYx
- ErJwmbQyCMQZCfmHOpmxByXnL46luyPHRHRSKmRvY1yypI6xUqchdrglO7TXCcYulizwPj/Bo1i
- sfr6Dyz
-X-Google-Smtp-Source: AGHT+IEKurQvTmSyWmqtwMX1wqwh1u7l8oyAe0LCoF7tBFB4gLp3KqELSQAOYsG8HEp0MrTaWDV9kMtEs4SF1uG+gxc=
-X-Received: by 2002:a05:651c:11d3:b0:319:d856:c2f3 with SMTP id
- 38308e7fff4ca-33053320f7emr26853951fa.10.1752473672787; Sun, 13 Jul 2025
- 23:14:32 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1752481071; x=1753085871;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:to
+ :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=pzuwwFvJx6wM4LgVKL49QRMWuDhmhBUWBHQj8ANhujU=;
+ b=xOrR5w2mPcdWh9nYtAzjwyHm83fM6B1zxe0BAh3GXRRSASWp/cZ+TGySGBwv87+spf
+ hLfUpmmxF1L6xbSG/17DUzIhq+j04H6dQ/bOogzwAGwelY/262XcnNsu2bo1XMu2VnMs
+ wa/IlbfbySvjlNoB0SaS9Djlv4avKD5QGBMoG7J+6lnaEEtk3tbsdPdEIqZcg7SPo26p
+ TtY9H1AhHCwu+klA6KFBU4oj22w4gnBhE0fJuDVEV+Qduxtz2kwQNq94MkEd2jbsoxXx
+ nI6V3JJ4Z8nbu0+dQRLSUJ2GpiB10I2IKLttLpMWwyWYJMsrKPaGk6zSh+N2KjQsSQrz
+ XFww==
+X-Gm-Message-State: AOJu0YzxPRhNWYS+QQBJZjabbtZSWZTukurRQJC5rdaKdJWavkJSTbYR
+ zxBoXrZRiR/KOFR0mivaWdcBr/qpnogjUpxt3kfj1O6qCNvhAvIBu7SHY+wcPGvR/fD6nzxVA/w
+ FsZ0/
+X-Gm-Gg: ASbGncvkR/E4IQdjowu/PYDTalz9TRHb6SLqgfrodG1LgvFOL3s7bYE8nSRpR4rLYmg
+ k0e5t9N1hHwyusseC52D6E91acl2LsgDHlq8Mt11BIUOHbqPBJk5KE0WAogmJuTQV8pVpX3+32z
+ DZ8+LJrN0Rne6z4HvsmTlPXP8wCbgHBwi1kslljBUGxfP2BenetpbBrhF1A4tfVSsGJ+y4GDONm
+ dtt80b026a2K5JV0a5dyZF55FEXOZIdDDWcoMd7HJUVD3np6O58NLN7SUd5lvmtJDvbjOe3NGQe
+ iIHquKIAXYPG3IF/HKQVR16ryLeyjcBd+dlO6rZDNRpKCmexrYKcsBew062bNrZHKkeIxsGY2mK
+ qRht2lBmkWIWmKQ==
+X-Google-Smtp-Source: AGHT+IHXDxfxoVIJhbdPJ//drvosk1K+KgP2m0UeQdT05f15guDufdfbb+CYkygrqvMZ1jSXK0RZIg==
+X-Received: by 2002:a05:600c:34d1:b0:456:1d4e:c127 with SMTP id
+ 5b1f17b1804b1-4561d4ec409mr13140585e9.8.1752481071106; 
+ Mon, 14 Jul 2025 01:17:51 -0700 (PDT)
+Received: from arch ([79.132.233.65]) by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-455f13ec67asm85796505e9.4.2025.07.14.01.17.50
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 14 Jul 2025 01:17:50 -0700 (PDT)
+To: buildroot@buildroot.org
+Date: Mon, 14 Jul 2025 10:17:49 +0200
+Message-ID: <20250714081749.83051-1-thomas.perale@mind.be>
+X-Mailer: git-send-email 2.50.1
 MIME-Version: 1.0
-References: <20250711120625.316250-1-heiko.thiery@gmail.com>
- <a2186a22be0f15499a563c1aa6d6d57f@free.fr>
-In-Reply-To: <a2186a22be0f15499a563c1aa6d6d57f@free.fr>
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Mon, 14 Jul 2025 08:14:20 +0200
-X-Gm-Features: Ac12FXznhM9l-4LOHfj-X78HjpYyoTh8g27pnLsLRe1_z-EbKKQ-DUbGCP_vZWo
-Message-ID: <CAEyMn7ag0TebP9FHJD6uin4Y03=Cb4Ldj6dFC_Shb0SZ8y-daw@mail.gmail.com>
-To: Julien Olivain <ju.o@free.fr>
-Cc: buildroot@buildroot.org, Bernd Kuhls <bernd@kuhls.net>, 
- Romain Naour <romain.naour@gmail.com>, Bryan Brattlof <bb@ti.com>,
- Michael Walle <michael@walle.cc>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1752473673; x=1753078473; darn=buildroot.org;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=PdmIL4xdkFmAjogi4u2o9tWoXi2UU17dFu32s74bg3Y=;
- b=Y9aPlRPBR45/J4MqB2gfOtzEbB2/ZH06PELi0IxU4Omw779RqphojfHynBm79n+RqD
- NDhmUBXCZbKzao8EONIpC1h4Y2McK7OJW4FkX3BBvEh+a8KvaHI2xqOaRG+ne2Tn8rth
- akAwJLPhUi/qaIg3OtkKnDDkafTZALXWPf/tnjzkDyH2up2Ld7Z6nZe8GPwj6ou24zf6
- s6srlHwvVmnEczy8VxKg+1SrNAvC4DLW90rD8SNbBjo5g2KW6eEAim/skN2fHz06BC+L
- HYIIYbx6zbyW2kcXHiAnwk9UVWHEFtmKRlJ3bLYbWryNe220/kL1LedqSxLeXsZMcVg1
- MNRw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Y9aPlRPB
-Subject: Re: [Buildroot] [PATCH] package/mesa3d: add support for imagination
- vulkan driver
+ d=mind.be; s=google; t=1752481071; x=1753085871; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:to
+ :from:from:to:cc:subject:date:message-id:reply-to;
+ bh=pzuwwFvJx6wM4LgVKL49QRMWuDhmhBUWBHQj8ANhujU=;
+ b=SadMIzVuy6qd0OCNYs3t4XnS+kSvGM0H2TQg8Q30ChCJgn3YwvQpI9YU+cp+H2OvSw
+ yqZiBlKaXpB+4O+dvMCee+BPgxi9QkWu+o5p1d8qFB/8bQLugPTml0+fez2CUAZZRvCO
+ yAGvhlyRPhT8IGqOSGsSlbB6k6q3wugEDtuXj1imX18fTyn5GOyod0/HVCiurjIL681X
+ vLCf/v56Bx8lQci7IZf39Qng56886WlQluBzYf/ui4Pdm5JDgUm7DMSuyekz6GNWEOjQ
+ 7X6j9TNnTBU+eyApXFxXZdvF5is6oUToZ5bejCkNP+N94tI5z5DrRgmuPYg08sWYpUv1
+ r+Tg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=SadMIzVu
+Subject: [Buildroot] [PATCH] package/libesmtp: bump to upstream version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -106,182 +105,73 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============7666729839675098059=="
+From: Thomas Perale via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Perale <thomas.perale@mind.be>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7666729839675098059==
-Content-Type: multipart/alternative; boundary="000000000000beabfe0639dd925c"
+When building libesmtp on the autobuilder, the following error occurs:
 
---000000000000beabfe0639dd925c
-Content-Type: text/plain; charset="UTF-8"
+/workdir/instance-0/output-1/per-package/libesmtp/host/bin/arc-linux-gcc -Ilibesmtp.so.6.2.0.p -I. -I.. -I/workdir/instance-0/output-1/per-package/libesmtp/host/arc-buildroot-linux-gnu/sysroot/usr/include -fdiagnostics-color=always -Wall -Winvalid-pch -std=c11 -O3 -D_POSIX_C_SOURCE=200809L -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -g0 -D_FORTIFY_SOURCE=2 -fPIC -pthread -MD -MQ libesmtp.so.6.2.0.p/smtp-api.c.o -MF libesmtp.so.6.2.0.p/smtp-api.c.o.d -o libesmtp.so.6.2.0.p/smtp-api.c.o -c ../smtp-api.c
+../smtp-api.c: In function 'smtp_version':
+../smtp-api.c:1183:7: error: implicit declaration of function 'strlcpy'; did you mean 'strncpy'? [-Wimplicit-function-declaration]
+ 1183 |   if (strlcpy (buf, v, len) > len)
+      |       ^~~~~~~
+      |       strncpy
 
-Hi Julien,
+This error has been fixed upstream in commit [1], but no new release has
+been made since.
+This patch update the package version to fetch the latest upstream commit.
 
+For the changes, see:
 
+ - https://github.com/libesmtp/libESMTP/compare/v1.1.0...335ee8d2fa5cb7d30db7b818ec05563ad139ee2f
 
-Am Sa., 12. Juli 2025 um 14:43 Uhr schrieb Julien Olivain <ju.o@free.fr>:
+[1] https://github.com/libesmtp/libESMTP/commit/972eb547493357681b1b7012ef20618e6831cfde
 
-> Hi Heiko,
->
-> Thanks for the patch.
->
-> On 11/07/2025 14:06, Heiko Thiery wrote:
-> > This adds the experimental vulkan support for the PowerVR rogue
-> > architecture.
-> >
-> > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> > ---
-> >  package/mesa3d/Config.in | 8 ++++++++
-> >  package/mesa3d/mesa3d.mk | 1 +
-> >  2 files changed, 9 insertions(+)
-> >
-> > diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-> > index b5c1d92d68..7ec8fd2f76 100644
-> > --- a/package/mesa3d/Config.in
-> > +++ b/package/mesa3d/Config.in
-> > @@ -359,6 +359,14 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_BROADCOM
-> >       help
-> >         Vulkan broadcom driver.
-> >
-> > +config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_IMAGINATION
-> > +     bool "Vulkan imagination driver (experimental)"
-> > +     depends on BR2_arm || BR2_aarch64
-> > +     depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libxshmfence
->
-> BR2_PACKAGE_XLIB_LIBXSHMFENCE is selected by BR2_PACKAGE_MESA3D_DRIVER
-> only if BR2_PACKAGE_XORG7 is also selected. See:
->
-> https://gitlab.com/buildroot.org/buildroot/-/blob/2025.05/package/mesa3d/Config.in#L72
->
-> In that case, why this dependency is not:
->
->      depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 #
-> libxshmfence
->
-> like most of the other drivers?
->
+Fixes: https://autobuild.buildroot.org/results/ced/ceda012506edccda1727904eb3327017b07e27d8
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+---
+ package/libesmtp/libesmtp.hash | 2 +-
+ package/libesmtp/libesmtp.mk   | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-I just copied the config entry from the  "Vulkan broadcom driver" above my
-entry. And in this the dependency is just for "BR2_TOOLCHAIN_HAS_SYNC_4".
-
-
-> Could you update this dependency or add an explanation please?
->
-
-For sure I will update that.
-
-
->
-> > +     select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
-> > +     help
-> > +       Vulkan imagination driver.
-> > +
-> >  config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
-> >       bool "Vulkan Intel driver"
-> >       depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 #
-> > libxshmfence
->
-> Best regards,
->
-> Julien.
->
-
-BR,
-Heiko
-
---000000000000beabfe0639dd925c
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr">Hi Julien,<div><br></div><div><br></div><=
-/div><br><div class=3D"gmail_quote gmail_quote_container"><div dir=3D"ltr" =
-class=3D"gmail_attr">Am Sa., 12. Juli 2025 um 14:43=C2=A0Uhr schrieb Julien=
- Olivain &lt;<a href=3D"mailto:ju.o@free.fr">ju.o@free.fr</a>&gt;:<br></div=
-><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border=
--left:1px solid rgb(204,204,204);padding-left:1ex">Hi Heiko,<br>
-<br>
-Thanks for the patch.<br>
-<br>
-On 11/07/2025 14:06, Heiko Thiery wrote:<br>
-&gt; This adds the experimental vulkan support for the PowerVR rogue<br>
-&gt; architecture.<br>
-&gt; <br>
-&gt; Signed-off-by: Heiko Thiery &lt;<a href=3D"mailto:heiko.thiery@gmail.c=
-om" target=3D"_blank">heiko.thiery@gmail.com</a>&gt;<br>
-&gt; ---<br>
-&gt;=C2=A0 package/mesa3d/Config.in | 8 ++++++++<br>
-&gt;=C2=A0 package/mesa3d/<a href=3D"http://mesa3d.mk" rel=3D"noreferrer" t=
-arget=3D"_blank">mesa3d.mk</a> | 1 +<br>
-&gt;=C2=A0 2 files changed, 9 insertions(+)<br>
-&gt; <br>
-&gt; diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in<br>
-&gt; index b5c1d92d68..7ec8fd2f76 100644<br>
-&gt; --- a/package/mesa3d/Config.in<br>
-&gt; +++ b/package/mesa3d/Config.in<br>
-&gt; @@ -359,6 +359,14 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_BROADCOM<=
-br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0help<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Vulkan broadcom driver.<br>
-&gt; <br>
-&gt; +config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_IMAGINATION<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0bool &quot;Vulkan imagination driver (experimenta=
-l)&quot;<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0depends on BR2_arm || BR2_aarch64<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libxshmfenc=
-e<br>
-<br>
-BR2_PACKAGE_XLIB_LIBXSHMFENCE is selected by BR2_PACKAGE_MESA3D_DRIVER<br>
-only if BR2_PACKAGE_XORG7 is also selected. See:<br>
-<a href=3D"https://gitlab.com/buildroot.org/buildroot/-/blob/2025.05/packag=
-e/mesa3d/Config.in#L72" rel=3D"noreferrer" target=3D"_blank">https://gitlab=
-.com/buildroot.org/buildroot/-/blob/2025.05/package/mesa3d/Config.in#L72</a=
-><br>
-<br>
-In that case, why this dependency is not:<br>
-<br>
-=C2=A0 =C2=A0 =C2=A0depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XOR=
-G7 # <br>
-libxshmfence<br>
-<br>
-like most of the other drivers?<br></blockquote><div><br></div><div>I just =
-copied the config entry from the=C2=A0 &quot;Vulkan broadcom driver&quot; a=
-bove my entry. And in this the dependency is just for &quot;BR2_TOOLCHAIN_H=
-AS_SYNC_4&quot;.</div><div><br></div><blockquote class=3D"gmail_quote" styl=
-e=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);paddin=
-g-left:1ex">
-<br>
-Could you update this dependency or add an explanation please?<br></blockqu=
-ote><div><br></div><div>For sure I will update that.</div><div>=C2=A0</div>=
-<blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-=
-left:1px solid rgb(204,204,204);padding-left:1ex">
-<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0select BR2_PACKAGE_MESA3D_VULKAN_DRIVER<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0help<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0Vulkan imagination driver.<br>
-&gt; +<br>
-&gt;=C2=A0 config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0bool &quot;Vulkan Intel driver&quot;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_=
-PACKAGE_XORG7 # <br>
-&gt; libxshmfence<br>
-<br>
-Best regards,<br>
-<br>
-Julien.<br></blockquote><div><br></div><div>BR,</div><div>Heiko=C2=A0</div>=
-</div></div>
-
---000000000000beabfe0639dd925c--
-
---===============7666729839675098059==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/libesmtp/libesmtp.hash b/package/libesmtp/libesmtp.hash
+index 596ed4eaca..ed301257df 100644
+--- a/package/libesmtp/libesmtp.hash
++++ b/package/libesmtp/libesmtp.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  32bc3614ca12d21c7d933f32d43410e8744b6f91fdca7732da9877a385e4e6c3  libesmtp-1.1.0.tar.gz
++sha256  144aece0077db6a2bd655d3d9558c714c9defd30a2d52c6e85ed54457d712daf  libesmtp-335ee8d2fa5cb7d30db7b818ec05563ad139ee2f.tar.gz
+ sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING.GPL
+ sha256  20c17d8b8c48a600800dfd14f95d5cb9ff47066a9641ddeab48dc54aec96e331  LICENSE
+diff --git a/package/libesmtp/libesmtp.mk b/package/libesmtp/libesmtp.mk
+index 6456e83e10..e861ad4ac6 100644
+--- a/package/libesmtp/libesmtp.mk
++++ b/package/libesmtp/libesmtp.mk
+@@ -4,12 +4,12 @@
+ #
+ ################################################################################
+ 
+-LIBESMTP_VERSION = 1.1.0
+-LIBESMTP_SITE = $(call github,libesmtp,libESMTP,v$(LIBESMTP_VERSION))
++LIBESMTP_VERSION = 335ee8d2fa5cb7d30db7b818ec05563ad139ee2f
++LIBESMTP_SITE = $(call github,libesmtp,libESMTP,$(LIBESMTP_VERSION))
+ LIBESMTP_INSTALL_STAGING = YES
+ LIBESMTP_LICENSE = GPL-2.0+ (examples), LGPL-2.1+ (library)
+ LIBESMTP_LICENSE_FILES = COPYING.GPL LICENSE
+-LIBESMTP_CPE_ID_VALID = YES
++LIBESMTP_CPE_ID_VERSION = 1.1.0
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ LIBESMTP_CONF_OPTS += -Dtls=enabled
+-- 
+2.50.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7666729839675098059==--
