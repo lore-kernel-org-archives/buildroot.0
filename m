@@ -4,72 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6ACA3C83F1A
-	for <buildroot@archiver.kernel.org>; Mon, 14 Jul 2025 18:35:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52522C83F1A
+	for <buildroot@archiver.kernel.org>; Mon, 14 Jul 2025 20:26:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 177F481E07;
-	Mon, 14 Jul 2025 18:35:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0CDD5820BE;
+	Mon, 14 Jul 2025 20:26:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xb5XKeDEXRpz; Mon, 14 Jul 2025 18:35:25 +0000 (UTC)
+ id yXSYie9-88II; Mon, 14 Jul 2025 20:26:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4B73381465
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 81500820AA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4B73381465;
-	Mon, 14 Jul 2025 18:35:25 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 501B05E
- for <buildroot@buildroot.org>; Mon, 14 Jul 2025 18:35:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 81500820AA;
+	Mon, 14 Jul 2025 20:26:12 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id D83D5DF
+ for <buildroot@buildroot.org>; Mon, 14 Jul 2025 20:26:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4D36F40744
- for <buildroot@buildroot.org>; Mon, 14 Jul 2025 18:35:23 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id BE1A7606CA;
+ Mon, 14 Jul 2025 20:26:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UTQoa7YEcIna for <buildroot@buildroot.org>;
- Mon, 14 Jul 2025 18:35:22 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E3E8540719
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E3E8540719
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E3E8540719
- for <buildroot@buildroot.org>; Mon, 14 Jul 2025 18:35:21 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a0cef.dip0.t-ipconnect.de [91.58.12.239])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 1C96BA4C3424;
- Mon, 14 Jul 2025 20:35:18 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:42424)
- by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
- (envelope-from <bernd@kuhls.net>) id 1ubO1F-000000003aF-31o2;
- Mon, 14 Jul 2025 18:35:17 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FMzEvqmM0ycd; Mon, 14 Jul 2025 20:26:09 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
+ envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 01477606C4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 01477606C4
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 01477606C4
+ for <buildroot@buildroot.org>; Mon, 14 Jul 2025 20:26:08 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ 5b1f17b1804b1-4555f89b236so32284415e9.1
+ for <buildroot@buildroot.org>; Mon, 14 Jul 2025 13:26:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1752524767; x=1753129567;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=sPMsxAuvJUZ+jwwPmRgrS6bBNW2WBeiHc3zeaK/DLxs=;
+ b=SvHTA7V+lan/LVMwCRqhTiXD3Q9WY6xb/RInakmJx+bdpbwpEWBkYDTqD73ULQRzk/
+ nu1puAzf7q++hz4LkYSKRtobFonBbu3IVYeQDVvx3GB8tdI0lkjHyUHmeyva8hiu1J3j
+ i8jZZUZ7b9xnYFhYIAchKI+LaXmzLurE2oGKu/EjPvyDwtwKIn9NF5ed8+RaeRsBVdYW
+ TW3eaiNVdXvrHmjIFKTQ5ZatMiiKxoyaWv3h/WBai4dVXJRlnmYkTonoZwhfc+62hrHR
+ TQu74920bylWCSEZeZmQLK7xeEWdaHkghlFQ5nqBZYeEOCOPaao7RFI8iGo6hDkCoJVe
+ VLfA==
+X-Gm-Message-State: AOJu0YyIwQQZ8qTZlVPoGydZUGuNuPEFYgOEvWzsnK7eslK/m+YYd8a5
+ NRueNJ61hpVtBxL+Zqid6WhziyxMyJbUjd7aMXnoKg47om8MI6w8CO9z+6+q8Q==
+X-Gm-Gg: ASbGnctFJffTlgQ0asnhs6k/f7PQLVGtAy+c0W7oXq2r1aQhYFJtMH12se7adGt6FPn
+ MRCf0fspMdxrNEhQahRBq0wjjz8U45jAA2WRDI881BPllRMClGHFg0XqGIHKN+l7UxJOHkI2UF9
+ juKee4i5sqywoeGyJO2iMfzP8ZuscNeST1HeWlnZOVzoIx/oGGTnoh5xgD3uhkGr7HlvT2WOk/q
+ x493NPCmF8q+2265RBW8Gv9Xo2+2SPeSvoOF07RpwAN0aolI7uQqgBA90ho6iwaKRvWRJ+2jxMt
+ rm2bWfiyi98FYQs0+0xskqelfHWfA2O9aHrIvSARvg0u2ToNdzvxhyzkeoRBQt23uY2y+LEk7Lt
+ Bx/G0m36BzyGF23s3lXrTOVVLu0thSlCK
+X-Google-Smtp-Source: AGHT+IFZmKhQMzptod7bPH/+sY6kiSXGr3dx95f7tm922bj6N6ADG9liaoWzjF0jkcL1OXc4Ld6tgQ==
+X-Received: by 2002:a05:600c:5304:b0:456:1bae:5478 with SMTP id
+ 5b1f17b1804b1-4561bae5841mr48274575e9.2.1752524766653; 
+ Mon, 14 Jul 2025 13:26:06 -0700 (PDT)
+Received: from landeda.home ([2a01:cb19:93aa:5000:c0e7:5e2f:eef4:db82])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-45626cdf83bsm886165e9.3.2025.07.14.13.26.05
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 14 Jul 2025 13:26:06 -0700 (PDT)
 To: buildroot@buildroot.org
-Cc: Julien Boibessot <julien.boibessot@armadeus.com>
-Date: Mon, 14 Jul 2025 20:35:17 +0200
-Message-Id: <20250714183517.2354615-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.5
+Date: Mon, 14 Jul 2025 22:26:05 +0200
+Message-ID: <cover.1752524763.git.yann.morin.1998@free.fr>
+X-Mailer: git-send-email 2.47.0
 MIME-Version: 1.0
-X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202506031021; t=1752518118;
- bh=r8YfJTWpOi1tJFKypkdCfp7aD4D3NYhKl/4XMyRZIVE=;
- h=From:To:Cc:Subject:Date:From;
- b=JXyKjDE9TQjR3eo5BiVygDsDzElk1SN1VAYAs4APL1aGCysiTkGTLz/rQvrIE8yvK
- /LQ0x4WQwrRvFPHP/fYZU0UAF60wwg0G4MCxnWbn5EFuAkn/5xfW90FJkX6N9ymy4C
- tKDrs/89fSld5JRVJVOGCIDWIPzcutCwl1DRVJApQfqTWmAtChR6Z/h163NwtFU6/v
- 7z6sV2934ayynP1L7xBRHPGbcW+Kx9kHtBBIpS49BLXH63v9PwLQNP+Q+0WH9C9Xy9
- vqielRG0WLWBjlynsbZjvEcV5KZ53mp2tu1pgAZyeCthiC4pTaMO6yWs9A5aH7yemW
- ovcyg3NpkP6Mg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202506031021 header.b=JXyKjDE9
-Subject: [Buildroot] [PATCH v2 1/1] package/libcddb: Fix build with gcc-14
+ d=gmail.com; s=20230601; t=1752524767; x=1753129567; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+ bh=sPMsxAuvJUZ+jwwPmRgrS6bBNW2WBeiHc3zeaK/DLxs=;
+ b=KdO/Se1nMNhpI6ZspUGQzMGR4Mn7RcNOF0JHPgsJAoJoQzLn25QrdrdrXfFNar5PjK
+ UCKsZarwsWYFSOj8AjIHvcjG16AN1l2w5pnpLzOEBGAIQG5jW9L0TaoBoaZfXdhm4QHG
+ 8JXDt0LSHUdkcyqseHUeqnt9xwNseSS5gaVOq3aW0KUHLjzjoCL4noR2iPV8tbcVHWOW
+ y+1s6uibyHM77/sYiEP7lHFffbYS5f9X3OwUOYF0fkg47teLNIkdVDWL7zWTIhpOAG5M
+ 1XuenqYcNHTVWSpv+3q1RUJ3E7BmetQriEDSoWXg2mfbml79vF2M1gqwwH5D5nvEyIkA
+ 60RA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=fail (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=KdO/Se1n
+Subject: [Buildroot] [PATCH 00/13] package: bump version for some
+ container-related packages (branch yem/bumps)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,48 +104,84 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: "Yann E. MORIN via buildroot" <buildroot@buildroot.org>
+Reply-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: "Yann E . MORIN" <yann.morin@orange.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Christian Stewart <christian@aperture.us>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes:
-https://autobuild.buildroot.net/results/723/7236cf5fd4f33aabd3178586f877dff04d754abe/
+Hello All!
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
-v2: updated patch (David)
+This series bumps the versions for a bunch of packages related to
+managing containers.
 
- package/libcddb/0001-gcc15.patch | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
- create mode 100644 package/libcddb/0001-gcc15.patch
+There is no runtime test to exercise individual packages; doing so
+would be a huge undertaking, especially for the various backends for
+docker. Instead, we just make sure that higher-level packages, like
+docker-compose, has enough variants to cover the various vcase, like was
+done for podman; in the ocker case, only a crun vs runc combo is tested
+for now, with further combinations to be added by interesting parties.
 
-diff --git a/package/libcddb/0001-gcc15.patch b/package/libcddb/0001-gcc15.patch
-new file mode 100644
-index 0000000000..379e654951
---- /dev/null
-+++ b/package/libcddb/0001-gcc15.patch
-@@ -0,0 +1,17 @@
-+Fix incorrect type.
-+
-+Upstream: https://sourceforge.net/p/libcddb/patches/9/#b9ea
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+
-+--- libcddb-1.3.2/lib/cddb_net.c	2009-03-01 03:28:07.000000000 +0000
-++++ libcddb-1.3.2/lib/cddb_net.c	2025-07-03 17:58:30.064232649 +0100
-+@@ -305,7 +305,7 @@
-+             int rv;
-+             fd_set wfds;
-+             struct timeval tv;
-+-            size_t l;
-++            socklen_t l;
-+ 
-+             /* set up select time out */
-+             tv.tv_sec = timeout;
--- 
-2.39.5
+Regards,
+Yann E. MORIN.
 
+
+----------------------------------------------------------------
+Yann E. MORIN (13):
+      support/testing: add a crun-based runtime test for docker-compoe
+      package/{aardvark-dns,netavark}: bump to versions 1.15.x
+      package/amazon-ecr-credential-helper: bump to version 0.10.1
+      package/crun: bump to version 1.22
+      package/docker-cli: bump to version 28.3.2
+      package/docker-cli-buildx: bump to version 0.25.0
+      package/docker-compose: bump to version 2.38.2
+      package/docker-credentials-gcr: bump to version 2.1.30
+      package/docker-engine: bump to version 28.3.2
+      package/passt: bumpt to version 2025.06.11
+      package/podman: bump to version 5.5.2
+      package/runc: bump to version 1.3.0
+      package/slirp4metms: bump to version 1.3.3
+
+ package/aardvark-dns/aardvark-dns.hash                 |  2 +-
+ package/aardvark-dns/aardvark-dns.mk                   |  2 +-
+ .../amazon-ecr-credential-helper.hash                  |  2 +-
+ .../amazon-ecr-credential-helper.mk                    |  2 +-
+ package/crun/crun.hash                                 |  2 +-
+ package/crun/crun.mk                                   |  2 +-
+ package/docker-cli-buildx/docker-cli-buildx.hash       |  2 +-
+ package/docker-cli-buildx/docker-cli-buildx.mk         |  2 +-
+ package/docker-cli/docker-cli.hash                     |  2 +-
+ package/docker-cli/docker-cli.mk                       |  2 +-
+ package/docker-compose/docker-compose.hash             |  2 +-
+ package/docker-compose/docker-compose.mk               |  2 +-
+ .../docker-credential-gcr/docker-credential-gcr.hash   |  2 +-
+ package/docker-credential-gcr/docker-credential-gcr.mk |  2 +-
+ package/docker-engine/docker-engine.hash               |  2 +-
+ package/docker-engine/docker-engine.mk                 |  3 ++-
+ package/netavark/netavark.hash                         |  2 +-
+ package/netavark/netavark.mk                           |  2 +-
+ package/passt/passt.hash                               |  2 +-
+ package/passt/passt.mk                                 |  2 +-
+ package/podman/podman.hash                             |  2 +-
+ package/podman/podman.mk                               |  2 +-
+ package/runc/runc.hash                                 |  2 +-
+ package/runc/runc.mk                                   |  2 +-
+ package/slirp4netns/slirp4netns.hash                   |  2 +-
+ package/slirp4netns/slirp4netns.mk                     |  2 +-
+ support/testing/tests/package/test_docker_compose.py   | 18 ++++++++++++++++--
+ 27 files changed, 43 insertions(+), 28 deletions(-)
+
+--
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
