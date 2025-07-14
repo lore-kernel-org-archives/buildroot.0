@@ -1,102 +1,101 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2326C83F1A
-	for <buildroot@archiver.kernel.org>; Mon, 14 Jul 2025 20:26:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 162A1C83F17
+	for <buildroot@archiver.kernel.org>; Mon, 14 Jul 2025 20:26:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A63D361492;
-	Mon, 14 Jul 2025 20:26:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DFF0B821FC;
+	Mon, 14 Jul 2025 20:26:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YDqcGpW0T-oQ; Mon, 14 Jul 2025 20:26:31 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7IBQQ0Y7uBxx; Mon, 14 Jul 2025 20:26:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E0EE961487
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1D29C820DA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E0EE961487;
-	Mon, 14 Jul 2025 20:26:30 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 0C746DF
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1D29C820DA;
+	Mon, 14 Jul 2025 20:26:32 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2CAA6DF
  for <buildroot@buildroot.org>; Mon, 14 Jul 2025 20:26:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F27544037A;
+ by smtp1.osuosl.org (Postfix) with ESMTP id A19A582139;
  Mon, 14 Jul 2025 20:26:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FeOapfMStyID; Mon, 14 Jul 2025 20:26:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fHT4rnJggDxs; Mon, 14 Jul 2025 20:26:18 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
+ client-ip=2a00:1450:4864:20::430; helo=mail-wr1-x430.google.com;
  envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5B9CC40287
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5B9CC40287
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5B9CC40287
- for <buildroot@buildroot.org>; Mon, 14 Jul 2025 20:26:19 +0000 (UTC)
-Received: by mail-wr1-x42b.google.com with SMTP id
- ffacd0b85a97d-3a6e8b1fa37so3828290f8f.2
- for <buildroot@buildroot.org>; Mon, 14 Jul 2025 13:26:19 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8912A82119
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8912A82119
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8912A82119
+ for <buildroot@buildroot.org>; Mon, 14 Jul 2025 20:26:18 +0000 (UTC)
+Received: by mail-wr1-x430.google.com with SMTP id
+ ffacd0b85a97d-3a510432236so3414682f8f.0
+ for <buildroot@buildroot.org>; Mon, 14 Jul 2025 13:26:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1752524777; x=1753129577;
+ d=1e100.net; s=20230601; t=1752524776; x=1753129576;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=bULBgNbFL/WueJL7KuX2GDCWeh9/Faylh+nXxOSnD4o=;
- b=ct5lB+MfNOAlR+qIUP+6vyNcj2FBBgGmwMRDecX3tramLPgloMVvK9ykeer3EdhHqj
- M87OqZ97a1GCdwrm9MOt1aiQeBJ4bvfk3Y3tCM9WvMxOxBZTSZEMO1YvtO/SWyQz/pED
- e5NiVFFIXpninqLlt7LM7jhi9i/zA8VgHLUFOe5Sxn+EHmCwstsvBjeAka7cVqSU7emm
- BxOhPWMMNATrEgVK7K+6X/yWuTIkdsuF880RW3yFdmHxmfJxQTyxm8MklmBOEfuRzVN0
- gPVYc6czx9AwJaTWPfVM9PBfhrJmDPnQ435ADUX08KT8xueuZIDHovPYzlJ5YIlbFlYL
- EWQw==
-X-Gm-Message-State: AOJu0YwsTKelikt3MJqhoVyw36dE4ZQxbGccqWwQeMHeVuI75VpVcOpe
- IrbBBdCUaYC5fJxOMCRt73eaAUsdIkSGc2QdMUrb/7Li8vcR4VCT5SmMmcv3ww==
-X-Gm-Gg: ASbGncvOwB2EqitV0bq7jPL3NGVxTYNoBTkjW1BrE9d6kwk9ehM9hiTXn6cP5Nkx0vK
- Rsnd+MIwIS9l355SeYUltg5iaQ8aAr9Ny6zuQhsc5sfp0HLyMy1Yne62wNB1X0UZYVBXUWqVjRX
- inPok2rp0GattB0rum+zXI9MbehntDIS5eSCurdcC384EYGGeI5FUugW6tCR0Rg/miL890bcuGR
- 76famuY5gaTxwxYbT+UPRf4FSfhAH1CqjDiZaS/TyrpHyQcLc+UiRv+eiVshNomNWTimWgJnaNB
- BDB8HpggWM9z9Rv81amMGzraQaLLGj4ASKmUJm55S281xn4iLQgwkeTReMCtRHqTep95Wmy5OLX
- Hj8VweNucOD0VA+0I9vL039z/mFzx6k+U
-X-Google-Smtp-Source: AGHT+IHBmg0IGNQFor77mtYi+Y17hAvcMjpdfYmcIzbYVCbVqMPbnccxAgFKcYaLwgc539G/SSsMhA==
-X-Received: by 2002:a05:6000:440f:b0:3a5:2f23:3789 with SMTP id
- ffacd0b85a97d-3b5f188debamr8509383f8f.15.1752524777251; 
- Mon, 14 Jul 2025 13:26:17 -0700 (PDT)
+ bh=SljXcix1Tz1cqVJhC+l8BUY/0I0Sqr6O50/96BxdopU=;
+ b=JAOW4hnmD/D0EDBapinttnNeQISpEEK+izAOp7vDQEe/qFVU7fFYxJ2axDOzEwl7Vt
+ 0aa5Stxtpkae79RdHRrZ/+wYfb1g7FFPsgU4WH3XtjrfF36LkMbJ479bw1YJJiyrOuAM
+ dqQnu1tCHCXJ6Lepjo2B1D6pCuJ7KqWhU7Zf37VFBzoCxMQzpAteKtIHlzpkwGKwjZro
+ 8mvvrUZ/khdvG37asqUQ6KjrzLAv59bKEL9JqCh1GDEKi5mHBhH+K7XOzFE7Nt/7EFlm
+ KXgic9BlkWS0KjaxezvSP8VQyBTvWDbfYBrKy1wsZ0PNhTjQFBmEyJrkKNj6H6h2Bpqq
+ m9Pg==
+X-Gm-Message-State: AOJu0YzgyzxXIN+2UVO86RoFHnj44vHdhwEybnd2/ZV2+8HmUiXstOeo
+ Vs9RxcFD2h9WpULAwnHusO8EzQVJN0+8yNlkc4Z1iKQI8yvL6q7KSacoFbKtSw==
+X-Gm-Gg: ASbGnctl7dDJvi+J56CqQate9memleGAXBcC4fY+EeM4LmG/jqE7zUiXw07pce9sImP
+ o/nACZj05AfLeSJq6mwjX0Dz5aFoUxkDg8TAO3kOChrC52iKU879oybwMgZcgR4whzdSeHAgJWc
+ b5Uz5hFsolMEufZp3Nefa6f1pipp0tIiC0I+hyr1tsyr/cJgvvm0kZlDKE539W6/d5rItCcVVfD
+ mBqh6RBJMAfbFvySWJfmf6NFhL4LyJSLOBvV+hleasCgkPw3p+bEVb3MY1CLFUJG+3gdHVWJcrT
+ sAu0bEzOtlug0yVf7MnZR5Hltt6rvKHNBIRPHomIrwYDmlkNCQG8qk1++8KP5d9pXqMqku0i2u9
+ YSCOG/lhPFlHgP1kbY1Hq7UOfKr8noVjm
+X-Google-Smtp-Source: AGHT+IFsNlkzgovvGxRgBECpjd4avGObdqJUJChw9gQPHiot+NxKkCDSAkdVZ92uiCUdCfT1b+tVdA==
+X-Received: by 2002:a05:6000:2085:b0:3a4:e667:922e with SMTP id
+ ffacd0b85a97d-3b5f2dacddamr10703325f8f.4.1752524776489; 
+ Mon, 14 Jul 2025 13:26:16 -0700 (PDT)
 Received: from landeda.home ([2a01:cb19:93aa:5000:c0e7:5e2f:eef4:db82])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3b5e8dc91e3sm13144838f8f.43.2025.07.14.13.26.16
+ ffacd0b85a97d-3b5e8dc91e3sm13144838f8f.43.2025.07.14.13.26.15
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
  Mon, 14 Jul 2025 13:26:16 -0700 (PDT)
 To: buildroot@buildroot.org
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Christian Stewart <christian@aperture.us>
-Date: Mon, 14 Jul 2025 22:26:06 +0200
-Message-ID: <6276393526cccdfa71abed779578b1229665c777.1752524763.git.yann.morin.1998@free.fr>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Date: Mon, 14 Jul 2025 22:26:05 +0200
+Message-ID: <bbfc150698b24344d1fd604015a74666d8c7e955.1752524763.git.yann.morin.1998@free.fr>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <cover.1752524763.git.yann.morin.1998@free.fr>
 References: <cover.1752524763.git.yann.morin.1998@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1752524777; x=1753129577; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1752524776; x=1753129576; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
  :message-id:reply-to;
- bh=bULBgNbFL/WueJL7KuX2GDCWeh9/Faylh+nXxOSnD4o=;
- b=nWbgRHrdfvZLBE8PRy4/4tZE8nPA5RD3VZjlcsqwVhiLo7dDC7siyc/TUbrWqCsjfH
- 7qTrMDBMFuxaJtUslTN+2YO9quKG4ikqE7sXx0v1voEif3O1bx7KOC8X5b6ZhFOU86iH
- LDKY71XqLyX5IMgcmfsrmSS7Il6QybnUalvTC8K6AoDHC+FkgRfdWAxUgPMx91PCmxQe
- mC6q2LHRrPo2aBbPp9ssUXihsTx9DEp54DxkC/vIrzA/GrGQXX3kPUC5LITAAEsDFQAM
- /l9RNGV0ombP1W8rex6rn9Z1DdwPeMCRr9XWNVYNpIMoisikVxUPkb8q3mtOpSJ6Xj+E
- 2ShQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=SljXcix1Tz1cqVJhC+l8BUY/0I0Sqr6O50/96BxdopU=;
+ b=UZf88WH8sXfyUiOVCIJjpH9LAXpZ7W/1r8DPwb0xU1s2757b5+pavMWuwwzGAQrW+k
+ uVp9ppaVMa1wt4qukB5yw+vzVCtPJ5smQ8aPRFAQCpIszEGM1VhJ2EcnDbauuU+9XzQC
+ 9L4RzkwWgeIjQWi+JDWwE6kHKE0oEvtwr0uHzyxLmJGnrjiGYRGhiSNKU5jz0bN5qecr
+ bwHxNQAGxRVd4UZX8wYwvzw/Dft/g8kLmGH73RsBhpiCQhoPvUazKUlGYS6AI3VK5Q79
+ 0lfs0zaUFNEMbGXs0UMdJQgh+Lurtb10YuT5OqSvze84BRVLpnqUjWsyM2ZyRIYV1KfK
+ WzmA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=fail (p=quarantine dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=nWbgRHrd
-Subject: [Buildroot] [PATCH 12/13] package/runc: bump to version 1.3.0
+ header.a=rsa-sha256 header.s=20230601 header.b=UZf88WH8
+Subject: [Buildroot] [PATCH 11/13] package/podman: bump to version 5.5.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,34 +115,33 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Christian Stewart <christian@aperture.us>
 ---
- package/runc/runc.hash | 2 +-
- package/runc/runc.mk   | 2 +-
+ package/podman/podman.hash | 2 +-
+ package/podman/podman.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/runc/runc.hash b/package/runc/runc.hash
-index d25d8facfd..76857afb31 100644
---- a/package/runc/runc.hash
-+++ b/package/runc/runc.hash
+diff --git a/package/podman/podman.hash b/package/podman/podman.hash
+index 734042df95..b5802dd305 100644
+--- a/package/podman/podman.hash
++++ b/package/podman/podman.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  9785c144c97974b52b6091b7a79168b73681ff574bc8438b44f3f5f8c112f171  runc-1.2.4-go2.tar.gz
-+sha256  3262492ce42bea0919ee1a2d000b6f303fd14877295bc38d094876b55fdd448b  runc-1.3.0-go2.tar.gz
- sha256  552a739c3b25792263f731542238b92f6f8d07e9a488eae27e6c4690038a8243  LICENSE
-diff --git a/package/runc/runc.mk b/package/runc/runc.mk
-index 51ac32de26..bdff619751 100644
---- a/package/runc/runc.mk
-+++ b/package/runc/runc.mk
+-sha256  6c31845cbbc54a0b65c4afba224048c002b40e863c4ba7ca19355a8d333b3d19  podman-v5.4.1-git4-go2.tar.gz
++sha256  a2cd66e33e1cabe34d11543c3fa68f9ebe7fcadbde578231d28745aa0f48a21d  podman-v5.5.2-git4-go2.tar.gz
+ sha256  62fb8a3a9621dc2388174caaabe9c2317b694bb9a1d46c98bcf5655b68f51be3  LICENSE
+diff --git a/package/podman/podman.mk b/package/podman/podman.mk
+index 27d9a84712..fc9a989bf0 100644
+--- a/package/podman/podman.mk
++++ b/package/podman/podman.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RUNC_VERSION = 1.2.4
-+RUNC_VERSION = 1.3.0
- RUNC_SITE = $(call github,opencontainers,runc,v$(RUNC_VERSION))
- RUNC_LICENSE = Apache-2.0, LGPL-2.1 (libseccomp)
- RUNC_LICENSE_FILES = LICENSE
+-PODMAN_VERSION = v5.4.1
++PODMAN_VERSION = v5.5.2
+ PODMAN_SITE = https://github.com/containers/podman
+ PODMAN_SITE_METHOD = git
+ 
 -- 
 2.47.0
 
