@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3DB6C83F1B
-	for <buildroot@archiver.kernel.org>; Wed, 16 Jul 2025 18:38:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FB98C83F27
+	for <buildroot@archiver.kernel.org>; Wed, 16 Jul 2025 18:38:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AA37B41545;
-	Wed, 16 Jul 2025 18:38:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 25D4A61462;
+	Wed, 16 Jul 2025 18:38:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lNryqFVKbDcn; Wed, 16 Jul 2025 18:38:13 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FL3CUDeOi-Ur; Wed, 16 Jul 2025 18:38:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 85DA541547
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EFACD61513
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 85DA541547;
-	Wed, 16 Jul 2025 18:38:12 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 24F121DCB
+	by smtp3.osuosl.org (Postfix) with ESMTP id EFACD61513;
+	Wed, 16 Jul 2025 18:38:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1B2F11C62
  for <buildroot@buildroot.org>; Wed, 16 Jul 2025 18:38:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7CCBE810F8
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6B35D40F2C
  for <buildroot@buildroot.org>; Wed, 16 Jul 2025 18:38:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7Ois7n0ofELt for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4ob6THFmmnXJ for <buildroot@buildroot.org>;
  Wed, 16 Jul 2025 18:38:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C6E0381122
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B4BD40CEF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C6E0381122
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8B4BD40CEF
  for <buildroot@buildroot.org>; Wed, 16 Jul 2025 18:38:02 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B839D86664; Wed, 16 Jul 2025 18:38:02 +0000 (UTC)
+ id 767B086662; Wed, 16 Jul 2025 18:38:02 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Tue, 15 Jul 2025 23:50:31 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 85ed3e271d14df79a0285605a526f7613ef93a74
-X-Git-Newrev: cb98524ca26ed82e172e0113d736d20a8d76cb79
+X-Git-Oldrev: ed99b77e5d276d62c2f4c9959b5c558a4f3c9e36
+X-Git-Newrev: 34e44809505a64c045a79be185afd3d163d1fb7f
 X-Patchwork-Hint: ignore
-Message-Id: <20250716183802.B839D86664@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/docker-cli-buildx: bump to version
- 0.25.0
+Message-Id: <20250716183802.767B086662@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: add a crun-based runtime
+ test for docker-compose
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,42 +66,63 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cb98524ca26ed82e172e0113d736d20a8d76cb79
+commit: https://git.buildroot.net/buildroot/commit/?id=34e44809505a64c045a79be185afd3d163d1fb7f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For release notes since version 0.16.1, see:
-https://github.com/docker/buildx/releases
+Via the docker-compose runtime test, we can exercise the full suite of
+the docker-related packages: docker-compose, of course, but also
+docker-engine, which in turn allows exercising containerd. The latter
+by defualt uses runc as the container runtime, but can alternatively use
+crun.
+
+Extend the docker-compose runtime test with a variant that enables crun.
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-[Julien: add link to release notes]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/docker-cli-buildx/docker-cli-buildx.hash | 2 +-
- package/docker-cli-buildx/docker-cli-buildx.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ support/testing/tests/package/test_docker_compose.py | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
 
-diff --git a/package/docker-cli-buildx/docker-cli-buildx.hash b/package/docker-cli-buildx/docker-cli-buildx.hash
-index 26b187d12a..41fcf6ddbe 100644
---- a/package/docker-cli-buildx/docker-cli-buildx.hash
-+++ b/package/docker-cli-buildx/docker-cli-buildx.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  8c9dd3fb18ccba399223ba0f623c9fe09fa38fb2a05283131be8e4e139b2d8fa  docker-cli-buildx-0.16.1-go2.tar.gz
-+sha256  e5a7573a5995c0f12c86d35a8148b2a10a6f1b11d1cf8c6977bf03ac281e6959  docker-cli-buildx-0.25.0-go2.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/docker-cli-buildx/docker-cli-buildx.mk b/package/docker-cli-buildx/docker-cli-buildx.mk
-index ea77a86077..10093bea7a 100644
---- a/package/docker-cli-buildx/docker-cli-buildx.mk
-+++ b/package/docker-cli-buildx/docker-cli-buildx.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/support/testing/tests/package/test_docker_compose.py b/support/testing/tests/package/test_docker_compose.py
+index 16027c9c3a..6a8f6f4010 100644
+--- a/support/testing/tests/package/test_docker_compose.py
++++ b/support/testing/tests/package/test_docker_compose.py
+@@ -3,7 +3,7 @@ import os
+ import infra.basetest
  
--DOCKER_CLI_BUILDX_VERSION = 0.16.1
-+DOCKER_CLI_BUILDX_VERSION = 0.25.0
- DOCKER_CLI_BUILDX_SITE = $(call github,docker,buildx,v$(DOCKER_CLI_BUILDX_VERSION))
  
- DOCKER_CLI_BUILDX_LICENSE = Apache-2.0
+-class TestDockerCompose(infra.basetest.BRTest):
++class BaseTestDockerCompose(infra.basetest.BRTest):
+     scripts = ["conf/docker-compose.yml",
+                "tests/package/sample_python_docker.py"]
+     config = \
+@@ -53,7 +53,7 @@ class TestDockerCompose(infra.basetest.BRTest):
+     def python_docker_test(self):
+         self.assertRunOk('python3 ./sample_python_docker.py', 120)
+ 
+-    def test_run(self):
++    def do_test(self):
+         kernel = os.path.join(self.builddir, "images", "bzImage")
+         rootfs = os.path.join(self.builddir, "images", "rootfs.ext2")
+         self.emulator.boot(arch="x86_64",
+@@ -70,3 +70,17 @@ class TestDockerCompose(infra.basetest.BRTest):
+         self.docker_test()
+         self.docker_compose_test()
+         self.python_docker_test()
++
++
++class TestDockerComposeRunc(BaseTestDockerCompose):
++    def test_run(self):
++        self.do_test()
++
++
++class TestDockerComposeCrun(BaseTestDockerCompose):
++    config = BaseTestDockerCompose.config + """
++        BR2_PACKAGE_CRUN=y
++        """
++
++    def test_run(self):
++        self.do_test()
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
