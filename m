@@ -4,100 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49055C83F17
-	for <buildroot@archiver.kernel.org>; Tue, 15 Jul 2025 13:50:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 188E9C83F17
+	for <buildroot@archiver.kernel.org>; Tue, 15 Jul 2025 14:02:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EB4A360E55;
-	Tue, 15 Jul 2025 13:50:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CC001611A4;
+	Tue, 15 Jul 2025 14:02:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4_qoxAv_znsC; Tue, 15 Jul 2025 13:50:18 +0000 (UTC)
+ id L84z8sax-I_W; Tue, 15 Jul 2025 14:02:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 33BDD60FE3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0014C6107E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 33BDD60FE3;
-	Tue, 15 Jul 2025 13:50:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0014C6107E;
+	Tue, 15 Jul 2025 14:02:10 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id D496EDF
- for <buildroot@buildroot.org>; Tue, 15 Jul 2025 13:50:17 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 6D7BADCA
+ for <buildroot@buildroot.org>; Tue, 15 Jul 2025 14:02:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C645C60E55
- for <buildroot@buildroot.org>; Tue, 15 Jul 2025 13:50:17 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 530666107E
+ for <buildroot@buildroot.org>; Tue, 15 Jul 2025 14:02:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TjqlvVQGU4yd for <buildroot@buildroot.org>;
- Tue, 15 Jul 2025 13:50:17 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::530; helo=mail-ed1-x530.google.com;
- envelope-from=shirokovalexs@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org DE51D6107E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DE51D6107E
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com
- [IPv6:2a00:1450:4864:20::530])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DE51D6107E
- for <buildroot@buildroot.org>; Tue, 15 Jul 2025 13:50:16 +0000 (UTC)
-Received: by mail-ed1-x530.google.com with SMTP id
- 4fb4d7f45d1cf-607cf70b00aso10405775a12.2
- for <buildroot@buildroot.org>; Tue, 15 Jul 2025 06:50:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1752587414; x=1753192214;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=EMorhDtAUUBQtVG7s42E21Cj92H5fspFt9ODrhESwF4=;
- b=YIRyW1F6vr4THcgw9kAwG9yK1DUW/LUtyKyAR6Hebtt8mhni0GosiU2YV2X4/cU1DG
- SPfYH3ThlBMdDcnI1tNmHECVxxPdjf26QzMAjQDkIbHm+Vsu12xzXCIiSeytkQmwziiz
- ksRkG7C+gR7SkvqtOBquHCVFTt6tTB3Ddzzf3K+5NEWP2bRyrpGKaVCPFUussLcn5TRK
- K0H/K768DptlJfXbfTgkwID1WEpLv9Jq7WTh3XMgi6UMOuRh2lLdiMwQcEN+7I2t2VYR
- kmG5XGmYqSEI3gi5hQw6Lxl+sZlkJOk7Ls3I1B5tA9oNABYxXGqXFH2u3X9038UwiGRc
- HLjA==
-X-Gm-Message-State: AOJu0YwxGzZEgradnQhNdMYQr3FxpfHsQvrcjvmwHTszACINmGijiZ1z
- hpf0AnG2viBMnUj0P1kbLjVfAzk5IE6D0rHMIbjg4zcRXkjT4MyTP14Jm5zMONc=
-X-Gm-Gg: ASbGnctO/zsiFkXSXhkkyxsmyAAGU8u6yWK2m2YkhBYIm6gwRBxs8QWDeU9rjwASlgE
- 4qn//JshygM34ZZs1zc5q9mpa5FVWQ8XKGimB9log5UA8a/ic+Dycy5LFULCAl7GT2ACRpshYgS
- wHszws/eCGsJYN+IVUjvI7JhgwaBMTso84kZnScTKWw3FbQrWz97cUpLs4ZD+l3vUTG+cGbKS9v
- w3411VcyXyvhIJiMGsRPjhatvndUfWdNnCr7aZjXhYAhj4ETzCuctWIJwUBA4kWkRzafYJGZusr
- xe3d7k39SHlUo1y+ziiiSniVAftvBXeBKokK8dTvZpYVH7IlimMYs/XpApo32M9lUVXxrKv0Twq
- 3yGCHfTVzuXrM34Jj4tvBH1JkYZ+xEYZL9iJ2
-X-Google-Smtp-Source: AGHT+IHOtYN3hByTJwyUTOEeiD7OO1yMy9qihF5Eoj4V7T0P9ob16gVcaWytfyqnsb6QiVdIXDe+Gw==
-X-Received: by 2002:a17:907:9811:b0:ad5:2328:e39b with SMTP id
- a640c23a62f3a-ae6fbf20e29mr1830522266b.31.1752587414298; 
- Tue, 15 Jul 2025 06:50:14 -0700 (PDT)
-Received: from devhost1.play.pl ([2a02:a319:a1e0:eb00:92eb:221f:6fb6:f3ab])
- by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-ae6e7e94338sm1012058566b.35.2025.07.15.06.50.13
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 15 Jul 2025 06:50:13 -0700 (PDT)
-From: Alexander Shirokov <shirokovalexs@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue, 15 Jul 2025 15:50:11 +0200
-Message-ID: <20250715135012.813261-1-shirokovalexs@gmail.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250715125737.798491-1-shirokovalexs@gmail.com>
-References: <20250715125737.798491-1-shirokovalexs@gmail.com>
+ id aivtU3PhDM4u for <buildroot@buildroot.org>;
+ Tue, 15 Jul 2025 14:02:08 +0000 (UTC)
+X-Greylist: delayed 502 seconds by postgrey-1.37 at util1.osuosl.org;
+ Tue, 15 Jul 2025 14:02:08 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org BA33460FE3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BA33460FE3
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=198.47.23.234;
+ helo=lelvem-ot01.ext.ti.com; envelope-from=bb@ti.com; receiver=<UNKNOWN> 
+Received: from lelvem-ot01.ext.ti.com (lelvem-ot01.ext.ti.com [198.47.23.234])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BA33460FE3
+ for <buildroot@buildroot.org>; Tue, 15 Jul 2025 14:02:08 +0000 (UTC)
+Received: from fllvem-sh03.itg.ti.com ([10.64.41.86])
+ by lelvem-ot01.ext.ti.com (8.15.2/8.15.2) with ESMTP id 56FE27Od2276543;
+ Tue, 15 Jul 2025 09:02:07 -0500
+Received: from DLEE101.ent.ti.com (dlee101.ent.ti.com [157.170.170.31])
+ by fllvem-sh03.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 56FE27FA119095
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
+ Tue, 15 Jul 2025 09:02:07 -0500
+Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55; Tue, 15
+ Jul 2025 09:02:07 -0500
+Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55 via
+ Frontend Transport; Tue, 15 Jul 2025 09:02:07 -0500
+Received: from localhost (bb.dhcp.ti.com [128.247.81.12])
+ by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 56FE27fb3009709;
+ Tue, 15 Jul 2025 09:02:07 -0500
+Date: Tue, 15 Jul 2025 09:02:07 -0500
+To: Heiko Thiery <heiko.thiery@gmail.com>
+Message-ID: <20250715140207.p5z2khln5cvfismv@bryanbrattlof.com>
+X-PGP-Fingerprint: D3D1 77E4 0A38 DF4D 1853 FEEF 41B9 0D5D 71D5 6CE0
+References: <20250715081938.108853-1-heiko.thiery@gmail.com>
+ <20250715081938.108853-2-heiko.thiery@gmail.com>
 MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20250715081938.108853-2-heiko.thiery@gmail.com>
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1752587414; x=1753192214; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
- :reply-to;
- bh=EMorhDtAUUBQtVG7s42E21Cj92H5fspFt9ODrhESwF4=;
- b=T+HYTXuiRWWqy6TBcIhYOhBAGvhAHKoOnlq5988v2GXlvU3LHWB1V8YeEJE4z6GDDX
- Nzjn93dSmgJI3Y82cH70nXvCTQM3O1xqKfxQrUiNzsN8CnyKK9vP7MgSJey6ATzqjzMy
- pC695EJ+5ApL6eEUeo5MbxHAOsXQ3C2uxOknr0VnRurKVhfsiYb6XgxDTE4ieqqD7Igi
- YYM02pETRvNW3FqvzM4vb7/SLvNsV9j2MRQKHD5hnTrIq04Hx8KaK/baMpEmOT1gWsly
- p61VRd3q0FB0k0g0ZqIk1mEUljT5orV7eval5trQQ/U7f77rz6CNKdde+HZGoZyggEO/
- u4pw==
+ d=ti.com; s=ti-com-17Q1; t=1752588127;
+ bh=ooqMxwRxgqvaMoHEZVdTk+T7pWv9zpTg3bvKUyOSirE=;
+ h=Date:From:To:CC:Subject:References:In-Reply-To;
+ b=Vz7PgrICZ+ZtnVVllD+DqvKkAx2lrJ9E9/423NgvHbJsKyBdyq9TspNLOKerejU3p
+ vxiHQ1X9ff9FtZsqyVP1BuxNUUylimqqQH0DwG3vUXFaf5M47Y+Y2B+eO0onYfu2zN
+ GjQ8AmvaZj1ucqW9AIiyemifal+HwE03vvjARyRM=
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ dmarc=pass (p=quarantine dis=none)
+ header.from=ti.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=T+HYTXui
-Subject: [Buildroot] [1/1] package/nnn: new package
+ dkim=pass (1024-bit key,
+ unprotected) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
+ header.s=ti-com-17Q1 header.b=Vz7PgrIC
+Subject: Re: [Buildroot] [PATCH v2] package/linux-firmware: add support for
+ PowerVR rogue
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -109,26 +93,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Bryan Brattlof via buildroot <buildroot@buildroot.org>
+Reply-To: Bryan Brattlof <bb@ti.com>
+Cc: Bernd Kuhls <bernd@kuhls.net>, Michael Walle <michael@walle.cc>,
+ buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgZXZlcnlvbmUsCgpMZXQgbWUgcHJvdmlkZSBzb21lIG1vcmUgaW5mb3JtYXRpb24gYWJvdXQg
-dGhlIG5ubiBwYWNrYWdlLgoKTW90aXZhdGlvbjoKCjEpIEkgZm91bmQgdGhlIHBhY2thZ2UgdXNl
-ZnVsIGR1cmluZyBteSBwZXJzb25hbCB3b3JrIHdpdGggZGV2aWNlcy4gSSB0aG91Z2h0CkJ1aWxk
-cm9vdCB3b3VsZCBiZSBhIGdyZWF0IHBsYWNlIHRvIHNoYXJlIHRoaXMgd29yayB0byBhdm9pZCBi
-dWlsZGluZyB0aGUgYXBwCmFuZCBpdHMgZGVwZW5kZW5jaWVzIG1hbnVhbGx5LgoKMikgbm5uIG9m
-dGVuIGxvb2tzIGFuZCBmZWVscyBsaWtlIGEgbGlnaHR3ZWlnaHQgdmVyc2lvbiBvZiByYW5nZXIs
-IGJ1dCB3aXRob3V0CnRoZSBuZWVkIHRvIGJ1aWxkIGFuZCBzaGlwIFB5dGhvbi4gU28gSSBmaWd1
-cmVkIGl04oCZZCBiZSBoYW5keSB0byBoYXZlIGEgZmlsZQptYW5hZ2VyIGxpa2UgdGhpcyB3aXRo
-IG1pbmltYWwgZGVwZW5kZW5jaWVzLgoKVGVzdHM6CgoxKSBJJ3ZlIHRlc3RlZCBpdCBtYW51YWxs
-eSB1c2luZyBRRU1VIChhYXJjaDY0KSwgUmFzcGJlcnJ5IFBpIDMsIGFuZCBPcmFuZ2UKUGkgWmVy
-by4KCjIpIGh0dHBzOi8vZ2l0bGFiLmNvbS9hbGV4cy1zaC9ubm4tYnVpbGRyb290IC0gdGhpcyBp
-cyBteSBHaXRMYWIgcHJvamVjdCB3aXRoCmEgY29uZmlndXJlZCBDSSBwaXBlbGluZSB0aGF0IGF1
-dG9tYXRpY2FsbHkgcnVucyBjaGVja3MgYW5kIGJ1aWxkcyBpbWFnZXMgZm9yClFFTVUsIFJhc3Bi
-ZXJyeSBQaSwgYW5kIE9yYW5nZSBQaS4gSSdtIHJlYWR5IHRvIG1ha2UgZnVydGhlciBtb2RpZmlj
-YXRpb25zCmFuZC9vciBpbXByb3ZlbWVudHMgYXMgbmVlZGVkLiA6KQoKVGhhbmsgeW91IQpfX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFp
-bGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290
-Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+On July 15, 2025 thus sayeth Heiko Thiery:
+> This "powervr" directory has been present in linux-firmware since
+> version 20231211.
+> 
+> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+> ---
+> v2:
+>     - add entry to the hash file for LICENSE.powervr (Julien)
+> 
+>  package/linux-firmware/Config.in           | 5 +++++
+>  package/linux-firmware/linux-firmware.hash | 1 +
+>  package/linux-firmware/linux-firmware.mk   | 5 +++++
+>  3 files changed, 11 insertions(+)
+> 
+
+I don't do a lot with GPUs or VPUs but I seem to remember the GPU driver 
+was kinda borked right now. It's no reason not to let the firmware in 
+but I just wanted temper expectations before we start rendering some 
+triangles :)
+
+Reviewed-by: Bryan Brattlof <bb@ti.com>
+
+~Bryan
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
