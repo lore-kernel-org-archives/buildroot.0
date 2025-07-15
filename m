@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 374A5C83F1A
-	for <buildroot@archiver.kernel.org>; Thu, 17 Jul 2025 20:33:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F3B5C83F3B
+	for <buildroot@archiver.kernel.org>; Thu, 17 Jul 2025 20:33:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0F37D417CA;
-	Thu, 17 Jul 2025 20:33:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 730C4417DA;
+	Thu, 17 Jul 2025 20:33:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id X3UDlwYweBaN; Thu, 17 Jul 2025 20:33:28 +0000 (UTC)
+ id Xr3wktmwlnkd; Thu, 17 Jul 2025 20:33:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 76CCD41796
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 24751417C4
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 76CCD41796;
-	Thu, 17 Jul 2025 20:33:24 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 10F21A59
- for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:33:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 24751417C4;
+	Thu, 17 Jul 2025 20:33:29 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 05AB81A6
+ for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:33:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C9B7341151
- for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:32:57 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2279460667
+ for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:32:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DgixsSiV4bVe for <buildroot@buildroot.org>;
- Thu, 17 Jul 2025 20:32:56 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8sBSksmpfb0Q for <buildroot@buildroot.org>;
+ Thu, 17 Jul 2025 20:32:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A62DA41162
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9655160869
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A62DA41162
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9655160869
  for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:32:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A44D086573; Thu, 17 Jul 2025 20:32:56 +0000 (UTC)
+ id 944B48667E; Thu, 17 Jul 2025 20:32:56 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 17 Jul 2025 13:17:31 +0200
+Date: Tue, 15 Jul 2025 23:11:52 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: ab6022a4105dbb9a2766c61f8a38d83bf8d90a80
-X-Git-Newrev: 9e870099fa49f22471ff9e31de6658748be838f2
+X-Git-Oldrev: 6bf2b6a3840fa885a13bfa97c3c828b86ceefcc6
+X-Git-Newrev: 1ec82cfaddf6aee6e3aebb5a2f4bf5ce1f8d5aec
 X-Patchwork-Hint: ignore
-Message-Id: <20250717203256.A44D086573@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/ncmpc: Fix build
- error with gcc-14
+Message-Id: <20250717203256.944B48667E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] configs/beaglebone: bump
+ Linux to 6.12.23-ti-arm32-r11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,255 +66,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9e870099fa49f22471ff9e31de6658748be838f2
+commit: https://git.buildroot.net/buildroot/commit/?id=1ec82cfaddf6aee6e3aebb5a2f4bf5ce1f8d5aec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-The error appears on autobuilder with the build using GCC14:
-FAILED: ncmpc.p/src_Styles.cxx.o
-In file included from ../src/Styles.cxx:7:
-/home/buildroot/instance-0/output-1/host/microblazeel-buildroot-linux-gnu/sysroot/usr/include/libintl.h:39:14: error: expected unqualified-id before 'const'
-   39 | extern char *gettext (const char *__msgid)
-      |              ^~~~~~~
-/home/buildroot/instance-0/output-1/host/microblazeel-buildroot-linux-gnu/sysroot/usr/include/libintl.h:39:14: error: expected ')' before 'const'
-../src/i18n.h:22:20: note: to match this '('
-   22 | #define gettext(x) (x)
-      |                    ^
-[80/102] Compiling C++ object ncmpc.p/src_xterm_title.cxx.o
-[81/102] Compiling C++ object ncmpc.p/src_db_completion.cxx.o
-[82/102] Compiling C++ object ncmpc.p/src_signals.cxx.o
-ninja: build stopped: subcommand failed.
-make: *** [package/pkg-generic.mk:273: /home/buildroot/instance-0/output-1/build/ncmpc-0.49/.stamp_built] Error 1
-make: Leaving directory '/home/buildroot/instance-0/buildroot'
+The patch bumps the Linux kernel to version 6.12.23-ti-arm32-r11
 
-Starting GCC14 the C++ standard library includes libintl.h that contains
-a definition of gettext which caused a clash with the definition present
-in ncmpc. This patch resolved this build error seen in [1] by
-backporting an upstream commit [2] that renamed the internal gettext
-implementation.
+Tested on beaglebone black.
 
-Applying the commits of [2], fixes the build error [1].
-
-[1] https://autobuild.buildroot.org/results/cb2/cb292f2c99cdca742a8f52dbfc25f193fe513c6e/build-end.log
-[2] https://github.com/MusicPlayerDaemon/ncmpc/commit/249b62fc9f5e3a653ebdd22da0d75fbe87069457
-
-Fixes: https://autobuild.buildroot.org/results/cb2/cb292f2c99cdca742a8f52dbfc25f193fe513c6e/build-end.log
-Signed-off-by: Tim Soubry <tim.soubry@mind.be>
-[Julien:
- - mention gcc-14 in commit title
- - remove patch numbering to fix check-package error
-]
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit a52269e221bf73ea4b2521e2297ab13bf3c687d0)
+(cherry picked from commit d4c5cfe80db563fc9d380d68e2b201f8bd4a9c1e)
+[Titouan: only bump Linux LTS]
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- ...dd-macro-my_gettext-do-not-define-gettext.patch | 199 +++++++++++++++++++++
- 1 file changed, 199 insertions(+)
+ board/beagleboard/beaglebone/patches/linux/linux.hash | 2 +-
+ configs/beaglebone_defconfig                          | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ncmpc/0001-i18n-add-macro-my_gettext-do-not-define-gettext.patch b/package/ncmpc/0001-i18n-add-macro-my_gettext-do-not-define-gettext.patch
-new file mode 100644
-index 0000000000..296d3d17d6
---- /dev/null
-+++ b/package/ncmpc/0001-i18n-add-macro-my_gettext-do-not-define-gettext.patch
-@@ -0,0 +1,199 @@
-+From d90e80cf0b3525d780b57d016afaa879e16b0fe4 Mon Sep 17 00:00:00 2001
-+From: Max Kellermann <max@musicpd.org>
-+Date: Tue, 23 Jul 2024 14:15:16 +0200
-+Subject: [PATCH] i18n: add macro my_gettext(), do not define "gettext"
-+
-+Defining the macro "gettext" can cause breakages if the C++ standard
-+library happens to include libintl.h (which GCC 14 does).
-+
-+Signed-off-by: Tim Soubry <tim.soubry@mind.be>
-+Upstream: https://github.com/MusicPlayerDaemon/ncmpc/commit/249b62fc9f5e3a653ebdd22da0d75fbe87069457
-+---
-+ src/Command.cxx    | 2 +-
-+ src/HelpPage.cxx   | 6 +++---
-+ src/KeyDefPage.cxx | 2 +-
-+ src/SearchPage.cxx | 6 +++---
-+ src/SongPage.cxx   | 8 ++++----
-+ src/TabBar.cxx     | 2 +-
-+ src/i18n.h         | 8 +++-----
-+ 7 files changed, 16 insertions(+), 18 deletions(-)
-+
-+diff --git a/src/Command.cxx b/src/Command.cxx
-+index 1caac250..b12a4a35 100644
-+--- a/src/Command.cxx
-++++ b/src/Command.cxx
-+@@ -238,7 +238,7 @@ get_cmds_max_name_width()
-+ const char *
-+ get_key_description(Command command)
-+ {
-+-	return gettext(cmds[size_t(command)].description);
-++	return my_gettext(cmds[size_t(command)].description);
-+ }
-+ 
-+ const char *
-+diff --git a/src/HelpPage.cxx b/src/HelpPage.cxx
-+index fad0f8c0..c07a20c4 100644
-+--- a/src/HelpPage.cxx
-++++ b/src/HelpPage.cxx
-+@@ -242,7 +242,7 @@ HelpPage::GetListItemText(char *, size_t, unsigned i) const noexcept
-+ 	assert(i < std::size(help_text));
-+ 
-+ 	if (row->text != nullptr)
-+-		return gettext(row->text);
-++		return my_gettext(row->text);
-+ 
-+ 	if (row->command != Command::NONE)
-+ 		return get_key_description(row->command);
-+@@ -272,7 +272,7 @@ HelpPage::PaintListItem(WINDOW *w, unsigned i,
-+ 
-+ 	if (row->command == Command::NONE) {
-+ 		if (row->text != nullptr)
-+-			mvwaddstr(w, y, 6, gettext(row->text));
-++			mvwaddstr(w, y, 6, my_gettext(row->text));
-+ 		else if (row->highlight == 2)
-+ 			mvwhline(w, y, 3, ACS_HLINE, width - 6);
-+ 	} else {
-+@@ -285,7 +285,7 @@ HelpPage::PaintListItem(WINDOW *w, unsigned i,
-+ 		mvwaddch(w, y, 21, ':');
-+ 		mvwaddstr(w, y, 23,
-+ 			  row->text != nullptr
-+-			  ? gettext(row->text)
-++			  ? my_gettext(row->text)
-+ 			  : get_key_description(row->command));
-+ 	}
-+ }
-+diff --git a/src/KeyDefPage.cxx b/src/KeyDefPage.cxx
-+index be638940..dd301d39 100644
-+--- a/src/KeyDefPage.cxx
-++++ b/src/KeyDefPage.cxx
-+@@ -434,7 +434,7 @@ CommandListPage::GetListItemText(char *buffer, size_t size,
-+ 
-+ 	snprintf(buffer + get_cmds_max_name_width(),
-+ 		 size - get_cmds_max_name_width(),
-+-		 " - %s", gettext(get_command_definitions()[idx].description));
-++		 " - %s", my_gettext(get_command_definitions()[idx].description));
-+ 
-+ 	return buffer;
-+ }
-+diff --git a/src/SearchPage.cxx b/src/SearchPage.cxx
-+index 4f2e3228..9ae8436b 100644
-+--- a/src/SearchPage.cxx
-++++ b/src/SearchPage.cxx
-+@@ -142,7 +142,7 @@ public:
-+ 				 " %s : %s [%s]",
-+ 				 GetGlobalKeyBindings().GetKeyNames(Command::SEARCH_MODE).c_str(),
-+ 				 get_key_description(Command::SEARCH_MODE),
-+-				 gettext(mode[options.search_mode].label));
-++				 my_gettext(mode[options.search_mode].label));
-+ 			return buffer;
-+ 		}
-+ 
-+@@ -453,7 +453,7 @@ SearchPage::GetTitle(char *str, size_t size) const noexcept
-+ 			 "%s '%s' [%s]",
-+ 			 _("Search"),
-+ 			 pattern.c_str(),
-+-			 gettext(mode[options.search_mode].label));
-++			 my_gettext(mode[options.search_mode].label));
-+ 	else
-+ 		return _("Search");
-+ 
-+@@ -478,7 +478,7 @@ SearchPage::OnCommand(struct mpdclient &c, Command cmd)
-+ 		if (mode[options.search_mode].label == nullptr)
-+ 			options.search_mode = 0;
-+ 		screen_status_printf(_("Search mode: %s"),
-+-				     gettext(mode[options.search_mode].label));
-++				     my_gettext(mode[options.search_mode].label));
-+ 
-+ 		if (pattern.empty())
-+ 			/* show the new mode in the help text */
-+diff --git a/src/SongPage.cxx b/src/SongPage.cxx
-+index c0830a9e..6d166b13 100644
-+--- a/src/SongPage.cxx
-++++ b/src/SongPage.cxx
-+@@ -174,14 +174,14 @@ static std::unique_ptr<Page>
-+ screen_song_init(ScreenManager &_screen, WINDOW *w, Size size) noexcept
-+ {
-+ 	for (unsigned i = 0; tag_labels[i].label != nullptr; ++i) {
-+-		unsigned width = StringWidthMB(gettext(tag_labels[i].label));
-++		unsigned width = StringWidthMB(my_gettext(tag_labels[i].label));
-+ 		if (width > max_tag_label_width)
-+ 			max_tag_label_width = width;
-+ 	}
-+ 
-+ 	for (unsigned i = 0; i < std::size(stats_labels); ++i) {
-+ 		if (stats_labels[i] != nullptr) {
-+-			unsigned width = StringWidthMB(gettext(stats_labels[i]));
-++			unsigned width = StringWidthMB(my_gettext(stats_labels[i]));
-+ 
-+ 			if (width > max_stats_label_width)
-+ 				max_stats_label_width = width;
-+@@ -267,7 +267,7 @@ get_tag_label(unsigned tag) noexcept
-+ {
-+ 	for (unsigned i = 0; tag_labels[i].label != nullptr; ++i)
-+ 		if (tag_labels[i].tag_type == tag)
-+-			return gettext(tag_labels[i].label);
-++			return my_gettext(tag_labels[i].label);
-+ 
-+ 	assert(tag < MPD_TAG_COUNT);
-+ 	return mpd_tag_name((enum mpd_tag_type)tag);
-+@@ -351,7 +351,7 @@ SongPage::AddSong(const struct mpd_song *song) noexcept
-+ void
-+ SongPage::AppendStatsLine(enum stats_label label, const char *value) noexcept
-+ {
-+-	AppendLine(gettext(stats_labels[label]), value, max_stats_label_width);
-++	AppendLine(my_gettext(stats_labels[label]), value, max_stats_label_width);
-+ }
-+ 
-+ bool
-+diff --git a/src/TabBar.cxx b/src/TabBar.cxx
-+index 426bce12..0518801f 100644
-+--- a/src/TabBar.cxx
-++++ b/src/TabBar.cxx
-+@@ -48,7 +48,7 @@ PaintTabBar(WINDOW *w, const PageMeta &current_page_meta,
-+ 			title = current_page_title;
-+ 
-+ 		if (title == nullptr)
-+-			title = gettext(page->title);
-++			title = my_gettext(page->title);
-+ 
-+ 		PaintPageTab(w, page->command, title,
-+ 			     page == &current_page_meta);
-+diff --git a/src/i18n.h b/src/i18n.h
-+index 8bda456e..7e98c1b0 100644
-+--- a/src/i18n.h
-++++ b/src/i18n.h
-+@@ -1,8 +1,7 @@
-+ // SPDX-License-Identifier: GPL-2.0-or-later
-+ // Copyright The Music Player Daemon Project
-+ 
-+-#ifndef I18N_H
-+-#define I18N_H
-++#pragma once
-+ 
-+ #include "config.h"
-+ 
-+@@ -10,6 +9,7 @@
-+ 
-+ #include <libintl.h> // IWYU pragma: export
-+ 
-++#define my_gettext(x) gettext(x)
-+ #define _(x) gettext(x)
-+ 
-+ #ifdef gettext_noop
-+@@ -19,12 +19,10 @@
-+ #endif
-+ 
-+ #else
-+-#define gettext(x) (x)
-++#define my_gettext(x) (x)
-+ #define  _(x) x
-+ #define N_(x) x
-+ #endif
-+ 
-+ #define YES_TRANSLATION _("y")
-+ #define NO_TRANSLATION _("n")
-+-
-+-#endif
-+-- 
-+2.39.5
-+
+diff --git a/board/beagleboard/beaglebone/patches/linux/linux.hash b/board/beagleboard/beaglebone/patches/linux/linux.hash
+index 5f6bd2bec1..f2c09d9872 100644
+--- a/board/beagleboard/beaglebone/patches/linux/linux.hash
++++ b/board/beagleboard/beaglebone/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  203743e32c9fba3bb9f965c1b3799977961a9d25071d6d482d96d74adfdbaadb  linux-6.12.17-ti-arm32-r9.tar.gz
++sha256  3654ca31003d90d20b195b23f8d60b78fcffbf0fd7fed6116c22719e20ac933d  linux-6.12.23-ti-arm32-r11.tar.gz
+diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
+index b4035215de..42eab6cc59 100644
+--- a/configs/beaglebone_defconfig
++++ b/configs/beaglebone_defconfig
+@@ -10,7 +10,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/beagleboard/beaglebone/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,beagleboard,linux,6.12.17-ti-arm32-r9)/linux-6.12.17-ti-arm32-r9.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,beagleboard,linux,6.12.23-ti-arm32-r11)/linux-6.12.23-ti-arm32-r11.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bb.org"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="ti/omap/am335x-evm ti/omap/am335x-bone ti/omap/am335x-boneblack ti/omap/am335x-bonegreen ti/omap/am335x-evmsk ti/omap/am335x-boneblue ti/omap/am335x-boneblack-wireless ti/omap/am335x-bonegreen-wireless"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
