@@ -4,99 +4,98 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4BC8C83F27
-	for <buildroot@archiver.kernel.org>; Tue, 15 Jul 2025 23:01:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D98B3C83F17
+	for <buildroot@archiver.kernel.org>; Tue, 15 Jul 2025 23:05:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5513F83C5F;
-	Tue, 15 Jul 2025 23:01:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 84A3983C61;
+	Tue, 15 Jul 2025 23:05:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PlGcBSSHvQVi; Tue, 15 Jul 2025 23:01:21 +0000 (UTC)
+ id s3ehjdUG4s-S; Tue, 15 Jul 2025 23:05:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8A50483C59
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BE1F283C5C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8A50483C59;
-	Tue, 15 Jul 2025 23:01:21 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id B0B121C62
- for <buildroot@buildroot.org>; Tue, 15 Jul 2025 23:01:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BE1F283C5C;
+	Tue, 15 Jul 2025 23:05:01 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id E8B641C62
+ for <buildroot@buildroot.org>; Tue, 15 Jul 2025 23:05:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A22176125E
- for <buildroot@buildroot.org>; Tue, 15 Jul 2025 23:01:20 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id DA16383C5C
+ for <buildroot@buildroot.org>; Tue, 15 Jul 2025 23:05:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RcABtCCZxfX7 for <buildroot@buildroot.org>;
- Tue, 15 Jul 2025 23:01:20 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BLzSUndF-nUy for <buildroot@buildroot.org>;
+ Tue, 15 Jul 2025 23:05:00 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::12b; helo=mail-il1-x12b.google.com;
+ client-ip=2607:f8b0:4864:20::d33; helo=mail-io1-xd33.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org DDC706115B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DDC706115B
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com
- [IPv6:2607:f8b0:4864:20::12b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DDC706115B
- for <buildroot@buildroot.org>; Tue, 15 Jul 2025 23:01:19 +0000 (UTC)
-Received: by mail-il1-x12b.google.com with SMTP id
- e9e14a558f8ab-3df2f20f4bbso18331455ab.0
- for <buildroot@buildroot.org>; Tue, 15 Jul 2025 16:01:19 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 181B683C59
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 181B683C59
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com
+ [IPv6:2607:f8b0:4864:20::d33])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 181B683C59
+ for <buildroot@buildroot.org>; Tue, 15 Jul 2025 23:04:59 +0000 (UTC)
+Received: by mail-io1-xd33.google.com with SMTP id
+ ca18e2360f4ac-879399faac9so458216139f.3
+ for <buildroot@buildroot.org>; Tue, 15 Jul 2025 16:04:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1752620479; x=1753225279;
+ d=1e100.net; s=20230601; t=1752620699; x=1753225499;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=ArlIrwfyhgeI8x4jEgKDSDgDzBFJsYP8YHz07FGf4Ck=;
- b=MMf1cLo5gPlVRfbztLepljROBhmlblabiJ8Nd9cb31H53V0QqyTETlGwz12ybTQ2Ck
- PyrZi+kzrTVgw5FM4ZN7HIwpLJ/ikP9O8Mgx3kwtmCYKuhk4XuB9ZhEZVZ9+EHtq6TKp
- K8GRw1AfclbXgnobZOZn7qbuU2CxBSk97Z3kcrOWVtM9Xt0z5sIrJ/0tS9E/ytQLWqoN
- Sh2tdnw04b2JZICAuA2PkXnrO6DNdWlwXEIl4wZ6jRvBHe5cBro+oMq5gDpe/IPFTmMX
- tudOxEGa5oXAIOkuhcgoVB1sspTn6m3cv0SxdLnpIw5jE53lrBE38vKnOUxqZK4zapc7
- +bvg==
-X-Gm-Message-State: AOJu0YzWkWQ/vmXP8CZuvdE+pv6ip6e04ghNd7h0znoEyOPmXDoZGMIm
- vgAg6SKT1wHMNHUScH6Ae9AT11fmseiYD+aZ5lrYXJMM40rBEdGdI1lbeWfxH0HCFBk=
-X-Gm-Gg: ASbGncssrhm8LGerokG/uRzKtP3FI1gtritb6tddpiz4gxtmQ8+IXSVhWdIEpXcxHiY
- Kbe7+hyAHgo7H89kU7y0gXgMz1QPjTytpk69BqlCeLMDblU+vNdoKZNHNjDP3Je2dBqui/3xXRO
- 6k89G4XcQKwYHPgijbh9vRp/SPpWaSZoPRS/LfNOVBQymqEsjrAxIx+Q0BwKl9KKGM2oyOTO00O
- 1Quv/t/pxyZ+EceDCKgUn0FPhEwTBVYfQ5O9LZy03fI4L07PjcfulK8MEbfngRk1LBTqcWftmEX
- mALhU2qB/locCyWzzdEMkC6R8YxkEg5RKfiGHmcpUL15xHFhrT4x+oGG9wPG+rdv4H5f14c/kgG
- pjBi0YuHG6hFjA47cGYM1ao0Iw9hUCSah4DdiSoNHctOqwKWdLy4FvNk0kTslw/JP4/slgxyNtR
- gPCN2FpKDX4QqkR06Zrw==
-X-Google-Smtp-Source: AGHT+IHT02gNIrZZSKWYJ2klaIxOj71Jveh0dLoiGMY1eXolZv2tbTKREc81QZ2kZV10CtJ/kz0LGA==
-X-Received: by 2002:a92:ca46:0:b0:3dd:d98c:cca9 with SMTP id
- e9e14a558f8ab-3e2823237acmr9606275ab.3.1752620478466; 
- Tue, 15 Jul 2025 16:01:18 -0700 (PDT)
+ bh=SfwSdI3Zzo/RGI+8fE84dudkL+F3lk6byE0+BB20w4s=;
+ b=bdBhPkH/wFhf3BrCZdwZGlelH4hjk9vGEhbpdqjf131KPbHGJVffyJkB70TON2UFVg
+ qsDnGTsDLqRfsSs/SoRUQcZjPgdeDFbGBEQ+LqMko0NhklyAY9JJkh584lpX3qHpI7Gc
+ 2IgkA0rzk6q6HhnZmqm+301AMuC+6n3X9Nr4ot+2T0P5PvHhDLVuGJmaz81ndY6zVRZV
+ lham0xKKBzq+cB627RLhpa/pjLDVhtO+N26lEMM+zZKtEavBAEBR1TyEOtoXVe1g///G
+ jL/rVIhxZPoADs6K1WiXWJYN6/k12DUZBlfTRsubSq4CydsIfHjAz/oktb7x0rRyxoGB
+ uBUQ==
+X-Gm-Message-State: AOJu0YzD7qHrdWo85UXCYDBOPiorOfrxNFIlHITdK8vwNcSnzumA+ue0
+ 7kIEd4gohdsD4umWn06NfWOTutxbFhHfeV/8crAq+zJn8HOlMSQC+Y0sawwDOlb4N18=
+X-Gm-Gg: ASbGncseBD6HWox6jy8ojSU9XzBzQq4aJ2WZaFGgdtAVyNDjrOnoOtQDV2Io9u0plH4
+ tZuD03Tphsbzuqs82xzu4fkFPh4qeH5j4BbZ27CPtzfMgnqy70HceQLRCyh+AlFv3r/ZRmvjoL7
+ 7wLztNuVDLZVMwu64UxvbElrY8BpkFpOH6kaTyWkU52v1pSRUqKYqwI6kvQuSDuSG1C9V80idSm
+ P3W67K3X9ID6dXNYSbsGY746Mio9Xsx7K6iw8/GxFqpuHJ/Xrni9yJNZLzGOs7yjSQxcUTUPBt9
+ 5yA4RaTioEFPSPvzAmbmg1bDYXJYUWcgPlh2OpzSIEdN8t1vY521lB3yI/Rme689AeuFAs4wYiA
+ s9JFKehd/ujYMBs7AvsW2SDz4k1h+jxgE0KH8HkvdjOjxyL+KZ75N9otmhZIsxeqjQDEfifLVBG
+ Q0OBPrj6w=
+X-Google-Smtp-Source: AGHT+IHfPAubof+G1mw3vv5Vo7z5hKIuOsWKMFzwuNizYtPr/Apv0Yt99MTQtMi8aFIjgQr1UvFDJw==
+X-Received: by 2002:a05:6602:13c5:b0:869:d4de:f7 with SMTP id
+ ca18e2360f4ac-879c0935f49mr152205439f.12.1752620698650; 
+ Tue, 15 Jul 2025 16:04:58 -0700 (PDT)
 Received: from james-x399.tailafd1a.ts.net (71-218-236-108.hlrn.qwest.net.
  [71.218.236.108]) by smtp.gmail.com with ESMTPSA id
- 8926c6da1cb9f-50556532328sm2691528173.5.2025.07.15.16.01.17
+ ca18e2360f4ac-8796bc35d38sm334295539f.33.2025.07.15.16.04.57
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 15 Jul 2025 16:01:18 -0700 (PDT)
+ Tue, 15 Jul 2025 16:04:58 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 15 Jul 2025 17:01:16 -0600
-Message-Id: <20250715230116.754529-1-james.hilliard1@gmail.com>
+Date: Tue, 15 Jul 2025 17:04:50 -0600
+Message-Id: <20250715230450.757888-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1752620479; x=1753225279; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1752620699; x=1753225499; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=ArlIrwfyhgeI8x4jEgKDSDgDzBFJsYP8YHz07FGf4Ck=;
- b=ESKjjBJOIsMI9Iop1ivDMFtdi+faAnI+dHZQzjGv35kDVM20DA6EZtc+JTu55FPWtj
- 381qisZ/HCmQ/wvHIXjFRPCLbxlGh/zlwcS7CPiL3adb63CXf81TjbD5vSg+oMCescsf
- Qg5hXtdIy0nMBHLSCdpAdkhCxy3ZgK58q2jdoC34rscMKUCCxFQixZ3yaA8HaZc4Rr5+
- qaJa8s1Pi5PEA+k2zgty1JO55LWsVqO5yUy31pXqTJAwWacLV78hC/UACpVvjxdXqnuO
- UBeVdt+rRfUt9CYSAHnPdOmd3htpIu9+PNkCXkJ5NaIjMHmP1If4I0hHuxVdoggWk9Iv
- N3yA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=SfwSdI3Zzo/RGI+8fE84dudkL+F3lk6byE0+BB20w4s=;
+ b=MhTsaikfEkwd0HiLhbkfm2Ml06EZLPXQd9zbroSGm9ZmgtRPRHGnBp4B9LKiaUNwEd
+ ScKNLN7KiNPD95qQ1hjAfJLw5SxiHmWWXh6t5MO1V3LHShTGLpyeXI2OlMqNCxiAX+It
+ JSUIh4J0SiTUE71sxw9GfeVEkogb+igfp6Qtd2zzaF4Pa5NGuDw/hj0kNWWVH5aBsxo8
+ 1ejwvW+VkPxwzEF5JyxlyhwEBez7+D2kXbskqLpggR4nxLJeu4WpZxyMiMZGGbW/E1ZF
+ fASqggDGnLRdwaYudi+gUnFYuuWkTANZ44LzaLFmiXZcx0g3Oy8177lyBvg+E8BAhMVm
+ 4mOQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=ESKjjBJO
-Subject: [Buildroot] [PATCH 1/1] package/python-maturin: bump to version
- 1.9.1
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=MhTsaikf
+Subject: [Buildroot] [PATCH 1/1] package/python-hatch-vcs: bump to version
+ 0.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,45 +113,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop no longer required host-python-tomli dependency.
-
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-maturin/python-maturin.hash | 2 +-
- package/python-maturin/python-maturin.mk   | 5 ++---
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ package/python-hatch-vcs/python-hatch-vcs.hash | 4 ++--
+ package/python-hatch-vcs/python-hatch-vcs.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-maturin/python-maturin.hash b/package/python-maturin/python-maturin.hash
-index baa8d4b2e6..fd7ef77adf 100644
---- a/package/python-maturin/python-maturin.hash
-+++ b/package/python-maturin/python-maturin.hash
+diff --git a/package/python-hatch-vcs/python-hatch-vcs.hash b/package/python-hatch-vcs/python-hatch-vcs.hash
+index 55cd3b3e5a..16f08bcc4a 100644
+--- a/package/python-hatch-vcs/python-hatch-vcs.hash
++++ b/package/python-hatch-vcs/python-hatch-vcs.hash
 @@ -1,5 +1,5 @@
- # Locally calculated after vendoring
--sha256  c5e19df8566f9c15b6178a6312f1d7071c7a91efb0f578151439b5fcdb517176  python-maturin-1.8.3-cargo4.tar.gz
-+sha256  344b213648e4954b157132ba8a3b5158576af7499bbd68712f42c5d314a13b40  python-maturin-1.9.1-cargo4.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/hatch_vcs/json
+-md5  d801fe7c3e5955307748f2790bbb3488  hatch_vcs-0.4.0.tar.gz
+-sha256  093810748fe01db0d451fabcf2c1ac2688caefd232d4ede967090b1c1b07d9f7  hatch_vcs-0.4.0.tar.gz
++md5  9a22a9f7203783e526959d34510a9672  hatch_vcs-0.5.0.tar.gz
++sha256  0395fa126940340215090c344a2bf4e2a77bcbe7daab16f41b37b98c95809ff9  hatch_vcs-0.5.0.tar.gz
  # Locally computed sha256 checksums
- sha256  a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  license-apache
- sha256  ea7882c559733766ad08343bde1d1ec80a4967c03a738fb8e0058ef6289f7b7c  license-mit
-diff --git a/package/python-maturin/python-maturin.mk b/package/python-maturin/python-maturin.mk
-index af6cf44b68..313dedf114 100644
---- a/package/python-maturin/python-maturin.mk
-+++ b/package/python-maturin/python-maturin.mk
-@@ -4,13 +4,12 @@
+ sha256  117aa5006d8475562f04442ab06dd2a4c501af3a77255eae0deef1f0c2499a1a  LICENSE.txt
+diff --git a/package/python-hatch-vcs/python-hatch-vcs.mk b/package/python-hatch-vcs/python-hatch-vcs.mk
+index f63d8b26fe..1fc2a19706 100644
+--- a/package/python-hatch-vcs/python-hatch-vcs.mk
++++ b/package/python-hatch-vcs/python-hatch-vcs.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MATURIN_VERSION = 1.8.3
-+PYTHON_MATURIN_VERSION = 1.9.1
- PYTHON_MATURIN_SOURCE_PYPI = maturin-$(PYTHON_MATURIN_VERSION).tar.gz
--PYTHON_MATURIN_SITE_PYPI = https://files.pythonhosted.org/packages/30/0b/3fd746cf5cfa3c8d7e20ea08c0dbc2c2c765ae051d0fc43d808a38bc9548
-+PYTHON_MATURIN_SITE_PYPI = https://files.pythonhosted.org/packages/94/f7/73cf2ae0d6db943a627d28c09f5368735fce6b8b2ad1e1f6bcda2632c80a
- PYTHON_MATURIN_SITE = $(PYTHON_MATURIN_SITE_PYPI)/$(PYTHON_MATURIN_SOURCE_PYPI)?buildroot-path=filename
- PYTHON_MATURIN_SETUP_TYPE = setuptools-rust
- PYTHON_MATURIN_LICENSE = Apache-2.0 or MIT
- PYTHON_MATURIN_LICENSE_FILES = license-apache license-mit
--HOST_PYTHON_MATURIN_DEPENDENCIES = host-python-tomli
- 
- $(eval $(host-python-package))
+-PYTHON_HATCH_VCS_VERSION = 0.4.0
++PYTHON_HATCH_VCS_VERSION = 0.5.0
+ PYTHON_HATCH_VCS_SOURCE = hatch_vcs-$(PYTHON_HATCH_VCS_VERSION).tar.gz
+-PYTHON_HATCH_VCS_SITE = https://files.pythonhosted.org/packages/f5/c9/54bb4fa27b4e4a014ef3bb17710cdf692b3aa2cbc7953da885f1bf7e06ea
++PYTHON_HATCH_VCS_SITE = https://files.pythonhosted.org/packages/6b/b0/4cc743d38adbee9d57d786fa496ed1daadb17e48589b6da8fa55717a0746
+ PYTHON_HATCH_VCS_LICENSE = MIT
+ PYTHON_HATCH_VCS_LICENSE_FILES = LICENSE.txt
+ PYTHON_HATCH_VCS_SETUP_TYPE = hatch
 -- 
 2.34.1
 
