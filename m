@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 622C3C83F34
-	for <buildroot@archiver.kernel.org>; Thu, 17 Jul 2025 20:33:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 479D2C83F1A
+	for <buildroot@archiver.kernel.org>; Thu, 17 Jul 2025 20:33:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3C8E361210;
-	Thu, 17 Jul 2025 20:33:23 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zvf2yRC-9D72; Thu, 17 Jul 2025 20:33:22 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2243460E07
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2243460E07;
-	Thu, 17 Jul 2025 20:33:22 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 07B50A59
- for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:33:01 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B014241140
- for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:32:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0F4284150F;
+	Thu, 17 Jul 2025 20:33:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jKpjKaWn4qy9 for <buildroot@buildroot.org>;
+ id F7yc3qb61swQ; Thu, 17 Jul 2025 20:33:20 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3289341764
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3289341764;
+	Thu, 17 Jul 2025 20:33:19 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 466651A6
+ for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:33:00 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 78FF160735
+ for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:32:57 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id opvxoi-2RF1x for <buildroot@buildroot.org>;
  Thu, 17 Jul 2025 20:32:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E6EA41151
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A13C607DC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6E6EA41151
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3A13C607DC
  for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:32:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6C96286673; Thu, 17 Jul 2025 20:32:56 +0000 (UTC)
+ id 10A358667F; Thu, 17 Jul 2025 20:32:56 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 15 Jul 2025 22:58:42 +0200
+Date: Tue, 15 Jul 2025 22:51:28 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: 65a8824c260979384eeae32f93e53593e0ef71c3
-X-Git-Newrev: e99cfb81cb83ea74959a129532e6f78a21654282
+X-Git-Oldrev: 950e39b1d7122edd59ac7296ccda5ca04e542bf8
+X-Git-Newrev: 008efd2fe41ca4dca75126b84cfe1129fe97f236
 X-Patchwork-Hint: ignore
-Message-Id: <20250717203256.6C96286673@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/libxml2: add
- patch for CVE-2025-49794 & CVE-2025-49796
+Message-Id: <20250717203256.10A358667F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/ustream-ssl: fix
+ build w/ mbedtls v3.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,231 +66,236 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e99cfb81cb83ea74959a129532e6f78a21654282
+commit: https://git.buildroot.net/buildroot/commit/?id=008efd2fe41ca4dca75126b84cfe1129fe97f236
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-This patch fixes CVE-2025-49794 [1] and CVE-2025-49796 [2] by
-backporting the commit from [3] to libxml2 2.13.
+Since the mbedtls bump to v3.6 [1] the ustream-ssl package is failling
+on the autobuilder with the following error:
 
-[1] https://nvd.nist.gov/vuln/detail/cve-2025-49794
-[2] https://nvd.nist.gov/vuln/detail/cve-2025-49796
-[3] https://gitlab.gnome.org/GNOME/libxml2/-/commit/71e1e8af5ee46dad1b57bb96cfbf1c3ad21fbd7b
+```
+In file included from /home/buildroot/instance-0/output-1/build/ustream-ssl-68d09243b6fd4473004b27ff6483352e76e6af1a/ustream-internal.h:25,
+                 from /home/buildroot/instance-0/output-1/build/ustream-ssl-68d09243b6fd4473004b27ff6483352e76e6af1a/ustream-ssl.c:25:
+/home/buildroot/instance-0/output-1/build/ustream-ssl-68d09243b6fd4473004b27ff6483352e76e6af1a/ustream-mbedtls.h:24:10: fatal error: mbedtls/certs.h: No such file or directory
+   24 | #include <mbedtls/certs.h>
+      |          ^~~~~~~~~~~~~~~~~
+compilation terminated.
+```
 
-Signed-off-by: Tim Soubry <tim.soubry@mind.be>
+This error can be reproduced with the following config:
+
+```
+cat <<EOF >.config
+BR2_arm=y
+BR2_cortex_a7=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+BR2_PACKAGE_MBEDTLS=y
+BR2_PACKAGE_USTREAM_SSL=y
+EOF
+make olddefconfig
+make
+```
+
+This patch backport upstream commit that address the compatibility with
+mbedtls v3.6.
+
+ - [2] rename the `_random` function used by the mbedtls functions
+ - [3] update `mbedtls_pk_parse_keyfile` function to support new mbedtls
+     definition and use `mbedtls_pk_get_type`.
+
+[1] 3481a9643f package/mbedtls: bump to version 3.6.3.1
+[2] 0001-ustream-mbedtls-use-getrandom-instead-of-dev-urandom.patch
+[3] 0002-ustream-mbedtls-add-compatibility-with-mbed-tls-3-0-0.patch
+
+Fixes: https://autobuild.buildroot.org/results/c20/c20dac7cbe5def2c6036d2e1d06de0bfea68b57c
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 0df4585100358976434238cc64825cfbc505fc02)
+(cherry picked from commit d28ae8b00b7aa5018ec24809ecc393e7420bc292)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- ...Fix-memory-safety-issues-in-xmlSchematron.patch | 186 +++++++++++++++++++++
- package/libxml2/libxml2.mk                         |   3 +
- 2 files changed, 189 insertions(+)
+ ...dtls-use-getrandom-instead-of-dev-urandom.patch | 88 ++++++++++++++++++++++
+ ...tls-add-compatibility-with-mbed-tls-3-0-0.patch | 79 +++++++++++++++++++
+ 2 files changed, 167 insertions(+)
 
-diff --git a/package/libxml2/0002-schematron-Fix-memory-safety-issues-in-xmlSchematron.patch b/package/libxml2/0002-schematron-Fix-memory-safety-issues-in-xmlSchematron.patch
+diff --git a/package/ustream-ssl/0001-ustream-mbedtls-use-getrandom-instead-of-dev-urandom.patch b/package/ustream-ssl/0001-ustream-mbedtls-use-getrandom-instead-of-dev-urandom.patch
 new file mode 100644
-index 0000000000..1aadf4d3bc
+index 0000000000..2abb7ce3a1
 --- /dev/null
-+++ b/package/libxml2/0002-schematron-Fix-memory-safety-issues-in-xmlSchematron.patch
-@@ -0,0 +1,186 @@
-+From a89ed49b681fb4299120154ce0d6ca38e9abe482 Mon Sep 17 00:00:00 2001
-+From: Nick Wellnhofer <wellnhofer@aevum.de>
-+Date: Fri, 4 Jul 2025 14:28:26 +0200
-+Subject: [PATCH] schematron: Fix memory safety issues in
-+ xmlSchematronReportOutput
++++ b/package/ustream-ssl/0001-ustream-mbedtls-use-getrandom-instead-of-dev-urandom.patch
+@@ -0,0 +1,88 @@
++From 498f6e268d4d2b0ad33b430f4ba1abe397d31496 Mon Sep 17 00:00:00 2001
++From: Hauke Mehrtens <hauke@hauke-m.de>
++Date: Sun, 19 Feb 2023 21:11:12 +0100
++Subject: [PATCH] ustream-mbedtls: Use getrandom() instead of /dev/urandom
 +
-+Fix use-after-free (CVE-2025-49794) and type confusion (CVE-2025-49796)
-+in xmlSchematronReportOutput.
++Instead of keeping a file descriptor open just use the getrandom syscall
++to get random data. This is supported by musl libc, glibc and Linux for
++some time now.
 +
-+Fixes #931.
-+Fixes #933.
++This also improves the error handling in case this function returns not
++as many bytes as expected.
 +
-+Upstream: https://gitlab.gnome.org/GNOME/libxml2/-/commit/71e1e8af5ee46dad1b57bb96cfbf1c3ad21fbd7b
-+CVE: CVE-2025-49794 CVE-2025-49796
-+Signed-off-by: Tim Soubry <tim.soubry@mind.be>
++Signed-off-by: Hauke Mehrtens <hauke@hauke-m.de>
++Reviewed-by: Torsten Duwe <duwe@lst.de>
++Upstream: https://git.openwrt.org/?p=project/ustream-ssl.git;a=commit;h=498f6e268d4d2b0ad33b430f4ba1abe397d31496
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 +---
-+ result/schematron/cve-2025-49794_0.err |  2 ++
-+ result/schematron/cve-2025-49796_0.err |  2 ++
-+ schematron.c                           | 49 ++++++++++++++------------
-+ test/schematron/cve-2025-49794.sct     | 10 ++++++
-+ test/schematron/cve-2025-49794_0.xml   |  6 ++++
-+ test/schematron/cve-2025-49796.sct     |  9 +++++
-+ test/schematron/cve-2025-49796_0.xml   |  3 ++
-+ 7 files changed, 58 insertions(+), 23 deletions(-)
-+ create mode 100644 result/schematron/cve-2025-49794_0.err
-+ create mode 100644 result/schematron/cve-2025-49796_0.err
-+ create mode 100644 test/schematron/cve-2025-49794.sct
-+ create mode 100644 test/schematron/cve-2025-49794_0.xml
-+ create mode 100644 test/schematron/cve-2025-49796.sct
-+ create mode 100644 test/schematron/cve-2025-49796_0.xml
++ ustream-mbedtls.c | 25 ++++++-------------------
++ 1 file changed, 6 insertions(+), 19 deletions(-)
 +
-+diff --git a/result/schematron/cve-2025-49794_0.err b/result/schematron/cve-2025-49794_0.err
-+new file mode 100644
-+index 00000000..57752310
-+--- /dev/null
-++++ b/result/schematron/cve-2025-49794_0.err
-+@@ -0,0 +1,2 @@
-++./test/schematron/cve-2025-49794_0.xml:2: element boo0: schematron error : /librar0/boo0 line 2:  
-++./test/schematron/cve-2025-49794_0.xml fails to validate
-+diff --git a/result/schematron/cve-2025-49796_0.err b/result/schematron/cve-2025-49796_0.err
-+new file mode 100644
-+index 00000000..bf875ee0
-+--- /dev/null
-++++ b/result/schematron/cve-2025-49796_0.err
-+@@ -0,0 +1,2 @@
-++./test/schematron/cve-2025-49796_0.xml:2: element boo0: schematron error : /librar0/boo0 line 2:  
-++./test/schematron/cve-2025-49796_0.xml fails to validate
-+diff --git a/schematron.c b/schematron.c
-+index 1de25deb..426300c8 100644
-+--- a/schematron.c
-++++ b/schematron.c
-+@@ -1414,27 +1414,15 @@ exit:
-+  *                                                                      *
-+  ************************************************************************/
++diff --git a/ustream-mbedtls.c b/ustream-mbedtls.c
++index e79e37b..7fc7874 100644
++--- a/ustream-mbedtls.c
+++++ b/ustream-mbedtls.c
++@@ -17,6 +17,7 @@
++  */
 + 
-+-static xmlNodePtr
-++static xmlXPathObjectPtr
-+ xmlSchematronGetNode(xmlSchematronValidCtxtPtr ctxt,
-+                      xmlNodePtr cur, const xmlChar *xpath) {
-+-    xmlNodePtr node = NULL;
-+-    xmlXPathObjectPtr ret;
-+-
-+     if ((ctxt == NULL) || (cur == NULL) || (xpath == NULL))
-+         return(NULL);
++ #include <sys/types.h>
+++#include <sys/random.h>
++ #include <fcntl.h>
++ #include <unistd.h>
++ #include <stdlib.h>
++@@ -25,8 +26,6 @@
++ #include "ustream-ssl.h"
++ #include "ustream-internal.h"
 + 
-+     ctxt->xctxt->doc = cur->doc;
-+     ctxt->xctxt->node = cur;
-+-    ret = xmlXPathEval(xpath, ctxt->xctxt);
-+-    if (ret == NULL)
-+-        return(NULL);
++-static int urandom_fd = -1;
 +-
-+-    if ((ret->type == XPATH_NODESET) &&
-+-        (ret->nodesetval != NULL) && (ret->nodesetval->nodeNr > 0))
-+-        node = ret->nodesetval->nodeTab[0];
-+-
-+-    xmlXPathFreeObject(ret);
-+-    return(node);
-++    return(xmlXPathEval(xpath, ctxt->xctxt));
++ static int s_ustream_read(void *ctx, unsigned char *buf, size_t len)
++ {
++ 	struct ustream *s = ctx;
++@@ -66,21 +65,12 @@ __hidden void ustream_set_io(struct ustream_ssl_ctx *ctx, void *ssl, struct ustr
++ 	mbedtls_ssl_set_bio(ssl, conn, s_ustream_write, s_ustream_read, NULL);
 + }
 + 
-+ /**
-+@@ -1480,25 +1468,40 @@ xmlSchematronFormatReport(xmlSchematronValidCtxtPtr ctxt,
-+             (child->type == XML_CDATA_SECTION_NODE))
-+             ret = xmlStrcat(ret, child->content);
-+         else if (IS_SCHEMATRON(child, "name")) {
-++            xmlXPathObject *obj = NULL;
-+             xmlChar *path;
++-static bool urandom_init(void)
+++static int _random(void *ctx, unsigned char *out, size_t len)
++ {
++-	if (urandom_fd > -1)
++-		return true;
+++	ssize_t ret;
 + 
-+             path = xmlGetNoNsProp(child, BAD_CAST "path");
++-	urandom_fd = open("/dev/urandom", O_RDONLY);
++-	if (urandom_fd < 0)
++-		return false;
++-
++-	return true;
++-}
++-
++-static int _urandom(void *ctx, unsigned char *out, size_t len)
++-{
++-	if (read(urandom_fd, out, len) < 0)
+++	ret = getrandom(out, len, 0);
+++	if (ret < 0 || (size_t)ret != len)
++ 		return MBEDTLS_ERR_ENTROPY_SOURCE_FAILED;
 + 
-+             node = cur;
-+             if (path != NULL) {
-+-                node = xmlSchematronGetNode(ctxt, cur, path);
-+-                if (node == NULL)
-+-                    node = cur;
-++                obj = xmlSchematronGetNode(ctxt, cur, path);
-++                if ((obj != NULL) &&
-++                    (obj->type == XPATH_NODESET) &&
-++                    (obj->nodesetval != NULL) &&
-++                    (obj->nodesetval->nodeNr > 0))
-++                    node = obj->nodesetval->nodeTab[0];
-+                 xmlFree(path);
-+             }
++ 	return 0;
++@@ -134,9 +124,6 @@ __ustream_ssl_context_new(bool server)
++ 	mbedtls_ssl_config *conf;
++ 	int ep;
 + 
-+-            if ((node->ns == NULL) || (node->ns->prefix == NULL))
-+-                ret = xmlStrcat(ret, node->name);
-+-            else {
-+-                ret = xmlStrcat(ret, node->ns->prefix);
-+-                ret = xmlStrcat(ret, BAD_CAST ":");
-+-                ret = xmlStrcat(ret, node->name);
-++            switch (node->type) {
-++                case XML_ELEMENT_NODE:
-++                case XML_ATTRIBUTE_NODE:
-++                    if ((node->ns == NULL) || (node->ns->prefix == NULL))
-++                        ret = xmlStrcat(ret, node->name);
-++                    else {
-++                        ret = xmlStrcat(ret, node->ns->prefix);
-++                        ret = xmlStrcat(ret, BAD_CAST ":");
-++                        ret = xmlStrcat(ret, node->name);
-++                    }
-++                    break;
-++
-++                /* TODO: handle other node types */
-++                default:
-++                    break;
-+             }
-++
-++            xmlXPathFreeObject(obj);
-+         } else if (IS_SCHEMATRON(child, "value-of")) {
-+             xmlChar *select;
-+             xmlXPathObjectPtr eval;
-+diff --git a/test/schematron/cve-2025-49794.sct b/test/schematron/cve-2025-49794.sct
-+new file mode 100644
-+index 00000000..7fc9ee3d
-+--- /dev/null
-++++ b/test/schematron/cve-2025-49794.sct
-+@@ -0,0 +1,10 @@
-++<sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron">
-++    <sch:pattern id="">
-++        <sch:rule context="boo0">
-++            <sch:report test="not(0)">
-++                <sch:name path="&#9;e|namespace::*|e"/>
-++            </sch:report>
-++            <sch:report test="0"></sch:report>
-++        </sch:rule>
-++    </sch:pattern>
-++</sch:schema>
-+diff --git a/test/schematron/cve-2025-49794_0.xml b/test/schematron/cve-2025-49794_0.xml
-+new file mode 100644
-+index 00000000..debc64ba
-+--- /dev/null
-++++ b/test/schematron/cve-2025-49794_0.xml
-+@@ -0,0 +1,6 @@
-++<librar0>
-++    <boo0 t="">
-++        <author></author>
-++    </boo0>
-++    <ins></ins>
-++</librar0>
-+diff --git a/test/schematron/cve-2025-49796.sct b/test/schematron/cve-2025-49796.sct
-+new file mode 100644
-+index 00000000..e9702d75
-+--- /dev/null
-++++ b/test/schematron/cve-2025-49796.sct
-+@@ -0,0 +1,9 @@
-++<sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron">
-++    <sch:pattern id="">
-++        <sch:rule context="boo0">
-++            <sch:report test="not(0)">
-++                <sch:name path="/"/>
-++            </sch:report>
-++        </sch:rule>
-++    </sch:pattern>
-++</sch:schema>
-+diff --git a/test/schematron/cve-2025-49796_0.xml b/test/schematron/cve-2025-49796_0.xml
-+new file mode 100644
-+index 00000000..be33c4ec
-+--- /dev/null
-++++ b/test/schematron/cve-2025-49796_0.xml
-+@@ -0,0 +1,3 @@
-++<librar0>
-++    <boo0/>
-++</librar0>
++-	if (!urandom_init())
++-		return NULL;
++-
++ 	ctx = calloc(1, sizeof(*ctx));
++ 	if (!ctx)
++ 		return NULL;
++@@ -159,7 +146,7 @@ __ustream_ssl_context_new(bool server)
++ 
++ 	mbedtls_ssl_config_defaults(conf, ep, MBEDTLS_SSL_TRANSPORT_STREAM,
++ 				    MBEDTLS_SSL_PRESET_DEFAULT);
++-	mbedtls_ssl_conf_rng(conf, _urandom, NULL);
+++	mbedtls_ssl_conf_rng(conf, _random, NULL);
++ 
++ 	if (server) {
++ 		mbedtls_ssl_conf_authmode(conf, MBEDTLS_SSL_VERIFY_NONE);
 +-- 
-+2.39.5
++2.30.2
+diff --git a/package/ustream-ssl/0002-ustream-mbedtls-add-compatibility-with-mbed-tls-3-0-0.patch b/package/ustream-ssl/0002-ustream-mbedtls-add-compatibility-with-mbed-tls-3-0-0.patch
+new file mode 100644
+index 0000000000..b9fa4be1a5
+--- /dev/null
++++ b/package/ustream-ssl/0002-ustream-mbedtls-add-compatibility-with-mbed-tls-3-0-0.patch
+@@ -0,0 +1,79 @@
++From 91666a38b7bd4bd353394986d8343a33ba61d8e2 Mon Sep 17 00:00:00 2001
++From: Hauke Mehrtens <hauke@hauke-m.de>
++Date: Sat, 11 Nov 2023 22:13:24 +0100
++Subject: [PATCH] ustream-mbedtls: Add compatibility with Mbed TLS 3.0.0
 +
-diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
-index f8651e726b..a4373a691a 100644
---- a/package/libxml2/libxml2.mk
-+++ b/package/libxml2/libxml2.mk
-@@ -18,6 +18,9 @@ LIBXML2_CONFIG_SCRIPTS = xml2-config
- #0001-tree-Fix-integer-overflow-in-xmlBuildQName.patch
- LIBXML2_IGNORE_CVES += CVE-2025-6021
- 
-+#0002-schematron-Fix-memory-safety-issues-in-xmlSchematron.patch
-+LIBXML2_IGNORE_CVES += CVE-2025-49794 CVE-2025-49796
++This adds support for compiling the code against Mbed TLS 3.0.0.
++It still compiles against Mbed TLS 2.28.
 +
- # relocation truncated to fit: R_68K_GOT16O
- ifeq ($(BR2_m68k_cf),y)
- LIBXML2_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -mxgot"
++The following changes were needed:
++ * DES and 3DES was removed
++ * mbedtls_pk_context->pk_info is private, use mbedtls_pk_get_type()
++   to check if it was initialized
++ * mbedtls_pk_parse_keyfile() now gets a random callback
++ * mbedtls/certs.h contains test data and is not installed any more and
++   not needed.
++
++Signed-off-by: Hauke Mehrtens <hauke@hauke-m.de>
++Upstream: https://git.openwrt.org/?p=project/ustream-ssl.git;a=commit;h=91666a38b7bd4bd353394986d8343a33ba61d8e2
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++---
++ ustream-mbedtls.c | 12 +++++++++++-
++ ustream-mbedtls.h |  1 -
++ 2 files changed, 11 insertions(+), 2 deletions(-)
++
++diff --git a/ustream-mbedtls.c b/ustream-mbedtls.c
++index 7fc7874..1c70cac 100644
++--- a/ustream-mbedtls.c
+++++ b/ustream-mbedtls.c
++@@ -110,9 +110,15 @@ static const int default_ciphersuites_client[] =
++ 	AES_CBC_CIPHERS(ECDHE_ECDSA),
++ 	AES_CBC_CIPHERS(ECDHE_RSA),
++ 	AES_CBC_CIPHERS(DHE_RSA),
+++/* Removed in Mbed TLS 3.0.0 */
+++#ifdef MBEDTLS_TLS_DHE_RSA_WITH_3DES_EDE_CBC_SHA
++ 	MBEDTLS_TLS_DHE_RSA_WITH_3DES_EDE_CBC_SHA,
+++#endif
++ 	AES_CIPHERS(RSA),
+++/* Removed in Mbed TLS 3.0.0 */
+++#ifdef MBEDTLS_TLS_RSA_WITH_3DES_EDE_CBC_SHA
++ 	MBEDTLS_TLS_RSA_WITH_3DES_EDE_CBC_SHA,
+++#endif
++ 	0
++ };
++ 
++@@ -171,7 +177,7 @@ static void ustream_ssl_update_own_cert(struct ustream_ssl_ctx *ctx)
++ 	if (!ctx->cert.version)
++ 		return;
++ 
++-	if (!ctx->key.pk_info)
+++	if (mbedtls_pk_get_type(&ctx->key) == MBEDTLS_PK_NONE)
++ 		return;
++ 
++ 	mbedtls_ssl_conf_own_cert(&ctx->conf, &ctx->cert, &ctx->key);
++@@ -206,7 +212,11 @@ __hidden int __ustream_ssl_set_key_file(struct ustream_ssl_ctx *ctx, const char
++ {
++ 	int ret;
++ 
+++#if (MBEDTLS_VERSION_NUMBER >= 0x03000000)
+++	ret = mbedtls_pk_parse_keyfile(&ctx->key, file, NULL, _random, NULL);
+++#else
++ 	ret = mbedtls_pk_parse_keyfile(&ctx->key, file, NULL);
+++#endif
++ 	if (ret)
++ 		return -1;
++ 
++diff --git a/ustream-mbedtls.h b/ustream-mbedtls.h
++index e622e5e..7e7c699 100644
++--- a/ustream-mbedtls.h
+++++ b/ustream-mbedtls.h
++@@ -21,7 +21,6 @@
++ 
++ #include <mbedtls/net_sockets.h>
++ #include <mbedtls/ssl.h>
++-#include <mbedtls/certs.h>
++ #include <mbedtls/x509.h>
++ #include <mbedtls/rsa.h>
++ #include <mbedtls/error.h>
++-- 
++2.30.2
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
