@@ -1,92 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 440C7C83F17
-	for <buildroot@archiver.kernel.org>; Tue, 15 Jul 2025 04:49:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6EE1C83F1D
+	for <buildroot@archiver.kernel.org>; Tue, 15 Jul 2025 04:53:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D79438232B;
-	Tue, 15 Jul 2025 04:49:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 90FFF60E89;
+	Tue, 15 Jul 2025 04:53:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SLM80erOeFA4; Tue, 15 Jul 2025 04:49:49 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IrKrevVHFNOb; Tue, 15 Jul 2025 04:53:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E9B9C821AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C3E1760ECB
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E9B9C821AB;
-	Tue, 15 Jul 2025 04:49:48 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 6B5D3DCA
- for <buildroot@buildroot.org>; Tue, 15 Jul 2025 04:49:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C3E1760ECB;
+	Tue, 15 Jul 2025 04:53:47 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6D28411AA
+ for <buildroot@buildroot.org>; Tue, 15 Jul 2025 04:53:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 59ED94005B
- for <buildroot@buildroot.org>; Tue, 15 Jul 2025 04:49:48 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 53E5160ECB
+ for <buildroot@buildroot.org>; Tue, 15 Jul 2025 04:53:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KwthMvrc3k_E for <buildroot@buildroot.org>;
- Tue, 15 Jul 2025 04:49:47 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YghXZka3Bnve for <buildroot@buildroot.org>;
+ Tue, 15 Jul 2025 04:53:45 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.126.236;
  helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 27A1040806
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 27A1040806
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org EA01C60E9C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA01C60E9C
 Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.236])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 27A1040806
- for <buildroot@buildroot.org>; Tue, 15 Jul 2025 04:49:46 +0000 (UTC)
-X-CSE-ConnectionGUID: R/9aPivrTCmK923QbGwykg==
-X-CSE-MsgGUID: I7z78e7OTpKwUVvjCRmjXw==
-Received: from unknown (HELO opfedv1rlp0h.nor.fr.ftgroup) ([x.x.x.x]) by
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EA01C60E9C
+ for <buildroot@buildroot.org>; Tue, 15 Jul 2025 04:53:44 +0000 (UTC)
+X-CSE-ConnectionGUID: XQKzzk2qQS2Uv3tctBEEKw==
+X-CSE-MsgGUID: oKzBai/cQKurCG4uWkUyiA==
+Received: from unknown (HELO opfedv1rlp0a.nor.fr.ftgroup) ([x.x.x.x]) by
  smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 15 Jul 2025 06:49:44 +0200
+ 15 Jul 2025 06:53:42 +0200
 Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv1rlp0h.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 15 Jul 2025 06:49:44 +0200
+ ([x.x.x.x]) by opfedv1rlp0a.nor.fr.ftgroup with
+ ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 15 Jul 2025 06:53:42 +0200
 Received: from yd-6wlzhs3 [x.x.x.x] by
  OPE16NORMBX305.corporate.adroot.infra.ftgroup
  [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.57;
- Tue, 15 Jul 2025 06:49:42 +0200
+ Tue, 15 Jul 2025 06:53:40 +0200
 Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
- Tue, 15 Jul 2025 06:49:47 +0200
-X-CSE-ConnectionGUID: 5ie+6w2VTBGNF7m/S32HIA==
-X-CSE-MsgGUID: BdFWqbZPRFeVdSs3dvGlnw==
-X-IronPort-AV: E=Sophos;i="6.16,312,1744063200"; d="scan'208";a="309239815"
-From: <yann.morin@orange.com>
-To: <buildroot@buildroot.org>
-CC: <yann.morin@orange.com>, Julien Olivain <ju.o@free.fr>
-Date: Tue, 15 Jul 2025 06:49:47 +0200
-Message-ID: <725a89cbad59708b94cac3eddb422dc5a0d305dc.1752554987.git.yann.morin@orange.com>
-X-Mailer: git-send-email 2.34.1
+ Tue, 15 Jul 2025 06:53:40 +0200
+From: yann.morin@orange.com
+X-CSE-ConnectionGUID: ZRIv99HmQFmfj8KT6+5P5g==
+X-CSE-MsgGUID: hyxMuIHhQE65r0gsQynJaw==
+X-IronPort-AV: E=Sophos;i="6.16,312,1744063200"; d="scan'208";a="313445024"
+Date: Tue, 15 Jul 2025 06:53:40 +0200
+To: Julien Olivain <ju.o@free.fr>
+CC: <buildroot@buildroot.org>
+Message-ID: <aHXe1GdHq06RsIMR@yd-6wlzhs3>
+References: <c509e65797c5662315ce9316ee1c4b50e5275111.1751288710.git.yann.morin@orange.com>
+ <64c23b7abfbfd647599418acd278f3a0@free.fr>
 MIME-Version: 1.0
-X-Originating-IP: [10.115.26.52]
-X-ClientProxiedBy: OPE16NORMBX202.corporate.adroot.infra.ftgroup (10.115.26.7)
+Content-Disposition: inline
+In-Reply-To: <64c23b7abfbfd647599418acd278f3a0@free.fr>
+X-Originating-IP: [10.115.27.51]
+X-ClientProxiedBy: OPE16NORMBX206.corporate.adroot.infra.ftgroup (10.115.27.7)
  To OPE16NORMBX305.corporate.adroot.infra.ftgroup
  (10.115.27.10)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1752554987; x=1784090987;
- h=from:to:cc:subject:date:message-id:mime-version:
- content-transfer-encoding;
- bh=H3qPHyHQZoKc9ut319ZxO8ei82antXCSC+XOeacpbdI=;
- b=BnlCrFcVKmtFvwZljCpyqWi7hr/tfPRkf9BMJlbN5/l9IzlL6dft1oC1
- unSjxwVYHSAOya6d+ukBDwrTh186LtDMvkLOUVKjlypd8nEY6rwFpzkfo
- IafGFKhat3K+NO+wtScjWtyHTlvpb3lA1sN/mLSNjEHg33vDGMZsgucKa
- LO6T6uFgZq8u5T/v6nBpb7hjKMURZrjtBkXIHVpyphK57MYPSD1azpfje
- DpOLjirPWsOEb7ZRNgwTPGimOuoFUZqdyQjOaxON8goZ6JdzSHerW/XJl
- djCl0wk7NDBHE4qHSJnwgC5PtpbV0ZcuB0ktkwtRVfXly6p/ixVIZ652J
- Q==;
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ t=1752555225; x=1784091225;
+ h=date:to:cc:subject:message-id:references:mime-version:
+ in-reply-to:content-transfer-encoding:from;
+ bh=8B5tj34ihXLbtPDPhQr9+S480PGbW9FfGqGPd/utLxY=;
+ b=oHRXUKTb3M0hTAafyFrG2D2MoxbnxJSJheoWMUjK5Xs/Vghu31gZanjE
+ ozN6tRBAAiAlRP8WmojSm4b7E4yYL6qw6NLv3yGkKvfDar+0ML1/RXlx8
+ LYFjP9/5b3Xqlx0aVIC9n2Ptj2EeWPUpUXfrEmUnAMXbV5raX4eog8OLL
+ MdgrzqkgNKpR3RmoIykEuE0H8g+piKohrlYJhm2ZPIZLJlhPjZRyMoGd3
+ MPiRLFgFvc1sAvUwEsdJrOJp/gsDTTQAz+iivW4nswjHkmIruSAo5Xi8o
+ St/YiQufwoVPRxiMUbzs9O+jepGk6TSBhjvSWGasFya0plbEgum80spVb
+ g==;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=orange.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
- header.s=orange002 header.b=BnlCrFcV
-Subject: [Buildroot] [PATCH] package/passt: needs headers >= 5.0
+ header.s=orange002 header.b=oHRXUKTb
+Subject: Re: [Buildroot] [PATCH] package/passt: needs headers >= 5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -103,67 +106,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: "Yann E. MORIN" <yann.morin@orange.com>
+Julien, All,
 
-Upstream passt only documents runtime dependencies; and they advertise
-being able to run on kernel 3.8 or later. However, they do not document
-the build dependencies.
+On 2025-06-30 21:29 +0200, Julien Olivain spake thusly:
+> On 30/06/2025 15:05, yann.morin@orange.com wrote:
+> > From: "Yann E. MORIN" <yann.morin@orange.com>
+[--SNIP--]
+> > Add a dependency to kernel headers, and propagate it to podman, updating
+> > the previous 4.14 requirement.
+[--SNIP--]
+> > diff --git a/package/podman/Config.in b/package/podman/Config.in
+> > index 6bfd477f38..cb7984f709 100644
+> > --- a/package/podman/Config.in
+> > +++ b/package/podman/Config.in
+> > @@ -5,7 +5,7 @@ config BR2_PACKAGE_PODMAN
+> >  	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS  # netavark
+> >  	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS  # libgpgme
+> >  	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS  # libseccomp
+> > -	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14  # shadow
+> > +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0  # passt
+> Since podman has two network backends (passt and slirp4netns),
+> exposed in a Kconfig choice, do we really need to propagate this
+> dependency here? Or could it moved only to
+> BR2_PACKAGE_PODMAN_NET_PASST?
+> This way, we could still build podman+slirp4netns for kernel
+> headers >= 4.14 and < 5.0.
 
-As reported by Julien, since 2024_12_11.09478d5, upstream requires
-kernel headers >= 5.0, as they make use of linux/vhost_types.h, only
-introduced in 5.0.
+Absolutely, you're right. I've just sent a patch doing what you
+suggested.
 
-Add a dependency to kernel headers, and propagate it to podman's passt
-backend.
+Regards,
+Yann E. MORIN.
 
-Reported-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-
----
-Changes v1 -> v2:
-  - only hide the passt backend, not the whole of podman  (Julien)
----
- package/passt/Config.in  | 4 ++++
- package/podman/Config.in | 4 ++++
- 2 files changed, 8 insertions(+)
-
-diff --git a/package/passt/Config.in b/package/passt/Config.in
-index a2d2f4f1fe..a93a088670 100644
---- a/package/passt/Config.in
-+++ b/package/passt/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PASST
- 	bool "passt"
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
- 	help
- 	  passt: Plug A Simple Socket Transport
- 	  pasta: Pack A Subtle Tap Abstraction
-@@ -17,3 +18,6 @@ config BR2_PACKAGE_PASST
- 	  hence not requiring any capabilities or privileges.
- 
- 	  https://passt.top/passt/about/
-+
-+comment "passt needs a toolchain w/ headers >= 5.0"
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
-diff --git a/package/podman/Config.in b/package/podman/Config.in
-index 6bfd477f38..a6554a3ddc 100644
---- a/package/podman/Config.in
-+++ b/package/podman/Config.in
-@@ -72,8 +72,12 @@ choice
- 
- config BR2_PACKAGE_PODMAN_NET_PASST
- 	bool "passt/pasta"
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0  # passt
- 	select BR2_PACKAGE_PASST  # runtime
- 
-+comment "passt/pasta backend needs a toolchain w/ headers >= 5.0"
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
-+
- config BR2_PACKAGE_PODMAN_NET_SLIRP4NETNS
- 	bool "slirp4netns"
- 	select BR2_PACKAGE_SLIRP4NETNS  # runtime
 -- 
-2.34.1
+                                        ____________
+.-----------------.--------------------:       _    :------------------.
+|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
+|                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
+| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
+| yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
+'--------------------------------------:______/_____:------------------'
 
 ____________________________________________________________________________________________________________
 Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
@@ -176,7 +158,6 @@ they should not be distributed, used or copied without authorisation.
 If you have received this email in error, please notify the sender and delete this message and its attachments.
 As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
 Thank you.
-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
