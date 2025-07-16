@@ -1,103 +1,102 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FACEC83F1B
-	for <buildroot@archiver.kernel.org>; Wed, 16 Jul 2025 10:07:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A83D5C83F22
+	for <buildroot@archiver.kernel.org>; Wed, 16 Jul 2025 10:22:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C80A283DEE;
-	Wed, 16 Jul 2025 10:07:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 62BCF613AE;
+	Wed, 16 Jul 2025 10:22:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UUllMQExch0r; Wed, 16 Jul 2025 10:07:24 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PXjM1cls6m1w; Wed, 16 Jul 2025 10:22:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 031CD83DEC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7870E60BB1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 031CD83DEC;
-	Wed, 16 Jul 2025 10:07:24 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 17AFF1514
- for <buildroot@buildroot.org>; Wed, 16 Jul 2025 10:07:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7870E60BB1;
+	Wed, 16 Jul 2025 10:22:28 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id BC23D11AA
+ for <buildroot@buildroot.org>; Wed, 16 Jul 2025 10:22:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F22F941408
- for <buildroot@buildroot.org>; Wed, 16 Jul 2025 10:07:21 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A28AA60BB1
+ for <buildroot@buildroot.org>; Wed, 16 Jul 2025 10:22:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0H6-2u2i6T6f for <buildroot@buildroot.org>;
- Wed, 16 Jul 2025 10:07:21 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zppUlHNk-31D for <buildroot@buildroot.org>;
+ Wed, 16 Jul 2025 10:22:25 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
  client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
- envelope-from=fabien.lehoussel@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2BC7A41024
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2BC7A41024
+ envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4745D60ACD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4745D60ACD
 Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
  [IPv6:2a00:1450:4864:20::429])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2BC7A41024
- for <buildroot@buildroot.org>; Wed, 16 Jul 2025 10:07:20 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4745D60ACD
+ for <buildroot@buildroot.org>; Wed, 16 Jul 2025 10:22:23 +0000 (UTC)
 Received: by mail-wr1-x429.google.com with SMTP id
- ffacd0b85a97d-3a588da60dfso4256573f8f.1
- for <buildroot@buildroot.org>; Wed, 16 Jul 2025 03:07:20 -0700 (PDT)
+ ffacd0b85a97d-3a54700a463so411287f8f.1
+ for <buildroot@buildroot.org>; Wed, 16 Jul 2025 03:22:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1752660439; x=1753265239;
+ d=1e100.net; s=20230601; t=1752661342; x=1753266142;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=GYl6eFY0VF3l9+84/o6DjPf3R7n1fm0THIuLhRtfV0s=;
- b=uGkE1PLg5LNKQauGHujTZoeVUkhOXo5cQuB/4PQ5RdTvhL+Ouzd5RSfffdaRlnpopj
- AmODNr+C+D+bFv7B84K5xc27Mgya8OpCs1tNduobu4VAL2u/0LuDFsvd++Kgak8KjLE5
- Sl8VHLzqVAyk4VKnkK6PYZsCnQD6DcgQCFm//0/xY5JckDT52PJ4LAvaEKV7EJJepNoK
- gIBgAZuonQ20bCHTBdlaTT33bMYmp+Li5D87fXOs5msBfo1XzStCK5WSRaNBC4ZYq+2l
- 2TCEn6X59czGY7cuD1gADUlMtkeud39sbYLZXeLWM5MH0Lu8/k5VMQunQXWTuX0wf6b7
- KP6A==
-X-Gm-Message-State: AOJu0YzN8zJlq96jfAH+4BcuyRE8Xrt08oxabMPuqQfErCPTggzwELST
- BT6zslo6qOVLvC3ydVXOp4FIitlP6CKs5fwk0/58qQ2dZzP3F7FFsG6l+WrQs0KLiVBORFxZzQN
- JGdt5
-X-Gm-Gg: ASbGnctA47WnljPEokJVWJqrvxsyJdKjQ9dgrAbdATxyyFq+su62F2lBCd7AZAb4cTd
- +NnP5dxL+GWZCuAd9vgzFbJXtc9z1LFBZtTZGtL8+hT9ysy3aeGRkhQv7n9XUOMzI4NZAMnNcp5
- jlVyKcsl5pBOh4szQn10JjFbHXqXFcqva9+PpAwWWbntXx4gjvcdc5DiZuoN5QsZgX1p0TBlO2O
- iJuR0EaojAIvg3moOS4cIyaDgUPQmG3H6zmS6bsDDnA9Lrhq9zUd7eAXBV0ZshSFgAg/azH6gt6
- 3J8b7Rx6HD6CJMSfJTxwoI/kj82621anEd3Sxkoi86ZDp5IcA33t4IiasodQwjZMnB+3myN30oo
- w2UBwzWI4XFCCY9OfWqRMoNy9pdSuGpmWf+Xss3lSmcAlqDDipvByKw/zftNJzee/vO3Z1GGeUd
- doqef781AjYuA6q9/ERyqzSd8jCJMUTK1h
-X-Google-Smtp-Source: AGHT+IExKI9g2JJTv3FpvYNP7pqIXKDSvNYY2dNcJjfVNKYQpf7bMdgTESj1wsqbTdf8d5NxXL3PYQ==
-X-Received: by 2002:a5d:6f15:0:b0:3a5:3b56:974e with SMTP id
- ffacd0b85a97d-3b60e4c51admr1277935f8f.6.1752660438917; 
- Wed, 16 Jul 2025 03:07:18 -0700 (PDT)
-Received: from NV4XMB-ME-MZ.idf.intranet
- (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
+ bh=56P842/KawbvqyIHYSM5VRqAYekUhvB1Vn7wzcZA2Tg=;
+ b=AXEbhAm1KFYfkfWrwpmJdTy6eaO7JdhVxkT1XoqH8ufFDPGkPMzeJsK6ojwwnWtc7E
+ aWsGEWWl90H9o+mzPaeDke5yiUJQkhY9ZmRaJqpjqcB8tdzDRhHkWAnIqSENYg8vFnEj
+ trxIh3ETCwd2VzojW35dtz4yQqKrgx6EZaD75H7aZNklLn+5edPwUYjBHpLSPPzUWwrd
+ mq3Llc+5pCTThGX8LGig8TQ/r0Gp1nCdhPwIcgHiqLzd0Isk8iiRZva0x7ay7uQSHP3t
+ VUKCS8Wv2YkzOCMm1zI6qaTIqtu/iwAgRluMZHXLIC6Uqg7T4CL2ywVS7GfUac1S/NJH
+ 8+fg==
+X-Gm-Message-State: AOJu0Yw79AP0a/fKbO9y2JOYsq1m5+YpAcLPgoYGtCu4PTS6xUZy7Sl+
+ 4LyqYtMlQYe46HkHXBmxQVmqFXafnG8IxVEq0JtNV5rTBVDm6riJUYK7rF0nvpAGnRnBtrLqqGz
+ jhUqu
+X-Gm-Gg: ASbGncv7gXedfnHXJKxepdRjP1Al21/aHdHKwzDjXXkYJgjuag6Ci0JWtCfP2pAP+W7
+ BsR5G9LYvajZ4mewF8yddUJn2EA5lzOuKGVroa6h3SyY3kxLbvERih+cSTwdB9aaHyBshI4KMP8
+ vwY0eINIHMzXVii7rdh8+XHw9JE1RZCETm/l3YtWDBxcLMgzH+G5/8N5O+q6Xdcd0Aj82sUJRY8
+ kxaeZHEMoQ4helXQIexOUr0vV1L1vnJmMhIBew3jAHhFf20FMj7VpauSmsDLUaAImJ9YF3Mbtja
+ pMGw9qQCtIHY+hXmJtvQ3dG62YTWlJx7p56ioPJauEYM1gconQOMbuRhK0W8vFRGjl409Iq77il
+ yroM/Zp8AhOssii2f4Zainm91CY3t9SHgs1uGNjDrNEEzv9BSzZwRuUZJO5s4ig07ktTq7Xnyqw
+ 0ZAQU4y8L3nGLqCQ==
+X-Google-Smtp-Source: AGHT+IEHTZPY47FjD7FxNb9EAlUOGgpwjXHG3RhfKUDjIt83Fz2+xWvITObbe0bRZmqB/NkQekKhOQ==
+X-Received: by 2002:a05:6000:658:b0:3a5:2915:ed68 with SMTP id
+ ffacd0b85a97d-3b60dd7aa9bmr2074290f8f.28.1752661341738; 
+ Wed, 16 Jul 2025 03:22:21 -0700 (PDT)
+Received: from dragon.local.ess-mail.com
+ (ip-94-140-185-241.reverse.destiny.be. [94.140.185.241])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3b5e8e0d872sm17612388f8f.60.2025.07.16.03.07.18
+ ffacd0b85a97d-3b5e8bd18a2sm17303223f8f.20.2025.07.16.03.22.21
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 16 Jul 2025 03:07:18 -0700 (PDT)
+ Wed, 16 Jul 2025 03:22:21 -0700 (PDT)
 To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Fabien Lehoussel <fabien.lehoussel@smile.fr>
-Date: Wed, 16 Jul 2025 12:07:11 +0200
-Message-ID: <20250716100712.1244865-1-fabien.lehoussel@smile.fr>
-X-Mailer: git-send-email 2.43.0
+Date: Wed, 16 Jul 2025 12:21:59 +0200
+Message-ID: <20250716102159.306474-1-titouan.christophe@mind.be>
+X-Mailer: git-send-email 2.50.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1752660439; x=1753265239; darn=buildroot.org;
+ d=mind.be; s=google; t=1752661342; x=1753266142; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=GYl6eFY0VF3l9+84/o6DjPf3R7n1fm0THIuLhRtfV0s=;
- b=Mkn86sIU2zQ28QMCOiRxNtCFinlXm9ppPC0XvSqtAio++suKlqZE7mUaxwxKgqJIlw
- /tsg0bp8/9PZ5H2wcBigNPefsD/6gMMDmj6G9osKWDuiW5CYT3ntrBaH4uOT5Ziyhym+
- c0XoCpr3I7Occus1bWZHNeqTr1NAfwaFh8DRA=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
- header.a=rsa-sha256 header.s=google header.b=Mkn86sIU
-Subject: [Buildroot] [PATCH 1/1] package/gcc/gcc-final.mx: fix CPE
- identification
+ bh=56P842/KawbvqyIHYSM5VRqAYekUhvB1Vn7wzcZA2Tg=;
+ b=a3MlsFUbqMDhN1Eel4ZfJy4mcS0Y4jY0WvG9Huali6IIy25DNYds4vdUSMkvh9577O
+ A89VuwPdKiStsQ649p0Ci+Gu/ugouYtjznzKOu9qQabP0md3KfSXGCRQYI8wzZwARXms
+ JacYVCBhymoty4oDIs40Vekq3SeeRjEaGD7f1x6atemIGTDthQGjBVKvjg/5lRjiR7hh
+ uX3V70Xm4W72jI5Jx/LRLqTTBz6I0C6Eo3xLJHY3pWU3KlbIxoBdZ7Z5H8P/wRKBfiuF
+ WAYmPodpFAUZ7erGOAX5IPcCJAyY838N9gJhKxB5kZ+ok7mGoSYaDgG12DyZakE3xSuP
+ Oksw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=a3MlsFUb
+Subject: [Buildroot] [PATCH] package/python-aiohttp: security bump to
+ v3.12.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -109,36 +108,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Fabien Lehoussel via buildroot <buildroot@buildroot.org>
-Reply-To: Fabien Lehoussel <fabien.lehoussel@smile.fr>
+From: Titouan Christophe via buildroot <buildroot@buildroot.org>
+Reply-To: Titouan Christophe <titouan.christophe@mind.be>
+Cc: James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the CPE (Common Platform Enumeration) identification in the gcc-final package to ensure proper vulnerability tracking.
+This fixes the following vulnerability:
+- CVE-2025-53643:
+    In aiohttp prior to version 3.12.14, the Python parser is vulnerable
+    to a request smuggling vulnerability due to not parsing trailer
+    sections of an HTTP request. If a pure Python version of aiohttp is
+    installed (i.e. without the usual C extensions) or
+    AIOHTTP_NO_EXTENSIONS is enabled, then an attacker may be able to
+    execute a request smuggling attack to bypass certain firewalls or
+    proxy protections. Version 3.12.14 contains a patch for this issue.
+    https://www.cve.org/CVERecord?id=CVE-2025-53643
 
-Signed-off-by: Fabien Lehoussel <fabien.lehoussel@smile.fr>
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/gcc/gcc-final/gcc-final.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/python-aiohttp/python-aiohttp.hash | 4 ++--
+ package/python-aiohttp/python-aiohttp.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-index 43aea72420..97a64ae2fa 100644
---- a/package/gcc/gcc-final/gcc-final.mk
-+++ b/package/gcc/gcc-final/gcc-final.mk
-@@ -12,6 +12,9 @@ GCC_FINAL_LICENSE_FILES = COPYING.RUNTIME
- HOST_GCC_FINAL_LICENSE = $(HOST_GCC_LICENSE)
- HOST_GCC_FINAL_LICENSE_FILES = $(HOST_GCC_LICENSE_FILES)
+diff --git a/package/python-aiohttp/python-aiohttp.hash b/package/python-aiohttp/python-aiohttp.hash
+index ac12cafeea..0aa8dbd3bc 100644
+--- a/package/python-aiohttp/python-aiohttp.hash
++++ b/package/python-aiohttp/python-aiohttp.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/aiohttp/json
+-md5  7835f28e41adf6f09467533e8de0c199  aiohttp-3.11.14.tar.gz
+-sha256  d6edc538c7480fa0a3b2bdd705f8010062d74700198da55d16498e1b49549b9c  aiohttp-3.11.14.tar.gz
++md5  4ed66dcec63108ae3a7c01d0415b4dd9  aiohttp-3.12.14.tar.gz
++sha256  6e06e120e34d93100de448fd941522e11dafa78ef1a893c179901b7d66aa29f2  aiohttp-3.12.14.tar.gz
+ # Locally computed sha256 checksums
+ sha256  9f80d0db7d755a941db4572172c270ecbd8f082ba215ddd095985942ed94a9eb  LICENSE.txt
+diff --git a/package/python-aiohttp/python-aiohttp.mk b/package/python-aiohttp/python-aiohttp.mk
+index d3e7d12eb6..e52b6e81c5 100644
+--- a/package/python-aiohttp/python-aiohttp.mk
++++ b/package/python-aiohttp/python-aiohttp.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
-+GCC_FINAL_CPE_ID_VENDOR = gnu
-+GCC_FINAL_CPE_ID_PRODUCT = gcc
-+
- GCC_FINAL_DEPENDENCIES = host-gcc-final
- GCC_FINAL_ADD_TOOLCHAIN_DEPENDENCY = NO
- GCC_FINAL_INSTALL_STAGING = YES
+-PYTHON_AIOHTTP_VERSION = 3.11.14
++PYTHON_AIOHTTP_VERSION = 3.12.14
+ PYTHON_AIOHTTP_SOURCE = aiohttp-$(PYTHON_AIOHTTP_VERSION).tar.gz
+-PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/6c/96/91e93ae5fd04d428c101cdbabce6c820d284d61d2614d00518f4fa52ea24
++PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/e6/0b/e39ad954107ebf213a2325038a3e7a506be3d98e1435e1f82086eec4cde2
+ PYTHON_AIOHTTP_SETUP_TYPE = setuptools
+ PYTHON_AIOHTTP_LICENSE = Apache-2.0
+ PYTHON_AIOHTTP_LICENSE_FILES = LICENSE.txt
 -- 
-2.43.0
+2.50.1
 
 _______________________________________________
 buildroot mailing list
