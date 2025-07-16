@@ -4,99 +4,105 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A83D5C83F22
-	for <buildroot@archiver.kernel.org>; Wed, 16 Jul 2025 10:22:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3CCC5C83F27
+	for <buildroot@archiver.kernel.org>; Wed, 16 Jul 2025 11:50:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 62BCF613AE;
-	Wed, 16 Jul 2025 10:22:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EC3B260B2E;
+	Wed, 16 Jul 2025 11:49:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PXjM1cls6m1w; Wed, 16 Jul 2025 10:22:28 +0000 (UTC)
+ id Rod-pITMtn5U; Wed, 16 Jul 2025 11:49:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7870E60BB1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF400613E9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7870E60BB1;
-	Wed, 16 Jul 2025 10:22:28 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id BC23D11AA
- for <buildroot@buildroot.org>; Wed, 16 Jul 2025 10:22:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EF400613E9;
+	Wed, 16 Jul 2025 11:49:58 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1FDBB1514
+ for <buildroot@buildroot.org>; Wed, 16 Jul 2025 11:49:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A28AA60BB1
- for <buildroot@buildroot.org>; Wed, 16 Jul 2025 10:22:26 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0594C83D87
+ for <buildroot@buildroot.org>; Wed, 16 Jul 2025 11:49:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zppUlHNk-31D for <buildroot@buildroot.org>;
- Wed, 16 Jul 2025 10:22:25 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id P72RC4dtmKtr for <buildroot@buildroot.org>;
+ Wed, 16 Jul 2025 11:49:56 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
- envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4745D60ACD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4745D60ACD
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4745D60ACD
- for <buildroot@buildroot.org>; Wed, 16 Jul 2025 10:22:23 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id
- ffacd0b85a97d-3a54700a463so411287f8f.1
- for <buildroot@buildroot.org>; Wed, 16 Jul 2025 03:22:23 -0700 (PDT)
+ client-ip=2607:f8b0:4864:20::d64; helo=mail-io1-xd64.google.com;
+ envelope-from=git@jdknight.me; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4A2A283D93
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4A2A283D93
+Received: from mail-io1-xd64.google.com (mail-io1-xd64.google.com
+ [IPv6:2607:f8b0:4864:20::d64])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4A2A283D93
+ for <buildroot@buildroot.org>; Wed, 16 Jul 2025 11:49:55 +0000 (UTC)
+Received: by mail-io1-xd64.google.com with SMTP id
+ ca18e2360f4ac-879c737bcebso11482239f.0
+ for <buildroot@buildroot.org>; Wed, 16 Jul 2025 04:49:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1752661342; x=1753266142;
+ d=1e100.net; s=20230601; t=1752666595; x=1753271395;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=56P842/KawbvqyIHYSM5VRqAYekUhvB1Vn7wzcZA2Tg=;
- b=AXEbhAm1KFYfkfWrwpmJdTy6eaO7JdhVxkT1XoqH8ufFDPGkPMzeJsK6ojwwnWtc7E
- aWsGEWWl90H9o+mzPaeDke5yiUJQkhY9ZmRaJqpjqcB8tdzDRhHkWAnIqSENYg8vFnEj
- trxIh3ETCwd2VzojW35dtz4yQqKrgx6EZaD75H7aZNklLn+5edPwUYjBHpLSPPzUWwrd
- mq3Llc+5pCTThGX8LGig8TQ/r0Gp1nCdhPwIcgHiqLzd0Isk8iiRZva0x7ay7uQSHP3t
- VUKCS8Wv2YkzOCMm1zI6qaTIqtu/iwAgRluMZHXLIC6Uqg7T4CL2ywVS7GfUac1S/NJH
- 8+fg==
-X-Gm-Message-State: AOJu0Yw79AP0a/fKbO9y2JOYsq1m5+YpAcLPgoYGtCu4PTS6xUZy7Sl+
- 4LyqYtMlQYe46HkHXBmxQVmqFXafnG8IxVEq0JtNV5rTBVDm6riJUYK7rF0nvpAGnRnBtrLqqGz
- jhUqu
-X-Gm-Gg: ASbGncv7gXedfnHXJKxepdRjP1Al21/aHdHKwzDjXXkYJgjuag6Ci0JWtCfP2pAP+W7
- BsR5G9LYvajZ4mewF8yddUJn2EA5lzOuKGVroa6h3SyY3kxLbvERih+cSTwdB9aaHyBshI4KMP8
- vwY0eINIHMzXVii7rdh8+XHw9JE1RZCETm/l3YtWDBxcLMgzH+G5/8N5O+q6Xdcd0Aj82sUJRY8
- kxaeZHEMoQ4helXQIexOUr0vV1L1vnJmMhIBew3jAHhFf20FMj7VpauSmsDLUaAImJ9YF3Mbtja
- pMGw9qQCtIHY+hXmJtvQ3dG62YTWlJx7p56ioPJauEYM1gconQOMbuRhK0W8vFRGjl409Iq77il
- yroM/Zp8AhOssii2f4Zainm91CY3t9SHgs1uGNjDrNEEzv9BSzZwRuUZJO5s4ig07ktTq7Xnyqw
- 0ZAQU4y8L3nGLqCQ==
-X-Google-Smtp-Source: AGHT+IEHTZPY47FjD7FxNb9EAlUOGgpwjXHG3RhfKUDjIt83Fz2+xWvITObbe0bRZmqB/NkQekKhOQ==
-X-Received: by 2002:a05:6000:658:b0:3a5:2915:ed68 with SMTP id
- ffacd0b85a97d-3b60dd7aa9bmr2074290f8f.28.1752661341738; 
- Wed, 16 Jul 2025 03:22:21 -0700 (PDT)
-Received: from dragon.local.ess-mail.com
- (ip-94-140-185-241.reverse.destiny.be. [94.140.185.241])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3b5e8bd18a2sm17303223f8f.20.2025.07.16.03.22.21
+ bh=0L5MqFRrb06rnKtq9kv/H3yGUoBS6j0c9b5zjHZUvL4=;
+ b=gY3zqz8WvWQbcTv54LWqW1NhSRdJ1ZlqZmla5IkrkW9mQQjekZ+0GaZ0ph30FFoc69
+ VfLgyp3JyAG+yqaGBrNZn9lCFF3DkFd5pxjQc7aCxwboA4K57Aq/J/XQp3JUnJe1YTGk
+ q5hl/2a3j81eblm884+Z90H1iPDtSpZj944r7quzpmLXl/+h8mSmKGuaHcMdPN8kb1jZ
+ 11jhpvF6JewKt/RWgTpxQ6PX2F2WyDvYWfpLroCBGz+G1Vt2TPNdECQZD7B6YCzDQnxQ
+ APJW5NgA7V0wr72GsAq0Fv1JCQiSh0gaFo1VDjToUNiLjKzMeCLRvCnCQgToCYblaQlO
+ reXA==
+X-Gm-Message-State: AOJu0YwjeHbXA87/AlCAP/cN3qsOJQ3YAdH2OMl31JBuBMnp6U3x5bZ5
+ HjtU0rnJMIMz2+FfIKqbww/+k1hu1FOlOn9k30gFvLN5/yJy094l1n0MxBTY0i6Fywcvmq1NbdB
+ uqK0/qf/WLNgi/WX/Bf4BtKrrOOT9kOntV0/UdWCIkl8Uesw=
+X-Gm-Gg: ASbGncut3nweF7Pi/enF5ipFqSNmwFCY+RnhjGGIIq0J6DmRPJ1I2wKKSt7D7Oei/Pu
+ rGQRdmQehIQ2vT5IpG4Od2Ccj34wnQ3/qcED31pX4pMvd1DsCh3rbADcc5F+90MUDmlMKG8z4U6
+ mS/InbYTpF2r4S+u8wZ0rZOo33XL7/RJ9m9PJkp9m+SRCJEjtzFcK1a9pFwF2kqJmuiaFp80GHz
+ WAFdQiG9TF07jw4HgQXE1buJkapLrCV8S8T9Qgbv+DUvyzkLXvRmIc3VeD15hNzQmg2LXQJJKm2
+ gYNlIb3t4Mamm3p8uij+JNd11K85tvS+wVGIk5pvuBWq1S8tIhK4uxjeUCtiQ9orrSXNis6h1iS
+ +PIhU0PEuzZWwxeg3E/3iD7OLQNihZ7h7fAd+nI0r0FbtcSym
+X-Google-Smtp-Source: AGHT+IEpoP+GK4lM886Jmq5UfWcBN6qOQAbOV3yN9EaNHfyE/EKvsn7bZnYiCSYez27o+k6Opnv0dcnNLLO/
+X-Received: by 2002:a05:6e02:1f81:b0:3dc:7b3d:6a45 with SMTP id
+ e9e14a558f8ab-3e281e5188bmr27315985ab.0.1752666594974; 
+ Wed, 16 Jul 2025 04:49:54 -0700 (PDT)
+Received: from localhost.localdomain
+ (bras-base-jkvlon0513w-grc-49-184-144-89-37.dsl.bell.ca. [184.144.89.37])
+ by smtp-relay.gmail.com with ESMTPS id
+ e9e14a558f8ab-3e246112f43sm9211125ab.23.2025.07.16.04.49.54
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 16 Jul 2025 03:22:21 -0700 (PDT)
+ Wed, 16 Jul 2025 04:49:54 -0700 (PDT)
+X-Relaying-Domain: jdknight.me
+From: James Knight <git@jdknight.me>
 To: buildroot@buildroot.org
-Date: Wed, 16 Jul 2025 12:21:59 +0200
-Message-ID: <20250716102159.306474-1-titouan.christophe@mind.be>
-X-Mailer: git-send-email 2.50.1
+Cc: Thomas Perale <thomas.perale@mind.be>,
+	James Knight <git@jdknight.me>
+Date: Wed, 16 Jul 2025 07:49:32 -0400
+Message-ID: <20250716114932.436-1-git@jdknight.me>
+X-Mailer: git-send-email 2.49.0.windows.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1752661342; x=1753266142; darn=buildroot.org;
+ d=jdknight-me.20230601.gappssmtp.com; s=20230601; t=1752666595; x=1753271395;
+ darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=56P842/KawbvqyIHYSM5VRqAYekUhvB1Vn7wzcZA2Tg=;
- b=a3MlsFUbqMDhN1Eel4ZfJy4mcS0Y4jY0WvG9Huali6IIy25DNYds4vdUSMkvh9577O
- A89VuwPdKiStsQ649p0Ci+Gu/ugouYtjznzKOu9qQabP0md3KfSXGCRQYI8wzZwARXms
- JacYVCBhymoty4oDIs40Vekq3SeeRjEaGD7f1x6atemIGTDthQGjBVKvjg/5lRjiR7hh
- uX3V70Xm4W72jI5Jx/LRLqTTBz6I0C6Eo3xLJHY3pWU3KlbIxoBdZ7Z5H8P/wRKBfiuF
- WAYmPodpFAUZ7erGOAX5IPcCJAyY838N9gJhKxB5kZ+ok7mGoSYaDgG12DyZakE3xSuP
- Oksw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=a3MlsFUb
-Subject: [Buildroot] [PATCH] package/python-aiohttp: security bump to
- v3.12.14
+ bh=0L5MqFRrb06rnKtq9kv/H3yGUoBS6j0c9b5zjHZUvL4=;
+ b=zul0eLvR5bG62bKFXQofqY/2mUoQOfG3DBBPhNma0M+I8DnR0UjbJXV9o7ig4IoNv7
+ N9vbaapVgmnM50/GgnWnGRISe7CMGE4GOMj0t1CquPMXii8PReCe/3IT3zHFHMtpgYqc
+ ebrM6UnDXmjR7X2BBybQ/efE6u7AH/+HFCMRfYkRgmc7hDTURhd8eTsl5vDyVJQqkcR1
+ 8idjsT5l3FYjcpvmBlTjnhp0nABDC+bIn5X9k5xnycgJiXXBOETBD7H159oyVt1gAB+O
+ HNkZa83c+VmXNQ1UlTTcWY/Kfrmu0Ok2VEEb423cE41ISCV5GyUNHDKuCxWulnsWbTQ/
+ fQSg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=jdknight.me
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=jdknight-me.20230601.gappssmtp.com
+ header.i=@jdknight-me.20230601.gappssmtp.com header.a=rsa-sha256
+ header.s=20230601 header.b=zul0eLvR
+Subject: [Buildroot] [PATCH 1/1] package/sudo: drop uClibc-exec_ptrace fix
+ applied upstream
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -108,61 +114,76 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Titouan Christophe via buildroot <buildroot@buildroot.org>
-Reply-To: Titouan Christophe <titouan.christophe@mind.be>
-Cc: James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This fixes the following vulnerability:
-- CVE-2025-53643:
-    In aiohttp prior to version 3.12.14, the Python parser is vulnerable
-    to a request smuggling vulnerability due to not parsing trailer
-    sections of an HTTP request. If a pure Python version of aiohttp is
-    installed (i.e. without the usual C extensions) or
-    AIOHTTP_NO_EXTENSIONS is enabled, then an attacker may be able to
-    execute a request smuggling attack to bypass certain firewalls or
-    proxy protections. Version 3.12.14 contains a patch for this issue.
-    https://www.cve.org/CVERecord?id=CVE-2025-53643
+This commit drops a uClibc patch that was included in sudo's 1.9.16p2
+release. This was applied on the primary development branch [1];
+however, when porting fixes on 2025.05.x, a jump was made from 1.9.15p5
+to 1.9.17p1 [2] which did not remove the patch.
 
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+[1]: 969bdb9d2e1857589292122adbc75073b1b30cd5
+[2]: 07cde1ad1efe24d826ca99166534b3f0212cb5f7
+
+Signed-off-by: James Knight <git@jdknight.me>
 ---
- package/python-aiohttp/python-aiohttp.hash | 4 ++--
- package/python-aiohttp/python-aiohttp.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+This patch is for 2025.05.x.
+---
+ ...e-fix-build-without-precess_vm_readv.patch | 41 -------------------
+ 1 file changed, 41 deletions(-)
+ delete mode 100644 package/sudo/0001-src-exec_ptrace-fix-build-without-precess_vm_readv.patch
 
-diff --git a/package/python-aiohttp/python-aiohttp.hash b/package/python-aiohttp/python-aiohttp.hash
-index ac12cafeea..0aa8dbd3bc 100644
---- a/package/python-aiohttp/python-aiohttp.hash
-+++ b/package/python-aiohttp/python-aiohttp.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aiohttp/json
--md5  7835f28e41adf6f09467533e8de0c199  aiohttp-3.11.14.tar.gz
--sha256  d6edc538c7480fa0a3b2bdd705f8010062d74700198da55d16498e1b49549b9c  aiohttp-3.11.14.tar.gz
-+md5  4ed66dcec63108ae3a7c01d0415b4dd9  aiohttp-3.12.14.tar.gz
-+sha256  6e06e120e34d93100de448fd941522e11dafa78ef1a893c179901b7d66aa29f2  aiohttp-3.12.14.tar.gz
- # Locally computed sha256 checksums
- sha256  9f80d0db7d755a941db4572172c270ecbd8f082ba215ddd095985942ed94a9eb  LICENSE.txt
-diff --git a/package/python-aiohttp/python-aiohttp.mk b/package/python-aiohttp/python-aiohttp.mk
-index d3e7d12eb6..e52b6e81c5 100644
---- a/package/python-aiohttp/python-aiohttp.mk
-+++ b/package/python-aiohttp/python-aiohttp.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_AIOHTTP_VERSION = 3.11.14
-+PYTHON_AIOHTTP_VERSION = 3.12.14
- PYTHON_AIOHTTP_SOURCE = aiohttp-$(PYTHON_AIOHTTP_VERSION).tar.gz
--PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/6c/96/91e93ae5fd04d428c101cdbabce6c820d284d61d2614d00518f4fa52ea24
-+PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/e6/0b/e39ad954107ebf213a2325038a3e7a506be3d98e1435e1f82086eec4cde2
- PYTHON_AIOHTTP_SETUP_TYPE = setuptools
- PYTHON_AIOHTTP_LICENSE = Apache-2.0
- PYTHON_AIOHTTP_LICENSE_FILES = LICENSE.txt
+diff --git a/package/sudo/0001-src-exec_ptrace-fix-build-without-precess_vm_readv.patch b/package/sudo/0001-src-exec_ptrace-fix-build-without-precess_vm_readv.patch
+deleted file mode 100644
+index 446f1d1797..0000000000
+--- a/package/sudo/0001-src-exec_ptrace-fix-build-without-precess_vm_readv.patch
++++ /dev/null
+@@ -1,41 +0,0 @@
+-From 5bbfaa8e68b5ee6f27d4fbfa3c4e789341724f9c Mon Sep 17 00:00:00 2001
+-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-Date: Sat, 17 Feb 2024 17:52:45 +0100
+-Subject: [PATCH] src/exec_ptrace: fix build without precess_vm_readv()
+-
+-Commit 32f4b98f6b4a (sudo frontend: silence most -Wconversion warnings.)
+-broke the build on C libraries that miss process_vm_readv(), like
+-uClibc-ng.
+-
+-Indeed, the ssize_t nwritten is declared guarded by HAVE_PROCESS_VM_READV,
+-but is then re-assigned and used a few lines below, outside any guard.
+-
+-Fix that by always declaring the object, as it is always needed.
+-
+-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+-Upstream: https://github.com/sudo-project/sudo/commit/5bbfaa8e68b5ee6f27d4fbfa3c4e789341724f9c
+----
+- src/exec_ptrace.c | 3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/src/exec_ptrace.c b/src/exec_ptrace.c
+-index 9dd36c275..3d44b82e2 100644
+---- a/src/exec_ptrace.c
+-+++ b/src/exec_ptrace.c
+-@@ -878,11 +878,12 @@ ptrace_write_vec(pid_t pid, struct sudo_ptrace_regs *regs, char **vec,
+-     unsigned long addr, unsigned long strtab)
+- {
+-     const unsigned long strtab0 = strtab;
+-+    ssize_t nwritten;
+-     size_t i;
+-     debug_decl(ptrace_write_vec, SUDO_DEBUG_EXEC);
+-
+- #ifdef HAVE_PROCESS_VM_READV
+--    ssize_t nwritten = ptrace_writev_vec(pid, regs, vec, addr, strtab);
+-+    nwritten = ptrace_writev_vec(pid, regs, vec, addr, strtab);
+-     if (nwritten != -1 || errno != ENOSYS)
+- 	debug_return_ssize_t(nwritten);
+- #endif /* HAVE_PROCESS_VM_READV */
+---
+-2.43.0
+-
 -- 
-2.50.1
+2.49.0.windows.1
 
 _______________________________________________
 buildroot mailing list
