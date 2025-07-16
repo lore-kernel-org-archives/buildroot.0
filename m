@@ -1,104 +1,103 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D18AC83F22
-	for <buildroot@archiver.kernel.org>; Wed, 16 Jul 2025 09:34:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FACEC83F1B
+	for <buildroot@archiver.kernel.org>; Wed, 16 Jul 2025 10:07:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F399A614CC;
-	Wed, 16 Jul 2025 09:34:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C80A283DEE;
+	Wed, 16 Jul 2025 10:07:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wmN-8QnNxeSI; Wed, 16 Jul 2025 09:34:23 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UUllMQExch0r; Wed, 16 Jul 2025 10:07:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 886EC614E1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 031CD83DEC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 886EC614E1;
-	Wed, 16 Jul 2025 09:34:22 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 125C7234
- for <buildroot@buildroot.org>; Wed, 16 Jul 2025 09:34:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 031CD83DEC;
+	Wed, 16 Jul 2025 10:07:24 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 17AFF1514
+ for <buildroot@buildroot.org>; Wed, 16 Jul 2025 10:07:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F1EC361488
- for <buildroot@buildroot.org>; Wed, 16 Jul 2025 09:34:18 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id F22F941408
+ for <buildroot@buildroot.org>; Wed, 16 Jul 2025 10:07:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j0uG9gRnRelK for <buildroot@buildroot.org>;
- Wed, 16 Jul 2025 09:34:18 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0H6-2u2i6T6f for <buildroot@buildroot.org>;
+ Wed, 16 Jul 2025 10:07:21 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
+ client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
  envelope-from=fabien.lehoussel@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 139DF614C7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 139DF614C7
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 139DF614C7
- for <buildroot@buildroot.org>; Wed, 16 Jul 2025 09:34:16 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- 5b1f17b1804b1-4561ca74829so28493325e9.0
- for <buildroot@buildroot.org>; Wed, 16 Jul 2025 02:34:16 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2BC7A41024
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2BC7A41024
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2BC7A41024
+ for <buildroot@buildroot.org>; Wed, 16 Jul 2025 10:07:20 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id
+ ffacd0b85a97d-3a588da60dfso4256573f8f.1
+ for <buildroot@buildroot.org>; Wed, 16 Jul 2025 03:07:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1752658454; x=1753263254;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=ovGoimMCDLeYjroeMfuNVwlvB27nxPDnJgoKMybKDdo=;
- b=Bceq16QvbA7yFpJSBtBYoMvNqvhWW3X2bqrtfIe+CANy34ySWnLxKzE5oLZiam8Nej
- 9gTPKmzdXuxkW1gbVW93JnhZHY0DwnzHr1IkBCwpkkkNkTXayrmYzOV94vRaJjrqQZOo
- 3ELqJa2VBe/x+56WIIC/geY4/BY3FckRyZXrwSUzvbP1qJJgx4dz2J7dipafCHTMjXhg
- eOpCgekFN/8vAO6MjnDzbEeHwqV3yP79Ly++6nxtXQGjob8LFfHvkCJka8xHkdtxXLvp
- hKcaaQ5RxtvPOfLWbLyKh8v0xVTsRmbEwLZ7u3igrZhKvMJVFKMevX3y09msT28UvEbi
- hQMg==
-X-Gm-Message-State: AOJu0YwzJGl+1lljh8pSNLxJ7PVpo5sa5+LusZtzxxBSo4YNc/Qs8VIx
- wbtdc8iDLZyxjTrAK5EpJiXd9lNb0eMtr/Dtb9SVsQhcW32DRvkRZt+f/UAk8cHtpEyCS6VfF6b
- huAyg
-X-Gm-Gg: ASbGncsVXZ1yVwfjDNDQwfCvDb0H8luOIYDmrH07HZI7uoXdVNUKXTrk8BGJ/K8OEv/
- U/XQ44ekCzBWoauqkULxAtQZd2jsJeRlaIbnSH+izy/SrRWYIuW2SjpTXDet5/tglq9n8AH+/8U
- beeDeDWieCRtd7kt481/doaiYJ5OAI3HX905S0nUy6VHPE/Of3lgJEiu5yAjqN+x683nj8s5dA3
- B/YwYVjkuNbTS7WvpbOxeJair98Hc5HrsU8MSvcJR+NLxEg66mVaWvewcKbCYW8iNnpl/h+zkIa
- vyxJGTzo+HzM4KTbBWAWJoU4eI4jTnFWYeqc872AW/sRRKnxjI381KGNcUlmFzPhpGBn5BrqpAV
- 1NTuXyFsZVMo+EIHPq3r/Ozgxqs8x7BBIRozD7mheId/u2Do9U9FwKym8mYhCuKJEC3gxIG/3Eu
- nbsmw72LsiMkTSzgbT0L+NJmzEFI63r9Iv
-X-Google-Smtp-Source: AGHT+IGbcr80/GaPKkf+l1vjzXGD4NFzZOomOJcPNcfUDMeLyHcq4IP6dadPYOJb9k0rIxeYKLmuFg==
-X-Received: by 2002:a05:600c:3b1e:b0:439:643a:c8d5 with SMTP id
- 5b1f17b1804b1-4562e321debmr20835785e9.0.1752658454477; 
- Wed, 16 Jul 2025 02:34:14 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1752660439; x=1753265239;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=GYl6eFY0VF3l9+84/o6DjPf3R7n1fm0THIuLhRtfV0s=;
+ b=uGkE1PLg5LNKQauGHujTZoeVUkhOXo5cQuB/4PQ5RdTvhL+Ouzd5RSfffdaRlnpopj
+ AmODNr+C+D+bFv7B84K5xc27Mgya8OpCs1tNduobu4VAL2u/0LuDFsvd++Kgak8KjLE5
+ Sl8VHLzqVAyk4VKnkK6PYZsCnQD6DcgQCFm//0/xY5JckDT52PJ4LAvaEKV7EJJepNoK
+ gIBgAZuonQ20bCHTBdlaTT33bMYmp+Li5D87fXOs5msBfo1XzStCK5WSRaNBC4ZYq+2l
+ 2TCEn6X59czGY7cuD1gADUlMtkeud39sbYLZXeLWM5MH0Lu8/k5VMQunQXWTuX0wf6b7
+ KP6A==
+X-Gm-Message-State: AOJu0YzN8zJlq96jfAH+4BcuyRE8Xrt08oxabMPuqQfErCPTggzwELST
+ BT6zslo6qOVLvC3ydVXOp4FIitlP6CKs5fwk0/58qQ2dZzP3F7FFsG6l+WrQs0KLiVBORFxZzQN
+ JGdt5
+X-Gm-Gg: ASbGnctA47WnljPEokJVWJqrvxsyJdKjQ9dgrAbdATxyyFq+su62F2lBCd7AZAb4cTd
+ +NnP5dxL+GWZCuAd9vgzFbJXtc9z1LFBZtTZGtL8+hT9ysy3aeGRkhQv7n9XUOMzI4NZAMnNcp5
+ jlVyKcsl5pBOh4szQn10JjFbHXqXFcqva9+PpAwWWbntXx4gjvcdc5DiZuoN5QsZgX1p0TBlO2O
+ iJuR0EaojAIvg3moOS4cIyaDgUPQmG3H6zmS6bsDDnA9Lrhq9zUd7eAXBV0ZshSFgAg/azH6gt6
+ 3J8b7Rx6HD6CJMSfJTxwoI/kj82621anEd3Sxkoi86ZDp5IcA33t4IiasodQwjZMnB+3myN30oo
+ w2UBwzWI4XFCCY9OfWqRMoNy9pdSuGpmWf+Xss3lSmcAlqDDipvByKw/zftNJzee/vO3Z1GGeUd
+ doqef781AjYuA6q9/ERyqzSd8jCJMUTK1h
+X-Google-Smtp-Source: AGHT+IExKI9g2JJTv3FpvYNP7pqIXKDSvNYY2dNcJjfVNKYQpf7bMdgTESj1wsqbTdf8d5NxXL3PYQ==
+X-Received: by 2002:a5d:6f15:0:b0:3a5:3b56:974e with SMTP id
+ ffacd0b85a97d-3b60e4c51admr1277935f8f.6.1752660438917; 
+ Wed, 16 Jul 2025 03:07:18 -0700 (PDT)
 Received: from NV4XMB-ME-MZ.idf.intranet
  (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4562e802984sm15415205e9.12.2025.07.16.02.34.14
+ ffacd0b85a97d-3b5e8e0d872sm17612388f8f.60.2025.07.16.03.07.18
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 16 Jul 2025 02:34:14 -0700 (PDT)
+ Wed, 16 Jul 2025 03:07:18 -0700 (PDT)
 To: buildroot@buildroot.org
-Cc: Thomas Perale <thomas.perale@mind.be>,
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Fabien Lehoussel <fabien.lehoussel@smile.fr>
-Date: Wed, 16 Jul 2025 11:33:47 +0200
-Message-ID: <20250716093401.1213358-4-fabien.lehoussel@smile.fr>
+Date: Wed, 16 Jul 2025 12:07:11 +0200
+Message-ID: <20250716100712.1244865-1-fabien.lehoussel@smile.fr>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250716093401.1213358-1-fabien.lehoussel@smile.fr>
-References: <20250716093401.1213358-1-fabien.lehoussel@smile.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1752658454; x=1753263254; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=ovGoimMCDLeYjroeMfuNVwlvB27nxPDnJgoKMybKDdo=;
- b=Ja7ZrbtxkwdrM+rIewc9DD74+K0E1Re3jFiWhpkRwytl2T64HRP7gidGTS0mnMttCL
- 1mnVQ8LDjL2G6DaQNCtCpdv7/znDZyjS2iIIeBhu43OIS5Cg81qxEa8bceyWvQMddeHp
- 5UNzMbUcPGLg8aDnNOm3Hp5eduITFu9hjbQxY=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=smile.fr; s=google; t=1752660439; x=1753265239; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=GYl6eFY0VF3l9+84/o6DjPf3R7n1fm0THIuLhRtfV0s=;
+ b=Mkn86sIU2zQ28QMCOiRxNtCFinlXm9ppPC0XvSqtAio++suKlqZE7mUaxwxKgqJIlw
+ /tsg0bp8/9PZ5H2wcBigNPefsD/6gMMDmj6G9osKWDuiW5CYT3ntrBaH4uOT5Ziyhym+
+ c0XoCpr3I7Occus1bWZHNeqTr1NAfwaFh8DRA=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
- header.a=rsa-sha256 header.s=google header.b=Ja7Zrbtx
-Subject: [Buildroot] [PATCH v2 4/5] utils/generate-cyclonedx: add project
- name and version options
+ header.a=rsa-sha256 header.s=google header.b=Mkn86sIU
+Subject: [Buildroot] [PATCH 1/1] package/gcc/gcc-final.mx: fix CPE
+ identification
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -117,61 +116,27 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Options used to customize the project name and version in the generated SBOM metadata.
-Sets buildroot generate-cyclonedx as a tool in the metadata section
+Fix the CPE (Common Platform Enumeration) identification in the gcc-final package to ensure proper vulnerability tracking.
 
 Signed-off-by: Fabien Lehoussel <fabien.lehoussel@smile.fr>
 ---
- utils/generate-cyclonedx | 27 ++++++++++++++++++++++++---
- 1 file changed, 24 insertions(+), 3 deletions(-)
+ package/gcc/gcc-final/gcc-final.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
-index d3acf755e1..d28750735f 100755
---- a/utils/generate-cyclonedx
-+++ b/utils/generate-cyclonedx
-@@ -278,6 +278,11 @@ def main():
-     parser.add_argument("-o", "--out-file", nargs="?", type=argparse.FileType("w"),
-                         default=sys.stdout)
+diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+index 43aea72420..97a64ae2fa 100644
+--- a/package/gcc/gcc-final/gcc-final.mk
++++ b/package/gcc/gcc-final/gcc-final.mk
+@@ -12,6 +12,9 @@ GCC_FINAL_LICENSE_FILES = COPYING.RUNTIME
+ HOST_GCC_FINAL_LICENSE = $(HOST_GCC_LICENSE)
+ HOST_GCC_FINAL_LICENSE_FILES = $(HOST_GCC_LICENSE_FILES)
  
-+    parser.add_argument("--project-name", type=str, default="buildroot",
-+                        help="Specify the project name to use in the SBOM metadata (default:'buildroot')")
-+    parser.add_argument("--project-version", type=str, default=f"{BR2_VERSION_FULL}",
-+                        help="Specify the project version to use in the SBOM metadata (default: builroot version)")
++GCC_FINAL_CPE_ID_VENDOR = gnu
++GCC_FINAL_CPE_ID_PRODUCT = gcc
 +
-     parser.add_argument("--no-host-packages", default=False, action='store_true',
-                         help="This option excludes host packages from the CycloneDX output")
- 
-@@ -300,11 +305,27 @@ def main():
-         "specVersion": f"{CYCLONEDX_VERSION}",
-         "metadata": {
-             "component": {
--                "bom-ref": "buildroot",
--                "name": "buildroot",
-+                "bom-ref": args.project_name,
-+                "name": args.project_name,
-+                "version": args.project_version,
-                 "type": "firmware",
--                "version": f"{BR2_VERSION_FULL}",
-             },
-+            "tools": {
-+                "components": [
-+                    {
-+                        "type": "application",
-+                        "name": "Buildroot generate-cyclonedx",
-+                        "version": f"{BR2_VERSION_FULL}",
-+                        "licenses": [
-+                            {
-+                                "license": {
-+                                    "id": "GPL-2.0"
-+                                }
-+                            }
-+                        ]
-+                    }
-+                ],
-+            }
-         },
-         "components": [
-             cyclonedx_component(name, comp) for name, comp in filtered_show_info_dict.items()
+ GCC_FINAL_DEPENDENCIES = host-gcc-final
+ GCC_FINAL_ADD_TOOLCHAIN_DEPENDENCY = NO
+ GCC_FINAL_INSTALL_STAGING = YES
 -- 
 2.43.0
 
