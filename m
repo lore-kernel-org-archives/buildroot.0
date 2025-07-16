@@ -4,49 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB6FDC83F1B
-	for <buildroot@archiver.kernel.org>; Wed, 16 Jul 2025 18:38:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6191C83F1B
+	for <buildroot@archiver.kernel.org>; Wed, 16 Jul 2025 18:41:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C0FA061489;
-	Wed, 16 Jul 2025 18:38:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 564B260DC7;
+	Wed, 16 Jul 2025 18:41:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gp4JsqeVug95; Wed, 16 Jul 2025 18:38:24 +0000 (UTC)
+ id RDFAHFxC91KW; Wed, 16 Jul 2025 18:41:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C0E94614F8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 94E4A614C3
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C0E94614F8;
-	Wed, 16 Jul 2025 18:38:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 94E4A614C3;
+	Wed, 16 Jul 2025 18:41:20 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id A3AED1514
- for <buildroot@buildroot.org>; Wed, 16 Jul 2025 18:38:14 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1365311AA
+ for <buildroot@buildroot.org>; Wed, 16 Jul 2025 18:41:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2B1C540CED
- for <buildroot@buildroot.org>; Wed, 16 Jul 2025 18:38:06 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 058BF40CED
+ for <buildroot@buildroot.org>; Wed, 16 Jul 2025 18:41:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WLxRuOCytcc8 for <buildroot@buildroot.org>;
- Wed, 16 Jul 2025 18:38:03 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DD9D940F37
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DD9D940F37
- for <buildroot@buildroot.org>; Wed, 16 Jul 2025 18:38:02 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D8A2286666; Wed, 16 Jul 2025 18:38:02 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 15 Jul 2025 23:50:31 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: eca78cae6b3a121fb7bbc181aef746ab99c75821
-X-Git-Newrev: c5fe7e96397b672e91458c228a65bc2bb5f7524a
-X-Patchwork-Hint: ignore
-Message-Id: <20250716183802.D8A2286666@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/docker-engine: bump to version
- 28.3.2
+ id 8fltseQ_EL6N for <buildroot@buildroot.org>;
+ Wed, 16 Jul 2025 18:41:18 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 177764017A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 177764017A
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 177764017A
+ for <buildroot@buildroot.org>; Wed, 16 Jul 2025 18:41:17 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id C3A8619F54D;
+ Wed, 16 Jul 2025 20:41:13 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Wed, 16 Jul 2025 20:41:13 +0200
+MIME-Version: 1.0
+Date: Wed, 16 Jul 2025 20:41:13 +0200
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: buildroot@buildroot.org
+In-Reply-To: <e3682b2190a8db8a5e815cb0d76835700fde43fb.1752524763.git.yann.morin.1998@free.fr>
+References: <cover.1752524763.git.yann.morin.1998@free.fr>
+ <e3682b2190a8db8a5e815cb0d76835700fde43fb.1752524763.git.yann.morin.1998@free.fr>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <eda07754ff0ec104ef4506ba6549d2d2@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1752691274;
+ bh=aHvDwSFiK8qYjuMtCMMsV+L3JqqK0nKzcCz1RLMREFA=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=EshdTTZmAi62WW/As5EdxpCht5bt3w5VO03vYg2SdtMOCRasJm44q1NI9vbU9U2Vb
+ Fs5U+enPqPfNq3dqB8y4QX+H6td1vxBLuYHItHCSfnuiso1p5FDEAWGG6gHFGL0KTc
+ 2kf5qjwJzg4MbvZ6fJVkXeb//6E3WPyRWCc9Msdrf+EAbHBri0Fw9OYrTsrvMoacsK
+ nUiaY1hPnBpePhDz3ZZRYiDba7AfVFSUrJNrKTtbPdyWAK70IZDManFoeFHXUZ4RTZ
+ 6c3XntozDZhZhzEiHNfLOuVo5zXgHLrMbxZ5SYZJWFbogd97xIm6PXvh0non7wt7W7
+ 2iC8PIsghn4Dw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=EshdTTZm
+Subject: Re: [Buildroot] [PATCH 01/13] support/testing: add a crun-based
+ runtime test for docker-compoe
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,60 +85,37 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c5fe7e96397b672e91458c228a65bc2bb5f7524a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Yann,
 
-For release notes since version 27.5.1, see:
-https://github.com/moby/moby/releases
+On 14/07/2025 22:25, Yann E. MORIN via buildroot wrote:
+> Via the docker-compose runtime test,m we can exercise the full suite of
+> the docker-related packages: docker-compose, of course, but also
+> docker-engine, which in turn allows exercising containerd. The latter
+> by defualt uses runc as the container runtime, but can alternatively 
+> use
+> crun.
+> 
+> Extend the docker-compose runtime test with a variant that enables 
+> crun.
+> 
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
-Since version 28.0.0, docker-engine requires the RAW netfilter table, so
-enable that as part of the kernel fixups.
+I applied this series to master, thanks.
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Christian Stewart <christian@aperture.us>
-[Julien: add link to release notes]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/docker-engine/docker-engine.hash | 2 +-
- package/docker-engine/docker-engine.mk   | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+I fixed few minor typos and added links to release notes,
+when available. While doing so, I noticed that podman 5.5.2 was
+fixing CVE-2025-6032, so I marked to bump as a security fix.
+See:
+https://gitlab.com/buildroot.org/buildroot/-/commits/413b9774a4bceda35c4e0c67f4d5aea78ee38924
 
-diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
-index 07a20108b6..5d7bc51a6a 100644
---- a/package/docker-engine/docker-engine.hash
-+++ b/package/docker-engine/docker-engine.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  0d071c1773c855778d85590e01b924c1857000fd786485f4b674a3be2d3b893c  docker-engine-27.5.1-go2.tar.gz
-+sha256  e4828e32e474cef1b78f40278211648300071399c7498252dfe0b96e789b8a31  docker-engine-28.3.2-go2.tar.gz
- sha256  7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index c39dc2b440..28905b28d6 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DOCKER_ENGINE_VERSION = 27.5.1
-+DOCKER_ENGINE_VERSION = 28.3.2
- DOCKER_ENGINE_SITE = $(call github,moby,moby,v$(DOCKER_ENGINE_VERSION))
- 
- DOCKER_ENGINE_LICENSE = Apache-2.0
-@@ -131,6 +131,7 @@ define DOCKER_ENGINE_LINUX_CONFIG_FIXUPS
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_IPTABLES)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_FILTER)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_NAT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_RAW)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_MASQUERADE)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_BRIDGE)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_CORE)
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
