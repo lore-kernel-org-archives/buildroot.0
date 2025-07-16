@@ -4,131 +4,131 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12DC8C83F22
-	for <buildroot@archiver.kernel.org>; Wed, 16 Jul 2025 14:53:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16D3DC83F34
+	for <buildroot@archiver.kernel.org>; Wed, 16 Jul 2025 14:53:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D3A2F80FC6;
-	Wed, 16 Jul 2025 14:53:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C29FD81162;
+	Wed, 16 Jul 2025 14:53:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Qmg_yV3hKdYF; Wed, 16 Jul 2025 14:53:16 +0000 (UTC)
+ id l1oXBVJmalBp; Wed, 16 Jul 2025 14:53:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 17E1981066
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 496788113E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 17E1981066;
-	Wed, 16 Jul 2025 14:53:16 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id B40341514
- for <buildroot@buildroot.org>; Wed, 16 Jul 2025 14:53:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 496788113E;
+	Wed, 16 Jul 2025 14:53:17 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id CA1F1234
+ for <buildroot@buildroot.org>; Wed, 16 Jul 2025 14:53:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9A298414D2
- for <buildroot@buildroot.org>; Wed, 16 Jul 2025 14:53:14 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BB85540989
+ for <buildroot@buildroot.org>; Wed, 16 Jul 2025 14:53:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id onpCAyWV_dA1 for <buildroot@buildroot.org>;
- Wed, 16 Jul 2025 14:53:14 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.20;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iVLPTYb9xqII for <buildroot@buildroot.org>;
+ Wed, 16 Jul 2025 14:53:15 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.21;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7D1214142B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D1214142B
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7D1214142B
- for <buildroot@buildroot.org>; Wed, 16 Jul 2025 14:53:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 70ECC40128
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 70ECC40128
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 70ECC40128
+ for <buildroot@buildroot.org>; Wed, 16 Jul 2025 14:53:14 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from haruka.home.arpa ([85.22.122.179]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N49hB-1ukTeZ09Vx-017LQO; Wed, 16
- Jul 2025 16:53:10 +0200
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1M1ps8-1ueFMl0RRI-005zJJ; Wed, 16
+ Jul 2025 16:53:11 +0200
 To: buildroot@buildroot.org
 Cc: Thomas Perale <thomas.perale@mind.be>,
  Titouan Christophe <titouan.christophe@mind.be>,
  "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
-Date: Wed, 16 Jul 2025 16:52:49 +0200
-Message-ID: <20250716145251.1359958-3-fiona.klute@gmx.de>
+Date: Wed, 16 Jul 2025 16:52:50 +0200
+Message-ID: <20250716145251.1359958-4-fiona.klute@gmx.de>
 X-Mailer: git-send-email 2.50.0
 In-Reply-To: <20250716145251.1359958-1-fiona.klute@gmx.de>
 References: <20250716145251.1359958-1-fiona.klute@gmx.de>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:s2uDscZ/uL26d2Na4BDD+UIBTF13a0ITRvD62X2oM6mLVLPGncH
- LHIQJB8bq/lLGte5DLXKQPrONkWdpnGGgigPMag/81ofefF61DwRqVCsONiEoYDaQ28PxEe
- 6Q7nQZ333I/Il8ifakXEzPwcRfeSsbcP6a8y73iFvu/R+HsMhUWofZP77080WjX2P7bxA4K
- iJZ4RZKqC6/wZ/ndEXf7w==
-UI-OutboundReport: notjunk:1;M01:P0:g94s5agXjFI=;Q5DKWtfV1tt3rfslO8PSxreco+S
- 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
- ePQt0=
+X-Provags-ID: V03:K1:ts4Y2X1LRjWgQlL71Wwf8hBnlFKgFZyLQ+uZSlOuoaZ3AGH5w1P
+ IN87t/GT/hhwwyWyJWtKpMe320tvcHql+74pQLvdp29qkCY8GqCu2UdzW6z58NGqpOECJ4C
+ 8D0uc94fo2XYE5EiomdnO9pwNIljV9WaACBKpD45vI+xGSGHnwN3NvsHeMqnm6RWv60rsSU
+ m58uaSe+i8RIwDgCsLkNA==
+UI-OutboundReport: notjunk:1;M01:P0:lrMPewW6bKM=;vm6Zjc8vk+nRd1tTiXZC7q9+gju
+ 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
+ ogjZw=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.de; 
- s=s31663417; t=1752677590; x=1753282390; i=fiona.klute@gmx.de;
- bh=ySwLMwWPLzOh+01bzVm2FJs2FbOut4a0l1FzWln/zts=;
+ s=s31663417; t=1752677591; x=1753282391; i=fiona.klute@gmx.de;
+ bh=E5CJXT0qLRtFht7ZcT0lbB0iaDr8f/3ndg0euIa6KrY=;
  h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
  References:MIME-Version:Content-Transfer-Encoding:cc:
  content-transfer-encoding:content-type:date:from:message-id:
  mime-version:reply-to:subject:to;
- b=dYqd6sfJyQpq9Zjy7p1xshw0hE84oAWYzOogUJnsAYEyaG4OxCqWL9odblo1q2wV
- Cwxa78W1SEv3zi5CpI8FtGcpwYURGqSzroy7SlOaLgcebtyXIh1Wx2esZNBORWfb1
- K3gZPmW0YmWMTa0g54nH5IsbwF3PMq1UuJVu1c3x42+/+Z0pREhggl/6WRP4i6oNS
- j111yL30V47HpMhqY22vw883cxr/ScjF4NTgN5Y/Hu/KgfUZO0184J2Ukk70HX1T5
- Wqbd4xWpy22KDEVEcd92lHWfYUwwkXw/Z1Uu802LMNGG7EwuRMLyzj7ELbsoQokEM
- DrNuee/uwPespdHmRQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=E/FBRaiKX1fNqvDP0CrLr9+VufQJQ33RiIKezFeQFliXm5vwFirJAy/1jdAo552m
+ VQ0uP7k0tmnjscb5UFtUeUO01U9P441GjrcahQRguvtAy6N2urN4xKbE2pq+Ik4Ft
+ oy1DV585qqfffHq5LLXePgYGsoDv/AQ+0L6RWB2qSlRePpcHna0sq/k9sVIRxh27j
+ ogUJHw4LgOe3C3dfOSt+SKByIb9E42hbxXoM8wWgOpGoWMm8daKr8hGEFZGZ7FAsu
+ U5FVVrrTtLQZK1LGrVCScS15fGC4SvxY+zq2HlL2V8D2QsdBZhD9PlJ7Gz/aEv//k
+ csrbPNCx3u/+mIqeEg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
- header.a=rsa-sha256 header.s=s31663417 header.b=dYqd6sfJ
-Subject: [Buildroot] [PATCH v2 2/3] package/pkg-utils.mk: include package
- directory in show-info output
+ header.a=rsa-sha256 header.s=s31663417 header.b=E/FBRaiK
+Subject: [Buildroot] [PATCH v2 3/3] utils/generate-cyclonedx: include
+ external tree in package properties
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -149,29 +149,83 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
 
-The new package_dir element contains the path of the package
-directory. For Buildroot packages this is a path relative to the main
-Buildroot directory, for packages from external trees an absolute
-path.
+For packages from external trees, the bom-ref of the external tree is
+listed in the BR_EXTERNAL_TREE property. The external tree is
+identified based on its path and the new "package_dir" property in
+show-info output. If the package directory is not part of the main
+Buildroot repository or a known external tree, an exception is raised.
 
 Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 Tested-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/pkg-utils.mk | 1 +
- 1 file changed, 1 insertion(+)
+ utils/generate-cyclonedx | 31 +++++++++++++++++++++++++------
+ 1 file changed, 25 insertions(+), 6 deletions(-)
 
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index 0266f66b42..288a202230 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -120,6 +120,7 @@ define _json-info-pkg
- 		"virtual": false$(comma)
- 		$(call _json-info-pkg-details,$(1)) \
- 	)
-+	"package_dir": $(call mk-json-str,$(patsubst $(CURDIR)/%,%,$($(1)_PKGDIR))),
- 	"stamp_dir": $(call mk-json-str,$(patsubst $(CONFIG_DIR)/%,%,$($(1)_DIR))),
- 	"source_dir": $(call mk-json-str,$(patsubst $(CONFIG_DIR)/%,%,$($(1)_DIR))),
- 	"build_dir": $(call mk-json-str,$(patsubst $(CONFIG_DIR)/%,%,$($(1)_BUILDDIR))),
+diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
+index dd11f4f83c..c672b3e7f2 100755
+--- a/utils/generate-cyclonedx
++++ b/utils/generate-cyclonedx
+@@ -206,16 +206,32 @@ def cyclonedx_patches(patch_list):
+     }
+ 
+ 
+-def cyclonedx_component(name, comp):
++def cyclonedx_component(name, comp, ext_trees: list[ExternalTree]):
+     """Translate a component from the show-info output, to a component entry in CycloneDX format.
+ 
+     Args:
+         name (str): Key used for the package in the show-info output.
+         comp (dict): Data about the package as a Python dictionary.
++        ext_trees (list): External trees that were used in the build.
+ 
+     Returns:
+         dict: Component information in CycloneDX format.
+     """
++    pkg_dir = Path(comp["package_dir"])
++    ext_tree_info = None
++    if pkg_dir.is_absolute():
++        # the package is from an external tree, find it
++        for ext in ext_trees:
++            if pkg_dir.is_relative_to(ext.path):
++                ext_tree_info = {
++                    "name": "BR_EXTERNAL_TREE",
++                    "value": ext.bom_ref,
++                }
++                break
++        if ext_tree_info is None:
++            raise Exception(
++                f'package "{name}" is from an unknown external tree at {pkg_dir!s}, use "-e" to provide external tree data')
++
+     return {
+         "bom-ref": name,
+         "type": "library",
+@@ -230,10 +246,13 @@ def cyclonedx_component(name, comp):
+             "cpe": comp["cpe-id"],
+         } if "cpe-id" in comp else {}),
+         **(cyclonedx_patches(comp["patches"]) if comp.get("patches") else {}),
+-        "properties": [{
+-            "name": "BR_TYPE",
+-            "value": comp["type"],
+-        }],
++        "properties": [
++            {
++                "name": "BR_TYPE",
++                "value": comp["type"],
++            },
++            *((ext_tree_info,) if ext_tree_info else ()),
++        ],
+     }
+ 
+ 
+@@ -350,7 +369,7 @@ def main():
+         "$schema": f"http://cyclonedx.org/schema/bom-{CYCLONEDX_VERSION}.schema.json",
+         "specVersion": f"{CYCLONEDX_VERSION}",
+         "components": [
+-            cyclonedx_component(name, comp) for name, comp in filtered_show_info_dict.items()
++            cyclonedx_component(name, comp, external_trees) for name, comp in filtered_show_info_dict.items()
+         ],
+         "dependencies": [
+             cyclonedx_dependency("buildroot", list(filtered_show_info_dict)),
 -- 
 2.50.0
 
