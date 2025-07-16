@@ -4,100 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20BE2C83F1B
-	for <buildroot@archiver.kernel.org>; Wed, 16 Jul 2025 05:59:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DEF1C83F1B
+	for <buildroot@archiver.kernel.org>; Wed, 16 Jul 2025 06:15:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9948683D24;
-	Wed, 16 Jul 2025 05:59:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 55E2383D31;
+	Wed, 16 Jul 2025 06:15:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1V_uANn4hDSh; Wed, 16 Jul 2025 05:59:52 +0000 (UTC)
+ id p9cax7Hs7Gyj; Wed, 16 Jul 2025 06:15:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C85B983D16
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6A7AC83D30
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C85B983D16;
-	Wed, 16 Jul 2025 05:59:52 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 67E471514
- for <buildroot@buildroot.org>; Wed, 16 Jul 2025 05:59:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6A7AC83D30;
+	Wed, 16 Jul 2025 06:15:34 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 421F31514
+ for <buildroot@buildroot.org>; Wed, 16 Jul 2025 06:15:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 59116407EF
- for <buildroot@buildroot.org>; Wed, 16 Jul 2025 05:59:51 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 33D1E83D2E
+ for <buildroot@buildroot.org>; Wed, 16 Jul 2025 06:15:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3hoO3NqaO8Ww for <buildroot@buildroot.org>;
- Wed, 16 Jul 2025 05:59:50 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nRReXBZWxBIT for <buildroot@buildroot.org>;
+ Wed, 16 Jul 2025 06:15:32 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62d; helo=mail-ej1-x62d.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3C77C400D7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3C77C400D7
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
- [IPv6:2a00:1450:4864:20::62d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3C77C400D7
- for <buildroot@buildroot.org>; Wed, 16 Jul 2025 05:59:50 +0000 (UTC)
-Received: by mail-ej1-x62d.google.com with SMTP id
- a640c23a62f3a-ae0dd7ac1f5so1211980366b.2
- for <buildroot@buildroot.org>; Tue, 15 Jul 2025 22:59:49 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
+ envelope-from=francois.perrad@gadz.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0D45F83CE2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0D45F83CE2
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0D45F83CE2
+ for <buildroot@busybox.net>; Wed, 16 Jul 2025 06:15:31 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id
+ ffacd0b85a97d-3a4fd1ba177so349576f8f.0
+ for <buildroot@busybox.net>; Tue, 15 Jul 2025 23:15:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1752645588; x=1753250388;
+ d=1e100.net; s=20230601; t=1752646530; x=1753251330;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=2Zwybs6aFfmG6EdwQD+pDkl+v+nFupzy4kdJV3Km02A=;
- b=WtASL5UbC5xrggbAwSawJ/errB72mZqRH2YkTpG+Rv4rpl3XXkr74CXfbGEHTXPBeV
- 79s/9V0kSFHjseUhTYy0b2/W6HPFhSnm/QbDNxH9vlTkI1aycEKpTeiovayvbQBa+ELS
- ieC7M77TtBwWpVcuMSmyLXGp3mx6OXY42rwpTSQq26fcIlm09F4sXlNjCZjganmnONb5
- EGJ8XpLK8VJShVXmCJhu9FfSGe7WTEoB+fqPQqswZeCjXkK/4BVI0JQHpi7cV6kS1K36
- FYiADiQHu0Bb6cFmAOw2AGBVZzv8EpwB/hk/17hGF8aH6OsyNTNBxsuP839E3fXodTxo
- WfbQ==
-X-Gm-Message-State: AOJu0YwUERffWke11Lsq5A31cNqYp/XY177lZw3KXzHJxfeNYujsW2hW
- iC9ryfHxlFIdFYc9ycToYegzVbiPjAInbbGQ4g8KndxQ2HVHd65Slkp/dJxbymy5d7JEUG9IOZT
- i/z/7
-X-Gm-Gg: ASbGnctoN6ZtPttQBLUjH8MDFkkKWw2DaGCCIKghz4iUEo3V8w1gH5y5brHDJKbUki1
- +vzLDGQb+X09wajS5aQ9TliWFWpTHoA/Bv6Rqa3ayz93RbI+BwhMRNxrmBydnjNvjU/F66LAifU
- Mb535yJBYfxZUu9CT+edBenojJBdfuTfqApla22YQrTDzzl5lshLfxh+vTXdK10TfhMZX6FPwe3
- yte4iMy1kS5s4UQa1Nj0zFyEa9flC2TCeJGQEl35WbVpCGGpp6AD80GyXU+mBT5P64QqlFjS1w7
- T4cSIZIChWiPz9XkwoJaVCfBFOY1qu4gK5LYlyH2j7mlIReW2dSv1GXnxl9i1OehgcPGjdfOs3x
- aAmIKTY1yCTeXmCNnOIVlCQbomCslvhbIzZOAj0VAm7wDPoQ/rpS22AXuK2pAgjKXsyY/pTncJe
- tEQeHQfpfkUKiL3jaWxTe45/QfRVnsGkjQLzZlQSfCR9bFcWdiW3fuIYqNNv0=
-X-Google-Smtp-Source: AGHT+IHTf2zUafNo4FmSX9izTtsJgaxnKt7IpwWhvF9cNY6LcIas5OSRp1uAJ+fskChOi6d+0RLFtQ==
-X-Received: by 2002:a17:907:f1dd:b0:ae3:635c:53c1 with SMTP id
- a640c23a62f3a-ae9c9b96a77mr190793566b.54.1752645586928; 
- Tue, 15 Jul 2025 22:59:46 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
- (host-87-5-95-99.retail.telecomitalia.it. [87.5.95.99])
+ bh=fj8u8o/Y7SdKEB8Kv2T46dbjsfx7exn3aXR3LxhwlYc=;
+ b=TZAHf9eR1MKyFk6/PciZ1nS2jYUuZxIgBam+noyMsIM1E43kaieqWox94+O7QL+xqQ
+ 55d3nUY7A2WQSiVU0Cj5qwnWIpQKK1uRf4LJisQyLs1VA+HqdLcwpMVC+4DKU3iviMPY
+ +JLxnqBCXUjNML+JXg3DzITWbOB6K9jLHEfRKkSlp8J8GUzq3UJUQ7TOfsW6yFKOsPou
+ I5bahRX1j2quNXrEet1FzUVWO9+Y6a9tkCkXMS3LV/9cTuU+yQPLm7WuQ8KSGYDousx9
+ iEHAnENr9v/tnPxwVliqNygMdQC+qezetp1rwJvf9vXEprdhDR/ap3hJLzavRCLqudvL
+ U3bg==
+X-Gm-Message-State: AOJu0Yz2x4PpeP478Fukr7sTKc+vaVyeQsUEA5HSoTeX3kfIrd+8Vlz5
+ slvVK2WgL8yRxGCb8bfDBVj/7o6uwxC08AOvGYkb6xN/FtLG5LoIRv6J6/kz5ivZENA1of8zXVh
+ gvl3nyg==
+X-Gm-Gg: ASbGnctLRia9UzmRUycudE+lR4gZI7qrMLdiVTv+wLrGlJPBNtJPzfDMTQxaiSFAiEf
+ ZobQq0374ELjtz507rvbEwY7v0xYXu12HPkXcOjj4gUlMhmeoke/YwhF7Ti6O/BoD0DQxlIfhLo
+ xd0UVlCDRNHw9T/azEyhZV/G/nwHIXiSBVQxm2Ic499WHCtGCTzob3RYMP3BlWPUNu+1CHkw9Qw
+ ac0ZPY9ZI6caLajzigObQaoAT6qNZc9TW+EVkwC9lCn9z6s70pwqfczYeAm4WUpDcT8yY4b2o3U
+ FyZMohiIBg2kaEk5hihjuaR3FY/hTr+cNA0ribLG6uWF+Zd9Zp+9kUg9NiapuYNSF5qmr+q4hU3
+ yXajeQI+lmtOdEKNsZd6VbIlbi4UP8NMpO/36ZKgaox41xmQl0Yrh37pW
+X-Google-Smtp-Source: AGHT+IETIwpQK7ZMMWuYm/Ck8H4NIfNA+C4AKOBWQGApYi7tVAKQe7qJyyelkfN69Zr8gxgxbEbOuw==
+X-Received: by 2002:a5d:5f48:0:b0:3a4:eee4:f73a with SMTP id
+ ffacd0b85a97d-3b60dd72beamr1356418f8f.22.1752646529400; 
+ Tue, 15 Jul 2025 23:15:29 -0700 (PDT)
+Received: from vm-2404.. (10.187.66.37.rev.sfr.net. [37.66.187.10])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-ae6e7e91dd3sm1116288266b.28.2025.07.15.22.59.46
+ ffacd0b85a97d-3b5e8e1e285sm16667492f8f.76.2025.07.15.23.15.28
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 15 Jul 2025 22:59:46 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To: buildroot@buildroot.org
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- linux-amarula@amarulasolutions.com
-Date: Wed, 16 Jul 2025 07:59:41 +0200
-Message-ID: <20250716055941.1323148-1-dario.binacchi@amarulasolutions.com>
+ Tue, 15 Jul 2025 23:15:29 -0700 (PDT)
+To: buildroot@busybox.net
+Date: Wed, 16 Jul 2025 08:15:14 +0200
+Message-ID: <20250716061514.1425011-1-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1752645588; x=1753250388;
- darn=buildroot.org; 
+ d=gadz.org; s=google; t=1752646530; x=1753251330; darn=busybox.net;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=2Zwybs6aFfmG6EdwQD+pDkl+v+nFupzy4kdJV3Km02A=;
- b=hh8vj7gC2zhgJSqxIXwiF/BxjdVFUP4ldeaai3hXvlEszv++dO3kE2kVxW44NAseqp
- fMfkHP3spg8v5JcoIejhjcrwL422/sfEVAdl61Nn2Pe9kjMd/aB9jrHfLEidv/hab85F
- t+lAZ7oqKUtFWIm2bcMm9vo2gvz1lYZ8N11lg=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=hh8vj7gC
-Subject: [Buildroot] [PATCH 1/1] package/ufs-utils: bump to version 7.14.12
+ bh=fj8u8o/Y7SdKEB8Kv2T46dbjsfx7exn3aXR3LxhwlYc=;
+ b=Sr2taPIff+mX1u6SHOlNyhhfsHxYZzV2Ltt8zN/6vNiBPcAL3YdwgcPwKx9XTxhSRO
+ 127LTZ0WBpIpSxmtiUyBUNAogKD5XM+A+XbbFhUHO+OWBHhayu2PDH1MXNNuw1ZiXXiN
+ Ot31ne0ov7uF/mwt8iKJQxAhOTPRg/B4qt7xcT01tEQ50ttWcBfv7Xaj3X2mWo61EA4o
+ pR4xCdppE6EQqm5wGMZf5+f/PQ4zIt3RMYyC7fiFknen54xVqmJiva7PJ2nWNof7uX6b
+ Y4Uj7iwFVTNeKhkIEOHNLLePtqxOSOrEc9yclCH0PwOz928fwOQqLhEXkq9L8PtdTWRW
+ iLNA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=gadz.org
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gadz.org header.i=@gadz.org header.a=rsa-sha256
+ header.s=google header.b=Sr2taPIf
+Subject: [Buildroot] [PATCH] package/lua-lrexlib-pcre2: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -109,42 +106,111 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Francois Perrad via buildroot <buildroot@buildroot.org>
+Reply-To: Francois Perrad <francois.perrad@gadz.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://github.com/SanDisk-Open-Source/ufs-utils/releases/tag/v7.14.12
-
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/ufs-utils/ufs-utils.hash | 2 +-
- package/ufs-utils/ufs-utils.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/Config.in                             |  1 +
+ package/lua-lrexlib-pcre2/Config.in           |  7 ++++++
+ .../lua-lrexlib-pcre2/lua-lrexlib-pcre2.hash  |  3 +++
+ .../lua-lrexlib-pcre2/lua-lrexlib-pcre2.mk    | 14 +++++++++++
+ .../tests/package/test_lua_lrexlib_pcre2.py   | 25 +++++++++++++++++++
+ 5 files changed, 50 insertions(+)
+ create mode 100644 package/lua-lrexlib-pcre2/Config.in
+ create mode 100644 package/lua-lrexlib-pcre2/lua-lrexlib-pcre2.hash
+ create mode 100644 package/lua-lrexlib-pcre2/lua-lrexlib-pcre2.mk
+ create mode 100644 support/testing/tests/package/test_lua_lrexlib_pcre2.py
 
-diff --git a/package/ufs-utils/ufs-utils.hash b/package/ufs-utils/ufs-utils.hash
-index f67534cd1e8d..89053996ab3b 100644
---- a/package/ufs-utils/ufs-utils.hash
-+++ b/package/ufs-utils/ufs-utils.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  07d80ddd2dcfbe5e844515648c494fab33790be5450d150b88e3612da9b1895b  ufs-utils-7.14.11.tar.gz
-+sha256  96cd578722830bc7d8a418d528a3067c0b80ad437f66c3333ebc238fe52436a2  ufs-utils-7.14.12.tar.gz
- sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
-diff --git a/package/ufs-utils/ufs-utils.mk b/package/ufs-utils/ufs-utils.mk
-index cafc825fab55..1de7615a924e 100644
---- a/package/ufs-utils/ufs-utils.mk
-+++ b/package/ufs-utils/ufs-utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UFS_UTILS_VERSION = 7.14.11
-+UFS_UTILS_VERSION = 7.14.12
- UFS_UTILS_SITE = $(call github,SanDisk-Open-Source,ufs-utils,v$(UFS_UTILS_VERSION))
- UFS_UTILS_LICENSE = GPL-2.0
- UFS_UTILS_LICENSE_FILES = COPYING
+diff --git a/package/Config.in b/package/Config.in
+index 579b5ffc8..1ec830050 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -761,6 +761,7 @@ menu "Lua libraries/modules"
+ 	source "package/lua-livr/Config.in"
+ 	source "package/lua-livr-extra/Config.in"
+ 	source "package/lua-lpeg-patterns/Config.in"
++	source "package/lua-lrexlib-pcre2/Config.in"
+ 	source "package/lua-lsdbus/Config.in"
+ 	source "package/lua-lunitx/Config.in"
+ 	source "package/lua-lunix/Config.in"
+diff --git a/package/lua-lrexlib-pcre2/Config.in b/package/lua-lrexlib-pcre2/Config.in
+new file mode 100644
+index 000000000..0d73ee8d6
+--- /dev/null
++++ b/package/lua-lrexlib-pcre2/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LUA_LREXLIB_PCRE2
++	bool "lua-lrexlib-pcre2"
++	select BR2_PACKAGE_PCRE2
++	help
++	  Regular expression library binding (PCRE2 flavour).
++
++	  https://github.com/rrthomas/lrexlib
+diff --git a/package/lua-lrexlib-pcre2/lua-lrexlib-pcre2.hash b/package/lua-lrexlib-pcre2/lua-lrexlib-pcre2.hash
+new file mode 100644
+index 000000000..090b83d48
+--- /dev/null
++++ b/package/lua-lrexlib-pcre2/lua-lrexlib-pcre2.hash
+@@ -0,0 +1,3 @@
++# computed by luarocks/buildroot
++sha256  9bb1cb2f307eb70d66fdab499864de732c891aace0ceb6a338194e2e6631b9c3  lrexlib-pcre2-2.9.2-1.src.rock
++sha256  067992fa7c5866e01d6c8fe93dfa1e1456a6ac81fa59ccdc72f5adcd6e5b3690  lrexlib/LICENSE
+diff --git a/package/lua-lrexlib-pcre2/lua-lrexlib-pcre2.mk b/package/lua-lrexlib-pcre2/lua-lrexlib-pcre2.mk
+new file mode 100644
+index 000000000..3d0c3c57f
+--- /dev/null
++++ b/package/lua-lrexlib-pcre2/lua-lrexlib-pcre2.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# lua-lrexlib-pcre2
++#
++################################################################################
++
++LUA_LREXLIB_PCRE2_VERSION = 2.9.2-1
++LUA_LREXLIB_PCRE2_NAME_UPSTREAM = Lrexlib-PCRE2
++LUA_LREXLIB_PCRE2_SUBDIR = lrexlib
++LUA_LREXLIB_PCRE2_LICENSE = MIT
++LUA_LREXLIB_PCRE2_LICENSE_FILES = $(LUA_LREXLIB_PCRE2_SUBDIR)/LICENSE
++LUA_LREXLIB_PCRE2_DEPENDENCIES = pcre2
++
++$(eval $(luarocks-package))
+diff --git a/support/testing/tests/package/test_lua_lrexlib_pcre2.py b/support/testing/tests/package/test_lua_lrexlib_pcre2.py
+new file mode 100644
+index 000000000..07a1a3e03
+--- /dev/null
++++ b/support/testing/tests/package/test_lua_lrexlib_pcre2.py
+@@ -0,0 +1,25 @@
++from tests.package.test_lua import TestLuaBase
++
++
++class TestLuaLrexlibPCRE2(TestLuaBase):
++    config = TestLuaBase.config + \
++        """
++        BR2_PACKAGE_LUA=y
++        BR2_PACKAGE_LUA_LREXLIB_PCRE2=y
++        """
++
++    def test_run(self):
++        self.login()
++        self.module_test("rex_pcre2")
++
++
++class TestLuajitLrexlibPCRE2(TestLuaBase):
++    config = TestLuaBase.config + \
++        """
++        BR2_PACKAGE_LUAJIT=y
++        BR2_PACKAGE_LUA_LREXLIB_PCRE2=y
++        """
++
++    def test_run(self):
++        self.login()
++        self.module_test("rex_pcre2")
 -- 
 2.43.0
 
