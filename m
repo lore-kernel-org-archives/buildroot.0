@@ -1,72 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3B7EC83F1A
-	for <buildroot@archiver.kernel.org>; Thu, 17 Jul 2025 20:02:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C1A1C83F1A
+	for <buildroot@archiver.kernel.org>; Thu, 17 Jul 2025 20:03:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C6BAF83EC5;
-	Thu, 17 Jul 2025 20:02:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 474534149A;
+	Thu, 17 Jul 2025 20:03:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WYLrrD9GawO9; Thu, 17 Jul 2025 20:02:40 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0byPfSibzQ7I; Thu, 17 Jul 2025 20:03:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E894E83ED4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C850413E7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E894E83ED4;
-	Thu, 17 Jul 2025 20:02:39 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 60B25226
- for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:02:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5C850413E7;
+	Thu, 17 Jul 2025 20:03:19 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9E34C226
+ for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:03:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 52BBD60813
- for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:02:38 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 84E904149A
+ for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:03:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gwoVxhfdy_XS for <buildroot@buildroot.org>;
- Thu, 17 Jul 2025 20:02:37 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QUzZUksayqGL for <buildroot@buildroot.org>;
+ Thu, 17 Jul 2025 20:03:18 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 76E34607F5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 76E34607F5
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C26C4413E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C26C4413E7
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 76E34607F5
- for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:02:37 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C26C4413E7
+ for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:03:17 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 0AF41B977AA4; Thu, 17 Jul 2025 22:02:35 +0200 (CEST)
-Message-ID: <c4e29b31-e1e1-4f22-b4e3-73eb43557bf5@rnout.be>
-Date: Thu, 17 Jul 2025 22:02:33 +0200
+ with ESMTPSA id 03A4AB977A8D; Thu, 17 Jul 2025 22:03:14 +0200 (CEST)
+Message-ID: <8dca488d-16eb-499f-bb6c-79b172bcbcb8@rnout.be>
+Date: Thu, 17 Jul 2025 22:03:13 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Thomas Perale <thomas.perale@mind.be>, buildroot@buildroot.org
-Cc: Romain Naour <romain.naour@gmail.com>
-References: <20250707163600.1332626-1-thomas.perale@mind.be>
+To: Marcus Hoffmann <buildroot@bubu1.eu>, buildroot@buildroot.org
+Cc: Marcus Hoffmann <marcus.hoffmann@othermo.de>
+References: <20250708131418.666495-1-buildroot@bubu1.eu>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20250707163600.1332626-1-thomas.perale@mind.be>
+In-Reply-To: <20250708131418.666495-1-buildroot@bubu1.eu>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1752782555; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1752782595; h=from:subject:date:message-id:to:cc:mime-version:content-type:
  content-transfer-encoding:content-language:in-reply-to:references;
- bh=K+r/IUnTLmQs9I2I/9C/2Xjozw8ghIuu9WHrrqjfbwo=;
- b=SCBUq8j/W1EyduUo7H7AKRLF+imLsSZeXvOeVQdoZ1JhhfmuCCOGf8WUv6ekqGRdqmNMB0
- iswBZLxVBdx2ZRLRO5WFOTkwakcRWoIKbUXC4NvgUVqK4KzWgLtSqGExeGsCvyEy7pdlIY
- P3N4lXLvEOZAa10Xhum7EtJ5hqSM5/6YhZucHNnJrB0h9jPZfVaARjHXF7sxB06MfFL6Kb
- DRU1MEX5GFM2GG3yj22n5RPwBuUyvugC4JFez+2R1Qj5qBguJ/I+B7+HrmR/HMRznkreYG
- qerGqauPdlaE4sxEvfBucGMbsAd1KLYldL3g6gUu8ctVkg8rJ72ZngC13aNvjQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=VGSnX+Jtxh7nNrPhG5943lCT9+4051O111AF0AxVTNk=;
+ b=g9zii6YgNVjAu6OkHGJxyWjgBTMH4b1nLdit3JZWW5Fx+UzejapXRDltO3dzBig04EtikA
+ o8xNLupR/r7xit9EBce7l+Yx7R+643ZtRrFptkbDs9eCDIJwKVy+rVb5yTnFKzT+J+NvAP
+ W1unTJ0ERBgdnD60wIDTQ8NuceMybs30VbgZEb8lKA6mSkjfrJGfd4W42QnBHBsp4AbALY
+ I2hEjo4ZGY8+GXvcmjqaSsPet7pNIdj8pGdNESd32SU4S9XiKdC/kz8NYpXKxdd0zhrgQf
+ 6dZ370BFAifHM9WuHHWxmAWkOF5cxMGszuSsoXPLXuohYp+UDN1fA4MRtIVpNA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
- header.s=dkim header.b=SCBUq8j/
-Subject: Re: [Buildroot] [PATCH] package/libiec61850: fix build w/ mbedtls
- v3.6
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
+ header.a=rsa-sha256 header.s=dkim header.b=g9zii6Yg
+Subject: Re: [Buildroot] [PATCH] package/sudo: fix
+ SUDO_ENABLE_SUDO_GROUP_RULE following version bump
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,38 +86,18 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 07/07/2025 18:36, Thomas Perale via buildroot wrote:
-> Since the mbedtls bump to v3.6 [1] the libiec61850 package is failling
-> on the autobuilder with the following error:
+On 08/07/2025 15:14, Marcus Hoffmann via buildroot wrote:
+> From: Marcus Hoffmann <marcus.hoffmann@othermo.de>
 > 
-> ```
-> [  2%] Building C object hal/CMakeFiles/hal.dir/tls/mbedtls/tls_mbedtls.c.o
-> /workdir/instance-0/output-1/build/libiec61850-1.6.0/hal/tls/mbedtls/tls_mbedtls.c: In function 'compareCertificates':
-> /workdir/instance-0/output-1/build/libiec61850-1.6.0/hal/tls/mbedtls/tls_mbedtls.c:122:17: error: 'mbedtls_x509_crt' has no member named 'sig'
->    122 |         if (crt1->sig.len == crt2->sig.len)
->        |                 ^~
-> /workdir/instance-0/output-1/build/libiec61850-1.6.0/hal/tls/mbedtls/tls_mbedtls.c:122:34: error: 'mbedtls_x509_crt' has no member named 'sig'
->    122 |         if (crt1->sig.len == crt2->sig.len)
->        |                                  ^~
-> ...
-> ```
+> Since the version bump of sudo to 1.9.17p1 [1], the sed command in
+> SUDO_ENABLE_SUDO_GROUP_RULE no longer matches the the line in the
+> example sudoers file shipped with the sudo package.
 > 
-> The logic to support mbedtls v3 is already present on the version
-> present in buildroot.
-> This patch ensures that the CMake build uses the mbedtls headers and
-> libraries provided by buildroot rather than the bundled copy.
+> This commit fixes the regexp to match the new sudoers file.
 > 
-> By setting the following variable the mbedtls v3.6 is correctly found
-> during the configuration of the package.
+> [1] ee86844e632d5760355154ea4e928c9228f3dfd1
 > 
-> ```
-> Found mbedtls 3.6 -> can compile HAL with TLS 1.3 support
-> ```
-> 
-> [1] 3481a9643f package/mbedtls: bump to version 3.6.3.1
-> 
-> Fixes: https://autobuild.buildroot.org/results/5fc/5fca384510d2fb9dd1d01736dee34b53339d62ff/build-end.log
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+> Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 
   Applied to 2025.02.x and 2025.05.x, thanks.
 
@@ -126,23 +105,22 @@ On 07/07/2025 18:36, Thomas Perale via buildroot wrote:
   Arnout
 
 > ---
->   package/libiec61850/libiec61850.mk | 3 +++
->   1 file changed, 3 insertions(+)
+>   package/sudo/sudo.mk | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/package/libiec61850/libiec61850.mk b/package/libiec61850/libiec61850.mk
-> index 92b27dc5c2..2bf98f1f3d 100644
-> --- a/package/libiec61850/libiec61850.mk
-> +++ b/package/libiec61850/libiec61850.mk
-> @@ -15,6 +15,9 @@ LIBIEC61850_CONF_OPTS = -DBUILD_PYTHON_BINDINGS=OFF
->   ifeq ($(BR2_PACKAGE_MBEDTLS),y)
->   LIBIEC61850_DEPENDENCIES += mbedtls
->   LIBIEC61850_CONF_OPTS += -DCONFIG_USE_EXTERNAL_MBEDTLS_DYNLIB=ON
-> +LIBIEC61850_CONF_OPTS += \
-> +	-DCONFIG_EXTERNAL_MBEDTLS_DYNLIB_PATH=$(STAGING_DIR)/usr/lib \
-> +	-DCONFIG_EXTERNAL_MBEDTLS_INCLUDE_PATH=$(STAGING_DIR)/usr/include
->   else
->   LIBIEC61850_CONF_OPTS += -DCONFIG_USE_EXTERNAL_MBEDTLS_DYNLIB=OFF
->   endif
+> diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+> index 4e1405eaf1..f57a86805a 100644
+> --- a/package/sudo/sudo.mk
+> +++ b/package/sudo/sudo.mk
+> @@ -73,7 +73,7 @@ define SUDO_USERS
+>   endef
+>   
+>   define SUDO_ENABLE_SUDO_GROUP_RULE
+> -	$(SED) '/^# \%sudo\tALL=(ALL:ALL) ALL/s/^# //' $(TARGET_DIR)/etc/sudoers
+> +	$(SED) '/^# \%sudo ALL=(ALL:ALL) ALL/s/^# //' $(TARGET_DIR)/etc/sudoers
+>   endef
+>   SUDO_POST_INSTALL_TARGET_HOOKS += SUDO_ENABLE_SUDO_GROUP_RULE
+>   
 
 _______________________________________________
 buildroot mailing list
