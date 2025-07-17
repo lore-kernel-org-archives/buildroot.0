@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C48BC83F1A
-	for <buildroot@archiver.kernel.org>; Thu, 17 Jul 2025 20:33:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B89EC83F34
+	for <buildroot@archiver.kernel.org>; Thu, 17 Jul 2025 20:33:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3FFE9414D2;
+	by smtp3.osuosl.org (Postfix) with ESMTP id E446660B1F;
 	Thu, 17 Jul 2025 20:33:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zi9U4LWkXJuR; Thu, 17 Jul 2025 20:33:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kawYdbq0OCli; Thu, 17 Jul 2025 20:33:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A454A41839
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 152AC608A2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A454A41839;
-	Thu, 17 Jul 2025 20:33:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 152AC608A2;
+	Thu, 17 Jul 2025 20:33:50 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 091991A6
- for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:33:13 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 128F4226
+ for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:33:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 891446076A
+ by smtp3.osuosl.org (Postfix) with ESMTP id C465460790
  for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:32:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0L-s8rviNh2B for <buildroot@buildroot.org>;
+ id tgB9S2eFgKOp for <buildroot@buildroot.org>;
  Thu, 17 Jul 2025 20:32:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 66E7C60834
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CEE3060A43
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 66E7C60834
+ by smtp3.osuosl.org (Postfix) with ESMTP id CEE3060A43
  for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:32:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 64C798667E; Thu, 17 Jul 2025 20:32:56 +0000 (UTC)
+ id CCDFD8667F; Thu, 17 Jul 2025 20:32:56 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 15 Jul 2025 22:58:31 +0200
+Date: Thu, 17 Jul 2025 22:24:18 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: 3d2a2bafefeaf495db459ceb3b7ed19e1a97eb33
-X-Git-Newrev: 65a8824c260979384eeae32f93e53593e0ef71c3
+X-Git-Oldrev: 6ad1e1a8a74a92b674f15420844a8b497b9376e4
+X-Git-Newrev: d61bf8b0680c28a169135113e5a9d587b40e5d58
 X-Patchwork-Hint: ignore
-Message-Id: <20250717203256.64C798667E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/libxml2: add
- patch for CVE-2025-6021
+Message-Id: <20250717203256.CCDFD8667F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/samba4: bump
+ version to 4.21.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,113 +58,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Titouan Christophe via buildroot <buildroot@buildroot.org>
-Reply-To: Titouan Christophe <titouan.christophe@mind.be>
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=65a8824c260979384eeae32f93e53593e0ef71c3
+commit: https://git.buildroot.net/buildroot/commit/?id=d61bf8b0680c28a169135113e5a9d587b40e5d58
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-This fixes an integer overflow vulnerability [1], in libxml2 version
-2.13 by backporting the commit [2] from libxml2 2.14. This commit uses
-the SIZE_MAX macro, for which stdint.h was included in tree.c, as done in [3].
+Release notes:
+https://www.samba.org/samba/history/samba-4.21.7.html
 
-[1] https://nvd.nist.gov/vuln/detail/CVE-2025-6021
-[2] https://gitlab.gnome.org/GNOME/libxml2/-/commit/ad346c9a249c4b380bf73c460ad3e81135c5d781
-[3] https://git.openembedded.org/openembedded-core/tree/meta/recipes-core/libxml/libxml2/CVE-2025-6021.patch
-
-Signed-off-by: Tim Soubry <tim.soubry@mind.be>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit a1cf6bcc0698f3c033fceeeae2a07b9f25d7049c)
+(cherry picked from commit 282e7add8806bb629c18cc84155542d89746710a)
+[Titouan: Bump to 4.21.7 on buildroot 2025.05]
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- ...ree-Fix-integer-overflow-in-xmlBuildQName.patch | 59 ++++++++++++++++++++++
- package/libxml2/libxml2.mk                         |  3 ++
- 2 files changed, 62 insertions(+)
+ package/samba4/samba4.hash | 4 ++--
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libxml2/0001-tree-Fix-integer-overflow-in-xmlBuildQName.patch b/package/libxml2/0001-tree-Fix-integer-overflow-in-xmlBuildQName.patch
-new file mode 100644
-index 0000000000..962e1e091f
---- /dev/null
-+++ b/package/libxml2/0001-tree-Fix-integer-overflow-in-xmlBuildQName.patch
-@@ -0,0 +1,59 @@
-+From 719cfb3f3893c7f8fada2ad71fabb68c5fe953bf Mon Sep 17 00:00:00 2001
-+From: Nick Wellnhofer <wellnhofer@aevum.de>
-+Date: Tue, 27 May 2025 12:53:17 +0200
-+Subject: [PATCH] tree: Fix integer overflow in xmlBuildQName
-+
-+This issue affects memory safety and might receive a CVE ID later.
-+
-+Fixes #926.
-+
-+Signed-off-by: Tim Soubry <tim.soubry@mind.be>
-+Upstream: https://gitlab.gnome.org/GNOME/libxml2/-/commit/ad346c9a249c4b380bf73c460ad3e81135c5d781
-+CVE: CVE-2025-6021
-+[tim: include needed stdint header]
-+---
-+ tree.c | 11 +++++++----
-+ 1 file changed, 7 insertions(+), 4 deletions(-)
-+
-+diff --git a/tree.c b/tree.c
-+index f097cf87..53385568 100644
-+--- a/tree.c
-++++ b/tree.c
-+@@ -23,6 +23,7 @@
-+ #include <limits.h>
-+ #include <ctype.h>
-+ #include <stdlib.h>
-++#include <stdint.h>
-+ 
-+ #ifdef LIBXML_ZLIB_ENABLED
-+ #include <zlib.h>
-+@@ -167,10 +168,10 @@ xmlGetParameterEntityFromDtd(const xmlDtd *dtd, const xmlChar *name) {
-+ xmlChar *
-+ xmlBuildQName(const xmlChar *ncname, const xmlChar *prefix,
-+ 	      xmlChar *memory, int len) {
-+-    int lenn, lenp;
-++    size_t lenn, lenp;
-+     xmlChar *ret;
-+ 
-+-    if (ncname == NULL) return(NULL);
-++    if ((ncname == NULL) || (len < 0)) return(NULL);
-+     if (prefix == NULL) return((xmlChar *) ncname);
-+ 
-+ #ifdef FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION
-+@@ -181,9 +182,11 @@ xmlBuildQName(const xmlChar *ncname, const xmlChar *prefix,
-+ 
-+     lenn = strlen((char *) ncname);
-+     lenp = strlen((char *) prefix);
-++    if (lenn >= SIZE_MAX - lenp - 1)
-++        return(NULL);
-+ 
-+-    if ((memory == NULL) || (len < lenn + lenp + 2)) {
-+-	ret = (xmlChar *) xmlMallocAtomic(lenn + lenp + 2);
-++    if ((memory == NULL) || ((size_t) len < lenn + lenp + 2)) {
-++	ret = xmlMalloc(lenn + lenp + 2);
-+ 	if (ret == NULL)
-+ 	    return(NULL);
-+     } else {
-+-- 
-+2.39.5
-+
-diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
-index 789c6a297e..f8651e726b 100644
---- a/package/libxml2/libxml2.mk
-+++ b/package/libxml2/libxml2.mk
-@@ -15,6 +15,9 @@ LIBXML2_LICENSE_FILES = Copyright
- LIBXML2_CPE_ID_VENDOR = xmlsoft
- LIBXML2_CONFIG_SCRIPTS = xml2-config
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 6c4205853e..21e5b6c9e8 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.21.6.tar.asc
+-sha256  681bad60f57959436350751bc89e893b8c106ac882cc7420f93f419e1d188688  samba-4.21.6.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.21.7.tar.asc
++sha256  a395414ee573ef3f5313b274d463866356a53acc7b5e48fb9b5ad83c6ad4a265  samba-4.21.7.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 7ba0aa3346..e5aa0ce31a 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+#0001-tree-Fix-integer-overflow-in-xmlBuildQName.patch
-+LIBXML2_IGNORE_CVES += CVE-2025-6021
-+
- # relocation truncated to fit: R_68K_GOT16O
- ifeq ($(BR2_m68k_cf),y)
- LIBXML2_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -mxgot"
+-SAMBA4_VERSION = 4.21.6
++SAMBA4_VERSION = 4.21.7
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
