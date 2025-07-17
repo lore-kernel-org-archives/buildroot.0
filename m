@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D29F4C83F34
-	for <buildroot@archiver.kernel.org>; Thu, 17 Jul 2025 20:22:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0FB4C83F38
+	for <buildroot@archiver.kernel.org>; Thu, 17 Jul 2025 20:22:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AC33560813;
-	Thu, 17 Jul 2025 20:22:46 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ga0xiDzgs9jp; Thu, 17 Jul 2025 20:22:45 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AD6346082E
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AD6346082E;
-	Thu, 17 Jul 2025 20:22:45 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1D94DA59
- for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:22:38 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 43E6C405A1
- for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:22:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 91638413D8;
+	Thu, 17 Jul 2025 20:22:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hyngJ38zvaDi for <buildroot@buildroot.org>;
- Thu, 17 Jul 2025 20:22:36 +0000 (UTC)
+ id kJ7hA3tpNaPz; Thu, 17 Jul 2025 20:22:47 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 08766415A3
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 08766415A3;
+	Thu, 17 Jul 2025 20:22:47 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 23FABDE6
+ for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:22:38 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0578080B4D
+ for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:22:38 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WU_KriqMgDLE for <buildroot@buildroot.org>;
+ Thu, 17 Jul 2025 20:22:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB5E740CE8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 36C9081EBC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id EB5E740CE8
- for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:22:35 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 36C9081EBC
+ for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:22:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DBDB181182; Thu, 17 Jul 2025 20:22:35 +0000 (UTC)
+ id 2876D865B2; Thu, 17 Jul 2025 20:22:37 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 11 Jul 2025 14:21:45 +0200
+Date: Thu, 17 Jul 2025 11:43:53 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: ad6de69d62673aa482c1ccbbcc91ab5111433c79
-X-Git-Newrev: 3e46e455e39b6572d07aa44edb3c9c9a024a8dd1
+X-Git-Oldrev: b31c15fa200a2fe94e0cd40fd013e070e199323b
+X-Git-Newrev: 78bf7ff6c604afc6d8ff300270160d26b463c88e
 X-Patchwork-Hint: ignore
-Message-Id: <20250717202235.DBDB181182@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/git: security
- bump to v2.48.2
+Message-Id: <20250717202237.2876D865B2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/webkitgtk: bump
+ to version 2.48.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,109 +58,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
+From: Titouan Christophe via buildroot <buildroot@buildroot.org>
+Reply-To: Titouan Christophe <titouan.christophe@mind.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3e46e455e39b6572d07aa44edb3c9c9a024a8dd1
+commit: https://git.buildroot.net/buildroot/commit/?id=78bf7ff6c604afc6d8ff300270160d26b463c88e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Read the announcement: https://lwn.net/ml/all/xmqq5xg2wrd1.fsf@gitster.g/
+Fixes a number of crashes. Release notes:
 
-This fixes the following vulnerabilities:
+  https://webkitgtk.org/2025/05/28/webkitgtk2.48.3-released.html
 
-- CVE-2025-27613 (Gitk):
-   When a user clones an untrusted repository and runs Gitk without
-   additional command arguments, any writable file can be created and
-   truncated. The option "Support per-file encoding" must have been
-   enabled. The operation "Show origin of this line" is affected as
-   well, regardless of the option being enabled or not.
-   https://www.cve.org/CVERecord?id=CVE-2025-27613
-
-- CVE-2025-27614 (Gitk):
-   A Git repository can be crafted in such a way that a user who has
-   cloned the repository can be tricked into running any script
-   supplied by the attacker by invoking `gitk filename`, where
-   `filename` has a particular structure.
-   https://www.cve.org/CVERecord?id=CVE-2025-27614
-
-- CVE-2025-46835 (Git GUI):
-   When a user clones an untrusted repository and is tricked into
-   editing a file located in a maliciously named directory in the
-   repository, then Git GUI can create and overwrite any writable
-   file.
-   https://www.cve.org/CVERecord?id=CVE-2025-46835
-
-- CVE-2025-48384:
-   When reading a config value, Git strips any trailing carriage
-   return and line feed (CRLF). When writing a config entry, values
-   with a trailing CR are not quoted, causing the CR to be lost when
-   the config is later read.  When initializing a submodule, if the
-   submodule path contains a trailing CR, the altered path is read
-   resulting in the submodule being checked out to an incorrect
-   location. If a symlink exists that points the altered path to the
-   submodule hooks directory, and the submodule contains an executable
-   post-checkout hook, the script may be unintentionally executed
-   after checkout.
-   https://www.cve.org/CVERecord?id=CVE-2025-48384
-
-- CVE-2025-48385:
-   When cloning a repository Git knows to optionally fetch a bundle
-   advertised by the remote server, which allows the server-side to
-   offload parts of the clone to a CDN. The Git client does not
-   perform sufficient validation of the advertised bundles, which
-   allows the remote side to perform protocol injection.
-   This protocol injection can cause the client to write the fetched
-   bundle to a location controlled by the adversary. The fetched
-   content is fully controlled by the server, which can in the worst
-   case lead to arbitrary code execution.
-   https://www.cve.org/CVERecord?id=CVE-2025-48385
-
-- CVE-2025-48386:
-   The wincred credential helper uses a static buffer (`target`) as a
-   unique key for storing and comparing against internal storage. This
-   credential helper does not properly bounds check the available
-   space remaining in the buffer before appending to it with
-   `wcsncat()`, leading to potential buffer overflows.
-   https://www.cve.org/CVERecord?id=CVE-2025-48386
-
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 676c4369d9bb80d953fd3bda76200d1a36ca356c)
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-(cherry picked from commit 62788e0e497ab8e8b6f2819a72c3b391ed3807eb)
-[thomas: bumped to v2.48.2 instead]
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/git/git.hash | 2 +-
- package/git/git.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/webkitgtk/webkitgtk.hash | 6 +++---
+ package/webkitgtk/webkitgtk.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/git/git.hash b/package/git/git.hash
-index 7608cbe176..24286a8705 100644
---- a/package/git/git.hash
-+++ b/package/git/git.hash
-@@ -1,5 +1,5 @@
- # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
--sha256  1c5d545f5dc1eb51e95d2c50d98fdf88b1a36ba1fa30e9ae5d5385c6024f82ad  git-2.48.1.tar.xz
-+sha256  30ce5660fc6be0453ab0e15ba3f2b69f2325cde0bb447ad2ee1b559f2999e494  git-2.48.2.tar.xz
- # Locally calculated
- sha256  5b2198d1645f767585e8a88ac0499b04472164c0d2da22e75ecf97ef443ab32e  COPYING
- sha256  1922f45d2c49e390032c9c0ba6d7cac904087f7cec51af30c2b2ad022ce0e76a  LGPL-2.1
-diff --git a/package/git/git.mk b/package/git/git.mk
-index de3103f4ff..18d768e900 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index 82b5cb4651..6c2beb7d1d 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,6 +1,6 @@
+-# From https://www.webkitgtk.org/releases/webkitgtk-2.48.2.tar.xz.sums
+-sha1  e1a216588ad5eaf71b548b035699319f74cbd8da  webkitgtk-2.48.2.tar.xz
+-sha256  ec58f6dfc25d3b360388e192f865068d69aab09b4d7df021f90e314d2fa54f37  webkitgtk-2.48.2.tar.xz
++# From https://www.webkitgtk.org/releases/webkitgtk-2.48.3.tar.xz.sums
++sha1  36faf2c30967db57175caf88cefd3d25781ae6d7  webkitgtk-2.48.3.tar.xz
++sha256  d4dc5970f0fc6a529ff7fd67bcbfab2bbb5e91be789b2e9279640b3217a782c3  webkitgtk-2.48.3.tar.xz
+ 
+ # Hashes for license files:
+ sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index b24527f7ce..419bef9d8e 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GIT_VERSION = 2.48.1
-+GIT_VERSION = 2.48.2
- GIT_SOURCE = git-$(GIT_VERSION).tar.xz
- GIT_SITE = $(BR2_KERNEL_MIRROR)/software/scm/git
- GIT_LICENSE = GPL-2.0, LGPL-2.1+
+-WEBKITGTK_VERSION = 2.48.2
++WEBKITGTK_VERSION = 2.48.3
+ WEBKITGTK_SITE = https://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
