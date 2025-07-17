@@ -4,66 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55961C83F34
-	for <buildroot@archiver.kernel.org>; Thu, 17 Jul 2025 20:16:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23172C83F34
+	for <buildroot@archiver.kernel.org>; Thu, 17 Jul 2025 20:21:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2554740864;
-	Thu, 17 Jul 2025 20:16:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 670AE404B0;
+	Thu, 17 Jul 2025 20:21:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CCthtOm_mz97; Thu, 17 Jul 2025 20:16:52 +0000 (UTC)
+ id uhu-8kXR809t; Thu, 17 Jul 2025 20:21:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C775407D4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2B10B4118B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2C775407D4;
-	Thu, 17 Jul 2025 20:16:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2B10B4118B;
+	Thu, 17 Jul 2025 20:21:01 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 16126226
- for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:16:50 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id D55931A6
+ for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:20:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 08AC2607DA
- for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:16:50 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C6992607DA
+ for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:20:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9_mQM_HCOtqF for <buildroot@buildroot.org>;
- Thu, 17 Jul 2025 20:16:49 +0000 (UTC)
+ id NaBenganoFe5 for <buildroot@buildroot.org>;
+ Thu, 17 Jul 2025 20:20:59 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 159FD6060C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 159FD6060C
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E4E0C607BA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E4E0C607BA
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 159FD6060C
- for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:16:49 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E4E0C607BA
+ for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:20:58 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 029DCB977A8D; Thu, 17 Jul 2025 22:16:46 +0200 (CEST)
-Message-ID: <5366f9a4-8197-4ed4-a063-aa8f514423fc@rnout.be>
-Date: Thu, 17 Jul 2025 22:16:45 +0200
+ with ESMTPSA id DF6CCB977A8D; Thu, 17 Jul 2025 22:20:56 +0200 (CEST)
+Message-ID: <678ac98d-b0b0-4789-b3c3-715ce4cde3da@rnout.be>
+Date: Thu, 17 Jul 2025 22:20:55 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Adrian Perez de Castro <aperez@igalia.com>, buildroot@buildroot.org
-References: <20250711142105.2822708-1-aperez@igalia.com>
+To: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
+References: <20250621163539.263715-1-ju.o@free.fr>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20250711142105.2822708-1-aperez@igalia.com>
+In-Reply-To: <20250621163539.263715-1-ju.o@free.fr>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1752783407; h=from:subject:date:message-id:to:mime-version:content-type:
+ t=1752783657; h=from:subject:date:message-id:to:mime-version:content-type:
  content-transfer-encoding:content-language:in-reply-to:references;
- bh=B9gx6+wwONXwt/wWN2UrpBRScGTGIxbHsSWA7bsSvCY=;
- b=Hdp5TooNDPkcqp7BBf3UNspSB0oxUgvdo+OlolDbQO77ykWy6gkVCBdFi4kznixf6HunlA
- B1+7coubhvgDevYZgBtEa34la+PGc7NiMiSZSQzvXqrj4ddQDTtqhotU239a7gWZ0MQVz8
- 1i/xD6cSSzcGDJLDPS/5uLNWx6W9UpbqIEML+YsNwUlyJ0nLdakHQzUBXZBDgaId1Aj6ad
- Xg+i3c8fT/Pb8ZjeDM7CJs9Fg85yLH+dySIJZVwRGWKAEwUhkoQa8XUkThqzWUwJt+Dx7Y
- JEcaLwQxG7AQdt7WzNxqzb1MWfjNX8fwi8h1NuwEMzRaujAN0QqGOhiPrzek6Q==
+ bh=eZuBE+CqlPFay5JfJUXXXITm9V/IqouC2LAKIOiHiJE=;
+ b=dGWoGxjECBV99hr5ao+s+hG9baVJdsT5DxudmyLYC7zvtAVAO85l72jwYU7ZNMchfKfyqf
+ JlV3oTQjGd5Pb69KHRwmhrNAKufKaPzZtqubd08lfetKXZuPoDcPyYvSo1KrYOTcUG3ZVR
+ uC9O/23sm7cFg3+qUP77Q6LmFtWtY1N0oRgH+u7oZnVPuAfT9eJVuAjteuSWk1hSyclyDo
+ L3ZJruLzCv0DpNJ8BOLmTvZZq9u1+8sqtPBMrW2by+WvAy6oRBzVkj8uL5eFR0nB1DLPwf
+ UaIyQ6cuN6eyNfF82cwlU14Nm6CV1HqR77So8AYq5gft4lqrcyD8BK0SKc4tQQ==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=Hdp5TooN
-Subject: Re: [Buildroot] [PATCH 1/1] package/libdex: bump to version 0.10.1
+ header.a=rsa-sha256 header.s=dkim header.b=dGWoGxjE
+Subject: Re: [Buildroot] [PATCH 1/1] package/openblas: bump to version
+ v0.3.30
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,49 +85,48 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 11/07/2025 16:21, Adrian Perez de Castro wrote:
-> This is a bugfix release which includes a few improvements and fixes
-> leaks of Unix signal futures. Release notes:
+On 21/06/2025 18:35, Julien Olivain wrote:
+> For change log since v0.3.29, see:
+> https://github.com/OpenMathLib/OpenBLAS/releases/tag/v0.3.30
 > 
->    https://gitlab.gnome.org/GNOME/libdex/-/blob/0.10.1/NEWS
-> 
-> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
 
-  Applied to 2025.05.x, thanks.
+  Applied to 2025.02.x and 2025.05.x, thanks.
 
   Regards,
   Arnout
 
 > ---
->   package/libdex/libdex.hash | 4 ++--
->   package/libdex/libdex.mk   | 2 +-
->   2 files changed, 3 insertions(+), 3 deletions(-)
+>   package/openblas/openblas.hash | 6 +++---
+>   package/openblas/openblas.mk   | 2 +-
+>   2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/libdex/libdex.hash b/package/libdex/libdex.hash
-> index fa6ff292a3..6d78b0842a 100644
-> --- a/package/libdex/libdex.hash
-> +++ b/package/libdex/libdex.hash
+> diff --git a/package/openblas/openblas.hash b/package/openblas/openblas.hash
+> index 6b123b5c58..965d7458ba 100644
+> --- a/package/openblas/openblas.hash
+> +++ b/package/openblas/openblas.hash
 > @@ -1,5 +1,5 @@
-> -# From https://download.gnome.org/sources/libdex/0.10/libdex-0.10.0.sha256sum
-> -sha256  98a69626aa7646ad455bea7a7f92d2a1ffa47e4559a154a1bfe98c16fa711ee1  libdex-0.10.0.tar.xz
-> +# From https://download.gnome.org/sources/libdex/0.10/libdex-0.10.1.sha256sum
-> +sha256  7472e88090db2b228307505edeba4483e872681340cb0404ae64ac3da5bed0a6  libdex-0.10.1.tar.xz
+> -# From https://github.com/OpenMathLib/OpenBLAS/releases/tag/v0.3.29
+> -md5  853a0c5c0747c5943e7ef4bbb793162d  openblas-0.3.29.tar.gz
+> +# From https://github.com/OpenMathLib/OpenBLAS/releases/tag/v0.3.30
+> +md5  8db3d57f4d4485c6ae3f21ea465660e7  openblas-0.3.30.tar.gz
+>   # Locally calculated
+> -sha256  38240eee1b29e2bde47ebb5d61160207dc68668a54cac62c076bb5032013b1eb  openblas-0.3.29.tar.gz
+> +sha256  27342cff518646afb4c2b976d809102e368957974c250a25ccc965e53063c95d  openblas-0.3.30.tar.gz
+>   sha256  190b5a9c8d9723fe958ad33916bd7346d96fab3c5ea90832bb02d854f620fcff  LICENSE
+> diff --git a/package/openblas/openblas.mk b/package/openblas/openblas.mk
+> index 069636f5f0..edab26493d 100644
+> --- a/package/openblas/openblas.mk
+> +++ b/package/openblas/openblas.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
 >   
->   # License files
->   sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-> diff --git a/package/libdex/libdex.mk b/package/libdex/libdex.mk
-> index e400757c2a..aea4c60ab7 100644
-> --- a/package/libdex/libdex.mk
-> +++ b/package/libdex/libdex.mk
-> @@ -6,7 +6,7 @@
->   
->   # The middle number is even for stable releases, odd for development ones.
->   LIBDEX_VERSION_MAJOR = 0.10
-> -LIBDEX_VERSION = $(LIBDEX_VERSION_MAJOR).0
-> +LIBDEX_VERSION = $(LIBDEX_VERSION_MAJOR).1
->   LIBDEX_SOURCE = libdex-$(LIBDEX_VERSION).tar.xz
->   LIBDEX_SITE = https://download.gnome.org/sources/libdex/$(LIBDEX_VERSION_MAJOR)
->   LIBDEX_LICENSE = LGPL-2.1+
+> -OPENBLAS_VERSION = 0.3.29
+> +OPENBLAS_VERSION = 0.3.30
+>   OPENBLAS_SITE = https://github.com/OpenMathLib/OpenBLAS/releases/download/v$(OPENBLAS_VERSION)
+>   OPENBLAS_LICENSE = BSD-3-Clause
+>   OPENBLAS_LICENSE_FILES = LICENSE
 
 _______________________________________________
 buildroot mailing list
