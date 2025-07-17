@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D99C4C83F1A
-	for <buildroot@archiver.kernel.org>; Thu, 17 Jul 2025 20:43:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BE5AC83F34
+	for <buildroot@archiver.kernel.org>; Thu, 17 Jul 2025 20:43:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AEA1841162;
-	Thu, 17 Jul 2025 20:43:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4834841810;
+	Thu, 17 Jul 2025 20:43:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xZEa8NZX6CI6; Thu, 17 Jul 2025 20:43:43 +0000 (UTC)
+ id pBQqeedSfxPH; Thu, 17 Jul 2025 20:43:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5EFF417ED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5CAE9417FF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A5EFF417ED;
-	Thu, 17 Jul 2025 20:43:43 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 113741A6
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5CAE9417FF;
+	Thu, 17 Jul 2025 20:43:45 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id CC6B41A6
  for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:43:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D5E8C6085B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 66264820CF
  for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:43:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ro7Itr_lsC82 for <buildroot@buildroot.org>;
- Thu, 17 Jul 2025 20:43:24 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id U9Z9CdEuPXPA for <buildroot@buildroot.org>;
+ Thu, 17 Jul 2025 20:43:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D449260610
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 67EDF82128
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D449260610
- for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:43:24 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 67EDF82128
+ for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:43:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CCEF486747; Thu, 17 Jul 2025 20:43:24 +0000 (UTC)
+ id 66F8886351; Thu, 17 Jul 2025 20:43:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 17 Jul 2025 22:29:47 +0200
+Date: Thu, 17 Jul 2025 22:35:02 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e4451602ebee8ef6f6b354e8f9b6dcc80206f079
-X-Git-Newrev: c05bf8c6c7801f2e5e50ee5b94512cec2fe31901
+X-Git-Oldrev: 6e0eb020135979fb5b923dcde9a7771e9dfb33fa
+X-Git-Newrev: fff98fd6ed6ce71e9f4c648646181acfe87b760b
 X-Patchwork-Hint: ignore
-Message-Id: <20250717204324.CCEF486747@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/p11-kit: bump to version 0.25.5
+Message-Id: <20250717204325.66F8886351@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-hatch-fancy-pypi-readme:
+ bump to version 25.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,174 +61,50 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6468412387789069897=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6468412387789069897==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=c05bf8c6c7801f2e5e50ee5b94512cec2fe31901
+commit: https://git.buildroot.net/buildroot/commit/?id=fff98fd6ed6ce71e9f4c648646181acfe87b760b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Drop patch which is now upstream.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- ...id-integer-truncation-on-32-bit-platforms.patch | 109 ---------------------
- package/p11-kit/p11-kit.hash                       |   2 +-
- package/p11-kit/p11-kit.mk                         |   2 +-
- 3 files changed, 2 insertions(+), 111 deletions(-)
+ .../python-hatch-fancy-pypi-readme.hash                               | 4 ++--
+ .../python-hatch-fancy-pypi-readme/python-hatch-fancy-pypi-readme.mk  | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/p11-kit/0001-import-object-Avoid-integer-truncation-on-32-bit-platforms.patch b/package/p11-kit/0001-import-object-Avoid-integer-truncation-on-32-bit-platforms.patch
-deleted file mode 100644
-index 03f54b4408..0000000000
---- a/package/p11-kit/0001-import-object-Avoid-integer-truncation-on-32-bit-platforms.patch
-+++ /dev/null
-@@ -1,109 +0,0 @@
--From d49c92c8420db6ee4c88515bdb014f68f4d471d9 Mon Sep 17 00:00:00 2001
--From: Daiki Ueno <ueno@gnu.org>
--Date: Sat, 2 Dec 2023 09:24:01 +0900
--Subject: [PATCH] import-object: Avoid integer truncation on 32-bit platforms
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--The build fails when compiling for 32-bit platforms with
---Werror=incompatible-pointer-types:
--
--  CFLAGS="-m32 -march=i686 -Werror=incompatible-pointer-types -Werror=implicit -Werror=int-conversion" setarch i686 -- meson setup _build
--  setarch i686 -- meson compile -C _build -v
--  ...
--
--  ../p11-kit/import-object.c: In function ‘add_attrs_pubkey_rsa’:
--  ../p11-kit/import-object.c:223:62: error: passing argument 3 of ‘p11_asn1_read’ from incompatible pointer type [-Werror=incompatible-pointer-types]
--    223 |         attr_modulus.pValue = p11_asn1_read (asn, "modulus", &attr_modulus.ulValueLen);
--        |                                                              ^~~~~~~~~~~~~~~~~~~~~~~~
--        |                                                              |
--        |                                                              long unsigned int *
--
--Reported by Sam James in:
--https://github.com/p11-glue/p11-kit/issues/608
--
--Signed-off-by: Daiki Ueno <ueno@gnu.org>
--
--Upstream: https://github.com/p11-glue/p11-kit/commit/d49c92c8420db6ee4c88515bdb014f68f4d471d9
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- p11-kit/import-object.c | 30 +++++++++++++++++++++++++++---
-- 1 file changed, 27 insertions(+), 3 deletions(-)
--
--diff --git a/p11-kit/import-object.c b/p11-kit/import-object.c
--index feee0765..fb47b964 100644
----- a/p11-kit/import-object.c
--+++ b/p11-kit/import-object.c
--@@ -55,6 +55,7 @@
-- #endif
-- 
-- #include <assert.h>
--+#include <limits.h>
-- #include <stdbool.h>
-- #include <stdlib.h>
-- #include <string.h>
--@@ -201,6 +202,7 @@ add_attrs_pubkey_rsa (CK_ATTRIBUTE *attrs,
-- 	CK_ATTRIBUTE attr_encrypt = { CKA_ENCRYPT, &tval, sizeof (tval) };
-- 	CK_ATTRIBUTE attr_modulus = { CKA_MODULUS, };
-- 	CK_ATTRIBUTE attr_exponent = { CKA_PUBLIC_EXPONENT, };
--+	size_t len = 0;
-- 
-- 	pubkey = p11_asn1_read (info, "subjectPublicKey", &pubkey_len);
-- 	if (pubkey == NULL) {
--@@ -220,17 +222,31 @@ add_attrs_pubkey_rsa (CK_ATTRIBUTE *attrs,
-- 		goto cleanup;
-- 	}
-- 
---	attr_modulus.pValue = p11_asn1_read (asn, "modulus", &attr_modulus.ulValueLen);
--+	attr_modulus.pValue = p11_asn1_read (asn, "modulus", &len);
-- 	if (attr_modulus.pValue == NULL) {
-- 		p11_message (_("failed to obtain modulus"));
-- 		goto cleanup;
-- 	}
--+#if ULONG_MAX < SIZE_MAX
--+	if (len > ULONG_MAX) {
--+		p11_message (_("failed to obtain modulus"));
--+		goto cleanup;
--+	}
--+#endif
--+	attr_modulus.ulValueLen = len;
-- 
---	attr_exponent.pValue = p11_asn1_read (asn, "publicExponent", &attr_exponent.ulValueLen);
--+	attr_exponent.pValue = p11_asn1_read (asn, "publicExponent", &len);
-- 	if (attr_exponent.pValue == NULL) {
-- 		p11_message (_("failed to obtain exponent"));
-- 		goto cleanup;
-- 	}
--+#if ULONG_MAX < SIZE_MAX
--+	if (len > ULONG_MAX) {
--+		p11_message (_("failed to obtain exponent"));
--+		goto cleanup;
--+	}
--+#endif
--+	attr_exponent.ulValueLen = len;
-- 
-- 	result = p11_attrs_build (attrs, &attr_key_type, &attr_encrypt, &attr_modulus, &attr_exponent, NULL);
-- 	if (result == NULL) {
--@@ -260,12 +276,20 @@ add_attrs_pubkey_ec (CK_ATTRIBUTE *attrs,
-- 	CK_ATTRIBUTE attr_key_type = { CKA_KEY_TYPE, &key_type, sizeof (key_type) };
-- 	CK_ATTRIBUTE attr_ec_params = { CKA_EC_PARAMS, };
-- 	CK_ATTRIBUTE attr_ec_point = { CKA_EC_POINT, };
--+	size_t len = 0;
-- 
---	attr_ec_params.pValue = p11_asn1_read (info, "algorithm.parameters", &attr_ec_params.ulValueLen);
--+	attr_ec_params.pValue = p11_asn1_read (info, "algorithm.parameters", &len);
-- 	if (attr_ec_params.pValue == NULL) {
-- 		p11_message (_("failed to obtain EC parameters"));
-- 		goto cleanup;
-- 	}
--+#if ULONG_MAX < SIZE_MAX
--+	if (len > ULONG_MAX) {
--+		p11_message (_("failed to obtain EC parameters"));
--+		goto cleanup;
--+	}
--+#endif
--+	attr_ec_params.ulValueLen = len;
-- 
-- 	/* subjectPublicKey is read as BIT STRING value which contains
-- 	 * EC point data. We need to DER encode this data as OCTET STRING.
-diff --git a/package/p11-kit/p11-kit.hash b/package/p11-kit/p11-kit.hash
-index 81d209b2c2..43a566a82c 100644
---- a/package/p11-kit/p11-kit.hash
-+++ b/package/p11-kit/p11-kit.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256  d8ddce1bb7e898986f9d250ccae7c09ce14d82f1009046d202a0eb1b428b2adc  p11-kit-0.25.3.tar.xz
-+sha256  04d0a86450cdb1be018f26af6699857171a188ac6d5b8c90786a60854e1198e5  p11-kit-0.25.5.tar.xz
- # Locally computed
- sha256  2e1ba993904df807a10c3eda1e5c272338edc35674b679773a8b3ad460731054  COPYING
-diff --git a/package/p11-kit/p11-kit.mk b/package/p11-kit/p11-kit.mk
-index 53e953e070..154a34e634 100644
---- a/package/p11-kit/p11-kit.mk
-+++ b/package/p11-kit/p11-kit.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-hatch-fancy-pypi-readme/python-hatch-fancy-pypi-readme.hash b/package/python-hatch-fancy-pypi-readme/python-hatch-fancy-pypi-readme.hash
+index e3a6363eb7..e2d22cb287 100644
+--- a/package/python-hatch-fancy-pypi-readme/python-hatch-fancy-pypi-readme.hash
++++ b/package/python-hatch-fancy-pypi-readme/python-hatch-fancy-pypi-readme.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/hatch-fancy-pypi-readme/json
+-md5  f5f9e639f066c91f8e623ec6231beae9  hatch_fancy_pypi_readme-24.1.0.tar.gz
+-sha256  44dd239f1a779b9dcf8ebc9401a611fd7f7e3e14578dcf22c265dfaf7c1514b8  hatch_fancy_pypi_readme-24.1.0.tar.gz
++md5  8e1ed2416887685adc1c909ed4fb63cb  hatch_fancy_pypi_readme-25.1.0.tar.gz
++sha256  9c58ed3dff90d51f43414ce37009ad1d5b0f08ffc9fc216998a06380f01c0045  hatch_fancy_pypi_readme-25.1.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  e69ea57f96e599e617f61af3e85bf326b87e833994709fb5e5908a81197730a2  LICENSE.txt
+diff --git a/package/python-hatch-fancy-pypi-readme/python-hatch-fancy-pypi-readme.mk b/package/python-hatch-fancy-pypi-readme/python-hatch-fancy-pypi-readme.mk
+index 0857864965..5e658239b1 100644
+--- a/package/python-hatch-fancy-pypi-readme/python-hatch-fancy-pypi-readme.mk
++++ b/package/python-hatch-fancy-pypi-readme/python-hatch-fancy-pypi-readme.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--P11_KIT_VERSION = 0.25.3
-+P11_KIT_VERSION = 0.25.5
- P11_KIT_SOURCE = p11-kit-$(P11_KIT_VERSION).tar.xz
- P11_KIT_SITE = https://github.com/p11-glue/p11-kit/releases/download/$(P11_KIT_VERSION)
- P11_KIT_INSTALL_STAGING = YES
-
---===============6468412387789069897==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-PYTHON_HATCH_FANCY_PYPI_README_VERSION = 24.1.0
++PYTHON_HATCH_FANCY_PYPI_README_VERSION = 25.1.0
+ PYTHON_HATCH_FANCY_PYPI_README_SOURCE = hatch_fancy_pypi_readme-$(PYTHON_HATCH_FANCY_PYPI_README_VERSION).tar.gz
+-PYTHON_HATCH_FANCY_PYPI_README_SITE = https://files.pythonhosted.org/packages/b4/c2/c9094283a07dd96c5a8f7a5f1910259d40d2e29223b95dd875a6ca13b58f
++PYTHON_HATCH_FANCY_PYPI_README_SITE = https://files.pythonhosted.org/packages/f3/0f/aed57c301f339936eb91cb4d8c1e5088a101081854bd3ec18a889df32365
+ PYTHON_HATCH_FANCY_PYPI_README_LICENSE = MIT
+ PYTHON_HATCH_FANCY_PYPI_README_LICENSE_FILES = LICENSE.txt
+ PYTHON_HATCH_FANCY_PYPI_README_SETUP_TYPE = hatch
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6468412387789069897==--
