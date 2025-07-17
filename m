@@ -4,67 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A76C1C83F1A
-	for <buildroot@archiver.kernel.org>; Thu, 17 Jul 2025 20:07:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB0C7C83F1A
+	for <buildroot@archiver.kernel.org>; Thu, 17 Jul 2025 20:09:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7CF6F413B9;
-	Thu, 17 Jul 2025 20:07:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ADFDE40A09;
+	Thu, 17 Jul 2025 20:09:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vebdyHuLtEsV; Thu, 17 Jul 2025 20:07:43 +0000 (UTC)
+ id wc9FuWPndA8x; Thu, 17 Jul 2025 20:09:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 931394119E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A8F6540E79
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 931394119E;
-	Thu, 17 Jul 2025 20:07:43 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 9BCABDA
- for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:07:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A8F6540E79;
+	Thu, 17 Jul 2025 20:09:00 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 048D8DA
+ for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:08:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 82E3F607DA
- for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:07:41 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DFFE5606E3
+ for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:08:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id a16y-kZaM8sr for <buildroot@buildroot.org>;
- Thu, 17 Jul 2025 20:07:40 +0000 (UTC)
+ id vlSG1FVe4qRZ for <buildroot@buildroot.org>;
+ Thu, 17 Jul 2025 20:08:58 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 73904607B2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 73904607B2
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E93F0606D6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E93F0606D6
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 73904607B2
- for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:07:40 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E93F0606D6
+ for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:08:57 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id A4273B977A8D; Thu, 17 Jul 2025 22:07:37 +0200 (CEST)
-Message-ID: <cf3f4a50-f06c-4d64-b1de-a0b5bc7986cc@rnout.be>
-Date: Thu, 17 Jul 2025 22:07:35 +0200
+ with ESMTPSA id 57A1CB977AA4; Thu, 17 Jul 2025 22:08:55 +0200 (CEST)
+Message-ID: <260128f5-5ac5-41d7-9491-bd55c9cb6219@rnout.be>
+Date: Thu, 17 Jul 2025 22:08:53 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Adrian Perez de Castro <aperez@igalia.com>, buildroot@buildroot.org
-References: <20250711134338.2817791-1-aperez@igalia.com>
+To: Tim Soubry <tim.soubry@mind.be>, buildroot@buildroot.org
+Cc: Pierre-Jean Texier <texier.pj2@gmail.com>
+References: <20250709151542.2605609-1-tim.soubry@mind.be>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20250711134338.2817791-1-aperez@igalia.com>
+In-Reply-To: <20250709151542.2605609-1-tim.soubry@mind.be>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1752782857; h=from:subject:date:message-id:to:mime-version:content-type:
+ t=1752782935; h=from:subject:date:message-id:to:cc:mime-version:content-type:
  content-transfer-encoding:content-language:in-reply-to:references;
- bh=o7Ua8ykH2CP5Gc2cnNChuP/BUbTX92237zlgX0UtFd4=;
- b=Ba2F2fOPIKvQQ1WMJsQGOj03tirHPjQrfRKiytYKw+FzKLmCLs+GQId8F3nmkpQ9ZuAkaJ
- juBF0k2w1KbBXV/KTykugQmebrShK34lR8KbKH8Ihmy+DmdOG5CfnjaoJ8YKgD/mYsWX5C
- o2fcVDxfewf+22i/j+pUYa/Vj+zOITA+Qt6Gfp6e3DVR709div44maRlLtv7CqxVFiY2If
- p0ygfb9WoHy9qb3npqd5Dmgtn6CWQAD8+a7b9DjnqwyRinXmgJjRSeXIDxW2ilpYRDwpEd
- FnGilNhLPKN4Eg6zTaUkfdp6NEt9/jZe0S8I9iWcH50k+02sVLVsxiTqLjkw5w==
+ bh=EmP9U0j97vnipsQ/YOU8y7cuuPPDKRkNbkrBZrwtIMU=;
+ b=WHwWBPHfkxDxc2vKQzIAGu2aBHxRyzdB0npWFqBBEjOVOAfs6T75PnzqAwaoWWXwUC+laV
+ Zi5Q+4xDNHDNl6vi9E53I7QXY5uB0EyRcnJO5R4yNr2lx+/MpJwj5uxZ0lSEo93YY3YHM/
+ iKjz0RxdoTUkjH5VcI760YdRAJ6W1jQtDR+k7uCClwdynk/jfwc7cV5on3UFqblhXeI8/G
+ vR/CZTKGmiL41Jj36BaKLXmUbisD3ymmQauO+bnnLfsVb4ht42GiBgWwtSYseZe+m6Z5Dp
+ nPV0xbQybQK7635+GCTbh0lkFPhasZHalQ9u2+iQzNn/5dBspZB333h4x1rkLw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=Ba2F2fOP
-Subject: Re: [Buildroot] [PATCH 1/1] package/wpebackend-fdo: bump to version
- 1.16.0
+ header.a=rsa-sha256 header.s=dkim header.b=WHwWBPHf
+Subject: Re: [Buildroot] [PATCH 1/3] package/libxml2: add patch for
+ CVE-2025-6021
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,54 +86,109 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 11/07/2025 15:43, Adrian Perez de Castro wrote:
-> This maintenance release solves build issues and memory leaks.
-> Release notes:
+On 09/07/2025 17:15, Tim Soubry via buildroot wrote:
+> This fixes an integer overflow vulnerability [1], in libxml2 version
+> 2.13 by backporting the commit [2] from libxml2 2.14. This commit uses
+> the SIZE_MAX macro, for which stdint.h was included in tree.c, as done in [3].
 > 
->    https://wpewebkit.org/release/wpebackend-fdo-1.16.0.html
+> [1] https://nvd.nist.gov/vuln/detail/CVE-2025-6021
+> [2] https://gitlab.gnome.org/GNOME/libxml2/-/commit/ad346c9a249c4b380bf73c460ad3e81135c5d781
+> [3] https://git.openembedded.org/openembedded-core/tree/meta/recipes-core/libxml/libxml2/CVE-2025-6021.patch
 > 
-> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+> Signed-off-by: Tim Soubry <tim.soubry@mind.be>
 
-  Applied to 2025.05.x, thanks. Not to 2025.02.x because it's too much of a 
-version jump.
+  Applied all three to 2025.02.x and 2025.05.x, thanks.
+
+  BTW, it would have been OK to put all three in a single commit.
 
   Regards,
   Arnout
 
 > ---
->   package/wpebackend-fdo/wpebackend-fdo.hash | 8 ++++----
->   package/wpebackend-fdo/wpebackend-fdo.mk   | 2 +-
->   2 files changed, 5 insertions(+), 5 deletions(-)
+>   ...ix-integer-overflow-in-xmlBuildQName.patch | 59 +++++++++++++++++++
+>   package/libxml2/libxml2.mk                    |  3 +
+>   2 files changed, 62 insertions(+)
+>   create mode 100644 package/libxml2/0001-tree-Fix-integer-overflow-in-xmlBuildQName.patch
 > 
-> diff --git a/package/wpebackend-fdo/wpebackend-fdo.hash b/package/wpebackend-fdo/wpebackend-fdo.hash
-> index 5055998ab7..f0578808c4 100644
-> --- a/package/wpebackend-fdo/wpebackend-fdo.hash
-> +++ b/package/wpebackend-fdo/wpebackend-fdo.hash
-> @@ -1,7 +1,7 @@
-> -# From https://wpewebkit.org/releases/wpebackend-fdo-1.14.3.tar.xz.sums
-> -md5  ab73398b1e35495977e50bee103969d2  wpebackend-fdo-1.14.3.tar.xz
-> -sha1  2d2945df15cc1efa957657fa727f3bc4c6f580bb  wpebackend-fdo-1.14.3.tar.xz
-> -sha256  10121842595a850291db3e82f3db0b9984df079022d386ce42c2b8508159dc6c  wpebackend-fdo-1.14.3.tar.xz
-> +# From https://wpewebkit.org/releases/wpebackend-fdo-1.16.0.tar.xz.sums
-> +md5  38f488aaa6d68252b593b65ba3e2d9d1  wpebackend-fdo-1.16.0.tar.xz
-> +sha1  8a06e51aeb2c94b4cf254d866c19eca587d3cd37  wpebackend-fdo-1.16.0.tar.xz
-> +sha256  beddf321232d5bd08106c179dbc600f8ce88eb3620b4a59a6329063b78f64635  wpebackend-fdo-1.16.0.tar.xz
+> diff --git a/package/libxml2/0001-tree-Fix-integer-overflow-in-xmlBuildQName.patch b/package/libxml2/0001-tree-Fix-integer-overflow-in-xmlBuildQName.patch
+> new file mode 100644
+> index 0000000000..962e1e091f
+> --- /dev/null
+> +++ b/package/libxml2/0001-tree-Fix-integer-overflow-in-xmlBuildQName.patch
+> @@ -0,0 +1,59 @@
+> +From 719cfb3f3893c7f8fada2ad71fabb68c5fe953bf Mon Sep 17 00:00:00 2001
+> +From: Nick Wellnhofer <wellnhofer@aevum.de>
+> +Date: Tue, 27 May 2025 12:53:17 +0200
+> +Subject: [PATCH] tree: Fix integer overflow in xmlBuildQName
+> +
+> +This issue affects memory safety and might receive a CVE ID later.
+> +
+> +Fixes #926.
+> +
+> +Signed-off-by: Tim Soubry <tim.soubry@mind.be>
+> +Upstream: https://gitlab.gnome.org/GNOME/libxml2/-/commit/ad346c9a249c4b380bf73c460ad3e81135c5d781
+> +CVE: CVE-2025-6021
+> +[tim: include needed stdint header]
+> +---
+> + tree.c | 11 +++++++----
+> + 1 file changed, 7 insertions(+), 4 deletions(-)
+> +
+> +diff --git a/tree.c b/tree.c
+> +index f097cf87..53385568 100644
+> +--- a/tree.c
+> ++++ b/tree.c
+> +@@ -23,6 +23,7 @@
+> + #include <limits.h>
+> + #include <ctype.h>
+> + #include <stdlib.h>
+> ++#include <stdint.h>
+> +
+> + #ifdef LIBXML_ZLIB_ENABLED
+> + #include <zlib.h>
+> +@@ -167,10 +168,10 @@ xmlGetParameterEntityFromDtd(const xmlDtd *dtd, const xmlChar *name) {
+> + xmlChar *
+> + xmlBuildQName(const xmlChar *ncname, const xmlChar *prefix,
+> + 	      xmlChar *memory, int len) {
+> +-    int lenn, lenp;
+> ++    size_t lenn, lenp;
+> +     xmlChar *ret;
+> +
+> +-    if (ncname == NULL) return(NULL);
+> ++    if ((ncname == NULL) || (len < 0)) return(NULL);
+> +     if (prefix == NULL) return((xmlChar *) ncname);
+> +
+> + #ifdef FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION
+> +@@ -181,9 +182,11 @@ xmlBuildQName(const xmlChar *ncname, const xmlChar *prefix,
+> +
+> +     lenn = strlen((char *) ncname);
+> +     lenp = strlen((char *) prefix);
+> ++    if (lenn >= SIZE_MAX - lenp - 1)
+> ++        return(NULL);
+> +
+> +-    if ((memory == NULL) || (len < lenn + lenp + 2)) {
+> +-	ret = (xmlChar *) xmlMallocAtomic(lenn + lenp + 2);
+> ++    if ((memory == NULL) || ((size_t) len < lenn + lenp + 2)) {
+> ++	ret = xmlMalloc(lenn + lenp + 2);
+> + 	if (ret == NULL)
+> + 	    return(NULL);
+> +     } else {
+> +--
+> +2.39.5
+> +
+> diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+> index 789c6a297e..f8651e726b 100644
+> --- a/package/libxml2/libxml2.mk
+> +++ b/package/libxml2/libxml2.mk
+> @@ -15,6 +15,9 @@ LIBXML2_LICENSE_FILES = Copyright
+>   LIBXML2_CPE_ID_VENDOR = xmlsoft
+>   LIBXML2_CONFIG_SCRIPTS = xml2-config
 >   
->   # Hashes for license files:
->   sha256  c9f6803371047fad3e72200ec6cd226329a5ee08ac61104c8211c2761fb46825  COPYING
-> diff --git a/package/wpebackend-fdo/wpebackend-fdo.mk b/package/wpebackend-fdo/wpebackend-fdo.mk
-> index dbabacf498..e5972754f6 100644
-> --- a/package/wpebackend-fdo/wpebackend-fdo.mk
-> +++ b/package/wpebackend-fdo/wpebackend-fdo.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
->   
-> -WPEBACKEND_FDO_VERSION = 1.14.3
-> +WPEBACKEND_FDO_VERSION = 1.16.0
->   WPEBACKEND_FDO_SITE = https://wpewebkit.org/releases
->   WPEBACKEND_FDO_SOURCE = wpebackend-fdo-$(WPEBACKEND_FDO_VERSION).tar.xz
->   WPEBACKEND_FDO_INSTALL_STAGING = YES
+> +#0001-tree-Fix-integer-overflow-in-xmlBuildQName.patch
+> +LIBXML2_IGNORE_CVES += CVE-2025-6021
+> +
+>   # relocation truncated to fit: R_68K_GOT16O
+>   ifeq ($(BR2_m68k_cf),y)
+>   LIBXML2_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -mxgot"
 
 _______________________________________________
 buildroot mailing list
