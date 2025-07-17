@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D50ECC83F34
-	for <buildroot@archiver.kernel.org>; Thu, 17 Jul 2025 20:43:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 667ABC83F38
+	for <buildroot@archiver.kernel.org>; Thu, 17 Jul 2025 20:43:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AF0C4411A1;
-	Thu, 17 Jul 2025 20:43:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3DE8741702;
+	Thu, 17 Jul 2025 20:43:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gKE_EFpVArIk; Thu, 17 Jul 2025 20:43:28 +0000 (UTC)
+ id VkBWZWzSkWar; Thu, 17 Jul 2025 20:43:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D1D20406FB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F77541162
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D1D20406FB;
-	Thu, 17 Jul 2025 20:43:27 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id B74A61A6
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4F77541162;
+	Thu, 17 Jul 2025 20:43:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id C33F4DE6
  for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:43:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A858482149
+ by smtp4.osuosl.org (Postfix) with ESMTP id A9074406FB
  for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:43:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9KeHHqRZBVHj for <buildroot@buildroot.org>;
- Thu, 17 Jul 2025 20:43:25 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id W_BxQP6JXQhk for <buildroot@buildroot.org>;
+ Thu, 17 Jul 2025 20:43:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ED76E8201D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D0F40404C0
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id ED76E8201D
+ by smtp4.osuosl.org (Postfix) with ESMTP id D0F40404C0
  for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:43:24 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DB8C78674A; Thu, 17 Jul 2025 20:43:24 +0000 (UTC)
+ id BBB7286746; Thu, 17 Jul 2025 20:43:24 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 17 Jul 2025 22:30:16 +0200
+Date: Thu, 17 Jul 2025 22:28:50 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c05bf8c6c7801f2e5e50ee5b94512cec2fe31901
-X-Git-Newrev: f5128711e33d912fd090e8280c3a1ad0d138a90b
+X-Git-Oldrev: c83d49486e15e884a941f4adfac54556fa640e25
+X-Git-Newrev: e4451602ebee8ef6f6b354e8f9b6dcc80206f079
 X-Patchwork-Hint: ignore
-Message-Id: <20250717204324.DB8C78674A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/vala: bump to version 0.56.18
+Message-Id: <20250717204324.BBB7286746@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-aiohttp: security bump to
+ v3.12.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,40 +66,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f5128711e33d912fd090e8280c3a1ad0d138a90b
+commit: https://git.buildroot.net/buildroot/commit/?id=e4451602ebee8ef6f6b354e8f9b6dcc80206f079
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+This fixes the following vulnerability:
+- CVE-2025-53643:
+    In aiohttp prior to version 3.12.14, the Python parser is vulnerable
+    to a request smuggling vulnerability due to not parsing trailer
+    sections of an HTTP request. If a pure Python version of aiohttp is
+    installed (i.e. without the usual C extensions) or
+    AIOHTTP_NO_EXTENSIONS is enabled, then an attacker may be able to
+    execute a request smuggling attack to bypass certain firewalls or
+    proxy protections. Version 3.12.14 contains a patch for this issue.
+    https://www.cve.org/CVERecord?id=CVE-2025-53643
+
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- package/vala/vala.hash | 4 ++--
- package/vala/vala.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-aiohttp/python-aiohttp.hash | 4 ++--
+ package/python-aiohttp/python-aiohttp.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/vala/vala.hash b/package/vala/vala.hash
-index a16875ac6a..1babb375d7 100644
---- a/package/vala/vala.hash
-+++ b/package/vala/vala.hash
-@@ -1,4 +1,4 @@
--# From https://download.gnome.org/sources/vala/0.56/vala-0.56.17.sha256sum
--sha256  26100c4e4ef0049c619275f140d97cf565883d00c7543c82bcce5a426934ed6a  vala-0.56.17.tar.xz
-+# From https://download.gnome.org/sources/vala/0.56/vala-0.56.18.sha256sum
-+sha256  f2affe7d40ab63db8e7b9ecc3f6bdc9c2fc7e3134c84ff2d795f482fe926a382  vala-0.56.18.tar.xz
- # Locally computed
- sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING
-diff --git a/package/vala/vala.mk b/package/vala/vala.mk
-index 85f928202a..24dadeb346 100644
---- a/package/vala/vala.mk
-+++ b/package/vala/vala.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/python-aiohttp/python-aiohttp.hash b/package/python-aiohttp/python-aiohttp.hash
+index ac12cafeea..0aa8dbd3bc 100644
+--- a/package/python-aiohttp/python-aiohttp.hash
++++ b/package/python-aiohttp/python-aiohttp.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/aiohttp/json
+-md5  7835f28e41adf6f09467533e8de0c199  aiohttp-3.11.14.tar.gz
+-sha256  d6edc538c7480fa0a3b2bdd705f8010062d74700198da55d16498e1b49549b9c  aiohttp-3.11.14.tar.gz
++md5  4ed66dcec63108ae3a7c01d0415b4dd9  aiohttp-3.12.14.tar.gz
++sha256  6e06e120e34d93100de448fd941522e11dafa78ef1a893c179901b7d66aa29f2  aiohttp-3.12.14.tar.gz
+ # Locally computed sha256 checksums
+ sha256  9f80d0db7d755a941db4572172c270ecbd8f082ba215ddd095985942ed94a9eb  LICENSE.txt
+diff --git a/package/python-aiohttp/python-aiohttp.mk b/package/python-aiohttp/python-aiohttp.mk
+index d3e7d12eb6..e52b6e81c5 100644
+--- a/package/python-aiohttp/python-aiohttp.mk
++++ b/package/python-aiohttp/python-aiohttp.mk
+@@ -4,9 +4,9 @@
+ #
  ################################################################################
  
- VALA_VERSION_MAJOR = 0.56
--VALA_VERSION = $(VALA_VERSION_MAJOR).17
-+VALA_VERSION = $(VALA_VERSION_MAJOR).18
- VALA_SITE = http://download.gnome.org/sources/vala/$(VALA_VERSION_MAJOR)
- VALA_SOURCE = vala-$(VALA_VERSION).tar.xz
- VALA_LICENSE = LGPL-2.1+
+-PYTHON_AIOHTTP_VERSION = 3.11.14
++PYTHON_AIOHTTP_VERSION = 3.12.14
+ PYTHON_AIOHTTP_SOURCE = aiohttp-$(PYTHON_AIOHTTP_VERSION).tar.gz
+-PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/6c/96/91e93ae5fd04d428c101cdbabce6c820d284d61d2614d00518f4fa52ea24
++PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/e6/0b/e39ad954107ebf213a2325038a3e7a506be3d98e1435e1f82086eec4cde2
+ PYTHON_AIOHTTP_SETUP_TYPE = setuptools
+ PYTHON_AIOHTTP_LICENSE = Apache-2.0
+ PYTHON_AIOHTTP_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
