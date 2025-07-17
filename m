@@ -1,69 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 480A7C83F1A
-	for <buildroot@archiver.kernel.org>; Thu, 17 Jul 2025 20:40:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DBC3C83F38
+	for <buildroot@archiver.kernel.org>; Thu, 17 Jul 2025 20:40:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1C3674119D;
-	Thu, 17 Jul 2025 20:40:45 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id b4TddrW8uII8; Thu, 17 Jul 2025 20:40:44 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F4D641148
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3F4D641148;
-	Thu, 17 Jul 2025 20:40:44 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id A4103226
- for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:40:43 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8ACEB60762
- for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:40:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 453FC607E3;
+	Thu, 17 Jul 2025 20:40:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5kJtQtAnhBdy for <buildroot@buildroot.org>;
- Thu, 17 Jul 2025 20:40:43 +0000 (UTC)
+ id njmQZtK8skSG; Thu, 17 Jul 2025 20:40:53 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 79E5A60762
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 79E5A60762;
+	Thu, 17 Jul 2025 20:40:53 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 680181A6
+ for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:40:52 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4EF6C40442
+ for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:40:52 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pgXKpSaMrwy6 for <buildroot@buildroot.org>;
+ Thu, 17 Jul 2025 20:40:51 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B9F106066A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B9F106066A
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7318940142
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7318940142
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B9F106066A
- for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:40:42 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7318940142
+ for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:40:51 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id A7F18B977A8D; Thu, 17 Jul 2025 22:40:40 +0200 (CEST)
-Message-ID: <aad174d8-c628-45bd-a5cf-3f1ea665ca73@rnout.be>
-Date: Thu, 17 Jul 2025 22:40:38 +0200
+ with ESMTPSA id 0D14CB977A8D; Thu, 17 Jul 2025 22:40:49 +0200 (CEST)
+Message-ID: <a2693d07-f7ca-4dd8-9ffe-3764250089ad@rnout.be>
+Date: Thu, 17 Jul 2025 22:40:47 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
-References: <20250715210509.544485-1-james.hilliard1@gmail.com>
+References: <20250715221656.729769-1-james.hilliard1@gmail.com>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20250715210509.544485-1-james.hilliard1@gmail.com>
+In-Reply-To: <20250715221656.729769-1-james.hilliard1@gmail.com>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1752784840; h=from:subject:date:message-id:to:mime-version:content-type:
+ t=1752784849; h=from:subject:date:message-id:to:mime-version:content-type:
  content-transfer-encoding:content-language:in-reply-to:references;
- bh=jbWkAjaKmRr2BQ3a9ieloxxJOpj4K5dii/B0Q1rVP98=;
- b=MnGQiTok6xDUX8tQzHkgkopx0IEWc+B6NW7TetTO0vVEAjLset1oS33f4MNG+EEnGdbwdL
- Ip1yh5wQ4l3ynZMSUDlL77w4Gm3A31p2wif19gm6Io/+qAilwLbM4mL/9vVBp3iYdEfFBu
- lz6+cQaurusoqmDAbmtNMFWRxOa4vbK9g3FTXNJy/Qjy1odyvuDI6OV5+l+Dvlp+JQwuMa
- fxBJiX5EPX92cJVUbXUFYniL3m5rWQ3/gH9eRTeQyGVs4tk4mU9dIxc4KEVtNg2lMcLIfh
- j+AUWnGeEs7/ZAD5GLsLOn7GLlsj7dwwWUT/JPMOywQSxCz65dDNZpr3mfOCtg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=p7GImBv3MJblRGNI/bnmwMO8eTGAoBLnbV3iYnbIIrI=;
+ b=Qws2LiMOIevdnswxuBHqU25B12Qn92AeNoR11167A3av5KCVbWXyRjxjk50aDU1hc4pdLJ
+ X567gTHOonogYiPMfHd93mZ6maTdmG0Vd6CuNgIRp34dJAC6Ivi3S2wyS+ly+pSRT6V6qH
+ r2qiyd4Yd3Ejlz1PTiaiG62k2E0uqpBdGOe9IAX+l08J5gRU7dw2z++EBI9aLSWhojf0QV
+ eY++9i1N2FrOfRY0pXhYjsAq3gCE2lksewxvMfDeSQ3r2oK7mcmvx1uT6y2Y7uwc+XUB02
+ BjBAAQaZpHklLkGFzkBbmTQvLWFZq1qolJIUjFKrvQFKwor9wQm/X25uQLoSwg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=MnGQiTok
-Subject: Re: [Buildroot] [PATCH 1/1] package/libjcat: bump to version 0.2.3
+ header.a=rsa-sha256 header.s=dkim header.b=Qws2LiMO
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-aerich: bump to version
+ 0.9.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,7 +85,7 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 15/07/2025 23:05, James Hilliard wrote:
+On 16/07/2025 00:16, James Hilliard wrote:
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
   Applied to master, thanks.
@@ -93,32 +94,38 @@ On 15/07/2025 23:05, James Hilliard wrote:
   Arnout
 
 > ---
->   package/libjcat/libjcat.hash | 2 +-
->   package/libjcat/libjcat.mk   | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
+>   package/python-aerich/python-aerich.hash | 4 ++--
+>   package/python-aerich/python-aerich.mk   | 4 ++--
+>   2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/libjcat/libjcat.hash b/package/libjcat/libjcat.hash
-> index b6dc8d2f69..8f50f8798f 100644
-> --- a/package/libjcat/libjcat.hash
-> +++ b/package/libjcat/libjcat.hash
-> @@ -1,3 +1,3 @@
->   # Locally calculated
-> -sha256  a6232aeca3c3fab6dbb3bed06ec3832088b49a4b278a7119558d72be60ce921f  libjcat-0.2.1.tar.xz
-> +sha256  f2f115aad8a8f16b8dde1ed55de7abacb91d0878539aa29b2b60854b499db639  libjcat-0.2.3.tar.xz
->   sha256  20c17d8b8c48a600800dfd14f95d5cb9ff47066a9641ddeab48dc54aec96e331  LICENSE
-> diff --git a/package/libjcat/libjcat.mk b/package/libjcat/libjcat.mk
-> index c365c1914b..4a7f304c2a 100644
-> --- a/package/libjcat/libjcat.mk
-> +++ b/package/libjcat/libjcat.mk
-> @@ -4,7 +4,7 @@
+> diff --git a/package/python-aerich/python-aerich.hash b/package/python-aerich/python-aerich.hash
+> index bdbea8f66c..6e44c241f3 100644
+> --- a/package/python-aerich/python-aerich.hash
+> +++ b/package/python-aerich/python-aerich.hash
+> @@ -1,5 +1,5 @@
+>   # md5, sha256 from https://pypi.org/pypi/aerich/json
+> -md5  031a5946dcf816e8059459204eb63b65  aerich-0.9.0.tar.gz
+> -sha256  37c7ca71e947e7de3aa0e778cb193fc1faebf9136a0f1108b52b902918b85acc  aerich-0.9.0.tar.gz
+> +md5  4d647c8f3829782f5770b7b120832f63  aerich-0.9.1.tar.gz
+> +sha256  629afbef5902635c41f410dd05def984c02e05e62d8a2020210a29a4aae19001  aerich-0.9.1.tar.gz
+>   # Locally computed sha256 checksums
+>   sha256  4cc00f0e33ac8e089b37d8a1474be441b26311bdc16fe035c75b51201515f617  LICENSE
+> diff --git a/package/python-aerich/python-aerich.mk b/package/python-aerich/python-aerich.mk
+> index 6c6cea2dfe..c7417f3179 100644
+> --- a/package/python-aerich/python-aerich.mk
+> +++ b/package/python-aerich/python-aerich.mk
+> @@ -4,9 +4,9 @@
 >   #
 >   ################################################################################
 >   
-> -LIBJCAT_VERSION = 0.2.1
-> +LIBJCAT_VERSION = 0.2.3
->   LIBJCAT_SITE = https://github.com/hughsie/libjcat/releases/download/$(LIBJCAT_VERSION)
->   LIBJCAT_SOURCE = libjcat-$(LIBJCAT_VERSION).tar.xz
->   LIBJCAT_LICENSE = LGPL-2.1+
+> -PYTHON_AERICH_VERSION = 0.9.0
+> +PYTHON_AERICH_VERSION = 0.9.1
+>   PYTHON_AERICH_SOURCE = aerich-$(PYTHON_AERICH_VERSION).tar.gz
+> -PYTHON_AERICH_SITE = https://files.pythonhosted.org/packages/2f/4b/1facb78fea47f790040035b94fdcc31630fabe1bda49ebc7a4f374da1757
+> +PYTHON_AERICH_SITE = https://files.pythonhosted.org/packages/a5/98/75c6e3053a14a14ffe86e2435698b960abe0bf03c114e67f966d92ff19e7
+>   PYTHON_AERICH_SETUP_TYPE = poetry
+>   PYTHON_AERICH_LICENSE = Apache-2.0
+>   PYTHON_AERICH_LICENSE_FILES = LICENSE
 
 _______________________________________________
 buildroot mailing list
