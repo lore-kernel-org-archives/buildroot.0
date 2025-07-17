@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 637F4C83F3B
-	for <buildroot@archiver.kernel.org>; Thu, 17 Jul 2025 20:43:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B64A8C83F1A
+	for <buildroot@archiver.kernel.org>; Thu, 17 Jul 2025 20:47:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3A6B040797;
-	Thu, 17 Jul 2025 20:43:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 83859416B7;
+	Thu, 17 Jul 2025 20:47:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zrOrsRIsqTzp; Thu, 17 Jul 2025 20:43:48 +0000 (UTC)
+ id Rd7Y8f_KtYDs; Thu, 17 Jul 2025 20:47:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 26C8041764
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8549341602
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 26C8041764;
-	Thu, 17 Jul 2025 20:43:48 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id D42561A6
- for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:43:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8549341602;
+	Thu, 17 Jul 2025 20:47:44 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1E0DE226
+ for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:47:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 62350820CA
- for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:43:27 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0F9D140142
+ for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:47:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id alHgACtP2l5t for <buildroot@buildroot.org>;
- Thu, 17 Jul 2025 20:43:25 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HosnFaR9yYSu for <buildroot@buildroot.org>;
+ Thu, 17 Jul 2025 20:47:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 71AF282140
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 57BE940042
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 71AF282140
- for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:43:25 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 57BE940042
+ for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:47:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 70A278674A; Thu, 17 Jul 2025 20:43:25 +0000 (UTC)
+ id 51AA586762; Thu, 17 Jul 2025 20:47:42 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 17 Jul 2025 22:35:15 +0200
+Date: Thu, 17 Jul 2025 22:43:32 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fff98fd6ed6ce71e9f4c648646181acfe87b760b
-X-Git-Newrev: b536caaec0d800ccf7669a50fce5192bce2405a6
+X-Git-Oldrev: 1796c4e405987d37501cb0deae5c2c2ebdba7007
+X-Git-Newrev: 4149871af19dbe88d95801f557866474120febfc
 X-Patchwork-Hint: ignore
-Message-Id: <20250717204325.70A278674A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-cython: bump to version
- 3.1.2
+Message-Id: <20250717204742.51AA586762@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lua-lrexlib-pcre2: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,45 +65,104 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b536caaec0d800ccf7669a50fce5192bce2405a6
+commit: https://git.buildroot.net/buildroot/commit/?id=4149871af19dbe88d95801f557866474120febfc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- package/python-cython/python-cython.hash | 4 ++--
- package/python-cython/python-cython.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/Config.in                                  |  1 +
+ package/lua-lrexlib-pcre2/Config.in                |  7 ++++++
+ package/lua-lrexlib-pcre2/lua-lrexlib-pcre2.hash   |  3 +++
+ package/lua-lrexlib-pcre2/lua-lrexlib-pcre2.mk     | 14 ++++++++++++
+ .../tests/package/test_lua_lrexlib_pcre2.py        | 25 ++++++++++++++++++++++
+ 5 files changed, 50 insertions(+)
 
-diff --git a/package/python-cython/python-cython.hash b/package/python-cython/python-cython.hash
-index cd320eaa2a..25fa1d93ba 100644
---- a/package/python-cython/python-cython.hash
-+++ b/package/python-cython/python-cython.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/cython/json
--md5  388b85b7c23f501320d19d991b169f5d  cython-3.0.11.tar.gz
--sha256  7146dd2af8682b4ca61331851e6aebce9fe5158e75300343f80c07ca80b1faff  cython-3.0.11.tar.gz
-+md5  6fb2dc869f4d00b4a13e130ec1197bfd  cython-3.1.2.tar.gz
-+sha256  6bbf7a953fa6762dfecdec015e3b054ba51c0121a45ad851fa130f63f5331381  cython-3.1.2.tar.gz
- # Locally computed sha256 checksums
- sha256  9568a2b155e66ac3e0ba1fd80b52b827b9460e6cf6f233125e7cbca8e206ddc3  LICENSE.txt
- sha256  e1eb1c49a8508e8173dac30157e4a6439a44ad8846194746c424fbc3fc2b95d7  COPYING.txt
-diff --git a/package/python-cython/python-cython.mk b/package/python-cython/python-cython.mk
-index 51086bedab..cffd613787 100644
---- a/package/python-cython/python-cython.mk
-+++ b/package/python-cython/python-cython.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_CYTHON_VERSION = 3.0.11
-+PYTHON_CYTHON_VERSION = 3.1.2
- PYTHON_CYTHON_SOURCE = cython-$(PYTHON_CYTHON_VERSION).tar.gz
--PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/84/4d/b720d6000f4ca77f030bd70f12550820f0766b568e43f11af7f7ad9061aa
-+PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/18/40/7b17cd866158238db704965da1b5849af261dbad393ea3ac966f934b2d39
- PYTHON_CYTHON_SETUP_TYPE = setuptools
- PYTHON_CYTHON_LICENSE = Apache-2.0
- PYTHON_CYTHON_LICENSE_FILES = COPYING.txt LICENSE.txt
+diff --git a/package/Config.in b/package/Config.in
+index 9a841082c6..f8f03f1eef 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -762,6 +762,7 @@ menu "Lua libraries/modules"
+ 	source "package/lua-livr/Config.in"
+ 	source "package/lua-livr-extra/Config.in"
+ 	source "package/lua-lpeg-patterns/Config.in"
++	source "package/lua-lrexlib-pcre2/Config.in"
+ 	source "package/lua-lsdbus/Config.in"
+ 	source "package/lua-lunitx/Config.in"
+ 	source "package/lua-lunix/Config.in"
+diff --git a/package/lua-lrexlib-pcre2/Config.in b/package/lua-lrexlib-pcre2/Config.in
+new file mode 100644
+index 0000000000..0d73ee8d6e
+--- /dev/null
++++ b/package/lua-lrexlib-pcre2/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LUA_LREXLIB_PCRE2
++	bool "lua-lrexlib-pcre2"
++	select BR2_PACKAGE_PCRE2
++	help
++	  Regular expression library binding (PCRE2 flavour).
++
++	  https://github.com/rrthomas/lrexlib
+diff --git a/package/lua-lrexlib-pcre2/lua-lrexlib-pcre2.hash b/package/lua-lrexlib-pcre2/lua-lrexlib-pcre2.hash
+new file mode 100644
+index 0000000000..090b83d48a
+--- /dev/null
++++ b/package/lua-lrexlib-pcre2/lua-lrexlib-pcre2.hash
+@@ -0,0 +1,3 @@
++# computed by luarocks/buildroot
++sha256  9bb1cb2f307eb70d66fdab499864de732c891aace0ceb6a338194e2e6631b9c3  lrexlib-pcre2-2.9.2-1.src.rock
++sha256  067992fa7c5866e01d6c8fe93dfa1e1456a6ac81fa59ccdc72f5adcd6e5b3690  lrexlib/LICENSE
+diff --git a/package/lua-lrexlib-pcre2/lua-lrexlib-pcre2.mk b/package/lua-lrexlib-pcre2/lua-lrexlib-pcre2.mk
+new file mode 100644
+index 0000000000..3d0c3c57fc
+--- /dev/null
++++ b/package/lua-lrexlib-pcre2/lua-lrexlib-pcre2.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# lua-lrexlib-pcre2
++#
++################################################################################
++
++LUA_LREXLIB_PCRE2_VERSION = 2.9.2-1
++LUA_LREXLIB_PCRE2_NAME_UPSTREAM = Lrexlib-PCRE2
++LUA_LREXLIB_PCRE2_SUBDIR = lrexlib
++LUA_LREXLIB_PCRE2_LICENSE = MIT
++LUA_LREXLIB_PCRE2_LICENSE_FILES = $(LUA_LREXLIB_PCRE2_SUBDIR)/LICENSE
++LUA_LREXLIB_PCRE2_DEPENDENCIES = pcre2
++
++$(eval $(luarocks-package))
+diff --git a/support/testing/tests/package/test_lua_lrexlib_pcre2.py b/support/testing/tests/package/test_lua_lrexlib_pcre2.py
+new file mode 100644
+index 0000000000..07a1a3e03b
+--- /dev/null
++++ b/support/testing/tests/package/test_lua_lrexlib_pcre2.py
+@@ -0,0 +1,25 @@
++from tests.package.test_lua import TestLuaBase
++
++
++class TestLuaLrexlibPCRE2(TestLuaBase):
++    config = TestLuaBase.config + \
++        """
++        BR2_PACKAGE_LUA=y
++        BR2_PACKAGE_LUA_LREXLIB_PCRE2=y
++        """
++
++    def test_run(self):
++        self.login()
++        self.module_test("rex_pcre2")
++
++
++class TestLuajitLrexlibPCRE2(TestLuaBase):
++    config = TestLuaBase.config + \
++        """
++        BR2_PACKAGE_LUAJIT=y
++        BR2_PACKAGE_LUA_LREXLIB_PCRE2=y
++        """
++
++    def test_run(self):
++        self.login()
++        self.module_test("rex_pcre2")
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
