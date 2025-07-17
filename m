@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE659C83F1A
-	for <buildroot@archiver.kernel.org>; Thu, 17 Jul 2025 20:40:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 480A7C83F1A
+	for <buildroot@archiver.kernel.org>; Thu, 17 Jul 2025 20:40:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C2A2241134;
-	Thu, 17 Jul 2025 20:40:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1C3674119D;
+	Thu, 17 Jul 2025 20:40:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tj-ArD-kiOKd; Thu, 17 Jul 2025 20:40:17 +0000 (UTC)
+ id b4TddrW8uII8; Thu, 17 Jul 2025 20:40:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DEDA04073B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F4D641148
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DEDA04073B;
-	Thu, 17 Jul 2025 20:40:16 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 337571A6
- for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:40:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3F4D641148;
+	Thu, 17 Jul 2025 20:40:44 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id A4103226
+ for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:40:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1996740503
- for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:40:15 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8ACEB60762
+ for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:40:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AJspgNhAMR_y for <buildroot@buildroot.org>;
- Thu, 17 Jul 2025 20:40:14 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5kJtQtAnhBdy for <buildroot@buildroot.org>;
+ Thu, 17 Jul 2025 20:40:43 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2989F40442
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2989F40442
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B9F106066A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B9F106066A
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2989F40442
- for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:40:14 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B9F106066A
+ for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:40:42 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id DD11CB977A8D; Thu, 17 Jul 2025 22:40:11 +0200 (CEST)
-Message-ID: <68894fbe-103d-4331-88a3-88180510c02c@rnout.be>
-Date: Thu, 17 Jul 2025 22:40:10 +0200
+ with ESMTPSA id A7F18B977A8D; Thu, 17 Jul 2025 22:40:40 +0200 (CEST)
+Message-ID: <aad174d8-c628-45bd-a5cf-3f1ea665ca73@rnout.be>
+Date: Thu, 17 Jul 2025 22:40:38 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
-References: <20250715202012.385593-1-james.hilliard1@gmail.com>
+References: <20250715210509.544485-1-james.hilliard1@gmail.com>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20250715202012.385593-1-james.hilliard1@gmail.com>
+In-Reply-To: <20250715210509.544485-1-james.hilliard1@gmail.com>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1752784812; h=from:subject:date:message-id:to:mime-version:content-type:
+ t=1752784840; h=from:subject:date:message-id:to:mime-version:content-type:
  content-transfer-encoding:content-language:in-reply-to:references;
- bh=GoYsYl2nILcEFuiLne/7K5eQ4y+TU0KY4EQVvqrjFiI=;
- b=pbq9itf09QlpNR6PLsgSFHjw4QqIbGsuuxqOdC5vok448u6BWtcmhYdqtnb2La362FQamk
- y1A3yNj8ZY/jOiLidQAt3TOu5mNX4U2wbg5gNfKtODlhzPCptk2xk59ViVqra26VbAJnFI
- xJ+VjxCvodnaoJ5pM6QGyFBANx+BHxVcN1uVbNYOAZwkOFgNdMxv5B1lRARSVy+264HLJ7
- EXMFc/EWiVCSpgNN7H8oDb6JGjU3wvps7cqGWzNEiLKbdhinIHNYUItDI8Kx6xWi0zZ2Jf
- hj/cBeOCkXwqlDj7SIcRObjWG5ArM9h5a95fVdiR3kXeuYVBlKbK/0c5lBtE2g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=jbWkAjaKmRr2BQ3a9ieloxxJOpj4K5dii/B0Q1rVP98=;
+ b=MnGQiTok6xDUX8tQzHkgkopx0IEWc+B6NW7TetTO0vVEAjLset1oS33f4MNG+EEnGdbwdL
+ Ip1yh5wQ4l3ynZMSUDlL77w4Gm3A31p2wif19gm6Io/+qAilwLbM4mL/9vVBp3iYdEfFBu
+ lz6+cQaurusoqmDAbmtNMFWRxOa4vbK9g3FTXNJy/Qjy1odyvuDI6OV5+l+Dvlp+JQwuMa
+ fxBJiX5EPX92cJVUbXUFYniL3m5rWQ3/gH9eRTeQyGVs4tk4mU9dIxc4KEVtNg2lMcLIfh
+ j+AUWnGeEs7/ZAD5GLsLOn7GLlsj7dwwWUT/JPMOywQSxCz65dDNZpr3mfOCtg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=pbq9itf0
-Subject: Re: [Buildroot] [PATCH 1/1] package/vala: bump to version 0.56.18
+ header.a=rsa-sha256 header.s=dkim header.b=MnGQiTok
+Subject: Re: [Buildroot] [PATCH 1/1] package/libjcat: bump to version 0.2.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,7 +84,7 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 15/07/2025 22:20, James Hilliard wrote:
+On 15/07/2025 23:05, James Hilliard wrote:
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
   Applied to master, thanks.
@@ -93,34 +93,32 @@ On 15/07/2025 22:20, James Hilliard wrote:
   Arnout
 
 > ---
->   package/vala/vala.hash | 4 ++--
->   package/vala/vala.mk   | 2 +-
->   2 files changed, 3 insertions(+), 3 deletions(-)
+>   package/libjcat/libjcat.hash | 2 +-
+>   package/libjcat/libjcat.mk   | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/vala/vala.hash b/package/vala/vala.hash
-> index a16875ac6a..1babb375d7 100644
-> --- a/package/vala/vala.hash
-> +++ b/package/vala/vala.hash
-> @@ -1,4 +1,4 @@
-> -# From https://download.gnome.org/sources/vala/0.56/vala-0.56.17.sha256sum
-> -sha256  26100c4e4ef0049c619275f140d97cf565883d00c7543c82bcce5a426934ed6a  vala-0.56.17.tar.xz
-> +# From https://download.gnome.org/sources/vala/0.56/vala-0.56.18.sha256sum
-> +sha256  f2affe7d40ab63db8e7b9ecc3f6bdc9c2fc7e3134c84ff2d795f482fe926a382  vala-0.56.18.tar.xz
->   # Locally computed
->   sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING
-> diff --git a/package/vala/vala.mk b/package/vala/vala.mk
-> index 85f928202a..24dadeb346 100644
-> --- a/package/vala/vala.mk
-> +++ b/package/vala/vala.mk
-> @@ -5,7 +5,7 @@
+> diff --git a/package/libjcat/libjcat.hash b/package/libjcat/libjcat.hash
+> index b6dc8d2f69..8f50f8798f 100644
+> --- a/package/libjcat/libjcat.hash
+> +++ b/package/libjcat/libjcat.hash
+> @@ -1,3 +1,3 @@
+>   # Locally calculated
+> -sha256  a6232aeca3c3fab6dbb3bed06ec3832088b49a4b278a7119558d72be60ce921f  libjcat-0.2.1.tar.xz
+> +sha256  f2f115aad8a8f16b8dde1ed55de7abacb91d0878539aa29b2b60854b499db639  libjcat-0.2.3.tar.xz
+>   sha256  20c17d8b8c48a600800dfd14f95d5cb9ff47066a9641ddeab48dc54aec96e331  LICENSE
+> diff --git a/package/libjcat/libjcat.mk b/package/libjcat/libjcat.mk
+> index c365c1914b..4a7f304c2a 100644
+> --- a/package/libjcat/libjcat.mk
+> +++ b/package/libjcat/libjcat.mk
+> @@ -4,7 +4,7 @@
+>   #
 >   ################################################################################
 >   
->   VALA_VERSION_MAJOR = 0.56
-> -VALA_VERSION = $(VALA_VERSION_MAJOR).17
-> +VALA_VERSION = $(VALA_VERSION_MAJOR).18
->   VALA_SITE = http://download.gnome.org/sources/vala/$(VALA_VERSION_MAJOR)
->   VALA_SOURCE = vala-$(VALA_VERSION).tar.xz
->   VALA_LICENSE = LGPL-2.1+
+> -LIBJCAT_VERSION = 0.2.1
+> +LIBJCAT_VERSION = 0.2.3
+>   LIBJCAT_SITE = https://github.com/hughsie/libjcat/releases/download/$(LIBJCAT_VERSION)
+>   LIBJCAT_SOURCE = libjcat-$(LIBJCAT_VERSION).tar.xz
+>   LIBJCAT_LICENSE = LGPL-2.1+
 
 _______________________________________________
 buildroot mailing list
