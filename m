@@ -4,67 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23172C83F34
-	for <buildroot@archiver.kernel.org>; Thu, 17 Jul 2025 20:21:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E181C83F1A
+	for <buildroot@archiver.kernel.org>; Thu, 17 Jul 2025 20:21:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 670AE404B0;
-	Thu, 17 Jul 2025 20:21:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 22A394088A;
+	Thu, 17 Jul 2025 20:21:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uhu-8kXR809t; Thu, 17 Jul 2025 20:21:01 +0000 (UTC)
+ id elIfkFUioWpB; Thu, 17 Jul 2025 20:21:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2B10B4118B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 624924087B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2B10B4118B;
-	Thu, 17 Jul 2025 20:21:01 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id D55931A6
- for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:20:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 624924087B;
+	Thu, 17 Jul 2025 20:21:14 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id DFB6C226
+ for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:21:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C6992607DA
- for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:20:59 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D1BBD4076A
+ for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:21:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NaBenganoFe5 for <buildroot@buildroot.org>;
- Thu, 17 Jul 2025 20:20:59 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FEbF22Qg8AVu for <buildroot@buildroot.org>;
+ Thu, 17 Jul 2025 20:21:12 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E4E0C607BA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E4E0C607BA
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3452840876
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3452840876
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E4E0C607BA
- for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:20:58 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3452840876
+ for <buildroot@buildroot.org>; Thu, 17 Jul 2025 20:21:12 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id DF6CCB977A8D; Thu, 17 Jul 2025 22:20:56 +0200 (CEST)
-Message-ID: <678ac98d-b0b0-4789-b3c3-715ce4cde3da@rnout.be>
-Date: Thu, 17 Jul 2025 22:20:55 +0200
+ with ESMTPSA id 6D52FB977A8D; Thu, 17 Jul 2025 22:21:08 +0200 (CEST)
+Message-ID: <19c42f1e-9432-44ad-9125-ca84e3a3ad21@rnout.be>
+Date: Thu, 17 Jul 2025 22:21:07 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
-References: <20250621163539.263715-1-ju.o@free.fr>
+To: Florian Larysch <fl@n621.de>, buildroot@buildroot.org
+Cc: =?UTF-8?B?SmFuIMSMZXJtw6Fr?= <sairon@sairon.cz>
+References: <20250713125521.18543-1-fl@n621.de>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20250621163539.263715-1-ju.o@free.fr>
+In-Reply-To: <20250713125521.18543-1-fl@n621.de>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1752783657; h=from:subject:date:message-id:to:mime-version:content-type:
+ t=1752783670; h=from:subject:date:message-id:to:cc:mime-version:content-type:
  content-transfer-encoding:content-language:in-reply-to:references;
- bh=eZuBE+CqlPFay5JfJUXXXITm9V/IqouC2LAKIOiHiJE=;
- b=dGWoGxjECBV99hr5ao+s+hG9baVJdsT5DxudmyLYC7zvtAVAO85l72jwYU7ZNMchfKfyqf
- JlV3oTQjGd5Pb69KHRwmhrNAKufKaPzZtqubd08lfetKXZuPoDcPyYvSo1KrYOTcUG3ZVR
- uC9O/23sm7cFg3+qUP77Q6LmFtWtY1N0oRgH+u7oZnVPuAfT9eJVuAjteuSWk1hSyclyDo
- L3ZJruLzCv0DpNJ8BOLmTvZZq9u1+8sqtPBMrW2by+WvAy6oRBzVkj8uL5eFR0nB1DLPwf
- UaIyQ6cuN6eyNfF82cwlU14Nm6CV1HqR77So8AYq5gft4lqrcyD8BK0SKc4tQQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=SaoPuKPHhBVsSiL8uMDSOQ9Lvzlj+5wUXjdjbyqfTjE=;
+ b=mYuapga1O/pyZLL4ej0mfIK7/eEJAvTJ+nyjJmERdfUczRptuhZS02t9dO4gUcVlszWHjS
+ PRnF0DvD0XxOxb81xK3CmrKZzrEm4oAS3qcxn9qkyV77xKYoTSaOG6p2E81SZsuD+SAgRz
+ jbdU34KB0H2zxNRnPgrqYw4Ty2/Lzck1PLAIJE40zGlyGSArvIa90dL/JneG5XxCHfkKm8
+ lTfrXXyMrZu/rr429UAiWIoJjCiRx4o5X6lGRiXB0fsBijuBx0inBYtBsQ3zNr1YR/DsGl
+ L65JuQkcnD3DtBz2Lg/Vgxa1vafZm4R34lbm8KrXO/Z7R0dnfzC3/G5JlKDj+w==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=dGWoGxjE
-Subject: Re: [Buildroot] [PATCH 1/1] package/openblas: bump to version
- v0.3.30
+ header.a=rsa-sha256 header.s=dkim header.b=mYuapga1
+Subject: Re: [Buildroot] [PATCH 1/1] fs: erofs: reword "all-fragments"
+ Kconfig text
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,11 +86,14 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 21/06/2025 18:35, Julien Olivain wrote:
-> For change log since v0.3.29, see:
-> https://github.com/OpenMathLib/OpenBLAS/releases/tag/v0.3.30
+On 13/07/2025 14:55, Florian Larysch wrote:
+> Currently, both BR2_TARGET_ROOTFS_EROFS_ALL_FRAGMENTS and
+> BR2_TARGET_ROOTFS_EROFS_FRAGMENTS have the same Kconfig prompt, making
+> them hard to distinguish.
 > 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> Reword the one for -Eall-fragments to be distinct.
+> 
+> Signed-off-by: Florian Larysch <fl@n621.de>
 
   Applied to 2025.02.x and 2025.05.x, thanks.
 
@@ -97,36 +101,22 @@ On 21/06/2025 18:35, Julien Olivain wrote:
   Arnout
 
 > ---
->   package/openblas/openblas.hash | 6 +++---
->   package/openblas/openblas.mk   | 2 +-
->   2 files changed, 4 insertions(+), 4 deletions(-)
+>   fs/erofs/Config.in | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/package/openblas/openblas.hash b/package/openblas/openblas.hash
-> index 6b123b5c58..965d7458ba 100644
-> --- a/package/openblas/openblas.hash
-> +++ b/package/openblas/openblas.hash
-> @@ -1,5 +1,5 @@
-> -# From https://github.com/OpenMathLib/OpenBLAS/releases/tag/v0.3.29
-> -md5  853a0c5c0747c5943e7ef4bbb793162d  openblas-0.3.29.tar.gz
-> +# From https://github.com/OpenMathLib/OpenBLAS/releases/tag/v0.3.30
-> +md5  8db3d57f4d4485c6ae3f21ea465660e7  openblas-0.3.30.tar.gz
->   # Locally calculated
-> -sha256  38240eee1b29e2bde47ebb5d61160207dc68668a54cac62c076bb5032013b1eb  openblas-0.3.29.tar.gz
-> +sha256  27342cff518646afb4c2b976d809102e368957974c250a25ccc965e53063c95d  openblas-0.3.30.tar.gz
->   sha256  190b5a9c8d9723fe958ad33916bd7346d96fab3c5ea90832bb02d854f620fcff  LICENSE
-> diff --git a/package/openblas/openblas.mk b/package/openblas/openblas.mk
-> index 069636f5f0..edab26493d 100644
-> --- a/package/openblas/openblas.mk
-> +++ b/package/openblas/openblas.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
+> diff --git a/fs/erofs/Config.in b/fs/erofs/Config.in
+> index 00f27faeeb..93c069f2c0 100644
+> --- a/fs/erofs/Config.in
+> +++ b/fs/erofs/Config.in
+> @@ -109,7 +109,7 @@ config BR2_TARGET_ROOTFS_EROFS_FRAGMENTS
+>   	  Introduced in Linux 6.1.
 >   
-> -OPENBLAS_VERSION = 0.3.29
-> +OPENBLAS_VERSION = 0.3.30
->   OPENBLAS_SITE = https://github.com/OpenMathLib/OpenBLAS/releases/download/v$(OPENBLAS_VERSION)
->   OPENBLAS_LICENSE = BSD-3-Clause
->   OPENBLAS_LICENSE_FILES = LICENSE
+>   config BR2_TARGET_ROOTFS_EROFS_ALL_FRAGMENTS
+> -	bool "enable fragments packing"
+> +	bool "enable all-fragments packing"
+>   	help
+>   	  Forcely record the whole files into a special inode for better
+>   	  compression. Introduced in Linux 6.1.
 
 _______________________________________________
 buildroot mailing list
