@@ -1,104 +1,106 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F03CC83F1A
-	for <buildroot@archiver.kernel.org>; Fri, 18 Jul 2025 04:56:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EE3AC83F17
+	for <buildroot@archiver.kernel.org>; Fri, 18 Jul 2025 05:10:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 50BCB84106;
-	Fri, 18 Jul 2025 04:56:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 103F2612B0;
+	Fri, 18 Jul 2025 05:10:07 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sWffTI2jcZvH; Fri, 18 Jul 2025 05:10:06 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A193612B4
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0A193612B4;
+	Fri, 18 Jul 2025 05:10:06 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C9C611A6
+ for <buildroot@buildroot.org>; Fri, 18 Jul 2025 05:10:04 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id C5EB781A5C
+ for <buildroot@buildroot.org>; Fri, 18 Jul 2025 05:10:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P7M5DXbt4l1e; Fri, 18 Jul 2025 04:56:22 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5425E8410A
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5425E8410A;
-	Fri, 18 Jul 2025 04:56:22 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 204DF1A6
- for <buildroot@buildroot.org>; Fri, 18 Jul 2025 04:56:21 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 11F944015F
- for <buildroot@buildroot.org>; Fri, 18 Jul 2025 04:56:21 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jaM2GaWetYL9 for <buildroot@buildroot.org>;
- Fri, 18 Jul 2025 04:56:20 +0000 (UTC)
+ id wPRu4rXS3zEk for <buildroot@buildroot.org>;
+ Fri, 18 Jul 2025 05:10:03 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::536; helo=mail-ed1-x536.google.com;
+ client-ip=2a00:1450:4864:20::535; helo=mail-ed1-x535.google.com;
  envelope-from=fede.evol@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C565840078
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C565840078
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
- [IPv6:2a00:1450:4864:20::536])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C565840078
- for <buildroot@buildroot.org>; Fri, 18 Jul 2025 04:56:19 +0000 (UTC)
-Received: by mail-ed1-x536.google.com with SMTP id
- 4fb4d7f45d1cf-60c01b983b6so3776842a12.0
- for <buildroot@buildroot.org>; Thu, 17 Jul 2025 21:56:19 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6981681AF4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6981681AF4
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
+ [IPv6:2a00:1450:4864:20::535])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6981681AF4
+ for <buildroot@buildroot.org>; Fri, 18 Jul 2025 05:10:02 +0000 (UTC)
+Received: by mail-ed1-x535.google.com with SMTP id
+ 4fb4d7f45d1cf-605b9488c28so2755080a12.2
+ for <buildroot@buildroot.org>; Thu, 17 Jul 2025 22:10:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1752814578; x=1753419378;
+ d=1e100.net; s=20230601; t=1752815400; x=1753420200;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:sender:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=yirmm0QOJEiwn3evRlpcxKKUwpO/IY01bg3oIwG4Et4=;
- b=dkSNX6UHsPVueJixp0rUgKu9+CeW06W1G5jXX2GoIRUYeon6ru3tSRK9z4RBmUePhB
- mQcia3ik1nXISzq+cPmdkqyXzhd25BINs4nqaL/D+EpY5PXOi73jzT/Kf4ezOjt2OQ2d
- TQchwmtlH78+T9A7E4kcNns+jB5mKYuK4yUQZqomzwfVLoiQfMguwXWDNxwUY0C34gDe
- ByYvhvzmKR0c4BJoIuDKrDyIO98SX5fprjcSrCxyXaCVRHuTIGglz7TltKdsJynQameR
- Oa/BE++zdzmQxj96gx0YRBLvqZOd48Vzjashz9/BHFUF5wisUYiwIORyJIVQN2tGnAjD
- 5ZMg==
-X-Gm-Message-State: AOJu0YzqBxh+iw2C5NDx46N3Du0muJVD9/X5jRC8AhEAhDn46/6GpWYi
- nfS7DWbRVWm5rHzbMF/UVaPYQpW6xHLvS3xWB2lhJNG75xVfnnHf6gPy0wmPuQ==
-X-Gm-Gg: ASbGnctNZ+CyNul/l8xna51+KY95c765nxG0ZO56zmqEJwat95y1rqlq5pou5NO2WPA
- Zlw2hnKdFWm568AYofTx1DahRGZKxQoXYnMqoflvXjv9OWF9HANqkoUbQyOf6LmgWXAZj35ggCF
- bF17HEp5TtLu/OWOTXxkWsvPFcsRbYOKuGjQC8ku/ohtGn+Cop2OxXs1ngtyWY/HtvX6P2hK5YV
- HiW02JKPJHMv6RQ6q9CLTX91fQ9hjvBNYxlj68sEamxpug0s8zo90dd3TGKnS++AwNv5zkwQaX+
- zt/cNsAXP8scSVfRH2wUKBsJwjvXdlSfi71rtDxvkSppu9lGXb9PTE2x9botnxy/SvNI2whAI+b
- RT//NZ4vQGJLKPudpNaB90WTld/tcdd+Lp2ptkNn7TjTstsJ658/FxbBbh6sGzzt6ufDeQ5PWER
- GRPXHbsYFllR0NQey/yqoAloqkraTh7PNjfGCN7zRiXX+DdIKjfy5V
-X-Google-Smtp-Source: AGHT+IHDdreN12VUDJRE6PICWvLFAhOyL5ToqtR+comSH/TT6jmyP7Oe71n4YHOiZkvw6e+WVRUUYw==
-X-Received: by 2002:a05:6402:42d6:b0:60e:3f7c:deb2 with SMTP id
- 4fb4d7f45d1cf-612a33968cemr4685447a12.12.1752814577600; 
- Thu, 17 Jul 2025 21:56:17 -0700 (PDT)
+ bh=dwxGjqv1OwBe9XsdWSWDEKB8ARQaSxvsPQiRCPH6V/o=;
+ b=n10Ok4b6Pcz/wKswTl5cmTW3Dtvlcv5KnPBQorxD0HFqD+SeVyTCsXpaP06Vjf5pja
+ +mRwihXtpBEDaygakOCi56XM2JBIkimRe6o97wVD4dA2NgVJnTu52BqXrqvkI4mrik5G
+ AJsL5cjwOskCZO4bfcOwV7TGMEBePsChPM30bhQ6w/FK1DXAQqNFli0WatJyiE2SP2Vu
+ 0mG1RkExFsyJDBBccF0Owp3AY7RlwPlvaP4Vc8vo1IKsKQv2LA++F6LjfrjlJQgigejV
+ fKQhtRpI1oemlJqob31yo+VWLBS4MedpxAawdRA7687IXgr7KIvcsV6M9I5CgOxvaRG5
+ PBAQ==
+X-Gm-Message-State: AOJu0Yx+Gt6AT3QIqznC+h6oQplX6UKZIEiICNoSRBrEVH5+msUHozlh
+ xcNxs4wwc+iuwLrFGoi8Si4BjfpN5vEWi2GizhWhVKE52A3UjdGKzhvUpCBqhQ==
+X-Gm-Gg: ASbGncub5kdm8oApVZ2cVI2bEjdrbLSWRhgjPxqaFSfdJ+yj8MOwPiG0OWeensGAklo
+ nPJCnqIirur0J4YaAlP1sW6S92rlFzIv1JpSf8OLMdjh0Azl50ETFVbNDLGZEyJuGRWsBYEKfN0
+ 5DoSO+t8aWk5Us0cwa54P1VS4IUx/1SKYLwNkaE+YtVvb3MqaxQRIbWRO7VyzSDMEP1t8lL4GLr
+ /jY9gJAo5Mg3OZSTo5SDj762QchBp/JA5obwucwfOYaBXKFmsaVj/XO1AbhdPcS/3QLTGp/tdxp
+ FarsT9N4eTnHoZmgnb+WWA8xOJNfKsnRjGpzUDdB2YALrlI3O2mCb1lE11xCdq3/pVqg8YGI+hW
+ gBw3bQfgig6rDCgfkzBARYGoqC9Q3h+mTkNUtyNjDqkJ+5/6aI5QLp+hqxn+rrxOcsVS9LHKGsG
+ TAg2/Gt0k5mXeZ6/PJGZ4LtPMstpzQXdqAuzfL+sldMw==
+X-Google-Smtp-Source: AGHT+IEhYkhVNblLNVVr3ymfkZfC+z5SEWULe7zl8NDXdC4y8piEt1Nq8qBrT1czGVGq1zhnvmepVg==
+X-Received: by 2002:a17:907:720d:b0:ae3:c767:da11 with SMTP id
+ a640c23a62f3a-ae9ce17e845mr880196266b.50.1752815399858; 
+ Thu, 17 Jul 2025 22:09:59 -0700 (PDT)
 Received: from rawyouth.fritz.box
  (dynamic-2a02-3102-6875-9900-19b4-7432-1ff2-cb8d.310.pool.telefonica.de.
  [2a02:3102:6875:9900:19b4:7432:1ff2:cb8d])
  by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-612c90a9098sm394212a12.65.2025.07.17.21.56.16
+ a640c23a62f3a-aec6c7c77c0sm54475966b.35.2025.07.17.22.09.59
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 17 Jul 2025 21:56:17 -0700 (PDT)
+ Thu, 17 Jul 2025 22:09:59 -0700 (PDT)
 From: Federico Pellegrin <fede@evolware.org>
 To: buildroot@buildroot.org,
-	james.hilliard1@gmail.com
+	joris.lijssens@gmail.com,
+	baruch@tkos.co.il
 Cc: Federico Pellegrin <fede@evolware.org>
-Date: Fri, 18 Jul 2025 06:56:14 +0200
-Message-ID: <20250718045614.17100-1-fede@evolware.org>
+Date: Fri, 18 Jul 2025 07:09:54 +0200
+Message-ID: <20250718050954.18325-1-fede@evolware.org>
 X-Mailer: git-send-email 2.50.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1752814578; x=1753419378; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1752815400; x=1753420200; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
- bh=yirmm0QOJEiwn3evRlpcxKKUwpO/IY01bg3oIwG4Et4=;
- b=i1NFRW8LDVTDEn5nk8omOgxe0nXKF/qEoZtHjOlfljEP/F86FokJNaW2g5SDtHci6u
- MBbbL6TZhSDqVOGBjYCo4hYbD1ajNvr5hKTVN8I58kHRkAHhngPyXUFSxJvko49YbYgA
- JOu6vi1aT/Uk9DlrfKg/33bXbxhJ8mSkolUzKUll8e6upVGeXGi//+GK4GEnVPzwMwzv
- FNf9OuUVmBxyQrrK3Wm63Qx/K5ntkmNZDDf0RFijcj6KVk/o6tgsXSLwIYfz+isY4b4C
- To6cn/kZEM7XCtHeNf3by0m3JIhYbtzOz+JphdDhs4JwPRkqfmD3k5DD8TC8mqpnbYB+
- ZLdA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=dwxGjqv1OwBe9XsdWSWDEKB8ARQaSxvsPQiRCPH6V/o=;
+ b=fHoR/vnkV12X8RMH20z8y1JE80pEMZrx9PfVlkYpG7xPssYeCwqDZJMK7s/JYI5Yl5
+ vrpPDDZgpiXQNs4+fFjKXByuL59WtGijGiVuGKhYuwnnDGWXKUHd5RyZsAfWBbvmhnl6
+ 8vH3fspLuNkVJVSUzlXlX1pzPA7l+Kkb52nM4OTY+/to3XqvZM/vpsJZfXkz/r+TrLp3
+ 7gsKlTf6aAN5b1utw2tL7AyacKUyjKeADJ/JM9AlU5Y8XvqHUlQP56Lq5NWbYZ9qhbeE
+ Plcms6bu5bsEtoKn5V5RhMoxvKK5WnNYP/w+Ms0f1hn99L5JA6ZTYx7unrJdr7f2pvx0
+ HOYw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=fail (p=none dis=none)
  header.from=evolware.org
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=i1NFRW8L
-Subject: [Buildroot] [PATCH 1/1] package/bpftool: bump to version 7.5.0
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=fHoR/vnk
+Subject: [Buildroot] [PATCH 1/1] package/netsniff-ng: bump to 0.6.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,41 +117,100 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changes: https://github.com/libbpf/bpftool/releases
+Changes: https://github.com/netsniff-ng/netsniff-ng/releases/tag/v0.6.9
 
-This upgrade fixes as well linking problems to LLVM libraries in
-the previous version on Buildroot 2025.05 and master.
+Remove now upstreamed patch 0001-Detect-libpcap-dependencies-using-pkg-config.patch.
+Fixes also: https://patchwork-proxy.ozlabs.org/project/buildroot/patch/20240829075015.39164-1-fede@evolware.org/
 
 Signed-off-by: Federico Pellegrin <fede@evolware.org>
 ---
- package/bpftool/bpftool.hash | 2 +-
- package/bpftool/bpftool.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...ibpcap-dependencies-using-pkg-config.patch | 51 -------------------
+ package/netsniff-ng/netsniff-ng.hash          |  2 +-
+ package/netsniff-ng/netsniff-ng.mk            |  2 +-
+ 3 files changed, 2 insertions(+), 53 deletions(-)
+ delete mode 100644 package/netsniff-ng/0001-Detect-libpcap-dependencies-using-pkg-config.patch
 
-diff --git a/package/bpftool/bpftool.hash b/package/bpftool/bpftool.hash
-index 4f83e71a76..5112bb997e 100644
---- a/package/bpftool/bpftool.hash
-+++ b/package/bpftool/bpftool.hash
+diff --git a/package/netsniff-ng/0001-Detect-libpcap-dependencies-using-pkg-config.patch b/package/netsniff-ng/0001-Detect-libpcap-dependencies-using-pkg-config.patch
+deleted file mode 100644
+index bbcbd2bfc3..0000000000
+--- a/package/netsniff-ng/0001-Detect-libpcap-dependencies-using-pkg-config.patch
++++ /dev/null
+@@ -1,51 +0,0 @@
+-From 194ec61843b9598ce90873c812b817c4b96e2e0d Mon Sep 17 00:00:00 2001
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Thu, 2 Sep 2021 12:56:00 +0300
+-Subject: [PATCH] Detect libpcap dependencies using pkg-config
+-
+-When building statically the link command line must include all
+-dependencies of all libraries. libpcap can optionally depend on libnl.
+-mausezahn can't build statically in this case.
+-
+-Use pkg-config in configure and in the link command to construct the
+-library flags we need to link with libpcap.
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+-Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
+----
+-Upstream status: commit 194ec61843b9598ce90873c812b817c4b96e2e0d
+-
+- configure          | 4 +++-
+- mausezahn/Makefile | 2 +-
+- 2 files changed, 4 insertions(+), 2 deletions(-)
+-
+-diff --git a/configure b/configure
+-index 510826a798f5..598ae2433a7a 100755
+---- a/configure
+-+++ b/configure
+-@@ -588,7 +588,9 @@ int main(void)
+- }
+- EOF
+- 
+--	$CC -o $TMPDIR/pcaptest $TMPDIR/pcaptest.c -lpcap >> config.log 2>&1
+-+	$CC -o $TMPDIR/pcaptest $TMPDIR/pcaptest.c \
+-+		$($PKG_CONFIG --libs libpcap 2>> config.log) \
+-+		>> config.log 2>&1
+- 	if [ ! -x $TMPDIR/pcaptest ] ; then
+- 		echo "[NO]"
+- 		echo "CONFIG_LIBPCAP=0" >> Config
+-diff --git a/mausezahn/Makefile b/mausezahn/Makefile
+-index ca16b6579583..9544565355cc 100644
+---- a/mausezahn/Makefile
+-+++ b/mausezahn/Makefile
+-@@ -1,6 +1,6 @@
+- mausezahn-libs =	-lcli \
+- 			-lnet \
+--			-lpcap \
+-+			$(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) $(PKG_CONFIG) --libs libpcap 2> /dev/null ) \
+- 			-lrt \
+- 			-lpthread \
+- 			-lm
+--- 
+-2.33.0
+-
+diff --git a/package/netsniff-ng/netsniff-ng.hash b/package/netsniff-ng/netsniff-ng.hash
+index 40b015cb0d..e63963c6d7 100644
+--- a/package/netsniff-ng/netsniff-ng.hash
++++ b/package/netsniff-ng/netsniff-ng.hash
 @@ -1,5 +1,5 @@
- # Locally calculated
--sha256  89d3ce783d5c9e40b9060b380869911ee9d5ab6732a4b1dd19a90103c5e41e6c  bpftool-v7.1.0-git4.tar.gz
-+sha256  ff95bc8a057c84e61863fcf95e354199041ac524f5b9f5d487cf0b2c6e9198fb  bpftool-v7.5.0-git4.tar.gz
- sha256  7c588754d5e81e92e2a12e47cf78949d485c9c22b4850f12d21b3835c85947d1  LICENSE
- sha256  6313108c23efffa36948f8b2cff1560a5935373b527b0e1a837cc77e6ed1bacd  LICENSE.BSD-2-Clause
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL-2.0
-diff --git a/package/bpftool/bpftool.mk b/package/bpftool/bpftool.mk
-index cd68d89799..1b765ba38f 100644
---- a/package/bpftool/bpftool.mk
-+++ b/package/bpftool/bpftool.mk
+ # Locally calculated after checking signature
+-sha256  77d17d4158faf1d93c7d922a1bd7f093a8b437bd658292c830708540e10894ba  netsniff-ng-0.6.8.tar.xz
++sha256  027840fa3c4e11abfe4fd0fffe9909c5c4ed1428d4b9397fb6d2f5ea69325918  netsniff-ng-0.6.9.tar.xz
+ # Locally computed
+ sha256  b353349ba51e0d4b59cf2f188f0c285296e154ce8c58954bc5e0dc0282a4db2d  README
+ sha256  8f6d85366f3763557d6ddd0637988b9ba11edef354e3c9302fff4262a235c387  COPYING
+diff --git a/package/netsniff-ng/netsniff-ng.mk b/package/netsniff-ng/netsniff-ng.mk
+index 2b5b19b27f..5e779f1cfb 100644
+--- a/package/netsniff-ng/netsniff-ng.mk
++++ b/package/netsniff-ng/netsniff-ng.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BPFTOOL_VERSION = v7.1.0
-+BPFTOOL_VERSION = v7.5.0
- BPFTOOL_SITE = https://github.com/libbpf/bpftool
- BPFTOOL_SITE_METHOD = git
- BPFTOOL_GIT_SUBMODULES = YES
+-NETSNIFF_NG_VERSION = 0.6.8
++NETSNIFF_NG_VERSION = 0.6.9
+ NETSNIFF_NG_SITE = http://pub.netsniff-ng.org/netsniff-ng
+ NETSNIFF_NG_SOURCE = netsniff-ng-$(NETSNIFF_NG_VERSION).tar.xz
+ NETSNIFF_NG_LICENSE = GPL-2.0
 -- 
 2.50.1
 
