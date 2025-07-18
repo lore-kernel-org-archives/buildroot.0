@@ -4,99 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A524BC83F17
-	for <buildroot@archiver.kernel.org>; Fri, 18 Jul 2025 14:58:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22AD0C83F17
+	for <buildroot@archiver.kernel.org>; Fri, 18 Jul 2025 15:20:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7388D40DB9;
-	Fri, 18 Jul 2025 14:58:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D8E95411BB;
+	Fri, 18 Jul 2025 15:20:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hGkDfCgT-Bh2; Fri, 18 Jul 2025 14:58:19 +0000 (UTC)
+ id hG91ta0iuSZw; Fri, 18 Jul 2025 15:20:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 49AB240C80
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A760640D85
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 49AB240C80;
-	Fri, 18 Jul 2025 14:58:19 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 4F206236
- for <buildroot@buildroot.org>; Fri, 18 Jul 2025 14:58:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A760640D85;
+	Fri, 18 Jul 2025 15:20:09 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5C6D8DA
+ for <buildroot@buildroot.org>; Fri, 18 Jul 2025 15:20:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3544E401A0
- for <buildroot@buildroot.org>; Fri, 18 Jul 2025 14:58:17 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 30FC760BB5
+ for <buildroot@buildroot.org>; Fri, 18 Jul 2025 15:20:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DHC4Rv9vF43E for <buildroot@buildroot.org>;
- Fri, 18 Jul 2025 14:58:16 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DlubtepP7Iz3 for <buildroot@buildroot.org>;
+ Fri, 18 Jul 2025 15:20:07 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
+ client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
  envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D8CF740083
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D8CF740083
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D8CF740083
- for <buildroot@buildroot.org>; Fri, 18 Jul 2025 14:58:15 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id
- 5b1f17b1804b1-4561514c7f0so22361155e9.0
- for <buildroot@buildroot.org>; Fri, 18 Jul 2025 07:58:15 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B616660A42
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B616660A42
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B616660A42
+ for <buildroot@buildroot.org>; Fri, 18 Jul 2025 15:20:06 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ 5b1f17b1804b1-455b00339c8so16891095e9.3
+ for <buildroot@buildroot.org>; Fri, 18 Jul 2025 08:20:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1752850693; x=1753455493;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=+NZmSYQlDb1iuufnWt9i6TMKF6uojWyCKUbDXZZwXmU=;
- b=DEujw65i7NRAntJ3ygRSnsKXA2bHYRiv5bo98KZGfJ8X0SJ7u3+aGE7lzpKV1e8CRc
- 2UXCeZCXBo9wzasWCBUN1XG5rNyfKScdqqOF6bKVbhPfX2EcMbTFe8wPeSxqN+wgqedP
- VIwJrc101iYdJEsAGDU4VyRsfOCsj93OJdM3qhC9CFc3ZN9U8x8043lKUlSW8l2Kr4i6
- qXRtP+tA8bLplI1HMaegJGEH3AiaBmFIriWBZnp1zC433upkIGBAVxiW6JcHTToncY5j
- Wq6tbE6fzNnmB/+oExKI/JgarpFk94Lkm8GACQtQDm/smSPQjaajMO1Z629+5NfwTfGR
- mLCQ==
-X-Gm-Message-State: AOJu0YzM20UAeO0qH4pJDGan+1BWeIk6pMcY6nx1YB6Qxe+CDODJ6A0m
- st+tVuOG8Na2qZhxwYvWRXVcuni2qS7SfoB/hAoI3MP9lxr/nEx2MKu3JdyPsdAbm+IJlmHXVt2
- nkQmm
-X-Gm-Gg: ASbGncv3/XAK/MnwuyDbb4XXGIqHr9Gt0TcmZPGZ3/tmROWIqF48OvRhNmSv72SVm4x
- glhA3beLPB4egvekefBCNmYMx1mc2qbyyotDFhiMXEjSGmFeSGkCPlOe1nrjbWIwKU+9Z4B274O
- 7SlTdxmQr9kCxESSNX40nPj85pPG7ONq5dTBv1zAapQ59toIwxnOYY7jBuXz8l37UT845FFd5Lg
- hvZExL+7QA4C4tKGD5krW4EtTwKF5n/1LMYOyeik5EKwk/YHj2wPlNRXtdCzcDf+gpNtPiu9dAN
- qsPYow/Ovu680xFRXdDZMh8UoZXQ3iGBZNt2J8jorbLS/R8xAHRS/N+WSN96v7CjDXIWeZHYVgG
- V0YX20AsC6OeRcs3dF0LcWYAFmdaKXCpuk6kOL2GK9bccvdR8OsCqSw==
-X-Google-Smtp-Source: AGHT+IHaTQC0hs4yyMETyf0OHYHwPqTUCPIs1sA/Xjn36QvjcekUGsgkH7l0LLH4bb+nA/1uZSUQ1A==
-X-Received: by 2002:a05:600c:4fc5:b0:456:1156:e5f5 with SMTP id
- 5b1f17b1804b1-456359ee0a4mr71087945e9.31.1752850693260; 
- Fri, 18 Jul 2025 07:58:13 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1752852003; x=1753456803;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:to
+ :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=2gFYSHzclnry15T6vwP14nM3+ZwqrzZVHWyM7ol1wBw=;
+ b=pcIJAcEi2fAC+m/TtdIurXGjlbQFw8HtAiK8/o4MJtdzO6Nod4PEOa6BOZv58JwzBn
+ qE2KIx0FkHkZGSnQbpGx/8egcE5jk5AxASI70ohYg4AZ1ASU7v+EL7DMZiG+iED/o4b0
+ 6x7j9Hdm69iM1g1618Ni1QLbpwnyFRNiKkqFPxVwduK+LXVkCkpgn01iW0iT/Z8jTOfl
+ hw2NazdoJik/D5BcNI7/th2g6W2EpPv4iIQv6SAYF1oVoj7NrlpSsWdw/Dlv39FXuczg
+ BgKbcIkzVCOtIRQ0a+9T8i0hMJsiXd4HCLPGAHvKW+Xy7tyEho0I52WPXhesdC7hdAVR
+ SqjA==
+X-Gm-Message-State: AOJu0YyS0X6llrR9gH+5p+fTSASxQ2ypdptzOHj88QXh++poRyoOXBGS
+ R7o3cGQ949V+eFgXz5xmHtUgom/oafAZpREQIJqqxEbSa9jZMe5qweQVzmautFln5joeWTarZZo
+ n1NiQ
+X-Gm-Gg: ASbGncv2kcvF5mgROgJtrrhbJh5Hqr45LQ881UDocvRWjk1x85XqNkOBFBqUpIvjLEb
+ ud2Y2Vrz9Ve+gxB0igkzR4jUPFm4Y4or7mVQ0YRZKhqgf/hpHXgHn9QV1SZ1tYYePGb/ZwLM1fM
+ MCitiVE5dS0IGhknDCFL+KKYJm6RlhNlA1dt516zAl24JMwTujMA3+3hd4TGW6gh/hE3nOF9uwR
+ J0OhayXW6GJYjsMQFuuVbYs3T9CXdn/npsOZwn4Z2P0pPkFDDtp5UPQjkN4qtuK7+bXMM50sLCL
+ hbIEc6y5e7e5t1HnTs3Av31p8XJjLUjcqlDPUppnrjlptCKjY6DG4d79zanebF/Pbry+ZH65aaU
+ sFW3n95jhvVJACJoCSD9fwxgKAI05bVJfw0u5L4lucg7OvcVq/ee+cA==
+X-Google-Smtp-Source: AGHT+IEWIhsxQ52xqQ4mWA4Eef6HSUgyOl+4WOnNXoJfahp6Cy0+XgCeOPhMLMICLgYuuFiLK5PjlQ==
+X-Received: by 2002:a05:600c:450f:b0:456:2981:2d6 with SMTP id
+ 5b1f17b1804b1-4562e34dc2amr118955995e9.14.1752852003343; 
+ Fri, 18 Jul 2025 08:20:03 -0700 (PDT)
 Received: from dragon.local.ess-mail.com
  ([2a02:a03f:639d:e501:5db7:a3a4:443e:4828])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3b61ca4d48bsm2084103f8f.62.2025.07.18.07.58.12
+ 5b1f17b1804b1-4563b75cb86sm22867835e9.32.2025.07.18.08.20.02
+ for <buildroot@buildroot.org>
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 18 Jul 2025 07:58:12 -0700 (PDT)
+ Fri, 18 Jul 2025 08:20:02 -0700 (PDT)
 To: buildroot@buildroot.org
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 18 Jul 2025 16:57:45 +0200
-Message-ID: <20250718145745.79845-1-titouan.christophe@mind.be>
+Date: Fri, 18 Jul 2025 17:19:53 +0200
+Message-ID: <20250718151953.97421-1-titouan.christophe@mind.be>
 X-Mailer: git-send-email 2.50.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1752850693; x=1753455493; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=+NZmSYQlDb1iuufnWt9i6TMKF6uojWyCKUbDXZZwXmU=;
- b=SiP//NOIrnpMw5JcP8lknu0jjFTUqWObovtazhHDxeKXI5PY2V/84nRVvHyoGqr21a
- jZxoBzTntGyZ2tdCfB7LqTpJfM/K0uJBPlChTh7dWqcsureG72UmXtuEd2F+7A54eGr+
- S84Gt5NGJ7P8gpSgSLH0K55usl2IPTxOrp7laz9AYQr3gCuBQDvKDvl9Dmvg3AqcHIys
- gwUOOcLjUZa4hWXuscHSvvge/679e3wXgg6yObHCWDIrGhJzkC6ba2yvnxi05/A63bIE
- bKosMmJ5XtJa4fv0sZNTLhiZ/O7tiQ+hWwHFOLjdL+TPo7A96P9SoZ1WjxtgP5p7E8mn
- 8AHg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=mind.be; s=google; t=1752852003; x=1753456803; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:to
+ :from:from:to:cc:subject:date:message-id:reply-to;
+ bh=2gFYSHzclnry15T6vwP14nM3+ZwqrzZVHWyM7ol1wBw=;
+ b=LnOGBwioIXSG1S+PN04B8mGcUyxqfmp6MY1YI+iZCZAiAB3FHxkfYOUveC+YFSuLj1
+ q4OeMcAmxtlzB87GodNe8sE+Wivk655eA53rPyJJkS0J8/nXeoGS2jjWsEUGEJ3acxxG
+ 3U5EZIzEiFBnCH/UM6pQUFY7MvOKLw0KWl0f/BIOvkYiMphhJbqeGv8ZtFoISE8mFJTh
+ 5goUQGU5kH9FbAUnerK29nbbmWEXO5fCnSRzK+18U3GKDyZZQtqcMaxZtxoPsYHdSkrR
+ 0ft025x95+5lMIFmAwm2Mzg9YMH5Z9tfjqm0yiaAsx4IIVc1OzWoEYJLJj0njrDnSEQi
+ fZcw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=SiP//NOI
-Subject: [Buildroot] [PATCH] package/mbedtls: security bump to v3.6.4
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=LnOGBwio
+Subject: [Buildroot] [PATCH] package/assimp: security bump to v6.0.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,120 +113,375 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This is a security release of the Long Term Support branch, see release notes:
-https://github.com/Mbed-TLS/mbedtls/releases/tag/mbedtls-3.6.4
-
-Also update the download location, because upstream changed the tag naming
-scheme from v<...> to mbedtls-<...>
-
 This fixes the following vulnerabilities:
 
-- CVE-2025-47917
-    Fix possible use-after-free or double-free in code calling
-    mbedtls_x509_string_to_names(). This was caused by the function calling
-    mbedtls_asn1_free_named_data_list() on its head argument, while the
-    documentation did no suggest it did, making it likely for callers relying
-    on the documented behaviour to still hold pointers to memory blocks after
-    they were free()d, resulting in high risk of use-after-free or double-free,
-    with consequences ranging up to arbitrary code execution.
-    In particular, the two sample programs x509/cert_write and x509/cert_req
-    were affected (use-after-free if the san string contains more than one DN).
-    Code that does not call mbedtls_string_to_names() directly is not affected.
+- CVE-2025-2750:
+    A vulnerability, which was classified as critical, was found in Open
+    Asset Import Library Assimp 5.4.3. This affects the function
+    Assimp::CSMImporter::InternReadFile of the file
+    code/AssetLib/CSM/CSMLoader.cpp of the component CSM File Handler. The
+    manipulation leads to out-of-bounds write. It is possible to initiate
+    the attack remotely. The exploit has been disclosed to the public and
+    may be used.
+    https://www.cve.org/CVERecord?id=CVE-2025-2750
 
-- CVE-2025-48965
-    Fix a bug in mbedtls_asn1_store_named_data() where it would sometimes leave
-    an item in the output list in an inconsistent state with val.p == NULL but
-    val.len > 0. This impacts applications that call this function directly,
-    or indirectly via mbedtls_x509_string_to_names() or one of the
-    mbedtls_x509write_{crt,csr}set{subject,issuer}_name() functions. The
-    inconsistent state of the output could then cause a NULL dereference either
-    inside the same call to mbedtls_x509_string_to_names(), or in subsequent
-    users of the output structure, such as mbedtls_x509_write_names(). This
-    only affects applications that create (as opposed to consume) X.509
-    certificates, CSRs or CRLs, or that call mbedtls_asn1_store_named_data()
+- CVE-2025-2751:
+    A vulnerability has been found in Open Asset Import Library Assimp
+    5.4.3 and classified as problematic. This vulnerability affects the
+    function Assimp::CSMImporter::InternReadFile of the file
+    code/AssetLib/CSM/CSMLoader.cpp of the component CSM File Handler. The
+    manipulation of the argument na leads to out-of-bounds read. The
+    attack can be initiated remotely. The exploit has been disclosed to
+    the public and may be used.
+    https://www.cve.org/CVERecord?id=CVE-2025-2751
 
-- CVE-2025-49087
-    Fix a timing side channel in the implementation of PKCS#7 padding
-    which would allow an attacker who can request decryption of arbitrary
-    ciphertexts to recover the plaintext through a timing oracle attack.
+- CVE-2025-2757:
+    A vulnerability classified as critical was found in Open Asset Import
+    Library Assimp 5.4.3. This vulnerability affects the function
+    AI_MD5_PARSE_STRING_IN_QUOTATION of the file
+    code/AssetLib/MD5/MD5Parser.cpp of the component MD5 File Handler. The
+    manipulation of the argument data leads to heap-based buffer overflow.
+    The attack can be initiated remotely. The exploit has been disclosed
+    to the public and may be used.
+    https://www.cve.org/CVERecord?id=CVE-2025-2757
 
-- CVE-2025-49600:
-    In MbedTLS 3.3.0 before 3.6.4, mbedtls_lms_verify may accept invalid
-    signatures if hash computation fails and internal errors go unchecked,
-    enabling LMS (Leighton-Micali Signature) forgery in a fault scenario.
-    Specifically, unchecked return values in mbedtls_lms_verify allow an
-    attacker (who can induce a hardware hash accelerator fault) to bypass
-    LMS signature verification by reusing stale stack data, resulting in
-    acceptance of an invalid signature. In mbedtls_lms_verify, the return
-    values of the internal Merkle tree functions create_merkle_leaf_value
-    and create_merkle_internal_value are not checked. These functions
-    return an integer that indicates whether the call succeeded or not. If
-    a failure occurs, the output buffer (Tc_candidate_root_node) may
-    remain uninitialized, and the result of the signature verification is
-    unpredictable. When the software implementation of SHA-256 is used,
-    these functions will not fail. However, with hardware-accelerated
-    hashing, an attacker could use fault injection against the accelerator
-    to bypass verification.
-    https://www.cve.org/CVERecord?id=CVE-2025-49600
+- CVE-2025-3158:
+    A vulnerability, which was classified as critical, has been found in
+    Open Asset Import Library Assimp 5.4.3. Affected by this issue is the
+    function Assimp::LWO::AnimResolver::UpdateAnimRangeSetup of the file
+    code/AssetLib/LWO/LWOAnimation.cpp of the component LWO File Handler.
+    The manipulation leads to heap-based buffer overflow. It is possible
+    to launch the attack on the local host. The exploit has been disclosed
+    to the public and may be used.
+    https://www.cve.org/CVERecord?id=CVE-2025-3158
 
-- CVE-2025-49601:
-    In MbedTLS 3.3.0 before 3.6.4, mbedtls_lms_import_public_key does not
-    check that the input buffer is at least 4 bytes before reading a
-    32-bit field, allowing a possible out-of-bounds read on truncated
-    input. Specifically, an out-of-bounds read in
-    mbedtls_lms_import_public_key allows context-dependent attackers to
-    trigger a crash or limited adjacent-memory disclosure by supplying a
-    truncated LMS (Leighton-Micali Signature) public-key buffer under four
-    bytes. An LMS public key starts with a 4-byte type indicator. The
-    function mbedtls_lms_import_public_key reads this type indicator
-    before validating the size of its input.
-    https://www.cve.org/CVERecord?id=CVE-2025-49601
-
-- CVE-2025-52496:
-    Mbed TLS before 3.6.4 has a race condition in AESNI detection if
-    certain compiler optimizations occur. An attacker may be able to
-    extract an AES key from a multithreaded program, or perform a GCM
-    forgery.
-    https://www.cve.org/CVERecord?id=CVE-2025-52496
-
-- CVE-2025-52497:
-    Mbed TLS before 3.6.4 has a PEM parsing one-byte heap-based buffer
-    underflow, in mbedtls_pem_read_buffer and two mbedtls_pk_parse
-    functions, via untrusted PEM input.
-    https://www.cve.org/CVERecord?id=CVE-2025-52497
+Also, drop local security patches that have been applied upstream
 
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/mbedtls/mbedtls.hash | 4 ++--
- package/mbedtls/mbedtls.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/assimp/0001-Fix-leak-5762.patch       | 139 ------------------
+ ...ee-in-the-CallbackToLogRedirector-59.patch |  39 -----
+ ...ASE-fix-possible-out-of-bound-access.patch |  29 ----
+ .../0004-MDL-limit-max-texture-sizes.patch    |  41 ------
+ package/assimp/assimp.hash                    |   2 +-
+ package/assimp/assimp.mk                      |  12 +-
+ 6 files changed, 2 insertions(+), 260 deletions(-)
+ delete mode 100644 package/assimp/0001-Fix-leak-5762.patch
+ delete mode 100644 package/assimp/0002-Fix-use-after-free-in-the-CallbackToLogRedirector-59.patch
+ delete mode 100644 package/assimp/0003-ASE-fix-possible-out-of-bound-access.patch
+ delete mode 100644 package/assimp/0004-MDL-limit-max-texture-sizes.patch
 
-diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
-index cc15958e3a..bf1db1fecd 100644
---- a/package/mbedtls/mbedtls.hash
-+++ b/package/mbedtls/mbedtls.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/Mbed-TLS/mbedtls/releases/tag/v3.6.3.1:
--sha256  243ed496d5f88a5b3791021be2800aac821b9a4cc16e7134aa413c58b4c20e0c  mbedtls-3.6.3.1.tar.bz2
-+# From https://github.com/Mbed-TLS/mbedtls/releases/tag/v3.6.4:
-+sha256  ec35b18a6c593cf98c3e30db8b98ff93e8940a8c4e690e66b41dfc011d678110  mbedtls-3.6.4.tar.bz2
+diff --git a/package/assimp/0001-Fix-leak-5762.patch b/package/assimp/0001-Fix-leak-5762.patch
+deleted file mode 100644
+index a78970e1d3..0000000000
+--- a/package/assimp/0001-Fix-leak-5762.patch
++++ /dev/null
+@@ -1,139 +0,0 @@
+-From 4024726eca89331503bdab33d0b9186e901bbc45 Mon Sep 17 00:00:00 2001
+-From: Kim Kulling <kimkulling@users.noreply.github.com>
+-Date: Sat, 7 Sep 2024 21:02:34 +0200
+-Subject: [PATCH] Fix leak (#5762)
+-
+-* Fix leak
+-
+-* Update utLogger.cpp
+-
+-Upstream: https://github.com/assimp/assimp/commit/4024726eca89331503bdab33d0b9186e901bbc45
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- code/Common/Assimp.cpp        | 13 ++++++---
+- fuzz/assimp_fuzzer.cc         |  2 +-
+- test/CMakeLists.txt           |  1 +
+- test/unit/Common/utLogger.cpp | 52 +++++++++++++++++++++++++++++++++++
+- 4 files changed, 63 insertions(+), 5 deletions(-)
+- create mode 100644 test/unit/Common/utLogger.cpp
+-
+-diff --git a/code/Common/Assimp.cpp b/code/Common/Assimp.cpp
+-index ef3ee7b5d..91896e405 100644
+---- a/code/Common/Assimp.cpp
+-+++ b/code/Common/Assimp.cpp
+-@@ -359,20 +359,25 @@ void CallbackToLogRedirector(const char *msg, char *dt) {
+-     s->write(msg);
+- }
+- 
+-+static LogStream *DefaultStream = nullptr;
+-+
+- // ------------------------------------------------------------------------------------------------
+- ASSIMP_API aiLogStream aiGetPredefinedLogStream(aiDefaultLogStream pStream, const char *file) {
+-     aiLogStream sout;
+- 
+-     ASSIMP_BEGIN_EXCEPTION_REGION();
+--    LogStream *stream = LogStream::createDefaultStream(pStream, file);
+--    if (!stream) {
+-+    if (DefaultStream == nullptr) {
+-+        DefaultStream = LogStream::createDefaultStream(pStream, file);
+-+    }
+-+    
+-+    if (!DefaultStream) {
+-         sout.callback = nullptr;
+-         sout.user = nullptr;
+-     } else {
+-         sout.callback = &CallbackToLogRedirector;
+--        sout.user = (char *)stream;
+-+        sout.user = (char *)DefaultStream;
+-     }
+--    gPredefinedStreams.push_back(stream);
+-+    gPredefinedStreams.push_back(DefaultStream);
+-     ASSIMP_END_EXCEPTION_REGION(aiLogStream);
+-     return sout;
+- }
+-diff --git a/fuzz/assimp_fuzzer.cc b/fuzz/assimp_fuzzer.cc
+-index 8178674e8..91ffd9d69 100644
+---- a/fuzz/assimp_fuzzer.cc
+-+++ b/fuzz/assimp_fuzzer.cc
+-@@ -47,7 +47,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+- using namespace Assimp;
+- 
+- extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t dataSize) {
+--    aiLogStream stream = aiGetPredefinedLogStream(aiDefaultLogStream_STDOUT,NULL);
+-+    aiLogStream stream = aiGetPredefinedLogStream(aiDefaultLogStream_STDOUT, nullptr);
+-     aiAttachLogStream(&stream);
+- 
+-     Importer importer;
+-diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
+-index 7b7fd850a..1a45adac7 100644
+---- a/test/CMakeLists.txt
+-+++ b/test/CMakeLists.txt
+-@@ -100,6 +100,7 @@ SET( COMMON
+-   unit/Common/utBase64.cpp
+-   unit/Common/utHash.cpp
+-   unit/Common/utBaseProcess.cpp
+-+  unit/Common/utLogger.cpp
+- )
+- 
+- SET(Geometry 
+-diff --git a/test/unit/Common/utLogger.cpp b/test/unit/Common/utLogger.cpp
+-new file mode 100644
+-index 000000000..932240a7f
+---- /dev/null
+-+++ b/test/unit/Common/utLogger.cpp
+-@@ -0,0 +1,52 @@
+-+/*
+-+---------------------------------------------------------------------------
+-+Open Asset Import Library (assimp)
+-+---------------------------------------------------------------------------
+-+
+-+Copyright (c) 2006-2024, assimp team
+-+
+-+All rights reserved.
+-+
+-+Redistribution and use of this software in source and binary forms,
+-+with or without modification, are permitted provided that the following
+-+conditions are met:
+-+
+-+* Redistributions of source code must retain the above
+-+copyright notice, this list of conditions and the
+-+following disclaimer.
+-+
+-+* Redistributions in binary form must reproduce the above
+-+copyright notice, this list of conditions and the
+-+following disclaimer in the documentation and/or other
+-+materials provided with the distribution.
+-+
+-+* Neither the name of the assimp team, nor the names of its
+-+contributors may be used to endorse or promote products
+-+derived from this software without specific prior
+-+written permission of the assimp team.
+-+
+-+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+-+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+-+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+-+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+-+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+-+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+-+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+-+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+-+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+-+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+-+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-+---------------------------------------------------------------------------
+-+*/
+-+
+-+#include "UnitTestPCH.h"
+-+#include <assimp/Importer.hpp>
+-+
+-+using namespace Assimp;
+-+class utLogger : public ::testing::Test {};
+-+
+-+TEST_F(utLogger, aiGetPredefinedLogStream_leak_test) {
+-+    aiLogStream stream1 = aiGetPredefinedLogStream(aiDefaultLogStream_STDOUT, nullptr);
+-+    aiLogStream stream2 = aiGetPredefinedLogStream(aiDefaultLogStream_STDOUT, nullptr);
+-+    ASSERT_EQ(stream1.callback, stream2.callback);
+-+}
+--- 
+-2.39.5
+-
+diff --git a/package/assimp/0002-Fix-use-after-free-in-the-CallbackToLogRedirector-59.patch b/package/assimp/0002-Fix-use-after-free-in-the-CallbackToLogRedirector-59.patch
+deleted file mode 100644
+index c4cd2af5aa..0000000000
+--- a/package/assimp/0002-Fix-use-after-free-in-the-CallbackToLogRedirector-59.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-From f12e52198669239af525e525ebb68407977f8e34 Mon Sep 17 00:00:00 2001
+-From: tyler92 <tyler92@inbox.ru>
+-Date: Wed, 11 Dec 2024 12:17:14 +0200
+-Subject: [PATCH] Fix use after free in the CallbackToLogRedirector (#5918)
+-
+-The heap-use-after-free vulnerability occurs in the
+-CallbackToLogRedirector function. During the process of logging,
+-a previously freed memory region is accessed, leading to a
+-use-after-free condition. This vulnerability stems from incorrect
+-memory management, specifically, freeing a log stream and then
+-attempting to access it later on.
+-
+-This patch sets NULL value for The DefaultStream global pointer.
+-
+-Co-authored-by: Kim Kulling <kimkulling@users.noreply.github.com>
+-Upstream: https://github.com/assimp/assimp/commit/f12e52198669239af525e525ebb68407977f8e34
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- code/Common/Assimp.cpp | 4 ++++
+- 1 file changed, 4 insertions(+)
+-
+-diff --git a/code/Common/Assimp.cpp b/code/Common/Assimp.cpp
+-index 91896e405..22e16bd36 100644
+---- a/code/Common/Assimp.cpp
+-+++ b/code/Common/Assimp.cpp
+-@@ -416,6 +416,10 @@ ASSIMP_API aiReturn aiDetachLogStream(const aiLogStream *stream) {
+-     DefaultLogger::get()->detachStream(it->second);
+-     delete it->second;
+- 
+-+    if ((Assimp::LogStream *)stream->user == DefaultStream) {
+-+        DefaultStream = nullptr;
+-+    }
+-+
+-     gActiveLogStreams.erase(it);
+- 
+-     if (gActiveLogStreams.empty()) {
+--- 
+-2.39.5
+-
+diff --git a/package/assimp/0003-ASE-fix-possible-out-of-bound-access.patch b/package/assimp/0003-ASE-fix-possible-out-of-bound-access.patch
+deleted file mode 100644
+index 427b7a4888..0000000000
+--- a/package/assimp/0003-ASE-fix-possible-out-of-bound-access.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-From 65c95bf3207b81fe522811d45780d72ed41d9c1e Mon Sep 17 00:00:00 2001
+-From: Kim Kulling <kim.kulling@googlemail.com>
+-Date: Wed, 12 Mar 2025 20:17:38 +0100
+-Subject: [PATCH] ASE: Fix possible out of bound access.
+-
+-Upstream: https://github.com/assimp/assimp/pull/6045
+-
+-CVE: CVE-2025-3015
+-
+-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+----
+- code/AssetLib/ASE/ASELoader.cpp | 4 ++++
+- 1 file changed, 4 insertions(+)
+-
+-diff --git a/code/AssetLib/ASE/ASELoader.cpp b/code/AssetLib/ASE/ASELoader.cpp
+-index eb6b37dc9b..c63edcf6bf 100644
+---- a/code/AssetLib/ASE/ASELoader.cpp
+-+++ b/code/AssetLib/ASE/ASELoader.cpp
+-@@ -731,6 +731,10 @@ void ASEImporter::BuildUniqueRepresentation(ASE::Mesh &mesh) {
+-     unsigned int iCurrent = 0, fi = 0;
+-     for (std::vector<ASE::Face>::iterator i = mesh.mFaces.begin(); i != mesh.mFaces.end(); ++i, ++fi) {
+-         for (unsigned int n = 0; n < 3; ++n, ++iCurrent) {
+-+            const uint32_t curIndex = (*i).mIndices[n];
+-+            if (curIndex >= mesh.mPositions.size()) {
+-+                throw DeadlyImportError("ASE: Invalid vertex index in face ", fi, ".");
+-+            }
+-             mPositions[iCurrent] = mesh.mPositions[(*i).mIndices[n]];
+- 
+-             // add texture coordinates
+diff --git a/package/assimp/0004-MDL-limit-max-texture-sizes.patch b/package/assimp/0004-MDL-limit-max-texture-sizes.patch
+deleted file mode 100644
+index ae7e54f35d..0000000000
+--- a/package/assimp/0004-MDL-limit-max-texture-sizes.patch
++++ /dev/null
+@@ -1,41 +0,0 @@
+-From 5d2a7482312db2e866439a8c05a07ce1e718bed1 Mon Sep 17 00:00:00 2001
+-From: Kim Kulling <kimkulling@users.noreply.github.com>
+-Date: Wed, 12 Mar 2025 21:29:33 +0100
+-Subject: [PATCH] MDL: Limit max texture sizes
+-
+-- closes https://github.com/assimp/assimp/issues/6022
+-
+-Upstream: https://github.com/assimp/assimp/pull/6046
+-
+-CVE: CVE-2025-3016
+-
+-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+----
+- code/AssetLib/MDL/MDLMaterialLoader.cpp | 7 +++++++
+- 1 file changed, 7 insertions(+)
+-
+-diff --git a/code/AssetLib/MDL/MDLMaterialLoader.cpp b/code/AssetLib/MDL/MDLMaterialLoader.cpp
+-index 2cac8a1e26..2e09992e89 100644
+---- a/code/AssetLib/MDL/MDLMaterialLoader.cpp
+-+++ b/code/AssetLib/MDL/MDLMaterialLoader.cpp
+-@@ -209,6 +209,8 @@ void MDLImporter::CreateTexture_3DGS_MDL4(const unsigned char *szData,
+-     return;
+- }
+- 
+-+static const uint32_t MaxTextureSize = 4096;
+-+
+- // ------------------------------------------------------------------------------------------------
+- // Load color data of a texture and convert it to our output format
+- void MDLImporter::ParseTextureColorData(const unsigned char *szData,
+-@@ -219,6 +221,11 @@ void MDLImporter::ParseTextureColorData(const unsigned char *szData,
+- 
+-     // allocate storage for the texture image
+-     if (do_read) {
+-+        // check for max texture sizes
+-+        if (pcNew->mWidth > MaxTextureSize || pcNew->mHeight > MaxTextureSize) {
+-+            throw DeadlyImportError("Invalid MDL file. A texture is too big.");
+-+        }
+-+      
+-         if(pcNew->mWidth != 0 && pcNew->mHeight > UINT_MAX/pcNew->mWidth) {
+-             throw DeadlyImportError("Invalid MDL file. A texture is too big.");
+-         }
+diff --git a/package/assimp/assimp.hash b/package/assimp/assimp.hash
+index bdcab695fc..93c081351e 100644
+--- a/package/assimp/assimp.hash
++++ b/package/assimp/assimp.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
- sha256  9b405ef4c89342f5eae1dd828882f931747f71001cfba7d114801039b52ad09b  LICENSE
-diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
-index 563683e739..b46bbe888a 100644
---- a/package/mbedtls/mbedtls.mk
-+++ b/package/mbedtls/mbedtls.mk
-@@ -4,8 +4,8 @@
+-sha256  66dfbaee288f2bc43172440a55d0235dfc7bf885dda6435c038e8000e79582cb  assimp-5.4.3.tar.gz
++sha256  d1822d9a19c9205d6e8bc533bf897174ddb360ce504680f294170cc1d6319751  assimp-6.0.2.tar.gz
+ sha256  147874443d242b4e2bae97036e26ec9d6b37f706174c1bd5ecfcc8c1294cef51  LICENSE
+diff --git a/package/assimp/assimp.mk b/package/assimp/assimp.mk
+index 39ad234546..dd61b69ca2 100644
+--- a/package/assimp/assimp.mk
++++ b/package/assimp/assimp.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MBEDTLS_VERSION = 3.6.3.1
--MBEDTLS_SITE = https://github.com/Mbed-TLS/mbedtls/releases/download/v$(MBEDTLS_VERSION)
-+MBEDTLS_VERSION = 3.6.4
-+MBEDTLS_SITE = https://github.com/Mbed-TLS/mbedtls/releases/download/mbedtls-$(MBEDTLS_VERSION)
- MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION).tar.bz2
- MBEDTLS_CONF_OPTS = \
- 	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -std=c99" \
+-ASSIMP_VERSION = 5.4.3
++ASSIMP_VERSION = 6.0.2
+ ASSIMP_SITE = $(call github,assimp,assimp,v$(ASSIMP_VERSION))
+ ASSIMP_LICENSE = BSD-3-Clause
+ ASSIMP_LICENSE_FILES = LICENSE
+@@ -12,16 +12,6 @@ ASSIMP_CPE_ID_VENDOR = assimp
+ ASSIMP_DEPENDENCIES = zlib
+ ASSIMP_INSTALL_STAGING = YES
+ 
+-# 0001-Fix-leak-5762.patch
+-# 0002-Fix-use-after-free-in-the-CallbackToLogRedirector-59.patch
+-ASSIMP_IGNORE_CVES += CVE-2024-48423
+-
+-# 0003-ASE-fix-possible-out-of-bound-access.patch
+-ASSIMP_IGNORE_CVES += CVE-2025-3015
+-
+-# 0004-MDL-limit-max-texture-sizes.patch
+-ASSIMP_IGNORE_CVES += CVE-2025-3016
+-
+ # relocation truncated to fit: R_68K_GOT16O. We also need to disable
+ # optimizations to not run into "Error: value -43420 out of range"
+ # assembler issues.
 -- 
 2.50.1
 
