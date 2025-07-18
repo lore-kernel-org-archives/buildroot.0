@@ -4,102 +4,99 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A26BCC83F17
-	for <buildroot@archiver.kernel.org>; Fri, 18 Jul 2025 14:53:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A524BC83F17
+	for <buildroot@archiver.kernel.org>; Fri, 18 Jul 2025 14:58:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5BD0240BEC;
-	Fri, 18 Jul 2025 14:53:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7388D40DB9;
+	Fri, 18 Jul 2025 14:58:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QIv-ljlpSXVK; Fri, 18 Jul 2025 14:53:40 +0000 (UTC)
+ id hGkDfCgT-Bh2; Fri, 18 Jul 2025 14:58:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8F95640BE1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 49AB240C80
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8F95640BE1;
-	Fri, 18 Jul 2025 14:53:40 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 6559A236
- for <buildroot@buildroot.org>; Fri, 18 Jul 2025 14:53:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 49AB240C80;
+	Fri, 18 Jul 2025 14:58:19 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4F206236
+ for <buildroot@buildroot.org>; Fri, 18 Jul 2025 14:58:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4B5F940BB8
- for <buildroot@buildroot.org>; Fri, 18 Jul 2025 14:53:39 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3544E401A0
+ for <buildroot@buildroot.org>; Fri, 18 Jul 2025 14:58:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7knEnn0CbRS3 for <buildroot@buildroot.org>;
- Fri, 18 Jul 2025 14:53:38 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DHC4Rv9vF43E for <buildroot@buildroot.org>;
+ Fri, 18 Jul 2025 14:58:16 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::432; helo=mail-pf1-x432.google.com;
- envelope-from=lancethepants@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6F2AC40BAD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F2AC40BAD
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com
- [IPv6:2607:f8b0:4864:20::432])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6F2AC40BAD
- for <buildroot@buildroot.org>; Fri, 18 Jul 2025 14:53:38 +0000 (UTC)
-Received: by mail-pf1-x432.google.com with SMTP id
- d2e1a72fcca58-748d982e97cso1997052b3a.1
- for <buildroot@buildroot.org>; Fri, 18 Jul 2025 07:53:38 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
+ envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D8CF740083
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D8CF740083
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D8CF740083
+ for <buildroot@buildroot.org>; Fri, 18 Jul 2025 14:58:15 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ 5b1f17b1804b1-4561514c7f0so22361155e9.0
+ for <buildroot@buildroot.org>; Fri, 18 Jul 2025 07:58:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1752850418; x=1753455218;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=CUWcfM4r7QGxmOA4nB7XYwXhV4A3emiTtOOjz7mJz9E=;
- b=RdwNzkQ+lKSYu0hlV9EPTNk9JU0B2DbD8wtx+SpRIClOBaM0Ue8tMF5QKrGgIg3nu6
- 9tZhWsBmW1Cwzgqg0x6LFAdOBMLYCX5SEUbQDgqKB9Gq9l5FitB3ebl8Sq0EKgIZUs4o
- 9tvjAPahVLxcl8FtrkZT1TQyKu9SePborRahbJ1rGTliiuo4N9xv3C/6V6GqxTgQzL9n
- 6be2Bd+RLj1q7JM+OnbyHIXWdWln1TabyR4on4J+pbHijSxdxCstHOL6m6vk86di9Vor
- QjCy7Ji+WBaohkiCwS2tFDZy4cuTdECOhLQQJghD2qUY26UI+/Vo2VmdylndVXcBKT/D
- TITA==
-X-Gm-Message-State: AOJu0Yx2LVB0vTdZfGlm6n325XaLMWd0W9yGUF3/kQzBcdSfoei1gJQ5
- B4o4Y+QOt+0XNytYrikG3kaILvWnqHqZU5Eh+EpU7L3dl9+mewZdMU3wZIJQSw==
-X-Gm-Gg: ASbGncug6tZOxF8cx+bPSh/PdAkJu8GtZHZZcdKxDZCLGPHXFd9ZEof4f6o38x0Odsz
- wSByBtyRCgXlI0UNNW0hwVK0mc7JgUM0q1HuoiwjJPsZe+x5iA5jzzpJl+yNWFR0rll1P/SV4WU
- Z3Lg5sk1e8NTQwOKvU2V6uvhXnMP7uVR9PucyOWH7Jx92FgsiPc1gWEFvfZAjZYaGA1BQtH3jqP
- CZ7n2KpAFQuxGSWMSnj6PECxFyVai/KYBXDMQrhi7VWK4MQaY8cXqA3FsKM2+J9f6QFip0isvqg
- tE9Ng3hFkaBew8E0SpAfphXjwest4moWYlVAKbXkd2/h3hL1dISv4EIpQzR+GVDVG2R3peOQfIs
- n0soeLUXj/5gndUf1TRbUDBqZ1Nr54VCPfb4=
-X-Google-Smtp-Source: AGHT+IHDn23X7jrlcPNavzvSXwrDhJjrRtBoD7F65WiNFwkq3X5AxaU3MhGPoPX1vetwPsv0pvJdgw==
-X-Received: by 2002:a05:6a00:a8a:b0:748:e1e4:71d9 with SMTP id
- d2e1a72fcca58-75724e7a7f9mr13122904b3a.22.1752850417520; 
- Fri, 18 Jul 2025 07:53:37 -0700 (PDT)
-Received: from [10.0.0.72] ([76.8.199.226]) by smtp.gmail.com with ESMTPSA id
- d2e1a72fcca58-759c89d55c8sm1419601b3a.62.2025.07.18.07.53.36
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 18 Jul 2025 07:53:37 -0700 (PDT)
-Message-ID: <6879b51d-6ff3-4182-9650-8f1441f0b0d1@gmail.com>
-Date: Fri, 18 Jul 2025 08:53:36 -0600
+ d=1e100.net; s=20230601; t=1752850693; x=1753455493;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=+NZmSYQlDb1iuufnWt9i6TMKF6uojWyCKUbDXZZwXmU=;
+ b=DEujw65i7NRAntJ3ygRSnsKXA2bHYRiv5bo98KZGfJ8X0SJ7u3+aGE7lzpKV1e8CRc
+ 2UXCeZCXBo9wzasWCBUN1XG5rNyfKScdqqOF6bKVbhPfX2EcMbTFe8wPeSxqN+wgqedP
+ VIwJrc101iYdJEsAGDU4VyRsfOCsj93OJdM3qhC9CFc3ZN9U8x8043lKUlSW8l2Kr4i6
+ qXRtP+tA8bLplI1HMaegJGEH3AiaBmFIriWBZnp1zC433upkIGBAVxiW6JcHTToncY5j
+ Wq6tbE6fzNnmB/+oExKI/JgarpFk94Lkm8GACQtQDm/smSPQjaajMO1Z629+5NfwTfGR
+ mLCQ==
+X-Gm-Message-State: AOJu0YzM20UAeO0qH4pJDGan+1BWeIk6pMcY6nx1YB6Qxe+CDODJ6A0m
+ st+tVuOG8Na2qZhxwYvWRXVcuni2qS7SfoB/hAoI3MP9lxr/nEx2MKu3JdyPsdAbm+IJlmHXVt2
+ nkQmm
+X-Gm-Gg: ASbGncv3/XAK/MnwuyDbb4XXGIqHr9Gt0TcmZPGZ3/tmROWIqF48OvRhNmSv72SVm4x
+ glhA3beLPB4egvekefBCNmYMx1mc2qbyyotDFhiMXEjSGmFeSGkCPlOe1nrjbWIwKU+9Z4B274O
+ 7SlTdxmQr9kCxESSNX40nPj85pPG7ONq5dTBv1zAapQ59toIwxnOYY7jBuXz8l37UT845FFd5Lg
+ hvZExL+7QA4C4tKGD5krW4EtTwKF5n/1LMYOyeik5EKwk/YHj2wPlNRXtdCzcDf+gpNtPiu9dAN
+ qsPYow/Ovu680xFRXdDZMh8UoZXQ3iGBZNt2J8jorbLS/R8xAHRS/N+WSN96v7CjDXIWeZHYVgG
+ V0YX20AsC6OeRcs3dF0LcWYAFmdaKXCpuk6kOL2GK9bccvdR8OsCqSw==
+X-Google-Smtp-Source: AGHT+IHaTQC0hs4yyMETyf0OHYHwPqTUCPIs1sA/Xjn36QvjcekUGsgkH7l0LLH4bb+nA/1uZSUQ1A==
+X-Received: by 2002:a05:600c:4fc5:b0:456:1156:e5f5 with SMTP id
+ 5b1f17b1804b1-456359ee0a4mr71087945e9.31.1752850693260; 
+ Fri, 18 Jul 2025 07:58:13 -0700 (PDT)
+Received: from dragon.local.ess-mail.com
+ ([2a02:a03f:639d:e501:5db7:a3a4:443e:4828])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-3b61ca4d48bsm2084103f8f.62.2025.07.18.07.58.12
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 18 Jul 2025 07:58:12 -0700 (PDT)
+To: buildroot@buildroot.org
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 18 Jul 2025 16:57:45 +0200
+Message-ID: <20250718145745.79845-1-titouan.christophe@mind.be>
+X-Mailer: git-send-email 2.50.1
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Peter Korsgaard <peter@korsgaard.com>
-Cc: buildroot@buildroot.org
-References: <20250417190544.1075310-1-lancethepants@gmail.com>
- <87msbb3rm6.fsf@dell.be.48ers.dk>
-Content-Language: en-US
-From: Lance Fredrickson <lancethepants@gmail.com>
-In-Reply-To: <87msbb3rm6.fsf@dell.be.48ers.dk>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1752850418; x=1753455218; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=CUWcfM4r7QGxmOA4nB7XYwXhV4A3emiTtOOjz7mJz9E=;
- b=cRaftvuQS/AvRx55mfYQIIgszVTuf4le4THKEV5Sxgg2SOpbUHohLOXC/L9N+yIaJA
- 4BENqOWezr2j4Zm5xAV1lM/wkLR83pl7IKSov09BoPV3y+NZYivlmdlXIAtgcAAGkqMw
- Qhsbi/wyD8UubtP5emWHaFeEfU25DC6rmEL3SVgmSyOggzEDXmB8w4o37qpuDTA9J/TO
- 377hYH4QOWeteyjO8sYiHSdHazO32dt/P2vnfDcvcs+s4tIyjmi5/zqOYMR+A+CGEp4D
- 1iKfP6zFb+tgS3GJ/6HWQHQaGuGLIe8H7owu3WcN2uZppYeVufPZeGCRfS5dLtiY6wfw
- IY3Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=cRaftvuQ
-Subject: Re: [Buildroot] [PATCH] package/libcurl: Also specify the CA bundle
- location
+ d=mind.be; s=google; t=1752850693; x=1753455493; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=+NZmSYQlDb1iuufnWt9i6TMKF6uojWyCKUbDXZZwXmU=;
+ b=SiP//NOIrnpMw5JcP8lknu0jjFTUqWObovtazhHDxeKXI5PY2V/84nRVvHyoGqr21a
+ jZxoBzTntGyZ2tdCfB7LqTpJfM/K0uJBPlChTh7dWqcsureG72UmXtuEd2F+7A54eGr+
+ S84Gt5NGJ7P8gpSgSLH0K55usl2IPTxOrp7laz9AYQr3gCuBQDvKDvl9Dmvg3AqcHIys
+ gwUOOcLjUZa4hWXuscHSvvge/679e3wXgg6yObHCWDIrGhJzkC6ba2yvnxi05/A63bIE
+ bKosMmJ5XtJa4fv0sZNTLhiZ/O7tiQ+hWwHFOLjdL+TPo7A96P9SoZ1WjxtgP5p7E8mn
+ 8AHg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=SiP//NOI
+Subject: [Buildroot] [PATCH] package/mbedtls: security bump to v3.6.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -111,40 +108,131 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+From: Titouan Christophe via buildroot <buildroot@buildroot.org>
+Reply-To: Titouan Christophe <titouan.christophe@mind.be>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SSBzb21laG93IG1pc3NlZCB0aGlzIGVtYWlsLgoKT24gNS8xNy8yMDI1IDI6MzIgUE0sIFBldGVy
-IEtvcnNnYWFyZCB3cm90ZToKPj4+Pj4+ICJMYW5jZSIgPT0gTGFuY2UgRnJlZHJpY2tzb24gPGxh
-bmNldGhlcGFudHNAZ21haWwuY29tPiB3cml0ZXM6Cj4gICA+IEZyb206IExhbmNlIEZyZWRyaWNr
-c29uIDxsYW5jZXRoZXBhbnRzQGdtYWlsLmNvbT4KPiAgID4gU2lnbmVkLW9mZi1ieTogTGFuY2Ug
-RnJlZHJpY2tzb24gPGxhbmNldGhlcGFudHNAZ21haWwuY29tPgo+Cj4gV2h5PyBXaGF0IGRvZXMg
-dGhhdCBjaGFuZ2U/ClRoaXMganVzdCBhZGRzIHRoZSBhYmlsaXR5IHRvIGFsc28gdmVyaWZ5IGFn
-YWluc3QgY2EtY2VydGlmaWNhdGVzLmNydC4gSSAKcmVtb3ZlIGFsbCBvdGhlciBjZXJ0cyBhbmQg
-anVzdCBrZWVwIHRoaXMgb25lLgpEZWJpYW4gZGVmaW5lcyBpdCBhcyB3ZWxsLiAKaHR0cHM6Ly9z
-YWxzYS5kZWJpYW4ub3JnL2RlYmlhbi9jdXJsLy0vYmxvYi9kZWJpYW4vdW5zdGFibGUvZGViaWFu
-L3J1bGVzP3JlZl90eXBlPWhlYWRzI0wyMCAKCgpBbmQgdGhlIGNlcnQgYnVuZGxlIGlzIGFsc28g
-aW5zdGFsbGVkLgoKIMKgIMKgIMKgIMKgICMgSW5zdGFsbCB0aGUgY2VydGlmaWNhdGVzIGJ1bmRs
-ZQogwqAgwqAgwqAgwqAgJChJTlNUQUxMKSAtRCAtbSA2NDQgJChCVUlMRF9ESVIpL2NhLWNlcnRp
-ZmljYXRlcy5jcnQgXAogwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgJChUQVJHRVRfRElSKS9ldGMv
-c3NsL2NlcnRzL2NhLWNlcnRpZmljYXRlcy5jcnQKCj4KPj4gLS0tCj4gICA+ICBwYWNrYWdlL2xp
-YmN1cmwvbGliY3VybC5tayB8IDMgKystCj4gICA+ICAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRp
-b25zKCspLCAxIGRlbGV0aW9uKC0pCj4KPiAgID4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvbGliY3Vy
-bC9saWJjdXJsLm1rIGIvcGFja2FnZS9saWJjdXJsL2xpYmN1cmwubWsKPiAgID4gaW5kZXggMjA2
-NmJhMDM4OC4uNTA5ZmVlYWI2NCAxMDA2NDQKPiAgID4gLS0tIGEvcGFja2FnZS9saWJjdXJsL2xp
-YmN1cmwubWsKPiAgID4gKysrIGIvcGFja2FnZS9saWJjdXJsL2xpYmN1cmwubWsKPiAgID4gQEAg
-LTY3LDcgKzY3LDggQEAgZW5kaWYKPiAgID4gIGlmZXEgKCQoQlIyX1BBQ0tBR0VfTElCQ1VSTF9P
-UEVOU1NMKSx5KQo+ICAgPiAgTElCQ1VSTF9ERVBFTkRFTkNJRVMgKz0gb3BlbnNzbAo+ICAgPiAg
-TElCQ1VSTF9DT05GX09QVFMgKz0gLS13aXRoLW9wZW5zc2w9JChTVEFHSU5HX0RJUikvdXNyIFwK
-PiAgID4gLQktLXdpdGgtY2EtcGF0aD0vZXRjL3NzbC9jZXJ0cwo+ICAgPiArCS0td2l0aC1jYS1w
-YXRoPS9ldGMvc3NsL2NlcnRzIFwKPiAgID4gKwktLXdpdGgtY2EtYnVuZGxlPS9ldGMvc3NsL2Nl
-cnRzL2NhLWNlcnRpZmljYXRlcy5jcnQKPiAgID4gIGVsc2UKPiAgID4gIExJQkNVUkxfQ09ORl9P
-UFRTICs9IC0td2l0aG91dC1vcGVuc3NsCj4gICA+ICBlbmRpZgo+ICAgPiAtLQo+Cj4gICA+IDIu
-MzkuNQo+Cj4gICA+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fCj4gICA+IGJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKPiAgID4gYnVpbGRyb290QGJ1aWxkcm9v
-dC5vcmcKPiAgID4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8v
-YnVpbGRyb290Cj4KPgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRw
-czovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+This is a security release of the Long Term Support branch, see release notes:
+https://github.com/Mbed-TLS/mbedtls/releases/tag/mbedtls-3.6.4
+
+Also update the download location, because upstream changed the tag naming
+scheme from v<...> to mbedtls-<...>
+
+This fixes the following vulnerabilities:
+
+- CVE-2025-47917
+    Fix possible use-after-free or double-free in code calling
+    mbedtls_x509_string_to_names(). This was caused by the function calling
+    mbedtls_asn1_free_named_data_list() on its head argument, while the
+    documentation did no suggest it did, making it likely for callers relying
+    on the documented behaviour to still hold pointers to memory blocks after
+    they were free()d, resulting in high risk of use-after-free or double-free,
+    with consequences ranging up to arbitrary code execution.
+    In particular, the two sample programs x509/cert_write and x509/cert_req
+    were affected (use-after-free if the san string contains more than one DN).
+    Code that does not call mbedtls_string_to_names() directly is not affected.
+
+- CVE-2025-48965
+    Fix a bug in mbedtls_asn1_store_named_data() where it would sometimes leave
+    an item in the output list in an inconsistent state with val.p == NULL but
+    val.len > 0. This impacts applications that call this function directly,
+    or indirectly via mbedtls_x509_string_to_names() or one of the
+    mbedtls_x509write_{crt,csr}set{subject,issuer}_name() functions. The
+    inconsistent state of the output could then cause a NULL dereference either
+    inside the same call to mbedtls_x509_string_to_names(), or in subsequent
+    users of the output structure, such as mbedtls_x509_write_names(). This
+    only affects applications that create (as opposed to consume) X.509
+    certificates, CSRs or CRLs, or that call mbedtls_asn1_store_named_data()
+
+- CVE-2025-49087
+    Fix a timing side channel in the implementation of PKCS#7 padding
+    which would allow an attacker who can request decryption of arbitrary
+    ciphertexts to recover the plaintext through a timing oracle attack.
+
+- CVE-2025-49600:
+    In MbedTLS 3.3.0 before 3.6.4, mbedtls_lms_verify may accept invalid
+    signatures if hash computation fails and internal errors go unchecked,
+    enabling LMS (Leighton-Micali Signature) forgery in a fault scenario.
+    Specifically, unchecked return values in mbedtls_lms_verify allow an
+    attacker (who can induce a hardware hash accelerator fault) to bypass
+    LMS signature verification by reusing stale stack data, resulting in
+    acceptance of an invalid signature. In mbedtls_lms_verify, the return
+    values of the internal Merkle tree functions create_merkle_leaf_value
+    and create_merkle_internal_value are not checked. These functions
+    return an integer that indicates whether the call succeeded or not. If
+    a failure occurs, the output buffer (Tc_candidate_root_node) may
+    remain uninitialized, and the result of the signature verification is
+    unpredictable. When the software implementation of SHA-256 is used,
+    these functions will not fail. However, with hardware-accelerated
+    hashing, an attacker could use fault injection against the accelerator
+    to bypass verification.
+    https://www.cve.org/CVERecord?id=CVE-2025-49600
+
+- CVE-2025-49601:
+    In MbedTLS 3.3.0 before 3.6.4, mbedtls_lms_import_public_key does not
+    check that the input buffer is at least 4 bytes before reading a
+    32-bit field, allowing a possible out-of-bounds read on truncated
+    input. Specifically, an out-of-bounds read in
+    mbedtls_lms_import_public_key allows context-dependent attackers to
+    trigger a crash or limited adjacent-memory disclosure by supplying a
+    truncated LMS (Leighton-Micali Signature) public-key buffer under four
+    bytes. An LMS public key starts with a 4-byte type indicator. The
+    function mbedtls_lms_import_public_key reads this type indicator
+    before validating the size of its input.
+    https://www.cve.org/CVERecord?id=CVE-2025-49601
+
+- CVE-2025-52496:
+    Mbed TLS before 3.6.4 has a race condition in AESNI detection if
+    certain compiler optimizations occur. An attacker may be able to
+    extract an AES key from a multithreaded program, or perform a GCM
+    forgery.
+    https://www.cve.org/CVERecord?id=CVE-2025-52496
+
+- CVE-2025-52497:
+    Mbed TLS before 3.6.4 has a PEM parsing one-byte heap-based buffer
+    underflow, in mbedtls_pem_read_buffer and two mbedtls_pk_parse
+    functions, via untrusted PEM input.
+    https://www.cve.org/CVERecord?id=CVE-2025-52497
+
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+---
+ package/mbedtls/mbedtls.hash | 4 ++--
+ package/mbedtls/mbedtls.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
+index cc15958e3a..bf1db1fecd 100644
+--- a/package/mbedtls/mbedtls.hash
++++ b/package/mbedtls/mbedtls.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/Mbed-TLS/mbedtls/releases/tag/v3.6.3.1:
+-sha256  243ed496d5f88a5b3791021be2800aac821b9a4cc16e7134aa413c58b4c20e0c  mbedtls-3.6.3.1.tar.bz2
++# From https://github.com/Mbed-TLS/mbedtls/releases/tag/v3.6.4:
++sha256  ec35b18a6c593cf98c3e30db8b98ff93e8940a8c4e690e66b41dfc011d678110  mbedtls-3.6.4.tar.bz2
+ # Locally calculated
+ sha256  9b405ef4c89342f5eae1dd828882f931747f71001cfba7d114801039b52ad09b  LICENSE
+diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
+index 563683e739..b46bbe888a 100644
+--- a/package/mbedtls/mbedtls.mk
++++ b/package/mbedtls/mbedtls.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-MBEDTLS_VERSION = 3.6.3.1
+-MBEDTLS_SITE = https://github.com/Mbed-TLS/mbedtls/releases/download/v$(MBEDTLS_VERSION)
++MBEDTLS_VERSION = 3.6.4
++MBEDTLS_SITE = https://github.com/Mbed-TLS/mbedtls/releases/download/mbedtls-$(MBEDTLS_VERSION)
+ MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION).tar.bz2
+ MBEDTLS_CONF_OPTS = \
+ 	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -std=c99" \
+-- 
+2.50.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
