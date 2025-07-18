@@ -1,104 +1,104 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E51A7C83F17
-	for <buildroot@archiver.kernel.org>; Fri, 18 Jul 2025 04:09:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F03CC83F1A
+	for <buildroot@archiver.kernel.org>; Fri, 18 Jul 2025 04:56:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 94B6E60866;
-	Fri, 18 Jul 2025 04:09:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 50BCB84106;
+	Fri, 18 Jul 2025 04:56:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wMkm51jcWAuV; Fri, 18 Jul 2025 04:09:12 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id P7M5DXbt4l1e; Fri, 18 Jul 2025 04:56:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9FFD961277
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5425E8410A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9FFD961277;
-	Fri, 18 Jul 2025 04:09:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 3990523C
- for <buildroot@buildroot.org>; Fri, 18 Jul 2025 04:09:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5425E8410A;
+	Fri, 18 Jul 2025 04:56:22 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 204DF1A6
+ for <buildroot@buildroot.org>; Fri, 18 Jul 2025 04:56:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2B61F4173F
- for <buildroot@buildroot.org>; Fri, 18 Jul 2025 04:09:11 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 11F944015F
+ for <buildroot@buildroot.org>; Fri, 18 Jul 2025 04:56:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CUcP3woBxl3H for <buildroot@buildroot.org>;
- Fri, 18 Jul 2025 04:09:10 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jaM2GaWetYL9 for <buildroot@buildroot.org>;
+ Fri, 18 Jul 2025 04:56:20 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42f; helo=mail-wr1-x42f.google.com;
- envelope-from=petr.vorel@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1328E4173D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1328E4173D
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1328E4173D
- for <buildroot@buildroot.org>; Fri, 18 Jul 2025 04:09:09 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id
- ffacd0b85a97d-3b5e6bfb427so922383f8f.2
- for <buildroot@buildroot.org>; Thu, 17 Jul 2025 21:09:09 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::536; helo=mail-ed1-x536.google.com;
+ envelope-from=fede.evol@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C565840078
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C565840078
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
+ [IPv6:2a00:1450:4864:20::536])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C565840078
+ for <buildroot@buildroot.org>; Fri, 18 Jul 2025 04:56:19 +0000 (UTC)
+Received: by mail-ed1-x536.google.com with SMTP id
+ 4fb4d7f45d1cf-60c01b983b6so3776842a12.0
+ for <buildroot@buildroot.org>; Thu, 17 Jul 2025 21:56:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1752811748; x=1753416548;
+ d=1e100.net; s=20230601; t=1752814578; x=1753419378;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=M8w0hvDQrvLGVGO/dPtjf9xVQH4Xf0X/9OhokxJs2Uk=;
- b=XYOYFM4zQBc1Y0vVGhX+Hblu10tQl69m8S/F/1m24ITl+7d8X9v4nLDsvYH1kT89oZ
- axHlFpW3NVwiDQe7Be5ANHCfwp2YWeE4Vrr+/iUmMeqdv8IXjx3zorjpOoB8+/fFBXJT
- lw6oiuqFsogvqUxQhIZsTpDGoTAWhivskvMP4kD3ChQDImhTERHv8NDt6LI1g5+FD2H9
- 1P8mwVQwWNg9o343KWTfuIVI1U47YpP590KAfbVOR1XzTYuQ87Cv4IyadIDPtQNBr+Mw
- JY2/y1/u05TdSpuArv91RzynWH2OfDD8PdZtlQt6/z2mvXKn//a5rZAzWDgRWzw1q4V5
- m0vg==
-X-Gm-Message-State: AOJu0Yxp6fPMHhPOsUClDc2v9nOvwwbklBPwG8Ygfv5QQXwZihtSPdfk
- 6DmEnzD2T/SMv5Ok2xjPfEdn72Yi36b6mvQhge0k6UECV7dlDH7DlprrfeNxUA==
-X-Gm-Gg: ASbGncvECtOfJMCvgkEbwSlmj3tmdVmjLZpp6x+7R/Ax5zq+IeJlvmqIpLmGt0HIPg3
- ES8rvRHavTMRIP2XXNKFkC1KBv0L01AMbXCuX4O8nDScxoqs8umWXxyCQVrupXel/O6zIGx+rMO
- k23Gjg7O0DdFC59bTNF4uLNm1EPvyPmceu8qiO/dXp9GowrpWrxN+SksKIBvDnCMcgHxTQQsH0q
- Oi0XwNJx36gjFw4+kQA0/wiQ2/tFkfuaa3guQ4iODw+/x5ZUSVbeOd1rv+acgD230c9LlL86gCg
- G/B8RmcF4gQx0ZdrpX/bs9uVlkNH9HhbYoGI2uehcFI+Civa68gbBRj/3R56BTD1aNDsViaZDve
- Ld17maE18KL+abYIj8aJwIcyJow==
-X-Google-Smtp-Source: AGHT+IG8/csd6H/3QgipcQAhZYCLJKbj7t7uz0ygmNdUbNWcuiRKFUp3cu45N8JMfUwm1iKoDnSY9A==
-X-Received: by 2002:a05:6000:4716:b0:3b4:98f6:dd77 with SMTP id
- ffacd0b85a97d-3b61b217fd7mr836283f8f.36.1752811747744; 
- Thu, 17 Jul 2025 21:09:07 -0700 (PDT)
-Received: from x230 (gw1.ms-free.net. [185.243.124.10])
+ :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=yirmm0QOJEiwn3evRlpcxKKUwpO/IY01bg3oIwG4Et4=;
+ b=dkSNX6UHsPVueJixp0rUgKu9+CeW06W1G5jXX2GoIRUYeon6ru3tSRK9z4RBmUePhB
+ mQcia3ik1nXISzq+cPmdkqyXzhd25BINs4nqaL/D+EpY5PXOi73jzT/Kf4ezOjt2OQ2d
+ TQchwmtlH78+T9A7E4kcNns+jB5mKYuK4yUQZqomzwfVLoiQfMguwXWDNxwUY0C34gDe
+ ByYvhvzmKR0c4BJoIuDKrDyIO98SX5fprjcSrCxyXaCVRHuTIGglz7TltKdsJynQameR
+ Oa/BE++zdzmQxj96gx0YRBLvqZOd48Vzjashz9/BHFUF5wisUYiwIORyJIVQN2tGnAjD
+ 5ZMg==
+X-Gm-Message-State: AOJu0YzqBxh+iw2C5NDx46N3Du0muJVD9/X5jRC8AhEAhDn46/6GpWYi
+ nfS7DWbRVWm5rHzbMF/UVaPYQpW6xHLvS3xWB2lhJNG75xVfnnHf6gPy0wmPuQ==
+X-Gm-Gg: ASbGnctNZ+CyNul/l8xna51+KY95c765nxG0ZO56zmqEJwat95y1rqlq5pou5NO2WPA
+ Zlw2hnKdFWm568AYofTx1DahRGZKxQoXYnMqoflvXjv9OWF9HANqkoUbQyOf6LmgWXAZj35ggCF
+ bF17HEp5TtLu/OWOTXxkWsvPFcsRbYOKuGjQC8ku/ohtGn+Cop2OxXs1ngtyWY/HtvX6P2hK5YV
+ HiW02JKPJHMv6RQ6q9CLTX91fQ9hjvBNYxlj68sEamxpug0s8zo90dd3TGKnS++AwNv5zkwQaX+
+ zt/cNsAXP8scSVfRH2wUKBsJwjvXdlSfi71rtDxvkSppu9lGXb9PTE2x9botnxy/SvNI2whAI+b
+ RT//NZ4vQGJLKPudpNaB90WTld/tcdd+Lp2ptkNn7TjTstsJ658/FxbBbh6sGzzt6ufDeQ5PWER
+ GRPXHbsYFllR0NQey/yqoAloqkraTh7PNjfGCN7zRiXX+DdIKjfy5V
+X-Google-Smtp-Source: AGHT+IHDdreN12VUDJRE6PICWvLFAhOyL5ToqtR+comSH/TT6jmyP7Oe71n4YHOiZkvw6e+WVRUUYw==
+X-Received: by 2002:a05:6402:42d6:b0:60e:3f7c:deb2 with SMTP id
+ 4fb4d7f45d1cf-612a33968cemr4685447a12.12.1752814577600; 
+ Thu, 17 Jul 2025 21:56:17 -0700 (PDT)
+Received: from rawyouth.fritz.box
+ (dynamic-2a02-3102-6875-9900-19b4-7432-1ff2-cb8d.310.pool.telefonica.de.
+ [2a02:3102:6875:9900:19b4:7432:1ff2:cb8d])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3b61ca4d581sm633546f8f.64.2025.07.17.21.09.07
+ 4fb4d7f45d1cf-612c90a9098sm394212a12.65.2025.07.17.21.56.16
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 17 Jul 2025 21:09:07 -0700 (PDT)
-From: Petr Vorel <petr.vorel@gmail.com>
-To: buildroot@buildroot.org
-Cc: Petr Vorel <petr.vorel@gmail.com>,
- Andrea Cervesato <andrea.cervesato@mailbox.org>,
- Julien Olivain <ju.o@free.fr>
-Date: Fri, 18 Jul 2025 06:09:03 +0200
-Message-ID: <20250718040903.1386179-1-petr.vorel@gmail.com>
-X-Mailer: git-send-email 2.50.0
+ Thu, 17 Jul 2025 21:56:17 -0700 (PDT)
+From: Federico Pellegrin <fede@evolware.org>
+To: buildroot@buildroot.org,
+	james.hilliard1@gmail.com
+Cc: Federico Pellegrin <fede@evolware.org>
+Date: Fri, 18 Jul 2025 06:56:14 +0200
+Message-ID: <20250718045614.17100-1-fede@evolware.org>
+X-Mailer: git-send-email 2.50.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1752811748; x=1753416548; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1752814578; x=1753419378; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=M8w0hvDQrvLGVGO/dPtjf9xVQH4Xf0X/9OhokxJs2Uk=;
- b=jVX1LjaAb4sU09hdpYYkR66DnVo9OJruDMguwJuUkymDOSqzLmStm88pXBK2xZg4HI
- JPG3bxcIzji1S0AfqX9hkfrbqCtCcSYHIMlVSFZ9mv1TUYqvRj0/SKFjNRHgkP29zz/5
- jyPTKcOSwFLJJhM6hoPzvxhdfA/x4jAUYaaIZXpi+5wqjw/2+pMv4DjBgRLZf2q5aG1c
- UJdhkmzdhFKCF2KFUvYhuPyfy2fuF9H65mSmPMMaPppvYRN9LHqwPUdizdyD8Mqeyz1F
- dx9/yz2X1gusktEKcT+BPX5NhYRYWsed3zSF0uw/OcANkhUSauzpZryZR64Liiu0La0s
- io5g==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=jVX1LjaA
-Subject: [Buildroot] [PATCH 1/1] package/ltp-testsuite: backport musl build
- fixes
+ :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+ bh=yirmm0QOJEiwn3evRlpcxKKUwpO/IY01bg3oIwG4Et4=;
+ b=i1NFRW8LDVTDEn5nk8omOgxe0nXKF/qEoZtHjOlfljEP/F86FokJNaW2g5SDtHci6u
+ MBbbL6TZhSDqVOGBjYCo4hYbD1ajNvr5hKTVN8I58kHRkAHhngPyXUFSxJvko49YbYgA
+ JOu6vi1aT/Uk9DlrfKg/33bXbxhJ8mSkolUzKUll8e6upVGeXGi//+GK4GEnVPzwMwzv
+ FNf9OuUVmBxyQrrK3Wm63Qx/K5ntkmNZDDf0RFijcj6KVk/o6tgsXSLwIYfz+isY4b4C
+ To6cn/kZEM7XCtHeNf3by0m3JIhYbtzOz+JphdDhs4JwPRkqfmD3k5DD8TC8mqpnbYB+
+ ZLdA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=fail (p=none dis=none)
+ header.from=evolware.org
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=i1NFRW8L
+Subject: [Buildroot] [PATCH 1/1] package/bpftool: bump to version 7.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,142 +115,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Backport 2 commits from upstream which fixes LTP on musl on kernel >= 6.14.
+Changes: https://github.com/libbpf/bpftool/releases
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+This upgrade fixes as well linking problems to LLVM libraries in
+the previous version on Buildroot 2025.05 and master.
+
+Signed-off-by: Federico Pellegrin <fede@evolware.org>
 ---
-Hi all,
+ package/bpftool/bpftool.hash | 2 +-
+ package/bpftool/bpftool.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I did not experience the problem on current bootlin-x86-64-musl
-toolchain (used via utils/test-pkg), but Andrea is using a different
-toolchain based obviously on newer headers.
-
-Kind regards,
-Petr
-
- ...ure-Fix-build-on-kernel-6.14-headers.patch | 51 ++++++++++++++++++
- ...002-statmount02-Remove-linux-btrfs.h.patch | 52 +++++++++++++++++++
- 2 files changed, 103 insertions(+)
- create mode 100644 package/ltp-testsuite/0001-configure-Fix-build-on-kernel-6.14-headers.patch
- create mode 100644 package/ltp-testsuite/0002-statmount02-Remove-linux-btrfs.h.patch
-
-diff --git a/package/ltp-testsuite/0001-configure-Fix-build-on-kernel-6.14-headers.patch b/package/ltp-testsuite/0001-configure-Fix-build-on-kernel-6.14-headers.patch
-new file mode 100644
-index 0000000000..6638ee2ccd
---- /dev/null
-+++ b/package/ltp-testsuite/0001-configure-Fix-build-on-kernel-6.14-headers.patch
-@@ -0,0 +1,51 @@
-+From 3ef4bac1dd253628dfdb8a823b51ae0d24fa0616 Mon Sep 17 00:00:00 2001
-+From: Petr Vorel <pvorel@suse.cz>
-+Date: Mon, 2 Jun 2025 19:08:30 +0200
-+Subject: [PATCH] configure: Fix build on kernel 6.14 headers
-+
-+We decided in a2300dc0f5 to remove <linux/mount.h> in lapi/mount.h and
-+use only <sys/mount.h>. But later in 5c5411ea8e we add autotools checks
-+in configure.ac which use <linux/mount.h> for detection, but kept using
-+lapi/mount.h. This worked until now, because no toolchain used new
-+header enough. Recent Alpine update broke that.
-+
-+This fixes CI build on Alpine v3.22 (the default Alpine version in
-+GitHub action), which uses 6.14.2 kernel headers, which already define
-+struct mnt_id_req (configure.ac detect it but lapi/mount.h was not using
-+a correct header):
-+
-+    listmount.h: In function 'listmount':
-+    listmount.h:18:16: error: variable 'req' has initializer but incomplete type
-+       18 |         struct mnt_id_req req = {
-+	  |                ^~~~~~~~~~
-+
-+Link: https://lore.kernel.org/ltp/20250602170831.404641-1-pvorel@suse.cz/
-+Fixes: 5c5411ea8e ("Add listmount/statmount fallback declarations")
-+Reviewed-by: Cyril Hrubis <chrubis@suse.cz>
-+Acked-by: Jan Stancek <jstancek@redhat.com>
-+Signed-off-by: Petr Vorel <pvorel@suse.cz>
-+Upstream: https://github.com/linux-test-project/ltp/commit/3ef4bac1dd253628dfdb8a823b51ae0d24fa0616
-+---
-+ configure.ac | 6 ++++--
-+ 1 file changed, 4 insertions(+), 2 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 9ff098b273..69c5be7362 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -254,8 +254,10 @@ AC_CHECK_TYPES([struct mount_attr],,,[
-+ 
-+ AC_CHECK_TYPES([struct cachestat_range],,,[#include <sys/mman.h>])
-+ AC_CHECK_TYPES([struct cachestat],,,[#include <sys/mman.h>])
-+-AC_CHECK_TYPES([struct mnt_id_req],,,[#include <linux/mount.h>])
-+-AC_CHECK_TYPES([struct statmount],,,[#include <linux/mount.h>])
-++
-++# Defined in <linux/mount.h>, but include/lapi/mount.h includes <sys/mount.h> */
-++AC_CHECK_TYPES([struct mnt_id_req],,,[#include <sys/mount.h>])
-++AC_CHECK_TYPES([struct statmount],,,[#include <sys/mount.h>])
-+ 
-+ # Tools knobs
-+ 
-+-- 
-+2.50.0
-+
-diff --git a/package/ltp-testsuite/0002-statmount02-Remove-linux-btrfs.h.patch b/package/ltp-testsuite/0002-statmount02-Remove-linux-btrfs.h.patch
-new file mode 100644
-index 0000000000..c82c422000
---- /dev/null
-+++ b/package/ltp-testsuite/0002-statmount02-Remove-linux-btrfs.h.patch
-@@ -0,0 +1,52 @@
-+From fe8c0dac5ab4aa49c4f977d14f8a8d24cefa6435 Mon Sep 17 00:00:00 2001
-+From: Petr Vorel <pvorel@suse.cz>
-+Date: Wed, 4 Jun 2025 16:13:18 +0200
-+Subject: [PATCH] statmount02: Remove <linux/btrfs.h>
-+
-+statmount02.c does not need <linux/btrfs.h> because it's skipped.
-+
-+Avoid using it fixes the problem due the old problem of indirect include
-+<linux/mount.h> by <linux/fs.h> on Alpine v3.22 (the default Alpine
-+version in GitHub action), which uses 6.14.2 kernel headers:
-+
-+    In file included from /usr/include/linux/fs.h:19,
-+                     from /usr/include/linux/btrfs.h:29,
-+                     from statmount02.c:23:
-+    /usr/include/linux/mount.h:155:8: error: redefinition of 'struct statmount'
-+      155 | struct statmount {
-+          |        ^~~~~~~~~
-+    In file included from statmount.h:12,
-+                     from statmount02.c:20:
-+    ../../../../include/lapi/mount.h:58:8: note: originally defined here
-+       58 | struct statmount {
-+          |        ^~~~~~~~~
-+    /usr/include/linux/mount.h:193:8: error: redefinition of 'struct mnt_id_req'
-+      193 | struct mnt_id_req {
-+          |        ^~~~~~~~~~
-+    ../../../../include/lapi/mount.h:49:8: note: originally defined here
-+       49 | struct mnt_id_req {
-+          |        ^~~~~~~~~~
-+
-+Fixes: 5f9942dffe ("Add statmount02 test")
-+Suggested-by: Jan Stancek <jstancek@redhat.com>
-+Signed-off-by: Petr Vorel <pvorel@suse.cz>
-+Upstream: https://github.com/linux-test-project/ltp/commit/fe8c0dac5ab4aa49c4f977d14f8a8d24cefa6435
-+---
-+ testcases/kernel/syscalls/statmount/statmount02.c | 1 -
-+ 1 file changed, 1 deletion(-)
-+
-+diff --git a/testcases/kernel/syscalls/statmount/statmount02.c b/testcases/kernel/syscalls/statmount/statmount02.c
-+index 504c558a11..07f877e040 100644
-+--- a/testcases/kernel/syscalls/statmount/statmount02.c
-++++ b/testcases/kernel/syscalls/statmount/statmount02.c
-+@@ -20,7 +20,6 @@
-+ #include "statmount.h"
-+ #include "lapi/stat.h"
-+ #include "lapi/sched.h"
-+-#include <linux/btrfs.h>
-+ 
-+ #define MNTPOINT "mntpoint"
-+ 
-+-- 
-+2.50.0
-+
+diff --git a/package/bpftool/bpftool.hash b/package/bpftool/bpftool.hash
+index 4f83e71a76..5112bb997e 100644
+--- a/package/bpftool/bpftool.hash
++++ b/package/bpftool/bpftool.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  89d3ce783d5c9e40b9060b380869911ee9d5ab6732a4b1dd19a90103c5e41e6c  bpftool-v7.1.0-git4.tar.gz
++sha256  ff95bc8a057c84e61863fcf95e354199041ac524f5b9f5d487cf0b2c6e9198fb  bpftool-v7.5.0-git4.tar.gz
+ sha256  7c588754d5e81e92e2a12e47cf78949d485c9c22b4850f12d21b3835c85947d1  LICENSE
+ sha256  6313108c23efffa36948f8b2cff1560a5935373b527b0e1a837cc77e6ed1bacd  LICENSE.BSD-2-Clause
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL-2.0
+diff --git a/package/bpftool/bpftool.mk b/package/bpftool/bpftool.mk
+index cd68d89799..1b765ba38f 100644
+--- a/package/bpftool/bpftool.mk
++++ b/package/bpftool/bpftool.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BPFTOOL_VERSION = v7.1.0
++BPFTOOL_VERSION = v7.5.0
+ BPFTOOL_SITE = https://github.com/libbpf/bpftool
+ BPFTOOL_SITE_METHOD = git
+ BPFTOOL_GIT_SUBMODULES = YES
 -- 
-2.50.0
+2.50.1
 
 _______________________________________________
 buildroot mailing list
