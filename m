@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C722CC83F34
-	for <buildroot@archiver.kernel.org>; Sat, 19 Jul 2025 10:43:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A248AC83F34
+	for <buildroot@archiver.kernel.org>; Sat, 19 Jul 2025 10:49:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8FF64844A0;
-	Sat, 19 Jul 2025 10:43:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 762F5811FD;
+	Sat, 19 Jul 2025 10:49:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 96Mn5g_NSGgE; Sat, 19 Jul 2025 10:43:24 +0000 (UTC)
+ id GDbIeGYu5sin; Sat, 19 Jul 2025 10:49:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D5373844B4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 53D24811BD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D5373844B4;
-	Sat, 19 Jul 2025 10:43:23 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0E437943
- for <buildroot@buildroot.org>; Sat, 19 Jul 2025 10:43:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 53D24811BD;
+	Sat, 19 Jul 2025 10:49:56 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 28AE8117
+ for <buildroot@buildroot.org>; Sat, 19 Jul 2025 10:49:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0BC0D844A0
- for <buildroot@buildroot.org>; Sat, 19 Jul 2025 10:43:21 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B31C3613DC
+ for <buildroot@buildroot.org>; Sat, 19 Jul 2025 10:49:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9h7c0zeRK3EQ for <buildroot@buildroot.org>;
- Sat, 19 Jul 2025 10:43:20 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yQWV68Y04V9v for <buildroot@buildroot.org>;
+ Sat, 19 Jul 2025 10:49:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3C584844B4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 14FAB6142C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3C584844B4
- for <buildroot@buildroot.org>; Sat, 19 Jul 2025 10:43:20 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 14FAB6142C
+ for <buildroot@buildroot.org>; Sat, 19 Jul 2025 10:49:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2A9DB8677E; Sat, 19 Jul 2025 10:43:20 +0000 (UTC)
+ id 0E0A686785; Sat, 19 Jul 2025 10:49:52 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 19 Jul 2025 12:42:21 +0200
+Date: Sat, 19 Jul 2025 12:44:58 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ae5647d8228d740d7f9a8d9d3dd82c878219876d
-X-Git-Newrev: 32e71aab7679fc7794a063790ba40ce63541a9eb
+X-Git-Oldrev: 32e71aab7679fc7794a063790ba40ce63541a9eb
+X-Git-Newrev: 57b6f97959d2ea2ab3d1039d7977c8f10423f43f
 X-Patchwork-Hint: ignore
-Message-Id: <20250719104320.2A9DB8677E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rdma-core: bump to version v58.0
+Message-Id: <20250719104953.0E0A686785@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/linux-firmware: add option for
+ Chips&Media Wave 521C
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,43 +66,69 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=32e71aab7679fc7794a063790ba40ce63541a9eb
+commit: https://git.buildroot.net/buildroot/commit/?id=57b6f97959d2ea2ab3d1039d7977c8f10423f43f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For change log since v56.0, see:
-https://github.com/linux-rdma/rdma-core/releases/tag/v57.0
-https://github.com/linux-rdma/rdma-core/releases/tag/v58.0
+Add an option to install the firmware files for Chips&Media Wave 521C
+video processor used in the TI K3 architecture.
 
+This "cnm/wave521c_k3_codec_fw.bin" file has been present in linux-firmware
+since version 20221109.
+
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Reviewed-by: Bryan Brattlof <bb@ti.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/rdma-core/rdma-core.hash | 2 +-
- package/rdma-core/rdma-core.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/linux-firmware/Config.in           | 6 ++++++
+ package/linux-firmware/linux-firmware.hash | 1 +
+ package/linux-firmware/linux-firmware.mk   | 5 +++++
+ 3 files changed, 12 insertions(+)
 
-diff --git a/package/rdma-core/rdma-core.hash b/package/rdma-core/rdma-core.hash
-index 6037a2409a..8ae78046f1 100644
---- a/package/rdma-core/rdma-core.hash
-+++ b/package/rdma-core/rdma-core.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  f09c73f89e0bdcd6b794ebd888021755835eba0c1e1e6b8c66a68d2f8952c468  rdma-core-56.0.tar.gz
-+sha256  08a554e0f95bb6869f9fbc2b1eb5521a85104dda9bf730db42b1a10d0b009e28  rdma-core-58.0.tar.gz
- sha256  99e0df1d009a21d0dfb031600c550fd8f4efc0c6b2a4ef8b34a995aa6f79c9f4  COPYING.BSD_MIT
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPL2
- sha256  c46a557f25b8ef9bec76526c4e593fc13e6cba27e7ba30d73b6497a689cf06f6  COPYING.md
-diff --git a/package/rdma-core/rdma-core.mk b/package/rdma-core/rdma-core.mk
-index 5b688df423..938a6398fa 100644
---- a/package/rdma-core/rdma-core.mk
-+++ b/package/rdma-core/rdma-core.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+index 34f3fb7691..b02ee03f56 100644
+--- a/package/linux-firmware/Config.in
++++ b/package/linux-firmware/Config.in
+@@ -33,6 +33,12 @@ config BR2_PACKAGE_LINUX_FIRMWARE_AMDGPU
+ 	help
+ 	  Firmware files for AMD GPU video cards.
  
--RDMA_CORE_VERSION = 56.0
-+RDMA_CORE_VERSION = 58.0
- RDMA_CORE_SITE = $(call github,linux-rdma,rdma-core,v$(RDMA_CORE_VERSION))
- RDMA_CORE_LICENSE = GPL-2.0 or BSD-2-Clause
- RDMA_CORE_LICENSE_FILES = COPYING.GPL2 COPYING.BSD_MIT COPYING.md
++config BR2_PACKAGE_LINUX_FIRMWARE_CNM_WAVE521C_K3_CODEC
++	bool "Chips&Media Wave 521C codec IP for K3"
++	help
++	  Firmware files for the Chips&Media Wave521C decoder
++	  needed by the Linux TI j721s2-wave521c driver.
++
+ config BR2_PACKAGE_LINUX_FIRMWARE_I915
+ 	bool "Intel i915 video card firmware"
+ 	help
+diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
+index c9c673f7e2..7381f0c03a 100644
+--- a/package/linux-firmware/linux-firmware.hash
++++ b/package/linux-firmware/linux-firmware.hash
+@@ -14,6 +14,7 @@ sha256  bf1cb89140fe7e138fec229b26fa45d2fb46f416ab559916c6e56c0224df2e8e  LICENC
+ sha256  691f2b5e3e94e06aa89450c99ff08c83336c77fe4ad64a609b1cddea4bf98727  LICENCE.bnx2x
+ sha256  b16056fc91b82a0e3e8de8f86c2dac98201aa9dc3cbd33e8d38f1b087fcec30d  LICENCE.broadcom_bcm43xx
+ sha256  a5777f9e80aca0603b0648454de996168b1c530322550ccda94d6d78bcf6c061  LICENCE.chelsio_firmware
++sha256  88236d5ae45b7abc96c2ab4c6952af88758e24b17412dd173746ee1c559b3c6f  LICENCE.cnm
+ sha256  ae0db6cc4db33941148df0f67de53e76a77b1b5a46b3165edb7040aa2750015f  LICENCE.cypress
+ sha256  60fbc9cccb455e1a3306c97db942d6f24fa93664be61d54c497637e6d0e2ae83  LICENCE.fw_sst_0f28
+ sha256  5181b0b51efc79d5acb2c9bb92042878fdbad97a92114d4ab5e32e2b5b52fce4  LICENCE.ibt_firmware
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 38212e12ac..02e04770d0 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -25,6 +25,11 @@ LINUX_FIRMWARE_DIRS += amdgpu
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.amdgpu
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_CNM_WAVE521C_K3_CODEC),y)
++LINUX_FIRMWARE_FILES += cnm/wave521c_k3_codec_fw.bin
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.cnm
++endif
++
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_I915),y)
+ LINUX_FIRMWARE_DIRS += i915
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.i915
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
