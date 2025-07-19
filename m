@@ -1,74 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3CBBEC83F27
-	for <buildroot@archiver.kernel.org>; Sat, 19 Jul 2025 14:40:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B624AC83F34
+	for <buildroot@archiver.kernel.org>; Sat, 19 Jul 2025 15:17:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0F1C560A9B;
-	Sat, 19 Jul 2025 14:40:56 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mthiO_5DCP9Z; Sat, 19 Jul 2025 14:40:55 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5694060A9E
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5694060A9E;
-	Sat, 19 Jul 2025 14:40:55 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 7D8EBDA
- for <buildroot@buildroot.org>; Sat, 19 Jul 2025 14:40:53 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 63997412AB
- for <buildroot@buildroot.org>; Sat, 19 Jul 2025 14:40:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7581F40BBE;
+	Sat, 19 Jul 2025 15:17:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id d-ityU44OcWE for <buildroot@buildroot.org>;
- Sat, 19 Jul 2025 14:40:52 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9324C41228
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9324C41228
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9324C41228
- for <buildroot@buildroot.org>; Sat, 19 Jul 2025 14:40:52 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id C46F919F5C6;
- Sat, 19 Jul 2025 16:40:48 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
- via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 19 Jul 2025 16:40:48 +0200
-MIME-Version: 1.0
-Date: Sat, 19 Jul 2025 16:40:48 +0200
-To: Federico Pellegrin <fede@evolware.org>
-Cc: buildroot@buildroot.org, james.hilliard1@gmail.com
-In-Reply-To: <20250718045614.17100-1-fede@evolware.org>
-References: <20250718045614.17100-1-fede@evolware.org>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <a6813f8b41e2a50a3622a48f515a14b0@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1752936051;
- bh=C2najG1PsDym2aNOWJ02oE4MbFDqcU5qfs9TRyiYBls=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=uFPDRMXkXVJioKw2kYJupF8x0J95jdYMxVG1273JuR1gvyYCrxYPVD0JtWmvY/Npb
- j0HEm3dY0zAPei3VGHcaTKg2X5g+rlp3gsKsxmQPoFBZ6ml0XwgDuvR4PHII+Y6s3j
- TfPJpt7Lj2yBydD+NwK7USeVjgp/1CGqAIyR1ivYQ+eTK2MovYyKR3ilb3i/7sR21m
- lvS+5lr+P6Wm6xmmeEF6OMMujkXe6jq5PIHMk1PeCAq8GVtf9YmfRBp8ggt7DPgJZE
- v9ogS+bKGZttuTiqbGegcQ0zZ4HS51ZJ2dMFHoXpZC/onR0liUYEkwwfbIB0RvTLEE
- fKok0f1C519Zg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=uFPDRMXk
-Subject: Re: [Buildroot] [PATCH 1/1] package/bpftool: bump to version 7.5.0
+ id J1JCGEu0ETuL; Sat, 19 Jul 2025 15:17:53 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96E9F40BA0
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 96E9F40BA0;
+	Sat, 19 Jul 2025 15:17:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id AEA60DA
+ for <buildroot@buildroot.org>; Sat, 19 Jul 2025 15:17:51 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9461B8458D
+ for <buildroot@buildroot.org>; Sat, 19 Jul 2025 15:17:51 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jZdQhCUg1iLR for <buildroot@buildroot.org>;
+ Sat, 19 Jul 2025 15:17:51 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E4C99845A3
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id E4C99845A3
+ for <buildroot@buildroot.org>; Sat, 19 Jul 2025 15:17:50 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id DEE56864C5; Sat, 19 Jul 2025 15:17:50 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 19 Jul 2025 16:45:51 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5e3114cd2f8380ae1fbd15eec78b182efe382303
+X-Git-Newrev: 7c8cca9baab5fd97f360a1b5d46397b629a54d6c
+X-Patchwork-Hint: ignore
+Message-Id: <20250719151750.DEE56864C5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/network-manager: set "nft" path if
+ BR2_PACKAGE_NFTABLES=y
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,20 +60,39 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 18/07/2025 06:56, Federico Pellegrin wrote:
-> Changes: https://github.com/libbpf/bpftool/releases
-> 
-> This upgrade fixes as well linking problems to LLVM libraries in
-> the previous version on Buildroot 2025.05 and master.
-> 
-> Signed-off-by: Federico Pellegrin <fede@evolware.org>
+commit: https://git.buildroot.net/buildroot/commit/?id=7c8cca9baab5fd97f360a1b5d46397b629a54d6c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Nftables should be preferred over iptables if available, which
+NetworkManager will do if both paths are set.
+
+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/network-manager/network-manager.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 8c517c49e6..1bec053c54 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -131,6 +131,10 @@ else
+ NETWORK_MANAGER_CONF_OPTS += -Dnmtui=false
+ endif
+ 
++ifeq ($(BR2_PACKAGE_NFTABLES),y)
++NETWORK_MANAGER_CONF_OPTS += -Dnft=/usr/sbin/nft
++endif
++
+ ifeq ($(BR2_PACKAGE_OFONO),y)
+ NETWORK_MANAGER_DEPENDENCIES += ofono
+ NETWORK_MANAGER_CONF_OPTS += -Dofono=true
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
