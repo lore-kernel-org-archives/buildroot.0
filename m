@@ -1,51 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 979D2C83F27
-	for <buildroot@archiver.kernel.org>; Sat, 19 Jul 2025 14:40:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3CBBEC83F27
+	for <buildroot@archiver.kernel.org>; Sat, 19 Jul 2025 14:40:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 619894122D;
-	Sat, 19 Jul 2025 14:40:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0F1C560A9B;
+	Sat, 19 Jul 2025 14:40:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xgCqWLj-Al_c; Sat, 19 Jul 2025 14:40:27 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mthiO_5DCP9Z; Sat, 19 Jul 2025 14:40:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F2C04124D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5694060A9E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9F2C04124D;
-	Sat, 19 Jul 2025 14:40:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5694060A9E;
+	Sat, 19 Jul 2025 14:40:55 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id D5BEC117
- for <buildroot@buildroot.org>; Sat, 19 Jul 2025 14:40:26 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 7D8EBDA
+ for <buildroot@buildroot.org>; Sat, 19 Jul 2025 14:40:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BBB8B4122D
- for <buildroot@buildroot.org>; Sat, 19 Jul 2025 14:40:26 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 63997412AB
+ for <buildroot@buildroot.org>; Sat, 19 Jul 2025 14:40:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gg8xYFmi9yfk for <buildroot@buildroot.org>;
- Sat, 19 Jul 2025 14:40:26 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C67C41228
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1C67C41228
- for <buildroot@buildroot.org>; Sat, 19 Jul 2025 14:40:26 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 07823864A6; Sat, 19 Jul 2025 14:40:26 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 19 Jul 2025 16:30:23 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d9d99eae4d735f80dc7fc30eda9dd10b36135095
-X-Git-Newrev: 2c7d6b9dbe2ce91ca68434d4ef1798e41752bbf3
-X-Patchwork-Hint: ignore
-Message-Id: <20250719144026.07823864A6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/bpftool: bump to version 7.5.0
+ id d-ityU44OcWE for <buildroot@buildroot.org>;
+ Sat, 19 Jul 2025 14:40:52 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9324C41228
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9324C41228
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9324C41228
+ for <buildroot@buildroot.org>; Sat, 19 Jul 2025 14:40:52 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id C46F919F5C6;
+ Sat, 19 Jul 2025 16:40:48 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 19 Jul 2025 16:40:48 +0200
+MIME-Version: 1.0
+Date: Sat, 19 Jul 2025 16:40:48 +0200
+To: Federico Pellegrin <fede@evolware.org>
+Cc: buildroot@buildroot.org, james.hilliard1@gmail.com
+In-Reply-To: <20250718045614.17100-1-fede@evolware.org>
+References: <20250718045614.17100-1-fede@evolware.org>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <a6813f8b41e2a50a3622a48f515a14b0@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1752936051;
+ bh=C2najG1PsDym2aNOWJ02oE4MbFDqcU5qfs9TRyiYBls=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=uFPDRMXkXVJioKw2kYJupF8x0J95jdYMxVG1273JuR1gvyYCrxYPVD0JtWmvY/Npb
+ j0HEm3dY0zAPei3VGHcaTKg2X5g+rlp3gsKsxmQPoFBZ6ml0XwgDuvR4PHII+Y6s3j
+ TfPJpt7Lj2yBydD+NwK7USeVjgp/1CGqAIyR1ivYQ+eTK2MovYyKR3ilb3i/7sR21m
+ lvS+5lr+P6Wm6xmmeEF6OMMujkXe6jq5PIHMk1PeCAq8GVtf9YmfRBp8ggt7DPgJZE
+ v9ogS+bKGZttuTiqbGegcQ0zZ4HS51ZJ2dMFHoXpZC/onR0liUYEkwwfbIB0RvTLEE
+ fKok0f1C519Zg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=uFPDRMXk
+Subject: Re: [Buildroot] [PATCH 1/1] package/bpftool: bump to version 7.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,51 +82,20 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2c7d6b9dbe2ce91ca68434d4ef1798e41752bbf3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 18/07/2025 06:56, Federico Pellegrin wrote:
+> Changes: https://github.com/libbpf/bpftool/releases
+> 
+> This upgrade fixes as well linking problems to LLVM libraries in
+> the previous version on Buildroot 2025.05 and master.
+> 
+> Signed-off-by: Federico Pellegrin <fede@evolware.org>
 
-Changes: https://github.com/libbpf/bpftool/releases
-
-This upgrade fixes as well linking problems to LLVM libraries in
-the previous version on Buildroot 2025.05 and master.
-
-Signed-off-by: Federico Pellegrin <fede@evolware.org>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/bpftool/bpftool.hash | 2 +-
- package/bpftool/bpftool.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/bpftool/bpftool.hash b/package/bpftool/bpftool.hash
-index 4f83e71a76..5112bb997e 100644
---- a/package/bpftool/bpftool.hash
-+++ b/package/bpftool/bpftool.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  89d3ce783d5c9e40b9060b380869911ee9d5ab6732a4b1dd19a90103c5e41e6c  bpftool-v7.1.0-git4.tar.gz
-+sha256  ff95bc8a057c84e61863fcf95e354199041ac524f5b9f5d487cf0b2c6e9198fb  bpftool-v7.5.0-git4.tar.gz
- sha256  7c588754d5e81e92e2a12e47cf78949d485c9c22b4850f12d21b3835c85947d1  LICENSE
- sha256  6313108c23efffa36948f8b2cff1560a5935373b527b0e1a837cc77e6ed1bacd  LICENSE.BSD-2-Clause
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL-2.0
-diff --git a/package/bpftool/bpftool.mk b/package/bpftool/bpftool.mk
-index cd68d89799..1b765ba38f 100644
---- a/package/bpftool/bpftool.mk
-+++ b/package/bpftool/bpftool.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BPFTOOL_VERSION = v7.1.0
-+BPFTOOL_VERSION = v7.5.0
- BPFTOOL_SITE = https://github.com/libbpf/bpftool
- BPFTOOL_SITE_METHOD = git
- BPFTOOL_GIT_SUBMODULES = YES
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
