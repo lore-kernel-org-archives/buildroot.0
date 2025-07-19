@@ -1,75 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E6E2C83F34
-	for <buildroot@archiver.kernel.org>; Sat, 19 Jul 2025 17:23:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30BA3C83F27
+	for <buildroot@archiver.kernel.org>; Sat, 19 Jul 2025 19:11:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B05F48475C;
-	Sat, 19 Jul 2025 17:23:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D456F61B97;
+	Sat, 19 Jul 2025 19:11:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RAgjnjnE6FQM; Sat, 19 Jul 2025 17:23:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id g5rlUoxSROiS; Sat, 19 Jul 2025 19:11:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BFDF184755
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 272E860A63
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BFDF184755;
-	Sat, 19 Jul 2025 17:23:57 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id B3369117
- for <buildroot@buildroot.org>; Sat, 19 Jul 2025 17:23:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 272E860A63;
+	Sat, 19 Jul 2025 19:11:48 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id EECC0117
+ for <buildroot@buildroot.org>; Sat, 19 Jul 2025 19:11:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AFA6C84755
- for <buildroot@buildroot.org>; Sat, 19 Jul 2025 17:23:56 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D500D40089
+ for <buildroot@buildroot.org>; Sat, 19 Jul 2025 19:11:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3smeqM_3YjEj for <buildroot@buildroot.org>;
- Sat, 19 Jul 2025 17:23:56 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E477784752
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E477784752
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E477784752
- for <buildroot@buildroot.org>; Sat, 19 Jul 2025 17:23:55 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 5F70513F8A2;
- Sat, 19 Jul 2025 19:23:50 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
- via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 19 Jul 2025 19:23:50 +0200
-MIME-Version: 1.0
-Date: Sat, 19 Jul 2025 19:23:50 +0200
-To: Petr Vorel <petr.vorel@gmail.com>
-Cc: buildroot@buildroot.org, Andrea Cervesato <andrea.cervesato@mailbox.org>
-In-Reply-To: <20250718040903.1386179-1-petr.vorel@gmail.com>
-References: <20250718040903.1386179-1-petr.vorel@gmail.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <07b1fa0c430c0c566d444c48bfcf1df1@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1752945832;
- bh=FsOSm0Xy2SJWHt9dG2Rls+pFTeD3/jvja7S/COSQMiQ=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=chZlQYy5yQYGx20u0BHR9syITXjQU50qwu4ABczhhak4ws6EwyuMoFrMdYqU1rWdJ
- pzLVC0zTgbJEMK1NBAJAj5G5ojltyY5rozra8ePnojgy3CKbuSAc70N6XGRzi7petu
- Ar0r5QlPwodvf0xnsGIBxPp7iigrQTlC2XPYzgVsvbIj0e3Z5pFYUx93ZecooCqb7Q
- i+BhxkzAB0u+MRU6UH74xgp+LUJ0CxSO1LRscJP0ZOLFITzrDg8lY9Ut0/VZLZnpsT
- P/RM0V3O6wvVJnfLXM8MUl7wdlUJ51n45pbZsq+L6miz68864Y+U9hVjo8VexsKX9/
- RvmZRnsitAj1Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=chZlQYy5
-Subject: Re: [Buildroot] [PATCH 1/1] package/ltp-testsuite: backport musl
- build fixes
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gmbNWX5x3zCH for <buildroot@buildroot.org>;
+ Sat, 19 Jul 2025 19:11:45 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 08FC24052A
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 08FC24052A
+ for <buildroot@buildroot.org>; Sat, 19 Jul 2025 19:11:45 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id EBEFF86587; Sat, 19 Jul 2025 19:11:44 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 19 Jul 2025 21:07:50 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 7c8cca9baab5fd97f360a1b5d46397b629a54d6c
+X-Git-Newrev: 69b2777291287e9bf43690d5b86bb2a512394233
+X-Patchwork-Hint: ignore
+Message-Id: <20250719191144.EBEFF86587@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rauc-hawkbit-updater: fix missing
+ user
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,64 +60,57 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============3758201108036073151=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Petr,
+--===============3758201108036073151==
+Content-Type: text/plain
 
-Thanks for the patch!
+commit: https://git.buildroot.net/buildroot/commit/?id=69b2777291287e9bf43690d5b86bb2a512394233
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 18/07/2025 06:09, Petr Vorel wrote:
-> Backport 2 commits from upstream which fixes LTP on musl on kernel >= 
-> 6.14.
-> 
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> ---
-> Hi all,
-> 
-> I did not experience the problem on current bootlin-x86-64-musl
-> toolchain (used via utils/test-pkg), but Andrea is using a different
-> toolchain based obviously on newer headers.
+Systemd support for the RAUC hawkbit updater was added in
 
-I am able to reproduce the issue with the following commands,
-on branch master at commit 7c8cca9:
+  4aa7a4ad8a (package/rauc-hawkbit-updater: add systemd optional dependency, 2024-07-10)
 
-     cat >.config <<EOF
-     BR2_aarch64=y
-     BR2_TOOLCHAIN_BUILDROOT_MUSL=y
-     BR2_LINUX_KERNEL=y
-     BR2_LINUX_KERNEL_LATEST_VERSION=y
-     BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-     BR2_PACKAGE_LTP_TESTSUITE=y
-     EOF
-     make olddefconfig
-     make ltp-testsuite
+This installs the RAUC hawkbit updater service, which executes as user
+"rauc-hawkbit" [1], which doesn't exist by default.
 
-However, this patch does not seem to fix it. It is probably because
-you added a patch modifying configure.ac without adding in
-ltp-testsuite.mk:
+[1] https://github.com/rauc/rauc-hawkbit-updater/blob/2711c0e02781eb9d97285c87197f1bafef75d0d1/script/rauc-hawkbit-updater.service
 
-     # 0001-configure-Fix-build-on-kernel-6.14-headers.patch
-     LTP_TESTSUITE_AUTORECONF = YES
+Signed-off-by: Gero Schwäricke <gero.schwaericke@sevenlab.de>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/rauc-hawkbit-updater/rauc-hawkbit-updater.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Could you confirm the reproduced issue is the right one,
-and adding _AUTORECONF fixes it, please?  If it is the right
-fix, could you send a v2 including the commands to reproduce
-in the commit log and adding this _AUTORECONF please?
+diff --git a/package/rauc-hawkbit-updater/rauc-hawkbit-updater.mk b/package/rauc-hawkbit-updater/rauc-hawkbit-updater.mk
+index da1c020bb6..e31a4deb5f 100644
+--- a/package/rauc-hawkbit-updater/rauc-hawkbit-updater.mk
++++ b/package/rauc-hawkbit-updater/rauc-hawkbit-updater.mk
+@@ -15,6 +15,10 @@ RAUC_HAWKBIT_UPDATER_CFLAGS = $(TARGET_CFLAGS) -std=c99
+ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+ RAUC_HAWKBIT_UPDATER_DEPENDENCIES += systemd
+ RAUC_HAWKBIT_UPDATER_CONF_OPTS += -Dsystemd=enabled
++# rauc-hawkbit-updater.service uses this user and group
++define RAUC_HAWKBIT_UPDATER_USERS
++	rauc-hawkbit -1 rauc-hawkbit -1 * - - - RAUC Hawkbit Updater
++endef
+ else
+ RAUC_HAWKBIT_UPDATER_CONF_OPTS += -Dsystemd=disabled
+ endif
 
-Best regards,
+--===============3758201108036073151==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-Julien.
-
-> Kind regards,
-> Petr
-
-Best regards,
-
-Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3758201108036073151==--
