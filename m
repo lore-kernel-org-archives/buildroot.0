@@ -1,103 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8F71C83F22
-	for <buildroot@archiver.kernel.org>; Sun, 20 Jul 2025 14:30:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D059C83F22
+	for <buildroot@archiver.kernel.org>; Sun, 20 Jul 2025 14:38:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6948B614B5;
-	Sun, 20 Jul 2025 14:30:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D6AF441091;
+	Sun, 20 Jul 2025 14:38:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wjf9o3CBHlyK; Sun, 20 Jul 2025 14:30:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id k9sGoqMTRyuA; Sun, 20 Jul 2025 14:38:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 605A061C3E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D2121410A7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 605A061C3E;
-	Sun, 20 Jul 2025 14:30:56 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2E695117
- for <buildroot@buildroot.org>; Sun, 20 Jul 2025 14:30:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D2121410A7;
+	Sun, 20 Jul 2025 14:38:56 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4325B1F7
+ for <buildroot@buildroot.org>; Sun, 20 Jul 2025 14:38:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1F96A84290
- for <buildroot@buildroot.org>; Sun, 20 Jul 2025 14:30:55 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 33AE640FAA
+ for <buildroot@buildroot.org>; Sun, 20 Jul 2025 14:38:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id h3u0pwcSTUYo for <buildroot@buildroot.org>;
- Sun, 20 Jul 2025 14:30:54 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
- envelope-from=petr.vorel@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0B4D984475
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B4D984475
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0B4D984475
- for <buildroot@buildroot.org>; Sun, 20 Jul 2025 14:30:53 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id
- ffacd0b85a97d-3a53359dea5so1609657f8f.0
- for <buildroot@buildroot.org>; Sun, 20 Jul 2025 07:30:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1753021852; x=1753626652;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=zaafrwKWYm4AQbvRL3V2BnvsJDYB6WpQ8SW0rMt7Oso=;
- b=l0BAEhpkSfWVlN4WLXPgKPvBnYsA+iBB/ghT2Rscdvb/sQtJK2gHSWF12VRzhTq6zp
- l4k++Q4YNXGo94VK12GmGj3uMB7w8SDFUvqWKN69d4zsKlnnlp6fkSjySJQPorzq3Pr1
- MFepDau0FdvJHeHOO5/cDgGFQ1VpGPzCvlCh4KPOGAPHaDOLSpg3BAOjZthbZ1g8vNOm
- +eZ1nFcY2VU+7Kgzi+VJh5P83EYByElkDkJzTSXJUsBVemmyCQSrK8VDTu/iC6ClAXu0
- dfOeyd6oag3nyM8rsLSbHh/sm7P44/Hl9xOGIYrAB1yfek/UYWdMfQsokJlUDszpDAIA
- CUXg==
-X-Gm-Message-State: AOJu0YyGy9jmgVqpVkfwC0uHtsl6eVo9eLnZupudllNH5Pg/4K0hGqzb
- nwX7ttS+D1FV8UTpH8boRT+3O5Bcy6YKV69G9b7vEDWUHzobnwm6EELj3WPIyw==
-X-Gm-Gg: ASbGncuZCMoNVSig/plYHQ7NreIzNFw3/FxhNuHhhUPfl5Ncmm/sFreQeI6jfO2jNKT
- xciWXTc9QWX7xotRs+7WBiyhiy83WfS0iua0/CY9wFxUHnot2NHRVR8IKXKYB5A61CvN7sjRTt0
- Q1Eyo6Bbbe/MKSGrXUqqc/sUvHu9alLpZYLjmKZr9fErsJr56mrw/h7p8Ptt2psdUwlRWk7oi9l
- v7Cu+3FXPHRwVN6oEkVR4JDuAo/pPGHkwBo0+/pGA7bThrb6YdWQz5hj87zSIwXNgRZFDBSqaVY
- nuoorI6PslcNM8zucU/KjXyP2t/eJ5KL6e741YtUZug5x8+1i9YAI4k/QJUN7SIREKfmsg9QhHH
- IofOAICPwNKlOE6fslcW8DrgLfa93qpunjLqX
-X-Google-Smtp-Source: AGHT+IHikYuutDHxa9GsZUX8Oj9STSfqV8tQSiXzShOca4pwW6iX0+FaUUlzMM/yxkYK03NB7sLVHA==
-X-Received: by 2002:a05:6000:420f:b0:3a5:2257:17b4 with SMTP id
- ffacd0b85a97d-3b60e55003amr13660469f8f.55.1753021851566; 
- Sun, 20 Jul 2025 07:30:51 -0700 (PDT)
-Received: from x230 (gw1.ms-free.net. [185.243.124.10])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3b61ca25437sm7477499f8f.10.2025.07.20.07.30.50
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 20 Jul 2025 07:30:51 -0700 (PDT)
-From: Petr Vorel <petr.vorel@gmail.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lw5_YdmkY4VL for <buildroot@buildroot.org>;
+ Sun, 20 Jul 2025 14:38:54 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5B64B40F9D
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5B64B40F9D
+ for <buildroot@buildroot.org>; Sun, 20 Jul 2025 14:38:54 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 4718B86876; Sun, 20 Jul 2025 14:38:54 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Petr Vorel <petr.vorel@gmail.com>,
- Andrea Cervesato <andrea.cervesato@mailbox.org>,
- Julien Olivain <ju.o@free.fr>
-Date: Sun, 20 Jul 2025 16:30:47 +0200
-Message-ID: <20250720143047.1447676-1-petr.vorel@gmail.com>
-X-Mailer: git-send-email 2.50.0
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1753021852; x=1753626652; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=zaafrwKWYm4AQbvRL3V2BnvsJDYB6WpQ8SW0rMt7Oso=;
- b=FR48DVRqscigIlccrhlCzOE0Dv0Ul2IDzUCA+aEfCaRSNUQ4ouh7lhneh8/9ReAdWl
- 8PcZS1i5Hfh0MKoMhELmi+qSosqOkon5iPZxFHU9do9YaY0mMjqJP5nEtZrdcXwwEWAz
- J4KNArRFeJNvPU/z/fhq5QoypNcnKMLe6rFdAl5Jfge9wmojTlFI50Xh25hfL0EGgOQS
- A7cvpGRyCPj0dLXpRBwLlcggNDGOzBlJ4OGOQc4T4SijzEflqlyvragro1ykeBz01fiP
- 254KLm1jaxH7N0bZfNobRvh/wrp+8tD2GiyIQILxNhtJTHMKRAG4xSZGLRYyqZRb8e9Y
- nQZA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=FR48DVRq
-Subject: [Buildroot] [PATCH v2 1/1] package/ltp-testsuite: backport musl
- build fixes
+Date: Sun, 20 Jul 2025 16:37:24 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 947deda6ffcb07ade8e7d00764ca73d97405e463
+X-Git-Newrev: c430f54f36bf27fbdab38e4319a04c3c18073b38
+X-Patchwork-Hint: ignore
+Message-Id: <20250720143854.4718B86876@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/soapy-sdr: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -109,177 +57,217 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Backport 2 commits from upstream which fixes LTP on musl on kernel >= 6.14.
+commit: https://git.buildroot.net/buildroot/commit/?id=c430f54f36bf27fbdab38e4319a04c3c18073b38
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Soapy SDR - vendor and platform neutral SDR support library.
+
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+[Julien: remove commented _DEPENDENCIES]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
-v1: https://lore.kernel.org/buildroot/20250718040903.1386179-1-petr.vorel@gmail.com/
+ package/Config.in                                  |  1 +
+ ...ecated-use-of-distutils-fix-for-Python-3..patch | 79 ++++++++++++++++++++++
+ package/soapy-sdr/Config.in                        | 27 ++++++++
+ package/soapy-sdr/soapy-sdr.hash                   |  3 +
+ package/soapy-sdr/soapy-sdr.mk                     | 42 ++++++++++++
+ 5 files changed, 152 insertions(+)
 
-Changes v1->v2:
-Add LTP_TESTSUITE_AUTORECONF = YES (Julien)
-
-Hi Julien, all,
-
-Yes, the following command reproduce the problem:
-
-    cat >.config <<EOF
-    BR2_aarch64=y
-    BR2_TOOLCHAIN_BUILDROOT_MUSL=y
-    BR2_LINUX_KERNEL=y
-    BR2_LINUX_KERNEL_LATEST_VERSION=y
-    BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-    BR2_PACKAGE_LTP_TESTSUITE=y
-    EOF
-    make olddefconfig
-    make ltp-testsuite
-
-which got fixed by this patch.
-
-Kind regards,
-Petr
-
- ...ure-Fix-build-on-kernel-6.14-headers.patch | 51 ++++++++++++++++++
- ...002-statmount02-Remove-linux-btrfs.h.patch | 52 +++++++++++++++++++
- package/ltp-testsuite/ltp-testsuite.mk        |  3 ++
- 3 files changed, 106 insertions(+)
- create mode 100644 package/ltp-testsuite/0001-configure-Fix-build-on-kernel-6.14-headers.patch
- create mode 100644 package/ltp-testsuite/0002-statmount02-Remove-linux-btrfs.h.patch
-
-diff --git a/package/ltp-testsuite/0001-configure-Fix-build-on-kernel-6.14-headers.patch b/package/ltp-testsuite/0001-configure-Fix-build-on-kernel-6.14-headers.patch
+diff --git a/package/Config.in b/package/Config.in
+index 22a57fa911..137f74ed82 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1884,6 +1884,7 @@ menu "Hardware handling"
+ 	source "package/pcsc-lite/Config.in"
+ 	source "package/pico-sdk/Config.in"
+ 	source "package/rpi-rgb-led-matrix/Config.in"
++	source "package/soapy-sdr/Config.in"
+ 	source "package/tslib/Config.in"
+ 	source "package/uhd/Config.in"
+ 	source "package/urg/Config.in"
+diff --git a/package/soapy-sdr/0001-Remove-deprecated-use-of-distutils-fix-for-Python-3..patch b/package/soapy-sdr/0001-Remove-deprecated-use-of-distutils-fix-for-Python-3..patch
 new file mode 100644
-index 0000000000..6638ee2ccd
+index 0000000000..0df2c8f8e0
 --- /dev/null
-+++ b/package/ltp-testsuite/0001-configure-Fix-build-on-kernel-6.14-headers.patch
-@@ -0,0 +1,51 @@
-+From 3ef4bac1dd253628dfdb8a823b51ae0d24fa0616 Mon Sep 17 00:00:00 2001
-+From: Petr Vorel <pvorel@suse.cz>
-+Date: Mon, 2 Jun 2025 19:08:30 +0200
-+Subject: [PATCH] configure: Fix build on kernel 6.14 headers
++++ b/package/soapy-sdr/0001-Remove-deprecated-use-of-distutils-fix-for-Python-3..patch
+@@ -0,0 +1,79 @@
++From 1ee5670803f89b21d84a6a84acbb578da051c119 Mon Sep 17 00:00:00 2001
++From: Ryan Volz <ryan.volz@gmail.com>
++Date: Tue, 26 Sep 2023 14:56:59 -0400
++Subject: [PATCH] Remove deprecated use of distutils, fix for Python 3.12+
 +
-+We decided in a2300dc0f5 to remove <linux/mount.h> in lapi/mount.h and
-+use only <sys/mount.h>. But later in 5c5411ea8e we add autotools checks
-+in configure.ac which use <linux/mount.h> for detection, but kept using
-+lapi/mount.h. This worked until now, because no toolchain used new
-+header enough. Recent Alpine update broke that.
++Remove deprecated use of distutils, fix for Python 3.12+
 +
-+This fixes CI build on Alpine v3.22 (the default Alpine version in
-+GitHub action), which uses 6.14.2 kernel headers, which already define
-+struct mnt_id_req (configure.ac detect it but lapi/mount.h was not using
-+a correct header):
++This switches to using sysconfig from distutils, which is necessary for
++Python 3.12+ since distutils is deprecated and has been removed.
 +
-+    listmount.h: In function 'listmount':
-+    listmount.h:18:16: error: variable 'req' has initializer but incomplete type
-+       18 |         struct mnt_id_req req = {
-+	  |                ^~~~~~~~~~
++It is necessary to specify the install scheme when a prefix other than
++the Python default is used so that changes to the default scheme made by
++distributions (e.g. Debian, Fedora) do not produce an incorrect Python
++installation directory. For example, Debian patches the default scheme
++to prepend the path with '/local', but if a user specifies a prefix of
++'/usr/local', then the path using the default scheme would be
++'/usr/local/local/...' with a duplicated 'local' directory. Specifying
++an unmodified install scheme fixes that.
 +
-+Link: https://lore.kernel.org/ltp/20250602170831.404641-1-pvorel@suse.cz/
-+Fixes: 5c5411ea8e ("Add listmount/statmount fallback declarations")
-+Reviewed-by: Cyril Hrubis <chrubis@suse.cz>
-+Acked-by: Jan Stancek <jstancek@redhat.com>
-+Signed-off-by: Petr Vorel <pvorel@suse.cz>
-+Upstream: https://github.com/linux-test-project/ltp/commit/3ef4bac1dd253628dfdb8a823b51ae0d24fa0616
++Signed-off-by: Ryan Volz <ryan.volz@gmail.com>
++
++Upstream: https://github.com/pothosware/SoapySDR/commit/1ee5670803f89b21d84a6a84acbb578da051c119
++Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 +---
-+ configure.ac | 6 ++++--
-+ 1 file changed, 4 insertions(+), 2 deletions(-)
++ swig/python/get_python_lib.py | 36 ++++++++++++++++++++++++-----------
++ 1 file changed, 25 insertions(+), 11 deletions(-)
 +
-+diff --git a/configure.ac b/configure.ac
-+index 9ff098b273..69c5be7362 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -254,8 +254,10 @@ AC_CHECK_TYPES([struct mount_attr],,,[
++diff --git a/python/get_python_lib.py b/python/get_python_lib.py
++index 0c71652..574f0b6 100644
++--- a/python/get_python_lib.py
+++++ b/python/get_python_lib.py
++@@ -1,19 +1,33 @@
++ import os
+++import pathlib
++ import sys
++-import site
++-from distutils.sysconfig import get_python_lib
+++import sysconfig
 + 
-+ AC_CHECK_TYPES([struct cachestat_range],,,[#include <sys/mman.h>])
-+ AC_CHECK_TYPES([struct cachestat],,,[#include <sys/mman.h>])
-+-AC_CHECK_TYPES([struct mnt_id_req],,,[#include <linux/mount.h>])
-+-AC_CHECK_TYPES([struct statmount],,,[#include <linux/mount.h>])
-++
-++# Defined in <linux/mount.h>, but include/lapi/mount.h includes <sys/mount.h> */
-++AC_CHECK_TYPES([struct mnt_id_req],,,[#include <sys/mount.h>])
-++AC_CHECK_TYPES([struct statmount],,,[#include <sys/mount.h>])
++ if __name__ == '__main__':
++-    prefix = sys.argv[1]
+++    prefix = pathlib.Path(sys.argv[1]).resolve()
 + 
-+ # Tools knobs
++-    #ask distutils where to install the python module
++-    install_dir = get_python_lib(plat_specific=True, prefix=prefix)
+++    # default install dir for the running Python interpreter
+++    default_install_dir = pathlib.Path(sysconfig.get_path('platlib')).resolve()
 + 
++-    #use sites when the prefix is already recognized
+++    # if default falls under the desired prefix, we're done
++     try:
++-        paths = [p for p in site.getsitepackages() if p.startswith(prefix)]
++-        if len(paths) == 1: install_dir = paths[0]
++-    except AttributeError: pass
+++        relative_install_dir = default_install_dir.relative_to(prefix)
+++    except ValueError:
+++        # get install dir for the specified prefix
+++        # can't use the default scheme because distributions modify it
+++        # newer Python versions have 'venv' scheme, use for all OSs.
+++        if 'venv' in sysconfig.get_scheme_names():
+++            scheme = 'venv'
+++        elif os.name == 'nt':
+++            scheme = 'nt'
+++        else:
+++            scheme = 'posix_prefix'
+++        prefix_install_dir = pathlib.Path(sysconfig.get_path(
+++            'platlib',
+++            scheme=scheme,
+++            vars={'base': prefix, 'platbase': prefix},
+++        )).resolve()
+++        relative_install_dir = prefix_install_dir.relative_to(prefix)
++ 
++-    #strip the prefix to return a relative path
++-    print(os.path.relpath(install_dir, prefix))
+++    # want a relative path for use in the build system
+++    print(relative_install_dir)
 +-- 
-+2.50.0
++2.49.0
 +
-diff --git a/package/ltp-testsuite/0002-statmount02-Remove-linux-btrfs.h.patch b/package/ltp-testsuite/0002-statmount02-Remove-linux-btrfs.h.patch
+diff --git a/package/soapy-sdr/Config.in b/package/soapy-sdr/Config.in
 new file mode 100644
-index 0000000000..c82c422000
+index 0000000000..43ff191dca
 --- /dev/null
-+++ b/package/ltp-testsuite/0002-statmount02-Remove-linux-btrfs.h.patch
-@@ -0,0 +1,52 @@
-+From fe8c0dac5ab4aa49c4f977d14f8a8d24cefa6435 Mon Sep 17 00:00:00 2001
-+From: Petr Vorel <pvorel@suse.cz>
-+Date: Wed, 4 Jun 2025 16:13:18 +0200
-+Subject: [PATCH] statmount02: Remove <linux/btrfs.h>
++++ b/package/soapy-sdr/Config.in
+@@ -0,0 +1,27 @@
++comment "SoapySDR needs a toolchain w/ C++, threads, dynamic library"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_STATIC_LIBS
 +
-+statmount02.c does not need <linux/btrfs.h> because it's skipped.
++config BR2_PACKAGE_SOAPY_SDR
++	bool "SoapySDR"
++	depends on !BR2_STATIC_LIBS
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	help
++	  Soapy SDR - vendor and platform neutral SDR support library.
 +
-+Avoid using it fixes the problem due the old problem of indirect include
-+<linux/mount.h> by <linux/fs.h> on Alpine v3.22 (the default Alpine
-+version in GitHub action), which uses 6.14.2 kernel headers:
++	  https://github.com/pothosware/SoapySDR/wiki
 +
-+    In file included from /usr/include/linux/fs.h:19,
-+                     from /usr/include/linux/btrfs.h:29,
-+                     from statmount02.c:23:
-+    /usr/include/linux/mount.h:155:8: error: redefinition of 'struct statmount'
-+      155 | struct statmount {
-+          |        ^~~~~~~~~
-+    In file included from statmount.h:12,
-+                     from statmount02.c:20:
-+    ../../../../include/lapi/mount.h:58:8: note: originally defined here
-+       58 | struct statmount {
-+          |        ^~~~~~~~~
-+    /usr/include/linux/mount.h:193:8: error: redefinition of 'struct mnt_id_req'
-+      193 | struct mnt_id_req {
-+          |        ^~~~~~~~~~
-+    ../../../../include/lapi/mount.h:49:8: note: originally defined here
-+       49 | struct mnt_id_req {
-+          |        ^~~~~~~~~~
++if BR2_PACKAGE_SOAPY_SDR
 +
-+Fixes: 5f9942dffe ("Add statmount02 test")
-+Suggested-by: Jan Stancek <jstancek@redhat.com>
-+Signed-off-by: Petr Vorel <pvorel@suse.cz>
-+Upstream: https://github.com/linux-test-project/ltp/commit/fe8c0dac5ab4aa49c4f977d14f8a8d24cefa6435
-+---
-+ testcases/kernel/syscalls/statmount/statmount02.c | 1 -
-+ 1 file changed, 1 deletion(-)
++config BR2_PACKAGE_SOAPY_SDR_APPS
++	bool "apps support"
++	help
++	  Enable apps
 +
-+diff --git a/testcases/kernel/syscalls/statmount/statmount02.c b/testcases/kernel/syscalls/statmount/statmount02.c
-+index 504c558a11..07f877e040 100644
-+--- a/testcases/kernel/syscalls/statmount/statmount02.c
-++++ b/testcases/kernel/syscalls/statmount/statmount02.c
-+@@ -20,7 +20,6 @@
-+ #include "statmount.h"
-+ #include "lapi/stat.h"
-+ #include "lapi/sched.h"
-+-#include <linux/btrfs.h>
-+ 
-+ #define MNTPOINT "mntpoint"
-+ 
-+-- 
-+2.50.0
++config BR2_PACKAGE_SOAPY_SDR_PYTHON
++	bool "python support"
++	depends on BR2_PACKAGE_PYTHON3
++	help
++	  Enable python binding
++endif
+diff --git a/package/soapy-sdr/soapy-sdr.hash b/package/soapy-sdr/soapy-sdr.hash
+new file mode 100644
+index 0000000000..3804660140
+--- /dev/null
++++ b/package/soapy-sdr/soapy-sdr.hash
+@@ -0,0 +1,3 @@
++# Locally calculated:
++sha256  a508083875ed75d1090c24f88abef9895ad65f0f1b54e96d74094478f0c400e6  soapy-sdr-0.8.1.tar.gz
++sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE_1_0.txt
+diff --git a/package/soapy-sdr/soapy-sdr.mk b/package/soapy-sdr/soapy-sdr.mk
+new file mode 100644
+index 0000000000..91fe66f8bc
+--- /dev/null
++++ b/package/soapy-sdr/soapy-sdr.mk
+@@ -0,0 +1,42 @@
++################################################################################
++#
++# SoapySDR
++#
++################################################################################
 +
-diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
-index 1a401c0421..265b7eda70 100644
---- a/package/ltp-testsuite/ltp-testsuite.mk
-+++ b/package/ltp-testsuite/ltp-testsuite.mk
-@@ -92,4 +92,7 @@ endef
- 
- LTP_TESTSUITE_POST_PATCH_HOOKS += LTP_TESTSUITE_REMOVE_UNSUPPORTED_TESTCASES
- 
-+# 0001-configure-Fix-build-on-kernel-6.14-headers.patch
-+LTP_TESTSUITE_AUTORECONF = YES
++SOAPY_SDR_VERSION = 0.8.1
++SOAPY_SDR_SITE = https://github.com/pothosware/SoapySDR/archive/refs/tags
++SOAPY_SDR_LICENSE = BSL-1.0
++SOAPY_SDR_LICENSE_FILES = LICENSE_1_0.txt
 +
- $(eval $(autotools-package))
--- 
-2.50.0
-
++SOAPY_SDR_SUPPORTS_IN_SOURCE_BUILD = NO
++
++SOAPY_SDR_CONF_OPTS = \
++	-DENABLE_TESTS=OFF \
++	-DENABLE_DOCS=OFF \
++	-DENABLE_LIBRARY=ON
++
++# For third-party modules, the SoapySDR libraries are mandatory at
++# compile time.
++SOAPY_SDR_INSTALL_STAGING = YES
++
++ifeq ($(BR2_PACKAGE_SOAPY_SDR_APPS),y)
++SOAPY_SDR_CONF_OPTS += -DENABLE_APPS=ON
++else
++SOAPY_SDR_CONF_OPTS += -DENABLE_APPS=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_SOAPY_SDR_PYTHON),y)
++SOAPY_SDR_DEPENDENCIES += python3
++SOAPY_SDR_CONF_OPTS += -DENABLE_PYTHON=ON \
++	-DENABLE_PYTHON3=ON \
++	-DBUILD_PYTHON3=ON \
++	-DUSE_PYTHON_CONFIG=ON
++else
++SOAPY_SDR_CONF_OPTS += -DENABLE_PYTHON=OFF \
++	-DENABLE_PYTHON3=OFF \
++	-DBUILD_PYTHON3=OFF \
++	-DUSE_PYTHON_CONFIG=OFF
++endif
++
++$(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
