@@ -4,49 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF532C83F3E
-	for <buildroot@archiver.kernel.org>; Sun, 20 Jul 2025 21:30:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E82D1C83F22
+	for <buildroot@archiver.kernel.org>; Sun, 20 Jul 2025 21:30:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BACC983AD2;
-	Sun, 20 Jul 2025 21:30:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BA57D83313;
+	Sun, 20 Jul 2025 21:30:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GrF2csul_6ar; Sun, 20 Jul 2025 21:30:18 +0000 (UTC)
+ id f4DQKlOLy4Y0; Sun, 20 Jul 2025 21:30:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C050283BBA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E674383336
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C050283BBA;
-	Sun, 20 Jul 2025 21:30:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E674383336;
+	Sun, 20 Jul 2025 21:30:37 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 101D61F7
- for <buildroot@buildroot.org>; Sun, 20 Jul 2025 21:30:12 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 39E781F7
+ for <buildroot@buildroot.org>; Sun, 20 Jul 2025 21:30:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8B88C81FA0
- for <buildroot@buildroot.org>; Sun, 20 Jul 2025 21:30:10 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1F8DB83336
+ for <buildroot@buildroot.org>; Sun, 20 Jul 2025 21:30:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pOKq5ZfVOkjr for <buildroot@buildroot.org>;
- Sun, 20 Jul 2025 21:30:08 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 460CF83032
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 460CF83032
- for <buildroot@buildroot.org>; Sun, 20 Jul 2025 21:30:08 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 35927868FC; Sun, 20 Jul 2025 21:30:08 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 20 Jul 2025 22:53:37 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f5b13a148f160e2a329e4c16cd5cb67d8051ea9c
-X-Git-Newrev: 611fd9b8e7ac432bc889264003beae20d1a1652c
-X-Patchwork-Hint: ignore
-Message-Id: <20250720213008.35927868FC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-aiodns: bump to version
- 3.5.0
+ id 1AE328qEpYZR for <buildroot@buildroot.org>;
+ Sun, 20 Jul 2025 21:30:35 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4484083313
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4484083313
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4484083313
+ for <buildroot@buildroot.org>; Sun, 20 Jul 2025 21:30:35 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 0DB4A13F8AD;
+ Sun, 20 Jul 2025 23:30:30 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 20 Jul 2025 23:30:30 +0200
+MIME-Version: 1.0
+Date: Sun, 20 Jul 2025 23:30:30 +0200
+To: James Hilliard <james.hilliard1@gmail.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250720190127.3211017-1-james.hilliard1@gmail.com>
+References: <20250720190127.3211017-1-james.hilliard1@gmail.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <8f6b6ccc6a92bae50921db847b70b869@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1753047032;
+ bh=3UQ4f49NKemXnY0R5oE9gUUi1yQqcsBpc3Kmt25+214=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=GeFhiCIqFNYvBqeeZFDCyjyZYVF2+pRwbIOz9E+tslzEFk74UqwXlj4r3M61SiVXo
+ eQCEqSiE7UhTQJ+1P+J1E2FtjSa2p/CyxS1/9+foWRugu2MqocB51j4HIq26Z7Os2F
+ fT4WrMaNljwut4rciVnhab1g/QXYFpdON0qPA//nY/bpwoAwsKD/n6HLf/o1H7qK4u
+ gRwe3/aeLXpSXjEEvhIl4WFtvnTziZk2iDGMB8iStyvoD8ysFcZhEMUwdjL9TgDRNs
+ 1jdIIuJxiTjBxuha6EOZ5AheafZyYOieFQMBxHyjCxM1puGl5PxAegfGLjqeaPRydf
+ 9WiM9I2jqlEpQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=GeFhiCIq
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-aiocoap: bump to version
+ 0.4.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,54 +83,18 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=611fd9b8e7ac432bc889264003beae20d1a1652c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 20/07/2025 21:01, James Hilliard wrote:
+> License hash changed due to adding SPDX header:
+> https://github.com/chrysn/aiocoap/commit/e666dd6515479f44fda6b5610064025ada56e199
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-License hash changed due to formatting:
-https://github.com/aio-libs/aiodns/commit/924b981471b676e90a1f38b1e20223c18b899a0b
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/python-aiodns/python-aiodns.hash | 6 +++---
- package/python-aiodns/python-aiodns.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/package/python-aiodns/python-aiodns.hash b/package/python-aiodns/python-aiodns.hash
-index 3f4d911db7..e0c73c2039 100644
---- a/package/python-aiodns/python-aiodns.hash
-+++ b/package/python-aiodns/python-aiodns.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aiodns/json
--md5  0bfcd1b040912744badd2771a33a32fc  aiodns-3.2.0.tar.gz
--sha256  62869b23409349c21b072883ec8998316b234c9a9e36675756e8e317e8768f72  aiodns-3.2.0.tar.gz
-+md5  30623b233a06bd318478e39828a771d2  aiodns-3.5.0.tar.gz
-+sha256  11264edbab51896ecf546c18eb0dd56dff0428c6aa6d2cd87e643e07300eb310  aiodns-3.5.0.tar.gz
- # Locally computed sha256 checksums
--sha256  eb0455d35129425ed399883cd710923de3e246a510e2eb84d9f00032d0bbec97  LICENSE
-+sha256  3e91cfa76821ab70d22998136d674d20ae888463a7e8a7f377166cfe1ee64feb  LICENSE
-diff --git a/package/python-aiodns/python-aiodns.mk b/package/python-aiodns/python-aiodns.mk
-index 9c1bea601c..87aa8830aa 100644
---- a/package/python-aiodns/python-aiodns.mk
-+++ b/package/python-aiodns/python-aiodns.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_AIODNS_VERSION = 3.2.0
-+PYTHON_AIODNS_VERSION = 3.5.0
- PYTHON_AIODNS_SOURCE = aiodns-$(PYTHON_AIODNS_VERSION).tar.gz
--PYTHON_AIODNS_SITE = https://files.pythonhosted.org/packages/e7/84/41a6a2765abc124563f5380e76b9b24118977729e25a84112f8dfb2b33dc
-+PYTHON_AIODNS_SITE = https://files.pythonhosted.org/packages/17/0a/163e5260cecc12de6abc259d158d9da3b8ec062ab863107dcdb1166cdcef
- PYTHON_AIODNS_SETUP_TYPE = setuptools
- PYTHON_AIODNS_LICENSE = MIT
- PYTHON_AIODNS_LICENSE_FILES = LICENSE
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
