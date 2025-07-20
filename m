@@ -1,101 +1,102 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C26C2C83F1A
-	for <buildroot@archiver.kernel.org>; Sun, 20 Jul 2025 19:14:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17F81C83F22
+	for <buildroot@archiver.kernel.org>; Sun, 20 Jul 2025 19:17:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 83F588150B;
-	Sun, 20 Jul 2025 19:14:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D63DD60E4D;
+	Sun, 20 Jul 2025 19:17:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9z4JMs7kOGXM; Sun, 20 Jul 2025 19:14:07 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uijagPYGeCHd; Sun, 20 Jul 2025 19:17:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8BDEC83ACA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E8CD660BB8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8BDEC83ACA;
-	Sun, 20 Jul 2025 19:14:07 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 693A71F7
- for <buildroot@buildroot.org>; Sun, 20 Jul 2025 19:14:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E8CD660BB8;
+	Sun, 20 Jul 2025 19:17:29 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id F14561F7
+ for <buildroot@buildroot.org>; Sun, 20 Jul 2025 19:17:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5AA8D83ACA
- for <buildroot@buildroot.org>; Sun, 20 Jul 2025 19:14:06 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E333860BB8
+ for <buildroot@buildroot.org>; Sun, 20 Jul 2025 19:17:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id k9e2l4Ioh8gJ for <buildroot@buildroot.org>;
- Sun, 20 Jul 2025 19:14:05 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jrQ96b8ldIsp for <buildroot@buildroot.org>;
+ Sun, 20 Jul 2025 19:17:27 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d35; helo=mail-io1-xd35.google.com;
+ client-ip=2607:f8b0:4864:20::130; helo=mail-il1-x130.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8283B8150B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8283B8150B
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com
- [IPv6:2607:f8b0:4864:20::d35])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8283B8150B
- for <buildroot@buildroot.org>; Sun, 20 Jul 2025 19:14:05 +0000 (UTC)
-Received: by mail-io1-xd35.google.com with SMTP id
- ca18e2360f4ac-86cdb330b48so313113539f.0
- for <buildroot@buildroot.org>; Sun, 20 Jul 2025 12:14:05 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1E85A60BAD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1E85A60BAD
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com
+ [IPv6:2607:f8b0:4864:20::130])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1E85A60BAD
+ for <buildroot@buildroot.org>; Sun, 20 Jul 2025 19:17:27 +0000 (UTC)
+Received: by mail-il1-x130.google.com with SMTP id
+ e9e14a558f8ab-3e2953dcaa1so9964775ab.1
+ for <buildroot@buildroot.org>; Sun, 20 Jul 2025 12:17:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1753038844; x=1753643644;
+ d=1e100.net; s=20230601; t=1753039046; x=1753643846;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=pWCpRPOCygLBVXCU2of8VYToCDiHDgJvkbbtfHKiUNU=;
- b=qZlHhOBYR8w88ZCKS58axOpZuKth/qoNUK6BnaOO3NSO6Hj7h1xIyM3i2TGDuUBLIr
- ofe8cyhfHLy9fPZGh98Zs08NRo/TJEwHj/nE3RyLNcsVNpcWp58b4DAZwI8NJBx9tVPl
- kTuzPTgcbKg+1w+FcpeKRcZYth592+TKbNmc/swjw0TfOJya2LqtlSuvOffAp65SDWoh
- S93poi2qs8Nkz4+pAMjCNZ7vePbi7flF1ziom8sqq0jb3w+RpIvxW2QiOhx/1vKywqlt
- gQHKar2AzfULIlpYpaxDbk07LIkpui1U+P/x/Nh4ZcelqzAjhi9R/twL0SlcIhUP+2L0
- 4VFg==
-X-Gm-Message-State: AOJu0YwdjOrduS6tegtPQnOQ0VHDXY+gu9pSGytIeBWa7YxPR3EduJJG
- xMK3JmEjqPdn6mB7oVmUGkp1DUxyb2HYFGP0He66QZeqSk2hvJ72CZ1vSwPe5Xth
-X-Gm-Gg: ASbGncvSpn/nBlo4DSNUowZViehOd12aJ3xO0cn/SmjK0e7KpxGSXVNJbCGFJg7eHEI
- ihaPppm61DK8U18+8MKSRnOhXU0CZQMvu8mTnGrwBQj2Zci9/2S2D8TmuhrrX/k4sLitnWY8MCo
- jUxfdoyMDmyfAwK7oXoGO8s/sDehVLiLZLAvS3ZdtvXna4JbmODdKWzW2PZl7qe9h64Lto7DpJX
- Rry2mVh17P9os54zolKiMrRIwyVP4TSQl6dxE+txqTkBnT/cTP24TxMN4Kyq6SMLZkGePUFbY/5
- gTFMJzYlKS4PlmCJXiNqQ7gh17ryHXMgPO8JuAvblbEJt5etd4QCrbaZ1Bqv4C9xy1k+d1loACB
- gMtIDX/MjtoAVQyuymwjT4bSiuozqIzQf0ruDr+URyKOojZPWk1MEtV5zjbpBB8T9BIyAxC0W5d
- QzvOZxHwo=
-X-Google-Smtp-Source: AGHT+IEOjlQPSqFZZel+Kw4QdZFrWoCiaQgqOf55IwM0K070A1AEr2dy3vUAjaV7jhjbta6PD/NLcg==
-X-Received: by 2002:a05:6e02:240f:b0:3e2:98eb:3c2f with SMTP id
- e9e14a558f8ab-3e298eb3e36mr86123695ab.11.1753038844068; 
- Sun, 20 Jul 2025 12:14:04 -0700 (PDT)
+ bh=iOKLuQYb4D7g/qnKzYMERHtaGT1X/naJ+tXIELG1cXI=;
+ b=xJHBoRHt/L6ThfVW1oc5fteTMUokeOC96wafqwKUbSo48oVcbkUa0FAfJ4lWQDXV1I
+ VTr8MkHl1oIGM3YDCgTJ1XYTKZ/Gv8hcnEOL056ELFFJAPZuedlRuhtlvbexmYHa9Uf8
+ NvPrTAMKPKw0e6WlGgTgkgqCSSuMqg1x/lo9Lq/4N1zWzpkqM/pAbNTvUKLmPkhJZS8c
+ ZBd754qyfOB5Noi8UUIZeb7dpF7RaPU6DOgMtN4hCmQOowtpc5X72O8Hy8Vpm9S26TGM
+ gVZl03LsisEJkeg2cbZnVWqjGGEXB+aXZXftez0zzYlLcoPyfyPtIvg8Wk6d67eiToYd
+ f1OQ==
+X-Gm-Message-State: AOJu0YwXbUgUQrJ1jbxuNXFCH5Z6t2nv3ekMlrI+lK9qBILuuZrthvZr
+ OeIbZQwmniQfI+zj7IWbGCdZsTnlyt+poCXWIDmY54NBo2/e3cB2YEnzQsgQReBz
+X-Gm-Gg: ASbGncukXGgErQ5FD4EQtRL0gV5zNS/oHLuJyophFgA3ka5lLCaPqMBD4f/1oVZR/hR
+ F9VV/epZTllxTF/yEH7OqPUOW0e86rIMukWdCqJfCwiw3TFzkx4IVrTo0qvvXqxq8hlohfhqvUI
+ 69xOWSM2iqD723IRqkwhHcn9Net6Nt7YoTbIqHr+e7OwHnaDNHQhoW5W3R/XyypfVk5yKVZIJ+E
+ 1zIcgh4OedDW39wGzgGFvheSgXo2Z50ICydY1YgI47753p4aw3qAyR6cO9303nS19/WAVV9U1vc
+ gOKHZ8sb4f8624EBR/Q1G+Dv/0uki+i/Jm6of9Iw99CR+AhJ/k3cWQz1VRiMhcFMo7mpBI9ESZr
+ fuzhV/Jm+Nzy+TzKpEywj0tm5jRDbv8ObWeY5MV7+8mTyIJTaxLC4QNirBjyzwqW0pK08S2Ee6J
+ oNjojHh44=
+X-Google-Smtp-Source: AGHT+IGXfJ0jvzOFHWWNwW30mbWP5rwur1aeonjbIRnl7Dg+gu/dn9P/JzoiFSuGUkGRwbkXM3TzKQ==
+X-Received: by 2002:a05:6e02:1489:b0:3e2:952d:f5df with SMTP id
+ e9e14a558f8ab-3e2952dfa35mr126775035ab.20.1753039045730; 
+ Sun, 20 Jul 2025 12:17:25 -0700 (PDT)
 Received: from james-x399.tailafd1a.ts.net (71-218-100-179.hlrn.qwest.net.
  [71.218.100.179]) by smtp.gmail.com with ESMTPSA id
- 8926c6da1cb9f-50872b56796sm353542173.29.2025.07.20.12.14.03
+ e9e14a558f8ab-3e29829763fsm18134965ab.45.2025.07.20.12.17.25
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 20 Jul 2025 12:14:03 -0700 (PDT)
+ Sun, 20 Jul 2025 12:17:25 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 20 Jul 2025 13:14:01 -0600
-Message-Id: <20250720191401.3214602-1-james.hilliard1@gmail.com>
+Date: Sun, 20 Jul 2025 13:17:23 -0600
+Message-Id: <20250720191723.3216187-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1753038844; x=1753643644; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1753039046; x=1753643846; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=pWCpRPOCygLBVXCU2of8VYToCDiHDgJvkbbtfHKiUNU=;
- b=AFbVMl63Nw23a4LPVHM6fOuUtgBsgO87B4wl6oq5btlItLXkcH+cp9RJ9JjsQFrcDr
- t/2reZe3HaWtQJK+55u73QMMoshpJ1O0WGMqc3g85inwFSgPAvNFd47cWvsaAmPAunvJ
- iCH+3N4L3qKrU9WGvIZPDKTSQwSOxojmcPQXB6CayEp2Q72F82aqwN6bTnOgQLh12NtW
- /b5Ibsw6K6EHwCSeaySh90Ludw2QMNwCU1m5YRqtlqsD9oj3VWo4qNxOWUhkcJ7my60o
- 08sLIygq6tdu7hvEHcsxB9N1SH/Iwhc+XWSKNR6jZWywMak3JyMUyB6ptYBHGVDaaLvn
- 5UEA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=iOKLuQYb4D7g/qnKzYMERHtaGT1X/naJ+tXIELG1cXI=;
+ b=aN7TswPaXEtRnFafYEi/QPDrC0XoZg4pDIL/rOMZrn8cp6WI620wcWZ94GsbXxk+3N
+ srRoHM3bEiKDgpeoY7ffHhGtbcIHi60iq3ICgaKU88GwnPS1ir1vDrf5c3KeA93XKfrf
+ Dk7UGQrK5jhJ1JOOWrWMFPEcdF41lUmhiBog2UPbpa9w1vpL/VCM7oz8gOL6xsQS8cUI
+ MIvSUVKItknDsCpkub7J4FU9GMkSioY5qc2sJTkKNEWC/jtE9SwRjzOXyVIqmVDRT3md
+ LAaVlfAKLSFdMlDNBcYsL15vf3E78h8u0GMUOPx5Tu77ovdykR1eYLVFGBe7aEhCq72e
+ N5+A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=AFbVMl63
-Subject: [Buildroot] [PATCH 1/1] package/python-aiohttp-cors: bump to
- verison 0.8.1
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=aN7TswPa
+Subject: [Buildroot] [PATCH 1/1] package/python-aiojobs: bump to version
+ 1.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,38 +116,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-aiohttp-cors/python-aiohttp-cors.hash | 4 ++--
- package/python-aiohttp-cors/python-aiohttp-cors.mk   | 4 ++--
+ package/python-aiojobs/python-aiojobs.hash | 4 ++--
+ package/python-aiojobs/python-aiojobs.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-aiohttp-cors/python-aiohttp-cors.hash b/package/python-aiohttp-cors/python-aiohttp-cors.hash
-index 5bcd8bdb05..5428fc826e 100644
---- a/package/python-aiohttp-cors/python-aiohttp-cors.hash
-+++ b/package/python-aiohttp-cors/python-aiohttp-cors.hash
+diff --git a/package/python-aiojobs/python-aiojobs.hash b/package/python-aiojobs/python-aiojobs.hash
+index d5721dc6d0..b37c0c2a8c 100644
+--- a/package/python-aiojobs/python-aiojobs.hash
++++ b/package/python-aiojobs/python-aiojobs.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aiohttp_cors/json
--md5  c993585a46c40cc4292c5722c7dfbaf0  aiohttp_cors-0.8.0.tar.gz
--sha256  ec70f38432c938e39d240ff38a7d789a5aa0a18087882c12d6cc141eef1144f6  aiohttp_cors-0.8.0.tar.gz
-+md5  bef1294f1ab08844eb35a56c7157026d  aiohttp_cors-0.8.1.tar.gz
-+sha256  ccacf9cb84b64939ea15f859a146af1f662a6b1d68175754a07315e305fb1403  aiohttp_cors-0.8.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/aiojobs/json
+-md5  efad80daa647b6346258f1027da44c8b  aiojobs-1.3.0.tar.gz
+-sha256  03074c884b3dc388b8d798c0de24ec17d72b2799018497fda8062c0431a494b5  aiojobs-1.3.0.tar.gz
++md5  62057a870d80ed0d9ebe951ba3457cff  aiojobs-1.4.0.tar.gz
++sha256  463665c75d1fcc46c78d44375c1034abf5e3f087894b0fc5ec4dd16ef90fdc98  aiojobs-1.4.0.tar.gz
  # Locally computed sha256 checksums
- sha256  c20f93f9891ddab8de9a4db5415d39c1d7d782174fe218b4c38ad78a771706e2  LICENSE
-diff --git a/package/python-aiohttp-cors/python-aiohttp-cors.mk b/package/python-aiohttp-cors/python-aiohttp-cors.mk
-index 26fa43bfa2..5e5ae92645 100644
---- a/package/python-aiohttp-cors/python-aiohttp-cors.mk
-+++ b/package/python-aiohttp-cors/python-aiohttp-cors.mk
+ sha256  1803dc89455114eefad3b827543343edc2452432fdac29b5edc66c8b66d4cbf3  LICENSE
+diff --git a/package/python-aiojobs/python-aiojobs.mk b/package/python-aiojobs/python-aiojobs.mk
+index e8ada82305..e0dff3fbe8 100644
+--- a/package/python-aiojobs/python-aiojobs.mk
++++ b/package/python-aiojobs/python-aiojobs.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_AIOHTTP_CORS_VERSION = 0.8.0
-+PYTHON_AIOHTTP_CORS_VERSION = 0.8.1
- PYTHON_AIOHTTP_CORS_SOURCE = aiohttp_cors-$(PYTHON_AIOHTTP_CORS_VERSION).tar.gz
--PYTHON_AIOHTTP_CORS_SITE = https://files.pythonhosted.org/packages/1d/a8/3edbba1d565f7888c52e04ac6188e19b812a9fc39d81dea413f3abf81bfa
-+PYTHON_AIOHTTP_CORS_SITE = https://files.pythonhosted.org/packages/6f/6d/d89e846a5444b3d5eb8985a6ddb0daef3774928e1bfbce8e84ec97b0ffa7
- PYTHON_AIOHTTP_CORS_SETUP_TYPE = setuptools
- PYTHON_AIOHTTP_CORS_LICENSE = Apache-2.0
- PYTHON_AIOHTTP_CORS_LICENSE_FILES = LICENSE
+-PYTHON_AIOJOBS_VERSION = 1.3.0
++PYTHON_AIOJOBS_VERSION = 1.4.0
+ PYTHON_AIOJOBS_SOURCE = aiojobs-$(PYTHON_AIOJOBS_VERSION).tar.gz
+-PYTHON_AIOJOBS_SITE = https://files.pythonhosted.org/packages/c4/0b/d612a769c28bd22bcc52b369a9a10c63eb6e7b5e2e0cfb35e3be7357fe29
++PYTHON_AIOJOBS_SITE = https://files.pythonhosted.org/packages/03/54/751969398e2039b4dc458fa153dc066a0f7337a5b480d58944f59b7b38ae
+ PYTHON_AIOJOBS_SETUP_TYPE = setuptools
+ PYTHON_AIOJOBS_LICENSE = Apache-2.0
+ PYTHON_AIOJOBS_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
