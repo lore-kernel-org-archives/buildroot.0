@@ -4,49 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29A09C83F22
-	for <buildroot@archiver.kernel.org>; Sun, 20 Jul 2025 22:22:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80D31C83F22
+	for <buildroot@archiver.kernel.org>; Sun, 20 Jul 2025 22:22:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D846241030;
-	Sun, 20 Jul 2025 22:22:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 503C440F43;
+	Sun, 20 Jul 2025 22:22:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vibOqD03EsVi; Sun, 20 Jul 2025 22:22:00 +0000 (UTC)
+ id WJeAD-PGtJOt; Sun, 20 Jul 2025 22:22:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DCF9741033
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A170341033
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DCF9741033;
-	Sun, 20 Jul 2025 22:21:59 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 09D08DA
- for <buildroot@buildroot.org>; Sun, 20 Jul 2025 22:21:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A170341033;
+	Sun, 20 Jul 2025 22:22:18 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6719B127
+ for <buildroot@buildroot.org>; Sun, 20 Jul 2025 22:22:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id ECB0140FB5
- for <buildroot@buildroot.org>; Sun, 20 Jul 2025 22:21:58 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 58B57401AD
+ for <buildroot@buildroot.org>; Sun, 20 Jul 2025 22:22:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cJeZhZPEjJwk for <buildroot@buildroot.org>;
- Sun, 20 Jul 2025 22:21:58 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 364DF40F43
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 364DF40F43
- for <buildroot@buildroot.org>; Sun, 20 Jul 2025 22:21:58 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 278058694E; Sun, 20 Jul 2025 22:21:58 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 21 Jul 2025 00:20:24 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 58fe0bb3600cb723dc84437376716a22245a3c89
-X-Git-Newrev: 784f52b64788ab4e3686c9e20d6c17e574f2d8e0
-X-Patchwork-Hint: ignore
-Message-Id: <20250720222158.278058694E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-propcache: bump to version
- 0.3.2
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id V53Gz6B9mZgx for <buildroot@buildroot.org>;
+ Sun, 20 Jul 2025 22:22:17 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 84C244098A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 84C244098A
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 84C244098A
+ for <buildroot@buildroot.org>; Sun, 20 Jul 2025 22:22:16 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 653A9780333;
+ Mon, 21 Jul 2025 00:22:11 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 21 Jul 2025 00:22:11 +0200
+MIME-Version: 1.0
+Date: Mon, 21 Jul 2025 00:22:11 +0200
+To: James Hilliard <james.hilliard1@gmail.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250720215907.3303734-1-james.hilliard1@gmail.com>
+References: <20250720215907.3303734-1-james.hilliard1@gmail.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <d0be35a0513c7edc33ea5608d0c6f1f2@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1753050132;
+ bh=FZMAAZ2NKnSl8KgIIwgME5v2pbaRrT+ZR86QzzHlN08=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=ko6DqP+I6gtWZG73nkAUVDUz5tsmrR/4mPSYYh+ge18g7biZCH/BOYMAHAl/CNfof
+ dYfl4vyrzQBili3r1FGL0CYsCuhDOXNox5D7osyuF3gcOjU+B8wSnA6u2OkLfw1SF1
+ kXT4O54bKkgSV5m60TnB7f2CeYUPowUi8DfPM8uFlaDLCvTaJvGJqi4qaWvzj8yYXo
+ l/riC0d3DvLk3QLCCsWuumAfqzlWwml+Egf6CA7v4yRy4dkHjUGQWb+Vs3V/oCq1bf
+ mvqninRE7VWfUSn3AahIKWky0AFkeVtOK6GHHb9OOcLgLyVBhmVJpGw5JLnkZyQbXc
+ OCOsto//L+mOg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=ko6DqP+I
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-propcache: bump to
+ version 0.3.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,50 +83,15 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=784f52b64788ab4e3686c9e20d6c17e574f2d8e0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 20/07/2025 23:59, James Hilliard wrote:
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/python-propcache/python-propcache.hash | 4 ++--
- package/python-propcache/python-propcache.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/python-propcache/python-propcache.hash b/package/python-propcache/python-propcache.hash
-index 1bda1e96fb..6e89eac6aa 100644
---- a/package/python-propcache/python-propcache.hash
-+++ b/package/python-propcache/python-propcache.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/propcache/json
--md5  c642caac1415818205011277008142ea  propcache-0.2.1.tar.gz
--sha256  3f77ce728b19cb537714499928fe800c3dda29e8d9428778fc7c186da4c09a64  propcache-0.2.1.tar.gz
-+md5  1c073b491620a9f6d568276d61f80277  propcache-0.3.2.tar.gz
-+sha256  20d7d62e4e7ef05f221e0db2856b979540686342e7dd9973b815599c7057e168  propcache-0.3.2.tar.gz
- # Locally computed sha256 checksums
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/python-propcache/python-propcache.mk b/package/python-propcache/python-propcache.mk
-index 92a31a19af..e1050c4919 100644
---- a/package/python-propcache/python-propcache.mk
-+++ b/package/python-propcache/python-propcache.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PROPCACHE_VERSION = 0.2.1
-+PYTHON_PROPCACHE_VERSION = 0.3.2
- PYTHON_PROPCACHE_SOURCE = propcache-$(PYTHON_PROPCACHE_VERSION).tar.gz
--PYTHON_PROPCACHE_SITE = https://files.pythonhosted.org/packages/20/c8/2a13f78d82211490855b2fb303b6721348d0787fdd9a12ac46d99d3acde1
-+PYTHON_PROPCACHE_SITE = https://files.pythonhosted.org/packages/a6/16/43264e4a779dd8588c21a70f0709665ee8f611211bdd2c87d952cfa7c776
- PYTHON_PROPCACHE_SETUP_TYPE = setuptools
- PYTHON_PROPCACHE_LICENSE = Apache-2.0
- PYTHON_PROPCACHE_LICENSE_FILES = LICENSE
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
