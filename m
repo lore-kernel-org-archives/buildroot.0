@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD86FC83F25
-	for <buildroot@archiver.kernel.org>; Mon, 21 Jul 2025 21:01:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6060C83F26
+	for <buildroot@archiver.kernel.org>; Mon, 21 Jul 2025 21:01:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 86D364159F;
-	Mon, 21 Jul 2025 21:01:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 750D2415D9;
+	Mon, 21 Jul 2025 21:01:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 06URYOY62FnF; Mon, 21 Jul 2025 21:01:34 +0000 (UTC)
+ id h-X9pRimjcMv; Mon, 21 Jul 2025 21:01:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8073D40DFD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A2E4140DFD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8073D40DFD;
-	Mon, 21 Jul 2025 21:01:34 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7DD73E0
+	by smtp4.osuosl.org (Postfix) with ESMTP id A2E4140DFD;
+	Mon, 21 Jul 2025 21:01:35 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 84170462
  for <buildroot@buildroot.org>; Mon, 21 Jul 2025 21:01:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6FFD540F95
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6AFE4410BC
  for <buildroot@buildroot.org>; Mon, 21 Jul 2025 21:01:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tkS7XVlI2maz for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8sp7tmB7Wb2E for <buildroot@buildroot.org>;
  Mon, 21 Jul 2025 21:01:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AC3FA4008F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D1C740DFD
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id AC3FA4008F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9D1C740DFD
  for <buildroot@buildroot.org>; Mon, 21 Jul 2025 21:01:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9D0E1869C2; Mon, 21 Jul 2025 21:01:32 +0000 (UTC)
+ id 8B91A869BE; Mon, 21 Jul 2025 21:01:32 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Mon, 21 Jul 2025 22:28:23 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3d9333a5628beb01f262a15bfb6c0b44da3eb2c6
-X-Git-Newrev: fb67d224beccb936a9d983d9046605b38c4747c9
+X-Git-Oldrev: a9c5dc024a0717b68b22a352f960d9dac099f73f
+X-Git-Newrev: 958736773acaad7300bb26637673fc71143d1316
 X-Patchwork-Hint: ignore
-Message-Id: <20250721210132.9D0E1869C2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rtl8192eu: bump to 2025-06-09
- version
+Message-Id: <20250721210132.8B91A869BE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rtl8189es: bump to version
+ 2025-06-21
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,41 +66,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fb67d224beccb936a9d983d9046605b38c4747c9
+commit: https://git.buildroot.net/buildroot/commit/?id=958736773acaad7300bb26637673fc71143d1316
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This version allows to build with Linux 6.16.
+With this version we can build with Linux 6.15.
 
 Fixes:
 still not occured.
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+[Julien: remove empty line in hash file to fix check-package error]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/rtl8192eu/rtl8192eu.hash | 2 +-
- package/rtl8192eu/rtl8192eu.mk   | 2 +-
+ package/rtl8189es/rtl8189es.hash | 2 +-
+ package/rtl8189es/rtl8189es.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rtl8192eu/rtl8192eu.hash b/package/rtl8192eu/rtl8192eu.hash
-index 0c6009f05e..847a0d4fc6 100644
---- a/package/rtl8192eu/rtl8192eu.hash
-+++ b/package/rtl8192eu/rtl8192eu.hash
+diff --git a/package/rtl8189es/rtl8189es.hash b/package/rtl8189es/rtl8189es.hash
+index 28dedca8d3..7f8d18a56e 100644
+--- a/package/rtl8189es/rtl8189es.hash
++++ b/package/rtl8189es/rtl8189es.hash
 @@ -1,2 +1,2 @@
- # Locally computed
--sha256  04cd204046bae15cfd64643d1f2d15d215acc0bd0b6b3da2404f001d5e172557  rtl8192eu-c014d0970c8052e8b2306e24ccc92f6fe738458d.tar.gz
-+sha256  6cb82ae3c5c5cf783b9150035459ecb4a13aaa614d0a8bb3ab938d54f4feeb74  rtl8192eu-0a170fe9a9cd75ea4df3c209fa4a02f9858483e5.tar.gz
-diff --git a/package/rtl8192eu/rtl8192eu.mk b/package/rtl8192eu/rtl8192eu.mk
-index 48c1217300..ebd376c475 100644
---- a/package/rtl8192eu/rtl8192eu.mk
-+++ b/package/rtl8192eu/rtl8192eu.mk
+ # Locally calculated
+-sha256  85aa06192594d8e5885eaec72e3792c7816f714d682897ff0cbd0ba48a134dcc  rtl8189es-fcf2a5746e6fe11d9d71337ee5dac6cf43423a97.tar.gz
++sha256  a6a7455bb1533add9ebb3afa8634d85644bcdb76279020b663e6a3f03681aaff  rtl8189es-07f03cf721f5e0317012ece4159834327680ba8b.tar.gz
+diff --git a/package/rtl8189es/rtl8189es.mk b/package/rtl8189es/rtl8189es.mk
+index 49a6ddfd1a..b60b08fe34 100644
+--- a/package/rtl8189es/rtl8189es.mk
++++ b/package/rtl8189es/rtl8189es.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RTL8192EU_VERSION = c014d0970c8052e8b2306e24ccc92f6fe738458d
-+RTL8192EU_VERSION = 0a170fe9a9cd75ea4df3c209fa4a02f9858483e5
- RTL8192EU_SITE = $(call github,clnhub,rtl8192eu-linux,$(RTL8192EU_VERSION))
- RTL8192EU_LICENSE = GPL-2.0
+-RTL8189ES_VERSION = fcf2a5746e6fe11d9d71337ee5dac6cf43423a97
++RTL8189ES_VERSION = 07f03cf721f5e0317012ece4159834327680ba8b
+ RTL8189ES_SITE = $(call github,jwrdegoede,rtl8189ES_linux,$(RTL8189ES_VERSION))
+ RTL8189ES_LICENSE = GPL-2.0
  
 _______________________________________________
 buildroot mailing list
