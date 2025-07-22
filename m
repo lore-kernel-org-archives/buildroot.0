@@ -4,48 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BED71C83F1A
-	for <buildroot@archiver.kernel.org>; Tue, 22 Jul 2025 17:13:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E28A9C83F1A
+	for <buildroot@archiver.kernel.org>; Tue, 22 Jul 2025 17:13:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 91D3860B72;
-	Tue, 22 Jul 2025 17:13:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AFD4060FA0;
+	Tue, 22 Jul 2025 17:13:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id s4G294pEqZNV; Tue, 22 Jul 2025 17:13:29 +0000 (UTC)
+ id IeJU62B8TlLv; Tue, 22 Jul 2025 17:13:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B5D7460D96
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E5AA860E9F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B5D7460D96;
-	Tue, 22 Jul 2025 17:13:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E5AA860E9F;
+	Tue, 22 Jul 2025 17:13:48 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1C52FCD
- for <buildroot@buildroot.org>; Tue, 22 Jul 2025 17:13:28 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 646A1E0
+ for <buildroot@buildroot.org>; Tue, 22 Jul 2025 17:13:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 025D4807C9
- for <buildroot@buildroot.org>; Tue, 22 Jul 2025 17:13:28 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4A245807CC
+ for <buildroot@buildroot.org>; Tue, 22 Jul 2025 17:13:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EWd7MA3gkEPX for <buildroot@buildroot.org>;
- Tue, 22 Jul 2025 17:13:26 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B4B72807C5
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id B4B72807C5
- for <buildroot@buildroot.org>; Tue, 22 Jul 2025 17:13:26 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id ABE90869CD; Tue, 22 Jul 2025 17:13:26 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 22 Jul 2025 19:12:41 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1471c9b421ce8438ac251a813c6a9bb291d8c6d0
-X-Git-Newrev: 8945ea3e671954ec7c36f0000a707184c7686234
-X-Patchwork-Hint: ignore
-Message-Id: <20250722171326.ABE90869CD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-starlette: security bump to
+ id 8NI5lw3VcQoo for <buildroot@buildroot.org>;
+ Tue, 22 Jul 2025 17:13:46 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 60656807C5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 60656807C5
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 60656807C5
+ for <buildroot@buildroot.org>; Tue, 22 Jul 2025 17:13:46 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 6B3C5780389;
+ Tue, 22 Jul 2025 19:13:41 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 22 Jul 2025 19:13:41 +0200
+MIME-Version: 1.0
+Date: Tue, 22 Jul 2025 19:13:41 +0200
+To: Titouan Christophe <titouan.christophe@mind.be>
+Cc: buildroot@buildroot.org, James Hilliard <james.hilliard1@gmail.com>,
+ Marcus Hoffmann <buildroot@bubu1.eu>
+In-Reply-To: <20250722111000.88565-1-titouan.christophe@mind.be>
+References: <20250722111000.88565-1-titouan.christophe@mind.be>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <89ea7ca109bb518019aa74799dacfef2@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1753204424;
+ bh=MHiFzqOqSys7hsmhSDs2SJQgTGf+xEc+AsBy7lSJsyc=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=F0Kdb5N1f3810842TXfhvxwsvU9AtHjNoOHC4hStkmW7L8cUmf90SQyN4mBotevCB
+ p9C+Q1YOvdetaBBkf3dyGwVKg5kHRwBMRJglJplU5M5H0tgrG0z1zLvr4I5M0+US0s
+ feHOtZUmjRRTZ1cEG6hhdsrP7U3TmuNyZRySjVxy2XoPIprkq+9JXbk+xfpK5IZSAr
+ ymIlUIU//0c/UgdcLtyW4NyXpNl9HWxpb7I7iwG/sth1ZFzF/3kZWmGkGjqIJq5Pek
+ 7PI43HpZkQ7Hb5/YRjJXjyzOmcnngHkBMWTQ6j8YD3F7UZIUhzZlXWsgL81mNiqhfa
+ YKczPUDKjttjA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=F0Kdb5N1
+Subject: Re: [Buildroot] [PATCH] package/python-starlette: security bump to
  v0.47.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -60,70 +84,35 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8945ea3e671954ec7c36f0000a707184c7686234
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 22/07/2025 13:10, Titouan Christophe via buildroot wrote:
+> This fixes the following vulnerability:
+> 
+> - CVE-2025-54121:
+>     Starlette is a lightweight ASGI (Asynchronous Server Gateway
+>     Interface) framework/toolkit, designed for building async web 
+> services
+>     in Python. In versions 0.47.1 and below, when parsing a multi-part
+>     form with large files (greater than the default max spool size)
+>     starlette will block the main thread to roll the file over to disk.
+>     This blocks the event thread which means the application can't 
+> accept
+>     new connections. The UploadFile code has a minor bug where instead 
+> of
+>     just checking for self._in_memory, the logic should also check if 
+> the
+>     additional bytes will cause a rollover. The vulnerability is fixed 
+> in
+>     version 0.47.2.
+>     https://www.cve.org/CVERecord?id=CVE-2025-54121
+> 
+> Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 
-For release note, see:
-https://github.com/encode/starlette/releases/tag/0.47.2
-
-This fixes the following vulnerability:
-
-- CVE-2025-54121:
-    Starlette is a lightweight ASGI (Asynchronous Server Gateway
-    Interface) framework/toolkit, designed for building async web services
-    in Python. In versions 0.47.1 and below, when parsing a multi-part
-    form with large files (greater than the default max spool size)
-    starlette will block the main thread to roll the file over to disk.
-    This blocks the event thread which means the application can't accept
-    new connections. The UploadFile code has a minor bug where instead of
-    just checking for self._in_memory, the logic should also check if the
-    additional bytes will cause a rollover. The vulnerability is fixed in
-    version 0.47.2.
-    https://www.cve.org/CVERecord?id=CVE-2025-54121
-
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-Reviewed-by: Marcus Hoffmann <buildroot@bubu1.eu>
-[Julien: add link to release note]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/python-starlette/python-starlette.hash | 4 ++--
- package/python-starlette/python-starlette.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/python-starlette/python-starlette.hash b/package/python-starlette/python-starlette.hash
-index be23e4ccb1..5939eb198f 100644
---- a/package/python-starlette/python-starlette.hash
-+++ b/package/python-starlette/python-starlette.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/starlette/json
--md5  b876ddd8665f70bb74e45d1fda053699  starlette-0.47.1.tar.gz
--sha256  aef012dd2b6be325ffa16698f9dc533614fb1cebd593a906b90dc1025529a79b  starlette-0.47.1.tar.gz
-+md5  b58c9f8d38df9946689cb3e9f94555da  starlette-0.47.2.tar.gz
-+sha256  6ae9aa5db235e4846decc1e7b79c4f346adf41e9777aebeb49dfd09bbd7023d8  starlette-0.47.2.tar.gz
- # Locally computed sha256 checksums
- sha256  dcb95677a02240243187e964f941847d19b17821cf99e5afae684fab328c19bf  LICENSE.md
-diff --git a/package/python-starlette/python-starlette.mk b/package/python-starlette/python-starlette.mk
-index eb49230600..4037903cc5 100644
---- a/package/python-starlette/python-starlette.mk
-+++ b/package/python-starlette/python-starlette.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_STARLETTE_VERSION = 0.47.1
-+PYTHON_STARLETTE_VERSION = 0.47.2
- PYTHON_STARLETTE_SOURCE = starlette-$(PYTHON_STARLETTE_VERSION).tar.gz
--PYTHON_STARLETTE_SITE = https://files.pythonhosted.org/packages/0a/69/662169fdb92fb96ec3eaee218cf540a629d629c86d7993d9651226a6789b
-+PYTHON_STARLETTE_SITE = https://files.pythonhosted.org/packages/04/57/d062573f391d062710d4088fa1369428c38d51460ab6fedff920efef932e
- PYTHON_STARLETTE_SETUP_TYPE = hatch
- PYTHON_STARLETTE_LICENSE = BSD-3-Clause
- PYTHON_STARLETTE_LICENSE_FILES = LICENSE.md
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
