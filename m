@@ -1,74 +1,86 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7F74C83F1A
-	for <buildroot@archiver.kernel.org>; Tue, 22 Jul 2025 17:23:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC8D4C83F1A
+	for <buildroot@archiver.kernel.org>; Tue, 22 Jul 2025 17:34:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8F19060A7D;
-	Tue, 22 Jul 2025 17:23:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9631A40FC6;
+	Tue, 22 Jul 2025 17:34:59 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Li7DtBrGQ0sO; Tue, 22 Jul 2025 17:34:59 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB86D4154F
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id CB86D4154F;
+	Tue, 22 Jul 2025 17:34:58 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id ABD7DCD
+ for <buildroot@buildroot.org>; Tue, 22 Jul 2025 17:34:57 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9E38F60B3F
+ for <buildroot@buildroot.org>; Tue, 22 Jul 2025 17:34:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v6U8zzaBPVsm; Tue, 22 Jul 2025 17:23:32 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D71F160E9F
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D71F160E9F;
-	Tue, 22 Jul 2025 17:23:31 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id A06A9CD
- for <buildroot@buildroot.org>; Tue, 22 Jul 2025 17:23:30 +0000 (UTC)
+ id KZjgvjz5G8Vq for <buildroot@buildroot.org>;
+ Tue, 22 Jul 2025 17:34:57 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=208.88.110.44;
+ helo=mail.savoirfairelinux.com;
+ envelope-from=serosh.deljam@savoirfairelinux.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E580C60AE1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E580C60AE1
+Received: from mail.savoirfairelinux.com (mail.savoirfairelinux.com
+ [208.88.110.44])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E580C60AE1
+ for <buildroot@buildroot.org>; Tue, 22 Jul 2025 17:34:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8638040072
- for <buildroot@buildroot.org>; Tue, 22 Jul 2025 17:23:30 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ryr8TfdF0LI7 for <buildroot@buildroot.org>;
- Tue, 22 Jul 2025 17:23:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org CC77240052
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CC77240052
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp2.osuosl.org (Postfix) with ESMTPS id CC77240052
- for <buildroot@buildroot.org>; Tue, 22 Jul 2025 17:23:29 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id DEC3B2003C3;
- Tue, 22 Jul 2025 19:23:26 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
- via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 22 Jul 2025 19:23:26 +0200
+ by mail.savoirfairelinux.com (Postfix) with ESMTP id 0A2C43D85870
+ for <buildroot@buildroot.org>; Tue, 22 Jul 2025 13:34:54 -0400 (EDT)
+Received: from mail.savoirfairelinux.com ([127.0.0.1])
+ by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavis, port 10032)
+ with ESMTP id 56vT1pvS5mQF; Tue, 22 Jul 2025 13:34:53 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.savoirfairelinux.com (Postfix) with ESMTP id 7F6763D875A3;
+ Tue, 22 Jul 2025 13:34:53 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.savoirfairelinux.com 7F6763D875A3
+X-Virus-Scanned: amavis at mail.savoirfairelinux.com
+Received: from mail.savoirfairelinux.com ([127.0.0.1])
+ by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavis, port 10026)
+ with ESMTP id Fd7oJOqLc0kS; Tue, 22 Jul 2025 13:34:53 -0400 (EDT)
+Received: from sdeljam-pc.mtl.sfl (unknown [192.168.51.254])
+ by mail.savoirfairelinux.com (Postfix) with ESMTPSA id 607743D85870;
+ Tue, 22 Jul 2025 13:34:53 -0400 (EDT)
+From: Serosh Deljam <serosh.deljam@savoirfairelinux.com>
+To: buildroot@buildroot.org
+Cc: Serosh Deljam <serosh.deljam@savoirfairelinux.com>
+Date: Tue, 22 Jul 2025 13:34:52 -0400
+Message-ID: <20250722173452.546013-1-serosh.deljam@savoirfairelinux.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-Date: Tue, 22 Jul 2025 19:23:26 +0200
-To: yegorslists@googlemail.com
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250722124519.3434397-1-yegorslists@googlemail.com>
-References: <20250722124519.3434397-1-yegorslists@googlemail.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <21e3be4b96798d6b221f8a2f39fb5096@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1753205008;
- bh=4GP8plQ66WSAyBTq1kk/W4fpyBmf277woRhbbz3yU2s=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=MfTdi3aQHO81Tl2qxiififaL7yz/LhGRBxqBbToyIaRD/jEP7UefC4kLMrpmBBXIw
- xgHHgJZNO04yomyZBrSgjW8lwQEGFjMGGR3b4fMfmt0ZrY8LO+AxkKd7WmFrPh+dpF
- G/Ny8WOcp3RSqSbnMUPKBOZJkoGSAy2SAg+pR3S53itieCoaDr+s1d3prf9Hsu7zAA
- lX/wg9yjEpn809H50V7D0NMIS8p2lJ6P+emqnzbm+CrMpm2MkSyvQ+ldaX0ZszW5M0
- kMzyO+c+JURvIEWoP5B3xcNirsOvQmGy2z7kd12XDLUg4n/pVEwdPfVapLzD0BgShp
- ZxvKJu0EkJLqQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=MfTdi3aQ
-Subject: Re: [Buildroot] [PATCH] package/memtester: bump version to 4.7.1
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=savoirfairelinux.com; s=DFC430D2-D198-11EC-948E-34200CB392D2;
+ t=1753205693; bh=5+ne9NbolQsv3Hr9GXhJ9n92W/qcr3/N8MeP66VC6Xs=;
+ h=From:To:Date:Message-ID:MIME-Version;
+ b=D76pRa1yLCPEhH9z4u+wwAk0jS2sXAMIbq//l2ECkHS8odAfZVRMa5ejuR9wJGVWU
+ L8UrYpHvxdcCNn8AcSxXxHX7/ZKsqb8wzMMHnS+CWw65QOHkb/wlVe0yz2Xy7bRs2C
+ 8pTLPKV+NGRnSDeIpLuWTia0CmPi+7XxSoQMJ5arpNmlcnAxCsnw8fMLxsKz6tcOPO
+ d4b1hxq4wcjStwoj0wUAW4zrcKVq/gPneXUF2WkRB6yjN8a7xUz4ypvZ3UCNkbbX+e
+ B6oVQo74ctKf4zhRZgKwqZ/XYOM/ImAT7ZjXRZmo1Q3U9ziDvkStlO2lsP5SjySG3q
+ qPVfBXgZpQ1jg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=savoirfairelinux.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=savoirfairelinux.com header.i=@savoirfairelinux.com
+ header.a=rsa-sha256 header.s=DFC430D2-D198-11EC-948E-34200CB392D2
+ header.b=D76pRa1y
+Subject: [Buildroot] [PATCH 1/1] package/cukinia: bump to version 0.8.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -80,28 +92,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 22/07/2025 14:45, yegorslists--- via buildroot wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> For change log, see:
-> https://pyropus.ca./software/memtester/CHANGELOG
-> 
-> Version 4.7.1 fixes compile error with stricter C23/gcc-15 due to
-> incompatible type declaration.
-> 
-> Fixes:
-> https://autobuild.buildroot.org/results/6d4d4e8ca4269a3d8f795c7c186ef70411f2dc79/build-end.log
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Serosh Deljam <serosh.deljam@savoirfairelinux.com>
+---
+ package/cukinia/cukinia.hash | 3 +--
+ package/cukinia/cukinia.mk   | 6 +++---
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-Applied to master, thanks.
+diff --git a/package/cukinia/cukinia.hash b/package/cukinia/cukinia.hash
+index 6e76a6ab88..cc0393aff9 100644
+--- a/package/cukinia/cukinia.hash
++++ b/package/cukinia/cukinia.hash
+@@ -1,4 +1,3 @@
+ # locally computed
+-sha256  79dc77c7b9f2784e7d22d961dd2c4ad9c78deebbc6e8f39df4fa214118682b40  cukinia-0.6.0.tar.gz
++sha256  8f608571354d87f7ec2949bd335c616881c05f66fc60d7a2fc7488369c9d307d  cukinia-0.8.0.tar.gz
+ sha256  b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  LICENSE
+-sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPLv3
+diff --git a/package/cukinia/cukinia.mk b/package/cukinia/cukinia.mk
+index 798c199b67..a4e3658ede 100644
+--- a/package/cukinia/cukinia.mk
++++ b/package/cukinia/cukinia.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-CUKINIA_VERSION = 0.6.0
++CUKINIA_VERSION = 0.8.0
+ CUKINIA_SITE = $(call github,savoirfairelinux,cukinia,v$(CUKINIA_VERSION))
+-CUKINIA_LICENSE = Apache-2.0 or GPL-3.0
+-CUKINIA_LICENSE_FILES = LICENSE LICENSE.GPLv3
++CUKINIA_LICENSE = Apache-2.0
++CUKINIA_LICENSE_FILES = LICENSE
+ 
+ define CUKINIA_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 0755 $(@D)/cukinia $(TARGET_DIR)/usr/bin/cukinia
+-- 
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
