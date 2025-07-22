@@ -1,51 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7040C83F27
-	for <buildroot@archiver.kernel.org>; Tue, 22 Jul 2025 17:23:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7F74C83F1A
+	for <buildroot@archiver.kernel.org>; Tue, 22 Jul 2025 17:23:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A859941024;
-	Tue, 22 Jul 2025 17:23:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8F19060A7D;
+	Tue, 22 Jul 2025 17:23:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 37TOMEX8Uj_l; Tue, 22 Jul 2025 17:23:04 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id v6U8zzaBPVsm; Tue, 22 Jul 2025 17:23:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD8AD40F9C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D71F160E9F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DD8AD40F9C;
-	Tue, 22 Jul 2025 17:23:03 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 996FAE0
- for <buildroot@buildroot.org>; Tue, 22 Jul 2025 17:23:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D71F160E9F;
+	Tue, 22 Jul 2025 17:23:31 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id A06A9CD
+ for <buildroot@buildroot.org>; Tue, 22 Jul 2025 17:23:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 96E0A40438
- for <buildroot@buildroot.org>; Tue, 22 Jul 2025 17:23:02 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8638040072
+ for <buildroot@buildroot.org>; Tue, 22 Jul 2025 17:23:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0YbLMw7VtSky for <buildroot@buildroot.org>;
- Tue, 22 Jul 2025 17:23:02 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E0A5240072
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E0A5240072
- for <buildroot@buildroot.org>; Tue, 22 Jul 2025 17:23:01 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C915C869DE; Tue, 22 Jul 2025 17:23:01 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 22 Jul 2025 19:21:03 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 54240460dcdbb1df76a092ad0f9d30b5b9875973
-X-Git-Newrev: eedffe0681004c067ebc69b9294f046a32a4b923
-X-Patchwork-Hint: ignore
-Message-Id: <20250722172301.C915C869DE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/memtester: bump version to 4.7.1
+ id Ryr8TfdF0LI7 for <buildroot@buildroot.org>;
+ Tue, 22 Jul 2025 17:23:30 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org CC77240052
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CC77240052
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id CC77240052
+ for <buildroot@buildroot.org>; Tue, 22 Jul 2025 17:23:29 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id DEC3B2003C3;
+ Tue, 22 Jul 2025 19:23:26 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 22 Jul 2025 19:23:26 +0200
+MIME-Version: 1.0
+Date: Tue, 22 Jul 2025 19:23:26 +0200
+To: yegorslists@googlemail.com
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250722124519.3434397-1-yegorslists@googlemail.com>
+References: <20250722124519.3434397-1-yegorslists@googlemail.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <21e3be4b96798d6b221f8a2f39fb5096@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1753205008;
+ bh=4GP8plQ66WSAyBTq1kk/W4fpyBmf277woRhbbz3yU2s=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=MfTdi3aQHO81Tl2qxiififaL7yz/LhGRBxqBbToyIaRD/jEP7UefC4kLMrpmBBXIw
+ xgHHgJZNO04yomyZBrSgjW8lwQEGFjMGGR3b4fMfmt0ZrY8LO+AxkKd7WmFrPh+dpF
+ G/Ny8WOcp3RSqSbnMUPKBOZJkoGSAy2SAg+pR3S53itieCoaDr+s1d3prf9Hsu7zAA
+ lX/wg9yjEpn809H50V7D0NMIS8p2lJ6P+emqnzbm+CrMpm2MkSyvQ+ldaX0ZszW5M0
+ kMzyO+c+JURvIEWoP5B3xcNirsOvQmGy2z7kd12XDLUg4n/pVEwdPfVapLzD0BgShp
+ ZxvKJu0EkJLqQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=MfTdi3aQ
+Subject: Re: [Buildroot] [PATCH] package/memtester: bump version to 4.7.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,53 +82,26 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eedffe0681004c067ebc69b9294f046a32a4b923
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 22/07/2025 14:45, yegorslists--- via buildroot wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+> 
+> For change log, see:
+> https://pyropus.ca./software/memtester/CHANGELOG
+> 
+> Version 4.7.1 fixes compile error with stricter C23/gcc-15 due to
+> incompatible type declaration.
+> 
+> Fixes:
+> https://autobuild.buildroot.org/results/6d4d4e8ca4269a3d8f795c7c186ef70411f2dc79/build-end.log
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-For change log, see:
-https://pyropus.ca./software/memtester/CHANGELOG
-
-Version 4.7.1 fixes compile error with stricter C23/gcc-15 due to
-incompatible type declaration.
-
-Fixes:
-https://autobuild.buildroot.org/results/6d4d4e8ca4269a3d8f795c7c186ef70411f2dc79/build-end.log
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/memtester/memtester.hash | 2 +-
- package/memtester/memtester.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/memtester/memtester.hash b/package/memtester/memtester.hash
-index 6e5d156ffd..1606fdbd01 100644
---- a/package/memtester/memtester.hash
-+++ b/package/memtester/memtester.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  1c5fc2382576c084b314cfd334d127a66c20bd63892cac9f445bc1d8b4ca5a47  memtester-4.5.1.tar.gz
-+sha256  e427de663f7bd22d1ebee8af12506a852c010bd4fcbca1e0e6b02972d298b5bb  memtester-4.7.1.tar.gz
- sha256  dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
-diff --git a/package/memtester/memtester.mk b/package/memtester/memtester.mk
-index 347a158b74..1d3a8329fc 100644
---- a/package/memtester/memtester.mk
-+++ b/package/memtester/memtester.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MEMTESTER_VERSION = 4.5.1
-+MEMTESTER_VERSION = 4.7.1
- MEMTESTER_SITE = http://pyropus.ca/software/memtester/old-versions
- MEMTESTER_LICENSE = GPL-2.0
- MEMTESTER_LICENSE_FILES = COPYING
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
