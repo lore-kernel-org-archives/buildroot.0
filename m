@@ -4,71 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F15CAC83F17
-	for <buildroot@archiver.kernel.org>; Wed, 23 Jul 2025 21:49:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C083EC83F17
+	for <buildroot@archiver.kernel.org>; Wed, 23 Jul 2025 22:14:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B37DF80BE5;
-	Wed, 23 Jul 2025 21:49:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 72FA2812FC;
+	Wed, 23 Jul 2025 22:14:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sNI3-Z4LV2Ru; Wed, 23 Jul 2025 21:49:47 +0000 (UTC)
+ id Xg1ms28mJPYU; Wed, 23 Jul 2025 22:14:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF08680B3A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 823DB812F9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BF08680B3A;
-	Wed, 23 Jul 2025 21:49:47 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 00C6CE0
- for <buildroot@buildroot.org>; Wed, 23 Jul 2025 21:49:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 823DB812F9;
+	Wed, 23 Jul 2025 22:14:08 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 37F9EE0
+ for <buildroot@buildroot.org>; Wed, 23 Jul 2025 22:14:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E6B5980B4A
- for <buildroot@buildroot.org>; Wed, 23 Jul 2025 21:49:46 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1E65640E50
+ for <buildroot@buildroot.org>; Wed, 23 Jul 2025 22:14:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gEu_1jplds9n for <buildroot@buildroot.org>;
- Wed, 23 Jul 2025 21:49:46 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0294C80A81
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0294C80A81
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0294C80A81
- for <buildroot@buildroot.org>; Wed, 23 Jul 2025 21:49:45 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id D3F8C19F593;
- Wed, 23 Jul 2025 23:49:42 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
- via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 23 Jul 2025 23:49:42 +0200
-MIME-Version: 1.0
-Date: Wed, 23 Jul 2025 23:49:42 +0200
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250722215452.3241365-1-giulio.benetti@benettiengineering.com>
-References: <20250722215452.3241365-1-giulio.benetti@benettiengineering.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <ffe9f70b90849bdc165251b29ec85f57@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1753307384;
- bh=0ZMGtS37kX6VSX/bvSntoky2AD5fheKjE5gNXqydslA=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=OATHgre6sJALyN9ay9FOOoxXfQVnXl0b9vIBXg1/qGRONBUXh0kiRyFjsL6DmuYEy
- AGYuwtl1QdxgZli5fqjDYdVxe1m+87HhaIljtnxLxpa2UX9fpIOIzQvnkEWhr8DC+6
- 0X29Ayx695/SwyWnOacMXCHq2JXY9IcMyPjs7vBdxv9JZGuC3gS9fkLJHUJ1yqlBJ+
- IjgTmRlMVyapgAEYZy1pwJWkk/hIvkNSXQ5AmpcG9rZD9DYYrZnmYiwp1+8qN6NdAW
- l8wwHl9mRQQzYEt3bONQu5ynDpnqt/GzEKgXxm015yMjEkeE/5YTO+FQ3pEulh2dyy
- vdsKQE3A9zsFw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=OATHgre6
-Subject: Re: [Buildroot] [PATCH] package/harfbuzz: bump to version 11.3.2
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tuaePxS6ugdg for <buildroot@buildroot.org>;
+ Wed, 23 Jul 2025 22:14:06 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6D36440EB6
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6D36440EB6
+ for <buildroot@buildroot.org>; Wed, 23 Jul 2025 22:14:06 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 58B2F86A29; Wed, 23 Jul 2025 22:14:06 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 23 Jul 2025 23:50:28 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: c877548b2e12c279d1d87100396889c97eb87013
+X-Git-Newrev: 8acdac04d9ba2113ed0ec653d4b783bc771b9188
+X-Patchwork-Hint: ignore
+Message-Id: <20250723221406.58B2F86A29@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libnspr: bump to version 4.37
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,18 +59,46 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 22/07/2025 23:54, Giulio Benetti wrote:
-> Release Notes:
-> https://github.com/harfbuzz/harfbuzz/releases/tag/11.3.2
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=8acdac04d9ba2113ed0ec653d4b783bc771b9188
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/libnspr/libnspr.hash | 4 ++--
+ package/libnspr/libnspr.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/libnspr/libnspr.hash b/package/libnspr/libnspr.hash
+index 521447e051..172778540e 100644
+--- a/package/libnspr/libnspr.hash
++++ b/package/libnspr/libnspr.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/nspr/releases/v4.36/src/SHA256SUMS
+-sha256  55dec317f1401cd2e5dba844d340b930ab7547f818179a4002bce62e6f1c6895  nspr-4.36.tar.gz
++# From https://ftp.mozilla.org/pub/nspr/releases/v4.37/src/SHA256SUMS
++sha256  5f9344ed0e31855bd38f88b33c9d9ab94f70ce547ef3213e488d1520f61840fa  nspr-4.37.tar.gz
+ # Locally calculated
+ sha256  fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  nspr/LICENSE
+diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
+index 62a2b92db6..a045140743 100644
+--- a/package/libnspr/libnspr.mk
++++ b/package/libnspr/libnspr.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNSPR_VERSION = 4.36
++LIBNSPR_VERSION = 4.37
+ LIBNSPR_SOURCE = nspr-$(LIBNSPR_VERSION).tar.gz
+ LIBNSPR_SITE = https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v$(LIBNSPR_VERSION)/src
+ LIBNSPR_SUBDIR = nspr
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
