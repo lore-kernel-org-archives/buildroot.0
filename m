@@ -1,81 +1,106 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA161C83F17
-	for <buildroot@archiver.kernel.org>; Wed, 23 Jul 2025 13:57:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B1AEC83F17
+	for <buildroot@archiver.kernel.org>; Wed, 23 Jul 2025 15:13:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7FF4C4085F;
-	Wed, 23 Jul 2025 13:57:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ABB8060B65;
+	Wed, 23 Jul 2025 15:13:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ov3W9AvMT6x8; Wed, 23 Jul 2025 13:57:00 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SioKO3V0DYO6; Wed, 23 Jul 2025 15:13:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AFE47409BF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0514060E5B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AFE47409BF;
-	Wed, 23 Jul 2025 13:57:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0514060E5B;
+	Wed, 23 Jul 2025 15:13:04 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 6A2B6CD
- for <buildroot@buildroot.org>; Wed, 23 Jul 2025 13:56:59 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id BDAC5DA
+ for <buildroot@buildroot.org>; Wed, 23 Jul 2025 15:13:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4FE9E81024
- for <buildroot@buildroot.org>; Wed, 23 Jul 2025 13:56:59 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id AF0E4810A3
+ for <buildroot@buildroot.org>; Wed, 23 Jul 2025 15:13:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id t1Y_B_BgwwYZ for <buildroot@buildroot.org>;
- Wed, 23 Jul 2025 13:56:57 +0000 (UTC)
-X-Greylist: delayed 1813 seconds by postgrey-1.37 at util1.osuosl.org;
- Wed, 23 Jul 2025 13:56:56 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4062F80F3A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4062F80F3A
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=220.197.31.4;
- helo=m16.mail.163.com; envelope-from=tianyuanhao3@163.com; receiver=<UNKNOWN> 
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4062F80F3A
- for <buildroot@buildroot.org>; Wed, 23 Jul 2025 13:56:55 +0000 (UTC)
-Received: from tianyuanhao3$163.com (
- [240e:40c:2101:1998:ec2f:7b73:6879:d48] ) by ajax-webmail-wzpm-k8s-gz
- (Coremail) ; Wed, 23 Jul 2025 21:11:05 +0800 (GMT+08:00)
-X-Originating-IP: [240e:40c:2101:1998:ec2f:7b73:6879:d48]
-Date: Wed, 23 Jul 2025 21:11:05 +0800 (GMT+08:00)
-From: "TIAN Yuanhao" <tianyuanhao3@163.com>
-To: "yann.morin.1998" <yann.morin.1998@free.fr>
-Cc: buildroot <buildroot@buildroot.org>, arnout <arnout@mind.be>,
- bonet <bonet@grenoble.cnrs.fr>
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2023.4-cmXT build
- 20250620(6dc55b48) Copyright (c) 2002-2025 www.mailtech.cn 163com
-In-Reply-To: <60de7be584b8ba31a450182f662c2c78cbeafe1a.1752178975.git.yann.morin.1998@free.fr>
-References: <cover.1752178975.git.yann.morin.1998@free.fr>
- <60de7be584b8ba31a450182f662c2c78cbeafe1a.1752178975.git.yann.morin.1998@free.fr>
-X-NTES-SC: AL_Qu2eAf6cuUot4yKQZekfmk8TjuY8WsS5v/0i24ZRO51wjAXp6wUBXW17MWL19tyuDjiTlTa5UxRK995bWbtFfoUxQ27/Q4KqtE5fdAyC7YxucA==
+ id zwMw4jTMTXpN for <buildroot@buildroot.org>;
+ Wed, 23 Jul 2025 15:13:01 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::832; helo=mail-qt1-x832.google.com;
+ envelope-from=jesse@rivosinc.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 29A50810A2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 29A50810A2
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com
+ [IPv6:2607:f8b0:4864:20::832])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 29A50810A2
+ for <buildroot@buildroot.org>; Wed, 23 Jul 2025 15:13:00 +0000 (UTC)
+Received: by mail-qt1-x832.google.com with SMTP id
+ d75a77b69052e-4ab5953f5dcso158281cf.0
+ for <buildroot@buildroot.org>; Wed, 23 Jul 2025 08:13:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1753283580; x=1753888380;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=hYrMbzOOlNOtvox6oAUUoiTbln3tNycOqkj/OsQ+AkE=;
+ b=syyP+KuukwuZNtlZNYyt+FI6bZDTkCVqr2leQRJPfDLAstqwV7F9Q1ZyTJi9eXSkjz
+ NmYIqNa2xQQ5s6HQw/Wf3kudcDrtjTk/49q8415Yx0v0dCUBRExcXDn2gF9jZOwB7Bbc
+ wigHflG5UhoP6KJlvzSPbFZB4JT9gh15Z4Pvr8+WjzpY1YSA4PEnAH1eg9uU32cZZsgW
+ aykw/95xUqaFnydvZwBgR6TMm8xhb+GssySBoJ+68gkg9Z6l/mo3hT10xUf9/KeuNU8c
+ lGFquZkkEnHMyxlpt6DPrvnpCwRPLmd/imjAZBIkTTIa6qM22ByQZgGS/A5cLeQhAUHb
+ FaoQ==
+X-Gm-Message-State: AOJu0YxSAMfuXqbYztaPO1Uj6p6pVASdATv5APsRu3fUjM5f0mSTOrm+
+ xUzfQfLORavQeKvN873HMxrzXSbeBnwe6eg8uIL2Qk4zhFUWBjBvyU9C7vhDsceY4H1pQa0FRpz
+ QLcem
+X-Gm-Gg: ASbGncvwNvVS7s3rVjm9aKG/m+bcsNdn5jDrMgta39CQAOXkzwlg6W71JAfE+BGiZRC
+ AES4agpHl2kolXQo+9b63Fx0dc+scGRHf5Z0ioSr5l0MYjxStUhwYf1PaARcPd/fXwCSNSQ28Zd
+ lfx7EWvnt7ZREr4JtS++E+Qs5lnWSQi0y7nEAVIcNtzsx7Kkygsgbe8BEgP1wws468ZTQCHJxs4
+ S44gJfmeU3smucwzQGE/3yqkY0rx44HUp5VV3uD4h4c3g5SW09HrE7Dt12PMeo9609fXBrDwxKc
+ 0XV5sg2qxYW3Dno+85n9RAdjPnhXAIsu+iPBazPHG3cIsEfOUhNlMwFsqURF4Eyf+KHGEhwWYV+
+ 3ZScSq1f7eQe85UrCFVA3cTM5HQC+p4f5wijFViXQbdOLzetAzrtj0R0RzZ9SJ/6MUXAoQMglWF
+ hqqJMGElMKd8p98WYmMgKq7w==
+X-Google-Smtp-Source: AGHT+IGPf9w5wpd3hVpNzJl9W75H8w+gBvY0137hy3ruW9f3h119UMOmPVNdOW/L+FhF9S26pDVejw==
+X-Received: by 2002:a05:622a:155:b0:4ab:8b84:8049 with SMTP id
+ d75a77b69052e-4ae6de1d09amr47032701cf.2.1753283579522; 
+ Wed, 23 Jul 2025 08:12:59 -0700 (PDT)
+Received: from jesse-lt.ba.rivosinc.com
+ (pool-108-26-215-125.bstnma.fios.verizon.net. [108.26.215.125])
+ by smtp.gmail.com with ESMTPSA id
+ d75a77b69052e-4abb499fbe9sm69284801cf.20.2025.07.23.08.12.59
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 23 Jul 2025 08:12:59 -0700 (PDT)
+From: Jesse Taube <jesse@rivosinc.com>
+To: buildroot@buildroot.org
+Cc: Alistair Francis <alistair@alistair23.me>, Jesse Taube <jesse@rivosinc.com>
+Date: Wed, 23 Jul 2025 08:12:58 -0700
+Message-ID: <20250723151258.1015918-1-jesse@rivosinc.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-Message-ID: <57fa4a0b.3fb1c.1983768b346.Coremail.tianyuanhao3@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: _____wD3x8Fp34BompocAA--.7942W
-X-CM-SenderInfo: xwld05xxdqxtjrt6il2tof0z/1tbiXQCTjWiATYWzfAABst
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=163.com; 
- s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
- Message-ID; bh=UDfzEcsePia3xJKio/K1Dljnj0VVUD/SR7YYmA6kRak=; b=i
- 5BDNBUbzruX5S+88KQZt9vhKGAcmCuA3FfXFn0U4Gz62Rxgdyp1WN5dh1Ftp576p
- y/3vhXOEHogyy3LfFIefsP9OtMRBbH/9HWIZdgXdI+Zf+8McezTqrZmz8E9T9Xy/
- yq5/RyQxkQyAQ0bSrwfhPAArk7IGnc32m01XsWmLSg=
+ d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1753283580; x=1753888380;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=hYrMbzOOlNOtvox6oAUUoiTbln3tNycOqkj/OsQ+AkE=;
+ b=j+JitXidvaj+33QKU8qT7MLTHe0FAOfzRY8lDqUP8oBuzAk3XtH4Rs33pBO5mFPWUk
+ MwTuHHsqK2RRgWjqcW4kd/2Q5f4woAyoP6J7yEJ17XHCqAIpIaCYdOrqUUx6XvQyjcOr
+ HGjwjY+FSc/oOxoa1xoIGtYCf0j+nWqe8+UGni1y1dqoZR4pBG4l9SePEq25Fn8EMfa0
+ rCd17OFI9O3xl110+s/92slufHwrYdHwr7nJ143GBRecpqFWgD0PQwfqzaIwHAGgDC6J
+ KmY2utY7WZEbYUnudrEBrtaJkTpPoIXPM+0oD4PK5GOHxupM9LUA9BiyzdCaZyc/O7ck
+ ZLOQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=163.com
+ dmarc=none (p=none dis=none)
+ header.from=rivosinc.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256
- header.s=s110527 header.b=i5BDNBUb
-Subject: Re: [Buildroot] [PATCH 11/17 v2] system: add support for merged
- /usr/sbin (aka merged-bin)
+ dkim=pass (2048-bit key,
+ unprotected) header.d=rivosinc-com.20230601.gappssmtp.com
+ header.i=@rivosinc-com.20230601.gappssmtp.com header.a=rsa-sha256
+ header.s=20230601 header.b=j+JitXid
+Subject: [Buildroot] [PATCH] boot/opensbi: bump version to 1.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,73 +112,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============7865596329599496389=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7865596329599496389==
-Content-Type: multipart/alternative; 
-	boundary="----=_Part_1029624_2093385518.1753276265286"
+Release notes at:
+https://github.com/riscv-software-src/opensbi/releases/tag/v1.7
 
-------=_Part_1029624_2093385518.1753276265286
-Content-Type: text/plain; charset=GBK
-Content-Transfer-Encoding: base64
+Signed-off-by: Jesse Taube <jesse@rivosinc.com>
+---
+ boot/opensbi/Config.in    | 2 +-
+ boot/opensbi/opensbi.hash | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-QWNrZWQtYnk6IFRJQU4gWXVhbmhhbyA8dGlhbnl1YW5oYW8zQDE2My5jb20+CgoKCnwgfAp0aWFu
-eXVhbmhhbzNAMTYzLmNvbQp8CnwK08rP5KO6dGlhbnl1YW5oYW8zQDE2My5jb20KfA==
-------=_Part_1029624_2093385518.1753276265286
-Content-Type: text/html; charset=GBK
-Content-Transfer-Encoding: base64
-
-PGZvbnQgc3R5bGU9ImNvbG9yOnJnYigwLDAsMCk7Ij48Zm9udCBzdHlsZT0iZm9udC1zaXplOjE2
-cHg7Ij5BY2tlZC1ieTogPC9mb250PjwvZm9udD5USUFOIFl1YW5oYW8gJmx0O3RpYW55dWFuaGFv
-M0AxNjMuY29tJmd0Ozxicj48YnI+PGJyPjxodG1sPgo8aGVhZD4KICAgIDxtZXRhIGh0dHAtZXF1
-aXY9IkNvbnRlbnQtVHlwZSIgY29udGVudD0idGV4dC9odG1sOyBjaGFyc2V0PVVURi04Ij4KPC9o
-ZWFkPgo8Ym9keT4KPGEgc3R5bGU9ImRpc3BsYXk6YmxvY2s7YmFja2dyb3VuZDojZmZmOyBtYXgt
-d2lkdGg6IDQwMHB4OyBfd2lkdGg6IDQwMHB4O3BhZGRpbmc6MTVweCAwIDEwcHggMDt0ZXh0LWRl
-Y29yYXRpb246IG5vbmU7IG91dGxpbmU6bm9uZTstd2Via2l0LXRhcC1oaWdobGlnaHQtY29sb3I6
-dHJhbnNwYXJlbnQ7LXdlYmtpdC10ZXh0LXNpemUtYWRqdXN0Om5vbmUgIWltcG9ydGFudDt0ZXh0
-LXNpemUtYWRqdXN0Om5vbmUgIWltcG9ydGFudDsiPgogICAgPHRhYmxlIGNlbGxwYWRkaW5nPSIw
-IiBzdHlsZT0id2lkdGg6IDEwMCU7IG1heC13aWR0aDogMTAwJTsgdGFibGUtbGF5b3V0OiBmaXhl
-ZDsgYm9yZGVyLWNvbGxhcHNlOiBjb2xsYXBzZTtjb2xvcjogIzliOWVhMTtmb250LXNpemU6IDE0
-cHg7bGluZS1oZWlnaHQ6MS4zOy13ZWJraXQtdGV4dC1zaXplLWFkanVzdDpub25lICFpbXBvcnRh
-bnQ7dGV4dC1zaXplLWFkanVzdDpub25lICFpbXBvcnRhbnQ7Ij4KICAgICAgICA8dGJvZHkgc3R5
-bGU9ImZvbnQtZmFtaWx5OiAnUGluZ0ZhbmcgU0MnLCAnSGlyYWdpbm8gU2FucyBHQicsJ1dlblF1
-YW5ZaSBNaWNybyBIZWknLCAnTWljcm9zb2Z0IFlhaGVpJywgJ86iyO3RxbraJywgdmVyZGFuYSAh
-aW1wb3J0YW50OyB3b3JkLXdyYXA6YnJlYWstd29yZDsgd29yZC1icmVhazpicmVhay1hbGw7LXdl
-YmtpdC10ZXh0LXNpemUtYWRqdXN0Om5vbmUgIWltcG9ydGFudDt0ZXh0LXNpemUtYWRqdXN0Om5v
-bmUgIWltcG9ydGFudDsiPgogICAgICAgICAgICA8dHI+CiAgICAgICAgICAgICAgICAgICAgPHRk
-IHdpZHRoPSIzOCIgc3R5bGU9InBhZGRpbmc6MDsgYm94LXNpemluZzogYm9yZGVyLWJveDsgd2lk
-dGg6IDM4cHg7Ij4KICAgICAgICAgICAgICAgICAgICAgICAgPGltZyB3aWR0aD0iMzgiIGhlaWdo
-dD0iMzgiIHN0eWxlPSJ2ZXJ0aWNhbC1hbGlnbjptaWRkbGU7IHdpZHRoOiAzOHB4OyBoZWlnaHQ6
-IDM4cHg7IGJvcmRlci1yYWRpdXM6NTAlOyIgc3JjPSJodHRwczovL21haWwtb25saW5lLm5vc2Ru
-LjEyNy5uZXQvcWl5ZWxvZ28vZGVmYXVsdEF2YXRhci5wbmciPgogICAgICAgICAgICAgICAgICAg
-IDwvdGQ+CiAgICAgICAgICAgICAgICAgICAgPHRkIHN0eWxlPSJwYWRkaW5nOiAwIDAgMCAxMHB4
-OyBjb2xvcjogIzMxMzUzYjsiPgogICAgICAgICAgICAgICAgICAgICAgICA8ZGl2IHN0eWxlPSJm
-b250LXNpemU6IDE2cHg7Zm9udC13ZWlnaHQ6Ym9sZDsgd2lkdGg6MTAwJTsgd2hpdGUtc3BhY2U6
-IG5vd3JhcDsgb3ZlcmZsb3c6aGlkZGVuO3RleHQtb3ZlcmZsb3c6IGVsbGlwc2lzOyI+dGlhbnl1
-YW5oYW8zQDE2My5jb208L2Rpdj4KICAgICAgICAgICAgICAgICAgICA8L3RkPgogICAgICAgICAg
-ICA8L3RyPgogICAgICAgICAgICAgICAgPHRyIHdpZHRoPSIxMDAlIiBzdHlsZT0iZm9udC1zaXpl
-OiAxNHB4ICFpbXBvcnRhbnQ7IHdpZHRoOiAxMDAlOyI+CiAgICAgICAgICAgICAgICAgICAgPHRk
-IGNvbHNwYW49IjIiIHN0eWxlPSJwYWRkaW5nOjEwcHggMCAwIDA7IGZvbnQtc2l6ZToxNHB4ICFp
-bXBvcnRhbnQ7IHdpZHRoOiAxMDAlOyI+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8ZGl2
-IHN0eWxlPSJ3aWR0aDogMTAwJTtmb250LXNpemU6IDE0cHggIWltcG9ydGFudDt3b3JkLXdyYXA6
-YnJlYWstd29yZDt3b3JkLWJyZWFrOmJyZWFrLWFsbDsiPtPKz+SjunRpYW55dWFuaGFvM0AxNjMu
-Y29tPC9kaXY+CiAgICAgICAgICAgICAgICAgICAgPC90ZD4KICAgICAgICAgICAgICAgIDwvdHI+
-CiAgICAgICAgPC90Ym9keT4KICAgIDwvdGFibGU+CjwvYT4KPC9ib2R5Pgo8L2h0bWw+
-------=_Part_1029624_2093385518.1753276265286--
-
-
---===============7865596329599496389==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/boot/opensbi/Config.in b/boot/opensbi/Config.in
+index 37f06cd99d..3b3daa429d 100644
+--- a/boot/opensbi/Config.in
++++ b/boot/opensbi/Config.in
+@@ -19,7 +19,7 @@ choice
+ 	  Select the specific OpenSBI version you want to use
+ 
+ config BR2_TARGET_OPENSBI_LATEST_VERSION
+-	bool "1.6"
++	bool "1.7"
+ 
+ config BR2_TARGET_OPENSBI_CUSTOM_VERSION
+ 	bool "Custom version"
+diff --git a/boot/opensbi/opensbi.hash b/boot/opensbi/opensbi.hash
+index 84ad67b2e3..c82d2de236 100644
+--- a/boot/opensbi/opensbi.hash
++++ b/boot/opensbi/opensbi.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256  d11702103f177a2914e94eec57ce5ed820296d874f6b6525c4482e55d71a3667  opensbi-1.6.tar.gz
++sha256  2cf856a4e5e2e052948ddb54ba48232b1f698b7f52e0374fc7d17d51e8c8f7ce  opensbi-1.7.tar.gz
+ sha256  82d13fb1bf6bb162629deeea9eb9c117e74548d3b707e478967691fe79a68e21  COPYING.BSD
+-- 
+2.43.0
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7865596329599496389==--
-
