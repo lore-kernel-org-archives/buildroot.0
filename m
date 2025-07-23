@@ -4,103 +4,105 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B1AEC83F17
-	for <buildroot@archiver.kernel.org>; Wed, 23 Jul 2025 15:13:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F8D0C83F1A
+	for <buildroot@archiver.kernel.org>; Wed, 23 Jul 2025 15:16:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ABB8060B65;
-	Wed, 23 Jul 2025 15:13:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 63C1E60B6A;
+	Wed, 23 Jul 2025 15:16:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SioKO3V0DYO6; Wed, 23 Jul 2025 15:13:04 +0000 (UTC)
+ id XCj8C_Claivd; Wed, 23 Jul 2025 15:16:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0514060E5B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B31A460E5B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0514060E5B;
-	Wed, 23 Jul 2025 15:13:04 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id BDAC5DA
- for <buildroot@buildroot.org>; Wed, 23 Jul 2025 15:13:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B31A460E5B;
+	Wed, 23 Jul 2025 15:16:05 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id C1F52DA
+ for <buildroot@buildroot.org>; Wed, 23 Jul 2025 15:16:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AF0E4810A3
- for <buildroot@buildroot.org>; Wed, 23 Jul 2025 15:13:02 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B33B560B6A
+ for <buildroot@buildroot.org>; Wed, 23 Jul 2025 15:16:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zwMw4jTMTXpN for <buildroot@buildroot.org>;
- Wed, 23 Jul 2025 15:13:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ty0zTMH8tG2m for <buildroot@buildroot.org>;
+ Wed, 23 Jul 2025 15:16:03 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::832; helo=mail-qt1-x832.google.com;
- envelope-from=jesse@rivosinc.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 29A50810A2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 29A50810A2
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com
- [IPv6:2607:f8b0:4864:20::832])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 29A50810A2
- for <buildroot@buildroot.org>; Wed, 23 Jul 2025 15:13:00 +0000 (UTC)
-Received: by mail-qt1-x832.google.com with SMTP id
- d75a77b69052e-4ab5953f5dcso158281cf.0
- for <buildroot@buildroot.org>; Wed, 23 Jul 2025 08:13:00 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::52e; helo=mail-ed1-x52e.google.com;
+ envelope-from=stefan.nickl@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org CBE0E60E5B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CBE0E60E5B
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
+ [IPv6:2a00:1450:4864:20::52e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CBE0E60E5B
+ for <buildroot@buildroot.org>; Wed, 23 Jul 2025 15:16:02 +0000 (UTC)
+Received: by mail-ed1-x52e.google.com with SMTP id
+ 4fb4d7f45d1cf-60c9d8a169bso532a12.1
+ for <buildroot@buildroot.org>; Wed, 23 Jul 2025 08:16:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1753283580; x=1753888380;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=hYrMbzOOlNOtvox6oAUUoiTbln3tNycOqkj/OsQ+AkE=;
- b=syyP+KuukwuZNtlZNYyt+FI6bZDTkCVqr2leQRJPfDLAstqwV7F9Q1ZyTJi9eXSkjz
- NmYIqNa2xQQ5s6HQw/Wf3kudcDrtjTk/49q8415Yx0v0dCUBRExcXDn2gF9jZOwB7Bbc
- wigHflG5UhoP6KJlvzSPbFZB4JT9gh15Z4Pvr8+WjzpY1YSA4PEnAH1eg9uU32cZZsgW
- aykw/95xUqaFnydvZwBgR6TMm8xhb+GssySBoJ+68gkg9Z6l/mo3hT10xUf9/KeuNU8c
- lGFquZkkEnHMyxlpt6DPrvnpCwRPLmd/imjAZBIkTTIa6qM22ByQZgGS/A5cLeQhAUHb
- FaoQ==
-X-Gm-Message-State: AOJu0YxSAMfuXqbYztaPO1Uj6p6pVASdATv5APsRu3fUjM5f0mSTOrm+
- xUzfQfLORavQeKvN873HMxrzXSbeBnwe6eg8uIL2Qk4zhFUWBjBvyU9C7vhDsceY4H1pQa0FRpz
- QLcem
-X-Gm-Gg: ASbGncvwNvVS7s3rVjm9aKG/m+bcsNdn5jDrMgta39CQAOXkzwlg6W71JAfE+BGiZRC
- AES4agpHl2kolXQo+9b63Fx0dc+scGRHf5Z0ioSr5l0MYjxStUhwYf1PaARcPd/fXwCSNSQ28Zd
- lfx7EWvnt7ZREr4JtS++E+Qs5lnWSQi0y7nEAVIcNtzsx7Kkygsgbe8BEgP1wws468ZTQCHJxs4
- S44gJfmeU3smucwzQGE/3yqkY0rx44HUp5VV3uD4h4c3g5SW09HrE7Dt12PMeo9609fXBrDwxKc
- 0XV5sg2qxYW3Dno+85n9RAdjPnhXAIsu+iPBazPHG3cIsEfOUhNlMwFsqURF4Eyf+KHGEhwWYV+
- 3ZScSq1f7eQe85UrCFVA3cTM5HQC+p4f5wijFViXQbdOLzetAzrtj0R0RzZ9SJ/6MUXAoQMglWF
- hqqJMGElMKd8p98WYmMgKq7w==
-X-Google-Smtp-Source: AGHT+IGPf9w5wpd3hVpNzJl9W75H8w+gBvY0137hy3ruW9f3h119UMOmPVNdOW/L+FhF9S26pDVejw==
-X-Received: by 2002:a05:622a:155:b0:4ab:8b84:8049 with SMTP id
- d75a77b69052e-4ae6de1d09amr47032701cf.2.1753283579522; 
- Wed, 23 Jul 2025 08:12:59 -0700 (PDT)
-Received: from jesse-lt.ba.rivosinc.com
- (pool-108-26-215-125.bstnma.fios.verizon.net. [108.26.215.125])
+ d=1e100.net; s=20230601; t=1753283761; x=1753888561;
+ h=mime-version:user-agent:content-transfer-encoding:references
+ :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=hbGTgYmhx+s5U3Gw1a7WJu8MSonHpAyr/v1MIbEpkS0=;
+ b=vZqwP9au64XblSV4JvvZjIKKTrtNXXubT+9cNO8sek+5N4XspBb8fE7Eyi4Y+rJmUE
+ ARGJO/cBW7NjomPeZBxs2WeXENTMCRKzbHVyLtUqYXbMTq1Kk/S/bv77Lk89cSBNn/JN
+ RyTg8vc+jJJ9J8swFtvnXkM52rB/Z7xIryp4didkNegD1CnJ34ZYodqj3Gpr5u+MYymB
+ bpMlZBwNWRfNTaz4iLvOpxy6DHCDT2gVKMIYQqRZS3ucYbSVG6aqVvWnsLeilRiLCxxG
+ gUcLxZCEWwHWdxX5GfWx/F3AjiwRKeVg4UGvS8JtbCUwbd2iM7g6LgNEk7NFkazo7T0i
+ yY7A==
+X-Gm-Message-State: AOJu0YxVYmjdAzUdZIHfovl4lAdtTOkCbkUreWbs6SGAAinoqStHnAv5
+ IfbqDx9g31LuBWAVZfbhgN4po+CZc93ASwI9J1dm93VLQZcUMY+P5oJBCtW4jwsO
+X-Gm-Gg: ASbGncsEklWjkftGU4XWe+HLxpsBzMT+i2qJtA73MR/tD3K0F3yi+rS6sn0lLmu8rRL
+ Slx+4RjaWhapFlGRoE0o3doNNmSb05gkBgXVNk6ql74n8iYCNSuwMrynqtCELoRcv9gAuwymzd3
+ JfmxoOcgXDJmkZzkH/frWJ9bVk71T8X7pm9Z+KMkomVSCj1/FEGVq+u3DIOET1+iU0XvDQkBfga
+ yYl8WceQtIPQtmuembOneiyliLdQOf0NUSSScNse5+73uvH6x4ILgl8HN1TpUKATjuyxANTfTrR
+ 4AcRxJz7nrBtEalgXrY5CMis9hFJbHLcDEOgwYih0FA+f+cxk9lzcobEAcrUgSsu/DTQ9ddgjRm
+ axvvN31zGs+Y+a+K9ob0eBLruaCT0b1inXQ9WYGB31lmlIIEEeUt61nD5a9rmGypQzBbEjHWqLm
+ 46ZDxZuRAs8A2D94QMuDc=
+X-Google-Smtp-Source: AGHT+IFD7PDIVUbvTxn6dqZpIZJ7Og6MiRDZ/M1kMVvSbPa9bfbdKHQEUVy6B+mK66yL2E4xxgG8CQ==
+X-Received: by 2002:a17:907:7294:b0:aec:65de:5258 with SMTP id
+ a640c23a62f3a-af2f64bd1b4mr335417266b.3.1753283760530; 
+ Wed, 23 Jul 2025 08:16:00 -0700 (PDT)
+Received: from ultra.fritz.box
+ (p200300d1973ff600a1ab5b988c9d795d.dip0.t-ipconnect.de.
+ [2003:d1:973f:f600:a1ab:5b98:8c9d:795d])
  by smtp.gmail.com with ESMTPSA id
- d75a77b69052e-4abb499fbe9sm69284801cf.20.2025.07.23.08.12.59
+ a640c23a62f3a-aec6c7d476esm1061880666b.50.2025.07.23.08.15.59
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 23 Jul 2025 08:12:59 -0700 (PDT)
-From: Jesse Taube <jesse@rivosinc.com>
-To: buildroot@buildroot.org
-Cc: Alistair Francis <alistair@alistair23.me>, Jesse Taube <jesse@rivosinc.com>
-Date: Wed, 23 Jul 2025 08:12:58 -0700
-Message-ID: <20250723151258.1015918-1-jesse@rivosinc.com>
-X-Mailer: git-send-email 2.43.0
+ Wed, 23 Jul 2025 08:16:00 -0700 (PDT)
+Message-ID: <59619ea5bc67adf918a35f865cb1567998641e62.camel@gmail.com>
+From: stefan.nickl@gmail.com
+To: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
+Cc: buildroot@buildroot.org, Jesse Van Gavere <jesseevg@gmail.com>, Thomas
+ Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 23 Jul 2025 17:15:59 +0200
+In-Reply-To: <CA+R_derRM8KYwv1bvaj7ZayMM=wF6AeSfAvoiidag=Luxhjdiw@mail.gmail.com>
+References: <20250719143417.144660-1-Stefan.Nickl@gmail.com>
+ <CA+R_derRM8KYwv1bvaj7ZayMM=wF6AeSfAvoiidag=Luxhjdiw@mail.gmail.com>
+User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1753283580; x=1753888380;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=hYrMbzOOlNOtvox6oAUUoiTbln3tNycOqkj/OsQ+AkE=;
- b=j+JitXidvaj+33QKU8qT7MLTHe0FAOfzRY8lDqUP8oBuzAk3XtH4Rs33pBO5mFPWUk
- MwTuHHsqK2RRgWjqcW4kd/2Q5f4woAyoP6J7yEJ17XHCqAIpIaCYdOrqUUx6XvQyjcOr
- HGjwjY+FSc/oOxoa1xoIGtYCf0j+nWqe8+UGni1y1dqoZR4pBG4l9SePEq25Fn8EMfa0
- rCd17OFI9O3xl110+s/92slufHwrYdHwr7nJ143GBRecpqFWgD0PQwfqzaIwHAGgDC6J
- KmY2utY7WZEbYUnudrEBrtaJkTpPoIXPM+0oD4PK5GOHxupM9LUA9BiyzdCaZyc/O7ck
- ZLOQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=rivosinc.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=rivosinc-com.20230601.gappssmtp.com
- header.i=@rivosinc-com.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=j+JitXid
-Subject: [Buildroot] [PATCH] boot/opensbi: bump version to 1.7
+ d=gmail.com; s=20230601; t=1753283761; x=1753888561; darn=buildroot.org;
+ h=mime-version:user-agent:content-transfer-encoding:references
+ :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+ :date:message-id:reply-to;
+ bh=hbGTgYmhx+s5U3Gw1a7WJu8MSonHpAyr/v1MIbEpkS0=;
+ b=IKr9N1jKjZSDYrAV068GY9vF/zU2PH4YNv4AiyQbxPqwnqYI7DTvjCQO9NCsgemGfv
+ ac2IV5vpRUnL69pZ9k5PD2e6i1xVLVHn9RjYpTisP5+AbC+P17kxY1D0RfO2g/jRfhER
+ oQB1OsbmsdjC5iUkRG9i6pULQ5wbYutC0FCWiQp9gG77MvJ7ZxlJNpcc628SBl0ecmRi
+ R40kfBjvsHLXhbRcifUNyTd6/HU5VDXt9NYq/7E7o7sBNB52vZaxjajJcVLOc9UnchGx
+ 7vrtCNnxRxy0GlFU37yFv9IEXHZplQdtn18kgO0ry1HN3RqE4FiI8msnHHIh5FlGFBgn
+ EcsQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=IKr9N1jK
+Subject: Re: [Buildroot] [PATCH 1/1] package/qt6/qt6positioning: New package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -117,40 +119,26 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes at:
-https://github.com/riscv-software-src/opensbi/releases/tag/v1.7
+Hi Roy,
+> Good to see more people working on adding Qt 6 packages to buildroot!
+Thanks!
 
-Signed-off-by: Jesse Taube <jesse@rivosinc.com>
----
- boot/opensbi/Config.in    | 2 +-
- boot/opensbi/opensbi.hash | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> Bernd Kuhls added this package a while back, which I later ported to Qt 6.9.1 here:
+> https://patchwork.ozlabs.org/project/buildroot/patch/20250610122924.431830-3-roykollensvendsen@gmail.com/
+> 
+> If you see any areas of improvements please feel free to build on top of Bernds patch.
 
-diff --git a/boot/opensbi/Config.in b/boot/opensbi/Config.in
-index 37f06cd99d..3b3daa429d 100644
---- a/boot/opensbi/Config.in
-+++ b/boot/opensbi/Config.in
-@@ -19,7 +19,7 @@ choice
- 	  Select the specific OpenSBI version you want to use
- 
- config BR2_TARGET_OPENSBI_LATEST_VERSION
--	bool "1.6"
-+	bool "1.7"
- 
- config BR2_TARGET_OPENSBI_CUSTOM_VERSION
- 	bool "Custom version"
-diff --git a/boot/opensbi/opensbi.hash b/boot/opensbi/opensbi.hash
-index 84ad67b2e3..c82d2de236 100644
---- a/boot/opensbi/opensbi.hash
-+++ b/boot/opensbi/opensbi.hash
-@@ -1,3 +1,3 @@
- # locally computed
--sha256  d11702103f177a2914e94eec57ce5ed820296d874f6b6525c4482e55d71a3667  opensbi-1.6.tar.gz
-+sha256  2cf856a4e5e2e052948ddb54ba48232b1f698b7f52e0374fc7d17d51e8c8f7ce  opensbi-1.7.tar.gz
- sha256  82d13fb1bf6bb162629deeea9eb9c117e74548d3b707e478967691fe79a68e21  COPYING.BSD
--- 
-2.43.0
+About that, my plans were actually a bit different.
+I have already prepared an update to 6.8.3 (latest LTS version) that I
+wanted to send out as soon as qtpositioning 6.8.1 was merged, plus a
+minor bugfix (qt6quick3d missing a BR2_PACKAGE_QT6BASE_CONCURRENT
+dependency).
 
+Do you think we could defer skipping to the next non-LTS for a while,
+maybe until after 2025.08 is released?
+
+Regards,
+Stefan
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
