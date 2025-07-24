@@ -4,104 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5ACEC83F1A
-	for <buildroot@archiver.kernel.org>; Thu, 24 Jul 2025 14:44:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4ED18C83F26
+	for <buildroot@archiver.kernel.org>; Thu, 24 Jul 2025 15:01:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 625F1613D3;
-	Thu, 24 Jul 2025 14:44:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0661960A81;
+	Thu, 24 Jul 2025 15:01:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wUI3RIQuTNMJ; Thu, 24 Jul 2025 14:44:05 +0000 (UTC)
+ id FIRfRkrjzh4m; Thu, 24 Jul 2025 15:01:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 735A9613E6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0063C613D3
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 735A9613E6;
-	Thu, 24 Jul 2025 14:44:05 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 696FD115
- for <buildroot@buildroot.org>; Thu, 24 Jul 2025 14:44:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0063C613D3;
+	Thu, 24 Jul 2025 15:01:32 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id A397D115
+ for <buildroot@buildroot.org>; Thu, 24 Jul 2025 15:01:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 50034613C0
- for <buildroot@buildroot.org>; Thu, 24 Jul 2025 14:44:04 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 868BF417F1
+ for <buildroot@buildroot.org>; Thu, 24 Jul 2025 15:01:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id abI7cYzFrFe2 for <buildroot@buildroot.org>;
- Thu, 24 Jul 2025 14:44:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2001:19f0:5800:8dea:5400:ff:fe25:676e; helo=arcturus.nroach44.id.au;
- envelope-from=nroach44@nroach44.id.au; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4EE8E613D3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4EE8E613D3
-Received: from arcturus.nroach44.id.au (arcturus.nroach44.id.au
- [IPv6:2001:19f0:5800:8dea:5400:ff:fe25:676e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4EE8E613D3
- for <buildroot@buildroot.org>; Thu, 24 Jul 2025 14:44:01 +0000 (UTC)
-Received: from arcturus.nroach44.id.au (localhost [127.0.0.1])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
- (No client certificate requested)
- by arcturus.nroach44.id.au (Postfix) with ESMTPS id 7540A2A98B
- for <buildroot@buildroot.org>; Thu, 24 Jul 2025 22:43:58 +0800 (AWST)
-Received: by arcturus.nroach44.id.au (Postfix, from userid 5555)
- id 4D3502A98E; Thu, 24 Jul 2025 22:43:58 +0800 (AWST)
-Received: from luna.haven (e1000e.luna.haven [10.1.10.41])
- by arcturus.nroach44.id.au (Postfix) with ESMTPA id 2D0F425527;
- Thu, 24 Jul 2025 22:43:54 +0800 (AWST)
-To: buildroot@buildroot.org
-Cc: Nathaniel Roach <nroach44@nroach44.id.au>,
- Laurent Vivier <laurent@vivier.eu>
-Date: Thu, 24 Jul 2025 22:43:42 +0800
-Message-Id: <20250724144342.2090731-1-nroach44@nroach44.id.au>
-X-Mailer: git-send-email 2.39.5
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id V8KBmGHGq1gl for <buildroot@buildroot.org>;
+ Thu, 24 Jul 2025 15:01:30 +0000 (UTC)
+X-Greylist: delayed 308 seconds by postgrey-1.37 at util1-new.osuosl.org;
+ Thu, 24 Jul 2025 15:01:29 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 108AF4048D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 108AF4048D
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.126.130;
+ helo=mout.kundenserver.de; envelope-from=laurent@vivier.eu;
+ receiver=<UNKNOWN> 
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 108AF4048D
+ for <buildroot@buildroot.org>; Thu, 24 Jul 2025 15:01:29 +0000 (UTC)
+Received: from [192.168.100.1] ([82.64.211.94]) by mrelayeu.kundenserver.de
+ (mreue010 [213.165.67.103]) with ESMTPSA (Nemesis) id
+ 1MvavG-1uNyyj3lLC-00z1g4; Thu, 24 Jul 2025 16:56:11 +0200
+Message-ID: <2eb4afa8-d988-4c25-adac-3b04baa0772e@vivier.eu>
+Date: Thu, 24 Jul 2025 16:56:10 +0200
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=nroach44.id.au; 
- s=dYX2HNEqNNRL; t=1753368238;
- bh=pD6cAFDls6EsNuXr9lvgjXek/HLaLq4Vz8GAH8pnYNs=;
- h=From:To:Cc:Subject:Date:From;
- b=bQMF4LnxmeUhiHcBYDB91leVoJz6bZYu4NizMqk9tSSw/zH6UjFv6D/KrRKe6jyYf
- UT5tiOR5KGJF86vL3+kPtAqj7VH+KfjWplFEVSqPZfYWRx0ugOrKGuM50fHsYEaRm3
- Zn6CH0UgO3/bukHhn82goRJVsh6HSbLl/YLsMmVdNiYyDfOD9pXu8ffk8KQgIobyDt
- 0/BdFxw96Dh6uQLoUKBnkGEI2k6Ou81m/NeH2RyBnINnIh0L9VaF6RzkADsg9I+BHX
- RhZR/pum+S3CvbE+ml4qwiZRfoy8nKhYflgmYJeZii/pRarydt2/5FMLYaXYdkTdCM
- GPDNdEl5sEN3Q==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=nroach44.id.au; 
- s=dYX2HNEqNNRL; t=1753368238;
- bh=pD6cAFDls6EsNuXr9lvgjXek/HLaLq4Vz8GAH8pnYNs=;
- h=From:To:Cc:Subject:Date:From;
- b=bQMF4LnxmeUhiHcBYDB91leVoJz6bZYu4NizMqk9tSSw/zH6UjFv6D/KrRKe6jyYf
- UT5tiOR5KGJF86vL3+kPtAqj7VH+KfjWplFEVSqPZfYWRx0ugOrKGuM50fHsYEaRm3
- Zn6CH0UgO3/bukHhn82goRJVsh6HSbLl/YLsMmVdNiYyDfOD9pXu8ffk8KQgIobyDt
- 0/BdFxw96Dh6uQLoUKBnkGEI2k6Ou81m/NeH2RyBnINnIh0L9VaF6RzkADsg9I+BHX
- RhZR/pum+S3CvbE+ml4qwiZRfoy8nKhYflgmYJeZii/pRarydt2/5FMLYaXYdkTdCM
- GPDNdEl5sEN3Q==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=nroach44.id.au; 
- s=dYX2HNEqNNRL; t=1753368234;
- bh=pD6cAFDls6EsNuXr9lvgjXek/HLaLq4Vz8GAH8pnYNs=;
- h=From:To:Cc:Subject:Date:From;
- b=IzD+83Er2An/uVSUnMy89rWxwOwZucoIwsDmBPgTbL2VCp6dvhyMrZr4Q9JwNv9vK
- rqllQHG1LENKf8ZoiCo+FI2mp43I1jdqUPrubEyaTxZZnVueP2COA5bagaYcU8HsrI
- IXCeHJ/agSYnQDxTZT7ygdFgMxqu72CIXVMO0RaWII6YJhuUGMLdUVAxszVjfu2iDO
- gDybCIH+P/9MtgPGnKrhnmx3IdQUsNWlRWBPFdi9HbUL4pSN1zzNepbl+plqn4FEtp
- Fj51RzatP2vT8vpLRDRN83Ul8F2fOZkp4CyN9CQQztT43JNeMuPhhFx4Ji7n33Hb+b
- KzIayGBEtHCNg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=nroach44.id.au
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key, unprotected) header.d=nroach44.id.au
- header.i=@nroach44.id.au header.a=rsa-sha256 header.s=dYX2HNEqNNRL
- header.b=bQMF4Lnx; 
- dkim=pass (2048-bit key) header.d=nroach44.id.au header.i=@nroach44.id.au
- header.a=rsa-sha256 header.s=dYX2HNEqNNRL header.b=bQMF4Lnx; 
- dkim=pass (2048-bit key) header.d=nroach44.id.au header.i=@nroach44.id.au
- header.a=rsa-sha256 header.s=dYX2HNEqNNRL header.b=IzD+83Er
-Subject: [Buildroot] [PATCH 1/1] package/petitboot: add patches to fix build
- errors with "opaque" ncurses
+User-Agent: Mozilla Thunderbird
+To: Nathaniel Roach <nroach44@nroach44.id.au>, buildroot@buildroot.org
+References: <20250724144342.2090731-1-nroach44@nroach44.id.au>
+Content-Language: en-US, fr-FR
+From: Laurent Vivier <laurent@vivier.eu>
+In-Reply-To: <20250724144342.2090731-1-nroach44@nroach44.id.au>
+X-Provags-ID: V03:K1:3zQq0OuLm0BpC0ov03sIib6poH0ULxdOkYNVkOruMoTPxfL9UYI
+ OOWdvWWtv9rYzO9FlaFgo6iAi0WBE+IjrtVEdp/JIkVzbsWEtCAZIcqyZrnejhsMsoa0Z9s
+ SkBxqkaBxc6bUyrlZvZZoUjCmS0Y46eT0V2YfAGs0KsS5O+FNmqL/pGEwedE9eB88JJ5xWl
+ w1Sos4CdjsU1FW1cNcsZg==
+UI-OutboundReport: notjunk:1;M01:P0:qSOE8TzXJmo=;YnfDFeCI+YfSmz3KQY0SPndejvG
+ pXRk0hqjYuQcfIdmKLEzRt/jiJOP6XXAyfT5bG/x+uZ10rMuGaATchzhAsAYxmxuJcmKDbjb+
+ rM548MjCoAXmncdX56gpzHzqVO0Q74SZ0lO42Tw6PGMn51TDBTYlycuJFa2vkfkBbD0+0puwf
+ B5Mibdi4PaiOWhx9uRNkAL3kJGXfp2oFsFb7xKI3dbLrVFMWEjiHauMmb5wTkbAMoDBc25YqB
+ W22RzLMeZ8AUXcGydB2UE1G8zft7+ibV9ZD97dULaR0V9WYni4Qq6P49LcDVYQxwU0Pz4Sg0p
+ ovC1gNEJ80loUFSjyDU+p86x5NjmlHH8jwEfPFqTvnAvuZwQ9/T50M5pucLJ/4OMF/biTTaVw
+ GhWY0Y5v8wjFIgeNUx45XpKwj6pGSG7p5KlfLe/twT+XimscgJZ5w+JMRXnbNLRW+X0RrsNV0
+ 4QhFPpM/1K8qksyMSa0Pqq2+TgAwVyXGsGyQGiE0of64QRY3ynZdfsnw630z9Cat96t35aqcj
+ cAznqUhKvomR0+0ARTGlNdV+1MXQgG1dONlbGFH5QCURNYFnSInmC0Ak3FZ/p4avKPjMsJIy0
+ TGuQvsCXsIF+Fwzc1WimTg7zpPwRG/a3rsR5NqxOJjTZal6d2Y/EpuNPh+YvF44KBQ5MRczJV
+ RZueDEPZNceooSCaUW5/WvCwVdjx6Y7V79mzDEuxBoFmftKnlbn1Wf7M1iKCHqycTk+gGb2rc
+ G0OCg2O/KrXwH9McDadiJOBoOPT8phtClV4o7n4rgIKFcH2K7mJMOtunC+nf2KtoTayzW20Eg
+ o+iwOnotef9UPyknMla1WTIGFjC2hEN+NDNXONfadZmnpEXbI8V6N3Sn5tn9QOvqa9q2E5DuK
+ FGtLF8zVHYU+JYhUH5QTvropeuQld53jz+bq65zWBRjGAAVLxljYgmNSCFJu6fq6Ccb2B1FX4
+ lOHu3oAhCBaCzzxaHUXsemw1rT0+l55o7bNubuV59ZsKwci+8s4p3WpmUFt+tmU1xfHVq3TvY
+ PuDw9zLsAt5vYuy8yW5r+gQBY/0wQ6RqwbTDws1GRuHy0oT4R1MvL01Duj74U4hEvDK1GA0nD
+ JsuF78iNnXPjTvEnaAfQtFlc/Ohikd851eN0xeWQK4BjZtclq236jJuCwS/6PSNiTzdgu+Tva
+ XcRHkJ9ukUxzQt86GWpyFao2ruYsgC9eWnRGFegbIslzjqvN2zjgoYvQGYd+H6CpRhBnEQLxq
+ rppmqyMck1U0tw8rsoUmGdlOlscK4rlgW3ccORM+1D667TiuHbTa6UUjLLNIMtuNDE5rj5GTo
+ 2azHzDjLUpI10QGqINhZ6qulnVorkXOvlYhtIbujc91SZdcikiMMcADudiNHo09E8vt/q/3nR
+ 4JuK/CIrxwApKetj/zAZpwTJ82AL0phPABTTQpDrFofe853sVYHsvUv3+bsE9s4fCskCuXw5Y
+ de3iDLwCH4T+GQM8ZzBfgbst4IqNfbVPJIJGKAoYgXSAAypDLrjHkGp+czzQhzuX03LVahbnO
+ X+irKyEMqmVoDWAey1h44F46t3KGLzrLrumct0SEEzCJHV1zXk8XZJ6DVMWBlA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=vivier.eu
+Subject: Re: [Buildroot] [PATCH 1/1] package/petitboot: add patches to fix
+ build errors with "opaque" ncurses
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -113,175 +94,112 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Nathaniel Roach via buildroot <buildroot@buildroot.org>
-Reply-To: Nathaniel Roach <nroach44@nroach44.id.au>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-ncurses from 6.4.20231021 enables "NCUSES_OPAQUE_MENU", which hides
-some parts of the code away from the application. This causes
-petitboot to fail building in a few spots where it tries to directly
-access the name of the menu item.
-
-These two patches were submitted to the petitboot mailing list by
-Nicholas Piggin [1] resolve this issue using accessors, or by making a new item.
-
-This has been raised upstream but not yet applied [2].
-
-[1]: https://lists.ozlabs.org/pipermail/petitboot/2024-February/thread.html#1545
-[2]: https://github.com/open-power/petitboot/issues/106
-
-Signed-off-by: Nathaniel Roach <nroach44@nroach44.id.au>
-Fixes: https://autobuild.buildroot.org/results/bf1/bf173e1e0f8ad3f40534aaa358dc40993cd14ac4/build-end.log
-
----
-Backport to 2025.05.x
-
-Signed-off-by: Nathaniel Roach <nroach44@nroach44.id.au>
----
- ...pile-with-curses-opaque-menu-headers.patch | 66 +++++++++++++++++++
- ...2-ui-Fix-curses-menu-item-label-leak.patch | 53 +++++++++++++++
- 2 files changed, 119 insertions(+)
- create mode 100644 package/petitboot/0001-ui-Fix-compile-with-curses-opaque-menu-headers.patch
- create mode 100644 package/petitboot/0002-ui-Fix-curses-menu-item-label-leak.patch
-
-diff --git a/package/petitboot/0001-ui-Fix-compile-with-curses-opaque-menu-headers.patch b/package/petitboot/0001-ui-Fix-compile-with-curses-opaque-menu-headers.patch
-new file mode 100644
-index 0000000000..d68e904b8b
---- /dev/null
-+++ b/package/petitboot/0001-ui-Fix-compile-with-curses-opaque-menu-headers.patch
-@@ -0,0 +1,66 @@
-+Recent Debian ncurses is built with NCURSES_OPAQUE_MENU, which means
-+the menu item type can't be poked directly. Fix with accessors.
-+
-+One wrinkle is the item name can't be modified, new_item has to be used.
-+
-+Signed-off-by: Nicholas Piggin <npiggin at gmail.com>
-+Upstream: https://github.com/open-power/petitboot/issues/106
-+---
-+ ui/ncurses/nc-menu.c | 12 ++++++++----
-+ ui/ncurses/nc-menu.h |  4 ++--
-+ 2 files changed, 10 insertions(+), 6 deletions(-)
-+
-+diff --git a/ui/ncurses/nc-menu.c b/ui/ncurses/nc-menu.c
-+index a90a02e..a1524b5 100644
-+--- a/ui/ncurses/nc-menu.c
-++++ b/ui/ncurses/nc-menu.c
-+@@ -141,9 +141,13 @@ int pmenu_item_update(struct pmenu_item *item, const char *name)
-+ 	if (!label)
-+ 		return -1;
-+ 
-+-	i = item->nci;
-+-	i->name.str = label;
-+-	i->name.length = strncols(label);
-++	i = new_item(label, NULL);
-++	if (!i) {
-++		talloc_free((char *)label);
-++		return -1;
-++	}
-++	free_item(item->nci);
-++	item->nci = i;
-+ 
-+ 	return 0;
-+ }
-+@@ -358,7 +362,7 @@ static int pmenu_item_get_index(const struct pmenu_item *item)
-+ 				return i;
-+ 
-+ 	pb_log_fn("not found: %p %s\n", item,
-+-		(item ? item->nci->name.str : "(null)"));
-++		(item ? item_name(item->nci) : "(null)"));
-+ 	return -1;
-+ }
-+ 
-+diff --git a/ui/ncurses/nc-menu.h b/ui/ncurses/nc-menu.h
-+index eb568c8..550c7e1 100644
-+--- a/ui/ncurses/nc-menu.h
-++++ b/ui/ncurses/nc-menu.h
-+@@ -126,7 +126,7 @@ static inline struct pmenu *pmenu_from_scr(struct nc_scr *scr)
-+ 
-+ static inline void pmenu_dump_item(const ITEM *item)
-+ {
-+-	pb_debug("%p %s\n", item, (item ? item->name.str : "(null)"));
-++	pb_debug("%p %s\n", item, (item ? item_name(item) : "(null)"));
-+ }
-+ 
-+ static inline void pmenu_dump_items(ITEM *const *items, unsigned int count)
-+@@ -135,7 +135,7 @@ static inline void pmenu_dump_items(ITEM *const *items, unsigned int count)
-+ 
-+ 	for (i = 0; i < count; i++)
-+ 		pb_debug("%u: %p %s\n", i, items[i],
-+-			(items[i] ? items[i]->name.str : "(null)"));
-++			(items[i] ? item_name(items[i]) : "(null)"));
-+ }
-+ 
-+ #endif
-+-- 
-+2.42.0
-diff --git a/package/petitboot/0002-ui-Fix-curses-menu-item-label-leak.patch b/package/petitboot/0002-ui-Fix-curses-menu-item-label-leak.patch
-new file mode 100644
-index 0000000000..9302b34cfe
---- /dev/null
-+++ b/package/petitboot/0002-ui-Fix-curses-menu-item-label-leak.patch
-@@ -0,0 +1,53 @@
-+When a menu item name is updated, the old label is not freed.
-+
-+Signed-off-by: Nicholas Piggin <npiggin at gmail.com>
-+Upstream: https://github.com/open-power/petitboot/issues/106
-+---
-+ ui/ncurses/nc-menu.c | 4 ++++
-+ ui/ncurses/nc-menu.h | 1 +
-+ 2 files changed, 5 insertions(+)
-+
-+diff --git a/ui/ncurses/nc-menu.c b/ui/ncurses/nc-menu.c
-+index a1524b5..70f2210 100644
-+--- a/ui/ncurses/nc-menu.c
-++++ b/ui/ncurses/nc-menu.c
-+@@ -82,6 +82,7 @@ static void pmenu_resize(struct nc_scr *scr)
-+ static int pmenu_item_destructor(void *arg)
-+ {
-+ 	struct pmenu_item *item = arg;
-++	talloc_free((char *)item->label);
-+ 	free_item(item->nci);
-+ 	return 0;
-+ }
-+@@ -146,7 +147,9 @@ int pmenu_item_update(struct pmenu_item *item, const char *name)
-+ 		talloc_free((char *)label);
-+ 		return -1;
-+ 	}
-++	talloc_free((char *)item->label);
-+ 	free_item(item->nci);
-++	item->label = label;
-+ 	item->nci = i;
-+ 
-+ 	return 0;
-+@@ -168,6 +171,7 @@ struct pmenu_item *pmenu_item_create(struct pmenu *menu, const char *name)
-+ 
-+ 	item->i_sig = pb_item_sig;
-+ 	item->pmenu = menu;
-++	item->label = label;
-+ 	item->nci = new_item(label, NULL);
-+ 
-+ 	if (!item->nci) {
-+diff --git a/ui/ncurses/nc-menu.h b/ui/ncurses/nc-menu.h
-+index 550c7e1..7ba45bf 100644
-+--- a/ui/ncurses/nc-menu.h
-++++ b/ui/ncurses/nc-menu.h
-+@@ -46,6 +46,7 @@ struct pmenu;
-+ 
-+ struct pmenu_item {
-+ 	enum pb_nc_sig i_sig;
-++	const char *label;
-+ 	ITEM *nci;
-+ 	struct pmenu *pmenu;
-+ 	void *data;
-+-- 
-+2.42.0
--- 
-2.39.5
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+CgpMZSAyNC8wNy8yMDI1IMOgIDE2OjQzLCBOYXRoYW5pZWwgUm9hY2ggYSDDqWNyaXTCoDoKPiBu
+Y3Vyc2VzIGZyb20gNi40LjIwMjMxMDIxIGVuYWJsZXMgIk5DVVNFU19PUEFRVUVfTUVOVSIsIHdo
+aWNoIGhpZGVzCj4gc29tZSBwYXJ0cyBvZiB0aGUgY29kZSBhd2F5IGZyb20gdGhlIGFwcGxpY2F0
+aW9uLiBUaGlzIGNhdXNlcwo+IHBldGl0Ym9vdCB0byBmYWlsIGJ1aWxkaW5nIGluIGEgZmV3IHNw
+b3RzIHdoZXJlIGl0IHRyaWVzIHRvIGRpcmVjdGx5Cj4gYWNjZXNzIHRoZSBuYW1lIG9mIHRoZSBt
+ZW51IGl0ZW0uCj4gCj4gVGhlc2UgdHdvIHBhdGNoZXMgd2VyZSBzdWJtaXR0ZWQgdG8gdGhlIHBl
+dGl0Ym9vdCBtYWlsaW5nIGxpc3QgYnkKPiBOaWNob2xhcyBQaWdnaW4gWzFdIHJlc29sdmUgdGhp
+cyBpc3N1ZSB1c2luZyBhY2Nlc3NvcnMsIG9yIGJ5IG1ha2luZyBhIG5ldyBpdGVtLgo+IAo+IFRo
+aXMgaGFzIGJlZW4gcmFpc2VkIHVwc3RyZWFtIGJ1dCBub3QgeWV0IGFwcGxpZWQgWzJdLgo+IAo+
+IFsxXTogaHR0cHM6Ly9saXN0cy5vemxhYnMub3JnL3BpcGVybWFpbC9wZXRpdGJvb3QvMjAyNC1G
+ZWJydWFyeS90aHJlYWQuaHRtbCMxNTQ1Cj4gWzJdOiBodHRwczovL2dpdGh1Yi5jb20vb3Blbi1w
+b3dlci9wZXRpdGJvb3QvaXNzdWVzLzEwNgo+IAo+IFNpZ25lZC1vZmYtYnk6IE5hdGhhbmllbCBS
+b2FjaCA8bnJvYWNoNDRAbnJvYWNoNDQuaWQuYXU+Cj4gRml4ZXM6IGh0dHBzOi8vYXV0b2J1aWxk
+LmJ1aWxkcm9vdC5vcmcvcmVzdWx0cy9iZjEvYmYxNzNlMWUwZjhhZDNmNDA1MzRhYWEzNThkYzQw
+OTkzY2QxNGFjNC9idWlsZC1lbmQubG9nCj4gCj4gLS0tCj4gQmFja3BvcnQgdG8gMjAyNS4wNS54
+Cj4gCj4gU2lnbmVkLW9mZi1ieTogTmF0aGFuaWVsIFJvYWNoIDxucm9hY2g0NEBucm9hY2g0NC5p
+ZC5hdT4KPiAtLS0KPiAgIC4uLnBpbGUtd2l0aC1jdXJzZXMtb3BhcXVlLW1lbnUtaGVhZGVycy5w
+YXRjaCB8IDY2ICsrKysrKysrKysrKysrKysrKysKPiAgIC4uLjItdWktRml4LWN1cnNlcy1tZW51
+LWl0ZW0tbGFiZWwtbGVhay5wYXRjaCB8IDUzICsrKysrKysrKysrKysrKwo+ICAgMiBmaWxlcyBj
+aGFuZ2VkLCAxMTkgaW5zZXJ0aW9ucygrKQo+ICAgY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2Uv
+cGV0aXRib290LzAwMDEtdWktRml4LWNvbXBpbGUtd2l0aC1jdXJzZXMtb3BhcXVlLW1lbnUtaGVh
+ZGVycy5wYXRjaAo+ICAgY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvcGV0aXRib290LzAwMDIt
+dWktRml4LWN1cnNlcy1tZW51LWl0ZW0tbGFiZWwtbGVhay5wYXRjaAo+IAo+IGRpZmYgLS1naXQg
+YS9wYWNrYWdlL3BldGl0Ym9vdC8wMDAxLXVpLUZpeC1jb21waWxlLXdpdGgtY3Vyc2VzLW9wYXF1
+ZS1tZW51LWhlYWRlcnMucGF0Y2ggYi9wYWNrYWdlL3BldGl0Ym9vdC8wMDAxLXVpLUZpeC1jb21w
+aWxlLXdpdGgtY3Vyc2VzLW9wYXF1ZS1tZW51LWhlYWRlcnMucGF0Y2gKPiBuZXcgZmlsZSBtb2Rl
+IDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAuLmQ2OGU5MDRiOGIKPiAtLS0gL2Rldi9udWxsCj4g
+KysrIGIvcGFja2FnZS9wZXRpdGJvb3QvMDAwMS11aS1GaXgtY29tcGlsZS13aXRoLWN1cnNlcy1v
+cGFxdWUtbWVudS1oZWFkZXJzLnBhdGNoCj4gQEAgLTAsMCArMSw2NiBAQAo+ICtSZWNlbnQgRGVi
+aWFuIG5jdXJzZXMgaXMgYnVpbHQgd2l0aCBOQ1VSU0VTX09QQVFVRV9NRU5VLCB3aGljaCBtZWFu
+cwo+ICt0aGUgbWVudSBpdGVtIHR5cGUgY2FuJ3QgYmUgcG9rZWQgZGlyZWN0bHkuIEZpeCB3aXRo
+IGFjY2Vzc29ycy4KPiArCj4gK09uZSB3cmlua2xlIGlzIHRoZSBpdGVtIG5hbWUgY2FuJ3QgYmUg
+bW9kaWZpZWQsIG5ld19pdGVtIGhhcyB0byBiZSB1c2VkLgo+ICsKPiArU2lnbmVkLW9mZi1ieTog
+TmljaG9sYXMgUGlnZ2luIDxucGlnZ2luIGF0IGdtYWlsLmNvbT4KPiArVXBzdHJlYW06IGh0dHBz
+Oi8vZ2l0aHViLmNvbS9vcGVuLXBvd2VyL3BldGl0Ym9vdC9pc3N1ZXMvMTA2Cj4gKy0tLQo+ICsg
+dWkvbmN1cnNlcy9uYy1tZW51LmMgfCAxMiArKysrKysrKy0tLS0KPiArIHVpL25jdXJzZXMvbmMt
+bWVudS5oIHwgIDQgKystLQo+ICsgMiBmaWxlcyBjaGFuZ2VkLCAxMCBpbnNlcnRpb25zKCspLCA2
+IGRlbGV0aW9ucygtKQo+ICsKPiArZGlmZiAtLWdpdCBhL3VpL25jdXJzZXMvbmMtbWVudS5jIGIv
+dWkvbmN1cnNlcy9uYy1tZW51LmMKPiAraW5kZXggYTkwYTAyZS4uYTE1MjRiNSAxMDA2NDQKPiAr
+LS0tIGEvdWkvbmN1cnNlcy9uYy1tZW51LmMKPiArKysrIGIvdWkvbmN1cnNlcy9uYy1tZW51LmMK
+PiArQEAgLTE0MSw5ICsxNDEsMTMgQEAgaW50IHBtZW51X2l0ZW1fdXBkYXRlKHN0cnVjdCBwbWVu
+dV9pdGVtICppdGVtLCBjb25zdCBjaGFyICpuYW1lKQo+ICsgCWlmICghbGFiZWwpCj4gKyAJCXJl
+dHVybiAtMTsKPiArCj4gKy0JaSA9IGl0ZW0tPm5jaTsKPiArLQlpLT5uYW1lLnN0ciA9IGxhYmVs
+Owo+ICstCWktPm5hbWUubGVuZ3RoID0gc3RybmNvbHMobGFiZWwpOwo+ICsrCWkgPSBuZXdfaXRl
+bShsYWJlbCwgTlVMTCk7Cj4gKysJaWYgKCFpKSB7Cj4gKysJCXRhbGxvY19mcmVlKChjaGFyICop
+bGFiZWwpOwo+ICsrCQlyZXR1cm4gLTE7Cj4gKysJfQo+ICsrCWZyZWVfaXRlbShpdGVtLT5uY2kp
+Owo+ICsrCWl0ZW0tPm5jaSA9IGk7Cj4gKwo+ICsgCXJldHVybiAwOwo+ICsgfQo+ICtAQCAtMzU4
+LDcgKzM2Miw3IEBAIHN0YXRpYyBpbnQgcG1lbnVfaXRlbV9nZXRfaW5kZXgoY29uc3Qgc3RydWN0
+IHBtZW51X2l0ZW0gKml0ZW0pCj4gKyAJCQkJcmV0dXJuIGk7Cj4gKwo+ICsgCXBiX2xvZ19mbigi
+bm90IGZvdW5kOiAlcCAlc1xuIiwgaXRlbSwKPiArLQkJKGl0ZW0gPyBpdGVtLT5uY2ktPm5hbWUu
+c3RyIDogIihudWxsKSIpKTsKPiArKwkJKGl0ZW0gPyBpdGVtX25hbWUoaXRlbS0+bmNpKSA6ICIo
+bnVsbCkiKSk7Cj4gKyAJcmV0dXJuIC0xOwo+ICsgfQo+ICsKPiArZGlmZiAtLWdpdCBhL3VpL25j
+dXJzZXMvbmMtbWVudS5oIGIvdWkvbmN1cnNlcy9uYy1tZW51LmgKPiAraW5kZXggZWI1NjhjOC4u
+NTUwYzdlMSAxMDA2NDQKPiArLS0tIGEvdWkvbmN1cnNlcy9uYy1tZW51LmgKPiArKysrIGIvdWkv
+bmN1cnNlcy9uYy1tZW51LmgKPiArQEAgLTEyNiw3ICsxMjYsNyBAQCBzdGF0aWMgaW5saW5lIHN0
+cnVjdCBwbWVudSAqcG1lbnVfZnJvbV9zY3Ioc3RydWN0IG5jX3NjciAqc2NyKQo+ICsKPiArIHN0
+YXRpYyBpbmxpbmUgdm9pZCBwbWVudV9kdW1wX2l0ZW0oY29uc3QgSVRFTSAqaXRlbSkKPiArIHsK
+PiArLQlwYl9kZWJ1ZygiJXAgJXNcbiIsIGl0ZW0sIChpdGVtID8gaXRlbS0+bmFtZS5zdHIgOiAi
+KG51bGwpIikpOwo+ICsrCXBiX2RlYnVnKCIlcCAlc1xuIiwgaXRlbSwgKGl0ZW0gPyBpdGVtX25h
+bWUoaXRlbSkgOiAiKG51bGwpIikpOwo+ICsgfQo+ICsKPiArIHN0YXRpYyBpbmxpbmUgdm9pZCBw
+bWVudV9kdW1wX2l0ZW1zKElURU0gKmNvbnN0ICppdGVtcywgdW5zaWduZWQgaW50IGNvdW50KQo+
+ICtAQCAtMTM1LDcgKzEzNSw3IEBAIHN0YXRpYyBpbmxpbmUgdm9pZCBwbWVudV9kdW1wX2l0ZW1z
+KElURU0gKmNvbnN0ICppdGVtcywgdW5zaWduZWQgaW50IGNvdW50KQo+ICsKPiArIAlmb3IgKGkg
+PSAwOyBpIDwgY291bnQ7IGkrKykKPiArIAkJcGJfZGVidWcoIiV1OiAlcCAlc1xuIiwgaSwgaXRl
+bXNbaV0sCj4gKy0JCQkoaXRlbXNbaV0gPyBpdGVtc1tpXS0+bmFtZS5zdHIgOiAiKG51bGwpIikp
+Owo+ICsrCQkJKGl0ZW1zW2ldID8gaXRlbV9uYW1lKGl0ZW1zW2ldKSA6ICIobnVsbCkiKSk7Cj4g
+KyB9Cj4gKwo+ICsgI2VuZGlmCj4gKy0tCj4gKzIuNDIuMAo+IGRpZmYgLS1naXQgYS9wYWNrYWdl
+L3BldGl0Ym9vdC8wMDAyLXVpLUZpeC1jdXJzZXMtbWVudS1pdGVtLWxhYmVsLWxlYWsucGF0Y2gg
+Yi9wYWNrYWdlL3BldGl0Ym9vdC8wMDAyLXVpLUZpeC1jdXJzZXMtbWVudS1pdGVtLWxhYmVsLWxl
+YWsucGF0Y2gKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAuLjkzMDJi
+MzRjZmUKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvcGFja2FnZS9wZXRpdGJvb3QvMDAwMi11aS1G
+aXgtY3Vyc2VzLW1lbnUtaXRlbS1sYWJlbC1sZWFrLnBhdGNoCj4gQEAgLTAsMCArMSw1MyBAQAo+
+ICtXaGVuIGEgbWVudSBpdGVtIG5hbWUgaXMgdXBkYXRlZCwgdGhlIG9sZCBsYWJlbCBpcyBub3Qg
+ZnJlZWQuCj4gKwo+ICtTaWduZWQtb2ZmLWJ5OiBOaWNob2xhcyBQaWdnaW4gPG5waWdnaW4gYXQg
+Z21haWwuY29tPgo+ICtVcHN0cmVhbTogaHR0cHM6Ly9naXRodWIuY29tL29wZW4tcG93ZXIvcGV0
+aXRib290L2lzc3Vlcy8xMDYKPiArLS0tCj4gKyB1aS9uY3Vyc2VzL25jLW1lbnUuYyB8IDQgKysr
+Kwo+ICsgdWkvbmN1cnNlcy9uYy1tZW51LmggfCAxICsKPiArIDIgZmlsZXMgY2hhbmdlZCwgNSBp
+bnNlcnRpb25zKCspCj4gKwo+ICtkaWZmIC0tZ2l0IGEvdWkvbmN1cnNlcy9uYy1tZW51LmMgYi91
+aS9uY3Vyc2VzL25jLW1lbnUuYwo+ICtpbmRleCBhMTUyNGI1Li43MGYyMjEwIDEwMDY0NAo+ICst
+LS0gYS91aS9uY3Vyc2VzL25jLW1lbnUuYwo+ICsrKysgYi91aS9uY3Vyc2VzL25jLW1lbnUuYwo+
+ICtAQCAtODIsNiArODIsNyBAQCBzdGF0aWMgdm9pZCBwbWVudV9yZXNpemUoc3RydWN0IG5jX3Nj
+ciAqc2NyKQo+ICsgc3RhdGljIGludCBwbWVudV9pdGVtX2Rlc3RydWN0b3Iodm9pZCAqYXJnKQo+
+ICsgewo+ICsgCXN0cnVjdCBwbWVudV9pdGVtICppdGVtID0gYXJnOwo+ICsrCXRhbGxvY19mcmVl
+KChjaGFyICopaXRlbS0+bGFiZWwpOwo+ICsgCWZyZWVfaXRlbShpdGVtLT5uY2kpOwo+ICsgCXJl
+dHVybiAwOwo+ICsgfQo+ICtAQCAtMTQ2LDcgKzE0Nyw5IEBAIGludCBwbWVudV9pdGVtX3VwZGF0
+ZShzdHJ1Y3QgcG1lbnVfaXRlbSAqaXRlbSwgY29uc3QgY2hhciAqbmFtZSkKPiArIAkJdGFsbG9j
+X2ZyZWUoKGNoYXIgKilsYWJlbCk7Cj4gKyAJCXJldHVybiAtMTsKPiArIAl9Cj4gKysJdGFsbG9j
+X2ZyZWUoKGNoYXIgKilpdGVtLT5sYWJlbCk7Cj4gKyAJZnJlZV9pdGVtKGl0ZW0tPm5jaSk7Cj4g
+KysJaXRlbS0+bGFiZWwgPSBsYWJlbDsKPiArIAlpdGVtLT5uY2kgPSBpOwo+ICsKPiArIAlyZXR1
+cm4gMDsKPiArQEAgLTE2OCw2ICsxNzEsNyBAQCBzdHJ1Y3QgcG1lbnVfaXRlbSAqcG1lbnVfaXRl
+bV9jcmVhdGUoc3RydWN0IHBtZW51ICptZW51LCBjb25zdCBjaGFyICpuYW1lKQo+ICsKPiArIAlp
+dGVtLT5pX3NpZyA9IHBiX2l0ZW1fc2lnOwo+ICsgCWl0ZW0tPnBtZW51ID0gbWVudTsKPiArKwlp
+dGVtLT5sYWJlbCA9IGxhYmVsOwo+ICsgCWl0ZW0tPm5jaSA9IG5ld19pdGVtKGxhYmVsLCBOVUxM
+KTsKPiArCj4gKyAJaWYgKCFpdGVtLT5uY2kpIHsKPiArZGlmZiAtLWdpdCBhL3VpL25jdXJzZXMv
+bmMtbWVudS5oIGIvdWkvbmN1cnNlcy9uYy1tZW51LmgKPiAraW5kZXggNTUwYzdlMS4uN2JhNDVi
+ZiAxMDA2NDQKPiArLS0tIGEvdWkvbmN1cnNlcy9uYy1tZW51LmgKPiArKysrIGIvdWkvbmN1cnNl
+cy9uYy1tZW51LmgKPiArQEAgLTQ2LDYgKzQ2LDcgQEAgc3RydWN0IHBtZW51Owo+ICsKPiArIHN0
+cnVjdCBwbWVudV9pdGVtIHsKPiArIAllbnVtIHBiX25jX3NpZyBpX3NpZzsKPiArKwljb25zdCBj
+aGFyICpsYWJlbDsKPiArIAlJVEVNICpuY2k7Cj4gKyAJc3RydWN0IHBtZW51ICpwbWVudTsKPiAr
+IAl2b2lkICpkYXRhOwo+ICstLQo+ICsyLjQyLjAKClJldmlld2VkLWJ5OiBMYXVyZW50IFZpdmll
+ciA8bGF1cmVudEB2aXZpZXIuZXU+CgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qu
+b3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9v
+dAo=
