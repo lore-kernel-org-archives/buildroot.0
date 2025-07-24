@@ -4,62 +4,98 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DAD5BC83F1A
-	for <buildroot@archiver.kernel.org>; Thu, 24 Jul 2025 10:32:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84566C83F26
+	for <buildroot@archiver.kernel.org>; Thu, 24 Jul 2025 12:06:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8D62A41256;
-	Thu, 24 Jul 2025 10:32:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 26906412C4;
+	Thu, 24 Jul 2025 12:06:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uApXie9S2Yci; Thu, 24 Jul 2025 10:32:38 +0000 (UTC)
+ id K_g4EHIduu0C; Thu, 24 Jul 2025 12:06:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C2DEA41257
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4FF67412A2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C2DEA41257;
-	Thu, 24 Jul 2025 10:32:38 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 8B771115
- for <buildroot@buildroot.org>; Thu, 24 Jul 2025 10:32:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4FF67412A2;
+	Thu, 24 Jul 2025 12:06:45 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1A117DA
+ for <buildroot@buildroot.org>; Thu, 24 Jul 2025 12:06:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 722916117B
- for <buildroot@buildroot.org>; Thu, 24 Jul 2025 10:32:37 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id F1730412A2
+ for <buildroot@buildroot.org>; Thu, 24 Jul 2025 12:06:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id G9HYQYmruu0k for <buildroot@buildroot.org>;
- Thu, 24 Jul 2025 10:32:36 +0000 (UTC)
-X-Greylist: delayed 431 seconds by postgrey-1.37 at util1-new.osuosl.org;
- Thu, 24 Jul 2025 10:32:36 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7427D60E74
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7427D60E74
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=202.248.49.38;
- helo=mx.socionext.com; envelope-from=hayashi.kunihiko@socionext.com;
- receiver=<UNKNOWN> 
-Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7427D60E74
- for <buildroot@buildroot.org>; Thu, 24 Jul 2025 10:32:36 +0000 (UTC)
-Received: from unknown (HELO kinkan3-ex.css.socionext.com) ([172.31.9.52])
- by mx.socionext.com with ESMTP; 24 Jul 2025 19:25:22 +0900
-Received: from mail.mfilter.local (mail-arc02.css.socionext.com [10.213.46.40])
- by kinkan3-ex.css.socionext.com (Postfix) with ESMTP id A2FCE2069FF1
- for <buildroot@buildroot.org>; Thu, 24 Jul 2025 19:25:22 +0900 (JST)
-Received: from kinkan3.css.socionext.com ([172.31.9.51]) by m-FILTER with
- ESMTP; Thu, 24 Jul 2025 19:25:22 +0900
-Received: from plum.e01.socionext.com (unknown [10.212.245.39])
- by kinkan3.css.socionext.com (Postfix) with ESMTP id 44BF41C5A;
- Thu, 24 Jul 2025 19:25:22 +0900 (JST)
-From: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PsnBhzrwTzra for <buildroot@buildroot.org>;
+ Thu, 24 Jul 2025 12:06:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::431; helo=mail-wr1-x431.google.com;
+ envelope-from=elmehdi.younes@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E4D754082C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E4D754082C
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E4D754082C
+ for <buildroot@buildroot.org>; Thu, 24 Jul 2025 12:06:42 +0000 (UTC)
+Received: by mail-wr1-x431.google.com with SMTP id
+ ffacd0b85a97d-3a6cdc27438so799224f8f.2
+ for <buildroot@buildroot.org>; Thu, 24 Jul 2025 05:06:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1753358801; x=1753963601;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=cGHXQC+cXVVZrzcsKN9T9OIf96Ny7pMz3E2sx566OpQ=;
+ b=V87ybUNpt57eTCZbUtzBtOA8Dd5t7CKQHGhcuI2O7xplZhk2yYHCBt3GhxjIEsLFtZ
+ BS9gR+qG42cJh4gk87Vta+tUo6GPMryjHNawp8X+T4s68mQL6ZqvJA1kZI5t8avo23J/
+ EoVfGSWCGLMSphp3oSfaE13Z7+ZOcIFlmYERP9wM8WemmpZNpd4Is5LkdK2cA57t1M1v
+ swoiNJXgef1PQsetMrHetvdn7DBnsNYhOrhgO0SVVewbbKymQ9klYIdgZY4c3CFxVzd1
+ NVZnXwhCKEtCej3PGU42m2UEIt+iP6kIQtrW9++5SghSyYfdH/ydraoD15euersa7O/h
+ R+MA==
+X-Gm-Message-State: AOJu0YwXAcjdLyDnSHz8PtzzU4zkOzEYb70XQ5XXPkS7WIx+YbGQA1ob
+ rLBKbB0CK47S9ihtCySQYDp4jhmWl5tWycnDWqXxCdqJPwMI5cc/bAsNugSP3FCDiwxVhShETtJ
+ 0hkS4
+X-Gm-Gg: ASbGnctSfqi+yG9kr4Mm1XThozSfV13Lo6w3fUoKabW6lytMJ/4oUayJqVYwF3JNd9/
+ 1oEBc8ChBLxtcHYux9W8jm8yGWRkxgFIyhyhpN+QJ7mOu5Kac7X/YsuT13hC1ZTXrHqKdC8aiYs
+ CPPUeWbNnIvyPlPN0jzUg1SOUCYqBB80J4KTo4F349Zrz5UwkhmBBwQkLtZiE8EELJ0yCa9HVou
+ aAJJvZ+7Y2P3IVXPYemvf/N3VwILY6HKD8srC8a7XYyC1hZxTJwNSLHoJi7XsQmisXXb0Ep4j30
+ vX8Btg2SSUNcd5l9GVX7e7oc1BuUDw66kaeC7A9t8JGFvLAF0tlrxkZOSk2jC7FAYHGlrZCCutx
+ H81PG8z3w/gswwzxe09enunumxhqMJ0Yy++ZruXrzFN3FrEj5WV04RxpZxyNfBxZD6rTtXLqQxB
+ 9Ij+thJ/01ha154+eVnaSZgyv4y1g=
+X-Google-Smtp-Source: AGHT+IG3yt46d48Uz/80Tkkqpo9i85joCQVdEVXaqCCkdB9JH/KYSBEGlttxQZi/k0UokQJ7NUqy4A==
+X-Received: by 2002:a05:6000:310d:b0:3a5:541c:b40f with SMTP id
+ ffacd0b85a97d-3b768ee0463mr6225000f8f.9.1753358800519; 
+ Thu, 24 Jul 2025 05:06:40 -0700 (PDT)
+Received: from P-NAN-ABRICOT..
+ (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-458705378ffsm17956925e9.1.2025.07.24.05.06.39
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 24 Jul 2025 05:06:40 -0700 (PDT)
 To: buildroot@buildroot.org
-Cc: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Date: Thu, 24 Jul 2025 19:25:14 +0900
-Message-Id: <20250724102514.2188530-1-hayashi.kunihiko@socionext.com>
-X-Mailer: git-send-email 2.34.1
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ El Mehdi YOUNES <elmehdi.younes@smile.fr>
+Date: Thu, 24 Jul 2025 14:06:03 +0200
+Message-ID: <20250724120604.2992836-1-elmehdi.younes@smile.fr>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=socionext.com
-Subject: [Buildroot] [PATCH] package/qemu: add zstd support
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile.fr; s=google; t=1753358801; x=1753963601; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=cGHXQC+cXVVZrzcsKN9T9OIf96Ny7pMz3E2sx566OpQ=;
+ b=XyBChTfa4qihMDNP0vQc3UxbgKyUdgKJ6Q+NwdKLxVfj8how33aVJQmRnSiVgH7JmJ
+ U9SS4gaoW1unmbuFDtdA5f+DJjZ7ejeuUvM1MLoF27/5btwMWK1TigW/SNC/RoEG/9gV
+ q7VwHyeLVkUMYY36b7Fb9aLGqpqCRIN+XUra0=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
+ header.s=google header.b=XyBChTfa
+Subject: [Buildroot] [PATCH 1/2] utils/update-rust: fix MIT hash
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,55 +107,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: El Mehdi YOUNES via buildroot <buildroot@buildroot.org>
+Reply-To: El Mehdi YOUNES <elmehdi.younes@smile.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add optional zstd compression type support for QEMU.
+The LICENSE-MIT file has changed.
+Commit 432aef05 fixed it for rust package but forgot
+the update-rust script.
 
-In order to a file compressed with zstd on host to be applied to
-target QEMU, zstd on both host and target should be enabled.
-
-Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Signed-off-by: El Mehdi YOUNES <elmehdi.younes@smile.fr>
 ---
- package/qemu/qemu.mk | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+Since we added rust 1.86.0 to the 2025.05.x release,
+I think this should be backported too.
+---
+ utils/update-rust | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index fdc8591e546a..a1a4b60855d7 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -271,6 +271,13 @@ else
- QEMU_OPTS += --disable-install-blobs
- endif
+diff --git a/utils/update-rust b/utils/update-rust
+index 0f40f2e2b6..7db3feff9c 100755
+--- a/utils/update-rust
++++ b/utils/update-rust
+@@ -62,7 +62,7 @@ RUST_DIST_URL = "https://static.rust-lang.org/dist"
  
-+ifeq ($(BR2_PACKAGE_ZSTD),y)
-+QEMU_OPTS += --enable-zstd
-+QEMU_DEPENDENCIES += zstd
-+else
-+QEMU_OPTS += --disable-zstd
-+endif
-+
- # Override CPP, as it expects to be able to call it like it'd
- # call the compiler.
- define QEMU_CONFIGURE_CMDS
-@@ -460,6 +467,13 @@ else
- HOST_QEMU_OPTS += --disable-libusb
- endif
+ LICENSES = {
+     "APACHE": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+-    "MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
++    "MIT": "b71bd43a069ca0641a9ecfe585ca7b3c53b5cc1608f8b68321168698e28b5ea1",
+ }
  
-+ifeq ($(BR2_PACKAGE_HOST_ZSTD),y)
-+HOST_QEMU_OPTS += --enable-zstd
-+HOST_QEMU_DEPENDENCIES += host-zstd
-+else
-+HOST_QEMU_OPTS += --disable-zstd
-+endif
-+
- # Override CPP, as it expects to be able to call it like it'd
- # call the compiler.
- define HOST_QEMU_CONFIGURE_CMDS
+ 
 -- 
-2.34.1
+2.43.0
 
 _______________________________________________
 buildroot mailing list
