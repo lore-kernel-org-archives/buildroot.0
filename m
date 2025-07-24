@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D0C0C87FC5
-	for <buildroot@archiver.kernel.org>; Thu, 24 Jul 2025 20:13:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74928C83F26
+	for <buildroot@archiver.kernel.org>; Thu, 24 Jul 2025 20:14:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BF1E66149B;
-	Thu, 24 Jul 2025 20:13:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4224E614BF;
+	Thu, 24 Jul 2025 20:14:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rTUY7ziSN2Ep; Thu, 24 Jul 2025 20:13:57 +0000 (UTC)
+ id f-q0aJ3bCt9d; Thu, 24 Jul 2025 20:14:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 424D06143C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 74E7061490
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 424D06143C;
-	Thu, 24 Jul 2025 20:13:57 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id CBB73115
- for <buildroot@buildroot.org>; Thu, 24 Jul 2025 20:13:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 74E7061490;
+	Thu, 24 Jul 2025 20:14:13 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 55752115
+ for <buildroot@buildroot.org>; Thu, 24 Jul 2025 20:14:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B168B823C0
- for <buildroot@buildroot.org>; Thu, 24 Jul 2025 20:13:55 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 46FA140546
+ for <buildroot@buildroot.org>; Thu, 24 Jul 2025 20:14:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mY1zATCkNIM5 for <buildroot@buildroot.org>;
- Thu, 24 Jul 2025 20:13:54 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF58B81387
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id BF58B81387
- for <buildroot@buildroot.org>; Thu, 24 Jul 2025 20:13:54 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AE58A86ACF; Thu, 24 Jul 2025 20:13:54 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 24 Jul 2025 21:48:49 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b6645d7407dc50ceda855b75ca4b9309e4e1863c
-X-Git-Newrev: 25e87d068c9a796a04c12ac89b7b91c3034fa838
-X-Patchwork-Hint: ignore
-Message-Id: <20250724201354.AE58A86ACF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/arm_foundationv8: bump to Linux
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JX-JkhvfOamL for <buildroot@buildroot.org>;
+ Thu, 24 Jul 2025 20:14:11 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org AE1AF40187
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AE1AF40187
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id AE1AF40187
+ for <buildroot@buildroot.org>; Thu, 24 Jul 2025 20:14:11 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id 5ECC25FFB7;
+ Thu, 24 Jul 2025 22:14:06 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Thu, 24 Jul 2025 22:14:06 +0200
+MIME-Version: 1.0
+Date: Thu, 24 Jul 2025 22:14:06 +0200
+To: =?UTF-8?Q?Vincent_Stehl=C3=A9?= <vincent.stehle@arm.com>
+Cc: buildroot@buildroot.org, Masahiro Yamada <yamada.masahiro@socionext.com>
+In-Reply-To: <20250724140124.1276139-1-vincent.stehle@arm.com>
+References: <20250724140124.1276139-1-vincent.stehle@arm.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <556d3de331e840e5d9143137157e3b05@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1753388048;
+ bh=3yCMaI5wDsiLZzstmg4JVTGOi7IqMs7rZxW5NdpPAZI=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=qnmzpsUWI8glQHzOzNGI9APGMxadeAtEcjWfBaUcndXWzX/E+9Qp8sT1TCc4PO53t
+ l/W4VN2j/86CnrnudboNLxU5JqOpzj8uviaf1M7OTk3NEDcbcarzSDY/3QVmPl8tLW
+ 5NbIGMh32vmWQlbUZp7SU4Xruk6kJp6gke3qOenUVh2BTlWMx2QNnY2Q9FdbhuVP0B
+ CCUkoXLcJx7XnFaS2d0ujcCeca7cbIzzHAft7sVlBVkuDjbhS6hm6Kz1l4b6iJVAvK
+ 9JNnrRMMbctLP4u8BrkD8IA/zv/3JVxdAzFireB+/ZU9KcCINq+hci9F9FNUGPCXj7
+ o/KvDP7seztzQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=qnmzpsUW
+Subject: Re: [Buildroot] [PATCH] configs/arm_foundationv8: bump to Linux
  6.15 and model 11.29
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -60,93 +83,18 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4218169703422297151=="
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4218169703422297151==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=25e87d068c9a796a04c12ac89b7b91c3034fa838
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-- Bump Linux kernel to v6.15.7 and update the hash file.
-- Bump the model in the readme to version 11.29 build 27.
-
-While at it, adjust the model's path in the readme to take the host
-architecture into account.
-
-Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
-Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- board/arm/foundation-v8/patches/linux/linux.hash |  2 +-
- board/arm/foundation-v8/readme.txt               | 11 ++++++++---
- configs/arm_foundationv8_defconfig               |  4 ++--
- 3 files changed, 11 insertions(+), 6 deletions(-)
-
-diff --git a/board/arm/foundation-v8/patches/linux/linux.hash b/board/arm/foundation-v8/patches/linux/linux.hash
-index 47cbb0181a..e58afb7bc7 100644
---- a/board/arm/foundation-v8/patches/linux/linux.hash
-+++ b/board/arm/foundation-v8/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
- # From https://cdn.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  5ff5bd84ea0e22c53437302db5d394d0a92d8b8b1a88ce20d1098298e9f7630a  linux-6.12.15.tar.xz
-+sha256  3507dd105b0a0e1101bd43d294472fccf853429a259a5fa7c67467bba318f8e9  linux-6.15.7.tar.xz
-diff --git a/board/arm/foundation-v8/readme.txt b/board/arm/foundation-v8/readme.txt
-index c640491215..c281faf9d6 100644
---- a/board/arm/foundation-v8/readme.txt
-+++ b/board/arm/foundation-v8/readme.txt
-@@ -22,12 +22,17 @@ Running on the simulator
- Download the AArch64 software simulator from one of the following sources,
- corresponding to your host computer:
- 
--- https://developer.arm.com/-/cdn-downloads/permalink/FVPs-Architecture/FM-11.27/Foundation_Platform_11.27_19_Linux64.tgz
--- https://developer.arm.com/-/cdn-downloads/permalink/FVPs-Architecture/FM-11.27/Foundation_Platform_11.27_19_Linux64_armv8l.tgz
-+- https://developer.arm.com/-/cdn-downloads/permalink/FVPs-Architecture/FM-11.29/Foundation_Platform_11.29_27_Linux64.tgz
-+- https://developer.arm.com/-/cdn-downloads/permalink/FVPs-Architecture/FM-11.29/Foundation_Platform_11.29_27_Linux64_armv8l.tgz
-+
-+The model will be located under one of the corresponding folders:
-+
-+- Foundation_Platformpkg/models/Linux64_GCC-9.3
-+- Foundation_Platformpkg/models/Linux64_armv8l_GCC-9.3
- 
- Finally, boot your system with:
- 
-- ${LOCATION_OF_FOUNDATIONV8_SIMULATOR}/models/Linux64_GCC-9.3/Foundation_Platform \
-+ Foundation_Platform \
-     --arm-v8.0 \
-     --image output/images/linux-system.axf \
-     --block-device output/images/rootfs.ext2 \
-diff --git a/configs/arm_foundationv8_defconfig b/configs/arm_foundationv8_defconfig
-index 93613f5a34..921fbf62c5 100644
---- a/configs/arm_foundationv8_defconfig
-+++ b/configs/arm_foundationv8_defconfig
-@@ -1,11 +1,11 @@
- BR2_aarch64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_15=y
- BR2_GLOBAL_PATCH_DIR="board/arm/foundation-v8/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.15"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.15.7"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="arm/foundation-v8-gicv3-psci"
-
---===============4218169703422297151==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4218169703422297151==--
+T24gMjQvMDcvMjAyNSAxNjowMSwgVmluY2VudCBTdGVobMOpIHdyb3RlOgo+IC0gQnVtcCBMaW51
+eCBrZXJuZWwgdG8gdjYuMTUuNyBhbmQgdXBkYXRlIHRoZSBoYXNoIGZpbGUuCj4gLSBCdW1wIHRo
+ZSBtb2RlbCBpbiB0aGUgcmVhZG1lIHRvIHZlcnNpb24gMTEuMjkgYnVpbGQgMjcuCj4gCj4gV2hp
+bGUgYXQgaXQsIGFkanVzdCB0aGUgbW9kZWwncyBwYXRoIGluIHRoZSByZWFkbWUgdG8gdGFrZSB0
+aGUgaG9zdAo+IGFyY2hpdGVjdHVyZSBpbnRvIGFjY291bnQuCj4gCj4gU2lnbmVkLW9mZi1ieTog
+VmluY2VudCBTdGVobMOpIDx2aW5jZW50LnN0ZWhsZUBhcm0uY29tPgo+IENjOiBNYXNhaGlybyBZ
+YW1hZGEgPHlhbWFkYS5tYXNhaGlyb0Bzb2Npb25leHQuY29tPgoKQXBwbGllZCB0byBtYXN0ZXIs
+IHRoYW5rcy4KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
+YnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xp
+c3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
