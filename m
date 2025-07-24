@@ -4,57 +4,104 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD959C83F26
-	for <buildroot@archiver.kernel.org>; Thu, 24 Jul 2025 14:01:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5ACEC83F1A
+	for <buildroot@archiver.kernel.org>; Thu, 24 Jul 2025 14:44:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6AFF1608DF;
-	Thu, 24 Jul 2025 14:01:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 625F1613D3;
+	Thu, 24 Jul 2025 14:44:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MfYZlXWgdGXt; Thu, 24 Jul 2025 14:01:33 +0000 (UTC)
+ id wUI3RIQuTNMJ; Thu, 24 Jul 2025 14:44:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8D2746110A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 735A9613E6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8D2746110A;
-	Thu, 24 Jul 2025 14:01:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 735A9613E6;
+	Thu, 24 Jul 2025 14:44:05 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1482DDA
- for <buildroot@buildroot.org>; Thu, 24 Jul 2025 14:01:32 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 696FD115
+ for <buildroot@buildroot.org>; Thu, 24 Jul 2025 14:44:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 068E1613E2
- for <buildroot@buildroot.org>; Thu, 24 Jul 2025 14:01:32 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 50034613C0
+ for <buildroot@buildroot.org>; Thu, 24 Jul 2025 14:44:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CcfMsSv0-yCF for <buildroot@buildroot.org>;
- Thu, 24 Jul 2025 14:01:31 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.140.110.172;
- helo=foss.arm.com; envelope-from=vincent.stehle@arm.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E1197608DF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E1197608DF
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
- by smtp3.osuosl.org (Postfix) with ESMTP id E1197608DF
- for <buildroot@buildroot.org>; Thu, 24 Jul 2025 14:01:30 +0000 (UTC)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
- by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CD4E51A00;
- Thu, 24 Jul 2025 07:01:22 -0700 (PDT)
-Received: from localhost.localdomain (MacBookPro.nice.arm.com [10.34.124.20])
- by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id
- 900EA3F66E; Thu, 24 Jul 2025 07:01:28 -0700 (PDT)
-From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@arm.com>
+ id abI7cYzFrFe2 for <buildroot@buildroot.org>;
+ Thu, 24 Jul 2025 14:44:03 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2001:19f0:5800:8dea:5400:ff:fe25:676e; helo=arcturus.nroach44.id.au;
+ envelope-from=nroach44@nroach44.id.au; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4EE8E613D3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4EE8E613D3
+Received: from arcturus.nroach44.id.au (arcturus.nroach44.id.au
+ [IPv6:2001:19f0:5800:8dea:5400:ff:fe25:676e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4EE8E613D3
+ for <buildroot@buildroot.org>; Thu, 24 Jul 2025 14:44:01 +0000 (UTC)
+Received: from arcturus.nroach44.id.au (localhost [127.0.0.1])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+ (No client certificate requested)
+ by arcturus.nroach44.id.au (Postfix) with ESMTPS id 7540A2A98B
+ for <buildroot@buildroot.org>; Thu, 24 Jul 2025 22:43:58 +0800 (AWST)
+Received: by arcturus.nroach44.id.au (Postfix, from userid 5555)
+ id 4D3502A98E; Thu, 24 Jul 2025 22:43:58 +0800 (AWST)
+Received: from luna.haven (e1000e.luna.haven [10.1.10.41])
+ by arcturus.nroach44.id.au (Postfix) with ESMTPA id 2D0F425527;
+ Thu, 24 Jul 2025 22:43:54 +0800 (AWST)
 To: buildroot@buildroot.org
-Cc: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@arm.com>,
- Masahiro Yamada <yamada.masahiro@socionext.com>
-Date: Thu, 24 Jul 2025 16:01:24 +0200
-Message-ID: <20250724140124.1276139-1-vincent.stehle@arm.com>
-X-Mailer: git-send-email 2.47.2
+Cc: Nathaniel Roach <nroach44@nroach44.id.au>,
+ Laurent Vivier <laurent@vivier.eu>
+Date: Thu, 24 Jul 2025 22:43:42 +0800
+Message-Id: <20250724144342.2090731-1-nroach44@nroach44.id.au>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=nroach44.id.au; 
+ s=dYX2HNEqNNRL; t=1753368238;
+ bh=pD6cAFDls6EsNuXr9lvgjXek/HLaLq4Vz8GAH8pnYNs=;
+ h=From:To:Cc:Subject:Date:From;
+ b=bQMF4LnxmeUhiHcBYDB91leVoJz6bZYu4NizMqk9tSSw/zH6UjFv6D/KrRKe6jyYf
+ UT5tiOR5KGJF86vL3+kPtAqj7VH+KfjWplFEVSqPZfYWRx0ugOrKGuM50fHsYEaRm3
+ Zn6CH0UgO3/bukHhn82goRJVsh6HSbLl/YLsMmVdNiYyDfOD9pXu8ffk8KQgIobyDt
+ 0/BdFxw96Dh6uQLoUKBnkGEI2k6Ou81m/NeH2RyBnINnIh0L9VaF6RzkADsg9I+BHX
+ RhZR/pum+S3CvbE+ml4qwiZRfoy8nKhYflgmYJeZii/pRarydt2/5FMLYaXYdkTdCM
+ GPDNdEl5sEN3Q==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=nroach44.id.au; 
+ s=dYX2HNEqNNRL; t=1753368238;
+ bh=pD6cAFDls6EsNuXr9lvgjXek/HLaLq4Vz8GAH8pnYNs=;
+ h=From:To:Cc:Subject:Date:From;
+ b=bQMF4LnxmeUhiHcBYDB91leVoJz6bZYu4NizMqk9tSSw/zH6UjFv6D/KrRKe6jyYf
+ UT5tiOR5KGJF86vL3+kPtAqj7VH+KfjWplFEVSqPZfYWRx0ugOrKGuM50fHsYEaRm3
+ Zn6CH0UgO3/bukHhn82goRJVsh6HSbLl/YLsMmVdNiYyDfOD9pXu8ffk8KQgIobyDt
+ 0/BdFxw96Dh6uQLoUKBnkGEI2k6Ou81m/NeH2RyBnINnIh0L9VaF6RzkADsg9I+BHX
+ RhZR/pum+S3CvbE+ml4qwiZRfoy8nKhYflgmYJeZii/pRarydt2/5FMLYaXYdkTdCM
+ GPDNdEl5sEN3Q==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=nroach44.id.au; 
+ s=dYX2HNEqNNRL; t=1753368234;
+ bh=pD6cAFDls6EsNuXr9lvgjXek/HLaLq4Vz8GAH8pnYNs=;
+ h=From:To:Cc:Subject:Date:From;
+ b=IzD+83Er2An/uVSUnMy89rWxwOwZucoIwsDmBPgTbL2VCp6dvhyMrZr4Q9JwNv9vK
+ rqllQHG1LENKf8ZoiCo+FI2mp43I1jdqUPrubEyaTxZZnVueP2COA5bagaYcU8HsrI
+ IXCeHJ/agSYnQDxTZT7ygdFgMxqu72CIXVMO0RaWII6YJhuUGMLdUVAxszVjfu2iDO
+ gDybCIH+P/9MtgPGnKrhnmx3IdQUsNWlRWBPFdi9HbUL4pSN1zzNepbl+plqn4FEtp
+ Fj51RzatP2vT8vpLRDRN83Ul8F2fOZkp4CyN9CQQztT43JNeMuPhhFx4Ji7n33Hb+b
+ KzIayGBEtHCNg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=arm.com
-Subject: [Buildroot] [PATCH] configs/arm_foundationv8: bump to Linux 6.15
- and model 11.29
+ dmarc=pass (p=quarantine dis=none)
+ header.from=nroach44.id.au
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key, unprotected) header.d=nroach44.id.au
+ header.i=@nroach44.id.au header.a=rsa-sha256 header.s=dYX2HNEqNNRL
+ header.b=bQMF4Lnx; 
+ dkim=pass (2048-bit key) header.d=nroach44.id.au header.i=@nroach44.id.au
+ header.a=rsa-sha256 header.s=dYX2HNEqNNRL header.b=bQMF4Lnx; 
+ dkim=pass (2048-bit key) header.d=nroach44.id.au header.i=@nroach44.id.au
+ header.a=rsa-sha256 header.s=dYX2HNEqNNRL header.b=IzD+83Er
+Subject: [Buildroot] [PATCH 1/1] package/petitboot: add patches to fix build
+ errors with "opaque" ncurses
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,67 +113,175 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Nathaniel Roach via buildroot <buildroot@buildroot.org>
+Reply-To: Nathaniel Roach <nroach44@nroach44.id.au>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-LSBCdW1wIExpbnV4IGtlcm5lbCB0byB2Ni4xNS43IGFuZCB1cGRhdGUgdGhlIGhhc2ggZmlsZS4K
-LSBCdW1wIHRoZSBtb2RlbCBpbiB0aGUgcmVhZG1lIHRvIHZlcnNpb24gMTEuMjkgYnVpbGQgMjcu
-CgpXaGlsZSBhdCBpdCwgYWRqdXN0IHRoZSBtb2RlbCdzIHBhdGggaW4gdGhlIHJlYWRtZSB0byB0
-YWtlIHRoZSBob3N0CmFyY2hpdGVjdHVyZSBpbnRvIGFjY291bnQuCgpTaWduZWQtb2ZmLWJ5OiBW
-aW5jZW50IFN0ZWhsw6kgPHZpbmNlbnQuc3RlaGxlQGFybS5jb20+CkNjOiBNYXNhaGlybyBZYW1h
-ZGEgPHlhbWFkYS5tYXNhaGlyb0Bzb2Npb25leHQuY29tPgotLS0KIGJvYXJkL2FybS9mb3VuZGF0
-aW9uLXY4L3BhdGNoZXMvbGludXgvbGludXguaGFzaCB8ICAyICstCiBib2FyZC9hcm0vZm91bmRh
-dGlvbi12OC9yZWFkbWUudHh0ICAgICAgICAgICAgICAgfCAxMSArKysrKysrKy0tLQogY29uZmln
-cy9hcm1fZm91bmRhdGlvbnY4X2RlZmNvbmZpZyAgICAgICAgICAgICAgIHwgIDQgKystLQogMyBm
-aWxlcyBjaGFuZ2VkLCAxMSBpbnNlcnRpb25zKCspLCA2IGRlbGV0aW9ucygtKQoKZGlmZiAtLWdp
-dCBhL2JvYXJkL2FybS9mb3VuZGF0aW9uLXY4L3BhdGNoZXMvbGludXgvbGludXguaGFzaCBiL2Jv
-YXJkL2FybS9mb3VuZGF0aW9uLXY4L3BhdGNoZXMvbGludXgvbGludXguaGFzaAppbmRleCA0N2Ni
-YjAxODFhLi5lNThhZmI3YmM3IDEwMDY0NAotLS0gYS9ib2FyZC9hcm0vZm91bmRhdGlvbi12OC9w
-YXRjaGVzL2xpbnV4L2xpbnV4Lmhhc2gKKysrIGIvYm9hcmQvYXJtL2ZvdW5kYXRpb24tdjgvcGF0
-Y2hlcy9saW51eC9saW51eC5oYXNoCkBAIC0xLDIgKzEsMiBAQAogIyBGcm9tIGh0dHBzOi8vY2Ru
-Lmtlcm5lbC5vcmcvcHViL2xpbnV4L2tlcm5lbC92Ni54L3NoYTI1NnN1bXMuYXNjCi1zaGEyNTYg
-IDVmZjViZDg0ZWEwZTIyYzUzNDM3MzAyZGI1ZDM5NGQwYTkyZDhiOGIxYTg4Y2UyMGQxMDk4Mjk4
-ZTlmNzYzMGEgIGxpbnV4LTYuMTIuMTUudGFyLnh6CitzaGEyNTYgIDM1MDdkZDEwNWIwYTBlMTEw
-MWJkNDNkMjk0NDcyZmNjZjg1MzQyOWEyNTlhNWZhN2M2NzQ2N2JiYTMxOGY4ZTkgIGxpbnV4LTYu
-MTUuNy50YXIueHoKZGlmZiAtLWdpdCBhL2JvYXJkL2FybS9mb3VuZGF0aW9uLXY4L3JlYWRtZS50
-eHQgYi9ib2FyZC9hcm0vZm91bmRhdGlvbi12OC9yZWFkbWUudHh0CmluZGV4IGM2NDA0OTEyMTUu
-LmMyODFmYWY5ZDYgMTAwNjQ0Ci0tLSBhL2JvYXJkL2FybS9mb3VuZGF0aW9uLXY4L3JlYWRtZS50
-eHQKKysrIGIvYm9hcmQvYXJtL2ZvdW5kYXRpb24tdjgvcmVhZG1lLnR4dApAQCAtMjIsMTIgKzIy
-LDE3IEBAIFJ1bm5pbmcgb24gdGhlIHNpbXVsYXRvcgogRG93bmxvYWQgdGhlIEFBcmNoNjQgc29m
-dHdhcmUgc2ltdWxhdG9yIGZyb20gb25lIG9mIHRoZSBmb2xsb3dpbmcgc291cmNlcywKIGNvcnJl
-c3BvbmRpbmcgdG8geW91ciBob3N0IGNvbXB1dGVyOgogCi0tIGh0dHBzOi8vZGV2ZWxvcGVyLmFy
-bS5jb20vLS9jZG4tZG93bmxvYWRzL3Blcm1hbGluay9GVlBzLUFyY2hpdGVjdHVyZS9GTS0xMS4y
-Ny9Gb3VuZGF0aW9uX1BsYXRmb3JtXzExLjI3XzE5X0xpbnV4NjQudGd6Ci0tIGh0dHBzOi8vZGV2
-ZWxvcGVyLmFybS5jb20vLS9jZG4tZG93bmxvYWRzL3Blcm1hbGluay9GVlBzLUFyY2hpdGVjdHVy
-ZS9GTS0xMS4yNy9Gb3VuZGF0aW9uX1BsYXRmb3JtXzExLjI3XzE5X0xpbnV4NjRfYXJtdjhsLnRn
-egorLSBodHRwczovL2RldmVsb3Blci5hcm0uY29tLy0vY2RuLWRvd25sb2Fkcy9wZXJtYWxpbmsv
-RlZQcy1BcmNoaXRlY3R1cmUvRk0tMTEuMjkvRm91bmRhdGlvbl9QbGF0Zm9ybV8xMS4yOV8yN19M
-aW51eDY0LnRnegorLSBodHRwczovL2RldmVsb3Blci5hcm0uY29tLy0vY2RuLWRvd25sb2Fkcy9w
-ZXJtYWxpbmsvRlZQcy1BcmNoaXRlY3R1cmUvRk0tMTEuMjkvRm91bmRhdGlvbl9QbGF0Zm9ybV8x
-MS4yOV8yN19MaW51eDY0X2FybXY4bC50Z3oKKworVGhlIG1vZGVsIHdpbGwgYmUgbG9jYXRlZCB1
-bmRlciBvbmUgb2YgdGhlIGNvcnJlc3BvbmRpbmcgZm9sZGVyczoKKworLSBGb3VuZGF0aW9uX1Bs
-YXRmb3JtcGtnL21vZGVscy9MaW51eDY0X0dDQy05LjMKKy0gRm91bmRhdGlvbl9QbGF0Zm9ybXBr
-Zy9tb2RlbHMvTGludXg2NF9hcm12OGxfR0NDLTkuMwogCiBGaW5hbGx5LCBib290IHlvdXIgc3lz
-dGVtIHdpdGg6CiAKLSAke0xPQ0FUSU9OX09GX0ZPVU5EQVRJT05WOF9TSU1VTEFUT1J9L21vZGVs
-cy9MaW51eDY0X0dDQy05LjMvRm91bmRhdGlvbl9QbGF0Zm9ybSBcCisgRm91bmRhdGlvbl9QbGF0
-Zm9ybSBcCiAgICAgLS1hcm0tdjguMCBcCiAgICAgLS1pbWFnZSBvdXRwdXQvaW1hZ2VzL2xpbnV4
-LXN5c3RlbS5heGYgXAogICAgIC0tYmxvY2stZGV2aWNlIG91dHB1dC9pbWFnZXMvcm9vdGZzLmV4
-dDIgXApkaWZmIC0tZ2l0IGEvY29uZmlncy9hcm1fZm91bmRhdGlvbnY4X2RlZmNvbmZpZyBiL2Nv
-bmZpZ3MvYXJtX2ZvdW5kYXRpb252OF9kZWZjb25maWcKaW5kZXggOTM2MTNmNWEzNC4uOTIxZmJm
-NjJjNSAxMDA2NDQKLS0tIGEvY29uZmlncy9hcm1fZm91bmRhdGlvbnY4X2RlZmNvbmZpZworKysg
-Yi9jb25maWdzL2FybV9mb3VuZGF0aW9udjhfZGVmY29uZmlnCkBAIC0xLDExICsxLDExIEBACiBC
-UjJfYWFyY2g2ND15Ci1CUjJfUEFDS0FHRV9IT1NUX0xJTlVYX0hFQURFUlNfQ1VTVE9NXzZfMTI9
-eQorQlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFERVJTX0NVU1RPTV82XzE1PXkKIEJSMl9HTE9C
-QUxfUEFUQ0hfRElSPSJib2FyZC9hcm0vZm91bmRhdGlvbi12OC9wYXRjaGVzIgogQlIyX0RPV05M
-T0FEX0ZPUkNFX0NIRUNLX0hBU0hFUz15CiBCUjJfVEFSR0VUX0dFTkVSSUNfR0VUVFlfUE9SVD0i
-dHR5QU1BMCIKIEJSMl9MSU5VWF9LRVJORUw9eQogQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVS
-U0lPTj15Ci1CUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSI2LjEyLjE1Igor
-QlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTl9WQUxVRT0iNi4xNS43IgogQlIyX0xJTlVY
-X0tFUk5FTF9VU0VfQVJDSF9ERUZBVUxUX0NPTkZJRz15CiBCUjJfTElOVVhfS0VSTkVMX0RUU19T
-VVBQT1JUPXkKIEJSMl9MSU5VWF9LRVJORUxfSU5UUkVFX0RUU19OQU1FPSJhcm0vZm91bmRhdGlv
-bi12OC1naWN2My1wc2NpIgotLSAKMi40Ny4yCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWls
-ZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1
-aWxkcm9vdAo=
+ncurses from 6.4.20231021 enables "NCUSES_OPAQUE_MENU", which hides
+some parts of the code away from the application. This causes
+petitboot to fail building in a few spots where it tries to directly
+access the name of the menu item.
+
+These two patches were submitted to the petitboot mailing list by
+Nicholas Piggin [1] resolve this issue using accessors, or by making a new item.
+
+This has been raised upstream but not yet applied [2].
+
+[1]: https://lists.ozlabs.org/pipermail/petitboot/2024-February/thread.html#1545
+[2]: https://github.com/open-power/petitboot/issues/106
+
+Signed-off-by: Nathaniel Roach <nroach44@nroach44.id.au>
+Fixes: https://autobuild.buildroot.org/results/bf1/bf173e1e0f8ad3f40534aaa358dc40993cd14ac4/build-end.log
+
+---
+Backport to 2025.05.x
+
+Signed-off-by: Nathaniel Roach <nroach44@nroach44.id.au>
+---
+ ...pile-with-curses-opaque-menu-headers.patch | 66 +++++++++++++++++++
+ ...2-ui-Fix-curses-menu-item-label-leak.patch | 53 +++++++++++++++
+ 2 files changed, 119 insertions(+)
+ create mode 100644 package/petitboot/0001-ui-Fix-compile-with-curses-opaque-menu-headers.patch
+ create mode 100644 package/petitboot/0002-ui-Fix-curses-menu-item-label-leak.patch
+
+diff --git a/package/petitboot/0001-ui-Fix-compile-with-curses-opaque-menu-headers.patch b/package/petitboot/0001-ui-Fix-compile-with-curses-opaque-menu-headers.patch
+new file mode 100644
+index 0000000000..d68e904b8b
+--- /dev/null
++++ b/package/petitboot/0001-ui-Fix-compile-with-curses-opaque-menu-headers.patch
+@@ -0,0 +1,66 @@
++Recent Debian ncurses is built with NCURSES_OPAQUE_MENU, which means
++the menu item type can't be poked directly. Fix with accessors.
++
++One wrinkle is the item name can't be modified, new_item has to be used.
++
++Signed-off-by: Nicholas Piggin <npiggin at gmail.com>
++Upstream: https://github.com/open-power/petitboot/issues/106
++---
++ ui/ncurses/nc-menu.c | 12 ++++++++----
++ ui/ncurses/nc-menu.h |  4 ++--
++ 2 files changed, 10 insertions(+), 6 deletions(-)
++
++diff --git a/ui/ncurses/nc-menu.c b/ui/ncurses/nc-menu.c
++index a90a02e..a1524b5 100644
++--- a/ui/ncurses/nc-menu.c
+++++ b/ui/ncurses/nc-menu.c
++@@ -141,9 +141,13 @@ int pmenu_item_update(struct pmenu_item *item, const char *name)
++ 	if (!label)
++ 		return -1;
++ 
++-	i = item->nci;
++-	i->name.str = label;
++-	i->name.length = strncols(label);
+++	i = new_item(label, NULL);
+++	if (!i) {
+++		talloc_free((char *)label);
+++		return -1;
+++	}
+++	free_item(item->nci);
+++	item->nci = i;
++ 
++ 	return 0;
++ }
++@@ -358,7 +362,7 @@ static int pmenu_item_get_index(const struct pmenu_item *item)
++ 				return i;
++ 
++ 	pb_log_fn("not found: %p %s\n", item,
++-		(item ? item->nci->name.str : "(null)"));
+++		(item ? item_name(item->nci) : "(null)"));
++ 	return -1;
++ }
++ 
++diff --git a/ui/ncurses/nc-menu.h b/ui/ncurses/nc-menu.h
++index eb568c8..550c7e1 100644
++--- a/ui/ncurses/nc-menu.h
+++++ b/ui/ncurses/nc-menu.h
++@@ -126,7 +126,7 @@ static inline struct pmenu *pmenu_from_scr(struct nc_scr *scr)
++ 
++ static inline void pmenu_dump_item(const ITEM *item)
++ {
++-	pb_debug("%p %s\n", item, (item ? item->name.str : "(null)"));
+++	pb_debug("%p %s\n", item, (item ? item_name(item) : "(null)"));
++ }
++ 
++ static inline void pmenu_dump_items(ITEM *const *items, unsigned int count)
++@@ -135,7 +135,7 @@ static inline void pmenu_dump_items(ITEM *const *items, unsigned int count)
++ 
++ 	for (i = 0; i < count; i++)
++ 		pb_debug("%u: %p %s\n", i, items[i],
++-			(items[i] ? items[i]->name.str : "(null)"));
+++			(items[i] ? item_name(items[i]) : "(null)"));
++ }
++ 
++ #endif
++-- 
++2.42.0
+diff --git a/package/petitboot/0002-ui-Fix-curses-menu-item-label-leak.patch b/package/petitboot/0002-ui-Fix-curses-menu-item-label-leak.patch
+new file mode 100644
+index 0000000000..9302b34cfe
+--- /dev/null
++++ b/package/petitboot/0002-ui-Fix-curses-menu-item-label-leak.patch
+@@ -0,0 +1,53 @@
++When a menu item name is updated, the old label is not freed.
++
++Signed-off-by: Nicholas Piggin <npiggin at gmail.com>
++Upstream: https://github.com/open-power/petitboot/issues/106
++---
++ ui/ncurses/nc-menu.c | 4 ++++
++ ui/ncurses/nc-menu.h | 1 +
++ 2 files changed, 5 insertions(+)
++
++diff --git a/ui/ncurses/nc-menu.c b/ui/ncurses/nc-menu.c
++index a1524b5..70f2210 100644
++--- a/ui/ncurses/nc-menu.c
+++++ b/ui/ncurses/nc-menu.c
++@@ -82,6 +82,7 @@ static void pmenu_resize(struct nc_scr *scr)
++ static int pmenu_item_destructor(void *arg)
++ {
++ 	struct pmenu_item *item = arg;
+++	talloc_free((char *)item->label);
++ 	free_item(item->nci);
++ 	return 0;
++ }
++@@ -146,7 +147,9 @@ int pmenu_item_update(struct pmenu_item *item, const char *name)
++ 		talloc_free((char *)label);
++ 		return -1;
++ 	}
+++	talloc_free((char *)item->label);
++ 	free_item(item->nci);
+++	item->label = label;
++ 	item->nci = i;
++ 
++ 	return 0;
++@@ -168,6 +171,7 @@ struct pmenu_item *pmenu_item_create(struct pmenu *menu, const char *name)
++ 
++ 	item->i_sig = pb_item_sig;
++ 	item->pmenu = menu;
+++	item->label = label;
++ 	item->nci = new_item(label, NULL);
++ 
++ 	if (!item->nci) {
++diff --git a/ui/ncurses/nc-menu.h b/ui/ncurses/nc-menu.h
++index 550c7e1..7ba45bf 100644
++--- a/ui/ncurses/nc-menu.h
+++++ b/ui/ncurses/nc-menu.h
++@@ -46,6 +46,7 @@ struct pmenu;
++ 
++ struct pmenu_item {
++ 	enum pb_nc_sig i_sig;
+++	const char *label;
++ 	ITEM *nci;
++ 	struct pmenu *pmenu;
++ 	void *data;
++-- 
++2.42.0
+-- 
+2.39.5
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
