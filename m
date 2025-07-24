@@ -1,51 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 544FEC87FC5
-	for <buildroot@archiver.kernel.org>; Thu, 24 Jul 2025 19:48:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28EADC87FC5
+	for <buildroot@archiver.kernel.org>; Thu, 24 Jul 2025 19:48:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0ECA060C09;
-	Thu, 24 Jul 2025 19:48:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D0CC641B19;
+	Thu, 24 Jul 2025 19:48:25 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XSmcTfEwEQxv; Thu, 24 Jul 2025 19:48:25 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D476F415C0
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id D476F415C0;
+	Thu, 24 Jul 2025 19:48:24 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id D1347B83
+ for <buildroot@buildroot.org>; Thu, 24 Jul 2025 19:48:22 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id C2F7860767
+ for <buildroot@buildroot.org>; Thu, 24 Jul 2025 19:48:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q59Qs-wWwImp; Thu, 24 Jul 2025 19:47:59 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D24960659
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1D24960659;
-	Thu, 24 Jul 2025 19:47:59 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id F2C4B115
- for <buildroot@buildroot.org>; Thu, 24 Jul 2025 19:47:57 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D883881E29
- for <buildroot@buildroot.org>; Thu, 24 Jul 2025 19:47:57 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id isaaidjpBvDY for <buildroot@buildroot.org>;
- Thu, 24 Jul 2025 19:47:57 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF08F82382
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id EF08F82382
- for <buildroot@buildroot.org>; Thu, 24 Jul 2025 19:47:56 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DF4D886AC9; Thu, 24 Jul 2025 19:47:56 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 24 Jul 2025 21:31:23 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 30ea8ea9aed673e3be1bcf0be80d5f7a0e8b4438
-X-Git-Newrev: b6645d7407dc50ceda855b75ca4b9309e4e1863c
-X-Patchwork-Hint: ignore
-Message-Id: <20250724194756.DF4D886AC9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/freescale_imx91frdm: new defconfig
+ id XovgKw4poPgm for <buildroot@buildroot.org>;
+ Thu, 24 Jul 2025 19:48:22 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0D286606DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0D286606DE
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0D286606DE
+ for <buildroot@buildroot.org>; Thu, 24 Jul 2025 19:48:21 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id B42A713F880;
+ Thu, 24 Jul 2025 21:48:17 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Thu, 24 Jul 2025 21:48:17 +0200
+MIME-Version: 1.0
+Date: Thu, 24 Jul 2025 21:48:17 +0200
+To: Juan Pablo Montero Castro <juanpablo.monterocastro@nxp.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250722165119.1789576-1-juanpablo.monterocastro@nxp.com>
+References: <20250722165119.1789576-1-juanpablo.monterocastro@nxp.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <73140e18d972cb9cf4f284e12b326b9b@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1753386498;
+ bh=SEESF4smacfDOQrOAcCqLdFpU7eAEfEqwCac/iNecf4=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=j5dnNvqlZc+oY89jcJXlKmT1wfxhNzFWDRq1Y0wyxWCe56A3wjrTByrDzYCVDKlW+
+ l8Uc2bfrEJfPLGSHLkSP0yy39LoDLklRB5GQc0miy6uISdiN0zwxo6h4uXCdvK4nJc
+ 0l33HNrjsQLeaKjBmEmg++7+GcRX49fxuLvS2wL3owlCecCUSj16lg99OCwh/SMuWA
+ 2KNmeJnVCLixmCAjaetnSimfEvCqhH/bwyUx+2G7oexlGnJxMDomilEHzS99yPrSFW
+ A4Nc+RFsHrGOwYzWywTvLcThw5X53apfaRiD/L13+7eyMqn+AUXVvHSGjVWOsMnB38
+ 4WA4fvn14MxLA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=j5dnNvql
+Subject: Re: [Buildroot] [PATCH 1/1] configs/freescale_imx91frdm: new
+ defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,201 +83,32 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b6645d7407dc50ceda855b75ca4b9309e4e1863c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 22/07/2025 18:51, Juan Pablo Montero Castro wrote:
+> This commit adds support for the i.MX 91 FRDM (Freedom) board.
+> 
+> The i.MX91 FRDM development board is a low-cost and compact
+> development board featuring the i.MX91 applications processor.
+> 
+> See: https://nxp.com/FRDM-IMX91
+> 
+> This defconfig is based on freescale_imx93frmd_defconfig, introduced in
+> commit 
+> https://gitlab.com/buildroot.org/buildroot/-/commit/2e05f22ff862192a7e512d0db0486351bba94ae8
+> 
+> Compared to the original freescale_imx93_frmd_defconfig, this defconfig
+> uses a Bootlin glibc stable external toolchain, to follow guidelines
+> from: 
+> https://elinux.org/Buildroot:DeveloperDaysELCE2024#Rules_for_defconfigs
+> 
+> Signed-off-by: Juan Pablo Montero Castro 
+> <juanpablo.monterocastro@nxp.com>
 
-This commit adds support for the i.MX 91 FRDM (Freedom) board.
-
-The i.MX91 FRDM development board is a low-cost and compact
-development board featuring the i.MX91 applications processor.
-
-See: https://nxp.com/FRDM-IMX91
-
-This defconfig is based on freescale_imx93frmd_defconfig, introduced in
-commit https://gitlab.com/buildroot.org/buildroot/-/commit/2e05f22ff862192a7e512d0db0486351bba94ae8
-
-Compared to the original freescale_imx93_frmd_defconfig, this defconfig
-uses a Bootlin glibc stable external toolchain, to follow guidelines
-from: https://elinux.org/Buildroot:DeveloperDaysELCE2024#Rules_for_defconfigs
-
-Signed-off-by: Juan Pablo Montero Castro <juanpablo.monterocastro@nxp.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- .../arm-trusted-firmware/arm-trusted-firmware.hash |  2 +
- .../patches/linux-headers/linux-headers.hash       |  1 +
- board/freescale/imx91frdm/patches/linux/linux.hash |  2 +
- board/freescale/imx91frdm/patches/uboot/uboot.hash |  2 +
- board/freescale/imx91frdm/readme.txt               | 74 ++++++++++++++++++++++
- configs/freescale_imx91frdm_defconfig              | 43 +++++++++++++
- 6 files changed, 124 insertions(+)
-
-diff --git a/board/freescale/imx91frdm/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/freescale/imx91frdm/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-new file mode 100644
-index 0000000000..7561385cb8
---- /dev/null
-+++ b/board/freescale/imx91frdm/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  8cfe0afc903ebbc03f27e4874aa9ce82be78843a8b42ed4c906871e7f311b510  imx-atf-lf-6.6.36-2.1.0.tar.gz
-diff --git a/board/freescale/imx91frdm/patches/linux-headers/linux-headers.hash b/board/freescale/imx91frdm/patches/linux-headers/linux-headers.hash
-new file mode 120000
-index 0000000000..5808d92afe
---- /dev/null
-+++ b/board/freescale/imx91frdm/patches/linux-headers/linux-headers.hash
-@@ -0,0 +1 @@
-+../linux/linux.hash
-\ No newline at end of file
-diff --git a/board/freescale/imx91frdm/patches/linux/linux.hash b/board/freescale/imx91frdm/patches/linux/linux.hash
-new file mode 100644
-index 0000000000..f03ffd5b55
---- /dev/null
-+++ b/board/freescale/imx91frdm/patches/linux/linux.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  3f5017e85ba6c490be597670033a7eaba14e3c34af4e53d24dc3762c3deece83  linux-imx-lf-6.6.36-2.1.0-imx91frdm.tar.gz
-diff --git a/board/freescale/imx91frdm/patches/uboot/uboot.hash b/board/freescale/imx91frdm/patches/uboot/uboot.hash
-new file mode 100644
-index 0000000000..f285dff490
---- /dev/null
-+++ b/board/freescale/imx91frdm/patches/uboot/uboot.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  f7d9a6e99825926d0bc597e0fdfeafffcc76ad6267f1d4e9aae1fe9a8d400c22  uboot-imx-lf-6.6.36-2.1.0-imx91frdm.tar.gz
-diff --git a/board/freescale/imx91frdm/readme.txt b/board/freescale/imx91frdm/readme.txt
-new file mode 100644
-index 0000000000..ec839b1dca
---- /dev/null
-+++ b/board/freescale/imx91frdm/readme.txt
-@@ -0,0 +1,74 @@
-+**********************
-+NXP i.MX 91 FRDM board
-+**********************
-+
-+This file documents the Buildroot support for the i.MX 91 FRDM
-+(Freedom) board. For more information on this board, see [1].
-+
-+
-+Build
-+=====
-+
-+First, configure Buildroot for the i.MX 91 FRDM board:
-+
-+    make freescale_imx91frdm_defconfig
-+
-+Build all components:
-+
-+    make
-+
-+When this command completes, the generated image containing everything
-+to boot from the SD card is located in "output/images/sdcard.img".
-+
-+
-+Create a bootable SD card
-+=========================
-+
-+To determine the device associated to the SD card have a look in the
-+/proc/partitions file:
-+
-+    cat /proc/partitions
-+
-+Buildroot prepares a bootable "sdcard.img" image in the output/images/
-+directory, ready to be dumped on a SD card. Launch the following
-+command as root:
-+
-+    dd if=output/images/sdcard.img of=/dev/<your-sd-device>
-+
-+*** WARNING! This will destroy all the card content. Use with care! ***
-+
-+For details about the medium image layout, see the definition in
-+board/freescale/common/imx/genimage.cfg.template_imx9.
-+
-+
-+Boot the i.MX 91 FRDM board
-+===========================
-+
-+To boot your newly created system (refer to the i.MX 91 FRDM
-+Documentation [2] for guidance):
-+- insert the SD card in the SD slot (P13) of the board;
-+- Configure the SW1 boot switches as follows:
-+  SW1: 1100 SW1[1-4] ("USDHC2 4-bit SD3.0" Boot Mode)
-+- connect a USB Type-C cable into the P16 Debug USB Port and connect
-+  using a terminal emulator at 115200 bps, 8n1;
-+- power on the board by connecting a USB Type-C cable into the P1
-+  Power USB Port.
-+
-+Note 1: the board boot switches default configuration is:
-+SW1: 0100 SW1[1-4] ("USDHC1 8-bit eMMC 5.1" Boot Mode)
-+and the board is also pre-flashed with a reference Linux demo
-+image. It is important to change the boot config switches to make
-+sure the system will boot on the SD Card.
-+
-+Note 2: the debug USB connector presents 2 UARTs (for example
-+/dev/ttyACM[0-1]), the Cortex-A55 UART should be the 1st one (in the
-+previous example, /dev/ttyACM0). Refer to the documentation [2] for
-+more details.
-+
-+Enjoy!
-+
-+
-+References
-+==========
-+[1] https://www.nxp.com/FRDM-IMX91
-+[2] https://www.nxp.com/document/guide/getting-started-with-frdm-imx91:GS-FRDM-IMX91
-diff --git a/configs/freescale_imx91frdm_defconfig b/configs/freescale_imx91frdm_defconfig
-new file mode 100644
-index 0000000000..8a233afb50
---- /dev/null
-+++ b/configs/freescale_imx91frdm_defconfig
-@@ -0,0 +1,43 @@
-+BR2_aarch64=y
-+BR2_cortex_a55=y
-+BR2_ARM_FPU_VFPV4D16=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
-+BR2_GLOBAL_PATCH_DIR="board/freescale/imx91frdm/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyLP0"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/imx9-bootloader-prepare.sh board/freescale/common/imx/post-image.sh"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,jolivain,linux-imx,lf-6.6.36-2.1.0-imx91frdm)/linux-imx-lf-6.6.36-2.1.0-imx91frdm.tar.gz"
-+BR2_LINUX_KERNEL_DEFCONFIG="imx_v8"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx91-11x11-frdm"
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_PACKAGE_FREESCALE_IMX=y
-+BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX91=y
-+BR2_PACKAGE_FIRMWARE_ELE_IMX=y
-+BR2_PACKAGE_FIRMWARE_IMX=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,imx-atf,lf-6.6.36-2.1.0)/imx-atf-lf-6.6.36-2.1.0.tar.gz"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx91"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,jolivain,uboot-imx,lf-6.6.36-2.1.0-imx91frdm)/uboot-imx-lf-6.6.36-2.1.0-imx91frdm.tar.gz"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx91_11x11_frdm"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_IMX_MKIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
