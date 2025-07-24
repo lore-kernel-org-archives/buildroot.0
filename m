@@ -1,97 +1,105 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B567C83F1A
-	for <buildroot@archiver.kernel.org>; Thu, 24 Jul 2025 09:04:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8F32C83F26
+	for <buildroot@archiver.kernel.org>; Thu, 24 Jul 2025 09:24:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DB2B980DA6;
-	Thu, 24 Jul 2025 09:04:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0A0224128F;
+	Thu, 24 Jul 2025 09:24:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tuAzMPYUFKY5; Thu, 24 Jul 2025 09:04:38 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rlkX7lo1jBVG; Thu, 24 Jul 2025 09:24:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0441F80C94
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C88541282
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0441F80C94;
-	Thu, 24 Jul 2025 09:04:38 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 8390F115
- for <buildroot@buildroot.org>; Thu, 24 Jul 2025 09:04:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3C88541282;
+	Thu, 24 Jul 2025 09:24:45 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8876F115
+ for <buildroot@buildroot.org>; Thu, 24 Jul 2025 09:24:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 69E2340781
- for <buildroot@buildroot.org>; Thu, 24 Jul 2025 09:04:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7A06241281
+ for <buildroot@buildroot.org>; Thu, 24 Jul 2025 09:24:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 74wzUiYrxUuj for <buildroot@buildroot.org>;
- Thu, 24 Jul 2025 09:04:35 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id V0jq0IzByQzJ for <buildroot@buildroot.org>;
+ Thu, 24 Jul 2025 09:24:44 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::135; helo=mail-lf1-x135.google.com;
- envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6CCC1401C8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6CCC1401C8
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com
- [IPv6:2a00:1450:4864:20::135])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6CCC1401C8
- for <buildroot@buildroot.org>; Thu, 24 Jul 2025 09:04:35 +0000 (UTC)
-Received: by mail-lf1-x135.google.com with SMTP id
- 2adb3069b0e04-5561c20e2d5so1002820e87.0
- for <buildroot@buildroot.org>; Thu, 24 Jul 2025 02:04:35 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
+ envelope-from=stefan.nickl@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B3C1841280
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B3C1841280
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B3C1841280
+ for <buildroot@buildroot.org>; Thu, 24 Jul 2025 09:24:43 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id
+ 5b1f17b1804b1-455b002833bso3180905e9.0
+ for <buildroot@buildroot.org>; Thu, 24 Jul 2025 02:24:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1753347872; x=1753952672;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=IKWro2Eiv9BmNSsjlEqjvdetfzXw3HhywAHrjradIfg=;
- b=bIsTmlH1x0fqdG8UlEybrKRX6IYVv+LLt8quKw6Atb9+zvwKsaUTSIM7QOs7uVWAOk
- a6nqwhjJ13CBPX8xwgfjmElT/p0oIJL/H/JPXnMUrHSw8D0EB4phr4W07xBxzmtgn22l
- bRoD2WrpE409YchCo4n5dTtIeFnaO/bROWfEUqhkWtuMfic2jA+N0Gpnuh5sVHkDXJEQ
- 5qyyrsGXDKOlx6mlNngfd4NPjVUdtW4wlKdfhswGClV+q7w38BXxeHQ1M0CKE+49sswW
- 7uXPTErD9GHi7TzTH6Ke7V28uv1Uk407TWy7sVLxQCw1TVf9ujQHp7/EiulBn8VAt86w
- 5Pdw==
-X-Gm-Message-State: AOJu0Yz146gDCycAFgsQBUjTpyXVlS/KPQqQ6jHVCN6kspo9WEi1GzV8
- 6osAX/c3/YhjfnnrRfg6bfkycYuqpv7xDylhue1D01ONMVgdtAt0MQIlrAXVQ1XVWzc7J+YthGQ
- fErEiE1Golzwfc8ptwYBJSmsYLTafdgfijIbM
-X-Gm-Gg: ASbGncvpy7kagkSSH+Q7vNpWKah2nVDs6bLqO/J02eT0dDwRJIivolhvYs9J0t4ccaj
- XFu5H5gD8tkNVbhVy3BSjvmNa8lHtcLXhTGAoqy5GJgDMbNh+kdzzwlr4J4Cb1OD2rKSoGEzlR2
- wo5DhVVYDSmX1PdcSEwfDtWQOym9JZGZYNvyoS9GyxkIjfsrD8fw/Vqu1NUhmUpf/h58lA44VBz
- sjIIzCk
-X-Google-Smtp-Source: AGHT+IEtmiZc910gYNpPIPOVEJc65Vyb5HfIqvAUgpeX9sUZxSoS1HPprQiW9PX/3NBMjHoIijYFNrY5ZH76NXLhE54=
-X-Received: by 2002:a05:6512:3c94:b0:553:d9ba:a171 with SMTP id
- 2adb3069b0e04-55a513cf3bemr2110902e87.43.1753347871962; Thu, 24 Jul 2025
- 02:04:31 -0700 (PDT)
-MIME-Version: 1.0
-References: <20250724061810.3677507-1-yegorslists@googlemail.com>
-In-Reply-To: <20250724061810.3677507-1-yegorslists@googlemail.com>
-Date: Thu, 24 Jul 2025 11:04:19 +0200
-X-Gm-Features: Ac12FXzpTQ8EKynZTeJNmhBTl95hH37BfH68BK9dkGPR88AHLwr0JjyEcCiuI6k
-Message-ID: <CAGm1_kuT-zo+xdmZ19CvVsc5xPc2CqYRORfM8xRtnpCNvyV44Q@mail.gmail.com>
+ d=1e100.net; s=20230601; t=1753349081; x=1753953881;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=vEs8B9vxG420/UsO4Lf9KQ6YTkUPUN1MOo25J3m6YdM=;
+ b=Kry/piy6uupA9RJvZw7oKVeHwA9GvrmH+4EfxGktQp0Uyg/88eqVTWtxNtcwjc3UOi
+ lFL6b9IlCTYuG8Fg0fN97DyB+pgKGA2jUFRXxhCIX0eHyhBy+aHcHTTzVmJYGx/30zY9
+ WRO4hDMJFJ/0UmLbDsEe7+3XhIQSFw7s8VR2EvfeWwcOn0ILaGcf53WKtct8ZAlcgit6
+ IYt025OSe+zuQUzjVYpCRZD6VIdMr0nO59WaRA/nnNOB9hbV+7dAZjl8VyXxjPgqu33k
+ bghOn+vexe+CxwC1gu3AzfCyvBkIeslNluo4Ey+bO0iYBcsGVadZ3iZpPL8YROuZs7Jf
+ tp0g==
+X-Gm-Message-State: AOJu0YzknJJONHpCdulrwSDUzSHiABMu8on6a2dOA6kVVPEBWkhBtUd9
+ WzJGZsAhJqN73faFO9W1PNLdP/sg/DBy0BOaQAm2XbmsnQc22Z2SHKuizGIORq5P
+X-Gm-Gg: ASbGnct3/2JzMOejFx0ntb6G3KLPMrEaA4LWVYkTxQOa5jm9A+A8LTOTcHGGEbDfP6a
+ xGrjrbxsW8nC0/95/6SlqQZxDe/nDzaBAp7sJ8UboqsWul+mvaNOfBf2D/+PmfEL2f229nlTyju
+ hyWzV30kjLNBnrkTSTDBYQAYPoZl6L5wEbi3wBEATwKyGiIny1xRDv2TdIikWLsSFYGGi6dlu2u
+ +NBcPapgn2USOZ1mOKFN1fcFCTH24xInG73shzesw8mBi2mF0/OmvuAyIcYvbHllr6E0qFuxz4q
+ AXNVrCYKe9T7Jo+09g6rOLllm1CY9iRRLN04D7ULyp9nOoHu3yuOgUExyIGBBbEcNxVw+4pm+HM
+ o8aaVHK/oqMwnX/G9o/1PyGDzthqk9A/RHVXnGAZaBEBk6TY7FibYRiLCNuLvsBePvrc7M6Wcvl
+ wONpxl2I9l6yxbJweG4PQ=
+X-Google-Smtp-Source: AGHT+IFFgBOP91FhFjkdCe74nvuE+4rfkUlcVt1ZTTSfM0pJJ41Xep2bv6ii8XddPMNE0Z/m44neRg==
+X-Received: by 2002:a05:600c:3b9a:b0:456:1ab0:d56d with SMTP id
+ 5b1f17b1804b1-45868c8bcbdmr50688345e9.7.1753349080983; 
+ Thu, 24 Jul 2025 02:24:40 -0700 (PDT)
+Received: from ultra.fritz.box
+ (p200300d1973ff600a1ab5b988c9d795d.dip0.t-ipconnect.de.
+ [2003:d1:973f:f600:a1ab:5b98:8c9d:795d])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-4587054f338sm12519405e9.13.2025.07.24.02.24.40
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 24 Jul 2025 02:24:40 -0700 (PDT)
+From: stefan.nickl@gmail.com
+X-Google-Original-From: Stefan.Nickl@gmail.com
 To: buildroot@buildroot.org
-Cc: "Wojciech M . Zabolotny" <wzab01@gmail.com>, Julien Olivain <ju.o@free.fr>
+Date: Thu, 24 Jul 2025 11:24:39 +0200
+Message-ID: <20250724092439.675354-1-Stefan.Nickl@gmail.com>
+X-Mailer: git-send-email 2.50.1
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=googlemail.com; s=20230601; t=1753347872; x=1753952672; darn=buildroot.org; 
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=IKWro2Eiv9BmNSsjlEqjvdetfzXw3HhywAHrjradIfg=;
- b=Tg678fI3Ysw7SbGQ4znk0byYDdVKoCSVoCBv+4ciQEVf1fnWfItzHLfKevI4Q87bYI
- A9/oqS0By0qfHBfZgpMPRWxSnMIDAd0k3T/BhZaeaBnI8tirc1kM5ONgILVwhE/Fv57u
- 58H1YUnlNBXLTF5bjULUphCThsDyUbOhJlfJCVKqiznj/TMlUn1pU/N8IDK9yv0ceJPT
- AbKc++LSiPfCLWzVZqmaEtx1FnspO5aMA9vHJWTBZYz6HFa9Fz8V0Kn/LZPTTInzJcix
- VcYjkj7ehiWgA8zkGAifzQH4m6eJ7y9uCB9R9z2zj3HGzSqL/mX7tkjLXBbuHwAGSZh9
- NLlg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=googlemail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=gmail.com; s=20230601; t=1753349081; x=1753953881; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=vEs8B9vxG420/UsO4Lf9KQ6YTkUPUN1MOo25J3m6YdM=;
+ b=Bq+OGWxnAGAF5IS0rsHztAzBs1LzHE7hP9l+5f3PWimLXmCvtY1xxXbQLKUfxvmzkd
+ taEtkx2r72BufCX71BcmaTYc2teRroorWpCjd/6OajbsL6RaFQ43jbrJ5LHNiU8SEIlc
+ a1tfTVDbuZHsJ8iIPT2X7QN8shiPXfWOqP3i4llJlIqoLW/Nm43PaR5R6gLLb1OtaANb
+ e0c0ti7fLNzrOISyeBfzaBRgnbka+13Wvt03l0XOTKlZ6Pz+iNVPVmasHDUjz+g7kYmH
+ cvQbE3gtXdyZgSxp4NLUk7e6yyq+82Z1OSBBWqrDyVtpkbyUjydYOA5UndIraY88SNNl
+ 5Xfg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=googlemail.com header.i=@googlemail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Tg678fI3
-Subject: Re: [Buildroot] [PATCH] package/avrdude: remove the obsolete hook
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=Bq+OGWxn
+Subject: [Buildroot] [PATCH 1/1] package/modem-manager: Add option to enable
+ AT commands via D-Bus
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -103,33 +111,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Yegor Yefremov via buildroot <buildroot@buildroot.org>
-Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Aleksander Morgado <aleksander@aleksander.es>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgYWxsLAoKT24gVGh1LCBKdWwgMjQsIDIwMjUgYXQgODoxOOKAr0FNIDx5ZWdvcnNsaXN0c0Bn
-b29nbGVtYWlsLmNvbT4gd3JvdGU6Cj4KPiBGcm9tOiBZZWdvciBZZWZyZW1vdiA8eWVnb3JzbGlz
-dHNAZ29vZ2xlbWFpbC5jb20+Cj4KPiBDTWFrZSByZWNpcGUgZG9lc24ndCBjcmVhdGUgYSBiYWNr
-dXAgb2YgdGhlIGF2cmR1ZGUuY29uZi4KPgo+IFNpZ25lZC1vZmYtYnk6IFllZ29yIFllZnJlbW92
-IDx5ZWdvcnNsaXN0c0Bnb29nbGVtYWlsLmNvbT4KPiAtLS0KPiAgcGFja2FnZS9hdnJkdWRlL2F2
-cmR1ZGUubWsgfCA4IC0tLS0tLS0tCj4gIDEgZmlsZSBjaGFuZ2VkLCA4IGRlbGV0aW9ucygtKQo+
-Cj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvYXZyZHVkZS9hdnJkdWRlLm1rIGIvcGFja2FnZS9hdnJk
-dWRlL2F2cmR1ZGUubWsKPiBpbmRleCA2MTk5ODcxMTliLi43OTQ0N2E2MjA1IDEwMDY0NAo+IC0t
-LSBhL3BhY2thZ2UvYXZyZHVkZS9hdnJkdWRlLm1rCj4gKysrIGIvcGFja2FnZS9hdnJkdWRlL2F2
-cmR1ZGUubWsKPiBAQCAtMjksMTIgKzI5LDQgQEAgaWZlcSAoJChCUjJfUEFDS0FHRV9ISURBUEkp
-LHkpCj4gIEFWUkRVREVfREVQRU5ERU5DSUVTICs9IGhpZGFwaQo+ICBlbmRpZgo+Cj4gLSMgaWYg
-L2V0Yy9hdnJkdWRlLmNvbmYgZXhpc3RzLCB0aGUgaW5zdGFsbGF0aW9uIHByb2Nlc3MgY3JlYXRl
-cyBhCj4gLSMgYmFja3VwIGZpbGUsIHdoaWNoIHdlIGRvIG5vdCB3YW50IGluIHRoZSBjb250ZXh0
-IG9mIEJ1aWxkcm9vdC4KPiAtZGVmaW5lIEFWUkRVREVfUkVNT1ZFX0JBQ0tVUF9GSUxFCj4gLSAg
-ICAgICAkKFJNKSAtZiAkKFRBUkdFVF9ESVIpL2V0Yy9hdnJkdWRlLmNvbmYuYmFrCj4gLWVuZGVm
-Cj4gLQo+IC1BVlJEVURFX1BPU1RfSU5TVEFMTF9UQVJHRVRfSE9PS1MgKz0gQVZSRFVERV9SRU1P
-VkVfQkFDS1VQX0ZJTEUKPiAtCj4gICQoZXZhbCAkKGNtYWtlLXBhY2thZ2UpKQoKUGVyaGFwcywg
-aXQgd2lsbCBmaXggYXZyZHVkZSBidWlsZCBmYWlsdXJlcyBbMV0uIFRob3VnaCBJIGNhbm5vdApy
-ZXByb2R1Y2UgdGhlbSBsb2NhbGx5LgoKWzFdIGh0dHBzOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5v
-cmcvcmVzdWx0cy8wNzM2YmM5MTFkOTRmMWE5NDM1ZDU1M2VhOTQxMDVmMWNmMWZkZjMwL2J1aWxk
-LWVuZC5sb2cKClllZ29yCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0
-cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+From: Stefan Nickl <Stefan.Nickl@gmail.com>
+
+Signed-off-by: Stefan Nickl <Stefan.Nickl@gmail.com>
+---
+ package/modem-manager/Config.in        | 6 ++++++
+ package/modem-manager/modem-manager.mk | 6 ++++++
+ 2 files changed, 12 insertions(+)
+
+diff --git a/package/modem-manager/Config.in b/package/modem-manager/Config.in
+index 6990996a86..975a45902f 100644
+--- a/package/modem-manager/Config.in
++++ b/package/modem-manager/Config.in
+@@ -35,6 +35,12 @@ config BR2_PACKAGE_MODEM_MANAGER_LIBQRTR
+ 	help
+ 	  This option enables support for QRTR protocol
+ 
++config BR2_PACKAGE_MODEM_MANAGER_ATVIADBUS
++	bool "at-via-dbus support"
++	help
++	  This option enables support for issuing AT commands
++	  over the D-Bus interface.
++
+ comment "QRTR support needs a toolchain w/ headers >= 4.15"
+ 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
+ 
+diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
+index 932c163175..899e3071a5 100644
+--- a/package/modem-manager/modem-manager.mk
++++ b/package/modem-manager/modem-manager.mk
+@@ -48,6 +48,12 @@ else
+ MODEM_MANAGER_CONF_OPTS += -Dqrtr=false
+ endif
+ 
++ifeq ($(BR2_PACKAGE_MODEM_MANAGER_ATVIADBUS),y)
++MODEM_MANAGER_CONF_OPTS += -Dat_command_via_dbus=true
++else
++MODEM_MANAGER_CONF_OPTS += -Dat_command_via_dbus=false
++endif
++
+ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+ MODEM_MANAGER_DEPENDENCIES += systemd
+ MODEM_MANAGER_CONF_OPTS += \
+-- 
+2.50.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
