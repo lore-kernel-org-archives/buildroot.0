@@ -4,49 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D7F4C87FCA
-	for <buildroot@archiver.kernel.org>; Fri, 25 Jul 2025 17:31:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ACAA8C87FCA
+	for <buildroot@archiver.kernel.org>; Fri, 25 Jul 2025 17:31:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5766761AC5;
-	Fri, 25 Jul 2025 17:31:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8212160789;
+	Fri, 25 Jul 2025 17:31:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xiXobCIVw7Aw; Fri, 25 Jul 2025 17:31:12 +0000 (UTC)
+ id 9hHmsfCgwRnS; Fri, 25 Jul 2025 17:31:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6EF9761AD2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AD37061ABE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6EF9761AD2;
-	Fri, 25 Jul 2025 17:31:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id BD4C71D9
- for <buildroot@buildroot.org>; Fri, 25 Jul 2025 17:31:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AD37061ABE;
+	Fri, 25 Jul 2025 17:31:45 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 29FCF909
+ for <buildroot@buildroot.org>; Fri, 25 Jul 2025 17:31:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 597D840770
- for <buildroot@buildroot.org>; Fri, 25 Jul 2025 17:31:08 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1C1AB402C3
+ for <buildroot@buildroot.org>; Fri, 25 Jul 2025 17:31:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4ylbIDL2m12y for <buildroot@buildroot.org>;
- Fri, 25 Jul 2025 17:31:06 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4BC2D407AC
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4BC2D407AC
- for <buildroot@buildroot.org>; Fri, 25 Jul 2025 17:31:06 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 42D2286BE8; Fri, 25 Jul 2025 17:31:06 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 25 Jul 2025 19:09:33 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5dea42b64f466ce11d54b1735a3db5c1638dc97e
-X-Git-Newrev: fb91f813d8cd687436eb908b8eeb028f85cb4195
-X-Patchwork-Hint: ignore
-Message-Id: <20250725173106.42D2286BE8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/intel-gmmlib: bump version to
- 22.8.1
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WkMIB32O0CCs for <buildroot@buildroot.org>;
+ Fri, 25 Jul 2025 17:31:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 81DDC400AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 81DDC400AB
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 81DDC400AB
+ for <buildroot@buildroot.org>; Fri, 25 Jul 2025 17:31:43 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id 546C0B00572;
+ Fri, 25 Jul 2025 19:31:39 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 25 Jul 2025 19:31:39 +0200
+MIME-Version: 1.0
+Date: Fri, 25 Jul 2025 19:31:39 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250724192739.1193136-1-bernd@kuhls.net>
+References: <20250724192739.1193136-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <922629b7a4d3461d0a1416cb666c8011@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1753464700;
+ bh=AkDU1xvFJe7TBul3sLiFLT18Mki2BUMmgZlelHIke34=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=uzuoyZQVf5C85EIqw8p2QZyruyp8pv6c3d7kFSaL3vlH+FUOFc41+Zv+tLXB+AwJz
+ rEtjtSw7eu765fmeUja5fKVJXB0dK6eslw7l3Ku9rFcYULYVUKpqMwbz+zvozCkv4r
+ kGFqphdIwbhWvQ5aBQ5OP0oGiDJ4hHDxNP766U//AA5WPL4jFiQVFPaPnVWEP+/kCX
+ zKoZzaOFPSLynK1Q0anV2Yms/QP1EKJkgDL6eo0ZrAJUY57SONAdsXOgQlrt4F8Eje
+ zpbeweSvjtwIl4D4pcYT0hAbBDWMnljMKY0P5spHdHmjNUnuCKMKnl9pMQcgHOvNfr
+ qPDYrKtkgIfCQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=uzuoyZQV
+Subject: Re: [Buildroot] [PATCH 1/3] package/intel-vpl-gpu-rt: bump version
+ to 25.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,44 +83,15 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fb91f813d8cd687436eb908b8eeb028f85cb4195
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 24/07/2025 21:27, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/intel-gmmlib/intel-gmmlib.hash | 2 +-
- package/intel-gmmlib/intel-gmmlib.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/intel-gmmlib/intel-gmmlib.hash b/package/intel-gmmlib/intel-gmmlib.hash
-index fc7b62bd9e..c4e90dd67f 100644
---- a/package/intel-gmmlib/intel-gmmlib.hash
-+++ b/package/intel-gmmlib/intel-gmmlib.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  0e509edf0b7892fad210e406014b3f6a53816a2ddb80650e9e1294f55aa493aa  intel-gmmlib-22.8.0.tar.gz
-+sha256  9b8eac1891650021ded26b72585e7a2c702a3ba47565c968feabd14ab38d18f7  intel-gmmlib-22.8.1.tar.gz
- sha256  8b7446825df3f8b0268307e272aa6aaaf78351c83161d860d02c913c22666c48  LICENSE.md
-diff --git a/package/intel-gmmlib/intel-gmmlib.mk b/package/intel-gmmlib/intel-gmmlib.mk
-index bc29e434d9..18c8e48648 100644
---- a/package/intel-gmmlib/intel-gmmlib.mk
-+++ b/package/intel-gmmlib/intel-gmmlib.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--INTEL_GMMLIB_VERSION = 22.8.0
-+INTEL_GMMLIB_VERSION = 22.8.1
- INTEL_GMMLIB_SITE = https://github.com/intel/gmmlib/archive
- INTEL_GMMLIB_LICENSE = MIT
- INTEL_GMMLIB_LICENSE_FILES = LICENSE.md
+Series applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
