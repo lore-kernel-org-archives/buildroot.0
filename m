@@ -4,73 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53027C87FCA
-	for <buildroot@archiver.kernel.org>; Fri, 25 Jul 2025 20:28:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2B3AC87FCA
+	for <buildroot@archiver.kernel.org>; Fri, 25 Jul 2025 20:37:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0590F407FD;
-	Fri, 25 Jul 2025 20:28:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6D702412EC;
+	Fri, 25 Jul 2025 20:37:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kTNjLxlWrZyC; Fri, 25 Jul 2025 20:28:05 +0000 (UTC)
+ id b_JcJlnjnink; Fri, 25 Jul 2025 20:37:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 348F340757
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 84B5141A71
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 348F340757;
-	Fri, 25 Jul 2025 20:28:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id BF088177
- for <buildroot@buildroot.org>; Fri, 25 Jul 2025 20:28:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 84B5141A71;
+	Fri, 25 Jul 2025 20:37:29 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5FE29177
+ for <buildroot@buildroot.org>; Fri, 25 Jul 2025 20:37:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A10FC83D6F
- for <buildroot@buildroot.org>; Fri, 25 Jul 2025 20:28:03 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5CCAC40212
+ for <buildroot@buildroot.org>; Fri, 25 Jul 2025 20:37:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UMvCgzc-oLa0 for <buildroot@buildroot.org>;
- Fri, 25 Jul 2025 20:28:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B2AC783D6D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B2AC783D6D
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B2AC783D6D
- for <buildroot@buildroot.org>; Fri, 25 Jul 2025 20:28:02 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 8352813F89A;
- Fri, 25 Jul 2025 22:27:57 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 25 Jul 2025 22:27:57 +0200
-MIME-Version: 1.0
-Date: Fri, 25 Jul 2025 22:27:57 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250725182743.3599859-1-bernd@kuhls.net>
-References: <20250725182743.3599859-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <f49823e545c2edcc40fb2ab9085da171@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1753475279;
- bh=ReIUTlaKwpAB4yErLLAsuZaUazvD9valQECwxmFjJCc=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=dkt1gtfIpMgy04rXz3S9oMP4rJInovvm3f4Wtdnn+a/ktpaYFuJkeWNz1VV2ehePk
- dDbopxxPKH/pd2jCaVdJ5akj6XhMSObsj79/9vn8D+6UMO/JtABG2gs3cmQLCkJfyT
- h9WImOelGgbz56kxk+dvnXfe4BFdvJQU7Z1ofJ0miqi5C8vsg5czD+COWFyMWv21eC
- wUGFU9g1D+ofzPNUc8WscRNy9p59GKShf2E/MWdcdMleGtvYFrrurid9gQ7ZXRET+D
- cCi0NvYpoAlCEtIUjja74JjUVcBRYzyBTwsb1yt+X2b8jEiBPigXzv5lifqeEOp2Hg
- 4eRHsQp90dCiA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=dkt1gtfI
-Subject: Re: [Buildroot] [PATCH 1/1] package/rust-bindgen: bump version to
- 0.72.0
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9yNA2a9FKNRb for <buildroot@buildroot.org>;
+ Fri, 25 Jul 2025 20:37:26 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5E8A1400EA
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5E8A1400EA
+ for <buildroot@buildroot.org>; Fri, 25 Jul 2025 20:37:26 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 4CFF986B55; Fri, 25 Jul 2025 20:37:26 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 25 Jul 2025 22:33:15 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 1a229c54b87697b5b56aeb1395d57bdcba6de58d
+X-Git-Newrev: ebb66480460fa152faa9ec27f639d53c27935e09
+X-Patchwork-Hint: ignore
+Message-Id: <20250725203726.4CFF986B55@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/apache: security bump version to
+ 2.4.65
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,26 +60,54 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 25/07/2025 20:27, Bernd Kuhls wrote:
-> Changelog:
-> https://github.com/rust-lang/rust-bindgen/blob/main/CHANGELOG.md
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://git.buildroot.net/buildroot/commit/?id=ebb66480460fa152faa9ec27f639d53c27935e09
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Changelog:
+https://downloads.apache.org/httpd/CHANGES_2.4.65
 
-For info, I marked this commit as "security related" since the changelog
-mention few dependencies updates fixing security issues. See:
-https://gitlab.com/buildroot.org/buildroot/-/commit/1a229c54b87697b5b56aeb1395d57bdcba6de58d
+Fixes:
+https://www.cve.org/CVERecord?id=CVE-2025-54090
 
-Best regards,
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/apache/apache.hash | 6 +++---
+ package/apache/apache.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Julien.
+diff --git a/package/apache/apache.hash b/package/apache/apache.hash
+index 748be01de7..ca9d1580ad 100644
+--- a/package/apache/apache.hash
++++ b/package/apache/apache.hash
+@@ -1,5 +1,5 @@
+-# From https://downloads.apache.org/httpd/httpd-2.4.64.tar.bz2.{sha256,sha512}
+-sha256  120b35a2ebf264f277e20f9a94f870f2063342fbff0861404660d7dd0ab1ac29  httpd-2.4.64.tar.bz2
+-sha512  299cb0d87a7e0e0a99d22bba7349b6b07c69222897410f9670af29896288d1f4e1da81d22ac9e1d8d6ea096e88044ab1dd34555b40a4b1b1cb3fd4b1d1897a7a  httpd-2.4.64.tar.bz2
++# From https://downloads.apache.org/httpd/httpd-2.4.65.tar.bz2.{sha256,sha512}
++sha256  58b8be97d9940ec17f7656c0c6b9f41b618aac468b894b534148e3296c53b8b3  httpd-2.4.65.tar.bz2
++sha512  202f8bfe2aafcfbcd7315191d466e9c10b9a8c0abafb7864510b6e1abe4cb660aaacc2456aa77d43e48ef7a49e591d0b54170d3daf67abc3e06c3da1c63fdffc  httpd-2.4.65.tar.bz2
+ # Locally computed
+ sha256  47b8c2b6c3309282a99d4a3001575c790fead690cc14734628c4667d2bbffc43  LICENSE
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+index 7e9fb522b5..cb029274c5 100644
+--- a/package/apache/apache.mk
++++ b/package/apache/apache.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-APACHE_VERSION = 2.4.64
++APACHE_VERSION = 2.4.65
+ APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
+ APACHE_SITE = https://dlcdn.apache.org/httpd
+ APACHE_LICENSE = Apache-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
