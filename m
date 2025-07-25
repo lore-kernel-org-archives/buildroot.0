@@ -4,72 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ACAA8C87FCA
-	for <buildroot@archiver.kernel.org>; Fri, 25 Jul 2025 17:31:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46061C87FCE
+	for <buildroot@archiver.kernel.org>; Fri, 25 Jul 2025 17:41:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8212160789;
-	Fri, 25 Jul 2025 17:31:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0805F61AB4;
+	Fri, 25 Jul 2025 17:41:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9hHmsfCgwRnS; Fri, 25 Jul 2025 17:31:45 +0000 (UTC)
+ id XPFX3JQLz5ly; Fri, 25 Jul 2025 17:41:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AD37061ABE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 478C661760
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AD37061ABE;
-	Fri, 25 Jul 2025 17:31:45 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 29FCF909
- for <buildroot@buildroot.org>; Fri, 25 Jul 2025 17:31:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 478C661760;
+	Fri, 25 Jul 2025 17:41:44 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 94E8A1D9
+ for <buildroot@buildroot.org>; Fri, 25 Jul 2025 17:41:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1C1AB402C3
- for <buildroot@buildroot.org>; Fri, 25 Jul 2025 17:31:44 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7B0F183D5F
+ for <buildroot@buildroot.org>; Fri, 25 Jul 2025 17:41:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WkMIB32O0CCs for <buildroot@buildroot.org>;
- Fri, 25 Jul 2025 17:31:43 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 81DDC400AB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 81DDC400AB
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 81DDC400AB
- for <buildroot@buildroot.org>; Fri, 25 Jul 2025 17:31:43 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id 546C0B00572;
- Fri, 25 Jul 2025 19:31:39 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 25 Jul 2025 19:31:39 +0200
-MIME-Version: 1.0
-Date: Fri, 25 Jul 2025 19:31:39 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250724192739.1193136-1-bernd@kuhls.net>
-References: <20250724192739.1193136-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <922629b7a4d3461d0a1416cb666c8011@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1753464700;
- bh=AkDU1xvFJe7TBul3sLiFLT18Mki2BUMmgZlelHIke34=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=uzuoyZQVf5C85EIqw8p2QZyruyp8pv6c3d7kFSaL3vlH+FUOFc41+Zv+tLXB+AwJz
- rEtjtSw7eu765fmeUja5fKVJXB0dK6eslw7l3Ku9rFcYULYVUKpqMwbz+zvozCkv4r
- kGFqphdIwbhWvQ5aBQ5OP0oGiDJ4hHDxNP766U//AA5WPL4jFiQVFPaPnVWEP+/kCX
- zKoZzaOFPSLynK1Q0anV2Yms/QP1EKJkgDL6eo0ZrAJUY57SONAdsXOgQlrt4F8Eje
- zpbeweSvjtwIl4D4pcYT0hAbBDWMnljMKY0P5spHdHmjNUnuCKMKnl9pMQcgHOvNfr
- qPDYrKtkgIfCQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=uzuoyZQV
-Subject: Re: [Buildroot] [PATCH 1/3] package/intel-vpl-gpu-rt: bump version
- to 25.3.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id l7ko93L4XfpZ for <buildroot@buildroot.org>;
+ Fri, 25 Jul 2025 17:41:42 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C2E0C83D56
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id C2E0C83D56
+ for <buildroot@buildroot.org>; Fri, 25 Jul 2025 17:41:42 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id BE34B86973; Fri, 25 Jul 2025 17:41:42 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 25 Jul 2025 19:33:09 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: fb91f813d8cd687436eb908b8eeb028f85cb4195
+X-Git-Newrev: 697cdb123ac67319aeb069e2202cec0bea14fee7
+X-Patchwork-Hint: ignore
+Message-Id: <20250725174142.BE34B86973@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/tvheadend: bump version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,15 +59,44 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 24/07/2025 21:27, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://git.buildroot.net/buildroot/commit/?id=697cdb123ac67319aeb069e2202cec0bea14fee7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Series applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/tvheadend/tvheadend.hash | 2 +-
+ package/tvheadend/tvheadend.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/tvheadend/tvheadend.hash b/package/tvheadend/tvheadend.hash
+index a480302988..bf1281f818 100644
+--- a/package/tvheadend/tvheadend.hash
++++ b/package/tvheadend/tvheadend.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  24d45f9d5f0b92a706e827e553850cc4e0ed5d7f5f4555d16d4c56eaa2f606bb  tvheadend-730718c2888a121a00b96f3460b2e8f5ca8396d1.tar.gz
++sha256  287c875ed08aa9ad8e2b90c209d57ec300ac89b2dfbcefe060a103eaf24dd3f7  tvheadend-0af87f13f786046df7bb610f8a6b291c26af1b14.tar.gz
+ sha256  0420f5d2e0df002e31320d9f58fc5454cbb8f53fa0ab1fc85afb8821c6b103e3  LICENSE.md
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index a37d4dac57..cd0bb68380 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TVHEADEND_VERSION = 730718c2888a121a00b96f3460b2e8f5ca8396d1
++TVHEADEND_VERSION = 0af87f13f786046df7bb610f8a6b291c26af1b14
+ TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
+ TVHEADEND_LICENSE = GPL-3.0+
+ TVHEADEND_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
