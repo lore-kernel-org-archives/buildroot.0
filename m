@@ -1,98 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BE7FC87FCA
-	for <buildroot@archiver.kernel.org>; Sat, 26 Jul 2025 04:01:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47F56C83F17
+	for <buildroot@archiver.kernel.org>; Sat, 26 Jul 2025 05:59:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B8F2D4074F;
-	Sat, 26 Jul 2025 04:01:30 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SMzveZE4fFKW; Sat, 26 Jul 2025 04:01:29 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC75340761
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BC75340761;
-	Sat, 26 Jul 2025 04:01:29 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 00DDBDA
- for <buildroot@buildroot.org>; Sat, 26 Jul 2025 04:01:29 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E669782A0B
- for <buildroot@buildroot.org>; Sat, 26 Jul 2025 04:01:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E6DFD83CFB;
+	Sat, 26 Jul 2025 05:59:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VpT8IACWZKzs for <buildroot@buildroot.org>;
- Sat, 26 Jul 2025 04:01:27 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::534; helo=mail-pg1-x534.google.com;
- envelope-from=fancp2007@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8250582980
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8250582980
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com
- [IPv6:2607:f8b0:4864:20::534])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8250582980
- for <buildroot@buildroot.org>; Sat, 26 Jul 2025 04:01:27 +0000 (UTC)
-Received: by mail-pg1-x534.google.com with SMTP id
- 41be03b00d2f7-b2c4e46a89fso2414206a12.2
- for <buildroot@buildroot.org>; Fri, 25 Jul 2025 21:01:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1753502486; x=1754107286;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=CjPEvbR5UNylszZRuSx5R/w1Mm53S9Eq7e6OiRJQb/k=;
- b=JJ7Yx7zCzcYw9/qbfG4ee1IG72k3Uwwk/d7EgM1CwIT844qgbZiBjb+y6D2tiiUPwY
- Zn5YXe5c5MOwuhQbUkN39LdFohs7bBXvRZOR2Et8t+pC6VmluymLg0lGKSISZrmkXFed
- L34VMEzSTlCAElLtpPVK+mHv8Q2rDHCAaBG3njNYYkBW3LmNNrMtL5/ttjHCttvvBRpc
- aBD7D6Qw05sfcMc/ykP18NWsU/k3FM0mwl3KQKZQmfjmBJ9+/BqZ7lIMEMPL/SvFJjmM
- AjyU/ul4P3yrn7G1Akzfsk49sr/bPlDRIzVR4NER3rXa7sRUuaItS+M5LuynSW1r5x2r
- d4qw==
-X-Gm-Message-State: AOJu0Yx/r0p201btmLoC4rDQHQrofQNYoQckJQYtTlhnpTMLE98HrSL6
- e2adHMvNzPQ+itWySCIv+J5Wq3owqG2GrwJsTL9euQWovHU/985Yimpay6KmYA==
-X-Gm-Gg: ASbGncuB06ssdEB69NX1wM6II5wCYOW+i3L8qTs+CvzDIO6pgxpC89hK6BnY09WM6P3
- dCIyXJPE1YaRunQilufZw1reKkBe5iSDPzjI2vNKQBIJ5RpmKnDu4v/lFhXFxYXfKj1R/md/n8A
- pIjlp+UEYJAJktoOjfh3/N21LeZohZ9r/uRFv2BSRVH6DmWK/dCsdUu3KIYhCpF8t0vuWgY7WWw
- u/ei3/4f3+xQmBiGujsI+/zlTqfausC9nNg6328BtuTDL41ELZ2pElgxZwBTU3ZuVZdbm98Wqfo
- jiLTihzic9pjXDDzTzWqgZaw5GGj8IdaDkBjPX2l2CMsox6uSB3T+C0yaTsvfYGQTqJx/JPZlJH
- 16xE5avlPt1TeNQw6eVY=
-X-Google-Smtp-Source: AGHT+IHN4hS27mQ9mlzxxMFQq3Ug58f5N/PRJ7zyy5CqViEgRAuj/+YcGAb7D+RwsZePMHJG2iMMKQ==
-X-Received: by 2002:a17:902:f711:b0:235:e1d6:f98b with SMTP id
- d9443c01a7336-23fb3048db3mr68546835ad.22.1753502485864; 
- Fri, 25 Jul 2025 21:01:25 -0700 (PDT)
-Received: from localhost ([66.112.214.180]) by smtp.gmail.com with ESMTPSA id
- d9443c01a7336-23fbe343829sm8206435ad.75.2025.07.25.21.01.24
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 25 Jul 2025 21:01:25 -0700 (PDT)
-From: Scott Fan <fancp2007@gmail.com>
+ id 4z2GvKiiNF7X; Sat, 26 Jul 2025 05:59:16 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7FCF983D58
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7FCF983D58;
+	Sat, 26 Jul 2025 05:59:16 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id CC73FDA
+ for <buildroot@buildroot.org>; Sat, 26 Jul 2025 05:59:14 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id B314F60DEC
+ for <buildroot@buildroot.org>; Sat, 26 Jul 2025 05:59:14 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nILutknYyIa9 for <buildroot@buildroot.org>;
+ Sat, 26 Jul 2025 05:59:14 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7657160AA0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7657160AA0
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7657160AA0
+ for <buildroot@buildroot.org>; Sat, 26 Jul 2025 05:59:12 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a0a17.dip0.t-ipconnect.de [91.58.10.23])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id DCB66A4C1132;
+ Sat, 26 Jul 2025 07:59:08 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:57580)
+ by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
+ (envelope-from <bernd@kuhls.net>) id 1ufXw4-000000000No-1J3b;
+ Sat, 26 Jul 2025 05:59:08 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 26 Jul 2025 12:01:19 +0800
-Message-ID: <20250726040120.250482-1-fancp2007@gmail.com>
-X-Mailer: git-send-email 2.43.0
+Date: Sat, 26 Jul 2025 07:59:07 +0200
+Message-Id: <20250726055908.3395125-2-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250726055908.3395125-1-bernd@kuhls.net>
+References: <20250726055908.3395125-1-bernd@kuhls.net>
 MIME-Version: 1.0
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1753502486; x=1754107286; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=CjPEvbR5UNylszZRuSx5R/w1Mm53S9Eq7e6OiRJQb/k=;
- b=jD3DpfF+9YMTB+v/tn4ewAMKr8EIk05FtoOjmMhLKkyqsaAAQ/encnACVwz96wUst4
- /aWk/w7rqjCs+RprbmpH+WA5MHvrpcl/mUkdB4OZsGLvywKfHjfO7wIvH4TPAA+KXbRA
- AUNFfdm44Ob1z68Ez1wGxO9KqXNit2CPuPWiUNgbGu7q1vUYSQXe3nrJthrAzzR5BATp
- 6ykO6ij3hbAnSp72pUNjqhFYLvUvpzeaA8PoLBCfF3nSyFm284KJdkZPZlE/pM7aSvKr
- JftwldHFi2SmbAJyZfZQl4W6/WhodB7Tl8JqwvI28WVcjymCzZwV51DTVZcittVjjTzM
- RANg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=kuhls.net; 
+ s=kas202506031021; t=1753509548;
+ bh=+IVlZmipqYWLKbINFXEKO5zNJDVojugHRLrCy35vay8=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:From;
+ b=QzAZxCLWRBgxU5lPU9ilHkVxLQUGQeGersOpWxmAuBKJC1+aY2gw1mhFvxu00gH9r
+ sAPnOitYuyVeUc8lE22Y+9/i+Pl8ZeLIk9t79F+IDa3SHME+Firq1HxSIBfKtnskDI
+ F5JSOnl1gNDt35W/7q74rtkka1PkMLcfqk6WzCk+p4ja017pNwnkrboo5TkS3Tbc+W
+ Qt+xp//mI1KbL+9ofb8C+az8TQDnajeliNacivGGkDAP9ViIZlJLA6EnjG0oxWuioO
+ uUYEM1/4xOP87YaBKn/rnE4H489n4pmJmAutfPFl3evpQFFtUC2aF5RcWh6bzBk1rr
+ thFmNnp6qsWgA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=jD3DpfF+
-Subject: [Buildroot] [PATCH] package/mosquitto: bump to version 2.0.22
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202506031021 header.b=QzAZxCLW
+Subject: [Buildroot] [PATCH 2/3] package/libcurl: remove configure option
+ --with-random
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -104,165 +83,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Titouan Christophe <titouan.christophe@mind.be>,
- Scott Fan <fancp2007@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop the patch that was fixed in the v2.0.22, see the closed issues and PRs:
-https://github.com/eclipse-mosquitto/mosquitto/issues/3246
-https://github.com/eclipse-mosquitto/mosquitto/pull/3256
-https://github.com/eclipse-mosquitto/mosquitto/pull/3227
-https://github.com/eclipse-mosquitto/mosquitto/pull/3252
+Upstream removed this configure option in version 8.10.0:
+https://github.com/curl/curl/commit/269fdd4c6ed5d837d57448ac977f6f300968df15
+which was added to buildroot with commit
+d68b999787a0e0838c3bb2d5966f11d8a349a49b.
 
-However, a new issue was reported by GasparQ, when WITH_TLS option is off.
-https://github.com/eclipse-mosquitto/mosquitto/issues/3318
-
-Fortunately, besmarsh had pushed a PR that fixed this issue.
-https://github.com/eclipse-mosquitto/mosquitto/pull/3321
-
-The patch file was quoted in this commit.
-
-For more details of v2.0.22, see the changelog:
-https://github.com/eclipse-mosquitto/mosquitto/blob/v2.0.22/ChangeLog.txt
-
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- ...1-Fix-CMake-builds-with-WITH_TLS-OFF.patch | 50 +++++++++++++++++++
- ...-compile-failed-when-WITH_TLS-is-off.patch | 35 -------------
- package/mosquitto/mosquitto.hash              |  4 +-
- package/mosquitto/mosquitto.mk                |  2 +-
- 4 files changed, 53 insertions(+), 38 deletions(-)
- create mode 100644 package/mosquitto/0001-Fix-CMake-builds-with-WITH_TLS-OFF.patch
- delete mode 100644 package/mosquitto/0001-fix-compile-failed-when-WITH_TLS-is-off.patch
+ package/libcurl/libcurl.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/mosquitto/0001-Fix-CMake-builds-with-WITH_TLS-OFF.patch b/package/mosquitto/0001-Fix-CMake-builds-with-WITH_TLS-OFF.patch
-new file mode 100644
-index 0000000000..9445148f44
---- /dev/null
-+++ b/package/mosquitto/0001-Fix-CMake-builds-with-WITH_TLS-OFF.patch
-@@ -0,0 +1,50 @@
-+From 1ecc94d7b4ff495afd7f32c42072cdf4ea5407aa Mon Sep 17 00:00:00 2001
-+From: Ben Marsh <ben.marsh555@googlemail.com>
-+Date: Mon, 21 Jul 2025 17:46:16 +0100
-+Subject: [PATCH] Fix CMake builds with WITH_TLS=OFF
-+
-+Recent CMake changes caused CMake builds with the WITH_TLS option set to OFF to fail. The OpenSSL package is only found (find_package()) if WITH_TLS is ON, but linking to OpenSSL for the broker and library is not guarded by WITH_TLS. The build therefore fails.
-+
-+Guard linking to OpenSSL, only linking if WITH_TLS is set.
-+
-+Upstream: https://github.com/eclipse-mosquitto/mosquitto/pull/3321
-+Signed-off-by: Scott Fan <fancp2007@gmail.com>
-+---
-+ lib/CMakeLists.txt | 4 +++-
-+ src/CMakeLists.txt | 5 ++++-
-+ 2 files changed, 7 insertions(+), 2 deletions(-)
-+
-+diff --git a/lib/CMakeLists.txt b/lib/CMakeLists.txt
-+index 21b61497..e6b8235b 100644
-+--- a/lib/CMakeLists.txt
-++++ b/lib/CMakeLists.txt
-+@@ -60,7 +60,9 @@ set(C_SRC
-+ 	util_mosq.c util_topic.c util_mosq.h
-+ 	will_mosq.c will_mosq.h)
-+ 
-+-set (LIBRARIES OpenSSL::SSL)
-++if (WITH_TLS)
-++	set (LIBRARIES OpenSSL::SSL)
-++endif()
-+ 
-+ if (UNIX AND NOT APPLE AND NOT ANDROID)
-+ 	find_library(LIBRT rt)
-+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-+index d4bae7cd..6fd0ee53 100644
-+--- a/src/CMakeLists.txt
-++++ b/src/CMakeLists.txt
-+@@ -163,7 +163,10 @@ if (WITH_DLT)
-+     set (MOSQ_LIBS ${MOSQ_LIBS} ${DLT_LIBRARIES})
-+ endif (WITH_DLT)
-+ 
-+-set (MOSQ_LIBS ${MOSQ_LIBS} OpenSSL::SSL)
-++if (WITH_TLS)
-++	set (MOSQ_LIBS ${MOSQ_LIBS} OpenSSL::SSL)
-++endif()
-++
-+ # Check for getaddrinfo_a
-+ include(CheckLibraryExists)
-+ check_library_exists(anl getaddrinfo_a  "" HAVE_GETADDRINFO_A)
-+-- 
-+2.43.0
-+
-diff --git a/package/mosquitto/0001-fix-compile-failed-when-WITH_TLS-is-off.patch b/package/mosquitto/0001-fix-compile-failed-when-WITH_TLS-is-off.patch
-deleted file mode 100644
-index 9c69c6a9c2..0000000000
---- a/package/mosquitto/0001-fix-compile-failed-when-WITH_TLS-is-off.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From 47c015e0d3fb5c5c71a68fe21c8e5eb2a5fbfc1d Mon Sep 17 00:00:00 2001
--From: "chunbo.bai" <chunbo.bai@tcl.com>
--Date: Fri, 7 Mar 2025 14:16:45 +0800
--Subject: [PATCH] fix: compile failed when WITH_TLS is off
--
--Upstream: https://github.com/eclipse-mosquitto/mosquitto/pull/3227
--Signed-off-by: "chunbo.bai" <chunbo.bai@tcl.com>
--Signed-off-by: Scott Fan <fancp2007@gmail.com>
-----
-- src/conf.c | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/src/conf.c b/src/conf.c
--index 74ca66fcb..bfccf729c 100644
----- a/src/conf.c
--+++ b/src/conf.c
--@@ -2313,6 +2313,7 @@ static int config__check(struct mosquitto__config *config)
-- 		}
-- 	}
-- 
--+#ifdef WITH_TLS
-- 	/* Check for missing TLS cafile/capath/certfile/keyfile */
-- 	for(int i=0; i<config->listener_count; i++){
-- 		 bool cafile = !!config->listeners[i].cafile;
--@@ -2333,6 +2334,7 @@ static int config__check(struct mosquitto__config *config)
-- 			 return MOSQ_ERR_INVAL;
-- 		 }
-- 	}
--+#endif
-- 	return MOSQ_ERR_SUCCESS;
-- }
-- 
---- 
--2.43.0
--
-diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
-index ff74d9c534..cf031f91e5 100644
---- a/package/mosquitto/mosquitto.hash
-+++ b/package/mosquitto/mosquitto.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking gpg signature
--# from https://mosquitto.org/files/source/mosquitto-2.0.21.tar.gz.asc
--sha256  7ad5e84caeb8d2bb6ed0c04614b2a7042def961af82d87f688ba33db857b899d  mosquitto-2.0.21.tar.gz
-+# from https://mosquitto.org/files/source/mosquitto-2.0.22.tar.gz.asc
-+sha256  2f752589ef7db40260b633fbdb536e9a04b446a315138d64a7ff3c14e2de6b68  mosquitto-2.0.22.tar.gz
- 
- # License files
- sha256  d3c4ccace4e5d3cc89d34cf2a0bc85b8596bfc0a32b815d0d77f9b7c41b5350c  LICENSE.txt
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index 900d1e65cb..8539f28d08 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MOSQUITTO_VERSION = 2.0.21
-+MOSQUITTO_VERSION = 2.0.22
- MOSQUITTO_SITE = https://mosquitto.org/files/source
- MOSQUITTO_LICENSE = EPL-2.0 or EDLv1.0
- MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v20 edl-v10
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 114ff3d70b..51716cd45b 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -20,7 +20,6 @@ LIBCURL_INSTALL_STAGING = YES
+ LIBCURL_CONF_OPTS = \
+ 	--disable-manual \
+ 	--disable-ntlm \
+-	--with-random=/dev/urandom \
+ 	--disable-curldebug \
+ 	--disable-libcurl-option \
+ 	--disable-ldap \
 -- 
-2.43.0
+2.39.5
 
 _______________________________________________
 buildroot mailing list
