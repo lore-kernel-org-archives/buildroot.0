@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95A95C83F17
-	for <buildroot@archiver.kernel.org>; Sat, 26 Jul 2025 14:44:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5DB5C83F17
+	for <buildroot@archiver.kernel.org>; Sat, 26 Jul 2025 14:45:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4383A60DEF;
-	Sat, 26 Jul 2025 14:44:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5A38960DD2;
+	Sat, 26 Jul 2025 14:45:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 85RCcNwtNqMJ; Sat, 26 Jul 2025 14:44:37 +0000 (UTC)
+ id osXGh-wLbEGe; Sat, 26 Jul 2025 14:45:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 302CF60BDA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8084360D4F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 302CF60BDA;
-	Sat, 26 Jul 2025 14:44:37 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 54409198
- for <buildroot@buildroot.org>; Sat, 26 Jul 2025 14:44:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8084360D4F;
+	Sat, 26 Jul 2025 14:45:02 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 823D0198
+ for <buildroot@buildroot.org>; Sat, 26 Jul 2025 14:45:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 466124011C
- for <buildroot@buildroot.org>; Sat, 26 Jul 2025 14:44:35 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 738A282893
+ for <buildroot@buildroot.org>; Sat, 26 Jul 2025 14:45:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DBTgR4_ePBEB for <buildroot@buildroot.org>;
- Sat, 26 Jul 2025 14:44:34 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5E56A400D5
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5E56A400D5
- for <buildroot@buildroot.org>; Sat, 26 Jul 2025 14:44:34 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4936686B29; Sat, 26 Jul 2025 14:44:34 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 26 Jul 2025 16:38:39 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7de76ae8d110e9eef9be060e8b62ccb46b99f07d
-X-Git-Newrev: cec0acc84d8357de0bac85b27659566b6cbf692c
-X-Patchwork-Hint: ignore
-Message-Id: <20250726144434.4936686B29@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kvmtool: fix build failure w/ musl
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RQWUhFrpoz3h for <buildroot@buildroot.org>;
+ Sat, 26 Jul 2025 14:45:01 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9BB7E827FA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9BB7E827FA
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9BB7E827FA
+ for <buildroot@buildroot.org>; Sat, 26 Jul 2025 14:45:00 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 7D84F13F8C6;
+ Sat, 26 Jul 2025 16:44:56 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 26 Jul 2025 16:44:56 +0200
+MIME-Version: 1.0
+Date: Sat, 26 Jul 2025 16:44:56 +0200
+To: Thomas Perale <thomas.perale@mind.be>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250726112630.778035-1-thomas.perale@mind.be>
+References: <20250726112630.778035-1-thomas.perale@mind.be>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <08f96c1d396dddcd89710433ca13ca86@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1753541097;
+ bh=bnRu2rgTshF3FtmnjCaBjALVEmgWlE/4GPAbDi8naw8=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=tR2jMlQZvv3bEOBA5uLbK2eD0xkxpU7l0kLATYu24AlgcFqjLSTUu8bFcaeRzs1qb
+ 8j3qW6Gorg6GCIlHRR2Xqmp/eom3UjQPuN6j9ZIyuD8a6lC6ZY/Q/RLBNDcHS79uoL
+ rLb0IYbgeBylPoLx7cJIFU66P9yNFLUfjgSbW7+Pm0e638JG1rjnZ+Law/Dxw1rex4
+ BqU+oo0b9zFAPJ3nrhT34HSr0J2v5PdLVLel5SmOnOZMYUSutOvyQE/NRMS6N96Q7J
+ McdDZFdvKwEV/XgVwhlDGdj86SODUlh3wmgeSzzNmbfaBLz2qbPkon9/csqfkxtelN
+ kdkQ+adwbwd8A==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=tR2jMlQZ
+Subject: Re: [Buildroot] [PATCH] package/kvmtool: fix build failure w/ musl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,118 +82,34 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8937896329355450719=="
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8937896329355450719==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=cec0acc84d8357de0bac85b27659566b6cbf692c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Starting GCC14 'implicit-function-declaration' are treated as errors by
-default. When building kvmtool with musl libc, the following error
-occurs due to missing declaration of 'basename':
-
-```
-vfio/core.c:537:22: error: implicit declaration of function ‘basename’ [-Wimplicit-function-declaration]
-  537 |         group_name = basename(group_path);
-      |                      ^~~~~~~~
-vfio/core.c:537:22: warning: nested extern declaration of ‘basename’ [-Wnested-externs]
-vfio/core.c:537:20: error: assignment to ‘char *’ from ‘int’ makes pointer from integer without a cast [-Wint-conversion]
-  537 |         group_name = basename(group_path);
-      |                    ^
-```
-
-This error can be reproduced with:
-
-```
-cat >.config <<EOF
-BR2_aarch64=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_MUSL_BLEEDING_EDGE=y
-BR2_PACKAGE_KVMTOOL=y
-EOF
-make olddefconfig
-make kvmtool
-```
-
-This patch adds the upstream commit that fixes this issue by including
-the appropriate header, ensuring compatibility with musl and GCC14.
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...o-include-libgen-h-for-musl-compatibility.patch | 48 ++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
-
-diff --git a/package/kvmtool/0002-vfio-include-libgen-h-for-musl-compatibility.patch b/package/kvmtool/0002-vfio-include-libgen-h-for-musl-compatibility.patch
-new file mode 100644
-index 0000000000..e75ede6af1
---- /dev/null
-+++ b/package/kvmtool/0002-vfio-include-libgen-h-for-musl-compatibility.patch
-@@ -0,0 +1,48 @@
-+From ba6830eec0f5ab734b093657b16b555e0437b927 Mon Sep 17 00:00:00 2001
-+From: Thomas Perale <thomas.perale@mind.be>
-+Date: Sun, 29 Jun 2025 22:22:21 +0200
-+Subject: vfio: include libgen.h (for musl compatibility)
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Starting GCC14 'implicit-function-declaration' are treated as errors by
-+default. When building kvmtool with musl libc, the following error
-+occurs due to missing declaration of 'basename':
-+
-+vfio/core.c:537:22: error: implicit declaration of function ‘basename’ [-Wimplicit-function-declaration]
-+  537 |         group_name = basename(group_path);
-+      |                      ^~~~~~~~
-+vfio/core.c:537:22: warning: nested extern declaration of ‘basename’ [-Wnested-externs]
-+vfio/core.c:537:20: error: assignment to ‘char *’ from ‘int’ makes pointer from integer without a cast [-Wint-conversion]
-+  537 |         group_name = basename(group_path);
-+      |                    ^
-+
-+This patch fixes the issue by including the appropriate header, ensuring
-+compatibility with musl and GCC14.
-+
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+Reviewed-by: Alexandru Elisei <alexandru.elisei@arm.com>
-+Link: https://lore.kernel.org/r/20250629202221.893360-1-thomas.perale@mind.be
-+Signed-off-by: Will Deacon <will@kernel.org>
-+Upstream: https://git.kernel.org/pub/scm/linux/kernel/git/will/kvmtool.git/patch/?id=ba6830eec0f5ab734b093657b16b555e0437b927
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ vfio/core.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/vfio/core.c b/vfio/core.c
-+index 3ff2c0b0..8f884898 100644
-+--- a/vfio/core.c
-++++ b/vfio/core.c
-+@@ -3,6 +3,7 @@
-+ #include "kvm/ioport.h"
-+ 
-+ #include <linux/list.h>
-++#include <libgen.h>
-+ 
-+ #define VFIO_DEV_DIR		"/dev/vfio"
-+ #define VFIO_DEV_NODE		VFIO_DEV_DIR "/vfio"
-+-- 
-+cgit 1.2.3-korg
-+
-
---===============8937896329355450719==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8937896329355450719==--
+T24gMjYvMDcvMjAyNSAxMzoyNiwgVGhvbWFzIFBlcmFsZSB2aWEgYnVpbGRyb290IHdyb3RlOgo+
+IFN0YXJ0aW5nIEdDQzE0ICdpbXBsaWNpdC1mdW5jdGlvbi1kZWNsYXJhdGlvbicgYXJlIHRyZWF0
+ZWQgYXMgZXJyb3JzIGJ5Cj4gZGVmYXVsdC4gV2hlbiBidWlsZGluZyBrdm10b29sIHdpdGggbXVz
+bCBsaWJjLCB0aGUgZm9sbG93aW5nIGVycm9yCj4gb2NjdXJzIGR1ZSB0byBtaXNzaW5nIGRlY2xh
+cmF0aW9uIG9mICdiYXNlbmFtZSc6Cj4gCj4gYGBgCj4gdmZpby9jb3JlLmM6NTM3OjIyOiBlcnJv
+cjogaW1wbGljaXQgZGVjbGFyYXRpb24gb2YgZnVuY3Rpb24g4oCYYmFzZW5hbWXigJkgCj4gWy1X
+aW1wbGljaXQtZnVuY3Rpb24tZGVjbGFyYXRpb25dCj4gICA1MzcgfCAgICAgICAgIGdyb3VwX25h
+bWUgPSBiYXNlbmFtZShncm91cF9wYXRoKTsKPiAgICAgICB8ICAgICAgICAgICAgICAgICAgICAg
+IF5+fn5+fn5+Cj4gdmZpby9jb3JlLmM6NTM3OjIyOiB3YXJuaW5nOiBuZXN0ZWQgZXh0ZXJuIGRl
+Y2xhcmF0aW9uIG9mIOKAmGJhc2VuYW1l4oCZIAo+IFstV25lc3RlZC1leHRlcm5zXQo+IHZmaW8v
+Y29yZS5jOjUzNzoyMDogZXJyb3I6IGFzc2lnbm1lbnQgdG8g4oCYY2hhciAq4oCZIGZyb20g4oCY
+aW504oCZIG1ha2VzIAo+IHBvaW50ZXIgZnJvbSBpbnRlZ2VyIHdpdGhvdXQgYSBjYXN0IFstV2lu
+dC1jb252ZXJzaW9uXQo+ICAgNTM3IHwgICAgICAgICBncm91cF9uYW1lID0gYmFzZW5hbWUoZ3Jv
+dXBfcGF0aCk7Cj4gICAgICAgfCAgICAgICAgICAgICAgICAgICAgXgo+IGBgYAo+IAo+IFRoaXMg
+ZXJyb3IgY2FuIGJlIHJlcHJvZHVjZWQgd2l0aDoKPiAKPiBgYGAKPiBjYXQgPi5jb25maWcgPDxF
+T0YKPiBCUjJfYWFyY2g2ND15Cj4gQlIyX1RPT0xDSEFJTl9FWFRFUk5BTD15Cj4gQlIyX1RPT0xD
+SEFJTl9FWFRFUk5BTF9CT09UTElOPXkKPiBCUjJfVE9PTENIQUlOX0VYVEVSTkFMX0JPT1RMSU5f
+QUFSQ0g2NF9NVVNMX0JMRUVESU5HX0VER0U9eQo+IEJSMl9QQUNLQUdFX0tWTVRPT0w9eQo+IEVP
+Rgo+IG1ha2Ugb2xkZGVmY29uZmlnCj4gbWFrZSBrdm10b29sCj4gYGBgCj4gCj4gVGhpcyBwYXRj
+aCBhZGRzIHRoZSB1cHN0cmVhbSBjb21taXQgdGhhdCBmaXhlcyB0aGlzIGlzc3VlIGJ5IGluY2x1
+ZGluZwo+IHRoZSBhcHByb3ByaWF0ZSBoZWFkZXIsIGVuc3VyaW5nIGNvbXBhdGliaWxpdHkgd2l0
+aCBtdXNsIGFuZCBHQ0MxNC4KPiAKPiBTaWduZWQtb2ZmLWJ5OiBUaG9tYXMgUGVyYWxlIDx0aG9t
+YXMucGVyYWxlQG1pbmQuYmU+CgpBcHBsaWVkIHRvIG1hc3RlciwgdGhhbmtzLgpfX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBs
+aXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9t
+YWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
