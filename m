@@ -4,95 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C8D2C87FCC
-	for <buildroot@archiver.kernel.org>; Sun, 27 Jul 2025 19:25:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8921BC87FCC
+	for <buildroot@archiver.kernel.org>; Sun, 27 Jul 2025 19:59:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2A6DE416BA;
-	Sun, 27 Jul 2025 19:25:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4ADE341BF8;
+	Sun, 27 Jul 2025 19:59:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yBE5hU-F-oXy; Sun, 27 Jul 2025 19:25:44 +0000 (UTC)
+ id F3ifmZT17GOR; Sun, 27 Jul 2025 19:59:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5FED140D5D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 860D5416BA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5FED140D5D;
-	Sun, 27 Jul 2025 19:25:44 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0B8A4231
- for <buildroot@buildroot.org>; Sun, 27 Jul 2025 19:25:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 860D5416BA;
+	Sun, 27 Jul 2025 19:59:14 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1FFF8231
+ for <buildroot@buildroot.org>; Sun, 27 Jul 2025 19:59:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 08C1D83EC4
- for <buildroot@buildroot.org>; Sun, 27 Jul 2025 19:25:43 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1240660C0D
+ for <buildroot@buildroot.org>; Sun, 27 Jul 2025 19:59:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tqbO6p4Xv1p9 for <buildroot@buildroot.org>;
- Sun, 27 Jul 2025 19:25:42 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::431; helo=mail-wr1-x431.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D9EDC83EC1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D9EDC83EC1
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D9EDC83EC1
- for <buildroot@buildroot.org>; Sun, 27 Jul 2025 19:25:41 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id
- ffacd0b85a97d-3b7892609a5so35754f8f.1
- for <buildroot@buildroot.org>; Sun, 27 Jul 2025 12:25:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1753644339; x=1754249139;
- h=content-transfer-encoding:mime-version:message-id:date:subject:to
- :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=fggxQExQd8KF2sXHxldnyTlT4e8FUxwiTbCIcIyVwK4=;
- b=upFk7Z41Vq+F043VGA1p236jbpNuQV1uNp1Eb7v509G08mg+GxkoWWXhMY1EMaRqfi
- SY1Rs0ZnGPSy1XOn2Zb1zdKe7+xUDTrBaRlD2I/Ly4rGig8heEWWcJ6hvL9pkILBpuZy
- +8O9fNL1jwv7BLtSz1dO01qLywXipKNTpFempP0iojVttvCF/8i4RtZsj2hpDLRIdvB4
- aa6pQ10yT09YCbfrCWaJgc7oeSyTjs3GOxj9nbWE6hpkv74s7pvt30LScSv57qCpCskU
- qSqJOGMD6CfqOGfoo7W+pqObzZt5PT63ER4FO/FOdb8GrEuTlzddhlDkbcWIwsEfHTyW
- AdGg==
-X-Gm-Message-State: AOJu0YwQV5QeAXAQPgecXGhq7P9utZtxxFtkmgqKRzX36zoz8QVI7ZZD
- twzRqzV459ubwJOfdOr9SEgpWw6bcV7yeoDH6419wKuvlLZDGrm7ZFndnjBZT1dfhlBKGblvMaD
- QjPcn
-X-Gm-Gg: ASbGncuAxQryXRi3LwUxed7+V6E9qSR5NyVzxZjO4zOaGilCgtK2kIVJXY28kPQsU1G
- BqX8xudwOmzxpXqPK4qyQeWUzAI/cyFMH4Ypm2yRYK/bgkZAM3b0lGRY6O6vGqx6uqPenGlwGKW
- Lzgqb9btucmdzoeUtH7PyFfnsect6c42WkW7A/kgN7GUpX9abQXVnbC35QoK0GHoBSdwlQNJ7H+
- 1eEwZOLfkIDqYjK0/quMevTU2N4dwLyOo03SQBKPquLTiWQxBRsN6/hB4Z2YhGJXWaGgD2DGwnw
- HeLF/Yt7QYLBJc5fPazTssCe0Jo83QgwSpc1Hvkc+e5K7y7JDS2o3PQHUj/U7ftozp97X5y/zVz
- gPD0vZ9GdemkzCA==
-X-Google-Smtp-Source: AGHT+IEelP+NhINdkuYPZLjGckNIrTfb130Z+nYbNxQq+B/z6NJGllI3JlMH9HW4TR65zn2waXDiyQ==
-X-Received: by 2002:a05:6000:2385:b0:3a5:1410:71c0 with SMTP id
- ffacd0b85a97d-3b77675bd59mr6571941f8f.38.1753644338931; 
- Sun, 27 Jul 2025 12:25:38 -0700 (PDT)
-Received: from arch ([79.132.233.79]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-458705ce775sm128269805e9.32.2025.07.27.12.25.38
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 27 Jul 2025 12:25:38 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uyE2fdanAqiE for <buildroot@buildroot.org>;
+ Sun, 27 Jul 2025 19:59:12 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.116;
+ helo=smtpcmd11116.aruba.it;
+ envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0D64C607AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0D64C607AB
+Received: from smtpcmd11116.aruba.it (smtpcmd11116.aruba.it [62.149.156.116])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0D64C607AB
+ for <buildroot@buildroot.org>; Sun, 27 Jul 2025 19:59:08 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba SMTP with ESMTPSA
+ id g7WUuGwGNtr9dg7WUuzDPy; Sun, 27 Jul 2025 21:59:06 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Sun, 27 Jul 2025 21:25:37 +0200
-Message-ID: <20250727192537.1164560-1-thomas.perale@mind.be>
-X-Mailer: git-send-email 2.50.1
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Sun, 27 Jul 2025 21:59:04 +0200
+Message-Id: <20250727195904.4022529-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1753644339; x=1754249139; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:to
- :from:from:to:cc:subject:date:message-id:reply-to;
- bh=fggxQExQd8KF2sXHxldnyTlT4e8FUxwiTbCIcIyVwK4=;
- b=YrHz9IfsvUTEivCvtnG+/jYHVIrSEc+BxdBdwonck93w1eUBgQP3WOUXZ9CdmduXzc
- 803BxoFPHnRSeh+TcO98N27cBNPAkz891wJnC/krKH/Tel7pFGfqRUf8GEIcvJpXZ6pZ
- FcFgWnNHeGFTs68hMKald5kSuOAnP+b8xHJysN8/We0EfSy5iA+QOgFduigt+LrxiMmg
- t+mxrv3kFQGaoY0oMUqNzBOGw4RKSYH48tI0ao+sSTtf03uW7Uh2tId9xW8aJ6RmqApq
- CBhurfZMVBp1WEq4Y9wmvBvvZrURFVNpqXuFon3N5wQXYa52bXE87PAnPJCn14MiFj/9
- 1H4g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=YrHz9Ifs
-Subject: [Buildroot] [PATCH] package/aardvark-dns: add CPE identifier
+X-CMAE-Envelope: MS4xfLVde9yH86w0rHCCBY1IGq0d+Jrw+Dr7WtvA50/ffa0NvsS11mZdEK0mzTjq1+mSWFUcTZGvGDCkWr4VzkJoHZaKqFjwcjGRFakgT3xsTLdhPbn6X5nk
+ 0Mk8gxbXkh6oee512wLzvuFZ1ILTn3KQProND8pQukxdNK9482BAYU5/259Om/NQAeOdjtFd9TnY//ICAA8/+RZD1844rxIxPBliwtYXg8Yzgkv1UU9OwlpT
+ X4BkbgQqz5Bhfo1TRiR1QX71YAWYWctSXR4uiWP4lsU=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1753646346; bh=tiglT50CaWeFZzde6/gPT/mdWuWwd1/oC3t1Lv9FJlI=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=RbYMbF08TuM7Gu2dBLYaO0Uw/DmV6Nuk57IbXNbupseHaMd9vOY2uyB+K6o8JZjAV
+ bBlNoqRS2/g5GsiyRdD3Lb5IDBUDHckGvO+tV9Z52naZ0/eg1wOzXajq5ztxq8B2Oh
+ hU3ysd8dvneA3PlNyWp0i3SxsGDxjM2sAU2MmC7W1s4z9PbRo2pbgFXWGU612UJBYy
+ 3IMaN/QNr+CrrywtOQSC5InHtL8wc5Rs6aYBp2UVy4fqW/0b2KvoAp34WduXDWvnaW
+ qR7twKy7sk9hsPPZyyRDukPRY3DQJ/Y+sv9eGDehJc+xRiPqUrScQIkx26FLZiyzd8
+ WUqhSz5cfbg8g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=RbYMbF08
+Subject: [Buildroot] [PATCH] package/harfbuzz: bump to version 11.3.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -104,39 +79,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The cpe:2.3:a:containers:aardvark-dns:*:*:*:*:*:*:*:* is
-valid for this package.
+Release Notes:
+https://github.com/harfbuzz/harfbuzz/releases/tag/11.3.3
 
-See https://nvd.nist.gov/products/cpe/detail/5F79D5CD-D716-4190-BE08-31EB5EEB233F
-
-The CPE version strip the 'v' prefix from the version.
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/aardvark-dns/aardvark-dns.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/harfbuzz/harfbuzz.hash | 2 +-
+ package/harfbuzz/harfbuzz.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/aardvark-dns/aardvark-dns.mk b/package/aardvark-dns/aardvark-dns.mk
-index 1d2e06fd03..1394218fbc 100644
---- a/package/aardvark-dns/aardvark-dns.mk
-+++ b/package/aardvark-dns/aardvark-dns.mk
-@@ -11,5 +11,7 @@ AARDVARK_DNS_SITE_METHOD = git
+diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
+index 4cb7da9318..91fd8afe6f 100644
+--- a/package/harfbuzz/harfbuzz.hash
++++ b/package/harfbuzz/harfbuzz.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  d58ada9b2d28821245e8bdb8b94a4e2dad01a08c50d57feb027b32e84c9abfb1  harfbuzz-11.3.2.tar.xz
++sha256  e1fbca6b32a91ae91ecd9eb2ca8d47a5bfe2b1cb2e54855ab7a0b464919ef358  harfbuzz-11.3.3.tar.xz
+ sha256  ba8f810f2455c2f08e2d56bb49b72f37fcf68f1f4fade38977cfd7372050ad64  COPYING
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+index 219564b487..d8a20bcb09 100644
+--- a/package/harfbuzz/harfbuzz.mk
++++ b/package/harfbuzz/harfbuzz.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- AARDVARK_DNS_LICENSE = Apache-2.0
- AARDVARK_DNS_LICENSE_FILES = LICENSE
-+AARDVARK_DNS_CPE_ID_VENDOR = containers
-+AARDVARK_DNS_CPE_ID_VERSION = $(subst v,,$(AARDVARK_DNS_VERSION))
- 
- $(eval $(cargo-package))
+-HARFBUZZ_VERSION = 11.3.2
++HARFBUZZ_VERSION = 11.3.3
+ HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
+ HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
+ HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
 -- 
-2.50.1
+2.39.5
 
 _______________________________________________
 buildroot mailing list
