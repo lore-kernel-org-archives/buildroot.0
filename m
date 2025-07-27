@@ -1,99 +1,157 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51F9DC87FCE
-	for <buildroot@archiver.kernel.org>; Sun, 27 Jul 2025 11:00:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE5CDC87FCE
+	for <buildroot@archiver.kernel.org>; Sun, 27 Jul 2025 11:26:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0894F8412B;
-	Sun, 27 Jul 2025 11:00:40 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ff6uKi572lgt; Sun, 27 Jul 2025 11:00:38 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EBB6F83C4E
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EBB6F83C4E;
-	Sun, 27 Jul 2025 11:00:37 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 409F4231
- for <buildroot@buildroot.org>; Sun, 27 Jul 2025 11:00:37 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2757041350
- for <buildroot@buildroot.org>; Sun, 27 Jul 2025 11:00:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 938E340CCC;
+	Sun, 27 Jul 2025 11:26:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GwOeMLYfe0fp for <buildroot@buildroot.org>;
- Sun, 27 Jul 2025 11:00:36 +0000 (UTC)
+ id VjtQLqKwBTi6; Sun, 27 Jul 2025 11:26:56 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 864B441043
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 864B441043;
+	Sun, 27 Jul 2025 11:26:56 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id E5B96231
+ for <buildroot@buildroot.org>; Sun, 27 Jul 2025 11:26:54 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id D623340BBD
+ for <buildroot@buildroot.org>; Sun, 27 Jul 2025 11:26:54 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sdz21CbT9AX2 for <buildroot@buildroot.org>;
+ Sun, 27 Jul 2025 11:26:54 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C78A640FA1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C78A640FA1
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C78A640FA1
- for <buildroot@buildroot.org>; Sun, 27 Jul 2025 11:00:35 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id
- ffacd0b85a97d-3b7823559a5so330184f8f.0
- for <buildroot@buildroot.org>; Sun, 27 Jul 2025 04:00:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1753614033; x=1754218833;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=H/u3q1jfCvyYjqIjOs8AdLQA+xbzO453LN4LwHk0nK0=;
- b=Y1jfU9uGZPhjbzrPAlfqHAA94YFmp+4i6iJR7ouJVUXKkhQNjsLpPmsPhFUJMDAHux
- SsYaWzVrvoVW4+OoRvczR2t2SfcqKnOQe0DJ2nEaA5vPMc44CQWOap5R1fuMBMZLRXrC
- zp99v+kghfCsBnXNNJrd1sojtUopzudC3WMD2Z0EdtHOElVmk0qKhfzWdayUs6o4dXaG
- WarVVFqg4IqTZ8YBo9BBaBSbstTU62/BG+Jm8wjlLmrnCQpUByHBPT1zfb6QPfIAUA6O
- NTr29HGnf7qNA0Xi1MHLHQge0nn8Mo89FwPgAQ25jjfwca3/N6JGAPkuEVNzmyXHAbKB
- tkdA==
-X-Gm-Message-State: AOJu0Yyh8VzklKF5T9hCm+Ymb9aZk+ME4jfGxKslmBwbkUsnXn+pnk7L
- J5DdNwW96w/9BA8BsyNfmS5+eWmct6oUT3tnjm1jhJSyb1q5xKPOSq/0DCqnOMUxpx1DOu39Hye
- HHAQg
-X-Gm-Gg: ASbGncsrFerAdPfJZKgcFk/yOYX7apR6or91BUq59uMXEm9uRy0v//4jv6JcofEopfC
- AFcy+h3X2V2rYzLBrgSk/1jB9ULPxYPb9117QyLr01A3oRugM1vW2okNfuax2jcEb2jeccKronv
- pAtsQ3DaCW5R4s74nqK49m6zxYMHipkYfQOqizX1/q45inSXHVZaMeKs2stf0wivdffWbkdUVLy
- qwC/igQ6Ov1tTIx7BspzyveiMQlPdXnr7WAC3bz78vUE+0UH7vliMr7dMrqPbcvlNvUZGu2zxJu
- DL3pt+Gnv9NKf595j9aisP4Whm6ZTJHHK6nbhll4Wz0ADmQGEQA4LmydXQYLrrdaD/9rwOx4rfr
- yPTpY3Mdrftife4fFehtOj5P4
-X-Google-Smtp-Source: AGHT+IEGbE04Qa35aXBcp2T8hHpeJO+wJGrRzx3LDnmgsZh+sIBSIpt4GIYlMXT7dF3pTnsXbOzWmw==
-X-Received: by 2002:adf:a2db:0:b0:3b7:7936:e7f1 with SMTP id
- ffacd0b85a97d-3b77936edd9mr2712803f8f.47.1753614033099; 
- Sun, 27 Jul 2025 04:00:33 -0700 (PDT)
-Received: from arch ([79.132.233.79]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-458705ce685sm114879955e9.30.2025.07.27.04.00.31
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 27 Jul 2025 04:00:32 -0700 (PDT)
-To: buildroot@buildroot.org
-Cc: Chris Packham <judge.packham@gmail.com>
-Date: Sun, 27 Jul 2025 13:00:31 +0200
-Message-ID: <20250727110031.1126248-1-thomas.perale@mind.be>
-X-Mailer: git-send-email 2.50.1
+ client-ip=2a01:111:f403:2412::604;
+ helo=nam10-mw2-obe.outbound.protection.outlook.com;
+ envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C915D40BB6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C915D40BB6
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com
+ (mail-mw2nam10on20604.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:2412::604])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C915D40BB6
+ for <buildroot@buildroot.org>; Sun, 27 Jul 2025 11:26:53 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=eEEygc9B8UgCAITc28IP7EpsBVKOy74B2EsqYvZWrgpteewJduM/SjXXHK2eV8JDbKFYdV1OM/DRYeinJZr4di2HDMoWJtzVcmf6uHzvy46UQTni7REC/OXLT7C9R/UyxSU3WG+Dz6MaSNIKRDS8B32MoWb12bfB1Eem3WpujwVRfO99YxVyPy6En9nd3KNVPnGmeEiAY2nJ2dcqCGuvR7czugmobu0xroCY0bevs0h5JvxL/BP1sohTz98RdKC2laZGjrLvoetu+grvhqFfPWAFSTOesRHLIle3gEx+gYPYVq8T3ncCbv0TbO6bKlV9SjOXoqqZD8R2siI0EhCe0A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=prM8h81NC3zIAkamzKiq/fmpmVyFdcP7yOIrQE2rM2g=;
+ b=XXtKshE4Ott7N2eoYNHUiE32NWB3grwA9Ief4Etga6+HQ3Uk9I/zebmzJLUaBYoYCFrYzpwZ8IXrTDIzEI69YJf0PJMnQSk9iT8ikbLgAA6+dYFRDlAVD0v7sWYxHGHujnfrNr1s7LgxGLlha6GgFKZHaIj+OBkhsono7nkDrIVrXK4YB87cGKZfONKqAzhKbEWyrSQ0VL0T3gPM1XxE7Jay2izeCc1GH7D97/ZhwLwWZn3+U5Myb0t+/etU4Pi+XVGuqHe3cdFrT8hrBPvyv9b+PHUGf5osP6RH7reQKqZeqVc1na7McMw2zHgV41V7n5x5pp0+pey2fUbV44q8oA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+Received: from MW4PR03CA0268.namprd03.prod.outlook.com (2603:10b6:303:b4::33)
+ by PH7PR12MB5949.namprd12.prod.outlook.com (2603:10b6:510:1d8::21)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8964.25; Sun, 27 Jul
+ 2025 11:26:46 +0000
+Received: from SJ1PEPF00002323.namprd03.prod.outlook.com
+ (2603:10b6:303:b4:cafe::86) by MW4PR03CA0268.outlook.office365.com
+ (2603:10b6:303:b4::33) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8964.25 via Frontend Transport; Sun,
+ 27 Jul 2025 11:26:45 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ SJ1PEPF00002323.mail.protection.outlook.com (10.167.242.85) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8989.10 via Frontend Transport; Sun, 27 Jul 2025 11:26:44 +0000
+Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Sun, 27 Jul
+ 2025 06:26:42 -0500
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB05.amd.com
+ (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Sun, 27 Jul
+ 2025 06:26:42 -0500
+Received: from xirengwts09.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
+ Transport; Sun, 27 Jul 2025 06:26:40 -0500
+To: <buildroot@buildroot.org>
+Date: Sun, 27 Jul 2025 12:26:33 +0100
+Message-ID: <20250727112633.3245247-1-neal.frager@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Received-SPF: None (SATLEXMB05.amd.com: neal.frager@amd.com does not designate
+ permitted sender hosts)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ1PEPF00002323:EE_|PH7PR12MB5949:EE_
+X-MS-Office365-Filtering-Correlation-Id: e2393284-ff45-410d-1e71-08ddcd00776f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+ ARA:13230040|1800799024|36860700013|82310400026|376014|41080700001; 
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?6jN06GmBygMXX6P3lg8mueDXscpt3lcRMiWJeBI8fsOsMEk/u4Mcr7YBmCgG?=
+ =?us-ascii?Q?VEnW2P2USK75HTdVY5xfGjctBdUkRcUsyxhwwvvG7xc91KMWSV5CHyBiyQpD?=
+ =?us-ascii?Q?00xeVYPZ6WTXZU2GDx5102pgz8FhgZRZzwja0HB1jKAyu0DhiKTEWh1zsV16?=
+ =?us-ascii?Q?CRX5Zhplp3Ejq3Axz+o5qjaqPyH8ig6sEf1tWK8wWvzu/KJSawgcqfjKv6Ob?=
+ =?us-ascii?Q?Pjp2ekHMKX/2x6u3SpNAfZ2miJfybuo+kH1wZLx2aKbSEaRNV7t9P16N02wC?=
+ =?us-ascii?Q?PC/veuua1GXpVLmDCymjL48yJSsocoz3ZHTJMPtv9UVZYx0Ewvdhp9SKwDrx?=
+ =?us-ascii?Q?Ay7ZbO+w1aGgpWmeQkoIm6QRlIBKIGPwhJ16tJQ3HPvHdHUHobf2gWCczntq?=
+ =?us-ascii?Q?sQI4yUJYLnLavBEwP6lSoLlbjMRlDdhiqXWisr3g0Vx4t3H5KrAnWQV5IUvb?=
+ =?us-ascii?Q?4IHkfSrupc+3AMHDUS748O8mTcZJdiTwHklPMMT1RglBcYqgIixhGNPPH03H?=
+ =?us-ascii?Q?8Ed/lK/UHghsDsyzPQ8JpyzuDEpKNft5xGW9nZ+iVkY/4QFlE9F2qdNMx7cx?=
+ =?us-ascii?Q?IT0w+PMF9ANfDH5ZznGKapqyuebSI/NdaCLNGpy8Zm67Ey1mOZJlsg7YmMvp?=
+ =?us-ascii?Q?t0OZOlhNztWtKVwcfVClkvhYBkK6jrxjfpu7PUAOvt3RpuxYjruyfS+Floa+?=
+ =?us-ascii?Q?wkrHqndcLVMQZ/w8DxPuUcB5zQYRovnDl2gbHNKl1feOGnv5S+dhKtmB4BDT?=
+ =?us-ascii?Q?T7NcfizuchEcwYGTOa3dIAx+o/SkOFIGGU9QKLuwDJ9NwN7O+UCgXU0yj2A1?=
+ =?us-ascii?Q?SYWDlSrCe2DfulJ5SS7/6TqqOZD2SXbI8FY0G0GqsNltyj2T+5tOPCus6Otv?=
+ =?us-ascii?Q?ljoHcIGiDjoajmd1Kl6621ojC8FlmvpCM83EoS3/66aBpA6IgUQ56FfvxsS8?=
+ =?us-ascii?Q?YRDBEXIzKDXhOIGQI1zP2L8mqgAvV7E+eNdvZ1Ojrnj1kKxAMd+OuGr69vEv?=
+ =?us-ascii?Q?QvIbLqJrrZCUn+hLJHpgdtcmEcP7xhLmFzw+sl0k/Gns3F5pwsM9nrDEeiB4?=
+ =?us-ascii?Q?jqFTV6W5Klx8ZlaVTDpEiNbBal06A9BuOtWzyP1l3lCKSs5gEvFrFH9vSnSz?=
+ =?us-ascii?Q?GPLvgeCGQAPWpvDX+aLgRfN00tDiOQDT4q++hMhoMDfXZsB6ilBeNIU2REHm?=
+ =?us-ascii?Q?5EsbzfYIjSbloXhlN/n6/qmi18ynIDR2WrKHlhtYoBY8pnX7+bEcamkCy7xa?=
+ =?us-ascii?Q?GycJNg1K5P7Eu7r4CDYZrj+D5kQU1cehb3c0XV6iJT66LPuT62YnmU69NFaR?=
+ =?us-ascii?Q?ORcKVkkRpMf4cqTgEYP0jVMI2SWZppVYMpirFvXQDmxHt79cVbo9dREqFuMA?=
+ =?us-ascii?Q?EmkNZH1pjkyzMLCd6r2J0EwLKo91gNCHOFUPuUKPkziVI0dfFq3BtF6V+dVV?=
+ =?us-ascii?Q?HZfwUg8JBz22zrzigZFyLsKX+zGT33zx8bs8ypY/CHO2g43P0uyQq+izfwYD?=
+ =?us-ascii?Q?HAeLq9rEI5MnihW09F55YMKcwRwIUMbsF597DKJbHKhiwHvRJvKynP2J547+?=
+ =?us-ascii?Q?SZdjespdnBT+p7/JDSk=3D?=
+X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
+ IPV:CAL; SFV:NSPM; H:SATLEXMB04.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
+ SFS:(13230040)(1800799024)(36860700013)(82310400026)(376014)(41080700001);
+ DIR:OUT; SFP:1101; 
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jul 2025 11:26:44.2594 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e2393284-ff45-410d-1e71-08ddcd00776f
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
+ Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: SJ1PEPF00002323.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5949
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1753614033; x=1754218833; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=H/u3q1jfCvyYjqIjOs8AdLQA+xbzO453LN4LwHk0nK0=;
- b=FcaqPwRQPTcLu5bt1cF09qXOj8EmUdwUF5+aS1q0bJh/q+8WDhfARyDSPvWkHReRlG
- 32kcAVrL6lABf/opYpeYZ8jAkcqd2rDLkegxfUOVgrBsnHD4svd/RqNUmXEe8PqS+w/2
- grb7IuYyUqtU1/96fHwb2MzD9hbRCsIMq49HaD7y7yx/fluVvrgIrGKCIDzTlYKfv3OA
- r9aLY0l4vUkRGINmVCxLPxgMyn6d2iI74CFdRrlfnEGdB4oBdWRHQQvawhBzRsKJ4K3S
- Ub2jiipUtshAlZ7LMElHCmIrmjlyTwa3Xb/tZfQKsKxyDiuzhgWxCympc8RJqZ+ZnU8T
- uXZg==
+ d=amd.com; s=selector1; 
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=prM8h81NC3zIAkamzKiq/fmpmVyFdcP7yOIrQE2rM2g=;
+ b=bLZ8fa9KTD/K92w2Ts8Sh3MSGENTPMY4uJG+Gjlfcyox+HTQIEacd/4uTN+eWefpz35gOpiOLTSBRNoxc8lbIWfuFVlgmmTL22gRhGEbamhq3sYzLGaYIxSXoSKJ/5GhB/QUrL9YxZRcBrvuqMsDSMSfm9xJ+r3NIYmTSUAzLqk=
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
+ header.from=amd.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=FcaqPwRQ
-Subject: [Buildroot] [PATCH] package/micropython: add patch for CVE-2024-8947
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
+ header.s=selector1 header.b=bLZ8fa9K
+Subject: [Buildroot] [PATCH v2 1/1] boot/xilinx-embeddedsw: only allow apps
+ for device family
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -105,245 +163,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
+From: Neal Frager via buildroot <buildroot@buildroot.org>
+Reply-To: Neal Frager <neal.frager@amd.com>
+Cc: ibai.erkiaga-elorza@amd.com, luca.ceresoli@bootlin.com,
+ Neal Frager <neal.frager@amd.com>, brandon.maier@collins.com, ju.o@free.fr,
+ thomas.petazzoni@bootlin.com, romain.naour@smile.fr, michal.simek@amd.com,
+ romain.naour@gmail.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This fixes the following vulnerability:
+This patch adds an architecture cpu dependency to each application to make
+sure that users can only build applications which are applicable to their
+target device family.
 
-- CVE-2024-8947
+The versal_plm and versal_psmfw applications are specific to versal devices
+which are based on BR2_cortex_a72.
 
- A vulnerability was found in MicroPython 1.22.2. It has been declared
- as critical. Affected by this vulnerability is an unknown functionality
- of the file py/objarray.c. The manipulation leads to use after free.
- The attack can be launched remotely. The complexity of an attack is
- rather high. The exploitation appears to be difficult. Upgrading to
- version 1.23.0 is able to address this issue. It is recommended to
- upgrade the affected component. In micropython objarray component, when
- a bytes object is resized and copied into itself, it may reference
- memory that has already been freed.
+The zynqmp_pmufw application is specific to zynqmp devices which are based on
+BR2_cortex_a53.
 
-For more information, see:
-  - https://www.cve.org/CVERecord?id=CVE-2024-8947
-  - https://github.com/micropython/micropython/commit/4bed614e707c0644c06e117f848fa12605c711cd
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Neal Frager <neal.frager@amd.com>
 ---
-Tested with `support/testing/run-tests -d dl -o output_folder -k tests.package.test_micropython`
+V1->V2:
+- Replaced new family variant config option with an architecture cpu
+dependency, so no new configs are needed.
+- Updated patch title and commit message accordingly.
 ---
- ...if-extending-a-bytearray-from-itself.patch | 183 ++++++++++++++++++
- package/micropython/micropython.mk            |   3 +
- 2 files changed, 186 insertions(+)
- create mode 100644 package/micropython/0004-py-objarray-fix-use-after-free-if-extending-a-bytearray-from-itself.patch
+ boot/xilinx-embeddedsw/Config.in | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/micropython/0004-py-objarray-fix-use-after-free-if-extending-a-bytearray-from-itself.patch b/package/micropython/0004-py-objarray-fix-use-after-free-if-extending-a-bytearray-from-itself.patch
-new file mode 100644
-index 0000000000..90a795a6c3
---- /dev/null
-+++ b/package/micropython/0004-py-objarray-fix-use-after-free-if-extending-a-bytearray-from-itself.patch
-@@ -0,0 +1,183 @@
-+From 4bed614e707c0644c06e117f848fa12605c711cd Mon Sep 17 00:00:00 2001
-+From: Angus Gratton <angus@redyak.com.au>
-+Date: Tue, 13 Feb 2024 09:24:36 +1100
-+Subject: [PATCH] py/objarray: Fix use-after-free if extending a bytearray from
-+ itself.
-+
-+Two cases, one assigning to a slice.
-+Closes https://github.com/micropython/micropython/issues/13283
-+
-+Second is extending a slice from itself, similar logic.
-+
-+In both cases the problem occurs when m_renew causes realloc to move the
-+buffer, leaving a dangling pointer behind.
-+
-+There are more complex and hard to fix cases when either argument is a
-+memoryview into the buffer, currently resizing to a new address breaks
-+memoryviews into that object.
-+
-+Reproducing this bug and confirming the fix was done by running the unix
-+port under valgrind with GC-aware extensions.
-+
-+Note in default configurations with GIL this bug exists but has no impact
-+(the free buffer won't be reused while the function is still executing, and
-+is no longer referenced after it returns).
-+
-+Signed-off-by: Angus Gratton <angus@redyak.com.au>
-+CVE: CVE-2024-8947
-+Upstream: https://github.com/micropython/micropython/commit/4bed614e707c0644c06e117f848fa12605c711cd
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ py/objarray.c                          | 20 ++++++++++++++++----
-+ tests/basics/bytearray_add.py          |  9 ++++++++-
-+ tests/basics/bytearray_add_self.py     |  8 ++++++++
-+ tests/basics/bytearray_add_self.py.exp |  1 +
-+ tests/basics/bytearray_slice_assign.py | 18 ++++++++++++------
-+ 5 files changed, 45 insertions(+), 11 deletions(-)
-+ create mode 100644 tests/basics/bytearray_add_self.py
-+ create mode 100644 tests/basics/bytearray_add_self.py.exp
-+
-+diff --git a/py/objarray.c b/py/objarray.c
-+index 1fff234822521..803af2cd270c7 100644
-+--- a/py/objarray.c
-++++ b/py/objarray.c
-+@@ -424,6 +424,13 @@ static mp_obj_t array_extend(mp_obj_t self_in, mp_obj_t arg_in) {
-+     if (self->free < len) {
-+         self->items = m_renew(byte, self->items, (self->len + self->free) * sz, (self->len + len) * sz);
-+         self->free = 0;
-++
-++        if (self_in == arg_in) {
-++            // Get arg_bufinfo again in case self->items has moved
-++            //
-++            // (Note not possible to handle case that arg_in is a memoryview into self)
-++            mp_get_buffer_raise(arg_in, &arg_bufinfo, MP_BUFFER_READ);
-++        }
-+     } else {
-+         self->free -= len;
-+     }
-+@@ -456,7 +463,8 @@ static mp_obj_t array_subscr(mp_obj_t self_in, mp_obj_t index_in, mp_obj_t value
-+                 #if MICROPY_PY_ARRAY_SLICE_ASSIGN
-+                 // Assign
-+                 size_t src_len;
-+-                void *src_items;
-++                uint8_t *src_items;
-++                size_t src_offs = 0;
-+                 size_t item_sz = mp_binary_get_size('@', o->typecode & TYPECODE_MASK, NULL);
-+                 if (mp_obj_is_obj(value) && MP_OBJ_TYPE_GET_SLOT_OR_NULL(((mp_obj_base_t *)MP_OBJ_TO_PTR(value))->type, subscr) == array_subscr) {
-+                     // value is array, bytearray or memoryview
-+@@ -469,7 +477,7 @@ static mp_obj_t array_subscr(mp_obj_t self_in, mp_obj_t index_in, mp_obj_t value
-+                     src_items = src_slice->items;
-+                     #if MICROPY_PY_BUILTINS_MEMORYVIEW
-+                     if (mp_obj_is_type(value, &mp_type_memoryview)) {
-+-                        src_items = (uint8_t *)src_items + (src_slice->memview_offset * item_sz);
-++                        src_offs = src_slice->memview_offset * item_sz;
-+                     }
-+                     #endif
-+                 } else if (mp_obj_is_type(value, &mp_type_bytes)) {
-+@@ -504,13 +512,17 @@ static mp_obj_t array_subscr(mp_obj_t self_in, mp_obj_t index_in, mp_obj_t value
-+                         // TODO: alloc policy; at the moment we go conservative
-+                         o->items = m_renew(byte, o->items, (o->len + o->free) * item_sz, (o->len + len_adj) * item_sz);
-+                         o->free = len_adj;
-++                        // m_renew may have moved o->items
-++                        if (src_items == dest_items) {
-++                            src_items = o->items;
-++                        }
-+                         dest_items = o->items;
-+                     }
-+                     mp_seq_replace_slice_grow_inplace(dest_items, o->len,
-+-                        slice.start, slice.stop, src_items, src_len, len_adj, item_sz);
-++                        slice.start, slice.stop, src_items + src_offs, src_len, len_adj, item_sz);
-+                 } else {
-+                     mp_seq_replace_slice_no_grow(dest_items, o->len,
-+-                        slice.start, slice.stop, src_items, src_len, item_sz);
-++                        slice.start, slice.stop, src_items + src_offs, src_len, item_sz);
-+                     // Clear "freed" elements at the end of list
-+                     // TODO: This is actually only needed for typecode=='O'
-+                     mp_seq_clear(dest_items, o->len + len_adj, o->len, item_sz);
-+diff --git a/tests/basics/bytearray_add.py b/tests/basics/bytearray_add.py
-+index a7e2b57374255..1f30a3b740e95 100644
-+--- a/tests/basics/bytearray_add.py
-++++ b/tests/basics/bytearray_add.py
-+@@ -15,4 +15,11 @@
-+ 
-+ # this inplace add tests the code when the buffer doesn't need to be increased
-+ b = bytearray()
-+-b += b''
-++b += b""
-++
-++# extend a bytearray from itself
-++b = bytearray(b"abcdefgh")
-++for _ in range(4):
-++    c = bytearray(b)  # extra allocation, as above
-++    b.extend(b)
-++print(b)
-+diff --git a/tests/basics/bytearray_add_self.py b/tests/basics/bytearray_add_self.py
-+new file mode 100644
-+index 0000000000000..94ae8689fd16c
-+--- /dev/null
-++++ b/tests/basics/bytearray_add_self.py
-+@@ -0,0 +1,8 @@
-++# add a bytearray to itself
-++# This is not supported by CPython as of 3.11.18.
-++
-++b = bytearray(b"123456789")
-++for _ in range(4):
-++    c = bytearray(b)  # extra allocation increases chance 'b' has to relocate
-++    b += b
-++print(b)
-+diff --git a/tests/basics/bytearray_add_self.py.exp b/tests/basics/bytearray_add_self.py.exp
-+new file mode 100644
-+index 0000000000000..5ef948157ac0f
-+--- /dev/null
-++++ b/tests/basics/bytearray_add_self.py.exp
-+@@ -0,0 +1 @@
-++bytearray(b'123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789')
-+diff --git a/tests/basics/bytearray_slice_assign.py b/tests/basics/bytearray_slice_assign.py
-+index fa7878e10ddbb..4de0819042a13 100644
-+--- a/tests/basics/bytearray_slice_assign.py
-++++ b/tests/basics/bytearray_slice_assign.py
-+@@ -18,7 +18,7 @@
-+ l[1:3] = bytearray()
-+ print(l)
-+ l = bytearray(x)
-+-#del l[1:3]
-++# del l[1:3]
-+ print(l)
-+ 
-+ l = bytearray(x)
-+@@ -28,7 +28,7 @@
-+ l[:3] = bytearray()
-+ print(l)
-+ l = bytearray(x)
-+-#del l[:3]
-++# del l[:3]
-+ print(l)
-+ 
-+ l = bytearray(x)
-+@@ -38,7 +38,7 @@
-+ l[:-3] = bytearray()
-+ print(l)
-+ l = bytearray(x)
-+-#del l[:-3]
-++# del l[:-3]
-+ print(l)
-+ 
-+ # slice assignment that extends the array
-+@@ -61,8 +61,14 @@
-+ print(b)
-+ 
-+ # Growth of bytearray via slice extension
-+-b = bytearray(b'12345678')
-+-b.append(57) # expand and add a bit of unused space at end of the bytearray
-++b = bytearray(b"12345678")
-++b.append(57)  # expand and add a bit of unused space at end of the bytearray
-+ for i in range(400):
-+-    b[-1:] = b'ab' # grow slowly into the unused space
-++    b[-1:] = b"ab"  # grow slowly into the unused space
-++print(len(b), b)
-++
-++# Growth of bytearray via slice extension from itself
-++b = bytearray(b"1234567")
-++for i in range(3):
-++    b[-1:] = b
-+ print(len(b), b)
-diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
-index 558ef86534..949abe3b0b 100644
---- a/package/micropython/micropython.mk
-+++ b/package/micropython/micropython.mk
-@@ -15,6 +15,9 @@ MICROPYTHON_LICENSE_FILES = LICENSE
- MICROPYTHON_DEPENDENCIES = host-python3
- MICROPYTHON_CPE_ID_VENDOR = micropython
+diff --git a/boot/xilinx-embeddedsw/Config.in b/boot/xilinx-embeddedsw/Config.in
+index 0dd6433608..608b293712 100644
+--- a/boot/xilinx-embeddedsw/Config.in
++++ b/boot/xilinx-embeddedsw/Config.in
+@@ -30,6 +30,7 @@ config BR2_TARGET_XILINX_EMBEDDEDSW_VERSION
  
-+# 0004-py-objarray-fix-use-after-free-if-extending-a-bytearray-from-itself.patch
-+MICROPYTHON_IGNORE_CVES += CVE-2024-8947
-+
- # Use fallback implementation for exception handling on architectures that don't
- # have explicit support.
- ifeq ($(BR2_i386)$(BR2_x86_64)$(BR2_arm)$(BR2_armeb),)
+ config BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM
+ 	bool "versal plm"
++	depends on BR2_cortex_a72
+ 	help
+ 	  Build versal plm application from Xilinx/embeddedsw repo.
+ 	  If selected, the xilinx-prebuilt package will not install
+@@ -40,6 +41,7 @@ config BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM
+ 
+ config BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PSMFW
+ 	bool "versal psmfw"
++	depends on BR2_cortex_a72
+ 	help
+ 	  Build versal psmfw application from Xilinx/embeddedsw repo.
+ 	  If selected, the xilinx-prebuilt package will not install
+@@ -50,6 +52,7 @@ config BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PSMFW
+ 
+ config BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW
+ 	bool "zynqmp pmufw"
++	depends on BR2_cortex_a53
+ 	help
+ 	  Build zynqmp pmufw application from Xilinx/embeddedsw repo.
+ 	  If selected, the xilinx-prebuilt package will not install
 -- 
-2.50.1
+2.25.1
 
 _______________________________________________
 buildroot mailing list
