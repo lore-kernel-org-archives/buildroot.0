@@ -1,78 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB039C83F26
-	for <buildroot@archiver.kernel.org>; Mon, 28 Jul 2025 19:10:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5C45C83F17
+	for <buildroot@archiver.kernel.org>; Mon, 28 Jul 2025 20:44:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 75B1760A6B;
-	Mon, 28 Jul 2025 19:10:51 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id m4zBxXRoKY59; Mon, 28 Jul 2025 19:10:50 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 929E460A6E
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 929E460A6E;
-	Mon, 28 Jul 2025 19:10:50 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 5F9921D3D
- for <buildroot@buildroot.org>; Mon, 28 Jul 2025 19:10:49 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4639B40D54
- for <buildroot@buildroot.org>; Mon, 28 Jul 2025 19:10:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8E52E40F13;
+	Mon, 28 Jul 2025 20:44:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gDbz4Cq7FK50 for <buildroot@buildroot.org>;
- Mon, 28 Jul 2025 19:10:48 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 46D3D409DE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 46D3D409DE
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 46D3D409DE
- for <buildroot@buildroot.org>; Mon, 28 Jul 2025 19:10:48 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a0a17.dip0.t-ipconnect.de [91.58.10.23])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 1D1FDA4C1F57;
- Mon, 28 Jul 2025 21:10:30 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:59118)
- by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
- (envelope-from <bernd@kuhls.net>) id 1ugTEz-000000005nC-0Kxe;
- Mon, 28 Jul 2025 19:10:29 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 28 Jul 2025 21:10:28 +0200
-Message-Id: <20250728191029.3903749-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.5
+ id eyomOvRGHi7H; Mon, 28 Jul 2025 20:44:20 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A0AC140F19
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id A0AC140F19;
+	Mon, 28 Jul 2025 20:44:20 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id DEFC891D
+ for <buildroot@buildroot.org>; Mon, 28 Jul 2025 20:44:19 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id D11EB40F19
+ for <buildroot@buildroot.org>; Mon, 28 Jul 2025 20:44:19 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bG33fnNTronV for <buildroot@buildroot.org>;
+ Mon, 28 Jul 2025 20:44:19 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
+ helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 937DF40F13
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 937DF40F13
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 937DF40F13
+ for <buildroot@buildroot.org>; Mon, 28 Jul 2025 20:44:18 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 456D2442F1;
+ Mon, 28 Jul 2025 20:44:15 +0000 (UTC)
+Date: Mon, 28 Jul 2025 22:44:14 +0200
+To: Alexander Shirokov <shirokovalexs@gmail.com>
+Cc: buildroot@buildroot.org
+Message-ID: <20250728224414.6d0833d2@windsurf>
+In-Reply-To: <20250728131926.848832-1-shirokovalexs@gmail.com>
+References: <20250728131926.848832-1-shirokovalexs@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-Spamd-Bar: +++
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdelfeduiecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthejredtredtvdenucfhrhhomhepvfhhohhmrghsucfrvghtrgiiiihonhhiuceothhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeejvdejvdfgffevteeiffdugeeiveeliefgffetfeehhfethfeuleefkeejgfefvdenucffohhmrghinhepghhithhhuhgsrdgtohhmpdgsohhothhlihhnrdgtohhmnecukfhppedvrgdtudemtggsudekmeekieegugemvddutddtmegrtddtfhemheelsgefmeegfhdvmeeifegusgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudekmeekieegugemvddutddtmegrtddtfhemheelsgefmeegfhdvmeeifegusgdphhgvlhhopeifihhnughsuhhrfhdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvddprhgtphhtthhopehshhhirhhokhhovhgrlhgvgihssehgmhgrihhlrdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrg
+ h
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202506031021; t=1753729830;
- bh=ROgtWpCeqPN/Aiqbkuv/EvxNuk51HFDVy9KbN+zlTzQ=;
- h=From:To:Cc:Subject:Date:From;
- b=hhXGwDYx60IthqV08n1AjtjiOHSj4nkbDARJ3FbjNCZNwm2nbCu5AvOMeJwZ36gG1
- 603njSUOYaQH71iztoYEvHhQ7XdXVW92qtP3Vdu3TZm8rtZ1dMcBfboWCj1ZcS6Wbj
- c/lwza7kRyaWH0CWSqrmMmC0+LQddAjVhiCfXlbZ/1pQnUaPJgf6ncEUGrCHJAS1OH
- RU9hAulu7JUsHYcS3Iky0N+QHX4XtD1PtIBzipdZtANmB8pQ0HZ7zqFkf/PZIbcjIP
- SmJzx4X7LpgMEar4KLaVW28b2lCDIw2mN3ZPvxZrsdTBG9i3LNIXlvrgILnFcUUNV4
- wlt8HbEnA8FWg==
+ d=bootlin.com; s=gm1; t=1753735455;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=w64fXw6fHgZXZy8Vs1aitkEXUNKE8xr8KjFwEdPxWH4=;
+ b=TP1Oo1an2F8OTI+MSTlnv7gF3or4PGsgKiDuU/oc3c5pYqstSNDKIjxS5ZRMRTLQ8B4r88
+ SpOIeDbQ7C06er8dyS7W4zd/L6HAr6CLfNrkkmZzo1kq107xT4vsWbxobtSjjNmbz27+qo
+ JLJ99qvGqc1EKzZzf8DUp9YvhDVSRh88lrv5Ga0R5kSXnFgFFhRofecc5dMFDcPsQ0MVcC
+ p8I5LF2qKIAVUA0C0dGUJ7cZ+pJ3VB7p55cIojyZlz2ZhVxQBlZ9GYNvaUbXpwQZ06nqB1
+ LFKm82kFqHvluwIVtLu5I51kvJ2DNd15C/E21zUNg30DV0vkqtYoI4L32aa6/w==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202506031021 header.b=hhXGwDYx
-Subject: [Buildroot] [PATCH 1/2] {toolchain,
- linux-headers}: add support for 6.16 headers
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=TP1Oo1an
+Subject: Re: [Buildroot] [v1,1/1] package/zellij: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,121 +85,95 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-And add (and default to) 6.16 to linux-headers.
+Hello Alexander,
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- linux/linux.hash                                    |  1 +
- package/linux-headers/Config.in.host                | 13 +++++++++++--
- toolchain/Config.in                                 |  5 +++++
- .../toolchain-external-custom/Config.in.options     |  6 +++++-
- 4 files changed, 22 insertions(+), 3 deletions(-)
+On Mon, 28 Jul 2025 15:19:26 +0200
+Alexander Shirokov <shirokovalexs@gmail.com> wrote:
 
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 1e6602c878..8401af95e4 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,4 +1,5 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
-+sha256  1a4be2fe6b5246aa4ac8987a8a4af34c42a8dd7d08b46ab48516bcc1befbcd83  linux-6.16.tar.xz
- sha256  d37e92bc16b962a3025df156647bdad90b2db4ff36c7a6137817fe81ef3f28a6  linux-6.15.8.tar.xz
- sha256  4811af1317f98d2cccea3c7695969a2c03a27cb02fd2d5327032dd5341842933  linux-6.12.40.tar.xz
- sha256  d6c0ec4d55b14814f55b62a0b23a2d95faf66877e48fbfb4b83523e4afdf97ba  linux-6.6.100.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 23b65f8dee..37a44c2e3c 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -3,7 +3,7 @@ comment "Kernel Header Options"
- choice
- 	prompt "Kernel Headers"
- 	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
--	default BR2_KERNEL_HEADERS_6_15
-+	default BR2_KERNEL_HEADERS_6_16
- 	help
- 	  Select the kernel version to get headers from.
- 
-@@ -51,6 +51,10 @@ config BR2_KERNEL_HEADERS_6_12
- config BR2_KERNEL_HEADERS_6_15
- 	bool "Linux 6.15.x kernel headers"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_15
-+
-+config BR2_KERNEL_HEADERS_6_16
-+	bool "Linux 6.16.x kernel headers"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_16
- 	select BR2_KERNEL_HEADERS_LATEST
- 
- config BR2_KERNEL_HEADERS_VERSION
-@@ -129,8 +133,12 @@ choice
- 	  If your kernel headers are more recent than the latest version
- 	  in the choice, then select the latest version.
- 
-+config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_16
-+	bool "6.16.x or later"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_16
-+
- config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_15
--	bool "6.15.x or later"
-+	bool "6.15.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_15
- 
- config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_14
-@@ -451,6 +459,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "6.6.100"	if BR2_KERNEL_HEADERS_6_6
- 	default "6.12.40"	if BR2_KERNEL_HEADERS_6_12
- 	default "6.15.8"	if BR2_KERNEL_HEADERS_6_15
-+	default "6.16"		if BR2_KERNEL_HEADERS_6_16
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 185a01057e..8f91b23562 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -657,6 +657,10 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_14
- config BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_15
- 	bool
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_14
-+
-+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_16
-+	bool
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_15
- 	select BR2_TOOLCHAIN_HEADERS_LATEST
- 
- # This should be selected by the latest version, above, to indicate that
-@@ -670,6 +674,7 @@ config BR2_TOOLCHAIN_HEADERS_LATEST
- # stops affecting a value on the first matching default.
- config BR2_TOOLCHAIN_HEADERS_AT_LEAST
- 	string
-+	default "6.16" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_16
- 	default "6.15" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_15
- 	default "6.14" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_14
- 	default "6.13" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_13
-diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-index 1580ffb920..bc34701455 100644
---- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-+++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-@@ -173,8 +173,12 @@ choice
- 	  If your toolchain uses headers newer than the latest version
- 	  in the choice, then select the latest version.
- 
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_6_16
-+	bool "6.16.x or later"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_16
-+
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_6_15
--	bool "6.15.x or later"
-+	bool "6.15.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_15
- 
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_6_14
+> An advanced terminal multiplexer with batteries included. Supports
+> layouts, floating and stacked panes, plugins, and customization.
+> Provides rich functionality out of the box.
+> 
+> Zellij is aimed at developers, operations-oriented users, and anyone who
+> loves the terminal.
+> 
+> https://github.com/zellij-org/zellij
+> 
+> Signed-off-by: Alexander Shirokov <shirokovalexs@gmail.com>
+
+Thanks for your contribution.
+
+> ---
+>  package/Config.in          |  1 +
+>  package/zellij/Config.in   | 15 +++++++++++++++
+>  package/zellij/zellij.hash |  3 +++
+>  package/zellij/zellij.mk   | 12 ++++++++++++
+>  4 files changed, 31 insertions(+)
+
+All new packages need an entry in the DEVELOPERS file, could you add
+one?
+
+
+> diff --git a/package/zellij/Config.in b/package/zellij/Config.in
+> new file mode 100644
+> index 0000000000..24383511ce
+> --- /dev/null
+> +++ b/package/zellij/Config.in
+> @@ -0,0 +1,15 @@
+> +config BR2_PACKAGE_ZELLIJ
+> +	bool "zellij"
+> +	depends on BR2_x86_64 || BR2_x86_i686 || BR2_aarch64
+
+Is there really something architecture-specific in zellij?
+
+> +	depends on BR2_PACKAGE_HOST_RUSTC
+> +	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+> +	help
+> +
+
+This blank line should be dropped.
+
+
+> diff --git a/package/zellij/zellij.mk b/package/zellij/zellij.mk
+> new file mode 100644
+> index 0000000000..b015991aab
+> --- /dev/null
+> +++ b/package/zellij/zellij.mk
+> @@ -0,0 +1,12 @@
+> +################################################################################
+> +#
+> +# zellij
+> +#
+> +################################################################################
+> +
+> +ZELLIJ_VERSION = v0.42.2
+> +ZELLIJ_SITE = $(call github,zellij-org,zellij,$(ZELLIJ_VERSION))
+
+This should be:
+
+ZELLIJ_VERSION = 0.42.2
+ZELLIJ_SITE = $(call github,zellij-org,zellij,v$(ZELLIJ_VERSION))
+
+i.e, the version field should not contain the "v" prefix, so that the
+version number can be matched against CVE reports, against
+release-monitoring.org, etc.
+
+Could you adjust those details and send a v2?
+
+Thanks a lot!
+
+Thomas
 -- 
-2.39.5
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
