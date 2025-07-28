@@ -1,73 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64AFEC83F17
-	for <buildroot@archiver.kernel.org>; Mon, 28 Jul 2025 23:03:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A358C83F17
+	for <buildroot@archiver.kernel.org>; Mon, 28 Jul 2025 23:12:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 37CB741101;
-	Mon, 28 Jul 2025 23:03:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4102760C10;
+	Mon, 28 Jul 2025 23:12:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9uS6CERRj_yJ; Mon, 28 Jul 2025 23:03:49 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id s49Ghj1NqOyl; Mon, 28 Jul 2025 23:12:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 581FB410C4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1FA2860E07
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 581FB410C4;
-	Mon, 28 Jul 2025 23:03:49 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id AC04215C
- for <buildroot@buildroot.org>; Mon, 28 Jul 2025 23:03:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1FA2860E07;
+	Mon, 28 Jul 2025 23:12:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7B3C015C
+ for <buildroot@buildroot.org>; Mon, 28 Jul 2025 23:12:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9DA1A410C4
- for <buildroot@buildroot.org>; Mon, 28 Jul 2025 23:03:48 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6198E80F3D
+ for <buildroot@buildroot.org>; Mon, 28 Jul 2025 23:12:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ep5T2e5gMRTw for <buildroot@buildroot.org>;
- Mon, 28 Jul 2025 23:03:47 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org AB3A2410A6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB3A2410A6
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AB3A2410A6
- for <buildroot@buildroot.org>; Mon, 28 Jul 2025 23:03:47 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id EF2B7B00563;
- Tue, 29 Jul 2025 01:03:44 +0200 (CEST)
-Received: from [192.214.236.6:44558] via [192.214.236.6] by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 29 Jul 2025 01:03:44 +0200
-MIME-Version: 1.0
-Date: Tue, 29 Jul 2025 01:03:44 +0200
-To: Thomas Perale <thomas.perale@mind.be>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250727095526.1006204-1-thomas.perale@mind.be>
-References: <20250727095526.1006204-1-thomas.perale@mind.be>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <b91af82817807676caa11f7b6a4a9fe9@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1753743826;
- bh=DBUwRkRGMWqv+eQNX4lDtGNjg9sUuDfKPZ+MvvyWvC4=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=gd3PO2ucmbLy9eR4CgZ5QI5c8TTbHAhhMTOUcYWBHjti1Sjsg62xcykdJlyv+r0y/
- NeZP/v8FUcf4NVlBp6CPkX4RqUTmpv9Wa4dLKR08vE2bPvN0CGmmkTVtzPx4rvZezy
- eL8l8yeUbPM8fq8rLKXp6rFl+lWtMWLtubP+Yq4Qi8FNmMdp43E+AwNk/KmlMpEeOe
- L4ggMCePdcEWVivuAs7gWJ1Fp0TJ/DiqbKmgJjJ/X8enZ2HXPv90V1U1TVnF5eNIn9
- Ei93s3k0WnxDR1l2wMuIE9Uye19fDJbWUdzMsdPqceL8ynXOG029/XJ9oow2FG8+DT
- 5T3H0aZVW3FlA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=gd3PO2uc
-Subject: Re: [Buildroot] [PATCH 1/3] package/orc: add CPE identifier
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fjXcoZiXsDYp for <buildroot@buildroot.org>;
+ Mon, 28 Jul 2025 23:12:19 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5495880EC1
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5495880EC1
+ for <buildroot@buildroot.org>; Mon, 28 Jul 2025 23:12:19 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 41A7886C2F; Mon, 28 Jul 2025 23:12:19 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 29 Jul 2025 01:07:48 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 74e38b3c4d4e97cc7da28dd0eae89269028f3512
+X-Git-Newrev: 1fc0e90450c433d2c43b2e46483175c68ceac2d2
+X-Patchwork-Hint: ignore
+Message-Id: <20250728231219.41A7886C2F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/micropython: add patch for
+ CVE-2024-8947
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,21 +60,243 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 27/07/2025 11:55, Thomas Perale via buildroot wrote:
-> The cpe:2.3:a:gstreamer:orc:0.4.34:*:*:*:*:*:*:* is
-> valid for this package.
-> 
-> See 
-> https://nvd.nist.gov/products/cpe/detail/37DFA009-0707-4825-B28A-62451B1E2AFC
-> 
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+commit: https://git.buildroot.net/buildroot/commit/?id=1fc0e90450c433d2c43b2e46483175c68ceac2d2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Series applied to master, thanks.
+This fixes the following vulnerability:
+
+- CVE-2024-8947
+
+ A vulnerability was found in MicroPython 1.22.2. It has been declared
+ as critical. Affected by this vulnerability is an unknown functionality
+ of the file py/objarray.c. The manipulation leads to use after free.
+ The attack can be launched remotely. The complexity of an attack is
+ rather high. The exploitation appears to be difficult. Upgrading to
+ version 1.23.0 is able to address this issue. It is recommended to
+ upgrade the affected component. In micropython objarray component, when
+ a bytes object is resized and copied into itself, it may reference
+ memory that has already been freed.
+
+For more information, see:
+  - https://www.cve.org/CVERecord?id=CVE-2024-8947
+  - https://github.com/micropython/micropython/commit/4bed614e707c0644c06e117f848fa12605c711cd
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ ...free-if-extending-a-bytearray-from-itself.patch | 183 +++++++++++++++++++++
+ package/micropython/micropython.mk                 |   3 +
+ 2 files changed, 186 insertions(+)
+
+diff --git a/package/micropython/0004-py-objarray-fix-use-after-free-if-extending-a-bytearray-from-itself.patch b/package/micropython/0004-py-objarray-fix-use-after-free-if-extending-a-bytearray-from-itself.patch
+new file mode 100644
+index 0000000000..90a795a6c3
+--- /dev/null
++++ b/package/micropython/0004-py-objarray-fix-use-after-free-if-extending-a-bytearray-from-itself.patch
+@@ -0,0 +1,183 @@
++From 4bed614e707c0644c06e117f848fa12605c711cd Mon Sep 17 00:00:00 2001
++From: Angus Gratton <angus@redyak.com.au>
++Date: Tue, 13 Feb 2024 09:24:36 +1100
++Subject: [PATCH] py/objarray: Fix use-after-free if extending a bytearray from
++ itself.
++
++Two cases, one assigning to a slice.
++Closes https://github.com/micropython/micropython/issues/13283
++
++Second is extending a slice from itself, similar logic.
++
++In both cases the problem occurs when m_renew causes realloc to move the
++buffer, leaving a dangling pointer behind.
++
++There are more complex and hard to fix cases when either argument is a
++memoryview into the buffer, currently resizing to a new address breaks
++memoryviews into that object.
++
++Reproducing this bug and confirming the fix was done by running the unix
++port under valgrind with GC-aware extensions.
++
++Note in default configurations with GIL this bug exists but has no impact
++(the free buffer won't be reused while the function is still executing, and
++is no longer referenced after it returns).
++
++Signed-off-by: Angus Gratton <angus@redyak.com.au>
++CVE: CVE-2024-8947
++Upstream: https://github.com/micropython/micropython/commit/4bed614e707c0644c06e117f848fa12605c711cd
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++---
++ py/objarray.c                          | 20 ++++++++++++++++----
++ tests/basics/bytearray_add.py          |  9 ++++++++-
++ tests/basics/bytearray_add_self.py     |  8 ++++++++
++ tests/basics/bytearray_add_self.py.exp |  1 +
++ tests/basics/bytearray_slice_assign.py | 18 ++++++++++++------
++ 5 files changed, 45 insertions(+), 11 deletions(-)
++ create mode 100644 tests/basics/bytearray_add_self.py
++ create mode 100644 tests/basics/bytearray_add_self.py.exp
++
++diff --git a/py/objarray.c b/py/objarray.c
++index 1fff234822521..803af2cd270c7 100644
++--- a/py/objarray.c
+++++ b/py/objarray.c
++@@ -424,6 +424,13 @@ static mp_obj_t array_extend(mp_obj_t self_in, mp_obj_t arg_in) {
++     if (self->free < len) {
++         self->items = m_renew(byte, self->items, (self->len + self->free) * sz, (self->len + len) * sz);
++         self->free = 0;
+++
+++        if (self_in == arg_in) {
+++            // Get arg_bufinfo again in case self->items has moved
+++            //
+++            // (Note not possible to handle case that arg_in is a memoryview into self)
+++            mp_get_buffer_raise(arg_in, &arg_bufinfo, MP_BUFFER_READ);
+++        }
++     } else {
++         self->free -= len;
++     }
++@@ -456,7 +463,8 @@ static mp_obj_t array_subscr(mp_obj_t self_in, mp_obj_t index_in, mp_obj_t value
++                 #if MICROPY_PY_ARRAY_SLICE_ASSIGN
++                 // Assign
++                 size_t src_len;
++-                void *src_items;
+++                uint8_t *src_items;
+++                size_t src_offs = 0;
++                 size_t item_sz = mp_binary_get_size('@', o->typecode & TYPECODE_MASK, NULL);
++                 if (mp_obj_is_obj(value) && MP_OBJ_TYPE_GET_SLOT_OR_NULL(((mp_obj_base_t *)MP_OBJ_TO_PTR(value))->type, subscr) == array_subscr) {
++                     // value is array, bytearray or memoryview
++@@ -469,7 +477,7 @@ static mp_obj_t array_subscr(mp_obj_t self_in, mp_obj_t index_in, mp_obj_t value
++                     src_items = src_slice->items;
++                     #if MICROPY_PY_BUILTINS_MEMORYVIEW
++                     if (mp_obj_is_type(value, &mp_type_memoryview)) {
++-                        src_items = (uint8_t *)src_items + (src_slice->memview_offset * item_sz);
+++                        src_offs = src_slice->memview_offset * item_sz;
++                     }
++                     #endif
++                 } else if (mp_obj_is_type(value, &mp_type_bytes)) {
++@@ -504,13 +512,17 @@ static mp_obj_t array_subscr(mp_obj_t self_in, mp_obj_t index_in, mp_obj_t value
++                         // TODO: alloc policy; at the moment we go conservative
++                         o->items = m_renew(byte, o->items, (o->len + o->free) * item_sz, (o->len + len_adj) * item_sz);
++                         o->free = len_adj;
+++                        // m_renew may have moved o->items
+++                        if (src_items == dest_items) {
+++                            src_items = o->items;
+++                        }
++                         dest_items = o->items;
++                     }
++                     mp_seq_replace_slice_grow_inplace(dest_items, o->len,
++-                        slice.start, slice.stop, src_items, src_len, len_adj, item_sz);
+++                        slice.start, slice.stop, src_items + src_offs, src_len, len_adj, item_sz);
++                 } else {
++                     mp_seq_replace_slice_no_grow(dest_items, o->len,
++-                        slice.start, slice.stop, src_items, src_len, item_sz);
+++                        slice.start, slice.stop, src_items + src_offs, src_len, item_sz);
++                     // Clear "freed" elements at the end of list
++                     // TODO: This is actually only needed for typecode=='O'
++                     mp_seq_clear(dest_items, o->len + len_adj, o->len, item_sz);
++diff --git a/tests/basics/bytearray_add.py b/tests/basics/bytearray_add.py
++index a7e2b57374255..1f30a3b740e95 100644
++--- a/tests/basics/bytearray_add.py
+++++ b/tests/basics/bytearray_add.py
++@@ -15,4 +15,11 @@
++ 
++ # this inplace add tests the code when the buffer doesn't need to be increased
++ b = bytearray()
++-b += b''
+++b += b""
+++
+++# extend a bytearray from itself
+++b = bytearray(b"abcdefgh")
+++for _ in range(4):
+++    c = bytearray(b)  # extra allocation, as above
+++    b.extend(b)
+++print(b)
++diff --git a/tests/basics/bytearray_add_self.py b/tests/basics/bytearray_add_self.py
++new file mode 100644
++index 0000000000000..94ae8689fd16c
++--- /dev/null
+++++ b/tests/basics/bytearray_add_self.py
++@@ -0,0 +1,8 @@
+++# add a bytearray to itself
+++# This is not supported by CPython as of 3.11.18.
+++
+++b = bytearray(b"123456789")
+++for _ in range(4):
+++    c = bytearray(b)  # extra allocation increases chance 'b' has to relocate
+++    b += b
+++print(b)
++diff --git a/tests/basics/bytearray_add_self.py.exp b/tests/basics/bytearray_add_self.py.exp
++new file mode 100644
++index 0000000000000..5ef948157ac0f
++--- /dev/null
+++++ b/tests/basics/bytearray_add_self.py.exp
++@@ -0,0 +1 @@
+++bytearray(b'123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789')
++diff --git a/tests/basics/bytearray_slice_assign.py b/tests/basics/bytearray_slice_assign.py
++index fa7878e10ddbb..4de0819042a13 100644
++--- a/tests/basics/bytearray_slice_assign.py
+++++ b/tests/basics/bytearray_slice_assign.py
++@@ -18,7 +18,7 @@
++ l[1:3] = bytearray()
++ print(l)
++ l = bytearray(x)
++-#del l[1:3]
+++# del l[1:3]
++ print(l)
++ 
++ l = bytearray(x)
++@@ -28,7 +28,7 @@
++ l[:3] = bytearray()
++ print(l)
++ l = bytearray(x)
++-#del l[:3]
+++# del l[:3]
++ print(l)
++ 
++ l = bytearray(x)
++@@ -38,7 +38,7 @@
++ l[:-3] = bytearray()
++ print(l)
++ l = bytearray(x)
++-#del l[:-3]
+++# del l[:-3]
++ print(l)
++ 
++ # slice assignment that extends the array
++@@ -61,8 +61,14 @@
++ print(b)
++ 
++ # Growth of bytearray via slice extension
++-b = bytearray(b'12345678')
++-b.append(57) # expand and add a bit of unused space at end of the bytearray
+++b = bytearray(b"12345678")
+++b.append(57)  # expand and add a bit of unused space at end of the bytearray
++ for i in range(400):
++-    b[-1:] = b'ab' # grow slowly into the unused space
+++    b[-1:] = b"ab"  # grow slowly into the unused space
+++print(len(b), b)
+++
+++# Growth of bytearray via slice extension from itself
+++b = bytearray(b"1234567")
+++for i in range(3):
+++    b[-1:] = b
++ print(len(b), b)
+diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
+index 558ef86534..949abe3b0b 100644
+--- a/package/micropython/micropython.mk
++++ b/package/micropython/micropython.mk
+@@ -15,6 +15,9 @@ MICROPYTHON_LICENSE_FILES = LICENSE
+ MICROPYTHON_DEPENDENCIES = host-python3
+ MICROPYTHON_CPE_ID_VENDOR = micropython
+ 
++# 0004-py-objarray-fix-use-after-free-if-extending-a-bytearray-from-itself.patch
++MICROPYTHON_IGNORE_CVES += CVE-2024-8947
++
+ # Use fallback implementation for exception handling on architectures that don't
+ # have explicit support.
+ ifeq ($(BR2_i386)$(BR2_x86_64)$(BR2_arm)$(BR2_armeb),)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
