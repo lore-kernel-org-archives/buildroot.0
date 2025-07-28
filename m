@@ -4,100 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BEE61C87FC9
-	for <buildroot@archiver.kernel.org>; Mon, 28 Jul 2025 10:30:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D192C87FC9
+	for <buildroot@archiver.kernel.org>; Mon, 28 Jul 2025 13:01:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2B1D340D48;
-	Mon, 28 Jul 2025 10:30:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3332E40848;
+	Mon, 28 Jul 2025 13:01:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UEHWv4JQFUtp; Mon, 28 Jul 2025 10:30:18 +0000 (UTC)
+ id xJPL-1tb_RBF; Mon, 28 Jul 2025 13:01:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 548BC40D09
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 377D54093B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 548BC40D09;
-	Mon, 28 Jul 2025 10:30:18 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id DB0B31BE
- for <buildroot@buildroot.org>; Mon, 28 Jul 2025 10:30:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 377D54093B;
+	Mon, 28 Jul 2025 13:01:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id A39F1151
+ for <buildroot@buildroot.org>; Mon, 28 Jul 2025 13:01:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CCFD940D09
- for <buildroot@buildroot.org>; Mon, 28 Jul 2025 10:30:16 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 87CEB8175E
+ for <buildroot@buildroot.org>; Mon, 28 Jul 2025 13:01:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5dQ5Wu8z4oNm for <buildroot@buildroot.org>;
- Mon, 28 Jul 2025 10:30:16 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42d; helo=mail-wr1-x42d.google.com;
- envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org AF1BA40D04
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF1BA40D04
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AF1BA40D04
- for <buildroot@buildroot.org>; Mon, 28 Jul 2025 10:30:14 +0000 (UTC)
-Received: by mail-wr1-x42d.google.com with SMTP id
- ffacd0b85a97d-3b783ea502eso967326f8f.1
- for <buildroot@buildroot.org>; Mon, 28 Jul 2025 03:30:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1753698612; x=1754303412;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=VVODQX2O8x/+S4VxjXYZUmBVHC1xlXIIpvqq4/F/jQY=;
- b=Hq4uKuPle+I9XQPOtwS5BE8Vd2hSMYkMGpiCRE00fNXXP1eHMvTY6DZtJ19jNnC1Hm
- ycf19Xi5hzlehQMSRnhGDpwD0mJzi3BK3jlux55AezLO2FVkMDeYob/P3Ir+uwWXEWAJ
- pEmD8rmhwx5XCRKb/+ue3X/7XuWsVD7q13fIjqtYsy+JcYslW3YmNCSzmnel5JmEnrW6
- syZyRGLRjxqWglDCDKsO9zMt9fdrtZKbSmpA+MM87uUmY9NI8wBmMzMY28bgRSBuIwsm
- dA5PWSBUoDRe1De+78OUdpsV8pnfGkIaeIu0MDhHEe+1KKmpPa09k7yk+qgAnYZudINU
- kr4A==
-X-Gm-Message-State: AOJu0YwBZxU3QudEzwZGlDFHS0uU0HOi0Jq80g7ATvvD5shlOCWApHcx
- vBr3J7ycahWXV05pDHtuGal1pQiwnBAw8hTEG1yAWc9XddKx/7TtE4ZP4pNQxq+Z3cJgItdK/bY
- iimna
-X-Gm-Gg: ASbGnctjnqOKhgc5WCU+mX5co71HKDtDdRT29eT9BTCmRjAnNmczq4hkk9tDB+Hg0uL
- U8AQXeadxrQFrMAUFDI8grQ8nQcbiOizPRK1FnjsCzwtbNDM4AmE2F9V0yANEQU1B6azWR1c1HL
- l3faHwbXN5wziWLoW5hF0cmSdSZnfTrBTA11W8exfYKsW4beoziMfONwSPYuVPakStCOps5rAl0
- k+EdxhkHUESDX+BsspoU1wycrNYWaMjmxjyD1YV09BmwMqgmGGR6CL7c4igctyDu8fvQ38Gmfig
- ucITf1vJBgpxH9wQHC+9ZonUNexkeou83luskcHRfUe82BRFWgDy6BkUlza5x4hVQ9dFhgXmt45
- Ui+EHxnaVmRuBYF/wt37JeVwM4cOFOkhbXwV7iYV8eRSVpRINsDaReuYvtq5hkFm1nedzW96ZDb
- oJAwPJQsWCgv0kCw==
-X-Google-Smtp-Source: AGHT+IGDVTq2I0VBNnaezIbar7bEVuFWbBI7vbIbib6GajZ3+D/4ItWyPmmcl4rVHF2Qdfi7H/ZMvw==
-X-Received: by 2002:a05:6000:2387:b0:3a6:d95e:f37c with SMTP id
- ffacd0b85a97d-3b7765e5c66mr8510564f8f.2.1753698612137; 
- Mon, 28 Jul 2025 03:30:12 -0700 (PDT)
-Received: from dragon.local.ess-mail.com
- (ip-94-140-185-241.reverse.destiny.be. [94.140.185.241])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3b7887285e1sm3071203f8f.65.2025.07.28.03.30.11
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 28 Jul 2025 03:30:11 -0700 (PDT)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iK8Wcfxk9IBF for <buildroot@buildroot.org>;
+ Mon, 28 Jul 2025 13:01:23 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=77.55.128.204;
+ helo=mail.grinn-global.com; envelope-from=b.bilas@grinn-global.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7BBFB81758
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7BBFB81758
+Received: from mail.grinn-global.com (mail.grinn-global.com [77.55.128.204])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7BBFB81758
+ for <buildroot@buildroot.org>; Mon, 28 Jul 2025 13:01:22 +0000 (UTC)
+X-Virus-Scanned: by amavisd-new using ClamAV (25)
+Received: from bartekk-pc (ip-194.4.60.197.edial.pl [194.4.60.197])
+ by server220076.nazwa.pl (Postfix) with ESMTP id 4F5DA1BC938;
+ Mon, 28 Jul 2025 15:01:20 +0200 (CEST)
+From: Bartosz Bilas <b.bilas@grinn-global.com>
 To: buildroot@buildroot.org
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Mon, 28 Jul 2025 12:29:56 +0200
-Message-ID: <20250728102956.81525-1-titouan.christophe@mind.be>
+Cc: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Mon, 28 Jul 2025 15:01:15 +0200
+Message-ID: <20250728130118.18606-3-b.bilas@grinn-global.com>
 X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20250728130118.18606-1-b.bilas@grinn-global.com>
+References: <20250728130118.18606-1-b.bilas@grinn-global.com>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1753698612; x=1754303412; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=VVODQX2O8x/+S4VxjXYZUmBVHC1xlXIIpvqq4/F/jQY=;
- b=h9CfA2JHXGVfJmOg6j0HXgkZ/E+cg6Z2Ks5CsR99H1WUmZ2BeNJnjNhYVibp+fMkmN
- ItRk37k1L7ZJ1DV7qihNlSwf38VU8bqHFOQ+Hgwwh7pSF+GKlfAHs+TJp67L65amjfaF
- E2VTbTqZU7YTE+Vo6RM1ocXPVtaK5vMzn9TU40ZEUy/W/haNo8LsCtrqV4Y6KkvryFRW
- g6ifVHu5jukqhcs6lk6P+1mDmg2jweK4ZCkvO8tOOf4DkLQ5OaDYIiBnN/GfdYp7EoWm
- 20HfKSG063ZHu8VJYd2TiDsfTId3y1nXH82RGtC+h+OnCGsnwSR7+/3iQyU57lDIKIaQ
- f+bA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=h9CfA2JH
-Subject: [Buildroot] [PATCH] package/rust: add CPE_ID_VENDOR
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=grinn-global.com
+Subject: [Buildroot] [PATCH 3/6] package/python-rich: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -109,32 +65,82 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Titouan Christophe via buildroot <buildroot@buildroot.org>
-Reply-To: Titouan Christophe <titouan.christophe@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This gives a proper cpe-id string to the Rust buildroot package
-
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 ---
- package/rust/rust.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/Config.in                    |  1 +
+ package/python-rich/Config.in        | 11 +++++++++++
+ package/python-rich/python-rich.hash |  5 +++++
+ package/python-rich/python-rich.mk   | 14 ++++++++++++++
+ 4 files changed, 31 insertions(+)
+ create mode 100644 package/python-rich/Config.in
+ create mode 100644 package/python-rich/python-rich.hash
+ create mode 100644 package/python-rich/python-rich.mk
 
-diff --git a/package/rust/rust.mk b/package/rust/rust.mk
-index 22f3ca1455..d1298f5d3c 100644
---- a/package/rust/rust.mk
-+++ b/package/rust/rust.mk
-@@ -11,6 +11,7 @@ RUST_SOURCE = rustc-$(RUST_VERSION)-src.tar.xz
- RUST_SITE = https://static.rust-lang.org/dist
- RUST_LICENSE = Apache-2.0 or MIT
- RUST_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
-+RUST_CPE_ID_VENDOR = "rust-lang"
- 
- HOST_RUST_PROVIDES = host-rustc
- 
+diff --git a/package/Config.in b/package/Config.in
+index 587f69e678..0f5e3def99 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1383,6 +1383,7 @@ menu "External python modules"
+ 	source "package/python-requests-toolbelt/Config.in"
+ 	source "package/python-rfc3987/Config.in"
+ 	source "package/python-rgbmatrix/Config.in"
++	source "package/python-rich/Config.in"
+ 	source "package/python-rpds-py/Config.in"
+ 	source "package/python-rpi-gpio/Config.in"
+ 	source "package/python-rpi-ws281x/Config.in"
+diff --git a/package/python-rich/Config.in b/package/python-rich/Config.in
+new file mode 100644
+index 0000000000..e8cc4327e2
+--- /dev/null
++++ b/package/python-rich/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_PYTHON_RICH
++	bool "python-rich"
++	select BR2_PACKAGE_PYTHON_MARKDOWN_IT_PY # runtime
++	select BR2_PACKAGE_PYTHON_PYGMENTS # runtime
++	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
++	select BR2_PACKAGE_PYTHON_MARKDOWN_IT_PY # runtime
++	help
++	  Render rich text, tables, progress bars, syntax
++	  highlighting, markdown and more to the terminal.
++
++	  https://github.com/Textualize/rich
+diff --git a/package/python-rich/python-rich.hash b/package/python-rich/python-rich.hash
+new file mode 100644
+index 0000000000..9e6e954c9f
+--- /dev/null
++++ b/package/python-rich/python-rich.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/rich/json
++md5  79410a24ae5dd52f3b89c6f0e4eadc5f  rich-14.0.0.tar.gz
++sha256  82f1bc23a6a21ebca4ae0c45af9bdbc492ed20231dcb63f297d6d1021a9d5725  rich-14.0.0.tar.gz
++# Locally computed sha256 checksums
++sha256  deed7c17a4318158190a3ea239cc879a5a50271cebb98ae7025f48fbe58dca15  LICENSE
+diff --git a/package/python-rich/python-rich.mk b/package/python-rich/python-rich.mk
+new file mode 100644
+index 0000000000..ddac9686fb
+--- /dev/null
++++ b/package/python-rich/python-rich.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-rich
++#
++################################################################################
++
++PYTHON_RICH_VERSION = 14.0.0
++PYTHON_RICH_SOURCE = rich-$(PYTHON_RICH_VERSION).tar.gz
++PYTHON_RICH_SITE = https://files.pythonhosted.org/packages/a1/53/830aa4c3066a8ab0ae9a9955976fb770fe9c6102117c8ec4ab3ea62d89e8
++PYTHON_RICH_SETUP_TYPE = poetry
++PYTHON_RICH_LICENSE = MIT
++PYTHON_RICH_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
 -- 
 2.50.1
 
