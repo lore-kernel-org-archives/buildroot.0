@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECADEC83F26
-	for <buildroot@archiver.kernel.org>; Mon, 28 Jul 2025 22:27:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1E0FC83F17
+	for <buildroot@archiver.kernel.org>; Mon, 28 Jul 2025 22:28:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BEC9760DE8;
-	Mon, 28 Jul 2025 22:27:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A763D60903;
+	Mon, 28 Jul 2025 22:28:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mw4huBvMolVE; Mon, 28 Jul 2025 22:27:17 +0000 (UTC)
+ id DMGZzOuh7gH3; Mon, 28 Jul 2025 22:28:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DCA3760DD9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA78760DE3
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DCA3760DD9;
-	Mon, 28 Jul 2025 22:27:16 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id E3EFE432
- for <buildroot@buildroot.org>; Mon, 28 Jul 2025 22:27:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EA78760DE3;
+	Mon, 28 Jul 2025 22:28:32 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 631AEDA
+ for <buildroot@buildroot.org>; Mon, 28 Jul 2025 22:28:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D646660DDA
- for <buildroot@buildroot.org>; Mon, 28 Jul 2025 22:27:13 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 49B5881343
+ for <buildroot@buildroot.org>; Mon, 28 Jul 2025 22:28:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6DgC006Jb6il for <buildroot@buildroot.org>;
- Mon, 28 Jul 2025 22:27:13 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2EED660DD9
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2EED660DD9
- for <buildroot@buildroot.org>; Mon, 28 Jul 2025 22:27:13 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1C11586B7B; Mon, 28 Jul 2025 22:27:13 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 29 Jul 2025 00:24:19 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 44801fa77d8368c88c452954f3ae2d4a616651aa
-X-Git-Newrev: 5b5889ee5f57e6159f44d18b13c44083772595e8
-X-Patchwork-Hint: ignore
-Message-Id: <20250728222713.1C11586B7B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libxmlrpc: fix boolean definitions
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BfdZxwcCBWfg for <buildroot@buildroot.org>;
+ Mon, 28 Jul 2025 22:28:31 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9D0E781342
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D0E781342
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9D0E781342
+ for <buildroot@buildroot.org>; Mon, 28 Jul 2025 22:28:31 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id 76641B0051E;
+ Tue, 29 Jul 2025 00:28:28 +0200 (CEST)
+Received: from [192.214.236.6:41552] via [192.214.236.6] by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 29 Jul 2025 00:28:28 +0200
+MIME-Version: 1.0
+Date: Tue, 29 Jul 2025 00:28:28 +0200
+To: yegorslists@googlemail.com
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250725094802.3695163-1-yegorslists@googlemail.com>
+References: <20250725094802.3695163-1-yegorslists@googlemail.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <91bdc9f4e8e4931363bd9743c37c8001@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1753741709;
+ bh=nkc8+BNE51U18zf5fPUrPP3LNEMufjwUTcbtrsQ9Pbg=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=BdbnWEVg432zkdgQabpR9YBjsAd4YU6E2dRFzOUZPYNbHiD5HsmCZaQJqOMzPwhx6
+ 9FgbkQtEQGGoFU7MmNt15mXBkpTK9ZDV28aHaFN1IDHeiPkzIEVdh8rnJvPfQp21Yy
+ ffOASVZPWIcBTTESat+qD9bKdxakwPRkTsrIXcHaTWyd8ldKPer+wZmITG32uGf/Zx
+ 9TLlIB/GykvsAsq+6Ydb3NeQN9xRn7EtEcJiJU6V6yQk9+aT5+aHHMoy2jnmGVtoTt
+ jIzvQ1HnzCKIMtK3vmN4OBJWs9eNk4JXrNo9mzA/RGQo9UUD8S+nQxvFwS9m1RpOZD
+ BxS7QIBF//OkA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=BdbnWEVg
+Subject: Re: [Buildroot] [PATCH] DEVELOPERS: add Yegor Yefremov for
+ package/libxmlrpc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,93 +82,18 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6063115506967628273=="
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6063115506967628273==
-Content-Type: text/plain
+On 25/07/2025 11:48, yegorslists@googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5b5889ee5f57e6159f44d18b13c44083772595e8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Don't define boolean macros for C23 standard as they are implemented
-as keywords.
-
-Fixes the following error:
-
-make[2]: Entering directory
-'/home/user/Documents/versioned/oss/xmlrpc-c/lib/util'
-gcc -c -DNDEBUG -pthread -Wall -W -Wno-uninitialized -Wundef
--Wno-unknown-pragmas -Wmissing-declarations -Wstrict-prototypes
--Wmissing-prototypes -Wimplicit -fno-common -g -O3
--Isrcdir/lib/util/include
--I/home/user/Documents/versioned/oss/xmlrpc-c   casprintf.c
-In file included from casprintf.c:9:
-srcdir/lib/util/include/bool.h:13:5: error: cannot use keyword ‘false’
-as enumeration constant
-   13 |     false = 0,
-      |     ^~~~~
-srcdir/lib/util/include/bool.h:13:5: note: ‘false’ is a keyword with
-‘-std=c23’ onwards
-srcdir/lib/util/include/bool.h:15:3: error: expected ‘;’, identifier
-or ‘(’ before ‘bool’
-   15 | } bool;
-      |   ^~~~
-srcdir/lib/util/include/bool.h:15:3: warning: useless type name in
-empty declaration
-
-Upstream: https://sourceforge.net/p/xmlrpc-c/code/3318/
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- .../libxmlrpc/0001-Fix-boolean-definitions.patch   | 25 ++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
-
-diff --git a/package/libxmlrpc/0001-Fix-boolean-definitions.patch b/package/libxmlrpc/0001-Fix-boolean-definitions.patch
-new file mode 100644
-index 0000000000..0fdfdf7f03
---- /dev/null
-+++ b/package/libxmlrpc/0001-Fix-boolean-definitions.patch
-@@ -0,0 +1,25 @@
-+Index: lib/util/include/bool.h
-+===================================================================
-+Don't define boolean macros for C23 standard as they are implemented
-+as keywords.
-+
-+Upstream: https://sourceforge.net/p/xmlrpc-c/code/3318/
-+
-+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-+
-+diff --git a/lib/util/include/bool.h b/lib/util/include/bool.h
-+--- a/lib/util/include/bool.h	(revision 3316)
-++++ b/lib/util/include/bool.h	(working copy)
-+@@ -5,7 +5,11 @@
-+    collision.
-+ */
-+ 
-+-#ifndef __cplusplus
-++#ifdef __cplusplus
-++/* bool has always been part of the C++ language */
-++#elif __STDC_VERSION__ >= 202311L
-++/* bool is part of the C23 standard */
-++#else
-+ /* At least the GNU compiler defines __bool_true_false_are_defined */
-+ #ifndef __bool_true_false_are_defined
-+ #define __bool_true_false_are_defined
-
---===============6063115506967628273==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6063115506967628273==--
