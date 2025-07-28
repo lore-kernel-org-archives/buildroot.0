@@ -4,57 +4,98 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66AADC87FCE
-	for <buildroot@archiver.kernel.org>; Mon, 28 Jul 2025 13:01:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0624C83F17
+	for <buildroot@archiver.kernel.org>; Mon, 28 Jul 2025 13:20:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1A61C40E8F;
-	Mon, 28 Jul 2025 13:01:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AF06D40DA9;
+	Mon, 28 Jul 2025 13:20:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UksirZnkwfdk; Mon, 28 Jul 2025 13:01:35 +0000 (UTC)
+ id jmp-v2LSPcXP; Mon, 28 Jul 2025 13:20:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3613340E1B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD3BC40C8C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3613340E1B;
-	Mon, 28 Jul 2025 13:01:35 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id A2DEF151
- for <buildroot@buildroot.org>; Mon, 28 Jul 2025 13:01:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CD3BC40C8C;
+	Mon, 28 Jul 2025 13:20:06 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 10EB91BE
+ for <buildroot@buildroot.org>; Mon, 28 Jul 2025 13:20:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 94EDC4003A
- for <buildroot@buildroot.org>; Mon, 28 Jul 2025 13:01:28 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C81C560784
+ for <buildroot@buildroot.org>; Mon, 28 Jul 2025 13:20:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VyojgxrcF-ag for <buildroot@buildroot.org>;
- Mon, 28 Jul 2025 13:01:26 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=77.55.128.204;
- helo=mail.grinn-global.com; envelope-from=b.bilas@grinn-global.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5ED0140327
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5ED0140327
-Received: from mail.grinn-global.com (mail.grinn-global.com [77.55.128.204])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5ED0140327
- for <buildroot@buildroot.org>; Mon, 28 Jul 2025 13:01:26 +0000 (UTC)
-X-Virus-Scanned: by amavisd-new using ClamAV (25)
-Received: from bartekk-pc (ip-194.4.60.197.edial.pl [194.4.60.197])
- by server220076.nazwa.pl (Postfix) with ESMTP id E8C1C1BC3B5;
- Mon, 28 Jul 2025 15:01:21 +0200 (CEST)
-From: Bartosz Bilas <b.bilas@grinn-global.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id khwyixaTcKYB for <buildroot@buildroot.org>;
+ Mon, 28 Jul 2025 13:20:02 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::530; helo=mail-ed1-x530.google.com;
+ envelope-from=shirokovalexs@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A1059606C7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A1059606C7
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com
+ [IPv6:2a00:1450:4864:20::530])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A1059606C7
+ for <buildroot@buildroot.org>; Mon, 28 Jul 2025 13:20:01 +0000 (UTC)
+Received: by mail-ed1-x530.google.com with SMTP id
+ 4fb4d7f45d1cf-615378b42ecso2061758a12.0
+ for <buildroot@buildroot.org>; Mon, 28 Jul 2025 06:20:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1753708799; x=1754313599;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=NEICtPFkgv/lJGEN9dQ5nholUcMq5yAVGwWzSxDasfE=;
+ b=qXi0zcH6UGmyFwiW9gQTrzxrzPnIEEo8vwWW37CYPMrNCU+lx2Xj7FfGZWUhVOw7HJ
+ 6LDkR7xWYEnUmQnd0ZqqdNcN8urLhI6SukoJQZduFoqp50YtLWtwoi4S7fxzRtaRWMLI
+ JPUNosBLU9+zLRKmQhk/6OSmL+o4mD79eCA+zsHEnpyVW+tDTvwMCaxjWwAXQOxlJmZ5
+ /qA8XZW+3wdi2zsAShI8/EW79G10s3kc9SeQuY9fqlDgSrrE/PeJEy8pUg4B697W3KHp
+ IVOx688v2mcdSm8i36FMWQjppCh5bts9XUGedMhdF4XXUfC1VH6VPgr8GycKB3YeGSih
+ cybw==
+X-Gm-Message-State: AOJu0YyNUC4qdr1f4GJi8+q5WUhvB2h6kwP65f2+6YNzrkuHDCJTCBA6
+ ChA1eIjvmAK4X0W3KjS0BBare3Qwj7qBPkPSOi7IngYf2aueHT/8fVKxIhR5
+X-Gm-Gg: ASbGnctXWGut2hBdGRzuMWzapAjYNibCpFfIkwvNRTS+/dEC1m/ZOh6z0Dpao3UBEwC
+ REVEiGT3VF57eVjOymwtukC9i5jkeOEw9gnodxfYmdV3nEfhh3IMZ+HHqVEchsUBVCrG1YMHrRk
+ gVKcma5K3UXxpfBSwaSYpt59OJKJDDJ7VWoHQ9iIuNJhKObMNjkUhshLSq/rSISmmepQ4Xs8GY4
+ S4a3JwnNkRdY/sArRls4hhtuyUGbsVHaUc00lZVZ5g45hEltpydsilUB/kyJYYesylMmgrgkIyB
+ xXq/YpM10802hSPyigrDOR4e+i6BLJFrsozE/qZki6qfICb7SECOKLS4bstalEJwG3u3iOt0f1J
+ TbHbYl4JUihku1Lo186DWac0HDx0vyy4BHhaU
+X-Google-Smtp-Source: AGHT+IF+Qu0BR0oSM/HgQiRq+UTtH2C9xVrViYbzeUjSEakfHgUP2XhJCwg8XVMcoGrszI7Ah2Q/pw==
+X-Received: by 2002:a05:6402:524d:b0:612:d8b3:a9e7 with SMTP id
+ 4fb4d7f45d1cf-614f1bbc851mr9992903a12.5.1753708799101; 
+ Mon, 28 Jul 2025 06:19:59 -0700 (PDT)
+Received: from devhost1.play.pl ([2a02:a319:a1e0:eb00:92eb:221f:6fb6:f3ab])
+ by smtp.gmail.com with ESMTPSA id
+ 4fb4d7f45d1cf-6153a041a4esm1428591a12.28.2025.07.28.06.19.58
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 28 Jul 2025 06:19:58 -0700 (PDT)
+From: Alexander Shirokov <shirokovalexs@gmail.com>
 To: buildroot@buildroot.org
-Cc: Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Mon, 28 Jul 2025 15:01:18 +0200
-Message-ID: <20250728130118.18606-6-b.bilas@grinn-global.com>
+Cc: Alexander Shirokov <shirokovalexs@gmail.com>
+Date: Mon, 28 Jul 2025 15:19:26 +0200
+Message-ID: <20250728131926.848832-1-shirokovalexs@gmail.com>
 X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250728130118.18606-1-b.bilas@grinn-global.com>
-References: <20250728130118.18606-1-b.bilas@grinn-global.com>
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1753708799; x=1754313599; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=NEICtPFkgv/lJGEN9dQ5nholUcMq5yAVGwWzSxDasfE=;
+ b=SE+Bhno/GhWGt76vCA3Lbn8yXsulCgETYboykzM2hWEICtELKCMwEG+LCTQAhZTRDl
+ TwuqHVpqDruPVZxj69w7Z7gtkNAWWA+K/IA28SKOXdmWeSCACdd+uoguNUlEVw6jVr+s
+ CK3dLqGvCoV84EZFSIvyAeQC0A/jXjqE0z0qf9i7orR9WU5x6riZDAMque/QqEwBiQ25
+ cDFUVF2km/VDI/P4EZ3b6CvPRMe7mjYsiAU/GewoDEV0hUTTdm3ggfc4M4Bjocf8y9eG
+ 9K/GEuLRSAdonH2dyKRgoDvcnLDfmPoAzn1oZg5ZwiZRmStXQM+LihkQbxc3uWjQ8xZw
+ KQNQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=grinn-global.com
-Subject: [Buildroot] [PATCH 6/6] package/python-esptool: bump version to
- 5.0.1
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=SE+Bhno/
+Subject: [Buildroot] [v1,1/1] package/zellij: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,98 +112,86 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
----
- .../0001-Fix-running-with-click-8.2.1.patch   | 37 +++++++++++++++++++
- package/python-esptool/Config.in              |  1 +
- package/python-esptool/python-esptool.hash    |  4 +-
- package/python-esptool/python-esptool.mk      |  4 +-
- 4 files changed, 42 insertions(+), 4 deletions(-)
- create mode 100644 package/python-esptool/0001-Fix-running-with-click-8.2.1.patch
+An advanced terminal multiplexer with batteries included. Supports
+layouts, floating and stacked panes, plugins, and customization.
+Provides rich functionality out of the box.
 
-diff --git a/package/python-esptool/0001-Fix-running-with-click-8.2.1.patch b/package/python-esptool/0001-Fix-running-with-click-8.2.1.patch
-new file mode 100644
-index 0000000000..9010d1bfd3
---- /dev/null
-+++ b/package/python-esptool/0001-Fix-running-with-click-8.2.1.patch
-@@ -0,0 +1,37 @@
-+From 0779a019603129d92833b3d275e82074b4a49ac4 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Fr=C3=A9d=C3=A9ric=20Fauberteau?= <frederic@fauberteau.org>
-+Date: Mon, 21 Jul 2025 09:35:27 +0200
-+Subject: [PATCH] Fix running with click-8.2.1
-+
-+The pkgsrc framework provides devel/py-click in version 8.2.1. The
-+dependency "click<8.2.0" cannot be respected in this framework.
-+Therefore esptool must be patched to update it to its last release.
-+---
-+ esptool/cli_util.py | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/esptool/cli_util.py b/esptool/cli_util.py
-+index 647c011..8a40b56 100644
-+--- a/esptool/cli_util.py
-++++ b/esptool/cli_util.py
-+@@ -155,7 +155,7 @@ class AddrFilenamePairType(click.Path):
-+ 
-+     name = "addr-filename-pair"
-+ 
-+-    def get_metavar(self, param):
-++    def get_metavar(self, param, ctx=None):
-+         return "<address> <filename>"
-+ 
-+     def convert(
-+@@ -294,7 +294,7 @@ class OptionEatAll(click.Option):
-+         self._eat_all_parser = None
-+         # Set the metavar dynamically based on the type's metavar
-+         if self.type and hasattr(self.type, "name"):
-+-            self.metavar = f"[{self.type.get_metavar(None) or self.type.name.upper()}]"
-++            self.metavar = f"[{self.type.get_metavar(None, None) or self.type.name.upper()}]"
-+ 
-+     def add_to_parser(self, parser, ctx):
-+         def parser_process(value, state):
-+-- 
-+2.50.1
-+
-diff --git a/package/python-esptool/Config.in b/package/python-esptool/Config.in
-index 5095454aa1..e1471f1170 100644
---- a/package/python-esptool/Config.in
-+++ b/package/python-esptool/Config.in
-@@ -10,6 +10,7 @@ config BR2_PACKAGE_PYTHON_ESPTOOL
- 	select BR2_PACKAGE_PYTHON_REEDSOLO # runtime
- 	select BR2_PACKAGE_PYTHON_SERIAL # runtime
- 	select BR2_PACKAGE_PYTHON3_ZLIB
-+	select BR2_PACKAGE_PYTHON_RICH_CLICK # runtime
- 	help
- 	  A serial utility to communicate & flash code to Espressif
- 	  ESP8266 & ESP32 chips.
-diff --git a/package/python-esptool/python-esptool.hash b/package/python-esptool/python-esptool.hash
-index 6eab790901..1e3cc363e1 100644
---- a/package/python-esptool/python-esptool.hash
-+++ b/package/python-esptool/python-esptool.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/esptool/json
--md5  c7d41d4c89ffa0fa0a9d490439358b27  esptool-4.8.1.tar.gz
--sha256  dc4ef26b659e1a8dcb019147c0ea6d94980b34de99fbe09121c7941c8b254531  esptool-4.8.1.tar.gz
-+md5  17c0e50e4017f1acab0c26e2b28b09ae  esptool-5.0.1.tar.gz
-+sha256  2ad7cae469e4356a2a3087c385343ade7b0c0cd68ffe5b934d9e595d74e3bac9  esptool-5.0.1.tar.gz
- # Locally computed sha256 checksums
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/python-esptool/python-esptool.mk b/package/python-esptool/python-esptool.mk
-index a4922c1e5b..1f8c961f33 100644
---- a/package/python-esptool/python-esptool.mk
-+++ b/package/python-esptool/python-esptool.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+Zellij is aimed at developers, operations-oriented users, and anyone who
+loves the terminal.
+
+https://github.com/zellij-org/zellij
+
+Signed-off-by: Alexander Shirokov <shirokovalexs@gmail.com>
+---
+ package/Config.in          |  1 +
+ package/zellij/Config.in   | 15 +++++++++++++++
+ package/zellij/zellij.hash |  3 +++
+ package/zellij/zellij.mk   | 12 ++++++++++++
+ 4 files changed, 31 insertions(+)
+ create mode 100644 package/zellij/Config.in
+ create mode 100644 package/zellij/zellij.hash
+ create mode 100644 package/zellij/zellij.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 137f74ed82..3699f1d1d7 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2832,6 +2832,7 @@ comment "Utilities"
+ 	source "package/xmlstarlet/Config.in"
+ 	source "package/xxhash/Config.in"
+ 	source "package/ytree/Config.in"
++	source "package/zellij/Config.in"
+ 	source "package/zoxide/Config.in"
+ endmenu
  
--PYTHON_ESPTOOL_VERSION = 4.8.1
-+PYTHON_ESPTOOL_VERSION = 5.0.1
- PYTHON_ESPTOOL_SOURCE = esptool-$(PYTHON_ESPTOOL_VERSION).tar.gz
--PYTHON_ESPTOOL_SITE = https://files.pythonhosted.org/packages/5c/6b/3ce9bb7f36bdef3d6ae71646a1d3b7d59826a478f3ed8a783a93a2f8f537
-+PYTHON_ESPTOOL_SITE = https://files.pythonhosted.org/packages/7e/94/4f3057d92c8e16db8c48ade626dcabb172031756bcee3a29c4bd614f4ff3
- PYTHON_ESPTOOL_SETUP_TYPE = setuptools
- PYTHON_ESPTOOL_LICENSE = GPL-2.0+
- PYTHON_ESPTOOL_LICENSE_FILES = LICENSE
+diff --git a/package/zellij/Config.in b/package/zellij/Config.in
+new file mode 100644
+index 0000000000..24383511ce
+--- /dev/null
++++ b/package/zellij/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_ZELLIJ
++	bool "zellij"
++	depends on BR2_x86_64 || BR2_x86_i686 || BR2_aarch64
++	depends on BR2_PACKAGE_HOST_RUSTC
++	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
++	help
++
++	  An advanced terminal multiplexer with batteries included.
++	  Supports layouts, floating and stacked panes, plugins, and
++	  customization. Provides rich functionality out of the box.
++
++	  Zellij is aimed at developers, operations-oriented users,
++	  and anyone who loves the terminal.
++
++	  https://github.com/zellij-org/zellij
+diff --git a/package/zellij/zellij.hash b/package/zellij/zellij.hash
+new file mode 100644
+index 0000000000..e2ce86a7cf
+--- /dev/null
++++ b/package/zellij/zellij.hash
+@@ -0,0 +1,3 @@
++# Locally generated
++sha256  cd32cd0790fb133dc6d5e5b6f707ff57d63827188e0256ec0438a0ea9b5dd852  zellij-v0.42.2-cargo4.tar.gz
++sha256  9aa6c363b18a48eeecbffe13ff390c76ede2c90eb37ba17dfbbaffc42892d87d  LICENSE.md
+diff --git a/package/zellij/zellij.mk b/package/zellij/zellij.mk
+new file mode 100644
+index 0000000000..b015991aab
+--- /dev/null
++++ b/package/zellij/zellij.mk
+@@ -0,0 +1,12 @@
++################################################################################
++#
++# zellij
++#
++################################################################################
++
++ZELLIJ_VERSION = v0.42.2
++ZELLIJ_SITE = $(call github,zellij-org,zellij,$(ZELLIJ_VERSION))
++ZELLIJ_LICENSE = MIT
++ZELLIJ_LICENSE_FILES = LICENSE
++
++$(eval $(cargo-package))
 -- 
 2.50.1
 
