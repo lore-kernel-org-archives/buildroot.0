@@ -4,73 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69636C87FC9
-	for <buildroot@archiver.kernel.org>; Tue, 29 Jul 2025 23:39:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1ACFC87FCA
+	for <buildroot@archiver.kernel.org>; Tue, 29 Jul 2025 23:40:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3E65461281;
-	Tue, 29 Jul 2025 23:39:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C89496127B;
+	Tue, 29 Jul 2025 23:40:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id d2aMubB8bSgH; Tue, 29 Jul 2025 23:39:15 +0000 (UTC)
+ id OKgtALmCp_mE; Tue, 29 Jul 2025 23:40:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 470FB61279
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C47EF6127E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 470FB61279;
-	Tue, 29 Jul 2025 23:39:15 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 5556913D
- for <buildroot@buildroot.org>; Tue, 29 Jul 2025 23:39:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C47EF6127E;
+	Tue, 29 Jul 2025 23:40:17 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9BEC613D
+ for <buildroot@buildroot.org>; Tue, 29 Jul 2025 23:40:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3BFCF40164
- for <buildroot@buildroot.org>; Tue, 29 Jul 2025 23:39:13 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 825258143F
+ for <buildroot@buildroot.org>; Tue, 29 Jul 2025 23:40:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lMjkuEhjpDFQ for <buildroot@buildroot.org>;
- Tue, 29 Jul 2025 23:39:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 92E33400E7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 92E33400E7
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 92E33400E7
- for <buildroot@buildroot.org>; Tue, 29 Jul 2025 23:39:12 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id EAD1213F86A;
- Wed, 30 Jul 2025 01:39:06 +0200 (CEST)
-Received: from [192.214.236.6:53250] via [192.214.236.6] by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 30 Jul 2025 01:39:06 +0200
-MIME-Version: 1.0
-Date: Wed, 30 Jul 2025 01:39:06 +0200
-To: stefan.nickl@gmail.com
-Cc: buildroot@buildroot.org, Aleksander Morgado <aleksander@aleksander.es>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20250729172639.46544-1-Stefan.Nickl@gmail.com>
-References: <20250729172639.46544-1-Stefan.Nickl@gmail.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <8450b904d73e81a72f106f77fa9dad1d@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1753832350;
- bh=afrDFrw0bcXoJ1Aokardh1xcon1Ybyr0Q1W20x860w4=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Osid9/gQGEA7nEZiCAU/wMovkMJovMN07Ptw0kLcq+6xAYmjB0GbVfdLp/ezXHNyO
- ywzrDLKxDfS9xmA/2ffBXCt7wdGkyy2W5K8yuhfSX0ygOwaLW6KIlHafJUkotdoe8t
- vSh4Rv+cbZp9PsE9mfvxuuuGrTSLykuaBZWzAiitfeUCrl7OyqwTffaUSFKx/TJGyo
- 5viSLxmeb8IWBFV+1YGyc4JrMRiz9v137e7Y155ChsfpEzdAH+82kJzkTkLw/h3bkT
- gii8vPOIkuUngNVNFtwzL5QlAcs+ousFMy8OBehyqkpEVlA19rtXhqbwWon/JEHDfv
- tA6E9S8swFjCA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=Osid9/gQ
-Subject: Re: [Buildroot] [PATCH v2] package/modem-manager: Add option to
- enable AT commands via D-Bus
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GYwftZaI5S_F for <buildroot@buildroot.org>;
+ Tue, 29 Jul 2025 23:40:15 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC3D08111A
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id AC3D08111A
+ for <buildroot@buildroot.org>; Tue, 29 Jul 2025 23:40:15 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 9D24C86C9E; Tue, 29 Jul 2025 23:40:15 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 30 Jul 2025 01:39:45 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f103e3696f611153915e99a32caf8dcbbb106397
+X-Git-Newrev: 0c2769b9c3075aa31ef7c436bd44c020e3c87d34
+X-Patchwork-Hint: ignore
+Message-Id: <20250729234015.9D24C86C9E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rust: add CPE_ID_VENDOR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,17 +59,38 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 29/07/2025 19:26, stefan.nickl@gmail.com wrote:
-> From: Stefan Nickl <Stefan.Nickl@gmail.com>
-> 
-> Signed-off-by: Stefan Nickl <Stefan.Nickl@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=0c2769b9c3075aa31ef7c436bd44c020e3c87d34
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+This gives a proper cpe-id string to the Rust buildroot package,
+as it can be found in the NVD database:
+https://nvd.nist.gov/products/cpe/search/results?keyword=cpe:2.3:a:rust-lang:rust
+
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/rust/rust.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/rust/rust.mk b/package/rust/rust.mk
+index 22f3ca1455..9999475c35 100644
+--- a/package/rust/rust.mk
++++ b/package/rust/rust.mk
+@@ -11,6 +11,7 @@ RUST_SOURCE = rustc-$(RUST_VERSION)-src.tar.xz
+ RUST_SITE = https://static.rust-lang.org/dist
+ RUST_LICENSE = Apache-2.0 or MIT
+ RUST_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
++RUST_CPE_ID_VENDOR = rust-lang
+ 
+ HOST_RUST_PROVIDES = host-rustc
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
