@@ -4,76 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4541EC83F26
-	for <buildroot@archiver.kernel.org>; Tue, 29 Jul 2025 08:56:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 290CFC87FC9
+	for <buildroot@archiver.kernel.org>; Tue, 29 Jul 2025 09:30:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 05A9C4101D;
-	Tue, 29 Jul 2025 08:56:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C7C8B4141A;
+	Tue, 29 Jul 2025 09:30:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lNFtH7JED0ko; Tue, 29 Jul 2025 08:56:56 +0000 (UTC)
+ id vQEm-Wfi4Z2U; Tue, 29 Jul 2025 09:30:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0DD6240FA8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D9F9D41096
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0DD6240FA8;
-	Tue, 29 Jul 2025 08:56:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D9F9D41096;
+	Tue, 29 Jul 2025 09:30:14 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 265CA15C
- for <buildroot@buildroot.org>; Tue, 29 Jul 2025 08:56:55 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id C6B5415C
+ for <buildroot@buildroot.org>; Tue, 29 Jul 2025 09:30:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 177328119F
- for <buildroot@buildroot.org>; Tue, 29 Jul 2025 08:56:55 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B7E9C8115C
+ for <buildroot@buildroot.org>; Tue, 29 Jul 2025 09:30:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5uZj_SxfhArQ for <buildroot@buildroot.org>;
- Tue, 29 Jul 2025 08:56:54 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.195;
- helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F0B1D80DB5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F0B1D80DB5
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F0B1D80DB5
- for <buildroot@buildroot.org>; Tue, 29 Jul 2025 08:56:53 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 662761F68D;
- Tue, 29 Jul 2025 08:56:50 +0000 (UTC)
-Date: Tue, 29 Jul 2025 10:56:49 +0200
-To: Alexander Shirokov <shirokovalexs@gmail.com>
-Cc: buildroot@buildroot.org
-Message-ID: <20250729105649.1c5fbd69@windsurf>
-In-Reply-To: <20250729083312.39534-1-shirokovalexs@gmail.com>
-References: <20250728224414.6d0833d2@windsurf>
- <20250729083312.39534-1-shirokovalexs@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+ id hsjUB98-0TV9 for <buildroot@buildroot.org>;
+ Tue, 29 Jul 2025 09:30:11 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1828:2000:679::23; helo=helium.openadk.org;
+ envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F1F798113F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F1F798113F
+Received: from helium.openadk.org (helium.openadk.org
+ [IPv6:2a00:1828:2000:679::23])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id F1F798113F
+ for <buildroot@buildroot.org>; Tue, 29 Jul 2025 09:30:10 +0000 (UTC)
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id 68446352051D; Tue, 29 Jul 2025 11:30:03 +0200 (CEST)
+Date: Tue, 29 Jul 2025 11:30:02 +0200
+From: Waldemar Brodkorb <wbx@openadk.org>
+To: Petr Vorel <petr.vorel@gmail.com>
+Cc: buildroot@buildroot.org, Julien Olivain <ju.o@free.fr>
+Message-ID: <aIiUmoZmDVJZptrw@waldemar-brodkorb.de>
+References: <20250728212614.37531-1-petr.vorel@gmail.com>
 MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdelgeeifecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthhqredtredtjeenucfhrhhomhepvfhhohhmrghsucfrvghtrgiiiihonhhiuceothhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeegueeludeiffetudekudekvdetteeuteeitdejleeigfefueefieetveefhfeiheenucffohhmrghinhepughotghsrdhrshdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegtsgdukeemkeeigegumedvuddttdemrgdttdhfmeehlegsfeemgehfvdemieefuggsnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgdukeemkeeigegumedvuddttdemrgdttdhfmeehlegsfeemgehfvdemieefuggspdhhvghlohepfihinhgushhurhhfpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedvpdhrtghpthhtohepshhhihhrohhkohhvrghlvgigshesghhmrghilhdrtghomhdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhg
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1753779410;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=M+kXisE20o2fJTYRYlke4NFGuUB8CypYqAXpYgY4Wn8=;
- b=FuoOPFcxhTX87LhX1UzVYIyZNIvagyjbkcbt9FqlT63w5pn6VNboYH+3L2lI7soLYWriwf
- CppfMUO6aNPLi7O/OHqC7F+HOk1Q06zNFucn5+1DLb4LhDynpgm8/erejIfoLo5ZFIbDrc
- VxxbNidTPgn9mVoAdlVWccvQic3/aiu/lTPv+8bOBgvLSxbjRF4PpClxjYRTo0IYwiZgnh
- +URbon4Tw5mGnRlbjZeMqYrytMo4GL4T6Cjlf/iGGUrLgpwlEvJGriZgjrN/0VbVqntynl
- SunJygE77jzzqbHdmoX7AfS08nkZnr6ba4HTApwM3Lf+1RvrNMrqCailTcDdwg==
+Content-Disposition: inline
+In-Reply-To: <20250728212614.37531-1-petr.vorel@gmail.com>
+X-Operating-System: Linux 6.1.0-32-amd64 x86_64
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=openadk.org; s=2022; 
+ t=1753781403; bh=BvO0WiP3EyMN9SKgtBiITB+lhSXnnSc6ZjanJtBazNA=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=wZZrM3I2ncD5utqMg9qE17h1i1gzjTqJfwdF7wiGe9shA5F2DyCFvHUmCHYnAMoPu
+ ozxs/xS7Xi+vk28eXqGOQ8yZ3DwdRydPQD3PTcbP9fUw4wV8bxLgQBbMcLAG+Zq4+W
+ 11Js+J4ertT4RvoKuAb7jkLLSTkmluAEoUppsNdHFckYiiVRuqpXSONeJE3/GMj5NJ
+ tfDFRsVyqD0wwUKfoE9dTBeVYtJaUbBPJMJXsFIxYCDIb9xIzZ966sVXst42upTtWe
+ nWwpMMNFLU3nEjAfpayDyrJnbdnCX2luf2XHsb5HZoYQ19NgUM3zsoheZqujBnjil3
+ /anmO9fZzCQ3Q==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
+ dmarc=none (p=none dis=none)
+ header.from=openadk.org
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=FuoOPFcx
-Subject: Re: [Buildroot] [v1,1/1] package/zellij: new package
+ unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
+ header.s=2022 header.b=wZZrM3I2
+Subject: Re: [Buildroot] [PATCH 1/1] package/ltp-testsuite: Fix uclibc-ng
+ build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,32 +80,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gQWxleGFuZGVyLAoKT24gVHVlLCAyOSBKdWwgMjAyNSAxMDozMzowMCArMDIwMApBbGV4
-YW5kZXIgU2hpcm9rb3YgPHNoaXJva292YWxleHNAZ21haWwuY29tPiB3cm90ZToKCj4gPiA+ICsJ
-ZGVwZW5kcyBvbiBCUjJfeDg2XzY0IHx8IEJSMl94ODZfaTY4NiB8fCBCUjJfYWFyY2g2NCAgCj4g
-PiAKPiA+IElzIHRoZXJlIHJlYWxseSBzb21ldGhpbmcgYXJjaGl0ZWN0dXJlLXNwZWNpZmljIGlu
-IHplbGxpaj8gIAo+IAo+IFVuZm9ydHVuYXRlbHksIHllcy4gVW5kZXIgdGhlIGhvb2QsIFplbGxp
-aiByZWxpZXMgb24gdGhlIGNyYW5lbGlmdCBjcmF0ZSBbMV0sCj4gd2hpY2ggaXMgcmVzdHJpY3Rp
-dmUgaW4gdGVybXMgb2Ygc3VwcG9ydGVkIHBsYXRmb3Jtcy4gSeKAmXZlIG9ic2VydmVkIGNvbXBp
-bGF0aW9uCj4gaXNzdWVzIGR1cmluZyBidWlsZHMgZm9yIFJQSTMsIFFFTVUgYW5kIG90aGVycy4g
-RWFjaCB0aW1lIGNhdXNlZCBieSB0aGlzIGNyYXRlCj4gZHVlIHRvIHVuc3VwcG9ydGVkIHBsYXRm
-b3Jtcy4gU28sIEkgZGVjaWRlZCB0byB0YWtlIGEgY29uc2VydmF0aXZlIGFwcHJvYWNoCj4gaGVy
-ZS4gUG9zc2libHksIHdlIGNhbiBleHBhbmQgdGhlIGxpc3Qgb2Ygc3VwcG9ydGVkIHBsYXRmb3Jt
-cyBvdmVyIHRpbWUuCj4gCj4gWzFdIGh0dHBzOi8vZG9jcy5ycy9jcmFuZWxpZnQtY29kZWdlbi8w
-LjEyMi4wL2NyYW5lbGlmdF9jb2RlZ2VuLwoKU291bmRzIGdvb2QuIFRoZW4gY291bGQgeW91IHBs
-ZWFzZSBzdW1tYXJpemUgdGhpcyBpbiBhIGNvbW1lbnQgYWJvdmUKdGhlIGRlcGVuZGVuY3k/CgoJ
-IyB6ZWxsaWogdXNlcyB0aGUgY3JhbmVsaWZ0IGNyZWF0ZSwgd2hpY2ggaGFzIHNvbWUgYXJjaGl0
-ZWN0dXJlCgkjIGRlcGVuZGVuY2llcywgc2VlCgkjIGh0dHBzOi8vZG9jcy5ycy9jcmFuZWxpZnQt
-Y29kZWdlbi8wLjEyMi4wL2NyYW5lbGlmdF9jb2RlZ2VuLwoJZGVwZW5kcyBvbiAuLi4KClRoYW5r
-cyEKClRob21hcwotLSAKVGhvbWFzIFBldGF6em9uaSwgY28tb3duZXIgYW5kIENFTywgQm9vdGxp
-bgpFbWJlZGRlZCBMaW51eCBhbmQgS2VybmVsIGVuZ2luZWVyaW5nIGFuZCB0cmFpbmluZwpodHRw
-czovL2Jvb3RsaW4uY29tCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0
-cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Hi Petr, all,
+Petr Vorel wrote,
+
+> Backport upstream fix.
+> 
+> Fixes:
+> https://autobuild.buildroot.org/results/f3e/f3e03b9a1a69988d6497f36c9d64a37a66e9ad20/
+> https://autobuild.buildroot.org/results/856/856365f467efc449faee1951250e63d8d4442bbc/
+> https://autobuild.buildroot.org/results/2ac/2ac08cecd6a505f1bac1a673efc280b3a8dcb23a/
+> https://autobuild.buildroot.org/results/59b/59b3ad33667b7e87c81e49dd434d5f494e189e0d/
+> https://autobuild.buildroot.org/results/b1a/b1a36f9971c97300670d8d772ace11e5fedceaaa/
+> 
+> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+
+Thanks for fixing it :)
+You can add my 
+Tested-By: Waldemar Brodkorb <wbx@openadk.org>
+
+best regards
+ Waldemar
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
