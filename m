@@ -1,52 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FDC0C87FCB
-	for <buildroot@archiver.kernel.org>; Wed, 30 Jul 2025 19:37:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F58DC83F26
+	for <buildroot@archiver.kernel.org>; Wed, 30 Jul 2025 19:37:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4C32961455;
-	Wed, 30 Jul 2025 19:37:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 47DCB41452;
+	Wed, 30 Jul 2025 19:37:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1029osAZggQf; Wed, 30 Jul 2025 19:37:19 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3v4kUrdHp8Di; Wed, 30 Jul 2025 19:37:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B42B61456
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 76E4441433
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3B42B61456;
-	Wed, 30 Jul 2025 19:37:19 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id DBEBB12E
- for <buildroot@buildroot.org>; Wed, 30 Jul 2025 19:37:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 76E4441433;
+	Wed, 30 Jul 2025 19:37:33 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 63F5513D
+ for <buildroot@buildroot.org>; Wed, 30 Jul 2025 19:37:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CD78261456
- for <buildroot@buildroot.org>; Wed, 30 Jul 2025 19:37:17 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 559F74141A
+ for <buildroot@buildroot.org>; Wed, 30 Jul 2025 19:37:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VInq6AxMbLXB for <buildroot@buildroot.org>;
- Wed, 30 Jul 2025 19:37:16 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CCBCA61455
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id CCBCA61455
- for <buildroot@buildroot.org>; Wed, 30 Jul 2025 19:37:16 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B54FD86D93; Wed, 30 Jul 2025 19:37:16 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 30 Jul 2025 14:48:58 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6044cc5f26f8f076ead9a3d22dd84681c7c9e23f
-X-Git-Newrev: 56adc0dacd4e07de3242a6acfa9337a12069e0c0
-X-Patchwork-Hint: ignore
-Message-Id: <20250730193716.B54FD86D93@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/opencl-{clhpp, headers,
- icd-loader}: bump version to v2025.07.22
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kdNlOkUc1lOM for <buildroot@buildroot.org>;
+ Wed, 30 Jul 2025 19:37:31 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5E23541411
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E23541411
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5E23541411
+ for <buildroot@buildroot.org>; Wed, 30 Jul 2025 19:37:30 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id E33DC5FFBA;
+ Wed, 30 Jul 2025 21:37:25 +0200 (CEST)
+Received: from [192.214.236.6:45718] via [192.214.236.6] by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Wed, 30 Jul 2025 21:37:25 +0200
+MIME-Version: 1.0
+Date: Wed, 30 Jul 2025 21:37:25 +0200
+To: El Mehdi YOUNES <elmehdi.younes@smile.fr>
+Cc: buildroot@buildroot.org, Gilles Talis <gilles.talis@gmail.com>
+In-Reply-To: <20250730074608.2400345-1-elmehdi.younes@smile.fr>
+References: <20250730074608.2400345-1-elmehdi.younes@smile.fr>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <c862a734f1a338698b9c60bdbddf21de@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1753904248;
+ bh=Yg6Nr42AZp2OJ8Ung01s1INarbM/PE5uEn090wS2Ubc=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=P5Gc2l1wqpqNw/ZP2jDqDbaZl2+5sGdzAlORR7IlFg82yzXv7K0ZTs6DmGXQy+ur/
+ uSya+CtJKEQHq5K2MhA0HwxVycNmtibuKyDPezD066jSdh5uqVRQTIt0jY3xKJPkK5
+ hl7LsVN1Oaj3gRDxVvyhyj0JwFPjbBuGG50NsV6foZbpjjKYinxDYmDOeifWF/3T7T
+ jr2kV0nsx/Uz8rKYVMAAKVjkREn59jBi8s/hpsylpA/lSCns+M0qlx4d8TIYNtt4iX
+ ynoQw75WfoeS/6e25yoFGF4UBtcvnZ77HsAdCL9j9W6FoZjKrMO2O06H0c2ZJ5mihf
+ g6GHM9bflZRWw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=P5Gc2l1w
+Subject: Re: [Buildroot] [PATCH 1/1] package/{opencl-headers, opencl-clhpp,
+ opencl-icd-loader}: bump version to v2025.07.22
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,100 +82,22 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=56adc0dacd4e07de3242a6acfa9337a12069e0c0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 30/07/2025 09:46, El Mehdi YOUNES via buildroot wrote:
+> Synchronizes with OpenCL v3.0.19 specification release.
+> 
+> Releases:
+> https://github.com/KhronosGroup/OpenCL-Headers/releases/tag/v2025.07.22
+> https://github.com/KhronosGroup/OpenCL-ICD-Loader/releases/tag/v2025.07.22
+> https://github.com/KhronosGroup/OpenCL-CLHPP/releases/tag/v2025.07.22
+> 
+> Signed-off-by: El Mehdi YOUNES <elmehdi.younes@smile.fr>
 
-Synchronizes with OpenCL v3.0.19 specification release.
-
-Releases:
-https://github.com/KhronosGroup/OpenCL-Headers/releases/tag/v2025.07.22
-https://github.com/KhronosGroup/OpenCL-ICD-Loader/releases/tag/v2025.07.22
-https://github.com/KhronosGroup/OpenCL-CLHPP/releases/tag/v2025.07.22
-
-Signed-off-by: El Mehdi YOUNES <elmehdi.younes@smile.fr>
-[Julien: factorize package names in commit log title]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/opencl-clhpp/opencl-clhpp.hash           | 2 +-
- package/opencl-clhpp/opencl-clhpp.mk             | 2 +-
- package/opencl-headers/opencl-headers.hash       | 2 +-
- package/opencl-headers/opencl-headers.mk         | 2 +-
- package/opencl-icd-loader/opencl-icd-loader.hash | 2 +-
- package/opencl-icd-loader/opencl-icd-loader.mk   | 2 +-
- 6 files changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/package/opencl-clhpp/opencl-clhpp.hash b/package/opencl-clhpp/opencl-clhpp.hash
-index add8563757..a8f56c5a43 100644
---- a/package/opencl-clhpp/opencl-clhpp.hash
-+++ b/package/opencl-clhpp/opencl-clhpp.hash
-@@ -1,3 +1,3 @@
- # Locally Computed
--sha256  51aebe848514b3bc74101036e111f8ee98703649eec7035944831dc6e05cec14  opencl-clhpp-2024.10.24.tar.gz
-+sha256  c1031afde6e9eb042e6fcfbc17078f4b437a7e8d55482a1ca6e0fa762d262a89  opencl-clhpp-2025.07.22.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
-diff --git a/package/opencl-clhpp/opencl-clhpp.mk b/package/opencl-clhpp/opencl-clhpp.mk
-index 4bff6ad73a..dbe90f6b41 100644
---- a/package/opencl-clhpp/opencl-clhpp.mk
-+++ b/package/opencl-clhpp/opencl-clhpp.mk
-@@ -9,7 +9,7 @@
- # Version desynchronization may result in build or runtime errors.
- # When updating one of them, make sure to check and update the others.
- 
--OPENCL_CLHPP_VERSION = 2024.10.24
-+OPENCL_CLHPP_VERSION = 2025.07.22
- OPENCL_CLHPP_SITE = $(call github,KhronosGroup,OpenCL-CLHPP,v$(OPENCL_CLHPP_VERSION))
- OPENCL_CLHPP_LICENSE = Apache-2.0
- OPENCL_CLHPP_LICENSE_FILES = LICENSE.txt
-diff --git a/package/opencl-headers/opencl-headers.hash b/package/opencl-headers/opencl-headers.hash
-index bd8697e43d..535884f68e 100644
---- a/package/opencl-headers/opencl-headers.hash
-+++ b/package/opencl-headers/opencl-headers.hash
-@@ -1,3 +1,3 @@
- #Locally generated
--sha256  159f2a550592bae49859fee83d372acd152328fdf95c0dcd8b9409f8fad5db93  OpenCL-Headers-2024.10.24.tar.gz
-+sha256  98f0a3ea26b4aec051e533cb1750db2998ab8e82eda97269ed6efe66ec94a240  OpenCL-Headers-2025.07.22.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/opencl-headers/opencl-headers.mk b/package/opencl-headers/opencl-headers.mk
-index 388a86e02e..92f6a7fb1a 100644
---- a/package/opencl-headers/opencl-headers.mk
-+++ b/package/opencl-headers/opencl-headers.mk
-@@ -9,7 +9,7 @@
- # Version desynchronization may result in build or runtime errors.
- # When updating one of them, make sure to check and update the others.
- 
--OPENCL_HEADERS_VERSION = 2024.10.24
-+OPENCL_HEADERS_VERSION = 2025.07.22
- OPENCL_HEADERS_SOURCE = OpenCL-Headers-$(OPENCL_HEADERS_VERSION).tar.gz
- OPENCL_HEADERS_SITE = $(call github,KhronosGroup,OpenCL-Headers,v$(OPENCL_HEADERS_VERSION))
- OPENCL_HEADERS_LICENSE = Apache-2.0
-diff --git a/package/opencl-icd-loader/opencl-icd-loader.hash b/package/opencl-icd-loader/opencl-icd-loader.hash
-index da9f75b63a..347cfe6e91 100644
---- a/package/opencl-icd-loader/opencl-icd-loader.hash
-+++ b/package/opencl-icd-loader/opencl-icd-loader.hash
-@@ -1,3 +1,3 @@
- # locally generated
--sha256  95f2f0cda375b13d2760290df044ebea9c6ff954a7d7faa0867422442c9174dc  OpenCL-ICD-Loader-2024.10.24.tar.gz
-+sha256  dff7a0b11ad5b63a669358e3476e3dc889a4a361674e5b69b267b944d0794142  OpenCL-ICD-Loader-2025.07.22.tar.gz
- sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
-diff --git a/package/opencl-icd-loader/opencl-icd-loader.mk b/package/opencl-icd-loader/opencl-icd-loader.mk
-index cb3d7e462d..222f051a75 100644
---- a/package/opencl-icd-loader/opencl-icd-loader.mk
-+++ b/package/opencl-icd-loader/opencl-icd-loader.mk
-@@ -8,7 +8,7 @@
- # must always be updated together to compatible versions.
- # Version desynchronization may result in build or runtime errors.
- # When updating one of them, make sure to check and update the others.
--OPENCL_ICD_LOADER_VERSION = 2024.10.24
-+OPENCL_ICD_LOADER_VERSION = 2025.07.22
- OPENCL_ICD_LOADER_SOURCE = OpenCL-ICD-Loader-$(OPENCL_ICD_LOADER_VERSION).tar.gz
- OPENCL_ICD_LOADER_SITE = $(call github,KhronosGroup,OpenCL-ICD-Loader,v$(OPENCL_ICD_LOADER_VERSION))
- OPENCL_ICD_LOADER_LICENSE = Apache-2.0
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
