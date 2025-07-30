@@ -4,77 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD06DC83F26
-	for <buildroot@archiver.kernel.org>; Wed, 30 Jul 2025 20:38:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DC57C87FCB
+	for <buildroot@archiver.kernel.org>; Wed, 30 Jul 2025 20:39:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 71A5D614BA;
-	Wed, 30 Jul 2025 20:38:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3D1F7614BD;
+	Wed, 30 Jul 2025 20:39:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UJjryKs19WXV; Wed, 30 Jul 2025 20:38:02 +0000 (UTC)
+ id f4it4AiXDD2k; Wed, 30 Jul 2025 20:39:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 84359613E9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 577CD614B9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 84359613E9;
-	Wed, 30 Jul 2025 20:38:02 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 0E97E186
- for <buildroot@buildroot.org>; Wed, 30 Jul 2025 20:38:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 577CD614B9;
+	Wed, 30 Jul 2025 20:39:55 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id E6D47186
+ for <buildroot@buildroot.org>; Wed, 30 Jul 2025 20:39:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E939940FF3
- for <buildroot@buildroot.org>; Wed, 30 Jul 2025 20:38:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D800340FF3
+ for <buildroot@buildroot.org>; Wed, 30 Jul 2025 20:39:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WAwMp9Ks37VI for <buildroot@buildroot.org>;
- Wed, 30 Jul 2025 20:38:00 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
- helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id OS1DGXxqzPOI for <buildroot@buildroot.org>;
+ Wed, 30 Jul 2025 20:39:52 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::236;
+ helo=relay16.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7BA454085A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7BA454085A
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7BA454085A
- for <buildroot@buildroot.org>; Wed, 30 Jul 2025 20:37:59 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D34F744386;
- Wed, 30 Jul 2025 20:37:54 +0000 (UTC)
-Date: Wed, 30 Jul 2025 22:37:53 +0200
-To: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: buildroot@buildroot.org, Julien Olivain <ju.o@free.fr>
-Message-ID: <20250730223753.2f400524@windsurf>
-In-Reply-To: <20250710-loongarch-fabi-v2-0-72fcf95c8b65@flygoat.com>
-References: <20250710-loongarch-fabi-v2-0-72fcf95c8b65@flygoat.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 853CD4085A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 853CD4085A
+Received: from relay16.mail.gandi.net (relay16.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::236])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 853CD4085A
+ for <buildroot@buildroot.org>; Wed, 30 Jul 2025 20:39:52 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id 4B359449F1;
+ Wed, 30 Jul 2025 20:39:48 +0000 (UTC)
+To: buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 30 Jul 2025 22:39:43 +0200
+Message-ID: <20250730203947.1097409-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.50.1
 MIME-Version: 1.0
 X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdelkeeludcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthejredtredtvdenucfhrhhomhepvfhhohhmrghsucfrvghtrgiiiihonhhiuceothhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpefhkeelhfeifeehffdthfehhfdvteeuvdetveduvdekhfffvddtgeeigfekleekteenucffohhmrghinhepsghuihhlughrohhothdrnhgvthdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegtsgdukeemkeeigegumedvuddttdemrgdttdhfmeehlegsfeemgehfvdemieefuggsnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgdukeemkeeigegumedvuddttdemrgdttdhfmeehlegsfeemgehfvdemieefuggspdhhvghlohepfihinhgushhurhhfpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeefpdhrtghpthhtohepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomhdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtr
- dhorhhgpdhrtghpthhtohepjhhurdhosehfrhgvvgdrfhhr
-X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-GND-Score: 0
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdelkeeludcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepvdefiedvhfevieetgfethffgiefhjeevfefftdfhtddvffeuieeludehfeeguefgnecukfhppedvrgdtudemtggsudekmeekieegugemvddutddtmegrtddtfhemheelsgefmeegfhdvmeeifegusgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudekmeekieegugemvddutddtmegrtddtfhemheelsgefmeegfhdvmeeifegusgdphhgvlhhopeifihhnughsuhhrfhdrhhhomhgvpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedvpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomh
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1753907875;
+ d=bootlin.com; s=gm1; t=1753907989;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=Zk+mkPWarqLu/TrIpJKFkL9b1gN75ziGwTEaJT1ngJY=;
- b=aM5yRjI2ckANawKeIfg2roSD5tOMx2HGg9ASD2bPPqvZPYbbF6/VtBVT9Xt0AQku94zz5a
- BdYnuPXBEd16BjfzEGNEC71NoVgdfmfRhSBDsZWJ1bKnIoyLc1ATQdymnmowaXh3S1EzQ5
- pWMVLVpFrzirf2/nGZElPLYFw6Tq5pGUNsujWd4GPVvDGnxPJXZYYlV4RqspQt1qeIPPse
- Je5egGYVpOhPDWewJK6Yk6+Ax6Iv1GQhxJ0UYJTzxd1IigdlCCXlzWOHD1T/8oybtMgHZl
- 0vuMs+Q9QVMlja9ME/KMPf/tndb1g2viH2kDqhMf+Bs5/9bHsPVxrSB69WdGvA==
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=xaZ8ErGBYcLWc3WZ6M1W6+eIgnGuQuiyaJpNwpJSVjM=;
+ b=AuJrF3fnl34yJoLM/hubx1CPb5ZAV40TlXIiN8MnKo6DVkvjUZXxNGMd2OvBV5ZCeN3Kx0
+ iRp+U9S1WXAwMnlXDqgZdoUHRUN4OOsHRB+7WnBN+/OtRJgI7sQcAiAnTGA6gcovK1DRip
+ Vi0MJt5bYkA2LPBB1rLMeb9JraQrFhpA7LwiYDDyVw4N4+zf0GAxURChofIF3AIh2CDTUO
+ TlCjdMdiSq3XPCVeNBKLHzpETT0MWedcp5N/d3V1chxJLaxGEtd8uv2rsqJQC0Cgtp6qaz
+ 5/2WDWoQRZaxq3JM6xauCMWcVFEPtoZOdjYtVqOK49kgGFFoOYwgl3nX6mKWig==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=aM5yRjI2
-Subject: Re: [Buildroot] [PATCH v2 0/3] arch/loongarch: Fix a couple of
- toolchain options
+ header.s=gm1 header.b=AuJrF3fn
+Subject: [Buildroot] [PATCH 0/2] Upgrade glibc to 2.42
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,33 +86,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Jiaxun,
+Hello,
 
-On Thu, 10 Jul 2025 11:41:55 +0100
-Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+Here is a small patch series bumping glibc to 2.42. I would probably
+recommend to *not* merge this into master right now, but rather merge
+it in next. Indeed, they removed termio.h, and this is likely to cause
+some amount of breakage here and there. Even gcc had to be fixed
+because of this.
 
-> This series fixed a couple of toolchain options. many thanks to
-> Julien and Thomas for reports and suggestions!
+So I believe we probably want to release 2025.08 with the existing
+glibc 2.41, and bite the glibc 2.42 bullet for our 2025.11 release.
 
-Thanks for those fixes. However, we still a considerable amount of
-failures of GCC on loongarch64 in our autobuilders:
-
-  https://autobuild.buildroot.net/?reason=%gcc%&arch=loongarch64
-
-Normally, you should be receiving an e-mail every day with build
-failures occurring on loongarch64, and as you've introduced support for
-this architecture, we expect some level of support from your side to
-resolve those architecture-specific issues. Could you have a look a
-those build failures that are loongarch64 specific and provide some
-fixes?
-
-Thanks a lot for your support,
+Best regards,
 
 Thomas
+
+Thomas Petazzoni (2):
+  package/gcc: backport upstream fix for glibc 2.42 build
+  package/{glibc,localdef}: bump to version 2.42
+
+ ...bsanitizer-Fix-build-with-glibc-2.42.patch | 81 +++++++++++++++++++
+ ...bsanitizer-Fix-build-with-glibc-2.42.patch | 81 +++++++++++++++++++
+ ...bsanitizer-Fix-build-with-glibc-2.42.patch | 81 +++++++++++++++++++
+ package/glibc/glibc.hash                      |  2 +-
+ package/glibc/glibc.mk                        |  2 +-
+ ...ACK-only-build-and-install-localedef.patch |  8 +-
+ ...y-on-GCC-to-4.8-and-binutils-to-2.24.patch | 14 ++--
+ ...3_SOURCE-undefined-to-build-localede.patch | 10 +--
+ package/localedef/localedef.mk                |  2 +-
+ 9 files changed, 262 insertions(+), 19 deletions(-)
+ create mode 100644 package/gcc/13.4.0/0004-libsanitizer-Fix-build-with-glibc-2.42.patch
+ create mode 100644 package/gcc/14.3.0/0003-libsanitizer-Fix-build-with-glibc-2.42.patch
+ create mode 100644 package/gcc/15.1.0/0002-libsanitizer-Fix-build-with-glibc-2.42.patch
+
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.50.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
