@@ -4,75 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31108C83F26
-	for <buildroot@archiver.kernel.org>; Wed, 30 Jul 2025 20:25:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1816AC83F26
+	for <buildroot@archiver.kernel.org>; Wed, 30 Jul 2025 20:32:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9B3F861496;
-	Wed, 30 Jul 2025 20:25:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DEB78614AB;
+	Wed, 30 Jul 2025 20:32:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3Hg4cmB2jPkO; Wed, 30 Jul 2025 20:25:03 +0000 (UTC)
+ id i1cuTsuFdo8A; Wed, 30 Jul 2025 20:32:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 84DA96149C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B48AE614AD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 84DA96149C;
-	Wed, 30 Jul 2025 20:25:03 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 9ED5E12E
- for <buildroot@buildroot.org>; Wed, 30 Jul 2025 20:25:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B48AE614AD;
+	Wed, 30 Jul 2025 20:32:10 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 940C8186
+ for <buildroot@buildroot.org>; Wed, 30 Jul 2025 20:32:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 85810408DC
- for <buildroot@buildroot.org>; Wed, 30 Jul 2025 20:25:01 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 85C99614AD
+ for <buildroot@buildroot.org>; Wed, 30 Jul 2025 20:32:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Oc4fleGhUkCR for <buildroot@buildroot.org>;
- Wed, 30 Jul 2025 20:25:00 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
- helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hriE-Bvlarop for <buildroot@buildroot.org>;
+ Wed, 30 Jul 2025 20:32:08 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 49BAF4085A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 49BAF4085A
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 49BAF4085A
- for <buildroot@buildroot.org>; Wed, 30 Jul 2025 20:24:59 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPA id E2FAC1F68D;
- Wed, 30 Jul 2025 20:24:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E37B614AB
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7E37B614AB
+ for <buildroot@buildroot.org>; Wed, 30 Jul 2025 20:32:08 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6BFE985F47; Wed, 30 Jul 2025 20:32:08 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Kadambini Nema <kadambini.nema@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Romain Naour <romain.naour@gmail.com>
-Date: Wed, 30 Jul 2025 22:24:54 +0200
-Message-ID: <20250730202455.1059438-1-thomas.petazzoni@bootlin.com>
-X-Mailer: git-send-email 2.50.1
-MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdelkeekkecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepvfhhohhmrghsucfrvghtrgiiiihonhhiuceothhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeduledvieevueetjeehgeffleegkefgheejffdvudffuedvtdejgfefvefhueejfeenucffohhmrghinheplhhlvhhmrdhorhhgpdhgihhthhhusgdrtghomhdpghhnuhdrohhrghenucfkphepvdgrtddumegtsgdukeemkeeigegumedvuddttdemrgdttdhfmeehlegsfeemgehfvdemieefuggsnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgdukeemkeeigegumedvuddttdemrgdttdhfmeehlegsfeemgehfvdemieefuggspdhhvghlohepfihinhgushhurhhfrdhhohhmvgdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohephedprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhis
- egsohhothhlihhnrdgtohhmpdhrtghpthhtohepkhgruggrmhgsihhnihdrnhgvmhgrsehgmhgrihhlrdgtohhmpdhrtghpthhtohepghhiuhhlihhordgsvghnvghtthhisegsvghnvghtthhivghnghhinhgvvghrihhnghdrtghomhdprhgtphhtthhopehrohhmrghinhdrnhgrohhurhesghhmrghilhdrtghomh
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1753907097;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=5CO4uvqJcjQi/JLIE1weG+OJBymjqS/PuoWmM4PL+QY=;
- b=jZ8/LAOBgo6RMleslFg6/D1fPfX5uLr9cbiz3p4STXnTsOXWWwLoV/GCs9cJxWhg0kzHxW
- eBO2cmaRMOMtyHWk2GtQEQIee28l+wa7Ttp7/xG0iaB0T8kiLZfTuK4V4T9SZnnKLQVyEw
- KCYwgmLvwQhx9ctARlSnlKJUsYL9YjTs/Fdmr2U/uOTnYW+9ogIiNW6jXsOjxPTlyRbnt6
- nQg/gObmB5zUtOQ/No2rk652mfg3qWxGtttYetX9b9t6+qw6tL9YKbrwEDD0mY2Hs6MZF7
- Uy9o4GIH5Xm60Er2DosW+qXKp2HJvVTMP6YoA41sGaX1gW1BU1O9530l1R8ouw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=jZ8/LAOB
-Subject: [Buildroot] [PATCH] package/gcc: drop stale 13.3.0 patches
+Date: Wed, 30 Jul 2025 22:07:23 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 56adc0dacd4e07de3242a6acfa9337a12069e0c0
+X-Git-Newrev: 2882cf4ae649f7d5e9cee72f84e672328f550845
+X-Patchwork-Hint: ignore
+Message-Id: <20250730203208.6BFE985F47@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/wpewebkit: security bump to
+ version 2.48.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,137 +60,260 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit 0b8b72d2fe2c8fa6a9d2859ceb8d29b6389cf894 bumped gcc 13.x from
-13.3.0 to 13.4.0 but forgot to drop the gcc 13.3.0, so let's remove
-those patches.
+commit: https://git.buildroot.net/buildroot/commit/?id=2882cf4ae649f7d5e9cee72f84e672328f550845
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Cc: Kadambini Nema <kadambini.nema@gmail.com>
-Fixes: 0b8b72d2fe2c8fa6a9d2859ceb8d29b6389cf894
+This bumps WPE WebKit to the 2.48 stable series, skipping over 2.46.
+
+WPE WebKit 2.48 and 2.46 highlights:
+
+- https://wpewebkit.org/blog/2025-04-11-wpewebkit-2.48.html
+- https://wpewebkit.org/blog/2024-wpewebkit-2.46.html
+
+Release notes:
+
+- https://wpewebkit.org/release/wpewebkit-2.48.3.html
+- https://wpewebkit.org/release/wpewebkit-2.48.2.html
+- https://wpewebkit.org/release/wpewebkit-2.48.1.html
+- https://wpewebkit.org/release/wpewebkit-2.48.0.html
+- https://wpewebkit.org/release/wpewebkit-2.46.7.html
+- https://wpewebkit.org/release/wpewebkit-2.46.6.html
+- https://wpewebkit.org/release/wpewebkit-2.46.5.html
+- https://wpewebkit.org/release/wpewebkit-2.46.4.html
+- https://wpewebkit.org/release/wpewebkit-2.46.3.html
+- https://wpewebkit.org/release/wpewebkit-2.46.2.html
+- https://wpewebkit.org/release/wpewebkit-2.46.1.html
+- https://wpewebkit.org/release/wpewebkit-2.46.0.html
+
+Fixes the following security issues:
+
+- From https://wpewebkit.org/security/WSA-2025-0004.html
+  CVE-2025-24223, CVE-2025-31204, CVE-2025-31205, CVE-2025-31206,
+  CVE-2025-31215, CVE-2025-31257
+
+- From https://wpewebkit.org/security/WSA-2025-0003.html
+  CVE-2024-54551, CVE-2025-24208, CVE-2025-24209, CVE-2025-24213,
+  CVE-2025-24216, CVE-2025-24264, CVE-2025-30427
+
+- From https://wpewebkit.org/security/WSA-2025-0002.html
+  CVE-2024-44192, CVE-2024-54467, CVE-2025-24201
+
+- From https://wpewebkit.org/security/WSA-2025-0001.html
+  CVE-2024-27856, CVE-2024-54543, CVE-2024-54658, CVE-2025-24143,
+  CVE-2025-24150, CVE-2025-24158, CVE-2025-24162
+
+- From https://wpewebkit.org/security/WSA-2024-0008.html
+  CVE-2024-54479, CVE-2024-54502, CVE-2024-54505, CVE-2024-54508,
+  CVE-2024-54534
+
+- From https://wpewebkit.org/security/WSA-2024-0007.html
+  CVE-2024-44308, CVE-2024-44309
+
+- From https://wpewebkit.org/security/WSA-2024-0006.html
+  CVE-2024-44185, CVE-2024-44244, CVE-2024-44296
+
+- From https://wpewebkit.org/security/WSA-2024-0005.html
+  CVE-2024-40866, CVE-2024-44187
+
+As for build system changes, the minimum GCC requirement gets raised to
+version 11 [1], the ENABLE_SPEECH_SYNTHESIS option is now enabled by
+default [2] and needs handling, and Skia (bundled with the sources) is
+now preferred on little-endian targets.
+
+[1] https://github.com/WebKit/WebKit/commit/682ac4ba74c53d0cd488c7a595096224a9abb036
+[2] https://github.com/WebKit/WebKit/commit/10381a8de938024f31935184af470ccbce0b22d9
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...-along-with-_FILE_OFFSET_BITS-on-Lin.patch | 44 ---------------
- ...o-undef-_TIME_BITS-in-sanitizer_proc.patch | 53 -------------------
- 2 files changed, 97 deletions(-)
- delete mode 100644 package/gcc/13.3.0/0004-Undef-_TIME_BITS-along-with-_FILE_OFFSET_BITS-on-Lin.patch
- delete mode 100644 package/gcc/13.3.0/0005-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch
+ ...-build-with-USE_SKIA_OPENTYPE_SVG-ON-and-.patch | 44 ++++++++++++++++++++++
+ package/wpewebkit/Config.in                        | 11 +++---
+ package/wpewebkit/wpewebkit.hash                   |  8 ++--
+ package/wpewebkit/wpewebkit.mk                     | 27 ++++++++++++-
+ 4 files changed, 79 insertions(+), 11 deletions(-)
 
-diff --git a/package/gcc/13.3.0/0004-Undef-_TIME_BITS-along-with-_FILE_OFFSET_BITS-on-Lin.patch b/package/gcc/13.3.0/0004-Undef-_TIME_BITS-along-with-_FILE_OFFSET_BITS-on-Lin.patch
-deleted file mode 100644
-index a3be0914b9..0000000000
---- a/package/gcc/13.3.0/0004-Undef-_TIME_BITS-along-with-_FILE_OFFSET_BITS-on-Lin.patch
-+++ /dev/null
-@@ -1,44 +0,0 @@
--From 88b73eedcfa0fc58aee2555377e6f7d4de153282 Mon Sep 17 00:00:00 2001
--From: Khem Raj <raj.khem@gmail.com>
--Date: Fri, 3 Feb 2023 11:48:35 -0800
--Subject: [PATCH] Undef _TIME_BITS along with _FILE_OFFSET_BITS on Linux
--
--On 32-bit glibc>=2.34 systems using 64bit time_t build fails because
--_FILE_OFFSET_BITS is undefined here but _TIME_BITS is still set to 64
--
--Fixes
--
--```
--/usr/include/features-time64.h:26:5: error: "_TIME_BITS=64 is allowed
-- only with _FILE_OFFSET_BITS=64"
--| #   error "_TIME_BITS=64 is allowed only with _FILE_OFFSET_BITS=64"
--|     ^
--| 1 error generated.
--```
--
--Reviewed By: thesamesam, MaskRay
--
--Differential Revision: https://reviews.llvm.org/D140812
--
--Upstream: https://github.com/llvm/llvm-project/commit/26800a2c7e7996dc773b4e990dd5cca41c45e1a9
--Upstream: https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=d53b3d94aaf211ffb2159614f5aaaf03ceb861cc
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-----
-- .../sanitizer_common/sanitizer_platform_limits_posix.cpp         | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
--index bcbd143d19d..1b23898b374 100644
----- a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
--+++ b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
--@@ -18,6 +18,7 @@
-- // depends on _FILE_OFFSET_BITS setting.
-- // To get this "true" dirent definition, we undefine _FILE_OFFSET_BITS below.
-- #undef _FILE_OFFSET_BITS
--+#undef _TIME_BITS
-- #endif
-- 
-- // Must go after undef _FILE_OFFSET_BITS.
---- 
--2.45.2
--
-diff --git a/package/gcc/13.3.0/0005-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch b/package/gcc/13.3.0/0005-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch
-deleted file mode 100644
-index 73b09ac389..0000000000
---- a/package/gcc/13.3.0/0005-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch
-+++ /dev/null
-@@ -1,53 +0,0 @@
--From 7ad54084a2c07cca6d03dfe274893e903852d359 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Date: Thu, 18 Jul 2024 23:13:41 +0200
--Subject: [PATCH] libsanitizer: also undef _TIME_BITS in
-- sanitizer_procmaps_solaris.cpp
--
--Upstream commit
--https://github.com/llvm/llvm-project/commit/26800a2c7e7996dc773b4e990dd5cca41c45e1a9
--of LLVM added a #undef _TIME_BITS in
--libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp to
--fix the build on 32-bit Linux platforms that have enabled 64-bit
--time_t using _TIME_BITS=64.
--
--Indeed, _TIME_BITS=64 can only be used when _FILE_OFFSET_BITS=64, but
--sanitizer_platform_limits_posix.cpp undefines _FILE_OFFSET_BITS before
--including any header file. To fix this, the upstream fix was to also
--undef _TIME_BITS.
--
--This commit simply does the same in sanitizer_procmaps_solaris.cpp,
--which also gets compiled under Linux (despite what the file name
--says). In practice on Linux hosts (where _TIME_BITS=64 matters),
--sanitizer_procmaps_solaris.cpp will expand to nothing, as pretty much
--the rest of the file is inside a #ifdef SANITIZER_SOLARIS...#endif. So
--the #undef _FILE_OFFSET_BITS and #undef _TIME_BITS are only here
--before including sanitizer_platform.h, which will set the
--SANITIZER_LINUX/SANITIZER_SOLARIS define depending on the platform.
--
--Fixes:
--
--armeb-buildroot-linux-gnueabi/sysroot/usr/include/features-time64.h:26:5: error: #error "_TIME_BITS=64 is allowed only with _FILE_OFFSET_BITS=64"
--   26 | #   error "_TIME_BITS=64 is allowed only with _FILE_OFFSET_BITS=64"
--
--Upstream: https://gcc.gnu.org/pipermail/gcc-patches/2024-July/657811.html
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-----
-- libsanitizer/sanitizer_common/sanitizer_procmaps_solaris.cpp | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/libsanitizer/sanitizer_common/sanitizer_procmaps_solaris.cpp b/libsanitizer/sanitizer_common/sanitizer_procmaps_solaris.cpp
--index eeb49e2afe3..1b23fd4d512 100644
----- a/libsanitizer/sanitizer_common/sanitizer_procmaps_solaris.cpp
--+++ b/libsanitizer/sanitizer_common/sanitizer_procmaps_solaris.cpp
--@@ -11,6 +11,7 @@
-- 
-- // Before Solaris 11.4, <procfs.h> doesn't work in a largefile environment.
-- #undef _FILE_OFFSET_BITS
--+#undef _TIME_BITS
-- #include "sanitizer_platform.h"
-- #if SANITIZER_SOLARIS
-- #  include <fcntl.h>
---- 
--2.45.2
--
--- 
-2.50.1
-
+diff --git a/package/wpewebkit/0001-WPE-Fix-the-build-with-USE_SKIA_OPENTYPE_SVG-ON-and-.patch b/package/wpewebkit/0001-WPE-Fix-the-build-with-USE_SKIA_OPENTYPE_SVG-ON-and-.patch
+new file mode 100644
+index 0000000000..8432543e07
+--- /dev/null
++++ b/package/wpewebkit/0001-WPE-Fix-the-build-with-USE_SKIA_OPENTYPE_SVG-ON-and-.patch
+@@ -0,0 +1,44 @@
++From 94acd1ce0ff2860b19f22ab2d386d7711c9699b7 Mon Sep 17 00:00:00 2001
++From: Adrian Perez de Castro <aperez@igalia.com>
++Date: Tue, 8 Jul 2025 21:46:44 +0300
++Subject: [PATCH] [WPE] Fix the build with USE_SKIA_OPENTYPE_SVG=ON and
++ USE_SYSPROF_CAPTURE=OFF
++
++Unreviewed build fix.
++
++When backporting 287859@main the #include for the needed Skia header
++slipped inside an USE(SYSPROF_CAPTURE) guard. This moves the guards
++and #include statements to their correct places.
++
++* Source/WebKit/WebProcess/wpe/WebProcessMainWPE.cpp:
++
++Canonical link: https://commits.webkit.org/290945.273@webkitglib/2.48
++
++Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
++Upstream: https://github.com/WebKit/WebKit/commit/943d05f0c9b03c053a456c90c2a8817c1f679711
++---
++ Source/WebKit/WebProcess/wpe/WebProcessMainWPE.cpp | 5 +++--
++ 1 file changed, 3 insertions(+), 2 deletions(-)
++
++diff --git a/Source/WebKit/WebProcess/wpe/WebProcessMainWPE.cpp b/Source/WebKit/WebProcess/wpe/WebProcessMainWPE.cpp
++index a06e33fd04f8..5fb245ce0b66 100644
++--- a/Source/WebKit/WebProcess/wpe/WebProcessMainWPE.cpp
+++++ b/Source/WebKit/WebProcess/wpe/WebProcessMainWPE.cpp
++@@ -43,11 +43,12 @@
++ #include <skia/core/SkGraphics.h>
++ #endif
++ 
++-#if USE(SYSPROF_CAPTURE)
++-#include <wtf/SystemTracing.h>
++ #if USE(SKIA_OPENTYPE_SVG)
++ #include <skia/modules/svg/SkSVGOpenTypeSVGDecoder.h>
++ #endif
+++
+++#if USE(SYSPROF_CAPTURE)
+++#include <wtf/SystemTracing.h>
++ #endif
++ 
++ namespace WebKit {
++-- 
++2.50.1
++
+diff --git a/package/wpewebkit/Config.in b/package/wpewebkit/Config.in
+index 512f7ea672..969590482c 100644
+--- a/package/wpewebkit/Config.in
++++ b/package/wpewebkit/Config.in
+@@ -16,12 +16,12 @@ config BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
+ 
+-comment "wpewebkit needs a toolchain w/ C++, wchar, NPTL, dynamic library, gcc >= 10, host gcc >= 4.9"
++comment "wpewebkit needs a toolchain w/ C++, wchar, NPTL, dynamic library, gcc >= 11, host gcc >= 4.9"
+ 	depends on BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS
+ 	depends on !BR2_BINFMT_FLAT
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
+ 		|| !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
+-		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_10 \
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_11 \
+ 		|| !BR2_HOST_GCC_AT_LEAST_4_9
+ 
+ comment "wpewebkit needs an OpenGL ES w/ EGL-capable Wayland backend"
+@@ -36,13 +36,13 @@ config BR2_PACKAGE_WPEWEBKIT
+ 	depends on BR2_HOST_GCC_AT_LEAST_4_9 # icu, host-ruby
+ 	depends on BR2_INSTALL_LIBSTDCPP # harfbuzz, icu
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_11
+ 	depends on BR2_USE_WCHAR # icu, libsoup3
+ 	depends on BR2_PACKAGE_HAS_LIBGLES # libepoxy
+ 	depends on BR2_PACKAGE_HAS_LIBEGL # libepoxy
+ 	depends on BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS
+-	select BR2_PACKAGE_CAIRO
+-	select BR2_PACKAGE_CAIRO_PNG
++	select BR2_PACKAGE_CAIRO if BR2_ENDIAN = "BIG"
++	select BR2_PACKAGE_CAIRO_PNG if BR2_ENDIAN = "BIG"
+ 	select BR2_PACKAGE_HARFBUZZ
+ 	select BR2_PACKAGE_ICU
+ 	select BR2_PACKAGE_JPEG
+@@ -56,6 +56,7 @@ config BR2_PACKAGE_WPEWEBKIT
+ 	select BR2_PACKAGE_WAYLAND_PROTOCOLS
+ 	select BR2_PACKAGE_WEBP
+ 	select BR2_PACKAGE_WEBP_DEMUX
++	select BR2_PACKAGE_WEBP_MUX
+ 	select BR2_PACKAGE_WPEBACKEND_FDO
+ 	help
+ 	  WPE (Web Platform for Embedded) port of the WebKit engine,
+diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
+index 7a7cef15a5..332fd9deaa 100644
+--- a/package/wpewebkit/wpewebkit.hash
++++ b/package/wpewebkit/wpewebkit.hash
+@@ -1,7 +1,7 @@
+-# From https://wpewebkit.org/releases/wpewebkit-2.44.4.tar.xz.sums
+-md5  4d91f3ff629c9356dcff866b68a4646f  wpewebkit-2.44.4.tar.xz
+-sha1  ef1ea0484e9ec17a362afe9a709fe0754f05cc14  wpewebkit-2.44.4.tar.xz
+-sha256  cd6042c63a6f883cc1586e5cea94e846aaaee6a864c14988e8af4ef4f362ba3b  wpewebkit-2.44.4.tar.xz
++# From https://wpewebkit.org/releases/wpewebkit-2.48.3.tar.xz.sums
++md5  2d3b7fa3c62886546f918fcc289cabbe  wpewebkit-2.48.3.tar.xz
++sha1  8a90b9ff8809c99c306defc1a08e50a31a09c590  wpewebkit-2.48.3.tar.xz
++sha256  807571f07e87823b8fb79564692c9b1ef81ee62edbf51345a15bd0e7e1f2e07b  wpewebkit-2.48.3.tar.xz
+ 
+ # Hashes for license files:
+ sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
+diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
+index 6a8e9c637c..796e271ecb 100644
+--- a/package/wpewebkit/wpewebkit.mk
++++ b/package/wpewebkit/wpewebkit.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # The middle number is even for stable releases, odd for development ones.
+-WPEWEBKIT_VERSION = 2.44.4
++WPEWEBKIT_VERSION = 2.48.3
+ WPEWEBKIT_SITE = https://wpewebkit.org/releases
+ WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
+ WPEWEBKIT_INSTALL_STAGING = YES
+@@ -16,7 +16,7 @@ WPEWEBKIT_LICENSE_FILES = \
+ WPEWEBKIT_CPE_ID_VENDOR = wpewebkit
+ WPEWEBKIT_CPE_ID_PRODUCT = wpe_webkit
+ WPEWEBKIT_DEPENDENCIES = host-gperf host-python3 host-ruby host-unifdef \
+-	harfbuzz cairo icu jpeg libepoxy libgcrypt libgles libsoup3 libtasn1 \
++	harfbuzz icu jpeg libepoxy libgcrypt libgles libsoup3 libtasn1 \
+ 	libpng libxslt wayland-protocols webp wpebackend-fdo
+ 
+ WPEWEBKIT_CMAKE_BACKEND = ninja
+@@ -30,6 +30,15 @@ WPEWEBKIT_CONF_OPTS = \
+ 	-DENABLE_WEB_RTC=OFF \
+ 	-DUSE_ATK=OFF
+ 
++# WPE WebKit uses a bundled copy of Skia since 2.46.0 for
++# little-endian targets, and Cairo for big-endian ones.
++ifeq ($(BR2_ENDIAN),"BIG")
++WPEWEBKIT_DEPENDENCIES += cairo
++WPEWEBKIT_CONF_OPTS += -DUSE_SKIA=OFF
++else
++WPEWEBKIT_CONF_OPTS += -DUSE_SKIA=ON
++endif
++
+ ifeq ($(BR2_PACKAGE_WPEWEBKIT_SANDBOX),y)
+ WPEWEBKIT_CONF_OPTS += \
+ 	-DENABLE_BUBBLEWRAP_SANDBOX=ON \
+@@ -79,6 +88,13 @@ else
+ WPEWEBKIT_CONF_OPTS += -DENABLE_WEBDRIVER=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_FLITE),y)
++WPEWEBKIT_CONF_OPTS += -DENABLE_SPEECH_SYNTHESIS=ON
++WPEWEBKIT_DEPENDENCIES += flite
++else
++WPEWEBKIT_CONF_OPTS += -DENABLE_SPEECH_SYNTHESIS=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_LCMS2),y)
+ WPEWEBKIT_CONF_OPTS += -DUSE_LCMS=ON
+ WPEWEBKIT_DEPENDENCIES += lcms2
+@@ -114,6 +130,13 @@ else
+ WPEWEBKIT_CONF_OPTS += -DUSE_JPEGXL=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SYSPROF),y)
++WPEWEBKIT_CONF_OPTS += -DUSE_SYSPROF_CAPTURE=ON
++WPEWEBKIT_DEPENDENCIES += sysprof
++else
++WPEWEBKIT_CONF_OPTS += -DUSE_SYSPROF_CAPTURE=OFF
++endif
++
+ ifeq ($(BR2_INIT_SYSTEMD),y)
+ WPEWEBKIT_CONF_OPTS += -DENABLE_JOURNALD_LOG=ON
+ WPEWEBKIT_DEPENDENCIES += systemd
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
