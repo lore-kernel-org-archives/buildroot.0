@@ -4,73 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA558C87FCC
-	for <buildroot@archiver.kernel.org>; Thu, 31 Jul 2025 13:03:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71DA5C87FCC
+	for <buildroot@archiver.kernel.org>; Thu, 31 Jul 2025 13:08:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 81EB94290E;
-	Thu, 31 Jul 2025 13:03:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2DBA542906;
+	Thu, 31 Jul 2025 13:08:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cB9w9lBQ_edI; Thu, 31 Jul 2025 13:03:35 +0000 (UTC)
+ id ybiQ-QwMkuE3; Thu, 31 Jul 2025 13:08:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ACB3842905
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C78B42900
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ACB3842905;
-	Thu, 31 Jul 2025 13:03:35 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0DBC0160
- for <buildroot@buildroot.org>; Thu, 31 Jul 2025 13:03:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3C78B42900;
+	Thu, 31 Jul 2025 13:08:50 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id B410C160
+ for <buildroot@buildroot.org>; Thu, 31 Jul 2025 13:08:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F405361539
- for <buildroot@buildroot.org>; Thu, 31 Jul 2025 13:03:33 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9A8FA42900
+ for <buildroot@buildroot.org>; Thu, 31 Jul 2025 13:08:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TS6QjqtmZ_sP for <buildroot@buildroot.org>;
- Thu, 31 Jul 2025 13:03:33 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1BDE260888
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1BDE260888
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1BDE260888
- for <buildroot@buildroot.org>; Thu, 31 Jul 2025 13:03:32 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id E743B2003DD;
- Thu, 31 Jul 2025 15:03:24 +0200 (CEST)
-Received: from [192.214.236.6:49058] via [192.214.236.6] by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Thu, 31 Jul 2025 15:03:24 +0200
-MIME-Version: 1.0
-Date: Thu, 31 Jul 2025 15:03:24 +0200
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org, Kadambini Nema <kadambini.nema@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>, Romain Naour
- <romain.naour@gmail.com>
-In-Reply-To: <20250730202455.1059438-1-thomas.petazzoni@bootlin.com>
-References: <20250730202455.1059438-1-thomas.petazzoni@bootlin.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <7cbb7926b7f6a185c80255d11d93068d@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1753967009;
- bh=HbWDzWER1sMrrsa7e1ift2sYWQlzlPcR75TAKocAWaI=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=F7auc1100QEZcx/yHHWIsDgelL9nk/D+ij0a74LrYLBRGrFPVQHMhHKV3BoDgyCci
- r7CE/4TSsYzF/1r3oLcIaPht9tziaBWkg3uMJQeJlfhGxXFo4pGReQzUW+TYc6rWPv
- yJl6K7h9pmCnKyZ1sc7QTtH2Kwe86LcRC6KrWJ5yneiMCys4QTugy7vq1NWgkpREbx
- w8+wMJMmLz7iFNq9yRl89rOVAqz4UANTkydObg2wxbwvKlJ/S8ZYqozddIR8kXrpbP
- zlk6kgXEMaYzuYxderwcabPZyrJf4IhfEXm2JzqcX95XuVxsYp7IbAt572dtgRNnAV
- n+6lhOAN0rszQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=F7auc110
-Subject: Re: [Buildroot] [PATCH] package/gcc: drop stale 13.3.0 patches
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hWg0cuVgTqD0 for <buildroot@buildroot.org>;
+ Thu, 31 Jul 2025 13:08:47 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF15A428F3
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id AF15A428F3
+ for <buildroot@buildroot.org>; Thu, 31 Jul 2025 13:08:47 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 9D18786075; Thu, 31 Jul 2025 13:08:47 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 31 Jul 2025 15:00:13 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b2801c7bce1efbaeacedd1d9fb974ee4480c6782
+X-Git-Newrev: 2fbf98da7c393ded3032c7fef95385653f96eddc
+X-Patchwork-Hint: ignore
+Message-Id: <20250731130847.9D18786075@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gcc: drop stale 13.3.0 patches
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,21 +59,137 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 30/07/2025 22:24, Thomas Petazzoni via buildroot wrote:
-> Commit 0b8b72d2fe2c8fa6a9d2859ceb8d29b6389cf894 bumped gcc 13.x from
-> 13.3.0 to 13.4.0 but forgot to drop the gcc 13.3.0, so let's remove
-> those patches.
-> 
-> Cc: Kadambini Nema <kadambini.nema@gmail.com>
-> Fixes: 0b8b72d2fe2c8fa6a9d2859ceb8d29b6389cf894
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=2fbf98da7c393ded3032c7fef95385653f96eddc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Commit 0b8b72d2fe2c8fa6a9d2859ceb8d29b6389cf894 bumped gcc 13.x from
+13.3.0 to 13.4.0 but forgot to drop the gcc 13.3.0, so let's remove
+those patches.
+
+Cc: Kadambini Nema <kadambini.nema@gmail.com>
+Fixes: 0b8b72d2fe2c8fa6a9d2859ceb8d29b6389cf894
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ ..._BITS-along-with-_FILE_OFFSET_BITS-on-Lin.patch | 44 ------------------
+ ...r-also-undef-_TIME_BITS-in-sanitizer_proc.patch | 53 ----------------------
+ 2 files changed, 97 deletions(-)
+
+diff --git a/package/gcc/13.3.0/0004-Undef-_TIME_BITS-along-with-_FILE_OFFSET_BITS-on-Lin.patch b/package/gcc/13.3.0/0004-Undef-_TIME_BITS-along-with-_FILE_OFFSET_BITS-on-Lin.patch
+deleted file mode 100644
+index a3be0914b9..0000000000
+--- a/package/gcc/13.3.0/0004-Undef-_TIME_BITS-along-with-_FILE_OFFSET_BITS-on-Lin.patch
++++ /dev/null
+@@ -1,44 +0,0 @@
+-From 88b73eedcfa0fc58aee2555377e6f7d4de153282 Mon Sep 17 00:00:00 2001
+-From: Khem Raj <raj.khem@gmail.com>
+-Date: Fri, 3 Feb 2023 11:48:35 -0800
+-Subject: [PATCH] Undef _TIME_BITS along with _FILE_OFFSET_BITS on Linux
+-
+-On 32-bit glibc>=2.34 systems using 64bit time_t build fails because
+-_FILE_OFFSET_BITS is undefined here but _TIME_BITS is still set to 64
+-
+-Fixes
+-
+-```
+-/usr/include/features-time64.h:26:5: error: "_TIME_BITS=64 is allowed
+- only with _FILE_OFFSET_BITS=64"
+-| #   error "_TIME_BITS=64 is allowed only with _FILE_OFFSET_BITS=64"
+-|     ^
+-| 1 error generated.
+-```
+-
+-Reviewed By: thesamesam, MaskRay
+-
+-Differential Revision: https://reviews.llvm.org/D140812
+-
+-Upstream: https://github.com/llvm/llvm-project/commit/26800a2c7e7996dc773b4e990dd5cca41c45e1a9
+-Upstream: https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=d53b3d94aaf211ffb2159614f5aaaf03ceb861cc
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+----
+- .../sanitizer_common/sanitizer_platform_limits_posix.cpp         | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
+-index bcbd143d19d..1b23898b374 100644
+---- a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
+-+++ b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
+-@@ -18,6 +18,7 @@
+- // depends on _FILE_OFFSET_BITS setting.
+- // To get this "true" dirent definition, we undefine _FILE_OFFSET_BITS below.
+- #undef _FILE_OFFSET_BITS
+-+#undef _TIME_BITS
+- #endif
+- 
+- // Must go after undef _FILE_OFFSET_BITS.
+--- 
+-2.45.2
+-
+diff --git a/package/gcc/13.3.0/0005-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch b/package/gcc/13.3.0/0005-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch
+deleted file mode 100644
+index 73b09ac389..0000000000
+--- a/package/gcc/13.3.0/0005-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch
++++ /dev/null
+@@ -1,53 +0,0 @@
+-From 7ad54084a2c07cca6d03dfe274893e903852d359 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Date: Thu, 18 Jul 2024 23:13:41 +0200
+-Subject: [PATCH] libsanitizer: also undef _TIME_BITS in
+- sanitizer_procmaps_solaris.cpp
+-
+-Upstream commit
+-https://github.com/llvm/llvm-project/commit/26800a2c7e7996dc773b4e990dd5cca41c45e1a9
+-of LLVM added a #undef _TIME_BITS in
+-libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp to
+-fix the build on 32-bit Linux platforms that have enabled 64-bit
+-time_t using _TIME_BITS=64.
+-
+-Indeed, _TIME_BITS=64 can only be used when _FILE_OFFSET_BITS=64, but
+-sanitizer_platform_limits_posix.cpp undefines _FILE_OFFSET_BITS before
+-including any header file. To fix this, the upstream fix was to also
+-undef _TIME_BITS.
+-
+-This commit simply does the same in sanitizer_procmaps_solaris.cpp,
+-which also gets compiled under Linux (despite what the file name
+-says). In practice on Linux hosts (where _TIME_BITS=64 matters),
+-sanitizer_procmaps_solaris.cpp will expand to nothing, as pretty much
+-the rest of the file is inside a #ifdef SANITIZER_SOLARIS...#endif. So
+-the #undef _FILE_OFFSET_BITS and #undef _TIME_BITS are only here
+-before including sanitizer_platform.h, which will set the
+-SANITIZER_LINUX/SANITIZER_SOLARIS define depending on the platform.
+-
+-Fixes:
+-
+-armeb-buildroot-linux-gnueabi/sysroot/usr/include/features-time64.h:26:5: error: #error "_TIME_BITS=64 is allowed only with _FILE_OFFSET_BITS=64"
+-   26 | #   error "_TIME_BITS=64 is allowed only with _FILE_OFFSET_BITS=64"
+-
+-Upstream: https://gcc.gnu.org/pipermail/gcc-patches/2024-July/657811.html
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+----
+- libsanitizer/sanitizer_common/sanitizer_procmaps_solaris.cpp | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/libsanitizer/sanitizer_common/sanitizer_procmaps_solaris.cpp b/libsanitizer/sanitizer_common/sanitizer_procmaps_solaris.cpp
+-index eeb49e2afe3..1b23fd4d512 100644
+---- a/libsanitizer/sanitizer_common/sanitizer_procmaps_solaris.cpp
+-+++ b/libsanitizer/sanitizer_common/sanitizer_procmaps_solaris.cpp
+-@@ -11,6 +11,7 @@
+- 
+- // Before Solaris 11.4, <procfs.h> doesn't work in a largefile environment.
+- #undef _FILE_OFFSET_BITS
+-+#undef _TIME_BITS
+- #include "sanitizer_platform.h"
+- #if SANITIZER_SOLARIS
+- #  include <fcntl.h>
+--- 
+-2.45.2
+-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
