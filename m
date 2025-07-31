@@ -1,106 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB8C8C87FCC
-	for <buildroot@archiver.kernel.org>; Thu, 31 Jul 2025 19:19:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B00B0C87FCC
+	for <buildroot@archiver.kernel.org>; Thu, 31 Jul 2025 20:37:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 897AC83CC8;
-	Thu, 31 Jul 2025 19:19:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 65EB941A57;
+	Thu, 31 Jul 2025 20:37:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aY5r2HpFsQ4Q; Thu, 31 Jul 2025 19:19:51 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sjVE54MF3t-2; Thu, 31 Jul 2025 20:37:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D35BC83C0B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7599141A84
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D35BC83C0B;
-	Thu, 31 Jul 2025 19:19:50 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id DC457160
- for <buildroot@buildroot.org>; Thu, 31 Jul 2025 19:19:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7599141A84;
+	Thu, 31 Jul 2025 20:37:09 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id C61F4168
+ for <buildroot@buildroot.org>; Thu, 31 Jul 2025 20:37:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D9ACC8347D
- for <buildroot@buildroot.org>; Thu, 31 Jul 2025 19:19:49 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C368760E88
+ for <buildroot@buildroot.org>; Thu, 31 Jul 2025 20:37:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eb2loMtlBHQi for <buildroot@buildroot.org>;
- Thu, 31 Jul 2025 19:19:49 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::430; helo=mail-wr1-x430.google.com;
- envelope-from=petr.vorel@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 12F668336F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 12F668336F
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 12F668336F
- for <buildroot@buildroot.org>; Thu, 31 Jul 2025 19:19:48 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id
- ffacd0b85a97d-3b7910123a0so1270569f8f.1
- for <buildroot@buildroot.org>; Thu, 31 Jul 2025 12:19:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1753989587; x=1754594387;
- h=in-reply-to:content-disposition:mime-version:references:reply-to
- :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=RMKdcBQ4CVMCTsLRSywRyVz2vTsErcogXE+qHuJuBbE=;
- b=mxZ3fmPwcbfh30Xv2zOlEKZ3oi7Cwe1vp0lWrV+gcyuMl1GtVs3WV8LVLtihptXRJL
- N1YT4gztib6b49r/sPLrWR8wiUmaKgFsNmnHAPeBlDVxkBK3LVASAG3HNod6drvWT8hu
- yCqFadieiSTXfy2isutvXQb4iOaPNhZanRS6R3s4JxUEMltLqHr58w+lPwr8EAJ0hSHx
- /SMW/+6P7tdnN/N2HRE2pgvHBcQdH9ckCm4K4xqUSl+CTg3MC7bYezyXM0ZF+O0ehAZi
- ZQyFiu0nmpTizct19hTJ+Ogenq1f26pnulroPCX/xOd+7ik/uo75FRuOVMFh3lG7I4xv
- /Hhg==
-X-Gm-Message-State: AOJu0YxiWB4i0F0KD/HnTt4JtoZhu4jk1ZQRsN2RY7HH1N9L1oqOjHDz
- dH11XsM+69jDqqY3ShfQpA/EhkqV5o4+ZX1lTo4Blqm9W7MOHSLpNkMT
-X-Gm-Gg: ASbGncuow9jOrAH1lVh71SVA4X6nBJq1fhCc6vfi+6x9fVotaWUrgfuZP4usEV1CMBq
- jT81Tm/tmRy4qAnpSFYiq07MAGThrWCQ0R4VArSYOnEU4MGqg3n2xPldkJ+3szw2oPQvIRM0lrK
- MR0bS74kRhwIRxVqi2N7qgtwI9AQY7zwX+TwA6J6/WOXhm8rtNBFwY729BoQ0pXlZlEVtt2UyZp
- UOuN64B2VVNddexsB6y8zjJ1oW3O9qLxFVw0MlPlJw0DxHo0cwbG+/9vagSY0SlUVI/SnErHrFk
- d+Tsx2Wt2dlcvSoUOSEdtZ40FTKIUxOIs3xHa4U7G+9A2jVHf9ZkO+FFT1pD2tNDbZ/ui7ngSWb
- 6aoCej7KUBW75sQe2sI4yF5LQOa0bG4lLYUmCEQ==
-X-Google-Smtp-Source: AGHT+IEWkcLEGV7e1zjkTuU4eMco+5STaRDyFFrchqnDW4z36EFLdZqMMeBPoKiRDspTz2eBPFfPgQ==
-X-Received: by 2002:adf:f749:0:b0:3b7:8146:463c with SMTP id
- ffacd0b85a97d-3b79503d1c2mr5667854f8f.59.1753989586699; 
- Thu, 31 Jul 2025 12:19:46 -0700 (PDT)
-Received: from pevik (gw1.ms-free.net. [185.243.124.10])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3b79c3b9074sm3222782f8f.17.2025.07.31.12.19.44
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 31 Jul 2025 12:19:45 -0700 (PDT)
-Date: Thu, 31 Jul 2025 21:19:41 +0200
-From: Petr Vorel <petr.vorel@gmail.com>
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org,
- Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <20250731191941.GA780832@pevik>
-References: <20250731172810.2935094-1-bernd@kuhls.net>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CsCbGrB39GnZ for <buildroot@buildroot.org>;
+ Thu, 31 Jul 2025 20:37:06 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7E69C60E3B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E69C60E3B
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7E69C60E3B
+ for <buildroot@buildroot.org>; Thu, 31 Jul 2025 20:37:04 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a0a17.dip0.t-ipconnect.de [91.58.10.23])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 0910BA4C2D89
+ for <buildroot@buildroot.org>; Thu, 31 Jul 2025 22:37:02 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:42234)
+ by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
+ (envelope-from <bernd@kuhls.net>) id 1uha1N-000000006H1-00fw
+ for buildroot@buildroot.org; Thu, 31 Jul 2025 20:37:01 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Thu, 31 Jul 2025 22:37:01 +0200
+Message-Id: <20250731203701.3347684-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20250731172810.2935094-1-bernd@kuhls.net>
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1753989587; x=1754594387; darn=buildroot.org;
- h=in-reply-to:content-disposition:mime-version:references:reply-to
- :message-id:subject:cc:to:from:date:from:to:cc:subject:date
- :message-id:reply-to;
- bh=RMKdcBQ4CVMCTsLRSywRyVz2vTsErcogXE+qHuJuBbE=;
- b=QmjxuhKsAkBdRLTstX2lyHLpfzf0IZVRvL0VupRtkvI1xRCmhZRCrj9vLFdl5/pnAl
- D8+uN5skSl6Qf1fz9lj3nZKvJRNB7snB54JY+ASngZ4xb/jpRv0oZf/nmphYCChd+Q7G
- 0jNoq2WI0qiBO9VYeDAfuVjScHRWTcQz38+TXwmpma/d6c+mKb7mQRbrxfczWjROttJo
- YamoyCWdfgslaIbJsjBlsoTovC6U+1iWhUWWPGL9QRYO2xnhBYwPyStcqEjno/I01Alo
- fUx8eSRodx+lJXFiYWoCBKtgdV2VQN17QNd3uzMS37drNlguBR7XSr24sTX+rrjD/wTR
- mYJQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=kuhls.net; 
+ s=kas202506031021; t=1753994222;
+ bh=Nz98DkiTOL4h2hUK5oVDLeGk9G9l4l+KRxTMCkRg928=;
+ h=From:To:Subject:Date:From;
+ b=fsr2uKyXIccZITuWAeyGS+FYlRS6s1cRks3u5HT/ikXgdG6hnc4XNbUypHirr1uFc
+ enPOoGTiXjMbdtluxXflgdLEPck4ix/b83DsaTmTVjc5LGvwB6A9csQyT9Uzp4eF4d
+ qAdttZ/1sK+m05gYhcV9Hswlg0BNvcFuTkh+TU5b93PsAVpa6Vm09tQlvrUPAUtjTu
+ DahwsNt3yR10Iiu92ugH1AEs3t9tlVJ8PpmQYgBRboPYWyfkscgDmry5vpdtfJybuV
+ /blVz1piTjmTumYfWMyaPFtWwW3/ha8BLa7shd//2CLaX85mpaF+t3wsE09zYW5iq0
+ Cv67G/REDBp9g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=QmjxuhKs
-Subject: Re: [Buildroot] [PATCH 1/1] package/nfs-utils: Fix build with
- glibc-2.42
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202506031021 header.b=fsr2uKyX
+Subject: [Buildroot] [PATCH 1/1] package/ghostscript: Fix build with gcc-15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -112,22 +80,677 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Reply-To: Petr Vorel <petr.vorel@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Bernd,
+Add upstream patch backported by linuxfromscratch.
 
-> Add upstream patch to fix build with glibc-2.42.
+Fixes:
+https://autobuild.buildroot.org/results/fe7/fe78392d73ecc0c6f28c5f25cdcf4b7b64ca71b0/
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ ...Fix-compatibility-with-C23-compilers.patch |  36 --
+ package/ghostscript/0001-gcc15_fixes.patch    | 603 ++++++++++++++++++
+ 2 files changed, 603 insertions(+), 36 deletions(-)
+ delete mode 100644 package/ghostscript/0001-Fix-compatibility-with-C23-compilers.patch
+ create mode 100644 package/ghostscript/0001-gcc15_fixes.patch
 
-Thank you for backporting this fix!
+diff --git a/package/ghostscript/0001-Fix-compatibility-with-C23-compilers.patch b/package/ghostscript/0001-Fix-compatibility-with-C23-compilers.patch
+deleted file mode 100644
+index 0dfca9cfa2..0000000000
+--- a/package/ghostscript/0001-Fix-compatibility-with-C23-compilers.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-From ae940946473ceb8c5353bc6e7f04673c6e60502d Mon Sep 17 00:00:00 2001
+-From: Alex Cherepanov <alex@coscript.biz>
+-Date: Thu, 3 Apr 2025 17:19:41 +0100
+-Subject: Bug 708160: Fix compatibility with C23 compilers
+-
+-Upstream: https://cgit.ghostscript.com/cgi-bin/cgit.cgi/ghostpdl.git/commit/?id=ae940946473ceb8c5353bc6e7f04673c6e60502d
+-[thomas: Only backport the bool typedef condition]
+-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+----
+- base/stdpre.h              |  6 ++++--
+- 1 files changed, 4 insertions(+), 2 deletions(-)
+-
+-diff --git a/base/stdpre.h b/base/stdpre.h
+-index dda30b6a4..2f9c84e0d 100644
+---- a/base/stdpre.h
+-+++ b/base/stdpre.h
+-@@ -1,4 +1,4 @@
+--/* Copyright (C) 2001-2023 Artifex Software, Inc.
+-+/* Copyright (C) 2001-2025 Artifex Software, Inc.
+-    All Rights Reserved.
+-
+-    This software is provided AS-IS with no warranty, either express or
+-@@ -341,7 +341,9 @@ typedef signed char schar;
+-  * and the MetroWerks C++ compiler insists that bool be equivalent to
+-  * unsigned char.
+-  */
+--#ifndef __cplusplus
+-+
+-+/* C23 has bool as a builtin type. */
+-+#if !defined(__cplusplus) && (!defined(__STDC_VERSION__) || __STDC_VERSION__ < 202311L)
+- #ifdef __BEOS__
+- typedef unsigned char bool;
+- #else
+---
+-cgit v1.2.3
+-
+diff --git a/package/ghostscript/0001-gcc15_fixes.patch b/package/ghostscript/0001-gcc15_fixes.patch
+new file mode 100644
+index 0000000000..1cc0665dcf
+--- /dev/null
++++ b/package/ghostscript/0001-gcc15_fixes.patch
+@@ -0,0 +1,603 @@
++Submitted By:            Bruce Dubbs <bdubbs@linuxfromscratch.org>
++Date:                    2025-06-03
++Initial Package Version: 10.05.1 
++Upstream Status:         Unknown
++Origin:                  https://cgit.ghostscript.com/cgi-bin/cgit.cgi/ghostpdl.git/commit/?id=ae940946473ceb8c5353bc6e7f04673c6e60502d Refactored for BLFS by Joe Locash                        
++Description:             Fixes build with GCC-15.
++
++Upstream: https://www.linuxfromscratch.org/patches/blfs/svn/ghostscript-10.05.1-gcc15_fixes-1.patch
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++
++diff -Nuarp ghostscript-10.05.1.orig/base/gdevkrnlsclass.c ghostscript-10.05.1/base/gdevkrnlsclass.c
++--- ghostscript-10.05.1.orig/base/gdevkrnlsclass.c	2025-04-29 07:01:29.000000000 -0400
+++++ ghostscript-10.05.1/base/gdevkrnlsclass.c	2025-04-30 15:46:32.354807551 -0400
++@@ -1,4 +1,4 @@
++-/* Copyright (C) 2001-2023 Artifex Software, Inc.
+++/* Copyright (C) 2001-2025 Artifex Software, Inc.
++    All Rights Reserved.
++ 
++    This software is provided AS-IS with no warranty, either express or
++@@ -29,7 +29,7 @@
++  * of devices which the push of the compositor claims are already installed (to prevent
++  * a second copy being installed by gdev_prn_open).
++  */
++-int install_internal_subclass_devices(gx_device **ppdev, int *devices_loaded)
+++int install_internal_subclass_devices(gx_device **ppdev, bool *devices_loaded)
++ {
++     int code = 0;
++     gx_device *dev = (gx_device *)*ppdev, *saved;
++diff -Nuarp ghostscript-10.05.1.orig/base/gdevkrnlsclass.h ghostscript-10.05.1/base/gdevkrnlsclass.h
++--- ghostscript-10.05.1.orig/base/gdevkrnlsclass.h	2025-04-29 07:01:29.000000000 -0400
+++++ ghostscript-10.05.1/base/gdevkrnlsclass.h	2025-04-30 15:46:32.355217448 -0400
++@@ -1,4 +1,4 @@
++-/* Copyright (C) 2001-2023 Artifex Software, Inc.
+++/* Copyright (C) 2001-2025 Artifex Software, Inc.
++    All Rights Reserved.
++ 
++    This software is provided AS-IS with no warranty, either express or
++@@ -29,6 +29,6 @@ extern gx_device_flp  gs_flp_device;
++ 
++ extern gx_device_nup gs_nup_device;
++ 
++-int install_internal_subclass_devices(gx_device **ppdev, int *devices_loaded);
+++int install_internal_subclass_devices(gx_device **ppdev, bool *devices_loaded);
++ 
++ #endif /* gdev_subclass_dev_INCLUDED */
++diff -Nuarp ghostscript-10.05.1.orig/base/gdevnup.c ghostscript-10.05.1/base/gdevnup.c
++--- ghostscript-10.05.1.orig/base/gdevnup.c	2025-04-29 07:01:29.000000000 -0400
+++++ ghostscript-10.05.1/base/gdevnup.c	2025-04-30 15:46:32.355331152 -0400
++@@ -1,4 +1,4 @@
++-/* Copyright (C) 2001-2023 Artifex Software, Inc.
+++/* Copyright (C) 2001-2025 Artifex Software, Inc.
++    All Rights Reserved.
++ 
++    This software is provided AS-IS with no warranty, either express or
++@@ -682,7 +682,7 @@ nup_dev_spec_op(gx_device *dev, int dev_
++         case gxdso_get_dev_param:
++             {
++                 dev_param_req_t *request = (dev_param_req_t *)data;
++-                int code = false;
+++                bool code = false;
++ 
++                 /* We need to disable pdfmark writing, primarily for CropBox, but also	*/
++                 /* they are probably not relevant for multiple input files to a single	*/
++diff -Nuarp ghostscript-10.05.1.orig/base/gp.h ghostscript-10.05.1/base/gp.h
++--- ghostscript-10.05.1.orig/base/gp.h	2025-04-29 07:01:29.000000000 -0400
+++++ ghostscript-10.05.1/base/gp.h	2025-04-30 15:46:32.355467860 -0400
++@@ -1,4 +1,4 @@
++-/* Copyright (C) 2001-2023 Artifex Software, Inc.
+++/* Copyright (C) 2001-2025 Artifex Software, Inc.
++    All Rights Reserved.
++ 
++    This software is provided AS-IS with no warranty, either express or
++@@ -646,7 +646,7 @@ int gp_fseek_impl(FILE *strm, gs_offset_
++ /* Create a second open gp_file on the basis of a given one */
++ FILE *gp_fdup_impl(FILE *f, const char *mode);
++ 
++-int gp_fseekable_impl(FILE *f);
+++bool gp_fseekable_impl(FILE *f);
++ 
++ /* Force given file into binary mode (no eol translations, etc) */
++ /* if 2nd param true, text mode if 2nd param false */
++diff -Nuarp ghostscript-10.05.1.orig/base/gsfcmap.c ghostscript-10.05.1/base/gsfcmap.c
++--- ghostscript-10.05.1.orig/base/gsfcmap.c	2025-04-29 07:01:29.000000000 -0400
+++++ ghostscript-10.05.1/base/gsfcmap.c	2025-04-30 15:46:32.355593657 -0400
++@@ -1,4 +1,4 @@
++-/* Copyright (C) 2001-2023 Artifex Software, Inc.
+++/* Copyright (C) 2001-2025 Artifex Software, Inc.
++    All Rights Reserved.
++ 
++    This software is provided AS-IS with no warranty, either express or
++@@ -221,7 +221,7 @@ gs_cmap_create_char_identity(gs_cmap_t *
++ /*
++  * Check for identity CMap. Uses a fast check for special cases.
++  */
++-int
+++bool
++ gs_cmap_is_identity(const gs_cmap_t *pcmap, int font_index_only)
++ {
++     return pcmap->procs->is_identity(pcmap, font_index_only);
++diff -Nuarp ghostscript-10.05.1.orig/base/gsovrc.c ghostscript-10.05.1/base/gsovrc.c
++--- ghostscript-10.05.1.orig/base/gsovrc.c	2025-04-29 07:01:29.000000000 -0400
+++++ ghostscript-10.05.1/base/gsovrc.c	2025-04-30 15:46:32.355750463 -0400
++@@ -1,4 +1,4 @@
++-/* Copyright (C) 2001-2024 Artifex Software, Inc.
+++/* Copyright (C) 2001-2025 Artifex Software, Inc.
++    All Rights Reserved.
++ 
++    This software is provided AS-IS with no warranty, either express or
++@@ -297,7 +297,7 @@ gs_create_overprint(
++  * This is used by the gs_pdf1.4_device (and eventually the PDFWrite
++  * device), which implements overprint and overprint mode directly.
++  */
++-int
+++bool
++ gs_is_overprint_compositor(const gs_composite_t * pct)
++ {
++     return pct->type == &gs_composite_overprint_type;
++diff -Nuarp ghostscript-10.05.1.orig/base/gsstate.h ghostscript-10.05.1/base/gsstate.h
++--- ghostscript-10.05.1.orig/base/gsstate.h	2025-04-29 07:01:29.000000000 -0400
+++++ ghostscript-10.05.1/base/gsstate.h	2025-04-30 15:46:32.355922748 -0400
++@@ -1,4 +1,4 @@
++-/* Copyright (C) 2001-2023 Artifex Software, Inc.
+++/* Copyright (C) 2001-2025 Artifex Software, Inc.
++    All Rights Reserved.
++ 
++    This software is provided AS-IS with no warranty, either express or
++@@ -54,8 +54,8 @@ int gs_do_set_overprint(gs_gstate *);
++ int gs_currentrenderingintent(const gs_gstate *);
++ int gs_setrenderingintent(gs_gstate *, int);
++ 
++-int gs_currentblackptcomp(const gs_gstate *);
++-int gs_setblackptcomp(gs_gstate *, int);
+++bool gs_currentblackptcomp(const gs_gstate *);
+++int gs_setblackptcomp(gs_gstate *, bool);
++ 
++ int gs_initgraphics(gs_gstate *);
++ int gs_initgraphics_no_cspace(gs_gstate *);
++diff -Nuarp ghostscript-10.05.1.orig/base/gxcmap.c ghostscript-10.05.1/base/gxcmap.c
++--- ghostscript-10.05.1.orig/base/gxcmap.c	2025-04-29 07:01:29.000000000 -0400
+++++ ghostscript-10.05.1/base/gxcmap.c	2025-04-30 15:46:32.356347589 -0400
++@@ -601,7 +601,7 @@ gx_no_concretize_color(const gs_client_c
++ /* If someone has specified a table for handling named spot colors then we will
++    be attempting to do the special handling to go directly to the device colors
++    here */
++-bool
+++int
++ gx_remap_named_color(const gs_client_color * pcc, const gs_color_space * pcs,
++ gx_device_color * pdc, const gs_gstate * pgs, gx_device * dev,
++ gs_color_select_t select)
++diff -Nuarp ghostscript-10.05.1.orig/base/gxdownscale.c ghostscript-10.05.1/base/gxdownscale.c
++--- ghostscript-10.05.1.orig/base/gxdownscale.c	2025-04-29 07:01:29.000000000 -0400
+++++ ghostscript-10.05.1/base/gxdownscale.c	2025-04-30 15:46:32.356671460 -0400
++@@ -1,4 +1,4 @@
++-/* Copyright (C) 2001-2024 Artifex Software, Inc.
+++/* Copyright (C) 2001-2025 Artifex Software, Inc.
++    All Rights Reserved.
++ 
++    This software is provided AS-IS with no warranty, either express or
++@@ -3376,7 +3376,8 @@ int gx_downscaler_read_params(gs_param_l
++                               int                   features)
++ {
++     int code;
++-    int downscale, mfs, ets, deskew;
+++    int downscale, mfs, ets;
+++    bool deskew;
++     int trap_w, trap_h;
++     const char *param_name;
++     gs_param_int_array trap_order;
++diff -Nuarp ghostscript-10.05.1.orig/base/gxdownscale.h ghostscript-10.05.1/base/gxdownscale.h
++--- ghostscript-10.05.1.orig/base/gxdownscale.h	2025-04-29 07:01:29.000000000 -0400
+++++ ghostscript-10.05.1/base/gxdownscale.h	2025-04-30 15:46:32.356947701 -0400
++@@ -1,4 +1,4 @@
++-/* Copyright (C) 2001-2023 Artifex Software, Inc.
+++/* Copyright (C) 2001-2025 Artifex Software, Inc.
++    All Rights Reserved.
++ 
++    This software is provided AS-IS with no warranty, either express or
++@@ -124,7 +124,7 @@ typedef struct gx_downscaler_params_s
++     int trap_h;
++     int trap_order[GS_CLIENT_COLOR_MAX_COMPONENTS];
++     int ets;
++-    int do_skew_detection;
+++    bool do_skew_detection;
++ } gx_downscaler_params;
++ 
++ /* To use the downscaler:
++diff -Nuarp ghostscript-10.05.1.orig/base/gxfapi.h ghostscript-10.05.1/base/gxfapi.h
++--- ghostscript-10.05.1.orig/base/gxfapi.h	2025-04-29 07:01:29.000000000 -0400
+++++ ghostscript-10.05.1/base/gxfapi.h	2025-04-30 15:46:32.357040305 -0400
++@@ -348,7 +348,7 @@ struct gs_fapi_server_s
++     gs_fapi_retcode(*get_decodingID) (gs_fapi_server *server, gs_fapi_font *ff, const char **decodingID);
++     gs_fapi_retcode(*get_font_bbox) (gs_fapi_server *server, gs_fapi_font *ff, int BBox[4], int unitsPerEm[2]);
++     gs_fapi_retcode(*get_font_proportional_feature) (gs_fapi_server *server, gs_fapi_font *ff, bool *bProportional);
++-    gs_fapi_retcode(*can_retrieve_char_by_name) (gs_fapi_server *server, gs_fapi_font *ff, gs_fapi_char_ref *c, int *result);
+++    gs_fapi_retcode(*can_retrieve_char_by_name) (gs_fapi_server *server, gs_fapi_font *ff, gs_fapi_char_ref *c, bool *result);
++     gs_fapi_retcode(*can_replace_metrics) (gs_fapi_server *server, gs_fapi_font *ff, gs_fapi_char_ref *c, int *result);
++     gs_fapi_retcode(*can_simulate_style) (gs_fapi_server *server, gs_fapi_font *ff, gs_fapi_style style, void *style_data);
++     gs_fapi_retcode(*get_fontmatrix) (gs_fapi_server *server, gs_matrix *m);
++diff -Nuarp ghostscript-10.05.1.orig/base/gximag3x.c ghostscript-10.05.1/base/gximag3x.c
++--- ghostscript-10.05.1.orig/base/gximag3x.c	2025-04-29 07:01:29.000000000 -0400
+++++ ghostscript-10.05.1/base/gximag3x.c	2025-04-30 15:46:32.357164970 -0400
++@@ -1,4 +1,4 @@
++-/* Copyright (C) 2001-2024 Artifex Software, Inc.
+++/* Copyright (C) 2001-2025 Artifex Software, Inc.
++    All Rights Reserved.
++ 
++    This software is provided AS-IS with no warranty, either express or
++@@ -391,7 +391,7 @@ check_image3x_extent(double mask_coeff,
++  * pmcs->{InterleaveType,width,height,full_height,depth,data,y,skip}.
++  * If the mask is omitted, sets pmcs->depth = 0 and returns normally.
++  */
++-static bool
+++static int
++ check_image3x_mask(const gs_image3x_t *pim, const gs_image3x_mask_t *pimm,
++                    const image3x_channel_values_t *ppcv,
++                    image3x_channel_values_t *pmcv,
++diff -Nuarp ghostscript-10.05.1.orig/base/gxiscale.c ghostscript-10.05.1/base/gxiscale.c
++--- ghostscript-10.05.1.orig/base/gxiscale.c	2025-04-29 07:01:29.000000000 -0400
+++++ ghostscript-10.05.1/base/gxiscale.c	2025-04-30 15:46:32.357381148 -0400
++@@ -1,4 +1,4 @@
++-/* Copyright (C) 2001-2024 Artifex Software, Inc.
+++/* Copyright (C) 2001-2025 Artifex Software, Inc.
++    All Rights Reserved.
++ 
++    This software is provided AS-IS with no warranty, either express or
++@@ -112,7 +112,7 @@ device_allows_imagemask_interpolation(gx
++     char data[] = "NoInterpolateImagemasks";
++     dev_param_req_t request;
++     gs_c_param_list list;
++-    int nointerpolate = 0;
+++    bool nointerpolate = false;
++     int code;
++ 
++     gs_c_param_list_write(&list, dev->memory);
++diff -Nuarp ghostscript-10.05.1.orig/base/stdpre.h ghostscript-10.05.1/base/stdpre.h
++--- ghostscript-10.05.1.orig/base/stdpre.h	2025-04-29 07:01:29.000000000 -0400
+++++ ghostscript-10.05.1/base/stdpre.h	2025-04-30 15:46:32.357657850 -0400
++@@ -1,4 +1,4 @@
++-/* Copyright (C) 2001-2023 Artifex Software, Inc.
+++/* Copyright (C) 2001-2025 Artifex Software, Inc.
++    All Rights Reserved.
++ 
++    This software is provided AS-IS with no warranty, either express or
++@@ -341,7 +341,9 @@ typedef signed char schar;
++  * and the MetroWerks C++ compiler insists that bool be equivalent to
++  * unsigned char.
++  */
++-#ifndef __cplusplus
+++
+++/* C23 has bool as a builtin type. */
+++#if !defined(__cplusplus) && (!defined(__STDC_VERSION__) || __STDC_VERSION__ < 202311L)
++ #ifdef __BEOS__
++ typedef unsigned char bool;
++ #else
++diff -Nuarp ghostscript-10.05.1.orig/contrib/eplaser/gdevescv.c ghostscript-10.05.1/contrib/eplaser/gdevescv.c
++--- ghostscript-10.05.1.orig/contrib/eplaser/gdevescv.c	2025-04-29 07:01:29.000000000 -0400
+++++ ghostscript-10.05.1/contrib/eplaser/gdevescv.c	2025-04-30 15:46:32.357837699 -0400
++@@ -183,7 +183,7 @@ esmv_initialize_device_procs(gx_device *
++         0,			/*   int           prev_paper_height; */\
++         0,			/*   int           prev_num_copies; */\
++         -1,			/*   int           prev_feed_mode; */\
++-        0,			/*   int           orientation; */\
+++        false,			/*   bool          orientation; */\
++         ESCPAGE_FACEUP_DEFAULT,	/*   bool          faceup; */\
++         ESCPAGE_MEDIATYPE_DEFAULT, /*   int           MediaType; */\
++         0,			/*   bool          first_page; */\
++diff -Nuarp ghostscript-10.05.1.orig/contrib/eplaser/gdevescv.h ghostscript-10.05.1/contrib/eplaser/gdevescv.h
++--- ghostscript-10.05.1.orig/contrib/eplaser/gdevescv.h	2025-04-29 07:01:29.000000000 -0400
+++++ ghostscript-10.05.1/contrib/eplaser/gdevescv.h	2025-04-30 15:46:32.358046532 -0400
++@@ -126,7 +126,7 @@ typedef struct gx_device_escv_s {
++   int           prev_paper_height;
++   int           prev_num_copies;
++   int           prev_feed_mode;
++-  int           orientation;
+++  bool          orientation;
++   bool          faceup;
++   int           MediaType;
++   bool          first_page;
++diff -Nuarp ghostscript-10.05.1.orig/contrib/gdevmd2k.c ghostscript-10.05.1/contrib/gdevmd2k.c
++--- ghostscript-10.05.1.orig/contrib/gdevmd2k.c	2025-04-29 07:01:29.000000000 -0400
+++++ ghostscript-10.05.1/contrib/gdevmd2k.c	2025-04-30 15:46:32.358141542 -0400
++@@ -157,10 +157,11 @@ alps_get_params(gx_device *pdev, gs_para
++ }
++ 
++ static int
++-alps_put_param_bool(gs_param_list *plist, gs_param_name pname, int *pvalue,
+++alps_put_param_bool(gs_param_list *plist, gs_param_name pname, bool *pvalue,
++                    int ecode)
++ {
++-    int code, value;
+++    int code;
+++    bool value;
++     switch (code = param_read_bool(plist, pname, &value)) {
++     default:
++         return code;
++diff -Nuarp ghostscript-10.05.1.orig/contrib/lips4/gdevl4r.c ghostscript-10.05.1/contrib/lips4/gdevl4r.c
++--- ghostscript-10.05.1.orig/contrib/lips4/gdevl4r.c	2025-04-29 07:01:29.000000000 -0400
+++++ ghostscript-10.05.1/contrib/lips4/gdevl4r.c	2025-04-30 15:46:32.358275765 -0400
++@@ -496,7 +496,7 @@ lips4_put_params(gx_device * pdev, gs_pa
++     int code;
++     gs_param_name param_name;
++     gs_param_string pmedia;
++-    bool nup = lips4->nup;
+++    int nup = lips4->nup;
++     bool faceup = lips4->faceup;
++     int old_bpp = pdev->color_info.depth;
++     int bpp = 0;
++diff -Nuarp ghostscript-10.05.1.orig/contrib/lips4/gdevl4v.c ghostscript-10.05.1/contrib/lips4/gdevl4v.c
++--- ghostscript-10.05.1.orig/contrib/lips4/gdevl4v.c	2025-04-29 07:01:29.000000000 -0400
+++++ ghostscript-10.05.1/contrib/lips4/gdevl4v.c	2025-04-30 15:46:32.358450644 -0400
++@@ -224,7 +224,7 @@ static int lips4v_setflat(gx_device_vect
++ static int
++ lips4v_setlogop(gx_device_vector * vdev, gs_logical_operation_t lop,
++                  gs_logical_operation_t diff);
++-static int lips4v_can_handle_hl_color(gx_device_vector * vdev, const gs_gstate * pgs,
+++static bool lips4v_can_handle_hl_color(gx_device_vector * vdev, const gs_gstate * pgs,
++                   const gx_drawing_color * pdc);
++ static int
++ 
++@@ -1220,7 +1220,7 @@ lips4v_setlogop(gx_device_vector * vdev,
++ }
++ 
++ /*--- added for Ghostscritp 8.15 ---*/
++-static int
+++static bool
++ lips4v_can_handle_hl_color(gx_device_vector * vdev, const gs_gstate * pgs1,
++               const gx_drawing_color * pdc)
++ {
++diff -Nuarp ghostscript-10.05.1.orig/contrib/opvp/gdevopvp.c ghostscript-10.05.1/contrib/opvp/gdevopvp.c
++--- ghostscript-10.05.1.orig/contrib/opvp/gdevopvp.c	2025-04-29 07:01:29.000000000 -0400
+++++ ghostscript-10.05.1/contrib/opvp/gdevopvp.c	2025-04-30 15:46:32.358826984 -0400
++@@ -265,7 +265,7 @@ static  int opvp_setdash(gx_device_vecto
++ static  int opvp_setflat(gx_device_vector *, double);
++ static  int opvp_setlogop(gx_device_vector *, gs_logical_operation_t,
++                           gs_logical_operation_t);
++-static  int opvp_can_handle_hl_color(gx_device_vector *, const gs_gstate *, const gx_drawing_color *);
+++static  bool opvp_can_handle_hl_color(gx_device_vector *, const gs_gstate *, const gx_drawing_color *);
++ static  int opvp_setfillcolor(gx_device_vector *, const gs_gstate *, const gx_drawing_color *);
++ static  int opvp_setstrokecolor(gx_device_vector *, const gs_gstate *,const gx_drawing_color *);
++ static  int opvp_vector_dopath(gx_device_vector *, const gx_path *,
++@@ -4947,7 +4947,7 @@ opvp_setlogop(
++ }
++ 
++ /*--- added for Ghostscript 8.15 ---*/
++-static int
+++static bool
++ opvp_can_handle_hl_color(gx_device_vector * vdev,
++               const gs_gstate * pgs1, const gx_drawing_color * pdc)
++ {
++diff -Nuarp ghostscript-10.05.1.orig/devices/gdevcdj.c ghostscript-10.05.1/devices/gdevcdj.c
++--- ghostscript-10.05.1.orig/devices/gdevcdj.c	2025-04-29 07:01:29.000000000 -0400
+++++ ghostscript-10.05.1/devices/gdevcdj.c	2025-04-30 15:46:32.359308833 -0400
++@@ -1,4 +1,4 @@
++-/* Copyright (C) 2001-2023 Artifex Software, Inc.
+++/* Copyright (C) 2001-2025 Artifex Software, Inc.
++    All Rights Reserved.
++ 
++    This software is provided AS-IS with no warranty, either express or
++@@ -337,7 +337,7 @@ typedef struct gx_device_bjc800_s gx_dev
++     bool mediaWeight_isSet;	/* Say if weight is an integer or null */ \
++     int mediaWeight;		/* Weigth of the media */ \
++     int printQuality;		/* Cf. strings below */ \
++-    bool ditheringType;		/* Do dithering */ \
+++    int ditheringType;		/* Do dithering */ \
++     int colorComponents;	/* The number of *desired* color comps */ \
++     int printColors		/* 0: Transparent, \
++                                    1: C, 2: M, 4: Y, 7: K (Color decomp). \
++diff -Nuarp ghostscript-10.05.1.orig/devices/gdevpdfimg.h ghostscript-10.05.1/devices/gdevpdfimg.h
++--- ghostscript-10.05.1.orig/devices/gdevpdfimg.h	2025-04-29 07:01:29.000000000 -0400
+++++ ghostscript-10.05.1/devices/gdevpdfimg.h	2025-04-30 15:46:32.359568141 -0400
++@@ -1,4 +1,4 @@
++-/* Copyright (C) 2001-2023 Artifex Software, Inc.
+++/* Copyright (C) 2001-2025 Artifex Software, Inc.
++    All Rights Reserved.
++ 
++    This software is provided AS-IS with no warranty, either express or
++@@ -74,8 +74,8 @@ typedef struct gx_device_pdf_image_s {
++     PCLm_temp_file_t temp_stream;
++     int NextObject;
++ 
++-    int Tumble;
++-    int Tumble2;
+++    bool Tumble;
+++    bool Tumble2;
++ 
++     /* OCR data */
++     struct {
++diff -Nuarp ghostscript-10.05.1.orig/devices/vector/gdevpdfd.c ghostscript-10.05.1/devices/vector/gdevpdfd.c
++--- ghostscript-10.05.1.orig/devices/vector/gdevpdfd.c	2025-04-29 07:01:29.000000000 -0400
+++++ ghostscript-10.05.1/devices/vector/gdevpdfd.c	2025-04-30 15:46:32.359695341 -0400
++@@ -1,4 +1,4 @@
++-/* Copyright (C) 2001-2024 Artifex Software, Inc.
+++/* Copyright (C) 2001-2025 Artifex Software, Inc.
++    All Rights Reserved.
++ 
++    This software is provided AS-IS with no warranty, either express or
++@@ -108,7 +108,7 @@ pdf_setlinewidth(gx_device_vector * vdev
++     return psdf_setlinewidth(vdev, fabs(width));
++ }
++ 
++-static int
+++static bool
++ pdf_can_handle_hl_color(gx_device_vector * vdev, const gs_gstate * pgs,
++                  const gx_drawing_color * pdc)
++ {
++diff -Nuarp ghostscript-10.05.1.orig/devices/vector/gdevpdtt.c ghostscript-10.05.1/devices/vector/gdevpdtt.c
++--- ghostscript-10.05.1.orig/devices/vector/gdevpdtt.c	2025-04-29 07:01:29.000000000 -0400
+++++ ghostscript-10.05.1/devices/vector/gdevpdtt.c	2025-04-30 15:46:32.359996529 -0400
++@@ -1,4 +1,4 @@
++-/* Copyright (C) 2001-2024 Artifex Software, Inc.
+++/* Copyright (C) 2001-2025 Artifex Software, Inc.
++    All Rights Reserved.
++ 
++    This software is provided AS-IS with no warranty, either express or
++@@ -3272,18 +3272,14 @@ static void pdf_type3_get_initial_matrix
++     gs_matrix_scale(pmat, pdev->HWResolution[0] / 72.0, pdev->HWResolution[0] / 72.0, pmat);
++ }
++ 
++-static int pdf_query_purge_cached_char(const gs_memory_t *mem, cached_char *cc, void *data)
+++static bool pdf_query_purge_cached_char(const gs_memory_t *mem, cached_char *cc, void *data)
++ {
++     cached_char *to_purge = (cached_char *)data;
++ 
++-
++-    if (cc->code == to_purge->code && cc_pair(cc) == cc_pair(to_purge) &&
++-        cc->subpix_origin.x == to_purge->subpix_origin.x &&
++-        cc->subpix_origin.y == to_purge->subpix_origin.y &&
++-        cc->wmode == to_purge->wmode && cc_depth(cc) == cc_depth(to_purge)
++-        )
++-        return 1;
++-    return 0;
+++    return cc->code == to_purge->code && cc_pair(cc) == cc_pair(to_purge) &&
+++           cc->subpix_origin.x == to_purge->subpix_origin.x &&
+++           cc->subpix_origin.y == to_purge->subpix_origin.y &&
+++           cc->wmode == to_purge->wmode && cc_depth(cc) == cc_depth(to_purge);
++ }
++ 
++ static int ProcessTextForOCR(gs_text_enum_t *pte)
++diff -Nuarp ghostscript-10.05.1.orig/devices/vector/gdevpx.c ghostscript-10.05.1/devices/vector/gdevpx.c
++--- ghostscript-10.05.1.orig/devices/vector/gdevpx.c	2025-04-29 07:01:29.000000000 -0400
+++++ ghostscript-10.05.1/devices/vector/gdevpx.c	2025-04-30 15:46:32.360339426 -0400
++@@ -1,4 +1,4 @@
++-/* Copyright (C) 2001-2023 Artifex Software, Inc.
+++/* Copyright (C) 2001-2025 Artifex Software, Inc.
++    All Rights Reserved.
++ 
++    This software is provided AS-IS with no warranty, either express or
++@@ -1393,7 +1393,7 @@ pclxl_setlogop(gx_device_vector * vdev,
++     return 0;
++ }
++ 
++-static int
+++static bool
++ pclxl_can_handle_hl_color(gx_device_vector * vdev, const gs_gstate * pgs,
++                           const gx_drawing_color * pdc)
++ {
++diff -Nuarp ghostscript-10.05.1.orig/devices/vector/gdevxps.c ghostscript-10.05.1/devices/vector/gdevxps.c
++--- ghostscript-10.05.1.orig/devices/vector/gdevxps.c	2025-04-29 07:01:29.000000000 -0400
+++++ ghostscript-10.05.1/devices/vector/gdevxps.c	2025-04-30 15:46:32.360607962 -0400
++@@ -1,4 +1,4 @@
++-/* Copyright (C) 2001-2024 Artifex Software, Inc.
+++/* Copyright (C) 2001-2025 Artifex Software, Inc.
++    All Rights Reserved.
++ 
++    This software is provided AS-IS with no warranty, either express or
++@@ -271,7 +271,7 @@ static int
++ xps_setlogop(gx_device_vector *vdev, gs_logical_operation_t lop,
++              gs_logical_operation_t diff);
++ 
++-static int
+++static bool
++ xps_can_handle_hl_color(gx_device_vector *vdev, const gs_gstate *pgs,
++                         const gx_drawing_color * pdc);
++ static int
++@@ -1480,12 +1480,12 @@ xps_setlogop(gx_device_vector *vdev, gs_
++ 
++         /* Other state */
++ 
++-static int
+++static bool
++ xps_can_handle_hl_color(gx_device_vector *vdev, const gs_gstate *pgs,
++                           const gx_drawing_color *pdc)
++ {
++     if_debug0m('_', vdev->memory, "xps_can_handle_hl_color\n");
++-    return 0;
+++    return false;
++ }
++ 
++ /* Paths */
++diff -Nuarp ghostscript-10.05.1.orig/pdf/pdf_device.c ghostscript-10.05.1/pdf/pdf_device.c
++--- ghostscript-10.05.1.orig/pdf/pdf_device.c	2025-04-29 07:01:29.000000000 -0400
+++++ ghostscript-10.05.1/pdf/pdf_device.c	2025-04-30 15:46:52.780602073 -0400
++@@ -1,4 +1,4 @@
++-/* Copyright (C) 2019-2024 Artifex Software, Inc.
+++/* Copyright (C) 2019-2025 Artifex Software, Inc.
++    All Rights Reserved.
++ 
++    This software is provided AS-IS with no warranty, either express or
++@@ -45,7 +45,7 @@ bool pdfi_device_check_param_bool(gx_dev
++ {
++     int code;
++     gs_c_param_list list;
++-    int value;
+++    bool value;
++ 
++     code = pdfi_device_check_param(dev, param, &list);
++     if (code < 0)
++@@ -57,7 +57,7 @@ bool pdfi_device_check_param_bool(gx_dev
++     if (code < 0)
++         value = false;
++     gs_c_param_list_release(&list);
++-    return (bool)value;
+++    return value;
++ }
++ 
++ /* Set value of string device parameter */
++diff -Nuarp ghostscript-10.05.1.orig/psi/zcontrol.c ghostscript-10.05.1/psi/zcontrol.c
++--- ghostscript-10.05.1.orig/psi/zcontrol.c	2025-04-29 07:01:29.000000000 -0400
+++++ ghostscript-10.05.1/psi/zcontrol.c	2025-04-30 15:46:52.780840162 -0400
++@@ -1,4 +1,4 @@
++-/* Copyright (C) 2001-2023 Artifex Software, Inc.
+++/* Copyright (C) 2001-2025 Artifex Software, Inc.
++    All Rights Reserved.
++ 
++    This software is provided AS-IS with no warranty, either express or
++@@ -990,7 +990,7 @@ const op_def zcontrol3_op_defs[] = {
++  * interpreter to catch them, so that we can signal the error with the
++  * object still on the operand stack.
++  */
++-static bool
+++static int
++ check_for_exec(const_os_ptr op)
++ {
++     if (!r_has_attr(op, a_execute) && /* only true if noaccess */
++diff -Nuarp ghostscript-10.05.1.orig/psi/zfaes.c ghostscript-10.05.1/psi/zfaes.c
++--- ghostscript-10.05.1.orig/psi/zfaes.c	2025-04-29 07:01:29.000000000 -0400
+++++ ghostscript-10.05.1/psi/zfaes.c	2025-04-30 15:53:07.719705296 -0400
++@@ -38,7 +38,7 @@ z_aes_d(i_ctx_t * i_ctx_p)
++     os_ptr op = osp;		/* i_ctx_p->op_stack.stack.p defined in osstack.h */
++     ref *sop = NULL;
++     stream_aes_state state;
++-    int use_padding;
+++    bool use_padding;
++ 
++     check_op(2);
++     /* extract the key from the parameter dictionary */
++diff -Nuarp ghostscript-10.05.1.orig/psi/zfdecode.c ghostscript-10.05.1/psi/zfdecode.c
++--- ghostscript-10.05.1.orig/psi/zfdecode.c	2025-04-29 07:01:29.000000000 -0400
+++++ ghostscript-10.05.1/psi/zfdecode.c	2025-04-30 15:46:52.781006938 -0400
++@@ -190,7 +190,7 @@ filter_read_predictor(i_ctx_t *i_ctx_p,
++ int
++ zlz_setup(os_ptr op, stream_LZW_state * plzs)
++ {
++-    int code;
+++    int code, ech;
++     const ref *dop;
++ 
++     s_LZW_set_defaults_inline(plzs);
++@@ -200,7 +200,7 @@ zlz_setup(os_ptr op, stream_LZW_state *
++     } else
++         dop = 0;
++     if (   (code = dict_int_param(dop, "EarlyChange", 0, 1, 1,
++-                                  &plzs->EarlyChange)) < 0 ||
+++                                  &ech)) < 0 ||
++            /*
++             * The following are not PostScript standard, although
++             * LanguageLevel 3 provides the first two under different
++@@ -214,6 +214,7 @@ zlz_setup(os_ptr op, stream_LZW_state *
++                                    &plzs->BlockData)) < 0
++         )
++         return code;
+++    plzs->EarlyChange = ech != 0;
++     return 0;
++ }
++ 
++diff -Nuarp ghostscript-10.05.1.orig/psi/zfunc4.c ghostscript-10.05.1/psi/zfunc4.c
++--- ghostscript-10.05.1.orig/psi/zfunc4.c	2025-04-29 07:01:29.000000000 -0400
+++++ ghostscript-10.05.1/psi/zfunc4.c	2025-04-30 15:46:52.781205801 -0400
++@@ -1,4 +1,4 @@
++-/* Copyright (C) 2001-2024 Artifex Software, Inc.
+++/* Copyright (C) 2001-2025 Artifex Software, Inc.
++    All Rights Reserved.
++ 
++    This software is provided AS-IS with no warranty, either express or
++@@ -468,7 +468,7 @@ gs_build_function_4(i_ctx_t *i_ctx_p, co
++     int code;
++     byte *ops;
++     uint size;
++-    int AllowRepeat = 1; /* Default to permitting Repeat, devices which can't handle it implement the spec_op */
+++    bool AllowRepeat = true; /* Default to permitting Repeat, devices which can't handle it implement the spec_op */
++ 
++     *(gs_function_params_t *)&params = *mnDR;
++     params.ops.data = 0;	/* in case of failure */
++@@ -548,7 +548,7 @@ int make_type4_function(i_ctx_t * i_ctx_
++     float *ptr;
++     ref alternatespace, *palternatespace = &alternatespace;
++     PS_colour_space_t *space, *altspace;
++-    int AllowRepeat = 1; /* Default to permitting Repeat, devices which can't handle it implement the spec_op */
+++    bool AllowRepeat = true; /* Default to permitting Repeat, devices which can't handle it implement the spec_op */
++ 
++     code = get_space_object(i_ctx_p, arr, &space);
++     if (code < 0)
+-- 
+2.39.5
 
-Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
-
-Kind regards,
-Petr
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
