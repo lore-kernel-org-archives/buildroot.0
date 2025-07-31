@@ -4,81 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8335C87FCC
-	for <buildroot@archiver.kernel.org>; Thu, 31 Jul 2025 13:15:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E99FC87FCC
+	for <buildroot@archiver.kernel.org>; Thu, 31 Jul 2025 13:44:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AC83842909;
-	Thu, 31 Jul 2025 13:15:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3C83642951;
+	Thu, 31 Jul 2025 13:44:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ehpCw6HlyAhr; Thu, 31 Jul 2025 13:15:02 +0000 (UTC)
+ id el0B1-U0nNwz; Thu, 31 Jul 2025 13:44:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B28D44290B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 512A942949
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B28D44290B;
-	Thu, 31 Jul 2025 13:15:02 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id D5B1F160
- for <buildroot@buildroot.org>; Thu, 31 Jul 2025 13:15:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 512A942949;
+	Thu, 31 Jul 2025 13:44:31 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id D7D89168
+ for <buildroot@buildroot.org>; Thu, 31 Jul 2025 13:44:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BC3DD40F06
- for <buildroot@buildroot.org>; Thu, 31 Jul 2025 13:15:00 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D52A1611B7
+ for <buildroot@buildroot.org>; Thu, 31 Jul 2025 13:44:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CCzN6ArBUmOp for <buildroot@buildroot.org>;
- Thu, 31 Jul 2025 13:15:00 +0000 (UTC)
-X-Greylist: delayed 71756 seconds by postgrey-1.37 at util1-new.osuosl.org;
- Thu, 31 Jul 2025 13:14:59 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C10C440EDE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C10C440EDE
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
- helo=relay6-d.mail.gandi.net; envelope-from=alexis.lothore@bootlin.com;
- receiver=<UNKNOWN> 
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C10C440EDE
- for <buildroot@buildroot.org>; Thu, 31 Jul 2025 13:14:59 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 53B6344267;
- Thu, 31 Jul 2025 13:14:56 +0000 (UTC)
-Mime-Version: 1.0
-Date: Thu, 31 Jul 2025 15:14:56 +0200
-Message-Id: <DBQ9NNWKH3VS.KK3SWYJH4GQY@bootlin.com>
-Cc: <tim.hammer@nav-timing.safrangroup.com>,
- <nicolas.carrier@nav-timing.safrangroup.com>, <buildroot@buildroot.org>
-To: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
-X-Mailer: aerc 0.20.1-0-g2ecb8770224a-dirty
-References: <20250730-openscap-v1-0-46e4a32e26da@bootlin.com>
- <20250730-openscap-v1-3-46e4a32e26da@bootlin.com>
- <20250730190231.51e0715e@windsurf> <DBQ8SCGP37TS.2V8HRWA7RWPTW@bootlin.com>
- <20250731144852.25bb9e9e@windsurf>
-In-Reply-To: <20250731144852.25bb9e9e@windsurf>
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddutddtleduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpegggfgtfffkufevhffvofhfjgesthhqredtredtjeenucfhrhhomheptehlvgigihhsucfnohhthhhorhoruceorghlvgigihhsrdhlohhthhhorhgvsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeejieevgeejveefffekkeejhfeiteefkeekffduleefvdduudffvdejleffgefgvdenucffohhmrghinhepghhithhhuhgsrdgtohhmpdgsohhothhlihhnrdgtohhmnecukfhppeeltddrkeelrdduieefrdduvdejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepledtrdekledrudeifedruddvjedphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomheprghlvgigihhsrdhlohhthhhorhgvsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeegpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtohepthhimhdrhhgrmhhmvghrsehnrghvqdhtihhmihhnghdrshgrfhhrrghnghhrohhuphdrtghomhdprhgtphhtthhopehnihgtohhlrghsrdgtrghrrhhivghrsehnrghvqdhtihhmihhnghdrs
- hgrfhhrrghnghhrohhuphdrtghomhdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhg
-X-GND-Sasl: alexis.lothore@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1753967696;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=5i/GVfrDjjvZnNIFMH/N12ZcS4are0mJ/wfSjYLp8Fw=;
- b=Q7SzDxI2NzRNvJu3uBfHmpsZjFWfVRTHPn1KOI7bVlpOm7ELaFn0Hx0qUgjbpbbaE7H+Sw
- jW0i3vykIKUlkcVGe3FLiWLMMdi53cpEKsUl1IPiWaQC1Di+ojy/SbOlLBBNGhIjGloJxA
- bTxPSxzV8FVK4AUU8wTmJYIQ6rpMc9Nyn7v9AM6EQMQoXFU4rVWuh1Vzs/oceTR8+SC3jL
- 66U+DVuxxDjZJyKJ3zYYOuEQ5LMJ4seninmyFyHMKnV/rTTQIN7KPWt942igsByB4l7AZw
- 80F0d1GpLEXwqu9iPxVDs8LU2bJIzY86bysHKjCSsvtXN0/BNO9FRgbDzpVAIw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Q7SzDxI2
-Subject: Re: [Buildroot] [PATCH 3/4] package/openscap: add openscap package
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8Y65HrfRoqnI for <buildroot@buildroot.org>;
+ Thu, 31 Jul 2025 13:44:30 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E9C876118F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E9C876118F
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E9C876118F
+ for <buildroot@buildroot.org>; Thu, 31 Jul 2025 13:44:29 +0000 (UTC)
+Received: from home.juju.sh (unknown [192.214.236.6])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPSA id 0820019F5C6;
+ Thu, 31 Jul 2025 15:44:20 +0200 (CEST)
+To: buildroot@buildroot.org
+Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>, Mingcong Bai <jeffbai@aosc.io>,
+ Xi Ruoyao <xry111@xry111.site>, Julien Olivain <ju.o@free.fr>
+Date: Thu, 31 Jul 2025 15:44:01 +0200
+Message-ID: <20250731134401.30301-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.50.1
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1753969466;
+ bh=4Of2OuM2pnJbGgKANVkDjBvXMEPEz62P4HJV3UnbaqA=;
+ h=From:To:Cc:Subject:Date:From;
+ b=uAr82OcEaKBjVnTHVMxu6nqD19ox0RS6wsDcSMXcbp2OnZDSo0zZek1H5u7nX9psv
+ cMvfogkgg3K9rZubADqcsZbM6uz1Pux7SEHzq3S/wEioIf5tvqYal/+DK/W86p0AAT
+ L9MWLZ1JkuaK3h6Mf7rgjaa1YjMd97M7HY1HdeYFgk4UASDsAsuTpw3jKhWFEC5tZB
+ sl99fNxHYGPDyRnQzEV/bnqxDsCBm0CQB4kLKh9phG3JJFmi2+z2SJfQWWXR+awY2g
+ i+JXZeVYqN0OrxOqTf97pz636XsyTbsD5MKxmKSUfUBgG6U2MVlQQqLcH/+VNtzTUG
+ cIlzXqkHn/Mfw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=uAr82OcE
+Subject: [Buildroot] [PATCH v3 1/1] arch/loongarch: Mark lp64f and lp64s as
+ broken
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -90,54 +76,141 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?q?Alexis_Lothor=C3=A9_via_buildroot?= <buildroot@buildroot.org>
-Reply-To: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gVGh1IEp1bCAzMSwgMjAyNSBhdCAyOjQ4IFBNIENFU1QsIFRob21hcyBQZXRhenpvbmkgd3Jv
-dGU6Cj4gT24gVGh1LCAzMSBKdWwgMjAyNSAxNDozNDowMSArMDIwMAo+IEFsZXhpcyBMb3Rob3LD
-qSA8YWxleGlzLmxvdGhvcmVAYm9vdGxpbi5jb20+IHdyb3RlOgo+Cj4+IGl0IGxvb2tzIGxpa2Ug
-Z2NyeXB0L25zcyBpcyBub3QgbWFuZGF0b3J5LiBCdXQgaWYgSSB0cnkgdG8gY29uZmlndXJlIGFu
-ZAo+PiBydW4gYSBidWlsZCBpbiBhbiBlbnZpcm9ubWVudCB3aXRob3V0IGxpYmdjcnlwdCwgSSBn
-b3Qgc2FtZSBsYXRlIGxpbmthZ2UKPj4gZXJyb3IsIGFib3V0IHNvbWUgbWlzc2luZyBjcmFwaV9p
-bml0IChubywgSSBhbSBub3QgbWFraW5nIHRoaXMgZnVuY3Rpb24ncwo+PiBuYW1lIHVwLi4uKSBi
-ZWluZyBtaXNzaW5nLiBJdCBhcHBlYXJzIHRoYXQgdGhlcmUgYXJlIGNvZGUgcGF0aHMKPj4gcHJl
-cHJvY2Vzc2VkIGNvbmRpdGlvbm5hbHkgb24gZWl0aGVyIGxpYmdjcnlwdCBvciBuc3MgcHJlc2Vu
-Y2UsIHdpdGhvdXQgYW55Cj4+IGZhbGxiYWNrIGlmIG5vbmUgaXMgZm91bmQuIEkgYW0gbm90IHN1
-cmUgaWYgSSBhbSBmYWNpbmcgc29tZSBvcHRpb25hbAo+PiBkZXBlbmRlbmNpZXMgdGhhdCBhcmUg
-bm90ICJvcHRpb25hbCBlbm91Z2giIGluIHRoZSBjb2RlIGJhc2UsIG9yIHNvbWUgaGFyZAo+PiBk
-cGVuZGVuY2llcyB0aGF0IGFyZSBub3Qgc3VmZmljaWVudGx5IGVuZm9yY2VkIGluIHRoZSBjbWFr
-ZSBmaWxlcy4gQnV0IGluCj4+IHRoZSBwcm9qZWN0IGN1cnJlbnQgc3RhdGUsIHRoZSBzb2Z0d2Fy
-ZSBkb2VzIG5vdCBidWlsZCB3aXRob3V0IGxpYmdjcnlwdC4KPj4gCj4+IElmIEkgdGFrZSBhIGZ1
-cnRoZXIgbG9vayBhdCB0aGUgZGV2IGRvYwo+PiAoaHR0cHM6Ly9naXRodWIuY29tL09wZW5TQ0FQ
-L29wZW5zY2FwL2Jsb2IvbWFpbi9kb2NzL2RldmVsb3Blci9kZXZlbG9wZXIuYWRvYyksCj4+IGl0
-IHNlZW1zIHRvIGhpbnQgdGhhdCBsaWJnY3J5cHQgaXMgYWN0dWFsbHkgbmVlZGVkIGluIGFueSBj
-YXNlLgo+Cj4gVGhhdCdzIGZpbmUsIHdlIGRvbid0IGV4cGVjdCB5b3UgdG8gZml4IGFsbCB1cHN0
-cmVhbSBpc3N1ZXMgOikKPgo+IEhvd2V2ZXIsIG15IGNvbmNlcm4gd2FzIG5vdCBzbyBtdWNoIGFi
-b3V0IGdjcnlwdCBiZWluZyBuZWVkZWQsIGJ1dCB0aGUKPiBmYWN0IHRoYXQgeW91IG5lZWQgb3Bl
-bnNzbCAqYW5kKiBsaWJnY3J5cHQuIEFyZSBib3RoIHRydWx5IG5lZWRlZD8KCkFzIHNob3duZWQg
-aW4gdGhlIHNhbXBsZSBhYm92ZTogeWVzLCBib3RoIGFyZSBuZWVkZWQsIE9wZW5TU0wgYmVjYXVz
-ZSBpdCBpcwphIGhhcmQgZGVwZW5kZW5jeSBpbiBDTWFrZUxpc3RzLnR4dCAodGVzdGVkIGJ5IHJl
-bW92aW5nIGxpYnNzbC1kZXYgZnJvbSBteQp0ZXN0aW5nIGVudiwgaXQgaW5kZWVkIGZhaWxzIHRv
-IGNvbmZpZ3VyZSB0aGUgcHJvamVjdCwgYW5kIHRoZXJlIGlzIG5vCm9wdGlvbiB0byBkaXNhYmxl
-IGl0KSwgYW5kIGxpYmdjcnlwdCwgYmVjYXVzZSBsaW5rYWdlIHdpbGwgZmFpbCBvdGhlcndpc2Uu
-Cgo+PiBJJ2xsIHJlbW92ZSB0aGUgV0lUSF9DUllQVE89Z2NyeXB0IHRob3VnaCwgYXMgaXQgaXMg
-dGhlIGRlZmF1bHQgdmFsdWUgaW4KPj4gQ01ha2VMaXN0cy50eHQuCj4KPiBXZWxsLCB5b3UgY2Fu
-IGtlZXAgaXQgZXhwbGljaXQsIEkgdGhpbmsgaXQncyBhIGdvb2QgaWRlYS4KCkFDSwoKPj4gCj4+
-ID4gLSBZb3UncmUgc2V0dGluZyBFTkFCTEVfUFlUSE9OMz1PTiwgYnV0IHlvdXIgdGFyZ2V0IHBh
-Y2thZ2UgZG9lcyBub3QKPj4gPiAgIGRlcGVuZCBvbiBob3N0LXB5dGhvbjMgbm9yIHB5dGhvbjMg
-aW4gdGVybXMgb2YgYnVpbGQgZGVwZW5kZW5jeS4KPj4gPiAgIENvdWxkIHlvdSBjbGFyaWZ5IHdo
-YXQgdGhpcyBFTkFCTEVfUFlUSE9OMyBvcHRpb24gZG9lcz8gIAo+PiAKPj4gVGhhdCdzIGFuIG9t
-aXNzaW9uIG9uIG15IHNpZGUuIFRoaXMgRU5BQkxFX1BZVEhPTjMgYWxsb3dzIGJ1aWxkaW5nIHNv
-bWUKPj4gYmluZGluZ3MgKHRvIHdyaXRlIHNvbWUgcHl0aG9uIGF1dG9tYXRpb24gdG9vbHMgYmFz
-ZWQgb24gb3BlbnNjYXAgPykgaWYgdGhlCj4+IGludGVycHJldGVyIGlzIGZvdW5kLiBJJ2xsIHJl
-bW92ZSBpdC4KPgo+IFRoZW4gRU5BQkxFX1BZVEhPTjM9T0ZGIGlzIHByb2JhYmx5IGJldHRlci4g
-R2VuZXJhbGx5IHNwZWFraW5nIHRoZSBtb3JlCj4gb3B0aW9ucyBhcmUgZXhwbGljaXRseSBzZXQs
-IHRoZSBiZXR0ZXIuCgpBQ0sKCkFsZXhpcwotLSAKQWxleGlzIExvdGhvcsOpLCBCb290bGluCkVt
-YmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5naW5lZXJpbmcKaHR0cHM6Ly9ib290bGluLmNvbQoK
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290
-IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxk
-cm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+From: Jiaxun Yang <jiaxun.yang@flygoat.com>
+
+Toolchain failed to bootstrap with LP64F and LP64S ABIs.
+
+As reported by Julien in [1]:
+
+Testing the "lp64f" ABI with commands:
+
+     cat >.config <<EOF
+     BR2_loongarch64=y
+     BR2_LOONGARCH_FPU_32=y
+     BR2_LINUX_KERNEL=y
+     BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+     BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+     BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
+     BR2_TARGET_ROOTFS_EXT2=y
+     # BR2_TARGET_ROOTFS_TAR is not set
+     EOF
+     make olddefconfig
+     make
+
+fails in host-gcc-initial with output:
+
+     Assembler messages:
+     /tmp/ccEkwSsD.s:28: Error: register save offset not a multiple of 8
+     /tmp/ccEkwSsD.s:30: Error: register save offset not a multiple of 8
+     /tmp/ccEkwSsD.s:50: Error: register save offset not a multiple of 8
+
+See also autobuilder failures such as [2].
+
+Testing the "lp46s" ABI with commands:
+
+     cat >.config <<EOF
+     BR2_loongarch64=y
+     BR2_LOONGARCH_FPU_NONE=y
+     BR2_LINUX_KERNEL=y
+     BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+     BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+     BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
+     BR2_TARGET_ROOTFS_EXT2=y
+     # BR2_TARGET_ROOTFS_TAR is not set
+     EOF
+     make olddefconfig
+     make
+
+fails in host-gcc-final with output:
+
+     /buildroot/output/host/loongarch64-buildroot-linux-gnusf/bin/ld: cannot find crti.o: No such file or directory
+     /buildroot/output/host/loongarch64-buildroot-linux-gnusf/bin/ld: cannot find -lc: No such file or directory
+     /buildroot/output/host/loongarch64-buildroot-linux-gnusf/bin/ld: cannot find crtn.o: No such file or directory
+
+See also autobuilder failures with as [3].
+
+This commit marks those ABIs as broken at the moment to allow time
+for investigation. Also, since gcc defaults to the "lp64d" ABI which
+requires a 64bit FPU is present, the BR2_LOONGARCH_FPU_32 and
+BR2_LOONGARCH_FPU_NONE options also needs to be marked as broken
+as well. See [4].
+
+[1] https://lore.kernel.org/buildroot/e17da108d1fb4e6abda26445dc053b35@free.fr/
+[2] https://autobuild.buildroot.org/results/f98570293823867e6c43a1672e1a4b43ca1e4be5
+[3] https://autobuild.buildroot.org/results/cf56c37fabcae964dbf4f96eb43a7e4d964452b6
+[4] https://lore.kernel.org/buildroot/7b0f1cb629fce8a57d9b644b8beb8b2a@free.fr/
+
+Cc: Mingcong Bai <jeffbai@aosc.io>
+Cc: Xi Ruoyao <xry111@xry111.site>
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+[Julien:
+ - add link to mailing list discussion
+ - add configuration to reproduce issues to help future investigations
+ - add links to autobuilder failures in commit log
+ - mark BR2_LOONGARCH_FPU_{32,NONE} as broken
+]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+Changes v2 -> v3:
+- add link to mailing list discussion
+- add configuration to reproduce issues to help future investigations
+- add links to autobuilder failures in commit log
+- mark BR2_LOONGARCH_FPU_{32,NONE} as broken
+
+Note: this v3 is a follow-up of:
+https://patchwork.ozlabs.org/project/buildroot/patch/20250710-loongarch-fabi-v2-2-72fcf95c8b65@flygoat.com/
+---
+ arch/Config.in.loongarch | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/arch/Config.in.loongarch b/arch/Config.in.loongarch
+index fa1b13bc52..4b50b98710 100644
+--- a/arch/Config.in.loongarch
++++ b/arch/Config.in.loongarch
+@@ -38,12 +38,16 @@ config BR2_LOONGARCH_FPU_64
+ 
+ config BR2_LOONGARCH_FPU_32
+ 	bool "32"
++	# Only supported by lp64s and lp64f ABIs which are marked as broken
++	depends on BR2_BROKEN
+ 	help
+ 	  Allow the use of hardware floating-point instructions for
+ 	  32-bit operations only.
+ 
+ config BR2_LOONGARCH_FPU_NONE
+ 	bool "none"
++	# Only supported by lp64s ABI which is marked as broken
++	depends on BR2_BROKEN
+ 	help
+ 	  Prevent the use of hardware floating-point instructions.
+ endchoice
+@@ -87,11 +91,15 @@ config BR2_LOONGARCH_ABI_LP64D
+ config BR2_LOONGARCH_ABI_LP64F
+ 	bool "lp64f"
+ 	depends on BR2_ARCH_IS_64
++	# Failed to build host GCC initial, pending investigation
++	depends on BR2_BROKEN
+ 	depends on BR2_LOONGARCH_FPU_64 || BR2_LOONGARCH_FPU_32
+ 
+ config BR2_LOONGARCH_ABI_LP64S
+ 	bool "lp64s"
+ 	depends on BR2_ARCH_IS_64
++	# GCC can't find libraries, pending investigation
++	depends on BR2_BROKEN
+ endchoice
+ 
+ config BR2_ARCH
+-- 
+2.50.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
