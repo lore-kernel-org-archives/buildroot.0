@@ -4,99 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D462BC87FCC
-	for <buildroot@archiver.kernel.org>; Thu, 31 Jul 2025 17:29:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F700C87FCC
+	for <buildroot@archiver.kernel.org>; Thu, 31 Jul 2025 19:12:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ACA67841A3;
-	Thu, 31 Jul 2025 17:29:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4BB2984580;
+	Thu, 31 Jul 2025 19:12:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id B8DOva8Y-LFP; Thu, 31 Jul 2025 17:29:44 +0000 (UTC)
+ id 8jsIOpi4amLO; Thu, 31 Jul 2025 19:12:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E225883E8F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2903A84581
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E225883E8F;
-	Thu, 31 Jul 2025 17:29:43 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 8C688168
- for <buildroot@buildroot.org>; Thu, 31 Jul 2025 17:29:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2903A84581;
+	Thu, 31 Jul 2025 19:12:35 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 35A77168
+ for <buildroot@buildroot.org>; Thu, 31 Jul 2025 19:12:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 88383400E2;
- Thu, 31 Jul 2025 17:29:38 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 199B784579
+ for <buildroot@buildroot.org>; Thu, 31 Jul 2025 19:12:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id u9dVbjUgJGtB; Thu, 31 Jul 2025 17:29:38 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id g-BAEQIPO4Ru for <buildroot@buildroot.org>;
+ Thu, 31 Jul 2025 19:12:33 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
- envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E672D4026C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E672D4026C
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E672D4026C
- for <buildroot@buildroot.org>; Thu, 31 Jul 2025 17:29:37 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id
- 5b1f17b1804b1-4561607166aso8636985e9.2
- for <buildroot@buildroot.org>; Thu, 31 Jul 2025 10:29:37 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DFE7F8457C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DFE7F8457C
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DFE7F8457C
+ for <buildroot@buildroot.org>; Thu, 31 Jul 2025 19:12:30 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id
+ 5b1f17b1804b1-455ecacfc32so5358875e9.3
+ for <buildroot@buildroot.org>; Thu, 31 Jul 2025 12:12:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1753982976; x=1754587776;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=Jp5QsT1KgxTldS8X0HnHEAxiZz9YLKEudKnpShMKvrA=;
- b=hSbJfzTnBzcNSDvDyK50ST7zHhHYtUflSNIxW4aWWZZThtJlwy2piosWib0u2BxJCi
- Ef8W49S8yPHCKnu0BXyPK3/PFDyJzqXZZWxEKn9AL0ryQG7oBRQaiLkdvD1DhD0DnMi4
- QUW9GJVxn4GM2YJZZxsp8rlVUGKL/vGglXR2riLQ+Ix00eQKHsyoevnwfzuMsb7IcxIl
- HMqtF7QZm3g2kkeSLTDzyVGgLjp2V3CZrTYJpxFoUSOnB9d4/MkSJTNTr7QkbAHOXEvW
- m405V00KzYSilPWfSmmE6Bq5kQOxj7NxZZMPBKw8bCt4H+scck2/sCT0xQwgOvDRGDyM
- ccEg==
-X-Gm-Message-State: AOJu0Yw8SJOi/1iNU/T6mDuwd9OXJVCmBa9t+xJhUNsaL28GdIiBbzyB
- iIr0xexU/6XmFFaDuKcMRGKh3wMOm3HQZNWzLS2vS2X4PXy2dNP2LgyC2mhs2A==
-X-Gm-Gg: ASbGncuDIS6VGZTMQEqaPidJNi1ogzxzMtl9WcPWSe3LpugKtxkL4+RNR3iawiDkr5t
- 3IdiVRUil+pk1xYe1HnlNXOA/u3yEFVK6KcX5jXTzlRo4tbeACAQ1D/cCGwiXa2V9elDK0L71NR
- ZFBwNsjiBBjXzQmBDjc9I3IqQRUh7l2JRgDW0VmjpUfKERPm52xHiN2QQSYbmYe9tv5/1Y4ubb4
- IZVg3vNBJV95vmyVn3YVO7kWdvKIflc6+qm95sGFnI4tNnRlSNbbksO1cGGoZfdzlgH/pUTQK1y
- meyYhfWeV/ehrolnbaTcYTFGflbPfY7hVZf8NmzufCIubNen2O8k1v5UIJqCQFsEhZHV9MfUASX
- SzrDa26GMl2ilJNNpDJbtag7B1ZNBhRJA
-X-Google-Smtp-Source: AGHT+IGwC0cEEpJbetJfex3mdhEujtP3xhIlnOlmkTMgfD9PTH+sn1y/8iHH2rjHL94stfJ64zv/rQ==
-X-Received: by 2002:a05:6000:2008:b0:3b7:8fcc:a1e3 with SMTP id
- ffacd0b85a97d-3b795032797mr6226845f8f.48.1753982975736; 
- Thu, 31 Jul 2025 10:29:35 -0700 (PDT)
-Received: from landeda.home ([2a01:cb19:93aa:5000:c0e7:5e2f:eef4:db82])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-458953cfeaesm79515285e9.16.2025.07.31.10.29.35
+ d=1e100.net; s=20230601; t=1753989148; x=1754593948;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=JbRb6jGD/I1o4WWZhyAyqtpUZRuS9bnCRjAVHnRZySI=;
+ b=nfMQcYSqhub2mUid8K7KsjYf/o43hlW9le1rjJCvgbC1XJsq0wgPLw1q3iyM/jRkPW
+ xujbN6+VTNJmL0TH+27NfbRQFooohn6om0YMpVGYyPRwK7nEu2Ca+Sczhf7jl/8C+60I
+ tTYvz/MFYt42Uy1RcKsCNPQ2I/y+Aj7Z9bPtGbWSuT62QkQf7zJWnMU+V4CkXWqqRa8Y
+ uH3L/pNA14VYu3o2/ZzU5C+9iDHKxdaLlPNDbeItOezRFPKyB3WjTGdzsouB8uyzV4dP
+ rdubt3JQmNGAcdtMBVuujU6bjShrVMDAbX2ywVi5MahpTde4u8iRpMbU9EvMM/xqGnlF
+ Ztug==
+X-Gm-Message-State: AOJu0Yz+uYBG4UK2wPC+XIucPpu5JdVittiYHkQVv9p30I4t1YPpdlkp
+ Qq7qOFMWvZrkM1c+xSLBsdbQeNEoqxVIQJrZSytOIzuaJCLEfWxyihze/RCDtrJTFvW1cJFSAkj
+ KL2jWFrg=
+X-Gm-Gg: ASbGncutXfFmpOp5T2yqA8wpIEVo8WztpQ+8ku4NhLvWnAiJn8+1rZjfJVqWMqK6XY+
+ 7yoEmjil8D4df3ZtaDy6dmlHYAd7ObVVbd/o9sVG09Eu5vWspa41hoZvWWgKw2xCNoPee4MF+bu
+ VBHrAmMWAfQXvmRm3tWObOMTt99f+Tq3N6aR30PzAsoSQdhxR5MbLPJY51RS/e4y2cuduknKQIs
+ za1v5Qw6AzjTtr0lWHUUuR4zWaHFjijta6Gih1ZdGi6O9i9k72KAwpEtgqYqHM/uf3Q6WO9QDHp
+ EbQIYcqAKfn2ge/3T1eSbB1J8L//t7COK70WCovpjwtQilyr4B+4AoC1Bt1osiov14zU+9zP+Nj
+ RhtOUNLSpOzapQQ==
+X-Google-Smtp-Source: AGHT+IGJ4eG94UqDIb/DByrwOeqFwYp4YOu24Am3VPIXLY3uuBiegtHwYO40rXEj5VtJ4QcCYgI1Bg==
+X-Received: by 2002:a05:600c:138e:b0:456:1824:4808 with SMTP id
+ 5b1f17b1804b1-45892bdf9admr71145855e9.32.1753989147910; 
+ Thu, 31 Jul 2025 12:12:27 -0700 (PDT)
+Received: from arch ([79.132.233.79]) by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-458a7dd8cdesm13765335e9.19.2025.07.31.12.12.27
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 31 Jul 2025 10:29:35 -0700 (PDT)
+ Thu, 31 Jul 2025 12:12:27 -0700 (PDT)
 To: buildroot@buildroot.org
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Date: Thu, 31 Jul 2025 19:29:34 +0200
-Message-ID: <2384243185c70ed34e5c80dd44cc45dff2f11b43.1753982959.git.yann.morin.1998@free.fr>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <cover.1753982959.git.yann.morin.1998@free.fr>
-References: <cover.1753982959.git.yann.morin.1998@free.fr>
+Cc: Pierre-Jean Texier <texier.pj2@gmail.com>
+Date: Thu, 31 Jul 2025 21:12:26 +0200
+Message-ID: <20250731191226.1599504-1-thomas.perale@mind.be>
+X-Mailer: git-send-email 2.50.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1753982976; x=1754587776; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
- :message-id:reply-to;
- bh=Jp5QsT1KgxTldS8X0HnHEAxiZz9YLKEudKnpShMKvrA=;
- b=eDUWvdZ3NOxWJbtA0ezILlLjk/N4E4I8JRJ/3jaF7h31Ukdf8/ldbJhbms0CeA1bjN
- YCCbmZB5Cvipp0gTzmGeIwTSgHjKPli6aWiwMb6y+UbkRmeVDCyriZwcZKmvuQdSuqzw
- Kg2gAfeNgoTs8B6m+aMzbZyfNIciWfvs927tU5jGs6hOIGP9d9fbQr9k94zQWD2PBmM4
- MKLhoTQLSZJkqXKfB6XprwEfgIXljGRTX++BdPP44vNIu0ry7we2Bz+WGnG+fJaGIavD
- ZyYujK10+keEZVEt8H4NBTx2W03nbpsRUJHaDot0bs6PNCncO1/QGnZdo0JLBPHtFNaj
- lSog==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=fail (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=eDUWvdZ3
-Subject: [Buildroot] [PATCH 1/2] Makefile: fix list-defconfigs for
- br2-external with weird descriptions
+ d=mind.be; s=google; t=1753989148; x=1754593948; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=JbRb6jGD/I1o4WWZhyAyqtpUZRuS9bnCRjAVHnRZySI=;
+ b=c0cYQaVuy1mmGPPEQxtKvgh30Tw3BCm93A8LcHXyP7oeoeN1i02MFRZJKWgkD+CF6+
+ jwOG78mZID1wXVEbTqoiUyMAP8XOUAPXywmhsvCJAplImneajJlaiGJNvNWSJJ7X3sg1
+ zRaJM89tYAnXnvYgOH/430gsxKE61Nv3npYbHbAhaUjMme45CfKLGGHRmdFJ9LvtefS8
+ +P01aWL960X2uoeiqnlzSCg8GjwmIfVGblIMeeHu+776zL138W68LUu4ktEXHBrqORFm
+ uygap3xOoFL6kTZ35cn/y5ERiEb+RWWs09XsbAfmCI+XaF4YY1zALOlBmZaOl3iq45W/
+ fm6A==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=c0cYQaVu
+Subject: [Buildroot] [PATCH] package/libxml2: add patch for CVE-2025-6170
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -108,48 +106,159 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: "Yann E. MORIN via buildroot" <buildroot@buildroot.org>
-Reply-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+From: Thomas Perale via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Perale <thomas.perale@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-When a br20-external tree description contains an odd number of single
-quotes, list-defconfigs will fail with a shell error message:
+This fixes the following vulnerability:
 
-    /bin/sh: -c: line 1: unexpected EOF while looking for matching `"'
-    make[1]: *** [Makefile:1243: list-defconfigs] Error 2
+- CVE-2025-6170
 
-Whoever wrote that code will have to write this sentence 100 times
-on the blackboard:
+    A flaw was found in the interactive shell of the xmllint command-line
+    tool, used for parsing XML files. When a user inputs an overly long
+    command, the program does not check the input size properly, which can
+    cause it to crash. This issue might allow attackers to run harmful
+    code in rare configurations without modern protections.
 
-     Never, ever pass user-provided data in a printf format.
+For more information, see:
+  - https://www.cve.org/CVERecord?id=CVE-2025-6170
+  - https://gitlab.gnome.org/GNOME/libxml2/-/commit/c340e419505cf4bf1d9ed7019a87cc00ec200434
 
-(see commit 49117c102803 (core: support description for br2-external
-trees); dang, I knew it... And I should have known better when I wrote
-that code, damit...)
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...uffer-overflows-of-interactive-shell.patch | 103 ++++++++++++++++++
+ package/libxml2/libxml2.mk                    |   3 +
+ 2 files changed, 106 insertions(+)
+ create mode 100644 package/libxml2/0004-fix-potential-buffer-overflows-of-interactive-shell.patch
 
-diff --git a/Makefile b/Makefile
-index c581067320..fa82afa49c 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1223,7 +1223,7 @@ define list-defconfigs
- 		[ -f "$${defconfig}" ] || continue; \
- 		if $${first}; then \
- 			if [ "$(2)" ]; then \
--				printf 'External configs in "$(call qstrip,$(2))":\n'; \
-+				printf 'External configs in "%s":\n' "$(call qstrip,$(2))"; \
- 			else \
- 				printf "Built-in configs:\n"; \
- 			fi; \
+diff --git a/package/libxml2/0004-fix-potential-buffer-overflows-of-interactive-shell.patch b/package/libxml2/0004-fix-potential-buffer-overflows-of-interactive-shell.patch
+new file mode 100644
+index 0000000000..7d1314c5f9
+--- /dev/null
++++ b/package/libxml2/0004-fix-potential-buffer-overflows-of-interactive-shell.patch
+@@ -0,0 +1,103 @@
++From: Michael Mann <mmann78@netscape.net>
++Date: Fri, 20 Jun 2025 23:05:00 -0400
++Subject: Fix potential buffer overflows of interactive shell
++
++Upstream: https://gitlab.gnome.org/GNOME/libxml2/-/commit/5e9ec5c107d3f5b5179c3dbc19df43df041cd55b
++Upstream: https://sources.debian.org/src/libxml2/2.12.7+dfsg+really2.9.14-2.1/debian/patches/CVE-2025-6170.patch/
++CVE: CVE-2025-6170
++[thomas: Originally backported for v2.9.14 re-applied on v2.13.8]
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++---
++ debugXML.c                       | 15 ++++++++++-----
++ result/scripts/long_command      |  8 ++++++++
++ test/scripts/long_command.script |  6 ++++++
++ test/scripts/long_command.xml    |  1 +
++ 4 files changed, 25 insertions(+), 5 deletions(-)
++ create mode 100644 result/scripts/long_command
++ create mode 100644 test/scripts/long_command.script
++ create mode 100644 test/scripts/long_command.xml
++
++diff --git a/debugXML.c b/debugXML.c
++index ed56b0f8..452b9573 100644
++--- a/debugXML.c
+++++ b/debugXML.c
++@@ -1033,6 +1033,10 @@ xmlCtxtDumpOneNode(xmlDebugCtxtPtr ctxt, xmlNodePtr node)
++     xmlCtxtGenericNodeCheck(ctxt, node);
++ }
++ 
+++#define MAX_PROMPT_SIZE     500
+++#define MAX_ARG_SIZE        400
+++#define MAX_COMMAND_SIZE    100
+++
++ /**
++  * xmlCtxtDumpNode:
++  * @output:  the FILE * for the output
++@@ -2795,10 +2799,10 @@ void
++ xmlShell(xmlDocPtr doc, const char *filename, xmlShellReadlineFunc input,
++          FILE * output)
++ {
++-    char prompt[500] = "/ > ";
+++    char prompt[MAX_PROMPT_SIZE] = "/ > ";
++     char *cmdline = NULL, *cur;
++-    char command[100];
++-    char arg[400];
+++    char command[MAX_COMMAND_SIZE];
+++    char arg[MAX_ARG_SIZE];
++     int i;
++     xmlShellCtxtPtr ctxt;
++     xmlXPathObjectPtr list;
++@@ -2856,7 +2860,8 @@ xmlShell(xmlDocPtr doc, const char *filename, xmlShellReadlineFunc input,
++             cur++;
++         i = 0;
++         while ((*cur != ' ') && (*cur != '\t') &&
++-               (*cur != '\n') && (*cur != '\r')) {
+++               (*cur != '\n') && (*cur != '\r') &&
+++               (i < (MAX_COMMAND_SIZE - 1))) {
++             if (*cur == 0)
++                 break;
++             command[i++] = *cur++;
++@@ -2871,7 +2876,7 @@ xmlShell(xmlDocPtr doc, const char *filename, xmlShellReadlineFunc input,
++         while ((*cur == ' ') || (*cur == '\t'))
++             cur++;
++         i = 0;
++-        while ((*cur != '\n') && (*cur != '\r') && (*cur != 0)) {
+++        while ((*cur != '\n') && (*cur != '\r') && (*cur != 0) && (i < (MAX_ARG_SIZE-1))) {
++             if (*cur == 0)
++                 break;
++             arg[i++] = *cur++;
++diff --git a/result/scripts/long_command b/result/scripts/long_command
++new file mode 100644
++index 00000000..e6f00708
++--- /dev/null
+++++ b/result/scripts/long_command
++@@ -0,0 +1,8 @@
+++/ > b > b > Object is a Node Set :
+++Set contains 1 nodes:
+++1  ELEMENT a:c
+++b > Unknown command This_is_a_really_long_command_string_designed_to_test_the_limits_of_the_memory_that_stores_the_comm
+++b > b > Unknown command ess_currents_of_time_and_existence
+++b > <?xml version="1.0"?>
+++<a xmlns:a="bar"><b xmlns:a="foo">Navigating_the_labyrinthine_corridors_of_human_cognition_one_often_encounters_the_perplexing_paradox_that_the_more_we_delve_into_the_intricate_dance_of_neural_pathways_and_synaptic_firings_the_further_we_seem_to_stray_from_a_truly_holistic_understanding_of_consciousness_a_phenomenon_that_remains_as_elusive_as_a_moonbeam_caught_in_a_spiderweb_yet_undeniably_shapes_every_fleeting_thought_every_prof</b></a>
+++b > 
++\ No newline at end of file
++diff --git a/test/scripts/long_command.script b/test/scripts/long_command.script
++new file mode 100644
++index 00000000..00f6df09
++--- /dev/null
+++++ b/test/scripts/long_command.script
++@@ -0,0 +1,6 @@
+++cd a/b
+++set <a:c/>
+++xpath //*[namespace-uri()="foo"]
+++This_is_a_really_long_command_string_designed_to_test_the_limits_of_the_memory_that_stores_the_command_please_dont_crash foo
+++set Navigating_the_labyrinthine_corridors_of_human_cognition_one_often_encounters_the_perplexing_paradox_that_the_more_we_delve_into_the_intricate_dance_of_neural_pathways_and_synaptic_firings_the_further_we_seem_to_stray_from_a_truly_holistic_understanding_of_consciousness_a_phenomenon_that_remains_as_elusive_as_a_moonbeam_caught_in_a_spiderweb_yet_undeniably_shapes_every_fleeting_thought_every_profound_emotion_and_every_grand_aspiration_that_propels_our_species_ever_onward_through_the_relentless_currents_of_time_and_existence
+++save -
++diff --git a/test/scripts/long_command.xml b/test/scripts/long_command.xml
++new file mode 100644
++index 00000000..1ba44016
++--- /dev/null
+++++ b/test/scripts/long_command.xml
++@@ -0,0 +1 @@
+++<a xmlns:a="bar"><b xmlns:a="foo"/></a>
++-- 
++2.50.1
+diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+index 0149ba1f0a..36cdd5a63d 100644
+--- a/package/libxml2/libxml2.mk
++++ b/package/libxml2/libxml2.mk
+@@ -24,6 +24,9 @@ LIBXML2_IGNORE_CVES += CVE-2025-49794 CVE-2025-49796
+ #0003-Schematron-Fix-null-pointer-dereference-leading-to-D.patch
+ LIBXML2_IGNORE_CVES += CVE-2025-49795
+ 
++# 0004-fix-potential-buffer-overflows-of-interactive-shell.patch
++LIBXML2_IGNORE_CVES += CVE-2025-6170
++
+ # relocation truncated to fit: R_68K_GOT16O
+ ifeq ($(BR2_m68k_cf),y)
+ LIBXML2_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -mxgot"
 -- 
-2.47.0
+2.50.1
 
 _______________________________________________
 buildroot mailing list
