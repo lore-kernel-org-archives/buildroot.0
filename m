@@ -1,85 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E23AFC87FCB
-	for <buildroot@archiver.kernel.org>; Fri,  1 Aug 2025 10:18:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90983C87FCA
+	for <buildroot@archiver.kernel.org>; Fri,  1 Aug 2025 12:30:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 738BE847EF;
-	Fri,  1 Aug 2025 10:18:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2383461BB7;
+	Fri,  1 Aug 2025 12:30:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wswtExGtekoy; Fri,  1 Aug 2025 10:18:19 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MKp9SwPwNjMB; Fri,  1 Aug 2025 12:30:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8556E84793
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 527F060A44
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8556E84793;
-	Fri,  1 Aug 2025 10:18:19 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 8C894C8
- for <buildroot@buildroot.org>; Fri,  1 Aug 2025 10:18:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 527F060A44;
+	Fri,  1 Aug 2025 12:30:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 20168C8
+ for <buildroot@buildroot.org>; Fri,  1 Aug 2025 12:30:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7B07A84793
- for <buildroot@buildroot.org>; Fri,  1 Aug 2025 10:18:18 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 06322412AE
+ for <buildroot@buildroot.org>; Fri,  1 Aug 2025 12:30:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id I2h-m_ixrnHg for <buildroot@buildroot.org>;
- Fri,  1 Aug 2025 10:18:17 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.178.249;
- helo=mslow3.mail.gandi.net; envelope-from=thomas.bonnefille@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 532DF84790
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 532DF84790
-Received: from mslow3.mail.gandi.net (mslow3.mail.gandi.net [217.70.178.249])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 532DF84790
- for <buildroot@buildroot.org>; Fri,  1 Aug 2025 10:18:16 +0000 (UTC)
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by mslow3.mail.gandi.net (Postfix) with ESMTP id 1A65B58321A
- for <buildroot@buildroot.org>; Fri,  1 Aug 2025 09:59:26 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4C0FE43291;
- Fri,  1 Aug 2025 09:59:16 +0000 (UTC)
-Date: Fri, 01 Aug 2025 11:59:14 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hAhnqrftgH_R for <buildroot@buildroot.org>;
+ Fri,  1 Aug 2025 12:30:28 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E0C8241285
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E0C8241285
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E0C8241285
+ for <buildroot@buildroot.org>; Fri,  1 Aug 2025 12:30:27 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id 8B137B00593;
+ Fri,  1 Aug 2025 14:30:22 +0200 (CEST)
+Received: from [192.214.236.6:57460] via [192.214.236.6] by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 01 Aug 2025 14:30:22 +0200
 MIME-Version: 1.0
-Message-Id: <20250801-fix_libspdm-v1-1-48138baca30b@bootlin.com>
-X-B4-Tracking: v=1; b=H4sIAPGPjGgC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI1MDCwND3bTMiviczKTigpRc3bSUNMukJAtDA2MTYyWgjoKiVKA02LTo2Np
- aAMwU2ipdAAAA
-X-Change-ID: 20250801-fix_libspdm-fdf9bb810343
-To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- =?utf-8?q?Miqu=C3=A8l_Raynal?= <miquel.raynal@bootlin.com>, 
- Alistair Francis <alistair@alistair23.me>, 
- Thomas Bonnefille <thomas.bonnefille@bootlin.com>
-X-Mailer: b4 0.14.2
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddutdefgedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhfffugggtgffkvfevofesthejredtredtjeenucfhrhhomhepvfhhohhmrghsuceuohhnnhgvfhhilhhlvgcuoehthhhomhgrshdrsghonhhnvghfihhllhgvsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeduudffjeejfffhleefueeiueetjeeikeevhedtueejgeehjeeftedtfedtleegjeenucffohhmrghinhepsghuihhlughrohhothdrohhrghenucfkphepvdgrtddvmeekgeegtdemhedvtdejmeekudgrvgemvdduudefmegvheejfhemkegvfhelmeguvdgsjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemkeeggedtmeehvddtjeemkedurggvmedvuddufeemvgehjehfmeekvghfleemugdvsgejpdhhvghloheplgdujedvrddujedrtddrudgnpdhmrghilhhfrhhomhepthhhohhmrghsrdgsohhnnhgvfhhilhhlvgessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohephedprhgtphhtthhopehthhhomhgrshdrsghonhhnvghfihhllhgvsegsohhothhlihhnrdgtohhmpdhrtghpthhtohepmhhiqhhuvghlrdhrrgihnhgrlhessghoohhtl
- hhinhdrtghomhdprhgtphhtthhopegrlhhishhtrghirhesrghlihhsthgrihhrvdefrdhmvgdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhg
-X-GND-Sasl: thomas.bonnefille@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1754042356;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding;
- bh=9pr0Zm2mlLv8/RMGH5wekb5gzoqVhz9UNhQRoZCA+to=;
- b=ikZrIqj2ee6Zmfn5l/930YQeXct55CBGvuADW9SqJBlrxqgNmWVx0OunH15Si2LU7Iqb87
- KAPfmX4wEpW2OPsuMQQ1spMgJ4yT9GAuLiZ0lBie/2gE49JsWarY3cxFii1yR65X3wrlMc
- 9IeY/WiBTpSm2ZGBLOCF4fVLC8/VXHsLVKwTVL5hLi1jKcGtK5xvL75UnGXfdYCnGhjVpS
- PmET8vCHaxCYhvpH7gG4fhE2CjEMoHkzFAkEFsVaXY39vdX43ZsRmaBygDiiqZndnQj91D
- qg5wvNE/ioi5ktN2c8rk57v8I21vbeiSk43Hc8HshzjeaL6iFpw/mclDyD34wg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+Date: Fri, 01 Aug 2025 14:30:22 +0200
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>, buildroot@buildroot.org
+In-Reply-To: <20250801094612.2c64fd28@windsurf>
+References: <20250710-loongarch-fabi-v2-0-72fcf95c8b65@flygoat.com>
+ <20250730223753.2f400524@windsurf>
+ <d2ee394a-1efe-492b-b89b-c81c4d1f92f5@app.fastmail.com>
+ <20250801094612.2c64fd28@windsurf>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <35038542df823aa9ab7b0c937fc69e1e@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1754051424;
+ bh=AxosIuWuWxFEoWyNa21VIgPUURApFsTHR7F1fQQAZQo=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=nmt7gepRvsv+/5JjlFjGtRu5F8Y1hTZKSMHTY/qDI0P2h+kZy0jFfYO94mmrqbN7s
+ PWm3NosXVVjfEQjLXBwp1M/iuSqv0Fldf6HReLOnQ2BvtaIF16JNEznRNOzj56hbHU
+ sLo2Ps/R3fzWCBijnsuwkZc5TQT2pim+2D94pvlDi1U6sCbqlgoBkydxL9Jzi5bSPm
+ KBLqWDyoSJX8ICYqh8UcUGSATiKYb7Mg3KYsIwXQBpgBMGcMig4CCE+i3yFgl+xI21
+ BlkqlaMkH+xj11q274jsYn7Xe5OGMGM/646uns5CXi4+rNZPZlCg4f6FyhzwMithUX
+ PlxBbM4h+fCgw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=ikZrIqj2
-Subject: [Buildroot] [PATCH] package/libspdm: bump version to 3.8.0
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=nmt7gepR
+Subject: Re: [Buildroot] [PATCH v2 0/3] arch/loongarch: Fix a couple of
+ toolchain options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,63 +84,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Bonnefille via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Following the upgrade of libopenssl to version 3.5.0 [1], the build
-process for libspdm encountered issues due to the new openssl API.
-It requires some modifications in the asn1.h file of libspdm.
-This build error was addressed by a specific commit [2] in libspdm.
+Hi Thomas, Jiaxun,
 
-As Buildroot 2025.02 isn't impacted, this commit bumps libspdm to the
-latest libspdm version to fix the build error.
+On 01/08/2025 09:46, Thomas Petazzoni via buildroot wrote:
+> Hello,
+> 
+> On Fri, 01 Aug 2025 12:13:48 +0800
+> "Jiaxun Yang" <jiaxun.yang@flygoat.com> wrote:
+> 
+>> Sure, sorry those emails slipped across my email filter.
+>> 
+>> I'm actually looking into fix LP64S and LP64D ABI in GCC and other
+>> libraries but trapped by various failures. If I'm unable to get them
+>> fixed we may need to drop them in Buildroot.
+> 
+> Thanks for your feedback. If there are known broken features causing
+> those failures, I would prefer that we remove/disable them now, and
+> re-enable them later once they are fixed. There are currently way too
+> many failures on loongarch64.
 
-[1]: 9868ca6e
-[2]: 88797f83:Backport API introduced in openssl 3.5.0
+I agree we should disable the lp64f and lp64s ABIs, which I believe
+are a major source of those failures.
 
-Fixes : https://autobuild.buildroot.org/results/87b/87b8805975ef132a58c40e622e2e023199f6ee2a/build-end.log
+For that reason, I reworked and proposed the Jiaxun's patch doing so:
+https://patchwork.ozlabs.org/project/buildroot/patch/20250731134401.30301-1-ju.o@free.fr/
 
-Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
----
- package/libspdm/libspdm.hash | 2 +-
- package/libspdm/libspdm.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Jiaxun, could you please review and test it?
 
-diff --git a/package/libspdm/libspdm.hash b/package/libspdm/libspdm.hash
-index e29c5994a32e0a949b807efbb066915348a2f728..cab1c5259e8cb40044dc108ec50d217f5d6a1691 100644
---- a/package/libspdm/libspdm.hash
-+++ b/package/libspdm/libspdm.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  7b8a556be64120bab9c321964e67b90f5e6adb59abf3992c5c7937f37a4e7c8f  libspdm-3.5.0.tar.gz
-+sha256  e7aefb9bc546bbd3ff10d707a6f05213cfb2e679354438ea0d1b5c483b5daa85  libspdm-3.8.0.tar.gz
- sha256  c6ffa7e6889e63893078cb21b89594070183f7e2cf5b4ea01a4fb23eac59ed32  LICENSE.md
-diff --git a/package/libspdm/libspdm.mk b/package/libspdm/libspdm.mk
-index 9d8da2a3c6f4fbf374a3ca7186b1b955f204eb97..4d294298117f7673518016cde39248a1aaef4414 100644
---- a/package/libspdm/libspdm.mk
-+++ b/package/libspdm/libspdm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBSPDM_VERSION = 3.5.0
-+LIBSPDM_VERSION = 3.8.0
- LIBSPDM_SITE = $(call github,DMTF,libspdm,$(LIBSPDM_VERSION))
- LIBSPDM_LICENSE = BSD-3-Clause
- LIBSPDM_LICENSE_FILES = LICENSE.md
-
----
-base-commit: f5101638b9f917dc4c569828ff3fee0c486ba8f8
-change-id: 20250801-fix_libspdm-fdf9bb810343
+> Best regards,
+> 
+> Thomas
+> --
+> Thomas Petazzoni, co-owner and CEO, Bootlin
+> Embedded Linux and Kernel engineering and training
+> https://bootlin.com
 
 Best regards,
--- 
-Thomas Bonnefille <thomas.bonnefille@bootlin.com>
 
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
