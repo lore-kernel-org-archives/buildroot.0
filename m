@@ -4,97 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9210FC87FCB
-	for <buildroot@archiver.kernel.org>; Fri,  1 Aug 2025 09:14:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E23AFC87FCB
+	for <buildroot@archiver.kernel.org>; Fri,  1 Aug 2025 10:18:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2D72182521;
-	Fri,  1 Aug 2025 09:14:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 738BE847EF;
+	Fri,  1 Aug 2025 10:18:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eWWZQFgC17ST; Fri,  1 Aug 2025 09:14:26 +0000 (UTC)
+ id wswtExGtekoy; Fri,  1 Aug 2025 10:18:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 48DFB82341
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8556E84793
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 48DFB82341;
-	Fri,  1 Aug 2025 09:14:26 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 9CE25160
- for <buildroot@buildroot.org>; Fri,  1 Aug 2025 09:14:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8556E84793;
+	Fri,  1 Aug 2025 10:18:19 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8C894C8
+ for <buildroot@buildroot.org>; Fri,  1 Aug 2025 10:18:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8E3986071A
- for <buildroot@buildroot.org>; Fri,  1 Aug 2025 09:14:25 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7B07A84793
+ for <buildroot@buildroot.org>; Fri,  1 Aug 2025 10:18:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zxOvACtYZ-nd for <buildroot@buildroot.org>;
- Fri,  1 Aug 2025 09:14:25 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::630; helo=mail-ej1-x630.google.com;
- envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8238660D8F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8238660D8F
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
- [IPv6:2a00:1450:4864:20::630])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8238660D8F
- for <buildroot@buildroot.org>; Fri,  1 Aug 2025 09:14:24 +0000 (UTC)
-Received: by mail-ej1-x630.google.com with SMTP id
- a640c23a62f3a-af913d9d2a1so278352866b.3
- for <buildroot@buildroot.org>; Fri, 01 Aug 2025 02:14:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1754039662; x=1754644462;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=gxUeNnVAnqo7eRp32/xHE5NQzgxtQRw9amqBZ4BE8mc=;
- b=DTVUlVUqPtqQVfDwhF/kNMnLU771suAZckyU3maWpSfDgXNgdWc1I87Bx5pzZwIgU2
- n+T91VF3a++ZroW0hv5JbPE/Aiofo3fV8b1rcbrtsoN23RDQ6rV6aBh0PFsyFncAUj7l
- 9ssyrByXTLeIE03vTaR2q4Pj2Jf8IYJMUz7CwBoGdgc5pFwLzvWCroUpnMBaPi4Wnm8I
- 7k5QBAMKwXH0cnAQTnDFfTSQo5+HVfuGfKRM/Ae55v8EIQzSN+d4tdV5F24a/Cbq81J8
- L5+EJ5aZhCrCLPEMwBYFnX8/kGR11gX3Tz/VGxAk8JZVHC4xi0+w8iXo3bLT5eSbjFdt
- y6CQ==
-X-Gm-Message-State: AOJu0Yxl+XLHqgjp1jselL9JsukwqGBMQWBnpA3KixZw25z+uDWAvNmk
- CSoX7ox7Q/BVjoTRy4bfbNsujM96riVLLOWyJEVRmbjNvI/5s2kOEoyqcHzJuQ==
-X-Gm-Gg: ASbGncspAuffK0nSCylyzdlBOBgmJ3l1QiETGk28KCpRfQvAmQmU7+H3rxRQkLzX5Bm
- qHOsJL9XZx+I6i3dmfaVspds5swNIUkkjgFEGm2UOFPH09ozC+RXhI7tDZ5azeg/f0SoP53Ribm
- n53jbRz8eMzoSmuDeDS1UtA8zBxmt94CrTNQGeSYxi4+duaeC/5ud37p1VbuywyGGBwKoxqYPo6
- Hbm4P3XHbanDKy3qpcKD6Mo2mPUX7j1FG+PxO3S1AbdIl+kM/KpjpV9htZUfW8jQtG/SqYZ53a+
- mTvSvcNAlV5Bi68B/yHWq4fyM95Dc3aziUjcKZldqLaEA9egsP0gERBkYOfew4RLY+0C4GwJiua
- aAmtEk3VgxwjMSlykttDDkQyRQZQNs210FTSW6NxRf3TrSySKWzzu2+5BeyoEojAhyMl05ODpr0
- EW0Wo=
-X-Google-Smtp-Source: AGHT+IGwoT9hljPOB9dXE8p13QSkNOwSCSQfquTBPBc56BDJ+yQDXgCu0QcYa7E/7v94OJjUQYzGrw==
-X-Received: by 2002:a17:907:72c9:b0:af6:a10a:d795 with SMTP id
- a640c23a62f3a-af93194b7fbmr250144066b.55.1754039661615; 
- Fri, 01 Aug 2025 02:14:21 -0700 (PDT)
-Received: from development2.visionsystems.local (mail.visionsystems.de.
- [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-af91a2436a4sm257706166b.134.2025.08.01.02.14.20
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 01 Aug 2025 02:14:21 -0700 (PDT)
-To: buildroot@buildroot.org
-Date: Fri,  1 Aug 2025 11:14:17 +0200
-Message-Id: <20250801091417.1209867-1-yegorslists@googlemail.com>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id I2h-m_ixrnHg for <buildroot@buildroot.org>;
+ Fri,  1 Aug 2025 10:18:17 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.178.249;
+ helo=mslow3.mail.gandi.net; envelope-from=thomas.bonnefille@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 532DF84790
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 532DF84790
+Received: from mslow3.mail.gandi.net (mslow3.mail.gandi.net [217.70.178.249])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 532DF84790
+ for <buildroot@buildroot.org>; Fri,  1 Aug 2025 10:18:16 +0000 (UTC)
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by mslow3.mail.gandi.net (Postfix) with ESMTP id 1A65B58321A
+ for <buildroot@buildroot.org>; Fri,  1 Aug 2025 09:59:26 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 4C0FE43291;
+ Fri,  1 Aug 2025 09:59:16 +0000 (UTC)
+Date: Fri, 01 Aug 2025 11:59:14 +0200
 MIME-Version: 1.0
+Message-Id: <20250801-fix_libspdm-v1-1-48138baca30b@bootlin.com>
+X-B4-Tracking: v=1; b=H4sIAPGPjGgC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDCwND3bTMiviczKTigpRc3bSUNMukJAtDA2MTYyWgjoKiVKA02LTo2Np
+ aAMwU2ipdAAAA
+X-Change-ID: 20250801-fix_libspdm-fdf9bb810343
+To: buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ =?utf-8?q?Miqu=C3=A8l_Raynal?= <miquel.raynal@bootlin.com>, 
+ Alistair Francis <alistair@alistair23.me>, 
+ Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+X-Mailer: b4 0.14.2
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddutdefgedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhfffugggtgffkvfevofesthejredtredtjeenucfhrhhomhepvfhhohhmrghsuceuohhnnhgvfhhilhhlvgcuoehthhhomhgrshdrsghonhhnvghfihhllhgvsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeduudffjeejfffhleefueeiueetjeeikeevhedtueejgeehjeeftedtfedtleegjeenucffohhmrghinhepsghuihhlughrohhothdrohhrghenucfkphepvdgrtddvmeekgeegtdemhedvtdejmeekudgrvgemvdduudefmegvheejfhemkegvfhelmeguvdgsjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemkeeggedtmeehvddtjeemkedurggvmedvuddufeemvgehjehfmeekvghfleemugdvsgejpdhhvghloheplgdujedvrddujedrtddrudgnpdhmrghilhhfrhhomhepthhhohhmrghsrdgsohhnnhgvfhhilhhlvgessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohephedprhgtphhtthhopehthhhomhgrshdrsghonhhnvghfihhllhgvsegsohhothhlihhnrdgtohhmpdhrtghpthhtohepmhhiqhhuvghlrdhrrgihnhgrlhessghoohhtl
+ hhinhdrtghomhdprhgtphhtthhopegrlhhishhtrghirhesrghlihhsthgrihhrvdefrdhmvgdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhg
+X-GND-Sasl: thomas.bonnefille@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=googlemail.com; s=20230601; t=1754039662; x=1754644462; darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=gxUeNnVAnqo7eRp32/xHE5NQzgxtQRw9amqBZ4BE8mc=;
- b=Qd20u7TZiXrNhidzrbYjz79IOU8etZoc4lwzPBmB6IASvp/FAUaGfZRxrNZoZpyR1J
- enetf4F+pYUBZjz4CLzwXE3CCI9nGwESbYIUR+Wb+wGsqP3uZ5fb/eGBuWFD74n1o4lR
- egCdKYrjajkuITuH4wEKV2hfe4YdxaGkD3WZ4qcYD/C78kLOTSEKNuvdFFTklONUivJG
- kTq/52qftsJsNDsu/1ss44bGA75BaoSq0KaY7V7L/Dv+78uftizrR77O43iTNXzYgHgV
- yNcuWtWKJ5Ik+AUHFa7aKv5Va/qOIgC11438yFyQ+EYBn702X/lJMBW9c1qohr3UYLZG
- SvZg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=googlemail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=bootlin.com; s=gm1; t=1754042356;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=9pr0Zm2mlLv8/RMGH5wekb5gzoqVhz9UNhQRoZCA+to=;
+ b=ikZrIqj2ee6Zmfn5l/930YQeXct55CBGvuADW9SqJBlrxqgNmWVx0OunH15Si2LU7Iqb87
+ KAPfmX4wEpW2OPsuMQQ1spMgJ4yT9GAuLiZ0lBie/2gE49JsWarY3cxFii1yR65X3wrlMc
+ 9IeY/WiBTpSm2ZGBLOCF4fVLC8/VXHsLVKwTVL5hLi1jKcGtK5xvL75UnGXfdYCnGhjVpS
+ PmET8vCHaxCYhvpH7gG4fhE2CjEMoHkzFAkEFsVaXY39vdX43ZsRmaBygDiiqZndnQj91D
+ qg5wvNE/ioi5ktN2c8rk57v8I21vbeiSk43Hc8HshzjeaL6iFpw/mclDyD34wg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=googlemail.com header.i=@googlemail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Qd20u7TZ
-Subject: [Buildroot] [PATCH] package/libxmlrpc: bump to version 1.64.02
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=ikZrIqj2
+Subject: [Buildroot] [PATCH] package/libspdm: bump version to 3.8.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -106,52 +91,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: yegorslists--- via buildroot <buildroot@buildroot.org>
-Reply-To: yegorslists@googlemail.com
-Cc: "Alvaro G . M" <alvaro.gamez@hazent.com>
+From: Thomas Bonnefille via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Following the upgrade of libopenssl to version 3.5.0 [1], the build
+process for libspdm encountered issues due to the new openssl API.
+It requires some modifications in the asn1.h file of libspdm.
+This build error was addressed by a specific commit [2] in libspdm.
 
-For change log, see:
+As Buildroot 2025.02 isn't impacted, this commit bumps libspdm to the
+latest libspdm version to fix the build error.
 
-https://xmlrpc-c.sourceforge.io/change_stable.html
+[1]: 9868ca6e
+[2]: 88797f83:Backport API introduced in openssl 3.5.0
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Fixes : https://autobuild.buildroot.org/results/87b/87b8805975ef132a58c40e622e2e023199f6ee2a/build-end.log
+
+Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
 ---
- package/libxmlrpc/libxmlrpc.hash | 2 +-
- package/libxmlrpc/libxmlrpc.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libspdm/libspdm.hash | 2 +-
+ package/libspdm/libspdm.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libxmlrpc/libxmlrpc.hash b/package/libxmlrpc/libxmlrpc.hash
-index b9167ca5a0..14f15a7ae5 100644
---- a/package/libxmlrpc/libxmlrpc.hash
-+++ b/package/libxmlrpc/libxmlrpc.hash
+diff --git a/package/libspdm/libspdm.hash b/package/libspdm/libspdm.hash
+index e29c5994a32e0a949b807efbb066915348a2f728..cab1c5259e8cb40044dc108ec50d217f5d6a1691 100644
+--- a/package/libspdm/libspdm.hash
++++ b/package/libspdm/libspdm.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  7265be1a181e57106707b5278daf64b2a717b8a2a9e6ec8992d8c8084e64eaa2  libxmlrpc-r3176-svn5.tar.gz
-+sha256  55623f77cc3a852ef6a834e93d8151891069e38a148c32b29f890635c7c10905  libxmlrpc-r3289-svn5.tar.gz
- sha256  db7a6d3f187b218c3534010a83424c6bcdef88e6a0b6b1aa3a8762238bd642e6  doc/COPYING
-diff --git a/package/libxmlrpc/libxmlrpc.mk b/package/libxmlrpc/libxmlrpc.mk
-index dd09fa8f53..91c2cb3afe 100644
---- a/package/libxmlrpc/libxmlrpc.mk
-+++ b/package/libxmlrpc/libxmlrpc.mk
-@@ -4,8 +4,8 @@
+ # Locally calculated
+-sha256  7b8a556be64120bab9c321964e67b90f5e6adb59abf3992c5c7937f37a4e7c8f  libspdm-3.5.0.tar.gz
++sha256  e7aefb9bc546bbd3ff10d707a6f05213cfb2e679354438ea0d1b5c483b5daa85  libspdm-3.8.0.tar.gz
+ sha256  c6ffa7e6889e63893078cb21b89594070183f7e2cf5b4ea01a4fb23eac59ed32  LICENSE.md
+diff --git a/package/libspdm/libspdm.mk b/package/libspdm/libspdm.mk
+index 9d8da2a3c6f4fbf374a3ca7186b1b955f204eb97..4d294298117f7673518016cde39248a1aaef4414 100644
+--- a/package/libspdm/libspdm.mk
++++ b/package/libspdm/libspdm.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--# 1.60.01 (code/advanced@r3176)
--LIBXMLRPC_VERSION = r3176
-+# 1.64.02 (code/advanced@r3289)
-+LIBXMLRPC_VERSION = r3289
- LIBXMLRPC_SITE = https://svn.code.sf.net/p/xmlrpc-c/code/advanced
- LIBXMLRPC_SITE_METHOD = svn
- LIBXMLRPC_LICENSE = BSD-3-Clause (xml-rpc main code and abyss web server), BSD like (lib/expat), Python 1.5.2 license (parts of xmlrpc_base64.c)
+-LIBSPDM_VERSION = 3.5.0
++LIBSPDM_VERSION = 3.8.0
+ LIBSPDM_SITE = $(call github,DMTF,libspdm,$(LIBSPDM_VERSION))
+ LIBSPDM_LICENSE = BSD-3-Clause
+ LIBSPDM_LICENSE_FILES = LICENSE.md
+
+---
+base-commit: f5101638b9f917dc4c569828ff3fee0c486ba8f8
+change-id: 20250801-fix_libspdm-fdf9bb810343
+
+Best regards,
 -- 
-2.34.1
+Thomas Bonnefille <thomas.bonnefille@bootlin.com>
 
 _______________________________________________
 buildroot mailing list
