@@ -1,78 +1,101 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90983C87FCA
-	for <buildroot@archiver.kernel.org>; Fri,  1 Aug 2025 12:30:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62449C87FDA
+	for <buildroot@archiver.kernel.org>; Fri,  1 Aug 2025 14:23:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2383461BB7;
-	Fri,  1 Aug 2025 12:30:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 13E7284744;
+	Fri,  1 Aug 2025 14:23:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MKp9SwPwNjMB; Fri,  1 Aug 2025 12:30:30 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YFdb5ekc2v5A; Fri,  1 Aug 2025 14:23:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 527F060A44
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E36638476B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 527F060A44;
-	Fri,  1 Aug 2025 12:30:30 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 20168C8
- for <buildroot@buildroot.org>; Fri,  1 Aug 2025 12:30:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E36638476B;
+	Fri,  1 Aug 2025 14:23:15 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5D11213D
+ for <buildroot@buildroot.org>; Fri,  1 Aug 2025 14:23:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 06322412AE
- for <buildroot@buildroot.org>; Fri,  1 Aug 2025 12:30:29 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4ED71400FE
+ for <buildroot@buildroot.org>; Fri,  1 Aug 2025 14:23:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hAhnqrftgH_R for <buildroot@buildroot.org>;
- Fri,  1 Aug 2025 12:30:28 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E0C8241285
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E0C8241285
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E0C8241285
- for <buildroot@buildroot.org>; Fri,  1 Aug 2025 12:30:27 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id 8B137B00593;
- Fri,  1 Aug 2025 14:30:22 +0200 (CEST)
-Received: from [192.214.236.6:57460] via [192.214.236.6] by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 01 Aug 2025 14:30:22 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4S69UViPI5Rx for <buildroot@buildroot.org>;
+ Fri,  1 Aug 2025 14:23:13 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org EA9A3400AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA9A3400AA
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EA9A3400AA
+ for <buildroot@buildroot.org>; Fri,  1 Aug 2025 14:23:12 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id
+ 5b1f17b1804b1-45629702e52so3903965e9.2
+ for <buildroot@buildroot.org>; Fri, 01 Aug 2025 07:23:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1754058190; x=1754662990;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=sk20MxBO1G4lRD/e5xdAKNBcNeuAcaRsY83FNy6BWqM=;
+ b=sMkHiDfLW6gHciFJy3+z94XqWHztBdPo87eQieawFlOkRXVzawm8/EL+qEQi6CF4gO
+ ZZNjMinPpbEtw/JXOHhq14gxgM2Y7hiG/eg6fYs5NtDF/pkS67QUtEJlvBib+Gv6zDwr
+ FaIJ2xEQGM5NVoUZHg/2i/O9oD9Km5w6l8TVfghh/+G1x97A2fvD1yLsghEnMVcIgc5i
+ YAk9EGAqipavHzqVS/8fnu/EC532W68qopSWSuWYzcmBNT0eWa9DB7xbyVX6Ci/ImEjk
+ k/J1iziT8NAs+QJ1s/BCbiLJqgPpcbo8i1J7byTFoRvvvsxHsE3OxVTutmrTgkpJFW4E
+ DILA==
+X-Gm-Message-State: AOJu0YxY/yV84CiWDHToMVzUn7H2RH9kJk8ub3APwO+lSmjQF7/sc8d2
+ an8IOp3HAe4J36BPTSqas3zfMOOpZXL+Dva2jwrCZZMnTlIaKR8bWR5aETDq0viGItoVFen8SXR
+ rTsc0nAQ=
+X-Gm-Gg: ASbGncuwvRFK0+9TSe1G0DkE9TLCe0glSLqWlcWr8rYGmXaPdinpT52qZ0Bo2ZBAj02
+ hgvCDYeZIRRYgBO3sLmqYMX6TSaMx9Psd9BBGZlS7rCCCHDwSPqqBm5KowRSQ2GTcriFmhsyTP1
+ FwGmADEXJ447ZWpC4tog7FC5pTkKunb9zjT/VtmMYrUpyBKqQbq+0v/oqh+T90vLcSbSl9D4mNE
+ OtRvAk5i1+bnwZY4J1by2IKl+lnA+H2mse5Wj671D3db+IMxjOwH8BMMCbvG5LOn1AttDqKEZTc
+ Dmo1zeoxhH0qMAvFpiT3uOKc4JbaH/TAEVwylHVU+xUt5G4yy4ylxQDmCKekX0PcvEaskMsSYYT
+ WlKwy8Q+WxkJ9FA==
+X-Google-Smtp-Source: AGHT+IHUEzh1tWA7bmtehu1e1c7ywTMbsPiT33Rcbay72MZcQy2HitOBFIkfYTfrK6UfMstY/XSwZA==
+X-Received: by 2002:a05:600c:6989:b0:456:2419:dc05 with SMTP id
+ 5b1f17b1804b1-45892b9da97mr126010515e9.12.1754058190198; 
+ Fri, 01 Aug 2025 07:23:10 -0700 (PDT)
+Received: from arch ([79.132.233.79]) by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-3b79c47ca5fsm5925393f8f.63.2025.08.01.07.23.09
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 01 Aug 2025 07:23:09 -0700 (PDT)
+To: buildroot@buildroot.org
+Cc: Alex Michel <alex.michel@wiedemann-group.com>
+Date: Fri,  1 Aug 2025 16:23:08 +0200
+Message-ID: <20250801142308.1786567-1-thomas.perale@mind.be>
+X-Mailer: git-send-email 2.50.1
 MIME-Version: 1.0
-Date: Fri, 01 Aug 2025 14:30:22 +0200
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>, buildroot@buildroot.org
-In-Reply-To: <20250801094612.2c64fd28@windsurf>
-References: <20250710-loongarch-fabi-v2-0-72fcf95c8b65@flygoat.com>
- <20250730223753.2f400524@windsurf>
- <d2ee394a-1efe-492b-b89b-c81c4d1f92f5@app.fastmail.com>
- <20250801094612.2c64fd28@windsurf>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <35038542df823aa9ab7b0c937fc69e1e@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1754051424;
- bh=AxosIuWuWxFEoWyNa21VIgPUURApFsTHR7F1fQQAZQo=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=nmt7gepRvsv+/5JjlFjGtRu5F8Y1hTZKSMHTY/qDI0P2h+kZy0jFfYO94mmrqbN7s
- PWm3NosXVVjfEQjLXBwp1M/iuSqv0Fldf6HReLOnQ2BvtaIF16JNEznRNOzj56hbHU
- sLo2Ps/R3fzWCBijnsuwkZc5TQT2pim+2D94pvlDi1U6sCbqlgoBkydxL9Jzi5bSPm
- KBLqWDyoSJX8ICYqh8UcUGSATiKYb7Mg3KYsIwXQBpgBMGcMig4CCE+i3yFgl+xI21
- BlkqlaMkH+xj11q274jsYn7Xe5OGMGM/646uns5CXi4+rNZPZlCg4f6FyhzwMithUX
- PlxBbM4h+fCgw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1754058190; x=1754662990; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=sk20MxBO1G4lRD/e5xdAKNBcNeuAcaRsY83FNy6BWqM=;
+ b=aXHQRi+3iVnGxqfwWcBTLnFciETlug0ilT6lpQXd/QWpLLpmD66ag51ApIk8rYFG/6
+ 5cx/5AxJfPplqmNjN2wRwlvT9nlEmIXYK9NMxhc6zRYhY7vnJrl0I5Mmgp9lgkdVtY1/
+ 1rkzPd5EjTmP/1ust+YvuTpChh+OJVtFSafOzBXY5Eg8vsxCAS9Jzn4hS00NszSv0Sxd
+ wt7ZHo7f3NgveCHTA4xLd4Neu9j/9Nz7VDPrgcjIx0wudhuxCdcmlGwlcz84kHjqrPNX
+ IuDWNclc/Q6WSskss417xcq+lsP8QqfC6ZW5Yoaxlbx3TGdjLzv0qsUSlUaIyg/lmnRz
+ iZDg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=nmt7gepR
-Subject: Re: [Buildroot] [PATCH v2 0/3] arch/loongarch: Fix a couple of
- toolchain options
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=aXHQRi+3
+Subject: [Buildroot] [PATCH] package/libzenoh-pico: fix build w/
+ RUNTIME_DEBUG
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,51 +107,260 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+From: Thomas Perale via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Perale <thomas.perale@mind.be>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas, Jiaxun,
+On the autobuilder the following build error would appear for the
+libzenoh-pico package when the option BR2_ENABLE_RUNTIME_DEBUG is
+enabled:
 
-On 01/08/2025 09:46, Thomas Petazzoni via buildroot wrote:
-> Hello,
-> 
-> On Fri, 01 Aug 2025 12:13:48 +0800
-> "Jiaxun Yang" <jiaxun.yang@flygoat.com> wrote:
-> 
->> Sure, sorry those emails slipped across my email filter.
->> 
->> I'm actually looking into fix LP64S and LP64D ABI in GCC and other
->> libraries but trapped by various failures. If I'm unable to get them
->> fixed we may need to drop them in Buildroot.
-> 
-> Thanks for your feedback. If there are known broken features causing
-> those failures, I would prefer that we remove/disable them now, and
-> re-enable them later once they are fixed. There are currently way too
-> many failures on loongarch64.
+```
+[  1%] Building C object CMakeFiles/zenohpico_shared.dir/src/api/encoding.c.o
+In function '_z_encoding_convert_into_string',
+    inlined from 'z_encoding_to_string' at /workdir/instance-0/output-1/build/libzenoh-pico-1.2.1/src/api/encoding.c:261:5:
+/workdir/instance-0/output-1/build/libzenoh-pico-1.2.1/src/api/encoding.c:203:15: error: 'strncat' output truncated before terminating nul copying 1 byte from a string of the same length [-Werror=stringop-truncation]
+  203 |         (void)strncat(value, &sep, 1);
+      |               ^~~~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+```
 
-I agree we should disable the lp64f and lp64s ABIs, which I believe
-are a major source of those failures.
+This error can be reproduced with:
 
-For that reason, I reworked and proposed the Jiaxun's patch doing so:
-https://patchwork.ozlabs.org/project/buildroot/patch/20250731134401.30301-1-ju.o@free.fr/
+```
+cat >.config <<EOF
+BR2_aarch64=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+BR2_PACKAGE_LIBZENOH_PICO=y
+BR2_ENABLE_RUNTIME_DEBUG=y
+EOF
+make olddefconfig
+make libzenoh-pico
+```
 
-Jiaxun, could you please review and test it?
+This patch include the upstream commit [1] that fixes this issue.
 
-> Best regards,
-> 
-> Thomas
-> --
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering and training
-> https://bootlin.com
+[1] https://github.com/eclipse-zenoh/zenoh-pico/commit/60e635cbb1dc6be8eda559a913d4689845f0d62e
 
-Best regards,
+Fixes: https://autobuild.buildroot.org/results/0c4/0c4644b17646d3ec482f0a4cf02d6fde19db2c99
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+---
+ .../0002-fix-compilation-issues.patch         | 199 ++++++++++++++++++
+ 1 file changed, 199 insertions(+)
+ create mode 100644 package/libzenoh-pico/0002-fix-compilation-issues.patch
 
-Julien.
+diff --git a/package/libzenoh-pico/0002-fix-compilation-issues.patch b/package/libzenoh-pico/0002-fix-compilation-issues.patch
+new file mode 100644
+index 0000000000..f9ff5bf506
+--- /dev/null
++++ b/package/libzenoh-pico/0002-fix-compilation-issues.patch
+@@ -0,0 +1,199 @@
++From 584e3d2cf8e879e5ad042f742a3d8656d7d98ed7 Mon Sep 17 00:00:00 2001
++From: Jean-Roland Gosse <jean.roland.gosse@gmail.com>
++Date: Thu, 10 Jul 2025 14:37:00 +0200
++Subject: [PATCH] Fix compilation issues (#986)
++
++* fix: compilation issues
++
++* fix: stringop-overflow
++
++* doc: add comment to _z_str_append function
++
++Upstream: https://github.com/eclipse-zenoh/zenoh-pico/commit/60e635cbb1dc6be8eda559a913d4689845f0d62e
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++---
++ include/zenoh-pico/utils/string.h | 8 ++++++++
++ src/api/encoding.c                | 4 ++--
++ src/protocol/codec/declarations.c | 4 ++++
++ src/protocol/codec/transport.c    | 3 ++-
++ src/protocol/config.c             | 8 +++-----
++ src/session/rx.c                  | 3 +++
++ src/transport/multicast/rx.c      | 4 ++++
++ src/transport/unicast/rx.c        | 4 ++++
++ 8 files changed, 30 insertions(+), 8 deletions(-)
++
++diff --git a/include/zenoh-pico/utils/string.h b/include/zenoh-pico/utils/string.h
++index e4ffd69d..2f56cb79 100644
++--- a/include/zenoh-pico/utils/string.h
+++++ b/include/zenoh-pico/utils/string.h
++@@ -18,6 +18,7 @@
++ #include <stdbool.h>
++ #include <stddef.h>
++ #include <stdint.h>
+++#include <string.h>
++ 
++ #ifdef __cplusplus
++ extern "C" {
++@@ -63,6 +64,13 @@ size_t _z_strcnt(char const *haystack_start, const char *harstack_end, const cha
++ 
++ size_t _z_str_startswith(const char *s, const char *needle);
++ 
+++// Must be used on a null terminated string with str[strlen(str) + 1] being valid memory.
+++static inline void _z_str_append(char *str, const char c) {
+++    size_t len = strlen(str);
+++    str[len] = c;
+++    str[len + 1] = '\0';
+++}
+++
++ #ifdef __cplusplus
++ }
++ #endif
++diff --git a/src/api/encoding.c b/src/api/encoding.c
++index b4ff4cb1..16a5b9ff 100644
++--- a/src/api/encoding.c
+++++ b/src/api/encoding.c
++@@ -19,6 +19,7 @@
++ #include <string.h>
++ 
++ #include "zenoh-pico.h"
+++#include "zenoh-pico/utils/string.h"
++ 
++ #if Z_FEATURE_ENCODING_VALUES == 1
++ #define ENCODING_SCHEMA_SEPARATOR ';'
++@@ -196,11 +197,10 @@ static z_result_t _z_encoding_convert_into_string(const z_loaned_encoding_t *enc
++         return _Z_ERR_SYSTEM_OUT_OF_MEMORY;
++     }
++     // Copy prefix
++-    char sep = ENCODING_SCHEMA_SEPARATOR;
++     (void)strncpy(value, prefix, prefix_len);
++     // Copy schema and separator
++     if (has_schema) {
++-        (void)strncat(value, &sep, 1);
+++        _z_str_append(value, ENCODING_SCHEMA_SEPARATOR);
++         (void)strncat(value, _z_string_data(&encoding->schema), _z_string_len(&encoding->schema));
++     }
++     // Fill container
++diff --git a/src/protocol/codec/declarations.c b/src/protocol/codec/declarations.c
++index 905aad39..2146537e 100644
++--- a/src/protocol/codec/declarations.c
+++++ b/src/protocol/codec/declarations.c
++@@ -163,6 +163,10 @@ z_result_t _z_declaration_encode(_z_wbuf_t *wbf, const _z_declaration_t *decl) {
++         case _Z_DECL_FINAL: {
++             ret = _z_decl_final_encode(wbf);
++         } break;
+++
+++        default:
+++            ret = _Z_ERR_MESSAGE_SERIALIZATION_FAILED;
+++            break;
++     }
++     return ret;
++ }
++diff --git a/src/protocol/codec/transport.c b/src/protocol/codec/transport.c
++index 894fb41d..51830cd1 100644
++--- a/src/protocol/codec/transport.c
+++++ b/src/protocol/codec/transport.c
++@@ -217,11 +217,12 @@ z_result_t _z_init_encode(_z_wbuf_t *wbf, uint8_t header, const _z_t_msg_init_t
++ }
++ 
++ z_result_t _z_init_decode_ext(_z_msg_ext_t *extension, void *ctx) {
+++    _ZP_UNUSED(ctx);
++     z_result_t ret = _Z_RES_OK;
++-    _z_t_msg_init_t *msg = (_z_t_msg_init_t *)ctx;
++     if (false) {
++ #if Z_FEATURE_FRAGMENTATION == 1
++     } else if (_Z_EXT_FULL_ID(extension->_header) == _Z_MSG_EXT_ID_INIT_PATCH) {
+++        _z_t_msg_init_t *msg = (_z_t_msg_init_t *)ctx;
++         msg->_patch = (uint8_t)extension->_body._zint._val;
++ #endif
++     } else if (_Z_MSG_EXT_IS_MANDATORY(extension->_header)) {
++diff --git a/src/protocol/config.c b/src/protocol/config.c
++index 1cfcff9c..245e7c3d 100644
++--- a/src/protocol/config.c
+++++ b/src/protocol/config.c
++@@ -21,6 +21,7 @@
++ 
++ #include "zenoh-pico/collections/string.h"
++ #include "zenoh-pico/utils/pointers.h"
+++#include "zenoh-pico/utils/string.h"
++ 
++ z_result_t _z_config_init(_z_config_t *ps) {
++     _z_str_intmap_init(ps);
++@@ -142,15 +143,12 @@ size_t _z_str_intmap_strlen(const _z_str_intmap_t *s, uint8_t argc, _z_str_intma
++ void _z_str_intmap_onto_str(char *dst, size_t dst_len, const _z_str_intmap_t *s, uint8_t argc,
++                             _z_str_intmapping_t argv[]) {
++     size_t len = dst_len;
++-    const char lsep = INT_STR_MAP_LIST_SEPARATOR;
++-    const char ksep = INT_STR_MAP_KEYVALUE_SEPARATOR;
++-
++     dst[0] = '\0';
++     for (size_t i = 0; i < argc; i++) {
++         char *v = _z_str_intmap_get(s, argv[i]._key);
++         if (v != NULL) {
++             if (len > (size_t)0) {
++-                (void)strncat(dst, &lsep, 1);  // List separator
+++                _z_str_append(dst, INT_STR_MAP_LIST_SEPARATOR);  // List separator
++                 len = len - (size_t)1;
++             }
++ 
++@@ -159,7 +157,7 @@ void _z_str_intmap_onto_str(char *dst, size_t dst_len, const _z_str_intmap_t *s,
++                 len = len - strlen(argv[i]._str);
++             }
++             if (len > (size_t)0) {
++-                (void)strncat(dst, &ksep, 1);  // KeyValue separator
+++                _z_str_append(dst, INT_STR_MAP_KEYVALUE_SEPARATOR);  // KeyValue separator
++                 len = len - (size_t)1;
++             }
++             if (len > (size_t)0) {
++diff --git a/src/session/rx.c b/src/session/rx.c
++index d85f9d38..8556ce1d 100644
++--- a/src/session/rx.c
+++++ b/src/session/rx.c
++@@ -93,6 +93,8 @@ static z_result_t _z_handle_declare(_z_session_t *zn, _z_n_msg_declare_t *decl,
++ 
++ static z_result_t _z_handle_request(_z_session_rc_t *zsrc, _z_session_t *zn, _z_n_msg_request_t *req,
++                                     z_reliability_t reliability) {
+++    _ZP_UNUSED(reliability);
+++    _ZP_UNUSED(zsrc);
++     switch (req->_tag) {
++         case _Z_REQUEST_QUERY:
++ #if Z_FEATURE_QUERYABLE == 1
++@@ -158,6 +160,7 @@ static z_result_t _z_handle_response(_z_session_t *zn, _z_n_msg_response_t *resp
++     }
++ #else
++     _z_n_msg_response_clear(resp);
+++    _ZP_UNUSED(zn);
++ #endif
++     return _Z_RES_OK;
++ }
++diff --git a/src/transport/multicast/rx.c b/src/transport/multicast/rx.c
++index 121406d0..47269b1a 100644
++--- a/src/transport/multicast/rx.c
+++++ b/src/transport/multicast/rx.c
++@@ -294,6 +294,10 @@ static z_result_t _z_multicast_handle_fragment_inner(_z_transport_multicast_t *z
++         *dbuf_state = _Z_DBUF_STATE_NULL;
++     }
++ #else
+++    _ZP_UNUSED(ztm);
+++    _ZP_UNUSED(header);
+++    _ZP_UNUSED(msg);
+++    _ZP_UNUSED(entry);
++     _Z_INFO("Fragment dropped because fragmentation feature is deactivated");
++ #endif
++     return ret;
++diff --git a/src/transport/unicast/rx.c b/src/transport/unicast/rx.c
++index c5ccf932..43e1b4c8 100644
++--- a/src/transport/unicast/rx.c
+++++ b/src/transport/unicast/rx.c
++@@ -248,6 +248,10 @@ static z_result_t _z_unicast_handle_fragment_inner(_z_transport_unicast_t *ztu,
++         *dbuf_state = _Z_DBUF_STATE_NULL;
++     }
++ #else
+++    _ZP_UNUSED(ztu);
+++    _ZP_UNUSED(header);
+++    _ZP_UNUSED(msg);
+++    _ZP_UNUSED(peer);
++     _Z_INFO("Fragment dropped because fragmentation feature is deactivated");
++ #endif
++     return ret;
++-- 
++2.50.1
+-- 
+2.50.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
