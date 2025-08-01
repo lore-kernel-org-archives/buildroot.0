@@ -4,96 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF9BEC87FCB
-	for <buildroot@archiver.kernel.org>; Fri,  1 Aug 2025 15:38:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77A10C87FCA
+	for <buildroot@archiver.kernel.org>; Fri,  1 Aug 2025 16:00:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A11974136D;
-	Fri,  1 Aug 2025 15:38:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 33FBA4128F;
+	Fri,  1 Aug 2025 16:00:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 12-edkbebw8o; Fri,  1 Aug 2025 15:38:26 +0000 (UTC)
+ id jZvSZMQhxFrz; Fri,  1 Aug 2025 16:00:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 087B041350
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5991A4126E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 087B041350;
-	Fri,  1 Aug 2025 15:38:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5991A4126E;
+	Fri,  1 Aug 2025 16:00:32 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id D8300160
- for <buildroot@buildroot.org>; Fri,  1 Aug 2025 15:38:23 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id AC83CC8
+ for <buildroot@buildroot.org>; Fri,  1 Aug 2025 16:00:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C947240A26
- for <buildroot@buildroot.org>; Fri,  1 Aug 2025 15:38:23 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 934DB40A26
+ for <buildroot@buildroot.org>; Fri,  1 Aug 2025 16:00:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 83Klu_c4rsBC for <buildroot@buildroot.org>;
- Fri,  1 Aug 2025 15:38:23 +0000 (UTC)
+ id WhGucJnACiQG for <buildroot@buildroot.org>;
+ Fri,  1 Aug 2025 16:00:28 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::435; helo=mail-wr1-x435.google.com;
+ client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D561D4005E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D561D4005E
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
- [IPv6:2a00:1450:4864:20::435])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D561D4005E
- for <buildroot@buildroot.org>; Fri,  1 Aug 2025 15:38:22 +0000 (UTC)
-Received: by mail-wr1-x435.google.com with SMTP id
- ffacd0b85a97d-3b788feab29so1090051f8f.2
- for <buildroot@buildroot.org>; Fri, 01 Aug 2025 08:38:22 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A63FB40A96
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A63FB40A96
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A63FB40A96
+ for <buildroot@buildroot.org>; Fri,  1 Aug 2025 16:00:27 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ 5b1f17b1804b1-451d41e1ad1so15644195e9.1
+ for <buildroot@buildroot.org>; Fri, 01 Aug 2025 09:00:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1754062700; x=1754667500;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=5r4cnsq5ygEn+lkXaoQ4AJAufF2zFmJqGdmQYnUZWAA=;
- b=ra4j0ET97G05Xfa8i9Rm2JMc7F5IdW6g1XY1xAD7MWRSFfp/MxxylGcPorNiCFBZ8p
- 8WpWZuwjU7+PCXj+YO+Ojw/JX9DVJCX4GhjbAow1kMlpDOtBbPOpdStq/uIeoxeVFnL6
- 3585+V5tBtx2uGHQNz80lVrujdMwVjCInK/XkBSByx8rcXeadk1kObX8C0sQqJI9TAiv
- 8DjvIknO3W1NepIOOOf0n3SbD0i2zcu09H0jnS/AEHfM7GpeefhPpnxsxIZmX1pL0sy+
- LFWdRt0vV/uCK4yIJku0TlYFC65GwAecTHrf4szdUTOgJfYeasDWVGHIHfIWUAwZISjH
- xo7w==
-X-Gm-Message-State: AOJu0Yxxjb0dXEAePgnp8XmsH1PGfwmXpQwBpHWSy50H5bi37dLNxwIi
- IMR0jRNieIbict05LrpD6Lsf7DWgh3yvlA39GK3OB5CULGYhDLdAkfy6xXm0HrBEeF9YL011FH0
- +WHkw
-X-Gm-Gg: ASbGncvBVBVXgo0YAY9Qj8vipgd/LWHt6O64hggOgCfbDN/5AXOWDIflZzhti+EnWrZ
- cUrg8pUfVwWbNhAG16ZniHNjVytJtu4kSqkn2peULo7NCnDvDF+r+jWzw2KNQ6pdjeWjig5iAk7
- AATdeF1xUITan3BAmLsFvHW6rTa1iRnl6Nv/CdYtk4I8nlQecCnLPh4Cy+RvK6HhMBI5hEpQm4e
- xjAJAs05ZOMl+PAQyn702fvz+pSfbKucXVd6ryBIpiqWkQduY4bwvgw6TjFK6+o2I7z8ATFr9JM
- 1fqRdcV22aKjElqL12rZfGrQZQQQDWqE6fw7hct66PfAQpS+aobLtihrA2K8N95P7bJGGeIGEpN
- 1sFkR35yw87BH2y+O1Irwb6zT
-X-Google-Smtp-Source: AGHT+IHTH3v6txc5xlvImlDDdBPXHB6or7SvjYtl1i/isySPqhBOZHqQUHGZzN5xXuCfyRcysyq5lw==
-X-Received: by 2002:a05:6000:381:b0:3b7:7cb3:1124 with SMTP id
- ffacd0b85a97d-3b8d9468524mr238127f8f.11.1754062699948; 
- Fri, 01 Aug 2025 08:38:19 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1754064025; x=1754668825;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:to
+ :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=YJgMuefaXxIR5FvqZyM/o6CWz8bKGyihrxZENxYgngQ=;
+ b=VR67sVdwUL3ilvnFCrvXl3ViGftK23IKM5E6fXOBHaaon2OI3TLLi06Yh6V8BzZ2zi
+ WevvWqZoOLWI0KVQ+9mpS8oNHwMkd4WO7u3/C5R+Yu9qpEM2k/ee9R5Y0AALNyHBjRnx
+ n6Yjo7JZ7gIYGOKAGMd2wTIUQF5i403U50xVCpDsoEmDyDvuiy6jr1H2NH0KpWx57CWZ
+ 0YMJ3vl/CRwlYiKTWuJVSVbEZDomB+ZXTqO/zKIStBck+3B1DNWTlTa1EFJgRkkXTsUo
+ ITcDRLG1F98saVh97viaQakX/8TZSPZDMuvatb9/rLKMguNO+gOOxiD4J6UtYJjBPazQ
+ nHKQ==
+X-Gm-Message-State: AOJu0Yzp8nqCi4OoI0u+aGmvLfAybY69VUmCshLjYcqdsTacSjkdUwFA
+ QrLLbfJ3MeQ7jIXMNbXa7DRM3F5KoHg+QgnEWUnXIzk7vErLj81WH+BpVKBt2jS9J3r2tejZZAg
+ qR6Dt
+X-Gm-Gg: ASbGncsbcjW0C+fT3reUmmyMQDOohB4YgQDgP9lWaAo6SNBNo833Pa0kWykFQWnCClZ
+ RnZVIcf4lPmZdgujv0Fof7anzsXnS2ZqTvyrhrbAF1FILcZUsarzgDg/dtnhuSPSwzkVMVXjsEA
+ Ur/ysxGRSnAbemHyh1c4MKXwZ93eCTgI6WoKz/vJipNSsk6PeN+9D3rjpBcps4OTzo7qLFX3ydn
+ Axn0xRhIT6ws2c/Jcmmjme8XvAIOeMgdGiL505Nn4bvLt9tBbv8GAPazKzZDRb+Zc9N3tFkQQmE
+ Kq4unYU5mco9TW5+YUWYTkoIH87uJ+Ik3S2HDKsNS2JsCzdJ538+XFd0uMTU3jECZETynyD2xGQ
+ okOIU+/Cbgn//7yp/JOD2ZqU0
+X-Google-Smtp-Source: AGHT+IFRoAz8WS3OAnNGVCYIW31C4pj6USiz/Kb7i4G5kCNFYBCymhxB8ZZaveqoo/wfwn91pB1AMw==
+X-Received: by 2002:a05:600c:3b93:b0:453:1058:f8c1 with SMTP id
+ 5b1f17b1804b1-458a965ae8dmr37072395e9.3.1754064025037; 
+ Fri, 01 Aug 2025 09:00:25 -0700 (PDT)
 Received: from arch ([79.132.233.79]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3b79c453c75sm6324170f8f.41.2025.08.01.08.38.19
+ 5b1f17b1804b1-458953f887asm111103225e9.29.2025.08.01.09.00.24
+ for <buildroot@buildroot.org>
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 01 Aug 2025 08:38:19 -0700 (PDT)
+ Fri, 01 Aug 2025 09:00:24 -0700 (PDT)
 To: buildroot@buildroot.org
-Cc: Bernd Kuhls <bernd@kuhls.net>
-Date: Fri,  1 Aug 2025 17:38:19 +0200
-Message-ID: <20250801153819.2086037-1-thomas.perale@mind.be>
+Date: Fri,  1 Aug 2025 18:00:24 +0200
+Message-ID: <20250801160024.2130333-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.50.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1754062700; x=1754667500; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=5r4cnsq5ygEn+lkXaoQ4AJAufF2zFmJqGdmQYnUZWAA=;
- b=QNajZqHBA18BjPQvUoFKdlSSGNJ8qjHWDWQimEOiE+FGuK7Z+dRHV4vze40+J6iHvM
- VMaJXJPOK8/oNwsjcXdYeT4cYRrEdUAa50i3QeYajvi9zoV9Pp+mAXJWT2mz3E5Ys/NS
- VsLVhQJhGlb2v8loNXDlCMARPI8t8mCr7YNpUsyv2S/n4iVcvDXLD+9cNl7UyNCINiIx
- p8zi9yOzMRw56iyOCgOru7oScfjSf2kJuUImPdYzFPE8f+34OLlKJBe+IAmHFe26Gdw1
- f3mTPRGv/Ltz7IhLHlsUozBWdeE7ZYitvp4N0QXSh1Ibp1R+PwvIna0yqQk/qFYxNFmm
- rl9A==
+ d=mind.be; s=google; t=1754064025; x=1754668825; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:to
+ :from:from:to:cc:subject:date:message-id:reply-to;
+ bh=YJgMuefaXxIR5FvqZyM/o6CWz8bKGyihrxZENxYgngQ=;
+ b=IQKCGBYSfS4KxZFAMNtLJTrKlbRIeb/jsZB4m6dd7M+yBt6JaB/kqQ8ZVuqSqM7Pp+
+ CT96jW3LFmOQdEPn+mJDnlATEK3MhNrC6vFRtqBfr5XPSERkzM3KXOoo8uXTbVFsCHob
+ mTm4YYapLpVk+pJ4iQpOdcE6K/V+8OKPf5oW3yJWyYNJZplXUzlsm9yX24OokL649G5I
+ +9a5CetHXs7HM2pb2PvkbtJdTh2xm8KtjNTYNKY6ztXi3YpKBP8JMujc2KpLcdCF4XcL
+ CqVwnLcoUyIAKLEZfc9jDmChzzo2ecCXnbUoV/aCHrfb/uKqtmS2Iwz3dsDbQmv8qcRJ
+ 54xA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=QNajZqHB
-Subject: [Buildroot] [PATCH] package/php: bump to v8.3.24
+ header.a=rsa-sha256 header.s=google header.b=IQKCGBYS
+Subject: [Buildroot] [2025.02.x PATCH] package/libopenssl: bump to v3.4.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -112,45 +111,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This is a bug fix release.
-
 For more information, see:
-
- - https://www.php.net/ChangeLog-8.php#PHP_8_3
- - https://news-web.php.net/php.announce/466
+ - https://github.com/openssl/openssl/releases/tag/openssl-3.4.2
+ - https://github.com/openssl/openssl/compare/openssl-3.4.1...openssl-3.4.2
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
-Tested with `support/testing/run-tests -d dl -o output_folder -k tests.package.test_php_pam`
----
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libopenssl/libopenssl.hash | 4 ++--
+ package/libopenssl/libopenssl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 29162bd008..dbb130f30b 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
+diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
+index 5924c5d46a..a3c4099b0e 100644
+--- a/package/libopenssl/libopenssl.hash
++++ b/package/libopenssl/libopenssl.hash
 @@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  08be64700f703bca6ff1284bf1fdaffa37ae1b9734b6559f8350248e8960a6db  php-8.3.23.tar.xz
-+sha256  388ee5fd111097e97bae439bff46aec4ea27f816d3f0c2cb5490a41410d44251  php-8.3.24.tar.xz
+-# From https://github.com/openssl/openssl/releases/download/openssl-3.4.1/openssl-3.4.1.tar.gz.sha256
+-sha256  002a2d6b30b58bf4bea46c43bdd96365aaf8daa6c428782aa4feee06da197df3  openssl-3.4.1.tar.gz
++# From https://github.com/openssl/openssl/releases/download/openssl-3.4.2/openssl-3.4.2.tar.gz.sha256
++sha256  17b02459fc28be415470cccaae7434f3496cac1306b86b52c83886580e82834c  openssl-3.4.2.tar.gz
  
- # License file
- sha256  b42e4df5e50e6ecda1047d503d6d91d71032d09ed1027ba1ef29eed26f890c5a  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index b431d839fb..5460f440cb 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
+ # License files
+ sha256  7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a  LICENSE.txt
+diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+index c1c5b818d7..a861fa597f 100644
+--- a/package/libopenssl/libopenssl.mk
++++ b/package/libopenssl/libopenssl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PHP_VERSION = 8.3.23
-+PHP_VERSION = 8.3.24
- PHP_SITE = https://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+-LIBOPENSSL_VERSION = 3.4.1
++LIBOPENSSL_VERSION = 3.4.2
+ LIBOPENSSL_SITE = https://github.com/openssl/openssl/releases/download/openssl-$(LIBOPENSSL_VERSION)
+ LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
+ LIBOPENSSL_LICENSE = Apache-2.0
 -- 
 2.50.1
 
