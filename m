@@ -4,49 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 175A8C87FCA
-	for <buildroot@archiver.kernel.org>; Sun,  3 Aug 2025 15:48:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E67AAC87FCA
+	for <buildroot@archiver.kernel.org>; Sun,  3 Aug 2025 15:51:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C8FF66100B;
-	Sun,  3 Aug 2025 15:48:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ACE066100B;
+	Sun,  3 Aug 2025 15:51:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mtF0IZcGJXQp; Sun,  3 Aug 2025 15:48:44 +0000 (UTC)
+ id TCb-3PvHUlcB; Sun,  3 Aug 2025 15:51:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA3A26101F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D844660FDF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CA3A26101F;
-	Sun,  3 Aug 2025 15:48:44 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id A53FF1A2
- for <buildroot@buildroot.org>; Sun,  3 Aug 2025 15:48:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D844660FDF;
+	Sun,  3 Aug 2025 15:51:02 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 053041A2
+ for <buildroot@buildroot.org>; Sun,  3 Aug 2025 15:51:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 85A0240430
- for <buildroot@buildroot.org>; Sun,  3 Aug 2025 15:48:40 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DB1ED407B4
+ for <buildroot@buildroot.org>; Sun,  3 Aug 2025 15:51:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZBKgBO3dqIYK for <buildroot@buildroot.org>;
- Sun,  3 Aug 2025 15:48:39 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B817840967
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B817840967
- for <buildroot@buildroot.org>; Sun,  3 Aug 2025 15:48:39 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A587E86E1F; Sun,  3 Aug 2025 15:48:39 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 3 Aug 2025 17:44:00 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a3569f03fc13763247d4a4c2c44fee26ad9b2be9
-X-Git-Newrev: 0343f03ce496b16b775859c78664425be6278aa9
-X-Patchwork-Hint: ignore
-Message-Id: <20250803154839.A587E86E1F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/iwd: fix S40iwd check-package
- warnings
+ id OUiQ5E6p2sc7 for <buildroot@buildroot.org>;
+ Sun,  3 Aug 2025 15:51:01 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D995540486
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D995540486
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D995540486
+ for <buildroot@buildroot.org>; Sun,  3 Aug 2025 15:51:00 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id A99A72003CA;
+ Sun,  3 Aug 2025 17:50:55 +0200 (CEST)
+Received: from 2001:18c0:a22:bf00:5c2b:f296:f108:6612
+ via 2001:18c0:a22:bf00:5c2b:f296:f108:6612 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 03 Aug 2025 17:50:55 +0200
+MIME-Version: 1.0
+Date: Sun, 03 Aug 2025 17:50:55 +0200
+To: Peter Seiderer <ps.report@gmx.net>
+Cc: buildroot@buildroot.org, Fiona Klute <fiona.klute@gmx.de>
+In-Reply-To: <20250803140011.186274-1-ps.report@gmx.net>
+References: <20250803140011.186274-1-ps.report@gmx.net>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <f0393f4842c7d7672a3d66ec9cfd4d7d@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1754236257;
+ bh=MoNPzfSU8iTq0OMtBAi5QkMJMW2QoK77BndUvX02oOM=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=S8e4OHN5vZff5s3YkbxM+6E/EgsMihgQzn86LgCHZgu10l8n/w31//v+tQZ0VSFKF
+ 6EOO3KPpWGfJQ1Qo21k9cIc2b1J0VEMY8aq6gQvca09+/5vNdlQDFz4S2Xmex9YxDX
+ NPmL83HWZOdKQUXqqqYGfhDSeI5KGokgcwHOZJlu8d4sZmjLyuPRp/QQ3uTGY5kl15
+ 9T1U5A8pbDAPsbHuQNeZw7EWWNV6/nKJa6gWrwU3tONOFhpCzFVx/JuhdM0CxHfoEW
+ 9jo2I6urRHYs1QAhXgrALZeprP6zNUrJf8/z+mTubUeHO5m8PCUhdapj+eeTjDwW0E
+ DoyGv2SAgh8cA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=S8e4OHN5
+Subject: Re: [Buildroot] [PATCH 1/3] package/ell: bump version to 0.79
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,82 +82,33 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0343f03ce496b16b775859c78664425be6278aa9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 03/08/2025 16:00, Peter Seiderer via buildroot wrote:
+> Changelog (see [1]):
+[...]
+> [1] 
+> https://git.kernel.org/pub/scm/libs/ell/ell.git/tree/ChangeLog?h=0.79
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-Fix fix S40iwd check-package warnings:
+Series applied to master, thanks.
 
-- package/iwd/S40iwd:3: Do not include path in DAEMON
-  (https://nightly.buildroot.org/#adding-packages-start-script)
+For info, I fixed another check-package error in patch 3/3.
 
-- package/iwd/S40iwd:4: Incorrect PIDFILE value
-  (https://nightly.buildroot.org/#adding-packages-start-script)
+     make check-package
+     package/iwd/S40iwd:0: lib_sysv.Variables was expected to fail, did 
+you fix the file and forget to update /buildroot/.checkpackageignore?
 
-Since this commit fixes lib_sysv.Variables check-package warnings
-in S40iwd, this commit also removes the .checkpackageignore entry.
+See:
+https://gitlab.com/buildroot.org/buildroot/-/commit/0343f03ce496b16b775859c78664425be6278aa9
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-[Julien: remove lib_sysv.Variables in .checkpackageignore]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- .checkpackageignore |  2 +-
- package/iwd/S40iwd  | 12 ++++++------
- 2 files changed, 7 insertions(+), 7 deletions(-)
+Best regards,
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 4591ff173a..7697fd2ea1 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -584,7 +584,7 @@ package/irqbalance/S13irqbalance Shellcheck lib_sysv.Indent lib_sysv.Variables
- package/irrlicht/0001-override-CPPFLAGS-CXXFLAGS-and-CFLAGS-in-Makefile.patch lib_patch.Upstream
- package/irrlicht/0002-makefile-override-LDFLAGS-and-remove-obsolete-X11R6-.patch lib_patch.Upstream
- package/iucode-tool/S00iucode-tool lib_sysv.Variables
--package/iwd/S40iwd Shellcheck lib_sysv.Variables
-+package/iwd/S40iwd Shellcheck
- package/janus-gateway/0001-disable-ssp.patch lib_patch.Upstream
- package/kexec-lite/0001-clean-restart.patch lib_patch.Upstream
- package/keyutils/0001-fix-install-rule.patch lib_patch.Upstream
-diff --git a/package/iwd/S40iwd b/package/iwd/S40iwd
-index 6714ca9956..7858ff3e42 100644
---- a/package/iwd/S40iwd
-+++ b/package/iwd/S40iwd
-@@ -1,16 +1,16 @@
- #!/bin/sh
- 
--DAEMON="/usr/libexec/iwd"
--PIDFILE="/var/run/iwd.pid"
-+DAEMON="iwd"
-+PIDFILE="/var/run/$DAEMON.pid"
- 
- IWD_ARGS=""
- 
--[ -r "/etc/default/iwd" ] && . "/etc/default/iwd"
-+[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
- 
- start() {
--	printf "Starting iwd:"
-+	printf 'Starting %s: ' "$DAEMON"
- 	mkdir -p /tmp/iwd/hotspot
--	start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "$DAEMON" \
-+	start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "/usr/libexec/$DAEMON" \
- 		-- $IWD_ARGS
- 	status=$?
- 	if [ "$status" -eq 0 ]; then
-@@ -22,7 +22,7 @@ start() {
- }
- 
- stop() {
--	printf "Stopping iwd:"
-+	printf 'Stopping %s: ' "$DAEMON"
- 	start-stop-daemon -K -q -p "$PIDFILE"
- 	status=$?
- 	if [ "$status" -eq 0 ]; then
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
