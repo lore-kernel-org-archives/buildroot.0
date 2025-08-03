@@ -1,76 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA301C87FCA
-	for <buildroot@archiver.kernel.org>; Sun,  3 Aug 2025 15:05:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EE3AC87FCA
+	for <buildroot@archiver.kernel.org>; Sun,  3 Aug 2025 15:24:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9691D40E84;
-	Sun,  3 Aug 2025 15:05:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2D19F6100E;
+	Sun,  3 Aug 2025 15:24:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id t4UZuNr81IGh; Sun,  3 Aug 2025 15:05:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5KbKMrwptz56; Sun,  3 Aug 2025 15:24:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BABF240F0B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 608F760F82
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BABF240F0B;
-	Sun,  3 Aug 2025 15:05:57 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 85A7D1A2
- for <buildroot@buildroot.org>; Sun,  3 Aug 2025 15:05:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 608F760F82;
+	Sun,  3 Aug 2025 15:24:40 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8E4711A2
+ for <buildroot@buildroot.org>; Sun,  3 Aug 2025 15:24:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6765240F35
- for <buildroot@buildroot.org>; Sun,  3 Aug 2025 15:05:56 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6A7CA80809
+ for <buildroot@buildroot.org>; Sun,  3 Aug 2025 15:24:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id f2IilCBdgGlG for <buildroot@buildroot.org>;
- Sun,  3 Aug 2025 15:05:55 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7771B40C4C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7771B40C4C
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7771B40C4C
- for <buildroot@buildroot.org>; Sun,  3 Aug 2025 15:05:55 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JYn3Z8NFgdVd for <buildroot@buildroot.org>;
+ Sun,  3 Aug 2025 15:24:37 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A30AB80805
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A30AB80805
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A30AB80805
+ for <buildroot@buildroot.org>; Sun,  3 Aug 2025 15:24:37 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
  (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 8E3A92003CE;
- Sun,  3 Aug 2025 17:05:49 +0200 (CEST)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 1F30C19F740;
+ Sun,  3 Aug 2025 17:24:33 +0200 (CEST)
 Received: from 2001:18c0:a22:bf00:5c2b:f296:f108:6612
  via 2001:18c0:a22:bf00:5c2b:f296:f108:6612 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 03 Aug 2025 17:05:49 +0200
+ with HTTP (HTTP/1.0 POST); Sun, 03 Aug 2025 17:24:33 +0200
 MIME-Version: 1.0
-Date: Sun, 03 Aug 2025 17:05:49 +0200
-To: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
-Cc: buildroot@buildroot.org, Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>, =?UTF-8?Q?Miqu=C3=A8l_Raynal?=
- <miquel.raynal@bootlin.com>, Alistair Francis <alistair@alistair23.me>
-In-Reply-To: <20250801-fix_libspdm-v1-1-48138baca30b@bootlin.com>
-References: <20250801-fix_libspdm-v1-1-48138baca30b@bootlin.com>
+Date: Sun, 03 Aug 2025 17:24:33 +0200
+To: Thomas Perale <thomas.perale@mind.be>
+Cc: buildroot@buildroot.org, Bernd Kuhls <bernd@kuhls.net>
+In-Reply-To: <20250801153819.2086037-1-thomas.perale@mind.be>
+References: <20250801153819.2086037-1-thomas.perale@mind.be>
 User-Agent: Webmail Free/1.6.11
-Message-ID: <15c103a036a9ae248fb9444057ed7733@free.fr>
+Message-ID: <fe44883bc2c7af86af67fb5f623a4e33@free.fr>
 X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1754233553;
- bh=Jn86JH5BqvcK8/uTCSzXRXQxCLBEwVwhRsQx2PsK1yM=;
+ d=free.fr; s=smtp-20201208; t=1754234675;
+ bh=SRzrMysYMZQi4PLzJpuTzlD396xkgsQ2d2IeGFL6Sks=;
  h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=SrHbyTu46zf1qYyytkP78S172ABezQCiBKHmalPJ4u12sst5YemCDBBZGUxBdVOji
- ZXXEZ9nucDwOiVMGq2czF2BaDjA9nfvGA+sC+LsFtN/Qs6yPK1SptBXRpI7jCUBMp9
- Hp1TeiesbS30cE6LqSAygEDzh2UVfx3cN4gL2BOrrMMV+hhrk7tdPX/qUR3CaFroxv
- bAKXZOMM14qyloySKCpF0rKoKBAus8VlD1Vk6TPFcjZopGF1Ou1AR9uf/z4KpMpIfc
- UD0Q623k4Kkwh5KwkdAbef1dOYY9x5zlexiuFjEJ01gFM//ivSBMF0zFQZJ8owSGaG
- PdQGmJeFHzQHw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=p/1BGSBlRc1nlpnmlE0jBrMUz2xKTJmcPhY90mqfILwmfpKZIhdOodc8emBBwu7/G
+ HLeUR4TLexT5RvWdLv7/JHh4MDle/YVKSNi5kmXGAwGgVlDV4/4H2jio2Ouz3p0tRO
+ CZnveRyNkq4bdTIfKYuZX1YEVqr4sXkgo7X86AR6a4JAYx6gos55vf0zyBdRmUkjpb
+ tk10VRyOAkUfEiVlGmZdWrzy5/kD6z4yB5cG1WCddxYMgXF/CwP5xpvrrcnpCZnII0
+ OkDoF0xY7i3i0/rheKJdprVRho5VDhThqqtd95hF91hPP1dKZmJPQ8oDI77fK75rVc
+ /F2rRpnv4mbLw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=SrHbyTu4
-Subject: Re: [Buildroot] [PATCH] package/libspdm: bump version to 3.8.0
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=p/1BGSBl
+Subject: Re: [Buildroot] [PATCH] package/php: bump to v8.3.24
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -89,30 +87,17 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 01/08/2025 11:59, Thomas Bonnefille via buildroot wrote:
-> Following the upgrade of libopenssl to version 3.5.0 [1], the build
-> process for libspdm encountered issues due to the new openssl API.
-> It requires some modifications in the asn1.h file of libspdm.
-> This build error was addressed by a specific commit [2] in libspdm.
+On 01/08/2025 17:38, Thomas Perale via buildroot wrote:
+> This is a bug fix release.
 > 
-> As Buildroot 2025.02 isn't impacted, this commit bumps libspdm to the
-> latest libspdm version to fix the build error.
+> For more information, see:
 > 
-> [1]: 9868ca6e
-> [2]: 88797f83:Backport API introduced in openssl 3.5.0
+>  - https://www.php.net/ChangeLog-8.php#PHP_8_3
+>  - https://news-web.php.net/php.announce/466
 > 
-> Fixes : 
-> https://autobuild.buildroot.org/results/87b/87b8805975ef132a58c40e622e2e023199f6ee2a/build-end.log
-> 
-> Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
 Applied to master, thanks.
-
-For info, I also fixed the LICENSE.md hash.
-
-Best regards,
-
-Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
