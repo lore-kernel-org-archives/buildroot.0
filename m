@@ -4,98 +4,98 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBAA7C87FCA
-	for <buildroot@archiver.kernel.org>; Sun,  3 Aug 2025 16:47:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CFDEC87FCB
+	for <buildroot@archiver.kernel.org>; Sun,  3 Aug 2025 17:04:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 950CA80E57;
-	Sun,  3 Aug 2025 16:47:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 53AE480734;
+	Sun,  3 Aug 2025 17:04:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id J-X4PL6jrT5C; Sun,  3 Aug 2025 16:47:13 +0000 (UTC)
+ id 7cwUQ3v6ZjGH; Sun,  3 Aug 2025 17:04:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9F95680E4C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 74DEE80737
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9F95680E4C;
-	Sun,  3 Aug 2025 16:47:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 74DEE80737;
+	Sun,  3 Aug 2025 17:04:36 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 7BF4A233
- for <buildroot@buildroot.org>; Sun,  3 Aug 2025 16:47:12 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id AA8B0118
+ for <buildroot@buildroot.org>; Sun,  3 Aug 2025 17:04:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 52DC580E4C
- for <buildroot@buildroot.org>; Sun,  3 Aug 2025 16:47:12 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 88AE880737
+ for <buildroot@buildroot.org>; Sun,  3 Aug 2025 17:04:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8TCWlSmRR9Jx for <buildroot@buildroot.org>;
- Sun,  3 Aug 2025 16:47:11 +0000 (UTC)
+ id Y0qv_7IH_ei2 for <buildroot@buildroot.org>;
+ Sun,  3 Aug 2025 17:04:33 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
+ client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
  envelope-from=angelo.compagnucci@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 32A0A80578
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 32A0A80578
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 32A0A80578
- for <buildroot@buildroot.org>; Sun,  3 Aug 2025 16:47:11 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id
- 5b1f17b1804b1-45994a72356so5316105e9.0
- for <buildroot@buildroot.org>; Sun, 03 Aug 2025 09:47:10 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 78F4A80734
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 78F4A80734
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 78F4A80734
+ for <buildroot@buildroot.org>; Sun,  3 Aug 2025 17:04:33 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id
+ 5b1f17b1804b1-458b885d6eeso7242775e9.3
+ for <buildroot@buildroot.org>; Sun, 03 Aug 2025 10:04:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1754239629; x=1754844429;
+ d=1e100.net; s=20230601; t=1754240671; x=1754845471;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=wg52h3ahmLqYoC+62mhVstyRaUHtoW/QiOke6fe35PU=;
- b=q6joME2xEP9GT5Skqo7kcL1JC6UX86FGd8XcA58VMpKLcs7mmxCFkqZA6gZvYs8g/z
- wii80DqqEYDDgLznAa19a+0rh8z1Jsdvrd9m9juqYPKw8A//jfmJbIdOjGdXVaGiH2BS
- oKkFfry1pHt/6bxrQUiKEJmpwvrRCugUHfozvhv8nb+nNlVHokadrpE573z4yYpStApN
- VT21MYCtN8iwqV7W9ClrO3LxTJreMrt/2fD4ArYq/csHjLNJIEZ6zq5wosVtYuKX7PYR
- yLWIi0qoUPsisFD5Fj2PEp/ckgjK08eXVZE3da+uwJNUocAWCeuYS5Drr5YGrkQlm4js
- 5OlA==
-X-Gm-Message-State: AOJu0YyQ2lKi8Q18/3ZBSvUF+7Il0/K6yr2VH/3kU/3XxmMGRB21m1zi
- Ujp2OchAjPJKrRj9HGmCfAqdoPF/V/swZ50qEEsxtOrpuEbSh8QbGUtDjhm90A==
-X-Gm-Gg: ASbGncubZzSq29gv69lyakY952zDDfpRrnh4FFfw9RXXFbRUMzjvfI+lYLiNHvXB3kF
- MP/3FAteNS+nw8vtz59/NgeOYLyANgMqrrPpjdEz/5zlp0COqCNoxjWfgYWPemHfdAPI4zZ9vjc
- Jj4sfseZbZVew50aZgbbqaqF5IH7JRyj0szfavM2TTT53m31q7unhE+hxAM21KOmE8mWHWVnn9F
- CtKqAjD2lB2cHOM9nZZZ83OFejpOXYvSXAgOwbcNsZ/zxAPvn8CuG45JXKnoBRU1M3g/Lo6kbYn
- 1n8h8CpKzvjvMH4AeAZZTqFswPsCeB/T9i37nRHOIFDBRpU06hI1MDVgMUgTGFMSxjSwZkL93dg
- 4+HX5gQJRa8Body0FBT3pcotcjE/No0/fjksoDG6Y7KPL6sxAu3Eiht1w7w==
-X-Google-Smtp-Source: AGHT+IHLWIdpfdSF4+/YKFKmQRzIe7Z96zS2mnPvk24O6eWsLSITslKvfVuqm9F2oL3t8z84lUCntw==
-X-Received: by 2002:a05:600c:6304:b0:456:2139:456a with SMTP id
- 5b1f17b1804b1-458b5f25142mr57264115e9.15.1754239628511; 
- Sun, 03 Aug 2025 09:47:08 -0700 (PDT)
+ bh=o+q9XJ9EUpQLHb9F+T4R4XSTEFHW1mJQXQTUZOCfYg0=;
+ b=odLOxuACzUgPnhNiTawzoaiwqnwQF/dVuJOK58/2NxwPs5S2z4ow+KIbMQZzvQ8qfE
+ 6vtniC2cYV/zTRJR60rUqNj5ilR8W/lbUTBIJKNboD2k/dPawaTG5QV/kjbJ2iG8fBaL
+ jRuIeXDNy22b6feAWbhc2VzqgLePRyYqN0PaWzU08K/NWplzFdwZcCyA7RLqvWsmRcPz
+ xzwIGTVkhbEJPlwxD8ELGT7Re8ImYl5ZBYK9ZRxH2Y8ZqrMDJrRgg9GmHeYuUNMa5g+k
+ NA51H7PotyUFnejyLPl44j1Y72LjCU4oehvujCVmW4mGA9/GbzcpGdy6+Hsjve+GaiIC
+ 7Vyw==
+X-Gm-Message-State: AOJu0YwBnDgOjoG5b19uPtMwhMO25mzGmlwdiW6PjyiPoJRnAVxJfZ/6
+ 4dkwg65AuN+iv6dUrL7VIcnMtTKp+J2xCZ7RrNx+2xBxehsQDQ7ZSdlu+9lR5g==
+X-Gm-Gg: ASbGncsPzFC2Jh5+oGFPdQs9DNXZydrVXc+vdXaOMoF9hPnsG8wND1xtpamDJt3bV+B
+ OoPqqcRrJWRwwMaH/Rd4thJpjL/A+/YUN0YZOVgczMyUdIOnmZqxFmKvXON3glCFplLarhPTjYf
+ SexJTq309LBQcNfky/n2Yab3dCpXXeanZQrRl2k350BNr5mobGYgl2x1NuNb+j7acWGTI3SZ+kK
+ GjGx1PNJvm0oeO+8T7o6Fuaq5eoUurr/RQSshZFMM1p6dpwjki0XZLaX8ejKAySsdgJnH8DnPBI
+ ylPGgdHC76e6Q4hlmGHBKBe6TZkcj5STMjv6MEq8cTKH3HUSBiFoxlnqzejwIR4BMYwrXWETUKf
+ kuM/y2bq/sjhJPo9Ns6RcveFfT0n3JI4iALmCzXsjEdvXphc=
+X-Google-Smtp-Source: AGHT+IEGmh75j+9uGn3J52ySW40JwEepbZe+5Z+NpduuKxMH87HxxEeycq5ABOCuxRZ+g7Hm48kIVA==
+X-Received: by 2002:a05:6000:2289:b0:3a5:52b2:fa65 with SMTP id
+ ffacd0b85a97d-3b8d946a541mr5339001f8f.5.1754240670944; 
+ Sun, 03 Aug 2025 10:04:30 -0700 (PDT)
 Received: from localhost.localdomain ([91.243.185.204])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4589edf5683sm139394295e9.7.2025.08.03.09.47.07
+ 5b1f17b1804b1-458b73868a4sm66097445e9.11.2025.08.03.10.04.30
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 03 Aug 2025 09:47:08 -0700 (PDT)
+ Sun, 03 Aug 2025 10:04:30 -0700 (PDT)
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 To: buildroot@buildroot.org
 Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Sun,  3 Aug 2025 18:47:01 +0200
-Message-Id: <20250803164701.225241-1-angelo.compagnucci@gmail.com>
+Date: Sun,  3 Aug 2025 19:04:27 +0200
+Message-Id: <20250803170427.273284-1-angelo.compagnucci@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1754239629; x=1754844429; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1754240671; x=1754845471; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=wg52h3ahmLqYoC+62mhVstyRaUHtoW/QiOke6fe35PU=;
- b=HgbMdhiQ2ojRrZsmhngVkJcw4nOQZ1ZM09JcyAEWfGztvusECbNEBiBHGjq3sE5x1M
- HB5zr/cuadh3tD285++57xYnWVbiLDQJ7R7G+g4/wcjz5lxFhuEqakjxW0Mo+oyNRFhr
- qDBM6iBIXobDXTyXyKEo2+P1djwV6DxJpo6jVT43EqJbOQY9Fp5aOWoVpdzslVsckENB
- G1LhtUlSXZintZn83kFO5CmKwChPpMRxfXwPUDzytasQ7/mPLTK2etcodhVLXo0oxwEC
- qOgeE35V4DLxxHP0+XtaBw6i4xIq6F2B/cuc9HzF3Psy2YC9d7OCA2VU2akLiG8STInI
- QnDA==
+ bh=o+q9XJ9EUpQLHb9F+T4R4XSTEFHW1mJQXQTUZOCfYg0=;
+ b=AL0CtFPtrITnqNbwkJ5ej3hnSQJObUt3V6eERmV1WvkFPQdcOskrKTNcSpLPrlGUDc
+ oZ5gsxM20ZiwXvRgKNxZLLyYnoRnDKaGbPhOqxtT8dbQ15Mhkuqo7yNMA0CMPsIHYJ1G
+ 1Aq6oC3cgfMhOoOZ5B5CB8mLMRCloEWOVz0EnkBZsx+oABdgVaw2aB1o7aR/SnR1PPUy
+ sZI4eGmC/4ZftiTdDWGEwJQ1yEufavOPU0TWV0i8chXYDkbFVDMECRAGm1Jz3+E61EZ/
+ sH7NtvK+AvOZIVz0etmycwBIG29ZCdATph4NfkWx4kKuFz3TBePldrpQmWcrZ9o9c5OL
+ vKig==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=HgbMdhiQ
-Subject: [Buildroot] [PATCH] package/sshguard: bump to version 2.5.1
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=AL0CtFPt
+Subject: [Buildroot] [PATCH] package/python-pillow: security bump to version
+ 11.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -113,38 +113,44 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Changelog:
-https://bitbucket.org/sshguard/sshguard/src/master/CHANGELOG.rst
+https://pillow.readthedocs.io/en/stable/releasenotes/11.3.0.html
+
+Fixes the following security issues:
+CVE 2025-48379
 
 Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 ---
- package/sshguard/sshguard.hash | 4 ++--
- package/sshguard/sshguard.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-pillow/python-pillow.hash | 4 ++--
+ package/python-pillow/python-pillow.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/sshguard/sshguard.hash b/package/sshguard/sshguard.hash
-index d018428d19..81d79e3034 100644
---- a/package/sshguard/sshguard.hash
-+++ b/package/sshguard/sshguard.hash
-@@ -1,4 +1,4 @@
--# sha256 from https://sourceforge.net/projects/sshguard/files/sshguard/2.4.3/sshguard-2.4.3.sha256
--sha256  64029deff6de90fdeefb1f497d414f0e4045076693a91da1a70eb7595e97efeb  sshguard-2.4.3.tar.gz
-+# sha256 from https://sourceforge.net/projects/sshguard/files/sshguard/2.5.1/sshguard-2.5.1.sha256
-+sha256  997a1e0ec2b2165b4757c42f8948162eb534183946af52efc406885d97cb89fc  sshguard-2.5.1.tar.gz
- # Locally calculated
- sha256  c3ae64f12153a1bc55bc234d09f40a08ab0e0149fffc972c0b7f02d5a12c1a5c  COPYING
-diff --git a/package/sshguard/sshguard.mk b/package/sshguard/sshguard.mk
-index 97cbbb2bdd..4aa152bbfc 100644
---- a/package/sshguard/sshguard.mk
-+++ b/package/sshguard/sshguard.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
+index abc5a4bf2e..d9077daaf7 100644
+--- a/package/python-pillow/python-pillow.hash
++++ b/package/python-pillow/python-pillow.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pillow/json
+-md5  ede5dce0bbbeff02099e2e297919a82a  pillow-11.1.0.tar.gz
+-sha256  368da70808b36d73b4b390a8ffac11069f8a5c85f29eff1f1b01bcf3ef5b2a20  pillow-11.1.0.tar.gz
++md5  9464f92bed3be9c68293cb399ec1ec1a  pillow-11.3.0.tar.gz
++sha256  3828ee7586cd0b2091b6209e5ad53e20d0649bbe87164a459d0676e035e8f523  pillow-11.3.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  17f240ae101143707e5e7303a5d800450d9ccc7475b463cedb555cefdb3c6ece  LICENSE
+diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
+index 1053bec5d6..80961b92a5 100644
+--- a/package/python-pillow/python-pillow.mk
++++ b/package/python-pillow/python-pillow.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--SSHGUARD_VERSION = 2.4.3
-+SSHGUARD_VERSION = 2.5.1
- SSHGUARD_SITE = https://sourceforge.net/projects/sshguard/files/sshguard/$(SSHGUARD_VERSION)
- SSHGUARD_LICENSE = ISC, Public Domain (fnv hash), BSD-3-Clause (SimCList)
- SSHGUARD_LICENSE_FILES = COPYING
+-PYTHON_PILLOW_VERSION = 11.1.0
+-PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/f3/af/c097e544e7bd278333db77933e535098c259609c4eb3b85381109602fb5b
++PYTHON_PILLOW_VERSION = 11.3.0
++PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/f3/0d/d0d6dea55cd152ce3d6767bb38a8fc10e33796ba4ba210cbab9354b6d238
+ PYTHON_PILLOW_SOURCE = pillow-$(PYTHON_PILLOW_VERSION).tar.gz
+ PYTHON_PILLOW_LICENSE = HPND
+ PYTHON_PILLOW_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
