@@ -4,72 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA885C87FCA
-	for <buildroot@archiver.kernel.org>; Sun,  3 Aug 2025 15:36:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 965EBC87FCB
+	for <buildroot@archiver.kernel.org>; Sun,  3 Aug 2025 15:48:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ABFB860A8A;
-	Sun,  3 Aug 2025 15:36:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5DEC560FDF;
+	Sun,  3 Aug 2025 15:48:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id R4EbvFN9xKqx; Sun,  3 Aug 2025 15:36:33 +0000 (UTC)
+ id rabtK5SYdk75; Sun,  3 Aug 2025 15:48:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 03B7560D9E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7843460D5E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 03B7560D9E;
-	Sun,  3 Aug 2025 15:36:33 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 09786233
- for <buildroot@buildroot.org>; Sun,  3 Aug 2025 15:36:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7843460D5E;
+	Sun,  3 Aug 2025 15:48:41 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6C095233
+ for <buildroot@buildroot.org>; Sun,  3 Aug 2025 15:48:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ED42A60D9E
- for <buildroot@buildroot.org>; Sun,  3 Aug 2025 15:36:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 520D540A82
+ for <buildroot@buildroot.org>; Sun,  3 Aug 2025 15:48:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0rPy6pXD0ly8 for <buildroot@buildroot.org>;
- Sun,  3 Aug 2025 15:36:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3252C60A8A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3252C60A8A
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3252C60A8A
- for <buildroot@buildroot.org>; Sun,  3 Aug 2025 15:36:29 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 092D96012D;
- Sun,  3 Aug 2025 17:36:25 +0200 (CEST)
-Received: from 2001:18c0:a22:bf00:5c2b:f296:f108:6612
- via 2001:18c0:a22:bf00:5c2b:f296:f108:6612 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 03 Aug 2025 17:36:25 +0200
-MIME-Version: 1.0
-Date: Sun, 03 Aug 2025 17:36:25 +0200
-To: Thomas Perale <thomas.perale@mind.be>
-Cc: buildroot@buildroot.org, Bernd Kuhls <bernd@kuhls.net>
-In-Reply-To: <20250803133846.2762327-1-thomas.perale@mind.be>
-References: <20250803133846.2762327-1-thomas.perale@mind.be>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <17d0d2d70f418f74902ed7f87a55d3bf@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1754235388;
- bh=R8GGqh1UYSQeaCwclzIKgulKfi3qmONPGOVF35PSEw0=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=QLg36skuP0t0D1hLwBZy+DabB79NZYEB+axT9EJhadDSprDcRRGJ/Ij5K4+hN4ePK
- VuLeRva6+1lP/CDUzhTB3DjnixgmoyMK4CD87XRhj1L6fUQBg8x5BJqOPEUciF21OJ
- PUMl5BTx3rqyI2e7UW2SjNHt8nrIMeH6i2TzcQ17YERVaJXEyE9Cru5V34ug1FBt2A
- E+HZRdnmuWO/ngXH4VGwcvU7UO+2cJhJvjU555pSm9D6Ix8rw8n8FmD03U6e8+e0ul
- Ltc/yIgApF61MJL5ypgd9wi8i8zUkZfBZsW2Mm9/tpIZEIdqH23HiYtu+GUDHyFaGB
- f3ObFZrfvcbog==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=QLg36sku
-Subject: Re: [Buildroot] [PATCH] package/sqlite: ignore CVE-2025-3277
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8dVcR6inFDEF for <buildroot@buildroot.org>;
+ Sun,  3 Aug 2025 15:48:39 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9398440486
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9398440486
+ for <buildroot@buildroot.org>; Sun,  3 Aug 2025 15:48:39 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 895CE7FB8C; Sun,  3 Aug 2025 15:48:39 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 3 Aug 2025 17:40:00 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 014174f00d358d38ddbb68d11a40a4d446b7e5cd
+X-Git-Newrev: e834d23cd792ee57ea80f37ce01d9d50756dba1d
+X-Patchwork-Hint: ignore
+Message-Id: <20250803154839.895CE7FB8C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ell: bump version to 0.79
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,25 +59,87 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 03/08/2025 15:38, Thomas Perale via buildroot wrote:
-> The CVE-2025-3277 as been marked as a duplicate of CVE-2025-29087 by 
-> the
-> debian security tracker [1].
-> 
-> The CVE-2025-29087 has already been fixed in commit [2] so this patch
-> adds CVE-2025-3277 to the ignored CVEs.
-> 
-> [1] https://security-tracker.debian.org/tracker/CVE-2025-3277
-> [2] 835b5659ea package/sqlite: add patch to fix CVE-2025-29087
-> 
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+commit: https://git.buildroot.net/buildroot/commit/?id=e834d23cd792ee57ea80f37ce01d9d50756dba1d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Changelog (see [1]):
+
+  ver 0.79:
+    Fix issue with D-Bus client and watch removal handling.
+    Fix issue with D-Bus client and service name handling.
+    Fix issue with D-Bus proxy and filter rule handling.
+
+  ver 0.78:
+    Fix issue with random ECC scalar generation.
+
+  ver 0.77:
+    Add support for precheck feature for unit tests.
+    Add support for license variable for pkg-config.
+
+  ver 0.76:
+    Fix issue with random scalar generation.
+
+  ver 0.75:
+    Add support for converting OID octets to strings.
+    Add support for NIST P-224 cuve usage with ECDH.
+    Add support for NIST P-521 cuve usage with ECDH.
+    Add support for SHA-3 series of hashing algorithms.
+
+  ver 0.74:
+    Add support for NIST P-192 curve usage with ECDH.
+    Add support for SHA-224 based checksums and HMACs.
+
+  ver 0.73:
+    Fix issue with parsing hwdb.bin child structures.
+
+  ver 0.72:
+    Add support for the Test Anything Protocol.
+
+  ver 0.71:
+    Fix issue with GCC 15 and -std=c23 build errors.
+
+  ver 0.70:
+    Add support for helper function for safe memcpy.
+
+[1] https://git.kernel.org/pub/scm/libs/ell/ell.git/tree/ChangeLog?h=0.79
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/ell/ell.hash | 2 +-
+ package/ell/ell.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/ell/ell.hash b/package/ell/ell.hash
+index 4f67cbae21..418d1a9a2a 100644
+--- a/package/ell/ell.hash
++++ b/package/ell/ell.hash
+@@ -1,5 +1,5 @@
+ # From https://mirrors.edge.kernel.org/pub/linux/libs/ell/sha256sums.asc
+-sha256  6cfc0888edc94de9f0623798609587b2cc11b92b892945f317e8d199afe7b12e  ell-0.69.tar.xz
++sha256  28dabdb1966fd2e47363c44e041de507e9420411b846947efa01b4cb0cda0d6b  ell-0.79.tar.xz
+ 
+ # License files
+ sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING
+diff --git a/package/ell/ell.mk b/package/ell/ell.mk
+index 6d4e8a5ae7..a0ae7a68c8 100644
+--- a/package/ell/ell.mk
++++ b/package/ell/ell.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ELL_VERSION = 0.69
++ELL_VERSION = 0.79
+ ELL_SOURCE = ell-$(ELL_VERSION).tar.xz
+ ELL_SITE = $(BR2_KERNEL_MIRROR)/linux/libs/ell
+ ELL_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
