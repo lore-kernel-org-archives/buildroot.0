@@ -4,71 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A974C87FCF
-	for <buildroot@archiver.kernel.org>; Mon,  4 Aug 2025 18:32:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E9EEC87FCB
+	for <buildroot@archiver.kernel.org>; Mon,  4 Aug 2025 18:46:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E8EBA8231E;
-	Mon,  4 Aug 2025 18:32:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2D08982325;
+	Mon,  4 Aug 2025 18:46:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0HMCfrsoHwh1; Mon,  4 Aug 2025 18:32:06 +0000 (UTC)
+ id uyNIgl1RmIEJ; Mon,  4 Aug 2025 18:46:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A15B82322
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4CE748231C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3A15B82322;
-	Mon,  4 Aug 2025 18:32:06 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id C3D22118
- for <buildroot@buildroot.org>; Mon,  4 Aug 2025 18:32:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4CE748231C;
+	Mon,  4 Aug 2025 18:46:32 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6CB5C118
+ for <buildroot@buildroot.org>; Mon,  4 Aug 2025 18:46:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A24E582322
- for <buildroot@buildroot.org>; Mon,  4 Aug 2025 18:32:04 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5A0986135E
+ for <buildroot@buildroot.org>; Mon,  4 Aug 2025 18:46:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rB6SJVYJkBFF for <buildroot@buildroot.org>;
- Mon,  4 Aug 2025 18:32:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4D7E78231C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4D7E78231C
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4D7E78231C
- for <buildroot@buildroot.org>; Mon,  4 Aug 2025 18:32:03 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 234467517; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Mon, 04 Aug 2025 18:31:57 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1uizyW-00BETS-2x;
- Mon, 04 Aug 2025 20:31:56 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Hans-Heinrich Hansen <hhansen@avt-nbg.de>
-Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
-References: <FR5P281MB50782986E33353F9AFF80C468723A@FR5P281MB5078.DEUP281.PROD.OUTLOOK.COM>
-Date: Mon, 04 Aug 2025 20:31:56 +0200
-In-Reply-To: <FR5P281MB50782986E33353F9AFF80C468723A@FR5P281MB5078.DEUP281.PROD.OUTLOOK.COM>
- (Hans-Heinrich Hansen's message of "Mon, 4 Aug 2025 11:37:52 +0000")
-Message-ID: <87y0rzkkf7.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cWvVb_zFHnUc for <buildroot@buildroot.org>;
+ Mon,  4 Aug 2025 18:46:30 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0F9BA61333
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F9BA61333
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0F9BA61333
+ for <buildroot@buildroot.org>; Mon,  4 Aug 2025 18:46:29 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p54a1bf8c.dip0.t-ipconnect.de [84.161.191.140])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 6C658A4C33FB
+ for <buildroot@buildroot.org>; Mon,  4 Aug 2025 20:46:26 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:50068)
+ by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
+ (envelope-from <bernd@kuhls.net>) id 1uj0CX-000000008UE-2Tqw
+ for buildroot@buildroot.org; Mon, 04 Aug 2025 18:46:26 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
+To: buildroot@buildroot.org
+Date: Mon,  4 Aug 2025 20:46:25 +0200
+Message-Id: <20250804184625.3337465-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=bWVol8eMUQxhfbPpKwKo1va+0xRrNzSLZxWfGIjqW8ak5GdrRI3LGmvkFPsZQ+q/Eq89DZSDohV5cCrN9ZxNKIx6od9h07iCIkZ/fPnmolVSIyWkdlKGhM4rndqCaRwg854p0VqOBDsDa9XOKVjFnzj8nLqy+3BaZJwpLB2HvWT+miIFBdJAEM9pV89H+JJMynkhtGvtt0tDaBq9i43f/sKb4Hj/1ffe7PeHBkCvfA/FYeM+R6oMIRW0mjRzYOqqgeT1baq4ls3qeK/cS79fLFfzrVFYo2kfB7jq77ruUiObdnQft9EVCS8HVfzltZYaNpSlNqXZv+8JAsIrGu08QQ==;
- s=purelymail3; d=purelymail.com; v=1;
- bh=HQVQtrpC2iqoTi/lcJPG+qkEEMJkt0V3yq35Waq48M0=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Spamd-Bar: ++++++
+X-Spam: Yes
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202506031021; t=1754333186;
+ bh=H5XpLF/l6kHiZ0Layon2QaPK0+QBtq0n+UXagsLsGjg=;
+ h=From:To:Subject:Date:From;
+ b=NqFRYrN51GfqdbCuuLgwR1IIZ/p/G4svlalw3kOXo+zQVa6wzLyLCuVp0XgqEHDqv
+ 9Fb5tzMw4lwKRffEuyemO4LXRv6+WhMJCATN4NEhuEIjEG4mLl7l+SjJYdrj0Ftnyr
+ RtcmhZ9r+dqoIa747UCJtOs8sGIqpqN8TQqVNktlKCVQG36ZRLKcFkLpkSv4VwMANI
+ lNCMYf4aWI0zSSOUNIEGZtNATr05zWBRDyRQH5ZLlTMjfQx44Hjr1vrWAvorvJfpLn
+ cz4j3oDJdJf6910jfhqIq/VACCuJd/7nGrfPrTpeE+cn1KhOd+PvvuV1fGiNqfaUJp
+ 8lwM1RBlq7GLA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail3 header.b=bWVol8eM
-Subject: Re: [Buildroot] Buildroot with Advantech EIO-IS200-DRIVER
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202506031021 header.b=NqFRYrN5
+Subject: [Buildroot] [PATCH 1/1] package/libdeflate: bump version to 1.24
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,17 +86,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Hans-Heinrich" == Hans-Heinrich Hansen <hhansen@avt-nbg.de> writes:
+Release notes:
+https://github.com/ebiggers/libdeflate/blob/v1.24/NEWS.md
 
- > Is someone working on Advantech EIO-IS200-DRIVER
- > (https://github.com/ADVANTECH-Corp/eio-is200-linux-kernel-driver) for
- > buildroot?
+Switch _SITE to tarball provided by upstream.
 
-Not that I am aware of. What specific issues are you running into
-(besides the general issue of a not-so-clear out-of-tree kernel module)?
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/libdeflate/libdeflate.hash | 2 +-
+ package/libdeflate/libdeflate.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
+diff --git a/package/libdeflate/libdeflate.hash b/package/libdeflate/libdeflate.hash
+index bb97c76c3d..231548feed 100644
+--- a/package/libdeflate/libdeflate.hash
++++ b/package/libdeflate/libdeflate.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  7f343c7bf2ba46e774d8a632bf073235e1fd27723ef0a12a90f8947b7fe851d6  libdeflate-1.22.tar.gz
++sha256  a0dda1c4b804742066db07b9510876edd09cc0ca06cdc32c5dfe1b2016a26463  libdeflate-1.24.tar.gz
+ sha256  4ad69099cb4374836fd27583d9991e2838cd86b6e4666ab26b2d32582c91e73a  COPYING
+diff --git a/package/libdeflate/libdeflate.mk b/package/libdeflate/libdeflate.mk
+index 823ff442fd..08c94f9250 100644
+--- a/package/libdeflate/libdeflate.mk
++++ b/package/libdeflate/libdeflate.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBDEFLATE_VERSION = 1.22
+-LIBDEFLATE_SITE = $(call github,ebiggers,libdeflate,v$(LIBDEFLATE_VERSION))
++LIBDEFLATE_VERSION = 1.24
++LIBDEFLATE_SITE = https://github.com/ebiggers/libdeflate/releases/download/v$(LIBDEFLATE_VERSION)
+ LIBDEFLATE_LICENSE = MIT
+ LIBDEFLATE_LICENSE_FILES = COPYING
+ LIBDEFLATE_INSTALL_STAGING = YES
 -- 
-Bye, Peter Korsgaard
+2.39.5
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
