@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D241EC87FCF
-	for <buildroot@archiver.kernel.org>; Mon,  4 Aug 2025 20:04:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6029C87FCF
+	for <buildroot@archiver.kernel.org>; Mon,  4 Aug 2025 20:04:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A18FC61391;
-	Mon,  4 Aug 2025 20:04:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 797F18237F;
+	Mon,  4 Aug 2025 20:04:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9B6C-VfsimqE; Mon,  4 Aug 2025 20:04:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pAUJUE6nY5-y; Mon,  4 Aug 2025 20:04:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C3D146138C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D9B682377
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C3D146138C;
-	Mon,  4 Aug 2025 20:04:14 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 53356233
- for <buildroot@buildroot.org>; Mon,  4 Aug 2025 20:04:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2D9B682377;
+	Mon,  4 Aug 2025 20:04:16 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6FC43233
+ for <buildroot@buildroot.org>; Mon,  4 Aug 2025 20:04:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3925F6138F
- for <buildroot@buildroot.org>; Mon,  4 Aug 2025 20:04:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 62727606F3
+ for <buildroot@buildroot.org>; Mon,  4 Aug 2025 20:04:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tlx1Ma-m3KyG for <buildroot@buildroot.org>;
+ id WvA8XXRusjXX for <buildroot@buildroot.org>;
  Mon,  4 Aug 2025 20:04:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7EE4D606F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8556B60AD4
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7EE4D606F3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8556B60AD4
  for <buildroot@buildroot.org>; Mon,  4 Aug 2025 20:04:12 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6C32F86E84; Mon,  4 Aug 2025 20:04:12 +0000 (UTC)
+ id 75BEF86E85; Mon,  4 Aug 2025 20:04:12 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 4 Aug 2025 22:01:54 +0200
+Date: Mon, 4 Aug 2025 22:02:10 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a2f53620e6300046723abc6b8a3e5b76d206b3f4
-X-Git-Newrev: 178cc76deb67730de6d4d669709da82daa0dff9a
+X-Git-Oldrev: 178cc76deb67730de6d4d669709da82daa0dff9a
+X-Git-Newrev: 6b607a774403f7cbdfd968a80ec1c5bcf7eff524
 X-Patchwork-Hint: ignore
-Message-Id: <20250804200412.6C32F86E84@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/meson: bump version to 1.8.3
+Message-Id: <20250804200412.75BEF86E85@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libinput: bump version to 1.29.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,40 +64,79 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=178cc76deb67730de6d4d669709da82daa0dff9a
+commit: https://git.buildroot.net/buildroot/commit/?id=6b607a774403f7cbdfd968a80ec1c5bcf7eff524
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Release notes:
+https://lists.freedesktop.org/archives/wayland-devel/2025-March/044026.html
+https://lists.freedesktop.org/archives/wayland-devel/2025-April/044102.html
+https://lore.freedesktop.org/wayland-devel/20250731092534.GA4100432@quokka/T/
+
+Upstream changed mtdev into an optional dependency:
+https://gitlab.freedesktop.org/libinput/libinput/-/commit/27f4b0ae744a2b2655755188f2224dd5f8c4bdeb
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/meson/meson.hash | 4 ++--
- package/meson/meson.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libinput/Config.in     |  1 -
+ package/libinput/libinput.hash |  2 +-
+ package/libinput/libinput.mk   | 11 +++++++++--
+ 3 files changed, 10 insertions(+), 4 deletions(-)
 
-diff --git a/package/meson/meson.hash b/package/meson/meson.hash
-index 40340fb932..c83daae6c9 100644
---- a/package/meson/meson.hash
-+++ b/package/meson/meson.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://github.com/mesonbuild/meson/releases/download/1.8.2/meson-1.8.2.tar.gz.asc
--sha256  c105816d8158c76b72adcb9ff60297719096da7d07f6b1f000fd8c013cd387af  meson-1.8.2.tar.gz
-+# https://github.com/mesonbuild/meson/releases/download/1.8.3/meson-1.8.3.tar.gz.asc
-+sha256  f118aa910fc0a137cc2dd0122232dbf82153d9a12fb5b0f5bb64896f6a157abf  meson-1.8.3.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
-diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-index e23c851d2e..0c460eca6f 100644
---- a/package/meson/meson.mk
-+++ b/package/meson/meson.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/libinput/Config.in b/package/libinput/Config.in
+index 1a8fcc7ed4..f5253dfec2 100644
+--- a/package/libinput/Config.in
++++ b/package/libinput/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_LIBINPUT
+ 	bool "libinput"
+ 	depends on BR2_PACKAGE_HAS_UDEV
+ 	select BR2_PACKAGE_LIBEVDEV
+-	select BR2_PACKAGE_MTDEV
+ 	help
+ 	  libinput is a library to handle input devices in Wayland
+ 	  compositors and to provide a generic X.Org input driver.
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index f6ec570588..cd60e70c40 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  8e823cc9f44c51b63ae90af0b73676ed82c0402cc1cbd4a59ac91b7bb6cad716  libinput-1.27.0.tar.bz2
++sha256  7160c16c409c9ea4f7da9d91923ae0a92df7f3453a292bf684bed071acd7b4ff  libinput-1.29.0.tar.bz2
+ 
+ # License files
+ sha256  80de50b2022a840db044c56db804ca3565600a692c0714babface587acc6d1b0  COPYING
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index ee15b781e6..93d8a51aca 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--MESON_VERSION = 1.8.2
-+MESON_VERSION = 1.8.3
- MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
- MESON_LICENSE = Apache-2.0
- MESON_LICENSE_FILES = COPYING
+-LIBINPUT_VERSION = 1.27.0
++LIBINPUT_VERSION = 1.29.0
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.bz2
+ LIBINPUT_SITE = https://gitlab.freedesktop.org/libinput/libinput/-/archive/$(LIBINPUT_VERSION)
+-LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
++LIBINPUT_DEPENDENCIES = host-pkgconf libevdev udev
+ LIBINPUT_INSTALL_STAGING = YES
+ LIBINPUT_LICENSE = MIT
+ LIBINPUT_LICENSE_FILES = COPYING
+@@ -31,6 +31,13 @@ else
+ LIBINPUT_CONF_OPTS += -Ddebug-gui=false
+ endif
+ 
++ifeq ($(BR2_PACKAGE_MTDEV),y)
++LIBINPUT_CONF_OPTS += -Dmtdev=true
++LIBINPUT_DEPENDENCIES += mtdev
++else
++LIBINPUT_CONF_OPTS += -Dmtdev=false
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBINPUT_PYTHON_TOOLS),)
+ LIBINPUT_PYTHON_TOOLS = libinput-analyze-per-slot-delta \
+ 	libinput-analyze-recording \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
