@@ -1,53 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C98DEC87FCF
-	for <buildroot@archiver.kernel.org>; Mon,  4 Aug 2025 19:41:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2012C87FCB
+	for <buildroot@archiver.kernel.org>; Mon,  4 Aug 2025 20:02:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 97EF2613B0;
-	Mon,  4 Aug 2025 19:41:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 85F6E8236B;
+	Mon,  4 Aug 2025 20:02:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id puavnwB0w3rp; Mon,  4 Aug 2025 19:41:02 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aHVPz_DnkCHx; Mon,  4 Aug 2025 20:02:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6506561374
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B02C8236A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6506561374;
-	Mon,  4 Aug 2025 19:41:01 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id E1DF1118
- for <buildroot@buildroot.org>; Mon,  4 Aug 2025 19:40:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1B02C8236A;
+	Mon,  4 Aug 2025 20:02:28 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8BB99233
+ for <buildroot@buildroot.org>; Mon,  4 Aug 2025 20:02:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BA17140FD7
- for <buildroot@buildroot.org>; Mon,  4 Aug 2025 19:40:54 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7220240D57
+ for <buildroot@buildroot.org>; Mon,  4 Aug 2025 20:02:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wavAjFsRbb89 for <buildroot@buildroot.org>;
- Mon,  4 Aug 2025 19:40:52 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6VnFGnY9XJJZ for <buildroot@buildroot.org>;
+ Mon,  4 Aug 2025 20:02:26 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8509540A25
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8509540A25
- for <buildroot@buildroot.org>; Mon,  4 Aug 2025 19:40:52 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7290986E7D; Mon,  4 Aug 2025 19:40:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org CF88840D4A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CF88840D4A
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id CF88840D4A
+ for <buildroot@buildroot.org>; Mon,  4 Aug 2025 20:02:25 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1763744660; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Mon, 04 Aug 2025 20:02:21 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1uj1O0-00BKQP-0t;
+ Mon, 04 Aug 2025 22:02:20 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 4 Aug 2025 21:33:28 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e6e930be67b7c4b760caebc2b44631933216db0c
-X-Git-Newrev: d149e6003374f99bc27d51ee82a0eb386e3c0043
-X-Patchwork-Hint: ignore
-Message-Id: <20250804194052.7290986E7D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pillow: security bump to
- version 11.3.0
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org,  Eric Le Bihan <eric.le.bihan.dev@free.fr>
+References: <20250804185002.3337860-1-bernd@kuhls.net>
+Date: Mon, 04 Aug 2025 22:02:20 +0200
+In-Reply-To: <20250804185002.3337860-1-bernd@kuhls.net> (Bernd Kuhls's message
+ of "Mon, 4 Aug 2025 20:50:02 +0200")
+Message-ID: <878qjylusz.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=DuYd/fg0jGi0RrXU9Nh2p3AgrENxp47ZxjvAxejCsnieB0EA5FiV9xHSu+hLHV2Bndob9AwRFfEQiZjDs8DeB0isWkYd/rO3ffkkD5YRj6ubGviCv6VbOk/1twvV4gBTfHWv91WypMal4GKJRVTIhtkQsvRAFh3Q/ZPwYdBNPbu8CGsnpsmy30BwFg/p8KTrCb8vQmjfj2FO26ZSeGiA54EaX/JVL5AHOmZzSDBYsfRaxrIl+xEtyfxfc3tbDHFcXS7sQtIMXHgw1FD5amglKInKFwMbowensW1eHvpt0E7vjhdaQLoPp7jHAXsWZl79ZkTFT88RnNTBo0Oi4XdK6g==;
+ s=purelymail3; d=purelymail.com; v=1;
+ bh=mvbMtCqNHwxxusACPm50zm2Y1vhN+6n3E4d3RH6t1L0=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail3 header.b=DuYd/fg0
+Subject: Re: [Buildroot] [PATCH 1/1] package/meson: bump version to 1.8.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,55 +80,19 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d149e6003374f99bc27d51ee82a0eb386e3c0043
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
 
-Changelog:
-https://pillow.readthedocs.io/en/stable/releasenotes/11.3.0.html
+ > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Fixes the following security issues:
-CVE 2025-48379
+Committed, thanks.
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-pillow/python-pillow.hash | 4 ++--
- package/python-pillow/python-pillow.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
-index abc5a4bf2e..d9077daaf7 100644
---- a/package/python-pillow/python-pillow.hash
-+++ b/package/python-pillow/python-pillow.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pillow/json
--md5  ede5dce0bbbeff02099e2e297919a82a  pillow-11.1.0.tar.gz
--sha256  368da70808b36d73b4b390a8ffac11069f8a5c85f29eff1f1b01bcf3ef5b2a20  pillow-11.1.0.tar.gz
-+md5  9464f92bed3be9c68293cb399ec1ec1a  pillow-11.3.0.tar.gz
-+sha256  3828ee7586cd0b2091b6209e5ad53e20d0649bbe87164a459d0676e035e8f523  pillow-11.3.0.tar.gz
- # Locally computed sha256 checksums
- sha256  17f240ae101143707e5e7303a5d800450d9ccc7475b463cedb555cefdb3c6ece  LICENSE
-diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
-index 1053bec5d6..80961b92a5 100644
---- a/package/python-pillow/python-pillow.mk
-+++ b/package/python-pillow/python-pillow.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--PYTHON_PILLOW_VERSION = 11.1.0
--PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/f3/af/c097e544e7bd278333db77933e535098c259609c4eb3b85381109602fb5b
-+PYTHON_PILLOW_VERSION = 11.3.0
-+PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/f3/0d/d0d6dea55cd152ce3d6767bb38a8fc10e33796ba4ba210cbab9354b6d238
- PYTHON_PILLOW_SOURCE = pillow-$(PYTHON_PILLOW_VERSION).tar.gz
- PYTHON_PILLOW_LICENSE = HPND
- PYTHON_PILLOW_LICENSE_FILES = LICENSE
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
