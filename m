@@ -4,72 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C0A3C87FD1
-	for <buildroot@archiver.kernel.org>; Tue,  5 Aug 2025 19:07:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F27D7C87FD1
+	for <buildroot@archiver.kernel.org>; Tue,  5 Aug 2025 19:42:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E0D23840B2;
-	Tue,  5 Aug 2025 19:07:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A58C5840E1;
+	Tue,  5 Aug 2025 19:42:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wpLh-xvvO2xW; Tue,  5 Aug 2025 19:07:36 +0000 (UTC)
+ id zYHhpghaGzB1; Tue,  5 Aug 2025 19:42:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E6E4E840AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B687E840F6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E6E4E840AB;
-	Tue,  5 Aug 2025 19:07:35 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1D590113C
- for <buildroot@buildroot.org>; Tue,  5 Aug 2025 19:07:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B687E840F6;
+	Tue,  5 Aug 2025 19:42:57 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 86618113C
+ for <buildroot@buildroot.org>; Tue,  5 Aug 2025 19:42:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0EF5041C3D
- for <buildroot@buildroot.org>; Tue,  5 Aug 2025 19:07:34 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6CA7E41C7A
+ for <buildroot@buildroot.org>; Tue,  5 Aug 2025 19:42:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NII7MSqLVa9S for <buildroot@buildroot.org>;
- Tue,  5 Aug 2025 19:07:33 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::235;
- helo=relay15.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org BAA7C40830
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BAA7C40830
-Received: from relay15.mail.gandi.net (relay15.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::235])
- by smtp4.osuosl.org (Postfix) with ESMTPS id BAA7C40830
- for <buildroot@buildroot.org>; Tue,  5 Aug 2025 19:07:32 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPA id 677A4442FF;
- Tue,  5 Aug 2025 19:07:29 +0000 (UTC)
+ id EgYtHEvMmcGW for <buildroot@buildroot.org>;
+ Tue,  5 Aug 2025 19:42:55 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4FC1141C8C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4FC1141C8C
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4FC1141C8C
+ for <buildroot@buildroot.org>; Tue,  5 Aug 2025 19:42:54 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ 5b1f17b1804b1-458baf449cbso33513625e9.0
+ for <buildroot@buildroot.org>; Tue, 05 Aug 2025 12:42:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1754422972; x=1755027772;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=TFao5n11hvyVqxsWLdxGJgFoW9PQcfrnKBJT6hO4S/4=;
+ b=n9ddvj210NQbry4VFA2M1hiFTzCMiscKK53UhRtLfWQtRCD7e7fP/MI8av2uI6Hqjj
+ X/wvoDJfoYQNVOvmPEeWp0Mc0KwUpVu0HlE+FtpB/cy/RsS/DFnY04Z6qc8V03FtTJaU
+ SsemlTO7kCfRjw2HVRXYNcefg1SgT6ugeaZPWvJWeCaMp16ZlZPnBZSkuDOvZUvuBInz
+ Xyb03WR+7IkRa/aMLT/GshF9L12dzVJta96c4qPpb9KycWGij83Q6YuusCaxW04hoYYc
+ STpO1jlv4CecEXDGndynwIHzzOLIRC+WKS92nFONbsAQFpagysN4aYgf7e+Z07sbEg0Z
+ tbbQ==
+X-Gm-Message-State: AOJu0YxET5oyfIv67ALBWIGPDcb9wajgNPmTCh37Dbs2Xfbq9uHuLlmU
+ rLqFCObuBSCgb8WbtFh0RKsHXIdSAtbe1KY2awHX0StFkq9x40a+0lZySB4VDzyxHgEanepHUfv
+ WSJBh
+X-Gm-Gg: ASbGncsI+JtdDIgeU6531W0ssdzmr2EVPacFf8o3/+x3B9ij+TMRl+3mzOLQCdH1bVf
+ kwYOzHnGwAUwCWrZL45fTcsjgpqckq7w5itq2BHZ8yC4o5Mjb3fCytGXqXyu1FsYj6p7xcT0mLh
+ XozglCLmJrxiNRNxWnRrskzaHOYs9PtvAiQkHrh8xLpLpq7bzbc32329YkNIpsI0HdXYSN/M8G5
+ Tc4MSbOAsPHxKBGoJVOTjw6AE4/ksFgTjq0dvn1MreFUxmKIs6PQ6qAiJmmYmWLVcb2dAkD9ahA
+ iI/lQa/D5YzQcgN8hFo27PnGYjso5KSdDhbzE4eF7zpJFA4CYQ4wscpEfnKjz8NGjt+loQEWKeU
+ zn0iQA5u9MmxC+w==
+X-Google-Smtp-Source: AGHT+IEQAarAUaOvfCNYQJzBxuh5jqbY9dXjSnDOSmau+r1yXq0dyWGLlmH7dNaXsPsI4TxLNX0fig==
+X-Received: by 2002:a05:600c:358e:b0:459:d4b5:623a with SMTP id
+ 5b1f17b1804b1-459e708e60emr1312995e9.9.1754422972369; 
+ Tue, 05 Aug 2025 12:42:52 -0700 (PDT)
+Received: from arch ([79.132.233.79]) by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-3b79c48105csm20389074f8f.64.2025.08.05.12.42.51
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 05 Aug 2025 12:42:52 -0700 (PDT)
 To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Romain Naour <romain.naour@gmail.com>
-Date: Tue,  5 Aug 2025 21:07:26 +0200
-Message-ID: <20250805190727.1696620-1-thomas.petazzoni@bootlin.com>
+Cc: Stefan Hager <stefan.hager@ginzinger.com>
+Date: Tue,  5 Aug 2025 21:42:51 +0200
+Message-ID: <20250805194251.3397164-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.50.1
 MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduudehleejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepvdduleejleetieefffethfevheekjeevffegleejveeggeeffeevueelleegvdfhnecuffhomhgrihhnpehgihhtlhgrsgdrtghomhenucfkphepvdgrtddumegtsgdukeemkeeigegumedvuddttdemrgdttdhfmeehlegsfeemgehfvdemieefuggsnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgdukeemkeeigegumedvuddttdemrgdttdhfmeehlegsfeemgehfvdemieefuggspdhhvghlohepfihinhgushhurhhfrdhhohhmvgdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepfedprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhrtghpt
- hhtoheprhhomhgrihhnrdhnrghouhhrsehgmhgrihhlrdgtohhm
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1754420849;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=SatV2uiFhwDNWbNCfBUDJ4m2WztZRvkaz8KfOQzbF64=;
- b=RW/lzE1CO+JZKB/DDvhRM0gagPK5G6yZO/s4d9JNjOjHdwZYGPesSwsZdRRt3RAOn62r6G
- laEIOx1Qpt9xTe8UE3LSirnKBmZnUym4t1/5fAcaOcxohPjyEOOTHZChbxqaDiXuldKDxG
- 8BjSNbIQU9AmxIJKCUkuO+NKiTLtD18uPPKIuAL0b4otN6ElY8SnBnAwEH8biExLGUt5g2
- uX0OpiMeBz91DQmIiRVTPcbC9jtUTmeYJWhITC+5dGjCcU0kcVDFcJGyFIwuhoQ2qHc5rV
- 0pdtssEpeS+Y4W2uKwVnnNFu/hDwE17tKHQy2cX0rXimztZd6Mz028qt+tpVhw==
+ d=mind.be; s=google; t=1754422972; x=1755027772; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=TFao5n11hvyVqxsWLdxGJgFoW9PQcfrnKBJT6hO4S/4=;
+ b=PNgX1ho/anijS/NKFCUZknFA/0N7DhJOlX9DWFo6LwGS+T+n4V4ruywTcxM9JWFutk
+ 4+qZO9HYIOE5SVqSI7ctVv+C/yupwzgUf/tlYXol/IPnTUpitFOrZEKcG6NK3F8Nm9/J
+ eiXn1HFUOD7tLRtI+VVVxPCiDoHrNnzx0BsMp7PWjEkz8NxL92VFR1ncu/vSSt/uEFnn
+ tn809rboBay6Z+i9c4ecsKwQ/kh28Ixx/bqPu5C0/7BAMIqNl4i8yGl3s168KdYnnD8h
+ dwnz8FTcvRVTLjWV6bcGbiCYoI2wvn5Q6wdGoIrPbnKxqC3enbZOy8gbpfEj8Q826pOZ
+ WbgQ==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=RW/lzE1C
-Subject: [Buildroot] [PATCH] configs/qemu_sh4*: switch back to disk emulation
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=PNgX1ho/
+Subject: [Buildroot] [PATCH] package/pthreadpool: fix thread dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,123 +106,86 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Thomas Perale via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Perale <thomas.perale@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Back in commit
-44a6b7866c95ca5459a53a50eab5ab1d38b6b8e1 ("configs/qemu_sh4*: switch
-to initramfs"), the Qemu SuperH defconfigs were switched to initramfs
-due to a bug in the Qemu disk emulation.
+On autobuilder config with BR2_TOOLCHAIN_HAS_THREADS not set the
+following error happens when building the pthreadpool package:
 
-However, the initramfs solution has an issue: if the initramfs is
-slightly too large (like just 6 MB!), the system no longer boots.
+```
+-- Looking for pthread_create in pthreads
+-- Looking for pthread_create in pthreads - not found
+-- Looking for pthread_create in pthread
+-- Looking for pthread_create in pthread - not found
+-- Check if compiler accepts -pthread
+-- Check if compiler accepts -pthread - no
+CMake Error at /home/buildroot/instance-0/output-1/host/share/cmake-3.31/Modules/FindPackageHandleStandardArgs.cmake:233 (message):
+  Could NOT find Threads (missing: Threads_FOUND)
+Call Stack (most recent call first):
+  /home/buildroot/instance-0/output-1/host/share/cmake-3.31/Modules/FindPackageHandleStandardArgs.cmake:603 (_FPHSA_FAILURE_MESSAGE)
+  /home/buildroot/instance-0/output-1/host/share/cmake-3.31/Modules/FindThreads.cmake:226 (FIND_PACKAGE_HANDLE_STANDARD_ARGS)
+  CMakeLists.txt:143 (FIND_PACKAGE)
 
-Since the disk emulation problem has apparently been resolved in Qemu
-10 (according to testing), let's switch back to this.
+-- Configuring incomplete, errors occurred!
+```
 
-In addition to essentially reverting
-44a6b7866c95ca5459a53a50eab5ab1d38b6b8e1, we also need to adjust the
-kernel configuration so that the kernel takes its command line for the
-bootloader (in our case from the Qemu -append option). Otherwise an
-hardcoded command line is used, which doesn't mount /dev/sda as the
-root filesystem.
+This can be reproduced with:
 
-This update has been tested on Gitlab CI:
+```
+cat >.config <<EOF
+BR2_armeb=y
+BR2_TOOLCHAIN_BUILDROOT_UCLIBC=y
+BR2_PTHREADS_NONE=y
+BR2_PACKAGE_PTHREADPOOL=y
+EOF
+make olddefconfig
+make pthreadpool
+```
 
-  https://gitlab.com/tpetazzoni/buildroot/-/pipelines/1968267919
+Since the introduction of this package in [1], the dependency was not
+included. Since this package was part of the tensorflow-lite
+dependencies that required thread it was not an issue.
 
-Thanks to Romain Naour for pointing to the initramfs size as being the
-issue.
+This patch adds BR2_TOOLCHAIN_HAS_THREADS in the dependency to avoid
+errors when built as a standalone package.
 
-Cc: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[1] f2486a6cf9 package/pthreadpool: new package
+
+Fixes: https://autobuild.buildroot.org/results/35a/35aa100d72c6875350ad10c57f028f04052cbf79
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- board/qemu/sh4-r2d/linux.config   | 1 +
- board/qemu/sh4-r2d/readme.txt     | 2 +-
- board/qemu/sh4eb-r2d/linux.config | 1 +
- board/qemu/sh4eb-r2d/readme.txt   | 2 +-
- configs/qemu_sh4_r2d_defconfig    | 2 +-
- configs/qemu_sh4eb_r2d_defconfig  | 2 +-
- 6 files changed, 6 insertions(+), 4 deletions(-)
+ package/pthreadpool/Config.in | 1 +
+ package/xnnpack/Config.in     | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/board/qemu/sh4-r2d/linux.config b/board/qemu/sh4-r2d/linux.config
-index a3d6544549..dd4bf5204f 100644
---- a/board/qemu/sh4-r2d/linux.config
-+++ b/board/qemu/sh4-r2d/linux.config
-@@ -5,6 +5,7 @@ CONFIG_MEMORY_START=0x0c000000
- CONFIG_FLATMEM_MANUAL=y
- CONFIG_SH_RTS7751R2D=y
- CONFIG_RTS7751R2D_PLUS=y
-+CONFIG_CMDLINE_FROM_BOOTLOADER=y
- CONFIG_HEARTBEAT=y
- CONFIG_PCI=y
- CONFIG_NET=y
-diff --git a/board/qemu/sh4-r2d/readme.txt b/board/qemu/sh4-r2d/readme.txt
-index 24c3676d8a..b0799e47a8 100644
---- a/board/qemu/sh4-r2d/readme.txt
-+++ b/board/qemu/sh4-r2d/readme.txt
-@@ -1,6 +1,6 @@
- Run the emulation with:
- 
--  qemu-system-sh4 -M r2d -kernel output/images/zImage -append "console=ttySC1,115200 noiotrap" -serial null -serial stdio -net nic,model=rtl8139 -net user # qemu_sh4_r2d_defconfig
-+  qemu-system-sh4 -M r2d -kernel output/images/zImage -drive file=output/images/rootfs.ext2,if=ide,format=raw -append "rootwait root=/dev/sda console=ttySC1,115200 noiotrap" -serial null -serial stdio -net nic,model=rtl8139 -net user # qemu_sh4_r2d_defconfig
- 
- The login prompt will appear in the terminal that started Qemu.
- The graphical window is the framebuffer.
-diff --git a/board/qemu/sh4eb-r2d/linux.config b/board/qemu/sh4eb-r2d/linux.config
-index 6ead626c41..5f94bee77d 100644
---- a/board/qemu/sh4eb-r2d/linux.config
-+++ b/board/qemu/sh4eb-r2d/linux.config
-@@ -6,6 +6,7 @@ CONFIG_FLATMEM_MANUAL=y
- CONFIG_CPU_BIG_ENDIAN=y
- CONFIG_SH_RTS7751R2D=y
- CONFIG_RTS7751R2D_PLUS=y
-+CONFIG_CMDLINE_FROM_BOOTLOADER=y
- CONFIG_HEARTBEAT=y
- CONFIG_PCI=y
- CONFIG_NET=y
-diff --git a/board/qemu/sh4eb-r2d/readme.txt b/board/qemu/sh4eb-r2d/readme.txt
-index 577c54cd9d..9f3dd8b20b 100644
---- a/board/qemu/sh4eb-r2d/readme.txt
-+++ b/board/qemu/sh4eb-r2d/readme.txt
-@@ -1,6 +1,6 @@
- Run the emulation with:
- 
--  qemu-system-sh4eb -M r2d -kernel output/images/zImage -append "console=ttySC1,115200 noiotrap" -serial null -serial stdio -net nic,model=rtl8139 -net user # qemu_sh4eb_r2d_defconfig
-+  qemu-system-sh4eb -M r2d -kernel output/images/zImage -drive file=output/images/rootfs.ext2,if=ide,format=raw -append "rootwait root=/dev/sda console=ttySC1,115200 noiotrap" -serial null -serial stdio -net nic,model=rtl8139 -net user # qemu_sh4eb_r2d_defconfig
- 
- The login prompt will appear in the terminal that started Qemu.
- The graphical window is the framebuffer.
-diff --git a/configs/qemu_sh4_r2d_defconfig b/configs/qemu_sh4_r2d_defconfig
-index 63b9fa1b29..628ca05543 100644
---- a/configs/qemu_sh4_r2d_defconfig
-+++ b/configs/qemu_sh4_r2d_defconfig
-@@ -12,7 +12,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4-r2d/linux.config"
- BR2_LINUX_KERNEL_ZIMAGE=y
--BR2_TARGET_ROOTFS_INITRAMFS=y
-+BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_PACKAGE_HOST_QEMU=y
- BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
-diff --git a/configs/qemu_sh4eb_r2d_defconfig b/configs/qemu_sh4eb_r2d_defconfig
-index 97cbd6bd8a..4fd07775ed 100644
---- a/configs/qemu_sh4eb_r2d_defconfig
-+++ b/configs/qemu_sh4eb_r2d_defconfig
-@@ -12,7 +12,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4eb-r2d/linux.config"
- BR2_LINUX_KERNEL_ZIMAGE=y
--BR2_TARGET_ROOTFS_INITRAMFS=y
-+BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_PACKAGE_HOST_QEMU=y
- BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
+diff --git a/package/pthreadpool/Config.in b/package/pthreadpool/Config.in
+index 194ae33f85..3288b56dee 100644
+--- a/package/pthreadpool/Config.in
++++ b/package/pthreadpool/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PTHREADPOOL
+ 	bool "pthreadpool"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_FXDIV
+ 	help
+ 	  Pthreadpool is a portable and efficient thread pool
+diff --git a/package/xnnpack/Config.in b/package/xnnpack/Config.in
+index e4b92f61e8..794c5c47d2 100644
+--- a/package/xnnpack/Config.in
++++ b/package/xnnpack/Config.in
+@@ -9,7 +9,7 @@ config BR2_PACKAGE_XNNPACK
+ 	depends on BR2_PACKAGE_XNNPACK_ARCH_SUPPORTS
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # cpuinfo
++	depends on BR2_TOOLCHAIN_HAS_THREADS # cpuinfo, pthreadpool
+ 	select BR2_PACKAGE_CPUINFO
+ 	select BR2_PACKAGE_FP16
+ 	select BR2_PACKAGE_FXDIV
 -- 
 2.50.1
 
