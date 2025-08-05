@@ -4,128 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08EDAC87FDA
-	for <buildroot@archiver.kernel.org>; Tue,  5 Aug 2025 17:16:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C0A3C87FD1
+	for <buildroot@archiver.kernel.org>; Tue,  5 Aug 2025 19:07:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A63FF83FE1;
-	Tue,  5 Aug 2025 17:16:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E0D23840B2;
+	Tue,  5 Aug 2025 19:07:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MX5EHELbOL7V; Tue,  5 Aug 2025 17:16:15 +0000 (UTC)
+ id wpLh-xvvO2xW; Tue,  5 Aug 2025 19:07:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B260584014
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E6E4E840AB
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B260584014;
-	Tue,  5 Aug 2025 17:16:14 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id A36CA233
- for <buildroot@buildroot.org>; Tue,  5 Aug 2025 17:16:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E6E4E840AB;
+	Tue,  5 Aug 2025 19:07:35 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1D590113C
+ for <buildroot@buildroot.org>; Tue,  5 Aug 2025 19:07:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 897C283FED
- for <buildroot@buildroot.org>; Tue,  5 Aug 2025 17:16:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0EF5041C3D
+ for <buildroot@buildroot.org>; Tue,  5 Aug 2025 19:07:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id niSc8iN3owzQ for <buildroot@buildroot.org>;
- Tue,  5 Aug 2025 17:16:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.20;
- helo=mout.gmx.net; envelope-from=ps.report@gmx.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7BACD83FEB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7BACD83FEB
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7BACD83FEB
- for <buildroot@buildroot.org>; Tue,  5 Aug 2025 17:16:11 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from pc-1.fritz.box ([82.135.81.178]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MowGU-1uHMyl0dbi-00derh; Tue, 05
- Aug 2025 19:16:09 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NII7MSqLVa9S for <buildroot@buildroot.org>;
+ Tue,  5 Aug 2025 19:07:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::235;
+ helo=relay15.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org BAA7C40830
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BAA7C40830
+Received: from relay15.mail.gandi.net (relay15.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::235])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BAA7C40830
+ for <buildroot@buildroot.org>; Tue,  5 Aug 2025 19:07:32 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id 677A4442FF;
+ Tue,  5 Aug 2025 19:07:29 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Fiona Klute <fiona.klute@gmx.de>, Joachim Wiberg <troglobit@gmail.com>,
- Peter Seiderer <ps.report@gmx.net>
-Date: Tue,  5 Aug 2025 19:16:03 +0200
-Message-ID: <20250805171603.1296472-3-ps.report@gmx.net>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Romain Naour <romain.naour@gmail.com>
+Date: Tue,  5 Aug 2025 21:07:26 +0200
+Message-ID: <20250805190727.1696620-1-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250805171603.1296472-1-ps.report@gmx.net>
-References: <20250805171603.1296472-1-ps.report@gmx.net>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:Em5BKQ+AXKuUeRHlVLBb6LCCS6MHgDno1IDW6aU0m6ZGQi+wBMh
- m8qArkimYIHp7FK8E/NUNeOl/wBTHCp7AJEW6PCNkxwesoxdc5xwPnbmdWRxI0wXPowdNNm
- 2SVS3kXWYcU7+vodt+VsiCtY5hG2JyRtzs9Kqmr8MGa5v/3X5F90vONE2HsyjOLXMdn8eBY
- B2PKkPih6jV1vCSpUGZrw==
-UI-OutboundReport: notjunk:1;M01:P0:mZrMD+P/TZY=;41QvbPmk8AqgTKAspg1JiYKdNj4
- 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
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduudehleejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepvdduleejleetieefffethfevheekjeevffegleejveeggeeffeevueelleegvdfhnecuffhomhgrihhnpehgihhtlhgrsgdrtghomhenucfkphepvdgrtddumegtsgdukeemkeeigegumedvuddttdemrgdttdhfmeehlegsfeemgehfvdemieefuggsnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgdukeemkeeigegumedvuddttdemrgdttdhfmeehlegsfeemgehfvdemieefuggspdhhvghlohepfihinhgushhurhhfrdhhohhmvgdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepfedprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhrtghpt
+ hhtoheprhhomhgrihhnrdhnrghouhhrsehgmhgrihhlrdgtohhm
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmx.net; 
- s=s31663417; t=1754414169; x=1755018969; i=ps.report@gmx.net;
- bh=BjcEA5nGjZyXSFErTjCTXeElw5FYmZcmgqcZHU512F0=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
- References:MIME-Version:Content-Transfer-Encoding:cc:
- content-transfer-encoding:content-type:date:from:message-id:
- mime-version:reply-to:subject:to;
- b=dq6zHcxBoeuITDC/Mmh+CCUAfB++l6VIJ+e2uPgJUyeynyu9bqHGVL16hqPNRQDJ
- baRyDyJX/l0LzBw0anmXG9dLROVDP4vQIsupt3eeoCV6tIKdkARdU5SwWeUqsEK2D
- 8jXSyuz9wPFZawmox0D4LVwupfHXMJKVQwl4c8N/rdGmDqLfHAHf7R+ZPofKBQ9Iu
- ZLQXVq/+Zw9B+zACOGGUuSfMSGVA3ixP2QwocNdeatxsYmt4kXxp/Lw6VoW7JNyx9
- Q2ZdBXUsUGHowvy4RyDRiJpYYD4VRZVskgJ85t9jEbpOUuS6RGbo4MV/3IFfeQ0yd
- MegvuvqabRUNmHV7Qg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=gmx.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net
- header.a=rsa-sha256 header.s=s31663417 header.b=dq6zHcxB
-Subject: [Buildroot] [PATCH v3 3/3] package/ssdp-responder: update S50ssdpd
- (move shellcheck comment)
+ d=bootlin.com; s=gm1; t=1754420849;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=SatV2uiFhwDNWbNCfBUDJ4m2WztZRvkaz8KfOQzbF64=;
+ b=RW/lzE1CO+JZKB/DDvhRM0gagPK5G6yZO/s4d9JNjOjHdwZYGPesSwsZdRRt3RAOn62r6G
+ laEIOx1Qpt9xTe8UE3LSirnKBmZnUym4t1/5fAcaOcxohPjyEOOTHZChbxqaDiXuldKDxG
+ 8BjSNbIQU9AmxIJKCUkuO+NKiTLtD18uPPKIuAL0b4otN6ElY8SnBnAwEH8biExLGUt5g2
+ uX0OpiMeBz91DQmIiRVTPcbC9jtUTmeYJWhITC+5dGjCcU0kcVDFcJGyFIwuhoQ2qHc5rV
+ 0pdtssEpeS+Y4W2uKwVnnNFu/hDwE17tKHQy2cX0rXimztZd6Mz028qt+tpVhw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=RW/lzE1C
+Subject: [Buildroot] [PATCH] configs/qemu_sh4*: switch back to disk emulation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -137,38 +81,123 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Peter Seiderer via buildroot <buildroot@buildroot.org>
-Reply-To: Peter Seiderer <ps.report@gmx.net>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- S50ssdpd: move shellcheck comment to the line where needed
+Back in commit
+44a6b7866c95ca5459a53a50eab5ab1d38b6b8e1 ("configs/qemu_sh4*: switch
+to initramfs"), the Qemu SuperH defconfigs were switched to initramfs
+due to a bug in the Qemu disk emulation.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
-Changes v2 -> v3:
-  - new patch
----
- package/ssdp-responder/S50ssdpd | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+However, the initramfs solution has an issue: if the initramfs is
+slightly too large (like just 6 MB!), the system no longer boots.
 
-diff --git a/package/ssdp-responder/S50ssdpd b/package/ssdp-responder/S50ssdpd
-index 8654de4f26..7b8106dcc8 100644
---- a/package/ssdp-responder/S50ssdpd
-+++ b/package/ssdp-responder/S50ssdpd
-@@ -10,9 +10,9 @@ DAEMON_ARGS=""
- # shellcheck source=/dev/null
- [ -r "$CFGFILE" ] && . "$CFGFILE"
+Since the disk emulation problem has apparently been resolved in Qemu
+10 (according to testing), let's switch back to this.
+
+In addition to essentially reverting
+44a6b7866c95ca5459a53a50eab5ab1d38b6b8e1, we also need to adjust the
+kernel configuration so that the kernel takes its command line for the
+bootloader (in our case from the Qemu -append option). Otherwise an
+hardcoded command line is used, which doesn't mount /dev/sda as the
+root filesystem.
+
+This update has been tested on Gitlab CI:
+
+  https://gitlab.com/tpetazzoni/buildroot/-/pipelines/1968267919
+
+Thanks to Romain Naour for pointing to the initramfs size as being the
+issue.
+
+Cc: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ board/qemu/sh4-r2d/linux.config   | 1 +
+ board/qemu/sh4-r2d/readme.txt     | 2 +-
+ board/qemu/sh4eb-r2d/linux.config | 1 +
+ board/qemu/sh4eb-r2d/readme.txt   | 2 +-
+ configs/qemu_sh4_r2d_defconfig    | 2 +-
+ configs/qemu_sh4eb_r2d_defconfig  | 2 +-
+ 6 files changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/board/qemu/sh4-r2d/linux.config b/board/qemu/sh4-r2d/linux.config
+index a3d6544549..dd4bf5204f 100644
+--- a/board/qemu/sh4-r2d/linux.config
++++ b/board/qemu/sh4-r2d/linux.config
+@@ -5,6 +5,7 @@ CONFIG_MEMORY_START=0x0c000000
+ CONFIG_FLATMEM_MANUAL=y
+ CONFIG_SH_RTS7751R2D=y
+ CONFIG_RTS7751R2D_PLUS=y
++CONFIG_CMDLINE_FROM_BOOTLOADER=y
+ CONFIG_HEARTBEAT=y
+ CONFIG_PCI=y
+ CONFIG_NET=y
+diff --git a/board/qemu/sh4-r2d/readme.txt b/board/qemu/sh4-r2d/readme.txt
+index 24c3676d8a..b0799e47a8 100644
+--- a/board/qemu/sh4-r2d/readme.txt
++++ b/board/qemu/sh4-r2d/readme.txt
+@@ -1,6 +1,6 @@
+ Run the emulation with:
  
--# shellcheck disable=SC2086
- start() {
- 	printf 'Starting %s: ' "$DAEMON"
-+	# shellcheck disable=SC2086 # we need the word splitting
- 	if start-stop-daemon -S -q -p "$PIDFILE" -x "$DAEMON" -- $DAEMON_ARGS; then
- 		echo "OK"
- 	else
+-  qemu-system-sh4 -M r2d -kernel output/images/zImage -append "console=ttySC1,115200 noiotrap" -serial null -serial stdio -net nic,model=rtl8139 -net user # qemu_sh4_r2d_defconfig
++  qemu-system-sh4 -M r2d -kernel output/images/zImage -drive file=output/images/rootfs.ext2,if=ide,format=raw -append "rootwait root=/dev/sda console=ttySC1,115200 noiotrap" -serial null -serial stdio -net nic,model=rtl8139 -net user # qemu_sh4_r2d_defconfig
+ 
+ The login prompt will appear in the terminal that started Qemu.
+ The graphical window is the framebuffer.
+diff --git a/board/qemu/sh4eb-r2d/linux.config b/board/qemu/sh4eb-r2d/linux.config
+index 6ead626c41..5f94bee77d 100644
+--- a/board/qemu/sh4eb-r2d/linux.config
++++ b/board/qemu/sh4eb-r2d/linux.config
+@@ -6,6 +6,7 @@ CONFIG_FLATMEM_MANUAL=y
+ CONFIG_CPU_BIG_ENDIAN=y
+ CONFIG_SH_RTS7751R2D=y
+ CONFIG_RTS7751R2D_PLUS=y
++CONFIG_CMDLINE_FROM_BOOTLOADER=y
+ CONFIG_HEARTBEAT=y
+ CONFIG_PCI=y
+ CONFIG_NET=y
+diff --git a/board/qemu/sh4eb-r2d/readme.txt b/board/qemu/sh4eb-r2d/readme.txt
+index 577c54cd9d..9f3dd8b20b 100644
+--- a/board/qemu/sh4eb-r2d/readme.txt
++++ b/board/qemu/sh4eb-r2d/readme.txt
+@@ -1,6 +1,6 @@
+ Run the emulation with:
+ 
+-  qemu-system-sh4eb -M r2d -kernel output/images/zImage -append "console=ttySC1,115200 noiotrap" -serial null -serial stdio -net nic,model=rtl8139 -net user # qemu_sh4eb_r2d_defconfig
++  qemu-system-sh4eb -M r2d -kernel output/images/zImage -drive file=output/images/rootfs.ext2,if=ide,format=raw -append "rootwait root=/dev/sda console=ttySC1,115200 noiotrap" -serial null -serial stdio -net nic,model=rtl8139 -net user # qemu_sh4eb_r2d_defconfig
+ 
+ The login prompt will appear in the terminal that started Qemu.
+ The graphical window is the framebuffer.
+diff --git a/configs/qemu_sh4_r2d_defconfig b/configs/qemu_sh4_r2d_defconfig
+index 63b9fa1b29..628ca05543 100644
+--- a/configs/qemu_sh4_r2d_defconfig
++++ b/configs/qemu_sh4_r2d_defconfig
+@@ -12,7 +12,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4-r2d/linux.config"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+-BR2_TARGET_ROOTFS_INITRAMFS=y
++BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_PACKAGE_HOST_QEMU=y
+ BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
+diff --git a/configs/qemu_sh4eb_r2d_defconfig b/configs/qemu_sh4eb_r2d_defconfig
+index 97cbd6bd8a..4fd07775ed 100644
+--- a/configs/qemu_sh4eb_r2d_defconfig
++++ b/configs/qemu_sh4eb_r2d_defconfig
+@@ -12,7 +12,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4eb-r2d/linux.config"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+-BR2_TARGET_ROOTFS_INITRAMFS=y
++BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_PACKAGE_HOST_QEMU=y
+ BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
 -- 
 2.50.1
 
