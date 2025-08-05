@@ -4,106 +4,106 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8849C87FCF
-	for <buildroot@archiver.kernel.org>; Tue,  5 Aug 2025 00:04:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3386EC87FCB
+	for <buildroot@archiver.kernel.org>; Tue,  5 Aug 2025 02:42:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3CF8D8384B;
-	Tue,  5 Aug 2025 00:04:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BAF5883C6E;
+	Tue,  5 Aug 2025 02:42:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lJk6mtpf1RUS; Tue,  5 Aug 2025 00:03:59 +0000 (UTC)
+ id PtSq15RjThEx; Tue,  5 Aug 2025 02:42:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 92B1D83807
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C60D183C66
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 92B1D83807;
-	Tue,  5 Aug 2025 00:03:58 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 967D8118
- for <buildroot@buildroot.org>; Tue,  5 Aug 2025 00:03:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C60D183C66;
+	Tue,  5 Aug 2025 02:42:26 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 211311A2
+ for <buildroot@buildroot.org>; Tue,  5 Aug 2025 02:42:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8833D40E85
- for <buildroot@buildroot.org>; Tue,  5 Aug 2025 00:03:57 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 063BC83C66
+ for <buildroot@buildroot.org>; Tue,  5 Aug 2025 02:42:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vUPbdzgriUW5 for <buildroot@buildroot.org>;
- Tue,  5 Aug 2025 00:03:56 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jAyYg2C_TozC for <buildroot@buildroot.org>;
+ Tue,  5 Aug 2025 02:42:25 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::f30; helo=mail-qv1-xf30.google.com;
+ client-ip=2607:f8b0:4864:20::f2a; helo=mail-qv1-xf2a.google.com;
  envelope-from=mr.bossman075@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A8CC640E9C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A8CC640E9C
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com
- [IPv6:2607:f8b0:4864:20::f30])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A8CC640E9C
- for <buildroot@buildroot.org>; Tue,  5 Aug 2025 00:03:56 +0000 (UTC)
-Received: by mail-qv1-xf30.google.com with SMTP id
- 6a1803df08f44-7072ed7094aso35644206d6.1
- for <buildroot@buildroot.org>; Mon, 04 Aug 2025 17:03:56 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4BE2E83C63
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4BE2E83C63
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com
+ [IPv6:2607:f8b0:4864:20::f2a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4BE2E83C63
+ for <buildroot@buildroot.org>; Tue,  5 Aug 2025 02:42:25 +0000 (UTC)
+Received: by mail-qv1-xf2a.google.com with SMTP id
+ 6a1803df08f44-7076b55460eso44032286d6.0
+ for <buildroot@buildroot.org>; Mon, 04 Aug 2025 19:42:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1754352235; x=1754957035;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=IHy3C0HN8eWuHUNxGtjU/bVz3iqKTKJPZUPInQVFZjI=;
- b=ajCG7v1IoTzLg2iY7m0QknCJbzqMK3yirHGGb5xtbgi7Fh++QCjgwnXTWG7HO2m+iz
- hXANy1eg6NP7KO7TuhgoifwzuNQiB3oAhl/PjfRbIr21mXwF39cpAbXtjYa+KDyZWzOy
- qyyOUDCaRnsUyEg/1trmxrYjtNI8mddnq147nHaiypCPR0uGLR09ba69xM50hYcX+QHV
- J0oTKCJspmIuElsFpdeSRgQ3YKqXrdOzonY5b76blpIR+7UuoLqt8YuJZiAjsG8BDzAv
- Gb84+7fa+tL3uBL2PdajeScgGiP+AGAly15i3r7PvYmhts/NIUlpamAAyFA3TngOhmYV
- dIhA==
-X-Gm-Message-State: AOJu0Yw2f8+lVLLuHvljqVE4yLlEVEzO/rC0QbwA/YiCx1aSQp8lDaix
- Eczg/kID2WzWWMMJIVc8/Iqynmp/4kZP2ePAi3u4AKJqIYvzErHQFosyHy0vJg==
-X-Gm-Gg: ASbGncsKfSRfb6N9Gm0MWr9/yIc50wMWT5KbrF02A6eOZmgM3b9zSI2GIQfRwhLp1kx
- UOsXqLD7EyljYRYhuJZGulyK5oF5DwHfViwxsTkWvZGFdixPXUD+QYYfR/AuWfSwFRmMFtLYsYh
- CVEKwzC7VzlH+9J565dwObC85PtP4Oex6Xim+b/dCbcJBEfNDxdNc0OBcT+pimhGKH5Y9JrsWrG
- OyzD8YJdUZA80zwKDy+EzdQ//5MF/6hTam5WgvKk36FHoF4RuhJuT3Nu2wY7f8enD0JuqOrvWp6
- X/L2ppze6gQYzFVNIUeiVaKFJEnv1PdbXvEDgKvrTyG0d8x6FzNObooiQGBLJpdeHz9Eg6udrDh
- WoxlBUIjFY0bwnASHT3/XSE/erSc2EQ2eabWv5abrDv0SndRWF01PM58DVSjhZeUvAeS2WnGC88
- Uv1e65AmYgwHpC++E+
-X-Google-Smtp-Source: AGHT+IHFSpkICun1yfCA64r3cLeoeYlf3iqg4w5CM3tKMBDCa81mmZAP3lhLW9Xl/TjCc2qjNxcILA==
-X-Received: by 2002:a05:6214:2626:b0:707:159e:d1c9 with SMTP id
- 6a1803df08f44-7093637cd44mr150713106d6.51.1754352234835; 
- Mon, 04 Aug 2025 17:03:54 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1754361744; x=1754966544;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=p0G6SWJvV2k5+whnWdBDFTt8pF9f4MtnIyGJRsb2S5g=;
+ b=GRQIimoMSBxUsoWSj8K0+yzyMOWuLJSFnDlYacK2qSEzp7VHjQRbuZJFpf6Py4zQ95
+ 0DR+q4bM5X188mPmzMSYz80RXVAOYh7z2E8mafT75R1v6FWJROymNJkM/own34Mv54mm
+ 74c7ceQIfJialTbmRMVfGeENLCKY4W2RtBzcXTd+K2+O36uZ5EcxmX2QXEEwCli8Aw0M
+ J2lNQTqdf0IircsCWZfJNly5/l6Di74c2Z65ra7W+gXJZ0HGpGt9MeBf/rwiw05aF2DU
+ UatkIRw68EwQeVeDFeV5u5HL8kQs6d0SLxppKmSDt+bwZXn3+cO1Bj8uQRVXJjuWxais
+ B3Vg==
+X-Gm-Message-State: AOJu0YxyeySRduvg3aiehdmazvwDFqO8do2iOO1rGDdmJP2W3nsSAbr4
+ fh/cpsTzo58agrUGNcmxpuFqPiylhUK4nROtDrUqWHuxA1KdekjyY9hOFGEYIw==
+X-Gm-Gg: ASbGncvE1cxhLf2Ffw7Ob1Oq02HMOsJmB9aq7CbqNGyarc5LX/RTF0kn6Z59VN54mZt
+ rLiMoR+NIgpcZFHJbz/APVIwl8wgoktxZ92GGRzOoz77rsqgwC5EFJliQOWHjX6WUa6nMSiLJ9t
+ Ij0zM5H1upoqUxlzqtL1FeNXvGRqbIibsn9bm3miBTnCcL7INFsAB/gx7yGKmvPL9skxeLXzcjB
+ 6w6+7u/07ycQEdbYxSSd2Pr+fOrJcM1ScFLwl3UkodzmnN8+0zuwsWAnQ7lfj7LBqKgAhgTjBaZ
+ Qcb4b+PyTd7A5c3GTHPjS6UcX8pxMwTiLZMOPK8QMaSbGvWWUYZKVRyTLXmAbJ14IlrtZb5Gffe
+ IgOON36+EAnFBT6Q73UvMHLqVBoJpExeRu7dCISiyHWUAnwNdq2gTpF7FISfQJA21IK41KfNWtq
+ i7LZGIEB2wjCUQbN+e
+X-Google-Smtp-Source: AGHT+IEpFLsgeaQ049cy/EdKyNEt4bFWMw5JCDU7ox+Buik0ZpC1F6ibdkkN88alIt5N76MuSFUdPA==
+X-Received: by 2002:ad4:5b8d:0:b0:707:16cd:8329 with SMTP id
+ 6a1803df08f44-7093631d6ebmr176115916d6.37.1754361743681; 
+ Mon, 04 Aug 2025 19:42:23 -0700 (PDT)
 Received: from jesse-desktop.. (pool-108-26-215-125.bstnma.fios.verizon.net.
  [108.26.215.125]) by smtp.gmail.com with ESMTPSA id
- 6a1803df08f44-7077ca3621asm64065846d6.33.2025.08.04.17.03.54
+ 6a1803df08f44-7077cd5a438sm65762666d6.48.2025.08.04.19.42.22
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 04 Aug 2025 17:03:54 -0700 (PDT)
+ Mon, 04 Aug 2025 19:42:23 -0700 (PDT)
 From: Jesse Taube <mr.bossman075@gmail.com>
 X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
 To: buildroot@buildroot.org
-Cc: Jesse Taube <Mr.Bossman075@gmail.com>,
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Ibai Erkiaga <ibai.erkiaga-elorza@amd.com>,
+ Neal Frager <neal.frager@amd.com>, Romain Naour <romain.naour@gmail.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Marcus Hoffmann <buildroot@bubu1.eu>
-Date: Mon,  4 Aug 2025 20:03:52 -0400
-Message-ID: <20250805000352.4062434-2-Mr.Bossman075@gmail.com>
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Arnout Vandecappelle <arnout@mind.be>, Julien Olivain <ju.o@free.fr>,
+ Jesse Taube <Mr.Bossman075@gmail.com>
+Date: Mon,  4 Aug 2025 22:42:22 -0400
+Message-ID: <20250805024222.247903-1-Mr.Bossman075@gmail.com>
 X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250805000352.4062434-1-Mr.Bossman075@gmail.com>
-References: <20250805000352.4062434-1-Mr.Bossman075@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1754352235; x=1754957035; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=IHy3C0HN8eWuHUNxGtjU/bVz3iqKTKJPZUPInQVFZjI=;
- b=H15pqP/Aty0cr/3fhLhCH9pAYHGnH0v0zZMQ2ygCZ/gTPVYyvEYZkQtLTAFa8te+JQ
- XlApCuJer/oY/dCE5mBKiTBGfw4++Tb3lebMjBUMlBsPlhDJuUY57vRYkJx7ri4KMo+I
- my6FKvUKcSRkGDrut/DSXCumi76udfcuARYa7AaQmPh5BtAPjDcKZiKSJIrydN0Y1rTL
- hJFrsA2+XQEiAezO3w6THlgMuJPzjI1BHN9w0vmZV3Km2HsnXAE+3iqP7y/2C/xzZota
- IkPvHKZCAbXyjqqDVIjfRYCplhqhm9bOcObwDRDZMGvsFTwNnKdj3EU1yf6FaShryI0X
- lL3w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=gmail.com; s=20230601; t=1754361744; x=1754966544; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=p0G6SWJvV2k5+whnWdBDFTt8pF9f4MtnIyGJRsb2S5g=;
+ b=mGoG1Dt2I8YzRmZKnN7n+afP4H6s5qks9Mu46dL3LRaDd5Z4B9xpdZsPx97cSv3ugV
+ ig9MAZOXMzm6lhXWCN/YeoHl24PLFdIgBt0kLFHdWH8y9h3Oo/VeOxl+f2UWWvi4MymU
+ t6+OrIdzdjWIf6Qarfk7GEvLJiYTRO0xsZYoIlKIBgW4MPSlYlGcOOP71vSoSryYCdS0
+ ikXgekVs8Dh5hazsM5KIWhE2mOuqHWASU3dyoee2Ada1rzdLdghqdqA6BfNElcKGAWwF
+ it2v1rVb83Gfq7cOyk4RHuirjGYsUelaRNY0ujwTJDjszeeTEPFXVFkvyFEQcZCLxK8f
+ m3hA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=H15pqP/A
-Subject: [Buildroot] [PATCH 2/2] package/pico-sdk: Clone submodules for
- picotool
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=mGoG1Dt2
+Subject: [Buildroot] [PATCH] package/gcc-bare-metal: Add extra options to
+ bare-metal gcc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -120,42 +120,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-picotool needs mbedtls for --hash --sign and --offset.
-Clone submodules in pico-sdk to provide the nessasaary files for
-picotool to build and link mbedtls and other optional libraries.
+Users may want to add extra options to the bare-metal gcc
+configuration, such as a default abi. Add a new option to
+allow this, similar to the existing one for the regular gcc.
 
 Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
 ---
- package/pico-sdk/pico-sdk.hash | 2 +-
- package/pico-sdk/pico-sdk.mk   | 6 ++++--
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/gcc-bare-metal/gcc-bare-metal.mk           | 3 ++-
+ toolchain/toolchain-bare-metal-buildroot/Config.in | 8 ++++++++
+ 2 files changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/package/pico-sdk/pico-sdk.hash b/package/pico-sdk/pico-sdk.hash
-index 6d40417f3a..a7028cfa1d 100644
---- a/package/pico-sdk/pico-sdk.hash
-+++ b/package/pico-sdk/pico-sdk.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  979af5c5aa5a07990544bc65e24a2121c096abd72ad0e6a03e7c524302e0f26e  pico-sdk-2.1.1.tar.gz
-+sha256  9f50e041d5f5afa7d7d0dd0d7dad46e524e9702c7d07ea3f445556c35afa226d  pico-sdk-refs_tags_2.1.1-git4.tar.gz
- sha256  483f865953435b66c443dee7558debe3cc3cf8fcbb6a112fd9fc6a795d53f1f6  LICENSE.TXT
-diff --git a/package/pico-sdk/pico-sdk.mk b/package/pico-sdk/pico-sdk.mk
-index cf487ac568..45db495623 100644
---- a/package/pico-sdk/pico-sdk.mk
-+++ b/package/pico-sdk/pico-sdk.mk
-@@ -4,8 +4,10 @@
- #
- ################################################################################
+diff --git a/package/gcc-bare-metal/gcc-bare-metal.mk b/package/gcc-bare-metal/gcc-bare-metal.mk
+index 17232a8ef1..e7290a11bf 100644
+--- a/package/gcc-bare-metal/gcc-bare-metal.mk
++++ b/package/gcc-bare-metal/gcc-bare-metal.mk
+@@ -53,7 +53,8 @@ HOST_GCC_BARE_METAL_CONF_OPTS = \
+ 	--with-gmp=$(HOST_DIR) \
+ 	--with-mpc=$(HOST_DIR) \
+ 	--with-mpfr=$(HOST_DIR) \
+-	--with-isl=$(HOST_DIR)
++	--with-isl=$(HOST_DIR) \
++	$(call qstrip,$(BR2_EXTRA_GCC_BARE_METAL_CONF_OPTIONS))
  
--PICO_SDK_VERSION = 2.1.1
--PICO_SDK_SITE = $(call github,raspberrypi,pico-sdk,$(PICO_SDK_VERSION))
-+PICO_SDK_VERSION = refs/tags/2.1.1
-+PICO_SDK_SITE = https://git@github.com/raspberrypi/pico-sdk.git
-+PICO_SDK_SITE_METHOD = git
-+PICO_SDK_GIT_SUBMODULES = YES
- PICO_SDK_LICENSE = BSD-3-Clause
- PICO_SDK_LICENSE_FILES = LICENSE.TXT
- PICO_SDK_INSTALL_STAGING = YES
+ define HOST_GCC_BARE_METAL_CONFIGURE_CMDS
+ 	$(foreach arch_tuple, $(TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE), \
+diff --git a/toolchain/toolchain-bare-metal-buildroot/Config.in b/toolchain/toolchain-bare-metal-buildroot/Config.in
+index 19c97410c6..89b0a98fdd 100644
+--- a/toolchain/toolchain-bare-metal-buildroot/Config.in
++++ b/toolchain/toolchain-bare-metal-buildroot/Config.in
+@@ -12,6 +12,14 @@ config BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH
+ 	  metal toolchain, use the following definition:
+ 	  "microblazeel-buildroot-elf riscv32-buildroot-elf"
+ 
++config BR2_EXTRA_GCC_BARE_METAL_CONF_OPTIONS
++	string "Additional bare-metal gcc options"
++	default ""
++	help
++	  Any additional bare-metal gcc configure options you
++	  may want to include. Affects al architecture tuples
++	  specified in BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH.
++
+ source "package/newlib-bare-metal/Config.in"
+ 
+ endif # BR2_TOOLCHAIN_BARE_METAL_BUILDROOT
 -- 
 2.49.0
 
