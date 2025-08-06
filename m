@@ -4,93 +4,128 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5A87C87FD3
-	for <buildroot@archiver.kernel.org>; Wed,  6 Aug 2025 16:05:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 980C8C87FD3
+	for <buildroot@archiver.kernel.org>; Wed,  6 Aug 2025 16:16:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5A3D640A62;
-	Wed,  6 Aug 2025 16:05:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 491F440C82;
+	Wed,  6 Aug 2025 16:16:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id F_RWEAaK4t4v; Wed,  6 Aug 2025 16:05:28 +0000 (UTC)
+ id fk_nZAjVEKoO; Wed,  6 Aug 2025 16:16:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 735234121C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7163440C10
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 735234121C;
-	Wed,  6 Aug 2025 16:05:28 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 3E23731
- for <buildroot@buildroot.org>; Wed,  6 Aug 2025 16:05:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7163440C10;
+	Wed,  6 Aug 2025 16:16:12 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4459331
+ for <buildroot@buildroot.org>; Wed,  6 Aug 2025 16:16:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2C618613DF
- for <buildroot@buildroot.org>; Wed,  6 Aug 2025 16:05:26 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3627840BE6
+ for <buildroot@buildroot.org>; Wed,  6 Aug 2025 16:16:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U_lu0EsVmsea for <buildroot@buildroot.org>;
- Wed,  6 Aug 2025 16:05:25 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::129; helo=mail-lf1-x129.google.com;
- envelope-from=fabien.lehoussel@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6543A60D97
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6543A60D97
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com
- [IPv6:2a00:1450:4864:20::129])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6543A60D97
- for <buildroot@buildroot.org>; Wed,  6 Aug 2025 16:05:25 +0000 (UTC)
-Received: by mail-lf1-x129.google.com with SMTP id
- 2adb3069b0e04-55b8736b1d6so41984e87.1
- for <buildroot@buildroot.org>; Wed, 06 Aug 2025 09:05:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1754496323; x=1755101123;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=9ulTwMK0jM7KEBdMMFFPbnAX/Tqly6aQPq3UXUVUzhE=;
- b=nFHFfm4aTD4UgIJ2Hf6dubs1bmIHDSFZFfSq3bcfkeD2OhXMC5yTZT4vphm2Nols+a
- ID4Q8xdIJV03Ar6hmpeDrXTNAF5FWILVEKoFc6WEyFBPoUVCFZ3cDD2cDHO1Cbtu0q2H
- 1eaTqXJWQAWdMACPEjEHpEg64RaiLKdLnAf8MsI8gKG+rNwpfJ5PyaBl+HWKB6eazBGd
- 8wHfME8rKRmk7/J2FQ4ZRxf462GU/6yV8LhmpeeB2/a9KTZA7acgbph8m5OyqhpLWPt8
- N+eDeb8D10p+4r+aBmOzm9uMTNT0y7u9kZy8sMUV2e0yqER/zgyfRX+zi07Jisa8ALq5
- 7wZQ==
-X-Gm-Message-State: AOJu0YyaI+VVEvW0d3H+Rm4GN+v3enxeDKUuYMLEtL5GSjGa7Izxe6Vq
- uu6rqfMgX19N/S4l5saVeSPWphes2I2YNfcA2dhf78CP5QIpOOSF+2KgGOm4ojrZ6zdnaygLR57
- g33MmgulPfTcaT4asPSdfOADFvvqoP3FyZHQMuxDj/Q==
-X-Gm-Gg: ASbGncsgOuJ/sE5H8GzMWZxihguO8CDL9mRFoO7RxDui9BJkvKi1szeqdZ95LNRfx3o
- nnOXFRFCYOkU+pUqMz3uW9URGW2x3fvyercPc73CkZ0zugYHAVxbsctv6jnCF+WV/1wyIcgRN9G
- IQsEBKp9CM0BckPVYs5httwv6QLmaoZ/YFUTtwXbIpBkv1w3t/MB4a3+LtXLfaJf7RBrenDOnwi
- OPpzAooWg==
-X-Google-Smtp-Source: AGHT+IEwp4gKAKhgjoo3ZfHkkH2hMI9tKLYSUgDOKSXrFiT8AenB/L4JnoauBqT2Er6CmoyMi+cY4F1yFN7Hp9mSebE=
-X-Received: by 2002:ac2:4e14:0:b0:554:e7f2:d759 with SMTP id
- 2adb3069b0e04-55caf35de5amr1198002e87.28.1754496323106; Wed, 06 Aug 2025
- 09:05:23 -0700 (PDT)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lsag-wJZXk-o for <buildroot@buildroot.org>;
+ Wed,  6 Aug 2025 16:16:09 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.18;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8057A40C0F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8057A40C0F
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8057A40C0F
+ for <buildroot@buildroot.org>; Wed,  6 Aug 2025 16:16:07 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from haruka.home.arpa ([85.22.163.130]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1M9Wys-1ugMtN0IWC-001MSD; Wed, 06
+ Aug 2025 18:16:05 +0200
+To: buildroot@buildroot.org
+Cc: Thomas Perale <thomas.perale@mind.be>,
+ Titouan Christophe <titouan.christophe@mind.be>,
+ "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
+Date: Wed,  6 Aug 2025 18:15:52 +0200
+Message-ID: <20250806161555.3805467-1-fiona.klute@gmx.de>
+X-Mailer: git-send-email 2.50.1
 MIME-Version: 1.0
-References: <20250716093401.1213358-1-fabien.lehoussel@smile.fr>
- <20250716093401.1213358-2-fabien.lehoussel@smile.fr>
- <87pld8im6v.fsf@dell.be.48ers.dk>
-In-Reply-To: <87pld8im6v.fsf@dell.be.48ers.dk>
-Date: Wed, 6 Aug 2025 18:05:12 +0200
-X-Gm-Features: Ac12FXwM-V4p3RDLnc1WycM4yHupguQZ4Ny-YLnfSpOy_hesstcJhsAlWrhlpJg
-Message-ID: <CAKWtHtxtsJz14bqoO1MqhC3m7SpfNn1DvYPbJLSTEAS_oATKUw@mail.gmail.com>
-To: Peter Korsgaard <peter@korsgaard.com>
+X-Provags-ID: V03:K1:el45avmfgmSk6l8ZNnSRMc33UT1Hp8FLaY+wQwlkyQBF6kWKrx2
+ YbSgeh07O4ai4253g7pU8L8Kcx/9u4vly9RcF6tkKsa2WI481+Kd6mZJ8BVfbESij+K06KI
+ fXOnOBBG1UHPEcBjRncLewC9yMPeHGmG4LAAkbLAXeV8qYwXSzk7fdL7VeCAv4r5jyrWrrn
+ s1O37+onPdq3nXCXhpgnw==
+UI-OutboundReport: notjunk:1;M01:P0:fx8tMtybJC0=;zF8vCfA4jfKFxUvsx317yE46AJC
+ 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
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1754496323; x=1755101123; darn=buildroot.org;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=9ulTwMK0jM7KEBdMMFFPbnAX/Tqly6aQPq3UXUVUzhE=;
- b=xUmCeozzdP/qe0XLNE3AzOEaDSKWlUuoCjUyfu3nysjqmmVwu/zHFv9QcH+Wm+SJXw
- dbl8HvjCKka1t4lv7HnZObwUSSPXEwskZrOxK8W7h4BNhPokpygAF9OGy8d2y6ZO/gOg
- uUqaKbwHugAbyOaa1EttC2LAGsc+iqYYzqwtw=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=xUmCeozz
-Subject: Re: [Buildroot] [PATCH v2 2/5] utils/generate-cyclonedx: update
- package filtering
+ d=gmx.de; 
+ s=s31663417; t=1754496965; x=1755101765; i=fiona.klute@gmx.de;
+ bh=Nr5RJ8iOnuom5vsUtoj75ppx5LYwt937/m3lB+qcXKA=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
+ MIME-Version:Content-Transfer-Encoding:cc:
+ content-transfer-encoding:content-type:date:from:message-id:
+ mime-version:reply-to:subject:to;
+ b=POjPJi2qj/atqR02oqnopeixqeI7vh6UzkB+N29YACbsaqLMNRuw9HBDwZYDmEAo
+ l7ZFui85nuWERrZW3oiInmjsSP2XLIWI9O178PmMrnh2S73+cD6WmsNVp/fiTvdCy
+ DKi5Th+jAf9Yswi7pMmUTfGsHuutM+Hmb+dBtxFbyP3J3UEoH08O6xhj9miamuqLR
+ DiRne6uEWcnJQsEZPUaCXiY54o156IjN4fIbpmIMKAHDaV9sugsiWaZU7c7xIridt
+ kqRgSUHXn8w5ixeUI2u6Jgcsa4NviTkrN/ssjE3t+uyxlEZtxEMQulgUp6+ONEvDT
+ /whwKN99UorB1xprKw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=gmx.de
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
+ header.s=s31663417 header.b=POjPJi2q
+Subject: [Buildroot] [PATCH v3 0/3] Add external tree information to
+ CycloneDX SBOM
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -102,73 +137,76 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Fabien LEHOUSSEL via buildroot <buildroot@buildroot.org>
-Reply-To: Fabien LEHOUSSEL <fabien.lehoussel@smile.fr>
-Cc: Thomas Perale <thomas.perale@mind.be>,
- Fabien Lehoussel via buildroot <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-TGUgbWVyLiA2IGFvw7t0IDIwMjUgw6AgMTY6MDEsIFBldGVyIEtvcnNnYWFyZCA8cGV0ZXJAa29y
-c2dhYXJkLmNvbT4gYSDDqWNyaXQgOgo+Cj4gPj4+Pj4gIkZhYmllbiIgPT0gRmFiaWVuIExlaG91
-c3NlbCB2aWEgYnVpbGRyb290IDxidWlsZHJvb3RAYnVpbGRyb290Lm9yZz4gd3JpdGVzOgo+Cj4g
-ID4gS2VlcCBvbmx5IHVwc3RyZWFtIHBhY2thZ2VzLCBpLmUuLCB0aG9zZSBmb3Igd2hpY2ggWFhf
-U0lURSBpcyBzZXQKPgo+IFRoZSB0ZXJtICJ1cHN0cmVhbSBwYWNrYWdlcyIgc291bmRzIGEgYml0
-IGNvbmZ1c2luZyB0byBtZSwgSSBndWVzcyB0aGUKPiBpbnRlbnRpb24gaXMgdG8gb25seSBpbmNs
-dWRlICJyZWFsIiBwYWNrYWdlcywgRS5HLiBwYWNrYWdlcyBub3QgYnVuZGxlZAo+IGluc2lkZSBC
-dWlsZHJvb3QuCgpPaywgSSB3aWxsIHVwZGF0ZSBjb21tZW50CgoKPiBZb3VyIHYxIHNlcmllcyBl
-eHBsaWNpdGx5IG1lbnRpb25lZCBza2VsZXRvbiBwYWNrYWdlcywgc28gbWF5YmUgZ2l2ZQo+IHRo
-YXQgYXMgYW4gZXhhbXBsZT8KCk9rLCBpIHdpbGwgbWVudGlvbiBza2VsZXRvbiBwYWNrYWdlcyBh
-cyBleGVtcGxlCgo+IEl0IHdvdWxkIElNSE8gbWFrZSBtb3JlIHNlbnNlIHRvIGhhdmUgdGhpcyBh
-cyB0aGUgZmlyc3QgY29tbWl0IGluIHlvdXIKPiBwYXRjaCBzZXJpZXMsIHNvIGJlZm9yZSB0aGUg
-aG9zdCBmaWx0ZXJpbmcgb25lLgoKT2sKCj4gPiBTaWduZWQtb2ZmLWJ5OiBGYWJpZW4gTGVob3Vz
-c2VsIDxmYWJpZW4ubGVob3Vzc2VsQHNtaWxlLmZyPgo+ICA+IC0tLQo+ICA+ICB1dGlscy9nZW5l
-cmF0ZS1jeWNsb25lZHggfCAxMiArKysrKy0tLS0tLS0KPiAgPiAgMSBmaWxlIGNoYW5nZWQsIDUg
-aW5zZXJ0aW9ucygrKSwgNyBkZWxldGlvbnMoLSkKPgo+ICA+IGRpZmYgLS1naXQgYS91dGlscy9n
-ZW5lcmF0ZS1jeWNsb25lZHggYi91dGlscy9nZW5lcmF0ZS1jeWNsb25lZHgKPiAgPiBpbmRleCAw
-OGM1OTFlODZiLi4xNGY2NTViY2EyIDEwMDc1NQo+ICA+IC0tLSBhL3V0aWxzL2dlbmVyYXRlLWN5
-Y2xvbmVkeAo+ICA+ICsrKyBiL3V0aWxzL2dlbmVyYXRlLWN5Y2xvbmVkeAo+ICA+IEBAIC0yNzcs
-OCArMjc3LDcgQEAgZGVmIG1haW4oKToKPiAgPiAgICAgICAgICAgICAgICAgICAgICAgICAgZGVm
-YXVsdD0oTm9uZSBpZiBzeXMuc3RkaW4uaXNhdHR5KCkgZWxzZSBzeXMuc3RkaW4pKQo+ICA+ICAg
-ICAgcGFyc2VyLmFkZF9hcmd1bWVudCgiLW8iLCAiLS1vdXQtZmlsZSIsIG5hcmdzPSI/IiwgdHlw
-ZT1hcmdwYXJzZS5GaWxlVHlwZSgidyIpLAo+ICA+ICAgICAgICAgICAgICAgICAgICAgICAgICBk
-ZWZhdWx0PXN5cy5zdGRvdXQpCj4gID4gLSAgICBwYXJzZXIuYWRkX2FyZ3VtZW50KCItLXZpcnR1
-YWwiLCBkZWZhdWx0PUZhbHNlLCBhY3Rpb249J3N0b3JlX3RydWUnLAo+ICA+IC0gICAgICAgICAg
-ICAgICAgICAgICAgICBoZWxwPSJUaGlzIG9wdGlvbiBpbmNsdWRlcyB2aXJ0dWFsIHBhY2thZ2Vz
-IHRvIHRoZSBDeWNsb25lRFggb3V0cHV0IikKPiAgPiArCj4KPgo+IEkgYW0gbm90IHN1cmUgZXhh
-Y3RseSB3aGF0IHRoZSB1c2UgY2FzZSBpcyBvZiAtLXZpcnR1YWwsIGJ1dCB3aHkgcmVtb3ZlCj4g
-aXQ/CgpEb24ndCBrbm93LCBJIGRpZG4ndCB1bmRlcnN0YW5kIHdoYXQgaXQgd2FzIGZvciwgYnV0
-IHRoaXMgaXMgbm90CmNvbXBhdGlibGUgd2l0aCB0aGUgbmV3IGZpbHRlci4KRG9lcyBhbnlvbmUg
-aGF2ZSB0aGUgYW5zd2VyPwoKPiA+ICAgICAgcGFyc2VyLmFkZF9hcmd1bWVudCgiLS1uby1ob3N0
-LXBhY2thZ2VzIiwgZGVmYXVsdD1GYWxzZSwgYWN0aW9uPSdzdG9yZV90cnVlJywKPiAgPiAgICAg
-ICAgICAgICAgICAgICAgICAgICAgaGVscD0iVGhpcyBvcHRpb24gZXhjbHVkZXMgaG9zdCBwYWNr
-YWdlcyBmcm9tIHRoZSBDeWNsb25lRFggb3V0cHV0IikKPgo+ICA+IEBAIC0yOTAsMTEgKzI4OSwx
-MCBAQCBkZWYgbWFpbigpOgo+Cj4gID4gICAgICBzaG93X2luZm9fZGljdCA9IGpzb24ubG9hZChh
-cmdzLmluX2ZpbGUpCj4KPiAgPiAtICAgICMgUmVtb3ZlIHJvb3RmcywgaG9zdCAoaWYgbm90IGlu
-Y2x1ZGVkKSBhbmQgdmlydHVhbCBwYWNrYWdlcyAoaWYgbm90IGluY2x1ZGVkKQo+ICA+IC0gICAg
-IyBmcm9tIHRoZSBjbGkgYXJndW1lbnRzCj4gID4gKyAgICAjIE9ubHkga2VlcCB1cHN0cmVhbSBw
-YWNrYWdlcywgaS5lLiwgdGhvc2UgZm9yIHdoaWNoIFhYX1NJVEUgaXMgc2V0Cj4gID4gKyAgICAj
-IEFsc28gZmlsdGVyIG91dCBob3N0IHBhY2thZ2VzIGlmIC0tbm8taG9zdC1wYWNrYWdlcyBpcyBz
-cGVjaWZpZWQKPiAgPiAgICAgIGZpbHRlcmVkX3Nob3dfaW5mb19kaWN0ID0ge2s6IHYgZm9yIGss
-IHYgaW4gc2hvd19pbmZvX2RpY3QuaXRlbXMoKQo+ICA+IC0gICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgaWYgKCJyb290ZnMiIG5vdCBpbiB2WyJ0eXBlIl0pIGFuZAo+ICA+IC0gICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgKGFyZ3MudmlydHVhbCBvciB2WyJ2aXJ0dWFsIl0g
-aXMgRmFsc2UpIGFuZAo+ICA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGlmICh2
-LmdldCgiZG93bmxvYWRzIikgYW5kIGxlbih2WyJkb3dubG9hZHMiXSkgPiAwKSBhbmQKPiAgPiAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIChub3QgYXJncy5ub19ob3N0X3BhY2th
-Z2VzIG9yICJob3N0IiBub3QgaW4gdlsidHlwZSJdKX0KPiAgPiAgICAgIGN5Y2xvbmVkeF9kaWN0
-ID0gewo+ICA+ICAgICAgICAgICJib21Gb3JtYXQiOiAiQ3ljbG9uZURYIiwKPiAgPiBAQCAtMzA1
-LDcgKzMwMyw3IEBAIGRlZiBtYWluKCk6Cj4gID4gICAgICAgICAgXSwKPiAgPiAgICAgICAgICAi
-ZGVwZW5kZW5jaWVzIjogWwo+ICA+ICAgICAgICAgICAgICBjeWNsb25lZHhfZGVwZW5kZW5jeSgi
-YnVpbGRyb290IiwgbGlzdChmaWx0ZXJlZF9zaG93X2luZm9fZGljdCkpLAo+ICA+IC0gICAgICAg
-ICAgICAqW2N5Y2xvbmVkeF9kZXBlbmRlbmN5KHJlZiwgYnIyX3BhcnNlX2RlcHNfcmVjdXJzaXZl
-bHkocmVmLCBzaG93X2luZm9fZGljdCwgYXJncy52aXJ0dWFsKSkKPiAgPiArICAgICAgICAgICAg
-KltjeWNsb25lZHhfZGVwZW5kZW5jeShyZWYsIGJyMl9wYXJzZV9kZXBzX3JlY3Vyc2l2ZWx5KHJl
-Ziwgc2hvd19pbmZvX2RpY3QsIFRydWUpKQo+Cj4gSWYgd2Ugd2VyZSB0byBkcm9wIHRoZSB2aXJ0
-dWFsIG9wdGlvbiwgdGhlbiBpdCBzaG91bGQgSU1ITyBhbHNvIGJlCj4gZHJvcHBlZCBmcm9tIGJy
-Ml9wYXJzZV9kZXBzX3JlY3Vyc2l2ZWx5LgoKT2sKCj4gLS0KPiBCeWUsIFBldGVyIEtvcnNnYWFy
-ZApfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJv
-b3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVp
-bGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
+
+Hi everyone,
+
+this series adds information about external trees that were used in
+the build to utils/generate-cyclonedx output. I think having this
+information is important to accurately interpret SBOM data: External
+trees may add or modify packages, and in that case the Buildroot
+version alone will not be enough to precisely identify the packaging
+that was used. To be able to identify which packages come from
+external trees, it also adds a new package_dir field to per-package
+data in make show-info output, which will be an absolute path for
+packages from external trees.
+
+Particular questions for review:
+
+* I've added a BR_EXTERNAL_TREE property to packages from external
+  trees with the bom-ref of the external tree, following the pattern
+  of the existing BR_TYPE. However, the CycloneDX specification
+  recommends (but does not require) registering properties with the
+  CycloneDX property taxonomy (see
+  https://github.com/CycloneDX/cyclonedx-property-taxonomy). That
+  would mean registering a "buildroot" namespace and maintaining
+  documentation on supported properties within that namespace. As far
+  as I can see, adding a section to the manual or an independent file
+  to the repository should work. I'd be happy to add a document
+  specifying the current properties (modified for the namespace), but
+  I can't speak for the Buildroot project in registering a namespace,
+  so I'd want maintainer agreement before working on that.
+
+* Is there a better approach to record which external tree a package
+  came from than deriving it from FOO_PKGDIR? I'm not aware of a make
+  variable that'd give me that information. With the current code
+  nested external trees aren't supported, but I doubt it'd make sense
+  to.
+
+Best regards,
+Fiona
+
+
+Changes v2 -> v3 (in patch 1):
+* Fix merge conflict after reordering of metadata structure in commits
+  6098cc45d64e9e7928f888b7cdf79533813d19c4 and
+  9cbbc477626c433fe78614de9474f8446b7e2389
+
+Changes v1 -> v2 (all in patch 1):
+* drop unnecessary default=None for "--external-trees" option
+* fix help string for "--external-trees" option ("%" needs to be "%%"
+  so it's not treated as a formatting specifier)
+
+Fiona Klute (WIWA) (3):
+  utils/generate-cyclonedx: support including external tree information
+  package/pkg-utils.mk: include package directory in show-info output
+  utils/generate-cyclonedx: include external tree in package properties
+
+ package/pkg-utils.mk     |  1 +
+ utils/generate-cyclonedx | 87 +++++++++++++++++++++++++++++++++++++---
+ 2 files changed, 82 insertions(+), 6 deletions(-)
+
+-- 
+2.50.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
