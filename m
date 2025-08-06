@@ -4,69 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87F0DC87FCB
-	for <buildroot@archiver.kernel.org>; Wed,  6 Aug 2025 12:25:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90540C87FD3
+	for <buildroot@archiver.kernel.org>; Wed,  6 Aug 2025 12:57:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2F07B84078;
-	Wed,  6 Aug 2025 12:25:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3C0A4844E2;
+	Wed,  6 Aug 2025 12:57:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iS5RRhw9D1Yt; Wed,  6 Aug 2025 12:25:17 +0000 (UTC)
+ id a6i2VWoJmtHi; Wed,  6 Aug 2025 12:57:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4B28F84099
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 55E76844CA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4B28F84099;
-	Wed,  6 Aug 2025 12:25:17 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4C4F131
- for <buildroot@buildroot.org>; Wed,  6 Aug 2025 12:25:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 55E76844CA;
+	Wed,  6 Aug 2025 12:57:37 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9857631
+ for <buildroot@buildroot.org>; Wed,  6 Aug 2025 12:57:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 356C684078
- for <buildroot@buildroot.org>; Wed,  6 Aug 2025 12:25:16 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8A50B4101D
+ for <buildroot@buildroot.org>; Wed,  6 Aug 2025 12:57:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PnU0Kgn3svxA for <buildroot@buildroot.org>;
- Wed,  6 Aug 2025 12:25:15 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id a5c811GzuXuQ for <buildroot@buildroot.org>;
+ Wed,  6 Aug 2025 12:57:34 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org AC62A84026
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC62A84026
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 636C540AA1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 636C540AA1
 Received: from sendmail.purelymail.com (sendmail.purelymail.com
  [34.202.193.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AC62A84026
- for <buildroot@buildroot.org>; Wed,  6 Aug 2025 12:25:14 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 636C540AA1
+ for <buildroot@buildroot.org>; Wed,  6 Aug 2025 12:57:34 +0000 (UTC)
 Feedback-ID: 21632:4007:null:purelymail
 X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1890140680; 
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1076163160; 
  (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Wed, 06 Aug 2025 12:25:12 +0000 (UTC)
+ Wed, 06 Aug 2025 12:57:32 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@dell.be.48ers.dk>) id 1ujdCh-00GZgW-25;
- Wed, 06 Aug 2025 14:25:11 +0200
+ (envelope-from <peter@korsgaard.com>) id 1ujdhz-00GdVu-0O;
+ Wed, 06 Aug 2025 14:57:31 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed,  6 Aug 2025 14:25:10 +0200
-Message-Id: <20250806122510.3950409-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.39.5
+To: Thomas Perale via buildroot <buildroot@buildroot.org>
+Cc: Thomas Perale <thomas.perale@mind.be>,  Bernd Kuhls <bernd@kuhls.net>
+References: <20250804210132.3249620-1-thomas.perale@mind.be>
+Date: Wed, 06 Aug 2025 14:57:31 +0200
+In-Reply-To: <20250804210132.3249620-1-thomas.perale@mind.be> (Thomas Perale
+ via buildroot's message of "Mon, 4 Aug 2025 23:01:32 +0200")
+Message-ID: <87ectok3pg.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
 X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=IaX9LFV1pVZn+f7Ivlim+YFIFH+cBO9WaVPg4JWiwxHmjQBHSnzvsLa/yM1XbUa3rdASfXk44kKL9oPGt0cjIRhwHKz3i43L6Rk0XmxNtsHDNfPj6kNz3QP3WvMJzSU0EpvQKCk1VAFii2Muaa6Vm4QhdnNFQkXWGdTV8J18ER5rSN5bJCKXUVkbh4HlaY3j3VN/1hFPCY/HCxh6yMhejDsaNYFTOeuITro9s47nXMbHnHWcYssSYnCMNXwLXy0GC7sfmHq+TY0TmQQJFPCN7jmmPUj/OVnMCiZiAk30/bnTjmCF3fOxfJL5yx7DWUuRjF5J6DWo126CZkRE8/q3XA==;
+ b=n62WjBLfND2coU7/huhucjf+f7sXP/j4b4k5fP0o4HFH9FJi50lfhHH6znyheZeYx9dJyr6FRaho6FLUXprgBqO4gHMfN7vg0Kteh6g9fWHzNtOFgTCiJE2TsnyCvLuuSweAl3TXi2Y2kWnkUlavaoHDEp7Gev3sg9FkHwnzCQmvrdoeomRyBbcU+I7XfAFIat5s6w3TNwwNv5jrAFM/kN1pu+2PXOUnDRzoJFZwuXKVv+uK5ksw+sx43G4Iolkai+I9nxiMS6v8HeuUUeZnReKzsojj2u06q8VZLjDKgZ77ovF+HAeSyc16T07p+MHE/1UxUJ9ucw7d8EpfDXK6lQ==;
  s=purelymail1; d=purelymail.com; v=1;
- bh=MlemuEU+SzbdTBRurvcTNCpictwtePkImI837FMdic4=;
+ bh=pAFlm61a7BD6czrUvy9sYCXU0fHXxyqrYGtReT1CSXo=;
  h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=IaX9LFV1
-X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
-Subject: [Buildroot] [PATCH] package/libopenssl: bump version to 3.5.2
+ header.a=rsa-sha256 header.s=purelymail1 header.b=n62WjBLf
+Subject: Re: [Buildroot] [PATCH] package/apache: update mirror url
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,49 +85,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bugfix release:
+>>>>> "Thomas" == Thomas Perale via buildroot <buildroot@buildroot.org> writes:
 
-- Miscellaneous minor bug fixes.
+ > While the 2.4.65 release of this package is available on
+ > https://dlcdn.apache.org/httpd older version are removed from this
+ > location in favour of https://archive.apache.org/dist/httpd.
 
-- The FIPS provider now performs a PCT on key import for RSA, EC and ECX.
-  This is mandated by FIPS 140-3 IG 10.3.A additional comment 1.
+ > In 2025.02.x branch the apache package hasn't been bumped to the latest
+ > version yet so the following error started appearing on the autobuilder:
 
-https://github.com/openssl/openssl/releases/tag/openssl-3.5.2
+ > ```
+ >>>> apache 2.4.64 Downloading
+ > wget -nd -t 3 --no-check-certificate -O
+ > '/workdir/instance-0/output-1/build/.httpd-2.4.64.tar.bz2.hfXgDB/output'
+ > 'https://dlcdn.apache.org/httpd/httpd-2.4.64.tar.bz2'
+ > WARNING: The certificate is NOT trusted. The certificate issuer is unknown.
+ > [0] Downloading 'https://dlcdn.apache.org/httpd/httpd-2.4.64.tar.bz2' ...
+ > HTTP ERROR response 404  [https://dlcdn.apache.org/httpd/httpd-2.4.64.tar.bz2]
+ > make: *** [package/pkg-generic.mk:179: /workdir/instance-0/output-1/build/apache-2.4.64/.stamp_downloaded] Error 1
+ > make: Leaving directory '/workdir/instance-0/buildroot'
+ > ```
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libopenssl/libopenssl.hash | 4 ++--
- package/libopenssl/libopenssl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > To avoid running in the same error once the next package version is
+ > released this patch update the site to the archive mirror with all the
+ > releases.
 
-diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
-index 1675d72fb2..7f3795e1ac 100644
---- a/package/libopenssl/libopenssl.hash
-+++ b/package/libopenssl/libopenssl.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/openssl/openssl/releases/download/openssl-3.5.1/openssl-3.5.1.tar.gz.sha256
--sha256  529043b15cffa5f36077a4d0af83f3de399807181d607441d734196d889b641f  openssl-3.5.1.tar.gz
-+# From https://github.com/openssl/openssl/releases/download/openssl-3.5.2/openssl-3.5.2.tar.gz.sha256
-+sha256  c53a47e5e441c930c3928cf7bf6fb00e5d129b630e0aa873b08258656e7345ec  openssl-3.5.2.tar.gz
- 
- # License files
- sha256  7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a  LICENSE.txt
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index f3521b3cf3..38d04ea924 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBOPENSSL_VERSION = 3.5.1
-+LIBOPENSSL_VERSION = 3.5.2
- LIBOPENSSL_SITE = https://github.com/openssl/openssl/releases/download/openssl-$(LIBOPENSSL_VERSION)
- LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
- LIBOPENSSL_LICENSE = Apache-2.0
+ > Fixes: https://autobuild.buildroot.org/results/7a0/7a0982bcf9db4dcbcf4f6cf31b9f19571c061ee4/build-end.log
+ > Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+
+Committed, thanks.
+
 -- 
-2.39.5
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
