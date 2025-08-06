@@ -1,74 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 244F7C87FCB
-	for <buildroot@archiver.kernel.org>; Wed,  6 Aug 2025 20:00:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C3D3C87FCB
+	for <buildroot@archiver.kernel.org>; Wed,  6 Aug 2025 20:01:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CE47E846B2;
-	Wed,  6 Aug 2025 20:00:45 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GjkArIvhuMNt; Wed,  6 Aug 2025 20:00:45 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0F3B684691
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0F3B684691;
-	Wed,  6 Aug 2025 20:00:45 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id BE9BD233
- for <buildroot@buildroot.org>; Wed,  6 Aug 2025 20:00:42 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A591160A94
- for <buildroot@buildroot.org>; Wed,  6 Aug 2025 20:00:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6348361C89;
+	Wed,  6 Aug 2025 20:01:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n5AoUnogX4XM for <buildroot@buildroot.org>;
- Wed,  6 Aug 2025 20:00:42 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ id 9EtZptgu9rTJ; Wed,  6 Aug 2025 20:01:11 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7649961BD5
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7649961BD5;
+	Wed,  6 Aug 2025 20:01:11 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 297DFD79
+ for <buildroot@buildroot.org>; Wed,  6 Aug 2025 20:01:10 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1B97261C94
+ for <buildroot@buildroot.org>; Wed,  6 Aug 2025 20:01:10 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Uuqn_YYWMRk4 for <buildroot@buildroot.org>;
+ Wed,  6 Aug 2025 20:01:09 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D58FC61BD5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D58FC61BD5
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D58FC61BD5
- for <buildroot@buildroot.org>; Wed,  6 Aug 2025 20:00:41 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 995199759; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Wed, 06 Aug 2025 20:00:39 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1ujkJS-00HOGw-2P;
- Wed, 06 Aug 2025 22:00:38 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E50960A94
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7E50960A94
+ for <buildroot@buildroot.org>; Wed,  6 Aug 2025 20:01:09 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 7477E86F5C; Wed,  6 Aug 2025 20:01:09 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Cc: buildroot@buildroot.org
-References: <20250803180058.338677-1-angelo.compagnucci@gmail.com>
-Date: Wed, 06 Aug 2025 22:00:38 +0200
-In-Reply-To: <20250803180058.338677-1-angelo.compagnucci@gmail.com> (Angelo
- Compagnucci's message of "Sun, 3 Aug 2025 20:00:58 +0200")
-Message-ID: <87v7n0gqzd.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=ApVCbzGs2pcQVU7isaE1ugOknjnokWdonQ2Mr1ScX+JbGGq1Hgl7x5gZtqH4vtXrQ38HEWjfDgD6o4nclHFdISw/ecogqjUAvbub5eW/4EwKRXh5yBk+jFm/8oN7Z2ngcpl+m7uBgmO3BnCdPrBhIqVvSq7rl7Ywjk8LGucHt5L32RUCci0qg+ir6FMnMxts1fb6EyDKKOMn51JLJ4ojJsRmnEudiUvYqDok6LFZM6ajcAdTuNHXyXZ/ZeJl8RCq6RbQ648PxymY8wCR8LeSlksxWPj6HhWuSP6DTfzcfUO/oEUDACX5Jjx3SabGasTEl7vaYFs+fCjt7VqTPBhp+w==;
- s=purelymail1; d=purelymail.com; v=1;
- bh=ZRZ9cWOSy2PmVUO9SqFQSofjn9T6DvN5EpjMYXXjrXI=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=ApVCbzGs
-Subject: Re: [Buildroot] [PATCH] package/htpdate: bump to version 2.0.0
+To: buildroot@buildroot.org
+Date: Wed, 6 Aug 2025 21:51:26 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 9cbbc477626c433fe78614de9474f8446b7e2389
+X-Git-Newrev: a008f3e7cb3b77ff487f7028eed4d6bb386b17ff
+X-Patchwork-Hint: ignore
+Message-Id: <20250806200109.7477E86F5C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/flatcc: add CPE identifier
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -80,24 +58,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=a008f3e7cb3b77ff487f7028eed4d6bb386b17ff
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Changelog:
- > https://github.com/twekkel/htpdate/releases/tag/v2.0.0
+The cpe:2.3:a:flatcc_project:flatcc:*:*:*:*:*:*:*:*
+valid for this package.
 
- > LICENSE file hash changed because of the copyright year update.
+See https://nvd.nist.gov/products/cpe/detail/AA7FC7B6-537C-4735-B615-689D3A91C994
 
- > Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/flatcc/flatcc.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/flatcc/flatcc.mk b/package/flatcc/flatcc.mk
+index 06be1a1338..b2d1efe00d 100644
+--- a/package/flatcc/flatcc.mk
++++ b/package/flatcc/flatcc.mk
+@@ -13,6 +13,8 @@ FLATCC_DEPENDENCIES = host-flatcc
+ FLATCC_CONF_OPTS = -DFLATCC_ALLOW_WERROR=OFF
+ HOST_FLATCC_CONF_OPTS = -DFLATCC_ALLOW_WERROR=OFF
+ 
++FLATCC_CPE_ID_VALID = YES
++
+ # Disable build of tests and samples
+ FLATCC_CONF_OPTS += -DFLATCC_TEST=OFF
+ HOST_FLATCC_CONF_OPTS += -DFLATCC_TEST=OFF
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
