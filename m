@@ -1,47 +1,47 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76141C87FCB
-	for <buildroot@archiver.kernel.org>; Wed,  6 Aug 2025 10:39:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CA43C87FCB
+	for <buildroot@archiver.kernel.org>; Wed,  6 Aug 2025 10:42:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4100541378;
-	Wed,  6 Aug 2025 10:39:10 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kJEB43ivIylI; Wed,  6 Aug 2025 10:39:09 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7470E415CD
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7470E415CD;
-	Wed,  6 Aug 2025 10:39:09 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 269ED233
- for <buildroot@buildroot.org>; Wed,  6 Aug 2025 10:39:08 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0CA39610A7
- for <buildroot@buildroot.org>; Wed,  6 Aug 2025 10:39:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1F446610C7;
+	Wed,  6 Aug 2025 10:42:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fDMnLMOkkU10 for <buildroot@buildroot.org>;
- Wed,  6 Aug 2025 10:39:07 +0000 (UTC)
+ id wIsQFreJ1fhs; Wed,  6 Aug 2025 10:42:06 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 49FAC60EF4
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 49FAC60EF4;
+	Wed,  6 Aug 2025 10:42:06 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id A6F3231
+ for <buildroot@buildroot.org>; Wed,  6 Aug 2025 10:42:04 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8DCCD60EF4
+ for <buildroot@buildroot.org>; Wed,  6 Aug 2025 10:42:04 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LTzBW3dPGJ8V for <buildroot@buildroot.org>;
+ Wed,  6 Aug 2025 10:42:04 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.18;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 97A8B60E8E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 97A8B60E8E
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 85C2760E8E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 85C2760E8E
 Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 97A8B60E8E
- for <buildroot@buildroot.org>; Wed,  6 Aug 2025 10:39:06 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 85C2760E8E
+ for <buildroot@buildroot.org>; Wed,  6 Aug 2025 10:42:03 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from [192.168.7.2] ([85.22.163.130]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MlNtP-1uMLco1h09-00j0Sd; Wed, 06
- Aug 2025 12:39:03 +0200
-Message-ID: <e0be5ac7-595b-47ca-a778-fdd1d5754b2a@gmx.de>
-Date: Wed, 6 Aug 2025 12:39:02 +0200
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mplc7-1uHvjY2LQj-00nQBZ; Wed, 06
+ Aug 2025 12:42:01 +0200
+Message-ID: <27e012c7-ee1e-445f-8d61-93addb163ae4@gmx.de>
+Date: Wed, 6 Aug 2025 12:42:01 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 To: Peter Seiderer <ps.report@gmx.net>, buildroot@buildroot.org
@@ -50,7 +50,7 @@ Cc: =?UTF-8?Q?Ga=C3=ABl_PORTAY?= <gael.portay+rtone@gmail.com>,
  Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
  Martin Bark <martin@barkynet.com>
 References: <20250803144208.195144-1-ps.report@gmx.net>
- <20250803144208.195144-2-ps.report@gmx.net>
+ <20250803144208.195144-3-ps.report@gmx.net>
 Content-Language: en-US, de-DE-1901, de-DE
 Autocrypt: addr=fiona.klute@gmx.de; keydata=
  xsFNBFrLsicBEADA7Px5KipL9zM7AVkZ6/U4QaWQyxhqim6MX88TxZ6KnqFiTSmevecEWbls
@@ -95,86 +95,86 @@ Autocrypt: addr=fiona.klute@gmx.de; keydata=
  bCn+vBDsJwD9Hcht1eVRxnIq745SQ0naL48Q3HGpKdXZpJoBQZ8bSAFhRSb3m+P4PE272rLY
  6FCkqS+UeX7RBpPkkIDoL7WS9HdvDHuQ751D56WkTnIpoF+sgW6tOEcfgFrYf3rVvh6G3B8S
  FPSOJuHYnwzMFrDNxQQKb0uS/j1s2dnlS55MouCvd5pShM5iRFzE7k3CMeS4NkhFim0=
-In-Reply-To: <20250803144208.195144-2-ps.report@gmx.net>
-X-Provags-ID: V03:K1:2Cj086siwOUDhqd9AA/z4GgqFCf5QY8bA7wbw95iNnsuo68Wumy
- pSM+qeMaNgwvXbRUz1ZCsZM1speygcgpMhEncUQBjzmtCFhUHLTweBGDWKkp7m6Fj3N19k6
- psRGktIUwci7v2Nv4D0s6t/pqYn1fP9xizg8lWDWXyUXmM45/JdC5mRgKjU8arNsG904ZO6
- pB0rEWoAmOiA09FLDsVAw==
-UI-OutboundReport: notjunk:1;M01:P0:9uw976nmOxs=;jxIRCuqwUAihl/sOCjsDmnYT1Ci
- 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
+In-Reply-To: <20250803144208.195144-3-ps.report@gmx.net>
+X-Provags-ID: V03:K1:lXyFl6Sgsdh/N0MqmXwOQPYW3+ym/kjINHIRZGh/Eal+NB3u0F3
+ cJEJcyoqfKxz4SzSgEazGa1Q5auqymImcNlNgs2BeeWszTDMYMTVCmGKxrm1a7Gpfcbs6Mg
+ q5V3XXpN7Ql9s5SzDnpQX8JIgR3iKjQFYhtBQTUz4nNyrGR4WzPEh4a1DXFfKl8tBOCwNDZ
+ bOjQXCwGirMlh6hks7sdw==
+UI-OutboundReport: notjunk:1;M01:P0:6XWx8ZjhdBs=;198+A1vq9agUf7pZe3BmtPC2KA/
+ 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
+ T1M/FwIFVz0VgIBHYMNUmIeQbrWvLLYkY+d
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.de; 
- s=s31663417; t=1754476743; x=1755081543; i=fiona.klute@gmx.de;
- bh=6xuTbVRoe4o22OayoBkD+c59Nr5sZdLVqfq819CQRJE=;
+ s=s31663417; t=1754476921; x=1755081721; i=fiona.klute@gmx.de;
+ bh=osZsrBoyauRUWET0PFDHXFaDHC93qsNivYIDsaC5pMk=;
  h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
  References:From:In-Reply-To:Content-Type:
  Content-Transfer-Encoding:cc:content-transfer-encoding:
  content-type:date:from:message-id:mime-version:reply-to:subject:
  to;
- b=OsbtTMZwYTAH8EdictDFQyJGvIajq1IDiGArGFp5aKW2VTGpKnkUd6HBChOq0yZa
- 7Mb9JlyW0okVG+b53+8Uuhc/9onQf6JoWtPTDPFwSNPsoz01qQSUMC2krOOA1Dt1Z
- 9wEvQw5K+4BbAD1b5knkXMoSnjAFQQModrQ+0JynZJ1FaIY0m4JtmnaVkVqng/pB9
- gLd4D0W1yfIzFI+P30fudsIhkS+WuuW/SDeeWz3wjgeReB0a67qD5c6O9/bYKELhK
- 0KHJSHGMfWDxlSBvZWDKNbmn2lKUrUqq1BjjPpO1oMu1j4tEhDPennEOzbzD9Z9lV
- 0vREUzD7MJjjozngEA==
+ b=ZokesbNW5NRHtTFC23Gv4IQlMZ7ugYN5neQ2Y2h1Odp9Z+A9YL5PnHTWXQE/E5Xp
+ Bvw3uf+EGhC2qpek9aoMFKEiOi4KAdhCRj90t8y7LRk1B6JL5oThk0cd2G+wKWysB
+ CclosF79M3DUZ4YQAQr5dreJFnMNRCRrPcwhqGI30ws4jNN2ZlUHeawBu2TskB5in
+ dnzK4r/twRa2V25G09AI/dzBxc6r1JAuVYgz9Fjq9WckEfya/JnQ5f+fSg4Y+M/Yo
+ +j+R8eTCzq5cMPpmKdd1Lf4kUepehKKrA2gXCyxOR38b7ySn6DujeVTlmSXOQyDwm
+ EG4EcJaoAg5HOPhCRg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.de
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
- header.s=s31663417 header.b=OsbtTMZw
-Subject: Re: [Buildroot] [PATCH 2/3] package/rpi-firmware: bump version to
- 95be71b
+ dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
+ header.a=rsa-sha256 header.s=s31663417 header.b=ZokesbNW
+Subject: Re: [Buildroot] [PATCH 3/3] package/brcmfmac_sdio-firmware-rpi:
+ bump version to 6596d33
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -194,44 +194,49 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Am 03.08.25 um 16:42 schrieb Peter Seiderer via buildroot:
-> Version 95be71b matches with kernel 6.12.41.
+> Changelog:
+> 
+>    - 4eec7f2 Sync with RPiOS 1.2-9+rpt3 bluez/1:20230625-2+rpt3 brcm80211 versions
+>    - 4c1789e Merge pull request #25 from HiassofT/fw-2024-08
+>    - e59476f Sync with 1:20240709-2~bpo12+1+rpt3
 > 
 > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
 Tested-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 
-Tested on CM4 and Zero 2W, with the RPi bootloader booting into U-Boot.
+Tested on CM4 (upstream kernel 6.16, as AP) and Zero 2W (upstream kernel 
+6.16 as client, RPi kernel 6.12.41 as AP).
 
 Thanks,
 Fiona
 
 > ---
->   package/rpi-firmware/rpi-firmware.hash | 2 +-
->   package/rpi-firmware/rpi-firmware.mk   | 2 +-
+>   .../brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.hash  | 2 +-
+>   .../brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.mk    | 2 +-
 >   2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmware/rpi-firmware.hash
-> index c2ca9343f1..0645d6ad77 100644
-> --- a/package/rpi-firmware/rpi-firmware.hash
-> +++ b/package/rpi-firmware/rpi-firmware.hash
+> diff --git a/package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.hash b/package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.hash
+> index c20abfc26c..aba028ef6a 100644
+> --- a/package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.hash
+> +++ b/package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.hash
 > @@ -1,3 +1,3 @@
->   # Locally computed
-> -sha256  b120625c1e0d2dec819638a6fda97c74d1c86e184c6a4263cdf04faa2d5bbe2e  rpi-firmware-1.20250326.tar.gz
-> +sha256  6c1b017867c3a51e606859f1cd50df61b94af311577583b6b2a113d11131ee93  rpi-firmware-95be71b8c0f63f03dc06dd0e4c2e5535e6fb4a93.tar.gz
->   sha256  c7283ff51f863d93a275c66e3b4cb08021a5dd4d8c1e7acc47d872fbe52d3d6b  boot/LICENCE.broadcom
-> diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-> index 2577d16a01..d0b6abcc6f 100644
-> --- a/package/rpi-firmware/rpi-firmware.mk
-> +++ b/package/rpi-firmware/rpi-firmware.mk
-> @@ -5,7 +5,7 @@
+>   # Locally calculated
+> -sha256  2f0917b104739455dd488dd8f5af2ee4430801a7ac8fe8d9866e74bfbb185356  brcmfmac_sdio-firmware-rpi-26ff205b45dc109b498a70aaf182804ad9dbfea5.tar.gz
+> +sha256  d9835b33bea65cf15f41753e215a11e5eca818a6e3bfacaa750aeac12456c24f  brcmfmac_sdio-firmware-rpi-6596d332eaadd63e2413e3937715a084f61c39e2.tar.gz
+>   sha256  ea8b7b7b6cfc6fd30587ed977100f6a542734ce53218b5b63de16180acddd599  LICENSE
+> diff --git a/package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.mk b/package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.mk
+> index 95707487a9..8c04b017e3 100644
+> --- a/package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.mk
+> +++ b/package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.mk
+> @@ -4,7 +4,7 @@
+>   #
 >   ################################################################################
 >   
->   # Please keep in sync with configs/raspberrypi*_deconfig
-> -RPI_FIRMWARE_VERSION = 1.20250326
-> +RPI_FIRMWARE_VERSION = 95be71b8c0f63f03dc06dd0e4c2e5535e6fb4a93
->   RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
->   RPI_FIRMWARE_LICENSE = BSD-3-Clause
->   RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
+> -BRCMFMAC_SDIO_FIRMWARE_RPI_VERSION = 26ff205b45dc109b498a70aaf182804ad9dbfea5
+> +BRCMFMAC_SDIO_FIRMWARE_RPI_VERSION = 6596d332eaadd63e2413e3937715a084f61c39e2
+>   BRCMFMAC_SDIO_FIRMWARE_RPI_SITE = $(call github,LibreELEC,brcmfmac_sdio-firmware-rpi,$(BRCMFMAC_SDIO_FIRMWARE_RPI_VERSION))
+>   BRCMFMAC_SDIO_FIRMWARE_RPI_LICENSE = PROPRIETARY
+>   BRCMFMAC_SDIO_FIRMWARE_RPI_LICENSE_FILES = LICENSE
 
 _______________________________________________
 buildroot mailing list
