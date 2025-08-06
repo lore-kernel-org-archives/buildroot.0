@@ -1,90 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC96EC87FD1
-	for <buildroot@archiver.kernel.org>; Tue,  5 Aug 2025 23:37:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08537C87FD2
+	for <buildroot@archiver.kernel.org>; Wed,  6 Aug 2025 03:13:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5257B41D34;
-	Tue,  5 Aug 2025 23:37:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7951D84325;
+	Wed,  6 Aug 2025 03:13:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1caVBtJIKawV; Tue,  5 Aug 2025 23:37:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KxAr5OLwFXOO; Wed,  6 Aug 2025 03:13:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C30A41D35
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C65984321
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8C30A41D35;
-	Tue,  5 Aug 2025 23:37:55 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id D14D9D79
- for <buildroot@buildroot.org>; Tue,  5 Aug 2025 23:37:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9C65984321;
+	Wed,  6 Aug 2025 03:13:40 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 35C7C31
+ for <buildroot@buildroot.org>; Wed,  6 Aug 2025 03:13:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C2DF241D35
- for <buildroot@buildroot.org>; Tue,  5 Aug 2025 23:37:53 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1EF9484325
+ for <buildroot@buildroot.org>; Wed,  6 Aug 2025 03:13:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Pt9CaJva3eZW for <buildroot@buildroot.org>;
- Tue,  5 Aug 2025 23:37:53 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.208.42;
- helo=mail-ed1-f42.google.com; envelope-from=th.huth@gmail.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6615841D33
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6615841D33
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com
- [209.85.208.42])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6615841D33
- for <buildroot@buildroot.org>; Tue,  5 Aug 2025 23:37:52 +0000 (UTC)
-Received: by mail-ed1-f42.google.com with SMTP id
- 4fb4d7f45d1cf-615622ed677so8398684a12.1
- for <buildroot@buildroot.org>; Tue, 05 Aug 2025 16:37:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1754437070; x=1755041870;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=sEScdfJtsk4I7zwZLKzT/b8KsmU1QpBt2Xs/w5Ek69A=;
- b=UrvSW30Tw3JeoWDExpHfXvBN/k1kO6wfOkXhjPdTC6ACBAGu1b3lIlEGgDejRawbBX
- gsGoyiP/v36+KZwHYUfFK0/4YVmpGeovNdzcn6K/0dsYCSPGGPO8EXkTFeWute9J1hcv
- 5Vxz51M7dJXLJ/8Kdo5KBWZZTnhO0TDpLUoQb+r0bhUSkl3w7VyAtGAgZWXb/oJho2CS
- sK37p/dSag3ixgrhZAXK23RP7tZ/OsBhECprr4cCv9KNNClpIi8Mv4M/dX563XVCLW7j
- ZXP/kLb7avkrkTH3axZL2Sq7xnNXnaeAWxsLTGaabY7TmV1OyvyMT+Vr30M9l2EGDyoB
- rWeg==
-X-Gm-Message-State: AOJu0Ywa/XXXdzLsoH0SxYXJ9vMwfFbJipcmTPTc2gOsZyqgIz/S8ouU
- BW5nIvrgPKWlQ42STqVkoXxVpX9HqeE5eLGInQVxSniAt3X1mqjoNqIm
-X-Gm-Gg: ASbGncvvvLWt8sCMKo5PrvMrpuNyLFoxn+GZxAm90rR9PCzC7dZI3Ya3+X7b776mFEX
- to9Ciq38aohXwALotxPWK+DLztdRvpkA5mQ619WPHhqEzzBhuSHSD0KYf+kSd7DywphE9NG95Fc
- 75dyO7ePk7bYjKGKDdURXIqB5pakRPVVGZfbxu6y3uOXRRGH7P/ea3Y/you6fCzzlER0kEsu5rd
- c/i7iokfOaT78122+FFM18F6Sgk20S0C14ThR9ev0XeYc/xjBvH+Q40jtmyNi/ZHeTqPPq1UBWx
- S/z0pD1vZXbcofp0rmBLHCmw8lhHiAZQjMCksLQ1m+UcPYm7cKeoUoPROfUhfu67R4uR34HyCT7
- Qg1YxxVvWy8OyFaVdmGLy7QFCuK0eJ+e71l+Q3nlO7zjaDNh5ay6VIh0=
-X-Google-Smtp-Source: AGHT+IHMVhkPZ3imqnAgsHcNCrgL+tTl4iXobEW4UME8EY4hV2D5IcC85h3u2lCaI7aE64Csl3zuJA==
-X-Received: by 2002:a05:6402:3487:b0:615:6fae:d778 with SMTP id
- 4fb4d7f45d1cf-6179615eb94mr631615a12.17.1754437070076; 
- Tue, 05 Aug 2025 16:37:50 -0700 (PDT)
-Received: from tpx1 (ip-109-42-50-164.web.vodafone.de. [109.42.50.164])
- by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-615a8ffa3c4sm9279307a12.46.2025.08.05.16.37.48
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 05 Aug 2025 16:37:49 -0700 (PDT)
-Date: Wed, 6 Aug 2025 01:37:47 +0200
-From: Thomas Huth <huth@tuxfamily.org>
-To: Alex =?UTF-8?B?QmVubsOpZQ==?= <alex.bennee@linaro.org>
-Cc: buildroot@buildroot.org, Cyril Bur <cyrilbur@gmail.com>
-Message-ID: <20250806013747.1b2835f8@tpx1>
-In-Reply-To: <20250805151814.1114414-6-alex.bennee@linaro.org>
-References: <20250805151814.1114414-1-alex.bennee@linaro.org>
- <20250805151814.1114414-6-alex.bennee@linaro.org>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-redhat-linux-gnu)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id M92dMBABGrqV for <buildroot@buildroot.org>;
+ Wed,  6 Aug 2025 03:13:39 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org CFF7F84323
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CFF7F84323
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CFF7F84323
+ for <buildroot@buildroot.org>; Wed,  6 Aug 2025 03:13:38 +0000 (UTC)
+Received: from home.juju.sh (unknown [66.187.116.99])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 3B14F78035B;
+ Wed,  6 Aug 2025 05:13:32 +0200 (CEST)
+To: buildroot@buildroot.org
+Cc: Julien Olivain <ju.o@free.fr>
+Date: Wed,  6 Aug 2025 05:13:09 +0200
+Message-ID: <20250806031309.201044-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.50.1
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=tuxfamily.org
-Subject: Re: [Buildroot] [PATCH v4 5/9] package/kvm-unit-tests: bump to
- v2025-07-31
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1754450015;
+ bh=324AjskfggSwt4YAO8VL/eJ1yjHtVhrSBKM1bxalGlI=;
+ h=From:To:Cc:Subject:Date:From;
+ b=t8x0IRjWVJOO8oMOjC5UYNeTwVNNqs9NRKi5l3nLWqC9yTBbjQv2IqpIMWq8gvwjc
+ Fxzun3b4o/YtgBKcHiatCZPofQn0JTxO49IHJqs5Hy6Jbloe9DgDv0I/mwYfgNnGGZ
+ 3ZI6ICc6aN7VS5aZGH31Nzaekl6pxLFgEzFkOpgThI2P/apt4bLUohmrkwYPABHKnW
+ yZDO6DLMORk/ngUCufLDVkwWnmVjNZ9AI+o3B3UTifZ7ENPVhv8eZDCwyGLpA9x2/D
+ MTIw+6te3SBBX1KjBHAO27jlOiOO/g0dc1iND1I3s0EgIgLgjURtkBxykFSKDnKvuX
+ FoPy2LVRXsEwQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=t8x0IRjW
+Subject: [Buildroot] [PATCH 1/1] package/fwts: bump to version 25.07.00
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,21 +75,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-QW0gVHVlLCAgNSBBdWcgMjAyNSAxNjoxODowNyArMDEwMApzY2hyaWViIEFsZXggQmVubsOpZSA8
-YWxleC5iZW5uZWVAbGluYXJvLm9yZz46Cgo+IFVwZGF0ZSB0byB0aGUgY3VycmVudCB2ZXJzaW9u
-IG9mIEtWTSB1bml0IHRlc3RzLiBUaGUgbWFpbiBjaGFuZ2UKPiBzaW5jZSB0aGUgbGFzdCBjaGVj
-ayBwb2ludCBpcyBzdXBwb3J0IGZvciBrdm10b29sIHRvIGxhdW5jaCB0ZXN0cy4KPiAKPiBTaWdu
-ZWQtb2ZmLWJ5OiBBbGV4IEJlbm7DqWUgPGFsZXguYmVubmVlQGxpbmFyby5vcmc+Cj4gCj4gLS0t
-Cj4gdjMKPiAgIC0gcmV3b3JkIGNvbW1pdAo+ICAgLSBtb3ZlIHRvIGN1cnJlbnQgbWFzdGVyIHNv
-IHdlIGNhbiB1c2Uga3ZtdG9vbCBhcyB3ZWxsCj4gICAtIGRpZG4ndCBhcHBseSB0aF9odXRoJ3Mg
-ci1iIGFzIG1vdmVkIHRvIG1hc3Rlcgo+IHY0Cj4gICAtIGNoYW5nZSBmcm9tIHNuYXBzaG90IHRv
-IHYyMDI1LTA3LTMxCj4gICAtIHJld29yZCBjb21taXQgbWVzc2FnZSBhZ2Fpbgo+IC0tLQoKUmV2
-aWV3ZWQtYnk6IFRob21hcyBIdXRoIDxodXRoQHR1eGZhbWlseS5vcmc+Cl9fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QK
-YnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxt
-YW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+See release announce:
+https://lists.ubuntu.com/archives/fwts-devel/2025-July/014057.html
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+Patch tested in:
+https://gitlab.com/jolivain/buildroot/-/jobs/10928033628
+---
+ package/fwts/fwts.hash | 2 +-
+ package/fwts/fwts.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/fwts/fwts.hash b/package/fwts/fwts.hash
+index 3657d87707..9a4422069c 100644
+--- a/package/fwts/fwts.hash
++++ b/package/fwts/fwts.hash
+@@ -1,5 +1,5 @@
+ # Hash from: https://fwts.ubuntu.com/release/SHA256SUMS
+-sha256  06802ac4fed7b6de989417c9726180c77cdc7253d4434b83e43104f4b7f65492  fwts-V25.05.00.tar.gz
++sha256  19450b19cfd71a43d3716e4108d06db8b52f10801fb24bfb76f30dc0023d5142  fwts-V25.07.00.tar.gz
+ 
+ # Hash for license file
+ sha256  77a5f0ea48e53ee8d67aecc7759cf468bcd340c1caca711ed4307b477a93fb47  debian/copyright
+diff --git a/package/fwts/fwts.mk b/package/fwts/fwts.mk
+index d3ba761982..b3860c6fad 100644
+--- a/package/fwts/fwts.mk
++++ b/package/fwts/fwts.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FWTS_VERSION = 25.05.00
++FWTS_VERSION = 25.07.00
+ FWTS_SOURCE = fwts-V$(FWTS_VERSION).tar.gz
+ FWTS_SITE = https://fwts.ubuntu.com/release
+ FWTS_STRIP_COMPONENTS = 0
+-- 
+2.50.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
