@@ -1,109 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 568C5C87FCA
-	for <buildroot@archiver.kernel.org>; Wed,  6 Aug 2025 06:21:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08A50C87FD1
+	for <buildroot@archiver.kernel.org>; Wed,  6 Aug 2025 07:37:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0A69084404;
-	Wed,  6 Aug 2025 06:21:58 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xC1lxyVJQn36; Wed,  6 Aug 2025 06:21:57 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2FE9D84413
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2FE9D84413;
-	Wed,  6 Aug 2025 06:21:57 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 2B5C7D79
- for <buildroot@buildroot.org>; Wed,  6 Aug 2025 06:21:55 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 280CA60E5C
- for <buildroot@buildroot.org>; Wed,  6 Aug 2025 06:21:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A7178608B4;
+	Wed,  6 Aug 2025 07:37:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fKkj-jaN3Iov for <buildroot@buildroot.org>;
- Wed,  6 Aug 2025 06:21:54 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::12c; helo=mail-lf1-x12c.google.com;
- envelope-from=troglobit@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3B08D60FBA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B08D60FBA
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com
- [IPv6:2a00:1450:4864:20::12c])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3B08D60FBA
- for <buildroot@buildroot.org>; Wed,  6 Aug 2025 06:21:53 +0000 (UTC)
-Received: by mail-lf1-x12c.google.com with SMTP id
- 2adb3069b0e04-55b823c9129so6300908e87.3
- for <buildroot@buildroot.org>; Tue, 05 Aug 2025 23:21:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1754461312; x=1755066112;
- h=user-agent:mime-version:date:content-transfer-encoding:organization
- :references:in-reply-to:cc:to:from:subject:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=rLgC4UJnnTq9WeeyJfXtR7ZeTCZR72Z00z2kSuxnkXw=;
- b=WOhsFuvYb0XqiRZ9I04jzHsSG7iu+apw1gsvLr5ysAh/sCkAtIJGfXA3+wVGvbeZCH
- SDEG2wktY/5jlu2OSOqHObu48k+RPJ4SBu7j0xeuHYT+73UD6Rb5Rn56YieloK+KHuZ2
- Uj2Dg26cKyhwBKERfMa7FasTf3fQfYXwLr80BB/k4fV2nnTK/j7jOOXPA5wR0hAUeQAI
- CzXb3jZw6ZCQxqmEyiCuggJXPfGXVVADvD/cqRZF2TeqWUQGs11JRo8U9QbyrwHX9BsS
- oHhY4XgpiuHq2KAWYupRhFEdVzywSShCmdS7+JJ2CQgYwnWT5iOm3FV0X32QeryWOk2D
- q2KA==
-X-Forwarded-Encrypted: i=1;
- AJvYcCVdngos8/u4t0TRbZ+23ZnaIwYC06g6disRwaMyp8KLoAX7s9q5JOEuTz/wZbGcy4rm44U94LifstI=@buildroot.org
-X-Gm-Message-State: AOJu0Yy3WICEq8t77bPt62uot/CXHHAbRd+Ca5Eta4I/6/seof3HKHav
- w93+wFy1UvucNz47OACRevFU3Z4OIE97rqOOObQ829xY0D6RdU9o7Rjn
-X-Gm-Gg: ASbGncvFht4EP1pvDhuFVQ/80LjbN+97qVkwQVibNXB1JNo2QIevTfq5soXoQTcV6iH
- HDctMKOqN8fqPA0b4d5HOF0LWsBU7IntcAc3TZb2U8iBYZjuMJlKy0Jxk6WMX3Gf8mMToQLPSzR
- GCDoyb/44pIRq1wAiPzPb/SYkPdFBlGuL9lgFRAcP4/znka1XwiSpRu9yyTSv/oO7arz9pcrS+k
- EXilJcyubX2sul1GphFELgq0ddTCJqP62HpD3dBw++t2reFoQCltn0UQakAbuiA2yYOZyrOZLKa
- 0DKOUmcf7dbOiwUyNPgv/CSrEMFUvBdf7HmTVkmMfEfNxDVqPaoEFeyzIsUq98hTFJNjgeIXPlA
- U
-X-Google-Smtp-Source: AGHT+IGq2xpeFCtkF7WxjSaARTkXyE6PeKxl3k0QUJsekXERHg66wGfqJzDK5ADFnIpxSlWo7nuDcQ==
-X-Received: by 2002:a05:6512:39c3:b0:55b:8827:b7c4 with SMTP id
- 2adb3069b0e04-55caf357830mr475723e87.40.1754461311724; 
- Tue, 05 Aug 2025 23:21:51 -0700 (PDT)
-Received: from gimli.lan ([2001:9b0:214:3500::522])
- by smtp.gmail.com with ESMTPSA id
- 2adb3069b0e04-55b88ca2978sm2195593e87.116.2025.08.05.23.21.49
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 05 Aug 2025 23:21:50 -0700 (PDT)
-Message-ID: <73cc9c6b7a9eacfb39f4a831ecf0a9ec7eb2b8fb.camel@gmail.com>
-From: Joachim Wiberg <troglobit@gmail.com>
-To: Peter Seiderer <ps.report@gmx.net>, buildroot@buildroot.org
-Cc: Fiona Klute <fiona.klute@gmx.de>
-In-Reply-To: <20250805171603.1296472-3-ps.report@gmx.net>
-References: <20250805171603.1296472-1-ps.report@gmx.net>
- <20250805171603.1296472-3-ps.report@gmx.net>
-Organization: wires.se
-Date: Wed, 06 Aug 2025 08:21:35 +0200
+ id EwxUQ5fRLDAT; Wed,  6 Aug 2025 07:37:53 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E981860880
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id E981860880;
+	Wed,  6 Aug 2025 07:37:52 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 268D3D79
+ for <buildroot@buildroot.org>; Wed,  6 Aug 2025 07:37:52 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 185FE4038F
+ for <buildroot@buildroot.org>; Wed,  6 Aug 2025 07:37:52 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nIhobex_NqtD for <buildroot@buildroot.org>;
+ Wed,  6 Aug 2025 07:37:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A9AC840198
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A9AC840198
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A9AC840198
+ for <buildroot@buildroot.org>; Wed,  6 Aug 2025 07:37:50 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 390268345; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Wed, 06 Aug 2025 07:37:42 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1ujYiT-00Fwwc-2H;
+ Wed, 06 Aug 2025 09:37:41 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Hans-Heinrich Hansen <hhansen@avt-nbg.de>
+Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
+References: <FR5P281MB50782986E33353F9AFF80C468723A@FR5P281MB5078.DEUP281.PROD.OUTLOOK.COM>
+ <87y0rzkkf7.fsf@dell.be.48ers.dk>
+ <FR5P281MB5078D44083ABDE1AAC41FC828722A@FR5P281MB5078.DEUP281.PROD.OUTLOOK.COM>
+ <87ms8ejodi.fsf@dell.be.48ers.dk>
+ <FR5P281MB507889A3AEA35D1FD5240DA7872DA@FR5P281MB5078.DEUP281.PROD.OUTLOOK.COM>
+Date: Wed, 06 Aug 2025 09:37:41 +0200
+In-Reply-To: <FR5P281MB507889A3AEA35D1FD5240DA7872DA@FR5P281MB5078.DEUP281.PROD.OUTLOOK.COM>
+ (Hans-Heinrich Hansen's message of "Wed, 6 Aug 2025 06:14:00 +0000")
+Message-ID: <87ikj0kiii.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Evolution 3.52.3-0ubuntu1 
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1754461312; x=1755066112; darn=buildroot.org;
- h=user-agent:mime-version:date:content-transfer-encoding:organization
- :references:in-reply-to:cc:to:from:subject:message-id:from:to:cc
- :subject:date:message-id:reply-to;
- bh=rLgC4UJnnTq9WeeyJfXtR7ZeTCZR72Z00z2kSuxnkXw=;
- b=Pz670BebQJqOYMOSWrEZg7ofNKvtMr7eKrbVWinzOK3Pk5vmIJLU0mmLYEMUuRJkXV
- e3uS6gJMLAv+SmsiJSckrrvCSvPOPTdZ8/c+Hezgb6UJXIbhhV4fZO7BPMeMxJ0jQRGw
- SOhc1wlUjkmEJvt2K3+hheGV5bPogfrnZvky5EMeAdxmoXE1yPBOX4cxm2M7iZGbJPR6
- 37nqaWMqH3lAbamIF98q5FJZcdCHzmLBofjVrchdz3QVmXu8Dshsdh85zUV+WyEEwgzg
- S0Wg75qYUzabsA1jRkVamjL3ZCWmLpsJJtCiuFV6kppd25AIK2VK0wMc+i2A4BEiYPLi
- nmxw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=pbvYhy3rygejNZtx7kla+QcvsR3R5UFz/BWgwpzs9Ise8EVbIFRuHClMO68Cwnb0q9xqovVVOUg9J2035rUJF4MgzeY7spZGO8amZ2KbgsV15gDMYntZ3j8s8js8d3Pf6sHjxq4yAorfdCMG9+Xtj/FjtGZr9+hgbnf3wfJcy9Q7OhGrSuqud09gaibGa0ZVNlsTbDhS0mlrP0lwFNXXjtVJFSydK5XEOzVOfUjtzymBzYBSMJfQy4mEJyPBslAmwKvLZK68gRoBWsPIsYVu5FCJjRUTOPz5GhKjgqbfwz5FeRi3z5cGWRtC5QwgkgoDhV4fZXWioZ3b9neHs20zLg==;
+ s=purelymail1; d=purelymail.com; v=1;
+ bh=c0KaysaL5eBHAeEF6WDAosnn15mh6g/nVB6Z8HPNV9w=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=Pz670Beb
-Subject: Re: [Buildroot] [PATCH v3 3/3] package/ssdp-responder: update
- S50ssdpd (move shellcheck comment)
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail1 header.b=pbvYhy3r
+Subject: Re: [Buildroot] Buildroot with Advantech EIO-IS200-DRIVER
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -120,13 +89,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 2025-08-05 at 19:16 +0200, Peter Seiderer wrote:
-> - S50ssdpd: move shellcheck comment to the line where needed
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+>>>>> "Hans-Heinrich" == Hans-Heinrich Hansen <hhansen@avt-nbg.de> writes:
 
-Reviewed-by: Joachim Wiberg <troglobit@gmail.com>
+ > Hello Peter,
+ > thank you for your assistance!
 
+ > I've enabled again the loadable module support (CONFIG_MODULES=y), but
+ > it seems that the source code (EIO_IS200_DRIVER_SITE = $(call
+ > github,ADVANTECH-Corp,eio-is200-linux-kernel-driver,$(EIO_IS200_DRIVER_VERSION)))
+ > isn't downloaded. I think that it must be found in the
+ > output/build/buildroot-config/br2/external folder, but my
+ > output/build/buildroot-config/br2/external shows only the following
+ > directories and header files. All header files (created by buildroot?)
+ > are empty:
+
+No, the output/build/buildroot-config is simply an internal
+implementation detail of the kconfig configuration system we are reusing
+from the Linux kernel. Your package tarball should be in
+output/dl/eio_is200_driver (unless you have customized BR2_DL_DIR) and
+get extracted in
+output/build/eio_is200_driver-082e737c59aa92bba2c29db46a06cdd0e5beb600
+when building (if enabled in your .config)
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
