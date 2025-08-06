@@ -1,78 +1,101 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9775DC87FD3
-	for <buildroot@archiver.kernel.org>; Wed,  6 Aug 2025 14:06:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F5A7C87FD3
+	for <buildroot@archiver.kernel.org>; Wed,  6 Aug 2025 14:09:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 516C561B20;
-	Wed,  6 Aug 2025 14:06:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 705A4412E1;
+	Wed,  6 Aug 2025 14:09:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EeXCThyojbuh; Wed,  6 Aug 2025 14:06:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id M8bpMoKlz_ZS; Wed,  6 Aug 2025 14:09:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 829216072F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B739B41B90
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 829216072F;
-	Wed,  6 Aug 2025 14:06:46 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1CA51D79
- for <buildroot@buildroot.org>; Wed,  6 Aug 2025 14:06:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B739B41B90;
+	Wed,  6 Aug 2025 14:09:03 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id A0F02D79
+ for <buildroot@buildroot.org>; Wed,  6 Aug 2025 14:09:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 032976072F
- for <buildroot@buildroot.org>; Wed,  6 Aug 2025 14:06:45 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9D9C1845FC
+ for <buildroot@buildroot.org>; Wed,  6 Aug 2025 14:09:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sQ0gf7LpjV2w for <buildroot@buildroot.org>;
- Wed,  6 Aug 2025 14:06:44 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1957F612F2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1957F612F2
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1957F612F2
- for <buildroot@buildroot.org>; Wed,  6 Aug 2025 14:06:43 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1758750493; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Wed, 06 Aug 2025 14:06:41 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1ujemu-00Gn9y-0Q;
- Wed, 06 Aug 2025 16:06:40 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabien Lehoussel via buildroot <buildroot@buildroot.org>, arnout@rnout.be
-Cc: Fabien Lehoussel <fabien.lehoussel@smile.fr>,  Thomas Perale
- <thomas.perale@mind.be>
-References: <20250716093401.1213358-1-fabien.lehoussel@smile.fr>
- <20250716093401.1213358-5-fabien.lehoussel@smile.fr>
-Date: Wed, 06 Aug 2025 16:06:40 +0200
-In-Reply-To: <20250716093401.1213358-5-fabien.lehoussel@smile.fr> (Fabien
- Lehoussel via buildroot's message of "Wed, 16 Jul 2025 11:33:48
- +0200")
-Message-ID: <87ldnwilxr.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2L1OcW-As42j for <buildroot@buildroot.org>;
+ Wed,  6 Aug 2025 14:09:02 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::52f; helo=mail-pg1-x52f.google.com;
+ envelope-from=lancethepants@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 12F46845FA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 12F46845FA
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com
+ [IPv6:2607:f8b0:4864:20::52f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 12F46845FA
+ for <buildroot@buildroot.org>; Wed,  6 Aug 2025 14:09:01 +0000 (UTC)
+Received: by mail-pg1-x52f.google.com with SMTP id
+ 41be03b00d2f7-b423b13e2c3so4156951a12.3
+ for <buildroot@buildroot.org>; Wed, 06 Aug 2025 07:09:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1754489341; x=1755094141;
+ h=content-transfer-encoding:subject:from:to:content-language
+ :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+ :cc:subject:date:message-id:reply-to;
+ bh=GXzyJvjYTa6ozITEZxNsZKdkUpJgGmjYjWAkDhqZDiA=;
+ b=gSiu7npG0ymrOB5dbll7DVk9hSOJYshzCDJuwn/r0fK4Iu+xkWdn9c5fl9lRBTq37j
+ UpRCodPpCLHQZGZ6W/y7CQovyWi9H3pqaql/YstDF8HOkeY6zgYjdKBz6BCdd7ZtbjeN
+ 1n9NsoWpcdd005l/9luYUCxrb2xsFscVZ6ivW5sjAjG1da0DnRZYlZl6PQU9PZafGXuF
+ sMGDkW1xwh0bsxR8QPYaMMCbJzCvYNK/UPzcylgWffH3hRCwdM2s2udPdxGIkeapnYel
+ bPVJH9xjVmUhb61Sellj4u8Gve4yl33uRTl5Oxd835qFOHktJCrZBUGVB5I1rpeNBmDo
+ a7nQ==
+X-Gm-Message-State: AOJu0YwtKcp5H34DFSko9gMXNNW2C7fDPTEIR7238aVYqfn1ZwjQGvPw
+ 5F8CS6z5QrbbThjMbB9nDElpHtxKv6KlZlEthKmszndOczIhK56EkD+WdCt3uw==
+X-Gm-Gg: ASbGncsi6MIMGXGcLgnl2N3u8q2nSNw3Hnat7Cai8RPwNPLWzgLRe/UOF1ZAvGT1jGv
+ pjsn7F4NnpGfpcgeIxZSpa51OpaODnbHAHEFmPA7wJ3mNYig3BmgX1/9qf62lXraa7XfNBvbXd8
+ /GPo0WAHUp888vZZ6vAW/RKRw61p85IbNY/Iczpv8+YSXIFOtWaSv0QSldoO3r53Jwq0I/8vRfN
+ HRJXN860uKtWjMbKXddr3BZrwf48osXUt7KRta/NxSVf5nRkUgfXMR3cKwignXJr18J9jHOj9DN
+ LhoaxAvUeMFfSOK1Db206bnLm3RD16rMkLEw0inG6tK5O1ZD7X7sUSsvEIkfBHLh7coKt3CYghb
+ /W9M4flFwr1I0R8pLSNgiXjCAu58gCb4EAvL4qlCwjl/F+w==
+X-Google-Smtp-Source: AGHT+IGZZ7zleIIgf0fDRxilaV2n8RUzfOoACiRJeyyTpaZpwQz/bSz6Tn3D66T/ZWMNNSBqjgkVtw==
+X-Received: by 2002:a17:903:2b06:b0:240:b075:577f with SMTP id
+ d9443c01a7336-242a0b70dbdmr37429715ad.37.1754489340870; 
+ Wed, 06 Aug 2025 07:09:00 -0700 (PDT)
+Received: from [10.0.0.72] ([76.8.199.226]) by smtp.gmail.com with ESMTPSA id
+ d9443c01a7336-241d1f1ececsm159378245ad.68.2025.08.06.07.09.00
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 06 Aug 2025 07:09:00 -0700 (PDT)
+Message-ID: <1cc31884-bcac-4b37-b83e-0bb3ef937f64@gmail.com>
+Date: Wed, 6 Aug 2025 08:08:59 -0600
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=aEH0GBy/yfQLOgybxSKl7L2UnZsiuRkMCQNN5mwvd1nLjF8lpg0CnBKL3ilngIim3ZT6B1fKUvwhWonPq3BKfo4eDYNLNhCQTCl+i7ZprHxZ57KtGk6K4tRnXqn7CeksPAq5CJBmT6RNUSr5WRpayFKyff04WlnUorWicdbbLNEl5aIuKyIxTXkad7MNXHJ6JWJrOdOeTRb81PLr2BYLMx5KLBzbbnS7YX1B/CYsf7db/yG+B6yH18A4llH3Jn4wNPxKOIRvwkcQQO4/cyH6yakvv4EUr9EF7LXRN+304I4ABQLdwMbHogKFbbhjFUfvOhbUBbR2heaIgdLNib7cAA==;
- s=purelymail1; d=purelymail.com; v=1;
- bh=56liKCVIGt+WlyPVjejn502gIJjPe9mQgHIy1SFfhCI=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=aEH0GBy/
-Subject: Re: [Buildroot] [PATCH v2 5/5] utils/generate-cyclonedx: add source
- field to CVE entries
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: buildroot@buildroot.org
+From: Lance Fredrickson <lancethepants@gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1754489341; x=1755094141; darn=buildroot.org;
+ h=content-transfer-encoding:subject:from:to:content-language
+ :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=GXzyJvjYTa6ozITEZxNsZKdkUpJgGmjYjWAkDhqZDiA=;
+ b=VTlJma+E27jolHSedSL6cCkdm6yWi0xBTkQyT9V10rYgbQJpRgZw8ma3oKlqBLLF0U
+ eqrnli2LzPimDX+UgWNvgXAJumb76Xgt0Krp6czeWcvLJYSj+/thJeTJl46cfRYBPo8q
+ +NI7DDbXYmskV1mkaPMf1BERXCCbmHqrTpR08n2sM6+Vw+gR7HkQ8yT3kVbfEKxn7Lpy
+ tqrHhjBWmdBiNXnw3vMZQXKc7eNH2itTr5tDIJAU0s5Lrw/c5w/ZTzNjuDt1PiMBVc6D
+ haOK92Y5ETV3B8Oycs7+SrUx2ohsg4Hbzp45YLRjgJs1Uu3nQXr/yQcWnguAPxnoYCnh
+ mkwA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=VTlJma+E
+Subject: [Buildroot] Multiple uboot defconfigs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,54 +107,19 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabien" == Fabien Lehoussel via buildroot <buildroot@buildroot.org> writes:
-
- > Mandatory for DependencyTrack compatibility
- > Signed-off-by: Fabien Lehoussel <fabien.lehoussel@smile.fr>
-
-Arnout mentioned in
-https://lore.kernel.org/buildroot/d85a9587-a1f0-4bdd-876d-939160102746@rnout.be/
-that it is marked as optional in the cyclonedx spec. Can you clarify
-what is the difference in behaviour in DependencyTrack if this is
-included?
-
-> ---
- >  utils/generate-cyclonedx | 4 ++++
- >  1 file changed, 4 insertions(+)
-
- > diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
- > index d28750735f..5effa0282c 100755
- > --- a/utils/generate-cyclonedx
- > +++ b/utils/generate-cyclonedx
- > @@ -228,6 +228,10 @@ def cyclonedx_vulnerabilities(show_info_dict):
- 
- >      return [{
- >          "id": cve,
- > +        "source": {
- > +            "name": "NVD",
- > +            "url": "https://nvd.nist.gov/vuln/detail/" + cve
- > +        },
- >          "analysis": {
- >              "state": "in_triage",
- >              "detail": f"The CVE '{cve}' has been marked as ignored by Buildroot"
- > -- 
-
- > 2.43.0
-
- > _______________________________________________
- > buildroot mailing list
- > buildroot@buildroot.org
- > https://lists.buildroot.org/mailman/listinfo/buildroot
-
-
--- 
-Bye, Peter Korsgaard
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SSdtIHdvcmtpbmcgd2l0aCBhIGRldmljZSB0aGF0IGNhbiBib290IGZyb20gbm9yLCBuYW5kLCBl
+bW1jLCBhbmQgCnNkY2FyZC7CoCBJJ2QgbGlrZSB0byBjb21waWxlIHVib290IGZvciBlYWNoIG9m
+IHRoZXNlIGNvbmZpZ3VyYXRpb25zIGluIApvbmUgZ28gaW4gYSBzaW5nbGUgYnVpbGRyb290IGNv
+bmZpZ3VyYXRpb24sIGJ1dCBpdCBsb29rcyBhcyB0aG91Z2ggeW91IApjYW4gb25seSBzcGVjaWZ5
+IGEgc2luZ2xlIHVib290IGRlZmNvbmZpZy7CoCBJcyB0aGVyZSBhbnlvbmUgdGhhdCdzIGFsc28g
+CmRlYWx0IHdpdGggdGhpcyBzY2VuYXJpbz8gb3IgaXMgdGhlcmUgYW55dGhpbmcgSSd2ZSBtaXNz
+ZWQgZm9yIGNvbXBpbGluZyAKbXVsdGlwbGUgdWJvb3QgY29uZmlncyBpbiBhIHNpbmdsZSBidWls
+ZHJvb3QgY29uZmlndXJhdGlvbj8KCnRoYW5rcywKTGFuY2UKX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJv
+b3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0
+aW5mby9idWlsZHJvb3QK
