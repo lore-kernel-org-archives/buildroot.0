@@ -1,99 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE3ACC87FCB
-	for <buildroot@archiver.kernel.org>; Wed,  6 Aug 2025 20:06:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31735C87FD3
+	for <buildroot@archiver.kernel.org>; Wed,  6 Aug 2025 20:18:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8BA7240C19;
-	Wed,  6 Aug 2025 20:06:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 08C8D84731;
+	Wed,  6 Aug 2025 20:18:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uvJcR_v6VZIN; Wed,  6 Aug 2025 20:06:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OiVT9KvExMBl; Wed,  6 Aug 2025 20:17:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 98A6640C03
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BC5308472E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 98A6640C03;
-	Wed,  6 Aug 2025 20:06:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BC5308472E;
+	Wed,  6 Aug 2025 20:17:58 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 6DAC1233
- for <buildroot@buildroot.org>; Wed,  6 Aug 2025 20:06:36 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 386DFD79
+ for <buildroot@buildroot.org>; Wed,  6 Aug 2025 20:17:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 53C1E40C00
- for <buildroot@buildroot.org>; Wed,  6 Aug 2025 20:06:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2A56941EE5
+ for <buildroot@buildroot.org>; Wed,  6 Aug 2025 20:17:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id C4hnIJdmGw7z for <buildroot@buildroot.org>;
- Wed,  6 Aug 2025 20:06:35 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1284540BBD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1284540BBD
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1284540BBD
- for <buildroot@buildroot.org>; Wed,  6 Aug 2025 20:06:34 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id
- ffacd0b85a97d-3b794a013bcso141164f8f.2
- for <buildroot@buildroot.org>; Wed, 06 Aug 2025 13:06:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1754510792; x=1755115592;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=WEV66IwyeUe6XCPXZk9c5Z8GvJs0lpWf3LCQKhGXlJ8=;
- b=ahntkMXWJkSZ6Vzb4jYgiNLTG8wRg599SgOaUUP25NrllxokhiSklc1WkeN1oADEvx
- beh3mz3BH5kcXOdJGdYoevqhBGW9rOU2nC2eUPGgv2XQBW08iExV6QO2i+cWcqhyg3RX
- fRpZNmA6UovfOag6AOL/mGcnAcSr20te5BN1I/DB/h36uAZBA68tG2/o5YFNoCamplUX
- wN0Buq2WF63InktuBdEO3cD905l3h9UBCzo0RwQtArUbSv3wX0Ev+VpcTxpVIOjvHRZX
- LK1KjpuUYJjTri4RDGuS6g86UEag6ZwDbuMbhGx6xpcg3Wx6RrfRmSPq74Q1akPAoViv
- vVpQ==
-X-Gm-Message-State: AOJu0Yyotdr0/m/LUEAtu/1FR4BPAwcRyO+greEpG1ELP66zt7a44PvN
- Qu5FcQfXv2bb+mif5buOMExxTZsADa4ogzT6hlGHe4M07zb9eI5qRhy28zGUq421NrTN1VWkmlS
- yCNai
-X-Gm-Gg: ASbGncveCTO/m3l7TYhB8QRS7oMoGckXknBy4NeymvYwF0nzeDEXWzvpmlMQP65VSze
- twWI72gApPF+yF5CWkn96REH5iUeH1v2DaSSl4ImS8CaUOY+66E1j0w4EwhAq6Q82VufEywDtcT
- 3t1MFebO1/vzV4J65dAZYmqW57lSopqP19xQFKy5Z8ZE7kI+dWUEyqjZhesdqnp2YGPZx0P6H3/
- OvkcP9/paHZGMhQl9egW8x4AuCe8MG6c+ZZ1Qfx7QtXdHuSKRD9Z1h01oOgNiP7EzximRNUbBhJ
- G90DZCaqPsuZtlOVp5budu6+hLDdsGIES5vJZVVRVNYF2k/8RA/N790m6XNBZKyvCFmPh6ky+Gc
- 6MnCbO6bmlzNM+g==
-X-Google-Smtp-Source: AGHT+IHPoS7Au/2hiwGwEWA71fcPM7RCy4Gx0GzteoanW873TWCrN5r1adyoe1Ry4sWFRv249V5AZQ==
-X-Received: by 2002:a05:6000:220d:b0:3a5:783f:528a with SMTP id
- ffacd0b85a97d-3b8f4948865mr3106846f8f.59.1754510792378; 
- Wed, 06 Aug 2025 13:06:32 -0700 (PDT)
-Received: from arch ([79.132.233.79]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3b79c3bc12csm24649352f8f.28.2025.08.06.13.06.31
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 06 Aug 2025 13:06:32 -0700 (PDT)
-To: buildroot@buildroot.org
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Wed,  6 Aug 2025 22:06:31 +0200
-Message-ID: <20250806200631.605635-1-thomas.perale@mind.be>
-X-Mailer: git-send-email 2.50.1
+ id 1gBfn9ANhqMv for <buildroot@buildroot.org>;
+ Wed,  6 Aug 2025 20:17:56 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
+ helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9ABB741F39
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9ABB741F39
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9ABB741F39
+ for <buildroot@buildroot.org>; Wed,  6 Aug 2025 20:17:55 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 0AB7B4335A;
+ Wed,  6 Aug 2025 20:17:51 +0000 (UTC)
+Date: Wed, 6 Aug 2025 22:17:45 +0200
+To: "Frager, Neal" <neal.frager@amd.com>
+Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>,
+ "giulio.benetti@benettiengineering.com"
+ <giulio.benetti@benettiengineering.com>, "ju.o@free.fr" <ju.o@free.fr>,
+ "romain.naour@gmail.com" <romain.naour@gmail.com>
+Message-ID: <20250806221745.03c267a0@windsurf>
+In-Reply-To: <20250805125846.31c941c1@windsurf>
+References: <20250728045145.132333-1-neal.frager@amd.com>
+ <20250804214047.5cfcf471@windsurf>
+ <SA1PR12MB5615611A10ADA56A9816AAB7F022A@SA1PR12MB5615.namprd12.prod.outlook.com>
+ <20250805100953.380f13df@windsurf>
+ <SA1PR12MB5615E2ACED00D66546CC13E7F022A@SA1PR12MB5615.namprd12.prod.outlook.com>
+ <20250805125846.31c941c1@windsurf>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduudekleelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepudduueeftdejhfetledugfevgfevtefgudfgueeffedutedvuedvteefvdduudeunecuffhomhgrihhnpehgnhhurdhorhhgpdgsohhothhlihhnrdgtohhmnecukfhppedvrgdtudemtggsudekmeekieegugemvddutddtmegrtddtfhemheelsgefmeegfhdvmeeifegusgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudekmeekieegugemvddutddtmegrtddtfhemheelsgefmeegfhdvmeeifegusgdphhgvlhhopeifihhnughsuhhrfhdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohephedprhgtphhtthhopehnvggrlhdrfhhrrghgvghrsegrmhgurdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtt
+ hhopehgihhulhhiohdrsggvnhgvthhtihessggvnhgvthhtihgvnhhgihhnvggvrhhinhhgrdgtohhmpdhrtghpthhtohepjhhurdhosehfrhgvvgdrfhhrpdhrtghpthhtoheprhhomhgrihhnrdhnrghouhhrsehgmhgrihhlrdgtohhm
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1754510792; x=1755115592; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=WEV66IwyeUe6XCPXZk9c5Z8GvJs0lpWf3LCQKhGXlJ8=;
- b=d8HCWTJPmfbcxDwfbSKxSSua4QX8YphPDnL/fgpUeZfKmouDNEWLDI/4vwiPFq9K2E
- dGmjsDUhstEBI7Li6TLgRO+039t1Z+1r7hYlfy9aAudbGiSjY/qr3DTsoGAoHEtaGupF
- LAElS9n9KZ7mYDiHBK88daupMry6hB3BYFZ7zbzqUJ0+hxGDF6MXFmjx89mDXPefoYGW
- FkGKtVcE+O7mAqS7ILJrLWAb1uppygRj0iZCazFZYqwnyi3WONT0fYuDJhz5990snESp
- aecxueB6LFhSS90eMs7+/QEq+1ZrHTLbHg9Wk0Pcq+shx+8A+fMcrT7bvsjobsUbt3pt
- zp3Q==
+ d=bootlin.com; s=gm1; t=1754511472;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=ng40zLs0PHleapHoHBf51tAzh/HXL2evteR08W/Zfdk=;
+ b=Mp0mFJH9ujNliL6kBWAV303Gy8n01aecIBU99E6rCGU70OS80dJ34jG5+Ju3MvoCUlRg35
+ B0f/BYL4kL83wl7MVdjYTW4ZOsv3kkqsCiaGXTgmo1Kiv4ujB0bTZE3gnn3Ti/TdComQRn
+ 91xWatYA0ujzC6HrvI03xWk9zd79UBXQGGmEg5kPVz4LBr+77rblYEZl+nPPhmqfzvDUfc
+ EFaezuvi7aJM8aYB19TNIDcO0LmULJzFHy3zeBrcFFr6ebI9Jjw1bxFy+aDiHyJsh5J0j/
+ 9HpxjH1ulb2uwY1Gayd3YrxH5OhYTI6pVYrk0/Ey2H5WL5st6Fnels/f11GznQ==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=d8HCWTJP
-Subject: [Buildroot] [PATCH] package/libapparmor: fix build w/ musl
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Mp0mFJH9
+Subject: Re: [Buildroot] [PATCH v1 1/1] package/gcc: add microblaze atomic
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -105,127 +94,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-When building the libapparmor package with musl the following error
-would appear:
+Hello Neal,
 
-```
-test_multi.c: In function 'main':
-test_multi.c:27:30: error: implicit declaration of function 'basename' [-Wimplicit-function-declaration]
-   27 |         printf("File: %s\n", basename(argv[1]));
-      |                              ^~~~~~~~
-test_multi.c:27:24: warning: format '%s' expects argument of type 'char *', but argument 2 has type 'int' [-Wformat=]
-   27 |         printf("File: %s\n", basename(argv[1]));
-      |                       ~^     ~~~~~~~~~~~~~~~~~
-      |                        |     |
-      |                        |     int
-      |                        char *
-      |                       %d
-make[3]: *** [Makefile:466: test_multi_multi-test_multi.o] Error 1
-```
+On Tue, 5 Aug 2025 12:58:46 +0200
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-This error can be reproduced with the following:
+> > There seems to be something specific in the init script that is failing.
+> > Should we consider creating another gcc bug report against gcc 15.x?  
+> 
+> We can certainly do so, but we don't have a lot of data to provide at
+> the moment :/
 
-```
-cat >.config <<EOF
-BR2_aarch64=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_MUSL_BLEEDING_EDGE=y
-BR2_PACKAGE_LIBAPPARMOR=y
-EOF
-make olddefconfig
-make libapparmor
-```
+I went through the tedious process of bisecting which GCC commit
+introduced the bug, and therefore collected a little bit more useful
+data and consequently submitted a GCC bug report:
 
-On musl libc the function `basename` is provided by included libgen.h.
-This error has been addressed upstream in [1] by re-defining the
-function `basename`.
+  https://gcc.gnu.org/bugzilla/show_bug.cgi?id=121432
 
-Also, `libapparmor.mk` refered to patch 0001 which has been removed in
-[2] so I removed that reference. The autoreconf is still needed.
+Best regards,
 
-[1] https://gitlab.com/apparmor/apparmor/-/commit/7fb040bde69ebdfce48cf1a01c1a62fd4f8eef0a
-[2] 27cd0b5033 package/apparmor: bump to version 3.0.4
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
----
- ...e-a-portable-version-of-gnu-basename.patch | 44 +++++++++++++++++++
- package/libapparmor/libapparmor.mk            |  1 -
- 2 files changed, 44 insertions(+), 1 deletion(-)
- create mode 100644 package/libapparmor/0001-libapparamor-define-a-portable-version-of-gnu-basename.patch
-
-diff --git a/package/libapparmor/0001-libapparamor-define-a-portable-version-of-gnu-basename.patch b/package/libapparmor/0001-libapparamor-define-a-portable-version-of-gnu-basename.patch
-new file mode 100644
-index 0000000000..c068279853
---- /dev/null
-+++ b/package/libapparmor/0001-libapparamor-define-a-portable-version-of-gnu-basename.patch
-@@ -0,0 +1,44 @@
-+From 7fb040bde69ebdfce48cf1a01c1a62fd4f8eef0a Mon Sep 17 00:00:00 2001
-+From: Jules Maselbas <jmaselbas@zdiv.net>
-+Date: Thu, 16 May 2024 12:01:00 +0200
-+Subject: [PATCH] libapparamor: Define a portable version of gnu basename
-+
-+Since musl 1.2.5, basename(3) prototype is only provided in libgen.h
-+(as mandated by POSIX) and not in strings.h. Also there is a major
-+difference between the gnu basename and the one defined in libgen.h,
-+the latter modify the argument string making them incompatible.
-+
-+Fix this by defining a portable version of basename using strchr.
-+
-+Upstream: https://gitlab.com/apparmor/apparmor/-/commit/7fb040bde69ebdfce48cf1a01c1a62fd4f8eef0a
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ libraries/libapparmor/testsuite/test_multi.c | 8 ++++++--
-+ 1 file changed, 6 insertions(+), 2 deletions(-)
-+
-+diff --git a/libraries/libapparmor/testsuite/test_multi.c b/libraries/libapparmor/testsuite/test_multi.c
-+index 578629500..7f37966ec 100644
-+--- a/libraries/libapparmor/testsuite/test_multi.c
-++++ b/libraries/libapparmor/testsuite/test_multi.c
-+@@ -1,5 +1,3 @@
-+-#define _GNU_SOURCE /* for glibc's basename version */
-+-
-+ #include <stdio.h>
-+ #include <stdlib.h>
-+ #include <string.h>
-+@@ -7,6 +5,12 @@
-+ 
-+ #include <aalogparse.h>
-+ 
-++static const char *basename(const char *path)
-++{
-++	const char *p = strrchr(path, '/');
-++	return p ? p + 1 : path;
-++}
-++
-+ int print_results(aa_log_record *record);
-+ 
-+ int main(int argc, char **argv)
-+-- 
-+GitLab
-+
-diff --git a/package/libapparmor/libapparmor.mk b/package/libapparmor/libapparmor.mk
-index fa59ff2924..b1c9a952f0 100644
---- a/package/libapparmor/libapparmor.mk
-+++ b/package/libapparmor/libapparmor.mk
-@@ -16,7 +16,6 @@ LIBAPPARMOR_DEPENDENCIES = host-bison host-flex host-pkgconf
- LIBAPPARMOR_SUBDIR = libraries/libapparmor
- LIBAPPARMOR_INSTALL_STAGING = YES
- 
--# Patch 0001 touches Makefile.am and m4 files
- LIBAPPARMOR_AUTORECONF = YES
- 
- # Most AppArmor tools will want to link to the static lib.
+Thomas
 -- 
-2.50.1
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
