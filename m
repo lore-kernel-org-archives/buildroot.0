@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BA36C87FCF
-	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 17:00:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4574C87FDA
+	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 17:00:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 346B180C68;
-	Thu,  7 Aug 2025 17:00:36 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 99P3RA2u3DRX; Thu,  7 Aug 2025 17:00:35 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 56F6780C2A
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 56F6780C2A;
-	Thu,  7 Aug 2025 17:00:35 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id E268B31
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:00:23 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CF95E40367
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:00:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 89CD540399;
+	Thu,  7 Aug 2025 17:00:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GaIbQV-RDlXw for <buildroot@buildroot.org>;
- Thu,  7 Aug 2025 17:00:23 +0000 (UTC)
+ id Xg-Suq5szBbR; Thu,  7 Aug 2025 17:00:36 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A280D40372
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id A280D40372;
+	Thu,  7 Aug 2025 17:00:36 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0D01C31
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:00:24 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9FDDF80C09
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:00:21 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kThLeYgji5ia for <buildroot@buildroot.org>;
+ Thu,  7 Aug 2025 17:00:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2AF0340363
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 17C4F80BD6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2AF0340363
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:00:23 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 17C4F80BD6
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:00:20 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2684880DA8; Thu,  7 Aug 2025 17:00:23 +0000 (UTC)
+ id 0466986984; Thu,  7 Aug 2025 17:00:20 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 7 Aug 2025 12:15:28 +0200
+Date: Thu, 7 Aug 2025 11:05:55 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 88f3819f7007316d3526eb4a05cc2e6ac89ea42d
-X-Git-Newrev: d7335c28b17a0cde8afb3ed34dc97236e5d382e6
+X-Git-Oldrev: 786700f1d3ee356fb65587479d61aed5eb8f1680
+X-Git-Newrev: 268ec38d07a33245df766d5ea82aa7fe342f1273
 X-Patchwork-Hint: ignore
-Message-Id: <20250807170023.2684880DA8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/qpid-proton:
- update mirror url
+Message-Id: <20250807170020.0466986984@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/python-fastapi:
+ bump to 0.116.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,38 +66,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d7335c28b17a0cde8afb3ed34dc97236e5d382e6
+commit: https://git.buildroot.net/buildroot/commit/?id=268ec38d07a33245df766d5ea82aa7fe342f1273
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-The current mirror now only has the version 0.40.0 available.
+Release notes:
+* https://github.com/fastapi/fastapi/releases/tag/0.116.0
+* https://github.com/fastapi/fastapi/releases/tag/0.116.1
 
-Older version of apache packages moved to the "archive.apache.org"
-location.
-
-Fixes: https://autobuild.buildroot.org/results/853/853c354b9bde4408e122046496fd3f0e7ffb0b55
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 60fe9b37333fe08c29037ebc0c6aa60736a9ca3f)
+(cherry picked from commit 25d8e7f1a046f807631a38b0e5f40f9fe86d6ed1)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/qpid-proton/qpid-proton.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/python-fastapi/python-fastapi.hash | 4 ++--
+ package/python-fastapi/python-fastapi.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/qpid-proton/qpid-proton.mk b/package/qpid-proton/qpid-proton.mk
-index fae6ecc413..1f92068f18 100644
---- a/package/qpid-proton/qpid-proton.mk
-+++ b/package/qpid-proton/qpid-proton.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/python-fastapi/python-fastapi.hash b/package/python-fastapi/python-fastapi.hash
+index 41b208a8a7..1810e81e75 100644
+--- a/package/python-fastapi/python-fastapi.hash
++++ b/package/python-fastapi/python-fastapi.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/fastapi/json
+-md5  af68daf64073e04653b314a895aee297  fastapi-0.115.12.tar.gz
+-sha256  1e2c2a2646905f9e83d32f04a3f86aff4a286669c6c950ca95b5fd68c2602681  fastapi-0.115.12.tar.gz
++md5  6de51bff13da558df5f6249d7a33b888  fastapi-0.116.1.tar.gz
++sha256  ed52cbf946abfd70c5a0dccb24673f0670deeb517a88b3544d03c2a6bf283143  fastapi-0.116.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  4ec89ffc81485b97fec584b2d4a961032eeffe834453894fd9c1274906cc744e  LICENSE
+diff --git a/package/python-fastapi/python-fastapi.mk b/package/python-fastapi/python-fastapi.mk
+index 95961972fe..745147dde8 100644
+--- a/package/python-fastapi/python-fastapi.mk
++++ b/package/python-fastapi/python-fastapi.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- QPID_PROTON_VERSION = 0.35.0
- QPID_PROTON_SITE = \
--	https://downloads.apache.org/qpid/proton/$(QPID_PROTON_VERSION)
-+	https://archive.apache.org/dist/qpid/proton/$(QPID_PROTON_VERSION)
- QPID_PROTON_LICENSE = Apache-2.0
- QPID_PROTON_LICENSE_FILES = LICENSE.txt
- QPID_PROTON_CPE_ID_VENDOR = apache
+-PYTHON_FASTAPI_VERSION = 0.115.12
++PYTHON_FASTAPI_VERSION = 0.116.1
+ PYTHON_FASTAPI_SOURCE = fastapi-$(PYTHON_FASTAPI_VERSION).tar.gz
+-PYTHON_FASTAPI_SITE = https://files.pythonhosted.org/packages/f4/55/ae499352d82338331ca1e28c7f4a63bfd09479b16395dce38cf50a39e2c2
++PYTHON_FASTAPI_SITE = https://files.pythonhosted.org/packages/78/d7/6c8b3bfe33eeffa208183ec037fee0cce9f7f024089ab1c5d12ef04bd27c
+ PYTHON_FASTAPI_SETUP_TYPE = pep517
+ PYTHON_FASTAPI_LICENSE = MIT
+ PYTHON_FASTAPI_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
