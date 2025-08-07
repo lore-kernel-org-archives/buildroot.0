@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADE75CA0EC0
-	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 17:20:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC22EC87FDA
+	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 17:20:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 833E4606D6;
-	Thu,  7 Aug 2025 17:20:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8EDB080CCB;
+	Thu,  7 Aug 2025 17:20:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IytjBE5AYqf0; Thu,  7 Aug 2025 17:20:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ck1e5RZu5iqc; Thu,  7 Aug 2025 17:20:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 79197606DA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A917E804C9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 79197606DA;
-	Thu,  7 Aug 2025 17:20:00 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7A2654C4
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:19:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A917E804C9;
+	Thu,  7 Aug 2025 17:20:01 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0DB414C4
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:19:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C4DDF40092
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:19:17 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1F74D40494
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:19:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fSOgwRYCgpbO for <buildroot@buildroot.org>;
- Thu,  7 Aug 2025 17:19:16 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eqmHEOWWpFbj for <buildroot@buildroot.org>;
+ Thu,  7 Aug 2025 17:19:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5BBB940095
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EED09404AA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5BBB940095
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:19:15 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EED09404AA
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:19:16 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5A00386FCC; Thu,  7 Aug 2025 17:19:15 +0000 (UTC)
+ id ECE2183606; Thu,  7 Aug 2025 17:19:16 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 7 Aug 2025 19:08:43 +0200
+Date: Thu, 7 Aug 2025 19:11:31 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: 7b8400f71b51a69d7f43969ba9db358823266549
-X-Git-Newrev: 189bdc4d017867708160cc3eb9191bed6d8ffb9e
+X-Git-Oldrev: 20d017a89e0b7147b85a083d2b23f03b9fadd022
+X-Git-Newrev: 3480fe66fb5c3c5b380d831071fa4df0321f71af
 X-Patchwork-Hint: ignore
-Message-Id: <20250807171915.5A00386FCC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/rtl8188eu: move
- upstream to Benetti Engineering Github
+Message-Id: <20250807171916.ECE2183606@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/modem-manager:
+ Add option to enable AT commands via D-Bus
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,76 +66,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=189bdc4d017867708160cc3eb9191bed6d8ffb9e
+commit: https://git.buildroot.net/buildroot/commit/?id=3480fe66fb5c3c5b380d831071fa4df0321f71af
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-Benetti Engineering just took over Larry Finger(lwfinger)'s repository
-rtl8188eu since Larry unfortunately passed away[0](RIP) and there are
-pending PRs that will never be checked as stated here[1]. So basically move
-github user to benetti-engineering-sas and update version with latest that
-fixes build failure with Linux version 6.15. And let's drop local patches
-that are now upstreamed as well. Let's also drop obsolete Config.in
-informations since as stated here[2]: "This driver is under development
-and has a limited feature set. In particular it does not yet support 40MHz
-channels and power management". At the same time drop other suggestions
-like enabling CONFIG_WIRELESS_EXT or "this package needs a firmware loading
-mechanism to load the binary blob for the chip to work" since they are now
-part of the package. And of course let's update package's URL due to the
-moving.
-
-[0]: https://lwn.net/Articles/979419/
-[1]: https://github.com/lwfinger/rtl8188eu/pull/464
-
-Fixes:
-https://autobuild.buildroot.org/results/d59537da8eb27d737718885dc81ec257a2791455/
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Signed-off-by: Stefan Nickl <Stefan.Nickl@gmail.com>
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit a9c5dc024a0717b68b22a352f960d9dac099f73f)
-[Thomas: only change upstream]
+(cherry picked from commit f103e3696f611153915e99a32caf8dcbbb106397)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/rtl8188eu/Config.in    | 11 +----------
- package/rtl8188eu/rtl8188eu.mk |  2 +-
- 2 files changed, 2 insertions(+), 11 deletions(-)
+ package/modem-manager/Config.in        | 6 ++++++
+ package/modem-manager/modem-manager.mk | 6 ++++++
+ 2 files changed, 12 insertions(+)
 
-diff --git a/package/rtl8188eu/Config.in b/package/rtl8188eu/Config.in
-index 76d9085297..5acef3cd32 100644
---- a/package/rtl8188eu/Config.in
-+++ b/package/rtl8188eu/Config.in
-@@ -4,17 +4,8 @@ config BR2_PACKAGE_RTL8188EU
- 	depends on BR2_LINUX_KERNEL
- 	help
- 	  A standalone driver for the RTL8188EU USB Wi-Fi adapter.
--	  This is needed only for Linux kernels before 3.12.
--	  Since 3.12, there is a (staging) driver in mainline, with a
--	  similar codebase.
+diff --git a/package/modem-manager/Config.in b/package/modem-manager/Config.in
+index 6990996a86..e03447b96c 100644
+--- a/package/modem-manager/Config.in
++++ b/package/modem-manager/Config.in
+@@ -38,6 +38,12 @@ config BR2_PACKAGE_MODEM_MANAGER_LIBQRTR
+ comment "QRTR support needs a toolchain w/ headers >= 4.15"
+ 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
  
--	  Make sure your target kernel has the CONFIG_WIRELESS_EXT
--	  config option enabled.
--
--	  Note: this package needs a firmware loading mechanism to load
--	  the binary blob for the chip to work.
--
--	  https://github.com/lwfinger/rtl8188eu
-+	  https://github.com/benetti-engineering-sas/rtl8188eu
++config BR2_PACKAGE_MODEM_MANAGER_ATVIADBUS
++	bool "at-via-dbus support"
++	help
++	  This option enables support for issuing AT commands
++	  over the D-Bus interface.
++
+ endif
  
- comment "rtl8188eu needs a Linux kernel to be built"
- 	depends on !BR2_s390x
-diff --git a/package/rtl8188eu/rtl8188eu.mk b/package/rtl8188eu/rtl8188eu.mk
-index eca0fb8007..98ee757425 100644
---- a/package/rtl8188eu/rtl8188eu.mk
-+++ b/package/rtl8188eu/rtl8188eu.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+ comment "modemmanager needs a toolchain w/ wchar, threads, dynamic library"
+diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
+index 932c163175..899e3071a5 100644
+--- a/package/modem-manager/modem-manager.mk
++++ b/package/modem-manager/modem-manager.mk
+@@ -48,6 +48,12 @@ else
+ MODEM_MANAGER_CONF_OPTS += -Dqrtr=false
+ endif
  
- RTL8188EU_VERSION = f42fc9c45d2086c415dce70d3018031b54a7beef
--RTL8188EU_SITE = $(call github,lwfinger,rtl8188eu,$(RTL8188EU_VERSION))
-+RTL8188EU_SITE = $(call github,benetti-engineering-sas,rtl8188eu,$(RTL8188EU_VERSION))
- RTL8188EU_LICENSE = GPL-2.0, proprietary (rtl8188eufw.bin firmware blob)
- RTL8188EU_LICENSE_FILES = COPYING
- RTL8188EU_MODULE_MAKE_OPTS = CONFIG_RTL8188EU=m
++ifeq ($(BR2_PACKAGE_MODEM_MANAGER_ATVIADBUS),y)
++MODEM_MANAGER_CONF_OPTS += -Dat_command_via_dbus=true
++else
++MODEM_MANAGER_CONF_OPTS += -Dat_command_via_dbus=false
++endif
++
+ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+ MODEM_MANAGER_DEPENDENCIES += systemd
+ MODEM_MANAGER_CONF_OPTS += \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
