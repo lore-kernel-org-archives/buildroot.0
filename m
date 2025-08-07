@@ -1,105 +1,105 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB737C87FDA
-	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 18:23:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D70DBC87FCF
+	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 18:23:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B9F3680D20;
-	Thu,  7 Aug 2025 18:23:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A64CC40525;
+	Thu,  7 Aug 2025 18:23:58 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KT6OgvLe7NOz; Thu,  7 Aug 2025 18:23:57 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CA99D40546
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id CA99D40546;
+	Thu,  7 Aug 2025 18:23:57 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2D1A04C4
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:23:53 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1155180C44
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:23:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ne3hwUAmd1xW; Thu,  7 Aug 2025 18:23:55 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DE93C80D2D
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DE93C80D2D;
-	Thu,  7 Aug 2025 18:23:54 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 6633410A
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:23:51 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E8B1B605F1
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:23:50 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1WwAJRBwJs6o for <buildroot@buildroot.org>;
- Thu,  7 Aug 2025 18:23:50 +0000 (UTC)
+ id w7BWJ4w73hwp for <buildroot@buildroot.org>;
+ Thu,  7 Aug 2025 18:23:52 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
+ client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E266260604
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E266260604
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E266260604
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:23:49 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id
- 5b1f17b1804b1-459e72abdd2so8075615e9.2
- for <buildroot@buildroot.org>; Thu, 07 Aug 2025 11:23:49 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E2FFC80C32
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E2FFC80C32
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E2FFC80C32
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:23:50 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id
+ ffacd0b85a97d-3b794a013bcso983459f8f.2
+ for <buildroot@buildroot.org>; Thu, 07 Aug 2025 11:23:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1754591028; x=1755195828;
+ d=1e100.net; s=20230601; t=1754591029; x=1755195829;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=q3Lyr98N5aNXzad6dPRSC31zYT+6aXJhNMjNufqE/rI=;
- b=Trev33ZmsGe9YAPcQmgSlHf0Ax6W21PDVHpaxE6uI8QLfrXGyezsl0CqoKIdHvKvH5
- 48fmb0KbmgSMMSZHtHmG5cGftlRu54M0bsiWruGEBR5zA9l0kexin3+mr/tPkMHYLb6C
- hDTIG0cORX7kmJEObvP6nnnpREBICeDCNAHzGnq6YfQcWvzBBpJb+DZzBO8ZUnxmk+un
- sbMMFECuAW72vVnJ5xMZN/B4hqNcNn2vEC7F5kbdp3DJaw02YS2niu2huejXPXp9YFoh
- es3cwGUIiEafMO1A4gfQ52UgJhibhqLDpWoM00gXqWtkKhohfb3kZ5mWZN3d20yhOF/I
- 26Tg==
+ bh=42ZcPZVnCSNqZibpWQZJmamusT4NeZN3IkUdrPdF2F8=;
+ b=i21q3faHCOdAv/0u0sN1DVCdXSOg+tE6jk4j8ehOUDkafNVdySpnaKZCtZAAcZBQ2D
+ 9d9+XhXm1gI+CVGS9aoGv23uAQY+xSUToM28eBaI3rTIn91DoY7chpNp2YsA8wKFqbrx
+ tJEG5+gzQ6gFC0B5ghRbiAMyRpMpVZwnjr3Kj96QfTQlR7C42BSWP7/EyehgpEB7EF6y
+ DmLIbBmmiXMQsKYVPtCHsdR13eHsNgChbyOe1souePRjG5HeZL1eaW09TrzPD3PBQOPc
+ IDF1vS+wW22FcCY5CiSHuGYJEy4IpVvHkck3aUzITeEOm3hH02/WceVLvyrn44La/LuA
+ wfgw==
 X-Forwarded-Encrypted: i=1;
- AJvYcCXCR44T7agRPJLweep1UE4MicaKhQ4JaUjZnDlqqtAxTXa5fj7umf5vjQ9vTCb24ovDnTkuH0p2gb8=@buildroot.org
-X-Gm-Message-State: AOJu0YzqhqTUhm7e6J/T5nEhzwhh8fAT+l7wO1Kji0Do8+fLhuSmVZWN
- Sy7fct2eaLb4QU29WsVttvIP6vUbfGX+YPSmhXv/thwekGLM3Gumt7e5Kls8lQg6oAY=
-X-Gm-Gg: ASbGncvOIbrBqG2WXTtcotEZmKEAfUthlqwAic4QFIom49dXy3mD04y7Hbrjjz/Ot7T
- +hHv+5VJ39dkuXO20Tf/yRYKYsrwaLyy5jvqUhlaMBrhWr7yKJjcduL5ggH6M9Phokx4VspfLek
- W+VYVnoHBlK3dJJcQmQmNq8RiNCfpNkYEFTAEC7yXXdd/PNrgNYsrQkdllvVNSNywUxrSSIcjOt
- FkPq9DIuNn71STNc7n8T/gijHtJiDr06XoZqGcvrrB39cronId3OprTNTJSYBnR+rg0gJXf2Bhx
- mviMJofbqeeNFs1IMCAReb+sx7MFeYbqPrf1uXWNawUcdb2J9Ppl1sclub329GwumtmeTZynEIG
- tFjz/V71BSOBS8Q==
-X-Google-Smtp-Source: AGHT+IFwKkR0+X56QSJ8pISVQjfF1O/prl5gH8GizIlWFjX40Mt61ttEqf2L3s+epNrNEdg2onMZZA==
-X-Received: by 2002:a05:600c:1d22:b0:456:24aa:9586 with SMTP id
- 5b1f17b1804b1-459f43a7a7dmr5442205e9.21.1754591027866; 
- Thu, 07 Aug 2025 11:23:47 -0700 (PDT)
+ AJvYcCV9ljx5i6CrcPRcZKW8lTSN67hcYPQmY2BlGbrufXzrZgNvdlEA4SCb0lmty0FCNGobju1KBFZ+Kq4=@buildroot.org
+X-Gm-Message-State: AOJu0YyJjmtwaCEVWcRtIBmy7r42Yat1riByZP4K/6m1ec8yKZp3IxAT
+ /LFMZ9VpOsz5BjJpQrrJ1+xf4v+1nEkUCn4ReFwxrBHozhc7mG7tO0P9y4WdFMX0dCo=
+X-Gm-Gg: ASbGncsXaIeQmgoEZp9zfyX+1XFTqjiRwBsUZ6pK8648v0iypySqiVxV3l0fVO5OT00
+ PdD7rqXQ0zOmUxEsXe4o6wEkhrTLvnqtTYAxcmXsfXERxV/9C4zz9NjWMs0Jc0BAzbiJ0ge1qsY
+ 6oVBaHqE/KQ04V1LKAXSLEslNAx+o7McqY6FlxZmKtA3ZFYQs00K4LXlWqTA8wG+He8WRdwnP90
+ TPldP9UHdQJyePs20iJxdBxvl3XKy9rEg3DYJ0pMn1WKcXp6Rwd7rDy5un4+var6KmMdzKhQCvY
+ /HCDVHdr2X82nWRbXX7fmjVFuIp8AxDhyxtMm6LWmi9cF9AjEbESb+U/uERyUcpXEAF69XNdGb0
+ M2fZUY7SVyAMWv7angZYX106U
+X-Google-Smtp-Source: AGHT+IHmh9FDf2teekDmQ6a0R5XwXXWQ8kEBA9PaTZbUV9BjQLvobQ2vf7bMxzUrQBXTSdMkpg4A1Q==
+X-Received: by 2002:a5d:5f47:0:b0:3b7:7c18:c72d with SMTP id
+ ffacd0b85a97d-3b900b472efmr197496f8f.4.1754591028777; 
+ Thu, 07 Aug 2025 11:23:48 -0700 (PDT)
 Received: from arch ([79.132.233.79]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3b79c485444sm27886442f8f.66.2025.08.07.11.23.47
+ ffacd0b85a97d-3b79c3abed3sm27416866f8f.10.2025.08.07.11.23.48
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 07 Aug 2025 11:23:47 -0700 (PDT)
-To: Bernd Kuhls <bernd@kuhls.net>
+ Thu, 07 Aug 2025 11:23:48 -0700 (PDT)
+To: Peter Korsgaard <peter@korsgaard.com>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Thu,  7 Aug 2025 20:23:47 +0200
-Message-ID: <20250807182347.723412-1-thomas.perale@mind.be>
+Date: Thu,  7 Aug 2025 20:23:48 +0200
+Message-ID: <20250807182348.723466-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250518173557.2147691-1-bernd@kuhls.net>
-References: <20250518173557.2147691-1-bernd@kuhls.net>
+In-Reply-To: <20250518124949.4159568-1-peter@korsgaard.com>
+References: <20250518124949.4159568-1-peter@korsgaard.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1754591028; x=1755195828; darn=buildroot.org;
+ d=mind.be; s=google; t=1754591029; x=1755195829; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=q3Lyr98N5aNXzad6dPRSC31zYT+6aXJhNMjNufqE/rI=;
- b=AINZtzyKUSJBj+tj/vTfC4GgDmJZbIIiNfDyQFhzl6+9EkcVPRqmG5bBHSCi05iPOZ
- EUOPygOva0wwwAPfI6JF2KMqqcLFGSm2agHhb0qdL3fkO9JYJFmirCDUP1SX8TxLzzu8
- w1kCZ437pRNskohl55N+o5A8sKlR5Jbjd2yb7HagGu3yvJMYo98eFaqB26yRo4rihNB1
- F7OcxBpGMSZOBMBGdOTZSVkAnY7AThVFqG8fPs7z2ni6cUgfVtdKyplmHL+86uRW+ii7
- gNvIabKZq1Zx/nJ/W3pfbXmsctKtbiVXnlwLI68FgGh6gg4a7TTXn2eqxa252ZZE1B7o
- NsLw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=42ZcPZVnCSNqZibpWQZJmamusT4NeZN3IkUdrPdF2F8=;
+ b=BmhdLw2G1wsoGmYDzHhDJMU2D0mL2UVdKD2j5GVIZ7YlAV7elJYWe0u/mj2eocZdpZ
+ v4Jhw6Eb0c1kHXSfra+aJct2Pqqt4O5d/a1JfemlaH49WQbKfDTkexgtj8s2b8otaRjw
+ PMm11D8YNnHIpx2kDvZoIboS9ubSdZ6Pgi18inoLHD3eJ1wmo77bP9ZhYXJ6i+6vvc3w
+ r7m6E4LvB5SUA05pa3oj9lJCD+qM5gwnfdI5BCoJp8fmtr58WP7eZFK8GlsGz5FKgOT4
+ IXFTXZj4+Wt+mnPLqHkmKtaF7XmJUvnLwW+BmVa/aaEyeIyCZNoE9vDXTcIRCxZKaojE
+ jorg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=AINZtzyK
-Subject: Re: [Buildroot] [PATCH 1/1] package/oniguruma: bump version to
- 6.9.10
+ header.a=rsa-sha256 header.s=google header.b=BmhdLw2G
+Subject: Re: [Buildroot] [PATCH 1/2] toolchain/toolchain-wrapper.c: slightly
+ simplify cmdline copying
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,42 +119,43 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Release notes:
-> https://github.com/kkos/oniguruma/releases/tag/v6.9.10
+> C99 section 5.1.2.2.1p2 mandates that:
 > 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> - argv[argc] shall be a null pointer.
+> 
+> https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1256.pdf
+> 
+> So we might as well copy the null pointer along in the memcpy() rather than
+> copy everything up to the null pointer and then add one afterwards for
+> simplicity.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Applied to 2025.02.x & 2025.05.x. Thanks
 
 > ---
->  package/oniguruma/oniguruma.hash | 4 ++--
->  package/oniguruma/oniguruma.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  toolchain/toolchain-wrapper.c | 8 ++------
+>  1 file changed, 2 insertions(+), 6 deletions(-)
 > 
-> diff --git a/package/oniguruma/oniguruma.hash b/package/oniguruma/oniguruma.hash
-> index ac1d375b7a..be49a4d4e7 100644
-> --- a/package/oniguruma/oniguruma.hash
-> +++ b/package/oniguruma/oniguruma.hash
-> @@ -1,4 +1,4 @@
-> -# From https://github.com/kkos/oniguruma/releases/download/v6.9.9/onig-6.9.9.tar.gz.sha256
-> -sha256  60162bd3b9fc6f4886d4c7a07925ffd374167732f55dce8c491bfd9cd818a6cf  onig-6.9.9.tar.gz
-> +# From https://github.com/kkos/oniguruma/releases/download/v6.9.10/onig-6.9.10.tar.gz.sha256
-> +sha256  2a5cfc5ae259e4e97f86b68dfffc152cdaffe94e2060b770cb827238d769fc05  onig-6.9.10.tar.gz
->  # Hash for license file
->  sha256  70ba5469ea0bab6e18a32d7009068f996503168d27be57747e08da34337ff26f  COPYING
-> diff --git a/package/oniguruma/oniguruma.mk b/package/oniguruma/oniguruma.mk
-> index e056048cb5..32eff4cc75 100644
-> --- a/package/oniguruma/oniguruma.mk
-> +++ b/package/oniguruma/oniguruma.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
+> diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
+> index e644c1e7bb..d6ce74fc94 100644
+> --- a/toolchain/toolchain-wrapper.c
+> +++ b/toolchain/toolchain-wrapper.c
+> @@ -497,12 +497,8 @@ int main(int argc, char **argv)
+>  #endif
+>  	}
 >  
-> -ONIGURUMA_VERSION = 6.9.9
-> +ONIGURUMA_VERSION = 6.9.10
->  ONIGURUMA_SITE = \
->  	https://github.com/kkos/oniguruma/releases/download/v$(ONIGURUMA_VERSION)
->  ONIGURUMA_SOURCE = onig-$(ONIGURUMA_VERSION).tar.gz
+> -	/* append forward args */
+> -	memcpy(cur, &argv[1], sizeof(char *) * (argc - 1));
+> -	cur += argc - 1;
+> -
+> -	/* finish with NULL termination */
+> -	*cur = NULL;
+> +	/* append forward args and terminating NULL */
+> +	memcpy(cur, &argv[1], sizeof(char *) * argc);
+>  
+>  	exec_args = args;
+>  #ifdef BR_CCACHE
 > -- 
 > 2.39.5
 > 
