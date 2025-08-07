@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F4ADC87FCF
-	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 17:00:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C988C87FCA
+	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 17:00:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3705B6062A;
-	Thu,  7 Aug 2025 17:00:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0B66C403AD;
+	Thu,  7 Aug 2025 17:00:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id B76plURsvkyI; Thu,  7 Aug 2025 17:00:53 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ke1FqV1dU4L7; Thu,  7 Aug 2025 17:00:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C62A960616
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 37E2840395
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C62A960616;
-	Thu,  7 Aug 2025 17:00:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 37E2840395;
+	Thu,  7 Aug 2025 17:00:56 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1305C31
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:00:32 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0EDCA31
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:00:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D547280C2C
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:00:22 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4FA1B80C33
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:00:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LjVDKvZVz3HV for <buildroot@buildroot.org>;
+ id ypRsUbJjIN_o for <buildroot@buildroot.org>;
  Thu,  7 Aug 2025 17:00:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8260080BFE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B97B680C01
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8260080BFE
+ by smtp1.osuosl.org (Postfix) with ESMTP id B97B680C01
  for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:00:20 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 803D186709; Thu,  7 Aug 2025 17:00:20 +0000 (UTC)
+ id B74CC822E3; Thu,  7 Aug 2025 17:00:20 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 7 Aug 2025 11:06:13 +0200
+Date: Thu, 7 Aug 2025 11:06:20 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 7bf31e873b496993ff46e70a282226c2a5456ffc
-X-Git-Newrev: bf3a4d6f13f53216eb86be8b82a641fd60e63d84
+X-Git-Oldrev: ff48d831e813681560ff4be337461ecbe094826a
+X-Git-Newrev: fa3df2b7d6e3debd96b022cece123c545bc568b2
 X-Patchwork-Hint: ignore
-Message-Id: <20250807170020.803D186709@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/mbedtls: security
- bump to v3.6.4
+Message-Id: <20250807170020.B74CC822E3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/ntp: fix OpenSSL
+ detection
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,127 +66,64 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bf3a4d6f13f53216eb86be8b82a641fd60e63d84
+commit: https://git.buildroot.net/buildroot/commit/?id=fa3df2b7d6e3debd96b022cece123c545bc568b2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-This is a security release of the Long Term Support branch, see release notes:
-https://github.com/Mbed-TLS/mbedtls/releases/tag/mbedtls-3.6.4
+Fixes:
+https://autobuild.buildroot.org/results/261e630f20dd20b7f606a7bcbd8fa7b50ce82fbe/
 
-Also update the download location, because upstream changed the tag naming
-scheme from v<...> to mbedtls-<...>
+The build error occurs when libatomic is needed for linking.
+In ntp_openssl.m4 the result of OpenSSL's pkgconf was omitted.
 
-This fixes the following vulnerabilities:
+Enable configure option --enable-verbose-ssl to help future debugging:
+configure: ntp_ssl_libs_l:   (-lssl -lcrypto -latomic)
 
-- CVE-2025-47917
-    Fix possible use-after-free or double-free in code calling
-    mbedtls_x509_string_to_names(). This was caused by the function calling
-    mbedtls_asn1_free_named_data_list() on its head argument, while the
-    documentation did no suggest it did, making it likely for callers relying
-    on the documented behaviour to still hold pointers to memory blocks after
-    they were free()d, resulting in high risk of use-after-free or double-free,
-    with consequences ranging up to arbitrary code execution.
-    In particular, the two sample programs x509/cert_write and x509/cert_req
-    were affected (use-after-free if the san string contains more than one DN).
-    Code that does not call mbedtls_string_to_names() directly is not affected.
-
-- CVE-2025-48965
-    Fix a bug in mbedtls_asn1_store_named_data() where it would sometimes leave
-    an item in the output list in an inconsistent state with val.p == NULL but
-    val.len > 0. This impacts applications that call this function directly,
-    or indirectly via mbedtls_x509_string_to_names() or one of the
-    mbedtls_x509write_{crt,csr}set{subject,issuer}_name() functions. The
-    inconsistent state of the output could then cause a NULL dereference either
-    inside the same call to mbedtls_x509_string_to_names(), or in subsequent
-    users of the output structure, such as mbedtls_x509_write_names(). This
-    only affects applications that create (as opposed to consume) X.509
-    certificates, CSRs or CRLs, or that call mbedtls_asn1_store_named_data()
-
-- CVE-2025-49087
-    Fix a timing side channel in the implementation of PKCS#7 padding
-    which would allow an attacker who can request decryption of arbitrary
-    ciphertexts to recover the plaintext through a timing oracle attack.
-
-- CVE-2025-49600:
-    In MbedTLS 3.3.0 before 3.6.4, mbedtls_lms_verify may accept invalid
-    signatures if hash computation fails and internal errors go unchecked,
-    enabling LMS (Leighton-Micali Signature) forgery in a fault scenario.
-    Specifically, unchecked return values in mbedtls_lms_verify allow an
-    attacker (who can induce a hardware hash accelerator fault) to bypass
-    LMS signature verification by reusing stale stack data, resulting in
-    acceptance of an invalid signature. In mbedtls_lms_verify, the return
-    values of the internal Merkle tree functions create_merkle_leaf_value
-    and create_merkle_internal_value are not checked. These functions
-    return an integer that indicates whether the call succeeded or not. If
-    a failure occurs, the output buffer (Tc_candidate_root_node) may
-    remain uninitialized, and the result of the signature verification is
-    unpredictable. When the software implementation of SHA-256 is used,
-    these functions will not fail. However, with hardware-accelerated
-    hashing, an attacker could use fault injection against the accelerator
-    to bypass verification.
-    https://www.cve.org/CVERecord?id=CVE-2025-49600
-
-- CVE-2025-49601:
-    In MbedTLS 3.3.0 before 3.6.4, mbedtls_lms_import_public_key does not
-    check that the input buffer is at least 4 bytes before reading a
-    32-bit field, allowing a possible out-of-bounds read on truncated
-    input. Specifically, an out-of-bounds read in
-    mbedtls_lms_import_public_key allows context-dependent attackers to
-    trigger a crash or limited adjacent-memory disclosure by supplying a
-    truncated LMS (Leighton-Micali Signature) public-key buffer under four
-    bytes. An LMS public key starts with a 4-byte type indicator. The
-    function mbedtls_lms_import_public_key reads this type indicator
-    before validating the size of its input.
-    https://www.cve.org/CVERecord?id=CVE-2025-49601
-
-- CVE-2025-52496:
-    Mbed TLS before 3.6.4 has a race condition in AESNI detection if
-    certain compiler optimizations occur. An attacker may be able to
-    extract an AES key from a multithreaded program, or perform a GCM
-    forgery.
-    https://www.cve.org/CVERecord?id=CVE-2025-52496
-
-- CVE-2025-52497:
-    Mbed TLS before 3.6.4 has a PEM parsing one-byte heap-based buffer
-    underflow, in mbedtls_pem_read_buffer and two mbedtls_pk_parse
-    functions, via untrusted PEM input.
-    https://www.cve.org/CVERecord?id=CVE-2025-52497
-
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-[Julien: fix upstream hash URL in hash file]
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 24639e0f72f4d0490eaed779817fab14bf9f2dd1)
+(cherry picked from commit 6a20660c5aefc804be21b1eeefacac8fbe973fe4)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/mbedtls/mbedtls.hash | 4 ++--
- package/mbedtls/mbedtls.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/ntp/0005-fix-openssl-configure.patch | 18 ++++++++++++++++++
+ package/ntp/ntp.mk                           |  2 +-
+ 2 files changed, 19 insertions(+), 1 deletion(-)
 
-diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
-index cc15958e3a..8b82313c07 100644
---- a/package/mbedtls/mbedtls.hash
-+++ b/package/mbedtls/mbedtls.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/Mbed-TLS/mbedtls/releases/tag/v3.6.3.1:
--sha256  243ed496d5f88a5b3791021be2800aac821b9a4cc16e7134aa413c58b4c20e0c  mbedtls-3.6.3.1.tar.bz2
-+# From https://github.com/Mbed-TLS/mbedtls/releases/tag/mbedtls-3.6.4:
-+sha256  ec35b18a6c593cf98c3e30db8b98ff93e8940a8c4e690e66b41dfc011d678110  mbedtls-3.6.4.tar.bz2
- # Locally calculated
- sha256  9b405ef4c89342f5eae1dd828882f931747f71001cfba7d114801039b52ad09b  LICENSE
-diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
-index 563683e739..b46bbe888a 100644
---- a/package/mbedtls/mbedtls.mk
-+++ b/package/mbedtls/mbedtls.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/ntp/0005-fix-openssl-configure.patch b/package/ntp/0005-fix-openssl-configure.patch
+new file mode 100644
+index 0000000000..0a213fcee6
+--- /dev/null
++++ b/package/ntp/0005-fix-openssl-configure.patch
+@@ -0,0 +1,18 @@
++Fix OpenSSL detection
++
++Upstream: https://bugs.ntp.org/show_bug.cgi?id=3985
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++
++diff -uNr ntp-4.2.8p18.orig/sntp/m4/ntp_openssl.m4 ntp-4.2.8p18/sntp/m4/ntp_openssl.m4
++--- ntp-4.2.8p18.orig/sntp/m4/ntp_openssl.m4	2024-05-07 13:21:14.000000000 +0200
+++++ ntp-4.2.8p18/sntp/m4/ntp_openssl.m4	2025-07-06 08:37:14.140657598 +0200
++@@ -326,7 +326,7 @@
++ 	     not_found) ;;
++ 	     *)
++ 		AC_MSG_NOTICE([Searching for libcrypto in $i])
++-		LIBS="-L$i $NTPSSL_SAVED_LIBS"
+++		LIBS="-L$i $ntp_ssl_libs_l $NTPSSL_SAVED_LIBS"
++ 		AC_CHECK_LIB(
++ 		    [crypto],
++ 		    [EVP_MD_CTX_new],
+diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+index 1a7c7e7937..f481c5d79b 100644
+--- a/package/ntp/ntp.mk
++++ b/package/ntp/ntp.mk
+@@ -29,7 +29,7 @@ NTP_CONF_OPTS = \
+ NTP_AUTORECONF = YES
  
--MBEDTLS_VERSION = 3.6.3.1
--MBEDTLS_SITE = https://github.com/Mbed-TLS/mbedtls/releases/download/v$(MBEDTLS_VERSION)
-+MBEDTLS_VERSION = 3.6.4
-+MBEDTLS_SITE = https://github.com/Mbed-TLS/mbedtls/releases/download/mbedtls-$(MBEDTLS_VERSION)
- MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION).tar.bz2
- MBEDTLS_CONF_OPTS = \
- 	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -std=c99" \
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+-NTP_CONF_OPTS += --with-crypto --enable-openssl-random
++NTP_CONF_OPTS += --with-crypto --enable-openssl-random --enable-verbose-ssl
+ NTP_DEPENDENCIES += openssl
+ else
+ NTP_CONF_OPTS += --without-crypto --disable-openssl-random
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
