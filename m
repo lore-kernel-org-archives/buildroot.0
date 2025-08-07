@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25EE2C87FCA
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9AB3BC87FDA
 	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 17:20:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F067E60731;
-	Thu,  7 Aug 2025 17:20:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 750F8405DB;
+	Thu,  7 Aug 2025 17:20:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xjcjw_b_OzTZ; Thu,  7 Aug 2025 17:20:30 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vKJK8lq1IqoC; Thu,  7 Aug 2025 17:20:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 260FB6074A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D6539405E0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 260FB6074A;
-	Thu,  7 Aug 2025 17:20:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D6539405E0;
+	Thu,  7 Aug 2025 17:20:28 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7572F4C4
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:19:48 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 3EF1831
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:19:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 38ADB40097
+ by smtp2.osuosl.org (Postfix) with ESMTP id 206E34006D
  for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:19:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kxFXCezBGmce for <buildroot@buildroot.org>;
- Thu,  7 Aug 2025 17:19:18 +0000 (UTC)
+ id zAX9IhrrbLT3 for <buildroot@buildroot.org>;
+ Thu,  7 Aug 2025 17:19:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 97E04400AE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C132D400B7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 97E04400AE
+ by smtp2.osuosl.org (Postfix) with ESMTP id C132D400B7
  for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:19:16 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 963EC85C8D; Thu,  7 Aug 2025 17:19:16 +0000 (UTC)
+ id BF26081435; Thu,  7 Aug 2025 17:19:16 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 7 Aug 2025 19:11:18 +0200
+Date: Thu, 7 Aug 2025 19:11:24 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: 0e38d5a53ca05399368d40df4eda514184baf9a3
-X-Git-Newrev: 59cdad3c0e1980da642d6bb5deb310e1bcf6dfda
+X-Git-Oldrev: 101aff81d2d791b8a899d30a5b1293386c3e88a2
+X-Git-Newrev: b2f2d587dbe3fca5e49d538035f0caaa80b5d5ff
 X-Patchwork-Hint: ignore
-Message-Id: <20250807171916.963EC85C8D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] DEVELOPERS: add Yegor
- Yefremov for package/libxmlrpc
+Message-Id: <20250807171916.BF26081435@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/orc: add CPE
+ identifier
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,30 +66,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=59cdad3c0e1980da642d6bb5deb310e1bcf6dfda
+commit: https://git.buildroot.net/buildroot/commit/?id=b2f2d587dbe3fca5e49d538035f0caaa80b5d5ff
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+The cpe:2.3:a:gstreamer:orc:0.4.34:*:*:*:*:*:*:* is
+valid for this package.
+
+See https://nvd.nist.gov/products/cpe/detail/37DFA009-0707-4825-B28A-62451B1E2AFC
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 44801fa77d8368c88c452954f3ae2d4a616651aa)
+(cherry picked from commit 279cb43814abe9e3452541a0e69e2f3945aa2b1b)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- DEVELOPERS | 1 +
+ package/orc/orc.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 162ee12808..3c3eda1de5 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3509,6 +3509,7 @@ F:	package/libsocketcan/
- F:	package/libubox/
- F:	package/libuci/
- F:	package/libxmlb/
-+F:	package/libxmlrpc/
- F:	package/linux-firmware/
- F:	package/linux-serial-test/
- F:	package/lpac/
+diff --git a/package/orc/orc.mk b/package/orc/orc.mk
+index b2d2bb461b..436dc9d629 100644
+--- a/package/orc/orc.mk
++++ b/package/orc/orc.mk
+@@ -9,6 +9,7 @@ ORC_SOURCE = orc-$(ORC_VERSION).tar.xz
+ ORC_SITE = http://gstreamer.freedesktop.org/data/src/orc
+ ORC_LICENSE = BSD-2-Clause, BSD-3-Clause
+ ORC_LICENSE_FILES = COPYING
++ORC_CPE_ID_VENDOR = gstreamer
+ ORC_INSTALL_STAGING = YES
+ ORC_DEPENDENCIES = host-orc
+ ORC_CONF_OPTS = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
