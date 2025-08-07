@@ -1,76 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BFB53C87FCF
-	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 22:25:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 852E8C87FCF
+	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 22:29:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 723E440777;
-	Thu,  7 Aug 2025 22:25:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5131E80845;
+	Thu,  7 Aug 2025 22:29:59 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TSvktuZVTVcd; Thu,  7 Aug 2025 22:29:58 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6800680841
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6800680841;
+	Thu,  7 Aug 2025 22:29:58 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8C65331
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 22:29:56 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8726840782
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 22:29:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nWD1U7oaxn2Q; Thu,  7 Aug 2025 22:25:58 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A792640773
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A792640773;
-	Thu,  7 Aug 2025 22:25:58 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 091D531
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 22:25:58 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E36A0607EE
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 22:25:57 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8SLWj62bGpaK for <buildroot@buildroot.org>;
- Thu,  7 Aug 2025 22:25:57 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E05FB607E9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E05FB607E9
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E05FB607E9
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 22:25:56 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id 57E55780371;
- Fri,  8 Aug 2025 00:25:51 +0200 (CEST)
-Received: from ip099.116-187-66.sogetel.net ([66.187.116.99:55162])
- via ip099.116-187-66.sogetel.net ([66.187.116.99]) by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 08 Aug 2025 00:25:51 +0200
-MIME-Version: 1.0
-Date: Fri, 08 Aug 2025 00:25:51 +0200
-To: Peter Korsgaard <peter@korsgaard.com>
-Cc: buildroot@buildroot.org, James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20250805075624.2851092-1-peter@korsgaard.com>
-References: <20250805075624.2851092-1-peter@korsgaard.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <72833b36206429069085f416ffc0bdab@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1754605554;
- bh=bm27t+0M3Vb0Z3muSlw+j4wJ90hA1bb1UTWg0+i3cLY=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=niLTdW0X53M14HBhiUhKRz6hZrv5HyOqMHMKBHsAnJ4Y76vTpO0sIbma0660QwKwG
- 3JqYHfiTVAMut60QoX8z9/SPBPBH2o5xH3UelCwxNEYY+a9+dQLBSgZB+5gqhLyrs7
- mfTkVBkDNMXyTR+nA4jK9eoR5GEBb7f42E1L+K8lOIVJVqujY0kYdyNVJq1kWZAwiC
- oxzgHdGS8fweyek3Ks8zf4feQgCIv9ZyXtPBNhNdTArKZ8bkl4YYuPbrWDziFxDPcJ
- 6WGDBRgaY+BwZoRQVqSDOKdsc3eTbZuXLNlctI2qvE4dX45z1Ln0mAfr43qQoNFqvf
- LPoltQqBWf/Lg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=niLTdW0X
-Subject: Re: [Buildroot] [PATCH] package/python3: add upstream post-3.13.5
- security fix for CVE-2025-8194
+ id dLDeSq3yjTin for <buildroot@buildroot.org>;
+ Thu,  7 Aug 2025 22:29:55 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BAD2C40780
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id BAD2C40780
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 22:29:55 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A374D87048; Thu,  7 Aug 2025 22:29:55 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 8 Aug 2025 00:26:50 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 681575c73cc0f5be2644bb87f73dcc50c602a690
+X-Git-Newrev: 0e450a0b0837e74d1378c25c1254dfc3696c3262
+X-Patchwork-Hint: ignore
+Message-Id: <20250807222955.A374D87048@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libhtp: security bump to v0.5.51
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,22 +59,65 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gMDUvMDgvMjAyNSAwOTo1NiwgUGV0ZXIgS29yc2dhYXJkIHdyb3RlOgo+IEZpeGVzIHRoZSBm
-b2xsb3dpbmcgdnVsbmVyYWJpbGl0eToKPiAKPiBDVkUtMjAyNS04MTk0OiBUaGVyZSBpcyBhIGRl
-ZmVjdCBpbiB0aGUgQ1B5dGhvbiDigJx0YXJmaWxl4oCdIG1vZHVsZSAKPiBhZmZlY3RpbmcKPiB0
-aGUg4oCcVGFyRmlsZeKAnSBleHRyYWN0aW9uIGFuZCBlbnRyeSBlbnVtZXJhdGlvbiBBUElzLiAg
-VGhlIHRhciAKPiBpbXBsZW1lbnRhdGlvbgo+IHdvdWxkIHByb2Nlc3MgdGFyIGFyY2hpdmVzIHdp
-dGggbmVnYXRpdmUgb2Zmc2V0cyB3aXRob3V0IGVycm9yLCAKPiByZXN1bHRpbmcgaW4KPiBhbiBp
-bmZpbml0ZSBsb29wIGFuZCBkZWFkbG9jayBkdXJpbmcgdGhlIHBhcnNpbmcgb2YgbWFsaWNpb3Vz
-bHkgY3JhZnRlZCAKPiB0YXIKPiBhcmNoaXZlcy4KPiAKPiBodHRwczovL252ZC5uaXN0Lmdvdi92
-dWxuL2RldGFpbC9DVkUtMjAyNS04MTk0Cj4gaHR0cHM6Ly93d3cub3BlbndhbGwuY29tL2xpc3Rz
-L29zcy1zZWN1cml0eS8yMDI1LzA3LzI4LzEKPiAKPiBTaWduZWQtb2ZmLWJ5OiBQZXRlciBLb3Jz
-Z2FhcmQgPHBldGVyQGtvcnNnYWFyZC5jb20+CgpBcHBsaWVkIHRvIG1hc3RlciwgdGhhbmtzLgpf
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3Qg
-bWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRy
-b290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+commit: https://git.buildroot.net/buildroot/commit/?id=0e450a0b0837e74d1378c25c1254dfc3696c3262
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+For more information on the release, see:
+ - https://github.com/OISF/libhtp/releases/tag/0.5.51
+ - https://github.com/OISF/libhtp/releases/tag/0.5.50
+ - https://github.com/OISF/libhtp/compare/0.5.49...0.5.51
+
+This fixes the following vulnerability:
+
+- CVE-2025-53537
+
+    LibHTP is a security-aware parser for the HTTP protocol and its
+    related bits and pieces. In versions 0.5.50 and below, there is a
+    traffic-induced memory leak that can starve the process of memory,
+    leading to loss of visibility. To workaround this issue, set
+    `suricata.yaml app-layer.protocols.http.libhtp.default-config.lzma-
+    enabled` to false. This issue is fixed in version 0.5.51.
+
+For more information, see:
+  - https://www.cve.org/CVERecord?id=CVE-2025-53537
+  - https://github.com/OISF/libhtp/security/advisories/GHSA-v3qq-h8mh-vph7
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/libhtp/libhtp.hash | 2 +-
+ package/libhtp/libhtp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libhtp/libhtp.hash b/package/libhtp/libhtp.hash
+index 2e93586f7a..11105f8586 100644
+--- a/package/libhtp/libhtp.hash
++++ b/package/libhtp/libhtp.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  214395f8b42011154e133dfb4e94d15e4e3e3e12535e744a4c1eec8687d12c18  libhtp-0.5.49.tar.gz
++sha256  699475c2e512d5af05312e808f1f759a5d3c4cb154e73d82eaa6906ceacfaeb4  libhtp-0.5.51.tar.gz
+ sha256  87c93904e5434c81622ea690c2b90097b9f162aaa92a96542649a157dbf98d15  LICENSE
+diff --git a/package/libhtp/libhtp.mk b/package/libhtp/libhtp.mk
+index bb6559bc92..a986a79f1d 100644
+--- a/package/libhtp/libhtp.mk
++++ b/package/libhtp/libhtp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBHTP_VERSION = 0.5.49
++LIBHTP_VERSION = 0.5.51
+ LIBHTP_SITE = $(call github,OISF,libhtp,$(LIBHTP_VERSION))
+ LIBHTP_LICENSE = BSD-3-Clause
+ LIBHTP_LICENSE_FILES = LICENSE
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
