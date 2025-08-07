@@ -1,104 +1,105 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8C01C87FCA
-	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 18:23:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB737C87FDA
+	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 18:23:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A5EC040541;
-	Thu,  7 Aug 2025 18:23:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B9F3680D20;
+	Thu,  7 Aug 2025 18:23:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fM3l5viDDsJi; Thu,  7 Aug 2025 18:23:53 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ne3hwUAmd1xW; Thu,  7 Aug 2025 18:23:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B619440543
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DE93C80D2D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B619440543;
-	Thu,  7 Aug 2025 18:23:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DE93C80D2D;
+	Thu,  7 Aug 2025 18:23:54 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 37D264C6
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:23:50 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 6633410A
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:23:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5FEC1605C3
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:23:49 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E8B1B605F1
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:23:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mAJROIcCjfAe for <buildroot@buildroot.org>;
- Thu,  7 Aug 2025 18:23:48 +0000 (UTC)
+ id 1WwAJRBwJs6o for <buildroot@buildroot.org>;
+ Thu,  7 Aug 2025 18:23:50 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
+ client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 617CB6064C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 617CB6064C
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
- [IPv6:2a00:1450:4864:20::32b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 617CB6064C
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:23:48 +0000 (UTC)
-Received: by mail-wm1-x32b.google.com with SMTP id
- 5b1f17b1804b1-455b00339c8so8947755e9.3
- for <buildroot@buildroot.org>; Thu, 07 Aug 2025 11:23:48 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E266260604
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E266260604
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E266260604
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:23:49 +0000 (UTC)
+Received: by mail-wm1-x331.google.com with SMTP id
+ 5b1f17b1804b1-459e72abdd2so8075615e9.2
+ for <buildroot@buildroot.org>; Thu, 07 Aug 2025 11:23:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1754591026; x=1755195826;
+ d=1e100.net; s=20230601; t=1754591028; x=1755195828;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=v77CTMcJjU+SLk+HiEUkpS3ptZeficIm6UObV5bL0GU=;
- b=NlnESbUFEhCVUnW8lq4sofNt08a+RKF2kKMsi9CWLbLC5Js00kbKuwb+kZDn2ot0Tt
- SelhiJpqMHgW2YtIgdaNtrkhPaDfEJOvgkhDlVbhTdIFsWba7KwcJJOvDnD8TVt07asJ
- iK/zB+XH325pt3NDRo2DzaG+2cxizfqBQdterMW7/LRGryhk1RIxCQ7ehR0mSgzDsJQs
- 8BKV2tLgumAgfriZZtrQWl/wty9HWluvJuWBTkPnXKqNRS3PglsqxJNOTxeET3pTdC9w
- jn609o9xX5u2sqQ5af3+c3DCfOSp+jX2VTgwP3fe5Z/w+se1FQZj9i8mdMk/ml7br3HQ
- l1JQ==
+ bh=q3Lyr98N5aNXzad6dPRSC31zYT+6aXJhNMjNufqE/rI=;
+ b=Trev33ZmsGe9YAPcQmgSlHf0Ax6W21PDVHpaxE6uI8QLfrXGyezsl0CqoKIdHvKvH5
+ 48fmb0KbmgSMMSZHtHmG5cGftlRu54M0bsiWruGEBR5zA9l0kexin3+mr/tPkMHYLb6C
+ hDTIG0cORX7kmJEObvP6nnnpREBICeDCNAHzGnq6YfQcWvzBBpJb+DZzBO8ZUnxmk+un
+ sbMMFECuAW72vVnJ5xMZN/B4hqNcNn2vEC7F5kbdp3DJaw02YS2niu2huejXPXp9YFoh
+ es3cwGUIiEafMO1A4gfQ52UgJhibhqLDpWoM00gXqWtkKhohfb3kZ5mWZN3d20yhOF/I
+ 26Tg==
 X-Forwarded-Encrypted: i=1;
- AJvYcCXNHP5hjzUAu7ju8H9IH7VY2c/DVxRR0eUWxuyaEDqD0ZFn5tnh5u2kH+ePQzsqUpD4aEnxDO4/ef0=@buildroot.org
-X-Gm-Message-State: AOJu0YwgR61Y14112WuLHs9y0o6oi8QZcjxDPwnT93dmehxm68FFwCv0
- tK3oAftln5Lt2QtaVwKQo5XdrHPBZtVcYd4kcFa6GY5ctdz2dHiRgko12KSaopJj/Q4=
-X-Gm-Gg: ASbGncvAUkLvKc41TCYvUrF5ro376THZsE/crliD7j1FpkPJVqY0QDS82XE1Y7z3F3f
- ivan9/bJsxnL6JpGHlNAb/c0oNBOdEswxEgr0WywPxMIto1iHgNfHj8aIvsDuAqMfalGqGDr1fh
- X5QfwzqvJXtJHpo78ExwNZ6gbBc8TfJ4I9XuoBBtM2URo4OJmGDv0P9R4vKHuhvuscING3TaoOa
- 9QS5ZbWetWhM9oOmv0AnGipb3Lyna/4q8/z+KRuUAoBCD5FAlwmv4BMkONqBzR80yQg4XqoRPVk
- 0UF2wxE7D+s+ejDNOT4FTAp9Ti3HgcbrAwoHvmDg8/h6zcshR1uJDIAz5E7UZfoJ0BUCQ1Zh/RE
- 8cJ184plwJrqeJg==
-X-Google-Smtp-Source: AGHT+IHDO3qFnHU5WJ55ADd2flTIyWemYUpt19oYqcdVYvwWO7bXXGnmoK9PlM63x+7KKsFCAx3CMg==
-X-Received: by 2002:a05:600c:1ca6:b0:458:bfb1:1fc7 with SMTP id
- 5b1f17b1804b1-459e707ffd9mr68859215e9.6.1754591026207; 
- Thu, 07 Aug 2025 11:23:46 -0700 (PDT)
+ AJvYcCXCR44T7agRPJLweep1UE4MicaKhQ4JaUjZnDlqqtAxTXa5fj7umf5vjQ9vTCb24ovDnTkuH0p2gb8=@buildroot.org
+X-Gm-Message-State: AOJu0YzqhqTUhm7e6J/T5nEhzwhh8fAT+l7wO1Kji0Do8+fLhuSmVZWN
+ Sy7fct2eaLb4QU29WsVttvIP6vUbfGX+YPSmhXv/thwekGLM3Gumt7e5Kls8lQg6oAY=
+X-Gm-Gg: ASbGncvOIbrBqG2WXTtcotEZmKEAfUthlqwAic4QFIom49dXy3mD04y7Hbrjjz/Ot7T
+ +hHv+5VJ39dkuXO20Tf/yRYKYsrwaLyy5jvqUhlaMBrhWr7yKJjcduL5ggH6M9Phokx4VspfLek
+ W+VYVnoHBlK3dJJcQmQmNq8RiNCfpNkYEFTAEC7yXXdd/PNrgNYsrQkdllvVNSNywUxrSSIcjOt
+ FkPq9DIuNn71STNc7n8T/gijHtJiDr06XoZqGcvrrB39cronId3OprTNTJSYBnR+rg0gJXf2Bhx
+ mviMJofbqeeNFs1IMCAReb+sx7MFeYbqPrf1uXWNawUcdb2J9Ppl1sclub329GwumtmeTZynEIG
+ tFjz/V71BSOBS8Q==
+X-Google-Smtp-Source: AGHT+IFwKkR0+X56QSJ8pISVQjfF1O/prl5gH8GizIlWFjX40Mt61ttEqf2L3s+epNrNEdg2onMZZA==
+X-Received: by 2002:a05:600c:1d22:b0:456:24aa:9586 with SMTP id
+ 5b1f17b1804b1-459f43a7a7dmr5442205e9.21.1754591027866; 
+ Thu, 07 Aug 2025 11:23:47 -0700 (PDT)
 Received: from arch ([79.132.233.79]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-459e5868fd7sm112373195e9.18.2025.08.07.11.23.45
+ ffacd0b85a97d-3b79c485444sm27886442f8f.66.2025.08.07.11.23.47
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 07 Aug 2025 11:23:46 -0700 (PDT)
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ Thu, 07 Aug 2025 11:23:47 -0700 (PDT)
+To: Bernd Kuhls <bernd@kuhls.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Thu,  7 Aug 2025 20:23:45 +0200
-Message-ID: <20250807182345.723308-1-thomas.perale@mind.be>
+Date: Thu,  7 Aug 2025 20:23:47 +0200
+Message-ID: <20250807182347.723412-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250425201824.141234-6-thomas.petazzoni@bootlin.com>
-References: <20250425201824.141234-6-thomas.petazzoni@bootlin.com>
+In-Reply-To: <20250518173557.2147691-1-bernd@kuhls.net>
+References: <20250518173557.2147691-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1754591026; x=1755195826; darn=buildroot.org;
+ d=mind.be; s=google; t=1754591028; x=1755195828; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=v77CTMcJjU+SLk+HiEUkpS3ptZeficIm6UObV5bL0GU=;
- b=C2z9ehqUPZVCcYX6TweyyHMgT9mvjMHWqF5p4MGjWhTkXvfCzo4byKNVHeH93AH0uI
- j7HSylVtcTFeZZzh8pxVrPY7LrWxSLI21iFqokR9GMIw2Hm39LGyG32E84mvpYv9ZPaB
- IRF58+8WVyiulBQG/lb32uwdym8U9ePjGlDLi/+oalE87RbkvFTF23vf6tZhV4tkkS/n
- VRu0Z/yz+BsSoKptVEeuXJc6YCYb5Y2w2KqUaF7lidompriznwltqmrO4U9tuiUqFgfy
- kQKeElMF1fVSRCLRvc3uIC7PH94Om17RwSq7haZTOBRwz6qRyEufCt7IWNb0S/NRFC0n
- Vvyw==
+ bh=q3Lyr98N5aNXzad6dPRSC31zYT+6aXJhNMjNufqE/rI=;
+ b=AINZtzyKUSJBj+tj/vTfC4GgDmJZbIIiNfDyQFhzl6+9EkcVPRqmG5bBHSCi05iPOZ
+ EUOPygOva0wwwAPfI6JF2KMqqcLFGSm2agHhb0qdL3fkO9JYJFmirCDUP1SX8TxLzzu8
+ w1kCZ437pRNskohl55N+o5A8sKlR5Jbjd2yb7HagGu3yvJMYo98eFaqB26yRo4rihNB1
+ F7OcxBpGMSZOBMBGdOTZSVkAnY7AThVFqG8fPs7z2ni6cUgfVtdKyplmHL+86uRW+ii7
+ gNvIabKZq1Zx/nJ/W3pfbXmsctKtbiVXnlwLI68FgGh6gg4a7TTXn2eqxa252ZZE1B7o
+ NsLw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=C2z9ehqU
-Subject: Re: [Buildroot] [PATCH 5/7] package/gcc: drop stale hash
+ header.a=rsa-sha256 header.s=google header.b=AINZtzyK
+Subject: Re: [Buildroot] [PATCH 1/1] package/oniguruma: bump version to
+ 6.9.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,32 +119,44 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> The hash for the GCC 10.4.0 tarball should have been removed a long
-> time ago, when support for GCC 10.x has been removed.
+> Release notes:
+> https://github.com/kkos/oniguruma/releases/tag/v6.9.10
 > 
-> Fixes: d37a8f3a2e2a387b102f2982d51aca78bcc09727 ("package/gcc: remove gcc 10.x")
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2025.02.x & 2025.05.x. Thanks
 
 > ---
->  package/gcc/gcc.hash | 2 --
->  1 file changed, 2 deletions(-)
+>  package/oniguruma/oniguruma.hash | 4 ++--
+>  package/oniguruma/oniguruma.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
-> index 7a473cdc02..00da7dd49b 100644
-> --- a/package/gcc/gcc.hash
-> +++ b/package/gcc/gcc.hash
-> @@ -1,7 +1,5 @@
->  # From https://gcc.gnu.org/pub/gcc/releases/gcc-8.4.0/sha512.sum
->  sha512  6de904f552a02de33b11ef52312bb664396efd7e1ce3bbe37bfad5ef617f133095b3767b4804bc7fe78df335cb53bc83f1ac055baed40979ce4c2c3e46b70280  gcc-8.4.0.tar.xz
-> -# From https://gcc.gnu.org/pub/gcc/releases/gcc-10.4.0/sha512.sum
-> -sha512  440c08ca746da450d9a1b35e8fd2305cb27e7e6987cd9d0f7d375f3b1fc9e4b0bd7acb3cd7bf795e72fcbead59cdef5b6c152862f5d35cd9fbfe6902101ce648  gcc-10.4.0.tar.xz
->  # From https://gcc.gnu.org/pub/gcc/releases/gcc-13.3.0/sha512.sum
->  sha512  ed5f2f4c6ed2c796fcf2c93707159e9dbd3ddb1ba063d549804dd68cdabbb6d550985ae1c8465ae9a336cfe29274a6eb0f42e21924360574ebd8e5d5c7c9a801  gcc-13.3.0.tar.xz
->  # From https://gcc.gnu.org/pub/gcc/releases/gcc-14.2.0/sha512.sum
+> diff --git a/package/oniguruma/oniguruma.hash b/package/oniguruma/oniguruma.hash
+> index ac1d375b7a..be49a4d4e7 100644
+> --- a/package/oniguruma/oniguruma.hash
+> +++ b/package/oniguruma/oniguruma.hash
+> @@ -1,4 +1,4 @@
+> -# From https://github.com/kkos/oniguruma/releases/download/v6.9.9/onig-6.9.9.tar.gz.sha256
+> -sha256  60162bd3b9fc6f4886d4c7a07925ffd374167732f55dce8c491bfd9cd818a6cf  onig-6.9.9.tar.gz
+> +# From https://github.com/kkos/oniguruma/releases/download/v6.9.10/onig-6.9.10.tar.gz.sha256
+> +sha256  2a5cfc5ae259e4e97f86b68dfffc152cdaffe94e2060b770cb827238d769fc05  onig-6.9.10.tar.gz
+>  # Hash for license file
+>  sha256  70ba5469ea0bab6e18a32d7009068f996503168d27be57747e08da34337ff26f  COPYING
+> diff --git a/package/oniguruma/oniguruma.mk b/package/oniguruma/oniguruma.mk
+> index e056048cb5..32eff4cc75 100644
+> --- a/package/oniguruma/oniguruma.mk
+> +++ b/package/oniguruma/oniguruma.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -ONIGURUMA_VERSION = 6.9.9
+> +ONIGURUMA_VERSION = 6.9.10
+>  ONIGURUMA_SITE = \
+>  	https://github.com/kkos/oniguruma/releases/download/v$(ONIGURUMA_VERSION)
+>  ONIGURUMA_SOURCE = onig-$(ONIGURUMA_VERSION).tar.gz
 > -- 
-> 2.49.0
+> 2.39.5
 > 
 > _______________________________________________
 > buildroot mailing list
