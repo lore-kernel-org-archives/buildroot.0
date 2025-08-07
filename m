@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B361ACA0EC0
-	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 17:20:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD0DBC87FCF
+	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 17:20:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8866480D4E;
-	Thu,  7 Aug 2025 17:20:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B5EF740574;
+	Thu,  7 Aug 2025 17:20:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VtUdryx1xuwX; Thu,  7 Aug 2025 17:20:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id l1Z-L6rXo86x; Thu,  7 Aug 2025 17:20:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 93C1080CE4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D4C37405A2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 93C1080CE4;
-	Thu,  7 Aug 2025 17:20:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D4C37405A2;
+	Thu,  7 Aug 2025 17:20:10 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 375714C4
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:19:33 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 892FF4C4
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:19:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 70D1540071
+ by smtp2.osuosl.org (Postfix) with ESMTP id 86AB240059
  for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:19:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qfEVaAhIeRg7 for <buildroot@buildroot.org>;
- Thu,  7 Aug 2025 17:19:17 +0000 (UTC)
+ id E9nytCMnrH_z for <buildroot@buildroot.org>;
+ Thu,  7 Aug 2025 17:19:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0CA4040059
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6E26E40070
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0CA4040059
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:19:16 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6E26E40070
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:19:15 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0A76880FCA; Thu,  7 Aug 2025 17:19:16 +0000 (UTC)
+ id 6C1D786FE1; Thu,  7 Aug 2025 17:19:15 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 7 Aug 2025 19:09:16 +0200
+Date: Thu, 7 Aug 2025 19:08:47 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: c55b9b0a704fd227216d6e85c80cfa55d53d12e3
-X-Git-Newrev: 78fe304aeb7299ec23697237e222510ee6f348a8
+X-Git-Oldrev: c743fcdd79cedcc63f2a0987b8fecdc3cc90fc54
+X-Git-Newrev: a9df497204283d5cf744b2b7de58778641bdd701
 X-Patchwork-Hint: ignore
-Message-Id: <20250807171916.0A76880FCA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/libmicrohttpd:
- bump version to 1.0.2
+Message-Id: <20250807171915.6C1D786FE1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/rtl8723ds: update
+ upstream
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,46 +66,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=78fe304aeb7299ec23697237e222510ee6f348a8
+commit: https://git.buildroot.net/buildroot/commit/?id=a9df497204283d5cf744b2b7de58778641bdd701
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-Fix double-close bugs on bind() errors reported by MC on the list.
+Benetti Engineering just took over Larry Finger(lwfinger)'s repository [0]
+rtl8723ds since Larry unfortunately passed away[1](RIP) and there are
+pending PRs that will never be checked as stated here. So basically move
+github user to benetti-engineering-sas and update version with latest that
+fixes build failure with Linux version 6.15. And let's drop local patches
+that are now upstreamed as well. And of course let's update package's
+URL due to the moving.
 
-Removed MHD2 draft code, now in libmicrohttpd2.git.
+[0]: https://github.com/lwfinger/rtl8723ds/issues/53
+[1]: https://lwn.net/Articles/979419/
 
-Changelog: https://git.gnunet.org/libmicrohttpd.git/tree/ChangeLog
-
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 2fd793312563c6fe9bdf8fb8632e0006a31092ec)
+(cherry picked from commit 54ee4a71c0b3c775067dca517a3780f31cc7f257)
+[thomas: only change the upstream]
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/libmicrohttpd/libmicrohttpd.hash | 2 +-
- package/libmicrohttpd/libmicrohttpd.mk   | 2 +-
+ package/rtl8723ds/Config.in    | 2 +-
+ package/rtl8723ds/rtl8723ds.mk | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libmicrohttpd/libmicrohttpd.hash b/package/libmicrohttpd/libmicrohttpd.hash
-index f1b3f8b7d8..59c87a738d 100644
---- a/package/libmicrohttpd/libmicrohttpd.hash
-+++ b/package/libmicrohttpd/libmicrohttpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  a89e09fc9b4de34dde19f4fcb4faaa1ce10299b9908db1132bbfa1de47882b94  libmicrohttpd-1.0.1.tar.gz
-+sha256  df324fcd0834175dab07483133902d9774a605bfa298025f69883288fd20a8c7  libmicrohttpd-1.0.2.tar.gz
- sha256  7399547209438c93f9b90297954698773d4846cea44cde5ca982c84c45952a3b  COPYING
-diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
-index 6998ffd1ae..335234c14b 100644
---- a/package/libmicrohttpd/libmicrohttpd.mk
-+++ b/package/libmicrohttpd/libmicrohttpd.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/rtl8723ds/Config.in b/package/rtl8723ds/Config.in
+index e5123a2aae..0921a55d37 100644
+--- a/package/rtl8723ds/Config.in
++++ b/package/rtl8723ds/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_RTL8723DS
+ 	help
+ 	  rtl8723bs wifi driver
+ 
+-	  https://github.com/lwfinger/rtl8723ds
++	  https://github.com/benetti-engineering-sas/rtl8723ds
+ 
+ comment "rtl8723ds needs a Linux kernel to be built"
+ 	depends on !BR2_s390x
+diff --git a/package/rtl8723ds/rtl8723ds.mk b/package/rtl8723ds/rtl8723ds.mk
+index 2536450d80..e35364aa67 100644
+--- a/package/rtl8723ds/rtl8723ds.mk
++++ b/package/rtl8723ds/rtl8723ds.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBMICROHTTPD_VERSION = 1.0.1
-+LIBMICROHTTPD_VERSION = 1.0.2
- LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
- LIBMICROHTTPD_LICENSE_FILES = COPYING
- LIBMICROHTTPD_CPE_ID_VENDOR = gnu
+ RTL8723DS_VERSION = 52e593e8c889b68ba58bd51cbdbcad7fe71362e4
+-RTL8723DS_SITE = $(call github,lwfinger,rtl8723ds,$(RTL8723DS_VERSION))
++RTL8723DS_SITE = $(call github,benetti-engineering-sas,rtl8723ds,$(RTL8723DS_VERSION))
+ RTL8723DS_LICENSE = GPL-2.0
+ RTL8723DS_LICENSE_FILES = COPYING
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
