@@ -4,103 +4,102 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B826FCA0EC0
-	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 18:25:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68478C87FCA
+	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 18:25:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 923104064A;
-	Thu,  7 Aug 2025 18:25:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 37FF04068C;
+	Thu,  7 Aug 2025 18:25:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PjxQNOpEDvxW; Thu,  7 Aug 2025 18:25:38 +0000 (UTC)
+ id khksMqM6Mlg6; Thu,  7 Aug 2025 18:25:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 061104065C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 533B440677
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 061104065C;
-	Thu,  7 Aug 2025 18:25:36 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id DD5AD10A
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:25:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 533B440677;
+	Thu,  7 Aug 2025 18:25:37 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 34C324C4
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:25:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CD0C3400D6
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:25:15 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 19B5F80F17
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:25:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XOTdtYgmudjn for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XMfa90TiCqpz for <buildroot@buildroot.org>;
  Thu,  7 Aug 2025 18:25:15 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
+ client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E3050400C1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E3050400C1
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E3050400C1
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:25:14 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id
- 5b1f17b1804b1-455fdfb5d04so7315715e9.2
- for <buildroot@buildroot.org>; Thu, 07 Aug 2025 11:25:14 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3123380EEC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3123380EEC
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3123380EEC
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:25:11 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ 5b1f17b1804b1-458baf449cbso12998565e9.0
+ for <buildroot@buildroot.org>; Thu, 07 Aug 2025 11:25:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1754591113; x=1755195913;
+ d=1e100.net; s=20230601; t=1754591109; x=1755195909;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=Z8rvltoy5km+C3VDUHhRc7Mjhdupw9EXdbwNmS2hc+U=;
- b=uQtfGkt+67xvjB49eaACEfEIMo1GtU60PcNWjVABAsUL7FGOwaCebzEt3JD6fWerco
- yaQqhSJO/ks1fWnANDaZSqfMbhmE2jcf7yi9IaM/lXVjiBOxJQwLVz+aIB8TqyFwPwg6
- QVE+SdO/Fy58TawrZCs58Iy+nS8BlOVEvUZqJxLNLcmqUAR654RB6VtrB9NGJxQqio5k
- 4SstCBca8XJgyYXiFxaiNS0AcpH6zG21UzbfgZLyfFksqLsDrCVFVbG7DOlAQBBIi9pm
- sl3msavBPk7sLK4xBRzWLX+V8z4evv0A8vGmlMbofuC81LEYaRLzLdwnATjm2qHIyVvm
- jFdQ==
+ bh=Z55IBV8gAMVxUn/01KwuShz2uWbA1rphvoN79xoSPRs=;
+ b=rfEVJYondDKReE1dhPSZP62JHNzBBwq/o6LrODg1Cb8Q6K2+gSdSpjChJrI++vP4P+
+ /hFJ2vxWbNbdCD+tKuZp2uBDR+4py8WZKjFsTtZHJ88LiM2vyA6t8V/QRLD/xHKH3MNb
+ 1tnOq7GLzIRef0BwmUIuf/C2+uGovEdRHtfmC0lWDrQyQMj2Q/U3Kxa00V4D41TelDLo
+ nUCBpA8T8tq6fq6ucBMxFOocc8zS6T5nhTFI5grlwzfs/VC/cSDnc6G9DSOZ8qqeHc69
+ qP2SCcOxEkvg6iYJR5EodCbU4qOdb+34Cmad2U/bm8PgFhLKoZSNb/oXnlNCVeA8pabO
+ dhcg==
 X-Forwarded-Encrypted: i=1;
- AJvYcCW8uMzePXpy6aBnmbCCn4YbMzi4LJcufIXh0RugsQd3Ash/pvadWFfLsULD+wLHXUUs7lPWXJuxLMk=@buildroot.org
-X-Gm-Message-State: AOJu0YwgeiJfDtqDBsJO834OV2JIyW170B/qQK9Vme93Y171khIfe8jn
- 0FwvzRlriTHXX+qSSu5Qq6D0ZnAGUPIY1aIVQgTZY+J7xFbzCbmdHiSDC0HcPin3R3d/VANUBNI
- XES/nnpY=
-X-Gm-Gg: ASbGncvQEmY8ZrhkM98SMSVfZjrXvwC70n9p74AdtyeDHnneAoJQXUbMp2k9iZUcnna
- Ot4V/8N/JXg1QKmG2W3nrvBPUSULvy2C3vWZwPqZLjqTycBY5BJKjiKLUtqtUlcLF9iXMbeA0TP
- I0ITaQ3aB3MHk8WHgbyMM6KjqVFtwG3RHy5g2F8OuCWpLcP9pleTQFexWfZbiZ9Bs/kBt5d9625
- 1RmekA2CYq/qGEt00fEgyizg3D4IGaK1xMjKobjEfYEVdHaqkMZQB9koZFoGeS9bdSmnkzOf75y
- 1lG78GAO7laMdDPip3K0OhiAIdKjJxVIeH5Y1PcRcwtrBziVVqTkvBtTyapNjTzrO+l0MKNZtqp
- Fi/+23rNjmiIQhg==
-X-Google-Smtp-Source: AGHT+IHVIoqi2WmS2dusj63p/BgzGpO1hGUK6YC/3lugKILiUtcsqNZ6cCP5+H4llizhS7H3mJkrqQ==
-X-Received: by 2002:a05:600c:474d:b0:459:db80:c29f with SMTP id
- 5b1f17b1804b1-459f4ea0f38mr212365e9.1.1754591112924; 
- Thu, 07 Aug 2025 11:25:12 -0700 (PDT)
+ AJvYcCUINL1FQn6b0FR4Mvkif60BpF469Y321imAX1DcZjHihWY1TKMVdmYuygtP6bkXD6f92JdNVzJi28w=@buildroot.org
+X-Gm-Message-State: AOJu0YyYYXnxNS4ICJrQV/QgMp0stm0UlEmVJf1LbcZaQ7P1yNIJoUxP
+ TT0ctPSpcsQOq/rHWHmGxwy4fFi6NN5fUwBIZUfkwj1XqpsDT6neZGkzkpCzdQh7sHa73clg0nZ
+ iRa3o
+X-Gm-Gg: ASbGnctzFMFLxWvPv3OKUKRNVIeCk5TUYbJXB6X8nK6ab0UGihz1EvAkJCONV+eY5Ey
+ wQ98OUQthB7muJVeUhrMTvNDh8sXPZ5YM7JckDmgI2XkKM8RvcOfV+Sx5SD/Sy02NIhyGYzD7TJ
+ y0+ucLstFjdwwxSKrKgwxkzdv/iKTknJZ6RgybEUDzHMvMgCD15cxMxxmd+kVLE0+HumwwU9o9+
+ 6HQXnRblFI+iZl7Q5wQwVzEpNXpQWc+SS7PyXCcDmhNFp+x7Vb2XagsJgS6mLC6/13P0B96xrJi
+ xtNqwlnlZjYSY6DpUhLbG2rmEFy9cVQlFNnS248N0mgpMULoMaksHWkWaEWLnfawJrzUNqL1+xt
+ DT7ADQxI6rP2vNA==
+X-Google-Smtp-Source: AGHT+IGzvRLwpNp0qPQ72P6WxrOKVH5UKtd2Xs8Z8IdLdxh9lgpqZabqF9e9FpEw8BkamJFwi7a+DA==
+X-Received: by 2002:a05:6000:188f:b0:3b8:fb9d:248a with SMTP id
+ ffacd0b85a97d-3b900b507e6mr200238f8f.24.1754591109193; 
+ Thu, 07 Aug 2025 11:25:09 -0700 (PDT)
 Received: from arch ([79.132.233.79]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3b79c4530b3sm28275189f8f.34.2025.08.07.11.25.12
+ ffacd0b85a97d-3b79c453328sm29118058f8f.46.2025.08.07.11.25.08
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 07 Aug 2025 11:25:12 -0700 (PDT)
-To: Bernd Kuhls <bernd@kuhls.net>
+ Thu, 07 Aug 2025 11:25:08 -0700 (PDT)
+To: yann.morin@orange.com
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Thu,  7 Aug 2025 20:25:12 +0200
-Message-ID: <20250807182512.726989-1-thomas.perale@mind.be>
+Date: Thu,  7 Aug 2025 20:25:08 +0200
+Message-ID: <20250807182508.726769-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250725182743.3599859-1-bernd@kuhls.net>
-References: <20250725182743.3599859-1-bernd@kuhls.net>
+In-Reply-To: <725a89cbad59708b94cac3eddb422dc5a0d305dc.1752554987.git.yann.morin@orange.com>
+References: <725a89cbad59708b94cac3eddb422dc5a0d305dc.1752554987.git.yann.morin@orange.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1754591113; x=1755195913; darn=buildroot.org;
+ d=mind.be; s=google; t=1754591109; x=1755195909; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=Z8rvltoy5km+C3VDUHhRc7Mjhdupw9EXdbwNmS2hc+U=;
- b=aax/ghydWi1xIZzstyOfAfwJUuVNh+BpGN3ctAxMf+J9PObfpl3qRKYE/JmqvJLOkH
- XMBlptKd2wGWVC+6RqqCny/WWLBoZi25MN+Xw2VO5QSyv404DsaKBQZTJ09C2kEvSWY9
- TeHQSOsg/KFEEp/fpqd1NtIAI9Pbdt5+k0nXjBclfHnEYxKO5zdK0wIT+kyzULz5WLfB
- ZsDzs4IKlQcFXAcegNpsLQCpfwtiVdtzC6tI3j11EhHzPYo7GWqad/EgLwXHdtCd+pB0
- EiEyziOE4GWH/ei4jKoOuBXbTA8qjB2NNQ7hWL2SVYzH73WdALwhR/5xdlsaqzPEPz79
- kpzg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=Z55IBV8gAMVxUn/01KwuShz2uWbA1rphvoN79xoSPRs=;
+ b=Kidh8VU0DMeZ/ulQ6S/myoB2x0mg/ifJVS6+t8JipwN9jSShFLShMZxy2C3i8NyGyJ
+ AmH6ykPeyk6eyoJ+asHAzTBQOKdmzDwrE8hleARju98KEDm8HNaS4A54Er39bYvwZ0B6
+ PS9kdrF4CNM2xfOkkEEIWLRChLD4mWhBxfjzpknE2COk+N8t0lOmZrkba1IAJfdW1LIG
+ 2kaktyygJaZVeTnExlOa7qgUiYGDfcKeQn+v0FVqBqUFwFPyV0hEwHYgmdXvQHTYjS3P
+ zhYlbl8sMirhCYebuSzLaBJOSE29bYJ0sndmluuiQj+Sj1bZ+73v81ve4bd6is6574D8
+ jvow==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=aax/ghyd
-Subject: Re: [Buildroot] [PATCH 1/1] package/rust-bindgen: bump version to
- 0.72.0
+ header.a=rsa-sha256 header.s=google header.b=Kidh8VU0
+Subject: Re: [Buildroot] [PATCH] package/passt: needs headers >= 5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -120,42 +119,80 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Changelog:
-> https://github.com/rust-lang/rust-bindgen/blob/main/CHANGELOG.md
+> Upstream passt only documents runtime dependencies; and they advertise
+> being able to run on kernel 3.8 or later. However, they do not document
+> the build dependencies.
 > 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> As reported by Julien, since 2024_12_11.09478d5, upstream requires
+> kernel headers >= 5.0, as they make use of linux/vhost_types.h, only
+> introduced in 5.0.
+> 
+> Add a dependency to kernel headers, and propagate it to podman's passt
+> backend.
+> 
+> Reported-by: Julien Olivain <ju.o@free.fr>
+> Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+> 
 
 Applied to 2025.05.x. Thanks
 
 > ---
->  package/rust-bindgen/rust-bindgen.hash | 2 +-
->  package/rust-bindgen/rust-bindgen.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+> Changes v1 -> v2:
+>   - only hide the passt backend, not the whole of podman  (Julien)
+> ---
+>  package/passt/Config.in  | 4 ++++
+>  package/podman/Config.in | 4 ++++
+>  2 files changed, 8 insertions(+)
 > 
-> diff --git a/package/rust-bindgen/rust-bindgen.hash b/package/rust-bindgen/rust-bindgen.hash
-> index 0718bdc696..dc79a62ddd 100644
-> --- a/package/rust-bindgen/rust-bindgen.hash
-> +++ b/package/rust-bindgen/rust-bindgen.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256  20d32e8e182ef49694a65a4a18d624cac7caa30b03422212d503a7edc0d04f6a  rust-bindgen-0.65.1-cargo4.tar.gz
-> +sha256  f131b9cf87ea0a5db33ff3ad711aec4dbc4d383536f5f2e37493d63cbe95428e  rust-bindgen-0.72.0-cargo4.tar.gz
->  sha256  c23953d9deb0a3312dbeaf6c128a657f3591acee45067612fa68405eaa4525db  LICENSE
-> diff --git a/package/rust-bindgen/rust-bindgen.mk b/package/rust-bindgen/rust-bindgen.mk
-> index aa0d7d44a4..349d4c3670 100644
-> --- a/package/rust-bindgen/rust-bindgen.mk
-> +++ b/package/rust-bindgen/rust-bindgen.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
+> diff --git a/package/passt/Config.in b/package/passt/Config.in
+> index a2d2f4f1fe..a93a088670 100644
+> --- a/package/passt/Config.in
+> +++ b/package/passt/Config.in
+> @@ -1,5 +1,6 @@
+>  config BR2_PACKAGE_PASST
+>  	bool "passt"
+> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
+>  	help
+>  	  passt: Plug A Simple Socket Transport
+>  	  pasta: Pack A Subtle Tap Abstraction
+> @@ -17,3 +18,6 @@ config BR2_PACKAGE_PASST
+>  	  hence not requiring any capabilities or privileges.
 >  
-> -RUST_BINDGEN_VERSION = 0.65.1
-> +RUST_BINDGEN_VERSION = 0.72.0
->  RUST_BINDGEN_SITE = $(call github,rust-lang,rust-bindgen,v$(RUST_BINDGEN_VERSION))
->  RUST_BINDGEN_LICENSE = BSD-3-clause
->  RUST_BINDGEN_LICENSE_FILES = LICENSE
+>  	  https://passt.top/passt/about/
+> +
+> +comment "passt needs a toolchain w/ headers >= 5.0"
+> +	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
+> diff --git a/package/podman/Config.in b/package/podman/Config.in
+> index 6bfd477f38..a6554a3ddc 100644
+> --- a/package/podman/Config.in
+> +++ b/package/podman/Config.in
+> @@ -72,8 +72,12 @@ choice
+>  
+>  config BR2_PACKAGE_PODMAN_NET_PASST
+>  	bool "passt/pasta"
+> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0  # passt
+>  	select BR2_PACKAGE_PASST  # runtime
+>  
+> +comment "passt/pasta backend needs a toolchain w/ headers >= 5.0"
+> +	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
+> +
+>  config BR2_PACKAGE_PODMAN_NET_SLIRP4NETNS
+>  	bool "slirp4netns"
+>  	select BR2_PACKAGE_SLIRP4NETNS  # runtime
 > -- 
-> 2.39.5
+> 2.34.1
+> 
+> ____________________________________________________________________________________________________________
+> Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+> pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+> a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+> Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+> 
+> This message and its attachments may contain confidential or privileged information that may be protected by law;
+> they should not be distributed, used or copied without authorisation.
+> If you have received this email in error, please notify the sender and delete this message and its attachments.
+> As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+> Thank you.
 > 
 > _______________________________________________
 > buildroot mailing list
