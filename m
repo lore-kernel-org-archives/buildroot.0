@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9406C87FCF
-	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 17:00:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCDD2C87FDA
+	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 17:00:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8B53A40363;
-	Thu,  7 Aug 2025 17:00:29 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OAF9H9KIaBAF; Thu,  7 Aug 2025 17:00:28 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 82F524036D
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 82F524036D;
-	Thu,  7 Aug 2025 17:00:28 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 212C9767
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:00:22 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1571C80C0A
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:00:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 838D180C20;
+	Thu,  7 Aug 2025 17:00:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id w6Cf9nbnUUg1 for <buildroot@buildroot.org>;
- Thu,  7 Aug 2025 17:00:20 +0000 (UTC)
+ id Z5TwAXu5hgGz; Thu,  7 Aug 2025 17:00:29 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 438CF80C4E
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 438CF80C4E;
+	Thu,  7 Aug 2025 17:00:26 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1380F233
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:00:22 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id CFC7440027
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:00:21 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lnOEBmfjSnoh for <buildroot@buildroot.org>;
+ Thu,  7 Aug 2025 17:00:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 328A580BD7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1430540012
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 328A580BD7
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:00:20 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1430540012
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:00:21 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2FAFC86984; Thu,  7 Aug 2025 17:00:20 +0000 (UTC)
+ id 05E8186984; Thu,  7 Aug 2025 17:00:21 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 7 Aug 2025 11:06:02 +0200
+Date: Thu, 7 Aug 2025 11:06:26 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 9a36561fdffa6beafb7b6dc42ce4a7026b7b6833
-X-Git-Newrev: 244005d46545003ad60d35a079d5314136345cda
+X-Git-Oldrev: a4b2c8a58f596e94ca42d69475ca4742845ac760
+X-Git-Newrev: 5c6a99f2420118ab8505deaff2e48e6035005eff
 X-Patchwork-Hint: ignore
-Message-Id: <20250807170020.2FAFC86984@busybox.osuosl.org>
+Message-Id: <20250807170021.05E8186984@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2025.02.x]
- package/python-setuptools: bump to version 80.9.0
+ toolchain/toolchain-wrapper.c: slightly simplify cmdline copying
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,107 +66,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=244005d46545003ad60d35a079d5314136345cda
+commit: https://git.buildroot.net/buildroot/commit/?id=5c6a99f2420118ab8505deaff2e48e6035005eff
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Rebase add executable patch.
+C99 section 5.1.2.2.1p2 mandates that:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-(cherry picked from commit 0b171693a9ea342528b608deaf8fec53611b8e4c)
+- argv[argc] shall be a null pointer.
+
+https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1256.pdf
+
+So we might as well copy the null pointer along in the memcpy() rather than
+copy everything up to the null pointer and then add one afterwards for
+simplicity.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 6b8ffbf97b9a5716c6d58758391adc8524c7d7fc)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/python-setuptools/0001-add-executable.patch | 16 ++++++++--------
- package/python-setuptools/python-setuptools.hash    |  4 ++--
- package/python-setuptools/python-setuptools.mk      |  4 ++--
- 3 files changed, 12 insertions(+), 12 deletions(-)
+ toolchain/toolchain-wrapper.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-setuptools/0001-add-executable.patch b/package/python-setuptools/0001-add-executable.patch
-index 9e12c4b628..aaef27ed75 100644
---- a/package/python-setuptools/0001-add-executable.patch
-+++ b/package/python-setuptools/0001-add-executable.patch
-@@ -1,4 +1,4 @@
--From 995cf87c0dfc420908847a06661cbae21d16a8f6 Mon Sep 17 00:00:00 2001
-+From 6fe6747c7d7509cc1af9667e1dae610657e5ccdf Mon Sep 17 00:00:00 2001
- From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
- Date: Mon, 7 Dec 2015 01:14:33 +0100
- Subject: [PATCH] add executable
-@@ -22,10 +22,10 @@ Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-  2 files changed, 11 insertions(+)
+diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
+index 698d36b54f..eb17c3d3de 100644
+--- a/toolchain/toolchain-wrapper.c
++++ b/toolchain/toolchain-wrapper.c
+@@ -497,12 +497,8 @@ int main(int argc, char **argv)
+ #endif
+ 	}
  
- diff --git a/setuptools/command/install.py b/setuptools/command/install.py
--index 741b140c7..5a281237a 100644
-+index 19ca60145..c4bb536b9 100644
- --- a/setuptools/command/install.py
- +++ b/setuptools/command/install.py
--@@ -39,6 +39,7 @@ class install(orig.install):
-+@@ -35,6 +35,7 @@ class install(orig.install):
-      distribution: Distribution  # override distutils.dist.Distribution with setuptools.dist.Distribution
-  
-      user_options = orig.install.user_options + [
-@@ -33,7 +33,7 @@ index 741b140c7..5a281237a 100644
-          ('old-and-unmanageable', None, "Try not to use this!"),
-          (
-              'single-version-externally-managed',
--@@ -73,6 +74,7 @@ class install(orig.install):
-+@@ -67,6 +68,7 @@ class install(orig.install):
-          )
-  
-          super().initialize_options()
-@@ -42,7 +42,7 @@ index 741b140c7..5a281237a 100644
-          self.single_version_externally_managed = None
-  
- diff --git a/setuptools/command/install_scripts.py b/setuptools/command/install_scripts.py
--index 4401cf693..38f5d5092 100644
-+index 537181e32..6893e6a8c 100644
- --- a/setuptools/command/install_scripts.py
- +++ b/setuptools/command/install_scripts.py
- @@ -18,6 +18,13 @@ class install_scripts(orig.install_scripts):
-@@ -59,13 +59,13 @@ index 4401cf693..38f5d5092 100644
-  
-      def run(self) -> None:
-          self.run_command("egg_info")
--@@ -45,6 +52,8 @@ class install_scripts(orig.install_scripts):
--         )
-+@@ -39,6 +46,8 @@ class install_scripts(orig.install_scripts):
-+         dist = metadata.Distribution.at(path=ei_cmd.egg_info)
-          bs_cmd = self.get_finalized_command('build_scripts')
-          exec_param = getattr(bs_cmd, 'executable', None)
- +        if self.executable is not None:
- +            exec_param = self.executable
--         writer = ei.ScriptWriter
-+         writer = _scripts.ScriptWriter
-          if exec_param == sys.executable:
-              # In case the path to the Python executable contains a space, wrap
- -- 
-diff --git a/package/python-setuptools/python-setuptools.hash b/package/python-setuptools/python-setuptools.hash
-index b5bac10fe2..d0ed270e9c 100644
---- a/package/python-setuptools/python-setuptools.hash
-+++ b/package/python-setuptools/python-setuptools.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/setuptools/json
--md5  652d999eca1412525c01e4c5b6e2275b  setuptools-79.0.1.tar.gz
--sha256  128ce7b8f33c3079fd1b067ecbb4051a66e8526e7b65f6cec075dfc650ddfa88  setuptools-79.0.1.tar.gz
-+md5  82e1d67883b713f9493659b50d13b436  setuptools-80.9.0.tar.gz
-+sha256  f36b47402ecde768dbfafc46e8e4207b4360c654f1f3bb84475f0a28628fb19c  setuptools-80.9.0.tar.gz
- # Locally computed sha256 checksums
- sha256  86da0f01aeae46348a3c3d465195dc1ceccde79f79e87769a64b8da04b2a4741  LICENSE
-diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
-index 1ee5448100..e013000c57 100644
---- a/package/python-setuptools/python-setuptools.mk
-+++ b/package/python-setuptools/python-setuptools.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+-	/* append forward args */
+-	memcpy(cur, &argv[1], sizeof(char *) * (argc - 1));
+-	cur += argc - 1;
+-
+-	/* finish with NULL termination */
+-	*cur = NULL;
++	/* append forward args and terminating NULL */
++	memcpy(cur, &argv[1], sizeof(char *) * argc);
  
--PYTHON_SETUPTOOLS_VERSION = 79.0.1
-+PYTHON_SETUPTOOLS_VERSION = 80.9.0
- PYTHON_SETUPTOOLS_SOURCE = setuptools-$(PYTHON_SETUPTOOLS_VERSION).tar.gz
--PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/bb/71/b6365e6325b3290e14957b2c3a804a529968c77a049b2ed40c095f749707
-+PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/18/5d/3bf57dcd21979b887f014ea83c24ae194cfcd12b9e0fda66b957c69d1fca
- PYTHON_SETUPTOOLS_LICENSE = MIT
- PYTHON_SETUPTOOLS_LICENSE_FILES = LICENSE
- PYTHON_SETUPTOOLS_CPE_ID_VENDOR = python
+ 	exec_args = args;
+ #ifdef BR_CCACHE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
