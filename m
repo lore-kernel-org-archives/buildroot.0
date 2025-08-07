@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44687C87FCF
-	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 17:19:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB7F4C87FDA
+	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 17:19:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1A70340590;
+	by smtp3.osuosl.org (Postfix) with ESMTP id A2B27606C2;
+	Thu,  7 Aug 2025 17:19:57 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4qeHHJk_F4VO; Thu,  7 Aug 2025 17:19:56 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9A7DE606A7
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9A7DE606A7;
 	Thu,  7 Aug 2025 17:19:56 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 015954C4
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:19:28 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7292A404B0
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:19:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bXx7Op9eHNHZ; Thu,  7 Aug 2025 17:19:55 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 476614050D
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 476614050D;
-	Thu,  7 Aug 2025 17:19:55 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 9371D4C6
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:19:27 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 96858400DC
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:19:17 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lgKn6xqYqPyM for <buildroot@buildroot.org>;
- Thu,  7 Aug 2025 17:19:15 +0000 (UTC)
+ id N7hcEK24Xaqm for <buildroot@buildroot.org>;
+ Thu,  7 Aug 2025 17:19:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E79B44007D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B5E140447
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E79B44007D
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:19:14 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4B5E140447
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:19:16 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E52CF86FCC; Thu,  7 Aug 2025 17:19:14 +0000 (UTC)
+ id 498D480FCA; Thu,  7 Aug 2025 17:19:16 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 7 Aug 2025 19:08:19 +0200
+Date: Thu, 7 Aug 2025 19:09:28 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: 4e09315fd14c9bbaa49deaedc14cc2ce367ae8df
-X-Git-Newrev: c4a1b99ef4c267484406b40e4503beda4aba2086
+X-Git-Oldrev: bbaa3000cfad5743d2635e09d02e81d9835b5248
+X-Git-Newrev: f8ec9b7f52bd2efb47a1331c933f2e7388e58179
 X-Patchwork-Hint: ignore
-Message-Id: <20250807171914.E52CF86FCC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/python-dbus-fast:
- fix cython 3.1.x compatibility
+Message-Id: <20250807171916.498D480FCA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/kvmtool: fix
+ build failure w/ musl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,48 +61,119 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============7323244220932661224=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c4a1b99ef4c267484406b40e4503beda4aba2086
+--===============7323244220932661224==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=f8ec9b7f52bd2efb47a1331c933f2e7388e58179
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-Since python-cython bump to 3.1.2 in commit [1], python-dbus-fast
-is failing to build.
+Starting GCC14 'implicit-function-declaration' are treated as errors by
+default. When building kvmtool with musl libc, the following error
+occurs due to missing declaration of 'basename':
 
-Set --skip-dependency-check as dbus-fast specifies an unnecessarily
-strict maximum cython version.
+```
+vfio/core.c:537:22: error: implicit declaration of function ‘basename’ [-Wimplicit-function-declaration]
+  537 |         group_name = basename(group_path);
+      |                      ^~~~~~~~
+vfio/core.c:537:22: warning: nested extern declaration of ‘basename’ [-Wnested-externs]
+vfio/core.c:537:20: error: assignment to ‘char *’ from ‘int’ makes pointer from integer without a cast [-Wint-conversion]
+  537 |         group_name = basename(group_path);
+      |                    ^
+```
 
-Fixes:
-ERROR Missing dependencies:
-	Cython<3.1.0,>=3
+This error can be reproduced with:
 
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/b536caaec0d800ccf7669a50fce5192bce2405a6
+```
+cat >.config <<EOF
+BR2_aarch64=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_MUSL_BLEEDING_EDGE=y
+BR2_PACKAGE_KVMTOOL=y
+EOF
+make olddefconfig
+make kvmtool
+```
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-[Julien: add reference to buildroot commit introducing the issue]
+This patch adds the upstream commit that fixes this issue by including
+the appropriate header, ensuring compatibility with musl and GCC14.
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit f38d4e63d76e3eeca78b28d7fca80dbc13ec6eef)
+(cherry picked from commit cec0acc84d8357de0bac85b27659566b6cbf692c)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/python-dbus-fast/python-dbus-fast.mk | 1 +
- 1 file changed, 1 insertion(+)
+ ...o-include-libgen-h-for-musl-compatibility.patch | 48 ++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
 
-diff --git a/package/python-dbus-fast/python-dbus-fast.mk b/package/python-dbus-fast/python-dbus-fast.mk
-index c2dccd073c..1fa9fcaacf 100644
---- a/package/python-dbus-fast/python-dbus-fast.mk
-+++ b/package/python-dbus-fast/python-dbus-fast.mk
-@@ -11,6 +11,7 @@ PYTHON_DBUS_FAST_SETUP_TYPE = poetry
- PYTHON_DBUS_FAST_LICENSE = MIT
- PYTHON_DBUS_FAST_LICENSE_FILES = LICENSE
- PYTHON_DBUS_FAST_ENV = REQUIRE_CYTHON=1
-+PYTHON_DBUS_FAST_BUILD_OPTS = --skip-dependency-check
- PYTHON_DBUS_FAST_DEPENDENCIES = \
- 	host-python-cython \
- 	host-python-setuptools
+diff --git a/package/kvmtool/0002-vfio-include-libgen-h-for-musl-compatibility.patch b/package/kvmtool/0002-vfio-include-libgen-h-for-musl-compatibility.patch
+new file mode 100644
+index 0000000000..e75ede6af1
+--- /dev/null
++++ b/package/kvmtool/0002-vfio-include-libgen-h-for-musl-compatibility.patch
+@@ -0,0 +1,48 @@
++From ba6830eec0f5ab734b093657b16b555e0437b927 Mon Sep 17 00:00:00 2001
++From: Thomas Perale <thomas.perale@mind.be>
++Date: Sun, 29 Jun 2025 22:22:21 +0200
++Subject: vfio: include libgen.h (for musl compatibility)
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Starting GCC14 'implicit-function-declaration' are treated as errors by
++default. When building kvmtool with musl libc, the following error
++occurs due to missing declaration of 'basename':
++
++vfio/core.c:537:22: error: implicit declaration of function ‘basename’ [-Wimplicit-function-declaration]
++  537 |         group_name = basename(group_path);
++      |                      ^~~~~~~~
++vfio/core.c:537:22: warning: nested extern declaration of ‘basename’ [-Wnested-externs]
++vfio/core.c:537:20: error: assignment to ‘char *’ from ‘int’ makes pointer from integer without a cast [-Wint-conversion]
++  537 |         group_name = basename(group_path);
++      |                    ^
++
++This patch fixes the issue by including the appropriate header, ensuring
++compatibility with musl and GCC14.
++
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++Reviewed-by: Alexandru Elisei <alexandru.elisei@arm.com>
++Link: https://lore.kernel.org/r/20250629202221.893360-1-thomas.perale@mind.be
++Signed-off-by: Will Deacon <will@kernel.org>
++Upstream: https://git.kernel.org/pub/scm/linux/kernel/git/will/kvmtool.git/patch/?id=ba6830eec0f5ab734b093657b16b555e0437b927
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++---
++ vfio/core.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/vfio/core.c b/vfio/core.c
++index 3ff2c0b0..8f884898 100644
++--- a/vfio/core.c
+++++ b/vfio/core.c
++@@ -3,6 +3,7 @@
++ #include "kvm/ioport.h"
++ 
++ #include <linux/list.h>
+++#include <libgen.h>
++ 
++ #define VFIO_DEV_DIR		"/dev/vfio"
++ #define VFIO_DEV_NODE		VFIO_DEV_DIR "/vfio"
++-- 
++cgit 1.2.3-korg
++
+
+--===============7323244220932661224==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7323244220932661224==--
