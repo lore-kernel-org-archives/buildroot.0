@@ -1,102 +1,105 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20587C87FCF
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA7CDC87FCA
 	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 18:25:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EDE0340606;
-	Thu,  7 Aug 2025 18:25:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7EE5080EF9;
+	Thu,  7 Aug 2025 18:25:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nTwMpLvUDhHT; Thu,  7 Aug 2025 18:25:11 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iWubJlJNMwUh; Thu,  7 Aug 2025 18:25:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB8C0405DF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AFDC080ED6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CB8C0405DF;
-	Thu,  7 Aug 2025 18:25:11 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 702A810A
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:24:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AFDC080ED6;
+	Thu,  7 Aug 2025 18:25:07 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 39E3C4C6
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:24:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5554040057
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:24:44 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 209AD605F0
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:24:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VYDUIl9zk1oF for <buildroot@buildroot.org>;
- Thu,  7 Aug 2025 18:24:43 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KDc3SzhcB2Yp for <buildroot@buildroot.org>;
+ Thu,  7 Aug 2025 18:24:40 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
+ client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 13C2D40087
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 13C2D40087
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 13C2D40087
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:24:43 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id
- 5b1f17b1804b1-458ba079338so9983295e9.1
- for <buildroot@buildroot.org>; Thu, 07 Aug 2025 11:24:42 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E41D0605F1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E41D0605F1
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E41D0605F1
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:24:39 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id
+ ffacd0b85a97d-3b7862bd22bso1218198f8f.1
+ for <buildroot@buildroot.org>; Thu, 07 Aug 2025 11:24:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1754591081; x=1755195881;
+ d=1e100.net; s=20230601; t=1754591078; x=1755195878;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=GQrOWsQdXeWxD+64RS7oD2F+dsZ6KbnsqMMfPj0cQYM=;
- b=F8AtGYw52wnwv3q2t7/4aIt2qK3x8G9j3zrXvNjPCiB7vFhrU5oYRM2KxzmPCI5hgI
- p8SIWw09muQf6RY7utitKMHh/aX5fj94LFaM62b59baS61RQxN24shQjTbrJxFwlqENq
- tIMPDfVxbXDjGOqJMPzDVmDa0/Kx3gQglrkQ7sf2daqemqviJvby5mQxuxj74DIElcp6
- L1EcchtPHbqtVKpkz7lEqBJydDyIazVi4jnJzvzvMkVshaSJV+8+2xpHpMBSiyEXNZ75
- 33qoCyji3UPfWLcq0FurwmPJwE4gej/KIBhRzpIFoY+3sZ95BqUFmw2n0KdR7bLkqwHu
- S2fg==
-X-Gm-Message-State: AOJu0YwgwuoQstMwgk560SfkQPgi86WAP0/nmvFwj6TlcKnH22StR9Gt
- dgVDxcp2xcAvzAfMHuUCQjwjjOHRks5owEQknZFxYRQzjjoQK2G12WWEbQlSvgrpEGM=
-X-Gm-Gg: ASbGnctjjlqXs/7rwfjsn+9nHfTDNKPL5KMKHlllrQdbmv5COgVTHq7Y9tYG+RTlN/+
- iY/kExla5ZN2OdSqKp8ceMW52cF2tWVCtzbfOd5NOq1D4LAb3+L1IfHm7M8UsyKDP80wwoW93xw
- LhXHyrELyduj7Jl4lr8aAJtzHj0+l6qy4eJiFsINjQKroXX70IeRsC6fXKB7yfXtGyFFmfqavIt
- e2X8TMWFXAbn0E5xuuolRRPMD1IQXICw4+o+PJqcNMzZguEV2HgY26Wbk9BW4cpIQHaTzLsz64p
- FZLLTYAmzS5/O61DlZWbNOeHa8LDkD8aj8aCbjtrzBzb1xbSYf+fAmQRiTILA+EYeweJ66w43Ih
- iysEcw7sHdfNsKQ==
-X-Google-Smtp-Source: AGHT+IG4YQv1tuss/kyX2Hg+e7IUnEGRyH3VBV5V7XXtQ80XjY17eEqZ1S02IsxCvJ/78xBEgAPbLQ==
-X-Received: by 2002:a05:600c:4f48:b0:458:6f13:aa4a with SMTP id
- 5b1f17b1804b1-459ede7d697mr46678565e9.6.1754591081092; 
- Thu, 07 Aug 2025 11:24:41 -0700 (PDT)
+ bh=l0ppaFGeK8x9KWf3I6o42ymltfEpZiA8XunVpqD1nUU=;
+ b=bVBYBP4K2R0KusDdeJW1eJrQ9NZ/kvitWFy5+Eb869GYY+zlK+csJ3f5arPac69Ax0
+ sEJCUnuRZbgyvsLDrzeoGkTiiWUPzOJlEM4pIXhpDGTnDbrkOoEoxTOH9vI1ZdxrJtpp
+ SjJxeJiei2tuVvS6rkmmK4YzMkd5g+0bBxQMeXKTn46V3bIEbk/HHaC1ldwZoAGvbznk
+ 3kbOeKDxHG4FgFIfbOD3U6iJlyH/33Uc9dlf0kcGzOZSWfdXCgOslRMZL7ISACgsFKwP
+ A5Vv0ln4c9KTGOuiRwv2R9TlLMD2EWtwp/D9YW+ockh2PMfnY2UkeoKn/lSYqaOXnB6x
+ 3Jhg==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCXUnLvfDlGRvm8zmCkJ++Mu9JJ58l+q19dWk/R9LLLe48I5wJXneqHN3Nqa9QetgrV8A2hHnIpn/e0=@buildroot.org
+X-Gm-Message-State: AOJu0YzJ0j7Sn9zHH+CHqQQ5JFXAtIn6hVdZe2YArtHEmVJOy/QcTyD3
+ CoUWnAzs/GoBBKW+oKquhoILxbb4BNZrppPSk7W7PGIzVz/W8naH1GH3qwvJt4UBQOL2u9vXObI
+ BLlLd
+X-Gm-Gg: ASbGncsb4wW8DG+tzy60f+yDCb7ygD+D4xzAhRI1+rHOcjbEaafxUUfaCZdVX2UyILp
+ YKw0jJLQT8Y82Zh5JU+nnIhcda0ZEm5BM3TpbbKc+GM7YlBD7IpxGTP2WYLnbQhxwRdDsqTzpr4
+ ibFYmuPTNDw1x7n9cnW2FPZKe31hQU0M4DV2TsqHUmZPkdBB4V5frpajpU+AHyrWUoLKwsQiJeX
+ 5tvOzR9sictQgJ5OyKUGL9JIDOpbf2KeRXKY5cOyVIan0pJ1NtKjph7l1s3DxJ2bfFNtRuBpTyl
+ ZGZ8xxmDNqim4odbIz273e04o/qnMQGe18I1q4o6fdhrxb6y+Gzm+zimo40mzLfj4kTtvDCby1I
+ 096oV9naeKTh5aA==
+X-Google-Smtp-Source: AGHT+IGTvXFtI7vWsCV3JVo1ITzMH+91WSdm4C1u5cKlHhdfeQ+eT19dEV6OEVnRvVwYFBV0SpFXkg==
+X-Received: by 2002:a05:6000:2209:b0:3a4:cec5:b59c with SMTP id
+ ffacd0b85a97d-3b8f97f4ba4mr4542444f8f.25.1754591077879; 
+ Thu, 07 Aug 2025 11:24:37 -0700 (PDT)
 Received: from arch ([79.132.233.79]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-459dc900606sm167400495e9.15.2025.08.07.11.24.40
+ ffacd0b85a97d-3b79c46ee84sm26870915f8f.57.2025.08.07.11.24.37
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 07 Aug 2025 11:24:40 -0700 (PDT)
-To: Thomas Perale <thomas.perale@mind.be>
-Cc: buildroot@buildroot.org
-Date: Thu,  7 Aug 2025 20:24:40 +0200
-Message-ID: <20250807182440.726002-1-thomas.perale@mind.be>
+ Thu, 07 Aug 2025 11:24:37 -0700 (PDT)
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: Thomas Perale <thomas.perale@mind.be>,
+	buildroot@buildroot.org
+Date: Thu,  7 Aug 2025 20:24:37 +0200
+Message-ID: <20250807182437.725899-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250727110031.1126248-1-thomas.perale@mind.be>
-References: <20250727110031.1126248-1-thomas.perale@mind.be>
+In-Reply-To: <20250726071450.3545797-1-bernd@kuhls.net>
+References: <20250726071450.3545797-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1754591081; x=1755195881; darn=buildroot.org;
+ d=mind.be; s=google; t=1754591078; x=1755195878; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=GQrOWsQdXeWxD+64RS7oD2F+dsZ6KbnsqMMfPj0cQYM=;
- b=FoETufD2pVWcIAnBKlOfTPD/anQq7pVbxulWugHiJVRP5PevER7MO8s8I6VLLk3a3y
- T+sMqupPfsLGMlrUEtI5vFikC39C8TxdTOYAkq0rDegtk6Y1beI2qUAh1Mwku2R2KktN
- G8eQvI15SihqWZZJDqQfMx8fr4kLL7HQgHa2jWuA7bhPFgS2A6e+oKHS61lopMuV3pQQ
- BnXqEofLOKnLlPG4R8hadg3DPbPIpOQkQHD6FlUFcn6EjRVTtoYVw/gNVLe53mFRWAdY
- X7eO88mAziWKUCrcYIkpKNwgPe4JvJTkzcF4e6HNzxM2sNaf6B5U6zk0dg18jMkACClu
- eu9g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=l0ppaFGeK8x9KWf3I6o42ymltfEpZiA8XunVpqD1nUU=;
+ b=DIQ4o/DAOyUFeW4UVYKFQcdpX/oArTVTeJQHVtGBxmoEftehAf5BVuxDC1vnOmRff0
+ WFjpSNrWvh41utODwQI3alOwg5AStc2O7SaNcWNNmXcu1hy2Cy0xFGPp9sTyufAZfEQR
+ NpIGT/N6xKiMoFR+IZ60ptC08ZZTLq/k12PUrFjqZ9DccxUVXhUR6ifrY6+kDdlu7ADL
+ D0fT9d5pCYfZrLPy/IBoXA/2dQZ/X9DLAOfOfkm58zC2NcSUFCt3wcUlCGXFMB3pei7g
+ 9yOKLU3bjeiTvCmGwaZ5DK5VyZel8nGdWrsEEEQe9Ma9rZ7wfVGe6iUuAdwRexEgASj4
+ bvAw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=FoETufD2
-Subject: Re: [Buildroot] [PATCH] package/micropython: add patch for
- CVE-2024-8947
+ header.a=rsa-sha256 header.s=google header.b=DIQ4o/DA
+Subject: Re: [Buildroot] [PATCH 1/1] Revert "package/libva: fix build error"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,241 +119,268 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> This fixes the following vulnerability:
+> This reverts commit c41f953ab9ba262324484a2efe1151d8f543eebd.
 > 
-> - CVE-2024-8947
+> This commit broke gst1-vaapi:
+> https://lists.buildroot.org/pipermail/buildroot/2025-July/782786.html
 > 
->  A vulnerability was found in MicroPython 1.22.2. It has been declared
->  as critical. Affected by this vulnerability is an unknown functionality
->  of the file py/objarray.c. The manipulation leads to use after free.
->  The attack can be launched remotely. The complexity of an attack is
->  rather high. The exploitation appears to be difficult. Upgrading to
->  version 1.23.0 is able to address this issue. It is recommended to
->  upgrade the affected component. In micropython objarray component, when
->  a bytes object is resized and copied into itself, it may reference
->  memory that has already been freed.
-> 
-> For more information, see:
->   - https://www.cve.org/CVERecord?id=CVE-2024-8947
->   - https://github.com/micropython/micropython/commit/4bed614e707c0644c06e117f848fa12605c711cd
-> 
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+> Reported-by: James Hilliard <james.hilliard1@gmail.com>
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2025.02.x & 2025.05.x. Thanks
 
 > ---
-> Tested with `support/testing/run-tests -d dl -o output_folder -k tests.package.test_micropython`
-> ---
->  ...if-extending-a-bytearray-from-itself.patch | 183 ++++++++++++++++++
->  package/micropython/micropython.mk            |   3 +
->  2 files changed, 186 insertions(+)
->  create mode 100644 package/micropython/0004-py-objarray-fix-use-after-free-if-extending-a-bytearray-from-itself.patch
+>  ...a-remove-older-0.32-and-0.33-support.patch | 239 ------------------
+>  1 file changed, 239 deletions(-)
+>  delete mode 100644 package/libva/0001-va-remove-older-0.32-and-0.33-support.patch
 > 
-> diff --git a/package/micropython/0004-py-objarray-fix-use-after-free-if-extending-a-bytearray-from-itself.patch b/package/micropython/0004-py-objarray-fix-use-after-free-if-extending-a-bytearray-from-itself.patch
-> new file mode 100644
-> index 0000000000..90a795a6c3
-> --- /dev/null
-> +++ b/package/micropython/0004-py-objarray-fix-use-after-free-if-extending-a-bytearray-from-itself.patch
-> @@ -0,0 +1,183 @@
-> +From 4bed614e707c0644c06e117f848fa12605c711cd Mon Sep 17 00:00:00 2001
-> +From: Angus Gratton <angus@redyak.com.au>
-> +Date: Tue, 13 Feb 2024 09:24:36 +1100
-> +Subject: [PATCH] py/objarray: Fix use-after-free if extending a bytearray from
-> + itself.
-> +
-> +Two cases, one assigning to a slice.
-> +Closes https://github.com/micropython/micropython/issues/13283
-> +
-> +Second is extending a slice from itself, similar logic.
-> +
-> +In both cases the problem occurs when m_renew causes realloc to move the
-> +buffer, leaving a dangling pointer behind.
-> +
-> +There are more complex and hard to fix cases when either argument is a
-> +memoryview into the buffer, currently resizing to a new address breaks
-> +memoryviews into that object.
-> +
-> +Reproducing this bug and confirming the fix was done by running the unix
-> +port under valgrind with GC-aware extensions.
-> +
-> +Note in default configurations with GIL this bug exists but has no impact
-> +(the free buffer won't be reused while the function is still executing, and
-> +is no longer referenced after it returns).
-> +
-> +Signed-off-by: Angus Gratton <angus@redyak.com.au>
-> +CVE: CVE-2024-8947
-> +Upstream: https://github.com/micropython/micropython/commit/4bed614e707c0644c06e117f848fa12605c711cd
-> +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-> +---
-> + py/objarray.c                          | 20 ++++++++++++++++----
-> + tests/basics/bytearray_add.py          |  9 ++++++++-
-> + tests/basics/bytearray_add_self.py     |  8 ++++++++
-> + tests/basics/bytearray_add_self.py.exp |  1 +
-> + tests/basics/bytearray_slice_assign.py | 18 ++++++++++++------
-> + 5 files changed, 45 insertions(+), 11 deletions(-)
-> + create mode 100644 tests/basics/bytearray_add_self.py
-> + create mode 100644 tests/basics/bytearray_add_self.py.exp
-> +
-> +diff --git a/py/objarray.c b/py/objarray.c
-> +index 1fff234822521..803af2cd270c7 100644
-> +--- a/py/objarray.c
-> ++++ b/py/objarray.c
-> +@@ -424,6 +424,13 @@ static mp_obj_t array_extend(mp_obj_t self_in, mp_obj_t arg_in) {
-> +     if (self->free < len) {
-> +         self->items = m_renew(byte, self->items, (self->len + self->free) * sz, (self->len + len) * sz);
-> +         self->free = 0;
-> ++
-> ++        if (self_in == arg_in) {
-> ++            // Get arg_bufinfo again in case self->items has moved
-> ++            //
-> ++            // (Note not possible to handle case that arg_in is a memoryview into self)
-> ++            mp_get_buffer_raise(arg_in, &arg_bufinfo, MP_BUFFER_READ);
-> ++        }
-> +     } else {
-> +         self->free -= len;
-> +     }
-> +@@ -456,7 +463,8 @@ static mp_obj_t array_subscr(mp_obj_t self_in, mp_obj_t index_in, mp_obj_t value
-> +                 #if MICROPY_PY_ARRAY_SLICE_ASSIGN
-> +                 // Assign
-> +                 size_t src_len;
-> +-                void *src_items;
-> ++                uint8_t *src_items;
-> ++                size_t src_offs = 0;
-> +                 size_t item_sz = mp_binary_get_size('@', o->typecode & TYPECODE_MASK, NULL);
-> +                 if (mp_obj_is_obj(value) && MP_OBJ_TYPE_GET_SLOT_OR_NULL(((mp_obj_base_t *)MP_OBJ_TO_PTR(value))->type, subscr) == array_subscr) {
-> +                     // value is array, bytearray or memoryview
-> +@@ -469,7 +477,7 @@ static mp_obj_t array_subscr(mp_obj_t self_in, mp_obj_t index_in, mp_obj_t value
-> +                     src_items = src_slice->items;
-> +                     #if MICROPY_PY_BUILTINS_MEMORYVIEW
-> +                     if (mp_obj_is_type(value, &mp_type_memoryview)) {
-> +-                        src_items = (uint8_t *)src_items + (src_slice->memview_offset * item_sz);
-> ++                        src_offs = src_slice->memview_offset * item_sz;
-> +                     }
-> +                     #endif
-> +                 } else if (mp_obj_is_type(value, &mp_type_bytes)) {
-> +@@ -504,13 +512,17 @@ static mp_obj_t array_subscr(mp_obj_t self_in, mp_obj_t index_in, mp_obj_t value
-> +                         // TODO: alloc policy; at the moment we go conservative
-> +                         o->items = m_renew(byte, o->items, (o->len + o->free) * item_sz, (o->len + len_adj) * item_sz);
-> +                         o->free = len_adj;
-> ++                        // m_renew may have moved o->items
-> ++                        if (src_items == dest_items) {
-> ++                            src_items = o->items;
-> ++                        }
-> +                         dest_items = o->items;
-> +                     }
-> +                     mp_seq_replace_slice_grow_inplace(dest_items, o->len,
-> +-                        slice.start, slice.stop, src_items, src_len, len_adj, item_sz);
-> ++                        slice.start, slice.stop, src_items + src_offs, src_len, len_adj, item_sz);
-> +                 } else {
-> +                     mp_seq_replace_slice_no_grow(dest_items, o->len,
-> +-                        slice.start, slice.stop, src_items, src_len, item_sz);
-> ++                        slice.start, slice.stop, src_items + src_offs, src_len, item_sz);
-> +                     // Clear "freed" elements at the end of list
-> +                     // TODO: This is actually only needed for typecode=='O'
-> +                     mp_seq_clear(dest_items, o->len + len_adj, o->len, item_sz);
-> +diff --git a/tests/basics/bytearray_add.py b/tests/basics/bytearray_add.py
-> +index a7e2b57374255..1f30a3b740e95 100644
-> +--- a/tests/basics/bytearray_add.py
-> ++++ b/tests/basics/bytearray_add.py
-> +@@ -15,4 +15,11 @@
-> + 
-> + # this inplace add tests the code when the buffer doesn't need to be increased
-> + b = bytearray()
-> +-b += b''
-> ++b += b""
-> ++
-> ++# extend a bytearray from itself
-> ++b = bytearray(b"abcdefgh")
-> ++for _ in range(4):
-> ++    c = bytearray(b)  # extra allocation, as above
-> ++    b.extend(b)
-> ++print(b)
-> +diff --git a/tests/basics/bytearray_add_self.py b/tests/basics/bytearray_add_self.py
-> +new file mode 100644
-> +index 0000000000000..94ae8689fd16c
-> +--- /dev/null
-> ++++ b/tests/basics/bytearray_add_self.py
-> +@@ -0,0 +1,8 @@
-> ++# add a bytearray to itself
-> ++# This is not supported by CPython as of 3.11.18.
-> ++
-> ++b = bytearray(b"123456789")
-> ++for _ in range(4):
-> ++    c = bytearray(b)  # extra allocation increases chance 'b' has to relocate
-> ++    b += b
-> ++print(b)
-> +diff --git a/tests/basics/bytearray_add_self.py.exp b/tests/basics/bytearray_add_self.py.exp
-> +new file mode 100644
-> +index 0000000000000..5ef948157ac0f
-> +--- /dev/null
-> ++++ b/tests/basics/bytearray_add_self.py.exp
-> +@@ -0,0 +1 @@
-> ++bytearray(b'123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789')
-> +diff --git a/tests/basics/bytearray_slice_assign.py b/tests/basics/bytearray_slice_assign.py
-> +index fa7878e10ddbb..4de0819042a13 100644
-> +--- a/tests/basics/bytearray_slice_assign.py
-> ++++ b/tests/basics/bytearray_slice_assign.py
-> +@@ -18,7 +18,7 @@
-> + l[1:3] = bytearray()
-> + print(l)
-> + l = bytearray(x)
-> +-#del l[1:3]
-> ++# del l[1:3]
-> + print(l)
-> + 
-> + l = bytearray(x)
-> +@@ -28,7 +28,7 @@
-> + l[:3] = bytearray()
-> + print(l)
-> + l = bytearray(x)
-> +-#del l[:3]
-> ++# del l[:3]
-> + print(l)
-> + 
-> + l = bytearray(x)
-> +@@ -38,7 +38,7 @@
-> + l[:-3] = bytearray()
-> + print(l)
-> + l = bytearray(x)
-> +-#del l[:-3]
-> ++# del l[:-3]
-> + print(l)
-> + 
-> + # slice assignment that extends the array
-> +@@ -61,8 +61,14 @@
-> + print(b)
-> + 
-> + # Growth of bytearray via slice extension
-> +-b = bytearray(b'12345678')
-> +-b.append(57) # expand and add a bit of unused space at end of the bytearray
-> ++b = bytearray(b"12345678")
-> ++b.append(57)  # expand and add a bit of unused space at end of the bytearray
-> + for i in range(400):
-> +-    b[-1:] = b'ab' # grow slowly into the unused space
-> ++    b[-1:] = b"ab"  # grow slowly into the unused space
-> ++print(len(b), b)
-> ++
-> ++# Growth of bytearray via slice extension from itself
-> ++b = bytearray(b"1234567")
-> ++for i in range(3):
-> ++    b[-1:] = b
-> + print(len(b), b)
-> diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
-> index 558ef86534..949abe3b0b 100644
-> --- a/package/micropython/micropython.mk
-> +++ b/package/micropython/micropython.mk
-> @@ -15,6 +15,9 @@ MICROPYTHON_LICENSE_FILES = LICENSE
->  MICROPYTHON_DEPENDENCIES = host-python3
->  MICROPYTHON_CPE_ID_VENDOR = micropython
->  
-> +# 0004-py-objarray-fix-use-after-free-if-extending-a-bytearray-from-itself.patch
-> +MICROPYTHON_IGNORE_CVES += CVE-2024-8947
-> +
->  # Use fallback implementation for exception handling on architectures that don't
->  # have explicit support.
->  ifeq ($(BR2_i386)$(BR2_x86_64)$(BR2_arm)$(BR2_armeb),)
+> diff --git a/package/libva/0001-va-remove-older-0.32-and-0.33-support.patch b/package/libva/0001-va-remove-older-0.32-and-0.33-support.patch
+> deleted file mode 100644
+> index 75fb8c9499..0000000000
+> --- a/package/libva/0001-va-remove-older-0.32-and-0.33-support.patch
+> +++ /dev/null
+> @@ -1,239 +0,0 @@
+> -From 0340bca0ee4f7d66fe029ce4c7fece01c896f00a Mon Sep 17 00:00:00 2001
+> -From: Carl Zhang <carl.zhang@intel.com>
+> -Date: Mon, 13 May 2024 16:19:13 +0800
+> -Subject: [PATCH] va: remove older 0.32 and 0.33 support
+> -
+> -libva version 2.x should be compatible with 2.x series , not 1.x series
+> -and 0.x series
+> -reserve va_compat.h , because maybe some existing usage refer this file
+> -
+> -Upstream: https://github.com/intel/libva/pull/812
+> -
+> -Signed-off-by: Carl Zhang <carl.zhang@intel.com>
+> -[Bernd: rebased after upstream commit
+> - https://github.com/intel/libva/commit/a6192260e7cde16ceb9db80eec02b44192087590]
+> -Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ----
+> - va/Makefile.am |  4 ---
+> - va/libva.syms  |  9 -------
+> - va/meson.build |  8 ------
+> - va/va_compat.c | 45 -------------------------------
+> - va/va_compat.h | 73 +-------------------------------------------------
+> - 5 files changed, 1 insertion(+), 138 deletions(-)
+> - delete mode 100644 va/libva.syms
+> - delete mode 100644 va/va_compat.c
+> -
+> -diff --git a/va/Makefile.am b/va/Makefile.am
+> -index 8d16d422c..4ebf8f09a 100644
+> ---- a/va/Makefile.am
+> -+++ b/va/Makefile.am
+> -@@ -32,7 +32,6 @@ LDADD = \
+> - 
+> - libva_source_c = \
+> - 	va.c			\
+> --	va_compat.c		\
+> - 	va_str.c		\
+> - 	va_trace.c		\
+> - 	$(NULL)
+> -@@ -75,7 +74,6 @@ libva_source_h_priv = \
+> - 
+> - libva_ldflags = \
+> - 	$(LDADD) -no-undefined	\
+> --	-Wl,-version-script,${srcdir}/libva.syms \
+> - 	$(NULL)
+> - 
+> - libva_cflags = \
+> -@@ -91,7 +89,6 @@ noinst_HEADERS			= $(libva_source_h_priv)
+> - libva_la_SOURCES		= $(libva_source_c)
+> - libva_la_CFLAGS			= $(libva_cflags)
+> - libva_la_LDFLAGS		= $(libva_ldflags)
+> --libva_la_DEPENDENCIES		= libva.syms
+> - libva_la_LIBADD			= $(LIBVA_LIBS)
+> - 
+> - if USE_DRM
+> -@@ -146,7 +143,6 @@ DISTCLEANFILES = \
+> - 	$(NULL)
+> - 
+> - EXTRA_DIST = \
+> --	libva.syms		\
+> - 	va_version.h.in		\
+> - 	meson.build		\
+> -         libva.def               \
+> -diff --git a/va/libva.syms b/va/libva.syms
+> -deleted file mode 100644
+> -index b3f91f935..000000000
+> ---- a/va/libva.syms
+> -+++ /dev/null
+> -@@ -1,9 +0,0 @@
+> --VA_API_0.32.0 {
+> --    local:
+> --        vaCreateSurfaces_0_32_0;
+> --};
+> --
+> --VA_API_0.33.0 {
+> --    global:
+> --        vaCreateSurfaces;
+> --} VA_API_0.32.0;
+> -diff --git a/va/meson.build b/va/meson.build
+> -index e15f8fe3e..43db2a3ef 100644
+> ---- a/va/meson.build
+> -+++ b/va/meson.build
+> -@@ -11,7 +11,6 @@ version_file = configure_file(
+> - 
+> - libva_sources = [
+> -   'va.c',
+> --  'va_compat.c',
+> -   'va_str.c',
+> -   'va_trace.c',
+> - ]
+> -@@ -55,15 +54,8 @@ libva_headers_priv = [
+> -   'va_trace.h',
+> - ]
+> - 
+> --libva_sym = 'libva.syms'
+> --libva_sym_arg = '-Wl,-version-script,' + '@0@/@1@'.format(meson.current_source_dir(), libva_sym)
+> --
+> - libva_link_args = []
+> - libva_link_depends = []
+> --if cc.links('void vaCreateSurfaces_0_32_0(void) {} void vaCreateSurfaces() {}', name: '-Wl,--version-script', args: ['-shared', libva_sym_arg])
+> --  libva_link_args = libva_sym_arg
+> --  libva_link_depends = libva_sym
+> --endif
+> - 
+> - install_headers(libva_headers, subdir : 'va')
+> - 
+> -diff --git a/va/va_compat.c b/va/va_compat.c
+> -deleted file mode 100644
+> -index 44d69562b..000000000
+> ---- a/va/va_compat.c
+> -+++ /dev/null
+> -@@ -1,45 +0,0 @@
+> --/*
+> -- * Copyright (c) 2007-2011 Intel Corporation. All Rights Reserved.
+> -- *
+> -- * Permission is hereby granted, free of charge, to any person obtaining a
+> -- * copy of this software and associated documentation files (the
+> -- * "Software"), to deal in the Software without restriction, including
+> -- * without limitation the rights to use, copy, modify, merge, publish,
+> -- * distribute, sub license, and/or sell copies of the Software, and to
+> -- * permit persons to whom the Software is furnished to do so, subject to
+> -- * the following conditions:
+> -- *
+> -- * The above copyright notice and this permission notice (including the
+> -- * next paragraph) shall be included in all copies or substantial portions
+> -- * of the Software.
+> -- *
+> -- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+> -- * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+> -- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT.
+> -- * IN NO EVENT SHALL INTEL AND/OR ITS SUPPLIERS BE LIABLE FOR
+> -- * ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+> -- * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+> -- * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+> -- */
+> --
+> --#define VA_COMPAT_DISABLED 1
+> --#include "sysdeps.h"
+> --#include "va.h"
+> --#include "va_compat.h"
+> --
+> --VAStatus
+> --vaCreateSurfaces_0_32_0(
+> --    VADisplay    dpy,
+> --    int          width,
+> --    int          height,
+> --    int          format,
+> --    int          num_surfaces,
+> --    VASurfaceID *surfaces
+> --)
+> --{
+> --    return vaCreateSurfaces(dpy, format, width, height, surfaces, num_surfaces,
+> --                            NULL, 0);
+> --}
+> --#if !defined(_WIN32)
+> --VA_CPP_HELPER_ALIAS(vaCreateSurfaces, 0, 32, 0);
+> --#endif
+> -diff --git a/va/va_compat.h b/va/va_compat.h
+> -index 41a3f73e7..02cf5667e 100644
+> ---- a/va/va_compat.h
+> -+++ b/va/va_compat.h
+> -@@ -36,78 +36,7 @@
+> - extern "C" {
+> - #endif
+> - 
+> --/**
+> -- * \defgroup api_compat Compatibility API
+> -- *
+> -- * The Compatibility API allows older programs that are not ported to
+> -- * the current API to still build and run correctly. In particular,
+> -- * this exposes older API to allow for backwards source compatibility.
+> -- *
+> -- * @{
+> -- */
+> --
+> --/**
+> -- * Makes a string literal out of the macro argument
+> -- */
+> --#define VA_CPP_HELPER_STRINGIFY(x) \
+> --    VA_CPP_HELPER_STRINGIFY_(x)
+> --#define VA_CPP_HELPER_STRINGIFY_(x) \
+> --    #x
+> --
+> --/**
+> -- * Concatenates two macro arguments at preprocessing time.
+> -- */
+> --#define VA_CPP_HELPER_CONCAT(a, b) \
+> --    VA_CPP_HELPER_CONCAT_(a, b)
+> --#define VA_CPP_HELPER_CONCAT_(a, b) \
+> --    a ## b
+> --
+> --/**
+> -- * Generates the number of macro arguments at preprocessing time.
+> -- * <http://groups.google.com/group/comp.std.c/browse_thread/thread/77ee8c8f92e4a3fb/346fc464319b1ee5>
+> -- *
+> -- * Note: this doesn't work for macros with no arguments
+> -- */
+> --#define VA_CPP_HELPER_N_ARGS(...) \
+> --    VA_CPP_HELPER_N_ARGS_(__VA_ARGS__, VA_CPP_HELPER_N_ARGS_LIST_REV())
+> --#define VA_CPP_HELPER_N_ARGS_(...) \
+> --    VA_CPP_HELPER_N_ARGS_LIST(__VA_ARGS__)
+> --#define VA_CPP_HELPER_N_ARGS_LIST(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a12, a13, a14, a15, a16, N, ...) N
+> --#define VA_CPP_HELPER_N_ARGS_LIST_REV() \
+> --    15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0
+> --
+> --/**
+> -- * Generates a versioned function alias.
+> -- *
+> -- * VA_CPP_HELPER_ALIAS(vaSomeFunction, 0,32,0) will generate
+> -- *   .symber vaSomeFunction_0_32_0, vaSomeFunction@VA_API_0.32.0
+> -- */
+> --#define VA_CPP_HELPER_ALIAS(func, major, minor, micro) \
+> --    VA_CPP_HELPER_ALIAS_(func, major, minor, micro, "@")
+> --#define VA_CPP_HELPER_ALIAS_DEFAULT(func, major, minor, micro) \
+> --    VA_CPP_HELPER_ALIAS_(func, major, minor, micro, "@@")
+> --#define VA_CPP_HELPER_ALIAS_(func, major, minor, micro, binding)        \
+> --    asm(".symver " #func "_" #major "_" #minor "_" #micro ", "          \
+> --        #func binding "VA_API_" #major "." #minor "." #micro)
+> --
+> --/* vaCreateSurfaces() */
+> --
+> --#ifndef VA_COMPAT_DISABLED
+> --#define vaCreateSurfaces(dpy, ...)                                      \
+> --    VA_CPP_HELPER_CONCAT(vaCreateSurfaces,                              \
+> --                         VA_CPP_HELPER_N_ARGS(dpy, __VA_ARGS__))        \
+> --    (dpy, __VA_ARGS__)
+> --#endif
+> --
+> --#define vaCreateSurfaces6(dpy, width, height, format, num_surfaces, surfaces) \
+> --    (vaCreateSurfaces)(dpy, format, width, height, surfaces, num_surfaces, \
+> --                       NULL, 0)
+> --
+> --#define vaCreateSurfaces8(dpy, format, width, height, surfaces, num_surfaces, attribs, num_attribs) \
+> --    (vaCreateSurfaces)(dpy, format, width, height, surfaces, num_surfaces, \
+> --                       attribs, num_attribs)
+> --
+> --/*@}*/
+> -+#warning deprecated, keep a empty file because some application may include it
+> - 
+> - #ifdef __cplusplus
+> - }
 > -- 
-> 2.50.1
+> 2.39.5
 > 
 > _______________________________________________
 > buildroot mailing list
