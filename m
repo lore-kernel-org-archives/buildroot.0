@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A19DC87FCA
-	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 17:00:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C1C8CA0EC1
+	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 17:00:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0650E80BE1;
-	Thu,  7 Aug 2025 17:00:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4A097403C8;
+	Thu,  7 Aug 2025 17:00:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Quk9gekkXbn9; Thu,  7 Aug 2025 17:00:51 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id v0yjHFwcj-UV; Thu,  7 Aug 2025 17:00:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2346280C05
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 73A60403B0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2346280C05;
-	Thu,  7 Aug 2025 17:00:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 73A60403B0;
+	Thu,  7 Aug 2025 17:00:52 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1432B233
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:00:30 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1D27A233
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:00:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8FEFA80C20
+ by smtp1.osuosl.org (Postfix) with ESMTP id A91EC80C00
  for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:00:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FpDsix1Pi8qL for <buildroot@buildroot.org>;
+ id DrXo0mBm9D6V for <buildroot@buildroot.org>;
  Thu,  7 Aug 2025 17:00:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AE37280C00
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB85180C03
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id AE37280C00
+ by smtp1.osuosl.org (Postfix) with ESMTP id EB85180C03
  for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:00:20 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AB8038430F; Thu,  7 Aug 2025 17:00:20 +0000 (UTC)
+ id DC6328156B; Thu,  7 Aug 2025 17:00:20 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 7 Aug 2025 11:06:18 +0200
+Date: Thu, 7 Aug 2025 11:06:23 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 32759b978260840cbf968897460913ccb6e0f9ae
-X-Git-Newrev: ff48d831e813681560ff4be337461ecbe094826a
+X-Git-Oldrev: 4482fc70fb94fbd1c959331eb1c91c667e99cc5d
+X-Git-Newrev: d69e07950dae08396e9867f3081d34bdaf638e21
 X-Patchwork-Hint: ignore
-Message-Id: <20250807170020.AB8038430F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x]
- package/rauc-hawkbit-updater: fix missing user
+Message-Id: <20250807170020.DC6328156B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/ntp: add Upstream
+ tag to patch 0001
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,58 +61,49 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3410081194530829187=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3410081194530829187==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=ff48d831e813681560ff4be337461ecbe094826a
+commit: https://git.buildroot.net/buildroot/commit/?id=d69e07950dae08396e9867f3081d34bdaf638e21
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Systemd support for the RAUC hawkbit updater was added in
-
-  4aa7a4ad8a (package/rauc-hawkbit-updater: add systemd optional dependency, 2024-07-10)
-
-This installs the RAUC hawkbit updater service, which executes as user
-"rauc-hawkbit" [1], which doesn't exist by default.
-
-[1] https://github.com/rauc/rauc-hawkbit-updater/blob/2711c0e02781eb9d97285c87197f1bafef75d0d1/script/rauc-hawkbit-updater.service
-
-Signed-off-by: Gero Schwäricke <gero.schwaericke@sevenlab.de>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 69b2777291287e9bf43690d5b86bb2a512394233)
+(cherry picked from commit c72557eaf8b4fd4c1899e90c16323d7d52e0200b)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/rauc-hawkbit-updater/rauc-hawkbit-updater.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ .checkpackageignore                          | 1 -
+ package/ntp/0001-ntp-syscalls-fallback.patch | 3 +--
+ 2 files changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/package/rauc-hawkbit-updater/rauc-hawkbit-updater.mk b/package/rauc-hawkbit-updater/rauc-hawkbit-updater.mk
-index da1c020bb6..e31a4deb5f 100644
---- a/package/rauc-hawkbit-updater/rauc-hawkbit-updater.mk
-+++ b/package/rauc-hawkbit-updater/rauc-hawkbit-updater.mk
-@@ -15,6 +15,10 @@ RAUC_HAWKBIT_UPDATER_CFLAGS = $(TARGET_CFLAGS) -std=c99
- ifeq ($(BR2_PACKAGE_SYSTEMD),y)
- RAUC_HAWKBIT_UPDATER_DEPENDENCIES += systemd
- RAUC_HAWKBIT_UPDATER_CONF_OPTS += -Dsystemd=enabled
-+# rauc-hawkbit-updater.service uses this user and group
-+define RAUC_HAWKBIT_UPDATER_USERS
-+	rauc-hawkbit -1 rauc-hawkbit -1 * - - - RAUC Hawkbit Updater
-+endef
- else
- RAUC_HAWKBIT_UPDATER_CONF_OPTS += -Dsystemd=disabled
- endif
-
---===============3410081194530829187==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/.checkpackageignore b/.checkpackageignore
+index ea9ed4c48c..8d2de48d32 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -876,7 +876,6 @@ package/norm/0001-protolib-drop-linux-version-check.patch lib_patch.Upstream
+ package/norm/0002-Use-print-as-function-call-for-Python3-compatibility.patch lib_patch.Upstream
+ package/norm/0003-Fix-mixed-tabs-spaces-in-protolib-wscript.patch lib_patch.Upstream
+ package/nss-pam-ldapd/S45nslcd Shellcheck lib_sysv.EmptyLastLine lib_sysv.Indent lib_sysv.Variables
+-package/ntp/0001-ntp-syscalls-fallback.patch lib_patch.Upstream
+ package/ntp/S49ntp.in lib_sysv.Variables
+ package/ntpsec/0001-wscript-remove-checks-for-bsd-string.h-fixes-host-co.patch lib_patch.Upstream
+ package/nuttcp/0001-susv3-legacy.patch lib_patch.Upstream
+diff --git a/package/ntp/0001-ntp-syscalls-fallback.patch b/package/ntp/0001-ntp-syscalls-fallback.patch
+index 46704b9d3f..445efd95e5 100644
+--- a/package/ntp/0001-ntp-syscalls-fallback.patch
++++ b/package/ntp/0001-ntp-syscalls-fallback.patch
+@@ -1,7 +1,6 @@
+ inline ntp syscalls fallback
+ 
+-Reference:
+- https://bugs.ntp.org/show_bug.cgi?id=769
++Upstream: https://bugs.ntp.org/show_bug.cgi?id=769
+ 
+ Signed-off-by: James Knight <james.knight@rockwellcollins.com>
+ ---
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3410081194530829187==--
