@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 874FBC87FCF
-	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 17:20:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CDB91C87FDA
+	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 17:20:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5F50980E17;
-	Thu,  7 Aug 2025 17:20:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A8E8940514;
+	Thu,  7 Aug 2025 17:20:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0eUxdT4FSpAL; Thu,  7 Aug 2025 17:20:51 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nZLXqNWlVsev; Thu,  7 Aug 2025 17:20:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5063C80E2F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 89147405AD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5063C80E2F;
-	Thu,  7 Aug 2025 17:20:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 89147405AD;
+	Thu,  7 Aug 2025 17:20:52 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 2A6D74C4
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:20:04 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 14D584C6
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:20:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 452D040074
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7299740088
  for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:19:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KvkjZY6lF7Gy for <buildroot@buildroot.org>;
+ id 98i7WRvtVAEi for <buildroot@buildroot.org>;
  Thu,  7 Aug 2025 17:19:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CDD39400BE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E39E5400C1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CDD39400BE
+ by smtp2.osuosl.org (Postfix) with ESMTP id E39E5400C1
  for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:19:16 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CC33383606; Thu,  7 Aug 2025 17:19:16 +0000 (UTC)
+ id E1FB586EE0; Thu,  7 Aug 2025 17:19:16 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 7 Aug 2025 19:11:25 +0200
+Date: Thu, 7 Aug 2025 19:11:29 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: b2f2d587dbe3fca5e49d538035f0caaa80b5d5ff
-X-Git-Newrev: 458696a88c01afb6978b3d490be646bf2ebcd907
+X-Git-Oldrev: 184252d4600378650675f156199619b36b90e05d
+X-Git-Newrev: 20d017a89e0b7147b85a083d2b23f03b9fadd022
 X-Patchwork-Hint: ignore
-Message-Id: <20250807171916.CC33383606@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/orc: add patch
- for CVE-2024-40897
+Message-Id: <20250807171916.E1FB586EE0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/micropython: add
+ patch for CVE-2024-8947
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,146 +66,239 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=458696a88c01afb6978b3d490be646bf2ebcd907
+commit: https://git.buildroot.net/buildroot/commit/?id=20d017a89e0b7147b85a083d2b23f03b9fadd022
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-This fixes the following vulnerabilities:
+This fixes the following vulnerability:
 
-- CVE-2024-40897
+- CVE-2024-8947
 
- Stack-based buffer overflow vulnerability exists in orcparse.c of ORC
- versions prior to 0.4.39. If a developer is tricked to process a
- specially crafted file with the affected ORC compiler, an arbitrary
- code may be executed on the developer's build environment. This may
- lead to compromise of developer machines or CI build environments.
- https://www.cve.org/CVERecord?id=CVE-2024-40897
+ A vulnerability was found in MicroPython 1.22.2. It has been declared
+ as critical. Affected by this vulnerability is an unknown functionality
+ of the file py/objarray.c. The manipulation leads to use after free.
+ The attack can be launched remotely. The complexity of an attack is
+ rather high. The exploitation appears to be difficult. Upgrading to
+ version 1.23.0 is able to address this issue. It is recommended to
+ upgrade the affected component. In micropython objarray component, when
+ a bytes object is resized and copied into itself, it may reference
+ memory that has already been freed.
 
 For more information, see:
- - https://www.cve.org/CVERecord?id=CVE-2024-40897
- - https://gitlab.freedesktop.org/gstreamer/orc/-/commit/fb7db9ae3e8ac271651d1884a3611d30bac04a98
+  - https://www.cve.org/CVERecord?id=CVE-2024-8947
+  - https://github.com/micropython/micropython/commit/4bed614e707c0644c06e117f848fa12605c711cd
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 2f7afa54ce8d8f9afd39228b429fbb6290316bc0)
+(cherry picked from commit 1fc0e90450c433d2c43b2e46483175c68ceac2d2)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...or-error-messages-and-otherwise-vsnprintf.patch | 94 ++++++++++++++++++++++
- package/orc/orc.mk                                 |  3 +
- 2 files changed, 97 insertions(+)
+ ...free-if-extending-a-bytearray-from-itself.patch | 183 +++++++++++++++++++++
+ package/micropython/micropython.mk                 |   3 +
+ 2 files changed, 186 insertions(+)
 
-diff --git a/package/orc/0001-use-vasprintf-if-available-for-error-messages-and-otherwise-vsnprintf.patch b/package/orc/0001-use-vasprintf-if-available-for-error-messages-and-otherwise-vsnprintf.patch
+diff --git a/package/micropython/0004-py-objarray-fix-use-after-free-if-extending-a-bytearray-from-itself.patch b/package/micropython/0004-py-objarray-fix-use-after-free-if-extending-a-bytearray-from-itself.patch
 new file mode 100644
-index 0000000000..41c5290722
+index 0000000000..90a795a6c3
 --- /dev/null
-+++ b/package/orc/0001-use-vasprintf-if-available-for-error-messages-and-otherwise-vsnprintf.patch
-@@ -0,0 +1,94 @@
-+From fb7db9ae3e8ac271651d1884a3611d30bac04a98 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Sebastian=20Dr=C3=B6ge?= <sebastian@centricular.com>
-+Date: Tue, 9 Jul 2024 12:11:37 +0300
-+Subject: [PATCH] Use vasprintf() if available for error messages and otherwise
-+ vsnprintf()
++++ b/package/micropython/0004-py-objarray-fix-use-after-free-if-extending-a-bytearray-from-itself.patch
+@@ -0,0 +1,183 @@
++From 4bed614e707c0644c06e117f848fa12605c711cd Mon Sep 17 00:00:00 2001
++From: Angus Gratton <angus@redyak.com.au>
++Date: Tue, 13 Feb 2024 09:24:36 +1100
++Subject: [PATCH] py/objarray: Fix use-after-free if extending a bytearray from
++ itself.
 +
-+vasprintf() is a GNU/BSD extension and would allocate as much memory as required
-+on the heap, similar to g_strdup_printf(). It's ridiculous that such a function
-+is still not provided as part of standard C.
++Two cases, one assigning to a slice.
++Closes https://github.com/micropython/micropython/issues/13283
 +
-+If it's not available, use vsnprintf() to at least avoid stack/heap buffer
-+overflows, which can lead to arbitrary code execution.
++Second is extending a slice from itself, similar logic.
 +
-+Thanks to Noriko Totsuka for reporting.
++In both cases the problem occurs when m_renew causes realloc to move the
++buffer, leaving a dangling pointer behind.
 +
-+Fixes JVN#02030803 / JPCERT#92912620 / CVE-2024-40897
-+Fixes #69
++There are more complex and hard to fix cases when either argument is a
++memoryview into the buffer, currently resizing to a new address breaks
++memoryviews into that object.
 +
-+Part-of: <https://gitlab.freedesktop.org/gstreamer/orc/-/merge_requests/191>
-+Upstream: https://gitlab.freedesktop.org/gstreamer/orc/-/commit/fb7db9ae3e8ac271651d1884a3611d30bac04a98
-+CVE: CVE-2024-40897
++Reproducing this bug and confirming the fix was done by running the unix
++port under valgrind with GC-aware extensions.
++
++Note in default configurations with GIL this bug exists but has no impact
++(the free buffer won't be reused while the function is still executing, and
++is no longer referenced after it returns).
++
++Signed-off-by: Angus Gratton <angus@redyak.com.au>
++CVE: CVE-2024-8947
++Upstream: https://github.com/micropython/micropython/commit/4bed614e707c0644c06e117f848fa12605c711cd
 +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 +---
-+ meson.build       |  1 +
-+ orc/orccompiler.c |  6 +++++-
-+ orc/orcparse.c    | 14 +++++++++++---
-+ 3 files changed, 17 insertions(+), 4 deletions(-)
++ py/objarray.c                          | 20 ++++++++++++++++----
++ tests/basics/bytearray_add.py          |  9 ++++++++-
++ tests/basics/bytearray_add_self.py     |  8 ++++++++
++ tests/basics/bytearray_add_self.py.exp |  1 +
++ tests/basics/bytearray_slice_assign.py | 18 ++++++++++++------
++ 5 files changed, 45 insertions(+), 11 deletions(-)
++ create mode 100644 tests/basics/bytearray_add_self.py
++ create mode 100644 tests/basics/bytearray_add_self.py.exp
 +
-+diff --git a/meson.build b/meson.build
-+index c7ba5d7d..fe8c6016 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -128,6 +128,7 @@ int main() {
-+ '''
-+ cdata.set('HAVE_MONOTONIC_CLOCK', cc.compiles(monotonic_test))
-+ cdata.set('HAVE_GETTIMEOFDAY', cc.has_function('gettimeofday'))
-++cdata.set('HAVE_VASPRINTF', cc.has_function('vasprintf'))
-+ cdata.set('HAVE_POSIX_MEMALIGN', cc.has_function('posix_memalign', prefix : '#include <stdlib.h>'))
-+ cdata.set('HAVE_MMAP', cc.has_function('mmap'))
-+ cdata.set('HAVE_SYS_TIME_H', cc.has_header('sys/time.h'))
-+diff --git a/orc/orccompiler.c b/orc/orccompiler.c
-+index 1e24b8a3..d3394612 100644
-+--- a/orc/orccompiler.c
-++++ b/orc/orccompiler.c
-+@@ -1332,8 +1332,12 @@ orc_compiler_error_valist (OrcCompiler *compiler, const char *fmt,
-+ 
-+   if (compiler->error_msg) return;
-+ 
-++#ifdef HAVE_VASPRINTF
-++  vasprintf (&s, fmt, args);
-++#else
-+   s = malloc (ORC_COMPILER_ERROR_BUFFER_SIZE);
-+-  vsprintf (s, fmt, args);
-++  vsnprintf (s, ORC_COMPILER_ERROR_BUFFER_SIZE, fmt, args);
-++#endif
-+   compiler->error_msg = s;
-+   compiler->error = TRUE;
-+   compiler->result = ORC_COMPILE_RESULT_UNKNOWN_COMPILE;
-+diff --git a/orc/orcparse.c b/orc/orcparse.c
-+index b0d67095..ae4f1b6b 100644
-+--- a/orc/orcparse.c
-++++ b/orc/orcparse.c
-+@@ -424,17 +424,25 @@ orc_parse_get_error_where (OrcParser *parser)
-+ static void
-+ orc_parse_add_error_valist (OrcParser *parser, const char *format, va_list args)
-+ {
-+-  char text[ORC_ERROR_LENGTH] = { '\0' };
-+-
-+   if (parser->error_program != parser->program) {
-+     parser->error_program = parser->program;
-+   }
-+ 
-+-  vsprintf (text, format, args);
-++#ifdef HAVE_VASPRINTF
-++  char *text;
-++  vasprintf (&text, format, args);
-++#else
-++  char text[ORC_ERROR_LENGTH] = { '\0' };
-++  vsnprintf (text, sizeof (text), format, args);
-++#endif
-+ 
-+   orc_vector_append (&parser->errors,
-+                      orc_parse_error_new (orc_parse_get_error_where (parser),
-+                                           parser->line_number, -1, text));
++diff --git a/py/objarray.c b/py/objarray.c
++index 1fff234822521..803af2cd270c7 100644
++--- a/py/objarray.c
+++++ b/py/objarray.c
++@@ -424,6 +424,13 @@ static mp_obj_t array_extend(mp_obj_t self_in, mp_obj_t arg_in) {
++     if (self->free < len) {
++         self->items = m_renew(byte, self->items, (self->len + self->free) * sz, (self->len + len) * sz);
++         self->free = 0;
 ++
-++#ifdef HAVE_VASPRINTF
-++  free (text);
-++#endif
-+ }
+++        if (self_in == arg_in) {
+++            // Get arg_bufinfo again in case self->items has moved
+++            //
+++            // (Note not possible to handle case that arg_in is a memoryview into self)
+++            mp_get_buffer_raise(arg_in, &arg_bufinfo, MP_BUFFER_READ);
+++        }
++     } else {
++         self->free -= len;
++     }
++@@ -456,7 +463,8 @@ static mp_obj_t array_subscr(mp_obj_t self_in, mp_obj_t index_in, mp_obj_t value
++                 #if MICROPY_PY_ARRAY_SLICE_ASSIGN
++                 // Assign
++                 size_t src_len;
++-                void *src_items;
+++                uint8_t *src_items;
+++                size_t src_offs = 0;
++                 size_t item_sz = mp_binary_get_size('@', o->typecode & TYPECODE_MASK, NULL);
++                 if (mp_obj_is_obj(value) && MP_OBJ_TYPE_GET_SLOT_OR_NULL(((mp_obj_base_t *)MP_OBJ_TO_PTR(value))->type, subscr) == array_subscr) {
++                     // value is array, bytearray or memoryview
++@@ -469,7 +477,7 @@ static mp_obj_t array_subscr(mp_obj_t self_in, mp_obj_t index_in, mp_obj_t value
++                     src_items = src_slice->items;
++                     #if MICROPY_PY_BUILTINS_MEMORYVIEW
++                     if (mp_obj_is_type(value, &mp_type_memoryview)) {
++-                        src_items = (uint8_t *)src_items + (src_slice->memview_offset * item_sz);
+++                        src_offs = src_slice->memview_offset * item_sz;
++                     }
++                     #endif
++                 } else if (mp_obj_is_type(value, &mp_type_bytes)) {
++@@ -504,13 +512,17 @@ static mp_obj_t array_subscr(mp_obj_t self_in, mp_obj_t index_in, mp_obj_t value
++                         // TODO: alloc policy; at the moment we go conservative
++                         o->items = m_renew(byte, o->items, (o->len + o->free) * item_sz, (o->len + len_adj) * item_sz);
++                         o->free = len_adj;
+++                        // m_renew may have moved o->items
+++                        if (src_items == dest_items) {
+++                            src_items = o->items;
+++                        }
++                         dest_items = o->items;
++                     }
++                     mp_seq_replace_slice_grow_inplace(dest_items, o->len,
++-                        slice.start, slice.stop, src_items, src_len, len_adj, item_sz);
+++                        slice.start, slice.stop, src_items + src_offs, src_len, len_adj, item_sz);
++                 } else {
++                     mp_seq_replace_slice_no_grow(dest_items, o->len,
++-                        slice.start, slice.stop, src_items, src_len, item_sz);
+++                        slice.start, slice.stop, src_items + src_offs, src_len, item_sz);
++                     // Clear "freed" elements at the end of list
++                     // TODO: This is actually only needed for typecode=='O'
++                     mp_seq_clear(dest_items, o->len + len_adj, o->len, item_sz);
++diff --git a/tests/basics/bytearray_add.py b/tests/basics/bytearray_add.py
++index a7e2b57374255..1f30a3b740e95 100644
++--- a/tests/basics/bytearray_add.py
+++++ b/tests/basics/bytearray_add.py
++@@ -15,4 +15,11 @@
 + 
-+ static void
-+-- 
-+GitLab
-+
-diff --git a/package/orc/orc.mk b/package/orc/orc.mk
-index 436dc9d629..466e554f6b 100644
---- a/package/orc/orc.mk
-+++ b/package/orc/orc.mk
-@@ -20,5 +20,8 @@ ORC_CONF_OPTS = \
- 	-Dtests=disabled \
- 	-Dtools=disabled
++ # this inplace add tests the code when the buffer doesn't need to be increased
++ b = bytearray()
++-b += b''
+++b += b""
+++
+++# extend a bytearray from itself
+++b = bytearray(b"abcdefgh")
+++for _ in range(4):
+++    c = bytearray(b)  # extra allocation, as above
+++    b.extend(b)
+++print(b)
++diff --git a/tests/basics/bytearray_add_self.py b/tests/basics/bytearray_add_self.py
++new file mode 100644
++index 0000000000000..94ae8689fd16c
++--- /dev/null
+++++ b/tests/basics/bytearray_add_self.py
++@@ -0,0 +1,8 @@
+++# add a bytearray to itself
+++# This is not supported by CPython as of 3.11.18.
+++
+++b = bytearray(b"123456789")
+++for _ in range(4):
+++    c = bytearray(b)  # extra allocation increases chance 'b' has to relocate
+++    b += b
+++print(b)
++diff --git a/tests/basics/bytearray_add_self.py.exp b/tests/basics/bytearray_add_self.py.exp
++new file mode 100644
++index 0000000000000..5ef948157ac0f
++--- /dev/null
+++++ b/tests/basics/bytearray_add_self.py.exp
++@@ -0,0 +1 @@
+++bytearray(b'123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789')
++diff --git a/tests/basics/bytearray_slice_assign.py b/tests/basics/bytearray_slice_assign.py
++index fa7878e10ddbb..4de0819042a13 100644
++--- a/tests/basics/bytearray_slice_assign.py
+++++ b/tests/basics/bytearray_slice_assign.py
++@@ -18,7 +18,7 @@
++ l[1:3] = bytearray()
++ print(l)
++ l = bytearray(x)
++-#del l[1:3]
+++# del l[1:3]
++ print(l)
++ 
++ l = bytearray(x)
++@@ -28,7 +28,7 @@
++ l[:3] = bytearray()
++ print(l)
++ l = bytearray(x)
++-#del l[:3]
+++# del l[:3]
++ print(l)
++ 
++ l = bytearray(x)
++@@ -38,7 +38,7 @@
++ l[:-3] = bytearray()
++ print(l)
++ l = bytearray(x)
++-#del l[:-3]
+++# del l[:-3]
++ print(l)
++ 
++ # slice assignment that extends the array
++@@ -61,8 +61,14 @@
++ print(b)
++ 
++ # Growth of bytearray via slice extension
++-b = bytearray(b'12345678')
++-b.append(57) # expand and add a bit of unused space at end of the bytearray
+++b = bytearray(b"12345678")
+++b.append(57)  # expand and add a bit of unused space at end of the bytearray
++ for i in range(400):
++-    b[-1:] = b'ab' # grow slowly into the unused space
+++    b[-1:] = b"ab"  # grow slowly into the unused space
+++print(len(b), b)
+++
+++# Growth of bytearray via slice extension from itself
+++b = bytearray(b"1234567")
+++for i in range(3):
+++    b[-1:] = b
++ print(len(b), b)
+diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
+index 558ef86534..949abe3b0b 100644
+--- a/package/micropython/micropython.mk
++++ b/package/micropython/micropython.mk
+@@ -15,6 +15,9 @@ MICROPYTHON_LICENSE_FILES = LICENSE
+ MICROPYTHON_DEPENDENCIES = host-python3
+ MICROPYTHON_CPE_ID_VENDOR = micropython
  
-+# 0001-use-vasprintf-if-available-for-error-messages-and-otherwise-vsnprintf.patch
-+ORC_IGNORE_CVES += CVE-2024-40897
++# 0004-py-objarray-fix-use-after-free-if-extending-a-bytearray-from-itself.patch
++MICROPYTHON_IGNORE_CVES += CVE-2024-8947
 +
- $(eval $(meson-package))
- $(eval $(host-meson-package))
+ # Use fallback implementation for exception handling on architectures that don't
+ # have explicit support.
+ ifeq ($(BR2_i386)$(BR2_x86_64)$(BR2_arm)$(BR2_armeb),)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
