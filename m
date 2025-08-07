@@ -4,48 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C795AC87FCB
-	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 01:14:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98867C87FCB
+	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 01:17:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 381DF84A38;
-	Thu,  7 Aug 2025 01:14:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 57B6684A42;
+	Thu,  7 Aug 2025 01:17:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EzSyqG0o1o-s; Thu,  7 Aug 2025 01:14:14 +0000 (UTC)
+ id WD4uCswTocDs; Thu,  7 Aug 2025 01:17:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 59C7E84A34
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 948AD84A3D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 59C7E84A34;
-	Thu,  7 Aug 2025 01:14:14 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 6AE2DD79
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 01:14:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 948AD84A3D;
+	Thu,  7 Aug 2025 01:17:43 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id EC64131
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 01:17:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5C7D661BE6
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 01:14:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DE53D6F4E2
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 01:17:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AnmkHrWzSSPR for <buildroot@buildroot.org>;
- Thu,  7 Aug 2025 01:14:12 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 80A6D61195
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 80A6D61195
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 01:14:12 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6B77986FB3; Thu,  7 Aug 2025 01:14:12 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 7 Aug 2025 03:02:51 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 945f4acbfff1ba28818a4343ec8d4b7127505e64
-X-Git-Newrev: 1c7948af337275ba3ec5ca9d2797fc4ba493da62
-X-Patchwork-Hint: ignore
-Message-Id: <20250807011412.6B77986FB3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/uuu: bump to version 1.5.219
+ id 82Ak6OaU727c for <buildroot@buildroot.org>;
+ Thu,  7 Aug 2025 01:17:42 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C51106F4DA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C51106F4DA
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C51106F4DA
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 01:17:41 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 11A6D13F879;
+ Thu,  7 Aug 2025 03:17:35 +0200 (CEST)
+Received: from ip099.116-187-66.sogetel.net ([66.187.116.99:35798])
+ via ip099.116-187-66.sogetel.net ([66.187.116.99]) by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Thu, 07 Aug 2025 03:17:35 +0200
+MIME-Version: 1.0
+Date: Thu, 07 Aug 2025 03:17:35 +0200
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc: buildroot@buildroot.org, linux-amarula@amarulasolutions.com
+In-Reply-To: <20250804180616.613019-1-dario.binacchi@amarulasolutions.com>
+References: <20250804180616.613019-1-dario.binacchi@amarulasolutions.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <ab2b2ecca66dd3ec854691ccb3a4d438@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1754529458;
+ bh=qjUIVocy92jBvN7Nxj8DfCqz9gKiEORhihxZAk9tpeQ=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=CRfWnPPBBkhojT0Ly+7wbvE6KUdhmHiRNFwQ47nm+axfFcdWfExx1qvbgiLv8tPRl
+ qlUrJK6DnV3mrop2LRCqITxF5Pmo2aFTWmqjzRQn1F8D4htCnXIGjBIGurwTq8PBtV
+ vYV9ddX5ww8vExAOcwl7ITiFqe/xH3LGmCZ/XcaOxEEXv2HBINaQ5QcXpMs0aiAYhj
+ mxoceaMf7QeEg/L/gHL8chz0//+A1mSTBeMPFFg1IhYqQzwn2NCt5SXIFJ6wyRCpF0
+ e4T0BV17l+3pnrO27WDH5i8uUzhoo8sENCPgEFuC8bP8pkyx1Ks53jlpRBHLzNHGTo
+ yx730FRODIiwg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=CRfWnPPB
+Subject: Re: [Buildroot] [PATCH 1/1] package/uuu: bump to version 1.5.219
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,92 +83,27 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1c7948af337275ba3ec5ca9d2797fc4ba493da62
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 04/08/2025 20:06, Dario Binacchi wrote:
+> Release notes:
+> https://github.com/nxp-imx/mfgtools/releases/tag/uuu_1.5.218
+> https://github.com/nxp-imx/mfgtools/releases/tag/uuu_1.5.219
+> 
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
-Release notes:
-https://github.com/nxp-imx/mfgtools/releases/tag/uuu_1.5.218
-https://github.com/nxp-imx/mfgtools/releases/tag/uuu_1.5.219
+Applied to master, thanks.
 
-This commit also removes the package patch included in this
-new release.
+For info, I also removed the stale package patch which was included in
+this new release. See:
+https://gitlab.com/buildroot.org/buildroot/-/commit/1c7948af337275ba3ec5ca9d2797fc4ba493da62
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-[Julien: remove the package patch included in this new release]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...0001-libuuu-sdps-fix-gcc15-compile-errors.patch | 33 ----------------------
- package/uuu/uuu.hash                               |  2 +-
- package/uuu/uuu.mk                                 |  2 +-
- 3 files changed, 2 insertions(+), 35 deletions(-)
+Best regards,
 
-diff --git a/package/uuu/0001-libuuu-sdps-fix-gcc15-compile-errors.patch b/package/uuu/0001-libuuu-sdps-fix-gcc15-compile-errors.patch
-deleted file mode 100644
-index a3c1d85fc0..0000000000
---- a/package/uuu/0001-libuuu-sdps-fix-gcc15-compile-errors.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--From 142448e55386b88adf5b1d7e6206df1ca6784708 Mon Sep 17 00:00:00 2001
--From: Bruno Thomsen <bruno.thomsen@gmail.com>
--Date: Sat, 1 Mar 2025 14:32:41 +0100
--Subject: [PATCH] libuuu/sdps: fix gcc15 compile errors
--
--This gcc 15 error happens on Fedora 42.
--
--error: uint32_t does not name a type
--
--error: uint64_t does not name a type
--
--Signed-off-by: Bruno Thomsen <bruno.thomsen@gmail.com>
--Upstream: https://github.com/nxp-imx/mfgtools/commit/142448e55386b88adf5b1d7e6206df1ca6784708
--Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-----
-- libuuu/sdps.h | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/libuuu/sdps.h b/libuuu/sdps.h
--index b82f9d71c981..667a477ee48f 100644
----- a/libuuu/sdps.h
--+++ b/libuuu/sdps.h
--@@ -30,6 +30,7 @@
-- */
-- 
-- #include "cmd.h"
--+#include <cstdint>
-- 
-- class SDPSCmd : public CmdBase
-- {
---- 
--2.43.0
--
-diff --git a/package/uuu/uuu.hash b/package/uuu/uuu.hash
-index 9f978f55cc..a56baaaef4 100644
---- a/package/uuu/uuu.hash
-+++ b/package/uuu/uuu.hash
-@@ -1,3 +1,3 @@
- # locally computed
--sha256  c763b87ffdf10ac5499a0c319463759caa336bc6567b56d6d0ef448590c1a76d  uuu_source-uuu_1.5.201.tar.gz
-+sha256  5940b1882628531b5786668552207576a5e27b7b890d67def2e22a760ebd5d91  uuu_source-uuu_1.5.219.tar.gz
- sha256  cc8d47f7b9260f6669ecd41c24554c552f17581d81ee8fc602c6d23edb8bf495  LICENSE
-diff --git a/package/uuu/uuu.mk b/package/uuu/uuu.mk
-index 93d0b97b13..18438963ad 100644
---- a/package/uuu/uuu.mk
-+++ b/package/uuu/uuu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UUU_VERSION = 1.5.201
-+UUU_VERSION = 1.5.219
- UUU_SOURCE = uuu_source-uuu_$(UUU_VERSION).tar.gz
- UUU_SITE = https://github.com/nxp-imx/mfgtools/releases/download/uuu_$(UUU_VERSION)
- UUU_LICENSE = BSD 3-Clause "New" or "Revised" License
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
