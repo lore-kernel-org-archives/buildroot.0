@@ -1,106 +1,106 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 425EBCA0EC0
-	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 18:24:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCA8AC87FCF
+	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 18:24:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 18BD04055E;
-	Thu,  7 Aug 2025 18:24:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A491680E28;
+	Thu,  7 Aug 2025 18:24:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NEeBZroMt2lq; Thu,  7 Aug 2025 18:24:38 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YELYzUacLkrJ; Thu,  7 Aug 2025 18:24:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4761A40577
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4297480D12
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4761A40577;
-	Thu,  7 Aug 2025 18:24:38 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 976E74C4
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:24:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4297480D12;
+	Thu,  7 Aug 2025 18:24:41 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id B0A6C4C4
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:24:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7E3586063E
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:24:22 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A2C3540087
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:24:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PEFF4PguUcpB for <buildroot@buildroot.org>;
- Thu,  7 Aug 2025 18:24:21 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 36UH4rF04S-4 for <buildroot@buildroot.org>;
+ Thu,  7 Aug 2025 18:24:22 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::432; helo=mail-wr1-x432.google.com;
+ client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8F6E160604
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F6E160604
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8F6E160604
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:24:21 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id
- ffacd0b85a97d-3a6cd1a6fecso942186f8f.3
- for <buildroot@buildroot.org>; Thu, 07 Aug 2025 11:24:21 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9395540057
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9395540057
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9395540057
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:24:22 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id
+ 5b1f17b1804b1-455fdfb5d04so7312345e9.2
+ for <buildroot@buildroot.org>; Thu, 07 Aug 2025 11:24:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1754591060; x=1755195860;
+ d=1e100.net; s=20230601; t=1754591061; x=1755195861;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=L8qtE7khw0Mmkn2niyMjW3S0UChKPT9Hw3ZK5Io1664=;
- b=DY3ESiKzBgcon+bOh6MSesZJVXPr2SIptxI2Bsu97eaxmpKAs24f21GTDTviOQBxE9
- Tn/5zk8ApMG5Wded4qaSf4WJ0RuhbaJI0XvkYHX/K+oLXC3KA2SHTLL5gk7sWs+PecaH
- 2NhLYcVU/1ktMpiYpj3utsd0pMa2IkkFVzHfB4O1f8Z8evKeDAd4P+pfzXZ3z5OyBfwP
- VWzPX/pzk/CtHWGqsJZbUdLElabaAErsgoWybyjKwTMTFXFZvp79xJCmNS1chxgR1bXB
- YAv+1qWnn7i1iAkj30JkDNdmO/PTP9n4zbJ1l3ErR3/ARM/VuhBgvGF26OkBhSo1fLcP
- DxaA==
+ bh=twQGLtX1Gg+nNZyIb0z/AbvcHMbgJqWH6SK9mHcak4c=;
+ b=F+p4qwToIfCrxsRhzMu4Vqb2jpWCFqBSdDe16xWLqj8S9vlW9QdqPDGVlG0OIZLE1A
+ p+17dAdS/fYOmQNUT46btaK6V6/tr+R31mnYz/r6pAx1b8vOjgoN4HrxyrsQF3VQ32Hh
+ 1j1xfMXuhYWR5G/CURKvAeo24ayhDlZ5Gt9mMIMD6rCsw84CxnOuzRoJ/PojaCjFh+4l
+ B2s8PMLl0lVKeNgg3fZ/z40iHw/ZAk/ah5jZS+72xtnV+ZqFqF0qo4fzDQ1BCHcCHDbt
+ 99uJ1Pxf04JKhb9LIuwT3lviOmKY9NrptPcZjNuGsWMvRNJqywBOHpuHj/CVrVzLLIfC
+ bDLQ==
 X-Forwarded-Encrypted: i=1;
- AJvYcCUignMgvSpAf0mPlgKLutb6jkAvByFxcaGVj4yd+NmLAY79UdJhEBy1F98g84CuN7hlFMmbH+bTHg4=@buildroot.org
-X-Gm-Message-State: AOJu0YxGISKTeNzkKBk7TRnNlhRFUnYk97joCmIYyoGiV4ztogC0afQ+
- yM25qY9c6/Fe4XOHgNoaviVDx+9E4Aym7+krmvz5BNWSo9qKiDwrIS+bXhQXYzuO398Ee+zs137
- Imhrf
-X-Gm-Gg: ASbGncsg3XQM9VS3PK3Z29XPakk8DALqMoHsvkX+hypxqmzXSlbooHoAMsFt/qOzcSY
- cXKs/N/qYNTkv3nCzoLF4Yb9+i94+srDnxw7VYqtoUaAGy5lFUEw+tfy/Shv39V+k9E7XbPKx1K
- 6r/0IkxsyheQDcmubhmkqAwbGZ+co707tfEsjtflV//Q+BAGqS8byNljCZvT8MayUFEdFcGGIYd
- UVwQHBU0NHLURozc3a7vN7o/9qlGdBQ+M/CMpj9DiQSYE0U/Fap4bpU2zGuFP3QXcznr7izZbrf
- beoUPGiDgUB1UCNVaKt1tc7e0DQLaM52lA3V5Nl5gcjxgPQ3iyohNVAzkIyCj/Z6VnRRyYL5UxS
- JfYvtUe/yrPD/oUKHTeKa7lOM
-X-Google-Smtp-Source: AGHT+IFAjBoKYX9EHwkSl8mr5ByMQlelNB+XuvLL5Y/YAE6bPLbdJO59FkGiDBLII2g50zCqUwkfWg==
-X-Received: by 2002:a05:6000:24c3:b0:3b8:d4c5:686f with SMTP id
- ffacd0b85a97d-3b900b83c71mr172903f8f.39.1754591059650; 
- Thu, 07 Aug 2025 11:24:19 -0700 (PDT)
+ AJvYcCWhMkZdlLEOC6++3fv5noONf853WSIbnvsseQ/k9yTPgGYJdBIyBZkZyq98/jeM2WQdZx57YgOVpZ0=@buildroot.org
+X-Gm-Message-State: AOJu0YzZBSwZEpIHmNhcpb1Xn4DX6JIu//rgDhIFOQCDEJxgNla9vMCD
+ +3TM6VInLj+aY/PPLML9p2mZMW3vcIyyhsmJ4Nupka8jWKrBNWVDO46aNbMWCNVa9bmI55evwoZ
+ ztoht
+X-Gm-Gg: ASbGncs7KjaW25IxWNwz5g+qfgvSZIhkknmJOyJEZ7MppgF4weDKlPL5axSwTv+poy4
+ 1WvceXt+IBjAy4fFHORfFAgTxMeKXvsu+rL2Bfo0aE0svJd9J0B1TUYsQHifQqCA55TAh1a8rOL
+ BMMnSXjoD2AxNrRIfPUWSEUUWqKK4P31Ddo4fWFSza4I0B49Y1yaXzUA3ndAhvwKThIjJ3g3q5D
+ O0piIeIrqiHE+XF/eh0z2WCEO/ZRaJJBe8ozydllZkqRe3gm/athOt6iDpW6EfJLhQ1i5FrWd74
+ ZgjOmzpnSqLMN+0Wa6wOAPaOsV/Xw75RSIcx5VClNtCRgz+C6zvkN+TX0sXo9/QJCYF3qdbP0MQ
+ k1b575q8xHgoCCQ==
+X-Google-Smtp-Source: AGHT+IGQl8ZWXxfJPznicACNzNOM5mJ1MRDWGFlILfinFt7t1IZoKmrcvjpgcT6zi8Tzdf+3r9KcoQ==
+X-Received: by 2002:a05:600c:35c6:b0:456:12ad:ec30 with SMTP id
+ 5b1f17b1804b1-459f4eb35a8mr164365e9.13.1754591060648; 
+ Thu, 07 Aug 2025 11:24:20 -0700 (PDT)
 Received: from arch ([79.132.233.79]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-459dc900606sm167391295e9.15.2025.08.07.11.24.18
+ ffacd0b85a97d-3b79c3c51e2sm26854307f8f.32.2025.08.07.11.24.20
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 07 Aug 2025 11:24:19 -0700 (PDT)
-To: Nathaniel Roach <nroach44@nroach44.id.au>
+ Thu, 07 Aug 2025 11:24:20 -0700 (PDT)
+To: Julien Olivain <ju.o@free.fr>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Thu,  7 Aug 2025 20:24:18 +0200
-Message-ID: <20250807182418.724971-1-thomas.perale@mind.be>
+Date: Thu,  7 Aug 2025 20:24:19 +0200
+Message-ID: <20250807182419.725021-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250721120820.3901333-1-nroach44@nroach44.id.au>
-References: <20250721120820.3901333-1-nroach44@nroach44.id.au>
+In-Reply-To: <20250722171326.ABE90869CD@busybox.osuosl.org>
+References: <20250722171326.ABE90869CD@busybox.osuosl.org>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1754591060; x=1755195860; darn=buildroot.org;
+ d=mind.be; s=google; t=1754591061; x=1755195861; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=L8qtE7khw0Mmkn2niyMjW3S0UChKPT9Hw3ZK5Io1664=;
- b=HbRrzjyyWCI5IFHuBHzVxj26bM0pAIbCMGKpY92gPNfiLpxw6nmTEfI8Z54Jcvqsjn
- 1A6exdRvJ2U6NGkfol1uCbjoXRhQpyE2gaDqxuoxRAWAVoOJ6s9QEPEtjDVvkLO0wUat
- IJwvb9JkLw8jy8FV/Mg90LSelmd5qYXYcZEib1+2jqpFSSXv4yre/HtTx98DGmPgDMRt
- +Mi2TJwe5usAlcwcbJdBnSFvRNUCtgCTRcSHmRq1YKFeZm37Kl6bn/R/uzbTc3wyP/Pb
- 3hPCXUa50GRMhcPz+qHgZUDJKGwTKrw7TLYRoPPDn0e/z4I0CX2MdmuOP6hLGT94SmwS
- sgRw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=twQGLtX1Gg+nNZyIb0z/AbvcHMbgJqWH6SK9mHcak4c=;
+ b=b1I+v3oZfDb9A2jA87mj5BjLJpRXQ3LOxQjSaCFz1KaONN4XUd2WI+wHGGXKyboh34
+ 6XEXuN7zmNqOBwiJ0HK15mYXW2e4Svq8CFugaN/uqFeY8/ti/iGtowvq3pId+YDv0Dom
+ pLQ/sKt75xq/AuoAk6QOn20qCFpZYctwyda97oviiEiJAV/aQrhRrQBxWrUQuPnQSx+W
+ O8V06lGV0wGlgLh8a2bdDhw2tZ4Vpbmrnlpzczy2ZxacrNHm9KuJ940hsZcDrGbTtIRo
+ fbWj9M75nigPwiuVHRQpipskSHn6oATatYH2AcC2u8Q94iE5Xmmeql/8iYPU96j3gnJx
+ Nx9w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=HbRrzjyy
-Subject: Re: [Buildroot] [PATCH v2] package/sudo: Enable libxcrypt with
- glibc, allowing hashed passwords without PAM
+ header.a=rsa-sha256 header.s=google header.b=b1I+v3oZ
+Subject: Re: [Buildroot] [git commit] package/python-starlette: security
+ bump to v0.47.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -120,66 +120,67 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Per https://gitlab.com/buildroot.org/buildroot/-/issues/27 , on glibc
-> builds without PAM, sudo will "fail" all password prompts.
+> commit: https://git.buildroot.net/buildroot/commit/?id=8945ea3e671954ec7c36f0000a707184c7686234
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 > 
-> It was found that it's simply checking the entered string against the
-> raw hash, because 'libcryp' isn't available. On glibc, we need libxcrypt,
-> so enable it and ensure sudo is built with it.
+> For release note, see:
+> https://github.com/encode/starlette/releases/tag/0.47.2
 > 
-> musl and uclibc do have crypt() functions, so this is not needed.
+> This fixes the following vulnerability:
 > 
-> Relevant code from sudo:
->  https://github.com/sudo-project/sudo/blob/v1.9.17p1/plugins/sudoers/auth/passwd.c#L139
+> - CVE-2025-54121:
+>     Starlette is a lightweight ASGI (Asynchronous Server Gateway
+>     Interface) framework/toolkit, designed for building async web services
+>     in Python. In versions 0.47.1 and below, when parsing a multi-part
+>     form with large files (greater than the default max spool size)
+>     starlette will block the main thread to roll the file over to disk.
+>     This blocks the event thread which means the application can't accept
+>     new connections. The UploadFile code has a minor bug where instead of
+>     just checking for self._in_memory, the logic should also check if the
+>     additional bytes will cause a rollover. The vulnerability is fixed in
+>     version 0.47.2.
+>     https://www.cve.org/CVERecord?id=CVE-2025-54121
 > 
-> Signed-off-by: Nathaniel Roach <nroach44@nroach44.id.au>
-> 
+> Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+> Reviewed-by: Marcus Hoffmann <buildroot@bubu1.eu>
+> [Julien: add link to release note]
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
 
 Applied to 2025.02.x & 2025.05.x. Thanks
 
 > ---
-> Backport to 2025.02.x, 2025.05.x
+>  package/python-starlette/python-starlette.hash | 4 ++--
+>  package/python-starlette/python-starlette.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> Changes v1 -> v2:
->   - Update makefile logic to depend on libxcrypt regardless of PAM (h/t Julien)
->   - Update description, backport notes
-> 
-> Signed-off-by: Nathaniel Roach <nroach44@nroach44.id.au>
-> ---
->  package/sudo/Config.in | 1 +
->  package/sudo/sudo.mk   | 4 ++++
->  2 files changed, 5 insertions(+)
-> 
-> diff --git a/package/sudo/Config.in b/package/sudo/Config.in
-> index ee5ea542ab..85bc4859b8 100644
-> --- a/package/sudo/Config.in
-> +++ b/package/sudo/Config.in
-> @@ -2,6 +2,7 @@ config BR2_PACKAGE_SUDO
->  	bool "sudo"
->  	# uses fork()
->  	depends on BR2_USE_MMU
-> +	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
->  	help
->  	  Sudo is a program designed to allow a sysadmin to give
->  	  limited root privileges to users and log root activity. The
-> diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
-> index f57a86805a..0aacd8207d 100644
-> --- a/package/sudo/sudo.mk
-> +++ b/package/sudo/sudo.mk
-> @@ -37,6 +37,10 @@ else
->  SUDO_CONF_OPTS += --without-pam
->  endif
+> diff --git a/package/python-starlette/python-starlette.hash b/package/python-starlette/python-starlette.hash
+> index be23e4ccb1..5939eb198f 100644
+> --- a/package/python-starlette/python-starlette.hash
+> +++ b/package/python-starlette/python-starlette.hash
+> @@ -1,5 +1,5 @@
+>  # md5, sha256 from https://pypi.org/pypi/starlette/json
+> -md5  b876ddd8665f70bb74e45d1fda053699  starlette-0.47.1.tar.gz
+> -sha256  aef012dd2b6be325ffa16698f9dc533614fb1cebd593a906b90dc1025529a79b  starlette-0.47.1.tar.gz
+> +md5  b58c9f8d38df9946689cb3e9f94555da  starlette-0.47.2.tar.gz
+> +sha256  6ae9aa5db235e4846decc1e7b79c4f346adf41e9777aebeb49dfd09bbd7023d8  starlette-0.47.2.tar.gz
+>  # Locally computed sha256 checksums
+>  sha256  dcb95677a02240243187e964f941847d19b17821cf99e5afae684fab328c19bf  LICENSE.md
+> diff --git a/package/python-starlette/python-starlette.mk b/package/python-starlette/python-starlette.mk
+> index eb49230600..4037903cc5 100644
+> --- a/package/python-starlette/python-starlette.mk
+> +++ b/package/python-starlette/python-starlette.mk
+> @@ -4,9 +4,9 @@
+>  #
+>  ################################################################################
 >  
-> +ifeq ($(BR2_PACKAGE_LIBXCRYPT),y)
-> +SUDO_DEPENDENCIES += libxcrypt
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_ZLIB),y)
->  SUDO_CONF_OPTS += --enable-zlib
->  SUDO_DEPENDENCIES += zlib
-> -- 
-> 2.39.5
-> 
+> -PYTHON_STARLETTE_VERSION = 0.47.1
+> +PYTHON_STARLETTE_VERSION = 0.47.2
+>  PYTHON_STARLETTE_SOURCE = starlette-$(PYTHON_STARLETTE_VERSION).tar.gz
+> -PYTHON_STARLETTE_SITE = https://files.pythonhosted.org/packages/0a/69/662169fdb92fb96ec3eaee218cf540a629d629c86d7993d9651226a6789b
+> +PYTHON_STARLETTE_SITE = https://files.pythonhosted.org/packages/04/57/d062573f391d062710d4088fa1369428c38d51460ab6fedff920efef932e
+>  PYTHON_STARLETTE_SETUP_TYPE = hatch
+>  PYTHON_STARLETTE_LICENSE = BSD-3-Clause
+>  PYTHON_STARLETTE_LICENSE_FILES = LICENSE.md
 > _______________________________________________
 > buildroot mailing list
 > buildroot@buildroot.org
