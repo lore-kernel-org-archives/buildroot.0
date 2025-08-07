@@ -1,105 +1,105 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0243C87FCF
-	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 18:24:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3AB22CA0EC1
+	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 18:24:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BFD4940584;
-	Thu,  7 Aug 2025 18:24:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D814E80413;
+	Thu,  7 Aug 2025 18:24:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id I9s5sGI_em_P; Thu,  7 Aug 2025 18:24:25 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AsE-GVO96dTL; Thu,  7 Aug 2025 18:24:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D7EEF40559
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0C86D803CA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D7EEF40559;
-	Thu,  7 Aug 2025 18:24:24 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 8CA8810A
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:24:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0C86D803CA;
+	Thu,  7 Aug 2025 18:24:23 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 90BF64C4
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:24:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 735F6605F1
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:24:09 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 82FC66064B
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:24:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5uLIUwjvAgA6 for <buildroot@buildroot.org>;
+ id tE7976-wAgK2 for <buildroot@buildroot.org>;
  Thu,  7 Aug 2025 18:24:08 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
+ client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7A8B660642
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A8B660642
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7A8B660642
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:24:08 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id
- ffacd0b85a97d-3b7834f2e72so644799f8f.2
- for <buildroot@buildroot.org>; Thu, 07 Aug 2025 11:24:08 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B493C6063E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B493C6063E
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B493C6063E
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:24:07 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id
+ ffacd0b85a97d-3b78d13bf10so1307943f8f.1
+ for <buildroot@buildroot.org>; Thu, 07 Aug 2025 11:24:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20230601; t=1754591046; x=1755195846;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=w5Cx/EFvYLg0uT8vlcwmUCO9+MgIVMcEomSTHSxInzI=;
- b=G7oDbULsoyYr43L9vAeOrMz/sbfOSsg7Bu0/0IdGGOqHBxXQ3gxR5m/odlw1PMxygJ
- uazDyQVa4PZDhtStlqp0ZT9dxQVd/ON5ua2MehPMNH3Ma5eZ6NqxaHpmARNM51ZxEn4C
- oakwKae3oAyLXcf3VHDg7sxq02vcnHIF9qMwzoC73A08lbCwCo0yI/jX0DO61gbpIwGl
- d/1i6To1l4B49DoeUtbiccTSYq9LV14oObNVIE9Yere0hQI8iz+LAlHXbsEsN/xHqWpy
- zlOxW1zgxBuL+3G3KDPl4F7584eQCVQYy+aL86CqUPbzjXpt6DyxjxCalOPley14iHlu
- BWXg==
+ bh=fPtbUbtiB4/0yQZg3QtYKkk+/eq5lCJ9jEOEFHavejc=;
+ b=oUNeOxACAZr/AQ7vy86UWc0fn7s3LYU38t79YFqfJOJzZP0zIwTj/QqcaXIpEG9KhL
+ FkNSK65Y+Uvmjd9c/aj4EAmkMAzHdttF3ydOepYS+W569uoEj+/eEbDlf+ZTJ8fpdbAU
+ a1PMHXm6ORAGmnU7gpp9cOusGIpaf6RSEaMAdgud/r3YhZViKNzM9VVN26IHvd9rB56e
+ 7pXODATPcLIbkYCcRCwd7Bsc4b0z3iW3h1Hu4LTi0J/6lyo+R6sh5Wl5YtRUKA5Q4WU5
+ UH5XybSzKVMm/DILD+U53P0apyQGXc47yRU6nTHCec71yx4g8GQA8WTVcIdTINDR+sKI
+ 1ZWQ==
 X-Forwarded-Encrypted: i=1;
- AJvYcCXTEFRvOCiSovTLBRo2IAXi8LXMeQ8ARCBStsywaALZaTEAwArcncaRReE9mDSknLjEkbKT+QKF+oc=@buildroot.org
-X-Gm-Message-State: AOJu0Yyi3LZ2+j6iJnnaH4toq3tN9Ev+JsKqi+1iV+uF9XPi07xjlF9w
- cqdS9idUgbvgUPhNWBg49X/9Nj7cnti+2QjBr6N0GhZNtH2qa3UI50WbBNuyi3B5IoY=
-X-Gm-Gg: ASbGncuGSDv4mioXIKu9vN3whvfPxZJOBl1EabFOz8Hf9+wR6zb/70X6JBS1REMYwWR
- Rz/FHeHFfmQ5q2LpMcAZQizNAjKhegc8qaNU3KhHrqUqruhlZKkUUlw1ULaSI+E3wk0uZobmMbO
- Sh4mYvSoTjB06+fw45wZqEYp0076HUWsHzGYY1WTv65mIAj9dEOM0FcbUUE547j5o5+rFW5a6go
- y48pk8veG65pXD5zpL4xMRjgsNqbRrjAOMJq4vOVTA+7r4By6kZa1vLHC96CwD46IENGNjYd8/x
- BVFCgGRfRZxNKoEsLDAu8+qFI3QEPkRP0iSxcuU38LvaBDruyDWtOdA1zIWnmHsFHd1vQ8RjeKY
- nxGRiFmg1vzGdyg==
-X-Google-Smtp-Source: AGHT+IE3iLcOo4p9IeGiHbNOUtRXfg9NAKuxoSxp1A/MBaf+7DjE2v8QdiTD8VC4rWts7TtOV5HMHg==
-X-Received: by 2002:a5d:5889:0:b0:3b8:d582:6162 with SMTP id
- ffacd0b85a97d-3b900b5138fmr186210f8f.46.1754591046466; 
- Thu, 07 Aug 2025 11:24:06 -0700 (PDT)
+ AJvYcCVR+2KZMa9Ev2W7tRFjnRFQMsdgQg+9lzvS55HfCxrLA2UQPNWq48q2aKXWjmCVEYN06b1735mNjX0=@buildroot.org
+X-Gm-Message-State: AOJu0YzsciHQHY2kS+QTTMJp6vTrKr4d9swlVP8aVOvdts3akWQ2i/jK
+ juLZ410WLULTyj0A7/L+tlTfahRsyP9QqEKwdHjhb0HWNFABGGATuOqwWOvS4k3ku8k=
+X-Gm-Gg: ASbGncuBPszqNglHsfxpZ8fPnNdOJKEe11FIvELAenhAUQwz4ldP1Ih8rCmYOc5QV6d
+ j1cIGVppfnYo0nWu4PWyHkaBNn0tMPb3ZJhvUgzPsMO9uf6qvoXIYTL6vfCBBEu6Blkt5MFafp3
+ N2KyHtFNwNvuCfeRLo8uhTP8Id0K/QyJ2a/OaJEl2WW0kPjaip9gYiE6eOJHau0nlv888jjLp8s
+ pkOcoOcaa39xATJ0RmJvwnpFx8z+tRya1Qw34TluWp7s8eAaSSK4Y78lAc0+tlibcOBm4f2wpal
+ SYleCQ7f9PKyL62ZKf2Z5qRlSq9MhGd5d+MOzbkfZ0CaAbZ0eA31BrSNgUqv/S+DzGOnM0IL5Q5
+ C9jYJ21SApSjZrw==
+X-Google-Smtp-Source: AGHT+IFZ5xpFrqJR4gnKD50sibp+Vc0zMJa+kzz4rDOomIlnT5cbJdv+Rr4nUYMHj1BAr9q5D8Cd2g==
+X-Received: by 2002:a05:6000:1ac7:b0:3b7:6d95:56d2 with SMTP id
+ ffacd0b85a97d-3b900b449b0mr175295f8f.7.1754591045634; 
+ Thu, 07 Aug 2025 11:24:05 -0700 (PDT)
 Received: from arch ([79.132.233.79]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3b79c3c51e2sm26853817f8f.32.2025.08.07.11.24.06
+ ffacd0b85a97d-3b79c469582sm27062854f8f.52.2025.08.07.11.24.05
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 07 Aug 2025 11:24:06 -0700 (PDT)
-To: Titouan Christophe <titouan.christophe@mind.be>
+ Thu, 07 Aug 2025 11:24:05 -0700 (PDT)
+To: Fiona Klute <fiona.klute@gmx.de>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Thu,  7 Aug 2025 20:24:05 +0200
-Message-ID: <20250807182405.724437-1-thomas.perale@mind.be>
+Date: Thu,  7 Aug 2025 20:24:04 +0200
+Message-ID: <20250807182404.724387-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250716102159.306474-1-titouan.christophe@mind.be>
-References: <20250716102159.306474-1-titouan.christophe@mind.be>
+In-Reply-To: <20250716143240.1354630-2-fiona.klute@gmx.de>
+References: <20250716143240.1354630-2-fiona.klute@gmx.de>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mind.be; s=google; t=1754591046; x=1755195846; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=w5Cx/EFvYLg0uT8vlcwmUCO9+MgIVMcEomSTHSxInzI=;
- b=fkf1vm+AKYzKjZ/2a+DKvUdeQpNvfKnPv+h8DZJNCYZ1+CPC+rnroeW96tlPSR1RhG
- TvguEaVlwV4bhJaVCSbnBAOBC8WERHrqZaFMQmrN+pTPRYIPha1C6IGJ2+i5N/RfhQl/
- hurMzdhFmIbuDKFKPWaXsPvkBy8iKpS7u7EPdCG32FIxwfwxxp2vJbriA8KVvCtdYi1T
- NvMhi7uwcWhaFNVKCwkIyO+y/SvTg8lWqje8Co7jfIVmgjTSQJOzMrmyNaAKGTjGBeb1
- Gsuq/Xf7THZqer//REadhy4rGCBjcuKW7NvGnyP4kcZBBPqCSwE237S7ZhL36rG0GhvJ
- s30Q==
+ bh=fPtbUbtiB4/0yQZg3QtYKkk+/eq5lCJ9jEOEFHavejc=;
+ b=OXxFDeCTEVGYQSZwSjYEuiZBjHkNUos9OqSMBsX041+j1QRD7dlwAT3D+8JvsUzrJj
+ 6CLTigVL+USrshCLu1LEDdAsgcx+l+GtnH11GmNa0sVMkEohaUU8WQcJsg/HnWk0ZI63
+ /J5DhkFbD0JR8nwsKMqhOsXGwFpkIbPopiAHzAILr7zIXlmOPyXNbYkcGZU/ppl+57Gs
+ U6g3NZtb8/t/f7NyWM4qfvzNn95U8u4z0vL5Q25+HVXN9c2tIPVYmfghzoaEgo2i+bEB
+ g4dbmf4/NhZ3VGWQHySpoPNZc2Vz9DO7EpPk5X9gankCxl0ag1S2wyvZsD4mI+uZItGd
+ CVPA==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=fkf1vm+A
-Subject: Re: [Buildroot] [PATCH] package/python-aiohttp: security bump to
- v3.12.14
+ header.a=rsa-sha256 header.s=google header.b=OXxFDeCT
+Subject: Re: [Buildroot] [PATCH 2/2] package/network-manager: set "nft" path
+ if BR2_PACKAGE_NFTABLES=y
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,56 +119,34 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> This fixes the following vulnerability:
-> - CVE-2025-53643:
->     In aiohttp prior to version 3.12.14, the Python parser is vulnerable
->     to a request smuggling vulnerability due to not parsing trailer
->     sections of an HTTP request. If a pure Python version of aiohttp is
->     installed (i.e. without the usual C extensions) or
->     AIOHTTP_NO_EXTENSIONS is enabled, then an attacker may be able to
->     execute a request smuggling attack to bypass certain firewalls or
->     proxy protections. Version 3.12.14 contains a patch for this issue.
->     https://www.cve.org/CVERecord?id=CVE-2025-53643
+> Nftables should be preferred over iptables if available, which
+> NetworkManager will do if both paths are set.
 > 
-> Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+> Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 
 Applied to 2025.02.x & 2025.05.x. Thanks
 
 > ---
->  package/python-aiohttp/python-aiohttp.hash | 4 ++--
->  package/python-aiohttp/python-aiohttp.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  package/network-manager/network-manager.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> diff --git a/package/python-aiohttp/python-aiohttp.hash b/package/python-aiohttp/python-aiohttp.hash
-> index ac12cafeea..0aa8dbd3bc 100644
-> --- a/package/python-aiohttp/python-aiohttp.hash
-> +++ b/package/python-aiohttp/python-aiohttp.hash
-> @@ -1,5 +1,5 @@
->  # md5, sha256 from https://pypi.org/pypi/aiohttp/json
-> -md5  7835f28e41adf6f09467533e8de0c199  aiohttp-3.11.14.tar.gz
-> -sha256  d6edc538c7480fa0a3b2bdd705f8010062d74700198da55d16498e1b49549b9c  aiohttp-3.11.14.tar.gz
-> +md5  4ed66dcec63108ae3a7c01d0415b4dd9  aiohttp-3.12.14.tar.gz
-> +sha256  6e06e120e34d93100de448fd941522e11dafa78ef1a893c179901b7d66aa29f2  aiohttp-3.12.14.tar.gz
->  # Locally computed sha256 checksums
->  sha256  9f80d0db7d755a941db4572172c270ecbd8f082ba215ddd095985942ed94a9eb  LICENSE.txt
-> diff --git a/package/python-aiohttp/python-aiohttp.mk b/package/python-aiohttp/python-aiohttp.mk
-> index d3e7d12eb6..e52b6e81c5 100644
-> --- a/package/python-aiohttp/python-aiohttp.mk
-> +++ b/package/python-aiohttp/python-aiohttp.mk
-> @@ -4,9 +4,9 @@
->  #
->  ################################################################################
+> diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+> index 8c517c49e6..1bec053c54 100644
+> --- a/package/network-manager/network-manager.mk
+> +++ b/package/network-manager/network-manager.mk
+> @@ -131,6 +131,10 @@ else
+>  NETWORK_MANAGER_CONF_OPTS += -Dnmtui=false
+>  endif
 >  
-> -PYTHON_AIOHTTP_VERSION = 3.11.14
-> +PYTHON_AIOHTTP_VERSION = 3.12.14
->  PYTHON_AIOHTTP_SOURCE = aiohttp-$(PYTHON_AIOHTTP_VERSION).tar.gz
-> -PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/6c/96/91e93ae5fd04d428c101cdbabce6c820d284d61d2614d00518f4fa52ea24
-> +PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/e6/0b/e39ad954107ebf213a2325038a3e7a506be3d98e1435e1f82086eec4cde2
->  PYTHON_AIOHTTP_SETUP_TYPE = setuptools
->  PYTHON_AIOHTTP_LICENSE = Apache-2.0
->  PYTHON_AIOHTTP_LICENSE_FILES = LICENSE.txt
+> +ifeq ($(BR2_PACKAGE_NFTABLES),y)
+> +NETWORK_MANAGER_CONF_OPTS += -Dnft=/usr/sbin/nft
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_OFONO),y)
+>  NETWORK_MANAGER_DEPENDENCIES += ofono
+>  NETWORK_MANAGER_CONF_OPTS += -Dofono=true
 > -- 
-> 2.50.1
+> 2.50.0
 > 
 > _______________________________________________
 > buildroot mailing list
