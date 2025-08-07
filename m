@@ -4,102 +4,102 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9CFCFC87FCF
-	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 18:24:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DDB0C87FDA
+	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 18:24:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5CC3F80DE8;
-	Thu,  7 Aug 2025 18:24:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 70BBD80E02;
+	Thu,  7 Aug 2025 18:24:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2yCi0__Ry3HV; Thu,  7 Aug 2025 18:24:35 +0000 (UTC)
+ id SBPb6-xMYTwL; Thu,  7 Aug 2025 18:24:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5DC6280C48
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0885380D76
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5DC6280C48;
-	Thu,  7 Aug 2025 18:24:35 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0A1DA10A
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0885380D76;
+	Thu,  7 Aug 2025 18:24:37 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4F8A510A
  for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:24:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C9ECE80363
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:24:20 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 462EF40582
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:24:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iH6i1iZk4Qb7 for <buildroot@buildroot.org>;
- Thu,  7 Aug 2025 18:24:19 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qHlICrhzWlel for <buildroot@buildroot.org>;
+ Thu,  7 Aug 2025 18:24:21 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
+ client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D458280DB4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D458280DB4
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
- [IPv6:2a00:1450:4864:20::336])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D458280DB4
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:24:14 +0000 (UTC)
-Received: by mail-wm1-x336.google.com with SMTP id
- 5b1f17b1804b1-458bf6d69e4so12703205e9.2
- for <buildroot@buildroot.org>; Thu, 07 Aug 2025 11:24:14 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 685B240573
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 685B240573
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 685B240573
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:24:20 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id
+ 5b1f17b1804b1-4563cfac2d2so11121905e9.3
+ for <buildroot@buildroot.org>; Thu, 07 Aug 2025 11:24:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1754591053; x=1755195853;
+ d=1e100.net; s=20230601; t=1754591058; x=1755195858;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=Ls5A8gSRS2hIskbeQ407WIfCLDRtm3tLTDH/dQ3toq8=;
- b=o+flys8czs14Y5TGHGbo5hxdmYb0CRKaWeGBw7DgOzsPTnQa5HhPpQ3znW9/T6dvCr
- bA/hWifibL5jjUwX7HiElgqO7Lh58yV/7ZZ3cOcW0FKEIODp1azAx6RYkd4s5v02JOwD
- evuKtiyX7dndAK/3fUgsEiPNh1MQwTDYwYqO6mSA0fD5Q8D/a4AG3NGsz8D3L4nQE5RR
- WN7JYTFFSXOJpwBSfgbKZuHUtXcU18EiugJ57E8lM1/XI7mvuLDIncpf+fg3OZi0RgOq
- 9phMrTfzm2HXo1EhkDCRasBjTeVRWi7KVPW20zeMMTswzSbclQ/RYda5hp1VnDHzxJ/v
- wreQ==
+ bh=CON9hA1VK8G0NPmUCGkBQfpBVXXzbZ3Fb6PwnYFj3r4=;
+ b=lqmVrko3RdEBqmv/xOHCziMCws90jphEeTK1rL3LmqIKEfJv5cH3/cIRijCxO67pvb
+ MYcdWF8/BoiqCcAsnTZsf9ZzDgD0rrq+21FFx7qMKjRRh45aFmdCOhL4PReg3o6fln8z
+ UEXnS/WV4+EIwccHN04e629YDo/N/CpDWCxjEr2JMk5K8DIfr2zoYlu97v66si1wu62p
+ kMWiBhKcIm9OLw3l8cxoqGM2isF48tbeuUOJuEMRiFEjM2bbb5P69QS0YSel69y38gIs
+ yqBpwk7PuM9ExMVp3EtUEEtmfEEqqLt9TDPwxG5o9ZJ7ys6SQOXDqZSle0d2/SyhQI3D
+ 3CzA==
 X-Forwarded-Encrypted: i=1;
- AJvYcCX2aubh4p22T3STBk9xp1FieZGoJWMlXxSvMtYKEvb1SAMnp5wRuSoJZSs6aIyMzD3PDvkLpB2MXPA=@buildroot.org
-X-Gm-Message-State: AOJu0YweDqC3J85enypc1o4Tcz7genexnPLy58n/514pojLoxJbh2jLp
- JVglJN28myU+v5u1Qy5QnkKgMvBK/AhNY0RzxI0efYdo93D1Mj1tzjVkbivokBSg8yM=
-X-Gm-Gg: ASbGncuj+C5T/4BnmJzuM80w+vkxzj8MVG9mJ2uDLFmguycykHyl/PTGtGyt2hKHGk3
- H2b+w5OB1KzAumtDastx0LmVrcdcbG0NwhI3CKTamsTxtxGq+X7dUgDIWr23nL4T3kQihYSOINW
- hXlm7SXTvkAMn/XN3fwREsWVVCbCZ2fS3kkmwypVgTuvUXnZai1a3G2p5HpXeB0ceVegxTdFrtz
- xdcp6NI27rAk888FR0h1RUNLbUJL4GMPpWW/VtpUXcZZAXrQ17y38eHEHFpMKeQc6HI6rV1201L
- ZaPKlrmpdNzzkl4wxZWSH6CV4c0OsNrSjp3vgrr4V3wz/gA6sArZ8OnXrq0CqIg3RmXgQy/x6H4
- jfPrDEEf7vNq4GQ==
-X-Google-Smtp-Source: AGHT+IH9QvXxe8DiZItMhfVMjl8ymRjucgMdXogXvZFbRPgVXb2rSvXn3OyA6yFBxwZnYbekHCsD7w==
-X-Received: by 2002:a05:600c:1554:b0:459:4441:1c07 with SMTP id
- 5b1f17b1804b1-459e745cf68mr64660785e9.20.1754591052920; 
- Thu, 07 Aug 2025 11:24:12 -0700 (PDT)
+ AJvYcCWGakCWj7rmq6D78WK4yo8cpkjQ/X2tnjcSWo/pVxizXv9uMuUSmXHpgkr22CKS5KTLeRM9wPOj2DU=@buildroot.org
+X-Gm-Message-State: AOJu0YzrOCAfhZgHd116w2MmoX9lXtSQX54x6T7BmEHi5OBNJ3QRVjD+
+ zdzTe8n7pdFHLUADh3CVcX+8TXEbcGLECHoNDYYnycuDOYktgZzVNtndbvfhERr33so=
+X-Gm-Gg: ASbGncu3AhMw8DSYfZklWBf4dsiuWA+hIi8cvysZq1BzghCgrXHUoR+avcS/0AO8z2d
+ eSRT1QKGsO9x7GVvEaMDY+qo1PsNO/+S2k00kDdmr2ppQdosCR5VlXn2x9PlN7jp5GTYf/sOz6M
+ l13pnUdWwzA30QZrFYggrt9OaMootSCnx9LdrEDB+0OpMjU616Y6i7kcoNMV4FjMgxlOiP5n6qj
+ KZGgrVcqRuwgNo9XeKdSekDXXw9vIxSOwKiBCb2ILCrlXYbCh1VgZAbALUXlIZ7hD+lpNeIfLxa
+ NaQxQZC+LJifBe19REbahqbEBCRSuoXjyR/UdVivOMv1oplYeEnczfQr8VvhBqq2q4FDLNiVGsn
+ EBMHfpCXPPAGk7g==
+X-Google-Smtp-Source: AGHT+IF3RPlczI/wRubZ2RYcx7V5QDzwDjCKWFosLMhSRFMM/CDlfiVqDlMmbOXmS16j70IpmdqlDw==
+X-Received: by 2002:a05:600c:1c16:b0:456:11cc:360d with SMTP id
+ 5b1f17b1804b1-459f4eae88bmr207315e9.9.1754591058412; 
+ Thu, 07 Aug 2025 11:24:18 -0700 (PDT)
 Received: from arch ([79.132.233.79]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3b79c3b95desm27067303f8f.20.2025.08.07.11.24.12
+ 5b1f17b1804b1-458b501f22dsm151433135e9.0.2025.08.07.11.24.18
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 07 Aug 2025 11:24:12 -0700 (PDT)
-To: =?UTF-8?q?Gero=20Schw=C3=A4ricke?= <gero.schwaericke@sevenlab.de>
+ Thu, 07 Aug 2025 11:24:18 -0700 (PDT)
+To: Julien Olivain <ju.o@free.fr>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Thu,  7 Aug 2025 20:24:08 +0200
-Message-ID: <20250807182412.724601-1-thomas.perale@mind.be>
+Date: Thu,  7 Aug 2025 20:24:17 +0200
+Message-ID: <20250807182417.724921-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250716133220.3484511-1-gero.schwaericke@sevenlab.de>
-References: <20250716133220.3484511-1-gero.schwaericke@sevenlab.de>
+In-Reply-To: <20250721210132.CD85D869C4@busybox.osuosl.org>
+References: <20250721210132.CD85D869C4@busybox.osuosl.org>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1754591053; x=1755195853; darn=buildroot.org;
+ d=mind.be; s=google; t=1754591058; x=1755195858; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=Ls5A8gSRS2hIskbeQ407WIfCLDRtm3tLTDH/dQ3toq8=;
- b=Z1pO2m2M7ihfl38QSKqkXdtXWYbewoyDGD7BP+PacGVIAYO1Xq3+k2kwj8lSvF6m0f
- GdcmL+vqqB5bSarU0LZg/fZmq7ezUDDillIqnlj68+WYYxYfn0g1q+VZ2b71znlWgKi8
- JRfuDGOfwEjVDsDpxmHik8Nq2dd2eFXpAuX5lN/IrXcsOTsKxn1FRqCz7YB2zWF7SNsa
- 4OBnYvcrM/6nxDf3m5gDCFcK6YIXpbeODvpUdzfqeNtfqReGuifzDRTnDMOZDHdSfafT
- IxqTPghxoG5+pHkZQZGjdDgWD0S7AMeSs1WlUGdELra1+QyQcjhflHSZweHszH9L81ky
- sqBw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=CON9hA1VK8G0NPmUCGkBQfpBVXXzbZ3Fb6PwnYFj3r4=;
+ b=ElhmCClUKX6xkkE11eCluJOITzbRlEJKa9GqTbZrfE/HfVaaBbwKijtvGH5mmCsGfn
+ SfsGcNHRgBI7hnE3iOJBME2adTHTcHQ5w2yyPbanA0Wq2GmeegnrWW+rksBAIAjBLoUc
+ 5q8zqrS9IzdSNVuXh845KgbwUWZIQPVPc9tY441Vm0u4/cYdcn/GiASTakMq6QCje5oV
+ bp+9zZkt7c9u9fbDll7fuYq5YQsCkBTXutKoqNWgtUnA3agVdPEBbCx4sOHK32INWsaN
+ VlypvCEOHpmPB1AJXeW2aPNrLHmrx20pHuIwe6qZ8usjiJjPzDGBnHEkiQ4/KR3TnyPi
+ AMlg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Z1pO2m2M
-Subject: Re: [Buildroot] [PATCH v2] package/rauc-hawkbit-updater: fix
- missing user
+ header.a=rsa-sha256 header.s=google header.b=ElhmCClU
+Subject: Re: [Buildroot] [git commit] package/rtl8821au: fix build failure
+ with Linux 6.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -113,40 +113,78 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SW4gcmVwbHkgb2Y6Cj4gU3lzdGVtZCBzdXBwb3J0IGZvciB0aGUgUkFVQyBoYXdrYml0IHVwZGF0
-ZXIgd2FzIGFkZGVkIGluCj4gCj4gICA0YWE3YTRhZDhhIChwYWNrYWdlL3JhdWMtaGF3a2JpdC11
-cGRhdGVyOiBhZGQgc3lzdGVtZCBvcHRpb25hbCBkZXBlbmRlbmN5LCAyMDI0LTA3LTEwKQo+IAo+
-IFRoaXMgaW5zdGFsbHMgdGhlIFJBVUMgaGF3a2JpdCB1cGRhdGVyIHNlcnZpY2UsIHdoaWNoIGV4
-ZWN1dGVzIGFzIHVzZXIKPiAicmF1Yy1oYXdrYml0IiBbMV0sIHdoaWNoIGRvZXNuJ3QgZXhpc3Qg
-YnkgZGVmYXVsdC4KPiAKPiBbMV0gaHR0cHM6Ly9naXRodWIuY29tL3JhdWMvcmF1Yy1oYXdrYml0
-LXVwZGF0ZXIvYmxvYi8yNzExYzBlMDI3ODFlYjlkOTcyODVjODcxOTdmMWJhZmVmNzVkMGQxL3Nj
-cmlwdC9yYXVjLWhhd2tiaXQtdXBkYXRlci5zZXJ2aWNlCj4gCj4gU2lnbmVkLW9mZi1ieTogR2Vy
-byBTY2h3w6RyaWNrZSA8Z2Vyby5zY2h3YWVyaWNrZUBzZXZlbmxhYi5kZT4KCkFwcGxpZWQgdG8g
-MjAyNS4wMi54ICYgMjAyNS4wNS54LiBUaGFua3MKCj4gLS0tCj4gQ2hhbmdlcyB2MSAtPiB2MjoK
-PiAtIENoYW5nZSBwYXNzd29yZCBmaWVsZCBmcm9tICEgKGxvZ2luIGRpc2FibGVkKSB0byAqIChs
-b2dpbiBub3QgYWxsb3dlZCkKPiAtLS0KPiAgcGFja2FnZS9yYXVjLWhhd2tiaXQtdXBkYXRlci9y
-YXVjLWhhd2tiaXQtdXBkYXRlci5tayB8IDQgKysrKwo+ICAxIGZpbGUgY2hhbmdlZCwgNCBpbnNl
-cnRpb25zKCspCj4gCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvcmF1Yy1oYXdrYml0LXVwZGF0ZXIv
-cmF1Yy1oYXdrYml0LXVwZGF0ZXIubWsgYi9wYWNrYWdlL3JhdWMtaGF3a2JpdC11cGRhdGVyL3Jh
-dWMtaGF3a2JpdC11cGRhdGVyLm1rCj4gaW5kZXggZGExYzAyMGJiNi4uZTMxYTRkZWI1ZiAxMDA2
-NDQKPiAtLS0gYS9wYWNrYWdlL3JhdWMtaGF3a2JpdC11cGRhdGVyL3JhdWMtaGF3a2JpdC11cGRh
-dGVyLm1rCj4gKysrIGIvcGFja2FnZS9yYXVjLWhhd2tiaXQtdXBkYXRlci9yYXVjLWhhd2tiaXQt
-dXBkYXRlci5tawo+IEBAIC0xNSw2ICsxNSwxMCBAQCBSQVVDX0hBV0tCSVRfVVBEQVRFUl9DRkxB
-R1MgPSAkKFRBUkdFVF9DRkxBR1MpIC1zdGQ9Yzk5Cj4gIGlmZXEgKCQoQlIyX1BBQ0tBR0VfU1lT
-VEVNRCkseSkKPiAgUkFVQ19IQVdLQklUX1VQREFURVJfREVQRU5ERU5DSUVTICs9IHN5c3RlbWQK
-PiAgUkFVQ19IQVdLQklUX1VQREFURVJfQ09ORl9PUFRTICs9IC1Ec3lzdGVtZD1lbmFibGVkCj4g
-KyMgcmF1Yy1oYXdrYml0LXVwZGF0ZXIuc2VydmljZSB1c2VzIHRoaXMgdXNlciBhbmQgZ3JvdXAK
-PiArZGVmaW5lIFJBVUNfSEFXS0JJVF9VUERBVEVSX1VTRVJTCj4gKwlyYXVjLWhhd2tiaXQgLTEg
-cmF1Yy1oYXdrYml0IC0xICogLSAtIC0gUkFVQyBIYXdrYml0IFVwZGF0ZXIKPiArZW5kZWYKPiAg
-ZWxzZQo+ICBSQVVDX0hBV0tCSVRfVVBEQVRFUl9DT05GX09QVFMgKz0gLURzeXN0ZW1kPWRpc2Fi
-bGVkCj4gIGVuZGlmCj4gLS0gCj4gMi40My4wCj4gCj4gX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX18KPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4gYnVpbGRy
-b290QGJ1aWxkcm9vdC5vcmcKPiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9s
-aXN0aW5mby9idWlsZHJvb3QKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpo
-dHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+In reply of:
+> commit: https://git.buildroot.net/buildroot/commit/?id=2dd7a4a374a0e585777422f2900d893a6cfcbc42
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> 
+> Benetti Engineering just took over Larry Finger(lwfinger)'s repository [0]
+> rtl8821au since Larry unfortunately passed away[1](RIP) and there are
+> pending PRs that will never be checked as stated here. So basically move
+> github user to benetti-engineering-sas and update version with latest that
+> fixes build failure with Linux version 6.15. And of course let's update
+> package's URL due to the moving.
+> 
+> [0]: https://github.com/lwfinger/rtl8812au/issues/32
+> [1]: https://lwn.net/Articles/979419/
+> 
+> Fixes:
+> still not occured.
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
+
+Applied to 2025.02.x & 2025.05.x. Thanks
+
+> ---
+>  package/rtl8821au/Config.in      | 2 +-
+>  package/rtl8821au/rtl8821au.hash | 2 +-
+>  package/rtl8821au/rtl8821au.mk   | 4 ++--
+>  3 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/rtl8821au/Config.in b/package/rtl8821au/Config.in
+> index 3d7bbf643d..66e7334148 100644
+> --- a/package/rtl8821au/Config.in
+> +++ b/package/rtl8821au/Config.in
+> @@ -9,4 +9,4 @@ config BR2_PACKAGE_RTL8821AU
+>  	help
+>  	  rtl8821au wifi driver
+>  
+> -	  https://github.com/abperiasamy/rtl8812AU_8821AU_linux
+> +	  https://github.com/benetti-engineering-sas/rtl8821au
+> diff --git a/package/rtl8821au/rtl8821au.hash b/package/rtl8821au/rtl8821au.hash
+> index 56e5609ebd..e79e32ff3d 100644
+> --- a/package/rtl8821au/rtl8821au.hash
+> +++ b/package/rtl8821au/rtl8821au.hash
+> @@ -1,3 +1,3 @@
+>  # Locally calculated
+> -sha256  fde8ca9735a6c9c4c907fb6f565185a59b04bcfa78feb2309941cc09d49c4ac7  rtl8821au-8ea0ed9da764448c7310a27744ab5814289f35a8.tar.gz
+> +sha256  fd02814e2ab5435cf4213aaf876d28dedccc0bec8c91ed768336727276c5eae6  rtl8821au-d0a49ba401a8661ef0cdc4cf8850bc7c927a062c.tar.gz
+>  sha256  640d90f6ee401241ff62834d0d1b33f83049e99b8bfdfa04ed1b0a1635dde3e7  LICENSE
+> diff --git a/package/rtl8821au/rtl8821au.mk b/package/rtl8821au/rtl8821au.mk
+> index 9a92696437..9ecbbbb0b2 100644
+> --- a/package/rtl8821au/rtl8821au.mk
+> +++ b/package/rtl8821au/rtl8821au.mk
+> @@ -4,8 +4,8 @@
+>  #
+>  ################################################################################
+>  
+> -RTL8821AU_VERSION = 8ea0ed9da764448c7310a27744ab5814289f35a8
+> -RTL8821AU_SITE = $(call github,lwfinger,rtl8812au,$(RTL8821AU_VERSION))
+> +RTL8821AU_VERSION = d0a49ba401a8661ef0cdc4cf8850bc7c927a062c
+> +RTL8821AU_SITE = $(call github,benetti-engineering-sas,rtl8821au,$(RTL8821AU_VERSION))
+>  RTL8821AU_LICENSE = GPL-2.0
+>  RTL8821AU_LICENSE_FILES = LICENSE
+>  
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
