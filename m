@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8193CCA0EC0
-	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 17:00:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9406C87FCF
+	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 17:00:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D32BB80C02;
-	Thu,  7 Aug 2025 17:00:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8B53A40363;
+	Thu,  7 Aug 2025 17:00:29 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OAF9H9KIaBAF; Thu,  7 Aug 2025 17:00:28 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 82F524036D
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 82F524036D;
+	Thu,  7 Aug 2025 17:00:28 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 212C9767
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:00:22 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1571C80C0A
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:00:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nub5hGKxw3vm; Thu,  7 Aug 2025 17:00:24 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9358E80C26
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9358E80C26;
-	Thu,  7 Aug 2025 17:00:22 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 118C731
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:00:21 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EC4EE605F5
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:00:20 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 58SUvbXJLNf9 for <buildroot@buildroot.org>;
+ id w6Cf9nbnUUg1 for <buildroot@buildroot.org>;
  Thu,  7 Aug 2025 17:00:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3E14C60606
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 328A580BD7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3E14C60606
+ by smtp1.osuosl.org (Postfix) with ESMTP id 328A580BD7
  for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:00:20 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3B5818430F; Thu,  7 Aug 2025 17:00:20 +0000 (UTC)
+ id 2FAFC86984; Thu,  7 Aug 2025 17:00:20 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 7 Aug 2025 11:06:04 +0200
+Date: Thu, 7 Aug 2025 11:06:02 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 244005d46545003ad60d35a079d5314136345cda
-X-Git-Newrev: 504aaaab1b3ce6931a6123fa423d6b5732675523
+X-Git-Oldrev: 9a36561fdffa6beafb7b6dc42ce4a7026b7b6833
+X-Git-Newrev: 244005d46545003ad60d35a079d5314136345cda
 X-Patchwork-Hint: ignore
-Message-Id: <20250807170020.3B5818430F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/python-cython:
- bump to version 3.1.2
+Message-Id: <20250807170020.2FAFC86984@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x]
+ package/python-setuptools: bump to version 80.9.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,47 +66,107 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=504aaaab1b3ce6931a6123fa423d6b5732675523
+commit: https://git.buildroot.net/buildroot/commit/?id=244005d46545003ad60d35a079d5314136345cda
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
+
+Rebase add executable patch.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-(cherry picked from commit b536caaec0d800ccf7669a50fce5192bce2405a6)
+(cherry picked from commit 0b171693a9ea342528b608deaf8fec53611b8e4c)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/python-cython/python-cython.hash | 4 ++--
- package/python-cython/python-cython.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-setuptools/0001-add-executable.patch | 16 ++++++++--------
+ package/python-setuptools/python-setuptools.hash    |  4 ++--
+ package/python-setuptools/python-setuptools.mk      |  4 ++--
+ 3 files changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/package/python-cython/python-cython.hash b/package/python-cython/python-cython.hash
-index cd320eaa2a..25fa1d93ba 100644
---- a/package/python-cython/python-cython.hash
-+++ b/package/python-cython/python-cython.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/cython/json
--md5  388b85b7c23f501320d19d991b169f5d  cython-3.0.11.tar.gz
--sha256  7146dd2af8682b4ca61331851e6aebce9fe5158e75300343f80c07ca80b1faff  cython-3.0.11.tar.gz
-+md5  6fb2dc869f4d00b4a13e130ec1197bfd  cython-3.1.2.tar.gz
-+sha256  6bbf7a953fa6762dfecdec015e3b054ba51c0121a45ad851fa130f63f5331381  cython-3.1.2.tar.gz
+diff --git a/package/python-setuptools/0001-add-executable.patch b/package/python-setuptools/0001-add-executable.patch
+index 9e12c4b628..aaef27ed75 100644
+--- a/package/python-setuptools/0001-add-executable.patch
++++ b/package/python-setuptools/0001-add-executable.patch
+@@ -1,4 +1,4 @@
+-From 995cf87c0dfc420908847a06661cbae21d16a8f6 Mon Sep 17 00:00:00 2001
++From 6fe6747c7d7509cc1af9667e1dae610657e5ccdf Mon Sep 17 00:00:00 2001
+ From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+ Date: Mon, 7 Dec 2015 01:14:33 +0100
+ Subject: [PATCH] add executable
+@@ -22,10 +22,10 @@ Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+  2 files changed, 11 insertions(+)
+ 
+ diff --git a/setuptools/command/install.py b/setuptools/command/install.py
+-index 741b140c7..5a281237a 100644
++index 19ca60145..c4bb536b9 100644
+ --- a/setuptools/command/install.py
+ +++ b/setuptools/command/install.py
+-@@ -39,6 +39,7 @@ class install(orig.install):
++@@ -35,6 +35,7 @@ class install(orig.install):
+      distribution: Distribution  # override distutils.dist.Distribution with setuptools.dist.Distribution
+  
+      user_options = orig.install.user_options + [
+@@ -33,7 +33,7 @@ index 741b140c7..5a281237a 100644
+          ('old-and-unmanageable', None, "Try not to use this!"),
+          (
+              'single-version-externally-managed',
+-@@ -73,6 +74,7 @@ class install(orig.install):
++@@ -67,6 +68,7 @@ class install(orig.install):
+          )
+  
+          super().initialize_options()
+@@ -42,7 +42,7 @@ index 741b140c7..5a281237a 100644
+          self.single_version_externally_managed = None
+  
+ diff --git a/setuptools/command/install_scripts.py b/setuptools/command/install_scripts.py
+-index 4401cf693..38f5d5092 100644
++index 537181e32..6893e6a8c 100644
+ --- a/setuptools/command/install_scripts.py
+ +++ b/setuptools/command/install_scripts.py
+ @@ -18,6 +18,13 @@ class install_scripts(orig.install_scripts):
+@@ -59,13 +59,13 @@ index 4401cf693..38f5d5092 100644
+  
+      def run(self) -> None:
+          self.run_command("egg_info")
+-@@ -45,6 +52,8 @@ class install_scripts(orig.install_scripts):
+-         )
++@@ -39,6 +46,8 @@ class install_scripts(orig.install_scripts):
++         dist = metadata.Distribution.at(path=ei_cmd.egg_info)
+          bs_cmd = self.get_finalized_command('build_scripts')
+          exec_param = getattr(bs_cmd, 'executable', None)
+ +        if self.executable is not None:
+ +            exec_param = self.executable
+-         writer = ei.ScriptWriter
++         writer = _scripts.ScriptWriter
+          if exec_param == sys.executable:
+              # In case the path to the Python executable contains a space, wrap
+ -- 
+diff --git a/package/python-setuptools/python-setuptools.hash b/package/python-setuptools/python-setuptools.hash
+index b5bac10fe2..d0ed270e9c 100644
+--- a/package/python-setuptools/python-setuptools.hash
++++ b/package/python-setuptools/python-setuptools.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/setuptools/json
+-md5  652d999eca1412525c01e4c5b6e2275b  setuptools-79.0.1.tar.gz
+-sha256  128ce7b8f33c3079fd1b067ecbb4051a66e8526e7b65f6cec075dfc650ddfa88  setuptools-79.0.1.tar.gz
++md5  82e1d67883b713f9493659b50d13b436  setuptools-80.9.0.tar.gz
++sha256  f36b47402ecde768dbfafc46e8e4207b4360c654f1f3bb84475f0a28628fb19c  setuptools-80.9.0.tar.gz
  # Locally computed sha256 checksums
- sha256  9568a2b155e66ac3e0ba1fd80b52b827b9460e6cf6f233125e7cbca8e206ddc3  LICENSE.txt
- sha256  e1eb1c49a8508e8173dac30157e4a6439a44ad8846194746c424fbc3fc2b95d7  COPYING.txt
-diff --git a/package/python-cython/python-cython.mk b/package/python-cython/python-cython.mk
-index 51086bedab..cffd613787 100644
---- a/package/python-cython/python-cython.mk
-+++ b/package/python-cython/python-cython.mk
+ sha256  86da0f01aeae46348a3c3d465195dc1ceccde79f79e87769a64b8da04b2a4741  LICENSE
+diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
+index 1ee5448100..e013000c57 100644
+--- a/package/python-setuptools/python-setuptools.mk
++++ b/package/python-setuptools/python-setuptools.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CYTHON_VERSION = 3.0.11
-+PYTHON_CYTHON_VERSION = 3.1.2
- PYTHON_CYTHON_SOURCE = cython-$(PYTHON_CYTHON_VERSION).tar.gz
--PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/84/4d/b720d6000f4ca77f030bd70f12550820f0766b568e43f11af7f7ad9061aa
-+PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/18/40/7b17cd866158238db704965da1b5849af261dbad393ea3ac966f934b2d39
- PYTHON_CYTHON_SETUP_TYPE = setuptools
- PYTHON_CYTHON_LICENSE = Apache-2.0
- PYTHON_CYTHON_LICENSE_FILES = COPYING.txt LICENSE.txt
+-PYTHON_SETUPTOOLS_VERSION = 79.0.1
++PYTHON_SETUPTOOLS_VERSION = 80.9.0
+ PYTHON_SETUPTOOLS_SOURCE = setuptools-$(PYTHON_SETUPTOOLS_VERSION).tar.gz
+-PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/bb/71/b6365e6325b3290e14957b2c3a804a529968c77a049b2ed40c095f749707
++PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/18/5d/3bf57dcd21979b887f014ea83c24ae194cfcd12b9e0fda66b957c69d1fca
+ PYTHON_SETUPTOOLS_LICENSE = MIT
+ PYTHON_SETUPTOOLS_LICENSE_FILES = LICENSE
+ PYTHON_SETUPTOOLS_CPE_ID_VENDOR = python
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
