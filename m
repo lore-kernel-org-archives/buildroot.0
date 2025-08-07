@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64EC2CA0EC0
-	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 17:01:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E4F0C87FCA
+	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 17:01:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3C01C80C00;
-	Thu,  7 Aug 2025 17:01:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 677A140488;
+	Thu,  7 Aug 2025 17:01:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mL6HlDiNlR-j; Thu,  7 Aug 2025 17:01:34 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JEvJXc_cAn11; Thu,  7 Aug 2025 17:01:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2697380C40
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5DB1A4046E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2697380C40;
-	Thu,  7 Aug 2025 17:01:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5DB1A4046E;
+	Thu,  7 Aug 2025 17:01:35 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 034F631
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:01:01 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0E5FE31
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:01:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 103E980C17
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9A9CF80C26
  for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:00:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id s6GGVNRMZrtI for <buildroot@buildroot.org>;
- Thu,  7 Aug 2025 17:00:23 +0000 (UTC)
+ id fnWUBjNLndTc for <buildroot@buildroot.org>;
+ Thu,  7 Aug 2025 17:00:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D667380C16
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BED3F80C2B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D667380C16
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:00:21 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BED3F80C2B
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:00:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D47BD86DA8; Thu,  7 Aug 2025 17:00:21 +0000 (UTC)
+ id BD2AD86DA8; Thu,  7 Aug 2025 17:00:22 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 7 Aug 2025 11:06:49 +0200
+Date: Thu, 7 Aug 2025 11:54:22 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 4ba6742ef4284ea8fadf094ddcc7ce907a84662f
-X-Git-Newrev: 2f83e0ccb772ba561d85ee4ce162c75503a467d2
+X-Git-Oldrev: 3f87cfca26c0b3c4ac594ec73a273a0c2a8a68f1
+X-Git-Newrev: 1e8c1e0ef097732ea8dad116dc64fc3c3654df94
 X-Patchwork-Hint: ignore
-Message-Id: <20250807170021.D47BD86DA8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] support/testing:
- test_xen: test on 32-bit Arm v7
+Message-Id: <20250807170022.BD2AD86DA8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/gcc: update to
+ 14.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,333 +61,153 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8200016313998601781=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8200016313998601781==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=2f83e0ccb772ba561d85ee4ce162c75503a467d2
+commit: https://git.buildroot.net/buildroot/commit/?id=1e8c1e0ef097732ea8dad116dc64fc3c3654df94
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Add a TestXenArmv7 class with its related files in an arm/ subfolder
-under test_xen/, to test Xen on 32-bit Arm v7.
+Release announcement:
+https://gcc.gnu.org/pipermail/gcc-announce/2025/000186.html
 
-We cannot boot with UEFI in this case; we use a custom U-Boot script,
-which creates the Xen configuration Devicetree during boot.
+List of bugs which were resolved in 14.3.0:
+https://gcc.gnu.org/bugzilla/buglist.cgi?bug_status=RESOLVED&resolution=FIXED&target_milestone=14.3
 
-Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
+Drop upstream patch 0003-libquadmath-Fix-up-libquadmath-math-sqrtq.c-compilat.patch
+https://gcc.gnu.org/cgit/gcc/commit/?id=3fe5720430a9ba61ed7562aac4d758cc77d49a28
+
+Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
+[Julien:
+ - rebase on branch next
+ - fix patch 0003 upstream merge URL
+]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 5346824a83488f840008eb24f84866435ac32a12)
+(cherry picked from commit e9227311d9a63c9a829316e2ffb91cb70ed127f1)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- support/testing/tests/package/test_xen.py          |  41 ++++++
- .../testing/tests/package/test_xen/arm/boot.cmd    |  23 +++
- .../tests/package/test_xen/arm/genimage.cfg        |  25 ++++
- .../tests/package/test_xen/arm/linux.config        | 163 +++++++++++++++++++++
- .../package/test_xen/arm/overlay/etc/xen/dom1.cfg  |   5 +
- 5 files changed, 257 insertions(+)
+ .checkpackageignore                                |  2 +-
+ ...-Fix-up-libquadmath-math-sqrtq.c-compilat.patch | 57 ----------------------
+ ...disable-split-stack-for-non-thread-builds.patch |  0
+ ...r-also-undef-_TIME_BITS-in-sanitizer_proc.patch |  0
+ package/gcc/Config.in.host                         |  2 +-
+ package/gcc/gcc.hash                               |  4 +-
+ 6 files changed, 4 insertions(+), 61 deletions(-)
 
-diff --git a/support/testing/tests/package/test_xen.py b/support/testing/tests/package/test_xen.py
-index 44425a1f26..4278b9563e 100644
---- a/support/testing/tests/package/test_xen.py
-+++ b/support/testing/tests/package/test_xen.py
-@@ -125,3 +125,44 @@ class TestXen(TestXenBase):
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 42594dace2..1bb20bce2c 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -479,7 +479,7 @@ package/fxdiv/0001-CMake-don-t-enable-CXX-unless-building-tests-benchma.patch li
+ package/fxload/0001-fix-static-build.patch lib_patch.Upstream
+ package/gcc/12.4.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
+ package/gcc/13.4.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
+-package/gcc/14.2.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
++package/gcc/14.3.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
+ package/gcc/8.4.0/0001-xtensa-fix-PR-target-91880.patch lib_patch.Upstream
+ package/gcc/8.4.0/0002-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch lib_patch.Upstream
+ package/gcc/8.4.0/0003-libsanitizer-Remove-cyclades-from-libsanitizer.patch lib_patch.Upstream
+diff --git a/package/gcc/14.2.0/0003-libquadmath-Fix-up-libquadmath-math-sqrtq.c-compilat.patch b/package/gcc/14.2.0/0003-libquadmath-Fix-up-libquadmath-math-sqrtq.c-compilat.patch
+deleted file mode 100644
+index b6ed2ffed8..0000000000
+--- a/package/gcc/14.2.0/0003-libquadmath-Fix-up-libquadmath-math-sqrtq.c-compilat.patch
++++ /dev/null
+@@ -1,57 +0,0 @@
+-From ba9356565695728ce0c852f7de3de27f8745611d Mon Sep 17 00:00:00 2001
+-From: Jakub Jelinek <jakub@redhat.com>
+-Date: Sat, 3 Aug 2024 20:37:54 +0200
+-Subject: [PATCH] libquadmath: Fix up libquadmath/math/sqrtq.c compilation in
+- some powerpc* configurations [PR116007]
+-
+-My PR114623 change started using soft-fp.h and quad.h for the sqrtq implementation.
+-Unfortunately, that seems to fail building in some powerpc* configurations, where
+-TFmode isn't available.
+-quad.h has:
+- #ifndef TFtype
+- typedef float TFtype __attribute__ ((mode (TF)));
+- #endif
+-and uses TFtype.  quad.h has:
+- /* Define the complex type corresponding to __float128
+-    ("_Complex __float128" is not allowed) */
+- #if (!defined(_ARCH_PPC)) || defined(__LONG_DOUBLE_IEEE128__)
+- typedef _Complex float __attribute__((mode(TC))) __complex128;
+- #else
+- typedef _Complex float __attribute__((mode(KC))) __complex128;
+- #endif
+-with the conditional and KCmode use added during porting of libquadmath
+-to powerpc*, so I've just defined TFtype for powerpc when __LONG_DOUBLE_IEEE128__
+-isn't defined; I could define it to float __attribute__ ((mode (KF))) but it
+-seemed easier to just define it to __float128 which should do the same thing.
+-
+-2024-08-03  Jakub Jelinek  <jakub@redhat.com>
+-
+-	PR target/116007
+-	* math/sqrtq.c (TFtype): For PowerPC without __LONG_DOUBLE_IEEE128__
+-	define to __float128 before including soft-fp.h and quad.h.
+-
+-(cherry picked from commit 3ac02e67503ccffa3dfeeffc0a60fce6bdaca43b)
+-Upstream: https://gcc.gnu.org/g:3ac02e67503ccffa3dfeeffc0a60fce6bdaca43b
+-Upstream: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=116007
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+----
+- libquadmath/math/sqrtq.c | 3 +++
+- 1 file changed, 3 insertions(+)
+-
+-diff --git a/libquadmath/math/sqrtq.c b/libquadmath/math/sqrtq.c
+-index 8ca2828d42c..a58998a0667 100644
+---- a/libquadmath/math/sqrtq.c
+-+++ b/libquadmath/math/sqrtq.c
+-@@ -9,6 +9,9 @@
+-     && defined(FE_TOWARDZERO) \
+-     && defined(FE_INEXACT)
+- #define USE_SOFT_FP 1
+-+#if defined(_ARCH_PPC) && !defined(__LONG_DOUBLE_IEEE128__)
+-+#define TFtype __float128
+-+#endif
+- #include "../../libgcc/soft-fp/soft-fp.h"
+- #include "../../libgcc/soft-fp/quad.h"
+- #endif
+--- 
+-2.46.0
+-
+diff --git a/package/gcc/14.2.0/0001-disable-split-stack-for-non-thread-builds.patch b/package/gcc/14.3.0/0001-disable-split-stack-for-non-thread-builds.patch
+similarity index 100%
+rename from package/gcc/14.2.0/0001-disable-split-stack-for-non-thread-builds.patch
+rename to package/gcc/14.3.0/0001-disable-split-stack-for-non-thread-builds.patch
+diff --git a/package/gcc/14.2.0/0002-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch b/package/gcc/14.3.0/0002-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch
+similarity index 100%
+rename from package/gcc/14.2.0/0002-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch
+rename to package/gcc/14.3.0/0002-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 1cbfaad59b..ebd6e073c0 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -75,7 +75,7 @@ config BR2_GCC_VERSION
+ 	default "8.4.0"     if BR2_GCC_VERSION_POWERPC_SPE
+ 	default "12.4.0"    if BR2_GCC_VERSION_12_X
+ 	default "13.4.0"    if BR2_GCC_VERSION_13_X
+-	default "14.2.0"    if BR2_GCC_VERSION_14_X
++	default "14.3.0"    if BR2_GCC_VERSION_14_X
+ 	default "arc-2023.09-release" if BR2_GCC_VERSION_ARC
  
-         # Run Xen test.
-         self.run_xen_test(arch="aarch64", options=qemu_opts)
-+
-+
-+class TestXenArmv7(TestXenBase):
-+    # Test Xen on 32b Arm v7.
-+    # Boot flow: Qemu Devicetree -> U-Boot -> Xen -> Linux
-+    # Xen does not boot with UEFI on 32-bit Arm v7.
-+    # We use U-Boot and a script to load the Dom0 images and amend the
-+    # Devicetree for Xen dynamically.
-+    # We have a custom kernel config to reduce build time.
-+    config = TestXenBase.base_config + \
-+        """
-+        BR2_arm=y
-+        BR2_cortex_a15=y
-+        BR2_ROOTFS_OVERLAY="support/testing/tests/package/test_xen/common/overlay \
-+                            support/testing/tests/package/test_xen/arm/overlay"
-+        BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+        BR2_ROOTFS_POST_SCRIPT_ARGS="-c support/testing/tests/package/test_xen/arm/genimage.cfg"
-+        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="support/testing/tests/package/test_xen/arm/linux.config"
-+        BR2_TARGET_UBOOT_BOARD_DEFCONFIG="qemu_arm"
-+        BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-+        BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
-+        BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="support/testing/tests/package/test_xen/arm/boot.cmd"
-+        """
-+
-+    def test_run(self):
-+        uboot_bin = os.path.join(self.builddir, "images", "u-boot.bin")
-+        disk_img = os.path.join(self.builddir, "images", "disk.img")
-+
-+        # We need to run Qemu with virtualization to run Xen.
-+        qemu_opts = [
-+            "-bios", uboot_bin,
-+            "-cpu", "cortex-a15",
-+            "-device", "virtio-blk-device,drive=hd0",
-+            "-drive", f"file={disk_img},if=none,format=raw,id=hd0",
-+            "-m", "1G",
-+            "-machine", "virt,virtualization=on,acpi=off",
-+            "-smp", "2"
-+        ]
-+
-+        # Run Xen test.
-+        self.run_xen_test(arch="armv7", options=qemu_opts)
-diff --git a/support/testing/tests/package/test_xen/arm/boot.cmd b/support/testing/tests/package/test_xen/arm/boot.cmd
-new file mode 100644
-index 0000000000..698e055e56
---- /dev/null
-+++ b/support/testing/tests/package/test_xen/arm/boot.cmd
-@@ -0,0 +1,23 @@
-+fdt addr ${fdtcontroladdr}
-+fdt resize
-+
-+fdt set /chosen \#address-cells <1>
-+fdt set /chosen \#size-cells <1>
-+
-+fdt mknod /chosen modules
-+
-+fdt mknod /chosen/modules module@0
-+fdt set /chosen/modules/module@0 compatible "xen,linux-zimage" "xen,multiboot-module"
-+load ${devtype} ${devnum} ${kernel_addr_r} zImage
-+fdt set /chosen/modules/module@0 reg <${kernel_addr_r} 0x${filesize} >
-+
-+fdt mknod /chosen/modules module@1
-+fdt set /chosen/modules/module@1 compatible "xen,linux-initrd" "xen,multiboot-module"
-+load ${devtype} ${devnum} ${ramdisk_addr_r} rootfs.cpio
-+fdt set /chosen/modules/module@1 reg <${ramdisk_addr_r} 0x${filesize} >
-+
-+load ${devtype} ${devnum} ${loadaddr} xen
-+fdt set /chosen xen,dom0-bootargs "console=hvc0"
-+fdt set /chosen xen,xen-bootargs "dom0_mem=256M loglvl=all guest_loglvl=all"
-+fdt print /chosen
-+bootz ${loadaddr} - ${fdtcontroladdr}
-diff --git a/support/testing/tests/package/test_xen/arm/genimage.cfg b/support/testing/tests/package/test_xen/arm/genimage.cfg
-new file mode 100644
-index 0000000000..6fd4e0edcd
---- /dev/null
-+++ b/support/testing/tests/package/test_xen/arm/genimage.cfg
-@@ -0,0 +1,25 @@
-+image boot.vfat {
-+	vfat {
-+		files = {
-+			"boot.scr",
-+			"xen",
-+			"zImage",
-+			"rootfs.cpio"
-+		}
-+	}
-+
-+	size = 128M
-+}
-+
-+image disk.img {
-+	hdimage {
-+		partition-table-type = "gpt"
-+	}
-+
-+	partition boot {
-+		image = "boot.vfat"
-+		partition-type-uuid = F
-+		offset = 32K
-+		bootable = true
-+	}
-+}
-diff --git a/support/testing/tests/package/test_xen/arm/linux.config b/support/testing/tests/package/test_xen/arm/linux.config
-new file mode 100644
-index 0000000000..aedd9bf0a2
---- /dev/null
-+++ b/support/testing/tests/package/test_xen/arm/linux.config
-@@ -0,0 +1,163 @@
-+CONFIG_SYSVIPC=y
-+CONFIG_NO_HZ_IDLE=y
-+CONFIG_HIGH_RES_TIMERS=y
-+# CONFIG_CPU_ISOLATION is not set
-+CONFIG_CGROUPS=y
-+CONFIG_BLK_DEV_INITRD=y
-+# CONFIG_INITRAMFS_PRESERVE_MTIME is not set
-+CONFIG_EXPERT=y
-+CONFIG_PERF_EVENTS=y
-+CONFIG_ARCH_VIRT=y
-+CONFIG_ARCH_VEXPRESS=y
-+CONFIG_ARCH_VEXPRESS_TC2_PM=y
-+CONFIG_SMP=y
-+CONFIG_MCPM=y
-+CONFIG_NR_CPUS=16
-+CONFIG_HIGHMEM=y
-+CONFIG_ARCH_FORCE_MAX_ORDER=11
-+CONFIG_XEN=y
-+CONFIG_CPU_IDLE=y
-+CONFIG_ARM_CPUIDLE=y
-+CONFIG_ARM_PSCI_CPUIDLE=y
-+CONFIG_VFP=y
-+CONFIG_NEON=y
-+CONFIG_KERNEL_MODE_NEON=y
-+# CONFIG_SUSPEND is not set
-+CONFIG_MODULES=y
-+CONFIG_MODULE_UNLOAD=y
-+CONFIG_PARTITION_ADVANCED=y
-+CONFIG_CMDLINE_PARTITION=y
-+# CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
-+# CONFIG_SWAP is not set
-+# CONFIG_COMPAT_BRK is not set
-+CONFIG_NET=y
-+CONFIG_PACKET=y
-+CONFIG_UNIX=y
-+CONFIG_INET=y
-+CONFIG_IP_PNP=y
-+CONFIG_IP_PNP_DHCP=y
-+CONFIG_IP_PNP_BOOTP=y
-+CONFIG_IP_PNP_RARP=y
-+CONFIG_QRTR=m
-+CONFIG_PAGE_POOL_STATS=y
-+CONFIG_DEVTMPFS=y
-+CONFIG_DEVTMPFS_MOUNT=y
-+CONFIG_ARM_SCMI_PROTOCOL=y
-+CONFIG_TRUSTED_FOUNDATIONS=y
-+CONFIG_MTD=y
-+CONFIG_MTD_CMDLINE_PARTS=y
-+CONFIG_MTD_BLOCK=y
-+CONFIG_MTD_CFI=y
-+CONFIG_MTD_CFI_INTELEXT=y
-+CONFIG_MTD_PHYSMAP=y
-+CONFIG_MTD_PHYSMAP_OF=y
-+CONFIG_BLK_DEV_LOOP=y
-+CONFIG_BLK_DEV_RAM=y
-+CONFIG_BLK_DEV_RAM_SIZE=65536
-+CONFIG_VIRTIO_BLK=y
-+CONFIG_SRAM=y
-+CONFIG_NETDEVICES=y
-+CONFIG_VIRTIO_NET=y
-+CONFIG_SYSTEMPORT=m
-+CONFIG_MACB=y
-+CONFIG_FTGMAC100=m
-+CONFIG_HIX5HD2_GMAC=y
-+CONFIG_MVMDIO=y
-+CONFIG_SMSC911X=y
-+CONFIG_STMMAC_ETH=y
-+CONFIG_DWMAC_DWC_QOS_ETH=y
-+CONFIG_MDIO_BITBANG=y
-+CONFIG_MDIO_MSCC_MIIM=m
-+# CONFIG_WLAN is not set
-+CONFIG_INPUT_EVDEV=y
-+CONFIG_INPUT_MISC=y
-+CONFIG_INPUT_GPIO_DECODER=m
-+CONFIG_INPUT_ADXL34X=m
-+# CONFIG_SERIO_SERPORT is not set
-+CONFIG_SERIO_AMBAKMI=y
-+CONFIG_SERIAL_8250=y
-+CONFIG_SERIAL_8250_CONSOLE=y
-+CONFIG_SERIAL_8250_NR_UARTS=5
-+CONFIG_SERIAL_8250_RUNTIME_UARTS=5
-+CONFIG_SERIAL_8250_EXTENDED=y
-+CONFIG_SERIAL_8250_MANY_PORTS=y
-+CONFIG_SERIAL_8250_SHARE_IRQ=y
-+CONFIG_SERIAL_8250_DW=y
-+CONFIG_SERIAL_OF_PLATFORM=y
-+CONFIG_SERIAL_AMBA_PL011=y
-+CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
-+CONFIG_SERIAL_DEV_BUS=y
-+CONFIG_VIRTIO_CONSOLE=y
-+# CONFIG_HW_RANDOM is not set
-+CONFIG_TCG_TPM=m
-+CONFIG_SPMI=y
-+CONFIG_GPIO_DWAPB=y
-+CONFIG_GPIO_MPC8XXX=y
-+CONFIG_GPIO_PL061=y
-+CONFIG_GPIO_SYSCON=y
-+CONFIG_POWER_RESET_BRCMKONA=y
-+CONFIG_POWER_RESET_GPIO=y
-+CONFIG_POWER_RESET_GPIO_RESTART=y
-+CONFIG_POWER_RESET_SYSCON=y
-+CONFIG_POWER_RESET_SYSCON_POWEROFF=y
-+# CONFIG_HWMON is not set
-+CONFIG_WATCHDOG=y
-+CONFIG_ARM_SP805_WATCHDOG=y
-+CONFIG_DW_WATCHDOG=y
-+CONFIG_BCMA=y
-+CONFIG_BCMA_HOST_SOC=y
-+CONFIG_BCMA_DRIVER_GMAC_CMN=y
-+CONFIG_BCMA_DRIVER_GPIO=y
-+CONFIG_MFD_PM8XXX=y
-+# CONFIG_HID_SUPPORT is not set
-+# CONFIG_USB_SUPPORT is not set
-+CONFIG_EDAC=y
-+CONFIG_RTC_CLASS=y
-+CONFIG_RTC_DRV_PL031=y
-+CONFIG_RTC_DRV_PM8XXX=m
-+CONFIG_DMADEVICES=y
-+CONFIG_PL330_DMA=y
-+CONFIG_DW_DMAC=y
-+CONFIG_VIRTIO_MMIO=y
-+# CONFIG_VHOST_MENU is not set
-+CONFIG_COMMON_CLK_SCMI=y
-+CONFIG_HWSPINLOCK=y
-+CONFIG_ARM_GT_INITIAL_PRESCALER_VAL=2
-+CONFIG_MICROCHIP_PIT64B=y
-+CONFIG_MAILBOX=y
-+CONFIG_PL320_MBOX=y
-+CONFIG_MEMORY=y
-+CONFIG_PWM=y
-+CONFIG_RESET_SIMPLE=y
-+# CONFIG_ARM_PMU is not set
-+CONFIG_RAS=y
-+CONFIG_FSI=m
-+CONFIG_FSI_MASTER_GPIO=m
-+CONFIG_FSI_MASTER_HUB=m
-+CONFIG_FSI_MASTER_ASPEED=m
-+CONFIG_FSI_SCOM=m
-+CONFIG_FSI_SBEFIFO=m
-+CONFIG_FSI_OCC=m
-+CONFIG_INTERCONNECT=y
-+CONFIG_COUNTER=m
-+CONFIG_EXT4_FS=y
-+# CONFIG_DNOTIFY is not set
-+# CONFIG_INOTIFY_USER is not set
-+CONFIG_AUTOFS_FS=y
-+CONFIG_MSDOS_FS=y
-+CONFIG_VFAT_FS=y
-+CONFIG_NTFS_FS=y
-+CONFIG_TMPFS=y
-+CONFIG_TMPFS_POSIX_ACL=y
-+# CONFIG_MISC_FILESYSTEMS is not set
-+CONFIG_NLS_CODEPAGE_437=y
-+CONFIG_NLS_ISO8859_1=y
-+CONFIG_NLS_UTF8=y
-+CONFIG_CRC_CCITT=m
-+CONFIG_PRINTK_TIME=y
-+CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
-+CONFIG_DEBUG_INFO_REDUCED=y
-+CONFIG_MAGIC_SYSRQ=y
-+CONFIG_DEBUG_FS=y
-+# CONFIG_SCHED_DEBUG is not set
-+# CONFIG_FTRACE is not set
-diff --git a/support/testing/tests/package/test_xen/arm/overlay/etc/xen/dom1.cfg b/support/testing/tests/package/test_xen/arm/overlay/etc/xen/dom1.cfg
-new file mode 100644
-index 0000000000..0a4ae24a16
---- /dev/null
-+++ b/support/testing/tests/package/test_xen/arm/overlay/etc/xen/dom1.cfg
-@@ -0,0 +1,5 @@
-+name="dom1"
-+kernel="/mnt/zImage"
-+ramdisk="/mnt/rootfs.cpio"
-+memory=256
-+cmdline="console=hvc0"
-
---===============8200016313998601781==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ config BR2_EXTRA_GCC_CONFIG_OPTIONS
+diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
+index 0da5cd26e8..168c6643ce 100644
+--- a/package/gcc/gcc.hash
++++ b/package/gcc/gcc.hash
+@@ -4,8 +4,8 @@ sha512  6de904f552a02de33b11ef52312bb664396efd7e1ce3bbe37bfad5ef617f133095b3767b
+ sha512  5bd29402cad2deb5d9388d0236c7146414d77e5b8d5f1c6c941c7a1f47691c3389f08656d5f6e8e2d6717bf2c81f018d326f632fb468f42925b40bd217fc4853  gcc-12.4.0.tar.xz
+ # From https://gcc.gnu.org/pub/gcc/releases/gcc-13.4.0/sha512.sum
+ sha512  9b4b83ecf51ef355b868608b8d257b2fa435c06d2719cb86657a7c2c2a0828ff4ce04e9bac1055bbcad8ed5b4da524cafaef654785e23a50233d95d89201e35f  gcc-13.4.0.tar.xz
+-# From https://gcc.gnu.org/pub/gcc/releases/gcc-14.2.0/sha512.sum
+-sha512  932bdef0cda94bacedf452ab17f103c0cb511ff2cec55e9112fc0328cbf1d803b42595728ea7b200e0a057c03e85626f937012e49a7515bc5dd256b2bf4bc396  gcc-14.2.0.tar.xz
++# From https://gcc.gnu.org/pub/gcc/releases/gcc-14.3.0/sha512.sum
++sha512  cb4e3259640721bbd275c723fe4df53d12f9b1673afb3db274c22c6aa457865dccf2d6ea20b4fd4c591f6152e6d4b87516c402015900f06ce9d43af66d3b7a93  gcc-14.3.0.tar.xz
+ 
+ # Locally calculated (fetched from Github)
+ sha512  4dca20f517a42bb027fec605965b09fb917a535eebf3fe3e811d93476b02b1962df5ad4665f117bd44c2ec8e8015d51a44c00591761fe5f259c201ac5c7d920f  gcc-arc-2023.09-release.tar.gz
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8200016313998601781==--
