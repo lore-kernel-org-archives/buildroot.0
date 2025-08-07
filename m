@@ -4,73 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75C9DC87FCF
-	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 22:01:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D50FFC87FCF
+	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 22:10:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 29A2940426;
-	Thu,  7 Aug 2025 22:01:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A8CEA40750;
+	Thu,  7 Aug 2025 22:10:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XVzXOvh6eQdV; Thu,  7 Aug 2025 22:01:15 +0000 (UTC)
+ id 6Cu6aVCybevv; Thu,  7 Aug 2025 22:10:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 61CEA403FE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B56474074D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 61CEA403FE;
-	Thu,  7 Aug 2025 22:01:15 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id A8D559CF
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 22:01:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B56474074D;
+	Thu,  7 Aug 2025 22:10:23 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id BC8379CF
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 22:10:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A611680CD4
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 22:01:14 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9F86240143
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 22:10:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sAB2xJXXiCyB for <buildroot@buildroot.org>;
- Thu,  7 Aug 2025 22:01:14 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9A97680C73
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9A97680C73
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9A97680C73
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 22:01:13 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 250522003C8;
- Fri,  8 Aug 2025 00:01:07 +0200 (CEST)
-Received: from ip099.116-187-66.sogetel.net ([66.187.116.99:44478])
- via ip099.116-187-66.sogetel.net ([66.187.116.99]) by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 08 Aug 2025 00:01:07 +0200
-MIME-Version: 1.0
-Date: Fri, 08 Aug 2025 00:01:07 +0200
-To: Peter Korsgaard <peter@korsgaard.com>
-Cc: buildroot@buildroot.org, Romain Naour <romain.naour@gmail.com>, Thomas
- Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20250805110636.3514105-1-peter@korsgaard.com>
-References: <20250805110636.3514105-1-peter@korsgaard.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <44e904ca6a5335b912f3f93f331e27a9@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1754604070;
- bh=OiBylcZQg0ulCW/ifyvexRVrTXZvL6hQxFEnP3UnXGU=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=ddxaDXIEeTgtxAhAvPiMqF7/x9T2V8lRFpg1h2jUx2vw5uGpiLhu1AReViWipXQJX
- KsuvFn+lHRuFIBNZZwG/BH+AcqJ2u4oNH2RAxe0MVAus+2amGTicaAGukaQ1dZvGHM
- zLfdw5ydVvv2NTlSGH0k40iJvriWkFBE1gbfIFJvnJMGOCcFXZ4Gehpexb/mb6m0x7
- 6zk/3lKjJWBNIsnPVtB7z2fKlwNxSL0dLUC5PM/1QD9ekyUQ000U9de7yCnu9b1Tny
- XE4P39eazPk18D2I5eV2xoGFqyMwqObfiMS3++WzxaChiOjkePcamajD1gLCLR5XYb
- oi+Isd+J7FvhQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=ddxaDXIE
-Subject: Re: [Buildroot] [PATCH] package/glibc: security bump to version
- 2.41-70
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YWQEwdZjzsPr for <buildroot@buildroot.org>;
+ Thu,  7 Aug 2025 22:10:21 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D5601402F5
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id D5601402F5
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 22:10:21 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C47FA8703C; Thu,  7 Aug 2025 22:10:21 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 8 Aug 2025 00:03:52 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: feaf53585a12d97802a67fd557ffc7340bbe6e13
+X-Git-Newrev: 16d4159d44b23a07e50aa458cb8b619c09f3fa1a
+X-Patchwork-Hint: ignore
+Message-Id: <20250807221021.C47FA8703C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gnutls: security bump to version
+ 3.8.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,38 +60,90 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 05/08/2025 13:06, Peter Korsgaard wrote:
-> Fixes the following security issues:
-> 
-> - CVE-2025-5702: power10: strcmp fails to save and restore nonvolatile
->   vector registers
->   https://sourceware.org/cgit/glibc/tree/advisories/GLIBC-SA-2025-0003
-> 
-> - CVE-2025-5745: power10: strncmp fails to save and restore nonvolatile
->   vector registers
->   https://sourceware.org/cgit/glibc/tree/advisories/GLIBC-SA-2025-0004
-> 
-> - CVE-2025-8058: posix: Fix double-free after allocation failure in 
-> regcomp
->   https://sourceware.org/cgit/glibc/tree/advisories/GLIBC-SA-2025-0005
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=16d4159d44b23a07e50aa458cb8b619c09f3fa1a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Fixes the following security issues:
 
-For info, I also added a note in the commit log that power10 is 
-currently
-not supported in Buildroot. See:
-https://gitlab.com/buildroot.org/buildroot/-/commit/feaf53585a12d97802a67fd557ffc7340bbe6e13
+GNUTLS-SA-2025-07-08-1 CVE-2025-32989
+Severity Medium; Heap read buffer overflow
 
-Best regards,
+When an X.509 certificate contains an SCT (signed certificate timestamp)
+extension and its length field is malformed, the library could read the memory
+buffer past the boundary. The issue was reported in the issue tracker as
+<https://gitlab.com/gnutls/gnutls/-/issues/1695>.
 
-Julien.
+------------------------------------------------------------------------------
+
+GNUTLS-SA-2025-07-08-2 CVE-2025-32988
+Severity Low; Memory corruption on error path
+
+When any error occurs during exporting a certificate with an otherName in the
+SAN (subject alternative name) extension, the library could potentially double
+free the ASN.1 structure. The issue was reported in the issue tracker as
+<https://gitlab.com/gnutls/gnutls/-/issues/1694>.
+
+------------------------------------------------------------------------------
+
+GNUTLS-SA-2025-07-08-3 CVE-2025-32990
+Severity Low; Heap write buffer overflow
+
+When the certtool program is invoked with a template file with a number of
+string pairs for a single keyword, a NULL pointer could be written past the
+memory boundary. The issue was reported in the issue tracker as
+<https://gitlab.com/gnutls/gnutls/-/issues/1696>.
+
+------------------------------------------------------------------------------
+
+GNUTLS-SA-2025-07-08-4 CVE-2025-6395
+Severity Medium; Denial of service
+
+When a TLS 1.3 handshake involves a Hello Retry Request and the second
+Client Hello omits the PSK which was present in the first Client Hello,
+the GnuTLS server can dereference a NULL pointer. The issue was reported
+in the issue tracker as <https://gitlab.com/gnutls/gnutls/-/issues/1718>.
+
+https://lists.gnupg.org/pipermail/gnutls-help/2025-July/004883.html
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/gnutls/gnutls.hash | 4 ++--
+ package/gnutls/gnutls.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+index dcfe201f3d..1b2a7ba9b5 100644
+--- a/package/gnutls/gnutls.hash
++++ b/package/gnutls/gnutls.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.8/gnutls-3.8.9.tar.xz.sig
+-sha256  69e113d802d1670c4d5ac1b99040b1f2d5c7c05daec5003813c049b5184820ed  gnutls-3.8.9.tar.xz
++# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.8/gnutls-3.8.10.tar.xz.sig
++sha256  db7fab7cce791e7727ebbef2334301c821d79a550ec55c9ef096b610b03eb6b7  gnutls-3.8.10.tar.xz
+ # Locally calculated
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
+ sha256  20e50fe7aae3e56378ebf0417d9de904f55a0e61e4df315333e632a4d3555d95  COPYING.LESSERv2
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index e71e411cf0..7536189429 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -6,7 +6,7 @@
+ 
+ # When bumping, make sure *all* --without-libfoo-prefix options are in GNUTLS_CONF_OPTS
+ GNUTLS_VERSION_MAJOR = 3.8
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).9
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).10
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = LGPL-2.1+ (core library)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
