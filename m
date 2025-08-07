@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2AC9CC87FCF
-	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 17:01:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C5D1C87FDA
+	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 17:01:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EAE23403F3;
-	Thu,  7 Aug 2025 17:01:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5C777606A3;
+	Thu,  7 Aug 2025 17:01:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8te1lPBaEi57; Thu,  7 Aug 2025 17:01:05 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4FLqueqgkXCM; Thu,  7 Aug 2025 17:01:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A98E403EC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6FCEA60667
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1A98E403EC;
-	Thu,  7 Aug 2025 17:01:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6FCEA60667;
+	Thu,  7 Aug 2025 17:01:06 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 10BFF31
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:00:40 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 02ACC767
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:00:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1C78680C27
+ by smtp1.osuosl.org (Postfix) with ESMTP id 36E2480C41
  for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:00:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9sSu51mq3DZt for <buildroot@buildroot.org>;
- Thu,  7 Aug 2025 17:00:21 +0000 (UTC)
+ id TFZoTwUSJBsC for <buildroot@buildroot.org>;
+ Thu,  7 Aug 2025 17:00:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 138D680BD3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 24E9B80BD7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 138D680BD3
+ by smtp1.osuosl.org (Postfix) with ESMTP id 24E9B80BD7
  for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:00:21 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 118B68156B; Thu,  7 Aug 2025 17:00:21 +0000 (UTC)
+ id 2220D82AE0; Thu,  7 Aug 2025 17:00:21 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 7 Aug 2025 11:06:28 +0200
+Date: Thu, 7 Aug 2025 11:06:30 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 5c6a99f2420118ab8505deaff2e48e6035005eff
-X-Git-Newrev: f8e603bceca4ffcfefa4657fe0a962aefd858dd0
+X-Git-Oldrev: f8e603bceca4ffcfefa4657fe0a962aefd858dd0
+X-Git-Newrev: 3a7e10b452ad9088cdf399db684c565da20da274
 X-Patchwork-Hint: ignore
-Message-Id: <20250807170021.118B68156B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x]
- toolchain/toolchain-wrapper.c: get rid of EXCLUSIVE_ARGS
+Message-Id: <20250807170021.2220D82AE0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/rtl8188eu: move
+ upstream to Benetti Engineering Github
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,92 +66,76 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f8e603bceca4ffcfefa4657fe0a962aefd858dd0
+commit: https://git.buildroot.net/buildroot/commit/?id=3a7e10b452ad9088cdf399db684c565da20da274
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Rather than having a hard coded amount of exclusive args (with the risk of
-overflow when new logic is added), simplify the argument buffer allocation
-logic to always allocate room for DEFAULT_MAX_ARGS (1024) arguments and just
-realloc to grow for the rare situation where that is not enough.
+Benetti Engineering just took over Larry Finger(lwfinger)'s repository
+rtl8188eu since Larry unfortunately passed away[0](RIP) and there are
+pending PRs that will never be checked as stated here[1]. So basically move
+github user to benetti-engineering-sas and update version with latest that
+fixes build failure with Linux version 6.15. And let's drop local patches
+that are now upstreamed as well. Let's also drop obsolete Config.in
+informations since as stated here[2]: "This driver is under development
+and has a limited feature set. In particular it does not yet support 40MHz
+channels and power management". At the same time drop other suggestions
+like enabling CONFIG_WIRELESS_EXT or "this package needs a firmware loading
+mechanism to load the binary blob for the chip to work" since they are now
+part of the package. And of course let's update package's URL due to the
+moving.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+[0]: https://lwn.net/Articles/979419/
+[1]: https://github.com/lwfinger/rtl8188eu/pull/464
+
+Fixes:
+https://autobuild.buildroot.org/results/d59537da8eb27d737718885dc81ec257a2791455/
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 00b30f887ac24eb1fb12509fb197ef5891ec332e)
+(cherry picked from commit a9c5dc024a0717b68b22a352f960d9dac099f73f)
+[Thomas: only change upstream]
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- toolchain/toolchain-wrapper.c | 37 +++++++++++++++----------------------
- 1 file changed, 15 insertions(+), 22 deletions(-)
+ package/rtl8188eu/Config.in    | 11 +----------
+ package/rtl8188eu/rtl8188eu.mk |  2 +-
+ 2 files changed, 2 insertions(+), 11 deletions(-)
 
-diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
-index eb17c3d3de..480a1ed5f1 100644
---- a/toolchain/toolchain-wrapper.c
-+++ b/toolchain/toolchain-wrapper.c
-@@ -36,25 +36,9 @@ static char sysroot[PATH_MAX];
- static char _time_[sizeof("-D__TIME__=\"HH:MM:SS\"")];
- static char _date_[sizeof("-D__DATE__=\"MMM DD YYYY\"")];
+diff --git a/package/rtl8188eu/Config.in b/package/rtl8188eu/Config.in
+index 76d9085297..5acef3cd32 100644
+--- a/package/rtl8188eu/Config.in
++++ b/package/rtl8188eu/Config.in
+@@ -4,17 +4,8 @@ config BR2_PACKAGE_RTL8188EU
+ 	depends on BR2_LINUX_KERNEL
+ 	help
+ 	  A standalone driver for the RTL8188EU USB Wi-Fi adapter.
+-	  This is needed only for Linux kernels before 3.12.
+-	  Since 3.12, there is a (staging) driver in mainline, with a
+-	  similar codebase.
  
--/**
-- * GCC errors out with certain combinations of arguments (examples are
-- * -mfloat-abi={hard|soft} and -m{little|big}-endian), so we have to ensure
-- * that we only pass the predefined one to the real compiler if the inverse
-- * option isn't in the argument list.
-- * This specifies the worst case number of extra arguments we might pass
-- * Currently, we may have:
-- * 	-mfloat-abi=
-- * 	-march=
-- * 	-mcpu=
-- * 	-D__TIME__=
-- * 	-D__DATE__=
-- * 	-Wno-builtin-macro-redefined
-- * 	-Wl,-z,now
-- * 	-Wl,-z,relro
-- * 	-fPIE
-- * 	-pie
-- */
--#define EXCLUSIVE_ARGS	10
-+/* Maximum amount of arguments to reserve space for by default.
-+   Must be > predef_args */
-+#define DEFAULT_MAX_ARGS	1024
+-	  Make sure your target kernel has the CONFIG_WIRELESS_EXT
+-	  config option enabled.
+-
+-	  Note: this package needs a firmware loading mechanism to load
+-	  the binary blob for the chip to work.
+-
+-	  https://github.com/lwfinger/rtl8188eu
++	  https://github.com/benetti-engineering-sas/rtl8188eu
  
- static char *predef_args[] = {
- #ifdef BR_CCACHE
-@@ -246,6 +230,7 @@ int main(int argc, char **argv)
- 	char *basename;
- 	char *env_debug;
- 	int ret, i, count = 0, debug = 0, found_shared = 0, found_nonoption = 0;
-+	size_t n_args;
+ comment "rtl8188eu needs a Linux kernel to be built"
+ 	depends on !BR2_s390x
+diff --git a/package/rtl8188eu/rtl8188eu.mk b/package/rtl8188eu/rtl8188eu.mk
+index eca0fb8007..98ee757425 100644
+--- a/package/rtl8188eu/rtl8188eu.mk
++++ b/package/rtl8188eu/rtl8188eu.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- 	/* Debug the wrapper to see arguments it was called with.
- 	 * If environment variable BR2_DEBUG_WRAPPER is:
-@@ -354,8 +339,7 @@ int main(int argc, char **argv)
- 		return 3;
- 	}
- 
--	cur = args = malloc(sizeof(predef_args) +
--			    (sizeof(char *) * (argc + EXCLUSIVE_ARGS)));
-+	cur = args = malloc(DEFAULT_MAX_ARGS * sizeof(char *));
- 	if (args == NULL) {
- 		perror(__FILE__ ": malloc");
- 		return 2;
-@@ -497,8 +481,17 @@ int main(int argc, char **argv)
- #endif
- 	}
- 
-+        n_args = (cur - args);
-+        if ((n_args + argc) > DEFAULT_MAX_ARGS) {
-+		args = realloc(args, (n_args + argc) * sizeof(char *));
-+		if (args == NULL) {
-+			perror(__FILE__ ": realloc");
-+			return 2;
-+		}
-+        }
-+
- 	/* append forward args and terminating NULL */
--	memcpy(cur, &argv[1], sizeof(char *) * argc);
-+	memcpy(&args[n_args], &argv[1], sizeof(char *) * argc);
- 
- 	exec_args = args;
- #ifdef BR_CCACHE
+ RTL8188EU_VERSION = f42fc9c45d2086c415dce70d3018031b54a7beef
+-RTL8188EU_SITE = $(call github,lwfinger,rtl8188eu,$(RTL8188EU_VERSION))
++RTL8188EU_SITE = $(call github,benetti-engineering-sas,rtl8188eu,$(RTL8188EU_VERSION))
+ RTL8188EU_LICENSE = GPL-2.0, proprietary (rtl8188eufw.bin firmware blob)
+ RTL8188EU_LICENSE_FILES = COPYING
+ RTL8188EU_MODULE_MAKE_OPTS = CONFIG_RTL8188EU=m
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
