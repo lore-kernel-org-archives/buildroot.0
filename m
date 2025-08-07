@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C879BC87FDA
-	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 17:19:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46358C87FCA
+	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 17:19:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9D3676060E;
-	Thu,  7 Aug 2025 17:19:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1DCE840499;
+	Thu,  7 Aug 2025 17:19:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uuc8r-vN-Z3h; Thu,  7 Aug 2025 17:19:30 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WA5bFrwgN2uv; Thu,  7 Aug 2025 17:19:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 94CA56062F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4D8A84049D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 94CA56062F;
-	Thu,  7 Aug 2025 17:19:30 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 31E7A919
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:19:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4D8A84049D;
+	Thu,  7 Aug 2025 17:19:32 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0DAE331
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:19:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1689E600D1
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:19:18 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0668E400A2
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:19:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vqtOlroRUxlL for <buildroot@buildroot.org>;
- Thu,  7 Aug 2025 17:19:17 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Omzp_nvXiUEh for <buildroot@buildroot.org>;
+ Thu,  7 Aug 2025 17:19:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4360660624
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C7CB34006D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4360660624
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:19:17 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C7CB34006D
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:19:14 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 34E0286FE6; Thu,  7 Aug 2025 17:19:17 +0000 (UTC)
+ id C627086FCC; Thu,  7 Aug 2025 17:19:14 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 7 Aug 2025 19:11:43 +0200
+Date: Thu, 7 Aug 2025 19:08:13 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: 9167bed6396c8254575598e6f08e5bd6b8f092de
-X-Git-Newrev: 1d1624881690d8e52aa907be53b5a64189d96cd3
+X-Git-Oldrev: c65fa3c7df6d6ed4ec27bdbb33fab329020e0f43
+X-Git-Newrev: 102b89bf9da6c60fc0ec6c9257149ad23649f8ec
 X-Patchwork-Hint: ignore
-Message-Id: <20250807171917.34E0286FE6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/gcc: drop stale
- 13.3.0 patches
+Message-Id: <20250807171914.C627086FCC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/libcddb: Fix
+ build with gcc-14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,133 +66,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1d1624881690d8e52aa907be53b5a64189d96cd3
+commit: https://git.buildroot.net/buildroot/commit/?id=102b89bf9da6c60fc0ec6c9257149ad23649f8ec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-Commit 0b8b72d2fe2c8fa6a9d2859ceb8d29b6389cf894 bumped gcc 13.x from
-13.3.0 to 13.4.0 but forgot to drop the gcc 13.3.0, so let's remove
-those patches.
+libcddb fail to build with gcc-14 with error:
 
-Cc: Kadambini Nema <kadambini.nema@gmail.com>
-Fixes: 0b8b72d2fe2c8fa6a9d2859ceb8d29b6389cf894
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+    cddb_net.c: In function 'timeout_connect':
+    cddb_net.c:328:63: error: passing argument 5 of 'getsockopt' from incompatible pointer type [-Wincompatible-pointer-types]
+      328 |                 getsockopt(sockfd, SOL_SOCKET, SO_ERROR, &rv, &l);
+          |                                                               ^~
+          |                                                               |
+          |                                                               size_t * {aka long unsigned int *}
+
+This commit adds a patch to fix the issue.
+
+Fixes:
+https://autobuild.buildroot.net/results/723/7236cf5fd4f33aabd3178586f877dff04d754abe/
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[Julien: add error message in commit log]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 2fbf98da7c393ded3032c7fef95385653f96eddc)
+(cherry picked from commit f1b4657bc0f53d6f102f0ec0100cfdc88b1a5eec)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ..._BITS-along-with-_FILE_OFFSET_BITS-on-Lin.patch | 44 ------------------
- ...r-also-undef-_TIME_BITS-in-sanitizer_proc.patch | 53 ----------------------
- 2 files changed, 97 deletions(-)
+ package/libcddb/0001-gcc15.patch | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/package/gcc/13.3.0/0004-Undef-_TIME_BITS-along-with-_FILE_OFFSET_BITS-on-Lin.patch b/package/gcc/13.3.0/0004-Undef-_TIME_BITS-along-with-_FILE_OFFSET_BITS-on-Lin.patch
-deleted file mode 100644
-index a3be0914b9..0000000000
---- a/package/gcc/13.3.0/0004-Undef-_TIME_BITS-along-with-_FILE_OFFSET_BITS-on-Lin.patch
-+++ /dev/null
-@@ -1,44 +0,0 @@
--From 88b73eedcfa0fc58aee2555377e6f7d4de153282 Mon Sep 17 00:00:00 2001
--From: Khem Raj <raj.khem@gmail.com>
--Date: Fri, 3 Feb 2023 11:48:35 -0800
--Subject: [PATCH] Undef _TIME_BITS along with _FILE_OFFSET_BITS on Linux
--
--On 32-bit glibc>=2.34 systems using 64bit time_t build fails because
--_FILE_OFFSET_BITS is undefined here but _TIME_BITS is still set to 64
--
--Fixes
--
--```
--/usr/include/features-time64.h:26:5: error: "_TIME_BITS=64 is allowed
-- only with _FILE_OFFSET_BITS=64"
--| #   error "_TIME_BITS=64 is allowed only with _FILE_OFFSET_BITS=64"
--|     ^
--| 1 error generated.
--```
--
--Reviewed By: thesamesam, MaskRay
--
--Differential Revision: https://reviews.llvm.org/D140812
--
--Upstream: https://github.com/llvm/llvm-project/commit/26800a2c7e7996dc773b4e990dd5cca41c45e1a9
--Upstream: https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=d53b3d94aaf211ffb2159614f5aaaf03ceb861cc
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-----
-- .../sanitizer_common/sanitizer_platform_limits_posix.cpp         | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
--index bcbd143d19d..1b23898b374 100644
----- a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
--+++ b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
--@@ -18,6 +18,7 @@
-- // depends on _FILE_OFFSET_BITS setting.
-- // To get this "true" dirent definition, we undefine _FILE_OFFSET_BITS below.
-- #undef _FILE_OFFSET_BITS
--+#undef _TIME_BITS
-- #endif
-- 
-- // Must go after undef _FILE_OFFSET_BITS.
---- 
--2.45.2
--
-diff --git a/package/gcc/13.3.0/0005-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch b/package/gcc/13.3.0/0005-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch
-deleted file mode 100644
-index 73b09ac389..0000000000
---- a/package/gcc/13.3.0/0005-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch
-+++ /dev/null
-@@ -1,53 +0,0 @@
--From 7ad54084a2c07cca6d03dfe274893e903852d359 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Date: Thu, 18 Jul 2024 23:13:41 +0200
--Subject: [PATCH] libsanitizer: also undef _TIME_BITS in
-- sanitizer_procmaps_solaris.cpp
--
--Upstream commit
--https://github.com/llvm/llvm-project/commit/26800a2c7e7996dc773b4e990dd5cca41c45e1a9
--of LLVM added a #undef _TIME_BITS in
--libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp to
--fix the build on 32-bit Linux platforms that have enabled 64-bit
--time_t using _TIME_BITS=64.
--
--Indeed, _TIME_BITS=64 can only be used when _FILE_OFFSET_BITS=64, but
--sanitizer_platform_limits_posix.cpp undefines _FILE_OFFSET_BITS before
--including any header file. To fix this, the upstream fix was to also
--undef _TIME_BITS.
--
--This commit simply does the same in sanitizer_procmaps_solaris.cpp,
--which also gets compiled under Linux (despite what the file name
--says). In practice on Linux hosts (where _TIME_BITS=64 matters),
--sanitizer_procmaps_solaris.cpp will expand to nothing, as pretty much
--the rest of the file is inside a #ifdef SANITIZER_SOLARIS...#endif. So
--the #undef _FILE_OFFSET_BITS and #undef _TIME_BITS are only here
--before including sanitizer_platform.h, which will set the
--SANITIZER_LINUX/SANITIZER_SOLARIS define depending on the platform.
--
--Fixes:
--
--armeb-buildroot-linux-gnueabi/sysroot/usr/include/features-time64.h:26:5: error: #error "_TIME_BITS=64 is allowed only with _FILE_OFFSET_BITS=64"
--   26 | #   error "_TIME_BITS=64 is allowed only with _FILE_OFFSET_BITS=64"
--
--Upstream: https://gcc.gnu.org/pipermail/gcc-patches/2024-July/657811.html
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-----
-- libsanitizer/sanitizer_common/sanitizer_procmaps_solaris.cpp | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/libsanitizer/sanitizer_common/sanitizer_procmaps_solaris.cpp b/libsanitizer/sanitizer_common/sanitizer_procmaps_solaris.cpp
--index eeb49e2afe3..1b23fd4d512 100644
----- a/libsanitizer/sanitizer_common/sanitizer_procmaps_solaris.cpp
--+++ b/libsanitizer/sanitizer_common/sanitizer_procmaps_solaris.cpp
--@@ -11,6 +11,7 @@
-- 
-- // Before Solaris 11.4, <procfs.h> doesn't work in a largefile environment.
-- #undef _FILE_OFFSET_BITS
--+#undef _TIME_BITS
-- #include "sanitizer_platform.h"
-- #if SANITIZER_SOLARIS
-- #  include <fcntl.h>
---- 
--2.45.2
--
+diff --git a/package/libcddb/0001-gcc15.patch b/package/libcddb/0001-gcc15.patch
+new file mode 100644
+index 0000000000..379e654951
+--- /dev/null
++++ b/package/libcddb/0001-gcc15.patch
+@@ -0,0 +1,17 @@
++Fix incorrect type.
++
++Upstream: https://sourceforge.net/p/libcddb/patches/9/#b9ea
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++
++--- libcddb-1.3.2/lib/cddb_net.c	2009-03-01 03:28:07.000000000 +0000
+++++ libcddb-1.3.2/lib/cddb_net.c	2025-07-03 17:58:30.064232649 +0100
++@@ -305,7 +305,7 @@
++             int rv;
++             fd_set wfds;
++             struct timeval tv;
++-            size_t l;
+++            socklen_t l;
++ 
++             /* set up select time out */
++             tv.tv_sec = timeout;
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
