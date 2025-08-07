@@ -4,102 +4,102 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68478C87FCA
-	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 18:25:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF780C87FCF
+	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 18:25:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 37FF04068C;
-	Thu,  7 Aug 2025 18:25:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C7E5740691;
+	Thu,  7 Aug 2025 18:25:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id khksMqM6Mlg6; Thu,  7 Aug 2025 18:25:41 +0000 (UTC)
+ id 9N0-gRYiCdRK; Thu,  7 Aug 2025 18:25:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 533B440677
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 14362405E4
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 533B440677;
-	Thu,  7 Aug 2025 18:25:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 14362405E4;
+	Thu,  7 Aug 2025 18:25:40 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 34C324C4
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:25:17 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 367454C4
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:25:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 19B5F80F17
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:25:17 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3240F80F0A
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:25:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XMfa90TiCqpz for <buildroot@buildroot.org>;
- Thu,  7 Aug 2025 18:25:15 +0000 (UTC)
+ id rr-BmVIOQISh for <buildroot@buildroot.org>;
+ Thu,  7 Aug 2025 18:25:19 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
  client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3123380EEC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3123380EEC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A676780F0F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A676780F0F
 Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
  [IPv6:2a00:1450:4864:20::336])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3123380EEC
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:25:11 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A676780F0F
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:25:15 +0000 (UTC)
 Received: by mail-wm1-x336.google.com with SMTP id
- 5b1f17b1804b1-458baf449cbso12998565e9.0
- for <buildroot@buildroot.org>; Thu, 07 Aug 2025 11:25:11 -0700 (PDT)
+ 5b1f17b1804b1-459ddf8acf1so12127345e9.0
+ for <buildroot@buildroot.org>; Thu, 07 Aug 2025 11:25:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1754591109; x=1755195909;
+ d=1e100.net; s=20230601; t=1754591114; x=1755195914;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=Z55IBV8gAMVxUn/01KwuShz2uWbA1rphvoN79xoSPRs=;
- b=rfEVJYondDKReE1dhPSZP62JHNzBBwq/o6LrODg1Cb8Q6K2+gSdSpjChJrI++vP4P+
- /hFJ2vxWbNbdCD+tKuZp2uBDR+4py8WZKjFsTtZHJ88LiM2vyA6t8V/QRLD/xHKH3MNb
- 1tnOq7GLzIRef0BwmUIuf/C2+uGovEdRHtfmC0lWDrQyQMj2Q/U3Kxa00V4D41TelDLo
- nUCBpA8T8tq6fq6ucBMxFOocc8zS6T5nhTFI5grlwzfs/VC/cSDnc6G9DSOZ8qqeHc69
- qP2SCcOxEkvg6iYJR5EodCbU4qOdb+34Cmad2U/bm8PgFhLKoZSNb/oXnlNCVeA8pabO
- dhcg==
+ bh=oQ2v/h/uSWFPPNBvT60pG0QbBmTWs8wTzygIVPrwjwg=;
+ b=txl/nvkxwMyGBMnrDGENukpdws+8zjiqLnawYQshMVcdeJdEg8bemlkkjJjTdAtcMS
+ ABShRLilnZ7MVnZwGs+KcongtXCwFcciNFuNxU3m8fS/eOap1iyZhffnD8NjAtOIQzXY
+ etXa92ery449yontlVwaO/6kjPZpqYi8ZfOMxNOrs36qwsQ9ay+OnpHKM29hWRI5oXm/
+ fv1BuibCZBEIL3QQBUSp9e/DVSTtKUqmMG1qgnlUDBZ9jP/EoHwp9i+pVHEXI9HFk7b1
+ GPH3zmiIClcuUh2Ak9DmTWuRcA3FsR2K+/wiFlEifLe2zH74WJffMmsFZ2cX4aOoZnbS
+ L38w==
 X-Forwarded-Encrypted: i=1;
- AJvYcCUINL1FQn6b0FR4Mvkif60BpF469Y321imAX1DcZjHihWY1TKMVdmYuygtP6bkXD6f92JdNVzJi28w=@buildroot.org
-X-Gm-Message-State: AOJu0YyYYXnxNS4ICJrQV/QgMp0stm0UlEmVJf1LbcZaQ7P1yNIJoUxP
- TT0ctPSpcsQOq/rHWHmGxwy4fFi6NN5fUwBIZUfkwj1XqpsDT6neZGkzkpCzdQh7sHa73clg0nZ
- iRa3o
-X-Gm-Gg: ASbGnctzFMFLxWvPv3OKUKRNVIeCk5TUYbJXB6X8nK6ab0UGihz1EvAkJCONV+eY5Ey
- wQ98OUQthB7muJVeUhrMTvNDh8sXPZ5YM7JckDmgI2XkKM8RvcOfV+Sx5SD/Sy02NIhyGYzD7TJ
- y0+ucLstFjdwwxSKrKgwxkzdv/iKTknJZ6RgybEUDzHMvMgCD15cxMxxmd+kVLE0+HumwwU9o9+
- 6HQXnRblFI+iZl7Q5wQwVzEpNXpQWc+SS7PyXCcDmhNFp+x7Vb2XagsJgS6mLC6/13P0B96xrJi
- xtNqwlnlZjYSY6DpUhLbG2rmEFy9cVQlFNnS248N0mgpMULoMaksHWkWaEWLnfawJrzUNqL1+xt
- DT7ADQxI6rP2vNA==
-X-Google-Smtp-Source: AGHT+IGzvRLwpNp0qPQ72P6WxrOKVH5UKtd2Xs8Z8IdLdxh9lgpqZabqF9e9FpEw8BkamJFwi7a+DA==
-X-Received: by 2002:a05:6000:188f:b0:3b8:fb9d:248a with SMTP id
- ffacd0b85a97d-3b900b507e6mr200238f8f.24.1754591109193; 
- Thu, 07 Aug 2025 11:25:09 -0700 (PDT)
+ AJvYcCUPlAu+pzcH82BLiBaGmxovcKVX0F0DicVP3MoG7LOjucbFOKazYiUfT9A0mgUaIy/xMHwESHsnbFc=@buildroot.org
+X-Gm-Message-State: AOJu0Yzne/RLGQLg2I/4J5m3PV1alwVe8QNTXp8v6CPVbk9kp60Lg/Pn
+ gw4leML09k2M3tos6BFdOrO5KfISixkrDJQfsQsjp5xb9UC6DD5ABodgfyPaAupts6u6U3CfxtD
+ XKDU+7Hs=
+X-Gm-Gg: ASbGncvEif5lIxlDyvyCHJzyUKVU0jBV3q+7Na0Tlu5usWTbCHY6KPdViK/tNSyaWIv
+ nZbikmULMcAJPvJAlfGAsynKpLQDCQGsznsUPyB3UPQ7oRJddnPW4RnpgBT6NyXgU6x2Y7CdMdu
+ cdwCDYtFgvy/CY0dkt2Ggn7EKRwdqHN1lyO3Du1ejW/lzz2Hn6myX6rnu7XZLqKcDknuS5esRlj
+ BrPlRHeX5F8HWWvo2XSm45Is5E/LjrSyTKNcdfvxx8euLisZ9Wdss3P2NmmcSDixmiZGNOY5/W5
+ USuC+IvUdeCPVpFTH4Qlb6ddrzb5y0THgYWIOvmxDrt0ao/AsNL4g+bOsuAfayhSeJwmF49cjny
+ MoAX6KOc5jRf1g3V2LFt8cLxn
+X-Google-Smtp-Source: AGHT+IFPXe3uRZikxsxRqrJSTufKsnJKxTGly1YQp3P1D6pmfKH8zbYujQ3/9DDBjP2/WlqDp8uNhg==
+X-Received: by 2002:a05:600c:a03:b0:458:a7b5:9f6c with SMTP id
+ 5b1f17b1804b1-459f4eb4d05mr145225e9.11.1754591113775; 
+ Thu, 07 Aug 2025 11:25:13 -0700 (PDT)
 Received: from arch ([79.132.233.79]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3b79c453328sm29118058f8f.46.2025.08.07.11.25.08
+ 5b1f17b1804b1-459ded356b9sm172933255e9.12.2025.08.07.11.25.13
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 07 Aug 2025 11:25:08 -0700 (PDT)
-To: yann.morin@orange.com
+ Thu, 07 Aug 2025 11:25:13 -0700 (PDT)
+To: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Thu,  7 Aug 2025 20:25:08 +0200
-Message-ID: <20250807182508.726769-1-thomas.perale@mind.be>
+Date: Thu,  7 Aug 2025 20:25:13 +0200
+Message-ID: <20250807182513.727042-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.50.1
-In-Reply-To: <725a89cbad59708b94cac3eddb422dc5a0d305dc.1752554987.git.yann.morin@orange.com>
-References: <725a89cbad59708b94cac3eddb422dc5a0d305dc.1752554987.git.yann.morin@orange.com>
+In-Reply-To: <20250801-fix_libspdm-v1-1-48138baca30b@bootlin.com>
+References: <20250801-fix_libspdm-v1-1-48138baca30b@bootlin.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1754591109; x=1755195909; darn=buildroot.org;
+ d=mind.be; s=google; t=1754591114; x=1755195914; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=Z55IBV8gAMVxUn/01KwuShz2uWbA1rphvoN79xoSPRs=;
- b=Kidh8VU0DMeZ/ulQ6S/myoB2x0mg/ifJVS6+t8JipwN9jSShFLShMZxy2C3i8NyGyJ
- AmH6ykPeyk6eyoJ+asHAzTBQOKdmzDwrE8hleARju98KEDm8HNaS4A54Er39bYvwZ0B6
- PS9kdrF4CNM2xfOkkEEIWLRChLD4mWhBxfjzpknE2COk+N8t0lOmZrkba1IAJfdW1LIG
- 2kaktyygJaZVeTnExlOa7qgUiYGDfcKeQn+v0FVqBqUFwFPyV0hEwHYgmdXvQHTYjS3P
- zhYlbl8sMirhCYebuSzLaBJOSE29bYJ0sndmluuiQj+Sj1bZ+73v81ve4bd6is6574D8
- jvow==
+ bh=oQ2v/h/uSWFPPNBvT60pG0QbBmTWs8wTzygIVPrwjwg=;
+ b=iLg9lYaHDgufg3dnfsYk5TeNfFuGxikcAAcw9UYo/UA1FgRkzwKZ+b4KmjyyQDHtY2
+ 4CVOLJ5M9zyuAd5IMo2UbKlagSN30qfH760LOo6gwWkvy6f3L432d4KXYBAppYHmwHeN
+ ka63CQi8nhUThp+fRrL7YrRx+zlGlGqKvrdIbDqb0iWaF0xxzWSHTdPH7S4NnW0LhA3V
+ o+Lk9A4kQ48kINtM01gVv46aPeleO5fb4EC5mBIirTF6Q1qFZdtno3zGWcePIFj1K3Cz
+ prxIqdw1bmDdDJpjYCDtN59jIhhH/6/xIrxQzVwDCI6CAtCbikN3RSq8zwM4NgMidScU
+ KvqA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Kidh8VU0
-Subject: Re: [Buildroot] [PATCH] package/passt: needs headers >= 5.0
+ header.a=rsa-sha256 header.s=google header.b=iLg9lYaH
+Subject: Re: [Buildroot] [PATCH] package/libspdm: bump version to 3.8.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,80 +119,58 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Upstream passt only documents runtime dependencies; and they advertise
-> being able to run on kernel 3.8 or later. However, they do not document
-> the build dependencies.
+> Following the upgrade of libopenssl to version 3.5.0 [1], the build
+> process for libspdm encountered issues due to the new openssl API.
+> It requires some modifications in the asn1.h file of libspdm.
+> This build error was addressed by a specific commit [2] in libspdm.
 > 
-> As reported by Julien, since 2024_12_11.09478d5, upstream requires
-> kernel headers >= 5.0, as they make use of linux/vhost_types.h, only
-> introduced in 5.0.
+> As Buildroot 2025.02 isn't impacted, this commit bumps libspdm to the
+> latest libspdm version to fix the build error.
 > 
-> Add a dependency to kernel headers, and propagate it to podman's passt
-> backend.
+> [1]: 9868ca6e
+> [2]: 88797f83:Backport API introduced in openssl 3.5.0
 > 
-> Reported-by: Julien Olivain <ju.o@free.fr>
-> Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+> Fixes : https://autobuild.buildroot.org/results/87b/87b8805975ef132a58c40e622e2e023199f6ee2a/build-end.log
 > 
+> Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
 
 Applied to 2025.05.x. Thanks
 
 > ---
-> Changes v1 -> v2:
->   - only hide the passt backend, not the whole of podman  (Julien)
+>  package/libspdm/libspdm.hash | 2 +-
+>  package/libspdm/libspdm.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/libspdm/libspdm.hash b/package/libspdm/libspdm.hash
+> index e29c5994a32e0a949b807efbb066915348a2f728..cab1c5259e8cb40044dc108ec50d217f5d6a1691 100644
+> --- a/package/libspdm/libspdm.hash
+> +++ b/package/libspdm/libspdm.hash
+> @@ -1,3 +1,3 @@
+>  # Locally calculated
+> -sha256  7b8a556be64120bab9c321964e67b90f5e6adb59abf3992c5c7937f37a4e7c8f  libspdm-3.5.0.tar.gz
+> +sha256  e7aefb9bc546bbd3ff10d707a6f05213cfb2e679354438ea0d1b5c483b5daa85  libspdm-3.8.0.tar.gz
+>  sha256  c6ffa7e6889e63893078cb21b89594070183f7e2cf5b4ea01a4fb23eac59ed32  LICENSE.md
+> diff --git a/package/libspdm/libspdm.mk b/package/libspdm/libspdm.mk
+> index 9d8da2a3c6f4fbf374a3ca7186b1b955f204eb97..4d294298117f7673518016cde39248a1aaef4414 100644
+> --- a/package/libspdm/libspdm.mk
+> +++ b/package/libspdm/libspdm.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -LIBSPDM_VERSION = 3.5.0
+> +LIBSPDM_VERSION = 3.8.0
+>  LIBSPDM_SITE = $(call github,DMTF,libspdm,$(LIBSPDM_VERSION))
+>  LIBSPDM_LICENSE = BSD-3-Clause
+>  LIBSPDM_LICENSE_FILES = LICENSE.md
+> 
 > ---
->  package/passt/Config.in  | 4 ++++
->  package/podman/Config.in | 4 ++++
->  2 files changed, 8 insertions(+)
+> base-commit: f5101638b9f917dc4c569828ff3fee0c486ba8f8
+> change-id: 20250801-fix_libspdm-fdf9bb810343
 > 
-> diff --git a/package/passt/Config.in b/package/passt/Config.in
-> index a2d2f4f1fe..a93a088670 100644
-> --- a/package/passt/Config.in
-> +++ b/package/passt/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_PASST
->  	bool "passt"
-> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
->  	help
->  	  passt: Plug A Simple Socket Transport
->  	  pasta: Pack A Subtle Tap Abstraction
-> @@ -17,3 +18,6 @@ config BR2_PACKAGE_PASST
->  	  hence not requiring any capabilities or privileges.
->  
->  	  https://passt.top/passt/about/
-> +
-> +comment "passt needs a toolchain w/ headers >= 5.0"
-> +	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
-> diff --git a/package/podman/Config.in b/package/podman/Config.in
-> index 6bfd477f38..a6554a3ddc 100644
-> --- a/package/podman/Config.in
-> +++ b/package/podman/Config.in
-> @@ -72,8 +72,12 @@ choice
->  
->  config BR2_PACKAGE_PODMAN_NET_PASST
->  	bool "passt/pasta"
-> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0  # passt
->  	select BR2_PACKAGE_PASST  # runtime
->  
-> +comment "passt/pasta backend needs a toolchain w/ headers >= 5.0"
-> +	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
-> +
->  config BR2_PACKAGE_PODMAN_NET_SLIRP4NETNS
->  	bool "slirp4netns"
->  	select BR2_PACKAGE_SLIRP4NETNS  # runtime
+> Best regards,
 > -- 
-> 2.34.1
-> 
-> ____________________________________________________________________________________________________________
-> Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-> pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-> a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-> Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-> 
-> This message and its attachments may contain confidential or privileged information that may be protected by law;
-> they should not be distributed, used or copied without authorisation.
-> If you have received this email in error, please notify the sender and delete this message and its attachments.
-> As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-> Thank you.
+> Thomas Bonnefille <thomas.bonnefille@bootlin.com>
 > 
 > _______________________________________________
 > buildroot mailing list
