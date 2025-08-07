@@ -4,102 +4,102 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 885B5C87FCF
-	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 18:24:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62B1DC87FDA
+	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 18:24:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4CF944054D;
-	Thu,  7 Aug 2025 18:24:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1483F40535;
+	Thu,  7 Aug 2025 18:24:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3650Fx1-1tkj; Thu,  7 Aug 2025 18:24:09 +0000 (UTC)
+ id iBzLBDv82S3G; Thu,  7 Aug 2025 18:24:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 03A3740564
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 06AFB4056D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 03A3740564;
-	Thu,  7 Aug 2025 18:24:09 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id A9B7710A
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:24:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 06AFB4056D;
+	Thu,  7 Aug 2025 18:24:13 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0DD8B4C4
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:24:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9C33060642
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:24:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E7F0D400BE
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:24:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0ZSxN2EWu49E for <buildroot@buildroot.org>;
- Thu,  7 Aug 2025 18:23:59 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pswG9y9qsc5n for <buildroot@buildroot.org>;
+ Thu,  7 Aug 2025 18:24:03 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::430; helo=mail-wr1-x430.google.com;
+ client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 699A660604
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 699A660604
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 699A660604
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:23:59 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id
- ffacd0b85a97d-3b8de6f7556so749946f8f.1
- for <buildroot@buildroot.org>; Thu, 07 Aug 2025 11:23:59 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org EFAAD40087
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EFAAD40087
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EFAAD40087
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:24:02 +0000 (UTC)
+Received: by mail-wm1-x334.google.com with SMTP id
+ 5b1f17b1804b1-459e1338565so12541175e9.2
+ for <buildroot@buildroot.org>; Thu, 07 Aug 2025 11:24:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1754591037; x=1755195837;
+ d=1e100.net; s=20230601; t=1754591041; x=1755195841;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=o4MUbk8c4RQ7fHNgS623xG3vn44aRqYFl3NIrnajeq0=;
- b=QSNV+d9TX5jS/Nxagtf9nDmkB0BFuZjVad0y+SGcwQbt1/hgYzQ7Kz0CydcwCwTR6T
- mTzELxMXnswuBsnrlEduUT1f+3fzjHuHE1dl7auENXsK7btbC2FYP2NweaaCk3RuCZUO
- IdbHu1x36ICRVfI7ks3DRgdcs5oMlradLZ/6AyqymFz8FpWiUzFOzNip2rGlpPhtsoW7
- 13hSWbeuKeJ6MAp2It+gh6DEiEh5oKLtHXuKJRjDYnNsMhjosM9li3nTbeGt9OQtUqmz
- pWx62EY8V9Bi92hv3MixXwoks0HPbX2GP+n3rmup9knYqyhXQ6LJAgBeLlYb9XVRDDhC
- U+dQ==
+ bh=Rq+EKDhUf/TtUREsuGzpTowACG83KIKLIbt59bP8zAY=;
+ b=eyW38bAlSnj4Ut8dmTWQr9prli1RuRhbftUrwXy+5sXSxtqq8wCvtrAFS/Ujo5dp5h
+ eKT58prdPXSw704PGXN5KKR3SAy23BhyoigfZZ84Xg9qD8UiJqct0uQMSjkq9KcDATu7
+ jVIGfn/wfqmO0OiA/KvDJ7jcQqer92fvJoq+sn7Nlo2rOAPKKXrSTXMQ2cP7DdnucKDt
+ lxbZwPG0zXRwOifZkJXPo47NX8Pju2PHzeiV02oGlt2cBHq5U3CcNmPr8wIyz3RlloIr
+ 1r0A67QmUFy6rPl39vYjfB5rLmm/5aO1kbmk+FAX5ep9b8adZ5YFcQ4lmfnxindZR6ql
+ vKgw==
 X-Forwarded-Encrypted: i=1;
- AJvYcCWwN9CKBlwbtj5bdcePOybKwU6KTMAk7/E6SV1rB/wt8WU9SFWjSIlmSGTc6QDGoUwGJl9Gx4VTn5w=@buildroot.org
-X-Gm-Message-State: AOJu0YztxFcOO61/r3vsG8BPZEEU+98Sx0S8gK+DE9tVN34Rs+yXF3Po
- 3a1qVBsgOfuejcTI5G+YZp3mg0s/j7W1Cpqh6rXFn7pDj7jSPu33aU1WS8H0UndJJDg=
-X-Gm-Gg: ASbGncu95O+JxvjMod8Q/UKd93nrkkYBPKPmu6kG7A+/VNQ9y1WFInP6NGN9PI9lDAY
- zs2PJb4Yx+pKxUckO1VUTXyAh0nudBP6PMKk8JhxU3wYSB7Jw5zyHUGNpiyXwV3f/IA3woSZKKy
- qax3S28KR40p7UmgvvxqbFGeKV6SFVMleQKXHoRVQWHxK2jY59Pcxk14/ldtw2NsfwG3Fpw8/zf
- drqEanf5r4zfW5fXW02TeM4KxxY8KzohqlVgSDY9v6v34zrKIcBkXs6O1PAlXBOOtoS3K7zljLn
- 5vAtT3JIXsCbfLT2stduVOMc5D8TSNppfoowJTqs9f6xAKPnRR0O3rdw+w4WEtuOTDVGEGFiFhD
- KqlUDlyOivMv0IQ==
-X-Google-Smtp-Source: AGHT+IGUh6wH0IEwBBaVHkdRstA1tDvkuyHJZ9OoSQbgvMJfZrciUCqLnK3ugZVm9a9Hyhzdd6/ZZA==
-X-Received: by 2002:a05:6000:2dc2:b0:3b8:d16a:a4b1 with SMTP id
- ffacd0b85a97d-3b900b56018mr176949f8f.58.1754591037329; 
- Thu, 07 Aug 2025 11:23:57 -0700 (PDT)
+ AJvYcCUNQf8yh5dm2XRvlkQ0eHYz4HPizfNBMSbWa63xdyyduOmUdi8imQNnHB3Rg55zgcx3anZVh7EeVBk=@buildroot.org
+X-Gm-Message-State: AOJu0YzIqxi5h4zD77PKizZIDZScyJrL+4WbYoodmZDfuKAoJPerS9Hj
+ LqdhC47UPf6Yrm6bDbtxvqPxyZm93Ya47SLfeQw91lD5ko/FOgVJV2VufcQLsEWIVMM5XVNvCzj
+ MKLdd
+X-Gm-Gg: ASbGncs+eeWBkYgHDP4f8ndsMXHXGDM/so1DV66i7txLldh5ouSQA2r1OEJceibCZsf
+ 1otX2l3YdR8EsLIVNZZg2tC2I0Vqk8JvO4AnO+KTwqeMU8RdCghhDgmDQQFGBWB3yUZJR2hShyB
+ FVOWFcp5F4ZfIyXi0oEOo7AaBxcwxMiyf0WE/h9PsVzI/oCffSJiAl7RRlvrEaPnFzD4C3qdCvc
+ SjcihfDNOnkJCtPj2mOKxVPODPmm2UNoNd1vnGqo6P3hHQaLif+pbBXwbpt8CU/MNBzaDuuslsd
+ plVsWzPfw4j11P2qEz9dnlL5VYAyWY3A2NkW9PZjuVT5RUTm15zq6aYffnK32r2pOGP1AAe8JNO
+ JX3Dl/0rRgpNKeg==
+X-Google-Smtp-Source: AGHT+IEggr5OAAlAwg8btWi4qSYX9AoVF242/X7OAbgL8HUvYBIOXzVLIBB9Nxb+RV97y0yQ5IMyBQ==
+X-Received: by 2002:a05:600c:46ca:b0:459:e3f8:9308 with SMTP id
+ 5b1f17b1804b1-459f4eaf6e4mr200165e9.11.1754591041054; 
+ Thu, 07 Aug 2025 11:24:01 -0700 (PDT)
 Received: from arch ([79.132.233.79]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3b8e0683045sm18263770f8f.41.2025.08.07.11.23.56
+ 5b1f17b1804b1-459e5862fd9sm112114475e9.16.2025.08.07.11.24.00
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 07 Aug 2025 11:23:57 -0700 (PDT)
-To: Adrian Perez de Castro <aperez@igalia.com>
+ Thu, 07 Aug 2025 11:24:00 -0700 (PDT)
+To: Marcus Hoffmann <buildroot@bubu1.eu>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Thu,  7 Aug 2025 20:23:56 +0200
-Message-ID: <20250807182356.723921-1-thomas.perale@mind.be>
+Date: Thu,  7 Aug 2025 20:24:00 +0200
+Message-ID: <20250807182400.724126-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250708215011.1213438-1-aperez@igalia.com>
-References: <20250708215011.1213438-1-aperez@igalia.com>
+In-Reply-To: <20250714144618.65723-2-buildroot@bubu1.eu>
+References: <20250714144618.65723-2-buildroot@bubu1.eu>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1754591037; x=1755195837; darn=buildroot.org;
+ d=mind.be; s=google; t=1754591041; x=1755195841; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=o4MUbk8c4RQ7fHNgS623xG3vn44aRqYFl3NIrnajeq0=;
- b=SGQaY0hS4OT9u6WcovdEAcvr1s4nB/40ImXHWEPsutZupAf+9oYj3+U3A5YlRR6AG0
- ODeM/mT5Jj3mvuglM7wkvL7naL5IlzFP7cBsJwNCJGqNg5vLEztZ6kD6tdL0Tl8B3+G3
- U7m/ySqMUhhe39D3tFDahrqcjfODAN4qQaUQ9wRI84nKm1IwWctTzg8P7ZWw8Sd9R3Hg
- CzD6y20awt5fvmBNN82+kf/fHIlS4AkFxJ3WVVnIMX31iw4eDea96zX0rmzCPHly47cM
- rkmVOx/fRr8DnKp1VxjKlFHN7VaqOLXedt9TVaz9ySmfBon+gyLIJn3d9bI8mW3j2Lr8
- z6Gw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=Rq+EKDhUf/TtUREsuGzpTowACG83KIKLIbt59bP8zAY=;
+ b=YCGIOWOtiuGV0hvfahLiarqtZ3D1ZV+xscisati5Q+vlGN4j+px31pJ3Phrt89rG1r
+ F56noi+sgPwb4y2I1Vh7Tz4NMSfvo6iPcfyRjx4hKrBLJIJ2oxY3utbrKVy+Ks8AKbAX
+ EmWNXR2Hqgxm4KLXRpICAy+bbrHgO7KNaj91FLZ3s21nn5emCrQJBpzwcv45lK2W8++u
+ 11Ue98W28wLJu7pC8ofjE7Gjd0QPpFbSWKRqmB58pmH3TH02Zy3vMp2ijGsaUYqUbdNe
+ Iduk1fk7FWSiwMwn2Te2F7yESkuX5pOFHUpxwYI2HU3EdSrVTbB6MEWebk1vgcIFk/lG
+ d/qw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=SGQaY0hS
-Subject: Re: [Buildroot] [PATCH 1/1] package/wpewebkit: security bump to
- version 2.48.3
+ header.a=rsa-sha256 header.s=google header.b=YCGIOWOt
+Subject: Re: [Buildroot] [PATCH 2/2] package/python-starlette: bump to 0.47.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,256 +119,49 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> This bumps WPE WebKit to the 2.48 stable series, skipping over 2.46.
-> 
-> WPE WebKit 2.48 and 2.46 highlights:
-> 
-> - https://wpewebkit.org/blog/2025-04-11-wpewebkit-2.48.html
-> - https://wpewebkit.org/blog/2024-wpewebkit-2.46.html
-> 
 > Release notes:
+> * https://github.com/encode/starlette/releases/tag/0.47.0
+> * https://github.com/encode/starlette/releases/tag/0.47.1
 > 
-> - https://wpewebkit.org/release/wpewebkit-2.48.3.html
-> - https://wpewebkit.org/release/wpewebkit-2.48.2.html
-> - https://wpewebkit.org/release/wpewebkit-2.48.1.html
-> - https://wpewebkit.org/release/wpewebkit-2.48.0.html
-> - https://wpewebkit.org/release/wpewebkit-2.46.7.html
-> - https://wpewebkit.org/release/wpewebkit-2.46.6.html
-> - https://wpewebkit.org/release/wpewebkit-2.46.5.html
-> - https://wpewebkit.org/release/wpewebkit-2.46.4.html
-> - https://wpewebkit.org/release/wpewebkit-2.46.3.html
-> - https://wpewebkit.org/release/wpewebkit-2.46.2.html
-> - https://wpewebkit.org/release/wpewebkit-2.46.1.html
-> - https://wpewebkit.org/release/wpewebkit-2.46.0.html
-> 
-> Fixes the following security issues:
-> 
-> - From https://wpewebkit.org/security/WSA-2025-0004.html
->   CVE-2025-24223, CVE-2025-31204, CVE-2025-31205, CVE-2025-31206,
->   CVE-2025-31215, CVE-2025-31257
-> 
-> - From https://wpewebkit.org/security/WSA-2025-0003.html
->   CVE-2024-54551, CVE-2025-24208, CVE-2025-24209, CVE-2025-24213,
->   CVE-2025-24216, CVE-2025-24264, CVE-2025-30427
-> 
-> - From https://wpewebkit.org/security/WSA-2025-0002.html
->   CVE-2024-44192, CVE-2024-54467, CVE-2025-24201
-> 
-> - From https://wpewebkit.org/security/WSA-2025-0001.html
->   CVE-2024-27856, CVE-2024-54543, CVE-2024-54658, CVE-2025-24143,
->   CVE-2025-24150, CVE-2025-24158, CVE-2025-24162
-> 
-> - From https://wpewebkit.org/security/WSA-2024-0008.html
->   CVE-2024-54479, CVE-2024-54502, CVE-2024-54505, CVE-2024-54508,
->   CVE-2024-54534
-> 
-> - From https://wpewebkit.org/security/WSA-2024-0007.html
->   CVE-2024-44308, CVE-2024-44309
-> 
-> - From https://wpewebkit.org/security/WSA-2024-0006.html
->   CVE-2024-44185, CVE-2024-44244, CVE-2024-44296
-> 
-> - From https://wpewebkit.org/security/WSA-2024-0005.html
->   CVE-2024-40866, CVE-2024-44187
-> 
-> As for build system changes, the minimum GCC requirement gets raised to
-> version 11 [1], the ENABLE_SPEECH_SYNTHESIS option is now enabled by
-> default [2] and needs handling, and Skia (bundled with the sources) is
-> now preferred on little-endian targets.
-> 
-> [1] https://github.com/WebKit/WebKit/commit/682ac4ba74c53d0cd488c7a595096224a9abb036
-> [2] https://github.com/WebKit/WebKit/commit/10381a8de938024f31935184af470ccbce0b22d9
-> 
-> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+> Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 
 Applied to 2025.02.x & 2025.05.x. Thanks
 
 > ---
->  ...d-with-USE_SKIA_OPENTYPE_SVG-ON-and-.patch | 44 +++++++++++++++++++
->  package/wpewebkit/Config.in                   | 11 ++---
->  package/wpewebkit/wpewebkit.hash              |  8 ++--
->  package/wpewebkit/wpewebkit.mk                | 27 +++++++++++-
->  4 files changed, 79 insertions(+), 11 deletions(-)
->  create mode 100644 package/wpewebkit/0001-WPE-Fix-the-build-with-USE_SKIA_OPENTYPE_SVG-ON-and-.patch
+>  package/python-starlette/python-starlette.hash | 4 ++--
+>  package/python-starlette/python-starlette.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/wpewebkit/0001-WPE-Fix-the-build-with-USE_SKIA_OPENTYPE_SVG-ON-and-.patch b/package/wpewebkit/0001-WPE-Fix-the-build-with-USE_SKIA_OPENTYPE_SVG-ON-and-.patch
-> new file mode 100644
-> index 0000000000..8432543e07
-> --- /dev/null
-> +++ b/package/wpewebkit/0001-WPE-Fix-the-build-with-USE_SKIA_OPENTYPE_SVG-ON-and-.patch
-> @@ -0,0 +1,44 @@
-> +From 94acd1ce0ff2860b19f22ab2d386d7711c9699b7 Mon Sep 17 00:00:00 2001
-> +From: Adrian Perez de Castro <aperez@igalia.com>
-> +Date: Tue, 8 Jul 2025 21:46:44 +0300
-> +Subject: [PATCH] [WPE] Fix the build with USE_SKIA_OPENTYPE_SVG=ON and
-> + USE_SYSPROF_CAPTURE=OFF
-> +
-> +Unreviewed build fix.
-> +
-> +When backporting 287859@main the #include for the needed Skia header
-> +slipped inside an USE(SYSPROF_CAPTURE) guard. This moves the guards
-> +and #include statements to their correct places.
-> +
-> +* Source/WebKit/WebProcess/wpe/WebProcessMainWPE.cpp:
-> +
-> +Canonical link: https://commits.webkit.org/290945.273@webkitglib/2.48
-> +
-> +Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-> +Upstream: https://github.com/WebKit/WebKit/commit/943d05f0c9b03c053a456c90c2a8817c1f679711
-> +---
-> + Source/WebKit/WebProcess/wpe/WebProcessMainWPE.cpp | 5 +++--
-> + 1 file changed, 3 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/Source/WebKit/WebProcess/wpe/WebProcessMainWPE.cpp b/Source/WebKit/WebProcess/wpe/WebProcessMainWPE.cpp
-> +index a06e33fd04f8..5fb245ce0b66 100644
-> +--- a/Source/WebKit/WebProcess/wpe/WebProcessMainWPE.cpp
-> ++++ b/Source/WebKit/WebProcess/wpe/WebProcessMainWPE.cpp
-> +@@ -43,11 +43,12 @@
-> + #include <skia/core/SkGraphics.h>
-> + #endif
-> + 
-> +-#if USE(SYSPROF_CAPTURE)
-> +-#include <wtf/SystemTracing.h>
-> + #if USE(SKIA_OPENTYPE_SVG)
-> + #include <skia/modules/svg/SkSVGOpenTypeSVGDecoder.h>
-> + #endif
-> ++
-> ++#if USE(SYSPROF_CAPTURE)
-> ++#include <wtf/SystemTracing.h>
-> + #endif
-> + 
-> + namespace WebKit {
-> +-- 
-> +2.50.1
-> +
-> diff --git a/package/wpewebkit/Config.in b/package/wpewebkit/Config.in
-> index 512f7ea672..969590482c 100644
-> --- a/package/wpewebkit/Config.in
-> +++ b/package/wpewebkit/Config.in
-> @@ -16,12 +16,12 @@ config BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS
->  	depends on BR2_TOOLCHAIN_HAS_SYNC_4
->  	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
->  
-> -comment "wpewebkit needs a toolchain w/ C++, wchar, NPTL, dynamic library, gcc >= 10, host gcc >= 4.9"
-> +comment "wpewebkit needs a toolchain w/ C++, wchar, NPTL, dynamic library, gcc >= 11, host gcc >= 4.9"
->  	depends on BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS
->  	depends on !BR2_BINFMT_FLAT
->  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
->  		|| !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
-> -		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_10 \
-> +		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_11 \
->  		|| !BR2_HOST_GCC_AT_LEAST_4_9
->  
->  comment "wpewebkit needs an OpenGL ES w/ EGL-capable Wayland backend"
-> @@ -36,13 +36,13 @@ config BR2_PACKAGE_WPEWEBKIT
->  	depends on BR2_HOST_GCC_AT_LEAST_4_9 # icu, host-ruby
->  	depends on BR2_INSTALL_LIBSTDCPP # harfbuzz, icu
->  	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-> -	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_11
->  	depends on BR2_USE_WCHAR # icu, libsoup3
->  	depends on BR2_PACKAGE_HAS_LIBGLES # libepoxy
->  	depends on BR2_PACKAGE_HAS_LIBEGL # libepoxy
->  	depends on BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS
-> -	select BR2_PACKAGE_CAIRO
-> -	select BR2_PACKAGE_CAIRO_PNG
-> +	select BR2_PACKAGE_CAIRO if BR2_ENDIAN = "BIG"
-> +	select BR2_PACKAGE_CAIRO_PNG if BR2_ENDIAN = "BIG"
->  	select BR2_PACKAGE_HARFBUZZ
->  	select BR2_PACKAGE_ICU
->  	select BR2_PACKAGE_JPEG
-> @@ -56,6 +56,7 @@ config BR2_PACKAGE_WPEWEBKIT
->  	select BR2_PACKAGE_WAYLAND_PROTOCOLS
->  	select BR2_PACKAGE_WEBP
->  	select BR2_PACKAGE_WEBP_DEMUX
-> +	select BR2_PACKAGE_WEBP_MUX
->  	select BR2_PACKAGE_WPEBACKEND_FDO
->  	help
->  	  WPE (Web Platform for Embedded) port of the WebKit engine,
-> diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
-> index 7a7cef15a5..332fd9deaa 100644
-> --- a/package/wpewebkit/wpewebkit.hash
-> +++ b/package/wpewebkit/wpewebkit.hash
-> @@ -1,7 +1,7 @@
-> -# From https://wpewebkit.org/releases/wpewebkit-2.44.4.tar.xz.sums
-> -md5  4d91f3ff629c9356dcff866b68a4646f  wpewebkit-2.44.4.tar.xz
-> -sha1  ef1ea0484e9ec17a362afe9a709fe0754f05cc14  wpewebkit-2.44.4.tar.xz
-> -sha256  cd6042c63a6f883cc1586e5cea94e846aaaee6a864c14988e8af4ef4f362ba3b  wpewebkit-2.44.4.tar.xz
-> +# From https://wpewebkit.org/releases/wpewebkit-2.48.3.tar.xz.sums
-> +md5  2d3b7fa3c62886546f918fcc289cabbe  wpewebkit-2.48.3.tar.xz
-> +sha1  8a90b9ff8809c99c306defc1a08e50a31a09c590  wpewebkit-2.48.3.tar.xz
-> +sha256  807571f07e87823b8fb79564692c9b1ef81ee62edbf51345a15bd0e7e1f2e07b  wpewebkit-2.48.3.tar.xz
->  
->  # Hashes for license files:
->  sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-> diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-> index 6a8e9c637c..796e271ecb 100644
-> --- a/package/wpewebkit/wpewebkit.mk
-> +++ b/package/wpewebkit/wpewebkit.mk
-> @@ -5,7 +5,7 @@
+> diff --git a/package/python-starlette/python-starlette.hash b/package/python-starlette/python-starlette.hash
+> index ce2ee91bed..be23e4ccb1 100644
+> --- a/package/python-starlette/python-starlette.hash
+> +++ b/package/python-starlette/python-starlette.hash
+> @@ -1,5 +1,5 @@
+>  # md5, sha256 from https://pypi.org/pypi/starlette/json
+> -md5  d745d832d3f585d6144e8cd0c8f06697  starlette-0.46.2.tar.gz
+> -sha256  7f7361f34eed179294600af672f565727419830b54b7b084efe44bb82d2fccd5  starlette-0.46.2.tar.gz
+> +md5  b876ddd8665f70bb74e45d1fda053699  starlette-0.47.1.tar.gz
+> +sha256  aef012dd2b6be325ffa16698f9dc533614fb1cebd593a906b90dc1025529a79b  starlette-0.47.1.tar.gz
+>  # Locally computed sha256 checksums
+>  sha256  dcb95677a02240243187e964f941847d19b17821cf99e5afae684fab328c19bf  LICENSE.md
+> diff --git a/package/python-starlette/python-starlette.mk b/package/python-starlette/python-starlette.mk
+> index b4d28a6d08..eb49230600 100644
+> --- a/package/python-starlette/python-starlette.mk
+> +++ b/package/python-starlette/python-starlette.mk
+> @@ -4,9 +4,9 @@
+>  #
 >  ################################################################################
 >  
->  # The middle number is even for stable releases, odd for development ones.
-> -WPEWEBKIT_VERSION = 2.44.4
-> +WPEWEBKIT_VERSION = 2.48.3
->  WPEWEBKIT_SITE = https://wpewebkit.org/releases
->  WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
->  WPEWEBKIT_INSTALL_STAGING = YES
-> @@ -16,7 +16,7 @@ WPEWEBKIT_LICENSE_FILES = \
->  WPEWEBKIT_CPE_ID_VENDOR = wpewebkit
->  WPEWEBKIT_CPE_ID_PRODUCT = wpe_webkit
->  WPEWEBKIT_DEPENDENCIES = host-gperf host-python3 host-ruby host-unifdef \
-> -	harfbuzz cairo icu jpeg libepoxy libgcrypt libgles libsoup3 libtasn1 \
-> +	harfbuzz icu jpeg libepoxy libgcrypt libgles libsoup3 libtasn1 \
->  	libpng libxslt wayland-protocols webp wpebackend-fdo
->  
->  WPEWEBKIT_CMAKE_BACKEND = ninja
-> @@ -30,6 +30,15 @@ WPEWEBKIT_CONF_OPTS = \
->  	-DENABLE_WEB_RTC=OFF \
->  	-DUSE_ATK=OFF
->  
-> +# WPE WebKit uses a bundled copy of Skia since 2.46.0 for
-> +# little-endian targets, and Cairo for big-endian ones.
-> +ifeq ($(BR2_ENDIAN),"BIG")
-> +WPEWEBKIT_DEPENDENCIES += cairo
-> +WPEWEBKIT_CONF_OPTS += -DUSE_SKIA=OFF
-> +else
-> +WPEWEBKIT_CONF_OPTS += -DUSE_SKIA=ON
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_WPEWEBKIT_SANDBOX),y)
->  WPEWEBKIT_CONF_OPTS += \
->  	-DENABLE_BUBBLEWRAP_SANDBOX=ON \
-> @@ -79,6 +88,13 @@ else
->  WPEWEBKIT_CONF_OPTS += -DENABLE_WEBDRIVER=OFF
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_FLITE),y)
-> +WPEWEBKIT_CONF_OPTS += -DENABLE_SPEECH_SYNTHESIS=ON
-> +WPEWEBKIT_DEPENDENCIES += flite
-> +else
-> +WPEWEBKIT_CONF_OPTS += -DENABLE_SPEECH_SYNTHESIS=OFF
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_LCMS2),y)
->  WPEWEBKIT_CONF_OPTS += -DUSE_LCMS=ON
->  WPEWEBKIT_DEPENDENCIES += lcms2
-> @@ -114,6 +130,13 @@ else
->  WPEWEBKIT_CONF_OPTS += -DUSE_JPEGXL=OFF
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_SYSPROF),y)
-> +WPEWEBKIT_CONF_OPTS += -DUSE_SYSPROF_CAPTURE=ON
-> +WPEWEBKIT_DEPENDENCIES += sysprof
-> +else
-> +WPEWEBKIT_CONF_OPTS += -DUSE_SYSPROF_CAPTURE=OFF
-> +endif
-> +
->  ifeq ($(BR2_INIT_SYSTEMD),y)
->  WPEWEBKIT_CONF_OPTS += -DENABLE_JOURNALD_LOG=ON
->  WPEWEBKIT_DEPENDENCIES += systemd
+> -PYTHON_STARLETTE_VERSION = 0.46.2
+> +PYTHON_STARLETTE_VERSION = 0.47.1
+>  PYTHON_STARLETTE_SOURCE = starlette-$(PYTHON_STARLETTE_VERSION).tar.gz
+> -PYTHON_STARLETTE_SITE = https://files.pythonhosted.org/packages/ce/20/08dfcd9c983f6a6f4a1000d934b9e6d626cff8d2eeb77a89a68eef20a2b7
+> +PYTHON_STARLETTE_SITE = https://files.pythonhosted.org/packages/0a/69/662169fdb92fb96ec3eaee218cf540a629d629c86d7993d9651226a6789b
+>  PYTHON_STARLETTE_SETUP_TYPE = hatch
+>  PYTHON_STARLETTE_LICENSE = BSD-3-Clause
+>  PYTHON_STARLETTE_LICENSE_FILES = LICENSE.md
 > -- 
-> 2.50.0
+> 2.43.0
 > 
 > _______________________________________________
 > buildroot mailing list
