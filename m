@@ -4,102 +4,102 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86440C87FCA
-	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 18:24:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D89BC87FCF
+	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 18:24:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4B29B80D5A;
-	Thu,  7 Aug 2025 18:24:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5095980C32;
+	Thu,  7 Aug 2025 18:24:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id K3yDcxC4Xsd4; Thu,  7 Aug 2025 18:23:59 +0000 (UTC)
+ id lqhMykzhR9Dc; Thu,  7 Aug 2025 18:24:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 28A5A80D17
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E258480D25
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 28A5A80D17;
-	Thu,  7 Aug 2025 18:23:59 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 7CC1E10A
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:23:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E258480D25;
+	Thu,  7 Aug 2025 18:24:00 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 22AF110A
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:23:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6E96040543
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:23:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 084DF40087
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:23:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tbeFKcZY9Uxi for <buildroot@buildroot.org>;
- Thu,  7 Aug 2025 18:23:52 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id y7whnoeY_57k for <buildroot@buildroot.org>;
+ Thu,  7 Aug 2025 18:23:54 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42c; helo=mail-wr1-x42c.google.com;
+ client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7410540525
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7410540525
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7410540525
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:23:52 +0000 (UTC)
-Received: by mail-wr1-x42c.google.com with SMTP id
- ffacd0b85a97d-3b78294a233so1050576f8f.3
- for <buildroot@buildroot.org>; Thu, 07 Aug 2025 11:23:52 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1BD7C40057
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1BD7C40057
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1BD7C40057
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 18:23:54 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ 5b1f17b1804b1-455fdfb5d04so7310135e9.2
+ for <buildroot@buildroot.org>; Thu, 07 Aug 2025 11:23:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1754591030; x=1755195830;
+ d=1e100.net; s=20230601; t=1754591032; x=1755195832;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=fz05PFGH+7tOGrNEB1lEAK2rmxv7kGh94O6XilVUKbM=;
- b=d0871CE7LhO7XhXDLKmjV+jprG+l3pOCvdcB8bwi7+oFrMvFgq1KyFz8ypThSWs9cK
- 0UZ70fAkDYIAH3e/tOuQpdfjZhsgXaEbf/gnud7lkSOMaQKnfFX2Ml4SIcVwsOhNfkqd
- zNpKGpqyjWgyob2HnZqNwCGC/7/Fb6SeiB1EnbKu59UU4DnFdilAOHclcMhUrjmZfxLS
- oGFevyD2Lql5KYGoAwplDi+PIiPEHX+MIbwoRmm3o6uPthvwtsOz8ZPZK13ORaBJss8D
- je45S3pto3y/lv3/4mjPXTLisIPaoP5zorpTR4pr7+8oXckFNXK+xo9FXsQJpiH3bBIM
- dbVw==
+ bh=YWGYhfVrYJLYaSWRBcXh0CHa4u0KdH1utSbt28FZKRg=;
+ b=cj4wFXDTVcXqH1pAthSy6+kYtKJepeIEyvpPhAeaUD2Zip/fWoZPC97Mp276kVyGmw
+ JaJ+N8LKSJgnNOkUUXDBleEfqn4325IqWKXavmUcipzuPCMj/cI6aRPbsfb8n65wq0lU
+ aYPdy06KsQh9Q8anc0k1SNeEwHJ5WGYZ1wrBb7iBOM1Os7cE4Cs+Bk6i/QGJ12yInMKS
+ 45TFWApmRDfozpP50P2e93vlbzEBZLuTMGdcgnd3E+d3XMxTcG7FqBfNtWm9Sy3czng2
+ TTxFy0qKiAqz4VJxbcF26EE5ewc/Ajzy8iYEtww/24KCgozzIHI2Bere/lRhwSTJKLfm
+ Dutw==
 X-Forwarded-Encrypted: i=1;
- AJvYcCUzQvnaVYFBp5D+vvBVAxmZY8VvI9vcm38my+dmddttrHkOPs2J0/p4wOA6J0Lyq3qsnFl4BuzQmsA=@buildroot.org
-X-Gm-Message-State: AOJu0YySqJNhZmJmPo0Hftupr5zImctwS4Yqy//rlfjXAMwvPwN0Ei1u
- SL7wbZfjIyYzGIsqRMZ6+33PYU3Q1551yy2BD5rZbR5XcU7AzDeAV5Jpz+wEJtMMng1B3NV5hWV
- dEnCR
-X-Gm-Gg: ASbGncvwrIPdDBWh2Te68W/65/dVSUHGMczfH7q7rkCh4gXBRWQWKk5fz5hkshOhgKz
- b5/oWdnuAeFYV2hgAWo1MLZA2PesdYU7cZ/LHz4nMqgrzaRGgKe5LcGtYL4v0tThLkigolhZUV0
- EEyYH8anKG+WtZXvqEoHlyvDhoRSTHnn0reI6/Ni9bLYRYtAjBmrBWZzSqJqzflLDfX6t5fngfH
- dKxvs5fbCufi8ni+9a8PYrhWeIPHsjrGp/N4vMTgwqyGXPBcsO54BG0MN3EHlwZUMgtkXBV4kNs
- rfR+Tt2dveoEnrPnPwNJCdcRBvg9GT/+dDifhzEa/oiTTCZFmttSdPnSWrdJJ43KTWsLCi1sDR+
- 8n9jD/AMADokBPOMtpvIQ42MA
-X-Google-Smtp-Source: AGHT+IF1rzr3UeH6eJ4AxFSycYSN5jegjEvVmAhoBn2cKVPoRb15IBAdRej1+WJujgxgbf/1Ckw7kQ==
-X-Received: by 2002:a05:6000:402a:b0:3b8:ffd1:80d2 with SMTP id
- ffacd0b85a97d-3b900b4d494mr212674f8f.24.1754591030440; 
- Thu, 07 Aug 2025 11:23:50 -0700 (PDT)
+ AJvYcCUXXr1tGrqVoA4g86Yp7eXA07vGD05CY8OwEX+8W5XKox0AE1zrNrDF33XzPJk2gVjpjCxRpUnGqec=@buildroot.org
+X-Gm-Message-State: AOJu0Yw0GvZaOwHxCNBuszXc8WsB7pQY0i9GJEmyqXuM+rGU/WITt8fl
+ 55h0kuRdkqtY6sU7WcF1rJOSf3wCo9Rdupcg3PthJE3hK9NSW3mI82n/E9WbFg7wvJM=
+X-Gm-Gg: ASbGncvdPlvbDbuAXD+HfA4sX0keFvm2ve9X4aL6pwoywXFy84tR6Y+ZgzsYZ+joNWw
+ qNNehG0kp8vJAPqQ0w80Dq7ks29fxuYasf9DPXuykyKkjlSusKfpgzQCzPWOsODaX9SKFy2G2iH
+ hArhn5KcIQGwogn8s7XOs1MKufzfYr0OLbrxUpw/Rg8B4x2Br69mr/q9av5mljr4R/DS8InUL7n
+ CBEXHB8tINXd5NoadIvFIMziZrC0hXFUEI/Gr8SvuwH8nYsCh9zjgr37LKERFaSGGC7fHEzmuPj
+ 9q2Bz/MspJw3ay/l4lEJ61qHrba2m6JR+q3KcLFGreZIp4DAp5SSZuS/Oz9YOnKBa8ogKhuYisj
+ tWqgh//Muyt1jUQ==
+X-Google-Smtp-Source: AGHT+IED1S+Vn8DLM3FV+KXKrIKOC7TRK8ZTdOfGRQjhXjtSK4h5MOKeQxmXGxqyELcMTfx8KYIVMw==
+X-Received: by 2002:a05:600c:3b98:b0:459:e466:1bec with SMTP id
+ 5b1f17b1804b1-459f4ea0d17mr255385e9.2.1754591032151; 
+ Thu, 07 Aug 2025 11:23:52 -0700 (PDT)
 Received: from arch ([79.132.233.79]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-459e5885eb8sm104554105e9.29.2025.08.07.11.23.50
+ ffacd0b85a97d-3b79c3ac51asm28235127f8f.1.2025.08.07.11.23.51
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 07 Aug 2025 11:23:50 -0700 (PDT)
-To: Kadambini Nema <kadambini.nema@gmail.com>
+ Thu, 07 Aug 2025 11:23:51 -0700 (PDT)
+To: yegorslists@googlemail.com
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Thu,  7 Aug 2025 20:23:49 +0200
-Message-ID: <20250807182349.723574-1-thomas.perale@mind.be>
+Date: Thu,  7 Aug 2025 20:23:51 +0200
+Message-ID: <20250807182351.723700-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250606212851.15883-1-kadambini.nema@gmail.com>
-References: <20250606212851.15883-1-kadambini.nema@gmail.com>
+In-Reply-To: <20250619082600.2176432-1-yegorslists@googlemail.com>
+References: <20250619082600.2176432-1-yegorslists@googlemail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1754591030; x=1755195830; darn=buildroot.org;
+ d=mind.be; s=google; t=1754591032; x=1755195832; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=fz05PFGH+7tOGrNEB1lEAK2rmxv7kGh94O6XilVUKbM=;
- b=NP//7IPBlyqb9BN2F/y8AaY224sD4INe4YESO/62xpwJZ4EwkB1r96JhKHK9XcZkRi
- YQlSS0VuH9TpsV77FnmX7GbPHzUy6tcG4dz/o89gHUn55oQLNkuS8vHocpFgRJ50+G8F
- G+3MsxF3fdc7YGKxhjC/oFgcpVqMwY4Nm8eY4pvK6zFnSJ8PdNavWSHmVCl389rUqanL
- 9S0UfwKkx/WWb+E0q6HdmeYRhnbs1mgWWgJJ6yyDC9nG1zaG7M1ByUVLmGxozJOrPzA+
- c6E91Tv+t/g1CRVGu4hIM97rD96frfRbkLldhGlitw9XojDSHTnFCe6UxDCnwxfhO3Bl
- T0Aw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=YWGYhfVrYJLYaSWRBcXh0CHa4u0KdH1utSbt28FZKRg=;
+ b=hnAiUWYwS/UjJAWOLlKzBeto77T1RfEKbP0xN8PsfXSXiWDuvBrxRbeTTAyoGk9dR0
+ itfXUMJGgYukyn44gZvqtLse9NoMynbnrF7Fg9UlJh91neqPKrUfRX13UkiBjmaXfDjD
+ KOkv4UDJzv+6zviqcLF3EDm5orV97bBtry2lk7vDpl7VKQOnRp8tb1z7+T5IDbxb5f5I
+ eXvIegGPljlI79sfCZ/COOFeTvukPfCJYbwqkfgusWJaFX61i2FtfegMSWwxeyHNJ9bM
+ U27B/6P/MwsizXNGYBE0plO0A4P2eTyMO30OtWFRnnmGuLt9oqrg+dYtVOrKSEZhrk9j
+ Pydg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=NP//7IPB
-Subject: Re: [Buildroot] [PATCH 1/1] package/gcc: update to 13.4.0
+ header.a=rsa-sha256 header.s=google header.b=hnAiUWYw
+Subject: Re: [Buildroot] [PATCH] package/watchdog: do not guard shutdown
+ __GLIBC__
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,68 +119,73 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Release announcement:
-> https://gcc.gnu.org/pipermail/gcc-announce/2025/000187.html
+> These headers are provided by uclibc/musl/glibc and bionic so we can
+> assume they are not needed to be glibc specific includes. This also
+> ensures that we get proper declaration of reboot() API.
 > 
-> Changelog:
-> https://gcc.gnu.org/bugzilla/buglist.cgi?bug_status=RESOLVED&resolution=FIXED&target_milestone=13.4
+> Upstream:
+> https://sourceforge.net/p/watchdog/code/ci/aa371bf201b1d59c595a1ad7b3464ae544ed142f/
 > 
-> Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
+> Fixes:
+> https://autobuild.buildroot.org/results/3e67d5b3b89d794e3f6c510803368f8b100b07a7/
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
 Applied to 2025.02.x & 2025.05.x. Thanks
 
 > ---
->  .../0001-disable-split-stack-for-non-thread-builds.patch      | 0
->  .../0002-RISC-V-fix-build-issue-with-gcc-4.9.x.patch          | 0
->  .../0003-Remove-crypt-and-crypt_r-interceptors.patch          | 0
->  package/gcc/Config.in.host                                    | 2 +-
->  package/gcc/gcc.hash                                          | 4 ++--
->  5 files changed, 3 insertions(+), 3 deletions(-)
->  rename package/gcc/{13.3.0 => 13.4.0}/0001-disable-split-stack-for-non-thread-builds.patch (100%)
->  rename package/gcc/{13.3.0 => 13.4.0}/0002-RISC-V-fix-build-issue-with-gcc-4.9.x.patch (100%)
->  rename package/gcc/{13.3.0 => 13.4.0}/0003-Remove-crypt-and-crypt_r-interceptors.patch (100%)
+>  ...0001-Do-not-guard-shutdown-__GLIBC__.patch | 40 +++++++++++++++++++
+>  1 file changed, 40 insertions(+)
+>  create mode 100644 package/watchdog/0001-Do-not-guard-shutdown-__GLIBC__.patch
 > 
-> diff --git a/package/gcc/13.3.0/0001-disable-split-stack-for-non-thread-builds.patch b/package/gcc/13.4.0/0001-disable-split-stack-for-non-thread-builds.patch
-> similarity index 100%
-> rename from package/gcc/13.3.0/0001-disable-split-stack-for-non-thread-builds.patch
-> rename to package/gcc/13.4.0/0001-disable-split-stack-for-non-thread-builds.patch
-> diff --git a/package/gcc/13.3.0/0002-RISC-V-fix-build-issue-with-gcc-4.9.x.patch b/package/gcc/13.4.0/0002-RISC-V-fix-build-issue-with-gcc-4.9.x.patch
-> similarity index 100%
-> rename from package/gcc/13.3.0/0002-RISC-V-fix-build-issue-with-gcc-4.9.x.patch
-> rename to package/gcc/13.4.0/0002-RISC-V-fix-build-issue-with-gcc-4.9.x.patch
-> diff --git a/package/gcc/13.3.0/0003-Remove-crypt-and-crypt_r-interceptors.patch b/package/gcc/13.4.0/0003-Remove-crypt-and-crypt_r-interceptors.patch
-> similarity index 100%
-> rename from package/gcc/13.3.0/0003-Remove-crypt-and-crypt_r-interceptors.patch
-> rename to package/gcc/13.4.0/0003-Remove-crypt-and-crypt_r-interceptors.patch
-> diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-> index 496ead1e6a..83176684a1 100644
-> --- a/package/gcc/Config.in.host
-> +++ b/package/gcc/Config.in.host
-> @@ -71,7 +71,7 @@ config BR2_GCC_SUPPORTS_DLANG
->  config BR2_GCC_VERSION
->  	string
->  	default "8.4.0"     if BR2_GCC_VERSION_POWERPC_SPE
-> -	default "13.3.0"    if BR2_GCC_VERSION_13_X
-> +	default "13.4.0"    if BR2_GCC_VERSION_13_X
->  	default "14.2.0"    if BR2_GCC_VERSION_14_X
->  	default "15.1.0"    if BR2_GCC_VERSION_15_X
->  	default "arc-2023.09-release" if BR2_GCC_VERSION_ARC
-> diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
-> index 00da7dd49b..76699a7b0f 100644
-> --- a/package/gcc/gcc.hash
-> +++ b/package/gcc/gcc.hash
-> @@ -1,7 +1,7 @@
->  # From https://gcc.gnu.org/pub/gcc/releases/gcc-8.4.0/sha512.sum
->  sha512  6de904f552a02de33b11ef52312bb664396efd7e1ce3bbe37bfad5ef617f133095b3767b4804bc7fe78df335cb53bc83f1ac055baed40979ce4c2c3e46b70280  gcc-8.4.0.tar.xz
-> -# From https://gcc.gnu.org/pub/gcc/releases/gcc-13.3.0/sha512.sum
-> -sha512  ed5f2f4c6ed2c796fcf2c93707159e9dbd3ddb1ba063d549804dd68cdabbb6d550985ae1c8465ae9a336cfe29274a6eb0f42e21924360574ebd8e5d5c7c9a801  gcc-13.3.0.tar.xz
-> +# From https://gcc.gnu.org/pub/gcc/releases/gcc-13.4.0/sha512.sum
-> +sha512  9b4b83ecf51ef355b868608b8d257b2fa435c06d2719cb86657a7c2c2a0828ff4ce04e9bac1055bbcad8ed5b4da524cafaef654785e23a50233d95d89201e35f  gcc-13.4.0.tar.xz
->  # From https://gcc.gnu.org/pub/gcc/releases/gcc-14.2.0/sha512.sum
->  sha512  932bdef0cda94bacedf452ab17f103c0cb511ff2cec55e9112fc0328cbf1d803b42595728ea7b200e0a057c03e85626f937012e49a7515bc5dd256b2bf4bc396  gcc-14.2.0.tar.xz
->  # From https://gcc.gnu.org/pub/gcc/releases/gcc-15.1.0/sha512.sum
+> diff --git a/package/watchdog/0001-Do-not-guard-shutdown-__GLIBC__.patch b/package/watchdog/0001-Do-not-guard-shutdown-__GLIBC__.patch
+> new file mode 100644
+> index 0000000000..eceaf11501
+> --- /dev/null
+> +++ b/package/watchdog/0001-Do-not-guard-shutdown-__GLIBC__.patch
+> @@ -0,0 +1,40 @@
+> +From aa371bf201b1d59c595a1ad7b3464ae544ed142f Mon Sep 17 00:00:00 2001
+> +From: Paul Crawford <psc@sat.dundee.ac.uk>
+> +Date: Thu, 16 Mar 2023 11:42:34 +0000
+> +Subject: [PATCH] Do not guard shutdown __GLIBC__
+> +
+> +- Patch by Khem Raj <raj.khem@gmail.com>
+> +
+> +- These headers are provided by uclibc/musl/glibc and bionic so we can
+> +  assume they are not needed to be glibc specific includes. This also
+> +  ensures that we get proper declaration of reboot() API
+> +
+> +Upstream:
+> +https://sourceforge.net/p/watchdog/code/ci/aa371bf201b1d59c595a1ad7b3464ae544ed142f/
+> +
+> +Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> +---
+> + src/shutdown.c | 4 ----
+> + 1 file changed, 4 deletions(-)
+> +
+> +diff --git a/src/shutdown.c b/src/shutdown.c
+> +index 1d9a857..6aea0d0 100644
+> +--- a/src/shutdown.c
+> ++++ b/src/shutdown.c
+> +@@ -29,13 +29,9 @@
+> + #include "extern.h"
+> + #include "ext2_mnt.h"
+> + 
+> +-#if defined __GLIBC__
+> + #include <sys/quota.h>
+> + #include <sys/swap.h>
+> + #include <sys/reboot.h>
+> +-#else				/* __GLIBC__ */
+> +-#include <linux/quota.h>
+> +-#endif				/* __GLIBC__ */
+> + 
+> + #include <unistd.h>
+> + 
+> +-- 
+> +2.34.1
+> +
 > -- 
-> 2.25.1
+> 2.34.1
 > 
 > _______________________________________________
 > buildroot mailing list
