@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AFE71C87FCF
-	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 17:19:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF097C87FCA
+	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 17:19:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6B8B780C63;
-	Thu,  7 Aug 2025 17:19:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9408140447;
+	Thu,  7 Aug 2025 17:19:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ro91PNAv0YXe; Thu,  7 Aug 2025 17:19:16 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fHuoImmndJYH; Thu,  7 Aug 2025 17:19:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B42780C3F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A41CD4047A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8B42780C3F;
-	Thu,  7 Aug 2025 17:19:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 353F231
+	by smtp4.osuosl.org (Postfix) with ESMTP id A41CD4047A;
+	Thu,  7 Aug 2025 17:19:17 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3FEC34C6
  for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:19:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 329A680C55
+ by smtp4.osuosl.org (Postfix) with ESMTP id 261C84045F
  for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:19:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XVHm9ftWtoSp for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dEWoajlR5NL4 for <buildroot@buildroot.org>;
  Thu,  7 Aug 2025 17:19:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E93180C37
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 70E0240447
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7E93180C37
+ by smtp4.osuosl.org (Postfix) with ESMTP id 70E0240447
  for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:19:14 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 799A586FE4; Thu,  7 Aug 2025 17:19:14 +0000 (UTC)
+ id 5FAF085C8D; Thu,  7 Aug 2025 17:19:14 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 7 Aug 2025 19:07:53 +0200
+Date: Thu, 7 Aug 2025 19:07:47 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: 8f2f6cbca0552cc5fcb5775d2ceb994940dd55c8
-X-Git-Newrev: 7535596950c7f40429bfd73f2f5fc2329062ded4
+X-Git-Oldrev: 745acf6a8d5ef7e0056d46bf6d6d797f5a8d88a3
+X-Git-Newrev: 8facccc14e25f78895fd7d9d592ba8def5010203
 X-Patchwork-Hint: ignore
-Message-Id: <20250807171914.799A586FE4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/python-fastapi:
- bump to 0.116.1
+Message-Id: <20250807171914.5FAF085C8D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/redis: security
+ bump to v8.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,50 +66,59 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7535596950c7f40429bfd73f2f5fc2329062ded4
+commit: https://git.buildroot.net/buildroot/commit/?id=8facccc14e25f78895fd7d9d592ba8def5010203
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-Release notes:
-* https://github.com/fastapi/fastapi/releases/tag/0.116.0
-* https://github.com/fastapi/fastapi/releases/tag/0.116.1
+For release note, see:
+https://github.com/redis/redis/releases/tag/8.0.3
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+This fixes the following vulnerabilities:
+
+- CVE-2025-32023:
+    An authenticated user may use a specially crafted string to trigger a
+    stack/heap out of bounds write on hyperloglog operations, potentially
+    leading to remote code execution.
+    https://github.com/redis/redis/security/advisories/GHSA-rp2m-q4j6-gr43
+
+- CVE-2025-48367:
+    An unauthenticated connection can cause repeated IP protocol errors,
+    leading to client starvation and, ultimately, a denial of service.
+    https://github.com/redis/redis/security/advisories/GHSA-4q32-c38c-pwgq
+
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+[Julien: add link to release note]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 25d8e7f1a046f807631a38b0e5f40f9fe86d6ed1)
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+(cherry picked from commit c87ddd6ee471d8b3a26a684712a4529ec5755e04)
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- package/python-fastapi/python-fastapi.hash | 4 ++--
- package/python-fastapi/python-fastapi.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/redis/redis.hash | 2 +-
+ package/redis/redis.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-fastapi/python-fastapi.hash b/package/python-fastapi/python-fastapi.hash
-index 41b208a8a7..1810e81e75 100644
---- a/package/python-fastapi/python-fastapi.hash
-+++ b/package/python-fastapi/python-fastapi.hash
+diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+index 4dfe1543d4..c66223f2da 100644
+--- a/package/redis/redis.hash
++++ b/package/redis/redis.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/fastapi/json
--md5  af68daf64073e04653b314a895aee297  fastapi-0.115.12.tar.gz
--sha256  1e2c2a2646905f9e83d32f04a3f86aff4a286669c6c950ca95b5fd68c2602681  fastapi-0.115.12.tar.gz
-+md5  6de51bff13da558df5f6249d7a33b888  fastapi-0.116.1.tar.gz
-+sha256  ed52cbf946abfd70c5a0dccb24673f0670deeb517a88b3544d03c2a6bf283143  fastapi-0.116.1.tar.gz
- # Locally computed sha256 checksums
- sha256  4ec89ffc81485b97fec584b2d4a961032eeffe834453894fd9c1274906cc744e  LICENSE
-diff --git a/package/python-fastapi/python-fastapi.mk b/package/python-fastapi/python-fastapi.mk
-index 95961972fe..745147dde8 100644
---- a/package/python-fastapi/python-fastapi.mk
-+++ b/package/python-fastapi/python-fastapi.mk
-@@ -4,9 +4,9 @@
+ # From https://github.com/redis/redis-hashes/blob/master/README
+-sha256  e9296b67b54c91befbcca046d67071c780a1f7c9f9e1ae5ed94773c3bb9b542f  redis-8.0.2.tar.gz
++sha256  33f37290b00b14e9a884dd4dcba335febd63ea16c51609d34fa41e031ad587df  redis-8.0.3.tar.gz
+ 
+ # Locally calculated
+ sha256  4a0e416b9537688f30dfe69ddaceb2ca64d96b7df02a0a6760d376890ddc4e40  LICENSE.txt
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index a4b6b4d652..5ffb2a929f 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_FASTAPI_VERSION = 0.115.12
-+PYTHON_FASTAPI_VERSION = 0.116.1
- PYTHON_FASTAPI_SOURCE = fastapi-$(PYTHON_FASTAPI_VERSION).tar.gz
--PYTHON_FASTAPI_SITE = https://files.pythonhosted.org/packages/f4/55/ae499352d82338331ca1e28c7f4a63bfd09479b16395dce38cf50a39e2c2
-+PYTHON_FASTAPI_SITE = https://files.pythonhosted.org/packages/78/d7/6c8b3bfe33eeffa208183ec037fee0cce9f7f024089ab1c5d12ef04bd27c
- PYTHON_FASTAPI_SETUP_TYPE = pep517
- PYTHON_FASTAPI_LICENSE = MIT
- PYTHON_FASTAPI_LICENSE_FILES = LICENSE
+-REDIS_VERSION = 8.0.2
++REDIS_VERSION = 8.0.3
+ REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = \
+ 	AGPL-3.0 or SSPL-1.0 or RSAL-2.0 (core); \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
