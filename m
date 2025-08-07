@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6B69C87FCA
-	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 17:19:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD1F3CA0EC0
+	for <buildroot@archiver.kernel.org>; Thu,  7 Aug 2025 17:19:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AD884804A3;
-	Thu,  7 Aug 2025 17:19:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AE66060642;
+	Thu,  7 Aug 2025 17:19:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0Qfdz54r64CU; Thu,  7 Aug 2025 17:19:20 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BpWjGw3NmdCN; Thu,  7 Aug 2025 17:19:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 29492801FC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DE80C60648
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 29492801FC;
-	Thu,  7 Aug 2025 17:19:20 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 6AB5931
- for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:19:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DE80C60648;
+	Thu,  7 Aug 2025 17:19:22 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2EEBA4C4
+ for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:19:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5104140093
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3066440447
  for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:19:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eSOXehVX9q79 for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id toLxdu3JO5nk for <buildroot@buildroot.org>;
  Thu,  7 Aug 2025 17:19:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 961C240066
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7771F40482
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 961C240066
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7771F40482
  for <buildroot@buildroot.org>; Thu,  7 Aug 2025 17:19:14 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9388B86FCC; Thu,  7 Aug 2025 17:19:14 +0000 (UTC)
+ id 67AE786FCC; Thu,  7 Aug 2025 17:19:14 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 7 Aug 2025 19:07:59 +0200
+Date: Thu, 7 Aug 2025 19:07:49 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: 321e6745b1baaa6e4b94a40093598e0ae8f8f31f
-X-Git-Newrev: d5dd06fb070b0705a49b8a9b5c550e83e9d0c38d
+X-Git-Oldrev: 8facccc14e25f78895fd7d9d592ba8def5010203
+X-Git-Newrev: 9fc517811153dcaeed2f95216f3a750dd5335e90
 X-Patchwork-Hint: ignore
-Message-Id: <20250807171914.9388B86FCC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] support/testing: add a
- crun-based runtime test for docker-compose
+Message-Id: <20250807171914.67AE786FCC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/oniguruma: bump
+ version to 6.9.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,65 +66,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d5dd06fb070b0705a49b8a9b5c550e83e9d0c38d
+commit: https://git.buildroot.net/buildroot/commit/?id=9fc517811153dcaeed2f95216f3a750dd5335e90
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-Via the docker-compose runtime test, we can exercise the full suite of
-the docker-related packages: docker-compose, of course, but also
-docker-engine, which in turn allows exercising containerd. The latter
-by defualt uses runc as the container runtime, but can alternatively use
-crun.
+Release notes:
+https://github.com/kkos/oniguruma/releases/tag/v6.9.10
 
-Extend the docker-compose runtime test with a variant that enables crun.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 34e44809505a64c045a79be185afd3d163d1fb7f)
+(cherry picked from commit 11818cd07d1ba2794619552788327136b24df9da)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- support/testing/tests/package/test_docker_compose.py | 18 ++++++++++++++++--
- 1 file changed, 16 insertions(+), 2 deletions(-)
+ package/oniguruma/oniguruma.hash | 4 ++--
+ package/oniguruma/oniguruma.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/support/testing/tests/package/test_docker_compose.py b/support/testing/tests/package/test_docker_compose.py
-index 16027c9c3a..6a8f6f4010 100644
---- a/support/testing/tests/package/test_docker_compose.py
-+++ b/support/testing/tests/package/test_docker_compose.py
-@@ -3,7 +3,7 @@ import os
- import infra.basetest
+diff --git a/package/oniguruma/oniguruma.hash b/package/oniguruma/oniguruma.hash
+index ac1d375b7a..be49a4d4e7 100644
+--- a/package/oniguruma/oniguruma.hash
++++ b/package/oniguruma/oniguruma.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/kkos/oniguruma/releases/download/v6.9.9/onig-6.9.9.tar.gz.sha256
+-sha256  60162bd3b9fc6f4886d4c7a07925ffd374167732f55dce8c491bfd9cd818a6cf  onig-6.9.9.tar.gz
++# From https://github.com/kkos/oniguruma/releases/download/v6.9.10/onig-6.9.10.tar.gz.sha256
++sha256  2a5cfc5ae259e4e97f86b68dfffc152cdaffe94e2060b770cb827238d769fc05  onig-6.9.10.tar.gz
+ # Hash for license file
+ sha256  70ba5469ea0bab6e18a32d7009068f996503168d27be57747e08da34337ff26f  COPYING
+diff --git a/package/oniguruma/oniguruma.mk b/package/oniguruma/oniguruma.mk
+index e056048cb5..32eff4cc75 100644
+--- a/package/oniguruma/oniguruma.mk
++++ b/package/oniguruma/oniguruma.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 
--class TestDockerCompose(infra.basetest.BRTest):
-+class BaseTestDockerCompose(infra.basetest.BRTest):
-     scripts = ["conf/docker-compose.yml",
-                "tests/package/sample_python_docker.py"]
-     config = \
-@@ -53,7 +53,7 @@ class TestDockerCompose(infra.basetest.BRTest):
-     def python_docker_test(self):
-         self.assertRunOk('python3 ./sample_python_docker.py', 120)
- 
--    def test_run(self):
-+    def do_test(self):
-         kernel = os.path.join(self.builddir, "images", "bzImage")
-         rootfs = os.path.join(self.builddir, "images", "rootfs.ext2")
-         self.emulator.boot(arch="x86_64",
-@@ -70,3 +70,17 @@ class TestDockerCompose(infra.basetest.BRTest):
-         self.docker_test()
-         self.docker_compose_test()
-         self.python_docker_test()
-+
-+
-+class TestDockerComposeRunc(BaseTestDockerCompose):
-+    def test_run(self):
-+        self.do_test()
-+
-+
-+class TestDockerComposeCrun(BaseTestDockerCompose):
-+    config = BaseTestDockerCompose.config + """
-+        BR2_PACKAGE_CRUN=y
-+        """
-+
-+    def test_run(self):
-+        self.do_test()
+-ONIGURUMA_VERSION = 6.9.9
++ONIGURUMA_VERSION = 6.9.10
+ ONIGURUMA_SITE = \
+ 	https://github.com/kkos/oniguruma/releases/download/v$(ONIGURUMA_VERSION)
+ ONIGURUMA_SOURCE = onig-$(ONIGURUMA_VERSION).tar.gz
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
