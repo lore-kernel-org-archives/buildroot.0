@@ -1,53 +1,102 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5341FC87FDA
-	for <buildroot@archiver.kernel.org>; Fri,  8 Aug 2025 14:48:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BA9DC87FCB
+	for <buildroot@archiver.kernel.org>; Fri,  8 Aug 2025 22:07:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1A88440BFB;
-	Fri,  8 Aug 2025 14:48:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B585A81975;
+	Fri,  8 Aug 2025 22:07:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aBlRHwhObXPw; Fri,  8 Aug 2025 14:48:18 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lfEHThDHtnYa; Fri,  8 Aug 2025 22:07:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 11C2240BCD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB302812F9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 11C2240BCD;
-	Fri,  8 Aug 2025 14:48:18 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1989510A
- for <buildroot@buildroot.org>; Fri,  8 Aug 2025 14:48:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EB302812F9;
+	Fri,  8 Aug 2025 22:07:17 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 759111D3
+ for <buildroot@buildroot.org>; Fri,  8 Aug 2025 22:07:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0097040433
- for <buildroot@buildroot.org>; Fri,  8 Aug 2025 14:48:14 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5BC7381301
+ for <buildroot@buildroot.org>; Fri,  8 Aug 2025 22:07:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tVc1T0FawJtX for <buildroot@buildroot.org>;
- Fri,  8 Aug 2025 14:48:13 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1DC6B40BCD
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1DC6B40BCD
- for <buildroot@buildroot.org>; Fri,  8 Aug 2025 14:48:13 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0BAA786FC9; Fri,  8 Aug 2025 14:48:13 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ek1kTiD54h5i for <buildroot@buildroot.org>;
+ Fri,  8 Aug 2025 22:07:15 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4697D81309
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4697D81309
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4697D81309
+ for <buildroot@buildroot.org>; Fri,  8 Aug 2025 22:07:14 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id
+ ffacd0b85a97d-3b78a034f17so2118576f8f.2
+ for <buildroot@buildroot.org>; Fri, 08 Aug 2025 15:07:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1754690833; x=1755295633;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=+ZZqcaAOJA0CEx1zuhFQZYHHl4rLQonyC0fYMHjkMBg=;
+ b=CY6oVqV6dgpqBYgdHsO76scOMwDZ/Vs7jA3fCaHeTMRP/ClGD68W6QEnXGgs/TNo2D
+ 4RFY3bKsvHTGCe82KPHnOnQ1q5SN3PksJ4sJ/eAkmopfJFM9EwJ9fv+rw4DlQmsAWiC7
+ S51Esy9Izm0SDuUQp6nkki8SK2uFrL/71M1/iTVsB8p8FmXA5KQapfovSJDn4GwMk6fO
+ 0l0Q5NuJmbv9rgaENY7GCLQn5rudNhvC4ZrgP+imz+kWGM9gCo4X0bpNttQsGm60dL0i
+ zuPPK2sABfO/aIZhwehcz8QM0Gb8P+5isJvGCwcWIcZ3+aA/rQxKq4YgjVIIiul7O4DG
+ 6tcg==
+X-Gm-Message-State: AOJu0YxVBd/xGD1YEVgXJcSrdk9/HQ6ebl3OVwnaIvEtxqZFhMaYn7T3
+ h3rj3n8I4NrxuDVvNmQDptTuKba3Rp+oEtd/G8/i+NqD1RPNfnGSSwCf6xV0zBW0w/LGekRGo6E
+ lNH7d
+X-Gm-Gg: ASbGncv+mbriyJWeJAtqdUw0P7mlz0KKUb/I8rmG3immPTey0qzcrGvIYxLJYp6SVW7
+ ho+TaHazMGDdaOLJsMyH1+xu3/WLzGaqc2I9/JB3odbSvt1oUBLOWC3aPE0aSHpNd1uR6JfHCnc
+ yt+B135kEkjuiGSUWfvRkm3VXBopX4ReDFe2LKMKCsTKDmtwemv3BmYDkot/nX3gf6lToWHESul
+ fURLLytlxv7EsJz+8G6rOgixx+/cpc/ImQoNKmYxJ9REP2/i/09OF+0hK4mylwjN/zeSbATbbpx
+ HpRGp5YMLHjHBVF+w8IJOk1Qmb5U4U9nTdJz2Qpp78TTwhs1xhKohxyAl/4vKTcVye7sG1C7QWA
+ Y2o8Pf52HYp2pF1kUXpQg/+/JNKhK73PM8QNIe+if8bFbG61WWKj9zvO+7nEs7fZ1LwKFE19pKE
+ i0k64Mk0hAum4oqI1dm3OD
+X-Google-Smtp-Source: AGHT+IGCOk09Y1bF6VCwyCJVD5lhweSiuMthrQWNBbh0hXmMZdBsr/UaOlxqs/Sw6ZGmYk/Nwn+aJw==
+X-Received: by 2002:a05:6000:188e:b0:3b8:d3ae:26e with SMTP id
+ ffacd0b85a97d-3b900b83cefmr3821351f8f.53.1754690833011; 
+ Fri, 08 Aug 2025 15:07:13 -0700 (PDT)
+Received: from P-NTS-Evian.home
+ (2a01cb05949d5800c97d3b734a46d823.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:949d:5800:c97d:3b73:4a46:d823])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-3b79c3ac036sm31496080f8f.15.2025.08.08.15.07.12
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 08 Aug 2025 15:07:12 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Fri, 8 Aug 2025 16:36:04 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c897f16a98644c1eb4883cdf3cc2ce38dcff7e73
-X-Git-Newrev: b3974df96614b08d418b291b86248ea0ff93c462
-X-Patchwork-Hint: ignore
-Message-Id: <20250808144813.0BAA786FC9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/tiff: add patches to fix
- CVE-2025-8176
+Cc: Romain Naour <romain.naour@smile.fr>,
+	Bernd Kuhls <bernd@kuhls.net>
+Date: Sat,  9 Aug 2025 00:07:10 +0200
+Message-ID: <20250808220710.4062162-1-romain.naour@smile.fr>
+X-Mailer: git-send-email 2.50.1
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile.fr; s=google; t=1754690833; x=1755295633; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=+ZZqcaAOJA0CEx1zuhFQZYHHl4rLQonyC0fYMHjkMBg=;
+ b=VQjd9Y/h244b1N7YLSEcCLI6Tu8QVHLm0A07g4aV++1lhoLFu88sAH3A35X+2ZmaFq
+ ursjx6h45MA1VOahA6zRz+UyIaEst98JGrD9CEhkK70P2/X6Z/c0NtonQafkfnvAHZI3
+ rEIaOXSAeYZDOo7kIab0oHUArp1OSMm3L35LM=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
+ header.s=google header.b=VQjd9Y/h
+Subject: [Buildroot] [PATCH] linux: add missing hash for linux 6.1.147
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,192 +108,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Romain Naour via buildroot <buildroot@buildroot.org>
+Reply-To: Romain Naour <romain.naour@smile.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b3974df96614b08d418b291b86248ea0ff93c462
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+When building a toolchain with kernel headers 6.1.x, the build fail
+due to missing hash for linux-6.1.147.tar.xz
 
-Fix the following vulnerability:
+The hash was removed by mistake when bumping kernel 6.{6, 12, 15}.x
+series.
 
-- CVE-2025-8176
+Fixes: 51b27bad915c95499877c8bf9a16a221c904bf82
 
-    A vulnerability was found in LibTIFF up to 4.7.0. It has been declared
-    as critical. This vulnerability affects the function get_histogram of
-    the file tools/tiffmedian.c. The manipulation leads to use after free.
-    The attack needs to be approached locally. The exploit has been
-    disclosed to the public and may be used. The patch is identified as
-    fe10872e53efba9cc36c66ac4ab3b41a839d5172. It is recommended to apply a
-    patch to fix this issue.
-
-For more information, see:
-  - https://www.cve.org/CVERecord?id=CVE-2025-8176
-  - https://gitlab.com/libtiff/libtiff/-/merge_requests/727
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Cc: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- ...-t-skip-the-first-line-of-the-input-image.patch | 61 ++++++++++++++++++++++
- package/tiff/0002-fix-tiffmedian-bug.patch         | 31 +++++++++++
- package/tiff/0003-conflict-resolution.patch        | 28 ++++++++++
- package/tiff/tiff.mk                               |  3 ++
- 4 files changed, 123 insertions(+)
+ linux/linux.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/tiff/0001-don-t-skip-the-first-line-of-the-input-image.patch b/package/tiff/0001-don-t-skip-the-first-line-of-the-input-image.patch
-new file mode 100644
-index 0000000000..bdf4bd8e94
---- /dev/null
-+++ b/package/tiff/0001-don-t-skip-the-first-line-of-the-input-image.patch
-@@ -0,0 +1,61 @@
-+From 3994cf3b3bc6b54c32f240ca5a412cffa11633fa Mon Sep 17 00:00:00 2001
-+From: Lee Howard <faxguy@howardsilvan.com>
-+Date: Mon, 19 May 2025 10:53:30 -0700
-+Subject: [PATCH] Don't skip the first line of the input image.  Addresses
-+ issue #703
-+
-+Upstream: https://gitlab.com/libtiff/libtiff/-/commit/3994cf3b3bc6b54c32f240ca5a412cffa11633fa
-+CVE: CVE-2025-8176
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ tools/tiffdither.c | 4 ++--
-+ tools/tiffmedian.c | 4 ++--
-+ 2 files changed, 4 insertions(+), 4 deletions(-)
-+
-+diff --git a/tools/tiffdither.c b/tools/tiffdither.c
-+index 714fe03d4..bfed6df18 100644
-+--- a/tools/tiffdither.c
-++++ b/tools/tiffdither.c
-+@@ -98,7 +98,7 @@ static int fsdither(TIFF *in, TIFF *out)
-+     nextptr = nextline;
-+     for (j = 0; j < imagewidth; ++j)
-+         *nextptr++ = *inptr++;
-+-    for (i = 1; i < imagelength; ++i)
-++    for (i = 0; i < imagelength; ++i)
-+     {
-+         tmpptr = thisline;
-+         thisline = nextline;
-+@@ -146,7 +146,7 @@ static int fsdither(TIFF *in, TIFF *out)
-+                     nextptr[0] += v / 16;
-+             }
-+         }
-+-        if (TIFFWriteScanline(out, outline, i - 1, 0) < 0)
-++        if (TIFFWriteScanline(out, outline, i, 0) < 0)
-+             goto skip_on_error;
-+     }
-+     goto exit_label;
-+diff --git a/tools/tiffmedian.c b/tools/tiffmedian.c
-+index 02b0bc2b4..f6cf26c2c 100644
-+--- a/tools/tiffmedian.c
-++++ b/tools/tiffmedian.c
-+@@ -917,7 +917,7 @@ static void quant_fsdither(TIFF *in, TIFF *out)
-+     outline = (unsigned char *)_TIFFmalloc(TIFFScanlineSize(out));
-+ 
-+     GetInputLine(in, 0, goto bad); /* get first line */
-+-    for (i = 1; i <= imagelength; ++i)
-++    for (i = 0; i <= imagelength; ++i)
-+     {
-+         SWAP(short *, thisline, nextline);
-+         lastline = (i >= imax);
-+@@ -997,7 +997,7 @@ static void quant_fsdither(TIFF *in, TIFF *out)
-+                 nextptr += 3;
-+             }
-+         }
-+-        if (TIFFWriteScanline(out, outline, i - 1, 0) < 0)
-++        if (TIFFWriteScanline(out, outline, i, 0) < 0)
-+             break;
-+     }
-+ bad:
-+-- 
-+GitLab
-+
-diff --git a/package/tiff/0002-fix-tiffmedian-bug.patch b/package/tiff/0002-fix-tiffmedian-bug.patch
-new file mode 100644
-index 0000000000..880bade7d8
---- /dev/null
-+++ b/package/tiff/0002-fix-tiffmedian-bug.patch
-@@ -0,0 +1,31 @@
-+From ce46f002eca4148497363f80fab33f9396bcbeda Mon Sep 17 00:00:00 2001
-+From: Lee Howard <faxguy@howardsilvan.com>
-+Date: Sat, 24 May 2025 21:25:16 -0700
-+Subject: [PATCH] Fix tiffmedian bug #707
-+
-+Upstream: https://gitlab.com/libtiff/libtiff/-/merge_requests/727/diffs?commit_id=ce46f002eca4148497363f80fab33f9396bcbeda
-+CVE: CVE-2025-8176
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ tools/tiffmedian.c | 5 ++++-
-+ 1 file changed, 4 insertions(+), 1 deletion(-)
-+
-+diff --git a/tools/tiffmedian.c b/tools/tiffmedian.c
-+index f6cf26c2c..8c9978bab 100644
-+--- a/tools/tiffmedian.c
-++++ b/tools/tiffmedian.c
-+@@ -414,7 +414,10 @@ static void get_histogram(TIFF *in, Colorbox *box)
-+     for (i = 0; i < imagelength; i++)
-+     {
-+         if (TIFFReadScanline(in, inputline, i, 0) <= 0)
-+-            break;
-++        {
-++            fprintf(stderr, "Error reading scanline\n");
-++            exit(EXIT_FAILURE);
-++        }
-+         inptr = inputline;
-+         for (j = imagewidth; j-- > 0;)
-+         {
-+-- 
-+GitLab
-+
-diff --git a/package/tiff/0003-conflict-resolution.patch b/package/tiff/0003-conflict-resolution.patch
-new file mode 100644
-index 0000000000..0c16aa3271
---- /dev/null
-+++ b/package/tiff/0003-conflict-resolution.patch
-@@ -0,0 +1,28 @@
-+From ecc4ddbf1f0fed7957d1e20361e37f01907898e0 Mon Sep 17 00:00:00 2001
-+From: Lee Howard <faxguy@howardsilvan.com>
-+Date: Sat, 24 May 2025 21:38:09 -0700
-+Subject: [PATCH] conflict resolution
-+
-+Upstream: https://gitlab.com/libtiff/libtiff/-/merge_requests/727/diffs?commit_id=ecc4ddbf1f0fed7957d1e20361e37f01907898e0
-+CVE: CVE-2025-8176
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ tools/tiffmedian.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/tools/tiffmedian.c b/tools/tiffmedian.c
-+index 8c9978bab..47e0524bc 100644
-+--- a/tools/tiffmedian.c
-++++ b/tools/tiffmedian.c
-+@@ -920,7 +920,7 @@ static void quant_fsdither(TIFF *in, TIFF *out)
-+     outline = (unsigned char *)_TIFFmalloc(TIFFScanlineSize(out));
-+ 
-+     GetInputLine(in, 0, goto bad); /* get first line */
-+-    for (i = 0; i <= imagelength; ++i)
-++    for (i = 0; i < imagelength; ++i)
-+     {
-+         SWAP(short *, thisline, nextline);
-+         lastline = (i >= imax);
-+-- 
-+GitLab
-+
-diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
-index 5d7219d7da..bd95fdca7f 100644
---- a/package/tiff/tiff.mk
-+++ b/package/tiff/tiff.mk
-@@ -13,6 +13,9 @@ TIFF_CPE_ID_VENDOR = libtiff
- TIFF_CPE_ID_PRODUCT = libtiff
- TIFF_INSTALL_STAGING = YES
- 
-+# 0001-don-t-skip-the-first-line-of-the-input-image.patch, 0002-fix-tiffmedian-bug.patch, 0003-conflict-resolution.patch
-+TIFF_IGNORE_CVES += CVE-2025-8176
-+
- # webp has a (optional) dependency on tiff, so we can't have webp
- # support in tiff, or that would create a circular dependency.
- TIFF_CONF_OPTS = \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index dd6febc25c..f5e2d663d1 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -3,6 +3,7 @@ sha256  1a4be2fe6b5246aa4ac8987a8a4af34c42a8dd7d08b46ab48516bcc1befbcd83  linux-
+ sha256  e94f3af85492302f7a819441458f80bca0ad9912e5a4c83c699ff3c63c52957d  linux-6.15.9.tar.xz
+ sha256  6b19a3ae99423de2416964d67251d745910277af258b4c4c63e88fd87dbf0e27  linux-6.12.41.tar.xz
+ sha256  8c4ff2869736538b9b0d88ea8dbf0332b79c6ecc40a32066768a754df1fae1c0  linux-6.6.101.tar.xz
++sha256  218f25663a41e3d811e84fa1c4acec50684898b2f6d0c8c0deb531d937e466f7  linux-6.1.147.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+ sha256  e3d0025b87278e14733cb326700f17c7cceb54d920622b0d5fcd58a88c6850c3  linux-5.15.189.tar.xz
+ sha256  8d88c3977226d666554b75f480d1e6c5f4e4d2acdf2a3462840c6bac88634d13  linux-5.10.240.tar.xz
+-- 
+2.50.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
