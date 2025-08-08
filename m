@@ -4,63 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BDB6C87FDA
-	for <buildroot@archiver.kernel.org>; Fri,  8 Aug 2025 14:37:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 244F3C87FD2
+	for <buildroot@archiver.kernel.org>; Fri,  8 Aug 2025 14:47:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0233140B5C;
-	Fri,  8 Aug 2025 14:37:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D623B40C09;
+	Fri,  8 Aug 2025 14:47:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hQHXoFQLZ7TY; Fri,  8 Aug 2025 14:37:37 +0000 (UTC)
+ id oRw9yVrxhI-9; Fri,  8 Aug 2025 14:47:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 316B040B58
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1CE0040C06
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 316B040B58;
-	Fri,  8 Aug 2025 14:37:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1CE0040C06;
+	Fri,  8 Aug 2025 14:47:37 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id C6C7B31
- for <buildroot@buildroot.org>; Fri,  8 Aug 2025 14:37:33 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id C646C10A
+ for <buildroot@buildroot.org>; Fri,  8 Aug 2025 14:47:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AD55560B8A
- for <buildroot@buildroot.org>; Fri,  8 Aug 2025 14:37:33 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A6A6B60BA1
+ for <buildroot@buildroot.org>; Fri,  8 Aug 2025 14:47:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7yWUMgrII4Ud for <buildroot@buildroot.org>;
- Fri,  8 Aug 2025 14:37:33 +0000 (UTC)
+ id vP36Yv0l7s8i for <buildroot@buildroot.org>;
+ Fri,  8 Aug 2025 14:47:35 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
  helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B8E4D60B2E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B8E4D60B2E
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org EEAB060665
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EEAB060665
 Received: from sendmail.purelymail.com (sendmail.purelymail.com
  [34.202.193.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B8E4D60B2E
- for <buildroot@buildroot.org>; Fri,  8 Aug 2025 14:37:32 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EEAB060665
+ for <buildroot@buildroot.org>; Fri,  8 Aug 2025 14:47:34 +0000 (UTC)
 Feedback-ID: 21632:4007:null:purelymail
 X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 801420568; 
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1245349943; 
  (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Fri, 08 Aug 2025 14:37:30 +0000 (UTC)
+ Fri, 08 Aug 2025 14:47:28 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1ukODq-003h9z-01;
- Fri, 08 Aug 2025 16:37:30 +0200
+ (envelope-from <peter@korsgaard.com>) id 1ukONT-0044xE-1d;
+ Fri, 08 Aug 2025 16:47:27 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Thomas Perale via buildroot <buildroot@buildroot.org>
-Cc: Thomas Perale <thomas.perale@mind.be>
-References: <20250806202029.625736-1-thomas.perale@mind.be>
- <20250806202029.625736-2-thomas.perale@mind.be>
-Date: Fri, 08 Aug 2025 16:37:29 +0200
-In-Reply-To: <20250806202029.625736-2-thomas.perale@mind.be> (Thomas Perale
- via buildroot's message of "Wed, 6 Aug 2025 22:20:29 +0200")
-Message-ID: <87o6spq3py.fsf@dell.be.48ers.dk>
+Cc: Thomas Perale <thomas.perale@mind.be>,  Angelo Compagnucci
+ <angelo.compagnucci@gmail.com>
+References: <20250806200631.605635-1-thomas.perale@mind.be>
+Date: Fri, 08 Aug 2025 16:47:27 +0200
+In-Reply-To: <20250806200631.605635-1-thomas.perale@mind.be> (Thomas Perale
+ via buildroot's message of "Wed, 6 Aug 2025 22:06:31 +0200")
+Message-ID: <87h5yhq39c.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=pSsNJ16iUIcKsJj3ZAEMw+X9xiRAMXsHJ1wrQir2pY++d5sM9zoq64V9EFHG8SrvJrR94QVdkB6VNu1chBSVD1e7pSd0UJtfI5gMmOuF3oPjxKUxC7sgwjcMQa2vkp8/rvOt3hs+TgvVrsQ08zAauxpq7Lsi+NATS2HUbWXC0cs79oGtF0Q2tKV6Th4CGRDql7XJzBMJdcgWJPttNX5EqfS4G/9NmfHD0JYSo+yEAfk8628KAB5g3xKGh5MJHVGF8+Uyd7FSNVTIntB4iuBVIN01ITeLiMZfwmWAh7OSjZBxPH5zek1Ab9YKl6EPAO3z4Lq2L8iLLHeQUI3Sq+A2IA==;
+ b=rk74a1z5ag1rv95AvYzt2Kqej97+zCICgfzAcDl+rx1y8g4aq2ERxd3zIt2OjVz0wC3K8vRvAMkXgM4EDbsCtTSqJcKi/70smjP+0cKrwp/xf61gM09ZhCSKgcUX22UcTxLhCuE53ZjhjTaY6gtKe1UBqmV1a4w3Dueqtg9Wdee+2PExtsNJr00ohFLTowmorfEjTFBqyfjWhlyjjzN5hz/g19kduj2RYskh55WrqZpILMdRhkycsheG//w9KH0D//Sn6xfH8HslgDJ/XnoO/qUpd7iJ/T57wQdm5HpYZyZzmY32kmLAUUofT3SKI072DsKu0xZY4gBc/T3ywAJYbg==;
  s=purelymail1; d=purelymail.com; v=1;
- bh=AS+fPG5kZT8H5dhXqJeTRp48XIjP2ZYq9DQZOALnxqg=;
+ bh=zlcuiknt/BYZlXDvgW/589Agfsa3ULp9qNObwnxyswY=;
  h=Feedback-ID:Received:Received:From:To:Subject:Date; 
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none)
@@ -68,9 +68,8 @@ X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=pSsNJ16i
-Subject: Re: [Buildroot] [PATCH 2/2] package/tiff: add patch to fix
- CVE-2025-8177
+ header.a=rsa-sha256 header.s=purelymail1 header.b=rk74a1z5
+Subject: Re: [Buildroot] [PATCH] package/libapparmor: fix build w/ musl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -89,26 +88,51 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Thomas" == Thomas Perale via buildroot <buildroot@buildroot.org> writes:
 
- > Fix the following vulnerability:
- > - CVE-2025-8177
+ > When building the libapparmor package with musl the following error
+ > would appear:
 
- >     A vulnerability was found in LibTIFF up to 4.7.0. It has been rated as
- >     critical. This issue affects the function setrow of the file
- >     tools/thumbnail.c. The manipulation leads to buffer overflow. An
- >     attack has to be approached locally. The patch is named
- >     e8c9d6c616b19438695fd829e58ae4fde5bfbc22. It is recommended to apply a
- >     patch to fix this issue. This vulnerability only affects products that
- >     are no longer supported by the maintainer.
+ > ```
+ > test_multi.c: In function 'main':
+ > test_multi.c:27:30: error: implicit declaration of function 'basename' [-Wimplicit-function-declaration]
+ >    27 |         printf("File: %s\n", basename(argv[1]));
+ >       |                              ^~~~~~~~
+ > test_multi.c:27:24: warning: format '%s' expects argument of type 'char *', but argument 2 has type 'int' [-Wformat=]
+ >    27 |         printf("File: %s\n", basename(argv[1]));
+ >       |                       ~^     ~~~~~~~~~~~~~~~~~
+ >       |                        |     |
+ >       |                        |     int
+ >       |                        char *
+ >       |                       %d
+ > make[3]: *** [Makefile:466: test_multi_multi-test_multi.o] Error 1
+ > ```
 
- > For more information, see:
- >   - https://www.cve.org/CVERecord?id=CVE-2025-8177
- >   - https://gitlab.com/libtiff/libtiff/-/merge_requests/737
+ > This error can be reproduced with the following:
 
- > Signed-off-by: Thomas Perale <thomas.perale@mind.be>
- > ---
- > v1 -> v2: renamed the patch from 0002 to 0004
+ > ```
+ > cat >.config <<EOF
+ > BR2_aarch64=y
+ > BR2_TOOLCHAIN_EXTERNAL=y
+ > BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+ > BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_MUSL_BLEEDING_EDGE=y
+ > BR2_PACKAGE_LIBAPPARMOR=y
+ > EOF
+ > make olddefconfig
+ > make libapparmor
+ > ```
 
-Committed, thanks.
+ > On musl libc the function `basename` is provided by included libgen.h.
+ > This error has been addressed upstream in [1] by re-defining the
+ > function `basename`.
+
+ > Also, `libapparmor.mk` refered to patch 0001 which has been removed in
+ > [2] so I removed that reference. The autoreconf is still needed.
+
+Please don't mix multiple changes in a single commit. It is not right
+away obvious to me why autoreconf would be needed if we don't patch any
+of the build files, so I have dropped this change for now and committed.
+
+Please send a separate patch for the autoreconf issue with a description
+of why it is needed.
 
 -- 
 Bye, Peter Korsgaard
