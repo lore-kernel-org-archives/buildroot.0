@@ -1,100 +1,104 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3AF4C87FCB
-	for <buildroot@archiver.kernel.org>; Sat,  9 Aug 2025 21:09:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25C5CC87FCF
+	for <buildroot@archiver.kernel.org>; Sat,  9 Aug 2025 21:09:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9E8B660D9B;
-	Sat,  9 Aug 2025 21:09:02 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id a-4O0l_1E6Ts; Sat,  9 Aug 2025 21:09:01 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CF4B160BE7
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CF4B160BE7;
-	Sat,  9 Aug 2025 21:09:01 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 17EE9154
- for <buildroot@buildroot.org>; Sat,  9 Aug 2025 21:09:00 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F25EC40B8F
- for <buildroot@buildroot.org>; Sat,  9 Aug 2025 21:08:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EFB6F40B8B;
+	Sat,  9 Aug 2025 21:09:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id E9a8J6TQzOlR for <buildroot@buildroot.org>;
+ id sqTYL-_m0pz3; Sat,  9 Aug 2025 21:09:03 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2912D40B8F
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2912D40B8F;
+	Sat,  9 Aug 2025 21:09:03 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 19F5B9DD
+ for <buildroot@buildroot.org>; Sat,  9 Aug 2025 21:09:00 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id F3FE240443
+ for <buildroot@buildroot.org>; Sat,  9 Aug 2025 21:08:59 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QE_s1xN_VrLM for <buildroot@buildroot.org>;
  Sat,  9 Aug 2025 21:08:59 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
+ client-ip=2a00:1450:4864:20::432; helo=mail-wr1-x432.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org DFB8140B8B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DFB8140B8B
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DFB8140B8B
- for <buildroot@buildroot.org>; Sat,  9 Aug 2025 21:08:57 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id
- ffacd0b85a97d-3b7823559a5so1520011f8f.0
- for <buildroot@buildroot.org>; Sat, 09 Aug 2025 14:08:57 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 20E7D403DF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 20E7D403DF
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 20E7D403DF
+ for <buildroot@buildroot.org>; Sat,  9 Aug 2025 21:08:59 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id
+ ffacd0b85a97d-3b7892609a5so1774352f8f.1
+ for <buildroot@buildroot.org>; Sat, 09 Aug 2025 14:08:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1754773736; x=1755378536;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=jSCRUR5uL9NmeVKsiBLUFiNRL4RkdEBKxRa75Unz3Uk=;
- b=n/oTrl+xYNy0yWzL7UpdB3bDH/Qf8Id9uH4ThdbOa2fIzc4CzDhMsibMza0QA0Vh1Z
- 0XChOuVpMigFuru8A1SbL23Ap5EGrBa+RGVhJLVWU7eRyywNxPZCwBcFwH2DFhbZ0SAv
- MCjgqG4LjO4ZJ6Uc94s0BfMq1MUMFdcaZBkzqMIrQkOGzvYCdwecNXH8GAyx1E+AQdCe
- jnqPK+AKgkRJwr1DSy711Bvyk8NFtEz8qaZ+vI1Ko7JI0rFAdwVeZYPayg4ZvoQ0SuNL
- 6752H+OQgPVu7qHRXZrWWm4Qm6xbwGUEbo/f8J3ge6xgvPa1HANU7zVYQ+2MgZBqbuCi
- Hl5w==
-X-Gm-Message-State: AOJu0Yw9FG97UfymM8xskKK7nl90rLU4+5LEFhi7atajlZaxnHigtsQd
- tb2+N45KErH//a83lwc3vQWJYZWgslQX9CHXEhhBw/0/JdcA9kBI8cfeko+pqesv1uqg9Zuz16f
- knKF5
-X-Gm-Gg: ASbGnctz4Tztbw6hK9ukDT92jziSay/fA1/Li4QVbeoOeasoYQy+5B4jwLIlDEh0r5m
- thgWrr7otaggx9dMm7nhAiNVqoJxtLkMIYcgDLzw25oIfUIXFfla7ARAGKjOYI5sYcnHlcLRBoo
- 0wd7O4i8bPASrGg6aVo7K/eV0Wp+c7fbMxE9pNwQjgTaALiVMOnd37V0kqTmrQSgn5GnqSuuw1a
- 8CVnfWBPV9MH8oOsEaTRy0t27gcznmjdDtcAPSdHfC70Db3wpWIn2wgsQ9nKwEiRw2YqZnGHor+
- AW/zEO4vvgHlnHcIgWzxgoy3KsIBVKa5/rSoQbLdAH5GquxcUipuSV971aSae3lSJK0QYFWj+qA
- Ywz+jF+BJIbUXug==
-X-Google-Smtp-Source: AGHT+IGxAQhDSHVzNRWkD7ALktE9l/Ma2o+1ykqnLaz9fdNiQ2gMzjj7yWFvU/F9m3OrTkAoL2w68A==
-X-Received: by 2002:a05:6000:240b:b0:3b8:d360:336f with SMTP id
- ffacd0b85a97d-3b900b4d2d7mr6467022f8f.28.1754773735833; 
- Sat, 09 Aug 2025 14:08:55 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1754773737; x=1755378537;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=97i/8lvRfPHwYFbR4XSkxjS3EDZJAmX9VWFNn2ehxBk=;
+ b=Js0Kq7r8lRm+Il4HBgYqxbJMHU8kL3tHru6UYzHV0N6bxK70HDsc2hI7vzdLQ4ak39
+ J9wUWbG+XgQEmqie05I0zC1WA6NxPoyVq6LlH2sbKd7uxM3czgAGmDy8gJrnlAEmfMx2
+ t5VoBKQ+XrziFtOKZOMJ86youxND+m10kb0iQcRLlafod/lRv7Uzmcpys1u00hLJf+7j
+ FlrOEPQtMAyt8aHhoDMmXj+5mDXAwJ1LLCJG6SMj3sigwADVIUuG96GiAyTJ/zzD0j3R
+ VV4T8xtuF5AHcqpbY6kif7WFUZGwYw2O/JjKFNISecDl41JDGPbpizOvFLsovFOyASIK
+ Sg9Q==
+X-Gm-Message-State: AOJu0YyMzaDTZYPU0EP1KD6MjCxLk541RFw2xH9o5zslwN4KC8t2o+Ic
+ ZCl+vyETYebhanRWsRJTnOL/SRlxlmnZ/ip5fAe9KZ45E2wprbDg11iCc2JhS4w/N++ScOagBnS
+ Ac5WT
+X-Gm-Gg: ASbGncu9fRa0wLRBQA6wEz5uC/wGPAjl9PfMl07ooAqa0v6ol0nmE0bLs0TfqHRkfT+
+ 0wUhXextc4FLiTOPCRgD74vHvMQd9QBVWL6qKdfDWtFFlXDFdjxRQbINhYddT8Pm/j0TbpP3sgm
+ 9rKVSCOV5RLogpBHbr/ZVvpnrNFTnQV9NFkvMLF2GVrDCyvw03HILXXUNaNNLbvO3JHxhGuX9aV
+ 6+jHm4K51dLSJSWT32Z3qeoiep5VxQyyvksmFMMg9GQPJTmZjUnDPAKKYNu57nk4VHAQ6+dOM0D
+ b9EonBbNeTApp9fT568LPTPxAcND7sEK0J2eQZ5uLMDP/+BEDlAIUBzXhBjsCuHj/OBTskmHsaP
+ ph2h1y091RI0bOuvCqriMeYzx
+X-Google-Smtp-Source: AGHT+IGPmoJiQDsN4rgSuf5STfJcpDrf9Wteb+ByGjN+zxS+qBe0VAu7OT8hAhC4GrslI3l7eKmG/Q==
+X-Received: by 2002:a05:6000:188e:b0:3b7:9589:1fe6 with SMTP id
+ ffacd0b85a97d-3b900b4d42cmr5787016f8f.38.1754773736186; 
+ Sat, 09 Aug 2025 14:08:56 -0700 (PDT)
 Received: from arch ([79.132.233.79]) by smtp.gmail.com with ESMTPSA id
  5b1f17b1804b1-459e587e154sm206908115e9.27.2025.08.09.14.08.55
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 09 Aug 2025 14:08:55 -0700 (PDT)
+ Sat, 09 Aug 2025 14:08:56 -0700 (PDT)
 To: buildroot@buildroot.org
 Cc: Stefan Hager <stefan.hager@ginzinger.com>
-Date: Sat,  9 Aug 2025 23:08:54 +0200
-Message-ID: <20250809210855.354805-1-thomas.perale@mind.be>
+Date: Sat,  9 Aug 2025 23:08:55 +0200
+Message-ID: <20250809210855.354805-2-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20250809210855.354805-1-thomas.perale@mind.be>
+References: <20250809210855.354805-1-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1754773736; x=1755378536; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=jSCRUR5uL9NmeVKsiBLUFiNRL4RkdEBKxRa75Unz3Uk=;
- b=WsR5E/gKN4vYNYuUslIztNI4OtaWzxs77Bv/Ou6aLKvmBvbdGN7K3X2j+wQSMPFXX9
- qdeZTDvmvjGDMljzXe4d5/JpNo6rn8WVuG/LTSE9ilrDVAX4uEev7M/7cZuh1h51wVAw
- Lx/smwvezeVy0spy04uOt1QzSvIKmOwYkgTk9zoTCq16RjgCZ3VgiyJfvZbvrnQrR05z
- OlNkefHDnj+pHb00BVF/cyPQhOCmfMBFHZr0pcDFYDpP8MSYhkyb4EdQnKMifbgW+SbO
- 9owsz0BhfBxKfxJ41yQjj59gLfJZt+hfpFZRTkC6A+GGeLfTTxoxlJVTyAGejPdVKNIg
- bkWw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=mind.be; s=google; t=1754773737; x=1755378537; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=97i/8lvRfPHwYFbR4XSkxjS3EDZJAmX9VWFNn2ehxBk=;
+ b=Nf7g0eq5lsTQr0VSKctMLqUml60/CTXaY3dqXnYqEqeW8Hlb0kNhXopvGmPq4v8GZ9
+ xH70eNoI2O3gqyxVSGLFEjeq+O/XB+Efg0c/+w/31X6Vtlzm2G3KfXNzTB6wyMXfSF9q
+ iC0YqskLAIKyZu9NtxNW2nDNah1v7a6NazjLFwuW93RO9s7xgBjsRLY4izmavINPhRa4
+ rdFX15qjWIn3XEdaD5RkBVEIRcqHmUP5Porvmhh0tTVR8xcMRKOLX+IOA2QE88UUZU28
+ gGkmNm5kBN6Desxlh4zwbSIYwJO3Sd/7hJmhNmZBkr5wqcCaXbhRixRc0VwQVpUBxxMh
+ YkGQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=WsR5E/gK
-Subject: [Buildroot] [PATCH v2 1/2] package/pthreadpool: fix thread
- dependency
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=Nf7g0eq5
+Subject: [Buildroot] [PATCH v2 2/2] package/cpuinfo: add thread requirement
+ comment
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -113,85 +117,27 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On autobuilder config with BR2_TOOLCHAIN_HAS_THREADS not set the
-following error happens when building the pthreadpool package:
+When the package was introduced in [1], it lacked a kconfig comment
+indicating that it requires a toolchain with thread support.
 
-```
--- Looking for pthread_create in pthreads
--- Looking for pthread_create in pthreads - not found
--- Looking for pthread_create in pthread
--- Looking for pthread_create in pthread - not found
--- Check if compiler accepts -pthread
--- Check if compiler accepts -pthread - no
-CMake Error at /home/buildroot/instance-0/output-1/host/share/cmake-3.31/Modules/FindPackageHandleStandardArgs.cmake:233 (message):
-  Could NOT find Threads (missing: Threads_FOUND)
-Call Stack (most recent call first):
-  /home/buildroot/instance-0/output-1/host/share/cmake-3.31/Modules/FindPackageHandleStandardArgs.cmake:603 (_FPHSA_FAILURE_MESSAGE)
-  /home/buildroot/instance-0/output-1/host/share/cmake-3.31/Modules/FindThreads.cmake:226 (FIND_PACKAGE_HANDLE_STANDARD_ARGS)
-  CMakeLists.txt:143 (FIND_PACKAGE)
+[1] ea1cc1af55 package/cpuinfo: new package
 
--- Configuring incomplete, errors occurred!
-```
-
-This can be reproduced with:
-
-```
-cat >.config <<EOF
-BR2_armeb=y
-BR2_TOOLCHAIN_BUILDROOT_UCLIBC=y
-BR2_PTHREADS_NONE=y
-BR2_PACKAGE_PTHREADPOOL=y
-EOF
-make olddefconfig
-make pthreadpool
-```
-
-Since the introduction of this package in [1], the dependency was not
-included. Since this package was part of the tensorflow-lite
-dependencies that required thread it was not an issue.
-
-This patch adds BR2_TOOLCHAIN_HAS_THREADS in the dependency to avoid
-errors when built as a standalone package.
-
-[1] f2486a6cf9 package/pthreadpool: new package
-
-Fixes: https://autobuild.buildroot.org/results/35a/35aa100d72c6875350ad10c57f028f04052cbf79
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/pthreadpool/Config.in | 4 ++++
- package/xnnpack/Config.in     | 2 +-
- 2 files changed, 5 insertions(+), 1 deletion(-)
+ package/cpuinfo/Config.in | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/pthreadpool/Config.in b/package/pthreadpool/Config.in
-index 194ae33f85..8d163b16de 100644
---- a/package/pthreadpool/Config.in
-+++ b/package/pthreadpool/Config.in
-@@ -1,8 +1,12 @@
- config BR2_PACKAGE_PTHREADPOOL
- 	bool "pthreadpool"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_FXDIV
- 	help
- 	  Pthreadpool is a portable and efficient thread pool
- 	  implementation.
+diff --git a/package/cpuinfo/Config.in b/package/cpuinfo/Config.in
+index 257480f068..64477c2bd7 100644
+--- a/package/cpuinfo/Config.in
++++ b/package/cpuinfo/Config.in
+@@ -15,3 +15,6 @@ config BR2_PACKAGE_CPUINFO
+ 	  host CPU.
  
- 	  https://github.com/Maratyszcza/pthreadpool
+ 	  https://github.com/pytorch/cpuinfo
 +
-+comment "pthreadpool needs a toolchain w/ threads"
-+	  depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/xnnpack/Config.in b/package/xnnpack/Config.in
-index e4b92f61e8..794c5c47d2 100644
---- a/package/xnnpack/Config.in
-+++ b/package/xnnpack/Config.in
-@@ -9,7 +9,7 @@ config BR2_PACKAGE_XNNPACK
- 	depends on BR2_PACKAGE_XNNPACK_ARCH_SUPPORTS
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
--	depends on BR2_TOOLCHAIN_HAS_THREADS # cpuinfo
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # cpuinfo, pthreadpool
- 	select BR2_PACKAGE_CPUINFO
- 	select BR2_PACKAGE_FP16
- 	select BR2_PACKAGE_FXDIV
++comment "cpuinfo needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
 -- 
 2.50.1
 
