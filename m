@@ -1,51 +1,110 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DCAC0C87FCB
-	for <buildroot@archiver.kernel.org>; Sat,  9 Aug 2025 20:25:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33C5AC87FCF
+	for <buildroot@archiver.kernel.org>; Sat,  9 Aug 2025 20:25:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9F73B60D7B;
-	Sat,  9 Aug 2025 20:25:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0083F40B7A;
+	Sat,  9 Aug 2025 20:25:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1EiBTS5lgHpr; Sat,  9 Aug 2025 20:25:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id a7Ppig2c0iY0; Sat,  9 Aug 2025 20:25:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B1C3F60DB9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F3E7D40B6D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B1C3F60DB9;
-	Sat,  9 Aug 2025 20:25:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 9ED7521B
- for <buildroot@buildroot.org>; Sat,  9 Aug 2025 20:25:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F3E7D40B6D;
+	Sat,  9 Aug 2025 20:25:10 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 520391D3
+ for <buildroot@buildroot.org>; Sat,  9 Aug 2025 20:25:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 84F2980D99
- for <buildroot@buildroot.org>; Sat,  9 Aug 2025 20:25:08 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 43F4940B6D
+ for <buildroot@buildroot.org>; Sat,  9 Aug 2025 20:25:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id s18bvbfVPQXv for <buildroot@buildroot.org>;
- Sat,  9 Aug 2025 20:25:06 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA1DC80D92
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id AA1DC80D92
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id V0xNRru1AydV for <buildroot@buildroot.org>;
+ Sat,  9 Aug 2025 20:25:07 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B0DED40B62
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0DED40B62
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B0DED40B62
  for <buildroot@buildroot.org>; Sat,  9 Aug 2025 20:25:06 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 94497870A0; Sat,  9 Aug 2025 20:25:06 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 9 Aug 2025 22:16:05 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 432cf9be9f43b26dbe7856feb3295b8e25c85048
-X-Git-Newrev: 0ae37b712f454975f1b18ac0557c2a371ceefa37
-X-Patchwork-Hint: ignore
-Message-Id: <20250809202506.94497870A0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/php-pecl-dbus: fix build with PHP8
+Received: by mail-wm1-x336.google.com with SMTP id
+ 5b1f17b1804b1-459e794b331so19752235e9.3
+ for <buildroot@buildroot.org>; Sat, 09 Aug 2025 13:25:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1754771104; x=1755375904;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=1vUq1VdysniZElzgFyPmsw+DHtbY20HEK+5IhiVeOn0=;
+ b=hvUW0vALY1c9s8sWUHvvCm+ZOiuLYvohKePtiRUZyKiMpj+0/Qg2YPt8HR2I4665aG
+ bF42l3YuqzhWSbWVaqdBShNOtbNPg+oxR86Bhw2o3E/fXQwv9lp3s+g83bzh/IpaHhAP
+ YhCk8jpbXaiJMjWvesQHif1nNfxoKzs/SpGQlzVYf/d/C9/qdjosJYbqH9XwWHvYva1A
+ QozmjSBUgpQ0uJv6vJgVH8pHhqytGXpDrK5ttqMb/AK/VDLaxYtwwc0f1C4MHcJGVlH8
+ aIHhzRAQTl0sixc3bksK75IaoYbgMJsP1qnf4V9t/qbis+3/uId8NAqGRZBLBA3FKiqP
+ LTPg==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCURpLEmNHhbSr45oDzJk4LzWBs42c07mwsSbhkvKwbSjRrWfE3IzSR5E5LK+7IXz1eq8uAzbTwxhbc=@buildroot.org
+X-Gm-Message-State: AOJu0YxN7meiolTeTlLh08jg/0j4wKIqe9/LdGkq1uJoqmFIgfTTvbAb
+ GC1oKGwX6AG7X0anrnZUdj9NCUQt/zN9MKsIy4KWzY2f0QTDvNSdE6cInCrMLdSF6rk=
+X-Gm-Gg: ASbGncvlQ0EdAzHgLJsz160xvoo8CkA2XFnERv20dlGtGPWoYmzxxOQ7sHZiQRPD7Lp
+ u1PNBtUV3rb4UTzpA8jxYS0rudSTty7K+e8WGFoZPVoGWclcio/wNKAQB2p82ijDji/LlCToVV+
+ afEqDjHHIJ7J6dggzCyIOc7UcuF7SvhcCK/eG46gpeLIfiqMFkYROHmbb/1hbO/yIzCcUUiVBM8
+ qA/0lmI/DumflWHj1hx9/Pe+4AWm3CUztI+2850GsZLGyx7B3K7z2NhsWx1dvo6KvD8kJsKJjCy
+ 6LX5L/e1h+fovVGyWDRKAsYbr6XuHYDT2atT+Y75hUV8Ix4OQtP+W0XOWCZPxQ1OZAZ3wf5csl8
+ UYzQ84f70Ph7TKuHw7oJB+GzMdaHINgpjVI8WI+v93zy1WHjNnMe6vhQs5pdy6Meewawbzj9ON0
+ UgkzzTOLmNVMZsFqjFn5QxWgYCCU5D1Uzmzw5z4i9hFYTfm23OJI/fee7HvIKV
+X-Google-Smtp-Source: AGHT+IE+d8x1GadxeiXvhslrQodMrg6c3Cz0aSAz1fuLWRRxgu6Dp9Xf0bgoOkyOKMrjlthuYn5Kew==
+X-Received: by 2002:a05:600c:3103:b0:456:28f4:a576 with SMTP id
+ 5b1f17b1804b1-459f4f2badbmr63116745e9.27.1754771104169; 
+ Sat, 09 Aug 2025 13:25:04 -0700 (PDT)
+Received: from ?IPV6:2a01:cb05:949d:5800:c97d:3b73:4a46:d823?
+ (2a01cb05949d5800c97d3b734a46d823.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:949d:5800:c97d:3b73:4a46:d823])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-459e5862fd9sm203315175e9.16.2025.08.09.13.25.03
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 09 Aug 2025 13:25:03 -0700 (PDT)
+Message-ID: <11f2a010-1574-4078-a484-56ec833eb870@smile.fr>
+Date: Sat, 9 Aug 2025 22:25:02 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
+ buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ =?UTF-8?Q?Herv=C3=A9_Codina?= <herve.codina@bootlin.com>,
+ Nicolas Carrier <nicolas.carrier@nav-timing.safrangroup.com>
+References: <20250806-php-dbus-v2-1-358798804c2c@bootlin.com>
+Content-Language: fr
+In-Reply-To: <20250806-php-dbus-v2-1-358798804c2c@bootlin.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile.fr; s=google; t=1754771104; x=1755375904; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=1vUq1VdysniZElzgFyPmsw+DHtbY20HEK+5IhiVeOn0=;
+ b=uD4f0rXiPILdha7Xou7xXiI6cBJp8ruVc2ewmmqzAbxUH06kOrbpyJHLx1DWXWB0MK
+ +uMEtukXbEZFYhwcfJWXUTrQf6nS4z/XJMSK6vtE9/F943lvbf5edISgC81Xayfm5Afb
+ GZNiZbIKxFS6HrebRwDqAQcepSzMVsjvcvZLk=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
+ header.s=google header.b=uD4f0rXi
+Subject: Re: [Buildroot] [PATCH v2] package/php-pecl-dbus: fix build with
+ PHP8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,889 +118,698 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Romain Naour via buildroot <buildroot@buildroot.org>
 Reply-To: Romain Naour <romain.naour@smile.fr>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7151495514081908330=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7151495514081908330==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=0ae37b712f454975f1b18ac0557c2a371ceefa37
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The php-pecl-dbus encouters two build issues in both buildroot 2025.02.x
-and master branch, both related to PHP8 and GCC14:
-
-/home/alexis/src/buildroot/php/build/php-pecl-dbus-b147624d480c3353e6c700e9a2d0c6f14d853941/dbus.c:465:56:
-error: assignment to ‘zend_object_get_properties_t’ {aka ‘struct
-_zend_array * (*)(struct _zend_object *)’} from incompatible pointer
-type ‘HashTable * (*)(zval *)’ {aka ‘struct _zend_array * (*)(struct
-_zval_str
-uct *)’} [-Wincompatible-pointer-types]
-  465 |         dbus_object_handlers_dbus_array.get_properties =
-dbus_array_get_properties;
-      |                                                        ^
-[...]
-
-The build failure can be reproduced with this minimal defconfig:
-
-BR2_arm=y
-BR2_cortex_a9=y
-BR2_ARM_ENABLE_NEON=y
-BR2_ARM_ENABLE_VFP=y
-BR2_ARM_FPU_NEON=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-BR2_PACKAGE_PHP=y
-BR2_PACKAGE_PHP_PECL_DBUS=y
-
-This build failure is the result of two events/conditions:
-- the update to PHP8 has changed the prototype for
-  zend_object_read_property_t and zend_hash_get_current_key(see [1]).
-  But at this time, php-dbus just generated a new warning
-  (-Wincompatible-pointer-types)
-- using bootlin bleeding-edge toolchain brings in GCC14, which now turns
-  this warning into a systematic error (see [2])
-
-Bring the relevant patches to fix this build.
-
-The first patch comes from an already opened PR on the upstream source.
-The second patch has been written during the build failure
-investigation, and has been sent upstream as well.
-
-Fixes: https://autobuild.buildroot.net/results/e9892bbefa781b403fd3d834b6c48527c8e078ba
-Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
- ...e-use-zend_objects-or-zval-depending-upon.patch | 751 +++++++++++++++++++++
- ...mpatibility-for-DBUS_ZEND_HASH_GET_CURREN.patch |  51 ++
- 2 files changed, 802 insertions(+)
-
-diff --git a/package/php-pecl-dbus/0001-PHP-8-update-use-zend_objects-or-zval-depending-upon.patch b/package/php-pecl-dbus/0001-PHP-8-update-use-zend_objects-or-zval-depending-upon.patch
-new file mode 100644
-index 0000000000..937cc3c62e
---- /dev/null
-+++ b/package/php-pecl-dbus/0001-PHP-8-update-use-zend_objects-or-zval-depending-upon.patch
-@@ -0,0 +1,751 @@
-+From c3ecd25a755461009de64b9a3b74b4bad8442938 Mon Sep 17 00:00:00 2001
-+From: Matt Saladna <msaladna@apisnetworks.com>
-+Date: Sun, 5 Mar 2023 12:37:26 -0500
-+Subject: [PATCH] PHP 8 update, use zend_objects or zval depending upon version
-+ Refrain duplicating objects on __get()
-+
-+Upstream: https://github.com/derickr/pecl-dbus/pull/13
-+Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
-+---
-+ dbus.c     | 223 +++++++++++++++++++++++++----------------------------
-+ php_dbus.h |  22 ++++--
-+ 2 files changed, 118 insertions(+), 127 deletions(-)
-+
-+diff --git a/dbus.c b/dbus.c
-+index 57672cc10f56..c198a6c5c71a 100644
-+--- a/dbus.c
-++++ b/dbus.c
-+@@ -267,22 +267,22 @@ static zend_object* dbus_object_new_dbus_set(zend_class_entry *class_type TSRMLS
-+ static zend_object* dbus_object_new_dbus_struct(zend_class_entry *class_type TSRMLS_DC);
-+ static zend_object* dbus_object_new_dbus_object_path(zend_class_entry *class_type TSRMLS_DC);
-+ 
-+-static HashTable *dbus_byte_get_properties(zval *object TSRMLS_DC);
-+-static HashTable *dbus_bool_get_properties(zval *object TSRMLS_DC);
-+-static HashTable *dbus_int16_get_properties(zval *object TSRMLS_DC);
-+-static HashTable *dbus_uint16_get_properties(zval *object TSRMLS_DC);
-+-static HashTable *dbus_int32_get_properties(zval *object TSRMLS_DC);
-+-static HashTable *dbus_uint32_get_properties(zval *object TSRMLS_DC);
-+-static HashTable *dbus_int64_get_properties(zval *object TSRMLS_DC);
-+-static HashTable *dbus_uint64_get_properties(zval *object TSRMLS_DC);
-+-static HashTable *dbus_double_get_properties(zval *object TSRMLS_DC);
-+-
-+-static HashTable *dbus_array_get_properties(zval *object TSRMLS_DC);
-+-static HashTable *dbus_dict_get_properties(zval *object TSRMLS_DC);
-+-static HashTable *dbus_variant_get_properties(zval *object TSRMLS_DC);
-+-static HashTable *dbus_set_get_properties(zval *object TSRMLS_DC);
-+-static HashTable *dbus_struct_get_properties(zval *object TSRMLS_DC);
-+-static HashTable *dbus_object_path_get_properties(zval *object TSRMLS_DC);
-++static HashTable *dbus_byte_get_properties(dbus_object_type *object TSRMLS_DC);
-++static HashTable *dbus_bool_get_properties(dbus_object_type *object TSRMLS_DC);
-++static HashTable *dbus_int16_get_properties(dbus_object_type *object TSRMLS_DC);
-++static HashTable *dbus_uint16_get_properties(dbus_object_type *object TSRMLS_DC);
-++static HashTable *dbus_int32_get_properties(dbus_object_type *object TSRMLS_DC);
-++static HashTable *dbus_uint32_get_properties(dbus_object_type *object TSRMLS_DC);
-++static HashTable *dbus_int64_get_properties(dbus_object_type *object TSRMLS_DC);
-++static HashTable *dbus_uint64_get_properties(dbus_object_type *object TSRMLS_DC);
-++static HashTable *dbus_double_get_properties(dbus_object_type *object TSRMLS_DC);
-++
-++static HashTable *dbus_array_get_properties(dbus_object_type *object TSRMLS_DC);
-++static HashTable *dbus_dict_get_properties(dbus_object_type *object TSRMLS_DC);
-++static HashTable *dbus_variant_get_properties(dbus_object_type *object TSRMLS_DC);
-++static HashTable *dbus_set_get_properties(dbus_object_type *object TSRMLS_DC);
-++static HashTable *dbus_struct_get_properties(dbus_object_type *object TSRMLS_DC);
-++static HashTable *dbus_object_path_get_properties(dbus_object_type *object TSRMLS_DC);
-+ 
-+ static int dbus_variant_initialize(php_dbus_variant_obj *dbusobj, zval *data, char *signature TSRMLS_DC);
-+ 
-+@@ -548,7 +548,7 @@ static int dbus_object_compare_dbus(zval *d1, zval *d2 TSRMLS_DC)
-+ 
-+ static void dbus_object_free_storage_dbus(void *object TSRMLS_DC)
-+ {
-+-	php_dbus_obj *intern = DBUS_ZEND_ZOBJ_TO_OBJ(object, php_dbus_obj);
-++	php_dbus_obj *intern = DBUS_GET_OBJECT(php_dbus_obj, object);
-+ 
-+ 	if (intern->con) {
-+ 		dbus_connection_unref(intern->con);
-+@@ -572,9 +572,10 @@ static zend_object* dbus_object_new_dbus_object(zend_class_entry *class_type TSR
-+ 
-+ static void dbus_object_free_storage_dbus_object(void *object TSRMLS_DC)
-+ {
-+-	php_dbus_object_obj *intern = DBUS_ZEND_ZOBJ_TO_OBJ(object, php_dbus_object_obj);
-++	php_dbus_object_obj *intern = DBUS_GET_OBJECT(php_dbus_object_obj, object);
-+ 
-+ 	xmlFreeDoc(intern->introspect_xml_doc);
-++
-+ 	if (intern->destination) {
-+ 		efree(intern->destination);
-+ 	}
-+@@ -584,6 +585,7 @@ static void dbus_object_free_storage_dbus_object(void *object TSRMLS_DC)
-+ 	if (intern->interface) {
-+ 		efree(intern->interface);
-+ 	}
-++
-+ 	zend_object_std_dtor(&intern->std);
-+ }
-+ 
-+@@ -601,7 +603,7 @@ static zend_object* dbus_object_new_dbus_signal(zend_class_entry *class_type TSR
-+ 
-+ static void dbus_object_free_storage_dbus_signal(void *object TSRMLS_DC)
-+ {
-+-	php_dbus_signal_obj *intern = DBUS_ZEND_ZOBJ_TO_OBJ(object, php_dbus_signal_obj);
-++	php_dbus_signal_obj *intern = DBUS_GET_OBJECT(php_dbus_signal_obj, object);
-+ 
-+ 	dbus_message_unref(intern->msg);
-+ 
-+@@ -631,7 +633,7 @@ static zend_object* dbus_object_new_dbus_array(zend_class_entry *class_type TSRM
-+ 
-+ static void dbus_object_free_storage_dbus_array(void *object TSRMLS_DC)
-+ {
-+-	php_dbus_array_obj *intern = DBUS_ZEND_ZOBJ_TO_OBJ(object, php_dbus_array_obj);
-++	php_dbus_array_obj *intern = DBUS_GET_OBJECT(php_dbus_array_obj, object);
-+ 
-+ 	if (intern->signature) {
-+ 		efree(intern->signature);
-+@@ -654,7 +656,7 @@ static zend_object* dbus_object_new_dbus_dict(zend_class_entry *class_type TSRML
-+ 
-+ static void dbus_object_free_storage_dbus_dict(void *object TSRMLS_DC)
-+ {
-+-	php_dbus_dict_obj *intern = DBUS_ZEND_ZOBJ_TO_OBJ(object, php_dbus_dict_obj);
-++	php_dbus_dict_obj *intern = DBUS_GET_OBJECT(php_dbus_dict_obj, object);
-+ 
-+ 	if (intern->signature) {
-+ 		efree(intern->signature);
-+@@ -677,11 +679,14 @@ static zend_object* dbus_object_new_dbus_variant(zend_class_entry *class_type TS
-+ 
-+ static void dbus_object_free_storage_dbus_variant(void *object TSRMLS_DC)
-+ {
-+-	php_dbus_variant_obj *intern = DBUS_ZEND_ZOBJ_TO_OBJ(object, php_dbus_variant_obj);
-++	php_dbus_variant_obj *intern = DBUS_GET_OBJECT(php_dbus_variant_obj, object);
-+ 
-+ 	if (intern->signature) {
-+ 		efree(intern->signature);
-+ 	}
-++	if (intern->data) {
-++		efree(intern->data);
-++	}
-+ 
-+ 	zend_object_std_dtor(&intern->std);
-+ }
-+@@ -700,7 +705,7 @@ static zend_object* dbus_object_new_dbus_set(zend_class_entry *class_type TSRMLS
-+ 
-+ static void dbus_object_free_storage_dbus_set(void *object TSRMLS_DC)
-+ {
-+-	php_dbus_set_obj *intern = DBUS_ZEND_ZOBJ_TO_OBJ(object, php_dbus_set_obj);
-++	php_dbus_set_obj *intern = DBUS_GET_OBJECT(php_dbus_set_obj, object);
-+ 
-+ 	if (intern->elements) {
-+ 		int i;
-+@@ -720,6 +725,7 @@ static void dbus_object_free_storage_dbus_set(void *object TSRMLS_DC)
-+ static inline zend_object* dbus_object_new_dbus_struct_ex(zend_class_entry *class_type, php_dbus_struct_obj **ptr TSRMLS_DC)
-+ {
-+ 	php_dbus_struct_obj *intern;
-++
-+ 	DBUS_ZEND_OBJECT_INIT_RETURN(intern, class_type, dbus_struct);
-+ }
-+ 
-+@@ -730,7 +736,7 @@ static zend_object* dbus_object_new_dbus_struct(zend_class_entry *class_type TSR
-+ 
-+ static void dbus_object_free_storage_dbus_struct(void *object TSRMLS_DC)
-+ {
-+-	php_dbus_struct_obj *intern = DBUS_ZEND_ZOBJ_TO_OBJ(object, php_dbus_struct_obj);
-++	php_dbus_struct_obj *intern = DBUS_GET_OBJECT(php_dbus_struct_obj, object);
-+ 
-+ 	zend_object_std_dtor(&intern->std);
-+ }
-+@@ -749,7 +755,7 @@ static zend_object* dbus_object_new_dbus_object_path(zend_class_entry *class_typ
-+ 
-+ static void dbus_object_free_storage_dbus_object_path(void *object TSRMLS_DC)
-+ {
-+-	php_dbus_object_path_obj *intern = DBUS_ZEND_ZOBJ_TO_OBJ(object, php_dbus_object_path_obj);
-++	php_dbus_object_path_obj *intern = DBUS_GET_OBJECT(php_dbus_object_path_obj, object);
-+ 
-+ 	zend_object_std_dtor(&intern->std);
-+ }
-+@@ -768,27 +774,19 @@ static void dbus_object_free_storage_dbus_object_path(void *object TSRMLS_DC)
-+  \
-+ 	static void dbus_object_free_storage_dbus_##t(void *object TSRMLS_DC) \
-+ 	{ \
-+-		php_dbus_##t##_obj *intern = DBUS_ZEND_ZOBJ_TO_OBJ(object, php_dbus_##t##_obj); \
-++		php_dbus_##t##_obj *intern = DBUS_GET_OBJECT(php_dbus_##t##_obj, object); \
-+  \
-+ 		zend_object_std_dtor(&intern->std); \
-+ 	} \
-+  \
-+-	static HashTable *dbus_##t##_get_properties(zval *object TSRMLS_DC) \
-++	static HashTable *dbus_##t##_get_properties(dbus_object_type *object TSRMLS_DC) \
-+ 	{ \
-+ 		HashTable *props; \
-+ 		zval *zv; \
-+ 		php_dbus_##t##_obj *intern; \
-+- \
-+-		DBUS_ZEND_GET_ZVAL_OBJECT(object, intern, php_dbus_##t##_obj); \
-+-		DBUS_ZEND_MAKE_STD_ZVAL(zv); \
-+-		DBUS_ZEND_ZVAL_TYPE_P(zv) = pt; \
-+-		(*zv).value.pf = intern->data; \
-+- \
-+-		props = intern->std.properties; \
-+- \
-+-		DBUS_ZEND_HASH_UPDATE(props, "value", &zv); \
-+- \
-+-		return props; \
-++                                                \
-++        props = zend_std_get_properties(object);\
-++		return props;                                 \
-+ 	}
-+ 
-+ 
-+@@ -810,10 +808,6 @@ static zval * dbus_instantiate(zend_class_entry *pce, zval *object TSRMLS_DC)
-+ 	}
-+ 
-+ 	object_init_ex(object, pce);
-+-	Z_TYPE_INFO_P(object) = IS_OBJECT_EX;
-+-	Z_SET_REFCOUNT_P(object, 1);
-+-	if (Z_ISREF_P(object))
-+-		ZVAL_UNREF(object);
-+ 
-+ 	return object;
-+ }
-+@@ -848,7 +842,7 @@ PHP_METHOD(Dbus, __construct)
-+ 
-+ 	dbus_set_error_handling(EH_THROW, NULL TSRMLS_CC);
-+ 	if (SUCCESS == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|ll", &type, &introspect)) {
-+-		DBUS_ZEND_GET_ZVAL_OBJECT(getThis(), dbus, php_dbus_obj);
-++		dbus = DBUS_ZVAL_GET_OBJECT(php_dbus_obj, getThis());
-+ 		dbus_initialize(dbus, type, introspect TSRMLS_CC);
-+ 	}
-+ 	dbus_set_error_handling(EH_NORMAL, NULL TSRMLS_CC);
-+@@ -930,13 +924,13 @@ PHP_METHOD(DbusObject, __construct)
-+ 
-+ 	dbus_set_error_handling(EH_THROW, NULL TSRMLS_CC);
-+ 	if (SUCCESS == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "Osss!",
-+-		&object, dbus_ce_dbus,
-+-		&destination, &destination_len, &path, &path_len,
-+-		&interface, &interface_len))
-++										 &object, dbus_ce_dbus,
-++										 &destination, &destination_len, &path, &path_len,
-++										 &interface, &interface_len))
-+ 	{
-+ 		DBUS_ZEND_ADDREF_P(object);
-+-		DBUS_ZEND_GET_ZVAL_OBJECT(object, dbus, php_dbus_obj);
-+-		DBUS_ZEND_GET_ZVAL_OBJECT(getThis(), dbus_object, php_dbus_object_obj);
-++		dbus = DBUS_ZVAL_GET_OBJECT(php_dbus_obj, object);
-++		dbus_object = DBUS_ZVAL_GET_OBJECT(php_dbus_object_obj, getThis());
-+ 		dbus_object_initialize(dbus_object, dbus, destination, path, interface TSRMLS_CC);
-+ 		if (dbus->useIntrospection) {
-+ 			php_dbus_introspect(dbus_object, dbus, destination, path, interface TSRMLS_CC);
-+@@ -959,13 +953,13 @@ PHP_METHOD(Dbus, createProxy)
-+ 
-+ 	dbus_set_error_handling(EH_THROW, NULL TSRMLS_CC);
-+ 	if (SUCCESS == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "sss!",
-+-		&destination, &destination_len, &path, &path_len,
-+-		&interface, &interface_len))
-++										 &destination, &destination_len, &path, &path_len,
-++										 &interface, &interface_len))
-+ 	{
-+-		DBUS_ZEND_GET_ZVAL_OBJECT(object, dbus, php_dbus_obj);
-++		dbus = DBUS_ZVAL_GET_OBJECT(php_dbus_obj, object);
-+ 		DBUS_ZEND_ADDREF_P(object);
-+ 		dbus_instantiate(dbus_ce_dbus_object, return_value TSRMLS_CC);
-+-		DBUS_ZEND_GET_ZVAL_OBJECT(return_value, dbus_object, php_dbus_object_obj);
-++		dbus_object = DBUS_ZVAL_GET_OBJECT(php_dbus_object_obj, return_value);
-+ 		dbus_object_initialize(dbus_object, dbus, destination, path, interface TSRMLS_CC);
-+ 		if (dbus->useIntrospection) {
-+ 			php_dbus_introspect(dbus_object, dbus, destination, path, interface TSRMLS_CC);
-+@@ -979,7 +973,7 @@ static void php_dbus_accept_incoming_signal(DBusMessage *msg, zval **return_valu
-+ {
-+ 	php_dbus_signal_obj *signalobj;
-+ 	dbus_instantiate(dbus_ce_dbus_signal, *return_value TSRMLS_CC);
-+-	DBUS_ZEND_GET_ZVAL_OBJECT(*return_value, signalobj, php_dbus_signal_obj);
-++	signalobj = DBUS_ZVAL_GET_OBJECT(php_dbus_signal_obj, *return_value);
-+ 	signalobj->msg = msg;
-+ 	signalobj->direction = PHP_DBUS_SIGNAL_IN;
-+ }
-+@@ -1114,7 +1108,7 @@ PHP_METHOD(Dbus, waitLoop)
-+ 		RETURN_FALSE;
-+ 	}
-+ 
-+-	DBUS_ZEND_GET_ZVAL_OBJECT(object, dbus, php_dbus_obj);
-++	dbus = DBUS_ZVAL_GET_OBJECT(php_dbus_obj, object);
-+ 
-+ 	dbus_connection_read_write(dbus->con, timeout);
-+ 	msg = dbus_connection_pop_message(dbus->con);
-+@@ -1151,7 +1145,7 @@ PHP_METHOD(Dbus, requestName)
-+ 		RETURN_FALSE;
-+ 	}
-+ 
-+-	DBUS_ZEND_GET_ZVAL_OBJECT(object, dbus, php_dbus_obj);
-++	dbus = DBUS_ZVAL_GET_OBJECT(php_dbus_obj, object);
-+ 	dbus_error_init(&err);
-+ 
-+ 	/* request our name on the bus and check for errors */
-+@@ -1180,7 +1174,7 @@ PHP_METHOD(Dbus, registerObject)
-+ 		&class, &class_len)) {
-+ 		RETURN_FALSE;
-+ 	}
-+-	DBUS_ZEND_GET_ZVAL_OBJECT(object, dbus, php_dbus_obj);
-++	dbus = DBUS_ZVAL_GET_OBJECT(php_dbus_obj, object);
-+ 
-+ 	/* Create the key out of the path and interface */
-+ 	spprintf(&key, 0, "%s:%s", path, interface ? interface : "(null)");
-+@@ -1459,7 +1453,7 @@ PHP_DBUS_APPEND_TYPE_FUNC(uint64, UINT64);
-+ #define PHP_DBUS_MARSHAL_TO_DBUS_CASE(t) \
-+ 	if (obj->ce == dbus_ce_dbus_##t) { \
-+ 		php_dbus_##t##_obj *_val = \
-+-			DBUS_ZEND_ZOBJ_TO_OBJ(obj, php_dbus_##t##_obj); \
-++			DBUS_GET_OBJECT(php_dbus_##t##_obj, obj); \
-+ 		dbus_append_var_##t(iter, _val->data); \
-+ 	}
-+ 
-+@@ -1506,27 +1500,27 @@ static int dbus_append_var(zval **val, DBusMessageIter *iter, char *type_hint TS
-+ 			obj = Z_OBJ_P(*val);
-+ 			if (obj->ce == dbus_ce_dbus_array) {
-+ 				dbus_append_var_array(iter,
-+-					DBUS_ZEND_ZOBJ_TO_OBJ(obj, php_dbus_array_obj) TSRMLS_CC);
-++					DBUS_GET_OBJECT(php_dbus_array_obj, obj) TSRMLS_CC);
-+ 			}
-+ 			if (obj->ce == dbus_ce_dbus_dict) {
-+ 				dbus_append_var_dict(iter,
-+-					DBUS_ZEND_ZOBJ_TO_OBJ(obj, php_dbus_dict_obj) TSRMLS_CC);
-++					DBUS_GET_OBJECT(php_dbus_dict_obj, obj) TSRMLS_CC);
-+ 			}
-+ 			if (obj->ce == dbus_ce_dbus_variant) {
-+ 				dbus_append_var_variant(iter,
-+-					DBUS_ZEND_ZOBJ_TO_OBJ(obj, php_dbus_variant_obj) TSRMLS_CC);
-++					DBUS_GET_OBJECT(php_dbus_variant_obj, obj) TSRMLS_CC);
-+ 			}
-+ 			if (obj->ce == dbus_ce_dbus_set) {
-+ 				dbus_append_var_set(iter,
-+-					DBUS_ZEND_ZOBJ_TO_OBJ(obj, php_dbus_set_obj) TSRMLS_CC);
-++					DBUS_GET_OBJECT(php_dbus_set_obj, obj) TSRMLS_CC);
-+ 			}
-+ 			if (obj->ce == dbus_ce_dbus_struct) {
-+ 				dbus_append_var_struct(iter,
-+-					DBUS_ZEND_ZOBJ_TO_OBJ(obj, php_dbus_struct_obj) TSRMLS_CC);
-++					DBUS_GET_OBJECT(php_dbus_struct_obj, obj) TSRMLS_CC);
-+ 			}
-+ 			if (obj->ce == dbus_ce_dbus_object_path) {
-+ 				dbus_append_var_object_path(iter,
-+-					DBUS_ZEND_ZOBJ_TO_OBJ(obj, php_dbus_object_path_obj) TSRMLS_CC);
-++					DBUS_GET_OBJECT(php_dbus_object_path_obj, obj) TSRMLS_CC);
-+ 			}
-+ 			PHP_DBUS_MARSHAL_TO_DBUS_CASE(byte);
-+ 			PHP_DBUS_MARSHAL_TO_DBUS_CASE(bool);
-+@@ -1599,7 +1593,7 @@ static zval *php_dbus_to_zval(DBusMessageIter *args, zval **key TSRMLS_DC)
-+ 					if (new_key) {
-+ 						if (!init) {
-+ 							dbus_instantiate(dbus_ce_dbus_dict, return_value TSRMLS_CC);
-+-							DBUS_ZEND_GET_ZVAL_OBJECT(return_value, dictobj, php_dbus_dict_obj);
-++							dictobj = DBUS_ZVAL_GET_OBJECT(php_dbus_dict_obj, return_value);
-+ 							dictobj->type = php_dbus_fetch_child_type(val TSRMLS_CC);
-+ 							DBUS_ZEND_ALLOC_ZVAL(dictobj->elements);
-+ 							array_init(dictobj->elements);
-+@@ -1611,7 +1605,7 @@ static zval *php_dbus_to_zval(DBusMessageIter *args, zval **key TSRMLS_DC)
-+ 						} else if (val && Z_TYPE_P(new_key) == IS_OBJECT) {
-+ 							zend_object *obj = Z_OBJ_P(new_key);
-+ 							if (obj->ce == dbus_ce_dbus_object_path) {
-+-								php_dbus_object_path_obj *intern = DBUS_ZEND_ZOBJ_TO_OBJ(obj, php_dbus_object_path_obj);
-++								php_dbus_object_path_obj *intern = DBUS_GET_OBJECT(php_dbus_object_path_obj, obj);
-+ 								add_assoc_zval_ex(dictobj->elements, intern->path, strlen(intern->path), val);
-+ 							}
-+ 						} else if (val && Z_TYPE_P(new_key) == IS_LONG) {
-+@@ -1620,7 +1614,7 @@ static zval *php_dbus_to_zval(DBusMessageIter *args, zval **key TSRMLS_DC)
-+ 					} else {
-+ 						if (!init) {
-+ 							dbus_instantiate(dbus_ce_dbus_array, return_value TSRMLS_CC);
-+-							DBUS_ZEND_GET_ZVAL_OBJECT(return_value, arrayobj, php_dbus_array_obj);
-++							arrayobj = DBUS_ZVAL_GET_OBJECT(php_dbus_array_obj, return_value);
-+ 							arrayobj->type = val ? php_dbus_fetch_child_type(val TSRMLS_CC) : DBUS_TYPE_INVALID;
-+ 							DBUS_ZEND_ALLOC_ZVAL(arrayobj->elements);
-+ 							array_init(arrayobj->elements);
-+@@ -1655,7 +1649,7 @@ static zval *php_dbus_to_zval(DBusMessageIter *args, zval **key TSRMLS_DC)
-+ 				val = php_dbus_to_zval(&subiter, &new_key TSRMLS_CC);
-+ 
-+ 				dbus_instantiate(dbus_ce_dbus_variant, return_value TSRMLS_CC);
-+-				DBUS_ZEND_GET_ZVAL_OBJECT(return_value, variantobj, php_dbus_variant_obj);
-++				variantobj = DBUS_ZVAL_GET_OBJECT(php_dbus_variant_obj, return_value);
-+ 				variantobj->data = val;
-+ 			}
-+ 			break;
-+@@ -1664,7 +1658,7 @@ static zval *php_dbus_to_zval(DBusMessageIter *args, zval **key TSRMLS_DC)
-+ 				php_dbus_struct_obj *structobj;
-+ 
-+ 				dbus_instantiate(dbus_ce_dbus_struct, return_value TSRMLS_CC);
-+-				DBUS_ZEND_GET_ZVAL_OBJECT(return_value, structobj, php_dbus_struct_obj);
-++				structobj = DBUS_ZVAL_GET_OBJECT(php_dbus_struct_obj, return_value);
-+ 				DBUS_ZEND_ALLOC_ZVAL(structobj->elements);
-+ 				array_init(structobj->elements);
-+ 
-+@@ -1682,7 +1676,7 @@ static zval *php_dbus_to_zval(DBusMessageIter *args, zval **key TSRMLS_DC)
-+ 				dbus_int64_t stat;
-+ 
-+ 				dbus_instantiate(dbus_ce_dbus_object_path, return_value TSRMLS_CC);
-+-				DBUS_ZEND_GET_ZVAL_OBJECT(return_value, object_pathobj, php_dbus_object_path_obj);
-++				object_pathobj = DBUS_ZVAL_GET_OBJECT(php_dbus_object_path_obj, return_value);
-+ 				dbus_message_iter_get_basic(args, &stat);
-+ 				object_pathobj->path = estrdup((char*) stat);
-+ 			}
-+@@ -1766,7 +1760,7 @@ static int php_dbus_handle_reply(zval *return_value, DBusMessage *msg, int alway
-+ 			size_t i = 0;
-+ 
-+ 			dbus_instantiate(dbus_ce_dbus_set, return_value TSRMLS_CC);
-+-			DBUS_ZEND_GET_ZVAL_OBJECT(return_value, set, php_dbus_set_obj);
-++			set = DBUS_ZVAL_GET_OBJECT(php_dbus_set_obj, return_value);
-+ 			set->elements = (zval **) safe_emalloc(sizeof(zval*), 64, 0);
-+ 
-+ 			do {
-+@@ -1806,7 +1800,8 @@ PHP_METHOD(DbusObject, __call)
-+ 		"Osz", &object, dbus_ce_dbus_object, &name, &name_len, &data)) {
-+ 		RETURN_FALSE;
-+ 	}
-+-	DBUS_ZEND_GET_ZVAL_OBJECT(object, dbus_object, php_dbus_object_obj);
-++
-++	dbus_object = DBUS_ZVAL_GET_OBJECT(php_dbus_object_obj, object);
-+ 
-+ 	dbus_set_error_handling(EH_THROW, NULL TSRMLS_CC);
-+ 
-+@@ -1859,7 +1854,7 @@ PHP_METHOD(Dbus, addWatch)
-+ 		"O|ss", &object, dbus_ce_dbus, &interface, &interface_len, &member, &member_len)) {
-+ 		RETURN_FALSE;
-+ 	}
-+-	DBUS_ZEND_GET_ZVAL_OBJECT(object, dbus, php_dbus_obj);
-++	dbus = DBUS_ZVAL_GET_OBJECT(php_dbus_obj, object);
-+ 
-+ 	dbus_set_error_handling(EH_THROW, NULL TSRMLS_CC);
-+ 
-+@@ -1912,8 +1907,8 @@ PHP_METHOD(DbusSignal, __construct)
-+ 		&signal, &signal_len))
-+ 	{
-+ 		DBUS_ZEND_ADDREF_P(object);
-+-		DBUS_ZEND_GET_ZVAL_OBJECT(object, dbus, php_dbus_obj);
-+-		DBUS_ZEND_GET_ZVAL_OBJECT(getThis(), signal_object, php_dbus_signal_obj);
-++		dbus = DBUS_ZVAL_GET_OBJECT(php_dbus_obj, object);
-++		signal_object = DBUS_ZVAL_GET_OBJECT(php_dbus_signal_obj, getThis());
-+ 		dbus_signal_initialize(signal_object, dbus, object_name, interface, signal TSRMLS_CC);
-+ 	}
-+ 	dbus_set_error_handling(EH_NORMAL, NULL TSRMLS_CC);
-+@@ -1933,7 +1928,7 @@ PHP_METHOD(DbusSignal, matches)
-+ 		"Oss", &object, dbus_ce_dbus_signal, &interface, &interface_len, &method, &method_len)) {
-+ 		RETURN_FALSE;
-+ 	}
-+-	DBUS_ZEND_GET_ZVAL_OBJECT(object, signal_obj, php_dbus_signal_obj);
-++	signal_obj = DBUS_ZVAL_GET_OBJECT(php_dbus_signal_obj, object);
-+ 
-+ 	if (dbus_message_is_signal(signal_obj->msg, interface, method)) {
-+ 		RETURN_TRUE;
-+@@ -1950,7 +1945,7 @@ PHP_METHOD(DbusSignal, getData)
-+ 		"O", &object, dbus_ce_dbus_signal)) {
-+ 		RETURN_FALSE;
-+ 	}
-+-	DBUS_ZEND_GET_ZVAL_OBJECT(object, signal_obj, php_dbus_signal_obj);
-++	signal_obj = DBUS_ZVAL_GET_OBJECT(php_dbus_signal_obj, object);
-+ 
-+ 	if (signal_obj->direction == PHP_DBUS_SIGNAL_OUT) {
-+ 		php_error_docref(NULL TSRMLS_CC, E_WARNING, "This signal is outgoing, and therefore does not have data.");
-+@@ -1969,7 +1964,7 @@ PHP_METHOD(DbusSignal, send)
-+ 	dbus_uint32_t serial = 0;
-+ 
-+ 	dbus_set_error_handling(EH_THROW, NULL TSRMLS_CC);
-+-	DBUS_ZEND_GET_ZVAL_OBJECT(getThis(), signal_obj, php_dbus_signal_obj);
-++	signal_obj = DBUS_ZVAL_GET_OBJECT(php_dbus_signal_obj, getThis());
-+ 
-+ 	if (signal_obj->direction == PHP_DBUS_SIGNAL_IN) {
-+ 		php_error_docref(NULL TSRMLS_CC, E_WARNING, "This signal is incoming, and therefore can not be send.");
-+@@ -2015,15 +2010,15 @@ static int dbus_array_initialize(php_dbus_array_obj *dbusobj, long type, zval *e
-+ 	return 1;
-+ }
-+ 
-+-static HashTable *dbus_array_get_properties(zval *object TSRMLS_DC)
-++static HashTable *dbus_array_get_properties(dbus_object_type *object TSRMLS_DC)
-+ {
-+ 	HashTable *props;
-+ 	php_dbus_array_obj *array_obj;
-+ 	zval *sig;
-+ 
-+-	DBUS_ZEND_GET_ZVAL_OBJECT(object, array_obj, php_dbus_array_obj);
-++	array_obj = DBUS_OBJ_WRAPPER(php_dbus_array_obj, object);
-+ 
-+-	props = array_obj->std.properties;
-++	props = zend_std_get_properties(object);
-+ 	if (array_obj->signature) {
-+ 		DBUS_ZEND_MAKE_STD_ZVAL(sig);
-+ 		DBUS_ZVAL_STRING(sig, array_obj->signature, 1);
-+@@ -2051,7 +2046,7 @@ PHP_METHOD(DbusArray, __construct)
-+ 
-+ 	dbus_set_error_handling(EH_THROW, NULL TSRMLS_CC);
-+ 	if (SUCCESS == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "la|s", &type, &array, &signature, &signature_len)) {
-+-		DBUS_ZEND_GET_ZVAL_OBJECT(getThis(), array_obj, php_dbus_array_obj);
-++		array_obj = DBUS_ZVAL_GET_OBJECT(php_dbus_array_obj, getThis());
-+ 		dbus_array_initialize(array_obj, type, array, signature TSRMLS_CC);
-+ 	}
-+ 	dbus_set_error_handling(EH_NORMAL, NULL TSRMLS_CC);
-+@@ -2067,7 +2062,7 @@ PHP_METHOD(DbusArray, getData)
-+ 		"O", &object, dbus_ce_dbus_array)) {
-+ 		RETURN_FALSE;
-+ 	}
-+-	DBUS_ZEND_GET_ZVAL_OBJECT(object, array_obj, php_dbus_array_obj);
-++	array_obj = DBUS_ZVAL_GET_OBJECT(php_dbus_array_obj, object);
-+ 	*return_value = *array_obj->elements;
-+ 	zval_copy_ctor(return_value);
-+ }
-+@@ -2085,15 +2080,15 @@ static int dbus_dict_initialize(php_dbus_dict_obj *dbusobj, long type, zval *ele
-+ 	return 1;
-+ }
-+ 
-+-static HashTable *dbus_dict_get_properties(zval *object TSRMLS_DC)
-++static HashTable *dbus_dict_get_properties(dbus_object_type *object TSRMLS_DC)
-+ {
-+ 	HashTable *props;
-+ 	php_dbus_dict_obj *dict_obj;
-+ 	zval *sig;
-+ 
-+-	DBUS_ZEND_GET_ZVAL_OBJECT(object, dict_obj, php_dbus_dict_obj);
-++	dict_obj = DBUS_OBJ_WRAPPER(php_dbus_dict_obj, object);
-+ 
-+-	props = dict_obj->std.properties;
-++	props = zend_std_get_properties(object);
-+ 
-+ 	if (dict_obj->signature) {
-+ 		DBUS_ZEND_MAKE_STD_ZVAL(sig);
-+@@ -2120,7 +2115,7 @@ PHP_METHOD(DbusDict, __construct)
-+ 
-+ 	dbus_set_error_handling(EH_THROW, NULL TSRMLS_CC);
-+ 	if (SUCCESS == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "la|s", &type, &dict, &signature, &signature_len)) {
-+-		DBUS_ZEND_GET_ZVAL_OBJECT(getThis(), dict_obj, php_dbus_dict_obj);
-++		dict_obj = DBUS_ZVAL_GET_OBJECT(php_dbus_dict_obj, getThis());
-+ 		dbus_dict_initialize(dict_obj, type, dict, signature TSRMLS_CC);
-+ 	}
-+ 	dbus_set_error_handling(EH_NORMAL, NULL TSRMLS_CC);
-+@@ -2136,7 +2131,7 @@ PHP_METHOD(DbusDict, getData)
-+ 		"O", &object, dbus_ce_dbus_dict)) {
-+ 		RETURN_FALSE;
-+ 	}
-+-	DBUS_ZEND_GET_ZVAL_OBJECT(object, dict_obj, php_dbus_dict_obj);
-++	dict_obj = DBUS_ZVAL_GET_OBJECT(php_dbus_dict_obj, object);
-+ 	*return_value = *dict_obj->elements;
-+ 	zval_copy_ctor(return_value);
-+ }
-+@@ -2152,17 +2147,12 @@ static int dbus_variant_initialize(php_dbus_variant_obj *dbusobj, zval *data, ch
-+ 	return 1;
-+ }
-+ 
-+-static HashTable *dbus_variant_get_properties(zval *object TSRMLS_DC)
-++static HashTable *dbus_variant_get_properties(dbus_object_type *object TSRMLS_DC)
-+ {
-+ 	HashTable *props;
-+ 	php_dbus_variant_obj *variant_obj;
-+ 
-+-	DBUS_ZEND_GET_ZVAL_OBJECT(object, variant_obj, php_dbus_variant_obj);
-+-
-+-	props = variant_obj->std.properties;
-+-
-+-	DBUS_ZEND_ADDREF_P(variant_obj->data);
-+-	DBUS_ZEND_HASH_UPDATE(props, "variant", &variant_obj->data);
-++	props = zend_std_get_properties(object);
-+ 
-+ 	return props;
-+ }
-+@@ -2179,9 +2169,10 @@ PHP_METHOD(DbusVariant, __construct)
-+ 
-+ 	dbus_set_error_handling(EH_THROW, NULL TSRMLS_CC);
-+ 	if (SUCCESS == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "z|s", &data, &signature, &signature_len)) {
-+-		DBUS_ZEND_GET_ZVAL_OBJECT(getThis(), variant_obj, php_dbus_variant_obj);
-++		variant_obj = DBUS_ZVAL_GET_OBJECT(php_dbus_variant_obj, getThis());
-+ 		dbus_variant_initialize(variant_obj, data, signature TSRMLS_CC);
-+ 	}
-++
-+ 	dbus_set_error_handling(EH_NORMAL, NULL TSRMLS_CC);
-+ }
-+ /* }}} */
-+@@ -2196,8 +2187,9 @@ PHP_METHOD(DbusVariant, getData)
-+ 		RETURN_FALSE;
-+ 	}
-+ 
-+-	DBUS_ZEND_GET_ZVAL_OBJECT(object, variant_obj, php_dbus_variant_obj);
-++	variant_obj = DBUS_ZVAL_GET_OBJECT(php_dbus_variant_obj, object);
-+ 	*return_value = *variant_obj->data;
-++
-+ 	zval_copy_ctor(return_value);
-+ }
-+ 
-+@@ -2219,14 +2211,14 @@ static int dbus_set_initialize(php_dbus_set_obj *dbusobj, zval **data, int eleme
-+ 	return 1;
-+ }
-+ 
-+-static HashTable *dbus_set_get_properties(zval *object TSRMLS_DC)
-++static HashTable *dbus_set_get_properties(dbus_object_type *object TSRMLS_DC)
-+ {
-+ 	int i;
-+ 	HashTable *props;
-+ 	php_dbus_set_obj *set_obj;
-+ 	zval *set_contents;
-+ 
-+-	DBUS_ZEND_GET_ZVAL_OBJECT(object, set_obj, php_dbus_set_obj);
-++	set_obj = DBUS_OBJ_WRAPPER(php_dbus_set_obj, object);
-+ 
-+ 	props = set_obj->std.properties;
-+ 
-+@@ -2255,7 +2247,7 @@ PHP_METHOD(DbusSet, __construct)
-+ 	zval *data = NULL;
-+ 	data = (zval *) safe_emalloc(elements, sizeof(zval), 1);
-+ 	if (SUCCESS == zend_get_parameters_array_ex(elements, data)) {
-+-		DBUS_ZEND_GET_ZVAL_OBJECT(getThis(), set_obj, php_dbus_set_obj);
-++		set_obj = DBUS_ZVAL_GET_OBJECT(php_dbus_set_obj, getThis());
-+ 		dbus_set_initialize(set_obj, &data, elements TSRMLS_CC);
-+ 	}
-+ 	efree(data);
-+@@ -2273,7 +2265,7 @@ PHP_METHOD(DbusSet, getData)
-+ 		"O", &object, dbus_ce_dbus_set)) {
-+ 		RETURN_FALSE;
-+ 	}
-+-	DBUS_ZEND_GET_ZVAL_OBJECT(object, set_obj, php_dbus_set_obj);
-++	set_obj = DBUS_ZVAL_GET_OBJECT(php_dbus_set_obj, object);
-+ 	array_init(return_value);
-+ 	for (i = 0; i < set_obj->element_count; i++) {
-+ 		DBUS_ZEND_ADDREF_P(set_obj->elements[i]);
-+@@ -2290,18 +2282,14 @@ static int dbus_struct_initialize(php_dbus_struct_obj *dbusobj, char *signature,
-+ 	return 1;
-+ }
-+ 
-+-static HashTable *dbus_struct_get_properties(zval *object TSRMLS_DC)
-++static HashTable *dbus_struct_get_properties(dbus_object_type *object TSRMLS_DC)
-+ {
-+ 	HashTable *props;
-+ 	php_dbus_struct_obj *struct_obj;
-+ 
-+-	DBUS_ZEND_GET_ZVAL_OBJECT(object, struct_obj, php_dbus_struct_obj);
-+-
-+-	props = struct_obj->std.properties;
-+-
-+-	DBUS_ZEND_ADDREF_P(struct_obj->elements);
-+-	DBUS_ZEND_HASH_UPDATE(props, "struct", &struct_obj->elements);
-++	struct_obj = DBUS_OBJ_WRAPPER(php_dbus_struct_obj, object);
-+ 
-++	props = zend_std_get_properties(object);
-+ 	return props;
-+ }
-+ 
-+@@ -2317,7 +2305,7 @@ PHP_METHOD(DbusStruct, __construct)
-+ 
-+ 	dbus_set_error_handling(EH_THROW, NULL TSRMLS_CC);
-+ 	if (SUCCESS == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "sa", &signature, &signature_len, &array)) {
-+-		DBUS_ZEND_GET_ZVAL_OBJECT(getThis(), struct_obj, php_dbus_struct_obj);
-++		struct_obj = DBUS_ZVAL_GET_OBJECT(php_dbus_struct_obj, getThis());
-+ 		dbus_struct_initialize(struct_obj, signature, array TSRMLS_CC);
-+ 	}
-+ 	dbus_set_error_handling(EH_NORMAL, NULL TSRMLS_CC);
-+@@ -2333,7 +2321,7 @@ PHP_METHOD(DbusStruct, getData)
-+ 		"O", &object, dbus_ce_dbus_struct)) {
-+ 		RETURN_FALSE;
-+ 	}
-+-	DBUS_ZEND_GET_ZVAL_OBJECT(object, struct_obj, php_dbus_struct_obj);
-++	struct_obj = DBUS_ZVAL_GET_OBJECT(php_dbus_struct_obj, object);
-+ 	*return_value = *struct_obj->elements;
-+ 	zval_copy_ctor(return_value);
-+ }
-+@@ -2345,20 +2333,15 @@ static int dbus_object_path_initialize(php_dbus_object_path_obj *dbusobj, char *
-+ 	return 1;
-+ }
-+ 
-+-static HashTable *dbus_object_path_get_properties(zval *object TSRMLS_DC)
-++static HashTable *dbus_object_path_get_properties(dbus_object_type *object TSRMLS_DC)
-+ {
-+ 	HashTable *props;
-+ 	php_dbus_object_path_obj *object_path_obj;
-+ 	zval *path;
-+ 
-+-	DBUS_ZEND_GET_ZVAL_OBJECT(object, object_path_obj, php_dbus_object_path_obj);
-+-
-+-	props = object_path_obj->std.properties;
-+-
-+-	DBUS_ZEND_MAKE_STD_ZVAL(path);
-+-	DBUS_ZVAL_STRING(path, object_path_obj->path, 1);
-+-	DBUS_ZEND_HASH_UPDATE(props, "path", &path);
-++	object_path_obj = DBUS_OBJ_WRAPPER(php_dbus_object_path_obj, object);
-+ 
-++	props = zend_std_get_properties(object);
-+ 	return props;
-+ }
-+ 
-+@@ -2373,7 +2356,7 @@ PHP_METHOD(DbusObjectPath, __construct)
-+ 
-+ 	dbus_set_error_handling(EH_THROW, NULL TSRMLS_CC);
-+ 	if (SUCCESS == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &path, &path_len)) {
-+-		DBUS_ZEND_GET_ZVAL_OBJECT(getThis(), object_path_obj, php_dbus_object_path_obj);
-++		object_path_obj = DBUS_ZVAL_GET_OBJECT(php_dbus_object_path_obj, getThis());
-+ 		dbus_object_path_initialize(object_path_obj, path TSRMLS_CC);
-+ 	}
-+ 	dbus_set_error_handling(EH_NORMAL, NULL TSRMLS_CC);
-+@@ -2389,7 +2372,7 @@ PHP_METHOD(DbusObjectPath, getData)
-+ 		"O", &object, dbus_ce_dbus_object_path)) {
-+ 		RETURN_FALSE;
-+ 	}
-+-	DBUS_ZEND_GET_ZVAL_OBJECT(object, object_path_obj, php_dbus_object_path_obj);
-++	object_path_obj = DBUS_ZVAL_GET_OBJECT(php_dbus_object_path_obj, object);
-+ 
-+ 	RETURN_STRING(object_path_obj->path);
-+ }
-+@@ -2407,7 +2390,7 @@ PHP_METHOD(DbusObjectPath, getData)
-+ 		dbus_set_error_handling(EH_THROW, NULL TSRMLS_CC); \
-+ 		if (SUCCESS == zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &data)) { \
-+ 			php_dbus_##s##_obj *dbusobj = NULL; \
-+-			DBUS_ZEND_GET_ZVAL_OBJECT(getThis(), dbusobj, php_dbus_##s##_obj); \
-++			dbusobj = DBUS_ZVAL_GET_OBJECT(php_dbus_##s##_obj, getThis()); \
-+ 			dbus_##s##_initialize(dbusobj, (t)data TSRMLS_CC); \
-+ 		} \
-+ 		dbus_set_error_handling(EH_NORMAL, NULL TSRMLS_CC); \
-+diff --git a/php_dbus.h b/php_dbus.h
-+index a080159c407d..fe93dd3a6a1f 100644
-+--- a/php_dbus.h
-++++ b/php_dbus.h
-+@@ -27,13 +27,23 @@
-+ 
-+ #include "Zend/zend_hash.h"
-+ 
-+-#define PHP_DBUS_VERSION "0.2.0"
-++#define PHP_DBUS_VERSION "0.3.x-dev"
-+ 
-+ #if PHP_VERSION_ID >= 80000
-+ # define TSRMLS_DC
-+ # define TSRMLS_CC
-+ # define TSRMLS_D void
-+ # define TSRMLS_C
-++# define dbus_object_type zend_object
-++# define dbus_object_handlers_dbus_object dbus_object_handlers_zend_object
-++#define DBUS_OBJ_WRAPPER DBUS_GET_OBJECT
-++
-++# define dbus_strip_obj
-++#else
-++# define dbus_object_type zval
-++# define dbus_object_handlers_dbus_object dbus_object_handlers_zval
-++# define dbus_strip_obj(o) Z_OBJ_P(o)
-++#define DBUS_OBJ_WRAPPER DBUS_ZVAL_GET_OBJECT
-+ #endif
-+ 
-+ # define DBUS_ZEND_OBJECT_PROPERTIES_INIT(_objPtr, _ce) \
-+@@ -75,6 +85,10 @@
-+         } \
-+     } while(0)
-+ 
-++#define DBUS_GET_OBJECT(class_entry, o) (class_entry *)((char *)o - XtOffsetOf(class_entry, std))
-++#define DBUS_ZVAL_GET_OBJECT(class_entry, z) DBUS_GET_OBJECT(class_entry, Z_OBJ_P(z))
-++
-++
-+ # define DBUS_ZEND_HASH_ADD_PTR(_ht, _key, _ptr, _ptrSz) \
-+     zend_hash_str_add_ptr(_ht, _key, strlen(_key), _ptr)
-+ 
-+@@ -120,12 +134,6 @@
-+         } \
-+     } while (0)
-+ 
-+-# define DBUS_ZEND_ZOBJ_TO_OBJ(_zObj, _objType) \
-+-    (_objType *) ((char *) _zObj - XtOffsetOf(_objType, std))
-+-
-+-# define DBUS_ZEND_GET_ZVAL_OBJECT(_zval, _objPtr, _objType) \
-+-    _objPtr = DBUS_ZEND_ZOBJ_TO_OBJ(Z_OBJ_P(_zval), _objType)
-+-
-+ # define DBUS_ZEND_MAKE_STD_ZVAL(_zval) \
-+     { \
-+         zval tmp; \
-+-- 
-+2.50.0
-+
-diff --git a/package/php-pecl-dbus/0002-Fix-PHP8-compatibility-for-DBUS_ZEND_HASH_GET_CURREN.patch b/package/php-pecl-dbus/0002-Fix-PHP8-compatibility-for-DBUS_ZEND_HASH_GET_CURREN.patch
-new file mode 100644
-index 0000000000..6c2f7321ec
---- /dev/null
-+++ b/package/php-pecl-dbus/0002-Fix-PHP8-compatibility-for-DBUS_ZEND_HASH_GET_CURREN.patch
-@@ -0,0 +1,51 @@
-+From 46a6aa1308b32549625fd7bc265ad011091b3992 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Alexis=20Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-+Date: Tue, 1 Jul 2025 17:12:32 +0200
-+Subject: [PATCH] Fix PHP8 compatibility for
-+ DBUS_ZEND_HASH_GET_CURRENT_KEY_INFO
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+php-pecl-dbus currently does not build with PHP8 because of the
-+following error:
-+
-+  In file included from dbus.c:27:
-+  dbus.c: In function 'dbus_append_var_dict':
-+  php_dbus.h:108:64: error: passing argument 3 of 'zend_hash_get_current_key' from incompatible pointer type [-Wincompatible-pointer-types]
-+    108 |         _info.type = zend_hash_get_current_key(_ht, &tmp_info, &_idx); \
-+  dbus.c:1295:17: note: in expansion of macro 'DBUS_ZEND_HASH_GET_CURRENT_KEY_INFO'
-+   1295 | DBUS_ZEND_HASH_GET_CURRENT_KEY_INFO(Z_ARRVAL_P(obj->elements), num_index, key);
-+        |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+  In file included from ../../host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/php/Zend/zend.h:33,
-+                   from ../../host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/php/main/php.h:31,
-+                   from dbus.c:21:
-+  ../../host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/php/Zend/zend_hash.h:269:115: note: expected 'zend_ulong *' {aka 'unsigned int *'} but argument is of type 'ulong *' {aka 'long unsigned int *'}
-+    269 | static zend_always_inline int zend_hash_get_current_key(const HashTable *ht, zend_string **str_index, zend_ulong *num_index) {
-+        |                                                                                                       ~~~~~~~~~~~~^~~~~~~~~
-+
-+Fix the build error by explicitely casting the passed index pointer to
-+(zend_ulong *)
-+
-+Upstream: https://github.com/derickr/pecl-dbus/pull/15
-+Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
-+---
-+ php_dbus.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/php_dbus.h b/php_dbus.h
-+index a080159c407d..68aec7bc3c42 100644
-+--- a/php_dbus.h
-++++ b/php_dbus.h
-+@@ -105,7 +105,7 @@
-+ # define DBUS_ZEND_HASH_GET_CURRENT_KEY_INFO(_ht, _idx, _info) \
-+     do { \
-+         zend_string *tmp_info = NULL; \
-+-        _info.type = zend_hash_get_current_key(_ht, &tmp_info, &_idx); \
-++        _info.type = zend_hash_get_current_key(_ht, &tmp_info, (zend_ulong *)&_idx); \
-+         if (tmp_info) { \
-+             _info.name = ZSTR_VAL(tmp_info); \
-+             _info.length = ZSTR_LEN(tmp_info); \
-+-- 
-+2.50.0
-+
-
---===============7151495514081908330==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7151495514081908330==--
+SGVsbG8gQWxleGlzLCBBbGwsCgpMZSAwNi8wOC8yMDI1IMOgIDIyOjQzLCBBbGV4aXMgTG90aG9y
+w6kgdmlhIGJ1aWxkcm9vdCBhIMOpY3JpdMKgOgo+IFRoZSBwaHAtcGVjbC1kYnVzIGVuY291dGVy
+cyB0d28gYnVpbGQgaXNzdWVzIGluIGJvdGggYnVpbGRyb290IDIwMjUuMDIueAo+IGFuZCBtYXN0
+ZXIgYnJhbmNoLCBib3RoIHJlbGF0ZWQgdG8gUEhQOCBhbmQgR0NDMTQ6Cj4gCj4gL2hvbWUvYWxl
+eGlzL3NyYy9idWlsZHJvb3QvcGhwL2J1aWxkL3BocC1wZWNsLWRidXMtYjE0NzYyNGQ0ODBjMzM1
+M2U2YzcwMGU5YTJkMGM2ZjE0ZDg1Mzk0MS9kYnVzLmM6NDY1OjU2Ogo+IGVycm9yOiBhc3NpZ25t
+ZW50IHRvIOKAmHplbmRfb2JqZWN0X2dldF9wcm9wZXJ0aWVzX3TigJkge2FrYSDigJhzdHJ1Y3QK
+PiBfemVuZF9hcnJheSAqICgqKShzdHJ1Y3QgX3plbmRfb2JqZWN0ICop4oCZfSBmcm9tIGluY29t
+cGF0aWJsZSBwb2ludGVyCj4gdHlwZSDigJhIYXNoVGFibGUgKiAoKikoenZhbCAqKeKAmSB7YWth
+IOKAmHN0cnVjdCBfemVuZF9hcnJheSAqICgqKShzdHJ1Y3QKPiBfenZhbF9zdHIKPiB1Y3QgKini
+gJl9IFstV2luY29tcGF0aWJsZS1wb2ludGVyLXR5cGVzXQo+ICAgNDY1IHwgICAgICAgICBkYnVz
+X29iamVjdF9oYW5kbGVyc19kYnVzX2FycmF5LmdldF9wcm9wZXJ0aWVzID0KPiBkYnVzX2FycmF5
+X2dldF9wcm9wZXJ0aWVzOwo+ICAgICAgIHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgIF4KPiBbLi4uXQo+IAo+IFRoZSBidWlsZCBmYWlsdXJl
+IGNhbiBiZSByZXByb2R1Y2VkIHdpdGggdGhpcyBtaW5pbWFsIGRlZmNvbmZpZzoKPiAKPiBCUjJf
+YXJtPXkKPiBCUjJfY29ydGV4X2E5PXkKPiBCUjJfQVJNX0VOQUJMRV9ORU9OPXkKPiBCUjJfQVJN
+X0VOQUJMRV9WRlA9eQo+IEJSMl9BUk1fRlBVX05FT049eQo+IEJSMl9UT09MQ0hBSU5fRVhURVJO
+QUw9eQo+IEJSMl9UT09MQ0hBSU5fRVhURVJOQUxfQk9PVExJTj15Cj4gQlIyX1BBQ0tBR0VfUEhQ
+PXkKPiBCUjJfUEFDS0FHRV9QSFBfUEVDTF9EQlVTPXkKPiAKPiBUaGlzIGJ1aWxkIGZhaWx1cmUg
+aXMgdGhlIHJlc3VsdCBvZiB0d28gZXZlbnRzL2NvbmRpdGlvbnM6Cj4gLSB0aGUgdXBkYXRlIHRv
+IFBIUDggaGFzIGNoYW5nZWQgdGhlIHByb3RvdHlwZSBmb3IKPiAgIHplbmRfb2JqZWN0X3JlYWRf
+cHJvcGVydHlfdCBhbmQgemVuZF9oYXNoX2dldF9jdXJyZW50X2tleShzZWUgWzFdKS4KPiAgIEJ1
+dCBhdCB0aGlzIHRpbWUsIHBocC1kYnVzIGp1c3QgZ2VuZXJhdGVkIGEgbmV3IHdhcm5pbmcKPiAg
+ICgtV2luY29tcGF0aWJsZS1wb2ludGVyLXR5cGVzKQo+IC0gdXNpbmcgYm9vdGxpbiBibGVlZGlu
+Zy1lZGdlIHRvb2xjaGFpbiBicmluZ3MgaW4gR0NDMTQsIHdoaWNoIG5vdyB0dXJucwo+ICAgdGhp
+cyB3YXJuaW5nIGludG8gYSBzeXN0ZW1hdGljIGVycm9yIChzZWUgWzJdKQo+IAo+IEJyaW5nIHRo
+ZSByZWxldmFudCBwYXRjaGVzIHRvIGZpeCB0aGlzIGJ1aWxkLgo+IAo+IFRoZSBmaXJzdCBwYXRj
+aCBjb21lcyBmcm9tIGFuIGFscmVhZHkgb3BlbmVkIFBSIG9uIHRoZSB1cHN0cmVhbSBzb3VyY2Uu
+Cj4gVGhlIHNlY29uZCBwYXRjaCBoYXMgYmVlbiB3cml0dGVuIGR1cmluZyB0aGUgYnVpbGQgZmFp
+bHVyZQo+IGludmVzdGlnYXRpb24sIGFuZCBoYXMgYmVlbiBzZW50IHVwc3RyZWFtIGFzIHdlbGwu
+Cj4gCj4gRml4ZXM6IGh0dHBzOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5uZXQvcmVzdWx0cy9lOTg5
+MmJiZWZhNzgxYjQwM2ZkM2Q4MzRiNmM0ODUyN2M4ZTA3OGJhCj4gU2lnbmVkLW9mZi1ieTogQWxl
+eGlzIExvdGhvcsOpIDxhbGV4aXMubG90aG9yZUBib290bGluLmNvbT4KCkFwcGxpZWQgdG8gbWFz
+dGVyLCB0aGFua3MuCgpCZXN0IHJlZ2FyZHMsClJvbWFpbgoKCj4gLS0tCj4gQ2hhbmdlcyBpbiB2
+MjoKPiAtIHVwZGF0ZSBjb21taXQgdGl0bGUKPiAtIGFkZCBtb3JlIGRldGFpbHMgYWJvdXQgYnVp
+bGQgZmFpbHVyZSByb290IGNhdXNlCj4gLSBhZGQgYSBtaW5pbWFsIGRlZmNvbmZpZyByZXByb2R1
+Y2luZyB0aGUgaXNzdWUKPiAtIGFkZCBhIEZpeGVzIHRhZyAKPiAtIExpbmsgdG8gdjE6IGh0dHBz
+Oi8vbG9yZS5rZXJuZWwub3JnL3IvMjAyNTA4MDYtcGhwLWRidXMtdjEtMS03OGNiZTdkMTc5N2ZA
+Ym9vdGxpbi5jb20KPiAtLS0KPiAgLi4uZS11c2UtemVuZF9vYmplY3RzLW9yLXp2YWwtZGVwZW5k
+aW5nLXVwb24ucGF0Y2ggfCA3NTEgKysrKysrKysrKysrKysrKysrKysrCj4gIC4uLm1wYXRpYmls
+aXR5LWZvci1EQlVTX1pFTkRfSEFTSF9HRVRfQ1VSUkVOLnBhdGNoIHwgIDUxICsrCj4gIDIgZmls
+ZXMgY2hhbmdlZCwgODAyIGluc2VydGlvbnMoKykKPiAKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9w
+aHAtcGVjbC1kYnVzLzAwMDEtUEhQLTgtdXBkYXRlLXVzZS16ZW5kX29iamVjdHMtb3ItenZhbC1k
+ZXBlbmRpbmctdXBvbi5wYXRjaCBiL3BhY2thZ2UvcGhwLXBlY2wtZGJ1cy8wMDAxLVBIUC04LXVw
+ZGF0ZS11c2UtemVuZF9vYmplY3RzLW9yLXp2YWwtZGVwZW5kaW5nLXVwb24ucGF0Y2gKPiBuZXcg
+ZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAw
+MDAwMDAwMDAuLjkzN2NjM2M2MmVlOGU4MDFmZGRmYTEwNzMwNGU1NWUxMmU4MzllMjMKPiAtLS0g
+L2Rldi9udWxsCj4gKysrIGIvcGFja2FnZS9waHAtcGVjbC1kYnVzLzAwMDEtUEhQLTgtdXBkYXRl
+LXVzZS16ZW5kX29iamVjdHMtb3ItenZhbC1kZXBlbmRpbmctdXBvbi5wYXRjaAo+IEBAIC0wLDAg
+KzEsNzUxIEBACj4gK0Zyb20gYzNlY2QyNWE3NTU0NjEwMDlkZTY0YjlhM2I3NGI0YmFkODQ0Mjkz
+OCBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKPiArRnJvbTogTWF0dCBTYWxhZG5hIDxtc2FsYWRu
+YUBhcGlzbmV0d29ya3MuY29tPgo+ICtEYXRlOiBTdW4sIDUgTWFyIDIwMjMgMTI6Mzc6MjYgLTA1
+MDAKPiArU3ViamVjdDogW1BBVENIXSBQSFAgOCB1cGRhdGUsIHVzZSB6ZW5kX29iamVjdHMgb3Ig
+enZhbCBkZXBlbmRpbmcgdXBvbiB2ZXJzaW9uCj4gKyBSZWZyYWluIGR1cGxpY2F0aW5nIG9iamVj
+dHMgb24gX19nZXQoKQo+ICsKPiArVXBzdHJlYW06IGh0dHBzOi8vZ2l0aHViLmNvbS9kZXJpY2ty
+L3BlY2wtZGJ1cy9wdWxsLzEzCj4gK1NpZ25lZC1vZmYtYnk6IEFsZXhpcyBMb3Rob3LDqSA8YWxl
+eGlzLmxvdGhvcmVAYm9vdGxpbi5jb20+Cj4gKy0tLQo+ICsgZGJ1cy5jICAgICB8IDIyMyArKysr
+KysrKysrKysrKysrKysrKysrKysrLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQo+ICsgcGhw
+X2RidXMuaCB8ICAyMiArKysrLS0KPiArIDIgZmlsZXMgY2hhbmdlZCwgMTE4IGluc2VydGlvbnMo
+KyksIDEyNyBkZWxldGlvbnMoLSkKPiArCj4gK2RpZmYgLS1naXQgYS9kYnVzLmMgYi9kYnVzLmMK
+PiAraW5kZXggNTc2NzJjYzEwZjU2Li5jMTk4YTZjNWM3MWEgMTAwNjQ0Cj4gKy0tLSBhL2RidXMu
+Ywo+ICsrKysgYi9kYnVzLmMKPiArQEAgLTI2NywyMiArMjY3LDIyIEBAIHN0YXRpYyB6ZW5kX29i
+amVjdCogZGJ1c19vYmplY3RfbmV3X2RidXNfc2V0KHplbmRfY2xhc3NfZW50cnkgKmNsYXNzX3R5
+cGUgVFNSTUxTCj4gKyBzdGF0aWMgemVuZF9vYmplY3QqIGRidXNfb2JqZWN0X25ld19kYnVzX3N0
+cnVjdCh6ZW5kX2NsYXNzX2VudHJ5ICpjbGFzc190eXBlIFRTUk1MU19EQyk7Cj4gKyBzdGF0aWMg
+emVuZF9vYmplY3QqIGRidXNfb2JqZWN0X25ld19kYnVzX29iamVjdF9wYXRoKHplbmRfY2xhc3Nf
+ZW50cnkgKmNsYXNzX3R5cGUgVFNSTUxTX0RDKTsKPiArIAo+ICstc3RhdGljIEhhc2hUYWJsZSAq
+ZGJ1c19ieXRlX2dldF9wcm9wZXJ0aWVzKHp2YWwgKm9iamVjdCBUU1JNTFNfREMpOwo+ICstc3Rh
+dGljIEhhc2hUYWJsZSAqZGJ1c19ib29sX2dldF9wcm9wZXJ0aWVzKHp2YWwgKm9iamVjdCBUU1JN
+TFNfREMpOwo+ICstc3RhdGljIEhhc2hUYWJsZSAqZGJ1c19pbnQxNl9nZXRfcHJvcGVydGllcyh6
+dmFsICpvYmplY3QgVFNSTUxTX0RDKTsKPiArLXN0YXRpYyBIYXNoVGFibGUgKmRidXNfdWludDE2
+X2dldF9wcm9wZXJ0aWVzKHp2YWwgKm9iamVjdCBUU1JNTFNfREMpOwo+ICstc3RhdGljIEhhc2hU
+YWJsZSAqZGJ1c19pbnQzMl9nZXRfcHJvcGVydGllcyh6dmFsICpvYmplY3QgVFNSTUxTX0RDKTsK
+PiArLXN0YXRpYyBIYXNoVGFibGUgKmRidXNfdWludDMyX2dldF9wcm9wZXJ0aWVzKHp2YWwgKm9i
+amVjdCBUU1JNTFNfREMpOwo+ICstc3RhdGljIEhhc2hUYWJsZSAqZGJ1c19pbnQ2NF9nZXRfcHJv
+cGVydGllcyh6dmFsICpvYmplY3QgVFNSTUxTX0RDKTsKPiArLXN0YXRpYyBIYXNoVGFibGUgKmRi
+dXNfdWludDY0X2dldF9wcm9wZXJ0aWVzKHp2YWwgKm9iamVjdCBUU1JNTFNfREMpOwo+ICstc3Rh
+dGljIEhhc2hUYWJsZSAqZGJ1c19kb3VibGVfZ2V0X3Byb3BlcnRpZXMoenZhbCAqb2JqZWN0IFRT
+Uk1MU19EQyk7Cj4gKy0KPiArLXN0YXRpYyBIYXNoVGFibGUgKmRidXNfYXJyYXlfZ2V0X3Byb3Bl
+cnRpZXMoenZhbCAqb2JqZWN0IFRTUk1MU19EQyk7Cj4gKy1zdGF0aWMgSGFzaFRhYmxlICpkYnVz
+X2RpY3RfZ2V0X3Byb3BlcnRpZXMoenZhbCAqb2JqZWN0IFRTUk1MU19EQyk7Cj4gKy1zdGF0aWMg
+SGFzaFRhYmxlICpkYnVzX3ZhcmlhbnRfZ2V0X3Byb3BlcnRpZXMoenZhbCAqb2JqZWN0IFRTUk1M
+U19EQyk7Cj4gKy1zdGF0aWMgSGFzaFRhYmxlICpkYnVzX3NldF9nZXRfcHJvcGVydGllcyh6dmFs
+ICpvYmplY3QgVFNSTUxTX0RDKTsKPiArLXN0YXRpYyBIYXNoVGFibGUgKmRidXNfc3RydWN0X2dl
+dF9wcm9wZXJ0aWVzKHp2YWwgKm9iamVjdCBUU1JNTFNfREMpOwo+ICstc3RhdGljIEhhc2hUYWJs
+ZSAqZGJ1c19vYmplY3RfcGF0aF9nZXRfcHJvcGVydGllcyh6dmFsICpvYmplY3QgVFNSTUxTX0RD
+KTsKPiArK3N0YXRpYyBIYXNoVGFibGUgKmRidXNfYnl0ZV9nZXRfcHJvcGVydGllcyhkYnVzX29i
+amVjdF90eXBlICpvYmplY3QgVFNSTUxTX0RDKTsKPiArK3N0YXRpYyBIYXNoVGFibGUgKmRidXNf
+Ym9vbF9nZXRfcHJvcGVydGllcyhkYnVzX29iamVjdF90eXBlICpvYmplY3QgVFNSTUxTX0RDKTsK
+PiArK3N0YXRpYyBIYXNoVGFibGUgKmRidXNfaW50MTZfZ2V0X3Byb3BlcnRpZXMoZGJ1c19vYmpl
+Y3RfdHlwZSAqb2JqZWN0IFRTUk1MU19EQyk7Cj4gKytzdGF0aWMgSGFzaFRhYmxlICpkYnVzX3Vp
+bnQxNl9nZXRfcHJvcGVydGllcyhkYnVzX29iamVjdF90eXBlICpvYmplY3QgVFNSTUxTX0RDKTsK
+PiArK3N0YXRpYyBIYXNoVGFibGUgKmRidXNfaW50MzJfZ2V0X3Byb3BlcnRpZXMoZGJ1c19vYmpl
+Y3RfdHlwZSAqb2JqZWN0IFRTUk1MU19EQyk7Cj4gKytzdGF0aWMgSGFzaFRhYmxlICpkYnVzX3Vp
+bnQzMl9nZXRfcHJvcGVydGllcyhkYnVzX29iamVjdF90eXBlICpvYmplY3QgVFNSTUxTX0RDKTsK
+PiArK3N0YXRpYyBIYXNoVGFibGUgKmRidXNfaW50NjRfZ2V0X3Byb3BlcnRpZXMoZGJ1c19vYmpl
+Y3RfdHlwZSAqb2JqZWN0IFRTUk1MU19EQyk7Cj4gKytzdGF0aWMgSGFzaFRhYmxlICpkYnVzX3Vp
+bnQ2NF9nZXRfcHJvcGVydGllcyhkYnVzX29iamVjdF90eXBlICpvYmplY3QgVFNSTUxTX0RDKTsK
+PiArK3N0YXRpYyBIYXNoVGFibGUgKmRidXNfZG91YmxlX2dldF9wcm9wZXJ0aWVzKGRidXNfb2Jq
+ZWN0X3R5cGUgKm9iamVjdCBUU1JNTFNfREMpOwo+ICsrCj4gKytzdGF0aWMgSGFzaFRhYmxlICpk
+YnVzX2FycmF5X2dldF9wcm9wZXJ0aWVzKGRidXNfb2JqZWN0X3R5cGUgKm9iamVjdCBUU1JNTFNf
+REMpOwo+ICsrc3RhdGljIEhhc2hUYWJsZSAqZGJ1c19kaWN0X2dldF9wcm9wZXJ0aWVzKGRidXNf
+b2JqZWN0X3R5cGUgKm9iamVjdCBUU1JNTFNfREMpOwo+ICsrc3RhdGljIEhhc2hUYWJsZSAqZGJ1
+c192YXJpYW50X2dldF9wcm9wZXJ0aWVzKGRidXNfb2JqZWN0X3R5cGUgKm9iamVjdCBUU1JNTFNf
+REMpOwo+ICsrc3RhdGljIEhhc2hUYWJsZSAqZGJ1c19zZXRfZ2V0X3Byb3BlcnRpZXMoZGJ1c19v
+YmplY3RfdHlwZSAqb2JqZWN0IFRTUk1MU19EQyk7Cj4gKytzdGF0aWMgSGFzaFRhYmxlICpkYnVz
+X3N0cnVjdF9nZXRfcHJvcGVydGllcyhkYnVzX29iamVjdF90eXBlICpvYmplY3QgVFNSTUxTX0RD
+KTsKPiArK3N0YXRpYyBIYXNoVGFibGUgKmRidXNfb2JqZWN0X3BhdGhfZ2V0X3Byb3BlcnRpZXMo
+ZGJ1c19vYmplY3RfdHlwZSAqb2JqZWN0IFRTUk1MU19EQyk7Cj4gKyAKPiArIHN0YXRpYyBpbnQg
+ZGJ1c192YXJpYW50X2luaXRpYWxpemUocGhwX2RidXNfdmFyaWFudF9vYmogKmRidXNvYmosIHp2
+YWwgKmRhdGEsIGNoYXIgKnNpZ25hdHVyZSBUU1JNTFNfREMpOwo+ICsgCj4gK0BAIC01NDgsNyAr
+NTQ4LDcgQEAgc3RhdGljIGludCBkYnVzX29iamVjdF9jb21wYXJlX2RidXMoenZhbCAqZDEsIHp2
+YWwgKmQyIFRTUk1MU19EQykKPiArIAo+ICsgc3RhdGljIHZvaWQgZGJ1c19vYmplY3RfZnJlZV9z
+dG9yYWdlX2RidXModm9pZCAqb2JqZWN0IFRTUk1MU19EQykKPiArIHsKPiArLQlwaHBfZGJ1c19v
+YmogKmludGVybiA9IERCVVNfWkVORF9aT0JKX1RPX09CSihvYmplY3QsIHBocF9kYnVzX29iaik7
+Cj4gKysJcGhwX2RidXNfb2JqICppbnRlcm4gPSBEQlVTX0dFVF9PQkpFQ1QocGhwX2RidXNfb2Jq
+LCBvYmplY3QpOwo+ICsgCj4gKyAJaWYgKGludGVybi0+Y29uKSB7Cj4gKyAJCWRidXNfY29ubmVj
+dGlvbl91bnJlZihpbnRlcm4tPmNvbik7Cj4gK0BAIC01NzIsOSArNTcyLDEwIEBAIHN0YXRpYyB6
+ZW5kX29iamVjdCogZGJ1c19vYmplY3RfbmV3X2RidXNfb2JqZWN0KHplbmRfY2xhc3NfZW50cnkg
+KmNsYXNzX3R5cGUgVFNSCj4gKyAKPiArIHN0YXRpYyB2b2lkIGRidXNfb2JqZWN0X2ZyZWVfc3Rv
+cmFnZV9kYnVzX29iamVjdCh2b2lkICpvYmplY3QgVFNSTUxTX0RDKQo+ICsgewo+ICstCXBocF9k
+YnVzX29iamVjdF9vYmogKmludGVybiA9IERCVVNfWkVORF9aT0JKX1RPX09CSihvYmplY3QsIHBo
+cF9kYnVzX29iamVjdF9vYmopOwo+ICsrCXBocF9kYnVzX29iamVjdF9vYmogKmludGVybiA9IERC
+VVNfR0VUX09CSkVDVChwaHBfZGJ1c19vYmplY3Rfb2JqLCBvYmplY3QpOwo+ICsgCj4gKyAJeG1s
+RnJlZURvYyhpbnRlcm4tPmludHJvc3BlY3RfeG1sX2RvYyk7Cj4gKysKPiArIAlpZiAoaW50ZXJu
+LT5kZXN0aW5hdGlvbikgewo+ICsgCQllZnJlZShpbnRlcm4tPmRlc3RpbmF0aW9uKTsKPiArIAl9
+Cj4gK0BAIC01ODQsNiArNTg1LDcgQEAgc3RhdGljIHZvaWQgZGJ1c19vYmplY3RfZnJlZV9zdG9y
+YWdlX2RidXNfb2JqZWN0KHZvaWQgKm9iamVjdCBUU1JNTFNfREMpCj4gKyAJaWYgKGludGVybi0+
+aW50ZXJmYWNlKSB7Cj4gKyAJCWVmcmVlKGludGVybi0+aW50ZXJmYWNlKTsKPiArIAl9Cj4gKysK
+PiArIAl6ZW5kX29iamVjdF9zdGRfZHRvcigmaW50ZXJuLT5zdGQpOwo+ICsgfQo+ICsgCj4gK0BA
+IC02MDEsNyArNjAzLDcgQEAgc3RhdGljIHplbmRfb2JqZWN0KiBkYnVzX29iamVjdF9uZXdfZGJ1
+c19zaWduYWwoemVuZF9jbGFzc19lbnRyeSAqY2xhc3NfdHlwZSBUU1IKPiArIAo+ICsgc3RhdGlj
+IHZvaWQgZGJ1c19vYmplY3RfZnJlZV9zdG9yYWdlX2RidXNfc2lnbmFsKHZvaWQgKm9iamVjdCBU
+U1JNTFNfREMpCj4gKyB7Cj4gKy0JcGhwX2RidXNfc2lnbmFsX29iaiAqaW50ZXJuID0gREJVU19a
+RU5EX1pPQkpfVE9fT0JKKG9iamVjdCwgcGhwX2RidXNfc2lnbmFsX29iaik7Cj4gKysJcGhwX2Ri
+dXNfc2lnbmFsX29iaiAqaW50ZXJuID0gREJVU19HRVRfT0JKRUNUKHBocF9kYnVzX3NpZ25hbF9v
+YmosIG9iamVjdCk7Cj4gKyAKPiArIAlkYnVzX21lc3NhZ2VfdW5yZWYoaW50ZXJuLT5tc2cpOwo+
+ICsgCj4gK0BAIC02MzEsNyArNjMzLDcgQEAgc3RhdGljIHplbmRfb2JqZWN0KiBkYnVzX29iamVj
+dF9uZXdfZGJ1c19hcnJheSh6ZW5kX2NsYXNzX2VudHJ5ICpjbGFzc190eXBlIFRTUk0KPiArIAo+
+ICsgc3RhdGljIHZvaWQgZGJ1c19vYmplY3RfZnJlZV9zdG9yYWdlX2RidXNfYXJyYXkodm9pZCAq
+b2JqZWN0IFRTUk1MU19EQykKPiArIHsKPiArLQlwaHBfZGJ1c19hcnJheV9vYmogKmludGVybiA9
+IERCVVNfWkVORF9aT0JKX1RPX09CSihvYmplY3QsIHBocF9kYnVzX2FycmF5X29iaik7Cj4gKysJ
+cGhwX2RidXNfYXJyYXlfb2JqICppbnRlcm4gPSBEQlVTX0dFVF9PQkpFQ1QocGhwX2RidXNfYXJy
+YXlfb2JqLCBvYmplY3QpOwo+ICsgCj4gKyAJaWYgKGludGVybi0+c2lnbmF0dXJlKSB7Cj4gKyAJ
+CWVmcmVlKGludGVybi0+c2lnbmF0dXJlKTsKPiArQEAgLTY1NCw3ICs2NTYsNyBAQCBzdGF0aWMg
+emVuZF9vYmplY3QqIGRidXNfb2JqZWN0X25ld19kYnVzX2RpY3QoemVuZF9jbGFzc19lbnRyeSAq
+Y2xhc3NfdHlwZSBUU1JNTAo+ICsgCj4gKyBzdGF0aWMgdm9pZCBkYnVzX29iamVjdF9mcmVlX3N0
+b3JhZ2VfZGJ1c19kaWN0KHZvaWQgKm9iamVjdCBUU1JNTFNfREMpCj4gKyB7Cj4gKy0JcGhwX2Ri
+dXNfZGljdF9vYmogKmludGVybiA9IERCVVNfWkVORF9aT0JKX1RPX09CSihvYmplY3QsIHBocF9k
+YnVzX2RpY3Rfb2JqKTsKPiArKwlwaHBfZGJ1c19kaWN0X29iaiAqaW50ZXJuID0gREJVU19HRVRf
+T0JKRUNUKHBocF9kYnVzX2RpY3Rfb2JqLCBvYmplY3QpOwo+ICsgCj4gKyAJaWYgKGludGVybi0+
+c2lnbmF0dXJlKSB7Cj4gKyAJCWVmcmVlKGludGVybi0+c2lnbmF0dXJlKTsKPiArQEAgLTY3Nywx
+MSArNjc5LDE0IEBAIHN0YXRpYyB6ZW5kX29iamVjdCogZGJ1c19vYmplY3RfbmV3X2RidXNfdmFy
+aWFudCh6ZW5kX2NsYXNzX2VudHJ5ICpjbGFzc190eXBlIFRTCj4gKyAKPiArIHN0YXRpYyB2b2lk
+IGRidXNfb2JqZWN0X2ZyZWVfc3RvcmFnZV9kYnVzX3ZhcmlhbnQodm9pZCAqb2JqZWN0IFRTUk1M
+U19EQykKPiArIHsKPiArLQlwaHBfZGJ1c192YXJpYW50X29iaiAqaW50ZXJuID0gREJVU19aRU5E
+X1pPQkpfVE9fT0JKKG9iamVjdCwgcGhwX2RidXNfdmFyaWFudF9vYmopOwo+ICsrCXBocF9kYnVz
+X3ZhcmlhbnRfb2JqICppbnRlcm4gPSBEQlVTX0dFVF9PQkpFQ1QocGhwX2RidXNfdmFyaWFudF9v
+YmosIG9iamVjdCk7Cj4gKyAKPiArIAlpZiAoaW50ZXJuLT5zaWduYXR1cmUpIHsKPiArIAkJZWZy
+ZWUoaW50ZXJuLT5zaWduYXR1cmUpOwo+ICsgCX0KPiArKwlpZiAoaW50ZXJuLT5kYXRhKSB7Cj4g
+KysJCWVmcmVlKGludGVybi0+ZGF0YSk7Cj4gKysJfQo+ICsgCj4gKyAJemVuZF9vYmplY3Rfc3Rk
+X2R0b3IoJmludGVybi0+c3RkKTsKPiArIH0KPiArQEAgLTcwMCw3ICs3MDUsNyBAQCBzdGF0aWMg
+emVuZF9vYmplY3QqIGRidXNfb2JqZWN0X25ld19kYnVzX3NldCh6ZW5kX2NsYXNzX2VudHJ5ICpj
+bGFzc190eXBlIFRTUk1MUwo+ICsgCj4gKyBzdGF0aWMgdm9pZCBkYnVzX29iamVjdF9mcmVlX3N0
+b3JhZ2VfZGJ1c19zZXQodm9pZCAqb2JqZWN0IFRTUk1MU19EQykKPiArIHsKPiArLQlwaHBfZGJ1
+c19zZXRfb2JqICppbnRlcm4gPSBEQlVTX1pFTkRfWk9CSl9UT19PQkoob2JqZWN0LCBwaHBfZGJ1
+c19zZXRfb2JqKTsKPiArKwlwaHBfZGJ1c19zZXRfb2JqICppbnRlcm4gPSBEQlVTX0dFVF9PQkpF
+Q1QocGhwX2RidXNfc2V0X29iaiwgb2JqZWN0KTsKPiArIAo+ICsgCWlmIChpbnRlcm4tPmVsZW1l
+bnRzKSB7Cj4gKyAJCWludCBpOwo+ICtAQCAtNzIwLDYgKzcyNSw3IEBAIHN0YXRpYyB2b2lkIGRi
+dXNfb2JqZWN0X2ZyZWVfc3RvcmFnZV9kYnVzX3NldCh2b2lkICpvYmplY3QgVFNSTUxTX0RDKQo+
+ICsgc3RhdGljIGlubGluZSB6ZW5kX29iamVjdCogZGJ1c19vYmplY3RfbmV3X2RidXNfc3RydWN0
+X2V4KHplbmRfY2xhc3NfZW50cnkgKmNsYXNzX3R5cGUsIHBocF9kYnVzX3N0cnVjdF9vYmogKipw
+dHIgVFNSTUxTX0RDKQo+ICsgewo+ICsgCXBocF9kYnVzX3N0cnVjdF9vYmogKmludGVybjsKPiAr
+Kwo+ICsgCURCVVNfWkVORF9PQkpFQ1RfSU5JVF9SRVRVUk4oaW50ZXJuLCBjbGFzc190eXBlLCBk
+YnVzX3N0cnVjdCk7Cj4gKyB9Cj4gKyAKPiArQEAgLTczMCw3ICs3MzYsNyBAQCBzdGF0aWMgemVu
+ZF9vYmplY3QqIGRidXNfb2JqZWN0X25ld19kYnVzX3N0cnVjdCh6ZW5kX2NsYXNzX2VudHJ5ICpj
+bGFzc190eXBlIFRTUgo+ICsgCj4gKyBzdGF0aWMgdm9pZCBkYnVzX29iamVjdF9mcmVlX3N0b3Jh
+Z2VfZGJ1c19zdHJ1Y3Qodm9pZCAqb2JqZWN0IFRTUk1MU19EQykKPiArIHsKPiArLQlwaHBfZGJ1
+c19zdHJ1Y3Rfb2JqICppbnRlcm4gPSBEQlVTX1pFTkRfWk9CSl9UT19PQkoob2JqZWN0LCBwaHBf
+ZGJ1c19zdHJ1Y3Rfb2JqKTsKPiArKwlwaHBfZGJ1c19zdHJ1Y3Rfb2JqICppbnRlcm4gPSBEQlVT
+X0dFVF9PQkpFQ1QocGhwX2RidXNfc3RydWN0X29iaiwgb2JqZWN0KTsKPiArIAo+ICsgCXplbmRf
+b2JqZWN0X3N0ZF9kdG9yKCZpbnRlcm4tPnN0ZCk7Cj4gKyB9Cj4gK0BAIC03NDksNyArNzU1LDcg
+QEAgc3RhdGljIHplbmRfb2JqZWN0KiBkYnVzX29iamVjdF9uZXdfZGJ1c19vYmplY3RfcGF0aCh6
+ZW5kX2NsYXNzX2VudHJ5ICpjbGFzc190eXAKPiArIAo+ICsgc3RhdGljIHZvaWQgZGJ1c19vYmpl
+Y3RfZnJlZV9zdG9yYWdlX2RidXNfb2JqZWN0X3BhdGgodm9pZCAqb2JqZWN0IFRTUk1MU19EQykK
+PiArIHsKPiArLQlwaHBfZGJ1c19vYmplY3RfcGF0aF9vYmogKmludGVybiA9IERCVVNfWkVORF9a
+T0JKX1RPX09CSihvYmplY3QsIHBocF9kYnVzX29iamVjdF9wYXRoX29iaik7Cj4gKysJcGhwX2Ri
+dXNfb2JqZWN0X3BhdGhfb2JqICppbnRlcm4gPSBEQlVTX0dFVF9PQkpFQ1QocGhwX2RidXNfb2Jq
+ZWN0X3BhdGhfb2JqLCBvYmplY3QpOwo+ICsgCj4gKyAJemVuZF9vYmplY3Rfc3RkX2R0b3IoJmlu
+dGVybi0+c3RkKTsKPiArIH0KPiArQEAgLTc2OCwyNyArNzc0LDE5IEBAIHN0YXRpYyB2b2lkIGRi
+dXNfb2JqZWN0X2ZyZWVfc3RvcmFnZV9kYnVzX29iamVjdF9wYXRoKHZvaWQgKm9iamVjdCBUU1JN
+TFNfREMpCj4gKyAgXAo+ICsgCXN0YXRpYyB2b2lkIGRidXNfb2JqZWN0X2ZyZWVfc3RvcmFnZV9k
+YnVzXyMjdCh2b2lkICpvYmplY3QgVFNSTUxTX0RDKSBcCj4gKyAJeyBcCj4gKy0JCXBocF9kYnVz
+XyMjdCMjX29iaiAqaW50ZXJuID0gREJVU19aRU5EX1pPQkpfVE9fT0JKKG9iamVjdCwgcGhwX2Ri
+dXNfIyN0IyNfb2JqKTsgXAo+ICsrCQlwaHBfZGJ1c18jI3QjI19vYmogKmludGVybiA9IERCVVNf
+R0VUX09CSkVDVChwaHBfZGJ1c18jI3QjI19vYmosIG9iamVjdCk7IFwKPiArICBcCj4gKyAJCXpl
+bmRfb2JqZWN0X3N0ZF9kdG9yKCZpbnRlcm4tPnN0ZCk7IFwKPiArIAl9IFwKPiArICBcCj4gKy0J
+c3RhdGljIEhhc2hUYWJsZSAqZGJ1c18jI3QjI19nZXRfcHJvcGVydGllcyh6dmFsICpvYmplY3Qg
+VFNSTUxTX0RDKSBcCj4gKysJc3RhdGljIEhhc2hUYWJsZSAqZGJ1c18jI3QjI19nZXRfcHJvcGVy
+dGllcyhkYnVzX29iamVjdF90eXBlICpvYmplY3QgVFNSTUxTX0RDKSBcCj4gKyAJeyBcCj4gKyAJ
+CUhhc2hUYWJsZSAqcHJvcHM7IFwKPiArIAkJenZhbCAqenY7IFwKPiArIAkJcGhwX2RidXNfIyN0
+IyNfb2JqICppbnRlcm47IFwKPiArLSBcCj4gKy0JCURCVVNfWkVORF9HRVRfWlZBTF9PQkpFQ1Qo
+b2JqZWN0LCBpbnRlcm4sIHBocF9kYnVzXyMjdCMjX29iaik7IFwKPiArLQkJREJVU19aRU5EX01B
+S0VfU1REX1pWQUwoenYpOyBcCj4gKy0JCURCVVNfWkVORF9aVkFMX1RZUEVfUCh6dikgPSBwdDsg
+XAo+ICstCQkoKnp2KS52YWx1ZS5wZiA9IGludGVybi0+ZGF0YTsgXAo+ICstIFwKPiArLQkJcHJv
+cHMgPSBpbnRlcm4tPnN0ZC5wcm9wZXJ0aWVzOyBcCj4gKy0gXAo+ICstCQlEQlVTX1pFTkRfSEFT
+SF9VUERBVEUocHJvcHMsICJ2YWx1ZSIsICZ6dik7IFwKPiArLSBcCj4gKy0JCXJldHVybiBwcm9w
+czsgXAo+ICsrICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+XAo+ICsrICAgICAgICBwcm9wcyA9IHplbmRfc3RkX2dldF9wcm9wZXJ0aWVzKG9iamVjdCk7XAo+
+ICsrCQlyZXR1cm4gcHJvcHM7ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXAo+ICsg
+CX0KPiArIAo+ICsgCj4gK0BAIC04MTAsMTAgKzgwOCw2IEBAIHN0YXRpYyB6dmFsICogZGJ1c19p
+bnN0YW50aWF0ZSh6ZW5kX2NsYXNzX2VudHJ5ICpwY2UsIHp2YWwgKm9iamVjdCBUU1JNTFNfREMp
+Cj4gKyAJfQo+ICsgCj4gKyAJb2JqZWN0X2luaXRfZXgob2JqZWN0LCBwY2UpOwo+ICstCVpfVFlQ
+RV9JTkZPX1Aob2JqZWN0KSA9IElTX09CSkVDVF9FWDsKPiArLQlaX1NFVF9SRUZDT1VOVF9QKG9i
+amVjdCwgMSk7Cj4gKy0JaWYgKFpfSVNSRUZfUChvYmplY3QpKQo+ICstCQlaVkFMX1VOUkVGKG9i
+amVjdCk7Cj4gKyAKPiArIAlyZXR1cm4gb2JqZWN0Owo+ICsgfQo+ICtAQCAtODQ4LDcgKzg0Miw3
+IEBAIFBIUF9NRVRIT0QoRGJ1cywgX19jb25zdHJ1Y3QpCj4gKyAKPiArIAlkYnVzX3NldF9lcnJv
+cl9oYW5kbGluZyhFSF9USFJPVywgTlVMTCBUU1JNTFNfQ0MpOwo+ICsgCWlmIChTVUNDRVNTID09
+IHplbmRfcGFyc2VfcGFyYW1ldGVycyhaRU5EX05VTV9BUkdTKCkgVFNSTUxTX0NDLCAifGxsIiwg
+JnR5cGUsICZpbnRyb3NwZWN0KSkgewo+ICstCQlEQlVTX1pFTkRfR0VUX1pWQUxfT0JKRUNUKGdl
+dFRoaXMoKSwgZGJ1cywgcGhwX2RidXNfb2JqKTsKPiArKwkJZGJ1cyA9IERCVVNfWlZBTF9HRVRf
+T0JKRUNUKHBocF9kYnVzX29iaiwgZ2V0VGhpcygpKTsKPiArIAkJZGJ1c19pbml0aWFsaXplKGRi
+dXMsIHR5cGUsIGludHJvc3BlY3QgVFNSTUxTX0NDKTsKPiArIAl9Cj4gKyAJZGJ1c19zZXRfZXJy
+b3JfaGFuZGxpbmcoRUhfTk9STUFMLCBOVUxMIFRTUk1MU19DQyk7Cj4gK0BAIC05MzAsMTMgKzky
+NCwxMyBAQCBQSFBfTUVUSE9EKERidXNPYmplY3QsIF9fY29uc3RydWN0KQo+ICsgCj4gKyAJZGJ1
+c19zZXRfZXJyb3JfaGFuZGxpbmcoRUhfVEhST1csIE5VTEwgVFNSTUxTX0NDKTsKPiArIAlpZiAo
+U1VDQ0VTUyA9PSB6ZW5kX3BhcnNlX3BhcmFtZXRlcnMoWkVORF9OVU1fQVJHUygpIFRTUk1MU19D
+QywgIk9zc3MhIiwKPiArLQkJJm9iamVjdCwgZGJ1c19jZV9kYnVzLAo+ICstCQkmZGVzdGluYXRp
+b24sICZkZXN0aW5hdGlvbl9sZW4sICZwYXRoLCAmcGF0aF9sZW4sCj4gKy0JCSZpbnRlcmZhY2Us
+ICZpbnRlcmZhY2VfbGVuKSkKPiArKwkJCQkJCQkJCQkgJm9iamVjdCwgZGJ1c19jZV9kYnVzLAo+
+ICsrCQkJCQkJCQkJCSAmZGVzdGluYXRpb24sICZkZXN0aW5hdGlvbl9sZW4sICZwYXRoLCAmcGF0
+aF9sZW4sCj4gKysJCQkJCQkJCQkJICZpbnRlcmZhY2UsICZpbnRlcmZhY2VfbGVuKSkKPiArIAl7
+Cj4gKyAJCURCVVNfWkVORF9BRERSRUZfUChvYmplY3QpOwo+ICstCQlEQlVTX1pFTkRfR0VUX1pW
+QUxfT0JKRUNUKG9iamVjdCwgZGJ1cywgcGhwX2RidXNfb2JqKTsKPiArLQkJREJVU19aRU5EX0dF
+VF9aVkFMX09CSkVDVChnZXRUaGlzKCksIGRidXNfb2JqZWN0LCBwaHBfZGJ1c19vYmplY3Rfb2Jq
+KTsKPiArKwkJZGJ1cyA9IERCVVNfWlZBTF9HRVRfT0JKRUNUKHBocF9kYnVzX29iaiwgb2JqZWN0
+KTsKPiArKwkJZGJ1c19vYmplY3QgPSBEQlVTX1pWQUxfR0VUX09CSkVDVChwaHBfZGJ1c19vYmpl
+Y3Rfb2JqLCBnZXRUaGlzKCkpOwo+ICsgCQlkYnVzX29iamVjdF9pbml0aWFsaXplKGRidXNfb2Jq
+ZWN0LCBkYnVzLCBkZXN0aW5hdGlvbiwgcGF0aCwgaW50ZXJmYWNlIFRTUk1MU19DQyk7Cj4gKyAJ
+CWlmIChkYnVzLT51c2VJbnRyb3NwZWN0aW9uKSB7Cj4gKyAJCQlwaHBfZGJ1c19pbnRyb3NwZWN0
+KGRidXNfb2JqZWN0LCBkYnVzLCBkZXN0aW5hdGlvbiwgcGF0aCwgaW50ZXJmYWNlIFRTUk1MU19D
+Qyk7Cj4gK0BAIC05NTksMTMgKzk1MywxMyBAQCBQSFBfTUVUSE9EKERidXMsIGNyZWF0ZVByb3h5
+KQo+ICsgCj4gKyAJZGJ1c19zZXRfZXJyb3JfaGFuZGxpbmcoRUhfVEhST1csIE5VTEwgVFNSTUxT
+X0NDKTsKPiArIAlpZiAoU1VDQ0VTUyA9PSB6ZW5kX3BhcnNlX3BhcmFtZXRlcnMoWkVORF9OVU1f
+QVJHUygpIFRTUk1MU19DQywgInNzcyEiLAo+ICstCQkmZGVzdGluYXRpb24sICZkZXN0aW5hdGlv
+bl9sZW4sICZwYXRoLCAmcGF0aF9sZW4sCj4gKy0JCSZpbnRlcmZhY2UsICZpbnRlcmZhY2VfbGVu
+KSkKPiArKwkJCQkJCQkJCQkgJmRlc3RpbmF0aW9uLCAmZGVzdGluYXRpb25fbGVuLCAmcGF0aCwg
+JnBhdGhfbGVuLAo+ICsrCQkJCQkJCQkJCSAmaW50ZXJmYWNlLCAmaW50ZXJmYWNlX2xlbikpCj4g
+KyAJewo+ICstCQlEQlVTX1pFTkRfR0VUX1pWQUxfT0JKRUNUKG9iamVjdCwgZGJ1cywgcGhwX2Ri
+dXNfb2JqKTsKPiArKwkJZGJ1cyA9IERCVVNfWlZBTF9HRVRfT0JKRUNUKHBocF9kYnVzX29iaiwg
+b2JqZWN0KTsKPiArIAkJREJVU19aRU5EX0FERFJFRl9QKG9iamVjdCk7Cj4gKyAJCWRidXNfaW5z
+dGFudGlhdGUoZGJ1c19jZV9kYnVzX29iamVjdCwgcmV0dXJuX3ZhbHVlIFRTUk1MU19DQyk7Cj4g
+Ky0JCURCVVNfWkVORF9HRVRfWlZBTF9PQkpFQ1QocmV0dXJuX3ZhbHVlLCBkYnVzX29iamVjdCwg
+cGhwX2RidXNfb2JqZWN0X29iaik7Cj4gKysJCWRidXNfb2JqZWN0ID0gREJVU19aVkFMX0dFVF9P
+QkpFQ1QocGhwX2RidXNfb2JqZWN0X29iaiwgcmV0dXJuX3ZhbHVlKTsKPiArIAkJZGJ1c19vYmpl
+Y3RfaW5pdGlhbGl6ZShkYnVzX29iamVjdCwgZGJ1cywgZGVzdGluYXRpb24sIHBhdGgsIGludGVy
+ZmFjZSBUU1JNTFNfQ0MpOwo+ICsgCQlpZiAoZGJ1cy0+dXNlSW50cm9zcGVjdGlvbikgewo+ICsg
+CQkJcGhwX2RidXNfaW50cm9zcGVjdChkYnVzX29iamVjdCwgZGJ1cywgZGVzdGluYXRpb24sIHBh
+dGgsIGludGVyZmFjZSBUU1JNTFNfQ0MpOwo+ICtAQCAtOTc5LDcgKzk3Myw3IEBAIHN0YXRpYyB2
+b2lkIHBocF9kYnVzX2FjY2VwdF9pbmNvbWluZ19zaWduYWwoREJ1c01lc3NhZ2UgKm1zZywgenZh
+bCAqKnJldHVybl92YWx1Cj4gKyB7Cj4gKyAJcGhwX2RidXNfc2lnbmFsX29iaiAqc2lnbmFsb2Jq
+Owo+ICsgCWRidXNfaW5zdGFudGlhdGUoZGJ1c19jZV9kYnVzX3NpZ25hbCwgKnJldHVybl92YWx1
+ZSBUU1JNTFNfQ0MpOwo+ICstCURCVVNfWkVORF9HRVRfWlZBTF9PQkpFQ1QoKnJldHVybl92YWx1
+ZSwgc2lnbmFsb2JqLCBwaHBfZGJ1c19zaWduYWxfb2JqKTsKPiArKwlzaWduYWxvYmogPSBEQlVT
+X1pWQUxfR0VUX09CSkVDVChwaHBfZGJ1c19zaWduYWxfb2JqLCAqcmV0dXJuX3ZhbHVlKTsKPiAr
+IAlzaWduYWxvYmotPm1zZyA9IG1zZzsKPiArIAlzaWduYWxvYmotPmRpcmVjdGlvbiA9IFBIUF9E
+QlVTX1NJR05BTF9JTjsKPiArIH0KPiArQEAgLTExMTQsNyArMTEwOCw3IEBAIFBIUF9NRVRIT0Qo
+RGJ1cywgd2FpdExvb3ApCj4gKyAJCVJFVFVSTl9GQUxTRTsKPiArIAl9Cj4gKyAKPiArLQlEQlVT
+X1pFTkRfR0VUX1pWQUxfT0JKRUNUKG9iamVjdCwgZGJ1cywgcGhwX2RidXNfb2JqKTsKPiArKwlk
+YnVzID0gREJVU19aVkFMX0dFVF9PQkpFQ1QocGhwX2RidXNfb2JqLCBvYmplY3QpOwo+ICsgCj4g
+KyAJZGJ1c19jb25uZWN0aW9uX3JlYWRfd3JpdGUoZGJ1cy0+Y29uLCB0aW1lb3V0KTsKPiArIAlt
+c2cgPSBkYnVzX2Nvbm5lY3Rpb25fcG9wX21lc3NhZ2UoZGJ1cy0+Y29uKTsKPiArQEAgLTExNTEs
+NyArMTE0NSw3IEBAIFBIUF9NRVRIT0QoRGJ1cywgcmVxdWVzdE5hbWUpCj4gKyAJCVJFVFVSTl9G
+QUxTRTsKPiArIAl9Cj4gKyAKPiArLQlEQlVTX1pFTkRfR0VUX1pWQUxfT0JKRUNUKG9iamVjdCwg
+ZGJ1cywgcGhwX2RidXNfb2JqKTsKPiArKwlkYnVzID0gREJVU19aVkFMX0dFVF9PQkpFQ1QocGhw
+X2RidXNfb2JqLCBvYmplY3QpOwo+ICsgCWRidXNfZXJyb3JfaW5pdCgmZXJyKTsKPiArIAo+ICsg
+CS8qIHJlcXVlc3Qgb3VyIG5hbWUgb24gdGhlIGJ1cyBhbmQgY2hlY2sgZm9yIGVycm9ycyAqLwo+
+ICtAQCAtMTE4MCw3ICsxMTc0LDcgQEAgUEhQX01FVEhPRChEYnVzLCByZWdpc3Rlck9iamVjdCkK
+PiArIAkJJmNsYXNzLCAmY2xhc3NfbGVuKSkgewo+ICsgCQlSRVRVUk5fRkFMU0U7Cj4gKyAJfQo+
+ICstCURCVVNfWkVORF9HRVRfWlZBTF9PQkpFQ1Qob2JqZWN0LCBkYnVzLCBwaHBfZGJ1c19vYmop
+Owo+ICsrCWRidXMgPSBEQlVTX1pWQUxfR0VUX09CSkVDVChwaHBfZGJ1c19vYmosIG9iamVjdCk7
+Cj4gKyAKPiArIAkvKiBDcmVhdGUgdGhlIGtleSBvdXQgb2YgdGhlIHBhdGggYW5kIGludGVyZmFj
+ZSAqLwo+ICsgCXNwcHJpbnRmKCZrZXksIDAsICIlczolcyIsIHBhdGgsIGludGVyZmFjZSA/IGlu
+dGVyZmFjZSA6ICIobnVsbCkiKTsKPiArQEAgLTE0NTksNyArMTQ1Myw3IEBAIFBIUF9EQlVTX0FQ
+UEVORF9UWVBFX0ZVTkModWludDY0LCBVSU5UNjQpOwo+ICsgI2RlZmluZSBQSFBfREJVU19NQVJT
+SEFMX1RPX0RCVVNfQ0FTRSh0KSBcCj4gKyAJaWYgKG9iai0+Y2UgPT0gZGJ1c19jZV9kYnVzXyMj
+dCkgeyBcCj4gKyAJCXBocF9kYnVzXyMjdCMjX29iaiAqX3ZhbCA9IFwKPiArLQkJCURCVVNfWkVO
+RF9aT0JKX1RPX09CSihvYmosIHBocF9kYnVzXyMjdCMjX29iaik7IFwKPiArKwkJCURCVVNfR0VU
+X09CSkVDVChwaHBfZGJ1c18jI3QjI19vYmosIG9iaik7IFwKPiArIAkJZGJ1c19hcHBlbmRfdmFy
+XyMjdChpdGVyLCBfdmFsLT5kYXRhKTsgXAo+ICsgCX0KPiArIAo+ICtAQCAtMTUwNiwyNyArMTUw
+MCwyNyBAQCBzdGF0aWMgaW50IGRidXNfYXBwZW5kX3Zhcih6dmFsICoqdmFsLCBEQnVzTWVzc2Fn
+ZUl0ZXIgKml0ZXIsIGNoYXIgKnR5cGVfaGludCBUUwo+ICsgCQkJb2JqID0gWl9PQkpfUCgqdmFs
+KTsKPiArIAkJCWlmIChvYmotPmNlID09IGRidXNfY2VfZGJ1c19hcnJheSkgewo+ICsgCQkJCWRi
+dXNfYXBwZW5kX3Zhcl9hcnJheShpdGVyLAo+ICstCQkJCQlEQlVTX1pFTkRfWk9CSl9UT19PQkoo
+b2JqLCBwaHBfZGJ1c19hcnJheV9vYmopIFRTUk1MU19DQyk7Cj4gKysJCQkJCURCVVNfR0VUX09C
+SkVDVChwaHBfZGJ1c19hcnJheV9vYmosIG9iaikgVFNSTUxTX0NDKTsKPiArIAkJCX0KPiArIAkJ
+CWlmIChvYmotPmNlID09IGRidXNfY2VfZGJ1c19kaWN0KSB7Cj4gKyAJCQkJZGJ1c19hcHBlbmRf
+dmFyX2RpY3QoaXRlciwKPiArLQkJCQkJREJVU19aRU5EX1pPQkpfVE9fT0JKKG9iaiwgcGhwX2Ri
+dXNfZGljdF9vYmopIFRTUk1MU19DQyk7Cj4gKysJCQkJCURCVVNfR0VUX09CSkVDVChwaHBfZGJ1
+c19kaWN0X29iaiwgb2JqKSBUU1JNTFNfQ0MpOwo+ICsgCQkJfQo+ICsgCQkJaWYgKG9iai0+Y2Ug
+PT0gZGJ1c19jZV9kYnVzX3ZhcmlhbnQpIHsKPiArIAkJCQlkYnVzX2FwcGVuZF92YXJfdmFyaWFu
+dChpdGVyLAo+ICstCQkJCQlEQlVTX1pFTkRfWk9CSl9UT19PQkoob2JqLCBwaHBfZGJ1c192YXJp
+YW50X29iaikgVFNSTUxTX0NDKTsKPiArKwkJCQkJREJVU19HRVRfT0JKRUNUKHBocF9kYnVzX3Zh
+cmlhbnRfb2JqLCBvYmopIFRTUk1MU19DQyk7Cj4gKyAJCQl9Cj4gKyAJCQlpZiAob2JqLT5jZSA9
+PSBkYnVzX2NlX2RidXNfc2V0KSB7Cj4gKyAJCQkJZGJ1c19hcHBlbmRfdmFyX3NldChpdGVyLAo+
+ICstCQkJCQlEQlVTX1pFTkRfWk9CSl9UT19PQkoob2JqLCBwaHBfZGJ1c19zZXRfb2JqKSBUU1JN
+TFNfQ0MpOwo+ICsrCQkJCQlEQlVTX0dFVF9PQkpFQ1QocGhwX2RidXNfc2V0X29iaiwgb2JqKSBU
+U1JNTFNfQ0MpOwo+ICsgCQkJfQo+ICsgCQkJaWYgKG9iai0+Y2UgPT0gZGJ1c19jZV9kYnVzX3N0
+cnVjdCkgewo+ICsgCQkJCWRidXNfYXBwZW5kX3Zhcl9zdHJ1Y3QoaXRlciwKPiArLQkJCQkJREJV
+U19aRU5EX1pPQkpfVE9fT0JKKG9iaiwgcGhwX2RidXNfc3RydWN0X29iaikgVFNSTUxTX0NDKTsK
+PiArKwkJCQkJREJVU19HRVRfT0JKRUNUKHBocF9kYnVzX3N0cnVjdF9vYmosIG9iaikgVFNSTUxT
+X0NDKTsKPiArIAkJCX0KPiArIAkJCWlmIChvYmotPmNlID09IGRidXNfY2VfZGJ1c19vYmplY3Rf
+cGF0aCkgewo+ICsgCQkJCWRidXNfYXBwZW5kX3Zhcl9vYmplY3RfcGF0aChpdGVyLAo+ICstCQkJ
+CQlEQlVTX1pFTkRfWk9CSl9UT19PQkoob2JqLCBwaHBfZGJ1c19vYmplY3RfcGF0aF9vYmopIFRT
+Uk1MU19DQyk7Cj4gKysJCQkJCURCVVNfR0VUX09CSkVDVChwaHBfZGJ1c19vYmplY3RfcGF0aF9v
+YmosIG9iaikgVFNSTUxTX0NDKTsKPiArIAkJCX0KPiArIAkJCVBIUF9EQlVTX01BUlNIQUxfVE9f
+REJVU19DQVNFKGJ5dGUpOwo+ICsgCQkJUEhQX0RCVVNfTUFSU0hBTF9UT19EQlVTX0NBU0UoYm9v
+bCk7Cj4gK0BAIC0xNTk5LDcgKzE1OTMsNyBAQCBzdGF0aWMgenZhbCAqcGhwX2RidXNfdG9fenZh
+bChEQnVzTWVzc2FnZUl0ZXIgKmFyZ3MsIHp2YWwgKiprZXkgVFNSTUxTX0RDKQo+ICsgCQkJCQlp
+ZiAobmV3X2tleSkgewo+ICsgCQkJCQkJaWYgKCFpbml0KSB7Cj4gKyAJCQkJCQkJZGJ1c19pbnN0
+YW50aWF0ZShkYnVzX2NlX2RidXNfZGljdCwgcmV0dXJuX3ZhbHVlIFRTUk1MU19DQyk7Cj4gKy0J
+CQkJCQkJREJVU19aRU5EX0dFVF9aVkFMX09CSkVDVChyZXR1cm5fdmFsdWUsIGRpY3RvYmosIHBo
+cF9kYnVzX2RpY3Rfb2JqKTsKPiArKwkJCQkJCQlkaWN0b2JqID0gREJVU19aVkFMX0dFVF9PQkpF
+Q1QocGhwX2RidXNfZGljdF9vYmosIHJldHVybl92YWx1ZSk7Cj4gKyAJCQkJCQkJZGljdG9iai0+
+dHlwZSA9IHBocF9kYnVzX2ZldGNoX2NoaWxkX3R5cGUodmFsIFRTUk1MU19DQyk7Cj4gKyAJCQkJ
+CQkJREJVU19aRU5EX0FMTE9DX1pWQUwoZGljdG9iai0+ZWxlbWVudHMpOwo+ICsgCQkJCQkJCWFy
+cmF5X2luaXQoZGljdG9iai0+ZWxlbWVudHMpOwo+ICtAQCAtMTYxMSw3ICsxNjA1LDcgQEAgc3Rh
+dGljIHp2YWwgKnBocF9kYnVzX3RvX3p2YWwoREJ1c01lc3NhZ2VJdGVyICphcmdzLCB6dmFsICoq
+a2V5IFRTUk1MU19EQykKPiArIAkJCQkJCX0gZWxzZSBpZiAodmFsICYmIFpfVFlQRV9QKG5ld19r
+ZXkpID09IElTX09CSkVDVCkgewo+ICsgCQkJCQkJCXplbmRfb2JqZWN0ICpvYmogPSBaX09CSl9Q
+KG5ld19rZXkpOwo+ICsgCQkJCQkJCWlmIChvYmotPmNlID09IGRidXNfY2VfZGJ1c19vYmplY3Rf
+cGF0aCkgewo+ICstCQkJCQkJCQlwaHBfZGJ1c19vYmplY3RfcGF0aF9vYmogKmludGVybiA9IERC
+VVNfWkVORF9aT0JKX1RPX09CSihvYmosIHBocF9kYnVzX29iamVjdF9wYXRoX29iaik7Cj4gKysJ
+CQkJCQkJCXBocF9kYnVzX29iamVjdF9wYXRoX29iaiAqaW50ZXJuID0gREJVU19HRVRfT0JKRUNU
+KHBocF9kYnVzX29iamVjdF9wYXRoX29iaiwgb2JqKTsKPiArIAkJCQkJCQkJYWRkX2Fzc29jX3p2
+YWxfZXgoZGljdG9iai0+ZWxlbWVudHMsIGludGVybi0+cGF0aCwgc3RybGVuKGludGVybi0+cGF0
+aCksIHZhbCk7Cj4gKyAJCQkJCQkJfQo+ICsgCQkJCQkJfSBlbHNlIGlmICh2YWwgJiYgWl9UWVBF
+X1AobmV3X2tleSkgPT0gSVNfTE9ORykgewo+ICtAQCAtMTYyMCw3ICsxNjE0LDcgQEAgc3RhdGlj
+IHp2YWwgKnBocF9kYnVzX3RvX3p2YWwoREJ1c01lc3NhZ2VJdGVyICphcmdzLCB6dmFsICoqa2V5
+IFRTUk1MU19EQykKPiArIAkJCQkJfSBlbHNlIHsKPiArIAkJCQkJCWlmICghaW5pdCkgewo+ICsg
+CQkJCQkJCWRidXNfaW5zdGFudGlhdGUoZGJ1c19jZV9kYnVzX2FycmF5LCByZXR1cm5fdmFsdWUg
+VFNSTUxTX0NDKTsKPiArLQkJCQkJCQlEQlVTX1pFTkRfR0VUX1pWQUxfT0JKRUNUKHJldHVybl92
+YWx1ZSwgYXJyYXlvYmosIHBocF9kYnVzX2FycmF5X29iaik7Cj4gKysJCQkJCQkJYXJyYXlvYmog
+PSBEQlVTX1pWQUxfR0VUX09CSkVDVChwaHBfZGJ1c19hcnJheV9vYmosIHJldHVybl92YWx1ZSk7
+Cj4gKyAJCQkJCQkJYXJyYXlvYmotPnR5cGUgPSB2YWwgPyBwaHBfZGJ1c19mZXRjaF9jaGlsZF90
+eXBlKHZhbCBUU1JNTFNfQ0MpIDogREJVU19UWVBFX0lOVkFMSUQ7Cj4gKyAJCQkJCQkJREJVU19a
+RU5EX0FMTE9DX1pWQUwoYXJyYXlvYmotPmVsZW1lbnRzKTsKPiArIAkJCQkJCQlhcnJheV9pbml0
+KGFycmF5b2JqLT5lbGVtZW50cyk7Cj4gK0BAIC0xNjU1LDcgKzE2NDksNyBAQCBzdGF0aWMgenZh
+bCAqcGhwX2RidXNfdG9fenZhbChEQnVzTWVzc2FnZUl0ZXIgKmFyZ3MsIHp2YWwgKiprZXkgVFNS
+TUxTX0RDKQo+ICsgCQkJCXZhbCA9IHBocF9kYnVzX3RvX3p2YWwoJnN1Yml0ZXIsICZuZXdfa2V5
+IFRTUk1MU19DQyk7Cj4gKyAKPiArIAkJCQlkYnVzX2luc3RhbnRpYXRlKGRidXNfY2VfZGJ1c192
+YXJpYW50LCByZXR1cm5fdmFsdWUgVFNSTUxTX0NDKTsKPiArLQkJCQlEQlVTX1pFTkRfR0VUX1pW
+QUxfT0JKRUNUKHJldHVybl92YWx1ZSwgdmFyaWFudG9iaiwgcGhwX2RidXNfdmFyaWFudF9vYmop
+Owo+ICsrCQkJCXZhcmlhbnRvYmogPSBEQlVTX1pWQUxfR0VUX09CSkVDVChwaHBfZGJ1c192YXJp
+YW50X29iaiwgcmV0dXJuX3ZhbHVlKTsKPiArIAkJCQl2YXJpYW50b2JqLT5kYXRhID0gdmFsOwo+
+ICsgCQkJfQo+ICsgCQkJYnJlYWs7Cj4gK0BAIC0xNjY0LDcgKzE2NTgsNyBAQCBzdGF0aWMgenZh
+bCAqcGhwX2RidXNfdG9fenZhbChEQnVzTWVzc2FnZUl0ZXIgKmFyZ3MsIHp2YWwgKiprZXkgVFNS
+TUxTX0RDKQo+ICsgCQkJCXBocF9kYnVzX3N0cnVjdF9vYmogKnN0cnVjdG9iajsKPiArIAo+ICsg
+CQkJCWRidXNfaW5zdGFudGlhdGUoZGJ1c19jZV9kYnVzX3N0cnVjdCwgcmV0dXJuX3ZhbHVlIFRT
+Uk1MU19DQyk7Cj4gKy0JCQkJREJVU19aRU5EX0dFVF9aVkFMX09CSkVDVChyZXR1cm5fdmFsdWUs
+IHN0cnVjdG9iaiwgcGhwX2RidXNfc3RydWN0X29iaik7Cj4gKysJCQkJc3RydWN0b2JqID0gREJV
+U19aVkFMX0dFVF9PQkpFQ1QocGhwX2RidXNfc3RydWN0X29iaiwgcmV0dXJuX3ZhbHVlKTsKPiAr
+IAkJCQlEQlVTX1pFTkRfQUxMT0NfWlZBTChzdHJ1Y3RvYmotPmVsZW1lbnRzKTsKPiArIAkJCQlh
+cnJheV9pbml0KHN0cnVjdG9iai0+ZWxlbWVudHMpOwo+ICsgCj4gK0BAIC0xNjgyLDcgKzE2NzYs
+NyBAQCBzdGF0aWMgenZhbCAqcGhwX2RidXNfdG9fenZhbChEQnVzTWVzc2FnZUl0ZXIgKmFyZ3Ms
+IHp2YWwgKiprZXkgVFNSTUxTX0RDKQo+ICsgCQkJCWRidXNfaW50NjRfdCBzdGF0Owo+ICsgCj4g
+KyAJCQkJZGJ1c19pbnN0YW50aWF0ZShkYnVzX2NlX2RidXNfb2JqZWN0X3BhdGgsIHJldHVybl92
+YWx1ZSBUU1JNTFNfQ0MpOwo+ICstCQkJCURCVVNfWkVORF9HRVRfWlZBTF9PQkpFQ1QocmV0dXJu
+X3ZhbHVlLCBvYmplY3RfcGF0aG9iaiwgcGhwX2RidXNfb2JqZWN0X3BhdGhfb2JqKTsKPiArKwkJ
+CQlvYmplY3RfcGF0aG9iaiA9IERCVVNfWlZBTF9HRVRfT0JKRUNUKHBocF9kYnVzX29iamVjdF9w
+YXRoX29iaiwgcmV0dXJuX3ZhbHVlKTsKPiArIAkJCQlkYnVzX21lc3NhZ2VfaXRlcl9nZXRfYmFz
+aWMoYXJncywgJnN0YXQpOwo+ICsgCQkJCW9iamVjdF9wYXRob2JqLT5wYXRoID0gZXN0cmR1cCgo
+Y2hhciopIHN0YXQpOwo+ICsgCQkJfQo+ICtAQCAtMTc2Niw3ICsxNzYwLDcgQEAgc3RhdGljIGlu
+dCBwaHBfZGJ1c19oYW5kbGVfcmVwbHkoenZhbCAqcmV0dXJuX3ZhbHVlLCBEQnVzTWVzc2FnZSAq
+bXNnLCBpbnQgYWx3YXkKPiArIAkJCXNpemVfdCBpID0gMDsKPiArIAo+ICsgCQkJZGJ1c19pbnN0
+YW50aWF0ZShkYnVzX2NlX2RidXNfc2V0LCByZXR1cm5fdmFsdWUgVFNSTUxTX0NDKTsKPiArLQkJ
+CURCVVNfWkVORF9HRVRfWlZBTF9PQkpFQ1QocmV0dXJuX3ZhbHVlLCBzZXQsIHBocF9kYnVzX3Nl
+dF9vYmopOwo+ICsrCQkJc2V0ID0gREJVU19aVkFMX0dFVF9PQkpFQ1QocGhwX2RidXNfc2V0X29i
+aiwgcmV0dXJuX3ZhbHVlKTsKPiArIAkJCXNldC0+ZWxlbWVudHMgPSAoenZhbCAqKikgc2FmZV9l
+bWFsbG9jKHNpemVvZih6dmFsKiksIDY0LCAwKTsKPiArIAo+ICsgCQkJZG8gewo+ICtAQCAtMTgw
+Niw3ICsxODAwLDggQEAgUEhQX01FVEhPRChEYnVzT2JqZWN0LCBfX2NhbGwpCj4gKyAJCSJPc3oi
+LCAmb2JqZWN0LCBkYnVzX2NlX2RidXNfb2JqZWN0LCAmbmFtZSwgJm5hbWVfbGVuLCAmZGF0YSkp
+IHsKPiArIAkJUkVUVVJOX0ZBTFNFOwo+ICsgCX0KPiArLQlEQlVTX1pFTkRfR0VUX1pWQUxfT0JK
+RUNUKG9iamVjdCwgZGJ1c19vYmplY3QsIHBocF9kYnVzX29iamVjdF9vYmopOwo+ICsrCj4gKysJ
+ZGJ1c19vYmplY3QgPSBEQlVTX1pWQUxfR0VUX09CSkVDVChwaHBfZGJ1c19vYmplY3Rfb2JqLCBv
+YmplY3QpOwo+ICsgCj4gKyAJZGJ1c19zZXRfZXJyb3JfaGFuZGxpbmcoRUhfVEhST1csIE5VTEwg
+VFNSTUxTX0NDKTsKPiArIAo+ICtAQCAtMTg1OSw3ICsxODU0LDcgQEAgUEhQX01FVEhPRChEYnVz
+LCBhZGRXYXRjaCkKPiArIAkJIk98c3MiLCAmb2JqZWN0LCBkYnVzX2NlX2RidXMsICZpbnRlcmZh
+Y2UsICZpbnRlcmZhY2VfbGVuLCAmbWVtYmVyLCAmbWVtYmVyX2xlbikpIHsKPiArIAkJUkVUVVJO
+X0ZBTFNFOwo+ICsgCX0KPiArLQlEQlVTX1pFTkRfR0VUX1pWQUxfT0JKRUNUKG9iamVjdCwgZGJ1
+cywgcGhwX2RidXNfb2JqKTsKPiArKwlkYnVzID0gREJVU19aVkFMX0dFVF9PQkpFQ1QocGhwX2Ri
+dXNfb2JqLCBvYmplY3QpOwo+ICsgCj4gKyAJZGJ1c19zZXRfZXJyb3JfaGFuZGxpbmcoRUhfVEhS
+T1csIE5VTEwgVFNSTUxTX0NDKTsKPiArIAo+ICtAQCAtMTkxMiw4ICsxOTA3LDggQEAgUEhQX01F
+VEhPRChEYnVzU2lnbmFsLCBfX2NvbnN0cnVjdCkKPiArIAkJJnNpZ25hbCwgJnNpZ25hbF9sZW4p
+KQo+ICsgCXsKPiArIAkJREJVU19aRU5EX0FERFJFRl9QKG9iamVjdCk7Cj4gKy0JCURCVVNfWkVO
+RF9HRVRfWlZBTF9PQkpFQ1Qob2JqZWN0LCBkYnVzLCBwaHBfZGJ1c19vYmopOwo+ICstCQlEQlVT
+X1pFTkRfR0VUX1pWQUxfT0JKRUNUKGdldFRoaXMoKSwgc2lnbmFsX29iamVjdCwgcGhwX2RidXNf
+c2lnbmFsX29iaik7Cj4gKysJCWRidXMgPSBEQlVTX1pWQUxfR0VUX09CSkVDVChwaHBfZGJ1c19v
+YmosIG9iamVjdCk7Cj4gKysJCXNpZ25hbF9vYmplY3QgPSBEQlVTX1pWQUxfR0VUX09CSkVDVChw
+aHBfZGJ1c19zaWduYWxfb2JqLCBnZXRUaGlzKCkpOwo+ICsgCQlkYnVzX3NpZ25hbF9pbml0aWFs
+aXplKHNpZ25hbF9vYmplY3QsIGRidXMsIG9iamVjdF9uYW1lLCBpbnRlcmZhY2UsIHNpZ25hbCBU
+U1JNTFNfQ0MpOwo+ICsgCX0KPiArIAlkYnVzX3NldF9lcnJvcl9oYW5kbGluZyhFSF9OT1JNQUws
+IE5VTEwgVFNSTUxTX0NDKTsKPiArQEAgLTE5MzMsNyArMTkyOCw3IEBAIFBIUF9NRVRIT0QoRGJ1
+c1NpZ25hbCwgbWF0Y2hlcykKPiArIAkJIk9zcyIsICZvYmplY3QsIGRidXNfY2VfZGJ1c19zaWdu
+YWwsICZpbnRlcmZhY2UsICZpbnRlcmZhY2VfbGVuLCAmbWV0aG9kLCAmbWV0aG9kX2xlbikpIHsK
+PiArIAkJUkVUVVJOX0ZBTFNFOwo+ICsgCX0KPiArLQlEQlVTX1pFTkRfR0VUX1pWQUxfT0JKRUNU
+KG9iamVjdCwgc2lnbmFsX29iaiwgcGhwX2RidXNfc2lnbmFsX29iaik7Cj4gKysJc2lnbmFsX29i
+aiA9IERCVVNfWlZBTF9HRVRfT0JKRUNUKHBocF9kYnVzX3NpZ25hbF9vYmosIG9iamVjdCk7Cj4g
+KyAKPiArIAlpZiAoZGJ1c19tZXNzYWdlX2lzX3NpZ25hbChzaWduYWxfb2JqLT5tc2csIGludGVy
+ZmFjZSwgbWV0aG9kKSkgewo+ICsgCQlSRVRVUk5fVFJVRTsKPiArQEAgLTE5NTAsNyArMTk0NSw3
+IEBAIFBIUF9NRVRIT0QoRGJ1c1NpZ25hbCwgZ2V0RGF0YSkKPiArIAkJIk8iLCAmb2JqZWN0LCBk
+YnVzX2NlX2RidXNfc2lnbmFsKSkgewo+ICsgCQlSRVRVUk5fRkFMU0U7Cj4gKyAJfQo+ICstCURC
+VVNfWkVORF9HRVRfWlZBTF9PQkpFQ1Qob2JqZWN0LCBzaWduYWxfb2JqLCBwaHBfZGJ1c19zaWdu
+YWxfb2JqKTsKPiArKwlzaWduYWxfb2JqID0gREJVU19aVkFMX0dFVF9PQkpFQ1QocGhwX2RidXNf
+c2lnbmFsX29iaiwgb2JqZWN0KTsKPiArIAo+ICsgCWlmIChzaWduYWxfb2JqLT5kaXJlY3Rpb24g
+PT0gUEhQX0RCVVNfU0lHTkFMX09VVCkgewo+ICsgCQlwaHBfZXJyb3JfZG9jcmVmKE5VTEwgVFNS
+TUxTX0NDLCBFX1dBUk5JTkcsICJUaGlzIHNpZ25hbCBpcyBvdXRnb2luZywgYW5kIHRoZXJlZm9y
+ZSBkb2VzIG5vdCBoYXZlIGRhdGEuIik7Cj4gK0BAIC0xOTY5LDcgKzE5NjQsNyBAQCBQSFBfTUVU
+SE9EKERidXNTaWduYWwsIHNlbmQpCj4gKyAJZGJ1c191aW50MzJfdCBzZXJpYWwgPSAwOwo+ICsg
+Cj4gKyAJZGJ1c19zZXRfZXJyb3JfaGFuZGxpbmcoRUhfVEhST1csIE5VTEwgVFNSTUxTX0NDKTsK
+PiArLQlEQlVTX1pFTkRfR0VUX1pWQUxfT0JKRUNUKGdldFRoaXMoKSwgc2lnbmFsX29iaiwgcGhw
+X2RidXNfc2lnbmFsX29iaik7Cj4gKysJc2lnbmFsX29iaiA9IERCVVNfWlZBTF9HRVRfT0JKRUNU
+KHBocF9kYnVzX3NpZ25hbF9vYmosIGdldFRoaXMoKSk7Cj4gKyAKPiArIAlpZiAoc2lnbmFsX29i
+ai0+ZGlyZWN0aW9uID09IFBIUF9EQlVTX1NJR05BTF9JTikgewo+ICsgCQlwaHBfZXJyb3JfZG9j
+cmVmKE5VTEwgVFNSTUxTX0NDLCBFX1dBUk5JTkcsICJUaGlzIHNpZ25hbCBpcyBpbmNvbWluZywg
+YW5kIHRoZXJlZm9yZSBjYW4gbm90IGJlIHNlbmQuIik7Cj4gK0BAIC0yMDE1LDE1ICsyMDEwLDE1
+IEBAIHN0YXRpYyBpbnQgZGJ1c19hcnJheV9pbml0aWFsaXplKHBocF9kYnVzX2FycmF5X29iaiAq
+ZGJ1c29iaiwgbG9uZyB0eXBlLCB6dmFsICplCj4gKyAJcmV0dXJuIDE7Cj4gKyB9Cj4gKyAKPiAr
+LXN0YXRpYyBIYXNoVGFibGUgKmRidXNfYXJyYXlfZ2V0X3Byb3BlcnRpZXMoenZhbCAqb2JqZWN0
+IFRTUk1MU19EQykKPiArK3N0YXRpYyBIYXNoVGFibGUgKmRidXNfYXJyYXlfZ2V0X3Byb3BlcnRp
+ZXMoZGJ1c19vYmplY3RfdHlwZSAqb2JqZWN0IFRTUk1MU19EQykKPiArIHsKPiArIAlIYXNoVGFi
+bGUgKnByb3BzOwo+ICsgCXBocF9kYnVzX2FycmF5X29iaiAqYXJyYXlfb2JqOwo+ICsgCXp2YWwg
+KnNpZzsKPiArIAo+ICstCURCVVNfWkVORF9HRVRfWlZBTF9PQkpFQ1Qob2JqZWN0LCBhcnJheV9v
+YmosIHBocF9kYnVzX2FycmF5X29iaik7Cj4gKysJYXJyYXlfb2JqID0gREJVU19PQkpfV1JBUFBF
+UihwaHBfZGJ1c19hcnJheV9vYmosIG9iamVjdCk7Cj4gKyAKPiArLQlwcm9wcyA9IGFycmF5X29i
+ai0+c3RkLnByb3BlcnRpZXM7Cj4gKysJcHJvcHMgPSB6ZW5kX3N0ZF9nZXRfcHJvcGVydGllcyhv
+YmplY3QpOwo+ICsgCWlmIChhcnJheV9vYmotPnNpZ25hdHVyZSkgewo+ICsgCQlEQlVTX1pFTkRf
+TUFLRV9TVERfWlZBTChzaWcpOwo+ICsgCQlEQlVTX1pWQUxfU1RSSU5HKHNpZywgYXJyYXlfb2Jq
+LT5zaWduYXR1cmUsIDEpOwo+ICtAQCAtMjA1MSw3ICsyMDQ2LDcgQEAgUEhQX01FVEhPRChEYnVz
+QXJyYXksIF9fY29uc3RydWN0KQo+ICsgCj4gKyAJZGJ1c19zZXRfZXJyb3JfaGFuZGxpbmcoRUhf
+VEhST1csIE5VTEwgVFNSTUxTX0NDKTsKPiArIAlpZiAoU1VDQ0VTUyA9PSB6ZW5kX3BhcnNlX3Bh
+cmFtZXRlcnMoWkVORF9OVU1fQVJHUygpIFRTUk1MU19DQywgImxhfHMiLCAmdHlwZSwgJmFycmF5
+LCAmc2lnbmF0dXJlLCAmc2lnbmF0dXJlX2xlbikpIHsKPiArLQkJREJVU19aRU5EX0dFVF9aVkFM
+X09CSkVDVChnZXRUaGlzKCksIGFycmF5X29iaiwgcGhwX2RidXNfYXJyYXlfb2JqKTsKPiArKwkJ
+YXJyYXlfb2JqID0gREJVU19aVkFMX0dFVF9PQkpFQ1QocGhwX2RidXNfYXJyYXlfb2JqLCBnZXRU
+aGlzKCkpOwo+ICsgCQlkYnVzX2FycmF5X2luaXRpYWxpemUoYXJyYXlfb2JqLCB0eXBlLCBhcnJh
+eSwgc2lnbmF0dXJlIFRTUk1MU19DQyk7Cj4gKyAJfQo+ICsgCWRidXNfc2V0X2Vycm9yX2hhbmRs
+aW5nKEVIX05PUk1BTCwgTlVMTCBUU1JNTFNfQ0MpOwo+ICtAQCAtMjA2Nyw3ICsyMDYyLDcgQEAg
+UEhQX01FVEhPRChEYnVzQXJyYXksIGdldERhdGEpCj4gKyAJCSJPIiwgJm9iamVjdCwgZGJ1c19j
+ZV9kYnVzX2FycmF5KSkgewo+ICsgCQlSRVRVUk5fRkFMU0U7Cj4gKyAJfQo+ICstCURCVVNfWkVO
+RF9HRVRfWlZBTF9PQkpFQ1Qob2JqZWN0LCBhcnJheV9vYmosIHBocF9kYnVzX2FycmF5X29iaik7
+Cj4gKysJYXJyYXlfb2JqID0gREJVU19aVkFMX0dFVF9PQkpFQ1QocGhwX2RidXNfYXJyYXlfb2Jq
+LCBvYmplY3QpOwo+ICsgCSpyZXR1cm5fdmFsdWUgPSAqYXJyYXlfb2JqLT5lbGVtZW50czsKPiAr
+IAl6dmFsX2NvcHlfY3RvcihyZXR1cm5fdmFsdWUpOwo+ICsgfQo+ICtAQCAtMjA4NSwxNSArMjA4
+MCwxNSBAQCBzdGF0aWMgaW50IGRidXNfZGljdF9pbml0aWFsaXplKHBocF9kYnVzX2RpY3Rfb2Jq
+ICpkYnVzb2JqLCBsb25nIHR5cGUsIHp2YWwgKmVsZQo+ICsgCXJldHVybiAxOwo+ICsgfQo+ICsg
+Cj4gKy1zdGF0aWMgSGFzaFRhYmxlICpkYnVzX2RpY3RfZ2V0X3Byb3BlcnRpZXMoenZhbCAqb2Jq
+ZWN0IFRTUk1MU19EQykKPiArK3N0YXRpYyBIYXNoVGFibGUgKmRidXNfZGljdF9nZXRfcHJvcGVy
+dGllcyhkYnVzX29iamVjdF90eXBlICpvYmplY3QgVFNSTUxTX0RDKQo+ICsgewo+ICsgCUhhc2hU
+YWJsZSAqcHJvcHM7Cj4gKyAJcGhwX2RidXNfZGljdF9vYmogKmRpY3Rfb2JqOwo+ICsgCXp2YWwg
+KnNpZzsKPiArIAo+ICstCURCVVNfWkVORF9HRVRfWlZBTF9PQkpFQ1Qob2JqZWN0LCBkaWN0X29i
+aiwgcGhwX2RidXNfZGljdF9vYmopOwo+ICsrCWRpY3Rfb2JqID0gREJVU19PQkpfV1JBUFBFUihw
+aHBfZGJ1c19kaWN0X29iaiwgb2JqZWN0KTsKPiArIAo+ICstCXByb3BzID0gZGljdF9vYmotPnN0
+ZC5wcm9wZXJ0aWVzOwo+ICsrCXByb3BzID0gemVuZF9zdGRfZ2V0X3Byb3BlcnRpZXMob2JqZWN0
+KTsKPiArIAo+ICsgCWlmIChkaWN0X29iai0+c2lnbmF0dXJlKSB7Cj4gKyAJCURCVVNfWkVORF9N
+QUtFX1NURF9aVkFMKHNpZyk7Cj4gK0BAIC0yMTIwLDcgKzIxMTUsNyBAQCBQSFBfTUVUSE9EKERi
+dXNEaWN0LCBfX2NvbnN0cnVjdCkKPiArIAo+ICsgCWRidXNfc2V0X2Vycm9yX2hhbmRsaW5nKEVI
+X1RIUk9XLCBOVUxMIFRTUk1MU19DQyk7Cj4gKyAJaWYgKFNVQ0NFU1MgPT0gemVuZF9wYXJzZV9w
+YXJhbWV0ZXJzKFpFTkRfTlVNX0FSR1MoKSBUU1JNTFNfQ0MsICJsYXxzIiwgJnR5cGUsICZkaWN0
+LCAmc2lnbmF0dXJlLCAmc2lnbmF0dXJlX2xlbikpIHsKPiArLQkJREJVU19aRU5EX0dFVF9aVkFM
+X09CSkVDVChnZXRUaGlzKCksIGRpY3Rfb2JqLCBwaHBfZGJ1c19kaWN0X29iaik7Cj4gKysJCWRp
+Y3Rfb2JqID0gREJVU19aVkFMX0dFVF9PQkpFQ1QocGhwX2RidXNfZGljdF9vYmosIGdldFRoaXMo
+KSk7Cj4gKyAJCWRidXNfZGljdF9pbml0aWFsaXplKGRpY3Rfb2JqLCB0eXBlLCBkaWN0LCBzaWdu
+YXR1cmUgVFNSTUxTX0NDKTsKPiArIAl9Cj4gKyAJZGJ1c19zZXRfZXJyb3JfaGFuZGxpbmcoRUhf
+Tk9STUFMLCBOVUxMIFRTUk1MU19DQyk7Cj4gK0BAIC0yMTM2LDcgKzIxMzEsNyBAQCBQSFBfTUVU
+SE9EKERidXNEaWN0LCBnZXREYXRhKQo+ICsgCQkiTyIsICZvYmplY3QsIGRidXNfY2VfZGJ1c19k
+aWN0KSkgewo+ICsgCQlSRVRVUk5fRkFMU0U7Cj4gKyAJfQo+ICstCURCVVNfWkVORF9HRVRfWlZB
+TF9PQkpFQ1Qob2JqZWN0LCBkaWN0X29iaiwgcGhwX2RidXNfZGljdF9vYmopOwo+ICsrCWRpY3Rf
+b2JqID0gREJVU19aVkFMX0dFVF9PQkpFQ1QocGhwX2RidXNfZGljdF9vYmosIG9iamVjdCk7Cj4g
+KyAJKnJldHVybl92YWx1ZSA9ICpkaWN0X29iai0+ZWxlbWVudHM7Cj4gKyAJenZhbF9jb3B5X2N0
+b3IocmV0dXJuX3ZhbHVlKTsKPiArIH0KPiArQEAgLTIxNTIsMTcgKzIxNDcsMTIgQEAgc3RhdGlj
+IGludCBkYnVzX3ZhcmlhbnRfaW5pdGlhbGl6ZShwaHBfZGJ1c192YXJpYW50X29iaiAqZGJ1c29i
+aiwgenZhbCAqZGF0YSwgY2gKPiArIAlyZXR1cm4gMTsKPiArIH0KPiArIAo+ICstc3RhdGljIEhh
+c2hUYWJsZSAqZGJ1c192YXJpYW50X2dldF9wcm9wZXJ0aWVzKHp2YWwgKm9iamVjdCBUU1JNTFNf
+REMpCj4gKytzdGF0aWMgSGFzaFRhYmxlICpkYnVzX3ZhcmlhbnRfZ2V0X3Byb3BlcnRpZXMoZGJ1
+c19vYmplY3RfdHlwZSAqb2JqZWN0IFRTUk1MU19EQykKPiArIHsKPiArIAlIYXNoVGFibGUgKnBy
+b3BzOwo+ICsgCXBocF9kYnVzX3ZhcmlhbnRfb2JqICp2YXJpYW50X29iajsKPiArIAo+ICstCURC
+VVNfWkVORF9HRVRfWlZBTF9PQkpFQ1Qob2JqZWN0LCB2YXJpYW50X29iaiwgcGhwX2RidXNfdmFy
+aWFudF9vYmopOwo+ICstCj4gKy0JcHJvcHMgPSB2YXJpYW50X29iai0+c3RkLnByb3BlcnRpZXM7
+Cj4gKy0KPiArLQlEQlVTX1pFTkRfQUREUkVGX1AodmFyaWFudF9vYmotPmRhdGEpOwo+ICstCURC
+VVNfWkVORF9IQVNIX1VQREFURShwcm9wcywgInZhcmlhbnQiLCAmdmFyaWFudF9vYmotPmRhdGEp
+Owo+ICsrCXByb3BzID0gemVuZF9zdGRfZ2V0X3Byb3BlcnRpZXMob2JqZWN0KTsKPiArIAo+ICsg
+CXJldHVybiBwcm9wczsKPiArIH0KPiArQEAgLTIxNzksOSArMjE2OSwxMCBAQCBQSFBfTUVUSE9E
+KERidXNWYXJpYW50LCBfX2NvbnN0cnVjdCkKPiArIAo+ICsgCWRidXNfc2V0X2Vycm9yX2hhbmRs
+aW5nKEVIX1RIUk9XLCBOVUxMIFRTUk1MU19DQyk7Cj4gKyAJaWYgKFNVQ0NFU1MgPT0gemVuZF9w
+YXJzZV9wYXJhbWV0ZXJzKFpFTkRfTlVNX0FSR1MoKSBUU1JNTFNfQ0MsICJ6fHMiLCAmZGF0YSwg
+JnNpZ25hdHVyZSwgJnNpZ25hdHVyZV9sZW4pKSB7Cj4gKy0JCURCVVNfWkVORF9HRVRfWlZBTF9P
+QkpFQ1QoZ2V0VGhpcygpLCB2YXJpYW50X29iaiwgcGhwX2RidXNfdmFyaWFudF9vYmopOwo+ICsr
+CQl2YXJpYW50X29iaiA9IERCVVNfWlZBTF9HRVRfT0JKRUNUKHBocF9kYnVzX3ZhcmlhbnRfb2Jq
+LCBnZXRUaGlzKCkpOwo+ICsgCQlkYnVzX3ZhcmlhbnRfaW5pdGlhbGl6ZSh2YXJpYW50X29iaiwg
+ZGF0YSwgc2lnbmF0dXJlIFRTUk1MU19DQyk7Cj4gKyAJfQo+ICsrCj4gKyAJZGJ1c19zZXRfZXJy
+b3JfaGFuZGxpbmcoRUhfTk9STUFMLCBOVUxMIFRTUk1MU19DQyk7Cj4gKyB9Cj4gKyAvKiB9fX0g
+Ki8KPiArQEAgLTIxOTYsOCArMjE4Nyw5IEBAIFBIUF9NRVRIT0QoRGJ1c1ZhcmlhbnQsIGdldERh
+dGEpCj4gKyAJCVJFVFVSTl9GQUxTRTsKPiArIAl9Cj4gKyAKPiArLQlEQlVTX1pFTkRfR0VUX1pW
+QUxfT0JKRUNUKG9iamVjdCwgdmFyaWFudF9vYmosIHBocF9kYnVzX3ZhcmlhbnRfb2JqKTsKPiAr
+Kwl2YXJpYW50X29iaiA9IERCVVNfWlZBTF9HRVRfT0JKRUNUKHBocF9kYnVzX3ZhcmlhbnRfb2Jq
+LCBvYmplY3QpOwo+ICsgCSpyZXR1cm5fdmFsdWUgPSAqdmFyaWFudF9vYmotPmRhdGE7Cj4gKysK
+PiArIAl6dmFsX2NvcHlfY3RvcihyZXR1cm5fdmFsdWUpOwo+ICsgfQo+ICsgCj4gK0BAIC0yMjE5
+LDE0ICsyMjExLDE0IEBAIHN0YXRpYyBpbnQgZGJ1c19zZXRfaW5pdGlhbGl6ZShwaHBfZGJ1c19z
+ZXRfb2JqICpkYnVzb2JqLCB6dmFsICoqZGF0YSwgaW50IGVsZW1lCj4gKyAJcmV0dXJuIDE7Cj4g
+KyB9Cj4gKyAKPiArLXN0YXRpYyBIYXNoVGFibGUgKmRidXNfc2V0X2dldF9wcm9wZXJ0aWVzKHp2
+YWwgKm9iamVjdCBUU1JNTFNfREMpCj4gKytzdGF0aWMgSGFzaFRhYmxlICpkYnVzX3NldF9nZXRf
+cHJvcGVydGllcyhkYnVzX29iamVjdF90eXBlICpvYmplY3QgVFNSTUxTX0RDKQo+ICsgewo+ICsg
+CWludCBpOwo+ICsgCUhhc2hUYWJsZSAqcHJvcHM7Cj4gKyAJcGhwX2RidXNfc2V0X29iaiAqc2V0
+X29iajsKPiArIAl6dmFsICpzZXRfY29udGVudHM7Cj4gKyAKPiArLQlEQlVTX1pFTkRfR0VUX1pW
+QUxfT0JKRUNUKG9iamVjdCwgc2V0X29iaiwgcGhwX2RidXNfc2V0X29iaik7Cj4gKysJc2V0X29i
+aiA9IERCVVNfT0JKX1dSQVBQRVIocGhwX2RidXNfc2V0X29iaiwgb2JqZWN0KTsKPiArIAo+ICsg
+CXByb3BzID0gc2V0X29iai0+c3RkLnByb3BlcnRpZXM7Cj4gKyAKPiArQEAgLTIyNTUsNyArMjI0
+Nyw3IEBAIFBIUF9NRVRIT0QoRGJ1c1NldCwgX19jb25zdHJ1Y3QpCj4gKyAJenZhbCAqZGF0YSA9
+IE5VTEw7Cj4gKyAJZGF0YSA9ICh6dmFsICopIHNhZmVfZW1hbGxvYyhlbGVtZW50cywgc2l6ZW9m
+KHp2YWwpLCAxKTsKPiArIAlpZiAoU1VDQ0VTUyA9PSB6ZW5kX2dldF9wYXJhbWV0ZXJzX2FycmF5
+X2V4KGVsZW1lbnRzLCBkYXRhKSkgewo+ICstCQlEQlVTX1pFTkRfR0VUX1pWQUxfT0JKRUNUKGdl
+dFRoaXMoKSwgc2V0X29iaiwgcGhwX2RidXNfc2V0X29iaik7Cj4gKysJCXNldF9vYmogPSBEQlVT
+X1pWQUxfR0VUX09CSkVDVChwaHBfZGJ1c19zZXRfb2JqLCBnZXRUaGlzKCkpOwo+ICsgCQlkYnVz
+X3NldF9pbml0aWFsaXplKHNldF9vYmosICZkYXRhLCBlbGVtZW50cyBUU1JNTFNfQ0MpOwo+ICsg
+CX0KPiArIAllZnJlZShkYXRhKTsKPiArQEAgLTIyNzMsNyArMjI2NSw3IEBAIFBIUF9NRVRIT0Qo
+RGJ1c1NldCwgZ2V0RGF0YSkKPiArIAkJIk8iLCAmb2JqZWN0LCBkYnVzX2NlX2RidXNfc2V0KSkg
+ewo+ICsgCQlSRVRVUk5fRkFMU0U7Cj4gKyAJfQo+ICstCURCVVNfWkVORF9HRVRfWlZBTF9PQkpF
+Q1Qob2JqZWN0LCBzZXRfb2JqLCBwaHBfZGJ1c19zZXRfb2JqKTsKPiArKwlzZXRfb2JqID0gREJV
+U19aVkFMX0dFVF9PQkpFQ1QocGhwX2RidXNfc2V0X29iaiwgb2JqZWN0KTsKPiArIAlhcnJheV9p
+bml0KHJldHVybl92YWx1ZSk7Cj4gKyAJZm9yIChpID0gMDsgaSA8IHNldF9vYmotPmVsZW1lbnRf
+Y291bnQ7IGkrKykgewo+ICsgCQlEQlVTX1pFTkRfQUREUkVGX1Aoc2V0X29iai0+ZWxlbWVudHNb
+aV0pOwo+ICtAQCAtMjI5MCwxOCArMjI4MiwxNCBAQCBzdGF0aWMgaW50IGRidXNfc3RydWN0X2lu
+aXRpYWxpemUocGhwX2RidXNfc3RydWN0X29iaiAqZGJ1c29iaiwgY2hhciAqc2lnbmF0dXJlLAo+
+ICsgCXJldHVybiAxOwo+ICsgfQo+ICsgCj4gKy1zdGF0aWMgSGFzaFRhYmxlICpkYnVzX3N0cnVj
+dF9nZXRfcHJvcGVydGllcyh6dmFsICpvYmplY3QgVFNSTUxTX0RDKQo+ICsrc3RhdGljIEhhc2hU
+YWJsZSAqZGJ1c19zdHJ1Y3RfZ2V0X3Byb3BlcnRpZXMoZGJ1c19vYmplY3RfdHlwZSAqb2JqZWN0
+IFRTUk1MU19EQykKPiArIHsKPiArIAlIYXNoVGFibGUgKnByb3BzOwo+ICsgCXBocF9kYnVzX3N0
+cnVjdF9vYmogKnN0cnVjdF9vYmo7Cj4gKyAKPiArLQlEQlVTX1pFTkRfR0VUX1pWQUxfT0JKRUNU
+KG9iamVjdCwgc3RydWN0X29iaiwgcGhwX2RidXNfc3RydWN0X29iaik7Cj4gKy0KPiArLQlwcm9w
+cyA9IHN0cnVjdF9vYmotPnN0ZC5wcm9wZXJ0aWVzOwo+ICstCj4gKy0JREJVU19aRU5EX0FERFJF
+Rl9QKHN0cnVjdF9vYmotPmVsZW1lbnRzKTsKPiArLQlEQlVTX1pFTkRfSEFTSF9VUERBVEUocHJv
+cHMsICJzdHJ1Y3QiLCAmc3RydWN0X29iai0+ZWxlbWVudHMpOwo+ICsrCXN0cnVjdF9vYmogPSBE
+QlVTX09CSl9XUkFQUEVSKHBocF9kYnVzX3N0cnVjdF9vYmosIG9iamVjdCk7Cj4gKyAKPiArKwlw
+cm9wcyA9IHplbmRfc3RkX2dldF9wcm9wZXJ0aWVzKG9iamVjdCk7Cj4gKyAJcmV0dXJuIHByb3Bz
+Owo+ICsgfQo+ICsgCj4gK0BAIC0yMzE3LDcgKzIzMDUsNyBAQCBQSFBfTUVUSE9EKERidXNTdHJ1
+Y3QsIF9fY29uc3RydWN0KQo+ICsgCj4gKyAJZGJ1c19zZXRfZXJyb3JfaGFuZGxpbmcoRUhfVEhS
+T1csIE5VTEwgVFNSTUxTX0NDKTsKPiArIAlpZiAoU1VDQ0VTUyA9PSB6ZW5kX3BhcnNlX3BhcmFt
+ZXRlcnMoWkVORF9OVU1fQVJHUygpIFRTUk1MU19DQywgInNhIiwgJnNpZ25hdHVyZSwgJnNpZ25h
+dHVyZV9sZW4sICZhcnJheSkpIHsKPiArLQkJREJVU19aRU5EX0dFVF9aVkFMX09CSkVDVChnZXRU
+aGlzKCksIHN0cnVjdF9vYmosIHBocF9kYnVzX3N0cnVjdF9vYmopOwo+ICsrCQlzdHJ1Y3Rfb2Jq
+ID0gREJVU19aVkFMX0dFVF9PQkpFQ1QocGhwX2RidXNfc3RydWN0X29iaiwgZ2V0VGhpcygpKTsK
+PiArIAkJZGJ1c19zdHJ1Y3RfaW5pdGlhbGl6ZShzdHJ1Y3Rfb2JqLCBzaWduYXR1cmUsIGFycmF5
+IFRTUk1MU19DQyk7Cj4gKyAJfQo+ICsgCWRidXNfc2V0X2Vycm9yX2hhbmRsaW5nKEVIX05PUk1B
+TCwgTlVMTCBUU1JNTFNfQ0MpOwo+ICtAQCAtMjMzMyw3ICsyMzIxLDcgQEAgUEhQX01FVEhPRChE
+YnVzU3RydWN0LCBnZXREYXRhKQo+ICsgCQkiTyIsICZvYmplY3QsIGRidXNfY2VfZGJ1c19zdHJ1
+Y3QpKSB7Cj4gKyAJCVJFVFVSTl9GQUxTRTsKPiArIAl9Cj4gKy0JREJVU19aRU5EX0dFVF9aVkFM
+X09CSkVDVChvYmplY3QsIHN0cnVjdF9vYmosIHBocF9kYnVzX3N0cnVjdF9vYmopOwo+ICsrCXN0
+cnVjdF9vYmogPSBEQlVTX1pWQUxfR0VUX09CSkVDVChwaHBfZGJ1c19zdHJ1Y3Rfb2JqLCBvYmpl
+Y3QpOwo+ICsgCSpyZXR1cm5fdmFsdWUgPSAqc3RydWN0X29iai0+ZWxlbWVudHM7Cj4gKyAJenZh
+bF9jb3B5X2N0b3IocmV0dXJuX3ZhbHVlKTsKPiArIH0KPiArQEAgLTIzNDUsMjAgKzIzMzMsMTUg
+QEAgc3RhdGljIGludCBkYnVzX29iamVjdF9wYXRoX2luaXRpYWxpemUocGhwX2RidXNfb2JqZWN0
+X3BhdGhfb2JqICpkYnVzb2JqLCBjaGFyICoKPiArIAlyZXR1cm4gMTsKPiArIH0KPiArIAo+ICst
+c3RhdGljIEhhc2hUYWJsZSAqZGJ1c19vYmplY3RfcGF0aF9nZXRfcHJvcGVydGllcyh6dmFsICpv
+YmplY3QgVFNSTUxTX0RDKQo+ICsrc3RhdGljIEhhc2hUYWJsZSAqZGJ1c19vYmplY3RfcGF0aF9n
+ZXRfcHJvcGVydGllcyhkYnVzX29iamVjdF90eXBlICpvYmplY3QgVFNSTUxTX0RDKQo+ICsgewo+
+ICsgCUhhc2hUYWJsZSAqcHJvcHM7Cj4gKyAJcGhwX2RidXNfb2JqZWN0X3BhdGhfb2JqICpvYmpl
+Y3RfcGF0aF9vYmo7Cj4gKyAJenZhbCAqcGF0aDsKPiArIAo+ICstCURCVVNfWkVORF9HRVRfWlZB
+TF9PQkpFQ1Qob2JqZWN0LCBvYmplY3RfcGF0aF9vYmosIHBocF9kYnVzX29iamVjdF9wYXRoX29i
+aik7Cj4gKy0KPiArLQlwcm9wcyA9IG9iamVjdF9wYXRoX29iai0+c3RkLnByb3BlcnRpZXM7Cj4g
+Ky0KPiArLQlEQlVTX1pFTkRfTUFLRV9TVERfWlZBTChwYXRoKTsKPiArLQlEQlVTX1pWQUxfU1RS
+SU5HKHBhdGgsIG9iamVjdF9wYXRoX29iai0+cGF0aCwgMSk7Cj4gKy0JREJVU19aRU5EX0hBU0hf
+VVBEQVRFKHByb3BzLCAicGF0aCIsICZwYXRoKTsKPiArKwlvYmplY3RfcGF0aF9vYmogPSBEQlVT
+X09CSl9XUkFQUEVSKHBocF9kYnVzX29iamVjdF9wYXRoX29iaiwgb2JqZWN0KTsKPiArIAo+ICsr
+CXByb3BzID0gemVuZF9zdGRfZ2V0X3Byb3BlcnRpZXMob2JqZWN0KTsKPiArIAlyZXR1cm4gcHJv
+cHM7Cj4gKyB9Cj4gKyAKPiArQEAgLTIzNzMsNyArMjM1Niw3IEBAIFBIUF9NRVRIT0QoRGJ1c09i
+amVjdFBhdGgsIF9fY29uc3RydWN0KQo+ICsgCj4gKyAJZGJ1c19zZXRfZXJyb3JfaGFuZGxpbmco
+RUhfVEhST1csIE5VTEwgVFNSTUxTX0NDKTsKPiArIAlpZiAoU1VDQ0VTUyA9PSB6ZW5kX3BhcnNl
+X3BhcmFtZXRlcnMoWkVORF9OVU1fQVJHUygpIFRTUk1MU19DQywgInMiLCAmcGF0aCwgJnBhdGhf
+bGVuKSkgewo+ICstCQlEQlVTX1pFTkRfR0VUX1pWQUxfT0JKRUNUKGdldFRoaXMoKSwgb2JqZWN0
+X3BhdGhfb2JqLCBwaHBfZGJ1c19vYmplY3RfcGF0aF9vYmopOwo+ICsrCQlvYmplY3RfcGF0aF9v
+YmogPSBEQlVTX1pWQUxfR0VUX09CSkVDVChwaHBfZGJ1c19vYmplY3RfcGF0aF9vYmosIGdldFRo
+aXMoKSk7Cj4gKyAJCWRidXNfb2JqZWN0X3BhdGhfaW5pdGlhbGl6ZShvYmplY3RfcGF0aF9vYmos
+IHBhdGggVFNSTUxTX0NDKTsKPiArIAl9Cj4gKyAJZGJ1c19zZXRfZXJyb3JfaGFuZGxpbmcoRUhf
+Tk9STUFMLCBOVUxMIFRTUk1MU19DQyk7Cj4gK0BAIC0yMzg5LDcgKzIzNzIsNyBAQCBQSFBfTUVU
+SE9EKERidXNPYmplY3RQYXRoLCBnZXREYXRhKQo+ICsgCQkiTyIsICZvYmplY3QsIGRidXNfY2Vf
+ZGJ1c19vYmplY3RfcGF0aCkpIHsKPiArIAkJUkVUVVJOX0ZBTFNFOwo+ICsgCX0KPiArLQlEQlVT
+X1pFTkRfR0VUX1pWQUxfT0JKRUNUKG9iamVjdCwgb2JqZWN0X3BhdGhfb2JqLCBwaHBfZGJ1c19v
+YmplY3RfcGF0aF9vYmopOwo+ICsrCW9iamVjdF9wYXRoX29iaiA9IERCVVNfWlZBTF9HRVRfT0JK
+RUNUKHBocF9kYnVzX29iamVjdF9wYXRoX29iaiwgb2JqZWN0KTsKPiArIAo+ICsgCVJFVFVSTl9T
+VFJJTkcob2JqZWN0X3BhdGhfb2JqLT5wYXRoKTsKPiArIH0KPiArQEAgLTI0MDcsNyArMjM5MCw3
+IEBAIFBIUF9NRVRIT0QoRGJ1c09iamVjdFBhdGgsIGdldERhdGEpCj4gKyAJCWRidXNfc2V0X2Vy
+cm9yX2hhbmRsaW5nKEVIX1RIUk9XLCBOVUxMIFRTUk1MU19DQyk7IFwKPiArIAkJaWYgKFNVQ0NF
+U1MgPT0gemVuZF9wYXJzZV9wYXJhbWV0ZXJzKFpFTkRfTlVNX0FSR1MoKSBUU1JNTFNfQ0MsICJs
+IiwgJmRhdGEpKSB7IFwKPiArIAkJCXBocF9kYnVzXyMjcyMjX29iaiAqZGJ1c29iaiA9IE5VTEw7
+IFwKPiArLQkJCURCVVNfWkVORF9HRVRfWlZBTF9PQkpFQ1QoZ2V0VGhpcygpLCBkYnVzb2JqLCBw
+aHBfZGJ1c18jI3MjI19vYmopOyBcCj4gKysJCQlkYnVzb2JqID0gREJVU19aVkFMX0dFVF9PQkpF
+Q1QocGhwX2RidXNfIyNzIyNfb2JqLCBnZXRUaGlzKCkpOyBcCj4gKyAJCQlkYnVzXyMjcyMjX2lu
+aXRpYWxpemUoZGJ1c29iaiwgKHQpZGF0YSBUU1JNTFNfQ0MpOyBcCj4gKyAJCX0gXAo+ICsgCQlk
+YnVzX3NldF9lcnJvcl9oYW5kbGluZyhFSF9OT1JNQUwsIE5VTEwgVFNSTUxTX0NDKTsgXAo+ICtk
+aWZmIC0tZ2l0IGEvcGhwX2RidXMuaCBiL3BocF9kYnVzLmgKPiAraW5kZXggYTA4MDE1OWM0MDdk
+Li5mZTkzZGQzYTZhMWYgMTAwNjQ0Cj4gKy0tLSBhL3BocF9kYnVzLmgKPiArKysrIGIvcGhwX2Ri
+dXMuaAo+ICtAQCAtMjcsMTMgKzI3LDIzIEBACj4gKyAKPiArICNpbmNsdWRlICJaZW5kL3plbmRf
+aGFzaC5oIgo+ICsgCj4gKy0jZGVmaW5lIFBIUF9EQlVTX1ZFUlNJT04gIjAuMi4wIgo+ICsrI2Rl
+ZmluZSBQSFBfREJVU19WRVJTSU9OICIwLjMueC1kZXYiCj4gKyAKPiArICNpZiBQSFBfVkVSU0lP
+Tl9JRCA+PSA4MDAwMAo+ICsgIyBkZWZpbmUgVFNSTUxTX0RDCj4gKyAjIGRlZmluZSBUU1JNTFNf
+Q0MKPiArICMgZGVmaW5lIFRTUk1MU19EIHZvaWQKPiArICMgZGVmaW5lIFRTUk1MU19DCj4gKysj
+IGRlZmluZSBkYnVzX29iamVjdF90eXBlIHplbmRfb2JqZWN0Cj4gKysjIGRlZmluZSBkYnVzX29i
+amVjdF9oYW5kbGVyc19kYnVzX29iamVjdCBkYnVzX29iamVjdF9oYW5kbGVyc196ZW5kX29iamVj
+dAo+ICsrI2RlZmluZSBEQlVTX09CSl9XUkFQUEVSIERCVVNfR0VUX09CSkVDVAo+ICsrCj4gKysj
+IGRlZmluZSBkYnVzX3N0cmlwX29iago+ICsrI2Vsc2UKPiArKyMgZGVmaW5lIGRidXNfb2JqZWN0
+X3R5cGUgenZhbAo+ICsrIyBkZWZpbmUgZGJ1c19vYmplY3RfaGFuZGxlcnNfZGJ1c19vYmplY3Qg
+ZGJ1c19vYmplY3RfaGFuZGxlcnNfenZhbAo+ICsrIyBkZWZpbmUgZGJ1c19zdHJpcF9vYmoobykg
+Wl9PQkpfUChvKQo+ICsrI2RlZmluZSBEQlVTX09CSl9XUkFQUEVSIERCVVNfWlZBTF9HRVRfT0JK
+RUNUCj4gKyAjZW5kaWYKPiArIAo+ICsgIyBkZWZpbmUgREJVU19aRU5EX09CSkVDVF9QUk9QRVJU
+SUVTX0lOSVQoX29ialB0ciwgX2NlKSBcCj4gK0BAIC03NSw2ICs4NSwxMCBAQAo+ICsgICAgICAg
+ICB9IFwKPiArICAgICB9IHdoaWxlKDApCj4gKyAKPiArKyNkZWZpbmUgREJVU19HRVRfT0JKRUNU
+KGNsYXNzX2VudHJ5LCBvKSAoY2xhc3NfZW50cnkgKikoKGNoYXIgKilvIC0gWHRPZmZzZXRPZihj
+bGFzc19lbnRyeSwgc3RkKSkKPiArKyNkZWZpbmUgREJVU19aVkFMX0dFVF9PQkpFQ1QoY2xhc3Nf
+ZW50cnksIHopIERCVVNfR0VUX09CSkVDVChjbGFzc19lbnRyeSwgWl9PQkpfUCh6KSkKPiArKwo+
+ICsrCj4gKyAjIGRlZmluZSBEQlVTX1pFTkRfSEFTSF9BRERfUFRSKF9odCwgX2tleSwgX3B0ciwg
+X3B0clN6KSBcCj4gKyAgICAgemVuZF9oYXNoX3N0cl9hZGRfcHRyKF9odCwgX2tleSwgc3RybGVu
+KF9rZXkpLCBfcHRyKQo+ICsgCj4gK0BAIC0xMjAsMTIgKzEzNCw2IEBACj4gKyAgICAgICAgIH0g
+XAo+ICsgICAgIH0gd2hpbGUgKDApCj4gKyAKPiArLSMgZGVmaW5lIERCVVNfWkVORF9aT0JKX1RP
+X09CSihfek9iaiwgX29ialR5cGUpIFwKPiArLSAgICAoX29ialR5cGUgKikgKChjaGFyICopIF96
+T2JqIC0gWHRPZmZzZXRPZihfb2JqVHlwZSwgc3RkKSkKPiArLQo+ICstIyBkZWZpbmUgREJVU19a
+RU5EX0dFVF9aVkFMX09CSkVDVChfenZhbCwgX29ialB0ciwgX29ialR5cGUpIFwKPiArLSAgICBf
+b2JqUHRyID0gREJVU19aRU5EX1pPQkpfVE9fT0JKKFpfT0JKX1AoX3p2YWwpLCBfb2JqVHlwZSkK
+PiArLQo+ICsgIyBkZWZpbmUgREJVU19aRU5EX01BS0VfU1REX1pWQUwoX3p2YWwpIFwKPiArICAg
+ICB7IFwKPiArICAgICAgICAgenZhbCB0bXA7IFwKPiArLS0gCj4gKzIuNTAuMAo+ICsKPiBkaWZm
+IC0tZ2l0IGEvcGFja2FnZS9waHAtcGVjbC1kYnVzLzAwMDItRml4LVBIUDgtY29tcGF0aWJpbGl0
+eS1mb3ItREJVU19aRU5EX0hBU0hfR0VUX0NVUlJFTi5wYXRjaCBiL3BhY2thZ2UvcGhwLXBlY2wt
+ZGJ1cy8wMDAyLUZpeC1QSFA4LWNvbXBhdGliaWxpdHktZm9yLURCVVNfWkVORF9IQVNIX0dFVF9D
+VVJSRU4ucGF0Y2gKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAwMDAw
+MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAuLjZjMmY3MzIxZWM5NjE1Y2UzMmViYTYwZGFlNjQw
+Nzk0ZjBiOTM1M2EKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvcGFja2FnZS9waHAtcGVjbC1kYnVz
+LzAwMDItRml4LVBIUDgtY29tcGF0aWJpbGl0eS1mb3ItREJVU19aRU5EX0hBU0hfR0VUX0NVUlJF
+Ti5wYXRjaAo+IEBAIC0wLDAgKzEsNTEgQEAKPiArRnJvbSA0NmE2YWExMzA4YjMyNTQ5NjI1ZmQ3
+YmMyNjVhZDAxMTA5MWIzOTkyIE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQo+ICtGcm9tOiA9P1VU
+Ri04P3E/QWxleGlzPTIwTG90aG9yPUMzPUE5Pz0gPGFsZXhpcy5sb3Rob3JlQGJvb3RsaW4uY29t
+Pgo+ICtEYXRlOiBUdWUsIDEgSnVsIDIwMjUgMTc6MTI6MzIgKzAyMDAKPiArU3ViamVjdDogW1BB
+VENIXSBGaXggUEhQOCBjb21wYXRpYmlsaXR5IGZvcgo+ICsgREJVU19aRU5EX0hBU0hfR0VUX0NV
+UlJFTlRfS0VZX0lORk8KPiArTUlNRS1WZXJzaW9uOiAxLjAKPiArQ29udGVudC1UeXBlOiB0ZXh0
+L3BsYWluOyBjaGFyc2V0PVVURi04Cj4gK0NvbnRlbnQtVHJhbnNmZXItRW5jb2Rpbmc6IDhiaXQK
+PiArCj4gK3BocC1wZWNsLWRidXMgY3VycmVudGx5IGRvZXMgbm90IGJ1aWxkIHdpdGggUEhQOCBi
+ZWNhdXNlIG9mIHRoZQo+ICtmb2xsb3dpbmcgZXJyb3I6Cj4gKwo+ICsgIEluIGZpbGUgaW5jbHVk
+ZWQgZnJvbSBkYnVzLmM6Mjc6Cj4gKyAgZGJ1cy5jOiBJbiBmdW5jdGlvbiAnZGJ1c19hcHBlbmRf
+dmFyX2RpY3QnOgo+ICsgIHBocF9kYnVzLmg6MTA4OjY0OiBlcnJvcjogcGFzc2luZyBhcmd1bWVu
+dCAzIG9mICd6ZW5kX2hhc2hfZ2V0X2N1cnJlbnRfa2V5JyBmcm9tIGluY29tcGF0aWJsZSBwb2lu
+dGVyIHR5cGUgWy1XaW5jb21wYXRpYmxlLXBvaW50ZXItdHlwZXNdCj4gKyAgICAxMDggfCAgICAg
+ICAgIF9pbmZvLnR5cGUgPSB6ZW5kX2hhc2hfZ2V0X2N1cnJlbnRfa2V5KF9odCwgJnRtcF9pbmZv
+LCAmX2lkeCk7IFwKPiArICBkYnVzLmM6MTI5NToxNzogbm90ZTogaW4gZXhwYW5zaW9uIG9mIG1h
+Y3JvICdEQlVTX1pFTkRfSEFTSF9HRVRfQ1VSUkVOVF9LRVlfSU5GTycKPiArICAgMTI5NSB8IERC
+VVNfWkVORF9IQVNIX0dFVF9DVVJSRU5UX0tFWV9JTkZPKFpfQVJSVkFMX1Aob2JqLT5lbGVtZW50
+cyksIG51bV9pbmRleCwga2V5KTsKPiArICAgICAgICB8ICAgICAgICAgICAgICAgICBefn5+fn5+
+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fgo+ICsgIEluIGZpbGUgaW5jbHVkZWQgZnJvbSAu
+Li8uLi9ob3N0L2FybS1idWlsZHJvb3QtbGludXgtZ251ZWFiaWhmL3N5c3Jvb3QvdXNyL2luY2x1
+ZGUvcGhwL1plbmQvemVuZC5oOjMzLAo+ICsgICAgICAgICAgICAgICAgICAgZnJvbSAuLi8uLi9o
+b3N0L2FybS1idWlsZHJvb3QtbGludXgtZ251ZWFiaWhmL3N5c3Jvb3QvdXNyL2luY2x1ZGUvcGhw
+L21haW4vcGhwLmg6MzEsCj4gKyAgICAgICAgICAgICAgICAgICBmcm9tIGRidXMuYzoyMToKPiAr
+ICAuLi8uLi9ob3N0L2FybS1idWlsZHJvb3QtbGludXgtZ251ZWFiaWhmL3N5c3Jvb3QvdXNyL2lu
+Y2x1ZGUvcGhwL1plbmQvemVuZF9oYXNoLmg6MjY5OjExNTogbm90ZTogZXhwZWN0ZWQgJ3plbmRf
+dWxvbmcgKicge2FrYSAndW5zaWduZWQgaW50IConfSBidXQgYXJndW1lbnQgaXMgb2YgdHlwZSAn
+dWxvbmcgKicge2FrYSAnbG9uZyB1bnNpZ25lZCBpbnQgKid9Cj4gKyAgICAyNjkgfCBzdGF0aWMg
+emVuZF9hbHdheXNfaW5saW5lIGludCB6ZW5kX2hhc2hfZ2V0X2N1cnJlbnRfa2V5KGNvbnN0IEhh
+c2hUYWJsZSAqaHQsIHplbmRfc3RyaW5nICoqc3RyX2luZGV4LCB6ZW5kX3Vsb25nICpudW1faW5k
+ZXgpIHsKPiArICAgICAgICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgIH5+fn5+fn5+fn5+fl5+fn5+fn5+fgo+ICsKPiArRml4IHRoZSBidWlsZCBlcnJvciBi
+eSBleHBsaWNpdGVseSBjYXN0aW5nIHRoZSBwYXNzZWQgaW5kZXggcG9pbnRlciB0bwo+ICsoemVu
+ZF91bG9uZyAqKQo+ICsKPiArVXBzdHJlYW06IGh0dHBzOi8vZ2l0aHViLmNvbS9kZXJpY2tyL3Bl
+Y2wtZGJ1cy9wdWxsLzE1Cj4gK1NpZ25lZC1vZmYtYnk6IEFsZXhpcyBMb3Rob3LDqSA8YWxleGlz
+LmxvdGhvcmVAYm9vdGxpbi5jb20+Cj4gKy0tLQo+ICsgcGhwX2RidXMuaCB8IDIgKy0KPiArIDEg
+ZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQo+ICsKPiArZGlmZiAt
+LWdpdCBhL3BocF9kYnVzLmggYi9waHBfZGJ1cy5oCj4gK2luZGV4IGEwODAxNTljNDA3ZC4uNjhh
+ZWM3YmMzYzQyIDEwMDY0NAo+ICstLS0gYS9waHBfZGJ1cy5oCj4gKysrKyBiL3BocF9kYnVzLmgK
+PiArQEAgLTEwNSw3ICsxMDUsNyBAQAo+ICsgIyBkZWZpbmUgREJVU19aRU5EX0hBU0hfR0VUX0NV
+UlJFTlRfS0VZX0lORk8oX2h0LCBfaWR4LCBfaW5mbykgXAo+ICsgICAgIGRvIHsgXAo+ICsgICAg
+ICAgICB6ZW5kX3N0cmluZyAqdG1wX2luZm8gPSBOVUxMOyBcCj4gKy0gICAgICAgIF9pbmZvLnR5
+cGUgPSB6ZW5kX2hhc2hfZ2V0X2N1cnJlbnRfa2V5KF9odCwgJnRtcF9pbmZvLCAmX2lkeCk7IFwK
+PiArKyAgICAgICAgX2luZm8udHlwZSA9IHplbmRfaGFzaF9nZXRfY3VycmVudF9rZXkoX2h0LCAm
+dG1wX2luZm8sICh6ZW5kX3Vsb25nICopJl9pZHgpOyBcCj4gKyAgICAgICAgIGlmICh0bXBfaW5m
+bykgeyBcCj4gKyAgICAgICAgICAgICBfaW5mby5uYW1lID0gWlNUUl9WQUwodG1wX2luZm8pOyBc
+Cj4gKyAgICAgICAgICAgICBfaW5mby5sZW5ndGggPSBaU1RSX0xFTih0bXBfaW5mbyk7IFwKPiAr
+LS0gCj4gKzIuNTAuMAo+ICsKPiAKPiAtLS0KPiBiYXNlLWNvbW1pdDogMmZkNTIwYzhkNTJiOWUw
+ZWQ1ZTI2MzQzODEzZmRkOGRiY2FkYjQ1Zgo+IGNoYW5nZS1pZDogMjAyNTA4MDYtcGhwLWRidXMt
+ZDNjMzk5MzUxODcxCj4gCj4gQmVzdCByZWdhcmRzLAoKX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RA
+YnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5m
+by9idWlsZHJvb3QK
