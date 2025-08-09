@@ -1,128 +1,126 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F30EC87FD2
-	for <buildroot@archiver.kernel.org>; Sat,  9 Aug 2025 22:37:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E39DC87FCF
+	for <buildroot@archiver.kernel.org>; Sat,  9 Aug 2025 22:37:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4C62481DCA;
-	Sat,  9 Aug 2025 22:37:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7D0B760E30;
+	Sat,  9 Aug 2025 22:37:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ltuxzWPaucHg; Sat,  9 Aug 2025 22:37:51 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vj34KYcocKrd; Sat,  9 Aug 2025 22:37:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 63DE981D3D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7BF7460E0F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 63DE981D3D;
-	Sat,  9 Aug 2025 22:37:51 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 53AB731
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7BF7460E0F;
+	Sat,  9 Aug 2025 22:37:52 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7A66B31
  for <buildroot@buildroot.org>; Sat,  9 Aug 2025 22:37:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5C77381D72
- for <buildroot@buildroot.org>; Sat,  9 Aug 2025 22:37:49 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 543C460E11
+ for <buildroot@buildroot.org>; Sat,  9 Aug 2025 22:37:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LbTkNDNJCkoE for <buildroot@buildroot.org>;
- Sat,  9 Aug 2025 22:37:48 +0000 (UTC)
-X-Greylist: delayed 372 seconds by postgrey-1.37 at util1.osuosl.org;
- Sat, 09 Aug 2025 22:37:47 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DCFD581D34
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DCFD581D34
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.21;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hcjLu91ku0UG for <buildroot@buildroot.org>;
+ Sat,  9 Aug 2025 22:37:49 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.22;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DCFD581D34
- for <buildroot@buildroot.org>; Sat,  9 Aug 2025 22:37:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E051C60DF9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E051C60DF9
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E051C60DF9
+ for <buildroot@buildroot.org>; Sat,  9 Aug 2025 22:37:48 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from haruka.home.arpa ([85.22.119.120]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MNKlu-1uzfBA3vAY-00RDfb; Sun, 10
- Aug 2025 00:32:43 +0200
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N9dsb-1uW8jO3r0v-00uSXI; Sun, 10
+ Aug 2025 00:32:44 +0200
 To: buildroot@buildroot.org
-Date: Sun, 10 Aug 2025 00:32:26 +0200
-Message-ID: <20250809223229.2307960-5-fiona.klute@gmx.de>
+Date: Sun, 10 Aug 2025 00:32:27 +0200
+Message-ID: <20250809223229.2307960-6-fiona.klute@gmx.de>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20250809223229.2307960-1-fiona.klute@gmx.de>
 References: <20250809223229.2307960-1-fiona.klute@gmx.de>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:wBb51BKAB4Lj3Cca7e2xEqfRlrdJfLrBiAGtKXTs+ot3+ni7W/k
- bK2aJY7muJZRtJjjaNWjWEmI9X9de//U67wyy4FdYgXBt677fmJb3A9OvOVBGWBf1oJRafc
- bXB4GnaRS4JXY0H2yKi5AOMIZ1tU8ROIQT3kaNjc6ROh6bcUsR8kH8b77MdAe82F0FZdOE4
- Zu7owA2NmGH8tX/lcNyMA==
-UI-OutboundReport: notjunk:1;M01:P0:ZDjG0q3ER7s=;n3QVqiXNIvujw4ktyYXrYa52R1w
- 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
+X-Provags-ID: V03:K1:8q8RL3Uh56JnFokgO/O8+zkAK+dF0oRYg/Db7k6JbXsXzes5noz
+ WJSZGxk9fnwIWr6+23TTv4IVCbFzlc4Lm9HkaxLaRgppKTxLkqUwBlhuIgmqdNDrHj/eGTN
+ 6tPFq1lOxvKo+BL07yjwaFmT3r13CyigpgZyF0cPdlPqb85FKjxlHdqzIYVFtIpHeuBdHdj
+ 6COMbMfMmOkJtkiwQqDDw==
+UI-OutboundReport: notjunk:1;M01:P0:5CWGfU+qCVg=;uGR0wHPAe8LqgNhFXSmD27twqq+
+ 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
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.de; 
- s=s31663417; t=1754779066; x=1755383866; i=fiona.klute@gmx.de;
- bh=FT9oX7dLQUhj/snGXg64fA1qDAmh7h6ld2obBHDuvQ4=;
+ s=s31663417; t=1754779067; x=1755383867; i=fiona.klute@gmx.de;
+ bh=s3rX5M/xBrhEhlqTRmsAW9kNtS/bGoj08/FvBkgXmn8=;
  h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
  References:MIME-Version:Content-Transfer-Encoding:cc:
  content-transfer-encoding:content-type:date:from:message-id:
  mime-version:reply-to:subject:to;
- b=pp8GvxQmUp6hIjXKeScNZrJzyLRKJ6zm8wgnxJS9Un67EBaV28W/pSzOixcCVgJn
- c/uweniP1cinDgQb7t3W2goXRVc7AS+J0JXlrwzuQeJCOSqL3WLrA3qMbgdX30miO
- /TgMufuO7NU0uV3unkBP85etVcNqHzJof54bVWfUFlZ282JU+KN7Xzi5ULxSMV0zO
- uutVOJR4I3rrN9Nvah8XdBdAgG7A9MNeXv96cBexItZEUJZcZkOtxXOEgyDLXTyfx
- Y4fwD4QufK+wuB2o3RITV5PP303MjzKUuFGhox9AVY141JnpSO23akgJL3avoHRfA
- J44XJmutf9pDxyuIUg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=JdDtg4O0Rt5bShiBBytOc7QGKVTxstSdr2NrX1JcKgh9VahGWyTYVN2jbkJkMjlh
+ vKNyB9JojnYx2NA/3uEk8F8hw+BaNpuTU+b//bAB9JECyIFRg8Tp0RJjlC2lKVcq2
+ zEU9mk9A8nPaIPGm6edJ1CVuq+eGjaKxMbNO5ISaxseK0He6s37Vc5IBEdX7ng4Vt
+ w77BoZUG7eWqBnaIqYV2N36HaxwHhv5QBoZrqC5FL1TxsISRBPvW5XBDmPL6cwtGJ
+ av9BFSrIuGt1BAFL8aNCf5vNxduJnUzSjx4GB68qPRX1Gi8l8oSnbsk8vg6Rp9Kjl
+ uybCFAGlyrwTX1D+Yg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
- header.s=s31663417 header.b=pp8GvxQm
-Subject: [Buildroot] [PATCH 4/7] package/python-platformdirs: new package
+ header.s=s31663417 header.b=JdDtg4O0
+Subject: [Buildroot] [PATCH 5/7] package/python-rich: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -148,82 +146,84 @@ From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
 
 Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 ---
- DEVELOPERS                                         |  1 +
- package/Config.in                                  |  1 +
- package/python-platformdirs/Config.in              |  7 +++++++
- .../python-platformdirs/python-platformdirs.hash   |  5 +++++
- package/python-platformdirs/python-platformdirs.mk | 14 ++++++++++++++
- 5 files changed, 28 insertions(+)
- create mode 100644 package/python-platformdirs/Config.in
- create mode 100644 package/python-platformdirs/python-platformdirs.hash
- create mode 100644 package/python-platformdirs/python-platformdirs.mk
+ DEVELOPERS                           |  1 +
+ package/Config.in                    |  1 +
+ package/python-rich/Config.in        |  9 +++++++++
+ package/python-rich/python-rich.hash |  5 +++++
+ package/python-rich/python-rich.mk   | 14 ++++++++++++++
+ 5 files changed, 30 insertions(+)
+ create mode 100644 package/python-rich/Config.in
+ create mode 100644 package/python-rich/python-rich.hash
+ create mode 100644 package/python-rich/python-rich.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 50a02d2171..361703b34b 100644
+index 361703b34b..60ce3274aa 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1122,6 +1122,7 @@ F:	package/panel-mipi-dbi-firmware/
- F:	package/python-aiomqtt/
- F:	package/python-markdown-it-py/
- F:	package/python-mdurl/
-+F:	package/python-platformdirs/
+@@ -1125,6 +1125,7 @@ F:	package/python-mdurl/
+ F:	package/python-platformdirs/
  F:	package/python-pyasynchat/
  F:	package/python-pyasyncore/
++F:	package/python-rich/
  F:	support/testing/tests/package/sample_python_networkmanager_goi.py
+ F:	support/testing/tests/package/test_nftables.py
+ F:	support/testing/tests/package/test_python_networkmanager_goi.py
 diff --git a/package/Config.in b/package/Config.in
-index 04041b11f2..3d343c3c91 100644
+index 3d343c3c91..14aab8ad3e 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1285,6 +1285,7 @@ menu "External python modules"
- 	source "package/python-pigpio/Config.in"
- 	source "package/python-pillow/Config.in"
- 	source "package/python-pip/Config.in"
-+	source "package/python-platformdirs/Config.in"
- 	source "package/python-pluggy/Config.in"
- 	source "package/python-ply/Config.in"
- 	source "package/python-portend/Config.in"
-diff --git a/package/python-platformdirs/Config.in b/package/python-platformdirs/Config.in
+@@ -1384,6 +1384,7 @@ menu "External python modules"
+ 	source "package/python-requests-toolbelt/Config.in"
+ 	source "package/python-rfc3987/Config.in"
+ 	source "package/python-rgbmatrix/Config.in"
++	source "package/python-rich/Config.in"
+ 	source "package/python-rpds-py/Config.in"
+ 	source "package/python-rpi-gpio/Config.in"
+ 	source "package/python-rpi-ws281x/Config.in"
+diff --git a/package/python-rich/Config.in b/package/python-rich/Config.in
 new file mode 100644
-index 0000000000..b0cde72585
+index 0000000000..d7f3cdf54a
 --- /dev/null
-+++ b/package/python-platformdirs/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_PLATFORMDIRS
-+	bool "python-platformdirs"
++++ b/package/python-rich/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_RICH
++	bool "python-rich"
++	select BR2_PACKAGE_PYTHON_MARKDOWN_IT_PY # runtime
++	select BR2_PACKAGE_PYTHON_PYGMENTS # runtime
 +	help
-+	  A small Python package for determining appropriate
-+	  platform-specific dirs, e.g. a "user data dir".
++	  Render rich text, tables, progress bars, syntax
++	  highlighting, markdown and more to the terminal.
 +
-+	  https://github.com/tox-dev/platformdirs
-diff --git a/package/python-platformdirs/python-platformdirs.hash b/package/python-platformdirs/python-platformdirs.hash
++	  https://github.com/Textualize/rich
+diff --git a/package/python-rich/python-rich.hash b/package/python-rich/python-rich.hash
 new file mode 100644
-index 0000000000..b35d10dba1
+index 0000000000..87c58f42e3
 --- /dev/null
-+++ b/package/python-platformdirs/python-platformdirs.hash
++++ b/package/python-rich/python-rich.hash
 @@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/platformdirs/json
-+md5  90aef8202386996ce2e4b560a9f1d3e6  platformdirs-4.3.8.tar.gz
-+sha256  3d512d96e16bcb959a814c9f348431070822a6496326a4be0911c40b5a74c2bc  platformdirs-4.3.8.tar.gz
++# md5, sha256 from https://pypi.org/pypi/rich/json
++md5  38baf395e7860be314c6c29fcac8637d  rich-14.1.0.tar.gz
++sha256  e497a48b844b0320d45007cdebfeaeed8db2a4f4bcf49f15e455cfc4af11eaa8  rich-14.1.0.tar.gz
 +# Locally computed sha256 checksums
-+sha256  29e0fd62e929850e86eb28c3fdccf0cefdf4fa94879011cffb3d0d4bed6d4db6  LICENSE
-diff --git a/package/python-platformdirs/python-platformdirs.mk b/package/python-platformdirs/python-platformdirs.mk
++sha256  deed7c17a4318158190a3ea239cc879a5a50271cebb98ae7025f48fbe58dca15  LICENSE
+diff --git a/package/python-rich/python-rich.mk b/package/python-rich/python-rich.mk
 new file mode 100644
-index 0000000000..fde3b3636c
+index 0000000000..e6564347a5
 --- /dev/null
-+++ b/package/python-platformdirs/python-platformdirs.mk
++++ b/package/python-rich/python-rich.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-platformdirs
++# python-rich
 +#
 +################################################################################
 +
-+PYTHON_PLATFORMDIRS_VERSION = 4.3.8
-+PYTHON_PLATFORMDIRS_SOURCE = platformdirs-$(PYTHON_PLATFORMDIRS_VERSION).tar.gz
-+PYTHON_PLATFORMDIRS_SITE = https://files.pythonhosted.org/packages/fe/8b/3c73abc9c759ecd3f1f7ceff6685840859e8070c4d947c93fae71f6a0bf2
-+PYTHON_PLATFORMDIRS_SETUP_TYPE = hatch
-+PYTHON_PLATFORMDIRS_LICENSE = MIT
-+PYTHON_PLATFORMDIRS_LICENSE_FILES = LICENSE
++PYTHON_RICH_VERSION = 14.1.0
++PYTHON_RICH_SOURCE = rich-$(PYTHON_RICH_VERSION).tar.gz
++PYTHON_RICH_SITE = https://files.pythonhosted.org/packages/fe/75/af448d8e52bf1d8fa6a9d089ca6c07ff4453d86c65c145d0a300bb073b9b
++PYTHON_RICH_SETUP_TYPE = poetry
++PYTHON_RICH_LICENSE = MIT
++PYTHON_RICH_LICENSE_FILES = LICENSE
 +
 +$(eval $(python-package))
 -- 
