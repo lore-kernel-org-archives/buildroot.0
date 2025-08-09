@@ -1,51 +1,108 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E6D9C87FCB
-	for <buildroot@archiver.kernel.org>; Sat,  9 Aug 2025 22:15:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7649C87FCF
+	for <buildroot@archiver.kernel.org>; Sat,  9 Aug 2025 22:15:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E402D81B7B;
-	Sat,  9 Aug 2025 22:15:42 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FVIaOrBMCsX2; Sat,  9 Aug 2025 22:15:41 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E9E4B81AF5
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E9E4B81AF5;
-	Sat,  9 Aug 2025 22:15:40 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id A98FD1D3
- for <buildroot@buildroot.org>; Sat,  9 Aug 2025 22:15:39 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 901A160DF9
- for <buildroot@buildroot.org>; Sat,  9 Aug 2025 22:15:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 91BCF60791;
+	Sat,  9 Aug 2025 22:15:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p4_jbdN7Slai for <buildroot@buildroot.org>;
- Sat,  9 Aug 2025 22:15:38 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A7BBB60791
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A7BBB60791
- for <buildroot@buildroot.org>; Sat,  9 Aug 2025 22:15:38 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 97337870D0; Sat,  9 Aug 2025 22:15:38 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 10 Aug 2025 00:10:14 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 38107ec40c4a66ed67d81a8e2bffd2673096a15a
-X-Git-Newrev: ec12da7384b10344cae3835bb4e7aa43e7d01b21
-X-Patchwork-Hint: ignore
-Message-Id: <20250809221538.97337870D0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libzenoh-pico: fix build w/
+ id tslHoSoABfi7; Sat,  9 Aug 2025 22:15:46 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 68B6860D61
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 68B6860D61;
+	Sat,  9 Aug 2025 22:15:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9441A1D3
+ for <buildroot@buildroot.org>; Sat,  9 Aug 2025 22:15:45 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 83EE481B04
+ for <buildroot@buildroot.org>; Sat,  9 Aug 2025 22:15:45 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vDUhjZsaNJLr for <buildroot@buildroot.org>;
+ Sat,  9 Aug 2025 22:15:44 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 24B8181BCF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 24B8181BCF
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 24B8181BCF
+ for <buildroot@buildroot.org>; Sat,  9 Aug 2025 22:15:44 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id
+ ffacd0b85a97d-3b794a013bcso2671736f8f.2
+ for <buildroot@buildroot.org>; Sat, 09 Aug 2025 15:15:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1754777742; x=1755382542;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=o9eZlmF+YgdAId0g4Wxivwavp+m5vOryiAJh13k4vw0=;
+ b=r/K07qH2vqDlJSxEUVRXxFrRG8kOjcdYN6Zu0cZ8zxBoYDOA5FUpmk994n7KbbtfP2
+ hvUSjlfOXKg219Gx/v0CU2JFH6UjuN1+Zaq7DT11/Su/S0phx7gQ4iLeklMVPsXTbtsJ
+ 9Du0gLV0TWBFw3Xi0xsR2gELYbTE4AFSqvqN2NuVk62VQqDy9IX/i0xdXrfTbu4xwz2T
+ 9p5FT3atZrKc3O3dLTzJyII2+NTMDh2JYWthJLb1C7PoMA2zt95/qcbBiwCWvMTdiWDH
+ tF7KsR+Y8HqoycwjKzYwr171EIfI0VNFkwbTFbWCmWn3zmizLOTUENbEOKpprxIDv8KU
+ CXjg==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCXVa2QwblyWQ9fgNZAyqFxX2rwths7v7auyh8D2p9qblRVodztn1K19tT76CCcj5qEqqlRZmUdAJsg=@buildroot.org
+X-Gm-Message-State: AOJu0Yx8hItaTnCP27C/QNH6jdOm7h9l/GI9tzcjwMqrj4EVixQdk9gu
+ XAzmhGC9Sl4eaUX3fP1UGc/CUEYADIRwUJwz1RHEHFVE/vwZElws58jbTG9BYNsDPLzZZbUj09K
+ N3Evl
+X-Gm-Gg: ASbGncsVZePNWZGUgfzWyR3qhtWdZQWTRlwaqCsAglOIjyWxJXxPmd6IJYMCMdhpfpX
+ 44N0R9tEIeMJe6laTnIOMCPHrc/N4n6jjxX16+P6snlnoXDwcEvvDK0dNUefGRovcCHdQz11tFc
+ AB5FcSXxJgWx3jSPuZxBGbLK2+AB4e65vcf9KEu78XF14RWh+SNS+U4Zwlan151HfzrF1Go3YCP
+ WhZW83Zls58738IH37sPHExJ0gns2ZvDBG1QwweeTFI3CRnMPAxr6hr6/mOJdFgGvx+eAHbsBIy
+ WhWmZ7Wam/jMpyxGWjiK8ay+D1Bk4Ln8FyUj7ggGKyVmIhQ7rPKgao0kw46RrpieFTD7fM+NzrX
+ C5KwN0YdgVMsm7Fmba9ADpLWT/Z0w2Aj511kekkOjtod/Z6r8lguLyvCGR+perFMdvJsh9vqz6V
+ Ms5cZe92KK8TQ22dq9e7WQCm+cUIacTNzw3xx92GhpCCFfj4JnrM/CWeJ9qh6qqHBO1fIrgyp/P
+ n5X8a0bLg==
+X-Google-Smtp-Source: AGHT+IE4pTtYqMajdCJjmHSZTt2b/A4MR85+lkzyvqBgTW1tSf0lqiTJa5x6BcG5yyG98glkqzo7Wg==
+X-Received: by 2002:a05:6000:2013:b0:3b7:8473:312c with SMTP id
+ ffacd0b85a97d-3b9009068b3mr6435291f8f.0.1754777741969; 
+ Sat, 09 Aug 2025 15:15:41 -0700 (PDT)
+Received: from ?IPV6:2a01:cb05:949d:5800:c97d:3b73:4a46:d823?
+ (2a01cb05949d5800c97d3b734a46d823.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:949d:5800:c97d:3b73:4a46:d823])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-459dcb86d6asm243619245e9.5.2025.08.09.15.15.41
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 09 Aug 2025 15:15:41 -0700 (PDT)
+Message-ID: <39cb3dc3-bb3d-48fb-81a2-b64be3f8f52b@smile.fr>
+Date: Sun, 10 Aug 2025 00:15:41 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Thomas Perale <thomas.perale@mind.be>, buildroot@buildroot.org
+Cc: Alex Michel <alex.michel@wiedemann-group.com>
+References: <20250801142308.1786567-1-thomas.perale@mind.be>
+Content-Language: fr
+In-Reply-To: <20250801142308.1786567-1-thomas.perale@mind.be>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile.fr; s=google; t=1754777742; x=1755382542; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=o9eZlmF+YgdAId0g4Wxivwavp+m5vOryiAJh13k4vw0=;
+ b=2DKL+OPlo3vFV+cTQbar316/zc7ogNy40hhTxgb8fdruhfVRbSNn2IWpZiDBOMXwN1
+ ljW0LKsoeimLtkgv0EgFFIn+n1M+rZqTmLCOro6rsaSJaRRmBvPKM2on68BJxfifFVtr
+ sX79AczL3+Hwf2qpd6cUxBm7D5ydWmWo4iatY=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
+ header.s=google header.b=2DKL+OPl
+Subject: Re: [Buildroot] [PATCH] package/libzenoh-pico: fix build w/
  RUNTIME_DEBUG
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -60,260 +117,184 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Romain Naour via buildroot <buildroot@buildroot.org>
 Reply-To: Romain Naour <romain.naour@smile.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ec12da7384b10344cae3835bb4e7aa43e7d01b21
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-On the autobuilder the following build error would appear for the
-libzenoh-pico package when the option BR2_ENABLE_RUNTIME_DEBUG is
-enabled:
-
-```
-[  1%] Building C object CMakeFiles/zenohpico_shared.dir/src/api/encoding.c.o
-In function '_z_encoding_convert_into_string',
-    inlined from 'z_encoding_to_string' at /workdir/instance-0/output-1/build/libzenoh-pico-1.2.1/src/api/encoding.c:261:5:
-/workdir/instance-0/output-1/build/libzenoh-pico-1.2.1/src/api/encoding.c:203:15: error: 'strncat' output truncated before terminating nul copying 1 byte from a string of the same length [-Werror=stringop-truncation]
-  203 |         (void)strncat(value, &sep, 1);
-      |               ^~~~~~~~~~~~~~~~~~~~~~~
-cc1: all warnings being treated as errors
-```
-
-This error can be reproduced with:
-
-```
-cat >.config <<EOF
-BR2_aarch64=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-BR2_PACKAGE_LIBZENOH_PICO=y
-BR2_ENABLE_RUNTIME_DEBUG=y
-EOF
-make olddefconfig
-make libzenoh-pico
-```
-
-This patch include the upstream commit [1] that fixes this issue.
-
-[1] https://github.com/eclipse-zenoh/zenoh-pico/commit/60e635cbb1dc6be8eda559a913d4689845f0d62e
-
-Fixes: https://autobuild.buildroot.org/results/0c4/0c4644b17646d3ec482f0a4cf02d6fde19db2c99
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
- .../0002-fix-compilation-issues.patch              | 199 +++++++++++++++++++++
- 1 file changed, 199 insertions(+)
-
-diff --git a/package/libzenoh-pico/0002-fix-compilation-issues.patch b/package/libzenoh-pico/0002-fix-compilation-issues.patch
-new file mode 100644
-index 0000000000..f9ff5bf506
---- /dev/null
-+++ b/package/libzenoh-pico/0002-fix-compilation-issues.patch
-@@ -0,0 +1,199 @@
-+From 584e3d2cf8e879e5ad042f742a3d8656d7d98ed7 Mon Sep 17 00:00:00 2001
-+From: Jean-Roland Gosse <jean.roland.gosse@gmail.com>
-+Date: Thu, 10 Jul 2025 14:37:00 +0200
-+Subject: [PATCH] Fix compilation issues (#986)
-+
-+* fix: compilation issues
-+
-+* fix: stringop-overflow
-+
-+* doc: add comment to _z_str_append function
-+
-+Upstream: https://github.com/eclipse-zenoh/zenoh-pico/commit/60e635cbb1dc6be8eda559a913d4689845f0d62e
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ include/zenoh-pico/utils/string.h | 8 ++++++++
-+ src/api/encoding.c                | 4 ++--
-+ src/protocol/codec/declarations.c | 4 ++++
-+ src/protocol/codec/transport.c    | 3 ++-
-+ src/protocol/config.c             | 8 +++-----
-+ src/session/rx.c                  | 3 +++
-+ src/transport/multicast/rx.c      | 4 ++++
-+ src/transport/unicast/rx.c        | 4 ++++
-+ 8 files changed, 30 insertions(+), 8 deletions(-)
-+
-+diff --git a/include/zenoh-pico/utils/string.h b/include/zenoh-pico/utils/string.h
-+index e4ffd69d..2f56cb79 100644
-+--- a/include/zenoh-pico/utils/string.h
-++++ b/include/zenoh-pico/utils/string.h
-+@@ -18,6 +18,7 @@
-+ #include <stdbool.h>
-+ #include <stddef.h>
-+ #include <stdint.h>
-++#include <string.h>
-+ 
-+ #ifdef __cplusplus
-+ extern "C" {
-+@@ -63,6 +64,13 @@ size_t _z_strcnt(char const *haystack_start, const char *harstack_end, const cha
-+ 
-+ size_t _z_str_startswith(const char *s, const char *needle);
-+ 
-++// Must be used on a null terminated string with str[strlen(str) + 1] being valid memory.
-++static inline void _z_str_append(char *str, const char c) {
-++    size_t len = strlen(str);
-++    str[len] = c;
-++    str[len + 1] = '\0';
-++}
-++
-+ #ifdef __cplusplus
-+ }
-+ #endif
-+diff --git a/src/api/encoding.c b/src/api/encoding.c
-+index b4ff4cb1..16a5b9ff 100644
-+--- a/src/api/encoding.c
-++++ b/src/api/encoding.c
-+@@ -19,6 +19,7 @@
-+ #include <string.h>
-+ 
-+ #include "zenoh-pico.h"
-++#include "zenoh-pico/utils/string.h"
-+ 
-+ #if Z_FEATURE_ENCODING_VALUES == 1
-+ #define ENCODING_SCHEMA_SEPARATOR ';'
-+@@ -196,11 +197,10 @@ static z_result_t _z_encoding_convert_into_string(const z_loaned_encoding_t *enc
-+         return _Z_ERR_SYSTEM_OUT_OF_MEMORY;
-+     }
-+     // Copy prefix
-+-    char sep = ENCODING_SCHEMA_SEPARATOR;
-+     (void)strncpy(value, prefix, prefix_len);
-+     // Copy schema and separator
-+     if (has_schema) {
-+-        (void)strncat(value, &sep, 1);
-++        _z_str_append(value, ENCODING_SCHEMA_SEPARATOR);
-+         (void)strncat(value, _z_string_data(&encoding->schema), _z_string_len(&encoding->schema));
-+     }
-+     // Fill container
-+diff --git a/src/protocol/codec/declarations.c b/src/protocol/codec/declarations.c
-+index 905aad39..2146537e 100644
-+--- a/src/protocol/codec/declarations.c
-++++ b/src/protocol/codec/declarations.c
-+@@ -163,6 +163,10 @@ z_result_t _z_declaration_encode(_z_wbuf_t *wbf, const _z_declaration_t *decl) {
-+         case _Z_DECL_FINAL: {
-+             ret = _z_decl_final_encode(wbf);
-+         } break;
-++
-++        default:
-++            ret = _Z_ERR_MESSAGE_SERIALIZATION_FAILED;
-++            break;
-+     }
-+     return ret;
-+ }
-+diff --git a/src/protocol/codec/transport.c b/src/protocol/codec/transport.c
-+index 894fb41d..51830cd1 100644
-+--- a/src/protocol/codec/transport.c
-++++ b/src/protocol/codec/transport.c
-+@@ -217,11 +217,12 @@ z_result_t _z_init_encode(_z_wbuf_t *wbf, uint8_t header, const _z_t_msg_init_t
-+ }
-+ 
-+ z_result_t _z_init_decode_ext(_z_msg_ext_t *extension, void *ctx) {
-++    _ZP_UNUSED(ctx);
-+     z_result_t ret = _Z_RES_OK;
-+-    _z_t_msg_init_t *msg = (_z_t_msg_init_t *)ctx;
-+     if (false) {
-+ #if Z_FEATURE_FRAGMENTATION == 1
-+     } else if (_Z_EXT_FULL_ID(extension->_header) == _Z_MSG_EXT_ID_INIT_PATCH) {
-++        _z_t_msg_init_t *msg = (_z_t_msg_init_t *)ctx;
-+         msg->_patch = (uint8_t)extension->_body._zint._val;
-+ #endif
-+     } else if (_Z_MSG_EXT_IS_MANDATORY(extension->_header)) {
-+diff --git a/src/protocol/config.c b/src/protocol/config.c
-+index 1cfcff9c..245e7c3d 100644
-+--- a/src/protocol/config.c
-++++ b/src/protocol/config.c
-+@@ -21,6 +21,7 @@
-+ 
-+ #include "zenoh-pico/collections/string.h"
-+ #include "zenoh-pico/utils/pointers.h"
-++#include "zenoh-pico/utils/string.h"
-+ 
-+ z_result_t _z_config_init(_z_config_t *ps) {
-+     _z_str_intmap_init(ps);
-+@@ -142,15 +143,12 @@ size_t _z_str_intmap_strlen(const _z_str_intmap_t *s, uint8_t argc, _z_str_intma
-+ void _z_str_intmap_onto_str(char *dst, size_t dst_len, const _z_str_intmap_t *s, uint8_t argc,
-+                             _z_str_intmapping_t argv[]) {
-+     size_t len = dst_len;
-+-    const char lsep = INT_STR_MAP_LIST_SEPARATOR;
-+-    const char ksep = INT_STR_MAP_KEYVALUE_SEPARATOR;
-+-
-+     dst[0] = '\0';
-+     for (size_t i = 0; i < argc; i++) {
-+         char *v = _z_str_intmap_get(s, argv[i]._key);
-+         if (v != NULL) {
-+             if (len > (size_t)0) {
-+-                (void)strncat(dst, &lsep, 1);  // List separator
-++                _z_str_append(dst, INT_STR_MAP_LIST_SEPARATOR);  // List separator
-+                 len = len - (size_t)1;
-+             }
-+ 
-+@@ -159,7 +157,7 @@ void _z_str_intmap_onto_str(char *dst, size_t dst_len, const _z_str_intmap_t *s,
-+                 len = len - strlen(argv[i]._str);
-+             }
-+             if (len > (size_t)0) {
-+-                (void)strncat(dst, &ksep, 1);  // KeyValue separator
-++                _z_str_append(dst, INT_STR_MAP_KEYVALUE_SEPARATOR);  // KeyValue separator
-+                 len = len - (size_t)1;
-+             }
-+             if (len > (size_t)0) {
-+diff --git a/src/session/rx.c b/src/session/rx.c
-+index d85f9d38..8556ce1d 100644
-+--- a/src/session/rx.c
-++++ b/src/session/rx.c
-+@@ -93,6 +93,8 @@ static z_result_t _z_handle_declare(_z_session_t *zn, _z_n_msg_declare_t *decl,
-+ 
-+ static z_result_t _z_handle_request(_z_session_rc_t *zsrc, _z_session_t *zn, _z_n_msg_request_t *req,
-+                                     z_reliability_t reliability) {
-++    _ZP_UNUSED(reliability);
-++    _ZP_UNUSED(zsrc);
-+     switch (req->_tag) {
-+         case _Z_REQUEST_QUERY:
-+ #if Z_FEATURE_QUERYABLE == 1
-+@@ -158,6 +160,7 @@ static z_result_t _z_handle_response(_z_session_t *zn, _z_n_msg_response_t *resp
-+     }
-+ #else
-+     _z_n_msg_response_clear(resp);
-++    _ZP_UNUSED(zn);
-+ #endif
-+     return _Z_RES_OK;
-+ }
-+diff --git a/src/transport/multicast/rx.c b/src/transport/multicast/rx.c
-+index 121406d0..47269b1a 100644
-+--- a/src/transport/multicast/rx.c
-++++ b/src/transport/multicast/rx.c
-+@@ -294,6 +294,10 @@ static z_result_t _z_multicast_handle_fragment_inner(_z_transport_multicast_t *z
-+         *dbuf_state = _Z_DBUF_STATE_NULL;
-+     }
-+ #else
-++    _ZP_UNUSED(ztm);
-++    _ZP_UNUSED(header);
-++    _ZP_UNUSED(msg);
-++    _ZP_UNUSED(entry);
-+     _Z_INFO("Fragment dropped because fragmentation feature is deactivated");
-+ #endif
-+     return ret;
-+diff --git a/src/transport/unicast/rx.c b/src/transport/unicast/rx.c
-+index c5ccf932..43e1b4c8 100644
-+--- a/src/transport/unicast/rx.c
-++++ b/src/transport/unicast/rx.c
-+@@ -248,6 +248,10 @@ static z_result_t _z_unicast_handle_fragment_inner(_z_transport_unicast_t *ztu,
-+         *dbuf_state = _Z_DBUF_STATE_NULL;
-+     }
-+ #else
-++    _ZP_UNUSED(ztu);
-++    _ZP_UNUSED(header);
-++    _ZP_UNUSED(msg);
-++    _ZP_UNUSED(peer);
-+     _Z_INFO("Fragment dropped because fragmentation feature is deactivated");
-+ #endif
-+     return ret;
-+-- 
-+2.50.1
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gVGhvbWFzLCBBbGwsCgpMZSAwMS8wOC8yMDI1IMOgIDE2OjIzLCBUaG9tYXMgUGVyYWxl
+IHZpYSBidWlsZHJvb3QgYSDDqWNyaXTCoDoKPiBPbiB0aGUgYXV0b2J1aWxkZXIgdGhlIGZvbGxv
+d2luZyBidWlsZCBlcnJvciB3b3VsZCBhcHBlYXIgZm9yIHRoZQo+IGxpYnplbm9oLXBpY28gcGFj
+a2FnZSB3aGVuIHRoZSBvcHRpb24gQlIyX0VOQUJMRV9SVU5USU1FX0RFQlVHIGlzCj4gZW5hYmxl
+ZDoKPiAKPiBgYGAKPiBbICAxJV0gQnVpbGRpbmcgQyBvYmplY3QgQ01ha2VGaWxlcy96ZW5vaHBp
+Y29fc2hhcmVkLmRpci9zcmMvYXBpL2VuY29kaW5nLmMubwo+IEluIGZ1bmN0aW9uICdfel9lbmNv
+ZGluZ19jb252ZXJ0X2ludG9fc3RyaW5nJywKPiAgICAgaW5saW5lZCBmcm9tICd6X2VuY29kaW5n
+X3RvX3N0cmluZycgYXQgL3dvcmtkaXIvaW5zdGFuY2UtMC9vdXRwdXQtMS9idWlsZC9saWJ6ZW5v
+aC1waWNvLTEuMi4xL3NyYy9hcGkvZW5jb2RpbmcuYzoyNjE6NToKPiAvd29ya2Rpci9pbnN0YW5j
+ZS0wL291dHB1dC0xL2J1aWxkL2xpYnplbm9oLXBpY28tMS4yLjEvc3JjL2FwaS9lbmNvZGluZy5j
+OjIwMzoxNTogZXJyb3I6ICdzdHJuY2F0JyBvdXRwdXQgdHJ1bmNhdGVkIGJlZm9yZSB0ZXJtaW5h
+dGluZyBudWwgY29weWluZyAxIGJ5dGUgZnJvbSBhIHN0cmluZyBvZiB0aGUgc2FtZSBsZW5ndGgg
+Wy1XZXJyb3I9c3RyaW5nb3AtdHJ1bmNhdGlvbl0KPiAgIDIwMyB8ICAgICAgICAgKHZvaWQpc3Ry
+bmNhdCh2YWx1ZSwgJnNlcCwgMSk7Cj4gICAgICAgfCAgICAgICAgICAgICAgIF5+fn5+fn5+fn5+
+fn5+fn5+fn5+fn5+Cj4gY2MxOiBhbGwgd2FybmluZ3MgYmVpbmcgdHJlYXRlZCBhcyBlcnJvcnMK
+PiBgYGAKPiAKPiBUaGlzIGVycm9yIGNhbiBiZSByZXByb2R1Y2VkIHdpdGg6Cj4gCj4gYGBgCj4g
+Y2F0ID4uY29uZmlnIDw8RU9GCj4gQlIyX2FhcmNoNjQ9eQo+IEJSMl9UT09MQ0hBSU5fRVhURVJO
+QUw9eQo+IEJSMl9UT09MQ0hBSU5fRVhURVJOQUxfQk9PVExJTj15Cj4gQlIyX1BBQ0tBR0VfTElC
+WkVOT0hfUElDTz15Cj4gQlIyX0VOQUJMRV9SVU5USU1FX0RFQlVHPXkKPiBFT0YKPiBtYWtlIG9s
+ZGRlZmNvbmZpZwo+IG1ha2UgbGliemVub2gtcGljbwo+IGBgYAoKRG8geW91IGhhdmUgYW4gaWRl
+YSB3aHkgdGhlIGlzc3VlIGRlcGVuZW5kcyBvbiBCUjJfRU5BQkxFX1JVTlRJTUVfREVCVUc/Cgo+
+IAo+IFRoaXMgcGF0Y2ggaW5jbHVkZSB0aGUgdXBzdHJlYW0gY29tbWl0IFsxXSB0aGF0IGZpeGVz
+IHRoaXMgaXNzdWUuCj4gCj4gWzFdIGh0dHBzOi8vZ2l0aHViLmNvbS9lY2xpcHNlLXplbm9oL3pl
+bm9oLXBpY28vY29tbWl0LzYwZTYzNWNiYjFkYzZiZThlZGE1NTlhOTEzZDQ2ODk4NDVmMGQ2MmUK
+PiAKPiBGaXhlczogaHR0cHM6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm9yZy9yZXN1bHRzLzBjNC8w
+YzQ2NDRiMTc2NDZkM2VjNDgyZjBhNGNmMDJkNmZkZTE5ZGIyYzk5Cj4gU2lnbmVkLW9mZi1ieTog
+VGhvbWFzIFBlcmFsZSA8dGhvbWFzLnBlcmFsZUBtaW5kLmJlPgoKQXBwbGllZCB0byBtYXN0ZXIs
+IHRoYW5rcy4KCkJlc3QgcmVnYXJkcywKUm9tYWluCgoKPiAtLS0KPiAgLi4uLzAwMDItZml4LWNv
+bXBpbGF0aW9uLWlzc3Vlcy5wYXRjaCAgICAgICAgIHwgMTk5ICsrKysrKysrKysrKysrKysrKwo+
+ICAxIGZpbGUgY2hhbmdlZCwgMTk5IGluc2VydGlvbnMoKykKPiAgY3JlYXRlIG1vZGUgMTAwNjQ0
+IHBhY2thZ2UvbGliemVub2gtcGljby8wMDAyLWZpeC1jb21waWxhdGlvbi1pc3N1ZXMucGF0Y2gK
+PiAKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9saWJ6ZW5vaC1waWNvLzAwMDItZml4LWNvbXBpbGF0
+aW9uLWlzc3Vlcy5wYXRjaCBiL3BhY2thZ2UvbGliemVub2gtcGljby8wMDAyLWZpeC1jb21waWxh
+dGlvbi1pc3N1ZXMucGF0Y2gKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAw
+MDAuLmY5ZmY1YmY1MDYKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvcGFja2FnZS9saWJ6ZW5vaC1w
+aWNvLzAwMDItZml4LWNvbXBpbGF0aW9uLWlzc3Vlcy5wYXRjaAo+IEBAIC0wLDAgKzEsMTk5IEBA
+Cj4gK0Zyb20gNTg0ZTNkMmNmOGU4NzllNWFkMDQyZjc0MmEzZDg2NTZkN2Q5OGVkNyBNb24gU2Vw
+IDE3IDAwOjAwOjAwIDIwMDEKPiArRnJvbTogSmVhbi1Sb2xhbmQgR29zc2UgPGplYW4ucm9sYW5k
+Lmdvc3NlQGdtYWlsLmNvbT4KPiArRGF0ZTogVGh1LCAxMCBKdWwgMjAyNSAxNDozNzowMCArMDIw
+MAo+ICtTdWJqZWN0OiBbUEFUQ0hdIEZpeCBjb21waWxhdGlvbiBpc3N1ZXMgKCM5ODYpCj4gKwo+
+ICsqIGZpeDogY29tcGlsYXRpb24gaXNzdWVzCj4gKwo+ICsqIGZpeDogc3RyaW5nb3Atb3ZlcmZs
+b3cKPiArCj4gKyogZG9jOiBhZGQgY29tbWVudCB0byBfel9zdHJfYXBwZW5kIGZ1bmN0aW9uCj4g
+Kwo+ICtVcHN0cmVhbTogaHR0cHM6Ly9naXRodWIuY29tL2VjbGlwc2UtemVub2gvemVub2gtcGlj
+by9jb21taXQvNjBlNjM1Y2JiMWRjNmJlOGVkYTU1OWE5MTNkNDY4OTg0NWYwZDYyZQo+ICtTaWdu
+ZWQtb2ZmLWJ5OiBUaG9tYXMgUGVyYWxlIDx0aG9tYXMucGVyYWxlQG1pbmQuYmU+Cj4gKy0tLQo+
+ICsgaW5jbHVkZS96ZW5vaC1waWNvL3V0aWxzL3N0cmluZy5oIHwgOCArKysrKysrKwo+ICsgc3Jj
+L2FwaS9lbmNvZGluZy5jICAgICAgICAgICAgICAgIHwgNCArKy0tCj4gKyBzcmMvcHJvdG9jb2wv
+Y29kZWMvZGVjbGFyYXRpb25zLmMgfCA0ICsrKysKPiArIHNyYy9wcm90b2NvbC9jb2RlYy90cmFu
+c3BvcnQuYyAgICB8IDMgKystCj4gKyBzcmMvcHJvdG9jb2wvY29uZmlnLmMgICAgICAgICAgICAg
+fCA4ICsrKy0tLS0tCj4gKyBzcmMvc2Vzc2lvbi9yeC5jICAgICAgICAgICAgICAgICAgfCAzICsr
+Kwo+ICsgc3JjL3RyYW5zcG9ydC9tdWx0aWNhc3QvcnguYyAgICAgIHwgNCArKysrCj4gKyBzcmMv
+dHJhbnNwb3J0L3VuaWNhc3QvcnguYyAgICAgICAgfCA0ICsrKysKPiArIDggZmlsZXMgY2hhbmdl
+ZCwgMzAgaW5zZXJ0aW9ucygrKSwgOCBkZWxldGlvbnMoLSkKPiArCj4gK2RpZmYgLS1naXQgYS9p
+bmNsdWRlL3plbm9oLXBpY28vdXRpbHMvc3RyaW5nLmggYi9pbmNsdWRlL3plbm9oLXBpY28vdXRp
+bHMvc3RyaW5nLmgKPiAraW5kZXggZTRmZmQ2OWQuLjJmNTZjYjc5IDEwMDY0NAo+ICstLS0gYS9p
+bmNsdWRlL3plbm9oLXBpY28vdXRpbHMvc3RyaW5nLmgKPiArKysrIGIvaW5jbHVkZS96ZW5vaC1w
+aWNvL3V0aWxzL3N0cmluZy5oCj4gK0BAIC0xOCw2ICsxOCw3IEBACj4gKyAjaW5jbHVkZSA8c3Rk
+Ym9vbC5oPgo+ICsgI2luY2x1ZGUgPHN0ZGRlZi5oPgo+ICsgI2luY2x1ZGUgPHN0ZGludC5oPgo+
+ICsrI2luY2x1ZGUgPHN0cmluZy5oPgo+ICsgCj4gKyAjaWZkZWYgX19jcGx1c3BsdXMKPiArIGV4
+dGVybiAiQyIgewo+ICtAQCAtNjMsNiArNjQsMTMgQEAgc2l6ZV90IF96X3N0cmNudChjaGFyIGNv
+bnN0ICpoYXlzdGFja19zdGFydCwgY29uc3QgY2hhciAqaGFyc3RhY2tfZW5kLCBjb25zdCBjaGEK
+PiArIAo+ICsgc2l6ZV90IF96X3N0cl9zdGFydHN3aXRoKGNvbnN0IGNoYXIgKnMsIGNvbnN0IGNo
+YXIgKm5lZWRsZSk7Cj4gKyAKPiArKy8vIE11c3QgYmUgdXNlZCBvbiBhIG51bGwgdGVybWluYXRl
+ZCBzdHJpbmcgd2l0aCBzdHJbc3RybGVuKHN0cikgKyAxXSBiZWluZyB2YWxpZCBtZW1vcnkuCj4g
+KytzdGF0aWMgaW5saW5lIHZvaWQgX3pfc3RyX2FwcGVuZChjaGFyICpzdHIsIGNvbnN0IGNoYXIg
+Yykgewo+ICsrICAgIHNpemVfdCBsZW4gPSBzdHJsZW4oc3RyKTsKPiArKyAgICBzdHJbbGVuXSA9
+IGM7Cj4gKysgICAgc3RyW2xlbiArIDFdID0gJ1wwJzsKPiArK30KPiArKwo+ICsgI2lmZGVmIF9f
+Y3BsdXNwbHVzCj4gKyB9Cj4gKyAjZW5kaWYKPiArZGlmZiAtLWdpdCBhL3NyYy9hcGkvZW5jb2Rp
+bmcuYyBiL3NyYy9hcGkvZW5jb2RpbmcuYwo+ICtpbmRleCBiNGZmNGNiMS4uMTZhNWI5ZmYgMTAw
+NjQ0Cj4gKy0tLSBhL3NyYy9hcGkvZW5jb2RpbmcuYwo+ICsrKysgYi9zcmMvYXBpL2VuY29kaW5n
+LmMKPiArQEAgLTE5LDYgKzE5LDcgQEAKPiArICNpbmNsdWRlIDxzdHJpbmcuaD4KPiArIAo+ICsg
+I2luY2x1ZGUgInplbm9oLXBpY28uaCIKPiArKyNpbmNsdWRlICJ6ZW5vaC1waWNvL3V0aWxzL3N0
+cmluZy5oIgo+ICsgCj4gKyAjaWYgWl9GRUFUVVJFX0VOQ09ESU5HX1ZBTFVFUyA9PSAxCj4gKyAj
+ZGVmaW5lIEVOQ09ESU5HX1NDSEVNQV9TRVBBUkFUT1IgJzsnCj4gK0BAIC0xOTYsMTEgKzE5Nywx
+MCBAQCBzdGF0aWMgel9yZXN1bHRfdCBfel9lbmNvZGluZ19jb252ZXJ0X2ludG9fc3RyaW5nKGNv
+bnN0IHpfbG9hbmVkX2VuY29kaW5nX3QgKmVuYwo+ICsgICAgICAgICByZXR1cm4gX1pfRVJSX1NZ
+U1RFTV9PVVRfT0ZfTUVNT1JZOwo+ICsgICAgIH0KPiArICAgICAvLyBDb3B5IHByZWZpeAo+ICst
+ICAgIGNoYXIgc2VwID0gRU5DT0RJTkdfU0NIRU1BX1NFUEFSQVRPUjsKPiArICAgICAodm9pZClz
+dHJuY3B5KHZhbHVlLCBwcmVmaXgsIHByZWZpeF9sZW4pOwo+ICsgICAgIC8vIENvcHkgc2NoZW1h
+IGFuZCBzZXBhcmF0b3IKPiArICAgICBpZiAoaGFzX3NjaGVtYSkgewo+ICstICAgICAgICAodm9p
+ZClzdHJuY2F0KHZhbHVlLCAmc2VwLCAxKTsKPiArKyAgICAgICAgX3pfc3RyX2FwcGVuZCh2YWx1
+ZSwgRU5DT0RJTkdfU0NIRU1BX1NFUEFSQVRPUik7Cj4gKyAgICAgICAgICh2b2lkKXN0cm5jYXQo
+dmFsdWUsIF96X3N0cmluZ19kYXRhKCZlbmNvZGluZy0+c2NoZW1hKSwgX3pfc3RyaW5nX2xlbigm
+ZW5jb2RpbmctPnNjaGVtYSkpOwo+ICsgICAgIH0KPiArICAgICAvLyBGaWxsIGNvbnRhaW5lcgo+
+ICtkaWZmIC0tZ2l0IGEvc3JjL3Byb3RvY29sL2NvZGVjL2RlY2xhcmF0aW9ucy5jIGIvc3JjL3By
+b3RvY29sL2NvZGVjL2RlY2xhcmF0aW9ucy5jCj4gK2luZGV4IDkwNWFhZDM5Li4yMTQ2NTM3ZSAx
+MDA2NDQKPiArLS0tIGEvc3JjL3Byb3RvY29sL2NvZGVjL2RlY2xhcmF0aW9ucy5jCj4gKysrKyBi
+L3NyYy9wcm90b2NvbC9jb2RlYy9kZWNsYXJhdGlvbnMuYwo+ICtAQCAtMTYzLDYgKzE2MywxMCBA
+QCB6X3Jlc3VsdF90IF96X2RlY2xhcmF0aW9uX2VuY29kZShfel93YnVmX3QgKndiZiwgY29uc3Qg
+X3pfZGVjbGFyYXRpb25fdCAqZGVjbCkgewo+ICsgICAgICAgICBjYXNlIF9aX0RFQ0xfRklOQUw6
+IHsKPiArICAgICAgICAgICAgIHJldCA9IF96X2RlY2xfZmluYWxfZW5jb2RlKHdiZik7Cj4gKyAg
+ICAgICAgIH0gYnJlYWs7Cj4gKysKPiArKyAgICAgICAgZGVmYXVsdDoKPiArKyAgICAgICAgICAg
+IHJldCA9IF9aX0VSUl9NRVNTQUdFX1NFUklBTElaQVRJT05fRkFJTEVEOwo+ICsrICAgICAgICAg
+ICAgYnJlYWs7Cj4gKyAgICAgfQo+ICsgICAgIHJldHVybiByZXQ7Cj4gKyB9Cj4gK2RpZmYgLS1n
+aXQgYS9zcmMvcHJvdG9jb2wvY29kZWMvdHJhbnNwb3J0LmMgYi9zcmMvcHJvdG9jb2wvY29kZWMv
+dHJhbnNwb3J0LmMKPiAraW5kZXggODk0ZmI0MWQuLjUxODMwY2QxIDEwMDY0NAo+ICstLS0gYS9z
+cmMvcHJvdG9jb2wvY29kZWMvdHJhbnNwb3J0LmMKPiArKysrIGIvc3JjL3Byb3RvY29sL2NvZGVj
+L3RyYW5zcG9ydC5jCj4gK0BAIC0yMTcsMTEgKzIxNywxMiBAQCB6X3Jlc3VsdF90IF96X2luaXRf
+ZW5jb2RlKF96X3didWZfdCAqd2JmLCB1aW50OF90IGhlYWRlciwgY29uc3QgX3pfdF9tc2dfaW5p
+dF90Cj4gKyB9Cj4gKyAKPiArIHpfcmVzdWx0X3QgX3pfaW5pdF9kZWNvZGVfZXh0KF96X21zZ19l
+eHRfdCAqZXh0ZW5zaW9uLCB2b2lkICpjdHgpIHsKPiArKyAgICBfWlBfVU5VU0VEKGN0eCk7Cj4g
+KyAgICAgel9yZXN1bHRfdCByZXQgPSBfWl9SRVNfT0s7Cj4gKy0gICAgX3pfdF9tc2dfaW5pdF90
+ICptc2cgPSAoX3pfdF9tc2dfaW5pdF90ICopY3R4Owo+ICsgICAgIGlmIChmYWxzZSkgewo+ICsg
+I2lmIFpfRkVBVFVSRV9GUkFHTUVOVEFUSU9OID09IDEKPiArICAgICB9IGVsc2UgaWYgKF9aX0VY
+VF9GVUxMX0lEKGV4dGVuc2lvbi0+X2hlYWRlcikgPT0gX1pfTVNHX0VYVF9JRF9JTklUX1BBVENI
+KSB7Cj4gKysgICAgICAgIF96X3RfbXNnX2luaXRfdCAqbXNnID0gKF96X3RfbXNnX2luaXRfdCAq
+KWN0eDsKPiArICAgICAgICAgbXNnLT5fcGF0Y2ggPSAodWludDhfdClleHRlbnNpb24tPl9ib2R5
+Ll96aW50Ll92YWw7Cj4gKyAjZW5kaWYKPiArICAgICB9IGVsc2UgaWYgKF9aX01TR19FWFRfSVNf
+TUFOREFUT1JZKGV4dGVuc2lvbi0+X2hlYWRlcikpIHsKPiArZGlmZiAtLWdpdCBhL3NyYy9wcm90
+b2NvbC9jb25maWcuYyBiL3NyYy9wcm90b2NvbC9jb25maWcuYwo+ICtpbmRleCAxY2ZjZmY5Yy4u
+MjQ1ZTdjM2QgMTAwNjQ0Cj4gKy0tLSBhL3NyYy9wcm90b2NvbC9jb25maWcuYwo+ICsrKysgYi9z
+cmMvcHJvdG9jb2wvY29uZmlnLmMKPiArQEAgLTIxLDYgKzIxLDcgQEAKPiArIAo+ICsgI2luY2x1
+ZGUgInplbm9oLXBpY28vY29sbGVjdGlvbnMvc3RyaW5nLmgiCj4gKyAjaW5jbHVkZSAiemVub2gt
+cGljby91dGlscy9wb2ludGVycy5oIgo+ICsrI2luY2x1ZGUgInplbm9oLXBpY28vdXRpbHMvc3Ry
+aW5nLmgiCj4gKyAKPiArIHpfcmVzdWx0X3QgX3pfY29uZmlnX2luaXQoX3pfY29uZmlnX3QgKnBz
+KSB7Cj4gKyAgICAgX3pfc3RyX2ludG1hcF9pbml0KHBzKTsKPiArQEAgLTE0MiwxNSArMTQzLDEy
+IEBAIHNpemVfdCBfel9zdHJfaW50bWFwX3N0cmxlbihjb25zdCBfel9zdHJfaW50bWFwX3QgKnMs
+IHVpbnQ4X3QgYXJnYywgX3pfc3RyX2ludG1hCj4gKyB2b2lkIF96X3N0cl9pbnRtYXBfb250b19z
+dHIoY2hhciAqZHN0LCBzaXplX3QgZHN0X2xlbiwgY29uc3QgX3pfc3RyX2ludG1hcF90ICpzLCB1
+aW50OF90IGFyZ2MsCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgX3pfc3RyX2ludG1h
+cHBpbmdfdCBhcmd2W10pIHsKPiArICAgICBzaXplX3QgbGVuID0gZHN0X2xlbjsKPiArLSAgICBj
+b25zdCBjaGFyIGxzZXAgPSBJTlRfU1RSX01BUF9MSVNUX1NFUEFSQVRPUjsKPiArLSAgICBjb25z
+dCBjaGFyIGtzZXAgPSBJTlRfU1RSX01BUF9LRVlWQUxVRV9TRVBBUkFUT1I7Cj4gKy0KPiArICAg
+ICBkc3RbMF0gPSAnXDAnOwo+ICsgICAgIGZvciAoc2l6ZV90IGkgPSAwOyBpIDwgYXJnYzsgaSsr
+KSB7Cj4gKyAgICAgICAgIGNoYXIgKnYgPSBfel9zdHJfaW50bWFwX2dldChzLCBhcmd2W2ldLl9r
+ZXkpOwo+ICsgICAgICAgICBpZiAodiAhPSBOVUxMKSB7Cj4gKyAgICAgICAgICAgICBpZiAobGVu
+ID4gKHNpemVfdCkwKSB7Cj4gKy0gICAgICAgICAgICAgICAgKHZvaWQpc3RybmNhdChkc3QsICZs
+c2VwLCAxKTsgIC8vIExpc3Qgc2VwYXJhdG9yCj4gKysgICAgICAgICAgICAgICAgX3pfc3RyX2Fw
+cGVuZChkc3QsIElOVF9TVFJfTUFQX0xJU1RfU0VQQVJBVE9SKTsgIC8vIExpc3Qgc2VwYXJhdG9y
+Cj4gKyAgICAgICAgICAgICAgICAgbGVuID0gbGVuIC0gKHNpemVfdCkxOwo+ICsgICAgICAgICAg
+ICAgfQo+ICsgCj4gK0BAIC0xNTksNyArMTU3LDcgQEAgdm9pZCBfel9zdHJfaW50bWFwX29udG9f
+c3RyKGNoYXIgKmRzdCwgc2l6ZV90IGRzdF9sZW4sIGNvbnN0IF96X3N0cl9pbnRtYXBfdCAqcywK
+PiArICAgICAgICAgICAgICAgICBsZW4gPSBsZW4gLSBzdHJsZW4oYXJndltpXS5fc3RyKTsKPiAr
+ICAgICAgICAgICAgIH0KPiArICAgICAgICAgICAgIGlmIChsZW4gPiAoc2l6ZV90KTApIHsKPiAr
+LSAgICAgICAgICAgICAgICAodm9pZClzdHJuY2F0KGRzdCwgJmtzZXAsIDEpOyAgLy8gS2V5VmFs
+dWUgc2VwYXJhdG9yCj4gKysgICAgICAgICAgICAgICAgX3pfc3RyX2FwcGVuZChkc3QsIElOVF9T
+VFJfTUFQX0tFWVZBTFVFX1NFUEFSQVRPUik7ICAvLyBLZXlWYWx1ZSBzZXBhcmF0b3IKPiArICAg
+ICAgICAgICAgICAgICBsZW4gPSBsZW4gLSAoc2l6ZV90KTE7Cj4gKyAgICAgICAgICAgICB9Cj4g
+KyAgICAgICAgICAgICBpZiAobGVuID4gKHNpemVfdCkwKSB7Cj4gK2RpZmYgLS1naXQgYS9zcmMv
+c2Vzc2lvbi9yeC5jIGIvc3JjL3Nlc3Npb24vcnguYwo+ICtpbmRleCBkODVmOWQzOC4uODU1NmNl
+MWQgMTAwNjQ0Cj4gKy0tLSBhL3NyYy9zZXNzaW9uL3J4LmMKPiArKysrIGIvc3JjL3Nlc3Npb24v
+cnguYwo+ICtAQCAtOTMsNiArOTMsOCBAQCBzdGF0aWMgel9yZXN1bHRfdCBfel9oYW5kbGVfZGVj
+bGFyZShfel9zZXNzaW9uX3QgKnpuLCBfel9uX21zZ19kZWNsYXJlX3QgKmRlY2wsCj4gKyAKPiAr
+IHN0YXRpYyB6X3Jlc3VsdF90IF96X2hhbmRsZV9yZXF1ZXN0KF96X3Nlc3Npb25fcmNfdCAqenNy
+YywgX3pfc2Vzc2lvbl90ICp6biwgX3pfbl9tc2dfcmVxdWVzdF90ICpyZXEsCj4gKyAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICB6X3JlbGlhYmlsaXR5X3QgcmVsaWFiaWxpdHkp
+IHsKPiArKyAgICBfWlBfVU5VU0VEKHJlbGlhYmlsaXR5KTsKPiArKyAgICBfWlBfVU5VU0VEKHpz
+cmMpOwo+ICsgICAgIHN3aXRjaCAocmVxLT5fdGFnKSB7Cj4gKyAgICAgICAgIGNhc2UgX1pfUkVR
+VUVTVF9RVUVSWToKPiArICNpZiBaX0ZFQVRVUkVfUVVFUllBQkxFID09IDEKPiArQEAgLTE1OCw2
+ICsxNjAsNyBAQCBzdGF0aWMgel9yZXN1bHRfdCBfel9oYW5kbGVfcmVzcG9uc2UoX3pfc2Vzc2lv
+bl90ICp6biwgX3pfbl9tc2dfcmVzcG9uc2VfdCAqcmVzcAo+ICsgICAgIH0KPiArICNlbHNlCj4g
+KyAgICAgX3pfbl9tc2dfcmVzcG9uc2VfY2xlYXIocmVzcCk7Cj4gKysgICAgX1pQX1VOVVNFRCh6
+bik7Cj4gKyAjZW5kaWYKPiArICAgICByZXR1cm4gX1pfUkVTX09LOwo+ICsgfQo+ICtkaWZmIC0t
+Z2l0IGEvc3JjL3RyYW5zcG9ydC9tdWx0aWNhc3QvcnguYyBiL3NyYy90cmFuc3BvcnQvbXVsdGlj
+YXN0L3J4LmMKPiAraW5kZXggMTIxNDA2ZDAuLjQ3MjY5YjFhIDEwMDY0NAo+ICstLS0gYS9zcmMv
+dHJhbnNwb3J0L211bHRpY2FzdC9yeC5jCj4gKysrKyBiL3NyYy90cmFuc3BvcnQvbXVsdGljYXN0
+L3J4LmMKPiArQEAgLTI5NCw2ICsyOTQsMTAgQEAgc3RhdGljIHpfcmVzdWx0X3QgX3pfbXVsdGlj
+YXN0X2hhbmRsZV9mcmFnbWVudF9pbm5lcihfel90cmFuc3BvcnRfbXVsdGljYXN0X3QgKnoKPiAr
+ICAgICAgICAgKmRidWZfc3RhdGUgPSBfWl9EQlVGX1NUQVRFX05VTEw7Cj4gKyAgICAgfQo+ICsg
+I2Vsc2UKPiArKyAgICBfWlBfVU5VU0VEKHp0bSk7Cj4gKysgICAgX1pQX1VOVVNFRChoZWFkZXIp
+Owo+ICsrICAgIF9aUF9VTlVTRUQobXNnKTsKPiArKyAgICBfWlBfVU5VU0VEKGVudHJ5KTsKPiAr
+ICAgICBfWl9JTkZPKCJGcmFnbWVudCBkcm9wcGVkIGJlY2F1c2UgZnJhZ21lbnRhdGlvbiBmZWF0
+dXJlIGlzIGRlYWN0aXZhdGVkIik7Cj4gKyAjZW5kaWYKPiArICAgICByZXR1cm4gcmV0Owo+ICtk
+aWZmIC0tZ2l0IGEvc3JjL3RyYW5zcG9ydC91bmljYXN0L3J4LmMgYi9zcmMvdHJhbnNwb3J0L3Vu
+aWNhc3QvcnguYwo+ICtpbmRleCBjNWNjZjkzMi4uNDNlMWI0YzggMTAwNjQ0Cj4gKy0tLSBhL3Ny
+Yy90cmFuc3BvcnQvdW5pY2FzdC9yeC5jCj4gKysrKyBiL3NyYy90cmFuc3BvcnQvdW5pY2FzdC9y
+eC5jCj4gK0BAIC0yNDgsNiArMjQ4LDEwIEBAIHN0YXRpYyB6X3Jlc3VsdF90IF96X3VuaWNhc3Rf
+aGFuZGxlX2ZyYWdtZW50X2lubmVyKF96X3RyYW5zcG9ydF91bmljYXN0X3QgKnp0dSwKPiArICAg
+ICAgICAgKmRidWZfc3RhdGUgPSBfWl9EQlVGX1NUQVRFX05VTEw7Cj4gKyAgICAgfQo+ICsgI2Vs
+c2UKPiArKyAgICBfWlBfVU5VU0VEKHp0dSk7Cj4gKysgICAgX1pQX1VOVVNFRChoZWFkZXIpOwo+
+ICsrICAgIF9aUF9VTlVTRUQobXNnKTsKPiArKyAgICBfWlBfVU5VU0VEKHBlZXIpOwo+ICsgICAg
+IF9aX0lORk8oIkZyYWdtZW50IGRyb3BwZWQgYmVjYXVzZSBmcmFnbWVudGF0aW9uIGZlYXR1cmUg
+aXMgZGVhY3RpdmF0ZWQiKTsKPiArICNlbmRpZgo+ICsgICAgIHJldHVybiByZXQ7Cj4gKy0tIAo+
+ICsyLjUwLjEKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+CmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9s
+aXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
