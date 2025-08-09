@@ -1,75 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22540C87FCF
-	for <buildroot@archiver.kernel.org>; Sat,  9 Aug 2025 15:59:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 958BFC87FCB
+	for <buildroot@archiver.kernel.org>; Sat,  9 Aug 2025 16:18:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CA12381A65;
-	Sat,  9 Aug 2025 15:59:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3A6A440B56;
+	Sat,  9 Aug 2025 16:18:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LnIbA-25tb99; Sat,  9 Aug 2025 15:59:08 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Hrd0d302DH6s; Sat,  9 Aug 2025 16:18:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 18E3881A6D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 533A740B48
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 18E3881A6D;
-	Sat,  9 Aug 2025 15:59:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id CC74D21B
- for <buildroot@buildroot.org>; Sat,  9 Aug 2025 15:59:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 533A740B48;
+	Sat,  9 Aug 2025 16:18:08 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4AB861D3
+ for <buildroot@buildroot.org>; Sat,  9 Aug 2025 16:18:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B2B4A40872
- for <buildroot@buildroot.org>; Sat,  9 Aug 2025 15:59:06 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3C7E340867
+ for <buildroot@buildroot.org>; Sat,  9 Aug 2025 16:18:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id c1KlA4PfgQE4 for <buildroot@buildroot.org>;
- Sat,  9 Aug 2025 15:59:06 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9361D40763
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9361D40763
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9361D40763
- for <buildroot@buildroot.org>; Sat,  9 Aug 2025 15:59:05 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 7B2CB19F5A5;
- Sat,  9 Aug 2025 17:59:00 +0200 (CEST)
-Received: from 2001:18c0:a22:bf00:5c2b:f296:f108:6612
- via 2001:18c0:a22:bf00:5c2b:f296:f108:6612 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 09 Aug 2025 17:59:00 +0200
-MIME-Version: 1.0
-Date: Sat, 09 Aug 2025 17:59:00 +0200
-To: Maxime Leroy <maxime@leroys.fr>
-Cc: buildroot@buildroot.org, Vadim Kochan <vadim4j@gmail.com>
-In-Reply-To: <20250806132109.129355-1-maxime@leroys.fr>
-References: <20250806132109.129355-1-maxime@leroys.fr>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <60c38472bd3ba2a510f30e8dde5fdfbb@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1754755142;
- bh=coeZadLkUycW74XiWcN5uYohbZPb+U3eE+eMu4oPjlQ=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=AkjjEyQY6LcobhG2E/WdBKcqz5dIHB7kksJ9BOhAwfKzWi4JHYZV0787BnwY1GAo6
- 1XpAReWFDi042TVujyADkYROj5Yx+JlmSs/741zamK3pg/m3ESvdbQ7gGdosc/Jtua
- 24/+MHiFLs7n4PqFbUbCNrhmdj+ehLn5ORQOeFWJ1zxWSnZ0bqllg/TSrtWdmEtx+/
- QvkLtjLzCvWzksV/TIzz09DcGxkIxhoJDaMrI0IS0v5te8fIF59t+J9cxKS3XPKMdZ
- yO+3DwHxkRbYdjcNNuHFGCwJG9uJ70QWTsko1mCQ1UoS2/8vzSIJqwXG3WO2m7FfcE
- XGDLxvBTvyO0g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=AkjjEyQY
-Subject: Re: [Buildroot] [PATCH 1/1] package/frr: bump to version 10.4.1
+ id iKRACUDWJqDy for <buildroot@buildroot.org>;
+ Sat,  9 Aug 2025 16:18:05 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9AC5D407FC
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9AC5D407FC
+ for <buildroot@buildroot.org>; Sat,  9 Aug 2025 16:18:05 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 9578D87062; Sat,  9 Aug 2025 16:18:05 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 9 Aug 2025 17:47:28 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 04c7bede2bbf7e7405f9ac21917d7187d3a97e6b
+X-Git-Newrev: 53c0b8c2f24f0c0816206ce643227fc4cc7de739
+X-Patchwork-Hint: ignore
+Message-Id: <20250809161805.9578D87062@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rpi-firmware: bump version to
+ 95be71b
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,41 +60,49 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Maxime,
+commit: https://git.buildroot.net/buildroot/commit/?id=53c0b8c2f24f0c0816206ce643227fc4cc7de739
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for the patch.
+Version 95be71b matches with kernel 6.12.41.
 
-On 06/08/2025 15:21, Maxime Leroy wrote:
-> Update FRR to the latest stable version (10.4.1 see [1], 10.4.0 see 
-> [2]).
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Tested-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+[Fiona: tested on CM4 and Zero 2W, with the RPi bootloader
+        booting into U-Boot]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/rpi-firmware/rpi-firmware.hash | 2 +-
+ package/rpi-firmware/rpi-firmware.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-This bump seems to introduce few build failures. See:
-https://gitlab.com/jolivain/buildroot/-/pipelines/1975753351
-
-Most failures seems to be introduced by upstream commit:
-https://github.com/FRRouting/frr/commit/ff76fb21d7b3bdf66b1710dc9ffb7bb46f376828
-which is adding a use of the "getloadavg()" which is not supported in 
-all libc version.
-
-> 
-> As protobuf-c is no longer mandatory (see [3]), a new option
-> BR2_PACKAGE_FRR_PROTOBUF is added to enable/disable it.
-> 
-> [1] https://github.com/FRRouting/frr/commit/88f5c06cbc1c
-> [2] https://github.com/FRRouting/frr/releases/tag/frr-10.4.0
-> [3] https://github.com/FRRouting/frr/commit/e51c16a4ca92
-> Signed-off-by: Maxime Leroy <maxime@leroys.fr>
-
-Could you have a look please?
-
-Best regards,
-
-Julien.
+diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmware/rpi-firmware.hash
+index c2ca9343f1..0645d6ad77 100644
+--- a/package/rpi-firmware/rpi-firmware.hash
++++ b/package/rpi-firmware/rpi-firmware.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  b120625c1e0d2dec819638a6fda97c74d1c86e184c6a4263cdf04faa2d5bbe2e  rpi-firmware-1.20250326.tar.gz
++sha256  6c1b017867c3a51e606859f1cd50df61b94af311577583b6b2a113d11131ee93  rpi-firmware-95be71b8c0f63f03dc06dd0e4c2e5535e6fb4a93.tar.gz
+ sha256  c7283ff51f863d93a275c66e3b4cb08021a5dd4d8c1e7acc47d872fbe52d3d6b  boot/LICENCE.broadcom
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index 2577d16a01..d0b6abcc6f 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Please keep in sync with configs/raspberrypi*_deconfig
+-RPI_FIRMWARE_VERSION = 1.20250326
++RPI_FIRMWARE_VERSION = 95be71b8c0f63f03dc06dd0e4c2e5535e6fb4a93
+ RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
+ RPI_FIRMWARE_LICENSE = BSD-3-Clause
+ RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
