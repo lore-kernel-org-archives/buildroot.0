@@ -1,105 +1,108 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F628C87FCB
-	for <buildroot@archiver.kernel.org>; Sat,  9 Aug 2025 03:38:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34066C87FCF
+	for <buildroot@archiver.kernel.org>; Sat,  9 Aug 2025 03:38:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D549460B52;
-	Sat,  9 Aug 2025 03:38:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F20B540A14;
+	Sat,  9 Aug 2025 03:38:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id F1TDB6jtAxUK; Sat,  9 Aug 2025 03:38:32 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id axfqvmAuu_7F; Sat,  9 Aug 2025 03:38:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E0E2A60B6C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2597940A8A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E0E2A60B6C;
-	Sat,  9 Aug 2025 03:38:31 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 2239721B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2597940A8A;
+	Sat,  9 Aug 2025 03:38:33 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 67F8231
  for <buildroot@buildroot.org>; Sat,  9 Aug 2025 03:38:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1466660B6C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 59AAA821EF
  for <buildroot@buildroot.org>; Sat,  9 Aug 2025 03:38:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 76yJdvgPidvS for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GM7rMMuT0XFa for <buildroot@buildroot.org>;
  Sat,  9 Aug 2025 03:38:30 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::662; helo=mail-pl1-x662.google.com;
+ client-ip=2607:f8b0:4864:20::561; helo=mail-pg1-x561.google.com;
  envelope-from=git@jdknight.me; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org CE53B60B52
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CE53B60B52
-Received: from mail-pl1-x662.google.com (mail-pl1-x662.google.com
- [IPv6:2607:f8b0:4864:20::662])
- by smtp3.osuosl.org (Postfix) with ESMTPS id CE53B60B52
- for <buildroot@buildroot.org>; Sat,  9 Aug 2025 03:38:29 +0000 (UTC)
-Received: by mail-pl1-x662.google.com with SMTP id
- d9443c01a7336-2405c0c431cso26539665ad.1
- for <buildroot@buildroot.org>; Fri, 08 Aug 2025 20:38:29 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9732581E33
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9732581E33
+Received: from mail-pg1-x561.google.com (mail-pg1-x561.google.com
+ [IPv6:2607:f8b0:4864:20::561])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9732581E33
+ for <buildroot@buildroot.org>; Sat,  9 Aug 2025 03:38:30 +0000 (UTC)
+Received: by mail-pg1-x561.google.com with SMTP id
+ 41be03b00d2f7-b2c4e46a89fso2195512a12.2
+ for <buildroot@buildroot.org>; Fri, 08 Aug 2025 20:38:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1754710709; x=1755315509;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=kzKuMHyeJY8tASe3UpLNTuKHgHRNq67B0Gy1wuO9dIY=;
- b=WnLZlm4PC/tjl+LGWAscFAKjY9TPPcEo9a3bVhMVe9pi2hpW8zWh3wJ0bYyHQZLdOp
- bCiZTPEhccvgfu4fa+y6uv87NY8qA662dX5wkspQG9ZAn0tQp39ZLP5AnDJ8+XBPRfYX
- vmDEjhNnVNWgxfIsTcy3sOKb/cy3O/mBwStRqMGjnEesWQtLAKNpGD3YxL1VifFTfveL
- pgtc6it2sbzP741wrA/C5SmvVhVbblMTQ9lOrh0uqwZUClEaE3VXtfVDTBD6p+fLyvoK
- +DUjty7DKYAwlmqVgHFimyS5zyg4AmUd5E759kmMVHDukMNaD4/BTbuvTfvmykctd0FL
- SuCA==
-X-Gm-Message-State: AOJu0YxBJ6ZmpOIsIdrmgGFBVNJHdv3LYs1YB2ITuu8EwrnpTEPxnVZ0
- srT/O9LyvntHGXt+Ou2B5yqoH/DujH0ZoaTLOmU4f8Av1F6Ge8hkg+Yn+Kh8BqjBX4RBbEPa17W
- Z/fn5yu9e1TLYBcr7LptANZ1Q6XDDyMJdvrK7gIa9wM7e
-X-Gm-Gg: ASbGncuG4iH0BTlUKZ9Q9My8Kbf82RVEIt9zl6MrWeMRVg8iylNDJVGcQigZfbpyg8A
- XvVh0zNK09zv7D4eF0RpqnFJrd/YhH8a57qI/1OEKuC8bxnIGU7XHlsEvPPmsdgkI16RCbjEg/p
- nvQ3UjUltQAZjzUMFDR7dDbCnEcWfdoQimL/TuKglf7E73bV7bRh1V6qKhGr9E2Ym1/OD+G3gvf
- 1VE8pqehkOQaHKAsDqf543QLoCylaJFrt+5CNXVGy18/G50u0Wh9Ydw2woodbokwa0HN9ZW/0gV
- E3JIa/KGhYcit7al3oM+puIZA37jjRGZ04UWNmb/nBDN2r0Q67PL9GjJz7dqQ1U6KbLQd3ryOvq
- dqbRGBa3EeF+hsHgi8cGiYQ61S6d7vED1SJnEBy038SF7hg+9
-X-Google-Smtp-Source: AGHT+IGc3fV1MOKEwMZ0kdRs22Mw0cWaOG44fBdrJOJCQmuCN0+3El8m/cGiw5HSSejAeaKkEwDOXXPIqj8C
-X-Received: by 2002:a17:903:3b8c:b0:234:986c:66bf with SMTP id
- d9443c01a7336-242c20037f0mr70876715ad.11.1754710708935; 
- Fri, 08 Aug 2025 20:38:28 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1754710710; x=1755315510;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=/XLwRRoIx8rLIfmhYZSF7hdgVCIfR5ap5dv0VlbA6wc=;
+ b=vvd/MOkrAlNXzInOBLHYDapcOiA3cA4j5Q30HEaVBJWHrImhlpvOqudgtcR/QpslUc
+ XC5OO7fD8o4xohAzwpEhhqb1K4mpTqpAwIwql2OGblkcuha1HDzsxOdPlSecCejPhMjJ
+ QZFuFbVDKLPe7DqZA8gGtJmnTR1/U82vlXZLtrP3BcBQH6eydftLA0iIXsEcOtlFixGQ
+ wXVl57COFPIbTrLYrWqj5QgIisNJHLlK+B9ZcnKcyZwvpgbFb+J21+F78BMLQAfphwfs
+ HIw+ONdmaNbUoTBuj0lUmU0CCW2BrFG3Mnz5+ESfih82CxRej+46TFcNmyPEoHNQXNPy
+ xYAQ==
+X-Gm-Message-State: AOJu0YxqvgJHNvHWKgsSSnWN9QIFqypwLojFiVWkVStW7Psq1Q6gESxr
+ iRUpwSrVkQrucZtdA2r6FNEfwmnu2LL/oomoMGzye7o+sXPuixBgi6jOtBuPoak/YpXKWME4IKA
+ GeC32suHq8FUDC5xsr16dhQm4z/6fuuRvB992WIFaVuJu
+X-Gm-Gg: ASbGnctAGv8nya/MakOKE3A3pCNbSUWlxKdziDmqSjsqOvRWu4gurJuGm5hdNsGmtOd
+ MwlKlhCJU4+eztD0uNCSMsWS3tMStYVzDLBkoBMJmyxg4YJJfZBP7CFwDIGHM2SL0WzGFIHNwZT
+ lXvSGDVfq2sAtlH9HFH4iaVCFKOOpRM7GVce9JGMGsL1i5TPerxKhSFT3063WtEi6L+dcoNV8IG
+ MlTRjTApo/5brdGvsBvpf7kvqtP8VjbbqHjnWocjBjH30X78gmYf5cMCJWTFwaaKXPzKIo5HH3j
+ FovU5krmjcpSWvZeaqHX33BtOuqMJ1c+P2Inr+ZvbXyIFO0niW/XA6JfRMRegzAYX0N/SNWvuKU
+ QQ2nSXFdzEFLmRKoJurVrNPDR1ErJaORbRBdWKTCzuZo54nf8
+X-Google-Smtp-Source: AGHT+IG+Yqqx549MFKVvhRSUQDeiuXtKQqQpSMgRZTiha1N6EURpeiRAeZWKVyObKqouFzbDpOoTlMmtrrE+
+X-Received: by 2002:a17:903:440f:b0:242:9bc4:f1c8 with SMTP id
+ d9443c01a7336-242c229fe3dmr62902655ad.55.1754710709819; 
+ Fri, 08 Aug 2025 20:38:29 -0700 (PDT)
 Received: from localhost.localdomain
  (bras-base-jkvlon0513w-grc-49-184-144-89-37.dsl.bell.ca. [184.144.89.37])
  by smtp-relay.gmail.com with ESMTPS id
- d9443c01a7336-241e8976de2sm14581565ad.47.2025.08.08.20.38.28
+ d9443c01a7336-241e8976de2sm14581565ad.47.2025.08.08.20.38.29
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 08 Aug 2025 20:38:28 -0700 (PDT)
+ Fri, 08 Aug 2025 20:38:29 -0700 (PDT)
 X-Relaying-Domain: jdknight.me
 From: James Knight <git@jdknight.me>
 To: buildroot@buildroot.org
-Date: Fri,  8 Aug 2025 23:37:55 -0400
-Message-ID: <20250809033757.1197-1-git@jdknight.me>
+Date: Fri,  8 Aug 2025 23:37:56 -0400
+Message-ID: <20250809033757.1197-2-git@jdknight.me>
 X-Mailer: git-send-email 2.49.0.windows.1
+In-Reply-To: <20250809033757.1197-1-git@jdknight.me>
+References: <20250809033757.1197-1-git@jdknight.me>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=jdknight-me.20230601.gappssmtp.com; s=20230601; t=1754710709; x=1755315509;
+ d=jdknight-me.20230601.gappssmtp.com; s=20230601; t=1754710710; x=1755315510;
  darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=kzKuMHyeJY8tASe3UpLNTuKHgHRNq67B0Gy1wuO9dIY=;
- b=ru8lU/gJokZEAnt8UrP+zZLVxkD//svatVPEFiODJVhkaKGeQzLwlMPle6ax5aLRNG
- 6KVcnseSGZCWhBSUJUTjDaJJybMjzvo622frjOyhmCxfUj9MMwzfe3vlwhfnBw5Z4r+2
- HA5WMe3Ys1Ny7dPhogpFyfu7jfuzucluk6BHLBd2KXF4yZpDig+Jr/udrL3qHJY9XoAj
- Vjy9y4Dv3Ls3GfmqoErdKDhgOVqWIMPh3drDgASczy7p9FsndfsvnKBiatldv0hILM3/
- Jw+1F4I8CPg+SvrrobldRiPNp5envBUb6c4TnZeqbY0fuyEy1byyX03oM1GdbKfqIyzz
- z4AA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=/XLwRRoIx8rLIfmhYZSF7hdgVCIfR5ap5dv0VlbA6wc=;
+ b=LK4aNLETzB9FWtxoij1QcCimhKBGiVZMiI6GzGXEt1VW5rPItvx8OtYFFqIa5iclkL
+ fSDlCUbOegm3+mjR/EkdJT66Iu5JoCvv/80sGqHf3OeVTD8DLhY3Zchdbi/aKh8cvf03
+ cXlnxIHAIcTBYBDSdrWBxfopCARG8sHeW1/LFBkyJ1MaUnSWT6WuR9RTUAk3gBpQMD9S
+ osDKOwdjwWwxl4nBL8B/Ol+AyybMwdHEShIf88FTNZoiDiPjZi8YwgDwtXm0GjsXhT1v
+ 6MfCtZtWZTe4bf6jRPZ/1vz60qGB7OLxkYJnaCp6NH9tIt2gRzpx4kGdX0jaFjFMskqe
+ jLsQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=jdknight.me
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=jdknight-me.20230601.gappssmtp.com
  header.i=@jdknight-me.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=ru8lU/gJ
-Subject: [Buildroot] [PATCH 1/3] package/libgtk3: remove schema compile hook
+ header.s=20230601 header.b=LK4aNLET
+Subject: [Buildroot] [PATCH 2/3] package/libgtk4: remove schema compile hook
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -124,27 +127,26 @@ finalization.
 
 Signed-off-by: James Knight <git@jdknight.me>
 ---
- package/libgtk3/libgtk3.mk | 7 -------
- 1 file changed, 7 deletions(-)
+ package/libgtk4/libgtk4.mk | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
-index d6d7c64a54..2fd3a26a3c 100644
---- a/package/libgtk3/libgtk3.mk
-+++ b/package/libgtk3/libgtk3.mk
-@@ -87,13 +87,6 @@ else
- LIBGTK3_CONF_OPTS += -Dtests=false -Dinstalled_tests=false
+diff --git a/package/libgtk4/libgtk4.mk b/package/libgtk4/libgtk4.mk
+index b00a2facad..f63e320629 100644
+--- a/package/libgtk4/libgtk4.mk
++++ b/package/libgtk4/libgtk4.mk
+@@ -79,12 +79,6 @@ else
+ LIBGTK4_CONF_OPTS += -Dbuild-demos=false -Dbuild-examples=false
  endif
  
--define LIBGTK3_COMPILE_GLIB_SCHEMAS
+-define LIBGTK4_COMPILE_GLIB_SCHEMAS
 -	$(HOST_DIR)/bin/glib-compile-schemas \
 -		$(TARGET_DIR)/usr/share/glib-2.0/schemas
 -endef
+-LIBGTK4_POST_INSTALL_TARGET_HOOKS += LIBGTK4_COMPILE_GLIB_SCHEMAS
 -
--LIBGTK3_POST_INSTALL_TARGET_HOOKS += LIBGTK3_COMPILE_GLIB_SCHEMAS
--
- # gtk+ >= 3.10 can build a native version of gtk-update-icon-cache if
- # --enable-gtk2-dependency=no is set when invoking './configure'.
- #
+ # here, we build a native gtk4-update-icon-cache as host-libgtk4
+ 
+ HOST_LIBGTK4_DEPENDENCIES = \
 -- 
 2.49.0.windows.1
 
