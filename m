@@ -4,48 +4,105 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85632C87FCB
-	for <buildroot@archiver.kernel.org>; Sat,  9 Aug 2025 20:53:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6E8BC87FCB
+	for <buildroot@archiver.kernel.org>; Sat,  9 Aug 2025 20:59:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4051840A68;
-	Sat,  9 Aug 2025 20:53:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8BA8440BCA;
+	Sat,  9 Aug 2025 20:59:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Mi4HDDdnCWxY; Sat,  9 Aug 2025 20:53:33 +0000 (UTC)
+ id Wi4zIA87M7Hu; Sat,  9 Aug 2025 20:59:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 587AE40B6F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9DB4140BC0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 587AE40B6F;
-	Sat,  9 Aug 2025 20:53:33 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 49B8D21B
- for <buildroot@buildroot.org>; Sat,  9 Aug 2025 20:53:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9DB4140BC0;
+	Sat,  9 Aug 2025 20:59:53 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2DA0B21B
+ for <buildroot@buildroot.org>; Sat,  9 Aug 2025 20:59:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4710860846
- for <buildroot@buildroot.org>; Sat,  9 Aug 2025 20:53:31 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3D12C40753
+ for <buildroot@buildroot.org>; Sat,  9 Aug 2025 20:59:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3b7JCkZk8S_n for <buildroot@buildroot.org>;
- Sat,  9 Aug 2025 20:53:30 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8CE7A60C18
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8CE7A60C18
- for <buildroot@buildroot.org>; Sat,  9 Aug 2025 20:53:30 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7BDB38709F; Sat,  9 Aug 2025 20:53:30 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 9 Aug 2025 22:51:29 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0ae37b712f454975f1b18ac0557c2a371ceefa37
-X-Git-Newrev: 064f7592d3e0c1422582545dec01367f46d443c9
-X-Patchwork-Hint: ignore
-Message-Id: <20250809205330.7BDB38709F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/tini: fix build w/ musl
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2N2IxdbaRpFr for <buildroot@buildroot.org>;
+ Sat,  9 Aug 2025 20:59:49 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 774AA40889
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 774AA40889
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 774AA40889
+ for <buildroot@buildroot.org>; Sat,  9 Aug 2025 20:59:49 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id
+ 5b1f17b1804b1-458b2d9dba5so19989735e9.1
+ for <buildroot@buildroot.org>; Sat, 09 Aug 2025 13:59:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1754773187; x=1755377987;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=eJuY08MiE0DMGtaWdgvw71pD+M+u9gVzxZAuMrUwQxM=;
+ b=nbqs+IQU481DxztlZqldi0bJhZBENmELwV30OeFUcqX8XgybzP4pzhm9hVB+R8go0z
+ aQd/iMSSBnHkOQ/G9KDPBYoTAlZMwn/9qOVcf0UwVkad5N8ZsCRkqYqApki7r+28v57/
+ ZGO/kx/8Tl07KCyEq5+C73W9zsZEzJBth0O3ZxLvxLrOYzhoqGNqGBcw+FR9VRZ9GRuK
+ USlzzOcyNKk29qzFwp1nTLfl4Sf03Nsoeyh+3pIjmCXhMwgC4YavpBRttKRiwP/vXdGL
+ BWZyVrh06pHIoonEf/tg+At4hTCilNjae1MgnySrnbfDMEBRPjOHVakQODiRCxreNg2f
+ rZnw==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCXzYAp5wap5cyi73vhyDuAMYxRTGrgKlUEW0sobjgQ7+ZAsEEN/EffIMThnw9D22FJC7n9edLkWPNU=@buildroot.org
+X-Gm-Message-State: AOJu0YyhKtGmTPyUIlMq4cV507AR1/9CP4tiKe2N1HMGRWmBkXrdrUIs
+ bHrJaEdhHTX37R2n1d7XDemZY/7wgcl5QSUSbwCadzrYCUmRLRA/z0IS7HUTor18sr2yf3sPQCU
+ mkOmM
+X-Gm-Gg: ASbGncvy5yFY8OHodo/MZdEJf7rMR3UAUa+NAjlMZsbRGbB7J8e0V+JWsyZZuO2SeeR
+ IsrD7xj+ZmwMzvuxNkuJaUtMsmi/nLHd/rWJMPr0K7246upqI8OKN8Hi0YCVuEIrfZ1fqhO5A47
+ KIVc9ZpfXqDOh+VLwlnC8fWeWrfhRhoeLb8DgDu3NxqUiferZXmJA03vwjei3bMtxPC0cG6aq+g
+ Ibb8TkPE8P68KMl+yUddwOj5Onfs8APTcj1O4YHmsJCvcT/iChxQts9KM0/OKWIzd9ZLahbntTj
+ tsPduT5m400DfqsVb6nQWWKB3KeYjRDai5mJ81UVPNbcwhX4u+cDDPpUUwhDOT4gYxKVonjHVVb
+ IO0zMd5pa+BVdYK7NmV0piaZDvlSVh9/AfOt60Ty+qfxPlFI/2hnIuhZ57BKmIHwMxEongRoKvj
+ Ks3lZXS+SO57JQYqJn/Gb8cvSsM8ENO17hSTtOmEvyBTAGyG479kWGuIJcKOER
+X-Google-Smtp-Source: AGHT+IEY7OKwpLxt7cblIajVM7dgt/pW+kyXKz3UYQOo2Jt29zxWljcaK1UUrlJa6EVgc9VYaR1hcA==
+X-Received: by 2002:a05:600c:3b02:b0:456:475b:7af6 with SMTP id
+ 5b1f17b1804b1-459f4ea1fa8mr58177635e9.7.1754773187265; 
+ Sat, 09 Aug 2025 13:59:47 -0700 (PDT)
+Received: from ?IPV6:2a01:cb05:949d:5800:c97d:3b73:4a46:d823?
+ (2a01cb05949d5800c97d3b734a46d823.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:949d:5800:c97d:3b73:4a46:d823])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-3b79c3ac51asm35709307f8f.1.2025.08.09.13.59.46
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 09 Aug 2025 13:59:46 -0700 (PDT)
+Message-ID: <6955632a-7621-406d-a4fa-9c530a62e096@smile.fr>
+Date: Sat, 9 Aug 2025 22:59:46 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Thomas Perale <thomas.perale@mind.be>, buildroot@buildroot.org
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+References: <20250809175417.315091-1-thomas.perale@mind.be>
+Content-Language: en-US
+In-Reply-To: <20250809175417.315091-1-thomas.perale@mind.be>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile.fr; s=google; t=1754773187; x=1755377987; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=eJuY08MiE0DMGtaWdgvw71pD+M+u9gVzxZAuMrUwQxM=;
+ b=1KjgLRUSDG7EZMXLXZ3H5beilAa7QonPEnXien4/axcBsYK8d4VB+yyFR7UVCCagEt
+ HceHnRhFoRrEEoXWqagns4qiy+FDTu0DUdxeCzzUpsf5xyH+gLkCCuotCzGBkr4x7L2s
+ C8/wDAsYnJHJn2wewzn0yW+q96Iw6IWK/CORE=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
+ header.s=google header.b=1KjgLRUS
+Subject: Re: [Buildroot] [PATCH] package/libapparmor: remove stale reference
+ to patch 0001
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,136 +116,42 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Romain Naour via buildroot <buildroot@buildroot.org>
 Reply-To: Romain Naour <romain.naour@smile.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=064f7592d3e0c1422582545dec01367f46d443c9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-When building tini with musl libc, the following error occurs dur to
-missing declaration of 'basename':
-
-```
-/home/buildroot/instance-0/output-1/build/tini-0.19.0/src/tini.c: In function 'print_usage':
-/home/buildroot/instance-0/output-1/build/tini-0.19.0/src/tini.c:227:36: error: implicit declaration of function 'basename' [-Wimplicit-function-declaration]
-  227 |         fprintf(file, "%s (%s)\n", basename(name), TINI_VERSION_STRING);
-      |                                    ^~~~~~~~
-make: *** [package/pkg-generic.mk:273: /home/buildroot/instance-0/output-1/build/tini-0.19.0/.stamp_built] Error 1
-make: Leaving directory '/home/buildroot/instance-0/buildroot'
-```
-
-This error can be reproduced with:
-
-```
-cat >.config <<EOF
-BR2_aarch64=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_MUSL_BLEEDING_EDGE=y
-BR2_PACKAGE_TINI=y
-EOF
-make olddefconfig
-make tini
-```
-
-This patch adds the upstream commit [1], that fixes this issue by
-including `libgen.h`.
-
-[1] https://github.com/krallin/tini/commit/924c4bd6028457188942ecbfdc75e6a343fa9395
-
-Fixes: https://autobuild.buildroot.org/results/f0d/f0d10cd25f3b0e2a4af7266f7417b339ea5d242a
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
- ...001-support-posix-basename-from-musl-libc.patch | 76 ++++++++++++++++++++++
- 1 file changed, 76 insertions(+)
-
-diff --git a/package/tini/0001-support-posix-basename-from-musl-libc.patch b/package/tini/0001-support-posix-basename-from-musl-libc.patch
-new file mode 100644
-index 0000000000..17445d5b3b
---- /dev/null
-+++ b/package/tini/0001-support-posix-basename-from-musl-libc.patch
-@@ -0,0 +1,76 @@
-+From 924c4bd6028457188942ecbfdc75e6a343fa9395 Mon Sep 17 00:00:00 2001
-+From: Hauke Mehrtens <hauke@hauke-m.de>
-+Date: Sun, 14 Apr 2024 15:33:51 +0200
-+Subject: [PATCH] Support POSIX basename() from musl libc
-+
-+Musl libc 1.2.5 removed the definition of the basename() function from
-+string.h and only provides it in libgen.h as the POSIX standard
-+defines it.
-+
-+This change fixes compilation with musl libc 1.2.5.
-+````
-+build_dir/target-mips_24kc_musl/tini-0.19.0/src/tini.c:227:36: error: implicit declaration of function 'basename' [-Wimplicit-function-declaration]
-+  227 |         fprintf(file, "%s (%s)\n", basename(name), TINI_VERSION_STRING);
-+build_dir/target-mips_24kc_musl/tini-0.19.0/src/tini.c:227:25: error: format '%s' expects argument of type 'char *', but argument 3 has type 'int' [-Werror=format=]
-+  227 |         fprintf(file, "%s (%s)\n", basename(name), TINI_VERSION_STRING);
-+      |                        ~^          ~~~~~~~~~~~~~~
-+      |                         |          |
-+      |                         char *     int
-+      |                        %d
-+
-+````
-+
-+basename() modifies the input string, copy it first with strdup(), If
-+strdup() returns NULL the code will handle it.
-+
-+Signed-off-by: Hauke Mehrtens <hauke@hauke-m.de>
-+Upstream: https://github.com/krallin/tini/commit/924c4bd6028457188942ecbfdc75e6a343fa9395
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ src/tini.c | 15 +++++++++++----
-+ 1 file changed, 11 insertions(+), 4 deletions(-)
-+
-+diff --git a/src/tini.c b/src/tini.c
-+index 7914d3a..41d1506 100644
-+--- a/src/tini.c
-++++ b/src/tini.c
-+@@ -14,6 +14,7 @@
-+ #include <stdlib.h>
-+ #include <unistd.h>
-+ #include <stdbool.h>
-++#include <libgen.h>
-+ 
-+ #include "tiniConfig.h"
-+ #include "tiniLicense.h"
-+@@ -224,14 +225,19 @@ int spawn(const signal_configuration_t* const sigconf_ptr, char* const argv[], i
-+ }
-+ 
-+ void print_usage(char* const name, FILE* const file) {
-+-	fprintf(file, "%s (%s)\n", basename(name), TINI_VERSION_STRING);
-++	char *dirc, *bname;
-++
-++	dirc = strdup(name);
-++	bname = basename(dirc);
-++
-++	fprintf(file, "%s (%s)\n", bname, TINI_VERSION_STRING);
-+ 
-+ #if TINI_MINIMAL
-+-	fprintf(file, "Usage: %s PROGRAM [ARGS] | --version\n\n", basename(name));
-++	fprintf(file, "Usage: %s PROGRAM [ARGS] | --version\n\n", bname);
-+ #else
-+-	fprintf(file, "Usage: %s [OPTIONS] PROGRAM -- [ARGS] | --version\n\n", basename(name));
-++	fprintf(file, "Usage: %s [OPTIONS] PROGRAM -- [ARGS] | --version\n\n", bname);
-+ #endif
-+-	fprintf(file, "Execute a program under the supervision of a valid init process (%s)\n\n", basename(name));
-++	fprintf(file, "Execute a program under the supervision of a valid init process (%s)\n\n", bname);
-+ 
-+ 	fprintf(file, "Command line options:\n\n");
-+ 
-+@@ -261,6 +267,7 @@ void print_usage(char* const name, FILE* const file) {
-+ 	fprintf(file, "  %s: Send signals to the child's process group.\n", KILL_PROCESS_GROUP_GROUP_ENV_VAR);
-+ 
-+ 	fprintf(file, "\n");
-++	free(dirc);
-+ }
-+ 
-+ void print_license(FILE* const file) {
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gVGhvbWFzLCBBbGwsCgpMZSAwOS8wOC8yMDI1IMOgIDE5OjU0LCBUaG9tYXMgUGVyYWxl
+IHZpYSBidWlsZHJvb3QgYSDDqWNyaXTCoDoKPiBUaGUgQVVUT1JFQ09ORiB2YXJpYWJsZSB3YXMg
+aW50cm9kdWNlZCBpbiBjb21taXQgWzFdIHdpdGggcmVmZXJlbmNlIHRvCj4gdGhlIHBhdGNoZXMg
+dGhhdCBtb2RpZmllZCB0aGUgbTQgYW5kIE1ha2VmaWxlLmFtIGZpbGVzLgo+IAo+IFRoZSBjb21t
+aXQgWzJdIHJlbW92ZWQgdGhlIGxhc3Qgc3VjaCBwYXRjaCBidXQgbGVmdCB0aGUgcmVmZXJlbmNl
+IHRvIHRoZQo+IHBhdGNoIGFuZCB0aGUgQVVUT1JFQ09ORiB2YXJpYWJsZS4KPiAKPiBMYXRlciwg
+Y29tbWl0IFszXSB1cGRhdGVkIHRoZSBtaXJyb3IgdG8gdGhlIGdpdGxhYiBVUkwgdGhhdCBubyBs
+b25nZXIKPiBidW5kbGUgYSBwcmUtZ2VuZXJhdGVkIGBjb25maWd1cmVgIGZpbGUsIG1ha2luZyB0
+aGUgZXhlY3V0aW9uIG9mCj4gQVVUT1JFQ09ORiBuZWNlc3NhcnkgYW55d2F5Lgo+IAo+IFRoaXMg
+cGF0Y2ggcmVtb3ZlcyB0aGUgb2Jzb2xldGUgcmVmZXJlbmNlIHRvIHRoZSBwYXRjaCAwMDAxIHJl
+bW92ZWQgaW4KPiBbMl0gdG8gYXZvaWQgYW1iaWd1aXR5IHdpdGggdGhlIG5ldyBwYXRjaCAwMDAx
+IGludHJvZHVjZWQgaW4gY29tbWl0IFs0XS4KPiAKPiBbMV0gMDFhODJjMTQwMSBwYWNrYWdlL2xp
+YmFwcGFybW9yOiBlbmFibGUgcHl0aG9uIGJpbmRpbmdzCj4gWzJdIDI3Y2QwYjUwMzMgcGFja2Fn
+ZS9hcHBhcm1vcjogYnVtcCB0byB2ZXJzaW9uIDMuMC40Cj4gWzNdIDU2NDkyMDJkZGMgcGFja2Fn
+ZS9saWJhcHBhcm1vcjogYnVtcCB0byB2ZXJzaW9uIDMuMS43Cj4gWzRdIDI2NDBmNWRjZDAgcGFj
+a2FnZS9saWJhcHBhcm1vcjogZml4IGJ1aWxkIHcvIG11c2wKPiAKPiBTaWduZWQtb2ZmLWJ5OiBU
+aG9tYXMgUGVyYWxlIDx0aG9tYXMucGVyYWxlQG1pbmQuYmU+Cj4gLS0tCj4gIHBhY2thZ2UvbGli
+YXBwYXJtb3IvbGliYXBwYXJtb3IubWsgfCAxIC0KPiAgMSBmaWxlIGNoYW5nZWQsIDEgZGVsZXRp
+b24oLSkKPiAKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9saWJhcHBhcm1vci9saWJhcHBhcm1vci5t
+ayBiL3BhY2thZ2UvbGliYXBwYXJtb3IvbGliYXBwYXJtb3IubWsKPiBpbmRleCBmYTU5ZmYyOTI0
+Li5iMWM5YTk1MmYwIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvbGliYXBwYXJtb3IvbGliYXBwYXJt
+b3IubWsKPiArKysgYi9wYWNrYWdlL2xpYmFwcGFybW9yL2xpYmFwcGFybW9yLm1rCj4gQEAgLTE2
+LDcgKzE2LDYgQEAgTElCQVBQQVJNT1JfREVQRU5ERU5DSUVTID0gaG9zdC1iaXNvbiBob3N0LWZs
+ZXggaG9zdC1wa2djb25mCj4gIExJQkFQUEFSTU9SX1NVQkRJUiA9IGxpYnJhcmllcy9saWJhcHBh
+cm1vcgo+ICBMSUJBUFBBUk1PUl9JTlNUQUxMX1NUQUdJTkcgPSBZRVMKPiAgCj4gLSMgUGF0Y2gg
+MDAwMSB0b3VjaGVzIE1ha2VmaWxlLmFtIGFuZCBtNCBmaWxlcwoKVGhhbmtzIGZvciB0aGUgZGV0
+YWlsZWQgYW5hbHlzaXMhCgpVc3VhbGx5IHdlIHByZWZlciBhIHNtYWxsIGNvbW1lbnQgdG8gcmVt
+ZW1iZXIgd2h5IHdlIGhhdmUgdG8gdXNlIEFVVE9SRUNPTkYuCgpXaGF0IGFib3V0OgoKIyBnaXQg
+cmVwbywgbm8gY29uZmlndXJlCgpCZXN0IHJlZ2FyZHMsClJvbWFpbgoKCj4gIExJQkFQUEFSTU9S
+X0FVVE9SRUNPTkYgPSBZRVMKPiAgCj4gICMgTW9zdCBBcHBBcm1vciB0b29scyB3aWxsIHdhbnQg
+dG8gbGluayB0byB0aGUgc3RhdGljIGxpYi4KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxk
+cm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVp
+bGRyb290Cg==
