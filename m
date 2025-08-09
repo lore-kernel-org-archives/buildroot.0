@@ -1,108 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB22DC87FD2
-	for <buildroot@archiver.kernel.org>; Sat,  9 Aug 2025 21:58:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E6D9C87FCB
+	for <buildroot@archiver.kernel.org>; Sat,  9 Aug 2025 22:15:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7A6F3409BC;
-	Sat,  9 Aug 2025 21:58:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E402D81B7B;
+	Sat,  9 Aug 2025 22:15:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id F5oEAZ4Cqy7L; Sat,  9 Aug 2025 21:58:20 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FVIaOrBMCsX2; Sat,  9 Aug 2025 22:15:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80720409D1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E9E4B81AF5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 80720409D1;
-	Sat,  9 Aug 2025 21:58:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E9E4B81AF5;
+	Sat,  9 Aug 2025 22:15:40 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id A91F831
- for <buildroot@buildroot.org>; Sat,  9 Aug 2025 21:58:17 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id A98FD1D3
+ for <buildroot@buildroot.org>; Sat,  9 Aug 2025 22:15:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8EE41606C8
- for <buildroot@buildroot.org>; Sat,  9 Aug 2025 21:58:17 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 901A160DF9
+ for <buildroot@buildroot.org>; Sat,  9 Aug 2025 22:15:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1Fw37txXV0BS for <buildroot@buildroot.org>;
- Sat,  9 Aug 2025 21:58:16 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::434; helo=mail-wr1-x434.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 701FD60D61
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 701FD60D61
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 701FD60D61
- for <buildroot@buildroot.org>; Sat,  9 Aug 2025 21:58:16 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id
- ffacd0b85a97d-3b786421e36so1703383f8f.3
- for <buildroot@buildroot.org>; Sat, 09 Aug 2025 14:58:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1754776694; x=1755381494;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=4+yp2UC+2XkkZM0QfSpdMOl/ur1oZIUuY2THpTfMYDE=;
- b=kOJ00Fn7u1ancXTP5ZsnoYH2I34+i1o8Mkcg8dAjNeUOwXrIaJQQcaQBjg3z04LRFt
- H5KjkyszVh1wC6/6+8Bu/OdsPjq36UrWRF4JLhzqPvIKxSR0EXDHV6DoYTHPy430Za/M
- QYXx1WwbP1S5tXiThIbx1jJUHTy4mQHGPnEz5Mj8Lcw0l2eV6NOzMQe97EUsMeWFYCgj
- jq57TXJOim9ADuquH0juUth5VtTG1hNrExWXw8dsf8hI+5DNFMvIz8azdEwWXZjTAgmU
- yhqt92Vw5hzlB/wHSfukWbgbAlOo73Kt5zE60LJrE4nPVdxrMC0ln9lpfS3GvVaUs7Sb
- 0Zzg==
-X-Forwarded-Encrypted: i=1;
- AJvYcCVq+vYECXfZ3do6oGFPYFbrPfZDgnq9EqX15Qo33z/8iiu1wewuWUXVacDDT0Zatv0kUmS89vRjTjA=@buildroot.org
-X-Gm-Message-State: AOJu0YwEW+EDCEBvc38UwMhrAlXMUxUzYQpu3CH6gO3uwKZ4xtvOWRMF
- fAbwUi2zBSaL9tBLB7y/Vh8Dt++kMkyO0ytRRDQ0awmJzqIBweLp7tEDvToHH1vlBHT/JWKeqaG
- r75bj
-X-Gm-Gg: ASbGncsjeQLyGS20d0TX27uuke0aQP1oX9Ol9wDUf/nxub7s5fEbRyDBmOUjQ5N1PDc
- 3LBwb3wgqDd5j7HGvWRZNaP2KEbCenhzrbkas9jyNm/lTLyK+Rs7bZTL2ObMgqs1lY0pVCKVrZS
- RRbySdbVN1izdL3Vv0mPd4tbAZXvWjMemplgfOAl8IeX8HEF2mIK3vaohC6Rt06++a0t5ryJJRm
- I+0dXnpOPzsrNLAPkBgm6LbM6mPBQ6CsMpZtJAP7Pdt7lknmHqhXMIzhv5z+Nc6tDlZpPDmC5ug
- B9fvfAZqmzTQUnULfL83dq5mmMPdLIcU+Qpfp6PYRx18T+/DmpBGqTCpKYJd4ddB8LEQuxuLJ6c
- JLOyd7en4Hlc4exJ/AYb3qCaWrmh+mQJIDMZQeODjIpj7EtupnUpsmNvZ5V0WRC+qeefoNhUDtE
- KXHmPL04Yuf9oJsnTgDBCH7kFkMkaqMqmVmqZNDdzGAJImt6K3hcTRsNmD3WGGjotd8XjYrlxyV
- JgLdDzuKQ==
-X-Google-Smtp-Source: AGHT+IEDHv8lS8XLRp76YZSuQ1L1icSH0UBvli//BymjMXqAXLOtAi1ZlEi71bm6zzEYTIbGFyzt6Q==
-X-Received: by 2002:a05:6000:290b:b0:3b7:8fcc:a1e3 with SMTP id
- ffacd0b85a97d-3b900b5108cmr5706039f8f.48.1754776694270; 
- Sat, 09 Aug 2025 14:58:14 -0700 (PDT)
-Received: from ?IPV6:2a01:cb05:949d:5800:c97d:3b73:4a46:d823?
- (2a01cb05949d5800c97d3b734a46d823.ipv6.abo.wanadoo.fr.
- [2a01:cb05:949d:5800:c97d:3b73:4a46:d823])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3b79c3c4beasm34105670f8f.30.2025.08.09.14.58.13
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 09 Aug 2025 14:58:13 -0700 (PDT)
-Message-ID: <9f6fdd80-ef24-49de-97ad-17f8a76f64a2@smile.fr>
-Date: Sat, 9 Aug 2025 23:58:13 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Thomas Perale <thomas.perale@mind.be>, buildroot@buildroot.org
-Cc: Stefan Hager <stefan.hager@ginzinger.com>
-References: <20250809210855.354805-1-thomas.perale@mind.be>
-Content-Language: fr
-In-Reply-To: <20250809210855.354805-1-thomas.perale@mind.be>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1754776694; x=1755381494; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=4+yp2UC+2XkkZM0QfSpdMOl/ur1oZIUuY2THpTfMYDE=;
- b=eiztcoyaet6aQW5F4E9FVU4CKP71C6QiD0vyrs8ObN9xY2ZWmLqkSjamu2lMzfF32T
- g0NFO4Go/roCPzGWahqHQWnBc5UhyMmJRDJwnU/sK7gup2iQfqzeghFRo3HYN3DTQrF0
- ZsgxTu5N8eST+Fco8h1tgYy35TZ8IJXTX8sxA=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
- header.a=rsa-sha256 header.s=google header.b=eiztcoya
-Subject: Re: [Buildroot] [PATCH v2 1/2] package/pthreadpool: fix thread
- dependency
+ id p4_jbdN7Slai for <buildroot@buildroot.org>;
+ Sat,  9 Aug 2025 22:15:38 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A7BBB60791
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id A7BBB60791
+ for <buildroot@buildroot.org>; Sat,  9 Aug 2025 22:15:38 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 97337870D0; Sat,  9 Aug 2025 22:15:38 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 10 Aug 2025 00:10:14 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 38107ec40c4a66ed67d81a8e2bffd2673096a15a
+X-Git-Newrev: ec12da7384b10344cae3835bb4e7aa43e7d01b21
+X-Patchwork-Hint: ignore
+Message-Id: <20250809221538.97337870D0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libzenoh-pico: fix build w/
+ RUNTIME_DEBUG
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,67 +60,260 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Romain Naour via buildroot <buildroot@buildroot.org>
 Reply-To: Romain Naour <romain.naour@smile.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gVGhvbWFzLCBBbGwsCgpMZSAwOS8wOC8yMDI1IMOgIDIzOjA4LCBUaG9tYXMgUGVyYWxl
-IHZpYSBidWlsZHJvb3QgYSDDqWNyaXTCoDoKPiBPbiBhdXRvYnVpbGRlciBjb25maWcgd2l0aCBC
-UjJfVE9PTENIQUlOX0hBU19USFJFQURTIG5vdCBzZXQgdGhlCj4gZm9sbG93aW5nIGVycm9yIGhh
-cHBlbnMgd2hlbiBidWlsZGluZyB0aGUgcHRocmVhZHBvb2wgcGFja2FnZToKPiAKPiBgYGAKPiAt
-LSBMb29raW5nIGZvciBwdGhyZWFkX2NyZWF0ZSBpbiBwdGhyZWFkcwo+IC0tIExvb2tpbmcgZm9y
-IHB0aHJlYWRfY3JlYXRlIGluIHB0aHJlYWRzIC0gbm90IGZvdW5kCj4gLS0gTG9va2luZyBmb3Ig
-cHRocmVhZF9jcmVhdGUgaW4gcHRocmVhZAo+IC0tIExvb2tpbmcgZm9yIHB0aHJlYWRfY3JlYXRl
-IGluIHB0aHJlYWQgLSBub3QgZm91bmQKPiAtLSBDaGVjayBpZiBjb21waWxlciBhY2NlcHRzIC1w
-dGhyZWFkCj4gLS0gQ2hlY2sgaWYgY29tcGlsZXIgYWNjZXB0cyAtcHRocmVhZCAtIG5vCj4gQ01h
-a2UgRXJyb3IgYXQgL2hvbWUvYnVpbGRyb290L2luc3RhbmNlLTAvb3V0cHV0LTEvaG9zdC9zaGFy
-ZS9jbWFrZS0zLjMxL01vZHVsZXMvRmluZFBhY2thZ2VIYW5kbGVTdGFuZGFyZEFyZ3MuY21ha2U6
-MjMzIChtZXNzYWdlKToKPiAgIENvdWxkIE5PVCBmaW5kIFRocmVhZHMgKG1pc3Npbmc6IFRocmVh
-ZHNfRk9VTkQpCj4gQ2FsbCBTdGFjayAobW9zdCByZWNlbnQgY2FsbCBmaXJzdCk6Cj4gICAvaG9t
-ZS9idWlsZHJvb3QvaW5zdGFuY2UtMC9vdXRwdXQtMS9ob3N0L3NoYXJlL2NtYWtlLTMuMzEvTW9k
-dWxlcy9GaW5kUGFja2FnZUhhbmRsZVN0YW5kYXJkQXJncy5jbWFrZTo2MDMgKF9GUEhTQV9GQUlM
-VVJFX01FU1NBR0UpCj4gICAvaG9tZS9idWlsZHJvb3QvaW5zdGFuY2UtMC9vdXRwdXQtMS9ob3N0
-L3NoYXJlL2NtYWtlLTMuMzEvTW9kdWxlcy9GaW5kVGhyZWFkcy5jbWFrZToyMjYgKEZJTkRfUEFD
-S0FHRV9IQU5ETEVfU1RBTkRBUkRfQVJHUykKPiAgIENNYWtlTGlzdHMudHh0OjE0MyAoRklORF9Q
-QUNLQUdFKQo+IAo+IC0tIENvbmZpZ3VyaW5nIGluY29tcGxldGUsIGVycm9ycyBvY2N1cnJlZCEK
-PiBgYGAKPiAKPiBUaGlzIGNhbiBiZSByZXByb2R1Y2VkIHdpdGg6Cj4gCj4gYGBgCj4gY2F0ID4u
-Y29uZmlnIDw8RU9GCj4gQlIyX2FybWViPXkKPiBCUjJfVE9PTENIQUlOX0JVSUxEUk9PVF9VQ0xJ
-QkM9eQo+IEJSMl9QVEhSRUFEU19OT05FPXkKPiBCUjJfUEFDS0FHRV9QVEhSRUFEUE9PTD15Cj4g
-RU9GCj4gbWFrZSBvbGRkZWZjb25maWcKPiBtYWtlIHB0aHJlYWRwb29sCj4gYGBgCj4gCj4gU2lu
-Y2UgdGhlIGludHJvZHVjdGlvbiBvZiB0aGlzIHBhY2thZ2UgaW4gWzFdLCB0aGUgZGVwZW5kZW5j
-eSB3YXMgbm90Cj4gaW5jbHVkZWQuIFNpbmNlIHRoaXMgcGFja2FnZSB3YXMgcGFydCBvZiB0aGUg
-dGVuc29yZmxvdy1saXRlCj4gZGVwZW5kZW5jaWVzIHRoYXQgcmVxdWlyZWQgdGhyZWFkIGl0IHdh
-cyBub3QgYW4gaXNzdWUuCj4gCj4gVGhpcyBwYXRjaCBhZGRzIEJSMl9UT09MQ0hBSU5fSEFTX1RI
-UkVBRFMgaW4gdGhlIGRlcGVuZGVuY3kgdG8gYXZvaWQKPiBlcnJvcnMgd2hlbiBidWlsdCBhcyBh
-IHN0YW5kYWxvbmUgcGFja2FnZS4KPiAKPiBbMV0gZjI0ODZhNmNmOSBwYWNrYWdlL3B0aHJlYWRw
-b29sOiBuZXcgcGFja2FnZQo+IAo+IEZpeGVzOiBodHRwczovL2F1dG9idWlsZC5idWlsZHJvb3Qu
-b3JnL3Jlc3VsdHMvMzVhLzM1YWExMDBkNzJjNjg3NTM1MGFkMTBjNTdmMDI4ZjA0MDUyY2JmNzkK
-PiBTaWduZWQtb2ZmLWJ5OiBUaG9tYXMgUGVyYWxlIDx0aG9tYXMucGVyYWxlQG1pbmQuYmU+CgpT
-ZXJpZXMgYXBwbGllZCB0byBtYXN0ZXIsIHRoYW5rcy4KCkJlc3QgcmVnYXJkcywKUm9tYWluCgoK
-PiAtLS0KPiAgcGFja2FnZS9wdGhyZWFkcG9vbC9Db25maWcuaW4gfCA0ICsrKysKPiAgcGFja2Fn
-ZS94bm5wYWNrL0NvbmZpZy5pbiAgICAgfCAyICstCj4gIDIgZmlsZXMgY2hhbmdlZCwgNSBpbnNl
-cnRpb25zKCspLCAxIGRlbGV0aW9uKC0pCj4gCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvcHRocmVh
-ZHBvb2wvQ29uZmlnLmluIGIvcGFja2FnZS9wdGhyZWFkcG9vbC9Db25maWcuaW4KPiBpbmRleCAx
-OTRhZTMzZjg1Li44ZDE2M2IxNmRlIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvcHRocmVhZHBvb2wv
-Q29uZmlnLmluCj4gKysrIGIvcGFja2FnZS9wdGhyZWFkcG9vbC9Db25maWcuaW4KPiBAQCAtMSw4
-ICsxLDEyIEBACj4gIGNvbmZpZyBCUjJfUEFDS0FHRV9QVEhSRUFEUE9PTAo+ICAJYm9vbCAicHRo
-cmVhZHBvb2wiCj4gKwlkZXBlbmRzIG9uIEJSMl9UT09MQ0hBSU5fSEFTX1RIUkVBRFMKPiAgCXNl
-bGVjdCBCUjJfUEFDS0FHRV9GWERJVgo+ICAJaGVscAo+ICAJICBQdGhyZWFkcG9vbCBpcyBhIHBv
-cnRhYmxlIGFuZCBlZmZpY2llbnQgdGhyZWFkIHBvb2wKPiAgCSAgaW1wbGVtZW50YXRpb24uCj4g
-IAo+ICAJICBodHRwczovL2dpdGh1Yi5jb20vTWFyYXR5c3pjemEvcHRocmVhZHBvb2wKPiArCj4g
-K2NvbW1lbnQgInB0aHJlYWRwb29sIG5lZWRzIGEgdG9vbGNoYWluIHcvIHRocmVhZHMiCj4gKwkg
-IGRlcGVuZHMgb24gIUJSMl9UT09MQ0hBSU5fSEFTX1RIUkVBRFMKPiBkaWZmIC0tZ2l0IGEvcGFj
-a2FnZS94bm5wYWNrL0NvbmZpZy5pbiBiL3BhY2thZ2UveG5ucGFjay9Db25maWcuaW4KPiBpbmRl
-eCBlNGI5MmY2MWU4Li43OTRjNWM0N2QyIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UveG5ucGFjay9D
-b25maWcuaW4KPiArKysgYi9wYWNrYWdlL3hubnBhY2svQ29uZmlnLmluCj4gQEAgLTksNyArOSw3
-IEBAIGNvbmZpZyBCUjJfUEFDS0FHRV9YTk5QQUNLCj4gIAlkZXBlbmRzIG9uIEJSMl9QQUNLQUdF
-X1hOTlBBQ0tfQVJDSF9TVVBQT1JUUwo+ICAJZGVwZW5kcyBvbiBCUjJfSU5TVEFMTF9MSUJTVERD
-UFAKPiAgCWRlcGVuZHMgb24gQlIyX1RPT0xDSEFJTl9HQ0NfQVRfTEVBU1RfNF85ICMgQysrMTQK
-PiAtCWRlcGVuZHMgb24gQlIyX1RPT0xDSEFJTl9IQVNfVEhSRUFEUyAjIGNwdWluZm8KPiArCWRl
-cGVuZHMgb24gQlIyX1RPT0xDSEFJTl9IQVNfVEhSRUFEUyAjIGNwdWluZm8sIHB0aHJlYWRwb29s
-Cj4gIAlzZWxlY3QgQlIyX1BBQ0tBR0VfQ1BVSU5GTwo+ICAJc2VsZWN0IEJSMl9QQUNLQUdFX0ZQ
-MTYKPiAgCXNlbGVjdCBCUjJfUEFDS0FHRV9GWERJVgoKX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RA
-YnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5m
-by9idWlsZHJvb3QK
+commit: https://git.buildroot.net/buildroot/commit/?id=ec12da7384b10344cae3835bb4e7aa43e7d01b21
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+On the autobuilder the following build error would appear for the
+libzenoh-pico package when the option BR2_ENABLE_RUNTIME_DEBUG is
+enabled:
+
+```
+[  1%] Building C object CMakeFiles/zenohpico_shared.dir/src/api/encoding.c.o
+In function '_z_encoding_convert_into_string',
+    inlined from 'z_encoding_to_string' at /workdir/instance-0/output-1/build/libzenoh-pico-1.2.1/src/api/encoding.c:261:5:
+/workdir/instance-0/output-1/build/libzenoh-pico-1.2.1/src/api/encoding.c:203:15: error: 'strncat' output truncated before terminating nul copying 1 byte from a string of the same length [-Werror=stringop-truncation]
+  203 |         (void)strncat(value, &sep, 1);
+      |               ^~~~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+```
+
+This error can be reproduced with:
+
+```
+cat >.config <<EOF
+BR2_aarch64=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+BR2_PACKAGE_LIBZENOH_PICO=y
+BR2_ENABLE_RUNTIME_DEBUG=y
+EOF
+make olddefconfig
+make libzenoh-pico
+```
+
+This patch include the upstream commit [1] that fixes this issue.
+
+[1] https://github.com/eclipse-zenoh/zenoh-pico/commit/60e635cbb1dc6be8eda559a913d4689845f0d62e
+
+Fixes: https://autobuild.buildroot.org/results/0c4/0c4644b17646d3ec482f0a4cf02d6fde19db2c99
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+---
+ .../0002-fix-compilation-issues.patch              | 199 +++++++++++++++++++++
+ 1 file changed, 199 insertions(+)
+
+diff --git a/package/libzenoh-pico/0002-fix-compilation-issues.patch b/package/libzenoh-pico/0002-fix-compilation-issues.patch
+new file mode 100644
+index 0000000000..f9ff5bf506
+--- /dev/null
++++ b/package/libzenoh-pico/0002-fix-compilation-issues.patch
+@@ -0,0 +1,199 @@
++From 584e3d2cf8e879e5ad042f742a3d8656d7d98ed7 Mon Sep 17 00:00:00 2001
++From: Jean-Roland Gosse <jean.roland.gosse@gmail.com>
++Date: Thu, 10 Jul 2025 14:37:00 +0200
++Subject: [PATCH] Fix compilation issues (#986)
++
++* fix: compilation issues
++
++* fix: stringop-overflow
++
++* doc: add comment to _z_str_append function
++
++Upstream: https://github.com/eclipse-zenoh/zenoh-pico/commit/60e635cbb1dc6be8eda559a913d4689845f0d62e
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++---
++ include/zenoh-pico/utils/string.h | 8 ++++++++
++ src/api/encoding.c                | 4 ++--
++ src/protocol/codec/declarations.c | 4 ++++
++ src/protocol/codec/transport.c    | 3 ++-
++ src/protocol/config.c             | 8 +++-----
++ src/session/rx.c                  | 3 +++
++ src/transport/multicast/rx.c      | 4 ++++
++ src/transport/unicast/rx.c        | 4 ++++
++ 8 files changed, 30 insertions(+), 8 deletions(-)
++
++diff --git a/include/zenoh-pico/utils/string.h b/include/zenoh-pico/utils/string.h
++index e4ffd69d..2f56cb79 100644
++--- a/include/zenoh-pico/utils/string.h
+++++ b/include/zenoh-pico/utils/string.h
++@@ -18,6 +18,7 @@
++ #include <stdbool.h>
++ #include <stddef.h>
++ #include <stdint.h>
+++#include <string.h>
++ 
++ #ifdef __cplusplus
++ extern "C" {
++@@ -63,6 +64,13 @@ size_t _z_strcnt(char const *haystack_start, const char *harstack_end, const cha
++ 
++ size_t _z_str_startswith(const char *s, const char *needle);
++ 
+++// Must be used on a null terminated string with str[strlen(str) + 1] being valid memory.
+++static inline void _z_str_append(char *str, const char c) {
+++    size_t len = strlen(str);
+++    str[len] = c;
+++    str[len + 1] = '\0';
+++}
+++
++ #ifdef __cplusplus
++ }
++ #endif
++diff --git a/src/api/encoding.c b/src/api/encoding.c
++index b4ff4cb1..16a5b9ff 100644
++--- a/src/api/encoding.c
+++++ b/src/api/encoding.c
++@@ -19,6 +19,7 @@
++ #include <string.h>
++ 
++ #include "zenoh-pico.h"
+++#include "zenoh-pico/utils/string.h"
++ 
++ #if Z_FEATURE_ENCODING_VALUES == 1
++ #define ENCODING_SCHEMA_SEPARATOR ';'
++@@ -196,11 +197,10 @@ static z_result_t _z_encoding_convert_into_string(const z_loaned_encoding_t *enc
++         return _Z_ERR_SYSTEM_OUT_OF_MEMORY;
++     }
++     // Copy prefix
++-    char sep = ENCODING_SCHEMA_SEPARATOR;
++     (void)strncpy(value, prefix, prefix_len);
++     // Copy schema and separator
++     if (has_schema) {
++-        (void)strncat(value, &sep, 1);
+++        _z_str_append(value, ENCODING_SCHEMA_SEPARATOR);
++         (void)strncat(value, _z_string_data(&encoding->schema), _z_string_len(&encoding->schema));
++     }
++     // Fill container
++diff --git a/src/protocol/codec/declarations.c b/src/protocol/codec/declarations.c
++index 905aad39..2146537e 100644
++--- a/src/protocol/codec/declarations.c
+++++ b/src/protocol/codec/declarations.c
++@@ -163,6 +163,10 @@ z_result_t _z_declaration_encode(_z_wbuf_t *wbf, const _z_declaration_t *decl) {
++         case _Z_DECL_FINAL: {
++             ret = _z_decl_final_encode(wbf);
++         } break;
+++
+++        default:
+++            ret = _Z_ERR_MESSAGE_SERIALIZATION_FAILED;
+++            break;
++     }
++     return ret;
++ }
++diff --git a/src/protocol/codec/transport.c b/src/protocol/codec/transport.c
++index 894fb41d..51830cd1 100644
++--- a/src/protocol/codec/transport.c
+++++ b/src/protocol/codec/transport.c
++@@ -217,11 +217,12 @@ z_result_t _z_init_encode(_z_wbuf_t *wbf, uint8_t header, const _z_t_msg_init_t
++ }
++ 
++ z_result_t _z_init_decode_ext(_z_msg_ext_t *extension, void *ctx) {
+++    _ZP_UNUSED(ctx);
++     z_result_t ret = _Z_RES_OK;
++-    _z_t_msg_init_t *msg = (_z_t_msg_init_t *)ctx;
++     if (false) {
++ #if Z_FEATURE_FRAGMENTATION == 1
++     } else if (_Z_EXT_FULL_ID(extension->_header) == _Z_MSG_EXT_ID_INIT_PATCH) {
+++        _z_t_msg_init_t *msg = (_z_t_msg_init_t *)ctx;
++         msg->_patch = (uint8_t)extension->_body._zint._val;
++ #endif
++     } else if (_Z_MSG_EXT_IS_MANDATORY(extension->_header)) {
++diff --git a/src/protocol/config.c b/src/protocol/config.c
++index 1cfcff9c..245e7c3d 100644
++--- a/src/protocol/config.c
+++++ b/src/protocol/config.c
++@@ -21,6 +21,7 @@
++ 
++ #include "zenoh-pico/collections/string.h"
++ #include "zenoh-pico/utils/pointers.h"
+++#include "zenoh-pico/utils/string.h"
++ 
++ z_result_t _z_config_init(_z_config_t *ps) {
++     _z_str_intmap_init(ps);
++@@ -142,15 +143,12 @@ size_t _z_str_intmap_strlen(const _z_str_intmap_t *s, uint8_t argc, _z_str_intma
++ void _z_str_intmap_onto_str(char *dst, size_t dst_len, const _z_str_intmap_t *s, uint8_t argc,
++                             _z_str_intmapping_t argv[]) {
++     size_t len = dst_len;
++-    const char lsep = INT_STR_MAP_LIST_SEPARATOR;
++-    const char ksep = INT_STR_MAP_KEYVALUE_SEPARATOR;
++-
++     dst[0] = '\0';
++     for (size_t i = 0; i < argc; i++) {
++         char *v = _z_str_intmap_get(s, argv[i]._key);
++         if (v != NULL) {
++             if (len > (size_t)0) {
++-                (void)strncat(dst, &lsep, 1);  // List separator
+++                _z_str_append(dst, INT_STR_MAP_LIST_SEPARATOR);  // List separator
++                 len = len - (size_t)1;
++             }
++ 
++@@ -159,7 +157,7 @@ void _z_str_intmap_onto_str(char *dst, size_t dst_len, const _z_str_intmap_t *s,
++                 len = len - strlen(argv[i]._str);
++             }
++             if (len > (size_t)0) {
++-                (void)strncat(dst, &ksep, 1);  // KeyValue separator
+++                _z_str_append(dst, INT_STR_MAP_KEYVALUE_SEPARATOR);  // KeyValue separator
++                 len = len - (size_t)1;
++             }
++             if (len > (size_t)0) {
++diff --git a/src/session/rx.c b/src/session/rx.c
++index d85f9d38..8556ce1d 100644
++--- a/src/session/rx.c
+++++ b/src/session/rx.c
++@@ -93,6 +93,8 @@ static z_result_t _z_handle_declare(_z_session_t *zn, _z_n_msg_declare_t *decl,
++ 
++ static z_result_t _z_handle_request(_z_session_rc_t *zsrc, _z_session_t *zn, _z_n_msg_request_t *req,
++                                     z_reliability_t reliability) {
+++    _ZP_UNUSED(reliability);
+++    _ZP_UNUSED(zsrc);
++     switch (req->_tag) {
++         case _Z_REQUEST_QUERY:
++ #if Z_FEATURE_QUERYABLE == 1
++@@ -158,6 +160,7 @@ static z_result_t _z_handle_response(_z_session_t *zn, _z_n_msg_response_t *resp
++     }
++ #else
++     _z_n_msg_response_clear(resp);
+++    _ZP_UNUSED(zn);
++ #endif
++     return _Z_RES_OK;
++ }
++diff --git a/src/transport/multicast/rx.c b/src/transport/multicast/rx.c
++index 121406d0..47269b1a 100644
++--- a/src/transport/multicast/rx.c
+++++ b/src/transport/multicast/rx.c
++@@ -294,6 +294,10 @@ static z_result_t _z_multicast_handle_fragment_inner(_z_transport_multicast_t *z
++         *dbuf_state = _Z_DBUF_STATE_NULL;
++     }
++ #else
+++    _ZP_UNUSED(ztm);
+++    _ZP_UNUSED(header);
+++    _ZP_UNUSED(msg);
+++    _ZP_UNUSED(entry);
++     _Z_INFO("Fragment dropped because fragmentation feature is deactivated");
++ #endif
++     return ret;
++diff --git a/src/transport/unicast/rx.c b/src/transport/unicast/rx.c
++index c5ccf932..43e1b4c8 100644
++--- a/src/transport/unicast/rx.c
+++++ b/src/transport/unicast/rx.c
++@@ -248,6 +248,10 @@ static z_result_t _z_unicast_handle_fragment_inner(_z_transport_unicast_t *ztu,
++         *dbuf_state = _Z_DBUF_STATE_NULL;
++     }
++ #else
+++    _ZP_UNUSED(ztu);
+++    _ZP_UNUSED(header);
+++    _ZP_UNUSED(msg);
+++    _ZP_UNUSED(peer);
++     _Z_INFO("Fragment dropped because fragmentation feature is deactivated");
++ #endif
++     return ret;
++-- 
++2.50.1
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
