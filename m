@@ -1,51 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC1EBC87FCF
-	for <buildroot@archiver.kernel.org>; Sat,  9 Aug 2025 14:20:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC70AC87FCB
+	for <buildroot@archiver.kernel.org>; Sat,  9 Aug 2025 14:20:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 77EAD815CD;
-	Sat,  9 Aug 2025 14:20:17 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Qctsx743-3C9; Sat,  9 Aug 2025 14:20:16 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8AAF281319
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8AAF281319;
-	Sat,  9 Aug 2025 14:20:16 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 8AF2C21B
- for <buildroot@buildroot.org>; Sat,  9 Aug 2025 14:20:15 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 71B3260BC4
- for <buildroot@buildroot.org>; Sat,  9 Aug 2025 14:20:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 993CF60C22;
+	Sat,  9 Aug 2025 14:20:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BpY2MDM0BQZn for <buildroot@buildroot.org>;
- Sat,  9 Aug 2025 14:20:14 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A7EF560BE5
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A7EF560BE5
- for <buildroot@buildroot.org>; Sat,  9 Aug 2025 14:20:14 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9468E86EB2; Sat,  9 Aug 2025 14:20:14 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 9 Aug 2025 16:08:51 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ab470fbc8eb1053548c3d33e807db84fd5af1445
-X-Git-Newrev: 866d89dfeb93cf8067ef66db6147bdd9fe37cda0
-X-Patchwork-Hint: ignore
-Message-Id: <20250809142014.9468E86EB2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mpd: update to version 0.24.5
+ id Xa0kX9N65V9r; Sat,  9 Aug 2025 14:20:52 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD35660BE5
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id CD35660BE5;
+	Sat,  9 Aug 2025 14:20:52 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 137A11D3
+ for <buildroot@buildroot.org>; Sat,  9 Aug 2025 14:20:52 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 04FDF82151
+ for <buildroot@buildroot.org>; Sat,  9 Aug 2025 14:20:52 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id R88f5PGYehvl for <buildroot@buildroot.org>;
+ Sat,  9 Aug 2025 14:20:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5E39F8214A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5E39F8214A
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5E39F8214A
+ for <buildroot@buildroot.org>; Sat,  9 Aug 2025 14:20:51 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 2EC7519F5A5;
+ Sat,  9 Aug 2025 16:20:48 +0200 (CEST)
+Received: from 2001:18c0:a22:bf00:5c2b:f296:f108:6612
+ via 2001:18c0:a22:bf00:5c2b:f296:f108:6612 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 09 Aug 2025 16:20:48 +0200
+MIME-Version: 1.0
+Date: Sat, 09 Aug 2025 16:20:48 +0200
+To: Andreas Ziegler <br015@umbiko.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250808115703.580212-1-br015@umbiko.net>
+References: <20250808115703.580212-1-br015@umbiko.net>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <a79681d2a00b3cb951ba642f5f262292@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1754749249;
+ bh=/PQo+dQO4VVyMiW5A8aza9dQ+r6D+TK1qj+TOIC/2hs=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=frfF05mlWuPLslvDhDH5xr7vLsDA+F8pYVgo387TJf2HSYvxYP5Z7R1JCXi6gRUj9
+ X5ha+qa9p/1abZDFA/7g36m1fgpDusRHY7gu/u29BwXoLKcHRQnNMcfWbOZTkHQJXe
+ jWR1ottxyOb1UpwJwLD0lLGnrvct+Wqk3eedVuBOnecZdCYsODZWCxu+wKb1HNsmRQ
+ HLAukVJsm7/2e9YvRfM8nS4h3pulViyeHoOoMqSsYdcN/4lRLQIJKZSvjuXNJVebZt
+ qsLQMcZXq4WMFT1Wh6lBkzgfYUvX2ZLgLjjDCrk0QRPSntCZ0pQE0H//2+t50FXOXk
+ PZEu4JmiLCSdA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=frfF05ml
+Subject: Re: [Buildroot] [PATCH 1/1] package/mpd: update to version 0.24.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,60 +83,32 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=866d89dfeb93cf8067ef66db6147bdd9fe37cda0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 08/08/2025 13:57, Andreas Ziegler wrote:
+> Version 0.24.5 change log:
+> 
+> * database
+>   - fix disappearing playlist files
+> * decoder
+>   - ffmpeg: handle "*.aif" files
+>   - mpg123: add option "full_scan"
+>   - mpg123: support seeking on remote files
+>   - mpg123: work around libmpg123 ID3 corruption bug
+>   - sidplay: add support for PSID files
+> * output
+>   - pipewire: fix resuming playback after it was paused by "single" 
+> mode
+> * Windows
+>   - fix libfmt error "what(): invalid utf8"
+> 
+> Tested-by: Andreas Ziegler <br015@umbiko.net>
+> Signed-off-by: Andreas Ziegler <br015@umbiko.net>
 
-Version 0.24.5 change log:
-
-* database
-  - fix disappearing playlist files
-* decoder
-  - ffmpeg: handle "*.aif" files
-  - mpg123: add option "full_scan"
-  - mpg123: support seeking on remote files
-  - mpg123: work around libmpg123 ID3 corruption bug
-  - sidplay: add support for PSID files
-* output
-  - pipewire: fix resuming playback after it was paused by "single" mode
-* Windows
-  - fix libfmt error "what(): invalid utf8"
-
-Tested-by: Andreas Ziegler <br015@umbiko.net>
-Signed-off-by: Andreas Ziegler <br015@umbiko.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/mpd/mpd.hash | 2 +-
- package/mpd/mpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index dd3ac9782f..4c2db47823 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  86035d6c63af32afa77fd5eb5ecd1c6afaef7cc352b28064edf51eea60f40d66  mpd-0.24.4.tar.xz
-+sha256  69dfcba5c99c8d828d8f35dfb31eb0a4e34ce3813f54666af4d8247558160a13  mpd-0.24.5.tar.xz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index e41c03ef08..c04408054e 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- MPD_VERSION_MAJOR = 0.24
--MPD_VERSION = $(MPD_VERSION_MAJOR).4
-+MPD_VERSION = $(MPD_VERSION_MAJOR).5
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = https://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf fmt
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
