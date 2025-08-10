@@ -4,102 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BB60C87FDA
-	for <buildroot@archiver.kernel.org>; Sun, 10 Aug 2025 20:48:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3E43C87FCF
+	for <buildroot@archiver.kernel.org>; Sun, 10 Aug 2025 22:15:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E7E006108E;
-	Sun, 10 Aug 2025 20:48:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1D0E461088;
+	Sun, 10 Aug 2025 22:15:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id asmWs3qbsjOh; Sun, 10 Aug 2025 20:48:06 +0000 (UTC)
+ id rsILGSI0wFZE; Sun, 10 Aug 2025 22:15:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C00A6108C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 00517610E6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1C00A6108C;
-	Sun, 10 Aug 2025 20:48:06 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 33CC6154
- for <buildroot@buildroot.org>; Sun, 10 Aug 2025 20:48:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 00517610E6;
+	Sun, 10 Aug 2025 22:15:23 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 41DDA31
+ for <buildroot@buildroot.org>; Sun, 10 Aug 2025 22:15:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1A83F6107F
- for <buildroot@buildroot.org>; Sun, 10 Aug 2025 20:48:05 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2839E610E9
+ for <buildroot@buildroot.org>; Sun, 10 Aug 2025 22:15:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8cwGl5VDkVHW for <buildroot@buildroot.org>;
- Sun, 10 Aug 2025 20:48:04 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 12C8061083
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 12C8061083
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
- [IPv6:2a00:1450:4864:20::332])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 12C8061083
- for <buildroot@buildroot.org>; Sun, 10 Aug 2025 20:48:03 +0000 (UTC)
-Received: by mail-wm1-x332.google.com with SMTP id
- 5b1f17b1804b1-459d4d7c745so34906375e9.1
- for <buildroot@buildroot.org>; Sun, 10 Aug 2025 13:48:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1754858882; x=1755463682;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=jw2vfwIyad1tmGYgEQ8gBHxs9rPHQJC0qyNVCsvNnUg=;
- b=JThjhavzt1LrQEFHPyTxDqFW54mjeRpJJ/vMBP9kzLjxJXWwgmxTkLRmKqEi5kSpV2
- Fduqt0OGaFBTwNZ3RFd0oU8kc3U0wh1w4lWyVRuQf8q0KI7MJolkXDX6GqVptf3eHKBM
- qNK62v3K+inble6dyIrVJPBbVZ2wSFm7EHGYe9ORJ05yHP4A6CUlcLuypI7JsiK5YbbA
- wgduMD+GLUvFoTs2JglEo2u/z1KvCplEevK7emgapgrO6h311icQZ5VAOLy8ytCNUurK
- Y4+59mYelHtDmQOFZPYk+sbmAJuemiM1iwhSr+EJkybeBU4AwGagOVPEgX2tv6VqfiAV
- wVPQ==
-X-Gm-Message-State: AOJu0YwbrpH6MT19MjXXwqHWLNzDyiZT7Yl6Kdlkz0iUXHDBquLOwKPW
- nT3juoxbgRx2FPuugJwvepQf5XUzbnlhHHPTsXb+vD7azyEYj0Fk1TTb8ZHIt1WlVoc=
-X-Gm-Gg: ASbGncs7MKUQrZfvKeHXGUFktLoSDAybjZ4T4TrSYwoBcGuE16tkiPgM6OSVCy0/65P
- vDFsrhjpsLZNWO/xsasjGiAEN7WI7fZGHxdeIwoO6UV+drwCdhBBzljGZAf7BbfM+fu4OFJhUnB
- qqPjqwnmKJhgvEmelR34o9/p7PTb+vWotcEMd+hs/LrZKSpkCuDhR/P67YqZWYUnN2kG0JfQvVs
- ENp2ZKtxt0oIcOQNF7BdNgLgSAgdz8e/2H9pNP1u4hgzqgxb5A/oCka2uWUy8CjeNadunlxi/g7
- tR15A44+HhLSat57qAJnDZ2avBgsNTo9QGr2SNXC3Ibj4IhqzlP7JdX1oEMetNJRKqJXd/h6ARY
- IYKKBN5W679Dp48vN9wpDmBjQMKoWSs2a3A23smt0bX/0lobq9w9k+FvOG8toQU1t3cK9g5MOX3
- OVPDI3vYeTuH+VyX6qRqETm0N2ZCefsAcCt11d1hcxZkfbu93CnmxXLdXO4pSZ
-X-Google-Smtp-Source: AGHT+IGpi+vxwhq8m7wtE4Su1UTy4EQHPOBPMmF5UXyxafnbiylrAX2KJNNs54PK+cWOgep5R49AxA==
-X-Received: by 2002:a05:600c:4f41:b0:458:a847:671e with SMTP id
- 5b1f17b1804b1-459f4f141b2mr68537185e9.23.1754858882031; 
- Sun, 10 Aug 2025 13:48:02 -0700 (PDT)
-Received: from ?IPV6:2a01:cb05:949d:5800:c97d:3b73:4a46:d823?
- (2a01cb05949d5800c97d3b734a46d823.ipv6.abo.wanadoo.fr.
- [2a01:cb05:949d:5800:c97d:3b73:4a46:d823])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-459db3048bdsm321359075e9.29.2025.08.10.13.48.01
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 10 Aug 2025 13:48:01 -0700 (PDT)
-Message-ID: <7b6da85a-a733-4731-8634-af94c9556d6d@smile.fr>
-Date: Sun, 10 Aug 2025 22:48:01 +0200
+ id g_Vbb9etL8AE for <buildroot@buildroot.org>;
+ Sun, 10 Aug 2025 22:15:21 +0000 (UTC)
+X-Greylist: delayed 425 seconds by postgrey-1.37 at util1.osuosl.org;
+ Sun, 10 Aug 2025 22:15:19 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org BE0D561088
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE0D561088
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.113;
+ helo=smtpcmd10113.aruba.it;
+ envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
+Received: from smtpcmd10113.aruba.it (smtpcmd10113.aruba.it [62.149.156.113])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BE0D561088
+ for <buildroot@buildroot.org>; Sun, 10 Aug 2025 22:15:19 +0000 (UTC)
+Received: from localhost.localdomain ([31.45.225.9]) by Aruba SMTP with ESMTPSA
+ id lED5uIGgG1ugblED5uf9RZ; Mon, 11 Aug 2025 00:08:11 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: buildroot@buildroot.org
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Mon, 11 Aug 2025 00:08:07 +0200
+Message-ID: <20250810220807.131029-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Yegor Yefremov <yegorslists@googlemail.com>
-Cc: buildroot@buildroot.org, Daniel Sangue <daniel.sangue@sangue.ch>
-References: <20250602101435.764559-1-yegorslists@googlemail.com>
- <e7f0be5f-50d8-4c63-970a-a3211702a431@smile.fr>
- <CAGm1_kuHMGo-LF4PQbuvP+=vGvH+UdagGk_7g7Cszp2+9qqMHw@mail.gmail.com>
-Content-Language: fr, en-US
-In-Reply-To: <CAGm1_kuHMGo-LF4PQbuvP+=vGvH+UdagGk_7g7Cszp2+9qqMHw@mail.gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1754858882; x=1755463682; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=jw2vfwIyad1tmGYgEQ8gBHxs9rPHQJC0qyNVCsvNnUg=;
- b=u8Lv6gJfnzAMeiE2qEH3teqX16PDxLkgJiGzZN/i+mbAEGm2D/SGz2mlLCzAv9bLWY
- lujgrEG6cDo4SjowAZE55zUq5XXTjrdTngh7Qek6O670d/1oGWMr4plISAllPFMFZKMi
- Cfdc690ETNRy0u4Z7IY6++wxPu0acKTdzf+Yo=
+X-CMAE-Envelope: MS4xfGeRGDVEsWsbrOTgF4QAwXVxzTMtOiJuml8YRJRz6//mdyfq0/joUdXrQtXRd7QZPUSYCliAX3dOyTIIARARrIZF4VDnbkMMTG0E36rGjgURet6nBxt9
+ 5rXbptlVJis1fkiM6eqR/cuMZS9wCO91ZjGnap5mGHp1b7+2KvkhwlTzH1DhRtdIFHHcUkgetAum82a9jAgionJWcIpJPyfGyTYBMPFqVuvFCd7XvrumjLBa
+ 4Bg4iCdlmTCGxyd+6nCp/r8Q7MZSasCtXoU2Z00n4QA=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1754863691; bh=sCW3l9DBSRySWIdsmxyJ+6C83IMFNKH7MBwIetxX+RA=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=k5VBItLJCsffN2UB6jWYgrClvi/W3+nFmb30P7aIlqLY3VT6zOWpGe5NGt8Cn7kpi
+ DCmyI3kv0JbJ3i/NeNCX8Bxa0m3x3Qu0et94X2TP335zpaeJFu/gfWB/eX/vYEllFJ
+ ARxxMtYBB6XQVio1ELMf/BGJFcoCYEgkhjbglldRZUzJqv48JYGpSgzJ6EwBUG0wrj
+ dJwNOyfop9AqCyhVqJZz1NmIuwa9lbmuLe4FTiP7IKF+Aat2ZdWxyw93qBB/rQ8UFD
+ IfWtrCb1EOmd8M+k6LWRUcWAznuKCyPpfoxrDDtQ/NSZpKNhgvL3GaNLQOplV66a70
+ t5xtwlbvVRd+w==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=smile.fr
+ dmarc=pass (p=none dis=none)
+ header.from=benettiengineering.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
- header.a=rsa-sha256 header.s=google header.b=u8Lv6gJf
-Subject: Re: [Buildroot] [PATCH] package/libftdi1: fix static building
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=k5VBItLJ
+Subject: [Buildroot] [PATCH] Update Benetti Engineering URLs to new ones
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -111,56 +80,171 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Romain Naour via buildroot <buildroot@buildroot.org>
-Reply-To: Romain Naour <romain.naour@smile.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gWWVnb3IsCgpMZSAxMC8wOC8yMDI1IMOgIDIyOjQyLCBZZWdvciBZZWZyZW1vdiBhIMOp
-Y3JpdMKgOgo+IEhpIFJvbWFpbiwKPiAKPiBPbiBTdW4sIEF1ZyAxMCwgMjAyNSBhdCA4OjQy4oCv
-UE0gUm9tYWluIE5hb3VyIDxyb21haW4ubmFvdXJAc21pbGUuZnI+IHdyb3RlOgo+Pgo+PiBIZWxs
-byBZZWdvciwgQWxsLAo+Pgo+PiBMZSAwMi8wNi8yMDI1IMOgIDEyOjE0LCB5ZWdvcnNsaXN0c0Bn
-b29nbGVtYWlsLmNvbSBhIMOpY3JpdCA6Cj4+PiBGcm9tOiBZZWdvciBZZWZyZW1vdiA8eWVnb3Jz
-bGlzdHNAZ29vZ2xlbWFpbC5jb20+Cj4+Pgo+Pj4gUmVzdG9yZSB0aGUgZm9sbG93aW5nIHBhdGNo
-LCBhcyB0aGUgdXBzdHJlYW0gc3RpbGwgY2Fubm90IHByb2R1Y2Ugc3RhdGljCj4+PiBvbmx5IGxp
-YnJhcmllczoKPj4+Cj4+PiAwMDAxLWNtYWtlLXVzZS10aGUtc3RhbmRhcmQtQ01ha2UtZmxhZy10
-by1kcml2ZS10aGUtc2hhcmUucGF0Y2gKPj4+Cj4+PiBGaXhlczoKPj4+Cj4+PiBodHRwczovL2F1
-dG9idWlsZC5idWlsZHJvb3Qub3JnL3Jlc3VsdHMvMDc3NDRiNjdiNTNkMmIyNWU3OGUwZjYxYjUx
-MWEzNDI2NzdlMmFiYi8KPj4+Cj4+PiBTaWduZWQtb2ZmLWJ5OiBZZWdvciBZZWZyZW1vdiA8eWVn
-b3JzbGlzdHNAZ29vZ2xlbWFpbC5jb20+Cj4+PiAtLS0KPj4+ICAuLi5hbmRhcmQtQ01ha2UtZmxh
-Zy10by1kcml2ZS10aGUtc2hhcmUucGF0Y2ggfCA5MyArKysrKysrKysrKysrKysrKysrCj4+PiAg
-MSBmaWxlIGNoYW5nZWQsIDkzIGluc2VydGlvbnMoKykKPj4+ICBjcmVhdGUgbW9kZSAxMDA2NDQg
-cGFja2FnZS9saWJmdGRpMS8wMDAxLWNtYWtlLXVzZS10aGUtc3RhbmRhcmQtQ01ha2UtZmxhZy10
-by1kcml2ZS10aGUtc2hhcmUucGF0Y2gKPj4+Cj4+PiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9saWJm
-dGRpMS8wMDAxLWNtYWtlLXVzZS10aGUtc3RhbmRhcmQtQ01ha2UtZmxhZy10by1kcml2ZS10aGUt
-c2hhcmUucGF0Y2ggYi9wYWNrYWdlL2xpYmZ0ZGkxLzAwMDEtY21ha2UtdXNlLXRoZS1zdGFuZGFy
-ZC1DTWFrZS1mbGFnLXRvLWRyaXZlLXRoZS1zaGFyZS5wYXRjaAo+Pj4gbmV3IGZpbGUgbW9kZSAx
-MDA2NDQKPj4+IGluZGV4IDAwMDAwMDAwMDAuLjg1NjU4N2I3YTYKPj4+IC0tLSAvZGV2L251bGwK
-Pj4+ICsrKyBiL3BhY2thZ2UvbGliZnRkaTEvMDAwMS1jbWFrZS11c2UtdGhlLXN0YW5kYXJkLUNN
-YWtlLWZsYWctdG8tZHJpdmUtdGhlLXNoYXJlLnBhdGNoCj4+PiBAQCAtMCwwICsxLDkzIEBACj4+
-PiArRnJvbSBiMGVhNTc3M2M5MGUzNjY1NGRhMzc1NjJhMDNlNjJkOWE2NjU3NWJmIE1vbiBTZXAg
-MTcgMDA6MDA6MDAgMjAwMQo+Pj4gK0Zyb206IFNhbXVlbCBNYXJ0aW4gPHMubWFydGluNDlAZ21h
-aWwuY29tPgo+Pj4gK0RhdGU6IFN1biwgMjUgSmFuIDIwMTUgMDk6NDU6MDQgKzAxMDAKPj4+ICtT
-dWJqZWN0OiBbUEFUQ0hdIGNtYWtlOiB1c2UgdGhlIHN0YW5kYXJkIENNYWtlIGZsYWcgdG8gZHJp
-dmUgdGhlIHNoYXJlZCBvYmplY3QKPj4+ICsgYnVpbGQKPj4+ICsKPj4+ICtSZW1vdmUgdGhlIFNU
-QVRJQ0xJQlMgQ01ha2Ugb3B0aW9uIChhbmQgdGhlIGNvZGUgaGFuZGxpbmcgaXQpIGFuZCBsZXQK
-Pj4+ICt0aGUgc3RhbmRhcmQgQ01ha2UgZmxhZ3MgZHJpdmUgdGhlIHNoYXJlZCBvYmplY3QgYnVp
-bGQuCj4+PiArCj4+PiArU2lnbmVkLW9mZi1ieTogU2FtdWVsIE1hcnRpbiA8cy5tYXJ0aW40OUBn
-bWFpbC5jb20+Cj4+PiArW0ZhYnJpY2U6IHVwZGF0ZSBmb3IgMS41XQo+Pj4gK1NpZ25lZC1vZmYt
-Ynk6IEZhYnJpY2UgRm9udGFpbmUgPGZvbnRhaW5lLmZhYnJpY2VAZ21haWwuY29tPgo+Pgo+PiBj
-aGVjay1wYWNrYWdlIHdhcm4gZHVlIHRvIG1pc3NpbmcgVXBzdHJlYW06IHRhZy4KPj4KPj4gV0FS
-TklORzoKPj4gcGFja2FnZS9saWJmdGRpMS8wMDAxLWNtYWtlLXVzZS10aGUtc3RhbmRhcmQtQ01h
-a2UtZmxhZy10by1kcml2ZS10aGUtc2hhcmUucGF0Y2g6MDoKPj4gbWlzc2luZyBVcHN0cmVhbSBp
-biB0aGUgaGVhZGVyCj4+Cj4+IFdoYXQncyB0aGUgdXBzdHJlYW0gc3RhdHVzIG9mIHRoaXMgcGF0
-Y2g/IG5vdCBhcHBsaWNhYmxlPwo+IAo+IFVwc3RyZWFtIGhhcyBub3cgYSBwcm9wZXIgc29sdXRp
-b24gWzFdIGFuZCBJIGFtIHdhaXRpbmcgZm9yIGEgcmVsZWFzZS4KPiBTbywgd2UgY2FuIGRyb3Ag
-dGhlIHBhdGNoIGZvciBub3cuCgpOaWNlLCB0aGFua3MgZm9yIHRoZSBmZWVkLWJhY2shCgpJJ2xs
-IG1hcmsgdGhpcyBwYXRjaCBhcyAic3VwZXJzZWRlZCIgc2luY2Ugd2UgYXJlIGV4cGVjdGluZyBh
-biB1cGNvbWluZyByZWxlYXNlLgoKQmVzdCByZWdhcmRzLApSb21haW4KCgo+IAo+IFsxXSBodHRw
-Oi8vZGV2ZWxvcGVyLmludHJhMm5ldC5jb20vZ2l0Lz9wPWxpYmZ0ZGk7YT1jb21taXQ7aD0yYTk5
-MjMwNmMwYWNmOTM4YjI5ZmEwY2Q1ZmJjMTYwZTI0NDI0MjA5Cj4gCj4gWWVnb3IKCl9fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5n
-IGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3Jn
-L21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+The company name was changed from "benetti-engineering-sas" to "benetti-engineering"
+to be agnostic to the company legal form. Update all GitHub and LinkedIn links
+accordingly.
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ docs/website/support.html                                    | 2 +-
+ package/rtl8188eu/Config.in                                  | 2 +-
+ package/rtl8188eu/rtl8188eu.mk                               | 2 +-
+ package/rtl8723bu/Config.in                                  | 2 +-
+ package/rtl8723bu/rtl8723bu.mk                               | 2 +-
+ package/rtl8723ds/Config.in                                  | 2 +-
+ package/rtl8723ds/rtl8723ds.mk                               | 2 +-
+ package/rtl8821au/Config.in                                  | 2 +-
+ package/rtl8821au/rtl8821au.mk                               | 2 +-
+ package/sunxi-mali-utgard-driver/Config.in                   | 2 +-
+ package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.mk | 2 +-
+ 11 files changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/docs/website/support.html b/docs/website/support.html
+index 9c44980e67..81f7e863e0 100644
+--- a/docs/website/support.html
++++ b/docs/website/support.html
+@@ -139,7 +139,7 @@
+ 	    <a href="https://www.amarulasolutions.com/services/integrated-system/">
+ 	      <img src="images/amarula-solutions-logo.png" style="max-width:200px; margin-right:40px;"/>
+ 	    </a>
+-	    <a href="https://www.linkedin.com/company/benetti-engineering-sas">
++	    <a href="https://www.linkedin.com/company/benetti-engineering">
+ 	      <img src="images/benetti-engineering-logo.png" style="max-width:260px; margin-right:40px;"/>
+ 	    </a>
+ 	  </center>
+diff --git a/package/rtl8188eu/Config.in b/package/rtl8188eu/Config.in
+index 5acef3cd32..102e8d7bf7 100644
+--- a/package/rtl8188eu/Config.in
++++ b/package/rtl8188eu/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_RTL8188EU
+ 	help
+ 	  A standalone driver for the RTL8188EU USB Wi-Fi adapter.
+ 
+-	  https://github.com/benetti-engineering-sas/rtl8188eu
++	  https://github.com/benetti-engineering/rtl8188eu
+ 
+ comment "rtl8188eu needs a Linux kernel to be built"
+ 	depends on !BR2_s390x
+diff --git a/package/rtl8188eu/rtl8188eu.mk b/package/rtl8188eu/rtl8188eu.mk
+index 1ad9452f82..6161ffd5d6 100644
+--- a/package/rtl8188eu/rtl8188eu.mk
++++ b/package/rtl8188eu/rtl8188eu.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ RTL8188EU_VERSION = 702a90b02edca722cc0d139260ba02c23f406333
+-RTL8188EU_SITE = $(call github,benetti-engineering-sas,rtl8188eu,$(RTL8188EU_VERSION))
++RTL8188EU_SITE = $(call github,benetti-engineering,rtl8188eu,$(RTL8188EU_VERSION))
+ RTL8188EU_LICENSE = GPL-2.0, proprietary (rtl8188eufw.bin firmware blob)
+ RTL8188EU_LICENSE_FILES = COPYING
+ RTL8188EU_MODULE_MAKE_OPTS = CONFIG_RTL8188EU=m
+diff --git a/package/rtl8723bu/Config.in b/package/rtl8723bu/Config.in
+index 70d597d23e..2f2f96dfe5 100644
+--- a/package/rtl8723bu/Config.in
++++ b/package/rtl8723bu/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_RTL8723BU
+ 	help
+ 	  rtl8723bu wifi driver
+ 
+-	  https://github.com/benetti-engineering-sas/rtl8723bu
++	  https://github.com/benetti-engineering/rtl8723bu
+ 
+ comment "rtl8723bu needs a Linux kernel to be built"
+ 	depends on !BR2_s390x
+diff --git a/package/rtl8723bu/rtl8723bu.mk b/package/rtl8723bu/rtl8723bu.mk
+index 05447ecef9..d9719a2cad 100644
+--- a/package/rtl8723bu/rtl8723bu.mk
++++ b/package/rtl8723bu/rtl8723bu.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ RTL8723BU_VERSION = 523cb38e4c62bb181d6b95024884e938835cf8cf
+-RTL8723BU_SITE = $(call github,benetti-engineering-sas,rtl8723bu,$(RTL8723BU_VERSION))
++RTL8723BU_SITE = $(call github,benetti-engineering,rtl8723bu,$(RTL8723BU_VERSION))
+ RTL8723BU_LICENSE = GPL-2.0, proprietary (*.bin firmware blobs)
+ 
+ RTL8723BU_MODULE_MAKE_OPTS = \
+diff --git a/package/rtl8723ds/Config.in b/package/rtl8723ds/Config.in
+index 0921a55d37..018e70489d 100644
+--- a/package/rtl8723ds/Config.in
++++ b/package/rtl8723ds/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_RTL8723DS
+ 	help
+ 	  rtl8723bs wifi driver
+ 
+-	  https://github.com/benetti-engineering-sas/rtl8723ds
++	  https://github.com/benetti-engineering/rtl8723ds
+ 
+ comment "rtl8723ds needs a Linux kernel to be built"
+ 	depends on !BR2_s390x
+diff --git a/package/rtl8723ds/rtl8723ds.mk b/package/rtl8723ds/rtl8723ds.mk
+index f1b345d548..67104fd5d7 100644
+--- a/package/rtl8723ds/rtl8723ds.mk
++++ b/package/rtl8723ds/rtl8723ds.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ RTL8723DS_VERSION = 97d714fdbfc562f71f2e72e5ce6cceb8e2a8be8a
+-RTL8723DS_SITE = $(call github,benetti-engineering-sas,rtl8723ds,$(RTL8723DS_VERSION))
++RTL8723DS_SITE = $(call github,benetti-engineering,rtl8723ds,$(RTL8723DS_VERSION))
+ RTL8723DS_LICENSE = GPL-2.0
+ RTL8723DS_LICENSE_FILES = COPYING
+ 
+diff --git a/package/rtl8821au/Config.in b/package/rtl8821au/Config.in
+index 66e7334148..24ea9b8c7d 100644
+--- a/package/rtl8821au/Config.in
++++ b/package/rtl8821au/Config.in
+@@ -9,4 +9,4 @@ config BR2_PACKAGE_RTL8821AU
+ 	help
+ 	  rtl8821au wifi driver
+ 
+-	  https://github.com/benetti-engineering-sas/rtl8821au
++	  https://github.com/benetti-engineering/rtl8821au
+diff --git a/package/rtl8821au/rtl8821au.mk b/package/rtl8821au/rtl8821au.mk
+index 9ecbbbb0b2..aa900839f5 100644
+--- a/package/rtl8821au/rtl8821au.mk
++++ b/package/rtl8821au/rtl8821au.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ RTL8821AU_VERSION = d0a49ba401a8661ef0cdc4cf8850bc7c927a062c
+-RTL8821AU_SITE = $(call github,benetti-engineering-sas,rtl8821au,$(RTL8821AU_VERSION))
++RTL8821AU_SITE = $(call github,benetti-engineering,rtl8821au,$(RTL8821AU_VERSION))
+ RTL8821AU_LICENSE = GPL-2.0
+ RTL8821AU_LICENSE_FILES = LICENSE
+ 
+diff --git a/package/sunxi-mali-utgard-driver/Config.in b/package/sunxi-mali-utgard-driver/Config.in
+index ba4d1919ce..22f93d0a0e 100644
+--- a/package/sunxi-mali-utgard-driver/Config.in
++++ b/package/sunxi-mali-utgard-driver/Config.in
+@@ -36,4 +36,4 @@ config BR2_PACKAGE_SUNXI_MALI_UTGARD_DRIVER
+ 	    since the driver requires at least double buffering and
+ 	    fails to work with the default value(100).
+ 
+-	  https://github.com/giuliobenetti/sunxi-mali/blob/master/README.md
++	  https://github.com/benetti-engineering/sunxi-mali/blob/master/README.md
+diff --git a/package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.mk b/package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.mk
+index ea3bc258a6..38946aa1e4 100644
+--- a/package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.mk
++++ b/package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ SUNXI_MALI_UTGARD_DRIVER_VERSION = b47f74c92fbcbdf175a16052d1b0ce8345efc6b2
+-SUNXI_MALI_UTGARD_DRIVER_SITE = $(call github,benetti-engineering-sas,sunxi-mali,$(SUNXI_MALI_UTGARD_DRIVER_VERSION))
++SUNXI_MALI_UTGARD_DRIVER_SITE = $(call github,benetti-engineering,sunxi-mali,$(SUNXI_MALI_UTGARD_DRIVER_VERSION))
+ SUNXI_MALI_UTGARD_DRIVER_DEPENDENCIES = linux
+ SUNXI_MALI_UTGARD_DRIVER_LICENSE = GPL-2.0
+ SUNXI_MALI_UTGARD_DRIVER_LICENSE_FILES = LICENSE
+-- 
+2.43.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
