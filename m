@@ -1,107 +1,84 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5E6CC87FDA
-	for <buildroot@archiver.kernel.org>; Sun, 10 Aug 2025 20:14:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6F0BC87FCF
+	for <buildroot@archiver.kernel.org>; Sun, 10 Aug 2025 20:16:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7F80F6105A;
-	Sun, 10 Aug 2025 20:14:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B239F8293D;
+	Sun, 10 Aug 2025 20:16:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DDHQqUdGNcLi; Sun, 10 Aug 2025 20:13:58 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id D2IZmvVp_vhI; Sun, 10 Aug 2025 20:16:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 59B266104A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CA9DB82923
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 59B266104A;
-	Sun, 10 Aug 2025 20:13:58 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 23381154
- for <buildroot@buildroot.org>; Sun, 10 Aug 2025 20:13:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CA9DB82923;
+	Sun, 10 Aug 2025 20:16:15 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 19C5231
+ for <buildroot@buildroot.org>; Sun, 10 Aug 2025 20:16:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 10DC240F6F
- for <buildroot@buildroot.org>; Sun, 10 Aug 2025 20:13:56 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0B63740A41
+ for <buildroot@buildroot.org>; Sun, 10 Aug 2025 20:16:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0bwSHhVfxoLD for <buildroot@buildroot.org>;
- Sun, 10 Aug 2025 20:13:55 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3E4C840F69
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E4C840F69
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3E4C840F69
- for <buildroot@buildroot.org>; Sun, 10 Aug 2025 20:13:55 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id
- ffacd0b85a97d-3b7961cf660so3065858f8f.1
- for <buildroot@buildroot.org>; Sun, 10 Aug 2025 13:13:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1754856833; x=1755461633;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=XLP7NeRRoBrYtymU0bjXqhDkMb9hbqckVolCmOzu5eQ=;
- b=pN1QOWA/iUVNMRZUFBSgYwALgougSFxyUyYzTKT3Gaaio/3p78bfdTs/wVh1Ra8x8Z
- tsEpXYydnYcskMBbDs2rRUgIwZTM5L3ByqwC0KkBztEKHpyZN5MEyR6O2Kt8rzg3nV6n
- 2kD3glprVoOP4mDDXq8l95vzB9zcwDZgAuWDsEZqWjwJrhoHznSMsYn68eIxfOul4Syq
- zIu0xF0CSs93kp7TXEXCpCyfCizh0g1rCxhCrK3yjaRFiR86Vg15WwDupGskC7Z3meSM
- 75qSVVIL7j7IpqzECIakSyIvboCKG3X2DBdxc9kPxiamnqoxBkr4KukCLwRjkdJH4CKJ
- Ctlg==
-X-Forwarded-Encrypted: i=1;
- AJvYcCU5yTZPvy7lzUMr7gxC8Gdr2YA6A4l1VPzNjwA9rjXETq8hXuOXrNWbQJyClOvSwW4bbeagB8Wgm8M=@buildroot.org
-X-Gm-Message-State: AOJu0Yw2abBcSqZl6iAFeasG6CKrPA1Zz6MU9hJAXe49l92MjDMygalH
- BPwudotw7uMzS6AwiQqjkyj+YOBkRvGpeKF1ewys1DLIltNlxa+EXqkgIi6oy8vvnp0=
-X-Gm-Gg: ASbGnctirAv8H2HA/7uzwg+RFQYKFi0fkUnGz3cUe+uO1NAvKBdd+EXX5w4BCGZ+Nkg
- zXWKgEQ0Q4GXAhmHWW7UDjX5O1WVKDKTlx1QMbrUgIATJ3Wi1DBZr4/hI09BbXFZsjCwBgTvRxt
- T/2AfRl5UgqBy3Ae/gbDwW0xVswFivG2sMba+t6pnTYP6pkhcP9F9Vtg1FxPSVyLCVwTrFpFaBh
- +lJHLU+pNUHlK5r6immoeDZ4saI/Vkrw3xWAm7GFJOYcZaPpId9It4DbCmz0HmO/Wal22Gl/4zT
- PLeknvt64lbJXXey0pc1d2z1AYWGEWsSKoKwYHiY0ZEatSvwIXxZW/tgm09pVW+Rt8+8hbPSiZf
- DG5nrVaKkqblAxv9ixhaDLt+3Um90FIh28pLIAPS6hDHcW1O1Y8PjFZiu4pcKpekbL3UA1SOG9u
- rYKRw0w38LScYd4ZFesSdpK5DPKandmpbyQkPqRUmQw0AFVuXABygOStt+QiPr
-X-Google-Smtp-Source: AGHT+IGoSmiOoV4EfprtvuazDOCAAmBw4HTH2dEtsWm6WiFhm1cnS5rXu4K6IlSuiL0eijbSnKFwDg==
-X-Received: by 2002:a5d:5f85:0:b0:3b7:8b1b:a9d5 with SMTP id
- ffacd0b85a97d-3b900b80406mr8728447f8f.51.1754856832998; 
- Sun, 10 Aug 2025 13:13:52 -0700 (PDT)
-Received: from ?IPV6:2a01:cb05:949d:5800:c97d:3b73:4a46:d823?
- (2a01cb05949d5800c97d3b734a46d823.ipv6.abo.wanadoo.fr.
- [2a01:cb05:949d:5800:c97d:3b73:4a46:d823])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-459e0a24bf1sm249076345e9.1.2025.08.10.13.13.52
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 10 Aug 2025 13:13:52 -0700 (PDT)
-Message-ID: <67d4f2ce-b68c-4cb5-bb10-71f8d1871371@smile.fr>
-Date: Sun, 10 Aug 2025 22:13:52 +0200
+ id UF91b28y55ba for <buildroot@buildroot.org>;
+ Sun, 10 Aug 2025 20:16:14 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
+ helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E1C3E40A3E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E1C3E40A3E
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E1C3E40A3E
+ for <buildroot@buildroot.org>; Sun, 10 Aug 2025 20:16:13 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 9B83A4436A;
+ Sun, 10 Aug 2025 20:16:09 +0000 (UTC)
+Date: Sun, 10 Aug 2025 22:16:07 +0200
+To: Romain Naour <romain.naour@smile.fr>
+Message-ID: <20250810221607.487515bf@windsurf>
+In-Reply-To: <28185e62-aff8-4cad-ac61-a466c85e05a0@smile.fr>
+References: <20250810124820.2116495-1-thomas.petazzoni@bootlin.com>
+ <20250810124820.2116495-2-thomas.petazzoni@bootlin.com>
+ <0ead42e3-6522-4f92-8a21-a8c8352375c2@smile.fr>
+ <20250810175224.788ea11f@windsurf>
+ <875xevow94.fsf@dell.be.48ers.dk>
+ <28185e62-aff8-4cad-ac61-a466c85e05a0@smile.fr>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: vkrawiec <victor.krawiec@arturia.com>, buildroot@buildroot.org
-Cc: Daniel Lang <dalang@gmx.at>, Joseph Kogut <joseph.kogut@gmail.com>
-References: <20250120162808.1219036-1-victor.krawiec@arturia.com>
-Content-Language: fr, en-US
-In-Reply-To: <20250120162808.1219036-1-victor.krawiec@arturia.com>
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddufedtheduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepudduueeftdejhfetledugfevgfevtefgudfgueeffedutedvuedvteefvdduudeunecuffhomhgrihhnpehgnhhurdhorhhgpdgsohhothhlihhnrdgtohhmnecukfhppedvrgdtudemtggsudekmeekieegugemvddutddtmegrtddtfhemheelsgefmeegfhdvmeeifegusgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudekmeekieegugemvddutddtmegrtddtfhemheelsgefmeegfhdvmeeifegusgdphhgvlhhopeifihhnughsuhhrfhdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepfedprhgtphhtthhopehrohhmrghinhdrnhgrohhurhesshhmihhlvgdrfhhrpdhrtghpthhtohepphgvthgvrheskhhorhhsghgrrghrugdrtghomhdprhgtphhtthhop
+ egsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhg
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1754856833; x=1755461633; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=XLP7NeRRoBrYtymU0bjXqhDkMb9hbqckVolCmOzu5eQ=;
- b=EhQMkOQFTa6pEsLwDKUQysp1o6nJbdp8YKs2dDBbxcuyjDglLlOAZrzQ0qVQKKWwtf
- GgnVbM+Jt78YnTWtfblBqNok5jugpD9KdN483LGk+VumeSL1trSBBaBndFqERnt7bA4d
- OVBUQblcSPoxV6vVQbkXwfF6Ym+3+OoTo2Xpw=
+ d=bootlin.com; s=gm1; t=1754856970;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=5p4aZF7A2IEO4bEGKf0R11TQuN9MqQxk00ZcjnRGsek=;
+ b=dljPe+F9GsI37vuluF6XCMqL5EgJ27l7HRS0EYOSDYNLV5Qm9BMqHf97rRA0nk3lpKJ7bl
+ otPaUb29kS1R92wVWcdWEk4GssM26dpszo2Qh81VEM1fiqZL+qCI3kCQg/VCuLux/Bl0c2
+ UYTAhy/uID8zPBeruyHk/rd127FiNXUXc/kngI1gVyFia/3Yp4+WrHkH1KQ3BvpoH5mJ0W
+ FdWkUQFQETgqtqwgxVXIvt5+4ATV21u5TvOwQYiZUrts4HZq7JqsP+xfcHn/4izRibMMLP
+ vEDIBgYdkCIZbRPodBYTbPlg6khpUUcAmQM7ZgE7r+NcGAfCwzWjdEIr4WST6A==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
- header.from=smile.fr
+ header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=EhQMkOQF
-Subject: Re: [Buildroot] [PATCH 1/1] package/llvm-project/lld: fix broken
- symlink in SDK
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=dljPe+F9
+Subject: Re: [Buildroot] [PATCH 2/3] support/scripts/gen-bootlin-toolchains:
+ drop tweak for Microblaze bleeding-edge toolchains
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -113,45 +90,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Romain Naour via buildroot <buildroot@buildroot.org>
-Reply-To: Romain Naour <romain.naour@smile.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gVmljdG9yLCBBbGwsCgpMZSAyMC8wMS8yMDI1IMOgIDE3OjI4LCB2a3Jhd2llYyBhIMOp
-Y3JpdMKgOgo+IFRoZSBzeW1saW5rIGJpbi9sbGQgLT4gJChHTlVfVEFSR0VUX05BTUUpL2Jpbi9s
-bGQgaXMgYnJva2VuIGluc2lkZSBhIFNESyBjb250YWluaW5nIGhvc3QtbGxkIHBhY2thZ2UKPiBU
-aGUgc3ltbGluayBzdGlsbCBwb2ludHMgdG8gdGhlIGxvY2F0aW9uIG9mIGxsZCBpbnNpZGUgdGhl
-IGJ1aWxkJ3MgaG9zdCBmb2xkZXIgaW5zdGVhZCBvZiB0aGUgbG9jYXRpb24gb2YgbGxkIGluc2lk
-ZSB0aGUgU0RLCj4gSW4gY29uc2VxdWVuY2UgR0NDIGlzIG5vdCBhYmxlIHRvIGZpbmQgbGxkIGxp
-bmtlcgo+IENoYW5naW5nIHRoZSBzeW1saW5rIHRvIGJlIHJlbGF0aXZlIGR1cmluZyBob3N0LWxs
-ZCBpbnN0YWxsYXRpb24gZml4ZXMgdGhlIHByb2JsZW0KClNvcnJ5IGZvciB0aGUgc2xvdyByZXBs
-eS4KCkkgZGlkIGEgdGVzdCB3aXRoIG1ha2Ugc2RrIGFuZCBpbmRlZWQsIHRoZQokKEhPU1RfRElS
-KS8kKEdOVV9UQVJHRVRfTkFNRSkvYmluL2xsZCBzdGlsbCBwb2ludHMgdG8gdGhlIGxvY2F0aW9u
-IG9mIGxsZAppbnNpZGUgdGhlIEhPU1RfRElSIGRpcmVjdG9yeSB3aGVyZSBob3N0LWxsZCB3YXMg
-aW5pdGlhbGx5IGluc3RhbGxlZC4KCkFzIHNvb24gYXMgdGhlIHNkayBpcyByZWxvY2F0ZWQsIHRo
-ZSBzeW1saW5rIGlzIHdyb25nLgoKQWNrZWQtYnk6IFJvbWFpbiBOYW91ciA8cm9tYWluLm5hb3Vy
-QHNtaWxlLmZyPgoKPiAKPiBTaWduZWQtb2ZmLWJ5OiB2a3Jhd2llYyA8dmljdG9yLmtyYXdpZWNA
-YXJ0dXJpYS5jb20+CgpDYW4geW91IGZpeCB5b3UgbmFtZSBpbiB5b3VyIFNvQiBsaW5lPyBJdCBz
-aG91bGQgYmUgIlZpY3RvciBLcmF3aWVjIgoKQmVzdCByZWdhcmRzLApSb21haW4KCgo+IC0tLQo+
-ICBwYWNrYWdlL2xsdm0tcHJvamVjdC9sbGQvbGxkLm1rIHwgNCArKy0tCj4gIDEgZmlsZSBjaGFu
-Z2VkLCAyIGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCj4gCj4gZGlmZiAtLWdpdCBhL3Bh
-Y2thZ2UvbGx2bS1wcm9qZWN0L2xsZC9sbGQubWsgYi9wYWNrYWdlL2xsdm0tcHJvamVjdC9sbGQv
-bGxkLm1rCj4gaW5kZXggNTM5ZGQwYmQ3MS4uMGMxZmNlNDg2MCAxMDA2NDQKPiAtLS0gYS9wYWNr
-YWdlL2xsdm0tcHJvamVjdC9sbGQvbGxkLm1rCj4gKysrIGIvcGFja2FnZS9sbHZtLXByb2plY3Qv
-bGxkL2xsZC5tawo+IEBAIC0xOCw4ICsxOCw4IEBAIEhPU1RfTExEX0NPTkZfT1BUUyArPSAtREJV
-SUxEX1NIQVJFRF9MSUJTPU9GRgo+ICAjIEdDQyBsb29rcyBmb3IgdG9vbHMgaW4gYSBkaWZmZXJl
-bnQgcGF0aCBmcm9tIExMRCdzIGRlZmF1bHQgaW5zdGFsbGF0aW9uIHBhdGgKPiAgZGVmaW5lIEhP
-U1RfTExEX0NSRUFURV9TWU1MSU5LUwo+ICAJbWtkaXIgLXAgJChIT1NUX0RJUikvJChHTlVfVEFS
-R0VUX05BTUUpL2Jpbgo+IC0JbG4gLXNmICQoSE9TVF9ESVIpL2Jpbi9sbGQgJChIT1NUX0RJUikv
-JChHTlVfVEFSR0VUX05BTUUpL2Jpbi9sbGQKPiAtCWxuIC1zZiAkKEhPU1RfRElSKS9iaW4vbGxk
-ICQoSE9TVF9ESVIpLyQoR05VX1RBUkdFVF9OQU1FKS9iaW4vbGQubGxkCj4gKwlsbiAtc2ZyICQo
-SE9TVF9ESVIpL2Jpbi9sbGQgJChIT1NUX0RJUikvJChHTlVfVEFSR0VUX05BTUUpL2Jpbi9sbGQK
-PiArCWxuIC1zZnIgJChIT1NUX0RJUikvYmluL2xsZCAkKEhPU1RfRElSKS8kKEdOVV9UQVJHRVRf
-TkFNRSkvYmluL2xkLmxsZAo+ICBlbmRlZgo+ICAKPiAgSE9TVF9MTERfUE9TVF9JTlNUQUxMX0hP
-T0tTICs9IEhPU1RfTExEX0NSRUFURV9TWU1MSU5LUwoKX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RA
-YnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5m
-by9idWlsZHJvb3QK
+On Sun, 10 Aug 2025 21:08:00 +0200
+Romain Naour <romain.naour@smile.fr> wrote:
+
+> Yes, we need another patch [1] to be able to test the rootfs with Qemu.
+> Obviously this patch [1] is still unsure (except if you let me patch gcc code :p)
+
+I think this patch is reasonably OK. First of all, it very obviously
+only touches Microblaze code, so at worst we risk breaking
+Microblaze... which is anyway already broken. Also, this patch
+basically restore the behavior that was happening on Microblaze prior
+to
+https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=3b9b8d6cfdf59337f4b7ce10ce92a98044b2657b.
+So overall, I think Romain you can submit this as a proper patch to
+Buildroot, I think it's a "good enough" workaround for something like
+Microblaze.
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
