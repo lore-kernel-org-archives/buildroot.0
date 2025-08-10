@@ -1,76 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD925C87FCF
-	for <buildroot@archiver.kernel.org>; Sun, 10 Aug 2025 14:53:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68E2BC87FCF
+	for <buildroot@archiver.kernel.org>; Sun, 10 Aug 2025 15:15:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 84E7F60ECD;
-	Sun, 10 Aug 2025 14:53:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 11A6040B38;
+	Sun, 10 Aug 2025 15:15:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Vd6rJgx0touV; Sun, 10 Aug 2025 14:53:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TZdHOWvwylXJ; Sun, 10 Aug 2025 15:15:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C810760ED8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 228E140A9B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C810760ED8;
-	Sun, 10 Aug 2025 14:53:56 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 7C088154
- for <buildroot@buildroot.org>; Sun, 10 Aug 2025 14:53:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 228E140A9B;
+	Sun, 10 Aug 2025 15:15:05 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 026B4154
+ for <buildroot@buildroot.org>; Sun, 10 Aug 2025 15:15:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 61DEB60ED8
- for <buildroot@buildroot.org>; Sun, 10 Aug 2025 14:53:55 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E895C81185
+ for <buildroot@buildroot.org>; Sun, 10 Aug 2025 15:15:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MOJTYLcPOLxy for <buildroot@buildroot.org>;
- Sun, 10 Aug 2025 14:53:55 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7550860ECD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7550860ECD
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7550860ECD
- for <buildroot@buildroot.org>; Sun, 10 Aug 2025 14:53:54 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 433EB13F861;
- Sun, 10 Aug 2025 16:53:50 +0200 (CEST)
-Received: from 2001:18c0:a22:bf00:5c2b:f296:f108:6612
- via 2001:18c0:a22:bf00:5c2b:f296:f108:6612 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 10 Aug 2025 16:53:50 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3EkeEd6zTa_D for <buildroot@buildroot.org>;
+ Sun, 10 Aug 2025 15:15:03 +0000 (UTC)
+X-Greylist: delayed 588 seconds by postgrey-1.37 at util1.osuosl.org;
+ Sun, 10 Aug 2025 15:15:02 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E23C3811D5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E23C3811D5
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=136.243.2.102;
+ helo=nyx.n621.de; envelope-from=fl@n621.de; receiver=<UNKNOWN> 
+Received: from nyx.n621.de (v4gw.hekate.n621.de [136.243.2.102])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E23C3811D5
+ for <buildroot@buildroot.org>; Sun, 10 Aug 2025 15:15:02 +0000 (UTC)
+Received: from eos.home.n621.de (localhost [127.0.0.1])
+ by nyx.n621.de (Postfix) with ESMTP id 71C08E00304;
+ Sun, 10 Aug 2025 17:05:11 +0200 (CEST)
+From: Florian Larysch <fl@n621.de>
+To: buildroot@buildroot.org
+Cc: Simon Dawson <spdawson@gmail.com>,
+	Florian Larysch <fl@n621.de>
+Date: Sun, 10 Aug 2025 17:04:51 +0200
+Message-ID: <20250810150509.13653-1-fl@n621.de>
+X-Mailer: git-send-email 2.50.1
 MIME-Version: 1.0
-Date: Sun, 10 Aug 2025 16:53:50 +0200
-To: Peter Seiderer <ps.report@gmx.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250809214151.2423583-1-ps.report@gmx.net>
-References: <20250809214151.2423583-1-ps.report@gmx.net>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <7d8c373813f2e36ccfac4a9f0fa3dac8@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1754837631;
- bh=BZghWnjfd4CiOEGg1XEFBzNbFtfdYg5cIMMhaXmX9bY=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=nC+rc9sH6iEXbC14UVA8FWnl5Y06RPvaqSgyPKfPTMslYDByLtn/DG9LHw17qTYky
- R95thq+1SzssBo4A5DuIwQBSORN5uVSslz3rnWUN4bsvRZ70ZVZVkulXVE++c5RnGT
- zyvVUdR4Kvn6dYi7Ms/Ms0jbF7vHItBeyhIN6OZjqFjOs6IqWW4MsEV8RD2V+33fwx
- fGFb6v5xFleYRnXhbHIwZNk3l6rRHx+Kx9Yvf2So+ACzPPMPQkgLho48u22eCSUBEw
- 8zTBlKKRkzm8M1DmXLhyellj+iyQGybXkv0tg+PEv0rCPlmS+Zoi903sm9CyXOqOM9
- 2MWsJ5ucffjKQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=nC+rc9sH
-Subject: Re: [Buildroot] [PATCH v1 1/2] package/iwd: add optional iwmon
- support
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=n621.de; s=dkim; t=1754838311;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=HY2/JoTCvZVYDT35k5ETI2nabCag4/IXayf289d+GCA=;
+ b=eO1VPAgckup0hkolWS8epdN0fSWA0VMT8YgWfio/mwOZO9lGSOrG3JEjLFLE5eRdJhsFYv
+ gSriPQCeaEBtUcAPqrReqTAmZWeL4TraqsKHrvRROBXi6sjGU0brJ/GCJVst8B0wxvnH+I
+ Dc6fkcC1wm7qA0cYBK3fpAvmg/7Q77U=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=n621.de
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=n621.de header.i=@n621.de header.a=rsa-sha256
+ header.s=dkim header.b=eO1VPAgc
+Subject: [Buildroot] [PATCH 1/1] package/nanocom: fix build with GCC 15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,20 +77,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 09/08/2025 23:41, Peter Seiderer via buildroot wrote:
-> - add option for iwmon support
-> - enable linux kernel CONFIG_NLMON option needed for iwmon
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+GCC 14 made implicit function definitions an error and GCC 15 switched
+to C23 by default, which made "void foo()" equivalent to "void
+foo(void)".
 
-Series applied to master, thanks.
+Both of these changes cause build errors because init_comm() doesn't
+actually take any arguments and the forward declaration for
+display_state() was using the wrong name. Fix both.
+
+Fixes: https://autobuild.buildroot.org/results/ebf/ebf500c48aaa357aaac3a88d87ef8f5c07cd78b6
+
+Signed-off-by: Florian Larysch <fl@n621.de>
+---
+ .../nanocom/0002-fix-build-with-gcc-15.patch  | 35 +++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 package/nanocom/0002-fix-build-with-gcc-15.patch
+
+diff --git a/package/nanocom/0002-fix-build-with-gcc-15.patch b/package/nanocom/0002-fix-build-with-gcc-15.patch
+new file mode 100644
+index 0000000000..728c56a3d0
+--- /dev/null
++++ b/package/nanocom/0002-fix-build-with-gcc-15.patch
+@@ -0,0 +1,35 @@
++GCC 14 made implicit function definitions an error and GCC 15 switched
++to C23 by default, which made "void foo()" equivalent to "void
++foo(void)".
++
++Both of these changes cause build errors because init_comm() doesn't
++actually take any arguments and the forward declaration for
++display_state() was using the wrong name. Fix both.
++
++Upstream: Submitted to author via email
++Signed-off-by: Florian Larysch <fl@n621.de>
++
++diff -purN old/nanocom.c new/nanocom.c
++--- old/nanocom.c	2025-08-10 01:34:12.000284003 +0200
+++++ new/nanocom.c	2025-08-10 01:31:05.639050630 +0200
++@@ -329,7 +329,7 @@ int main(int argc, char *argv[]) {
++     memcpy(&pots, &pts, sizeof(pots));
++     
++     /*setup serial port with new settings*/
++-    init_comm(&pts);
+++    init_comm();
++         
++     fprintf(stderr,"Press CTRL+T for menu options");   
++     display_state();
++diff -purN old/nanocom.h new/nanocom.h
++--- old/nanocom.h	2025-08-10 01:34:12.000284003 +0200
+++++ new/nanocom.h	2025-08-10 01:27:59.545821909 +0200
++@@ -56,7 +56,7 @@ void cleanup_termios(int signal);
++ void init_stdin(struct termios *sts);
++ void init_comm();
++ void usage( char *str);
++-void display_status();
+++void display_state();
++ 
++ 
++ /*typedef to represent the current line state
+-- 
+2.50.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
