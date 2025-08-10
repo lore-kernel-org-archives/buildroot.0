@@ -1,53 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E396CC87FCF
-	for <buildroot@archiver.kernel.org>; Sun, 10 Aug 2025 18:25:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B27E8C87FDA
+	for <buildroot@archiver.kernel.org>; Sun, 10 Aug 2025 18:41:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AD98740EC5;
-	Sun, 10 Aug 2025 18:25:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 63D7A8244D;
+	Sun, 10 Aug 2025 18:41:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id II90SNSVcpgQ; Sun, 10 Aug 2025 18:25:58 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id a5mLZnS8Ah2N; Sun, 10 Aug 2025 18:41:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE85440EC1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7269F8246D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DE85440EC1;
-	Sun, 10 Aug 2025 18:25:57 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 63899154
- for <buildroot@buildroot.org>; Sun, 10 Aug 2025 18:25:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7269F8246D;
+	Sun, 10 Aug 2025 18:41:06 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id D426F31
+ for <buildroot@buildroot.org>; Sun, 10 Aug 2025 18:41:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3C71140EC1
- for <buildroot@buildroot.org>; Sun, 10 Aug 2025 18:25:55 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id BB42360F60
+ for <buildroot@buildroot.org>; Sun, 10 Aug 2025 18:41:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HI98jh57Ix9C for <buildroot@buildroot.org>;
- Sun, 10 Aug 2025 18:25:54 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id znW3WUXF6P3C for <buildroot@buildroot.org>;
+ Sun, 10 Aug 2025 18:41:01 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8046D40EC3
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8046D40EC3
- for <buildroot@buildroot.org>; Sun, 10 Aug 2025 18:25:54 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6EBB787143; Sun, 10 Aug 2025 18:25:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6D86A60FC0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D86A60FC0
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6D86A60FC0
+ for <buildroot@buildroot.org>; Sun, 10 Aug 2025 18:41:01 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -190780266; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Sun, 10 Aug 2025 18:40:56 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1ulAyV-006bKe-0V;
+ Sun, 10 Aug 2025 20:40:55 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 10 Aug 2025 20:19:42 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9adc8a05707f743c659cc6fb25d0a213498d0868
-X-Git-Newrev: 50cac72f73f7eee9136aa9cc48dbd5a5a12a0625
-X-Patchwork-Hint: ignore
-Message-Id: <20250810182554.6EBB787143@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libapparmor: remove stale
- reference to patch 0001
+To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Cc: Romain Naour <romain.naour@smile.fr>,  Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>
+References: <20250810124820.2116495-1-thomas.petazzoni@bootlin.com>
+ <20250810124820.2116495-2-thomas.petazzoni@bootlin.com>
+ <0ead42e3-6522-4f92-8a21-a8c8352375c2@smile.fr>
+ <20250810175224.788ea11f@windsurf>
+Date: Sun, 10 Aug 2025 20:40:55 +0200
+In-Reply-To: <20250810175224.788ea11f@windsurf> (Thomas Petazzoni via
+ buildroot's message of "Sun, 10 Aug 2025 17:52:24 +0200")
+Message-ID: <875xevow94.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=di6iOtcCtb21M7YhBqG6UmHmSIvTuWSAyBXa8PccOE4DcKVHHpXe3Cni4KYqSh3VjqwxJgDq41PZLZhE8Whlce/O4zP0YetOC5BwcyKluWP6oJVhJKMfWQozQVDwNuATMHvpn6VYtLX7K+1tbd1hjyGK8lUAMIR7PvnhBma8BaGfjwTWUzZVBDb7+f6mqa04NhebHSXSBPjfpxbab5wZ5+GdeNtLCuWAnDUwoszhYX61ACtGnzP0x8hxzQAbiTsMbzvYQUp8xW4N764E4MUJ0hUKyWTCgocMKIk4j5hQSE2Gltve6Ri4m/ns2UGOxLOql2w6L98cwgvAzJK0nTP3HQ==;
+ s=purelymail1; d=purelymail.com; v=1;
+ bh=h26mLQBF1h+WqAHwC9zixkEI3EUh7CcId/KxWcL69n0=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail1 header.b=di6iOtcC
+Subject: Re: [Buildroot] [PATCH 2/3] support/scripts/gen-bootlin-toolchains:
+ drop tweak for Microblaze bleeding-edge toolchains
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,53 +85,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=50cac72f73f7eee9136aa9cc48dbd5a5a12a0625
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
 
-The AUTORECONF variable was introduced in commit [1] with reference to
-the patches that modified the m4 and Makefile.am files.
+ > On Sun, 10 Aug 2025 16:11:09 +0200
+ > Romain Naour <romain.naour@smile.fr> wrote:
 
-The commit [2] removed the last such patch but left the reference to the
-patch and the AUTORECONF variable.
+ >> I guess you are referring to the pending patch from Neal Frager [1].
+ >> 
+ >> [1]
+ >> https://patchwork.ozlabs.org/project/buildroot/patch/20250728045145.132333-1-neal.frager@amd.com/
 
-Later, commit [3] updated the mirror to the gitlab URL that no longer
-bundle a pre-generated `configure` file, making the execution of
-AUTORECONF necessary anyway.
+ > Correct. This patch is pending for Buildroot master, but I did
+ > integrate it into my toolchain build.
 
-This patch removes the obsolete reference to the patch 0001 removed in
-[2] to avoid ambiguity with the new patch 0001 introduced in commit [4].
+I wanted to apply this and get 2025.08-rc1 out - But if I read the
+discussion correctly, gcc 15.x is broken on Microblaze even with that
+patch, so what do we do?
 
-[1] 01a82c1401 package/libapparmor: enable python bindings
-[2] 27cd0b5033 package/apparmor: bump to version 3.0.4
-[3] 5649202ddc package/libapparmor: bump to version 3.1.7
-[4] 2640f5dcd0 package/libapparmor: fix build w/ musl
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-[Peter: add a comment explaining why]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libapparmor/libapparmor.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/libapparmor/libapparmor.mk b/package/libapparmor/libapparmor.mk
-index fa59ff2924..91c22ad35b 100644
---- a/package/libapparmor/libapparmor.mk
-+++ b/package/libapparmor/libapparmor.mk
-@@ -16,7 +16,7 @@ LIBAPPARMOR_DEPENDENCIES = host-bison host-flex host-pkgconf
- LIBAPPARMOR_SUBDIR = libraries/libapparmor
- LIBAPPARMOR_INSTALL_STAGING = YES
- 
--# Patch 0001 touches Makefile.am and m4 files
-+# no configure in tarball
- LIBAPPARMOR_AUTORECONF = YES
- 
- # Most AppArmor tools will want to link to the static lib.
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
