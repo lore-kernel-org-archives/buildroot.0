@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34CA1C87FD2
-	for <buildroot@archiver.kernel.org>; Mon, 11 Aug 2025 14:10:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8D75C87FD2
+	for <buildroot@archiver.kernel.org>; Mon, 11 Aug 2025 14:13:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 099B241319;
-	Mon, 11 Aug 2025 14:10:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 67FDD4134B;
+	Mon, 11 Aug 2025 14:13:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kPCbHSHpIbl5; Mon, 11 Aug 2025 14:10:21 +0000 (UTC)
+ id k5hCbuzglbJ4; Mon, 11 Aug 2025 14:13:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A69BE413E2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 73AD0413B3
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A69BE413E2;
-	Mon, 11 Aug 2025 14:10:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 37E4E1C5
- for <buildroot@buildroot.org>; Mon, 11 Aug 2025 14:10:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 73AD0413B3;
+	Mon, 11 Aug 2025 14:13:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id AA6FF154
+ for <buildroot@buildroot.org>; Mon, 11 Aug 2025 14:13:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A0F3C41383
- for <buildroot@buildroot.org>; Mon, 11 Aug 2025 14:10:17 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 910B283E34
+ for <buildroot@buildroot.org>; Mon, 11 Aug 2025 14:13:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XhPh0iv0WHq6 for <buildroot@buildroot.org>;
- Mon, 11 Aug 2025 14:10:16 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id M2hNMJpvGpA4 for <buildroot@buildroot.org>;
+ Mon, 11 Aug 2025 14:13:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5819B41380
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C12B283E2F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5819B41380
- for <buildroot@buildroot.org>; Mon, 11 Aug 2025 14:10:16 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C12B283E2F
+ for <buildroot@buildroot.org>; Mon, 11 Aug 2025 14:13:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 45F8A873EF; Mon, 11 Aug 2025 14:10:16 +0000 (UTC)
+ id B1C5487402; Mon, 11 Aug 2025 14:13:26 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 7 Aug 2025 22:10:43 +0200
-X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: 0ae11e1e830c1dc25c90ac3ba16a4bd52de7dcc1
-X-Git-Newrev: 3c2f5ce23e4ec99c036218b9ba7a005f59d57402
+Date: Sun, 10 Aug 2025 15:46:40 +0200
+X-Git-Refname: refs/heads/2025.02.x
+X-Git-Oldrev: 176fed6cc006629ecd43b9930ab975db54a8f850
+X-Git-Newrev: 8ffaffb0b9485f4ff41c4ec8ec6be280d4b461a1
 X-Patchwork-Hint: ignore
-Message-Id: <20250811141016.45F8A873EF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/ltp-testsuite:
- Revert "package/ltp-testsuite: Fix uclibc-ng build"
+Message-Id: <20250811141326.B1C5487402@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] linux: fix bump to 6.12.41
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,369 +65,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3c2f5ce23e4ec99c036218b9ba7a005f59d57402
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8ffaffb0b9485f4ff41c4ec8ec6be280d4b461a1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-This reverts commit ab7297f3c19b1e84ed667a6fb8b7a459b8c49006.
+In commit [1], the linux 6.12 version was bumped to 6.12.41 but didn't
+align linux/Config.in to include that bump.
 
-It was mistakenly applied but the error described doesn't apply on the
-LTS branch.
+[1] 52f03f832f {linux, linux-headers}: bump 6.{6, 12}.x series
 
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-(cherry picked from commit e69822b2dce2db4e79227231a55a270ef02e3594)
+Fixes: https://autobuild.buildroot.org/results/6a9/6a9f7617368d71b810586e29081c5239831b597e
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- .../0003-tlibio-Detect-aio.h-support.patch         | 342 ---------------------
- 1 file changed, 342 deletions(-)
+ linux/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ltp-testsuite/0003-tlibio-Detect-aio.h-support.patch b/package/ltp-testsuite/0003-tlibio-Detect-aio.h-support.patch
-deleted file mode 100644
-index 442e2fd96b..0000000000
---- a/package/ltp-testsuite/0003-tlibio-Detect-aio.h-support.patch
-+++ /dev/null
-@@ -1,342 +0,0 @@
--From 91e6272febf95e19a8300695dfc2089569adf9d8 Mon Sep 17 00:00:00 2001
--From: Petr Vorel <petr.vorel@gmail.com>
--Date: Sun, 27 Jul 2025 22:54:54 +0200
--Subject: [PATCH] tlibio: Detect <aio.h> support
--
--Some libc (i.e. uclibc-ng or uclibc) does not implement <aio.h>.
--Requiring it for the core LTP library breaks build of these libc.
--Restore unintentional removal in fed3e3ee63.
--
--Changes:
--* Fix for all libc without <aio.h> support: previous check
--  'defined(__linux__) && !defined(__UCLIBC__)' was uclibc-ng specific
--  (and check for __linux__ was not needed anyway). All of these used
--  prior fed3e3ee63 is replaced just by HAVE_AIO_H.
--* Comment out also if block first and last 'line if (...) {' and '}' if
--  the block would be empty anyway.
--* Further join preprocessor checks as code prior fed3e3ee63 contained
--  code compiled for old unixes (e.g. sgi), which fed3e3ee63 removed.
--* Remove nested preprocessors checks in code which is already checked
--  (i.e. lio_wait4asyncio()).
--* Fix wrong #endif comments.
--* Add further cleanup of old unixes.
--
--I also wonder if #else part of struct lio_info_type Lio_info1[]
--should be really defined for code without <aio.h>.
--
--Fixes: fed3e3ee63 ("lib/tlibio: Get rid of support for old UNIXes")
--Fixes: https://autobuild.buildroot.org/results/f3e/f3e03b9a1a69988d6497f36c9d64a37a66e9ad20/
--Fixes: https://autobuild.buildroot.org/results/856/856365f467efc449faee1951250e63d8d4442bbc/
--Fixes: https://autobuild.buildroot.org/results/2ac/2ac08cecd6a505f1bac1a673efc280b3a8dcb23a/
--Fixes: https://autobuild.buildroot.org/results/59b/59b3ad33667b7e87c81e49dd434d5f494e189e0d/
--Fixes: https://autobuild.buildroot.org/results/b1a/b1a36f9971c97300670d8d772ace11e5fedceaaa/
--Reviewed-by: Li Wang <liwang@redhat.com>
--Acked-by: Cyril Hrubis <chrubis@suse.cz>
--Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
--Upstream: https://github.com/linux-test-project/ltp/commit/91e6272febf95e19a8300695dfc2089569adf9d8
-----
-- configure.ac |  1 +
-- lib/tlibio.c | 52 +++++++++++++++++++++++++++++++++++++++++++---------
-- 2 files changed, 44 insertions(+), 9 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index 8ec37639c1..12025be51c 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -48,6 +48,7 @@ AC_CHECK_DECLS([PR_CAPBSET_DROP, PR_CAPBSET_READ],,,[#include <sys/prctl.h>])
-- AC_CHECK_DECLS([SEM_STAT_ANY],,,[#include <sys/sem.h>])
-- 
-- AC_CHECK_HEADERS_ONCE([ \
--+    aio.h \
--     asm/ldt.h \
--     asm/prctl.h \
--     cpuid.h \
--diff --git a/lib/tlibio.c b/lib/tlibio.c
--index b877393df2..70e0c6f7d2 100644
----- a/lib/tlibio.c
--+++ b/lib/tlibio.c
--@@ -88,7 +88,9 @@
-- #include <stdint.h>
-- #include <sys/uio.h>		/* readv(2)/writev(2) */
-- #include <string.h>
---#include <aio.h>
--+#ifdef HAVE_AIO_H
--+# include <aio.h>
--+#endif
-- #include <stdlib.h>		/* atoi, abs */
-- 
-- #include "tlibio.h"		/* defines LIO* macros */
--@@ -108,7 +110,7 @@ struct lio_info_type Lio_info1[] = {
-- 	{"b", LIO_IO_ASYNC | LIO_WAIT_SIGPAUSE, "async i/o using pause"},
-- 	{"a", LIO_IO_ASYNC | LIO_WAIT_RECALL,
-- 	 "async i/o using recall/aio_suspend"},
---#if defined(sgi) || (defined(__linux__) && !defined(__UCLIBC__))
--+#ifdef HAVE_AIO_H
-- 	{"r",
-- 	 LIO_RANDOM | LIO_IO_TYPES | LIO_WAIT_TYPES,
-- 	 "random sync i/o types and wait methods"},
--@@ -159,7 +161,7 @@ char Lio_SysCall[PATH_MAX];	/* string containing last i/o system call */
-- 
-- static volatile int Received_signal = 0;	/* number of signals received */
-- static volatile int Rec_signal;
---#if defined(sgi) || (defined(__linux__) && !defined(__UCLIBC__))
--+#ifdef HAVE_AIO_H
-- static volatile int Received_callback = 0;	/* number of callbacks received */
-- static volatile int Rec_callback;
-- #endif
--@@ -399,7 +401,7 @@ static void lio_async_signal_handler(int sig)
-- 	return;
-- }
-- 
---#if defined(sgi) || (defined(__linux__) && !defined(__UCLIBC__))
--+#ifdef HAVE_AIO_H
-- /***********************************************************************
--  * This is an internal callback handler.
--  * If the handler is called, it will increment the Received_callback
--@@ -417,7 +419,7 @@ static void lio_async_callback_handler(union sigval sigval)
-- 
-- 	return;
-- }
---#endif /* sgi */
--+#endif
-- 
-- /***********************************************************************
--  * lio_random_methods
--@@ -515,9 +517,11 @@ int lio_write_buffer(int fd,		/* open file descriptor */
-- 	int omethod = method;
-- 	int listio_cmd;		/* Holds the listio/lio_listio cmd */
-- 	struct iovec iov;	/* iovec for writev(2) */
--+#ifdef HAVE_AIO_H
-- 	struct aiocb aiocbp;	/* POSIX aio control block */
-- 	struct aiocb *aiolist[1];	/* list of aio control blocks for lio_listio */
-- 	off64_t poffset;	/* pwrite(2) offset */
--+#endif
-- 
-- 	/*
-- 	 * If LIO_RANDOM bit specified, get new method randomly.
--@@ -536,12 +540,15 @@ int lio_write_buffer(int fd,		/* open file descriptor */
-- 		*errmsg = Errormsg;
-- 
-- 	Rec_signal = Received_signal;	/* get the current number of signals received */
--+#ifdef HAVE_AIO_H
-- 	Rec_callback = Received_callback;	/* get the current number of callbacks received */
--+#endif
-- 
-- 	memset(&iov, 0x00, sizeof(struct iovec));
-- 	iov.iov_base = buffer;
-- 	iov.iov_len = size;
-- 
--+#ifdef HAVE_AIO_H
-- 	memset(&aiocbp, 0x00, sizeof(struct aiocb));
-- 
-- 	aiocbp.aio_fildes = fd;
--@@ -589,6 +596,7 @@ int lio_write_buffer(int fd,		/* open file descriptor */
-- 
-- 	poffset = (off64_t) ret;
-- 	aiocbp.aio_offset = ret;
--+#endif
-- 
-- 	/*
-- 	 * If the LIO_USE_SIGNAL bit is not set, only use the signal
--@@ -597,9 +605,9 @@ int lio_write_buffer(int fd,		/* open file descriptor */
-- 	 * the signal.
-- 	 */
-- 	if (sig && !(method & LIO_USE_SIGNAL) && !(method & LIO_WAIT_SIGTYPES)) {
---
-- 		sig = 0;	/* ignore signal parameter */
-- 	}
--+#ifdef HAVE_AIO_H
-- 	if (sig && (method & LIO_WAIT_CBTYPES))
-- 		sig = 0;	/* ignore signal parameter */
-- 
--@@ -626,6 +634,7 @@ int lio_write_buffer(int fd,		/* open file descriptor */
-- 		aiocbp.aio_sigevent.sigev_notify_attributes =
-- 		    (void *)(uintptr_t) size;
-- 	}
--+#endif
-- 
-- 	/*
-- 	 * Determine the system call that will be called and produce
--@@ -684,6 +693,7 @@ int lio_write_buffer(int fd,		/* open file descriptor */
-- 	}
-- 
-- 	else if (method & LIO_IO_ASYNC) {
--+#ifdef HAVE_AIO_H
-- 		sprintf(Lio_SysCall,
-- 			"aio_write(fildes=%d, buf, nbytes=%d, signo=%d)", fd,
-- 			size, sig);
--@@ -705,9 +715,11 @@ int lio_write_buffer(int fd,		/* open file descriptor */
-- 				sigrelse(sig);
-- 			return -errno;
-- 		}
--+#endif
-- 	}
-- 	/* LIO_IO_ASYNC */
-- 	else if (method & LIO_IO_SLISTIO) {
--+#ifdef HAVE_AIO_H
-- 		aiocbp.aio_lio_opcode = LIO_WRITE;
-- 		listio_cmd = LIO_WAIT;
-- 		io_type = "lio_listio(3) sync write";
--@@ -739,9 +751,11 @@ int lio_write_buffer(int fd,		/* open file descriptor */
-- 
-- 		ret = lio_check_asyncio(io_type, size, &aiocbp, method);
-- 		return ret;
--+#endif
-- 	}
-- 	/* LIO_IO_SLISTIO */
-- 	else if (method & LIO_IO_ALISTIO) {
--+#ifdef HAVE_AIO_H
-- 		aiocbp.aio_lio_opcode = LIO_WRITE;
-- 		listio_cmd = LIO_NOWAIT;
-- 		io_type = "lio_listio(3) async write";
--@@ -766,6 +780,7 @@ int lio_write_buffer(int fd,		/* open file descriptor */
-- 				sigrelse(sig);
-- 			return -errno;
-- 		}
--+#endif
-- 	}
-- 	/* LIO_IO_ALISTIO */
-- 	else if (method & LIO_IO_SYNCV) {
--@@ -796,6 +811,7 @@ int lio_write_buffer(int fd,		/* open file descriptor */
-- 
-- 		return ret;
-- 	}			/* LIO_IO_SYNCV */
--+#ifdef HAVE_AIO_H
-- 	else if (method & LIO_IO_SYNCP) {
-- 		io_type = "pwrite(2)";
-- 
--@@ -827,6 +843,7 @@ int lio_write_buffer(int fd,		/* open file descriptor */
-- 
-- 		return ret;
-- 	}			/* LIO_IO_SYNCP */
--+#endif
-- 	else {
-- 		printf("DEBUG %s/%d: No I/O method chosen\n", __FILE__,
-- 		       __LINE__);
--@@ -836,7 +853,9 @@ int lio_write_buffer(int fd,		/* open file descriptor */
-- 	/*
-- 	 * wait for async io to complete.
-- 	 */
--+#ifdef HAVE_AIO_H
-- 	ret = lio_wait4asyncio(method, fd, &aiocbp);
--+#endif
-- 
-- 	/*
-- 	 * If there was an error waiting for async i/o to complete,
--@@ -862,7 +881,9 @@ int lio_write_buffer(int fd,		/* open file descriptor */
-- 	 * have been updated but the actual i/o size if returned.
-- 	 */
-- 
--+#ifdef HAVE_AIO_H
-- 	ret = lio_check_asyncio(io_type, size, &aiocbp, method);
--+#endif
-- 
-- 	return ret;
-- }				/* end of lio_write_buffer */
--@@ -924,9 +945,11 @@ int lio_read_buffer(int fd,	/* open file descriptor */
-- 	int listio_cmd;		/* Holds the listio/lio_listio cmd */
-- 	int omethod = method;
-- 	struct iovec iov;	/* iovec for readv(2) */
--+#ifdef HAVE_AIO_H
-- 	struct aiocb aiocbp;	/* POSIX aio control block */
-- 	struct aiocb *aiolist[1];	/* list of aio control blocks for lio_listio */
-- 	off64_t poffset;	/* pread(2) offset */
--+#endif
-- 
-- 	/*
-- 	 * If LIO_RANDOM bit specified, get new method randomly.
--@@ -945,12 +968,15 @@ int lio_read_buffer(int fd,	/* open file descriptor */
-- 		*errmsg = Errormsg;
-- 
-- 	Rec_signal = Received_signal;	/* get the current number of signals received */
--+#ifdef HAVE_AIO_H
-- 	Rec_callback = Received_callback;	/* get the current number of callbacks received */
--+#endif
-- 
-- 	memset(&iov, 0x00, sizeof(struct iovec));
-- 	iov.iov_base = buffer;
-- 	iov.iov_len = size;
-- 
--+#ifdef HAVE_AIO_H
-- 	memset(&aiocbp, 0x00, sizeof(struct aiocb));
-- 
-- 	aiocbp.aio_fildes = fd;
--@@ -998,6 +1024,7 @@ int lio_read_buffer(int fd,	/* open file descriptor */
-- 	}
-- 	poffset = (off64_t) ret;
-- 	aiocbp.aio_offset = ret;
--+#endif
-- 
-- 	/*
-- 	 * If the LIO_USE_SIGNAL bit is not set, only use the signal
--@@ -1010,6 +1037,7 @@ int lio_read_buffer(int fd,	/* open file descriptor */
-- 		sig = 0;	/* ignore signal parameter */
-- 	}
-- 
--+#ifdef HAVE_AIO_H
-- 	if (sig && (method & LIO_WAIT_CBTYPES))
-- 		sig = 0;	/* ignore signal parameter */
-- 
--@@ -1020,7 +1048,6 @@ int lio_read_buffer(int fd,	/* open file descriptor */
-- 	 * old signal handler will not be restored.
-- 	 *** restoring the signal handler could be added ***
-- 	 */
---
-- 	if (sig && (method & LIO_WAIT_SIGTYPES)) {
-- 		aiocbp.aio_sigevent.sigev_notify = SIGEV_SIGNAL;
-- 		aiocbp.aio_sigevent.sigev_signo = sig;
--@@ -1035,6 +1062,7 @@ int lio_read_buffer(int fd,	/* open file descriptor */
-- 		aiocbp.aio_sigevent.sigev_notify_attributes =
-- 		    (void *)(uintptr_t) size;
-- 	}
--+#endif
-- 
-- 	/*
-- 	 * Determine the system call that will be called and produce
--@@ -1093,6 +1121,7 @@ int lio_read_buffer(int fd,	/* open file descriptor */
-- 			wait4sync_io(fd, 1);
-- 		}
-- 
--+#ifdef HAVE_AIO_H
-- 	} else if (method & LIO_IO_ASYNC) {
-- 		sprintf(Lio_SysCall,
-- 			"aio_read(fildes=%d, buf, nbytes=%d, signo=%d)", fd,
--@@ -1236,7 +1265,8 @@ int lio_read_buffer(int fd,	/* open file descriptor */
-- 			     __FILE__, __LINE__, ret);
-- 
-- 		return ret;
---	}			/* LIO_IO_SYNCP */
--+#endif
--+	}
-- 
-- 	else {
-- 		printf("DEBUG %s/%d: No I/O method chosen\n", __FILE__,
--@@ -1248,7 +1278,9 @@ int lio_read_buffer(int fd,	/* open file descriptor */
-- 	 * wait for async io to complete.
-- 	 * Note: Sync io should have returned prior to getting here.
-- 	 */
--+#ifdef HAVE_AIO_H
-- 	ret = lio_wait4asyncio(method, fd, &aiocbp);
--+#endif
-- 
-- 	/*
-- 	 * If there was an error waiting for async i/o to complete,
--@@ -1274,12 +1306,14 @@ int lio_read_buffer(int fd,	/* open file descriptor */
-- 	 * have been updated but the actual i/o size if returned.
-- 	 */
-- 
--+#ifdef HAVE_AIO_H
-- 	ret = lio_check_asyncio(io_type, size, &aiocbp, method);
--+#endif
-- 
-- 	return ret;
-- }				/* end of lio_read_buffer */
-- 
---#if !defined(__sun) && !defined(__hpux) && !defined(_AIX)
--+#ifdef HAVE_AIO_H
-- /***********************************************************************
--  * This function will check that async io was successful.
--  * It can also be used to check sync listio since it uses the
---- 
--2.50.0
--
+diff --git a/linux/Config.in b/linux/Config.in
+index 8a66fd453e..b36f926c18 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -137,7 +137,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "6.12.40" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "6.12.41" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
