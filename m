@@ -4,48 +4,104 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34DF7C87FCF
-	for <buildroot@archiver.kernel.org>; Sun, 10 Aug 2025 17:35:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88D3EC87FDA
+	for <buildroot@archiver.kernel.org>; Sun, 10 Aug 2025 17:52:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8BFC840A88;
-	Sun, 10 Aug 2025 17:35:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3C0B140E76;
+	Sun, 10 Aug 2025 17:52:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AIj6WMpk1Zmn; Sun, 10 Aug 2025 17:35:19 +0000 (UTC)
+ id dAiE4k_qAaVJ; Sun, 10 Aug 2025 17:52:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A118240E24
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E6D640E75
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A118240E24;
-	Sun, 10 Aug 2025 17:35:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5E6D640E75;
+	Sun, 10 Aug 2025 17:52:35 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 72DAD138
- for <buildroot@buildroot.org>; Sun, 10 Aug 2025 17:35:16 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 2E748154
+ for <buildroot@buildroot.org>; Sun, 10 Aug 2025 17:52:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 645614089E
- for <buildroot@buildroot.org>; Sun, 10 Aug 2025 17:35:16 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2074B4089F
+ for <buildroot@buildroot.org>; Sun, 10 Aug 2025 17:52:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ffboB6LmoYq4 for <buildroot@buildroot.org>;
- Sun, 10 Aug 2025 17:35:15 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AD60C40896
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id AD60C40896
- for <buildroot@buildroot.org>; Sun, 10 Aug 2025 17:35:15 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A452887141; Sun, 10 Aug 2025 17:35:15 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 10 Aug 2025 19:33:05 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b10b7346c9d96ac7a3eb98f3f3c83472f63ff55c
-X-Git-Newrev: 9adc8a05707f743c659cc6fb25d0a213498d0868
-X-Patchwork-Hint: ignore
-Message-Id: <20250810173515.A452887141@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ghostscript: fix xlib dependency
+ id UlAG-niwrwty for <buildroot@buildroot.org>;
+ Sun, 10 Aug 2025 17:52:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2021B400DA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2021B400DA
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2021B400DA
+ for <buildroot@buildroot.org>; Sun, 10 Aug 2025 17:52:32 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id
+ 5b1f17b1804b1-458ba079338so28403815e9.1
+ for <buildroot@buildroot.org>; Sun, 10 Aug 2025 10:52:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1754848351; x=1755453151;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=6JO9jxAEZtq6zbvNsRErVCwFhnyxjTQMDEUXyUvvoDA=;
+ b=LOYRNsuLU3XTanC6fqndJR+TfzvJCBJljD1BqNRE7azZFskwHwvcPbmZ9kbgMU8lwi
+ 8C6NTEqXXwr/4ka5+odjxd6jRdLF6TV+NQZ4lkWx3zjeKuLwEtZ2QWZKo7L72LlBtC5O
+ iTtn4Eqy9Yfqs66w3KsMQy8lq1m8TwZAF6jGJin33aZcGGxG1QyPQOEER2elARLdJUo4
+ HU4PvDVRzv6fxm2CZ++q/WJcXC795APZKOYg/931sjiYYozdA7fbn9w9P5jCr0PJDw/p
+ vLw1VoeYj8ROq6s9vZ7p7NJpXLlGH2f+06lT8ee528ZJM4w4+zNv5gkm2/UumBJ1R5xl
+ 0Cww==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCVXdyhxCx8w8IJEFoIeL9XQsEazJYpUlryskDXG6+/Ox1kx//Og0x78A3QC0QHj0i0iYDa1IsBKKZs=@buildroot.org
+X-Gm-Message-State: AOJu0YyVvV4XJnQ+udLKOKXKUiCEB+EmeR3HuUpcLRuYPbQ0trry17bi
+ Fy5CoxD1Seq5dEN9z5gJZT/aXA/L6lMJlwasIkbcjWar66suenLVx+RqPFbQXaALVXMg272PHYE
+ AQsS/
+X-Gm-Gg: ASbGncuYaEieQpmhtL8Q11l1GP44gbeoSH5FPFteSb/9D2DHFNp9823+d4PmIia1ccY
+ pZShbY1tuhVYCYIV47tAo+uQe1NpnrM5Im6q+t9KBPL8qMxW3cTsyCxGuJx3kw5U5wbE9S559w6
+ D6jyQi/ygg44FbvxxU85qyydjoTSv8pKMfvGvxGKlg1UU7bhJvat1R+Xvek9e75ToZ+62z3Nfcl
+ wt5nCJBxTGX5dc54tZSep6yLgABLHLfwHAziWcA8KKTH+p/959noAZaRx7BPKDVuCuzcRMilg6M
+ PsWaw35s4xH6uXw26X23V8IcRvWXsSKvivahknSrrqvZfCgqAt3T5IMsNd5tQmcNgSx6hjEC2R7
+ 6fZkxhyPS5M63l3FQWjofgx0ltNM8giRa3zpD2acgee2l0La8UjBSZo/0BDnyJmEsmbhWqzPTNe
+ iQwXoPFNI0ALEesxPTs6KHKxephyTPcYhKN5r85q3icMaMbUX4dV77U6COfdb+
+X-Google-Smtp-Source: AGHT+IHfgt0kjXXe92Adm7zjGmRMQq2LS8o/74NixLWj0xSk95WgQ3hABruuaKzDGTDW1pU69o4VHw==
+X-Received: by 2002:a05:600c:a40d:b0:459:eeee:2759 with SMTP id
+ 5b1f17b1804b1-459eeee3089mr77728725e9.14.1754848350917; 
+ Sun, 10 Aug 2025 10:52:30 -0700 (PDT)
+Received: from ?IPV6:2a01:cb05:949d:5800:c97d:3b73:4a46:d823?
+ (2a01cb05949d5800c97d3b734a46d823.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:949d:5800:c97d:3b73:4a46:d823])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-3b79c3c4d02sm36770695f8f.33.2025.08.10.10.52.30
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 10 Aug 2025 10:52:30 -0700 (PDT)
+Message-ID: <4973533f-7474-43a9-9fe1-18490e1302c9@smile.fr>
+Date: Sun, 10 Aug 2025 19:52:29 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: marleen.vos@essensium.com, buildroot@buildroot.org
+Cc: Marleen Vos <marleen.vos@mind.be>
+References: <20250704103913.2271142-1-marleen.vos@mind.be>
+Content-Language: fr, en-US
+In-Reply-To: <20250704103913.2271142-1-marleen.vos@mind.be>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile.fr; s=google; t=1754848351; x=1755453151; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=6JO9jxAEZtq6zbvNsRErVCwFhnyxjTQMDEUXyUvvoDA=;
+ b=M04SUKYJX0cpIbWY7eSOLnF95cZk1uPb3LPZAR1RkTQpD2xHZHzYVTbbAYgADb+UtC
+ adZ3d0R0G7ZPHq5WldUFGBwEE/aqNzymj7yhi5crQ8TChJATv5/q6Iw0afN54hja5u6h
+ EvyjtRK0r4QE1GW/UYL8p5VK48+ioETtn3fC4=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
+ header.a=rsa-sha256 header.s=google header.b=M04SUKYJ
+Subject: Re: [Buildroot] [PATCH 1/1] Fix error with missing atomic_ops in
+ autoconf for nginx package on sparc/v8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,81 +115,42 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Romain Naour via buildroot <buildroot@buildroot.org>
 Reply-To: Romain Naour <romain.naour@smile.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9adc8a05707f743c659cc6fb25d0a213498d0868
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Since the package bump to v10.05.0 the xlib libraries detection has been
-improved to error missing x libraries (see [2]).
-
-The following error is happening on the autobuilder when building
-ghostscript with xlib_libX11:
-
-```
-checking for XOpenDisplay in -lX11... yes
-checking for XdbeQueryExtension in -lXext... yes
-checking for XtAppCreateShell in -lXt... no
-configure: error: X11 libraries (libX11, libXt, libXext) not available, either install them, or rerun configure with "--without-x"
-make: *** [package/pkg-generic.mk:263: /home/buildroot/instance-0/output-1/build/ghostscript-10.05.1/.stamp_configured] Error 1
-```
-
-This error can be reproduced with the following config:
-
-```
-cat <<EOF >.config
-BR2_arm=y
-BR2_cortex_a7=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-BR2_PACKAGE_XORG7=y
-BR2_PACKAGE_XLIB_LIBX11=y
-BR2_PACKAGE_GHOSTSCRIPT=y
-EOF
-make olddefconfig
-make
-```
-
-This patch fixes the xlib dependencies of the ghostscript package to
-correctly build with X support:
-
-- The 'XtAppCreateShell' function is provided by the package
-  'xlib_libXt'.
-- The 'XdbeQueryExtension' function is provided by the package
-  'xlib_libXext'.
-
-They both select the 'xlib_libX11' package.
-
-[1] 9abf662cfd package/ghostscript: security bump to version 10.05.0
-[2] https://github.com/ArtifexSoftware/ghostpdl/commit/37eede31e12814fae69744e7842a5640004e5a65
-
-Fixes: https://autobuild.buildroot.org/results/45d/45d0414f341feb2354478b145396fe137f9cc6a6
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
- package/ghostscript/ghostscript.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
-index 0ddcb950ff..c9d13f5545 100644
---- a/package/ghostscript/ghostscript.mk
-+++ b/package/ghostscript/ghostscript.mk
-@@ -85,8 +85,8 @@ else
- GHOSTSCRIPT_CONF_OPTS += --disable-cups
- endif
- 
--ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
--GHOSTSCRIPT_DEPENDENCIES += xlib_libX11
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXT)$(BR2_PACKAGE_XLIB_LIBXEXT),yy)
-+GHOSTSCRIPT_DEPENDENCIES += xlib_libXt xlib_libXext
- GHOSTSCRIPT_CONF_OPTS += --with-x
- else
- GHOSTSCRIPT_CONF_OPTS += --without-x
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gTWFybGVlbiwgQWxsLAoKTGUgMDQvMDcvMjAyNSDDoCAxMjozOSwgTWFybGVlbiBWb3Mg
+dmlhIGJ1aWxkcm9vdCBhIMOpY3JpdMKgOgo+IEZyb206IE1hcmxlZW4gVm9zIDxtYXJsZWVuLnZv
+c0BtaW5kLmJlPgoKV2UgdXN1YWxseSBwcmVmZXIgYSBjb21taXQgdGl0bGUgInBhY2thZ2Uvbmdp
+bng6IC4uLiIKCi1sYXRvbWljIG11c3QgYmUgdXNlZCBvbmx5IGlmIHRvb2xjaGFpbiBoYXMgYXRv
+bWljIHN1cHBvcnQKKEJSMl9UT09MQ0hBSU5fSEFTX0xJQkFUT01JQyBpcyBzZXQpLgpPdGhlcndp
+c2UgdGhlIGJ1aWxkIHdpbGwgZmFpbCB3aXRoIHRvb2xjaGFpbnMgd2l0aG91dCBsaWJhdG9taWMu
+CgpTZWUgWzFdIGFzIGV4YW1wbGUuCgpJcyB0aGUgbGliYXRvbWljIGlzc3VlIHJlYWxseSBzcGVj
+aWZpYyB0byBzcGFyYy92OCBhcmNoaXRlY3R1cmU/CgpBdCBsZWFzdCB0aGUgYXV0b2J1aWxkZXJz
+IG9ubHkgcmVwb3J0IHRoaXMgaXNzdWUgb24gc3BhcmMvdjg6Cmh0dHBzOi8vYXV0b2J1aWxkLmJ1
+aWxkcm9vdC5vcmcvP3JlYXNvbj1uZ2lueC0xLjI2LjMKCkNhbiB5b3Ugc2VuZCBhbiB1cGRhdGVk
+IHZlcnNpb24/CgpbMV0KaHR0cHM6Ly9naXRsYWIuY29tL2J1aWxkcm9vdC5vcmcvYnVpbGRyb290
+Ly0vY29tbWl0L2E0NDMwNTc4YWViNmNhNDYwODEzZjRmZjdkODMzY2RkODM5YTMyNDkKCkJlc3Qg
+cmVnYXJkcywKUm9tYWluCgoKPiAKPiBGaXhlczogaHR0cHM6Ly9hdXRvYnVpbGQuYnVpbGRyb290
+Lm9yZy9yZXN1bHRzL2NkNS9jZDU5MTgwYjA1NjA4NDI1YWRkZmZiMDIyODEzMDMxZWI2NjZiZjk1
+Lwo+IFNpZ25lZC1vZmYtYnk6IE1hcmxlZW4gVm9zIDxtYXJsZWVuLnZvc0BtaW5kLmJlPgo+IC0t
+LQo+ICBwYWNrYWdlL25naW54L25naW54Lm1rIHwgNCArKystCj4gIDEgZmlsZSBjaGFuZ2VkLCAz
+IGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkKPiAKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9u
+Z2lueC9uZ2lueC5tayBiL3BhY2thZ2UvbmdpbngvbmdpbngubWsKPiBpbmRleCA2Y2ExYWMyMDc1
+Li4xM2M0NmFkNTNkIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvbmdpbngvbmdpbngubWsKPiArKysg
+Yi9wYWNrYWdlL25naW54L25naW54Lm1rCj4gQEAgLTc1LDYgKzc1LDcgQEAgTkdJTlhfQ09ORl9P
+UFRTICs9IC0td2l0aC1saWJhdG9taWMKPiAgTkdJTlhfQ09ORl9FTlYgKz0gbmd4X2ZvcmNlX2hh
+dmVfbGliYXRvbWljPXllcwo+ICBpZmVxICgkKEJSMl9zcGFyY192OCkkKEJSMl9zcGFyY19sZW9u
+MykseSkKPiAgTkdJTlhfQ0ZMQUdTICs9ICItREFPX05PX1NQQVJDX1Y5Igo+ICtOR0lOWF9MREZM
+QUdTICs9IC1sYXRvbWljCj4gIGVuZGlmCj4gIGVsc2UKPiAgTkdJTlhfQ09ORl9FTlYgKz0gbmd4
+X2ZvcmNlX2hhdmVfbGliYXRvbWljPW5vCj4gQEAgLTMwMCw3ICszMDEsOCBAQCBkZWZpbmUgTkdJ
+TlhfQ09ORklHVVJFX0NNRFMKPiAgCWNkICQoQEQpIDsgJChOR0lOWF9DT05GX0VOVikgXAo+ICAJ
+CVBLR19DT05GSUc9IiQoUEtHX0NPTkZJR19IT1NUX0JJTkFSWSkiIFwKPiAgCQkuL2NvbmZpZ3Vy
+ZSAkKE5HSU5YX0NPTkZfT1BUUykgXAo+IC0JCQktLXdpdGgtY2Mtb3B0PSIkKFRBUkdFVF9DRkxB
+R1MpICQoTkdJTlhfQ0ZMQUdTKSIKPiArCQkJLS13aXRoLWNjLW9wdD0iJChUQVJHRVRfQ0ZMQUdT
+KSAkKE5HSU5YX0NGTEFHUykiIFwKPiArCQkJLS13aXRoLWxkLW9wdD0iJChOR0lOWF9MREZMQUdT
+KSIKPiAgZW5kZWYKPiAgCj4gIGRlZmluZSBOR0lOWF9CVUlMRF9DTURTCgpfX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0
+CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWls
+bWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
