@@ -4,99 +4,108 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1B6CC87FDA
-	for <buildroot@archiver.kernel.org>; Sun, 10 Aug 2025 20:36:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E621C87FDA
+	for <buildroot@archiver.kernel.org>; Sun, 10 Aug 2025 20:40:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9051760FAF;
-	Sun, 10 Aug 2025 20:36:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D9C3160FFC;
+	Sun, 10 Aug 2025 20:40:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IkwymKD1REm1; Sun, 10 Aug 2025 20:36:29 +0000 (UTC)
+ id t-aQeNqlPj86; Sun, 10 Aug 2025 20:40:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ACD8060BE2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A02C60FA4
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ACD8060BE2;
-	Sun, 10 Aug 2025 20:36:29 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 9173C154
- for <buildroot@buildroot.org>; Sun, 10 Aug 2025 20:36:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0A02C60FA4;
+	Sun, 10 Aug 2025 20:40:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 29ED6154
+ for <buildroot@buildroot.org>; Sun, 10 Aug 2025 20:40:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 77C39409F5
- for <buildroot@buildroot.org>; Sun, 10 Aug 2025 20:36:28 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0CAD681D18
+ for <buildroot@buildroot.org>; Sun, 10 Aug 2025 20:40:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UVvPMwk3mOaM for <buildroot@buildroot.org>;
- Sun, 10 Aug 2025 20:36:27 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Y6fdUMe2GUBY for <buildroot@buildroot.org>;
+ Sun, 10 Aug 2025 20:40:20 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::433; helo=mail-wr1-x433.google.com;
+ client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
  envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5385B40297
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5385B40297
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
- [IPv6:2a00:1450:4864:20::433])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5385B40297
- for <buildroot@buildroot.org>; Sun, 10 Aug 2025 20:36:27 +0000 (UTC)
-Received: by mail-wr1-x433.google.com with SMTP id
- ffacd0b85a97d-3b77b8750acso2203815f8f.0
- for <buildroot@buildroot.org>; Sun, 10 Aug 2025 13:36:27 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 07DA281587
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 07DA281587
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 07DA281587
+ for <buildroot@buildroot.org>; Sun, 10 Aug 2025 20:40:19 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ 5b1f17b1804b1-458b885d6eeso22896335e9.3
+ for <buildroot@buildroot.org>; Sun, 10 Aug 2025 13:40:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1754858185; x=1755462985;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=vGhpb9O5KIY2h9nhiO10lp0zoWMDsNAsm19ODSEVIA8=;
- b=l2osRHykgnT4gx9MLhG4bxMkIfS9daPa1+nXkRdOF8m52ytNbU5fqLp0euDdNlZSG0
- w1PRuq5r/pWcTkgpeDhxTslWIICmO+X2VvzQdTHD5vsLyFU7uh1DdNCJzQoWH/e8Fhb5
- mOWAJCzJWyObYxFw4nEPjlsSYkhibnroObiJpBaK+1rrZw5u2Vs6dSq+UUsXSbwdUBjS
- y8MqtIsyYuC+aoRxFk+HFslBvloT0U4PvwWqBV6C6wtwbaMaF348ZWj3OI/VOqoO/tpG
- PJmiD5j/z3yNFbnh+l5CHnPHvmtlq1ilIz6Ibe2yAo+1uvLqBTzzyKogHVg/72FRitTX
- PhkQ==
-X-Gm-Message-State: AOJu0YyKOWK21BlBYu2t+noI36yT1JrfgN03iUHpPLa1PEPeHvBU8PW/
- FUVWutXJRX6B7dRyvWeMi8VSqbI63RWrpfse+gG+7X9SQnYZR+PtgNezS0asWrukuLcdhsMioDg
- 4SKN3
-X-Gm-Gg: ASbGncteVJ9/HAfzoY4IuE7HbaqLWFM5BnJVHUZfcRvAuLlzUZE8QS9avrXabB9OTSU
- kO8xCA0ibNNVDxtwuHlPdjAqkPDN6cEahyOZT5rRtslsa/OuAIHoG4XcxSToT65ymx6wrsrkb8m
- IZRlwc0eRoXn1ctpTZxeGfsV5Dcc6PXjaKyVgNcTueVSpFf2x7OhnoKnwBVUdbdJA1bU0bazX3e
- HJ4X5R3hEagBxfaxzOM0HRcs1RQqmmVMLND3c/J59ZIoldfQedqDmWEiYfalQV/h6vWhuQI1nUO
- /7TPf0+6PtYJcE2kY/fbcWiP8YwDU4ggwWJhwE3DRbwehN0YyOs0suVxGrjy0mA7reob+CkAuV6
- QMUmSJH5hg+MfKtOtVjDgcC7eoho6C1BGlmqlZbULlNd5o6W2K3AfmW2WLun6YEk91e4St0rpnF
- F8bJWIC9yPNUF1uUOPCxsm
-X-Google-Smtp-Source: AGHT+IHourw4csBlpaDFyk3y3fCtrKoJ74O0IEob6uVPbW2fXJ9BWWtFmdAqKKvESRuEIigjpzKoCw==
-X-Received: by 2002:a05:6000:4029:b0:3a5:1388:9a55 with SMTP id
- ffacd0b85a97d-3b8f97bb949mr11158055f8f.5.1754858185247; 
- Sun, 10 Aug 2025 13:36:25 -0700 (PDT)
-Received: from P-NTS-Evian.home
+ d=1e100.net; s=20230601; t=1754858418; x=1755463218;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=Ribptz6MtSfd3dZtQz0+CGRXofum2sVHR8MZbfLRM4U=;
+ b=sWssZ3aUahJ9xXpYQnatKd+hJDoqbwgL1BB7xh6rT4g1d5RcCqo1f5VqdbT7zCdJkm
+ HGqGuj0m47i2JHZhDup/7X+2D0N4zAwszW6Iy/+z4FHy9d9XupNEDV3OLQAH+UEVnGtt
+ Bsvn1BlM2cXCsx4Bsj2lv5hOSKvLiQO3JxINLv6jr+yNETAi/xPPJtlPAgW8MUr+mXUL
+ p+kyd1PhurvKQhGtR+f+FsEm5uSl5e0/IO22pc2+CrU9yLQ/hij6xXB2Q0FrWHeWVerF
+ up3JRtioNseRUixbGkai8wHIjrtfUDcfETT43JXzPWGtj5zIIEecOBoGe1tsedC4RIhT
+ Hsqg==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCXxBSQAVeM1jlNyQbj/kjLSjaV3jTw7ZYa4rFiKTGXONhZ95QIJWQVoPurAreYrd4IrgHybbNTSw+c=@buildroot.org
+X-Gm-Message-State: AOJu0YzcnWEtKWFzcJpo6QGx4SkO2bHGwpqh2gFrxSwleZjj2FVvKtIf
+ 5TLFKhcGk3KlFkR8+z+JEQfzynhlzj9YKZz9NiMSwCRMh576fNNVfiszzrmwtBFpv0GCbdvPW0w
+ ROQ4g
+X-Gm-Gg: ASbGncssKS2kN0CyCxVOA3LyOL1wdG1W5iqOx/Si3slUYdlosCTeZ8oRE6Qj4neNE8m
+ ijYegJZxusHLw77ZvXMQF1jw1HUPwmdrcvO5Jk/83O60Q5VTbtNMERcH5PlDavTDtCCRWFiHNT+
+ yFdG+fSarwNQa/xfdWE0Y8nj1nSIADcH5EiieJ3AtVWSAAb6xl7eoWqg0dlxjvGZ48g+Lh3Z3eV
+ TEhfDicJboH7KCoKFfjOTN78dVlFIz/tvWRTJNMMgWGOqjjcG0LlG0RIO/mpWFDRPQsU+Ch293f
+ Wxot9/gUcNioK4OyQuh26/VNbQZx1llqvcFdT9+jAkrRF2385A3IT5cMOFWl2hl7i4H37Mml+U/
+ OR9GgdjYPXUNsaOhJI/9xu/sXRs2K3dxYji/SqCfg3CbaiAm67rMslkIB6cZ4Hm5OxPvDR5aY5o
+ RhQt6NawiI2a7Zj9pwyqIelqMiC+gdJlEwE+his4wDmHb6CUMI+BmJgindRggO
+X-Google-Smtp-Source: AGHT+IEZfms06BCKUFwv4IPcB09o3gT6FmUxqrSrvw1gPgFh3NS7gU1ksCwugjgy7x/GXWBrUD0cqg==
+X-Received: by 2002:a05:600c:1912:b0:442:c993:6f94 with SMTP id
+ 5b1f17b1804b1-459f4eb1a07mr89967215e9.12.1754858417997; 
+ Sun, 10 Aug 2025 13:40:17 -0700 (PDT)
+Received: from ?IPV6:2a01:cb05:949d:5800:c97d:3b73:4a46:d823?
  (2a01cb05949d5800c97d3b734a46d823.ipv6.abo.wanadoo.fr.
  [2a01:cb05:949d:5800:c97d:3b73:4a46:d823])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3b8e0b2d2fasm27602586f8f.50.2025.08.10.13.36.24
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 10 Aug 2025 13:36:24 -0700 (PDT)
-To: buildroot@buildroot.org
-Cc: Romain Naour <romain.naour@smile.fr>
-Date: Sun, 10 Aug 2025 22:36:21 +0200
-Message-ID: <20250810203621.945900-1-romain.naour@smile.fr>
-X-Mailer: git-send-email 2.50.1
+ 5b1f17b1804b1-459e0e70218sm254105385e9.20.2025.08.10.13.40.17
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 10 Aug 2025 13:40:17 -0700 (PDT)
+Message-ID: <73cb2b5e-736a-4c7c-b0ad-a0f827bacd86@smile.fr>
+Date: Sun, 10 Aug 2025 22:40:17 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20250810124820.2116495-1-thomas.petazzoni@bootlin.com>
+ <20250810124820.2116495-2-thomas.petazzoni@bootlin.com>
+ <0ead42e3-6522-4f92-8a21-a8c8352375c2@smile.fr>
+ <20250810175224.788ea11f@windsurf> <875xevow94.fsf@dell.be.48ers.dk>
+ <28185e62-aff8-4cad-ac61-a466c85e05a0@smile.fr>
+ <20250810221607.487515bf@windsurf>
+Content-Language: fr
+In-Reply-To: <20250810221607.487515bf@windsurf>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1754858185; x=1755462985; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=vGhpb9O5KIY2h9nhiO10lp0zoWMDsNAsm19ODSEVIA8=;
- b=HMw3t7OW/5/b0X9s96gYAJW44qY6UbFBZeorSLxdwLOCCmwZ2lG6+srio5wEmKjpmB
- VW+tvnPMLmehZKYN6wqvRvwu7sED2HARJzWASVG3KlZCG/zOIDEl0oNjF9CwmkdK94wt
- ebPID5Fh/uj3EyU4nifMpq1SEavFyLFiU4oRc=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=smile.fr; s=google; t=1754858418; x=1755463218; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=Ribptz6MtSfd3dZtQz0+CGRXofum2sVHR8MZbfLRM4U=;
+ b=cQwZIVdWuxMzHYoQCdg04D8QJ9D+XDQqSE+kijsxQ8wbhaq+prTUjIMoDtDzxdm7Gl
+ HZWh9kEdYf2Oc4Np7CcaH/HlTShJpYPHeZDBShgPBM8XCSxRCNLjSU9KbLQoawXqPo0y
+ I1s7Mn1xP8PmqFtSt4YjoKsPsmRhpCQgQhz48=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=HMw3t7OW
-Subject: [Buildroot] [PATCH] package/gcc: add microblaze fix for GCC bug
- 121432
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
+ header.a=rsa-sha256 header.s=google header.b=cQwZIVdW
+Subject: Re: [Buildroot] [PATCH 2/3] support/scripts/gen-bootlin-toolchains:
+ drop tweak for Microblaze bleeding-edge toolchains
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -110,98 +119,29 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Romain Naour via buildroot <buildroot@buildroot.org>
 Reply-To: Romain Naour <romain.naour@smile.fr>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This is a temporary fix under discussion [1], but it resolves the
-problem, by implementing the same behavior as GCC 14.x for register
-allocation on Microblaze.
-
-Tested with qemu_microblazeel_mmu_defconfig and used to generate
-Microblaze toolchains for the Bootlin toolchains 2025.08-1 [2].
-
-[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=121432#c10
-[2] https://github.com/bootlin/buildroot-toolchains/commit/83947c7bb6158072bc2f52b58e90891cd3dc04a2
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
-
-This requires this patch [1] applied first.
-
-[1] https://patchwork.ozlabs.org/project/buildroot/patch/20250728045145.132333-1-neal.frager@amd.com/
----
- ...-config-microblaze-fix-ira-for-GCC15.patch | 56 +++++++++++++++++++
- 1 file changed, 56 insertions(+)
- create mode 100644 package/gcc/15.1.0/0003-gcc-config-microblaze-fix-ira-for-GCC15.patch
-
-diff --git a/package/gcc/15.1.0/0003-gcc-config-microblaze-fix-ira-for-GCC15.patch b/package/gcc/15.1.0/0003-gcc-config-microblaze-fix-ira-for-GCC15.patch
-new file mode 100644
-index 0000000000..6a1e5cf31a
---- /dev/null
-+++ b/package/gcc/15.1.0/0003-gcc-config-microblaze-fix-ira-for-GCC15.patch
-@@ -0,0 +1,56 @@
-+From b6163bbd898e2462455998d5d38fe1463e70ca66 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Wed, 6 Aug 2025 22:32:30 +0200
-+Subject: [PATCH] gcc/config/microblaze: fix ira for GCC15
-+
-+Add new hooks for callee-save on microblaze defined by [1] and
-+return 1 to restore the old behavior prior to the commit [3].
-+
-+Tested with qemu_microblazeel_mmu_defconfig and used to generate
-+Microblaze toolchains for the Bootlin toolchains 2025.08-1 [4][5].
-+
-+Upstream: suggested in the bug report: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=121432#c10
-+
-+[1] https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=b191e8bdecf881d11c1544c441e38f4c18392a15
-+[2] https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=gcc/config/i386/i386.cc;h=3128973ba79cccfc6761f451dcb716b9558cc4da;hb=d3ff498c478acefce35de04402f99171b4f64a1a#l20606
-+[3] https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=3b9b8d6cfdf59337f4b7ce10ce92a98044b2657b
-+[4] https://lore.kernel.org/buildroot/87sehzndtp.fsf@dell.be.48ers.dk/T/#mce7decd0b3f6a41008d5de577538a8525c91b374
-+[5] https://toolchains.bootlin.com/
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ gcc/config/microblaze/microblaze.cc | 11 +++++++++++
-+ 1 file changed, 11 insertions(+)
-+
-+diff --git a/gcc/config/microblaze/microblaze.cc b/gcc/config/microblaze/microblaze.cc
-+index 4b7f0a1a5e0..3710755ae8d 100644
-+--- a/gcc/config/microblaze/microblaze.cc
-++++ b/gcc/config/microblaze/microblaze.cc
-+@@ -3200,6 +3200,14 @@ microblaze_secondary_reload (bool in_p ATTRIBUTE_UNUSED, rtx x ATTRIBUTE_UNUSED,
-+   return NO_REGS;
-+ }
-+ 
-++/* Implement TARGET_CALLEE_SAVE_COST.  */
-++static int
-++microblaze_callee_save_cost (spill_cost_type, unsigned int hard_regno, machine_mode,
-++		       unsigned int, int mem_cost, const HARD_REG_SET &, bool)
-++{
-++  return 1;
-++}
-++
-+ static void
-+ microblaze_globalize_label (FILE * stream, const char *name)
-+ {
-+@@ -4038,6 +4046,9 @@ microblaze_starting_frame_offset (void)
-+ #undef TARGET_SECONDARY_RELOAD
-+ #define TARGET_SECONDARY_RELOAD		microblaze_secondary_reload
-+ 
-++#undef TARGET_CALLEE_SAVE_COST
-++#define TARGET_CALLEE_SAVE_COST microblaze_callee_save_cost
-++
-+ #undef  TARGET_ASM_OUTPUT_MI_THUNK
-+ #define TARGET_ASM_OUTPUT_MI_THUNK      microblaze_asm_output_mi_thunk
-+ 
-+-- 
-+2.50.1
-+
--- 
-2.50.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gVGhvbWFzLAoKTGUgMTAvMDgvMjAyNSDDoCAyMjoxNiwgVGhvbWFzIFBldGF6em9uaSBh
+IMOpY3JpdMKgOgo+IE9uIFN1biwgMTAgQXVnIDIwMjUgMjE6MDg6MDAgKzAyMDAKPiBSb21haW4g
+TmFvdXIgPHJvbWFpbi5uYW91ckBzbWlsZS5mcj4gd3JvdGU6Cj4gCj4+IFllcywgd2UgbmVlZCBh
+bm90aGVyIHBhdGNoIFsxXSB0byBiZSBhYmxlIHRvIHRlc3QgdGhlIHJvb3RmcyB3aXRoIFFlbXUu
+Cj4+IE9idmlvdXNseSB0aGlzIHBhdGNoIFsxXSBpcyBzdGlsbCB1bnN1cmUgKGV4Y2VwdCBpZiB5
+b3UgbGV0IG1lIHBhdGNoIGdjYyBjb2RlIDpwKQo+IAo+IEkgdGhpbmsgdGhpcyBwYXRjaCBpcyBy
+ZWFzb25hYmx5IE9LLiBGaXJzdCBvZiBhbGwsIGl0IHZlcnkgb2J2aW91c2x5Cj4gb25seSB0b3Vj
+aGVzIE1pY3JvYmxhemUgY29kZSwgc28gYXQgd29yc3Qgd2UgcmlzayBicmVha2luZwo+IE1pY3Jv
+YmxhemUuLi4gd2hpY2ggaXMgYW55d2F5IGFscmVhZHkgYnJva2VuLiBBbHNvLCB0aGlzIHBhdGNo
+Cj4gYmFzaWNhbGx5IHJlc3RvcmUgdGhlIGJlaGF2aW9yIHRoYXQgd2FzIGhhcHBlbmluZyBvbiBN
+aWNyb2JsYXplIHByaW9yCj4gdG8KPiBodHRwczovL2djYy5nbnUub3JnL2dpdC8/cD1nY2MuZ2l0
+O2E9Y29tbWl0O2g9M2I5YjhkNmNmZGY1OTMzN2Y0YjdjZTEwY2U5MmE5ODA0NGIyNjU3Yi4KPiBT
+byBvdmVyYWxsLCBJIHRoaW5rIFJvbWFpbiB5b3UgY2FuIHN1Ym1pdCB0aGlzIGFzIGEgcHJvcGVy
+IHBhdGNoIHRvCj4gQnVpbGRyb290LCBJIHRoaW5rIGl0J3MgYSAiZ29vZCBlbm91Z2giIHdvcmth
+cm91bmQgZm9yIHNvbWV0aGluZyBsaWtlCj4gTWljcm9ibGF6ZS4KCkRvbmU6Cmh0dHBzOi8vbG9y
+ZS5rZXJuZWwub3JnL2J1aWxkcm9vdC8yMDI1MDgxMDIwMzYyMS45NDU5MDAtMS1yb21haW4ubmFv
+dXJAc21pbGUuZnIvVC8jdQoKQmVzdCByZWdhcmRzLApSb21haW4KCgo+IAo+IFRob21hcwoKX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1h
+aWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9v
+dC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
