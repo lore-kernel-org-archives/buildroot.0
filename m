@@ -4,48 +4,102 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38E30C87FCF
-	for <buildroot@archiver.kernel.org>; Sun, 10 Aug 2025 15:25:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5E46C87FCA
+	for <buildroot@archiver.kernel.org>; Sun, 10 Aug 2025 15:25:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E1493822D7;
-	Sun, 10 Aug 2025 15:25:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0631B822F2;
+	Sun, 10 Aug 2025 15:25:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id toNdVHSUUwcU; Sun, 10 Aug 2025 15:25:46 +0000 (UTC)
+ id qwG-CCl4Tt7N; Sun, 10 Aug 2025 15:25:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 07D15822D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 41D5F8230F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 07D15822D8;
-	Sun, 10 Aug 2025 15:25:46 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0DAA2154
- for <buildroot@buildroot.org>; Sun, 10 Aug 2025 15:25:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 41D5F8230F;
+	Sun, 10 Aug 2025 15:25:49 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id C26FE154
+ for <buildroot@buildroot.org>; Sun, 10 Aug 2025 15:25:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F310840D8E
- for <buildroot@buildroot.org>; Sun, 10 Aug 2025 15:25:44 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id BF75960F1F
+ for <buildroot@buildroot.org>; Sun, 10 Aug 2025 15:25:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XjzIOlHpaJpA for <buildroot@buildroot.org>;
- Sun, 10 Aug 2025 15:25:44 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 293D140ABA
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 293D140ABA
- for <buildroot@buildroot.org>; Sun, 10 Aug 2025 15:25:44 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1FFB687075; Sun, 10 Aug 2025 15:25:44 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 10 Aug 2025 17:21:37 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 92a244ba8bf1a80dba746dbb6b7ab0a45b1dd375
-X-Git-Newrev: 34a3a1ee8b82b9b6aebbc73da9efabef0bbc38aa
-X-Patchwork-Hint: ignore
-Message-Id: <20250810152544.1FFB687075@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/nfs-utils: Fix build with
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jglAI3hWmx89 for <buildroot@buildroot.org>;
+ Sun, 10 Aug 2025 15:25:47 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C63786073A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C63786073A
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C63786073A
+ for <buildroot@buildroot.org>; Sun, 10 Aug 2025 15:25:46 +0000 (UTC)
+Received: by mail-wm1-x331.google.com with SMTP id
+ 5b1f17b1804b1-459d40d16bdso23862335e9.0
+ for <buildroot@buildroot.org>; Sun, 10 Aug 2025 08:25:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1754839545; x=1755444345;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=HoN7NKPyrRt3vWjJmyKHCsIX0giH2X7Pdz2Fqtff/WY=;
+ b=cIH3qCmei5zs+/V+LvI2J/38SsvM119ZMLWMElbJ2S4E6UiYkpzX89JtAmG/aQphBW
+ zs9ZyE5G8GEGpxoIgfAn5Hm9AQNXYo6gBoCaJk9GLK+aLu+nlXk9/Ze8IqmWdkUWw5xe
+ G/GOq+Lo5w3KfTYsqs56NokaVgrW3x5cIRKQf+qcLGKHjC5Y8HCDGcoTw8J9hLEwItPj
+ o/CJpRzrtArmeN3lyNAG+FM+PdgpzsDHYn2BHYkJ2WgStOf4svkPEjEMLxCu9U4tsh6R
+ tdBCMl6Z5DbK8t2o++dwgRrGre9cDY73UL1ZRKjpAvVL4/RoO/c3ZJQC+nMfgIwKtbiA
+ Kt/A==
+X-Gm-Message-State: AOJu0YwZTEaJxr4S+aQTlT66R3UjLamG/7J/d3m0FjKETDOO8qi1loQF
+ FtO/GrKWFd0zm4WfEBv5YhLL3wbFcj9UkYV1VYSF20AxJHvkVX3HcvydkERkiRjOIcY=
+X-Gm-Gg: ASbGncsf1dIy8BrMzQVB6gbEpAsRvipg8EvIwW5K0+VcMyDfrkW+uwisWT78H195fjG
+ rZS6zAjuN8rpNqlcw7HYu5AOWXkTiQVog/lljbXFupu70FrtAxRwKN7AdiOh3bJoFH58rKGikYS
+ 2yaTPMiokOa0iAaH6LS3gXFTzTaiKbKSlxC4orxSNPAzxWl0a3TCvD7wVOfk5qAeBcZMAL2i8rM
+ BycnvWYRbF6AJxzV2zYNYmKUNi/HFYH23xbRNfncvuUMx1dJ3mW6AHcmCEKHQSJIH5Anf+K74+/
+ Kbftk3xLcjuKyWKPZFk0L0cLaHSktqwkMLmzU93TWPvRMARTFlDFHKlKK98aJ5RJqKKpm3NL7Cs
+ D+OD3t+qW4yB0fCv3Podfay0PWiRyH4VF837tYwyB3yVEZeo4xKntwef9S6r3GZlObfK5LYZ775
+ Bsb5P7vYsL9QgqOWtc2MdBzi+Hlmj+654ix6A12TtAx1RBynqNPEkANRVyGzWy
+X-Google-Smtp-Source: AGHT+IH7rEb3b8oNezNAaS4mzrc6TPl91oAMw2F+3d+wXSBvSVorOkVwYYq6ayvfZxpBoR4e2a/Ewg==
+X-Received: by 2002:a05:600c:524a:b0:456:1204:e7e6 with SMTP id
+ 5b1f17b1804b1-459f4f517dbmr76537445e9.11.1754839544598; 
+ Sun, 10 Aug 2025 08:25:44 -0700 (PDT)
+Received: from ?IPV6:2a01:cb05:949d:5800:c97d:3b73:4a46:d823?
+ (2a01cb05949d5800c97d3b734a46d823.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:949d:5800:c97d:3b73:4a46:d823])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-459e585586esm229637635e9.13.2025.08.10.08.25.44
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 10 Aug 2025 08:25:44 -0700 (PDT)
+Message-ID: <ac658ccc-52fc-49b3-b9b6-fb017c38a3a1@smile.fr>
+Date: Sun, 10 Aug 2025 17:25:43 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Petr Vorel <petr.vorel@gmail.com>, Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>
+References: <20250731172810.2935094-1-bernd@kuhls.net>
+ <20250731191941.GA780832@pevik>
+Content-Language: fr
+In-Reply-To: <20250731191941.GA780832@pevik>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile.fr; s=google; t=1754839545; x=1755444345; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=HoN7NKPyrRt3vWjJmyKHCsIX0giH2X7Pdz2Fqtff/WY=;
+ b=0LY+e8rpSryqKgFRFg+yUAvq9VWh1qAQevvexbRlYLe7RtRlOW7hpquTnG3w3hN4vN
+ vowv6RlaZ/wk2pjH6SFWkRLo2qDWbR2fEz0p3i2CbIJRXQ4qPfBruvOZzfPcIbwz2NZu
+ rKuQAq1qERdC6PteA538dzwfymgT5d+Pkyxsw=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
+ header.a=rsa-sha256 header.s=google header.b=0LY+e8rp
+Subject: Re: [Buildroot] [PATCH 1/1] package/nfs-utils: Fix build with
  glibc-2.42
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -60,101 +114,22 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Romain Naour via buildroot <buildroot@buildroot.org>
 Reply-To: Romain Naour <romain.naour@smile.fr>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6444785264862188971=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6444785264862188971==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=34a3a1ee8b82b9b6aebbc73da9efabef0bbc38aa
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Add upstream patch to fix build with glibc-2.42.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
- .../nfs-utils/0001-Fix-build-with-glibc-2.42.patch | 59 ++++++++++++++++++++++
- 1 file changed, 59 insertions(+)
-
-diff --git a/package/nfs-utils/0001-Fix-build-with-glibc-2.42.patch b/package/nfs-utils/0001-Fix-build-with-glibc-2.42.patch
-new file mode 100644
-index 0000000000..6bf3622586
---- /dev/null
-+++ b/package/nfs-utils/0001-Fix-build-with-glibc-2.42.patch
-@@ -0,0 +1,59 @@
-+From 9f974046c37b7c28705d5558328759fff708b1cb Mon Sep 17 00:00:00 2001
-+From: Yaakov Selkowitz <yselkowi@redhat.com>
-+Date: Fri, 27 Jun 2025 04:54:08 -0500
-+Subject: Fix build with glibc-2.42
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+exportfs.c: In function ‘release_lockfile’:
-+exportfs.c:83:17: error: ignoring return value of ‘lockf’ declared with attribute ‘warn_unused_result’ [-Werror=unused-result]
-+   83 |                 lockf(_lockfd, F_ULOCK, 0);
-+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~
-+exportfs.c: In function ‘grab_lockfile’:
-+exportfs.c:77:17: error: ignoring return value of ‘lockf’ declared with attribute ‘warn_unused_result’ [-Werror=unused-result]
-+   77 |                 lockf(_lockfd, F_LOCK, 0);
-+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+lockf is now marked with attribute warn_unused_result:
-+
-+https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=f3c82fc1b41261f582f5f9fa12f74af9bcbc88f9
-+
-+Signed-off-by: Steve Dickson <steved@redhat.com>
-+
-+Upstream: https://git.linux-nfs.org/?p=steved/nfs-utils.git;a=commit;h=9f974046c37b7c28705d5558328759fff708b1cb
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ utils/exportfs/exportfs.c | 10 ++++++++--
-+ 1 file changed, 8 insertions(+), 2 deletions(-)
-+
-+diff --git a/utils/exportfs/exportfs.c b/utils/exportfs/exportfs.c
-+index b03a047b..748c38e3 100644
-+--- a/utils/exportfs/exportfs.c
-++++ b/utils/exportfs/exportfs.c
-+@@ -74,13 +74,19 @@ grab_lockfile(void)
-+ {
-+ 	_lockfd = open(lockfile, O_CREAT|O_RDWR, 0666);
-+ 	if (_lockfd != -1)
-+-		lockf(_lockfd, F_LOCK, 0);
-++		if (lockf(_lockfd, F_LOCK, 0) != 0) {
-++			xlog_warn("%s: lockf() failed: errno %d (%s)",
-++			__func__, errno, strerror(errno));
-++		}
-+ }
-+ static void
-+ release_lockfile(void)
-+ {
-+ 	if (_lockfd != -1) {
-+-		lockf(_lockfd, F_ULOCK, 0);
-++		if (lockf(_lockfd, F_ULOCK, 0) != 0) {
-++			xlog_warn("%s: lockf() failed: errno %d (%s)",
-++			__func__, errno, strerror(errno));
-++		}
-+ 		close(_lockfd);
-+ 		_lockfd = -1;
-+ 	}
-+-- 
-+cgit v1.2.3
-+
-
---===============6444785264862188971==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6444785264862188971==--
+SGVsbG8gQmVybmQsIFBldHIsIEFsbCwKCkxlIDMxLzA3LzIwMjUgw6AgMjE6MTksIFBldHIgVm9y
+ZWwgYSDDqWNyaXTCoDoKPiBIaSBCZXJuZCwKPiAKPj4gQWRkIHVwc3RyZWFtIHBhdGNoIHRvIGZp
+eCBidWlsZCB3aXRoIGdsaWJjLTIuNDIuCj4gCj4gVGhhbmsgeW91IGZvciBiYWNrcG9ydGluZyB0
+aGlzIGZpeCEKPiAKPiBSZXZpZXdlZC1ieTogUGV0ciBWb3JlbCA8cGV0ci52b3JlbEBnbWFpbC5j
+b20+CgpBcHBsaWVkIHRvIG1hc3RlciwgdGhhbmtzLgoKTm90ZTogZ2xpYmMgMi40MiBpcyBub3Qg
+eWV0IHN1cHBvcnRlZCBpbiBCdWlsZHJvb3QgYnV0IHNpbmNlIG5mcy11dGlscyBwcm92aWRlIGEK
+aG9zdCB2YXJpYW50LCB3ZSBuZWVkIHRoaXMgZml4IGZvciBob3N0cyB1c2luZyBsYXRlc3QgZ2xp
+YmMuCgpCZXN0IHJlZ2FyZHMsClJvbWFpbgoKCj4gCj4gS2luZCByZWdhcmRzLAo+IFBldHIKPiBf
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGJ1aWxkcm9v
+dCBtYWlsaW5nIGxpc3QKPiBidWlsZHJvb3RAYnVpbGRyb290Lm9yZwo+IGh0dHBzOi8vbGlzdHMu
+YnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAoKX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApi
+dWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1h
+bi9saXN0aW5mby9idWlsZHJvb3QK
