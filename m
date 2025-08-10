@@ -1,76 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C22FC87FCA
-	for <buildroot@archiver.kernel.org>; Sun, 10 Aug 2025 12:48:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5CD59C87FCF
+	for <buildroot@archiver.kernel.org>; Sun, 10 Aug 2025 12:48:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CA59D82323;
-	Sun, 10 Aug 2025 12:48:32 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cJL7nbQlACyU; Sun, 10 Aug 2025 12:48:32 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 004E08231F
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 004E08231F;
-	Sun, 10 Aug 2025 12:48:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id D0086154
- for <buildroot@buildroot.org>; Sun, 10 Aug 2025 12:48:29 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B62C840BFE
- for <buildroot@buildroot.org>; Sun, 10 Aug 2025 12:48:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1FDA740B4C;
+	Sun, 10 Aug 2025 12:48:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PZoMASfapuAO for <buildroot@buildroot.org>;
+ id ZisD_RBL8Guj; Sun, 10 Aug 2025 12:48:33 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5DBD140BB7
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5DBD140BB7;
+	Sun, 10 Aug 2025 12:48:33 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1EFAB154
+ for <buildroot@buildroot.org>; Sun, 10 Aug 2025 12:48:30 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 10B8340B4C
+ for <buildroot@buildroot.org>; Sun, 10 Aug 2025 12:48:30 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7_KgcX0sYZVA for <buildroot@buildroot.org>;
  Sun, 10 Aug 2025 12:48:29 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.178.235;
+X-Greylist: delayed 7246 seconds by postgrey-1.37 at util1.osuosl.org;
+ Sun, 10 Aug 2025 12:48:29 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1747240BB7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1747240BB7
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::235;
  helo=relay15.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A95C840B4C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A95C840B4C
-Received: from relay15.mail.gandi.net (relay15.mail.gandi.net [217.70.178.235])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A95C840B4C
+Received: from relay15.mail.gandi.net (relay15.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::235])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1747240BB7
  for <buildroot@buildroot.org>; Sun, 10 Aug 2025 12:48:28 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPA id 57E0544296;
- Sun, 10 Aug 2025 12:48:26 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id 7D69A44287;
+ Sun, 10 Aug 2025 12:48:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 10 Aug 2025 14:48:17 +0200
-Message-ID: <20250810124820.2116495-2-thomas.petazzoni@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Romain Naour <romain.naour@gmail.com>
+Date: Sun, 10 Aug 2025 14:48:16 +0200
+Message-ID: <20250810124820.2116495-1-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250810124820.2116495-1-thomas.petazzoni@bootlin.com>
-References: <20250810124820.2116495-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 X-GND-State: clean
-X-GND-Score: 0
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduvdelieduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecunecujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepvfhhohhmrghsucfrvghtrgiiiihonhhiuceothhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeejvdetjeffieetkeeftdfhvdffgfeukedttdevvefhgfdugfeikeeliedufeehleenucffohhmrghinhepghhnuhdrohhrghenucfkphepvdgrtddumegtsgdukeemkeeigegumedvuddttdemrgdttdhfmeehlegsfeemgehfvdemieefuggsnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgdukeemkeeigegumedvuddttdemrgdttdhfmeehlegsfeemgehfvdemieefuggspdhhvghlohepfihinhgushhurhhfrdhhohhmvgdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvddprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhm
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduvdelieduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnheptdfftddtledvgeefveegfedtjedvveeltdevkeffgfejgeeiveeijeeuvdevgeeunecuffhomhgrihhnpehgihhthhhusgdrtghomhenucfkphepvdgrtddumegtsgdukeemkeeigegumedvuddttdemrgdttdhfmeehlegsfeemgehfvdemieefuggsnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgdukeemkeeigegumedvuddttdemrgdttdhfmeehlegsfeemgehfvdemieefuggspdhhvghlohepfihinhgushhurhhfrdhhohhmvgdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepgedprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhrtghpt
+ hhtohepghhiuhhlihhordgsvghnvghtthhisegsvghnvghtthhivghnghhinhgvvghrihhnghdrtghomhdprhgtphhtthhopehrohhmrghinhdrnhgrohhurhesghhmrghilhdrtghomh
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1754830106;
+ d=bootlin.com; s=gm1; t=1754830105;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=nozw1rh1+OlaA1Ho9VUzAiX+6tcXTgf7T7GUdnBH35g=;
- b=BLn69QMgLTd2zcnHz2sDq/JwgBIAhLddErMpU9ThA+lYghKdQwdnzlssdWD0ByuWQa7YSo
- p8DSJWh+1CgxJ1eJD7AGjcITCyKqZ7c2Z5YC/+FmuZvgvuYs12OdrCInnXoE7gQe/IPrbT
- joZU6+2SVVr0YjEpleXcnQpn0UTAPs2bWT0oUDgLFb+12MlCLoEuL4y7KAHEtS3eC4zcCk
- jV9j5SbAothtP6LmQL8Ak3aHcr8m3nXtJKjyczCDxPV8xRcEc7X7F0r6eXPjjOS71DgZnR
- WdPVn/BzsIYfUVM5+H0rChzocJTw6m+U+PQ1NU8cekaCnJpPwYFQSHg5zL9huA==
+ content-transfer-encoding:content-transfer-encoding;
+ bh=AwCmpmesDCa9eFf8sdB5EJ0JWUSGh975QbJ0vB+gpnQ=;
+ b=kbSb/cUns8zLGYbe+51Xytw+ONP+TnIIQJCTzqx8uEfOYIkbGy+UE7qVdP+RtAiX6k0f7f
+ yBEF0V0T/+oyCBrxbcLHGKwIWmTciFSB23flxkMdoRK2hMDV41rtKF/iFd9tLbIOIA64vm
+ IjlxYGdxa3mn9Eiprkinexr/p7g7kNCqOqt0MjVKf1idQWhwF1ygZ3oTKJ+FUPSCizKW5t
+ OSa5GGpxQhyr+2bmDqXPbxjKGFQ0N1LrOZpuPmbfBKgCl5JPzh6WfyFVfL9MizmVa99MHw
+ tbP/kGTlBceov2M0rqioOT7xRb5r3bQqlCF4g9Of7hkV7JDZ5pZHx17ofFqcoA==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=BLn69QMg
-Subject: [Buildroot] [PATCH 2/3] support/scripts/gen-bootlin-toolchains:
- drop tweak for Microblaze bleeding-edge toolchains
+ header.s=gm1 header.b=kbSb/cUn
+Subject: [Buildroot] [PATCH 1/3] package/gcc: 2024.12 ARC gcc is in fact
+ based on GCC 14.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -89,30 +92,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This issue has been fixed in the Bootlin toolchains thanks to the
-Microblaze "atomic fix" in GCC.
+Contrary to what was done in
+8ef2ba2ec3cedae92c585135d3a1c5ae3e0f63d8 ("package/{gcc, binutils,
+gdb}: update ARC version to 2024.12"), the ARC gcc version 2024.12 is
+in fact based on GCC 14.2. This can be verified at:
 
+  https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/tag/arc-2024.12-release
+
+Which states "GCC 14.2 with ARC patches".
+
+Fixes: 8ef2ba2ec3cedae92c585135d3a1c5ae3e0f63d8 ("package/{gcc, binutils, gdb}: update ARC version to 2024.12")
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/scripts/gen-bootlin-toolchains | 5 -----
- 1 file changed, 5 deletions(-)
+ package/gcc/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/scripts/gen-bootlin-toolchains b/support/scripts/gen-bootlin-toolchains
-index 502411d4cc..42e1c995f5 100755
---- a/support/scripts/gen-bootlin-toolchains
-+++ b/support/scripts/gen-bootlin-toolchains
-@@ -479,11 +479,6 @@ def get_toolchains():
-                 variant = "bleeding-edge"
-                 version = parts[2][len("bleeding-edge-"):]
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 2149846761..dc0867fa14 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -10,10 +10,10 @@ choice
+ 	  Select the version of gcc you wish to use.
  
--            # GCC 14.x on Microblaze is very broken, see
--            # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=118280
--            if arch in ["microblazeel", "microblazebe"] and variant == "bleeding-edge":
--                continue
--
-             tmp[(arch, libc, variant)] = version
+ config BR2_GCC_VERSION_ARC
+-	bool "gcc arc (15.1)"
++	bool "gcc arc (14.2)"
+ 	# Only supported architecture
+ 	depends on BR2_arc
+-	select BR2_TOOLCHAIN_GCC_AT_LEAST_15
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_14
  
-         if len(tmp) == 0:
+ config BR2_GCC_VERSION_POWERPC_SPE
+ 	bool "gcc powerpc spe"
 -- 
 2.50.1
 
