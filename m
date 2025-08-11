@@ -1,70 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1D75C87FD2
-	for <buildroot@archiver.kernel.org>; Mon, 11 Aug 2025 14:37:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35C42C87FD2
+	for <buildroot@archiver.kernel.org>; Mon, 11 Aug 2025 14:51:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 756C760DA2;
-	Mon, 11 Aug 2025 14:37:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DA04241213;
+	Mon, 11 Aug 2025 14:51:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1C3bcNsn6Qp0; Mon, 11 Aug 2025 14:37:58 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vJmIPxU9_h13; Mon, 11 Aug 2025 14:51:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4F58B60593
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA0CB41268
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4F58B60593;
-	Mon, 11 Aug 2025 14:37:58 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id A6D47154
- for <buildroot@buildroot.org>; Mon, 11 Aug 2025 14:37:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DA0CB41268;
+	Mon, 11 Aug 2025 14:51:47 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id D0DE0138
+ for <buildroot@buildroot.org>; Mon, 11 Aug 2025 14:51:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 81EF983A6F
- for <buildroot@buildroot.org>; Mon, 11 Aug 2025 14:37:56 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C26DE40CFB
+ for <buildroot@buildroot.org>; Mon, 11 Aug 2025 14:51:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id m2HnHfVVa_ZO for <buildroot@buildroot.org>;
- Mon, 11 Aug 2025 14:37:55 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
- helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 28E2281257
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 28E2281257
-Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 28E2281257
- for <buildroot@buildroot.org>; Mon, 11 Aug 2025 14:37:54 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id CD76FB977F31; Mon, 11 Aug 2025 16:37:52 +0200 (CEST)
-Message-ID: <dbab32bd-1f0a-41c9-84e1-bdad5781fe85@rnout.be>
-Date: Mon, 11 Aug 2025 16:37:51 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PXwdadpn3UGY for <buildroot@buildroot.org>;
+ Mon, 11 Aug 2025 14:51:45 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 86AFE40A33
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 86AFE40A33
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 86AFE40A33
+ for <buildroot@buildroot.org>; Mon, 11 Aug 2025 14:51:44 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 1115513FA36;
+ Mon, 11 Aug 2025 16:51:38 +0200 (CEST)
+Received: from 2001:18c0:a22:bf00:5c2b:f296:f108:6612
+ via 2001:18c0:a22:bf00:5c2b:f296:f108:6612 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 11 Aug 2025 16:51:33 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-GB, fr-BE
-To: Buildroot Mailing List <buildroot@buildroot.org>,
- buildroot-lts-sponsors@buildroot.org,
- ML_BuildrootUsers <buildroot-users@buildroot.org>
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rnout.be; s=dkim; 
- t=1754923073; h=from:subject:date:message-id:to:mime-version:content-type:
- content-transfer-encoding:content-language;
- bh=9Rsg2Vhi/b3bt0LQ+e6fAB9r19envv7W6mLYM61XhH8=;
- b=bnrt+4h7n/3Lp/+bIEEy1bAhxudXiOjN8/RhGiM7O57OYEeUkMrNuu/cj1m0dT5sXO7vHv
- T7aFjHnVY9SSM+15385cG1+BrJ4f7qUl/zewepwVdk7+KdAytO3l/cgGkIb9Iw9vwInMxs
- zI2lertbgDz8kVVxuu5dcabqKhADHYreNHbbbh3y23abji+GHF/GO/AUM0PmyLR/wCd+mV
- RXesKGaOMDaYvflgWyl3CFuAsCTBpTno3ygmtULI27zoaYeXYkvVWTLuHUES/23PuJsJMD
- 3KEpHRBLQA0hZ3s1B+u0c6VtFpxqgrYlAFOu070elFFmKiJwFLtO8QE+N3PB/g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+Date: Mon, 11 Aug 2025 16:51:33 +0200
+To: Titouan Christophe <titouan.christophe@mind.be>
+Cc: buildroot@buildroot.org, Daniel Price <daniel.price@gmail.com>
+In-Reply-To: <20250811090700.20714-1-titouan.christophe@mind.be>
+References: <20250811090700.20714-1-titouan.christophe@mind.be>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <6ae17cd572cb689f27a1c1d959969c18@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1754923901;
+ bh=H7Y/5nGaqnbGG51mlN7My8B9U28Avgr6gACyE5JohZY=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=dGRASmj7EsJhEEk91KDCqrrq0sfu0dIN8hLdNk4rsTfDWQD7g+1Cbv/03cXwUasYT
+ x9GC0u5h7IhYYcA1UWr1ZYghrtMIwFLKm6Ckgf6qWcnZEp2O2UK43qlrhvMKPLhjru
+ /LLMcTE1l18NqUu1svzbGs3Z2EsMzG9b1hmEVTGvu/GeQAiyqA+LqxaYAerS/qKb8/
+ FseG3C3iASM9e9doJaqfeMlIds1T0sDAyAPPuwbHhU3cCAc8lB86n5EtE4ano6eMms
+ oROY40FsGfLPfCdmSTRQHmlC5axl71lbCbcKSI0YT2fCdUVGVwUOHxaqXXMIs8CidF
+ ZdMgOkXZvdhCg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
- header.s=dkim header.b=bnrt+4h7
-Subject: [Buildroot] Buildroot 2025.02.5 released
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=dGRASmj7
+Subject: Re: [Buildroot] [PATCH] package/redis: bump to v8.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,138 +81,101 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGksCgpCdWlsZHJvb3QgaXMgYSBzaW1wbGUgdG9vbCBmb3IgY3JlYXRpbmcgY29tcGxldGUgZW1i
-ZWRkZWQgTGludXggc3lzdGVtcwooaHR0cHM6Ly9idWlsZHJvb3Qub3JnKS4KCkJ1aWxkcm9vdCAy
-MDI1LjAyLjUgaXMgcmVsZWFzZWQgLSBHbyBkb3dubG9hZCBpdCBhdDoKCmh0dHBzOi8vYnVpbGRy
-b290Lm9yZy9kb3dubG9hZHMvYnVpbGRyb290LTIwMjUuMDIuNS50YXIuZ3oKCm9yCgpodHRwczov
-L2J1aWxkcm9vdC5vcmcvZG93bmxvYWRzL2J1aWxkcm9vdC0yMDI1LjAyLjUudGFyLnh6CgpPciBn
-ZXQgaXQgZnJvbSBHaXQ6CgpodHRwczovL2dpdGxhYi5jb20vYnVpbGRyb290Lm9yZy9idWlsZHJv
-b3QuZ2l0ICgyMDI1LjAyLjUgdGFnKQoKQnVpbGRyb290IDIwMjUuMDIuNSBpcyBhIGJ1Z2ZpeCBy
-ZWxlYXNlLCBmaXhpbmcgYSBudW1iZXIgb2YgaW1wb3J0YW50IC8Kc2VjdXJpdHkgcmVsYXRlZCBp
-c3N1ZXMgZGlzY292ZXJlZCBzaW5jZSB0aGUgMjAyNS4wMi40IHJlbGVhc2UuCgoKICAgICBDaGFu
-Z2VzIHRoYXQgYXJlIGxpa2VseSB0byBhZmZlY3QgdXNlcnMuCiAgICAgLSBtYmVkdGxzIGlzIHVw
-ZGF0ZWQgdG8gMy42LngsIHdoaWNoIGlzIG5vdCBBUEkgY29tcGF0aWJsZSB3aXRoIDIuMjgueC4K
-ICAgICBDdXN0b20gcGFja2FnZXMgdGhhdCBkZXBlbmQgb24gbWJlZHRscyBtYXkgbmVlZCB0byBi
-ZSB1cGRhdGVkLgogICAgIC0gVGhlIHN5c3RlbSBDTWFrZSB2ZXJzaW9uIG11c3QgYmUgc21hbGxl
-ciB0aGFuIDQuMC4gSWYgdGhlIHN5c3RlbSBvbiB3aGljaAogICAgIHlvdSBidWlsZCBoYXMgQ01h
-a2UgNC4wIG9yIGxhdGVyLCBob3N0LWNtYWtlIHdpbGwgYmUgYnVpbHQuCgogICAgIEltcG9ydGFu
-dCAvIHNlY3VyaXR5IHJlbGF0ZWQgZml4ZXM6CiAgICAgLSBCdW1wIG1iZWR0bHMgdG8gdmVyc2lv
-biAzLjYuNCwgdGhpcyBhZmZlY3QgbWFueSBwYWNrYWdlcyBkZXBlbmRpbmcgb24gaXQuCiAgICAg
-ICAgIEFsc28gZml4ZXMgQ1ZFLTIwMjUtNDc5MTcsIENWRS0yMDI1LTQ4OTY1LCBDVkUtMjAyNS00
-OTA4NywKICAgICAgICAgQ1ZFLTIwMjUtNDk2MDAsIENWRS0yMDI1LTQ5NjAxLCBDVkUtMjAyNS01
-MjQ5NiwgQ1ZFLTIwMjUtNTI0OTcKICAgICAtIHNhbWJhNDogc3VwcG9ydCBXaW5kb3dzIHNlY3Vy
-aXR5IGhhcmRlbmluZwogICAgIC0gYXBhY2hlOiBDVkUtMjAyNS01MzAyMCwgQ1ZFLTIwMjUtNDk4
-MTIsIENWRS0yMDI1LTQ5NjMwLCBDVkUtMjAyNS0yMzA0OCwKICAgICAgICAgQ1ZFLTIwMjQtNDcy
-NTIsIENWRS0yMDI0LTQzMzk0LCBDVkUtMjAyNC00MzIwNCwgQ1ZFLTIwMjQtNDI1MTYsCiAgICAg
-ICAgIENWRS0yMDI1LTU0MDkwCiAgICAgLSBhc3NpbXA6IENWRS0yMDI1LTI3NTAsIENWRS0yMDI1
-LTI3NTEsIENWRS0yMDI1LTI3NTcsIENWRS0yMDI1LTMxNTgKICAgICAtIGNsYW1hdjogQ1ZFLTIw
-MjUtMjAyNjAKICAgICAtIGVkazI6IENWRS0yMDI0LTM4ODA1CiAgICAgLSBnaXQ6IENWRS0yMDI1
-LTI3NjEzLCBDVkUtMjAyNS0yNzYxNCwgQ1ZFLTIwMjUtNDY4MzUsIENWRS0yMDI1LTQ4Mzg0LAog
-ICAgICAgICBDVkUtMjAyNS00ODM4NSwgQ1ZFLTIwMjUtNDgzODYKICAgICAtIGpvc2U6IENWRS0y
-MDIzLTUwOTY3CiAgICAgLSBsaWJhcmNoaXZlOiBDVkUtMjAyNS01OTE0LCBDVkUtMjAyNS01OTE1
-LCBDVkUtMjAyNS01OTE2LCBDVkUtMjAyNS01OTE3LAogICAgICAgICBDVkUtMjAyNS01OTE4CiAg
-ICAgLSBsaWJhdmlmOiBDVkUtMjAyNS00ODE3NCwgQ1ZFLTIwMjUtNDgxNzUKICAgICAtIGxpYmJs
-b2NrZGV2OiBDVkUtMjAyNS02MDE5CiAgICAgLSBsaWJicGY6IENWRS0yMDI1LTI5NDgxCiAgICAg
-LSBsaWJoZWlmOiBDVkUtMjAyNS00Mzk2NiwgQ1ZFLTIwMjUtNDM5NjcKICAgICAtIGxpYmh0cDog
-Q1ZFLTIwMjQtNDU3OTcKICAgICAtIGxpYnNvdXA6IENWRS0yMDI0LTUyNTMwLCBDVkUtMjAyNC01
-MjUzMSwgQ1ZFLTIwMjQtNTI1MzIsIENWRS0yMDI1LTI3ODQsCiAgICAgICAgIENWRS0yMDI1LTQ0
-NzYsIENWRS0yMDI1LTQ5NDgsIENWRS0yMDI1LTQ5NjksIENWRS0yMDI1LTMyMDUwLAogICAgICAg
-ICBDVkUtMjAyNS0zMjA1MiwgQ1ZFLTIwMjUtMzIwNTMsIENWRS0yMDI1LTMyOTA2LCBDVkUtMjAy
-NS0zMjkxMCwKICAgICAgICAgQ1ZFLTIwMjUtMzI5MTEsIENWRS0yMDI1LTMyOTEyLCBDVkUtMjAy
-NS0zMjkxMywgQ1ZFLTIwMjUtMzI5MTQsCiAgICAgICAgIENWRS0yMDI1LTQ2NDIwLCBDVkUtMjAy
-NS00NjQyMQogICAgIC0gbGlieG1sMjogQ1ZFLTIwMjUtNjAyMSwgQ1ZFLTIwMjUtNjE3MCwgQ1ZF
-LTIwMjUtNDk3OTQsIENWRS0yMDI1LTQ5Nzk2LAogICAgICAgICBDVkUtMjAyNS00OTc5NQogICAg
-IC0gbWljcm9weXRob246IENWRS0yMDI0LTg5NDcKICAgICAtIG1vZHNlY3VyaXR5MjogQ1ZFLTIw
-MjUtNDc5NDcsIENWRS0yMDI1LTQ4ODY2CiAgICAgLSBvcmM6IENWRS0yMDI0LTQwODk3CiAgICAg
-LSBwaHA6IENWRS0yMDI1LTE3MzUsIENWRS0yMDI1LTY0OTEsIENWRS0yMDI1LTEyMjAKICAgICAt
-IHB5dGhvbi1haW9odHRwOiBDVkUtMjAyNS01MzY0MwogICAgIC0gcHl0aG9uLXN0YXJsZXR0ZTog
-Q1ZFLTIwMjUtNTQxMjEKICAgICAtIHB5dGhvbi11cmxsaWIzOiBDVkUtMjAyNS01MDE4MSwgQ1ZF
-LTIwMjUtNTAxODIKICAgICAtIHB5dGhvbjM6IENWRS0yMDI0LTEyNzE4LCBDVkUtMjAyNS00MTM4
-LCBDVkUtMjAyNS00MzMwLCBDVkUtMjAyNS00NDM1LAogICAgICAgICBDVkUtMjAyNS00NTE3CiAg
-ICAgLSByZWRpczogQ1ZFLTIwMjUtMzIwMjMsIENWRS0yMDI1LTQ4MzY3CiAgICAgLSBzaGltOiBD
-VkUtMjAyNC0yMzEyCiAgICAgLSBzbmdyZXA6IENWRS0yMDI0LTMxMTksIENWRS0yMDI0LTMxMjAK
-ICAgICAtIHN1ZG86IENWRS0yMDI1LTMyNDYyLCBDVkUtMjAyNS0zMjQ2MwogICAgIC0gdGNwcmVw
-bGF5OiBDVkUtMjAyMy00MjU2LCBDVkUtMjAyMy00MzI3OSwgQ1ZFLTIwMjQtMjI2NTQKICAgICAt
-IHRpbnl4bWw6IENWRS0yMDIzLTM0MTk0CiAgICAgLSB3cGV3ZWJraXQ6IENWRS0yMDI0LTI3ODU2
-LCBDVkUtMjAyNC00MDg2NiwgQ1ZFLTIwMjQtNDQxODUsCiAgICAgICAgIENWRS0yMDI0LTQ0MTg3
-LCBDVkUtMjAyNC00NDE5MiwgQ1ZFLTIwMjQtNDQyNDQsIENWRS0yMDI0LTQ0Mjk2LAogICAgICAg
-ICBDVkUtMjAyNC00NDMwOCwgQ1ZFLTIwMjQtNDQzMDksIENWRS0yMDI0LTU0NDY3LCBDVkUtMjAy
-NC01NDQ3OSwKICAgICAgICAgQ1ZFLTIwMjQtNTQ1MDIsIENWRS0yMDI0LTU0NTA1LCBDVkUtMjAy
-NC01NDUwOCwgQ1ZFLTIwMjQtNTQ1MzQsCiAgICAgICAgIENWRS0yMDI0LTU0NTQzLCBDVkUtMjAy
-NC01NDU1MSwgQ1ZFLTIwMjQtNTQ2NTgsIENWRS0yMDI1LTI0MTQzLAogICAgICAgICBDVkUtMjAy
-NS0yNDE1MCwgQ1ZFLTIwMjUtMjQxNTgsIENWRS0yMDI1LTI0MTYyLCBDVkUtMjAyNS0yNDIwMSwK
-ICAgICAgICAgQ1ZFLTIwMjUtMjQyMDgsIENWRS0yMDI1LTI0MjA5LCBDVkUtMjAyNS0yNDIxMywg
-Q1ZFLTIwMjUtMjQyMTYsCiAgICAgICAgIENWRS0yMDI1LTI0MjIzLCBDVkUtMjAyNS0yNDI2NCwg
-Q1ZFLTIwMjUtMzA0MjcsIENWRS0yMDI1LTMxMjA0LAogICAgICAgICBDVkUtMjAyNS0zMTIwNSwg
-Q1ZFLTIwMjUtMzEyMDYsIENWRS0yMDI1LTMxMjE1LCBDVkUtMjAyNS0zMTI1NwogICAgIC0geG9y
-Zy1zZXJ2ZXIgLyB4d2F5bGFuZDogQ1ZFLTIwMjUtNDkxNzUsIENWRS0yMDI1LTQ5MTc2LCBDVkUt
-MjAyNS00OTE3NywKICAgICAgICAgQ1ZFLTIwMjUtNDkxNzgsIENWRS0yMDI1LTQ5MTc5LCBDVkUt
-MjAyNS00OTE4MAoKICAgICBVcGRhdGVkIC8gZml4ZWQgcGFja2FnZXM6IGF2cmR1ZGUsIGJlcmtl
-bGV5ZGIsIGJpbnV0aWxzLCBibXg3LCBib290L3NoaW0sCiAgICAgYm9vdC9zeXNsaW51eCwgY2Et
-Y2VydGlmaWNhdGVzLCBjaGFydGpzLCBjaWZzLXV0aWxzLCBjcHAtaHR0cGxpYiwgY3B1bGltaXQs
-CiAgICAgZGFxLCBlbGZ1dGlscywgZXVkZXYsIGZ3dXBkLCBnY2MsIGdudXBsb3QsIGdzdHJlYW1l
-cjEtZWRpdGluZy1zZXJ2aWNlcywKICAgICBndW1iby1wYXJzZXIsIGd2ZnMsIGhhcHJveHksIGhk
-ZHRlbXAsIGt2bXRvb2wsIGxpYmFyZ3RhYmxlLCBsaWJjZGRiLAogICAgIGxpYmNvbmZ1c2UsIGxp
-YmNyb3NzZ3VpZCwgbGliY3VybCwgbGliZXNtdHAsIGxpYmdjcnlwdCwgbGliaWVjNjE4NTAsCiAg
-ICAgbGlibWFuZXR0ZSwgbGlibWljcm9odHRwZCwgbGlibXBlZzIsIGxpYm5kcCwgbGlib3BlbnNz
-bCwgbGlicDExLCBsaWJzc2gyLAogICAgIGxpYnVodHRwZCwgbGlidmEsIGxpbnV4LCBsaW51eC10
-b29scyAocnRsYSksIGxyenN6LCBsdHAtdGVzdHN1aXRlLCBsdWEsCiAgICAgbW9kZW0tbWFuYWdl
-ciwgbW9kc2VjdXJpdHkyLCBtb3NxdWl0dG8sIG1wdiwgbXVwZGYsIG5jbXBjLCBuZXQtdG9vbHMs
-CiAgICAgbmV0d29yay1tYW5hZ2VyLCBuZ2lueC1tb2RzZWN1cml0eSwgbnRwLCBvbmlndXJ1bWEs
-IG9wZW5ibGFzLCBvcmMsIHBhcnRlZCwKICAgICBweXRob24tYXNnaXJlZiwgcHl0aG9uLWN5dGhv
-biwgcHl0aG9uLWRidXMtZmFzdCwgcHl0aG9uLWZhc3RhcGksCiAgICAgcHl0aG9uLWZ1dHVyZSwg
-cHl0aG9uLW1zZ3BhY2ssIHB5dGhvbi1tdWx0aXBhcnQsIHB5dGhvbi1yZW1pLAogICAgIHB5dGhv
-bi1zZXR1cHRvb2xzLCBxcGlkLXByb3RvbiwgcmF1Yy1oYXdrYml0LXVwZGF0ZXIsIHJ0bDgxODhl
-dSwgcnRsODcyM2J1LAogICAgIHJ0bDg3MjNkcywgcnRsODgyMWF1LCBydXN0LCBzaGFkb3dzb2Nr
-LWxpYmV2LCBzaGFpcnBvcnQtc3luYywgc294LCBzcWxpdGUsCiAgICAgc3F1YXNoZnMsIHN5c3Rl
-bWQsIHRhaWxzY2FsZSwgdG9yLCB1Y2xpYmMsIHVzdHJlYW0tc3NsLCB3YXRjaGRvZywKICAgICB3
-ZWJraXRndGssIHhlbgoKICAgICBSZW1vdmVkIHBhY2thZ2U6IGxpYm9sbSwgbGlid2Vic29jawoK
-ICAgICBJbmZyYXN0cnVjdHVyZSB1cGRhdGVzIC8gZml4ZXM6CiAgICAgLSBweXRob24tZ2xzbGFu
-ZyBpcyBub3cgYSBob3N0IHBhY2thZ2Ugb25seQogICAgIC0gTWFrZWZpbGUgdW5leHBvcnRzIGFy
-ZSBub3cgZml4ZWQgYW5kIHNvcnRlZAogICAgIC0gSGlkZSBHQ0MgdmVyc2lvbnMgZm9yIHVuc3Vw
-cG9ydGVkIENQVXMKICAgICAtIGNoZWNrLXBhY2thZ2U6IGhhbmRsZSBtaXNzaW5nIGZpbGVzCiAg
-ICAgLSB0ZXN0LXBrZzogc3RvcCBvbiBzaWdpbnQKICAgICAtIGNoZWNrLWhvc3QtY21ha2UubWs6
-IHNldCBob3N0LWNtYWtlIG1heCB2ZXJzaW9uCiAgICAgLSB0b29sY2hhaW4vdG9vbGNoYWluLXdy
-YXBwZXIuYzoKICAgICAgICAgLSBjb3JyZWN0IENDQUNIRV9CQVNFRElSIGNvbW1lbnQKICAgICAg
-ICAgLSBzbGlnaHRseSBzaW1wbGlmeSBjbWRsaW5lIGNvcHlpbmcKICAgICAgICAgLSBnZXQgcmlk
-IG9mIEVYQ0xVU0lWRV9BUkdTCgogICAgIFRlc3QgaW1wcm92ZW1lbnRzOgogICAgIC0gbmdpbngt
-bW9kc2VjdXJpdHk6IG5ldyB0ZXN0CiAgICAgLSBndW1iby1wYXJzZXI6IG5ldyBydW50aW1lIHRl
-c3QKICAgICAtIGFkZCBhIGNydW4tYmFzZWQgcnVudGltZSB0ZXN0IGZvciBkb2NrZXItY29tcG9z
-ZQogICAgIC0gdGVzdF94ZW46IGFkZCBhIGJhc2UgY2xhc3MKICAgICAtIHRlc3RfeGVuOiB0ZXN0
-IG9uIDMyLWJpdCBBcm0gdjcKICAgICAtIHRlc3RfeGVuOiByZW5hbWUgVGVzdFhlbiB0byBUZXN0
-WGVuQWFyY2g2NAoKICAgICBCb2FyZHMgdXBkYXRlZCAvIGZpeGVkOgogICAgIC0gZ2xvYmFsc2Nh
-bGVfZXNwcmVzc29iaW46IHVwZGF0ZSBsaW51eAogICAgIC0gZnJlZXNjYWxlL214czogZml4IGxp
-bnV4IGJvb3RpbmcKICAgICAtIHRpX2FtNjJ4X3NrOiBidW1wIExpbnV4IHZlcnNpb24KICAgICAt
-IHJhc3BiZXJyeXBpNTogZml4IGZhaWxpbmcgYnVpbGQgYmVjYXVzZSBvZiBtaXNzaW5nIGluLWtl
-cm5lbCBkdHMKCgoKRm9yIG1vcmUgZGV0YWlscywgc2VlIHRoZSBDSEFOR0VTIGZpbGU6CgpodHRw
-czovL2dpdGxhYi5jb20vYnVpbGRyb290Lm9yZy9idWlsZHJvb3QvLS9ibG9iLzIwMjUuMDIuNS9D
-SEFOR0VTCgpVc2VycyBvZiB0aGUgYWZmZWN0ZWQgcGFja2FnZXMgYXJlIHN0cm9uZ2x5IGVuY291
-cmFnZWQgdG8gdXBncmFkZS4KCk1hbnkgdGhhbmtzIHRvIGFsbCB0aGUgcGVvcGxlIGNvbnRyaWJ1
-dGluZyB0byB0aGlzIHJlbGVhc2U6CgpnaXQgc2hvcnRsb2cgLXMgLW4gMjAyNS4wMi40Li4KCiAg
-ICAgMzYgIFRob21hcyBQZXJhbGUKICAgICAyNyAgQmVybmQgS3VobHMKICAgICAyNiAgVGl0b3Vh
-biBDaHJpc3RvcGhlCiAgICAgMTAgIFBldGVyIEtvcnNnYWFyZAogICAgICA5ICBNYXJjdXMgSG9m
-Zm1hbm4KICAgICAgOCAgUmFwaGHDq2wgTcOpbG90dGUKICAgICAgNyAgR2l1bGlvIEJlbmV0dGkK
-ICAgICAgNiAgSnVsaWVuIE9saXZhaW4KICAgICAgNiAgVGhvbWFzIFBldGF6em9uaQogICAgICA2
-ICBUaW0gU291YnJ5CiAgICAgIDQgIEphbWVzIEhpbGxpYXJkCiAgICAgIDQgIE1heGltZSBDaGV2
-YWxsaWVyCiAgICAgIDQgIFllZ29yIFllZnJlbW92CiAgICAgIDMgIEZsb3JpYW4gTGFyeXNjaAog
-ICAgICAzICBWaW5jZW50IFN0ZWhsw6kKICAgICAgMyAgWWFubiBFLiBNT1JJTgogICAgICAyICBB
-ZHJpYW4gUGVyZXogZGUgQ2FzdHJvCiAgICAgIDIgIEZpb25hIEtsdXRlCiAgICAgIDIgIEZpb25h
-IEtsdXRlIChXSVdBKQogICAgICAyICBKYW1lcyBLbmlnaHQKICAgICAgMiAgS2FkYW1iaW5pIE5l
-bWEKICAgICAgMiAgU2NvdHQgRmFuCiAgICAgIDEgIEFybm91dCBWYW5kZWNhcHBlbGxlCiAgICAg
-IDEgIEJyYW0gT29zdGVyaHVpcwogICAgICAxICBEYXJpbyBCaW5hY2NoaQogICAgICAxICBGYWJp
-ZW4gTGVob3Vzc2VsCiAgICAgIDEgIEZsb3JpYW4gRmFpbmVsbGkKICAgICAgMSAgRnJhbmNvaXMg
-UGVycmFkCiAgICAgIDEgIEZyZWQgTGVmcmFuYwogICAgICAxICBHZXJvIFNjaHfDpHJpY2tlCiAg
-ICAgIDEgIEd3ZW5oYWVsIEdvYXZlYy1NZXJvdQogICAgICAxICBNYXJrdXMgTWF5ZXIKICAgICAg
-MSAgTWljaGFlbCBGaXNjaGVyCiAgICAgIDEgIE5hdGhhbmllbCBSb2FjaAogICAgICAxICBQZXRy
-IFZvcmVsCiAgICAgIDEgIFJvbWFpbiBOYW91cgogICAgICAxICBTdGVmYW4gTmlja2wKICAgICAg
-MSAgV2FsZGVtYXIgQnJvZGtvcmIKClJlZ2FyZHMsCkFybm91dApfX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxk
-cm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xp
-c3RpbmZvL2J1aWxkcm9vdAo=
+Hi Titouan,
+
+Thank you for the patch.
+
+On 11/08/2025 11:07, Titouan Christophe via buildroot wrote:
+> From the release notes:
+> (https://github.com/redis/redis/blob/8.2.0/00-RELEASENOTES)
+> 
+> ===========================================================
+> 8.2 GA (v8.2.0)    Released Mon 4 Aug 2025 15:00:00 IST
+> ===========================================================
+> 
+> This is the General Availability release of Redis Open Source 8.2.
+> 
+> - Streams - new commands: `XDELEX` and `XACKDEL`; extension to `XADD` 
+> and `XTRIM`
+> - Bitmap - `BITOP`: new operators: `DIFF`, `DIFF1`, `ANDOR`, and `ONE`
+> - Query Engine - new SVS-VAMANA vector index type which supports vector 
+> compression
+> - More than 15 performance and resource utilization improvements
+> - New metrics: per-slot usage metrics, key size distributions for basic 
+> data types, and more
+
+This is a short summary for the 8.2.0 release. Looking at the full
+release note:
+https://github.com/redis/redis/blob/8.2.0/00-RELEASENOTES
+
+We see the changes from 8.0.3 to 8.2.0 includes three security fixes:
+- (CVE-2025-32023) Fix out-of-bounds write in `HyperLogLog` commands
+- (CVE-2025-48367) Retry accepting other connections even if the 
+accepted connection reports an error
+- (CVE-2025-27151) redis-check-aof may lead to stack overflow and 
+potential RCE
+
+So I believe this patch should be marked as "security bump" (with the
+corresponding info in the commit log).
+
+Could you send an updated patch, please?
+
+> Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+> ---
+>  package/redis/redis.hash | 2 +-
+>  package/redis/redis.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+> index c66223f2da..41d2797cd0 100644
+> --- a/package/redis/redis.hash
+> +++ b/package/redis/redis.hash
+> @@ -1,5 +1,5 @@
+>  # From https://github.com/redis/redis-hashes/blob/master/README
+> -sha256  
+> 33f37290b00b14e9a884dd4dcba335febd63ea16c51609d34fa41e031ad587df  
+> redis-8.0.3.tar.gz
+> +sha256  
+> ff95b83b7cf2f7a33af3be1e52fdf2e791c259f8272465c3b09f9e6bc901b604  
+> redis-8.2.0.tar.gz
+> 
+>  # Locally calculated
+>  sha256  
+> 4a0e416b9537688f30dfe69ddaceb2ca64d96b7df02a0a6760d376890ddc4e40  
+> LICENSE.txt
+> diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+> index 5ffb2a929f..8b5005ccda 100644
+> --- a/package/redis/redis.mk
+> +++ b/package/redis/redis.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  
+> ################################################################################
+> 
+> -REDIS_VERSION = 8.0.3
+> +REDIS_VERSION = 8.2.0
+>  REDIS_SITE = http://download.redis.io/releases
+>  REDIS_LICENSE = \
+>  	AGPL-3.0 or SSPL-1.0 or RSAL-2.0 (core); \
+> --
+> 2.50.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+Best regaeds,
+
+Julien.
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
