@@ -4,93 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB2ACCA0ECD
-	for <buildroot@archiver.kernel.org>; Mon, 11 Aug 2025 15:24:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA90DCA0ECD
+	for <buildroot@archiver.kernel.org>; Mon, 11 Aug 2025 15:26:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8C9A261429;
-	Mon, 11 Aug 2025 15:24:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8784D6144A;
+	Mon, 11 Aug 2025 15:26:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LY_Kec1PAcBy; Mon, 11 Aug 2025 15:24:45 +0000 (UTC)
+ id hbivQ1DaEAVK; Mon, 11 Aug 2025 15:26:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A340161438
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF2B76142D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A340161438;
-	Mon, 11 Aug 2025 15:24:45 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id B59ED1C5
- for <buildroot@buildroot.org>; Mon, 11 Aug 2025 15:24:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AF2B76142D;
+	Mon, 11 Aug 2025 15:26:55 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id E210B1C5
+ for <buildroot@buildroot.org>; Mon, 11 Aug 2025 15:26:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9BC5882479
- for <buildroot@buildroot.org>; Mon, 11 Aug 2025 15:24:44 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C86E68223A;
+ Mon, 11 Aug 2025 15:26:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 48LzFHVJLjkh for <buildroot@buildroot.org>;
- Mon, 11 Aug 2025 15:24:43 +0000 (UTC)
+ id eTWODcyDTZy6; Mon, 11 Aug 2025 15:26:54 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::130; helo=mail-lf1-x130.google.com;
- envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5F05F82392
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5F05F82392
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com
- [IPv6:2a00:1450:4864:20::130])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5F05F82392
- for <buildroot@buildroot.org>; Mon, 11 Aug 2025 15:24:43 +0000 (UTC)
-Received: by mail-lf1-x130.google.com with SMTP id
- 2adb3069b0e04-55b8a0f36fcso4809945e87.1
- for <buildroot@buildroot.org>; Mon, 11 Aug 2025 08:24:43 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
+ envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C08F7807D5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C08F7807D5
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C08F7807D5
+ for <buildroot@buildroot.org>; Mon, 11 Aug 2025 15:26:53 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ 5b1f17b1804b1-4563cfac2d2so38669115e9.3
+ for <buildroot@buildroot.org>; Mon, 11 Aug 2025 08:26:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1754925880; x=1755530680;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=M2EXB56fII40TUewsqTU43C5VLBZvHL6ATYDBSFS3AE=;
- b=rPQctsH7rAYp9WrUqXFNKcomInPJKs9mE8AFm7LwFcdT3rV/9Cx5aXc3sI37al3BGZ
- ybXAcbimzkMRY41m0AFVbhJjRMKGFxPPygSqTptrXFLJ8IFZK3exXWqteDxZfR/cjfm0
- LRdMjLxtKB6CDA1huTn8wUNuYDXhCoG4PXRsQVPkqqDdZ7rO3vh2HoiIibzRfcVhiFZ3
- 2HyDozZA5yNAqP+IdPZflDcoD7rvtx7yQ+awvuOEGm9FpS3ERSGcLiJ2eugprMlZim7V
- /SaJbwvEnairvOBfGt5RhJHolKkMtqPIbiN8eBWfLGdPultU4CSgLPxrv1W9V69wXAka
- oI0Q==
-X-Gm-Message-State: AOJu0YzcbP+SVHhWBdpL+7vnv7Z7yK9h5Wa8uoouZDMhKmZ7aFPrTG1Z
- 8mVKaPusuS/4hs40AxrTSaeYO34SpjMlv17uF/exHLvR/fVuemIGPyFHesJ6tGcXTaUer2aeM5q
- EA6aQEbtyK0ayIGyL8YNgz9n6aFfCIcGb01PE
-X-Gm-Gg: ASbGnctBjjVCkPCiqVgqJEKvY3icx/BDnTHqnuOA6pk3qf+1P6MspYUnoMiqA5pmbbP
- hPuMIQ1Sdr1kAtIR/mp+lzP4ZP3Y1fPi1GhK+ejTqNPdsW7O9bR23OdwMzPrVRgjon+1UmIJHFv
- PkTlsTRFqztBwfZhJ5UJYRavea9kQQUE0EwAH+UFkGk4z5qjUmTIub2Y6lBehjK7Qeb93Rs5VBi
- ojol7PN
-X-Google-Smtp-Source: AGHT+IFQWYGUzNBtGL+bMiSMQqIrF7E0oYYQCcbQDRZzztPg2tD6yKhUAruE/lZCruL9FfKQzx/mAi1UKXXW0SoXsTY=
-X-Received: by 2002:a05:6512:4021:b0:55b:8aff:9af3 with SMTP id
- 2adb3069b0e04-55cd75b257dmr98885e87.7.1754925879693; Mon, 11 Aug 2025
- 08:24:39 -0700 (PDT)
-MIME-Version: 1.0
-References: <20250730145724.204468-1-yegorslists@googlemail.com>
-In-Reply-To: <20250730145724.204468-1-yegorslists@googlemail.com>
-Date: Mon, 11 Aug 2025 17:24:26 +0200
-X-Gm-Features: Ac12FXzFYHd4qI8mZZZV8B9gLI6rvBr6Ptp5IbrNFrNFBjx8byiTT2XW6BZ3ljk
-Message-ID: <CAGm1_ktDKcFJONe4iZ3kcyYwZGiuD503quwSOgNj=N=N5eVEPQ@mail.gmail.com>
-To: buildroot@buildroot.org
-Cc: James Hilliard <james.hilliard1@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=googlemail.com; s=20230601; t=1754925880; x=1755530680; darn=buildroot.org; 
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
+ d=1e100.net; s=20230601; t=1754926012; x=1755530812;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=M2EXB56fII40TUewsqTU43C5VLBZvHL6ATYDBSFS3AE=;
- b=QTUhrhqZl90cFCDa6Nw7CP23T/gZstDQrTd1+lBGTH2pl86vvDUGoeKQEXBzmYHjKf
- 0UNvHATZzlbACvEpybMPkN/KWbHXFpysJBgVCnll4YG59KMBGZ3TPpaBOwYgiC9BEZgQ
- y7L8UgT7BeR6Qetd/LPw8ARgMb89XkxX8PiDiXILWIL4qiHyIOn6QDDoyaR9XuvLxnsO
- 99ZAzn5VVQSsDPGv7jEpGWmCLuFEVEAQbRCF9H1CmBQDRVTu2W4w9FQBablI9yMk55c9
- x9VJNpA71Es5kBIuU0di7Gx4sKPUovfIkRTx4cXaEFPmQMlfa1a/K5wWXfLlgYc3fJCD
- 9qlw==
+ bh=WRIS4M2KEebeuYeECtAkyf2Q1SqeFROz74WTjZLYBHQ=;
+ b=rcZ0845dJ5IT5d6kSJzbezzjvTSoN8SIDmu5vL5Mn+VVmsDoDSwzRbsdZwCdBveBE4
+ xcfx6qM+rTTaS0ObMzTQBbhC1G5juYAjjrSZOde83lQlRsbzs6HRBL8eR5jL/WF7h15L
+ DoMQ8kyrUMfo8/tS4m2O+rsXI+OF+gAInJck+j7+7782OUNUsPF6Ty8B/iwq7Z0ohnKU
+ WEnQYIfZkROp444tbalJZBV41SuyDU0LzOms1nvdmKKyK7BqBvYHKGYhH2yDVeLRzeM8
+ fUQWqH6uyXtAbylqaKYMmtW7LOl/fOpGh9RVra6M6g0sYgqynSjG+Hk5bV5eTw3HOqTS
+ HLtA==
+X-Gm-Message-State: AOJu0YyPxAlWlb78cV/w9b5MEnS7VxIYdw1BgPqeejlqyQuhWVB2MW3H
+ L5n5zWWFk0eA1MTexJuhIQwbML/ptm/6H4Gg6LmQ4WIauWu+jKIAYnty2CO+Og==
+X-Gm-Gg: ASbGncsSrcm5+qWQjHrVYTNrKVtvTAbk4GaymhdWZnxKzLPYc1xS68MW9iIYhf0krNF
+ LQIFaSyuJD7Xzj5ZA9lfZoMO6Wc4aTuRPrVsDGt+votRZh7WH4rfqaE1cZZNOIiE57QzuEc+dFC
+ Jy2V9Iq4T3UfiatFP6gK7EfDb5ZGO6MtQ1OU15twAFgQSN8FpqETWAxWI1mFMenNFSF3jQSL2pI
+ zEl7+XnCpAfVm9bQ0hrZqPPiCf8e2xF4LpO4tg6yYAZZC2Y+/K+RQizgKYH8eV5NarU2gVuzMY6
+ 6d/OSEXmNCWega63aa5s4je7fvHzOi0PLixcnaTfk/g9LVybjooHWPymExNAgum435Fq8H35Qad
+ syF238PJ3ShPBtjNwHnG4XuahRe7RCeYi
+X-Google-Smtp-Source: AGHT+IGcbpkaQ61Fg+PXxOvXx1N//kOxcvHboZVYRoco5gVqf5U9wdGmK/BF9iWeUuPS2a5etQ65iQ==
+X-Received: by 2002:a05:600c:1caa:b0:456:e39:ec1a with SMTP id
+ 5b1f17b1804b1-459f4ec3a43mr133365325e9.14.1754926011437; 
+ Mon, 11 Aug 2025 08:26:51 -0700 (PDT)
+Received: from landeda.home ([2a01:cb19:93aa:5000:c0e7:5e2f:eef4:db82])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-459e587d378sm256734235e9.23.2025.08.11.08.26.50
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 11 Aug 2025 08:26:51 -0700 (PDT)
+To: buildroot@buildroot.org
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Date: Mon, 11 Aug 2025 17:26:50 +0200
+Message-ID: <20250811152650.3689304-1-yann.morin.1998@free.fr>
+X-Mailer: git-send-email 2.47.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1754926012; x=1755530812; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+ bh=WRIS4M2KEebeuYeECtAkyf2Q1SqeFROz74WTjZLYBHQ=;
+ b=kU1GEjoXZ+HBVXcRrPxirKv0ABpPSEW5tML7xptajOgIyBs43fpkIr2jRtwQ8u/m/i
+ e3k8cNHfyp/ZKRey/Q5Dp6zcvBhfVa0uN9Cat0S6wUwu+whurW8TyU6IFFOlJJ97xeEP
+ V0CbxwV814MpUuYd4jppvEdVjMi+aZnWyIvf8GtXl6fALjkOS0xgw339Y2UWCtqs19nH
+ bOLw5pLJkTopNFI0j/+1nWkz/YTQHbDn6oa/bzmLXty2niHNknSfWDYDHbyRyEoSBRuO
+ qZaIm1Ho99w/tjhrczF1yOaEQfnu/ZLiwNi32/cjiosLr0Wfe5W9vaOrooC0abNRxf0c
+ q4og==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=googlemail.com
+ dmarc=fail (p=quarantine dis=none)
+ header.from=free.fr
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com
- header.a=rsa-sha256 header.s=20230601 header.b=QTUhrhqZ
-Subject: Re: [Buildroot] [PATCH] package/python-yarl: bump to version 1.20.1
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=kU1GEjoX
+Subject: [Buildroot] [PATCH] package/bash: don't use append-assignment where
+ unneeded
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -102,50 +106,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Yegor Yefremov via buildroot <buildroot@buildroot.org>
-Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: "Yann E. MORIN via buildroot" <buildroot@buildroot.org>
+Reply-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gV2VkLCBKdWwgMzAsIDIwMjUgYXQgNDo1N+KAr1BNIDx5ZWdvcnNsaXN0c0Bnb29nbGVtYWls
-LmNvbT4gd3JvdGU6Cj4KPiBGcm9tOiBZZWdvciBZZWZyZW1vdiA8eWVnb3JzbGlzdHNAZ29vZ2xl
-bWFpbC5jb20+Cj4KPiBGb3IgY2hhbmdlIGxvZywgc2VlOgo+Cj4gaHR0cHM6Ly9naXRodWIuY29t
-L2Fpby1saWJzL3lhcmwvcmVsZWFzZXMvdGFnL3YxLjIxLjEKPgo+IFNpZ25lZC1vZmYtYnk6IFll
-Z29yIFllZnJlbW92IDx5ZWdvcnNsaXN0c0Bnb29nbGVtYWlsLmNvbT4KPiAtLS0KPiAgcGFja2Fn
-ZS9weXRob24teWFybC9weXRob24teWFybC5oYXNoIHwgNCArKy0tCj4gIHBhY2thZ2UvcHl0aG9u
-LXlhcmwvcHl0aG9uLXlhcmwubWsgICB8IDQgKystLQo+ICAyIGZpbGVzIGNoYW5nZWQsIDQgaW5z
-ZXJ0aW9ucygrKSwgNCBkZWxldGlvbnMoLSkKPgo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3B5dGhv
-bi15YXJsL3B5dGhvbi15YXJsLmhhc2ggYi9wYWNrYWdlL3B5dGhvbi15YXJsL3B5dGhvbi15YXJs
-Lmhhc2gKPiBpbmRleCBjYTJkNDJiZjU4Li40M2JhMzFmODFmIDEwMDY0NAo+IC0tLSBhL3BhY2th
-Z2UvcHl0aG9uLXlhcmwvcHl0aG9uLXlhcmwuaGFzaAo+ICsrKyBiL3BhY2thZ2UvcHl0aG9uLXlh
-cmwvcHl0aG9uLXlhcmwuaGFzaAo+IEBAIC0xLDUgKzEsNSBAQAo+ICAjIG1kNSwgc2hhMjU2IGZy
-b20gaHR0cHM6Ly9weXBpLm9yZy9weXBpL3lhcmwvanNvbgo+IC1tZDUgIDgwYjg5ZDJiMjhiZTcz
-NDVhMzhmMDk5YjJmODM5ZDdkICB5YXJsLTEuMTguMy50YXIuZ3oKPiAtc2hhMjU2ICBhYzE4MDFj
-NDVjYmY3N2I2Yzk5MjQyZWVmZjRmZmZiNWU0ZTczYTgwMGI1YzRhZDRmYzBiZTVkZWY2MzRkMmUx
-ICB5YXJsLTEuMTguMy50YXIuZ3oKPiArbWQ1ICAyMzM1MmZiYzJiMTY1ODI1ZDRhMzM2ODJjOTE3
-ODhiYyAgeWFybC0xLjIwLjEudGFyLmd6Cj4gK3NoYTI1NiAgZDAxN2E0OTk3ZWU1MGM5MWZkNTQ2
-NmNlZjQxNjIzMWJiODIxNzdiOTNiMDI5OTA2Y2VmYzU0MmNlMTRjMzVhYyAgeWFybC0xLjIwLjEu
-dGFyLmd6Cj4gICMgTG9jYWxseSBjb21wdXRlZCBzaGEyNTYgY2hlY2tzdW1zCj4gIHNoYTI1NiAg
-Y2ZjNzc0OWI5NmY2M2JkMzFjM2M0MmI1YzQ3MWJmNzU2ODE0MDUzZTg0N2MxMGYzZWIwMDM0MTdi
-YzUyM2QzMCAgTElDRU5TRQo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3B5dGhvbi15YXJsL3B5dGhv
-bi15YXJsLm1rIGIvcGFja2FnZS9weXRob24teWFybC9weXRob24teWFybC5tawo+IGluZGV4IDE2
-MGRlYzhhMWIuLjRmMjUzOTRjOGIgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9weXRob24teWFybC9w
-eXRob24teWFybC5tawo+ICsrKyBiL3BhY2thZ2UvcHl0aG9uLXlhcmwvcHl0aG9uLXlhcmwubWsK
-PiBAQCAtNCw5ICs0LDkgQEAKPiAgIwo+ICAjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo+Cj4gLVBZ
-VEhPTl9ZQVJMX1ZFUlNJT04gPSAxLjE4LjMKPiArUFlUSE9OX1lBUkxfVkVSU0lPTiA9IDEuMjAu
-MQo+ICBQWVRIT05fWUFSTF9TT1VSQ0UgPSB5YXJsLSQoUFlUSE9OX1lBUkxfVkVSU0lPTikudGFy
-Lmd6Cj4gLVBZVEhPTl9ZQVJMX1NJVEUgPSBodHRwczovL2ZpbGVzLnB5dGhvbmhvc3RlZC5vcmcv
-cGFja2FnZXMvYjcvOWQvNGI5NGE4ZTZkMmI1MWI1OTk1MTZhNWNiODhlNWJjOTliNGQ4ZDQ1ODNl
-NDY4MDU3ZWFhMjlkNWYwOTE4Cj4gK1BZVEhPTl9ZQVJMX1NJVEUgPSBodHRwczovL2ZpbGVzLnB5
-dGhvbmhvc3RlZC5vcmcvcGFja2FnZXMvM2MvZmIvZWZhYTIzZmE0ZTQ1NTM3YjgyNzYyMGYwNGNm
-OGYzY2Q2NThiNzY2NDIyMDUxNjJlMDcyNzAzYTViOTYzCj4gIFBZVEhPTl9ZQVJMX0xJQ0VOU0Ug
-PSBBcGFjaGUtMi4wCj4gIFBZVEhPTl9ZQVJMX0xJQ0VOU0VfRklMRVMgPSBMSUNFTlNFCj4gIFBZ
-VEhPTl9ZQVJMX1NFVFVQX1RZUEUgPSBzZXR1cHRvb2xzCj4gLS0KPiAyLjM0LjEKCkZ4ZXM6IGh0
-dHBzOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5vcmcvcmVzdWx0cy9lNjM2NWZkNGQzOGQyZjJiYzU0
-YjU0ZTdlOWFiZDJhZTQ3ZGI1YjgzLwpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qu
-b3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9v
-dAo=
+For the first, unconditional assignment, there is no reason to use
+append-assignment; it can even be misleading.
+
+Fixes: b367ca32e53a774c174899e44c77ed1d128cbcdc
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/bash/bash.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/bash/bash.mk b/package/bash/bash.mk
+index 84f581da79..2747802592 100644
+--- a/package/bash/bash.mk
++++ b/package/bash/bash.mk
+@@ -17,7 +17,7 @@ BASH_CONF_OPTS = \
+ 	--with-installed-readline \
+ 	--without-bash-malloc
+ 
+-BASH_CONF_ENV += \
++BASH_CONF_ENV = \
+ 	ac_cv_rl_prefix="$(STAGING_DIR)" \
+ 	ac_cv_rl_version="$(READLINE_VERSION)" \
+ 	bash_cv_getcwd_malloc=yes \
+-- 
+2.47.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
