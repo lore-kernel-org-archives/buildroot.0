@@ -4,97 +4,96 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5828ACA0EC0
-	for <buildroot@archiver.kernel.org>; Mon, 11 Aug 2025 08:19:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB2D3CA0EC0
+	for <buildroot@archiver.kernel.org>; Mon, 11 Aug 2025 08:19:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 188CA81EB8;
-	Mon, 11 Aug 2025 08:19:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A24E881EB8;
+	Mon, 11 Aug 2025 08:19:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZvC0_Vz3lEic; Mon, 11 Aug 2025 08:19:44 +0000 (UTC)
+ id 6BJXEdzV-weB; Mon, 11 Aug 2025 08:19:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 416EB81F1F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B6D4D821A1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 416EB81F1F;
-	Mon, 11 Aug 2025 08:19:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B6D4D821A1;
+	Mon, 11 Aug 2025 08:19:55 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 7FE54154
- for <buildroot@buildroot.org>; Mon, 11 Aug 2025 08:19:43 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 7A8B3154
+ for <buildroot@buildroot.org>; Mon, 11 Aug 2025 08:19:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 71B0781EB8
- for <buildroot@buildroot.org>; Mon, 11 Aug 2025 08:19:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6C2928243B
+ for <buildroot@buildroot.org>; Mon, 11 Aug 2025 08:19:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9Lmo8PAeDO3r for <buildroot@buildroot.org>;
- Mon, 11 Aug 2025 08:19:43 +0000 (UTC)
+ id sXvMwGT0cgvQ for <buildroot@buildroot.org>;
+ Mon, 11 Aug 2025 08:19:54 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
+ client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
  envelope-from=francois.perrad@gadz.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8544581E44
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8544581E44
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8544581E44
- for <buildroot@busybox.net>; Mon, 11 Aug 2025 08:19:42 +0000 (UTC)
-Received: by mail-wm1-x32c.google.com with SMTP id
- 5b1f17b1804b1-45a0dc77a15so1155315e9.2
- for <buildroot@busybox.net>; Mon, 11 Aug 2025 01:19:42 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org AB3A8821A1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AB3A8821A1
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id AB3A8821A1
+ for <buildroot@busybox.net>; Mon, 11 Aug 2025 08:19:53 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ 5b1f17b1804b1-459ebb6bbdfso25554655e9.0
+ for <buildroot@busybox.net>; Mon, 11 Aug 2025 01:19:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1754900380; x=1755505180;
+ d=1e100.net; s=20230601; t=1754900392; x=1755505192;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=FGMbbakjEJcsz7MWutm/qWkXUbxcggHo4nIPMP5kmhk=;
- b=NpXCczwGkKeU+n1VbHX4SpZ+uu3U82uNMpNZUoFCzFKJTnFxp94IcYGGHcaV5MfEi3
- xBuXGCl43yNpxFUtQma1x8cu/pCp21YyCGomLIN0sgXSJyRrgKsZtRc7IorVQgJ0qygu
- me06vXMImX7RlFY8KINDIy2CWhRuUf+0eZDaltZ1EjL/5CIhp5Hu4XXTNLEv/EUYMrT5
- 14CFZWkrkzVFC+MWzvnsrL3gfGA7z2I3HVMdC/sDJmpygqCnFdW7NoWQOTNqWLV04KRU
- 46S+ZhBC1dG5E9DtA3+rtIqBkpb32fLH/PN9U4XB1aVKZaOkclV7LhsF6LjRLfnrWimV
- TO2g==
-X-Gm-Message-State: AOJu0YzenYlMIe/Zg7KtkQYynqOKp1X6t98nM2b0o31UdtzcIQLET6aX
- VGB8n3D3FiwrqefWs5MvBRGNVS9CrAbS2epLvuPmXlzzpkcQngXVlqZnrwQwJBAjTkfqHUQ8q1N
- z1sTADA==
-X-Gm-Gg: ASbGnctsDJN9k60UWQEFdr5VhSoLb73aziHdKy803YdMXt9mZhBA+E+kB4gTld2Qcmp
- x2SESSs46/pfQIf4YnJAvg74WQGUX8kqseg19+pVAVX4bur/lswuGbATmOFGltFLcdPuchHtjap
- qAXi3t2LNUbn8w6PaKmZd9wBschDGuFBa8cJ0bSdHRdGKiFKlWaXkv7RIc5xs7Q6BNgVYafKmGe
- Fo9/x8uwKyCh/jqp8d4aHAOZbQsBbcC7rvdFrTW1IIbUIL/aY8pNSLXxLFKuJ2gynrdCtSKq7YO
- tWQJ/IpucxSzMkZrRRcr6AU4d/L/wHFInRZXRysI34saL/cEq7hTP6VRG/RXBzRSDzVxQjjjVLB
- dNZo1bL8KGgdf96aX7jAOKQVnfrRL4U5BWWq/eOPmKzONS6CSLLXV2DyD
-X-Google-Smtp-Source: AGHT+IEBmKTlyZifa0Q3spGowemGRzYjm50JqiuidTXuuBHoFpvGkcCKpgCke33A34iQzPNOiMQI5A==
-X-Received: by 2002:a05:600c:c0d2:10b0:459:ea5d:418b with SMTP id
- 5b1f17b1804b1-459f4eb3fcemr64649005e9.9.1754900380012; 
- Mon, 11 Aug 2025 01:19:40 -0700 (PDT)
+ bh=yHZ2bpvZDByRK9Fdih25C2V1OHz+v5hfJY6MwLCvlOs=;
+ b=C+eV+BQEluyANIqAOyy0osV3+e2VG0h4jOslu6rkX03ZrovNdqvSxZkeIOc2DimZEn
+ 6De7tB/YZoIlpOkiqYqi5a/qFP5vF78DgvFEvDbjy0q2xzT9TrXNU0HnCEaM5RySzkeY
+ /6/npeQkaiPJ3rLgeqQdDWiNx8qWlEmlcj0Q/+uZRSKAxUpO5o0ad6vKmS0du7NvNlEM
+ Fn/lDbeO9TUtmGEUKTUNX5wM9KVzJJNr28Z+Xntzk/5oxfmspvCgGGJyX2rvdIy7NbHD
+ XiuapRdNiDpjtudFwwYwbFvknWvFX/AfrBHMstFdoA4gSDMt/riAZImT55ga1CjfSCu5
+ KsNQ==
+X-Gm-Message-State: AOJu0Yy3bqS1/35fj2h8v0qNHql9DOOmp421xzsTY9E9AwEmQmJZOOUd
+ vWHDKja/fa5Eix5O8n7fVXpVJqzlFvy4ztTZ/PwMK0cK/QZzzGUfEc7+sFzxxtf+lg6E13BdWLS
+ lA99epA==
+X-Gm-Gg: ASbGncuaay7EKT8FynHnFgk/RLRPvLHHOxAsJBr1wS/4H6cEE2I8yCFV8VIeiwAsql2
+ xhzg81aRWLEHbwwl68/kdhhLhMmv+6/RAX9Tm+NEg9casfgU93TSiyWay9EzV6jAxn//IUgxD08
+ 4PUWQReeGatd7fbUGvkd3Hs5vjrhLIiIdS+1iPvB4sheY8b7NjkDL7u4DiMa291ksu0K/9i1EA2
+ qcOg0TE52i3pdNNI5+05Qbcbtkd2/v1nLvlHKtaxosMU39KDHgZSBl4m4NEfkI0jQobw/Q3I+iM
+ XVLGOeovPLCQs7X59z5oCOWBiUwJBGGs1sDucobfVroH/GskfEnnEmC56s35vGD0eKlS3d3GwGJ
+ j1ifEL2kwolJ2w2eo7RGd9skD4yZr7e5YfJIysFOzCD0c1NttUyG+n5oy
+X-Google-Smtp-Source: AGHT+IGyH2NWa9q95jPiEBOkmqdVD0lCm0HM00+I+8umlZKnluwtdvkPhNKCGrZkI10H5H4WM0Kz4g==
+X-Received: by 2002:a05:600c:4686:b0:459:d6a6:792 with SMTP id
+ 5b1f17b1804b1-459f4fb2d08mr96910755e9.29.1754900391204; 
+ Mon, 11 Aug 2025 01:19:51 -0700 (PDT)
 Received: from vm-2404.. (10.187.66.37.rev.sfr.net. [37.66.187.10])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-459e5869cccsm265982975e9.17.2025.08.11.01.19.39
+ ffacd0b85a97d-3b8e1cb7deesm29749929f8f.2.2025.08.11.01.19.50
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 11 Aug 2025 01:19:39 -0700 (PDT)
+ Mon, 11 Aug 2025 01:19:50 -0700 (PDT)
 To: buildroot@busybox.net
-Date: Mon, 11 Aug 2025 10:19:32 +0200
-Message-ID: <20250811081933.2353281-1-francois.perrad@gadz.org>
+Date: Mon, 11 Aug 2025 10:19:44 +0200
+Message-ID: <20250811081944.2353310-1-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gadz.org; s=google; t=1754900380; x=1755505180; darn=busybox.net;
+ d=gadz.org; s=google; t=1754900392; x=1755505192; darn=busybox.net;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=FGMbbakjEJcsz7MWutm/qWkXUbxcggHo4nIPMP5kmhk=;
- b=ORS0Cl2O2nX3pNXbmb5xztzqNzYsOcMv9WtFt8AhR2GzwlIq5Ql8kdM7PqPQbrul/n
- o3re6yHhB3zTK2MIZMRYg5SHldCPvaRwm33G9PBcEAmO2hlUtU8oKSmREI4eyGQtwYQI
- +s4WU1fPPmPme5BSeadXtWmvHzIrWwi5EYzl6tpVrrGtQTbhfOdX2lyds4MelyLQLo+Y
- yoPI1IyPVAtBr1faCkfxBX7EUqSr1S54/stliA9OQP7bkJbImV5ovEOcclSDJRIDQfWb
- ZubETE7ygbT6H0Yk4LPQ3Eew4aFb2BGjyl9LK1IoP9JtGTwjakfz7XgXP1VMW9cSn0LK
- UpWg==
+ bh=yHZ2bpvZDByRK9Fdih25C2V1OHz+v5hfJY6MwLCvlOs=;
+ b=hmK8MSMNQb00tcnjUp111wxueNy4XsQtyOOksohjlFAtizpD3uWL2sNqYeDhvci10/
+ zuDTf3I5buMqRJtaDNn232mPvMcWtdTQdWnqWSOSZsNeLgtjgb5Oy6AnhCmRVyvHfmlT
+ VmcoQyyYldwp5RDSb6cqwtL7XlEotQiY8oaHWyNLlJaKDh865kb1PRfqR0LZlIplZX+H
+ sB456+b8P5HbDGxPl5w9Q83TM2ACZ1kHu6DRiucgpjnbyqVIqPNCL4TbQ3eGMYwAlw61
+ bXEVj2dCQfgb4tKEUp3AsW1Hzbt83XmcJ+LI8SqTVmilmLkmofP3shZp2bwb4rnxdYdV
+ Y5yw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=gadz.org
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gadz.org header.i=@gadz.org header.a=rsa-sha256
- header.s=google header.b=ORS0Cl2O
-Subject: [Buildroot] [PATCH] package/lynis: bump to version 3.1.5
+ dkim=pass (2048-bit key) header.d=gadz.org header.i=@gadz.org
+ header.a=rsa-sha256 header.s=google header.b=hmK8MSMN
+Subject: [Buildroot] [PATCH] package/lua-zlib: bump to version 1.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,32 +114,31 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/lynis/lynis.hash | 2 +-
- package/lynis/lynis.mk   | 2 +-
+ package/lua-zlib/lua-zlib.hash | 2 +-
+ package/lua-zlib/lua-zlib.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lynis/lynis.hash b/package/lynis/lynis.hash
-index 1027fb21a..3e387e2c0 100644
---- a/package/lynis/lynis.hash
-+++ b/package/lynis/lynis.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  9932147acafb1c5e13289a8bd46e8d330d4a97473da30ec04650ad019e497cd0  lynis-3.1.3.tar.gz
-+sha256  02e16e452a926b6dbae5bfc28b0592d42c8af24c572180f444ac865e0e4f4bce  lynis-3.1.5.tar.gz
- sha256  57151f0fa287550534af08facb1c6693ca803ffa65b512da38b55c3130810bcf  LICENSE
-diff --git a/package/lynis/lynis.mk b/package/lynis/lynis.mk
-index 13a883bd5..d6b3371e6 100644
---- a/package/lynis/lynis.mk
-+++ b/package/lynis/lynis.mk
+diff --git a/package/lua-zlib/lua-zlib.hash b/package/lua-zlib/lua-zlib.hash
+index cef29efb1..c092ea431 100644
+--- a/package/lua-zlib/lua-zlib.hash
++++ b/package/lua-zlib/lua-zlib.hash
+@@ -1,2 +1,2 @@
+ # computed by luarocks/buildroot
+-sha256  42436ba2b78c9a2d515d6da59ceb12cdea7f84c9ce3c859d91addb42badd4061  lua-zlib-1.2-0.src.rock
++sha256  65e90d13f9da12168276d5533b1989ad0d8fc806ee93152b52106a6f2c52c1ae  lua-zlib-1.3-0.src.rock
+diff --git a/package/lua-zlib/lua-zlib.mk b/package/lua-zlib/lua-zlib.mk
+index 23e2a8ae3..cc5807371 100644
+--- a/package/lua-zlib/lua-zlib.mk
++++ b/package/lua-zlib/lua-zlib.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LYNIS_VERSION = 3.1.3
-+LYNIS_VERSION = 3.1.5
- LYNIS_SITE = $(call github,CISOfy,lynis,$(LYNIS_VERSION))
- LYNIS_LICENSE = GPL-3.0
- LYNIS_LICENSE_FILES = LICENSE
+-LUA_ZLIB_VERSION = 1.2-0
++LUA_ZLIB_VERSION = 1.3-0
+ LUA_ZLIB_SUBDIR = lua-zlib
+ LUA_ZLIB_LICENSE = MIT
+ LUA_ZLIB_DEPENDENCIES = zlib
 -- 
 2.43.0
 
