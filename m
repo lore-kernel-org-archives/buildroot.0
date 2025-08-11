@@ -1,128 +1,128 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CC05CA0ED1
-	for <buildroot@archiver.kernel.org>; Mon, 11 Aug 2025 16:18:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7FBECA0ED1
+	for <buildroot@archiver.kernel.org>; Mon, 11 Aug 2025 16:18:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D84ED41474;
-	Mon, 11 Aug 2025 16:18:37 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EIVirOjrjJV4; Mon, 11 Aug 2025 16:18:37 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE4A940E0A
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DE4A940E0A;
-	Mon, 11 Aug 2025 16:18:36 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 42A5D154
- for <buildroot@buildroot.org>; Mon, 11 Aug 2025 16:18:35 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3FB5B6144A
- for <buildroot@buildroot.org>; Mon, 11 Aug 2025 16:18:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9EF3C61090;
+	Mon, 11 Aug 2025 16:18:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TfopvoqVBdW8 for <buildroot@buildroot.org>;
- Mon, 11 Aug 2025 16:18:34 +0000 (UTC)
+ id mYAUOuuy9uSk; Mon, 11 Aug 2025 16:18:39 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 909E861446
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 909E861446;
+	Mon, 11 Aug 2025 16:18:39 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id B161E138
+ for <buildroot@buildroot.org>; Mon, 11 Aug 2025 16:18:37 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id A310383E55
+ for <buildroot@buildroot.org>; Mon, 11 Aug 2025 16:18:37 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gqPP9GtJ-EZ0 for <buildroot@buildroot.org>;
+ Mon, 11 Aug 2025 16:18:36 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.21;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org AF2B361417
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF2B361417
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3B59983E53
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B59983E53
 Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
- by smtp3.osuosl.org (Postfix) with ESMTPS id AF2B361417
- for <buildroot@buildroot.org>; Mon, 11 Aug 2025 16:18:33 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3B59983E53
+ for <buildroot@buildroot.org>; Mon, 11 Aug 2025 16:18:35 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from haruka.home.arpa ([85.22.127.180]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MtfNf-1uSjes3AJb-00zwoX; Mon, 11
- Aug 2025 18:18:29 +0200
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mel81-1uDoNB2C9t-00l1Wh; Mon, 11
+ Aug 2025 18:18:32 +0200
 To: buildroot@buildroot.org
-Date: Mon, 11 Aug 2025 18:18:03 +0200
-Message-ID: <20250811161809.3641323-2-fiona.klute@gmx.de>
+Date: Mon, 11 Aug 2025 18:18:05 +0200
+Message-ID: <20250811161809.3641323-4-fiona.klute@gmx.de>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20250811161809.3641323-1-fiona.klute@gmx.de>
 References: <20250811161809.3641323-1-fiona.klute@gmx.de>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:3n6CzmF3tl7JvzcDOhYIn3Ht2bxU6pxl3HQNaEdbwQsUIx1+/PL
- orm1EoOP3WNOC/yCyGiEXC8oYrAVVJW9arVpnNel0hHGAUGoPIY9U36lYSeJ93TV2s+8F+P
- j15PkxfIOIonaBIerEzx3m4eElzZ3fguEI4LXbdDOX249SB3vhSzcyGrrBhvX86ub45dSL+
- MbTxbh0l9v+6UrxJzRTLg==
-UI-OutboundReport: notjunk:1;M01:P0:0IXV/vIjJw0=;n/n5LEQPeCFpVA/8DDHHC0jYrDW
- 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
- qfbCcIMvgwtGnV7T0/85WdbkSBhcMSz0=
+X-Provags-ID: V03:K1:6T8D/6DWCKWSQpRQKoyI0qX0cbE769NYFByLFDYbW+itci5yA0V
+ yvWhvT7+9y3Hhxf/tdr5JOO0SzWyMAWhAJF29vUNTiBLR/c2DgSKZXFEdYbTR2lXgTBlRKv
+ HlMFDeg/BpIxTqoIO2LedRX4+ZycC9NpXSQd0PdNxhOBLVY1RyiIvAiLS9T1ksY6u4mMXk1
+ TQHH09eJiCx0Li1q/3BMw==
+UI-OutboundReport: notjunk:1;M01:P0:LLUsEwe9OEs=;x/tV7HVqIxLaEuIm2v7l+qbiBxn
+ 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
+ PWINEhz7SlA==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.de; 
- s=s31663417; t=1754929109; x=1755533909; i=fiona.klute@gmx.de;
- bh=QyGa+rYSFstlHxA2ZAJYGhourkx5z01WTJdIO4xj0R4=;
+ s=s31663417; t=1754929112; x=1755533912; i=fiona.klute@gmx.de;
+ bh=tFNRmEbLvjYiZcLWprrS9S3c4G9RAgyG9AxQpXTDhRo=;
  h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
  References:MIME-Version:Content-Transfer-Encoding:cc:
  content-transfer-encoding:content-type:date:from:message-id:
  mime-version:reply-to:subject:to;
- b=A/s0hV4ZzkrSfnvIqu2iAbdvAc3NFH3hF+xsrKUlYSRXtcz+yUWrUiVdzQpqAYLQ
- 7OMOt++FmKi04S/HydXICw/W8gVPCdMY/iyyZra2urleAbFe0hl6bkd69eebZi06D
- K2mzQoRzhvt6I4dqOhYtV9OJyn+NME1bYv3DeIGg4+rikmQFq0wV9ne+L/1/Q91DF
- OlgVVGpqcpVdDa6ZRbZ8CI+KXspjJ1fWJ8KEtVqAt3+eVsdJsOEQFdxUbYZ4j2jzY
- 6yq9rIRgBLLSaxFeFYsrRMKAO/EvLtKYtugMTnVXvgEVJBEeIWmJTwbh1JlTaZ5BS
- qWyenZDIwD3Fo97pQQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=rfPQ+m1Q9ka1CxdJ5SFtNmovNN3szY8KiwSlu46gFLberm+YJSGT2KnmjWGFI6tF
+ 5wQ3YGHMpumCpH+Zr3RBQ01ka1Uw5G3PNcPG0l5w6gWD6Yw69YY1S5cpe4Er8uZRv
+ gm5zqTC/B0plGRU+lTy0OKNHZqxU2RiuBSO3iwFp7SKHMxIPNU+VcEreZOtYXiW/h
+ cti57hKt1iM9Tberx7/cSiiMPiybP0K1VAgehRmxEma5TqbWqXZwpO3TAwfBEivKw
+ XaMcE08JUMIaO0p3o5Bmy3HUkflc2Go0nvBRUYUbo1l8ysrJUSui0gr48BVrAeafm
+ TPKonmBwkHc4KeCLUw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
- header.a=rsa-sha256 header.s=s31663417 header.b=A/s0hV4Z
-Subject: [Buildroot] [PATCH v2 1/7] package/elfutils: new option to enable
- building libdebuginfod for target
+ header.a=rsa-sha256 header.s=s31663417 header.b=rfPQ+m1Q
+Subject: [Buildroot] [PATCH v2 3/7] package/python-markdown-it-py: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -146,59 +146,87 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
 
-This does not make debug info available, but allows building programs
-that link against libdebuginfod.
-
 Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 ---
-Changes v1 -> v2:
-* add option to enable building libdebuginfod, instead of building it
-  if requirements are met
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ package/python-markdown-it-py/Config.in            |  7 +++++++
+ .../python-markdown-it-py.hash                     |  6 ++++++
+ .../python-markdown-it-py/python-markdown-it-py.mk | 14 ++++++++++++++
+ 5 files changed, 29 insertions(+)
+ create mode 100644 package/python-markdown-it-py/Config.in
+ create mode 100644 package/python-markdown-it-py/python-markdown-it-py.hash
+ create mode 100644 package/python-markdown-it-py/python-markdown-it-py.mk
 
- package/elfutils/Config.in   | 11 +++++++++++
- package/elfutils/elfutils.mk |  9 +++++++--
- 2 files changed, 18 insertions(+), 2 deletions(-)
-
-diff --git a/package/elfutils/Config.in b/package/elfutils/Config.in
-index e866dd448b..a57a7e4d8e 100644
---- a/package/elfutils/Config.in
-+++ b/package/elfutils/Config.in
-@@ -33,4 +33,15 @@ comment "elfutils programs needs a glibc toolchain w/ C++"
- 	depends on !BR2_TOOLCHAIN_USES_GLIBC \
- 		|| !BR2_INSTALL_LIBSTDCPP
- 
-+config BR2_PACKAGE_ELFUTILS_LIBDEBUGINFOD
-+	bool "build libdebuginfod"
-+	default n
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # required for json-c
-+	select BR2_PACKAGE_JSON_C
-+	select BR2_PACKAGE_LIBCURL
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 8073742940..b4fa35a84c 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1120,6 +1120,7 @@ N:	Fiona Klute <fiona.klute@gmx.de>
+ F:	package/*/S*
+ F:	package/panel-mipi-dbi-firmware/
+ F:	package/python-aiomqtt/
++F:	package/python-markdown-it-py/
+ F:	package/python-mdurl/
+ F:	package/python-pyasynchat/
+ F:	package/python-pyasyncore/
+diff --git a/package/Config.in b/package/Config.in
+index e9ce49e2df..04041b11f2 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1228,6 +1228,7 @@ menu "External python modules"
+ 	source "package/python-magic-wormhole-transit-relay/Config.in"
+ 	source "package/python-mako/Config.in"
+ 	source "package/python-markdown/Config.in"
++	source "package/python-markdown-it-py/Config.in"
+ 	source "package/python-markdown2/Config.in"
+ 	source "package/python-markupsafe/Config.in"
+ 	source "package/python-marshmallow/Config.in"
+diff --git a/package/python-markdown-it-py/Config.in b/package/python-markdown-it-py/Config.in
+new file mode 100644
+index 0000000000..b05a875bc9
+--- /dev/null
++++ b/package/python-markdown-it-py/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_MARKDOWN_IT_PY
++	bool "python-markdown-it-py"
++	select BR2_PACKAGE_PYTHON_MDURL # runtime
 +	help
-+	  This option enables building libdebuginfod. Note that this
-+	  only builds the library, it does not provide any service or
-+	  data to download debug info.
++	  Python port of markdown-it. Markdown parsing, done right!
 +
- endif
-diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
-index 39d6607cdf..697ec538f1 100644
---- a/package/elfutils/elfutils.mk
-+++ b/package/elfutils/elfutils.mk
-@@ -49,8 +49,13 @@ ifeq ($(BR2_microblaze),y)
- ELFUTILS_CONF_OPTS += --disable-symbol-versioning
- endif
- 
--# disable for now, needs "distro" support
--ELFUTILS_CONF_OPTS += --disable-libdebuginfod --disable-debuginfod
-+ifeq ($(BR2_PACKAGE_ELFUTILS_LIBDEBUGINFOD),y)
-+ELFUTILS_CONF_OPTS += --enable-libdebuginfod
-+ELFUTILS_DEPENDENCIES += json-c libcurl
-+else
-+ELFUTILS_CONF_OPTS += --disable-libdebuginfod
-+endif
-+ELFUTILS_CONF_OPTS += --disable-debuginfod
- HOST_ELFUTILS_CONF_OPTS += --disable-libdebuginfod --disable-debuginfod
- 
- ELFUTILS_CONF_ENV += \
++	  https://github.com/executablebooks/markdown-it-py
+diff --git a/package/python-markdown-it-py/python-markdown-it-py.hash b/package/python-markdown-it-py/python-markdown-it-py.hash
+new file mode 100644
+index 0000000000..bc28feea7d
+--- /dev/null
++++ b/package/python-markdown-it-py/python-markdown-it-py.hash
+@@ -0,0 +1,6 @@
++# md5, sha256 from https://pypi.org/pypi/markdown-it-py/json
++md5  a00d59ed2704f6590fdde0e9bad04c7c  markdown-it-py-3.0.0.tar.gz
++sha256  e3f60a94fa066dc52ec76661e37c851cb232d92f9886b15cb560aaada2df8feb  markdown-it-py-3.0.0.tar.gz
++# Locally computed sha256 checksums
++sha256  4a2260d6e2cd0f5a151a1e86dbfe7d3ed552b1e2beabf9941c1ba5c49cbce484  LICENSE
++sha256  792c48c5a849a15fdf9e37e8bcf9e6d1dd13b32b46c642a748a0a46a9919d473  LICENSE.markdown-it
+diff --git a/package/python-markdown-it-py/python-markdown-it-py.mk b/package/python-markdown-it-py/python-markdown-it-py.mk
+new file mode 100644
+index 0000000000..aac0845185
+--- /dev/null
++++ b/package/python-markdown-it-py/python-markdown-it-py.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-markdown-it-py
++#
++################################################################################
++
++PYTHON_MARKDOWN_IT_PY_VERSION = 3.0.0
++PYTHON_MARKDOWN_IT_PY_SOURCE = markdown-it-py-$(PYTHON_MARKDOWN_IT_PY_VERSION).tar.gz
++PYTHON_MARKDOWN_IT_PY_SITE = https://files.pythonhosted.org/packages/38/71/3b932df36c1a044d397a1f92d1cf91ee0a503d91e470cbd670aa66b07ed0
++PYTHON_MARKDOWN_IT_PY_SETUP_TYPE = flit
++PYTHON_MARKDOWN_IT_PY_LICENSE = MIT
++PYTHON_MARKDOWN_IT_PY_LICENSE_FILES = LICENSE LICENSE.markdown-it
++
++$(eval $(python-package))
 -- 
 2.50.1
 
