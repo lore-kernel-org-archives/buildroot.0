@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 689EACA0EC4
-	for <buildroot@archiver.kernel.org>; Mon, 11 Aug 2025 15:28:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F326CA0EC4
+	for <buildroot@archiver.kernel.org>; Mon, 11 Aug 2025 15:30:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 24D164155F;
-	Mon, 11 Aug 2025 15:28:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7669841532;
+	Mon, 11 Aug 2025 15:30:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EOxEOZCiATb4; Mon, 11 Aug 2025 15:28:49 +0000 (UTC)
+ id XvZ3BIQnstYn; Mon, 11 Aug 2025 15:30:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 207574151C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7BAA041515
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 207574151C;
-	Mon, 11 Aug 2025 15:28:49 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 6914C1C5
- for <buildroot@buildroot.org>; Mon, 11 Aug 2025 15:28:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7BAA041515;
+	Mon, 11 Aug 2025 15:30:51 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id C46F8154
+ for <buildroot@buildroot.org>; Mon, 11 Aug 2025 15:30:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5AB8840D91
- for <buildroot@buildroot.org>; Mon, 11 Aug 2025 15:28:48 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id AA42E409E1
+ for <buildroot@buildroot.org>; Mon, 11 Aug 2025 15:30:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OgpYyD0t1k3l for <buildroot@buildroot.org>;
- Mon, 11 Aug 2025 15:28:47 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8AB6F40D7E
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8AB6F40D7E
- for <buildroot@buildroot.org>; Mon, 11 Aug 2025 15:28:47 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7876A84310; Mon, 11 Aug 2025 15:28:47 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 11 Aug 2025 17:23:38 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 1349cd6031dcff9bdb30bd9c0bd61641cadc99b9
-X-Git-Newrev: 874601825f848f9c4f6e8d8086c154f0812666d4
-X-Patchwork-Hint: ignore
-Message-Id: <20250811152847.7876A84310@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/redis: bump to v8.2.0
+ id 2LrkUPDfJGxV for <buildroot@buildroot.org>;
+ Mon, 11 Aug 2025 15:30:49 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org CE38F401DF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CE38F401DF
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id CE38F401DF
+ for <buildroot@buildroot.org>; Mon, 11 Aug 2025 15:30:48 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id EA3897804FD;
+ Mon, 11 Aug 2025 17:30:44 +0200 (CEST)
+Received: from 2001:18c0:a22:bf00:5c2b:f296:f108:6612
+ via 2001:18c0:a22:bf00:5c2b:f296:f108:6612 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 11 Aug 2025 17:30:44 +0200
+MIME-Version: 1.0
+Date: Mon, 11 Aug 2025 17:30:44 +0200
+To: Titouan Christophe <titouan.christophe@mind.be>
+Cc: buildroot@buildroot.org, Daniel Price <daniel.price@gmail.com>
+In-Reply-To: <20250811090700.20714-1-titouan.christophe@mind.be>
+References: <20250811090700.20714-1-titouan.christophe@mind.be>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <1abd8c5d5d0de8531314137dd5336f74@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1754926247;
+ bh=/WX5u1HMEYHAVu8iVlOLePSMsCi/JJyyrnlAF+C1Mq0=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=PpbDdiX400hVROW5g7UFvxFb2E5yFUsOJf2cK+Y8lBTk9WwpFUpq5hHh9AtNGtDlP
+ BkuKBpGYCze7XtdEWZiIuu2x3ouEvjLtq12XsKaiz+c5NvxK99Pc1VP7lvmbIZ1HzU
+ /aKGyK5TJ7kOcP6Js5pdke9B86Df3pQjd/dlS607PXBVhGkr+IyO+2Z/HICFo2LWjw
+ i328+0RQH1m4VfL7G3iW07qAMErj+R+9m0WyUvxmdYNv5LNh56sZDAeg+NEvgNzfKy
+ ONjnjg8Sui1kBFyIRLgwQ013233InGaFPvhqgfPFoznM1kUHE4O3v3Z0kO02o/COGx
+ v4BY3PCRfvBIw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=PpbDdiX4
+Subject: Re: [Buildroot] [PATCH] package/redis: bump to v8.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,67 +82,33 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=874601825f848f9c4f6e8d8086c154f0812666d4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On 11/08/2025 11:07, Titouan Christophe via buildroot wrote:
+> From the release notes:
+> (https://github.com/redis/redis/blob/8.2.0/00-RELEASENOTES)
+> 
+> ===========================================================
+> 8.2 GA (v8.2.0)    Released Mon 4 Aug 2025 15:00:00 IST
+> ===========================================================
+> 
+> This is the General Availability release of Redis Open Source 8.2.
+> 
+> - Streams - new commands: `XDELEX` and `XACKDEL`; extension to `XADD` 
+> and `XTRIM`
+> - Bitmap - `BITOP`: new operators: `DIFF`, `DIFF1`, `ANDOR`, and `ONE`
+> - Query Engine - new SVS-VAMANA vector index type which supports vector 
+> compression
+> - More than 15 performance and resource utilization improvements
+> - New metrics: per-slot usage metrics, key size distributions for basic 
+> data types, and more
+> 
+> Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 
-From the release notes:
-(https://github.com/redis/redis/blob/8.2.0/00-RELEASENOTES)
-
-===========================================================
-8.2 GA (v8.2.0)    Released Mon 4 Aug 2025 15:00:00 IST
-===========================================================
-
-This is the General Availability release of Redis Open Source 8.2.
-
-- Streams - new commands: `XDELEX` and `XACKDEL`; extension to `XADD` and `XTRIM`
-- Bitmap - `BITOP`: new operators: `DIFF`, `DIFF1`, `ANDOR`, and `ONE`
-- Query Engine - new SVS-VAMANA vector index type which supports vector compression
-- More than 15 performance and resource utilization improvements
-- New metrics: per-slot usage metrics, key size distributions for basic data types, and more
-
-Note: the full release note mention three CVEs fixed in 8.1.x and 8.2.x
-series. Those security fixes were already included in version 8.0.2 and
-8.0.3, already in Buildroot. Therefore, this commit is not marked as
-security related.
-
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-[Julien: add comment in commit log about CVE in release note]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/redis/redis.hash | 2 +-
- package/redis/redis.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-index c66223f2da..41d2797cd0 100644
---- a/package/redis/redis.hash
-+++ b/package/redis/redis.hash
-@@ -1,5 +1,5 @@
- # From https://github.com/redis/redis-hashes/blob/master/README
--sha256  33f37290b00b14e9a884dd4dcba335febd63ea16c51609d34fa41e031ad587df  redis-8.0.3.tar.gz
-+sha256  ff95b83b7cf2f7a33af3be1e52fdf2e791c259f8272465c3b09f9e6bc901b604  redis-8.2.0.tar.gz
- 
- # Locally calculated
- sha256  4a0e416b9537688f30dfe69ddaceb2ca64d96b7df02a0a6760d376890ddc4e40  LICENSE.txt
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index 5ffb2a929f..8b5005ccda 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--REDIS_VERSION = 8.0.3
-+REDIS_VERSION = 8.2.0
- REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = \
- 	AGPL-3.0 or SSPL-1.0 or RSAL-2.0 (core); \
+Applied to next, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
