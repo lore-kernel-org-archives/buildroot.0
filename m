@@ -4,98 +4,102 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D15ACA0EC4
-	for <buildroot@archiver.kernel.org>; Mon, 11 Aug 2025 20:32:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 479E6CA0ED1
+	for <buildroot@archiver.kernel.org>; Mon, 11 Aug 2025 20:47:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2F8C141720;
-	Mon, 11 Aug 2025 20:32:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E1C1E41B71;
+	Mon, 11 Aug 2025 20:47:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id E5Q9iSkktVq7; Mon, 11 Aug 2025 20:32:16 +0000 (UTC)
+ id GVew8wdZ_-iX; Mon, 11 Aug 2025 20:47:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F328D4177C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E7A0A41701
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F328D4177C;
-	Mon, 11 Aug 2025 20:32:15 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 2F391D98
- for <buildroot@buildroot.org>; Mon, 11 Aug 2025 20:32:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E7A0A41701;
+	Mon, 11 Aug 2025 20:47:53 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 01357D98
+ for <buildroot@buildroot.org>; Mon, 11 Aug 2025 20:47:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2C67C615C8
- for <buildroot@buildroot.org>; Mon, 11 Aug 2025 20:32:14 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DB72A4005E
+ for <buildroot@buildroot.org>; Mon, 11 Aug 2025 20:47:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id d_qbuClJGDpq for <buildroot@buildroot.org>;
- Mon, 11 Aug 2025 20:32:13 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Wvqszd3vU9d0 for <buildroot@buildroot.org>;
+ Mon, 11 Aug 2025 20:47:51 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
+ client-ip=2a00:1450:4864:20::42d; helo=mail-wr1-x42d.google.com;
  envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E1AA5615C6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E1AA5615C6
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E1AA5615C6
- for <buildroot@buildroot.org>; Mon, 11 Aug 2025 20:32:12 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id
- 5b1f17b1804b1-459ddf8acf1so40593895e9.0
- for <buildroot@buildroot.org>; Mon, 11 Aug 2025 13:32:12 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A17E640F56
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A17E640F56
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A17E640F56
+ for <buildroot@buildroot.org>; Mon, 11 Aug 2025 20:47:50 +0000 (UTC)
+Received: by mail-wr1-x42d.google.com with SMTP id
+ ffacd0b85a97d-3b7825e2775so4286035f8f.2
+ for <buildroot@buildroot.org>; Mon, 11 Aug 2025 13:47:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1754944331; x=1755549131;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=+RLjcFDcP9ps81pC5rfNYoiMfhZHOzEPAEtvDuKDgWU=;
- b=YByPTSGkHKALwbkgPqA6uZjMZI2x5Q0/pbuRY4wwuNzurFOfsHdo3ULW2oTA12WYA3
- G0nWnhyIEPAhnY5waOJS6woXHaNfWWzvhm/6ADBkbJ0N7plaIsuO07IERrPc+nLNrPJE
- T3pjIROLbUZJ5vUekBej3SeM5S8D+Pxl14bCeXZR0g9HttNd4XnjJ1litLlt0o81OKZ1
- 1krbG4tJ62PAzIM7lYqoEdoiI8Zxw7EPVfJ+epw5UOUFqI69ex3o/tqVhw+o7BNYsasy
- aUIJLBMrn3IbYk6aFuq+UbzwjuxLI2fg5fDk4zwRivNIAsaxbil9kU+gLHgLakWw/dRV
- C77w==
-X-Gm-Message-State: AOJu0YxVyJHCPUGE7RoiD3Gq2MqWon9EjZEfUs7AS1tDaPiwVkNKh2f5
- OlZq4HjFDWBn3uxeNDups9Rj/q6I46ba9KrRzph3DhrbrNduDUHkzIz50E6vumDpw7b5mheEDFS
- LeEAc
-X-Gm-Gg: ASbGnctk5BYeqSp+KjUYadQieirdibRZb/ZTnkQgLnepi5PYA1kjkb1CYJ+L6M+zPik
- D4S141ElGLE6FL6SC8A4oHUOH2HBW5aG2LKJy58ZF/GrpQm2aIDfoqaz7h8rux4m/rclZnTSAEu
- Wj4nKmDrYKzywjahQ0MO9me+KmR/O4XzVEqyiZLtAYpob1SkS5OoBvd2DHYDIrMEUD9e27TWGEP
- waFuQ7gBHCvn5XRgO2Z+UP4XHy1KCvgvSm1PecnI48YTdJvynMC/eTVQ0qYQ1Az87E/f5F0kwZ/
- 13YPVJPKbtOiB4D+UYsWs0JXGYjNhKiE+ASXW2k4xcut778x0V0R8IUk1ZRL17NkXDrHZE/WmyE
- VFN3RSDIL2MWzXRlBf6QMKW7yUq4rXnjbFcwbne3sd4XIYMt2QzIwvNUhkClosXvj9xEs2+hb5l
- jNd/nrSU5IhIlzCPNYTs1OxIQI1O5PQJM=
-X-Google-Smtp-Source: AGHT+IGOLIiB97KXa8DPtu+d7I2fCA+vf/Zq2HSWEAVJphjrs+WpFJusPORNh6f+7TB42MmU7F4qnQ==
-X-Received: by 2002:a05:600c:1c1f:b0:458:bb0e:8cda with SMTP id
- 5b1f17b1804b1-45a10be7d65mr10781485e9.17.1754944330622; 
- Mon, 11 Aug 2025 13:32:10 -0700 (PDT)
-Received: from P-NTS-Evian.home
+ d=1e100.net; s=20230601; t=1754945268; x=1755550068;
+ h=content-transfer-encoding:in-reply-to:from:cc:content-language
+ :references:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=Nv7OmxjqNt9GfFOc/porIr7ZO5inZn23O0kHXnnNIz0=;
+ b=uiktPPJj3VemXHTJ5dXEyHQIVyD5JUxJ7gu+duDyXqKWlD4p3FXeJJ3hFLHrA5gq8n
+ WLLhO83ZmM8ROvPnQZPpgIR/XEEV3lfsyuR8GaFba+e/AqVU0jxNjH116ny1iFcf4Zlx
+ nBCj4gIhFeVemPeoXYcMxTYXBWGN04miF3pMTr91bw43ADscPgOZz4yg6vdtzcrBVSkw
+ CZ5qCgH5kmvaCA5udDZ3/ytXd79fJYZhiyirVL3XfcGvLjCLQb1dLc/BuOsIaH3Or7OV
+ LVzb8cLLkDpjyzZL+N5mdS/Z1beRqRgq4ILgT6MonjCfuhmKVkggOGMgN62Gc9fBEQYT
+ tPTQ==
+X-Gm-Message-State: AOJu0Yz3aILmmGR1oqZD1CWyIfymilwbjXPEURGiQFf/1ig4T19KLmko
+ 2jsIXoVEAJy4YAvIVflvj7qCKnDaKZGv3eSUGXKYHXBcJyUNTF28VVNEaNnun8/n9mTShG76mOs
+ w4hSQ
+X-Gm-Gg: ASbGncvPXaB7B5g78ai4gz7TogzTkiZjsjmNV5HrcmFIl/HCK2DNhNkTURvE77vYi/O
+ Ea0mdL6zfJaWGVetg+Hfp58qJQyM6FWxmisgIj+ErqGkYsUSx3bajo1Fe6/8FYuLFSwu29C5Gq8
+ 0l/9+/UMVQf1JfO0Z3a3qvgMWh6Yi/iFPgCoJhb2a5eOy2LEZt9HMkGYqz4YJdkyvLJfTiVM4S4
+ Q/dCTt2zCdXbM4zhws9rIjpS8a8VnP2R2M6D49uoVDurzGboUQE/YYy28xpZwT2eUbtk8cvBovP
+ VKE4Z9li+coMgWhETKTotF+wtNFH/YwwUnAyjqHNRsGsrS3vgMEUoW1Ky99jneJ7/pC2cLMc+f3
+ zBnDOtcqe6FLVTopFo3yVz7lO4OJLphCvKWiUtY+AuQuTV/9ylttucSGfMNL45mOQmk4mzBsfmq
+ 8gh7DCtxFnYxjIEEYX2NENAiKb4a1j450aPD5PPzts11d6HwoYZws/4fZrR8TWLRIRoMyxSqU=
+X-Google-Smtp-Source: AGHT+IHdh+ffyqxGHPewfGQWJxMztWVNRPEPlDQVuCOF0hCoFB4bIqiUuYrRbQ11yWWrgNV1rz4tqQ==
+X-Received: by 2002:a5d:64c4:0:b0:3b7:6828:5f78 with SMTP id
+ ffacd0b85a97d-3b910fcc8a3mr925558f8f.4.1754945268580; 
+ Mon, 11 Aug 2025 13:47:48 -0700 (PDT)
+Received: from ?IPV6:2a01:cb05:949d:5800:c97d:3b73:4a46:d823?
  (2a01cb05949d5800c97d3b734a46d823.ipv6.abo.wanadoo.fr.
  [2a01:cb05:949d:5800:c97d:3b73:4a46:d823])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3b79c3abed3sm41624078f8f.10.2025.08.11.13.32.09
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 11 Aug 2025 13:32:10 -0700 (PDT)
-To: buildroot@buildroot.org
-Cc: Romain Naour <romain.naour@smile.fr>
-Date: Mon, 11 Aug 2025 22:32:05 +0200
-Message-ID: <20250811203206.1506378-1-romain.naour@smile.fr>
-X-Mailer: git-send-email 2.50.1
+ ffacd0b85a97d-3b79c3ac51asm42749244f8f.1.2025.08.11.13.47.46
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 11 Aug 2025 13:47:48 -0700 (PDT)
+Message-ID: <c6fab884-3590-411b-8f3a-257ba882ee15@smile.fr>
+Date: Mon, 11 Aug 2025 22:47:41 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: buildroot@buildroot.org
+References: <20250811203206.1506378-1-romain.naour@smile.fr>
+Content-Language: fr, en-US
+Cc: Joachim Wiberg <troglobit@gmail.com>
+In-Reply-To: <20250811203206.1506378-1-romain.naour@smile.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1754944331; x=1755549131; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=+RLjcFDcP9ps81pC5rfNYoiMfhZHOzEPAEtvDuKDgWU=;
- b=oe+TQp8Lyp7PAo1XpnVheB7yNEVmfM0DO8cfe4Z2Jg8qSGlbbpyMBgODIh5x0HdJNZ
- xJJxA1XDg2iVVPHEEDGkITNShFPGf0EBJTR99im+tx4FgtJ+A0lIsz3Ho6lk8Mph2ThW
- XlVJPTihGQ+agC7YC8DJP5GrQ2ej93lma1NcY=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=smile.fr; s=google; t=1754945268; x=1755550068; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:cc:content-language
+ :references:to:subject:user-agent:mime-version:date:message-id:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=Nv7OmxjqNt9GfFOc/porIr7ZO5inZn23O0kHXnnNIz0=;
+ b=dXlZJPhbE3kSULvGZ6DZKvy/WFpR9SaBMJ19xMAhmObxC86fm90QIvsyRjmToexi8N
+ /FY047qLFtXOJ8LvLE4fD2Do9lKjsMu+JrxqXE3BtQapRFDvO/JonKnKaAZrrJsJr27X
+ cJPQcKgzWxsyL/0bSFUr3/XL3qnG9mxps3IQc=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=oe+TQp8L
-Subject: [Buildroot] [PATCH 1/2] package/thttpd: port to C99
+ header.s=google header.b=dXlZJPhb
+Subject: Re: [Buildroot] [PATCH 1/2] package/thttpd: port to C99
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -109,221 +113,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Romain Naour via buildroot <buildroot@buildroot.org>
 Reply-To: Romain Naour <romain.naour@smile.fr>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Apply changes from Fedora [1] to fix gcc-15 issues.
-
-Despite the last thttpd release 2.29 back in 2018, the package
-doesn't build with modern compiler and Autoconf (newer than 2.13).
-
-Fixes:
-https://autobuild.buildroot.org/results/f65/f6564b144366a936e94555875141dfe0cca5d11b
-https://gitlab.com/buildroot.org/buildroot/-/jobs/10972859338
-https://gitlab.com/buildroot.org/buildroot/-/jobs/10972858979
-
-[1] https://src.fedoraproject.org/rpms/thttpd/c/608a10e7758eb87556af5206abeedca1d3cd500f
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
-thttpd package is used by TestWget and TestLibCurl, so we can't remove it
-right now.
----
- .../0001-configure.in-Port-to-C99.patch       | 118 ++++++++++++++++++
- ...0002-libhttpd.c-thttpd.c-Port-to-C99.patch |  53 ++++++++
- 2 files changed, 171 insertions(+)
- create mode 100644 package/thttpd/0001-configure.in-Port-to-C99.patch
- create mode 100644 package/thttpd/0002-libhttpd.c-thttpd.c-Port-to-C99.patch
-
-diff --git a/package/thttpd/0001-configure.in-Port-to-C99.patch b/package/thttpd/0001-configure.in-Port-to-C99.patch
-new file mode 100644
-index 0000000000..34c11317f7
---- /dev/null
-+++ b/package/thttpd/0001-configure.in-Port-to-C99.patch
-@@ -0,0 +1,118 @@
-+From 54f84c421b264d0d1bb6bfb9c7a4d903a787d190 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@smile.fr>
-+Date: Mon, 11 Aug 2025 21:17:45 +0200
-+Subject: [PATCH] configure.in: Port to C99
-+
-+configure.in is broken beyond repair since it still uses AC_LANG that
-+was supported up-to Autoconf-2.13 [1].
-+
-+  AC_LANG, CPLUSPLUS
-+
-+[1] https://lists.gnu.org/archive/html/autoconf/2000-11/msg00101.html
-+
-+From:
-+https://src.fedoraproject.org/rpms/thttpd/c/608a10e7758eb87556af5206abeedca1d3cd500f
-+
-+Upstream: n/a
-+
-+Signed-off-by: Romain Naour <romain.naour@smile.fr>
-+---
-+ configure    | 21 ++++++++-------------
-+ configure.in |  4 ++--
-+ 2 files changed, 10 insertions(+), 15 deletions(-)
-+
-+diff --git a/configure b/configure
-+index bb2d78f..85c59cf 100755
-+--- a/configure
-++++ b/configure
-+@@ -761,7 +761,7 @@ cat > conftest.$ac_ext << EOF
-+ #line 762 "configure"
-+ #include "confdefs.h"
-+ 
-+-main(){return(0);}
-++int main(){return(0);}
-+ EOF
-+ if { (eval echo configure:767: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
-+   ac_cv_prog_cc_works=yes
-+@@ -880,7 +880,7 @@ if eval "test \"`echo '$''{'ac_cv_lbl_static_flag'+set}'`\" = set"; then
-+   echo $ac_n "(cached) $ac_c" 1>&6
-+ else
-+   ac_cv_lbl_static_flag=unknown
-+-    echo 'main() {}' > conftest.c
-++    echo 'int main() {}' > conftest.c
-+     if test "$GCC" != yes ; then
-+ 	    trial_flag="-Bstatic"
-+ 	    test=`$CC $trial_flag -o conftest conftest.c 2>&1`
-+@@ -913,6 +913,7 @@ else
-+   cat > conftest.$ac_ext <<EOF
-+ #line 915 "configure"
-+ #include "confdefs.h"
-++#include <stdio.h>
-+ 
-+ int main() {
-+ extern char *__progname; 
-+@@ -2046,13 +2047,14 @@ else
-+ #include <sys/types.h>
-+ #include <fcntl.h>
-+ #include <sys/mman.h>
-++#include <stdlib.h>
-++
-++#ifdef HAVE_UNISTD_H
-++# include <unistd.h>
-++#endif
-+ 
-+ /* This mess was copied from the GNU getpagesize.h.  */
-+ #ifndef HAVE_GETPAGESIZE
-+-# ifdef HAVE_UNISTD_H
-+-#  include <unistd.h>
-+-# endif
-+-
-+ /* Assume that all systems that can run configure have sys/param.h.  */
-+ # ifndef HAVE_SYS_PARAM_H
-+ #  define HAVE_SYS_PARAM_H 1
-+@@ -2088,12 +2090,6 @@ else
-+ 
-+ #endif /* no HAVE_GETPAGESIZE */
-+ 
-+-#ifdef __cplusplus
-+-extern "C" { void *malloc(unsigned); }
-+-#else
-+-char *malloc();
-+-#endif
-+-
-+ int
-+ main()
-+ {
-+@@ -2111,7 +2107,6 @@ main()
-+ 		exit(1);
-+ 	for (i = 0; i < pagesize; ++i)
-+ 		*(data + i) = rand();
-+-	umask(0);
-+ 	fd = creat("conftestmmap", 0600);
-+ 	if (fd < 0)
-+ 		exit(1);
-+diff --git a/configure.in b/configure.in
-+index 1209ddc..a15398d 100644
-+--- a/configure.in
-++++ b/configure.in
-+@@ -27,7 +27,7 @@ dnl
-+ AC_MSG_CHECKING(how to link static binaries)
-+ AC_CACHE_VAL(ac_cv_lbl_static_flag,
-+     ac_cv_lbl_static_flag=unknown
-+-    echo 'main() {}' > conftest.c
-++    echo 'int main() {}' > conftest.c
-+     if test "$GCC" != yes ; then
-+ 	    trial_flag="-Bstatic"
-+ 	    test=`$CC $trial_flag -o conftest conftest.c 2>&1`
-+@@ -52,7 +52,7 @@ fi
-+ 
-+ AC_MSG_CHECKING(for __progname)
-+ AC_CACHE_VAL(ac_cv_extern__progname,
-+-    AC_TRY_LINK([],
-++    AC_TRY_LINK([#include <stdio.h>],
-+ 	[extern char *__progname; 
-+ 	puts(__progname)],
-+ 	ac_cv_extern__progname=yes,
-+-- 
-+2.50.1
-+
-diff --git a/package/thttpd/0002-libhttpd.c-thttpd.c-Port-to-C99.patch b/package/thttpd/0002-libhttpd.c-thttpd.c-Port-to-C99.patch
-new file mode 100644
-index 0000000000..6af7b2ad8f
---- /dev/null
-+++ b/package/thttpd/0002-libhttpd.c-thttpd.c-Port-to-C99.patch
-@@ -0,0 +1,53 @@
-+From 73edec5197d2beabaa383a50dd0d0f6fce0342e7 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@smile.fr>
-+Date: Mon, 11 Aug 2025 21:43:17 +0200
-+Subject: [PATCH] libhttpd.c, thttpd.c: Port to C99
-+
-+From:
-+https://src.fedoraproject.org/rpms/thttpd/c/608a10e7758eb87556af5206abeedca1d3cd500f
-+
-+Upstream: n/a
-+
-+Signed-off-by: Romain Naour <romain.naour@smile.fr>
-+---
-+ libhttpd.c | 5 +++++
-+ thttpd.c   | 5 +++++
-+ 2 files changed, 10 insertions(+)
-+
-+diff --git a/libhttpd.c b/libhttpd.c
-+index c6b1622..ca2b7af 100644
-+--- a/libhttpd.c
-++++ b/libhttpd.c
-+@@ -47,7 +47,12 @@
-+ #include <memory.h>
-+ #endif /* HAVE_MEMORY_H */
-+ #include <pwd.h>
-++
-+ #include <signal.h>
-++/* Not available with glibc default feature test macros.  Kludge to
-++   avoid extensive changes.  */
-++extern __typeof (signal) sigset;
-++
-+ #include <stdio.h>
-+ #include <stdlib.h>
-+ #include <string.h>
-+diff --git a/thttpd.c b/thttpd.c
-+index 3be7546..c13541c 100644
-+--- a/thttpd.c
-++++ b/thttpd.c
-+@@ -44,7 +44,12 @@
-+ #ifdef HAVE_GRP_H
-+ #include <grp.h>
-+ #endif
-++
-+ #include <signal.h>
-++/* Not available with glibc default feature test macros.  Kludge to
-++   avoid extensive changes.  */
-++extern __typeof (signal) sigset;
-++
-+ #include <stdio.h>
-+ #include <stdlib.h>
-+ #include <string.h>
-+-- 
-+2.50.1
-+
--- 
-2.50.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gSm9hY2hpbSwgQWxsLAoKTGUgMTEvMDgvMjAyNSDDoCAyMjozMiwgUm9tYWluIE5hb3Vy
+IGEgw6ljcml0wqA6Cj4gQXBwbHkgY2hhbmdlcyBmcm9tIEZlZG9yYSBbMV0gdG8gZml4IGdjYy0x
+NSBpc3N1ZXMuCj4gCj4gRGVzcGl0ZSB0aGUgbGFzdCB0aHR0cGQgcmVsZWFzZSAyLjI5IGJhY2sg
+aW4gMjAxOCwgdGhlIHBhY2thZ2UKPiBkb2Vzbid0IGJ1aWxkIHdpdGggbW9kZXJuIGNvbXBpbGVy
+IGFuZCBBdXRvY29uZiAobmV3ZXIgdGhhbiAyLjEzKS4KPiAKPiBGaXhlczoKPiBodHRwczovL2F1
+dG9idWlsZC5idWlsZHJvb3Qub3JnL3Jlc3VsdHMvZjY1L2Y2NTY0YjE0NDM2NmE5MzZlOTQ1NTU4
+NzUxNDFkZmUwY2NhNWQxMWIKPiBodHRwczovL2dpdGxhYi5jb20vYnVpbGRyb290Lm9yZy9idWls
+ZHJvb3QvLS9qb2JzLzEwOTcyODU5MzM4Cj4gaHR0cHM6Ly9naXRsYWIuY29tL2J1aWxkcm9vdC5v
+cmcvYnVpbGRyb290Ly0vam9icy8xMDk3Mjg1ODk3OQo+IAo+IFsxXSBodHRwczovL3NyYy5mZWRv
+cmFwcm9qZWN0Lm9yZy9ycG1zL3RodHRwZC9jLzYwOGExMGU3NzU4ZWI4NzU1NmFmNTIwNmFiZWVk
+Y2ExZDNjZDUwMGYKPiAKPiBTaWduZWQtb2ZmLWJ5OiBSb21haW4gTmFvdXIgPHJvbWFpbi5uYW91
+ckBzbWlsZS5mcj4KPiAtLS0KPiB0aHR0cGQgcGFja2FnZSBpcyB1c2VkIGJ5IFRlc3RXZ2V0IGFu
+ZCBUZXN0TGliQ3VybCwgc28gd2UgY2FuJ3QgcmVtb3ZlIGl0Cj4gcmlnaHQgbm93LgoKSm9hY2hp
+bSwgZG8geW91IGtub3cgaWYgeW91ciBpbXBsZW1lbnRhdGlvbiAibWVyZWNhdCIgWzFdIGNhbiBy
+ZXBsYWNlIHRodHRwZD8KSW5kZWVkLCB0aGUgd2lraXBlZGlhIFsyXSByZXBvcnQgIm1lcmVjYXQi
+IGFzIGEgZm9yayBvZiB0aHR0cGQuCgpbMV0gaHR0cHM6Ly9naXRodWIuY29tL3Ryb2dsb2JpdC9t
+ZXJlY2F0LwpbMl0gaHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvVGh0dHBkI0ZvcmtzCgpC
+ZXN0IHJlZ2FyZHMsClJvbWFpbgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9y
+ZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
