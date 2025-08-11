@@ -1,52 +1,177 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 953CCC87FDB
-	for <buildroot@archiver.kernel.org>; Mon, 11 Aug 2025 10:44:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C167C87FDB
+	for <buildroot@archiver.kernel.org>; Mon, 11 Aug 2025 10:49:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4B17061305;
-	Mon, 11 Aug 2025 10:44:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4442641296;
+	Mon, 11 Aug 2025 10:49:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZDX2IEdwO-w5; Mon, 11 Aug 2025 10:44:27 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RBRPlxssDGIf; Mon, 11 Aug 2025 10:49:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 393ED6130B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C11F41294
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 393ED6130B;
-	Mon, 11 Aug 2025 10:44:27 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1255D154
- for <buildroot@buildroot.org>; Mon, 11 Aug 2025 10:44:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3C11F41294;
+	Mon, 11 Aug 2025 10:49:54 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 75881154
+ for <buildroot@buildroot.org>; Mon, 11 Aug 2025 10:49:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id ED17682379
- for <buildroot@buildroot.org>; Mon, 11 Aug 2025 10:44:24 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5AE6881335
+ for <buildroot@buildroot.org>; Mon, 11 Aug 2025 10:49:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nAsZt_kzuPCq for <buildroot@buildroot.org>;
- Mon, 11 Aug 2025 10:44:23 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC9E48234B
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id AC9E48234B
- for <buildroot@buildroot.org>; Mon, 11 Aug 2025 10:44:23 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9BBE987110; Mon, 11 Aug 2025 10:44:23 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 11 Aug 2025 12:40:55 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a4694522c9ec9783eeadcabc1cf647ad037538f9
-X-Git-Newrev: eac5605b576474c3619de17309fff41a7f0f1871
-X-Patchwork-Hint: ignore
-Message-Id: <20250811104423.9BBE987110@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] CHANGES: move 2025.02.4 where it belongs
+ id 9vgWKp9QwfH4 for <buildroot@buildroot.org>;
+ Mon, 11 Aug 2025 10:49:51 +0000 (UTC)
+X-Greylist: delayed 305 seconds by postgrey-1.37 at util1.osuosl.org;
+ Mon, 11 Aug 2025 10:49:50 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D2A8881310
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D2A8881310
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.19;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D2A8881310
+ for <buildroot@buildroot.org>; Mon, 11 Aug 2025 10:49:50 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.7.2] ([85.22.127.180]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MLi8g-1v2wu308jw-00LWYm; Mon, 11
+ Aug 2025 12:44:43 +0200
+Message-ID: <bf2a9103-0ed0-4d78-b92d-08bf64bc35d2@gmx.de>
+Date: Mon, 11 Aug 2025 12:44:42 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Julien Olivain <ju.o@free.fr>
+Cc: buildroot@buildroot.org, James Hilliard <james.hilliard1@gmail.com>
+References: <20250809223118.2306727-1-fiona.klute@gmx.de>
+ <d5d036f00fd07fa6cd7f063141dc4468@free.fr>
+Content-Language: en-US, de-DE-1901, de-DE
+Autocrypt: addr=fiona.klute@gmx.de; keydata=
+ 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
+In-Reply-To: <d5d036f00fd07fa6cd7f063141dc4468@free.fr>
+X-Provags-ID: V03:K1:xE8lHdMsVhZvaGMxlm1RRBn6v2YtXEkR7Wgp8yNCJLvv/A9dNSI
+ +fDh2HUOonrpKMF3i1Qau1Cy1pj/oIvY9RZdkC/qhDMj99nxkr5QHv8sF7Rwl1LVr6Wtriz
+ L6kxMuEevuezrVyK1PZirzjCwKKL4C4rO6iwlrSGHNrhT3qCloFjqhZ+fslmZ9oDk1hUeOF
+ UBN4s6sbX4lAjJorLF0wA==
+UI-OutboundReport: notjunk:1;M01:P0:ZCO8JLwFk9g=;ax0k8BQK3Fck3Lb4fUknLnhFOyl
+ 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
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmx.de; 
+ s=s31663417; t=1754909388; x=1755514188; i=fiona.klute@gmx.de;
+ bh=MWspqJ8o3sI9nExub5zGyPWOZlxEPYnDftP41ju3veI=;
+ h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+ References:From:In-Reply-To:Content-Type:
+ Content-Transfer-Encoding:cc:content-transfer-encoding:
+ content-type:date:from:message-id:mime-version:reply-to:subject:
+ to;
+ b=LomKEZGd8IGgrckrgQ/xhZAxPL1Od7YdQDjbLVSzqQ5+fQeuifjurnbNQY4m4AWy
+ UfiNM4+sfTzCLH1F68315zOL2QOoheIJpt6ijtEuzMAj06aDojmnj170+9D8JUlvH
+ gLTB5LDgpd89Rh34NdDqatYfXaSGofwYX+GEV53Mj78L4LL655BVhw4uhdLEqf8Jv
+ ZbK8LGthOxz4j++C0ARO+1OzoIYkggkbZt+kD1+MgkfZ2Hqp0M2ORb/AwNpKZGBhk
+ hos4GhmsUglRZPqREQ3OlBNkD57aWUNQ71AHR9Qyvl1fF8JhAgOj1+ei0kqSY9tLE
+ EH83tTwZHrfrjlIR+w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=gmx.de
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
+ header.s=s31663417 header.b=LomKEZGd
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-pyroute2: bump to
+ version 0.9.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,184 +183,74 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eac5605b576474c3619de17309fff41a7f0f1871
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Commit f30bf62f5340 ("CHANGES: update for 2025.02.4") added the release to
-the top of the file instead of below 2025.05-rc1.  Fix that and indent with
-a tab like the other releases.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES | 144 ++++++++++++++++++++++++++++++++--------------------------------
- 1 file changed, 72 insertions(+), 72 deletions(-)
-
-diff --git a/CHANGES b/CHANGES
-index 6ce20522bb..957a838a7e 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,75 +1,3 @@
--2025.02.4, released June 23th, 2025
--
--    Important / security related fixes:
--
--    - assimp: CVE-2025-3015, CVE-2025-3016
--    - binutils: CVE-2025-3198
--    - connman: CVE-2025-32366, CVE-2025-32743
--    - go: CVE-2025-0913, CVE-2025-4673, CVE-2025-22874
--    - iputils: CVE-2025-47268, CVE-2025-48964
--    - jq: CVE-2024-23337, CVE-2025-48060, CVE-2024-53427
--    - libcurl: CVE-2025-4947, CVE-2025-5025, CVE-2025-5399
--    - net-tools: CVE-2025-46836
--    - nodejs: CVE-2025-23165, CVE-2025-23166
--    - openvmtools: CVE-2025-22247
--    - python-django: CVE-2025-48432
--    - python-requests: CVE-2024-47081
--    - python-tornado: CVE-2025-47287
--    - redis: CVE-2025-21605, CVE-2025-27151
--    - samba4: CVE-2025-0620
--    - sox: CVE-2021-23159, CVE-2021-23172, CVE-2021-23210, CVE-2021-3643,
--        CVE-2021-40426, CVE-2022-31650, CVE-2022-31651, CVE-2023-26590,
--        CVE-2023-32627, CVE-2023-34318
--    - webkitgtk: CVE-2025-24223, CVE-2025-31204, CVE-2025-31205,
--        CVE-2025-31206, CVE-2025-31215, CVE-2025-31257
--
--    Updated / fixed packages: alsa-utils, atkmm, atmm2_28, audit,
--    bluez5_utils, busybox, catch2, connman, dbus-glib, dlib, dovecot,
--    esp-hosted, execline, firmware-ele-imx, flex, fluent-bit, freescale-imx,
--    ghostscript, gmrender-resurrect, grub2, gst1-plugins-bad, gtkmm3, iputils,
--    kmsxx, libcamera, libcurl, libglade, libical, libuv, llvm-project,
--    lm-sensors, m4, mesa3d, mongoose, openvmtools, php, protobuf-c,
--    python-django, python-fastapi, python-flit-core, python-jc,
--    python-requests, python-uvicorn, qt5 (declarative, webengine,
--    webengine-chromium), qt6 (base, multimedia, tools), rpm, samba4, spdlog,
--    systemd, uacme, uboot-tools, yasm
--
--    Removed package: libebur128
--
--    Infrastructure updates / fixes:
--
--    - pkg-cmake now forces CMake>=3.5
--    - pkg-meson now uses a dedicated buildroot build directory
--      see https://gitlab.com/buildroot.org/buildroot/-/issues/64
--    - include defconfigs in sub-directories in make list-defconfigs
--    - new manual section about private repositories
--    - pkg-autotools: handle libtool 2.5.x
--    - pkg-cmake: force check_language(CXX) to be false when building w/o C++
--    - pkg-stats: add support for reporting stale CVE entries
--    - add basic support for package file download over smb
--    - toolchain/wrapper: check unsafe paths earlier
--    - test_flutter: drop unneeded vga/vnc stanzas from QEMU invocation
--
--    Test improvements
--
--    - new python-pydantic runtime tests
--    - new dieharder runtime test
--    - test_xen: fix runtime test
--    - test_timezone: fix test by setting a fixed time
--    - new tree runtime test
--
--    Boards fixes
--
--    - imx6ulz-bsh-smm-m2: fix missing U-Boot
--    - freescale: fix cpu name in i.MX9 boards
--    - imx8mn-bsh-smm-s2: erase the entire NAND chip
--    - freescale_t1040d4rdb: fix kernel build
--
--    In addition, thanks to the new stale CVE reporting, reported
--    vulnerabilities have been fixed for the following packages:
--    busybox, dnsmasq, dovecot, exim, exim, freeradius-server, grub2,
--    libopenh264, libssh, netsnmp, ninja, qt5base, ripgrep, sox, tinyxml
--
- 2025.05, released June 9th, 2025
- 
- 	Various fixes.
-@@ -160,6 +88,78 @@
- 	- netsnmp: unexpected header length in /proc/net/snmp...
- 	  https://gitlab.com/buildroot.org/buildroot/-/issues/110
- 
-+2025.02.4, released June 23th, 2025
-+
-+	Important / security related fixes:
-+
-+	- assimp: CVE-2025-3015, CVE-2025-3016
-+	- binutils: CVE-2025-3198
-+	- connman: CVE-2025-32366, CVE-2025-32743
-+	- go: CVE-2025-0913, CVE-2025-4673, CVE-2025-22874
-+	- iputils: CVE-2025-47268, CVE-2025-48964
-+	- jq: CVE-2024-23337, CVE-2025-48060, CVE-2024-53427
-+	- libcurl: CVE-2025-4947, CVE-2025-5025, CVE-2025-5399
-+	- net-tools: CVE-2025-46836
-+	- nodejs: CVE-2025-23165, CVE-2025-23166
-+	- openvmtools: CVE-2025-22247
-+	- python-django: CVE-2025-48432
-+	- python-requests: CVE-2024-47081
-+	- python-tornado: CVE-2025-47287
-+	- redis: CVE-2025-21605, CVE-2025-27151
-+	- samba4: CVE-2025-0620
-+	- sox: CVE-2021-23159, CVE-2021-23172, CVE-2021-23210, CVE-2021-3643,
-+	  CVE-2021-40426, CVE-2022-31650, CVE-2022-31651, CVE-2023-26590,
-+	  CVE-2023-32627, CVE-2023-34318
-+	- webkitgtk: CVE-2025-24223, CVE-2025-31204, CVE-2025-31205,
-+	  CVE-2025-31206, CVE-2025-31215, CVE-2025-31257
-+
-+	Updated / fixed packages: alsa-utils, atkmm, atmm2_28, audit,
-+	bluez5_utils, busybox, catch2, connman, dbus-glib, dlib, dovecot,
-+	esp-hosted, execline, firmware-ele-imx, flex, fluent-bit, freescale-imx,
-+	ghostscript, gmrender-resurrect, grub2, gst1-plugins-bad, gtkmm3, iputils,
-+	kmsxx, libcamera, libcurl, libglade, libical, libuv, llvm-project,
-+	lm-sensors, m4, mesa3d, mongoose, openvmtools, php, protobuf-c,
-+	python-django, python-fastapi, python-flit-core, python-jc,
-+	python-requests, python-uvicorn, qt5 (declarative, webengine,
-+	webengine-chromium), qt6 (base, multimedia, tools), rpm, samba4, spdlog,
-+	systemd, uacme, uboot-tools, yasm
-+
-+	Removed package: libebur128
-+
-+	Infrastructure updates / fixes:
-+
-+	- pkg-cmake now forces CMake>=3.5
-+	- pkg-meson now uses a dedicated buildroot build directory
-+	  see https://gitlab.com/buildroot.org/buildroot/-/issues/64
-+	- include defconfigs in sub-directories in make list-defconfigs
-+	- new manual section about private repositories
-+	- pkg-autotools: handle libtool 2.5.x
-+	- pkg-cmake: force check_language(CXX) to be false when building w/o C++
-+	- pkg-stats: add support for reporting stale CVE entries
-+	- add basic support for package file download over smb
-+	- toolchain/wrapper: check unsafe paths earlier
-+	- test_flutter: drop unneeded vga/vnc stanzas from QEMU invocation
-+
-+	Test improvements
-+
-+	- new python-pydantic runtime tests
-+	- new dieharder runtime test
-+	- test_xen: fix runtime test
-+	- test_timezone: fix test by setting a fixed time
-+	- new tree runtime test
-+
-+	Boards fixes
-+
-+	- imx6ulz-bsh-smm-m2: fix missing U-Boot
-+	- freescale: fix cpu name in i.MX9 boards
-+	- imx8mn-bsh-smm-s2: erase the entire NAND chip
-+	- freescale_t1040d4rdb: fix kernel build
-+
-+	In addition, thanks to the new stale CVE reporting, reported
-+	vulnerabilities have been fixed for the following packages:
-+	busybox, dnsmasq, dovecot, exim, exim, freeradius-server, grub2,
-+	libopenh264, libssh, netsnmp, ninja, qt5base, ripgrep, sox, tinyxml
-+
- 2025.02.3, released May 19th, 2025
- 	Build issues and other problems solved for packages:
- 
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgSnVsaWVuIQoKQW0gMTAuMDguMjUgdW0gMTc6MTUgc2NocmllYiBKdWxpZW4gT2xpdmFpbjoK
+PiBIaSBGaW9uYSwKPiAKPiBUaGFua3MgZm9yIHRoZSBwYXRjaCEKPiAKPiBPbiAxMC8wOC8yMDI1
+IDAwOjMxLCBGaW9uYSBLbHV0ZSB2aWEgYnVpbGRyb290IHdyb3RlOgo+PiBGcm9tOiAiRmlvbmEg
+S2x1dGUgKFdJV0EpIiA8ZmlvbmEua2x1dGVAZ214LmRlPgo+Pgo+PiBGcm9tIDAuOS4xIHRoZSBw
+eXJvdXRlMiBjb3JlIGlzIGFzeW5jLCB0aGUgc3luY2hyb25vdXMgQVBJIHJlbWFpbnMKPj4gYXZh
+aWxhYmxlIGFzIGEgd3JhcHBlci4KPj4KPj4gVXBzdHJlYW0gY2hhbmdlbG9nOgo+PiBodHRwczov
+L2dpdGh1Yi5jb20vc3Zpbm90YS9weXJvdXRlMi9ibG9iLzAuOS40L0NIQU5HRUxPRy5yc3QKPj4K
+Pj4gU2lnbmVkLW9mZi1ieTogRmlvbmEgS2x1dGUgKFdJV0EpIDxmaW9uYS5rbHV0ZUBnbXguZGU+
+Cj4+IC0tLQo+PiDCoHBhY2thZ2UvcHl0aG9uLXB5cm91dGUyL3B5dGhvbi1weXJvdXRlMi5oYXNo
+IHwgNCArKy0tCj4+IMKgcGFja2FnZS9weXRob24tcHlyb3V0ZTIvcHl0aG9uLXB5cm91dGUyLm1r
+wqDCoCB8IDQgKystLQo+PiDCoDIgZmlsZXMgY2hhbmdlZCwgNCBpbnNlcnRpb25zKCspLCA0IGRl
+bGV0aW9ucygtKQo+Pgo+PiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9weXRob24tcHlyb3V0ZTIvcHl0
+aG9uLXB5cm91dGUyLmhhc2ggYi9wYWNrYWdlLyAKPj4gcHl0aG9uLXB5cm91dGUyL3B5dGhvbi1w
+eXJvdXRlMi5oYXNoCj4+IGluZGV4IDM3ODVjOWFkN2YuLjg3NDAyYjlkYmIgMTAwNjQ0Cj4+IC0t
+LSBhL3BhY2thZ2UvcHl0aG9uLXB5cm91dGUyL3B5dGhvbi1weXJvdXRlMi5oYXNoCj4+ICsrKyBi
+L3BhY2thZ2UvcHl0aG9uLXB5cm91dGUyL3B5dGhvbi1weXJvdXRlMi5oYXNoCj4+IEBAIC0xLDYg
+KzEsNiBAQAo+PiDCoCMgbWQ1LCBzaGEyNTYgZnJvbSBodHRwczovL3B5cGkub3JnL3B5cGkvcHly
+b3V0ZTIvanNvbgo+PiAtbWQ1wqAgNjY5OTI5NDE2OGQzMDUxYjI4OTdhNTU2Y2VlYWY2YzLCoCBw
+eXJvdXRlMi0wLjguMS50YXIuZ3oKPj4gLXNoYTI1NiAKPj4gYjkxZjRhMWY3YWJiOTgyNDYzN2Ix
+ZmU2N2U2ZTRhMGEwNzFkOThkNGExYTFiNDdlZjc5MjMwNGZmM2FkYWQxMSAKPj4gcHlyb3V0ZTIt
+MC44LjEudGFyLmd6Cj4+ICttZDXCoCAyMjVkNjg5OWRhMjI2ZGY4ODk5ZWZjZmYyNTU3MjA0YcKg
+IHB5cm91dGUyLTAuOS40LnRhci5nego+PiArc2hhMjU2IAo+PiAzY2JjY2JlMWFmMGMyYjJhZWFl
+ODFiMzI3ZTBlOTFhYTk0YzgxYWIxOWY4NTFlNzRiMjZiZWY3MDIwMmYzMDcwIAo+PiBweXJvdXRl
+Mi0wLjkuNC50YXIuZ3oKPj4gwqAjIExvY2FsbHkgY29tcHV0ZWQgc2hhMjU2IGNoZWNrc3Vtcwo+
+PiDCoHNoYTI1NiAKPj4gNDczOWIzMmEyNDc4ZTljMjA0YmYwMTBiYWQ1ZDU2NWQxODhlNTlmZjkw
+NWUzYzhmNzFmZTMzOTgwOThiNzA5MyAKPj4gTElDRU5TRS5BcGFjaGUtMi4wCj4+IMKgc2hhMjU2
+IAo+PiA4MTc3Zjk3NTEzMjEzNTI2ZGYyY2Y2MTg0ZDhmZjk4NmM2NzVhZmI1MTRkNGU2OGE0MDQw
+MTA1MjFiODgwNjQzIAo+PiBMSUNFTlNFLkdQTC0yLjAtb3ItbGF0ZXIKPj4gZGlmZiAtLWdpdCBh
+L3BhY2thZ2UvcHl0aG9uLXB5cm91dGUyL3B5dGhvbi1weXJvdXRlMi5tayBiL3BhY2thZ2UvIAo+
+PiBweXRob24tcHlyb3V0ZTIvcHl0aG9uLXB5cm91dGUyLm1rCj4+IGluZGV4IGZlYTZlNDM5Nzku
+LmVmZThkNzNmNTIgMTAwNjQ0Cj4+IC0tLSBhL3BhY2thZ2UvcHl0aG9uLXB5cm91dGUyL3B5dGhv
+bi1weXJvdXRlMi5tawo+PiArKysgYi9wYWNrYWdlL3B5dGhvbi1weXJvdXRlMi9weXRob24tcHly
+b3V0ZTIubWsKPj4gQEAgLTQsOSArNCw5IEBACj4+IMKgIwo+Pgo+PiAjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIwo+Pgo+PiAtUFlUSE9OX1BZUk9VVEUyX1ZFUlNJT04gPSAwLjguMQo+PiArUFlUSE9O
+X1BZUk9VVEUyX1ZFUlNJT04gPSAwLjkuNAo+IAo+IFdpdGggdGhhdCBidW1wIGRvaW5nIGF0IHJ1
+bnRpbWUgdGhlIGNvbW1hbmQ6Cj4gCj4gcHl0aG9uMyAtYyAnZnJvbSBweXJvdXRlMiBpbXBvcnQg
+SVBSb3V0ZScKPiAKPiBmYWlscyB3aXRoIGVycm9yOgo+IAo+IE1vZHVsZU5vdEZvdW5kRXJyb3I6
+IE5vIG1vZHVsZSBuYW1lZCAnX3NzbCcKPiAKPiBNYXliZSB0aGlzIHBhY2thZ2Ugbm93IG5lZWQg
+dG8gc2VsZWN0IGZvciBydW50aW1lOgo+IEJSMl9QQUNLQUdFX1BZVEhPTjNfU1NMPXkKPiAKPiBD
+b3VsZCB5b3UgaGF2ZSBhIGxvb2sgcGxlYXNlPwoKVGhhdCB3b3VsZCBtYWtlIHNlbnNlLCBhbGwg
+b2YgbXkgYnVpbGRzIGhhdmUgQlIyX1BBQ0tBR0VfUFlUSE9OM19TU0w9eSAKZW5hYmxlZCwgYW5k
+IEkgYXNzdW1lIGZldyBQeXRob24gcGFja2FnZSBtYWludGFpbmVycyB3b3VsZCB0aGluayB0byAK
+bWVudGlvbiBhIG5ldyBzdGFuZGFyZCBsaWJyYXJ5IGltcG9ydCBpbiByZWxlYXNlIG5vdGVzLgoK
+SSdsbCBsb29rIGF0IGFkZGluZyBhIHNpbXBsZSB0ZXN0LCBwcm9iYWJseSBzb21ldGhpbmcgbGlr
+ZSAiZ2V0IHRoZSBJUCAKYWRkcmVzcyhlcykgb24gbG8iIHNvIHRoZSB0ZXN0IGRvZXNuJ3QgbmVl
+ZCBleHRyYSBzdHVmZiBvdGhlcndpc2UuCgpUaGFua3MgZm9yIHJldmlldyAmIHRlc3QhCgpCZXN0
+IHJlZ2FyZHMsCkZpb25hCgo+IEFsc28sIG1heWJlIGEgc21hbGwgcnVudGltZSB0ZXN0IGNvdWxk
+IGhlbHAsIHBpY2tpbmcgZmV3IHNpbXBsZQo+IGNvbW1hbmRzIGZyb206Cj4gaHR0cHM6Ly9naXRo
+dWIuY29tL3N2aW5vdGEvcHlyb3V0ZTIvdHJlZS8wLjkuND90YWI9cmVhZG1lLW92LSAKPiBmaWxl
+I2lwcm91dGUtLS0tc3luY2hyb25vdXMtcnRubC1hcGkKPiAKPj4gwqBQWVRIT05fUFlST1VURTJf
+U09VUkNFID0gcHlyb3V0ZTItJChQWVRIT05fUFlST1VURTJfVkVSU0lPTikudGFyLmd6Cj4+IC1Q
+WVRIT05fUFlST1VURTJfU0lURSA9IGh0dHBzOi8vZmlsZXMucHl0aG9uaG9zdGVkLm9yZy9wYWNr
+YWdlcy80ZC8wNC8gCj4+IGM5MDYwYjZjYjAyNGQwNTQ2N2UxN2VhOTNkM2NhNGJkMmYzYjA1ZGVi
+MjM3MmI3Zjc5MzIxNjQwZThhZAo+PiArUFlUSE9OX1BZUk9VVEUyX1NJVEUgPSBodHRwczovL2Zp
+bGVzLnB5dGhvbmhvc3RlZC5vcmcvcGFja2FnZXMvYjAvNWUvIAo+PiBmYzY0ZTIxMWNjZTAwNzg1
+NTVjNmRiOThhYWYxNDM0OGFlZDUyNzU2NWYzYzQ4NzY5MTNhMjkwYTViMmMKPj4gwqBQWVRIT05f
+UFlST1VURTJfTElDRU5TRSA9IEFwYWNoZS0yLjAgb3IgR1BMLTIuMCsKPj4gwqBQWVRIT05fUFlS
+T1VURTJfTElDRU5TRV9GSUxFUyA9IExJQ0VOU0UuQXBhY2hlLTIuMCBMSUNFTlNFLkdQTC0yLjAt
+IAo+PiBvci1sYXRlciBSRUFETUUubGljZW5zZS5yc3QKPj4gwqBQWVRIT05fUFlST1VURTJfU0VU
+VVBfVFlQRSA9IHNldHVwdG9vbHMKPj4gLS0gCj4+IDIuNTAuMQo+IAo+IEJlc3QgcmVnYXJkcywK
+PiAKPiBKdWxpZW4uCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBz
+Oi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
