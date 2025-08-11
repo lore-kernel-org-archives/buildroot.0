@@ -1,75 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23721CA0ED3
-	for <buildroot@archiver.kernel.org>; Mon, 11 Aug 2025 16:56:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F15CCA0ED1
+	for <buildroot@archiver.kernel.org>; Mon, 11 Aug 2025 16:56:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EC60383F10;
-	Mon, 11 Aug 2025 16:56:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 06E73416D8;
+	Mon, 11 Aug 2025 16:56:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id munlMdQ1CKH9; Mon, 11 Aug 2025 16:56:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3XO2tPT_0TZe; Mon, 11 Aug 2025 16:56:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BA38683F1C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 262B0416DA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BA38683F1C;
-	Mon, 11 Aug 2025 16:56:10 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 27670154
- for <buildroot@buildroot.org>; Mon, 11 Aug 2025 16:56:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 262B0416DA;
+	Mon, 11 Aug 2025 16:56:12 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id C5A3E154
+ for <buildroot@buildroot.org>; Mon, 11 Aug 2025 16:56:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0E4AB40E3F
- for <buildroot@buildroot.org>; Mon, 11 Aug 2025 16:56:09 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id ABE9061491
+ for <buildroot@buildroot.org>; Mon, 11 Aug 2025 16:56:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ezR8fSGq7o82 for <buildroot@buildroot.org>;
- Mon, 11 Aug 2025 16:56:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ab5PbzBlj8Bs for <buildroot@buildroot.org>;
+ Mon, 11 Aug 2025 16:56:09 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62f; helo=mail-ej1-x62f.google.com;
+ client-ip=2a00:1450:4864:20::62e; helo=mail-ej1-x62e.google.com;
  envelope-from=olteanv@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org CCC2140E3C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CCC2140E3C
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com
- [IPv6:2a00:1450:4864:20::62f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id CCC2140E3C
- for <buildroot@buildroot.org>; Mon, 11 Aug 2025 16:56:07 +0000 (UTC)
-Received: by mail-ej1-x62f.google.com with SMTP id
- a640c23a62f3a-af95a5989a2so59790666b.3
- for <buildroot@buildroot.org>; Mon, 11 Aug 2025 09:56:07 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7376B61490
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7376B61490
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com
+ [IPv6:2a00:1450:4864:20::62e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7376B61490
+ for <buildroot@buildroot.org>; Mon, 11 Aug 2025 16:56:09 +0000 (UTC)
+Received: by mail-ej1-x62e.google.com with SMTP id
+ a640c23a62f3a-af94440f4ecso74455966b.1
+ for <buildroot@buildroot.org>; Mon, 11 Aug 2025 09:56:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1754931365; x=1755536165;
+ d=1e100.net; s=20230601; t=1754931367; x=1755536167;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=UbBKySnvtV8tGlmymcMWPPwbAmlmsH5mIeWolr9kAUM=;
- b=tspFWx8SYyGcUXKfwL8praU9xUUg7JYXcQVbqg25H+NSc4sjbvLfpTKKRM46oZWfq4
- AZngTSgBzxVqohEvp6WnDz4f0tphIT65sAEUZ3rZ4sZQp4OFYRmk1ccTZHflxd4S/+mp
- MFyBoBaJoyPc1hMCxcPW1qjYF8idF3rgLj8ZQNeFhbo4X0f6F1jlISI8gfliUPhosbIe
- Hgp5FhV6gXrqpj5BM1NL/kZJpf0Bu3GGlKbsvGkM0lvPZu7aK+RntG/mGpmGGMAa0JyG
- dzQTc13gfwW9oD+b08sQZiBIcVYX8fLd5r8xxCw1oSfMF9j850e9CjMyv8NMSamxgoZE
- 7LTA==
-X-Gm-Message-State: AOJu0YwkSNajGGJMZPMlVzzl/JnYjXfFg+eEL84vfnqe9SplDfJrpa3v
- V0iiFbvE3cvUet55TYjk8QW2/j64je9PXFb3CsYV3H9lEI/ox9ny6Lsqgrjtzg==
-X-Gm-Gg: ASbGncvtPktHbx8Z2S4fEc7QFE3gdGVtT8pTiOFgkK7yyoLUEn33izAlHLWPoPsN2ck
- V9C20XOHzfeFKNbNr6xe17JTfxmV8UH0WENsJW+Ckjrg4HtZHVSyCFBDQ8rB2Tn7/AiUDR3OzrK
- 0d/oms/SbzTTg6RyxiaGZLEnCPNzgrUCXLBDb9Z8aEgj1Chdol0udgCagrruj9/QjhMGRdoKYIC
- 0GWhEwiM8UQ3l4xQFbqC9z+3VFtUi7NA/Qj0BANwPUxwHPQnMt+tO5ZmL9O3M93jy5Az99YYwMk
- dwtyfTsmtqq6aDYZb5KoYFMMdZ0t+bZu7XRe8ld0z/T0My/ylcRPqaMFt7Fx3rJrBpNUm12mcpW
- eJlGxRLVd9hJG5H/+LPI=
-X-Google-Smtp-Source: AGHT+IESoe9jGcvSJ9UeXVXAan4Y9ODhrL4hYCz4q5N6NaffpKD2npWTpBrTWHUsNJ+JVd/hVGp9Yw==
-X-Received: by 2002:a17:907:9482:b0:af9:3c7f:7447 with SMTP id
- a640c23a62f3a-af9deaad890mr373337366b.2.1754931365181; 
- Mon, 11 Aug 2025 09:56:05 -0700 (PDT)
+ bh=MP8vFYBh1iheBK/pPLESPhv3+Ja4HL8ebfio7QGvD1I=;
+ b=lDv7xnM1NH+txCeE/DTHWd5oHkFQ1zwptSZVafgzgW4yHuxsBITok6OzybMwSA89Nq
+ n0u7B/t7REnYOjMh1FXDdoC9TSQzGnGKjuf/iIROvUi7LYbIjAxr1DFMOyKpOCbpf03D
+ K9jyV/GGMf5PJLaXHlitaZAFbxnhgc4dCyx8wJvefm4uv9qpzCrmkviwhPRSAfngq9NR
+ YF+Hw6oFMAv4FjTfV5x4PyO0/mO0k1Yx7ToFTg8ARfsCOvFQpne6EZjTAPYaFxrz+xFz
+ O3ohxsdZ8tQ8n1UTpDGCKzhZnH87QjBE1E48R+mm8awobYRChdYDF8tlgH7EKmFpqELt
+ RWrg==
+X-Gm-Message-State: AOJu0YyJMKdT/wSjUlUP8Y7sV7GXItot18iHcdJkraIfduwdY7/voOHF
+ dCkth2taUsE0doquE7naaXIr6F9j4XyTSFJg35noOCpIiDMpXQcDOAtLovtRdw==
+X-Gm-Gg: ASbGncszrSBxTl+n+Ygt1w2ocZ4c5923f6Ax7HafpWKWElDzk0KcAHvZNAfHZmug4Xr
+ BmxwrjFVmBC9h4/9Vw5ikKRrQZey4m65iKHpFY9+ynze7IREFf+DvtlX7/Yju/Qa+NgiqWiSu53
+ dmO/iizGAuCx05cvioUuB4Cq0rMga6OwvwK64Y73r5AhD5FBpos3ChB2Ey5fbLUAayzhZ5V5LlI
+ E7NFSWtyvSTdn7xTf/94O7xoMofK1izsa2JFpMlDKC3xFTwXCAtY6MZ4PwW/mSlFNE6PSXQ6Tr5
+ upjyZDRKm/Qd2Eq0U4Kwl02R4IsCwSV61jY5uO4IAB5lYGOputh06E8HmofNL0GoGw18IhcPCNh
+ PBU6G4rRFERTf9rfZdPA=
+X-Google-Smtp-Source: AGHT+IHSP9Q2Dvepi9vPHlWSBj2ih5268rNd3JK4wxKJ35OzGPIQsSHiyOcJKSAoSEr9CLv9LK/t8g==
+X-Received: by 2002:a17:907:3d05:b0:adb:2ce8:686a with SMTP id
+ a640c23a62f3a-af9deb0eff0mr368669466b.12.1754931366835; 
+ Mon, 11 Aug 2025 09:56:06 -0700 (PDT)
 Received: from skbuf.lan ([2a02:2f04:d005:3b00:15ff:6865:527:c8f0])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-af91a0766e2sm2044629166b.27.2025.08.11.09.56.03
+ a640c23a62f3a-af91a0766e2sm2044629166b.27.2025.08.11.09.56.05
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 11 Aug 2025 09:56:04 -0700 (PDT)
+ Mon, 11 Aug 2025 09:56:05 -0700 (PDT)
 From: Vladimir Oltean <olteanv@gmail.com>
 To: buildroot@buildroot.org
 Cc: Brandon Maier <Brandon.Maier@collins.com>,
@@ -77,32 +77,31 @@ Cc: Brandon Maier <Brandon.Maier@collins.com>,
  Romain Naour <romain.naour@smile.fr>, Vincent Jardin <vjardin@free.fr>,
  Julien Olivain <ju.o@free.fr>, Arnout Vandecappelle <arnout@mind.be>,
  Akhilesh Nema <nemaakhilesh@gmail.com>
-Date: Mon, 11 Aug 2025 19:55:29 +0300
-Message-ID: <20250811165531.1533913-10-olteanv@gmail.com>
+Date: Mon, 11 Aug 2025 19:55:30 +0300
+Message-ID: <20250811165531.1533913-11-olteanv@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250811165531.1533913-1-olteanv@gmail.com>
 References: <20250811165531.1533913-1-olteanv@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1754931365; x=1755536165; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1754931367; x=1755536167; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=UbBKySnvtV8tGlmymcMWPPwbAmlmsH5mIeWolr9kAUM=;
- b=HsxfBOmvjxcWXr3loz9LR8HMp51sNWjI88Exxt8AIOqomWrI/4knnCvp1/b36X1Tj7
- w5gSKwULylezYwYGXdvD+niWPDoiGRsqag54MSlVUy49iR4Y0s85PdRv1UlflhrFIbz5
- qUaNRo/shPkjz58q1PqTgWnmHpUCmLN7i3y0lN9WIGJihKGmCQun56ceX5Wi+thvGqsD
- QNvzJDQI6xSyo1H30QuxEw+Xh3x/V81HFTerI679TcgViOKP++XHzCWc5Hv1/PxAXiSD
- MBwHv6X92ZyHqOIeV/Klm/1KC20zlzJL5lXpmHbrid7axia8hWsxoNl9GJEZgNv8nD54
- VFTg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=MP8vFYBh1iheBK/pPLESPhv3+Ja4HL8ebfio7QGvD1I=;
+ b=ExjYYUgFTFkUky5BTJWqCC/JrhnIExWGfs2YVYs7m11APfz3AgLfqMnU+5oPmHSSWu
+ XmwhsPbVVZiCSKg8epxHPS5MQlylWairnWvZ1oXnHn/m3L1TfE7AjrMCmq9n31jCl4nS
+ ZIut4ghWZHkxtkgxprn5GUAMaprVpD8tpBm+nnG8OC2bn3qxqpsGqF82anCffl4S5LZi
+ oV37zk3+TnpfsFLaTyGsHNgv0vpgm0BkUzMBAbK9A31TOClhUCbKHvTC/4+1UjBwXkJh
+ 1AloSyJtKE/g5puTB06Uwf7C8kMfMXIfjj00LWd0ui7OTSZu5gUA5v4zg3E8G0Px5VGS
+ WxYA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=HsxfBOmv
-Subject: [Buildroot] [PATCH v3 09/11] configs/ls1046a-frwy: bump BSP tag to
- lf-6.12.20-2.0.0
+ header.a=rsa-sha256 header.s=20230601 header.b=ExjYYUgF
+Subject: [Buildroot] [PATCH v3 10/11] package/qoriq-restool: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,115 +118,134 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Update the kernel, U-Boot, ATF tags, as well as documentation, used by
-the LS1046A-FRWY to the latest Linux Factory release.
+Introduce a package for the restool program, which permits the user to
+modify the network configuration of the DPAA2 subsystem and create one
+that is adequate to their use case.
+
+We integrate the lf-6.12.20-2.0.0 release tag, which contains some extra
+fixups specifically made for the Buildroot integration:
+- commit 14a9058c772b ("manpage: it should be optional"): It was pointed
+  out on previous patch submissions that the "make install" target also
+  converts man pages from Markdown to groff using pandoc, and apart from
+  the fact that Buildroot doesn't want manpages, pandoc is also too
+  heavy to drag into the build system. So that feedback was considered
+  valid and the patch is included here via upstream.
+- commit 6d6b9d8c200c ("dpdmux: remove unused dpdmux_create_options
+  array") addresses a build error
+- commit 66d941a0160d ("Adapt BITS_PER_LONG and GENMASK() definitions
+  for 32-bit compatibility") addresses a build error on 32-bit builds
+- commit 8f73f2600111 ("Print 64-bit counters using PRIu64 from
+  inttypes.h") addresses a build error on 32-bit builds
 
 Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
+Reviewed-by: Vincent Jardin <vjardin@free.fr>
 ---
-v1->v2: patch is new
+v2->v3: integrate upstream a patch which fixes 32-bit builds
+v1->v2: integrate upstream a patch from Vincent which avoids building
+        man pages
 
- .../arm-trusted-firmware.hash                 |  2 +-
- .../ls1046a-frwy/patches/linux/linux.hash     |  2 +-
- .../ls1046a-frwy/patches/uboot/uboot.hash     |  2 +-
- board/freescale/ls1046a-frwy/readme.txt       | 23 ++++++++++---------
- configs/ls1046a-frwy_defconfig                |  6 ++---
- 5 files changed, 18 insertions(+), 17 deletions(-)
+ DEVELOPERS                               |  1 +
+ package/Config.in                        |  1 +
+ package/qoriq-restool/Config.in          | 22 +++++++++++++++++++++
+ package/qoriq-restool/qoriq-restool.hash |  3 +++
+ package/qoriq-restool/qoriq-restool.mk   | 25 ++++++++++++++++++++++++
+ 5 files changed, 52 insertions(+)
+ create mode 100644 package/qoriq-restool/Config.in
+ create mode 100644 package/qoriq-restool/qoriq-restool.hash
+ create mode 100644 package/qoriq-restool/qoriq-restool.mk
 
-diff --git a/board/freescale/ls1046a-frwy/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/freescale/ls1046a-frwy/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-index 41c7ad4068a4..c05084df7660 100644
---- a/board/freescale/ls1046a-frwy/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-+++ b/board/freescale/ls1046a-frwy/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  2751fcd3eb9080c34531f68ca2e1f571a60f4220853df53a5ebed9835abf8c13  atf-lf-6.12.3-1.0.0.tar.gz
-+sha256  738f029c6bfcdac5649e2c252970b1f44c1ce7fee9fe4657a25edc666375ffa8  atf-lf-6.12.20-2.0.0.tar.gz
-diff --git a/board/freescale/ls1046a-frwy/patches/linux/linux.hash b/board/freescale/ls1046a-frwy/patches/linux/linux.hash
-index 43dbe074c2ec..3aea05469cc0 100644
---- a/board/freescale/ls1046a-frwy/patches/linux/linux.hash
-+++ b/board/freescale/ls1046a-frwy/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256  9e2fff1014f1b196be8149c63a6054e40b1b36b222e53db3f445c96c856066e0  linux-lf-6.12.3-1.0.0.tar.gz
-+sha256  c98177e85ace6400b06301101af3065e90463920c3e166da4ed22deffe960fb8  linux-lf-6.12.20-2.0.0.tar.gz
-diff --git a/board/freescale/ls1046a-frwy/patches/uboot/uboot.hash b/board/freescale/ls1046a-frwy/patches/uboot/uboot.hash
-index 5e36d9348789..1072686160f5 100644
---- a/board/freescale/ls1046a-frwy/patches/uboot/uboot.hash
-+++ b/board/freescale/ls1046a-frwy/patches/uboot/uboot.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256  8708fc95844d020f79b87f954f29073ae9b230de3e41117e7fb379294da946ac  u-boot-lf-6.12.3-1.0.0.tar.gz
-+sha256  a39f7db3ffd2b7263ea5d02b0631decac1c89f7c1b96b77ba8e302f3641a3eb3  u-boot-lf-6.12.20-2.0.0.tar.gz
-diff --git a/board/freescale/ls1046a-frwy/readme.txt b/board/freescale/ls1046a-frwy/readme.txt
-index 8c83a4eac94d..79a2ecdecf20 100644
---- a/board/freescale/ls1046a-frwy/readme.txt
-+++ b/board/freescale/ls1046a-frwy/readme.txt
-@@ -11,23 +11,24 @@ For more details about the board and the QorIQ Layerscape SoC, see the following
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 12a41597afb0..1b5b3e87ea04 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -3432,6 +3432,7 @@ F:	package/qoriq-ddr-phy-binary/
+ F:	package/qoriq-firmware-inphi/
+ F:	package/qoriq-mc-binary/
+ F:	package/qoriq-mc-utils/
++F:	package/qoriq-restool/
  
- Layerscape platforms are officially supported by NXP under the Layerscape
- Debian Linux SDK (LDLSDK). This uses components from Linux Factory (project
--common with i.MX), currently tag lf-6.6.36-2.1.0, two releases behind the
--latest lf-6.12.3-1.0.0.  In Buildroot, the latest Linux Factory release tag
--is used, which may be considered pre-release software, as it may contain
--features which are not yet documented, and it generally undergoes less testing.
-+common with i.MX), but has a slower release cadence than LF. The currently used
-+tag is lf-6.12.20-2.0.0, which is in line with the latest LF tag. Generally, in
-+Buildroot, the latest Linux Factory release tag is always used, which may be
-+considered pre-release software, as it may contain features which are not yet
-+documented, and it generally undergoes less testing.
- 
- For the software Layerscape Debian Linux SDK User Guide, see:
-   - https://docs.nxp.com/bundle/UG10143/page/topics/about_this_document.html
-   - https://www.nxp.com/docs/en/user-guide/UG10143.pdf
- 
- The components from NXP are:
--  - rcw, lf-6.12.3-1.0.0
--  - atf (fork), lf-6.12.3-1.0.0
--  - uboot (fork), lf-6.12.3-1.0.0
--  - qoriq-fm-ucode (blob), lf-6.12.3-1.0.0
--  - linux (fork), lf-6.12.3-1.0.0
--  - fmlib, lf-6.12.3-1.0.0
--  - fmc, lf-6.12.3-1.0.0
-+  - rcw, lf-6.12.20-2.0.0
-+  - atf (fork), lf-6.12.20-2.0.0
-+  - uboot (fork), lf-6.12.20-2.0.0
-+  - qoriq-fm-ucode (blob), lf-6.12.20-2.0.0
-+  - linux (fork), lf-6.12.20-2.0.0
-+  - fmlib, lf-6.12.20-2.0.0
-+  - fmc, lf-6.12.20-2.0.0
- 
- Build
- =====
-diff --git a/configs/ls1046a-frwy_defconfig b/configs/ls1046a-frwy_defconfig
-index 0e6f1cd941b5..25524df623a2 100644
---- a/configs/ls1046a-frwy_defconfig
-+++ b/configs/ls1046a-frwy_defconfig
-@@ -13,7 +13,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/freescale/ls1046a-frwy/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,linux,lf-6.12.3-1.0.0)/linux-lf-6.12.3-1.0.0.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,linux,lf-6.12.20-2.0.0)/linux-lf-6.12.20-2.0.0.tar.gz"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(LINUX_DIR)/arch/arm64/configs/lsdk.config"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -28,7 +28,7 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="200M"
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,atf,lf-6.12.3-1.0.0)/atf-lf-6.12.3-1.0.0.tar.gz"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,atf,lf-6.12.20-2.0.0)/atf-lf-6.12.20-2.0.0.tar.gz"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="ls1046afrwy"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
-@@ -38,7 +38,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="fip.bin bl2_sd.pbl"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,u-boot,lf-6.12.3-1.0.0)/u-boot-lf-6.12.3-1.0.0.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,u-boot,lf-6.12.20-2.0.0)/u-boot-lf-6.12.20-2.0.0.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="ls1046afrwy_tfa"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_PACKAGE_HOST_GENIMAGE=y
+ N:	Volkov Viacheslav <sv99@inbox.ru>
+ F:	package/v4l2grab/
+diff --git a/package/Config.in b/package/Config.in
+index 137f74ed82ce..ccf76af1cc21 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -598,6 +598,7 @@ endmenu
+ 	source "package/pru-software-support/Config.in"
+ 	source "package/pulseview/Config.in"
+ 	source "package/qoriq-cadence-dp-firmware/Config.in"
++	source "package/qoriq-restool/Config.in"
+ 	source "package/raspi-gpio/Config.in"
+ 	source "package/rdma-core/Config.in"
+ 	source "package/read-edid/Config.in"
+diff --git a/package/qoriq-restool/Config.in b/package/qoriq-restool/Config.in
+new file mode 100644
+index 000000000000..dbe0934d4dd3
+--- /dev/null
++++ b/package/qoriq-restool/Config.in
+@@ -0,0 +1,22 @@
++config BR2_PACKAGE_QORIQ_RESTOOL
++	bool "qoriq-restool"
++	help
++	  The DPAA2 architecture in Layerscape SoCs consists of
++	  networking resources that can be assembled into various
++	  nuggets of functionality, called "objects" (DPMAC, DPNI,
++	  DPDMUX, DPSW etc), by the Management Complex (MC) firmware.
++
++	  The MC firmware reads a file called Data Path Layout (DPL)
++	  which describes the set of networking objects it should
++	  create statically, at boot time.
++
++	  The restool program is able to talk to the Management
++	  Complex at runtime and permits the dynamic reconfiguration
++	  of networking objects, as well as saving the current
++	  configuration into a new DPL file. Without the restool
++	  program, the only possible networking configuration is
++	  that specified in the boot-time DPL file.
++
++	  https://github.com/nxp-qoriq/restool
++	  # sign in required
++	  https://www.nxp.com/webapp/Download?colCode=DPAA2UM
+diff --git a/package/qoriq-restool/qoriq-restool.hash b/package/qoriq-restool/qoriq-restool.hash
+new file mode 100644
+index 000000000000..5e11f60d0e74
+--- /dev/null
++++ b/package/qoriq-restool/qoriq-restool.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  efc3c21c04adef30d7903e6ce4923ca085dad7e53351ce21b6bfafd681ae8674  qoriq-restool-lf-6.12.20-2.0.0.tar.gz
++sha256  68f4b15ecc085729419bc60ca6eeadca5af0237bbfec791e8a79da9c943d42e9  LICENSE
+diff --git a/package/qoriq-restool/qoriq-restool.mk b/package/qoriq-restool/qoriq-restool.mk
+new file mode 100644
+index 000000000000..2e02e00cdb1c
+--- /dev/null
++++ b/package/qoriq-restool/qoriq-restool.mk
+@@ -0,0 +1,25 @@
++################################################################################
++#
++# qoriq-restool
++#
++################################################################################
++
++QORIQ_RESTOOL_VERSION = lf-6.12.20-2.0.0
++QORIQ_RESTOOL_SITE = $(call github,nxp-qoriq,restool,$(QORIQ_RESTOOL_VERSION))
++QORIQ_RESTOOL_LICENSE = BSD-3-Clause or GPL-2.0-or-later
++QORIQ_RESTOOL_LICENSE_FILES = COPYING
++
++QORIQ_RESTOOL_MAKE_OPTS = \
++	CC="$(TARGET_CC)" \
++	CROSS_COMPILE="$(TARGET_CROSS)"
++
++define QORIQ_RESTOOL_BUILD_CMDS
++	cd $(@D) && $(TARGET_MAKE_ENV) $(MAKE) $(QORIQ_RESTOOL_MAKE_OPTS)
++endef
++
++define QORIQ_RESTOOL_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) MANPAGE="" $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) \
++		prefix=/usr install
++endef
++
++$(eval $(generic-package))
 -- 
 2.43.0
 
