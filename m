@@ -1,73 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FA4CC87FD2
-	for <buildroot@archiver.kernel.org>; Mon, 11 Aug 2025 10:03:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 979C8C87FDB
+	for <buildroot@archiver.kernel.org>; Mon, 11 Aug 2025 10:03:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DF524612B6;
-	Mon, 11 Aug 2025 10:03:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6837183DAC;
+	Mon, 11 Aug 2025 10:03:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id O3cDfPoKYikC; Mon, 11 Aug 2025 10:03:44 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id i6ly5aj6CDVs; Mon, 11 Aug 2025 10:03:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B9BE612AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6F3F583DC1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1B9BE612AB;
-	Mon, 11 Aug 2025 10:03:44 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 94DEB1C5
- for <buildroot@buildroot.org>; Mon, 11 Aug 2025 10:03:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6F3F583DC1;
+	Mon, 11 Aug 2025 10:03:58 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 525FD1C5
+ for <buildroot@buildroot.org>; Mon, 11 Aug 2025 10:03:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 86873411A0
- for <buildroot@buildroot.org>; Mon, 11 Aug 2025 10:03:42 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 43E1E83DC1
+ for <buildroot@buildroot.org>; Mon, 11 Aug 2025 10:03:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Jprcjsid02yg for <buildroot@buildroot.org>;
- Mon, 11 Aug 2025 10:03:42 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 20oo1BE1e59c for <buildroot@buildroot.org>;
+ Mon, 11 Aug 2025 10:03:56 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B696E40FA4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B696E40FA4
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B696E40FA4
- for <buildroot@buildroot.org>; Mon, 11 Aug 2025 10:03:41 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1376178446; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Mon, 11 Aug 2025 10:03:39 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1ulPNS-0086SY-1K;
- Mon, 11 Aug 2025 12:03:38 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 75CF783DC0
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 75CF783DC0
+ for <buildroot@buildroot.org>; Mon, 11 Aug 2025 10:03:56 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6440F873AA; Mon, 11 Aug 2025 10:03:56 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Francois Perrad via buildroot <buildroot@buildroot.org>
-References: <20250811081933.2353281-1-francois.perrad@gadz.org>
-Date: Mon, 11 Aug 2025 12:03:38 +0200
-In-Reply-To: <20250811081933.2353281-1-francois.perrad@gadz.org> (Francois
- Perrad via buildroot's message of "Mon, 11 Aug 2025 10:19:32 +0200")
-Message-ID: <87y0rqmayt.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=gmaRlZPj2sEnzd46b4Dm4FgGWkmnNKyY41ehvkoOyorWmukM7/zaTYthjqhsG21kq8HegVkJDcWwdQjQnmGdJ2tD62f235qUiPGOH5Wf8tpXNaNP4Tti3MHO7S34d26HFCX36lqCCm5y9bnCO8aaJbh/VCGGhN7eHwHoTzYwQn8PqshfHNEkjz7kN7Dji9Mk3xNK4H/YLpVf7VauxBrGQFKHWZfDrCVaMJOS9y5VNXsai1ghrs4oSeNMudz1njucsI9QTSK2/+D/XTbZqtE0LlDFecmOLN51h2Qixl/Wx7uSn9u/fj4i4COosfmwvvvuf/KultQBx/fhAq5UUb4GLA==;
- s=purelymail1; d=purelymail.com; v=1;
- bh=WVSw2dw7HipPwxgC9ZvcGCcjxsZEASccjESPzw2Pt4g=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=gmaRlZPj
-Subject: Re: [Buildroot] [PATCH] package/lynis: bump to version 3.1.5
+To: buildroot@buildroot.org
+Date: Mon, 11 Aug 2025 12:00:22 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 0d09bd49e8a2e20ff59c9e61bb7ff7bb34ab9f36
+X-Git-Newrev: e388ef88f06aeffddf5da242c400269604b0fa7f
+X-Patchwork-Hint: ignore
+Message-Id: <20250811100356.6440F873AA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/luajit: add CPE_VERSION &
+ CPE_UPDATE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -79,20 +59,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@busybox.net
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Francois" == Francois Perrad via buildroot <buildroot@buildroot.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=e388ef88f06aeffddf5da242c400269604b0fa7f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Since this package hasn't had a proper release in a while this patch set
+the CPE_VERSION and CPE_UPDATE to the latest tags available.
 
-Committed, thanks.
+The annotation available on NVD all refers to this last available
+version `cpe:2.3:a:luajit:luajit:2.1.0:beta3:*:*:*:*:*:*`.
 
--- 
-Bye, Peter Korsgaard
+See https://nvd.nist.gov/vuln/detail/CVE-2020-15890 for instance.
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/luajit/luajit.mk | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
+index b030a16cfc..ebec4d87ac 100644
+--- a/package/luajit/luajit.mk
++++ b/package/luajit/luajit.mk
+@@ -9,6 +9,8 @@ LUAJIT_SITE = $(call github,LuaJIT,LuaJIT,$(LUAJIT_VERSION))
+ LUAJIT_LICENSE = MIT
+ LUAJIT_LICENSE_FILES = COPYRIGHT
+ LUAJIT_CPE_ID_VENDOR = luajit
++LUAJIT_CPE_ID_VERSION = 2.1.0
++LUAJIT_CPE_ID_UPDATE = beta3
+ 
+ LUAJIT_INSTALL_STAGING = YES
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
