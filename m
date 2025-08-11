@@ -1,81 +1,105 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C71B0CA0ED1
-	for <buildroot@archiver.kernel.org>; Mon, 11 Aug 2025 20:28:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3FB5CA0ED1
+	for <buildroot@archiver.kernel.org>; Mon, 11 Aug 2025 20:32:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5018741B54;
-	Mon, 11 Aug 2025 20:28:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9E68E615C9;
+	Mon, 11 Aug 2025 20:32:15 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id c6F5Yb0N5pfv; Mon, 11 Aug 2025 20:32:14 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF07A615CD
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id AF07A615CD;
+	Mon, 11 Aug 2025 20:32:14 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 071D6D98
+ for <buildroot@buildroot.org>; Mon, 11 Aug 2025 20:32:14 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id E0DFF4177C
+ for <buildroot@buildroot.org>; Mon, 11 Aug 2025 20:32:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MUoUKO0j2xeL; Mon, 11 Aug 2025 20:28:35 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A4F541B4F
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4A4F541B4F;
-	Mon, 11 Aug 2025 20:28:35 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 9A45CB8B
- for <buildroot@buildroot.org>; Mon, 11 Aug 2025 20:28:34 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7FBD0840F2
- for <buildroot@buildroot.org>; Mon, 11 Aug 2025 20:28:34 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KNDcVie6-mjt for <buildroot@buildroot.org>;
- Mon, 11 Aug 2025 20:28:33 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
- helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 64553840D3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 64553840D3
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 64553840D3
- for <buildroot@buildroot.org>; Mon, 11 Aug 2025 20:28:32 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0B5904435E;
- Mon, 11 Aug 2025 20:28:28 +0000 (UTC)
-Date: Mon, 11 Aug 2025 22:28:27 +0200
-To: Fiona Klute <fiona.klute@gmx.de>
-Message-ID: <20250811222827.4a74af55@windsurf>
-In-Reply-To: <d483d5ac-58f7-4517-b049-3a7688b83d2f@gmx.de>
-References: <20250809223229.2307960-1-fiona.klute@gmx.de>
- <20250810124736.00b1cc30@windsurf>
- <d483d5ac-58f7-4517-b049-3a7688b83d2f@gmx.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+ id T0XPy6pPuHUy for <buildroot@buildroot.org>;
+ Mon, 11 Aug 2025 20:32:13 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 365DF41720
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 365DF41720
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 365DF41720
+ for <buildroot@buildroot.org>; Mon, 11 Aug 2025 20:32:13 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ 5b1f17b1804b1-459e210bd2dso17143495e9.1
+ for <buildroot@buildroot.org>; Mon, 11 Aug 2025 13:32:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1754944331; x=1755549131;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=RFfL/u21re/7ma7hYJdTEgfmWaWxe1lLheLcFL+735Q=;
+ b=fcou4F8j7y+fkWmn9Jq7MTYLgHoHhElxtBXmXYqIu37+iaeNw298hmGyAYDSf67Iun
+ QtqDniO87xk2SewTbqGF6YUaJgBO5yarvkn/0hqt/SjCC5O3UyNZadRAiPbLVX0TrD0g
+ BtojYkTTVQFglEMTsY0S+e48LXwP+JoI5PhfYRLabtcNbhZay6Iy6o5ElvBK7o208UO5
+ qRSMs3vxz8Ud2tk82xkyrTHoWbzAvhrWLa/qDrHYEAC9800OJzB8akio4GtDIeFvuND6
+ 6l/HX63VoLaMIyGHeq/mJyM5tqo3ftFt4xwhpwjo0JVwwPbJVg45IgMygPyvxm9tK5Jn
+ 1KMQ==
+X-Gm-Message-State: AOJu0YyWwGPv1S/WTAAqhVy+EwcJ9Db7/id2b3jmYC4RO/1k+4aqLqvu
+ tkDE/jExF58Q3lGh65/UrlPpYU2bQRCQDgO8y0/YeL503eajuqTe7goPFfgmhLOds58Rm8zDxx2
+ yuiNl
+X-Gm-Gg: ASbGncvKb5056AOhn5mOeRcTBJQMgxD17/hy5zOX2jN7qqM+Dj8aBeG2kseI3CGgXEU
+ tYwpNvEHWIXVEBfiMmRQe5jEMBBZFtwZzETSVKC8d8bihHmCxt45SB2Ou7G8O858kH7F+dSfKiO
+ WmgKBg+qTe/3WGyBbb/gQgkFfHeFlHmxYG9vMCId/kGYl5V+YSmrTYZrCY+QQiNiZVhpQxzJWsf
+ rGDpc/dG7bSZ1JrylomsYAyjgpjCmThiDYGs/avnkCkP58EaMKDs33sT9TiN6ShkaXWRKwkMOkl
+ E2k6WgbyvxPne7+YnypBdnRsnDMA6mDgjXuTOjyfoDTKc432iAbhVO9/OmSO9Vil/eW2N7LEWF2
+ 5tw7DdlD7GCPQp+0YahTE5+pGduOmntIeGcPDuE8ONF05tCDnHK/mM6X6uOKCkEyZKDf+dKwrb7
+ nWzW78ssuUpb/OgiKtx6kZKy4w0ggS/5w=
+X-Google-Smtp-Source: AGHT+IFEz5KxEMgYlciD2G3HXisqw7nox3qf9F23sfV0IWBuPq/uz2ekTDFPOYryJ9fVH3zd7KA6+A==
+X-Received: by 2002:a05:600c:304a:b0:456:1146:5c01 with SMTP id
+ 5b1f17b1804b1-45a10dd6efemr5079465e9.12.1754944331198; 
+ Mon, 11 Aug 2025 13:32:11 -0700 (PDT)
+Received: from P-NTS-Evian.home
+ (2a01cb05949d5800c97d3b734a46d823.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:949d:5800:c97d:3b73:4a46:d823])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-3b79c3abed3sm41624078f8f.10.2025.08.11.13.32.10
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 11 Aug 2025 13:32:10 -0700 (PDT)
+To: buildroot@buildroot.org
+Cc: Romain Naour <romain.naour@smile.fr>
+Date: Mon, 11 Aug 2025 22:32:06 +0200
+Message-ID: <20250811203206.1506378-2-romain.naour@smile.fr>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20250811203206.1506378-1-romain.naour@smile.fr>
+References: <20250811203206.1506378-1-romain.naour@smile.fr>
 MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddufeefgeduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepledtgedvjeehgeetgfeufffglefhkedvfeduveeiieelteeliedtfefguefggffhnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtudemtggsudekmeekieegugemvddutddtmegrtddtfhemheelsgefmeegfhdvmeeifegusgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudekmeekieegugemvddutddtmegrtddtfhemheelsgefmeegfhdvmeeifegusgdphhgvlhhopeifihhnughsuhhrfhdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepgedprhgtphhtthhopehfihhonhgrrdhklhhuthgvsehgmhigrdguvgdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtohepjhgrmhgvshdrh
- hhilhhlihgrrhguudesghhmrghilhdrtghomhdprhgtphhtthhopeihvghgohhrshhlihhsthhssehgohhoghhlvghmrghilhdrtghomh
-X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1754944109;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=GkUxWVQHKLRtMdJ0cV7MIEMAZcqy9NTQQ5BKdAyJtkg=;
- b=ObEH7ZanBCLkseiPviPdn4EV79l/cJDnTahCUrSkJw+6eb+6qIWTz74PyBTNLo/xHTqxQu
- +rh2smGSo/ez0TNHYoJ3K4AIMZBRx6mjruugxxeUYOTVc0qqV5bes8duk0YUJM74+ulpIS
- lqZpHxmyipOu/AKAw+G3AqgDMQ2qu9TeQ5zplcnw2qoyrcIUP+qV6GS0oRvgU2pD9qk8c2
- 0Ns6k8ME6tua8wufsrtbIAdenwpCEzAWjIPsg5ZDhINofgQdRMtxyTYzN/gOvIq0LTykdT
- 5nx0pdAVV40Dp+i5aCzQjdeHQoxhz6IsUe7dP14XjwqDCVaVrQ+S7EriMEG19w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=smile.fr; s=google; t=1754944331; x=1755549131; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=RFfL/u21re/7ma7hYJdTEgfmWaWxe1lLheLcFL+735Q=;
+ b=nsWRuh7tgAJ5zbxzAUziJ0+eTCpPguLLgBL21jtZQWHFbKHLdYfuv0pBnjM8EfWbW/
+ woLaNHi+2/zWUqbXMhF/Z8pkNaW9P8dsqVb9oUBNmRyG3gQPPGCgf7B7ps/kK1AIniMv
+ 3OISzbaBOhQ02VqmqIfxxb2PiUC1KmoS8JL/U=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=ObEH7Zan
-Subject: Re: [Buildroot] [PATCH 0/7] Add package/python-memray and
- dependencies
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
+ header.s=google header.b=nsWRuh7t
+Subject: [Buildroot] [PATCH 2/2] package/thttpd: disable static build for
+ shared only builds
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,41 +111,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
+From: Romain Naour via buildroot <buildroot@buildroot.org>
+Reply-To: Romain Naour <romain.naour@smile.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+When BR2_SHARED_LIBS is set, thttpd package is trying to link with
+the static variant of lcrypt.
 
-On Mon, 11 Aug 2025 12:53:52 +0200
-Fiona Klute <fiona.klute@gmx.de> wrote:
+  [...]/host/bin/arm-linux-gcc  -static htpasswd.o -o htpasswd -lcrypt
+  [...]arm-buildroot-linux-gnueabi/bin/ld: cannot find -lcrypt: No such file or directory
 
-> Something like "record a trace and process it into 
-> statistics/flamegraph" should be simple enough to do, checking if the 
-> output makes sense would be hard to automate though. Would just "doesn't 
-> crash in the process" and maybe a grep for expected items be enough?
+Disable static build using STATICFLAG=""
 
-Something simple is good enough. Verifying that the output "makes
-sense" is IMO too complicated. Just make sure that it does generate
-something vaguely reasonable :-)
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+---
+ package/thttpd/thttpd.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-> I'll add it then. Would it make sense to use "depends on" the new option 
-> in package/python-memray then, to simplify the forwarded requirements 
-> (instead of copying all the "depends on" for elfutils and json-c), even 
-> if it's a little less convenient to enable?
-
-I saw you v2, and you went for "select", and it was the right thing to
-do. Thanks a lot!
-
-Thomas
+diff --git a/package/thttpd/thttpd.mk b/package/thttpd/thttpd.mk
+index d9cb5c9071..53cd4c3462 100644
+--- a/package/thttpd/thttpd.mk
++++ b/package/thttpd/thttpd.mk
+@@ -16,6 +16,10 @@ ifeq ($(BR2_PACKAGE_LIBXCRYPT),y)
+ THTTPD_DEPENDENCIES += libxcrypt
+ endif
+ 
++ifeq ($(BR2_SHARED_LIBS),y)
++THTTPD_MAKE_OPTS += STATICFLAG=""
++endif
++
+ define THTTPD_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 0755 $(@D)/thttpd $(TARGET_DIR)/usr/sbin/thttpd
+ 	$(INSTALL) -D -m 0755 $(@D)/extras/htpasswd $(TARGET_DIR)/usr/bin/htpasswd
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.50.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
