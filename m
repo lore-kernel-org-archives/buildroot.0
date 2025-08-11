@@ -1,98 +1,105 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AC4ECA0ED1
-	for <buildroot@archiver.kernel.org>; Mon, 11 Aug 2025 20:59:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56923CA0ED1
+	for <buildroot@archiver.kernel.org>; Mon, 11 Aug 2025 21:47:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 38AB4827F3;
-	Mon, 11 Aug 2025 20:59:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 11EAB41BF5;
+	Mon, 11 Aug 2025 21:47:49 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cZGyC4Eos-oA; Mon, 11 Aug 2025 21:47:48 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C4E741BF0
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3C4E741BF0;
+	Mon, 11 Aug 2025 21:47:48 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8C0C5D98
+ for <buildroot@buildroot.org>; Mon, 11 Aug 2025 21:47:47 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 71B60840EF
+ for <buildroot@buildroot.org>; Mon, 11 Aug 2025 21:47:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bu5Lbb1ZIHSe; Mon, 11 Aug 2025 20:59:44 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 48847828D1
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 48847828D1;
-	Mon, 11 Aug 2025 20:59:44 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 07AAAD98
- for <buildroot@buildroot.org>; Mon, 11 Aug 2025 20:59:43 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ED5B3615EB
- for <buildroot@buildroot.org>; Mon, 11 Aug 2025 20:59:42 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uD9alo33twGQ for <buildroot@buildroot.org>;
- Mon, 11 Aug 2025 20:59:42 +0000 (UTC)
+ id GgfU8N8EvyCg for <buildroot@buildroot.org>;
+ Mon, 11 Aug 2025 21:47:47 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D90AF61594
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D90AF61594
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D90AF61594
- for <buildroot@buildroot.org>; Mon, 11 Aug 2025 20:59:41 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id
- ffacd0b85a97d-3b79bddd604so2800400f8f.0
- for <buildroot@buildroot.org>; Mon, 11 Aug 2025 13:59:41 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::533; helo=mail-ed1-x533.google.com;
+ envelope-from=petr.vorel@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C8D60840E8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C8D60840E8
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
+ [IPv6:2a00:1450:4864:20::533])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C8D60840E8
+ for <buildroot@buildroot.org>; Mon, 11 Aug 2025 21:47:46 +0000 (UTC)
+Received: by mail-ed1-x533.google.com with SMTP id
+ 4fb4d7f45d1cf-6154655c8aeso6757210a12.3
+ for <buildroot@buildroot.org>; Mon, 11 Aug 2025 14:47:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1754945979; x=1755550779;
- h=content-transfer-encoding:mime-version:message-id:date:subject:to
- :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=gFZSYkdP/3T0QOfAoAczkJ9+NkDFFdguxaDnvbIZgHM=;
- b=jvLjuHN2lmu6tT8z+ET0tvhiKMppQnnc3jTy5URghWVAZwYP7YXC83I7YQQZ1Ti2xT
- q4/T6oYtZfb/YJ7YHaF4hC73O2DS61TiYc7B4zNY5UGXx8cuxuJqJ4lcgkxG6NA/Yu7R
- IAVJ5SGdHu6Hfhe/Ge3t6QYR5l7PE9+sprCeA6N96Mmf0E+rGsTcLnSXHR8RXgUhKRZ0
- wx+LBUdQR55eo4xiVS67pQQAXjizKOohUkdRb0Zkx/NZyglLZPvwqT6eTx8RRCK3Kjum
- XPTmUiXco6Cys1Y4HUCIlHFbRnkEjKKKEzrMT5MbTAYhvL64U62gIYCqMRCmMmthkM7w
- 6CcA==
-X-Gm-Message-State: AOJu0YwlRILO3nkBDy+X7OCduxQF71TNoBwOVVganSqaZoht7Y7AsYn8
- vbWBigQZNZXE3f5/+Ur0qECdsD1TOsD49197YNmDk0tBPxKzsvM6nz/Dbca6nm/iqU4uCgny3im
- 9fklv
-X-Gm-Gg: ASbGncu4bjX1Uqxybv7+YptOiWYyTrxelX38LO2djxzaJuW7gl6daGubg/CzHOPGWIf
- mPYlJHK3y7KL7YgGBlhuVZsJNU62P/V3i7/ZoZvuM2zUAKMQ6519jPgljS3EGdQB91nz+U9qcr4
- XTzq/QCul8XnMryKHruhqWA+2ZRwZQ07ms9I/0BTg3fC+wAw9b7FZHmqI721SoyGDmn56RngIEh
- 0meuhqqdkKzrLVxy+XxsnPDrg7q7jhu7D0DJM8DB2o+EGBCH8BAg8gf8rw/olJ2BScdsmK876Nq
- EiLy7AFBGNW7vKnO9Vv9TPgGZBrQ27gfotkHD+grxzM7f0ED3EUHOZZAXGAuq3pBYmq+RXS1lav
- vSX/7Oo4ITjfxng==
-X-Google-Smtp-Source: AGHT+IFH4Wl8ZS2vWxOA6CLDEAlCG+Ix0eMTBXE4phlq4jimp/dkxLSO7iuS/xDnmCjtFw2vvuodlg==
-X-Received: by 2002:a05:6000:220f:b0:3b7:644f:9ca7 with SMTP id
- ffacd0b85a97d-3b910fe019cmr911684f8f.25.1754945979366; 
- Mon, 11 Aug 2025 13:59:39 -0700 (PDT)
-Received: from arch ([79.132.233.79]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3b79c3bf93dsm41948565f8f.27.2025.08.11.13.59.38
- for <buildroot@buildroot.org>
+ d=1e100.net; s=20230601; t=1754948865; x=1755553665;
+ h=in-reply-to:content-disposition:mime-version:references:reply-to
+ :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=fJvI1e+9VgdeMavDAuxF/MWCdaS1KDmpvLbLAHgcSgA=;
+ b=KYJZ5qW7XPFPIV91pYIctkGwmzUoLGoHrfHQi8QqXqNkEZU0L7ERMR27JINt+7QjXY
+ eNEz0BKiFDct0k6M31uWVaI3hdygS+YLDBechHlI60o4YP4xrBxpKWmvYu2kVrnoVS8w
+ SDEdENWeHtM7+W1Vt970lCWoxJZbGlLf2bzhz/xjYk5N5S89hn12slw4cf9f+19j5rJ8
+ PjL6RymQWc34vR/2Rs96aUBFv4aTCLhJGt68xF7+c4pCA4GECOLd6j+sl6wVyS4TRYND
+ VobhWDVZyzZ4DDFCp7UMOPFav3E8w4UEijZaBlxaOuSSKfo3cRpGnp+S06chVKzSH1d3
+ F35w==
+X-Gm-Message-State: AOJu0YzdTibjJ/bDn+eH2YDUhWAJu4dUldAOtYk4UHmkL9S9hxurysNz
+ 0sQQZIANOSVDTelUvjdmF2YtanoBtrvQhiOi7+TV4tRBNEFdpHD6z9BLb9Mevg==
+X-Gm-Gg: ASbGncsCCNJaso5TaJZvO7hho6vr4ovprq4f9obtWed5mXRmX9t8pRvTDE5wNwZEh4v
+ fPC1InCDCL/+j+tEEBy6ltNtRN0VepUCyG/yJhUMC6ms4zIKTBKkkYKUb0KK8NL1kwdoPsuWHPv
+ c90gSyccLxzyLZlhDe8UWhSx7gDst1vWzUSKvmHydJdzKQVv25g9o13bUNzAAqFVn7R6sE/nveE
+ sGhy3t7x2zrHNqZ6V1fLLDs91iRn1Ah2aPun/uYaB4haw2eg4/K/AsYA06sE1ui9pzGGhOUax5U
+ WiD5SmxUA3B0mtiqbnj0znvMO0CXtBlawrFXgrADmpzNuqWnemk6TbeWwRqs59MGONEkL4N0Izf
+ fZlNhHCwbvsUuhV0qQdA7n5yDmKU=
+X-Google-Smtp-Source: AGHT+IGL871PuAYEHl0uPrsF4GWzt133WrSuGSdVSCF11siLPG9TYoPFwO8yDK+I4mBaa1CGtlid9A==
+X-Received: by 2002:a50:d68e:0:b0:615:979c:e8b2 with SMTP id
+ 4fb4d7f45d1cf-6184ec9d71fmr403520a12.29.1754948864558; 
+ Mon, 11 Aug 2025 14:47:44 -0700 (PDT)
+Received: from pevik (gw1.ms-free.net. [185.243.124.10])
+ by smtp.gmail.com with ESMTPSA id
+ 4fb4d7f45d1cf-615a9113e40sm19095508a12.57.2025.08.11.14.47.42
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 11 Aug 2025 13:59:39 -0700 (PDT)
-To: buildroot@buildroot.org
-Date: Mon, 11 Aug 2025 22:59:38 +0200
-Message-ID: <20250811205938.784904-1-thomas.perale@mind.be>
-X-Mailer: git-send-email 2.50.1
+ Mon, 11 Aug 2025 14:47:43 -0700 (PDT)
+Date: Mon, 11 Aug 2025 23:47:41 +0200
+From: Petr Vorel <petr.vorel@gmail.com>
+To: Titouan Christophe <titouan.christophe@mind.be>
+Cc: buildroot@buildroot.org
+Message-ID: <20250811214741.GA589128@pevik>
+References: <20250811120851.543585-1-titouan.christophe@mind.be>
+ <20250811120851.543585-2-titouan.christophe@mind.be>
 MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20250811120851.543585-2-titouan.christophe@mind.be>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1754945979; x=1755550779; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:to
- :from:from:to:cc:subject:date:message-id:reply-to;
- bh=gFZSYkdP/3T0QOfAoAczkJ9+NkDFFdguxaDnvbIZgHM=;
- b=IJbXASi+fZArke50ss4LOVHiNMUX9PD2JKChVZnwtkQ45z8QbQJgI/R6ix66PxU5vW
- /6Hb6mkLev16m47DfvxVmkGjE41pL200B9nj+dv3m2427Mb5yWBu0Wlizk9B7LqRLSAi
- JRBY/IoOavhUU0Q7LeCs5/ZowyQITFbur1STRhN/3BYp9u3eD6F2UDVVODFiPE7P2ZeF
- OVHfpuhx7dI0qVJPEMzHgSRYq1w6x06vvT08f9UTi/ki2qGaCfouqaxklzrN6DSBj5yt
- e+Lu/8MdlfpjViQSMuuNs7vCQ5dR08kLCa83nqYe+sgqrUb6GkLrj8BbEGHuwT7K/gjB
- IUXw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=IJbXASi+
-Subject: [Buildroot] [PATCH] package/mariadb: fix openssl RMD160 requirement
+ d=gmail.com; s=20230601; t=1754948865; x=1755553665; darn=buildroot.org;
+ h=in-reply-to:content-disposition:mime-version:references:reply-to
+ :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=fJvI1e+9VgdeMavDAuxF/MWCdaS1KDmpvLbLAHgcSgA=;
+ b=iWmidwfy0Q25NnLxJ4xo4PkBNAXPemIBxEWzZ+bJKj5SlooE1jny6KqL4RlLlBpKxa
+ Rm6NfkH2HgRO1AvXbpEZ8vmk3v5VkbtaFidppGgDkFdWNWuBPw+NO6vJIX1qe70aCTKf
+ VtmdtkFHkoUAR47dAl6SO8rcINBIpNwCaoAlRehuyZD/9uySZ+qJxi0mJGu3RYFyMnS8
+ /0DvfJ6Sr+I+f8ocdIQMuRvOEPQ73/iNBYdW1inE2FWZTVANlpEFtgCMGqQzMQ+Yn7Om
+ Ka7A8FzElozYWc6Z4WilFyQrHun8dxAtIuyswkqFCEVJoMNEo2NX4GGKTyhjBhvmdklI
+ S1Yg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=iWmidwfy
+Subject: Re: [Buildroot] [PATCH 2/2] package/ofono: security bump to v2.18
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -104,72 +111,21 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
+Reply-To: Petr Vorel <petr.vorel@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On the autobuilder the mariadb package fails to build when the
-BR2_PACKAGE_LIBOPENSSL_ENABLE_RMD160 variable is not set.
+Hi Titouan,
 
-See the following autobuilder error:
+Thanks a lot!
 
-```
-/workdir/instance-0/output-1/build/mariadb-10.11.11/libmariadb/libmariadb/secure/openssl_crypt.c: In function 'ma_hash_get_algorithm':
-/workdir/instance-0/output-1/build/mariadb-10.11.11/libmariadb/libmariadb/secure/openssl_crypt.c:40:12: error: implicit declaration of function 'EVP_ripemd160'; did you mean 'LN_ripemd160'? [-Wimplicit-function-declaration]
-   40 |     return EVP_ripemd160();
-      |            ^~~~~~~~~~~~~
-      |            LN_ripemd160
-/workdir/instance-0/output-1/build/mariadb-10.11.11/libmariadb/libmariadb/secure/openssl_crypt.c:40:12: error: returning 'int' from a function with return type 'const EVP_MD *' {aka 'const struct evp_md_st *'} makes pointer from integer without a cast [-Wint-conversion]
-   40 |     return EVP_ripemd160();
-      |            ^~~~~~~~~~~~~~~
-```
+For the patchset:
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
 
-This error can be reproduced with the following config:
-
-```
-cat <<EOF >.config
-BR2_arm=y
-BR2_cortex_a7=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-BR2_PACKAGE_LIBOPENSSL=y
-# BR2_PACKAGE_LIBOPENSSL_ENABLE_RMD160 is not set
-BR2_PACKAGE_MARIADB=y
-EOF
-make olddefconfig
-make mariadb
-```
-
-This patch adds a requirement to the RMD160 crypto for the MariaDB
-package.
-
-Fixes: https://autobuild.buildroot.org/results/f2b/f2b749cb7019856c5434c27987e8bfb2dc179cda
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
----
-Tested building by removing all the other crypto except DES & RMD160. It
-builds on that case.
----
- package/mariadb/Config.in | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/mariadb/Config.in b/package/mariadb/Config.in
-index acedd1da9d..142ec815ed 100644
---- a/package/mariadb/Config.in
-+++ b/package/mariadb/Config.in
-@@ -12,6 +12,7 @@ config BR2_PACKAGE_MARIADB
- 	select BR2_PACKAGE_NCURSES
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
-+	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RMD160 if BR2_PACKAGE_LIBOPENSSL
- 	select BR2_PACKAGE_PCRE2
- 	help
- 	  MariaDB is one of the most popular database servers in the
--- 
-2.50.1
-
+Kind regards,
+Petr
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
