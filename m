@@ -1,102 +1,104 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27DAAC87FDB
-	for <buildroot@archiver.kernel.org>; Mon, 11 Aug 2025 12:09:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB2CBC88CB9
+	for <buildroot@archiver.kernel.org>; Mon, 11 Aug 2025 14:01:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DEEBE610D6;
-	Mon, 11 Aug 2025 12:09:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 51F344130C;
+	Mon, 11 Aug 2025 14:01:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8qTIqJcf_5ro; Mon, 11 Aug 2025 12:09:04 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lyweFktTt_4W; Mon, 11 Aug 2025 14:01:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0AFEA6112B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5AC334130E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0AFEA6112B;
-	Mon, 11 Aug 2025 12:09:04 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 928FB1C5
- for <buildroot@buildroot.org>; Mon, 11 Aug 2025 12:09:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5AC334130E;
+	Mon, 11 Aug 2025 14:01:00 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 22754138
+ for <buildroot@buildroot.org>; Mon, 11 Aug 2025 14:00:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4AE2F81B71
- for <buildroot@buildroot.org>; Mon, 11 Aug 2025 12:09:01 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 08A1C4130A
+ for <buildroot@buildroot.org>; Mon, 11 Aug 2025 14:00:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XwRK34AeDzPU for <buildroot@buildroot.org>;
- Mon, 11 Aug 2025 12:09:00 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6SjI4GtHQUzN for <buildroot@buildroot.org>;
+ Mon, 11 Aug 2025 14:00:58 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62b; helo=mail-ej1-x62b.google.com;
- envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org CF4F883D54
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF4F883D54
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
- [IPv6:2a00:1450:4864:20::62b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CF4F883D54
- for <buildroot@buildroot.org>; Mon, 11 Aug 2025 12:08:59 +0000 (UTC)
-Received: by mail-ej1-x62b.google.com with SMTP id
- a640c23a62f3a-af95b919093so627003266b.2
- for <buildroot@buildroot.org>; Mon, 11 Aug 2025 05:08:59 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
+ envelope-from=maxime.leroys@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1DB4C41309
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1DB4C41309
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1DB4C41309
+ for <buildroot@buildroot.org>; Mon, 11 Aug 2025 14:00:57 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ 5b1f17b1804b1-459ddf83023so26617935e9.0
+ for <buildroot@buildroot.org>; Mon, 11 Aug 2025 07:00:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1754914138; x=1755518938;
- h=content-transfer-encoding:mime-version:message-id:date:subject:to
- :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=bL5MJjRR4ROLnQ0un84LCUGwPmmrIKLzUiQy3UzptZw=;
- b=I9yh4C8KLMJxa6yGgiIGFAlMs9Cqr56JbDwkdVeJUv6pJzxDQXbX0lnwvimgJ6WwyE
- ijmL/pkJQrP+tDYhRRDw1Xyzwf7f4sXtOBZCsxw/CsbqViQIcHUW4LRoKz4qtArEA+bI
- 5KxG7dM2cOVq80vH2F+OAWhCUQ2jdaiOJt/4zwYqVH4J6q71ByzaPqOLNIq0vli7gWb/
- PzFaVsORlaVelIeKvGwCUan1RS1YnkbsKIBCoWkTY5ovmXhRIvrj265ZdYIgFTHmrA1y
- 40+oqM5cACfz79hdvAuJMsnww2CIG5kBLvdhw01UYyFuWb81zpC4doJ7rETXnNtcRj5/
- nLMQ==
-X-Gm-Message-State: AOJu0YyWzrT1dntq8dtA92LD+vAusE0yf6OwCrvDzT8M5qrShAXMZFVc
- pHWh3oZEUbFYA6P2lvg78KvrcGLoqltD1gM3VRCdFC0xsyW8LETBjemSO1uyF8azMVulYAjVHP4
- MOExDdr4=
-X-Gm-Gg: ASbGnculRBmk3HSeMe1evAi5wsN7e4p96o2aKoRJnwI8rToDFWmuEWnoPh+W3Yii5zU
- jc0mDIM+FUhIyndSeFEL5FOjliiCy73GihfL/Uhpd66IeGncT3LsJnwVmLRazY4UFUf0bGIvJpl
- 7Pii9MqW13gcEvoZYyb4EH3AMMdzUCXuXIDk7OOxb23F6vZRVPqV+qAR1m7MQDyxUCrzEN948OG
- E5XqFoggJjGeByVjdfmSxbkb11+YN4TiIea8J+3q+Pm1B4idQOq9NRJHRBXKvr0glk70SKdgUhP
- x9s3oqMa1EfeU3hEt3IFdlFG+6ltjoQqhtnaOQPsylgS5LmswpJmOdreFGLlH/nLHXmWW+e6s5v
- ph8jS0YhyG+A5wcQom87cPUq8bzab0ENaDYpvkw+14tJJ5rxFEmCT+QK1D7Lgf4VEz17dZ49gEr
- 82ZWXUhy872h3zqkWPF1wkdaYj
-X-Google-Smtp-Source: AGHT+IEHx7Y6jk/Spbhsy5ei4r3FsxUJzdXnP27MbK+9nrK9CjGYI8K0YFI9T5aCwv+9CSAqjazwqg==
-X-Received: by 2002:a17:907:9627:b0:ae3:163a:f69a with SMTP id
- a640c23a62f3a-af9c655d877mr1231187366b.33.1754914136816; 
- Mon, 11 Aug 2025 05:08:56 -0700 (PDT)
-Received: from dragon.local.ess-mail.com
- (ip-94-140-185-241.reverse.destiny.be. [94.140.185.241])
+ d=1e100.net; s=20230601; t=1754920856; x=1755525656;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=xef6MHl3W48Rlvd3wz6pzpAtbzv6HRd1WsffYE1d/Lg=;
+ b=jgtNrW3eaU2A5XKXKt/mrKUpGRF1kLHG2OZ5+d3pKCWH/3S6NKhlS4d/ScWzhWyKRD
+ q4NWU3PBdzDy+AQmWwuXd07t4GtIWDDabdyXghL8TeUJOlvHQEVkV0+ae+h88eDnfEEN
+ CGEyAQ4e76zTWTrOB1nyt5V6kFGeTHexmsIISpcYF3wkk8iVm7EI+8P7HAXVkHbruTkt
+ 3KUV6wkzCO8Y0nBSHetd36O1wM1CpquGAFro3ft3zy+p0OTcRiZEj6R9TXr6l1s3yEb/
+ yGv/8lrenrd2v/h3lfUTM2dZKO3agDe9lJmJslNb3D4nQ25BakXOgQcKn7pAaLjWxiCP
+ PwoQ==
+X-Gm-Message-State: AOJu0YziBPDYpLm0X731Ub0nhS2NR9hH5MD+E/KXk8y0grIO/9U2PqkJ
+ RDiOUJ7siTkafBe/xdUq5zwZ6HzbkkXv/JxraiDdLAczLnFeUH+/UztHfA0C1Q==
+X-Gm-Gg: ASbGncsWKJJRFPQ+4h7vclwwDGXYLqZLT9AP4sn0B4rfWH7F3bxaqN8P6ChR7uj/9jp
+ vV/Zp6piowdC77291FWdWvxe+4oSqaDZMEzj/NTr1jc5LjYV3FfB1iUlXtxVZ54H7k53Me1Zo7C
+ zB5KB/jAoBm1/CzIGdJa/4xc5ATwHUQapQXOd17Aytb7BDIwWuLctAfypgS5Fozte35ullbQtxM
+ OMon/+TFaHL4ahgpqOzCu7NIZIDrIq5qYNZ/cZ7QdycXKO4wqhkepeke5ZSElUfMyWihRBgvFE+
+ DhWRRBkSYwuMvnRTJE8MEChsCDQBGPaIP8pMjlJ0nRMOjvn5KKbLu93iJOtArIUcwKlgkI+yi1e
+ JdPIU3aMZMiN7la4=
+X-Google-Smtp-Source: AGHT+IGL2BrQkZpoPg8W3Ci8/EbMTilxst+Lno6NSJqjKjrx2slp3Yp49wUh0bYJi/K+l5KHZpFhtA==
+X-Received: by 2002:a05:600c:3103:b0:456:28f4:a576 with SMTP id
+ 5b1f17b1804b1-459f4f2badbmr108657585e9.27.1754920855095; 
+ Mon, 11 Aug 2025 07:00:55 -0700 (PDT)
+Received: from freepad.. ([2a01:e0a:6f:bdf0:91cb:8ca9:ea79:d987])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-af91a218ab4sm2015207666b.92.2025.08.11.05.08.56
- for <buildroot@buildroot.org>
+ 5b1f17b1804b1-459dbba5210sm328560805e9.2.2025.08.11.07.00.54
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 11 Aug 2025 05:08:56 -0700 (PDT)
+ Mon, 11 Aug 2025 07:00:54 -0700 (PDT)
+From: Maxime Leroy <maxime@leroys.fr>
 To: buildroot@buildroot.org
-Date: Mon, 11 Aug 2025 14:08:50 +0200
-Message-ID: <20250811120851.543585-1-titouan.christophe@mind.be>
-X-Mailer: git-send-email 2.50.1
+Cc: Vadim Kochan <vadim4j@gmail.com>, ju.o@free.fr,
+ Maxime Leroy <maxime@leroys.fr>
+Date: Mon, 11 Aug 2025 16:00:28 +0200
+Message-ID: <20250811140030.1043469-1-maxime@leroys.fr>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250806132109.129355-1-maxime@leroys.fr>
+References: <20250806132109.129355-1-maxime@leroys.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1754914138; x=1755518938; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:to
- :from:from:to:cc:subject:date:message-id:reply-to;
- bh=bL5MJjRR4ROLnQ0un84LCUGwPmmrIKLzUiQy3UzptZw=;
- b=TmxrllTyrR+SSEpGZgDKRRyKKwyilG5qPoPNeT3JQhugqJewBmndxHfIH3Qnxfotev
- zkHtV+tqt63dkPYmY7NaT4cISOtFr1eCrOlbK7nM1f3hgg+CyovRA2zQm+aYTaA/gbUK
- quqyDsHLUd2MjBoo+IUBrhsEGlc0q53IjA1cHxerkYFVoGzHm6i0jBbAAT+3ETy0IMZF
- rf52e/dWM9ObFZTw8nsqhNSTJtFqAmvBjh/+CFUAqGZY/vXBkpisC5fSRMS6CHqmX3D5
- 3ARY93drW8+ek/q/rrfDqp0kwVgBVNTNbDlguCwCrpPt7KPcFb+ajEaWxRJGkuo6Zj0I
- ASxw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=TmxrllTy
-Subject: [Buildroot] [PATCH 1/2] package/ofono: mark CPE as valid
+ d=gmail.com; s=20230601; t=1754920856; x=1755525656; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=xef6MHl3W48Rlvd3wz6pzpAtbzv6HRd1WsffYE1d/Lg=;
+ b=Eq8Z54QVQARQWZ2fJpsTBTdx2R1TBaqx2BYONrYyOXLYj52K8ULwsNRLSUVjZih+rF
+ y9o8sQpij80A0laiaQZMGkZq3ZU5jKwgEBNcn3sWlRrKt3egGMKXtl/JnbTWeixx5hMf
+ ENDwifDiliM5yZ0dtzyooQqdYKONAiP5DjwLCxj6dWvzY/A0BVz4Y99uGG5yFSKqAl/t
+ hInJI0bX4D5tiS3BSR43Fk47tPdwuBqqtJCGhOp4hDjOku5S2QgbuXOsDNZwtPUr/E/B
+ zm9PNYTM4QZeIiMsMbz4zrVuUtlem8G1xGGEsYZ0IqBRm4v6IY9jA1Sr7WRBuVWrQ1Xd
+ f4tw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=leroys.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=Eq8Z54QV
+Subject: [Buildroot] [PATCH v2 0/2] update FRR to version 10.4.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -108,35 +110,28 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Titouan Christophe via buildroot <buildroot@buildroot.org>
-Reply-To: Titouan Christophe <titouan.christophe@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The default ofono_project:ofono is a valid CPE, see
-https://nvd.nist.gov/products/cpe/detail/734A0A32-DA21-49B8-86BD-1A60C7CDF864
+Changes v1 -> v2:
+- Fix compilation with uClibc
+- Add new option to configure enable-multipath
 
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
----
- package/ofono/ofono.mk | 1 +
- 1 file changed, 1 insertion(+)
+Maxime Leroy (2):
+  package/frr: bump to version 10.4.1
+  package/frr: make ECMP max configurable
 
-diff --git a/package/ofono/ofono.mk b/package/ofono/ofono.mk
-index 1ff43092c4..ba0846e823 100644
---- a/package/ofono/ofono.mk
-+++ b/package/ofono/ofono.mk
-@@ -9,6 +9,7 @@ OFONO_SOURCE = ofono-$(OFONO_VERSION).tar.xz
- OFONO_SITE = $(BR2_KERNEL_MIRROR)/linux/network/ofono
- OFONO_LICENSE = GPL-2.0
- OFONO_LICENSE_FILES = COPYING
-+OFONO_CPE_ID_VALID = YES
- OFONO_DEPENDENCIES = \
- 	host-pkgconf \
- 	dbus \
+ ...davg-optional-in-late-timer-warnings.patch | 48 +++++++++++++++++++
+ package/frr/Config.in                         | 33 +++++++++----
+ package/frr/frr.hash                          |  2 +-
+ package/frr/frr.mk                            | 13 +++--
+ 4 files changed, 83 insertions(+), 13 deletions(-)
+ create mode 100644 package/frr/0001-lib-make-getloadavg-optional-in-late-timer-warnings.patch
+
 -- 
-2.50.1
+2.43.0
 
 _______________________________________________
 buildroot mailing list
