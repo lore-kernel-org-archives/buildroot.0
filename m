@@ -4,72 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCECBCA0EC4
-	for <buildroot@archiver.kernel.org>; Tue, 12 Aug 2025 14:49:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27926CA0EC4
+	for <buildroot@archiver.kernel.org>; Tue, 12 Aug 2025 15:02:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 883A1427E8;
-	Tue, 12 Aug 2025 14:49:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D89024280E;
+	Tue, 12 Aug 2025 15:02:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5-oEQQ6Z5bzZ; Tue, 12 Aug 2025 14:49:36 +0000 (UTC)
+ id ksOqullLCfp7; Tue, 12 Aug 2025 15:02:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8F93E42797
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D6C3D41DC6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8F93E42797;
-	Tue, 12 Aug 2025 14:49:36 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id D11D5158
- for <buildroot@buildroot.org>; Tue, 12 Aug 2025 14:49:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D6C3D41DC6;
+	Tue, 12 Aug 2025 15:02:13 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 26C65158
+ for <buildroot@buildroot.org>; Tue, 12 Aug 2025 15:02:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C2CCC427B9
- for <buildroot@buildroot.org>; Tue, 12 Aug 2025 14:49:34 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0CB67614EC
+ for <buildroot@buildroot.org>; Tue, 12 Aug 2025 15:02:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aUyUQftbEHQZ for <buildroot@buildroot.org>;
- Tue, 12 Aug 2025 14:49:34 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B5B8542797
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B5B8542797
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B5B8542797
- for <buildroot@buildroot.org>; Tue, 12 Aug 2025 14:49:33 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 41D6F2003EF;
- Tue, 12 Aug 2025 16:49:29 +0200 (CEST)
-Received: from 2001:18c0:a22:bf00:5c2b:f296:f108:6612
- via 2001:18c0:a22:bf00:5c2b:f296:f108:6612 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 12 Aug 2025 16:49:29 +0200
-MIME-Version: 1.0
-Date: Tue, 12 Aug 2025 16:49:29 +0200
-To: Akhilesh Nema <nemaakhilesh@gmail.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250812075237.1214602-1-nemaakhilesh@gmail.com>
-References: <20250812075237.1214602-1-nemaakhilesh@gmail.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <396284c66c5653fcfdcaaac029ac58a3@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1755010170;
- bh=MMxZFv7enRSKcB6CPZBoGWU4jlz3EdICZuSzG065eEE=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=BF6HFVCc2yOx6YeQnwxlg/ZQni86BcL1QnPB/ygu+sgfwHJwshw4AMs1qgV59WK/R
- DOAAqBeSPxPTG3PL2AYTcN2WvbPszIqNem0OI5pASzpVuQmrceWX2uQB8v56sgAI2F
- R8jJC9Fwx8Pz56qRxobzBBl+OWu+KIBEK0kdI8IagvI5iiJaSbIM9NISue+Rf7thi5
- kesjeDydv2dqCjgUDspBmPaW6hSo0sY597Q4BnuvzWCRU74tkMgIbt462aZUIbgAqu
- yCvfselNp40A3U9Q5zJ/hbgQPar6jGgeh2/7Y7FgPF//NavBDMzu7je+d80Et7wOks
- U23exKEydaXNA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=BF6HFVCc
-Subject: Re: [Buildroot] [PATCH 1/1] package/iperf3: security bump to
- version 3.19.1
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 46yOLrPBuaRi for <buildroot@buildroot.org>;
+ Tue, 12 Aug 2025 15:02:12 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5257C60B5E
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5257C60B5E
+ for <buildroot@buildroot.org>; Tue, 12 Aug 2025 15:02:12 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 4B79F87473; Tue, 12 Aug 2025 15:02:12 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 12 Aug 2025 16:55:32 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 44ce29223df4f673cde5fc75840f002978b9567f
+X-Git-Newrev: 1788598fff138078e5ebdcb96e9c23abe0b2bd68
+X-Patchwork-Hint: ignore
+Message-Id: <20250812150212.4B79F87473@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/swugenerator: bump to
+ version 0.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,31 +60,48 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 12/08/2025 09:52, Akhilesh Nema wrote:
-> Release notes:
-> https://github.com/esnet/iperf/releases/tag/3.19.1
-> 
-> Fixes the following security issues:
-> - An off-by-one heap overflow has been fixed in authentication.
->   CVE-2025-54349, ESNET-SECADV-2025-0003)
->   https://github.com/advisories/GHSA-8xx8-qrh3-q8mq
-> 
-> - An assert in authentication has been removed. (CVE-2025-54350,
->   ESNET-SECADV-2025-0002)
->   https://github.com/advisories/GHSA-r6x8-74x9-5mc9
-> 
-> - A buffer overflow in the --skip-rx-copy option for zerocopy
->   has been fixed. (CVE-2025-54351, ESNET-SECADV-2025-0001)
->   https://github.com/advisories/GHSA-xjwm-4pfw-49g2
-> 
-> Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=1788598fff138078e5ebdcb96e9c23abe0b2bd68
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Applied to master, thanks.
+For release note, see:
+https://github.com/sbabic/swugenerator/releases/tag/0.5
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/swugenerator/swugenerator.hash | 2 +-
+ package/swugenerator/swugenerator.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/swugenerator/swugenerator.hash b/package/swugenerator/swugenerator.hash
+index 5c4878b400..184fd86e27 100644
+--- a/package/swugenerator/swugenerator.hash
++++ b/package/swugenerator/swugenerator.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  80351fc1c57a6162bc07c44765f2cfd76f3d984dbefca79c3d59844aacd2957f  swugenerator-0.4.tar.gz
++sha256  bb816a77278a2d320e36cdd6fd1bb9b8318b4ef4ccd05e79bb1d5ee631a1d5c1  swugenerator-0.5.tar.gz
+ # Locally computed sha256 checksums
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  LICENSE
+diff --git a/package/swugenerator/swugenerator.mk b/package/swugenerator/swugenerator.mk
+index b5f7796ebe..5acabc2036 100644
+--- a/package/swugenerator/swugenerator.mk
++++ b/package/swugenerator/swugenerator.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SWUGENERATOR_VERSION = 0.4
++SWUGENERATOR_VERSION = 0.5
+ SWUGENERATOR_SITE = $(call github,sbabic,swugenerator,$(SWUGENERATOR_VERSION))
+ SWUGENERATOR_LICENSE = GPL-3.0
+ SWUGENERATOR_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
