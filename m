@@ -1,52 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26BFDCA0EDC
-	for <buildroot@archiver.kernel.org>; Tue, 12 Aug 2025 21:42:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E621ACA0EC4
+	for <buildroot@archiver.kernel.org>; Tue, 12 Aug 2025 21:42:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6A15941DD4;
-	Tue, 12 Aug 2025 21:42:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BD17E84167;
+	Tue, 12 Aug 2025 21:42:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vf4eNdG0onzL; Tue, 12 Aug 2025 21:42:25 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FfN9wd4XXKUR; Tue, 12 Aug 2025 21:42:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 14AE241D9A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 99AA78402E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 14AE241D9A;
-	Tue, 12 Aug 2025 21:42:24 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 82CF1939
- for <buildroot@buildroot.org>; Tue, 12 Aug 2025 21:42:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 99AA78402E;
+	Tue, 12 Aug 2025 21:42:47 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7A2DF938
+ for <buildroot@buildroot.org>; Tue, 12 Aug 2025 21:42:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 694B841D81
- for <buildroot@buildroot.org>; Tue, 12 Aug 2025 21:42:21 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6044F40107
+ for <buildroot@buildroot.org>; Tue, 12 Aug 2025 21:42:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZVGfcznkfMF3 for <buildroot@buildroot.org>;
- Tue, 12 Aug 2025 21:42:20 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pgEIkluOyE1g for <buildroot@buildroot.org>;
+ Tue, 12 Aug 2025 21:42:44 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
+ helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3842541D82
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3842541D82
- for <buildroot@buildroot.org>; Tue, 12 Aug 2025 21:42:20 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 335E18750F; Tue, 12 Aug 2025 21:42:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org EC3EF4005F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EC3EF4005F
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EC3EF4005F
+ for <buildroot@buildroot.org>; Tue, 12 Aug 2025 21:42:43 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id B6B8941D02;
+ Tue, 12 Aug 2025 21:42:39 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 12 Aug 2025 21:28:23 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c9c8624d45eefe3465fb0a5d75dc12c1a74e9044
-X-Git-Newrev: fb6256c0efbc93d242e9ae2aa2d3b4a2e7fd149c
-X-Patchwork-Hint: ignore
-Message-Id: <20250812214220.335E18750F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/{glibc,
- localdef}: bump to version 2.42
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Romain Naour <romain.naour@gmail.com>
+Date: Tue, 12 Aug 2025 23:42:37 +0200
+Message-ID: <20250812214238.2398115-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.50.1
+MIME-Version: 1.0
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddufeeigeegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnheptdfhtdeiiefftdelleettedtjeekheekfedugfejgeehfedtueehhfefvddtjeeknecuffhomhgrihhnpehgnhhurdhorhhgnecukfhppedvrgdtudemtggsudekmeekieegugemvddutddtmegrtddtfhemheelsgefmeegfhdvmeeifegusgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudekmeekieegugemvddutddtmegrtddtfhemheelsgefmeegfhdvmeeifegusgdphhgvlhhopeifihhnughsuhhrfhdrhhhomhgvpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeegpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdprhgtphhtthhop
+ ehgihhulhhiohdrsggvnhgvthhtihessggvnhgvthhtihgvnhhgihhnvggvrhhinhhgrdgtohhmpdhrtghpthhtoheprhhomhgrihhnrdhnrghouhhrsehgmhgrihhlrdgtohhm
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1755034960;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=V1yxCdqYPMi9rR/UX+RsiWI+efTOHR7NgChU1kAmHqQ=;
+ b=huGr/bCnpbDq7O8r3SqXKUG1E5eB4asnXqJExrRrP0hDaF7uqwayXs+RK9xXS7Ii4+srob
+ P2JDA+hLZUPBt+DLobzIYP30vTrkQ4ODv5EKL4TiPItAKp+Ii6YD01n/54wU8nmOexVYz4
+ GT6u9jaV7UIvNsSMXs7RFtU3K0a/QWg5T7Y7HRQLX9mVLBKhbNTgLxdMrVbGjOGOAMlr9C
+ 2ZvopYEGL6PYoAaDkKztvOQ2vH4EPUHke4kPfbNr+/a0oDJMlsgzaCIiFRJESWbk9I9htI
+ BWrO7Q27wWRaKipDWY94IkYgjUJVEGKb+lsPFF8GO6BM0CrVip4i6rW6SDI21w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=huGr/bCn
+Subject: [Buildroot] [PATCH] package/gcc: bump 15.x series to 15.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,247 +83,236 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fb6256c0efbc93d242e9ae2aa2d3b4a2e7fd149c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Announcement:
+https://gcc.gnu.org/pipermail/gcc-announce/2025/000189.html
 
-Release e-mail:
+GCC 15.2 is a bug-fix release from the GCC 15 branch
+containing important fixes for regressions and serious bugs in
+GCC 15.1 with more than 123 bugs fixed since the previous release.
 
-  https://inbox.sourceware.org/libc-alpha/5906001.DvuYhMxLoT@pinacolada/
-
-Major new features:
-
-* The following ISO C23 function families (introduced in TS
-  18661-4:2015) are now supported in <math.h>.  Each family includes
-  functions for float, double, long double, _FloatN and _FloatNx, and a
-  type-generic macro in <tgmath.h>.
-
-  - Power and absolute-value functions: compoundn, pown, powr, rootn,
-    rsqrt.
-
-* On Linux, the pthread_gettid_np function has been added.
-
-* The ISO C2Y family of unsigned abs functions, i.e. uabs, ulabs,
-  ullabs, and uimaxabs, is now supported.
-
-* On Linux, the <termios.h> interface now supports arbitrary baud rates;
-  speed_t is redefined to simply be the baud rate specified as an
-  unsigned int, which matches the kernel interface.
-
-* The thread-local cache in malloc (tcache) now supports caching of
-  large blocks.  This feature can be enabled by setting the tunable
-  glibc.malloc.tcache_max to a larger value (max 4194304). Tcache is
-  also significantly faster for small sizes.
-
-* A new configure option, "--enable-sframe", can be used to enable
-  SFrame support of the GNU C Libraries.  SFrame is a new stack trace
-  information format which can be used by backtrace.  It requires
-  binutils with a minimum version of 2.45.
-
-* Support for lightweight stack guard pages via madvise and the
-  MADV_GUARD_INSTALL flag has been added to pthread_create.
-
-* Additional optimized and correctly rounded mathematical functions have
-  been imported from the CORE-MATH project, in particular acospif,
-  asinpif, atanpif, atan2pif, cospif, sinpif, tanpif.
-
-* The testsuite has been significantly extended, including coverage of
-  the functionality of the printf and scanf function families in many
-  variants.
-
-* The manual has been significantly extended and updated, particularly
-  the threads, terminal, filesystem, resource, and math chapters.
-
-* Code has been added to detect the x86-64 Intel Arrow Lake, Panther
-  Lake, Clearwater Forest, and Diamond Rapids microarchitectures.
-
-* Regarding S390, support for the new z17 platform has been added.
-
-Deprecated and removed features, and other changes affecting compatibility:
-
-* The glibc.rtld.execstack tunable now supports a compatibility mode to
-  allow programs that require an executable stack through dynamically
-  loaded shared libraries.
-
-* On Linux, the <termio.h> header and the definition of struct termio
-  in <sys/ioctl.h> have been removed. The termio interface has been
-  obsolete since the very first version of POSIX.1 in 1988, replaced
-  with <termios.h>.
-
-* The support for TX lock elision of pthread mutexes has been deprecated
-  on all architectures and will be removed in the next release.
-
-* On AArch64 Linux targets supporting the Scalable Matrix Extension
-  (SME), setjmp and sigsetjmp will disable the ZA state of SME.
-
-Changes to build and runtime requirements:
-
-* GCC 12.1 or later is now required to build the GNU C Library.
-
-* GNU Binutils 2.39 or later is now required to build the GNU C Library.
+One patch is renamed to match the filename generated by "git
+format-patch" out of the box.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-[Julien: resolve conflict with commit feaf53585a]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/glibc/glibc.hash                                   |  2 +-
- package/glibc/glibc.mk                                     |  2 +-
- .../0001-HACK-only-build-and-install-localedef.patch       |  8 ++++----
- ...lax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch | 14 +++++++-------
- ...K-keep-_ISOC23_SOURCE-undefined-to-build-localede.patch | 10 +++++-----
- package/localedef/localedef.mk                             |  2 +-
- 6 files changed, 19 insertions(+), 19 deletions(-)
+Considering that this is a bugfix only release and that 15.x is not
+the default GCC version in Buildroot for the 2025.08 release, I would
+believe this patch should be considered for the 2025.08 release, even
+though technically this is a version bump.
+---
+ .checkpackageignore                           |  2 +-
+ ...le-split-stack-for-non-thread-builds.patch |  4 ++--
+ ...e-support-for-atomics.-Fix-PR118280.patch} | 22 +++++++++----------
+ ...-config-microblaze-fix-ira-for-GCC15.patch |  8 +++----
+ package/gcc/Config.in.host                    |  2 +-
+ package/gcc/gcc.hash                          |  4 ++--
+ 6 files changed, 21 insertions(+), 21 deletions(-)
+ rename package/gcc/{15.1.0 => 15.2.0}/0001-disable-split-stack-for-non-thread-builds.patch (91%)
+ rename package/gcc/{15.1.0/0002-microblaze-add-atomic-test-and-set-support.patch => 15.2.0/0002-MicroBlaze-Enhance-support-for-atomics.-Fix-PR118280.patch} (96%)
+ rename package/gcc/{15.1.0 => 15.2.0}/0003-gcc-config-microblaze-fix-ira-for-GCC15.patch (89%)
 
-diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
-index 0deba84dc7..538f8b69a7 100644
---- a/package/glibc/glibc.hash
-+++ b/package/glibc/glibc.hash
-@@ -1,5 +1,5 @@
- # Locally calculated (fetched from Github)
--sha256  166b6e7637bb45cb9352e4813005f83dd48f03ef634d3e9e94a30aa5a0300fab  glibc-2.41-70-g1502c248d58cb99a203731707987a4342926e830.tar.gz
-+sha256  a364a548ebda9c570f5bf62bf5e4ad3240a90056455b9edfbf1472a7254bd1c0  glibc-2.42-3-gbc13db73937730401d592b33092db6df806d193e.tar.gz
- 
- # Hashes for license files
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 239e39a2ba..b0fa66218a 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -7,7 +7,7 @@
- # Generate version string using:
- #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
- # When updating the version, please also update localedef
--GLIBC_VERSION = 2.41-70-g1502c248d58cb99a203731707987a4342926e830
-+GLIBC_VERSION = 2.42-3-gbc13db73937730401d592b33092db6df806d193e
- 
- # Upstream doesn't officially provide an https download link.
- # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
-diff --git a/package/localedef/0001-HACK-only-build-and-install-localedef.patch b/package/localedef/0001-HACK-only-build-and-install-localedef.patch
-index bcec4067c2..dd3906eb37 100644
---- a/package/localedef/0001-HACK-only-build-and-install-localedef.patch
-+++ b/package/localedef/0001-HACK-only-build-and-install-localedef.patch
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 7697fd2ea1..c9e30cf5f1 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -475,7 +475,7 @@ package/fxdiv/0001-CMake-don-t-enable-CXX-unless-building-tests-benchma.patch li
+ package/fxload/0001-fix-static-build.patch lib_patch.Upstream
+ package/gcc/13.4.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
+ package/gcc/14.3.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
+-package/gcc/15.1.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
++package/gcc/15.2.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
+ package/gcc/8.4.0/0001-xtensa-fix-PR-target-91880.patch lib_patch.Upstream
+ package/gcc/8.4.0/0002-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch lib_patch.Upstream
+ package/gcc/8.4.0/0003-libsanitizer-Remove-cyclades-from-libsanitizer.patch lib_patch.Upstream
+diff --git a/package/gcc/15.1.0/0001-disable-split-stack-for-non-thread-builds.patch b/package/gcc/15.2.0/0001-disable-split-stack-for-non-thread-builds.patch
+similarity index 91%
+rename from package/gcc/15.1.0/0001-disable-split-stack-for-non-thread-builds.patch
+rename to package/gcc/15.2.0/0001-disable-split-stack-for-non-thread-builds.patch
+index 052c31cf04..c3b600cfb8 100644
+--- a/package/gcc/15.1.0/0001-disable-split-stack-for-non-thread-builds.patch
++++ b/package/gcc/15.2.0/0001-disable-split-stack-for-non-thread-builds.patch
 @@ -1,4 +1,4 @@
--From b90ae9abee7e5cc3a92b053f00db959c853a745e Mon Sep 17 00:00:00 2001
-+From a3006d23a58d825dcaa4863ce81a454e151d038d Mon Sep 17 00:00:00 2001
- From: Michael Olbrich <m.olbrich@pengutronix.de>
- Date: Mon, 21 May 2018 16:45:02 +0200
- Subject: [PATCH] HACK: only build and install localedef
-@@ -17,10 +17,10 @@ Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-  2 files changed, 10 insertions(+), 7 deletions(-)
- 
- diff --git a/Rules b/Rules
--index c8adc00008..4acf69790f 100644
-+index 44c041c491..156c82619b 100644
- --- a/Rules
- +++ b/Rules
--@@ -234,10 +234,16 @@ binaries-shared-notests = $(filter-out $(binaries-pie) $(binaries-static), \
-+@@ -239,10 +239,16 @@ binaries-shared-notests = $(filter-out $(binaries-pie) $(binaries-static), \
-  				       $(binaries-all-notests))
-  
-  ifneq "$(strip $(binaries-shared-notests))" ""
-@@ -70,5 +70,5 @@ index 9d9c1a7691..4d26032c15 100644
-  
-  libBrokenLocale-routines = broken_cur_max
+-From d5fe709ddf2ba97ed94ea8339655230322456d1b Mon Sep 17 00:00:00 2001
++From 7d5f59e035341430e20f47420535d0e987516e55 Mon Sep 17 00:00:00 2001
+ From: Waldemar Brodkorb <wbx@openadk.org>
+ Date: Mon, 25 Jul 2022 00:29:55 +0200
+ Subject: [PATCH] disable split-stack for non-thread builds
+@@ -22,5 +22,5 @@ index cc0366b4cd8..f3f97e86d60 100644
+  LIB2ADD_ST += $(srcdir)/generic-morestack.c $(srcdir)/generic-morestack-thread.c
+ +endif
  -- 
--2.48.1
+-2.49.0
 +2.50.1
  
-diff --git a/package/localedef/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch b/package/localedef/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
-index af352eee5f..cc11c9a08c 100644
---- a/package/localedef/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
-+++ b/package/localedef/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
+diff --git a/package/gcc/15.1.0/0002-microblaze-add-atomic-test-and-set-support.patch b/package/gcc/15.2.0/0002-MicroBlaze-Enhance-support-for-atomics.-Fix-PR118280.patch
+similarity index 96%
+rename from package/gcc/15.1.0/0002-microblaze-add-atomic-test-and-set-support.patch
+rename to package/gcc/15.2.0/0002-MicroBlaze-Enhance-support-for-atomics.-Fix-PR118280.patch
+index db6aefaef2..958339bf6c 100644
+--- a/package/gcc/15.1.0/0002-microblaze-add-atomic-test-and-set-support.patch
++++ b/package/gcc/15.2.0/0002-MicroBlaze-Enhance-support-for-atomics.-Fix-PR118280.patch
 @@ -1,4 +1,4 @@
--From df211e396f3a2183eed33dc3ac05ecea6bc16f0a Mon Sep 17 00:00:00 2001
-+From 2cb626348a64846b836a878ab7fc93f54eb0afd6 Mon Sep 17 00:00:00 2001
- From: Matt Weber <matthew.weber@rockwellcollins.com>
- Date: Thu, 6 Feb 2020 14:36:21 -0600
- Subject: [PATCH] relax dependency on GCC to 4.8 and binutils to 2.24
-@@ -35,27 +35,27 @@ Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-  1 file changed, 2 insertions(+), 2 deletions(-)
- 
- diff --git a/configure b/configure
--index eb8abd0054..24abd55594 100755
-+index 180e49d95b..fdb19d1d27 100755
- --- a/configure
- +++ b/configure
--@@ -5329,7 +5329,7 @@ printf %s "checking version of $LD... " >&6; }
-+@@ -5352,7 +5352,7 @@ printf %s "checking version of $LD... " >&6; }
-    ac_prog_version=`$LD --version 2>&1 | sed -n 's/^.*GNU ld.* \([0-9][0-9]*\.[0-9.]*\).*$/\1/p'`
-    case $ac_prog_version in
-      '') ac_prog_version="v. ?.??, bad"; ac_verc_fail=yes;;
---    2.1[0-9][0-9]*|2.2[5-9]*|2.[3-9][0-9]*|[3-9].*|[1-9][0-9]*)
-+-    2.[1-9][0-9][0-9]*|2.39*|2.[4-9][0-9]*|[3-9].*|[1-9][0-9]*)
- +    2.1[0-9][0-9]*|2.2[4-9]*|2.[3-9][0-9]*|[3-9].*|[1-9][0-9]*)
-         ac_prog_version="$ac_prog_version, ok"; ac_verc_fail=no;;
-      *) ac_prog_version="$ac_prog_version, bad"; ac_verc_fail=yes;;
+-From cd01b277c4a9e03c83427290228e4b289a169431 Mon Sep 17 00:00:00 2001
++From f14e0b13a5abbc15b4b3b4c0c6a125bbb0509465 Mon Sep 17 00:00:00 2001
+ From: Gopi Kumar Bulusu <gopi@sankhya.com>
+ Date: Thu, 10 Jul 2025 12:44:44 +0530
+ Subject: [PATCH] MicroBlaze : Enhance support for atomics. Fix PR118280
+@@ -39,7 +39,7 @@ new file mode 100644
+ index 00000000000..2ffc2422a0a
+ --- /dev/null
+ +++ b/gcc/config/microblaze/iterators.md
+-@@ -0,0 +1,25 @@ 
++@@ -0,0 +1,25 @@
+ +;; Iterator definitions for GCC MicroBlaze machine description files.
+ +;; Copyright (C) 2012-2024 Free Software Foundation, Inc.
+ +;;
+@@ -69,7 +69,7 @@ diff --git a/gcc/config/microblaze/microblaze-protos.h b/gcc/config/microblaze/m
+ index 90b79cfe716..1cee0b3096c 100644
+ --- a/gcc/config/microblaze/microblaze-protos.h
+ +++ b/gcc/config/microblaze/microblaze-protos.h
+-@@ -62,6 +62,7 @@  extern int symbol_mentioned_p (rtx);
++@@ -62,6 +62,7 @@ extern int symbol_mentioned_p (rtx);
+  extern int label_mentioned_p (rtx);
+  extern bool microblaze_cannot_force_const_mem (machine_mode, rtx);
+  extern void microblaze_eh_return (rtx op0);
+@@ -78,10 +78,10 @@ index 90b79cfe716..1cee0b3096c 100644
   
--@@ -5777,7 +5777,7 @@ int
-+@@ -5801,7 +5801,7 @@ int
-  main (void)
-  {
+  /* Declare functions in microblaze-c.cc.  */
+ diff --git a/gcc/config/microblaze/microblaze.cc b/gcc/config/microblaze/microblaze.cc
+-index 2ab5ada4ec9..80d10ab60e0 100644
++index 4b7f0a1a5e0..78b9428ef3b 100644
+ --- a/gcc/config/microblaze/microblaze.cc
+ +++ b/gcc/config/microblaze/microblaze.cc
+-@@ -1299,6 +1299,34 @@  microblaze_expand_block_move (rtx dest, rtx src, rtx length, rtx align_rtx)
++@@ -1300,6 +1300,34 @@ microblaze_expand_block_move (rtx dest, rtx src, rtx length, rtx align_rtx)
+    return false;
+  }
   
---#if !defined __GNUC__ || __GNUC__ < 6 || (__GNUC__ == 6 && __GNUC_MINOR__ < 2)
-+-#if !defined __GNUC__ || __GNUC__ < 12 || (__GNUC__ == 12 && __GNUC_MINOR__ < 1)
- +#if !defined __GNUC__ || __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 8)
-  #error insufficient compiler
-  #endif
-    ;
+@@ -120,7 +120,7 @@ diff --git a/gcc/config/microblaze/microblaze.h b/gcc/config/microblaze/microbla
+ index 2390542434b..b2e9ccde363 100644
+ --- a/gcc/config/microblaze/microblaze.h
+ +++ b/gcc/config/microblaze/microblaze.h
+-@@ -57,7 +57,7 @@  extern enum pipeline_type microblaze_pipe;
++@@ -57,7 +57,7 @@ extern enum pipeline_type microblaze_pipe;
+  
+  /* Default target_flags if no switches are specified  */
+  #define TARGET_DEFAULT      (MASK_SOFT_MUL | MASK_SOFT_DIV | MASK_SOFT_FLOAT \
+@@ -133,7 +133,7 @@ diff --git a/gcc/config/microblaze/microblaze.md b/gcc/config/microblaze/microbl
+ index 45c48a71e8d..270df8da0c5 100644
+ --- a/gcc/config/microblaze/microblaze.md
+ +++ b/gcc/config/microblaze/microblaze.md
+-@@ -21,6 +21,7 @@ 
++@@ -21,6 +21,7 @@
+  
+  (include "constraints.md")
+  (include "predicates.md")
+@@ -141,7 +141,7 @@ index 45c48a71e8d..270df8da0c5 100644
+  
+  ;;----------------------------------------------------
+  ;; Constants
+-@@ -43,6 +44,10 @@ 
++@@ -43,6 +44,10 @@
+    (UNSPEC_TLS           106)    ;; jump table
+    (UNSPEC_SET_TEXT      107)    ;; set text start
+    (UNSPEC_TEXT          108)    ;; data text relative
+@@ -152,7 +152,7 @@ index 45c48a71e8d..270df8da0c5 100644
+  ])
+  
+  (define_c_enum "unspec" [
+-@@ -79,7 +84,7 @@ 
++@@ -79,7 +84,7 @@
+  ;; bshift 	Shift operations
+  
+  (define_attr "type"
+@@ -165,7 +165,7 @@ diff --git a/gcc/config/microblaze/sync.md b/gcc/config/microblaze/sync.md
+ index db7b11e5379..6478ab6dcac 100644
+ --- a/gcc/config/microblaze/sync.md
+ +++ b/gcc/config/microblaze/sync.md
+-@@ -18,26 +18,97 @@ 
++@@ -18,26 +18,97 @@
+  ;; <http://www.gnu.org/licenses/>.
+  
+  (define_insn "atomic_compare_and_swapsi"
+@@ -282,5 +282,5 @@ index db7b11e5379..6478ab6dcac 100644
+ +  DONE;
+ +})
  -- 
--2.48.1
+-2.43.5
 +2.50.1
  
-diff --git a/package/localedef/0003-HACK-keep-_ISOC23_SOURCE-undefined-to-build-localede.patch b/package/localedef/0003-HACK-keep-_ISOC23_SOURCE-undefined-to-build-localede.patch
-index 64dbdefed2..5c3803d583 100644
---- a/package/localedef/0003-HACK-keep-_ISOC23_SOURCE-undefined-to-build-localede.patch
-+++ b/package/localedef/0003-HACK-keep-_ISOC23_SOURCE-undefined-to-build-localede.patch
-@@ -1,8 +1,8 @@
--From 7f52329793c88260260631593c9bc558b7eb01f8 Mon Sep 17 00:00:00 2001
-+From c01b78e37885c7c4a191f752dc346c848d73b731 Mon Sep 17 00:00:00 2001
+diff --git a/package/gcc/15.1.0/0003-gcc-config-microblaze-fix-ira-for-GCC15.patch b/package/gcc/15.2.0/0003-gcc-config-microblaze-fix-ira-for-GCC15.patch
+similarity index 89%
+rename from package/gcc/15.1.0/0003-gcc-config-microblaze-fix-ira-for-GCC15.patch
+rename to package/gcc/15.2.0/0003-gcc-config-microblaze-fix-ira-for-GCC15.patch
+index 6a1e5cf31a..663aab7218 100644
+--- a/package/gcc/15.1.0/0003-gcc-config-microblaze-fix-ira-for-GCC15.patch
++++ b/package/gcc/15.2.0/0003-gcc-config-microblaze-fix-ira-for-GCC15.patch
+@@ -1,4 +1,4 @@
+-From b6163bbd898e2462455998d5d38fe1463e70ca66 Mon Sep 17 00:00:00 2001
++From d2fdbd8c4abe67eea86877dfb3b3b9d8508c165f Mon Sep 17 00:00:00 2001
  From: Romain Naour <romain.naour@gmail.com>
- Date: Sat, 9 Sep 2023 23:58:50 +0200
--Subject: [PATCH] HACK: keep _ISOC23_SOURCE undefined to build localedef with
-- old glibc
-+Subject: [PATCH] HACK: keep _ISOC23_SOURCE undefined to build localedef
-+ with old glibc
+ Date: Wed, 6 Aug 2025 22:32:30 +0200
+ Subject: [PATCH] gcc/config/microblaze: fix ira for GCC15
+@@ -23,10 +23,10 @@ Signed-off-by: Romain Naour <romain.naour@gmail.com>
+  1 file changed, 11 insertions(+)
  
- Fixes:
- host-localedef-2.38-13-g92201f16cbcfd9eafe314ef6654be2ea7ba25675/build/locale/ld-ctype.o: in function `ctype_read':
-@@ -19,7 +19,7 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-  1 file changed, 2 deletions(-)
+ diff --git a/gcc/config/microblaze/microblaze.cc b/gcc/config/microblaze/microblaze.cc
+-index 4b7f0a1a5e0..3710755ae8d 100644
++index 78b9428ef3b..84ea7e8d55a 100644
+ --- a/gcc/config/microblaze/microblaze.cc
+ +++ b/gcc/config/microblaze/microblaze.cc
+-@@ -3200,6 +3200,14 @@ microblaze_secondary_reload (bool in_p ATTRIBUTE_UNUSED, rtx x ATTRIBUTE_UNUSED,
++@@ -3228,6 +3228,14 @@ microblaze_secondary_reload (bool in_p ATTRIBUTE_UNUSED, rtx x ATTRIBUTE_UNUSED,
+    return NO_REGS;
+  }
+  
+@@ -41,7 +41,7 @@ index 4b7f0a1a5e0..3710755ae8d 100644
+  static void
+  microblaze_globalize_label (FILE * stream, const char *name)
+  {
+-@@ -4038,6 +4046,9 @@ microblaze_starting_frame_offset (void)
++@@ -4066,6 +4074,9 @@ microblaze_starting_frame_offset (void)
+  #undef TARGET_SECONDARY_RELOAD
+  #define TARGET_SECONDARY_RELOAD		microblaze_secondary_reload
+  
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index f90f7c499d..21581487df 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -70,7 +70,7 @@ config BR2_GCC_VERSION
+ 	default "8.4.0"     if BR2_GCC_VERSION_POWERPC_SPE
+ 	default "13.4.0"    if BR2_GCC_VERSION_13_X
+ 	default "14.3.0"    if BR2_GCC_VERSION_14_X
+-	default "15.1.0"    if BR2_GCC_VERSION_15_X
++	default "15.2.0"    if BR2_GCC_VERSION_15_X
+ 	default "arc-2024.12-release" if BR2_GCC_VERSION_ARC
  
- diff --git a/include/features.h b/include/features.h
--index 44bc4bbc85..c856368a71 100644
-+index 8515b06b36..9abd65af93 100644
- --- a/include/features.h
- +++ b/include/features.h
- @@ -217,9 +217,7 @@
-@@ -33,5 +33,5 @@ index 44bc4bbc85..c856368a71 100644
-  # define _POSIX_SOURCE	1
-  # undef  _POSIX_C_SOURCE
- -- 
--2.48.1
-+2.50.1
+ config BR2_EXTRA_GCC_CONFIG_OPTIONS
+diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
+index 5ccbd81122..deb7c40fa3 100644
+--- a/package/gcc/gcc.hash
++++ b/package/gcc/gcc.hash
+@@ -4,8 +4,8 @@ sha512  6de904f552a02de33b11ef52312bb664396efd7e1ce3bbe37bfad5ef617f133095b3767b
+ sha512  9b4b83ecf51ef355b868608b8d257b2fa435c06d2719cb86657a7c2c2a0828ff4ce04e9bac1055bbcad8ed5b4da524cafaef654785e23a50233d95d89201e35f  gcc-13.4.0.tar.xz
+ # From https://gcc.gnu.org/pub/gcc/releases/gcc-14.3.0/sha512.sum
+ sha512  cb4e3259640721bbd275c723fe4df53d12f9b1673afb3db274c22c6aa457865dccf2d6ea20b4fd4c591f6152e6d4b87516c402015900f06ce9d43af66d3b7a93  gcc-14.3.0.tar.xz
+-# From https://gcc.gnu.org/pub/gcc/releases/gcc-15.1.0/sha512.sum
+-sha512  ddd35ca6c653dffa88f7c7ef9ee4cd806e156e0f3b30f4d63e75a8363361285cd566ee73127734cde6a934611de815bee3e32e24bfd2e0ab9f7ff35c929821c1  gcc-15.1.0.tar.xz
++# From https://gcc.gnu.org/pub/gcc/releases/gcc-15.2.0/sha512.sum
++sha512  89047a2e07bd9da265b507b516ed3635adb17491c7f4f67cf090f0bd5b3fc7f2ee6e4cc4008beef7ca884b6b71dffe2bb652b21f01a702e17b468cca2d10b2de  gcc-15.2.0.tar.xz
  
-diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
-index c76a8d82a0..c34fe22b5e 100644
---- a/package/localedef/localedef.mk
-+++ b/package/localedef/localedef.mk
-@@ -7,7 +7,7 @@
- # Use the same VERSION and SITE as target glibc
- # As in glibc.mk, generate version string using:
- #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
--LOCALEDEF_VERSION = 2.41-70-g1502c248d58cb99a203731707987a4342926e830
-+LOCALEDEF_VERSION = 2.42-3-gbc13db73937730401d592b33092db6df806d193e
- LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION).tar.gz
- LOCALEDEF_SITE = $(call github,bminor,glibc,$(LOCALEDEF_VERSION))
- HOST_LOCALEDEF_DL_SUBDIR = glibc
+ # Locally calculated (fetched from Github)
+ sha512  7f08ae335d9112be65e92c3744c095d8fa265994b8282274948f99fe37409531e627e6dadfb77b138a82fa09d012c56d8c075b482a5a5186814a57f9db63c29e  gcc-arc-2024.12-release.tar.gz
+-- 
+2.50.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
