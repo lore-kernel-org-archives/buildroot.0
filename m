@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BD35C87FCB
-	for <buildroot@archiver.kernel.org>; Tue, 12 Aug 2025 15:56:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 956B8C87FCB
+	for <buildroot@archiver.kernel.org>; Tue, 12 Aug 2025 15:56:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 70E03427F4;
-	Tue, 12 Aug 2025 15:56:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6808F428DB;
+	Tue, 12 Aug 2025 15:56:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id o4WhUBORIkHX; Tue, 12 Aug 2025 15:56:21 +0000 (UTC)
+ id 0D62jKugoEfq; Tue, 12 Aug 2025 15:56:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39D9141B5D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8698B4290F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 39D9141B5D;
-	Tue, 12 Aug 2025 15:56:21 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 4B386183
- for <buildroot@buildroot.org>; Tue, 12 Aug 2025 15:56:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8698B4290F;
+	Tue, 12 Aug 2025 15:56:53 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3E140183
+ for <buildroot@buildroot.org>; Tue, 12 Aug 2025 15:56:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 319886176A
- for <buildroot@buildroot.org>; Tue, 12 Aug 2025 15:56:19 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3B39641BE0
+ for <buildroot@buildroot.org>; Tue, 12 Aug 2025 15:56:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9o6B1w4GQJ-F for <buildroot@buildroot.org>;
- Tue, 12 Aug 2025 15:56:18 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6572261B21
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6572261B21
- for <buildroot@buildroot.org>; Tue, 12 Aug 2025 15:56:18 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 505F5874DB; Tue, 12 Aug 2025 15:56:18 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 12 Aug 2025 17:54:34 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f6194a6f4a9b10892ac758374e42726100453f40
-X-Git-Newrev: a62ed63dce9a892b5c4942e0c2fc2c310c62ccf6
-X-Patchwork-Hint: ignore
-Message-Id: <20250812155618.505F5874DB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/hwdata: bump version to 0.398
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QyT4BVi370Ti for <buildroot@buildroot.org>;
+ Tue, 12 Aug 2025 15:56:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3A181403B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A181403B1
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3A181403B1
+ for <buildroot@buildroot.org>; Tue, 12 Aug 2025 15:56:50 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id E1F9219F73B;
+ Tue, 12 Aug 2025 17:56:46 +0200 (CEST)
+Received: from 2001:18c0:a22:bf00:5c2b:f296:f108:6612
+ via 2001:18c0:a22:bf00:5c2b:f296:f108:6612 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 12 Aug 2025 17:56:46 +0200
+MIME-Version: 1.0
+Date: Tue, 12 Aug 2025 17:56:46 +0200
+To: Akhilesh Nema <nemaakhilesh@gmail.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250812061408.1187401-1-nemaakhilesh@gmail.com>
+References: <20250812061408.1187401-1-nemaakhilesh@gmail.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <9ecbf5b804a58e4d7b03ff4d21851294@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1755014208;
+ bh=FwM11xyXNnchAdQ31nwDXOFa63DNnHB0b4vbkmDPskk=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=IRodvDHjLQxNUSfdqr9MSZGqYCoy3EKUnRCREmuqCVOe2I71NSXu5bECAKvfw+aGu
+ 79hgUsyDC05vCZm/3Lr8mXZmyP2sbxGiJsVLodehz8nfmyA21peq95Lu5100IImSwI
+ ijn1ztEDEP2Uxi7A3kIeE8i8AhcXNseteTBrQ+WiO1XlGfyD2b1tLJ6mIfFLNyglvx
+ l19gSJTghBnEl+wt3MdoyIGOicyoZLfLBo6jl5/+gFW6NwWK4zL68GNaUI4Uj2kOAi
+ 6sv06cVPesEgCPKfd8QfoY0vgaOnj84uAi3NhwiJLNlT4YN3TyQKKzeESeihb6Kue6
+ rd93B9Pjmx39g==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=IRodvDHj
+Subject: Re: [Buildroot] [PATCH 1/1] package/hwdata: bump version to 0.398
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,48 +82,18 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a62ed63dce9a892b5c4942e0c2fc2c310c62ccf6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 12/08/2025 08:14, Akhilesh Nema wrote:
+> Release notes:
+> https://github.com/vcrhonek/hwdata/releases/tag/v0.398
+> 
+> Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
 
-Release notes:
-https://github.com/vcrhonek/hwdata/releases/tag/v0.398
-
-Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/hwdata/hwdata.hash | 2 +-
- package/hwdata/hwdata.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/hwdata/hwdata.hash b/package/hwdata/hwdata.hash
-index e3c6d881d5..5507a6b0df 100644
---- a/package/hwdata/hwdata.hash
-+++ b/package/hwdata/hwdata.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  09eee39e73a63ab27af651ab6afdd13d6e5c3485872f2cd406b35e4d80ffdb0b  hwdata-0.397.tar.gz
-+sha256  cd52f7eb5c0f438a3605d1799d9f345a2894ad0f269ab6e8441f55e27e80dd78  hwdata-0.398.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  21d0406f93e884a050426ebc21931839a45d56bfcbcbfdda7686d583f36f107f  LICENSE
-diff --git a/package/hwdata/hwdata.mk b/package/hwdata/hwdata.mk
-index 3d325978b8..fd914c238d 100644
---- a/package/hwdata/hwdata.mk
-+++ b/package/hwdata/hwdata.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--HWDATA_VERSION = 0.397
-+HWDATA_VERSION = 0.398
- HWDATA_SITE = $(call github,vcrhonek,hwdata,v$(HWDATA_VERSION))
- HWDATA_LICENSE = GPL-2.0+, BSD-3-Clause, XFree86 1.0
- HWDATA_LICENSE_FILES = COPYING LICENSE
+Since this bump is mostly data updates, I applied on master. Thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
