@@ -4,73 +4,100 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BB5AC87FCB
-	for <buildroot@archiver.kernel.org>; Tue, 12 Aug 2025 07:48:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2017EC87FCB
+	for <buildroot@archiver.kernel.org>; Tue, 12 Aug 2025 07:52:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CD5FF41F12;
-	Tue, 12 Aug 2025 07:48:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EA69040F08;
+	Tue, 12 Aug 2025 07:52:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id I1itZ2Th3Gyx; Tue, 12 Aug 2025 07:48:06 +0000 (UTC)
+ id g6MUfv6hwnbh; Tue, 12 Aug 2025 07:52:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 60F3B41ECD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E8ABE40FC7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 60F3B41ECD;
-	Tue, 12 Aug 2025 07:48:05 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 64F67D98
- for <buildroot@buildroot.org>; Tue, 12 Aug 2025 07:48:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E8ABE40FC7;
+	Tue, 12 Aug 2025 07:52:43 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id A9B9E158
+ for <buildroot@buildroot.org>; Tue, 12 Aug 2025 07:52:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4B48B60F34
- for <buildroot@buildroot.org>; Tue, 12 Aug 2025 07:48:02 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9BB3040FC7
+ for <buildroot@buildroot.org>; Tue, 12 Aug 2025 07:52:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cY6xcEgPGjuG for <buildroot@buildroot.org>;
- Tue, 12 Aug 2025 07:48:01 +0000 (UTC)
-X-Greylist: delayed 671 seconds by postgrey-1.37 at util1.osuosl.org;
- Tue, 12 Aug 2025 07:48:01 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3879F60FC7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3879F60FC7
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
- receiver=<UNKNOWN> 
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3879F60FC7
- for <buildroot@buildroot.org>; Tue, 12 Aug 2025 07:48:01 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -390604253; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Tue, 12 Aug 2025 07:36:48 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@dell.be.48ers.dk>) id 1uljYu-008h4E-0p;
- Tue, 12 Aug 2025 09:36:48 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Fh2g3YFRpGr3 for <buildroot@buildroot.org>;
+ Tue, 12 Aug 2025 07:52:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::531; helo=mail-pg1-x531.google.com;
+ envelope-from=nemaakhilesh@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org AEF1C40F08
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AEF1C40F08
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com
+ [IPv6:2607:f8b0:4864:20::531])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id AEF1C40F08
+ for <buildroot@buildroot.org>; Tue, 12 Aug 2025 07:52:41 +0000 (UTC)
+Received: by mail-pg1-x531.google.com with SMTP id
+ 41be03b00d2f7-879d2e419b9so3425939a12.2
+ for <buildroot@buildroot.org>; Tue, 12 Aug 2025 00:52:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1754985161; x=1755589961;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=W1wHGy+27IvDsBZ458smA7FGY3HjfgzYrANa1wDI+28=;
+ b=toK+I/G77cZ+TGhFxrbsq3vVrYqYT/3eoMPe2xUYNLlI3dqNb/HSshPkwjN66oKSSt
+ f8332KqfwqLPuCWH30LXcPNi/tdZ6W3I3kM54Rq20fDBHr+BS5bcdKA+pF3yqQCXNTqu
+ OHqF0vQUT8h6r7J4322F898Vb2+BE/0WT5QJdCMVX5JEnQ7ZiSSD4LlSfnZg8aaxvuek
+ qgLsg7LSD+B75nPoe6SE0hrRN/10XXjZSA50QGjMmBGclf0Ml9POohJSkdHT8+dKE36f
+ JDp2v9rpCx1rnlbnnfL4V0eiN1UI81VKNRpmA2A8+kbrHO088VJGz0nJ9AEz84DsyLm2
+ ynMA==
+X-Gm-Message-State: AOJu0Yx1XCZr0S44ol+hpr2hfLmaCp/681SoX0skb2yE0JWpLVbXQZ+S
+ xm9r8kEHejcnOj43Zu8yNwpS8PwW+nZ3waaVW80AbzGSg2IdjldEiHIvg4OmpXXw
+X-Gm-Gg: ASbGncukNS+Szy3KkWE0xjDvuGbs/A7hrHnV1BtzqR+8chs3RCHMVVSjC6inkcEnElV
+ 8hR6A3Cz/rXu/yqpn8kcSbO5Bhgy7BsLdryO8RuW1QAl1cpnQOr6CFgWiX38NrP1KSYjuTFtdON
+ bbXTJtd2URBj1SyvBXPqXYny1S1uuu9+adtcS9z6jM+Nvl4dcGCTq/y6wnB1lWpcC7iI309U+BE
+ 52+3bjtJ1VeFqKBvJH8kHOkMyXJLjLGu/wS4HGbsHeW+p6Tw7cfSONFcJ66zcZZ3O+ZzU0BUZRs
+ YHH8dhRSf3qDP3WzqqW0qS6bCk2G7YL9iNwZV0Keoyshw2JtR/sAY67j/1k23uwjnVt0rWAbAyJ
+ OufPa/kR4t2XApAzWOJ8iGMuKNK+TBPQ6EH0VYwOsNltUDKzJlU4ZvkPWbHLWCbfw6WYiUrl/lQ
+ vW6iE+gQ==
+X-Google-Smtp-Source: AGHT+IFzR75fgB2o0W7WdRi6UNvdrHxHz+zBcCADS7k9q97jWSXVQXD75drAqHpiZjBKnKSeUEzgJg==
+X-Received: by 2002:a17:903:247:b0:235:eb8d:7fff with SMTP id
+ d9443c01a7336-242fc317145mr25945145ad.28.1754985160578; 
+ Tue, 12 Aug 2025 00:52:40 -0700 (PDT)
+Received: from localhost.localdomain (ip72-203-121-181.oc.oc.cox.net.
+ [72.203.121.181]) by smtp.gmail.com with ESMTPSA id
+ d9443c01a7336-241d1ef6a8fsm290502725ad.23.2025.08.12.00.52.39
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 12 Aug 2025 00:52:40 -0700 (PDT)
+From: Akhilesh Nema <nemaakhilesh@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 12 Aug 2025 09:36:44 +0200
-Message-Id: <20250812073645.2072147-2-peter@korsgaard.com>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250812073645.2072147-1-peter@korsgaard.com>
-References: <20250812073645.2072147-1-peter@korsgaard.com>
+Cc: Akhilesh Nema <nemaakhilesh@gmail.com>
+Date: Tue, 12 Aug 2025 00:52:37 -0700
+Message-Id: <20250812075237.1214602-1-nemaakhilesh@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=ITDrmC3Yce4T3vcvI+GhI82MsCs3/YFCfcLxqpVmsN6EXMhS6jKvV/5u6jdGopF0FgVuV0Sg7qsHshC/XTsrf3Gfjl8TcPoIsbepu/Du1vPKtpXZDJxWvqNXNlMczXU6AY3I84rdR9FLbvwlkC/UPIqiriqHMkD2oY41ouYsMSnNZKQ4y8CN+RiSnW2PAS16/eK493+2KjLsn/EDblKkLXqU8Dr8hoiWlnWElWnfrxCP2/xetOxzaGoK4cXpGAQYhr7jVXwXqfPqSvp2IoSmeR4B3a7/5RAEjmHjiMoa9wUQiYeUkz9AIGlYsJ9kfnIG/atNrHtJNvPpfbQmW4T6QQ==;
- s=purelymail1; d=purelymail.com; v=1;
- bh=1NTR5tBlIClyqrV6+usDsSiRpKqt8Xdl19zGwUrGmjU=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1754985161; x=1755589961; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=W1wHGy+27IvDsBZ458smA7FGY3HjfgzYrANa1wDI+28=;
+ b=JvlFiGKqbkuJvoKwv71Bii3cckEsWggemEbKY11gxCg3oR/TjSnKHYVLgsNt3P45hG
+ +ROSZS3UfzZfONZAZxufm4nqhM4ifSRl8E7tnPQ/+JXWsLXlM4tRBmW9IHEo8ERopO0I
+ lLAr/2bTxbleSrisT/9kdoFWTMfOiyHK66oIAA53Ec6WCO4fo0UTvRcXFOfq3UEugSCR
+ uBrYm9OsVACKNxna1uAxpYutxv6eKpNwPCXU56JCU9fJUsqsGjoufca+mIesQ2L6B4kn
+ yFQq1k3BuvQlaO6mwc409moSU6ErAnTOFK+L1InTu0tpvz7zF45iW+ZkZOhwnXxyI7Kt
+ 8qLg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=ITDrmC3Y
-X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
-Subject: [Buildroot] [PATCH 2/3] Makefile: release: make tarball reproducible
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=JvlFiGKq
+Subject: [Buildroot] [PATCH 1/1] package/iperf3: security bump to version
+ 3.19.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,51 +114,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The tarball created by git archive is reproducible, but when we append the
-generated manual we leak current time and the username/uid of the person
-running make release:
+Release notes:
+https://github.com/esnet/iperf/releases/tag/3.19.1
 
-tar tvf buildroot-2025.08-rc1.tar.gz | tail
--rwxrwxr-x root/root      5512 2025-08-11 13:22 buildroot-2025.08-rc1/utils/update-rust
-drwxr-xr-x peko/peko         0 2025-08-11 17:39 buildroot-2025.08-rc1/
-drwxr-xr-x peko/peko         0 2025-08-11 17:38 buildroot-2025.08-rc1/docs/
-drwxr-xr-x peko/peko         0 2025-08-11 17:39 buildroot-2025.08-rc1/docs/manual/
--rw-r--r-- peko/peko      5738 2025-08-11 17:38 buildroot-2025.08-rc1/docs/manual/docbook-xsl.css
--rw-r--r-- peko/peko     19029 2025-08-11 17:38 buildroot-2025.08-rc1/docs/manual/github_hash_mongrel2.png
--rw-r--r-- peko/peko    638866 2025-08-11 17:39 buildroot-2025.08-rc1/docs/manual/manual.pdf
--rw-r--r-- peko/peko    587892 2025-08-11 17:38 buildroot-2025.08-rc1/docs/manual/manual.html
--rw-r--r-- peko/peko    393514 2025-08-11 17:39 buildroot-2025.08-rc1/docs/manual/manual.text
--rw-r--r-- peko/peko    117499 2025-08-11 17:38 buildroot-2025.08-rc1/docs/manual/logo.png
+Fixes the following security issues:
+- An off-by-one heap overflow has been fixed in authentication.
+  CVE-2025-54349, ESNET-SECADV-2025-0003)
+  https://github.com/advisories/GHSA-8xx8-qrh3-q8mq
 
-Fix that by forcing uid as root and setting mtime to the latest commit,
-similar to how we do it in support/download/{git,helpers}.
+- An assert in authentication has been removed. (CVE-2025-54350,
+  ESNET-SECADV-2025-0002)
+  https://github.com/advisories/GHSA-r6x8-74x9-5mc9
 
-Notice that we do not use --numeric-owner to match the output of git
-archive, so it does rely on uid 0=root, which is very likely but not
-guaranteed.
+- A buffer overflow in the --skip-rx-copy option for zerocopy
+  has been fixed. (CVE-2025-54351, ESNET-SECADV-2025-0001)
+  https://github.com/advisories/GHSA-xjwm-4pfw-49g2
 
-Reported-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
 ---
- Makefile | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/iperf3/iperf3.hash | 4 ++--
+ package/iperf3/iperf3.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 33e8563e93..db2f522c7e 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1253,7 +1253,8 @@ release:
- 	SOURCE_DATE_EPOCH=$$(git log -1 --format=%at 2> /dev/null) \
- 		$(MAKE) O=$(OUT) manual-html manual-text manual-pdf
- 	$(MAKE) O=$(OUT) distclean
--	tar rf $(OUT).tar $(OUT)
-+	tar rf $(OUT).tar --owner=0 --group=0 \
-+		--mtime="$$(git log -1 --pretty=format:%ci)" $(OUT)
- 	gzip -9 -c < $(OUT).tar > $(OUT).tar.gz
- 	xz -9 -c < $(OUT).tar > $(OUT).tar.xz
- 	rm -rf $(OUT) $(OUT).tar
+diff --git a/package/iperf3/iperf3.hash b/package/iperf3/iperf3.hash
+index 1ffb2c6c02..3d9ff0cf5d 100644
+--- a/package/iperf3/iperf3.hash
++++ b/package/iperf3/iperf3.hash
+@@ -1,4 +1,4 @@
+-# From https://downloads.es.net/pub/iperf/iperf-3.19.tar.gz.sha256
+-sha256  040161da1555ec7411a9d81191049830ef37717d429a94ee6cf0842618e0e29c  iperf-3.19.tar.gz
++# From https://downloads.es.net/pub/iperf/iperf-3.19.1.tar.gz.sha256
++sha256  dc63f89ec581ea99f8b558d8eb35109de06383010db5a1906c208a562ba0c270  iperf-3.19.1.tar.gz
+ # Locally computed
+ sha256  7c9ba0385fcf35c4c9e08ad0c0cba72d4315f36f0f742fef4de826a28cc33a97  LICENSE
+diff --git a/package/iperf3/iperf3.mk b/package/iperf3/iperf3.mk
+index 69c4792f98..df6b32abc1 100644
+--- a/package/iperf3/iperf3.mk
++++ b/package/iperf3/iperf3.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IPERF3_VERSION = 3.19
++IPERF3_VERSION = 3.19.1
+ IPERF3_SITE = https://downloads.es.net/pub/iperf
+ IPERF3_SOURCE = iperf-$(IPERF3_VERSION).tar.gz
+ IPERF3_LICENSE = BSD-3-Clause, BSD-2-Clause, MIT
 -- 
-2.39.5
+2.25.1
 
 _______________________________________________
 buildroot mailing list
