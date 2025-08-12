@@ -4,99 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48D40CA0EC4
-	for <buildroot@archiver.kernel.org>; Tue, 12 Aug 2025 17:18:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95850CA0EC4
+	for <buildroot@archiver.kernel.org>; Tue, 12 Aug 2025 17:18:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 01B714292B;
-	Tue, 12 Aug 2025 17:18:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 70DE442937;
+	Tue, 12 Aug 2025 17:18:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tACcdERq1i5F; Tue, 12 Aug 2025 17:18:32 +0000 (UTC)
+ id 2Bi6iajfrj6F; Tue, 12 Aug 2025 17:18:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB0624291F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 28C6A4292F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EB0624291F;
-	Tue, 12 Aug 2025 17:18:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 28C6A4292F;
+	Tue, 12 Aug 2025 17:18:33 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 95EEC1D1
- for <buildroot@buildroot.org>; Tue, 12 Aug 2025 17:18:30 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id C2A891C9
+ for <buildroot@buildroot.org>; Tue, 12 Aug 2025 17:18:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7C0FC42920
+ by smtp4.osuosl.org (Postfix) with ESMTP id B2E4A4291C
  for <buildroot@buildroot.org>; Tue, 12 Aug 2025 17:18:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wuMR9g2CWfR1 for <buildroot@buildroot.org>;
+ id u87i51ClDp5m for <buildroot@buildroot.org>;
  Tue, 12 Aug 2025 17:18:29 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
+ client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 652534291C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 652534291C
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
- [IPv6:2a00:1450:4864:20::332])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 652534291C
- for <buildroot@buildroot.org>; Tue, 12 Aug 2025 17:18:29 +0000 (UTC)
-Received: by mail-wm1-x332.google.com with SMTP id
- 5b1f17b1804b1-458bece40fcso29240155e9.3
- for <buildroot@buildroot.org>; Tue, 12 Aug 2025 10:18:29 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6561C4291F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6561C4291F
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6561C4291F
+ for <buildroot@buildroot.org>; Tue, 12 Aug 2025 17:18:28 +0000 (UTC)
+Received: by mail-wm1-x331.google.com with SMTP id
+ 5b1f17b1804b1-459e7ea3ebeso22348485e9.0
+ for <buildroot@buildroot.org>; Tue, 12 Aug 2025 10:18:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20230601; t=1755019107; x=1755623907;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=Yp4a30O5YwcQbc7Z8af4oc17xFl0mEzFWoAxuMpuXMA=;
- b=eEcyACBRjIkgCkFaOk1gUqUaCb1swgepUMJZi0nePXb2ylhQ5WSioaOjdnlV5cGq0G
- VVa7m1qXktRFDtW8GzWWEWvg6mRhz0pg7uiKn0zptE6Xjpym0CVtD15X1xowFiotBCNg
- QqHVOk7RqOkf2Kpt+GAZSuOxgMdRPQzWfya2pN7t8pz3zfihCWTdxvOCYtuF7jy3o7Ar
- 1vBT9iX1G6kHedjQkhrEBQHxP9b/N9vdE/IgfXS9Prfryspdi1FXM0yXbqPKgpbJ7QTr
- AMyPu+CNaI/vyITrH0TfATp+oV21OZCX1AVNngsoJm99SaRgdTZYX60nUzreafhqxPVY
- jRSg==
-X-Gm-Message-State: AOJu0Yx/VXTYiMfSa0wOGpv6h+kg2Wv1207auq5E1oNyGpERAYk3r88Y
- Zgf8krJeOB+d/IyBlenFYgTZHZnSc3jPPfjsWQH6TqSdZcukUJI1W4KlG9EsWC5VXUJEH3nb/Uy
- I8KWv
-X-Gm-Gg: ASbGncsME7XU5Klr/KEdVyhEGbJz8pDRknFbON4ATcR0HfDYrMkm8EZ2DWMxu74l/Mk
- jZPn0wIHnM4ATpYyZg13nQfyFbhUKjsLCR4kwprbP28+7e+uyT9KM/sfgYrCVHj7LblBMJYeVrE
- Ay3UHqerQlT/pIztM/N+Mk/1IbqnM4teskj94cgYO0/5E66m+AQh1Eu0uHztEx0GBDNjl4Q8fvq
- Y5geYs28+J86dlO5nQF8w0rAiOUXxJK9OsHjyXzHQTkKaIqozn1OcRF/5T1zcca0lhz3umo/lWk
- BqQj78v8bVctauR8dOEhMdrAoGpc/mZ6P6DnpVtoXX+cMZXpwVqVhsMm+Wtvrs85XvtXk8S706s
- 2+64bU0isuqgTZQ==
-X-Google-Smtp-Source: AGHT+IHDVlRdcqWMV2n91NohhgNQkDejl42LBSBbL7vqXkTSeRwFrTiv0TmWw6nfzMDUwiJB7nyM0g==
-X-Received: by 2002:a05:6000:2902:b0:3b8:893f:a17d with SMTP id
- ffacd0b85a97d-3b917307715mr145650f8f.49.1755019107007; 
- Tue, 12 Aug 2025 10:18:27 -0700 (PDT)
+ h=content-transfer-encoding:mime-version:message-id:date:subject:to
+ :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=BQGxmy4pyebmYaiRpDDR0kiZcXFZA72LstlBflQ2aF8=;
+ b=tjk5IteOQhrJDALgisyd2OnDpAKBi15JTAtF2KLll19eDWLyopFp4ebnSBvgQgI51V
+ 6ODrJcJpnb7qj/Ymw7KgnPd9NuZKLwRNnXyaixW0dsaoftenWGBHAznQA1C9+mtQTZ4y
+ BZMaC68oP/ubodH2pAl3m5lpL5QbT+xna9VYUP469Plu3nVdhxA61rI+gFtILfWJrJlm
+ dVOG7aZG2iQIGmTU2V0rRZWFLp3QYCelzHvP/fui2KchIdJpJnU3n0sLhzABTAMR+058
+ fyqXuqutZsk1CECexoAV9PxxCPdA7prPA9nE4D2PgQMiZenT3iSVEe+PmbcyYYVWNjHa
+ HsOg==
+X-Gm-Message-State: AOJu0YynT7mqBa7Zv7fKpX1wpb/V67PK44oRN6OpmQgl/5P4SrGzCSXX
+ xTYWawkVwTSkSk4x8mo7Ykr5Sk1hBCpmd3u2qkr2TLC9BqGBVg5BFfvO6WJo5c5HdeETrvYaIBX
+ K02rS
+X-Gm-Gg: ASbGncuA+PRrOLaI497Kq0MsB4VNSa7F3DsXolYl0Z0VrJjfa2n5nTLskzfmd4EoEZt
+ 2s4Ke4ih0j5YCxv5J9Uh7Fw2L9GyAJE62SYVE7Fm5D1xqTbrzW12vetgkwJ8k+aLGoabFup10jH
+ qBwYWuWsyfRJHQm/rUqBufX7xBWcpm7ve9dwY5/auTHrxIPV4XiMs3I6aiS/bmaOQ8Vc3F53p/G
+ +D6xph1D/EDHmv30XlJa1nHSWV45EDJBuHtIWinq4+aHO8nI+C/muH9UrxK5ZvrauqF7/AN26aC
+ e320zvyat3TNv4KNKtcsfGbdKwV9oB8heUcpavXdNv/zsF5BcW6C+4L9O6o6owGv532/HuALT+U
+ 0o76YaddnNvTzUA==
+X-Google-Smtp-Source: AGHT+IFhvShhBVtSIPDuyBTw/CU2w9coqjgMcKOMD5z109iyHzM6iBSzAC+zx3NUffMxugkSBNbyzg==
+X-Received: by 2002:a05:600c:4693:b0:455:f187:6203 with SMTP id
+ 5b1f17b1804b1-45a15b52acfmr5272435e9.27.1755019106524; 
+ Tue, 12 Aug 2025 10:18:26 -0700 (PDT)
 Received: from arch ([79.132.233.79]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3b79c338c7dsm45125353f8f.0.2025.08.12.10.18.26
+ ffacd0b85a97d-3b79c338c7dsm45125353f8f.0.2025.08.12.10.18.25
  for <buildroot@buildroot.org>
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
  Tue, 12 Aug 2025 10:18:26 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Tue, 12 Aug 2025 19:18:25 +0200
-Message-ID: <20250812171825.1942608-2-thomas.perale@mind.be>
+Date: Tue, 12 Aug 2025 19:18:24 +0200
+Message-ID: <20250812171825.1942608-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250812171825.1942608-1-thomas.perale@mind.be>
-References: <20250812171825.1942608-1-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mind.be; s=google; t=1755019107; x=1755623907; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
- :reply-to;
- bh=Yp4a30O5YwcQbc7Z8af4oc17xFl0mEzFWoAxuMpuXMA=;
- b=BM9bAaTLYuyJppmW1mbf9mtz+R+wNGXvWklmKmXUrrVj8l5W6DWGMG1szX6YzKjDsd
- wKbq1t99h4xMegde0b/ABbzfKZ7Il0NNgSJEjbz7DLUP4kpL464tf7hwXmrsUinWeKfP
- zi+U/TkRIlD0ucrGsZi2rZN73PA7I1kH/vwudb2eFXYciJWRo0meqehwbkpqc7O/ZB59
- E8+GRq2M6rUaSp6121jrsRPq9ckWg1wRh4s5zDl/5q6lOfdUYGOrBXaHjvDqpMKA2jfr
- eE5hOzjf2eqBWIFRIm602r4uMnuitt6/ASMQ1uy+FKgP9F0ocv+xaKsAqRrGco+1cucD
- Dbtg==
+ h=content-transfer-encoding:mime-version:message-id:date:subject:to
+ :from:from:to:cc:subject:date:message-id:reply-to;
+ bh=BQGxmy4pyebmYaiRpDDR0kiZcXFZA72LstlBflQ2aF8=;
+ b=YrDfHBWvXXuZWlq6kQ55KFnjPN//BWDd5cjoamG3KijCBvjwjJI161/Jp2NpTnqgXt
+ HHHIGjUSAgCf7yj9i7O9+SmHaR/PEhJRLvhodXiZfovjXvABsKRY0j3c8IQo/nsYVqds
+ aeGiWSkpwQQC8Lq7zKJD9d9u0xy7sjbrXlTF1oSq2BrVCpI1w9TjGMOLDRgUrDERK4xI
+ I3Bbifat+/Dnzgm+bpdIBoBF6ArzawzS7VWv8iYi4miAYC7bYHcnnB3fx0EnVqV7qBaO
+ hhbkPJQO2Ys6lTpxhRdQh/huV5YJGFEQNl6jYzY0dtTxNIisD8NtwG64GWdURyjjK4At
+ 1ssw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=BM9bAaTL
-Subject: [Buildroot] [PATCH 2/2] package/prboom: fix build w/ gcc-15
+ header.a=rsa-sha256 header.s=google header.b=YrDfHBWv
+Subject: [Buildroot] [PATCH 1/2] package/prboom: fix build w/ gcc-14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -110,40 +106,184 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VGhpcyBwYXRjaCBmb3JjZSB0aGUgdXNhZ2Ugb2YgYC1zdGQ9Z251MThgIGZvciBHQ0MxNSB0b29s
-Y2hhaW5zIHRvIGZpeAp0aGUgZm9sbG93aW5nIGlzc3VlczoKCi0gVGhlIGJvb2xlYW4gaXNzdWUg
-d2l0aCBDMjMKCmBgYApJbiBmaWxlIGluY2x1ZGVkIGZyb20gLi4vLi4vc3JjL2lfc291bmQuaDoz
-OCwKICAgICAgICAgICAgICAgICBmcm9tIGlfc291bmQuYzo1ODoKLi4vLi4vc3JjL2Rvb210eXBl
-Lmg6NDg6MTU6IGVycm9yOiBjYW5ub3QgdXNlIGtleXdvcmQg4oCYZmFsc2XigJkgYXMgZW51bWVy
-YXRpb24gY29uc3RhbnQKICAgNDggfCB0eXBlZGVmIGVudW0ge2ZhbHNlLCB0cnVlfSBib29sZWFu
-OwogICAgICB8ICAgICAgICAgICAgICAgXn5+fn4KLi4vLi4vc3JjL2Rvb210eXBlLmg6NDg6MTU6
-IG5vdGU6IOKAmGZhbHNl4oCZIGlzIGEga2V5d29yZCB3aXRoIOKAmC1zdGQ9YzIz4oCZIG9ud2Fy
-ZHMKYGBgCgotIFRoZSB1c2FnZSBvZiBgdXNsZWVwYCAmIGBzdHJ1Y3QgdGltZXpvbmVgIHJlcXVp
-cmUgdXNhZ2Ugb2YgR05VCiAgZXh0ZW5zaW9ucy4KCmBgYAppX3N5c3RlbS5jOjU4OjM6IGVycm9y
-OiBpbXBsaWNpdCBkZWNsYXJhdGlvbiBvZiBmdW5jdGlvbiDigJh1c2xlZXDigJk7IGRpZCB5b3Ug
-bWVhbiDigJhzbGVlcOKAmT8gWy1XaW1wbGljaXQtZnVuY3Rpb24tZGVjbGFyYXRpb25dCiAgIDU4
-IHwgICB1c2xlZXAodXNlY3MpOwogICAgICB8ICAgXn5+fn5+CiAgICAgIHwgICBzbGVlcAppX3N5
-c3RlbS5jOiBJbiBmdW5jdGlvbiDigJhJX0dldFRpbWVfUmVhbFRpbWXigJk6Cmlfc3lzdGVtLmM6
-Nzg6MTk6IGVycm9yOiBzdG9yYWdlIHNpemUgb2Yg4oCYdHrigJkgaXNu4oCZdCBrbm93bgogICA3
-OCB8ICAgc3RydWN0IHRpbWV6b25lIHR6OwogICAgICB8ICAgICAgICAgICAgICAgICAgIF5+Cmlf
-c3lzdGVtLmM6IEluIGZ1bmN0aW9uIOKAmElfR2V0UmFuZG9tVGltZVNlZWTigJk6Cmlfc3lzdGVt
-LmM6MTA1OjE5OiBlcnJvcjogc3RvcmFnZSBzaXplIG9mIOKAmHR64oCZIGlzbuKAmXQga25vd24K
-ICAxMDUgfCAgIHN0cnVjdCB0aW1lem9uZSB0ejsKICAgICAgfCAgICAgICAgICAgICAgICAgICBe
-fgpgYGAKClNpZ25lZC1vZmYtYnk6IFRob21hcyBQZXJhbGUgPHRob21hcy5wZXJhbGVAbWluZC5i
-ZT4KLS0tCiBwYWNrYWdlL3ByYm9vbS9wcmJvb20ubWsgfCA0ICsrKysKIDEgZmlsZSBjaGFuZ2Vk
-LCA0IGluc2VydGlvbnMoKykKCmRpZmYgLS1naXQgYS9wYWNrYWdlL3ByYm9vbS9wcmJvb20ubWsg
-Yi9wYWNrYWdlL3ByYm9vbS9wcmJvb20ubWsKaW5kZXggZmM0NDBlNWNmOC4uYWI5YWIwOTkxMyAx
-MDA2NDQKLS0tIGEvcGFja2FnZS9wcmJvb20vcHJib29tLm1rCisrKyBiL3BhY2thZ2UvcHJib29t
-L3ByYm9vbS5tawpAQCAtMTgsNiArMTgsMTAgQEAgaWZlcSAoJChCUjJfVE9PTENIQUlOX0hBU19H
-Q0NfQlVHXzg1MTgwKSx5KQogUFJCT09NX0NGTEFHUyArPSAtTzAKIGVuZGlmCiAKK2lmZXEgKCQo
-QlIyX1RPT0xDSEFJTl9HQ0NfQVRfTEVBU1RfMTUpLHkpCitQUkJPT01fQ0ZMQUdTICs9IC1zdGQ9
-Z251MTgKK2VuZGlmCisKIFBSQk9PTV9DT05GX0VOViArPSBDRkxBR1M9IiQoUFJCT09NX0NGTEFH
-UykiCiAKIGlmZXEgKCQoQlIyX1BBQ0tBR0VfTElCUE5HKSx5KQotLSAKMi41MC4xCgpfX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGlu
-ZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9y
-Zy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+When building prboom with gcc-14 the following error appeared on the
+autobuilder:
+
+```
+i_main.c: In function 'main':
+i_main.c:359:10: error: assignment to 'const char * const*' from incompatible pointer type 'char **' [-Wincompatible-pointer-types]
+  359 |   myargv = argv;
+      |          ^
+```
+
+While this package did not receive any update for a while on the
+sourceforge mirror, I backported the fix from a fork. For more
+information see [1].
+
+[1] https://github.com/coelckers/prboom-plus/commit/92d44b6383a3e053feac2c820b8114873fcd798e
+
+Fixes: https://autobuild.buildroot.org/results/888/88846e3cb267b04da58bc17d92fd5dd385b65b5d
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+---
+ ...v-instead-of-const-char-const-myargv.patch | 140 ++++++++++++++++++
+ 1 file changed, 140 insertions(+)
+ create mode 100644 package/prboom/0003-gcc-warnings-const-myargv-instead-of-const-char-const-myargv.patch
+
+diff --git a/package/prboom/0003-gcc-warnings-const-myargv-instead-of-const-char-const-myargv.patch b/package/prboom/0003-gcc-warnings-const-myargv-instead-of-const-char-const-myargv.patch
+new file mode 100644
+index 0000000000..b102175d59
+--- /dev/null
++++ b/package/prboom/0003-gcc-warnings-const-myargv-instead-of-const-char-const-myargv.patch
+@@ -0,0 +1,140 @@
++From 92d44b6383a3e053feac2c820b8114873fcd798e Mon Sep 17 00:00:00 2001
++From: entryway <entryway@localhost>
++Date: Fri, 10 Jun 2011 19:59:18 +0000
++Subject: [PATCH] gcc warnings: 'const **myargv' instead of 'const char * const
++ * myargv'
++
++Upstream: https://github.com/coelckers/prboom-plus/commit/92d44b6383a3e053feac2c820b8114873fcd798e
++[thomas: backport to 2.5.0]
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++---
++ src/SDL/i_main.c |  3 ++-
++ src/d_main.c     | 20 ++++++++++++--------
++ src/m_argv.c     |  3 +--
++ src/m_argv.h     |  2 +-
++ 4 files changed, 16 insertions(+), 12 deletions(-)
++
++diff --git a/src/SDL/i_main.c b/src/SDL/i_main.c
++index 05cd655..1c19ef0 100644
++--- a/src/SDL/i_main.c
+++++ b/src/SDL/i_main.c
++@@ -356,7 +356,8 @@ int main(int argc, char **argv)
++ #endif
++ 
++   myargc = argc;
++-  myargv = argv;
+++  myargv = malloc(sizeof(myargv[0]) * myargc);
+++  memcpy(myargv, argv, sizeof(myargv[0]) * myargc);
++ 
++ #ifdef _WIN32
++   if (!M_CheckParm("-nodraw")) {
++diff --git a/src/d_main.c b/src/d_main.c
++index 6d8493e..320e07a 100644
++--- a/src/d_main.c
+++++ b/src/d_main.c
++@@ -870,7 +870,7 @@ static void FindResponseFile (void)
++ 	int indexinfile;
++         byte *file = NULL;
++         const char **moreargs = malloc(myargc * sizeof(const char*));
++-        const char **newargv;
+++        char **newargv;
++         // proff 04/05/2000: Added for searching responsefile
++         char fname[PATH_MAX+1];
++ 
++@@ -904,14 +904,15 @@ static void FindResponseFile (void)
++ 	  int k;
++           lprintf(LO_ERROR,"\nResponse file empty!\n");
++ 
++-	  newargv = calloc(sizeof(char *),MAXARGVS);
+++	  newargv = calloc(sizeof(newargv[0]),myargc);
++ 	  newargv[0] = myargv[0];
++           for (k = 1,index = 1;k < myargc;k++)
++           {
++             if (i!=k)
++               newargv[index++] = myargv[k];
++           }
++-          myargc = index; myargv = newargv;
+++          myargc = index;
+++          myargv = newargv;
++           return;
++         }
++ 
++@@ -919,8 +920,8 @@ static void FindResponseFile (void)
++ 	memcpy((void *)moreargs,&myargv[i+1],(index = myargc - i - 1) * sizeof(myargv[0]));
++ 
++ 	{
++-	  const char *firstargv = myargv[0];
++-	  newargv = calloc(sizeof(char *),MAXARGVS);
+++	  char *firstargv = myargv[0];
+++	  newargv = calloc(sizeof(newargv[0]), 1);
++ 	  newargv[0] = firstargv;
++ 	}
++ 
++@@ -949,16 +950,19 @@ static void FindResponseFile (void)
++ 
++ 	      // Terminate string, realloc and add to argv
++ 	      *p = 0;
+++	      newargv = realloc(newargv, sizeof(newargv[0]) * (indexinfile + 1));
++ 	      newargv[indexinfile++] = realloc(s,strlen(s)+1);
++ 	    }
++ 	  } while(size > 0);
++ 	}
++ 	free(file);
++ 
+++	newargv = realloc(newargv, sizeof(newargv[0]) * (indexinfile + index));
++ 	memcpy((void *)&newargv[indexinfile],moreargs,index*sizeof(moreargs[0]));
++ 	free((void *)moreargs);
++ 
++-        myargc = indexinfile+index; myargv = newargv;
+++        myargc = indexinfile+index;
+++        myargv = newargv;
++ 
++         // DISPLAY ARGS
++         //jff 9/3/98 use logical output routine
++@@ -999,7 +1003,7 @@ static void DoLooseFiles(void)
++   int lmpcount = 0;
++   int dehcount = 0;
++   int i,j,p;
++-  const char **tmyargv;  // use these to recreate the argv array
+++  char **tmyargv;  // use these to recreate the argv array
++   int tmyargc;
++   boolean skip[MAXARGVS]; // CPhipps - should these be skipped at the end
++ 
++@@ -1060,7 +1064,7 @@ static void DoLooseFiles(void)
++ 
++   // Now go back and redo the whole myargv array with our stuff in it.
++   // First, create a new myargv array to copy into
++-  tmyargv = calloc(sizeof(char *),MAXARGVS);
+++  tmyargv = calloc(sizeof(tmyargv[0]),MAXARGVS);
++   tmyargv[0] = myargv[0]; // invocation
++   tmyargc = 1;
++ 
++diff --git a/src/m_argv.c b/src/m_argv.c
++index 9392840..4fa1ed8 100644
++--- a/src/m_argv.c
+++++ b/src/m_argv.c
++@@ -37,8 +37,7 @@
++ #include "m_argv.h"
++ 
++ int    myargc;
++-const char * const * myargv; // CPhipps - not sure if ANSI C allows you to
++-// modify contents of argv, but I can't imagine it does.
+++char **myargv;
++ 
++ //
++ // M_CheckParm
++diff --git a/src/m_argv.h b/src/m_argv.h
++index 5340c15..b1d5907 100644
++--- a/src/m_argv.h
+++++ b/src/m_argv.h
++@@ -39,7 +39,7 @@
++  * MISC
++  */
++ extern int  myargc;
++-extern const char * const * myargv; /* CPhipps - const * const * */
+++extern char **myargv;
++ 
++ /* Returns the position of the given parameter in the arg list (0 if not found). */
++ int M_CheckParm(const char *check);
++-- 
++2.50.1
+-- 
+2.50.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
