@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 197D7CA0EE6
-	for <buildroot@archiver.kernel.org>; Thu, 14 Aug 2025 19:56:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 202C9CA0EE4
+	for <buildroot@archiver.kernel.org>; Thu, 14 Aug 2025 19:56:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CD44760727;
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1D58B8075D;
 	Thu, 14 Aug 2025 19:56:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iqyGIplxv30X; Thu, 14 Aug 2025 19:56:18 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dSl1BcVDzeLB; Thu, 14 Aug 2025 19:56:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DFAEF60718
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 283748073B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DFAEF60718;
-	Thu, 14 Aug 2025 19:56:17 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0449B93F
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 19:56:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 283748073B;
+	Thu, 14 Aug 2025 19:56:16 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id E9BBE93E
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 19:56:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DAB26402BD
+ by smtp1.osuosl.org (Postfix) with ESMTP id DB9148074D
  for <buildroot@buildroot.org>; Thu, 14 Aug 2025 19:56:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ExBmurPc2mB3 for <buildroot@buildroot.org>;
- Thu, 14 Aug 2025 19:56:12 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4c9swUxmstjs for <buildroot@buildroot.org>;
+ Thu, 14 Aug 2025 19:56:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 12855402AE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0301F80702
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 12855402AE
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 19:56:12 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0301F80702
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 19:56:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E643687606; Thu, 14 Aug 2025 19:56:11 +0000 (UTC)
+ id E5350875ED; Thu, 14 Aug 2025 19:56:10 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 14 Aug 2025 09:26:21 +0200
+Date: Tue, 12 Aug 2025 15:00:53 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: a978c9ee8711a885dfbcd9e8d1c950e523a467c5
-X-Git-Newrev: cc1a1992c4f5b7c2495c95922661c72875c8a109
+X-Git-Oldrev: 745791cf6e117f7230f3e7d6bd759711f295358f
+X-Git-Newrev: 80c44ebfd6ac05c6a3d61fae209d3859e16c8ce7
 X-Patchwork-Hint: ignore
-Message-Id: <20250814195611.E643687606@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/tiff: add patch
- to fix CVE-2025-8177
+Message-Id: <20250814195610.E5350875ED@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/python-propcache:
+ bump to version 0.3.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,89 +66,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc1a1992c4f5b7c2495c95922661c72875c8a109
+commit: https://git.buildroot.net/buildroot/commit/?id=80c44ebfd6ac05c6a3d61fae209d3859e16c8ce7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Fix the following vulnerability:
-
-- CVE-2025-8177
-
-    A vulnerability was found in LibTIFF up to 4.7.0. It has been rated as
-    critical. This issue affects the function setrow of the file
-    tools/thumbnail.c. The manipulation leads to buffer overflow. An
-    attack has to be approached locally. The patch is named
-    e8c9d6c616b19438695fd829e58ae4fde5bfbc22. It is recommended to apply a
-    patch to fix this issue. This vulnerability only affects products that
-    are no longer supported by the maintainer.
-
-For more information, see:
-  - https://www.cve.org/CVERecord?id=CVE-2025-8177
-  - https://gitlab.com/libtiff/libtiff/-/merge_requests/737
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 3db725d71d3220bf62a1352ef9bc6312f89499ef)
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 784f52b64788ab4e3686c9e20d6c17e574f2d8e0)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/tiff/0004-fix-for-thumbnail-issue.patch | 35 +++++++++++++++++++++++++
- package/tiff/tiff.mk                            |  3 +++
- 2 files changed, 38 insertions(+)
+ package/python-propcache/python-propcache.hash | 4 ++--
+ package/python-propcache/python-propcache.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/tiff/0004-fix-for-thumbnail-issue.patch b/package/tiff/0004-fix-for-thumbnail-issue.patch
-new file mode 100644
-index 0000000000..237306f6c2
---- /dev/null
-+++ b/package/tiff/0004-fix-for-thumbnail-issue.patch
-@@ -0,0 +1,35 @@
-+From e8de4dc1f923576dce9d625caeebd93f9db697e1 Mon Sep 17 00:00:00 2001
-+From: Lee Howard <faxguy@howardsilvan.com>
-+Date: Wed, 25 Jun 2025 17:14:18 +0000
-+Subject: [PATCH] Fix for thumbnail issue #715
-+
-+CVE: CVE-2025-8177
-+Upstream: https://gitlab.com/libtiff/libtiff/-/commit/e8de4dc1f923576dce9d625caeebd93f9db697e1
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ tools/thumbnail.c | 10 +++++++++-
-+ 1 file changed, 9 insertions(+), 1 deletion(-)
-+
-+diff --git a/tools/thumbnail.c b/tools/thumbnail.c
-+index 9cade913..7e21f521 100644
-+--- a/tools/thumbnail.c
-++++ b/tools/thumbnail.c
-+@@ -620,7 +620,15 @@ static void setrow(uint8_t *row, uint32_t nrows, const uint8_t *rows[])
-+             }
-+             acc += bits[*src & mask1];
-+         }
-+-        *row++ = cmap[(255 * acc) / area];
-++        if (255 * acc / area < 256)
-++        {
-++            *row++ = cmap[(255 * acc) / area];
-++        }
-++        else
-++        {
-++            fprintf(stderr, "acc=%d, area=%d\n", acc, area);
-++            *row++ = cmap[0];
-++        }
-+     }
-+ }
-+ 
-+-- 
-+GitLab
-diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
-index bd95fdca7f..3d426fad4d 100644
---- a/package/tiff/tiff.mk
-+++ b/package/tiff/tiff.mk
-@@ -16,6 +16,9 @@ TIFF_INSTALL_STAGING = YES
- # 0001-don-t-skip-the-first-line-of-the-input-image.patch, 0002-fix-tiffmedian-bug.patch, 0003-conflict-resolution.patch
- TIFF_IGNORE_CVES += CVE-2025-8176
+diff --git a/package/python-propcache/python-propcache.hash b/package/python-propcache/python-propcache.hash
+index 1bda1e96fb..6e89eac6aa 100644
+--- a/package/python-propcache/python-propcache.hash
++++ b/package/python-propcache/python-propcache.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/propcache/json
+-md5  c642caac1415818205011277008142ea  propcache-0.2.1.tar.gz
+-sha256  3f77ce728b19cb537714499928fe800c3dda29e8d9428778fc7c186da4c09a64  propcache-0.2.1.tar.gz
++md5  1c073b491620a9f6d568276d61f80277  propcache-0.3.2.tar.gz
++sha256  20d7d62e4e7ef05f221e0db2856b979540686342e7dd9973b815599c7057e168  propcache-0.3.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/python-propcache/python-propcache.mk b/package/python-propcache/python-propcache.mk
+index 92a31a19af..e1050c4919 100644
+--- a/package/python-propcache/python-propcache.mk
++++ b/package/python-propcache/python-propcache.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
-+# 0004-fix-for-thumbnail-issue.patch
-+TIFF_IGNORE_CVES += CVE-2025-8177
-+
- # webp has a (optional) dependency on tiff, so we can't have webp
- # support in tiff, or that would create a circular dependency.
- TIFF_CONF_OPTS = \
+-PYTHON_PROPCACHE_VERSION = 0.2.1
++PYTHON_PROPCACHE_VERSION = 0.3.2
+ PYTHON_PROPCACHE_SOURCE = propcache-$(PYTHON_PROPCACHE_VERSION).tar.gz
+-PYTHON_PROPCACHE_SITE = https://files.pythonhosted.org/packages/20/c8/2a13f78d82211490855b2fb303b6721348d0787fdd9a12ac46d99d3acde1
++PYTHON_PROPCACHE_SITE = https://files.pythonhosted.org/packages/a6/16/43264e4a779dd8588c21a70f0709665ee8f611211bdd2c87d952cfa7c776
+ PYTHON_PROPCACHE_SETUP_TYPE = setuptools
+ PYTHON_PROPCACHE_LICENSE = Apache-2.0
+ PYTHON_PROPCACHE_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
