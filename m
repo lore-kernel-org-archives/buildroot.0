@@ -4,49 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2991C87FCF
-	for <buildroot@archiver.kernel.org>; Wed, 13 Aug 2025 21:57:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1DD8C87FCF
+	for <buildroot@archiver.kernel.org>; Wed, 13 Aug 2025 21:59:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 756EC61C9C;
-	Wed, 13 Aug 2025 21:57:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6EA1461C9F;
+	Wed, 13 Aug 2025 21:59:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sBRjomPthG6W; Wed, 13 Aug 2025 21:57:48 +0000 (UTC)
+ id 7vqIC1Xa2I_g; Wed, 13 Aug 2025 21:59:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 660E461C8D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9450B61C94
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 660E461C8D;
-	Wed, 13 Aug 2025 21:57:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9450B61C94;
+	Wed, 13 Aug 2025 21:59:35 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0867C1BA
- for <buildroot@buildroot.org>; Wed, 13 Aug 2025 21:57:47 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 2F4B31BA
+ for <buildroot@buildroot.org>; Wed, 13 Aug 2025 21:59:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E23E342AC6
- for <buildroot@buildroot.org>; Wed, 13 Aug 2025 21:57:46 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1578D42AFB
+ for <buildroot@buildroot.org>; Wed, 13 Aug 2025 21:59:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pJ9dJXXQQPMn for <buildroot@buildroot.org>;
- Wed, 13 Aug 2025 21:57:45 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 43BBC42ABC
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 43BBC42ABC
- for <buildroot@buildroot.org>; Wed, 13 Aug 2025 21:57:45 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 319BC875AD; Wed, 13 Aug 2025 21:57:45 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 13 Aug 2025 23:37:01 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c3ceae347284e0bb018b074520e317160b3d16dc
-X-Git-Newrev: 83b3dc9815144ba94a54d833e86e060fe2ff6133
-X-Patchwork-Hint: ignore
-Message-Id: <20250813215745.319BC875AD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- package/gstreamer1/gst1-plugins-bayer2rgb-neon: bump to v0.6.0-11-g7e06aa3
+ id gxYvgjNWHe_r for <buildroot@buildroot.org>;
+ Wed, 13 Aug 2025 21:59:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 11DBE42AF1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 11DBE42AF1
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 11DBE42AF1
+ for <buildroot@buildroot.org>; Wed, 13 Aug 2025 21:59:32 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 0D96913F89C;
+ Wed, 13 Aug 2025 23:59:26 +0200 (CEST)
+Received: from 2001:18c0:a22:bf00:5c2b:f296:f108:6612
+ via 2001:18c0:a22:bf00:5c2b:f296:f108:6612 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Wed, 13 Aug 2025 23:59:26 +0200
+MIME-Version: 1.0
+Date: Wed, 13 Aug 2025 23:59:26 +0200
+To: =?UTF-8?Q?S=C3=A9bastien_Tisserand?= <sebastien.tisserand@armadeus.com>
+Cc: buildroot@buildroot.org, Eloi Bail <eloi.bail@savoirfairelinux.com>
+In-Reply-To: <20250813081813.4475-1-sebastien.tisserand@armadeus.com>
+References: <20250813081813.4475-1-sebastien.tisserand@armadeus.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <ec796b0c7327d574e8a05d0d833ae45a@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1755122369;
+ bh=6FMie8I18lYlMcCTS9Sm93tFXR9FmvmjU0RXDva3Ruk=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=WSjusvjCzLQ5mdm35EpznJ21I1v7J2JsvVOvO2ym98HtNJ6DHicd0yVBUa+mwAmOK
+ h4bOSVITYgcG7eobjZyV74KU8g7ZGXFFL5jc1X6wHEpnfGZeDx7XrM3OHeSKVX6EO6
+ xRgLQFsHzIF0/tYRUWNuKhqfjOk+nEy5nmr9yuWWX2uEOnQukhKLexIYWI0EFmFeQd
+ CvAyYajO8hPSulwPqgWSVQC/K9BvxJ5tn0yEhOmTOpoKu02kORNMZgdxTBr8ZGf7kX
+ o7H7ErhDWgNI1hA1DClid90vLz+fEzlO4N+fXyL814jzV15+DELUrtkOJgTfXYLOnD
+ u9umpiZb6LfpQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=WSjusvjC
+Subject: Re: [Buildroot] [PATCH]
+ package/gstreamer1/gst1-plugins-bayer2rgb-neon: bump to latest git commit
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,62 +83,20 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6686945209950924483=="
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6686945209950924483==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=83b3dc9815144ba94a54d833e86e060fe2ff6133
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-This new version v0.6.0-11-g7e06aa3 (lastest git commit)
-supports more bayer formats:
-https://gitlab-ext.sigma-chemnitz.de/ensc/gst-bayer2rgb-neon/-/commit/b5ad78a1c6bfaa3adce5f0f69493efcce106e953
-
-Signed-off-by: Sébastien Tisserand <sebastien.tisserand@armadeus.com>
-Reviewed-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
-[Julien: use "git describe --tags --abbrev=40" format in _VERSION]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- .../gst1-plugins-bayer2rgb-neon/gst1-plugins-bayer2rgb-neon.hash        | 2 +-
- .../gst1-plugins-bayer2rgb-neon/gst1-plugins-bayer2rgb-neon.mk          | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/gstreamer1/gst1-plugins-bayer2rgb-neon/gst1-plugins-bayer2rgb-neon.hash b/package/gstreamer1/gst1-plugins-bayer2rgb-neon/gst1-plugins-bayer2rgb-neon.hash
-index 1efaf6421d..7a9a009a5d 100644
---- a/package/gstreamer1/gst1-plugins-bayer2rgb-neon/gst1-plugins-bayer2rgb-neon.hash
-+++ b/package/gstreamer1/gst1-plugins-bayer2rgb-neon/gst1-plugins-bayer2rgb-neon.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  6ae89adf1979edf5760bbf2fb589dcaa905cff55bb828e6b271bc3d1e403a130  gst1-plugins-bayer2rgb-neon-b630798efcd611879e7cb1c246052e5ba1acc41d-git4.tar.gz
-+sha256  e44fbe895310fd3fd0e43d02fadda3ad33bd00ec79159bf305c44f2919c68612  gst1-plugins-bayer2rgb-neon-v0.6.0-11-g7e06aa310805b1600d12f1d3bb0058aa02ab8f83-git4.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/gstreamer1/gst1-plugins-bayer2rgb-neon/gst1-plugins-bayer2rgb-neon.mk b/package/gstreamer1/gst1-plugins-bayer2rgb-neon/gst1-plugins-bayer2rgb-neon.mk
-index 0d4aeac7f5..de9a8b4bad 100644
---- a/package/gstreamer1/gst1-plugins-bayer2rgb-neon/gst1-plugins-bayer2rgb-neon.mk
-+++ b/package/gstreamer1/gst1-plugins-bayer2rgb-neon/gst1-plugins-bayer2rgb-neon.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GST1_PLUGINS_BAYER2RGB_NEON_VERSION = b630798efcd611879e7cb1c246052e5ba1acc41d
-+GST1_PLUGINS_BAYER2RGB_NEON_VERSION = v0.6.0-11-g7e06aa310805b1600d12f1d3bb0058aa02ab8f83
- GST1_PLUGINS_BAYER2RGB_NEON_SITE = https://gitlab-ext.sigma-chemnitz.de/ensc/gst-bayer2rgb-neon.git
- GST1_PLUGINS_BAYER2RGB_NEON_SITE_METHOD = git
- GST1_PLUGINS_BAYER2RGB_NEON_LICENSE = GPL-3.0
-
---===============6686945209950924483==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6686945209950924483==--
+T24gMTMvMDgvMjAyNSAxMDoxOCwgU8OpYmFzdGllbiBUaXNzZXJhbmQgd3JvdGU6Cj4gTGFzdGVz
+dCBnaXQgY29tbWl0IHN1cHBvcnRzIG1vcmUgYmF5ZXIgZm9ybWF0czoKPiBodHRwczovL2dpdGxh
+Yi1leHQuc2lnbWEtY2hlbW5pdHouZGUvZW5zYy9nc3QtYmF5ZXIycmdiLW5lb24vLS9jb21taXQv
+YjVhZDc4YTFjNmJmYWEzYWRjZTVmMGY2OTQ5M2VmY2NlMTA2ZTk1Mwo+IAo+IFNpZ25lZC1vZmYt
+Ynk6IFPDqWJhc3RpZW4gVGlzc2VyYW5kIDxzZWJhc3RpZW4udGlzc2VyYW5kQGFybWFkZXVzLmNv
+bT4KCkFwcGxpZWQgdG8gbmV4dCwgdGhhbmtzLgoKRm9yIGluZm8sIEkgc3dpdGNoZWQgX1ZFUlNJ
+T04gdG8gdXNlIGEgImdpdCBkZXNjcmliZSIgZm9ybWF0LiBTZWU6Cmh0dHBzOi8vZ2l0bGFiLmNv
+bS9idWlsZHJvb3Qub3JnL2J1aWxkcm9vdC8tL2NvbW1pdC84M2IzZGM5ODE1MTQ0YmE5NGE1NGQ4
+MzNlODZlMDYwZmUyZmY2MTMzCgpCZXN0IHJlZ2FyZHMsCgpKdWxpZW4uCl9fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QK
+YnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxt
+YW4vbGlzdGluZm8vYnVpbGRyb290Cg==
