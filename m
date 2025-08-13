@@ -4,48 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F6FFCA0EE0
-	for <buildroot@archiver.kernel.org>; Wed, 13 Aug 2025 14:36:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A838CA0EE0
+	for <buildroot@archiver.kernel.org>; Wed, 13 Aug 2025 14:37:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B84C940BCC;
-	Wed, 13 Aug 2025 14:36:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5879940EE4;
+	Wed, 13 Aug 2025 14:37:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gcBoLf1cLTZR; Wed, 13 Aug 2025 14:36:36 +0000 (UTC)
+ id tAzl2C6XGjn8; Wed, 13 Aug 2025 14:37:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8BDB240BB9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B73340E9E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8BDB240BB9;
-	Wed, 13 Aug 2025 14:36:36 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id D7D421C9
- for <buildroot@buildroot.org>; Wed, 13 Aug 2025 14:36:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7B73340E9E;
+	Wed, 13 Aug 2025 14:37:54 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 18739938
+ for <buildroot@buildroot.org>; Wed, 13 Aug 2025 14:37:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B676840BAD
- for <buildroot@buildroot.org>; Wed, 13 Aug 2025 14:36:34 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id F2755607FC
+ for <buildroot@buildroot.org>; Wed, 13 Aug 2025 14:37:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LKump3eY-Vbw for <buildroot@buildroot.org>;
- Wed, 13 Aug 2025 14:36:33 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0FCC840A8F
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0FCC840A8F
- for <buildroot@buildroot.org>; Wed, 13 Aug 2025 14:36:33 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EDA0587550; Wed, 13 Aug 2025 14:36:32 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 13 Aug 2025 16:15:04 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 802d0930602fe8fef6bc9f021760b3da9ab8650e
-X-Git-Newrev: b1dd235ad0dd91e1919a167a17cc9cd20a3695b2
-X-Patchwork-Hint: ignore
-Message-Id: <20250813143632.EDA0587550@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gcc: bump 15.x series to 15.2.0
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0qAqg5ItifkK for <buildroot@buildroot.org>;
+ Wed, 13 Aug 2025 14:37:52 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D9C70607A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D9C70607A7
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D9C70607A7
+ for <buildroot@buildroot.org>; Wed, 13 Aug 2025 14:37:51 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id E0B3C13F8AE;
+ Wed, 13 Aug 2025 16:37:44 +0200 (CEST)
+Received: from 2001:18c0:a22:bf00:5c2b:f296:f108:6612
+ via 2001:18c0:a22:bf00:5c2b:f296:f108:6612 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Wed, 13 Aug 2025 16:37:44 +0200
+MIME-Version: 1.0
+Date: Wed, 13 Aug 2025 16:37:44 +0200
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org, Giulio Benetti
+ <giulio.benetti@benettiengineering.com>, Romain Naour
+ <romain.naour@gmail.com>
+In-Reply-To: <20250812214238.2398115-1-thomas.petazzoni@bootlin.com>
+References: <20250812214238.2398115-1-thomas.petazzoni@bootlin.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <53d4b5abca67c5d5a2e3b4a416d714fd@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1755095868;
+ bh=5pOwQShWNlqazmVKgYQ35qmj9oy0JGVfQGZslVMnz/4=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=ux+IEpf8udxmcbiM7y+1s1/ARCbrsVjlMMut8mtmt445U6nbB75um0nJxgLSSLlp7
+ XuaqJroOOVz6Je1bJwH5posutyk1p09E5F9VWpVo+/WVDSEVbdKNorswSyLrYzSlRo
+ mZbwRdxwyE0cqVkCbFZhGLW7zTs9zQsJFjmLQOlI1eXsK01htxrKBT6hZzd8TzwUi+
+ kW81JLRVKR+6FFRi1R06ML+lF5APfzSRUPTn6sRm+TwK8j9VDSUz2AASEeiW/TEVxj
+ 5J3VY5vm77ZIh7Iyh//EKJt+gUAISxc8adLmJG0d7yrTIjUcN6atTuHQ2NIPfykZLk
+ vcfLOYdKQOcBQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=ux+IEpf8
+Subject: Re: [Buildroot] [PATCH] package/gcc: bump 15.x series to 15.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,232 +84,39 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b1dd235ad0dd91e1919a167a17cc9cd20a3695b2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 12/08/2025 23:42, Thomas Petazzoni via buildroot wrote:
+> Announcement:
+> https://gcc.gnu.org/pipermail/gcc-announce/2025/000189.html
+> 
+> GCC 15.2 is a bug-fix release from the GCC 15 branch
+> containing important fixes for regressions and serious bugs in
+> GCC 15.1 with more than 123 bugs fixed since the previous release.
+> 
+> One patch is renamed to match the filename generated by "git
+> format-patch" out of the box.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+> Considering that this is a bugfix only release and that 15.x is not
+> the default GCC version in Buildroot for the 2025.08 release, I would
+> believe this patch should be considered for the 2025.08 release, even
+> though technically this is a version bump.
 
-Announcement:
-https://gcc.gnu.org/pipermail/gcc-announce/2025/000189.html
+Since this bump is indeed a bugfix only, I applied it on master.
+Thanks.
 
-GCC 15.2 is a bug-fix release from the GCC 15 branch
-containing important fixes for regressions and serious bugs in
-GCC 15.1 with more than 123 bugs fixed since the previous release.
-
-For the list of bugs fixed in this version, see:
+For the record, I added in the commit log a link to the list
+of bugs fixed in this release:
 https://gcc.gnu.org/gcc-15/changes.html#15.2
 
-One patch is renamed to match the filename generated by "git
-format-patch" out of the box.
+Best regards,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-[Julien: add link to the bug list in commit log]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- .checkpackageignore                                |  2 +-
- ...disable-split-stack-for-non-thread-builds.patch |  4 ++--
- ...nhance-support-for-atomics.-Fix-PR118280.patch} | 22 +++++++++++-----------
- ...3-gcc-config-microblaze-fix-ira-for-GCC15.patch |  8 ++++----
- package/gcc/Config.in.host                         |  2 +-
- package/gcc/gcc.hash                               |  4 ++--
- 6 files changed, 21 insertions(+), 21 deletions(-)
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 7697fd2ea1..c9e30cf5f1 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -475,7 +475,7 @@ package/fxdiv/0001-CMake-don-t-enable-CXX-unless-building-tests-benchma.patch li
- package/fxload/0001-fix-static-build.patch lib_patch.Upstream
- package/gcc/13.4.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
- package/gcc/14.3.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
--package/gcc/15.1.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
-+package/gcc/15.2.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
- package/gcc/8.4.0/0001-xtensa-fix-PR-target-91880.patch lib_patch.Upstream
- package/gcc/8.4.0/0002-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch lib_patch.Upstream
- package/gcc/8.4.0/0003-libsanitizer-Remove-cyclades-from-libsanitizer.patch lib_patch.Upstream
-diff --git a/package/gcc/15.1.0/0001-disable-split-stack-for-non-thread-builds.patch b/package/gcc/15.2.0/0001-disable-split-stack-for-non-thread-builds.patch
-similarity index 91%
-rename from package/gcc/15.1.0/0001-disable-split-stack-for-non-thread-builds.patch
-rename to package/gcc/15.2.0/0001-disable-split-stack-for-non-thread-builds.patch
-index 052c31cf04..c3b600cfb8 100644
---- a/package/gcc/15.1.0/0001-disable-split-stack-for-non-thread-builds.patch
-+++ b/package/gcc/15.2.0/0001-disable-split-stack-for-non-thread-builds.patch
-@@ -1,4 +1,4 @@
--From d5fe709ddf2ba97ed94ea8339655230322456d1b Mon Sep 17 00:00:00 2001
-+From 7d5f59e035341430e20f47420535d0e987516e55 Mon Sep 17 00:00:00 2001
- From: Waldemar Brodkorb <wbx@openadk.org>
- Date: Mon, 25 Jul 2022 00:29:55 +0200
- Subject: [PATCH] disable split-stack for non-thread builds
-@@ -22,5 +22,5 @@ index cc0366b4cd8..f3f97e86d60 100644
-  LIB2ADD_ST += $(srcdir)/generic-morestack.c $(srcdir)/generic-morestack-thread.c
- +endif
- -- 
--2.49.0
-+2.50.1
- 
-diff --git a/package/gcc/15.1.0/0002-microblaze-add-atomic-test-and-set-support.patch b/package/gcc/15.2.0/0002-MicroBlaze-Enhance-support-for-atomics.-Fix-PR118280.patch
-similarity index 96%
-rename from package/gcc/15.1.0/0002-microblaze-add-atomic-test-and-set-support.patch
-rename to package/gcc/15.2.0/0002-MicroBlaze-Enhance-support-for-atomics.-Fix-PR118280.patch
-index db6aefaef2..958339bf6c 100644
---- a/package/gcc/15.1.0/0002-microblaze-add-atomic-test-and-set-support.patch
-+++ b/package/gcc/15.2.0/0002-MicroBlaze-Enhance-support-for-atomics.-Fix-PR118280.patch
-@@ -1,4 +1,4 @@
--From cd01b277c4a9e03c83427290228e4b289a169431 Mon Sep 17 00:00:00 2001
-+From f14e0b13a5abbc15b4b3b4c0c6a125bbb0509465 Mon Sep 17 00:00:00 2001
- From: Gopi Kumar Bulusu <gopi@sankhya.com>
- Date: Thu, 10 Jul 2025 12:44:44 +0530
- Subject: [PATCH] MicroBlaze : Enhance support for atomics. Fix PR118280
-@@ -39,7 +39,7 @@ new file mode 100644
- index 00000000000..2ffc2422a0a
- --- /dev/null
- +++ b/gcc/config/microblaze/iterators.md
--@@ -0,0 +1,25 @@ 
-+@@ -0,0 +1,25 @@
- +;; Iterator definitions for GCC MicroBlaze machine description files.
- +;; Copyright (C) 2012-2024 Free Software Foundation, Inc.
- +;;
-@@ -69,7 +69,7 @@ diff --git a/gcc/config/microblaze/microblaze-protos.h b/gcc/config/microblaze/m
- index 90b79cfe716..1cee0b3096c 100644
- --- a/gcc/config/microblaze/microblaze-protos.h
- +++ b/gcc/config/microblaze/microblaze-protos.h
--@@ -62,6 +62,7 @@  extern int symbol_mentioned_p (rtx);
-+@@ -62,6 +62,7 @@ extern int symbol_mentioned_p (rtx);
-  extern int label_mentioned_p (rtx);
-  extern bool microblaze_cannot_force_const_mem (machine_mode, rtx);
-  extern void microblaze_eh_return (rtx op0);
-@@ -78,10 +78,10 @@ index 90b79cfe716..1cee0b3096c 100644
-  
-  /* Declare functions in microblaze-c.cc.  */
- diff --git a/gcc/config/microblaze/microblaze.cc b/gcc/config/microblaze/microblaze.cc
--index 2ab5ada4ec9..80d10ab60e0 100644
-+index 4b7f0a1a5e0..78b9428ef3b 100644
- --- a/gcc/config/microblaze/microblaze.cc
- +++ b/gcc/config/microblaze/microblaze.cc
--@@ -1299,6 +1299,34 @@  microblaze_expand_block_move (rtx dest, rtx src, rtx length, rtx align_rtx)
-+@@ -1300,6 +1300,34 @@ microblaze_expand_block_move (rtx dest, rtx src, rtx length, rtx align_rtx)
-    return false;
-  }
-  
-@@ -120,7 +120,7 @@ diff --git a/gcc/config/microblaze/microblaze.h b/gcc/config/microblaze/microbla
- index 2390542434b..b2e9ccde363 100644
- --- a/gcc/config/microblaze/microblaze.h
- +++ b/gcc/config/microblaze/microblaze.h
--@@ -57,7 +57,7 @@  extern enum pipeline_type microblaze_pipe;
-+@@ -57,7 +57,7 @@ extern enum pipeline_type microblaze_pipe;
-  
-  /* Default target_flags if no switches are specified  */
-  #define TARGET_DEFAULT      (MASK_SOFT_MUL | MASK_SOFT_DIV | MASK_SOFT_FLOAT \
-@@ -133,7 +133,7 @@ diff --git a/gcc/config/microblaze/microblaze.md b/gcc/config/microblaze/microbl
- index 45c48a71e8d..270df8da0c5 100644
- --- a/gcc/config/microblaze/microblaze.md
- +++ b/gcc/config/microblaze/microblaze.md
--@@ -21,6 +21,7 @@ 
-+@@ -21,6 +21,7 @@
-  
-  (include "constraints.md")
-  (include "predicates.md")
-@@ -141,7 +141,7 @@ index 45c48a71e8d..270df8da0c5 100644
-  
-  ;;----------------------------------------------------
-  ;; Constants
--@@ -43,6 +44,10 @@ 
-+@@ -43,6 +44,10 @@
-    (UNSPEC_TLS           106)    ;; jump table
-    (UNSPEC_SET_TEXT      107)    ;; set text start
-    (UNSPEC_TEXT          108)    ;; data text relative
-@@ -152,7 +152,7 @@ index 45c48a71e8d..270df8da0c5 100644
-  ])
-  
-  (define_c_enum "unspec" [
--@@ -79,7 +84,7 @@ 
-+@@ -79,7 +84,7 @@
-  ;; bshift 	Shift operations
-  
-  (define_attr "type"
-@@ -165,7 +165,7 @@ diff --git a/gcc/config/microblaze/sync.md b/gcc/config/microblaze/sync.md
- index db7b11e5379..6478ab6dcac 100644
- --- a/gcc/config/microblaze/sync.md
- +++ b/gcc/config/microblaze/sync.md
--@@ -18,26 +18,97 @@ 
-+@@ -18,26 +18,97 @@
-  ;; <http://www.gnu.org/licenses/>.
-  
-  (define_insn "atomic_compare_and_swapsi"
-@@ -282,5 +282,5 @@ index db7b11e5379..6478ab6dcac 100644
- +  DONE;
- +})
- -- 
--2.43.5
-+2.50.1
- 
-diff --git a/package/gcc/15.1.0/0003-gcc-config-microblaze-fix-ira-for-GCC15.patch b/package/gcc/15.2.0/0003-gcc-config-microblaze-fix-ira-for-GCC15.patch
-similarity index 89%
-rename from package/gcc/15.1.0/0003-gcc-config-microblaze-fix-ira-for-GCC15.patch
-rename to package/gcc/15.2.0/0003-gcc-config-microblaze-fix-ira-for-GCC15.patch
-index 6a1e5cf31a..663aab7218 100644
---- a/package/gcc/15.1.0/0003-gcc-config-microblaze-fix-ira-for-GCC15.patch
-+++ b/package/gcc/15.2.0/0003-gcc-config-microblaze-fix-ira-for-GCC15.patch
-@@ -1,4 +1,4 @@
--From b6163bbd898e2462455998d5d38fe1463e70ca66 Mon Sep 17 00:00:00 2001
-+From d2fdbd8c4abe67eea86877dfb3b3b9d8508c165f Mon Sep 17 00:00:00 2001
- From: Romain Naour <romain.naour@gmail.com>
- Date: Wed, 6 Aug 2025 22:32:30 +0200
- Subject: [PATCH] gcc/config/microblaze: fix ira for GCC15
-@@ -23,10 +23,10 @@ Signed-off-by: Romain Naour <romain.naour@gmail.com>
-  1 file changed, 11 insertions(+)
- 
- diff --git a/gcc/config/microblaze/microblaze.cc b/gcc/config/microblaze/microblaze.cc
--index 4b7f0a1a5e0..3710755ae8d 100644
-+index 78b9428ef3b..84ea7e8d55a 100644
- --- a/gcc/config/microblaze/microblaze.cc
- +++ b/gcc/config/microblaze/microblaze.cc
--@@ -3200,6 +3200,14 @@ microblaze_secondary_reload (bool in_p ATTRIBUTE_UNUSED, rtx x ATTRIBUTE_UNUSED,
-+@@ -3228,6 +3228,14 @@ microblaze_secondary_reload (bool in_p ATTRIBUTE_UNUSED, rtx x ATTRIBUTE_UNUSED,
-    return NO_REGS;
-  }
-  
-@@ -41,7 +41,7 @@ index 4b7f0a1a5e0..3710755ae8d 100644
-  static void
-  microblaze_globalize_label (FILE * stream, const char *name)
-  {
--@@ -4038,6 +4046,9 @@ microblaze_starting_frame_offset (void)
-+@@ -4066,6 +4074,9 @@ microblaze_starting_frame_offset (void)
-  #undef TARGET_SECONDARY_RELOAD
-  #define TARGET_SECONDARY_RELOAD		microblaze_secondary_reload
-  
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index f90f7c499d..21581487df 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -70,7 +70,7 @@ config BR2_GCC_VERSION
- 	default "8.4.0"     if BR2_GCC_VERSION_POWERPC_SPE
- 	default "13.4.0"    if BR2_GCC_VERSION_13_X
- 	default "14.3.0"    if BR2_GCC_VERSION_14_X
--	default "15.1.0"    if BR2_GCC_VERSION_15_X
-+	default "15.2.0"    if BR2_GCC_VERSION_15_X
- 	default "arc-2024.12-release" if BR2_GCC_VERSION_ARC
- 
- config BR2_EXTRA_GCC_CONFIG_OPTIONS
-diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
-index 5ccbd81122..deb7c40fa3 100644
---- a/package/gcc/gcc.hash
-+++ b/package/gcc/gcc.hash
-@@ -4,8 +4,8 @@ sha512  6de904f552a02de33b11ef52312bb664396efd7e1ce3bbe37bfad5ef617f133095b3767b
- sha512  9b4b83ecf51ef355b868608b8d257b2fa435c06d2719cb86657a7c2c2a0828ff4ce04e9bac1055bbcad8ed5b4da524cafaef654785e23a50233d95d89201e35f  gcc-13.4.0.tar.xz
- # From https://gcc.gnu.org/pub/gcc/releases/gcc-14.3.0/sha512.sum
- sha512  cb4e3259640721bbd275c723fe4df53d12f9b1673afb3db274c22c6aa457865dccf2d6ea20b4fd4c591f6152e6d4b87516c402015900f06ce9d43af66d3b7a93  gcc-14.3.0.tar.xz
--# From https://gcc.gnu.org/pub/gcc/releases/gcc-15.1.0/sha512.sum
--sha512  ddd35ca6c653dffa88f7c7ef9ee4cd806e156e0f3b30f4d63e75a8363361285cd566ee73127734cde6a934611de815bee3e32e24bfd2e0ab9f7ff35c929821c1  gcc-15.1.0.tar.xz
-+# From https://gcc.gnu.org/pub/gcc/releases/gcc-15.2.0/sha512.sum
-+sha512  89047a2e07bd9da265b507b516ed3635adb17491c7f4f67cf090f0bd5b3fc7f2ee6e4cc4008beef7ca884b6b71dffe2bb652b21f01a702e17b468cca2d10b2de  gcc-15.2.0.tar.xz
- 
- # Locally calculated (fetched from Github)
- sha512  7f08ae335d9112be65e92c3744c095d8fa265994b8282274948f99fe37409531e627e6dadfb77b138a82fa09d012c56d8c075b482a5a5186814a57f9db63c29e  gcc-arc-2024.12-release.tar.gz
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
