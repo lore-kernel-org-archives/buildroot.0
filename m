@@ -4,79 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBAE2C87FCF
-	for <buildroot@archiver.kernel.org>; Wed, 13 Aug 2025 10:33:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 715EDC87FCF
+	for <buildroot@archiver.kernel.org>; Wed, 13 Aug 2025 10:44:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A9DDC8184F;
-	Wed, 13 Aug 2025 10:33:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 294BB82143;
+	Wed, 13 Aug 2025 10:44:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5jq9WFkjhD7r; Wed, 13 Aug 2025 10:33:42 +0000 (UTC)
+ id RxDwp5rvTOia; Wed, 13 Aug 2025 10:43:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B42EE8186A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3033181FA8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B42EE8186A;
-	Wed, 13 Aug 2025 10:33:42 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id E0C251B5
- for <buildroot@buildroot.org>; Wed, 13 Aug 2025 10:33:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3033181FA8;
+	Wed, 13 Aug 2025 10:43:59 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id A1C0F938
+ for <buildroot@buildroot.org>; Wed, 13 Aug 2025 10:43:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C75AD8184F
- for <buildroot@buildroot.org>; Wed, 13 Aug 2025 10:33:41 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 93D6781FA8
+ for <buildroot@buildroot.org>; Wed, 13 Aug 2025 10:43:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id u4dRg0jTbDkA for <buildroot@buildroot.org>;
- Wed, 13 Aug 2025 10:33:41 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
- helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id GK-YTVm4y43B for <buildroot@buildroot.org>;
+ Wed, 13 Aug 2025 10:43:57 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
+ helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9ACA5817C0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9ACA5817C0
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9ACA5817C0
- for <buildroot@buildroot.org>; Wed, 13 Aug 2025 10:33:40 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 30901443AF;
- Wed, 13 Aug 2025 10:33:35 +0000 (UTC)
-Date: Wed, 13 Aug 2025 12:33:35 +0200
-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Message-ID: <20250813123335.3c421094@windsurf>
-In-Reply-To: <20250813102024.3d15c0c6@booty>
-References: <20250617205801.2440300-1-neal.frager@amd.com>
- <20250709170840.347d5738@booty>
- <SA1PR12MB5615E50A2137A428191E355FF049A@SA1PR12MB5615.namprd12.prod.outlook.com>
- <20250813102024.3d15c0c6@booty>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 96ADA80FFB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 96ADA80FFB
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 96ADA80FFB
+ for <buildroot@buildroot.org>; Wed, 13 Aug 2025 10:43:57 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5BFD04321C;
+ Wed, 13 Aug 2025 10:43:54 +0000 (UTC)
+Date: Wed, 13 Aug 2025 12:43:53 +0200
+To: Alexis =?UTF-8?B?TG90aG9yw6k=?= <alexis.lothore@bootlin.com>
+Cc: "Romain Naour" <romain.naour@smile.fr>, <buildroot@buildroot.org>,
+ =?UTF-8?B?SGVydsOp?= Codina <herve.codina@bootlin.com>, "Nicolas Carrier"
+ <nicolas.carrier@nav-timing.safrangroup.com>
+Message-ID: <20250813124353.4015c466@windsurf>
+In-Reply-To: <DBZCJ6MUT01E.IED2BZIAW291@bootlin.com>
+References: <20250806-php-lua-v2-1-a73faad939e9@bootlin.com>
+ <e0045fd1-40e1-4af8-8031-9e051aff6833@smile.fr>
+ <DBZCJ6MUT01E.IED2BZIAW291@bootlin.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-State: clean
 X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddufeejleekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepledtgedvjeehgeetgfeufffglefhkedvfeduveeiieelteeliedtfefguefggffhnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtudemtggsudekmeekieegugemvddutddtmegrtddtfhemheelsgefmeegfhdvmeeifegusgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudekmeekieegugemvddutddtmegrtddtfhemheelsgefmeegfhdvmeeifegusgdphhgvlhhopeifihhnughsuhhrfhdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepuddupdhrtghpthhtoheplhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomhdprhgtphhtthhopehnvggrlhdrfhhrrghgvghrsegrmhgurdgtohhmpdhrtghpthhtoheprghrn
- hhouhhtsehrnhhouhhtrdgsvgdprhgtphhtthhopehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmpdhrtghpthhtoheprhhomhgrihhnrdhnrghouhhrsehsmhhilhgvrdhfrhdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtohepmhhitghhrghlrdhsihhmvghksegrmhgurdgtohhmpdhrtghpthhtohepjhhurdhosehfrhgvvgdrfhhr
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddufeektddtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtqhertdertdejnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnheptedthfehjeegffevteeuteetheekkeevudeuleegfedvkedvueetudduudekgeevnecuffhomhgrihhnpehgihhthhhusgdrtghomhdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegtsgdukeemkeeigegumedvuddttdemrgdttdhfmeehlegsfeemgehfvdemieefuggsnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgdukeemkeeigegumedvuddttdemrgdttdhfmeehlegsfeemgehfvdemieefuggspdhhvghlohepfihinhgushhurhhfpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheprghlvgigihhsrdhlohhthhhorhgvsegsohhothhlihhnrdgtohhmpdhrtghpthhtoheprhhomhgrihhnrdhnrghouhhrsehsmhhilhgvr
+ dhfrhdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtohephhgvrhhvvgdrtghoughinhgrsegsohhothhlihhnrdgtohhmpdhrtghpthhtohepnhhitgholhgrshdrtggrrhhrihgvrhesnhgrvhdqthhimhhinhhgrdhsrghfrhgrnhhgrhhouhhprdgtohhm
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1755081217;
+ d=bootlin.com; s=gm1; t=1755081834;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=no5OInC71PRzz8MjFaj3WTrMTI32PpzOLemuam45W4I=;
- b=CjpvV8o3u+WQfbdsz3ZoAO2/XL07cufxwMQgx/JBAo6EtdstCOoj19AnfnX2uuVmO2avfK
- kUD+iP/iz4bpZ2UsA47DMpslc3pMPDxusNG1Dx5Ymja+NekjtrHE1DizVm8ZtmRDpYFOkK
- L5R5v/MBcN/YBnleR4bvtoDuY5ny317MUwQGWo6C1d6YePbK4GuwnJlVjyCVNX8C7squEK
- RTCd4lQd8j70D8sluyw0COiv7azXEqcxiMaRROTvOQzaIpvPdt6tcnJQos4FID4nsZi2M0
- z0/HpV2sDTLvsRvEmrnmg3fAU6va/gh5cSAIYSKdqSUwiOLTptLNRhED7INXGA==
+ bh=g5PqPjGkd19W1TcwNUdA9tRhT8pbZ/n5E9x9+xifXd8=;
+ b=ZFOPiNrtbhT+cy96XTjnvb87Szqtjfid84ggHp6IdDQyPis0a+0/plC7qIQApbAoNQ1xEl
+ jIxkZeIDWQ8IZfvwL/MrA9Gwuinj2+Yg31ARXbLgJA0tBOIOFhyFnGunHTYa7OASd8mIcS
+ loy6gQFQbevcF2DA5Wd8bhm8kvSEkr7nC6Avl0ZtJ5UnueY/sZ+/aEeM7cvtbRxGqCN4yK
+ zGIARhEVtT+lE3KTsnnZdhm3qHTIrMKDMmd1RUQ7KqTnCtDfvG2YtIhNBNQRsMd9bgQJBY
+ kBVI7PPIRy7JNOeLBW5WjRT3iWgXY83/isAYZu1awP84ZLefY+QB9zVhJCpjYQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=CjpvV8o3
-Subject: Re: [Buildroot] [PATCH v1 1/1] boot/xilinx-embeddedsw: add family
- variant choice
+ header.s=gm1 header.b=ZFOPiNrt
+Subject: Re: [Buildroot] [PATCH v2] package/php-lua: fix build with
+ PHP8/GCC14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -90,55 +92,22 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: "Erkiaga Elorza, Ibai" <ibai.erkiaga-elorza@amd.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>,
- "brandon.maier@collins.com" <brandon.maier@collins.com>,
- "ju.o@free.fr" <ju.o@free.fr>, "Frager, Neal" <neal.frager@amd.com>,
- "romain.naour@smile.fr" <romain.naour@smile.fr>, "Simek,
- Michal" <michal.simek@amd.com>,
- "romain.naour@gmail.com" <romain.naour@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 13 Aug 2025 10:20:24 +0200
-Luca Ceresoli <luca.ceresoli@bootlin.com> wrote:
-
-> > Perhaps a global SoC family definition for bootloaders could make sense.  
-> 
-> For the need discussed in this thread, a shortcut was found based on
-> the fortunate coincidence that all SoC families impacted by
-> xilinx-embeddedsw are based on a different CPU core (a72, a53...).
-> However this is not necessarily happening in similar future use cases.
-> 
-> So I'm raising this topic to the attention of core Buildroot developers
-> as the next Buildroot Developer Days are coming in a short time. Some
-> discussion there may be useful to bring ideas and opinions about how to
-> handle such SoC-family-specific differentiation within packages ina
-> generic way.
-
-I haven't followed the whole discussion. We do already have some SoC
-selection for i.MX platforms somewhere in package/freescale-imx/.
-
-I am a bit balanced with this idea of having a top-level SoC selection.
-On one hand it would indeed help to show/not show relevant packages. On
-the other hand, people will think "my SoC is not in this list, so
-Buildroot doesn't support it" just like people already think "there is
-no defconfig in Buildroot, so Buildroot doesn't support my platform".
-Also, it would be a quite long list to maintain. So I'm not fully
-against, but I'm not super sold to it as well.
-
-So far on the bootloaders side, I believe what matters is appropriate
-help text describing for which platform a given package is designed, if
-it's a platform-specific package.
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gTW9uLCAxMSBBdWcgMjAyNSAwNzoyNDowNyArMDIwMApBbGV4aXMgTG90aG9yw6kgPGFsZXhp
+cy5sb3Rob3JlQGJvb3RsaW4uY29tPiB3cm90ZToKCj4gPiBDaGVjay1wYWNrYWdlIHdhcm4gYWJv
+dXQgbWlzc2luZyAiVXBzdHJlYW06IiBsaW5rLgo+ID4KPiA+IFNpbmNlIHRoZSBwYXRjaCBjb21l
+IGZyb20gYSBmb3JrLCB1c2luZyAiVXBzdHJlYW0iIGxvb2tzIHdyb25nIGhlcmUuCj4gPiBNYXli
+ZSBVcHN0cmVhbTogbi9hID8gIAo+IAo+IFN1cmUsIEkgY2FuIGFkZCB0aGlzIGVtcHR5IFVwc3Ry
+ZWFtIGluIHRoZSBuZXh0IHJldmlzaW9uLgoKSSBkb24ndCB0aGluayAiVXBzdHJlYW06IG4vYSIg
+aXMgdmVyeSB1c2VmdWwuCgpJbiBmYWN0LCBzb21ldGhpbmcgbGlrZToKClVwc3RyZWFtOiB1cHN0
+cmVhbSBkZWFkLCB0YWtlbiBmcm9tIGZvcmsgYXQgaHR0cHM6Ly9naXRodWIuY29tL2JhZG9vL3Bo
+cC1sdWEvcHVsbC84CgppcyBJTU8gYSBsb3QgbW9yZSB1c2VmdWwuCgpUaG9tYXMKLS0gClRob21h
+cyBQZXRhenpvbmksIGNvLW93bmVyIGFuZCBDRU8sIEJvb3RsaW4KRW1iZWRkZWQgTGludXggYW5k
+IEtlcm5lbCBlbmdpbmVlcmluZyBhbmQgdHJhaW5pbmcKaHR0cHM6Ly9ib290bGluLmNvbQpfX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFp
+bGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290
+Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
