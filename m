@@ -4,86 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06044C87FCF
-	for <buildroot@archiver.kernel.org>; Wed, 13 Aug 2025 08:25:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77147CA0EE0
+	for <buildroot@archiver.kernel.org>; Wed, 13 Aug 2025 08:33:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C514C40F94;
-	Wed, 13 Aug 2025 08:25:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 476DE405FB;
+	Wed, 13 Aug 2025 08:33:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p4as2PeAnlas; Wed, 13 Aug 2025 08:25:27 +0000 (UTC)
+ id OIC3yM0bK9Y6; Wed, 13 Aug 2025 08:33:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EDD3C41060
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6ADCD4063E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EDD3C41060;
-	Wed, 13 Aug 2025 08:25:26 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id E5D43938
- for <buildroot@buildroot.org>; Wed, 13 Aug 2025 08:25:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6ADCD4063E;
+	Wed, 13 Aug 2025 08:33:36 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 58AB3938
+ for <buildroot@buildroot.org>; Wed, 13 Aug 2025 08:33:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D6FB44120D
- for <buildroot@buildroot.org>; Wed, 13 Aug 2025 08:25:25 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4A6EA60719
+ for <buildroot@buildroot.org>; Wed, 13 Aug 2025 08:33:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QZhdkV2dEC85 for <buildroot@buildroot.org>;
- Wed, 13 Aug 2025 08:25:24 +0000 (UTC)
-X-Greylist: delayed 408 seconds by postgrey-1.37 at util1.osuosl.org;
- Wed, 13 Aug 2025 08:25:23 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org DD16C41060
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD16C41060
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=46.105.34.113;
- helo=3.mo581.mail-out.ovh.net; envelope-from=sebastien.tisserand@armadeus.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qo0tM7krqRhk for <buildroot@buildroot.org>;
+ Wed, 13 Aug 2025 08:33:34 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.178.249;
+ helo=mslow3.mail.gandi.net; envelope-from=luca.ceresoli@bootlin.com;
  receiver=<UNKNOWN> 
-Received: from 3.mo581.mail-out.ovh.net (3.mo581.mail-out.ovh.net
- [46.105.34.113])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DD16C41060
- for <buildroot@buildroot.org>; Wed, 13 Aug 2025 08:25:23 +0000 (UTC)
-Received: from director8.ghost.mail-out.ovh.net (unknown [10.110.58.120])
- by mo581.mail-out.ovh.net (Postfix) with ESMTP id 4c21V058xJz6SlL
- for <buildroot@buildroot.org>; Wed, 13 Aug 2025 08:18:32 +0000 (UTC)
-Received: from ghost-submission-5b5ff79f4f-gbd4g (unknown [10.108.42.201])
- by director8.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 189BDC023B;
- Wed, 13 Aug 2025 08:18:32 +0000 (UTC)
-Received: from armadeus.com ([37.59.142.113])
- by ghost-submission-5b5ff79f4f-gbd4g with ESMTPSA
- id PY+uMVdKnGgBLAAAuE9Nhw
- (envelope-from <sebastien.tisserand@armadeus.com>);
- Wed, 13 Aug 2025 08:18:31 +0000
-X-OVh-ClientIp: 82.66.61.158
-From: =?UTF-8?q?S=C3=A9bastien=20Tisserand?= <sebastien.tisserand@armadeus.com>
-To: buildroot@buildroot.org
-Date: Wed, 13 Aug 2025 10:18:13 +0200
-Message-ID: <20250813081813.4475-1-sebastien.tisserand@armadeus.com>
-X-Mailer: git-send-email 2.43.0
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4634E60655
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4634E60655
+Received: from mslow3.mail.gandi.net (mslow3.mail.gandi.net [217.70.178.249])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4634E60655
+ for <buildroot@buildroot.org>; Wed, 13 Aug 2025 08:33:33 +0000 (UTC)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by mslow3.mail.gandi.net (Postfix) with ESMTP id E5840583871
+ for <buildroot@buildroot.org>; Wed, 13 Aug 2025 08:13:39 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7E43E41C06;
+ Wed, 13 Aug 2025 08:13:31 +0000 (UTC)
+Date: Wed, 13 Aug 2025 10:13:29 +0200
+To: Neal Frager <neal.frager@amd.com>
+Message-ID: <20250813101329.1b28d58b@booty>
+In-Reply-To: <20250727112633.3245247-1-neal.frager@amd.com>
+References: <20250727112633.3245247-1-neal.frager@amd.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-Ovh-Tracer-Id: 5357031758475097846
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddufeejjeduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkofggtgfgsehtkeertdertdejnecuhfhrohhmpefurogsrghsthhivghnucfvihhsshgvrhgrnhguuceoshgvsggrshhtihgvnhdrthhishhsvghrrghnugesrghrmhgruggvuhhsrdgtohhmqeenucggtffrrghtthgvrhhnpeeivddtffevteejteeuvddvhefgkedvjeejtddvvdevhfelhedvtdetudevtdefieenucffohhmrghinhepshhighhmrgdqtghhvghmnhhithiirdguvgenucfkphepuddvjedrtddrtddruddpkedvrdeiiedriedurdduheekpdefjedrheelrddugedvrdduudefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpehsvggsrghsthhivghnrdhtihhsshgvrhgrnhgusegrrhhmrgguvghushdrtghomhdpnhgspghrtghpthhtohepuddprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdfovfetjfhoshhtpehmohehkedumgdpmhhouggvpehsmhhtphhouhht
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- bh=sRoz7xvfEflmSxS1OVovuieVcM1lmkxdVnTUTcv4Sqk=; 
- c=relaxed/relaxed; d=armadeus.com; h=From; s=ovhmo103079-selector1;
- t=1755073112; v=1;
- b=WJW1977MabfkIgRRMyUJ+0UwPOZlnNV5O6Z+Nk15lUtFydbCZ3oFsfOXDhKq+/uNnB1iQ5sh
- mTPf0Uv4VA+G23Vr7mgOuES+OPlFoacsHTMAZONyOXirIcuniTgYw1pdX0e8/OssUBlvOEnuefM
- jjKsmV/AjYfFaXgPUq6Oe5XijkpUVxAWcvf0FEoNvlnc/G3irwwLKMeVZDv0KDOSZpZurryDT1Y
- pO5bIZ4CvUAp0KQUhdZC8c/QLYDGf1g0sObFiHChZbHAuhED3+aLZLupfAydQD4jaX15ruiRdyf
- ecoLNkElGCWTWOkhFvB+jq2sD68FIOKW6Xf2EburJvGyQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=armadeus.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddufeejjedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefnuhgtrgcuvegvrhgvshholhhiuceolhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepgeelffefgfehhfdtvdefueefieevkefggfelkeeiudetkeektedvhedukefgvddvnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtvdemieejtdemvddtvddtmegvrgdtudemsggvgedumeelhegvjeemfeegfeemledufegvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeeijedtmedvtddvtdemvggrtddumegsvgegudemleehvgejmeefgeefmeeludefvgdphhgvlhhopegsohhothihpdhmrghilhhfrhhomheplhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepuddupdhrtghpthhtohepnhgvrghlrdhfrhgrghgvrhesrghmugdrtghomhdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtoheprghrnhhouhhtsehrnhhouhhtrdgsvgdprhgtp
+ hhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdprhgtphhtthhopehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmpdhrtghpthhtohepmhhitghhrghlrdhsihhmvghksegrmhgurdgtohhmpdhrtghpthhtohepjhhurdhosehfrhgvvgdrfhhrpdhrtghpthhtohepsghrrghnughonhdrmhgrihgvrhestgholhhlihhnshdrtghomh
+X-GND-Sasl: luca.ceresoli@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1755072812;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=WgV+jP02ORmKy7WpCLc/WuTzhN2nUtq/8G4ic0sSG8k=;
+ b=hIQw1jkdDDP+6yavBvkC1b8JBr+woYR3VNrNDW4h63MIUU/EnGqEv7Ok87lz/Tp8K3waR9
+ cz8ul7PBrLbRRJ0b17M89MvGRY0DQno/2B9mi+5wu8N3lILagDBuD9TXc3KO/CprQzcvTD
+ y3pNEs78IWatf3zU559Y3s/WXokx71ZHAeLXE6/yngSZP0kkllsgB2Gr4XF5Br7aDIcXPM
+ e02JDERgJPsoqSpQSkcM+bP06HEhuU0STbzqCygNX5JuKW+oGx4E1Gz3ZBwOk1O7ATZVhR
+ upY/DpGHUTlfHF5r3y9KiBvmfXUgufVUHbmY0r48JdErKyPgGSHSeJCITeW7gQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=armadeus.com header.i=@armadeus.com header.a=rsa-sha256
- header.s=ovhmo103079-selector1 header.b=WJW1977M
-X-Mailman-Original-Authentication-Results: garm.ovh; auth=pass
- (GARM-113S007998b1a7e-61a0-499c-ba05-6363354311f1,
- 9E69EF9D757CCE8A4B0CF4546F3487C95A201DA6)
- smtp.auth=sebastien.tisserand@armadeus.com
-Subject: [Buildroot] [PATCH] package/gstreamer1/gst1-plugins-bayer2rgb-neon:
- bump to latest git commit
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=hIQw1jkd
+Subject: Re: [Buildroot] [PATCH v2 1/1] boot/xilinx-embeddedsw: only allow
+ apps for device family
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,50 +88,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?q?S=C3=A9bastien=20Tisserand?= <sebastien.tisserand@armadeus.com>,
- Eloi Bail <eloi.bail@savoirfairelinux.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Luca Ceresoli via buildroot <buildroot@buildroot.org>
+Reply-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc: ibai.erkiaga-elorza@amd.com, buildroot@buildroot.org,
+ brandon.maier@collins.com, ju.o@free.fr, thomas.petazzoni@bootlin.com,
+ romain.naour@smile.fr, michal.simek@amd.com, romain.naour@gmail.com
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-TGFzdGVzdCBnaXQgY29tbWl0IHN1cHBvcnRzIG1vcmUgYmF5ZXIgZm9ybWF0czoKaHR0cHM6Ly9n
-aXRsYWItZXh0LnNpZ21hLWNoZW1uaXR6LmRlL2Vuc2MvZ3N0LWJheWVyMnJnYi1uZW9uLy0vY29t
-bWl0L2I1YWQ3OGExYzZiZmFhM2FkY2U1ZjBmNjk0OTNlZmNjZTEwNmU5NTMKClNpZ25lZC1vZmYt
-Ynk6IFPDqWJhc3RpZW4gVGlzc2VyYW5kIDxzZWJhc3RpZW4udGlzc2VyYW5kQGFybWFkZXVzLmNv
-bT4KLS0tCiAuLi4vZ3N0MS1wbHVnaW5zLWJheWVyMnJnYi1uZW9uLmhhc2ggICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgfCAyICstCiAuLi4vZ3N0MS1wbHVnaW5zLWJheWVyMnJnYi1uZW9uL2dz
-dDEtcGx1Z2lucy1iYXllcjJyZ2ItbmVvbi5tayAgfCAyICstCiAyIGZpbGVzIGNoYW5nZWQsIDIg
-aW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9wYWNrYWdlL2dzdHJl
-YW1lcjEvZ3N0MS1wbHVnaW5zLWJheWVyMnJnYi1uZW9uL2dzdDEtcGx1Z2lucy1iYXllcjJyZ2It
-bmVvbi5oYXNoIGIvcGFja2FnZS9nc3RyZWFtZXIxL2dzdDEtcGx1Z2lucy1iYXllcjJyZ2ItbmVv
-bi9nc3QxLXBsdWdpbnMtYmF5ZXIycmdiLW5lb24uaGFzaAppbmRleCAxZWZhZjY0MjFkLi5lNDk1
-MDYxOTk5IDEwMDY0NAotLS0gYS9wYWNrYWdlL2dzdHJlYW1lcjEvZ3N0MS1wbHVnaW5zLWJheWVy
-MnJnYi1uZW9uL2dzdDEtcGx1Z2lucy1iYXllcjJyZ2ItbmVvbi5oYXNoCisrKyBiL3BhY2thZ2Uv
-Z3N0cmVhbWVyMS9nc3QxLXBsdWdpbnMtYmF5ZXIycmdiLW5lb24vZ3N0MS1wbHVnaW5zLWJheWVy
-MnJnYi1uZW9uLmhhc2gKQEAgLTEsMyArMSwzIEBACiAjIExvY2FsbHkgY2FsY3VsYXRlZAotc2hh
-MjU2ICA2YWU4OWFkZjE5NzllZGY1NzYwYmJmMmZiNTg5ZGNhYTkwNWNmZjU1YmI4MjhlNmIyNzFi
-YzNkMWU0MDNhMTMwICBnc3QxLXBsdWdpbnMtYmF5ZXIycmdiLW5lb24tYjYzMDc5OGVmY2Q2MTE4
-NzllN2NiMWMyNDYwNTJlNWJhMWFjYzQxZC1naXQ0LnRhci5negorc2hhMjU2ICBhOWUyYzllZmIw
-YzI1NWYxNmVkNzVkMjU1NTEyODUxM2JlNTRhYzljMWZjNThiZmZiNDg5MjFiNGViMWY5OTQ1ICBn
-c3QxLXBsdWdpbnMtYmF5ZXIycmdiLW5lb24tN2UwNmFhMzEwODA1YjE2MDBkMTJmMWQzYmIwMDU4
-YWEwMmFiOGY4My1naXQ0LnRhci5negogc2hhMjU2ICA4Y2ViNGI5ZWU1YWRlZGRlNDdiMzFlOTc1
-YzFkOTBjNzNhZDI3YjZiMTY1YTFkY2Q4MGM3YzU0NWViNjViOTAzICBDT1BZSU5HCmRpZmYgLS1n
-aXQgYS9wYWNrYWdlL2dzdHJlYW1lcjEvZ3N0MS1wbHVnaW5zLWJheWVyMnJnYi1uZW9uL2dzdDEt
-cGx1Z2lucy1iYXllcjJyZ2ItbmVvbi5tayBiL3BhY2thZ2UvZ3N0cmVhbWVyMS9nc3QxLXBsdWdp
-bnMtYmF5ZXIycmdiLW5lb24vZ3N0MS1wbHVnaW5zLWJheWVyMnJnYi1uZW9uLm1rCmluZGV4IDBk
-NGFlYWM3ZjUuLmNkZTI1YWQ0NWUgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvZ3N0cmVhbWVyMS9nc3Qx
-LXBsdWdpbnMtYmF5ZXIycmdiLW5lb24vZ3N0MS1wbHVnaW5zLWJheWVyMnJnYi1uZW9uLm1rCisr
-KyBiL3BhY2thZ2UvZ3N0cmVhbWVyMS9nc3QxLXBsdWdpbnMtYmF5ZXIycmdiLW5lb24vZ3N0MS1w
-bHVnaW5zLWJheWVyMnJnYi1uZW9uLm1rCkBAIC00LDcgKzQsNyBAQAogIwogIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMKIAotR1NUMV9QTFVHSU5TX0JBWUVSMlJHQl9ORU9OX1ZFUlNJT04gPSBiNjMw
-Nzk4ZWZjZDYxMTg3OWU3Y2IxYzI0NjA1MmU1YmExYWNjNDFkCitHU1QxX1BMVUdJTlNfQkFZRVIy
-UkdCX05FT05fVkVSU0lPTiA9IDdlMDZhYTMxMDgwNWIxNjAwZDEyZjFkM2JiMDA1OGFhMDJhYjhm
-ODMKIEdTVDFfUExVR0lOU19CQVlFUjJSR0JfTkVPTl9TSVRFID0gaHR0cHM6Ly9naXRsYWItZXh0
-LnNpZ21hLWNoZW1uaXR6LmRlL2Vuc2MvZ3N0LWJheWVyMnJnYi1uZW9uLmdpdAogR1NUMV9QTFVH
-SU5TX0JBWUVSMlJHQl9ORU9OX1NJVEVfTUVUSE9EID0gZ2l0CiBHU1QxX1BMVUdJTlNfQkFZRVIy
-UkdCX05FT05fTElDRU5TRSA9IEdQTC0zLjAKLS0gCjIuNDMuMAoKX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWls
-ZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9s
-aXN0aW5mby9idWlsZHJvb3QK
+Hello Neal,
+
+On Sun, 27 Jul 2025 12:26:33 +0100
+Neal Frager <neal.frager@amd.com> wrote:
+
+> This patch adds an architecture cpu dependency to each application to make
+> sure that users can only build applications which are applicable to their
+> target device family.
+> 
+> The versal_plm and versal_psmfw applications are specific to versal devices
+> which are based on BR2_cortex_a72.
+> 
+> The zynqmp_pmufw application is specific to zynqmp devices which are based on
+> BR2_cortex_a53.
+> 
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
+
+Sorry for the delay -- vacation time and bad luck made this patch
+disappear from my radar.
+
+Looks good, but with this patch and an aarch64 target that is not (a72
+or a53) we can enable xilinx-embeddedsw but all the firmwares are
+hidden. Thus you should add this to your patch:
+
+@@ -1,6 +1,6 @@
+ comment "xilinx-embeddedsw needs a bare metal toolchain for tuple microblazeel-buildroot-elf"
+        depends on BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH != "microblazeel-buildroot-elf"
+-       depends on BR2_aarch64
++       depends on BR2_cortex_a53 || BR2_cortex_a72
+        depends on BR2_TOOLCHAIN_BARE_METAL_BUILDROOT
+
+Luca
+
+-- 
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
