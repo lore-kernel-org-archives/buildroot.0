@@ -4,115 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94E83CA0EC4
-	for <buildroot@archiver.kernel.org>; Wed, 13 Aug 2025 07:52:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCD19CA0EE0
+	for <buildroot@archiver.kernel.org>; Wed, 13 Aug 2025 08:20:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 50F924102B;
-	Wed, 13 Aug 2025 07:52:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 927B641253;
+	Wed, 13 Aug 2025 08:20:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cOk45Jzw4qjq; Wed, 13 Aug 2025 07:52:45 +0000 (UTC)
+ id 9VHmPntBMgyJ; Wed, 13 Aug 2025 08:20:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 821E240FF9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 715B94125A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 821E240FF9;
-	Wed, 13 Aug 2025 07:52:45 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id C5857938
- for <buildroot@buildroot.org>; Wed, 13 Aug 2025 07:52:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 715B94125A;
+	Wed, 13 Aug 2025 08:20:33 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id B7E271B5
+ for <buildroot@buildroot.org>; Wed, 13 Aug 2025 08:20:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id ABC6040112
- for <buildroot@buildroot.org>; Wed, 13 Aug 2025 07:52:44 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9A74F6073F
+ for <buildroot@buildroot.org>; Wed, 13 Aug 2025 08:20:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZJsKaC9xK5Ju for <buildroot@buildroot.org>;
- Wed, 13 Aug 2025 07:52:43 +0000 (UTC)
-X-Greylist: delayed 1103 seconds by postgrey-1.37 at util1.osuosl.org;
- Wed, 13 Aug 2025 07:52:42 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D041F400E6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D041F400E6
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=178.33.251.173;
- helo=1.mo576.mail-out.ovh.net; envelope-from=sebastien.szymanski@armadeus.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Sk0BW9JqWgal for <buildroot@buildroot.org>;
+ Wed, 13 Aug 2025 08:20:31 +0000 (UTC)
+X-Greylist: delayed 415 seconds by postgrey-1.37 at util1.osuosl.org;
+ Wed, 13 Aug 2025 08:20:30 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2BC9E6073A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2BC9E6073A
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
+ helo=relay5-d.mail.gandi.net; envelope-from=luca.ceresoli@bootlin.com;
  receiver=<UNKNOWN> 
-Received: from 1.mo576.mail-out.ovh.net (1.mo576.mail-out.ovh.net
- [178.33.251.173])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D041F400E6
- for <buildroot@buildroot.org>; Wed, 13 Aug 2025 07:52:42 +0000 (UTC)
-Received: from director6.ghost.mail-out.ovh.net (unknown [10.109.254.143])
- by mo576.mail-out.ovh.net (Postfix) with ESMTP id 4c20Vw4MYyz5wTR
- for <buildroot@buildroot.org>; Wed, 13 Aug 2025 07:34:16 +0000 (UTC)
-Received: from ghost-submission-5b5ff79f4f-dg9qv (unknown [10.111.182.10])
- by director6.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 34E8A81263;
- Wed, 13 Aug 2025 07:34:16 +0000 (UTC)
-Received: from armadeus.com ([37.59.142.106])
- by ghost-submission-5b5ff79f4f-dg9qv with ESMTPSA
- id MIE/O/c/nGiqAwAAwKra4Q
- (envelope-from <sebastien.szymanski@armadeus.com>);
- Wed, 13 Aug 2025 07:34:16 +0000
-X-OVh-ClientIp: 90.11.248.239
-Message-ID: <b3aed606-5b71-4f79-bd47-59cee6adf59e@armadeus.com>
-Date: Wed, 13 Aug 2025 09:34:14 +0200
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2BC9E6073A
+ for <buildroot@buildroot.org>; Wed, 13 Aug 2025 08:20:29 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2CB6A43273;
+ Wed, 13 Aug 2025 08:20:26 +0000 (UTC)
+Date: Wed, 13 Aug 2025 10:20:24 +0200
+To: "Frager, Neal" <neal.frager@amd.com>, "arnout@rnout.be"
+ <arnout@rnout.be>, "thomas.petazzoni@bootlin.com"
+ <thomas.petazzoni@bootlin.com>, "peter@korsgaard.com"
+ <peter@korsgaard.com>, "romain.naour@smile.fr" <romain.naour@smile.fr>
+Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>, "Simek, Michal"
+ <michal.simek@amd.com>, "ju.o@free.fr" <ju.o@free.fr>,
+ "brandon.maier@collins.com" <brandon.maier@collins.com>,
+ "romain.naour@gmail.com" <romain.naour@gmail.com>, "Erkiaga Elorza, Ibai"
+ <ibai.erkiaga-elorza@amd.com>
+Message-ID: <20250813102024.3d15c0c6@booty>
+In-Reply-To: <SA1PR12MB5615E50A2137A428191E355FF049A@SA1PR12MB5615.namprd12.prod.outlook.com>
+References: <20250617205801.2440300-1-neal.frager@amd.com>
+ <20250709170840.347d5738@booty>
+ <SA1PR12MB5615E50A2137A428191E355FF049A@SA1PR12MB5615.namprd12.prod.outlook.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Fabio Estevam <festevam@gmail.com>, buildroot@buildroot.org
-Cc: breno.lima@nxp.com
-References: <20250812231417.1249446-1-festevam@gmail.com>
-Content-Language: en-US
-From: =?UTF-8?Q?S=C3=A9bastien_Szymanski?= <sebastien.szymanski@armadeus.com>
-Autocrypt: addr=sebastien.szymanski@armadeus.com; keydata=
- xsBNBFNfZLEBCACv1lqSePHJNpRgcnER+3emy+Arjz84zFax3XkogjY/e3ZneihIgWrVKe5M
- ql16pX4KTkzNgMUKz4bG/XwT3kjcrXshxFLlg7KrHMl287C+W+QOUjnjVeRi/su+SPmjz8VD
- yr11h+ZkVLAWhS+uQJ93jy1NwG8M4t1kBLAVHHD5Vw4FJ+3ouaVYIp1X1Cr8bVKQw33Q1aTd
- ro0kMBb96B9vNu7ciJZ3gvlaBzUEKOgNnq9KaywuLnqrqr4HUIn5JuxZjCjJzt9kTAKcTfp2
- cJM8qpp+2FF5qtbkse9fZ6M64qozgOPr9Tk4Amf9fZEUQ6UNw14mmBZuXSzoHe75gI7TABEB
- AAHNN1PDqWJhc3RpZW4gU1pZTUFOU0tJIDxzZWJhc3RpZW4uc3p5bWFuc2tpQGFybWFkZXVz
- LmNvbT7CwJAEEwEIADoCGyMHCwkIBwMCAQYVCAIJCgsEFgIDAQIeAQIXgBYhBJwGygpYm/1C
- /GCmwbCaKeiBMmTiBQJdhIHLAAoJELCaKeiBMmTixXIH/2W3kbzRG0UF81jtRRnp0H83rjDT
- v0H+8fgFMRL/7HCJ1QPArkfRJlM2wlJkN+ChP09CCarYfUEHfRCHlTb7At6Yyrz1jziD7ZwX
- 8IWHYRXnZkY5eZc5DsiUgq6JH49kt+GPzK8UVP9MTa6zkBpPCUf7LzZ4pD3FihdkT52BU3gI
- d9P49fSI0TYySlb/VKn815aOhvwEr7+Dh3mZUjSh7saofbRmVUOr7p+R3MvvGI19/IJZjeOE
- ZWliODDOt6HnBOtoGSXMcNIFF6snH52D5N5gY88njZjTwhgGGUBix1bsgf/EY0v4R5itZBXB
- B/Ze4Tm++YHaB75hZK6PQu/YRv7OwE0EU19ksQEIALo7jhXddrXBTRu5SAjelV53jyHBJTX/
- vN4nL/VbbW/saca+NJjDSxx5DBmotZbQdWIyZiSIjU/xnTREvtDrl6ZeSsKWd7ZqiuiY4fSR
- zwuQp9rd0yqRuxesrWeyJB1zCSdEvLyKASERt+nxkOA+IzJ4y1qLtvnWr+SL1AXgTMw+Tkyw
- KIDCRWHTIYas11ldGj82gOIpYeXnapeNLHfT4EQwg0NeWYHynJxAQWiX5aPlw0uSpAQSsBXQ
- FIe3fpoveMSnXK+PG2BBOzexYv7r4S70a6sF9sgTTPpfKqUaqqC+u1+bUX6alTAKhGKJywaF
- 6ViqLlgY8PfwohSyAlqlTRMAEQEAAcLAdgQYAQgAIAIbDBYhBJwGygpYm/1C/GCmwbCaKeiB
- MmTiBQJdhIHSAAoJELCaKeiBMmTitU8IAK7NQM3fEwaF5XaKtepYWsVka44CD8A9e4r7NVK9
- ugirKvXirIxBSDmN/Db862NmVpITsZ6ERNSNZLm/7k55N+TexKYiFZeU7G92TEfAM6qPElvx
- DLEcrkNMq9r08YZeUloacsq31AL5fK4LW+xdvXudkdiKRMJsdTpmff3x5kIziGOHjwFP9wve
- ZgEH52gpbRsP8Whx/Z2lNX/BBRmFM8OnEXFsjjqDzYThdxTq85wGPpkgvvUGyPNRD7TpbB1C
- pajOUUkPxgj5LKt77HD1afeZNudWhgcdkbtT5PMQTT0WY6wvMEj9S1+bGPeXRGWLYB7gHQ+L
- JNoSD7Kz6Y9qnKo=
-In-Reply-To: <20250812231417.1249446-1-festevam@gmail.com>
-X-Ovh-Tracer-Id: 4609434221892201354
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddufeejiedvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvvehfhfgjtgfgsehtkeertddtvdejnecuhfhrohhmpefurogsrghsthhivghnucfuiiihmhgrnhhskhhiuceoshgvsggrshhtihgvnhdrshiihihmrghnshhkihesrghrmhgruggvuhhsrdgtohhmqeenucggtffrrghtthgvrhhnpedtgeehtdduledtudevveekveevveefffdthedtieekgeeukeevtdffieegteekhfenucfkphepuddvjedrtddrtddruddpledtrdduuddrvdegkedrvdefledpfeejrdehledrudegvddruddtieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepshgvsggrshhtihgvnhdrshiihihmrghnshhkihesrghrmhgruggvuhhsrdgtohhmpdhnsggprhgtphhtthhopedupdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdpoffvtefjohhsthepmhhoheejiegmpdhmohguvgepshhmthhpohhuth
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- bh=kj0VWXgg2st88n0wp06ZuORVXubTGxeoFftuqfPFxuY=; 
- c=relaxed/relaxed; d=armadeus.com; h=From; s=ovhmo103079-selector1;
- t=1755070456; v=1;
- b=WxAwUTdxte340PoWQg2MW7LaBjl2JeqycvovfzlNWCHi1EwtEr7Dy57hnmv4fkGHrStzFGZT
- cTbZmTd2YHNxP63Juh2lPdyCWvECzO6SoHWKVOuYo39VLfojhsuMO7vRny+3XD01AMqHbABaIMw
- shD3VorGMsU80NZPISFNYoU5XNQcVe9mZH975cyAvlEXJ2qGMYlSgbGKes3IFuOoZGN9chom07c
- 7O+h/vXZ+MvmmptcFJdi8lh5/roqWBztVFLPUZFDuMbPgnZd3XfIr1gMw3NgVOba/mmZcbsct/F
- nN1pMg2bqODRaTwJgdDtCgFEgCMbbxsjK59frvkSOlIEA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=armadeus.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddufeejjedvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefnuhgtrgcuvegvrhgvshholhhiuceolhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepfedtgeeuudeuhfdugffhhfejgedvgfevtdfhfeefkeevfefgheevgeduhfeghfelnecuffhomhgrihhnpegsihhnrdgshidpghhithhhuhgsrdgtohhmpdgsohhothhlihhnrdgtohhmnecukfhppedvrgdtvdemieejtdemvddtvddtmegvrgdtudemsggvgedumeelhegvjeemfeegfeemledufegvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeeijedtmedvtddvtdemvggrtddumegsvgegudemleehvgejmeefgeefmeeludefvgdphhgvlhhopegsohhothihpdhmrghilhhfrhhomheplhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepuddupdhrtghpthhtohepnhgvrghlrdhfrhgrghgvrhesrghmugdrtghomhdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtohepr
+ ghrnhhouhhtsehrnhhouhhtrdgsvgdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdprhgtphhtthhopehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmpdhrtghpthhtohepmhhitghhrghlrdhsihhmvghksegrmhgurdgtohhmpdhrtghpthhtohepjhhurdhosehfrhgvvgdrfhhrpdhrtghpthhtohepsghrrghnughonhdrmhgrihgvrhestgholhhlihhnshdrtghomh
+X-GND-Sasl: luca.ceresoli@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1755073227;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=opPiyb4//P0O9bWx/GyuX07mQ9Y4/XGCnzbXaGdSnkI=;
+ b=hnagvtg/7zX1PuJO1noWAz3m/yqhsT1B0EjgNGXiatg0hrFf3o1uH1R3mV7Qb2WIxjLbIN
+ Pwb/Z/DQMmaQ/1bKidf+HjrqTjNHbR0SY/Fw6mZyicy+m93GQjgb/4E+PCHXgU7Ymeg6B4
+ 9wDfgD/UJyfLXGAvRcFxZ/DmeF8oove4BTQLNFuoM6jKCa0MEcHNHUk1Qu21uhdgeA6q7t
+ IjYz32JVoh3q+5lkQHLfF3/KouHvUB2uUySd1i9AzxNCSSBrbk56Eg6oZRRWwylMpeTKsx
+ lQ0VFhlWKTwJzS9oHIzk2Lyk26goW+cYCDdqgiW4seHoxWvPiFsKeD+YL4B2AA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=armadeus.com header.i=@armadeus.com header.a=rsa-sha256
- header.s=ovhmo103079-selector1 header.b=WxAwUTdx
-X-Mailman-Original-Authentication-Results: garm.ovh; auth=pass
- (GARM-106R006fd0542b9-5346-4ae8-ba84-1e292b45b223,
- 0C39A146902883F6F8F0121D354C7FD2E14C4150)
- smtp.auth=sebastien.szymanski@armadeus.com
-Subject: Re: [Buildroot] [PATCH] freescale_imx93evk_defconfig: Add OP-TEE OS
- support
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=hnagvtg/
+Subject: Re: [Buildroot] [PATCH v1 1/1] boot/xilinx-embeddedsw: add family
+ variant choice
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -124,26 +97,160 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+From: Luca Ceresoli via buildroot <buildroot@buildroot.org>
+Reply-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gOC8xMy8yNSAxOjE0IEFNLCBGYWJpbyBFc3RldmFtIHdyb3RlOgo+IEZyb206IEJyZW5vIExp
-bWEgPGJyZW5vLmxpbWFAbnhwLmNvbT4KPiAKPiBBZGQgT1AtVEVFIE9TIFN1cHBvcnQgZnJvbSB0
-aGUgTlhQIEJTUCBsZi02LjEyLjMtMS4wLjAgdmVyc2lvbi4KPiAKPiBUaGUgaS5NWDkzIEJvb3Qg
-Q29udGFpbmVyIHJlcXVpcmVzIGEgcmF3IFRFRSBiaW5hcnkgd2l0aG91dCBhIFRFRSBoZWFkZXIu
-Cj4gVXBkYXRlIHRoZSBpbXg5LWJvb3Rsb2FkZXItcHJlcGFyZS5zaCBzY3JpcHQgYW5kIENvbmZp
-Zy5pbiBhY2NvcmRpbmdseQo+IHRvIGVuc3VyZSBjb21wYXRpYmlsaXR5IHdpdGggdGhpcyByZXF1
-aXJlbWVudC4KPiAKPiBTaWduZWQtb2ZmLWJ5OiBCcmVubyBMaW1hIDxicmVuby5saW1hQG54cC5j
-b20+Cj4gU2lnbmVkLW9mZi1ieTogRmFiaW8gRXN0ZXZhbSA8ZmVzdGV2YW1AZ21haWwuY29tPgo+
-IC0tLQo+ICAgYm9hcmQvZnJlZXNjYWxlL2NvbW1vbi9pbXgvaW14OS1ib290bG9hZGVyLXByZXBh
-cmUuc2ggfCAyICstCj4gICBib290L29wdGVlLW9zL0NvbmZpZy5pbiAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICB8IDIgKy0KPiAgIGNvbmZpZ3MvZnJlZXNjYWxlX2lteDkzZXZrX2RlZmNv
-bmZpZyAgICAgICAgICAgICAgICAgIHwgNyArKysrKysrCj4gICAzIGZpbGVzIGNoYW5nZWQsIDkg
-aW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkKPiAKClJldmlld2VkLWJ5OiBTw6liYXN0aWVu
-IFN6eW1hbnNraSA8c2ViYXN0aWVuLnN6eW1hbnNraUBhcm1hZGV1cy5jb20+CgpSZWdhcmRzLAoK
-LS0gClPDqWJhc3RpZW4gU3p5bWFuc2tpLCBBcm1hZGV1cyBTeXN0ZW1zClNvZnR3YXJlIGVuZ2lu
-ZWVyCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxk
-cm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5i
-dWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Hello core Buildroot developers,
+
+On Wed, 9 Jul 2025 23:13:09 +0000
+"Frager, Neal" <neal.frager@amd.com> wrote:
+
+> [AMD Official Use Only - AMD Internal Distribution Only]
+> 
+> Hi Luca,
+> 
+> > This patch adds a family variant choice to xilinx-embeddedsw for two reasons.
+> >
+> > 1. It does not make sense to build a zynqmp_pmufw for a versal platform or
+> > versal_plm and versal_psmfw applications for a zynqmp platform.  With this
+> > solution, users can only select applications which are targeted for their
+> > device family.  
+> 
+> > I think ZynqmMP is based on Cortex-A53 and Versal on Cortex-A72, so
+> > could the various Kconfig symbols depend on either  BR2_cortex_a53
+> > or BR2_cortex_a72, without additional symbols?  
+> 
+> Yes, this could work.
+> 
+> zynqmp is cortex_a53
+> versal is cortex_a72
+> versal_gen2 is cortex_a78
+> 
+> > 2. Buildroot will soon be adding support for the versal_2ve_2vm second gen
+> > family. This family has a plm boot application that generates a plm.elf just
+> > like the current versal platform. If a user was to select both the versal_plm
+> > and the versal_2ve_2vm_plm, two different plm.elf files will be generated
+> > causing a conflict at the installation step and a run-time failure when the
+> > wrong plm.elf gets included in the boot.bin.  By having a family variant,
+> > only one plm.elf can be built at a time depending on the choice of family
+> > variant being "versal" or "versal_2ve_2vm".  
+> 
+> > Is this new family based on A53 or A72? If it is, clearly the above
+> > idea won't work for the new family, so in that case see my discussion
+> > below.  
+> 
+> Even though your above idea works, I still like the global family idea.
+> 
+> > The issue can be seen by comparing the two Makefiles which both create a
+> > plm.elf.
+> >
+> > versal plm:
+> > https://github.com/Xilinx/embeddedsw/tree/master/lib/sw_apps/versal_plm/src/versal
+> >
+> > versal_2ve_2vm plm:
+> > https://github.com/Xilinx/embeddedsw/tree/master/lib/sw_apps/versal_plm/src/versal_2ve_2vm
+> >
+> > Signed-off-by: Neal Frager <neal.frager@amd.com>
+> > ---
+> >  boot/xilinx-embeddedsw/Config.in | 15 +++++++++++++++
+> >  configs/versal_vck190_defconfig  |  1 +
+> >  configs/versal_vek280_defconfig  |  1 +
+> >  configs/versal_vpk180_defconfig  |  1 +
+> >  4 files changed, 18 insertions(+)
+> >
+> > diff --git a/boot/xilinx-embeddedsw/Config.in b/boot/xilinx-embeddedsw/Config.in
+> > index 0dd6433608..7af8d59929 100644
+> > --- a/boot/xilinx-embeddedsw/Config.in
+> > +++ b/boot/xilinx-embeddedsw/Config.in
+> > @@ -28,8 +28,21 @@ config BR2_TARGET_XILINX_EMBEDDEDSW_VERSION
+> >          Release version of Xilinx/embeddedsw.
+> >          Must be xilinx_v2023.1 or newer.
+> >
+> > +choice
+> > +     bool "family variant"
+> > +     default BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP
+> > +
+> > +config BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL
+> > +     bool "versal"
+> > +
+> > +config BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP
+> > +     bool "zynqmp"
+> > +
+> > +endchoice  
+> 
+> > I agree about the overall idea. I'm not sure the xilinx-embeddedsw
+> > package is the ideal place, though. We already have  
+> BR2_TARGET_UBOOT_ZYNQMP in the u-boot options, > and similar
+> > setting might be needed in the future for other packages. Users are in
+> > charge of configuring all those consistently, in different sub-menus.  
+> 
+> > So I wonder whether it might make sense to add a family selection in a
+> > global place, and then have both uboot and xilinx-embeddedsw follow it.  
+> 
+> > I'm not sure where that might be added, though. The "Target options"
+> > menu looks like the obvious place, but currently it is used only for
+> > core-specific options, not SoC-specific ones.  
+> 
+> > Another possible place is the "Bootloaders" menu. While less ambitious,
+> > the need for family selection is limited to bootloader-related packages.  
+> 
+> > Other opinions?  
+> 
+> > Best regards,
+> > Luca  
+> 
+> Perhaps a global SoC family definition for bootloaders could make sense.
+
+For the need discussed in this thread, a shortcut was found based on
+the fortunate coincidence that all SoC families impacted by
+xilinx-embeddedsw are based on a different CPU core (a72, a53...).
+However this is not necessarily happening in similar future use cases.
+
+So I'm raising this topic to the attention of core Buildroot developers
+as the next Buildroot Developer Days are coming in a short time. Some
+discussion there may be useful to bring ideas and opinions about how to
+handle such SoC-family-specific differentiation within packages ina
+generic way.
+
+> For Xilinx SoCs, there are three packages which would use it:
+> 
+> uboot
+> xilinx-embeddedsw
+> xilinx-prebuilt
+> 
+> However, if we do this, both uboot and xilinx-prebuilt already have family definitions.
+> 
+> We would need to remain backwards compatible with these already defined definitions.
+> 
+> Also, we would need to think about how to handle zynqmp and kria.
+> 
+> For xilinx-embeddedsw and uboot, zynqmp and kria are the same,
+> but for xilinx-prebuilt, this is not the case.
+> 
+> Also, since versal products boot with a microblaze running the plm app,
+> and not the u-boot spl, I am not sure if uboot will ever need a versal specific config.
+> 
+> When I get back from vacation, I will resubmit this patch
+> using the BR2_cortex configs.
+> 
+> We can then think about whether creating a global SoC family definition
+> makes sense as a next step.
+> 
+> Best regards,
+> Neal Frager
+> AMD
+
+
+
+-- 
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
