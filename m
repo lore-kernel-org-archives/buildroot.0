@@ -4,103 +4,102 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6C18CA0EE4
-	for <buildroot@archiver.kernel.org>; Thu, 14 Aug 2025 20:31:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C4C5CA0EDC
+	for <buildroot@archiver.kernel.org>; Thu, 14 Aug 2025 20:32:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9B15F80E10;
-	Thu, 14 Aug 2025 20:31:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EF9DB80E1A;
+	Thu, 14 Aug 2025 20:31:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jVTOaf-Hqcai; Thu, 14 Aug 2025 20:31:53 +0000 (UTC)
+ id hM8l-6laLV77; Thu, 14 Aug 2025 20:31:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A376180DB4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F277680E2A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A376180DB4;
-	Thu, 14 Aug 2025 20:31:52 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 211C41BA
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:31:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F277680E2A;
+	Thu, 14 Aug 2025 20:31:58 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 11AAB941
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:31:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 08825402F8
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5801B6079A
  for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:31:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AStUMi14jikJ for <buildroot@buildroot.org>;
- Thu, 14 Aug 2025 20:31:50 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UkmZNDk3onmf for <buildroot@buildroot.org>;
+ Thu, 14 Aug 2025 20:31:48 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::52e; helo=mail-ed1-x52e.google.com;
+ client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1E7CE4022A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E7CE4022A
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
- [IPv6:2a00:1450:4864:20::52e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1E7CE4022A
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:31:49 +0000 (UTC)
-Received: by mail-ed1-x52e.google.com with SMTP id
- 4fb4d7f45d1cf-6188b657bddso2531549a12.1
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 13:31:49 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 61F8960763
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 61F8960763
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 61F8960763
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:31:48 +0000 (UTC)
+Received: by mail-wm1-x334.google.com with SMTP id
+ 5b1f17b1804b1-45a1b0b6ac4so6800005e9.2
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 13:31:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1755203508; x=1755808308;
+ d=1e100.net; s=20230601; t=1755203506; x=1755808306;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=+75c8L0NRXuHXkAi1hgrF+Zi2SzA8Xc8oUprTd3x/QM=;
- b=Ci4JmTWs1U2bU6/uSOQXvq9oJAwdXegNjSs4PmMhiPnams5ANapbuxgdqiTFJv6VY8
- gdwxj2m/C2ZhyP6Q3bwp7C28qpVT+t3jzTlcZelrkmRmAAavCAlmUNXQGJEA/r56aD2p
- qnhbI4ULX9r22ASdceiQj813TXK1FARoVobxxoCic36peMATVxA0dz7vdpGe57XJS7q8
- kH2HjUVhjLun8U3RncNBoNdZ1LAvm7G1lRR58C2h6WZePjBY1S2h5FNn+AsZn4PFHTLD
- rplA07pwyH+/JMzsHy/wOM2KBxhuRN+aTMlxuUxdRj+Aju3XlAQ1Xxv2yoQhAVW+KA4M
- +Y2g==
+ bh=PWRqQnvoBLiLcy6jSSVlDiwNX6sElOACMDQmDiZMLng=;
+ b=kYInH3Fbp3MdYzIRQndNf8+C0LyANH2fa0vaG3CwHFcsLY1Jf7IbJfl4uFFv8pT3Gv
+ uj2gkrpQFZ/zeDTE9UJz+RWH7ivGSHocPJi1Su1dffZOlxkOw6Ivzx/sWXlKBKGX2qHI
+ 9lyuXkYXIwGBOLll5qHT56Sw+J2f4MlyWZKno5lFmvQHOaU0Sr8lYKPg/J6U2y0kf9pF
+ kiIW5hXa/wIgdNKGjKyYrV5/AWRuVp+5dot9zTZI6ktzmxWPWrrqZj9Gz+Iy153HIhOH
+ LtM9M4bM8TpOrfxi7Mlzb+yCZ7TQZshSr7TNgctZVUIgOYsTHNqRLM5GlSmuyULaRAeP
+ r6WQ==
 X-Forwarded-Encrypted: i=1;
- AJvYcCUaAjCfpW4v6WLuHfexCXzqWLN8L181uW+ERnHkxzunb05bKkY5icy25knPzZ1z0Hc1+4qBI6nqkAU=@buildroot.org
-X-Gm-Message-State: AOJu0Yz9nCLWP8vcKEVKfaVIu1PtHbYHaOyDcjeBfheCcFwbPm2zDoPW
- GCLE4FBS0V9rz5bIbDLk/09R2K9J+/9EXNnd0Xz6R7pTwi8HLk6Ofqr2SAfYKxeAtkk2/Jutzuk
- DIX1DpPA=
-X-Gm-Gg: ASbGncu+Dy/TuZjsTILDwhRycQ+yNuBDYD+xKqvlcDQNPErQdbf/XDU4MoBxI1iRe7Z
- 8ITYXbrQH4Rvq6Zhz1LihRWJXTH5V+tAjOW9AuXQyw8Kj7wjergDMztx2wGNeHO1dBdRXwCv87z
- gLRcYzadm3CaZhDCK5Z0OHLR7FA/nsDkGpEfD+kpr0xzaY/HagRkvOJP3+bIU6LNBx07iNGD3Gk
- 6f2P/oqC6mrreiN51bY12gootX9ayjbShk+CRyIcv3J1Vk7bVAIG4PPswBrbFShMWqte0sQn3rD
- 3dTX2mdHrFCY6TMBUjeoj/NHznL1wqzcIKJC8Z7ICqfgwVQqiYsMu9bC1fU9rVwbiyJgeHvSw+/
- l8ZbIu0rDO6FnlA==
-X-Google-Smtp-Source: AGHT+IHC2EhnxZcbblcpH6S978aLl1tsctBbTWisKsvtBKSlo4PNdRdZgY+LbAMLdBGdBwWkNK6z7g==
-X-Received: by 2002:a17:907:1c95:b0:ae0:d78a:2366 with SMTP id
- a640c23a62f3a-afcb93940efmr499884666b.4.1755203508118; 
- Thu, 14 Aug 2025 13:31:48 -0700 (PDT)
+ AJvYcCV0ZoBR9iGT73pD5rHnHGc3j09+dyrRGIAz3Kf3eJMMSDHGRwghgcqqAc8t3l1TFl/esgqovR0VEpg=@buildroot.org
+X-Gm-Message-State: AOJu0YyoIvl3q66NTDJzeuxbL0xSeyYFFdYX/kof096IyglAEwgRFX5X
+ qt8Bs7rdqQlpqx2nZyRHczYd9Bo3bmdEAw/cMnDy7e3eJFpbo7MLgz/5PX2Ewpgzj2bXiOkkbFO
+ lEwL5LE4=
+X-Gm-Gg: ASbGncsx8HR8zFuwZ0hwwFjE2D3GWGjh2kObVwCi5+6iMsqOURGUqxcwYDDCfHJlZ+D
+ kcuMT6o2QW628ukwKi8Nt4uhMYpkP0Gszp9l6loZMPsFfLhzT/QEbchg6VZtE/uUoCbP+zKsIqe
+ zU4TC/a3MkdzATi9CINVsZUAc2KpCzLMnO2JYVJSI7U3inId+AZO68/Rg/5xnH+5Xd4D5OrmCHZ
+ 2FUZyvqZw1GU+RHFfh6juk8Dgg7n45/Alit9D0uIeDaEdghirePSv3FepzUzPWhmIMBiYOqsLjP
+ R84NdDtKUixg/dxPgajepFHzCECKsMv7gS4XnIH6kv/slDv0/xsxGV4oPM85v5G10rCCYoVga9F
+ NPRsDlPMH8X0pRw==
+X-Google-Smtp-Source: AGHT+IHeglMwC4wnI6VhxOqUTDRS4Bw7kPDDSJq1F6aCeEZrgCSy5dtQGtn8dhjpkaa5oLN/woW7Hw==
+X-Received: by 2002:a05:600c:1c28:b0:458:bc3f:6a7b with SMTP id
+ 5b1f17b1804b1-45a1c7b8a64mr34272345e9.18.1755203506324; 
+ Thu, 14 Aug 2025 13:31:46 -0700 (PDT)
 Received: from arch ([79.132.233.79]) by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-af91a0a38aasm2657128666b.37.2025.08.14.13.31.47
+ 5b1f17b1804b1-45a1c70cb83sm32934055e9.27.2025.08.14.13.31.45
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 14 Aug 2025 13:31:47 -0700 (PDT)
-To: Fabien Lehoussel <fabien.lehoussel@smile.fr>
+ Thu, 14 Aug 2025 13:31:46 -0700 (PDT)
+To: Aaron Sierra <aaron@bubbl-tek.com>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Thu, 14 Aug 2025 22:31:46 +0200
-Message-ID: <20250814203146.2815354-1-thomas.perale@mind.be>
+Date: Thu, 14 Aug 2025 22:31:45 +0200
+Message-ID: <20250814203145.2815281-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250716093401.1213358-4-fabien.lehoussel@smile.fr>
-References: <20250716093401.1213358-4-fabien.lehoussel@smile.fr>
+In-Reply-To: <20250716185626.365031-1-aaron@bubbl-tek.com>
+References: <20250716185626.365031-1-aaron@bubbl-tek.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1755203508; x=1755808308; darn=buildroot.org;
+ d=mind.be; s=google; t=1755203506; x=1755808306; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=+75c8L0NRXuHXkAi1hgrF+Zi2SzA8Xc8oUprTd3x/QM=;
- b=elsnyBdqc7MaQ6uFKY94OcRwT9AnuGJ3C5KQhpzB4OMIpjMqJLXX8jJ9YpbSYUNfHZ
- NRiPp8FxVShdKzoq8owRvDcypoI6MXBZCqNzn6kVcoXNQu3hrEGHLzKqmv7ZPBWyXTwb
- I2T9KspNFC+EIH6HiAkbbDVDFmSv4RqGSNFqrCwXtWIpADl+1FhNcAkjNrccV5TEu1Zn
- nHpJZBaGTZzzMSwFSHKna7mEkgTOMGZrgm7r68vq8SLnoNDHb3xApuiwNdxg6FiPWvBi
- MxMsHePXtIV+Pgl1FUmURwI7FMEo6kdjbLtqJ3rbZa2I/xBwAEpi1lQPZEqVXTeYG03h
- Hz8Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=PWRqQnvoBLiLcy6jSSVlDiwNX6sElOACMDQmDiZMLng=;
+ b=gFEMsY9q3QVrR9lzN9jkyCbLbauzsbArnE2Yh5qBw1drtDOKe9ogZ9ZwpHMeimqMhT
+ Aw7iDozOOoTNWSytwgRzYJ8kDz9JPJNDFqzueWOq+y8Hd5ctxArO/osA3WpYkVAuXnNS
+ n4Css9XIDdKBrLpyo77BIY/h0en5nC6Y2oj5ruJAcYt5Bceopg8ESLvPHTlZC/O8TNy3
+ ceb7nGSaGEZTMAYRCEDzTVnIwAo2bhIg6J/7ol32mJhPX7mNdtMpdZvKoxXxN3t46vFB
+ 93Dcl6PL4zRJsiuMVwZ5PrkX+6ukRkRaBYUoVYj5rSRsD1RWrcJOT4yNJ2Ax3vaRCcyy
+ aGMg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=elsnyBdq
-Subject: Re: [Buildroot] [PATCH v2 4/5] utils/generate-cyclonedx: add
- project name and version options
+ header.a=rsa-sha256 header.s=google header.b=gFEMsY9q
+Subject: Re: [Buildroot] [PATCH] package/xinetd: fix build with musl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -120,64 +119,34 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Options used to customize the project name and version in the generated SBOM metadata.
-> Sets buildroot generate-cyclonedx as a tool in the metadata section
+> The ecvt(), fcvt(), and gcvt() functions from stdlib.h, used by the SIO
+> library packaged with the xinetd sources, are masked by _GNU_SOURCE in
+> musl libc.
 > 
-> Signed-off-by: Fabien Lehoussel <fabien.lehoussel@smile.fr>
+> Signed-off-by: Aaron Sierra <aaron@bubbl-tek.com>
 
 Applied to 2025.02.x & 2025.05.x. Thanks
 
 > ---
->  utils/generate-cyclonedx | 27 ++++++++++++++++++++++++---
->  1 file changed, 24 insertions(+), 3 deletions(-)
+>  package/xinetd/xinetd.mk | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
-> diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
-> index d3acf755e1..d28750735f 100755
-> --- a/utils/generate-cyclonedx
-> +++ b/utils/generate-cyclonedx
-> @@ -278,6 +278,11 @@ def main():
->      parser.add_argument("-o", "--out-file", nargs="?", type=argparse.FileType("w"),
->                          default=sys.stdout)
+> diff --git a/package/xinetd/xinetd.mk b/package/xinetd/xinetd.mk
+> index f58c26f02a..f63a8a2251 100644
+> --- a/package/xinetd/xinetd.mk
+> +++ b/package/xinetd/xinetd.mk
+> @@ -29,6 +29,11 @@ else ifeq ($(BR2_TOOLCHAIN_HAS_NATIVE_RPC),)
+>  XINETD_CFLAGS += -DNO_RPC
+>  endif
 >  
-> +    parser.add_argument("--project-name", type=str, default="buildroot",
-> +                        help="Specify the project name to use in the SBOM metadata (default:'buildroot')")
-> +    parser.add_argument("--project-version", type=str, default=f"{BR2_VERSION_FULL}",
-> +                        help="Specify the project version to use in the SBOM metadata (default: builroot version)")
+> +ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
+> +# Make ecvt(), fcvt(), and gcvt() available for SIO library
+> +XINETD_CFLAGS += -D_GNU_SOURCE
+> +endif
 > +
->      parser.add_argument("--no-host-packages", default=False, action='store_true',
->                          help="This option excludes host packages from the CycloneDX output")
->  
-> @@ -300,11 +305,27 @@ def main():
->          "specVersion": f"{CYCLONEDX_VERSION}",
->          "metadata": {
->              "component": {
-> -                "bom-ref": "buildroot",
-> -                "name": "buildroot",
-> +                "bom-ref": args.project_name,
-> +                "name": args.project_name,
-> +                "version": args.project_version,
->                  "type": "firmware",
-> -                "version": f"{BR2_VERSION_FULL}",
->              },
-> +            "tools": {
-> +                "components": [
-> +                    {
-> +                        "type": "application",
-> +                        "name": "Buildroot generate-cyclonedx",
-> +                        "version": f"{BR2_VERSION_FULL}",
-> +                        "licenses": [
-> +                            {
-> +                                "license": {
-> +                                    "id": "GPL-2.0"
-> +                                }
-> +                            }
-> +                        ]
-> +                    }
-> +                ],
-> +            }
->          },
->          "components": [
->              cyclonedx_component(name, comp) for name, comp in filtered_show_info_dict.items()
+>  XINETD_CONF_ENV += \
+>  	CFLAGS="$(XINETD_CFLAGS)" \
+>  	LIBS="$(XINETD_LIBS)"
 > -- 
 > 2.43.0
 > 
