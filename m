@@ -1,106 +1,105 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C67DCA0EDC
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A878CA0EE4
 	for <buildroot@archiver.kernel.org>; Thu, 14 Aug 2025 20:31:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DA3306077F;
-	Thu, 14 Aug 2025 20:31:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0FBA780C55;
+	Thu, 14 Aug 2025 20:31:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id L-S5giL9-an1; Thu, 14 Aug 2025 20:31:41 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7IwDcgVQar82; Thu, 14 Aug 2025 20:31:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ECCDA607AD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A5C1D80DDF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ECCDA607AD;
-	Thu, 14 Aug 2025 20:31:40 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 6840D1BA
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:31:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A5C1D80DDF;
+	Thu, 14 Aug 2025 20:31:39 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id E70CA1BA
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:31:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6BBE8402D0
+ by smtp2.osuosl.org (Postfix) with ESMTP id CC515402F5
  for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:31:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JfCRzERq0BHN for <buildroot@buildroot.org>;
- Thu, 14 Aug 2025 20:31:29 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Mx5l2Hear6HW for <buildroot@buildroot.org>;
+ Thu, 14 Aug 2025 20:31:32 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
+ client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7488C4021A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7488C4021A
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7488C4021A
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:31:29 +0000 (UTC)
-Received: by mail-wr1-x42b.google.com with SMTP id
- ffacd0b85a97d-3b9e413a219so1064244f8f.3
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 13:31:29 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6F4D040459
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6F4D040459
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6F4D040459
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:31:32 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id
+ ffacd0b85a97d-3b9e414ef53so1196692f8f.2
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 13:31:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1755203487; x=1755808287;
+ d=1e100.net; s=20230601; t=1755203490; x=1755808290;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=dPhu90dhkXncC3bikD6ugFy4W8NyAXNC6dE0cQ66FxE=;
- b=FxCez8nAi7NGFG9oYKj7lRl/Zapz0ukYSqWkIua5bjCMSEBsnW2UeZAR+fe7FZ2Q3A
- sxFXKi0OodlX3tdwi+riRnjpO0ZM8zpjUV2T8eTj+6tVjWf0lVhVtZz/ykVfQ1w3cmS8
- Nw0rNFdaMPNb9/tDvLgD3r9txQpPI06kZX03HBYV5oFM9CzwT139M5950jkXT9aUyz9z
- 7CzKAIeVX5Cf3jQ0yLBNfdwIq4ZTzLRU401K8qbLbbZClsalGJCGTbeDyEf1A9SHyFXZ
- eL+a5gLXrEBVnnDDmWBjSFTgvgN8K1WmiwFTmHg7wwZ0NV0aRcCtnNB5n66HNTTvbOaI
- 7WCQ==
+ bh=TyrTwRtd9lfKn8vMWKQTdkLISY64jWcy/FZjWZE5z9o=;
+ b=H40xSyDqOvjX42tXxK+XQSLYAZriLV5tta4Wi2hsk+4fG3tAxt9ooDWoQNWBNAn0dN
+ CjANwF/nmIE0d/SU0aFV4fMGxArtz7fz7KpL06y7H3PSJoGTMaiKmfX3IXi2ssF9cHeW
+ PmwRszHW02lbiaOIZmnkW+VH+FoeQnj230RluuRjo5IUBhyAj7qkJ8dwkygcUJCoD75n
+ PMUAqObbfhTNRw79OLJ1dYsplu47cZ1x1ga70EAZaQCycmKcu8DGWehQV6bIBMJJ2JDs
+ V29AM+7mbTMujiyGQcDu824D651TmBu/QRsUnimXrwTGX/S53eoyZezlU/uUZJ0IsoDS
+ ze6Q==
 X-Forwarded-Encrypted: i=1;
- AJvYcCVHcDTBjzb7SdfYdrZuAYkbgj+5aclq2y1EJOdKw9BvzcXcDDjXK3axVI3tQ0qrHllwTezj1XQFCWY=@buildroot.org
-X-Gm-Message-State: AOJu0Yy/uxN7vs+4TR0HJN2Bh1FKL24J5iuWbNkOFasIiNsaORb2wLPB
- qsP2yqSGRNqBldWQdG/zIdtlKUyD4O3TjpR+uoA6CmvG76tZcUUgm6CQCiiuprin4Mk=
-X-Gm-Gg: ASbGncuZyRpm27rc65j2Jq1hl/iOVXBsWbPMjeCCJXOXg9uxv56q+/sa1qGqU5lBLfR
- BPfUgDMlLnQmKCb4WyuJYv2R7FbItaRiGTviqnYGha6tFRO4L+/SCnlyQE50Ar8CEz1VvERl5D4
- Qu3N50CWczujKQxiZVsKlD1f1YxFaB3GW5uP62dSzgZyCvwVSk7w1IRMI3HWoEZ0SjFNVXWSEM+
- Tf2E3d31fNyglozCujI1UJyjc+T9HiGvA4440VqKfANccz1cSEXfo9117WlRA+0venCek0CKwH3
- MaUXL0WVlua7Pkx9DZgwBlZddJLbLjcsrFAzF+ZSmjHQ7bJflmPyyf/Uqpx2LseEXVXVrIuDegr
- CoBZAkCRqvcPQhA==
-X-Google-Smtp-Source: AGHT+IEcHMmGGYG49/VgMJjAnQKhJ9epA0bxSDixt93TfK4y/031mCRBG2PfrC8EcTME8wPXUQO6YA==
-X-Received: by 2002:a05:6000:230b:b0:3b7:9350:44d4 with SMTP id
- ffacd0b85a97d-3b9e415a4b2mr4243086f8f.11.1755203487433; 
- Thu, 14 Aug 2025 13:31:27 -0700 (PDT)
+ AJvYcCXIBkqYlLQHxqTz4tMZ8TYs5ewzDb4k+Q0jfOce4LYCe2ecyp3cIeh95VtQaIRJequ5A5qVA79aggA=@buildroot.org
+X-Gm-Message-State: AOJu0YyI54qytgUsEeONkyS1GHqIr9I+lmR5+KGiK4ASrohSnGg95Wy8
+ TSy8LWYTqUGSrFCE+gQTatGruBB3wVdUg/FDax4m5Hrg1YCeAeKNs1L945FaVOInK9RWJ2+6VgT
+ z9v0mrX8=
+X-Gm-Gg: ASbGncvMqv3qlZ87Gz+ETTux7YdySo90FqymbADKB1f/plvnAK7OUY9a12NItHGJ4tt
+ dy8JCCuCqGosoI4kZL1BcGDF1mR6gYI7yaghZpDYbkUgKExLw7bWAzLJ/o4n4P59452ZqUVtKke
+ FOcVIVDjmrKIwPTPmS/PBlewM7YT+egC8oviuQrcBAHQZxHUn4bzIj1FK7q5DFlVTVXV+eH+2D7
+ 4A8hKeTBnce+sngsJPVY5V8wnFUPOrM6O8JFkSbec7nq0jY/ExXsCRhrNoEVTEXiIK5GPZfM79h
+ VHzXygpf2DuPpXmw050X9hy133ST90gAJ4BD7phV/b3BzJMDHHFEAl+CxUnGa36lKD3IR6RaLU6
+ SuPCe49FvZokbRA==
+X-Google-Smtp-Source: AGHT+IE6v5KPWZibprXi+E9/iSBcpw66roo9Lnn5U2yG6aZKkKafGjHoRvrzqRPGYRPHfD6zgI/f1g==
+X-Received: by 2002:a05:6000:2410:b0:3b7:83c0:a9e0 with SMTP id
+ ffacd0b85a97d-3b9e4189fb5mr4137358f8f.25.1755203490509; 
+ Thu, 14 Aug 2025 13:31:30 -0700 (PDT)
 Received: from arch ([79.132.233.79]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3b79c4530b3sm52843796f8f.34.2025.08.14.13.31.26
+ 5b1f17b1804b1-45a1c70b2c2sm35765165e9.26.2025.08.14.13.31.30
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 14 Aug 2025 13:31:27 -0700 (PDT)
-To: Peter Seiderer <ps.report@gmx.net>
+ Thu, 14 Aug 2025 13:31:30 -0700 (PDT)
+To: Maxime Leroy <maxime@leroys.fr>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Thu, 14 Aug 2025 22:31:26 +0200
-Message-ID: <20250814203126.2814877-1-thomas.perale@mind.be>
+Date: Thu, 14 Aug 2025 22:31:29 +0200
+Message-ID: <20250814203129.2815002-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250803144208.195144-2-ps.report@gmx.net>
-References: <20250803144208.195144-2-ps.report@gmx.net>
+In-Reply-To: <20250806150636.20937-1-maxime@leroys.fr>
+References: <20250806150636.20937-1-maxime@leroys.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1755203487; x=1755808287; darn=buildroot.org;
+ d=mind.be; s=google; t=1755203490; x=1755808290; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=dPhu90dhkXncC3bikD6ugFy4W8NyAXNC6dE0cQ66FxE=;
- b=hgDXugC4vxk31IG+EMiDAn7Z+EqNIxQHCckwDcCeui6hxlrZeNXDzBfzizsLwE1CmC
- QUkwIkpVGqnY6cStozwtJY/BHyBRrj1OdTRmWwd4GP2ZypsNya6MVJHF3+EkRiMcCUcg
- JDOBqSFFysHQtwtTfdtvA+/aeWdXMbczg5HgC3mvpJjSYLAZnc7mIUggvsP1OSvJJTN7
- 5DkR8tqrKZ31mcbf4DqZfTV6rnTv53S3/ENXpUy4ST4v1//Rc8YIqZnTrexoc2WTTTPN
- m+DqQhAUax+8Kq6QguYksX0q2dtwUygu5UQtjp7plDA7A/5FZczw+ZZiz83kbyVV1g0m
- 6hHw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=TyrTwRtd9lfKn8vMWKQTdkLISY64jWcy/FZjWZE5z9o=;
+ b=cqoJhxL6Q/qyRjJJqex98hBBcU3aNbycCn8um+z9YiweKz8AkZEkF6/GCRp0xESE61
+ 15GSK0AaRaqYHJyw/ODy18GiT1eO9CUkbybl1qPOLTFct+g+0EKcNeNKnTLpIWmfTWWI
+ Ji+frmgGPB2eTuTLMFwboy9uvAzwSl/z1jcTfnEVWkICFZEf82w4vSSP9SOoZaq2pFKF
+ w7kZ4NKImNkoN5nW8evH8CGd4RhUAhkhtWgFLoW0dKGmrUGQnkhoF/NLLSxTco///Dq/
+ +owwL+6Y48Y0Ey+rJt6llz7e3KS60EK+ZEUHfUHWmcAnypt6CiENewAgQZKqNyEIGY/5
+ ts2g==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=hgDXugC4
-Subject: Re: [Buildroot] [PATCH 2/3] package/rpi-firmware: bump version to
- 95be71b
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=cqoJhxL6
+Subject: Re: [Buildroot] [PATCH 1/2] package/grout: add kernel TUN dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -120,41 +119,33 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Version 95be71b matches with kernel 6.12.41.
+> Grout automatically creates a TUN interface at runtime, so the target
+> kernel must have CONFIG_TUN enabled.  Add a fix-up to ensure that option
+> is selected.
 > 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> Signed-off-by: Maxime Leroy <maxime@leroys.fr>
 
 Applied to 2025.05.x. Thanks
 
 > ---
->  package/rpi-firmware/rpi-firmware.hash | 2 +-
->  package/rpi-firmware/rpi-firmware.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/grout/grout.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmware/rpi-firmware.hash
-> index c2ca9343f1..0645d6ad77 100644
-> --- a/package/rpi-firmware/rpi-firmware.hash
-> +++ b/package/rpi-firmware/rpi-firmware.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha256  b120625c1e0d2dec819638a6fda97c74d1c86e184c6a4263cdf04faa2d5bbe2e  rpi-firmware-1.20250326.tar.gz
-> +sha256  6c1b017867c3a51e606859f1cd50df61b94af311577583b6b2a113d11131ee93  rpi-firmware-95be71b8c0f63f03dc06dd0e4c2e5535e6fb4a93.tar.gz
->  sha256  c7283ff51f863d93a275c66e3b4cb08021a5dd4d8c1e7acc47d872fbe52d3d6b  boot/LICENCE.broadcom
-> diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-> index 2577d16a01..d0b6abcc6f 100644
-> --- a/package/rpi-firmware/rpi-firmware.mk
-> +++ b/package/rpi-firmware/rpi-firmware.mk
-> @@ -5,7 +5,7 @@
->  ################################################################################
+> diff --git a/package/grout/grout.mk b/package/grout/grout.mk
+> index 46d3cf5f0a..53271dd913 100644
+> --- a/package/grout/grout.mk
+> +++ b/package/grout/grout.mk
+> @@ -20,4 +20,8 @@ GROUT_DEPENDENCIES = \
+>  	libecoli \
+>  	util-linux
 >  
->  # Please keep in sync with configs/raspberrypi*_deconfig
-> -RPI_FIRMWARE_VERSION = 1.20250326
-> +RPI_FIRMWARE_VERSION = 95be71b8c0f63f03dc06dd0e4c2e5535e6fb4a93
->  RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
->  RPI_FIRMWARE_LICENSE = BSD-3-Clause
->  RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
+> +define GROUT_LINUX_CONFIG_FIXUPS
+> +	$(call KCONFIG_ENABLE_OPT,CONFIG_TUN)
+> +endef
+> +
+>  $(eval $(meson-package))
 > -- 
-> 2.50.1
+> 2.43.0
 > 
 > _______________________________________________
 > buildroot mailing list
