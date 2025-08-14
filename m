@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17462CA0EE4
-	for <buildroot@archiver.kernel.org>; Thu, 14 Aug 2025 19:56:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A63FCA0EDC
+	for <buildroot@archiver.kernel.org>; Thu, 14 Aug 2025 19:56:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DF5F280D95;
-	Thu, 14 Aug 2025 19:56:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CFC6D80753;
+	Thu, 14 Aug 2025 19:56:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VLkS290fZv-e; Thu, 14 Aug 2025 19:56:30 +0000 (UTC)
+ id RaPhPid6DGRG; Thu, 14 Aug 2025 19:56:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C6E3E80D86
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 570B880B53
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C6E3E80D86;
-	Thu, 14 Aug 2025 19:56:25 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 3CE59228
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 19:56:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 570B880B53;
+	Thu, 14 Aug 2025 19:56:28 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 152721BA
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 19:56:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AE47C60714
+ by smtp2.osuosl.org (Postfix) with ESMTP id A29D440479
  for <buildroot@buildroot.org>; Thu, 14 Aug 2025 19:56:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fEaQqBTl8fHp for <buildroot@buildroot.org>;
- Thu, 14 Aug 2025 19:56:11 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eMqgoMvJj2HG for <buildroot@buildroot.org>;
+ Thu, 14 Aug 2025 19:56:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 182526070B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 722574047C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 182526070B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 722574047C
  for <buildroot@buildroot.org>; Thu, 14 Aug 2025 19:56:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0842A87607; Thu, 14 Aug 2025 19:56:11 +0000 (UTC)
+ id 6FE5B875ED; Thu, 14 Aug 2025 19:56:11 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 14 Aug 2025 09:25:49 +0200
+Date: Thu, 14 Aug 2025 09:26:03 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 9de4d9dc11daebe7d51b7ba0d844fce97c3da955
-X-Git-Newrev: 43e2ee5b2636d362962363743ed71d9a58958ff5
+X-Git-Oldrev: 01e97b6f5c327692b20ed0759d2eb463344d3d8c
+X-Git-Newrev: c2a5677a5b503b54f759d3ab5219689315bb2222
 X-Patchwork-Hint: ignore
-Message-Id: <20250814195611.0842A87607@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/libssh: security
- bump to v0.11.2
+Message-Id: <20250814195611.6FE5B875ED@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/glibc: security
+ bump to version 2.41-70
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,219 +61,97 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8346639632092961024=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8346639632092961024==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=43e2ee5b2636d362962363743ed71d9a58958ff5
+commit: https://git.buildroot.net/buildroot/commit/?id=c2a5677a5b503b54f759d3ab5219689315bb2222
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-For more information on the release see:
-  - https://git.libssh.org/projects/libssh.git/tag/?h=libssh-0.11.2
+Fixes the following security issues:
 
-This fixes the following vulnerabilities:
+- CVE-2025-5702: power10: strcmp fails to save and restore nonvolatile
+  vector registers
+  https://sourceware.org/cgit/glibc/tree/advisories/GLIBC-SA-2025-0003
 
-- CVE-2025-4878
+- CVE-2025-5745: power10: strncmp fails to save and restore nonvolatile
+  vector registers
+  https://sourceware.org/cgit/glibc/tree/advisories/GLIBC-SA-2025-0004
 
-    A vulnerability was found in libssh, where an uninitialized variable
-    exists under certain conditions in the privatekey_from_file()
-    function. This flaw can be triggered if the file specified by the
-    filename doesn't exist and may lead to possible signing failures or
-    heap corruption.
+Note: CVE-2025-5702 and CVE-2025-5745 are specific to the Power 10
+hardware architecture, which is not supported in Buildroot at the time
+of this commit. The highest target CPU supported in Buildroot is
+Power 9. See the file `arch/Config.in.powerpc`.
 
-For more information, see:
-  - https://www.cve.org/CVERecord?id=CVE-2025-4878
-  - https://git.libssh.org/projects/libssh.git/commit/?id=697650caa97eaf7623924c75f9fcfec6dd423cd1
-  - https://git.libssh.org/projects/libssh.git/commit/?id=b35ee876adc92a208d47194772e99f9c71e0bedb
+- CVE-2025-8058: posix: Fix double-free after allocation failure in regcomp
+  https://sourceware.org/cgit/glibc/tree/advisories/GLIBC-SA-2025-0005
 
-- CVE-2025-5318
-
-    A flaw was found in the libssh library. An out-of-bounds read can be
-    triggered in the sftp_handle function due to an incorrect comparison
-    check that permits the function to access memory beyond the valid
-    handle list and to return an invalid pointer, which is used in further
-    processing. This vulnerability allows an authenticated remote attacker
-    to potentially read unintended memory regions, exposing sensitive
-    information or affect service behavior.
-
-For more information, see:
-  - https://www.cve.org/CVERecord?id=CVE-2025-5318
-  - https://www.libssh.org/security/advisories/CVE-2025-5318.txt
-
-- CVE-2025-5351
-
-    A flaw was found in the key export functionality of libssh. The issue
-    occurs in the internal function responsible for converting
-    cryptographic keys into serialized formats. During error handling, a
-    memory structure is freed but not cleared, leading to a potential
-    double free issue if an additional failure occurs later in the
-    function. This condition may result in heap corruption or application
-    instability in low-memory scenarios, posing a risk to system
-    reliability where key export operations are performed.
-
-For more information, see:
-  - https://www.cve.org/CVERecord?id=CVE-2025-5351
-
-- CVE-2025-5372
-
-    A flaw was found in libssh versions built with OpenSSL versions older
-    than 3.0, specifically in the ssh_kdf() function responsible for key
-    derivation. Due to inconsistent interpretation of return values where
-    OpenSSL uses 0 to indicate failure and libssh uses 0 for success—the
-    function may mistakenly return a success status even when key
-    derivation fails. This results in uninitialized cryptographic key
-    buffers being used in subsequent communication, potentially
-    compromising SSH sessions' confidentiality, integrity, and
-    availability.
-
-For more information, see:
-  - https://www.cve.org/CVERecord?id=CVE-2025-5372
-
-- CVE-2025-5449
-
-    A flaw was found in the SFTP server message decoding logic of libssh.
-    The issue occurs due to an incorrect packet length check that allows
-    an integer overflow when handling large payload sizes on 32-bit
-    systems. This issue leads to failed memory allocation and causes the
-    server process to crash, resulting in a denial of service.
-
-For more information, see:
-  - https://www.cve.org/CVERecord?id=CVE-2025-5449
-  - https://git.libssh.org/projects/libssh.git/commit/?h=stable-0.11&id=261612179f740bc62ba363d98b3bd5e5573a811f
-  - https://git.libssh.org/projects/libssh.git/commit/?h=stable-0.11&id=3443aec90188d6aab9282afc80a81df5ab72c4da
-  - https://git.libssh.org/projects/libssh.git/commit/?h=stable-0.11&id=5504ff40515439a5fecbb17da7483000c4d12eb7
-  - https://git.libssh.org/projects/libssh.git/commit/?h=stable-0.11&id=78485f446af9b30e37eb8f177b81940710d54496
-  - https://git.libssh.org/projects/libssh.git/commit/?h=stable-0.11&id=f79ec51b7fd519dbc5737a7ba826e3ed093f6ceb
-  - https://www.libssh.org/security/advisories/CVE-2025-5449.txt
-
-- CVE-2025-5987
-
-    A flaw was found in libssh when using the ChaCha20 cipher with the
-    OpenSSL library. If an attacker manages to exhaust the heap space,
-    this error is not detected and may lead to libssh using a partially
-    initialized cipher context. This occurs because the OpenSSL error code
-    returned aliases with the SSH_OK code, resulting in libssh not
-    properly detecting the error returned by the OpenSSL library. This
-    issue can lead to undefined behavior, including compromised data
-    confidentiality and integrity or crashes.
-
-For more information, see:
-  - https://www.cve.org/CVERecord?id=CVE-2025-5987
-
-The patch 0001 is removed as it's now included upstream see [1].
-
-[1] https://gitlab.com/libssh/libssh-mirror/-/commit/093431f929ec8c36d5941bfdc0b2d3b68404a2aa
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8083972a9098d174f3f7e1be007a55b134864cd8)
+[Julien: add the note about power10 in commit log]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit feaf53585a12d97802a67fd557ffc7340bbe6e13)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...Only-enable-CXX-when-running-the-coverage.patch | 57 ----------------------
- package/libssh/libssh.hash                         |  4 +-
- package/libssh/libssh.mk                           |  2 +-
- 3 files changed, 3 insertions(+), 60 deletions(-)
+ package/glibc/glibc.hash       |  2 +-
+ package/glibc/glibc.mk         | 11 ++++++++++-
+ package/localedef/localedef.mk |  2 +-
+ 3 files changed, 12 insertions(+), 3 deletions(-)
 
-diff --git a/package/libssh/0001-cmake-Only-enable-CXX-when-running-the-coverage.patch b/package/libssh/0001-cmake-Only-enable-CXX-when-running-the-coverage.patch
-deleted file mode 100644
-index c1f39b7d9a..0000000000
---- a/package/libssh/0001-cmake-Only-enable-CXX-when-running-the-coverage.patch
-+++ /dev/null
-@@ -1,57 +0,0 @@
--From 328ae3d2306c9f65b5e85a2be98a368c07287a05 Mon Sep 17 00:00:00 2001
--From: Thomas Perale <thomas.perale@mind.be>
--Date: Sat, 14 Sep 2024 21:07:30 +0200
--Subject: [PATCH] cmake: Only enable CXX when running the coverage
--
--Commit 25a678190c42b24076fdd805a8d7a722a8a9c798 introduced code coverage
--collection. That also introduced a dependency to CXX language.
--
--When cross-compiling libssh in an environment that doesn't have a C++ compiler
--the following error is raised: "No CMAKE_CXX_COMPILER could be found.".
--
--Since the C++ part is only needed for the coverage part, this commit only enable
--that language dependency when actually needing it.
--
--Signed-off-by: Thomas Perale <thomas.perale@mind.be>
--Upstream: https://gitlab.com/libssh/libssh-mirror/-/merge_requests/537
-----
-- CMakeLists.txt                    | 3 ++-
-- cmake/Modules/AddCMockaTest.cmake | 1 +
-- 2 files changed, 3 insertions(+), 1 deletion(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 13330ea3..5595a47a 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -9,7 +9,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules")
-- include(DefineCMakeDefaults)
-- include(DefineCompilerFlags)
-- 
---project(libssh VERSION 0.11.1 LANGUAGES C CXX)
--+project(libssh VERSION 0.11.1 LANGUAGES C)
-- 
-- # global needed variable
-- set(APPLICATION_NAME ${PROJECT_NAME})
--@@ -190,6 +190,7 @@ endif (WITH_SYMBOL_VERSIONING AND ABIMAP_FOUND)
-- 
-- # Coverage
-- if (WITH_COVERAGE)
--+    ENABLE_LANGUAGE(CXX)
--     include(CodeCoverage)
--     setup_target_for_coverage_lcov(
--         NAME "coverage"
--diff --git a/cmake/Modules/AddCMockaTest.cmake b/cmake/Modules/AddCMockaTest.cmake
--index 79178183..f49961ba 100644
----- a/cmake/Modules/AddCMockaTest.cmake
--+++ b/cmake/Modules/AddCMockaTest.cmake
--@@ -117,6 +117,7 @@ function(ADD_CMOCKA_TEST _TARGET_NAME)
--         ${TARGET_SYSTEM_EMULATOR} ${_TARGET_NAME}
--     )
--     if (WITH_COVERAGE)
--+        ENABLE_LANGUAGE(CXX)
--         include(CodeCoverage)
--         append_coverage_compiler_flags_to_target(${_TARGET_NAME})
--     endif (WITH_COVERAGE)
---- 
--2.46.0
--
-diff --git a/package/libssh/libssh.hash b/package/libssh/libssh.hash
-index b131557ee8..161d5b1e58 100644
---- a/package/libssh/libssh.hash
-+++ b/package/libssh/libssh.hash
+diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
+index 61af3d9488..0deba84dc7 100644
+--- a/package/glibc/glibc.hash
++++ b/package/glibc/glibc.hash
 @@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://www.libssh.org/files/0.11/libssh-0.11.1.tar.xz.asc
-+# https://www.libssh.org/files/0.11/libssh-0.11.2.tar.xz.asc
- # with key 88A228D89B07C2C77D0C780903D5DF8CFDD3E8E7
--sha256  14b7dcc72e91e08151c58b981a7b570ab2663f630e7d2837645d5a9c612c1b79  libssh-0.11.1.tar.xz
-+sha256  69529fc18f5b601f0baf0e5a4501a2bc26df5e2f116f5f8f07f19fafaa6d04e7  libssh-0.11.2.tar.xz
- sha256  1656186e951db1c010a8485481fa94587f7e53a26d24976bef97945ad0c4df5a  COPYING
-diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
-index a00e6a9445..7bcf077929 100644
---- a/package/libssh/libssh.mk
-+++ b/package/libssh/libssh.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+ # Locally calculated (fetched from Github)
+-sha256  ed2cd1f058f22f682e700c5be408975db62025a14863a5a6700ee93d5927504e  glibc-2.41-5-gcb7f20653724029be89224ed3a35d627cc5b4163.tar.gz
++sha256  166b6e7637bb45cb9352e4813005f83dd48f03ef634d3e9e94a30aa5a0300fab  glibc-2.41-70-g1502c248d58cb99a203731707987a4342926e830.tar.gz
  
- LIBSSH_VERSION_MAJOR = 0.11
--LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).1
-+LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).2
- LIBSSH_SOURCE = libssh-$(LIBSSH_VERSION).tar.xz
- LIBSSH_SITE = https://www.libssh.org/files/$(LIBSSH_VERSION_MAJOR)
- LIBSSH_LICENSE = LGPL-2.1
-
---===============8346639632092961024==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ # Hashes for license files
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 29617b9756..239e39a2ba 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -7,7 +7,7 @@
+ # Generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+ # When updating the version, please also update localedef
+-GLIBC_VERSION = 2.41-5-gcb7f20653724029be89224ed3a35d627cc5b4163
++GLIBC_VERSION = 2.41-70-g1502c248d58cb99a203731707987a4342926e830
+ 
+ # Upstream doesn't officially provide an https download link.
+ # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
+@@ -25,6 +25,15 @@ GLIBC_CPE_ID_VENDOR = gnu
+ # allow proper matching with the CPE database.
+ GLIBC_CPE_ID_VERSION = $(word 1, $(subst -,$(space),$(GLIBC_VERSION)))
+ 
++# Fixed by glibc-2.41-57-g84bdbf8a6f2fdafd3661489dbb7f79835a52da82
++GLIBC_IGNORE_CVES += CVE-2025-5745
++
++# Fixed by glibc-2.41-60-g0c76c951620f9e12df2a89b2c684878b55bb6795
++GLIBC_IGNORE_CVES += CVE-2025-5702
++
++# Fixed by glibc-2.41-64-g1e16d0096d80a6e12d5bfa8e0aafdd13c47efd65
++GLIBC_IGNORE_CVES += CVE-2025-8058
++
+ # All these CVEs are considered as not being security issues by
+ # upstream glibc:
+ #  https://security-tracker.debian.org/tracker/CVE-2010-4756
+diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
+index 7a6c94bd2f..c76a8d82a0 100644
+--- a/package/localedef/localedef.mk
++++ b/package/localedef/localedef.mk
+@@ -7,7 +7,7 @@
+ # Use the same VERSION and SITE as target glibc
+ # As in glibc.mk, generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+-LOCALEDEF_VERSION = 2.41-5-gcb7f20653724029be89224ed3a35d627cc5b4163
++LOCALEDEF_VERSION = 2.41-70-g1502c248d58cb99a203731707987a4342926e830
+ LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION).tar.gz
+ LOCALEDEF_SITE = $(call github,bminor,glibc,$(LOCALEDEF_VERSION))
+ HOST_LOCALEDEF_DL_SUBDIR = glibc
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8346639632092961024==--
