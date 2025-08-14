@@ -1,104 +1,104 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29646CA0EDC
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 171F8CA0EE4
 	for <buildroot@archiver.kernel.org>; Thu, 14 Aug 2025 15:33:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E67FC40EE4;
+	by smtp3.osuosl.org (Postfix) with ESMTP id DF72860D6D;
 	Thu, 14 Aug 2025 15:33:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FBLzApYK5tIP; Thu, 14 Aug 2025 15:33:33 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id q7AKkem1iGak; Thu, 14 Aug 2025 15:33:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2124941239
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7293860C0A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2124941239;
-	Thu, 14 Aug 2025 15:33:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7293860C0A;
+	Thu, 14 Aug 2025 15:33:31 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 378341BA
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 15:33:28 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 2757B271
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 15:33:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 34E4B40E84
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 15:33:28 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0E33A40E84
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 15:33:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zppj-aalbaA9 for <buildroot@buildroot.org>;
- Thu, 14 Aug 2025 15:33:27 +0000 (UTC)
+ id Dudw9lNtzXiT for <buildroot@buildroot.org>;
+ Thu, 14 Aug 2025 15:33:26 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::629; helo=mail-ej1-x629.google.com;
+ client-ip=2a00:1450:4864:20::62b; helo=mail-ej1-x62b.google.com;
  envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 74EEC40DDD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 74EEC40DDD
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
- [IPv6:2a00:1450:4864:20::629])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 74EEC40DDD
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 15:33:27 +0000 (UTC)
-Received: by mail-ej1-x629.google.com with SMTP id
- a640c23a62f3a-afcb61f6044so198458566b.0
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 08:33:27 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 47C2A40DDD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 47C2A40DDD
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
+ [IPv6:2a00:1450:4864:20::62b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 47C2A40DDD
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 15:33:26 +0000 (UTC)
+Received: by mail-ej1-x62b.google.com with SMTP id
+ a640c23a62f3a-afcb78d5e74so173482166b.1
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 08:33:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1755185605; x=1755790405;
+ d=1e100.net; s=20230601; t=1755185604; x=1755790404;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=jo6XNWQjvvZivIg+e9Jllj7wGYs4TiNC3o3+uYMg5Is=;
- b=DTgynqs+WMRIl9pKdZR+Ru/TfsymA1G4fMdBEMhFYamF2xksgf3N8t0EOp6b1WdAif
- hIX4Tk31zPPkO2g2SyLxyYXyXGhXdEaZkaUeHI3r9exL3R4A7gP9ZVUdOdyytGtFtkAy
- Hz/w9mEufQZSybagCXG+Q2sbOptN8PhkVrPpAK7mns0gtOLrtymik2Xv4AZByX1orbI4
- kswn5O7i0/o4ICwirgGg57M8FrpJZbrGEyX+76w2SFaW5yaOx8D+WV7vwK5Pv05Uutd4
- qB568DSMyISXJCs9rPIEgYE/roUKqTpaTXPnTGmE+ek/AOcuIa91MKkd1/SL+849Cmg7
- D3Fw==
-X-Gm-Message-State: AOJu0YyNZTm8XW5ot5N39oMxqZ5HSqDHLgxA8Le/cJGCBPyoppFWpU7t
- KNkvuRlLkTFRJyJusWuGZ/0Rp4rjWJMx5Wgj1bZQUxurcrlmDJnx8qrUQgbFpuGDH735XxDeO7l
- +nGZE6kA=
-X-Gm-Gg: ASbGncuh+VdYAXoEDPfQwxBvNK61977JUOxaIgGgNJtLJlt3WejAxRZtcFgL+izKqIr
- 2u1DcX/urLTlRLOGtZT4w9QGlNbyqGQIlzjAk5nsMddFysu6osqnZDSKxlZqYLhhNdaFLyMPS7u
- 4DRgSPEt0U+bSRUGd5G1YFQlWb+PsqRw5vF6i3hphpU/dEV76Sew61v0KA7um29LvECGoawVGi3
- Wi5+aAWGjQc6zwZcs3pl3XP6nX6DXgeuOk1v7uW53otzwZBBAoyBuvCxjb36iIR419IDNS2+XGV
- cky8Z3eSmX5Db/wjWLy6xwkKw/SXQ+dTL4TZZadP9vxdFna+ppm5vSXxtM7Z4NGz4hVUbixciWK
- UI0kIEc8/mZTr1Qt27aaZybm6eQeRnMGSp32TeVAC0vr5qM9u5K3//PXe+VPhocQ0eh98xJ8oC0
- yr
-X-Google-Smtp-Source: AGHT+IEXq1mxyW1uFF5xB/V22M6pYWcC0EXnO7OrwqF6HZoZHvnfjWr45pO/gGeJ+zR9VK44nXbxfw==
-X-Received: by 2002:a17:907:160c:b0:afc:a3b2:d100 with SMTP id
- a640c23a62f3a-afcbe7c8410mr356831366b.7.1755185605262; 
- Thu, 14 Aug 2025 08:33:25 -0700 (PDT)
+ bh=D81YniUm0d5I2fh0KwtxE7j/KmEcZkOvoWFi71EYJBU=;
+ b=iDJzp1kSA4kBbmPvJ8exycsmSFEf6HdQT+9p0QA59Ve7d/urAERw2ciCRF0hFE/dIk
+ f7orbRYLBkn8ToYXin/o0pU/N2ujQZr0W4yX767xj5EILZXIahFMADYhjNlbTNaPy0yA
+ Ts2PyXMoXn22oH6GsuJWFc7gfKU43K4EOsG6x5lR/zzm7XoJdfqPq/qgYsNWlFbquGbz
+ eaNbZSecbInD3wzMc+NRrpBU/pK1QGq2E/3DnnxGDouhJulluJVwyiRImgvybmGGanTw
+ SYKQkylmQSA8+HUYKzoa9786L2pfpfTyKvSPc4o2c8E4fc/rtV7b1fuZpXJyuH7FFkUP
+ Tq9A==
+X-Gm-Message-State: AOJu0YwN6CHktzpmWGetOoZl/m23oUPSKrWTkkdetmiGF7kcuUYDbqXE
+ VspxXw63lJjoHRTS3HQ6jdW2ok6R1DozhUhck19mNz1cD3+eb/bslwe+UqbLb8A7+/peERscp1r
+ FMunmLOQ=
+X-Gm-Gg: ASbGncuFPw1RYJgEVPftD84QJ9mcAdeji9nRyPPfUVw2T7tXNyG80SbzPQlXfkh93k7
+ Nl/N7ZvSAiANrxJKGNBqumcKpSkUVGbMTO1ji57zikC0tMEIU8V/JVOWp1x5MzFC1Ji9OAlQgy1
+ q1WDUHfEG+MYoWka5VVy3mdtlZVhaqBXsQohuetujTsKS+f7RxGO4LOjaHKuzuy9jLZEmGNA4hZ
+ 0v5ZVAofFEoUbyQAAZr8l9wqhfBsFnul+xhJsQiQNxClOWgu+laMrS5OtA0IcSUaftdoV9dPpxI
+ VIIKDz0UEmnDNdUIgXfom7Z9Z9U5cH2PJ2qj1/Rqmvitkxk6oIeXPRoPw2DbDbVXITKzVVxqhNO
+ eCgz/o+2/niuzTKVNX4gIausXWCoS/UM31sMNiOjl7273xytV+vSj6QNye3TBm0nT5u48OwdADX
+ RM
+X-Google-Smtp-Source: AGHT+IHdJ/Fkb/YM+r20kIbMiEVt7QY0WQdkLthq6qAW5hNzBqaRbAB88eqP9iiNQJNreKKpGBcV+w==
+X-Received: by 2002:a17:907:9815:b0:af8:f187:3222 with SMTP id
+ a640c23a62f3a-afcbe1afac3mr280899666b.33.1755185604170; 
+ Thu, 14 Aug 2025 08:33:24 -0700 (PDT)
 Received: from dario-ThinkPad-T14s-Gen-2i.fritz.box
  ([2001:871:248:acda:9b30:e43:d6cd:c58f])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-af91a21c022sm2561928966b.101.2025.08.14.08.33.24
+ a640c23a62f3a-af91a21c022sm2561928966b.101.2025.08.14.08.33.23
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 14 Aug 2025 08:33:24 -0700 (PDT)
+ Thu, 14 Aug 2025 08:33:23 -0700 (PDT)
 From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Thu, 14 Aug 2025 17:32:59 +0200
-Message-ID: <20250814153259.6822-6-dario.binacchi@amarulasolutions.com>
+Date: Thu, 14 Aug 2025 17:32:58 +0200
+Message-ID: <20250814153259.6822-5-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250814153259.6822-1-dario.binacchi@amarulasolutions.com>
 References: <20250814153259.6822-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1755185605; x=1755790405;
+ d=amarulasolutions.com; s=google; t=1755185604; x=1755790404;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=jo6XNWQjvvZivIg+e9Jllj7wGYs4TiNC3o3+uYMg5Is=;
- b=R9xzX5CvTZw86ELkqIrCGACg+VhMHD02//9QqGtkuK1hPegbgQzLyyoHeDUVmWXApG
- LBttRnhGiPCzgCtjtsVmhQZxF8kXqsA/gNEMBac5teNiz29syw/n5ocyo42waoo7Pu7W
- hQ3GX5Tqg2SRuQ8JbAcu9h7Vviyj663FhZ9B8=
+ bh=D81YniUm0d5I2fh0KwtxE7j/KmEcZkOvoWFi71EYJBU=;
+ b=FLWRKjUh9cHZdFUejlm1GqeviRiA+NI0wETK+Lc335cRdkBJMZMYoKQS5m3+uPTKSA
+ OHJ9owr5vzBekztP2+OLqAaI20YuVYv7rTA6rhCUujnplPGNBZM1PwqXCmU04yS128dc
+ oWh0VjY3gq+u2FpS4v96vqXj6vJdiWDBsR3bM=
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=R9xzX5Cv
-Subject: [Buildroot] [RFC v3 5/5] package/cutekeyboard: enable build with Qt6
+ header.b=FLWRKjUh
+Subject: [Buildroot] [RFC v3 4/5] package/qwt: enable build with Qt6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -122,62 +122,80 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Enable building of cutekeyboard with Qt6. With the merge of
-QuickControls2 into qtdeclarative, the corresponding Kconfig option has
-also disappeared in Buildroot.
+Version 6.3.0 added support for Qt6, so enable building Qwt with Qt6 as
+well.
 
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
 ---
 
-(no changes since v2)
+(no changes since v1)
 
-Added in v2
+ package/qwt/Config.in | 22 ++++++++++++++--------
+ package/qwt/qwt.mk    |  4 ++++
+ 2 files changed, 18 insertions(+), 8 deletions(-)
 
- package/cutekeyboard/Config.in       | 13 ++++++++-----
- package/cutekeyboard/cutekeyboard.mk |  6 +++++-
- 2 files changed, 13 insertions(+), 6 deletions(-)
-
-diff --git a/package/cutekeyboard/Config.in b/package/cutekeyboard/Config.in
-index bd661b0cd42e..4f83316644a2 100644
---- a/package/cutekeyboard/Config.in
-+++ b/package/cutekeyboard/Config.in
-@@ -1,10 +1,13 @@
- config BR2_PACKAGE_CUTEKEYBOARD
- 	bool "cutekeyboard"
+diff --git a/package/qwt/Config.in b/package/qwt/Config.in
+index 736ccc2a5ea5..c816b48a0851 100644
+--- a/package/qwt/Config.in
++++ b/package/qwt/Config.in
+@@ -1,9 +1,13 @@
+ config BR2_PACKAGE_QWT
+ 	bool "qwt"
 -	depends on BR2_PACKAGE_QT5
--	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE # qt5declarative
--	select BR2_PACKAGE_QT5DECLARATIVE
--	select BR2_PACKAGE_QT5DECLARATIVE_QUICK
--	select BR2_PACKAGE_QT5QUICKCONTROLS2
+-	select BR2_PACKAGE_QT5BASE_GUI
+-	select BR2_PACKAGE_QT5BASE_WIDGETS # printsupport
+-	select BR2_PACKAGE_QT5BASE_CONCURRENT
 +	depends on BR2_PACKAGE_QT5 || BR2_PACKAGE_QT6
-+	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE || BR2_PACKAGE_QT6 # qt5declarative
-+	select BR2_PACKAGE_QT5DECLARATIVE if BR2_PACKAGE_QT5
-+	select BR2_PACKAGE_QT5DECLARATIVE_QUICK if BR2_PACKAGE_QT5
-+	select BR2_PACKAGE_QT5QUICKCONTROLS2 if BR2_PACKAGE_QT5
++	select BR2_PACKAGE_QT5BASE_GUI if BR2_PACKAGE_QT5
++	select BR2_PACKAGE_QT5BASE_WIDGETS if BR2_PACKAGE_QT5 # printsupport
++	select BR2_PACKAGE_QT5BASE_CONCURRENT if BR2_PACKAGE_QT5
 +	select BR2_PACKAGE_QT6BASE_GUI if BR2_PACKAGE_QT6
-+	select BR2_PACKAGE_QT6DECLARATIVE if BR2_PACKAGE_QT6
-+	select BR2_PACKAGE_QT6DECLARATIVE_QUICK if BR2_PACKAGE_QT6
++	select BR2_PACKAGE_QT6BASE_WIDGETS if BR2_PACKAGE_QT6
++	select BR2_PACKAGE_QT6BASE_PRINTSUPPORT if BR2_PACKAGE_QT6
++	select BR2_PACKAGE_QT6BASE_CONCURRENT if BR2_PACKAGE_QT6
  	help
- 	  CuteKeyboard is a Qt virtual keyboard plugin for
- 	  embedded applications.
-diff --git a/package/cutekeyboard/cutekeyboard.mk b/package/cutekeyboard/cutekeyboard.mk
-index 775bed0fe995..8181950aac50 100644
---- a/package/cutekeyboard/cutekeyboard.mk
-+++ b/package/cutekeyboard/cutekeyboard.mk
-@@ -6,7 +6,11 @@
+ 	  Qwt is a graphics extension to the Qt GUI application
+ 	  framework. It provides a 2D plotting widget and more.
+@@ -14,15 +18,17 @@ if BR2_PACKAGE_QWT
  
- CUTEKEYBOARD_VERSION = v1.3.0
- CUTEKEYBOARD_SITE = $(call github,amarula,cutekeyboard,$(CUTEKEYBOARD_VERSION))
--CUTEKEYBOARD_DEPENDENCIES = qt5declarative qt5quickcontrols2
+ config BR2_PACKAGE_QWT_SVG
+ 	bool "SVG support"
+-	select BR2_PACKAGE_QT5SVG
++	select BR2_PACKAGE_QT5SVG if BR2_PACKAGE_QT5
++	select BR2_PACKAGE_QT6SVG if BR2_PACKAGE_QT6
+ 
+ config BR2_PACKAGE_QWT_MATHML
+ 	bool "MathML support"
+ 
+ config BR2_PACKAGE_QWT_OPENGL
+ 	bool "OpenGL support"
+-	depends on BR2_PACKAGE_QT5_GL_AVAILABLE
+-	select BR2_PACKAGE_QT5BASE_OPENGL
+-	select BR2_PACKAGE_QT5BASE_OPENGL_LIB
++	depends on BR2_PACKAGE_QT5_GL_AVAILABLE || BR2_PACKAGE_QT6
++	select BR2_PACKAGE_QT5BASE_OPENGL if BR2_PACKAGE_QT5
++	select BR2_PACKAGE_QT5BASE_OPENGL_LIB if BR2_PACKAGE_QT5
++	select BR2_PACKAGE_QT6BASE_OPENGL if BR2_PACKAGE_QT6
+ 
+ endif
+diff --git a/package/qwt/qwt.mk b/package/qwt/qwt.mk
+index 67292ee025be..0e835c700e16 100644
+--- a/package/qwt/qwt.mk
++++ b/package/qwt/qwt.mk
+@@ -18,8 +18,12 @@ QWT_CONFIG += -e 's%/features%/mkspecs/features%'
+ 
+ ifeq ($(BR2_PACKAGE_QWT_SVG),y)
+ QWT_CONFIG += -e 's/^.*QWT_CONFIG.*QwtSvg.*$$/QWT_CONFIG += QwtSvg/'
 +ifeq ($(BR2_PACKAGE_QT5),y)
-+CUTEKEYBOARD_DEPENDENCIES += qt5declarative qt5quickcontrols2
-+else
-+CUTEKEYBOARD_DEPENDENCIES += qt6declarative
+ QWT_DEPENDENCIES += qt5svg
+ else
++QWT_DEPENDENCIES += qt6svg
 +endif
- CUTEKEYBOARD_INSTALL_STAGING = YES
- CUTEKEYBOARD_LICENSE = MIT
- CUTEKEYBOARD_LICENSE_FILES = LICENSE
++else
+ QWT_CONFIG += -e 's/^.*QWT_CONFIG.*QwtSvg.*$$/\# QWT_CONFIG += QwtSvg/'
+ endif
+ 
 -- 
 2.43.0
 
