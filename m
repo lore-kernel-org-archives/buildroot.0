@@ -4,103 +4,103 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7162CA0EDC
-	for <buildroot@archiver.kernel.org>; Thu, 14 Aug 2025 20:31:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA867CA0EE4
+	for <buildroot@archiver.kernel.org>; Thu, 14 Aug 2025 20:31:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8E2AD80D9E;
-	Thu, 14 Aug 2025 20:31:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 95BAA80DBC;
+	Thu, 14 Aug 2025 20:31:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DyhzYirN-SFR; Thu, 14 Aug 2025 20:31:31 +0000 (UTC)
+ id 86OtQs2jiVp3; Thu, 14 Aug 2025 20:31:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C4DAC80DBA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 20ADA80DA5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C4DAC80DBA;
-	Thu, 14 Aug 2025 20:31:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 20ADA80DA5;
+	Thu, 14 Aug 2025 20:31:34 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7B52F1BA
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:31:30 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id CC95D228
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:31:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6229F402F5
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:31:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BBF60404AB
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:31:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wq6VsCJsgKL1 for <buildroot@buildroot.org>;
- Thu, 14 Aug 2025 20:31:27 +0000 (UTC)
+ id lvD4NkC2HmNa for <buildroot@buildroot.org>;
+ Thu, 14 Aug 2025 20:31:31 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
+ client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 221DC40363
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 221DC40363
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
- [IPv6:2a00:1450:4864:20::334])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 221DC40363
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:31:26 +0000 (UTC)
-Received: by mail-wm1-x334.google.com with SMTP id
- 5b1f17b1804b1-45a1b05fe23so7341735e9.1
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 13:31:26 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 997C240363
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 997C240363
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 997C240363
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:31:31 +0000 (UTC)
+Received: by mail-wm1-x335.google.com with SMTP id
+ 5b1f17b1804b1-45a1b0b42d5so9492295e9.2
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 13:31:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1755203485; x=1755808285;
+ d=1e100.net; s=20230601; t=1755203490; x=1755808290;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=AoIuuMAI6SmIFv6dK8lYO/9c/pzQeME3KxXbDtZ2Hmw=;
- b=RB/z/3VtTNMIE6WxqqeIe2uIAZFmgYeG8yefqEUIUqmmtS/x3Bn9wg0MCsIAu6DHXy
- O42gIjh8SZfHBJsB7rdHEh1+GTDghQqYiBOzWZZY75sqCYG93Np0pjDzNGM2nmQk5Z2X
- 2ehAOFmTHEBw2DtDpMvDYy9jrIVOh+p29h4BXpdgcI8omxptI3WJN4rhfQOxIR77MqDv
- VTfWJni3XPin0rpW8/1h03mQ4UIRZia3jJrMNyMOdXs4W90ydDCkY+dq/Hji4tMEp5Q2
- AaJ2aw00mmB9h1TZPJDrKY6CJIFP0WQQKVjgKbp8E8sYgHmF/OG09GJ7Mb8l8HSKlt4V
- UFAg==
+ bh=lKtURrV9a5OLzlcPFONjLK4eb/Qf4DkimftSQhh4nDY=;
+ b=ciebmxEYnu+//7b3p603WUrXfwFELnVUHCrKZ9UkTKC0ROgOY88olsswKfayuJStUO
+ F9sjSln+I0niN1wsYUqLepoLpWVKIICT5tiOk4zTRw4EZCYZ8xgFUqCXqqzGmxrRsnuv
+ snsVSh7YXLeVaa5EeLDdtIbMFygy68agjRXR61WUURpZk2uajHDz06g0E2nfrhnBBQcq
+ 9PWnr/8pwixASVG0ZWUU2EwAQV0ur7t1/b7Htc6FMxPAgvSFVKLpT4E+znN/y5GwUygY
+ pe+BTRM+TSBfPbVtXStyaoMDGfTK27jjTpnBAgGOCkf0PDEda3YlHgYAjCjnBZSMCugo
+ tLnQ==
 X-Forwarded-Encrypted: i=1;
- AJvYcCVM4OwzAaoHaFEcKO6WZvWJ5vQnal78CpmtQeZtg2lKsMt04lks1L6QCIU5bW/ybElwOJIbDowPHNU=@buildroot.org
-X-Gm-Message-State: AOJu0YwQgIMoS0qipuE+zVHAACOOGQsMVp4scoei7gQJCv5x4yUT+pjU
- 0RfYJy7VLajG/dZppshbQNai2Bz8IE4Li0TxiZxS+pPnxw5H6AvvlxPnI00a1zymccgsN0chyfV
- GDIdPTL4=
-X-Gm-Gg: ASbGncuFGYVEnf4Au1bi8Zty3b6ciSf4ISKke9BIt15QpI/HnezfL5cEfcFeopJeWZV
- M1D5ZPTaz6fbjZ0yO6yhSgbt5lQh0Ba8zEpNfzfU7M9I8N5rixpAxCUdqt/BKbqfkiBBJLRSCfR
- JQ4SaSdT2EbO7lfgOSsetrymdvm53+dffxwlB3PhznDyDEatMegRomFPq6i4683lyi4LAymQowE
- PvA+7Y6PyON0zQtCU6bOgSGVDQGL8zwe3OVMblEYmfM28IRp9fN+19yh0Rn61CsYaetPZ7ZZ7e4
- w+8tfg4QAO0zE4woifH3FA1Qj2MNVT4docgkwwAPwNVgwdMEx0WMVrjSPza4yepzGfP2C6O5t6r
- vWa9CsxXQU2nlxA==
-X-Google-Smtp-Source: AGHT+IFFT9nNTbVIY1zw1ta1F8DqZl9xQvxRwim/YmKBwi5lLaYLpnwHz1f8JCU33PPKeg1+MQmaww==
-X-Received: by 2002:a05:600c:1d16:b0:459:94a7:220f with SMTP id
- 5b1f17b1804b1-45a1b6577f9mr33244315e9.26.1755203484794; 
- Thu, 14 Aug 2025 13:31:24 -0700 (PDT)
+ AJvYcCV7367Dhu431OYW1b7xrPMvCflIV4V7O4NPnc2Yr4mn1px1UHbGmLmtSSoi52s8hB9Ehi356D6nhYM=@buildroot.org
+X-Gm-Message-State: AOJu0Yx+oRc0BlXywAIwSKJRvnUNFxphf8nOeWGFF6dUpBM3ZE1Ctesb
+ mHRiJIHJu/aj+pvd9QPZPzHzDqSz5b/YZE1fINWwOZilF9ejvwAKEIQASzwBhLXnEgkkl3C9Djg
+ CEAVHocI=
+X-Gm-Gg: ASbGncu/zdMOdICSLZbbTmflc/fvT/9t7TY8C2OYugp3FBxAEnz0HB0HG8SDU4L94yF
+ FNpvPSzcecZ1VzFWR9k22M1oHHV3PevPl6IZ0EHV0QpLU/EzQZ0s2krJmw66u2xcfoyLuBa54W3
+ XEFREdXaGNfw1qu9Z/rJUGWbGcfybIiCaIMBJebrEVBfmhX9TrkBJCPdQYyHUEsMkHmrEc4tu81
+ UJiKBMEtgBSa0dHfywfAjfregjtuJZcn7XGyHTMmKDicFox2S+0CE9io6wF29HG78IEy4eIyAYR
+ 7cznLNM2rJQHbRD+JmY4fAKxmJIHD9eLDeRuE3oKv/01JOq9n+14OLMWEUBESvBCjqR5eNdT8TM
+ MtTtmzWeg63U8cqhAM3Zg5EwT
+X-Google-Smtp-Source: AGHT+IEhVivmFzP/oMrVd8Gmg3z+anfSN2OoT2qCrXTrYVb5/goZKBKk56g+aBOAjMGhTMT5a/0KfA==
+X-Received: by 2002:a05:600c:138d:b0:43c:e70d:44f0 with SMTP id
+ 5b1f17b1804b1-45a1b6697d0mr33640495e9.19.1755203489613; 
+ Thu, 14 Aug 2025 13:31:29 -0700 (PDT)
 Received: from arch ([79.132.233.79]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-45a1fe2c019sm13255275e9.17.2025.08.14.13.31.24
+ ffacd0b85a97d-3b8f8b1bc81sm30017295f8f.69.2025.08.14.13.31.29
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 14 Aug 2025 13:31:24 -0700 (PDT)
-To: Peter Seiderer <ps.report@gmx.net>
+ Thu, 14 Aug 2025 13:31:29 -0700 (PDT)
+To: Peter Korsgaard <peter@korsgaard.com>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Thu, 14 Aug 2025 22:31:24 +0200
-Message-ID: <20250814203124.2814766-1-thomas.perale@mind.be>
+Date: Thu, 14 Aug 2025 22:31:27 +0200
+Message-ID: <20250814203128.2814933-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250803144208.195144-1-ps.report@gmx.net>
-References: <20250803144208.195144-1-ps.report@gmx.net>
+In-Reply-To: <20250805075624.2851092-1-peter@korsgaard.com>
+References: <20250805075624.2851092-1-peter@korsgaard.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1755203485; x=1755808285; darn=buildroot.org;
+ d=mind.be; s=google; t=1755203490; x=1755808290; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=AoIuuMAI6SmIFv6dK8lYO/9c/pzQeME3KxXbDtZ2Hmw=;
- b=S+InBQqfVBW8XrN3VKq+hLs0KmVYNJ/jGu6/gdUBn3bkkxCfg6Ky3aIDFTmr5/FxnC
- DAk5v5XjKrwhmGSPcffoPriGkxfEhOgkC241w2+jPGUEXDsYLeOvLhq8Z2PFGGJWyuMU
- 5wQ6OOxVtlQhEY+xcfWqxOXZ4bAhu8Tx171cofDOtz8Vpr2AJGgJo3rXXIvWfP+OhZyU
- hW+RVEfXChAycClDYmAKW8by95nvtw3bVA4UsOIV4eTqVmAbltquZISXm9FMGtmG1RoJ
- garAjEU4NqFoxXljsXhsXGvvsdpWauG5UPTmu8hCr3WP39LCizBd4eRVxc4/+YV1SC90
- fvPg==
+ bh=lKtURrV9a5OLzlcPFONjLK4eb/Qf4DkimftSQhh4nDY=;
+ b=IWYCMqxaZ91sr02Xk47BG9eAU6uPqmQ0EKH37WLIMbK2E+c/bHxfbzLXPpKGTyfd19
+ v3XYsirBlkbe7Z/MWoJO37ok9RffaVrFgDo06d+w70A9QLHMDBwdwqnicoAeFyh8PvB0
+ R3wNF+uEBkNW2HVNY7uxbTfDRxTYxkA2gRWPgjog5gSrmzkSHjfKz5+PrMAV8ck4FFmt
+ MD9veOuSJQS4MKyusvmnhBdiAh2lRKKLRwTucDNAtMYUZvc+wBqZDHedAOQbOe6RD3Vm
+ iPN2A7QVeS4GpVwPrLNv+rdy8qu8+ySGu8e/1zBBz7L2f19RFwjKjYmCDf5XJuw8nPma
+ g8oQ==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=S+InBQqf
-Subject: Re: [Buildroot] [PATCH 1/3] configs/raspberrypi*: bump kernel
- version to ac69f09 (6.12.41)
+ header.a=rsa-sha256 header.s=google header.b=IWYCMqxa
+Subject: Re: [Buildroot] [PATCH] package/python3: add upstream post-3.13.5
+ security fix for CVE-2025-8194
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,262 +114,203 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-In reply of:
-> Now based on 6.12.41 (from 6.12.20)
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-
-Applied to 2025.05.x. Thanks
-
-> ---
->  board/raspberrypi/patches/linux/linux.hash | 2 +-
->  configs/raspberrypi0_defconfig             | 2 +-
->  configs/raspberrypi0w_defconfig            | 2 +-
->  configs/raspberrypi2_64_defconfig          | 2 +-
->  configs/raspberrypi2_defconfig             | 2 +-
->  configs/raspberrypi3_64_defconfig          | 2 +-
->  configs/raspberrypi3_defconfig             | 2 +-
->  configs/raspberrypi3_qt5we_defconfig       | 2 +-
->  configs/raspberrypi4_64_defconfig          | 2 +-
->  configs/raspberrypi4_defconfig             | 2 +-
->  configs/raspberrypi5_defconfig             | 2 +-
->  configs/raspberrypi_defconfig              | 2 +-
->  configs/raspberrypicm4io_64_defconfig      | 2 +-
->  configs/raspberrypicm4io_defconfig         | 2 +-
->  configs/raspberrypicm5io_defconfig         | 2 +-
->  configs/raspberrypizero2w_64_defconfig     | 2 +-
->  configs/raspberrypizero2w_defconfig        | 2 +-
->  17 files changed, 17 insertions(+), 17 deletions(-)
-> 
-> diff --git a/board/raspberrypi/patches/linux/linux.hash b/board/raspberrypi/patches/linux/linux.hash
-> index 3f278cb885..51b0684b20 100644
-> --- a/board/raspberrypi/patches/linux/linux.hash
-> +++ b/board/raspberrypi/patches/linux/linux.hash
-> @@ -1,2 +1,2 @@
->  # Locally calculated
-> -sha256  e7b484dc66565e8ea7b2792eea864c7c5ba6d8d0f6ea65288e701e03befec33f  linux-cd231d4775b14f228606c09f219b48308f6ab3aa.tar.gz
-> +sha256  afc44e2899a3c32a1b968272a5816e5c90bea346341153807553396621e65dde  linux-ac69f097e1fba94502cbd36278db204120a37943.tar.gz
-> diff --git a/configs/raspberrypi0_defconfig b/configs/raspberrypi0_defconfig
-> index ffd1ef78c1..1be48c32dc 100644
-> --- a/configs/raspberrypi0_defconfig
-> +++ b/configs/raspberrypi0_defconfig
-> @@ -8,7 +8,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi0/post-build.sh"
->  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi0/post-image.sh"
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,cd231d4775b14f228606c09f219b48308f6ab3aa)/linux-cd231d4775b14f228606c09f219b48308f6ab3aa.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,ac69f097e1fba94502cbd36278db204120a37943)/linux-ac69f097e1fba94502cbd36278db204120a37943.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
->  BR2_LINUX_KERNEL_DTS_SUPPORT=y
->  BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2708-rpi-zero"
-> diff --git a/configs/raspberrypi0w_defconfig b/configs/raspberrypi0w_defconfig
-> index 45dab555d3..c7803c5af6 100644
-> --- a/configs/raspberrypi0w_defconfig
-> +++ b/configs/raspberrypi0w_defconfig
-> @@ -8,7 +8,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi0w/post-build.sh"
->  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi0w/post-image.sh"
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,cd231d4775b14f228606c09f219b48308f6ab3aa)/linux-cd231d4775b14f228606c09f219b48308f6ab3aa.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,ac69f097e1fba94502cbd36278db204120a37943)/linux-ac69f097e1fba94502cbd36278db204120a37943.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
->  BR2_LINUX_KERNEL_DTS_SUPPORT=y
->  BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2708-rpi-zero-w"
-> diff --git a/configs/raspberrypi2_64_defconfig b/configs/raspberrypi2_64_defconfig
-> index 211e8470b4..57f98c7396 100644
-> --- a/configs/raspberrypi2_64_defconfig
-> +++ b/configs/raspberrypi2_64_defconfig
-> @@ -10,7 +10,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi2-64/post-build.sh"
->  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi2-64/post-image.sh"
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,cd231d4775b14f228606c09f219b48308f6ab3aa)/linux-cd231d4775b14f228606c09f219b48308f6ab3aa.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,ac69f097e1fba94502cbd36278db204120a37943)/linux-ac69f097e1fba94502cbd36278db204120a37943.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
->  BR2_LINUX_KERNEL_DTS_SUPPORT=y
->  BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2710-rpi-2-b"
-> diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
-> index d19a64ce11..60eb62b473 100644
-> --- a/configs/raspberrypi2_defconfig
-> +++ b/configs/raspberrypi2_defconfig
-> @@ -11,7 +11,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi2/post-build.sh"
->  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi2/post-image.sh"
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,cd231d4775b14f228606c09f219b48308f6ab3aa)/linux-cd231d4775b14f228606c09f219b48308f6ab3aa.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,ac69f097e1fba94502cbd36278db204120a37943)/linux-ac69f097e1fba94502cbd36278db204120a37943.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
->  BR2_LINUX_KERNEL_DTS_SUPPORT=y
->  BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2709-rpi-2-b broadcom/bcm2710-rpi-2-b"
-> diff --git a/configs/raspberrypi3_64_defconfig b/configs/raspberrypi3_64_defconfig
-> index 927f82a4cb..59b8b3fc6f 100644
-> --- a/configs/raspberrypi3_64_defconfig
-> +++ b/configs/raspberrypi3_64_defconfig
-> @@ -10,7 +10,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3-64/post-build.sh"
->  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3-64/post-image.sh"
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,cd231d4775b14f228606c09f219b48308f6ab3aa)/linux-cd231d4775b14f228606c09f219b48308f6ab3aa.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,ac69f097e1fba94502cbd36278db204120a37943)/linux-ac69f097e1fba94502cbd36278db204120a37943.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
->  BR2_LINUX_KERNEL_DTS_SUPPORT=y
->  BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2710-rpi-3-b broadcom/bcm2710-rpi-3-b-plus broadcom/bcm2710-rpi-cm3"
-> diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
-> index 9342bc4b6a..3f7fdeb3ab 100644
-> --- a/configs/raspberrypi3_defconfig
-> +++ b/configs/raspberrypi3_defconfig
-> @@ -11,7 +11,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3/post-build.sh"
->  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3/post-image.sh"
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,cd231d4775b14f228606c09f219b48308f6ab3aa)/linux-cd231d4775b14f228606c09f219b48308f6ab3aa.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,ac69f097e1fba94502cbd36278db204120a37943)/linux-ac69f097e1fba94502cbd36278db204120a37943.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
->  BR2_LINUX_KERNEL_DTS_SUPPORT=y
->  BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2710-rpi-3-b broadcom/bcm2710-rpi-3-b-plus broadcom/bcm2710-rpi-cm3"
-> diff --git a/configs/raspberrypi3_qt5we_defconfig b/configs/raspberrypi3_qt5we_defconfig
-> index dc8160711d..8cbb8b0d41 100644
-> --- a/configs/raspberrypi3_qt5we_defconfig
-> +++ b/configs/raspberrypi3_qt5we_defconfig
-> @@ -12,7 +12,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3/post-build.sh"
->  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3/post-image.sh"
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,cd231d4775b14f228606c09f219b48308f6ab3aa)/linux-cd231d4775b14f228606c09f219b48308f6ab3aa.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,ac69f097e1fba94502cbd36278db204120a37943)/linux-ac69f097e1fba94502cbd36278db204120a37943.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
->  BR2_LINUX_KERNEL_DTS_SUPPORT=y
->  BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2710-rpi-3-b broadcom/bcm2710-rpi-3-b-plus broadcom/bcm2710-rpi-cm3"
-> diff --git a/configs/raspberrypi4_64_defconfig b/configs/raspberrypi4_64_defconfig
-> index 2e2c52e5c9..c0a33c3eb5 100644
-> --- a/configs/raspberrypi4_64_defconfig
-> +++ b/configs/raspberrypi4_64_defconfig
-> @@ -11,7 +11,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi4-64/post-build.sh"
->  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi4-64/post-image.sh"
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,cd231d4775b14f228606c09f219b48308f6ab3aa)/linux-cd231d4775b14f228606c09f219b48308f6ab3aa.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,ac69f097e1fba94502cbd36278db204120a37943)/linux-ac69f097e1fba94502cbd36278db204120a37943.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
->  BR2_LINUX_KERNEL_DTS_SUPPORT=y
->  BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2711-rpi-4-b broadcom/bcm2711-rpi-400 broadcom/bcm2711-rpi-cm4 broadcom/bcm2711-rpi-cm4s"
-> diff --git a/configs/raspberrypi4_defconfig b/configs/raspberrypi4_defconfig
-> index d7229b66f2..75078a3c2c 100644
-> --- a/configs/raspberrypi4_defconfig
-> +++ b/configs/raspberrypi4_defconfig
-> @@ -11,7 +11,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi4/post-build.sh"
->  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi4/post-image.sh"
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,cd231d4775b14f228606c09f219b48308f6ab3aa)/linux-cd231d4775b14f228606c09f219b48308f6ab3aa.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,ac69f097e1fba94502cbd36278db204120a37943)/linux-ac69f097e1fba94502cbd36278db204120a37943.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
->  BR2_LINUX_KERNEL_DTS_SUPPORT=y
->  BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2711-rpi-4-b broadcom/bcm2711-rpi-400 broadcom/bcm2711-rpi-cm4 broadcom/bcm2711-rpi-cm4s"
-> diff --git a/configs/raspberrypi5_defconfig b/configs/raspberrypi5_defconfig
-> index d18f2ff480..6928e2ba0f 100644
-> --- a/configs/raspberrypi5_defconfig
-> +++ b/configs/raspberrypi5_defconfig
-> @@ -10,7 +10,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi5/post-build.sh"
->  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi5/post-image.sh"
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,cd231d4775b14f228606c09f219b48308f6ab3aa)/linux-cd231d4775b14f228606c09f219b48308f6ab3aa.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,ac69f097e1fba94502cbd36278db204120a37943)/linux-ac69f097e1fba94502cbd36278db204120a37943.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcm2712"
->  BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/raspberrypi/linux-4k-page-size.fragment"
->  BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
-> index 90a5240bd8..00525e050e 100644
-> --- a/configs/raspberrypi_defconfig
-> +++ b/configs/raspberrypi_defconfig
-> @@ -9,7 +9,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi/post-build.sh"
->  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi/post-image.sh"
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,cd231d4775b14f228606c09f219b48308f6ab3aa)/linux-cd231d4775b14f228606c09f219b48308f6ab3aa.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,ac69f097e1fba94502cbd36278db204120a37943)/linux-ac69f097e1fba94502cbd36278db204120a37943.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
->  BR2_LINUX_KERNEL_DTS_SUPPORT=y
->  BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2708-rpi-b-rev1 broadcom/bcm2708-rpi-b broadcom/bcm2708-rpi-b-plus broadcom/bcm2708-rpi-cm"
-> diff --git a/configs/raspberrypicm4io_64_defconfig b/configs/raspberrypicm4io_64_defconfig
-> index 1e5915c287..648740c273 100644
-> --- a/configs/raspberrypicm4io_64_defconfig
-> +++ b/configs/raspberrypicm4io_64_defconfig
-> @@ -11,7 +11,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypicm4io-64/post-build.sh"
->  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypicm4io-64/post-image.sh"
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,cd231d4775b14f228606c09f219b48308f6ab3aa)/linux-cd231d4775b14f228606c09f219b48308f6ab3aa.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,ac69f097e1fba94502cbd36278db204120a37943)/linux-ac69f097e1fba94502cbd36278db204120a37943.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
->  BR2_LINUX_KERNEL_DTS_SUPPORT=y
->  BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2711-rpi-cm4"
-> diff --git a/configs/raspberrypicm4io_defconfig b/configs/raspberrypicm4io_defconfig
-> index 51400f9217..e5bbff76c1 100644
-> --- a/configs/raspberrypicm4io_defconfig
-> +++ b/configs/raspberrypicm4io_defconfig
-> @@ -11,7 +11,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypicm4io/post-build.sh"
->  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypicm4io/post-image.sh"
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,cd231d4775b14f228606c09f219b48308f6ab3aa)/linux-cd231d4775b14f228606c09f219b48308f6ab3aa.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,ac69f097e1fba94502cbd36278db204120a37943)/linux-ac69f097e1fba94502cbd36278db204120a37943.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
->  BR2_LINUX_KERNEL_DTS_SUPPORT=y
->  BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2711-rpi-cm4"
-> diff --git a/configs/raspberrypicm5io_defconfig b/configs/raspberrypicm5io_defconfig
-> index 9bfde8f501..122a25ed92 100644
-> --- a/configs/raspberrypicm5io_defconfig
-> +++ b/configs/raspberrypicm5io_defconfig
-> @@ -10,7 +10,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypicm5io/post-build.sh"
->  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypicm5io/post-image.sh"
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,cd231d4775b14f228606c09f219b48308f6ab3aa)/linux-cd231d4775b14f228606c09f219b48308f6ab3aa.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,ac69f097e1fba94502cbd36278db204120a37943)/linux-ac69f097e1fba94502cbd36278db204120a37943.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcm2712"
->  BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/raspberrypi/linux-4k-page-size.fragment"
->  BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> diff --git a/configs/raspberrypizero2w_64_defconfig b/configs/raspberrypizero2w_64_defconfig
-> index a3c5b586a3..7a00fa14ac 100644
-> --- a/configs/raspberrypizero2w_64_defconfig
-> +++ b/configs/raspberrypizero2w_64_defconfig
-> @@ -9,7 +9,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypizero2w-64/post-build.sh"
->  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypizero2w-64/post-image.sh"
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,cd231d4775b14f228606c09f219b48308f6ab3aa)/linux-cd231d4775b14f228606c09f219b48308f6ab3aa.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,ac69f097e1fba94502cbd36278db204120a37943)/linux-ac69f097e1fba94502cbd36278db204120a37943.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
->  BR2_LINUX_KERNEL_DTS_SUPPORT=y
->  BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2710-rpi-zero-2-w"
-> diff --git a/configs/raspberrypizero2w_defconfig b/configs/raspberrypizero2w_defconfig
-> index 4385c7bdd6..36e66676fa 100644
-> --- a/configs/raspberrypizero2w_defconfig
-> +++ b/configs/raspberrypizero2w_defconfig
-> @@ -10,7 +10,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypizero2w/post-build.sh"
->  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypizero2w/post-image.sh"
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,cd231d4775b14f228606c09f219b48308f6ab3aa)/linux-cd231d4775b14f228606c09f219b48308f6ab3aa.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,ac69f097e1fba94502cbd36278db204120a37943)/linux-ac69f097e1fba94502cbd36278db204120a37943.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
->  BR2_LINUX_KERNEL_DTS_SUPPORT=y
->  BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2710-rpi-zero-2-w"
-> -- 
-> 2.50.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SW4gcmVwbHkgb2Y6Cj4gRml4ZXMgdGhlIGZvbGxvd2luZyB2dWxuZXJhYmlsaXR5Ogo+IAo+IENW
+RS0yMDI1LTgxOTQ6IFRoZXJlIGlzIGEgZGVmZWN0IGluIHRoZSBDUHl0aG9uIOKAnHRhcmZpbGXi
+gJ0gbW9kdWxlIGFmZmVjdGluZwo+IHRoZSDigJxUYXJGaWxl4oCdIGV4dHJhY3Rpb24gYW5kIGVu
+dHJ5IGVudW1lcmF0aW9uIEFQSXMuICBUaGUgdGFyIGltcGxlbWVudGF0aW9uCj4gd291bGQgcHJv
+Y2VzcyB0YXIgYXJjaGl2ZXMgd2l0aCBuZWdhdGl2ZSBvZmZzZXRzIHdpdGhvdXQgZXJyb3IsIHJl
+c3VsdGluZyBpbgo+IGFuIGluZmluaXRlIGxvb3AgYW5kIGRlYWRsb2NrIGR1cmluZyB0aGUgcGFy
+c2luZyBvZiBtYWxpY2lvdXNseSBjcmFmdGVkIHRhcgo+IGFyY2hpdmVzLgo+IAo+IGh0dHBzOi8v
+bnZkLm5pc3QuZ292L3Z1bG4vZGV0YWlsL0NWRS0yMDI1LTgxOTQKPiBodHRwczovL3d3dy5vcGVu
+d2FsbC5jb20vbGlzdHMvb3NzLXNlY3VyaXR5LzIwMjUvMDcvMjgvMQo+IAo+IFNpZ25lZC1vZmYt
+Ynk6IFBldGVyIEtvcnNnYWFyZCA8cGV0ZXJAa29yc2dhYXJkLmNvbT4KCkFwcGxpZWQgdG8gMjAy
+NS4wNS54LiBUaGFua3MKCj4gLS0tCj4gIC4uLmFyZmlsZS1ub3ctdmFsaWRhdGVzLWFyY2hpdmVz
+LXRvLWVucy5wYXRjaCB8IDIyMSArKysrKysrKysrKysrKysrKysKPiAgcGFja2FnZS9weXRob24z
+L3B5dGhvbjMubWsgICAgICAgICAgICAgICAgICAgIHwgICAzICsKPiAgMiBmaWxlcyBjaGFuZ2Vk
+LCAyMjQgaW5zZXJ0aW9ucygrKQo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9weXRob24z
+LzAwMDktMy4xMy1naC0xMzA1NzctdGFyZmlsZS1ub3ctdmFsaWRhdGVzLWFyY2hpdmVzLXRvLWVu
+cy5wYXRjaAo+IAo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3B5dGhvbjMvMDAwOS0zLjEzLWdoLTEz
+MDU3Ny10YXJmaWxlLW5vdy12YWxpZGF0ZXMtYXJjaGl2ZXMtdG8tZW5zLnBhdGNoIGIvcGFja2Fn
+ZS9weXRob24zLzAwMDktMy4xMy1naC0xMzA1NzctdGFyZmlsZS1ub3ctdmFsaWRhdGVzLWFyY2hp
+dmVzLXRvLWVucy5wYXRjaAo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAwMDAwMDAw
+MC4uMTg0OGVjMjc0NQo+IC0tLSAvZGV2L251bGwKPiArKysgYi9wYWNrYWdlL3B5dGhvbjMvMDAw
+OS0zLjEzLWdoLTEzMDU3Ny10YXJmaWxlLW5vdy12YWxpZGF0ZXMtYXJjaGl2ZXMtdG8tZW5zLnBh
+dGNoCj4gQEAgLTAsMCArMSwyMjEgQEAKPiArRnJvbSBjZGFlOTIzZmZlMTg3ZDZlZjkxNmMwZjY2
+NWEzMTI0OTYxOTE5M2ZlIE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQo+ICtGcm9tOiAiTWlzcyBJ
+c2xpbmd0b24gKGJvdCkiCj4gKyA8MzE0ODg5MDkrbWlzcy1pc2xpbmd0b25AdXNlcnMubm9yZXBs
+eS5naXRodWIuY29tPgo+ICtEYXRlOiBNb24sIDI4IEp1bCAyMDI1IDE3OjU5OjMzICswMjAwCj4g
+K1N1YmplY3Q6IFtQQVRDSF0gWzMuMTNdIGdoLTEzMDU3NzogdGFyZmlsZSBub3cgdmFsaWRhdGVz
+IGFyY2hpdmVzIHRvIGVuc3VyZQo+ICsgbWVtYmVyIG9mZnNldHMgYXJlIG5vbi1uZWdhdGl2ZSAo
+R0gtMTM3MDI3KSAoIzEzNzE3MCkKPiArCj4gK2doLTEzMDU3NzogdGFyZmlsZSBub3cgdmFsaWRh
+dGVzIGFyY2hpdmVzIHRvIGVuc3VyZSBtZW1iZXIgb2Zmc2V0cyBhcmUgbm9uLW5lZ2F0aXZlIChH
+SC0xMzcwMjcpCj4gKyhjaGVycnkgcGlja2VkIGZyb20gY29tbWl0IDcwNDBhYTU0ZjE0Njc2OTM4
+OTcwZTEwYzVmNzRlYTkzY2Q1NmFhMzgpCj4gKwo+ICtVcHN0cmVhbTogaHR0cHM6Ly9naXRodWIu
+Y29tL3B5dGhvbi9jcHl0aG9uL2NvbW1pdC9jZGFlOTIzZmZlMTg3ZDZlZjkxNmMwZjY2NWEzMTI0
+OTYxOTE5M2ZlCj4gK0NvLWF1dGhvcmVkLWJ5OiBBbGV4YW5kZXIgVXJpZWxlcyA8YWV1cmllbGVz
+bkB1c2Vycy5ub3JlcGx5LmdpdGh1Yi5jb20+Cj4gK0NvLWF1dGhvcmVkLWJ5OiBHcmVnb3J5IFAu
+IFNtaXRoIDxncmVnQGtyeXB0by5vcmc+Cj4gK1NpZ25lZC1vZmYtYnk6IFBldGVyIEtvcnNnYWFy
+ZCA8cGV0ZXJAa29yc2dhYXJkLmNvbT4KPiArLS0tCj4gKyBMaWIvdGFyZmlsZS5weSAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgfCAgIDMgKwo+ICsgTGliL3Rlc3QvdGVzdF90YXJmaWxl
+LnB5ICAgICAgICAgICAgICAgICAgICAgIHwgMTU2ICsrKysrKysrKysrKysrKysrKwo+ICsgLi4u
+LTA3LTIzLTAwLTM1LTI5LmdoLWlzc3VlLTEzMDU3Ny5jN0VJVHkucnN0IHwgICAzICsKPiArIDMg
+ZmlsZXMgY2hhbmdlZCwgMTYyIGluc2VydGlvbnMoKykKPiArIGNyZWF0ZSBtb2RlIDEwMDY0NCBN
+aXNjL05FV1MuZC9uZXh0L0xpYnJhcnkvMjAyNS0wNy0yMy0wMC0zNS0yOS5naC1pc3N1ZS0xMzA1
+NzcuYzdFSVR5LnJzdAo+ICsKPiArZGlmZiAtLWdpdCBhL0xpYi90YXJmaWxlLnB5IGIvTGliL3Rh
+cmZpbGUucHkKPiAraW5kZXggMDk4MGY2YTgxNzUuLjlmZjlkZjY5NmRlIDEwMDc1NQo+ICstLS0g
+YS9MaWIvdGFyZmlsZS5weQo+ICsrKysgYi9MaWIvdGFyZmlsZS5weQo+ICtAQCAtMTYzNiw2ICsx
+NjM2LDkgQEAgZGVmIF9ibG9jayhzZWxmLCBjb3VudCk6Cj4gKyAgICAgICAgICIiIlJvdW5kIHVw
+IGEgYnl0ZSBjb3VudCBieSBCTE9DS1NJWkUgYW5kIHJldHVybiBpdCwKPiArICAgICAgICAgICAg
+ZS5nLiBfYmxvY2soODM0KSA9PiAxMDI0Lgo+ICsgICAgICAgICAiIiIKPiArKyAgICAgICAgIyBP
+bmx5IG5vbi1uZWdhdGl2ZSBvZmZzZXRzIGFyZSBhbGxvd2VkCj4gKysgICAgICAgIGlmIGNvdW50
+IDwgMDoKPiArKyAgICAgICAgICAgIHJhaXNlIEludmFsaWRIZWFkZXJFcnJvcigiaW52YWxpZCBv
+ZmZzZXQiKQo+ICsgICAgICAgICBibG9ja3MsIHJlbWFpbmRlciA9IGRpdm1vZChjb3VudCwgQkxP
+Q0tTSVpFKQo+ICsgICAgICAgICBpZiByZW1haW5kZXI6Cj4gKyAgICAgICAgICAgICBibG9ja3Mg
+Kz0gMQo+ICtkaWZmIC0tZ2l0IGEvTGliL3Rlc3QvdGVzdF90YXJmaWxlLnB5IGIvTGliL3Rlc3Qv
+dGVzdF90YXJmaWxlLnB5Cj4gK2luZGV4IGFjMzFiZTBmMDUwLi43MDI0YmU0NmRlNSAxMDA2NDQK
+PiArLS0tIGEvTGliL3Rlc3QvdGVzdF90YXJmaWxlLnB5Cj4gKysrKyBiL0xpYi90ZXN0L3Rlc3Rf
+dGFyZmlsZS5weQo+ICtAQCAtNTAsNiArNTAsNyBAQCBkZWYgc2hhMjU2c3VtKGRhdGEpOgo+ICsg
+eHpuYW1lID0gb3MucGF0aC5qb2luKFRFTVBESVIsICJ0ZXN0dGFyLnRhci54eiIpCj4gKyB0bXBu
+YW1lID0gb3MucGF0aC5qb2luKFRFTVBESVIsICJ0bXAudGFyIikKPiArIGRvdGxlc3NuYW1lID0g
+b3MucGF0aC5qb2luKFRFTVBESVIsICJ0ZXN0dGFyIikKPiArK1NQQUNFID0gYiIgIgo+ICsgCj4g
+KyBzaGEyNTZfcmVndHlwZSA9ICgKPiArICAgICAiZTA5ZTRiYzhiM2M5ZDkxNzdlNzcyNTYzNTNi
+MzZjMTU5ZjVmMDQwNTMxYmJkNGIwMjRhOGY5YjkxOTZjNzFjZSIKPiArQEAgLTQ1NzgsNiArNDU3
+OSwxNjEgQEAgZGVmIGV4dHJhY3RhbGwoc2VsZiwgYXIpOgo+ICsgICAgICAgICBhci5leHRyYWN0
+YWxsKHNlbGYudGVzdGRpciwgZmlsdGVyPSdmdWxseV90cnVzdGVkJykKPiArIAo+ICsgCj4gKytj
+bGFzcyBPZmZzZXRWYWxpZGF0aW9uVGVzdHModW5pdHRlc3QuVGVzdENhc2UpOgo+ICsrICAgIHRh
+cm5hbWUgPSB0bXBuYW1lCj4gKysgICAgaW52YWxpZF9wb3NpeF9oZWFkZXIgPSAoCj4gKysgICAg
+ICAgICMgbmFtZTogMTAwIGJ5dGVzCj4gKysgICAgICAgIHRhcmZpbGUuTlVMICogdGFyZmlsZS5M
+RU5HVEhfTkFNRQo+ICsrICAgICAgICAjIG1vZGUsIHNwYWNlLCBudWxsIHRlcm1pbmF0b3I6IDgg
+Ynl0ZXMKPiArKyAgICAgICAgKyBiIjAwMDc1NSIgKyBTUEFDRSArIHRhcmZpbGUuTlVMCj4gKysg
+ICAgICAgICMgdWlkLCBzcGFjZSwgbnVsbCB0ZXJtaW5hdG9yOiA4IGJ5dGVzCj4gKysgICAgICAg
+ICsgYiIwMDAwMDEiICsgU1BBQ0UgKyB0YXJmaWxlLk5VTAo+ICsrICAgICAgICAjIGdpZCwgc3Bh
+Y2UsIG51bGwgdGVybWluYXRvcjogOCBieXRlcwo+ICsrICAgICAgICArIGIiMDAwMDAxIiArIFNQ
+QUNFICsgdGFyZmlsZS5OVUwKPiArKyAgICAgICAgIyBzaXplLCBzcGFjZTogMTIgYnl0ZXMKPiAr
+KyAgICAgICAgKyBiIlx4ZmYiICogMTEgKyBTUEFDRQo+ICsrICAgICAgICAjIG10aW1lLCBzcGFj
+ZTogMTIgYnl0ZXMKPiArKyAgICAgICAgKyB0YXJmaWxlLk5VTCAqIDExICsgU1BBQ0UKPiArKyAg
+ICAgICAgIyBjaGtzdW06IDggYnl0ZXMKPiArKyAgICAgICAgKyBiIjAwMTE0MDciICsgdGFyZmls
+ZS5OVUwKPiArKyAgICAgICAgIyB0eXBlOiAxIGJ5dGUKPiArKyAgICAgICAgKyB0YXJmaWxlLlJF
+R1RZUEUKPiArKyAgICAgICAgIyBsaW5rbmFtZTogMTAwIGJ5dGVzCj4gKysgICAgICAgICsgdGFy
+ZmlsZS5OVUwgKiB0YXJmaWxlLkxFTkdUSF9MSU5LCj4gKysgICAgICAgICMgbWFnaWM6IDYgYnl0
+ZXMsIHZlcnNpb246IDIgYnl0ZXMKPiArKyAgICAgICAgKyB0YXJmaWxlLlBPU0lYX01BR0lDCj4g
+KysgICAgICAgICMgdW5hbWU6IDMyIGJ5dGVzCj4gKysgICAgICAgICsgdGFyZmlsZS5OVUwgKiAz
+Mgo+ICsrICAgICAgICAjIGduYW1lOiAzMiBieXRlcwo+ICsrICAgICAgICArIHRhcmZpbGUuTlVM
+ICogMzIKPiArKyAgICAgICAgIyBkZXZtYWpvciwgc3BhY2UsIG51bGwgdGVybWluYXRvcjogOCBi
+eXRlcwo+ICsrICAgICAgICArIHRhcmZpbGUuTlVMICogNiArIFNQQUNFICsgdGFyZmlsZS5OVUwK
+PiArKyAgICAgICAgIyBkZXZtaW5vciwgc3BhY2UsIG51bGwgdGVybWluYXRvcjogOCBieXRlcwo+
+ICsrICAgICAgICArIHRhcmZpbGUuTlVMICogNiArIFNQQUNFICsgdGFyZmlsZS5OVUwKPiArKyAg
+ICAgICAgIyBwcmVmaXg6IDE1NSBieXRlcwo+ICsrICAgICAgICArIHRhcmZpbGUuTlVMICogdGFy
+ZmlsZS5MRU5HVEhfUFJFRklYCj4gKysgICAgICAgICMgcGFkZGluZzogMTIgYnl0ZXMKPiArKyAg
+ICAgICAgKyB0YXJmaWxlLk5VTCAqIDEyCj4gKysgICAgKQo+ICsrICAgIGludmFsaWRfZ251X2hl
+YWRlciA9ICgKPiArKyAgICAgICAgIyBuYW1lOiAxMDAgYnl0ZXMKPiArKyAgICAgICAgdGFyZmls
+ZS5OVUwgKiB0YXJmaWxlLkxFTkdUSF9OQU1FCj4gKysgICAgICAgICMgbW9kZSwgbnVsbCB0ZXJt
+aW5hdG9yOiA4IGJ5dGVzCj4gKysgICAgICAgICsgYiIwMDAwNzU1IiArIHRhcmZpbGUuTlVMCj4g
+KysgICAgICAgICMgdWlkLCBudWxsIHRlcm1pbmF0b3I6IDggYnl0ZXMKPiArKyAgICAgICAgKyBi
+IjAwMDAwMDEiICsgdGFyZmlsZS5OVUwKPiArKyAgICAgICAgIyBnaWQsIHNwYWNlLCBudWxsIHRl
+cm1pbmF0b3I6IDggYnl0ZXMKPiArKyAgICAgICAgKyBiIjAwMDAwMDEiICsgdGFyZmlsZS5OVUwK
+PiArKyAgICAgICAgIyBzaXplLCBzcGFjZTogMTIgYnl0ZXMKPiArKyAgICAgICAgKyBiIlx4ZmYi
+ICogMTEgKyBTUEFDRQo+ICsrICAgICAgICAjIG10aW1lLCBzcGFjZTogMTIgYnl0ZXMKPiArKyAg
+ICAgICAgKyB0YXJmaWxlLk5VTCAqIDExICsgU1BBQ0UKPiArKyAgICAgICAgIyBjaGtzdW06IDgg
+Ynl0ZXMKPiArKyAgICAgICAgKyBiIjAwMTEzMjciICsgdGFyZmlsZS5OVUwKPiArKyAgICAgICAg
+IyB0eXBlOiAxIGJ5dGUKPiArKyAgICAgICAgKyB0YXJmaWxlLlJFR1RZUEUKPiArKyAgICAgICAg
+IyBsaW5rbmFtZTogMTAwIGJ5dGVzCj4gKysgICAgICAgICsgdGFyZmlsZS5OVUwgKiB0YXJmaWxl
+LkxFTkdUSF9MSU5LCj4gKysgICAgICAgICMgbWFnaWM6IDggYnl0ZXMKPiArKyAgICAgICAgKyB0
+YXJmaWxlLkdOVV9NQUdJQwo+ICsrICAgICAgICAjIHVuYW1lOiAzMiBieXRlcwo+ICsrICAgICAg
+ICArIHRhcmZpbGUuTlVMICogMzIKPiArKyAgICAgICAgIyBnbmFtZTogMzIgYnl0ZXMKPiArKyAg
+ICAgICAgKyB0YXJmaWxlLk5VTCAqIDMyCj4gKysgICAgICAgICMgZGV2bWFqb3IsIG51bGwgdGVy
+bWluYXRvcjogOCBieXRlcwo+ICsrICAgICAgICArIHRhcmZpbGUuTlVMICogOAo+ICsrICAgICAg
+ICAjIGRldm1pbm9yLCBudWxsIHRlcm1pbmF0b3I6IDggYnl0ZXMKPiArKyAgICAgICAgKyB0YXJm
+aWxlLk5VTCAqIDgKPiArKyAgICAgICAgIyBwYWRkaW5nOiAxNjcgYnl0ZXMKPiArKyAgICAgICAg
+KyB0YXJmaWxlLk5VTCAqIDE2Nwo+ICsrICAgICkKPiArKyAgICBpbnZhbGlkX3Y3X2hlYWRlciA9
+ICgKPiArKyAgICAgICAgIyBuYW1lOiAxMDAgYnl0ZXMKPiArKyAgICAgICAgdGFyZmlsZS5OVUwg
+KiB0YXJmaWxlLkxFTkdUSF9OQU1FCj4gKysgICAgICAgICMgbW9kZSwgc3BhY2UsIG51bGwgdGVy
+bWluYXRvcjogOCBieXRlcwo+ICsrICAgICAgICArIGIiMDAwNzU1IiArIFNQQUNFICsgdGFyZmls
+ZS5OVUwKPiArKyAgICAgICAgIyB1aWQsIHNwYWNlLCBudWxsIHRlcm1pbmF0b3I6IDggYnl0ZXMK
+PiArKyAgICAgICAgKyBiIjAwMDAwMSIgKyBTUEFDRSArIHRhcmZpbGUuTlVMCj4gKysgICAgICAg
+ICMgZ2lkLCBzcGFjZSwgbnVsbCB0ZXJtaW5hdG9yOiA4IGJ5dGVzCj4gKysgICAgICAgICsgYiIw
+MDAwMDEiICsgU1BBQ0UgKyB0YXJmaWxlLk5VTAo+ICsrICAgICAgICAjIHNpemUsIHNwYWNlOiAx
+MiBieXRlcwo+ICsrICAgICAgICArIGIiXHhmZiIgKiAxMSArIFNQQUNFCj4gKysgICAgICAgICMg
+bXRpbWUsIHNwYWNlOiAxMiBieXRlcwo+ICsrICAgICAgICArIHRhcmZpbGUuTlVMICogMTEgKyBT
+UEFDRQo+ICsrICAgICAgICAjIGNoa3N1bTogOCBieXRlcwo+ICsrICAgICAgICArIGIiMDAxMDA3
+MCIgKyB0YXJmaWxlLk5VTAo+ICsrICAgICAgICAjIHR5cGU6IDEgYnl0ZQo+ICsrICAgICAgICAr
+IHRhcmZpbGUuUkVHVFlQRQo+ICsrICAgICAgICAjIGxpbmtuYW1lOiAxMDAgYnl0ZXMKPiArKyAg
+ICAgICAgKyB0YXJmaWxlLk5VTCAqIHRhcmZpbGUuTEVOR1RIX0xJTksKPiArKyAgICAgICAgIyBw
+YWRkaW5nOiAyNTUgYnl0ZXMKPiArKyAgICAgICAgKyB0YXJmaWxlLk5VTCAqIDI1NQo+ICsrICAg
+ICkKPiArKyAgICB2YWxpZF9nbnVfaGVhZGVyID0gdGFyZmlsZS5UYXJJbmZvKCJmaWxlbmFtZSIp
+LnRvYnVmKHRhcmZpbGUuR05VX0ZPUk1BVCkKPiArKyAgICBkYXRhX2Jsb2NrID0gYiJceGZmIiAq
+IHRhcmZpbGUuQkxPQ0tTSVpFCj4gKysKPiArKyAgICBkZWYgX3dyaXRlX2J1ZmZlcihzZWxmLCBi
+dWZmZXIpOgo+ICsrICAgICAgICB3aXRoIG9wZW4oc2VsZi50YXJuYW1lLCAid2IiKSBhcyBmOgo+
+ICsrICAgICAgICAgICAgZi53cml0ZShidWZmZXIpCj4gKysKPiArKyAgICBkZWYgX2dldF9tZW1i
+ZXJzKHNlbGYsIGlnbm9yZV96ZXJvcz1Ob25lKToKPiArKyAgICAgICAgd2l0aCBvcGVuKHNlbGYu
+dGFybmFtZSwgInJiIikgYXMgZjoKPiArKyAgICAgICAgICAgIHdpdGggdGFyZmlsZS5vcGVuKAo+
+ICsrICAgICAgICAgICAgICAgIG1vZGU9InIiLCBmaWxlb2JqPWYsIGlnbm9yZV96ZXJvcz1pZ25v
+cmVfemVyb3MKPiArKyAgICAgICAgICAgICkgYXMgdGFyOgo+ICsrICAgICAgICAgICAgICAgIHJl
+dHVybiB0YXIuZ2V0bWVtYmVycygpCj4gKysKPiArKyAgICBkZWYgX2Fzc2VydF9yYWlzZXNfcmVh
+ZF9lcnJvcl9leGNlcHRpb24oc2VsZik6Cj4gKysgICAgICAgIHdpdGggc2VsZi5hc3NlcnRSYWlz
+ZXNSZWdleCgKPiArKyAgICAgICAgICAgIHRhcmZpbGUuUmVhZEVycm9yLCAiZmlsZSBjb3VsZCBu
+b3QgYmUgb3BlbmVkIHN1Y2Nlc3NmdWxseSIKPiArKyAgICAgICAgKToKPiArKyAgICAgICAgICAg
+IHNlbGYuX2dldF9tZW1iZXJzKCkKPiArKwo+ICsrICAgIGRlZiB0ZXN0X2ludmFsaWRfb2Zmc2V0
+X2hlYWRlcl92YWxpZGF0aW9ucyhzZWxmKToKPiArKyAgICAgICAgZm9yIHRhcl9mb3JtYXQsIGlu
+dmFsaWRfaGVhZGVyIGluICgKPiArKyAgICAgICAgICAgICgicG9zaXgiLCBzZWxmLmludmFsaWRf
+cG9zaXhfaGVhZGVyKSwKPiArKyAgICAgICAgICAgICgiZ251Iiwgc2VsZi5pbnZhbGlkX2dudV9o
+ZWFkZXIpLAo+ICsrICAgICAgICAgICAgKCJ2NyIsIHNlbGYuaW52YWxpZF92N19oZWFkZXIpLAo+
+ICsrICAgICAgICApOgo+ICsrICAgICAgICAgICAgd2l0aCBzZWxmLnN1YlRlc3QoZm9ybWF0PXRh
+cl9mb3JtYXQpOgo+ICsrICAgICAgICAgICAgICAgIHNlbGYuX3dyaXRlX2J1ZmZlcihpbnZhbGlk
+X2hlYWRlcikKPiArKyAgICAgICAgICAgICAgICBzZWxmLl9hc3NlcnRfcmFpc2VzX3JlYWRfZXJy
+b3JfZXhjZXB0aW9uKCkKPiArKwo+ICsrICAgIGRlZiB0ZXN0X2Vhcmx5X3N0b3BfYXRfaW52YWxp
+ZF9vZmZzZXRfaGVhZGVyKHNlbGYpOgo+ICsrICAgICAgICBidWZmZXIgPSBzZWxmLnZhbGlkX2du
+dV9oZWFkZXIgKyBzZWxmLmludmFsaWRfZ251X2hlYWRlciArIHNlbGYudmFsaWRfZ251X2hlYWRl
+cgo+ICsrICAgICAgICBzZWxmLl93cml0ZV9idWZmZXIoYnVmZmVyKQo+ICsrICAgICAgICBtZW1i
+ZXJzID0gc2VsZi5fZ2V0X21lbWJlcnMoKQo+ICsrICAgICAgICBzZWxmLmFzc2VydEVxdWFsKGxl
+bihtZW1iZXJzKSwgMSkKPiArKyAgICAgICAgc2VsZi5hc3NlcnRFcXVhbChtZW1iZXJzWzBdLm5h
+bWUsICJmaWxlbmFtZSIpCj4gKysgICAgICAgIHNlbGYuYXNzZXJ0RXF1YWwobWVtYmVyc1swXS5v
+ZmZzZXQsIDApCj4gKysKPiArKyAgICBkZWYgdGVzdF9pZ25vcmVfaW52YWxpZF9hcmNoaXZlKHNl
+bGYpOgo+ICsrICAgICAgICAjIDMgaW52YWxpZCBoZWFkZXJzIHdpdGggdGhlaXIgcmVzcGVjdGl2
+ZSBkYXRhCj4gKysgICAgICAgIGJ1ZmZlciA9IChzZWxmLmludmFsaWRfZ251X2hlYWRlciArIHNl
+bGYuZGF0YV9ibG9jaykgKiAzCj4gKysgICAgICAgIHNlbGYuX3dyaXRlX2J1ZmZlcihidWZmZXIp
+Cj4gKysgICAgICAgIG1lbWJlcnMgPSBzZWxmLl9nZXRfbWVtYmVycyhpZ25vcmVfemVyb3M9VHJ1
+ZSkKPiArKyAgICAgICAgc2VsZi5hc3NlcnRFcXVhbChsZW4obWVtYmVycyksIDApCj4gKysKPiAr
+KyAgICBkZWYgdGVzdF9pZ25vcmVfaW52YWxpZF9vZmZzZXRfaGVhZGVycyhzZWxmKToKPiArKyAg
+ICAgICAgZm9yIGZpcnN0X2Jsb2NrLCBzZWNvbmRfYmxvY2ssIGV4cGVjdGVkX29mZnNldCBpbiAo
+Cj4gKysgICAgICAgICAgICAoCj4gKysgICAgICAgICAgICAgICAgKHNlbGYudmFsaWRfZ251X2hl
+YWRlciksCj4gKysgICAgICAgICAgICAgICAgKHNlbGYuaW52YWxpZF9nbnVfaGVhZGVyICsgc2Vs
+Zi5kYXRhX2Jsb2NrKSwKPiArKyAgICAgICAgICAgICAgICAwLAo+ICsrICAgICAgICAgICAgKSwK
+PiArKyAgICAgICAgICAgICgKPiArKyAgICAgICAgICAgICAgICAoc2VsZi5pbnZhbGlkX2dudV9o
+ZWFkZXIgKyBzZWxmLmRhdGFfYmxvY2spLAo+ICsrICAgICAgICAgICAgICAgIChzZWxmLnZhbGlk
+X2dudV9oZWFkZXIpLAo+ICsrICAgICAgICAgICAgICAgIDEwMjQsCj4gKysgICAgICAgICAgICAp
+LAo+ICsrICAgICAgICApOgo+ICsrICAgICAgICAgICAgc2VsZi5fd3JpdGVfYnVmZmVyKGZpcnN0
+X2Jsb2NrICsgc2Vjb25kX2Jsb2NrKQo+ICsrICAgICAgICAgICAgbWVtYmVycyA9IHNlbGYuX2dl
+dF9tZW1iZXJzKGlnbm9yZV96ZXJvcz1UcnVlKQo+ICsrICAgICAgICAgICAgc2VsZi5hc3NlcnRF
+cXVhbChsZW4obWVtYmVycyksIDEpCj4gKysgICAgICAgICAgICBzZWxmLmFzc2VydEVxdWFsKG1l
+bWJlcnNbMF0ubmFtZSwgImZpbGVuYW1lIikKPiArKyAgICAgICAgICAgIHNlbGYuYXNzZXJ0RXF1
+YWwobWVtYmVyc1swXS5vZmZzZXQsIGV4cGVjdGVkX29mZnNldCkKPiArKwo+ICsrCj4gKyBkZWYg
+c2V0VXBNb2R1bGUoKToKPiArICAgICBvc19oZWxwZXIudW5saW5rKFRFTVBESVIpCj4gKyAgICAg
+b3MubWFrZWRpcnMoVEVNUERJUikKPiArZGlmZiAtLWdpdCBhL01pc2MvTkVXUy5kL25leHQvTGli
+cmFyeS8yMDI1LTA3LTIzLTAwLTM1LTI5LmdoLWlzc3VlLTEzMDU3Ny5jN0VJVHkucnN0IGIvTWlz
+Yy9ORVdTLmQvbmV4dC9MaWJyYXJ5LzIwMjUtMDctMjMtMDAtMzUtMjkuZ2gtaXNzdWUtMTMwNTc3
+LmM3RUlUeS5yc3QKPiArbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiAraW5kZXggMDAwMDAwMDAwMDAu
+LjM0MmNhYmJjODY1Cj4gKy0tLSAvZGV2L251bGwKPiArKysrIGIvTWlzYy9ORVdTLmQvbmV4dC9M
+aWJyYXJ5LzIwMjUtMDctMjMtMDAtMzUtMjkuZ2gtaXNzdWUtMTMwNTc3LmM3RUlUeS5yc3QKPiAr
+QEAgLTAsMCArMSwzIEBACj4gKys6bW9kOmB0YXJmaWxlYCBub3cgdmFsaWRhdGVzIGFyY2hpdmVz
+IHRvIGVuc3VyZSBtZW1iZXIgb2Zmc2V0cyBhcmUKPiArK25vbi1uZWdhdGl2ZS4gIChDb250cmli
+dXRlZCBieSBBbGV4YW5kZXIgRW5yaXF1ZSBVcmllbGVzIE5pZXRvIGluCj4gKys6Z2g6YDEzMDU3
+N2AuKQo+ICstLSAKPiArMi4zOS41Cj4gKwo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3B5dGhvbjMv
+cHl0aG9uMy5tayBiL3BhY2thZ2UvcHl0aG9uMy9weXRob24zLm1rCj4gaW5kZXggZWMyMTBjY2Fj
+OC4uMzM3ZTE0MDFkZSAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL3B5dGhvbjMvcHl0aG9uMy5tawo+
+ICsrKyBiL3BhY2thZ2UvcHl0aG9uMy9weXRob24zLm1rCj4gQEAgLTEzLDYgKzEzLDkgQEAgUFlU
+SE9OM19MSUNFTlNFX0ZJTEVTID0gTElDRU5TRQo+ICBQWVRIT04zX0NQRV9JRF9WRU5ET1IgPSBw
+eXRob24KPiAgUFlUSE9OM19DUEVfSURfUFJPRFVDVCA9IHB5dGhvbgo+ICAKPiArIyAwMDA5LTMu
+MTMtZ2gtMTMwNTc3LXRhcmZpbGUtbm93LXZhbGlkYXRlcy1hcmNoaXZlcy10by1lbnMucGF0Y2gK
+PiArUFlUSE9OM19JR05PUkVfQ1ZFUyArPSBDVkUtMjAyNS04MTk0Cj4gKwo+ICAjIFRoaXMgaG9z
+dCBQeXRob24gaXMgaW5zdGFsbGVkIGluICQoSE9TVF9ESVIpLCBhcyBpdCBpcyBuZWVkZWQgd2hl
+bgo+ICAjIGNyb3NzLWNvbXBpbGluZyB0aGlyZC1wYXJ0eSBQeXRob24gbW9kdWxlcy4KPiAgCj4g
+LS0gCj4gMi4zOS41Cj4gCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX18KPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4gYnVpbGRyb290QGJ1aWxkcm9vdC5v
+cmcKPiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJv
+b3QKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRy
+b290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1
+aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
