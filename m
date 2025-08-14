@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 202C9CA0EE4
-	for <buildroot@archiver.kernel.org>; Thu, 14 Aug 2025 19:56:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0519CA0EE6
+	for <buildroot@archiver.kernel.org>; Thu, 14 Aug 2025 19:56:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1D58B8075D;
-	Thu, 14 Aug 2025 19:56:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0714580D38;
+	Thu, 14 Aug 2025 19:56:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dSl1BcVDzeLB; Thu, 14 Aug 2025 19:56:16 +0000 (UTC)
+ id 7igm2gDoFt0s; Thu, 14 Aug 2025 19:56:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 283748073B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 068B180D3B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 283748073B;
-	Thu, 14 Aug 2025 19:56:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id E9BBE93E
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 19:56:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 068B180D3B;
+	Thu, 14 Aug 2025 19:56:19 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 07641941
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 19:56:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DB9148074D
+ by smtp3.osuosl.org (Postfix) with ESMTP id DB6A960719
  for <buildroot@buildroot.org>; Thu, 14 Aug 2025 19:56:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4c9swUxmstjs for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JHUseQKGb9qi for <buildroot@buildroot.org>;
  Thu, 14 Aug 2025 19:56:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0301F80702
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5201A60714
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0301F80702
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5201A60714
  for <buildroot@buildroot.org>; Thu, 14 Aug 2025 19:56:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E5350875ED; Thu, 14 Aug 2025 19:56:10 +0000 (UTC)
+ id 32DBA87606; Thu, 14 Aug 2025 19:56:11 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 12 Aug 2025 15:00:53 +0200
+Date: Thu, 14 Aug 2025 09:25:55 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 745791cf6e117f7230f3e7d6bd759711f295358f
-X-Git-Newrev: 80c44ebfd6ac05c6a3d61fae209d3859e16c8ce7
+X-Git-Oldrev: 8bd2be012e6cb669940a09f1bd539e1a8cb929b8
+X-Git-Newrev: f65bbd34f8503a74a92673524c4c74166c8a4595
 X-Patchwork-Hint: ignore
-Message-Id: <20250814195610.E5350875ED@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/python-propcache:
- bump to version 0.3.2
+Message-Id: <20250814195611.32DBA87606@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] utils/generate-cyclonedx:
+ move metadata section to top level
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,46 +66,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=80c44ebfd6ac05c6a3d61fae209d3859e16c8ce7
+commit: https://git.buildroot.net/buildroot/commit/?id=f65bbd34f8503a74a92673524c4c74166c8a4595
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 784f52b64788ab4e3686c9e20d6c17e574f2d8e0)
+This makes it more readable and easier to quickly identify basic information.
+
+Signed-off-by: Fabien Lehoussel <fabien.lehoussel@smile.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 6098cc45d64e9e7928f888b7cdf79533813d19c4)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/python-propcache/python-propcache.hash | 4 ++--
- package/python-propcache/python-propcache.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ utils/generate-cyclonedx | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/package/python-propcache/python-propcache.hash b/package/python-propcache/python-propcache.hash
-index 1bda1e96fb..6e89eac6aa 100644
---- a/package/python-propcache/python-propcache.hash
-+++ b/package/python-propcache/python-propcache.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/propcache/json
--md5  c642caac1415818205011277008142ea  propcache-0.2.1.tar.gz
--sha256  3f77ce728b19cb537714499928fe800c3dda29e8d9428778fc7c186da4c09a64  propcache-0.2.1.tar.gz
-+md5  1c073b491620a9f6d568276d61f80277  propcache-0.3.2.tar.gz
-+sha256  20d7d62e4e7ef05f221e0db2856b979540686342e7dd9973b815599c7057e168  propcache-0.3.2.tar.gz
- # Locally computed sha256 checksums
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/python-propcache/python-propcache.mk b/package/python-propcache/python-propcache.mk
-index 92a31a19af..e1050c4919 100644
---- a/package/python-propcache/python-propcache.mk
-+++ b/package/python-propcache/python-propcache.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
+index 46f68ac63d..d662f02527 100755
+--- a/utils/generate-cyclonedx
++++ b/utils/generate-cyclonedx
+@@ -297,6 +297,14 @@ def main():
+         "bomFormat": "CycloneDX",
+         "$schema": f"http://cyclonedx.org/schema/bom-{CYCLONEDX_VERSION}.schema.json",
+         "specVersion": f"{CYCLONEDX_VERSION}",
++        "metadata": {
++            "component": {
++                "bom-ref": "buildroot",
++                "name": "buildroot",
++                "type": "firmware",
++                "version": f"{BR2_VERSION_FULL}",
++            },
++        },
+         "components": [
+             cyclonedx_component(name, comp) for name, comp in filtered_show_info_dict.items()
+         ],
+@@ -306,14 +314,6 @@ def main():
+               for ref in filtered_show_info_dict],
+         ],
+         "vulnerabilities": cyclonedx_vulnerabilities(show_info_dict),
+-        "metadata": {
+-            "component": {
+-                "bom-ref": "buildroot",
+-                "name": "buildroot",
+-                "type": "firmware",
+-                "version": f"{BR2_VERSION_FULL}",
+-            },
+-        },
+     }
  
--PYTHON_PROPCACHE_VERSION = 0.2.1
-+PYTHON_PROPCACHE_VERSION = 0.3.2
- PYTHON_PROPCACHE_SOURCE = propcache-$(PYTHON_PROPCACHE_VERSION).tar.gz
--PYTHON_PROPCACHE_SITE = https://files.pythonhosted.org/packages/20/c8/2a13f78d82211490855b2fb303b6721348d0787fdd9a12ac46d99d3acde1
-+PYTHON_PROPCACHE_SITE = https://files.pythonhosted.org/packages/a6/16/43264e4a779dd8588c21a70f0709665ee8f611211bdd2c87d952cfa7c776
- PYTHON_PROPCACHE_SETUP_TYPE = setuptools
- PYTHON_PROPCACHE_LICENSE = Apache-2.0
- PYTHON_PROPCACHE_LICENSE_FILES = LICENSE
+     args.out_file.write(json.dumps(cyclonedx_dict, indent=2))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
