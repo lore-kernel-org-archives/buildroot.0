@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F481CA0EE4
-	for <buildroot@archiver.kernel.org>; Thu, 14 Aug 2025 20:06:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D4C6CA0EE4
+	for <buildroot@archiver.kernel.org>; Thu, 14 Aug 2025 20:06:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E8F4260757;
-	Thu, 14 Aug 2025 20:06:15 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IRYxcUHZQtMq; Thu, 14 Aug 2025 20:06:15 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 18D9B60751
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 18D9B60751;
-	Thu, 14 Aug 2025 20:06:15 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1DD7193E
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:06:06 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0418780D0F
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:06:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id ED7F080DBB;
+	Thu, 14 Aug 2025 20:06:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4hLdDwOX64Oz for <buildroot@buildroot.org>;
+ id 22urpbQufP3F; Thu, 14 Aug 2025 20:06:17 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 57FE380D0F
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 57FE380D0F;
+	Thu, 14 Aug 2025 20:06:16 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 26E881BA
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:06:06 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2534A404C5
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:06:05 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0zK7CXicrpcD for <buildroot@buildroot.org>;
  Thu, 14 Aug 2025 20:06:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3433680C8A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 396F94049F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3433680C8A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 396F94049F
  for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:06:04 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 268428758C; Thu, 14 Aug 2025 20:06:04 +0000 (UTC)
+ id 370068760B; Thu, 14 Aug 2025 20:06:04 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 14 Aug 2025 09:29:32 +0200
+Date: Thu, 14 Aug 2025 09:29:42 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: de11e142c39e9a4b8815f2561844b88a5d53e5e1
-X-Git-Newrev: 34d5425d17f13cc73511c8bbc02bf7fdf9ab83f4
+X-Git-Oldrev: 5ca396f4bc2e691a64489711ccd5a37a580648d7
+X-Git-Newrev: 8694dd1d07e2cd27504e9e737efdc7487624f17a
 X-Patchwork-Hint: ignore
-Message-Id: <20250814200604.268428758C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/flatcc: add CPE
- identifier
+Message-Id: <20250814200604.370068760B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/glibc: security
+ bump to version 2.41-70
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,35 +66,91 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=34d5425d17f13cc73511c8bbc02bf7fdf9ab83f4
+commit: https://git.buildroot.net/buildroot/commit/?id=8694dd1d07e2cd27504e9e737efdc7487624f17a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-The cpe:2.3:a:flatcc_project:flatcc:*:*:*:*:*:*:*:*
-valid for this package.
+Fixes the following security issues:
 
-See https://nvd.nist.gov/products/cpe/detail/AA7FC7B6-537C-4735-B615-689D3A91C994
+- CVE-2025-5702: power10: strcmp fails to save and restore nonvolatile
+  vector registers
+  https://sourceware.org/cgit/glibc/tree/advisories/GLIBC-SA-2025-0003
 
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+- CVE-2025-5745: power10: strncmp fails to save and restore nonvolatile
+  vector registers
+  https://sourceware.org/cgit/glibc/tree/advisories/GLIBC-SA-2025-0004
+
+Note: CVE-2025-5702 and CVE-2025-5745 are specific to the Power 10
+hardware architecture, which is not supported in Buildroot at the time
+of this commit. The highest target CPU supported in Buildroot is
+Power 9. See the file `arch/Config.in.powerpc`.
+
+- CVE-2025-8058: posix: Fix double-free after allocation failure in regcomp
+  https://sourceware.org/cgit/glibc/tree/advisories/GLIBC-SA-2025-0005
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit a008f3e7cb3b77ff487f7028eed4d6bb386b17ff)
+[Julien: add the note about power10 in commit log]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit feaf53585a12d97802a67fd557ffc7340bbe6e13)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/flatcc/flatcc.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/glibc/glibc.hash       |  2 +-
+ package/glibc/glibc.mk         | 11 ++++++++++-
+ package/localedef/localedef.mk |  2 +-
+ 3 files changed, 12 insertions(+), 3 deletions(-)
 
-diff --git a/package/flatcc/flatcc.mk b/package/flatcc/flatcc.mk
-index 06be1a1338..b2d1efe00d 100644
---- a/package/flatcc/flatcc.mk
-+++ b/package/flatcc/flatcc.mk
-@@ -13,6 +13,8 @@ FLATCC_DEPENDENCIES = host-flatcc
- FLATCC_CONF_OPTS = -DFLATCC_ALLOW_WERROR=OFF
- HOST_FLATCC_CONF_OPTS = -DFLATCC_ALLOW_WERROR=OFF
+diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
+index 61af3d9488..0deba84dc7 100644
+--- a/package/glibc/glibc.hash
++++ b/package/glibc/glibc.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated (fetched from Github)
+-sha256  ed2cd1f058f22f682e700c5be408975db62025a14863a5a6700ee93d5927504e  glibc-2.41-5-gcb7f20653724029be89224ed3a35d627cc5b4163.tar.gz
++sha256  166b6e7637bb45cb9352e4813005f83dd48f03ef634d3e9e94a30aa5a0300fab  glibc-2.41-70-g1502c248d58cb99a203731707987a4342926e830.tar.gz
  
-+FLATCC_CPE_ID_VALID = YES
+ # Hashes for license files
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 29617b9756..239e39a2ba 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -7,7 +7,7 @@
+ # Generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+ # When updating the version, please also update localedef
+-GLIBC_VERSION = 2.41-5-gcb7f20653724029be89224ed3a35d627cc5b4163
++GLIBC_VERSION = 2.41-70-g1502c248d58cb99a203731707987a4342926e830
+ 
+ # Upstream doesn't officially provide an https download link.
+ # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
+@@ -25,6 +25,15 @@ GLIBC_CPE_ID_VENDOR = gnu
+ # allow proper matching with the CPE database.
+ GLIBC_CPE_ID_VERSION = $(word 1, $(subst -,$(space),$(GLIBC_VERSION)))
+ 
++# Fixed by glibc-2.41-57-g84bdbf8a6f2fdafd3661489dbb7f79835a52da82
++GLIBC_IGNORE_CVES += CVE-2025-5745
 +
- # Disable build of tests and samples
- FLATCC_CONF_OPTS += -DFLATCC_TEST=OFF
- HOST_FLATCC_CONF_OPTS += -DFLATCC_TEST=OFF
++# Fixed by glibc-2.41-60-g0c76c951620f9e12df2a89b2c684878b55bb6795
++GLIBC_IGNORE_CVES += CVE-2025-5702
++
++# Fixed by glibc-2.41-64-g1e16d0096d80a6e12d5bfa8e0aafdd13c47efd65
++GLIBC_IGNORE_CVES += CVE-2025-8058
++
+ # All these CVEs are considered as not being security issues by
+ # upstream glibc:
+ #  https://security-tracker.debian.org/tracker/CVE-2010-4756
+diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
+index 7a6c94bd2f..c76a8d82a0 100644
+--- a/package/localedef/localedef.mk
++++ b/package/localedef/localedef.mk
+@@ -7,7 +7,7 @@
+ # Use the same VERSION and SITE as target glibc
+ # As in glibc.mk, generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+-LOCALEDEF_VERSION = 2.41-5-gcb7f20653724029be89224ed3a35d627cc5b4163
++LOCALEDEF_VERSION = 2.41-70-g1502c248d58cb99a203731707987a4342926e830
+ LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION).tar.gz
+ LOCALEDEF_SITE = $(call github,bminor,glibc,$(LOCALEDEF_VERSION))
+ HOST_LOCALEDEF_DL_SUBDIR = glibc
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
