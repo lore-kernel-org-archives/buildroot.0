@@ -1,71 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3123ECA0EDC
-	for <buildroot@archiver.kernel.org>; Thu, 14 Aug 2025 20:10:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6820CA0EE4
+	for <buildroot@archiver.kernel.org>; Thu, 14 Aug 2025 20:17:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 07EAE808C4;
-	Thu, 14 Aug 2025 20:10:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BC0AD6074E;
+	Thu, 14 Aug 2025 20:17:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CzAT61UGwAu9; Thu, 14 Aug 2025 20:10:56 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KMhWcKrL1xiE; Thu, 14 Aug 2025 20:17:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 08D0A808C8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C082960760
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 08D0A808C8;
-	Thu, 14 Aug 2025 20:10:56 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 7E6C51BA
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:10:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C082960760;
+	Thu, 14 Aug 2025 20:17:31 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 04EC4228
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:17:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6FB4F808C8
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:10:54 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EAD8160758
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:17:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gb4XPN1tMZR2 for <buildroot@buildroot.org>;
- Thu, 14 Aug 2025 20:10:53 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
- helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 33C0C808C4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 33C0C808C4
-Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 33C0C808C4
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:10:52 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id A37E6B978067; Thu, 14 Aug 2025 22:10:50 +0200 (CEST)
-Message-ID: <415e0a82-2f81-497e-84aa-62761fd7834d@rnout.be>
-Date: Thu, 14 Aug 2025 22:10:48 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Tim Soubry <tim.soubry@mind.be>, buildroot@buildroot.org
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20250708073934.1926413-1-tim.soubry@mind.be>
-Content-Language: en-GB, fr-BE
-In-Reply-To: <20250708073934.1926413-1-tim.soubry@mind.be>
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rnout.be; s=dkim; 
- t=1755202251; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:content-language:in-reply-to:references;
- bh=MMRTzTiZwcC9hfzDYJbj6zdiDVBRy6JeOZQtN4Rh17I=;
- b=TqZHC2zREv1fz6ggbxzmLUNFqdwO1TzYjvo/mzdc/0dKroOG5DPeGAy0ka6wOuPFkJVyog
- YIML4uxbU2Wa3/zyymTETAm1NuyWdo+o9UetioIsHY+PLkps6OOyyb+wlVCU0vyF8gVO1L
- TBebsJ1LH9eZ16bO46udTxwP7x3npBxJOc5yYMU5mn+6tPuYEdg7DJabXHEjfytRFT0DCh
- bTDKKcQn+XZblGU9MecDROh/OQrKPi8GhdidZw6kivPNMDz4bLbb/5gS/+OfIwGNE+pC0T
- sUpmfjvxSyP4RqapkuBMfHNo6UR0+Mx87KRv+ZKiH3t4dRU/qg6NJnqAFDe9dA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
- header.s=dkim header.b=TqZHC2zR
-Subject: Re: [Buildroot] [2025.02.x PATCH v2] package/libglib2: fix
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aOGiST78jMuD for <buildroot@buildroot.org>;
+ Thu, 14 Aug 2025 20:17:28 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA65960757
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id DA65960757
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:17:28 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C98AE8760E; Thu, 14 Aug 2025 20:17:28 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 14 Aug 2025 22:08:50 +0200
+X-Git-Refname: refs/heads/2025.02.x
+X-Git-Oldrev: 71fe0f583a6252317e850054377bab28c156cbc6
+X-Git-Newrev: 678c631c5e5b8ca3d6b50ef55b16274516fdff8b
+X-Patchwork-Hint: ignore
+Message-Id: <20250814201728.C98AE8760E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/libglib2: fix
  CVE-2025-6052
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -80,102 +60,138 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@rnout.be>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============0702106949142198662=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-CgpPbiAwOC8wNy8yMDI1IDA5OjM5LCBUaW0gU291YnJ5IHZpYSBidWlsZHJvb3Qgd3JvdGU6Cj4g
-QnVpbGRyb290IExUUyAyMDI1LjAyLnggdXRpbGlzZXMgbGliZ2xpYjIgdmVyc2lvbiAyLjgyLjUg
-d2hpY2ggaXMgcHJvbmUKPiB0byBDVkUtMjAyNS02MDUyIFsxXS4KPiAwMDAxLWdzdHJpbmctRml4
-LW92ZXJmbG93LWNoZWNrLXdoZW4tZXhwYW5kaW5nLXRoZS1zdHJpbmcucGF0Y2ggaXMKPiBpbmNs
-dWRlZCBpbiB0aGUgcGFja2FnZS9saWJnbGliMiBkaXJlY3RvcnkuIFRoaXMgcGF0Y2ggbWl0aWdh
-dGVzCj4gQ1ZFLTIwMjUtNjA1MiBhcyBzZWVuIGluIFsxXSwgYnkgYmFja3BvcnRpbmcgdG8gbGli
-Z2xpYjIgMi44Mi41Lgo+IGxpYmdsaWIyIHNoYXJlcyBwYXJ0IG9mIGl0cyBpbmZyYXN0cnVjdHVy
-ZSB3aXRoIGxpYmdsaWIyLWJvb3RzdHJhcCwKPiBieSBhZGRpbmcgdGhlIHBhdGNoIGluIHBhY2th
-Z2UvbGliZ2xpYjIgdGhlIHBhdGNoIGlzbid0IGFwcGxpZWQgdG8KPiBsaWJnbGliMi1ib290c3Ry
-YXAuCj4gV2hlbiBidWlsZGluZyBsaWJnbGliMiwgdGhlIHBhdGNoIHdhcyBjb3JyZWN0bHkgYXBw
-bGllZCBpbgo+IG91dHB1dC9idWlsZC9ob3N0LWxpYmdsaWIyLTIuODIuNS9nbGliL2dzdHJpbmcu
-YyAuICBXaGVuIGJ1aWxkaW5nCj4gbGliZ2xpYjItYm9vdHN0cmFwIGl0IHdhcyB2ZXJpZmllZCB0
-aGF0IHRoZSBwYXRjaCB3YXMgbm90IGFwcGxpZWQgaGVyZS4KPiAKPiBTaWduZWQtb2ZmLWJ5OiBU
-aW0gU291YnJ5IDx0aW0uc291YnJ5QG1pbmQuYmU+Cj4gLS0tCj4gICAuLi5mbG93LWNoZWNrLXdo
-ZW4tZXhwYW5kaW5nLXRoZS1zdHJpbmcucGF0Y2ggfCA3MSArKysrKysrKysrKysrKysrKysrCj4g
-ICBwYWNrYWdlL2xpYmdsaWIyL2xpYmdsaWIyLm1rICAgICAgICAgICAgICAgICAgfCAgMyArCj4g
-ICAyIGZpbGVzIGNoYW5nZWQsIDc0IGluc2VydGlvbnMoKykKPiAgIGNyZWF0ZSBtb2RlIDEwMDY0
-NCBwYWNrYWdlL2xpYmdsaWIyLzAwMDEtZ3N0cmluZy1GaXgtb3ZlcmZsb3ctY2hlY2std2hlbi1l
-eHBhbmRpbmctdGhlLXN0cmluZy5wYXRjaAo+IAo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2xpYmds
-aWIyLzAwMDEtZ3N0cmluZy1GaXgtb3ZlcmZsb3ctY2hlY2std2hlbi1leHBhbmRpbmctdGhlLXN0
-cmluZy5wYXRjaCBiL3BhY2thZ2UvbGliZ2xpYjIvMDAwMS1nc3RyaW5nLUZpeC1vdmVyZmxvdy1j
-aGVjay13aGVuLWV4cGFuZGluZy10aGUtc3RyaW5nLnBhdGNoCj4gbmV3IGZpbGUgbW9kZSAxMDA2
-NDQKPiBpbmRleCAwMDAwMDAwMDAwLi40NDdiNjU0NzgwCj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBi
-L3BhY2thZ2UvbGliZ2xpYjIvMDAwMS1nc3RyaW5nLUZpeC1vdmVyZmxvdy1jaGVjay13aGVuLWV4
-cGFuZGluZy10aGUtc3RyaW5nLnBhdGNoCj4gQEAgLTAsMCArMSw3MSBAQAo+ICtGcm9tIDljNDAz
-Zjc4N2VlZTY5YmU4NTBiYTVmOTIzNDhlY2VhNjVmOWJhZGMgTW9uIFNlcCAxNyAwMDowMDowMCAy
-MDAxCj4gK0Zyb206IFBoaWxpcCBXaXRobmFsbCA8cHdpdGhuYWxsQGdub21lLm9yZz4KPiArRGF0
-ZTogVHVlLCAzIEp1biAyMDI1IDExOjMxOjA0ICswMTAwCj4gK1N1YmplY3Q6IFtQQVRDSCAxLzFd
-IGdzdHJpbmc6IEZpeCBvdmVyZmxvdyBjaGVjayB3aGVuIGV4cGFuZGluZyB0aGUgc3RyaW5nCgog
-IGNoZWNrLXBhY2thZ2UgY29tcGxhaW5zOgoKcGFja2FnZS9saWJnbGliMi8wMDAxLWdzdHJpbmct
-Rml4LW92ZXJmbG93LWNoZWNrLXdoZW4tZXhwYW5kaW5nLXRoZS1zdHJpbmcucGF0Y2g6NDogCmdl
-bmVyYXRlIHlvdXIgcGF0Y2hlcyB3aXRoICdnaXQgZm9ybWF0LXBhdGNoIC1OJwoKCiAgQXBwbGll
-ZCB0byAyMDI1LjAyLnggd2l0aCB0aGF0IGZpeGVkLCB0aGFua3MuCgogIFJlZ2FyZHMsCiAgQXJu
-b3V0CgoKPiArTUlNRS1WZXJzaW9uOiAxLjAKPiArQ29udGVudC1UeXBlOiB0ZXh0L3BsYWluOyBj
-aGFyc2V0PVVURi04Cj4gK0NvbnRlbnQtVHJhbnNmZXItRW5jb2Rpbmc6IDhiaXQKPiArCj4gK0Fm
-dGVyIGNvbW1pdCAzNGI3OTkyZmQ2ZTM4OTRiZjZkMjIyOWI4YWE1OWNhYzM0YmNiMWI1IHRoZSBv
-dmVyZmxvdyBjaGVjawo+ICt3YXMgb25seSBkb25lIHdoZW4gZXhwYW5kaW5nIHRoZSBzdHJpbmcs
-IGJ1dCB3ZSBuZWVkIHRvIGRvIGl0IGJlZm9yZQo+ICtjaGVja2luZyB3aGV0aGVyIHRvIGV4cGFu
-ZCB0aGUgc3RyaW5nLCBvdGhlcndpc2UgdGhhdCBjYWxjdWxhdGlvbiBjb3VsZAo+ICtvdmVyZmxv
-dyBhbmQgZmFsc2VseSBkZWNpZGUgdGhhdCB0aGUgc3RyaW5nIGlzIGJpZyBlbm91Z2ggYWxyZWFk
-eS4KPiArCj4gK0FzIGEgY29uY3JldGUgZXhhbXBsZSwgY29uc2lkZXIgYSBgR1N0cmluZ2Agd2hp
-Y2ggaGFzOgo+ICsgKiBgLmxlbiA9IEdfTUFYU0laRSAvIDIgKyAxYAo+ICsgKiBgLmFsbG9jYXRl
-ZF9sZW4gPSBHX01BWFNJWkUgLyAyICsgMWAKPiArYW5kIGBnX3N0cmluZ19hcHBlbmQoKWAgaXMg
-Y2FsbGVkIG9uIGl0IHdpdGggYW4gaW5wdXQgc3RyaW5nIG9mIGxlbmd0aAo+ICtgR19NQVhTSVpF
-IC8gMmAuCj4gKwo+ICtUaGlzIHJlc3VsdHMgaW4gYSBjYWxsIGBnX3N0cmluZ19tYXliZV9leHBh
-bmQgKHN0cmluZywgR19NQVhTSVpFIC8gMilgLAo+ICt3aGljaCBjYWxjdWxhdGVzIGBzdHJpbmct
-PmxlbiArIGxlbmAgYXMgYChHX01BWFNJWkUgLyAyICsgMSkgKwo+ICsoR19NQVhTSVpFIC8gMilg
-IHdoaWNoIGV2YWx1YXRlcyB0byBgMWAgYXMgaXQgb3ZlcmZsb3dzLiBUaGlzIGlzIG5vdAo+ICtn
-cmVhdGVyIHRoYW4gYHN0cmluZy0+YWxsb2NhdGVkX2xlbmAgKHdoaWNoIGlzIGBHX01BWFNJWkUg
-LyAyICsgMWApLCBzbwo+ICtgZ19zdHJpbmdfZXhwYW5kKClgIGlzICpub3QqIGNhbGxlZCwgYW5k
-IGBnX3N0cmluZ19tYXliZV9leHBhbmQoKWAKPiArcmV0dXJucyBzdWNjZXNzZnVsbHkuIFRoZSBj
-YWxsZXIgdGhlbiBhc3N1bWVzIHRoYXQgdGhlcmXigJlzIGVub3VnaCBzcGFjZQo+ICtpbiB0aGUg
-YnVmZmVyLCBhbmQgaGFwcGlseSBjb250aW51ZXMgdG8gY2F1c2UgYSBidWZmZXIgb3ZlcmZsb3cu
-Cj4gKwo+ICtJdOKAmXMgdW5saWtlbHkgYW55b25lIGNvdWxkIGhpdCB0aGlzIGluIHByYWN0aWNl
-IGJlY2F1c2UgaXQgcmVxdWlyZXMKPiArbHVkaWNyb3VzbHkgYmlnIHN0cmluZ3MgYW5kIGBHU3Ry
-aW5nYCBhbGxvY2F0aW9ucywgd2hpY2ggbGlrZWx5IHdvdWxkCj4gK2hhdmUgYmVlbiBibG9ja2Vk
-IGJ5IG90aGVyIGNvZGUsIGJ1dCBpZiB3ZeKAmXJlIGdvaW5nIHRvIGhhdmUgdGhlIG92ZXJmbG93
-Cj4gK2NoZWNrcyBpbiBgR1N0cmluZ2AgdGhlbiB0aGV5IHNob3VsZCBiZSBlZmZlY3RpdmUuCj4g
-Kwo+ICtTcG90dGVkIGJ5IGNvZGUgaW5zcGVjdGlvbi4KPiArCj4gK1NpZ25lZC1vZmYtYnk6IFBo
-aWxpcCBXaXRobmFsbCA8cHdpdGhuYWxsQGdub21lLm9yZz4KPiArVXBzdHJlYW06IGh0dHBzOi8v
-Z2l0bGFiLmdub21lLm9yZy9HTk9NRS9nbGliLy0vbWVyZ2VfcmVxdWVzdHMvNDY1NS9kaWZmcwo+
-ICtDVkU6IENWRS0yMDI1LTYwNTIKPiArU2lnbmVkLW9mZi1ieTogVGltIFNvdWJyeSA8dGltLnNv
-dWJyeUBtaW5kLmJlPgo+ICstLS0KPiArIGdsaWIvZ3N0cmluZy5jIHwgOCArKysrLS0tLQo+ICsg
-MSBmaWxlIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygrKSwgNCBkZWxldGlvbnMoLSkKPiArCj4gK2Rp
-ZmYgLS1naXQgYS9nbGliL2dzdHJpbmcuYyBiL2dsaWIvZ3N0cmluZy5jCj4gK2luZGV4IGJkZDA2
-ODM0NC4uNDVhNmY2OGIxIDEwMDY0NAo+ICstLS0gYS9nbGliL2dzdHJpbmcuYwo+ICsrKysgYi9n
-bGliL2dzdHJpbmcuYwo+ICtAQCAtNjgsMTAgKzY4LDYgQEAgc3RhdGljIHZvaWQKPiArIGdfc3Ry
-aW5nX2V4cGFuZCAoR1N0cmluZyAqc3RyaW5nLAo+ICsgICAgICAgICAgICAgICAgICBnc2l6ZSAg
-ICBsZW4pCj4gKyB7Cj4gKy0gIC8qIERldGVjdCBwb3RlbnRpYWwgb3ZlcmZsb3cgKi8KPiArLSAg
-aWYgR19VTkxJS0VMWSAoKEdfTUFYU0laRSAtIHN0cmluZy0+bGVuIC0gMSkgPCBsZW4pCj4gKy0g
-ICAgZ19lcnJvciAoImFkZGluZyAlIiBHX0dTSVpFX0ZPUk1BVCAiIHRvIHN0cmluZyB3b3VsZCBv
-dmVyZmxvdyIsIGxlbik7Cj4gKy0KPiArICAgc3RyaW5nLT5hbGxvY2F0ZWRfbGVuID0gZ19uZWFy
-ZXN0X3BvdyAoc3RyaW5nLT5sZW4gKyBsZW4gKyAxKTsKPiArICAgLyogSWYgdGhlIG5ldyBzaXpl
-IGlzIGJpZ2dlciB0aGFuIEdfTUFYU0laRSAvIDIsIG9ubHkgYWxsb2NhdGUgZW5vdWdoCj4gKyAg
-ICAqIG1lbW9yeSBmb3IgdGhpcyBzdHJpbmcgYW5kIGRvbid0IG92ZXItYWxsb2NhdGUuCj4gK0BA
-IC04Niw2ICs4MiwxMCBAQCBzdGF0aWMgaW5saW5lIHZvaWQKPiArIGdfc3RyaW5nX21heWJlX2V4
-cGFuZCAoR1N0cmluZyAqc3RyaW5nLAo+ICsgICAgICAgICAgICAgICAgICAgICAgICBnc2l6ZSAg
-ICBsZW4pCj4gKyB7Cj4gKysgIC8qIERldGVjdCBwb3RlbnRpYWwgb3ZlcmZsb3cgKi8KPiArKyAg
-aWYgR19VTkxJS0VMWSAoKEdfTUFYU0laRSAtIHN0cmluZy0+bGVuIC0gMSkgPCBsZW4pCj4gKysg
-ICAgZ19lcnJvciAoImFkZGluZyAlIiBHX0dTSVpFX0ZPUk1BVCAiIHRvIHN0cmluZyB3b3VsZCBv
-dmVyZmxvdyIsIGxlbik7Cj4gKysKPiArICAgaWYgKEdfVU5MSUtFTFkgKHN0cmluZy0+bGVuICsg
-bGVuID49IHN0cmluZy0+YWxsb2NhdGVkX2xlbikpCj4gKyAgICAgZ19zdHJpbmdfZXhwYW5kIChz
-dHJpbmcsIGxlbik7Cj4gKyB9Cj4gKy0tCj4gKzIuMzkuNQo+ICsKPiBkaWZmIC0tZ2l0IGEvcGFj
-a2FnZS9saWJnbGliMi9saWJnbGliMi5tayBiL3BhY2thZ2UvbGliZ2xpYjIvbGliZ2xpYjIubWsK
-PiBpbmRleCA2YzAxMmM3OWM3Li5iOGM4NTNiNzUyIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvbGli
-Z2xpYjIvbGliZ2xpYjIubWsKPiArKysgYi9wYWNrYWdlL2xpYmdsaWIyL2xpYmdsaWIyLm1rCj4g
-QEAgLTIyLDYgKzIyLDkgQEAgaWZlcSAoJChCUjJfQVJNX0lOU1RSVUNUSU9OU19USFVNQikseSkK
-PiAgIExJQkdMSUIyX0NGTEFHUyArPSAtbWFybQo+ICAgZW5kaWYKPiAgIAo+ICsjIDAwMDEtZ3N0
-cmluZy1GaXgtb3ZlcmZsb3ctY2hlY2std2hlbi1leHBhbmRpbmctdGhlLXN0cmluZy5wYXRjaAo+
-ICtMSUJHTElCMl9JR05PUkVfQ1ZFUyArPSBDVkUtMjAyNS02MDUyCj4gKwo+ICAgSE9TVF9MSUJH
-TElCMl9DT05GX09QVFMgPSBcCj4gICAJLURkdHJhY2U9ZmFsc2UgXAo+ICAgCS1EZ2xpYl9kZWJ1
-Zz1kaXNhYmxlZCBcCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBz
-Oi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+--===============0702106949142198662==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=678c631c5e5b8ca3d6b50ef55b16274516fdff8b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
+
+Buildroot LTS 2025.02.x utilises libglib2 version 2.82.5 which is prone
+to CVE-2025-6052 [1].
+0001-gstring-Fix-overflow-check-when-expanding-the-string.patch is
+included in the package/libglib2 directory. This patch mitigates
+CVE-2025-6052 as seen in [1], by backporting to libglib2 2.82.5.
+libglib2 shares part of its infrastructure with libglib2-bootstrap,
+by adding the patch in package/libglib2 the patch isn't applied to
+libglib2-bootstrap.
+When building libglib2, the patch was correctly applied in
+output/build/host-libglib2-2.82.5/glib/gstring.c .  When building
+libglib2-bootstrap it was verified that the patch was not applied here.
+
+Signed-off-by: Tim Soubry <tim.soubry@mind.be>
+[Arnout: fix checkpackage error]
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+---
+ ...-overflow-check-when-expanding-the-string.patch | 71 ++++++++++++++++++++++
+ package/libglib2/libglib2.mk                       |  3 +
+ 2 files changed, 74 insertions(+)
+
+diff --git a/package/libglib2/0001-gstring-Fix-overflow-check-when-expanding-the-string.patch b/package/libglib2/0001-gstring-Fix-overflow-check-when-expanding-the-string.patch
+new file mode 100644
+index 0000000000..3f9f06954b
+--- /dev/null
++++ b/package/libglib2/0001-gstring-Fix-overflow-check-when-expanding-the-string.patch
+@@ -0,0 +1,71 @@
++From 9c403f787eee69be850ba5f92348ecea65f9badc Mon Sep 17 00:00:00 2001
++From: Philip Withnall <pwithnall@gnome.org>
++Date: Tue, 3 Jun 2025 11:31:04 +0100
++Subject: [PATCH] gstring: Fix overflow check when expanding the string
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++After commit 34b7992fd6e3894bf6d2229b8aa59cac34bcb1b5 the overflow check
++was only done when expanding the string, but we need to do it before
++checking whether to expand the string, otherwise that calculation could
++overflow and falsely decide that the string is big enough already.
++
++As a concrete example, consider a `GString` which has:
++ * `.len = G_MAXSIZE / 2 + 1`
++ * `.allocated_len = G_MAXSIZE / 2 + 1`
++and `g_string_append()` is called on it with an input string of length
++`G_MAXSIZE / 2`.
++
++This results in a call `g_string_maybe_expand (string, G_MAXSIZE / 2)`,
++which calculates `string->len + len` as `(G_MAXSIZE / 2 + 1) +
++(G_MAXSIZE / 2)` which evaluates to `1` as it overflows. This is not
++greater than `string->allocated_len` (which is `G_MAXSIZE / 2 + 1`), so
++`g_string_expand()` is *not* called, and `g_string_maybe_expand()`
++returns successfully. The caller then assumes that there’s enough space
++in the buffer, and happily continues to cause a buffer overflow.
++
++It’s unlikely anyone could hit this in practice because it requires
++ludicrously big strings and `GString` allocations, which likely would
++have been blocked by other code, but if we’re going to have the overflow
++checks in `GString` then they should be effective.
++
++Spotted by code inspection.
++
++Signed-off-by: Philip Withnall <pwithnall@gnome.org>
++Upstream: https://gitlab.gnome.org/GNOME/glib/-/merge_requests/4655/diffs
++CVE: CVE-2025-6052
++Signed-off-by: Tim Soubry <tim.soubry@mind.be>
++---
++ glib/gstring.c | 8 ++++----
++ 1 file changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/glib/gstring.c b/glib/gstring.c
++index bdd068344..45a6f68b1 100644
++--- a/glib/gstring.c
+++++ b/glib/gstring.c
++@@ -68,10 +68,6 @@ static void
++ g_string_expand (GString *string,
++                  gsize    len)
++ {
++-  /* Detect potential overflow */
++-  if G_UNLIKELY ((G_MAXSIZE - string->len - 1) < len)
++-    g_error ("adding %" G_GSIZE_FORMAT " to string would overflow", len);
++-
++   string->allocated_len = g_nearest_pow (string->len + len + 1);
++   /* If the new size is bigger than G_MAXSIZE / 2, only allocate enough
++    * memory for this string and don't over-allocate.
++@@ -86,6 +82,10 @@ static inline void
++ g_string_maybe_expand (GString *string,
++                        gsize    len)
++ {
+++  /* Detect potential overflow */
+++  if G_UNLIKELY ((G_MAXSIZE - string->len - 1) < len)
+++    g_error ("adding %" G_GSIZE_FORMAT " to string would overflow", len);
+++
++   if (G_UNLIKELY (string->len + len >= string->allocated_len))
++     g_string_expand (string, len);
++ }
++-- 
++2.39.5
++
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index 6c012c79c7..b8c853b752 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -22,6 +22,9 @@ ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
+ LIBGLIB2_CFLAGS += -marm
+ endif
+ 
++# 0001-gstring-Fix-overflow-check-when-expanding-the-string.patch
++LIBGLIB2_IGNORE_CVES += CVE-2025-6052
++
+ HOST_LIBGLIB2_CONF_OPTS = \
+ 	-Ddtrace=false \
+ 	-Dglib_debug=disabled \
+
+--===============0702106949142198662==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0702106949142198662==--
