@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9ED2ECA0EE6
-	for <buildroot@archiver.kernel.org>; Thu, 14 Aug 2025 20:07:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EEC1ACA0EDC
+	for <buildroot@archiver.kernel.org>; Thu, 14 Aug 2025 20:07:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7107660823;
-	Thu, 14 Aug 2025 20:07:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C6FFE80F1E;
+	Thu, 14 Aug 2025 20:07:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id F6YxTcRl4fff; Thu, 14 Aug 2025 20:07:12 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id F1Y-YujLM3HN; Thu, 14 Aug 2025 20:07:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4FABB607D5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ADEEB80EFA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4FABB607D5;
-	Thu, 14 Aug 2025 20:07:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id ADEEB80EFA;
+	Thu, 14 Aug 2025 20:07:08 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id AFE301BA
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:06:28 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 151B21BA
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:06:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D75F2404B7
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6F1A940464
  for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:06:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BGEBqQN_g6ad for <buildroot@buildroot.org>;
+ id 1FnnpZ3472_9 for <buildroot@buildroot.org>;
  Thu, 14 Aug 2025 20:06:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 92104404B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 04BB14049D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 92104404B1
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:06:04 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 04BB14049D
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:06:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 900D087609; Thu, 14 Aug 2025 20:06:04 +0000 (UTC)
+ id 028DA8760A; Thu, 14 Aug 2025 20:06:05 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 14 Aug 2025 09:30:31 +0200
+Date: Thu, 14 Aug 2025 09:33:06 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: c5bc42e041aafba30089bcf68e929e48cef5c3f6
-X-Git-Newrev: 469cf40be40dcb7dcbacec8880a281463ae3f5ff
+X-Git-Oldrev: b52125245ef2758b2615cc4742a72c3e0b1bffdd
+X-Git-Newrev: 1bb79ed5c87e338e53a34b2a40216d4353e2caa0
 X-Patchwork-Hint: ignore
-Message-Id: <20250814200604.900D087609@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/libopenssl: bump
- version to 3.5.2
+Message-Id: <20250814200605.028DA8760A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/ngrep: fix
+ implicit function declaration (GCC14)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,52 +66,87 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=469cf40be40dcb7dcbacec8880a281463ae3f5ff
+commit: https://git.buildroot.net/buildroot/commit/?id=1bb79ed5c87e338e53a34b2a40216d4353e2caa0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-Bugfix release:
+Using toolchains based on GCC14 (and newer), now turns this warning
+into a systematic error (see [1]).
 
-- Miscellaneous minor bug fixes.
+The build failure can be reproduced with this minimal defconfig:
 
-- The FIPS provider now performs a PCT on key import for RSA, EC and ECX.
-  This is mandated by FIPS 140-3 IG 10.3.A additional comment 1.
+BR2_x86_64=y
+BR2_x86_atom=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+BR2_PACKAGE_NGREP=y
+BR2_PACKAGE_LIBNET=y
 
-https://github.com/openssl/openssl/releases/tag/openssl-3.5.2
+[1] https://gcc.gnu.org/gcc-14/porting_to.html
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 7e5a3c98452c6db8422b0fa6455390d138ad07df)
+Fixes: https://autobuild.buildroot.org/results/20b/20b924c5c96b3f43e381d87e59fb160ba8d3dcd0//
+
+Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+[Romain:
+  - add a defconfig to reproduce the issue
+  - add the minimal gcc version to reproduce the issue
+]
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+(cherry picked from commit 53d2ef7ec6fc406a23a5c5a13a4a3aefc8de3563)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/libopenssl/libopenssl.hash | 4 ++--
- package/libopenssl/libopenssl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ....h-and-tcpkill.h-to-avoid-implicit-functi.patch | 44 ++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
 
-diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
-index 1675d72fb2..7f3795e1ac 100644
---- a/package/libopenssl/libopenssl.hash
-+++ b/package/libopenssl/libopenssl.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/openssl/openssl/releases/download/openssl-3.5.1/openssl-3.5.1.tar.gz.sha256
--sha256  529043b15cffa5f36077a4d0af83f3de399807181d607441d734196d889b641f  openssl-3.5.1.tar.gz
-+# From https://github.com/openssl/openssl/releases/download/openssl-3.5.2/openssl-3.5.2.tar.gz.sha256
-+sha256  c53a47e5e441c930c3928cf7bf6fb00e5d129b630e0aa873b08258656e7345ec  openssl-3.5.2.tar.gz
- 
- # License files
- sha256  7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a  LICENSE.txt
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index f3521b3cf3..38d04ea924 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBOPENSSL_VERSION = 3.5.1
-+LIBOPENSSL_VERSION = 3.5.2
- LIBOPENSSL_SITE = https://github.com/openssl/openssl/releases/download/openssl-$(LIBOPENSSL_VERSION)
- LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
- LIBOPENSSL_LICENSE = Apache-2.0
+diff --git a/package/ngrep/0006-Include-err.h-and-tcpkill.h-to-avoid-implicit-functi.patch b/package/ngrep/0006-Include-err.h-and-tcpkill.h-to-avoid-implicit-functi.patch
+new file mode 100644
+index 0000000000..6d596bfe37
+--- /dev/null
++++ b/package/ngrep/0006-Include-err.h-and-tcpkill.h-to-avoid-implicit-functi.patch
+@@ -0,0 +1,44 @@
++From 52515bae377f221b5473d9040f5f43ab1c672672 Mon Sep 17 00:00:00 2001
++From: Florian Weimer <fweimer@redhat.com>
++Date: Mon, 19 Dec 2022 11:49:06 +0100
++Subject: [PATCH] Include <err.h> and "tcpkill.h" to avoid implicit function
++ declarations
++
++Implicit function declarations are a historic language feature that
++were removed from C in 1999.
++
++Upstream: https://github.com/jpr5/ngrep/pull/28
++
++Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
++---
++ ngrep.c   | 1 +
++ tcpkill.c | 1 +
++ 2 files changed, 2 insertions(+)
++
++diff --git a/ngrep.c b/ngrep.c
++index 3df9389..b2fcceb 100644
++--- a/ngrep.c
+++++ b/ngrep.c
++@@ -98,6 +98,7 @@
++ #endif
++ 
++ #include "ngrep.h"
+++#include "tcpkill.h"
++ 
++ 
++ /*
++diff --git a/tcpkill.c b/tcpkill.c
++index 5388ec5..ac8fd2e 100644
++--- a/tcpkill.c
+++++ b/tcpkill.c
++@@ -14,6 +14,7 @@
++ #include <stdlib.h>
++ #include <unistd.h>
++ #include <string.h>
+++#include <err.h>
++ #include <libnet.h>
++ #include <pcap.h>
++ 
++-- 
++2.50.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
