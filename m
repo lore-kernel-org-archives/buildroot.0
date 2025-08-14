@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 182B9CA0EE4
-	for <buildroot@archiver.kernel.org>; Thu, 14 Aug 2025 20:06:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 066C2CA0EE4
+	for <buildroot@archiver.kernel.org>; Thu, 14 Aug 2025 20:06:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DEE8F80EB1;
-	Thu, 14 Aug 2025 20:06:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D072F60751;
+	Thu, 14 Aug 2025 20:06:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2au-oaHNcH-h; Thu, 14 Aug 2025 20:06:53 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0Wg2PFKy2jkr; Thu, 14 Aug 2025 20:06:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D655E80EA4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E8903607E8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D655E80EA4;
-	Thu, 14 Aug 2025 20:06:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E8903607E8;
+	Thu, 14 Aug 2025 20:06:55 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id DB4F7228
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:06:17 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 53A0E1BA
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:06:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 386A6404AB
+ by smtp2.osuosl.org (Postfix) with ESMTP id 43755404A5
  for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:06:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id o7jU5iXnLesn for <buildroot@buildroot.org>;
+ id 7STXY7Q0QDrS for <buildroot@buildroot.org>;
  Thu, 14 Aug 2025 20:06:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0DC7D404A5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AE2AB404B5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0DC7D404A5
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:06:05 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id AE2AB404B5
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:06:04 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0B9E887609; Thu, 14 Aug 2025 20:06:05 +0000 (UTC)
+ id AC03287609; Thu, 14 Aug 2025 20:06:04 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 14 Aug 2025 09:33:11 +0200
+Date: Thu, 14 Aug 2025 09:32:24 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: 1bb79ed5c87e338e53a34b2a40216d4353e2caa0
-X-Git-Newrev: 2d817766c344173cc401949aecc057c602a4c3e1
+X-Git-Oldrev: 07a458c9c66461a0a2192eceee5b5f55b299a47c
+X-Git-Newrev: 443bf63537edcefa5167be893fbb73bd12b2ee38
 X-Patchwork-Hint: ignore
-Message-Id: <20250814200605.0B9E887609@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/pthreadpool: fix
- thread dependency
+Message-Id: <20250814200604.AC03287609@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x]
+ package/brcmfmac_sdio-firmware-rpi: bump version to 6596d33
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,91 +66,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2d817766c344173cc401949aecc057c602a4c3e1
+commit: https://git.buildroot.net/buildroot/commit/?id=443bf63537edcefa5167be893fbb73bd12b2ee38
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-On autobuilder config with BR2_TOOLCHAIN_HAS_THREADS not set the
-following error happens when building the pthreadpool package:
+Changelog:
 
-```
--- Looking for pthread_create in pthreads
--- Looking for pthread_create in pthreads - not found
--- Looking for pthread_create in pthread
--- Looking for pthread_create in pthread - not found
--- Check if compiler accepts -pthread
--- Check if compiler accepts -pthread - no
-CMake Error at /home/buildroot/instance-0/output-1/host/share/cmake-3.31/Modules/FindPackageHandleStandardArgs.cmake:233 (message):
-  Could NOT find Threads (missing: Threads_FOUND)
-Call Stack (most recent call first):
-  /home/buildroot/instance-0/output-1/host/share/cmake-3.31/Modules/FindPackageHandleStandardArgs.cmake:603 (_FPHSA_FAILURE_MESSAGE)
-  /home/buildroot/instance-0/output-1/host/share/cmake-3.31/Modules/FindThreads.cmake:226 (FIND_PACKAGE_HANDLE_STANDARD_ARGS)
-  CMakeLists.txt:143 (FIND_PACKAGE)
+  - 4eec7f2 Sync with RPiOS 1.2-9+rpt3 bluez/1:20230625-2+rpt3 brcm80211 versions
+  - 4c1789e Merge pull request #25 from HiassofT/fw-2024-08
+  - e59476f Sync with 1:20240709-2~bpo12+1+rpt3
 
--- Configuring incomplete, errors occurred!
-```
-
-This can be reproduced with:
-
-```
-cat >.config <<EOF
-BR2_armeb=y
-BR2_TOOLCHAIN_BUILDROOT_UCLIBC=y
-BR2_PTHREADS_NONE=y
-BR2_PACKAGE_PTHREADPOOL=y
-EOF
-make olddefconfig
-make pthreadpool
-```
-
-Since the introduction of this package in [1], the dependency was not
-included. Since this package was part of the tensorflow-lite
-dependencies that required thread it was not an issue.
-
-This patch adds BR2_TOOLCHAIN_HAS_THREADS in the dependency to avoid
-errors when built as a standalone package.
-
-[1] f2486a6cf9 package/pthreadpool: new package
-
-Fixes: https://autobuild.buildroot.org/results/35a/35aa100d72c6875350ad10c57f028f04052cbf79
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-(cherry picked from commit 627af87bda2f14e42b127bb749ddeb4fd4a4f6b2)
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Tested-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+[Fiona: tested on CM4 (upstream kernel 6.16, as AP) and Zero 2W
+        (upstream kernel 6.16 as client, RPi kernel 6.12.41 as AP)]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 67c91e85b7ccaef7c9bccb173f75accee9a154dc)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/pthreadpool/Config.in | 4 ++++
- package/xnnpack/Config.in     | 2 +-
- 2 files changed, 5 insertions(+), 1 deletion(-)
+ package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.hash | 2 +-
+ package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pthreadpool/Config.in b/package/pthreadpool/Config.in
-index 194ae33f85..8d163b16de 100644
---- a/package/pthreadpool/Config.in
-+++ b/package/pthreadpool/Config.in
-@@ -1,8 +1,12 @@
- config BR2_PACKAGE_PTHREADPOOL
- 	bool "pthreadpool"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_FXDIV
- 	help
- 	  Pthreadpool is a portable and efficient thread pool
- 	  implementation.
+diff --git a/package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.hash b/package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.hash
+index c20abfc26c..aba028ef6a 100644
+--- a/package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.hash
++++ b/package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  2f0917b104739455dd488dd8f5af2ee4430801a7ac8fe8d9866e74bfbb185356  brcmfmac_sdio-firmware-rpi-26ff205b45dc109b498a70aaf182804ad9dbfea5.tar.gz
++sha256  d9835b33bea65cf15f41753e215a11e5eca818a6e3bfacaa750aeac12456c24f  brcmfmac_sdio-firmware-rpi-6596d332eaadd63e2413e3937715a084f61c39e2.tar.gz
+ sha256  ea8b7b7b6cfc6fd30587ed977100f6a542734ce53218b5b63de16180acddd599  LICENSE
+diff --git a/package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.mk b/package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.mk
+index 95707487a9..8c04b017e3 100644
+--- a/package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.mk
++++ b/package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  https://github.com/Maratyszcza/pthreadpool
-+
-+comment "pthreadpool needs a toolchain w/ threads"
-+	  depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/xnnpack/Config.in b/package/xnnpack/Config.in
-index e4b92f61e8..794c5c47d2 100644
---- a/package/xnnpack/Config.in
-+++ b/package/xnnpack/Config.in
-@@ -9,7 +9,7 @@ config BR2_PACKAGE_XNNPACK
- 	depends on BR2_PACKAGE_XNNPACK_ARCH_SUPPORTS
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
--	depends on BR2_TOOLCHAIN_HAS_THREADS # cpuinfo
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # cpuinfo, pthreadpool
- 	select BR2_PACKAGE_CPUINFO
- 	select BR2_PACKAGE_FP16
- 	select BR2_PACKAGE_FXDIV
+-BRCMFMAC_SDIO_FIRMWARE_RPI_VERSION = 26ff205b45dc109b498a70aaf182804ad9dbfea5
++BRCMFMAC_SDIO_FIRMWARE_RPI_VERSION = 6596d332eaadd63e2413e3937715a084f61c39e2
+ BRCMFMAC_SDIO_FIRMWARE_RPI_SITE = $(call github,LibreELEC,brcmfmac_sdio-firmware-rpi,$(BRCMFMAC_SDIO_FIRMWARE_RPI_VERSION))
+ BRCMFMAC_SDIO_FIRMWARE_RPI_LICENSE = PROPRIETARY
+ BRCMFMAC_SDIO_FIRMWARE_RPI_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
