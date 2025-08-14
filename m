@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D63D4CA0EE4
-	for <buildroot@archiver.kernel.org>; Thu, 14 Aug 2025 19:57:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30131CA0EDC
+	for <buildroot@archiver.kernel.org>; Thu, 14 Aug 2025 19:57:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A907280E30;
-	Thu, 14 Aug 2025 19:57:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 04E59607E6;
+	Thu, 14 Aug 2025 19:57:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1CkZsVLmWGyW; Thu, 14 Aug 2025 19:57:03 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SuLpYphx4exC; Thu, 14 Aug 2025 19:57:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A1E8B80E12
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 19A3F607AA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A1E8B80E12;
-	Thu, 14 Aug 2025 19:56:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 19A3F607AA;
+	Thu, 14 Aug 2025 19:57:06 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7D6CA1BA
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 19:56:33 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id BC05D228
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 19:56:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9D9C8404A2
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 19:56:16 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D8A2F4049D
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 19:56:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yZHVexibNohI for <buildroot@buildroot.org>;
- Thu, 14 Aug 2025 19:56:13 +0000 (UTC)
+ id ZnOV8CXiqKfX for <buildroot@buildroot.org>;
+ Thu, 14 Aug 2025 19:56:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A707140486
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2F2FA404B5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A707140486
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 19:56:11 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2F2FA404B5
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 19:56:13 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A4D0A87606; Thu, 14 Aug 2025 19:56:11 +0000 (UTC)
+ id 2CA7287606; Thu, 14 Aug 2025 19:56:13 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 14 Aug 2025 09:26:13 +0200
+Date: Thu, 14 Aug 2025 09:26:54 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: c407ccec92b359382b1eef42312e61c40d9b91b3
-X-Git-Newrev: 72db85e25096667e896bbd05dc31b79b7190db90
+X-Git-Oldrev: f473e57f8ac21340f51fbaddaca7121e8126caf6
+X-Git-Newrev: 2b930c0faba0274adfd93409e74c1bb603cdbe99
 X-Patchwork-Hint: ignore
-Message-Id: <20250814195611.A4D0A87606@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] configs/qemu_sh4*: switch
- back to disk emulation
+Message-Id: <20250814195613.2CA7287606@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/ghostscript: fix
+ xlib dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,122 +66,76 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=72db85e25096667e896bbd05dc31b79b7190db90
+commit: https://git.buildroot.net/buildroot/commit/?id=2b930c0faba0274adfd93409e74c1bb603cdbe99
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Back in commit
-44a6b7866c95ca5459a53a50eab5ab1d38b6b8e1 ("configs/qemu_sh4*: switch
-to initramfs"), the Qemu SuperH defconfigs were switched to initramfs
-due to a bug in the Qemu disk emulation.
+Since the package bump to v10.05.0 the xlib libraries detection has been
+improved to error missing x libraries (see [2]).
 
-However, the initramfs solution has an issue: if the initramfs is
-slightly too large (like just 6 MB!), the system no longer boots.
+The following error is happening on the autobuilder when building
+ghostscript with xlib_libX11:
 
-Since the disk emulation problem has apparently been resolved in Qemu
-10 (according to testing), let's switch back to this.
+```
+checking for XOpenDisplay in -lX11... yes
+checking for XdbeQueryExtension in -lXext... yes
+checking for XtAppCreateShell in -lXt... no
+configure: error: X11 libraries (libX11, libXt, libXext) not available, either install them, or rerun configure with "--without-x"
+make: *** [package/pkg-generic.mk:263: /home/buildroot/instance-0/output-1/build/ghostscript-10.05.1/.stamp_configured] Error 1
+```
 
-In addition to essentially reverting
-44a6b7866c95ca5459a53a50eab5ab1d38b6b8e1, we also need to adjust the
-kernel configuration so that the kernel takes its command line for the
-bootloader (in our case from the Qemu -append option). Otherwise an
-hardcoded command line is used, which doesn't mount /dev/sda as the
-root filesystem.
+This error can be reproduced with the following config:
 
-This update has been tested on Gitlab CI:
+```
+cat <<EOF >.config
+BR2_arm=y
+BR2_cortex_a7=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+BR2_PACKAGE_XORG7=y
+BR2_PACKAGE_XLIB_LIBX11=y
+BR2_PACKAGE_GHOSTSCRIPT=y
+EOF
+make olddefconfig
+make
+```
 
-  https://gitlab.com/tpetazzoni/buildroot/-/pipelines/1968267919
+This patch fixes the xlib dependencies of the ghostscript package to
+correctly build with X support:
 
-Thanks to Romain Naour for pointing to the initramfs size as being the
-issue.
+- The 'XtAppCreateShell' function is provided by the package
+  'xlib_libXt'.
+- The 'XdbeQueryExtension' function is provided by the package
+  'xlib_libXext'.
 
-Cc: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 5edce691885fb41252676df6b94768683a165157)
+They both select the 'xlib_libX11' package.
+
+[1] 9abf662cfd package/ghostscript: security bump to version 10.05.0
+[2] https://github.com/ArtifexSoftware/ghostpdl/commit/37eede31e12814fae69744e7842a5640004e5a65
+
+Fixes: https://autobuild.buildroot.org/results/45d/45d0414f341feb2354478b145396fe137f9cc6a6
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+(cherry picked from commit 9adc8a05707f743c659cc6fb25d0a213498d0868)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- board/qemu/sh4-r2d/linux.config   | 1 +
- board/qemu/sh4-r2d/readme.txt     | 2 +-
- board/qemu/sh4eb-r2d/linux.config | 1 +
- board/qemu/sh4eb-r2d/readme.txt   | 2 +-
- configs/qemu_sh4_r2d_defconfig    | 2 +-
- configs/qemu_sh4eb_r2d_defconfig  | 2 +-
- 6 files changed, 6 insertions(+), 4 deletions(-)
+ package/ghostscript/ghostscript.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/board/qemu/sh4-r2d/linux.config b/board/qemu/sh4-r2d/linux.config
-index a3d6544549..dd4bf5204f 100644
---- a/board/qemu/sh4-r2d/linux.config
-+++ b/board/qemu/sh4-r2d/linux.config
-@@ -5,6 +5,7 @@ CONFIG_MEMORY_START=0x0c000000
- CONFIG_FLATMEM_MANUAL=y
- CONFIG_SH_RTS7751R2D=y
- CONFIG_RTS7751R2D_PLUS=y
-+CONFIG_CMDLINE_FROM_BOOTLOADER=y
- CONFIG_HEARTBEAT=y
- CONFIG_PCI=y
- CONFIG_NET=y
-diff --git a/board/qemu/sh4-r2d/readme.txt b/board/qemu/sh4-r2d/readme.txt
-index 24c3676d8a..b0799e47a8 100644
---- a/board/qemu/sh4-r2d/readme.txt
-+++ b/board/qemu/sh4-r2d/readme.txt
-@@ -1,6 +1,6 @@
- Run the emulation with:
+diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
+index 0ddcb950ff..c9d13f5545 100644
+--- a/package/ghostscript/ghostscript.mk
++++ b/package/ghostscript/ghostscript.mk
+@@ -85,8 +85,8 @@ else
+ GHOSTSCRIPT_CONF_OPTS += --disable-cups
+ endif
  
--  qemu-system-sh4 -M r2d -kernel output/images/zImage -append "console=ttySC1,115200 noiotrap" -serial null -serial stdio -net nic,model=rtl8139 -net user # qemu_sh4_r2d_defconfig
-+  qemu-system-sh4 -M r2d -kernel output/images/zImage -drive file=output/images/rootfs.ext2,if=ide,format=raw -append "rootwait root=/dev/sda console=ttySC1,115200 noiotrap" -serial null -serial stdio -net nic,model=rtl8139 -net user # qemu_sh4_r2d_defconfig
- 
- The login prompt will appear in the terminal that started Qemu.
- The graphical window is the framebuffer.
-diff --git a/board/qemu/sh4eb-r2d/linux.config b/board/qemu/sh4eb-r2d/linux.config
-index 6ead626c41..5f94bee77d 100644
---- a/board/qemu/sh4eb-r2d/linux.config
-+++ b/board/qemu/sh4eb-r2d/linux.config
-@@ -6,6 +6,7 @@ CONFIG_FLATMEM_MANUAL=y
- CONFIG_CPU_BIG_ENDIAN=y
- CONFIG_SH_RTS7751R2D=y
- CONFIG_RTS7751R2D_PLUS=y
-+CONFIG_CMDLINE_FROM_BOOTLOADER=y
- CONFIG_HEARTBEAT=y
- CONFIG_PCI=y
- CONFIG_NET=y
-diff --git a/board/qemu/sh4eb-r2d/readme.txt b/board/qemu/sh4eb-r2d/readme.txt
-index 577c54cd9d..9f3dd8b20b 100644
---- a/board/qemu/sh4eb-r2d/readme.txt
-+++ b/board/qemu/sh4eb-r2d/readme.txt
-@@ -1,6 +1,6 @@
- Run the emulation with:
- 
--  qemu-system-sh4eb -M r2d -kernel output/images/zImage -append "console=ttySC1,115200 noiotrap" -serial null -serial stdio -net nic,model=rtl8139 -net user # qemu_sh4eb_r2d_defconfig
-+  qemu-system-sh4eb -M r2d -kernel output/images/zImage -drive file=output/images/rootfs.ext2,if=ide,format=raw -append "rootwait root=/dev/sda console=ttySC1,115200 noiotrap" -serial null -serial stdio -net nic,model=rtl8139 -net user # qemu_sh4eb_r2d_defconfig
- 
- The login prompt will appear in the terminal that started Qemu.
- The graphical window is the framebuffer.
-diff --git a/configs/qemu_sh4_r2d_defconfig b/configs/qemu_sh4_r2d_defconfig
-index 63b9fa1b29..628ca05543 100644
---- a/configs/qemu_sh4_r2d_defconfig
-+++ b/configs/qemu_sh4_r2d_defconfig
-@@ -12,7 +12,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4-r2d/linux.config"
- BR2_LINUX_KERNEL_ZIMAGE=y
--BR2_TARGET_ROOTFS_INITRAMFS=y
-+BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_PACKAGE_HOST_QEMU=y
- BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
-diff --git a/configs/qemu_sh4eb_r2d_defconfig b/configs/qemu_sh4eb_r2d_defconfig
-index 97cbd6bd8a..4fd07775ed 100644
---- a/configs/qemu_sh4eb_r2d_defconfig
-+++ b/configs/qemu_sh4eb_r2d_defconfig
-@@ -12,7 +12,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4eb-r2d/linux.config"
- BR2_LINUX_KERNEL_ZIMAGE=y
--BR2_TARGET_ROOTFS_INITRAMFS=y
-+BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_PACKAGE_HOST_QEMU=y
- BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
+-ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
+-GHOSTSCRIPT_DEPENDENCIES += xlib_libX11
++ifeq ($(BR2_PACKAGE_XLIB_LIBXT)$(BR2_PACKAGE_XLIB_LIBXEXT),yy)
++GHOSTSCRIPT_DEPENDENCIES += xlib_libXt xlib_libXext
+ GHOSTSCRIPT_CONF_OPTS += --with-x
+ else
+ GHOSTSCRIPT_CONF_OPTS += --without-x
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
