@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19B67CA0EE6
-	for <buildroot@archiver.kernel.org>; Thu, 14 Aug 2025 20:06:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36402CA0EE4
+	for <buildroot@archiver.kernel.org>; Thu, 14 Aug 2025 20:06:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E2E6880DB7;
-	Thu, 14 Aug 2025 20:06:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C867380E79;
+	Thu, 14 Aug 2025 20:06:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hItagWGDQ5Gg; Thu, 14 Aug 2025 20:06:39 +0000 (UTC)
+ id 2pNyj0hONTSE; Thu, 14 Aug 2025 20:06:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C9A2080E40
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A41ED80E41
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C9A2080E40;
-	Thu, 14 Aug 2025 20:06:38 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 18FEB228
+	by smtp1.osuosl.org (Postfix) with ESMTP id A41ED80E41;
+	Thu, 14 Aug 2025 20:06:40 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 74192228
  for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:06:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id ADF2480D0F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 99B1C40486
  for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:06:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id g0j1fRU0xX2L for <buildroot@buildroot.org>;
- Thu, 14 Aug 2025 20:06:05 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TooIcAqJUBLq for <buildroot@buildroot.org>;
+ Thu, 14 Aug 2025 20:06:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EEE3580C93
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4240A404A2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id EEE3580C93
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4240A404A2
  for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:06:04 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id ED35E8758C; Thu, 14 Aug 2025 20:06:04 +0000 (UTC)
+ id 4025F87609; Thu, 14 Aug 2025 20:06:04 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 14 Aug 2025 09:33:01 +0200
+Date: Thu, 14 Aug 2025 09:29:46 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: a3bbfe3b089feb420aa14a5a4216a152ce4254fe
-X-Git-Newrev: b52125245ef2758b2615cc4742a72c3e0b1bffdd
+X-Git-Oldrev: 8694dd1d07e2cd27504e9e737efdc7487624f17a
+X-Git-Newrev: de04bbfdcc4a002695d4f85d53042f9ab0f5c52d
 X-Patchwork-Hint: ignore
-Message-Id: <20250814200604.ED35E8758C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/snooze: fix build
- w/ uclibc
+Message-Id: <20250814200604.4025F87609@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/gnutls: security
+ bump to version 3.8.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,117 +61,92 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3857853469860223860=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3857853469860223860==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=b52125245ef2758b2615cc4742a72c3e0b1bffdd
+commit: https://git.buildroot.net/buildroot/commit/?id=de04bbfdcc4a002695d4f85d53042f9ab0f5c52d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-The following error occur on the autobuilder for static build using
-buildroot toolchain and uclibc:
+Fixes the following security issues:
 
-```
-/usr/bin/make -j17 -C /home/buildroot/instance-0/output-1/build/snooze-0.5/ PREFIX=/usr CC=/home/buildroot/instance-0/output-1/host/bin/arc-buildroot-linux-uclibc-gcc CFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g0  -static  -static"
-make[1]: Entering directory '/home/buildroot/instance-0/output-1/build/snooze-0.5'
-/home/buildroot/instance-0/output-1/host/bin/arc-buildroot-linux-uclibc-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g0  -static  -static    snooze.c   -o snooze
-snooze.c:22:10: fatal error: sys/auxv.h: No such file or directory
-   22 | #include <sys/auxv.h>
-      |          ^~~~~~~~~~~~
-compilation terminated.
-make[1]: *** [<builtin>: snooze] Error 1
-```
+GNUTLS-SA-2025-07-08-1 CVE-2025-32989
+Severity Medium; Heap read buffer overflow
 
-This error can be reproduced with:
+When an X.509 certificate contains an SCT (signed certificate timestamp)
+extension and its length field is malformed, the library could read the memory
+buffer past the boundary. The issue was reported in the issue tracker as
+<https://gitlab.com/gnutls/gnutls/-/issues/1695>.
 
-```
-cat >.config <<EOF
-BR2_arm=y
-BR2_cortex_a7=y
-BR2_TOOLCHAIN_BUILDROOT_UCLIBC=y
-BR2_STATIC_LIBS=y
-BR2_PACKAGE_SNOOZE=y
-EOF
-make olddefconfig
-make snooze
-```
+------------------------------------------------------------------------------
 
-The error doesn't occur on external toolchains.
+GNUTLS-SA-2025-07-08-2 CVE-2025-32988
+Severity Low; Memory corruption on error path
 
-The `#include <sys/auxv.h>` was orinally included in the initial commit
-(see [1]) to use the `getauxval` function declaration. This function
-usage has since been removed in commit [2].
+When any error occurs during exporting a certificate with an otherName in the
+SAN (subject alternative name) extension, the library could potentially double
+free the ASN.1 structure. The issue was reported in the issue tracker as
+<https://gitlab.com/gnutls/gnutls/-/issues/1694>.
 
-This patch removes the include that is no longer needed.
+------------------------------------------------------------------------------
 
-[1] https://github.com/leahneukirchen/snooze/commit/56480881978a4cb5813746232de9950d46cb3369
-[2] https://github.com/leahneukirchen/snooze/commit/610e6b35ec614764770d47b5974b30fd90dce6fe
+GNUTLS-SA-2025-07-08-3 CVE-2025-32990
+Severity Low; Heap write buffer overflow
 
-Fixes: https://autobuild.buildroot.org/results/aec/aec463f87094a47ee059113f08e8ee3604dcea9b
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Reviewed-by: J. Neuschäfer <j.ne@posteo.net>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-(cherry picked from commit a00151af54382bd4da22ac7e9a5e40b614dcbdb6)
+When the certtool program is invoked with a template file with a number of
+string pairs for a single keyword, a NULL pointer could be written past the
+memory boundary. The issue was reported in the issue tracker as
+<https://gitlab.com/gnutls/gnutls/-/issues/1696>.
+
+------------------------------------------------------------------------------
+
+GNUTLS-SA-2025-07-08-4 CVE-2025-6395
+Severity Medium; Denial of service
+
+When a TLS 1.3 handshake involves a Hello Retry Request and the second
+Client Hello omits the PSK which was present in the first Client Hello,
+the GnuTLS server can dereference a NULL pointer. The issue was reported
+in the issue tracker as <https://gitlab.com/gnutls/gnutls/-/issues/1718>.
+
+https://lists.gnupg.org/pipermail/gnutls-help/2025-July/004883.html
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 16d4159d44b23a07e50aa458cb8b619c09f3fa1a)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- .../snooze/0002-snooze-remove-unused-include.patch | 36 ++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ package/gnutls/gnutls.hash | 4 ++--
+ package/gnutls/gnutls.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/snooze/0002-snooze-remove-unused-include.patch b/package/snooze/0002-snooze-remove-unused-include.patch
-new file mode 100644
-index 0000000000..fba92cd6b5
---- /dev/null
-+++ b/package/snooze/0002-snooze-remove-unused-include.patch
-@@ -0,0 +1,36 @@
-+From 2eebd33c10d5a0f1a9831e3e49215857ab41ec03 Mon Sep 17 00:00:00 2001
-+From: Thomas Perale <perale.thomas@gmail.com>
-+Date: Sat, 2 Aug 2025 23:09:31 +0200
-+Subject: [PATCH] snooze: remove unused include
-+
-+The `#include <sys/auxv.h>` was orinally included in the initial commit
-+(see [1]) to use the `getauxval` function declaration.
-+
-+This function usage has since been removed in commit [2].
-+
-+This commit removes the include that is no longer needed.
-+
-+[1] https://github.com/leahneukirchen/snooze/commit/56480881978a4cb5813746232de9950d46cb3369
-+[2] https://github.com/leahneukirchen/snooze/commit/610e6b35ec614764770d47b5974b30fd90dce6fe
-+
-+Upstream: https://github.com/leahneukirchen/snooze/pull/24
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ snooze.c | 4 ----
-+ 1 file changed, 4 deletions(-)
-+
-+diff --git a/snooze.c b/snooze.c
-+index e47ad11..11925ca 100644
-+--- a/snooze.c
-++++ b/snooze.c
-+@@ -18,10 +18,6 @@
-+ #include <time.h>
-+ #include <unistd.h>
-+ 
-+-#ifdef __linux__
-+-#include <sys/auxv.h>
-+-#endif
-+-
-+ static long slack = 60;
-+ #define SLEEP_PHASE 300
-+ static int nflag, vflag;
-
---===============3857853469860223860==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+index dcfe201f3d..1b2a7ba9b5 100644
+--- a/package/gnutls/gnutls.hash
++++ b/package/gnutls/gnutls.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.8/gnutls-3.8.9.tar.xz.sig
+-sha256  69e113d802d1670c4d5ac1b99040b1f2d5c7c05daec5003813c049b5184820ed  gnutls-3.8.9.tar.xz
++# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.8/gnutls-3.8.10.tar.xz.sig
++sha256  db7fab7cce791e7727ebbef2334301c821d79a550ec55c9ef096b610b03eb6b7  gnutls-3.8.10.tar.xz
+ # Locally calculated
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
+ sha256  20e50fe7aae3e56378ebf0417d9de904f55a0e61e4df315333e632a4d3555d95  COPYING.LESSERv2
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index e71e411cf0..7536189429 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -6,7 +6,7 @@
+ 
+ # When bumping, make sure *all* --without-libfoo-prefix options are in GNUTLS_CONF_OPTS
+ GNUTLS_VERSION_MAJOR = 3.8
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).9
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).10
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = LGPL-2.1+ (core library)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3857853469860223860==--
