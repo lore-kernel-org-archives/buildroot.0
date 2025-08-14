@@ -1,75 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93763CA0EDC
-	for <buildroot@archiver.kernel.org>; Thu, 14 Aug 2025 22:40:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49E09CA0EE4
+	for <buildroot@archiver.kernel.org>; Thu, 14 Aug 2025 22:42:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5A42C60831;
-	Thu, 14 Aug 2025 22:40:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0727F4079B;
+	Thu, 14 Aug 2025 22:42:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SDU7C1LGMLhh; Thu, 14 Aug 2025 22:40:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZdTbXWzxDZ0X; Thu, 14 Aug 2025 22:42:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9FB7960829
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0999440798
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9FB7960829;
-	Thu, 14 Aug 2025 22:40:46 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 5D3D0228
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 22:40:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0999440798;
+	Thu, 14 Aug 2025 22:42:57 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 79170271
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 22:42:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4E63A80A98
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 22:40:45 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5FD0A40793
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 22:42:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ajhjNAbiM7XV for <buildroot@buildroot.org>;
- Thu, 14 Aug 2025 22:40:44 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6C48780EBD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C48780EBD
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6C48780EBD
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 22:40:44 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 5E7F35FFBA;
- Fri, 15 Aug 2025 00:40:40 +0200 (CEST)
-Received: from 2001:18c0:a22:bf00:5c2b:f296:f108:6612
- via 2001:18c0:a22:bf00:5c2b:f296:f108:6612 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 15 Aug 2025 00:40:40 +0200
-MIME-Version: 1.0
-Date: Fri, 15 Aug 2025 00:40:40 +0200
-To: =?UTF-8?Q?S=C3=A9bastien_Szymanski?= <sebastien.szymanski@armadeus.com>
-Cc: buildroot@buildroot.org, James Hilliard <james.hilliard1@gmail.com>
-In-Reply-To: <20250814-python-numpy-fix-build-cyhton-v1-1-849f0bb9524d@armadeus.com>
-References: <20250814-python-numpy-fix-build-cyhton-v1-1-849f0bb9524d@armadeus.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <ac6b87bdc508aab98a2d884de83e7f8b@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1755211242;
- bh=Tgxj5+n9BRNDLjYYvaqB/55F5KZXIBSCwxeW2pBbOeI=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=EP9nh0r4utV8azZVcTv6dn8XeKtgsPcpGfQQbSTFcLA0SUYuTGFD/p1t37LIAReTt
- vaekcEaPNL8BrPeVcGJK0HsAZ3XYc3Kg1G5DPZA+lQTG8fWJX5MGYG+LZ2eawrJCgE
- 5NMVOhMJygv3k6NuYneYIngUMFy5pIhVhtSE0goNEoQxGLIbnjWlnlo7TWi1cZOxvi
- 4xwAp+1wEsB2qoWlSVAtUu1O5P2AFUIVV0H7mxZs7kXl9oaLUN4+AJVHy9zCIeAp5M
- jXZiL6FWK/+9MNagjQhfINanUF+vRBe9QtVgIkkAhdysLZaTJaRMXoguVu6jVIqw2Y
- tI2+v1oCecQcw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=EP9nh0r4
-Subject: Re: [Buildroot] [PATCH] package/python-numpy: fix build with
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 71YrQ1Cki3on for <buildroot@buildroot.org>;
+ Thu, 14 Aug 2025 22:42:54 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BABDC40650
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id BABDC40650
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 22:42:54 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A6FB98763A; Thu, 14 Aug 2025 22:42:54 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 15 Aug 2025 00:22:19 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: e91d1068de81357d86d462fc07c4f97e142c74bc
+X-Git-Newrev: cfabe800ad458bb67f01b5ebe97950902853e7c2
+X-Patchwork-Hint: ignore
+Message-Id: <20250814224254.A6FB98763A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-numpy: fix build with
  python-cython >= 3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -84,26 +60,90 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============4498429184323133210=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gMTQvMDgvMjAyNSAxNDoxNiwgU8OpYmFzdGllbiBTenltYW5za2kgd3JvdGU6Cj4gU2luY2Ug
-Y29tbWl0IGI1MzZjYWFlYzBkOCAoInBhY2thZ2UvcHl0aG9uLWN5dGhvbjogYnVtcCB0byB2ZXJz
-aW9uCj4gMy4xLjIiKSwgcHl0aG9uLW51bXB5IGZhaWxzIHRvIGJ1aWxkOgo+IAo+IEVycm9yIGNv
-bXBpbGluZyBDeXRob24gZmlsZToKPiAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KPiAuLi4KPiAgICAgICAgICAgICAgICAgbnAuaXNz
-dWJkdHlwZShjb3YuZHR5cGUsIG5wLmNvbXBsZXhmbG9hdGluZykpOgo+ICAgICAgICAgICAgIHJh
-aXNlIFR5cGVFcnJvcigibWVhbiBhbmQgY292IG11c3Qgbm90IGJlIGNvbXBsZXgiKQo+ICAgICAg
-ICAgaWYgc2l6ZSBpcyBOb25lOgo+ICAgICAgICAgICAgIHNoYXBlID0gW10KPiAgICAgICAgIGVs
-aWYgaXNpbnN0YW5jZShzaXplLCAoaW50LCBsb25nLCBucC5pbnRlZ2VyKSk6Cj4gICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgXgo+IC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQo+IG51bXB5L3JhbmRvbS9fZ2VuZXJh
-dG9yLnB5eDozNzYwOjM2OiB1bmRlY2xhcmVkIG5hbWUgbm90IGJ1aWx0aW46IGxvbmcKPiAKPiBC
-YWNrcG9ydCB1cHN0cmVhbSBwYXRjaCB0byBmaXggdGhhdCBidWlsZCBmYWlsdXJlLgo+IAo+IFNp
-Z25lZC1vZmYtYnk6IFPDqWJhc3RpZW4gU3p5bWFuc2tpIDxzZWJhc3RpZW4uc3p5bWFuc2tpQGFy
-bWFkZXVzLmNvbT4KCkFwcGxpZWQgdG8gbWFzdGVyLCB0aGFua3MuCl9fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVp
-bGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4v
-bGlzdGluZm8vYnVpbGRyb290Cg==
+--===============4498429184323133210==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=cfabe800ad458bb67f01b5ebe97950902853e7c2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Since commit b536caaec0d8 ("package/python-cython: bump to version
+3.1.2"), python-numpy fails to build:
+
+Error compiling Cython file:
+------------------------------------------------------------
+...
+                np.issubdtype(cov.dtype, np.complexfloating)):
+            raise TypeError("mean and cov must not be complex")
+        if size is None:
+            shape = []
+        elif isinstance(size, (int, long, np.integer)):
+                                    ^
+------------------------------------------------------------
+numpy/random/_generator.pyx:3760:36: undeclared name not builtin: long
+
+Backport upstream patch to fix that build failure.
+
+Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ .../0001-MNT-do-not-use-long-type.patch            | 34 ++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+
+diff --git a/package/python-numpy/0001-MNT-do-not-use-long-type.patch b/package/python-numpy/0001-MNT-do-not-use-long-type.patch
+new file mode 100644
+index 0000000000..d813a4d51b
+--- /dev/null
++++ b/package/python-numpy/0001-MNT-do-not-use-long-type.patch
+@@ -0,0 +1,34 @@
++From 6dc2fd31f8a5a4ef502cb7734f004f5bce94e671 Mon Sep 17 00:00:00 2001
++From: Thomas A Caswell <tcaswell@gmail.com>
++Date: Sat, 18 Nov 2023 16:46:52 -0500
++Subject: [PATCH] MNT: do not use `long` type
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Removed as type at language level 3 in ed7e95912b6ed7d20e190fbf1aecb9f2a997d479
++in cython
++
++Upstream: https://github.com/numpy/numpy/commit/6dc2fd31f8a5a4ef502cb7734f004f5bce94e671
++
++Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
++---
++ numpy/random/_generator.pyx | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/numpy/random/_generator.pyx b/numpy/random/_generator.pyx
++index d067e795eb5c..ae481d69d696 100644
++--- a/numpy/random/_generator.pyx
+++++ b/numpy/random/_generator.pyx
++@@ -3757,7 +3757,7 @@ def multivariate_normal(self, mean, cov, size=None, check_valid='warn',
++ 
++         if size is None:
++             shape = []
++-        elif isinstance(size, (int, long, np.integer)):
+++        elif isinstance(size, (int, np.integer)):
++             shape = [size]
++         else:
++             shape = size
++-- 
++2.49.1
++
+
+--===============4498429184323133210==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4498429184323133210==--
