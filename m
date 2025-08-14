@@ -4,49 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73628CA0EE4
-	for <buildroot@archiver.kernel.org>; Thu, 14 Aug 2025 20:07:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3123ECA0EDC
+	for <buildroot@archiver.kernel.org>; Thu, 14 Aug 2025 20:10:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4E50C80D70;
-	Thu, 14 Aug 2025 20:07:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 07EAE808C4;
+	Thu, 14 Aug 2025 20:10:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id A5lDxhdpACEr; Thu, 14 Aug 2025 20:07:14 +0000 (UTC)
+ id CzAT61UGwAu9; Thu, 14 Aug 2025 20:10:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 13D1480F04
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 08D0A808C8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 13D1480F04;
-	Thu, 14 Aug 2025 20:07:10 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id B6BFA228
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:06:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 08D0A808C8;
+	Thu, 14 Aug 2025 20:10:56 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7E6C51BA
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:10:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8954F4049D
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:06:08 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6FB4F808C8
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:10:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AUAYB4hNfnak for <buildroot@buildroot.org>;
- Thu, 14 Aug 2025 20:06:05 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 423A4404C7
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 423A4404C7
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:06:05 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 400E387609; Thu, 14 Aug 2025 20:06:05 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 14 Aug 2025 09:33:43 +0200
-X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: 4f7126b85c49127cf87e0dd80b01a5f6dfd25ebd
-X-Git-Newrev: 2fe351d66a2112a1beec85192d62a2d8e8c533bd
-X-Patchwork-Hint: ignore
-Message-Id: <20250814200605.400E387609@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/flatcc: fix cmake
- 4 compatibility
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gb4XPN1tMZR2 for <buildroot@buildroot.org>;
+ Thu, 14 Aug 2025 20:10:53 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
+ helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 33C0C808C4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 33C0C808C4
+Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 33C0C808C4
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:10:52 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id A37E6B978067; Thu, 14 Aug 2025 22:10:50 +0200 (CEST)
+Message-ID: <415e0a82-2f81-497e-84aa-62761fd7834d@rnout.be>
+Date: Thu, 14 Aug 2025 22:10:48 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Tim Soubry <tim.soubry@mind.be>, buildroot@buildroot.org
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20250708073934.1926413-1-tim.soubry@mind.be>
+Content-Language: en-GB, fr-BE
+In-Reply-To: <20250708073934.1926413-1-tim.soubry@mind.be>
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=rnout.be; s=dkim; 
+ t=1755202251; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:content-language:in-reply-to:references;
+ bh=MMRTzTiZwcC9hfzDYJbj6zdiDVBRy6JeOZQtN4Rh17I=;
+ b=TqZHC2zREv1fz6ggbxzmLUNFqdwO1TzYjvo/mzdc/0dKroOG5DPeGAy0ka6wOuPFkJVyog
+ YIML4uxbU2Wa3/zyymTETAm1NuyWdo+o9UetioIsHY+PLkps6OOyyb+wlVCU0vyF8gVO1L
+ TBebsJ1LH9eZ16bO46udTxwP7x3npBxJOc5yYMU5mn+6tPuYEdg7DJabXHEjfytRFT0DCh
+ bTDKKcQn+XZblGU9MecDROh/OQrKPi8GhdidZw6kivPNMDz4bLbb/5gS/+OfIwGNE+pC0T
+ sUpmfjvxSyP4RqapkuBMfHNo6UR0+Mx87KRv+ZKiH3t4dRU/qg6NJnqAFDe9dA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=rnout.be
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
+ header.s=dkim header.b=TqZHC2zR
+Subject: Re: [Buildroot] [2025.02.x PATCH v2] package/libglib2: fix
+ CVE-2025-6052
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,98 +78,104 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4786632325489668390=="
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4786632325489668390==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=2fe351d66a2112a1beec85192d62a2d8e8c533bd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
-
-Add a patch fixing cmake 4 compatibility, found in upstream pull
-request #349. The patch has been modified to apply on version 0.6.1
-instead of the current upstream HEAD.
-
-Signed-off-by: Benoît Monin <benoit.monin@bootlin.com>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-(cherry picked from commit 76099d285e75d646ffd7dc0f3872b261ffedbb89)
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
----
- ...nimum_required_version_to_3.5_for_cmake_4.patch | 51 ++++++++++++++++++++++
- 1 file changed, 51 insertions(+)
-
-diff --git a/package/flatcc/0001-cmake_set_minimum_required_version_to_3.5_for_cmake_4.patch b/package/flatcc/0001-cmake_set_minimum_required_version_to_3.5_for_cmake_4.patch
-new file mode 100644
-index 0000000000..9bfae54ae2
---- /dev/null
-+++ b/package/flatcc/0001-cmake_set_minimum_required_version_to_3.5_for_cmake_4.patch
-@@ -0,0 +1,51 @@
-+From 915f62dcd9f0a372944f749cf4acd707db10c5fd Mon Sep 17 00:00:00 2001
-+From: Alper Ak <alperyasinak1@gmail.com>
-+Date: Wed, 9 Jul 2025 12:59:17 +0300
-+Subject: [PATCH] cmake: Set minimum required version to 3.5 for CMake 4+
-+ compatibility
-+
-+Fix:
-+
-+| CMake Error at CMakeLists.txt:2 (cmake_minimum_required):
-+|   Compatibility with CMake < 3.5 has been removed from CMake.
-+|
-+|   Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
-+|   to tell CMake that the project requires at least <min> but has been updated
-+|   to work with policies introduced by <max> or earlier.
-+|
-+|   Or, add -DCMAKE_POLICY_VERSION_MINIMUM=3.5 to try configuring anyway.
-+|
-+|
-+| -- Configuring incomplete, errors occurred!
-+
-+Signed-off-by: Alper Ak <alperyasinak1@gmail.com>
-+Signed-off-by: Benoît Monin <benoit.monin@bootlin.com>
-+Upstream: https://github.com/dvidelabs/flatcc/pull/349
-+---
-+ CMakeLists.txt               | 2 +-
-+ external/hash/CMakeLists.txt | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index d4127f598..b51e5c5bd 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -2,7 +2,7 @@
-+ #cmake_minimum_required (VERSION 2.8.12.2)
-+ # Centos 7
-+ #cmake_minimum_required (VERSION 2.8.11)
-+-cmake_minimum_required (VERSION 2.8)
-++cmake_minimum_required (VERSION 3.5)
-+ 
-+ # Disable build of tests and samples. Due to custom build step
-+ # dependency on flatcc tool, some custom build configurations may
-+diff --git a/external/hash/CMakeLists.txt b/external/hash/CMakeLists.txt
-+index 7b7d990dd..12eb3daa4 100644
-+--- a/external/hash/CMakeLists.txt
-++++ b/external/hash/CMakeLists.txt
-+@@ -1,4 +1,4 @@
-+-cmake_minimum_required (VERSION 3.0.2)
-++cmake_minimum_required (VERSION 3.5)
-+ 
-+ project (HashTest)
-+ 
-
---===============4786632325489668390==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4786632325489668390==--
+CgpPbiAwOC8wNy8yMDI1IDA5OjM5LCBUaW0gU291YnJ5IHZpYSBidWlsZHJvb3Qgd3JvdGU6Cj4g
+QnVpbGRyb290IExUUyAyMDI1LjAyLnggdXRpbGlzZXMgbGliZ2xpYjIgdmVyc2lvbiAyLjgyLjUg
+d2hpY2ggaXMgcHJvbmUKPiB0byBDVkUtMjAyNS02MDUyIFsxXS4KPiAwMDAxLWdzdHJpbmctRml4
+LW92ZXJmbG93LWNoZWNrLXdoZW4tZXhwYW5kaW5nLXRoZS1zdHJpbmcucGF0Y2ggaXMKPiBpbmNs
+dWRlZCBpbiB0aGUgcGFja2FnZS9saWJnbGliMiBkaXJlY3RvcnkuIFRoaXMgcGF0Y2ggbWl0aWdh
+dGVzCj4gQ1ZFLTIwMjUtNjA1MiBhcyBzZWVuIGluIFsxXSwgYnkgYmFja3BvcnRpbmcgdG8gbGli
+Z2xpYjIgMi44Mi41Lgo+IGxpYmdsaWIyIHNoYXJlcyBwYXJ0IG9mIGl0cyBpbmZyYXN0cnVjdHVy
+ZSB3aXRoIGxpYmdsaWIyLWJvb3RzdHJhcCwKPiBieSBhZGRpbmcgdGhlIHBhdGNoIGluIHBhY2th
+Z2UvbGliZ2xpYjIgdGhlIHBhdGNoIGlzbid0IGFwcGxpZWQgdG8KPiBsaWJnbGliMi1ib290c3Ry
+YXAuCj4gV2hlbiBidWlsZGluZyBsaWJnbGliMiwgdGhlIHBhdGNoIHdhcyBjb3JyZWN0bHkgYXBw
+bGllZCBpbgo+IG91dHB1dC9idWlsZC9ob3N0LWxpYmdsaWIyLTIuODIuNS9nbGliL2dzdHJpbmcu
+YyAuICBXaGVuIGJ1aWxkaW5nCj4gbGliZ2xpYjItYm9vdHN0cmFwIGl0IHdhcyB2ZXJpZmllZCB0
+aGF0IHRoZSBwYXRjaCB3YXMgbm90IGFwcGxpZWQgaGVyZS4KPiAKPiBTaWduZWQtb2ZmLWJ5OiBU
+aW0gU291YnJ5IDx0aW0uc291YnJ5QG1pbmQuYmU+Cj4gLS0tCj4gICAuLi5mbG93LWNoZWNrLXdo
+ZW4tZXhwYW5kaW5nLXRoZS1zdHJpbmcucGF0Y2ggfCA3MSArKysrKysrKysrKysrKysrKysrCj4g
+ICBwYWNrYWdlL2xpYmdsaWIyL2xpYmdsaWIyLm1rICAgICAgICAgICAgICAgICAgfCAgMyArCj4g
+ICAyIGZpbGVzIGNoYW5nZWQsIDc0IGluc2VydGlvbnMoKykKPiAgIGNyZWF0ZSBtb2RlIDEwMDY0
+NCBwYWNrYWdlL2xpYmdsaWIyLzAwMDEtZ3N0cmluZy1GaXgtb3ZlcmZsb3ctY2hlY2std2hlbi1l
+eHBhbmRpbmctdGhlLXN0cmluZy5wYXRjaAo+IAo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2xpYmds
+aWIyLzAwMDEtZ3N0cmluZy1GaXgtb3ZlcmZsb3ctY2hlY2std2hlbi1leHBhbmRpbmctdGhlLXN0
+cmluZy5wYXRjaCBiL3BhY2thZ2UvbGliZ2xpYjIvMDAwMS1nc3RyaW5nLUZpeC1vdmVyZmxvdy1j
+aGVjay13aGVuLWV4cGFuZGluZy10aGUtc3RyaW5nLnBhdGNoCj4gbmV3IGZpbGUgbW9kZSAxMDA2
+NDQKPiBpbmRleCAwMDAwMDAwMDAwLi40NDdiNjU0NzgwCj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBi
+L3BhY2thZ2UvbGliZ2xpYjIvMDAwMS1nc3RyaW5nLUZpeC1vdmVyZmxvdy1jaGVjay13aGVuLWV4
+cGFuZGluZy10aGUtc3RyaW5nLnBhdGNoCj4gQEAgLTAsMCArMSw3MSBAQAo+ICtGcm9tIDljNDAz
+Zjc4N2VlZTY5YmU4NTBiYTVmOTIzNDhlY2VhNjVmOWJhZGMgTW9uIFNlcCAxNyAwMDowMDowMCAy
+MDAxCj4gK0Zyb206IFBoaWxpcCBXaXRobmFsbCA8cHdpdGhuYWxsQGdub21lLm9yZz4KPiArRGF0
+ZTogVHVlLCAzIEp1biAyMDI1IDExOjMxOjA0ICswMTAwCj4gK1N1YmplY3Q6IFtQQVRDSCAxLzFd
+IGdzdHJpbmc6IEZpeCBvdmVyZmxvdyBjaGVjayB3aGVuIGV4cGFuZGluZyB0aGUgc3RyaW5nCgog
+IGNoZWNrLXBhY2thZ2UgY29tcGxhaW5zOgoKcGFja2FnZS9saWJnbGliMi8wMDAxLWdzdHJpbmct
+Rml4LW92ZXJmbG93LWNoZWNrLXdoZW4tZXhwYW5kaW5nLXRoZS1zdHJpbmcucGF0Y2g6NDogCmdl
+bmVyYXRlIHlvdXIgcGF0Y2hlcyB3aXRoICdnaXQgZm9ybWF0LXBhdGNoIC1OJwoKCiAgQXBwbGll
+ZCB0byAyMDI1LjAyLnggd2l0aCB0aGF0IGZpeGVkLCB0aGFua3MuCgogIFJlZ2FyZHMsCiAgQXJu
+b3V0CgoKPiArTUlNRS1WZXJzaW9uOiAxLjAKPiArQ29udGVudC1UeXBlOiB0ZXh0L3BsYWluOyBj
+aGFyc2V0PVVURi04Cj4gK0NvbnRlbnQtVHJhbnNmZXItRW5jb2Rpbmc6IDhiaXQKPiArCj4gK0Fm
+dGVyIGNvbW1pdCAzNGI3OTkyZmQ2ZTM4OTRiZjZkMjIyOWI4YWE1OWNhYzM0YmNiMWI1IHRoZSBv
+dmVyZmxvdyBjaGVjawo+ICt3YXMgb25seSBkb25lIHdoZW4gZXhwYW5kaW5nIHRoZSBzdHJpbmcs
+IGJ1dCB3ZSBuZWVkIHRvIGRvIGl0IGJlZm9yZQo+ICtjaGVja2luZyB3aGV0aGVyIHRvIGV4cGFu
+ZCB0aGUgc3RyaW5nLCBvdGhlcndpc2UgdGhhdCBjYWxjdWxhdGlvbiBjb3VsZAo+ICtvdmVyZmxv
+dyBhbmQgZmFsc2VseSBkZWNpZGUgdGhhdCB0aGUgc3RyaW5nIGlzIGJpZyBlbm91Z2ggYWxyZWFk
+eS4KPiArCj4gK0FzIGEgY29uY3JldGUgZXhhbXBsZSwgY29uc2lkZXIgYSBgR1N0cmluZ2Agd2hp
+Y2ggaGFzOgo+ICsgKiBgLmxlbiA9IEdfTUFYU0laRSAvIDIgKyAxYAo+ICsgKiBgLmFsbG9jYXRl
+ZF9sZW4gPSBHX01BWFNJWkUgLyAyICsgMWAKPiArYW5kIGBnX3N0cmluZ19hcHBlbmQoKWAgaXMg
+Y2FsbGVkIG9uIGl0IHdpdGggYW4gaW5wdXQgc3RyaW5nIG9mIGxlbmd0aAo+ICtgR19NQVhTSVpF
+IC8gMmAuCj4gKwo+ICtUaGlzIHJlc3VsdHMgaW4gYSBjYWxsIGBnX3N0cmluZ19tYXliZV9leHBh
+bmQgKHN0cmluZywgR19NQVhTSVpFIC8gMilgLAo+ICt3aGljaCBjYWxjdWxhdGVzIGBzdHJpbmct
+PmxlbiArIGxlbmAgYXMgYChHX01BWFNJWkUgLyAyICsgMSkgKwo+ICsoR19NQVhTSVpFIC8gMilg
+IHdoaWNoIGV2YWx1YXRlcyB0byBgMWAgYXMgaXQgb3ZlcmZsb3dzLiBUaGlzIGlzIG5vdAo+ICtn
+cmVhdGVyIHRoYW4gYHN0cmluZy0+YWxsb2NhdGVkX2xlbmAgKHdoaWNoIGlzIGBHX01BWFNJWkUg
+LyAyICsgMWApLCBzbwo+ICtgZ19zdHJpbmdfZXhwYW5kKClgIGlzICpub3QqIGNhbGxlZCwgYW5k
+IGBnX3N0cmluZ19tYXliZV9leHBhbmQoKWAKPiArcmV0dXJucyBzdWNjZXNzZnVsbHkuIFRoZSBj
+YWxsZXIgdGhlbiBhc3N1bWVzIHRoYXQgdGhlcmXigJlzIGVub3VnaCBzcGFjZQo+ICtpbiB0aGUg
+YnVmZmVyLCBhbmQgaGFwcGlseSBjb250aW51ZXMgdG8gY2F1c2UgYSBidWZmZXIgb3ZlcmZsb3cu
+Cj4gKwo+ICtJdOKAmXMgdW5saWtlbHkgYW55b25lIGNvdWxkIGhpdCB0aGlzIGluIHByYWN0aWNl
+IGJlY2F1c2UgaXQgcmVxdWlyZXMKPiArbHVkaWNyb3VzbHkgYmlnIHN0cmluZ3MgYW5kIGBHU3Ry
+aW5nYCBhbGxvY2F0aW9ucywgd2hpY2ggbGlrZWx5IHdvdWxkCj4gK2hhdmUgYmVlbiBibG9ja2Vk
+IGJ5IG90aGVyIGNvZGUsIGJ1dCBpZiB3ZeKAmXJlIGdvaW5nIHRvIGhhdmUgdGhlIG92ZXJmbG93
+Cj4gK2NoZWNrcyBpbiBgR1N0cmluZ2AgdGhlbiB0aGV5IHNob3VsZCBiZSBlZmZlY3RpdmUuCj4g
+Kwo+ICtTcG90dGVkIGJ5IGNvZGUgaW5zcGVjdGlvbi4KPiArCj4gK1NpZ25lZC1vZmYtYnk6IFBo
+aWxpcCBXaXRobmFsbCA8cHdpdGhuYWxsQGdub21lLm9yZz4KPiArVXBzdHJlYW06IGh0dHBzOi8v
+Z2l0bGFiLmdub21lLm9yZy9HTk9NRS9nbGliLy0vbWVyZ2VfcmVxdWVzdHMvNDY1NS9kaWZmcwo+
+ICtDVkU6IENWRS0yMDI1LTYwNTIKPiArU2lnbmVkLW9mZi1ieTogVGltIFNvdWJyeSA8dGltLnNv
+dWJyeUBtaW5kLmJlPgo+ICstLS0KPiArIGdsaWIvZ3N0cmluZy5jIHwgOCArKysrLS0tLQo+ICsg
+MSBmaWxlIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygrKSwgNCBkZWxldGlvbnMoLSkKPiArCj4gK2Rp
+ZmYgLS1naXQgYS9nbGliL2dzdHJpbmcuYyBiL2dsaWIvZ3N0cmluZy5jCj4gK2luZGV4IGJkZDA2
+ODM0NC4uNDVhNmY2OGIxIDEwMDY0NAo+ICstLS0gYS9nbGliL2dzdHJpbmcuYwo+ICsrKysgYi9n
+bGliL2dzdHJpbmcuYwo+ICtAQCAtNjgsMTAgKzY4LDYgQEAgc3RhdGljIHZvaWQKPiArIGdfc3Ry
+aW5nX2V4cGFuZCAoR1N0cmluZyAqc3RyaW5nLAo+ICsgICAgICAgICAgICAgICAgICBnc2l6ZSAg
+ICBsZW4pCj4gKyB7Cj4gKy0gIC8qIERldGVjdCBwb3RlbnRpYWwgb3ZlcmZsb3cgKi8KPiArLSAg
+aWYgR19VTkxJS0VMWSAoKEdfTUFYU0laRSAtIHN0cmluZy0+bGVuIC0gMSkgPCBsZW4pCj4gKy0g
+ICAgZ19lcnJvciAoImFkZGluZyAlIiBHX0dTSVpFX0ZPUk1BVCAiIHRvIHN0cmluZyB3b3VsZCBv
+dmVyZmxvdyIsIGxlbik7Cj4gKy0KPiArICAgc3RyaW5nLT5hbGxvY2F0ZWRfbGVuID0gZ19uZWFy
+ZXN0X3BvdyAoc3RyaW5nLT5sZW4gKyBsZW4gKyAxKTsKPiArICAgLyogSWYgdGhlIG5ldyBzaXpl
+IGlzIGJpZ2dlciB0aGFuIEdfTUFYU0laRSAvIDIsIG9ubHkgYWxsb2NhdGUgZW5vdWdoCj4gKyAg
+ICAqIG1lbW9yeSBmb3IgdGhpcyBzdHJpbmcgYW5kIGRvbid0IG92ZXItYWxsb2NhdGUuCj4gK0BA
+IC04Niw2ICs4MiwxMCBAQCBzdGF0aWMgaW5saW5lIHZvaWQKPiArIGdfc3RyaW5nX21heWJlX2V4
+cGFuZCAoR1N0cmluZyAqc3RyaW5nLAo+ICsgICAgICAgICAgICAgICAgICAgICAgICBnc2l6ZSAg
+ICBsZW4pCj4gKyB7Cj4gKysgIC8qIERldGVjdCBwb3RlbnRpYWwgb3ZlcmZsb3cgKi8KPiArKyAg
+aWYgR19VTkxJS0VMWSAoKEdfTUFYU0laRSAtIHN0cmluZy0+bGVuIC0gMSkgPCBsZW4pCj4gKysg
+ICAgZ19lcnJvciAoImFkZGluZyAlIiBHX0dTSVpFX0ZPUk1BVCAiIHRvIHN0cmluZyB3b3VsZCBv
+dmVyZmxvdyIsIGxlbik7Cj4gKysKPiArICAgaWYgKEdfVU5MSUtFTFkgKHN0cmluZy0+bGVuICsg
+bGVuID49IHN0cmluZy0+YWxsb2NhdGVkX2xlbikpCj4gKyAgICAgZ19zdHJpbmdfZXhwYW5kIChz
+dHJpbmcsIGxlbik7Cj4gKyB9Cj4gKy0tCj4gKzIuMzkuNQo+ICsKPiBkaWZmIC0tZ2l0IGEvcGFj
+a2FnZS9saWJnbGliMi9saWJnbGliMi5tayBiL3BhY2thZ2UvbGliZ2xpYjIvbGliZ2xpYjIubWsK
+PiBpbmRleCA2YzAxMmM3OWM3Li5iOGM4NTNiNzUyIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvbGli
+Z2xpYjIvbGliZ2xpYjIubWsKPiArKysgYi9wYWNrYWdlL2xpYmdsaWIyL2xpYmdsaWIyLm1rCj4g
+QEAgLTIyLDYgKzIyLDkgQEAgaWZlcSAoJChCUjJfQVJNX0lOU1RSVUNUSU9OU19USFVNQikseSkK
+PiAgIExJQkdMSUIyX0NGTEFHUyArPSAtbWFybQo+ICAgZW5kaWYKPiAgIAo+ICsjIDAwMDEtZ3N0
+cmluZy1GaXgtb3ZlcmZsb3ctY2hlY2std2hlbi1leHBhbmRpbmctdGhlLXN0cmluZy5wYXRjaAo+
+ICtMSUJHTElCMl9JR05PUkVfQ1ZFUyArPSBDVkUtMjAyNS02MDUyCj4gKwo+ICAgSE9TVF9MSUJH
+TElCMl9DT05GX09QVFMgPSBcCj4gICAJLURkdHJhY2U9ZmFsc2UgXAo+ICAgCS1EZ2xpYl9kZWJ1
+Zz1kaXNhYmxlZCBcCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBz
+Oi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
