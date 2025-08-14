@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28195CA0EDC
-	for <buildroot@archiver.kernel.org>; Thu, 14 Aug 2025 20:06:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EEF8DCA0EDC
+	for <buildroot@archiver.kernel.org>; Thu, 14 Aug 2025 20:06:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EFFF36074E;
-	Thu, 14 Aug 2025 20:06:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C908480DD8;
+	Thu, 14 Aug 2025 20:06:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LHY0IZ2ggm2v; Thu, 14 Aug 2025 20:06:20 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HxXpZufNb6au; Thu, 14 Aug 2025 20:06:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DCF7760766
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0AB0280DCE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DCF7760766;
-	Thu, 14 Aug 2025 20:06:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0AB0280DCE;
+	Thu, 14 Aug 2025 20:06:21 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1AD7A93F
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:06:07 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1775493E
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:06:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2DC5E80D6C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 707A880D70
  for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:06:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VqL8ZF7ENuKa for <buildroot@buildroot.org>;
+ id rPdjgyDbjmXf for <buildroot@buildroot.org>;
  Thu, 14 Aug 2025 20:06:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 092FE80C99
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4B49380D3B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 092FE80C99
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4B49380D3B
  for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:06:04 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EDE638760A; Thu, 14 Aug 2025 20:06:03 +0000 (UTC)
+ id 4967C8758C; Thu, 14 Aug 2025 20:06:04 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 14 Aug 2025 09:29:09 +0200
+Date: Thu, 14 Aug 2025 09:29:51 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: d3466c76ca9d1e513e18817ff5ff4b466146bc26
-X-Git-Newrev: 5117af47a8d1a1ac1ba60f456ef94cd46bd398cf
+X-Git-Oldrev: de04bbfdcc4a002695d4f85d53042f9ab0f5c52d
+X-Git-Newrev: 630a22d09339f94c5b166e3b71c1a12938cbc46b
 X-Patchwork-Hint: ignore
-Message-Id: <20250814200603.EDE638760A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/libssh: security
- bump to v0.11.2
+Message-Id: <20250814200604.4967C8758C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/python3: add
+ upstream post-3.13.5 security fix for CVE-2025-8194
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,211 +61,279 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7657822960934353101=="
+Content-Type: multipart/mixed; boundary="===============0262323224580913684=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7657822960934353101==
+--===============0262323224580913684==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5117af47a8d1a1ac1ba60f456ef94cd46bd398cf
+commit: https://git.buildroot.net/buildroot/commit/?id=630a22d09339f94c5b166e3b71c1a12938cbc46b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-For more information on the release see:
-  - https://git.libssh.org/projects/libssh.git/tag/?h=libssh-0.11.2
+Fixes the following vulnerability:
 
-This fixes the following vulnerabilities:
+CVE-2025-8194: There is a defect in the CPython “tarfile” module affecting
+the “TarFile” extraction and entry enumeration APIs.  The tar implementation
+would process tar archives with negative offsets without error, resulting in
+an infinite loop and deadlock during the parsing of maliciously crafted tar
+archives.
 
-- CVE-2025-4878
+https://nvd.nist.gov/vuln/detail/CVE-2025-8194
+https://www.openwall.com/lists/oss-security/2025/07/28/1
 
-    A vulnerability was found in libssh, where an uninitialized variable
-    exists under certain conditions in the privatekey_from_file()
-    function. This flaw can be triggered if the file specified by the
-    filename doesn't exist and may lead to possible signing failures or
-    heap corruption.
-
-For more information, see:
-  - https://www.cve.org/CVERecord?id=CVE-2025-4878
-  - https://git.libssh.org/projects/libssh.git/commit/?id=697650caa97eaf7623924c75f9fcfec6dd423cd1
-  - https://git.libssh.org/projects/libssh.git/commit/?id=b35ee876adc92a208d47194772e99f9c71e0bedb
-
-- CVE-2025-5318
-
-    A flaw was found in the libssh library. An out-of-bounds read can be
-    triggered in the sftp_handle function due to an incorrect comparison
-    check that permits the function to access memory beyond the valid
-    handle list and to return an invalid pointer, which is used in further
-    processing. This vulnerability allows an authenticated remote attacker
-    to potentially read unintended memory regions, exposing sensitive
-    information or affect service behavior.
-
-For more information, see:
-  - https://www.cve.org/CVERecord?id=CVE-2025-5318
-  - https://www.libssh.org/security/advisories/CVE-2025-5318.txt
-
-- CVE-2025-5351
-
-    A flaw was found in the key export functionality of libssh. The issue
-    occurs in the internal function responsible for converting
-    cryptographic keys into serialized formats. During error handling, a
-    memory structure is freed but not cleared, leading to a potential
-    double free issue if an additional failure occurs later in the
-    function. This condition may result in heap corruption or application
-    instability in low-memory scenarios, posing a risk to system
-    reliability where key export operations are performed.
-
-For more information, see:
-  - https://www.cve.org/CVERecord?id=CVE-2025-5351
-
-- CVE-2025-5372
-
-    A flaw was found in libssh versions built with OpenSSL versions older
-    than 3.0, specifically in the ssh_kdf() function responsible for key
-    derivation. Due to inconsistent interpretation of return values where
-    OpenSSL uses 0 to indicate failure and libssh uses 0 for success—the
-    function may mistakenly return a success status even when key
-    derivation fails. This results in uninitialized cryptographic key
-    buffers being used in subsequent communication, potentially
-    compromising SSH sessions' confidentiality, integrity, and
-    availability.
-
-For more information, see:
-  - https://www.cve.org/CVERecord?id=CVE-2025-5372
-
-- CVE-2025-5449
-
-    A flaw was found in the SFTP server message decoding logic of libssh.
-    The issue occurs due to an incorrect packet length check that allows
-    an integer overflow when handling large payload sizes on 32-bit
-    systems. This issue leads to failed memory allocation and causes the
-    server process to crash, resulting in a denial of service.
-
-For more information, see:
-  - https://www.cve.org/CVERecord?id=CVE-2025-5449
-  - https://git.libssh.org/projects/libssh.git/commit/?h=stable-0.11&id=261612179f740bc62ba363d98b3bd5e5573a811f
-  - https://git.libssh.org/projects/libssh.git/commit/?h=stable-0.11&id=3443aec90188d6aab9282afc80a81df5ab72c4da
-  - https://git.libssh.org/projects/libssh.git/commit/?h=stable-0.11&id=5504ff40515439a5fecbb17da7483000c4d12eb7
-  - https://git.libssh.org/projects/libssh.git/commit/?h=stable-0.11&id=78485f446af9b30e37eb8f177b81940710d54496
-  - https://git.libssh.org/projects/libssh.git/commit/?h=stable-0.11&id=f79ec51b7fd519dbc5737a7ba826e3ed093f6ceb
-  - https://www.libssh.org/security/advisories/CVE-2025-5449.txt
-
-- CVE-2025-5987
-
-    A flaw was found in libssh when using the ChaCha20 cipher with the
-    OpenSSL library. If an attacker manages to exhaust the heap space,
-    this error is not detected and may lead to libssh using a partially
-    initialized cipher context. This occurs because the OpenSSL error code
-    returned aliases with the SSH_OK code, resulting in libssh not
-    properly detecting the error returned by the OpenSSL library. This
-    issue can lead to undefined behavior, including compromised data
-    confidentiality and integrity or crashes.
-
-For more information, see:
-  - https://www.cve.org/CVERecord?id=CVE-2025-5987
-
-The patch 0001 is removed as it's now included upstream see [1].
-
-[1] https://gitlab.com/libssh/libssh-mirror/-/commit/093431f929ec8c36d5941bfdc0b2d3b68404a2aa
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8083972a9098d174f3f7e1be007a55b134864cd8)
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 681575c73cc0f5be2644bb87f73dcc50c602a690)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...Only-enable-CXX-when-running-the-coverage.patch | 57 ----------------------
- package/libssh/libssh.hash                         |  4 +-
- package/libssh/libssh.mk                           |  2 +-
- 3 files changed, 3 insertions(+), 60 deletions(-)
+ ...577-tarfile-now-validates-archives-to-ens.patch | 221 +++++++++++++++++++++
+ package/python3/python3.mk                         |   3 +
+ 2 files changed, 224 insertions(+)
 
-diff --git a/package/libssh/0001-cmake-Only-enable-CXX-when-running-the-coverage.patch b/package/libssh/0001-cmake-Only-enable-CXX-when-running-the-coverage.patch
-deleted file mode 100644
-index c1f39b7d9a..0000000000
---- a/package/libssh/0001-cmake-Only-enable-CXX-when-running-the-coverage.patch
-+++ /dev/null
-@@ -1,57 +0,0 @@
--From 328ae3d2306c9f65b5e85a2be98a368c07287a05 Mon Sep 17 00:00:00 2001
--From: Thomas Perale <thomas.perale@mind.be>
--Date: Sat, 14 Sep 2024 21:07:30 +0200
--Subject: [PATCH] cmake: Only enable CXX when running the coverage
--
--Commit 25a678190c42b24076fdd805a8d7a722a8a9c798 introduced code coverage
--collection. That also introduced a dependency to CXX language.
--
--When cross-compiling libssh in an environment that doesn't have a C++ compiler
--the following error is raised: "No CMAKE_CXX_COMPILER could be found.".
--
--Since the C++ part is only needed for the coverage part, this commit only enable
--that language dependency when actually needing it.
--
--Signed-off-by: Thomas Perale <thomas.perale@mind.be>
--Upstream: https://gitlab.com/libssh/libssh-mirror/-/merge_requests/537
-----
-- CMakeLists.txt                    | 3 ++-
-- cmake/Modules/AddCMockaTest.cmake | 1 +
-- 2 files changed, 3 insertions(+), 1 deletion(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 13330ea3..5595a47a 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -9,7 +9,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules")
-- include(DefineCMakeDefaults)
-- include(DefineCompilerFlags)
-- 
---project(libssh VERSION 0.11.1 LANGUAGES C CXX)
--+project(libssh VERSION 0.11.1 LANGUAGES C)
-- 
-- # global needed variable
-- set(APPLICATION_NAME ${PROJECT_NAME})
--@@ -190,6 +190,7 @@ endif (WITH_SYMBOL_VERSIONING AND ABIMAP_FOUND)
-- 
-- # Coverage
-- if (WITH_COVERAGE)
--+    ENABLE_LANGUAGE(CXX)
--     include(CodeCoverage)
--     setup_target_for_coverage_lcov(
--         NAME "coverage"
--diff --git a/cmake/Modules/AddCMockaTest.cmake b/cmake/Modules/AddCMockaTest.cmake
--index 79178183..f49961ba 100644
----- a/cmake/Modules/AddCMockaTest.cmake
--+++ b/cmake/Modules/AddCMockaTest.cmake
--@@ -117,6 +117,7 @@ function(ADD_CMOCKA_TEST _TARGET_NAME)
--         ${TARGET_SYSTEM_EMULATOR} ${_TARGET_NAME}
--     )
--     if (WITH_COVERAGE)
--+        ENABLE_LANGUAGE(CXX)
--         include(CodeCoverage)
--         append_coverage_compiler_flags_to_target(${_TARGET_NAME})
--     endif (WITH_COVERAGE)
---- 
--2.46.0
--
-diff --git a/package/libssh/libssh.hash b/package/libssh/libssh.hash
-index b131557ee8..161d5b1e58 100644
---- a/package/libssh/libssh.hash
-+++ b/package/libssh/libssh.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://www.libssh.org/files/0.11/libssh-0.11.1.tar.xz.asc
-+# https://www.libssh.org/files/0.11/libssh-0.11.2.tar.xz.asc
- # with key 88A228D89B07C2C77D0C780903D5DF8CFDD3E8E7
--sha256  14b7dcc72e91e08151c58b981a7b570ab2663f630e7d2837645d5a9c612c1b79  libssh-0.11.1.tar.xz
-+sha256  69529fc18f5b601f0baf0e5a4501a2bc26df5e2f116f5f8f07f19fafaa6d04e7  libssh-0.11.2.tar.xz
- sha256  1656186e951db1c010a8485481fa94587f7e53a26d24976bef97945ad0c4df5a  COPYING
-diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
-index a00e6a9445..7bcf077929 100644
---- a/package/libssh/libssh.mk
-+++ b/package/libssh/libssh.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/python3/0009-3.13-gh-130577-tarfile-now-validates-archives-to-ens.patch b/package/python3/0009-3.13-gh-130577-tarfile-now-validates-archives-to-ens.patch
+new file mode 100644
+index 0000000000..1848ec2745
+--- /dev/null
++++ b/package/python3/0009-3.13-gh-130577-tarfile-now-validates-archives-to-ens.patch
+@@ -0,0 +1,221 @@
++From cdae923ffe187d6ef916c0f665a31249619193fe Mon Sep 17 00:00:00 2001
++From: "Miss Islington (bot)"
++ <31488909+miss-islington@users.noreply.github.com>
++Date: Mon, 28 Jul 2025 17:59:33 +0200
++Subject: [PATCH] [3.13] gh-130577: tarfile now validates archives to ensure
++ member offsets are non-negative (GH-137027) (#137170)
++
++gh-130577: tarfile now validates archives to ensure member offsets are non-negative (GH-137027)
++(cherry picked from commit 7040aa54f14676938970e10c5f74ea93cd56aa38)
++
++Upstream: https://github.com/python/cpython/commit/cdae923ffe187d6ef916c0f665a31249619193fe
++Co-authored-by: Alexander Urieles <aeurielesn@users.noreply.github.com>
++Co-authored-by: Gregory P. Smith <greg@krypto.org>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ Lib/tarfile.py                                |   3 +
++ Lib/test/test_tarfile.py                      | 156 ++++++++++++++++++
++ ...-07-23-00-35-29.gh-issue-130577.c7EITy.rst |   3 +
++ 3 files changed, 162 insertions(+)
++ create mode 100644 Misc/NEWS.d/next/Library/2025-07-23-00-35-29.gh-issue-130577.c7EITy.rst
++
++diff --git a/Lib/tarfile.py b/Lib/tarfile.py
++index 0980f6a8175..9ff9df696de 100755
++--- a/Lib/tarfile.py
+++++ b/Lib/tarfile.py
++@@ -1636,6 +1636,9 @@ def _block(self, count):
++         """Round up a byte count by BLOCKSIZE and return it,
++            e.g. _block(834) => 1024.
++         """
+++        # Only non-negative offsets are allowed
+++        if count < 0:
+++            raise InvalidHeaderError("invalid offset")
++         blocks, remainder = divmod(count, BLOCKSIZE)
++         if remainder:
++             blocks += 1
++diff --git a/Lib/test/test_tarfile.py b/Lib/test/test_tarfile.py
++index ac31be0f050..7024be46de5 100644
++--- a/Lib/test/test_tarfile.py
+++++ b/Lib/test/test_tarfile.py
++@@ -50,6 +50,7 @@ def sha256sum(data):
++ xzname = os.path.join(TEMPDIR, "testtar.tar.xz")
++ tmpname = os.path.join(TEMPDIR, "tmp.tar")
++ dotlessname = os.path.join(TEMPDIR, "testtar")
+++SPACE = b" "
++ 
++ sha256_regtype = (
++     "e09e4bc8b3c9d9177e77256353b36c159f5f040531bbd4b024a8f9b9196c71ce"
++@@ -4578,6 +4579,161 @@ def extractall(self, ar):
++         ar.extractall(self.testdir, filter='fully_trusted')
++ 
++ 
+++class OffsetValidationTests(unittest.TestCase):
+++    tarname = tmpname
+++    invalid_posix_header = (
+++        # name: 100 bytes
+++        tarfile.NUL * tarfile.LENGTH_NAME
+++        # mode, space, null terminator: 8 bytes
+++        + b"000755" + SPACE + tarfile.NUL
+++        # uid, space, null terminator: 8 bytes
+++        + b"000001" + SPACE + tarfile.NUL
+++        # gid, space, null terminator: 8 bytes
+++        + b"000001" + SPACE + tarfile.NUL
+++        # size, space: 12 bytes
+++        + b"\xff" * 11 + SPACE
+++        # mtime, space: 12 bytes
+++        + tarfile.NUL * 11 + SPACE
+++        # chksum: 8 bytes
+++        + b"0011407" + tarfile.NUL
+++        # type: 1 byte
+++        + tarfile.REGTYPE
+++        # linkname: 100 bytes
+++        + tarfile.NUL * tarfile.LENGTH_LINK
+++        # magic: 6 bytes, version: 2 bytes
+++        + tarfile.POSIX_MAGIC
+++        # uname: 32 bytes
+++        + tarfile.NUL * 32
+++        # gname: 32 bytes
+++        + tarfile.NUL * 32
+++        # devmajor, space, null terminator: 8 bytes
+++        + tarfile.NUL * 6 + SPACE + tarfile.NUL
+++        # devminor, space, null terminator: 8 bytes
+++        + tarfile.NUL * 6 + SPACE + tarfile.NUL
+++        # prefix: 155 bytes
+++        + tarfile.NUL * tarfile.LENGTH_PREFIX
+++        # padding: 12 bytes
+++        + tarfile.NUL * 12
+++    )
+++    invalid_gnu_header = (
+++        # name: 100 bytes
+++        tarfile.NUL * tarfile.LENGTH_NAME
+++        # mode, null terminator: 8 bytes
+++        + b"0000755" + tarfile.NUL
+++        # uid, null terminator: 8 bytes
+++        + b"0000001" + tarfile.NUL
+++        # gid, space, null terminator: 8 bytes
+++        + b"0000001" + tarfile.NUL
+++        # size, space: 12 bytes
+++        + b"\xff" * 11 + SPACE
+++        # mtime, space: 12 bytes
+++        + tarfile.NUL * 11 + SPACE
+++        # chksum: 8 bytes
+++        + b"0011327" + tarfile.NUL
+++        # type: 1 byte
+++        + tarfile.REGTYPE
+++        # linkname: 100 bytes
+++        + tarfile.NUL * tarfile.LENGTH_LINK
+++        # magic: 8 bytes
+++        + tarfile.GNU_MAGIC
+++        # uname: 32 bytes
+++        + tarfile.NUL * 32
+++        # gname: 32 bytes
+++        + tarfile.NUL * 32
+++        # devmajor, null terminator: 8 bytes
+++        + tarfile.NUL * 8
+++        # devminor, null terminator: 8 bytes
+++        + tarfile.NUL * 8
+++        # padding: 167 bytes
+++        + tarfile.NUL * 167
+++    )
+++    invalid_v7_header = (
+++        # name: 100 bytes
+++        tarfile.NUL * tarfile.LENGTH_NAME
+++        # mode, space, null terminator: 8 bytes
+++        + b"000755" + SPACE + tarfile.NUL
+++        # uid, space, null terminator: 8 bytes
+++        + b"000001" + SPACE + tarfile.NUL
+++        # gid, space, null terminator: 8 bytes
+++        + b"000001" + SPACE + tarfile.NUL
+++        # size, space: 12 bytes
+++        + b"\xff" * 11 + SPACE
+++        # mtime, space: 12 bytes
+++        + tarfile.NUL * 11 + SPACE
+++        # chksum: 8 bytes
+++        + b"0010070" + tarfile.NUL
+++        # type: 1 byte
+++        + tarfile.REGTYPE
+++        # linkname: 100 bytes
+++        + tarfile.NUL * tarfile.LENGTH_LINK
+++        # padding: 255 bytes
+++        + tarfile.NUL * 255
+++    )
+++    valid_gnu_header = tarfile.TarInfo("filename").tobuf(tarfile.GNU_FORMAT)
+++    data_block = b"\xff" * tarfile.BLOCKSIZE
+++
+++    def _write_buffer(self, buffer):
+++        with open(self.tarname, "wb") as f:
+++            f.write(buffer)
+++
+++    def _get_members(self, ignore_zeros=None):
+++        with open(self.tarname, "rb") as f:
+++            with tarfile.open(
+++                mode="r", fileobj=f, ignore_zeros=ignore_zeros
+++            ) as tar:
+++                return tar.getmembers()
+++
+++    def _assert_raises_read_error_exception(self):
+++        with self.assertRaisesRegex(
+++            tarfile.ReadError, "file could not be opened successfully"
+++        ):
+++            self._get_members()
+++
+++    def test_invalid_offset_header_validations(self):
+++        for tar_format, invalid_header in (
+++            ("posix", self.invalid_posix_header),
+++            ("gnu", self.invalid_gnu_header),
+++            ("v7", self.invalid_v7_header),
+++        ):
+++            with self.subTest(format=tar_format):
+++                self._write_buffer(invalid_header)
+++                self._assert_raises_read_error_exception()
+++
+++    def test_early_stop_at_invalid_offset_header(self):
+++        buffer = self.valid_gnu_header + self.invalid_gnu_header + self.valid_gnu_header
+++        self._write_buffer(buffer)
+++        members = self._get_members()
+++        self.assertEqual(len(members), 1)
+++        self.assertEqual(members[0].name, "filename")
+++        self.assertEqual(members[0].offset, 0)
+++
+++    def test_ignore_invalid_archive(self):
+++        # 3 invalid headers with their respective data
+++        buffer = (self.invalid_gnu_header + self.data_block) * 3
+++        self._write_buffer(buffer)
+++        members = self._get_members(ignore_zeros=True)
+++        self.assertEqual(len(members), 0)
+++
+++    def test_ignore_invalid_offset_headers(self):
+++        for first_block, second_block, expected_offset in (
+++            (
+++                (self.valid_gnu_header),
+++                (self.invalid_gnu_header + self.data_block),
+++                0,
+++            ),
+++            (
+++                (self.invalid_gnu_header + self.data_block),
+++                (self.valid_gnu_header),
+++                1024,
+++            ),
+++        ):
+++            self._write_buffer(first_block + second_block)
+++            members = self._get_members(ignore_zeros=True)
+++            self.assertEqual(len(members), 1)
+++            self.assertEqual(members[0].name, "filename")
+++            self.assertEqual(members[0].offset, expected_offset)
+++
+++
++ def setUpModule():
++     os_helper.unlink(TEMPDIR)
++     os.makedirs(TEMPDIR)
++diff --git a/Misc/NEWS.d/next/Library/2025-07-23-00-35-29.gh-issue-130577.c7EITy.rst b/Misc/NEWS.d/next/Library/2025-07-23-00-35-29.gh-issue-130577.c7EITy.rst
++new file mode 100644
++index 00000000000..342cabbc865
++--- /dev/null
+++++ b/Misc/NEWS.d/next/Library/2025-07-23-00-35-29.gh-issue-130577.c7EITy.rst
++@@ -0,0 +1,3 @@
+++:mod:`tarfile` now validates archives to ensure member offsets are
+++non-negative.  (Contributed by Alexander Enrique Urieles Nieto in
+++:gh:`130577`.)
++-- 
++2.39.5
++
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index ec210ccac8..337e1401de 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -13,6 +13,9 @@ PYTHON3_LICENSE_FILES = LICENSE
+ PYTHON3_CPE_ID_VENDOR = python
+ PYTHON3_CPE_ID_PRODUCT = python
  
- LIBSSH_VERSION_MAJOR = 0.11
--LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).1
-+LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).2
- LIBSSH_SOURCE = libssh-$(LIBSSH_VERSION).tar.xz
- LIBSSH_SITE = https://www.libssh.org/files/$(LIBSSH_VERSION_MAJOR)
- LIBSSH_LICENSE = LGPL-2.1
++# 0009-3.13-gh-130577-tarfile-now-validates-archives-to-ens.patch
++PYTHON3_IGNORE_CVES += CVE-2025-8194
++
+ # This host Python is installed in $(HOST_DIR), as it is needed when
+ # cross-compiling third-party Python modules.
+ 
 
---===============7657822960934353101==
+--===============0262323224580913684==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -276,4 +344,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============7657822960934353101==--
+--===============0262323224580913684==--
