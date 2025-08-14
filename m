@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 246BECA0EE6
-	for <buildroot@archiver.kernel.org>; Thu, 14 Aug 2025 20:06:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5063BCA0EE4
+	for <buildroot@archiver.kernel.org>; Thu, 14 Aug 2025 20:07:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EC52980EB8;
-	Thu, 14 Aug 2025 20:06:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 27C6280ECD;
+	Thu, 14 Aug 2025 20:07:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eVG7WLMg6BHl; Thu, 14 Aug 2025 20:06:57 +0000 (UTC)
+ id sQ9I6ywvPc-d; Thu, 14 Aug 2025 20:06:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1774080EC8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E28380EA5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1774080EC8;
-	Thu, 14 Aug 2025 20:06:57 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 62EF4228
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:06:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7E28380EA5;
+	Thu, 14 Aug 2025 20:06:54 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0CB97228
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:06:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4F1B5404AF
+ by smtp1.osuosl.org (Postfix) with ESMTP id A733A80D3F
  for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:06:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6mENugsG9d94 for <buildroot@buildroot.org>;
- Thu, 14 Aug 2025 20:06:06 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HfqTO9pY3uyO for <buildroot@buildroot.org>;
+ Thu, 14 Aug 2025 20:06:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5A232404CE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 62AF880D73
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5A232404CE
+ by smtp1.osuosl.org (Postfix) with ESMTP id 62AF880D73
  for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:06:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5819787609; Thu, 14 Aug 2025 20:06:05 +0000 (UTC)
+ id 610B08760A; Thu, 14 Aug 2025 20:06:05 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 14 Aug 2025 09:33:59 +0200
+Date: Thu, 14 Aug 2025 09:34:06 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: 465c75af76b51636d09751f4faae939ef4488fe8
-X-Git-Newrev: 5cada211a9054c47f49ddc75ce124f0accd6ff13
+X-Git-Oldrev: 5cada211a9054c47f49ddc75ce124f0accd6ff13
+X-Git-Newrev: b0daed85e7787ec6c7fe640cf151af26a318151e
 X-Patchwork-Hint: ignore
-Message-Id: <20250814200605.5819787609@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/ghostscript: fix
- xlib dependency
+Message-Id: <20250814200605.610B08760A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/libapparmor:
+ remove stale reference to patch 0001
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,76 +66,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5cada211a9054c47f49ddc75ce124f0accd6ff13
+commit: https://git.buildroot.net/buildroot/commit/?id=b0daed85e7787ec6c7fe640cf151af26a318151e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-Since the package bump to v10.05.0 the xlib libraries detection has been
-improved to error missing x libraries (see [2]).
+The AUTORECONF variable was introduced in commit [1] with reference to
+the patches that modified the m4 and Makefile.am files.
 
-The following error is happening on the autobuilder when building
-ghostscript with xlib_libX11:
+The commit [2] removed the last such patch but left the reference to the
+patch and the AUTORECONF variable.
 
-```
-checking for XOpenDisplay in -lX11... yes
-checking for XdbeQueryExtension in -lXext... yes
-checking for XtAppCreateShell in -lXt... no
-configure: error: X11 libraries (libX11, libXt, libXext) not available, either install them, or rerun configure with "--without-x"
-make: *** [package/pkg-generic.mk:263: /home/buildroot/instance-0/output-1/build/ghostscript-10.05.1/.stamp_configured] Error 1
-```
+Later, commit [3] updated the mirror to the gitlab URL that no longer
+bundle a pre-generated `configure` file, making the execution of
+AUTORECONF necessary anyway.
 
-This error can be reproduced with the following config:
+This patch removes the obsolete reference to the patch 0001 removed in
+[2] to avoid ambiguity with the new patch 0001 introduced in commit [4].
 
-```
-cat <<EOF >.config
-BR2_arm=y
-BR2_cortex_a7=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-BR2_PACKAGE_XORG7=y
-BR2_PACKAGE_XLIB_LIBX11=y
-BR2_PACKAGE_GHOSTSCRIPT=y
-EOF
-make olddefconfig
-make
-```
+[1] 01a82c1401 package/libapparmor: enable python bindings
+[2] 27cd0b5033 package/apparmor: bump to version 3.0.4
+[3] 5649202ddc package/libapparmor: bump to version 3.1.7
+[4] 2640f5dcd0 package/libapparmor: fix build w/ musl
 
-This patch fixes the xlib dependencies of the ghostscript package to
-correctly build with X support:
-
-- The 'XtAppCreateShell' function is provided by the package
-  'xlib_libXt'.
-- The 'XdbeQueryExtension' function is provided by the package
-  'xlib_libXext'.
-
-They both select the 'xlib_libX11' package.
-
-[1] 9abf662cfd package/ghostscript: security bump to version 10.05.0
-[2] https://github.com/ArtifexSoftware/ghostpdl/commit/37eede31e12814fae69744e7842a5640004e5a65
-
-Fixes: https://autobuild.buildroot.org/results/45d/45d0414f341feb2354478b145396fe137f9cc6a6
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-(cherry picked from commit 9adc8a05707f743c659cc6fb25d0a213498d0868)
+[Peter: add a comment explaining why]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 50cac72f73f7eee9136aa9cc48dbd5a5a12a0625)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/ghostscript/ghostscript.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/libapparmor/libapparmor.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
-index 0ddcb950ff..c9d13f5545 100644
---- a/package/ghostscript/ghostscript.mk
-+++ b/package/ghostscript/ghostscript.mk
-@@ -85,8 +85,8 @@ else
- GHOSTSCRIPT_CONF_OPTS += --disable-cups
- endif
+diff --git a/package/libapparmor/libapparmor.mk b/package/libapparmor/libapparmor.mk
+index fa59ff2924..91c22ad35b 100644
+--- a/package/libapparmor/libapparmor.mk
++++ b/package/libapparmor/libapparmor.mk
+@@ -16,7 +16,7 @@ LIBAPPARMOR_DEPENDENCIES = host-bison host-flex host-pkgconf
+ LIBAPPARMOR_SUBDIR = libraries/libapparmor
+ LIBAPPARMOR_INSTALL_STAGING = YES
  
--ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
--GHOSTSCRIPT_DEPENDENCIES += xlib_libX11
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXT)$(BR2_PACKAGE_XLIB_LIBXEXT),yy)
-+GHOSTSCRIPT_DEPENDENCIES += xlib_libXt xlib_libXext
- GHOSTSCRIPT_CONF_OPTS += --with-x
- else
- GHOSTSCRIPT_CONF_OPTS += --without-x
+-# Patch 0001 touches Makefile.am and m4 files
++# no configure in tarball
+ LIBAPPARMOR_AUTORECONF = YES
+ 
+ # Most AppArmor tools will want to link to the static lib.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
