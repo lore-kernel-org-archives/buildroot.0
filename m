@@ -1,103 +1,102 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27266CA0EE4
-	for <buildroot@archiver.kernel.org>; Thu, 14 Aug 2025 20:32:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70985CA0EDC
+	for <buildroot@archiver.kernel.org>; Thu, 14 Aug 2025 20:32:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F177580EE3;
-	Thu, 14 Aug 2025 20:32:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 477AE6084B;
+	Thu, 14 Aug 2025 20:32:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hBHAuBbbbOF7; Thu, 14 Aug 2025 20:32:37 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id H9cIhah9C2om; Thu, 14 Aug 2025 20:32:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5532E80EE8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E334F60831
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5532E80EE8;
-	Thu, 14 Aug 2025 20:32:28 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 00E981BA
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:32:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E334F60831;
+	Thu, 14 Aug 2025 20:32:38 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id E4C53228
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:32:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DBA9240491
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:32:18 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CBAC840494
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:32:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D5AigW1qbhCo for <buildroot@buildroot.org>;
- Thu, 14 Aug 2025 20:32:18 +0000 (UTC)
+ id ZIwQixxGQfW0 for <buildroot@buildroot.org>;
+ Thu, 14 Aug 2025 20:32:20 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
+ client-ip=2a00:1450:4864:20::636; helo=mail-ej1-x636.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E78BB4048F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E78BB4048F
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E78BB4048F
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:32:17 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- 5b1f17b1804b1-45a20c51c40so827315e9.3
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 13:32:17 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org DE39240491
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE39240491
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com
+ [IPv6:2a00:1450:4864:20::636])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id DE39240491
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:32:19 +0000 (UTC)
+Received: by mail-ej1-x636.google.com with SMTP id
+ a640c23a62f3a-afcb7aea37cso178928366b.3
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 13:32:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1755203536; x=1755808336;
+ d=1e100.net; s=20230601; t=1755203538; x=1755808338;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=ZOpEjaH+2rMotPLUe/DvvDgnlN1NRsJ8Ry+7tMCemDI=;
- b=J1F4txvYt89mr6gUlyxZeBbf9Atm6b6Inc31JMib73zu94qtAYVhhabQKgI9zHxC9k
- 01IWJrL/s/pbm1Yw18iJW8CHnG1zC6VGekhL2jD1GB7p30TUPZSwrcStbyq6+A8fEK4w
- vYLhd5bXUOv3IB9T3YfqSQpRPu1LzrgiU7JCQtbyoGCLsYNIAD3oAvs2fSAkQhcMVYNt
- J41XHK763M3QtxnjWkUXhCDYCmuzDb2/e8i2wkFKxogoSjoIuFKM03vrXSYGRSdU1JPr
- Fw+HbAgkmiyG2YDoTYcn9yCXZsjs9CVMiD3rOpBCrwhmHYmUz3ek+j97MKvSfh9nh57Z
- +89A==
-X-Gm-Message-State: AOJu0YwL3GH3hyTHsrHTzdX0vP6BLP3xifW25iKoZoPpnMGSWqSQOxk/
- 2ETE4bobrOhQ62nlibOzFLa/a2RBNEcXckcYMuxkbWOe4Iw+wzoy3xuGnWPxLZwPWuOKMgViU1m
- v9tWLZ4k=
-X-Gm-Gg: ASbGnctchXTribPvkXZljSPEjd1cBYcZtWprUTzg7gK3hMbQL++RUWno0ycfx26XvpK
- ew9Rs/mgFTOmHIEb/GZwJcO5BuwZpKA5gSRaOguyPX0tpegqCO/TsXV9CZosetrZ03d7mBlJXoy
- yh8LhM36V05xZSMgAysS1vFPbWAUnIw3IlFWym0HPvQciO90eBjOSv0xPJ/odfeLJxgBkJYKaYm
- J8WmStpCUx4b9DPpQhg6dd3u56RNCbXTcCMfFSqcoZ2fPC+wshxk4fd9wFYY+DV0vY6/J3ueNZT
- MuO6bbEQuxcuvt44uMJ2P7LowKxRn4Lpvkd1+xuIzEo62M3CvslUaqmjwsZZWzBRzteuOqOYG69
- EInqk1c3SSCDPEw==
-X-Google-Smtp-Source: AGHT+IFPoQl9RMVskrc3dlfCd/5tDMDtyelG/mtAgFZIJebiOoSt222jlh7yDDsEIp/wCesmvvMMsQ==
-X-Received: by 2002:a05:600c:3ba7:b0:456:25e7:bed with SMTP id
- 5b1f17b1804b1-45a20be5f97mr2514645e9.14.1755203535925; 
- Thu, 14 Aug 2025 13:32:15 -0700 (PDT)
+ bh=2KrKDM43l3IaOFS055zEvBKVQZ2MPtPnvNFSN/FBKIQ=;
+ b=gGA0XsQzPvG8jTFI94pQZTeWLzXFQXd1g3CH8mP+nf6OxGidaUrz74ZR62sxCYBaVL
+ kszUkiESEEq8FfuKcmd89nvy/VAjh9Brl58CE9qZIxetPM9OzsF0T+ErEM9ezAi8HChj
+ LqCic4c7pMZ2Vv/LlXIje05gPYRU49d1KdnQgOkPO1pn3Dptqdpq+EWnYtZr3Q18d8Dc
+ SQrvW+1cDCehD7zAb06q2uPaxFGfEcn+og3z59xm7wQOz2nJpULE4wusXOPlWBnrgN2g
+ 7D3LsVQ5MaLArytMfKFPw0vbpeiOJvbVbZLlWNlrC2l+2P6QUSgIg8LE++fvisff0E60
+ tE4w==
+X-Gm-Message-State: AOJu0YyH5xh+wf5zq5H6ffBQA3xV9f8sXGkp6WL1tWr8T/GDxEheGm5n
+ YtCVmRnmO0kLZL/U1hZUrTC2ryEc/DCa/O/9FToOjATM5e3UDDBaU3NbpaEkDJ1/JMAKrqPPbcJ
+ YJCoEy+E=
+X-Gm-Gg: ASbGncsQZoXtQ6IDRyrQ/hd37KnrM5yFi+IKQfBqPMrpvp/EG0MooN8eqOTQbvzB+XA
+ uePsGzB7z9qJA4Z4WSZrs0SwtKyMe4HLu5OYoeAiEB3x4WrhwJzJXbppQaMXDnetTt7ZsXhRPcb
+ tjQxpVJXrK1nKuXbd94S6umaz9x3Gd5EwdzGmHXbJ5lVdl7jufzdcDHg2YGclRL/yKNHkATqapr
+ /OeAmjWTtDqzLIjQ1BbFR3aI4uABeZZTLY1bAkYjtpLA8nSxUP1vDNw+Jmok5rNmaWKTV6O1Zr6
+ xJnCYD2pD88xQTqAAZNaWskIa2UPfeLqQPxYXXdSj+zS4mwccLfsD5XC47c8XDVnV8B6XKIOLIJ
+ boSd2DriNx/vCHg==
+X-Google-Smtp-Source: AGHT+IHH0WVcS++vj5dcGMcBrA6Mv5zwZJk4GR88LnEIKYtDTW10mdljFZd4wSc+R0aPC40fW8qQfA==
+X-Received: by 2002:a17:907:1c26:b0:ae3:595f:91a0 with SMTP id
+ a640c23a62f3a-afcb985ced0mr466397466b.16.1755203537680; 
+ Thu, 14 Aug 2025 13:32:17 -0700 (PDT)
 Received: from arch ([79.132.233.79]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3b90d147485sm14200160f8f.19.2025.08.14.13.32.15
+ a640c23a62f3a-af91a0a38aasm2657209666b.37.2025.08.14.13.32.17
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 14 Aug 2025 13:32:15 -0700 (PDT)
+ Thu, 14 Aug 2025 13:32:17 -0700 (PDT)
 To: Thomas Perale <thomas.perale@mind.be>
 Cc: buildroot@buildroot.org
-Date: Thu, 14 Aug 2025 22:32:15 +0200
-Message-ID: <20250814203215.2816859-1-thomas.perale@mind.be>
+Date: Thu, 14 Aug 2025 22:32:16 +0200
+Message-ID: <20250814203216.2816966-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250809175417.315091-1-thomas.perale@mind.be>
-References: <20250809175417.315091-1-thomas.perale@mind.be>
+In-Reply-To: <20250809201954.333758-1-thomas.perale@mind.be>
+References: <20250809201954.333758-1-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1755203536; x=1755808336; darn=buildroot.org;
+ d=mind.be; s=google; t=1755203538; x=1755808338; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=ZOpEjaH+2rMotPLUe/DvvDgnlN1NRsJ8Ry+7tMCemDI=;
- b=OiS7tdIudmXXeYADhGGkVOZAlJZeXrtflhA7vb0zyL5P0sQwylUjIzBo3bsaX03zuO
- YkDyGyqfYGs95tAQkcii0MfgK8yHjY/uTZkxmb+rLDA9RNMS0eT47xBfMVqNqjBK3Tji
- wR0hyT0NYUoYF4n3BvWUKH1mN0i4urCbQWNFQu8IFmknNaYaNJZ4N1a4ZheMkGllTZ6N
- ghTvO34MLBV6F+3S5Od4lkGVdq/tnLQpiBCNTbDrZs+q26gH+zjrDu6ld+okOyRJ1/GV
- 24UBFSIfm0bajBOWfR17w3YOXJq2D8mAjIG3paXIbGB6F4USP9Y0aeLs1C6G34aH4557
- qvCA==
+ bh=2KrKDM43l3IaOFS055zEvBKVQZ2MPtPnvNFSN/FBKIQ=;
+ b=CZ2ZI1SoSi8Afal7MM9eUT8ePPl4r0AShOz4AHKT+fRLw26j8XA8xKKcOTiIdIHU+B
+ eRq6x07zN71r7aN8SFvT8obRoxdjG8ZVkNC8GG8iRj8egXvlkAW5NB3FGAuiTK4z2lwe
+ kDqMDBW4ysPPC5yJL1Zbm4HrM2SNY0wvKzdxQfFRaxcsZ335HdFV5MmnRy4VisKy0QuA
+ +MdqK5I0Ee9usyJ3fm5Xu1hREN0OHIXfx/0hkpEpL255XqLbwEi3GkzbsV8lsCu/8gQS
+ tShfT0RUTN1MnQPCSnMugiXVjFIaXilofkja57p8ObLzhjjop7czUt0OwuqGU1+Ovbcq
+ 5PwQ==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=OiS7tdIu
-Subject: Re: [Buildroot] [PATCH] package/libapparmor: remove stale reference
- to patch 0001
+ header.a=rsa-sha256 header.s=google header.b=CZ2ZI1So
+Subject: Re: [Buildroot] [PATCH v2] package/tini: fix build w/ musl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -117,44 +116,129 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> The AUTORECONF variable was introduced in commit [1] with reference to
-> the patches that modified the m4 and Makefile.am files.
+> When building tini with musl libc, the following error occurs dur to
+> missing declaration of 'basename':
 > 
-> The commit [2] removed the last such patch but left the reference to the
-> patch and the AUTORECONF variable.
+> ```
+> /home/buildroot/instance-0/output-1/build/tini-0.19.0/src/tini.c: In function 'print_usage':
+> /home/buildroot/instance-0/output-1/build/tini-0.19.0/src/tini.c:227:36: error: implicit declaration of function 'basename' [-Wimplicit-function-declaration]
+>   227 |         fprintf(file, "%s (%s)\n", basename(name), TINI_VERSION_STRING);
+>       |                                    ^~~~~~~~
+> make: *** [package/pkg-generic.mk:273: /home/buildroot/instance-0/output-1/build/tini-0.19.0/.stamp_built] Error 1
+> make: Leaving directory '/home/buildroot/instance-0/buildroot'
+> ```
 > 
-> Later, commit [3] updated the mirror to the gitlab URL that no longer
-> bundle a pre-generated `configure` file, making the execution of
-> AUTORECONF necessary anyway.
+> This error can be reproduced with:
 > 
-> This patch removes the obsolete reference to the patch 0001 removed in
-> [2] to avoid ambiguity with the new patch 0001 introduced in commit [4].
+> ```
+> cat >.config <<EOF
+> BR2_aarch64=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+> BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_MUSL_BLEEDING_EDGE=y
+> BR2_PACKAGE_TINI=y
+> EOF
+> make olddefconfig
+> make tini
+> ```
 > 
-> [1] 01a82c1401 package/libapparmor: enable python bindings
-> [2] 27cd0b5033 package/apparmor: bump to version 3.0.4
-> [3] 5649202ddc package/libapparmor: bump to version 3.1.7
-> [4] 2640f5dcd0 package/libapparmor: fix build w/ musl
+> This patch adds the upstream commit [1], that fixes this issue by
+> including `libgen.h`.
 > 
+> [1] https://github.com/krallin/tini/commit/924c4bd6028457188942ecbfdc75e6a343fa9395
+> 
+> Fixes: https://autobuild.buildroot.org/results/f0d/f0d10cd25f3b0e2a4af7266f7417b339ea5d242a
 > Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
 Applied to 2025.02.x & 2025.05.x. Thanks
 
 > ---
->  package/libapparmor/libapparmor.mk | 1 -
->  1 file changed, 1 deletion(-)
+>  ...upport-posix-basename-from-musl-libc.patch | 76 +++++++++++++++++++
+>  1 file changed, 76 insertions(+)
+>  create mode 100644 package/tini/0001-support-posix-basename-from-musl-libc.patch
 > 
-> diff --git a/package/libapparmor/libapparmor.mk b/package/libapparmor/libapparmor.mk
-> index fa59ff2924..b1c9a952f0 100644
-> --- a/package/libapparmor/libapparmor.mk
-> +++ b/package/libapparmor/libapparmor.mk
-> @@ -16,7 +16,6 @@ LIBAPPARMOR_DEPENDENCIES = host-bison host-flex host-pkgconf
->  LIBAPPARMOR_SUBDIR = libraries/libapparmor
->  LIBAPPARMOR_INSTALL_STAGING = YES
->  
-> -# Patch 0001 touches Makefile.am and m4 files
->  LIBAPPARMOR_AUTORECONF = YES
->  
->  # Most AppArmor tools will want to link to the static lib.
+> diff --git a/package/tini/0001-support-posix-basename-from-musl-libc.patch b/package/tini/0001-support-posix-basename-from-musl-libc.patch
+> new file mode 100644
+> index 0000000000..17445d5b3b
+> --- /dev/null
+> +++ b/package/tini/0001-support-posix-basename-from-musl-libc.patch
+> @@ -0,0 +1,76 @@
+> +From 924c4bd6028457188942ecbfdc75e6a343fa9395 Mon Sep 17 00:00:00 2001
+> +From: Hauke Mehrtens <hauke@hauke-m.de>
+> +Date: Sun, 14 Apr 2024 15:33:51 +0200
+> +Subject: [PATCH] Support POSIX basename() from musl libc
+> +
+> +Musl libc 1.2.5 removed the definition of the basename() function from
+> +string.h and only provides it in libgen.h as the POSIX standard
+> +defines it.
+> +
+> +This change fixes compilation with musl libc 1.2.5.
+> +````
+> +build_dir/target-mips_24kc_musl/tini-0.19.0/src/tini.c:227:36: error: implicit declaration of function 'basename' [-Wimplicit-function-declaration]
+> +  227 |         fprintf(file, "%s (%s)\n", basename(name), TINI_VERSION_STRING);
+> +build_dir/target-mips_24kc_musl/tini-0.19.0/src/tini.c:227:25: error: format '%s' expects argument of type 'char *', but argument 3 has type 'int' [-Werror=format=]
+> +  227 |         fprintf(file, "%s (%s)\n", basename(name), TINI_VERSION_STRING);
+> +      |                        ~^          ~~~~~~~~~~~~~~
+> +      |                         |          |
+> +      |                         char *     int
+> +      |                        %d
+> +
+> +````
+> +
+> +basename() modifies the input string, copy it first with strdup(), If
+> +strdup() returns NULL the code will handle it.
+> +
+> +Signed-off-by: Hauke Mehrtens <hauke@hauke-m.de>
+> +Upstream: https://github.com/krallin/tini/commit/924c4bd6028457188942ecbfdc75e6a343fa9395
+> +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+> +---
+> + src/tini.c | 15 +++++++++++----
+> + 1 file changed, 11 insertions(+), 4 deletions(-)
+> +
+> +diff --git a/src/tini.c b/src/tini.c
+> +index 7914d3a..41d1506 100644
+> +--- a/src/tini.c
+> ++++ b/src/tini.c
+> +@@ -14,6 +14,7 @@
+> + #include <stdlib.h>
+> + #include <unistd.h>
+> + #include <stdbool.h>
+> ++#include <libgen.h>
+> + 
+> + #include "tiniConfig.h"
+> + #include "tiniLicense.h"
+> +@@ -224,14 +225,19 @@ int spawn(const signal_configuration_t* const sigconf_ptr, char* const argv[], i
+> + }
+> + 
+> + void print_usage(char* const name, FILE* const file) {
+> +-	fprintf(file, "%s (%s)\n", basename(name), TINI_VERSION_STRING);
+> ++	char *dirc, *bname;
+> ++
+> ++	dirc = strdup(name);
+> ++	bname = basename(dirc);
+> ++
+> ++	fprintf(file, "%s (%s)\n", bname, TINI_VERSION_STRING);
+> + 
+> + #if TINI_MINIMAL
+> +-	fprintf(file, "Usage: %s PROGRAM [ARGS] | --version\n\n", basename(name));
+> ++	fprintf(file, "Usage: %s PROGRAM [ARGS] | --version\n\n", bname);
+> + #else
+> +-	fprintf(file, "Usage: %s [OPTIONS] PROGRAM -- [ARGS] | --version\n\n", basename(name));
+> ++	fprintf(file, "Usage: %s [OPTIONS] PROGRAM -- [ARGS] | --version\n\n", bname);
+> + #endif
+> +-	fprintf(file, "Execute a program under the supervision of a valid init process (%s)\n\n", basename(name));
+> ++	fprintf(file, "Execute a program under the supervision of a valid init process (%s)\n\n", bname);
+> + 
+> + 	fprintf(file, "Command line options:\n\n");
+> + 
+> +@@ -261,6 +267,7 @@ void print_usage(char* const name, FILE* const file) {
+> + 	fprintf(file, "  %s: Send signals to the child's process group.\n", KILL_PROCESS_GROUP_GROUP_ENV_VAR);
+> + 
+> + 	fprintf(file, "\n");
+> ++	free(dirc);
+> + }
+> + 
+> + void print_license(FILE* const file) {
 > -- 
 > 2.50.1
 > 
