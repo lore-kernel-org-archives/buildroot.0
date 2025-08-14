@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30131CA0EDC
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6E51CA0EE8
 	for <buildroot@archiver.kernel.org>; Thu, 14 Aug 2025 19:57:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 04E59607E6;
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7E51480E42;
 	Thu, 14 Aug 2025 19:57:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SuLpYphx4exC; Thu, 14 Aug 2025 19:57:06 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MaPC-xG6abXH; Thu, 14 Aug 2025 19:57:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 19A3F607AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DE11F80DFC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 19A3F607AA;
-	Thu, 14 Aug 2025 19:57:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DE11F80DFC;
+	Thu, 14 Aug 2025 19:56:59 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id BC05D228
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 19:56:38 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 8BEB8228
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 19:56:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D8A2F4049D
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 19:56:17 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BD74E40486
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 19:56:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZnOV8CXiqKfX for <buildroot@buildroot.org>;
- Thu, 14 Aug 2025 19:56:15 +0000 (UTC)
+ id HrUf7F-z64GP for <buildroot@buildroot.org>;
+ Thu, 14 Aug 2025 19:56:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2F2FA404B5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DFB2E404AE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2F2FA404B5
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 19:56:13 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DFB2E404AE
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 19:56:12 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2CA7287606; Thu, 14 Aug 2025 19:56:13 +0000 (UTC)
+ id DD84487606; Thu, 14 Aug 2025 19:56:12 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 14 Aug 2025 09:26:54 +0200
+Date: Thu, 14 Aug 2025 09:26:45 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: f473e57f8ac21340f51fbaddaca7121e8126caf6
-X-Git-Newrev: 2b930c0faba0274adfd93409e74c1bb603cdbe99
+X-Git-Oldrev: cf2ea88f485a75c1c89a8ecc42d2e6305f1ba3e4
+X-Git-Newrev: 73f722ad09ffb4a05feddbd7f6614f1aee28ebdc
 X-Patchwork-Hint: ignore
-Message-Id: <20250814195613.2CA7287606@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/ghostscript: fix
- xlib dependency
+Message-Id: <20250814195612.DD84487606@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] DEVELOPERS: Update email
+ address of Thomas Huth
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,76 +66,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2b930c0faba0274adfd93409e74c1bb603cdbe99
+commit: https://git.buildroot.net/buildroot/commit/?id=73f722ad09ffb4a05feddbd7f6614f1aee28ebdc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Since the package bump to v10.05.0 the xlib libraries detection has been
-improved to error missing x libraries (see [2]).
+Since tuxfamily.org is slowly fading away, update my mail address
+to something that is more future-proof.
 
-The following error is happening on the autobuilder when building
-ghostscript with xlib_libX11:
-
-```
-checking for XOpenDisplay in -lX11... yes
-checking for XdbeQueryExtension in -lXext... yes
-checking for XtAppCreateShell in -lXt... no
-configure: error: X11 libraries (libX11, libXt, libXext) not available, either install them, or rerun configure with "--without-x"
-make: *** [package/pkg-generic.mk:263: /home/buildroot/instance-0/output-1/build/ghostscript-10.05.1/.stamp_configured] Error 1
-```
-
-This error can be reproduced with the following config:
-
-```
-cat <<EOF >.config
-BR2_arm=y
-BR2_cortex_a7=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-BR2_PACKAGE_XORG7=y
-BR2_PACKAGE_XLIB_LIBX11=y
-BR2_PACKAGE_GHOSTSCRIPT=y
-EOF
-make olddefconfig
-make
-```
-
-This patch fixes the xlib dependencies of the ghostscript package to
-correctly build with X support:
-
-- The 'XtAppCreateShell' function is provided by the package
-  'xlib_libXt'.
-- The 'XdbeQueryExtension' function is provided by the package
-  'xlib_libXext'.
-
-They both select the 'xlib_libX11' package.
-
-[1] 9abf662cfd package/ghostscript: security bump to version 10.05.0
-[2] https://github.com/ArtifexSoftware/ghostpdl/commit/37eede31e12814fae69744e7842a5640004e5a65
-
-Fixes: https://autobuild.buildroot.org/results/45d/45d0414f341feb2354478b145396fe137f9cc6a6
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-(cherry picked from commit 9adc8a05707f743c659cc6fb25d0a213498d0868)
+Signed-off-by: Thomas Huth <huth@tuxfamily.org>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit b7f7bd44f9c32a3ab49dae453256d04d7e66a630)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/ghostscript/ghostscript.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
-index 0ddcb950ff..c9d13f5545 100644
---- a/package/ghostscript/ghostscript.mk
-+++ b/package/ghostscript/ghostscript.mk
-@@ -85,8 +85,8 @@ else
- GHOSTSCRIPT_CONF_OPTS += --disable-cups
- endif
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 152d97ee39..52069b3d96 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -3177,7 +3177,7 @@ N:	Thomas Devoogdt <thomas@devoogdt.com>
+ F:	package/fluent-bit/
+ F:	package/libsoup3/
  
--ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
--GHOSTSCRIPT_DEPENDENCIES += xlib_libX11
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXT)$(BR2_PACKAGE_XLIB_LIBXEXT),yy)
-+GHOSTSCRIPT_DEPENDENCIES += xlib_libXt xlib_libXext
- GHOSTSCRIPT_CONF_OPTS += --with-x
- else
- GHOSTSCRIPT_CONF_OPTS += --without-x
+-N:	Thomas Huth <huth@tuxfamily.org>
++N:	Thomas Huth <th.huth+br@posteo.eu>
+ F:	package/ascii-invaders/
+ F:	package/kvm-unit-tests/
+ F:	package/xorcurses/
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
