@@ -1,104 +1,106 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E38EDCA0EDC
-	for <buildroot@archiver.kernel.org>; Thu, 14 Aug 2025 20:32:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6CE6DCA0EE6
+	for <buildroot@archiver.kernel.org>; Thu, 14 Aug 2025 20:32:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BB4D180E92;
-	Thu, 14 Aug 2025 20:32:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 44AC4607D0;
+	Thu, 14 Aug 2025 20:32:19 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5C96-rpkRpG0; Thu, 14 Aug 2025 20:32:17 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C3F1A6078A
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id C3F1A6078A;
+	Thu, 14 Aug 2025 20:32:17 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4D7561BA
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:32:08 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3121380E2E
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:32:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QkekCdf7iLzQ; Thu, 14 Aug 2025 20:32:16 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 919FD80E2A
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 919FD80E2A;
-	Thu, 14 Aug 2025 20:32:10 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 706C193E
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:32:02 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 63099404AB
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:32:02 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5p1hSpw77CeO for <buildroot@buildroot.org>;
- Thu, 14 Aug 2025 20:32:01 +0000 (UTC)
+ id C5FoSI46X4Ha for <buildroot@buildroot.org>;
+ Thu, 14 Aug 2025 20:32:06 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::431; helo=mail-wr1-x431.google.com;
+ client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6A89B402F5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6A89B402F5
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6A89B402F5
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:32:01 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id
- ffacd0b85a97d-3b9e415a68fso1259506f8f.2
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 13:32:01 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4A45A80E23
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4A45A80E23
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4A45A80E23
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:32:03 +0000 (UTC)
+Received: by mail-wm1-x335.google.com with SMTP id
+ 5b1f17b1804b1-45a1b0b6ac4so6800535e9.2
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 13:32:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1755203519; x=1755808319;
+ d=1e100.net; s=20230601; t=1755203521; x=1755808321;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=a+xUHJNPiqtVLY/i9hysnkdA8h1lsj4HK+MKroDofNY=;
- b=A/jWijmDLyn8G13345ZjmcSpmtaoceKuwmY+sXNyZ/nWNyHEROz3vvtBTyX+Gt54Wy
- Uyc4E6JhXONXrF0Y+p+2pFYGYNAqce0+N0aEd5XlgFzmqUqpkaZ54q/e34xJdrP42jRg
- Z41NBIdC30QaQP2K0xFxXkVfvlPpH5lphk1YUvehpSh9FZUc1UL5CAvWaupTgbpj+CT3
- NmcfzM/l6AVHk4dWFMuI6+IeCgvVclUJM/xz8m3IQor/o6CKszBDF5qYTpe6vw5wGVwE
- o67UQZeCNJc6clNheRQivM9Um/qBLwgHENp1mh5bJC+0c0xgAzw6qHfsEpk3p1juZwmc
- nPVQ==
+ bh=8SFJ4nJqmljV9dsS2UNrKMfiKf4alXe9y5kdARr6z8c=;
+ b=ansWBs8w3PheVNUg64uOzWEPmwc1azp/aiiWBI/L8YD1OmtqGP3QzFkZKovJEQndSt
+ +6AS9/AfJxwNUfjDi/u7nFkOmXDDwEJhizuxXh16nPxFxQMKNq6Nc6dm48CPVQCJIR3r
+ PdwxbtQuutIY85VV9dbmFyX1mr/VRYQC0Bh5m71VfCLrKlaRTAJMswc+z5grLa6jfNO0
+ VrHKWBQevJh9cTr/WMCfVBRkCOf46f1jMmVzd1KRtQRBJ4fgKdaQvEFLncRks42o+1PL
+ BQxtYqVxnltuWERFRQCGLlFzELbihh2F2eYp1cONab3uyM9xlIdvb8VHe4Xbcd6rrQLJ
+ 93Qw==
 X-Forwarded-Encrypted: i=1;
- AJvYcCVbm2oEClTXPqEBNEA1QYXX562HOaKNf84GWGbXAdkgUYOb4kbHcErSBAY/ebWsYlpP+uTYe7ae1qs=@buildroot.org
-X-Gm-Message-State: AOJu0YxcjLYIlFJBFYIBz3eEyD8uiTbSMhvleZzg3ttVTY5yRTkOuO/2
- WimB181gHZOKmaI6Gf2Zmwnqj6GCeYg46Hx2/yIxMcDRChSN+6Su478o1ADtRe4f7RU=
-X-Gm-Gg: ASbGnctWNwx5ddx4AVvA01JEi998WAS9Eg56HXtf1F9hTVWuVqgQlHEt59qmJgVQzX1
- UNxLu03DEIYEWnGKPaD1MmdPP7mGXTXE2aIJuNgROCVxDN+28IV03PrZbQtXTVR9OGljzujDcvI
- MXPFwo4eYLSokc1kvPaa0sh01KYYMM1B7VJ5YOeD7BN00iePUGYJ1Fdu8hLB/JRZ8iHMlP/TM6D
- xg/AL8l7frvWeA4Hn+RcrHPhQLItpfwbQOZwuMLORokhKDO1ez+e4MYZlX4/lWeMKLYC1QXdjtG
- sYzlPnv1K/9y6fQBRKBlkyISRMJSkP7JkdbCZ/eFGKe4RgXQVSDr5X7xt9//hQRicBv5ExccxWF
- hArXYeNa3zLxd9A==
-X-Google-Smtp-Source: AGHT+IH4vgmJALZLxu3BZqFs7jc1x9x0/5LfV+A76FyXWb3tA5l8dLPTBlq/U4ETizkvwoo0rY0eXw==
-X-Received: by 2002:a05:6000:40de:b0:3b9:13e4:966d with SMTP id
- ffacd0b85a97d-3bb26c88aecmr64218f8f.59.1755203519203; 
- Thu, 14 Aug 2025 13:31:59 -0700 (PDT)
+ AJvYcCWw2Jm94ecBTh1scd044VZ8I7qdm+YdrLY0Wwx0dbL6UeB+F4qXptDkkc3wDcaCI0G/z2ODT7QGCug=@buildroot.org
+X-Gm-Message-State: AOJu0YwDroDq29sqpjIn1i0rIfyqn8Aay3XvYCl/p7Ekh/xb7hy7DAlF
+ eoAcfWc2dngRnBKYAvKtXValf7Or7Z8RyDJuDAWeXkiSeS7mb+SiHJaXAlivLrHdxs0sYbB9UIH
+ uQVic2r0=
+X-Gm-Gg: ASbGncvyWKD5lap1Nj56x4vec3j7Zwdss8y16Di6/VI6I5ybw7BByaZrV3V2FQKBBgr
+ 10xa3tT/snvHyjKi2ihE6Zq/Elbwgp2y9evw6YT0wEWVQsSt/xajayi7DhtJ73rKZPbMknFR6jQ
+ UymuhIwzfQmVNjNf7GvM5kAA2+wvMw+77SZzJHiTGFz3TGmarrS1L+uJnx77Qmt3252Ar4xYMGH
+ Ym2jQ/TLeBUkhlg1qhtqsJLyiQbwJm+VpUHeDLsFAgbtdhZ5v16ruMRY72a6GBUiqT5yehOVKgi
+ qbrLyi7b0gYtJx6dyltXsCg1fUdYxcKOq9CstZIuM0pgdmO8OK61fnc9qd4qkaiYv636LafpEBQ
+ Hr36m+A4AX3KtcA==
+X-Google-Smtp-Source: AGHT+IHmriV2Xky3+LZt13cRlSbx+BjO0ZoQruBfU9E+2PYe4SEpORxKgeufImXku2hld12wfggsJA==
+X-Received: by 2002:a05:600c:4f45:b0:456:3b21:ad1e with SMTP id
+ 5b1f17b1804b1-45a20d9cc19mr2161195e9.17.1755203521146; 
+ Thu, 14 Aug 2025 13:32:01 -0700 (PDT)
 Received: from arch ([79.132.233.79]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-45a1fe2c019sm13268585e9.17.2025.08.14.13.31.58
+ ffacd0b85a97d-3b90d147485sm14199598f8f.19.2025.08.14.13.32.00
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 14 Aug 2025 13:31:58 -0700 (PDT)
-To: Florian Larysch <fl@n621.de>
+ Thu, 14 Aug 2025 13:32:00 -0700 (PDT)
+To: Peter Korsgaard <peter@korsgaard.com>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Thu, 14 Aug 2025 22:31:58 +0200
-Message-ID: <20250814203158.2816156-1-thomas.perale@mind.be>
+Date: Thu, 14 Aug 2025 22:32:00 +0200
+Message-ID: <20250814203200.2816273-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250804141631.7089-1-fl@n621.de>
-References: <20250804141631.7089-1-fl@n621.de>
+In-Reply-To: <20250805110636.3514105-1-peter@korsgaard.com>
+References: <20250805110636.3514105-1-peter@korsgaard.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1755203519; x=1755808319; darn=buildroot.org;
+ d=mind.be; s=google; t=1755203521; x=1755808321; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=a+xUHJNPiqtVLY/i9hysnkdA8h1lsj4HK+MKroDofNY=;
- b=dRt5/vnnlcSQxEP3aXNtliuX8APU63kl7ylpFSy+q9DVTv7FYMD1EDqem/vDhyNuNE
- wHSVy+b6Jhz25MaMaN2vh7QhZSNfsklh2tY0+5Td94qQtTtKTrzKvINP6je5cKfITPHC
- 244Dw6fxVFeIY1ZmLJvkaKCUXkST4B3gbSx6+TXwZJpVWcZItzSeUpg11s+Qftemnr+b
- YriIS8hN4xjSa0FhHFSFZ+5gTTDa8i1d2U1qHKOECPfHvxA3M7cVWYn672IUzj8jdL21
- FjlbqXJmoHtCSk1DW/Ymu+5NPAs4hb0rxTA+rZBK3vqmplV19KdO1XKKTXRyoQbae45m
- JTJA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=8SFJ4nJqmljV9dsS2UNrKMfiKf4alXe9y5kdARr6z8c=;
+ b=ZtOjDJWDVxV/tSrCopQjWIjyQfE4vR1C7ov8/Z6wo6WQ58VJxFqDjiO9PYpTlVSv+1
+ 67Bi42lKtX21Ut+TZkR8inWXrsIhA1dqF+KbZnvx+40TwfTdp28phZ9aRMGj94QmHYF2
+ Hjgej6WVSpHtp5AyRlrD/UQc9leYghQJurde2IvTI6r+5gjG1z+CnOrInpC/8uMO++n/
+ KBALjuQuKZzSQOroxx7QR2Y76clCGAx+KEvkvMvZNyEuTntyzD8LBEfA6XrlPnLi8qW7
+ sCzSekumVljDPnFWo4cUAC4lqBDrS6bJ7rVPqGDVdFCiZ9o6/Qv+EhVTTbu7XVqnSsDZ
+ 0kGA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=dRt5/vnn
-Subject: Re: [Buildroot] [PATCH 1/1] package/pipewire: bump version to 1.2.8
+ header.a=rsa-sha256 header.s=google header.b=ZtOjDJWD
+Subject: Re: [Buildroot] [PATCH] package/glibc: security bump to version
+ 2.41-70
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,45 +120,84 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Bugfix release for the 1.2.x series.
+> Fixes the following security issues:
 > 
-> Release notes:
-> https://gitlab.freedesktop.org/pipewire/pipewire/-/blob/91a1ce183fe8a77843ebe72d62aae51e5ce62737/NEWS
+> - CVE-2025-5702: power10: strcmp fails to save and restore nonvolatile
+>   vector registers
+>   https://sourceware.org/cgit/glibc/tree/advisories/GLIBC-SA-2025-0003
 > 
-> Signed-off-by: Florian Larysch <fl@n621.de>
+> - CVE-2025-5745: power10: strncmp fails to save and restore nonvolatile
+>   vector registers
+>   https://sourceware.org/cgit/glibc/tree/advisories/GLIBC-SA-2025-0004
+> 
+> - CVE-2025-8058: posix: Fix double-free after allocation failure in regcomp
+>   https://sourceware.org/cgit/glibc/tree/advisories/GLIBC-SA-2025-0005
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Applied to 2025.02.x & 2025.05.x. Thanks
 
 > ---
->  package/pipewire/pipewire.hash | 2 +-
->  package/pipewire/pipewire.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/glibc/glibc.hash       |  2 +-
+>  package/glibc/glibc.mk         | 11 ++++++++++-
+>  package/localedef/localedef.mk |  2 +-
+>  3 files changed, 12 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/pipewire/pipewire.hash b/package/pipewire/pipewire.hash
-> index 9ffe95cbea..2e6a9ae3aa 100644
-> --- a/package/pipewire/pipewire.hash
-> +++ b/package/pipewire/pipewire.hash
-> @@ -1,4 +1,4 @@
->  # Locally calculated
-> -sha256  3c00292f9a419610c9eeb6e45b958d460afb601ecc6894012574a3b9f118616a  pipewire-1.2.7.tar.bz2
-> +sha256  7670f617220cc053948fc8f2c1ff788192479ef5d4f373d878ac8a7cab76a71c  pipewire-1.2.8.tar.bz2
->  sha256  8909c319a7e27dbb33a15b9035f89ab3b7b2f6a12f8bcddc755206a8db1ada44  COPYING
->  sha256  be4be5d77424833edf31f53fc1f1cecb6996b9e2d747d9e6fb8f878362ebc92b  LICENSE
-> diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
-> index 9ad92546cc..c1dc2aa0cc 100644
-> --- a/package/pipewire/pipewire.mk
-> +++ b/package/pipewire/pipewire.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
+> diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
+> index 61af3d9488..0deba84dc7 100644
+> --- a/package/glibc/glibc.hash
+> +++ b/package/glibc/glibc.hash
+> @@ -1,5 +1,5 @@
+>  # Locally calculated (fetched from Github)
+> -sha256  ed2cd1f058f22f682e700c5be408975db62025a14863a5a6700ee93d5927504e  glibc-2.41-5-gcb7f20653724029be89224ed3a35d627cc5b4163.tar.gz
+> +sha256  166b6e7637bb45cb9352e4813005f83dd48f03ef634d3e9e94a30aa5a0300fab  glibc-2.41-70-g1502c248d58cb99a203731707987a4342926e830.tar.gz
 >  
-> -PIPEWIRE_VERSION = 1.2.7
-> +PIPEWIRE_VERSION = 1.2.8
->  PIPEWIRE_SOURCE = pipewire-$(PIPEWIRE_VERSION).tar.bz2
->  PIPEWIRE_SITE = https://gitlab.freedesktop.org/pipewire/pipewire/-/archive/$(PIPEWIRE_VERSION)
->  PIPEWIRE_LICENSE = MIT, LGPL-2.1+ (libspa-alsa), GPL-2.0 (libjackserver)
+>  # Hashes for license files
+>  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+> diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+> index 29617b9756..239e39a2ba 100644
+> --- a/package/glibc/glibc.mk
+> +++ b/package/glibc/glibc.mk
+> @@ -7,7 +7,7 @@
+>  # Generate version string using:
+>  #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+>  # When updating the version, please also update localedef
+> -GLIBC_VERSION = 2.41-5-gcb7f20653724029be89224ed3a35d627cc5b4163
+> +GLIBC_VERSION = 2.41-70-g1502c248d58cb99a203731707987a4342926e830
+>  
+>  # Upstream doesn't officially provide an https download link.
+>  # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
+> @@ -25,6 +25,15 @@ GLIBC_CPE_ID_VENDOR = gnu
+>  # allow proper matching with the CPE database.
+>  GLIBC_CPE_ID_VERSION = $(word 1, $(subst -,$(space),$(GLIBC_VERSION)))
+>  
+> +# Fixed by glibc-2.41-57-g84bdbf8a6f2fdafd3661489dbb7f79835a52da82
+> +GLIBC_IGNORE_CVES += CVE-2025-5745
+> +
+> +# Fixed by glibc-2.41-60-g0c76c951620f9e12df2a89b2c684878b55bb6795
+> +GLIBC_IGNORE_CVES += CVE-2025-5702
+> +
+> +# Fixed by glibc-2.41-64-g1e16d0096d80a6e12d5bfa8e0aafdd13c47efd65
+> +GLIBC_IGNORE_CVES += CVE-2025-8058
+> +
+>  # All these CVEs are considered as not being security issues by
+>  # upstream glibc:
+>  #  https://security-tracker.debian.org/tracker/CVE-2010-4756
+> diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
+> index 7a6c94bd2f..c76a8d82a0 100644
+> --- a/package/localedef/localedef.mk
+> +++ b/package/localedef/localedef.mk
+> @@ -7,7 +7,7 @@
+>  # Use the same VERSION and SITE as target glibc
+>  # As in glibc.mk, generate version string using:
+>  #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+> -LOCALEDEF_VERSION = 2.41-5-gcb7f20653724029be89224ed3a35d627cc5b4163
+> +LOCALEDEF_VERSION = 2.41-70-g1502c248d58cb99a203731707987a4342926e830
+>  LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION).tar.gz
+>  LOCALEDEF_SITE = $(call github,bminor,glibc,$(LOCALEDEF_VERSION))
+>  HOST_LOCALEDEF_DL_SUBDIR = glibc
 > -- 
-> 2.50.1
+> 2.39.5
 > 
 > _______________________________________________
 > buildroot mailing list
