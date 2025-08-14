@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6E51CA0EE8
-	for <buildroot@archiver.kernel.org>; Thu, 14 Aug 2025 19:57:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15265CA0EE4
+	for <buildroot@archiver.kernel.org>; Thu, 14 Aug 2025 19:57:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7E51480E42;
-	Thu, 14 Aug 2025 19:57:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CD71280E15;
+	Thu, 14 Aug 2025 19:57:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MaPC-xG6abXH; Thu, 14 Aug 2025 19:57:06 +0000 (UTC)
+ id m4XTrIE9Q6r3; Thu, 14 Aug 2025 19:57:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DE11F80DFC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4E51380E1B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DE11F80DFC;
-	Thu, 14 Aug 2025 19:56:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4E51380E1B;
+	Thu, 14 Aug 2025 19:57:02 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 8BEB8228
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 19:56:34 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 9F8421BA
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 19:56:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BD74E40486
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 19:56:16 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0E9FE4047C
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 19:56:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HrUf7F-z64GP for <buildroot@buildroot.org>;
+ id o-rCp5_3ojCM for <buildroot@buildroot.org>;
  Thu, 14 Aug 2025 19:56:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DFB2E404AE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0FF45404AF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DFB2E404AE
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 19:56:12 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0FF45404AF
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 19:56:13 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DD84487606; Thu, 14 Aug 2025 19:56:12 +0000 (UTC)
+ id 0D42787606; Thu, 14 Aug 2025 19:56:13 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 14 Aug 2025 09:26:45 +0200
+Date: Thu, 14 Aug 2025 09:26:50 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: cf2ea88f485a75c1c89a8ecc42d2e6305f1ba3e4
-X-Git-Newrev: 73f722ad09ffb4a05feddbd7f6614f1aee28ebdc
+X-Git-Oldrev: 1e783e770c46336bc9621dbff707a7985f1963d1
+X-Git-Newrev: b9c7bb1143a237c8643f6c0325821eac9941b800
 X-Patchwork-Hint: ignore
-Message-Id: <20250814195612.DD84487606@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] DEVELOPERS: Update email
- address of Thomas Huth
+Message-Id: <20250814195613.0D42787606@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/nanocom: fix
+ build with GCC 14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,33 +66,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=73f722ad09ffb4a05feddbd7f6614f1aee28ebdc
+commit: https://git.buildroot.net/buildroot/commit/?id=b9c7bb1143a237c8643f6c0325821eac9941b800
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Since tuxfamily.org is slowly fading away, update my mail address
-to something that is more future-proof.
+GCC 14 made implicit function definitions an error and the forward declaration
+for display_state() was using the wrong name, causing a compilation
+failure at the call site.
 
-Signed-off-by: Thomas Huth <huth@tuxfamily.org>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit b7f7bd44f9c32a3ab49dae453256d04d7e66a630)
+Fixes: https://autobuild.buildroot.org/results/ebf/ebf500c48aaa357aaac3a88d87ef8f5c07cd78b6
+
+Signed-off-by: Florian Larysch <fl@n621.de>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+(cherry picked from commit 6db1aeaeef3726ad07e6d6afc90a3e8c721d3728)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- DEVELOPERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/nanocom/0002-fix-build-with-gcc-14.patch | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 152d97ee39..52069b3d96 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3177,7 +3177,7 @@ N:	Thomas Devoogdt <thomas@devoogdt.com>
- F:	package/fluent-bit/
- F:	package/libsoup3/
- 
--N:	Thomas Huth <huth@tuxfamily.org>
-+N:	Thomas Huth <th.huth+br@posteo.eu>
- F:	package/ascii-invaders/
- F:	package/kvm-unit-tests/
- F:	package/xorcurses/
+diff --git a/package/nanocom/0002-fix-build-with-gcc-14.patch b/package/nanocom/0002-fix-build-with-gcc-14.patch
+new file mode 100644
+index 0000000000..87df33a04d
+--- /dev/null
++++ b/package/nanocom/0002-fix-build-with-gcc-14.patch
+@@ -0,0 +1,19 @@
++GCC 14 made implicit function definitions an error and the forward declaration
++for display_state() was using the wrong name, causing a compilation
++failure at the call site.
++
++Upstream: Submitted to author via email
++Signed-off-by: Florian Larysch <fl@n621.de>
++
++diff -purN old/nanocom.h new/nanocom.h
++--- old/nanocom.h	2025-08-10 01:34:12.000284003 +0200
+++++ new/nanocom.h	2025-08-10 01:27:59.545821909 +0200
++@@ -56,7 +56,7 @@ void cleanup_termios(int signal);
++ void init_stdin(struct termios *sts);
++ void init_comm();
++ void usage( char *str);
++-void display_status();
+++void display_state();
++ 
++ 
++ /*typedef to represent the current line state
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
