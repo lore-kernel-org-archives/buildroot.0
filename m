@@ -4,102 +4,103 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1580CA0EDC
-	for <buildroot@archiver.kernel.org>; Thu, 14 Aug 2025 20:31:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C67DCA0EDC
+	for <buildroot@archiver.kernel.org>; Thu, 14 Aug 2025 20:31:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BB0C4607A8;
-	Thu, 14 Aug 2025 20:31:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DA3306077F;
+	Thu, 14 Aug 2025 20:31:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9Gy-0NWJeEmK; Thu, 14 Aug 2025 20:31:35 +0000 (UTC)
+ id L-S5giL9-an1; Thu, 14 Aug 2025 20:31:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 401366078B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ECCDA607AD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 401366078B;
-	Thu, 14 Aug 2025 20:31:35 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2D43E1BA
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:31:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ECCDA607AD;
+	Thu, 14 Aug 2025 20:31:40 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6840D1BA
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:31:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 127DC80DBD
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6BBE8402D0
  for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:31:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tTEf_r8WkwpS for <buildroot@buildroot.org>;
- Thu, 14 Aug 2025 20:31:30 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JfCRzERq0BHN for <buildroot@buildroot.org>;
+ Thu, 14 Aug 2025 20:31:29 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
+ client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6163680DA5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6163680DA5
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6163680DA5
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:31:28 +0000 (UTC)
-Received: by mail-wm1-x32c.google.com with SMTP id
- 5b1f17b1804b1-45a1b004954so9713725e9.0
- for <buildroot@buildroot.org>; Thu, 14 Aug 2025 13:31:28 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7488C4021A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7488C4021A
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7488C4021A
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 20:31:29 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id
+ ffacd0b85a97d-3b9e413a219so1064244f8f.3
+ for <buildroot@buildroot.org>; Thu, 14 Aug 2025 13:31:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1755203486; x=1755808286;
+ d=1e100.net; s=20230601; t=1755203487; x=1755808287;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=QXR61pd+psvrVJn1NkAAxkHePkov9cy0f5W5oOTlUac=;
- b=FdRVrlq/IO4tTDesoo0fb6LhcyHTR6g6NTkB/ASMI9ckb212011UEsizVitS1xUSCT
- bAkFtMAnP0TV99ZwXf7nHPGM3jqygd8WGlXKbb+jttniMvF0fw5X7Ji/erhpkRgI4qR8
- UVHUFljR/GiCP2kG2q5kPNM6NcUhU5bO80lTB5kLOfeAmTbAziqr/Huok5DFj4bWHRAo
- IPOFSkz8AdKOPhuDTM76km04S1rVf7DSC2besNvjlHImcv2JnYsPyN2BRUhbg81n3jIu
- 4K8Bt/gsijL3gxpSWIDp6dC9+r+LbwhaIq9wVKsKqF+kxR99RKBfsMzh83BQa8E7ABOc
- diIw==
+ bh=dPhu90dhkXncC3bikD6ugFy4W8NyAXNC6dE0cQ66FxE=;
+ b=FxCez8nAi7NGFG9oYKj7lRl/Zapz0ukYSqWkIua5bjCMSEBsnW2UeZAR+fe7FZ2Q3A
+ sxFXKi0OodlX3tdwi+riRnjpO0ZM8zpjUV2T8eTj+6tVjWf0lVhVtZz/ykVfQ1w3cmS8
+ Nw0rNFdaMPNb9/tDvLgD3r9txQpPI06kZX03HBYV5oFM9CzwT139M5950jkXT9aUyz9z
+ 7CzKAIeVX5Cf3jQ0yLBNfdwIq4ZTzLRU401K8qbLbbZClsalGJCGTbeDyEf1A9SHyFXZ
+ eL+a5gLXrEBVnnDDmWBjSFTgvgN8K1WmiwFTmHg7wwZ0NV0aRcCtnNB5n66HNTTvbOaI
+ 7WCQ==
 X-Forwarded-Encrypted: i=1;
- AJvYcCXudQBJMV2n81wuxjPke9fsNt5zEGliZr9UfEu6/1CThVR/n0gETKfoSs61xFRy45Duk+2E3HAoUKk=@buildroot.org
-X-Gm-Message-State: AOJu0YzKPnThdQCjCdK665Z9N1hkyNHe6Dz5YxtIJwAfFmG/JicgaL4e
- kfYaXTvy/LRXxpNQOZtBo5h9IMqWaNuWQqvkuFKEBwnDXK1ERkFqQds/iuk62lVpig0=
-X-Gm-Gg: ASbGnct3gOPQMcJnDrpfZfWgLL0gks3gqJbifD5d4etuNfs5mvanaeuZIhBBQLWMIm4
- CEKc/72VVA99f/qqVhs3wDJzgCEm6rke4BPHvaO8q+gWTZy3dInZrh7hY+I/ixCaQ2AhJfENqUH
- FsrL9Gx+xcnuDKsb7yXwGkMdjNrrc0Q8C4DasDsucvPVtd/AzPoSY7ikSMCbfa94s0Q7c2KE+QI
- 8Cc6Mgk7LW7L3G63NmEvmKcQp0j+a4kjKw+Kc61kEyyXKOYhGuvXol6AM5ziqwptitFbCwcomhM
- 3LRqGlhhWX0CBCCKDubY6XPmJWjvZpJg4jOuRroR1fiPUFi8XFEKvY3GGKFEZEua7j7WmiO07Ox
- OC1W6Kf4Onj05UxYUrX1WH/li
-X-Google-Smtp-Source: AGHT+IGHQksW1LsR8xuNMYwTaVdmCoFLqA2YyPcT3Lca4WKChpPILCbXtY9FPMAfkCPL335mT40lXQ==
-X-Received: by 2002:a05:600c:1c9b:b0:456:1dd9:943 with SMTP id
- 5b1f17b1804b1-45a2126055fmr346145e9.3.1755203486406; 
- Thu, 14 Aug 2025 13:31:26 -0700 (PDT)
+ AJvYcCVHcDTBjzb7SdfYdrZuAYkbgj+5aclq2y1EJOdKw9BvzcXcDDjXK3axVI3tQ0qrHllwTezj1XQFCWY=@buildroot.org
+X-Gm-Message-State: AOJu0Yy/uxN7vs+4TR0HJN2Bh1FKL24J5iuWbNkOFasIiNsaORb2wLPB
+ qsP2yqSGRNqBldWQdG/zIdtlKUyD4O3TjpR+uoA6CmvG76tZcUUgm6CQCiiuprin4Mk=
+X-Gm-Gg: ASbGncuZyRpm27rc65j2Jq1hl/iOVXBsWbPMjeCCJXOXg9uxv56q+/sa1qGqU5lBLfR
+ BPfUgDMlLnQmKCb4WyuJYv2R7FbItaRiGTviqnYGha6tFRO4L+/SCnlyQE50Ar8CEz1VvERl5D4
+ Qu3N50CWczujKQxiZVsKlD1f1YxFaB3GW5uP62dSzgZyCvwVSk7w1IRMI3HWoEZ0SjFNVXWSEM+
+ Tf2E3d31fNyglozCujI1UJyjc+T9HiGvA4440VqKfANccz1cSEXfo9117WlRA+0venCek0CKwH3
+ MaUXL0WVlua7Pkx9DZgwBlZddJLbLjcsrFAzF+ZSmjHQ7bJflmPyyf/Uqpx2LseEXVXVrIuDegr
+ CoBZAkCRqvcPQhA==
+X-Google-Smtp-Source: AGHT+IEcHMmGGYG49/VgMJjAnQKhJ9epA0bxSDixt93TfK4y/031mCRBG2PfrC8EcTME8wPXUQO6YA==
+X-Received: by 2002:a05:6000:230b:b0:3b7:9350:44d4 with SMTP id
+ ffacd0b85a97d-3b9e415a4b2mr4243086f8f.11.1755203487433; 
+ Thu, 14 Aug 2025 13:31:27 -0700 (PDT)
 Received: from arch ([79.132.233.79]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3b79c453ab0sm52272787f8f.44.2025.08.14.13.31.25
+ ffacd0b85a97d-3b79c4530b3sm52843796f8f.34.2025.08.14.13.31.26
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 14 Aug 2025 13:31:26 -0700 (PDT)
+ Thu, 14 Aug 2025 13:31:27 -0700 (PDT)
 To: Peter Seiderer <ps.report@gmx.net>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Thu, 14 Aug 2025 22:31:24 +0200
-Message-ID: <20250814203124.2814817-1-thomas.perale@mind.be>
+Date: Thu, 14 Aug 2025 22:31:26 +0200
+Message-ID: <20250814203126.2814877-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250803144208.195144-3-ps.report@gmx.net>
-References: <20250803144208.195144-3-ps.report@gmx.net>
+In-Reply-To: <20250803144208.195144-2-ps.report@gmx.net>
+References: <20250803144208.195144-2-ps.report@gmx.net>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1755203486; x=1755808286; darn=buildroot.org;
+ d=mind.be; s=google; t=1755203487; x=1755808287; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=QXR61pd+psvrVJn1NkAAxkHePkov9cy0f5W5oOTlUac=;
- b=H+MYAe6GE2iD/SeKyDYxH0GgTCUpKp8tHAICqLpwrjgBLm5UWtzbDxszBjsSW6AUcM
- pvG4VUhe3E/+HZu0FeKPlyEvt/0572AhgxgPyA1GOuXKgdBgkam7yUhiMrr618md1ApE
- oZBcSPPEeNaVw9sFUZJi6Yie/mx2KL9GPEqqxCnqNgfbvueNfF0DHIUEh5s0/pQBVYhH
- 7Kc53Bz+2HFRjUSQf4RcvT3HUjSD+OYFm5kc01xH64gkRMk35l4pOYNKQ176JYc9rE4U
- ACvj0IF5NykEOUB/A767j8zir8ksJ2NSMtzMDpHqC2q7BPObbhhL/vlQpJLaHgdMb8Nk
- ftRg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=dPhu90dhkXncC3bikD6ugFy4W8NyAXNC6dE0cQ66FxE=;
+ b=hgDXugC4vxk31IG+EMiDAn7Z+EqNIxQHCckwDcCeui6hxlrZeNXDzBfzizsLwE1CmC
+ QUkwIkpVGqnY6cStozwtJY/BHyBRrj1OdTRmWwd4GP2ZypsNya6MVJHF3+EkRiMcCUcg
+ JDOBqSFFysHQtwtTfdtvA+/aeWdXMbczg5HgC3mvpJjSYLAZnc7mIUggvsP1OSvJJTN7
+ 5DkR8tqrKZ31mcbf4DqZfTV6rnTv53S3/ENXpUy4ST4v1//Rc8YIqZnTrexoc2WTTTPN
+ m+DqQhAUax+8Kq6QguYksX0q2dtwUygu5UQtjp7plDA7A/5FZczw+ZZiz83kbyVV1g0m
+ 6hHw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=H+MYAe6G
-Subject: Re: [Buildroot] [PATCH 3/3] package/brcmfmac_sdio-firmware-rpi:
- bump version to 6596d33
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=hgDXugC4
+Subject: Re: [Buildroot] [PATCH 2/3] package/rpi-firmware: bump version to
+ 95be71b
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,43 +120,39 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Changelog:
-> 
->   - 4eec7f2 Sync with RPiOS 1.2-9+rpt3 bluez/1:20230625-2+rpt3 brcm80211 versions
->   - 4c1789e Merge pull request #25 from HiassofT/fw-2024-08
->   - e59476f Sync with 1:20240709-2~bpo12+1+rpt3
+> Version 95be71b matches with kernel 6.12.41.
 > 
 > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
 Applied to 2025.05.x. Thanks
 
 > ---
->  .../brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.hash  | 2 +-
->  .../brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.mk    | 2 +-
+>  package/rpi-firmware/rpi-firmware.hash | 2 +-
+>  package/rpi-firmware/rpi-firmware.mk   | 2 +-
 >  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.hash b/package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.hash
-> index c20abfc26c..aba028ef6a 100644
-> --- a/package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.hash
-> +++ b/package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.hash
+> diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmware/rpi-firmware.hash
+> index c2ca9343f1..0645d6ad77 100644
+> --- a/package/rpi-firmware/rpi-firmware.hash
+> +++ b/package/rpi-firmware/rpi-firmware.hash
 > @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256  2f0917b104739455dd488dd8f5af2ee4430801a7ac8fe8d9866e74bfbb185356  brcmfmac_sdio-firmware-rpi-26ff205b45dc109b498a70aaf182804ad9dbfea5.tar.gz
-> +sha256  d9835b33bea65cf15f41753e215a11e5eca818a6e3bfacaa750aeac12456c24f  brcmfmac_sdio-firmware-rpi-6596d332eaadd63e2413e3937715a084f61c39e2.tar.gz
->  sha256  ea8b7b7b6cfc6fd30587ed977100f6a542734ce53218b5b63de16180acddd599  LICENSE
-> diff --git a/package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.mk b/package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.mk
-> index 95707487a9..8c04b017e3 100644
-> --- a/package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.mk
-> +++ b/package/brcmfmac_sdio-firmware-rpi/brcmfmac_sdio-firmware-rpi.mk
-> @@ -4,7 +4,7 @@
->  #
+>  # Locally computed
+> -sha256  b120625c1e0d2dec819638a6fda97c74d1c86e184c6a4263cdf04faa2d5bbe2e  rpi-firmware-1.20250326.tar.gz
+> +sha256  6c1b017867c3a51e606859f1cd50df61b94af311577583b6b2a113d11131ee93  rpi-firmware-95be71b8c0f63f03dc06dd0e4c2e5535e6fb4a93.tar.gz
+>  sha256  c7283ff51f863d93a275c66e3b4cb08021a5dd4d8c1e7acc47d872fbe52d3d6b  boot/LICENCE.broadcom
+> diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+> index 2577d16a01..d0b6abcc6f 100644
+> --- a/package/rpi-firmware/rpi-firmware.mk
+> +++ b/package/rpi-firmware/rpi-firmware.mk
+> @@ -5,7 +5,7 @@
 >  ################################################################################
 >  
-> -BRCMFMAC_SDIO_FIRMWARE_RPI_VERSION = 26ff205b45dc109b498a70aaf182804ad9dbfea5
-> +BRCMFMAC_SDIO_FIRMWARE_RPI_VERSION = 6596d332eaadd63e2413e3937715a084f61c39e2
->  BRCMFMAC_SDIO_FIRMWARE_RPI_SITE = $(call github,LibreELEC,brcmfmac_sdio-firmware-rpi,$(BRCMFMAC_SDIO_FIRMWARE_RPI_VERSION))
->  BRCMFMAC_SDIO_FIRMWARE_RPI_LICENSE = PROPRIETARY
->  BRCMFMAC_SDIO_FIRMWARE_RPI_LICENSE_FILES = LICENSE
+>  # Please keep in sync with configs/raspberrypi*_deconfig
+> -RPI_FIRMWARE_VERSION = 1.20250326
+> +RPI_FIRMWARE_VERSION = 95be71b8c0f63f03dc06dd0e4c2e5535e6fb4a93
+>  RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
+>  RPI_FIRMWARE_LICENSE = BSD-3-Clause
+>  RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
 > -- 
 > 2.50.1
 > 
