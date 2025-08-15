@@ -4,183 +4,100 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5DACECA0EE4
-	for <buildroot@archiver.kernel.org>; Fri, 15 Aug 2025 19:04:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31520CA0ED1
+	for <buildroot@archiver.kernel.org>; Fri, 15 Aug 2025 19:50:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F356341296;
-	Fri, 15 Aug 2025 19:04:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E2E3641360;
+	Fri, 15 Aug 2025 19:50:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AGGgmHyBo3QS; Fri, 15 Aug 2025 19:04:07 +0000 (UTC)
+ id X5O05EE79gSZ; Fri, 15 Aug 2025 19:50:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0DDF341277
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8BD444136A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0DDF341277;
-	Fri, 15 Aug 2025 19:04:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8BD444136A;
+	Fri, 15 Aug 2025 19:50:07 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 7662A196
- for <buildroot@buildroot.org>; Fri, 15 Aug 2025 19:04:05 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id AB59D223
+ for <buildroot@buildroot.org>; Fri, 15 Aug 2025 19:50:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6551E41277
- for <buildroot@buildroot.org>; Fri, 15 Aug 2025 19:04:05 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 91FA34137F
+ for <buildroot@buildroot.org>; Fri, 15 Aug 2025 19:50:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ypxbxyk4wXbI for <buildroot@buildroot.org>;
- Fri, 15 Aug 2025 19:04:04 +0000 (UTC)
+ id D3UBTgJ5SW9L for <buildroot@buildroot.org>;
+ Fri, 15 Aug 2025 19:50:04 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:2406::608;
- helo=nam02-sn1-obe.outbound.protection.outlook.com;
- envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9B5324128A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B5324128A
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com
- (mail-sn1nam02on20608.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:2406::608])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9B5324128A
- for <buildroot@buildroot.org>; Fri, 15 Aug 2025 19:04:04 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=VZsRNnCYd1ZBcx+Y5WW9xj/p2uRmpMokwdTZznwl+CPcxM452CfHs2P2xguNg12g1T7dfU/d7TYTQ3lNqHP3CxqShWr5KR9nmhfa7cpcimSAkAerhHTRVsYpBi4bnCRO34muALXtjs3u2PjDzEWF5gUO1Mtxtx5ArwJDBkzjPV9B6eLrVv2kzxFofhnJv6EjKMZlED9hnFD6Iv8IZdllbGiv3HteJABzMRI5xsx2eclokIGxN8KJ7HXoyQQrlBGrb0XWXjeUDL152i3aLMiPMEqbTHgO2T5XhG7GWD+nbqUPw54xJRsVcAjyKXZFmopzFHtLRrmlxgyxZRA6fV6Qfg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1pAVtKQ3djCf0tQ5zoePvirI6Xv3LrFOfc8xK2UqTtQ=;
- b=QuLECJzLvhrm6bS3b528nod65VOvZbk0yzt9fslh2p+Czryw0iafJhaxkt7yBOI3NYTYNcB9Kk86jeRzsjwfvU1b/ziC6Dnrhr+D4Fik90WwVHGHXF9NZeWw2YfejZbwLrXxZRu6Boo45IGqtSCCKxauBG/Hn79tctblq2bPC6oLwYP2HDEtdk0GQmmiEC06dlNwGLKBorkddMgwaThM86XR1yTiID5DjSuPbskgFaXeTgHVdKgnXleHC8z7t9I18qKF44qZokCh7lnVwxfCvUkMxhPDjpNuvYuL1XXLFkaX08P+XqF9m3dEuDtO8aXjqZ7xHJOIr2catI1Ru1+BjQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-Received: from SA1PR12MB5615.namprd12.prod.outlook.com (2603:10b6:806:229::17)
- by SJ2PR12MB8875.namprd12.prod.outlook.com (2603:10b6:a03:543::13)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9009.23; Fri, 15 Aug
- 2025 19:04:00 +0000
-Received: from SA1PR12MB5615.namprd12.prod.outlook.com
- ([fe80::7557:587c:4ec:1913]) by SA1PR12MB5615.namprd12.prod.outlook.com
- ([fe80::7557:587c:4ec:1913%7]) with mapi id 15.20.9031.014; Fri, 15 Aug 2025
- 19:04:00 +0000
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-CC: Julien Olivain <ju.o@free.fr>, "buildroot@buildroot.org"
- <buildroot@buildroot.org>, "Erkiaga Elorza, Ibai"
- <ibai.erkiaga-elorza@amd.com>
-Thread-Topic: [PATCH 1/1] package/gcc-bare-metal: bump to version 15.2.0 to
- fix build
-Thread-Index: AQHcDfk7NJeQg2tNQE+twuWibsCkgrRj1zYAgAAXQfCAAAP+oIAAFqaAgAABS8SAAAJhAIAAA7hH
-Date: Fri, 15 Aug 2025 19:04:00 +0000
-Message-ID: <SA1PR12MB561519AC36BCB510FCDD3C0AF034A@SA1PR12MB5615.namprd12.prod.outlook.com>
-References: <20250815152737.588503-1-ju.o@free.fr>
- <20250815173050.1cc70ac9@windsurf>
- <SA1PR12MB5615DBECDFACC784ACC244BFF034A@SA1PR12MB5615.namprd12.prod.outlook.com>
- <SA1PR12MB56156FBEE60B08B4CF6E47FEF034A@SA1PR12MB5615.namprd12.prod.outlook.com>
- <20250815202925.42d1667c@windsurf>
- <SA1PR12MB5615109970A6666176138370F034A@SA1PR12MB5615.namprd12.prod.outlook.com>
- <20250815204234.695f6fe0@windsurf>
-In-Reply-To: <20250815204234.695f6fe0@windsurf>
-Accept-Language: en-US
-Content-Language: fr-FR
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Enabled=True;
- MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_SetDate=2025-08-15T18:55:52.0784173Z;
- MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Name=AMD
- Internal Distribution
- Only; MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_ContentBits=3;
- MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Method=Standard
-x-ms-reactions: allow
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA1PR12MB5615:EE_|SJ2PR12MB8875:EE_
-x-ms-office365-filtering-correlation-id: b6c8a6ae-e10c-47e9-fd77-08dddc2e7e62
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
- ARA:13230040|1800799024|10070799003|366016|376014|8096899003|38070700018|41080700001;
-x-microsoft-antispam-message-info: =?us-ascii?Q?2Pkc6VdeoEqtekYSwSXW/tpNp83LTfLcte8aiQbA3RjxY1vIMmEdp6B34bBi?=
- =?us-ascii?Q?4O3VoQb/gudQeXq+FUHmPwsnE64RGWGjE8Hp+kGj+5d+mfeUtapxz2Kns00B?=
- =?us-ascii?Q?lUMrguKyNfGATVqI+UdTPYszq2FnQHKU1LeTzvxW0nOFoWCaG0rqhCLcFlGG?=
- =?us-ascii?Q?qNLtvPwgtGWkTfqBAwS0rSPg59oL5RGXWzaTe3Jwfp0MfKel+DYCZuovAx8X?=
- =?us-ascii?Q?Zz4OE8pYF8n2qgeSrA2gBjyizvuYGlcvLcCQqTpaM6y/DriUL/CJxW70a6zl?=
- =?us-ascii?Q?oyYoJsYRtxEpCQ0bicy7DoQ9b4zAWk4lGX0FrlmpqEirgG9nMzBLwMpLjpgC?=
- =?us-ascii?Q?llQhF7TnG6KeCGbgRoE6r88aQnJpjaRGGhMN9QGJVG77aeeK2MQEp9ue51NQ?=
- =?us-ascii?Q?Mm8c/7yEwbywwDAHCfYUhyoEmPIX+fnFCGhttkPuFQhr/6Ql/J+qo2O7dXiX?=
- =?us-ascii?Q?LtKAudf7sj3ULk/bX3ZvOCk+v0DHqrWDXKfw8UPXmZDCLkb8q56eIOzCi7Pa?=
- =?us-ascii?Q?w9uSjL3DmVUm956sYBxXwfK2PmGcmttoGNDbpUV5auKWMyJXUYSxtvjl6Qgg?=
- =?us-ascii?Q?hbEgp2WTp5j64bjxk3XNec8XR3796FH6cZb3TDoXjzpxRuXckxqnb2BXrVlI?=
- =?us-ascii?Q?Z/gLbyx0bp0p3KvcYknSJ9I/oSEMLDX1wWrN1seZJ0E1WfK1iplE7ezhrTAy?=
- =?us-ascii?Q?ZQ375KfsQYQ8dLIyfxzDE5K0Z+ZTnUt+oyJ+OSJ9kRVyg+eQ0dcsFp3LHJST?=
- =?us-ascii?Q?QbREdbb5hwKgKWyIX+tueot0TnzbZ5Na4ntjzndcUCgreBT5LdxCDLNe4gEk?=
- =?us-ascii?Q?4gAJjvnV/CtJgBwxTwxSNxl7UwLVw1zQuAFt4fC6qwcaqtpj7LA/WuBD5Ynr?=
- =?us-ascii?Q?bdX03wWRiF7aC0DHyJ+MEO76wT45p3GdmYLe1vfRwDo31/o/dUYBB7nJsziK?=
- =?us-ascii?Q?ySUX75Dr9aCR4OgiFW3ImGpnLNPbBPHYq5RzSM7Iaakqpe8uKaSEBYq11dvO?=
- =?us-ascii?Q?OiALzOGL7cxQ9w+RQiLtrTmaxK0lJDAxuIK5Nn/lYwU8sId6YdriON/+ANj1?=
- =?us-ascii?Q?VIga1kzfUALSk6GQJ6jHEB6AYGuxwGxYYBVr0VhqmpXs9F5bWfFjfXqsTMzG?=
- =?us-ascii?Q?a3SYjR+uef5junq8NEDzMXHx2W87gd38K0LiEc2NxRPvStubFXSLvT7aJOqf?=
- =?us-ascii?Q?mNlCMOEFLER+6+CMoNkAvufsTN2XEvFxUmHi2KBABmfir0LVc0NtOP8P7erO?=
- =?us-ascii?Q?FSUPtGTsErr3lxAqvxPzCu6S2EnEBPp+NTGpWlwshb59W0NZt48ODaxVT9Dc?=
- =?us-ascii?Q?t4kskO6MQRy8qpeuyts2CegPx9q/jmxLi0GNLjBBkhgcrHyHNSPh8+nHRXE8?=
- =?us-ascii?Q?jHe6xZDBAgJ2kpnuWEl0/et0IhSip2IfMOpWCrO7jXADVuMceUi+OKBXfihR?=
- =?us-ascii?Q?Lzca6jVJ1iuUiQmpaUjXvi6d2amXdZayxVnF/a/FOJm0NONKSO4tS6+sK9Eq?=
- =?us-ascii?Q?PQZ1KTgDYWN0OSjdmbehk9vEtrfbTJ2cuYlL?=
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:SA1PR12MB5615.namprd12.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230040)(1800799024)(10070799003)(366016)(376014)(8096899003)(38070700018)(41080700001);
- DIR:OUT; SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?9Sb01dFH2my2s63yhkTPooXyI0AsPaw0rmfueqYgDyVRY9Fru3OodMnREdqw?=
- =?us-ascii?Q?0EX2lU5FMBGw9vaXjYOiQjWJ99hW0eYCmQtYDEVJUc9wjNXztiRTn+YberI5?=
- =?us-ascii?Q?vUpoGGnFSPjrOZL1G9j46YL0UqVPwBM6FTjIv/sJ2k+X2MzLhoaB9hfx/ITk?=
- =?us-ascii?Q?QvVHl0TOuwYN5sHEjmuM8WhvHY8s39APvSoJ8TR8u3FatukJniy4zAHe08pM?=
- =?us-ascii?Q?MsZL1x/7M6eRb+Jq0q+wubXqp5+6K+tXRev5F9CFq5J9ZhxXOUJTBFxhncDP?=
- =?us-ascii?Q?1wzd/VY7Vvfj1ilftwg8dBusfoDs9lXJih5nFANGO0iLI2WvMIq5rVoWv/B0?=
- =?us-ascii?Q?rDK/kjp7PhSvzxS3ScqIHsVmipyWP5VGgx9tQCAx5SqLj7Xy9e7sZj4NSfUY?=
- =?us-ascii?Q?h+vmOQ3+mlILJaMmV4mxfgNcU9WNgO16js/aM7+i1vK4lB5YBMbfeUHOdlav?=
- =?us-ascii?Q?M1FdorjBoE65GyNqsJcZH34zA02UmRA5GaJMG0YA2LIXCXF7qk0cmlQYVpo5?=
- =?us-ascii?Q?01UwMoayZN0W1bOQIKFP4apMbyuqQZvuDI9VAT1XztJmpbegIMrocjQ15Yrn?=
- =?us-ascii?Q?o6EjttVKhyzq96d/CuD8hb8Xc59kt74NB9mTCKq392CSbwUNUMMW4YGrqP+I?=
- =?us-ascii?Q?gr2Lp9kJxfyNGWUJ4xbCVR/dZnVChcddgeeDSEHsi2RyPzWuQDd6x+NinvpY?=
- =?us-ascii?Q?8Z98veMY3mANt1v6lHNGvSMBm9XE5jifMzhARfAWalWrazTACMDefZ0WLMOF?=
- =?us-ascii?Q?BVYpdV1E7UQE639v1nNImA4V8vZ9fEh0jRGGR49MUYCOwsPFNhVHc/Oe9q5g?=
- =?us-ascii?Q?u6ateZ/s6gE2oc5Rx5G3jgTg3E8WixtcT7UF8LDVpz5geuLJU+TcgtoEmug+?=
- =?us-ascii?Q?ZXnh2r5XNW2BqTgurIAdToe0AzPfBe1M1INkk0k8E+hkpXFqI0o8EK11Nss7?=
- =?us-ascii?Q?coMOmIcwIQ9FcB1HKh2tb5IwEB0NWRJX2J1EYLm1MWwR8SFam2Ryi1vJoowi?=
- =?us-ascii?Q?RLtvYOtT6qR+aKMBb2odADUF6PVKji7H1WbrZexx5X0dbAS6NjPPnGaBSjY3?=
- =?us-ascii?Q?c4nDwsY+XXEAEz4ZrqkjfmXSEftMQLRhEyrt//3zoMjbrW0YvzAi3mMjYdTL?=
- =?us-ascii?Q?nNtO3A8FbiLP34lLl5oUa+gseHiKXNh9id6jTRLzWlsOP1M+Kr0cLd0YnTJc?=
- =?us-ascii?Q?l5M9V7LCYmVRj8YQbnpa6kCAwf9ulH9UkQLN25RVWkljyrxkl2i4zG44V2FL?=
- =?us-ascii?Q?/7VKMqWUgrbXFrBAwL+GzIaPz3x2LvFzPDT509dsFk9RkSC7BRy8NaS4r4Fw?=
- =?us-ascii?Q?mPfOK+NvM76zWZJRNH28OQTVY7xeyxjC05crUAAJQvQ+LDQzZY/ohN6TKlCO?=
- =?us-ascii?Q?SvFDcqn5dC9duFZlxslUZZXhCGE8zIoPxdp6SP3dBLcHAW6FnRxhlSZd4TZW?=
- =?us-ascii?Q?0kgncygoxI3jVq9RnQtViawSGN3foXptzZTyOui9SVuE1t5RPHlimrnOrQ//?=
- =?us-ascii?Q?4LeOnYc2UejKRw8xkmzvZZxFt+TLm2SBI4Vnoqi9oLubwDoGGvHXX0UdfCG9?=
- =?us-ascii?Q?6XymbIJJwKrr4fGwTiVD9jMqOnZxcZ7elQqsUZUekT3oHln34dFrFsFrDAZv?=
- =?us-ascii?Q?ledPuWamw71A/ijBNfHpkjjGSTfGFYkY6c8C0aGcwJR3?=
+ client-ip=2607:f8b0:4864:20::433; helo=mail-pf1-x433.google.com;
+ envelope-from=lancethepants@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 643DE41374
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 643DE41374
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com
+ [IPv6:2607:f8b0:4864:20::433])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 643DE41374
+ for <buildroot@buildroot.org>; Fri, 15 Aug 2025 19:50:04 +0000 (UTC)
+Received: by mail-pf1-x433.google.com with SMTP id
+ d2e1a72fcca58-76e34c4ce54so1734811b3a.0
+ for <buildroot@buildroot.org>; Fri, 15 Aug 2025 12:50:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1755287403; x=1755892203;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=dWLZSN+DGYfrNtVSKTJDf7yF0SgKkUuqiaIcvkIsTAM=;
+ b=eeQ4PO8JNiqqBdEa0tIk/yecSv8ZpsBlGxqRvtnHH0thnUbGXw5gcj6l11exRiPo6C
+ uwgQsyuVqUKaLygEdCRJRuU5jnunWYqHseS89SdUADase7cu3U4xijzOHjq1JwHZB8tJ
+ QcaZwKa/nCPCnqeHCNY/Rgcl03E82lYs5JlRpWbWcjbC7mzgy1P3ZcCNROhod9ZPQGsJ
+ 8DT2Z52aupZCLs32RsULJTBV28FGy8SH+yXG5rMQfZg0h5QhVEHCOMxKvTEqgSlfEish
+ KUMOs6WW3tvAf9NX2HhxBCn1HsnLO9aGHDuHo1ol/pCcEuP14bi0AeLCzkkRtzCQv052
+ ts0Q==
+X-Gm-Message-State: AOJu0Ywpp7mV/Vp1J4h+D7wY8c5rGmhd1y+rb0kq8RxeanaGNpyR1h06
+ 5UqbPwHm+criFfUVGkAbH9Vue7sUHnmc+kJW9rH60vQbNzxnSLDcKBkDO5cYNQ==
+X-Gm-Gg: ASbGncv9i+cssevYFzVXUMhUDlrBazgGnspxeRwTu6Nk9egJA+JG5GSP43SiSUAk2HS
+ pii2WTWeHFqFgGdtb3oZgZLUfjsLvrc+Mm30iFr/ay73QGxnBzG/diYUnc1r/w0N9srj4oaI/my
+ TzmmjjQiY8NYmtP25DezesckYdBL/RR2+GiQpTkV8P0dULOTR2WfVFZgWY6N6x/XUV/n+/mlMLG
+ 9m7/Tr15dQEmPqXMSAAqnqpDgx/uhsdD2yRJdo5yoVeCWR5R2d8NQceWfsTxu7/b1tHu+h9+hhP
+ DzLNoHZ8Y2dlNEtqB0KupekFjUK7JDqXqL7HME7trkNcM2EvGiM+lHhcVJDceuqeV2DwhTaRFXk
+ 6a6Q=
+X-Google-Smtp-Source: AGHT+IH12Klx0i3mXUzXy/6Uu22rUFEyIxTZWHiP+ueAgzW6ZJ8o8Qmk09xXNw8QmN6IXqizL3jOOA==
+X-Received: by 2002:a05:6a20:2451:b0:222:ca3f:199 with SMTP id
+ adf61e73a8af0-240d297f5c3mr5293397637.18.1755287403305; 
+ Fri, 15 Aug 2025 12:50:03 -0700 (PDT)
+Received: from ProgramPC.bm.local ([76.8.199.226])
+ by smtp.gmail.com with ESMTPSA id
+ d2e1a72fcca58-76e4558c2e6sm1691674b3a.97.2025.08.15.12.50.02
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 15 Aug 2025 12:50:02 -0700 (PDT)
+From: Lance Fredrickson <lancethepants@gmail.com>
+X-Google-Original-From: Lance Fredrickson
+To: buildroot@buildroot.org
+Cc: Lance Fredrickson <lancethepants@gmail.com>,
+ Karoly Kasza <kaszak@gmail.com>
+Date: Fri, 15 Aug 2025 13:49:41 -0600
+Message-Id: <20250815194948.2191266-1-lancethepants@gmail.com>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR12MB5615.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b6c8a6ae-e10c-47e9-fd77-08dddc2e7e62
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Aug 2025 19:04:00.3121 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ic/d3oF4zGAGTbzYve4GLFBH9p9PwrH4q4Z5vPjC+ns6jLog8Tk4XXG3hk7avMOg
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8875
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amd.com; s=selector1; 
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1pAVtKQ3djCf0tQ5zoePvirI6Xv3LrFOfc8xK2UqTtQ=;
- b=PM81WzgGr1ZbbvUsojpdfTvWLA42V5wYIgJAMFDmQ4mPlv5OcNx7scmZwPlAOjSAAZPulehQaidnuhxszezvm1XdMk6o7NXe4a1USVwJzKqJLOCvw9MN6wUHl0ZwQ9lJ8IKJS7iO8VybEBGPMgSXWN2iK+u2cyDj5iOiCZF4tgo=
+ d=gmail.com; s=20230601; t=1755287403; x=1755892203; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=dWLZSN+DGYfrNtVSKTJDf7yF0SgKkUuqiaIcvkIsTAM=;
+ b=ao+OgNQKNSgIZf5y22/kPJ6wWr2Xs5Oqrl4Fi7RuNcSMerZBG7UbVe1hP84LxD1HXu
+ 7Bo5JfYbzql1qDQEF8tHXV2UT9ZcSB3n6tOtHQ0DQZ+KJqJtUfOTJlkQ+AzteIk8OL4r
+ MQpcWuHDS8QcVpxYfwvHaIu54KIkIevY3fAErqTHm/SFmqFxgibVlSSGw5RdkhBiFaB2
+ ArKkV17y1hbqmPjgqvMiVgcdknMGudxB3OemKJYNZnjVvcF82pP0RnWO3iDNnAWltVRg
+ BYRhHeSqSrR9/prc4wiCXj+aCl+ro44+pInxQOMuuuDaMDhjQRF+yKBt9N3wO1wsHiGD
+ TJkQ==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=amd.com
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=PM81WzgG
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Subject: Re: [Buildroot] [PATCH 1/1] package/gcc-bare-metal: bump to version
- 15.2.0 to fix build
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=ao+OgNQK
+Subject: [Buildroot] [PATCH] package/irqbalance: fix build with GCC 15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -192,149 +109,447 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: "Frager, Neal via buildroot" <buildroot@buildroot.org>
-Reply-To: "Frager, Neal" <neal.frager@amd.com>
-Content-Type: multipart/mixed; boundary="===============6395234228391435698=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6395234228391435698==
-Content-Language: fr-FR
-Content-Type: multipart/alternative;
-	boundary="_000_SA1PR12MB561519AC36BCB510FCDD3C0AF034ASA1PR12MB5615namp_"
+From: Lance Fredrickson <lancethepants@gmail.com>
 
---_000_SA1PR12MB561519AC36BCB510FCDD3C0AF034ASA1PR12MB5615namp_
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+Bumps package to version 1.9.4
+Adds two patches already in upstream to fix compilation with GCC 15
 
-[AMD Official Use Only - AMD Internal Distribution Only]
+Signed-off-by: Lance Fredrickson <lancethepants@gmail.com>
+---
+ .../irqbalance/0001-fix-32-bit-formats.patch  |  66 ++++
+ ...02-add-void-to-fix-strict-prototypes.patch | 317 ++++++++++++++++++
+ package/irqbalance/irqbalance.hash            |   2 +-
+ package/irqbalance/irqbalance.mk              |   2 +-
+ 4 files changed, 385 insertions(+), 2 deletions(-)
+ create mode 100644 package/irqbalance/0001-fix-32-bit-formats.patch
+ create mode 100644 package/irqbalance/0002-add-void-to-fix-strict-prototypes.patch
 
-Hi Thomas,
-
-> At the moment, gcc-bare-metal does not need any of the 3 gcc 15 patches.
->
-> We could just delete the patches symlink and cherry pick
-> any gcc patches we might actually need in the future.
->
-> Then we would truly disconnect any dependencies between the
-> gcc and gcc-bare-metal packages.
-
-> That would be fine by me, especially as they don't _need_ to be
-> connected. In other cases, we really need to have the same version,
-> like package/glibc and package/localedef, so it makes sense to share
-> hash file and stuff. But between gcc-{final,initial} and
-> gcc-bare-metal, there's really no relationship whatsoever.
-
-A good example of this are the zynqmp and versal defconfigs.
-
-The aarch64 gcc version is 14.3 and the microblaze gcc-bare-metal
-version is 15.1 (15.2 when Julien's patch is applied).
-
-And having two gcc toolchains of completely different version
-causes no problems whatsoever for zynqmp or versal.
-
-The symlinks were only there for convenience. Why create a
-second copy of files we already have?
-
-Now we know the unintended consequence of that decision...
-
-Best regards,
-Neal Frager
-AMD
-
---_000_SA1PR12MB561519AC36BCB510FCDD3C0AF034ASA1PR12MB5615namp_
-Content-Type: text/html; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-
-<html>
-<head>
-<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
->
-</head>
-<body>
-<p style=3D"font-family:Calibri;font-size:10pt;color:#0000FF;margin:5pt;fon=
-t-style:normal;font-weight:normal;text-decoration:none;" align=3D"Left">
-[AMD Official Use Only - AMD Internal Distribution Only]<br>
-</p>
-<br>
-<div>
-<div dir=3D"ltr" style=3D"font-family: Aptos, Aptos_MSFontService, -apple-s=
-ystem, Roboto, Arial, Helvetica, sans-serif; font-size: 12pt;">
-Hi Thomas,</div>
-<div id=3D"ms-outlook-mobile-body-separator-line" dir=3D"ltr"></div>
-<div id=3D"ms-outlook-mobile-signature" dir=3D"ltr"></div>
-<div id=3D"mail-editor-reference-message-container" class=3D"ms-outlook-mob=
-ile-reference-message">
-<div id=3D"mail-editor-reference-message-container">
-<div id=3D"divRplyFwdMsg" dir=3D"ltr"><br>
-</div>
-<div style=3D"font-size: 11pt;">&gt; At the moment, gcc-bare-metal does not=
- need any of the 3 gcc 15 patches.<br>
-&gt;<br>
-&gt; We could just delete the patches symlink and cherry pick<br>
-&gt; any gcc patches we might actually need in the future.<br>
-&gt;<br>
-&gt; Then we would truly disconnect any dependencies between the<br>
-&gt; gcc and gcc-bare-metal packages.<br>
-<br>
-&gt; That would be fine by me, especially as they don't _need_ to be<br>
-&gt; connected. In other cases, we really need to have the same version,<br=
->
-&gt; like package/glibc and package/localedef, so it makes sense to share<b=
-r>
-&gt; hash file and stuff. But between gcc-{final,initial} and<br>
-&gt; gcc-bare-metal, there's really no relationship whatsoever.<br>
-<br>
-A good example of this are the zynqmp and versal defconfigs.</div>
-<div dir=3D"ltr" style=3D"font-size: 11pt;"><br>
-</div>
-<div dir=3D"ltr" style=3D"font-size: 11pt;">The aarch64 gcc version is 14.3=
- and the microblaze gcc-bare-metal</div>
-<div dir=3D"ltr" style=3D"font-size: 11pt;">version is 15.1 (15.2 when Juli=
-en's patch is applied).</div>
-<div dir=3D"ltr" style=3D"font-size: 11pt;"><br>
-</div>
-<div dir=3D"ltr" style=3D"font-size: 11pt;">And having two gcc toolchains o=
-f completely different version</div>
-<div dir=3D"ltr" style=3D"font-size: 11pt;">causes no problems whatsoever f=
-or zynqmp or versal.</div>
-<div dir=3D"ltr" style=3D"font-size: 11pt;"><br>
-</div>
-<div dir=3D"ltr" style=3D"font-family: Aptos, Aptos_MSFontService, -apple-s=
-ystem, Roboto, Arial, Helvetica, sans-serif; font-size: 11pt;">
-The symlinks were only there for convenience. Why create a</div>
-<div dir=3D"ltr" style=3D"font-family: Aptos, Aptos_MSFontService, -apple-s=
-ystem, Roboto, Arial, Helvetica, sans-serif; font-size: 11pt;">
-second copy of files we already have?</div>
-<div dir=3D"ltr" style=3D"font-family: Aptos, Aptos_MSFontService, -apple-s=
-ystem, Roboto, Arial, Helvetica, sans-serif; font-size: 11pt;">
-<br>
-</div>
-<div dir=3D"ltr" style=3D"font-family: Aptos, Aptos_MSFontService, -apple-s=
-ystem, Roboto, Arial, Helvetica, sans-serif; font-size: 11pt;">
-Now we know the unintended consequence of that decision...</div>
-<div dir=3D"ltr" style=3D"font-size: 11pt;"><br>
-</div>
-<div dir=3D"ltr" style=3D"font-size: 11pt;">Best regards,</div>
-<div dir=3D"ltr" style=3D"font-size: 11pt;">Neal Frager</div>
-<div dir=3D"ltr" style=3D"font-size: 11pt;">AMD</div>
-</div>
-</div>
-</div>
-</body>
-</html>
-
---_000_SA1PR12MB561519AC36BCB510FCDD3C0AF034ASA1PR12MB5615namp_--
-
---===============6395234228391435698==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/irqbalance/0001-fix-32-bit-formats.patch b/package/irqbalance/0001-fix-32-bit-formats.patch
+new file mode 100644
+index 0000000000..712c084bf0
+--- /dev/null
++++ b/package/irqbalance/0001-fix-32-bit-formats.patch
+@@ -0,0 +1,66 @@
++From 1277ea524354fa628b4189e699af8d62f8be7021 Mon Sep 17 00:00:00 2001
++From: Rosen Penev <rosenp@gmail.com>
++Date: Sun, 31 Mar 2024 14:18:24 -0700
++Subject: [PATCH] fix 32-bit formats
++
++exposed with -Wformat when building on 32-bit systems
++
++Signed-off-by: Rosen Penev <rosenp@gmail.com>
++---
++ placement.c | 2 +-
++ ui/ui.c     | 8 ++++----
++ 2 files changed, 5 insertions(+), 5 deletions(-)
++
++diff --git a/placement.c b/placement.c
++index 9fde8cb..dea7c23 100644
++--- a/placement.c
+++++ b/placement.c
++@@ -172,7 +172,7 @@ static void validate_irq(struct irq_info *info, void *data)
++ {
++ 	if (info->assigned_obj != data)
++ 		log(TO_CONSOLE, LOG_INFO, "object validation error: irq %d is wrong, points to %p, should be %p\n",
++-			info->irq, info->assigned_obj, data);
+++			info->irq, (void*)info->assigned_obj, data);
++ }
++ 
++ static void validate_object(struct topo_obj *d, void *data __attribute__((unused)))
++diff --git a/ui/ui.c b/ui/ui.c
++index bee6868..8354fc6 100644
++--- a/ui/ui.c
+++++ b/ui/ui.c
++@@ -101,7 +101,7 @@ int get_valid_sleep_input(int column_offest)
++ 		if(input == NULL) {
++ 			curs_set(0);
++ 			attrset(COLOR_PAIR(1));
++-			mvprintw(2, column_offest, "%lu			", new_sleep);
+++			mvprintw(2, column_offest, "%" PRIu64 "			", new_sleep);
++ 			move(LINES, COLS);
++ 			break;
++ 		}
++@@ -125,7 +125,7 @@ int get_valid_sleep_input(int column_offest)
++ 	}
++ 
++ 	attrset(COLOR_PAIR(1));
++-	mvprintw(2, column_offest, "%lu				", new_sleep);
+++	mvprintw(2, column_offest, "%" PRIu64 "				", new_sleep);
++ 
++ 	return new_sleep;
++ }
++@@ -296,7 +296,7 @@ void handle_cpu_banning()
++ 		case '\r': {
++ 			attrset(COLOR_PAIR(3));
++ 			int banned = toggle_cpu(tmp, position + offset - 6);
++-			mvprintw(position, 3, "CPU %d     ", position + offset - 6);
+++			mvprintw(position, 3, "CPU %zu     ", position + offset - 6);
++ 			if(banned) {
++ 				mvprintw(position, 19, "YES");
++ 			} else {
++@@ -770,7 +770,7 @@ void display_tree_node_irqs(irq_t *irq, void *data)
++ 	if (max_offset >= offset && max_offset - offset < LINES - 5) {
++ 		snprintf(indent + strlen(indent), 32 - strlen(indent), "%s", (char *)data);
++ 		attrset(COLOR_PAIR(3));
++-		printw("%sIRQ %u, IRQs since last rebalance %lu\n",
+++		printw("%sIRQ %u, IRQs since last rebalance %" PRIu64 "\n",
++ 			indent, irq->vector, irq->diff);
++ 	}
++ 	max_offset++;
+diff --git a/package/irqbalance/0002-add-void-to-fix-strict-prototypes.patch b/package/irqbalance/0002-add-void-to-fix-strict-prototypes.patch
+new file mode 100644
+index 0000000000..2693945530
+--- /dev/null
++++ b/package/irqbalance/0002-add-void-to-fix-strict-prototypes.patch
+@@ -0,0 +1,317 @@
++From b6a831d692ed7e12db7748db49b3b39516d151d2 Mon Sep 17 00:00:00 2001
++From: Rosen Penev <rosenp@gmail.com>
++Date: Sun, 31 Mar 2024 14:31:22 -0700
++Subject: [PATCH] add void to fix strict-prototypes
++
++This becomes a hard error with C23
++
++Signed-off-by: Rosen Penev <rosenp@gmail.com>
++---
++ irqbalance.c       |  2 +-
++ irqbalance.h       |  2 +-
++ procinterrupts.c   |  2 +-
++ ui/helpers.c       |  2 +-
++ ui/helpers.h       |  2 +-
++ ui/irqbalance-ui.c |  6 +++---
++ ui/irqbalance-ui.h |  5 ++---
++ ui/ui.c            | 26 +++++++++++++-------------
++ ui/ui.h            | 28 ++++++++++++++--------------
++ 9 files changed, 37 insertions(+), 38 deletions(-)
++
++diff --git a/irqbalance.c b/irqbalance.c
++index 12302d7..373161f 100644
++--- a/irqbalance.c
+++++ b/irqbalance.c
++@@ -544,7 +544,7 @@ gboolean sock_handle(gint fd, GIOCondition condition, gpointer user_data __attri
++ 	return TRUE;
++ }
++ 
++-int init_socket()
+++int init_socket(void)
++ {
++ 	struct sockaddr_un addr;
++ 	memset(&addr, 0, sizeof(struct sockaddr_un));
++diff --git a/irqbalance.h b/irqbalance.h
++index 7b47cd1..09daa3d 100644
++--- a/irqbalance.h
+++++ b/irqbalance.h
++@@ -36,7 +36,7 @@ extern char *classes[];
++ extern void parse_cpu_tree(void);
++ extern void clear_work_stats(void);
++ extern void parse_proc_interrupts(void);
++-extern GList* collect_full_irq_list();
+++extern GList* collect_full_irq_list(void);
++ extern void parse_proc_stat(void);
++ extern void set_interrupt_count(int number, uint64_t count);
++ extern void set_msi_interrupt_numa(int number);
++diff --git a/procinterrupts.c b/procinterrupts.c
++index dfa95c6..e7ba653 100644
++--- a/procinterrupts.c
+++++ b/procinterrupts.c
++@@ -206,7 +206,7 @@ void init_irq_class_and_type(char *savedline, struct irq_info *info, int irq)
++ 	info->name = strdup(irq_fullname);
++ }
++ 
++-GList* collect_full_irq_list()
+++GList* collect_full_irq_list(void)
++ {
++ 	GList *tmp_list = NULL;
++ 	FILE *file;
++diff --git a/ui/helpers.c b/ui/helpers.c
++index 0e9f76c..247f826 100644
++--- a/ui/helpers.c
+++++ b/ui/helpers.c
++@@ -165,7 +165,7 @@ void dump_node(cpu_node_t *node, void *data __attribute__((unused)))
++ 	}
++ }
++ 
++-void dump_tree()
+++void dump_tree(void)
++ {
++ 	for_each_node(tree, dump_node, NULL);
++ }
++diff --git a/ui/helpers.h b/ui/helpers.h
++index b8d9fcc..922914b 100644
++--- a/ui/helpers.h
+++++ b/ui/helpers.h
++@@ -25,7 +25,7 @@ void for_each_node(GList *list, void (*fp)(cpu_node_t *node, void *data), void *
++ 
++ void dump_irq(irq_t *irq, void *data __attribute__((unused)));
++ void dump_node(cpu_node_t *node, void *data __attribute__((unused)));
++-void dump_tree();
+++void dump_tree(void);
++ 
++ 
++ #endif /* HELPERS_H */
++diff --git a/ui/irqbalance-ui.c b/ui/irqbalance-ui.c
++index c26eff6..f5122ee 100644
++--- a/ui/irqbalance-ui.c
+++++ b/ui/irqbalance-ui.c
++@@ -28,7 +28,7 @@ setup_t setup;
++ GMainLoop *main_loop;
++ static int default_bufsz = 8192;
++ 
++-struct msghdr * create_credentials_msg()
+++struct msghdr * create_credentials_msg(void)
++ {
++ 	struct ucred *credentials = malloc(sizeof(struct ucred));
++ 	credentials->pid = getpid();
++@@ -51,7 +51,7 @@ struct msghdr * create_credentials_msg()
++ 	return msg;
++ }
++ 
++-int init_connection()
+++int init_connection(void)
++ {
++ 	struct sockaddr_un addr;
++ 	memset(&addr, 0, sizeof(struct sockaddr_un));
++@@ -378,7 +378,7 @@ gboolean rescan_tree(gpointer data __attribute__((unused)))
++ 	free(irqbalance_data);
++ 	return TRUE;
++ }
++-void scroll_window() {
+++void scroll_window(void) {
++ 	switch(state) {
++ 	case STATE_TREE:
++ 		display_tree();
++diff --git a/ui/irqbalance-ui.h b/ui/irqbalance-ui.h
++index dc24083..178be4b 100644
++--- a/ui/irqbalance-ui.h
+++++ b/ui/irqbalance-ui.h
++@@ -72,8 +72,8 @@ typedef struct setup {
++ 
++ /* Function prototypes */
++ 
++-struct msghdr * create_credentials_msg();
++-int init_connection();
+++struct msghdr * create_credentials_msg(void);
+++int init_connection(void);
++ void send_settings(char *data);
++ char * get_data(char *string);
++ void parse_setup(char *setup_data);
++@@ -83,7 +83,6 @@ void assign_cpu_lists(cpu_node_t *node, void *data);
++ void assign_cpu_mask(cpu_node_t *node, void *data);
++ void parse_into_tree(char *data);
++ gboolean rescan_tree(gpointer data);
++-int main();
++ 
++ 
++ #endif /* IRQBALANCE_UI_H */
++diff --git a/ui/ui.c b/ui/ui.c
++index 8354fc6..9fa990a 100644
++--- a/ui/ui.c
+++++ b/ui/ui.c
++@@ -21,7 +21,7 @@ char *IRQ_CLASS_TO_STR[] = {
++ 			"10-Gigabit Ethernet",
++ 			"Virt Event"};
++ 
++-void show_frame()
+++void show_frame(void)
++ {
++ 	int i;
++ 	attrset(COLOR_PAIR(4));
++@@ -37,7 +37,7 @@ void show_frame()
++ 	}
++ }
++ 
++-void show_footer()
+++void show_footer(void)
++ {
++ 	char footer[COLS];
++ 	snprintf(footer, COLS - 1,
++@@ -172,7 +172,7 @@ void print_cpu_line(cpu_ban_t *cpu, void *data __attribute__((unused)))
++ 	max_offset++;
++ }
++ 
++-void print_all_cpus()
+++void print_all_cpus(void)
++ {
++ 	max_offset = 0;
++ 	if(all_cpus == NULL) {
++@@ -193,7 +193,7 @@ void add_banned_cpu(int *banned_cpu, void *data)
++ 	snprintf(data + strlen(data), 1024 - strlen(data), "%d, ", *banned_cpu);
++ }
++ 
++-void display_banned_cpus()
+++void display_banned_cpus(void)
++ {
++ 	char banned_cpus[1024] = "Banned CPU numbers: \0";
++ 	if(g_list_length(setup.banned_cpus) > 0) {
++@@ -247,7 +247,7 @@ void get_cpu(cpu_node_t *node, void *data __attribute__((unused)))
++ 	}
++ }
++ 
++-void handle_cpu_banning()
+++void handle_cpu_banning(void)
++ {
++ 	GList *tmp = g_list_copy_deep(all_cpus, copy_cpu_ban, NULL);
++ 	attrset(COLOR_PAIR(5));
++@@ -504,7 +504,7 @@ void print_irq_line(irq_t *irq, void *data __attribute__((unused)))
++ 	mvprintw(line, 120, "%s", irq_name[line]);
++ }
++ 
++-void print_all_irqs()
+++void print_all_irqs(void)
++ {
++ 	max_offset = 0;
++ 	attrset(COLOR_PAIR(0));
++@@ -555,13 +555,13 @@ void copy_irqs_from_nodes(cpu_node_t *node, void *data __attribute__((unused)))
++ 	}
++ }
++ 
++-void get_all_irqs()
+++void get_all_irqs(void)
++ {
++ 	all_irqs = g_list_copy_deep(setup.banned_irqs, copy_irq, NULL);
++ 	for_each_node(tree, copy_irqs_from_nodes, NULL);
++ }
++ 
++-void handle_irq_banning()
+++void handle_irq_banning(void)
++ {
++ 	GList *tmp = g_list_copy_deep(all_irqs, copy_irq, NULL);
++ 	attrset(COLOR_PAIR(5));
++@@ -670,7 +670,7 @@ void handle_irq_banning()
++ 	}
++ }
++ 
++-void handle_sleep_setting()
+++void handle_sleep_setting(void)
++ {
++ 	char info[128] = "Current sleep interval between rebalancing: \0";
++ 	uint8_t sleep_input_offset = strlen(info) + 3;
++@@ -693,7 +693,7 @@ void handle_sleep_setting()
++ 	refresh();
++ }
++ 
++-void init()
+++void init(void)
++ {
++ 	signal(SIGINT, close_window);
++ 	initscr();
++@@ -732,7 +732,7 @@ void close_window(int sig __attribute__((unused)))
++ 	exit(EXIT_SUCCESS);
++ }
++ 
++-void settings()
+++void settings(void)
++ {
++ 	clear();
++ 	char *setup_data = get_data(SETUP);
++@@ -751,7 +751,7 @@ void settings()
++ 	free(setup_data);
++ }
++ 
++-void setup_irqs()
+++void setup_irqs(void)
++ {
++ 	clear();
++ 	get_all_irqs();
++@@ -830,7 +830,7 @@ void display_tree_node(cpu_node_t *node, void *data)
++ 	}
++ }
++ 
++-void display_tree()
+++void display_tree(void)
++ {
++ 	clear();
++ 	char *setup_data = get_data(SETUP);
++diff --git a/ui/ui.h b/ui/ui.h
++index da5b4b9..f3485d4 100644
++--- a/ui/ui.h
+++++ b/ui/ui.h
++@@ -17,40 +17,40 @@ extern setup_t setup;
++ extern int offset;
++ extern int max_offset;
++ 
++-void show_frame();
++-void show_footer();
+++void show_frame(void);
+++void show_footer(void);
++ 
++ char * check_control_in_sleep_input(int max_len, int column_offest, int line_offset);
++ int get_valid_sleep_input(int column_offest);
++ 
++ void get_banned_cpu(int *cpu, void *data);
++ void print_cpu_line(cpu_ban_t *cpu, void *data);
++-void print_all_cpus();
+++void print_all_cpus(void);
++ void add_banned_cpu(int *banned_cpu, void *data);
++-void display_banned_cpus();
+++void display_banned_cpus(void);
++ int toggle_cpu(GList *cpu_list, int cpu_number);
++ void get_new_cpu_ban_values(cpu_ban_t *cpu, void *data);
++-void get_cpu();
++-void handle_sleep_setting();
++-void handle_cpu_banning();
+++void get_cpu(cpu_node_t *node, void *data);
+++void handle_sleep_setting(void);
+++void handle_cpu_banning(void);
++ 
++ void copy_assigned_obj(int *number, void *data);
++ void print_assigned_objects_string(irq_t *irq, int *line_offset);
++ void print_irq_line(irq_t *irq, void *data);
++-void print_all_irqs();
+++void print_all_irqs(void);
++ int toggle_irq(GList *irq_list, int position);
++ void get_new_irq_ban_values(irq_t *irq, void *data);
++ void copy_irqs_from_nodes(cpu_node_t *node, void *data);
++-void get_all_irqs();
++-void handle_irq_banning();
+++void get_all_irqs(void);
+++void handle_irq_banning(void);
++ 
++-void init();
+++void init(void);
++ void close_window(int sig);
++-void settings();
++-void setup_irqs();
+++void settings(void);
+++void setup_irqs(void);
++ void display_tree_node_irqs(irq_t *irq, void *data);
++ void display_tree_node(cpu_node_t *node, void *data);
++-void display_tree();
+++void display_tree(void);
++ 
++ 
++ #endif /* UI_H */
+diff --git a/package/irqbalance/irqbalance.hash b/package/irqbalance/irqbalance.hash
+index bf33e71e48..c9d1acade8 100644
+--- a/package/irqbalance/irqbalance.hash
++++ b/package/irqbalance/irqbalance.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  8d698799251ea8518f342f36be26f2f092df51189f6777db33116d40cf0dae6c  irqbalance-1.9.3.tar.gz
++sha256  f37bb2e27c2e9ec609131d0ee3f770185d3845f79ee6ef11477ea0ffb600a561  irqbalance-1.9.4.tar.gz
+ sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+diff --git a/package/irqbalance/irqbalance.mk b/package/irqbalance/irqbalance.mk
+index 5d1bd48002..173c7d8df0 100644
+--- a/package/irqbalance/irqbalance.mk
++++ b/package/irqbalance/irqbalance.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IRQBALANCE_VERSION = 1.9.3
++IRQBALANCE_VERSION = 1.9.4
+ IRQBALANCE_SITE = $(call github,irqbalance,irqbalance,v$(IRQBALANCE_VERSION))
+ IRQBALANCE_LICENSE = GPL-2.0
+ IRQBALANCE_LICENSE_FILES = COPYING
+-- 
+2.39.5
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6395234228391435698==--
