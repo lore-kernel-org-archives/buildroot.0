@@ -1,80 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3133ECA0EE4
-	for <buildroot@archiver.kernel.org>; Fri, 15 Aug 2025 15:30:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3603ECA0ED1
+	for <buildroot@archiver.kernel.org>; Fri, 15 Aug 2025 15:46:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F37EF40AC9;
-	Fri, 15 Aug 2025 15:30:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E839F60E92;
+	Fri, 15 Aug 2025 15:46:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jBrBckIy9m0C; Fri, 15 Aug 2025 15:30:58 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id G0DDztCjFEI1; Fri, 15 Aug 2025 15:46:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E913240AF4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0C81E60E8D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E913240AF4;
-	Fri, 15 Aug 2025 15:30:57 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id E0255228
- for <buildroot@buildroot.org>; Fri, 15 Aug 2025 15:30:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0C81E60E8D;
+	Fri, 15 Aug 2025 15:46:46 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6FB67228
+ for <buildroot@buildroot.org>; Fri, 15 Aug 2025 15:46:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C647E81839
- for <buildroot@buildroot.org>; Fri, 15 Aug 2025 15:30:56 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 559AE60E92
+ for <buildroot@buildroot.org>; Fri, 15 Aug 2025 15:46:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jeoQzF23WZyw for <buildroot@buildroot.org>;
- Fri, 15 Aug 2025 15:30:56 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::235;
- helo=relay15.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A716B8184F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A716B8184F
-Received: from relay15.mail.gandi.net (relay15.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::235])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A716B8184F
- for <buildroot@buildroot.org>; Fri, 15 Aug 2025 15:30:55 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 84442442B9;
- Fri, 15 Aug 2025 15:30:51 +0000 (UTC)
-Date: Fri, 15 Aug 2025 17:30:50 +0200
-To: Julien Olivain <ju.o@free.fr>
-Cc: buildroot@buildroot.org, Ibai Erkiaga <ibai.erkiaga-elorza@amd.com>,
- Neal Frager <neal.frager@amd.com>
-Message-ID: <20250815173050.1cc70ac9@windsurf>
-In-Reply-To: <20250815152737.588503-1-ju.o@free.fr>
-References: <20250815152737.588503-1-ju.o@free.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id itbO5Ktco77A for <buildroot@buildroot.org>;
+ Fri, 15 Aug 2025 15:46:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 793DA60E60
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 793DA60E60
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 793DA60E60
+ for <buildroot@buildroot.org>; Fri, 15 Aug 2025 15:46:43 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2001:18c0:a22:bf00:5c2b:f296:f108:6612])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 2A9FE780395;
+ Fri, 15 Aug 2025 17:46:38 +0200 (CEST)
+To: buildroot@buildroot.org
+Cc: Julien Olivain <ju.o@free.fr>
+Date: Fri, 15 Aug 2025 17:46:31 +0200
+Message-ID: <20250815154631.945926-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.50.1
 MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddugeegfedvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepvdelteegveefkeffudduieeitdegjeefuddttefhjefgkeeikeevvedujeeiheeknecuffhomhgrihhnpegsuhhilhgurhhoohhtrdhorhhgpdhgihhtlhgrsgdrtghomhdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegtsgdukeemkeeigegumedvuddttdemrgdttdhfmeehlegsfeemgehfvdemieefuggsnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgdukeemkeeigegumedvuddttdemrgdttdhfmeehlegsfeemgehfvdemieefuggspdhhvghlohepfihinhgushhurhhfpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeegpdhrtghpthhtohepjhhurdhosehfrhgvvgdrfhhrpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhot
- hdrohhrghdprhgtphhtthhopehisggrihdrvghrkhhirghgrgdqvghlohhriigrsegrmhgurdgtohhmpdhrtghpthhtohepnhgvrghlrdhfrhgrghgvrhesrghmugdrtghomh
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1755271851;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=HliyEeyaWtLW8FihAjyWnRvxS36teSKrcGYlSRkcbNU=;
- b=lerD8O+fXItSZJlZ1i1FDWeril8hxWeku+y/b5WnGV9xJUTI3kRjft0GHb5hwmx1++7TCZ
- SXAHmiIfeXBXY1YI8M22FatG00SWTeZMhcA1B0EK4UpJ4QV0obuNBNg2JausExRrQncjW6
- CctiwTs1AU5/scp6LuNPRoAsv4uJkgcChPl0r9zYrnb74mXqJghw4rDdqu7PxnW7Bbhrxu
- aVSSV++/zD/s0U0sUkZFrR1+hq4dMkRwvXzxoQw4EUR4NUpI7YrD146PIR0fOIkb+kwxxY
- EpIZ8q3Ukyklvh78AMaWdz8BR1Mkqc5NFtGJ0rbyAm386SHZnJ5P8UZrToy6ig==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1755272800;
+ bh=NCa5zEods8T4HKil6gdYd7bTethh7/20GJ/ei1pDLdY=;
+ h=From:To:Cc:Subject:Date:From;
+ b=mjpva87bwt5KCmAmbuuJmgKuVqt/kedTG4Us/hwzR7RuVYT6ZxChrOOXWvYQADD47
+ +kxYatTkU1BAMI9qTRNFHAHs0E9WrXdlClGsRxYv82GjQWVk8nsgvwsfkczbWM/P5D
+ N5h+nCV0TQoFJCbdONyCjOBlEjY6g8jcWYoSxh7SzQ7kJMmKL2KYurKYLuWldmgpH/
+ XRnLEolY5CIGgJVt4uM/PZMebufbtHlhmRJ6Vvcm9P2OLlzgZ3JkLOBg14B0zHb9Yt
+ KI25Pallrlf4V+PvBuFr9z1izgfWaoKv5DWjeD9Wyp6b0PkloKivgItoHMJ1ZoWAwd
+ VzKpxWA8nzgGQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=lerD8O+f
-Subject: Re: [Buildroot] [PATCH 1/1] package/gcc-bare-metal: bump to version
- 15.2.0 to fix build
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=mjpva87b
+Subject: [Buildroot] [PATCH 1/1] support/testing: test_wine: fix test after
+ bootlin toolchains update
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,57 +77,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 15 Aug 2025 17:27:37 +0200
-Julien Olivain <ju.o@free.fr> wrote:
+Since Buildroot commit [1] "update to Bootlin toolchains 2025.08-1",
+the tests.package.test_wine fails to build its Kernel 6.6.27 with
+gcc 15.1.0.
 
-> Since Buildroot commit [1] "package/gcc: bump 15.x series to 15.2.0",
-> gcc-bare-metal fails to download its sources. For example using the
-> commands:
-> 
-> 	make zynqmp_kria_kv260_defconfig
-> 	make source
-> 
-> fails with error:
-> 
-> 	ERROR: No hash found for gcc-15.1.0.tar.xz
-> 
-> This is because the gcc-bare-metal package reuses the hash file and
-> the 15.x package patch directory from the gcc package (which was
-> bumped to 15.2.0), but still defines its _VERSION to 15.1.0.
-> 
-> This commit fixes this issue by bumping gcc-bare-metal to 15.2.0.
-> 
-> Fixes:
-> https://autobuild.buildroot.org/results/eda879fb8e1ccd696f01927087713b88a4b1a2c5
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/11026775160
-> 
-> [1] https://gitlab.com/buildroot.org/buildroot/-/commit/b1dd235ad0dd91e1919a167a17cc9cd20a3695b2
-> 
-> Cc: Ibai Erkiaga <ibai.erkiaga-elorza@amd.com>
-> Cc: Neal Frager <neal.frager@amd.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
+This commit fixes the issue by updating the test Kernel version to
+the latest 6.6.y version (6.6.102 at the time of this commit) which
+includes the fix for gcc-15.
 
-Dammit, I always forget about gcc-bare-metal. Maybe we need to add a
-comment in package/gcc/Config.in.host saying "if you change since, also
-change gcc-bare-metal".
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/10984686766
 
-Otherwise:
+[1] https://gitlab.com/buildroot.org/buildroot/-/commit/947dbc92a20c5acea7882166cae7893e6ea661e1
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ support/testing/tests/package/test_wine.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
+diff --git a/support/testing/tests/package/test_wine.py b/support/testing/tests/package/test_wine.py
+index 4e5b4a8b11..8c7b80f522 100644
+--- a/support/testing/tests/package/test_wine.py
++++ b/support/testing/tests/package/test_wine.py
+@@ -15,7 +15,7 @@ class TestWine(infra.basetest.BRTest):
+         BR2_TOOLCHAIN_EXTERNAL=y
+         BR2_LINUX_KERNEL=y
+         BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.27"
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.102"
+         BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+         BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux.config"
+         BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.50.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
