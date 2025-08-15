@@ -1,103 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31520CA0ED1
-	for <buildroot@archiver.kernel.org>; Fri, 15 Aug 2025 19:50:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 371EBCA0EE4
+	for <buildroot@archiver.kernel.org>; Fri, 15 Aug 2025 20:36:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E2E3641360;
-	Fri, 15 Aug 2025 19:50:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7C5E18232F;
+	Fri, 15 Aug 2025 20:35:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id X5O05EE79gSZ; Fri, 15 Aug 2025 19:50:07 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Mcn19t5h9XNM; Fri, 15 Aug 2025 20:35:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8BD444136A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD60082240
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8BD444136A;
-	Fri, 15 Aug 2025 19:50:07 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id AB59D223
- for <buildroot@buildroot.org>; Fri, 15 Aug 2025 19:50:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DD60082240;
+	Fri, 15 Aug 2025 20:35:56 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id B8619223
+ for <buildroot@buildroot.org>; Fri, 15 Aug 2025 20:35:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 91FA34137F
- for <buildroot@buildroot.org>; Fri, 15 Aug 2025 19:50:05 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id AAB9B409C8
+ for <buildroot@buildroot.org>; Fri, 15 Aug 2025 20:35:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D3UBTgJ5SW9L for <buildroot@buildroot.org>;
- Fri, 15 Aug 2025 19:50:04 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::433; helo=mail-pf1-x433.google.com;
- envelope-from=lancethepants@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 643DE41374
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 643DE41374
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com
- [IPv6:2607:f8b0:4864:20::433])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 643DE41374
- for <buildroot@buildroot.org>; Fri, 15 Aug 2025 19:50:04 +0000 (UTC)
-Received: by mail-pf1-x433.google.com with SMTP id
- d2e1a72fcca58-76e34c4ce54so1734811b3a.0
- for <buildroot@buildroot.org>; Fri, 15 Aug 2025 12:50:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1755287403; x=1755892203;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=dWLZSN+DGYfrNtVSKTJDf7yF0SgKkUuqiaIcvkIsTAM=;
- b=eeQ4PO8JNiqqBdEa0tIk/yecSv8ZpsBlGxqRvtnHH0thnUbGXw5gcj6l11exRiPo6C
- uwgQsyuVqUKaLygEdCRJRuU5jnunWYqHseS89SdUADase7cu3U4xijzOHjq1JwHZB8tJ
- QcaZwKa/nCPCnqeHCNY/Rgcl03E82lYs5JlRpWbWcjbC7mzgy1P3ZcCNROhod9ZPQGsJ
- 8DT2Z52aupZCLs32RsULJTBV28FGy8SH+yXG5rMQfZg0h5QhVEHCOMxKvTEqgSlfEish
- KUMOs6WW3tvAf9NX2HhxBCn1HsnLO9aGHDuHo1ol/pCcEuP14bi0AeLCzkkRtzCQv052
- ts0Q==
-X-Gm-Message-State: AOJu0Ywpp7mV/Vp1J4h+D7wY8c5rGmhd1y+rb0kq8RxeanaGNpyR1h06
- 5UqbPwHm+criFfUVGkAbH9Vue7sUHnmc+kJW9rH60vQbNzxnSLDcKBkDO5cYNQ==
-X-Gm-Gg: ASbGncv9i+cssevYFzVXUMhUDlrBazgGnspxeRwTu6Nk9egJA+JG5GSP43SiSUAk2HS
- pii2WTWeHFqFgGdtb3oZgZLUfjsLvrc+Mm30iFr/ay73QGxnBzG/diYUnc1r/w0N9srj4oaI/my
- TzmmjjQiY8NYmtP25DezesckYdBL/RR2+GiQpTkV8P0dULOTR2WfVFZgWY6N6x/XUV/n+/mlMLG
- 9m7/Tr15dQEmPqXMSAAqnqpDgx/uhsdD2yRJdo5yoVeCWR5R2d8NQceWfsTxu7/b1tHu+h9+hhP
- DzLNoHZ8Y2dlNEtqB0KupekFjUK7JDqXqL7HME7trkNcM2EvGiM+lHhcVJDceuqeV2DwhTaRFXk
- 6a6Q=
-X-Google-Smtp-Source: AGHT+IH12Klx0i3mXUzXy/6Uu22rUFEyIxTZWHiP+ueAgzW6ZJ8o8Qmk09xXNw8QmN6IXqizL3jOOA==
-X-Received: by 2002:a05:6a20:2451:b0:222:ca3f:199 with SMTP id
- adf61e73a8af0-240d297f5c3mr5293397637.18.1755287403305; 
- Fri, 15 Aug 2025 12:50:03 -0700 (PDT)
-Received: from ProgramPC.bm.local ([76.8.199.226])
- by smtp.gmail.com with ESMTPSA id
- d2e1a72fcca58-76e4558c2e6sm1691674b3a.97.2025.08.15.12.50.02
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 15 Aug 2025 12:50:02 -0700 (PDT)
-From: Lance Fredrickson <lancethepants@gmail.com>
-X-Google-Original-From: Lance Fredrickson
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id W3lWyKvBx7gS for <buildroot@buildroot.org>;
+ Fri, 15 Aug 2025 20:35:53 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.143;
+ helo=smtpcmd12143.aruba.it;
+ envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1824240979
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1824240979
+Received: from smtpcmd12143.aruba.it (smtpcmd12143.aruba.it [62.149.156.143])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1824240979
+ for <buildroot@buildroot.org>; Fri, 15 Aug 2025 20:35:51 +0000 (UTC)
+Received: from localhost.localdomain ([95.168.120.45])
+ by Aruba SMTP with ESMTPSA
+ id n19QuK2sf8eo9n19RuAq3r; Fri, 15 Aug 2025 22:35:49 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Cc: Lance Fredrickson <lancethepants@gmail.com>,
- Karoly Kasza <kaszak@gmail.com>
-Date: Fri, 15 Aug 2025 13:49:41 -0600
-Message-Id: <20250815194948.2191266-1-lancethepants@gmail.com>
-X-Mailer: git-send-email 2.39.5
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Maxime Chevallier <maxime.chevallier@bootlin.com>
+Date: Fri, 15 Aug 2025 22:35:45 +0200
+Message-ID: <20250815203545.10042-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250815203247.14ecd5f5@windsurf>
+References: <20250815203247.14ecd5f5@windsurf>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1755287403; x=1755892203; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=dWLZSN+DGYfrNtVSKTJDf7yF0SgKkUuqiaIcvkIsTAM=;
- b=ao+OgNQKNSgIZf5y22/kPJ6wWr2Xs5Oqrl4Fi7RuNcSMerZBG7UbVe1hP84LxD1HXu
- 7Bo5JfYbzql1qDQEF8tHXV2UT9ZcSB3n6tOtHQ0DQZ+KJqJtUfOTJlkQ+AzteIk8OL4r
- MQpcWuHDS8QcVpxYfwvHaIu54KIkIevY3fAErqTHm/SFmqFxgibVlSSGw5RdkhBiFaB2
- ArKkV17y1hbqmPjgqvMiVgcdknMGudxB3OemKJYNZnjVvcF82pP0RnWO3iDNnAWltVRg
- BYRhHeSqSrR9/prc4wiCXj+aCl+ro44+pInxQOMuuuDaMDhjQRF+yKBt9N3wO1wsHiGD
- TJkQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-CMAE-Envelope: MS4xfIiiJyjAsAzgIcaQf9Nbjlx1NxeGj/9bq9NFBWdIr1q8tsL0HqiZZrUh4roxbJq7cLfLad04hXnKQM148IiZKUCleR+Dx2QbCRmsCO3paIl/mu43VnA/
+ Vwazu5ikjJaVY6oq+zuKtfDnc48Cp3Lf4zrZVloKTdGBnKiDrqatolNbblJDPzHhvYtLOf6mQEwpOHiT16ZUbJ0QmcAKD4mIrH6rzq/vmEX+8aKyiFnsaMbv
+ 6aMrVts44BPQ8NMddp6SBr5Pa7bYiv0Id0UU2HK+rNVEerKgAYCvDoV/w7j7PYAyKZ/fROqonzZdGsFcFVBKNvfqO/Bhh4/uKau0/MQC24M=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1755290149; bh=y5NC/xWwkCM/j26eKNw0RhytQB/QR1S9SUomDyPEkno=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=jMbVlKOShR9sKxTLNs6x6MKFB7LOjaTT5MyF5CWJDzI/CkRZlrNMQiOLv28okZP2k
+ lZocnLXsdSPyVk6TjUjIvM/9oKPJx2IHv4LeZlXycpGxHi+WwBKqmq13YptapAZZYD
+ uNMPFMzE1CGckcYhk/YTCnTfZ9pK0c0sIoeSBp853Fz8+PHiuoDu/JympRv+gYQk6y
+ EKkr78lVxJ47+N7GBoOKTZTm24Er2pCI9rBdhYKyvArKPyAW1FVUurRjFkwTQHQZ+A
+ jZVJTq6b+Zuv/PW3iNS3PQm3O67GIe2iwnyLg2ll/DBzMSt06lvzNm0AAvWgyZ9mfy
+ /T7lh4dCMfnpw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=ao+OgNQK
-Subject: [Buildroot] [PATCH] package/irqbalance: fix build with GCC 15
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=jMbVlKOS
+Subject: [Buildroot] [PATCH v3] package/libtracefs: fix build failure due to
+ missing NPTL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,440 +88,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Lance Fredrickson <lancethepants@gmail.com>
+With commit:
+https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/commit/?id=31acfe1747b273e147f864b5a62a4e39197ca1a2
+package libtracefs utest started to use pthread_barrier_() functions and
+this lead to build failure when we build without NPTL. Since utest is
+not needed on the target we can avoid to build it, so let's disable it.
 
-Bumps package to version 1.9.4
-Adds two patches already in upstream to fix compilation with GCC 15
+Fixes: 117ece4835 ("package/libtracefs: bump to version 1.8.0")
+Fixes:
+https://autobuild.buildroot.net/results/69b/69b75908bebdf9382a4cd9b138fcaf1e34daba09//
 
-Signed-off-by: Lance Fredrickson <lancethepants@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- .../irqbalance/0001-fix-32-bit-formats.patch  |  66 ++++
- ...02-add-void-to-fix-strict-prototypes.patch | 317 ++++++++++++++++++
- package/irqbalance/irqbalance.hash            |   2 +-
- package/irqbalance/irqbalance.mk              |   2 +-
- 4 files changed, 385 insertions(+), 2 deletions(-)
- create mode 100644 package/irqbalance/0001-fix-32-bit-formats.patch
- create mode 100644 package/irqbalance/0002-add-void-to-fix-strict-prototypes.patch
+V1->V2:
+* improve commit log to point when problem began as requested by Thomas Petazzoni
+V2->V3:
+* improve commit log again by pointing which Buildroot commit introduced
+  the build failure as pointed by Thomas Petazzoni
+---
+ package/libtracefs/libtracefs.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/irqbalance/0001-fix-32-bit-formats.patch b/package/irqbalance/0001-fix-32-bit-formats.patch
-new file mode 100644
-index 0000000000..712c084bf0
---- /dev/null
-+++ b/package/irqbalance/0001-fix-32-bit-formats.patch
-@@ -0,0 +1,66 @@
-+From 1277ea524354fa628b4189e699af8d62f8be7021 Mon Sep 17 00:00:00 2001
-+From: Rosen Penev <rosenp@gmail.com>
-+Date: Sun, 31 Mar 2024 14:18:24 -0700
-+Subject: [PATCH] fix 32-bit formats
-+
-+exposed with -Wformat when building on 32-bit systems
-+
-+Signed-off-by: Rosen Penev <rosenp@gmail.com>
-+---
-+ placement.c | 2 +-
-+ ui/ui.c     | 8 ++++----
-+ 2 files changed, 5 insertions(+), 5 deletions(-)
-+
-+diff --git a/placement.c b/placement.c
-+index 9fde8cb..dea7c23 100644
-+--- a/placement.c
-++++ b/placement.c
-+@@ -172,7 +172,7 @@ static void validate_irq(struct irq_info *info, void *data)
-+ {
-+ 	if (info->assigned_obj != data)
-+ 		log(TO_CONSOLE, LOG_INFO, "object validation error: irq %d is wrong, points to %p, should be %p\n",
-+-			info->irq, info->assigned_obj, data);
-++			info->irq, (void*)info->assigned_obj, data);
-+ }
-+ 
-+ static void validate_object(struct topo_obj *d, void *data __attribute__((unused)))
-+diff --git a/ui/ui.c b/ui/ui.c
-+index bee6868..8354fc6 100644
-+--- a/ui/ui.c
-++++ b/ui/ui.c
-+@@ -101,7 +101,7 @@ int get_valid_sleep_input(int column_offest)
-+ 		if(input == NULL) {
-+ 			curs_set(0);
-+ 			attrset(COLOR_PAIR(1));
-+-			mvprintw(2, column_offest, "%lu			", new_sleep);
-++			mvprintw(2, column_offest, "%" PRIu64 "			", new_sleep);
-+ 			move(LINES, COLS);
-+ 			break;
-+ 		}
-+@@ -125,7 +125,7 @@ int get_valid_sleep_input(int column_offest)
-+ 	}
-+ 
-+ 	attrset(COLOR_PAIR(1));
-+-	mvprintw(2, column_offest, "%lu				", new_sleep);
-++	mvprintw(2, column_offest, "%" PRIu64 "				", new_sleep);
-+ 
-+ 	return new_sleep;
-+ }
-+@@ -296,7 +296,7 @@ void handle_cpu_banning()
-+ 		case '\r': {
-+ 			attrset(COLOR_PAIR(3));
-+ 			int banned = toggle_cpu(tmp, position + offset - 6);
-+-			mvprintw(position, 3, "CPU %d     ", position + offset - 6);
-++			mvprintw(position, 3, "CPU %zu     ", position + offset - 6);
-+ 			if(banned) {
-+ 				mvprintw(position, 19, "YES");
-+ 			} else {
-+@@ -770,7 +770,7 @@ void display_tree_node_irqs(irq_t *irq, void *data)
-+ 	if (max_offset >= offset && max_offset - offset < LINES - 5) {
-+ 		snprintf(indent + strlen(indent), 32 - strlen(indent), "%s", (char *)data);
-+ 		attrset(COLOR_PAIR(3));
-+-		printw("%sIRQ %u, IRQs since last rebalance %lu\n",
-++		printw("%sIRQ %u, IRQs since last rebalance %" PRIu64 "\n",
-+ 			indent, irq->vector, irq->diff);
-+ 	}
-+ 	max_offset++;
-diff --git a/package/irqbalance/0002-add-void-to-fix-strict-prototypes.patch b/package/irqbalance/0002-add-void-to-fix-strict-prototypes.patch
-new file mode 100644
-index 0000000000..2693945530
---- /dev/null
-+++ b/package/irqbalance/0002-add-void-to-fix-strict-prototypes.patch
-@@ -0,0 +1,317 @@
-+From b6a831d692ed7e12db7748db49b3b39516d151d2 Mon Sep 17 00:00:00 2001
-+From: Rosen Penev <rosenp@gmail.com>
-+Date: Sun, 31 Mar 2024 14:31:22 -0700
-+Subject: [PATCH] add void to fix strict-prototypes
-+
-+This becomes a hard error with C23
-+
-+Signed-off-by: Rosen Penev <rosenp@gmail.com>
-+---
-+ irqbalance.c       |  2 +-
-+ irqbalance.h       |  2 +-
-+ procinterrupts.c   |  2 +-
-+ ui/helpers.c       |  2 +-
-+ ui/helpers.h       |  2 +-
-+ ui/irqbalance-ui.c |  6 +++---
-+ ui/irqbalance-ui.h |  5 ++---
-+ ui/ui.c            | 26 +++++++++++++-------------
-+ ui/ui.h            | 28 ++++++++++++++--------------
-+ 9 files changed, 37 insertions(+), 38 deletions(-)
-+
-+diff --git a/irqbalance.c b/irqbalance.c
-+index 12302d7..373161f 100644
-+--- a/irqbalance.c
-++++ b/irqbalance.c
-+@@ -544,7 +544,7 @@ gboolean sock_handle(gint fd, GIOCondition condition, gpointer user_data __attri
-+ 	return TRUE;
-+ }
-+ 
-+-int init_socket()
-++int init_socket(void)
-+ {
-+ 	struct sockaddr_un addr;
-+ 	memset(&addr, 0, sizeof(struct sockaddr_un));
-+diff --git a/irqbalance.h b/irqbalance.h
-+index 7b47cd1..09daa3d 100644
-+--- a/irqbalance.h
-++++ b/irqbalance.h
-+@@ -36,7 +36,7 @@ extern char *classes[];
-+ extern void parse_cpu_tree(void);
-+ extern void clear_work_stats(void);
-+ extern void parse_proc_interrupts(void);
-+-extern GList* collect_full_irq_list();
-++extern GList* collect_full_irq_list(void);
-+ extern void parse_proc_stat(void);
-+ extern void set_interrupt_count(int number, uint64_t count);
-+ extern void set_msi_interrupt_numa(int number);
-+diff --git a/procinterrupts.c b/procinterrupts.c
-+index dfa95c6..e7ba653 100644
-+--- a/procinterrupts.c
-++++ b/procinterrupts.c
-+@@ -206,7 +206,7 @@ void init_irq_class_and_type(char *savedline, struct irq_info *info, int irq)
-+ 	info->name = strdup(irq_fullname);
-+ }
-+ 
-+-GList* collect_full_irq_list()
-++GList* collect_full_irq_list(void)
-+ {
-+ 	GList *tmp_list = NULL;
-+ 	FILE *file;
-+diff --git a/ui/helpers.c b/ui/helpers.c
-+index 0e9f76c..247f826 100644
-+--- a/ui/helpers.c
-++++ b/ui/helpers.c
-+@@ -165,7 +165,7 @@ void dump_node(cpu_node_t *node, void *data __attribute__((unused)))
-+ 	}
-+ }
-+ 
-+-void dump_tree()
-++void dump_tree(void)
-+ {
-+ 	for_each_node(tree, dump_node, NULL);
-+ }
-+diff --git a/ui/helpers.h b/ui/helpers.h
-+index b8d9fcc..922914b 100644
-+--- a/ui/helpers.h
-++++ b/ui/helpers.h
-+@@ -25,7 +25,7 @@ void for_each_node(GList *list, void (*fp)(cpu_node_t *node, void *data), void *
-+ 
-+ void dump_irq(irq_t *irq, void *data __attribute__((unused)));
-+ void dump_node(cpu_node_t *node, void *data __attribute__((unused)));
-+-void dump_tree();
-++void dump_tree(void);
-+ 
-+ 
-+ #endif /* HELPERS_H */
-+diff --git a/ui/irqbalance-ui.c b/ui/irqbalance-ui.c
-+index c26eff6..f5122ee 100644
-+--- a/ui/irqbalance-ui.c
-++++ b/ui/irqbalance-ui.c
-+@@ -28,7 +28,7 @@ setup_t setup;
-+ GMainLoop *main_loop;
-+ static int default_bufsz = 8192;
-+ 
-+-struct msghdr * create_credentials_msg()
-++struct msghdr * create_credentials_msg(void)
-+ {
-+ 	struct ucred *credentials = malloc(sizeof(struct ucred));
-+ 	credentials->pid = getpid();
-+@@ -51,7 +51,7 @@ struct msghdr * create_credentials_msg()
-+ 	return msg;
-+ }
-+ 
-+-int init_connection()
-++int init_connection(void)
-+ {
-+ 	struct sockaddr_un addr;
-+ 	memset(&addr, 0, sizeof(struct sockaddr_un));
-+@@ -378,7 +378,7 @@ gboolean rescan_tree(gpointer data __attribute__((unused)))
-+ 	free(irqbalance_data);
-+ 	return TRUE;
-+ }
-+-void scroll_window() {
-++void scroll_window(void) {
-+ 	switch(state) {
-+ 	case STATE_TREE:
-+ 		display_tree();
-+diff --git a/ui/irqbalance-ui.h b/ui/irqbalance-ui.h
-+index dc24083..178be4b 100644
-+--- a/ui/irqbalance-ui.h
-++++ b/ui/irqbalance-ui.h
-+@@ -72,8 +72,8 @@ typedef struct setup {
-+ 
-+ /* Function prototypes */
-+ 
-+-struct msghdr * create_credentials_msg();
-+-int init_connection();
-++struct msghdr * create_credentials_msg(void);
-++int init_connection(void);
-+ void send_settings(char *data);
-+ char * get_data(char *string);
-+ void parse_setup(char *setup_data);
-+@@ -83,7 +83,6 @@ void assign_cpu_lists(cpu_node_t *node, void *data);
-+ void assign_cpu_mask(cpu_node_t *node, void *data);
-+ void parse_into_tree(char *data);
-+ gboolean rescan_tree(gpointer data);
-+-int main();
-+ 
-+ 
-+ #endif /* IRQBALANCE_UI_H */
-+diff --git a/ui/ui.c b/ui/ui.c
-+index 8354fc6..9fa990a 100644
-+--- a/ui/ui.c
-++++ b/ui/ui.c
-+@@ -21,7 +21,7 @@ char *IRQ_CLASS_TO_STR[] = {
-+ 			"10-Gigabit Ethernet",
-+ 			"Virt Event"};
-+ 
-+-void show_frame()
-++void show_frame(void)
-+ {
-+ 	int i;
-+ 	attrset(COLOR_PAIR(4));
-+@@ -37,7 +37,7 @@ void show_frame()
-+ 	}
-+ }
-+ 
-+-void show_footer()
-++void show_footer(void)
-+ {
-+ 	char footer[COLS];
-+ 	snprintf(footer, COLS - 1,
-+@@ -172,7 +172,7 @@ void print_cpu_line(cpu_ban_t *cpu, void *data __attribute__((unused)))
-+ 	max_offset++;
-+ }
-+ 
-+-void print_all_cpus()
-++void print_all_cpus(void)
-+ {
-+ 	max_offset = 0;
-+ 	if(all_cpus == NULL) {
-+@@ -193,7 +193,7 @@ void add_banned_cpu(int *banned_cpu, void *data)
-+ 	snprintf(data + strlen(data), 1024 - strlen(data), "%d, ", *banned_cpu);
-+ }
-+ 
-+-void display_banned_cpus()
-++void display_banned_cpus(void)
-+ {
-+ 	char banned_cpus[1024] = "Banned CPU numbers: \0";
-+ 	if(g_list_length(setup.banned_cpus) > 0) {
-+@@ -247,7 +247,7 @@ void get_cpu(cpu_node_t *node, void *data __attribute__((unused)))
-+ 	}
-+ }
-+ 
-+-void handle_cpu_banning()
-++void handle_cpu_banning(void)
-+ {
-+ 	GList *tmp = g_list_copy_deep(all_cpus, copy_cpu_ban, NULL);
-+ 	attrset(COLOR_PAIR(5));
-+@@ -504,7 +504,7 @@ void print_irq_line(irq_t *irq, void *data __attribute__((unused)))
-+ 	mvprintw(line, 120, "%s", irq_name[line]);
-+ }
-+ 
-+-void print_all_irqs()
-++void print_all_irqs(void)
-+ {
-+ 	max_offset = 0;
-+ 	attrset(COLOR_PAIR(0));
-+@@ -555,13 +555,13 @@ void copy_irqs_from_nodes(cpu_node_t *node, void *data __attribute__((unused)))
-+ 	}
-+ }
-+ 
-+-void get_all_irqs()
-++void get_all_irqs(void)
-+ {
-+ 	all_irqs = g_list_copy_deep(setup.banned_irqs, copy_irq, NULL);
-+ 	for_each_node(tree, copy_irqs_from_nodes, NULL);
-+ }
-+ 
-+-void handle_irq_banning()
-++void handle_irq_banning(void)
-+ {
-+ 	GList *tmp = g_list_copy_deep(all_irqs, copy_irq, NULL);
-+ 	attrset(COLOR_PAIR(5));
-+@@ -670,7 +670,7 @@ void handle_irq_banning()
-+ 	}
-+ }
-+ 
-+-void handle_sleep_setting()
-++void handle_sleep_setting(void)
-+ {
-+ 	char info[128] = "Current sleep interval between rebalancing: \0";
-+ 	uint8_t sleep_input_offset = strlen(info) + 3;
-+@@ -693,7 +693,7 @@ void handle_sleep_setting()
-+ 	refresh();
-+ }
-+ 
-+-void init()
-++void init(void)
-+ {
-+ 	signal(SIGINT, close_window);
-+ 	initscr();
-+@@ -732,7 +732,7 @@ void close_window(int sig __attribute__((unused)))
-+ 	exit(EXIT_SUCCESS);
-+ }
-+ 
-+-void settings()
-++void settings(void)
-+ {
-+ 	clear();
-+ 	char *setup_data = get_data(SETUP);
-+@@ -751,7 +751,7 @@ void settings()
-+ 	free(setup_data);
-+ }
-+ 
-+-void setup_irqs()
-++void setup_irqs(void)
-+ {
-+ 	clear();
-+ 	get_all_irqs();
-+@@ -830,7 +830,7 @@ void display_tree_node(cpu_node_t *node, void *data)
-+ 	}
-+ }
-+ 
-+-void display_tree()
-++void display_tree(void)
-+ {
-+ 	clear();
-+ 	char *setup_data = get_data(SETUP);
-+diff --git a/ui/ui.h b/ui/ui.h
-+index da5b4b9..f3485d4 100644
-+--- a/ui/ui.h
-++++ b/ui/ui.h
-+@@ -17,40 +17,40 @@ extern setup_t setup;
-+ extern int offset;
-+ extern int max_offset;
-+ 
-+-void show_frame();
-+-void show_footer();
-++void show_frame(void);
-++void show_footer(void);
-+ 
-+ char * check_control_in_sleep_input(int max_len, int column_offest, int line_offset);
-+ int get_valid_sleep_input(int column_offest);
-+ 
-+ void get_banned_cpu(int *cpu, void *data);
-+ void print_cpu_line(cpu_ban_t *cpu, void *data);
-+-void print_all_cpus();
-++void print_all_cpus(void);
-+ void add_banned_cpu(int *banned_cpu, void *data);
-+-void display_banned_cpus();
-++void display_banned_cpus(void);
-+ int toggle_cpu(GList *cpu_list, int cpu_number);
-+ void get_new_cpu_ban_values(cpu_ban_t *cpu, void *data);
-+-void get_cpu();
-+-void handle_sleep_setting();
-+-void handle_cpu_banning();
-++void get_cpu(cpu_node_t *node, void *data);
-++void handle_sleep_setting(void);
-++void handle_cpu_banning(void);
-+ 
-+ void copy_assigned_obj(int *number, void *data);
-+ void print_assigned_objects_string(irq_t *irq, int *line_offset);
-+ void print_irq_line(irq_t *irq, void *data);
-+-void print_all_irqs();
-++void print_all_irqs(void);
-+ int toggle_irq(GList *irq_list, int position);
-+ void get_new_irq_ban_values(irq_t *irq, void *data);
-+ void copy_irqs_from_nodes(cpu_node_t *node, void *data);
-+-void get_all_irqs();
-+-void handle_irq_banning();
-++void get_all_irqs(void);
-++void handle_irq_banning(void);
-+ 
-+-void init();
-++void init(void);
-+ void close_window(int sig);
-+-void settings();
-+-void setup_irqs();
-++void settings(void);
-++void setup_irqs(void);
-+ void display_tree_node_irqs(irq_t *irq, void *data);
-+ void display_tree_node(cpu_node_t *node, void *data);
-+-void display_tree();
-++void display_tree(void);
-+ 
-+ 
-+ #endif /* UI_H */
-diff --git a/package/irqbalance/irqbalance.hash b/package/irqbalance/irqbalance.hash
-index bf33e71e48..c9d1acade8 100644
---- a/package/irqbalance/irqbalance.hash
-+++ b/package/irqbalance/irqbalance.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  8d698799251ea8518f342f36be26f2f092df51189f6777db33116d40cf0dae6c  irqbalance-1.9.3.tar.gz
-+sha256  f37bb2e27c2e9ec609131d0ee3f770185d3845f79ee6ef11477ea0ffb600a561  irqbalance-1.9.4.tar.gz
- sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/irqbalance/irqbalance.mk b/package/irqbalance/irqbalance.mk
-index 5d1bd48002..173c7d8df0 100644
---- a/package/irqbalance/irqbalance.mk
-+++ b/package/irqbalance/irqbalance.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libtracefs/libtracefs.mk b/package/libtracefs/libtracefs.mk
+index d24763fa7d..6b8f838c2e 100644
+--- a/package/libtracefs/libtracefs.mk
++++ b/package/libtracefs/libtracefs.mk
+@@ -14,6 +14,7 @@ LIBTRACEFS_DEPENDENCIES = host-bison host-flex host-pkgconf libtraceevent
  
--IRQBALANCE_VERSION = 1.9.3
-+IRQBALANCE_VERSION = 1.9.4
- IRQBALANCE_SITE = $(call github,irqbalance,irqbalance,v$(IRQBALANCE_VERSION))
- IRQBALANCE_LICENSE = GPL-2.0
- IRQBALANCE_LICENSE_FILES = COPYING
+ LIBTRACEFS_CONF_OPTS = \
+ 	-Ddoc=false \
+-	-Dsamples=false
++	-Dsamples=false \
++	-Dutest=false
+ 
+ $(eval $(meson-package))
 -- 
-2.39.5
+2.43.0
 
 _______________________________________________
 buildroot mailing list
