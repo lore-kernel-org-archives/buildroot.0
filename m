@@ -4,75 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E66ACA0EE4
-	for <buildroot@archiver.kernel.org>; Fri, 15 Aug 2025 22:11:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5DDECA0EE4
+	for <buildroot@archiver.kernel.org>; Sat, 16 Aug 2025 00:11:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 413E782B5E;
-	Fri, 15 Aug 2025 22:11:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 635CE83759;
+	Sat, 16 Aug 2025 00:11:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kOQ0YUekJCbI; Fri, 15 Aug 2025 22:11:33 +0000 (UTC)
+ id kCiRhQhcnSZr; Sat, 16 Aug 2025 00:11:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 652B682A8F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 994518376B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 652B682A8F;
-	Fri, 15 Aug 2025 22:11:33 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id E31F8223
- for <buildroot@buildroot.org>; Fri, 15 Aug 2025 22:11:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 994518376B;
+	Sat, 16 Aug 2025 00:11:56 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 645E9959
+ for <buildroot@buildroot.org>; Sat, 16 Aug 2025 00:11:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C9AE061212
- for <buildroot@buildroot.org>; Fri, 15 Aug 2025 22:11:30 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4A07740C80
+ for <buildroot@buildroot.org>; Sat, 16 Aug 2025 00:11:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DG4EL8ync7Lc for <buildroot@buildroot.org>;
- Fri, 15 Aug 2025 22:11:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
- helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org CD7E561210
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD7E561210
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp3.osuosl.org (Postfix) with ESMTPS id CD7E561210
- for <buildroot@buildroot.org>; Fri, 15 Aug 2025 22:11:29 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPA id 3C175430D4;
- Fri, 15 Aug 2025 22:11:27 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aCTdaL3pQ2Up for <buildroot@buildroot.org>;
+ Sat, 16 Aug 2025 00:11:53 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 65EE140C82
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 65EE140C82
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 65EE140C82
+ for <buildroot@buildroot.org>; Sat, 16 Aug 2025 00:11:52 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2001:18c0:a22:bf00:5c2b:f296:f108:6612])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id F236578035E;
+ Sat, 16 Aug 2025 02:11:48 +0200 (CEST)
 To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 16 Aug 2025 00:11:24 +0200
-Message-ID: <20250815221125.1348145-2-thomas.petazzoni@bootlin.com>
+Cc: Julien Olivain <ju.o@free.fr>
+Date: Sat, 16 Aug 2025 02:11:17 +0200
+Message-ID: <20250816001117.246947-1-ju.o@free.fr>
 X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250815221125.1348145-1-thomas.petazzoni@bootlin.com>
-References: <20250815221125.1348145-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: 0
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddugeehuddvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecunecujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepvfhhohhmrghsucfrvghtrgiiiihonhhiuceothhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeehtedtteduffdtueegfeeigedtgfeugfeuhefhgeeuveejffefveffkeetueeghfenucffohhmrghinhepsghuihhlughrohhothdrohhrghenucfkphepvdgrtddumegtsgdukeemkeeigegumedvuddttdemrgdttdhfmeehlegsfeemgehfvdemieefuggsnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgdukeemkeeigegumedvuddttdemrgdttdhfmeehlegsfeemgehfvdemieefuggspdhhvghlohepfihinhgushhurhhfrdhhohhmvgdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvddprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhm
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1755295887;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=RiwiN8EUhb+SIgxx5e6D+ZqTbxSzP6z1dFWE66O2UPA=;
- b=iuTcPP+ASpTa48bkMe/NEDyMFEZJnduRJETtWLUD+2DkYLL6r8gMzNBRqGwV5DXdSxU1xT
- dB6H0xEmNCTwwtLZwRisQdgjLhRr/rEn5h6wnPR6Psoo7xmCgV4vnCFjwHA4d0LyDOqrWp
- wLc+h6ntIOJVdC0opoOlsVIbJku1fZgvBaSJlYO4g9PLQ9vV1Rj+vEul93GQDNf56CwEh5
- bZkQ0A3e2pHW0BcZU9zSkIcvtRYANiDk2k6jmqmS9CYfpvkOo4189PQbbfdIXc2i70vAay
- tPwNtbR5QLi14AGGfKaWg0WL1unxSATX/OzYFqk7z2AZPjNtD9DHyQyKrgj2IQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1755303110;
+ bh=NoZAjIPNy1L2SFa3QwbvWv8cQDgjDubYZqI2U5mj06w=;
+ h=From:To:Cc:Subject:Date:From;
+ b=oBxIfkJeiBsvggA00vXY3ADzZ6+xeclPkGMBM4NQT7II7YL3JKhL/z2AK83hph5CI
+ vD8m0NHyeJRmdQyP5ljjo78hDRzWEfUad26Et8ztZoSiICScsHybZJjPdpbWswgBNS
+ T1dH07RKc6q3+uWUXWesjIaoY3BUHJFMbDJct+mKhXaP9Azg/w3VfXLyQzzTLZuMwj
+ v3ZNJZqSZgP1I3RzfsDcm1Dq3NtvT4R5agfrmSZroBpLkrWKXl6utR+HZxC5lgXkOE
+ tgE/B/FPi10tCQROX52ZRYtyqkl/ipGDmhETKJTVRnRK0Qz2oSTr/IIWY8SKhKup5B
+ /RKEBC4D7HkLQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=iuTcPP+A
-Subject: [Buildroot] [PATCH 2/2] package/weston: jpeg support needs
- jpeg-turbo
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=oBxIfkJe
+Subject: [Buildroot] [PATCH 1/1] support/testing: test_dpdk: fix test after
+ bootlin toolchains update
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,51 +77,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Since upstream commit 312efb2acba7dba80b6652ccf98339dcbbd47695, the
-JPEG loading code is using jpeg_read_icc_profile(), which is only
-available when the jpeg-turbo implementation is used, not the classic
-libjpeg. When classic jpeg is used, the build fails with:
+Since Buildroot commit [1] "update to Bootlin toolchains 2025.08-1",
+the tests.package.test_dpdk fails to build its Kernel 6.6.58 with
+gcc 15.1.0.
 
-../shared/image-loader.c:163:14: error: implicit declaration of function 'jpeg_read_icc_profile' [-Wimplicit-function-declaration]
-  163 |         if (!jpeg_read_icc_profile(cinfo, &profdata, &proflen)) {
-
-This commit first appeared in development version 13.0.91 and stable
-version 14.0.0, which means the problem exists in Buildroot since
-commit 430b80cfc11c59949da8e0a4f11a7088d0b4bd79, when weston was
-bumped from 13.0.3 to 14.0.0.
-
-So let's enable the JPEG logic only when jpeg-turbo is used.
+This commit fixes the issue by updating the test Kernel version to
+the latest 6.6.y version (6.6.102 at the time of this commit) which
+includes the fix for gcc-15.
 
 Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/10984686010
 
-  https://autobuild.buildroot.org/results/353e39902616bdbce40ac667e98cbaf51079f69e/
+[1] https://gitlab.com/buildroot.org/buildroot/-/commit/947dbc92a20c5acea7882166cae7893e6ea661e1
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/weston/weston.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ support/testing/tests/package/test_dpdk.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index 7d43132073..1d55a1fcba 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -36,7 +36,8 @@ WESTON_SIMPLE_CLIENTS += dmabuf-v4l
- endif
- endif # BR2_PACKAGE_WESTON_SIMPLE_CLIENTS
- 
--ifeq ($(BR2_PACKAGE_JPEG),y)
-+# weston uses jpeg_read_icc_profile(), only provided by jpeg-turbo
-+ifeq ($(BR2_PACKAGE_JPEG_TURBO),y)
- WESTON_CONF_OPTS += -Dimage-jpeg=true
- WESTON_DEPENDENCIES += jpeg
- else
+diff --git a/support/testing/tests/package/test_dpdk.py b/support/testing/tests/package/test_dpdk.py
+index de2828298a..6f55cddee8 100644
+--- a/support/testing/tests/package/test_dpdk.py
++++ b/support/testing/tests/package/test_dpdk.py
+@@ -11,7 +11,7 @@ class TestDPDK(infra.basetest.BRTest):
+         BR2_TOOLCHAIN_EXTERNAL=y
+         BR2_LINUX_KERNEL=y
+         BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.58"
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.102"
+         BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+         BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux.config"
+         BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
 -- 
 2.50.1
 
