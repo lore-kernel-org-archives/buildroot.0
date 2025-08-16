@@ -4,78 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D34DCA0EE6
-	for <buildroot@archiver.kernel.org>; Sat, 16 Aug 2025 21:07:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78003CA0EE6
+	for <buildroot@archiver.kernel.org>; Sat, 16 Aug 2025 21:34:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EA45C61556;
-	Sat, 16 Aug 2025 21:07:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 24813615A1;
+	Sat, 16 Aug 2025 21:34:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZaMOgvorJbva; Sat, 16 Aug 2025 21:07:06 +0000 (UTC)
+ id h9tG-aWXhIho; Sat, 16 Aug 2025 21:34:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 350E86155C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 480E9615AD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 350E86155C;
-	Sat, 16 Aug 2025 21:07:06 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id AE3B8197
- for <buildroot@buildroot.org>; Sat, 16 Aug 2025 21:07:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 480E9615AD;
+	Sat, 16 Aug 2025 21:34:53 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id D065B197
+ for <buildroot@buildroot.org>; Sat, 16 Aug 2025 21:34:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 943AE83F84
- for <buildroot@buildroot.org>; Sat, 16 Aug 2025 21:07:05 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C28BA615A1
+ for <buildroot@buildroot.org>; Sat, 16 Aug 2025 21:34:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id usNcYtrrE88l for <buildroot@buildroot.org>;
- Sat, 16 Aug 2025 21:07:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
- helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9183083F7E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9183083F7E
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9183083F7E
- for <buildroot@buildroot.org>; Sat, 16 Aug 2025 21:07:04 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 22B4644367;
- Sat, 16 Aug 2025 21:07:00 +0000 (UTC)
-Date: Sat, 16 Aug 2025 23:06:59 +0200
-To: "Yann E. MORIN via buildroot" <buildroot@buildroot.org>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>, Adam Duskett
- <adam.duskett@amarulasolutions.com>, Florian Larysch <fl@n621.de>, Julien
- Olivain <ju.o@free.fr>
-Message-ID: <20250816230659.2134186f@windsurf>
-In-Reply-To: <20250811153257.3746260-1-yann.morin.1998@free.fr>
-References: <20250811153257.3746260-1-yann.morin.1998@free.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 30R624gZwd7A for <buildroot@buildroot.org>;
+ Sat, 16 Aug 2025 21:34:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=136.243.2.102;
+ helo=nyx.n621.de; envelope-from=fl@n621.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B8AB0615A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B8AB0615A7
+Received: from nyx.n621.de (v4gw.hekate.n621.de [136.243.2.102])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B8AB0615A7
+ for <buildroot@buildroot.org>; Sat, 16 Aug 2025 21:34:50 +0000 (UTC)
+Received: from argo.fritz.box (localhost [127.0.0.1])
+ by nyx.n621.de (Postfix) with ESMTP id 56B0EE00108;
+ Sat, 16 Aug 2025 23:34:47 +0200 (CEST)
+From: Florian Larysch <fl@n621.de>
+To: buildroot@buildroot.org
+Cc: Justin Maggard <jmaggard@netgear.com>,
+	Florian Larysch <fl@n621.de>
+Date: Sat, 16 Aug 2025 23:34:45 +0200
+Message-ID: <20250816213446.22359-1-fl@n621.de>
+X-Mailer: git-send-email 2.50.1
 MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddugeejkeekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepledtgedvjeehgeetgfeufffglefhkedvfeduveeiieelteeliedtfefguefggffhnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtudemtggsudekmeekieegugemvddutddtmegrtddtfhemheelsgefmeegfhdvmeeifegusgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudekmeekieegugemvddutddtmegrtddtfhemheelsgefmeegfhdvmeeifegusgdphhgvlhhopeifihhnughsuhhrfhdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohephedprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtohephigrnhhnrdhmohhrihhnrdduleelkeesfhhrvggvrdhfrhdprhgtphhtthhopegru
- ggrmhdrughushhkvghtthesrghmrghruhhlrghsohhluhhtihhonhhsrdgtohhmpdhrtghpthhtohepfhhlsehniedvuddruggvpdhrtghpthhtohepjhhurdhosehfrhgvvgdrfhhr
-X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1755378421;
+ d=n621.de; s=dkim; t=1755380087;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=a+IW8QbgaFwxEBHblIW0VnyEOu7X0AsuVOF6zghrSRE=;
- b=C1LhxCjDIFkE4NXso8jTTiKuw96xiahjv15w6tLdEYgCDv+NqovPme2/bnWAe2LzbDpLYC
- 4Tcc+nhz7KRzEh9Putnv8+IcM8Q5dj6p7VrK/PP5RVKf2ozczWnNyeWAxZTdfEVeiR/R1V
- jrNSoJWfOqtS5sl/gOlIE9P+xMFFOVd8Hy0oxvqW3BDiVLSAJbWWB2fymlW6+x8cuoJAlb
- d5naiCPD1xZnwEyQrstLHiOSZgjQ0c6TFrJyEJVyBLAKu6KbS/N3tlyGb5zpK1nDwokvkQ
- m2BO7ED1q3rWnMdG1TqsAdsJy/IR7dAMM/2362Yg5uXwS45MA0sRjRxEdqfqbA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=C1LhxCjD
-Subject: Re: [Buildroot] [PATCH] package/bash: fix build with gcc 15
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=jktZQunZKeUK6rAsngpQ0K4rH2C+qOaIeLKmaNjcNXE=;
+ b=C9BWC+X8FfpaIamkZlK9dmxYDIpxPYJ9vtiMJZurl3MamGIf56woLETvxtymSCEiSZkk6N
+ 0lOzUUHkdoNASre3UVIOYoJ1AnsSxWHYW74Kx5/8tDFzFp8argNQh+Kx3SDhSzLAxsXgtz
+ k6myqIZO+1blsKLHXw4y6R1YspJof/E=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=n621.de
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=n621.de header.i=@n621.de header.a=rsa-sha256
+ header.s=dkim header.b=C9BWC+X8
+Subject: [Buildroot] [PATCH 1/1] package/dtach: fix GCC 15 build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,48 +75,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Yann,
+GCC 15 making C23 the default causes the dtach build to fail. Import the
+upstream patch that fixes it.
 
-Thanks for the patch!
+Fixes: https://autobuild.buildroot.org/results/1ab/1ab2eead8309c138ad7a5190e2489e086c3d676d
+Signed-off-by: Florian Larysch <fl@n621.de>
+---
+ package/dtach/0001-fix-gcc-15-build.patch | 27 +++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+ create mode 100644 package/dtach/0001-fix-gcc-15-build.patch
 
-On Mon, 11 Aug 2025 17:32:57 +0200
-"Yann E. MORIN via buildroot" <buildroot@buildroot.org> wrote:
-
-> Commit 6d09b25d08fe (package/bash: fix build with host GCC 15) did
-> apply a workaround for when the host gcc is gcc-15 (or later), but
-> missed the fact that the target compiler also exhibits build issues.
-> 
-> For the same reasons as explained in 6d09b25d08fe, don't try and fix
-> those issues, but just paper over the problem by using an older C
-> standard.
-> 
-> Fixes: b7882d024ae484c52473955fbbcbf3b5f0717c2f
-
-This "Fixes" didn't make much sense. You're not really fixing a
-previous commit here. Rather you're fixing an autobuilder issue, so
-I've added a reference to the autobuilder issue being fixed instead.
-
-> +ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_15),y)
-> +BASH_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=gnu17"
-> +endif
-
-Added a comment above this indicating that it can be dropped when
-bumping to bash 5.3.
-
-Applied to master with those fixes. Thanks again!
-
-Thomas
+diff --git a/package/dtach/0001-fix-gcc-15-build.patch b/package/dtach/0001-fix-gcc-15-build.patch
+new file mode 100644
+index 0000000000..4da6abb44e
+--- /dev/null
++++ b/package/dtach/0001-fix-gcc-15-build.patch
+@@ -0,0 +1,27 @@
++From 6d80909a8c0fd19717010a3c76fec560f988ca48 Mon Sep 17 00:00:00 2001
++From: Rudi Heitbaum <rudi@heitbaum.com>
++Date: Mon, 9 Dec 2024 12:35:09 +0000
++Subject: [PATCH] fix gcc-15 build
++
++Upstream: https://github.com/crigler/dtach/commit/6d80909a8c0fd19717010a3c76fec560f988ca48
++Signed-off-by: Florian Larysch <fl@n621.de>
++---
++ attach.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/attach.c b/attach.c
++index 41a696c..e4a46bd 100644
++--- a/attach.c
+++++ b/attach.c
++@@ -96,7 +96,7 @@ die(int sig)
++ 
++ /* Window size change. */
++ static RETSIGTYPE
++-win_change()
+++win_change(int sig)
++ {
++ 	signal(SIGWINCH, win_change);
++ 	win_changed = 1;
++-- 
++2.50.1
++
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.50.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
