@@ -4,76 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56081CA0EE6
-	for <buildroot@archiver.kernel.org>; Sat, 16 Aug 2025 19:38:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A96DBCA0EE6
+	for <buildroot@archiver.kernel.org>; Sat, 16 Aug 2025 19:39:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 229676149B;
-	Sat, 16 Aug 2025 19:38:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7B43E61470;
+	Sat, 16 Aug 2025 19:39:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DmhbWr44bt1I; Sat, 16 Aug 2025 19:38:36 +0000 (UTC)
+ id EeLLFHwLx_l0; Sat, 16 Aug 2025 19:39:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6A193614B4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 94D75614A6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6A193614B4;
-	Sat, 16 Aug 2025 19:38:36 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 5E96C197
- for <buildroot@buildroot.org>; Sat, 16 Aug 2025 19:38:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 94D75614A6;
+	Sat, 16 Aug 2025 19:39:53 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7FF58196
+ for <buildroot@buildroot.org>; Sat, 16 Aug 2025 19:39:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 50935614AC
- for <buildroot@buildroot.org>; Sat, 16 Aug 2025 19:38:35 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 71F6C4111C
+ for <buildroot@buildroot.org>; Sat, 16 Aug 2025 19:39:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3X2Oqhgpfiyy for <buildroot@buildroot.org>;
- Sat, 16 Aug 2025 19:38:34 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
- helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id I7Stk3NWSkxE for <buildroot@buildroot.org>;
+ Sat, 16 Aug 2025 19:39:51 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2BE09614BD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2BE09614BD
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2BE09614BD
- for <buildroot@buildroot.org>; Sat, 16 Aug 2025 19:38:33 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id EC84144522;
- Sat, 16 Aug 2025 19:38:30 +0000 (UTC)
-Date: Sat, 16 Aug 2025 21:38:29 +0200
-To: Thomas Perale via buildroot <buildroot@buildroot.org>
-Cc: Thomas Perale <thomas.perale@mind.be>
-Message-ID: <20250816213829.36838480@windsurf>
-In-Reply-To: <20250714081749.83051-1-thomas.perale@mind.be>
-References: <20250714081749.83051-1-thomas.perale@mind.be>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddugeejjeduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeeftdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepfffgueethffffffhgeekkeejtefgfeevuddvjedvleevleefgfefgfegudetleevnecuffhomhgrihhnpegsuhhilhgurhhoohhtrdhnvghtpdgsohhothhlihhnrdgtohhmnecukfhppedvrgdtudemtggsudekmeekieegugemvddutddtmegrtddtfhemheelsgefmeegfhdvmeeifegusgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudekmeekieegugemvddutddtmegrtddtfhemheelsgefmeegfhdvmeeifegusgdphhgvlhhopeifihhnughsuhhrfhdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvddprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtohepthhhohhmrghsrdhpvghrrghlvgesmhhinhgur
- dgsvg
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1755373111;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=XZWT98Tr94rHGLxaxPripBDSGu0FA6WbKVH6bwxyM1A=;
- b=SRF04uSFxxcRGlH0LXlKDgiyCGqKedZg+qLYqjyTtm5MCmTLC9OkVzaVQ9WPZ42hCmlUGb
- E/6zXpfsy44maP33O0MZuOqEiOUOeMfFfTxqaiXsAByb0ewlty6TXS7rw8r+VF1Dh/gK7J
- g37tlbZccLlJMYKKIsUGl+Eix5djJtYltNvXktmtG+mTX7zAM1nOdDwre1VOpDESvrHebe
- WzLuzdQM35MjePqzpjkJSuodRaSzMgjVpkvo4VK5AtVGen6xFu1JTcxWlcd4aftmhByqsR
- nXfEi1NM1DcOGLNvFdNEZfFAxsZ9yb/kseJxCtQmpR4ieoaEFlnaFXv1smAIoA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=SRF04uSF
-Subject: Re: [Buildroot] [PATCH] package/libesmtp: bump to upstream version
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A232D412F9
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id A232D412F9
+ for <buildroot@buildroot.org>; Sat, 16 Aug 2025 19:39:51 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 916EC87537; Sat, 16 Aug 2025 19:39:51 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 16 Aug 2025 21:39:15 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: c7508a23242aae7a80f22acc4473da25f7f9e96d
+X-Git-Newrev: 71ae8e6ca94fb445b3c4681b85787789a352af6c
+X-Patchwork-Hint: ignore
+Message-Id: <20250816193951.916EC87537@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gcc-bare-metal: bump to version
+ 15.2.0 to fix build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,43 +60,80 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=71ae8e6ca94fb445b3c4681b85787789a352af6c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 14 Jul 2025 10:17:49 +0200
-Thomas Perale via buildroot <buildroot@buildroot.org> wrote:
+Since Buildroot commit [1] "package/gcc: bump 15.x series to 15.2.0",
+gcc-bare-metal fails to download its sources. For example using the
+commands:
 
-> When building libesmtp on the autobuilder, the following error occurs:
-> 
-> /workdir/instance-0/output-1/per-package/libesmtp/host/bin/arc-linux-gcc -Ilibesmtp.so.6.2.0.p -I. -I.. -I/workdir/instance-0/output-1/per-package/libesmtp/host/arc-buildroot-linux-gnu/sysroot/usr/include -fdiagnostics-color=always -Wall -Winvalid-pch -std=c11 -O3 -D_POSIX_C_SOURCE=200809L -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -g0 -D_FORTIFY_SOURCE=2 -fPIC -pthread -MD -MQ libesmtp.so.6.2.0.p/smtp-api.c.o -MF libesmtp.so.6.2.0.p/smtp-api.c.o.d -o libesmtp.so.6.2.0.p/smtp-api.c.o -c ../smtp-api.c
-> ../smtp-api.c: In function 'smtp_version':
-> ../smtp-api.c:1183:7: error: implicit declaration of function 'strlcpy'; did you mean 'strncpy'? [-Wimplicit-function-declaration]
->  1183 |   if (strlcpy (buf, v, len) > len)
->       |       ^~~~~~~
->       |       strncpy
-> 
-> This error has been fixed upstream in commit [1], but no new release has
-> been made since.
-> This patch update the package version to fetch the latest upstream commit.
+	make zynqmp_kria_kv260_defconfig
+	make source
 
-Not sure it's new with this version bump, but there are still some
-failures of libesmtp:
+fails with error:
 
-https://autobuild.buildroot.net/?reason=libesmtp-v1.1.0-14-g335ee8d2fa5cb7d30db7b818ec05563ad139ee2f
+	ERROR: No hash found for gcc-15.1.0.tar.xz
 
-Could you perhaps have a look?
+This is because the gcc-bare-metal package reuses the hash file and
+the 15.x package patch directory from the gcc package (which was
+bumped to 15.2.0), but still defines its _VERSION to 15.1.0.
 
-Thanks a lot!
+This commit fixes this issue by bumping gcc-bare-metal to 15.2.0.
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Fixes:
+https://autobuild.buildroot.org/results/eda879fb8e1ccd696f01927087713b88a4b1a2c5
+https://gitlab.com/buildroot.org/buildroot/-/jobs/11026775160
+
+[1] https://gitlab.com/buildroot.org/buildroot/-/commit/b1dd235ad0dd91e1919a167a17cc9cd20a3695b2
+
+Cc: Ibai Erkiaga <ibai.erkiaga-elorza@amd.com>
+Cc: Neal Frager <neal.frager@amd.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Acked-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gcc-bare-metal/15.1.0            | 1 -
+ package/gcc-bare-metal/15.2.0            | 1 +
+ package/gcc-bare-metal/gcc-bare-metal.mk | 2 +-
+ 3 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/gcc-bare-metal/15.1.0 b/package/gcc-bare-metal/15.1.0
+deleted file mode 120000
+index 669da9e956..0000000000
+--- a/package/gcc-bare-metal/15.1.0
++++ /dev/null
+@@ -1 +0,0 @@
+-../gcc/15.1.0/
+\ No newline at end of file
+diff --git a/package/gcc-bare-metal/15.2.0 b/package/gcc-bare-metal/15.2.0
+new file mode 120000
+index 0000000000..d3d1bbdefa
+--- /dev/null
++++ b/package/gcc-bare-metal/15.2.0
+@@ -0,0 +1 @@
++../gcc/15.2.0
+\ No newline at end of file
+diff --git a/package/gcc-bare-metal/gcc-bare-metal.mk b/package/gcc-bare-metal/gcc-bare-metal.mk
+index 17232a8ef1..88fc56ac09 100644
+--- a/package/gcc-bare-metal/gcc-bare-metal.mk
++++ b/package/gcc-bare-metal/gcc-bare-metal.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GCC_BARE_METAL_VERSION = 15.1.0
++GCC_BARE_METAL_VERSION = 15.2.0
+ GCC_BARE_METAL_SITE = $(BR2_GNU_MIRROR)/gcc/gcc-$(GCC_BARE_METAL_VERSION)
+ GCC_BARE_METAL_SOURCE = gcc-$(GCC_BARE_METAL_VERSION).tar.xz
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
