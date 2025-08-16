@@ -4,48 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 728D4CA0EE9
-	for <buildroot@archiver.kernel.org>; Sat, 16 Aug 2025 20:55:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17BBDCA0EE9
+	for <buildroot@archiver.kernel.org>; Sat, 16 Aug 2025 20:55:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 48E3C61573;
-	Sat, 16 Aug 2025 20:55:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E030A615B5;
+	Sat, 16 Aug 2025 20:55:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uTUl_Y2OZlNI; Sat, 16 Aug 2025 20:55:31 +0000 (UTC)
+ id TSfeRwif4_AP; Sat, 16 Aug 2025 20:55:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C4CBF6155E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7BD0B61558
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C4CBF6155E;
-	Sat, 16 Aug 2025 20:55:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 6A7F6197
- for <buildroot@buildroot.org>; Sat, 16 Aug 2025 20:55:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7BD0B61558;
+	Sat, 16 Aug 2025 20:55:37 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id B9B9E196
+ for <buildroot@buildroot.org>; Sat, 16 Aug 2025 20:55:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4335B414DE
- for <buildroot@buildroot.org>; Sat, 16 Aug 2025 20:55:24 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B739C83F61
+ for <buildroot@buildroot.org>; Sat, 16 Aug 2025 20:55:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QXxh5jUyjbvv for <buildroot@buildroot.org>;
- Sat, 16 Aug 2025 20:55:23 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cBeh69arLBQx for <buildroot@buildroot.org>;
+ Sat, 16 Aug 2025 20:55:36 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.178.235;
+ helo=relay15.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F2375414EC
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id F2375414EC
- for <buildroot@buildroot.org>; Sat, 16 Aug 2025 20:55:22 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E20168768E; Sat, 16 Aug 2025 20:55:22 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 16 Aug 2025 22:55:10 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a46810838a57ed82dd2b794600ecc22995776d87
-X-Git-Newrev: 0fc81120335e3fc2161e409dc94afff162167bf3
-X-Patchwork-Hint: ignore
-Message-Id: <20250816205522.E20168768E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libcue: add CPE vendor
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BD52783F5F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BD52783F5F
+Received: from relay15.mail.gandi.net (relay15.mail.gandi.net [217.70.178.235])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BD52783F5F
+ for <buildroot@buildroot.org>; Sat, 16 Aug 2025 20:55:35 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 707BD442B8;
+ Sat, 16 Aug 2025 20:55:32 +0000 (UTC)
+Date: Sat, 16 Aug 2025 22:55:32 +0200
+To: Titouan Christophe via buildroot <buildroot@buildroot.org>
+Cc: Titouan Christophe <titouan.christophe@mind.be>
+Message-ID: <20250816225532.5aea07e4@windsurf>
+In-Reply-To: <20250812100148.717381-1-titouan.christophe@mind.be>
+References: <20250812100148.717381-1-titouan.christophe@mind.be>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-State: clean
+X-GND-Score: -110
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddugeejkeeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenfghrlhcuvffnffculddquddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepgeefffetleevgeelfeeggefgfeekffejfeffveeiueduueehhfekgeeugeejveeunecuffhomhgrihhnpehnihhsthdrghhovhdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegtsgdukeemkeeigegumedvuddttdemrgdttdhfmeehlegsfeemgehfvdemieefuggsnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgdukeemkeeigegumedvuddttdemrgdttdhfmeehlegsfeemgehfvdemieefuggspdhhvghlohepfihinhgushhurhhfpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedvpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehtihhtohhurghnrdgth
+ hhrihhsthhophhhvgesmhhinhgurdgsvg
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1755377733;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=gT7YsO4T9kwMNyc4J4Q4oF3lqYa4/K0hQ9VYyBGozOc=;
+ b=M9hfj36dAMZYhLG6oJhDwK/64FfWKHsPRi/z6QrEsyXdlXj8prc15Ti/coLo0QEHvBV8jQ
+ J3ONiuskysQ96pR2Dec7TOYYQsamZdO6W0NC5bv69IF4urUEbo0jBcWf/Hu97FbPNh6aCn
+ vpZnnPdT1XpIs667u7KBnDWbrf9+dv4EgGsq+BaTZSKIuJVIUb1U6tvRmHros3mRycNbps
+ TziA389Ja/UCA+qtb8eKJ6VphOHoFIWkLLo0BrTXoWPVAgLNMd0Rc7DR8xkej5HfOSgG/x
+ 78A1ViczQ2dHJWElbviLW0aQASSTbmUijN77TtRSX4uRQiiqiBIIiaj1ybaszQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=M9hfj36d
+Subject: Re: [Buildroot] [PATCH 1/4] package/openconnect: add CPE vendor
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,35 +85,29 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0fc81120335e3fc2161e409dc94afff162167bf3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 12 Aug 2025 12:01:45 +0200
+Titouan Christophe via buildroot <buildroot@buildroot.org> wrote:
 
-lipnitsk is a valid CPE vendor ID for libcue, see
-https://nvd.nist.gov/products/cpe/detail/79A927B3-A7E5-476D-94C9-0FA0AB71D182
+> infradead is a valid CPE vendor for openconnect, see
+> https://nvd.nist.gov/products/cpe/detail/2877E5FD-6361-465D-81D7-AE1EBB3E059F
+> 
+> Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+> ---
+>  package/openconnect/openconnect.mk | 1 +
+>  1 file changed, 1 insertion(+)
 
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libcue/libcue.mk | 1 +
- 1 file changed, 1 insertion(+)
+Entire series of 4 patches applied, thanks a lot!
 
-diff --git a/package/libcue/libcue.mk b/package/libcue/libcue.mk
-index 7ef27f5a17..8eac4725c9 100644
---- a/package/libcue/libcue.mk
-+++ b/package/libcue/libcue.mk
-@@ -10,5 +10,6 @@ LIBCUE_LICENSE = GPL-2.0, BSD-2-Clause (rem.c)
- LIBCUE_LICENSE_FILES = LICENSE
- LIBCUE_DEPENDENCIES = host-bison host-flex flex
- LIBCUE_INSTALL_STAGING = YES
-+LIBCUE_CPE_ID_VENDOR = lipnitsk
- 
- $(eval $(cmake-package))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
