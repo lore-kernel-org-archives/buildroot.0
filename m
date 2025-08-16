@@ -4,64 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33C8CCA0EE6
-	for <buildroot@archiver.kernel.org>; Sat, 16 Aug 2025 19:55:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1518ECA0EE9
+	for <buildroot@archiver.kernel.org>; Sat, 16 Aug 2025 19:56:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 090D3614D3;
-	Sat, 16 Aug 2025 19:55:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D70D6614D1;
+	Sat, 16 Aug 2025 19:56:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T-K-fcolVccz; Sat, 16 Aug 2025 19:55:55 +0000 (UTC)
+ id e4zFRdi8pjHd; Sat, 16 Aug 2025 19:56:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 36793614D0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F0F84614D2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 36793614D0;
-	Sat, 16 Aug 2025 19:55:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 52BA075
- for <buildroot@buildroot.org>; Sat, 16 Aug 2025 19:55:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F0F84614D2;
+	Sat, 16 Aug 2025 19:56:29 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 28B7A196
+ for <buildroot@buildroot.org>; Sat, 16 Aug 2025 19:56:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 44904836A7
- for <buildroot@buildroot.org>; Sat, 16 Aug 2025 19:55:54 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0F1DF40B92
+ for <buildroot@buildroot.org>; Sat, 16 Aug 2025 19:56:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2tHvtiC_WbEd for <buildroot@buildroot.org>;
- Sat, 16 Aug 2025 19:55:53 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=136.243.2.102;
- helo=nyx.n621.de; envelope-from=fl@n621.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4C7D2835E0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4C7D2835E0
-Received: from nyx.n621.de (v4gw.hekate.n621.de [136.243.2.102])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4C7D2835E0
- for <buildroot@buildroot.org>; Sat, 16 Aug 2025 19:55:53 +0000 (UTC)
-Received: from argo.fritz.box (localhost [127.0.0.1])
- by nyx.n621.de (Postfix) with ESMTP id 82EAAE001D9;
- Sat, 16 Aug 2025 21:55:50 +0200 (CEST)
-From: Florian Larysch <fl@n621.de>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id K_6GOPIxh5Cs for <buildroot@buildroot.org>;
+ Sat, 16 Aug 2025 19:56:27 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 43A9A40AAB
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 43A9A40AAB
+ for <buildroot@buildroot.org>; Sat, 16 Aug 2025 19:56:27 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2DDF087622; Sat, 16 Aug 2025 19:56:27 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 16 Aug 2025 21:55:41 +0200
-Message-ID: <20250816195542.3748-1-fl@n621.de>
-X-Mailer: git-send-email 2.50.1
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=n621.de; s=dkim; t=1755374150;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=XnLVz6+sVQJ41iCClp1lV6CmJsbPsKhYIJNonV5rDbY=;
- b=W9V4vQZLA3psXUDcpbe6Ks0jMV6UT+xvuqoUQvOmj2oKf8VoYLHUpfyqkkfg9PyWhYEM2p
- frfGe+I5vM9TbwBOnEl/RDvwzjibKwVqA+0y/9sh8cBMBc3/gXicw3/pYREYhL1scRcL4S
- zo1TikDpeu8nmS4qnk4uOf0WbO65LJw=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=n621.de
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=n621.de header.i=@n621.de header.a=rsa-sha256
- header.s=dkim header.b=W9V4vQZL
-Subject: [Buildroot] [PATCH 1/1] package/libjwt: require openssl
+Date: Sat, 16 Aug 2025 21:55:54 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 93e37c58b0a0c66c6faf81925ce5777b1e863779
+X-Git-Newrev: c73243468fbf65b815f39fdf95068f2d49fad6ac
+X-Patchwork-Hint: ignore
+Message-Id: <20250816195627.2DDF087622@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rtl8812au-aircrack-ng: fix build
+ with Linux 6.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -73,79 +58,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Florian Larysch <fl@n621.de>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Ever since upstream commit 01dd6da ("Rework the entire API"), first
-introduced as part of release v3.0.0, openssl is a hard requirement for
-building libjwt. As such, "-DWITH_OPENSSL=ON" also has become a no-op.
+commit: https://git.buildroot.net/buildroot/commit/?id=c73243468fbf65b815f39fdf95068f2d49fad6ac
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In Buildroot, this has been masked somewhat by the implicit select when
-gnutls is disabled, but a failure can be reproduced using test-pkg with
-a config like:
+Add local patch pending upstream to fix build failure with Linux 6.16.
 
-BR2_PACKAGE_GNUTLS=y
-BR2_PACKAGE_LIBJWT=y
-
-Fix this by requiring openssl. Furthermore, building against libressl
-does not work because libjwt requires API surface that is not present
-there[1], so we need to force libopenssl.
-
-libjwt still supports linking against additional crypto providers, so we
-can still link against gnutls if it is present.
-
-[1] https://autobuild.buildroot.org/results/463/4638a7d46c149ca0f46d3fe5f5f90dc5ee9d1e03
-
-Signed-off-by: Florian Larysch <fl@n621.de>
+Fixes:
+https://autobuild.buildroot.org/results/7a5b5f3e8d34e3e8ca155ffe168768275256c17e/
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libjwt/Config.in | 3 ++-
- package/libjwt/libjwt.mk | 7 ++-----
- 2 files changed, 4 insertions(+), 6 deletions(-)
+ .../0002-fix-build-for-kernel-6.16.patch           | 34 ++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-diff --git a/package/libjwt/Config.in b/package/libjwt/Config.in
-index 39d1665e0e..47eb0882a3 100644
---- a/package/libjwt/Config.in
-+++ b/package/libjwt/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LIBJWT
- 	bool "libjwt"
--	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_GNUTLS
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
- 	select BR2_PACKAGE_JANSSON
- 	help
- 	  JSON Web Tokens are an open, industry standard RFC 7519
-diff --git a/package/libjwt/libjwt.mk b/package/libjwt/libjwt.mk
-index 29ca9cebf4..687432142f 100644
---- a/package/libjwt/libjwt.mk
-+++ b/package/libjwt/libjwt.mk
-@@ -7,7 +7,7 @@
- LIBJWT_VERSION = 3.2.0
- LIBJWT_SITE = https://github.com/benmcollins/libjwt/releases/download/v$(LIBJWT_VERSION)
- LIBJWT_SOURCE = libjwt-$(LIBJWT_VERSION).tar.xz
--LIBJWT_DEPENDENCIES = host-pkgconf jansson
-+LIBJWT_DEPENDENCIES = host-pkgconf jansson openssl
- LIBJWT_INSTALL_STAGING = YES
- LIBJWT_LICENSE = MPL-2.0
- LIBJWT_LICENSE_FILES = LICENSE
-@@ -16,10 +16,7 @@ LIBJWT_CPE_ID_PRODUCT = jwt_c_library
- 
- LIBJWT_CONF_OPTS += -DWITH_TESTS=OFF
- 
--ifeq ($(BR2_PACKAGE_OPENSSL),y)
--LIBJWT_CONF_OPTS += -DWITH_OPENSSL=ON
--LIBJWT_DEPENDENCIES += openssl
--else
-+ifeq ($(BR2_PACKAGE_GNUTLS),y)
- LIBJWT_CONF_OPTS += -DWITH_GNUTLS=ON
- LIBJWT_DEPENDENCIES += gnutls
- endif
--- 
-2.50.1
-
+diff --git a/package/rtl8812au-aircrack-ng/0002-fix-build-for-kernel-6.16.patch b/package/rtl8812au-aircrack-ng/0002-fix-build-for-kernel-6.16.patch
+new file mode 100644
+index 0000000000..46f67f14ac
+--- /dev/null
++++ b/package/rtl8812au-aircrack-ng/0002-fix-build-for-kernel-6.16.patch
+@@ -0,0 +1,34 @@
++From de764c6b43fef79bdea8783232a89d2e8ff0e059 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Fri, 15 Aug 2025 23:48:33 +0200
++Subject: [PATCH] fix build for kernel 6.16
++
++With commit:
++https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=41cb08555c4164996d67c78b3bf1c658075b75f1
++from_timer() has been renamed to timer_container_of() so let's rename
++according to linux version >= 6.16
++
++Upstream: https://github.com/aircrack-ng/rtl8812au/pull/1236
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ include/osdep_service_linux.h | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/include/osdep_service_linux.h b/include/osdep_service_linux.h
++index 4c276f6..9f9a317 100644
++--- a/include/osdep_service_linux.h
+++++ b/include/osdep_service_linux.h
++@@ -355,7 +355,9 @@ static inline void timer_hdl(struct timer_list *in_timer)
++ static inline void timer_hdl(unsigned long cntx)
++ #endif
++ {
++-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 0))
+++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 16, 0))
+++	_timer *ptimer = timer_container_of(ptimer, in_timer, timer);
+++#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 0))
++ 	_timer *ptimer = from_timer(ptimer, in_timer, timer);
++ #else
++ 	_timer *ptimer = (_timer *)cntx;
++-- 
++2.43.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
