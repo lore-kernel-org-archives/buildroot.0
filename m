@@ -1,76 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04D16CA0EE6
-	for <buildroot@archiver.kernel.org>; Sat, 16 Aug 2025 20:13:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 685F5CA0EE9
+	for <buildroot@archiver.kernel.org>; Sat, 16 Aug 2025 20:13:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CC08A614E7;
-	Sat, 16 Aug 2025 20:13:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3248483ECF;
+	Sat, 16 Aug 2025 20:13:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id V1wcDm5f2Wxx; Sat, 16 Aug 2025 20:13:02 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id I-T6pMvq7K3I; Sat, 16 Aug 2025 20:13:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0436560F49
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5818283F1C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0436560F49;
-	Sat, 16 Aug 2025 20:13:02 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 02C4D75
- for <buildroot@buildroot.org>; Sat, 16 Aug 2025 20:13:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5818283F1C;
+	Sat, 16 Aug 2025 20:13:33 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id B6F40196
+ for <buildroot@buildroot.org>; Sat, 16 Aug 2025 20:13:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DDA7760EA9
- for <buildroot@buildroot.org>; Sat, 16 Aug 2025 20:13:00 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9E1E061500
+ for <buildroot@buildroot.org>; Sat, 16 Aug 2025 20:13:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 55eS44vL5327 for <buildroot@buildroot.org>;
- Sat, 16 Aug 2025 20:13:00 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ id 24AQ-ZoERCK6 for <buildroot@buildroot.org>;
+ Sat, 16 Aug 2025 20:13:31 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B66D7605E6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B66D7605E6
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B66D7605E6
- for <buildroot@buildroot.org>; Sat, 16 Aug 2025 20:12:59 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -599497234; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Sat, 16 Aug 2025 20:12:56 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1unNGp-00A6rI-2H;
- Sat, 16 Aug 2025 22:12:55 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E55A4614E7
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id E55A4614E7
+ for <buildroot@buildroot.org>; Sat, 16 Aug 2025 20:13:30 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D467E87642; Sat, 16 Aug 2025 20:13:30 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,  Petr Vorel
- <petr.vorel@gmail.com>
-References: <20250816193255.1429450-1-thomas.petazzoni@bootlin.com>
-Date: Sat, 16 Aug 2025 22:12:55 +0200
-In-Reply-To: <20250816193255.1429450-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni via buildroot's message of "Sat, 16 Aug 2025 21:32:55
- +0200")
-Message-ID: <87frdrm3eg.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=J1+ztb33O/9U3ReiK9Z0HFMtg0YqNEl6r4hqpIthiy7uFHT7rjaKKYkFLTgf8a2XiBfKFiI68fIxs9aKO3MXyVl+DKftM0CwCOYnptmhNjhxvzhpS+tMwV+ML+9uYCeGz3b44I4teJxFGZtqWq8OLc+QacqfIV+FxjgrS8YECLqar/PhTZ9H4klGOsrUFIhxdJk0F1YFbX+e4mQhkVuIgfgrB9J62PhppHnRONbzXmcokBSiw7A/+3bb97DNOLxdc6oAFDSaepFFUbIwiUKreMOXyCtdvN6/6ZgS+Q0oZjQK0TJfppHwPTdmm5XveD+g4rLliCiub6VDdN2HOC+9nQ==;
- s=purelymail2; d=purelymail.com; v=1;
- bh=pjn6xWJRpfkbbvf1PWsmIbuLn5zcRJoR+Lh7UlCHwHg=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail2 header.b=J1+ztb33
-Subject: Re: [Buildroot] [PATCH] package/rpcbind: bump to version 1.2.8
+To: buildroot@buildroot.org
+Date: Sat, 16 Aug 2025 22:11:23 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: cd0ce33b62d5c863470d839c4c1a0dded3ead15c
+X-Git-Newrev: 826f9e43a1fa89fd3e6d165b1c3b66bf61e9bfe9
+X-Patchwork-Hint: ignore
+Message-Id: <20250816201330.D467E87642@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rpcbind: bump to version 1.2.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,46 +58,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=826f9e43a1fa89fd3e6d165b1c3b66bf61e9bfe9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > List of commits between 1.2.7..1.2.8:
- > f979f1b8fa202cd0d6c352de0f2b64361ce5ea33 (HEAD -> master, tag:
- > rpcbind-1_2_8, origin/master, origin/HEAD) Release: 1.2.8
- > a9ecbb81940b23a4bb9814e126c1c1ae1db93b69 (tag: rpcbind-1_2_8-rc3)
- > rpcinfo: Removed a number of "old-style function definition" warnings
- > 8cc10d038c361f296b0a8e068c173acc33568997 rpcbind: Add -v flag to print version and config
- > 8ef2e504df6e5ec3321c0804a8c6684d781e7a84 man/rpcbind: Update list of options
- > 74da58dde5b1a1a7e54df1fb16315845195a69c0 (tag: rpcbind-1_2_8-rc2)
- > Comment out ListenStream=@/run/rpcbind.sock
- > b78689b8f1df42eb593dc3412698aa1b8aaa3532 [nfs/nfs-utils/rpcbind]
- > rpcbind: avoid dereferencing NULL from realloc()
- > fd1d5387de8078530d51eccf876afe6e6182b975 (tag: rpcbind-1_2_8-rc1) Move
- > rpbind's default configuration to /run verses /var/run
- > 7a6b1c58eee2e5fa74e3e4045c4950fbb4f8af0a Move rpcbind.lock to /run
- > be63348bd3dd9e69e151ff83f08f09e1a9df82bf systemd/rpcbind.service.in:
- > Want/After systemd-tmpfiles-setup
- > 626fd801a13cecd8eb79ac6e979c248d7214aad4 systemd/rpcbind.service.in:
- > Add various hardenings options
- > 511fc4f4bc5ca7b7c8dac877d590d0634e570e6d man/rpcbind: Add Files section to manpage
- > 31157ba6e60b0a8c4989010df8b1cf2aa673a86c systemd/rpcbind.service.in:
- > Add few default EnvironmentFile
+List of commits between 1.2.7..1.2.8:
 
- > So really not much.
+f979f1b8fa202cd0d6c352de0f2b64361ce5ea33 (HEAD -> master, tag: rpcbind-1_2_8, origin/master, origin/HEAD) Release: 1.2.8
+a9ecbb81940b23a4bb9814e126c1c1ae1db93b69 (tag: rpcbind-1_2_8-rc3) rpcinfo: Removed a number of "old-style function definition" warnings
+8cc10d038c361f296b0a8e068c173acc33568997 rpcbind: Add -v flag to print version and config
+8ef2e504df6e5ec3321c0804a8c6684d781e7a84 man/rpcbind: Update list of options
+74da58dde5b1a1a7e54df1fb16315845195a69c0 (tag: rpcbind-1_2_8-rc2) Comment out ListenStream=@/run/rpcbind.sock
+b78689b8f1df42eb593dc3412698aa1b8aaa3532 [nfs/nfs-utils/rpcbind] rpcbind: avoid dereferencing NULL from realloc()
+fd1d5387de8078530d51eccf876afe6e6182b975 (tag: rpcbind-1_2_8-rc1) Move rpbind's default configuration to /run verses /var/run
+7a6b1c58eee2e5fa74e3e4045c4950fbb4f8af0a Move rpcbind.lock to /run
+be63348bd3dd9e69e151ff83f08f09e1a9df82bf systemd/rpcbind.service.in: Want/After systemd-tmpfiles-setup
+626fd801a13cecd8eb79ac6e979c248d7214aad4 systemd/rpcbind.service.in: Add various hardenings options
+511fc4f4bc5ca7b7c8dac877d590d0634e570e6d man/rpcbind: Add Files section to manpage
+31157ba6e60b0a8c4989010df8b1cf2aa673a86c systemd/rpcbind.service.in: Add few default EnvironmentFile
 
- > While we're at it, let's add a sha1 hash provided directly by
- > Sourceforge, in addition to the locally calculated sha256.
+So really not much.
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+While we're at it, let's add a sha1 hash provided directly by
+Sourceforge, in addition to the locally calculated sha256.
 
-Committed, thanks.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/rpcbind/rpcbind.hash | 5 ++++-
+ package/rpcbind/rpcbind.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/rpcbind/rpcbind.hash b/package/rpcbind/rpcbind.hash
+index 45bd394199..e268a0733a 100644
+--- a/package/rpcbind/rpcbind.hash
++++ b/package/rpcbind/rpcbind.hash
+@@ -1,3 +1,6 @@
++# From https://sourceforge.net/projects/rpcbind/files/rpcbind/1.2.8/
++sha1  2f733aba26075ca91fda3787890232da3d07c06e  rpcbind-1.2.8.tar.bz2
++
+ # Locally computed:
+-sha256  f6edf8cdf562aedd5d53b8bf93962d61623292bfc4d47eedd3f427d84d06f37e  rpcbind-1.2.7.tar.bz2
++sha256  964132c389918e8964d7334936b6dd10ef025b300c6b29e693ba0f29550e3de5  rpcbind-1.2.8.tar.bz2
+ sha256  2b9477d2f4ab277b29702958f0058546edc120aae4b5fb8b8d1a9652104e1ba3  COPYING
+diff --git a/package/rpcbind/rpcbind.mk b/package/rpcbind/rpcbind.mk
+index e553f54066..3b496ee2c6 100644
+--- a/package/rpcbind/rpcbind.mk
++++ b/package/rpcbind/rpcbind.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RPCBIND_VERSION = 1.2.7
++RPCBIND_VERSION = 1.2.8
+ RPCBIND_SITE = https://downloads.sourceforge.net/project/rpcbind/rpcbind/$(RPCBIND_VERSION)
+ RPCBIND_SOURCE = rpcbind-$(RPCBIND_VERSION).tar.bz2
+ RPCBIND_LICENSE = BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
