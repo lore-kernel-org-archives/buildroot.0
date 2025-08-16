@@ -4,48 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0572DCA0EE9
-	for <buildroot@archiver.kernel.org>; Sat, 16 Aug 2025 20:50:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99D24CA0EE6
+	for <buildroot@archiver.kernel.org>; Sat, 16 Aug 2025 20:52:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ED4E16154B;
-	Sat, 16 Aug 2025 20:50:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 72AE26154B;
+	Sat, 16 Aug 2025 20:52:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 11RA95rgIU8E; Sat, 16 Aug 2025 20:50:56 +0000 (UTC)
+ id WKEJcTcMF5c9; Sat, 16 Aug 2025 20:52:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4F8CC6154E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1859361540
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4F8CC6154E;
-	Sat, 16 Aug 2025 20:50:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1859361540;
+	Sat, 16 Aug 2025 20:52:09 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 301CE196
- for <buildroot@buildroot.org>; Sat, 16 Aug 2025 20:50:54 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 76834196
+ for <buildroot@buildroot.org>; Sat, 16 Aug 2025 20:52:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1663A6154B
- for <buildroot@buildroot.org>; Sat, 16 Aug 2025 20:50:54 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6854961540
+ for <buildroot@buildroot.org>; Sat, 16 Aug 2025 20:52:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9tGUWJW11Sw7 for <buildroot@buildroot.org>;
- Sat, 16 Aug 2025 20:50:53 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id mWf6j2lNkVf0 for <buildroot@buildroot.org>;
+ Sat, 16 Aug 2025 20:52:06 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
+ helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D7FF6153E
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4D7FF6153E
- for <buildroot@buildroot.org>; Sat, 16 Aug 2025 20:50:53 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3C1A187670; Sat, 16 Aug 2025 20:50:53 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 16 Aug 2025 22:48:28 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 14955941e23f88259b06038633353eb7061b532d
-X-Git-Newrev: c0bf3da45b4feb9d849f79743cfc3e11e70290c7
-X-Patchwork-Hint: ignore
-Message-Id: <20250816205053.3C1A187670@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/prboom: fix build w/ gcc-14
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5F66B6153E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F66B6153E
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5F66B6153E
+ for <buildroot@buildroot.org>; Sat, 16 Aug 2025 20:52:06 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1CCA8442BA;
+ Sat, 16 Aug 2025 20:52:02 +0000 (UTC)
+Date: Sat, 16 Aug 2025 22:52:01 +0200
+To: Thomas Perale <thomas.perale@mind.be>
+Cc: Thomas Perale via buildroot <buildroot@buildroot.org>, James Hilliard
+ <james.hilliard1@gmail.com>
+Message-ID: <20250816225201.10b98623@windsurf>
+In-Reply-To: <20250816202153.3376159-1-thomas.perale@mind.be>
+References: <20250816195207.5f8136a3@windsurf>
+ <20250816202153.3376159-1-thomas.perale@mind.be>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddugeejkeeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepgffhkeekgeevgfekhfeggfelffdvgfdtteduuedthfehfffgkeeileefhedvkeelnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegtsgdukeemkeeigegumedvuddttdemrgdttdhfmeehlegsfeemgehfvdemieefuggsnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgdukeemkeeigegumedvuddttdemrgdttdhfmeehlegsfeemgehfvdemieefuggspdhhvghlohepfihinhgushhurhhfpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeefpdhrtghpthhtohepthhhohhmrghsrdhpvghrrghlvgesmhhinhgurdgsvgdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgp
+ dhrtghpthhtohepjhgrmhgvshdrhhhilhhlihgrrhguudesghhmrghilhdrtghomh
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1755377523;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=3uvzrr0MbB/FvlnLdoCh/Enw7b5F6PROViZ+AsJhhFE=;
+ b=EaJAQJfa2NhPV/XwRBGsuaJo5iVDn59Oe0gnUUTSPOkpqeA/m4R+lcK+okBwZ93Dg+dtNU
+ e7stRAH/mzIFF9uKF8VzCJvVXjrT/A3VlkJd4IrAPLmejLxXK2fi3F/NzsOxG8+YB4Jpoe
+ 6XpKHibqnAq7wGOwRbz/8sydQV94LYOcrKcpmueIjIk8+TPVFsmqPIUhSna++/u5EVw/zS
+ WBPJTm8Q3OT1/9h1BKCUNXvh36IkDZtGQJlEsncptCmeERDIqk/TuAeLyuocuJcH7OPZhZ
+ eyQypxr816mTAvTJLZcrSdohgLv31XI2EKodM5YjCs/kxGb2G5fzJbYhOqDvdQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=EaJAQJfa
+Subject: Re: [Buildroot] [PATCH 1/2] package/python-yarl: add missing select
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,184 +89,36 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c0bf3da45b4feb9d849f79743cfc3e11e70290c7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 16 Aug 2025 22:21:53 +0200
+Thomas Perale <thomas.perale@mind.be> wrote:
 
-When building prboom with gcc-14 the following error appeared on the
-autobuilder:
+> Good to know, my reasoning was that other package in that same case seemed to
+> select `BR2_PACKAGE_HOST_PYTHON_CYTHON`:
+> 
+> - python-kmod/Config.in
+> - python-dbus-fast/Config.in
+> - python-rgbmatrix/Config.in
+> 
+> So, if you prefer to not include the 'select' I will send a v2 and remove my
+> series that did the same for python-propcache
+> (https://lore.kernel.org/r/<20250813201639.2443921-1-thomas.perale@mind.be>).
 
-```
-i_main.c: In function 'main':
-i_main.c:359:10: error: assignment to 'const char * const*' from incompatible pointer type 'char **' [-Wincompatible-pointer-types]
-  359 |   myargv = argv;
-      |          ^
-```
+Indeed to me right now the consensus has been to _not_ add those
+selects for host packages. The Config.in.host option is only to allow a
+user to explicitly enable a host package through "make menuconfig".
 
-While this package did not receive any update for a while on the
-sourceforge mirror, I backported the fix from a fork. For more
-information see [1].
+Thanks!
 
-[1] https://github.com/coelckers/prboom-plus/commit/92d44b6383a3e053feac2c820b8114873fcd798e
-
-Fixes: https://autobuild.buildroot.org/results/888/88846e3cb267b04da58bc17d92fd5dd385b65b5d
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...myargv-instead-of-const-char-const-myargv.patch | 140 +++++++++++++++++++++
- 1 file changed, 140 insertions(+)
-
-diff --git a/package/prboom/0003-gcc-warnings-const-myargv-instead-of-const-char-const-myargv.patch b/package/prboom/0003-gcc-warnings-const-myargv-instead-of-const-char-const-myargv.patch
-new file mode 100644
-index 0000000000..b102175d59
---- /dev/null
-+++ b/package/prboom/0003-gcc-warnings-const-myargv-instead-of-const-char-const-myargv.patch
-@@ -0,0 +1,140 @@
-+From 92d44b6383a3e053feac2c820b8114873fcd798e Mon Sep 17 00:00:00 2001
-+From: entryway <entryway@localhost>
-+Date: Fri, 10 Jun 2011 19:59:18 +0000
-+Subject: [PATCH] gcc warnings: 'const **myargv' instead of 'const char * const
-+ * myargv'
-+
-+Upstream: https://github.com/coelckers/prboom-plus/commit/92d44b6383a3e053feac2c820b8114873fcd798e
-+[thomas: backport to 2.5.0]
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ src/SDL/i_main.c |  3 ++-
-+ src/d_main.c     | 20 ++++++++++++--------
-+ src/m_argv.c     |  3 +--
-+ src/m_argv.h     |  2 +-
-+ 4 files changed, 16 insertions(+), 12 deletions(-)
-+
-+diff --git a/src/SDL/i_main.c b/src/SDL/i_main.c
-+index 05cd655..1c19ef0 100644
-+--- a/src/SDL/i_main.c
-++++ b/src/SDL/i_main.c
-+@@ -356,7 +356,8 @@ int main(int argc, char **argv)
-+ #endif
-+ 
-+   myargc = argc;
-+-  myargv = argv;
-++  myargv = malloc(sizeof(myargv[0]) * myargc);
-++  memcpy(myargv, argv, sizeof(myargv[0]) * myargc);
-+ 
-+ #ifdef _WIN32
-+   if (!M_CheckParm("-nodraw")) {
-+diff --git a/src/d_main.c b/src/d_main.c
-+index 6d8493e..320e07a 100644
-+--- a/src/d_main.c
-++++ b/src/d_main.c
-+@@ -870,7 +870,7 @@ static void FindResponseFile (void)
-+ 	int indexinfile;
-+         byte *file = NULL;
-+         const char **moreargs = malloc(myargc * sizeof(const char*));
-+-        const char **newargv;
-++        char **newargv;
-+         // proff 04/05/2000: Added for searching responsefile
-+         char fname[PATH_MAX+1];
-+ 
-+@@ -904,14 +904,15 @@ static void FindResponseFile (void)
-+ 	  int k;
-+           lprintf(LO_ERROR,"\nResponse file empty!\n");
-+ 
-+-	  newargv = calloc(sizeof(char *),MAXARGVS);
-++	  newargv = calloc(sizeof(newargv[0]),myargc);
-+ 	  newargv[0] = myargv[0];
-+           for (k = 1,index = 1;k < myargc;k++)
-+           {
-+             if (i!=k)
-+               newargv[index++] = myargv[k];
-+           }
-+-          myargc = index; myargv = newargv;
-++          myargc = index;
-++          myargv = newargv;
-+           return;
-+         }
-+ 
-+@@ -919,8 +920,8 @@ static void FindResponseFile (void)
-+ 	memcpy((void *)moreargs,&myargv[i+1],(index = myargc - i - 1) * sizeof(myargv[0]));
-+ 
-+ 	{
-+-	  const char *firstargv = myargv[0];
-+-	  newargv = calloc(sizeof(char *),MAXARGVS);
-++	  char *firstargv = myargv[0];
-++	  newargv = calloc(sizeof(newargv[0]), 1);
-+ 	  newargv[0] = firstargv;
-+ 	}
-+ 
-+@@ -949,16 +950,19 @@ static void FindResponseFile (void)
-+ 
-+ 	      // Terminate string, realloc and add to argv
-+ 	      *p = 0;
-++	      newargv = realloc(newargv, sizeof(newargv[0]) * (indexinfile + 1));
-+ 	      newargv[indexinfile++] = realloc(s,strlen(s)+1);
-+ 	    }
-+ 	  } while(size > 0);
-+ 	}
-+ 	free(file);
-+ 
-++	newargv = realloc(newargv, sizeof(newargv[0]) * (indexinfile + index));
-+ 	memcpy((void *)&newargv[indexinfile],moreargs,index*sizeof(moreargs[0]));
-+ 	free((void *)moreargs);
-+ 
-+-        myargc = indexinfile+index; myargv = newargv;
-++        myargc = indexinfile+index;
-++        myargv = newargv;
-+ 
-+         // DISPLAY ARGS
-+         //jff 9/3/98 use logical output routine
-+@@ -999,7 +1003,7 @@ static void DoLooseFiles(void)
-+   int lmpcount = 0;
-+   int dehcount = 0;
-+   int i,j,p;
-+-  const char **tmyargv;  // use these to recreate the argv array
-++  char **tmyargv;  // use these to recreate the argv array
-+   int tmyargc;
-+   boolean skip[MAXARGVS]; // CPhipps - should these be skipped at the end
-+ 
-+@@ -1060,7 +1064,7 @@ static void DoLooseFiles(void)
-+ 
-+   // Now go back and redo the whole myargv array with our stuff in it.
-+   // First, create a new myargv array to copy into
-+-  tmyargv = calloc(sizeof(char *),MAXARGVS);
-++  tmyargv = calloc(sizeof(tmyargv[0]),MAXARGVS);
-+   tmyargv[0] = myargv[0]; // invocation
-+   tmyargc = 1;
-+ 
-+diff --git a/src/m_argv.c b/src/m_argv.c
-+index 9392840..4fa1ed8 100644
-+--- a/src/m_argv.c
-++++ b/src/m_argv.c
-+@@ -37,8 +37,7 @@
-+ #include "m_argv.h"
-+ 
-+ int    myargc;
-+-const char * const * myargv; // CPhipps - not sure if ANSI C allows you to
-+-// modify contents of argv, but I can't imagine it does.
-++char **myargv;
-+ 
-+ //
-+ // M_CheckParm
-+diff --git a/src/m_argv.h b/src/m_argv.h
-+index 5340c15..b1d5907 100644
-+--- a/src/m_argv.h
-++++ b/src/m_argv.h
-+@@ -39,7 +39,7 @@
-+  * MISC
-+  */
-+ extern int  myargc;
-+-extern const char * const * myargv; /* CPhipps - const * const * */
-++extern char **myargv;
-+ 
-+ /* Returns the position of the given parameter in the arg list (0 if not found). */
-+ int M_CheckParm(const char *check);
-+-- 
-+2.50.1
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
