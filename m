@@ -4,77 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 999ACCA0EE6
-	for <buildroot@archiver.kernel.org>; Sat, 16 Aug 2025 20:47:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12FAFCA0EE6
+	for <buildroot@archiver.kernel.org>; Sat, 16 Aug 2025 20:50:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6816C6153E;
-	Sat, 16 Aug 2025 20:47:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DC2286154C;
+	Sat, 16 Aug 2025 20:50:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hiKRYyqgADhh; Sat, 16 Aug 2025 20:47:36 +0000 (UTC)
+ id J_GlsxZ3QyA7; Sat, 16 Aug 2025 20:50:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9ED5961539
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 238F361540
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9ED5961539;
-	Sat, 16 Aug 2025 20:47:36 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 910F175
- for <buildroot@buildroot.org>; Sat, 16 Aug 2025 20:47:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 238F361540;
+	Sat, 16 Aug 2025 20:50:55 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 182D9196
+ for <buildroot@buildroot.org>; Sat, 16 Aug 2025 20:50:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 82C7583E63
- for <buildroot@buildroot.org>; Sat, 16 Aug 2025 20:47:35 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id F1F7040EA2
+ for <buildroot@buildroot.org>; Sat, 16 Aug 2025 20:50:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dfL3RMTmS3iH for <buildroot@buildroot.org>;
- Sat, 16 Aug 2025 20:47:34 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
- helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ytO5PDvDhvA5 for <buildroot@buildroot.org>;
+ Sat, 16 Aug 2025 20:50:53 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8FEE783F51
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8FEE783F51
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8FEE783F51
- for <buildroot@buildroot.org>; Sat, 16 Aug 2025 20:47:34 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5BDAD4452B;
- Sat, 16 Aug 2025 20:47:31 +0000 (UTC)
-Date: Sat, 16 Aug 2025 22:47:30 +0200
-To: Thomas Perale via buildroot <buildroot@buildroot.org>
-Cc: Thomas Perale <thomas.perale@mind.be>, Kurt Van Dijck
- <dev.kurt@vandijck-laurijssen.be>
-Message-ID: <20250816224730.466990e0@windsurf>
-In-Reply-To: <20250812173616.1977078-1-thomas.perale@mind.be>
-References: <20250812173616.1977078-1-thomas.perale@mind.be>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddugeejkeegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepuddtfffhvdegueeludeugfelheeifeeuueejjeevhfetueejteejtedvudffhfffnecuffhomhgrihhnpegsuhhilhgurhhoohhtrdhorhhgpdgsohhothhlihhnrdgtohhmnecukfhppedvrgdtudemtggsudekmeekieegugemvddutddtmegrtddtfhemheelsgefmeegfhdvmeeifegusgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudekmeekieegugemvddutddtmegrtddtfhemheelsgefmeegfhdvmeeifegusgdphhgvlhhopeifihhnughsuhhrfhdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepfedprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtohepthhhohhmrghsrdhpvghrrghlvgesmhhinhgur
- dgsvgdprhgtphhtthhopeguvghvrdhkuhhrthesvhgrnhguihhjtghkqdhlrghurhhijhhsshgvnhdrsggv
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1755377251;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=ono3jUnm6GUq+wEGW66YK79X/CTfEWBQzLqChALjIG8=;
- b=cOHCiuYC5PlvnkP57y1CLeoinsO2oxLnSCdy6A/hidnXzJoZw3hzc7NVE7i3v9gYQDkfpA
- /bjb3cszC3w8HAJnCfc8WxXILfbEpotiNm11XiXJ7/TPRx3JIh1NvCgkcqdOdGDkqkjqSu
- 3S08LhoYotOQazEhAVrC40RiKqqVVJcERuLF4AYB4WFAwL6otWqgM8LfK8R+sTYGJcgG9p
- Ho/ui3z6D9RdWmY9K9Uyzn0T8mXi0Ltz0mx60pvqdHQYuH4TXzDe7Smhs7Lwt1BRs5ytNS
- +0MvC0FNO/ocmJv2jTd19IYdXBNhAkmA/3X7dELL/Lu/z5+0vrzmXaO4HzzvBg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=cOHCiuYC
-Subject: Re: [Buildroot] [PATCH] package/bcusdk: fix build w/ gcc-14
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 538C040E3D
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 538C040E3D
+ for <buildroot@buildroot.org>; Sat, 16 Aug 2025 20:50:53 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 446DE87671; Sat, 16 Aug 2025 20:50:53 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 16 Aug 2025 22:49:13 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: c0bf3da45b4feb9d849f79743cfc3e11e70290c7
+X-Git-Newrev: 2eb72e76663a00f1f61cef513c31508d8d3236c2
+X-Patchwork-Hint: ignore
+Message-Id: <20250816205053.446DE87671@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/prboom: fix build w/ gcc-15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -88,53 +59,80 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============5360154266479367198=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 12 Aug 2025 19:36:16 +0200
-Thomas Perale via buildroot <buildroot@buildroot.org> wrote:
+--===============5360154266479367198==
+Content-Type: text/plain
 
-> When using gcc-14 the compilation fails with the following error
-> message:
-> 
-> ```
-> close.c: In function 'EIBClose':
-> close.c:38:3: error: implicit declaration of function 'close'; did you mean 'pclose'? [-Wimplicit-function-declaration]
->    38 |   close (con->fd);
->       |   ^~~~~
->       |   pclose
-> openlocal.c: In function 'EIBSocketLocal':
-> openlocal.c:57:7: error: implicit declaration of function 'close'; did you mean 'pclose'? [-Wimplicit-function-declaration]
->    57 |       close (con->fd);
->       |       ^~~~~
->       |       pclose
-> make[6]: *** [Makefile:611: close.lo] Error 1
-> ```
-> 
-> This patch include <unistd.h> to include the declaration of close.
-> 
-> Fixes: https://autobuild.buildroot.org/results/483/483fc4584815507c3798eb972e22e51f70f52c23/build-end.log
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-> ---
->  ...include-unistd-for-close-declaration.patch | 70 +++++++++++++++++++
->  1 file changed, 70 insertions(+)
->  create mode 100644 package/bcusdk/0005-include-unistd-for-close-declaration.patch
+commit: https://git.buildroot.net/buildroot/commit/?id=2eb72e76663a00f1f61cef513c31508d8d3236c2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks. However, I suggest that we drop this
-package. It has been added in 2014 by someone working for a company
-which no longer exists. The latest release is from 2011. Kurt, the
-package maintainer, only every made two commits to it, back in 2017.
+This patch force the usage of `-std=gnu18` for GCC15 toolchains to fix
+the following issues:
 
-Best regards,
+- The boolean issue with C23
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+```
+In file included from ../../src/i_sound.h:38,
+                 from i_sound.c:58:
+../../src/doomtype.h:48:15: error: cannot use keyword ‘false’ as enumeration constant
+   48 | typedef enum {false, true} boolean;
+      |               ^~~~~
+../../src/doomtype.h:48:15: note: ‘false’ is a keyword with ‘-std=c23’ onwards
+```
+
+- The usage of `usleep` & `struct timezone` require usage of GNU
+  extensions.
+
+```
+i_system.c:58:3: error: implicit declaration of function ‘usleep’; did you mean ‘sleep’? [-Wimplicit-function-declaration]
+   58 |   usleep(usecs);
+      |   ^~~~~~
+      |   sleep
+i_system.c: In function ‘I_GetTime_RealTime’:
+i_system.c:78:19: error: storage size of ‘tz’ isn’t known
+   78 |   struct timezone tz;
+      |                   ^~
+i_system.c: In function ‘I_GetRandomTimeSeed’:
+i_system.c:105:19: error: storage size of ‘tz’ isn’t known
+  105 |   struct timezone tz;
+      |                   ^~
+```
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/prboom/prboom.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/prboom/prboom.mk b/package/prboom/prboom.mk
+index fc440e5cf8..ab9ab09913 100644
+--- a/package/prboom/prboom.mk
++++ b/package/prboom/prboom.mk
+@@ -18,6 +18,10 @@ ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
+ PRBOOM_CFLAGS += -O0
+ endif
+ 
++ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_15),y)
++PRBOOM_CFLAGS += -std=gnu18
++endif
++
+ PRBOOM_CONF_ENV += CFLAGS="$(PRBOOM_CFLAGS)"
+ 
+ ifeq ($(BR2_PACKAGE_LIBPNG),y)
+
+--===============5360154266479367198==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5360154266479367198==--
