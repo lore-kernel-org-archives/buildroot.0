@@ -1,74 +1,105 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5965ECA0EE9
-	for <buildroot@archiver.kernel.org>; Sat, 16 Aug 2025 20:17:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DD06CA0EE9
+	for <buildroot@archiver.kernel.org>; Sat, 16 Aug 2025 20:22:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 09F8983F29;
-	Sat, 16 Aug 2025 20:17:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F31806151F;
+	Sat, 16 Aug 2025 20:21:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ktjl1ujrs2vw; Sat, 16 Aug 2025 20:17:55 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gA3_pM3kOvwp; Sat, 16 Aug 2025 20:21:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 11DCE83F1D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 20BC06151B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 11DCE83F1D;
-	Sat, 16 Aug 2025 20:17:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 60CD875
- for <buildroot@buildroot.org>; Sat, 16 Aug 2025 20:17:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 20BC06151B;
+	Sat, 16 Aug 2025 20:21:59 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 487E4196
+ for <buildroot@buildroot.org>; Sat, 16 Aug 2025 20:21:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4688683F1D
- for <buildroot@buildroot.org>; Sat, 16 Aug 2025 20:17:53 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 368836151A
+ for <buildroot@buildroot.org>; Sat, 16 Aug 2025 20:21:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZPd_A7oA-obO for <buildroot@buildroot.org>;
- Sat, 16 Aug 2025 20:17:52 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 59BEA83EF4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 59BEA83EF4
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 59BEA83EF4
- for <buildroot@buildroot.org>; Sat, 16 Aug 2025 20:17:52 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 818457017; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Sat, 16 Aug 2025 20:17:48 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1unNLX-00A7Ds-0R;
- Sat, 16 Aug 2025 22:17:47 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Florian Larysch <fl@n621.de>
-Cc: buildroot@buildroot.org
-References: <20250816195542.3748-1-fl@n621.de>
-Date: Sat, 16 Aug 2025 22:17:47 +0200
-In-Reply-To: <20250816195542.3748-1-fl@n621.de> (Florian Larysch's message of
- "Sat, 16 Aug 2025 21:55:41 +0200")
-Message-ID: <87bjofm36c.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id g7iOFVCNDkpD for <buildroot@buildroot.org>;
+ Sat, 16 Aug 2025 20:21:57 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::42f; helo=mail-wr1-x42f.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3914961517
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3914961517
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
+ [IPv6:2a00:1450:4864:20::42f])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3914961517
+ for <buildroot@buildroot.org>; Sat, 16 Aug 2025 20:21:56 +0000 (UTC)
+Received: by mail-wr1-x42f.google.com with SMTP id
+ ffacd0b85a97d-3b9e4193083so2806209f8f.3
+ for <buildroot@buildroot.org>; Sat, 16 Aug 2025 13:21:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1755375715; x=1755980515;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=Iu16vkWrQ760AhykCqYBcKYlGYvmIb0WFTVoKSxBf4s=;
+ b=pRr15gzzjkFhR4AFYCwnlwX63B3hG+wxiwSBjldhGKrNXT/snf78xfDD5231XtDPts
+ MbDD0tpngeznOTWO69zXCcCEoFT8HYl+tyHkC3iVHJUVewAy5ZUNOZ4mo1jm0Il92rsN
+ Iczz2+tRZmyqvcTywajbkkC+ea5HhF9wDW+N1mLv93Wq8d107Y7yc2Q4dMPUfV8dFuPn
+ aQejJen85Bu8a8wRusGU4EF4MS7VTlWP4FNPA3VXPWh4Tp/9lNqJ5mHVJ7glMGXxVsXc
+ XdDfT0zUfV0c7kDSdeDayjDpjV8LRWVzr8PmtTs1oSicjCDs3MlN71dpXf4MIooy0bQ2
+ 8Z8Q==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCUEa8cZ3UIhqHuj6RWB9y6pvNDC5WOA3nTxijkO0ymFUBMz39YkgLbslfYGSR+rg789cH8qFVcg7N4=@buildroot.org
+X-Gm-Message-State: AOJu0YzTVNN0iDk/t4wcvp7dnagiONHhnSmhciIr74kmnmrUIoljyyEX
+ mz4vEN+XOBtFlCTfGzV906kdIMFU4rRWUF11wr3LYIyQnCzawNbSJAogTZABDUdB9mg=
+X-Gm-Gg: ASbGncv8YWMw1m2cz40PPAGlKTcvNKE5ZsY7vMtguGIwjY3zOvZBptgc2Tcukqy/Ku2
+ 0AIKtPNo3QvyMog8NAWepfgl8AIVvCU4QNfFZf8GBqF3hTXWU68Z0/6lyskMbBtttTc4eDFey5X
+ +LK1jGs8dRRj97PcTXyZtJatay76ts2oeRmdXrFoM5OoxB/iw+lH3y+SoE/hxmTmKAoHMdKpV3r
+ bE7cbTicp3kE+xuO0UJN3eDG+MKGYMCdCUm8Kbp94oMFik7JE/JFRx6q39/QHIh7gvjyrhoE0WG
+ OkSbn9q+W99gUw2vFN9NDxJ6B3/go8Ec0rWMmCtqKyDPxZknWKdPx8Oi0sn+VdKR6gXezxnRxae
+ jKpSPa34JMxm6Vw==
+X-Google-Smtp-Source: AGHT+IFRwEbxoaUzz6H5RT3f4IA7wG8s09vK/BRPyXCbnXgLQT5zs7Sv1HDFDh2EtWXjhaTbbF1SkQ==
+X-Received: by 2002:a05:6000:420b:b0:3b3:c4b1:a212 with SMTP id
+ ffacd0b85a97d-3bb66564c83mr5096507f8f.7.1755375714660; 
+ Sat, 16 Aug 2025 13:21:54 -0700 (PDT)
+Received: from arch ([79.132.233.79]) by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-3bb676c9426sm7282874f8f.33.2025.08.16.13.21.54
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 16 Aug 2025 13:21:54 -0700 (PDT)
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas Perale <thomas.perale@mind.be>,
+ Thomas Perale via buildroot <buildroot@buildroot.org>,
+ James Hilliard <james.hilliard1@gmail.com>
+Date: Sat, 16 Aug 2025 22:21:53 +0200
+Message-ID: <20250816202153.3376159-1-thomas.perale@mind.be>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20250816195207.5f8136a3@windsurf>
+References: <20250816195207.5f8136a3@windsurf>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=FvQMywWrtawpMxsP9JJrMzK+8aInUKmfdF3Z2aAt8t4S+U8eMEctoOXwrZR1/wngjDIsqCXyvvBNx6lE5L/RueafOhRyma809bTHwWdyXUPhMGKvEL5VCOqvkGbvEcGWCAduZ/aax5rTOESXKayWqew7GP/qGlzrhUm8p3/FeRYGUJShJ6qXgoi77AlKPrE+nMe+Z9+k3DQht/jR5IbhCY3FWZVw0Sr39bZOzA9lDG/Y6M2xnEONMJoBiud4YNK7wHEjg8E4C0gN20nvawTCzLcdleCutwdHfSRpJsdA8peFfFrfrVwdUNbOUC4D+CbczbQHtAB2bSVPw1ALwQdxmg==;
- s=purelymail2; d=purelymail.com; v=1;
- bh=sMs3j2FlYTcSMr+KPnj4WPQ/SUyIDyZh0KQvvKmEEbo=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail2 header.b=FvQMywWr
-Subject: Re: [Buildroot] [PATCH 1/1] package/libjwt: require openssl
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1755375715; x=1755980515; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=Iu16vkWrQ760AhykCqYBcKYlGYvmIb0WFTVoKSxBf4s=;
+ b=Qw9OV1x/mkz/0oPKBD+N5l+u0EqVbNBnzLFzr/8DsAYj6SQ4hwh3yszVXkYDgU7Mbl
+ tS/mV6EyrxDt0cmKz8PW6iROhvRusabS1Pg5fVRikFIlIg0VqkPA2eFY8fGlmeeZFNxy
+ oULASSJV9mBRCC5iciK5W0/O/odfgi/kV1kppZSlUv0eobzWs/ImDAP5E5m+Yvg2SC31
+ JpUdICq/+Q/Q6v4x4QnS4YN7UbGZyBkQerpZ1Us1zCqnJGuf+i7O9tJaubBwcltY60LQ
+ lrzg9EW47D0rpTIjOEjKhT4YyDSSHid1h1ttw8ht3NzTH1gZnqWszFcdShoPM975d3tF
+ FMaA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=Qw9OV1x/
+Subject: Re: [Buildroot] [PATCH 1/2] package/python-yarl: add missing select
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -80,93 +111,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Perale via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Perale <thomas.perale@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Florian" == Florian Larysch <fl@n621.de> writes:
+Good Evening,
 
- > Ever since upstream commit 01dd6da ("Rework the entire API"), first
- > introduced as part of release v3.0.0, openssl is a hard requirement for
- > building libjwt. As such, "-DWITH_OPENSSL=ON" also has become a no-op.
+In reply of:
+> On Sat, 16 Aug 2025 15:01:04 +0200
+> Thomas Perale via buildroot <buildroot@buildroot.org> wrote:
+> 
+> > `python-yarl.mk` depends on the host-python-cython package. This patch
+> > adds a `select BR2_PACKAGE_HOST_PYTHON_CYTHON` to correctly express this
+> > dependency in KConfig.
+> 
+> This is not quite needed, nor required. We do not enforce adding select
+> for host packages. When a package needs host-pkgconf, we do not select
+> BR2_PACKAGE_HOST_PKGCONF for example. I'm sure you will find tons of
+> other packages that have host-python-cython in their <pkg>_DEPENDENCIES
+> but that don't select BR2_PACKAGE_HOST_PYTHON_CYTHON.
 
- > In Buildroot, this has been masked somewhat by the implicit select when
- > gnutls is disabled, but a failure can be reproduced using test-pkg with
- > a config like:
+Good to know, my reasoning was that other package in that same case seemed to
+select `BR2_PACKAGE_HOST_PYTHON_CYTHON`:
 
- > BR2_PACKAGE_GNUTLS=y
- > BR2_PACKAGE_LIBJWT=y
+- python-kmod/Config.in
+- python-dbus-fast/Config.in
+- python-rgbmatrix/Config.in
 
- > Fix this by requiring openssl. Furthermore, building against libressl
- > does not work because libjwt requires API surface that is not present
- > there[1], so we need to force libopenssl.
+So, if you prefer to not include the 'select' I will send a v2 and remove my
+series that did the same for python-propcache
+(https://lore.kernel.org/r/<20250813201639.2443921-1-thomas.perale@mind.be>).
 
- > libjwt still supports linking against additional crypto providers, so we
- > can still link against gnutls if it is present.
+Best regards.
 
- > [1] https://autobuild.buildroot.org/results/463/4638a7d46c149ca0f46d3fe5f5f90dc5ee9d1e03
-
-While it can work with the combination gnutls + libopenssl, would there
-be any advantage over just using openssl for everything?
-
-
- > Signed-off-by: Florian Larysch <fl@n621.de>
- > ---
- >  package/libjwt/Config.in | 3 ++-
- >  package/libjwt/libjwt.mk | 7 ++-----
- >  2 files changed, 4 insertions(+), 6 deletions(-)
-
- > diff --git a/package/libjwt/Config.in b/package/libjwt/Config.in
- > index 39d1665e0e..47eb0882a3 100644
- > --- a/package/libjwt/Config.in
- > +++ b/package/libjwt/Config.in
- > @@ -1,6 +1,7 @@
- >  config BR2_PACKAGE_LIBJWT
- >  	bool "libjwt"
- > -	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_GNUTLS
- > +	select BR2_PACKAGE_OPENSSL
- > +	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
- >  	select BR2_PACKAGE_JANSSON
- >  	help
- >  	  JSON Web Tokens are an open, industry standard RFC 7519
- > diff --git a/package/libjwt/libjwt.mk b/package/libjwt/libjwt.mk
- > index 29ca9cebf4..687432142f 100644
- > --- a/package/libjwt/libjwt.mk
- > +++ b/package/libjwt/libjwt.mk
- > @@ -7,7 +7,7 @@
- >  LIBJWT_VERSION = 3.2.0
- >  LIBJWT_SITE = https://github.com/benmcollins/libjwt/releases/download/v$(LIBJWT_VERSION)
- >  LIBJWT_SOURCE = libjwt-$(LIBJWT_VERSION).tar.xz
- > -LIBJWT_DEPENDENCIES = host-pkgconf jansson
- > +LIBJWT_DEPENDENCIES = host-pkgconf jansson openssl
- >  LIBJWT_INSTALL_STAGING = YES
- >  LIBJWT_LICENSE = MPL-2.0
- >  LIBJWT_LICENSE_FILES = LICENSE
- > @@ -16,10 +16,7 @@ LIBJWT_CPE_ID_PRODUCT = jwt_c_library
- 
- >  LIBJWT_CONF_OPTS += -DWITH_TESTS=OFF
- 
- > -ifeq ($(BR2_PACKAGE_OPENSSL),y)
- > -LIBJWT_CONF_OPTS += -DWITH_OPENSSL=ON
- > -LIBJWT_DEPENDENCIES += openssl
- > -else
- > +ifeq ($(BR2_PACKAGE_GNUTLS),y)
- >  LIBJWT_CONF_OPTS += -DWITH_GNUTLS=ON
- >  LIBJWT_DEPENDENCIES += gnutls
- >  endif
- > -- 
-
- > 2.50.1
-
- > _______________________________________________
- > buildroot mailing list
- > buildroot@buildroot.org
- > https://lists.buildroot.org/mailman/listinfo/buildroot
+> Thomas
+> -- 
+> Thomas Petazzoni, co-owner and CEO, Bootlin
+> Embedded Linux and Kernel engineering and training
+> https://bootlin.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
 
--- 
-Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
