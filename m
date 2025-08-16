@@ -4,76 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C12CFCA0EE9
-	for <buildroot@archiver.kernel.org>; Sat, 16 Aug 2025 21:06:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D34DCA0EE6
+	for <buildroot@archiver.kernel.org>; Sat, 16 Aug 2025 21:07:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 956F96155A;
-	Sat, 16 Aug 2025 21:06:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EA45C61556;
+	Sat, 16 Aug 2025 21:07:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pOmnKnIJyegN; Sat, 16 Aug 2025 21:06:01 +0000 (UTC)
+ id ZaMOgvorJbva; Sat, 16 Aug 2025 21:07:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA66D6155E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 350E86155C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CA66D6155E;
-	Sat, 16 Aug 2025 21:06:01 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 52781196
- for <buildroot@buildroot.org>; Sat, 16 Aug 2025 21:06:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 350E86155C;
+	Sat, 16 Aug 2025 21:07:06 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id AE3B8197
+ for <buildroot@buildroot.org>; Sat, 16 Aug 2025 21:07:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 449B940ED5
- for <buildroot@buildroot.org>; Sat, 16 Aug 2025 21:06:00 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 943AE83F84
+ for <buildroot@buildroot.org>; Sat, 16 Aug 2025 21:07:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iV5gFAtbIOW9 for <buildroot@buildroot.org>;
- Sat, 16 Aug 2025 21:05:59 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
- helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id usNcYtrrE88l for <buildroot@buildroot.org>;
+ Sat, 16 Aug 2025 21:07:05 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
+ helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4DF5340EA2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4DF5340EA2
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4DF5340EA2
- for <buildroot@buildroot.org>; Sat, 16 Aug 2025 21:05:59 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 41BA3442AB;
- Sat, 16 Aug 2025 21:05:56 +0000 (UTC)
-Date: Sat, 16 Aug 2025 23:05:56 +0200
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9183083F7E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9183083F7E
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9183083F7E
+ for <buildroot@buildroot.org>; Sat, 16 Aug 2025 21:07:04 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 22B4644367;
+ Sat, 16 Aug 2025 21:07:00 +0000 (UTC)
+Date: Sat, 16 Aug 2025 23:06:59 +0200
 To: "Yann E. MORIN via buildroot" <buildroot@buildroot.org>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Message-ID: <20250816230556.5ab76c07@windsurf>
-In-Reply-To: <20250811152650.3689304-1-yann.morin.1998@free.fr>
-References: <20250811152650.3689304-1-yann.morin.1998@free.fr>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>, Adam Duskett
+ <adam.duskett@amarulasolutions.com>, Florian Larysch <fl@n621.de>, Julien
+ Olivain <ju.o@free.fr>
+Message-ID: <20250816230659.2134186f@windsurf>
+In-Reply-To: <20250811153257.3746260-1-yann.morin.1998@free.fr>
+References: <20250811153257.3746260-1-yann.morin.1998@free.fr>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-State: clean
 X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddugeejkeekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepledtgedvjeehgeetgfeufffglefhkedvfeduveeiieelteeliedtfefguefggffhnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtudemtggsudekmeekieegugemvddutddtmegrtddtfhemheelsgefmeegfhdvmeeifegusgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudekmeekieegugemvddutddtmegrtddtfhemheelsgefmeegfhdvmeeifegusgdphhgvlhhopeifihhnughsuhhrfhdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvddprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtohephigrnhhnrdhmohhrihhnrdduleelkeesfhhrvggvrdhfrh
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddugeejkeekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepledtgedvjeehgeetgfeufffglefhkedvfeduveeiieelteeliedtfefguefggffhnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtudemtggsudekmeekieegugemvddutddtmegrtddtfhemheelsgefmeegfhdvmeeifegusgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudekmeekieegugemvddutddtmegrtddtfhemheelsgefmeegfhdvmeeifegusgdphhgvlhhopeifihhnughsuhhrfhdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohephedprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtohephigrnhhnrdhmohhrihhnrdduleelkeesfhhrvggvrdhfrhdprhgtphhtthhopegru
+ ggrmhdrughushhkvghtthesrghmrghruhhlrghsohhluhhtihhonhhsrdgtohhmpdhrtghpthhtohepfhhlsehniedvuddruggvpdhrtghpthhtohepjhhurdhosehfrhgvvgdrfhhr
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1755378357;
+ d=bootlin.com; s=gm1; t=1755378421;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=Qd2fPa3WDbyCvdFCmTL5L67u4bVd6nn6yXWd6oLrfRo=;
- b=kN/m5ZzhpMl4M25CpC0dW4DtZIiZOAc9f8Vcoi7OyOwFqojN8M/TqtxCcD3T52J3FtqL0y
- tchs+MjBLdJDiSbyA2LSNrz8MNG5YPqKg5XGXSK/de8ODtM5p7xy+Egizhb2ehACM6WptI
- Do6fqjf+WRVYG8Basf0KEMG+5vxUvgCDXuVFx9N+YMsrVKZKDYvKBCPB2TkAaUpLPgKUd/
- 9/DCjeYZqRHGsuMjkFSKoBM2J2/iZVU0j5bHRc6T1rAvPP9gD8T6+xpPwhCwwcAO5OZKI8
- Vt4rlHPJzHDmtYQGwVxf0w8jiu93+EfaAD6pQe3XX40azxFLMMq/jt2Wg5iFYw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=a+IW8QbgaFwxEBHblIW0VnyEOu7X0AsuVOF6zghrSRE=;
+ b=C1LhxCjDIFkE4NXso8jTTiKuw96xiahjv15w6tLdEYgCDv+NqovPme2/bnWAe2LzbDpLYC
+ 4Tcc+nhz7KRzEh9Putnv8+IcM8Q5dj6p7VrK/PP5RVKf2ozczWnNyeWAxZTdfEVeiR/R1V
+ jrNSoJWfOqtS5sl/gOlIE9P+xMFFOVd8Hy0oxvqW3BDiVLSAJbWWB2fymlW6+x8cuoJAlb
+ d5naiCPD1xZnwEyQrstLHiOSZgjQ0c6TFrJyEJVyBLAKu6KbS/N3tlyGb5zpK1nDwokvkQ
+ m2BO7ED1q3rWnMdG1TqsAdsJy/IR7dAMM/2362Yg5uXwS45MA0sRjRxEdqfqbA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=kN/m5Zzh
-Subject: Re: [Buildroot] [PATCH] package/bash: don't use append-assignment
- where unneeded
+ header.s=gm1 header.b=C1LhxCjD
+Subject: Re: [Buildroot] [PATCH] package/bash: fix build with gcc 15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,25 +94,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 11 Aug 2025 17:26:50 +0200
+Hello Yann,
+
+Thanks for the patch!
+
+On Mon, 11 Aug 2025 17:32:57 +0200
 "Yann E. MORIN via buildroot" <buildroot@buildroot.org> wrote:
 
-> For the first, unconditional assignment, there is no reason to use
-> append-assignment; it can even be misleading.
+> Commit 6d09b25d08fe (package/bash: fix build with host GCC 15) did
+> apply a workaround for when the host gcc is gcc-15 (or later), but
+> missed the fact that the target compiler also exhibits build issues.
 > 
-> Fixes: b367ca32e53a774c174899e44c77ed1d128cbcdc
+> For the same reasons as explained in 6d09b25d08fe, don't try and fix
+> those issues, but just paper over the problem by using an older C
+> standard.
 > 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> ---
->  package/bash/bash.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Fixes: b7882d024ae484c52473955fbbcbf3b5f0717c2f
 
-Applied to master, thanks.
+This "Fixes" didn't make much sense. You're not really fixing a
+previous commit here. Rather you're fixing an autobuilder issue, so
+I've added a reference to the autobuilder issue being fixed instead.
+
+> +ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_15),y)
+> +BASH_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=gnu17"
+> +endif
+
+Added a comment above this indicating that it can be dropped when
+bumping to bash 5.3.
+
+Applied to master with those fixes. Thanks again!
 
 Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
 https://bootlin.com
 _______________________________________________
 buildroot mailing list
