@@ -1,100 +1,84 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4FDFCA0ED1
-	for <buildroot@archiver.kernel.org>; Mon, 18 Aug 2025 14:56:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D9D2CA0EE4
+	for <buildroot@archiver.kernel.org>; Mon, 18 Aug 2025 14:59:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 75AD9848C6;
-	Mon, 18 Aug 2025 14:56:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D828941E7D;
+	Mon, 18 Aug 2025 14:59:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iY_4LBd-xx8u; Mon, 18 Aug 2025 14:56:05 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id S8HU5cyqVgyW; Mon, 18 Aug 2025 14:59:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 44BEF848D5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D348441E6B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 44BEF848D5;
-	Mon, 18 Aug 2025 14:56:05 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 2BC36196
- for <buildroot@buildroot.org>; Mon, 18 Aug 2025 14:56:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D348441E6B;
+	Mon, 18 Aug 2025 14:59:18 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 402C8E2
+ for <buildroot@buildroot.org>; Mon, 18 Aug 2025 14:59:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1D4D341763
- for <buildroot@buildroot.org>; Mon, 18 Aug 2025 14:56:03 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1F55D41D99
+ for <buildroot@buildroot.org>; Mon, 18 Aug 2025 14:59:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T3d2R0pRB3WF for <buildroot@buildroot.org>;
- Mon, 18 Aug 2025 14:56:02 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
- envelope-from=angelo.compagnucci@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 312B440332
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 312B440332
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 312B440332
- for <buildroot@buildroot.org>; Mon, 18 Aug 2025 14:56:02 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id
- 5b1f17b1804b1-45a1b065d58so31600705e9.1
- for <buildroot@buildroot.org>; Mon, 18 Aug 2025 07:56:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1755528960; x=1756133760;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=nfbvIjGYtqOqEIztnJZxBaXyab0PpBg6fQ9zRHmWWio=;
- b=aT0e4GAN0hyPR21Kax83cJPjV5fXCkwjmIJkWrcI340XGh91RjYwbt65N9db2iq8qD
- S3hUy16lCOd8t4CXT8pCXRPb8Isst1/z+GJ7Ht3c+yYjrNRKcpBwOqcbGgesaUCslp5P
- um0nD0KvrGFUb1B6nmqqT7lGVW+VkyU85qUXrg75gq2o20DmIF59wS8jsdpAoaAvcVUU
- FPZkPaTJ5xKIJpysBvhQV3QCrLYeYqDRxzk+E/SZUwAOSO/hxiOvPGxeKGgVV/FXEzm2
- ZoiLS9yEcv0s0Tq858VMAEmt4E/7w3+y2ZucRypahxAHDoqpaCp7VmnjB5nu+xKBJPA+
- kNDw==
-X-Gm-Message-State: AOJu0YzZeDPccX0XjmKKWz7hqYsMdW0RuR4h/UywUQZ8fcxTN5nWBTW6
- J+YRNqqdQdkyPV6C60uu0I6zGXLo17D3UaTsuprfHYuWhAov5ye0oke0zREG8v11
-X-Gm-Gg: ASbGncuO0xkH9J5zQmW+rLATtvXP0L6ZhyjFvDE11al04Tgf+RovnWiuC2Akxf4CGdU
- MGUW1BSaQvDCyT5CRIUA/I2KIfhU/U5IjJC4PVvY51VyJ/FBWjNi3b58bdhccQddOvsCxiiI4Cz
- wBebAsHPyRKeqqN8lP2JrPgYNbz+XmvvWFH1kJggQ6XyfcFsRfTd8Dajh2kkTeJVfZi3s/qYYoU
- MQcnvGC59/W5FOUOHU387USQwFwQb8O2yxfurt38/eiaOVRRQF9D3x9Xqfy02wfNDE0fntBw/RO
- eE8qHwlXVFm6xVS8jElhYVvjD3Yo0GWI7mkGDCVZtYBBakiit2rYH3SZcwihYVv5EChTEDqPZBq
- UQKa4meupGEMCacthiq9GCwP3nl0hDCcdAC8w1KdOVwyV/A==
-X-Google-Smtp-Source: AGHT+IGlfJUfUdp6ADPiG9XZUhRAxkbcMZY9XVXspD38yA4vqpVfUmndT6zw9HgyoxjNjGOlyDzYrw==
-X-Received: by 2002:a05:6000:1446:b0:3b7:9929:871c with SMTP id
- ffacd0b85a97d-3bb68c0472emr9851600f8f.37.1755528959685; 
- Mon, 18 Aug 2025 07:55:59 -0700 (PDT)
-Received: from localhost.localdomain ([212.22.141.99])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3bb64758690sm13255840f8f.6.2025.08.18.07.55.58
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 18 Aug 2025 07:55:59 -0700 (PDT)
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-To: buildroot@buildroot.org
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Mon, 18 Aug 2025 16:55:55 +0200
-Message-Id: <20250818145555.1039619-1-angelo.compagnucci@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Y5YAgocWmWdf for <buildroot@buildroot.org>;
+ Mon, 18 Aug 2025 14:59:15 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=117.135.210.3;
+ helo=m16.mail.163.com; envelope-from=uuidxx@163.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5B61C41D63
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5B61C41D63
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5B61C41D63
+ for <buildroot@buildroot.org>; Mon, 18 Aug 2025 14:59:13 +0000 (UTC)
+Received: from OSZPR01MB7868.jpnprd01.prod.outlook.com (unknown [])
+ by gzga-smtp-mtada-g1-2 (Coremail) with SMTP id
+ _____wA3GvusP6NopnYICw--.22587S2; 
+ Mon, 18 Aug 2025 22:58:54 +0800 (CST)
+From: "uuidxx@163.com" <uuidxx@163.com>
+To: "romain.naour@smile.fr" <romain.naour@smile.fr>, Thomas Petazzoni via
+ buildroot <buildroot@buildroot.org>
+CC: "thomas.petazzoni@bootlin.com" <thomas.petazzoni@bootlin.com>
+Thread-Topic: [Buildroot] [PATCH v3 1/1] package/lrzsz: fix build with gcc 15
+Thread-Index: AQHcEE/mT/IvMHgot0aRHK1/6mJvJg==
+X-MS-Exchange-MessageSentRepresentingType: 1
+Date: Mon, 18 Aug 2025 14:58:50 +0000
+Message-ID: <OSZPR01MB786801D0CA53D517D6E04AD6FD31A@OSZPR01MB7868.jpnprd01.prod.outlook.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-Exchange-Organization-SCL: -1
+X-MS-TNEF-Correlator: 
+X-MS-Exchange-Organization-RecordReviewCfmType: 0
+msip_labels: 
 MIME-Version: 1.0
+X-CM-TRANSID: _____wA3GvusP6NopnYICw--.22587S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxZFWDKF1ktF1kuF48Wr4kJFb_yoW5ur47pF
+ Wqk3s8Kw4xtF1fXFy7Ww10g3WrKFZFkF17Aw48Gw4SqrsxGas0qa4YyFWrur13ur97Ww43
+ ur1rZwnruF4UXrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+ 9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UDrchUUUUU=
+X-Originating-IP: [2603:1046:c0a:20d8::5]
+X-CM-SenderInfo: hxxlv5r06rljoofrz/1tbisg+t22ijOkWLqwAAsf
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1755528960; x=1756133760; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=nfbvIjGYtqOqEIztnJZxBaXyab0PpBg6fQ9zRHmWWio=;
- b=PfMwXlNFXy4gCOy8CM8LVKnQ3h6xtOt+OPUcAEDeSrO2UuKTGoq6e5nLwaMrc3DBXD
- UzeUbVDywE4JFWALQZDiJ14yZMlTvczfbnbLmRf5PmWD2EKQhe6u+JWLxLUELyO3Qto6
- 8Migxmq8+VjzAlXuQoZiRKewPoa+drQA3xDCvrbYE45w6Hsd7a9vntlJ6yD9OicEA6+K
- 9dlYBY4bN1hvfV/kOiPpwjltktu0LEuvoWPy6jU+vi3PK6iPYbkSd3kLtk1NQEfOV8sN
- nRvbi1Y+0YzbjxT6O2RvemuxyCjtwd+p/5qDZSodAFe6X00ncPBM8z0xpk3VGSo2m94R
- 7sdw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=163.com; 
+ s=s110527; h=From:To:Subject:Date:Message-ID:Content-Type:
+ MIME-Version; bh=CHxRmSMmzXASIfiDCJNw8nVzGBbO/+a/hzyuJpxo9T4=;
+ b=fSSJxaDRdqRCFH0Iisug8hbUESGsTFrDvLu6OXpMONWqFIa913vZnShfa6BhCi
+ InaU0DpQUuoRZ8eNjXEiPKF7+j9CiM4YmjAq9/0FNdjDVUm2j3axE149gNZfPKhb
+ W31aPy9GFPgf2YtQgrUcr9TC+7ywd0Mu9pG4BDHApfkro=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=PfMwXlNF
-Subject: [Buildroot] [PATCH] package/cups: bump to version 2.4.12
+ header.from=163.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256
+ header.s=s110527 header.b=fSSJxaDR
+Subject: [Buildroot] [PATCH v3 1/1] package/lrzsz: fix build with gcc 15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -111,41 +95,115 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog:
-https://github.com/OpenPrinting/cups/releases/tag/v2.4.12
+Fixes:
+  https://autobuild.buildroot.net/results/a1a5aad2ccc69aeff586d7a83620f10d51ccfdb6/
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Upstream: https://github.com/UweOhse/lrzsz/pull/8
+
+Signed-off-by: Frank Chung <uuidxx@163.com>
 ---
- package/cups/cups.hash | 4 ++--
- package/cups/cups.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Changes v2 -> v3:
+  - remove `[PATCH 2/2]` from the patch (suggested by Thomas)
+  - use `Upstream` instaead of `From` (suggested by Thomas)
+  - point to the autobuilder issue (suggested by Thomas)
+---
+ package/lrzsz/0005-fix-build-with-gcc15.patch | 85 +++++++++++++++++++
+ 1 file changed, 85 insertions(+)
+ create mode 100644 package/lrzsz/0005-fix-build-with-gcc15.patch
 
-diff --git a/package/cups/cups.hash b/package/cups/cups.hash
-index f826f96fe7..e363a761eb 100644
---- a/package/cups/cups.hash
-+++ b/package/cups/cups.hash
-@@ -1,4 +1,4 @@
- # Locally calculated:
--sha256  9a88fe1da3a29a917c3fc67ce6eb3178399d68e1a548c6d86c70d9b13651fd71  cups-2.4.11-source.tar.gz
-+sha256  b1dde191a4ae2760c47220c82ca6155a28c382701e6c1a0159d1054990231d59  cups-2.4.12-source.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
--sha256  5320b6e3c252423e4153eb2dd63e57e3b630afb21139f44e43b02d85fe33e279  NOTICE
-+sha256  977206f041b9a6f47ac00531e1242c0fab7063da71178f8d868b167b70866b6d  NOTICE
-diff --git a/package/cups/cups.mk b/package/cups/cups.mk
-index 31899114ef..21fe6a7c5e 100644
---- a/package/cups/cups.mk
-+++ b/package/cups/cups.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CUPS_VERSION = 2.4.11
-+CUPS_VERSION = 2.4.12
- CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.gz
- CUPS_SITE = https://github.com/OpenPrinting/cups/releases/download/v$(CUPS_VERSION)
- CUPS_LICENSE = Apache-2.0 with GPL-2.0/LGPL-2.0 exception
+diff --git a/package/lrzsz/0005-fix-build-with-gcc15.patch b/package/lrzsz/0005-fix-build-with-gcc15.patch
+new file mode 100644
+index 0000000000..400a2e70cc
+--- /dev/null
++++ b/package/lrzsz/0005-fix-build-with-gcc15.patch
+@@ -0,0 +1,85 @@
++From a33f1700fb9b2af731b30468267a1693999889b4 Mon Sep 17 00:00:00 2001
++From: Frank Chung <uuidxx@163.com>
++Date: Mon, 18 Aug 2025 20:59:46 +0800
++Subject: [PATCH] fix build with gcc15
++
++Fixes:
++  https://autobuild.buildroot.net/results/a1a5aad2ccc69aeff586d7a83620f10d51ccfdb6/
++
++Upstream: https://github.com/UweOhse/lrzsz/pull/8
++
++Signed-off-by: Frank Chung <uuidxx@163.com>
++---
++ lib/error.c        | 2 +-
++ lib/getopt.h       | 2 +-
++ lib/long-options.c | 2 +-
++ lib/long-options.h | 2 +-
++ lib/xstrtol.c      | 2 --
++ 5 files changed, 4 insertions(+), 6 deletions(-)
++
++diff --git a/lib/error.c b/lib/error.c
++index 3861578..2a2f1ff 100644
++--- a/lib/error.c
+++++ b/lib/error.c
++@@ -74,7 +74,7 @@ extern char *program_name;
++ 
++ # if HAVE_STRERROR
++ #  ifndef strerror		/* On some systems, strerror is a macro */
++-char *strerror ();
+++char *strerror (int);
++ #  endif
++ # else
++ static char *
++diff --git a/lib/getopt.h b/lib/getopt.h
++index 4ac33b7..46971cb 100644
++--- a/lib/getopt.h
+++++ b/lib/getopt.h
++@@ -101,7 +101,7 @@ struct option
++    errors, only prototype getopt for the GNU C library.  */
++ extern int getopt (int argc, char *const *argv, const char *shortopts);
++ #else /* not __GNU_LIBRARY__ */
++-extern int getopt ();
+++extern int getopt (int, char * const [], const char *);
++ #endif /* __GNU_LIBRARY__ */
++ extern int getopt_long (int argc, char *const *argv, const char *shortopts,
++ 		        const struct option *longopts, int *longind);
++diff --git a/lib/long-options.c b/lib/long-options.c
++index 761c16a..0e7e8c2 100644
++--- a/lib/long-options.c
+++++ b/lib/long-options.c
++@@ -46,7 +46,7 @@ parse_long_options (argc, argv,version, usage)
++      int argc;
++      char **argv;
++      void (*version)();
++-     void (*usage)();
+++     void (*usage)(int);
++ #endif
++ {
++   int c;
++diff --git a/lib/long-options.h b/lib/long-options.h
++index 14459cd..3fb8fa6 100644
++--- a/lib/long-options.h
+++++ b/lib/long-options.h
++@@ -6,5 +6,5 @@
++ #endif
++ 
++ void parse_long_options __P ((int _argc, char **_argv, 
++-							  void (*_version) (void), 
+++							  void (*_version) (), 
++ 							  void (*_usage) (int)));
++diff --git a/lib/xstrtol.c b/lib/xstrtol.c
++index d7b4b56..7d0737d 100644
++--- a/lib/xstrtol.c
+++++ b/lib/xstrtol.c
++@@ -65,8 +65,6 @@ extern int errno;
++ 	}								\
++       while (0)
++ 
++-__unsigned long int __strtol ();
++-
++ /* FIXME: comment.  */
++ 
++ strtol_error
++-- 
++2.47.2
++
 -- 
-2.34.1
+2.47.2
 
 _______________________________________________
 buildroot mailing list
