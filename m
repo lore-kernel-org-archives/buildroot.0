@@ -1,76 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34341CA0EE4
-	for <buildroot@archiver.kernel.org>; Mon, 18 Aug 2025 21:26:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 308F0CA0ED1
+	for <buildroot@archiver.kernel.org>; Mon, 18 Aug 2025 21:32:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D9F466067F;
-	Mon, 18 Aug 2025 21:26:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DE040400C2;
+	Mon, 18 Aug 2025 21:32:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Bd_gqgmxC_2W; Mon, 18 Aug 2025 21:26:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3Ew3Y9yRBRQS; Mon, 18 Aug 2025 21:32:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C5F56066B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0FAD2400C5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3C5F56066B;
-	Mon, 18 Aug 2025 21:26:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2FF50E2
- for <buildroot@buildroot.org>; Mon, 18 Aug 2025 21:26:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0FAD2400C5;
+	Mon, 18 Aug 2025 21:32:55 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0748D19E
+ for <buildroot@buildroot.org>; Mon, 18 Aug 2025 21:32:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1D9CA80BCD
- for <buildroot@buildroot.org>; Mon, 18 Aug 2025 21:26:08 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id DC92880B71
+ for <buildroot@buildroot.org>; Mon, 18 Aug 2025 21:32:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NKyDursPFJ9u for <buildroot@buildroot.org>;
- Mon, 18 Aug 2025 21:26:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id EjLCtH7rKxy5 for <buildroot@buildroot.org>;
+ Mon, 18 Aug 2025 21:32:52 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DEFD580BCC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DEFD580BCC
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DEFD580BCC
- for <buildroot@buildroot.org>; Mon, 18 Aug 2025 21:26:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0968A80B85
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0968A80B85
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0968A80B85
+ for <buildroot@buildroot.org>; Mon, 18 Aug 2025 21:32:51 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id 9379F1A0C5C
- for <buildroot@buildroot.org>; Mon, 18 Aug 2025 21:26:02 +0000 (UTC)
+ by smtpout-03.galae.net (Postfix) with ESMTPS id B758C4E40C02;
+ Mon, 18 Aug 2025 21:32:49 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 5ADD1606A6;
- Mon, 18 Aug 2025 21:26:02 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 798F4606A6;
+ Mon, 18 Aug 2025 21:32:49 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id EA1281C22C6F9; 
- Mon, 18 Aug 2025 23:26:00 +0200 (CEST)
+ with ESMTPSA id 895D21C22A1A3; 
+ Mon, 18 Aug 2025 23:32:45 +0200 (CEST)
 To: buildroot@buildroot.org
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Alex Suykov <alex.suykov@gmail.com>
-Date: Mon, 18 Aug 2025 23:25:58 +0200
-Message-ID: <20250818212559.3266944-1-thomas.petazzoni@bootlin.com>
+ Adam Duskett <adam.duskett@amarulasolutions.com>,
+ Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ Jagan Teki <jagan@amarulasolutions.com>,
+ Meena Murthy <meena.murthy@amarulasolutions.com>,
+ Michael Trimarchi <michael@amarulasolutions.com>,
+ Suniel Mahesh <sunil@amarulasolutions.com>
+Date: Mon, 18 Aug 2025 23:32:40 +0200
+Message-ID: <20250818213241.3270409-1-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.50.1
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=dkim; 
- t=1755552361; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding; bh=w5gL91ZS3zLLhHuaGLQ1DPA/BG+kD6C7HOmRK5uzLJE=;
- b=AvxelFtNiakUE0JNLDOpcqdh3oZ3t8fG9dy91CnJe+i2smlkVht//3RsJ60yxTwpcP1QoS
- wZOIHV06qfl9k4NJgNt75VvU1rxiS1hVA91bAZeKPpOtnA867F7xGf7IBJrJSWmtCb05j4
- cnGhnNNXpE0Iu+9sEL7FI/OsoBQXmpYz4HlGaPh51MLR78iVaCYsHjOGfBsZ54Ka7tRlSF
- 1d+mszDXVgKU0Jtchr0GvaCIhA0BnT/+Kv4OSF1/JtrTnj0RbnaI/Hrv/QGBADd8GNUOeJ
- aHFeW2l87I4BdEE38GJZgmeN+W1PUo40lSgpM966MkPoYpUURpr5/3kEWB3CHw==
+ t=1755552767; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=lQ3lAV4OMjhOoLDrYTgFRLHvmUfeMxxNXClTFqxJR7I=;
+ b=FaYwa5AUA9cKAaq2DpQSR6DezGthhIu+dJauthKgvqtsSSi1g8YQzUxyagVUEEeSEjIdID
+ moXwuAvIaLsu/29fyyOezKioWcohIQtkYN7Q7cLx9/CyG1FwO2BrHUGUlMxCgVrM6ihEak
+ X5j2u458eWoaTzCe0jmStY0o+w3umcY4ju4+m6eIvhKVk0eFJG/HTGVO8sUF83+v9nN5rq
+ Z2sESHx+J8+bCAEtMKmHjeyeynrQBEdqPnJPJ1+M9mi5t9z8sWR6eaA9iXOAIpeZqH7puV
+ wIGPG4NuFG0mrs8xwL43fP67UlzNfLp8TK8J43hjCyKAF3EmbPzVQZnkb3OeXw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=AvxelFtN
-Subject: [Buildroot] [PATCH] configs/chromebook_snow: remove defconfig,
- broken
+ header.a=rsa-sha256 header.s=dkim header.b=FaYwa5AU
+Subject: [Buildroot] [PATCH] configs/engicam_imx6*: remove defconfigs, broken
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -89,398 +93,882 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This defconfig no longer builds:
+Remove numerous Engicam i.MX6 defconfigs as they don't build:
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/11012273111
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/11012273148
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/11012273147
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/11012273145
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/11012273144
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/11012273136
 
-It has been failing for over 2 months:
+All of them are using outdated Linux kernel versions, not even LTS,
+which fail to build with modern toolchains.
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs?name=T%3Dchromebook_snow&kind=BUILD
+Unless fixes are provided, these defconfigs will be dropped.
 
-It builds a 4.15 kernel, which is not even a maintained LTS kernel.
-
-Unless a fix is provided, this defconfig will be removed.
-
-Cc: Alex Suykov <alex.suykov@gmail.com>
+Cc: Adam Duskett <adam.duskett@amarulasolutions.com>
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc: Jagan Teki <jagan@amarulasolutions.com>
+Cc: Meena Murthy <meena.murthy@amarulasolutions.com>
+Cc: Michael Trimarchi <michael@amarulasolutions.com>
+Cc: Suniel Mahesh <sunil@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .checkpackageignore                           |   1 -
- DEVELOPERS                                    |   2 -
- board/chromebook/snow/kernel.args             |   1 -
- board/chromebook/snow/kernel.its              |  37 -----
- board/chromebook/snow/linux-4.15.fragment     |   2 -
- .../patches/linux-headers/linux-headers.hash  |   1 -
- .../linux/0001-linux-4.15-dts-tpm.patch       |  30 ----
- .../chromebook/snow/patches/linux/linux.hash  |   2 -
- board/chromebook/snow/readme.txt              | 137 ------------------
- board/chromebook/snow/sign.sh                 |  41 ------
- configs/chromebook_snow_defconfig             |  24 ---
- 11 files changed, 278 deletions(-)
- delete mode 100644 board/chromebook/snow/kernel.args
- delete mode 100644 board/chromebook/snow/kernel.its
- delete mode 100644 board/chromebook/snow/linux-4.15.fragment
- delete mode 120000 board/chromebook/snow/patches/linux-headers/linux-headers.hash
- delete mode 100644 board/chromebook/snow/patches/linux/0001-linux-4.15-dts-tpm.patch
- delete mode 100644 board/chromebook/snow/patches/linux/linux.hash
- delete mode 100644 board/chromebook/snow/readme.txt
- delete mode 100755 board/chromebook/snow/sign.sh
- delete mode 100644 configs/chromebook_snow_defconfig
+ .checkpackageignore                           |  5 -
+ DEVELOPERS                                    |  5 -
+ board/engicam/geam6ul/genimage.cfg            | 39 --------
+ board/engicam/geam6ul/readme.txt              | 66 -------------
+ board/engicam/icorem6/genimage.cfg            | 42 ---------
+ board/engicam/icorem6/linux_qt5.fragment      |  4 -
+ board/engicam/icorem6/readme.txt              | 93 -------------------
+ .../root/imx6qdl-icore-ofcap10.json           | 11 ---
+ .../root/imx6qdl-icore-ofcap12.json           | 11 ---
+ .../rootfs_overlay/root/imx6qdl-icore.json    | 11 ---
+ board/engicam/icorem6_rqs/genimage.cfg        | 40 --------
+ board/engicam/icorem6_rqs/readme.txt          | 69 --------------
+ board/engicam/isiot/genimage.cfg              | 39 --------
+ board/engicam/isiot/readme.txt                | 66 -------------
+ configs/engicam_imx6qdl_icore_defconfig       | 33 -------
+ configs/engicam_imx6qdl_icore_qt5_defconfig   | 60 ------------
+ configs/engicam_imx6qdl_icore_rqs_defconfig   | 33 -------
+ configs/engicam_imx6ul_geam_defconfig         | 33 -------
+ configs/engicam_imx6ul_isiot_defconfig        | 33 -------
+ 19 files changed, 693 deletions(-)
+ delete mode 100644 board/engicam/geam6ul/genimage.cfg
+ delete mode 100644 board/engicam/geam6ul/readme.txt
+ delete mode 100644 board/engicam/icorem6/genimage.cfg
+ delete mode 100644 board/engicam/icorem6/linux_qt5.fragment
+ delete mode 100644 board/engicam/icorem6/readme.txt
+ delete mode 100644 board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore-ofcap10.json
+ delete mode 100644 board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore-ofcap12.json
+ delete mode 100644 board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore.json
+ delete mode 100644 board/engicam/icorem6_rqs/genimage.cfg
+ delete mode 100644 board/engicam/icorem6_rqs/readme.txt
+ delete mode 100644 board/engicam/isiot/genimage.cfg
+ delete mode 100644 board/engicam/isiot/readme.txt
+ delete mode 100644 configs/engicam_imx6qdl_icore_defconfig
+ delete mode 100644 configs/engicam_imx6qdl_icore_qt5_defconfig
+ delete mode 100644 configs/engicam_imx6qdl_icore_rqs_defconfig
+ delete mode 100644 configs/engicam_imx6ul_geam_defconfig
+ delete mode 100644 configs/engicam_imx6ul_isiot_defconfig
 
 diff --git a/.checkpackageignore b/.checkpackageignore
-index 3d154908c3..a3642ca61f 100644
+index a3642ca61f..5328f4f307 100644
 --- a/.checkpackageignore
 +++ b/.checkpackageignore
-@@ -19,7 +19,6 @@ board/bsh/imx8mn-bsh-smm-s2/post-build.sh Shellcheck
- board/canaan/k210-soc/post-build.sh Shellcheck
- board/chromebook/elm/sign.sh Shellcheck
- board/chromebook/mksd.sh Shellcheck
--board/chromebook/snow/sign.sh Shellcheck
- board/ci20/patches/uboot/0001-mips-Remove-default-endiannes.patch lib_patch.Upstream
- board/freescale/common/imx/imx8-bootloader-prepare.sh Shellcheck
- board/freescale/common/mxs/post-image.sh Shellcheck
+@@ -119,11 +119,6 @@ configs/bananapi_m2_zero_defconfig lib_defconfig.ForceCheckHash
+ configs/broadcom_northstar_defconfig lib_defconfig.ForceCheckHash
+ configs/canaan_kd233_defconfig lib_defconfig.ForceCheckHash
+ configs/ci20_defconfig lib_defconfig.ForceCheckHash
+-configs/engicam_imx6qdl_icore_defconfig lib_defconfig.ForceCheckHash
+-configs/engicam_imx6qdl_icore_qt5_defconfig lib_defconfig.ForceCheckHash
+-configs/engicam_imx6qdl_icore_rqs_defconfig lib_defconfig.ForceCheckHash
+-configs/engicam_imx6ul_geam_defconfig lib_defconfig.ForceCheckHash
+-configs/engicam_imx6ul_isiot_defconfig lib_defconfig.ForceCheckHash
+ configs/freescale_p1025twr_defconfig lib_defconfig.ForceCheckHash
+ configs/freescale_t1040d4rdb_defconfig lib_defconfig.ForceCheckHash
+ configs/freescale_t2080_qds_rdb_defconfig lib_defconfig.ForceCheckHash
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 996c5980a8..cffb7f51e2 100644
+index cffb7f51e2..1888175d3b 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -100,8 +100,6 @@ F:	package/libzenoh-pico/
- F:	package/network-manager-openvpn/
- 
- N:	Alex Suykov <alex.suykov@gmail.com>
--F:	board/chromebook/snow/
--F:	configs/chromebook_snow_defconfig
- F:	package/vboot-utils/
- 
- N:	Alexander Clouter <alex+buildroot@digriz.org.uk>
-diff --git a/board/chromebook/snow/kernel.args b/board/chromebook/snow/kernel.args
+@@ -1498,11 +1498,6 @@ F:	board/orangepi/orangepi-zero-plus2/
+ F:	board/pine64/
+ F:	configs/amarula_vyasa_rk3288_defconfig
+ F:	configs/asus_tinker_rk3288_defconfig
+-F:	configs/engicam_imx6qdl_icore_defconfig
+-F:	configs/engicam_imx6qdl_icore_qt5_defconfig
+-F:	configs/engicam_imx6qdl_icore_rqs_defconfig
+-F:	configs/engicam_imx6ul_geam_defconfig
+-F:	configs/engicam_imx6ul_isiot_defconfig
+ F:	configs/olimex_a33_olinuxino_defconfig
+ F:	configs/olimex_a64_olinuxino_defconfig
+ F:	configs/orangepi_lite2_defconfig
+diff --git a/board/engicam/geam6ul/genimage.cfg b/board/engicam/geam6ul/genimage.cfg
 deleted file mode 100644
-index 1220bf84ac..0000000000
---- a/board/chromebook/snow/kernel.args
+index 3d290b2ea6..0000000000
+--- a/board/engicam/geam6ul/genimage.cfg
 +++ /dev/null
-@@ -1 +0,0 @@
--console=tty1 clk_ignore_unused root=/dev/mmcblk1p2 rootfstype=ext4 ro
-diff --git a/board/chromebook/snow/kernel.its b/board/chromebook/snow/kernel.its
+@@ -1,39 +0,0 @@
+-image boot.vfat {
+-	vfat {
+-		files = {
+-			"uImage",
+-			"imx6ul-geam-kit.dtb"
+-		}
+-	}
+-
+-	size = 64M
+-}
+-
+-image sdcard.img {
+-	hdimage {
+-	}
+-
+-	partition SPL {
+-		in-partition-table = "no"
+-		image = "SPL"
+-		offset = 1K
+-	}
+-
+-	partition u-boot-dtb {
+-		in-partition-table = "no"
+-		image = "u-boot-dtb.img"
+-		offset = 69K
+-	}
+-
+-	partition boot {
+-		partition-type = 0xC
+-		bootable = "true"
+-		image = "boot.vfat"
+-		offset = 8M
+-	}
+-
+-	partition rootfs {
+-		partition-type = 0x83
+-		image = "rootfs.ext2"
+-	}
+-}
+diff --git a/board/engicam/geam6ul/readme.txt b/board/engicam/geam6ul/readme.txt
 deleted file mode 100644
-index c8766ef9e8..0000000000
---- a/board/chromebook/snow/kernel.its
+index ace993a661..0000000000
+--- a/board/engicam/geam6ul/readme.txt
 +++ /dev/null
-@@ -1,37 +0,0 @@
--/dts-v1/;
+@@ -1,66 +0,0 @@
+-********************************************
+-Buildroot for Engicam GEAM6UL SOM platforms:
+-********************************************
 -
--/ {
--    description = "Buildroot kernel for Chromebook Snow";
--    images {
--        kernel@1 {
--            description = "kernel";
--            data = /incbin/("zImage");
--            type = "kernel_noload";
--            arch = "arm";
--            os = "linux";
--            compression = "none";
--            load = <0>;
--            entry = <0>;
--            hash@1 {
--                algo = "sha1";
--            };
--        };
--        fdt@1{
--            description = "exynos5250-snow.dtb";
--            data = /incbin/("exynos5250-snow.dtb");
--            type = "flat_dt";
--            arch = "arm";
--            compression = "none";
--            hash@1 {
--                algo = "sha1";
--            };
--        };
--    };
--    configurations {
--        default = "conf@1";
--        conf@1{
--            kernel = "kernel@1";
--            fdt = "fdt@1";
--        };
--    };
--};
-diff --git a/board/chromebook/snow/linux-4.15.fragment b/board/chromebook/snow/linux-4.15.fragment
-deleted file mode 100644
-index e2786dacba..0000000000
---- a/board/chromebook/snow/linux-4.15.fragment
-+++ /dev/null
-@@ -1,2 +0,0 @@
--CONFIG_MWIFIEX=m
--CONFIG_MWIFIEX_SDIO=m
-diff --git a/board/chromebook/snow/patches/linux-headers/linux-headers.hash b/board/chromebook/snow/patches/linux-headers/linux-headers.hash
-deleted file mode 120000
-index 5808d92afe..0000000000
---- a/board/chromebook/snow/patches/linux-headers/linux-headers.hash
-+++ /dev/null
-@@ -1 +0,0 @@
--../linux/linux.hash
-\ No newline at end of file
-diff --git a/board/chromebook/snow/patches/linux/0001-linux-4.15-dts-tpm.patch b/board/chromebook/snow/patches/linux/0001-linux-4.15-dts-tpm.patch
-deleted file mode 100644
-index 01f452b563..0000000000
---- a/board/chromebook/snow/patches/linux/0001-linux-4.15-dts-tpm.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--Some versions of u-boot for this Chromebook check for tpm node
--in the device tree and fail badly (reboot) if it is not found.
+-This file documents the Buildroot support for all Engicam GEAM6UL
+-SOM platform boards.
 -
--While not exactly correct, it is much easier to patch the mainline
--device tree to match u-boot expectations than to fix u-boot on
--this device.
+-GEAM6UL SOM Starter kits:
+-https://www.engicam.com/vis-prod/101115
 -
--See https://code.google.com/p/chromium/issues/detail?id=220169
--and https://lkml.org/lkml/2013/3/4/242
+-This configuration uses U-Boot mainline and kernel mainline.
 -
--Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
--Upstream: Not Applicable
--[yann.morin.1998@free.fr: add Upstream tag]
--Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+-Build
+-=====
 -
----- a/arch/arm/boot/dts/exynos5250-snow-common.dtsi
--+++ b/arch/arm/boot/dts/exynos5250-snow-common.dtsi
--@@ -466,6 +466,11 @@
-- 	status = "okay";
-- 	samsung,i2c-sda-delay = <100>;
-- 	samsung,i2c-max-bus-freq = <66000>;
--+
--+	tpm {
--+		compatible = "infineon,slb9635tt";
--+		reg = <0x20>;
--+	};
-- };
-- 
-- &i2c_5 {
+-First, configure Buildroot for the Engicam GEAM6UL SOM:
 -
-diff --git a/board/chromebook/snow/patches/linux/linux.hash b/board/chromebook/snow/patches/linux/linux.hash
-deleted file mode 100644
-index 1064af46aa..0000000000
---- a/board/chromebook/snow/patches/linux/linux.hash
-+++ /dev/null
-@@ -1,2 +0,0 @@
--# Localy computed
--sha256  5a26478906d5005f4f809402e981518d2b8844949199f60c4b6e1f986ca2a769  linux-4.15.tar.xz
-diff --git a/board/chromebook/snow/readme.txt b/board/chromebook/snow/readme.txt
-deleted file mode 100644
-index 1afd949829..0000000000
---- a/board/chromebook/snow/readme.txt
-+++ /dev/null
-@@ -1,137 +0,0 @@
--Samsung XE303C12 aka Chromebook Snow
+-- for GEAM6UL SOM:
+-
+-  make engicam_imx6ul_geam_defconfig
+-
+-Build all components:
+-
+-  make
+-
+-You will find the following files in output/images/:
+-  - imx6ul-geam-kit.dtb
+-  - rootfs.ext4
+-  - rootfs.tar
+-  - sdcard.img
+-  - SPL
+-  - u-boot-dtb.img
+-  - uImage
+-
+-Create a bootable SD card
+-=========================
+-
+-To determine the device associated to the SD card have a look in the
+-/proc/partitions file:
+-
+-  cat /proc/partitions
+-
+-Buildroot prepares a bootable "sdcard.img" image in the output/images/
+-directory, ready to be dumped on a SD card. Launch the following
+-command as root:
+-
+-  dd if=output/images/sdcard.img of=/dev/<your-sd-device>
+-  sync
+-
+-*** WARNING! This will destroy all the card content. Use with care! ***
+-
+-For details about the medium image layout, see the definition in
+-board/engicam/geam6ul/genimage.cfg
+-
+-Boot the GEAM6UL boards with SD boot:
 -====================================
 -
--This file describes booting the Chromebook from an SD card containing
--Buildroot kernel and rootfs, using the original bootloader. This is
--the least invasive way to get Buildroot onto the devices and a good
--starting point.
+-To boot your newly created system:
+-- insert the SD card in the SD slot of the board;
+-- connect 3-wire RS232 serial port J28 on board, and connect with other
+-  serial end or USB cable(if serial-to-usb converter used) using
+-  a terminal emulator at 115200 bps, 8n1;
+-- close JM3 for sd boot.
+-- power on the board.
 -
--The bootloader will only boot a kernel from a GPT partition marked
--bootable with cgpt tool from vboot-utils package.
--The kernel image must be signed using futility from the same package.
--The signing part is done by sign.sh script in this directory.
--
--It does not really matter where rootfs is as long as the kernel is able
--to find it, but this particular configuration assumes the kernel is on
--partition 1 and rootfs is on partition 2 of the SD card.
--Make sure to check kernel.args if you change this.
--
--Making the boot media
-----------------------
--Start by configuring and building the images.
--
--	make chromebook_snow_defconfig
--	make menuconfig # if necessary
--	make
--
--The important files are:
--
--	uImage.kpart (kernel and device tree, signed)
--	rootfs.tar
--	bootsd.img (SD card image containing both kernel and rootfs)
--
--Write the image directly to some SD card.
--WARNING: make sure there is nothing important on that card,
--and double-check the device name!
--
--	SD=/dev/mmcblk1		# may be /dev/sdX on some hosts
--	dd if=output/images/bootsd.img of=$SD
--
--Switching to developer mode and booting from SD
-------------------------------------------------
--Power Chromebook down, then power it up while holding Esc+F3.
--BEWARE: switching to developer mode deletes all user data.
--Create backups if you need them.
--
--While in developer mode, Chromebook will boot into a white screen saying
--"OS verification is off".
--
--Press Ctrl-D at this screen to boot Chromium OS from eMMC.
--Press Ctrl-U at this screen to boot from SD (or USB)
--Press Power to power it off.
--Do NOT press Space unless you mean it.
--This will switch it back to normal mode.
--
--The is no way to get rid of the white screen without re-flashing the bootloader.
--
--Troubleshooting
-----------------
--Loud *BEEP* after pressing Ctrl-U means there's no valid partition to boot from.
--Which in turn means either bad GPT or improperly signed kernel.
--
--Return to the OS verification screen without any sounds means the code managed
--to reboot the board. May indicate properly signed but invalid image.
--
--Blank screen means the image is valid and properly signed but cannot boot
--for some reason, like missing or incorrect DT.
--
--In case the board becomes unresponsive:
--
--* Press Esc+F3+Power. The board should reboot instantly.
--  Remove SD card to prevent it from attempting a system recovery.
--
--* Hold Power button for around 10s. The board should shut down into
--  its soft-off mode. Press Power button again or open the lid to turn in on.
--
--* If that does not work, disconnect the charger and push a hidden
--  button on the underside with a pin of some sort. The board should shut
--  down completely. Opening the lid and pressing Power button will not work.
--  To turn it back on, connect the charger.
--
--Partitioning SD card manually
-------------------------------
--Check mksd.sh for partitioning commands.
--
--Use parted and cgpt on a real device, and calculate the partition
--sizes properly. The kernel partition may be as small as 4MB, but
--you will probably want the rootfs to occupy the whole remaining space.
--
--cgpt may be used to check current layout:
--
--	output/host/bin/cgpt show $SD
--
--All sizes and all offsets are in 512-byte blocks.
--
--Writing kernel and rootfs to a partitioned SD card
----------------------------------------------------
--Write .kpart directly to the bootable partition:
--
--	dd if=output/images/uImage.kpart of=${SD}1
--
--Make a new filesystem on the rootfs partition, and unpack rootfs.tar there:
--
--	mkfs.ext4 ${SD}2
--	mount ${SD2} /mnt/<ROOTFS-PARTITION>
--	tar -xvf output/images/rootfs.tar -C /mnt/<ROOTFS-PARTITION>
--	umount /mnt/<ROOTFS-PARTITION>
--
--This will require root permissions even if you can write to $SD.
--
--Kernel command line
---------------------
--The command line is taken from board/chromebook/snow/kernel.args and stored
--in the vboot header (which also holds the signature).
--
--The original bootloader prepends "cros_secure console= " to the supplied
--command line. The only way to suppress this is to enable CMDLINE_FORCE
--in the kernel config, disabling external command line completely.
--
--That's not necessary however. The mainline kernel ignores cros_secure,
--and supplying console=tty1 in kernel.args undoes the effect of console=
--
--Booting with console= suppresses all kernel output.
--As a side effect, it makes /dev/console unusable, which the init in use must
--be able to handle.
--
--WiFi card
-----------
--Run modprobe mwifiex_sdio to load the driver.
--The name of the device should be mlan0.
--
--Further reading
-----------------
--https://www.chromium.org/chromium-os/developer-information-for-chrome-os-devices/samsung-arm-chromebook
--http://linux-exynos.org/wiki/Samsung_Chromebook_XE303C12/Installing_Linux
--http://archlinuxarm.org/platforms/armv7/samsung/samsung-chromebook
--http://www.de7ec7ed.com/2013/05/application-processor-ap-uart-samsung.html
--http://www.de7ec7ed.com/2013/05/embedded-controller-ec-uart-samsung.html
-diff --git a/board/chromebook/snow/sign.sh b/board/chromebook/snow/sign.sh
-deleted file mode 100755
-index e8f111ff0a..0000000000
---- a/board/chromebook/snow/sign.sh
-+++ /dev/null
-@@ -1,41 +0,0 @@
--#!/bin/sh
--
--# This script creates u-boot FIT image containing the kernel and the DT,
--# then signs it using futility from vboot-utils.
--# The resulting file is called uImage.kpart.
--
--BOARD_DIR=$(dirname $0)
--mkimage=$HOST_DIR/bin/mkimage
--futility=$HOST_DIR/bin/futility
--devkeys=$HOST_DIR/share/vboot/devkeys
--
--run() { echo "$@"; "$@"; }
--die() { echo "$@" >&2; exit 1; }
--test -f $BINARIES_DIR/zImage || \
--	die "No kernel image found"
--test -x $mkimage || \
--	die "No mkimage found (host-uboot-tools has not been built?)"
--test -x $futility || \
--	die "No futility found (host-vboot-utils has not been built?)"
--
--# kernel.its references zImage and exynos5250-snow.dtb, and all three
--# files must be in current directory for mkimage.
--run cp $BOARD_DIR/kernel.its $BINARIES_DIR/kernel.its || exit 1
--echo "# entering $BINARIES_DIR for the next command"
--(cd $BINARIES_DIR && run $mkimage -f kernel.its uImage.itb) || exit 1
--
--# futility requires non-empty file to be supplied with --bootloader
--# even if it does not make sense for the target platform.
--echo > $BINARIES_DIR/dummy.txt
--
--run $futility vbutil_kernel \
--	--keyblock $devkeys/kernel.keyblock \
--	--signprivate $devkeys/kernel_data_key.vbprivk \
--	--arch arm \
--	--version 1 \
--	--config $BOARD_DIR/kernel.args \
--	--vmlinuz $BINARIES_DIR/uImage.itb \
--	--bootloader $BINARIES_DIR/dummy.txt \
--	--pack $BINARIES_DIR/uImage.kpart || exit 1
--
--rm -f $BINARIES_DIR/kernel.its $BINARIES_DIR/dummy.txt
-diff --git a/configs/chromebook_snow_defconfig b/configs/chromebook_snow_defconfig
+-Enjoy!
+diff --git a/board/engicam/icorem6/genimage.cfg b/board/engicam/icorem6/genimage.cfg
 deleted file mode 100644
-index 9a5bcce98b..0000000000
---- a/configs/chromebook_snow_defconfig
+index 985d9e5de1..0000000000
+--- a/board/engicam/icorem6/genimage.cfg
 +++ /dev/null
-@@ -1,24 +0,0 @@
+@@ -1,42 +0,0 @@
+-image boot.vfat {
+-	vfat {
+-		files = {
+-			"uImage",
+-			"imx6dl-icore.dtb",
+-			"imx6q-icore.dtb",
+-			"imx6q-icore-ofcap10.dtb",
+-			"imx6q-icore-ofcap12.dtb"
+-		}
+-	}
+-
+-	size = 64M
+-}
+-
+-image sdcard.img {
+-	hdimage {
+-	}
+-
+-	partition SPL {
+-		in-partition-table = "no"
+-		image = "SPL"
+-		offset = 1K
+-	}
+-
+-	partition u-boot-dtb {
+-		in-partition-table = "no"
+-		image = "u-boot-dtb.img"
+-		offset = 69K
+-	}
+-
+-	partition boot {
+-		partition-type = 0xC
+-		bootable = "true"
+-		image = "boot.vfat"
+-		offset = 8M
+-	}
+-
+-	partition rootfs {
+-		partition-type = 0x83
+-		image = "rootfs.ext2"
+-	}
+-}
+diff --git a/board/engicam/icorem6/linux_qt5.fragment b/board/engicam/icorem6/linux_qt5.fragment
+deleted file mode 100644
+index 5c0505e510..0000000000
+--- a/board/engicam/icorem6/linux_qt5.fragment
++++ /dev/null
+@@ -1,4 +0,0 @@
+-# Currently kernel mainline exhibits issues when running cpufreq as ondemand
+-# governor on mx6.
+-# CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND is not set
+-CONFIG_CPU_FREQ_DEFAULT_GOV_PERFORMANCE=y
+diff --git a/board/engicam/icorem6/readme.txt b/board/engicam/icorem6/readme.txt
+deleted file mode 100644
+index bd78c5a556..0000000000
+--- a/board/engicam/icorem6/readme.txt
++++ /dev/null
+@@ -1,93 +0,0 @@
+-*********************************************
+-Buildroot for Engicam i.CoreM6 SOM platforms:
+-*********************************************
+-
+-This file documents the Buildroot support for Engicam i.CoreM6
+-platform boards.
+-
+-i.CoreM6 Quad/Dual/DualLite/Solo SOM Starter kits:
+-https://www.engicam.com/vis-prod/101120
+-i.CoreM6 Quad/Dual/DualLite/Solo Open Frame 10.1 C.TOUCH kits:
+-https://www.engicam.com/vis-prod/101133
+-
+-This configuration uses U-Boot mainline and kernel mainline.
+-
+-Build
+-=====
+-
+-First, configure Buildroot for the Engicam i.CoreM6:
+-
+-  make engicam_imx6qdl_icore_defconfig
+-
+-Build all components:
+-
+-  make
+-
+-You will find the following files in output/images/:
+-  - imx6q-icore.dtb (for i.CoreM6 Quad/Dual)
+-  - imx6dl-icore.dtb (for i.CoreM6 DualLite/Solo)
+-  - imx6q-icore-ofcap10.dtb (for i.CoreM6 Quad/Dual ofcap 10)
+-  - imx6q-icore-ofcap12.dtb (for i.CoreM6 Quad/Dual ofcap 12)
+-  - rootfs.ext4
+-  - rootfs.tar
+-  - sdcard.img
+-  - SPL
+-  - u-boot-dtb.img
+-  - uImage
+-
+-Create a bootable SD card
+-=========================
+-
+-To determine the device associated to the SD card have a look in the
+-/proc/partitions file:
+-
+-  cat /proc/partitions
+-
+-Buildroot prepares a bootable "sdcard.img" image in the output/images/
+-directory, ready to be dumped on a SD card. Launch the following
+-command as root:
+-
+-  dd if=output/images/sdcard.img of=/dev/<your-sd-device>
+-  sync
+-
+-*** WARNING! This will destroy all the card content. Use with care! ***
+-
+-For details about the medium image layout, see the definition in
+-board/engicam/icorem6/genimage.cfg
+-
+-Boot the i.CoreM6 boards with SD boot:
+-=====================================
+-
+-To boot your newly created system:
+-- insert the SD card in the SD slot of the board;
+-- connect 3-wire RS232 serial port J28 on board, and connect with other
+-  serial end or USB cable(if serial-to-usb converter used) using
+-  a terminal emulator at 115200 bps, 8n1;
+-- close JM3 for sd boot.
+-- power on the board.
+-
+-Testing graphics on i.CoreM6:
+-============================
+-
+-Build with support for Etnaviv, Qt5 and demo applications:
+-
+-  make engicam_imx6qdl_icore_qt5_defconfig
+-  make
+-
+-Running kmscube
+-# kmscube -D /dev/dri/card1
+-
+-Running glmark2-es2-drm
+-# glmark2-es2-drm
+-
+-Running Qt5 Cinematic Demo:
+-- for i.CoreM6 Starter Kit
+-# export QT_QPA_EGLFS_KMS_CONFIG=/root/imx6qdl-icore.json
+-- for i.CoreM6 ofcap10
+-# export QT_QPA_EGLFS_KMS_CONFIG=/root/imx6qdl-icore-ofcap10.json
+-- for i.CoreM6 ofcap12
+-# export QT_QPA_EGLFS_KMS_CONFIG=/root/imx6qdl-icore-ofcap12.json
+-
+-# CinematicExperience-demo
+-
+-Enjoy!
+diff --git a/board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore-ofcap10.json b/board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore-ofcap10.json
+deleted file mode 100644
+index 3bfe4a2362..0000000000
+--- a/board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore-ofcap10.json
++++ /dev/null
+@@ -1,11 +0,0 @@
+-{
+-  "device": "/dev/dri/card1",
+-  "hwcursor": false,
+-  "pbuffers": true,
+-  "outputs": [
+-    {
+-      "name": "LVDS1",
+-      "mode": "1280x800"
+-    }
+-  ]
+-}
+diff --git a/board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore-ofcap12.json b/board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore-ofcap12.json
+deleted file mode 100644
+index ea5ce6f97a..0000000000
+--- a/board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore-ofcap12.json
++++ /dev/null
+@@ -1,11 +0,0 @@
+-{
+-  "device": "/dev/dri/card1",
+-  "hwcursor": false,
+-  "pbuffers": true,
+-  "outputs": [
+-    {
+-      "name": "LVDS1",
+-      "mode": "1280x480"
+-    }
+-  ]
+-}
+diff --git a/board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore.json b/board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore.json
+deleted file mode 100644
+index b4fa359b64..0000000000
+--- a/board/engicam/icorem6/rootfs_overlay/root/imx6qdl-icore.json
++++ /dev/null
+@@ -1,11 +0,0 @@
+-{
+-  "device": "/dev/dri/card1",
+-  "hwcursor": false,
+-  "pbuffers": true,
+-  "outputs": [
+-    {
+-      "name": "LVDS1",
+-      "mode": "800x480"
+-    }
+-  ]
+-}
+diff --git a/board/engicam/icorem6_rqs/genimage.cfg b/board/engicam/icorem6_rqs/genimage.cfg
+deleted file mode 100644
+index d6936f8109..0000000000
+--- a/board/engicam/icorem6_rqs/genimage.cfg
++++ /dev/null
+@@ -1,40 +0,0 @@
+-image boot.vfat {
+-	vfat {
+-		files = {
+-			"uImage",
+-			"imx6dl-icore-rqs.dtb",
+-			"imx6q-icore-rqs.dtb"
+-		}
+-	}
+-
+-	size = 64M
+-}
+-
+-image sdcard.img {
+-	hdimage {
+-	}
+-
+-	partition SPL {
+-		in-partition-table = "no"
+-		image = "SPL"
+-		offset = 1K
+-	}
+-
+-	partition u-boot-dtb {
+-		in-partition-table = "no"
+-		image = "u-boot-dtb.img"
+-		offset = 69K
+-	}
+-
+-	partition boot {
+-		partition-type = 0xC
+-		bootable = "true"
+-		image = "boot.vfat"
+-		offset = 8M
+-	}
+-
+-	partition rootfs {
+-		partition-type = 0x83
+-		image = "rootfs.ext2"
+-	}
+-}
+diff --git a/board/engicam/icorem6_rqs/readme.txt b/board/engicam/icorem6_rqs/readme.txt
+deleted file mode 100644
+index a0bf6f508f..0000000000
+--- a/board/engicam/icorem6_rqs/readme.txt
++++ /dev/null
+@@ -1,69 +0,0 @@
+-*************************************************
+-Buildroot for Engicam i.CoreM6 RQS SOM platforms:
+-*************************************************
+-
+-This file documents the Buildroot support for Engicam i.CoreM6 RQS
+-SOM platform boards.
+-
+-i.CoreM6 Quad/Dual/DualLite/Solo RQS SOM Starter kits:
+-https://www.engicam.com/vis-prod/101124
+-
+-This configuration uses U-Boot mainline and kernel mainline.
+-
+-Build
+-=====
+-
+-First, configure Buildroot for the Engicam i.CoreM6 RQS:
+-
+-- for i.CoreM6 RQS Quad/Dual/DualLite/Solo:
+-
+-  make engicam_imx6qdl_icore_rqs_defconfig
+-
+-Build all components:
+-
+-  make
+-
+-You will find the following files in output/images/:
+-- for i.CoreM6 Quad/Dual RQS:
+-  - imx6q-icore-rqs.dtb
+-- for i.CoreM6 DualLite/Solo RQS:
+-  - imx6dl-icore-rqs.dtb
+-  - rootfs.ext4
+-  - rootfs.tar
+-  - sdcard.img
+-  - SPL
+-  - u-boot-dtb.img
+-  - uImage
+-
+-Create a bootable SD card
+-=========================
+-
+-To determine the device associated to the SD card have a look in the
+-/proc/partitions file:
+-
+-  cat /proc/partitions
+-
+-Buildroot prepares a bootable "sdcard.img" image in the output/images/
+-directory, ready to be dumped on a SD card. Launch the following
+-command as root:
+-
+-  dd if=output/images/sdcard.img of=/dev/<your-sd-device>
+-  sync
+-
+-*** WARNING! This will destroy all the card content. Use with care! ***
+-
+-For details about the medium image layout, see the definition in
+-board/engicam/icorem6_rqs/genimage.cfg
+-
+-Boot the i.CoreM6 RQS boards with SD boot:
+-=========================================
+-
+-To boot your newly created system:
+-- insert the SD card in the SD slot of the board;
+-- connect 3-wire RS232 serial port J7 on board, and connect with other
+-  serial end or USB cable(if serial-to-usb converter used) using
+-  a terminal emulator at 115200 bps, 8n1;
+-- close JM2 for sd boot.
+-- power on the board.
+-
+-Enjoy!
+diff --git a/board/engicam/isiot/genimage.cfg b/board/engicam/isiot/genimage.cfg
+deleted file mode 100644
+index 4e65a70110..0000000000
+--- a/board/engicam/isiot/genimage.cfg
++++ /dev/null
+@@ -1,39 +0,0 @@
+-image boot.vfat {
+-	vfat {
+-		files = {
+-			"uImage",
+-			"imx6ul-isiot-emmc.dtb"
+-		}
+-	}
+-
+-	size = 64M
+-}
+-
+-image sdcard.img {
+-	hdimage {
+-	}
+-
+-	partition SPL {
+-		in-partition-table = "no"
+-		image = "SPL"
+-		offset = 1K
+-	}
+-
+-	partition u-boot-dtb {
+-		in-partition-table = "no"
+-		image = "u-boot-dtb.img"
+-		offset = 69K
+-	}
+-
+-	partition boot {
+-		partition-type = 0xC
+-		bootable = "true"
+-		image = "boot.vfat"
+-		offset = 8M
+-	}
+-
+-	partition rootfs {
+-		partition-type = 0x83
+-		image = "rootfs.ext2"
+-	}
+-}
+diff --git a/board/engicam/isiot/readme.txt b/board/engicam/isiot/readme.txt
+deleted file mode 100644
+index 5394007ca5..0000000000
+--- a/board/engicam/isiot/readme.txt
++++ /dev/null
+@@ -1,66 +0,0 @@
+-********************************************
+-Buildroot for Engicam Is.IoT SOM platforms:
+-********************************************
+-
+-This file documents the Buildroot support for all Engicam Is.IoT MX6UL
+-SOM platform boards.
+-
+-Is.IoT MX6UL SOM Starter kits:
+-https://www.engicam.com/vis-prod/101122
+-
+-This configuration uses U-Boot mainline and kernel mainline.
+-
+-Build
+-=====
+-
+-First, configure Buildroot for the Engicam Is.IoT MX6UL SOM:
+-
+-- for Is.IoT MX6UL SOM:
+-
+-  make engicam_imx6ul_isiot_defconfig
+-
+-Build all components:
+-
+-  make
+-
+-You will find the following files in output/images/:
+-  - imx6ul-isiot-emmc.dtb
+-  - rootfs.ext4
+-  - rootfs.tar
+-  - sdcard.img
+-  - SPL
+-  - u-boot-dtb.img
+-  - uImage
+-
+-Create a bootable SD card
+-=========================
+-
+-To determine the device associated to the SD card have a look in the
+-/proc/partitions file:
+-
+-  cat /proc/partitions
+-
+-Buildroot prepares a bootable "sdcard.img" image in the output/images/
+-directory, ready to be dumped on a SD card. Launch the following
+-command as root:
+-
+-  dd if=output/images/sdcard.img of=/dev/<your-sd-device>
+-  sync
+-
+-*** WARNING! This will destroy all the card content. Use with care! ***
+-
+-For details about the medium image layout, see the definition in
+-board/engicam/isiot/genimage.cfg
+-
+-Boot the Is.IoT MX6UL boards with SD boot:
+-=========================================
+-
+-To boot your newly created system:
+-- insert the SD card in the SD slot of the board;
+-- connect 3-wire RS232 serial port J28 on board, and connect with other
+-  serial end or USB cable(if serial-to-usb converter used) using
+-  a terminal emulator at 115200 bps, 8n1;
+-- close JM3 for sd boot.
+-- power on the board.
+-
+-Enjoy!
+diff --git a/configs/engicam_imx6qdl_icore_defconfig b/configs/engicam_imx6qdl_icore_defconfig
+deleted file mode 100644
+index 2ac415e335..0000000000
+--- a/configs/engicam_imx6qdl_icore_defconfig
++++ /dev/null
+@@ -1,33 +0,0 @@
 -BR2_arm=y
--BR2_cortex_a15=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
--BR2_GLOBAL_PATCH_DIR="board/chromebook/snow/patches"
--BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
--BR2_TARGET_GENERIC_GETTY_PORT="tty1"
--BR2_TARGET_GENERIC_GETTY_TERM="linux"
--BR2_ROOTFS_POST_BUILD_SCRIPT="board/chromebook/snow/sign.sh"
--BR2_ROOTFS_POST_IMAGE_SCRIPT="board/chromebook/mksd.sh"
+-BR2_cortex_a9=y
+-BR2_ARM_ENABLE_NEON=y
+-BR2_ARM_ENABLE_VFP=y
+-BR2_ARM_FPU_VFPV3=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
+-BR2_TARGET_GENERIC_ISSUE="Welcome to Engicam i.CoreM6 Quad/Dual/DualLite/Solo"
+-BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/engicam/icorem6/genimage.cfg"
 -BR2_LINUX_KERNEL=y
 -BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15"
--BR2_LINUX_KERNEL_DEFCONFIG="exynos"
--BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/chromebook/snow/linux-4.15.fragment"
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0"
+-BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+-BR2_LINUX_KERNEL_UIMAGE=y
+-BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
 -BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="exynos5250-snow"
--BR2_PACKAGE_LINUX_FIRMWARE=y
--BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8797=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-icore imx6q-icore imx6q-icore-ofcap10 imx6q-icore-ofcap12"
 -BR2_TARGET_ROOTFS_EXT2=y
 -BR2_TARGET_ROOTFS_EXT2_4=y
--BR2_PACKAGE_HOST_PARTED=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
--BR2_PACKAGE_HOST_VBOOT_UTILS=y
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
+-BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx6qdl_icore_mmc"
+-BR2_TARGET_UBOOT_NEEDS_DTC=y
+-BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+-BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
+-BR2_TARGET_UBOOT_SPL=y
+-BR2_TARGET_UBOOT_SPL_NAME="SPL"
+-BR2_PACKAGE_HOST_DOSFSTOOLS=y
+-BR2_PACKAGE_HOST_GENIMAGE=y
+-BR2_PACKAGE_HOST_MTOOLS=y
+diff --git a/configs/engicam_imx6qdl_icore_qt5_defconfig b/configs/engicam_imx6qdl_icore_qt5_defconfig
+deleted file mode 100644
+index 8b0c8bbe28..0000000000
+--- a/configs/engicam_imx6qdl_icore_qt5_defconfig
++++ /dev/null
+@@ -1,60 +0,0 @@
+-BR2_arm=y
+-BR2_cortex_a9=y
+-BR2_ARM_ENABLE_NEON=y
+-BR2_ARM_ENABLE_VFP=y
+-BR2_ARM_FPU_VFPV3=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
+-BR2_TOOLCHAIN_BUILDROOT_CXX=y
+-BR2_TARGET_GENERIC_ISSUE="Welcome to Engicam i.CoreM6 Quad/Dual/DualLite/Solo"
+-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+-BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
+-BR2_ROOTFS_OVERLAY="board/engicam/icorem6/rootfs_overlay"
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/engicam/icorem6/genimage.cfg"
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13"
+-BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+-BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/engicam/icorem6/linux_qt5.fragment"
+-BR2_LINUX_KERNEL_UIMAGE=y
+-BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
+-BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-icore imx6q-icore imx6q-icore-ofcap10 imx6q-icore-ofcap12"
+-BR2_PACKAGE_BITSTREAM_VERA=y
+-BR2_PACKAGE_CANTARELL=y
+-BR2_PACKAGE_DEJAVU=y
+-BR2_PACKAGE_FONT_AWESOME=y
+-BR2_PACKAGE_GHOSTSCRIPT_FONTS=y
+-BR2_PACKAGE_INCONSOLATA=y
+-BR2_PACKAGE_LIBERATION=y
+-BR2_PACKAGE_GLMARK2=y
+-BR2_PACKAGE_KMSCUBE=y
+-BR2_PACKAGE_MESA3D_DEMOS=y
+-BR2_PACKAGE_QT5CINEX=y
+-BR2_PACKAGE_QT5CINEX_HD=y
+-BR2_PACKAGE_MESA3D=y
+-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV=y
+-BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+-BR2_PACKAGE_MESA3D_OPENGL_ES=y
+-BR2_PACKAGE_QT5=y
+-BR2_PACKAGE_QT5BASE_OPENGL_LIB=y
+-BR2_PACKAGE_QT5BASE_LINUXFB=y
+-BR2_PACKAGE_QT5BASE_FONTCONFIG=y
+-BR2_PACKAGE_QT5BASE_GIF=y
+-BR2_PACKAGE_QT5BASE_JPEG=y
+-BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07"
+-BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx6qdl_icore_mmc"
+-BR2_TARGET_UBOOT_NEEDS_DTC=y
+-BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+-BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
+-BR2_TARGET_UBOOT_SPL=y
+-BR2_TARGET_UBOOT_SPL_NAME="SPL"
+-BR2_PACKAGE_HOST_DOSFSTOOLS=y
+-BR2_PACKAGE_HOST_GENIMAGE=y
+-BR2_PACKAGE_HOST_MTOOLS=y
+diff --git a/configs/engicam_imx6qdl_icore_rqs_defconfig b/configs/engicam_imx6qdl_icore_rqs_defconfig
+deleted file mode 100644
+index 7d4d4e3df4..0000000000
+--- a/configs/engicam_imx6qdl_icore_rqs_defconfig
++++ /dev/null
+@@ -1,33 +0,0 @@
+-BR2_arm=y
+-BR2_cortex_a9=y
+-BR2_ARM_ENABLE_NEON=y
+-BR2_ARM_ENABLE_VFP=y
+-BR2_ARM_FPU_VFPV3=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
+-BR2_TARGET_GENERIC_ISSUE="Welcome to Engicam i.CoreM6 Quad/Dual/DualLite/Solo RQS Starter Kit"
+-BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/engicam/icorem6_rqs/genimage.cfg"
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0"
+-BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+-BR2_LINUX_KERNEL_UIMAGE=y
+-BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
+-BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-icore-rqs imx6q-icore-rqs"
+-BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
+-BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx6qdl_icore_rqs"
+-BR2_TARGET_UBOOT_NEEDS_DTC=y
+-BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+-BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
+-BR2_TARGET_UBOOT_SPL=y
+-BR2_TARGET_UBOOT_SPL_NAME="SPL"
+-BR2_PACKAGE_HOST_DOSFSTOOLS=y
+-BR2_PACKAGE_HOST_GENIMAGE=y
+-BR2_PACKAGE_HOST_MTOOLS=y
+diff --git a/configs/engicam_imx6ul_geam_defconfig b/configs/engicam_imx6ul_geam_defconfig
+deleted file mode 100644
+index ed4b491ebe..0000000000
+--- a/configs/engicam_imx6ul_geam_defconfig
++++ /dev/null
+@@ -1,33 +0,0 @@
+-BR2_arm=y
+-BR2_cortex_a9=y
+-BR2_ARM_ENABLE_NEON=y
+-BR2_ARM_ENABLE_VFP=y
+-BR2_ARM_FPU_VFPV3=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
+-BR2_TARGET_GENERIC_ISSUE="Welcome to Engicam GEAM6UL Starter Kit"
+-BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/engicam/geam6ul/genimage.cfg"
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.5"
+-BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+-BR2_LINUX_KERNEL_UIMAGE=y
+-BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x80008000"
+-BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6ul-geam-kit"
+-BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07-rc1"
+-BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx6ul_geam_mmc"
+-BR2_TARGET_UBOOT_NEEDS_DTC=y
+-BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+-BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
+-BR2_TARGET_UBOOT_SPL=y
+-BR2_TARGET_UBOOT_SPL_NAME="SPL"
+-BR2_PACKAGE_HOST_DOSFSTOOLS=y
+-BR2_PACKAGE_HOST_GENIMAGE=y
+-BR2_PACKAGE_HOST_MTOOLS=y
+diff --git a/configs/engicam_imx6ul_isiot_defconfig b/configs/engicam_imx6ul_isiot_defconfig
+deleted file mode 100644
+index 1377022c30..0000000000
+--- a/configs/engicam_imx6ul_isiot_defconfig
++++ /dev/null
+@@ -1,33 +0,0 @@
+-BR2_arm=y
+-BR2_cortex_a9=y
+-BR2_ARM_ENABLE_NEON=y
+-BR2_ARM_ENABLE_VFP=y
+-BR2_ARM_FPU_VFPV3=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
+-BR2_TARGET_GENERIC_ISSUE="Welcome to Engicam Is.IoT eMMC Starter Kit"
+-BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/engicam/isiot/genimage.cfg"
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0"
+-BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+-BR2_LINUX_KERNEL_UIMAGE=y
+-BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x80008000"
+-BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6ul-isiot-emmc"
+-BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
+-BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx6ul_isiot_emmc"
+-BR2_TARGET_UBOOT_NEEDS_DTC=y
+-BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+-BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
+-BR2_TARGET_UBOOT_SPL=y
+-BR2_TARGET_UBOOT_SPL_NAME="SPL"
+-BR2_PACKAGE_HOST_DOSFSTOOLS=y
+-BR2_PACKAGE_HOST_GENIMAGE=y
+-BR2_PACKAGE_HOST_MTOOLS=y
 -- 
 2.50.1
 
