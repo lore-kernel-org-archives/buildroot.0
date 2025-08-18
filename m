@@ -1,75 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94089CA0EE4
-	for <buildroot@archiver.kernel.org>; Mon, 18 Aug 2025 21:16:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34341CA0EE4
+	for <buildroot@archiver.kernel.org>; Mon, 18 Aug 2025 21:26:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 61F01405E6;
-	Mon, 18 Aug 2025 21:16:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D9F466067F;
+	Mon, 18 Aug 2025 21:26:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M8HQoJS9d3Tc; Mon, 18 Aug 2025 21:16:26 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Bd_gqgmxC_2W; Mon, 18 Aug 2025 21:26:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 57308405E0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C5F56066B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 57308405E0;
-	Mon, 18 Aug 2025 21:16:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3C5F56066B;
+	Mon, 18 Aug 2025 21:26:09 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 053DE19E
- for <buildroot@buildroot.org>; Mon, 18 Aug 2025 21:16:24 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 2FF50E2
+ for <buildroot@buildroot.org>; Mon, 18 Aug 2025 21:26:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D9EBD80AFB
- for <buildroot@buildroot.org>; Mon, 18 Aug 2025 21:16:24 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1D9CA80BCD
+ for <buildroot@buildroot.org>; Mon, 18 Aug 2025 21:26:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7n44Ttk0xr4O for <buildroot@buildroot.org>;
- Mon, 18 Aug 2025 21:16:24 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
- helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id NKyDursPFJ9u for <buildroot@buildroot.org>;
+ Mon, 18 Aug 2025 21:26:05 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
+ helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9F9FC80AFD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9F9FC80AFD
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9F9FC80AFD
- for <buildroot@buildroot.org>; Mon, 18 Aug 2025 21:16:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DEFD580BCC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DEFD580BCC
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DEFD580BCC
+ for <buildroot@buildroot.org>; Mon, 18 Aug 2025 21:26:04 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id 40C534E40BFF
- for <buildroot@buildroot.org>; Mon, 18 Aug 2025 21:16:21 +0000 (UTC)
+ by smtpout-02.galae.net (Postfix) with ESMTPS id 9379F1A0C5C
+ for <buildroot@buildroot.org>; Mon, 18 Aug 2025 21:26:02 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 021A7606A6;
- Mon, 18 Aug 2025 21:16:20 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 5ADD1606A6;
+ Mon, 18 Aug 2025 21:26:02 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 1BF2E1C22C3CB; 
- Mon, 18 Aug 2025 23:16:09 +0200 (CEST)
+ with ESMTPSA id EA1281C22C6F9; 
+ Mon, 18 Aug 2025 23:26:00 +0200 (CEST)
 To: buildroot@buildroot.org
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>
-Date: Mon, 18 Aug 2025 23:16:07 +0200
-Message-ID: <20250818211608.3263059-1-thomas.petazzoni@bootlin.com>
+ Alex Suykov <alex.suykov@gmail.com>
+Date: Mon, 18 Aug 2025 23:25:58 +0200
+Message-ID: <20250818212559.3266944-1-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.50.1
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=dkim; 
- t=1755551779; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding; bh=wXkvkk3q+wT6Ux7a6BV/FCcpYjJQV5oQRQm3r1TQE9Y=;
- b=AUIpVZ1uAP3NyyJwbwUfzItMX+Otsbq4gCatpfc4CDk5xqMwOrxgfXCA99bfRiF3Vav5i9
- OweJg2HufneD4cQfYjenO5+dHrvxk61cVIgnef1dF7RRhVM2tS6CE64iVjAcWE7X4D67Pv
- E8gsEqZjB4ps0mZSQl5vv66qy57qbZk/nsXT6QxLZhjiGkRiEPlhc3RLmklbOEZe5dHK7t
- HUymAG9YGY0Heq/wkvZlbQmAkFW9wRx9VX+UUwJdoJmX/mB5Cq0CBsyb+bJO60Bb7DGudp
- JYXfagGg55wi7S4NsNwnMXxRaDi8jCERtNVWAL4soQ3Z7NurK2UIp2ghUn7EbQ==
+ t=1755552361; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=w5gL91ZS3zLLhHuaGLQ1DPA/BG+kD6C7HOmRK5uzLJE=;
+ b=AvxelFtNiakUE0JNLDOpcqdh3oZ3t8fG9dy91CnJe+i2smlkVht//3RsJ60yxTwpcP1QoS
+ wZOIHV06qfl9k4NJgNt75VvU1rxiS1hVA91bAZeKPpOtnA867F7xGf7IBJrJSWmtCb05j4
+ cnGhnNNXpE0Iu+9sEL7FI/OsoBQXmpYz4HlGaPh51MLR78iVaCYsHjOGfBsZ54Ka7tRlSF
+ 1d+mszDXVgKU0Jtchr0GvaCIhA0BnT/+Kv4OSF1/JtrTnj0RbnaI/Hrv/QGBADd8GNUOeJ
+ aHFeW2l87I4BdEE38GJZgmeN+W1PUo40lSgpM966MkPoYpUURpr5/3kEWB3CHw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=AUIpVZ1u
-Subject: [Buildroot] [PATCH] configs/beelink_gs1: remove defconfig, broken
+ header.a=rsa-sha256 header.s=dkim header.b=AvxelFtN
+Subject: [Buildroot] [PATCH] configs/chromebook_snow: remove defconfig,
+ broken
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,108 +84,407 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VGhpcyBkZWZjb25maWcgbm8gbG9uZ2VyIGJ1aWxkczoKCiAgaHR0cHM6Ly9naXRsYWIuY29tL2J1
-aWxkcm9vdC5vcmcvYnVpbGRyb290Ly0vam9icy8xMTAxMjI3MzA3MQoKSXQgaGFzIGJlZW4gYnJv
-a2VuIGZvciBhdCBsZWFzdCAyIG1vbnRoczoKCiAgaHR0cHM6Ly9naXRsYWIuY29tL2J1aWxkcm9v
-dC5vcmcvYnVpbGRyb290Ly0vam9icz9uYW1lPVQlM0RiZWVsaW5rJmtpbmQ9QlVJTEQKClVubGVz
-cyBhIGZpeCBpcyBwcm92aWRlZCwgdGhpcyBkZWZjb25maWcgd2lsbCBiZSByZW1vdmVkLgoKQ2M6
-IENsw6ltZW50IFDDqXJvbiA8cGVyb24uY2xlbUBnbWFpbC5jb20+ClNpZ25lZC1vZmYtYnk6IFRo
-b21hcyBQZXRhenpvbmkgPHRob21hcy5wZXRhenpvbmlAYm9vdGxpbi5jb20+Ci0tLQogLmNoZWNr
-cGFja2FnZWlnbm9yZSAgICAgICAgICAgICB8ICAyIC0tCiBERVZFTE9QRVJTICAgICAgICAgICAg
-ICAgICAgICAgIHwgIDQgLS0tLQogYm9hcmQvYmVlbGluay9nczEvZXh0bGludXguY29uZiB8ICA0
-IC0tLS0KIGJvYXJkL2JlZWxpbmsvZ3MxL2dlbmltYWdlLmNmZyAgfCAzNCAtLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tCiBib2FyZC9iZWVsaW5rL2dzMS9wb3N0LWJ1aWxkLnNoIHwgIDQg
-LS0tLQogY29uZmlncy9iZWVsaW5rX2dzMV9kZWZjb25maWcgICB8IDM2IC0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLQogNiBmaWxlcyBjaGFuZ2VkLCA4NCBkZWxldGlvbnMoLSkKIGRl
-bGV0ZSBtb2RlIDEwMDY0NCBib2FyZC9iZWVsaW5rL2dzMS9leHRsaW51eC5jb25mCiBkZWxldGUg
-bW9kZSAxMDA2NDQgYm9hcmQvYmVlbGluay9nczEvZ2VuaW1hZ2UuY2ZnCiBkZWxldGUgbW9kZSAx
-MDA3NTUgYm9hcmQvYmVlbGluay9nczEvcG9zdC1idWlsZC5zaAogZGVsZXRlIG1vZGUgMTAwNjQ0
-IGNvbmZpZ3MvYmVlbGlua19nczFfZGVmY29uZmlnCgpkaWZmIC0tZ2l0IGEvLmNoZWNrcGFja2Fn
-ZWlnbm9yZSBiLy5jaGVja3BhY2thZ2VpZ25vcmUKaW5kZXggMTUzOGFkOWViYi4uM2QxNTQ5MDhj
-MyAxMDA2NDQKLS0tIGEvLmNoZWNrcGFja2FnZWlnbm9yZQorKysgYi8uY2hlY2twYWNrYWdlaWdu
-b3JlCkBAIC04LDcgKzgsNiBAQCBib2FyZC9iZWFnbGVib2FyZC9iZWFnbGVib25lLXF0NS9wYXRj
-aGVzL2xpbnV4LzAwMDEta2VlcC1qdGFnLWNsb2NrLWFsaXZlLWZvci1kZQogYm9hcmQvYmVhZ2xl
-Ym9hcmQvYmVhZ2xlYm9uZS9wb3N0LWJ1aWxkLnNoIFNoZWxsY2hlY2sKIGJvYXJkL2JlYWdsZWJv
-YXJkL2JlYWdsZWJvbmVhaS9wYXRjaGVzL3Vib290LzAwMDEtYW01N3h4X2V2bS1maXhlcy5wYXRj
-aCBsaWJfcGF0Y2guVXBzdHJlYW0KIGJvYXJkL2JlYWdsZWJvYXJkL2JlYWdsZWJvbmVhaS9wb3N0
-LWJ1aWxkLnNoIFNoZWxsY2hlY2sKLWJvYXJkL2JlZWxpbmsvZ3MxL3Bvc3QtYnVpbGQuc2ggU2hl
-bGxjaGVjawogYm9hcmQvYm91bmRhcnlkZXZpY2VzL2NvbW1vbi9wb3N0LWJ1aWxkLnNoIFNoZWxs
-Y2hlY2sKIGJvYXJkL2JvdW5kYXJ5ZGV2aWNlcy9jb21tb24vcG9zdC1pbWFnZS5zaCBTaGVsbGNo
-ZWNrCiBib2FyZC9icm9hZGNvbS9ub3J0aHN0YXIvcG9zdC1pbWFnZS5zaCBTaGVsbGNoZWNrCkBA
-IC0xMTgsNyArMTE3LDYgQEAgY29uZmlncy9hdm5ldF9yemJvYXJkX3YybF9kZWZjb25maWcgbGli
-X2RlZmNvbmZpZy5Gb3JjZUNoZWNrSGFzaAogY29uZmlncy9iYW5hbmFwaV9tMl9iZXJyeV9kZWZj
-b25maWcgbGliX2RlZmNvbmZpZy5Gb3JjZUNoZWNrSGFzaAogY29uZmlncy9iYW5hbmFwaV9tMl91
-bHRyYV9kZWZjb25maWcgbGliX2RlZmNvbmZpZy5Gb3JjZUNoZWNrSGFzaAogY29uZmlncy9iYW5h
-bmFwaV9tMl96ZXJvX2RlZmNvbmZpZyBsaWJfZGVmY29uZmlnLkZvcmNlQ2hlY2tIYXNoCi1jb25m
-aWdzL2JlZWxpbmtfZ3MxX2RlZmNvbmZpZyBsaWJfZGVmY29uZmlnLkZvcmNlQ2hlY2tIYXNoCiBj
-b25maWdzL2Jyb2FkY29tX25vcnRoc3Rhcl9kZWZjb25maWcgbGliX2RlZmNvbmZpZy5Gb3JjZUNo
-ZWNrSGFzaAogY29uZmlncy9jYW5hYW5fa2QyMzNfZGVmY29uZmlnIGxpYl9kZWZjb25maWcuRm9y
-Y2VDaGVja0hhc2gKIGNvbmZpZ3MvY2kyMF9kZWZjb25maWcgbGliX2RlZmNvbmZpZy5Gb3JjZUNo
-ZWNrSGFzaApkaWZmIC0tZ2l0IGEvREVWRUxPUEVSUyBiL0RFVkVMT1BFUlMKaW5kZXggOGI5ZTkw
-ZGRhNi4uOTk2YzU5ODBhOCAxMDA2NDQKLS0tIGEvREVWRUxPUEVSUworKysgYi9ERVZFTE9QRVJT
-CkBAIC03MDEsMTAgKzcwMSw2IEBAIEY6CXBhY2thZ2UvbGlic2VtYW5hZ2UvCiBGOglwYWNrYWdl
-L2xpYnNlcG9sLwogRjoJcGFja2FnZS9wb2xpY3ljb3JldXRpbHMvCiAKLU46CUNsw6ltZW50IFDD
-qXJvbiA8cGVyb24uY2xlbUBnbWFpbC5jb20+Ci1GOglib2FyZC9iZWVsaW5rL2dzMS8KLUY6CWNv
-bmZpZ3MvYmVlbGlua19nczFfZGVmY29uZmlnCi0KIE46CUNvbGluIEZvc3RlciA8Y29saW4uZm9z
-dGVyQGluLWFkdmFudGFnZS5jb20+CiBGOglwYWNrYWdlL3B5dGhvbi10ZnRweS8KIEY6CXBhY2th
-Z2UvcmF1Yy1oYXdrYml0LXVwZGF0ZXIvCmRpZmYgLS1naXQgYS9ib2FyZC9iZWVsaW5rL2dzMS9l
-eHRsaW51eC5jb25mIGIvYm9hcmQvYmVlbGluay9nczEvZXh0bGludXguY29uZgpkZWxldGVkIGZp
-bGUgbW9kZSAxMDA2NDQKaW5kZXggMDQ2NjgxZjcxZC4uMDAwMDAwMDAwMAotLS0gYS9ib2FyZC9i
-ZWVsaW5rL2dzMS9leHRsaW51eC5jb25mCisrKyAvZGV2L251bGwKQEAgLTEsNCArMCwwIEBACi1s
-YWJlbCBsaW51eAotICBrZXJuZWwgL0ltYWdlCi0gIGRldmljZXRyZWUgL3N1bjUwaS1oNi1iZWVs
-aW5rLWdzMS5kdGIKLSAgYXBwZW5kIGNvbnNvbGU9dHR5UzAsMTE1MjAwIGVhcmx5cHJpbnRrIHJv
-b3Q9L2Rldi9tbWNibGswcDIgcm9vdHdhaXQKZGlmZiAtLWdpdCBhL2JvYXJkL2JlZWxpbmsvZ3Mx
-L2dlbmltYWdlLmNmZyBiL2JvYXJkL2JlZWxpbmsvZ3MxL2dlbmltYWdlLmNmZwpkZWxldGVkIGZp
-bGUgbW9kZSAxMDA2NDQKaW5kZXggNzE1Nzg3NDNlYy4uMDAwMDAwMDAwMAotLS0gYS9ib2FyZC9i
-ZWVsaW5rL2dzMS9nZW5pbWFnZS5jZmcKKysrIC9kZXYvbnVsbApAQCAtMSwzNCArMCwwIEBACi1p
-bWFnZSBib290LnZmYXQgewotCXZmYXQgewotCQlmaWxlcyA9IHsKLQkJCSJJbWFnZSIsCi0JCQki
-c3VuNTBpLWg2LWJlZWxpbmstZ3MxLmR0YiIsCi0JCQkiZXh0bGludXgiCi0JCX0KLQl9Ci0KLQlz
-aXplID0gNjRNCi19Ci0KLWltYWdlIHNkY2FyZC5pbWcgewotCWhkaW1hZ2UgewotCX0KLQotCXBh
-cnRpdGlvbiB1LWJvb3QgewotCQlpbi1wYXJ0aXRpb24tdGFibGUgPSAibm8iCi0JCWltYWdlID0g
-InUtYm9vdC1zdW54aS13aXRoLXNwbC5iaW4iCi0JCW9mZnNldCA9IDhLCi0JCXNpemUgPSAxMDE2
-SyAjIDFNQiAtIDhLQgotCX0KLQotCXBhcnRpdGlvbiBib290IHsKLQkJcGFydGl0aW9uLXR5cGUg
-PSAweEMKLQkJYm9vdGFibGUgPSAidHJ1ZSIKLQkJaW1hZ2UgPSAiYm9vdC52ZmF0IgotCX0KLQot
-CXBhcnRpdGlvbiByb290ZnMgewotCQlwYXJ0aXRpb24tdHlwZSA9IDB4ODMKLQkJaW1hZ2UgPSAi
-cm9vdGZzLmV4dDQiCi0JfQotfQpkaWZmIC0tZ2l0IGEvYm9hcmQvYmVlbGluay9nczEvcG9zdC1i
-dWlsZC5zaCBiL2JvYXJkL2JlZWxpbmsvZ3MxL3Bvc3QtYnVpbGQuc2gKZGVsZXRlZCBmaWxlIG1v
-ZGUgMTAwNzU1CmluZGV4IGVjMjBmY2E3ZDkuLjAwMDAwMDAwMDAKLS0tIGEvYm9hcmQvYmVlbGlu
-ay9nczEvcG9zdC1idWlsZC5zaAorKysgL2Rldi9udWxsCkBAIC0xLDQgKzAsMCBAQAotIyEvYmlu
-L3NoCi1CT0FSRF9ESVI9IiQoZGlybmFtZSAkMCkiCi0KLWluc3RhbGwgLW0gMDY0NCAtRCAkQk9B
-UkRfRElSL2V4dGxpbnV4LmNvbmYgJEJJTkFSSUVTX0RJUi9leHRsaW51eC9leHRsaW51eC5jb25m
-CmRpZmYgLS1naXQgYS9jb25maWdzL2JlZWxpbmtfZ3MxX2RlZmNvbmZpZyBiL2NvbmZpZ3MvYmVl
-bGlua19nczFfZGVmY29uZmlnCmRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAppbmRleCAxOWQ2NmMx
-NGE0Li4wMDAwMDAwMDAwCi0tLSBhL2NvbmZpZ3MvYmVlbGlua19nczFfZGVmY29uZmlnCisrKyAv
-ZGV2L251bGwKQEAgLTEsMzYgKzAsMCBAQAotQlIyX2FhcmNoNjQ9eQotQlIyX0FSTV9GUFVfVkZQ
-VjQ9eQotQlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFERVJTX0NVU1RPTV81XzE1PXkKLUJSMl9U
-QVJHRVRfR0VORVJJQ19JU1NVRT0iV2VsY29tZSB0byBCZWVsaW5rIEdTMSIKLUJSMl9ST09URlNf
-REVWSUNFX0NSRUFUSU9OX0RZTkFNSUNfTURFVj15Ci1CUjJfU1lTVEVNX0RIQ1A9ImV0aDAiCi1C
-UjJfUk9PVEZTX1BPU1RfQlVJTERfU0NSSVBUPSJib2FyZC9iZWVsaW5rL2dzMS9wb3N0LWJ1aWxk
-LnNoIgotQlIyX1JPT1RGU19QT1NUX0lNQUdFX1NDUklQVD0ic3VwcG9ydC9zY3JpcHRzL2dlbmlt
-YWdlLnNoIgotQlIyX1JPT1RGU19QT1NUX1NDUklQVF9BUkdTPSItYyBib2FyZC9iZWVsaW5rL2dz
-MS9nZW5pbWFnZS5jZmciCi1CUjJfTElOVVhfS0VSTkVMPXkKLUJSMl9MSU5VWF9LRVJORUxfQ1VT
-VE9NX1ZFUlNJT049eQotQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTl9WQUxVRT0iNS4x
-NSIKLUJSMl9MSU5VWF9LRVJORUxfVVNFX0FSQ0hfREVGQVVMVF9DT05GSUc9eQotQlIyX0xJTlVY
-X0tFUk5FTF9EVFNfU1VQUE9SVD15Ci1CUjJfTElOVVhfS0VSTkVMX0lOVFJFRV9EVFNfTkFNRT0i
-YWxsd2lubmVyL3N1bjUwaS1oNi1iZWVsaW5rLWdzMSIKLUJSMl9MSU5VWF9LRVJORUxfTkVFRFNf
-SE9TVF9PUEVOU1NMPXkKLUJSMl9UQVJHRVRfUk9PVEZTX0VYVDI9eQotQlIyX1RBUkdFVF9ST09U
-RlNfRVhUMl80PXkKLUJSMl9UQVJHRVRfQVJNX1RSVVNURURfRklSTVdBUkU9eQotQlIyX1RBUkdF
-VF9BUk1fVFJVU1RFRF9GSVJNV0FSRV9DVVNUT01fVkVSU0lPTj15Ci1CUjJfVEFSR0VUX0FSTV9U
-UlVTVEVEX0ZJUk1XQVJFX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSJ2Mi41IgotQlIyX1RBUkdFVF9B
-Uk1fVFJVU1RFRF9GSVJNV0FSRV9QTEFURk9STT0ic3VuNTBpX2g2IgotQlIyX1RBUkdFVF9VQk9P
-VD15Ci1CUjJfVEFSR0VUX1VCT09UX0JVSUxEX1NZU1RFTV9LQ09ORklHPXkKLUJSMl9UQVJHRVRf
-VUJPT1RfQ1VTVE9NX1ZFUlNJT049eQotQlIyX1RBUkdFVF9VQk9PVF9DVVNUT01fVkVSU0lPTl9W
-QUxVRT0iMjAyMS4xMCIKLUJSMl9UQVJHRVRfVUJPT1RfQk9BUkRfREVGQ09ORklHPSJiZWVsaW5r
-X2dzMSIKLUJSMl9UQVJHRVRfVUJPT1RfTkVFRFNfRFRDPXkKLUJSMl9UQVJHRVRfVUJPT1RfTkVF
-RFNfUFlMSUJGRFQ9eQotQlIyX1RBUkdFVF9VQk9PVF9ORUVEU19PUEVOU1NMPXkKLUJSMl9UQVJH
-RVRfVUJPT1RfTkVFRFNfQVRGX0JMMzE9eQotQlIyX1RBUkdFVF9VQk9PVF9TUEw9eQotQlIyX1RB
-UkdFVF9VQk9PVF9TUExfTkFNRT0idS1ib290LXN1bnhpLXdpdGgtc3BsLmJpbiIKLUJSMl9QQUNL
-QUdFX0hPU1RfRE9TRlNUT09MUz15Ci1CUjJfUEFDS0FHRV9IT1NUX0dFTklNQUdFPXkKLUJSMl9Q
-QUNLQUdFX0hPU1RfTVRPT0xTPXkKLS0gCjIuNTAuMQoKX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RA
-YnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5m
-by9idWlsZHJvb3QK
+This defconfig no longer builds:
+
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/11012273111
+
+It has been failing for over 2 months:
+
+  https://gitlab.com/buildroot.org/buildroot/-/jobs?name=T%3Dchromebook_snow&kind=BUILD
+
+It builds a 4.15 kernel, which is not even a maintained LTS kernel.
+
+Unless a fix is provided, this defconfig will be removed.
+
+Cc: Alex Suykov <alex.suykov@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .checkpackageignore                           |   1 -
+ DEVELOPERS                                    |   2 -
+ board/chromebook/snow/kernel.args             |   1 -
+ board/chromebook/snow/kernel.its              |  37 -----
+ board/chromebook/snow/linux-4.15.fragment     |   2 -
+ .../patches/linux-headers/linux-headers.hash  |   1 -
+ .../linux/0001-linux-4.15-dts-tpm.patch       |  30 ----
+ .../chromebook/snow/patches/linux/linux.hash  |   2 -
+ board/chromebook/snow/readme.txt              | 137 ------------------
+ board/chromebook/snow/sign.sh                 |  41 ------
+ configs/chromebook_snow_defconfig             |  24 ---
+ 11 files changed, 278 deletions(-)
+ delete mode 100644 board/chromebook/snow/kernel.args
+ delete mode 100644 board/chromebook/snow/kernel.its
+ delete mode 100644 board/chromebook/snow/linux-4.15.fragment
+ delete mode 120000 board/chromebook/snow/patches/linux-headers/linux-headers.hash
+ delete mode 100644 board/chromebook/snow/patches/linux/0001-linux-4.15-dts-tpm.patch
+ delete mode 100644 board/chromebook/snow/patches/linux/linux.hash
+ delete mode 100644 board/chromebook/snow/readme.txt
+ delete mode 100755 board/chromebook/snow/sign.sh
+ delete mode 100644 configs/chromebook_snow_defconfig
+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 3d154908c3..a3642ca61f 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -19,7 +19,6 @@ board/bsh/imx8mn-bsh-smm-s2/post-build.sh Shellcheck
+ board/canaan/k210-soc/post-build.sh Shellcheck
+ board/chromebook/elm/sign.sh Shellcheck
+ board/chromebook/mksd.sh Shellcheck
+-board/chromebook/snow/sign.sh Shellcheck
+ board/ci20/patches/uboot/0001-mips-Remove-default-endiannes.patch lib_patch.Upstream
+ board/freescale/common/imx/imx8-bootloader-prepare.sh Shellcheck
+ board/freescale/common/mxs/post-image.sh Shellcheck
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 996c5980a8..cffb7f51e2 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -100,8 +100,6 @@ F:	package/libzenoh-pico/
+ F:	package/network-manager-openvpn/
+ 
+ N:	Alex Suykov <alex.suykov@gmail.com>
+-F:	board/chromebook/snow/
+-F:	configs/chromebook_snow_defconfig
+ F:	package/vboot-utils/
+ 
+ N:	Alexander Clouter <alex+buildroot@digriz.org.uk>
+diff --git a/board/chromebook/snow/kernel.args b/board/chromebook/snow/kernel.args
+deleted file mode 100644
+index 1220bf84ac..0000000000
+--- a/board/chromebook/snow/kernel.args
++++ /dev/null
+@@ -1 +0,0 @@
+-console=tty1 clk_ignore_unused root=/dev/mmcblk1p2 rootfstype=ext4 ro
+diff --git a/board/chromebook/snow/kernel.its b/board/chromebook/snow/kernel.its
+deleted file mode 100644
+index c8766ef9e8..0000000000
+--- a/board/chromebook/snow/kernel.its
++++ /dev/null
+@@ -1,37 +0,0 @@
+-/dts-v1/;
+-
+-/ {
+-    description = "Buildroot kernel for Chromebook Snow";
+-    images {
+-        kernel@1 {
+-            description = "kernel";
+-            data = /incbin/("zImage");
+-            type = "kernel_noload";
+-            arch = "arm";
+-            os = "linux";
+-            compression = "none";
+-            load = <0>;
+-            entry = <0>;
+-            hash@1 {
+-                algo = "sha1";
+-            };
+-        };
+-        fdt@1{
+-            description = "exynos5250-snow.dtb";
+-            data = /incbin/("exynos5250-snow.dtb");
+-            type = "flat_dt";
+-            arch = "arm";
+-            compression = "none";
+-            hash@1 {
+-                algo = "sha1";
+-            };
+-        };
+-    };
+-    configurations {
+-        default = "conf@1";
+-        conf@1{
+-            kernel = "kernel@1";
+-            fdt = "fdt@1";
+-        };
+-    };
+-};
+diff --git a/board/chromebook/snow/linux-4.15.fragment b/board/chromebook/snow/linux-4.15.fragment
+deleted file mode 100644
+index e2786dacba..0000000000
+--- a/board/chromebook/snow/linux-4.15.fragment
++++ /dev/null
+@@ -1,2 +0,0 @@
+-CONFIG_MWIFIEX=m
+-CONFIG_MWIFIEX_SDIO=m
+diff --git a/board/chromebook/snow/patches/linux-headers/linux-headers.hash b/board/chromebook/snow/patches/linux-headers/linux-headers.hash
+deleted file mode 120000
+index 5808d92afe..0000000000
+--- a/board/chromebook/snow/patches/linux-headers/linux-headers.hash
++++ /dev/null
+@@ -1 +0,0 @@
+-../linux/linux.hash
+\ No newline at end of file
+diff --git a/board/chromebook/snow/patches/linux/0001-linux-4.15-dts-tpm.patch b/board/chromebook/snow/patches/linux/0001-linux-4.15-dts-tpm.patch
+deleted file mode 100644
+index 01f452b563..0000000000
+--- a/board/chromebook/snow/patches/linux/0001-linux-4.15-dts-tpm.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-Some versions of u-boot for this Chromebook check for tpm node
+-in the device tree and fail badly (reboot) if it is not found.
+-
+-While not exactly correct, it is much easier to patch the mainline
+-device tree to match u-boot expectations than to fix u-boot on
+-this device.
+-
+-See https://code.google.com/p/chromium/issues/detail?id=220169
+-and https://lkml.org/lkml/2013/3/4/242
+-
+-Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+-Upstream: Not Applicable
+-[yann.morin.1998@free.fr: add Upstream tag]
+-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+-
+---- a/arch/arm/boot/dts/exynos5250-snow-common.dtsi
+-+++ b/arch/arm/boot/dts/exynos5250-snow-common.dtsi
+-@@ -466,6 +466,11 @@
+- 	status = "okay";
+- 	samsung,i2c-sda-delay = <100>;
+- 	samsung,i2c-max-bus-freq = <66000>;
+-+
+-+	tpm {
+-+		compatible = "infineon,slb9635tt";
+-+		reg = <0x20>;
+-+	};
+- };
+- 
+- &i2c_5 {
+-
+diff --git a/board/chromebook/snow/patches/linux/linux.hash b/board/chromebook/snow/patches/linux/linux.hash
+deleted file mode 100644
+index 1064af46aa..0000000000
+--- a/board/chromebook/snow/patches/linux/linux.hash
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# Localy computed
+-sha256  5a26478906d5005f4f809402e981518d2b8844949199f60c4b6e1f986ca2a769  linux-4.15.tar.xz
+diff --git a/board/chromebook/snow/readme.txt b/board/chromebook/snow/readme.txt
+deleted file mode 100644
+index 1afd949829..0000000000
+--- a/board/chromebook/snow/readme.txt
++++ /dev/null
+@@ -1,137 +0,0 @@
+-Samsung XE303C12 aka Chromebook Snow
+-====================================
+-
+-This file describes booting the Chromebook from an SD card containing
+-Buildroot kernel and rootfs, using the original bootloader. This is
+-the least invasive way to get Buildroot onto the devices and a good
+-starting point.
+-
+-The bootloader will only boot a kernel from a GPT partition marked
+-bootable with cgpt tool from vboot-utils package.
+-The kernel image must be signed using futility from the same package.
+-The signing part is done by sign.sh script in this directory.
+-
+-It does not really matter where rootfs is as long as the kernel is able
+-to find it, but this particular configuration assumes the kernel is on
+-partition 1 and rootfs is on partition 2 of the SD card.
+-Make sure to check kernel.args if you change this.
+-
+-Making the boot media
+----------------------
+-Start by configuring and building the images.
+-
+-	make chromebook_snow_defconfig
+-	make menuconfig # if necessary
+-	make
+-
+-The important files are:
+-
+-	uImage.kpart (kernel and device tree, signed)
+-	rootfs.tar
+-	bootsd.img (SD card image containing both kernel and rootfs)
+-
+-Write the image directly to some SD card.
+-WARNING: make sure there is nothing important on that card,
+-and double-check the device name!
+-
+-	SD=/dev/mmcblk1		# may be /dev/sdX on some hosts
+-	dd if=output/images/bootsd.img of=$SD
+-
+-Switching to developer mode and booting from SD
+------------------------------------------------
+-Power Chromebook down, then power it up while holding Esc+F3.
+-BEWARE: switching to developer mode deletes all user data.
+-Create backups if you need them.
+-
+-While in developer mode, Chromebook will boot into a white screen saying
+-"OS verification is off".
+-
+-Press Ctrl-D at this screen to boot Chromium OS from eMMC.
+-Press Ctrl-U at this screen to boot from SD (or USB)
+-Press Power to power it off.
+-Do NOT press Space unless you mean it.
+-This will switch it back to normal mode.
+-
+-The is no way to get rid of the white screen without re-flashing the bootloader.
+-
+-Troubleshooting
+----------------
+-Loud *BEEP* after pressing Ctrl-U means there's no valid partition to boot from.
+-Which in turn means either bad GPT or improperly signed kernel.
+-
+-Return to the OS verification screen without any sounds means the code managed
+-to reboot the board. May indicate properly signed but invalid image.
+-
+-Blank screen means the image is valid and properly signed but cannot boot
+-for some reason, like missing or incorrect DT.
+-
+-In case the board becomes unresponsive:
+-
+-* Press Esc+F3+Power. The board should reboot instantly.
+-  Remove SD card to prevent it from attempting a system recovery.
+-
+-* Hold Power button for around 10s. The board should shut down into
+-  its soft-off mode. Press Power button again or open the lid to turn in on.
+-
+-* If that does not work, disconnect the charger and push a hidden
+-  button on the underside with a pin of some sort. The board should shut
+-  down completely. Opening the lid and pressing Power button will not work.
+-  To turn it back on, connect the charger.
+-
+-Partitioning SD card manually
+------------------------------
+-Check mksd.sh for partitioning commands.
+-
+-Use parted and cgpt on a real device, and calculate the partition
+-sizes properly. The kernel partition may be as small as 4MB, but
+-you will probably want the rootfs to occupy the whole remaining space.
+-
+-cgpt may be used to check current layout:
+-
+-	output/host/bin/cgpt show $SD
+-
+-All sizes and all offsets are in 512-byte blocks.
+-
+-Writing kernel and rootfs to a partitioned SD card
+---------------------------------------------------
+-Write .kpart directly to the bootable partition:
+-
+-	dd if=output/images/uImage.kpart of=${SD}1
+-
+-Make a new filesystem on the rootfs partition, and unpack rootfs.tar there:
+-
+-	mkfs.ext4 ${SD}2
+-	mount ${SD2} /mnt/<ROOTFS-PARTITION>
+-	tar -xvf output/images/rootfs.tar -C /mnt/<ROOTFS-PARTITION>
+-	umount /mnt/<ROOTFS-PARTITION>
+-
+-This will require root permissions even if you can write to $SD.
+-
+-Kernel command line
+--------------------
+-The command line is taken from board/chromebook/snow/kernel.args and stored
+-in the vboot header (which also holds the signature).
+-
+-The original bootloader prepends "cros_secure console= " to the supplied
+-command line. The only way to suppress this is to enable CMDLINE_FORCE
+-in the kernel config, disabling external command line completely.
+-
+-That's not necessary however. The mainline kernel ignores cros_secure,
+-and supplying console=tty1 in kernel.args undoes the effect of console=
+-
+-Booting with console= suppresses all kernel output.
+-As a side effect, it makes /dev/console unusable, which the init in use must
+-be able to handle.
+-
+-WiFi card
+----------
+-Run modprobe mwifiex_sdio to load the driver.
+-The name of the device should be mlan0.
+-
+-Further reading
+----------------
+-https://www.chromium.org/chromium-os/developer-information-for-chrome-os-devices/samsung-arm-chromebook
+-http://linux-exynos.org/wiki/Samsung_Chromebook_XE303C12/Installing_Linux
+-http://archlinuxarm.org/platforms/armv7/samsung/samsung-chromebook
+-http://www.de7ec7ed.com/2013/05/application-processor-ap-uart-samsung.html
+-http://www.de7ec7ed.com/2013/05/embedded-controller-ec-uart-samsung.html
+diff --git a/board/chromebook/snow/sign.sh b/board/chromebook/snow/sign.sh
+deleted file mode 100755
+index e8f111ff0a..0000000000
+--- a/board/chromebook/snow/sign.sh
++++ /dev/null
+@@ -1,41 +0,0 @@
+-#!/bin/sh
+-
+-# This script creates u-boot FIT image containing the kernel and the DT,
+-# then signs it using futility from vboot-utils.
+-# The resulting file is called uImage.kpart.
+-
+-BOARD_DIR=$(dirname $0)
+-mkimage=$HOST_DIR/bin/mkimage
+-futility=$HOST_DIR/bin/futility
+-devkeys=$HOST_DIR/share/vboot/devkeys
+-
+-run() { echo "$@"; "$@"; }
+-die() { echo "$@" >&2; exit 1; }
+-test -f $BINARIES_DIR/zImage || \
+-	die "No kernel image found"
+-test -x $mkimage || \
+-	die "No mkimage found (host-uboot-tools has not been built?)"
+-test -x $futility || \
+-	die "No futility found (host-vboot-utils has not been built?)"
+-
+-# kernel.its references zImage and exynos5250-snow.dtb, and all three
+-# files must be in current directory for mkimage.
+-run cp $BOARD_DIR/kernel.its $BINARIES_DIR/kernel.its || exit 1
+-echo "# entering $BINARIES_DIR for the next command"
+-(cd $BINARIES_DIR && run $mkimage -f kernel.its uImage.itb) || exit 1
+-
+-# futility requires non-empty file to be supplied with --bootloader
+-# even if it does not make sense for the target platform.
+-echo > $BINARIES_DIR/dummy.txt
+-
+-run $futility vbutil_kernel \
+-	--keyblock $devkeys/kernel.keyblock \
+-	--signprivate $devkeys/kernel_data_key.vbprivk \
+-	--arch arm \
+-	--version 1 \
+-	--config $BOARD_DIR/kernel.args \
+-	--vmlinuz $BINARIES_DIR/uImage.itb \
+-	--bootloader $BINARIES_DIR/dummy.txt \
+-	--pack $BINARIES_DIR/uImage.kpart || exit 1
+-
+-rm -f $BINARIES_DIR/kernel.its $BINARIES_DIR/dummy.txt
+diff --git a/configs/chromebook_snow_defconfig b/configs/chromebook_snow_defconfig
+deleted file mode 100644
+index 9a5bcce98b..0000000000
+--- a/configs/chromebook_snow_defconfig
++++ /dev/null
+@@ -1,24 +0,0 @@
+-BR2_arm=y
+-BR2_cortex_a15=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
+-BR2_GLOBAL_PATCH_DIR="board/chromebook/snow/patches"
+-BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+-BR2_TARGET_GENERIC_GETTY_PORT="tty1"
+-BR2_TARGET_GENERIC_GETTY_TERM="linux"
+-BR2_ROOTFS_POST_BUILD_SCRIPT="board/chromebook/snow/sign.sh"
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/chromebook/mksd.sh"
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15"
+-BR2_LINUX_KERNEL_DEFCONFIG="exynos"
+-BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/chromebook/snow/linux-4.15.fragment"
+-BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="exynos5250-snow"
+-BR2_PACKAGE_LINUX_FIRMWARE=y
+-BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8797=y
+-BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_PACKAGE_HOST_PARTED=y
+-BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+-BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
+-BR2_PACKAGE_HOST_VBOOT_UTILS=y
+-- 
+2.50.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
