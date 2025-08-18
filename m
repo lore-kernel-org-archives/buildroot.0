@@ -4,107 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 372A5CA0EF2
-	for <buildroot@archiver.kernel.org>; Mon, 18 Aug 2025 14:48:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4FDFCA0ED1
+	for <buildroot@archiver.kernel.org>; Mon, 18 Aug 2025 14:56:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D9024848D6;
-	Mon, 18 Aug 2025 14:48:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 75AD9848C6;
+	Mon, 18 Aug 2025 14:56:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id E_v-myXJEXTA; Mon, 18 Aug 2025 14:48:42 +0000 (UTC)
+ id iY_4LBd-xx8u; Mon, 18 Aug 2025 14:56:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0EBDF83E83
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 44BEF848D5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0EBDF83E83;
-	Mon, 18 Aug 2025 14:48:42 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 154F7E2
- for <buildroot@buildroot.org>; Mon, 18 Aug 2025 14:48:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 44BEF848D5;
+	Mon, 18 Aug 2025 14:56:05 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2BC36196
+ for <buildroot@buildroot.org>; Mon, 18 Aug 2025 14:56:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 06D7460AA1
- for <buildroot@buildroot.org>; Mon, 18 Aug 2025 14:48:41 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1D4D341763
+ for <buildroot@buildroot.org>; Mon, 18 Aug 2025 14:56:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Y3EYDowicFqq for <buildroot@buildroot.org>;
- Mon, 18 Aug 2025 14:48:40 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id T3d2R0pRB3WF for <buildroot@buildroot.org>;
+ Mon, 18 Aug 2025 14:56:02 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::f35; helo=mail-qv1-xf35.google.com;
- envelope-from=mr.bossman075@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4C1966089D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4C1966089D
-Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com
- [IPv6:2607:f8b0:4864:20::f35])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4C1966089D
- for <buildroot@buildroot.org>; Mon, 18 Aug 2025 14:48:40 +0000 (UTC)
-Received: by mail-qv1-xf35.google.com with SMTP id
- 6a1803df08f44-70a927d4aaaso36537296d6.1
- for <buildroot@buildroot.org>; Mon, 18 Aug 2025 07:48:40 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
+ envelope-from=angelo.compagnucci@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 312B440332
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 312B440332
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 312B440332
+ for <buildroot@buildroot.org>; Mon, 18 Aug 2025 14:56:02 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ 5b1f17b1804b1-45a1b065d58so31600705e9.1
+ for <buildroot@buildroot.org>; Mon, 18 Aug 2025 07:56:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1755528519; x=1756133319;
- h=content-transfer-encoding:thread-topic:in-reply-to:content-language
- :references:cc:to:subject:from:user-agent:mime-version:date
- :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+ d=1e100.net; s=20230601; t=1755528960; x=1756133760;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=+y+YqOU2Jhf0Nd86eb9zBAwV/hgL+8Y8w43kUdrWzAk=;
- b=nh6SOL7JifqMbi1AsFB4n35P2VMeSc8pRvSlL6xMTGNV2hGzZ1lpzQO7vGNlTpYXuc
- /XJ/fEDxh7ZzfHrBFZrcqQjugLh0gMxZKG6FuGyX5Zesz1tzcUBeriVRGI2lzliT/UqE
- Hdm4dR4tqZBUCHMuEG9ryAZ5Z/yrvGGW9dF1anPQondLaNHP0fUBd6Tu+3NUnh6wzavY
- EhesPByjpm1FYzkg63ua9YYkoF7FjOHeGAhHLJe2TfPtVKMeVxuquiaqt/Hu1dVug14c
- wzVhnx+dvJHoC+++u8ltvoiNJCCizxbMdmUdF8IxDo4LIxegkGMKVWSsub71oEP/H97m
- 0yAg==
-X-Forwarded-Encrypted: i=1;
- AJvYcCVDgUVolVmv4EVOu3bP4S7BW6MhpnXCtjCmifLcPFi7+/c53bbolhn5Tl+2lpH7Tikg31/WgL8PyWo=@buildroot.org
-X-Gm-Message-State: AOJu0Yzny0/tHtWR3FR8TC0p6/29AosjWfYZ95qQ3JYUWjDzCaCwMTtf
- vsYTBUznJQ5w1FgXzMsEhivsfEQmTCsW51HQ9mfsRS33W+MLmXbbOnh2Yr3yuA==
-X-Gm-Gg: ASbGncufwqLtnptCXtpyPTjo+kg2DeF/E+EzlvzvdU9xAjnPZBKI6EOK9ahZD/CLNY8
- dGA0m9QsN0OpjzbUwPWiTohbpKXdQqbMrIh7l9YGNNw9O2TaA0lbdr5v6RRR2zA9r9DZp8Y8mPI
- keEO397lNZPfEGzvhhzNcaVY5gZYe7BwhckXKLT8cb2QmMstW1JmWvGiB+QyL5nPamI9gibAvw+
- 8LC6V8E8O4JfmXDp5sy67DB8d035QwQFX0PbxqON+XkOSS/IFa0XkGVNeAwzlA8KiIdmctqzOYm
- 6Tfa+W2F9FT9QhAJkRTcCFB/rpVAChYKuzBKiLv39InP2pEd7UZ0QnQvAZYNeeY7NO3t059YQE2
- nV5IBVgEmCwjy3+kxJhbeIkeygGMzAIFqLPIdIJpGaMYyHBApF7tXuJmjX7Uq/ie6qTafb/8c8I
- nEJQ==
-X-Google-Smtp-Source: AGHT+IEIpsHR9c/pT4c8qvvapOmQcH24dDy4mKBBSSfZI4H00HQi1vAAyu+JBIGP91d+SLQhD2vFgg==
-X-Received: by 2002:a05:6214:2a8a:b0:6fb:25f:ac8c with SMTP id
- 6a1803df08f44-70ba7c0b334mr154363906d6.31.1755528518762; 
- Mon, 18 Aug 2025 07:48:38 -0700 (PDT)
-Received: from [10.4.10.38] (pool-108-26-215-125.bstnma.fios.verizon.net.
- [108.26.215.125]) by smtp.gmail.com with ESMTPSA id
- 6a1803df08f44-70ba9370592sm53689946d6.56.2025.08.18.07.48.38
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 18 Aug 2025 07:48:38 -0700 (PDT)
-Message-ID: <6278f47a-e07e-45a7-9587-a4bbdd96c634@gmail.com>
-Date: Mon, 18 Aug 2025 10:48:37 -0400
+ bh=nfbvIjGYtqOqEIztnJZxBaXyab0PpBg6fQ9zRHmWWio=;
+ b=aT0e4GAN0hyPR21Kax83cJPjV5fXCkwjmIJkWrcI340XGh91RjYwbt65N9db2iq8qD
+ S3hUy16lCOd8t4CXT8pCXRPb8Isst1/z+GJ7Ht3c+yYjrNRKcpBwOqcbGgesaUCslp5P
+ um0nD0KvrGFUb1B6nmqqT7lGVW+VkyU85qUXrg75gq2o20DmIF59wS8jsdpAoaAvcVUU
+ FPZkPaTJ5xKIJpysBvhQV3QCrLYeYqDRxzk+E/SZUwAOSO/hxiOvPGxeKGgVV/FXEzm2
+ ZoiLS9yEcv0s0Tq858VMAEmt4E/7w3+y2ZucRypahxAHDoqpaCp7VmnjB5nu+xKBJPA+
+ kNDw==
+X-Gm-Message-State: AOJu0YzZeDPccX0XjmKKWz7hqYsMdW0RuR4h/UywUQZ8fcxTN5nWBTW6
+ J+YRNqqdQdkyPV6C60uu0I6zGXLo17D3UaTsuprfHYuWhAov5ye0oke0zREG8v11
+X-Gm-Gg: ASbGncuO0xkH9J5zQmW+rLATtvXP0L6ZhyjFvDE11al04Tgf+RovnWiuC2Akxf4CGdU
+ MGUW1BSaQvDCyT5CRIUA/I2KIfhU/U5IjJC4PVvY51VyJ/FBWjNi3b58bdhccQddOvsCxiiI4Cz
+ wBebAsHPyRKeqqN8lP2JrPgYNbz+XmvvWFH1kJggQ6XyfcFsRfTd8Dajh2kkTeJVfZi3s/qYYoU
+ MQcnvGC59/W5FOUOHU387USQwFwQb8O2yxfurt38/eiaOVRRQF9D3x9Xqfy02wfNDE0fntBw/RO
+ eE8qHwlXVFm6xVS8jElhYVvjD3Yo0GWI7mkGDCVZtYBBakiit2rYH3SZcwihYVv5EChTEDqPZBq
+ UQKa4meupGEMCacthiq9GCwP3nl0hDCcdAC8w1KdOVwyV/A==
+X-Google-Smtp-Source: AGHT+IGlfJUfUdp6ADPiG9XZUhRAxkbcMZY9XVXspD38yA4vqpVfUmndT6zw9HgyoxjNjGOlyDzYrw==
+X-Received: by 2002:a05:6000:1446:b0:3b7:9929:871c with SMTP id
+ ffacd0b85a97d-3bb68c0472emr9851600f8f.37.1755528959685; 
+ Mon, 18 Aug 2025 07:55:59 -0700 (PDT)
+Received: from localhost.localdomain ([212.22.141.99])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-3bb64758690sm13255840f8f.6.2025.08.18.07.55.58
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 18 Aug 2025 07:55:59 -0700 (PDT)
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+To: buildroot@buildroot.org
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Mon, 18 Aug 2025 16:55:55 +0200
+Message-Id: <20250818145555.1039619-1-angelo.compagnucci@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Jesse Taube <mr.bossman075@gmail.com>
-To: Charlie Jenkins <charlie@rivosinc.com>, buildroot@buildroot.org
-Cc: Mark Corbin <mark@dibsco.co.uk>
-References: <20250507-riscv_isa_extra-v1-1-2cad4c15d2ca@rivosinc.com>
-Content-Language: en-US
-In-Reply-To: <20250507-riscv_isa_extra-v1-1-2cad4c15d2ca@rivosinc.com>
-Thread-Topic: [PATCH] arch: riscv: Add RISCV_ISA_EXTRA config string
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1755528519; x=1756133319; darn=buildroot.org;
- h=content-transfer-encoding:thread-topic:in-reply-to:content-language
- :references:cc:to:subject:from:user-agent:mime-version:date
- :message-id:from:to:cc:subject:date:message-id:reply-to;
- bh=+y+YqOU2Jhf0Nd86eb9zBAwV/hgL+8Y8w43kUdrWzAk=;
- b=CfVJc+OOoBAR8ymtdce6rGhOdRnecZSbTZNgGD8jYMKyXy0aTgz/4nAXp9kcD9b4XE
- uP1D0WdQTobHuRffi5NkFFBX5/DtwkO3Zfp4veVSCeXkwkmS1F+zEEt/8mWqHqqejBN2
- NtGJ07p1LegfkjxljzhSKk500yL3Vm2kyYluf4tcAoVe8vRyIr50tD95hg7wU4iDWKan
- o29XPbgNPD3D84bITwK5gkQaiQfS100UwSButUhrQ6f2CeBrIBXXkNxBekza1IK7Ua2Y
- 1V5fHZ/SpF8Uzf32ohCwq6pbDu1ieH5mRiM2+xXqpEL/1oxmIQKPnX0VSg0CSzTo+e3A
- b/GQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=gmail.com; s=20230601; t=1755528960; x=1756133760; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=nfbvIjGYtqOqEIztnJZxBaXyab0PpBg6fQ9zRHmWWio=;
+ b=PfMwXlNFXy4gCOy8CM8LVKnQ3h6xtOt+OPUcAEDeSrO2UuKTGoq6e5nLwaMrc3DBXD
+ UzeUbVDywE4JFWALQZDiJ14yZMlTvczfbnbLmRf5PmWD2EKQhe6u+JWLxLUELyO3Qto6
+ 8Migxmq8+VjzAlXuQoZiRKewPoa+drQA3xDCvrbYE45w6Hsd7a9vntlJ6yD9OicEA6+K
+ 9dlYBY4bN1hvfV/kOiPpwjltktu0LEuvoWPy6jU+vi3PK6iPYbkSd3kLtk1NQEfOV8sN
+ nRvbi1Y+0YzbjxT6O2RvemuxyCjtwd+p/5qDZSodAFe6X00ncPBM8z0xpk3VGSo2m94R
+ 7sdw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=CfVJc+OO
-Subject: Re: [Buildroot] [PATCH] arch: riscv: Add RISCV_ISA_EXTRA config
- string
+ header.a=rsa-sha256 header.s=20230601 header.b=PfMwXlNF
+Subject: [Buildroot] [PATCH] package/cups: bump to version 2.4.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,66 +106,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
- > Adds a new user-configurable string to arch/Config.in.riscv, and in
- > arch/arch.mk.riscv appends it to GCC_TARGET_ARCH.
- >
- > This enables custom extensions/combinations to be easily configured.
- >
- > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+Changelog:
+https://github.com/OpenPrinting/cups/releases/tag/v2.4.12
 
-Reviewed-by: Jesse Taube <Mr.Bossman075@gmail.com>
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+---
+ package/cups/cups.hash | 4 ++--
+ package/cups/cups.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- > ---
- >  arch/Config.in.riscv | 7 +++++++
- >  arch/arch.mk.riscv   | 3 +++
- >  2 files changed, 10 insertions(+)
- >
- >
- > ---
- > base-commit: dd2d62a36e091ad745fbacbef810709b2f597396
- > change-id: 20250507-riscv_isa_extra-769a6078a3ad
- >
- > diff --git a/arch/Config.in.riscv b/arch/Config.in.riscv
- > index 
-23d095d1a6626d6bfe4a717b1837aec72e67b8db..4f48b6f3cac7ed182c045ded864aaf190144b54e 
-100644
- > --- a/arch/Config.in.riscv
- > +++ b/arch/Config.in.riscv
- > @@ -45,6 +45,13 @@ config BR2_RISCV_ISA_RVV
- >  	bool "Vector Instructions (V)"
- >  	select BR2_ARCH_NEEDS_GCC_AT_LEAST_12
- >
- > +config BR2_RISCV_ISA_EXTRA
- > +        string "Append extra RISC-V ISA extensions"
- > +        default ""
- > +	help
- > +	  Extra ISA extensions to append to the ISA extensions string. 
-They are
- > +	  underscore-separated.  For example, "zba_zbb_zvl256b".
- > +
- >  choice
- >  	prompt "Target Architecture Size"
- >  	default BR2_RISCV_64
- > diff --git a/arch/arch.mk.riscv b/arch/arch.mk.riscv
- > index 
-ee5c434b97115eb0106b87203dc909c0705690eb..3e258b78afb0f4bdb2a456d644489b1673e2df59 
-100644
- > --- a/arch/arch.mk.riscv
- > +++ b/arch/arch.mk.riscv
- > @@ -39,4 +39,7 @@ ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_12),y)
- >  GCC_TARGET_ARCH := $(GCC_TARGET_ARCH)_zicsr_zifencei
- >  endif
- >
- > +ifneq ($(BR2_RISCV_ISA_EXTRA), "")
- > +GCC_TARGET_ARCH := $(GCC_TARGET_ARCH)_$(call qstrip, 
-$(BR2_RISCV_ISA_EXTRA))
- > +endif
- >  endif
+diff --git a/package/cups/cups.hash b/package/cups/cups.hash
+index f826f96fe7..e363a761eb 100644
+--- a/package/cups/cups.hash
++++ b/package/cups/cups.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated:
+-sha256  9a88fe1da3a29a917c3fc67ce6eb3178399d68e1a548c6d86c70d9b13651fd71  cups-2.4.11-source.tar.gz
++sha256  b1dde191a4ae2760c47220c82ca6155a28c382701e6c1a0159d1054990231d59  cups-2.4.12-source.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+-sha256  5320b6e3c252423e4153eb2dd63e57e3b630afb21139f44e43b02d85fe33e279  NOTICE
++sha256  977206f041b9a6f47ac00531e1242c0fab7063da71178f8d868b167b70866b6d  NOTICE
+diff --git a/package/cups/cups.mk b/package/cups/cups.mk
+index 31899114ef..21fe6a7c5e 100644
+--- a/package/cups/cups.mk
++++ b/package/cups/cups.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CUPS_VERSION = 2.4.11
++CUPS_VERSION = 2.4.12
+ CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.gz
+ CUPS_SITE = https://github.com/OpenPrinting/cups/releases/download/v$(CUPS_VERSION)
+ CUPS_LICENSE = Apache-2.0 with GPL-2.0/LGPL-2.0 exception
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
