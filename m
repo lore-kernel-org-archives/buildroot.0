@@ -1,200 +1,101 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FC62CA0ED1
-	for <buildroot@archiver.kernel.org>; Mon, 18 Aug 2025 13:52:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9378CCA0ED1
+	for <buildroot@archiver.kernel.org>; Mon, 18 Aug 2025 14:05:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4974F41D24;
-	Mon, 18 Aug 2025 13:52:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 65424842D2;
+	Mon, 18 Aug 2025 14:05:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0xRp0ct6YQ5B; Mon, 18 Aug 2025 13:52:15 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id w3oFLxI_tqRB; Mon, 18 Aug 2025 14:05:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 75E1B41DA2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CA593847FF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 75E1B41DA2;
-	Mon, 18 Aug 2025 13:52:15 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id B392775
- for <buildroot@buildroot.org>; Mon, 18 Aug 2025 13:52:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CA593847FF;
+	Mon, 18 Aug 2025 14:05:27 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6E4A1196
+ for <buildroot@buildroot.org>; Mon, 18 Aug 2025 14:05:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A520F4031C
- for <buildroot@buildroot.org>; Mon, 18 Aug 2025 13:52:14 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4F3AB61BA5
+ for <buildroot@buildroot.org>; Mon, 18 Aug 2025 14:05:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id h3M0OIq1J4c8 for <buildroot@buildroot.org>;
- Mon, 18 Aug 2025 13:52:14 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yRKBj3aijYVu for <buildroot@buildroot.org>;
+ Mon, 18 Aug 2025 14:05:25 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:c207::3;
- helo=mrwpr03cu001.outbound.protection.outlook.com;
- envelope-from=henri.roosen@ginzinger.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org AB82140323
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AB82140323
-Received: from MRWPR03CU001.outbound.protection.outlook.com
- (mail-francesouthazlp170110003.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:c207::3])
- by smtp2.osuosl.org (Postfix) with ESMTPS id AB82140323
- for <buildroot@buildroot.org>; Mon, 18 Aug 2025 13:52:13 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=V50w/c1XUQqrE3WF83TWcM9+EB5WLsm28LzLWY8bDHiHX0gPrbhEptYCvlcegosrGkE5eeJ2SZuXtc1rSxpzeN76qk4NGtSyGIcV6ZJQgdrj8Dgyi3UI8VgBchG46ZaV7ItHwQZljUyDW4mlgxpIJjhbypiELPBYpVozl1lbkWce89ilDDKYkp6fjhP9+4GUXVsQs1JmV5rJFCS6tJPTEf5yIze7kS7AqvkK6I14mMxzIYcyiIrupxZ6rxBY8sN3Q/l2MVTC2zaCxzDrbcQODjb7js7fvyoPidbxJDgfHs6Mj+U0xNv54b3cltJHq8eSTE0+Bsshq8UGaU64oOV6Cw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=AUzzxizjCCXk32FVIFTaozGyg+uhkbCQeh0Gn61M4Nc=;
- b=QMBq3CM33AeoaDCrL0jXzA6uQFKsXSNi0bngqkBPV3piNwll4kiEU7igCb8Trga7yW1QRNGnWM6K+f1Z8KFqg3Y4Jp+/HRMa8/7Wk5QHTMpsSbG3zeeAXsSsUZ18hSyhOdwiPUMVwAo39tGAgNh4H/UkOR/906GKYL2JjHvi6LEesDiccwnA+IyUYapCOeQrUrht2kowomAIVjFmM0RL6gyPHxB0fX0uaBF2xHso3g7jsqm1d+xmjmnrqVU3RVZebubeSEswvFtebqknW1r5YiGiq3P2sFgQbRCagcCPX99QTHlkbTA+U8X2nv4gl5CQ7uVzKSY7Sx9zW32zOQNB6g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 20.93.157.195) smtp.rcpttodomain=buildroot.org smtp.mailfrom=ginzinger.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=ginzinger.com;
- dkim=none (message not signed); arc=none (0)
-Received: from AM0PR07CA0012.eurprd07.prod.outlook.com (2603:10a6:208:ac::25)
- by AS8PR06MB7319.eurprd06.prod.outlook.com (2603:10a6:20b:250::15)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9031.24; Mon, 18 Aug
- 2025 13:52:07 +0000
-Received: from AM2PEPF0001C713.eurprd05.prod.outlook.com
- (2603:10a6:208:ac:cafe::69) by AM0PR07CA0012.outlook.office365.com
- (2603:10a6:208:ac::25) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9052.12 via Frontend Transport; Mon,
- 18 Aug 2025 13:52:07 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 20.93.157.195)
- smtp.mailfrom=ginzinger.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=ginzinger.com;
-Received-SPF: Pass (protection.outlook.com: domain of ginzinger.com designates
- 20.93.157.195 as permitted sender)
- receiver=protection.outlook.com; 
- client-ip=20.93.157.195; helo=westeu11-emailsignatures-cloud.codetwo.com;
- pr=C
-Received: from westeu11-emailsignatures-cloud.codetwo.com (20.93.157.195) by
- AM2PEPF0001C713.mail.protection.outlook.com (10.167.16.183) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9052.8 via Frontend Transport; Mon, 18 Aug 2025 13:52:05 +0000
-Received: from AM0PR02CU008.outbound.protection.outlook.com (40.93.65.2) by
- westeu11-emailsignatures-cloud.codetwo.com with CodeTwo SMTP Server (TLS12)
- via SMTP; Mon, 18 Aug 2025 13:52:04 +0000
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=ginzinger.com;
-Received: from DB9PR06MB9030.eurprd06.prod.outlook.com (2603:10a6:10:4cb::6)
- by AM7PR06MB6375.eurprd06.prod.outlook.com (2603:10a6:20b:120::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9031.24; Mon, 18 Aug
- 2025 13:52:03 +0000
-Received: from DB9PR06MB9030.eurprd06.prod.outlook.com
- ([fe80::5346:5260:86cf:ee69]) by DB9PR06MB9030.eurprd06.prod.outlook.com
- ([fe80::5346:5260:86cf:ee69%3]) with mapi id 15.20.9031.023; Mon, 18 Aug 2025
- 13:52:03 +0000
-From: Henri Roosen <henri.roosen@ginzinger.com>
+ client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
+ envelope-from=angelo.compagnucci@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 960AA61B92
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 960AA61B92
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 960AA61B92
+ for <buildroot@buildroot.org>; Mon, 18 Aug 2025 14:05:24 +0000 (UTC)
+Received: by mail-wm1-x332.google.com with SMTP id
+ 5b1f17b1804b1-45a1b065d58so31106275e9.1
+ for <buildroot@buildroot.org>; Mon, 18 Aug 2025 07:05:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1755525922; x=1756130722;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=8JElvC4uUiAzadgTrUhr5dtplLuPfrX8v1LY9S1FarY=;
+ b=BLRDNoxCVoQpzd4PDIpMBBmo1f8UXrKcEL+8+RPjpLUnInzyEjcCh0qzGSWqf3PzUi
+ JPct3pUWR1eeaiunSRpNiZFlni8IQCofCCOvou5wUldMZUeE20Su7tuAqFdm0A1uqcYL
+ 7ktbGYD9mlmp3/hci4UP1nNrRMdhcqv2flMikJsWTLRfXV/iNVWs2fDTf5rDqnq8iC4O
+ o7F3OVhueHV7PJF7lcyIyb21TP18UoIQrCni3L7JOWPJThwqojfxs90e5kJEGFzsByN3
+ T/Z5vyqUHaOg3jzMPq25XpwrfDGaA/2ZhQ/QpwylG+/9ox3K/jaH2QjnF8I0cd1Zwazw
+ y+4w==
+X-Gm-Message-State: AOJu0YwS1iTFqAhGOdqLsYoyY2FNNo2wDTJACKyNuBRk7iH7phBB3xgI
+ qV/OjGCItJAUV+Uu9a3VpVzwZC/bPQpMgRpzHeDF3ZE47vI8jcTV/dwHyIo81DKT
+X-Gm-Gg: ASbGncsdI6EsK0GjrT9RlGauswW+KwQHUtVqWr3fHOMWAyhoqoS8PZC8ciLOrcRwFzQ
+ di/aE93G6YSjEDCIdYbN51LU5bBdbdWEWE965b/kg2cp+muc2ZMqZzoK+uBG00vHOpDOC/K3ecK
+ ShsTPdTbAGuEbXFSqobghMwOAWqVRi42ybq81m4R6IiEWUVvQgZ+/upe51B8zMhFg2iYG8wI51f
+ Jtcfwx1d2Lp6e4nbzBcodbkmL3kG5eGpfhK3fgeBv7cKfWlYFKh+U1NrY6VkLUL3ex+AWkSZPZq
+ DYZqrCCSvWeG/0GO//1/F+uEUrYAZEiwT3OpB9y9dQbF6kBcK63SI59Aao3Pw2+RZMZvNs7MJ4d
+ SAKbUZjkHDmvS+rZ2Qtk7uif+8OBlTpPfrJZPV/2VPLSzRQ==
+X-Google-Smtp-Source: AGHT+IHPiXyyctH1fOdiSv3/JbsUivQCSeTbeaTCl6fIhs1+nPd8LyjRH7y7XSWSqDdnqh9IA2rlvA==
+X-Received: by 2002:a05:6000:1446:b0:3b7:9929:871c with SMTP id
+ ffacd0b85a97d-3bb68c0472emr9693852f8f.37.1755525921649; 
+ Mon, 18 Aug 2025 07:05:21 -0700 (PDT)
+Received: from localhost.localdomain ([212.22.141.99])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-3bb6484ebfdsm12753166f8f.7.2025.08.18.07.05.20
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 18 Aug 2025 07:05:21 -0700 (PDT)
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 18 Aug 2025 15:51:42 +0200
-Message-ID: <20250818135142.1533405-1-henri.roosen@ginzinger.com>
-X-Mailer: git-send-email 2.39.5
-X-ClientProxiedBy: VI1PR06CA0128.eurprd06.prod.outlook.com
- (2603:10a6:803:a0::21) To DB9PR06MB9030.eurprd06.prod.outlook.com
- (2603:10a6:10:4cb::6)
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Mon, 18 Aug 2025 16:05:18 +0200
+Message-Id: <20250818140518.964728-1-angelo.compagnucci@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic: DB9PR06MB9030:EE_|AM7PR06MB6375:EE_|AM2PEPF0001C713:EE_|AS8PR06MB7319:EE_
-X-MS-Office365-Filtering-Correlation-Id: 726a5ac8-fb62-4632-338e-08ddde5e6aba
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted: BCL:0;
- ARA:13230040|376014|52116014|366016|1800799024|38350700014; 
-X-Microsoft-Antispam-Message-Info-Original: =?us-ascii?Q?s6Bovgl/Rhfqx6qovmf1xcwMJVO0DCCeoaCtPFiiSXCVLFauGS7mImWmT8Pn?=
- =?us-ascii?Q?lg46JScjIF0nIznJgig37NugTrhY8pIft5XLbAcTZyqaI7+WfUBkT7PIt4Fw?=
- =?us-ascii?Q?VmAMA1ldzCpGYt24Dz/I14r6LFxxFkhgLzFC5lvSpHW6H1Gi/6t6f7T6ZT5c?=
- =?us-ascii?Q?HVfnGL4saQFsfFfYizyrE7YjL+biFM5sSPcGPD7mjshwD9jUj3phipyzk8Zb?=
- =?us-ascii?Q?dDO2UeJQYJ+9VtboeN4zREji0EAvxUVfN8koieCdMTpSAJoHOYNJo+EEingG?=
- =?us-ascii?Q?iDSqBoNybRhPQHyM5FNBvsA85qA+xqM/wVQgQvn0ihUmHYPlV4GpDFBa8OBd?=
- =?us-ascii?Q?yKI9jIZoO7Fb4M0D7kVyMTfs+lUoqCIGcX0WPOQeilsHMlfojTrABLgpChNu?=
- =?us-ascii?Q?qaVXsXYtQPzlC+xQZLIlk3nexBSIwFfS8kpO5DLIOQFiUwO4AxslWJffWqaZ?=
- =?us-ascii?Q?AwxyjfyAzsd3tl6r0ImHjhE2A1Aqh9OaeaKiRIFjoqFvcePvRo1+2T+9x5e/?=
- =?us-ascii?Q?XNysmMzCERSEhjT9wcseSJE1atjEsJTMNNKAe5QLfa9BmuESsi1nQ6dX4js1?=
- =?us-ascii?Q?pYavPSBj9KWaYsHnIqPgdgieJ8koRIHL/FfT3RdNfzbesXEBwL3xs93Mhhlt?=
- =?us-ascii?Q?+i8bpjSokQ3v+nSD8mxY3WxiQkl3JelUpCH1AKWzcxlMGCO9llfWe12hRedp?=
- =?us-ascii?Q?4ijCs1WubODua0iqYOl8jT/nAc1ECWR6UgNlV2XRf5PuXXyfcA6RfAar+A85?=
- =?us-ascii?Q?9DiYF0BWrNPj4Fdvh+Y9nCopaUg20V6A7RBlWyYOXQix/8pZAOuKetciuyuz?=
- =?us-ascii?Q?M2VBZK8OoZL9wftpZGwOsiVY+3FBoqN2Ts4BxYXXvMm/7uAXZ7kGTt6No1b+?=
- =?us-ascii?Q?Jtl8nf0AOw2sNUtgnuHsSbuZ38lw7laZf6f0vAElgtVxk9SvfaBx3DIVTZKW?=
- =?us-ascii?Q?3rgeJMLWa+kn1kXcaB1Q8QLCaFeEREqWtxfQj5gaFy85rDetO/nO58NiAnTI?=
- =?us-ascii?Q?ODguqmxQa+xLMbJ6rwL7gFSUF971M4mkv0VISErMMV0E6XcrHHIOAzlizEoP?=
- =?us-ascii?Q?6WobUhm922W+wzmvyxEauMFbNM/ahyJQSj5js4OvKVe7tIywoo+6p7EaDz9k?=
- =?us-ascii?Q?qyFOdGihxhXkVEJBWsuWzJOf2dDAUCHKqldtD00wFsLvC4E2TJRvcqK/WLvb?=
- =?us-ascii?Q?CE+kvo8IAm8/JyHkzsyNdCfrzBkb68zFPzC+0TTvWodg3zDH/N7aTHn/lGWQ?=
- =?us-ascii?Q?gxEI/t89LyNMkDlssz5ZPmiXF6liLb7HrqHKkuf8nbwN0+WJe6FWjLz4FZSx?=
- =?us-ascii?Q?L9KbPWuItdTCiY+vsZPogIDTJ639ap/vU6m+KpCmwqqOTLgOc2O+RYVL6pYW?=
- =?us-ascii?Q?4EO5bXEEBH5ZIc9Ub34/+StlFOdpT7r6jEi4jduAagjdF7Q1/L+95U9zs/um?=
- =?us-ascii?Q?3jGUqlTrBkfKOQ/+ck4yXVkMo/NX3fCE+oPUKD/hqVW/xldywj8BLw=3D=3D?=
-X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255; CTRY:; LANG:en;
- SCL:1; SRV:; IPV:NLI; SFV:NSPM; H:DB9PR06MB9030.eurprd06.prod.outlook.com;
- PTR:; CAT:NONE;
- SFS:(13230040)(376014)(52116014)(366016)(1800799024)(38350700014); DIR:OUT;
- SFP:1102; 
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR06MB6375
-X-CodeTwo-MessageID: 5a929b91-4aa4-48f5-b9b1-ef50a3ab6b48.20250818135204@westeu11-emailsignatures-cloud.codetwo.com
-X-CodeTwoProcessed: true
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: AM2PEPF0001C713.eurprd05.prod.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs: ae3fffdd-baf2-49fa-c5f6-08ddde5e691e
-X-Microsoft-Antispam: BCL:0;
- ARA:13230040|82310400026|35042699022|376014|14060799003|1800799024|36860700013;
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?e8UqKcGKQ8O0udGkGAWNSVQsaGzylNgTQNjF1uNjJacJydYhmF9RHkGHIeJz?=
- =?us-ascii?Q?R4XRDKOrC/0NC0UBqk7+yfK4YVXS9nR1kKe+jYUXMY9YSrgvXE+E02hnjztp?=
- =?us-ascii?Q?a+3aQXQo2/b9z3yshjZ6KUbRIDtun0j0Kf6SFznaco71jBGKtYJwOcTlhrNY?=
- =?us-ascii?Q?e5PDSDcBPiyJUcqC6cEcc4uHA4KNKfIt/VhREIrS9MrrBQqABbtNadfw2c9C?=
- =?us-ascii?Q?u51j+59sgPSg8fqLuBRZmNNJlkIxDEQ+jriZq3bh9FzCjOdU0OidXPqCurkU?=
- =?us-ascii?Q?qKpJUkGnvngqyE8kwYP5sMC0QrkNvKb4SfGXy547/uFtJlXjm+/KHBOtZ+Fh?=
- =?us-ascii?Q?dK0VIcX+TSm8+udC6Snv1eyZtNO6FKdAsLeyBvIFuWPOHKPFdH39zUTF8TmP?=
- =?us-ascii?Q?byjldtJNZVNAS5Ig2Ik+2S7ImeIY95Kbkr9lNjcCLYCHhdN/CGMlZavShgYc?=
- =?us-ascii?Q?1Jd49brJJBz/TCsiAMAVMunRq5uJYQ14lsq28SXJef0XL86JH4GO6bv+kyzI?=
- =?us-ascii?Q?UOvkjfx8wog7gs8+w7eGVoxo7MfSqA3v5IUywhLUS5nQm0UanbFpdicsX4yH?=
- =?us-ascii?Q?EEVv6WBy0SXA0kFXCqpK3CrxQhCn+aRtVDHnUbPNYhGpPFYAQi6LWk/2lvEa?=
- =?us-ascii?Q?BoXSmler8tdLGOWg0o6Lli8XoD7ejXtfBJ03aPSfPbT1GaYQXGYMEUu5KkKE?=
- =?us-ascii?Q?QAjNqi7w1TEVw1cEoGpVmG8WI//pkxPC55tCqvYCziHHZ1RPDua0KfJg3dvQ?=
- =?us-ascii?Q?UM8dYTU13nJDsSaysy//zYLiI/mdyHBTPJYr0mJ+kksYLyZjRPn7ODQDMYKw?=
- =?us-ascii?Q?q6OXUwCmLb5+Pieu2lf7fEJevOij3MnIDpnzuEL0dMyE3RDOghTJm+1ioKf1?=
- =?us-ascii?Q?CFamyLY5FEIFZx4kTJvzb1jmc1PxwrmeWw3FHUOrl5ImXn4Apr8U/iIT2AnU?=
- =?us-ascii?Q?yiRKfNRuQTnALR4LhdGR4Hlpd5yhpcPtEvtfoySOecmbWdFkjsVX0JpUa8J8?=
- =?us-ascii?Q?hZApjT96/1rSpieGgfjScGLm2pNHvwDRmYb5uXuWqwzncKqILmt0rT6kIAIQ?=
- =?us-ascii?Q?I+V/07S0tLqsAABMTLmomkszZF3yenNmlHDEflz1jYyrOrBL7TTEQGGu0hwa?=
- =?us-ascii?Q?BtK8fR16IsevgagDoGnaaMhvpPgPJKWVk6rw2a5xSXdtet+v9I/9EjOeMh5y?=
- =?us-ascii?Q?39nVTB1SD/rzocDXC82izBTn+NbjDeYMGCExP/zcNZzPkKdh8GGGA9GPBEz6?=
- =?us-ascii?Q?cEkVE8xaW3RVSJq9Ua6Kb0N4ILRWv2UbTlTFY18gxj1tBVjan3xgJWkgg3UJ?=
- =?us-ascii?Q?L6JHMxIMXyIHAOTahvl2WFtd6hbbeMYnLR0fE4tyfkYe31zcgTMiJDi0LKXt?=
- =?us-ascii?Q?c0QINE1VLzt6qfZd9U1yDqlGpD0YqouiUSOHkdqmYYQC3J/leuDFQpJ/SQHO?=
- =?us-ascii?Q?oPsiVYsb5pULhX3XJnZ5RL2cNuHHv/c/CEN9Q1jK3UqvuZDxFgmuh/08yyB3?=
- =?us-ascii?Q?edcshXs563dOJfUiQ88rrtRvt5yT6XL21y+9?=
-X-Forefront-Antispam-Report: CIP:20.93.157.195; CTRY:NL; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:westeu11-emailsignatures-cloud.codetwo.com;
- PTR:westeu11-emailsignatures-cloud.codetwo.com; CAT:NONE;
- SFS:(13230040)(82310400026)(35042699022)(376014)(14060799003)(1800799024)(36860700013);
- DIR:OUT; SFP:1102; 
-X-OriginatorOrg: ginzinger.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Aug 2025 13:52:05.5238 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 726a5ac8-fb62-4632-338e-08ddde5e6aba
-X-MS-Exchange-CrossTenant-Id: 198354b3-f56d-4ad5-b1e4-7eb8b115ed44
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=198354b3-f56d-4ad5-b1e4-7eb8b115ed44; Ip=[20.93.157.195];
- Helo=[westeu11-emailsignatures-cloud.codetwo.com]
-X-MS-Exchange-CrossTenant-AuthSource: AM2PEPF0001C713.eurprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR06MB7319
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=ginzinger.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AUzzxizjCCXk32FVIFTaozGyg+uhkbCQeh0Gn61M4Nc=;
- b=XCkW3gEwUJ6h/S7fp9neUF1HPiZeytsAtyi3N9mbpOHZWw92NcUM+vkeWCBF574OD87svkXmJZqgVOLObsQgOIsMwXuBmdHTsvvbZnyyACnlBm2mSSmM87Wa/7Hfvp2Vuc3UXA+SUe+MhYb7MsB21ZzWGpJC7F9dc4puaG0S5Geke4iieI+aucSEc/Opk/J3o7eOyG1lnWLqQAI/sJXCzQCUxwX2uowKljkW/DIAK5w9ZWxpUO/CRuLGfcCYMubIyyRCWXiilh9lk2zYCQSdwRh+cEoV2lmL475dzg/DTxEcDFvcDaL9guqzYnY1wo3IEmgX4MmuUf6d4jHygtn6jg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=gmail.com; s=20230601; t=1755525922; x=1756130722; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=8JElvC4uUiAzadgTrUhr5dtplLuPfrX8v1LY9S1FarY=;
+ b=gR36ZX2f8D5KCd/A1R2yLBzur726OrAt8luuqHPD4tc6V27QYi+SnqEKmIzV1Nmf8H
+ SyJIp0EhPbGf0xRDkA2ORfQvS0dBDu+F+EYi/1vIx7aq48++9ctNzuPIWyOfDUMFzJOr
+ odV8b/DdqUkaHlYd1/zl8m3+ow+UfL1I6PeiiwbbwG8UsiyoK1EtHxIf4WCjak70j1vR
+ iJFNiEMPQ4Cj5sFFShqkAKDrjzjZnPFNbdwoxxdDBIDskavcngRbpOKeSeBskTgHJkMS
+ hrhfSBiA+xmx1vrdrNfEJO1GVoz2UHykPX2/rbn4cwf8D6e3pB4S4iNFQeR3PGImHoZn
+ 6dYQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=ginzinger.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=ginzinger.com header.i=@ginzinger.com
- header.a=rsa-sha256 header.s=selector1 header.b=XCkW3gEw
-Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: needs host-cmake >= 3.20
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=gR36ZX2f
+Subject: [Buildroot] [PATCH] package/mono: remove mono and related packages
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -206,44 +107,470 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adrian Perez de Castro <aperez@igalia.com>,
- Henri Roosen <henri.roosen@ginzinger.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Since commit-2882cf4ae649 ("package/wpewebkit: security bump to version
-2.48.3") wpewebkit depends on cmake 3.20.
-Fixes build on current Debian LTS (bullseye) which has only 3.18.4.
+Microsoft maintains a modern fork of Mono runtime in the dotnet/runtime repo and
+has been progressively moving workloads to that fork. That work is now complete,
+and we recommend that active Mono users and maintainers of Mono-based app
+frameworks migrate to .NET which includes work from this fork.
 
->>> wpewebkit 2.48.3 Configuring
-...
-CMake Error at CMakeLists.txt:9 (cmake_minimum_required):
-  CMake 3.20 or higher is required.  You are running version 3.18.4
--- Configuring incomplete, errors occurred!
-make: *** [package/pkg-generic.mk:263: /../buildroot/output/build/wpewebkit-2.48.3/.stamp_configured] Error 1
-
-Fixes: 2882cf4ae649f7d5e9cee72f84e672328f550845
-Signed-off-by: Henri Roosen <henri.roosen@ginzinger.com>
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 ---
- package/wpewebkit/Config.in | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/package/wpewebkit/Config.in b/package/wpewebkit/Config.in
-index 969590482c..5cbba43792 100644
---- a/package/wpewebkit/Config.in
-+++ b/package/wpewebkit/Config.in
-@@ -41,6 +41,7 @@ config BR2_PACKAGE_WPEWEBKIT
- 	depends on BR2_PACKAGE_HAS_LIBGLES # libepoxy
- 	depends on BR2_PACKAGE_HAS_LIBEGL # libepoxy
- 	depends on BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS
-+	select BR2_HOST_CMAKE_AT_LEAST_3_20
- 	select BR2_PACKAGE_CAIRO if BR2_ENDIAN = "BIG"
- 	select BR2_PACKAGE_CAIRO_PNG if BR2_ENDIAN = "BIG"
- 	select BR2_PACKAGE_HARFBUZZ
+To the maintainers: while applying this patch, please apply also this patch from
+Giulio
+
+https://patchwork.ozlabs.org/project/buildroot/patch/20240701193420.2119084-1-giulio.benetti@benettiengineering.com/
+
+ Config.in.legacy                              | 12 ++++
+ DEVELOPERS                                    |  3 -
+ package/Config.in                             |  6 --
+ ...-MONO_PROFILE_ENTER_LEAVE-undeclared.patch | 28 --------
+ .../0002-Mono-compilation-error-branch.patch  | 25 -------
+ package/mono-gtksharp3/Config.in              |  8 ---
+ package/mono-gtksharp3/mono-gtksharp3.hash    |  5 --
+ package/mono-gtksharp3/mono-gtksharp3.mk      | 17 -----
+ ...-system-libatomic_ops-shared-library.patch | 52 --------------
+ ...0002-Ongoing-work-on-the-cmake-build.patch | 34 ----------
+ package/mono/Config.in                        | 29 --------
+ package/mono/mono.hash                        |  5 --
+ package/mono/mono.mk                          | 67 -------------------
+ package/monolite/monolite.hash                |  2 -
+ package/monolite/monolite.mk                  | 17 -----
+ 15 files changed, 12 insertions(+), 298 deletions(-)
+ delete mode 100644 package/mono-gtksharp3/0001-Fixes-MONO_PROFILE_ENTER_LEAVE-undeclared.patch
+ delete mode 100644 package/mono-gtksharp3/0002-Mono-compilation-error-branch.patch
+ delete mode 100644 package/mono-gtksharp3/Config.in
+ delete mode 100644 package/mono-gtksharp3/mono-gtksharp3.hash
+ delete mode 100644 package/mono-gtksharp3/mono-gtksharp3.mk
+ delete mode 100644 package/mono/0001-Fix-linkage-with-a-system-libatomic_ops-shared-library.patch
+ delete mode 100644 package/mono/0002-Ongoing-work-on-the-cmake-build.patch
+ delete mode 100644 package/mono/Config.in
+ delete mode 100644 package/mono/mono.hash
+ delete mode 100644 package/mono/mono.mk
+ delete mode 100644 package/monolite/monolite.hash
+ delete mode 100644 package/monolite/monolite.mk
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index efb59dc535..4bc1e23734 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -205,6 +205,18 @@ config BR2_PACKAGE_ALSA_LIB_ALISP
+ 	help
+ 	  Support for alisp was removed from alsa-lib v1.12.14.
+ 
++config BR2_PACKAGE_MONO
++	bool "Mono has been removed"
++	select BR2_LEGACY
++	help
++	  Support for mono was deprecated upstream.
++
++config BR2_PACKAGE_MONO_GTKSHARP3
++	bool "Mono GTK#3 has been removed"
++	select BR2_LEGACY
++	help
++	  Support for Mono was deprecated upstream.
++
+ comment "Legacy options removed in 2025.05"
+ 
+ config BR2_GCC_VERSION_12_X
+diff --git a/DEVELOPERS b/DEVELOPERS
+index a28f3e8d57..828e7f7b22 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -223,9 +223,6 @@ F:	package/libb64/
+ F:	package/libdill/
+ F:	package/mender/
+ F:	package/mender-artifact/
+-F:	package/mono/
+-F:	package/mono-gtksharp3/
+-F:	package/monolite/
+ F:	package/openjpeg/
+ F:	package/python-can/
+ F:	package/python-minimalmodbus/
+diff --git a/package/Config.in b/package/Config.in
+index 137f74ed82..8119d039ed 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -816,12 +816,6 @@ endmenu
+ endif
+ 	source "package/micropython/Config.in"
+ 	source "package/moarvm/Config.in"
+-	source "package/mono/Config.in"
+-if BR2_PACKAGE_MONO
+-menu "Mono libraries/modules"
+-	source "package/mono-gtksharp3/Config.in"
+-endmenu
+-endif
+ 	source "package/nodejs/Config.in"
+ 	source "package/octave/Config.in"
+ 	source "package/openjdk/Config.in"
+diff --git a/package/mono-gtksharp3/0001-Fixes-MONO_PROFILE_ENTER_LEAVE-undeclared.patch b/package/mono-gtksharp3/0001-Fixes-MONO_PROFILE_ENTER_LEAVE-undeclared.patch
+deleted file mode 100644
+index 6596849a89..0000000000
+--- a/package/mono-gtksharp3/0001-Fixes-MONO_PROFILE_ENTER_LEAVE-undeclared.patch
++++ /dev/null
+@@ -1,28 +0,0 @@
+-From c1b9bd4214b78dc426bc6e6a07c23a8ab4ab50ea Mon Sep 17 00:00:00 2001
+-From: Jordi Mas <jmas@softcatala.org>
+-Date: Tue, 12 Mar 2019 12:24:19 +0100
+-Subject: [PATCH] Fixes MONO_PROFILE_ENTER_LEAVE undeclared when compiling with
+- newer versions of Mono (#266)
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-https://github.com/mono/gtk-sharp/commit/c1b9bd4214b78dc426bc6e6a07c23a8ab4ab50ea]
+----
+- gtk/gui-thread-check/profiler/gui-thread-check.c | 4 ++++
+- 1 file changed, 4 insertions(+)
+-
+-diff --git a/gtk/gui-thread-check/profiler/gui-thread-check.c b/gtk/gui-thread-check/profiler/gui-thread-check.c
+-index 11838e3b0..9f45fe6b2 100644
+---- a/gtk/gui-thread-check/profiler/gui-thread-check.c
+-+++ b/gtk/gui-thread-check/profiler/gui-thread-check.c
+-@@ -86,6 +86,10 @@ simple_method_enter (MonoProfiler *prof, MonoMethod *method)
+- 	}
+- }
+- 
+-+#ifndef MONO_PROFILE_ENTER_LEAVE
+-+#define MONO_PROFILE_ENTER_LEAVE (1 << 12)
+-+#endif
+-+
+- void
+- mono_profiler_startup (const char *desc)
+- {
+diff --git a/package/mono-gtksharp3/0002-Mono-compilation-error-branch.patch b/package/mono-gtksharp3/0002-Mono-compilation-error-branch.patch
+deleted file mode 100644
+index 0d52401b4a..0000000000
+--- a/package/mono-gtksharp3/0002-Mono-compilation-error-branch.patch
++++ /dev/null
+@@ -1,25 +0,0 @@
+-From fe18352a4bc9f0cf3b6cf63b8cc03c5d6e41863b Mon Sep 17 00:00:00 2001
+-From: plprevost <plprevost@sii.fr>
+-Date: Wed, 12 May 2021 16:46:16 +0200
+-Subject: [PATCH] refs issue:#298 Fix mono compilation errors
+-
+-[Retrieved from:
+-https://github.com/mono/gtk-sharp/pull/299/commits/fe18352a4bc9f0cf3b6cf63b8cc03c5d6e41863b]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- sample/test/TestRange.cs | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/sample/test/TestRange.cs b/sample/test/TestRange.cs
+-index 82fb81105..8727c9a77 100644
+---- a/sample/test/TestRange.cs
+-+++ b/sample/test/TestRange.cs
+-@@ -8,7 +8,7 @@
+- 
+- using System;
+- 
+--using Gtk;
+-+using Gtk; using Range = Gtk.Range;
+- 
+- namespace WidgetViewer {
+- 
+diff --git a/package/mono-gtksharp3/Config.in b/package/mono-gtksharp3/Config.in
+deleted file mode 100644
+index 570b62c3c9..0000000000
+--- a/package/mono-gtksharp3/Config.in
++++ /dev/null
+@@ -1,8 +0,0 @@
+-config BR2_PACKAGE_MONO_GTKSHARP3
+-	bool "gtk# 3"
+-	depends on BR2_PACKAGE_LIBGTK3
+-	help
+-	  Gtk# is a .NET language binding for the GTK+ toolkit.
+-	  This package provides version 3 of the bindings.
+-
+-	  http://www.mono-project.com/docs/gui/gtksharp/
+diff --git a/package/mono-gtksharp3/mono-gtksharp3.hash b/package/mono-gtksharp3/mono-gtksharp3.hash
+deleted file mode 100644
+index 706d985159..0000000000
+--- a/package/mono-gtksharp3/mono-gtksharp3.hash
++++ /dev/null
+@@ -1,5 +0,0 @@
+-# sha256 from https://download.gnome.org/sources/gtk-sharp/2.99/gtk-sharp-2.99.3.sha256sum
+-sha256  6440f571416267ae0cb5698071d087b31e3084693fa2c829b1db37ca7ea2c3a2  gtk-sharp-2.99.3.tar.xz
+-
+-# Locally computed
+-sha256  4b96eca92e6964e89c2faf6a810c9a0214daf6be651fa848fdfbb8cef80c04b1  COPYING
+diff --git a/package/mono-gtksharp3/mono-gtksharp3.mk b/package/mono-gtksharp3/mono-gtksharp3.mk
+deleted file mode 100644
+index 27fcda9482..0000000000
+--- a/package/mono-gtksharp3/mono-gtksharp3.mk
++++ /dev/null
+@@ -1,17 +0,0 @@
+-################################################################################
+-#
+-# gtksharp3
+-#
+-################################################################################
+-
+-MONO_GTKSHARP3_VERSION_MAJOR = 2.99
+-MONO_GTKSHARP3_VERSION = $(MONO_GTKSHARP3_VERSION_MAJOR).3
+-MONO_GTKSHARP3_SITE = https://download.gnome.org/sources/gtk-sharp/$(MONO_GTKSHARP3_VERSION_MAJOR)
+-MONO_GTKSHARP3_SOURCE = gtk-sharp-$(MONO_GTKSHARP3_VERSION).tar.xz
+-MONO_GTKSHARP3_LICENSE = LGPL-2.0, MIT (cairo)
+-MONO_GTKSHARP3_LICENSE_FILES = COPYING
+-MONO_GTKSHARP3_INSTALL_STAGING = YES
+-MONO_GTKSHARP3_DEPENDENCIES = mono libgtk3
+-MONO_GTKSHARP3_CONF_OPTS += CSC=$(HOST_DIR)/bin/mcs
+-
+-$(eval $(autotools-package))
+diff --git a/package/mono/0001-Fix-linkage-with-a-system-libatomic_ops-shared-library.patch b/package/mono/0001-Fix-linkage-with-a-system-libatomic_ops-shared-library.patch
+deleted file mode 100644
+index 66d4d8e100..0000000000
+--- a/package/mono/0001-Fix-linkage-with-a-system-libatomic_ops-shared-library.patch
++++ /dev/null
+@@ -1,52 +0,0 @@
+-From 02a44ee1df8176c72e75fd706d1a8f063d3196d5 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Mon, 5 Nov 2018 22:50:40 +0100
+-Subject: Fix linkage with a system libatomic_ops shared library
+-
+-Issue #247 (bdwgc).
+-
+-When bdwgc is linked with the external libatomic_ops, bdw-gc.pc must
+-contain the needed dynamic libraries (such as -latomic_ops) otherwise
+-build of applications could fail on the link stage on some hosts:
+-* libgc.so: undefined reference to 'AO_fetch_compare_and_swap_emulation'
+-* libgc.so: undefined reference to 'AO_store_full_emulation'
+-
+-So, this commit sets ATOMIC_OPS_LIBS to "-latomic_ops" when a system
+-atomic_ops library is used and uses ATOMIC_OPS_LIBS in bdw-gc.pc.in.
+-
+-* bdw-gc.pc.in (Libs): Add @ATOMIC_OPS_LIBS@.
+-* configure.ac [$with_libatomic_ops!=no && $with_libatomic_ops!=none
+-&& $THREADS!=none] (ATOMIC_OPS_LIBS): Set to -latomic_ops; do AC_SUBST.
+-
+-Fix is cherry-picked from bdwgc upstream
+-
+-Link to original commit https://github.com/ivmai/bdwgc/commit/02a44ee1df8176c72e75fd706d1a8f063d3196d5?branch=02a44ee1df8176c72e75fd706d1a8f063d3196d5&diff=unified  
+-
+-Signed-off-by: Illia Bitkov <illia.bitkov@mind.be>
+-
+-diff --git a/external/bdwgc/bdw-gc.pc.in b/external/bdwgc/bdw-gc.pc.in
+-index ef4c2341..a32e7598 100644
+---- a/external/bdwgc/bdw-gc.pc.in
+-+++ b/external/bdwgc/bdw-gc.pc.in
+-@@ -6,5 +6,5 @@ includedir=@includedir@
+- Name: Boehm-Demers-Weiser Conservative Garbage Collector
+- Description: A garbage collector for C and C++
+- Version: @PACKAGE_VERSION@
+--Libs: -L${libdir} -lgc
+-+Libs: -L${libdir} @ATOMIC_OPS_LIBS@ -lgc
+- Cflags: -I${includedir}
+-diff --git a/external/bdwgc/configure.ac b/external/bdwgc/configure.ac
+-index 21abe8fa..9ffe81de 100644
+---- a/external/bdwgc/configure.ac
+-+++ b/external/bdwgc/configure.ac
+-@@ -1081,7 +1081,9 @@ AS_IF([test x"$with_libatomic_ops" = xno \
+- AC_MSG_CHECKING([which libatomic_ops to use])
+- AS_IF([test x"$with_libatomic_ops" != xno],
+-   [ AS_IF([test x"$with_libatomic_ops" != xnone -a x"$THREADS" != xnone],
+--          [ AC_MSG_RESULT([external]) ],
+-+          [ AC_MSG_RESULT([external])
+-+            ATOMIC_OPS_LIBS="-latomic_ops"
+-+            AC_SUBST([ATOMIC_OPS_LIBS]) ],
+-           [ AC_MSG_RESULT([none])
+-             AS_IF([test x"$THREADS" != xnone],
+-                   [ AC_DEFINE([GC_BUILTIN_ATOMIC], [1],
+diff --git a/package/mono/0002-Ongoing-work-on-the-cmake-build.patch b/package/mono/0002-Ongoing-work-on-the-cmake-build.patch
+deleted file mode 100644
+index afe618f193..0000000000
+--- a/package/mono/0002-Ongoing-work-on-the-cmake-build.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From 17650f7e0f571287bb14bb9b4fbde7b91d842bb4 Mon Sep 17 00:00:00 2001
+-From: monojenkins <jo.shields+jenkins@xamarin.com>
+-Date: Thu, 24 Sep 2020 12:17:34 -0400
+-Subject: [PATCH] Ongoing work on the cmake build. (#20428)
+-
+-* Fix some warnings.
+-* Avoid creating netcore/config.make.
+-* Fix CPU_COUNT test.
+-* Add missing source file.
+-
+-Co-authored-by: vargaz <vargaz@users.noreply.github.com>
+-
+-[Retrieved (and updated to keep only update of icall.c) from:
+-https://github.com/mono/mono/commit/17650f7e0f571287bb14bb9b4fbde7b91d842bb4]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- mono/metadata/CMakeLists.txt | 1 +
+- mono/metadata/icall.c        | 2 +-
+- mono/mini/CMakeLists.txt     | 5 +++++
+- 3 files changed, 7 insertions(+), 1 deletion(-)
+-
+-diff --git a/mono/metadata/icall.c b/mono/metadata/icall.c
+-index fa991bc72e57..f2c003ac1ff1 100644
+---- a/mono/metadata/icall.c
+-+++ b/mono/metadata/icall.c
+-@@ -9605,7 +9605,7 @@ mono_create_icall_signatures (void)
+- 	int n;
+- 	while ((n = sig->param_count)) {
+- 		--sig->param_count; // remove ret
+--		gsize_a *types = (gsize*)(sig + 1);
+-+		gsize_a *types = (gsize_a*)(sig + 1);
+- 		for (int i = 0; i < n; ++i) {
+- 			gsize index = *types++;
+- 			g_assert (index < G_N_ELEMENTS (lookup));
+diff --git a/package/mono/Config.in b/package/mono/Config.in
+deleted file mode 100644
+index 0152df8268..0000000000
+--- a/package/mono/Config.in
++++ /dev/null
+@@ -1,29 +0,0 @@
+-config BR2_PACKAGE_HOST_MONO_ARCH_SUPPORTS
+-	bool
+-	default y if BR2_HOSTARCH = "x86_64"
+-	default y if BR2_HOSTARCH = "x86"
+-
+-config BR2_PACKAGE_MONO_ARCH_SUPPORTS
+-	bool
+-	default y if (BR2_aarch64 || BR2_arm || BR2_armeb || \
+-		      BR2_i386 || BR2_powerpc || BR2_x86_64)
+-	depends on BR2_PACKAGE_HOST_MONO_ARCH_SUPPORTS
+-	depends on BR2_PACKAGE_LIBATOMIC_OPS_ARCH_SUPPORTS
+-
+-config BR2_PACKAGE_MONO
+-	bool "mono"
+-	depends on BR2_PACKAGE_MONO_ARCH_SUPPORTS
+-	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # pthread_getattr_np()
+-	depends on !BR2_STATIC_LIBS
+-	select BR2_PACKAGE_LIBATOMIC_OPS
+-	help
+-	  An open source, cross-platform, implementation of C#
+-	  and the CLR that is binary compatible with Microsoft.NET.
+-
+-	  http://download.mono-project.com/sources/mono/
+-
+-comment "mono needs a toolchain w/ C++, NPTL, dynamic library"
+-	depends on BR2_PACKAGE_MONO_ARCH_SUPPORTS
+-	depends on !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
+diff --git a/package/mono/mono.hash b/package/mono/mono.hash
+deleted file mode 100644
+index 1010f6d0ab..0000000000
+--- a/package/mono/mono.hash
++++ /dev/null
+@@ -1,5 +0,0 @@
+-# sha256 locally computed
+-sha256  57366a6ab4f3b5ecf111d48548031615b3a100db87c679fc006e8c8a4efd9424  mono-6.12.0.182.tar.xz
+-sha256  923c7053ad0d430cd9b0b69a0ccf3abb7170a1ce50ecbf01915b565a35823d10  LICENSE
+-sha256  fc488f3ec9f36856bea8cce5cdde1449176341ef93a3962b691970f8981799f4  mcs/COPYING
+-sha256  2c3c3ef532828bcd42bb3127349625a25291ff5ae7e6f8d42e0fe9b5be836a99  external/Newtonsoft.Json/Tools/7-zip/copying.txt
+diff --git a/package/mono/mono.mk b/package/mono/mono.mk
+deleted file mode 100644
+index aead85bac0..0000000000
+--- a/package/mono/mono.mk
++++ /dev/null
+@@ -1,67 +0,0 @@
+-################################################################################
+-#
+-# mono
+-#
+-################################################################################
+-
+-MONO_VERSION = 6.12.0.182
+-MONO_SITE = http://download.mono-project.com/sources/mono
+-MONO_SOURCE = mono-$(MONO_VERSION).tar.xz
+-MONO_SELINUX_MODULES = mono
+-MONO_LICENSE = GPL-2.0 or MIT (compiler, tools), MIT (libs) or commercial
+-MONO_LICENSE_FILES = LICENSE mcs/COPYING \
+-	external/Newtonsoft.Json/Tools/7-zip/copying.txt
+-MONO_CPE_ID_VENDOR = mono-project
+-MONO_INSTALL_STAGING = YES
+-
+-## Mono native
+-
+-# patching configure.ac
+-MONO_AUTORECONF = YES
+-
+-MONO_COMMON_CONF_OPTS = --with-mcs-docs=no \
+-	--with-ikvm-native=no \
+-	--enable-minimal=profiler,debug \
+-	--enable-static \
+-	--disable-btls \
+-	--disable-system-aot
+-
+-# Disable managed code (mcs folder) from building
+-MONO_CONF_OPTS = $(MONO_COMMON_CONF_OPTS) --disable-mcs-build
+-
+-# The libraries have been built by the host-mono build. Since they are
+-# architecture-independent, we simply copy them to the target.
+-define MONO_INSTALL_LIBS
+-	rsync -av --exclude=*.so --exclude=*.mdb \
+-		$(HOST_DIR)/lib/mono $(TARGET_DIR)/usr/lib/
+-endef
+-
+-MONO_POST_INSTALL_TARGET_HOOKS += MONO_INSTALL_LIBS
+-
+-ifeq ($(BR2_PACKAGE_LIBICONV),y)
+-MONO_DEPENDENCIES += libiconv
+-endif
+-
+-MONO_DEPENDENCIES += \
+-	host-mono \
+-	$(if $(BR2_PACKAGE_LIBUNWIND),libunwind) \
+-	libatomic_ops
+-
+-## Mono managed
+-
+-HOST_MONO_CONF_OPTS = $(MONO_COMMON_CONF_OPTS) --disable-libraries
+-
+-# ensure monolite is used
+-HOST_MONO_MAKE_OPTS += EXTERNAL_MCS=false
+-
+-HOST_MONO_DEPENDENCIES = host-monolite host-gettext host-python3
+-
+-define HOST_MONO_SETUP_MONOLITE
+-	rm -rf $(@D)/mcs/class/lib/monolite
+-	(cd $(@D)/mcs/class/lib; ln -s $(HOST_DIR)/lib/monolite monolite)
+-endef
+-
+-HOST_MONO_POST_CONFIGURE_HOOKS += HOST_MONO_SETUP_MONOLITE
+-
+-$(eval $(autotools-package))
+-$(eval $(host-autotools-package))
+diff --git a/package/monolite/monolite.hash b/package/monolite/monolite.hash
+deleted file mode 100644
+index e72ccfbf9d..0000000000
+--- a/package/monolite/monolite.hash
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# sha256 locally computed
+-sha256  0ac314f75ca2bc4455785f12ceb50da89b6dac90162f9f46afbbb988a8752d4b  monolite-linux-1A5E0066-58DC-428A-B21C-0AD6CDAE2789-latest.tar.gz
+diff --git a/package/monolite/monolite.mk b/package/monolite/monolite.mk
+deleted file mode 100644
+index b0042aabf7..0000000000
+--- a/package/monolite/monolite.mk
++++ /dev/null
+@@ -1,17 +0,0 @@
+-################################################################################
+-#
+-# monolite
+-#
+-################################################################################
+-
+-MONOLITE_VERSION = 1A5E0066-58DC-428A-B21C-0AD6CDAE2789
+-MONOLITE_SITE = http://download.mono-project.com/monolite
+-MONOLITE_SOURCE = monolite-linux-$(MONOLITE_VERSION)-latest.tar.gz
+-MONOLITE_LICENSE = LGPL-2.0 or commercial
+-
+-define HOST_MONOLITE_INSTALL_CMDS
+-	mkdir -p $(HOST_DIR)/lib/monolite-linux/$(MONOLITE_VERSION)
+-	cp -r $(@D)/* $(HOST_DIR)/lib/monolite-linux/$(MONOLITE_VERSION)
+-endef
+-
+-$(eval $(host-generic-package))
 -- 
-2.39.5
+2.34.1
 
 _______________________________________________
 buildroot mailing list
