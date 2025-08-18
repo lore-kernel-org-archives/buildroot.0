@@ -1,52 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5DB3CA0EE4
-	for <buildroot@archiver.kernel.org>; Mon, 18 Aug 2025 20:59:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6549CA0EE9
+	for <buildroot@archiver.kernel.org>; Mon, 18 Aug 2025 20:59:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5F56E40732;
-	Mon, 18 Aug 2025 20:59:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9BC336064B;
+	Mon, 18 Aug 2025 20:59:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YUskRj58j45Z; Mon, 18 Aug 2025 20:59:04 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5GA-o3n4j4hi; Mon, 18 Aug 2025 20:59:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6BDC34072D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A9D6B60664
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6BDC34072D;
-	Mon, 18 Aug 2025 20:59:04 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 0A4FFE2
+	by smtp3.osuosl.org (Postfix) with ESMTP id A9D6B60664;
+	Mon, 18 Aug 2025 20:59:05 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 17BCE196
  for <buildroot@buildroot.org>; Mon, 18 Aug 2025 20:59:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E8A0E4026B
- for <buildroot@buildroot.org>; Mon, 18 Aug 2025 20:59:02 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 09DEA80A4C
+ for <buildroot@buildroot.org>; Mon, 18 Aug 2025 20:59:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wG6cR451NX0p for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id y2EGEcKsVUgD for <buildroot@buildroot.org>;
  Mon, 18 Aug 2025 20:59:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2D7EE40257
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3BC8680A54
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2D7EE40257
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3BC8680A54
  for <buildroot@buildroot.org>; Mon, 18 Aug 2025 20:59:02 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1BD79876FD; Mon, 18 Aug 2025 20:59:02 +0000 (UTC)
+ id 37CD2876FC; Mon, 18 Aug 2025 20:59:02 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 18 Aug 2025 22:56:39 +0200
+Date: Mon, 18 Aug 2025 22:58:27 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 534147af946dab2013398f6bd50df903c0276ef7
-X-Git-Newrev: 26077c2d41cd8dc827b91d5345efbc43f7eca9ab
+X-Git-Oldrev: 871cdeab6a00054a1366d5e0ea56bd62a53f1c76
+X-Git-Newrev: c688a1a8a833a89e9e6fcef70f183766e341e11d
 X-Patchwork-Hint: ignore
-Message-Id: <20250818205902.1BD79876FD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/setserial: autoreconfigure for
- compatibility with newer toolchains
+Message-Id: <20250818205902.37CD2876FC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/setserial: simplify patching
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,43 +65,105 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=26077c2d41cd8dc827b91d5345efbc43f7eca9ab
+commit: https://git.buildroot.net/buildroot/commit/?id=c688a1a8a833a89e9e6fcef70f183766e341e11d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Newer toolchains silently fail during configure step. After some
-investigation, it is because -Wimplicit-int is returned for one of the
-simplest test from the in-package configure file and thus fail the
-configure step early, when checking if the compiler can produce an
-executable.
+The original commit (aaa2b660a9f9 ("setserial: convert to autotargets
+and fix manpages install") wasn't entirely clear why we went for a
+removal of a patch from the tarball we get from Debian.
 
-Let's fix this by simply regenerating the configure file, similarly to
-what Debian is doing, c.f. debian/rules.
+It is assumed the original patch mainly only wanted to remove the strip
+and make sure the directories are created before files are installed in
+there. But doing only that made my build fail because the linker doesn't
+find @CXXFLAGS@. After undoing the addition of this variable (and its
+use) from 01_makefile.patch it now compiles just fine.
 
-Fixes:
+Therefore, instead of removing the patch from the tarball we get from
+Debian, simply update the patch we carry in the tree to remove what's
+necessary and simplify the patching logic.
 
-  https://autobuild.buildroot.net/results/ff7a9c3c42f11a2ab71fb04ff0f6d593ac9ee327/
-
-(but there are more build failures later, fixed in a follow-up commit)
+This could also help identify notable differences between the
+01_makefile.patch from two different versions whenever we upgrade.
 
 Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/setserial/setserial.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/setserial/0001-build-system-fix.patch | 33 +++++++++++++++++++++++----
+ package/setserial/setserial.mk                |  2 --
+ 2 files changed, 29 insertions(+), 6 deletions(-)
 
+diff --git a/package/setserial/0001-build-system-fix.patch b/package/setserial/0001-build-system-fix.patch
+index eec7993d19..06f2201bd4 100644
+--- a/package/setserial/0001-build-system-fix.patch
++++ b/package/setserial/0001-build-system-fix.patch
+@@ -3,7 +3,19 @@ sure that the directories (especially the manpages directory) are
+ created before installing files to them. This is similar to what
+ automake does.
+ 
++Also remove CXXFLAGS and its use since the linker errors out with:
++
++  cannot find @CXXFLAGS@: No such file or directory
++
++Additionally, remove the strip command made on the wrong file.
++
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++[rebased on top of Debian's setserial_2.17-57.debian.tar.xz instead of relying
++ on deletion of 01_makefile.patch]
++[extend commit log to explain why CXXFLAGS is removed and also that strip is
++ removed on purpose, c.f. original commit aaa2b660a9f9 ("setserial: convert to
++ autotargets and fix manpages install")]
++Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
+ ---
+  Makefile.in |    7 ++++---
+  1 file changed, 4 insertions(+), 3 deletions(-)
+@@ -12,17 +24,30 @@ Index: setserial-2.17/Makefile.in
+ ===================================================================
+ --- setserial-2.17.orig/Makefile.in
+ +++ setserial-2.17/Makefile.in
+-@@ -26,9 +26,10 @@ setserial.cat: setserial.8
++@@ -15,7 +15,6 @@ RM = rm -f
++ CFLAGS = @CFLAGS@
++ LDFLAGS = @LDFLAGS@
++ CPPFLAGS = @CPPFLAGS@
++-CXXFLAGS = @CXXFLAGS@
++ DEFS = @DEFS@
++ INCS = -I.
++ TAR = tar
++@@ -23,14 +22,15 @@ TAR = tar
++ all: setserial setserial.cat
++ 
++ setserial: setserial.c
++-	$(CC) $(CFLAGS) $(CXXFLAGS) $(CPPFLAGS) $(LDFLAGS) $(DEFS) $(INCS) setserial.c -o setserial
+++	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(DEFS) $(INCS) setserial.c -o setserial
++ 
++ setserial.cat: setserial.8
+  	nroff -man setserial.8 > setserial.cat
+  
+  install: setserial setserial.8
+ -	$(INSTALL_PROGRAM) setserial $(DESTDIR)/bin
+ -	$(STRIP) $(DESTDIR)/bin/setserial
+--	$(INSTALL_DATA) setserial.8 $(DESTDIR)/usr/man/man8
+ +	mkdir -p $(DESTDIR)/usr/bin
+ +	$(INSTALL_PROGRAM) setserial $(DESTDIR)/usr/bin
+ +	mkdir -p $(DESTDIR)/usr/share/man/man8
+-+	$(INSTALL_DATA) setserial.8 $(DESTDIR)/usr/share/man/man8
++ 	$(INSTALL_DATA) setserial.8 $(DESTDIR)/usr/share/man/man8
+  
+  clean:
+- 	$(RM) setserial setserial.o setserial.cat *~
 diff --git a/package/setserial/setserial.mk b/package/setserial/setserial.mk
-index 002bf21161..6567738e76 100644
+index 5bce05056a..9beee349c8 100644
 --- a/package/setserial/setserial.mk
 +++ b/package/setserial/setserial.mk
-@@ -13,6 +13,8 @@ SETSERIAL_LICENSE_FILES = debian/copyright
- # make all also builds setserial.cat which needs nroff
- SETSERIAL_MAKE_OPTS = setserial
- 
-+SETSERIAL_AUTORECONF = YES
-+
- # Extract the Debian tarball inside the sources
- define SETSERIAL_DEBIAN_EXTRACT
- 	$(call suitable-extractor,$(notdir $(SETSERIAL_EXTRA_DOWNLOADS))) \
+@@ -29,8 +29,6 @@ define SETSERIAL_APPLY_DEBIAN_PATCHES
+ 	# - Apply patches in the order listed in debian/patches/series
+ 	if [ -d $(@D)/debian/patches ]; then \
+ 		touch $(@D)/gorhack.h; \
+-		rm $(@D)/debian/patches/01_makefile.patch; \
+-		sed -i '/01_makefile.patch/d' $(@D)/debian/patches/series; \
+ 		$(APPLY_PATCHES) $(@D) $(@D)/debian/patches series; \
+ 	fi
+ endef
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
