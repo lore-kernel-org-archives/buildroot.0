@@ -1,99 +1,99 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33945CA0EE4
-	for <buildroot@archiver.kernel.org>; Mon, 18 Aug 2025 13:44:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75032CA0EE4
+	for <buildroot@archiver.kernel.org>; Mon, 18 Aug 2025 13:46:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E42AF827A8;
-	Mon, 18 Aug 2025 13:44:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1B48341C69;
+	Mon, 18 Aug 2025 13:46:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LJaeqVzSCxgi; Mon, 18 Aug 2025 13:44:27 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XutJ1QskRrJ1; Mon, 18 Aug 2025 13:46:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1CF48827B5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7EEFE41C3B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1CF48827B5;
-	Mon, 18 Aug 2025 13:44:27 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7F0B2196
- for <buildroot@buildroot.org>; Mon, 18 Aug 2025 13:44:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7EEFE41C3B;
+	Mon, 18 Aug 2025 13:46:45 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 40C3E75
+ for <buildroot@buildroot.org>; Mon, 18 Aug 2025 13:46:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7C8C440323
- for <buildroot@buildroot.org>; Mon, 18 Aug 2025 13:44:25 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2451D41C3B
+ for <buildroot@buildroot.org>; Mon, 18 Aug 2025 13:46:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2IOvHxkofSOr for <buildroot@buildroot.org>;
- Mon, 18 Aug 2025 13:44:24 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id E-1qfMY8ILfQ for <buildroot@buildroot.org>;
+ Mon, 18 Aug 2025 13:46:42 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
+ client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
  envelope-from=angelo.compagnucci@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E082440310
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E082440310
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
- [IPv6:2a00:1450:4864:20::332])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E082440310
- for <buildroot@buildroot.org>; Mon, 18 Aug 2025 13:44:23 +0000 (UTC)
-Received: by mail-wm1-x332.google.com with SMTP id
- 5b1f17b1804b1-45a286135c8so7842635e9.0
- for <buildroot@buildroot.org>; Mon, 18 Aug 2025 06:44:23 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9186641C37
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9186641C37
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9186641C37
+ for <buildroot@buildroot.org>; Mon, 18 Aug 2025 13:46:42 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ 5b1f17b1804b1-45a1b004954so29620585e9.0
+ for <buildroot@buildroot.org>; Mon, 18 Aug 2025 06:46:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1755524662; x=1756129462;
+ d=1e100.net; s=20230601; t=1755524800; x=1756129600;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=Nhk0p55PogPzIhIL2bgMYwFTH3lD89H9x+TRppEutJQ=;
- b=OrOTSwm6ETHnCFGROvECuW3AOvgUtQ77sQyevcLYkykslbq8EFgf0l4zeBuRlJDsdV
- gilvdoYL8fIWZSiNdf6bq3aUmIrrY8lDGffrVEG8A9wzOaW2PcCMT1PMZSPZ7LvX49eY
- EkpeTOuPDRacfT9H3BpCAJeHBeersHUTwlxRGJwqNLsefLXgeJ+R1hPxeU+65DoO2O0E
- 7YZnygIYog1jVuX+7id3y8V3JIeClqAQCxxEG5a5KWWNtvXKNbdZ6QaUHlPwHwQ9Lft/
- Jz0cEaw7e2y50X8CTfzHh/R7X8i30Qd0rUi9mJaLYNX2fTRwsvhRkyia1Rq5BkaEgOHU
- BSwA==
-X-Gm-Message-State: AOJu0Yxl3lrzXle1Pkve97grWUn5C0ITn2jF1I2TxlDc1nhEFPcNL8ab
- vOonYO5C8V0U4tgSPpavEKsnCTsPZip4rCt+aOyuDLEN+PcQpcH/yyXejJ6K6z0O
-X-Gm-Gg: ASbGnctWV38rtLnx4vkpn474QLuZaBP9ASjP/iL44if9NeE/HpqF4OOm9QQ+qF4u2hG
- Br+3d8AsEtducMPSfifP3hN4lKC4oyN/X1EleRNQpVlWTvELGEa8Ci0qb8DCYu2/WNUn5Kjy1xr
- 2bshTmQ1JCyXiGSeDb0iJ6+hv/O5/fBiDrIyyqv47sXjZ333RLka3a1JbuG9SNaOBPk/slsGvue
- jT528Dpyn5/t7AUC2Upp2+FsT1Focl0PNlUocWV07HF3AxB27YxQKEMIa/a8gJUEFj/KWahAzOB
- mxJDb7cd4fWDzfY6WL/OFA5/cWoddC/ecc0bPuuXgC7cacOkQ3VMFyPx/wGP91W7h/99vgknzER
- 73R9jshfGSdO90uHEGL/LbA2JhFji9sxAx1QdYCPO2xiBYQ==
-X-Google-Smtp-Source: AGHT+IHOQDITCoL8VWXD+kjTERZv7SJDbK7IsTjsM1fCtfPVWTsJFg9uZljLds57RUrcEtDfKUFY1A==
-X-Received: by 2002:a05:600c:4794:b0:459:d3e2:d743 with SMTP id
- 5b1f17b1804b1-45a1b677b33mr90805225e9.8.1755524661084; 
- Mon, 18 Aug 2025 06:44:21 -0700 (PDT)
+ bh=Y9/il6mZgVt7PHmVFogL0SHPSq7Tp+4gA6/AiSKkcws=;
+ b=ZXcwfzooTe9CmMKOLufAwZHgbI4079cjo6Rl6Zk0s+SgROj+D5KLsAGPMjKG7QOE5n
+ JTXP677uBsUM3TPDGhBkUwpTHVynxB8Wp4s4rr+sR9pexFBD3DWkzKEWbTKhQT7SWdJu
+ A9KdR7ceFla26RMQoAgSlBiwxepDfTCtRFos1khbrx2tbGdU7iJqhg8D3zZbuTmOmSU3
+ pdZzSlZT68C+HW9TKl07wFtgl0pvy8mXmn9oyEHBZSLuJxkTBRD/FD/zBwjJUvwbYFOZ
+ YNgURgyUjeF90n3lQUm6zhJoTuu7EHP+cSINmL8m/olzujJJWtnOEZcAzXb1ghLK95f/
+ 5VNg==
+X-Gm-Message-State: AOJu0YyIMl18/4D5VvHJBrmR/jf1PlWOYdzUHxE9JJLNKPIiFnWmFCTE
+ PyXjNSYr/+EFkibw9rlQthft2q8ZLReXWq4U9rbXT7bAKYBBlL/yr7i4Iil/hvLa
+X-Gm-Gg: ASbGncsxwNCAtZtGd/5Su6ilAQ3BoPlVao4+dem3+kH8x9ZGckG8x1AQUpeF1YMfuaF
+ wtVGGMqf8wFD21jkxnmCJXOcETHc8hm0XwiJ6ZUf0nWCByTD00M+TshK/sRovG5RbcrfpJJBs/B
+ d7Z6rBi178p1Yxo8wnUV4LihpiCt/TCV0+XgaPFs1c3WG5NbbUAmd1Xg7TZXE8SdzYTVnkuEOgg
+ x5m/wjSFp2+YSYMHerbW5EWh+p+1WzUuFp033n8FRURnHY4fVQ1jMtYwBDYcqf51nGpn5+fnYDL
+ IHToPorTCfHd5z+FAL9QylfOVaPtjb2mFef5dXrpXV1gL2ZXP9bwLPOduwRdkSwXF+MVJV/eJSU
+ qbttr5afhuKRZpT5LmQJfEFoFY3kzd/jYmixwfS/G1eB7yQ==
+X-Google-Smtp-Source: AGHT+IEWOPG9dNECx8kppLY5wF49TSscLp271yHC3q0DWAWXDdG6J8ZNcVv7dD44SR4xNfVY+ugwpw==
+X-Received: by 2002:a05:600c:1f96:b0:456:1dd9:943 with SMTP id
+ 5b1f17b1804b1-45a26fdafe4mr76143905e9.3.1755524800003; 
+ Mon, 18 Aug 2025 06:46:40 -0700 (PDT)
 Received: from localhost.localdomain ([212.22.141.99])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-45a1b1db885sm108777715e9.0.2025.08.18.06.44.20
+ ffacd0b85a97d-3bb93862fe7sm13035328f8f.64.2025.08.18.06.46.39
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 18 Aug 2025 06:44:20 -0700 (PDT)
+ Mon, 18 Aug 2025 06:46:39 -0700 (PDT)
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 To: buildroot@buildroot.org
 Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Mon, 18 Aug 2025 15:44:17 +0200
-Message-Id: <20250818134417.909413-1-angelo.compagnucci@gmail.com>
+Date: Mon, 18 Aug 2025 15:46:36 +0200
+Message-Id: <20250818134636.927592-1-angelo.compagnucci@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1755524662; x=1756129462; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1755524800; x=1756129600; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Nhk0p55PogPzIhIL2bgMYwFTH3lD89H9x+TRppEutJQ=;
- b=PUHtWn7/VpwD3WV6olfRelaY/4WbhZeM/lbKzZEyKDp6T9auCm2AIrYpfW821BIoO8
- GB9ZSfEiAOYVL7i13SGyRUglnlrY/afswDgInhEarRz+46YNaaLjIfPPVheUUPvmGGU0
- k2875w0oyY3uWZ9YC1ko4esEJSF7NZJlCG3cntSVO9nEiYxCDosTnhaxL5duYybvVrTB
- AVzqLVH3qWE3NjFTjiiXqUJCotHBaT+OCAZjs8NthEUgD5qWpQQpLIJxKSIgAaLhYI2t
- MH05MVDM//AhSffW4I6HNVNHZ/AgzB9xz4HngzVh8zBwTQYwLSHghhrUBRhMJvtFaf18
- lQHg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=Y9/il6mZgVt7PHmVFogL0SHPSq7Tp+4gA6/AiSKkcws=;
+ b=aI1eZ/Lgthsryn2Ge39Sj5XLMR9nGLplPAPS43Xg0RG7eU3/fe8Z22NOOKuyv7vnYF
+ 7IyrjGetqHFJI96W5rOA83ormuh4sGV03Js2BZVV2SsiTldyqXSmcX8uYob4LNwPMvwl
+ jXd1knSzuu9z2YiYB55UDkFQXZ1OcGlBD4WVvxz7jfqw0hnr6/jQVzgjFkErbyDA/Bo/
+ rN6sY2oSdq+7K/2RmXKaxAUOJ7Y79cGQGO59ZtQEdGH50nlD950KAW3KRtqoNaEhhGei
+ 8ojmwfyaR7ePgIXchC9TUokmTm2OSsAn5FrgWYymdkGJZWa3al/ejMIu2FKAHd6EZ2Ew
+ Bsow==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=PUHtWn7/
+ header.a=rsa-sha256 header.s=20230601 header.b=aI1eZ/Lg
 Subject: [Buildroot] [PATCH] package/mono: remove mono and related packages
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -125,6 +125,7 @@ Giulio
 https://patchwork.ozlabs.org/project/buildroot/patch/20240701193420.2119084-1-giulio.benetti@benettiengineering.com/
 
 
+ DEVELOPERS                                    |  3 -
  package/Config.in                             |  5 --
  ...-MONO_PROFILE_ENTER_LEAVE-undeclared.patch | 28 --------
  .../0002-Mono-compilation-error-branch.patch  | 25 -------
@@ -136,7 +137,9 @@ https://patchwork.ozlabs.org/project/buildroot/patch/20240701193420.2119084-1-gi
  package/mono/Config.in                        | 29 --------
  package/mono/mono.hash                        |  5 --
  package/mono/mono.mk                          | 67 -------------------
- 11 files changed, 275 deletions(-)
+ package/monolite/monolite.hash                |  2 -
+ package/monolite/monolite.mk                  | 17 -----
+ 14 files changed, 297 deletions(-)
  delete mode 100644 package/mono-gtksharp3/0001-Fixes-MONO_PROFILE_ENTER_LEAVE-undeclared.patch
  delete mode 100644 package/mono-gtksharp3/0002-Mono-compilation-error-branch.patch
  delete mode 100644 package/mono-gtksharp3/Config.in
@@ -147,7 +150,23 @@ https://patchwork.ozlabs.org/project/buildroot/patch/20240701193420.2119084-1-gi
  delete mode 100644 package/mono/Config.in
  delete mode 100644 package/mono/mono.hash
  delete mode 100644 package/mono/mono.mk
+ delete mode 100644 package/monolite/monolite.hash
+ delete mode 100644 package/monolite/monolite.mk
 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index a28f3e8d57..828e7f7b22 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -223,9 +223,6 @@ F:	package/libb64/
+ F:	package/libdill/
+ F:	package/mender/
+ F:	package/mender-artifact/
+-F:	package/mono/
+-F:	package/mono-gtksharp3/
+-F:	package/monolite/
+ F:	package/openjpeg/
+ F:	package/python-can/
+ F:	package/python-minimalmodbus/
 diff --git a/package/Config.in b/package/Config.in
 index 137f74ed82..f4bc846b8d 100644
 --- a/package/Config.in
@@ -494,6 +513,37 @@ index aead85bac0..0000000000
 -
 -$(eval $(autotools-package))
 -$(eval $(host-autotools-package))
+diff --git a/package/monolite/monolite.hash b/package/monolite/monolite.hash
+deleted file mode 100644
+index e72ccfbf9d..0000000000
+--- a/package/monolite/monolite.hash
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# sha256 locally computed
+-sha256  0ac314f75ca2bc4455785f12ceb50da89b6dac90162f9f46afbbb988a8752d4b  monolite-linux-1A5E0066-58DC-428A-B21C-0AD6CDAE2789-latest.tar.gz
+diff --git a/package/monolite/monolite.mk b/package/monolite/monolite.mk
+deleted file mode 100644
+index b0042aabf7..0000000000
+--- a/package/monolite/monolite.mk
++++ /dev/null
+@@ -1,17 +0,0 @@
+-################################################################################
+-#
+-# monolite
+-#
+-################################################################################
+-
+-MONOLITE_VERSION = 1A5E0066-58DC-428A-B21C-0AD6CDAE2789
+-MONOLITE_SITE = http://download.mono-project.com/monolite
+-MONOLITE_SOURCE = monolite-linux-$(MONOLITE_VERSION)-latest.tar.gz
+-MONOLITE_LICENSE = LGPL-2.0 or commercial
+-
+-define HOST_MONOLITE_INSTALL_CMDS
+-	mkdir -p $(HOST_DIR)/lib/monolite-linux/$(MONOLITE_VERSION)
+-	cp -r $(@D)/* $(HOST_DIR)/lib/monolite-linux/$(MONOLITE_VERSION)
+-endef
+-
+-$(eval $(host-generic-package))
 -- 
 2.34.1
 
