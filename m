@@ -4,72 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5CC2ECA0EE4
-	for <buildroot@archiver.kernel.org>; Mon, 18 Aug 2025 14:30:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6AE61CA0EE4
+	for <buildroot@archiver.kernel.org>; Mon, 18 Aug 2025 14:30:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2028684897;
-	Mon, 18 Aug 2025 14:30:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 407C9848CF;
+	Mon, 18 Aug 2025 14:30:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yWzJ7UPJi3aZ; Mon, 18 Aug 2025 14:30:41 +0000 (UTC)
+ id eJH8xB6faG74; Mon, 18 Aug 2025 14:30:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3C7E584898
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C0648489B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3C7E584898;
-	Mon, 18 Aug 2025 14:30:41 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id E7EF1196
- for <buildroot@buildroot.org>; Mon, 18 Aug 2025 14:30:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6C0648489B;
+	Mon, 18 Aug 2025 14:30:46 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 77E6EE2
+ for <buildroot@buildroot.org>; Mon, 18 Aug 2025 14:30:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CEB2B8489B
- for <buildroot@buildroot.org>; Mon, 18 Aug 2025 14:30:39 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6A12E4175C
+ for <buildroot@buildroot.org>; Mon, 18 Aug 2025 14:30:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7wQMdMhsqM45 for <buildroot@buildroot.org>;
- Mon, 18 Aug 2025 14:30:39 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.70.43.21;
- helo=mail-4321.protonmail.ch; envelope-from=philip@philipmolloy.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uUDpxV222rwJ for <buildroot@buildroot.org>;
+ Mon, 18 Aug 2025 14:30:45 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=109.224.244.102;
+ helo=mail-244102.protonmail.ch; envelope-from=philip@philipmolloy.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2B7C284898
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2B7C284898
-Received: from mail-4321.protonmail.ch (mail-4321.protonmail.ch [185.70.43.21])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2B7C284898
- for <buildroot@buildroot.org>; Mon, 18 Aug 2025 14:30:39 +0000 (UTC)
-Date: Mon, 18 Aug 2025 14:22:49 +0000
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6CFBE41413
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6CFBE41413
+Received: from mail-244102.protonmail.ch (mail-244102.protonmail.ch
+ [109.224.244.102])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6CFBE41413
+ for <buildroot@buildroot.org>; Mon, 18 Aug 2025 14:30:44 +0000 (UTC)
+Date: Mon, 18 Aug 2025 14:22:58 +0000
 To: buildroot@buildroot.org
 From: Philip Molloy <philip@philipmolloy.com>
 Cc: Philip Molloy <philip.molloy@analog.com>,
  Michael Hennerich <michael.hennerich@analog.com>,
  Philip Molloy <philip@philipmolloy.com>
-Message-ID: <20250818142203.421300-4-philip@philipmolloy.com>
+Message-ID: <20250818142203.421300-5-philip@philipmolloy.com>
 In-Reply-To: <20250818142203.421300-1-philip@philipmolloy.com>
 References: <20250818142203.421300-1-philip@philipmolloy.com>
 Feedback-ID: 9117015:user:proton
-X-Pm-Message-ID: bb9750ba22504621525bc141a96bc71fdb520c07
+X-Pm-Message-ID: fb39f5da1aad4402006f61a5edb07a57cb3763c0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=philipmolloy.com; 
- s=protonmail3; t=1755526976; x=1755786176;
- bh=XR7W4bhOLdoZcpodC9Ru30S0vu9g50AetzNL2IdDCcY=;
+ s=protonmail3; t=1755526983; x=1755786183;
+ bh=zyl056mocc34Hndn45eZ04D61c8WkFuL/BTg9/6kDwo=;
  h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
  Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
  Message-ID:BIMI-Selector;
- b=Pbav7r+OdJ3vIX3fzN1XYWgOXhjv0iPtIGNsyJJjygBLlGjwzUDXe/HDnPOkbM604
- riGXD6zKENK+WFSXIkymef4sBuhnWSbgWKDFirjAW50Qm+ejn1OnK6G+3fb1fWblGL
- L8KjjzrNyWb5BIi7EWdwVOjpKH5GEqG47+NYIdXZ4Bcs0bXZ5i8aGXmhdjAdQOgOfW
- qFD4F38DqR5tEnppdqpVhhbyg8NORGO0Nh13Jj635AJ3xA2Gb8VKLHfPuw2IQgx7mi
- r0CuG5GG3mOMsmxF7mYv/tQizwR/mIstXZV/io595GKl1HvlYqlpavNrUZSoGEM6gI
- 88pPWb4bAxW+g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=ssoQoun02Jsil93FC7D0PYn92oyNp0V1gdv5b6BpJb9mYtZQiIk9zIbELGhqbdwT9
+ ODgdCXFvxGUXcRzzXEVKeK0OeDc532TbigI6TxrX7gKU1Lgv5Q3fj+49Peu7rery/9
+ aB2056C3dZfWwX0BCNVcfj0BAEjxt1IkiOLLqyPQOwTxbB3/7RCAExmfEMzWEfS1uG
+ Cjc8VIgRjwoGeFUV+yd1+cgg46914Cr77cXkb4MOZBcUxI7P9wPFlc0KdJW3a/Q1JX
+ kC5T850iJA6Ro0cBBl459BBAtfihheFbMJouEGPfzTsWunrvM+CE8bYKaioHHyVZ33
+ WLp+tyXu0XmxQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=philipmolloy.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=philipmolloy.com header.i=@philipmolloy.com
- header.a=rsa-sha256 header.s=protonmail3 header.b=Pbav7r+O
-Subject: [Buildroot] [PATCH 3/4] boot/uboot: add ADSP LDR binary format
+ header.a=rsa-sha256 header.s=protonmail3 header.b=ssoQoun0
+Subject: [Buildroot] [PATCH 4/4] DEVELOPERS: add Philip Molloy for adsp-ldr
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,45 +87,25 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Philip Molloy <philip.molloy@analog.com>
-
-Signed-off-by: Philip Molloy <philip.molloy@analog.com>
 Signed-off-by: Philip Molloy <philip@philipmolloy.com>
 ---
- boot/uboot/Config.in | 4 ++++
- boot/uboot/uboot.mk  | 4 ++++
- 2 files changed, 8 insertions(+)
+ DEVELOPERS | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index f29f2173fa..f388be5d64 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -487,6 +487,10 @@ config BR2_TARGET_UBOOT_FORMAT_QSPI_BIN
- 	  file for flashing by combining the spl/boot.bin and
- 	  u-boot.itb files into a unified binary.
+diff --git a/DEVELOPERS b/DEVELOPERS
+index a7bb3bd834..792f230e4c 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2742,6 +2742,9 @@ F:	package/psplash/
+ F:	package/sispmctl/
+ F:	package/zsh/
  
-+config BR2_TARGET_UBOOT_FORMAT_ADSP_LDR
-+	bool "u-boot.ldr"
-+	depends on BR2_arm || BR2_aarch64
++N:	Philip Molloy <philip@philipmolloy.com>
++F:	package/adsp-ldr/
 +
- config BR2_TARGET_UBOOT_FORMAT_STM32
- 	bool "u-boot.stm32"
- 	depends on BR2_arm
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index cc7714c324..eea76edaf9 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -144,6 +144,10 @@ UBOOT_MAKE_TARGET += u-boot.stm32
- endif
- endif
+ N:	Philipp Richter <richterphilipp.pops@gmail.com>
+ F:	package/libtorrent-rasterbar/
  
-+ifeq ($(BR2_TARGET_UBOOT_FORMAT_ADSP_LDR),y)
-+UBOOT_BINS += u-boot.ldr
-+endif
-+
- ifeq ($(BR2_TARGET_UBOOT_INITIAL_ENV),y)
- UBOOT_MAKE_TARGET += u-boot-initial-env
- define UBOOT_INSTALL_UBOOT_INITIAL_ENV
 -- 
 2.50.1
 
