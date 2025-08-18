@@ -4,78 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15E49CA0EE4
-	for <buildroot@archiver.kernel.org>; Mon, 18 Aug 2025 06:50:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0639CA0EE4
+	for <buildroot@archiver.kernel.org>; Mon, 18 Aug 2025 08:07:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AAA338439C;
-	Mon, 18 Aug 2025 06:50:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 90BAC83F78;
+	Mon, 18 Aug 2025 08:07:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vHVKPP0TnOco; Mon, 18 Aug 2025 06:50:39 +0000 (UTC)
+ id lBbbJPyOztze; Mon, 18 Aug 2025 08:07:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B4EBB843A5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC94E83E86
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B4EBB843A5;
-	Mon, 18 Aug 2025 06:50:39 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id BD5BE75
- for <buildroot@buildroot.org>; Mon, 18 Aug 2025 06:50:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AC94E83E86;
+	Mon, 18 Aug 2025 08:07:35 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id E9AE0196
+ for <buildroot@buildroot.org>; Mon, 18 Aug 2025 08:07:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AF38440DA4
- for <buildroot@buildroot.org>; Mon, 18 Aug 2025 06:50:37 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C82D6613B8
+ for <buildroot@buildroot.org>; Mon, 18 Aug 2025 08:07:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fL-pUvIuA2cl for <buildroot@buildroot.org>;
- Mon, 18 Aug 2025 06:50:37 +0000 (UTC)
-X-Greylist: delayed 445 seconds by postgrey-1.37 at util1.osuosl.org;
- Mon, 18 Aug 2025 06:50:36 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 77B6740E5C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77B6740E5C
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.243.197.30;
- helo=mail.hostpark.net; envelope-from=christian@klarinett.li;
- receiver=<UNKNOWN> 
-Received: from mail.hostpark.net (mail.hostpark.net [212.243.197.30])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 77B6740E5C
- for <buildroot@buildroot.org>; Mon, 18 Aug 2025 06:50:36 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by mail.hostpark.net (Postfix) with ESMTP id 2B8D716459;
- Mon, 18 Aug 2025 08:43:08 +0200 (CEST)
-X-Virus-Scanned: by Hostpark/NetZone Mailprotection at hostpark.net
-Received: from mail.hostpark.net ([127.0.0.1])
- by localhost (mail0.hostpark.net [127.0.0.1]) (amavis, port 10224) with ESMTP
- id B48vgIqZ1OTm; Mon, 18 Aug 2025 08:43:07 +0200 (CEST)
-Received: from customer (localhost [127.0.0.1])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by mail.hostpark.net (Postfix) with ESMTPSA id 3F400162C2;
- Mon, 18 Aug 2025 08:43:07 +0200 (CEST)
-To: buildroot@buildroot.org
-Cc: Christian Hitz <christian.hitz@bbv.ch>,
- Norbert Lange <nolange79@gmail.com>, Sen Hastings <sen@hastings.org>
-Date: Mon, 18 Aug 2025 08:42:35 +0200
-Message-ID: <20250818064235.258181-1-christian@klarinett.li>
-X-Mailer: git-send-email 2.50.1
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jbSfVPmacOdA for <buildroot@buildroot.org>;
+ Mon, 18 Aug 2025 08:07:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=vjardin@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D04AA6129A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D04AA6129A
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D04AA6129A
+ for <buildroot@buildroot.org>; Mon, 18 Aug 2025 08:07:32 +0000 (UTC)
+Received: from L25025.local (unknown [213.36.7.11])
+ (Authenticated sender: vjardin@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 31A07780504;
+ Mon, 18 Aug 2025 10:07:21 +0200 (CEST)
+Date: Mon, 18 Aug 2025 10:07:20 +0200
+To: Vladimir Oltean <olteanv@gmail.com>
+Cc: buildroot@buildroot.org, Brandon Maier <Brandon.Maier@collins.com>, 
+ Ioana Ciornei <ciorneiioana@gmail.com>, Romain Naour <romain.naour@smile.fr>, 
+ Julien Olivain <ju.o@free.fr>, Arnout Vandecappelle <arnout@mind.be>, 
+ Akhilesh Nema <nemaakhilesh@gmail.com>
+Message-ID: <hhhu2cl4shracbhuuaejhyukde2rxhkrkon2pgpexfedobtme2@c7p77s2tpbtc>
+References: <20250811165531.1533913-1-olteanv@gmail.com>
 MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20250811165531.1533913-1-olteanv@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=klarinett.li; h=
- content-transfer-encoding:mime-version:x-mailer:message-id:date
- :date:subject:subject:from:from; s=sel2011a; t=1755499387; bh=s6
- rWAgECjwPvFkfujVDWps+XxYkNGZRl8oCNMdOU0bY=; b=jnKfjuwZ0ATxP+nn3h
- WJDSCNLucTDLdl2knUg006hsbQ0tyJUnA7oa+kKzVj5rQ6zLJ7lAJNFhefJyGMl1
- tHjb+gIOUI6rtTFs/g1rk4WsMrflk7VgwsnQsTi02V8tt8Fnw7fGaq7aVUtgnC8O
- oNmK6X3EDESMy+kwNtgYGQ5P8=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=klarinett.li
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=klarinett.li header.i=@klarinett.li header.a=rsa-sha256
- header.s=sel2011a header.b=jnKfjuwZ
-Subject: [Buildroot] [PATCH 2020.02.x] package/systemd: bump required
- toolchain headers for systemd-networkd
+ d=free.fr; s=smtp-20201208; t=1755504449;
+ bh=Yo9QfF8YOps9gWojwLXgYvKm7hF9KbJLDtF3oYBEIS0=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=YxyV/WTt4jYvw1hYjimC/tlwZRzn+W4tmaGobBl6Y6s2pgfZutm8Gg7KI+9pVW3ek
+ Z5WNWY5aMx8ZCkjojg2R3tmrKmyLmXc7LIzjprdg/0WSMCiiNrEBg8NvIV3bFfjdxu
+ mDWHAkMux2p0ZGUJAJKnw7g3rdPLpF1VqLevJJF7REnyNRPpMXV9o8feVI+EF7xGnY
+ qw9PrYBF0qoxlOgnOfDwWqif72PAkh2DNFKZj6Ddok1R2LD04Glbz+tfQ8u/Hxi9R9
+ glfIZD44u4+icSOoZ4vWQVwBpy7mC7aPVzyP2FnMQNUCHLetThLRd+NA4ykh/HhSRq
+ yxLaPovSFLMOw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=YxyV/WTt
+Subject: Re: [Buildroot] [PATCH v3 00/11] Layerscape uprev to
+ lf-6.12.20-2.0.0, initial LX2160A-RDB support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,67 +80,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Hitz via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Hitz <christian@klarinett.li>
+From: Vincent Jardin via buildroot <buildroot@buildroot.org>
+Reply-To: Vincent Jardin <vjardin@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Christian Hitz <christian.hitz@bbv.ch>
+Hi,
 
-Since 256.12 systemd-networkd requires kernel >=5.4 due to the inclusion of
-the sockios.h header, which uses the SIOCGSTAMP_OLD macro.
+> This is logically a continuation of "[PATCH v2 00/11] Initial support
+> for SolidRun LX2160A-CEX7":
+> https://lore.kernel.org/buildroot/20241208143802.1048266-1-olteanv@gmail.com/
+> 
+> where I was requested to split out the Layerscape BSP uprev and initial
+> LX2160A support from the more problematic Solidrun board support.
+> But as with any splitting of a larger series, the version counter reset
+> at v1 (which can be found here):
+> https://lore.kernel.org/buildroot/20250302215219.1276480-1-olteanv@gmail.com/
+> 
+> Major change log, more details in individual patches:
+> - Bump Linux Factory tag to lf-6.12.20-2.0.0 (patches 01-09)
+> - Add the remaining DPAA2 components (patch 10)
+> - Support the NXP LX2160A-RDB as a vehicle for pushing this patch set
+>   forward (patch 11)
+> 
+> v2 at:
+> https://lore.kernel.org/buildroot/20250328180427.3434693-1-olteanv@gmail.com/
+> 
+> Disclaimer copied from original cover letter:
+> Although I also work at NXP, I am submitting this in a personal
+> capacity, and for personal use.
+> 
+> Vladimir Oltean (11):
+>   package/qoriq-rcw: bump to version lf-6.12.20-2.0.0
+>   package/fmc: bump version to lf-6.12.20-2.0.0
+>   package/fmlib: bump version to lf-6.12.20-2.0.0
+>   package/qoriq-fm-ucode: bump version to lf-6.12.20-2.0.0
+>   package/qoriq-ddr-phy-binary: bump version to lf-6.12.20-2.0.0
+>   configs/ls1028ardb: bump BSP tag to lf-6.12.20-2.0.0
+>   configs/ls1043a-rdb: bump BSP tag to lf-6.12.20-2.0.0
+>   configs/ls1046a-rdb: bump BSP tag to lf-6.12.20-2.0.0
+>   configs/ls1046a-frwy: bump BSP tag to lf-6.12.20-2.0.0
+>   package/qoriq-restool: new package
+>   board/lx2160ardb: new platform
+> 
 
-The same change has already been applied to master/2025.08 in
-7d8d48cd2ba1396ea146e94020939f4dfe08c5cb
+This serie is OK for me. Let's merge it.
 
-Signed-off-by: Christian Hitz <christian.hitz@bbv.ch>
----
- package/systemd/Config.in | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+Thanks Vladimir for this support that enriches the Layerscale CPU
+support.
 
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index 851b91aeba..320d416203 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -52,9 +52,11 @@ menuconfig BR2_PACKAGE_SYSTEMD
- 	  an elaborate transactional dependency-based service control
- 	  logic.  It can work as a drop-in replacement for sysvinit.
- 
--	  Kernel versions below 4.15 ("recommended baseline") have
-+	  Kernel versions below 5.4 ("recommended baseline") have
- 	  significant gaps in functionality and are not recommended
--	  for use with this version of systemd.
-+	  for use with this version of systemd. (e.g. lack race-free
-+	  process tracking by pidfd, systemd-networkd, and new mount
-+	  API support).
- 
- 	  Systemd requires a Linux kernel >= 3.15 with the following
- 	  options enabled:
-@@ -354,7 +356,8 @@ config BR2_PACKAGE_SYSTEMD_MYHOSTNAME
- 
- config BR2_PACKAGE_SYSTEMD_NETWORKD
- 	bool "enable network manager"
--	default y
-+	default y if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
- 	help
- 	  systemd-networkd is a system service that manages networks.
- 	  It detects and configures network devices as they appear, as
-@@ -365,6 +368,9 @@ config BR2_PACKAGE_SYSTEMD_NETWORKD
- 
- 	  https://www.freedesktop.org/software/systemd/man/systemd-networkd.html
- 
-+comment "systemd-networkd needs a toolchain with kernel headers >= 5.4"
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
-+
- config BR2_PACKAGE_SYSTEMD_OOMD
- 	bool "enable out-of-memory killer"
- 	help
--- 
-2.50.1
+Best regards,
+  Vincent
 
+Reviewed-by: Vincent Jardin <vjardin@free.fr>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
