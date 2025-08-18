@@ -1,75 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D94ECA0ED1
-	for <buildroot@archiver.kernel.org>; Mon, 18 Aug 2025 21:12:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94089CA0EE4
+	for <buildroot@archiver.kernel.org>; Mon, 18 Aug 2025 21:16:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 011FD6063A;
-	Mon, 18 Aug 2025 21:12:16 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5jHQyDhA-Uxj; Mon, 18 Aug 2025 21:12:14 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C74246066B
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C74246066B;
-	Mon, 18 Aug 2025 21:12:14 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id EBD54E2
- for <buildroot@buildroot.org>; Mon, 18 Aug 2025 21:12:12 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DDD0440787
- for <buildroot@buildroot.org>; Mon, 18 Aug 2025 21:12:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 61F01405E6;
+	Mon, 18 Aug 2025 21:16:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D4UZoz8nj777 for <buildroot@buildroot.org>;
- Mon, 18 Aug 2025 21:12:11 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
- helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id M8HQoJS9d3Tc; Mon, 18 Aug 2025 21:16:26 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 57308405E0
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 57308405E0;
+	Mon, 18 Aug 2025 21:16:26 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 053DE19E
+ for <buildroot@buildroot.org>; Mon, 18 Aug 2025 21:16:24 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id D9EBD80AFB
+ for <buildroot@buildroot.org>; Mon, 18 Aug 2025 21:16:24 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7n44Ttk0xr4O for <buildroot@buildroot.org>;
+ Mon, 18 Aug 2025 21:16:24 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 68A3A40785
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 68A3A40785
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 68A3A40785
- for <buildroot@buildroot.org>; Mon, 18 Aug 2025 21:12:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9F9FC80AFD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9F9FC80AFD
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9F9FC80AFD
+ for <buildroot@buildroot.org>; Mon, 18 Aug 2025 21:16:23 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-04.galae.net (Postfix) with ESMTPS id 3D434C6B3B0
- for <buildroot@buildroot.org>; Mon, 18 Aug 2025 21:11:55 +0000 (UTC)
+ by smtpout-03.galae.net (Postfix) with ESMTPS id 40C534E40BFF
+ for <buildroot@buildroot.org>; Mon, 18 Aug 2025 21:16:21 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 97960606A6;
- Mon, 18 Aug 2025 21:12:08 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 021A7606A6;
+ Mon, 18 Aug 2025 21:16:20 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 28F7C1C22CB18; 
- Mon, 18 Aug 2025 23:12:05 +0200 (CEST)
+ with ESMTPSA id 1BF2E1C22C3CB; 
+ Mon, 18 Aug 2025 23:16:09 +0200 (CEST)
 To: buildroot@buildroot.org
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Mon, 18 Aug 2025 23:12:02 +0200
-Message-ID: <20250818211202.3260962-1-thomas.petazzoni@bootlin.com>
+ =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>
+Date: Mon, 18 Aug 2025 23:16:07 +0200
+Message-ID: <20250818211608.3263059-1-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.50.1
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=dkim; 
- t=1755551527; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding; bh=OWWZ7dKnhB76fpR9FEaaVjFlDEm0QGIxXQSUlm18usM=;
- b=e96ja7FBP2milhqLCB+Du7HeJsOYXs3GBifjAHoSWVil1gb6lQz8JBStMDE415/tEzN5ZQ
- Az926kNwd76cBv8aCxER/lJuK99o1juHuBZQ/y+xeXy06YA4cDVS+IxEdqKETJdljnkaNe
- lJ7M/aiGpZYL8MiPZPgPpCvbmzX7RqYVtcVfD9I1CN7vS50S/NjbR5upFZN2YkJG+180hE
- QPrBugsEISvLyFgaB2zhOHcFi5b/uzwdpJOt9Jhr0J7Rc3JhQZeSEeLN2C9Ssbnh0+3vv4
- G5lyfEn0Jb8lzROMeS2mfAwaaLdAczjosf6ZP3jaIjJcamFRN6W14WMf7AApMw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ t=1755551779; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding; bh=wXkvkk3q+wT6Ux7a6BV/FCcpYjJQV5oQRQm3r1TQE9Y=;
+ b=AUIpVZ1uAP3NyyJwbwUfzItMX+Otsbq4gCatpfc4CDk5xqMwOrxgfXCA99bfRiF3Vav5i9
+ OweJg2HufneD4cQfYjenO5+dHrvxk61cVIgnef1dF7RRhVM2tS6CE64iVjAcWE7X4D67Pv
+ E8gsEqZjB4ps0mZSQl5vv66qy57qbZk/nsXT6QxLZhjiGkRiEPlhc3RLmklbOEZe5dHK7t
+ HUymAG9YGY0Heq/wkvZlbQmAkFW9wRx9VX+UUwJdoJmX/mB5Cq0CBsyb+bJO60Bb7DGudp
+ JYXfagGg55wi7S4NsNwnMXxRaDi8jCERtNVWAL4soQ3Z7NurK2UIp2ghUn7EbQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=e96ja7FB
-Subject: [Buildroot] [PATCH] configs/bananapro: remove defconfig, broken
+ header.a=rsa-sha256 header.s=dkim header.b=AUIpVZ1u
+Subject: [Buildroot] [PATCH] configs/beelink_gs1: remove defconfig, broken
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,441 +83,108 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This defconfig no longer builds:
-
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/11012272989
-
-It has been broken for at least 2 months, and it has no maintainer in
-the DEVELOPERS file. We're adding Bartosz Bilas who has been the last
-person doing updates to this defconfig.
-
-Unless some fixes are provided, this defconfig will be dropped from
-Buildroot.
-
-Cc: Bartosz Bilas <b.bilas@grinn-global.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .checkpackageignore                           |  4 --
- board/lemaker/bananapro/boot.cmd              |  5 --
- board/lemaker/bananapro/genimage.cfg          | 38 ------------
- board/lemaker/bananapro/linux-wifi.fragment   | 24 -------
- ...s-sun7i-a20-bananapro.dts-disable-00.patch | 44 -------------
- board/lemaker/bananapro/post-build.sh         | 12 ----
- board/lemaker/bananapro/post-image.sh         | 16 -----
- board/lemaker/bananapro/readme.txt            | 62 -------------------
- .../brcmfmac43362-sdio.lemaker,bananapro.txt  |  1 -
- .../lib/firmware/brcm/brcmfmac43362-sdio.txt  | 56 -----------------
- configs/bananapro_defconfig                   | 48 --------------
- 11 files changed, 310 deletions(-)
- delete mode 100644 board/lemaker/bananapro/boot.cmd
- delete mode 100644 board/lemaker/bananapro/genimage.cfg
- delete mode 100644 board/lemaker/bananapro/linux-wifi.fragment
- delete mode 100644 board/lemaker/bananapro/patches/linux/0001-arch-arm-boot-dts-sun7i-a20-bananapro.dts-disable-00.patch
- delete mode 100755 board/lemaker/bananapro/post-build.sh
- delete mode 100755 board/lemaker/bananapro/post-image.sh
- delete mode 100644 board/lemaker/bananapro/readme.txt
- delete mode 120000 board/lemaker/bananapro/rootfs_overlay/lib/firmware/brcm/brcmfmac43362-sdio.lemaker,bananapro.txt
- delete mode 100644 board/lemaker/bananapro/rootfs_overlay/lib/firmware/brcm/brcmfmac43362-sdio.txt
- delete mode 100644 configs/bananapro_defconfig
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 12e5af6b7b..1538ad9ebb 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -36,9 +36,6 @@ board/kontron/pitx-imx8m/patches/uboot/2022.04/0001-tools-mkeficapsule-use-pkg-c
- board/kontron/pitx-imx8m/post-build.sh Shellcheck
- board/kontron/smarc-sal28/post-build.sh Shellcheck
- board/lego/ev3/post-image.sh Shellcheck
--board/lemaker/bananapro/patches/linux/0001-arch-arm-boot-dts-sun7i-a20-bananapro.dts-disable-00.patch lib_patch.Upstream
--board/lemaker/bananapro/post-build.sh Shellcheck
--board/lemaker/bananapro/post-image.sh Shellcheck
- board/minnowboard/post-build.sh Shellcheck
- board/nexbox/a95x/post-build.sh Shellcheck
- board/nexbox/a95x/post-image.sh Shellcheck
-@@ -121,7 +118,6 @@ configs/avnet_rzboard_v2l_defconfig lib_defconfig.ForceCheckHash
- configs/bananapi_m2_berry_defconfig lib_defconfig.ForceCheckHash
- configs/bananapi_m2_ultra_defconfig lib_defconfig.ForceCheckHash
- configs/bananapi_m2_zero_defconfig lib_defconfig.ForceCheckHash
--configs/bananapro_defconfig lib_defconfig.ForceCheckHash
- configs/beelink_gs1_defconfig lib_defconfig.ForceCheckHash
- configs/broadcom_northstar_defconfig lib_defconfig.ForceCheckHash
- configs/canaan_kd233_defconfig lib_defconfig.ForceCheckHash
-diff --git a/board/lemaker/bananapro/boot.cmd b/board/lemaker/bananapro/boot.cmd
-deleted file mode 100644
-index 439f5b12c4..0000000000
---- a/board/lemaker/bananapro/boot.cmd
-+++ /dev/null
-@@ -1,5 +0,0 @@
--setenv fdt_high ffffffff
--setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
--fatload mmc 0 $kernel_addr_r zImage
--fatload mmc 0 $fdt_addr_r sun7i-a20-bananapro.dtb
--bootz $kernel_addr_r - $fdt_addr_r
-diff --git a/board/lemaker/bananapro/genimage.cfg b/board/lemaker/bananapro/genimage.cfg
-deleted file mode 100644
-index 9d15f35e3a..0000000000
---- a/board/lemaker/bananapro/genimage.cfg
-+++ /dev/null
-@@ -1,38 +0,0 @@
--# Minimal SD card image for the Banana Pro
--# Based in the Orange Pi genimage.cfg
--
--image boot.vfat {
--	vfat {
--		files = {
--			"zImage",
--			"sun7i-a20-bananapro.dtb",
--			"boot.scr"
--		}
--	}
--
--	size = 10M
--}
--
--image sdcard.img {
--	hdimage {
--	}
--
--	partition u-boot {
--		in-partition-table = "no"
--		image = "u-boot-sunxi-with-spl.bin"
--		offset = 8K
--		size = 1016K # 1MB - 8KB
--	}
--
--	partition boot {
--		partition-type = 0xC
--		bootable = "true"
--		image = "boot.vfat"
--	}
--
--	partition rootfs {
--		partition-type = 0x83
--		image = "rootfs.ext4"
--		size = 512M
--	}
--}
-diff --git a/board/lemaker/bananapro/linux-wifi.fragment b/board/lemaker/bananapro/linux-wifi.fragment
-deleted file mode 100644
-index f4ede39faa..0000000000
---- a/board/lemaker/bananapro/linux-wifi.fragment
-+++ /dev/null
-@@ -1,24 +0,0 @@
--# Networking support
--CONFIG_WIRELESS=y
--CONFIG_CFG80211=y
--CONFIG_CFG80211_WEXT=y
--CONFIG_RFKILL=y
--
--# Network device support
--CONFIG_WLAN=y
--CONFIG_WLAN_VENDOR_BROADCOM=y
--CONFIG_BRCMFMAC=m
--# CONFIG_WLAN_VENDOR_ADMTEK is not set
--# CONFIG_WLAN_VENDOR_ATH is not set
--# CONFIG_WLAN_VENDOR_ATMEL is not set
--# CONFIG_WLAN_VENDOR_CISCO is not set
--# CONFIG_WLAN_VENDOR_INTEL is not set
--# CONFIG_WLAN_VENDOR_INTERSIL is not set
--# CONFIG_WLAN_VENDOR_MARVELL is not set
--# CONFIG_WLAN_VENDOR_MEDIATEK is not set
--# CONFIG_WLAN_VENDOR_RALINK is not set
--# CONFIG_WLAN_VENDOR_REALTEK is not set
--# CONFIG_WLAN_VENDOR_RSI is not set
--# CONFIG_WLAN_VENDOR_ST is not set
--# CONFIG_WLAN_VENDOR_TI is not set
--# CONFIG_WLAN_VENDOR_ZYDAS is not set
-diff --git a/board/lemaker/bananapro/patches/linux/0001-arch-arm-boot-dts-sun7i-a20-bananapro.dts-disable-00.patch b/board/lemaker/bananapro/patches/linux/0001-arch-arm-boot-dts-sun7i-a20-bananapro.dts-disable-00.patch
-deleted file mode 100644
-index c8e8c03753..0000000000
---- a/board/lemaker/bananapro/patches/linux/0001-arch-arm-boot-dts-sun7i-a20-bananapro.dts-disable-00.patch
-+++ /dev/null
-@@ -1,44 +0,0 @@
--From 896e82ab14e7e4e361ffa7c81def787907c1bf4c Mon Sep 17 00:00:00 2001
--From: Bartosz Bilas <b.bilas@grinn-global.com>
--Date: Sun, 19 May 2019 21:04:35 +0200
--Subject: [PATCH] arch/arm/boot/dts/sun7i-a20-bananapro.dts: disable 00B
-- IRQ for brcm wifi module
--
--	BugLink: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=908438
--
--Signed-off-by: Hans de Goede <hdegoede@redhat.com>
--Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
-----
-- arch/arm/boot/dts/sun7i-a20-bananapro.dts | 16 +++++++++++++---
-- 1 file changed, 13 insertions(+), 3 deletions(-)
--
--diff --git a/arch/arm/boot/dts/sun7i-a20-bananapro.dts b/arch/arm/boot/dts/sun7i-a20-bananapro.dts
--index 0176e9de0..93b3340f5 100644
----- a/arch/arm/boot/dts/sun7i-a20-bananapro.dts
--+++ b/arch/arm/boot/dts/sun7i-a20-bananapro.dts
--@@ -160,9 +160,19 @@
-- 	brcmf: wifi@1 {
-- 		reg = <1>;
-- 		compatible = "brcm,bcm4329-fmac";
---		interrupt-parent = <&pio>;
---		interrupts = <7 15 IRQ_TYPE_LEVEL_LOW>;
---		interrupt-names = "host-wake";
--+		/*
--+		 * OOB interrupt support is broken ATM, often the first irq
--+		 * does not get seen resulting in the drv probe failing with:
--+		 *
--+		 * brcmfmac: brcmf_sdio_bus_rxctl: resumed on timeout
--+		 * brcmfmac: brcmf_bus_started: failed: -110
--+		 * brcmfmac: brcmf_attach: dongle is not responding: err=-110
--+		 * brcmfmac: brcmf_sdio_firmware_callback: brcmf_attach failed
--+		 *
--+		 * interrupt-parent = <&pio>;
--+		 * interrupts = <7 15 IRQ_TYPE_LEVEL_LOW>;
--+		 * interrupt-names = "host-wake";
--+		 */
-- 	};
-- };
-- 
---- 
--2.21.0
--
-diff --git a/board/lemaker/bananapro/post-build.sh b/board/lemaker/bananapro/post-build.sh
-deleted file mode 100755
-index a335310dbc..0000000000
---- a/board/lemaker/bananapro/post-build.sh
-+++ /dev/null
-@@ -1,12 +0,0 @@
--#!/bin/sh
--
--# Remove all but the brcmfmac43362 firmware files
--find $TARGET_DIR/lib/firmware/brcm -type f -not -name "brcmfmac43362*" -delete
--
--BOARD_DIR="$(dirname $0)"
--MKIMAGE=$HOST_DIR/bin/mkimage
--BOOT_CMD=$BOARD_DIR/boot.cmd
--BOOT_CMD_H=$BINARIES_DIR/boot.scr
--
--# U-Boot script
--$MKIMAGE -C none -A arm -T script -d $BOOT_CMD $BOOT_CMD_H
-diff --git a/board/lemaker/bananapro/post-image.sh b/board/lemaker/bananapro/post-image.sh
-deleted file mode 100755
-index 9cca1b1789..0000000000
---- a/board/lemaker/bananapro/post-image.sh
-+++ /dev/null
-@@ -1,16 +0,0 @@
--#!/bin/sh
--
--BOARD_DIR="$(dirname $0)"
--GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
--GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
--
--rm -rf "${GENIMAGE_TMP}"
--
--genimage                           \
--	--rootpath "${TARGET_DIR}"     \
--	--tmppath "${GENIMAGE_TMP}"    \
--	--inputpath "${BINARIES_DIR}"  \
--	--outputpath "${BINARIES_DIR}" \
--	--config "${GENIMAGE_CFG}"
--
--exit $?
-diff --git a/board/lemaker/bananapro/readme.txt b/board/lemaker/bananapro/readme.txt
-deleted file mode 100644
-index 27b922e26d..0000000000
---- a/board/lemaker/bananapro/readme.txt
-+++ /dev/null
-@@ -1,62 +0,0 @@
--Banana Pro
--
--Intro
--=====
--
--This default configuration will allow you to start experimenting with the
--Buildroot environment for the Banana Pro. With the current configuration
--it will bring-up the board, and allow access through the serial console.
--
--How to build it
--===============
--
--Configure Buildroot:
--
--  $ make bananapro_defconfig
--
--Compile everything and build the SD card image:
--
--  $ make
--
--How to write the SD card
--========================
--
--Once the build process is finished you will have an image called "sdcard.img"
--in the output/images/ directory.
--
--Copy the bootable "sdcard.img" onto an SD card with "dd":
--
--  $ dd if=output/images/sdcard.img of=/dev/sdX
--
--Notes:
--  - replace 'sdX' with the actual device with your micro SD card
--  - you may need to be root to do that (use 'sudo')
--
--Insert the micro SD card in your Banana Pro and power it up. The console
--is on the debug TTL UART, 115200 8N1.
--
--Ethernet
--==========
--
--  # udhcpc -i eth0
--
--Wifi
--==========
--
--  # wpa_passphrase YOUR_SSID >> /etc/wpa_supplicant.conf
--  (enter the wifi password and press enter)
--  # wpa_supplicant -i wlan0 -c /etc/wpa_supplicant.conf -B
--  # udhcpc -i wlan0
--
--Note:
--  - replace 'YOUR_SSID' with the actual SSID from your access point
--
--Audio
--==========
--
--Connect a headphone to the 3.5mm jack (TRRS). Note, that the Banana Pro
--has an on-board microphone, too.
--
--  # amixer cset name='Power Amplifier DAC Playback Switch' on
--  # amixer cset name='Power Amplifier Mute Switch' on
--  # amixer cset name='Power Amplifier Volume' 42
-diff --git a/board/lemaker/bananapro/rootfs_overlay/lib/firmware/brcm/brcmfmac43362-sdio.lemaker,bananapro.txt b/board/lemaker/bananapro/rootfs_overlay/lib/firmware/brcm/brcmfmac43362-sdio.lemaker,bananapro.txt
-deleted file mode 120000
-index 93947975ee..0000000000
---- a/board/lemaker/bananapro/rootfs_overlay/lib/firmware/brcm/brcmfmac43362-sdio.lemaker,bananapro.txt
-+++ /dev/null
-@@ -1 +0,0 @@
--brcmfmac43362-sdio.txt
-\ No newline at end of file
-diff --git a/board/lemaker/bananapro/rootfs_overlay/lib/firmware/brcm/brcmfmac43362-sdio.txt b/board/lemaker/bananapro/rootfs_overlay/lib/firmware/brcm/brcmfmac43362-sdio.txt
-deleted file mode 100644
-index 14a554fdd8..0000000000
---- a/board/lemaker/bananapro/rootfs_overlay/lib/firmware/brcm/brcmfmac43362-sdio.txt
-+++ /dev/null
-@@ -1,56 +0,0 @@
--#AP6210_NVRAM_V1.2_03192013
--manfid=0x2d0
--prodid=0x492
--vendid=0x14e4
--devid=0x4343
--boardtype=0x0598
--
--# Board Revision is P307, same nvram file can be used for P304, P305, P306 and P307 as the tssi pa params used are same
--#Please force the automatic RX PER data to the respective board directory if not using P307 board, for e.g. for P305 boards force the data into the following directory /projects/BCM43362/a1_labdata/boardtests/results/sdg_rev0305
--boardrev=0x1307
--boardnum=777
--xtalfreq=26000
--boardflags=0x80201
--boardflags2=0x80
--sromrev=3
--wl0id=0x431b
--macaddr=00:90:4c:07:71:12
--aa2g=1
--ag0=2
--maxp2ga0=74
--cck2gpo=0x2222
--ofdm2gpo=0x44444444
--mcs2gpo0=0x6666
--mcs2gpo1=0x6666
--pa0maxpwr=56
--
--#P207 PA params
--#pa0b0=5447
--#pa0b1=-658
--#pa0b2=-175
--
--#Same PA params for P304,P305, P306, P307
--
--pa0b0=5447
--pa0b1=-607
--pa0b2=-160
--pa0itssit=62
--pa1itssit=62
--
--
--cckPwrOffset=5
--ccode=0
--rssismf2g=0xa
--rssismc2g=0x3
--rssisav2g=0x7
--triso2g=0
--noise_cal_enable_2g=0
--noise_cal_po_2g=0
--swctrlmap_2g=0x04040404,0x02020202,0x02020202,0x010101,0x1ff
--temp_add=29767
--temp_mult=425
--
--btc_flags=0x6
--btc_params0=5000
--btc_params1=1000
--btc_params6=63
-diff --git a/configs/bananapro_defconfig b/configs/bananapro_defconfig
-deleted file mode 100644
-index f733f8c0ca..0000000000
---- a/configs/bananapro_defconfig
-+++ /dev/null
-@@ -1,48 +0,0 @@
--BR2_arm=y
--BR2_cortex_a7=y
--BR2_ARM_FPU_NEON_VFPV4=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
--BR2_GLOBAL_PATCH_DIR="board/lemaker/bananapro/patches"
--BR2_TARGET_GENERIC_HOSTNAME="bananapro"
--BR2_TARGET_GENERIC_ISSUE="Welcome to Banana Pro!"
--BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
--BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
--BR2_ROOTFS_OVERLAY="board/lemaker/bananapro/rootfs_overlay"
--BR2_ROOTFS_POST_BUILD_SCRIPT="board/lemaker/bananapro/post-build.sh"
--BR2_ROOTFS_POST_IMAGE_SCRIPT="board/lemaker/bananapro/post-image.sh"
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.7"
--BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
--BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/lemaker/bananapro/linux-wifi.fragment"
--BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun7i-a20-bananapro"
--BR2_LINUX_KERNEL_INSTALL_TARGET=y
--BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
--BR2_PACKAGE_ALSA_UTILS=y
--# BR2_PACKAGE_ALSA_UTILS_ALSAMIXER is not set
--BR2_PACKAGE_ALSA_UTILS_AMIXER=y
--BR2_PACKAGE_ALSA_UTILS_APLAY=y
--BR2_PACKAGE_LINUX_FIRMWARE=y
--BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XXX=y
--BR2_PACKAGE_IW=y
--BR2_PACKAGE_WPA_SUPPLICANT=y
--BR2_PACKAGE_WPA_SUPPLICANT_CLI=y
--BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=y
--BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_ROOTFS_EXT2_4=y
--# BR2_TARGET_ROOTFS_TAR is not set
--BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.04"
--BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Bananapro"
--BR2_TARGET_UBOOT_NEEDS_DTC=y
--BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
--BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
--BR2_TARGET_UBOOT_SPL=y
--BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
--BR2_PACKAGE_HOST_DOSFSTOOLS=y
--BR2_PACKAGE_HOST_GENIMAGE=y
--BR2_PACKAGE_HOST_MTOOLS=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS=y
--- 
-2.50.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+VGhpcyBkZWZjb25maWcgbm8gbG9uZ2VyIGJ1aWxkczoKCiAgaHR0cHM6Ly9naXRsYWIuY29tL2J1
+aWxkcm9vdC5vcmcvYnVpbGRyb290Ly0vam9icy8xMTAxMjI3MzA3MQoKSXQgaGFzIGJlZW4gYnJv
+a2VuIGZvciBhdCBsZWFzdCAyIG1vbnRoczoKCiAgaHR0cHM6Ly9naXRsYWIuY29tL2J1aWxkcm9v
+dC5vcmcvYnVpbGRyb290Ly0vam9icz9uYW1lPVQlM0RiZWVsaW5rJmtpbmQ9QlVJTEQKClVubGVz
+cyBhIGZpeCBpcyBwcm92aWRlZCwgdGhpcyBkZWZjb25maWcgd2lsbCBiZSByZW1vdmVkLgoKQ2M6
+IENsw6ltZW50IFDDqXJvbiA8cGVyb24uY2xlbUBnbWFpbC5jb20+ClNpZ25lZC1vZmYtYnk6IFRo
+b21hcyBQZXRhenpvbmkgPHRob21hcy5wZXRhenpvbmlAYm9vdGxpbi5jb20+Ci0tLQogLmNoZWNr
+cGFja2FnZWlnbm9yZSAgICAgICAgICAgICB8ICAyIC0tCiBERVZFTE9QRVJTICAgICAgICAgICAg
+ICAgICAgICAgIHwgIDQgLS0tLQogYm9hcmQvYmVlbGluay9nczEvZXh0bGludXguY29uZiB8ICA0
+IC0tLS0KIGJvYXJkL2JlZWxpbmsvZ3MxL2dlbmltYWdlLmNmZyAgfCAzNCAtLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tCiBib2FyZC9iZWVsaW5rL2dzMS9wb3N0LWJ1aWxkLnNoIHwgIDQg
+LS0tLQogY29uZmlncy9iZWVsaW5rX2dzMV9kZWZjb25maWcgICB8IDM2IC0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLQogNiBmaWxlcyBjaGFuZ2VkLCA4NCBkZWxldGlvbnMoLSkKIGRl
+bGV0ZSBtb2RlIDEwMDY0NCBib2FyZC9iZWVsaW5rL2dzMS9leHRsaW51eC5jb25mCiBkZWxldGUg
+bW9kZSAxMDA2NDQgYm9hcmQvYmVlbGluay9nczEvZ2VuaW1hZ2UuY2ZnCiBkZWxldGUgbW9kZSAx
+MDA3NTUgYm9hcmQvYmVlbGluay9nczEvcG9zdC1idWlsZC5zaAogZGVsZXRlIG1vZGUgMTAwNjQ0
+IGNvbmZpZ3MvYmVlbGlua19nczFfZGVmY29uZmlnCgpkaWZmIC0tZ2l0IGEvLmNoZWNrcGFja2Fn
+ZWlnbm9yZSBiLy5jaGVja3BhY2thZ2VpZ25vcmUKaW5kZXggMTUzOGFkOWViYi4uM2QxNTQ5MDhj
+MyAxMDA2NDQKLS0tIGEvLmNoZWNrcGFja2FnZWlnbm9yZQorKysgYi8uY2hlY2twYWNrYWdlaWdu
+b3JlCkBAIC04LDcgKzgsNiBAQCBib2FyZC9iZWFnbGVib2FyZC9iZWFnbGVib25lLXF0NS9wYXRj
+aGVzL2xpbnV4LzAwMDEta2VlcC1qdGFnLWNsb2NrLWFsaXZlLWZvci1kZQogYm9hcmQvYmVhZ2xl
+Ym9hcmQvYmVhZ2xlYm9uZS9wb3N0LWJ1aWxkLnNoIFNoZWxsY2hlY2sKIGJvYXJkL2JlYWdsZWJv
+YXJkL2JlYWdsZWJvbmVhaS9wYXRjaGVzL3Vib290LzAwMDEtYW01N3h4X2V2bS1maXhlcy5wYXRj
+aCBsaWJfcGF0Y2guVXBzdHJlYW0KIGJvYXJkL2JlYWdsZWJvYXJkL2JlYWdsZWJvbmVhaS9wb3N0
+LWJ1aWxkLnNoIFNoZWxsY2hlY2sKLWJvYXJkL2JlZWxpbmsvZ3MxL3Bvc3QtYnVpbGQuc2ggU2hl
+bGxjaGVjawogYm9hcmQvYm91bmRhcnlkZXZpY2VzL2NvbW1vbi9wb3N0LWJ1aWxkLnNoIFNoZWxs
+Y2hlY2sKIGJvYXJkL2JvdW5kYXJ5ZGV2aWNlcy9jb21tb24vcG9zdC1pbWFnZS5zaCBTaGVsbGNo
+ZWNrCiBib2FyZC9icm9hZGNvbS9ub3J0aHN0YXIvcG9zdC1pbWFnZS5zaCBTaGVsbGNoZWNrCkBA
+IC0xMTgsNyArMTE3LDYgQEAgY29uZmlncy9hdm5ldF9yemJvYXJkX3YybF9kZWZjb25maWcgbGli
+X2RlZmNvbmZpZy5Gb3JjZUNoZWNrSGFzaAogY29uZmlncy9iYW5hbmFwaV9tMl9iZXJyeV9kZWZj
+b25maWcgbGliX2RlZmNvbmZpZy5Gb3JjZUNoZWNrSGFzaAogY29uZmlncy9iYW5hbmFwaV9tMl91
+bHRyYV9kZWZjb25maWcgbGliX2RlZmNvbmZpZy5Gb3JjZUNoZWNrSGFzaAogY29uZmlncy9iYW5h
+bmFwaV9tMl96ZXJvX2RlZmNvbmZpZyBsaWJfZGVmY29uZmlnLkZvcmNlQ2hlY2tIYXNoCi1jb25m
+aWdzL2JlZWxpbmtfZ3MxX2RlZmNvbmZpZyBsaWJfZGVmY29uZmlnLkZvcmNlQ2hlY2tIYXNoCiBj
+b25maWdzL2Jyb2FkY29tX25vcnRoc3Rhcl9kZWZjb25maWcgbGliX2RlZmNvbmZpZy5Gb3JjZUNo
+ZWNrSGFzaAogY29uZmlncy9jYW5hYW5fa2QyMzNfZGVmY29uZmlnIGxpYl9kZWZjb25maWcuRm9y
+Y2VDaGVja0hhc2gKIGNvbmZpZ3MvY2kyMF9kZWZjb25maWcgbGliX2RlZmNvbmZpZy5Gb3JjZUNo
+ZWNrSGFzaApkaWZmIC0tZ2l0IGEvREVWRUxPUEVSUyBiL0RFVkVMT1BFUlMKaW5kZXggOGI5ZTkw
+ZGRhNi4uOTk2YzU5ODBhOCAxMDA2NDQKLS0tIGEvREVWRUxPUEVSUworKysgYi9ERVZFTE9QRVJT
+CkBAIC03MDEsMTAgKzcwMSw2IEBAIEY6CXBhY2thZ2UvbGlic2VtYW5hZ2UvCiBGOglwYWNrYWdl
+L2xpYnNlcG9sLwogRjoJcGFja2FnZS9wb2xpY3ljb3JldXRpbHMvCiAKLU46CUNsw6ltZW50IFDD
+qXJvbiA8cGVyb24uY2xlbUBnbWFpbC5jb20+Ci1GOglib2FyZC9iZWVsaW5rL2dzMS8KLUY6CWNv
+bmZpZ3MvYmVlbGlua19nczFfZGVmY29uZmlnCi0KIE46CUNvbGluIEZvc3RlciA8Y29saW4uZm9z
+dGVyQGluLWFkdmFudGFnZS5jb20+CiBGOglwYWNrYWdlL3B5dGhvbi10ZnRweS8KIEY6CXBhY2th
+Z2UvcmF1Yy1oYXdrYml0LXVwZGF0ZXIvCmRpZmYgLS1naXQgYS9ib2FyZC9iZWVsaW5rL2dzMS9l
+eHRsaW51eC5jb25mIGIvYm9hcmQvYmVlbGluay9nczEvZXh0bGludXguY29uZgpkZWxldGVkIGZp
+bGUgbW9kZSAxMDA2NDQKaW5kZXggMDQ2NjgxZjcxZC4uMDAwMDAwMDAwMAotLS0gYS9ib2FyZC9i
+ZWVsaW5rL2dzMS9leHRsaW51eC5jb25mCisrKyAvZGV2L251bGwKQEAgLTEsNCArMCwwIEBACi1s
+YWJlbCBsaW51eAotICBrZXJuZWwgL0ltYWdlCi0gIGRldmljZXRyZWUgL3N1bjUwaS1oNi1iZWVs
+aW5rLWdzMS5kdGIKLSAgYXBwZW5kIGNvbnNvbGU9dHR5UzAsMTE1MjAwIGVhcmx5cHJpbnRrIHJv
+b3Q9L2Rldi9tbWNibGswcDIgcm9vdHdhaXQKZGlmZiAtLWdpdCBhL2JvYXJkL2JlZWxpbmsvZ3Mx
+L2dlbmltYWdlLmNmZyBiL2JvYXJkL2JlZWxpbmsvZ3MxL2dlbmltYWdlLmNmZwpkZWxldGVkIGZp
+bGUgbW9kZSAxMDA2NDQKaW5kZXggNzE1Nzg3NDNlYy4uMDAwMDAwMDAwMAotLS0gYS9ib2FyZC9i
+ZWVsaW5rL2dzMS9nZW5pbWFnZS5jZmcKKysrIC9kZXYvbnVsbApAQCAtMSwzNCArMCwwIEBACi1p
+bWFnZSBib290LnZmYXQgewotCXZmYXQgewotCQlmaWxlcyA9IHsKLQkJCSJJbWFnZSIsCi0JCQki
+c3VuNTBpLWg2LWJlZWxpbmstZ3MxLmR0YiIsCi0JCQkiZXh0bGludXgiCi0JCX0KLQl9Ci0KLQlz
+aXplID0gNjRNCi19Ci0KLWltYWdlIHNkY2FyZC5pbWcgewotCWhkaW1hZ2UgewotCX0KLQotCXBh
+cnRpdGlvbiB1LWJvb3QgewotCQlpbi1wYXJ0aXRpb24tdGFibGUgPSAibm8iCi0JCWltYWdlID0g
+InUtYm9vdC1zdW54aS13aXRoLXNwbC5iaW4iCi0JCW9mZnNldCA9IDhLCi0JCXNpemUgPSAxMDE2
+SyAjIDFNQiAtIDhLQgotCX0KLQotCXBhcnRpdGlvbiBib290IHsKLQkJcGFydGl0aW9uLXR5cGUg
+PSAweEMKLQkJYm9vdGFibGUgPSAidHJ1ZSIKLQkJaW1hZ2UgPSAiYm9vdC52ZmF0IgotCX0KLQot
+CXBhcnRpdGlvbiByb290ZnMgewotCQlwYXJ0aXRpb24tdHlwZSA9IDB4ODMKLQkJaW1hZ2UgPSAi
+cm9vdGZzLmV4dDQiCi0JfQotfQpkaWZmIC0tZ2l0IGEvYm9hcmQvYmVlbGluay9nczEvcG9zdC1i
+dWlsZC5zaCBiL2JvYXJkL2JlZWxpbmsvZ3MxL3Bvc3QtYnVpbGQuc2gKZGVsZXRlZCBmaWxlIG1v
+ZGUgMTAwNzU1CmluZGV4IGVjMjBmY2E3ZDkuLjAwMDAwMDAwMDAKLS0tIGEvYm9hcmQvYmVlbGlu
+ay9nczEvcG9zdC1idWlsZC5zaAorKysgL2Rldi9udWxsCkBAIC0xLDQgKzAsMCBAQAotIyEvYmlu
+L3NoCi1CT0FSRF9ESVI9IiQoZGlybmFtZSAkMCkiCi0KLWluc3RhbGwgLW0gMDY0NCAtRCAkQk9B
+UkRfRElSL2V4dGxpbnV4LmNvbmYgJEJJTkFSSUVTX0RJUi9leHRsaW51eC9leHRsaW51eC5jb25m
+CmRpZmYgLS1naXQgYS9jb25maWdzL2JlZWxpbmtfZ3MxX2RlZmNvbmZpZyBiL2NvbmZpZ3MvYmVl
+bGlua19nczFfZGVmY29uZmlnCmRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAppbmRleCAxOWQ2NmMx
+NGE0Li4wMDAwMDAwMDAwCi0tLSBhL2NvbmZpZ3MvYmVlbGlua19nczFfZGVmY29uZmlnCisrKyAv
+ZGV2L251bGwKQEAgLTEsMzYgKzAsMCBAQAotQlIyX2FhcmNoNjQ9eQotQlIyX0FSTV9GUFVfVkZQ
+VjQ9eQotQlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFERVJTX0NVU1RPTV81XzE1PXkKLUJSMl9U
+QVJHRVRfR0VORVJJQ19JU1NVRT0iV2VsY29tZSB0byBCZWVsaW5rIEdTMSIKLUJSMl9ST09URlNf
+REVWSUNFX0NSRUFUSU9OX0RZTkFNSUNfTURFVj15Ci1CUjJfU1lTVEVNX0RIQ1A9ImV0aDAiCi1C
+UjJfUk9PVEZTX1BPU1RfQlVJTERfU0NSSVBUPSJib2FyZC9iZWVsaW5rL2dzMS9wb3N0LWJ1aWxk
+LnNoIgotQlIyX1JPT1RGU19QT1NUX0lNQUdFX1NDUklQVD0ic3VwcG9ydC9zY3JpcHRzL2dlbmlt
+YWdlLnNoIgotQlIyX1JPT1RGU19QT1NUX1NDUklQVF9BUkdTPSItYyBib2FyZC9iZWVsaW5rL2dz
+MS9nZW5pbWFnZS5jZmciCi1CUjJfTElOVVhfS0VSTkVMPXkKLUJSMl9MSU5VWF9LRVJORUxfQ1VT
+VE9NX1ZFUlNJT049eQotQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTl9WQUxVRT0iNS4x
+NSIKLUJSMl9MSU5VWF9LRVJORUxfVVNFX0FSQ0hfREVGQVVMVF9DT05GSUc9eQotQlIyX0xJTlVY
+X0tFUk5FTF9EVFNfU1VQUE9SVD15Ci1CUjJfTElOVVhfS0VSTkVMX0lOVFJFRV9EVFNfTkFNRT0i
+YWxsd2lubmVyL3N1bjUwaS1oNi1iZWVsaW5rLWdzMSIKLUJSMl9MSU5VWF9LRVJORUxfTkVFRFNf
+SE9TVF9PUEVOU1NMPXkKLUJSMl9UQVJHRVRfUk9PVEZTX0VYVDI9eQotQlIyX1RBUkdFVF9ST09U
+RlNfRVhUMl80PXkKLUJSMl9UQVJHRVRfQVJNX1RSVVNURURfRklSTVdBUkU9eQotQlIyX1RBUkdF
+VF9BUk1fVFJVU1RFRF9GSVJNV0FSRV9DVVNUT01fVkVSU0lPTj15Ci1CUjJfVEFSR0VUX0FSTV9U
+UlVTVEVEX0ZJUk1XQVJFX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSJ2Mi41IgotQlIyX1RBUkdFVF9B
+Uk1fVFJVU1RFRF9GSVJNV0FSRV9QTEFURk9STT0ic3VuNTBpX2g2IgotQlIyX1RBUkdFVF9VQk9P
+VD15Ci1CUjJfVEFSR0VUX1VCT09UX0JVSUxEX1NZU1RFTV9LQ09ORklHPXkKLUJSMl9UQVJHRVRf
+VUJPT1RfQ1VTVE9NX1ZFUlNJT049eQotQlIyX1RBUkdFVF9VQk9PVF9DVVNUT01fVkVSU0lPTl9W
+QUxVRT0iMjAyMS4xMCIKLUJSMl9UQVJHRVRfVUJPT1RfQk9BUkRfREVGQ09ORklHPSJiZWVsaW5r
+X2dzMSIKLUJSMl9UQVJHRVRfVUJPT1RfTkVFRFNfRFRDPXkKLUJSMl9UQVJHRVRfVUJPT1RfTkVF
+RFNfUFlMSUJGRFQ9eQotQlIyX1RBUkdFVF9VQk9PVF9ORUVEU19PUEVOU1NMPXkKLUJSMl9UQVJH
+RVRfVUJPT1RfTkVFRFNfQVRGX0JMMzE9eQotQlIyX1RBUkdFVF9VQk9PVF9TUEw9eQotQlIyX1RB
+UkdFVF9VQk9PVF9TUExfTkFNRT0idS1ib290LXN1bnhpLXdpdGgtc3BsLmJpbiIKLUJSMl9QQUNL
+QUdFX0hPU1RfRE9TRlNUT09MUz15Ci1CUjJfUEFDS0FHRV9IT1NUX0dFTklNQUdFPXkKLUJSMl9Q
+QUNLQUdFX0hPU1RfTVRPT0xTPXkKLS0gCjIuNTAuMQoKX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RA
+YnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5m
+by9idWlsZHJvb3QK
