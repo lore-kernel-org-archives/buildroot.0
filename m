@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A42FDCAC581
-	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 14:16:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2622CAC588
+	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 14:16:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7A01B8055F;
-	Mon,  8 Sep 2025 14:16:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BBEB980544;
+	Mon,  8 Sep 2025 14:16:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dCMDiHjk3GpK; Mon,  8 Sep 2025 14:16:36 +0000 (UTC)
+ id XdtBhfKVY9md; Mon,  8 Sep 2025 14:16:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1635C80523
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9FA318056D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1635C80523;
-	Mon,  8 Sep 2025 14:16:36 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1D628186
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9FA318056D;
+	Mon,  8 Sep 2025 14:16:38 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 121D7CA
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 424938050D
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:21 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3126C4020A
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FZe3hYAJR927 for <buildroot@buildroot.org>;
- Mon,  8 Sep 2025 14:16:20 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OU3iIPNMcMyI for <buildroot@buildroot.org>;
+ Mon,  8 Sep 2025 14:16:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 759638050F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6C88B40203
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 759638050F
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:20 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6C88B40203
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:21 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 730B083CAF; Mon,  8 Sep 2025 14:16:20 +0000 (UTC)
+ id 69C9683916; Mon,  8 Sep 2025 14:16:21 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 13 Aug 2025 17:26:47 +0200
+Date: Tue, 19 Aug 2025 04:31:16 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: dec8cfe396094523c27a15dc63ec4d325e6f49e0
-X-Git-Newrev: 786557d859dba7e52c883e5215e53e93fac13b88
+X-Git-Oldrev: f6be007591f504516fef6434e29c2ca9246ac5a7
+X-Git-Newrev: 374a71b0811a38da929aba9f689f9cab3f327c75
 X-Patchwork-Hint: ignore
-Message-Id: <20250908141620.730B083CAF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pyroute2: bump to version
- 0.9.4
+Message-Id: <20250908141621.69C9683916@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/cubieboard1: bump Linux to 6.12.42
+ and U-Boot to 2025.07
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,71 +66,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=786557d859dba7e52c883e5215e53e93fac13b88
+commit: https://git.buildroot.net/buildroot/commit/?id=374a71b0811a38da929aba9f689f9cab3f327c75
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-From 0.9.1 the pyroute2 core is async, the synchronous API remains
-available as a wrapper.
-
-Upstream changelog:
-https://github.com/svinota/pyroute2/blob/0.9.4/CHANGELOG.rst
-
-pyroute2 now requires the python3 ssl module at runtime. This is
-reflected in Config.in.
-
-Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
-[Julien:
- - add comment in commit log about new ssl runtime dependency
- - add runtime comment in Config.in
-]
+Signed-off-by: Scott Fan <fancp2007@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-pyroute2/Config.in            | 1 +
- package/python-pyroute2/python-pyroute2.hash | 4 ++--
- package/python-pyroute2/python-pyroute2.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 4 deletions(-)
+ board/cubietech/cubieboard1/patches/linux/linux.hash | 2 +-
+ board/cubietech/cubieboard1/patches/uboot/uboot.hash | 2 +-
+ configs/cubieboard1_defconfig                        | 4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pyroute2/Config.in b/package/python-pyroute2/Config.in
-index 9e685f9d1e..2e667165a8 100644
---- a/package/python-pyroute2/Config.in
-+++ b/package/python-pyroute2/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_PYTHON_PYROUTE2
- 	bool "python-pyroute2"
- 	select BR2_PACKAGE_PYTHON3_SQLITE
-+	select BR2_PACKAGE_PYTHON3_SSL # runtime
- 	help
- 	  Python netlink library - Linux network / netns / wireless /
- 	  ipset configuration.
-diff --git a/package/python-pyroute2/python-pyroute2.hash b/package/python-pyroute2/python-pyroute2.hash
-index 3785c9ad7f..87402b9dbb 100644
---- a/package/python-pyroute2/python-pyroute2.hash
-+++ b/package/python-pyroute2/python-pyroute2.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/pyroute2/json
--md5  6699294168d3051b2897a556ceeaf6c2  pyroute2-0.8.1.tar.gz
--sha256  b91f4a1f7abb9824637b1fe67e6e4a0a071d98d4a1a1b47ef792304ff3adad11  pyroute2-0.8.1.tar.gz
-+md5  225d6899da226df8899efcff2557204a  pyroute2-0.9.4.tar.gz
-+sha256  3cbccbe1af0c2b2aeae81b327e0e91aa94c81ab19f851e74b26bef70202f3070  pyroute2-0.9.4.tar.gz
- # Locally computed sha256 checksums
- sha256  4739b32a2478e9c204bf010bad5d565d188e59ff905e3c8f71fe3398098b7093  LICENSE.Apache-2.0
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL-2.0-or-later
-diff --git a/package/python-pyroute2/python-pyroute2.mk b/package/python-pyroute2/python-pyroute2.mk
-index fea6e43979..efe8d73f52 100644
---- a/package/python-pyroute2/python-pyroute2.mk
-+++ b/package/python-pyroute2/python-pyroute2.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PYROUTE2_VERSION = 0.8.1
-+PYTHON_PYROUTE2_VERSION = 0.9.4
- PYTHON_PYROUTE2_SOURCE = pyroute2-$(PYTHON_PYROUTE2_VERSION).tar.gz
--PYTHON_PYROUTE2_SITE = https://files.pythonhosted.org/packages/4d/04/c9060b6cb024d05467e17ea93d3ca4bd2f3b05deb2372b7f79321640e8ad
-+PYTHON_PYROUTE2_SITE = https://files.pythonhosted.org/packages/b0/5e/fc64e211cce0078555c6db98aaf14348aed527565f3c4876913a290a5b2c
- PYTHON_PYROUTE2_LICENSE = Apache-2.0 or GPL-2.0+
- PYTHON_PYROUTE2_LICENSE_FILES = LICENSE.Apache-2.0 LICENSE.GPL-2.0-or-later README.license.rst
- PYTHON_PYROUTE2_SETUP_TYPE = setuptools
+diff --git a/board/cubietech/cubieboard1/patches/linux/linux.hash b/board/cubietech/cubieboard1/patches/linux/linux.hash
+index 1213da86b1..823f6a55a3 100644
+--- a/board/cubietech/cubieboard1/patches/linux/linux.hash
++++ b/board/cubietech/cubieboard1/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  643142c1b5991560dd12f950825cc19e4497b95b82641918ecff1177f4130c1d  linux-6.12.24.tar.xz
++sha256  4804528a29cd20309a0b41c30e5aeffc35fa21ee3358f4a706d4586d003bc1fb  linux-6.12.42.tar.xz
+diff --git a/board/cubietech/cubieboard1/patches/uboot/uboot.hash b/board/cubietech/cubieboard1/patches/uboot/uboot.hash
+index 80ea21b7cb..440526977b 100644
+--- a/board/cubietech/cubieboard1/patches/uboot/uboot.hash
++++ b/board/cubietech/cubieboard1/patches/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  439d3bef296effd54130be6a731c5b118be7fddd7fcc663ccbc5fb18294d8718  u-boot-2025.04.tar.bz2
++sha256  0f933f6c5a426895bf306e93e6ac53c60870e4b54cda56d95211bec99e63bec7  u-boot-2025.07.tar.bz2
+diff --git a/configs/cubieboard1_defconfig b/configs/cubieboard1_defconfig
+index 9f3ad65386..8a25129311 100644
+--- a/configs/cubieboard1_defconfig
++++ b/configs/cubieboard1_defconfig
+@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/cubietech/cubieboard1/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.24"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.42"
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun4i-a10-cubieboard"
+@@ -18,7 +18,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.04"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Cubieboard"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
