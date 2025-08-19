@@ -1,77 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86F81CA0EE6
-	for <buildroot@archiver.kernel.org>; Tue, 19 Aug 2025 07:52:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB671CA0EF5
+	for <buildroot@archiver.kernel.org>; Tue, 19 Aug 2025 07:52:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3D26A608C6;
-	Tue, 19 Aug 2025 07:52:38 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BNevX_UQiH9R; Tue, 19 Aug 2025 07:52:37 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C41B608C7
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2C41B608C7;
-	Tue, 19 Aug 2025 07:52:37 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 630EAE2
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 07:52:36 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4997B810CC
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 07:52:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 829C8810CA;
+	Tue, 19 Aug 2025 07:52:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 09ILwv39z95E for <buildroot@buildroot.org>;
- Tue, 19 Aug 2025 07:52:35 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id 7_rOlXwjID4T; Tue, 19 Aug 2025 07:52:52 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 665D6810CC
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 665D6810CC;
+	Tue, 19 Aug 2025 07:52:52 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id CFD84E2
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 07:52:50 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id B6CB940406
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 07:52:50 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ePVomUuK0Pcl for <buildroot@buildroot.org>;
+ Tue, 19 Aug 2025 07:52:49 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
+ helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1F2B2810CA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F2B2810CA
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1F2B2810CA
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 07:52:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 98A5D4005C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 98A5D4005C
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 98A5D4005C
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 07:52:49 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id 79A981A0C11
+ by smtpout-04.galae.net (Postfix) with ESMTPS id 42947C6B390
  for <buildroot@buildroot.org>; Tue, 19 Aug 2025 07:52:33 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 4D93460697;
- Tue, 19 Aug 2025 07:52:33 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id BE93C60697;
+ Tue, 19 Aug 2025 07:52:46 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id E1E3A1C228A5D; 
- Tue, 19 Aug 2025 09:52:31 +0200 (CEST)
+ with ESMTPSA id 0A1B51C228086; 
+ Tue, 19 Aug 2025 09:52:42 +0200 (CEST)
 To: buildroot@buildroot.org
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Heiko Thiery <heiko.thiery@gmail.com>
-Date: Tue, 19 Aug 2025 09:52:27 +0200
-Message-ID: <20250819075229.3286869-1-thomas.petazzoni@bootlin.com>
+ Pierre Crokaert <pct@crookies.net>
+Date: Tue, 19 Aug 2025 09:52:41 +0200
+Message-ID: <20250819075241.3286980-1-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.50.1
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=dkim; 
- t=1755589952; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding; bh=pjzMF7G9fP1D8YnbmgcNkCDPmLB5TYHL8H3I8lc+pSY=;
- b=GmX3y6PP7YLlpgjqZvTvUZ/+11dfA48YpPusjH2kQ+NvXzGg8FH0xuMcolsmkrzUHEOTvP
- i9cJtGp8tFb5REebz94db8B0fuYq4j3DQbsATY8rvStwVGNOUn1JCsEt4YPASJP84jKZT/
- 54Dk2vzKZzOGvqvB3x1jPmbYkKZlvZyzn2r9UCQ7wM2/XqwjpXCU8VuZ6YHxgtXgd958pj
- WpY25CiezWcsVP4TFfcBHI+krbhjZm+ZGVxx9/70IyoK3f0yS9TgzbwFJgZ/OPQHJkInmL
- SZ3ertcMV2CK/4aqMxV4ytWocrNC09/jywdt1YRcJHHYoN14v/51shT517xPtQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ t=1755589965; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=Yz6e5q277s4a1qFSiegmMk2r/56VeAgxnaa3ZmQ63Hs=;
+ b=mbqLoZaifkCnUg3KmAvo7wM8SCvtIh+gOv+OCkX/CHkdgfYir0MwjZzWfKRKzimRVt3Wba
+ GLb+vGGKrz+EsOlyMjgJjNDKKeS6LFio2X6SxzUgoB/sSkR1QyZnRyDt6Natw02z0QX+ik
+ CnZfmOoX2IBwbIfjXLOXAi0dtvNkxa9YXrpD+gjgquVmH2vfGjrCRRWi/xMkfkWJQLHIET
+ p5cGSJkL91TAihN/3i2D9G/5eH4azhukAiFFTw2ExI9zHow6nsn4YZGMIBAVm3yasfv99P
+ GyokNXNZkjocTvh0ztOIlhEriD0Zx5anoIIZjNciTmKD9pHDHi0wZ9XDMM83bA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=GmX3y6PP
-Subject: [Buildroot] [PATCH] configs/kontron_pitx_imx8m: remove defconfig,
- broken
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
+ header.a=rsa-sha256 header.s=dkim header.b=mbqLoZai
+Subject: [Buildroot] [PATCH] configs/odroidxu4: remove defconfig, broken
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,189 +83,291 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VGhpcyBkZWZjb25maWcgbm8gbG9uZ2VyIGJ1aWxkczoKCiAgaHR0cHM6Ly9naXRsYWIuY29tL2J1
-aWxkcm9vdC5vcmcvYnVpbGRyb290Ly0vam9icy8xMTAxMjI3MzY2NgoKSXQgaGFzIGJlZW4gYnJv
-a2VuIGZvciBvdmVyIDIgbW9udGhzOgoKICBodHRwczovL2dpdGxhYi5jb20vYnVpbGRyb290Lm9y
-Zy9idWlsZHJvb3QvLS9qb2JzP25hbWU9VCUzRGtvbnRyb25fcGl0eF9pbXg4bSZraW5kPUJVSUxE
-CgpVbmxlc3MgYSBmaXggaXMgcHJvdmlkZWQsIHRoaXMgZGVmY29uZmlnIHdpbGwgYmUgcmVtb3Zl
-ZC4KCkNjOiBIZWlrbyBUaGllcnkgPGhlaWtvLnRoaWVyeUBnbWFpbC5jb20+ClNpZ25lZC1vZmYt
-Ynk6IFRob21hcyBQZXRhenpvbmkgPHRob21hcy5wZXRhenpvbmlAYm9vdGxpbi5jb20+Ci0tLQog
-LmNoZWNrcGFja2FnZWlnbm9yZSAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDMgLQogREVW
-RUxPUEVSUyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIgLQogYm9hcmQv
-a29udHJvbi9waXR4LWlteDhtL2V4dGxpbnV4LmNvbmYgICAgICAgIHwgIDQgLQogYm9hcmQva29u
-dHJvbi9waXR4LWlteDhtL2dlbmltYWdlLmNmZyAgICAgICAgIHwgMTcgLS0tLS0KIC4uLmxlLXVz
-ZS1wa2ctY29uZmlnLXRvLWdldC1sdXVpZC1hbmQtbC5wYXRjaCB8IDMzIC0tLS0tLS0tLQogYm9h
-cmQva29udHJvbi9waXR4LWlteDhtL3Bvc3QtYnVpbGQuc2ggICAgICAgIHwgIDcgLS0KIGJvYXJk
-L2tvbnRyb24vcGl0eC1pbXg4bS9yZWFkbWUudHh0ICAgICAgICAgICB8IDc0IC0tLS0tLS0tLS0t
-LS0tLS0tLS0KIGNvbmZpZ3Mva29udHJvbl9waXR4X2lteDhtX2RlZmNvbmZpZyAgICAgICAgICB8
-IDQ1IC0tLS0tLS0tLS0tCiA4IGZpbGVzIGNoYW5nZWQsIDE4NSBkZWxldGlvbnMoLSkKIGRlbGV0
-ZSBtb2RlIDEwMDY0NCBib2FyZC9rb250cm9uL3BpdHgtaW14OG0vZXh0bGludXguY29uZgogZGVs
-ZXRlIG1vZGUgMTAwNjQ0IGJvYXJkL2tvbnRyb24vcGl0eC1pbXg4bS9nZW5pbWFnZS5jZmcKIGRl
-bGV0ZSBtb2RlIDEwMDY0NCBib2FyZC9rb250cm9uL3BpdHgtaW14OG0vcGF0Y2hlcy91Ym9vdC8y
-MDIyLjA0LzAwMDEtdG9vbHMtbWtlZmljYXBzdWxlLXVzZS1wa2ctY29uZmlnLXRvLWdldC1sdXVp
-ZC1hbmQtbC5wYXRjaAogZGVsZXRlIG1vZGUgMTAwNzU1IGJvYXJkL2tvbnRyb24vcGl0eC1pbXg4
-bS9wb3N0LWJ1aWxkLnNoCiBkZWxldGUgbW9kZSAxMDA2NDQgYm9hcmQva29udHJvbi9waXR4LWlt
-eDhtL3JlYWRtZS50eHQKIGRlbGV0ZSBtb2RlIDEwMDY0NCBjb25maWdzL2tvbnRyb25fcGl0eF9p
-bXg4bV9kZWZjb25maWcKCmRpZmYgLS1naXQgYS8uY2hlY2twYWNrYWdlaWdub3JlIGIvLmNoZWNr
-cGFja2FnZWlnbm9yZQppbmRleCBmNmJmNDVlZGFmLi5lOGYxZWIyYTFlIDEwMDY0NAotLS0gYS8u
-Y2hlY2twYWNrYWdlaWdub3JlCisrKyBiLy5jaGVja3BhY2thZ2VpZ25vcmUKQEAgLTI3LDggKzI3
-LDYgQEAgYm9hcmQvaGFyZGtlcm5lbC9vZHJvaWRjMi9wb3N0LWltYWdlLnNoIFNoZWxsY2hlY2sK
-IGJvYXJkL2hhcmRrZXJuZWwvb2Ryb2lkYzIvcm9vdGZzX292ZXJsYXkvZXRjL2luaXQuZC9TMDlt
-b2Rsb2FkIFNoZWxsY2hlY2sgbGliX3N5c3YuVmFyaWFibGVzCiBib2FyZC9oYXJka2VybmVsL29k
-cm9pZHh1NC9wb3N0LWltYWdlLnNoIFNoZWxsY2hlY2sgbGliX3NoZWxsc2NyaXB0LkVtcHR5TGFz
-dExpbmUKIGJvYXJkL2tvbnRyb24vYmwtaW14OG1tL3Bvc3QtYnVpbGQuc2ggU2hlbGxjaGVjawot
-Ym9hcmQva29udHJvbi9waXR4LWlteDhtL3BhdGNoZXMvdWJvb3QvMjAyMi4wNC8wMDAxLXRvb2xz
-LW1rZWZpY2Fwc3VsZS11c2UtcGtnLWNvbmZpZy10by1nZXQtbHV1aWQtYW5kLWwucGF0Y2ggbGli
-X3BhdGNoLk51bWJlcmVkU3ViamVjdCBsaWJfcGF0Y2guVXBzdHJlYW0KLWJvYXJkL2tvbnRyb24v
-cGl0eC1pbXg4bS9wb3N0LWJ1aWxkLnNoIFNoZWxsY2hlY2sKIGJvYXJkL2tvbnRyb24vc21hcmMt
-c2FsMjgvcG9zdC1idWlsZC5zaCBTaGVsbGNoZWNrCiBib2FyZC9sZWdvL2V2My9wb3N0LWltYWdl
-LnNoIFNoZWxsY2hlY2sKIGJvYXJkL21pbm5vd2JvYXJkL3Bvc3QtYnVpbGQuc2ggU2hlbGxjaGVj
-awpAQCAtMTM1LDcgKzEzMyw2IEBAIGNvbmZpZ3MvaW14OG1xZXZrX2RlZmNvbmZpZyBsaWJfZGVm
-Y29uZmlnLkZvcmNlQ2hlY2tIYXNoCiBjb25maWdzL2lteHJ0MTA1MC1ldmtfZGVmY29uZmlnIGxp
-Yl9kZWZjb25maWcuRm9yY2VDaGVja0hhc2gKIGNvbmZpZ3Mva2hhZGFzX3ZpbTNfZGVmY29uZmln
-IGxpYl9kZWZjb25maWcuRm9yY2VDaGVja0hhc2gKIGNvbmZpZ3Mva29udHJvbl9ibF9pbXg4bW1f
-ZGVmY29uZmlnIGxpYl9kZWZjb25maWcuRm9yY2VDaGVja0hhc2gKLWNvbmZpZ3Mva29udHJvbl9w
-aXR4X2lteDhtX2RlZmNvbmZpZyBsaWJfZGVmY29uZmlnLkZvcmNlQ2hlY2tIYXNoCiBjb25maWdz
-L2tvbnRyb25fc21hcmNfc2FsMjhfZGVmY29uZmlnIGxpYl9kZWZjb25maWcuRm9yY2VDaGVja0hh
-c2gKIGNvbmZpZ3MvbWFuZ29waV9tcTFyZHcyX2RlZmNvbmZpZyBsaWJfZGVmY29uZmlnLkZvcmNl
-Q2hlY2tIYXNoCiBjb25maWdzL21lbmRlcl94ODZfNjRfZWZpX2RlZmNvbmZpZyBsaWJfZGVmY29u
-ZmlnLkZvcmNlQ2hlY2tIYXNoCmRpZmYgLS1naXQgYS9ERVZFTE9QRVJTIGIvREVWRUxPUEVSUwpp
-bmRleCBlY2I4MmIzYjk3Li40MGRhZTBhMjc5IDEwMDY0NAotLS0gYS9ERVZFTE9QRVJTCisrKyBi
-L0RFVkVMT1BFUlMKQEAgLTE0MDIsMTAgKzE0MDIsOCBAQCBGOglwYWNrYWdlL3ZvbGsvCiBOOglI
-ZWlrbyBUaGllcnkgPGhlaWtvLnRoaWVyeUBnbWFpbC5jb20+CiBGOglib2FyZC9rb250cm9uL2Js
-LWlteDhtbS8KIEY6CWJvYXJkL2tvbnRyb24vc21hcmMtc2FsMjgvCi1GOglib2FyZC9rb250cm9u
-L3BpdHgtaW14OG0vCiBGOgljb25maWdzL2tvbnRyb25fYmxfaW14OG1tX2RlZmNvbmZpZwogRjoJ
-Y29uZmlncy9rb250cm9uX3NtYXJjX3NhbDI4X2RlZmNvbmZpZwotRjoJY29uZmlncy9rb250cm9u
-X3BpdHhfaW14OG1fZGVmY29uZmlnCiBGOglwYWNrYWdlL2FsdGVyYS1zdGFwbC8KIEY6CXBhY2th
-Z2UvYmxha2UzLwogRjoJcGFja2FnZS9pcG1pdG9vbC8KZGlmZiAtLWdpdCBhL2JvYXJkL2tvbnRy
-b24vcGl0eC1pbXg4bS9leHRsaW51eC5jb25mIGIvYm9hcmQva29udHJvbi9waXR4LWlteDhtL2V4
-dGxpbnV4LmNvbmYKZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDI5MTFhY2VjNTkuLjAw
-MDAwMDAwMDAKLS0tIGEvYm9hcmQva29udHJvbi9waXR4LWlteDhtL2V4dGxpbnV4LmNvbmYKKysr
-IC9kZXYvbnVsbApAQCAtMSw0ICswLDAgQEAKLWxhYmVsIGJ1aWxkcm9vdAotICBrZXJuZWwgL2Jv
-b3QvSW1hZ2UKLSAgZGV2aWNldHJlZSAvYm9vdC9mcmVlc2NhbGUvaW14OG1xLWtvbnRyb24tcGl0
-eC1pbXg4bS5kdGIKLSAgYXBwZW5kIHJvb3Q9UEFSVFVVSUQ9JVBBUlRVVUlEJSByb290d2FpdCBy
-dwpkaWZmIC0tZ2l0IGEvYm9hcmQva29udHJvbi9waXR4LWlteDhtL2dlbmltYWdlLmNmZyBiL2Jv
-YXJkL2tvbnRyb24vcGl0eC1pbXg4bS9nZW5pbWFnZS5jZmcKZGVsZXRlZCBmaWxlIG1vZGUgMTAw
-NjQ0CmluZGV4IGJjMTAwYjE3MWQuLjAwMDAwMDAwMDAKLS0tIGEvYm9hcmQva29udHJvbi9waXR4
-LWlteDhtL2dlbmltYWdlLmNmZworKysgL2Rldi9udWxsCkBAIC0xLDE3ICswLDAgQEAKLWltYWdl
-IHNkY2FyZC5pbWcgewotCWhkaW1hZ2UgewotCQlwYXJ0aXRpb24tdGFibGUtdHlwZSA9ICJncHQi
-Ci0JfQotCi0JcGFydGl0aW9uIGlteC1ib290IHsKLQkJaW4tcGFydGl0aW9uLXRhYmxlID0gIm5v
-IgotCQlpbWFnZSA9ICJmbGFzaC5iaW4iCi0JCW9mZnNldCA9IDMzSwotCX0KLQotCXBhcnRpdGlv
-biByb290ZnMgewotCQlvZmZzZXQgPSA4TQotCQlpbWFnZSA9ICJyb290ZnMuZXh0NCIKLQkJcGFy
-dGl0aW9uLXV1aWQgPSAlUEFSVFVVSUQlCi0JfQotfQpkaWZmIC0tZ2l0IGEvYm9hcmQva29udHJv
-bi9waXR4LWlteDhtL3BhdGNoZXMvdWJvb3QvMjAyMi4wNC8wMDAxLXRvb2xzLW1rZWZpY2Fwc3Vs
-ZS11c2UtcGtnLWNvbmZpZy10by1nZXQtbHV1aWQtYW5kLWwucGF0Y2ggYi9ib2FyZC9rb250cm9u
-L3BpdHgtaW14OG0vcGF0Y2hlcy91Ym9vdC8yMDIyLjA0LzAwMDEtdG9vbHMtbWtlZmljYXBzdWxl
-LXVzZS1wa2ctY29uZmlnLXRvLWdldC1sdXVpZC1hbmQtbC5wYXRjaApkZWxldGVkIGZpbGUgbW9k
-ZSAxMDA2NDQKaW5kZXggOTUzMGE0NWVmZS4uMDAwMDAwMDAwMAotLS0gYS9ib2FyZC9rb250cm9u
-L3BpdHgtaW14OG0vcGF0Y2hlcy91Ym9vdC8yMDIyLjA0LzAwMDEtdG9vbHMtbWtlZmljYXBzdWxl
-LXVzZS1wa2ctY29uZmlnLXRvLWdldC1sdXVpZC1hbmQtbC5wYXRjaAorKysgL2Rldi9udWxsCkBA
-IC0xLDMzICswLDAgQEAKLUZyb20gZjM1MjM5NzdlOGY1ZjZiMjE3MzcwODc3NzAwMTMzMjQzMWVi
-YzYwOSBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKLUZyb206IEhlaWtvIFRoaWVyeSA8aGVpa28u
-dGhpZXJ5QGdtYWlsLmNvbT4KLURhdGU6IFR1ZSwgMTkgSnVsIDIwMjIgMTY6MTc6MDkgKzAyMDAK
-LVN1YmplY3Q6IFtQQVRDSCAxLzJdIHRvb2xzOiBta2VmaWNhcHN1bGU6IHVzZSBwa2ctY29uZmln
-IHRvIGdldCAtbHV1aWQgYW5kIC1sZ251dGxzCi0KLUluc3RlYWQgb2YgaGFyZGNvZGluZyAtbHV1
-aWQgLWxnbnV0bHMgYXMgdGhlIGZsYWdzIG5lZWRlZCB0byBidWlsZAotbWtlZmljYXBzdWxlLCB1
-c2UgcGtnLWNvbmZpZyB3aGVuIGF2YWlsYWJsZS4KLQotV2UgZ3JhY2VmdWxseSBmYWxsYmFjayBv
-biB0aGUgcHJldmlvdXMgYmVoYXZpb3Igb2YgaGFyZGNvZGluZyAtbHV1aWQKLS1sZ251dGxzIGlm
-IHBrZy1jb25maWcgaXMgbm90IGF2YWlsYWJsZSBvciBmYWlscyB3aXRoIGFuIGVycm9yLgotCi1T
-aWduZWQtb2ZmLWJ5OiBIZWlrbyBUaGllcnkgPGhlaWtvLnRoaWVyeUBnbWFpbC5jb20+Ci0tLS0K
-LSB0b29scy9NYWtlZmlsZSB8IDMgKystCi0gMSBmaWxlIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygr
-KSwgMSBkZWxldGlvbigtKQotCi1kaWZmIC0tZ2l0IGEvdG9vbHMvTWFrZWZpbGUgYi90b29scy9N
-YWtlZmlsZQotaW5kZXggOWYyMzM5NjY2YS4uOWY2YjI4MmFkOCAxMDA2NDQKLS0tLSBhL3Rvb2xz
-L01ha2VmaWxlCi0rKysgYi90b29scy9NYWtlZmlsZQotQEAgLTI0Miw3ICsyNDIsOCBAQCBob3N0
-cHJvZ3MtJChDT05GSUdfTUlQUykgKz0gbWlwcy1yZWxvY3MKLSBob3N0cHJvZ3MtJChDT05GSUdf
-QVNOMV9DT01QSUxFUikJKz0gYXNuMV9jb21waWxlcgotIEhPU1RDRkxBR1NfYXNuMV9jb21waWxl
-ci5vID0gLWlkaXJhZnRlciAkKHNyY3RyZWUpL2luY2x1ZGUKLSAKLS1IT1NUTERMSUJTX21rZWZp
-Y2Fwc3VsZSArPSAtbGdudXRscyAtbHV1aWQKLStIT1NUTERMSUJTX21rZWZpY2Fwc3VsZSArPSBc
-Ci0rCSQoc2hlbGwgcGtnLWNvbmZpZyAtLWxpYnMgZ251dGxzIHV1aWQgMj4gL2Rldi9udWxsIHx8
-IGVjaG8gIi1sZ251dGxzIC1sdXVpZCIpCi0gaG9zdHByb2dzLSQoQ09ORklHX1RPT0xTX01LRUZJ
-Q0FQU1VMRSkgKz0gbWtlZmljYXBzdWxlCi0gCi0gIyBXZSBidWlsZCBzb21lIGZpbGVzIHdpdGgg
-ZXh0cmEgcGVkYW50aWMgZmxhZ3MgdG8gdHJ5IHRvIG1pbmltaXplIHRoaW5ncwotLS0gCi0yLjMw
-LjIKLQpkaWZmIC0tZ2l0IGEvYm9hcmQva29udHJvbi9waXR4LWlteDhtL3Bvc3QtYnVpbGQuc2gg
-Yi9ib2FyZC9rb250cm9uL3BpdHgtaW14OG0vcG9zdC1idWlsZC5zaApkZWxldGVkIGZpbGUgbW9k
-ZSAxMDA3NTUKaW5kZXggYmY4ODYxZjZhOS4uMDAwMDAwMDAwMAotLS0gYS9ib2FyZC9rb250cm9u
-L3BpdHgtaW14OG0vcG9zdC1idWlsZC5zaAorKysgL2Rldi9udWxsCkBAIC0xLDcgKzAsMCBAQAot
-IyEvYmluL3NoCi1CT0FSRF9ESVI9IiQoZGlybmFtZSAkMCkiCi1QQVJUVVVJRD0iJCgkSE9TVF9E
-SVIvYmluL3V1aWRnZW4pIgotCi1pbnN0YWxsIC1kICIkVEFSR0VUX0RJUi9ib290L2V4dGxpbnV4
-LyIKLXNlZCAicy8lUEFSVFVVSUQlLyRQQVJUVVVJRC9nIiAiJEJPQVJEX0RJUi9leHRsaW51eC5j
-b25mIiA+ICIkVEFSR0VUX0RJUi9ib290L2V4dGxpbnV4L2V4dGxpbnV4LmNvbmYiCi1zZWQgInMv
-JVBBUlRVVUlEJS8kUEFSVFVVSUQvZyIgIiRCT0FSRF9ESVIvZ2VuaW1hZ2UuY2ZnIiA+ICIkQklO
-QVJJRVNfRElSL2dlbmltYWdlLmNmZyIKZGlmZiAtLWdpdCBhL2JvYXJkL2tvbnRyb24vcGl0eC1p
-bXg4bS9yZWFkbWUudHh0IGIvYm9hcmQva29udHJvbi9waXR4LWlteDhtL3JlYWRtZS50eHQKZGVs
-ZXRlZCBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDdjODVkZDQzNzcuLjAwMDAwMDAwMDAKLS0tIGEv
-Ym9hcmQva29udHJvbi9waXR4LWlteDhtL3JlYWRtZS50eHQKKysrIC9kZXYvbnVsbApAQCAtMSw3
-NCArMCwwIEBACi1Lb250cm9uIHBpdHgtaW14OG0KLT09PT09PT09PT09PT09PT09PQotCi1odHRw
-czovL3d3dy5rb250cm9uLmNvbS9wcm9kdWt0ZS9waXR4LWlteDhtL3AxNTUyNTgKLQotCi1Ib3cg
-dG8gYnVpbGQgaXQKLT09PT09PT09PT09PT09PQotCi1Db25maWd1cmUgYnVpbGRyb290OgotCi0g
-ICQgbWFrZSBrb250cm9uX3BpdHhfaW14OG1fZGVmY29uZmlnCi0KLUNoYW5nZSBzZXR0aW5ncyB0
-byBmaXQgeW91ciBuZWVkcyAob3B0aW9uYWwpOgotCi0gICQgbWFrZSBtZW51Y29uZmlnCi0KLUNv
-bXBpbGUgZXZlcnl0aGluZyBhbmQgYnVpbGRyIHRoZSByb290ZnMgaW1hZ2U6Ci0KLSAgJCBtYWtl
-Ci0KLQotUmVzdWx0IG9mIHRoZSBidWlsZAotPT09PT09PT09PT09PT09PT09PQotCi1BZnRlciBi
-dWlsZGluZywgdGhlIG91dHB1dC9pbWFnZXMgZGlyZWN0b3J5IGNvbnRhaW5zOgotCi0gIG91dHB1
-dC9pbWFnZXMvCi0gICAg4pSc4pSA4pSAIGJsMzEuYmluCi0gICAg4pSc4pSA4pSAIGJvb3Quc2Ny
-Ci0gICAg4pSc4pSA4pSAIGRkcl9mdy5iaW4KLSAgICDilJzilIDilIAgSW1hZ2UKLSAgICDilJzi
-lIDilIAgaW14OC1ib290LXNkLmJpbgotICAgIOKUnOKUgOKUgCBpbXg4bXEta29udHJvbi1waXR4
-LWlteDhtLmR0YgotICAgIOKUnOKUgOKUgCBscGRkcjRfcG11X3RyYWluX2Z3LmJpbgotICAgIOKU
-nOKUgOKUgCByb290ZnMuZXh0MgotICAgIOKUnOKUgOKUgCByb290ZnMuZXh0NCAtPiByb290ZnMu
-ZXh0MgotICAgIOKUnOKUgOKUgCByb290ZnMudGFyCi0gICAg4pSc4pSA4pSAIHNkY2FyZC5pbWcK
-LSAgICDilJzilIDilIAgc2lnbmVkX2hkbWlfaW14OG0uYmluCi0gICAg4pSc4pSA4pSAIHUtYm9v
-dC5iaW4KLSAgICDilJzilIDilIAgdS1ib290Lml0YgotICAgIOKUnOKUgOKUgCB1LWJvb3Qtbm9k
-dGIuYmluCi0gICAg4pSc4pSA4pSAIHUtYm9vdC1zcGwuYmluCi0gICAg4pSU4pSA4pSAIHUtYm9v
-dC1zcGwtZGRyLmJpbgotCi0KLUZsYXNoaW5nIHRoZSBTRCBjYXJkIGltYWdlCi09PT09PT09PT09
-PT09PT09PT09PT09PT09PQotCi1UbyBpbnN0YWxsIHRoZSBpbWFnZSBvbiBhIFNEQ2FyZCBzaW1w
-bHkgY29weSBzZGNhcmQuaW1nIHRvIHRoZSBzdG9yYWdlIChlLmcuIFNELCBlTU1DKQotCi0gICQg
-c3VkbyBkZCBpZj1vdXRwdXQvaW1hZ2VzL3NkY2FyZC5pbWcgb2Y9PHlvdXItc2QtZGV2aWNlPgot
-Ci0KLVByZXBhcmluZyB0aGUgYm9hcmQKLT09PT09PT09PT09PT09PT09PT0KLQotICogQ29ubmVj
-dCBhIHNlcmlhbCBsaW5lIHRvIHRoZSBib2FyZAotICogSW5zZXJ0IHRoZSBTRCBjYXJkCi0gKiBN
-YWtlIHN1cmUgdGhlIGJvb3Qgc291cmNlIHNlbGVjdGlvbiBESVAgc3dpdGNoZXMgYXJlIHNldCBj
-b3JyZWN0bHkKLSAgKiBTVzEgMS00IE9GRgotICAqIFNXMSAyLTMgT0ZGCi0gKiBQb3dlci11cCB0
-aGUgYm9hcmQKLQotCi1Cb290aW5nIHRoZSBib2FyZAotPT09PT09PT09PT09PT09PT0KLQotQnkg
-ZGVmYXVsdCB0aGUgYm9vdGxvYWRlciB3aWxsIHNlYXJjaCBmb3IgdGhlIGZpcnN0IHZhbGlkIGlt
-YWdlLCBzdGFydGluZwotd2l0aCB0aGUgaW50ZXJuYWwgZU1NQy4gVG8gbWFrZSBzdXJlIHRoZSBi
-b290bG9hZGVyIGxvYWRzIGJvb3RzY3JpcHQgZnJvbQotdGhlIGNvcnJlY3QgbG9jYXRpb24gKFNE
-IGNhcmQpIHNldCB0aGUgYm9vdF90YXJnZXRzIGVudmlyb25tZW50IHZhcmlhYmxlOgotCi0gICQg
-c2V0ZW52IGJvb3RfdGFyZ2V0cyBtbWMxCmRpZmYgLS1naXQgYS9jb25maWdzL2tvbnRyb25fcGl0
-eF9pbXg4bV9kZWZjb25maWcgYi9jb25maWdzL2tvbnRyb25fcGl0eF9pbXg4bV9kZWZjb25maWcK
-ZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDQ3ZDMzZjExZWQuLjAwMDAwMDAwMDAKLS0t
-IGEvY29uZmlncy9rb250cm9uX3BpdHhfaW14OG1fZGVmY29uZmlnCisrKyAvZGV2L251bGwKQEAg
-LTEsNDUgKzAsMCBAQAotQlIyX2FhcmNoNjQ9eQotQlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFE
-RVJTX0NVU1RPTV81XzE3PXkKLUJSMl9HTE9CQUxfUEFUQ0hfRElSPSJib2FyZC9rb250cm9uL3Bp
-dHgtaW14OG0vcGF0Y2hlcyIKLUJSMl9UQVJHRVRfR0VORVJJQ19HRVRUWV9QT1JUPSJ0dHlteGMy
-IgotQlIyX1JPT1RGU19QT1NUX0JVSUxEX1NDUklQVD0iYm9hcmQva29udHJvbi9waXR4LWlteDht
-L3Bvc3QtYnVpbGQuc2giCi1CUjJfUk9PVEZTX1BPU1RfSU1BR0VfU0NSSVBUPSJzdXBwb3J0L3Nj
-cmlwdHMvZ2VuaW1hZ2Uuc2giCi1CUjJfUk9PVEZTX1BPU1RfU0NSSVBUX0FSR1M9Ii1jICQoQklO
-QVJJRVNfRElSKS9nZW5pbWFnZS5jZmciCi1CUjJfTElOVVhfS0VSTkVMPXkKLUJSMl9MSU5VWF9L
-RVJORUxfQ1VTVE9NX1ZFUlNJT049eQotQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTl9W
-QUxVRT0iNS4xNy43IgotQlIyX0xJTlVYX0tFUk5FTF9VU0VfQVJDSF9ERUZBVUxUX0NPTkZJRz15
-Ci1CUjJfTElOVVhfS0VSTkVMX0RUU19TVVBQT1JUPXkKLUJSMl9MSU5VWF9LRVJORUxfSU5UUkVF
-X0RUU19OQU1FPSJmcmVlc2NhbGUvaW14OG1xLWtvbnRyb24tcGl0eC1pbXg4bSIKLUJSMl9MSU5V
-WF9LRVJORUxfRFRCX0tFRVBfRElSTkFNRT15Ci1CUjJfTElOVVhfS0VSTkVMX0lOU1RBTExfVEFS
-R0VUPXkKLUJSMl9MSU5VWF9LRVJORUxfTkVFRFNfSE9TVF9PUEVOU1NMPXkKLUJSMl9QQUNLQUdF
-X0ZSRUVTQ0FMRV9JTVg9eQotQlIyX1BBQ0tBR0VfRlJFRVNDQUxFX0lNWF9QTEFURk9STV9JTVg4
-TT15Ci1CUjJfUEFDS0FHRV9GSVJNV0FSRV9JTVg9eQotQlIyX1RBUkdFVF9ST09URlNfRVhUMj15
-Ci1CUjJfVEFSR0VUX1JPT1RGU19FWFQyXzQ9eQotQlIyX1RBUkdFVF9ST09URlNfRVhUMl9TSVpF
-PSIxMjBNIgotQlIyX1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FSRT15Ci1CUjJfVEFSR0VUX0FS
-TV9UUlVTVEVEX0ZJUk1XQVJFX0NVU1RPTV9WRVJTSU9OPXkKLUJSMl9UQVJHRVRfQVJNX1RSVVNU
-RURfRklSTVdBUkVfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9InYyLjUiCi1CUjJfVEFSR0VUX0FSTV9U
-UlVTVEVEX0ZJUk1XQVJFX1BMQVRGT1JNPSJpbXg4bXEiCi1CUjJfVEFSR0VUX1VCT09UPXkKLUJS
-Ml9UQVJHRVRfVUJPT1RfQlVJTERfU1lTVEVNX0tDT05GSUc9eQotQlIyX1RBUkdFVF9VQk9PVF9D
-VVNUT01fVkVSU0lPTj15Ci1CUjJfVEFSR0VUX1VCT09UX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSIy
-MDIyLjA0IgotQlIyX1RBUkdFVF9VQk9PVF9CT0FSRF9ERUZDT05GSUc9ImtvbnRyb25fcGl0eF9p
-bXg4bSIKLUJSMl9UQVJHRVRfVUJPT1RfTkVFRFNfRFRDPXkKLUJSMl9UQVJHRVRfVUJPT1RfTkVF
-RFNfUFlMSUJGRFQ9eQotQlIyX1RBUkdFVF9VQk9PVF9ORUVEU19PUEVOU1NMPXkKLUJSMl9UQVJH
-RVRfVUJPT1RfTkVFRFNfR05VVExTPXkKLUJSMl9UQVJHRVRfVUJPT1RfTkVFRFNfVVRJTF9MSU5V
-WD15Ci1CUjJfVEFSR0VUX1VCT09UX05FRURTX0FURl9CTDMxPXkKLUJSMl9UQVJHRVRfVUJPT1Rf
-TkVFRFNfSU1YX0ZJUk1XQVJFPXkKLUJSMl9UQVJHRVRfVUJPT1RfRk9STUFUX0NVU1RPTT15Ci1C
-UjJfVEFSR0VUX1VCT09UX0ZPUk1BVF9DVVNUT01fTkFNRT0iZmxhc2guYmluIgotQlIyX1RBUkdF
-VF9VQk9PVF9TUEw9eQotQlIyX1BBQ0tBR0VfSE9TVF9HRU5JTUFHRT15Ci1CUjJfUEFDS0FHRV9I
-T1NUX0lNWF9NS0lNQUdFPXkKLUJSMl9QQUNLQUdFX0hPU1RfVUJPT1RfVE9PTFM9eQotQlIyX1BB
-Q0tBR0VfSE9TVF9VQk9PVF9UT09MU19GSVRfU1VQUE9SVD15Ci0tIAoyLjUwLjEKCl9fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5n
-IGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3Jn
-L21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+This defconfig no longer builds:
+
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/11012273936
+
+It has been broken for over 2 months:
+
+  https://gitlab.com/buildroot.org/buildroot/-/jobs?name=T%3Dodroidxu4&kind=BUILD
+
+Most likely the U-Boot version used is no longer compatible with
+recent toolchains.
+
+Unless a fix is provided, this defconfig will be removed.
+
+Cc: Pierre Crokaert <pct@crookies.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .checkpackageignore                      |  2 -
+ DEVELOPERS                               |  4 --
+ board/hardkernel/odroidxu4/boot.ini      | 38 ----------------
+ board/hardkernel/odroidxu4/genimage.cfg  | 55 ------------------------
+ board/hardkernel/odroidxu4/post-image.sh | 24 -----------
+ board/hardkernel/odroidxu4/readme.txt    | 37 ----------------
+ configs/odroidxu4_defconfig              | 27 ------------
+ 7 files changed, 187 deletions(-)
+ delete mode 100644 board/hardkernel/odroidxu4/boot.ini
+ delete mode 100644 board/hardkernel/odroidxu4/genimage.cfg
+ delete mode 100755 board/hardkernel/odroidxu4/post-image.sh
+ delete mode 100644 board/hardkernel/odroidxu4/readme.txt
+ delete mode 100644 configs/odroidxu4_defconfig
+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index e8f1eb2a1e..cf71d2f0c6 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -25,7 +25,6 @@ board/freescale/common/mxs/post-image.sh Shellcheck
+ board/friendlyarm/nanopi-r2s/post-build.sh Shellcheck
+ board/hardkernel/odroidc2/post-image.sh Shellcheck
+ board/hardkernel/odroidc2/rootfs_overlay/etc/init.d/S09modload Shellcheck lib_sysv.Variables
+-board/hardkernel/odroidxu4/post-image.sh Shellcheck lib_shellscript.EmptyLastLine
+ board/kontron/bl-imx8mm/post-build.sh Shellcheck
+ board/kontron/smarc-sal28/post-build.sh Shellcheck
+ board/lego/ev3/post-image.sh Shellcheck
+@@ -156,7 +155,6 @@ configs/nitrogen8mm_defconfig lib_defconfig.ForceCheckHash
+ configs/nitrogen8mn_defconfig lib_defconfig.ForceCheckHash
+ configs/nitrogen8mp_defconfig lib_defconfig.ForceCheckHash
+ configs/odroidc2_defconfig lib_defconfig.ForceCheckHash
+-configs/odroidxu4_defconfig lib_defconfig.ForceCheckHash
+ configs/olimex_a10_olinuxino_lime_defconfig lib_defconfig.ForceCheckHash
+ configs/olimex_a13_olinuxino_defconfig lib_defconfig.ForceCheckHash
+ configs/olimex_a20_olinuxino_micro_defconfig lib_defconfig.ForceCheckHash
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 40dae0a279..10f035e007 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2756,10 +2756,6 @@ F:	package/liburcu/
+ N:	Philippe Reynes <philippe.reynes@softathome.com>
+ F:	package/ibm-sw-tpm2/
+ 
+-N:	Pierre Crokaert <pct@crookies.net>
+-F:	board/hardkernel/odroidxu4/
+-F:	configs/odroidxu4_defconfig
+-
+ N:	Pierre Ducroquet <pinaraf@pinaraf.info>
+ F:	package/kf5/
+ 
+diff --git a/board/hardkernel/odroidxu4/boot.ini b/board/hardkernel/odroidxu4/boot.ini
+deleted file mode 100644
+index 87ac7ac135..0000000000
+--- a/board/hardkernel/odroidxu4/boot.ini
++++ /dev/null
+@@ -1,38 +0,0 @@
+-ODROIDXU-UBOOT-CONFIG
+-
+-# U-Boot Parameters
+-setenv initrd_high "0xffffffff"
+-setenv fdt_high "0xffffffff"
+-
+-setenv macaddr "00:1e:06:61:7a:39"
+-setenv bootrootfs "console=tty1 root=/dev/mmcblk1p2 rootwait rw fsck.repair=yes net.ifnames=0"
+-setenv bootcmd "load mmc 0:1 0x40008000 zImage; load mmc 0:1 0x44000000 exynos5422-odroidxu4.dtb; bootz 0x40008000 - 0x44000000"
+-setenv vout "hdmi"
+-setenv governor "performance"
+-setenv HPD "true"
+-
+-#  TMDS data amplitude control.
+-setenv hdmi_tx_amp_lvl  "31"
+-
+-#  TMDS data amplitude fine control for each channel.
+-setenv hdmi_tx_lvl_ch0      "3"
+-setenv hdmi_tx_lvl_ch1      "3"
+-setenv hdmi_tx_lvl_ch2      "3"
+-
+-#  TMDS data pre-emphasis level control.
+-setenv hdmi_tx_emp_lvl      "6"
+-
+-#  TMDS clock amplitude control.
+-setenv hdmi_clk_amp_lvl     "31"
+-
+-#  TMDS data source termination resistor control.
+-setenv hdmi_tx_res      "0"
+-
+-setenv hdmi_phy_control "hdmi_tx_amp_lvl=${hdmi_tx_amp_lvl} hdmi_tx_lvl_ch0=${hdmi_tx_lvl_ch0} hdmi_tx_lvl_ch1=${hdmi_tx_lvl_ch1} hdmi_tx_lvl_ch2=${hdmi_tx_lvl_ch2} hdmi_tx_emp_lvl=${hdmi_tx_emp_lvl} hdmi_clk_amp_lvl=${hdmi_clk_amp_lvl} hdmi_tx_res=${hdmi_tx_res} HPD=${HPD} vout=${vout}"
+-
+-# final boot args
+-setenv bootargs "${bootrootfs} ${videoconfig} smsc95xx.macaddr=${macaddr} governor=${governor} ${hdmi_phy_control}"
+-
+-# Boot the board
+-boot
+-
+diff --git a/board/hardkernel/odroidxu4/genimage.cfg b/board/hardkernel/odroidxu4/genimage.cfg
+deleted file mode 100644
+index 0a90d6be50..0000000000
+--- a/board/hardkernel/odroidxu4/genimage.cfg
++++ /dev/null
+@@ -1,55 +0,0 @@
+-image boot.vfat {
+-	vfat {
+-		files = {
+-			"boot.ini",
+-			"zImage",
+-			"exynos5422-odroidxu4.dtb"
+-		}
+-	}
+-
+-	size = 32M
+-}
+-
+-image sdcard.img {
+-	hdimage {
+-	}
+-
+-	partition bl1 {
+-		in-partition-table = "no"
+-		image = "bl1.bin.hardkernel"
+-		offset = 512
+-		size = 15K
+-	}
+-
+-	partition bl2 {
+-		in-partition-table = "no"
+-		image = "bl2.bin.hardkernel.720k_uboot"
+-		offset = 15872 # 15KB + 512B
+-		size = 16K
+-	}
+-
+-	partition u-boot {
+-		in-partition-table = "no"
+-		image = "u-boot-dtb.bin"
+-		offset = 32256 # 31KB + 512B
+-		size = 720K
+-	}
+-
+-	partition tzsw {
+-		in-partition-table = "no"
+-		image = "tzsw.bin.hardkernel"
+-		offset = 769536 # 751KB + 512B
+-		size = 256K
+-	}
+-
+-	partition vfat {
+-		partition-type = 0xC
+-		image = "boot.vfat"
+-		offset = 2M
+-	}
+-
+-	partition rootfs {
+-		partition-type = 0x83
+-		image = "rootfs.ext4"
+-	}
+-}
+diff --git a/board/hardkernel/odroidxu4/post-image.sh b/board/hardkernel/odroidxu4/post-image.sh
+deleted file mode 100755
+index 025906cd09..0000000000
+--- a/board/hardkernel/odroidxu4/post-image.sh
++++ /dev/null
+@@ -1,24 +0,0 @@
+-#!/bin/sh
+-
+-BOARD_DIR="$(dirname $0)"
+-GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
+-GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
+-
+-cp ${BOARD_DIR}/boot.ini ${BINARIES_DIR}/
+-
+-# The bl1.bin.hardkernel file provided by the uboot hardkernel repository is overwritten
+-# by the bl2.bin.hardkernel in the sd_fusing.sh script because it is too big.
+-# In order to implement this in genimage, we need to truncate the bl1.bin file
+-# so that it does not exceed the available place.
+-# An issue has been filled about this: https://github.com/hardkernel/u-boot/issues/45
+-truncate -s 15360 ${BINARIES_DIR}/bl1.bin.hardkernel
+-
+-rm -rf "${GENIMAGE_TMP}"
+-
+-genimage                           \
+-	--rootpath "${TARGET_DIR}"     \
+-	--tmppath "${GENIMAGE_TMP}"    \
+-	--inputpath "${BINARIES_DIR}"  \
+-	--outputpath "${BINARIES_DIR}" \
+-	--config "${GENIMAGE_CFG}"
+-
+diff --git a/board/hardkernel/odroidxu4/readme.txt b/board/hardkernel/odroidxu4/readme.txt
+deleted file mode 100644
+index e3cba8b0c1..0000000000
+--- a/board/hardkernel/odroidxu4/readme.txt
++++ /dev/null
+@@ -1,37 +0,0 @@
+-Odroid XU-4 board with Samsung Exynos 5422 SoC
+-
+-How to build it
+-===============
+-
+-  $ make odroidxu4_defconfig
+-
+-Then you can edit the build options using
+-
+-  $ make menuconfig
+-
+-Compile all and build rootfs image:
+-
+-  $ make
+-
+-Note: you will need to have access to the network, since Buildroot will
+-download the packages' sources.
+-
+-Result of the build
+--------------------
+-
+-After building, you should obtain all output files in output/images/
+-
+-
+-How to write the SD card or eMMC
+-================================
+-
+-Once the build process is finished you will have an image called "sdcard.img"
+-in the output/images/ directory.
+-
+-Copy the bootable "sdcard.img" onto an SD card or eMMC with "dd":
+-
+-  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
+-
+-Insert the SDcard into your ODROID-XU4, and power it up. Your new system
+-should come up now.
+-
+diff --git a/configs/odroidxu4_defconfig b/configs/odroidxu4_defconfig
+deleted file mode 100644
+index ab819efa23..0000000000
+--- a/configs/odroidxu4_defconfig
++++ /dev/null
+@@ -1,27 +0,0 @@
+-BR2_arm=y
+-BR2_cortex_a7=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/hardkernel/odroidxu4/post-image.sh"
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/hardkernel/linux.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="4.14.16-104"
+-BR2_LINUX_KERNEL_DEFCONFIG="odroidxu4"
+-BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="exynos5422-odroidxu4"
+-BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_4=y
+-# BR2_TARGET_ROOTFS_TAR is not set
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+-BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/hardkernel/u-boot.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="88af53fbcef8386cb4d5f04c19f4b2bcb69e90ca"
+-BR2_TARGET_UBOOT_BOARD_DEFCONFIG="odroid-xu4"
+-BR2_TARGET_UBOOT_NEEDS_DTC=y
+-BR2_TARGET_UBOOT_FORMAT_DTB_BIN=y
+-BR2_TARGET_UBOOT_SPL=y
+-BR2_TARGET_UBOOT_SPL_NAME="sd_fuse/bl1.bin.hardkernel sd_fuse/bl2.bin.hardkernel.720k_uboot sd_fuse/tzsw.bin.hardkernel "
+-BR2_PACKAGE_HOST_DOSFSTOOLS=y
+-BR2_PACKAGE_HOST_GENIMAGE=y
+-BR2_PACKAGE_HOST_MTOOLS=y
+-- 
+2.50.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
