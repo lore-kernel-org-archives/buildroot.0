@@ -1,52 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BAF7CA0EF7
-	for <buildroot@archiver.kernel.org>; Tue, 19 Aug 2025 01:59:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A45A6CA0EF5
+	for <buildroot@archiver.kernel.org>; Tue, 19 Aug 2025 02:06:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6608C60785;
-	Tue, 19 Aug 2025 01:59:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6F6F8404A9;
+	Tue, 19 Aug 2025 02:06:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AQCtgDwnKuBY; Tue, 19 Aug 2025 01:59:22 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XwURem1aLDJ7; Tue, 19 Aug 2025 02:06:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5AE2F6077E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 81F43403EC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5AE2F6077E;
-	Tue, 19 Aug 2025 01:59:22 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 71A42E2
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 01:59:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 81F43403EC;
+	Tue, 19 Aug 2025 02:06:14 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 77F67E2
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 02:06:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6397260769
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 01:59:19 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5E09F60774
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 02:06:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ft6U68aBLnAR for <buildroot@buildroot.org>;
- Tue, 19 Aug 2025 01:59:17 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 51F2060765
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 51F2060765
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 01:59:17 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 435C78799A; Tue, 19 Aug 2025 01:59:17 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 19 Aug 2025 02:50:55 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f4d01d1c5eaea7c4cb702e0ef4281883f50e73fd
-X-Git-Newrev: ded3e0045aeeab226d2770fe8de522422c174434
-X-Patchwork-Hint: ignore
-Message-Id: <20250819015917.435C78799A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] boot/grub2: add patches to fix numerous
- CVEs
+ id lOyIK9RtZmp2 for <buildroot@buildroot.org>;
+ Tue, 19 Aug 2025 02:06:12 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5987E60765
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5987E60765
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5987E60765
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 02:06:11 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 9040813F88F;
+ Tue, 19 Aug 2025 04:06:07 +0200 (CEST)
+Received: from 2001:18c0:a22:bf00:5c2b:f296:f108:6612
+ via 2001:18c0:a22:bf00:5c2b:f296:f108:6612 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 19 Aug 2025 04:06:07 +0200
+MIME-Version: 1.0
+Date: Tue, 19 Aug 2025 04:06:07 +0200
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250815103002.3871929-2-thomas.petazzoni@bootlin.com>
+References: <20250815103002.3871929-1-thomas.petazzoni@bootlin.com>
+ <20250815103002.3871929-2-thomas.petazzoni@bootlin.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <aae6c20414ae5826c36fd1fd4fdce2c1@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1755569168;
+ bh=es9ilw2febik+O4WE1VDhfjt+sQFKukzhXYj5oqX5jY=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=G4Yn8AxPA1hzV+8pN9PDruL615ldoeDAT+eC7jAq3X2ZomKlUqx1tdwaxxGaVXFC1
+ uKy2s732BZWUebRSX2f3M9wurgb3VZ9lin1UZkRmb/3U8Ga57wJzQcDy4PzPKwYqlF
+ mE/ycrqGSVZWa5C/46vkwBbb5mklkU11+iv7F9biQg3W2iOnA8u53a+z/hM7kVKe3m
+ wopewGloXLKh4ZTBOSSbL4PDcfMcJYIAqMQS4FGzIPhL+1479DN+ra/WfFVgfC18Xs
+ VMTAsr7oRt4t3R/KlOAwGdVY7HYAnYxeAkvljnekk43auoErSQAK7sboAoCaAs6PDs
+ w5PMB8phLGx2Q==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=G4Yn8AxP
+Subject: Re: [Buildroot] [PATCH 1/3]
+ support/testing/tests/fs/test_iso9660.py: use a more recent toolchain
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,163 +84,52 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ded3e0045aeeab226d2770fe8de522422c174434
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas,
 
-This patch brings the entire stack of Debian patches on grub2 titled
-"cve-2025-jan" and available at:
+On 15/08/2025 12:29, Thomas Petazzoni via buildroot wrote:
+> The ISO9660 tests are currently using an old 2017 toolchain. Let's
+> switch to a modern toolchain, which is regularly updated. Also, we use
+> a toolchain based on glibc since grub2 doesn't build with recent
+> uClibc toolchains.
+> 
+> It will work around build issues with syslinux.
+> 
+> Fixes:
+> 
+>   https://gitlab.com/buildroot.org/buildroot/-/jobs/10975828975
+>   https://gitlab.com/buildroot.org/buildroot/-/jobs/10975828871
+>   https://gitlab.com/buildroot.org/buildroot/-/jobs/10975828770
+> 
+> (Even though those should be fixed separately, as syslinux should
+> continue to build with old compilers not supporting std=gnu17)
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-  https://salsa.debian.org/grub-team/grub/-/tree/debian/2.12-9/debian/patches/cve-2025-jan?ref_type=tags
+I applied this series to master, after a complete review and some more 
+testing.
 
-As of this exact Debian grub2 version 2.12-9. Some minor conflicts had
-to be fixed. All patches are in upstream Grub master, but mixed with
-hundreds of other changes, which is why Debian's effort to backport
-them has been leveraged here.
-
-In addition to those patches, 2 extra patches are added:
-
- 0073-net-drivers-ieee1275-ofnet-Add-missing-grub_malloc.patch
- 0074-Constant-time-grub_crypto_memcmp.patch
-
-The first one fixes an issue in one of the earlier patches. The fix is
-not in Debian, but is in upstream Grub.
-
-The second one fixes another CVE, not fixed in Debian, but fixed in
-OpenSUSE. This fix is not upstream as upstream has decided to move to
-libgcrypt instead to avoid the problem, but that's a fairly large
-change.
-
-Overall, this patch fixes all CVEs currently reported by pkg-stats
-against our grub2 package, namely:
-
-CVE-2024-45777
-CVE-2024-45778
-CVE-2024-45779
-CVE-2024-45780
-CVE-2024-45782
-CVE-2024-56737
-CVE-2024-56738
-CVE-2025-0678
-CVE-2025-0684
-CVE-2025-0685
-CVE-2025-0686
-CVE-2025-0689
-CVE-2025-1125
-
-With the previous fixes on runtime tests added (to use glibc
-toolchains to build grub2 tests), this commit successfully passes all
-tests:
-
-- The ISO9660 tests that use grub2:
-  https://gitlab.com/tpetazzoni/buildroot/-/pipelines/1985234563
-
-- The grub2 tests:
-  https://gitlab.com/tpetazzoni/buildroot/-/pipelines/1985234685
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-[Julien: also tested by building and booting
- - qemu_aarch64_sbsa_defconfig
- - qemu_arm_ebbr_defconfig
- - qemu_loongarch64_virt_efi_defconfig
- - qemu_riscv64_virt_efi_defconfig
- - pc_x86_64_bios_defconfig
- - pc_x86_64_efi_defconfig
-]
-Tested-by: Julien Olivain <ju.o@free.fr>
-[Julien:
- - fix patch #72 upstream link to point to the initial patch
-   sumbission rather than a reply
- - merge two _IGNORE_CVES blocks for patch #50 into a single one
- - order _IGNORE_CVES blocks by numerical patch order
- - order numerically the CVE list in commit log
- - add a "Fixes:" tag in patch #74 since its commit log does not
+I also made few minor cosmetic changes in patch #3:
+- fix patch #72 upstream link to point to the initial patch
+   submission rather than a reply
+- merge two _IGNORE_CVES blocks for patch #50 into a single one
+- order _IGNORE_CVES blocks by numerical patch order
+- order numerically the CVE list in commit log
+- add a "Fixes:" tag in patch #74 since its commit log does not
    mention the CVE.
-]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- boot/grub2/0002-misc-Implement-grub_strlcpy.patch  |  70 +++
- boot/grub2/0003-fs-ufs-Fix-a-heap-OOB-write.patch  |  36 ++
- ...-hfs-Fix-stack-OOB-write-with-grub_strcpy.patch |  36 ++
- ...ar-Initialize-name-in-grub_cpio_find_file.patch |  45 ++
- ...-Integer-overflow-leads-to-heap-OOB-write.patch |  94 ++++
- ...7-fs-f2fs-Set-a-grub_errno-if-mount-fails.patch |  36 ++
- ...s-hfsplus-Set-a-grub_errno-if-mount-fails.patch |  40 ++
- ...s-iso9660-Set-a-grub_errno-if-mount-fails.patch |  38 ++
- boot/grub2/0010-fs-iso9660-Fix-invalid-free.patch  |  55 ++
- .../0011-fs-jfs-Fix-OOB-read-in-jfs_getent.patch   |  68 +++
- ...OOB-read-caused-by-invalid-dir-slot-index.patch |  69 +++
- ...full-40-bits-offset-and-address-for-a-dat.patch | 133 +++++
- ...nsistent-signed-unsigned-types-usage-in-r.patch |  90 ++++
- ...Fix-out-of-bounds-read-for-inline-extents.patch |  51 ++
- .../grub2/0016-fs-xfs-Fix-out-of-bounds-read.patch |  48 ++
- ...suring-failing-to-mount-sets-a-grub_errno.patch |  47 ++
- .../0018-kern-file-Ensure-file-data-is-set.patch   |  37 ++
- ...e-Implement-filesystem-reference-counting.patch | 449 +++++++++++++++++
- ...pback-Reference-tracking-for-the-loopback.patch | 108 ++++
- .../0021-kern-disk-Limit-recursion-depth.patch     | 125 +++++
- ...partition-Limit-recursion-in-part_iterate.patch |  49 ++
- ...-script-execute-Limit-the-recursion-depth.patch |  60 +++
- ...ter-net_default_ip-and-net_default_mac-va.patch |  34 ++
- ...variables-hooks-when-interface-is-unregis.patch |  93 ++++
- ...-OOB-write-in-grub_net_search_config_file.patch |  89 ++++
- ...tp-Fix-stack-buffer-overflow-in-tftp_open.patch | 120 +++++
- ...rs-jpeg-Do-not-permit-duplicate-SOF0-mark.patch |  38 ++
- ...ix-for-an-integer-overflow-in-grub_dl_ref.patch | 143 ++++++
- ...ck-for-the-SHF_INFO_LINK-flag-in-grub_dl_.patch |  46 ++
- ...xtcmd-Missing-check-for-failed-allocation.patch |  39 ++
- .../0032-commands-ls-Fix-NULL-dereference.patch    |  37 ++
- ...p-Unregister-the-check_signatures-hooks-o.patch |  36 ++
- ...l-Remove-variables-hooks-on-module-unload.patch |  42 ++
- ...t-Remove-variables-hooks-on-module-unload.patch |  39 ++
- ...eger-overflow-leads-to-heap-OOB-write-or-.patch |  40 ++
- ...-Integer-overflow-leads-to-heap-OOB-write.patch |  58 +++
- ...ad-Fix-an-integer-overflow-when-supplying.patch |  74 +++
- ...st-Stack-overflow-due-to-unlimited-recurs.patch |  88 ++++
- ...nicmd-Block-the-dump-command-in-lockdown-.patch |  38 ++
- ...mrw-Disable-memory-reading-in-lockdown-mo.patch |  55 ++
- ...xdump-Disable-memory-reading-in-lockdown-.patch |  42 ++
- .../grub2/0043-fs-bfs-Disable-under-lockdown.patch |  57 +++
- ...s-Disable-many-filesystems-under-lockdown.patch | 396 +++++++++++++++
- ...Use-safe-math-macros-to-prevent-overflows.patch | 551 +++++++++++++++++++++
- ...t-overflows-when-allocating-memory-for-ar.patch |  47 ++
- ...if-returned-pointer-for-allocated-memory-.patch | 157 ++++++
- ...75-ofdisk-Call-grub_ieee1275_close-when-g.patch |  36 ++
- ...Use-safe-math-macros-to-prevent-overflows.patch | 362 ++++++++++++++
- ...overflows-when-allocating-memory-for-arra.patch |  87 ++++
- ...overflows-when-assigning-returned-values-.patch | 110 ++++
- ...Use-safe-math-macros-to-prevent-overflows.patch | 143 ++++++
- ...ent-overflows-when-allocating-memory-for-.patch |  45 ++
- ...k-if-returned-pointer-for-allocated-memor.patch |  93 ++++
- ...missing-NULL-check-after-grub_strdup-call.patch |  29 ++
- ...Use-safe-math-macros-to-prevent-overflows.patch | 250 ++++++++++
- ...-overflows-when-allocating-memory-for-arr.patch |  50 ++
- ...f-returned-pointer-for-allocated-memory-i.patch |  36 ++
- ...-fs-sfs-Check-if-allocated-memory-is-NULL.patch |  37 ++
- ...ute-Fix-potential-underflow-and-NULL-dere.patch |  37 ++
- ...sdep-unix-getroot-Fix-potential-underflow.patch |  40 ++
- ...Ensure-consistent-overflow-error-messages.patch |  60 +++
- ...i-Define-GRUB_EHCI_TOGGLE-as-grub_uint32_.patch |  35 ++
- ...-Use-safe-math-to-avoid-an-integer-overfl.patch |  46 ++
- ...ion-Add-sanity-check-after-grub_strtoul-c.patch |  51 ++
- ...-Add-sanity-check-after-grub_strtoul-call.patch |  62 +++
- ...86-linux-Cast-left-shift-to-grub_uint32_t.patch |  35 ++
- ...i386-bsd-Use-safe-math-to-avoid-underflow.patch |  61 +++
- ...ork-out-of-bounds-read-for-inline-and-ext.patch |  69 +++
- ...grub_xfs_iterate_dir-return-value-in-case.patch |  53 ++
- ...agate-incorrect-inode-error-from-grub_xfs.patch |  77 +++
- ...le-root-inode-read-failure-in-grub_xfs_mo.patch |  29 ++
- ...rs-ieee1275-ofnet-Add-missing-grub_malloc.patch |  36 ++
- .../0074-Constant-time-grub_crypto_memcmp.patch    |  63 +++
- boot/grub2/grub2.mk                                |  31 ++
- 74 files changed, 6206 insertions(+)
 
-Patch is too large, so refusing to show it
+See:
+https://gitlab.com/buildroot.org/buildroot/-/commit/ded3e0045aeeab226d2770fe8de522422c174434
+
+Thanks a lot for this series!
+
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
