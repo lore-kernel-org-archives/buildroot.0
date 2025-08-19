@@ -4,78 +4,99 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF7D0CA0EF5
-	for <buildroot@archiver.kernel.org>; Tue, 19 Aug 2025 08:32:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B66DCA0EF5
+	for <buildroot@archiver.kernel.org>; Tue, 19 Aug 2025 08:53:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8D82C60900;
-	Tue, 19 Aug 2025 08:32:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 03BA7608FC;
+	Tue, 19 Aug 2025 08:53:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RslFKUcMOgTR; Tue, 19 Aug 2025 08:32:01 +0000 (UTC)
+ id DOzM1iYjHydc; Tue, 19 Aug 2025 08:53:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C0F3760903
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0ECFD60903
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C0F3760903;
-	Tue, 19 Aug 2025 08:32:01 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id A72CDE2
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 08:32:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0ECFD60903;
+	Tue, 19 Aug 2025 08:53:34 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id F0DA7E0A
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 08:53:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A4D0B60907
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 08:32:00 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D733F81164
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 08:53:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 475o7REz13kL for <buildroot@buildroot.org>;
- Tue, 19 Aug 2025 08:31:59 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
- helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 87624608F1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 87624608F1
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 87624608F1
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 08:31:59 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-04.galae.net (Postfix) with ESMTPS id 24177C6B390
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 08:31:44 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id A233760697;
- Tue, 19 Aug 2025 08:31:57 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 294E01C228BA3; 
- Tue, 19 Aug 2025 10:31:56 +0200 (CEST)
-Date: Tue, 19 Aug 2025 10:31:54 +0200
-To: Julien Olivain <ju.o@free.fr>
-Cc: buildroot@buildroot.org
-Message-ID: <20250819103154.03389843@windsurf>
-In-Reply-To: <aae6c20414ae5826c36fd1fd4fdce2c1@free.fr>
-References: <20250815103002.3871929-1-thomas.petazzoni@bootlin.com>
- <20250815103002.3871929-2-thomas.petazzoni@bootlin.com>
- <aae6c20414ae5826c36fd1fd4fdce2c1@free.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id K4niVMyQIsUi for <buildroot@buildroot.org>;
+ Tue, 19 Aug 2025 08:53:31 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::536; helo=mail-pg1-x536.google.com;
+ envelope-from=michael@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DF1AD81161
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DF1AD81161
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com
+ [IPv6:2607:f8b0:4864:20::536])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DF1AD81161
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 08:53:30 +0000 (UTC)
+Received: by mail-pg1-x536.google.com with SMTP id
+ 41be03b00d2f7-b47052620a6so4717826a12.1
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 01:53:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1755593610; x=1756198410;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=wKORt9NoKz2gephoLrPfSPLJ4OsyF16qp87ufkCXhCk=;
+ b=GoeezxQyHG2lqDjt9beNWm24XUptUuGM8as/QpjE7x46AMh7cxLn7tjiEc7CwFvQGp
+ 7hPVj6DIWlz3a3iBuJr5Bd7QTT9fDr+1eycC0xqjEfxhJiD8a6lMxq5ONKrKcRRwVIwV
+ YUjotQRNhEORV+c4CP54fpmikeLcqWkorGJg0BCqN36ueol6iuShc9Gu+a9SupdWq0Jf
+ Noz5oahduWHqjLmFloPjXEWna4vEaYJSFzoJNuaPR8Y6y83wiU2e8GUlzF8S7/+ATCyK
+ hsui+epzNx0LNjDrtdPcbLu6IdxJN0Fb0LL7KKiZSF2Cab3ymU1TZSOUxrEIckMYUBNc
+ m6Pg==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCUbpYB5X0vuXZLhh3SW4IGgXtnvOeRrXlHZiI7rSxzIDhYBvUB1aAk+DlU+ChxsVmaLlHPYzV8bB28=@buildroot.org
+X-Gm-Message-State: AOJu0YwX3TZkQMi8oeIFyucFcRVys2wFYqekTSVmayEw9+n1M0haEr3M
+ A1pYoESV2xmFgamiKPbXvD73pf6/BbFhvFMEuEORicA7wElHkfnLED96SkDZidFFJXcRV1xgu+e
+ 4OiGkMOBtDTlyeLKxguZWON5xBOKm1OWRDOmR/0tKjn81OYS9kcM3JeU=
+X-Gm-Gg: ASbGncuF24U/wL75uxjMhiwsocbMp0wJZn+oEqWfVsASipUvResfTayRzHRIWiD4ymL
+ DWy/SJq/bzMSHMlsp7SjLjOXnV+clvDTv5DKGsa3SlMhrv0bC60G+r/aHOtar6H0XRRNQWIB1fV
+ 10L4NU3R+S5PmxeD/86BubjTcSJ/NngZ+IIqmffpUAdNX25tJgzj1TJz44XNTlU2HAMndKmS48+
+ Q/4pnSx
+X-Google-Smtp-Source: AGHT+IFsdQbd3szBaSIfDhDQAkHvyJaRoJ6spQQumxZwu/YGwHOnubsBcLwVb7/9krzRRlzNq7ZhAAI4YQKZs5fyay8=
+X-Received: by 2002:a17:903:1205:b0:231:d0da:5e1f with SMTP id
+ d9443c01a7336-245e0f2775amr15824325ad.21.1755593609769; Tue, 19 Aug 2025
+ 01:53:29 -0700 (PDT)
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
+References: <20250818140518.964728-1-angelo.compagnucci@gmail.com>
+ <20250818183349.6373d330@windsurf>
+ <CA+TH9VkUgn3y2VthqiKfejas0Fx47yqvVGbgjch3MPyHS4u_2A@mail.gmail.com>
+ <20250819102915.7cc03d65@windsurf>
+In-Reply-To: <20250819102915.7cc03d65@windsurf>
+From: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
+Date: Tue, 19 Aug 2025 10:53:17 +0200
+X-Gm-Features: Ac12FXyBRxtTpTWGZTZRobUgh0iAF-DtBd9Xb_hVQxpksdb2GpU96vF-rYBB4dw
+Message-ID: <CAOf5uwkt1m2WKk2F4preBmd5zjkMKcs0hJ3jUGwGOiBGTNR-dA@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ buildroot <buildroot@buildroot.org>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1755592316; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=WWkW07ap15F0uauADEqrMOwKeucXQSDtzY+VcpfhL4w=;
- b=HgSu9ctvkRWtxviUeXWxFWZ4LrbN3RxqIiANhPliBIlMQWZYsBbqaaDuRFts4mIHU3KGdS
- 5/Isfz52RioGYPjlsfult2Q963Ye7hPX3XEnWcDZwGNYBALt/pC0/VDpnr0SajrBmvDwS7
- 0X2d5PX9iiie20R2liJ0z1r7J+dsC0PqQ2A9wjv7qthe8/wGneckbPNbtrp+NaFt8KHc6x
- WsfveAKOj64ouPSCsaSmRX9FakcmhfdHUWv56dcDgr6QH1EQu7KG7HR2wEWEpWjNwRN/YS
- Ec3mbwkuSOWpoID45OaMP/nHfcvTfUkASp0snb8NziN+frrD5WVfDQfPPPCJAw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=HgSu9ctv
-Subject: Re: [Buildroot] [PATCH 1/3]
- support/testing/tests/fs/test_iso9660.py: use a more recent toolchain
+ d=amarulasolutions.com; s=google; t=1755593610; x=1756198410;
+ darn=buildroot.org; 
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=wKORt9NoKz2gephoLrPfSPLJ4OsyF16qp87ufkCXhCk=;
+ b=QWYAAURmtK0XI9vPateHNSIPQaE3fFsDHePs9NSwRtEPKSo6lDQSP2ikpjNO9w+Hfv
+ 6C973TFrMajMMvVhEFYBm2ZFPP3t0Ka6YpYihddU1GV8Me7TGeg4mf1b1SwrS1/3Ry7B
+ D9torOSb16B8dHZfLInkq/8hhnbchU6klwddI=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=amarulasolutions.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=QWYAAURm
+Subject: Re: [Buildroot] [PATCH] package/mono: remove mono and related
+ packages
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,41 +108,204 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============6240782520834002393=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Julien,
+--===============6240782520834002393==
+Content-Type: multipart/alternative; boundary="0000000000007b1139063cb3fd84"
 
-On Tue, 19 Aug 2025 04:06:07 +0200
-Julien Olivain <ju.o@free.fr> wrote:
+--0000000000007b1139063cb3fd84
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> I applied this series to master, after a complete review and some more 
-> testing.
-> 
-> I also made few minor cosmetic changes in patch #3:
-> - fix patch #72 upstream link to point to the initial patch
->    submission rather than a reply
-> - merge two _IGNORE_CVES blocks for patch #50 into a single one
-> - order _IGNORE_CVES blocks by numerical patch order
-> - order numerically the CVE list in commit log
-> - add a "Fixes:" tag in patch #74 since its commit log does not
->    mention the CVE.
+Hi Thomas
 
-Thanks a lot for having taken care of all those very relevant
-improvements!
+On Tue, Aug 19, 2025 at 10:29=E2=80=AFAM Thomas Petazzoni via buildroot <
+buildroot@buildroot.org> wrote:
 
-Best regards,
+> Hello Angelo,
+>
+> On Tue, 19 Aug 2025 08:12:55 +0200
+> Angelo Compagnucci <angelo.compagnucci@gmail.com> wrote:
+>
+> > > Thanks for this patch. But do we have the Buildroot packages for .NET=
+,
+> > > which would replace these Mono packages?
+> > >
+> > > Or should I read your patch as "This mono stuff is no longer
+> > > maintained, and if anyone wants to use .NET with Buildroot, they shou=
+ld
+> > > package .NET instead of using this unmaintained mono stuff" ?
+> > >
+> >
+> > I added the note about the .NET Giulio's patch exactly for that reason.
+>
+> Sorry but I don't understand your answer. You don't really answer my
+> questions, and I don't understand which "note about the .NET Giulio's
+> patch" you're referring to.
+>
+> Could you clarify?
+>
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+I think that he refers to this note in this commit
+
+To the maintainers: while applying this patch, please apply also this patch
+from
+Giulio
+
+https://patchwork.ozlabs.org/project/buildroot/patch/20240701193420.2119084=
+-1-giulio.benetti@benettiengineering.com/
+
+I suspect that you have seen it but anyway...
+
+Michael
+
+
+
+> > Technically speaking, while having an infra in builroot to build .NET
+> > packages, it's not strictly required: mono can cross compile and produc=
+e
+> a
+> > self contained executable to deploy on the target without any third par=
+ty
+> > tool.
+>
+> Perhaps, but it would still make sense to have the necessary tools
+> packaged so that the entire build process can be integrated in
+> Buildroot, and be reproducible, as opposed to have to separately and
+> manually download the .NET "stuff", build your application, copy it to
+> the rootfs, etc.
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, co-owner and CEO, Bootlin
+> Embedded Linux and Kernel engineering and training
+> https://bootlin.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+>
+
+
+--=20
+Michael Nazzareno Trimarchi
+Co-Founder & Chief Executive Officer
+M. +39 347 913 2170
+michael@amarulasolutions.com
+__________________________________
+
+Amarula Solutions BV
+Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
+T. +31 (0)85 111 9172
+info@amarulasolutions.com
+www.amarulasolutions.com
+
+--0000000000007b1139063cb3fd84
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div dir=3D"ltr">Hi Thomas</div><br><div class=3D"gmail_qu=
+ote gmail_quote_container"><div dir=3D"ltr" class=3D"gmail_attr">On Tue, Au=
+g 19, 2025 at 10:29=E2=80=AFAM Thomas Petazzoni via buildroot &lt;<a href=
+=3D"mailto:buildroot@buildroot.org">buildroot@buildroot.org</a>&gt; wrote:<=
+br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8e=
+x;border-left:1px solid rgb(204,204,204);padding-left:1ex">Hello Angelo,<br=
+>
+<br>
+On Tue, 19 Aug 2025 08:12:55 +0200<br>
+Angelo Compagnucci &lt;<a href=3D"mailto:angelo.compagnucci@gmail.com" targ=
+et=3D"_blank">angelo.compagnucci@gmail.com</a>&gt; wrote:<br>
+<br>
+&gt; &gt; Thanks for this patch. But do we have the Buildroot packages for =
+.NET,<br>
+&gt; &gt; which would replace these Mono packages?<br>
+&gt; &gt;<br>
+&gt; &gt; Or should I read your patch as &quot;This mono stuff is no longer=
+<br>
+&gt; &gt; maintained, and if anyone wants to use .NET with Buildroot, they =
+should<br>
+&gt; &gt; package .NET instead of using this unmaintained mono stuff&quot; =
+?<br>
+&gt; &gt;=C2=A0 <br>
+&gt; <br>
+&gt; I added the note about the .NET Giulio&#39;s patch exactly for that re=
+ason.<br>
+<br>
+Sorry but I don&#39;t understand your answer. You don&#39;t really answer m=
+y<br>
+questions, and I don&#39;t understand which &quot;note about the .NET Giuli=
+o&#39;s<br>
+patch&quot; you&#39;re referring to.<br>
+<br>
+Could you clarify?<br></blockquote><div><br></div><div class=3D"gmail_quote=
+ gmail_quote_container">I think that he refers to this note in this commit<=
+/div><div class=3D"gmail_quote gmail_quote_container"><br></div>To the main=
+tainers: while applying this patch, please apply also this patch from<br>Gi=
+ulio<br><br><div><a href=3D"https://patchwork.ozlabs.org/project/buildroot/=
+patch/20240701193420.2119084-1-giulio.benetti@benettiengineering.com/">http=
+s://patchwork.ozlabs.org/project/buildroot/patch/20240701193420.2119084-1-g=
+iulio.benetti@benettiengineering.com/</a></div><div><br></div><div>I suspec=
+t that you have seen it but anyway...</div><div><br></div><div>Michael</div=
+><div>=C2=A0</div><div><br></div><blockquote class=3D"gmail_quote" style=3D=
+"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-le=
+ft:1ex">
+<br>
+&gt; Technically speaking, while having an infra in builroot to build .NET<=
+br>
+&gt; packages, it&#39;s not strictly required: mono can cross compile and p=
+roduce a<br>
+&gt; self contained executable to deploy on the target without any third pa=
+rty<br>
+&gt; tool.<br>
+<br>
+Perhaps, but it would still make sense to have the necessary tools<br>
+packaged so that the entire build process can be integrated in<br>
+Buildroot, and be reproducible, as opposed to have to separately and<br>
+manually download the .NET &quot;stuff&quot;, build your application, copy =
+it to<br>
+the rootfs, etc.<br>
+<br>
+Best regards,<br>
+<br>
+Thomas<br>
+-- <br>
+Thomas Petazzoni, co-owner and CEO, Bootlin<br>
+Embedded Linux and Kernel engineering and training<br>
+<a href=3D"https://bootlin.com" rel=3D"noreferrer" target=3D"_blank">https:=
+//bootlin.com</a><br>
+_______________________________________________<br>
+buildroot mailing list<br>
+<a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank">buildroot@buil=
+droot.org</a><br>
+<a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=3D"n=
+oreferrer" target=3D"_blank">https://lists.buildroot.org/mailman/listinfo/b=
+uildroot</a><br>
+</blockquote></div><div><br clear=3D"all"></div><div><br></div><span class=
+=3D"gmail_signature_prefix">-- </span><br><div dir=3D"ltr" class=3D"gmail_s=
+ignature"><div dir=3D"ltr">Michael Nazzareno Trimarchi<br>Co-Founder &amp; =
+Chief Executive Officer<br>M. +39 347 913 2170<br><a href=3D"mailto:michael=
+@amarulasolutions.com" target=3D"_blank">michael@amarulasolutions.com</a><b=
+r>__________________________________<br><div><br></div><div>Amarula Solutio=
+ns BV</div>Joop Geesinkweg 125, 1114 AB, Amsterdam, NL<br>T. +31 (0)85 111 =
+9172<br><a href=3D"mailto:info@amarulasolutions.com" target=3D"_blank">info=
+@amarulasolutions.com</a><br><a href=3D"http://www.amarulasolutions.com" ta=
+rget=3D"_blank">www.amarulasolutions.com</a><br></div></div></div>
+
+--0000000000007b1139063cb3fd84--
+
+--===============6240782520834002393==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6240782520834002393==--
