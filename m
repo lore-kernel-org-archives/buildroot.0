@@ -4,100 +4,96 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8985CCA0EEB
-	for <buildroot@archiver.kernel.org>; Tue, 19 Aug 2025 03:59:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15CABCA0EE6
+	for <buildroot@archiver.kernel.org>; Tue, 19 Aug 2025 06:13:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3EEBF40635;
-	Tue, 19 Aug 2025 03:59:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BD9EB4077F;
+	Tue, 19 Aug 2025 06:13:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xMigEqRQyKOp; Tue, 19 Aug 2025 03:59:54 +0000 (UTC)
+ id nq1URb0cNjkz; Tue, 19 Aug 2025 06:13:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E33340643
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C63E140782
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6E33340643;
-	Tue, 19 Aug 2025 03:59:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C63E140782;
+	Tue, 19 Aug 2025 06:13:11 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1CAE5E2
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 03:59:53 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0452FDE6
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 06:13:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0EB3340635
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 03:59:53 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DE9024077F
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 06:13:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id F-TYWGtGYz8a for <buildroot@buildroot.org>;
- Tue, 19 Aug 2025 03:59:52 +0000 (UTC)
+ id Clf9XryrPSDQ for <buildroot@buildroot.org>;
+ Tue, 19 Aug 2025 06:13:09 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::62c; helo=mail-pl1-x62c.google.com;
- envelope-from=daniel.crowe@maxmine.com.au; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 002384062D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 002384062D
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com
- [IPv6:2607:f8b0:4864:20::62c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 002384062D
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 03:59:51 +0000 (UTC)
-Received: by mail-pl1-x62c.google.com with SMTP id
- d9443c01a7336-2430c5b1b32so36004685ad.1
- for <buildroot@buildroot.org>; Mon, 18 Aug 2025 20:59:51 -0700 (PDT)
+ client-ip=2607:f8b0:4864:20::12a; helo=mail-il1-x12a.google.com;
+ envelope-from=angelo.compagnucci@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 088C840784
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 088C840784
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com
+ [IPv6:2607:f8b0:4864:20::12a])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 088C840784
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 06:13:08 +0000 (UTC)
+Received: by mail-il1-x12a.google.com with SMTP id
+ e9e14a558f8ab-3e584a51a3fso16007435ab.2
+ for <buildroot@buildroot.org>; Mon, 18 Aug 2025 23:13:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1755575991; x=1756180791;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ d=1e100.net; s=20230601; t=1755583988; x=1756188788;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=s1pPhLv0QZvJafDuvXxbn2n1pKLVtg+PeZnyqeBctSo=;
- b=fTNWLGEftYXF2Kvrs2PtZL1f3WMd4q5kPtijAaPTzumjMDE4JVK+62HPp+pnZQJr20
- iqlfQpVg2gZwfPRAxkiX5Ltdvwa1qmzuGHO2qsUL6MTYOk4g14vE9wD21Hyx3exTuM0L
- 8v3g3zpoNKz75bjCBG9YCWUbcjKq/tefatDuwQkQVCs4tAVsHDIJGccKmfOt4OykOtzE
- Vu0ENQlJJmNC/3Tj8e9IHX7o8LEv6omrFyxQlSNIcm2vFbJsLP5EkB52pP1lioLdp2D0
- B0pDPzC+nP0Kxvcuji6PDxQOuhiNUua2lXRyvFhgmWDK4IRlad/AJaRhUey3zb+alv+x
- Z/0A==
-X-Gm-Message-State: AOJu0Yw0DXT8KVzVlm62r1fWJ0EyKgLD12x/edMN7qCdg9GwTaRT8bao
- 8DCbiWi6+Q+idBAWJDEbJMG+1EMkD0FhjbRsWO9ATzloRsbeHM0EkBB5N4A5px8fxyYjOTt7f8/
- HCGYTDeU=
-X-Gm-Gg: ASbGncvL0wIY7R5YAxWjXFS6ONlDseGvUIWD34uybFJ9L9GmyY8hFLVhJCjv/CdwWEj
- rqlDs4LGJwMaDYjMma08OQVVcdctJvvJVMc1kyOWMuhfPqs5fTsLXaM70S+iA8Qr03XXjMKDmsf
- 1wulyZbriRaN+4H5w0PCXpkRlfShPM8irn+8LeKH2Pto5fqfRQszIwsnK8vgPCPGxHARr/8b18a
- 2i6Ww7y+lhrassRsL8AA2giwXEMaU+is4krq9jbkevDFXhGbLwNhkX2tAsEr2eR+r9/BfEgnSz6
- u5FknGB9EXDTWGpbfprS8kjZ9pDWK19CDBdmfImFhZQNHjX7WSHUPnXfME/nL65FfJ0QNrkbqY1
- m/RfYE+XS3VmXlbdbd7UuV5lB4oYdoP8LDLzhWnWbOSIF3szM4MYdlwr4dU7l2QGX3FHvsPY=
-X-Google-Smtp-Source: AGHT+IHLuLnqe72tAONE4nP5hD7CTzKfJtIp0yhalL/HX4t9yoTKrzkHwnK71ujU8Tk4J2MdpkTanw==
-X-Received: by 2002:a17:903:1112:b0:240:ac96:e054 with SMTP id
- d9443c01a7336-245e0f49e17mr9951285ad.23.1755575990739; 
- Mon, 18 Aug 2025 20:59:50 -0700 (PDT)
-Received: from res-0346.adl.internal.resolution.systems ([103.211.209.15])
- by smtp.gmail.com with ESMTPSA id
- d9443c01a7336-2446ca9d016sm93609675ad.35.2025.08.18.20.59.48
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 18 Aug 2025 20:59:50 -0700 (PDT)
-From: Daniel Crowe <daniel.crowe@maxmine.com.au>
-To: buildroot@buildroot.org
-Date: Tue, 19 Aug 2025 13:29:30 +0930
-Message-ID: <20250819035930.3666816-1-daniel.crowe@maxmine.com.au>
-X-Mailer: git-send-email 2.43.0
+ bh=ApBEwqUUgtjGygtRbiGe5G7ZMKS9TpCwd4vLEtqV5sU=;
+ b=wRzRkZVSxViRjTbVWHGFj8xijD0m1aHmx+iloK92f6hhCcOG+2cjrSUV+2V/Zx4jze
+ 28vcif63M8XJ8Xgx+VX3KVrqvBhvAoMvWBjZdCINPNEYoX2vuQQD0JoxoyxjGTQNDEOk
+ ECk/TATmfGms2J14PpFJNtkTbEGhtuU6R0PQ7JWcYuqLEm2A9dU4fDdTE4r0xEzNtywh
+ j0/HdEDYVuWiQxSVVZv8YxM5H7HrQFRrphXRTK5FaFayUew0hV5qPx9F+wdlNIhhdzY2
+ ZmqEM8J04JFYUZSToVc4PiDMVn6GWFYddMe729imvGBb6kah7DT9gB87OntUWXe+MsMS
+ hP+Q==
+X-Gm-Message-State: AOJu0YydN5uATg+V273PxxbnMYzXbPVzrh/fU1OEPL9fr53GPdssH+NR
+ KF9RLP698/TBp+uWKF0hHMiqLl7WIC6O3FgBhLv/fr5oYhnpcSVFUWuB9el6pUmTAg/E/GGtPNT
+ TbcfTV6r32Rfuo7WXu/Knh800DuqiOi4InatN
+X-Gm-Gg: ASbGncsGo5bARm3UZVjxNkvUG7wAYMJSem8nMjVu2qu1GQLERJ2XVJgpNfQcVCPfKQt
+ BbRQvqpUu7e5u+DOvq4dWVhAaK8Z8RunTEG0dR04mpdu8RYt3F8jhgA1wBBGL7z3xnmEM6L6sUQ
+ LG7KnF4lYLeOwu7jECu0geffBP5X0SPpZbxxEffwv7gJdvHTSkoY9Seb2dxP+p/sm+zWKuLz8jP
+ H5cz3x3xGnj4FUA6A==
+X-Google-Smtp-Source: AGHT+IGEqLykZvLx2wZDkdY+05avuGakPj2k6V8TNWfcqQwrKcM9PcAEcvVhhp8bB0FIzy8ai1GRl2Rw+2pmRFdnMn0=
+X-Received: by 2002:a05:6602:340e:b0:87c:1cc3:c0fa with SMTP id
+ ca18e2360f4ac-88467dc9d94mr249871639f.0.1755583987891; Mon, 18 Aug 2025
+ 23:13:07 -0700 (PDT)
 MIME-Version: 1.0
+References: <20250818140518.964728-1-angelo.compagnucci@gmail.com>
+ <20250818183349.6373d330@windsurf>
+In-Reply-To: <20250818183349.6373d330@windsurf>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Tue, 19 Aug 2025 08:12:55 +0200
+X-Gm-Features: Ac12FXz3LN2TsU_XDYipFKnlWTwJ2MibxCqPdrCLQJyhz1K0fZegsuJSrowE0iY
+Message-ID: <CA+TH9VkUgn3y2VthqiKfejas0Fx47yqvVGbgjch3MPyHS4u_2A@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot <buildroot@buildroot.org>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=maxmine-com-au.20230601.gappssmtp.com; s=20230601; t=1755575991; x=1756180791;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=s1pPhLv0QZvJafDuvXxbn2n1pKLVtg+PeZnyqeBctSo=;
- b=eV838KXKnKlaPIX9FwOa8t8pGGMoQC8vEQ4BLUuYd1tJLDdrrBYyhW/T+wQOa8esuP
- Q+l2O5NCoF+7pQrpUlZXlt4ohxdOWqZR/AQ6y2N2nS4Yb9Jk3LT9onSv1RVnkOTUQTId
- 0K6/y+w3VMwFT67Ib+0psFMNjIUd8u9Dn6NP/Vd82MRM7ktUjIte9tq/Msw1FpySI4hp
- H+XOEu+B4lOxzOmmFvUNe2/w4A/AGScVYQKDoYZ91Nn/YSiqWzwWi7UrgDdA10Wq3Ya6
- 0I5EetR6Ri5I54x1XcoEQbiPUxNkuswwNYs490oy7cL6zH2MpBFytmam9HsAgh/nYBT2
- tIrA==
+ d=gmail.com; s=20230601; t=1755583988; x=1756188788; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=ApBEwqUUgtjGygtRbiGe5G7ZMKS9TpCwd4vLEtqV5sU=;
+ b=Lui5yRJy7H3Zm2Ms2jiSk7+gXhvzzGZQGKPVGUfrJPwtu+tSlWMsotiDOqtdxtNglF
+ 9H6WjrvbesB2Nn0LgBzA4TQB6OFhJlRbnrj+lQOJXbASJ1dp6cFP1n1GHth2SQhTnxd5
+ OSgvu1MgNlXYIAyh/2OQZ3fKXJ3beF2af/JZ0/n5g+F4GhzvzPcLg/GJQpkzjrkV7PlX
+ 3AH87/CVdipIkEwK+W4ZWAUAAOEWBXuojWm+5jAyaId0iuy1w/YcUnmi0bgqkbOAOMow
+ qjzv+DW0pkcbJMMYL9IOKbSPhCwpJgAnSs61blqFy48++2NBjaIE38UbxDxyKRc/c3ub
+ 3IrQ==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=maxmine.com.au
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=maxmine-com-au.20230601.gappssmtp.com
- header.i=@maxmine-com-au.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=eV838KXK
-Subject: [Buildroot] [PATCH 1/1] package/python-pyproj: bump package to 3.7.2
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=Lui5yRJy
+Subject: Re: [Buildroot] [PATCH] package/mono: remove mono and related
+ packages
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -109,51 +105,119 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Daniel Crowe <daniel.crowe@maxmine.com.au>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============5983828228595438122=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Daniel Crowe <daniel.crowe@maxmine.com.au>
----
- package/python-pyproj/python-pyproj.hash | 4 ++--
- package/python-pyproj/python-pyproj.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+--===============5983828228595438122==
+Content-Type: multipart/alternative; boundary="000000000000f8c324063cb1bfda"
 
-diff --git a/package/python-pyproj/python-pyproj.hash b/package/python-pyproj/python-pyproj.hash
-index 6d9d4d2a20..e42c371469 100644
---- a/package/python-pyproj/python-pyproj.hash
-+++ b/package/python-pyproj/python-pyproj.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pyproj/json
--md5  ad62b11249d8e62879778190a3e3ef8c  pyproj-3.7.1.tar.gz
--sha256  60d72facd7b6b79853f19744779abcd3f804c4e0d4fa8815469db20c9f640a47  pyproj-3.7.1.tar.gz
-+md5  1c0501d6055ff26565dae8fe2e6083c5  pyproj-3.7.2.tar.gz
-+sha256  39a0cf1ecc7e282d1d30f36594ebd55c9fae1fda8a2622cee5d100430628f88c  pyproj-3.7.2.tar.gz
- # Locally computed sha256 checksums
- sha256  a652687151814d4c4715445912fcb49e7e58f5b248d47a1a88b859a8815e0822  LICENSE
-diff --git a/package/python-pyproj/python-pyproj.mk b/package/python-pyproj/python-pyproj.mk
-index e2e0fada5b..ccb5c659d0 100644
---- a/package/python-pyproj/python-pyproj.mk
-+++ b/package/python-pyproj/python-pyproj.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PYPROJ_VERSION = 3.7.1
-+PYTHON_PYPROJ_VERSION = 3.7.2
- PYTHON_PYPROJ_SOURCE = pyproj-$(PYTHON_PYPROJ_VERSION).tar.gz
--PYTHON_PYPROJ_SITE = https://files.pythonhosted.org/packages/67/10/a8480ea27ea4bbe896c168808854d00f2a9b49f95c0319ddcbba693c8a90
-+PYTHON_PYPROJ_SITE = https://files.pythonhosted.org/packages/04/90/67bd7260b4ea9b8b20b4f58afef6c223ecb3abf368eb4ec5bc2cdef81b49
- PYTHON_PYPROJ_SETUP_TYPE = setuptools
- PYTHON_PYPROJ_LICENSE = MIT
- PYTHON_PYPROJ_LICENSE_FILES = LICENSE
--- 
-2.43.0
+--000000000000f8c324063cb1bfda
+Content-Type: text/plain; charset="UTF-8"
+
+Il lun 18 ago 2025, 18:33 Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ha scritto:
+
+> Hello Angelo,
+>
+> On Mon, 18 Aug 2025 16:05:18 +0200
+> Angelo Compagnucci <angelo.compagnucci@gmail.com> wrote:
+>
+> > Microsoft maintains a modern fork of Mono runtime in the dotnet/runtime
+> repo and
+> > has been progressively moving workloads to that fork. That work is now
+> complete,
+> > and we recommend that active Mono users and maintainers of Mono-based app
+> > frameworks migrate to .NET which includes work from this fork.
+> >
+> > Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+>
+> Thanks for this patch. But do we have the Buildroot packages for .NET,
+> which would replace these Mono packages?
+>
+> Or should I read your patch as "This mono stuff is no longer
+> maintained, and if anyone wants to use .NET with Buildroot, they should
+> package .NET instead of using this unmaintained mono stuff" ?
+>
+
+I added the note about the .NET Giulio's patch exactly for that reason.
+
+Technically speaking, while having an infra in builroot to build .NET
+packages, it's not strictly required: mono can cross compile and produce a
+self contained executable to deploy on the target without any third party
+tool.
+
+
+> Thomas
+> --
+> Thomas Petazzoni, co-owner and CEO, Bootlin
+> Embedded Linux and Kernel engineering and training
+> https://bootlin.com
+>
+
+--000000000000f8c324063cb1bfda
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"auto"><div dir=3D"auto"><br></div><br><div class=3D"gmail_quote=
+ gmail_quote_container" dir=3D"auto"><div dir=3D"ltr" class=3D"gmail_attr">=
+Il lun 18 ago 2025, 18:33 Thomas Petazzoni &lt;<a href=3D"mailto:thomas.pet=
+azzoni@bootlin.com">thomas.petazzoni@bootlin.com</a>&gt; ha scritto:<br></d=
+iv><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left=
+:1px #ccc solid;padding-left:1ex">Hello Angelo,<br>
+<br>
+On Mon, 18 Aug 2025 16:05:18 +0200<br>
+Angelo Compagnucci &lt;<a href=3D"mailto:angelo.compagnucci@gmail.com" targ=
+et=3D"_blank" rel=3D"noreferrer">angelo.compagnucci@gmail.com</a>&gt; wrote=
+:<br>
+<br>
+&gt; Microsoft maintains a modern fork of Mono runtime in the dotnet/runtim=
+e repo and<br>
+&gt; has been progressively moving workloads to that fork. That work is now=
+ complete,<br>
+&gt; and we recommend that active Mono users and maintainers of Mono-based =
+app<br>
+&gt; frameworks migrate to .NET which includes work from this fork.<br>
+&gt; <br>
+&gt; Signed-off-by: Angelo Compagnucci &lt;<a href=3D"mailto:angelo.compagn=
+ucci@gmail.com" target=3D"_blank" rel=3D"noreferrer">angelo.compagnucci@gma=
+il.com</a>&gt;<br>
+<br>
+Thanks for this patch. But do we have the Buildroot packages for .NET,<br>
+which would replace these Mono packages?<br>
+<br>
+Or should I read your patch as &quot;This mono stuff is no longer<br>
+maintained, and if anyone wants to use .NET with Buildroot, they should<br>
+package .NET instead of using this unmaintained mono stuff&quot; ?<br></blo=
+ckquote></div><div dir=3D"auto"><br></div><div dir=3D"auto">I added the not=
+e about the .NET Giulio&#39;s patch exactly for that reason.</div><div dir=
+=3D"auto"><br></div><div dir=3D"auto">Technically speaking, while having an=
+ infra in builroot to build .NET packages, it&#39;s not strictly required: =
+mono can cross compile and produce a self contained executable to deploy on=
+ the target without any third party tool.</div><div dir=3D"auto"><br></div>=
+<div class=3D"gmail_quote gmail_quote_container" dir=3D"auto"><blockquote c=
+lass=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;=
+padding-left:1ex">
+<br>
+Thomas<br>
+-- <br>
+Thomas Petazzoni, co-owner and CEO, Bootlin<br>
+Embedded Linux and Kernel engineering and training<br>
+<a href=3D"https://bootlin.com" rel=3D"noreferrer noreferrer" target=3D"_bl=
+ank">https://bootlin.com</a><br>
+</blockquote></div></div>
+
+--000000000000f8c324063cb1bfda--
+
+--===============5983828228595438122==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5983828228595438122==--
