@@ -4,72 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5DA1ECA0EEB
-	for <buildroot@archiver.kernel.org>; Tue, 19 Aug 2025 14:37:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F849CA0EEB
+	for <buildroot@archiver.kernel.org>; Tue, 19 Aug 2025 14:50:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D855040BD0;
-	Tue, 19 Aug 2025 14:37:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 04E2740BD3;
+	Tue, 19 Aug 2025 14:50:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PuSvxez-z6EA; Tue, 19 Aug 2025 14:37:15 +0000 (UTC)
+ id TsmxU9_opj88; Tue, 19 Aug 2025 14:50:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0B03840BB5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1029B40BD5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0B03840BB5;
-	Tue, 19 Aug 2025 14:37:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1029B40BD5;
+	Tue, 19 Aug 2025 14:50:56 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 949FEE2
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 14:37:13 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id E026BE2
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 14:50:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8661740BA8
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 14:37:13 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C548140BD0
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 14:50:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vhZ9HS0RiCjl for <buildroot@buildroot.org>;
- Tue, 19 Aug 2025 14:37:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 246E340B97
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 246E340B97
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 246E340B97
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 14:37:11 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id AD9E5B0051B;
- Tue, 19 Aug 2025 16:37:07 +0200 (CEST)
-Received: from 2001:18c0:a22:bf00:5c2b:f296:f108:6612
- via 2001:18c0:a22:bf00:5c2b:f296:f108:6612 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 19 Aug 2025 16:37:07 +0200
-MIME-Version: 1.0
-Date: Tue, 19 Aug 2025 16:37:07 +0200
-To: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250819140331.1518506-1-angelo.compagnucci@gmail.com>
-References: <20250819140331.1518506-1-angelo.compagnucci@gmail.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <280d7f1f3a718ebdfdc0dbb32bb60049@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1755614228;
- bh=MORm3PVv0bvingAuTLLqwAEDzBGKaNRKmAdFkx1tnnk=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=CIbtVsK/+TdrrGwbYOVPrjAgi7IdisxkllcyzzbOk7MmpWc3r6vx0/hBDu1gJRPql
- vC6EoNSA+I/c2uSoapMcYSnzfMFDh2lonO6vaVFO9ELsAkCuYW0nh4TcZ7rMJw67Z9
- GqPZ6kYye9xMk5aakFquCP526ETLnapPCcLpkvY5zRMlJx5BPlJLCmSPTDmMXlIKK2
- 5/Bsbb/ExLNQR2QdUPfE+/sn3NO7Q5HgvloeH6yA7yn2CpgVrq3uy98S1ItCTOu5RA
- 33+k/8TL5ZF8lqQGnrjulSmXW1hD/fzQh33m5vq1S7fsMgd3BIJUBS5Q47KpBJ0obp
- Xo8zYPf2SP3ow==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=CIbtVsK/
-Subject: Re: [Buildroot] [PATCH v2] package/jq: security bump to version
- 1.8.1
+ id PE2Qllq_qLiC for <buildroot@buildroot.org>;
+ Tue, 19 Aug 2025 14:50:53 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D698C40B99
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id D698C40B99
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 14:50:53 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id CF657876FE; Tue, 19 Aug 2025 14:50:53 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 19 Aug 2025 16:47:19 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: ded3e0045aeeab226d2770fe8de522422c174434
+X-Git-Newrev: 022ff55a39cad5d103b3bf29f887c37ec0b2f0f9
+X-Patchwork-Hint: ignore
+Message-Id: <20250819145053.CF657876FE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/elfutils: fix build after 0.193
+ version bump
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,109 +60,92 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Angelo,
+commit: https://git.buildroot.net/buildroot/commit/?id=022ff55a39cad5d103b3bf29f887c37ec0b2f0f9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for the patch!
+The 0.193 version bump done in commit
+c7508a23242aae7a80f22acc4473da25f7f9e96d broke the build on numerous
+CPU architectures. Let's take a patch from upstream's main branch to
+fix the issue.
 
-I have few comments, see below.
+Fixes:
 
-On 19/08/2025 16:03, Angelo Compagnucci wrote:
-> Changelog:
-> https://github.com/jqlang/jq/releases/tag/jq-1.8.1
-> 
-> COPYING:
-> Add LICENSE notice of NetBSD's strptime() to COPYING
+  https://autobuild.buildroot.net/results/3b005f7afec386f6fa4237f427f73367d55bb211/ (sparc64)
+  https://autobuild.buildroot.net/results/a6b1d5078abdd6c8def93aaffa2e67573250da3e/ (m68k)
+  https://autobuild.buildroot.net/results/45305cc2be3b255740808ee1f3486d1a10abfbb4/ (microblaze)
+  and a bunch more
 
-When there is a change in the license text, it is preferable to
-provide a link of the upstream commit of the change, if available.
-This makes reviews easier. In that case, it is:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ ...30-backends-guard-asm-perf_regs.h-include.patch | 53 ++++++++++++++++++++++
+ 1 file changed, 53 insertions(+)
 
-https://github.com/jqlang/jq/commit/78045d8aa9d155ec0f82ab102aa752300c2349f1
-
-Looking at this change, I see it is introducing a new BSD-2-Clause
-paragraph for strptime(). So the JQ_LICENSE variable would also need
-to be updated accordingly. See below.
-
-> Fixes the following security issues:
-> 
-> - CVE-2025-49014
->   Fix heap use after free in f_strftime, f_strflocaltime.
-
-To make review faster, could you add a direct link to the CVE, please?
-
-     https://www.cve.org/CVERecord?id=CVE-2025-49014
-
-> 
-> - GHSA-f946-j5j2-4w5m
->   Fix stack overflow in node_min_byte_len of oniguruma.
-
-Same comment here:
-
-     https://github.com/jqlang/jq/security/advisories/GHSA-f946-j5j2-4w5m
-
-> 
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-> ---
-> 
-> v1->v2:
-> * Updated COPYING hash (Thomas P)
-> 
->  package/jq/jq.hash | 4 ++--
->  package/jq/jq.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/jq/jq.hash b/package/jq/jq.hash
-> index 344f73d463..4596134620 100644
-> --- a/package/jq/jq.hash
-> +++ b/package/jq/jq.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256  
-> 91811577f91d9a6195ff50c2bffec9b72c8429dc05ec3ea022fd95c06d2b319c  
-> jq-1.8.0.tar.gz
-> -sha256  
-> ea9e53f5974239869c51ace8bb6849c9751dee7c9d592180957987a1a133caff  
-> COPYING
-> +sha256  
-> 2be64e7129cecb11d5906290eba10af694fb9e3e7f9fc208a311dc33ca837eb0  
-> jq-1.8.1.tar.gz
-> +sha256  
-> ad2b4a266b2268939c1446979759706077421cf906a203aa188c6f396e8cfd74  
-> COPYING
-> diff --git a/package/jq/jq.mk b/package/jq/jq.mk
-> index f3f4704f37..3077a76b17 100644
-> --- a/package/jq/jq.mk
-> +++ b/package/jq/jq.mk
-> @@ -4,7 +4,7 @@
->  #
->  
-> ################################################################################
-> 
-> -JQ_VERSION = 1.8.0
-> +JQ_VERSION = 1.8.1
->  JQ_SITE = 
-> https://github.com/jqlang/jq/releases/download/jq-$(JQ_VERSION)
->  JQ_LICENSE = MIT (code), ICU (decNumber), CC-BY-3.0 (documentation)
-
-Here, we should update _LICENSE to include the new BSD-2-Clause:
-
-JQ_LICENSE = MIT (code), ICU (decNumber), CC-BY-3.0 (documentation), 
-BSD-2-Clause (strptime)
-
->  JQ_LICENSE_FILES = COPYING
-> --
-> 2.34.1
-
-Could you send an updated patch, please?
-
-Best regards,
-
-Julien.
+diff --git a/package/elfutils/0003-PR32930-backends-guard-asm-perf_regs.h-include.patch b/package/elfutils/0003-PR32930-backends-guard-asm-perf_regs.h-include.patch
+new file mode 100644
+index 0000000000..76c604510b
+--- /dev/null
++++ b/package/elfutils/0003-PR32930-backends-guard-asm-perf_regs.h-include.patch
+@@ -0,0 +1,53 @@
++From d05241ce690018548857199bd34d7734c7164679 Mon Sep 17 00:00:00 2001
++From: Serhei Makarov <serhei@serhei.io>
++Date: Mon, 5 May 2025 12:08:55 -0400
++Subject: [PATCH] PR32930 backends/: guard asm/perf_regs.h include
++
++asm/perf_regs.h is an arch-specific linux include, not present on
++architectures like hppa and m68k that lack perf_events support.
++
++Only one place we need to fix; others already guard the include by
++architecture, or use architecture-independent headers (e.g.
++linux/perf_events.h).
++
++* backends/libebl_PERF_FLAGS.h: Only include asm/perf_regs.h on
++  architectures where we use it.
++
++Signed-off-by: Serhei Makarov <serhei@serhei.io>
++Upstream: d05241ce690018548857199bd34d7734c7164679
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ backends/libebl_PERF_FLAGS.h | 8 ++++++--
++ 1 file changed, 6 insertions(+), 2 deletions(-)
++
++diff --git a/backends/libebl_PERF_FLAGS.h b/backends/libebl_PERF_FLAGS.h
++index 2ed45f0f..51c20ea6 100644
++--- a/backends/libebl_PERF_FLAGS.h
+++++ b/backends/libebl_PERF_FLAGS.h
++@@ -32,8 +32,12 @@
++ #define _LIBEBL_PERF_FLAGS_H 1
++ 
++ #if defined(__linux__)
+++/* XXX Need to exclude __linux__ arches without perf_regs.h. */
+++#if defined(__x86_64__) || defined(__i386__)
+++/* || defined(other_architecture)... */
++ # include <asm/perf_regs.h>
++ #endif
+++#endif
++ 
++ #if defined(_ASM_X86_PERF_REGS_H)
++ /* See the code in x86_initreg_sample.c for list of required regs and
++@@ -49,8 +53,8 @@
++    see the code in tools/perf/util/intel-pt.c intel_pt_add_gp_regs()
++    and note how regs are added in the same order as the perf_regs.h enum.  */
++ #else
++-/* Since asm/perf_regs.h gives the register layout for a different arch,
++-   we can't unwind x86_64 frames.  */
+++/* Since asm/perf_regs.h is absent, or gives the register layout for a
+++   different arch, we can't unwind i386 and x86_64 frames. */
++ #define PERF_FRAME_REGISTERS_I386 0
++ #define PERF_FRAME_REGISTERS_X86_64 0
++ #endif
++-- 
++2.50.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
