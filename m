@@ -1,74 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 941A6CA0EE6
-	for <buildroot@archiver.kernel.org>; Tue, 19 Aug 2025 15:42:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2DBF3CA0EEB
+	for <buildroot@archiver.kernel.org>; Tue, 19 Aug 2025 16:00:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5BBAD81203;
-	Tue, 19 Aug 2025 15:42:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E1EFE40B4D;
+	Tue, 19 Aug 2025 16:00:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mXkDiWuNQ8wR; Tue, 19 Aug 2025 15:42:48 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cSRXJvwXxUwr; Tue, 19 Aug 2025 16:00:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5630081207
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D9C9140C3E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5630081207;
-	Tue, 19 Aug 2025 15:42:48 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 43541DE6
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 15:42:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D9C9140C3E;
+	Tue, 19 Aug 2025 16:00:55 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 96545E0A
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 16:00:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 21A8E400AF
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 15:42:46 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7CDF64077D
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 16:00:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N3n2BotLP2UG for <buildroot@buildroot.org>;
- Tue, 19 Aug 2025 15:42:44 +0000 (UTC)
-X-Greylist: delayed 426 seconds by postgrey-1.37 at util1.osuosl.org;
- Tue, 19 Aug 2025 15:42:44 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 22343400EA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 22343400EA
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=84.110.109.230;
- helo=mail.tkos.co.il; envelope-from=baruch@tkos.co.il; receiver=<UNKNOWN> 
-Received: from mail.tkos.co.il (wiki.tkos.co.il [84.110.109.230])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 22343400EA
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 15:42:44 +0000 (UTC)
-Received: from localhost (unknown [10.0.8.2])
- by mail.tkos.co.il (Postfix) with ESMTP id EE12544075D;
- Tue, 19 Aug 2025 18:33:10 +0300 (IDT)
-To: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250819150834.1651775-2-angelo.compagnucci@gmail.com> (Angelo
- Compagnucci's message of "Tue, 19 Aug 2025 17:08:30 +0200")
-References: <20250819150834.1651775-1-angelo.compagnucci@gmail.com>
- <20250819150834.1651775-2-angelo.compagnucci@gmail.com>
-User-Agent: mu4e 1.12.9; emacs 30.1
-Date: Tue, 19 Aug 2025 18:35:35 +0300
-Message-ID: <87ldnf1fzs.fsf@tarshish>
+ id Fyh4ONbK12xV for <buildroot@buildroot.org>;
+ Tue, 19 Aug 2025 16:00:53 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=109.224.244.20;
+ helo=mail-24420.protonmail.ch; envelope-from=philip@philipmolloy.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 85C2940779
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 85C2940779
+Received: from mail-24420.protonmail.ch (mail-24420.protonmail.ch
+ [109.224.244.20])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 85C2940779
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 16:00:52 +0000 (UTC)
+Date: Tue, 19 Aug 2025 16:00:43 +0000
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Philip Molloy <philip@philipmolloy.com>
+Cc: buildroot@buildroot.org, Philip Molloy <philip.molloy@analog.com>,
+ Michael Hennerich <michael.hennerich@analog.com>
+Message-ID: <cad96fd9e7449c747de6e6f0613f24fc37f285cf.camel@philipmolloy.com>
+In-Reply-To: <20250819143950.0fe69ce0@windsurf>
+References: <76af3a7b1aade5a457440fa4605712aba391bd90.camel@philipmolloy.com>
+ <20250819143950.0fe69ce0@windsurf>
+Feedback-ID: 9117015:user:proton
+X-Pm-Message-ID: 7dfca9f72851f34a7eaa1bd65001d1e533814c70
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=tkos.co.il; s=default; t=1755617590;
- bh=AftPSnbg8qeQ9qqiF7GoSbu1HdG58NyKsA6bgB9sdsw=;
- h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
- b=M+BdIJ6v4LsWbqSon9qpOzwWBH8XxvvMBYwzquqi8swi8vNZkOP2JqT+PPDPTQOhV
- 93v2Emxa5YiSsQQcvu49ZoV6Ik3gjuOVYc1nHuj2fK8YTMQGGibXEhH4wBp1p34w2Z
- gPK0gPnP/+RvQrnLz6k9ycz1DKWjoXLj7CzqCkWhmMCGS445d9li6PKqRSyZARdct7
- zEQE/sa6lk7uYAIw/oppufpk1pyOLrGVsLbMM7g1ejBohkTfwlXzL+eleKPmjuvnCl
- h8ym1IeNDKtGLJeowQJg596QXJy+liIQKUNre//2kk2UM1ey2q6p+/NX0Jf3I/akIr
- qsQLD/1+p71BQ==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=philipmolloy.com; 
+ s=protonmail3; t=1755619249; x=1755878449;
+ bh=msZ8zzl0Qy5kEvR5W3ErIo+VC8bQ6huUBdWXMxsiXb4=;
+ h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+ Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+ Message-ID:BIMI-Selector;
+ b=LEgl53zsHX97IVMa38opops9n2xgvGEYzj8vaQ1TAGQfF/yR4fZVfSn53zCykHN0C
+ GyQi3g2IuxlmqkFuPyc189ojE4k/VfG22PfzdCPMvUIs8LZ5p/CDuMRVvkks/iM5k9
+ IDPq06pcgfMQDk+yez7j9aKPpWvNkvsnlNqkDejYxtUxDEW/SNa6wlT9lPt0Pz+/sk
+ gQRsCKRoe62RDauVW9J6wLXgo+iYllM3Mm16dN38Jurlq4o/cFHDml2P9x3sdTAdYr
+ O5JaJMMgxddzV0zbm3BzaSKaBsgtQGrcCAnoQy/pmkTy7VGwr8jeS+VnZKBTcOu9Ls
+ MoFf57MY8sVDQ==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=tkos.co.il
+ dmarc=pass (p=none dis=none)
+ header.from=philipmolloy.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=tkos.co.il header.i=@tkos.co.il header.a=rsa-sha256
- header.s=default header.b=M+BdIJ6v
-Subject: Re: [Buildroot] [PATCH 1/5] package/libppd: new package
+ unprotected) header.d=philipmolloy.com header.i=@philipmolloy.com
+ header.a=rsa-sha256 header.s=protonmail3 header.b=LEgl53zs
+Subject: Re: [Buildroot] [PATCH 1/4] package/adsp-ldr: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -80,127 +82,118 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Baruch Siach via buildroot <buildroot@buildroot.org>
-Reply-To: Baruch Siach <baruch@tkos.co.il>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Angelo,
+On Tue, 2025-08-19 at 14:39 +0200, Thomas Petazzoni wrote:
+> Hello Philip,
+> 
+> On Tue, 19 Aug 2025 11:53:00 +0000
+> Philip Molloy <philip@philipmolloy.com> wrote:
+> 
+> > Absolutely, renamed it to Config.in.host and updated accordingly.
+> > Pushed it, along
+> > with all other changes to the branch linked to in the cover letter.
+> 
+> You don't need a Config.in.host file. This tool is merely a build
+> dependency for U-Boot to do its job, so it's sufficient to have U-
+> Boot
+> add host-adsp-ldr to UBOOT_DEPENDENCIES. No need for a
+> Config.in.host.
 
-On Tue, Aug 19 2025, Angelo Compagnucci wrote:
+ldr basically just generates a header describing data to be loaded and
+executed by the boot ROM. That data could be U-Boot SPL, U-Boot Proper,
+ATF, Linux, FreeRTOS or a baremetal application, for the ARM Cortex or
+ADI SHARC DSP cores.
 
-> This package contains PPD library for newer versions of cups supporting
-> more than ~10000 printer models.
->
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-> ---
->  DEVELOPERS                 |  1 +
->  package/Config.in          |  2 ++
->  package/libppd/Config.in   |  8 ++++++++
->  package/libppd/libppd.hash |  4 ++++
->  package/libppd/libppd.mk   | 22 ++++++++++++++++++++++
->  5 files changed, 37 insertions(+)
->  create mode 100644 package/libppd/Config.in
->  create mode 100644 package/libppd/libppd.hash
->  create mode 100644 package/libppd/libppd.mk
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 3efad36d70..d8f797d2c0 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -221,6 +221,7 @@ F:	package/jq/
->  F:	package/libapparmor/
->  F:	package/libb64/
->  F:	package/libdill/
-> +F:	package/libppd/
->  F:	package/mender/
->  F:	package/mender-artifact/
->  F:	package/mono/
-> diff --git a/package/Config.in b/package/Config.in
-> index 137f74ed82..d029780241 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -352,7 +352,9 @@ comment "Graphic libraries"
->  	source "package/freerdp/Config.in"
->  	source "package/graphicsmagick/Config.in"
->  	source "package/imagemagick/Config.in"
-> +	source "package/libcupsfilters/Config.in"
+I don't mind dropping it, but it is much more than just a U-Boot
+dependency. Perhaps more context in the Config.in.host description
+would help?
 
-This belongs to the next patch.
+> > > Are you sure that this license file is correct? Indeed, all
+> > > source
+> > > files seem to have a BSD-3-Clause license, for example:
+> > > https://github.com/analogdevicesinc/adsp-ldr/blob/main/src/ldr/lfd.c
+> > > .
+> > 
+> > Thanks for noticing this! I'll try to address it in a new release.
+> 
+> But in the mean time? You'll set ADSP_LDR_LICENSE to BSD-3-Clause and
+> use one of the source files as a license file?
 
->  	source "package/libglvnd/Config.in"
-> +	source "package/libppd/Config.in"
->  	source "package/mesa3d/Config.in"
->  	source "package/mesa3d-headers/Config.in"
->  	source "package/ocrad/Config.in"
-> diff --git a/package/libppd/Config.in b/package/libppd/Config.in
-> new file mode 100644
-> index 0000000000..124de4f7f2
-> --- /dev/null
-> +++ b/package/libppd/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_LIBPPD
-> +	bool "libppd"
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_PACKAGE_LIBCUPSFILTERS
-> +	help
-> +	  The Common Unix Printing System
-> +
-> +	  ~10000 printer models are supported with PPD-file-based classic CUPS drivers.
-> diff --git a/package/libppd/libppd.hash b/package/libppd/libppd.hash
-> new file mode 100644
-> index 0000000000..3f698c3108
-> --- /dev/null
-> +++ b/package/libppd/libppd.hash
-> @@ -0,0 +1,4 @@
-> +# Locally calculated:
-> +sha256  b356aeed1335ef0ca7f799741782a2544e7acee63fb4b047b94e4e0395a9cb62  libppd-2.1.1.tar.gz
-> +sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-> +sha256  977206f041b9a6f47ac00531e1242c0fab7063da71178f8d868b167b70866b6d  NOTICE
-> diff --git a/package/libppd/libppd.mk b/package/libppd/libppd.mk
-> new file mode 100644
-> index 0000000000..d76ecc3765
-> --- /dev/null
-> +++ b/package/libppd/libppd.mk
-> @@ -0,0 +1,22 @@
-> +################################################################################
-> +#
-> +# libppd
-> +#
-> +################################################################################
-> +
-> +LIBPPD_VERSION = 2.1.1
-> +LIBPPD_SOURCE = libppd-$(LIBPPD_VERSION).tar.gz
-> +LIBPPD_SITE = https://github.com/OpenPrinting/libppd/releases/download/$(LIBPPD_VERSION)
-> +LIBPPD_LICENSE = Apache-2.0 with GPL-2.0/LGPL-2.0 exception
-> +LIBPPD_LICENSE_FILES = LICENSE NOTICE
-> +LIBPPD_CPE_ID_VENDOR = openprinting
-> +LIBPPD_SELINUX_MODULES = cups
-> +LIBPPD_INSTALL_STAGING = YES
-> +LIBPPD_AUTORECONF = YES
+src/ldr/COPYING originally contained GPL v2. It was then moved to
+LICENSE in the project root. Then around 9/2022 LICENSE was updated to
+GPL v3.
 
-Why is this needed?
+I'm checking internally, but I assume at this point we'll change
+everything to GPL v2 in a new release. If so, then I'll just bump the
+version and update the package mk file accordingly in v2 of this
+series.
 
-> +
-> +LIBPPD_DEPENDENCIES = cups libcupsfilters
+> > > Why do you install it with a $(TARGET_CROSS) prefix?
+> > 
+> > It is currently required by mainline U-Boot.[1] More context below.
+> > 
+> > [1]:
+> > https://elixir.bootlin.com/u-boot/v2025.07/source/Makefile#L405
+> 
+> OK, understood. Then probably a comment in the .mk file makes sense.
 
-libcupsfilters doesn't exist yet. You should probably reverse the order
-of patches in this series.
+Sounds good, I added a comment.
 
-> +
-> +LIBPPD_CONF_OPTS = \
-> +	--with-cups-config=$(STAGING_DIR)/usr/bin/cups-config
-> +
-> +$(eval $(autotools-package))
+> > > Also, you seem to be the author of this repo. Why is the ldr code
+> > > burried in src/ldr, with not much outside of this folder? It
+> > > would make
+> > > a lot more sense to have the code directly at the project root,
+> > > and
+> > > avoid having to pass ADSP_LDR_SUBDIR = src/ldr.
+> > 
+> > This code is very very old. I was not even able to track down the
+> > full history internally at ADI.
+> > 
+> > The DSP line of processors were (and largely still are) used to run
+> > baremetal or FreeRTOS applications, which are developed using a IDE
+> > called CCES, which includes a custom toolchain (hence the prefix
+> > above). Some DSP processors do not even have ARM cores.
+> > 
+> > As they began to support Linux with larger ARM cores, the code
+> > necessary to generate boot streams was extracted from a CCES
+> > related
+> > mono repo and copied into the Github repository. That happened a
+> > few
+> > years ago and was never updated.
+> > 
+> > So far I've renamed the repo, switched from master to main, merged
+> > a
+> > "release" branch into main, and created a Github release. But there
+> > is still a lot that can be improved.
+> > 
+> > I have spent some time cleaning things up[2], but I need to
+> > refactor
+> > it a bit and rebase onto main since merging the release branch. As
+> > I'm sure you can imagine, this isn't a high priority. :-P
+> 
+> I can understand all of that, but I don't quite understand why all
+> this
+> history implies that the code should be buried in a sub-subdir of a
+> brand new Git repo that otherwise doesn't contain anything else?
+> 
+> Basically, just recreate your Git repo with the contents of src/ldr/,
+> but directly at the root of your repo, and work from there.
+> > 
+The git repo is at least 3 years old. The repo has been in use by the
+ADI Yocto layer since at least May, 2022.[1] All of the commits
+currently on main (which I recently merged without making any changes)
+have been in use since October, 2022.[2]
 
-baruch
+[1]:
+https://github.com/analogdevicesinc/lnxdsp-adi-meta/commit/5dc8760c306fcc25c4d60da64ee478a117878a7f
+[2]: https://github.com/analogdevicesinc/lnxdsp-adi-
+meta/commit/083171f142d230f5e726f89a86486373b0494b54
+> > 
 
--- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
