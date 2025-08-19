@@ -1,103 +1,103 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A133CA0EE6
-	for <buildroot@archiver.kernel.org>; Tue, 19 Aug 2025 15:08:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13A9BCA0EEB
+	for <buildroot@archiver.kernel.org>; Tue, 19 Aug 2025 15:08:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C464A40C5A;
-	Tue, 19 Aug 2025 15:08:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E10818127C;
+	Tue, 19 Aug 2025 15:08:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1owkqeAy1X6I; Tue, 19 Aug 2025 15:08:52 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nF3fki4atFAq; Tue, 19 Aug 2025 15:08:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77B8640C47
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 22BE481307
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 77B8640C47;
-	Tue, 19 Aug 2025 15:08:52 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id D4659E0A
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 15:08:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 22BE481307;
+	Tue, 19 Aug 2025 15:08:54 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 146F4E0A
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 15:08:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BAD4B60A70
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 15:08:48 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 11AE440759
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 15:08:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vBtwHOz7QcKP for <buildroot@buildroot.org>;
- Tue, 19 Aug 2025 15:08:47 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hJTBFYz4kByH for <buildroot@buildroot.org>;
+ Tue, 19 Aug 2025 15:08:48 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
+ client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
  envelope-from=angelo.compagnucci@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 727AE60A6B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 727AE60A6B
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 727AE60A6B
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 15:08:47 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id
- 5b1f17b1804b1-45a1b0cd668so28987445e9.3
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 08:08:47 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3781540461
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3781540461
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3781540461
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 15:08:48 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ 5b1f17b1804b1-45a1b001f55so25215035e9.0
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 08:08:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1755616125; x=1756220925;
+ d=1e100.net; s=20230601; t=1755616126; x=1756220926;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=DjhHfH3VlPBRxPSYyQh4gZn3wqzcc7Rr2J60ySkuF+U=;
- b=BHUwJDYHeks450euaxY7RJR/YhAdVINy+sgZi2FWWxfVDWvfEXTQmI5iXSxfG9Djg5
- Wp4ZUEY/uhk9hLLjwtb4db+tBo0ZBelvRF/zautGX1BRxEh5c4rgxQArrmCPdv0gykOT
- X68vHQW0XQAg2qKOxpvPTxEZdfuIu3wncx2RlDYCXXQXBNQYZIStoPYtGmF9yniaorTb
- dszXuylAkjjvm0tP2sJzO1HoaAzxrHnu4T0wDWQFyr058IFW4HxpH4/0adY6lJTeY3yu
- nGJ0Yee303LtQD+kfKK9TffojQpnGZEni5eG9T06UjBVHlkBPf1oHrjWCFHQYgBSpTOc
- dWZg==
-X-Gm-Message-State: AOJu0YxEeX7rk2bfC7Xh/flGhOygwgv6KM6JUtnQKxHtZqz1uOuhbah7
- nDUZKfvLKozy7IBk3TsW2FG3wycmPfDGjA7Nk6LFprX+t/4tD05PpmTsCrLDjkLC
-X-Gm-Gg: ASbGnct4LintCirxBus4erJuG2oc5yW6HnW13Uct0qys9BW5ywKfi/eJ+xs4F5DKPGc
- 7ClobdleMUkJ81HgTJxAhsgNq7+kAnnuToI9JTjitrSjilbu1ILgzP4RlqC/qp9GJu1+5Af3fWn
- DDgaBFrLw8fMP8yinu3A+HQ4y4loU2mG1ov6Z8P1pR1/JS2++H9puGKK9UOkO1lTkxgyxCwk37G
- isc1PWMAf7EFLpzNWSvKtwMriUkJNd5HOG34d2heCkvgKqsXOFzvTyNa678mApmMg46Dk1yzs6T
- BGeSZHXmLDxHQbGKbmX1U2ypVq7CkvLO2brZsHPLkTuGortEsAnnigwGLl838VroKw9+mLIOaCh
- KchgNFvS+7dvuYTXWudTYV+5aROyHaCVTdZCU3QOZ9R9sqg==
-X-Google-Smtp-Source: AGHT+IHW4hwD2MyD+waEvfYSL2DZR+Y2gCwbz2Ph9zl7Md5W9ZKGiCzya+/MAiM13kKG4zLo/P55Ug==
-X-Received: by 2002:a05:600c:4710:b0:439:86fb:7340 with SMTP id
- 5b1f17b1804b1-45b43e15255mr32658865e9.30.1755616124904; 
- Tue, 19 Aug 2025 08:08:44 -0700 (PDT)
+ bh=nfbvIjGYtqOqEIztnJZxBaXyab0PpBg6fQ9zRHmWWio=;
+ b=kKGVOx/WjOuFG8dJUUQv6lffLD498SSXzaHa9PHzDAzAroaFZj84O0+3QZX7CJKWcV
+ 71/Cu5MeGCAZqhBa88u81VINcuLXes3qQfaQyT1Dzqyrc/BpPxvSbVZXemGC3WXViNq6
+ BKsJj9YzPOnrgoX51XUf0ibD8n3bje+1bQhxtLtDmoikxCLgCCyi4SvRWaei9L4zzl9i
+ i9ICG+ehEV89X61mWMdDMRbDIMcsTWmEtfa+41OI73QAxlx0aAZkcXsXUsWHPG8jBDFc
+ mfQvyhnMGxZwKRRZ6qPYIgtkO1YI+BLF58Tv1VR5WQwdT+rDh8oDrV/cRlqua5RpgEUP
+ zHyQ==
+X-Gm-Message-State: AOJu0YzpmGRFkJkIy/MZ/Li+ieToplbj3NcncWUYzS0mW0LAc5EHunUl
+ jQovtgwgtSC3amRKzNEBKfTBwtTBVtNpQTYY4j1BYopFytHjC69ZoaOBsHoWTJxw
+X-Gm-Gg: ASbGncviw2DcwtI+wdvoPM61UVOsxNWSClgt7/Ag0fASrw6Ls6qWhWCLDL/QKn9uSGC
+ DoRnPErdkgorRn9+idJXjlsIiN3vezTHXlLvhM+BwlDr3vyVu5+xNM54XEnKMx4W7wNGtSMMRNo
+ 5URMrNbhGmF/ULYW5oMQZP5vZG/RoQWAbNEM0LABf22HiazhnU5P4Sm0m7j2ntwmp7zp4YiAszX
+ rtqNXpu/aDuykCI1J2b/yhoPBFC8rpCawAKdJITOXfDlq4rQpmmPGjTV9V17ThlyswMoUrALG8v
+ SpmUCSK3oDkK1PYqKOoUkMjjwzDNujxj2qlYprNAfjyLz0cp6rLxIpVCq+Vd5Nqnyx1k3eZ+Ql7
+ XeLhIpjVLozVdC1f38AFR7tN6iI1RCLHBkKM4xHPq++uJww==
+X-Google-Smtp-Source: AGHT+IGDszHs/gbGoOlfQt7ioGsBiRHF1cthBmnNXg3bONafOkZLoqA71Fz4QvZQmBBPX+ootH7fUQ==
+X-Received: by 2002:a05:600c:3b83:b0:459:ea5d:418b with SMTP id
+ 5b1f17b1804b1-45b43dc4c29mr26875085e9.9.1755616125774; 
+ Tue, 19 Aug 2025 08:08:45 -0700 (PDT)
 Received: from localhost.localdomain ([212.22.141.99])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-45a1c61a66esm216675995e9.0.2025.08.19.08.08.43
+ 5b1f17b1804b1-45a1c61a66esm216675995e9.0.2025.08.19.08.08.45
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 19 Aug 2025 08:08:44 -0700 (PDT)
+ Tue, 19 Aug 2025 08:08:45 -0700 (PDT)
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 To: buildroot@buildroot.org
 Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Tue, 19 Aug 2025 17:08:33 +0200
-Message-Id: <20250819150834.1651775-5-angelo.compagnucci@gmail.com>
+Date: Tue, 19 Aug 2025 17:08:34 +0200
+Message-Id: <20250819150834.1651775-6-angelo.compagnucci@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250819150834.1651775-1-angelo.compagnucci@gmail.com>
 References: <20250819150834.1651775-1-angelo.compagnucci@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1755616125; x=1756220925; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1755616126; x=1756220926; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=DjhHfH3VlPBRxPSYyQh4gZn3wqzcc7Rr2J60ySkuF+U=;
- b=L9e5dGwUGVVQBhh0SNRoLJ/SHLI8by9bqkgCue++N31uaTWNrZJc0a5YxrXLTK+klg
- tPOQja7Vt7pK4V7YUTsl0AbpirQQKhG8LVPE+szCXkYVi9gqhtlKZk1EIdms3zbHzToE
- Vz2sFtZfqq1/k4jfmXa7QWjfkECV0qcl4NUgMnkKVHTtF434aMInqu0Bq31XUiCBZim7
- d3Lourj762xNc8jsV/rPeBvtdHtFS3MejMHCqw/7W1cMOPsnWpKgzYNjWRBinvz5GtBp
- 7BhhTdvAP6eKvQD/RypaCArXwaYy0Fsk2LWBwwLg1wLzsVfQktdYh6WIu/TL9zLb5PLf
- q4AA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=nfbvIjGYtqOqEIztnJZxBaXyab0PpBg6fQ9zRHmWWio=;
+ b=Dd7OqlfRaM7EbCaTUw3AkEN7GRna5aYiMijQ2lQGDwaqs1ZHtdEW4q6M3flJ4xUQ8n
+ +Xlxmbd9zIRR4koMp9nuqDF60FKyDLVB2v2w8VXdLEO54t1fLrOm/r+onhbq+jq0mlfw
+ Oj7YidLu0GTyp7cDxvYNqFh+r/TeC19nBETWfol4vx2SxxFV22fjzGGAyibMkGiq1x9/
+ /X61zkFZ+0TqG8QntCXruOiTJsaQuOMmhGcAAj4+AwLvHoL7PfjGvpRHyIAi0xIsvJX7
+ nwyTt3jiE0nJuOkeaJuDkbT5KD1YXTNmwZFQf30OtzmMDi/pAVkxASFBSxu/wx31rrHJ
+ 193Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=L9e5dGwU
-Subject: [Buildroot] [PATCH 4/5] package/cups-filters: bump to version 2.0.1
+ header.a=rsa-sha256 header.s=20230601 header.b=Dd7OqlfR
+Subject: [Buildroot] [PATCH 5/5] package/cups: bump to version 2.4.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,369 +115,38 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Changelog:
-https://github.com/OpenPrinting/cups-filters/releases/tag/2.0.1
-
-This version makes use of two ancillary libraries split from the main code.
-Those libraries are:
-* libcupsfilters
-* libppd
-
-This required a major rework of the package because most of the dependencies
-were moved those new libraries.
+https://github.com/OpenPrinting/cups/releases/tag/v2.4.12
 
 Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 ---
- ...ecv-instead-of-system-CVE-2023-24805.patch | 208 ------------------
- package/cups-filters/Config.in                |  16 +-
- package/cups-filters/cups-filters.hash        |   2 +-
- package/cups-filters/cups-filters.mk          |  70 +-----
- 4 files changed, 10 insertions(+), 286 deletions(-)
- delete mode 100644 package/cups-filters/0001-beh-backend-Use-execv-instead-of-system-CVE-2023-24805.patch
+ package/cups/cups.hash | 4 ++--
+ package/cups/cups.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/cups-filters/0001-beh-backend-Use-execv-instead-of-system-CVE-2023-24805.patch b/package/cups-filters/0001-beh-backend-Use-execv-instead-of-system-CVE-2023-24805.patch
-deleted file mode 100644
-index e527b20f91..0000000000
---- a/package/cups-filters/0001-beh-backend-Use-execv-instead-of-system-CVE-2023-24805.patch
-+++ /dev/null
-@@ -1,208 +0,0 @@
--From 93e60d3df358c0ae6f3dba79e1c9684657683d89 Mon Sep 17 00:00:00 2001
--From: Till Kamppeter <till.kamppeter@gmail.com>
--Date: Wed, 17 May 2023 11:11:29 +0200
--Subject: [PATCH] beh backend: Use execv() instead of system() - CVE-2023-24805
--
--With execv() command line arguments are passed as separate strings and
--not the full command line in a single string. This prevents arbitrary
--command execution by escaping the quoting of the arguments in a job
--with a forged job title.
--
--In addition, done the following fixes and improvements:
--
--- Do not allow '/' in the scheme of the URI (= backend executable
--  name), to assure that only backends inside /usr/lib/cups/backend/
--  are used.
--
--- URI must have ':', to split off scheme, otherwise error out.
--
--- Check return value of snprintf() to create call path for backend, to
--  error out on truncation of a too long scheme or on complete failure
--  due to a completely odd scheme.
--
--- Use strncat() instead of strncpy() for getting scheme from URI, the latter
--  does not require setting terminating zero byte in case of truncation.
--
--- Also exclude "." or ".." as scheme, as directories are not valid CUPS
--  backends.
--
--- Do not use fprintf() in sigterm_handler(), to not interfere with a
--  fprintf() which could be running in the main process when
--  sigterm_handler() is triggered.
--
--- Use "static volatile int" for global variable job_canceled.
--
--Upstream: https://github.com/OpenPrinting/cups-filters/commit/93e60d3df358c0ae6f3dba79e1c9684657683d89
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- backend/beh.c | 107 +++++++++++++++++++++++++++++++++++++++-----------
-- 1 file changed, 84 insertions(+), 23 deletions(-)
--
--diff --git a/backend/beh.c b/backend/beh.c
--index 225fd27d5..8d51235b1 100644
----- a/backend/beh.c
--+++ b/backend/beh.c
--@@ -22,12 +22,13 @@
-- #include "backend-private.h"
-- #include <cups/array.h>
-- #include <ctype.h>
--+#include <sys/wait.h>
-- 
-- /*
--  * Local globals...
--  */
-- 
---static int		job_canceled = 0; /* Set to 1 on SIGTERM */
--+static volatile int	job_canceled = 0; /* Set to 1 on SIGTERM */
-- 
-- /*
--  * Local functions...
--@@ -213,21 +214,40 @@ call_backend(char *uri,                 /* I - URI of final destination */
-- 	     char **argv,		/* I - Command-line arguments */
-- 	     char *filename) {          /* I - File name of input data */
--   const char	*cups_serverbin;	/* Location of programs */
--+  char          *backend_argv[8];	/* Arguments for backend */
--   char		scheme[1024],           /* Scheme from URI */
--                 *ptr,			/* Pointer into scheme */
---		cmdline[65536];		/* Backend command line */
---  int           retval;
--+		backend_path[2048];	/* Backend path */
--+  int           pid = 0, 		/* Process ID of backend */
--+                wait_pid,		/* Process ID from wait() */
--+                wait_status, 		/* Status from child */
--+                retval = 0;
--+  int           bytes;
-- 
--  /*
--   * Build the backend command line...
--   */
-- 
---  strncpy(scheme, uri, sizeof(scheme) - 1);
---  if (strlen(uri) > 1023)
---    scheme[1023] = '\0';
--+  scheme[0] = '\0';
--+  strncat(scheme, uri, sizeof(scheme) - 1);
--   if ((ptr = strchr(scheme, ':')) != NULL)
--     *ptr = '\0';
---
--+  else {
--+    fprintf(stderr,
--+	    "ERROR: beh: Invalid URI, no colon (':') to mark end of scheme part.\n");
--+    exit (CUPS_BACKEND_FAILED);
--+  }
--+  if (strchr(scheme, '/')) {
--+    fprintf(stderr,
--+	    "ERROR: beh: Invalid URI, scheme contains a slash ('/').\n");
--+    exit (CUPS_BACKEND_FAILED);
--+  }
--+  if (!strcmp(scheme, ".") || !strcmp(scheme, "..")) {
--+    fprintf(stderr,
--+	    "ERROR: beh: Invalid URI, scheme (\"%s\") is a directory.\n",
--+	    scheme);
--+    exit (CUPS_BACKEND_FAILED);
--+  }
--   if ((cups_serverbin = getenv("CUPS_SERVERBIN")) == NULL)
--     cups_serverbin = CUPS_SERVERBIN;
-- 
--@@ -235,16 +255,29 @@ call_backend(char *uri,                 /* I - URI of final destination */
--     fprintf(stderr,
-- 	    "ERROR: beh: Direct output into a file not supported.\n");
--     exit (CUPS_BACKEND_FAILED);
---  } else
---    snprintf(cmdline, sizeof(cmdline),
---	     "%s/backend/%s '%s' '%s' '%s' '%s' '%s' %s",
---	     cups_serverbin, scheme, argv[1], argv[2], argv[3],
---	     /* Apply number of copies only if beh was called with a
---		file name and not with the print data in stdin, as
---	        backends should handle copies only if they are called
---	        with a file name */
---	     (argc == 6 ? "1" : argv[4]),
---	     argv[5], filename);
--+  }
--+
--+  backend_argv[0] = uri;
--+  backend_argv[1] = argv[1];
--+  backend_argv[2] = argv[2];
--+  backend_argv[3] = argv[3];
--+  /* Apply number of copies only if beh was called with a file name
--+     and not with the print data in stdin, as backends should handle
--+     copies only if they are called with a file name */
--+  backend_argv[4] = (argc == 6 ? "1" : argv[4]);
--+  backend_argv[5] = argv[5];
--+  backend_argv[6] = filename;
--+  backend_argv[7] = NULL;
--+
--+  bytes = snprintf(backend_path, sizeof(backend_path),
--+		   "%s/backend/%s", cups_serverbin, scheme);
--+  if (bytes < 0 || bytes >= sizeof(backend_path))
--+  {
--+    fprintf(stderr,
--+	    "ERROR: beh: Invalid scheme (\"%s\"), could not determing backend path.\n",
--+	    scheme);
--+    return (CUPS_BACKEND_FAILED);
--+  }
-- 
--  /*
--   * Overwrite the device URI and run the actual backend...
--@@ -253,18 +286,44 @@ call_backend(char *uri,                 /* I - URI of final destination */
--   setenv("DEVICE_URI", uri, 1);
-- 
--   fprintf(stderr,
---	  "DEBUG: beh: Executing backend command line \"%s\"...\n",
---	  cmdline);
--+	  "DEBUG: beh: Executing backend command line \"%s '%s' '%s' '%s' '%s' '%s' %s\"...\n",
--+	  backend_path, backend_argv[1], backend_argv[2], backend_argv[3],
--+	  backend_argv[4], backend_argv[5], backend_argv[6]);
--   fprintf(stderr,
-- 	  "DEBUG: beh: Using device URI: %s\n",
-- 	  uri);
-- 
---  retval = system(cmdline) >> 8;
--+  if ((pid = fork()) == 0) {
--+   /*
--+    * Child comes here...
--+    */
--+
--+    /* Run the backend */
--+    execv(backend_path, backend_argv);
-- 
---  if (retval == -1)
--     fprintf(stderr, "ERROR: Unable to execute backend command line: %s\n",
-- 	    strerror(errno));
-- 
--+    exit(1);
--+  } else if (pid < 0) {
--+   /*
--+    * Unable to fork!
--+    */
--+
--+    return (CUPS_BACKEND_FAILED);
--+  }
--+
--+  while ((wait_pid = wait(&wait_status)) < 0 && errno == EINTR);
--+
--+  if (wait_pid >= 0 && wait_status) {
--+    if (WIFEXITED(wait_status))
--+      retval = WEXITSTATUS(wait_status);
--+    else if (WTERMSIG(wait_status) != SIGTERM)
--+      retval = WTERMSIG(wait_status);
--+    else
--+      retval = 0;
--+  }
--+
--   return (retval);
-- }
-- 
--@@ -277,8 +336,10 @@ static void
-- sigterm_handler(int sig) {		/* I - Signal number (unused) */
--   (void)sig;
-- 
---  fprintf(stderr,
---	  "DEBUG: beh: Job canceled.\n");
--+  const char * const msg = "DEBUG: beh: Job canceled.\n";
--+  /* The if() is to eliminate the return value and silence the warning
--+     about an unused return value. */
--+  if (write(2, msg, strlen(msg)));
-- 
--   if (job_canceled)
--     _exit(CUPS_BACKEND_OK);
-diff --git a/package/cups-filters/Config.in b/package/cups-filters/Config.in
-index ded99a4774..89f4b4d08d 100644
---- a/package/cups-filters/Config.in
-+++ b/package/cups-filters/Config.in
-@@ -2,19 +2,15 @@ config BR2_PACKAGE_CUPS_FILTERS
- 	bool "cups-filters"
- 	# needs fork()
- 	depends on BR2_USE_MMU
--	depends on BR2_INSTALL_LIBSTDCPP # qpdf
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_WCHAR
- 	depends on !BR2_STATIC_LIBS
--	depends on BR2_USE_WCHAR # libglib2
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
- 	depends on BR2_PACKAGE_CUPS
-+	depends on BR2_PACKAGE_LIBCUPSFILTERS
-+	depends on BR2_PACKAGE_LIBPPD
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # qpdf
--	depends on BR2_TOOLCHAIN_HAS_ATOMIC # qpdf
--	select BR2_PACKAGE_JPEG
--	select BR2_PACKAGE_FONTCONFIG
--	select BR2_PACKAGE_FREETYPE
--	select BR2_PACKAGE_LCMS2
--	select BR2_PACKAGE_LIBGLIB2
--	select BR2_PACKAGE_QPDF
- 	help
- 	  This project provides backends, filters, and other software
- 	  that was once part of the core CUPS distribution but is no
-diff --git a/package/cups-filters/cups-filters.hash b/package/cups-filters/cups-filters.hash
-index 7fb3badf46..24c7b463f7 100644
---- a/package/cups-filters/cups-filters.hash
-+++ b/package/cups-filters/cups-filters.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  01a2acbd6bb78f09638047e4e9ce305d7e5ef4cb9ed6949672b5d901b7321dd4  cups-filters-1.28.17.tar.gz
-+sha256  3de1cbb889d06e5a6a945dcb921292544477ab89da95ca89f1eec2de29937afb  cups-filters-2.0.1.tar.gz
- sha256  38192ffdaca98b718f78b2d4abc38bb087f0bbcc9a16d212c98b903b985f900f  COPYING
-diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
-index dcfb2e9500..328b6693e9 100644
---- a/package/cups-filters/cups-filters.mk
-+++ b/package/cups-filters/cups-filters.mk
+diff --git a/package/cups/cups.hash b/package/cups/cups.hash
+index f826f96fe7..e363a761eb 100644
+--- a/package/cups/cups.hash
++++ b/package/cups/cups.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated:
+-sha256  9a88fe1da3a29a917c3fc67ce6eb3178399d68e1a548c6d86c70d9b13651fd71  cups-2.4.11-source.tar.gz
++sha256  b1dde191a4ae2760c47220c82ca6155a28c382701e6c1a0159d1054990231d59  cups-2.4.12-source.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+-sha256  5320b6e3c252423e4153eb2dd63e57e3b630afb21139f44e43b02d85fe33e279  NOTICE
++sha256  977206f041b9a6f47ac00531e1242c0fab7063da71178f8d868b167b70866b6d  NOTICE
+diff --git a/package/cups/cups.mk b/package/cups/cups.mk
+index 31899114ef..21fe6a7c5e 100644
+--- a/package/cups/cups.mk
++++ b/package/cups/cups.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CUPS_FILTERS_VERSION = 1.28.17
-+CUPS_FILTERS_VERSION = 2.0.1
- CUPS_FILTERS_SITE = https://github.com/OpenPrinting/cups-filters/releases/download/$(CUPS_FILTERS_VERSION)
- CUPS_FILTERS_LICENSE = GPL-2.0, GPL-2.0+, GPL-3.0, GPL-3.0+, LGPL-2, LGPL-2.1+, MIT, BSD-4-Clause
- CUPS_FILTERS_LICENSE_FILES = COPYING
-@@ -13,75 +13,11 @@ CUPS_FILTERS_CPE_ID_VENDOR = linuxfoundation
- # 0001-beh-backend-Use-execv-instead-of-system-CVE-2023-24805.patch
- CUPS_FILTERS_IGNORE_CVES += CVE-2023-24805
- 
--CUPS_FILTERS_DEPENDENCIES = cups libglib2 lcms2 qpdf fontconfig freetype jpeg
-+CUPS_FILTERS_DEPENDENCIES = cups libcupsfilters libppd
- 
- CUPS_FILTERS_CONF_OPTS = \
--	--disable-mutool \
--	--disable-foomatic \
--	--disable-braille \
--	--enable-imagefilters \
- 	--with-cups-config=$(STAGING_DIR)/usr/bin/cups-config \
--	--with-sysroot=$(STAGING_DIR) \
--	--with-pdftops=pdftops \
--	--with-jpeg \
--	--with-test-font-path=/dev/null \
--	--without-rcdir
--
--ifeq ($(BR2_PACKAGE_LIBPNG),y)
--CUPS_FILTERS_CONF_OPTS += --with-png
--CUPS_FILTERS_DEPENDENCIES += libpng
--else
--CUPS_FILTERS_CONF_OPTS += --without-png
--endif
--
--ifeq ($(BR2_PACKAGE_TIFF),y)
--CUPS_FILTERS_CONF_OPTS += --with-tiff
--CUPS_FILTERS_DEPENDENCIES += tiff
--else
--CUPS_FILTERS_CONF_OPTS += --without-tiff
--endif
--
--ifeq ($(BR2_PACKAGE_DBUS),y)
--CUPS_FILTERS_CONF_OPTS += --enable-dbus
--CUPS_FILTERS_DEPENDENCIES += dbus
--else
--CUPS_FILTERS_CONF_OPTS += --disable-dbus
--endif
--
--ifeq ($(BR2_PACKAGE_AVAHI_LIBAVAHI_CLIENT),y)
--CUPS_FILTERS_DEPENDENCIES += avahi
--CUPS_FILTERS_CONF_OPTS += --enable-avahi
--else
--CUPS_FILTERS_CONF_OPTS += --disable-avahi
--endif
--
--ifeq ($(BR2_PACKAGE_GHOSTSCRIPT),y)
--CUPS_FILTERS_DEPENDENCIES += ghostscript
--CUPS_FILTERS_CONF_OPTS += --enable-ghostscript
--else
--CUPS_FILTERS_CONF_OPTS += --disable-ghostscript
--endif
--
--ifeq ($(BR2_PACKAGE_IJS),y)
--CUPS_FILTERS_DEPENDENCIES += ijs
--CUPS_FILTERS_CONF_OPTS += --enable-ijs
--else
--CUPS_FILTERS_CONF_OPTS += --disable-ijs
--endif
--
--ifeq ($(BR2_PACKAGE_POPPLER),y)
--CUPS_FILTERS_DEPENDENCIES += poppler
--CUPS_FILTERS_CONF_OPTS += --enable-poppler
--else
--CUPS_FILTERS_CONF_OPTS += --disable-poppler
--endif
--
--ifeq ($(BR2_PACKAGE_LIBEXIF),y)
--CUPS_FILTERS_CONF_OPTS += --enable-exif
--CUPS_FILTERS_DEPENDENCIES += libexif
--else
--CUPS_FILTERS_CONF_OPTS += --disable-exif
--endif
-+	CFLAGS="$(TARGET_CFLAGS) -std=gnu17"
- 
- define CUPS_FILTERS_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 0755 package/cups-filters/S82cups-browsed \
+-CUPS_VERSION = 2.4.11
++CUPS_VERSION = 2.4.12
+ CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.gz
+ CUPS_SITE = https://github.com/OpenPrinting/cups/releases/download/v$(CUPS_VERSION)
+ CUPS_LICENSE = Apache-2.0 with GPL-2.0/LGPL-2.0 exception
 -- 
 2.34.1
 
