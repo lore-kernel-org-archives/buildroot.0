@@ -4,74 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5F5CCA0EEB
-	for <buildroot@archiver.kernel.org>; Tue, 19 Aug 2025 17:28:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3994ACA0EEB
+	for <buildroot@archiver.kernel.org>; Tue, 19 Aug 2025 17:31:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6C64381489;
-	Tue, 19 Aug 2025 17:28:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DCA03814AB;
+	Tue, 19 Aug 2025 17:31:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Oonfsu9kGeAG; Tue, 19 Aug 2025 17:28:39 +0000 (UTC)
+ id li5OJzPh8fPt; Tue, 19 Aug 2025 17:31:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3608181490
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C985C814C7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3608181490;
-	Tue, 19 Aug 2025 17:28:39 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id BC74BDE6
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 17:28:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C985C814C7;
+	Tue, 19 Aug 2025 17:31:13 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 56AF1E2
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 17:31:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B1FE040CEE
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 17:28:37 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 494874009A
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 17:31:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id o836QdeXw1AJ for <buildroot@buildroot.org>;
- Tue, 19 Aug 2025 17:28:36 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AegGpsCMYV3m for <buildroot@buildroot.org>;
+ Tue, 19 Aug 2025 17:31:11 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
  helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 72D6840CE9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 72D6840CE9
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org F104440068
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F104440068
 Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 72D6840CE9
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 17:28:35 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F104440068
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 17:31:10 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id A25B01A0D18
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 17:28:33 +0000 (UTC)
+ by smtpout-02.galae.net (Postfix) with ESMTPS id 6EA411A0D18
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 17:31:09 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 6DFBE60697;
- Tue, 19 Aug 2025 17:28:33 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 40B7F60697;
+ Tue, 19 Aug 2025 17:31:09 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 8794D1C22C041; 
- Tue, 19 Aug 2025 19:28:31 +0200 (CEST)
+ with ESMTPSA id 3DF451C22DBB2; 
+ Tue, 19 Aug 2025 19:31:08 +0200 (CEST)
 To: buildroot@buildroot.org
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Michel Stempin <michel.stempin@wanadoo.fr>,
- Damien Le Moal <dlemoal@kernel.org>
-Date: Tue, 19 Aug 2025 19:28:29 +0200
-Message-ID: <20250819172830.3350159-1-thomas.petazzoni@bootlin.com>
+ =?UTF-8?q?Micha=C5=82=20=C5=81yszczek?= <michal.lyszczek@bofc.pl>
+Date: Tue, 19 Aug 2025 19:31:06 +0200
+Message-ID: <20250819173106.3351049-1-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.50.1
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=dkim; 
- t=1755624512; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding; bh=TogTY8wKp0D1a6Ixd+B6WCQNd2oKKVm/4uw/qrCPwtQ=;
- b=ROF6eiHES6tmnT98LysyPOj1pnlxPD0W7eImWDc889fa35BBRWxwo+AOR79BRN5bFbWOkr
- 6GFvOgO+mQd2MoPmsXVSiHKJQBc1cq7GUavbraCcY6SjNhO2h6s/NZzrc4leZWOSWQ/bqY
- +UuivbU0tl9rBI9m/R0JvHlVEb7neSmuTQTZ0B5nLirRLFuYPuBsBJDOn7n/csVqHjd0VZ
- v4aJQU4TRcQrdelIWGaUcjZZJfZT5MjtBpEVZfuRCYslgWjRxNpiVXAJv666ziNkxuTZu3
- OL/f+f5HV3Ny+fUy9x8OyqIH2OHG2FiZURRBrjxnQ8DhyYnHKUFxpegBNbE+sw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ t=1755624668; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding; bh=ugUzeqOWMRRC7UrE11ubKsBTz+JRPcxVsNey5e7HcNM=;
+ b=TeBz1W75LUSCseWBodBun1ThaiP1oZUIY1Tp7PMaGrsESEiJIvZKTaQFK5XRUjm79fSZ6N
+ 2T/jJ4CQXnQp6JagwVU13xtf0rdqchkYIAr4SWnUN3ekDD8xo7FTuNRav20TluK1qBS4ll
+ i+nTZ7j9DO39YoF0ht3J7m2YSjeO+DE7MISw1IzXyBMrzPxpSl5xoRoELlRxFVAxDflXD8
+ llD6WGqe9iGyoif0vzX4uXyPGgYtEt8P4i2ECocLC3VQgtX/j5uXvTrWIdWNFaYOzDMpBk
+ BYV1sDDaAGSwVmdkV1npq09HV42gD0ZxJcImW01SQzR1K43XSBCu6NVlFJbDuw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=ROF6eiHE
-Subject: [Buildroot] [PATCH] configs/sipeed_licheepi_zero: remove defconfig,
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
+ header.a=rsa-sha256 header.s=dkim header.b=TeBz1W75
+Subject: [Buildroot] [PATCH] configs/socrates_cyclone5: remove defconfig,
  broken
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -86,237 +84,132 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This defconfig no longer builds:
-
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/11026771001
-
-It has been broken for over 2 months:
-
-  https://gitlab.com/buildroot.org/buildroot/-/jobs?name=T%3Dsipeed_licheepi_zero&kind=BUILD
-
-It uses Linux 5.8.3, which is not even an LTS maintained kernel.
-
-Unless a fix is provided, this defconfig will be removed.
-
-Fixes:
-
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/11026771001
-
-Cc: Michel Stempin <michel.stempin@wanadoo.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .checkpackageignore                     |  1 -
- DEVELOPERS                              |  4 --
- board/sipeed/licheepi_zero/boot.cmd     |  4 --
- board/sipeed/licheepi_zero/genimage.cfg | 36 --------------
- board/sipeed/licheepi_zero/readme.txt   | 62 -------------------------
- configs/sipeed_licheepi_zero_defconfig  | 38 ---------------
- 6 files changed, 145 deletions(-)
- delete mode 100644 board/sipeed/licheepi_zero/boot.cmd
- delete mode 100644 board/sipeed/licheepi_zero/genimage.cfg
- delete mode 100644 board/sipeed/licheepi_zero/readme.txt
- delete mode 100644 configs/sipeed_licheepi_zero_defconfig
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 8720dcb9a8..e075426313 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -169,7 +169,6 @@ configs/s6lx9_microboard_defconfig lib_defconfig.ForceCheckHash
- configs/sipeed_lichee_rv_defconfig lib_defconfig.ForceCheckHash
- configs/sipeed_lichee_rv_dock_defconfig lib_defconfig.ForceCheckHash
- configs/sipeed_licheepi_nano_defconfig lib_defconfig.ForceCheckHash
--configs/sipeed_licheepi_zero_defconfig lib_defconfig.ForceCheckHash
- configs/sipeed_maix_bit_defconfig lib_defconfig.ForceCheckHash
- configs/sipeed_maix_bit_sdcard_defconfig lib_defconfig.ForceCheckHash
- configs/sipeed_maix_dock_defconfig lib_defconfig.ForceCheckHash
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 6d17d1464a..a8bb88b917 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2459,10 +2459,6 @@ F:	package/netifrc/
- F:	package/openrc/
- F:	package/skeleton-init-openrc/
- 
--N:	Michel Stempin <michel.stempin@wanadoo.fr>
--F:	board/sipeed/licheepi_zero/
--F:	configs/sipeed_licheepi_zero_defconfig
--
- N:	Mika Westerberg <mika.westerberg@linux.intel.com>
- F:	package/tbtools/
- 
-diff --git a/board/sipeed/licheepi_zero/boot.cmd b/board/sipeed/licheepi_zero/boot.cmd
-deleted file mode 100644
-index 383b3473ed..0000000000
---- a/board/sipeed/licheepi_zero/boot.cmd
-+++ /dev/null
-@@ -1,4 +0,0 @@
--setenv bootargs console=ttyS0,115200 panic=5 console=tty0 rootwait root=/dev/mmcblk0p2 earlyprintk rw
--load mmc 0:1 0x41000000 zImage
--load mmc 0:1 0x41800000 sun8i-v3s-licheepi-zero-dock.dtb
--bootz 0x41000000 - 0x41800000
-diff --git a/board/sipeed/licheepi_zero/genimage.cfg b/board/sipeed/licheepi_zero/genimage.cfg
-deleted file mode 100644
-index 8dcb2e708e..0000000000
---- a/board/sipeed/licheepi_zero/genimage.cfg
-+++ /dev/null
-@@ -1,36 +0,0 @@
--image boot.vfat {
--	vfat {
--		files = {
--			"zImage",
--			"sun8i-v3s-licheepi-zero-dock.dtb",
--			"sun8i-v3s-licheepi-zero.dtb",
--			"boot.scr"
--		}
--	}
--
--	size = 8M
--}
--
--image sdcard.img {
--	hdimage {
--	}
--
--	partition u-boot {
--		in-partition-table = "no"
--		image = "u-boot-sunxi-with-spl.bin"
--		offset = 8K
--		size = 504K # 512KB - 8KB
--	}
--
--	partition boot {
--		partition-type = 0xC
--		bootable = "true"
--		image = "boot.vfat"
--	}
--
--	partition rootfs {
--		partition-type = 0x83
--		image = "rootfs.ext4"
--		size = 0
--	}
--}
-diff --git a/board/sipeed/licheepi_zero/readme.txt b/board/sipeed/licheepi_zero/readme.txt
-deleted file mode 100644
-index 2f122125b7..0000000000
---- a/board/sipeed/licheepi_zero/readme.txt
-+++ /dev/null
-@@ -1,62 +0,0 @@
--Intro
--=====
--
--This directory contains a buildroot configuration for building a
--LicheePi Zero.
--
--How to build it
--===============
--
--Configure Buildroot
---------------------
--
--  $ make sipeed_licheepi_zero_defconfig
--
--Build the rootfs
------------------
--
--Note: you will need to have access to the network, since Buildroot
--will download the packages' sources.
--
--You may now build your rootfs with:
--
--  $ make
--
--(This may take a while, consider getting yourself a coffee ;-) )
--
--Result of the build
---------------------
--
--After building, you should obtain this tree:
--
--    output/images/
--    +-- boot.scr
--    +-- boot.vfat
--    +-- rootfs.ext2
--    +-- rootfs.ext4 -> rootfs.ext2
--    +-- rootfs.tar
--    +-- sdcard.img
--    +-- sun8i-v3s-licheepi-zero-dock.dtb
--    +-- sun8i-v3s-licheepi-zero.dtb
--    +-- u-boot.bin
--    +-- u-boot-sunxi-with-spl.bin
--    `-- zImage
--
--How to write the SD card
--========================
--
--Once the build process is finished you will have an image called
--"sdcard.img" in the output/images/ directory.
--
--Copy the bootable "sdcard.img" onto an SD card with "dd":
--
--  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
--
--Alternatively, you can use the Etcher graphical tool to burn the image
--to the SD card safely and on any platform:
--
--https://etcher.io/
--
--Once the SD card is burned, insert it into your LicheePi Zero board,
--and power it up. Your new system should come up now and start a
--console on the UART0 serial port.
-diff --git a/configs/sipeed_licheepi_zero_defconfig b/configs/sipeed_licheepi_zero_defconfig
-deleted file mode 100644
-index e92c1d854e..0000000000
---- a/configs/sipeed_licheepi_zero_defconfig
-+++ /dev/null
-@@ -1,38 +0,0 @@
--BR2_arm=y
--BR2_cortex_a7=y
--BR2_ARM_FPU_VFPV4=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_3=y
--BR2_TARGET_GENERIC_HOSTNAME="licheepi-zero"
--BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the LicheePi Zero"
--BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
--BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
--BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/sipeed/licheepi_zero/genimage.cfg"
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.3.5"
--BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
--BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-v3s-licheepi-zero sun8i-v3s-licheepi-zero-dock"
--BR2_PACKAGE_LINUX_FIRMWARE=y
--BR2_PACKAGE_LINUX_FIRMWARE_RTL_87XX=y
--BR2_PACKAGE_WPA_SUPPLICANT=y
--BR2_PACKAGE_WPA_SUPPLICANT_AUTOSCAN=y
--BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_ROOTFS_EXT2_4=y
--BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.01"
--BR2_TARGET_UBOOT_BOARD_DEFCONFIG="LicheePi_Zero"
--BR2_TARGET_UBOOT_NEEDS_DTC=y
--BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
--BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
--BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
--BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
--BR2_PACKAGE_HOST_DOSFSTOOLS=y
--BR2_PACKAGE_HOST_GENIMAGE=y
--BR2_PACKAGE_HOST_MTOOLS=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/sipeed/licheepi_zero/boot.cmd"
--- 
-2.50.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+VGhpcyBkZWZjb25maWcgbm8gbG9uZ2VyIGJ1aWxkczoKCiAgaHR0cHM6Ly9naXRsYWIuY29tL2J1
+aWxkcm9vdC5vcmcvYnVpbGRyb290Ly0vam9icy8xMTAyNjc3Mjg4NwoKSXQgaGFzIGJlZW4gYnJv
+a2VuIGZvciBhdCBsZWFzdCAyIG1vbnRoczoKCiAgaHR0cHM6Ly9naXRsYWIuY29tL2J1aWxkcm9v
+dC5vcmcvYnVpbGRyb290Ly0vam9icz9uYW1lPVQlM0Rzb2NyYXRlc19jeWNsb25lNSZraW5kPUJV
+SUxECgpJdCB1c2VzIHRoZSBvdXRkYXRlZCBhbmQgbm90IGV2ZW4gTFRTIDQuMTYuNyBMaW51eCBr
+ZXJuZWwsIHdoaWNoIG5vCmxvbmdlciBidWlsZHMgd2l0aCBtb2Rlcm4gdG9vbGNoYWlucy4KClVu
+bGVzcyBhIGZpeCBpcyBwcm92aWRlZCwgdGhpcyBkZWZjb25maWcgd2lsbCBiZSByZW1vdmVkLgoK
+Rml4ZXM6CgogIGh0dHBzOi8vZ2l0bGFiLmNvbS9idWlsZHJvb3Qub3JnL2J1aWxkcm9vdC8tL2pv
+YnMvMTEwMjY3NzI4ODcKCkNjOiBNaWNoYcWCIMWBeXN6Y3playA8bWljaGFsLmx5c3pjemVrQGJv
+ZmMucGw+ClNpZ25lZC1vZmYtYnk6IFRob21hcyBQZXRhenpvbmkgPHRob21hcy5wZXRhenpvbmlA
+Ym9vdGxpbi5jb20+Ci0tLQogLmNoZWNrcGFja2FnZWlnbm9yZSAgICAgICAgICAgICAgICAgICAg
+ICAgICB8ICAxIC0KIERFVkVMT1BFUlMgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+fCAgMiAtCiBib2FyZC9hbHRlcmEvc29jcmF0ZXNfY3ljbG9uZTUvYm9vdC1lbnYudHh0IHwgIDgg
+LS0tCiBib2FyZC9hbHRlcmEvc29jcmF0ZXNfY3ljbG9uZTUvZ2VuaW1hZ2UuY2ZnIHwgNTkgLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tCiBib2FyZC9hbHRlcmEvc29jcmF0ZXNfY3ljbG9uZTUvcmVhZG1l
+LnR4dCAgIHwgNTIgLS0tLS0tLS0tLS0tLS0tLS0tCiBjb25maWdzL3NvY3JhdGVzX2N5Y2xvbmU1
+X2RlZmNvbmZpZyAgICAgICAgIHwgMzIgLS0tLS0tLS0tLS0KIDYgZmlsZXMgY2hhbmdlZCwgMTU0
+IGRlbGV0aW9ucygtKQogZGVsZXRlIG1vZGUgMTAwNjQ0IGJvYXJkL2FsdGVyYS9zb2NyYXRlc19j
+eWNsb25lNS9ib290LWVudi50eHQKIGRlbGV0ZSBtb2RlIDEwMDY0NCBib2FyZC9hbHRlcmEvc29j
+cmF0ZXNfY3ljbG9uZTUvZ2VuaW1hZ2UuY2ZnCiBkZWxldGUgbW9kZSAxMDA2NDQgYm9hcmQvYWx0
+ZXJhL3NvY3JhdGVzX2N5Y2xvbmU1L3JlYWRtZS50eHQKIGRlbGV0ZSBtb2RlIDEwMDY0NCBjb25m
+aWdzL3NvY3JhdGVzX2N5Y2xvbmU1X2RlZmNvbmZpZwoKZGlmZiAtLWdpdCBhLy5jaGVja3BhY2th
+Z2VpZ25vcmUgYi8uY2hlY2twYWNrYWdlaWdub3JlCmluZGV4IGUwNzU0MjYzMTMuLmI2ZDE4MjEw
+MjUgMTAwNjQ0Ci0tLSBhLy5jaGVja3BhY2thZ2VpZ25vcmUKKysrIGIvLmNoZWNrcGFja2FnZWln
+bm9yZQpAQCAtMTgyLDcgKzE4Miw2IEBAIGNvbmZpZ3Mvc25wc19hcmM3MDBfbnNpbV9kZWZjb25m
+aWcgbGliX2RlZmNvbmZpZy5Gb3JjZUNoZWNrSGFzaAogY29uZmlncy9zbnBzX2FyY2hzMzhfYXhz
+MTAzX2RlZmNvbmZpZyBsaWJfZGVmY29uZmlnLkZvcmNlQ2hlY2tIYXNoCiBjb25maWdzL3NucHNf
+YXJjaHMzOF9oYXBzX2RlZmNvbmZpZyBsaWJfZGVmY29uZmlnLkZvcmNlQ2hlY2tIYXNoCiBjb25m
+aWdzL3NucHNfYXJjaHMzOF9oc2RrX2RlZmNvbmZpZyBsaWJfZGVmY29uZmlnLkZvcmNlQ2hlY2tI
+YXNoCi1jb25maWdzL3NvY3JhdGVzX2N5Y2xvbmU1X2RlZmNvbmZpZyBsaWJfZGVmY29uZmlnLkZv
+cmNlQ2hlY2tIYXNoCiBjb25maWdzL3NvbGlkcnVuX2NsZWFyZm9nX2d0XzhrX2RlZmNvbmZpZyBs
+aWJfZGVmY29uZmlnLkZvcmNlQ2hlY2tIYXNoCiBjb25maWdzL3NvbGlkcnVuX21hY2NoaWF0b2Jp
+bl9kZWZjb25maWcgbGliX2RlZmNvbmZpZy5Gb3JjZUNoZWNrSGFzaAogY29uZmlncy9zdG0zMm1w
+MTU3Y19vZHlzc2V5X2RlZmNvbmZpZyBsaWJfZGVmY29uZmlnLkZvcmNlQ2hlY2tIYXNoCmRpZmYg
+LS1naXQgYS9ERVZFTE9QRVJTIGIvREVWRUxPUEVSUwppbmRleCBhOGJiODhiOTE3Li45NTE5ZmEz
+Y2NiIDEwMDY0NAotLS0gYS9ERVZFTE9QRVJTCisrKyBiL0RFVkVMT1BFUlMKQEAgLTI0NTMsOCAr
+MjQ1Myw2IEBAIEY6CXBhY2thZ2UvbGliYXZsLwogRjoJcGFja2FnZS9yY3ctc21hcmMtc2FsMjgv
+CiAKIE46CU1pY2hhxYIgxYF5c3pjemVrIDxtaWNoYWwubHlzemN6ZWtAYm9mYy5wbD4KLUY6CWJv
+YXJkL2FsdGVyYS9zb2NyYXRlc19jeWNsb25lNS8KLUY6CWNvbmZpZ3Mvc29jcmF0ZXNfY3ljbG9u
+ZTVfZGVmY29uZmlnCiBGOglwYWNrYWdlL25ldGlmcmMvCiBGOglwYWNrYWdlL29wZW5yYy8KIEY6
+CXBhY2thZ2Uvc2tlbGV0b24taW5pdC1vcGVucmMvCmRpZmYgLS1naXQgYS9ib2FyZC9hbHRlcmEv
+c29jcmF0ZXNfY3ljbG9uZTUvYm9vdC1lbnYudHh0IGIvYm9hcmQvYWx0ZXJhL3NvY3JhdGVzX2N5
+Y2xvbmU1L2Jvb3QtZW52LnR4dApkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggZWQ1YjYx
+Mzg2Yy4uMDAwMDAwMDAwMAotLS0gYS9ib2FyZC9hbHRlcmEvc29jcmF0ZXNfY3ljbG9uZTUvYm9v
+dC1lbnYudHh0CisrKyAvZGV2L251bGwKQEAgLTEsOCArMCwwIEBACi1saW51eF9sb2FkX2FkZHJl
+c3M9MHgxMDAwMDAKLWxpbnV4X2R0Yl9sb2FkX2FkZHJlc3M9MHgxMDAKLWxpbnV4X2R0Yj1zb2Nm
+cGdhX2N5Y2xvbmU1X3NvY3JhdGVzLmR0YgotbGludXhfbG9hZD1tbWMgcmVzY2FuOyBmYXRsb2Fk
+IG1tYyAwOjEgJHtsaW51eF9sb2FkX2FkZHJlc3N9IHpJbWFnZTsgZmF0bG9hZCBtbWMgMDoxICR7
+bGludXhfZHRiX2xvYWRfYWRkcmVzc30gJHtsaW51eF9kdGJ9Ci1ib290YXJncz1jb25zb2xlPXR0
+eVMwLDExNTIwMCByb290PS9kZXYvbW1jYmxrMHAzIHJvIHJvb3R3YWl0Ci1zb3VyY2VfZW52PWZh
+dGxvYWQgbW1jIDA6MSAweDIwMDAwMDAgYm9vdC5zY3I7IHNvdXJjZSAweDIwMDAwMDAKLWJvb3Rj
+bWQ9cnVuIGxpbnV4X2xvYWQ7IGJvb3R6ICR7bGludXhfbG9hZF9hZGRyZXNzfSAtICR7bGludXhf
+ZHRiX2xvYWRfYWRkcmVzc30KLWJvb3RkZWxheT0xCmRpZmYgLS1naXQgYS9ib2FyZC9hbHRlcmEv
+c29jcmF0ZXNfY3ljbG9uZTUvZ2VuaW1hZ2UuY2ZnIGIvYm9hcmQvYWx0ZXJhL3NvY3JhdGVzX2N5
+Y2xvbmU1L2dlbmltYWdlLmNmZwpkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggZDMxYzM4
+MzhiZS4uMDAwMDAwMDAwMAotLS0gYS9ib2FyZC9hbHRlcmEvc29jcmF0ZXNfY3ljbG9uZTUvZ2Vu
+aW1hZ2UuY2ZnCisrKyAvZGV2L251bGwKQEAgLTEsNTkgKzAsMCBAQAotaW1hZ2UgYm9vdC52ZmF0
+IHsKLQl2ZmF0IHsKLQkJZmlsZXMgPSB7Ci0JCQkiekltYWdlIiwKLQkJCSJzb2NmcGdhX2N5Y2xv
+bmU1X3NvY3JhdGVzLmR0YiIKLQkJfQotCX0KLQotCXNpemUgPSA4TQotfQotCi1pbWFnZSB1Ym9v
+dC5pbWcgewotCWhkaW1hZ2UgewotCQlwYXJ0aXRpb24tdGFibGUgPSAibm8iCi0JfQotCi0JcGFy
+dGl0aW9uIHNwbCB7Ci0JCWluLXBhcnRpdGlvbi10YWJsZSA9ICJubyIKLQkJaW1hZ2UgPSAidS1i
+b290LXNwbC5iaW4uY3JjIgotCQlvZmZzZXQgPSAwCi0JCXNpemUgPSA2NEsKLQl9Ci0KLQlwYXJ0
+aXRpb24gdWJvb3QtZnVsbCB7Ci0JCWluLXBhcnRpdGlvbi10YWJsZSA9ICJubyIKLQkJaW1hZ2Ug
+PSAidS1ib290LmltZyIKLQkJb2Zmc2V0ID0gMjU2SwotCX0KLQotCXNpemUgPSAxTQotfQotCi1p
+bWFnZSBzZGNhcmQuaW1nIHsKLQloZGltYWdlIHsKLQl9Ci0KLQlwYXJ0aXRpb24gdWJvb3QtZW52
+IHsKLQkJaW4tcGFydGl0aW9uLXRhYmxlID0gIm5vIgotCQlpbWFnZSA9ICJ1Ym9vdC1lbnYuYmlu
+IgotCQlvZmZzZXQgPSAxN0sgIyA1MTIgKiAzNCAtPiBqdXN0IGFmdGVyIGdwdAotCX0KLQotCXBh
+cnRpdGlvbiBib290IHsKLQkJcGFydGl0aW9uLXR5cGUgPSAweGMKLQkJYm9vdGFibGUgPSAidHJ1
+ZSIKLQkJaW1hZ2UgPSAiYm9vdC52ZmF0IgotCX0KLQotCXBhcnRpdGlvbiB1Ym9vdCB7Ci0JCXBh
+cnRpdGlvbi10eXBlID0gMHhhMgotCQlpbWFnZSA9ICJ1Ym9vdC5pbWciCi0JfQotCi0JcGFydGl0
+aW9uIHJvb3RmcyB7Ci0JCXBhcnRpdGlvbi10eXBlID0gMHg4MwotCQlpbWFnZSA9ICJyb290ZnMu
+ZXh0MiIKLQkJc2l6ZSA9IDUwME0KLQl9Ci19CmRpZmYgLS1naXQgYS9ib2FyZC9hbHRlcmEvc29j
+cmF0ZXNfY3ljbG9uZTUvcmVhZG1lLnR4dCBiL2JvYXJkL2FsdGVyYS9zb2NyYXRlc19jeWNsb25l
+NS9yZWFkbWUudHh0CmRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAppbmRleCA0ZTc4ZmVlZjExLi4w
+MDAwMDAwMDAwCi0tLSBhL2JvYXJkL2FsdGVyYS9zb2NyYXRlc19jeWNsb25lNS9yZWFkbWUudHh0
+CisrKyAvZGV2L251bGwKQEAgLTEsNTIgKzAsMCBAQAotRUJWIFNvQ3JhdGVzIEV2YWx1YXRpb24g
+Qm9hcmQKLQotSW50cm8KLT09PT09Ci0KLU1vcmUgaW5mb3JtYXRpb24gYWJvdXQgdGhpcyBib2Fy
+ZCBjYW4gYmUgZm91bmQgaGVyZToKLWh0dHBzOi8vcm9ja2V0Ym9hcmRzLm9yZy9mb3N3aWtpL0Rv
+Y3VtZW50YXRpb24vRUJWU29DcmF0ZXNFdmFsdWF0aW9uQm9hcmQKLQotQnVpbGQKLT09PT09Ci0K
+LUZpcnN0LCBsb2FkIHNvY3JhdGVzIGNvbmZpZyBmb3IgYnVpbGRyb290Ci0KLSAgICBtYWtlIHNv
+Y3JhdGVzX2N5Y2xvbmU1X2RlZmNvbmZpZwotCi1CdWlsZCBldmVyeXRoaW5nCi0KLSAgICBtYWtl
+Ci0KLUZvbGxvd2luZyBmaWxlcyB3aWxsIGJlIGdlbmVyYXRlZCBpbiBvdXRwdXQvaW1hZ2VzCi0K
+LS4KLeKUnOKUgOKUgCBib290LnZmYXQKLeKUnOKUgOKUgCByb290ZnMuZXh0Mgot4pSc4pSA4pSA
+IHJvb3Rmcy5leHQ0IC0+IHJvb3Rmcy5leHQyCi3ilJzilIDilIAgcm9vdGZzLnRhcgot4pSc4pSA
+4pSAIHNkY2FyZC5pbWcKLeKUnOKUgOKUgCBzb2NmcGdhX2N5Y2xvbmU1X3NvY3JhdGVzLmR0Ygot
+4pSc4pSA4pSAIHUtYm9vdC1zcGwuYmluCi3ilJzilIDilIAgdS1ib290LXNwbC5iaW4uY3JjCi3i
+lJzilIDilIAgdS1ib290LmJpbgot4pSc4pSA4pSAIHUtYm9vdC5pbWcKLeKUnOKUgOKUgCB1Ym9v
+dC1lbnYuYmluCi3ilJzilIDilIAgdWJvb3QuaW1nCi3ilJTilIDilIAgekltYWdlCi0KLQotQ3Jl
+YXRpbmcgYm9vdGFibGUgU0QgY2FyZAotPT09PT09PT09PT09PT09PT09PT09PT09PQotCi1TaW1w
+bHkgaW52b2tlCi0KLWRkIGlmPW91dHB1dC9pbWFnZXMvc2RjYXJkLmltZyBvZj0vZGV2L3NkWAot
+Ci1XaGVyZSBYIGlzIHlvdXIgU0QgY2FyZCBkZXZpY2UgKG5vdCBwYXJ0aXRpb24pCi0KLUJvb3Rp
+bmcKLT09PT09PT0KLQotUGlucyA2Ojggb24gUDE4IHNlbGVjdG9yIGlzIHVzZWQgdG8gZGV0ZXJt
+aW5lIGJvb3QgZGV2aWNlLiBUbyBib290IHNvY3JhdGVzIGZyb20KLXNkY2FyZCBzZXQgdGhlc2Ug
+cGlucyB0byB2YWx1ZSAweDUgKDEwMWIpLiBSZW1haW5pbmcgcGlucyBhcmUgdXNlZCB0byBkZXRl
+cm1pbmUKLWhvdyB0byBjb25maWd1cmUgRlBHQSBhbmQgYXJlIG5vdCBhc3NvY2lhdGVkIHdpdGgg
+Ym9vdGluZyBpbnRvIExpbnV4IGtlcm5lbC4KZGlmZiAtLWdpdCBhL2NvbmZpZ3Mvc29jcmF0ZXNf
+Y3ljbG9uZTVfZGVmY29uZmlnIGIvY29uZmlncy9zb2NyYXRlc19jeWNsb25lNV9kZWZjb25maWcK
+ZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IGQyM2UwOGEyNTUuLjAwMDAwMDAwMDAKLS0t
+IGEvY29uZmlncy9zb2NyYXRlc19jeWNsb25lNV9kZWZjb25maWcKKysrIC9kZXYvbnVsbApAQCAt
+MSwzMiArMCwwIEBACi1CUjJfYXJtPXkKLUJSMl9jb3J0ZXhfYTk9eQotQlIyX0FSTV9FTkFCTEVf
+TkVPTj15Ci1CUjJfQVJNX0VOQUJMRV9WRlA9eQotQlIyX0FSTV9GUFVfTkVPTj15Ci1CUjJfUEFD
+S0FHRV9IT1NUX0xJTlVYX0hFQURFUlNfQ1VTVE9NXzRfMTY9eQotQlIyX1JPT1RGU19QT1NUX0lN
+QUdFX1NDUklQVD0ic3VwcG9ydC9zY3JpcHRzL2dlbmltYWdlLnNoIgotQlIyX1JPT1RGU19QT1NU
+X1NDUklQVF9BUkdTPSItYyBib2FyZC9hbHRlcmEvc29jcmF0ZXNfY3ljbG9uZTUvZ2VuaW1hZ2Uu
+Y2ZnIgotQlIyX0xJTlVYX0tFUk5FTD15Ci1CUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9O
+PXkKLUJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9IjQuMTYuNyIKLUJSMl9M
+SU5VWF9LRVJORUxfREVGQ09ORklHPSJzb2NmcGdhIgotQlIyX0xJTlVYX0tFUk5FTF9EVFNfU1VQ
+UE9SVD15Ci1CUjJfTElOVVhfS0VSTkVMX0lOVFJFRV9EVFNfTkFNRT0ic29jZnBnYV9jeWNsb25l
+NV9zb2NyYXRlcyIKLUJSMl9UQVJHRVRfUk9PVEZTX0VYVDI9eQotQlIyX1RBUkdFVF9ST09URlNf
+RVhUMl80PXkKLUJSMl9UQVJHRVRfVUJPT1Q9eQotQlIyX1RBUkdFVF9VQk9PVF9CVUlMRF9TWVNU
+RU1fS0NPTkZJRz15Ci1CUjJfVEFSR0VUX1VCT09UX0NVU1RPTV9WRVJTSU9OPXkKLUJSMl9UQVJH
+RVRfVUJPT1RfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9IjIwMTguMDMiCi1CUjJfVEFSR0VUX1VCT09U
+X0JPQVJEX0RFRkNPTkZJRz0ic29jZnBnYV9zb2NyYXRlcyIKLUJSMl9UQVJHRVRfVUJPT1RfTkVF
+RFNfRFRDPXkKLUJSMl9UQVJHRVRfVUJPT1RfRk9STUFUX0lNRz15Ci1CUjJfVEFSR0VUX1VCT09U
+X1NQTD15Ci1CUjJfVEFSR0VUX1VCT09UX0FMVEVSQV9TT0NGUEdBX0lNQUdFX0NSQz15Ci1CUjJf
+UEFDS0FHRV9IT1NUX0RPU0ZTVE9PTFM9eQotQlIyX1BBQ0tBR0VfSE9TVF9HRU5JTUFHRT15Ci1C
+UjJfUEFDS0FHRV9IT1NUX01UT09MUz15Ci1CUjJfUEFDS0FHRV9IT1NUX1VCT09UX1RPT0xTPXkK
+LUJSMl9QQUNLQUdFX0hPU1RfVUJPT1RfVE9PTFNfRU5WSU1BR0U9eQotQlIyX1BBQ0tBR0VfSE9T
+VF9VQk9PVF9UT09MU19FTlZJTUFHRV9TT1VSQ0U9ImJvYXJkL2FsdGVyYS9zb2NyYXRlc19jeWNs
+b25lNS9ib290LWVudi50eHQiCi1CUjJfUEFDS0FHRV9IT1NUX1VCT09UX1RPT0xTX0VOVklNQUdF
+X1NJWkU9IjgxOTIiCi0tIAoyLjUwLjEKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9v
+dC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRy
+b290Cg==
