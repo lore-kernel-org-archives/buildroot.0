@@ -1,102 +1,100 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69D37CA0EE6
-	for <buildroot@archiver.kernel.org>; Tue, 19 Aug 2025 13:39:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92A04CA0EEB
+	for <buildroot@archiver.kernel.org>; Tue, 19 Aug 2025 14:03:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2594060A68;
-	Tue, 19 Aug 2025 13:39:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 489E640BAA;
+	Tue, 19 Aug 2025 14:03:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jvAcwSHiXf4j; Tue, 19 Aug 2025 13:39:20 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2KXMpAimIOnq; Tue, 19 Aug 2025 14:03:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 432E460A70
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 657C540B98
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 432E460A70;
-	Tue, 19 Aug 2025 13:39:20 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 378CEDE6
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 13:39:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 657C540B98;
+	Tue, 19 Aug 2025 14:03:40 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1E6C3E0A
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 14:03:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1DA6B60A70
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 13:39:19 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0860840B98
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 14:03:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MFF8pCAG_jZQ for <buildroot@buildroot.org>;
- Tue, 19 Aug 2025 13:39:18 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id P4uFzC5CIURx for <buildroot@buildroot.org>;
+ Tue, 19 Aug 2025 14:03:38 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 9FE4160A68
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9FE4160A68
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9FE4160A68
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 13:39:17 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id
- 5b1f17b1804b1-45a1b00f187so24752075e9.0
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 06:39:17 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
+ envelope-from=angelo.compagnucci@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1A70240B35
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A70240B35
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1A70240B35
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 14:03:38 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ 5b1f17b1804b1-45a1b001f55so24712895e9.0
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 07:03:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1755610755; x=1756215555;
+ d=1e100.net; s=20230601; t=1755612216; x=1756217016;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=t43jv1b/ZxwvvnpXrYqdbvrC7RQSEjl3OZst7Yt7P/k=;
- b=ChTGcApTWZNyg3YoU0VNDsxeXiphdjo2vJogd2i6BiThrQx7EulZ7MD3OSiy6MdvZD
- rshLX46GgixUz8zlT5OdZbzPeN7ZdhDrfYlzlP79pyIYSqaQ6OoOc671bnVAPBYQ/3db
- xd1v9wDetE8dJiV7ZTBgkGCVpKCcfskvL/xiaae/H7nGGrUMGtcdC4qgiRMFZd+zKaYt
- TtnK7OJu5iT8+HENtAK6xxxBFx+dMLLMNSG1HlMrrVvmv5K6HEz74LlqkUni/y93Qauu
- GpcG8CYD7P9WBsLVUVYtzUs8BWgvoFjbuffQwBcDN8UgbJfEDducDAOQ3JX7EyEuwPsl
- MZjA==
-X-Gm-Message-State: AOJu0YxUZd92An+pMcYKftT5wChPOmrervEorkTOxQ2dAmlz0f5Y9SX0
- syP99vWsjv6gtnz7impQtQ0veLOO7SraKDiwR6QvfCxNuL6TExjwYTyb3SttIZUjJsAubPFOqSy
- /0c3uNGw=
-X-Gm-Gg: ASbGncu0Vs0Ki6v88hoNCTHFMj2IsfWAVr7wz4ouZAQIgHU19CpTOm5ftxpS3+o5wix
- yTKxeTbufNeXzfAfg6VSLRW8ARZY1YgBHTOZGiRanprHAAvpN9oR1hT74B6H2on9+QEE6so8SiK
- dzieWzJ+KVJHmlWMzxaGZnzR/rg3pOyxPXJi4Q7A46Q0GtHiQsxsfZ/4tz/EZp9L3OokhZId41r
- E9fsZC1vYnThTMAWDzBuQ/a18OKjyvDTyG0JvmhPr1culPa45T9CpxkJaWXw+offvaFTgXax07k
- 1HS04N6ajIuXmJVn1CjwadbXDcVEBlB06u7/A9Ly6zra4+OHEaCsSlRgtqB32cz0hP6Y7R5KuOL
- vsKcNl6znKq6PrvEH6Hs27K/H
-X-Google-Smtp-Source: AGHT+IESGeY1pqOoH+hrqoX06lcDzi2GSKPV1otuJZNzzt6XfHGBe0N/uBbcgwJ0NQaxUhIBzlZVuw==
-X-Received: by 2002:a05:600c:3513:b0:459:443e:b177 with SMTP id
- 5b1f17b1804b1-45b43e0bc36mr22518445e9.25.1755610754865; 
- Tue, 19 Aug 2025 06:39:14 -0700 (PDT)
-Received: from arch ([79.132.233.79]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3c077788df7sm3805731f8f.48.2025.08.19.06.39.13
+ bh=FT1OK5HiApKE+XTIWyOJuPnmID4LpoirsAvGlAOht1E=;
+ b=FnIJKv72neBKY2Ip9PjjY4BOYBD5XTgvQ+YDbHNp/Rp5/hGdie5OLoOIFC+YxNSlCa
+ 2oBsMr6q42kmFw0Z5eWniOJ/QnteI50FoRJ7qXvulFGmOqVVtrT9E8QwWrgjJQmH9WAM
+ YsebazUPYnpFVtTr/HROVlDGZ1cRiZMl3g6o2qCEiVCV71HX76GGq/6gIM6fFoLGTVFu
+ ZyKilTk21W8grHSr5sPuiUNnf/02VZPIGjQedb5j65ArwDPusEIiVLL8DjJIKpwEH931
+ PH0ynZMWdpGhF07QJnC2O0njv9uVY5v8LFA7RThPa3C+GP/IWREPAcS2k4a9lGHf1On4
+ JeNQ==
+X-Gm-Message-State: AOJu0YzXRbZhhGbLyEc2Ohhum6NB9dhWsqrqap0HnK90TcwBzBxwMrxn
+ YkjML6k+MqDwLLkW7wPB3kHVouJ65ACqQkKsuofo2iMhFRqHTEm9DcrPrKY7fNRL
+X-Gm-Gg: ASbGncs4k9wC8yNJib72OthIyZKOGW1ibPVnlSsfyGIBx+4pXrJOmevH0Ne67Xc3ue3
+ BVTmGkQqWeMsG2Z8Ws9NBBRRjtkCnL9OzGTVlEbZn9zmHCODSN+wISWgn6Z2QyOsxloKEZbQDd9
+ 2ye3Os9PuffGP/NR7m+uvLuRgvMEa3JhJKnzE/FZ2x4ttKTKjBMQuQWRjFDXkjfC6wGWIol6YXz
+ 4genL/c/zVg2BhYfsyx8qogkQ2Cud650Ndeg0u6v5+0wdnwGqFt/91xNnEfdMDPaNStfHWp90ar
+ 5Tm5B61ZXNXyL94LzuvOF2xj8hnOIfINTU300Z882SOahWq9+cBsWdzz5y1yVdYyhUFF/7gklC7
+ tyvFGMK4x2juu+rjdxEPjg9imWpFz4IbjaQeBRQN7SPQuNw==
+X-Google-Smtp-Source: AGHT+IHUSOFhE0YnQ3bZPx0N2NFtieeuSHf6i8SNlr4Akgymm5jMxpf2GDma0EVPrcW/dNrbpFtMrQ==
+X-Received: by 2002:a05:600c:198e:b0:458:c045:ee99 with SMTP id
+ 5b1f17b1804b1-45b43e129c9mr19179935e9.28.1755612215516; 
+ Tue, 19 Aug 2025 07:03:35 -0700 (PDT)
+Received: from localhost.localdomain ([212.22.141.99])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-45b42a97c02sm46563695e9.23.2025.08.19.07.03.34
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 19 Aug 2025 06:39:14 -0700 (PDT)
+ Tue, 19 Aug 2025 07:03:35 -0700 (PDT)
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 To: buildroot@buildroot.org
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Olivier Schonken <olivier.schonken@gmail.com>
-Date: Tue, 19 Aug 2025 15:39:11 +0200
-Message-ID: <20250819133911.3965048-1-thomas.perale@mind.be>
-X-Mailer: git-send-email 2.50.1
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Tue, 19 Aug 2025 16:03:31 +0200
+Message-Id: <20250819140331.1518506-1-angelo.compagnucci@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1755610755; x=1756215555; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1755612216; x=1756217016; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=t43jv1b/ZxwvvnpXrYqdbvrC7RQSEjl3OZst7Yt7P/k=;
- b=c1Uf9+MMDeEa4y8y4WkcEblN7YkAPMUzpo6kVcWltRfnScUaPOqER+PREsko0eqcpL
- jc2G7bWgBc2gCs4Om6FFUcgVPx7UAPz+xL17CvmgHvy7zsFkXx/era1T3UdlPoxeCak6
- 0KC0xte+foYLcAHwWvNBAzQSNNhTzfqpD6hEAnfgDoZvtc2aW98VEk6w0HHnuSjpO93E
- C3S8txsMceF/hM/zZIjkt6oxC7A4AF7wjOE9cCF5kCtPqoeu8GfTg7mBLfX/q0CzaDh6
- z1mG5uBp+UQDpjpc3zs5WiCAKQ2JUE4nxmgJkvB+4X4oFcRVvzqRG4gP6qyCAkucQGhY
- 5+LA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=c1Uf9+MM
-Subject: [Buildroot] [PATCH] package/openjpeg: add patch to fix
- CVE-2025-54874
+ bh=FT1OK5HiApKE+XTIWyOJuPnmID4LpoirsAvGlAOht1E=;
+ b=a1qlxMbfkcCGmDJzhrsFN70lvzU+WLpWsgixxZDR1IPtpUfrC7b+aRe1YsR8M1zQZy
+ W3mIvzPD5sW2AEJucPjAxfjLKRigpccQ8r4v5YtmwtcQvkNvq//5QapHQKAE2hpi82+r
+ ura8KeiQhekXUxE7mcmLR5QISdsASzL/wyb6VNO7WFRQq2YnCjkXcOMHlinbMPJO+XWZ
+ pIJzjIh9L7Me+wcEMA3UP19WWLIHnY+hLJhCxKziyIB9j9GkTWhFZFqLSoCXktK3G40Y
+ QsbFIWzgYNmK1R9fPh4oKqpJtqISqy54KMcMgRe4JMMTca+Vx/Xbm3EaDcze1sFakQx9
+ v5Jg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=a1qlxMbf
+Subject: [Buildroot] [PATCH v2] package/jq: security bump to version 1.8.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -108,96 +106,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes the following vulnerability:
+Changelog:
+https://github.com/jqlang/jq/releases/tag/jq-1.8.1
 
-- CVE-2025-54874
+COPYING:
+Add LICENSE notice of NetBSD's strptime() to COPYING
 
-    OpenJPEG is an open-source JPEG 2000 codec. In OpenJPEG 2.5.3 and
-    earlier, a call to opj_jp2_read_header may lead to OOB heap memory
-    write when the data stream p_stream is too short and p_image is not
-    initialized.
+Fixes the following security issues:
 
-For more information, see:
-  - https://www.cve.org/CVERecord?id=CVE-2025-54874
-  - https://github.com/uclouvain/openjpeg/commit/f809b80c67717c152a5ad30bf06774f00da4fd2d
+- CVE-2025-49014
+  Fix heap use after free in f_strftime, f_strflocaltime.
 
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+- GHSA-f946-j5j2-4w5m
+  Fix stack overflow in node_min_byte_len of oniguruma.
+
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 ---
- ...check-for-error-after-parsing-header.patch | 41 +++++++++++++++++++
- package/openjpeg/openjpeg.mk                  |  3 ++
- 2 files changed, 44 insertions(+)
- create mode 100644 package/openjpeg/0001-check-for-error-after-parsing-header.patch
 
-diff --git a/package/openjpeg/0001-check-for-error-after-parsing-header.patch b/package/openjpeg/0001-check-for-error-after-parsing-header.patch
-new file mode 100644
-index 0000000000..9a02fbf3d4
---- /dev/null
-+++ b/package/openjpeg/0001-check-for-error-after-parsing-header.patch
-@@ -0,0 +1,41 @@
-+From f809b80c67717c152a5ad30bf06774f00da4fd2d Mon Sep 17 00:00:00 2001
-+From: Sebastian Rasmussen <sebras@gmail.com>
-+Date: Thu, 16 Jan 2025 02:13:43 +0100
-+Subject: [PATCH] opj_jp2_read_header: Check for error after parsing header.
-+
-+Consider the case where the caller has not set the p_image
-+pointer to NULL before calling opj_read_header().
-+
-+If opj_j2k_read_header_procedure() fails while obtaining the rest
-+of the marker segment when calling opj_stream_read_data() because
-+the data stream is too short, then opj_j2k_read_header() will
-+never have the chance to initialize p_image, leaving it
-+uninitialized.
-+
-+opj_jp2_read_header() will check the p_image value whether
-+opj_j2k_read_header() suceeded or failed. This may be detected as
-+an error in valgrind or ASAN.
-+
-+The fix is to check whether opj_j2k_read_header() suceeded before
-+using the output argument p_image.
-+
-+Upstream: https://github.com/uclouvain/openjpeg/commit/f809b80c67717c152a5ad30bf06774f00da4fd2d
-+CVE: CVE-2025-54874
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ src/lib/openjp2/jp2.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/lib/openjp2/jp2.c b/src/lib/openjp2/jp2.c
-+index 4df055a54..da5063186 100644
-+--- a/src/lib/openjp2/jp2.c
-++++ b/src/lib/openjp2/jp2.c
-+@@ -2873,7 +2873,7 @@ OPJ_BOOL opj_jp2_read_header(opj_stream_private_t *p_stream,
-+                               p_image,
-+                               p_manager);
-+ 
-+-    if (p_image && *p_image) {
-++    if (ret && p_image && *p_image) {
-+         /* Set Image Color Space */
-+         if (jp2->enumcs == 16) {
-+             (*p_image)->color_space = OPJ_CLRSPC_SRGB;
-diff --git a/package/openjpeg/openjpeg.mk b/package/openjpeg/openjpeg.mk
-index 275659cd3c..7b1352c222 100644
---- a/package/openjpeg/openjpeg.mk
-+++ b/package/openjpeg/openjpeg.mk
-@@ -11,6 +11,9 @@ OPENJPEG_LICENSE_FILES = LICENSE
- OPENJPEG_CPE_ID_VENDOR = uclouvain
- OPENJPEG_INSTALL_STAGING = YES
+v1->v2:
+* Updated COPYING hash (Thomas P)
+
+ package/jq/jq.hash | 4 ++--
+ package/jq/jq.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/jq/jq.hash b/package/jq/jq.hash
+index 344f73d463..4596134620 100644
+--- a/package/jq/jq.hash
++++ b/package/jq/jq.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  91811577f91d9a6195ff50c2bffec9b72c8429dc05ec3ea022fd95c06d2b319c  jq-1.8.0.tar.gz
+-sha256  ea9e53f5974239869c51ace8bb6849c9751dee7c9d592180957987a1a133caff  COPYING
++sha256  2be64e7129cecb11d5906290eba10af694fb9e3e7f9fc208a311dc33ca837eb0  jq-1.8.1.tar.gz
++sha256  ad2b4a266b2268939c1446979759706077421cf906a203aa188c6f396e8cfd74  COPYING
+diff --git a/package/jq/jq.mk b/package/jq/jq.mk
+index f3f4704f37..3077a76b17 100644
+--- a/package/jq/jq.mk
++++ b/package/jq/jq.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# 0001-check-for-error-after-parsing-header.patch
-+OPENJPEG_IGNORE_CVES += CVE-2025-54874
-+
- OPENJPEG_DEPENDENCIES += $(if $(BR2_PACKAGE_ZLIB),zlib)
- OPENJPEG_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBPNG),libpng)
- OPENJPEG_DEPENDENCIES += $(if $(BR2_PACKAGE_TIFF),tiff)
+-JQ_VERSION = 1.8.0
++JQ_VERSION = 1.8.1
+ JQ_SITE = https://github.com/jqlang/jq/releases/download/jq-$(JQ_VERSION)
+ JQ_LICENSE = MIT (code), ICU (decNumber), CC-BY-3.0 (documentation)
+ JQ_LICENSE_FILES = COPYING
 -- 
-2.50.1
+2.34.1
 
 _______________________________________________
 buildroot mailing list
