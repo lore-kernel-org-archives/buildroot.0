@@ -4,71 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E01FDCA0EEB
-	for <buildroot@archiver.kernel.org>; Tue, 19 Aug 2025 15:04:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF0D9CA0EE6
+	for <buildroot@archiver.kernel.org>; Tue, 19 Aug 2025 15:08:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A018740BF2;
-	Tue, 19 Aug 2025 15:04:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BED56402B0;
+	Tue, 19 Aug 2025 15:08:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AglB3V4Miizy; Tue, 19 Aug 2025 15:04:37 +0000 (UTC)
+ id h_Lx-p5-rN6D; Tue, 19 Aug 2025 15:08:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D7E1840BED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0186940BF9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D7E1840BED;
-	Tue, 19 Aug 2025 15:04:36 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 733E7E0A
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 15:04:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0186940BF9;
+	Tue, 19 Aug 2025 15:08:43 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id AC420E0A
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 15:08:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 70B898098C
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 15:04:35 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 92493811FC
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 15:08:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id X6KaEVXa_VpT for <buildroot@buildroot.org>;
- Tue, 19 Aug 2025 15:04:35 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C3EAF80978
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C3EAF80978
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C3EAF80978
- for <buildroot@busybox.net>; Tue, 19 Aug 2025 15:04:34 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 37F755FFB7;
- Tue, 19 Aug 2025 17:04:30 +0200 (CEST)
-Received: from 2001:18c0:a22:bf00:5c2b:f296:f108:6612
- via 2001:18c0:a22:bf00:5c2b:f296:f108:6612 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 19 Aug 2025 17:04:30 +0200
+ id YIiyhJQlKL3g for <buildroot@buildroot.org>;
+ Tue, 19 Aug 2025 15:08:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
+ envelope-from=angelo.compagnucci@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D227680F7D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D227680F7D
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D227680F7D
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 15:08:40 +0000 (UTC)
+Received: by mail-wm1-x334.google.com with SMTP id
+ 5b1f17b1804b1-45a1ac7c066so30926055e9.1
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 08:08:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1755616119; x=1756220919;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=EompyGb7bLNrMYlfhFYqNZVLRJvjbaMTv7oIghsKDfM=;
+ b=AHt54ByKE1hOdAMXcFeamH9/WwmE2LEw7ZuewxUa46/eyKkFcywKYhLe8DVCosNCKG
+ Vcd+ZTnFNq1uMcqWNOWnCmDGZuQlaetwbf0F+gjoFfCqoOoMS2/1UcNv68jvePjLj/US
+ 8icpHDquazY9CF/87S6F/5eZKQv7gT9GUd9495nGV1vmUy9v4vmN3XuowZKP1jLhY70W
+ +WSHxS/nBhj3X4uq+uwW8kPE5tUk/wjFPYYlCpriXXj5cAp7GCMcNpLTZwH9rsZP9BXL
+ d8rd+b0kojwHSA56kPI/QOPKJK6xSH+hl2QucvsqW2tKdpBxWmAnCsQWycwAiXvf5zxC
+ yC3w==
+X-Gm-Message-State: AOJu0YzO0v9yUJmzhrbI7Mvgq0f1+TR83hohR4CtAhZYrjbr4oTBMN/y
+ k1z/1rHB3uH+PKoL4oU9zkV4rtcyzUjzUHoWCnmETOMpirk3VvSRb/Ux+FFQkAuW
+X-Gm-Gg: ASbGncvo/4ADRinG+wDehBsCjFZirZuHPr3NmDMhN5n0uD0KdvIk+TdgxWgRknhtXVD
+ QRQVyXb5BOLwLno+gr+tpSkRqOVZMgJp24FJ76DdEUlPJ1M1muaP7BGdfCpm7k5nsPoYrdNZMhT
+ 07qtuLdl5X/v32Q8dnyYeiupNEHyRW7z00CUrLaOy99lkTxfY1jI71+5Evv2/QLUCjfh5OU4TE7
+ DxHDcWRW9/n9riz/eINEbkY7J4U1e/RpfSMJ/Uo5fmXJOpAxM7lg+pZMnCYOw3HlCcvdxcTlVwu
+ U//jfG9d4laWF9H7lTWPqr/pF9Yl9ET5zULSnn55a4TJZ7Yhkr5wI+iZnUvU9rKjs7Kgxa3QsaW
+ 4DOIvMPqNUaNFZaJuDJF1ct8AsRuOjf9Rgkd6lYco+VS6wA==
+X-Google-Smtp-Source: AGHT+IFxqX6A++6BG7w4K4kXNEbDWvosGNqmlvX/YmFsoL6034zCclQHt3x93EU1Pz7ajC45EK741w==
+X-Received: by 2002:a05:600c:1f96:b0:459:d9d5:7f2b with SMTP id
+ 5b1f17b1804b1-45b43f9fd5amr28451435e9.16.1755616118395; 
+ Tue, 19 Aug 2025 08:08:38 -0700 (PDT)
+Received: from localhost.localdomain ([212.22.141.99])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-45a1c61a66esm216675995e9.0.2025.08.19.08.08.37
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 19 Aug 2025 08:08:37 -0700 (PDT)
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+To: buildroot@buildroot.org
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Tue, 19 Aug 2025 17:08:29 +0200
+Message-Id: <20250819150834.1651775-1-angelo.compagnucci@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Date: Tue, 19 Aug 2025 17:04:30 +0200
-To: Francois Perrad <francois.perrad@gadz.org>
-Cc: buildroot@busybox.net
-In-Reply-To: <20250819101956.2709125-1-francois.perrad@gadz.org>
-References: <20250819101956.2709125-1-francois.perrad@gadz.org>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <a27d72422ed85b4fedf0aa49fa74d522@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1755615871;
- bh=Lb0rwNz4ax2Y/ZHGIyHEMB6HWorIrv2xQkIE8H+Lagk=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Hdl+WNDVXKRiVD0AWd1bOMN1ZxjwcBdzD9iXkMAYqIC+B2LoCEkSt5M3ftivLc7eg
- 1TGhV8uIVS/yMIlLV9sb+LJxKJVJLJZP9IRL2bszEGdC/Ym/YmeKxO9BimaqFxeGkQ
- BMZKpqXwJ1FAKP716NVzyEj45AXy+t5RC5MN4ggko4TtRCCq8qfZxReEir/hK7ucTZ
- cqdfT89bvJxNMHCnZ88vs4u/NbLLZE6Skkcr76ZpZ0aoAl1szax5CNbxtHbK4CjUkL
- sQiZF3sgTJ8HG6eKa75GWoBDAADyRluGB+0p/kcVRAjGOlx27MlI3PK37IJ4X1QB4g
- LWK/DRRdIDw8g==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1755616119; x=1756220919; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=EompyGb7bLNrMYlfhFYqNZVLRJvjbaMTv7oIghsKDfM=;
+ b=itC51VVkQdv9gM9jMtyq8ULZqeV3/uN3hohdgvbRLR/ZFdC256eh2KbPvyYvB45PCw
+ ekfe4N5/FsSMD8m2FrNyBR1VHZu5v2H7JpJKrpK9cGow1KkJZHbrR8JANOIkI/JJRFiK
+ mqMPFVOR1MSEKAcN8QNtcxSgBwaP6HRBtJFGOEeYuEVico40QbYFqX9tXTAlQLqigroS
+ jYgl3NWxjFHJLkxCycjNtETJaXklO1nXji3XeIwAzckeOcu5JpFJZJzMUEyADdrkDJ+F
+ egnw/x/ZD4Q1uJdO/Ukqvn+PMGbs+cfAeHtT+I9cH2/zX2tHuKscpB8s4GIBw8yH1Rmv
+ s1Hw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Hdl+WNDV
-Subject: Re: [Buildroot] [PATCH] package/lua-utf8: bump to version 0.1.6
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=itC51VVk
+Subject: [Buildroot] [PATCH 0/5] Bump CUPS to the latest version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -80,17 +106,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 19/08/2025 12:19, Francois Perrad via buildroot wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+CUPS went though a lot of changes lately, therefore bumping to the latest
+version wasn't as straightforward as I hoped.
 
-Applied to next, thanks.
+Angelo Compagnucci (5):
+  package/libppd: new package
+  package/libcupsfilters: new package
+  package/qpdf: bump to version 12.2.0
+  package/cups-filters: bump to version 2.0.1
+  package/cups: bump to version 2.4.12
+
+ DEVELOPERS                                    |   3 +
+ package/Config.in                             |   2 +
+ ...ecv-instead-of-system-CVE-2023-24805.patch | 208 ------------------
+ package/cups-filters/Config.in                |  16 +-
+ package/cups-filters/cups-filters.hash        |   2 +-
+ package/cups-filters/cups-filters.mk          |  70 +-----
+ package/cups/cups.hash                        |   4 +-
+ package/cups/cups.mk                          |   2 +-
+ package/libcupsfilters/Config.in              |  34 +++
+ package/libcupsfilters/libcupsfilters.hash    |   3 +
+ package/libcupsfilters/libcupsfilters.mk      |  93 ++++++++
+ package/libppd/Config.in                      |   8 +
+ package/libppd/libppd.hash                    |   4 +
+ package/libppd/libppd.mk                      |  22 ++
+ package/qpdf/qpdf.hash                        |   4 +-
+ package/qpdf/qpdf.mk                          |  26 +--
+ 16 files changed, 194 insertions(+), 307 deletions(-)
+ delete mode 100644 package/cups-filters/0001-beh-backend-Use-execv-instead-of-system-CVE-2023-24805.patch
+ create mode 100644 package/libcupsfilters/Config.in
+ create mode 100644 package/libcupsfilters/libcupsfilters.hash
+ create mode 100644 package/libcupsfilters/libcupsfilters.mk
+ create mode 100644 package/libppd/Config.in
+ create mode 100644 package/libppd/libppd.hash
+ create mode 100644 package/libppd/libppd.mk
+
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
