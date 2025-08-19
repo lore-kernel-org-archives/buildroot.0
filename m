@@ -1,51 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CBAD7CAC586
-	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 14:17:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 953BACAC581
+	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 14:17:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9ECF8605C9;
-	Mon,  8 Sep 2025 14:17:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6ED5A8052F;
+	Mon,  8 Sep 2025 14:17:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id a9eJr0x6sTAH; Mon,  8 Sep 2025 14:17:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8vYKk5T3R3Qr; Mon,  8 Sep 2025 14:17:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 88DBB60697
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8EF5A8060A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 88DBB60697;
-	Mon,  8 Sep 2025 14:17:00 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 13D0C12A0
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8EF5A8060A;
+	Mon,  8 Sep 2025 14:17:02 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 04E28186
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0222540055
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:25 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 34ED38050D
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GtqMpd7uu_Nd for <buildroot@buildroot.org>;
- Mon,  8 Sep 2025 14:16:24 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id v32Qb5cN6sEg for <buildroot@buildroot.org>;
+ Mon,  8 Sep 2025 14:16:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2051E4004D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 77382804DF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2051E4004D
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:24 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 77382804DF
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:21 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1CD0283CB1; Mon,  8 Sep 2025 14:16:24 +0000 (UTC)
+ id 74F2383CAF; Mon,  8 Sep 2025 14:16:21 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 24 Aug 2025 17:08:56 +0200
+Date: Tue, 19 Aug 2025 04:31:19 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: aea7c89396f20570b5ce32c4a235f7011ad0bd01
-X-Git-Newrev: 519d03657c6a247f739003a3590c93948e6a48d8
+X-Git-Oldrev: 374a71b0811a38da929aba9f689f9cab3f327c75
+X-Git-Newrev: 88c970318df6712febfc9a7087860e2639e9d9e4
 X-Patchwork-Hint: ignore
-Message-Id: <20250908141624.1CD0283CB1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/cpp-httplib: bump to v0.25.0
+Message-Id: <20250908141621.74F2383CAF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/cubieboard2: bump Linux to 6.12.42
+ and U-Boot to 2025.07
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,216 +66,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=519d03657c6a247f739003a3590c93948e6a48d8
+commit: https://git.buildroot.net/buildroot/commit/?id=88c970318df6712febfc9a7087860e2639e9d9e4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For release notes since v0.19.0, see:
-https://github.com/yhirose/cpp-httplib/releases
-
-Since v0.23.0 (see [1]), meson options removed the `cpp-httplib_`
-prefix.
-
-This bump contains the fix for CVE-2025-46728 that has been adressed in
-the previous patch.
-
-For more information on the releases, see:
-  - https://github.com/yhirose/cpp-httplib/releases/tag/v0.20.0
-  - https://github.com/yhirose/cpp-httplib/releases/tag/v0.20.1
-  - https://github.com/yhirose/cpp-httplib/releases/tag/v0.21.0
-  - https://github.com/yhirose/cpp-httplib/releases/tag/v0.22.0
-  - https://github.com/yhirose/cpp-httplib/releases/tag/v0.23.0
-  - https://github.com/yhirose/cpp-httplib/releases/tag/v0.23.1
-  - https://github.com/yhirose/cpp-httplib/releases/tag/v0.24.0
-  - https://github.com/yhirose/cpp-httplib/releases/tag/v0.25.0
-
-[1] https://github.com/yhirose/cpp-httplib/commit/4ff7a1c858faeab14d0f9e8d533a9787cab1de08
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-[Julien: add link to release notes]
+Signed-off-by: Scott Fan <fancp2007@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .../cpp-httplib/0001-merge-commit-from-fork.patch  | 103 ---------------------
- package/cpp-httplib/cpp-httplib.hash               |   2 +-
- package/cpp-httplib/cpp-httplib.mk                 |  21 ++---
- 3 files changed, 10 insertions(+), 116 deletions(-)
+ board/cubietech/cubieboard2/patches/linux/linux.hash | 2 +-
+ board/cubietech/cubieboard2/patches/uboot/uboot.hash | 2 +-
+ configs/cubieboard2_defconfig                        | 4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/cpp-httplib/0001-merge-commit-from-fork.patch b/package/cpp-httplib/0001-merge-commit-from-fork.patch
-deleted file mode 100644
-index 180bb22e11..0000000000
---- a/package/cpp-httplib/0001-merge-commit-from-fork.patch
-+++ /dev/null
-@@ -1,103 +0,0 @@
--From 7b752106ac42bd5b907793950d9125a0972c8e8e Mon Sep 17 00:00:00 2001
--From: Ville Vesilehto <ville@vesilehto.fi>
--Date: Sat, 3 May 2025 11:39:01 +0300
--Subject: [PATCH] Merge commit from fork
--
--* fix(parser): Limit line length in getline
--
--Prevents potential infinite loop and memory exhaustion in
--stream_line_reader::getline by enforcing max line length.
--
--Signed-off-by: Ville Vesilehto <ville@vesilehto.fi>
--
--* fix: increase default max line length to 32k
--
--LONG_QUERY_VALUE test is set at 25k.
--
--Signed-off-by: Ville Vesilehto <ville@vesilehto.fi>
--
--* test(client): expect read error with too long query
--
--Adds a test case (`TooLongQueryValue`) to verify client behavior
--when the request URI is excessively long, exceeding
--`CPPHTTPLIB_MAX_LINE_LENGTH`. In this scenario, the server is
--expected to reset the connection.
--
--Signed-off-by: Ville Vesilehto <ville@vesilehto.fi>
--
--CVE: CVE-2025-46728
--Upstream: https://github.com/yhirose/cpp-httplib/commit/7b752106ac42bd5b907793950d9125a0972c8e8e
--[thomas: adapt lines numbers to v0.19.0]
--Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-----
-- httplib.h    |  9 +++++++++
-- test/test.cc | 15 +++++++++++++++
-- 2 files changed, 24 insertions(+)
--
--diff --git a/httplib.h b/httplib.h
--index cb182c4129..a2aa24f96b 100644
----- a/httplib.h
--+++ b/httplib.h
--@@ -145,6 +145,10 @@
-- #define CPPHTTPLIB_LISTEN_BACKLOG 5
-- #endif
-- 
--+#ifndef CPPHTTPLIB_MAX_LINE_LENGTH
--+#define CPPHTTPLIB_MAX_LINE_LENGTH 32768
--+#endif
--+
-- /*
--  * Headers
--  */
--@@ -2998,6 +3002,11 @@ inline bool stream_line_reader::getline() {
-- #endif
-- 
--   for (size_t i = 0;; i++) {
--+    if (size() >= CPPHTTPLIB_MAX_LINE_LENGTH) {
--+      // Treat exceptionally long lines as an error to
--+      // prevent infinite loops/memory exhaustion
--+      return false;
--+    }
--     char byte;
--     auto n = strm_.read(&byte, 1);
-- 
--diff --git a/test/test.cc b/test/test.cc
--index 4fd9983bd8..7f5cc8a9d0 100644
----- a/test/test.cc
--+++ b/test/test.cc
--@@ -42,6 +42,9 @@ const int PORT = 1234;
-- const string LONG_QUERY_VALUE = string(25000, '@');
-- const string LONG_QUERY_URL = "/long-query-value?key=" + LONG_QUERY_VALUE;
-- 
--+const string TOO_LONG_QUERY_VALUE = string(35000, '@');
--+const string TOO_LONG_QUERY_URL = "/too-long-query-value?key=" + TOO_LONG_QUERY_VALUE;
--+
-- const std::string JSON_DATA = "{\"hello\":\"world\"}";
-- 
-- const string LARGE_DATA = string(1024 * 1024 * 100, '@'); // 100MB
--@@ -2839,6 +2842,11 @@ class ServerTest : public ::testing::Test {
--                EXPECT_EQ(LONG_QUERY_URL, req.target);
--                EXPECT_EQ(LONG_QUERY_VALUE, req.get_param_value("key"));
--              })
--+        .Get("/too-long-query-value",
--+             [&](const Request &req, Response & /*res*/) {
--+               EXPECT_EQ(TOO_LONG_QUERY_URL, req.target);
--+               EXPECT_EQ(TOO_LONG_QUERY_VALUE, req.get_param_value("key"));
--+             })
--         .Get("/array-param",
--              [&](const Request &req, Response & /*res*/) {
--                EXPECT_EQ(3u, req.get_param_value_count("array"));
--@@ -3624,6 +3632,13 @@ TEST_F(ServerTest, LongQueryValue) {
--   EXPECT_EQ(StatusCode::UriTooLong_414, res->status);
-- }
-- 
--+TEST_F(ServerTest, TooLongQueryValue) {
--+  auto res = cli_.Get(TOO_LONG_QUERY_URL.c_str());
--+
--+  ASSERT_FALSE(res);
--+  EXPECT_EQ(Error::Read, res.error());
--+}
--+
-- TEST_F(ServerTest, TooLongHeader) {
--   Request req;
--   req.method = "GET";
-diff --git a/package/cpp-httplib/cpp-httplib.hash b/package/cpp-httplib/cpp-httplib.hash
-index 0984bd359b..89f9ae5540 100644
---- a/package/cpp-httplib/cpp-httplib.hash
-+++ b/package/cpp-httplib/cpp-httplib.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  c9b9e0524666e1cd088f0874c57c1ce7c0eaa8552f9f4e15c755d5201fc8c608  cpp-httplib-0.19.0.tar.gz
-+sha256  ac7c59fa72325d4cb9f73af266312d82632ac35a5c4c8a1be620c1f946ec9cea  cpp-httplib-0.25.0.tar.gz
- sha256  4b45cbe16d7b71b89ae6127e26e0d90a029198ca5e958ad8e3d0b8bbed364d8b  LICENSE
-diff --git a/package/cpp-httplib/cpp-httplib.mk b/package/cpp-httplib/cpp-httplib.mk
-index 928cef8a86..c7171d0ea0 100644
---- a/package/cpp-httplib/cpp-httplib.mk
-+++ b/package/cpp-httplib/cpp-httplib.mk
-@@ -4,20 +4,17 @@
- #
- ################################################################################
- 
--CPP_HTTPLIB_VERSION = 0.19.0
-+CPP_HTTPLIB_VERSION = 0.25.0
- CPP_HTTPLIB_SITE = $(call github,yhirose,cpp-httplib,v$(CPP_HTTPLIB_VERSION))
- CPP_HTTPLIB_LICENSE = MIT
- CPP_HTTPLIB_LICENSE_FILES = LICENSE
- CPP_HTTPLIB_CPE_ID_VALID = YES
- CPP_HTTPLIB_INSTALL_STAGING = YES
- CPP_HTTPLIB_CONF_OPTS = \
--	-Dcpp-httplib_test=false
--
--# 0001-merge-commit-from-fork.patch
--CPP_HTTPLIB_IGNORE_CVES += CVE-2025-46728
-+	-Dtest=false
- 
- ifeq ($(BR2_PACKAGE_CPP_HTTPLIB_COMPILE),y)
--CPP_HTTPLIB_CONF_OPTS += -Dcpp-httplib_compile=true
-+CPP_HTTPLIB_CONF_OPTS += -Dcompile=true
- CPP_HTTPLIB_DEPENDENCIES += host-python3
- else
- # Header only library
-@@ -25,24 +22,24 @@ CPP_HTTPLIB_INSTALL_TARGET = NO
- endif
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
--CPP_HTTPLIB_CONF_OPTS += -Dcpp-httplib_openssl=enabled
-+CPP_HTTPLIB_CONF_OPTS += -Dopenssl=enabled
- CPP_HTTPLIB_DEPENDENCIES += openssl
- else
--CPP_HTTPLIB_CONF_OPTS += -Dcpp-httplib_openssl=disabled
-+CPP_HTTPLIB_CONF_OPTS += -Dopenssl=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_ZLIB),y)
--CPP_HTTPLIB_CONF_OPTS += -Dcpp-httplib_zlib=enabled
-+CPP_HTTPLIB_CONF_OPTS += -Dzlib=enabled
- CPP_HTTPLIB_DEPENDENCIES += zlib
- else
--CPP_HTTPLIB_CONF_OPTS += -Dcpp-httplib_zlib=disabled
-+CPP_HTTPLIB_CONF_OPTS += -Dzlib=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_BROTLI),y)
--CPP_HTTPLIB_CONF_OPTS += -Dcpp-httplib_brotli=enabled
-+CPP_HTTPLIB_CONF_OPTS += -Dbrotli=enabled
- CPP_HTTPLIB_DEPENDENCIES += brotli
- else
--CPP_HTTPLIB_CONF_OPTS += -Dcpp-httplib_brotli=disabled
-+CPP_HTTPLIB_CONF_OPTS += -Dbrotli=disabled
- endif
- 
- $(eval $(meson-package))
+diff --git a/board/cubietech/cubieboard2/patches/linux/linux.hash b/board/cubietech/cubieboard2/patches/linux/linux.hash
+index 1213da86b1..823f6a55a3 100644
+--- a/board/cubietech/cubieboard2/patches/linux/linux.hash
++++ b/board/cubietech/cubieboard2/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  643142c1b5991560dd12f950825cc19e4497b95b82641918ecff1177f4130c1d  linux-6.12.24.tar.xz
++sha256  4804528a29cd20309a0b41c30e5aeffc35fa21ee3358f4a706d4586d003bc1fb  linux-6.12.42.tar.xz
+diff --git a/board/cubietech/cubieboard2/patches/uboot/uboot.hash b/board/cubietech/cubieboard2/patches/uboot/uboot.hash
+index 80ea21b7cb..440526977b 100644
+--- a/board/cubietech/cubieboard2/patches/uboot/uboot.hash
++++ b/board/cubietech/cubieboard2/patches/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  439d3bef296effd54130be6a731c5b118be7fddd7fcc663ccbc5fb18294d8718  u-boot-2025.04.tar.bz2
++sha256  0f933f6c5a426895bf306e93e6ac53c60870e4b54cda56d95211bec99e63bec7  u-boot-2025.07.tar.bz2
+diff --git a/configs/cubieboard2_defconfig b/configs/cubieboard2_defconfig
+index 180677923a..de8af36eb3 100644
+--- a/configs/cubieboard2_defconfig
++++ b/configs/cubieboard2_defconfig
+@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/cubietech/cubieboard2/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.24"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.42"
+ BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun7i-a20-cubieboard2"
+@@ -19,7 +19,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.04"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Cubieboard2"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
