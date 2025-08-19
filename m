@@ -1,83 +1,84 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA95BCA0EEB
-	for <buildroot@archiver.kernel.org>; Tue, 19 Aug 2025 20:24:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46CE8CA0EEB
+	for <buildroot@archiver.kernel.org>; Tue, 19 Aug 2025 20:25:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 95D156072B;
-	Tue, 19 Aug 2025 20:24:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0A7E281238;
+	Tue, 19 Aug 2025 20:25:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tJxbHox13ok2; Tue, 19 Aug 2025 20:24:43 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fYiO991bnp2Y; Tue, 19 Aug 2025 20:25:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B1D1660744
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 27F8081200
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B1D1660744;
-	Tue, 19 Aug 2025 20:24:43 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 4E957E0A
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 20:24:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 27F8081200;
+	Tue, 19 Aug 2025 20:25:32 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 671ADE0A
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 20:25:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3FCF860BCF
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 20:24:42 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 58D1581205
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 20:25:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kCWiZCQE2KXO for <buildroot@buildroot.org>;
- Tue, 19 Aug 2025 20:24:41 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JoqmRcm7TJec for <buildroot@buildroot.org>;
+ Tue, 19 Aug 2025 20:25:29 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
  helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 518F16072B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 518F16072B
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8B294811E5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B294811E5
 Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 518F16072B
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 20:24:40 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8B294811E5
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 20:25:29 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id 4505B4E40C2E;
- Tue, 19 Aug 2025 20:24:38 +0000 (UTC)
+ by smtpout-03.galae.net (Postfix) with ESMTPS id 8720D4E40A2A;
+ Tue, 19 Aug 2025 20:25:27 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id F142960697;
- Tue, 19 Aug 2025 20:24:37 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 60C7260697;
+ Tue, 19 Aug 2025 20:25:27 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id D0B521C228A8C; 
- Tue, 19 Aug 2025 22:24:27 +0200 (CEST)
-Date: Tue, 19 Aug 2025 22:24:14 +0200
+ with ESMTPSA id A7D421C228A25; 
+ Tue, 19 Aug 2025 22:25:25 +0200 (CEST)
+Date: Tue, 19 Aug 2025 22:25:24 +0200
 To: Michael Trimarchi <michael@amarulasolutions.com>
 Cc: buildroot@buildroot.org, Jagan Teki <jagan@amarulasolutions.com>,
  linux-amarula@amarulasolutions.com, Dario Binacchi
  <dario.binacchi@amarulasolutions.com>
-Message-ID: <20250819222414.3ea8948d@windsurf>
-In-Reply-To: <20250819181451.3012126-2-michael@amarulasolutions.com>
+Message-ID: <20250819222524.5682cbc2@windsurf>
+In-Reply-To: <20250819181451.3012126-3-michael@amarulasolutions.com>
 References: <20250819181451.3012126-1-michael@amarulasolutions.com>
- <20250819181451.3012126-2-michael@amarulasolutions.com>
+ <20250819181451.3012126-3-michael@amarulasolutions.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=dkim; 
- t=1755635077; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1755635126; h=from:subject:date:message-id:to:cc:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=BtPEXGln2n2aqcytIM9VOb0q/v/GQmPgBbaeFlVeXL0=;
- b=kwUD6xC1HWCF+9Qv1LG6BvxKPtchlPC69uLsqZ3xncO6egz6excVgNCQieF9lQfJfwIE5i
- Jl7Hn7faipLodBLvx26JZ4ad+XkIOHzp3NtoFsj7ZAowNOOo6DH1/ZvxMeikU1OVqAGMD9
- GOGIgwumkCWThU8Rdt2cicMzzSiqjrCtHtITFjsIQsqjiOAowtM0ktGX1b5yD3S5tSXhHI
- obIcPEdF//tRQX8sms/a9QVExJ/vG7eE69UBPTGSxmOlvZuzPdLyAj6ssZnAvrU83n2VDJ
- 2pLA0r7K//A5qajJmCugzCiUrROnLCcUlh+gKGwlpNhZpIGlX6QCLXd3MTjvdQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=Tu1NiuUZ1c3Q8MY06i4fhumRXHK+E5jn1JusMcQLkdQ=;
+ b=IYmvFx7rGLSFsoVrPe5yupS94qvkxtoY+4I8KJ70AmWePTf/T+SEFyah7yJk+r+ab4f/IS
+ EnOu6bs42fR/iggLdJxZn+jvRfKuCQMXcEz3Urlc73u0Tdy1TmsphGLyLXTddqs3EM+YEq
+ vgsEBLzYRib0X/g9Y0u2Rr3qT7DxPzco/xfOVpr6fzJjaTRY+YhOA1y4vB0ifWZFrtu5Bb
+ xm18OblKTGm8XHD2gma9wMz03QiK6kefOoxm2ZBMMicNRAIawcqnb7meU9Rv7H24suglG/
+ +VCNaCaCLF/2kQrPfe4Nlh0TySS8gLKYxMHUa68ob2qLfJukogUuhTONqq4Yag==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=kwUD6xC1
-Subject: Re: [Buildroot] [PATCH 1/6] linux: add missing hash for linux
- 6.12.36
+ header.s=dkim header.b=IYmvFx7r
+Subject: Re: [Buildroot] [PATCH 2/6]
+ configs/engicam_imx6qdl_icore_defconfig: bump Linux to 6.12.36 and U-Boot
+ to 2025.07
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -98,32 +99,20 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Hello Michael,
 
-Thanks for the quick turn around with the patches.
-
-On Tue, 19 Aug 2025 20:14:46 +0200
+On Tue, 19 Aug 2025 20:14:47 +0200
 Michael Trimarchi <michael@amarulasolutions.com> wrote:
 
-> diff --git a/linux/linux.hash b/linux/linux.hash
-> index f5e2d663d1..599d2bc6b3 100644
-> --- a/linux/linux.hash
-> +++ b/linux/linux.hash
-> @@ -1,4 +1,6 @@
->  # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
-> +sha256  4a168aed2de5a81aadd90ba2b153860a98d99bfc34651936e17f18e54f01ba8c  linux-6.12.36.tar.xz
-> +
+> +BR2_PACKAGE_HOST_E2FSPROGS=y
 
-Unfortunately, this is not how it works. Each defconfig should have its
-own set of hash files. Check out:
+What do you need this?
 
-board/freescale/imx8mqevk/patches/uboot/uboot.hash
-board/freescale/imx8mqevk/patches/linux/linux.hash
-board/freescale/imx8mqevk/patches/linux-headers/linux-headers.hash
+> +BR2_PACKAGE_HOST_ENVIRONMENT_SETUP=y
 
-and:
+Please do not add this package, we try to keep our defconfigs minimal.
 
-BR2_GLOBAL_PATCH_DIR="board/freescale/imx8mqevk/patches"
+(Comment applies to other patches of course)
 
-Best regards,
+Thanks!
 
 Thomas
 -- 
