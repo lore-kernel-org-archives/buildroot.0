@@ -1,100 +1,102 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92A04CA0EEB
-	for <buildroot@archiver.kernel.org>; Tue, 19 Aug 2025 14:03:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F064CA0EEB
+	for <buildroot@archiver.kernel.org>; Tue, 19 Aug 2025 14:05:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 489E640BAA;
-	Tue, 19 Aug 2025 14:03:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1278960AC6;
+	Tue, 19 Aug 2025 14:05:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2KXMpAimIOnq; Tue, 19 Aug 2025 14:03:40 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id i26TB9Xwii0G; Tue, 19 Aug 2025 14:05:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 657C540B98
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1924260AB8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 657C540B98;
-	Tue, 19 Aug 2025 14:03:40 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1E6C3E0A
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 14:03:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1924260AB8;
+	Tue, 19 Aug 2025 14:05:45 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9EC72E0A
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 14:05:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0860840B98
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 14:03:39 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 80B64811A4
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 14:05:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P4uFzC5CIURx for <buildroot@buildroot.org>;
- Tue, 19 Aug 2025 14:03:38 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qqpr2jwzThNH for <buildroot@buildroot.org>;
+ Tue, 19 Aug 2025 14:05:34 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
- envelope-from=angelo.compagnucci@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1A70240B35
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A70240B35
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1A70240B35
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 14:03:38 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id
- 5b1f17b1804b1-45a1b001f55so24712895e9.0
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 07:03:37 -0700 (PDT)
+ client-ip=2607:f8b0:4864:20::631; helo=mail-pl1-x631.google.com;
+ envelope-from=michael@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 389068119C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 389068119C
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com
+ [IPv6:2607:f8b0:4864:20::631])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 389068119C
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 14:05:34 +0000 (UTC)
+Received: by mail-pl1-x631.google.com with SMTP id
+ d9443c01a7336-2445824dc27so49380675ad.3
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 07:05:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1755612216; x=1756217016;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ d=1e100.net; s=20230601; t=1755612333; x=1756217133;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=FT1OK5HiApKE+XTIWyOJuPnmID4LpoirsAvGlAOht1E=;
- b=FnIJKv72neBKY2Ip9PjjY4BOYBD5XTgvQ+YDbHNp/Rp5/hGdie5OLoOIFC+YxNSlCa
- 2oBsMr6q42kmFw0Z5eWniOJ/QnteI50FoRJ7qXvulFGmOqVVtrT9E8QwWrgjJQmH9WAM
- YsebazUPYnpFVtTr/HROVlDGZ1cRiZMl3g6o2qCEiVCV71HX76GGq/6gIM6fFoLGTVFu
- ZyKilTk21W8grHSr5sPuiUNnf/02VZPIGjQedb5j65ArwDPusEIiVLL8DjJIKpwEH931
- PH0ynZMWdpGhF07QJnC2O0njv9uVY5v8LFA7RThPa3C+GP/IWREPAcS2k4a9lGHf1On4
- JeNQ==
-X-Gm-Message-State: AOJu0YzXRbZhhGbLyEc2Ohhum6NB9dhWsqrqap0HnK90TcwBzBxwMrxn
- YkjML6k+MqDwLLkW7wPB3kHVouJ65ACqQkKsuofo2iMhFRqHTEm9DcrPrKY7fNRL
-X-Gm-Gg: ASbGncs4k9wC8yNJib72OthIyZKOGW1ibPVnlSsfyGIBx+4pXrJOmevH0Ne67Xc3ue3
- BVTmGkQqWeMsG2Z8Ws9NBBRRjtkCnL9OzGTVlEbZn9zmHCODSN+wISWgn6Z2QyOsxloKEZbQDd9
- 2ye3Os9PuffGP/NR7m+uvLuRgvMEa3JhJKnzE/FZ2x4ttKTKjBMQuQWRjFDXkjfC6wGWIol6YXz
- 4genL/c/zVg2BhYfsyx8qogkQ2Cud650Ndeg0u6v5+0wdnwGqFt/91xNnEfdMDPaNStfHWp90ar
- 5Tm5B61ZXNXyL94LzuvOF2xj8hnOIfINTU300Z882SOahWq9+cBsWdzz5y1yVdYyhUFF/7gklC7
- tyvFGMK4x2juu+rjdxEPjg9imWpFz4IbjaQeBRQN7SPQuNw==
-X-Google-Smtp-Source: AGHT+IHUSOFhE0YnQ3bZPx0N2NFtieeuSHf6i8SNlr4Akgymm5jMxpf2GDma0EVPrcW/dNrbpFtMrQ==
-X-Received: by 2002:a05:600c:198e:b0:458:c045:ee99 with SMTP id
- 5b1f17b1804b1-45b43e129c9mr19179935e9.28.1755612215516; 
- Tue, 19 Aug 2025 07:03:35 -0700 (PDT)
-Received: from localhost.localdomain ([212.22.141.99])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-45b42a97c02sm46563695e9.23.2025.08.19.07.03.34
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 19 Aug 2025 07:03:35 -0700 (PDT)
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-To: buildroot@buildroot.org
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Tue, 19 Aug 2025 16:03:31 +0200
-Message-Id: <20250819140331.1518506-1-angelo.compagnucci@gmail.com>
-X-Mailer: git-send-email 2.34.1
+ bh=ZcT5m0IS6tnYTRqyCAREBAEfQjXrbIICHNLGYLbsVIA=;
+ b=tzrcQYiJhY9DXC4Y6ZJEo9mTyv3h/GoD2WKG+AbVTBSUd5QVRPGcCZFxTseDmokbyQ
+ OuFgLZHUveyUb9+rFc4TxDfXTvAz9MFefExtFQCdOlzcB6ea/qP66GCFT7Bwv3HM8s2i
+ i3caG1uB2ZkeHyaYXa7zf+wu+xsvxhCsfyy0T1XU9OHjm8HXg5uCWSOdqB7uGsmH9Qr7
+ u/a/gQ6yTOgqMCDRdLYeNIaFgc3HzHBhOofCi+XYeHa8puE/EpiGrhf7MpCrwaDk3izk
+ lUoW5tOpuEOvyznMbwgaWZu3WjsVe63x4b+amZGul5pC6r/duANNven+k/PRodQnw+Ql
+ jRew==
+X-Gm-Message-State: AOJu0YzLn2bHE+mwADkHkSybvG0ApKQpd+JbLa5sYWJH5fPka2MFVNWR
+ BOR4lHv8WMrps0w46aEonOTvajt2nhXpFgHQzwH6YU8fn0zYniTIzkXqGetM3ckel4wMyXX2E4Y
+ qYsBIH7JrrejaYU82xJ5hGXOZsLFmRobYtIYXlynsyw==
+X-Gm-Gg: ASbGnctx6mAafPJY9EVZfG6JrYiqcjTLgmwOuLh/RuP7FtfsvXYbPR5HwrHBcKrc68I
+ 3mm6U2xOI+9qPzB8cpFyLzuxfulSvaCyNmoobT9z/U3/zEn1s81u5p0D5xL06bCpmq9h6Ygg+1s
+ 4pWSflOzK03Txm+BftbuRNED9qUs5UOsY8KgaGJF04Raz4Q08d/AudYbnHNzSodH2wPg52tEqbc
+ I/dYgbPiqLCSr5fwEfURpRfMjGPSOBxNk0rVtib
+X-Google-Smtp-Source: AGHT+IEPR7rA4HzbLL97+ejkTLUFBolaHaWiOUZe+gjjnofwQ69jWh2WynzwjtE7u026DIFMYrrNr6TXYOJAJq+xkHs=
+X-Received: by 2002:a17:902:c410:b0:240:3f43:25f with SMTP id
+ d9443c01a7336-245e041d9e0mr31664895ad.23.1755612332928; Tue, 19 Aug 2025
+ 07:05:32 -0700 (PDT)
 MIME-Version: 1.0
+References: <20250818213241.3270409-1-thomas.petazzoni@bootlin.com>
+ <CAOf5uwm3V8hsY5YofupxYJufNqSMmAferLhtUrrMC6NtO6RF7w@mail.gmail.com>
+ <20250819142521.36865a9c@windsurf>
+In-Reply-To: <20250819142521.36865a9c@windsurf>
+From: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
+Date: Tue, 19 Aug 2025 16:05:20 +0200
+X-Gm-Features: Ac12FXx57IYh6grVSAUvSzfO4FWHJuVA5pzxfBTv-Ys4OFcFa1_k08actOLnti4
+Message-ID: <CAOf5uw=Uny0iNhQx3mrJwOt+_Q+XfRxUp-4VEasSrxOF3PHTbQ@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org, Adam Duskett <adam.duskett@amarulasolutions.com>, 
+ Dario Binacchi <dario.binacchi@amarulasolutions.com>, 
+ Jagan Teki <jagan@amarulasolutions.com>, 
+ Meena Murthy <meena.murthy@amarulasolutions.com>, 
+ Suniel Mahesh <sunil@amarulasolutions.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1755612216; x=1756217016; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=FT1OK5HiApKE+XTIWyOJuPnmID4LpoirsAvGlAOht1E=;
- b=a1qlxMbfkcCGmDJzhrsFN70lvzU+WLpWsgixxZDR1IPtpUfrC7b+aRe1YsR8M1zQZy
- W3mIvzPD5sW2AEJucPjAxfjLKRigpccQ8r4v5YtmwtcQvkNvq//5QapHQKAE2hpi82+r
- ura8KeiQhekXUxE7mcmLR5QISdsASzL/wyb6VNO7WFRQq2YnCjkXcOMHlinbMPJO+XWZ
- pIJzjIh9L7Me+wcEMA3UP19WWLIHnY+hLJhCxKziyIB9j9GkTWhFZFqLSoCXktK3G40Y
- QsbFIWzgYNmK1R9fPh4oKqpJtqISqy54KMcMgRe4JMMTca+Vx/Xbm3EaDcze1sFakQx9
- v5Jg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=amarulasolutions.com; s=google; t=1755612333; x=1756217133;
+ darn=buildroot.org; 
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=ZcT5m0IS6tnYTRqyCAREBAEfQjXrbIICHNLGYLbsVIA=;
+ b=CDoo+n8k+QTh+UKVGcNgdm3muiJM3flqJDsXe55JqXvzTsHj0vYGvhwo+u+4Rc76Ga
+ iL36DXGLLBnlhafW8fBhLWVJTnKGCAWcV97CqkQjG3yHXTNYGe9RTR88LUKjNjcFqTvA
+ 4qcN3rUX0EO3qIgcVthRP9gbc0s8f23gIEEqg=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=a1qlxMbf
-Subject: [Buildroot] [PATCH v2] package/jq: security bump to version 1.8.1
+ header.from=amarulasolutions.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=CDoo+n8k
+Subject: Re: [Buildroot] [PATCH] configs/engicam_imx6*: remove defconfigs,
+ broken
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -106,62 +108,167 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============6418572755352025817=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog:
-https://github.com/jqlang/jq/releases/tag/jq-1.8.1
+--===============6418572755352025817==
+Content-Type: multipart/alternative; boundary="00000000000077c86d063cb859bb"
 
-COPYING:
-Add LICENSE notice of NetBSD's strptime() to COPYING
+--00000000000077c86d063cb859bb
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Fixes the following security issues:
+HI Thomas
 
-- CVE-2025-49014
-  Fix heap use after free in f_strftime, f_strflocaltime.
+On Tue, Aug 19, 2025 at 2:25=E2=80=AFPM Thomas Petazzoni <
+thomas.petazzoni@bootlin.com> wrote:
 
-- GHSA-f946-j5j2-4w5m
-  Fix stack overflow in node_min_byte_len of oniguruma.
+> Hello Michael,
+>
+> Thanks for your feedback.
+>
+> On Tue, 19 Aug 2025 14:00:38 +0200
+> Michael Nazzareno Trimarchi <michael@amarulasolutions.com> wrote:
+>
+> > We would like to fix them. We need a bit of time up to the end of
+> September.
+> >
+> > Can you please wait?
+>
+> We have a release scheduled end of August, and those have been broken
+> for a long while. I looked, in January 2025 they were already broken,
+> and the maintainers of those boards normally received an e-mail telling
+> them they were broken.
+>
+> You can check those jobs from January 2025:
+>
+>             engicam_imx6qdl_icore |
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/8990262441  |
+>         engicam_imx6qdl_icore_qt5 |
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/8990262446  |
+>         engicam_imx6qdl_icore_rqs |
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/8990262448  |
+>               engicam_imx6ul_geam |
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/8990262452  |
+>              engicam_imx6ul_isiot |
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/8990262468  |
+>
+> So I'm not really willing to do yet another release with broken
+> defconfigs that don't even build.
+>
+>
+I will try to make buildable all of them before the end of the month but I
+will not able to test for the end of the month
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
----
+Michael
 
-v1->v2:
-* Updated COPYING hash (Thomas P)
+> Thomas
+> --
+> Thomas Petazzoni, co-owner and CEO, Bootlin
+> Embedded Linux and Kernel engineering and training
+> https://bootlin.com
+>
 
- package/jq/jq.hash | 4 ++--
- package/jq/jq.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/jq/jq.hash b/package/jq/jq.hash
-index 344f73d463..4596134620 100644
---- a/package/jq/jq.hash
-+++ b/package/jq/jq.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  91811577f91d9a6195ff50c2bffec9b72c8429dc05ec3ea022fd95c06d2b319c  jq-1.8.0.tar.gz
--sha256  ea9e53f5974239869c51ace8bb6849c9751dee7c9d592180957987a1a133caff  COPYING
-+sha256  2be64e7129cecb11d5906290eba10af694fb9e3e7f9fc208a311dc33ca837eb0  jq-1.8.1.tar.gz
-+sha256  ad2b4a266b2268939c1446979759706077421cf906a203aa188c6f396e8cfd74  COPYING
-diff --git a/package/jq/jq.mk b/package/jq/jq.mk
-index f3f4704f37..3077a76b17 100644
---- a/package/jq/jq.mk
-+++ b/package/jq/jq.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--JQ_VERSION = 1.8.0
-+JQ_VERSION = 1.8.1
- JQ_SITE = https://github.com/jqlang/jq/releases/download/jq-$(JQ_VERSION)
- JQ_LICENSE = MIT (code), ICU (decNumber), CC-BY-3.0 (documentation)
- JQ_LICENSE_FILES = COPYING
--- 
-2.34.1
+--=20
+Michael Nazzareno Trimarchi
+Co-Founder & Chief Executive Officer
+M. +39 347 913 2170
+michael@amarulasolutions.com
+__________________________________
+
+Amarula Solutions BV
+Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
+T. +31 (0)85 111 9172
+info@amarulasolutions.com
+www.amarulasolutions.com
+
+--00000000000077c86d063cb859bb
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div>HI Thomas</div><br><div class=3D"gmail_quote gmail_qu=
+ote_container"><div dir=3D"ltr" class=3D"gmail_attr">On Tue, Aug 19, 2025 a=
+t 2:25=E2=80=AFPM Thomas Petazzoni &lt;<a href=3D"mailto:thomas.petazzoni@b=
+ootlin.com">thomas.petazzoni@bootlin.com</a>&gt; wrote:<br></div><blockquot=
+e class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px s=
+olid rgb(204,204,204);padding-left:1ex">Hello Michael,<br>
+<br>
+Thanks for your feedback.<br>
+<br>
+On Tue, 19 Aug 2025 14:00:38 +0200<br>
+Michael Nazzareno Trimarchi &lt;<a href=3D"mailto:michael@amarulasolutions.=
+com" target=3D"_blank">michael@amarulasolutions.com</a>&gt; wrote:<br>
+<br>
+&gt; We would like to fix them. We need a bit of time up to the end of Sept=
+ember.<br>
+&gt; <br>
+&gt; Can you please wait?<br>
+<br>
+We have a release scheduled end of August, and those have been broken<br>
+for a long while. I looked, in January 2025 they were already broken,<br>
+and the maintainers of those boards normally received an e-mail telling<br>
+them they were broken.<br>
+<br>
+You can check those jobs from January 2025:<br>
+<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 engicam_imx6qdl_icore | <a href=
+=3D"https://gitlab.com/buildroot.org/buildroot/-/jobs/8990262441" rel=3D"no=
+referrer" target=3D"_blank">https://gitlab.com/buildroot.org/buildroot/-/jo=
+bs/8990262441</a>=C2=A0 |=C2=A0 =C2=A0 =C2=A0 <br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 engicam_imx6qdl_icore_qt5 | <a href=3D"https://=
+gitlab.com/buildroot.org/buildroot/-/jobs/8990262446" rel=3D"noreferrer" ta=
+rget=3D"_blank">https://gitlab.com/buildroot.org/buildroot/-/jobs/899026244=
+6</a>=C2=A0 |=C2=A0 =C2=A0 =C2=A0 <br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 engicam_imx6qdl_icore_rqs | <a href=3D"https://=
+gitlab.com/buildroot.org/buildroot/-/jobs/8990262448" rel=3D"noreferrer" ta=
+rget=3D"_blank">https://gitlab.com/buildroot.org/buildroot/-/jobs/899026244=
+8</a>=C2=A0 |=C2=A0 =C2=A0 =C2=A0 <br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 engicam_imx6ul_geam | <a h=
+ref=3D"https://gitlab.com/buildroot.org/buildroot/-/jobs/8990262452" rel=3D=
+"noreferrer" target=3D"_blank">https://gitlab.com/buildroot.org/buildroot/-=
+/jobs/8990262452</a>=C2=A0 |=C2=A0 =C2=A0 =C2=A0 <br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0engicam_imx6ul_isiot | <a h=
+ref=3D"https://gitlab.com/buildroot.org/buildroot/-/jobs/8990262468" rel=3D=
+"noreferrer" target=3D"_blank">https://gitlab.com/buildroot.org/buildroot/-=
+/jobs/8990262468</a>=C2=A0 |=C2=A0 =C2=A0 =C2=A0 <br>
+<br>
+So I&#39;m not really willing to do yet another release with broken<br>
+defconfigs that don&#39;t even build.<br>
+<br></blockquote><div><br></div><div>I will try to make buildable all of th=
+em before the end of the month but I will not able to test for the end of t=
+he month</div><div><br></div><div>Michael=C2=A0</div><blockquote class=3D"g=
+mail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204=
+,204,204);padding-left:1ex">
+Thomas<br>
+-- <br>
+Thomas Petazzoni, co-owner and CEO, Bootlin<br>
+Embedded Linux and Kernel engineering and training<br>
+<a href=3D"https://bootlin.com" rel=3D"noreferrer" target=3D"_blank">https:=
+//bootlin.com</a><br>
+</blockquote></div><div><br clear=3D"all"></div><div><br></div><span class=
+=3D"gmail_signature_prefix">-- </span><br><div dir=3D"ltr" class=3D"gmail_s=
+ignature"><div dir=3D"ltr">Michael Nazzareno Trimarchi<br>Co-Founder &amp; =
+Chief Executive Officer<br>M. +39 347 913 2170<br><a href=3D"mailto:michael=
+@amarulasolutions.com" target=3D"_blank">michael@amarulasolutions.com</a><b=
+r>__________________________________<br><div><br></div><div>Amarula Solutio=
+ns BV</div>Joop Geesinkweg 125, 1114 AB, Amsterdam, NL<br>T. +31 (0)85 111 =
+9172<br><a href=3D"mailto:info@amarulasolutions.com" target=3D"_blank">info=
+@amarulasolutions.com</a><br><a href=3D"http://www.amarulasolutions.com" ta=
+rget=3D"_blank">www.amarulasolutions.com</a><br></div></div></div>
+
+--00000000000077c86d063cb859bb--
+
+--===============6418572755352025817==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6418572755352025817==--
