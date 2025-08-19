@@ -1,78 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A52C8CA0EF7
-	for <buildroot@archiver.kernel.org>; Tue, 19 Aug 2025 18:15:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2041CA0EE6
+	for <buildroot@archiver.kernel.org>; Tue, 19 Aug 2025 18:15:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 65BF080B05;
-	Tue, 19 Aug 2025 18:15:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8A13860BBE;
+	Tue, 19 Aug 2025 18:15:06 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dIsqBx2vFGDJ; Tue, 19 Aug 2025 18:15:05 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C07A660872
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id C07A660872;
+	Tue, 19 Aug 2025 18:15:05 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 908F7E0A
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 18:15:03 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8E11880BDA
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 18:15:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YXrg5SJeiAZo; Tue, 19 Aug 2025 18:15:03 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 71F4B80B47
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 71F4B80B47;
-	Tue, 19 Aug 2025 18:15:03 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 00FF6E2
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 18:15:02 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DC2A240164
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 18:15:01 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NN7-FrF9Y0uI for <buildroot@buildroot.org>;
- Tue, 19 Aug 2025 18:15:01 +0000 (UTC)
+ id 3Skc0tkrhpLb for <buildroot@buildroot.org>;
+ Tue, 19 Aug 2025 18:15:03 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::535; helo=mail-ed1-x535.google.com;
+ client-ip=2a00:1450:4864:20::533; helo=mail-ed1-x533.google.com;
  envelope-from=michael@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B9D4D40068
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B9D4D40068
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
- [IPv6:2a00:1450:4864:20::535])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B9D4D40068
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 18:15:00 +0000 (UTC)
-Received: by mail-ed1-x535.google.com with SMTP id
- 4fb4d7f45d1cf-61a8f452c43so255496a12.0
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 11:15:00 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BB72480B21
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BB72480B21
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
+ [IPv6:2a00:1450:4864:20::533])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BB72480B21
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 18:15:02 +0000 (UTC)
+Received: by mail-ed1-x533.google.com with SMTP id
+ 4fb4d7f45d1cf-61a1c6a5338so3574987a12.1
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 11:15:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1755627298; x=1756232098;
+ d=1e100.net; s=20230601; t=1755627300; x=1756232100;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=NsRZorVhSxNDRnTQEgSARrhk8IL7C/Jqi8WX2Yp6C8g=;
- b=Fw6oPWKkGHRgJw0ixwlaF4HYEMzveO6btCy4KbzXRs40n+lk7kKPaPwwVjCLwV9M6J
- X69K1B8C2lvAo12ojCgxvE6gc04/W+ho3L0n+bSdII2Wxb56yxjz6LGOuBKiIa9iKxM+
- HdeEMfjs2L9eytuljNhgUQ3fuDqfaNo6KkrsBfcVsvC9wdRFMqF2SB5QmAC/I7xVnmzX
- IA/tIODmdhbRAQL4Zlux7CIlMf6h5AJs4g3YJQD9Jw1iad2tjgZVqzB0zXgW9F4aZ5f7
- d4crd55Dpsfw8THuFZml2MGnAgZrpzQoRUbC/XmOAHTVxcOQlEJhX9enPzo06sITTipH
- edVA==
-X-Gm-Message-State: AOJu0Yzdy5nINdrcJKytNOnoXFX38hyBsBrkvUv3CcTf0BWdKPMadCSV
- 4TIy16Ile8G+1+/dss0YRcTiN08o9zOdJ9WTeFULz3jLCv83IXnf7mkwr/Py58E1O5WIL2r+BDO
- qwaWy
-X-Gm-Gg: ASbGncth1elDSRqkrzG24gXzkfmRUOS/8VDim5nuRLUY9TZjN8bw2bctN43FI+2qpL0
- 9bV35sMndeYi+cEyypwLnmehUT64bEi1EJMfvyjsW1Ru++iWQovzOjo/nMFEjkDixWH3+UYsOwu
- Sp6d5BjrK/yskF2jEtAo1BwYdP49pmkt9mnYdwfuw8+OPhAQC4QwCG7/f666UwRiwzzaFL55P/i
- bwRiO7YQtWmfn5WhNCwwq/rqgzyrtAB2Ey8i8tzcriet7vN99YQLzaX/IQle8UN/7DYJZITCHuK
- SWyTtwwizXoXjaRdVqMotcxVkipH8j/WmhTH2XeblPnps7FoGxXtwEQYyIRiuvNe22l66aZCK4Y
- 4yBvPPT8CDgDDT88yOKqgYoxk96P0RZyc+6+so07E1xm6mrqgJHNH7CUNtwAnSinzFbtHSj42+8
- ieHm7HsrBmKAGJesY0vLg/
-X-Google-Smtp-Source: AGHT+IGTj3hxJ87fHc4f+GrLhOSPz4Scra28dFCAxGyVCEHAGjlegDv10VMxeCR6yhpJLnJO3ofr+Q==
-X-Received: by 2002:a05:6402:4393:b0:618:2533:f735 with SMTP id
- 4fb4d7f45d1cf-61a97556109mr284416a12.7.1755627298363; 
- Tue, 19 Aug 2025 11:14:58 -0700 (PDT)
+ bh=ofuxmlPJyECp/QbikCX2UPvwKgPCgucz4XjJeMg4F9Y=;
+ b=wrreqJ0svOEDIG2UXqPoKvV3d6Fc6gM4WA+KlqKtPSvUE9d4js+u9BFFROGW51JEsP
+ 4MMF3qxvCVwDaPgc0GvFGVCOpX1pc/ZIEid5BTkN8cSiMajnFdImp1iH7m48a/LbaT04
+ McOQkcyVo2/rMUaippC0hPoVIns1hk/axgQQwFAtRF7NRUUV7gst4X3DuC6IijVEUZ+4
+ zCF5U5G4gUL/s2nBS+bC1g3rX54bWQFZzqsET2Vu2Mtw9GkHqqB1tsYetKu5gQLDES5I
+ KAJduZFsbOuYTSfFcEoSvDwe+9K4nEoJDYvjkmkSbEJQ53dEarHwruXHKmS3kIau1665
+ JigQ==
+X-Gm-Message-State: AOJu0YzIvFlskmgcKzSoQ97kEGMBRuAqysuOkyrPXSAUf/TamjO16z8v
+ tKG1nguAcAClomQBi4SNwZpmYPoZHMuCqfDwO5afbtS20y18O2/SWXkPnCEpZlinxxkMwz6990V
+ 9hz2C
+X-Gm-Gg: ASbGncsDC9t3T2r0z3nEyi6OhS70kOOmqhBEeGURor7npq5YhwLfv0cpWqE3qh6EHsx
+ 0lECrTiTYo27EyxTam1slycsFF9r1JtPMol753g+0OYFWfN0Q1G1xRfdpQ+Fgckk2MXDvdA0zk+
+ xacRvm1DfzTZREw4c4xlAa3R/pPV/zilLuhYIbj6XT2opP4LX9nEaI7jZhL9IZSTHbZIQVq/+oA
+ rdaEsht+GqyxcNSaMAMbABAr8f5A9ZUnT9gHCjfzhOWIoaCETTUWx2bKf6JB7MPNBYEw18rhLQ7
+ XfF1b00+ScSeG0B/RNDA8nP74xKMEmI+fQvAfiq8jBEoRN4jFMKvGfIv3CkOF4pdP5f53az0HPG
+ LB2uTotE5Mmxa7hlXWEGY8PejA2lUd8C08WY7Ot8KbMzYmDRfUYnK3tJ2RVgLBKv6PkIv1YfKqa
+ /jS/AFRZn6msvKwoC60Yvk
+X-Google-Smtp-Source: AGHT+IEolfcyhJPr7H1BfETSe6WVvcyqOaN36VWo92PcNRLwbPzKswSXqGDVv6lR2x2w2zkzUftGFA==
+X-Received: by 2002:a05:6402:320d:b0:618:2011:cad4 with SMTP id
+ 4fb4d7f45d1cf-61a9759a196mr237110a12.15.1755627299971; 
+ Tue, 19 Aug 2025 11:14:59 -0700 (PDT)
 Received: from panicking.amarulasolutions.com
  (mob-31-158-159-104.net.vodafone.it. [31.158.159.104])
  by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-61a755f876bsm2112245a12.13.2025.08.19.11.14.56
+ 4fb4d7f45d1cf-61a755f876bsm2112245a12.13.2025.08.19.11.14.58
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 19 Aug 2025 11:14:57 -0700 (PDT)
+ Tue, 19 Aug 2025 11:14:59 -0700 (PDT)
 From: Michael Trimarchi <michael@amarulasolutions.com>
 To: buildroot@buildroot.org
 Cc: Jagan Teki <jagan@amarulasolutions.com>,
@@ -80,30 +80,31 @@ Cc: Jagan Teki <jagan@amarulasolutions.com>,
  Dario Binacchi <dario.binacchi@amarulasolutions.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Michael Trimarchi <michael@amarulasolutions.com>
-Date: Tue, 19 Aug 2025 20:14:46 +0200
-Message-ID: <20250819181451.3012126-2-michael@amarulasolutions.com>
+Date: Tue, 19 Aug 2025 20:14:47 +0200
+Message-ID: <20250819181451.3012126-3-michael@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250819181451.3012126-1-michael@amarulasolutions.com>
 References: <20250819181451.3012126-1-michael@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1755627298; x=1756232098;
+ d=amarulasolutions.com; s=google; t=1755627300; x=1756232100;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=NsRZorVhSxNDRnTQEgSARrhk8IL7C/Jqi8WX2Yp6C8g=;
- b=EAwtEpxSC05WYjTDmEvtlQQetyxKhHaHk/xOltTywoaV7awHEf435fKI5h+xYWSWVT
- P+2tvga7TwAXyaYYMuSrWHhmTiJVVZqVjfA9cDTgQwenWqGJZJ4aVvOA4vwrscG7ng/9
- 5XYReiqX+DTpPiaWltnZNDGwDAWqe/y8bOsxY=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=ofuxmlPJyECp/QbikCX2UPvwKgPCgucz4XjJeMg4F9Y=;
+ b=E+BrR9yMmV3pefekZ/P7yMVVlvGACG4bnq9qUI8ZxPcZTI9xaZ6QInSfeax4lM3eDn
+ l780H3ixQPxsUyQiHHeWA2Dl5WV4BGp4FYmDrO3hRAf9Zrlzmz9fHjTOG3RB2pTPpStH
+ rZcil1zyuUPvaSOZ3yO9VFxuRVunhtHXeGx7w=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=EAwtEpxS
-Subject: [Buildroot] [PATCH 1/6] linux: add missing hash for linux 6.12.36
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=E+BrR9yM
+Subject: [Buildroot] [PATCH 2/6] configs/engicam_imx6qdl_icore_defconfig:
+ bump Linux to 6.12.36 and U-Boot to 2025.07
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -120,22 +121,60 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+The patch bumps the Linux kernel to version 6.12.36 and U-Boot to
+version 2025.07.
+
 Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
 ---
- linux/linux.hash | 2 ++
- 1 file changed, 2 insertions(+)
+ configs/engicam_imx6qdl_icore_defconfig | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
-diff --git a/linux/linux.hash b/linux/linux.hash
-index f5e2d663d1..599d2bc6b3 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,4 +1,6 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
-+sha256  4a168aed2de5a81aadd90ba2b153860a98d99bfc34651936e17f18e54f01ba8c  linux-6.12.36.tar.xz
-+
- sha256  1a4be2fe6b5246aa4ac8987a8a4af34c42a8dd7d08b46ab48516bcc1befbcd83  linux-6.16.tar.xz
- sha256  e94f3af85492302f7a819441458f80bca0ad9912e5a4c83c699ff3c63c52957d  linux-6.15.9.tar.xz
- sha256  6b19a3ae99423de2416964d67251d745910277af258b4c4c63e88fd87dbf0e27  linux-6.12.41.tar.xz
+diff --git a/configs/engicam_imx6qdl_icore_defconfig b/configs/engicam_imx6qdl_icore_defconfig
+index 2ac415e335..30e397c0af 100644
+--- a/configs/engicam_imx6qdl_icore_defconfig
++++ b/configs/engicam_imx6qdl_icore_defconfig
+@@ -3,31 +3,37 @@ BR2_cortex_a9=y
+ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_FPU_VFPV3=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Engicam i.CoreM6 Quad/Dual/DualLite/Solo"
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/engicam/icorem6/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.36"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_UIMAGE=y
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-icore imx6q-icore imx6q-icore-ofcap10 imx6q-icore-ofcap12"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="nxp/imx/imx6dl-icore nxp/imx/imx6q-icore nxp/imx/imx6q-icore-ofcap10 nxp/imx/imx6q-icore-ofcap12"
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx6qdl_icore_mmc"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
++BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX=y
+ BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_E2FSPROGS=y
++BR2_PACKAGE_HOST_ENVIRONMENT_SETUP=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_MTOOLS=y
 -- 
 2.43.0
 
