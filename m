@@ -1,76 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A45A6CA0EF5
-	for <buildroot@archiver.kernel.org>; Tue, 19 Aug 2025 02:06:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 531BFCA0EF5
+	for <buildroot@archiver.kernel.org>; Tue, 19 Aug 2025 02:14:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6F6F8404A9;
-	Tue, 19 Aug 2025 02:06:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1EA078053F;
+	Tue, 19 Aug 2025 02:14:53 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id URLgH3FCf0ui; Tue, 19 Aug 2025 02:14:52 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 28582804D0
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 28582804D0;
+	Tue, 19 Aug 2025 02:14:52 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id B7226E2
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 02:14:50 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id A8D5E40816
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 02:14:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XwURem1aLDJ7; Tue, 19 Aug 2025 02:06:14 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 81F43403EC
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 81F43403EC;
-	Tue, 19 Aug 2025 02:06:14 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 77F67E2
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 02:06:13 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5E09F60774
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 02:06:13 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lOyIK9RtZmp2 for <buildroot@buildroot.org>;
- Tue, 19 Aug 2025 02:06:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5987E60765
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5987E60765
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5987E60765
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 02:06:11 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 9040813F88F;
- Tue, 19 Aug 2025 04:06:07 +0200 (CEST)
-Received: from 2001:18c0:a22:bf00:5c2b:f296:f108:6612
- via 2001:18c0:a22:bf00:5c2b:f296:f108:6612 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 19 Aug 2025 04:06:07 +0200
-MIME-Version: 1.0
-Date: Tue, 19 Aug 2025 04:06:07 +0200
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250815103002.3871929-2-thomas.petazzoni@bootlin.com>
-References: <20250815103002.3871929-1-thomas.petazzoni@bootlin.com>
- <20250815103002.3871929-2-thomas.petazzoni@bootlin.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <aae6c20414ae5826c36fd1fd4fdce2c1@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1755569168;
- bh=es9ilw2febik+O4WE1VDhfjt+sQFKukzhXYj5oqX5jY=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=G4Yn8AxPA1hzV+8pN9PDruL615ldoeDAT+eC7jAq3X2ZomKlUqx1tdwaxxGaVXFC1
- uKy2s732BZWUebRSX2f3M9wurgb3VZ9lin1UZkRmb/3U8Ga57wJzQcDy4PzPKwYqlF
- mE/ycrqGSVZWa5C/46vkwBbb5mklkU11+iv7F9biQg3W2iOnA8u53a+z/hM7kVKe3m
- wopewGloXLKh4ZTBOSSbL4PDcfMcJYIAqMQS4FGzIPhL+1479DN+ra/WfFVgfC18Xs
- VMTAsr7oRt4t3R/KlOAwGdVY7HYAnYxeAkvljnekk43auoErSQAK7sboAoCaAs6PDs
- w5PMB8phLGx2Q==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=G4Yn8AxP
-Subject: Re: [Buildroot] [PATCH 1/3]
- support/testing/tests/fs/test_iso9660.py: use a more recent toolchain
+ id S2T7cEXWXHSm for <buildroot@buildroot.org>;
+ Tue, 19 Aug 2025 02:14:50 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF00F40830
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id EF00F40830
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 02:14:49 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E942087670; Tue, 19 Aug 2025 02:14:49 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 19 Aug 2025 04:11:04 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: c45735988ef19aa7085bc89a5e9e2327248ab3e5
+X-Git-Newrev: 2edd6b8214c4e035bd63fda9a81171140e525759
+X-Patchwork-Hint: ignore
+Message-Id: <20250819021449.E942087670@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/uuu: bump to version
+ 1.5.222
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,52 +60,47 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=2edd6b8214c4e035bd63fda9a81171140e525759
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On 15/08/2025 12:29, Thomas Petazzoni via buildroot wrote:
-> The ISO9660 tests are currently using an old 2017 toolchain. Let's
-> switch to a modern toolchain, which is regularly updated. Also, we use
-> a toolchain based on glibc since grub2 doesn't build with recent
-> uClibc toolchains.
-> 
-> It will work around build issues with syslinux.
-> 
-> Fixes:
-> 
->   https://gitlab.com/buildroot.org/buildroot/-/jobs/10975828975
->   https://gitlab.com/buildroot.org/buildroot/-/jobs/10975828871
->   https://gitlab.com/buildroot.org/buildroot/-/jobs/10975828770
-> 
-> (Even though those should be fixed separately, as syslinux should
-> continue to build with old compilers not supporting std=gnu17)
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Release notes:
+https://github.com/nxp-imx/mfgtools/releases/tag/uuu_1.5.222
 
-I applied this series to master, after a complete review and some more 
-testing.
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/uuu/uuu.hash | 2 +-
+ package/uuu/uuu.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I also made few minor cosmetic changes in patch #3:
-- fix patch #72 upstream link to point to the initial patch
-   submission rather than a reply
-- merge two _IGNORE_CVES blocks for patch #50 into a single one
-- order _IGNORE_CVES blocks by numerical patch order
-- order numerically the CVE list in commit log
-- add a "Fixes:" tag in patch #74 since its commit log does not
-   mention the CVE.
-
-See:
-https://gitlab.com/buildroot.org/buildroot/-/commit/ded3e0045aeeab226d2770fe8de522422c174434
-
-Thanks a lot for this series!
-
-Best regards,
-
-Julien.
+diff --git a/package/uuu/uuu.hash b/package/uuu/uuu.hash
+index 4ad1783b89..75e298e4a3 100644
+--- a/package/uuu/uuu.hash
++++ b/package/uuu/uuu.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256  f604de5aeb687b4523768d998f6cc4a5dd295d227107365d32b5032a82be81e6  uuu_source-uuu_1.5.220.tar.gz
++sha256  50bd2ce7e7fbc5fea38bcd138da46ca84aee3aaf723f674fa8546ce70c070c0f  uuu_source-uuu_1.5.222.tar.gz
+ sha256  cc8d47f7b9260f6669ecd41c24554c552f17581d81ee8fc602c6d23edb8bf495  LICENSE
+diff --git a/package/uuu/uuu.mk b/package/uuu/uuu.mk
+index e88f2715e6..61f4e82ee3 100644
+--- a/package/uuu/uuu.mk
++++ b/package/uuu/uuu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UUU_VERSION = 1.5.220
++UUU_VERSION = 1.5.222
+ UUU_SOURCE = uuu_source-uuu_$(UUU_VERSION).tar.gz
+ UUU_SITE = https://github.com/nxp-imx/mfgtools/releases/download/uuu_$(UUU_VERSION)
+ UUU_LICENSE = BSD 3-Clause "New" or "Revised" License
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
