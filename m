@@ -4,72 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3994ACA0EEB
-	for <buildroot@archiver.kernel.org>; Tue, 19 Aug 2025 17:31:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CD81CA0EEB
+	for <buildroot@archiver.kernel.org>; Tue, 19 Aug 2025 17:33:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DCA03814AB;
-	Tue, 19 Aug 2025 17:31:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 61E90814C2;
+	Tue, 19 Aug 2025 17:33:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id li5OJzPh8fPt; Tue, 19 Aug 2025 17:31:13 +0000 (UTC)
+ id 5K2RV2agVNZM; Tue, 19 Aug 2025 17:33:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C985C814C7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F0E7E814C6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C985C814C7;
-	Tue, 19 Aug 2025 17:31:13 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 56AF1E2
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 17:31:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F0E7E814C6;
+	Tue, 19 Aug 2025 17:33:27 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 78680DE6
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 17:33:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 494874009A
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 17:31:12 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6A3AB814C2
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 17:33:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AegGpsCMYV3m for <buildroot@buildroot.org>;
- Tue, 19 Aug 2025 17:31:11 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8Y6Pochg-UHT for <buildroot@buildroot.org>;
+ Tue, 19 Aug 2025 17:33:26 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
  helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org F104440068
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F104440068
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3131B814C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3131B814C6
 Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp2.osuosl.org (Postfix) with ESMTPS id F104440068
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 17:31:10 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3131B814C6
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 17:33:26 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id 6EA411A0D18
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 17:31:09 +0000 (UTC)
+ by smtpout-02.galae.net (Postfix) with ESMTPS id 51E851A0D18
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 17:33:24 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 40B7F60697;
- Tue, 19 Aug 2025 17:31:09 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 245E160697;
+ Tue, 19 Aug 2025 17:33:24 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 3DF451C22DBB2; 
- Tue, 19 Aug 2025 19:31:08 +0200 (CEST)
+ with ESMTPSA id 54E721C22C719; 
+ Tue, 19 Aug 2025 19:33:22 +0200 (CEST)
 To: buildroot@buildroot.org
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- =?UTF-8?q?Micha=C5=82=20=C5=81yszczek?= <michal.lyszczek@bofc.pl>
-Date: Tue, 19 Aug 2025 19:31:06 +0200
-Message-ID: <20250819173106.3351049-1-thomas.petazzoni@bootlin.com>
+ Sergio Prado <sergio.prado@e-labworks.com>
+Date: Tue, 19 Aug 2025 19:33:18 +0200
+Message-ID: <20250819173319.3352151-1-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.50.1
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=dkim; 
- t=1755624668; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding; bh=ugUzeqOWMRRC7UrE11ubKsBTz+JRPcxVsNey5e7HcNM=;
- b=TeBz1W75LUSCseWBodBun1ThaiP1oZUIY1Tp7PMaGrsESEiJIvZKTaQFK5XRUjm79fSZ6N
- 2T/jJ4CQXnQp6JagwVU13xtf0rdqchkYIAr4SWnUN3ekDD8xo7FTuNRav20TluK1qBS4ll
- i+nTZ7j9DO39YoF0ht3J7m2YSjeO+DE7MISw1IzXyBMrzPxpSl5xoRoELlRxFVAxDflXD8
- llD6WGqe9iGyoif0vzX4uXyPGgYtEt8P4i2ECocLC3VQgtX/j5uXvTrWIdWNFaYOzDMpBk
- BYV1sDDaAGSwVmdkV1npq09HV42gD0ZxJcImW01SQzR1K43XSBCu6NVlFJbDuw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ t=1755624803; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=0mQHjBIli4+hFfZ1e3xQVuwAlFBdt1CKx9/jkzB70kY=;
+ b=NaOf7lXmMOtAlB+eKX/n8afYwl/GQZ8XKeTDYnFG2/nMkQQAFDcVYJamBfEULE+nuFnp29
+ 3J98tJYUroH0rWcqqXLekh48w1ltA7asjHMVAna+WvgGU2sb1/98O6Ciai/dZnoJXWn0g+
+ YMuk63TSR/nXOCdb5sY8UK4WiHaNksMnIjnFxPbym91de9bd1Z9w3OCLFrkmi9gk06FIBr
+ hu5Zg+0nIX70qclUZaA+XN+IHIJy872LGDOdWOlph3JM8GWQmtS7nMck33ejak8GezjkSf
+ jpf7KMS8u7oPskKENj0dqUi9RoS6u1aXpEb3VqEmrN3bePEqo0Nx4rc89IjqdA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=TeBz1W75
-Subject: [Buildroot] [PATCH] configs/socrates_cyclone5: remove defconfig,
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=NaOf7lXm
+Subject: [Buildroot] [PATCH] configs/toradex_apalis_imx6: remove defconfig,
  broken
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -84,132 +85,262 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VGhpcyBkZWZjb25maWcgbm8gbG9uZ2VyIGJ1aWxkczoKCiAgaHR0cHM6Ly9naXRsYWIuY29tL2J1
-aWxkcm9vdC5vcmcvYnVpbGRyb290Ly0vam9icy8xMTAyNjc3Mjg4NwoKSXQgaGFzIGJlZW4gYnJv
-a2VuIGZvciBhdCBsZWFzdCAyIG1vbnRoczoKCiAgaHR0cHM6Ly9naXRsYWIuY29tL2J1aWxkcm9v
-dC5vcmcvYnVpbGRyb290Ly0vam9icz9uYW1lPVQlM0Rzb2NyYXRlc19jeWNsb25lNSZraW5kPUJV
-SUxECgpJdCB1c2VzIHRoZSBvdXRkYXRlZCBhbmQgbm90IGV2ZW4gTFRTIDQuMTYuNyBMaW51eCBr
-ZXJuZWwsIHdoaWNoIG5vCmxvbmdlciBidWlsZHMgd2l0aCBtb2Rlcm4gdG9vbGNoYWlucy4KClVu
-bGVzcyBhIGZpeCBpcyBwcm92aWRlZCwgdGhpcyBkZWZjb25maWcgd2lsbCBiZSByZW1vdmVkLgoK
-Rml4ZXM6CgogIGh0dHBzOi8vZ2l0bGFiLmNvbS9idWlsZHJvb3Qub3JnL2J1aWxkcm9vdC8tL2pv
-YnMvMTEwMjY3NzI4ODcKCkNjOiBNaWNoYcWCIMWBeXN6Y3playA8bWljaGFsLmx5c3pjemVrQGJv
-ZmMucGw+ClNpZ25lZC1vZmYtYnk6IFRob21hcyBQZXRhenpvbmkgPHRob21hcy5wZXRhenpvbmlA
-Ym9vdGxpbi5jb20+Ci0tLQogLmNoZWNrcGFja2FnZWlnbm9yZSAgICAgICAgICAgICAgICAgICAg
-ICAgICB8ICAxIC0KIERFVkVMT1BFUlMgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-fCAgMiAtCiBib2FyZC9hbHRlcmEvc29jcmF0ZXNfY3ljbG9uZTUvYm9vdC1lbnYudHh0IHwgIDgg
-LS0tCiBib2FyZC9hbHRlcmEvc29jcmF0ZXNfY3ljbG9uZTUvZ2VuaW1hZ2UuY2ZnIHwgNTkgLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tCiBib2FyZC9hbHRlcmEvc29jcmF0ZXNfY3ljbG9uZTUvcmVhZG1l
-LnR4dCAgIHwgNTIgLS0tLS0tLS0tLS0tLS0tLS0tCiBjb25maWdzL3NvY3JhdGVzX2N5Y2xvbmU1
-X2RlZmNvbmZpZyAgICAgICAgIHwgMzIgLS0tLS0tLS0tLS0KIDYgZmlsZXMgY2hhbmdlZCwgMTU0
-IGRlbGV0aW9ucygtKQogZGVsZXRlIG1vZGUgMTAwNjQ0IGJvYXJkL2FsdGVyYS9zb2NyYXRlc19j
-eWNsb25lNS9ib290LWVudi50eHQKIGRlbGV0ZSBtb2RlIDEwMDY0NCBib2FyZC9hbHRlcmEvc29j
-cmF0ZXNfY3ljbG9uZTUvZ2VuaW1hZ2UuY2ZnCiBkZWxldGUgbW9kZSAxMDA2NDQgYm9hcmQvYWx0
-ZXJhL3NvY3JhdGVzX2N5Y2xvbmU1L3JlYWRtZS50eHQKIGRlbGV0ZSBtb2RlIDEwMDY0NCBjb25m
-aWdzL3NvY3JhdGVzX2N5Y2xvbmU1X2RlZmNvbmZpZwoKZGlmZiAtLWdpdCBhLy5jaGVja3BhY2th
-Z2VpZ25vcmUgYi8uY2hlY2twYWNrYWdlaWdub3JlCmluZGV4IGUwNzU0MjYzMTMuLmI2ZDE4MjEw
-MjUgMTAwNjQ0Ci0tLSBhLy5jaGVja3BhY2thZ2VpZ25vcmUKKysrIGIvLmNoZWNrcGFja2FnZWln
-bm9yZQpAQCAtMTgyLDcgKzE4Miw2IEBAIGNvbmZpZ3Mvc25wc19hcmM3MDBfbnNpbV9kZWZjb25m
-aWcgbGliX2RlZmNvbmZpZy5Gb3JjZUNoZWNrSGFzaAogY29uZmlncy9zbnBzX2FyY2hzMzhfYXhz
-MTAzX2RlZmNvbmZpZyBsaWJfZGVmY29uZmlnLkZvcmNlQ2hlY2tIYXNoCiBjb25maWdzL3NucHNf
-YXJjaHMzOF9oYXBzX2RlZmNvbmZpZyBsaWJfZGVmY29uZmlnLkZvcmNlQ2hlY2tIYXNoCiBjb25m
-aWdzL3NucHNfYXJjaHMzOF9oc2RrX2RlZmNvbmZpZyBsaWJfZGVmY29uZmlnLkZvcmNlQ2hlY2tI
-YXNoCi1jb25maWdzL3NvY3JhdGVzX2N5Y2xvbmU1X2RlZmNvbmZpZyBsaWJfZGVmY29uZmlnLkZv
-cmNlQ2hlY2tIYXNoCiBjb25maWdzL3NvbGlkcnVuX2NsZWFyZm9nX2d0XzhrX2RlZmNvbmZpZyBs
-aWJfZGVmY29uZmlnLkZvcmNlQ2hlY2tIYXNoCiBjb25maWdzL3NvbGlkcnVuX21hY2NoaWF0b2Jp
-bl9kZWZjb25maWcgbGliX2RlZmNvbmZpZy5Gb3JjZUNoZWNrSGFzaAogY29uZmlncy9zdG0zMm1w
-MTU3Y19vZHlzc2V5X2RlZmNvbmZpZyBsaWJfZGVmY29uZmlnLkZvcmNlQ2hlY2tIYXNoCmRpZmYg
-LS1naXQgYS9ERVZFTE9QRVJTIGIvREVWRUxPUEVSUwppbmRleCBhOGJiODhiOTE3Li45NTE5ZmEz
-Y2NiIDEwMDY0NAotLS0gYS9ERVZFTE9QRVJTCisrKyBiL0RFVkVMT1BFUlMKQEAgLTI0NTMsOCAr
-MjQ1Myw2IEBAIEY6CXBhY2thZ2UvbGliYXZsLwogRjoJcGFja2FnZS9yY3ctc21hcmMtc2FsMjgv
-CiAKIE46CU1pY2hhxYIgxYF5c3pjemVrIDxtaWNoYWwubHlzemN6ZWtAYm9mYy5wbD4KLUY6CWJv
-YXJkL2FsdGVyYS9zb2NyYXRlc19jeWNsb25lNS8KLUY6CWNvbmZpZ3Mvc29jcmF0ZXNfY3ljbG9u
-ZTVfZGVmY29uZmlnCiBGOglwYWNrYWdlL25ldGlmcmMvCiBGOglwYWNrYWdlL29wZW5yYy8KIEY6
-CXBhY2thZ2Uvc2tlbGV0b24taW5pdC1vcGVucmMvCmRpZmYgLS1naXQgYS9ib2FyZC9hbHRlcmEv
-c29jcmF0ZXNfY3ljbG9uZTUvYm9vdC1lbnYudHh0IGIvYm9hcmQvYWx0ZXJhL3NvY3JhdGVzX2N5
-Y2xvbmU1L2Jvb3QtZW52LnR4dApkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggZWQ1YjYx
-Mzg2Yy4uMDAwMDAwMDAwMAotLS0gYS9ib2FyZC9hbHRlcmEvc29jcmF0ZXNfY3ljbG9uZTUvYm9v
-dC1lbnYudHh0CisrKyAvZGV2L251bGwKQEAgLTEsOCArMCwwIEBACi1saW51eF9sb2FkX2FkZHJl
-c3M9MHgxMDAwMDAKLWxpbnV4X2R0Yl9sb2FkX2FkZHJlc3M9MHgxMDAKLWxpbnV4X2R0Yj1zb2Nm
-cGdhX2N5Y2xvbmU1X3NvY3JhdGVzLmR0YgotbGludXhfbG9hZD1tbWMgcmVzY2FuOyBmYXRsb2Fk
-IG1tYyAwOjEgJHtsaW51eF9sb2FkX2FkZHJlc3N9IHpJbWFnZTsgZmF0bG9hZCBtbWMgMDoxICR7
-bGludXhfZHRiX2xvYWRfYWRkcmVzc30gJHtsaW51eF9kdGJ9Ci1ib290YXJncz1jb25zb2xlPXR0
-eVMwLDExNTIwMCByb290PS9kZXYvbW1jYmxrMHAzIHJvIHJvb3R3YWl0Ci1zb3VyY2VfZW52PWZh
-dGxvYWQgbW1jIDA6MSAweDIwMDAwMDAgYm9vdC5zY3I7IHNvdXJjZSAweDIwMDAwMDAKLWJvb3Rj
-bWQ9cnVuIGxpbnV4X2xvYWQ7IGJvb3R6ICR7bGludXhfbG9hZF9hZGRyZXNzfSAtICR7bGludXhf
-ZHRiX2xvYWRfYWRkcmVzc30KLWJvb3RkZWxheT0xCmRpZmYgLS1naXQgYS9ib2FyZC9hbHRlcmEv
-c29jcmF0ZXNfY3ljbG9uZTUvZ2VuaW1hZ2UuY2ZnIGIvYm9hcmQvYWx0ZXJhL3NvY3JhdGVzX2N5
-Y2xvbmU1L2dlbmltYWdlLmNmZwpkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggZDMxYzM4
-MzhiZS4uMDAwMDAwMDAwMAotLS0gYS9ib2FyZC9hbHRlcmEvc29jcmF0ZXNfY3ljbG9uZTUvZ2Vu
-aW1hZ2UuY2ZnCisrKyAvZGV2L251bGwKQEAgLTEsNTkgKzAsMCBAQAotaW1hZ2UgYm9vdC52ZmF0
-IHsKLQl2ZmF0IHsKLQkJZmlsZXMgPSB7Ci0JCQkiekltYWdlIiwKLQkJCSJzb2NmcGdhX2N5Y2xv
-bmU1X3NvY3JhdGVzLmR0YiIKLQkJfQotCX0KLQotCXNpemUgPSA4TQotfQotCi1pbWFnZSB1Ym9v
-dC5pbWcgewotCWhkaW1hZ2UgewotCQlwYXJ0aXRpb24tdGFibGUgPSAibm8iCi0JfQotCi0JcGFy
-dGl0aW9uIHNwbCB7Ci0JCWluLXBhcnRpdGlvbi10YWJsZSA9ICJubyIKLQkJaW1hZ2UgPSAidS1i
-b290LXNwbC5iaW4uY3JjIgotCQlvZmZzZXQgPSAwCi0JCXNpemUgPSA2NEsKLQl9Ci0KLQlwYXJ0
-aXRpb24gdWJvb3QtZnVsbCB7Ci0JCWluLXBhcnRpdGlvbi10YWJsZSA9ICJubyIKLQkJaW1hZ2Ug
-PSAidS1ib290LmltZyIKLQkJb2Zmc2V0ID0gMjU2SwotCX0KLQotCXNpemUgPSAxTQotfQotCi1p
-bWFnZSBzZGNhcmQuaW1nIHsKLQloZGltYWdlIHsKLQl9Ci0KLQlwYXJ0aXRpb24gdWJvb3QtZW52
-IHsKLQkJaW4tcGFydGl0aW9uLXRhYmxlID0gIm5vIgotCQlpbWFnZSA9ICJ1Ym9vdC1lbnYuYmlu
-IgotCQlvZmZzZXQgPSAxN0sgIyA1MTIgKiAzNCAtPiBqdXN0IGFmdGVyIGdwdAotCX0KLQotCXBh
-cnRpdGlvbiBib290IHsKLQkJcGFydGl0aW9uLXR5cGUgPSAweGMKLQkJYm9vdGFibGUgPSAidHJ1
-ZSIKLQkJaW1hZ2UgPSAiYm9vdC52ZmF0IgotCX0KLQotCXBhcnRpdGlvbiB1Ym9vdCB7Ci0JCXBh
-cnRpdGlvbi10eXBlID0gMHhhMgotCQlpbWFnZSA9ICJ1Ym9vdC5pbWciCi0JfQotCi0JcGFydGl0
-aW9uIHJvb3RmcyB7Ci0JCXBhcnRpdGlvbi10eXBlID0gMHg4MwotCQlpbWFnZSA9ICJyb290ZnMu
-ZXh0MiIKLQkJc2l6ZSA9IDUwME0KLQl9Ci19CmRpZmYgLS1naXQgYS9ib2FyZC9hbHRlcmEvc29j
-cmF0ZXNfY3ljbG9uZTUvcmVhZG1lLnR4dCBiL2JvYXJkL2FsdGVyYS9zb2NyYXRlc19jeWNsb25l
-NS9yZWFkbWUudHh0CmRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAppbmRleCA0ZTc4ZmVlZjExLi4w
-MDAwMDAwMDAwCi0tLSBhL2JvYXJkL2FsdGVyYS9zb2NyYXRlc19jeWNsb25lNS9yZWFkbWUudHh0
-CisrKyAvZGV2L251bGwKQEAgLTEsNTIgKzAsMCBAQAotRUJWIFNvQ3JhdGVzIEV2YWx1YXRpb24g
-Qm9hcmQKLQotSW50cm8KLT09PT09Ci0KLU1vcmUgaW5mb3JtYXRpb24gYWJvdXQgdGhpcyBib2Fy
-ZCBjYW4gYmUgZm91bmQgaGVyZToKLWh0dHBzOi8vcm9ja2V0Ym9hcmRzLm9yZy9mb3N3aWtpL0Rv
-Y3VtZW50YXRpb24vRUJWU29DcmF0ZXNFdmFsdWF0aW9uQm9hcmQKLQotQnVpbGQKLT09PT09Ci0K
-LUZpcnN0LCBsb2FkIHNvY3JhdGVzIGNvbmZpZyBmb3IgYnVpbGRyb290Ci0KLSAgICBtYWtlIHNv
-Y3JhdGVzX2N5Y2xvbmU1X2RlZmNvbmZpZwotCi1CdWlsZCBldmVyeXRoaW5nCi0KLSAgICBtYWtl
-Ci0KLUZvbGxvd2luZyBmaWxlcyB3aWxsIGJlIGdlbmVyYXRlZCBpbiBvdXRwdXQvaW1hZ2VzCi0K
-LS4KLeKUnOKUgOKUgCBib290LnZmYXQKLeKUnOKUgOKUgCByb290ZnMuZXh0Mgot4pSc4pSA4pSA
-IHJvb3Rmcy5leHQ0IC0+IHJvb3Rmcy5leHQyCi3ilJzilIDilIAgcm9vdGZzLnRhcgot4pSc4pSA
-4pSAIHNkY2FyZC5pbWcKLeKUnOKUgOKUgCBzb2NmcGdhX2N5Y2xvbmU1X3NvY3JhdGVzLmR0Ygot
-4pSc4pSA4pSAIHUtYm9vdC1zcGwuYmluCi3ilJzilIDilIAgdS1ib290LXNwbC5iaW4uY3JjCi3i
-lJzilIDilIAgdS1ib290LmJpbgot4pSc4pSA4pSAIHUtYm9vdC5pbWcKLeKUnOKUgOKUgCB1Ym9v
-dC1lbnYuYmluCi3ilJzilIDilIAgdWJvb3QuaW1nCi3ilJTilIDilIAgekltYWdlCi0KLQotQ3Jl
-YXRpbmcgYm9vdGFibGUgU0QgY2FyZAotPT09PT09PT09PT09PT09PT09PT09PT09PQotCi1TaW1w
-bHkgaW52b2tlCi0KLWRkIGlmPW91dHB1dC9pbWFnZXMvc2RjYXJkLmltZyBvZj0vZGV2L3NkWAot
-Ci1XaGVyZSBYIGlzIHlvdXIgU0QgY2FyZCBkZXZpY2UgKG5vdCBwYXJ0aXRpb24pCi0KLUJvb3Rp
-bmcKLT09PT09PT0KLQotUGlucyA2Ojggb24gUDE4IHNlbGVjdG9yIGlzIHVzZWQgdG8gZGV0ZXJt
-aW5lIGJvb3QgZGV2aWNlLiBUbyBib290IHNvY3JhdGVzIGZyb20KLXNkY2FyZCBzZXQgdGhlc2Ug
-cGlucyB0byB2YWx1ZSAweDUgKDEwMWIpLiBSZW1haW5pbmcgcGlucyBhcmUgdXNlZCB0byBkZXRl
-cm1pbmUKLWhvdyB0byBjb25maWd1cmUgRlBHQSBhbmQgYXJlIG5vdCBhc3NvY2lhdGVkIHdpdGgg
-Ym9vdGluZyBpbnRvIExpbnV4IGtlcm5lbC4KZGlmZiAtLWdpdCBhL2NvbmZpZ3Mvc29jcmF0ZXNf
-Y3ljbG9uZTVfZGVmY29uZmlnIGIvY29uZmlncy9zb2NyYXRlc19jeWNsb25lNV9kZWZjb25maWcK
-ZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IGQyM2UwOGEyNTUuLjAwMDAwMDAwMDAKLS0t
-IGEvY29uZmlncy9zb2NyYXRlc19jeWNsb25lNV9kZWZjb25maWcKKysrIC9kZXYvbnVsbApAQCAt
-MSwzMiArMCwwIEBACi1CUjJfYXJtPXkKLUJSMl9jb3J0ZXhfYTk9eQotQlIyX0FSTV9FTkFCTEVf
-TkVPTj15Ci1CUjJfQVJNX0VOQUJMRV9WRlA9eQotQlIyX0FSTV9GUFVfTkVPTj15Ci1CUjJfUEFD
-S0FHRV9IT1NUX0xJTlVYX0hFQURFUlNfQ1VTVE9NXzRfMTY9eQotQlIyX1JPT1RGU19QT1NUX0lN
-QUdFX1NDUklQVD0ic3VwcG9ydC9zY3JpcHRzL2dlbmltYWdlLnNoIgotQlIyX1JPT1RGU19QT1NU
-X1NDUklQVF9BUkdTPSItYyBib2FyZC9hbHRlcmEvc29jcmF0ZXNfY3ljbG9uZTUvZ2VuaW1hZ2Uu
-Y2ZnIgotQlIyX0xJTlVYX0tFUk5FTD15Ci1CUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9O
-PXkKLUJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9IjQuMTYuNyIKLUJSMl9M
-SU5VWF9LRVJORUxfREVGQ09ORklHPSJzb2NmcGdhIgotQlIyX0xJTlVYX0tFUk5FTF9EVFNfU1VQ
-UE9SVD15Ci1CUjJfTElOVVhfS0VSTkVMX0lOVFJFRV9EVFNfTkFNRT0ic29jZnBnYV9jeWNsb25l
-NV9zb2NyYXRlcyIKLUJSMl9UQVJHRVRfUk9PVEZTX0VYVDI9eQotQlIyX1RBUkdFVF9ST09URlNf
-RVhUMl80PXkKLUJSMl9UQVJHRVRfVUJPT1Q9eQotQlIyX1RBUkdFVF9VQk9PVF9CVUlMRF9TWVNU
-RU1fS0NPTkZJRz15Ci1CUjJfVEFSR0VUX1VCT09UX0NVU1RPTV9WRVJTSU9OPXkKLUJSMl9UQVJH
-RVRfVUJPT1RfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9IjIwMTguMDMiCi1CUjJfVEFSR0VUX1VCT09U
-X0JPQVJEX0RFRkNPTkZJRz0ic29jZnBnYV9zb2NyYXRlcyIKLUJSMl9UQVJHRVRfVUJPT1RfTkVF
-RFNfRFRDPXkKLUJSMl9UQVJHRVRfVUJPT1RfRk9STUFUX0lNRz15Ci1CUjJfVEFSR0VUX1VCT09U
-X1NQTD15Ci1CUjJfVEFSR0VUX1VCT09UX0FMVEVSQV9TT0NGUEdBX0lNQUdFX0NSQz15Ci1CUjJf
-UEFDS0FHRV9IT1NUX0RPU0ZTVE9PTFM9eQotQlIyX1BBQ0tBR0VfSE9TVF9HRU5JTUFHRT15Ci1C
-UjJfUEFDS0FHRV9IT1NUX01UT09MUz15Ci1CUjJfUEFDS0FHRV9IT1NUX1VCT09UX1RPT0xTPXkK
-LUJSMl9QQUNLQUdFX0hPU1RfVUJPT1RfVE9PTFNfRU5WSU1BR0U9eQotQlIyX1BBQ0tBR0VfSE9T
-VF9VQk9PVF9UT09MU19FTlZJTUFHRV9TT1VSQ0U9ImJvYXJkL2FsdGVyYS9zb2NyYXRlc19jeWNs
-b25lNS9ib290LWVudi50eHQiCi1CUjJfUEFDS0FHRV9IT1NUX1VCT09UX1RPT0xTX0VOVklNQUdF
-X1NJWkU9IjgxOTIiCi0tIAoyLjUwLjEKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9v
-dC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRy
-b290Cg==
+This defconfig no longer builds:
+
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/11026774072
+
+It has been broken for at least 2 months:
+
+  https://gitlab.com/buildroot.org/buildroot/-/jobs?name=T%3Dtoradex_apalis_imx6&kind=BUILD
+
+It uses an outdated Linux 4.9 kernel, which no longer builds with
+modern toolchains.
+
+Unless a fix is provided, this defconfig will be removed.
+
+Fixes:
+
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/11026774072
+
+Cc: Sergio Prado <sergio.prado@e-labworks.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .checkpackageignore                           |  2 -
+ DEVELOPERS                                    |  2 -
+ board/toradex/apalis-imx6/genimage.cfg        | 15 ------
+ .../patches/linux-headers/linux-headers.hash  |  1 -
+ .../apalis-imx6/patches/linux/linux.hash      |  2 -
+ .../apalis-imx6/patches/uboot/uboot.hash      |  2 -
+ board/toradex/apalis-imx6/post-image.sh       | 20 -------
+ board/toradex/apalis-imx6/readme.txt          | 53 -------------------
+ board/toradex/apalis-imx6/uEnv.txt            |  6 ---
+ configs/toradex_apalis_imx6_defconfig         | 26 ---------
+ 10 files changed, 129 deletions(-)
+ delete mode 100644 board/toradex/apalis-imx6/genimage.cfg
+ delete mode 120000 board/toradex/apalis-imx6/patches/linux-headers/linux-headers.hash
+ delete mode 100644 board/toradex/apalis-imx6/patches/linux/linux.hash
+ delete mode 100644 board/toradex/apalis-imx6/patches/uboot/uboot.hash
+ delete mode 100755 board/toradex/apalis-imx6/post-image.sh
+ delete mode 100644 board/toradex/apalis-imx6/readme.txt
+ delete mode 100644 board/toradex/apalis-imx6/uEnv.txt
+ delete mode 100644 configs/toradex_apalis_imx6_defconfig
+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index b6d1821025..34646f144f 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -63,7 +63,6 @@ board/stmicroelectronics/stm32f469-disco/flash_sd.sh Shellcheck
+ board/stmicroelectronics/stm32f469-disco/flash_xip.sh Shellcheck
+ board/synopsys/axs10x/post-build.sh Shellcheck
+ board/technologic/ts4900/post-image.sh Shellcheck
+-board/toradex/apalis-imx6/post-image.sh Shellcheck
+ board/udoo/common/post-build.sh Shellcheck
+ boot/afboot-stm32/0003-Makefile-disable-stack-protector.patch lib_patch.Upstream
+ boot/optee-os/3.13.0/0001-core-zlib-fix-build-warning-when-_LFS64_LARGEFILE-is.patch lib_patch.Upstream
+@@ -186,7 +185,6 @@ configs/solidrun_clearfog_gt_8k_defconfig lib_defconfig.ForceCheckHash
+ configs/solidrun_macchiatobin_defconfig lib_defconfig.ForceCheckHash
+ configs/stm32mp157c_odyssey_defconfig lib_defconfig.ForceCheckHash
+ configs/terasic_de10nano_cyclone5_defconfig lib_defconfig.ForceCheckHash
+-configs/toradex_apalis_imx6_defconfig lib_defconfig.ForceCheckHash
+ configs/ts4900_defconfig lib_defconfig.ForceCheckHash
+ configs/ts5500_defconfig lib_defconfig.ForceCheckHash
+ configs/ts7680_defconfig lib_defconfig.ForceCheckHash
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 9519fa3ccb..9bcce10cb2 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -3024,8 +3024,6 @@ F:	package/wpa_supplicant/
+ F:	package/xr819-xradio/
+ 
+ N:	Sergio Prado <sergio.prado@e-labworks.com>
+-F:	board/toradex/apalis-imx6/
+-F:	configs/toradex_apalis_imx6_defconfig
+ F:	package/aoetools/
+ F:	package/asn1c/
+ F:	package/azure-iot-sdk-c/
+diff --git a/board/toradex/apalis-imx6/genimage.cfg b/board/toradex/apalis-imx6/genimage.cfg
+deleted file mode 100644
+index a277decaa8..0000000000
+--- a/board/toradex/apalis-imx6/genimage.cfg
++++ /dev/null
+@@ -1,15 +0,0 @@
+-# Minimal SD card image for the Toradex Apalis i.MX6 COM
+-#
+-# It does not need a boot section for a bootloader since it is booted
+-# from its internal flash memory (eMMC).
+-
+-image sdcard.img {
+-	hdimage {
+-	}
+-
+-	partition rootfs {
+-		partition-type = 0x83
+-		image = "rootfs.ext2"
+-		size = 512M
+-	}
+-}
+diff --git a/board/toradex/apalis-imx6/patches/linux-headers/linux-headers.hash b/board/toradex/apalis-imx6/patches/linux-headers/linux-headers.hash
+deleted file mode 120000
+index 5808d92afe..0000000000
+--- a/board/toradex/apalis-imx6/patches/linux-headers/linux-headers.hash
++++ /dev/null
+@@ -1 +0,0 @@
+-../linux/linux.hash
+\ No newline at end of file
+diff --git a/board/toradex/apalis-imx6/patches/linux/linux.hash b/board/toradex/apalis-imx6/patches/linux/linux.hash
+deleted file mode 100644
+index 0697228724..0000000000
+--- a/board/toradex/apalis-imx6/patches/linux/linux.hash
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# Locally calculated
+-sha256  722ece80ee8dbcc04309c89139da8b1df6974e1ab4bb66d04c1906a576fa46fa  linux-d899927728beca8357a5b4120b690cb3c1d80844-git4.tar.gz
+diff --git a/board/toradex/apalis-imx6/patches/uboot/uboot.hash b/board/toradex/apalis-imx6/patches/uboot/uboot.hash
+deleted file mode 100644
+index 6132435fed..0000000000
+--- a/board/toradex/apalis-imx6/patches/uboot/uboot.hash
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# Locally calculated
+-sha256  f8d3e45d7944c9620ecacbd8f8824db42134c70e3b55efd6dab127bf763e48c2  uboot-30a1208727729dae22cb42f9ba9ba17efe5e6f77-git4.tar.gz
+diff --git a/board/toradex/apalis-imx6/post-image.sh b/board/toradex/apalis-imx6/post-image.sh
+deleted file mode 100755
+index 2b49f9d3d0..0000000000
+--- a/board/toradex/apalis-imx6/post-image.sh
++++ /dev/null
+@@ -1,20 +0,0 @@
+-#!/usr/bin/env bash
+-
+-GENIMAGE_CFG="$(dirname $0)/genimage.cfg"
+-GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
+-
+-# copy the uEnv.txt to the output/images directory
+-cp board/toradex/apalis-imx6/uEnv.txt $BINARIES_DIR/uEnv.txt
+-
+-rm -rf "${GENIMAGE_TMP}"
+-
+-# generate rootfs.img
+-genimage \
+-  --rootpath "${TARGET_DIR}" \
+-  --tmppath "${GENIMAGE_TMP}" \
+-  --inputpath "${BINARIES_DIR}" \
+-  --outputpath "${BINARIES_DIR}" \
+-  --config "${GENIMAGE_CFG}"
+-
+-RET=${?}
+-exit ${RET}
+diff --git a/board/toradex/apalis-imx6/readme.txt b/board/toradex/apalis-imx6/readme.txt
+deleted file mode 100644
+index feddad641c..0000000000
+--- a/board/toradex/apalis-imx6/readme.txt
++++ /dev/null
+@@ -1,53 +0,0 @@
+-Toradex Apalis i.MX6 Computer on Module
+-
+-Intro
+-=====
+-
+-The Apalis iMX6 is a small form-factor Computer on Module that comes
+-in both quad core and dual core versions based on Freescale i.MX6Q and
+-Freescale i.MX6D SoCs respectively. The Cortex A9 quad core and dual
+-core CPU peaks at 1 GHz for commercial temperature variant, while the
+-industrial temperature variant has a peak frequency of 800 MHz.
+-
+-https://www.toradex.com/computer-on-modules/apalis-arm-family/freescale-imx-6
+-
+-It supports two carrier boards:
+-
+-Apalis Evaluation Board
+-https://www.toradex.com/products/carrier-boards/apalis-evaluation-board
+-
+-Ixora Carrier Board
+-https://www.toradex.com/products/carrier-boards/ixora-carrier-board
+-
+-How to build it
+-===============
+-
+-Configure Buildroot:
+-
+-    $ make toradex_apalis_imx6_defconfig
+-
+-Compile everything and build the rootfs image:
+-
+-    $ make
+-
+-How to boot the image
+-=====================
+-
+-The board only boots from its internal flash memory eMMC, so the
+-bootloader image should be copied to it, following the procedures
+-described in Toradex website.
+-
+-http://developer.toradex.com/knowledge-base/flashing-linux-on-imx6-modules
+-
+-Buildroot prepares a "sdcard.img" in output/images/ with the kernel
+-image, device tree and a root filesystem, ready to be dumped on an SD
+-card.
+-
+-    $ dd if=output/images/sdcard.img of=/dev/sdX bs=1M
+-
+-To boot from the SD card, you should change the U-Boot
+-environment. Since U-Boot is running from internal eMMC, you will need
+-to access its command line prompt and manually set the necessary
+-variables to boot from the external SD card. For convenience, you can
+-use uEnv.txt provided in output/images/ as a reference to create the
+-necessary U-Boot variables to boot from the SD card.
+diff --git a/board/toradex/apalis-imx6/uEnv.txt b/board/toradex/apalis-imx6/uEnv.txt
+deleted file mode 100644
+index 96ab80cfb6..0000000000
+--- a/board/toradex/apalis-imx6/uEnv.txt
++++ /dev/null
+@@ -1,6 +0,0 @@
+-boot_file=zImage
+-fdt_file=imx6q-apalis_v1_0-ixora.dtb
+-sdargs=ip=off root=/dev/mmcblk1p1 rw,noatime rootfstype=ext4 rootwait
+-sddtbload=ext2load mmc 2:1 ${fdt_addr_r} boot/${fdt_file}
+-sdkernelload=ext2load mmc 2:1 ${kernel_addr_r} boot/${boot_file}
+-bootcmd=run setup; setenv bootargs ${defargs} ${sdargs} ${setupargs} ${vidargs}; echo Booting from SD card...; run sddtbload; run sdkernelload; bootz ${kernel_addr_r} - ${fdt_addr_r}
+diff --git a/configs/toradex_apalis_imx6_defconfig b/configs/toradex_apalis_imx6_defconfig
+deleted file mode 100644
+index e447190e0c..0000000000
+--- a/configs/toradex_apalis_imx6_defconfig
++++ /dev/null
+@@ -1,26 +0,0 @@
+-BR2_arm=y
+-BR2_cortex_a9=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
+-BR2_GLOBAL_PATCH_DIR="board/toradex/apalis-imx6/patches"
+-BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/toradex/apalis-imx6/post-image.sh"
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.toradex.com/linux-toradex.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="d899927728beca8357a5b4120b690cb3c1d80844"
+-BR2_LINUX_KERNEL_DEFCONFIG="apalis_imx6"
+-BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-apalis-eval imx6q-apalis-ixora imx6q-apalis-ixora-v1.1"
+-BR2_LINUX_KERNEL_INSTALL_TARGET=y
+-BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+-BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.toradex.com/u-boot-toradex.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="30a1208727729dae22cb42f9ba9ba17efe5e6f77"
+-BR2_TARGET_UBOOT_BOARD_DEFCONFIG="apalis_imx6"
+-BR2_TARGET_UBOOT_FORMAT_IMG=y
+-BR2_TARGET_UBOOT_SPL=y
+-BR2_TARGET_UBOOT_SPL_NAME="SPL"
+-BR2_PACKAGE_HOST_GENIMAGE=y
+-- 
+2.50.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
