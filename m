@@ -1,51 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F849CA0EEB
-	for <buildroot@archiver.kernel.org>; Tue, 19 Aug 2025 14:50:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86742CA0EE6
+	for <buildroot@archiver.kernel.org>; Tue, 19 Aug 2025 14:51:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 04E2740BD3;
-	Tue, 19 Aug 2025 14:50:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5378E81266;
+	Tue, 19 Aug 2025 14:51:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TsmxU9_opj88; Tue, 19 Aug 2025 14:50:56 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sYDGpnEt4HJM; Tue, 19 Aug 2025 14:51:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1029B40BD5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7119F811E3
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1029B40BD5;
-	Tue, 19 Aug 2025 14:50:56 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id E026BE2
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 14:50:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7119F811E3;
+	Tue, 19 Aug 2025 14:51:25 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 359E2E0A
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 14:51:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C548140BD0
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 14:50:54 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1C34C60AC9
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 14:51:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PE2Qllq_qLiC for <buildroot@buildroot.org>;
- Tue, 19 Aug 2025 14:50:53 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D698C40B99
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D698C40B99
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 14:50:53 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CF657876FE; Tue, 19 Aug 2025 14:50:53 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 19 Aug 2025 16:47:19 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ded3e0045aeeab226d2770fe8de522422c174434
-X-Git-Newrev: 022ff55a39cad5d103b3bf29f887c37ec0b2f0f9
-X-Patchwork-Hint: ignore
-Message-Id: <20250819145053.CF657876FE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/elfutils: fix build after 0.193
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yp33AQYI_3ZI for <buildroot@buildroot.org>;
+ Tue, 19 Aug 2025 14:51:23 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 462A360A4A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 462A360A4A
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 462A360A4A
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 14:51:23 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 47FAB13F88D;
+ Tue, 19 Aug 2025 16:51:19 +0200 (CEST)
+Received: from 2001:18c0:a22:bf00:5c2b:f296:f108:6612
+ via 2001:18c0:a22:bf00:5c2b:f296:f108:6612 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 19 Aug 2025 16:51:19 +0200
+MIME-Version: 1.0
+Date: Tue, 19 Aug 2025 16:51:19 +0200
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250818083826.2770186-1-thomas.petazzoni@bootlin.com>
+References: <20250818083826.2770186-1-thomas.petazzoni@bootlin.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <cf46da4964dddab7f78d62bef3eaa5c7@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1755615080;
+ bh=wLZRzm+ZFRnFvuMGci1NTGhfwn8RW0ENLyHysbFfN0w=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=uoK76kgzTgP1OM11WgRaZZlhxsX7qFdwNzMQjRVj4Wv2ruY/wuWAW2fN/dFeQC9Yv
+ jvhXTO4OnOJQ+CzBTK7HjacPZC/wg0Y6edqY74zfjwkshs1mtm/N7SViHV4YhCQGqx
+ h3fcCpX9gLS8Q9B7eiknGUTtdccOBTpixx3HgC9i9XJsxFXpT9QS/7PmqlD4QCwhaq
+ J1UCX9UlCi/IjlUjmneIco3gONoQJsLnDqyyD2zC0KqxU0sjC7ZISWfY0w0ArauQ8K
+ 0l1DYVRn1EFOT3a/LXHThXwgR1QPyAozkGXyDrekUvEk6TCIDf5bfltg7QE5qfOX7O
+ gwguhLLZwvhaw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=uoK76kgz
+Subject: Re: [Buildroot] [PATCH] package/elfutils: fix build after 0.193
  version bump
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -60,92 +83,33 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=022ff55a39cad5d103b3bf29f887c37ec0b2f0f9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 18/08/2025 10:38, Thomas Petazzoni via buildroot wrote:
+> The 0.193 version bump done in commit
+> c7508a23242aae7a80f22acc4473da25f7f9e96d broke the build on numerous
+> CPU architectures. Let's take a patch from upstream's main branch to
+> fix the issue.
+> 
+> Fixes:
+> 
+>   
+> https://autobuild.buildroot.net/results/3b005f7afec386f6fa4237f427f73367d55bb211/ 
+> (sparc64)
+>   
+> https://autobuild.buildroot.net/results/a6b1d5078abdd6c8def93aaffa2e67573250da3e/ 
+> (m68k)
+>   
+> https://autobuild.buildroot.net/results/45305cc2be3b255740808ee1f3486d1a10abfbb4/ 
+> (microblaze)
+>   and a bunch more
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-The 0.193 version bump done in commit
-c7508a23242aae7a80f22acc4473da25f7f9e96d broke the build on numerous
-CPU architectures. Let's take a patch from upstream's main branch to
-fix the issue.
-
-Fixes:
-
-  https://autobuild.buildroot.net/results/3b005f7afec386f6fa4237f427f73367d55bb211/ (sparc64)
-  https://autobuild.buildroot.net/results/a6b1d5078abdd6c8def93aaffa2e67573250da3e/ (m68k)
-  https://autobuild.buildroot.net/results/45305cc2be3b255740808ee1f3486d1a10abfbb4/ (microblaze)
-  and a bunch more
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...30-backends-guard-asm-perf_regs.h-include.patch | 53 ++++++++++++++++++++++
- 1 file changed, 53 insertions(+)
-
-diff --git a/package/elfutils/0003-PR32930-backends-guard-asm-perf_regs.h-include.patch b/package/elfutils/0003-PR32930-backends-guard-asm-perf_regs.h-include.patch
-new file mode 100644
-index 0000000000..76c604510b
---- /dev/null
-+++ b/package/elfutils/0003-PR32930-backends-guard-asm-perf_regs.h-include.patch
-@@ -0,0 +1,53 @@
-+From d05241ce690018548857199bd34d7734c7164679 Mon Sep 17 00:00:00 2001
-+From: Serhei Makarov <serhei@serhei.io>
-+Date: Mon, 5 May 2025 12:08:55 -0400
-+Subject: [PATCH] PR32930 backends/: guard asm/perf_regs.h include
-+
-+asm/perf_regs.h is an arch-specific linux include, not present on
-+architectures like hppa and m68k that lack perf_events support.
-+
-+Only one place we need to fix; others already guard the include by
-+architecture, or use architecture-independent headers (e.g.
-+linux/perf_events.h).
-+
-+* backends/libebl_PERF_FLAGS.h: Only include asm/perf_regs.h on
-+  architectures where we use it.
-+
-+Signed-off-by: Serhei Makarov <serhei@serhei.io>
-+Upstream: d05241ce690018548857199bd34d7734c7164679
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ backends/libebl_PERF_FLAGS.h | 8 ++++++--
-+ 1 file changed, 6 insertions(+), 2 deletions(-)
-+
-+diff --git a/backends/libebl_PERF_FLAGS.h b/backends/libebl_PERF_FLAGS.h
-+index 2ed45f0f..51c20ea6 100644
-+--- a/backends/libebl_PERF_FLAGS.h
-++++ b/backends/libebl_PERF_FLAGS.h
-+@@ -32,8 +32,12 @@
-+ #define _LIBEBL_PERF_FLAGS_H 1
-+ 
-+ #if defined(__linux__)
-++/* XXX Need to exclude __linux__ arches without perf_regs.h. */
-++#if defined(__x86_64__) || defined(__i386__)
-++/* || defined(other_architecture)... */
-+ # include <asm/perf_regs.h>
-+ #endif
-++#endif
-+ 
-+ #if defined(_ASM_X86_PERF_REGS_H)
-+ /* See the code in x86_initreg_sample.c for list of required regs and
-+@@ -49,8 +53,8 @@
-+    see the code in tools/perf/util/intel-pt.c intel_pt_add_gp_regs()
-+    and note how regs are added in the same order as the perf_regs.h enum.  */
-+ #else
-+-/* Since asm/perf_regs.h gives the register layout for a different arch,
-+-   we can't unwind x86_64 frames.  */
-++/* Since asm/perf_regs.h is absent, or gives the register layout for a
-++   different arch, we can't unwind i386 and x86_64 frames. */
-+ #define PERF_FRAME_REGISTERS_I386 0
-+ #define PERF_FRAME_REGISTERS_X86_64 0
-+ #endif
-+-- 
-+2.50.1
-+
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
