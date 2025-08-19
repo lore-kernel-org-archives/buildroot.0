@@ -1,75 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8EA6FCA0EE6
-	for <buildroot@archiver.kernel.org>; Tue, 19 Aug 2025 15:14:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D3D7CA0EE6
+	for <buildroot@archiver.kernel.org>; Tue, 19 Aug 2025 15:37:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 44E3540C1C;
-	Tue, 19 Aug 2025 15:14:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4CF5480799;
+	Tue, 19 Aug 2025 15:37:37 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wyraGcy0kLKm; Tue, 19 Aug 2025 15:37:36 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 492CE807A9
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 492CE807A9;
+	Tue, 19 Aug 2025 15:37:36 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id EFF18E0A
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 15:37:34 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id E1705403DC
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 15:37:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zZ4BmmPyGfZX; Tue, 19 Aug 2025 15:14:40 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F37A40C12
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7F37A40C12;
-	Tue, 19 Aug 2025 15:14:40 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0BC41DE6
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 15:14:40 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E599160A3A
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 15:14:39 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JXsGcKVuhOuN for <buildroot@buildroot.org>;
- Tue, 19 Aug 2025 15:14:39 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 60A92608C5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 60A92608C5
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 60A92608C5
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 15:14:39 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id 0E7C9780371;
- Tue, 19 Aug 2025 17:14:34 +0200 (CEST)
-Received: from 2001:18c0:a22:bf00:5c2b:f296:f108:6612
- via 2001:18c0:a22:bf00:5c2b:f296:f108:6612 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 19 Aug 2025 17:14:34 +0200
-MIME-Version: 1.0
-Date: Tue, 19 Aug 2025 17:14:34 +0200
-To: Daniel Crowe <daniel.crowe@maxmine.com.au>
-Cc: buildroot@buildroot.org, James Hilliard <james.hilliard1@gmail.com>
-In-Reply-To: <20250819035930.3666816-1-daniel.crowe@maxmine.com.au>
-References: <20250819035930.3666816-1-daniel.crowe@maxmine.com.au>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <14d7cbffd26545d38d2d4bd79a25bc68@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1755616477;
- bh=d5JBvX4O/qyb9FdgmxMQd3GWaOPH90B41/Au3AX0jz8=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Ov+c/BVgmhsYtaBWhBCOhIjEa6DlPMUpFOdc9scG4bdyEavkjbg+sRXBz63mIRTSA
- OPVFf/tbf73tHPn39BvCY3cGDjIEpC/hHUAsTrVZt1URmlFqlxqZxJ+KU7ki+fRbJV
- /da6kuysKbgkQPxSvqjQJ+pbi0IDneXqxaiZK9/RcHR8WhUEbS3bQRmKHxHS+ItvNj
- CnT6ratiFB9QawWIlhmmtddyACDOx+AI8rt2lAU3hrwtBJGoS9rWVS10hCmkhycS6h
- cryl8feH4vyKeDoeUZuSAbA7x0Ezb5nqCzpWMi4pJkeZmrhkRxhj3lDDhVInG7OGMP
- PL2mJpoTGibYA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Ov+c/BVg
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-pyproj: bump package to
- 3.7.2
+ id C8qVDxDD_Jxp for <buildroot@buildroot.org>;
+ Tue, 19 Aug 2025 15:37:34 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1390640BCA
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1390640BCA
+ for <buildroot@buildroot.org>; Tue, 19 Aug 2025 15:37:34 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id F3A93876EA; Tue, 19 Aug 2025 15:37:33 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 19 Aug 2025 17:19:14 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 022ff55a39cad5d103b3bf29f887c37ec0b2f0f9
+X-Git-Newrev: fe94b611fde271d40c299365a4966a3dbf71cdcc
+X-Patchwork-Hint: ignore
+Message-Id: <20250819153733.F3A93876EA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ed: bump to version 1.22.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,15 +59,61 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 19/08/2025 05:59, Daniel Crowe wrote:
-> Signed-off-by: Daniel Crowe <daniel.crowe@maxmine.com.au>
+commit: https://git.buildroot.net/buildroot/commit/?id=fe94b611fde271d40c299365a4966a3dbf71cdcc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to next, thanks.
+In particular, the 1.21 release fixes C23 compilation issues caused by a
+custom bool definition.
+
+Release 1.21 also includes a change of the COPYRIGHT file, but it is
+purely cosmetic.
+
+Changelogs since 1.20.2:
+1.21:   https://lists.gnu.org/archive/html/bug-ed/2025-01/msg00002.html
+1.21.1: https://lists.gnu.org/archive/html/bug-ed/2025-03/msg00006.html
+1.22:   https://lists.gnu.org/archive/html/bug-ed/2025-07/msg00008.html
+1.22.1: https://lists.gnu.org/archive/html/bug-ed/2025-08/msg00010.html
+
+Fixes: https://autobuild.buildroot.org/results/3d5/3d523440dc7bebe12fd95564e3c5b5e90bc39af9
+
+Signed-off-by: Florian Larysch <fl@n621.de>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/ed/ed.hash | 6 +++---
+ package/ed/ed.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/ed/ed.hash b/package/ed/ed.hash
+index d1d99309c6..44d5bc7653 100644
+--- a/package/ed/ed.hash
++++ b/package/ed/ed.hash
+@@ -1,4 +1,4 @@
+-# From https://lists.gnu.org/archive/html/bug-ed/2024-04/msg00003.html
+-sha256  65fec7318f48c2ca17f334ac0f4703defe62037bb13cc23920de077b5fa24523  ed-1.20.2.tar.lz
++# From https://lists.gnu.org/archive/html/bug-ed/2025-08/msg00010.html
++sha256  1af541116796d6b9e4b66ef9c45ddce0e15a19ed62bfca362ccd7d472cc1c8fb  ed-1.22.1.tar.lz
+ # Locally calculated
+-sha256  3d77c1a58fbde5ddba612d1fe09965e20a3804953eca12e8c1892298bb8a5eef  COPYING
++sha256  022e9c2e9cc1aac3622313df6f971fbb39c1d1b0cb45324c16b8a1fe231c5ea6  COPYING
+diff --git a/package/ed/ed.mk b/package/ed/ed.mk
+index 704744359a..10092d513f 100644
+--- a/package/ed/ed.mk
++++ b/package/ed/ed.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ED_VERSION = 1.20.2
++ED_VERSION = 1.22.1
+ ED_SITE = $(BR2_GNU_MIRROR)/ed
+ ED_SOURCE = ed-$(ED_VERSION).tar.lz
+ ED_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
