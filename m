@@ -1,82 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66997CA0EE6
-	for <buildroot@archiver.kernel.org>; Tue, 19 Aug 2025 21:52:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E7EACA0EF8
+	for <buildroot@archiver.kernel.org>; Wed, 20 Aug 2025 02:08:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1721C60C15;
-	Tue, 19 Aug 2025 21:52:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0ECF38121E;
+	Wed, 20 Aug 2025 02:08:48 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pWoX8MzDwL3b; Wed, 20 Aug 2025 02:08:47 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2CD3280CB7
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2CD3280CB7;
+	Wed, 20 Aug 2025 02:08:47 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 00166DE6
+ for <buildroot@buildroot.org>; Wed, 20 Aug 2025 02:08:45 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id DB1426090C
+ for <buildroot@buildroot.org>; Wed, 20 Aug 2025 02:08:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hWHwxJDPp9s2; Tue, 19 Aug 2025 21:52:50 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 49CA160C17
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 49CA160C17;
-	Tue, 19 Aug 2025 21:52:50 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 6F97DE2
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 21:52:48 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6D26A4050C
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 21:52:48 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wq10qggORZY0 for <buildroot@buildroot.org>;
- Tue, 19 Aug 2025 21:52:47 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
- helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 94A2D404D4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 94A2D404D4
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 94A2D404D4
- for <buildroot@buildroot.org>; Tue, 19 Aug 2025 21:52:46 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id B126F4E40C3D;
- Tue, 19 Aug 2025 21:52:44 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 6C8B860697;
- Tue, 19 Aug 2025 21:52:44 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 093B41C228BA3; 
- Tue, 19 Aug 2025 23:52:41 +0200 (CEST)
-Date: Tue, 19 Aug 2025 23:52:40 +0200
-To: Oleksandr G Zhadan <oleks@arcturusnetworks.com>
-Cc: Michael Durrant <mdurrant@ArcturusNetworks.com>, buildroot@buildroot.org
-Message-ID: <20250819235240.3642326c@windsurf>
-In-Reply-To: <08a9d67a-1a2f-45f9-b494-2cde99cacd9b@arcturusnetworks.com>
-References: <20250818203601.3220947-1-thomas.petazzoni@bootlin.com>
- <0a388727-f5e7-4fc4-8be9-85f72d98f1e7@ArcturusNetworks.com>
- <08a9d67a-1a2f-45f9-b494-2cde99cacd9b@arcturusnetworks.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+ id rh2OJ54fbqO1 for <buildroot@buildroot.org>;
+ Wed, 20 Aug 2025 02:08:45 +0000 (UTC)
+X-Greylist: delayed 580 seconds by postgrey-1.37 at util1.osuosl.org;
+ Wed, 20 Aug 2025 02:08:45 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 17E5360FDA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 17E5360FDA
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2604:1380:4641:c500::1; helo=dfw.source.kernel.org;
+ envelope-from=dlemoal@kernel.org; receiver=<UNKNOWN> 
+Received: from dfw.source.kernel.org (dfw.source.kernel.org
+ [IPv6:2604:1380:4641:c500::1])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 17E5360FDA
+ for <buildroot@buildroot.org>; Wed, 20 Aug 2025 02:08:44 +0000 (UTC)
+Received: from smtp.kernel.org (transwarp.subspace.kernel.org [100.75.92.58])
+ by dfw.source.kernel.org (Postfix) with ESMTP id B42155C5E34;
+ Wed, 20 Aug 2025 01:59:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A840BC4CEF1;
+ Wed, 20 Aug 2025 01:59:02 +0000 (UTC)
+Message-ID: <ac3aa9b6-109f-45ac-a7e5-8b049668f9bd@kernel.org>
+Date: Wed, 20 Aug 2025 10:56:16 +0900
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1755640362; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=MYOBuMf1dlP4bhiA17DJREomhnhZ2dQds1Vp77d3XWU=;
- b=gop3mJ2cO2iIR/Dbl3W/fwLcxwCrelUiquc+nL+H3oZT+WjmFw6mpxJeijvb5TYxGR388v
- Y2R543fXlUkVbAH5EOk0vUZd7I+Y81mUklFfG68DBIoGiRyjth07uRQWuGn+wo0yIZPVCa
- NhGLzu37l66laCKkywLJdoTqQG67k36A+XK+RTh7hPfy58yqkk2v840kvFrZqlD1wqMiTz
- SyrAjfBj92OKHqk/C8EDddSjX8EY7OC1TU5ZCD9FI8iAcOQOgz1JGK003BH4USffCtbdE1
- VvHW9MqktnqK1zSPckZOSDbMSWD6JZFMVRICCrHIjlP+iEk0EgWo143g7qjXLw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+User-Agent: Mozilla Thunderbird
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: Michel Stempin <michel.stempin@wanadoo.fr>
+References: <20250819172830.3350159-1-thomas.petazzoni@bootlin.com>
+Content-Language: en-US
+Organization: Western Digital Research
+In-Reply-To: <20250819172830.3350159-1-thomas.petazzoni@bootlin.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=kernel.org; s=k20201202; t=1755655143;
+ bh=Uevy6nhAyh0YokmOfW8uqVwNIMiCOFHbj62wc+PmMJQ=;
+ h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+ b=WhL87xiDZIhG7Uce1dSLKC8sR+GmP72napO9LIzKYXab/uE0lmSgRLqyH6QvnETZH
+ DprFDVup2gqcCu2okU/o7EtWWIb6MYf9zx9Qacu6DVEOOjdO2qvagqJX0Mfyib7R0s
+ 4J2NiEnqaEtLm8+9eEYzh+j4Tw9ruf9kalXOXX6iK6ldPDd7EcRr3hY0CtF24LAlXO
+ J7JZinPhBizcvZmqVRRwfdRWUbg6ChgbqjWEHCqZlRONHtGnGdvHC2sUG9kbkeR0Dl
+ k05ZfDNRkfdtMZBHfxp1mVQ+tCS/M8W8KkM66Ttii4k7HZ81id11MUKVg2aXDyX2cm
+ YcYBPm+/j8KuQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=kernel.org
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=gop3mJ2c
-Subject: Re: [Buildroot] [PATCH] configs/arcturus_ucp1020: remove defconfig,
- broken
+ unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256
+ header.s=k20201202 header.b=WhL87xiD
+Subject: Re: [Buildroot] [PATCH] configs/sipeed_licheepi_zero: remove
+ defconfig, broken
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -88,39 +85,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Damien Le Moal via buildroot <buildroot@buildroot.org>
+Reply-To: Damien Le Moal <dlemoal@kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Oleksandr, Michael,
-
-On Tue, 19 Aug 2025 17:02:19 -0400
-Oleksandr G Zhadan <oleks@arcturusnetworks.com> wrote:
-
-> The changes affected only our p1020 kernel branch.
+On 8/20/25 2:28 AM, Thomas Petazzoni wrote:
+> This defconfig no longer builds:
 > 
-> There were no changes in buildroot.
+>   https://gitlab.com/buildroot.org/buildroot/-/jobs/11026771001
 > 
-> Now `make arcturus_ucp1020_defconfig; make` generates images as expected.
+> It has been broken for over 2 months:
+> 
+>   https://gitlab.com/buildroot.org/buildroot/-/jobs?name=T%3Dsipeed_licheepi_zero&kind=BUILD
+> 
+> It uses Linux 5.8.3, which is not even an LTS maintained kernel.
+> 
+> Unless a fix is provided, this defconfig will be removed.
+> 
+> Fixes:
+> 
+>   https://gitlab.com/buildroot.org/buildroot/-/jobs/11026771001
+> 
+> Cc: Michel Stempin <michel.stempin@wanadoo.fr>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Thanks for the feedback, I'll mark my patch as Rejected.
+I di dnot write this one, never used it...
+But nevertheless:
 
-However, the kernel you're using is based on Linux 4.4, which is no
-longer maintained, which isn't great, and which sooner or later will
-mean that it won't build with newer compilers as Linux 4.4 no longer
-receives any fixes/updates. Perhaps you need to get the support for
-your platform in the upstream Linux kernel?
+Reviewed-by: Damien Le Moal <dlemoal@kernel.org>
 
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Damien Le Moal
+Western Digital Research
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
