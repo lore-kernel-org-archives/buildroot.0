@@ -1,52 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB5B1CA0EE4
-	for <buildroot@archiver.kernel.org>; Wed, 20 Aug 2025 15:09:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5CA3CA0EE4
+	for <buildroot@archiver.kernel.org>; Wed, 20 Aug 2025 15:10:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 66B4240E31;
-	Wed, 20 Aug 2025 15:09:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9E1F0611A3;
+	Wed, 20 Aug 2025 15:10:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LS4umb9E94jm; Wed, 20 Aug 2025 15:09:04 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ESH8BUgQ7SCZ; Wed, 20 Aug 2025 15:10:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 933DB41055
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E359D60E53
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 933DB41055;
-	Wed, 20 Aug 2025 15:09:04 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 6D50A7AD
- for <buildroot@buildroot.org>; Wed, 20 Aug 2025 15:09:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E359D60E53;
+	Wed, 20 Aug 2025 15:10:04 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7227FE0A
+ for <buildroot@buildroot.org>; Wed, 20 Aug 2025 15:10:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4A19E41189
- for <buildroot@buildroot.org>; Wed, 20 Aug 2025 15:09:01 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 646F06112F
+ for <buildroot@buildroot.org>; Wed, 20 Aug 2025 15:10:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XRWLDTy0BW97 for <buildroot@buildroot.org>;
- Wed, 20 Aug 2025 15:09:00 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 565B340E31
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 565B340E31
- for <buildroot@buildroot.org>; Wed, 20 Aug 2025 15:09:00 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 455538781C; Wed, 20 Aug 2025 15:09:00 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 20 Aug 2025 17:08:27 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c46fb3c8b3d13875fd22846dd3cf0ca20f480559
-X-Git-Newrev: 84276c0449b3c902ec73247bf74a1104e4c4b1fa
-X-Patchwork-Hint: ignore
-Message-Id: <20250820150900.455538781C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/go: security bump to version
- 1.23.12
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fyIbZ7kVvyHQ for <buildroot@buildroot.org>;
+ Wed, 20 Aug 2025 15:10:03 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 9933160E9C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9933160E9C
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9933160E9C
+ for <buildroot@buildroot.org>; Wed, 20 Aug 2025 15:10:03 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id F2CF36013F;
+ Wed, 20 Aug 2025 17:09:56 +0200 (CEST)
+Received: from 2001:18c0:a22:bf00:5c2b:f296:f108:6612
+ via 2001:18c0:a22:bf00:5c2b:f296:f108:6612 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Wed, 20 Aug 2025 17:09:56 +0200
+MIME-Version: 1.0
+Date: Wed, 20 Aug 2025 17:09:56 +0200
+To: Peter Korsgaard <peter@korsgaard.com>
+Cc: buildroot@buildroot.org, Thomas Perale <thomas.perale@mind.be>,
+ Christian Stewart <christian@aperture.us>
+In-Reply-To: <20250819204443.3155790-1-peter@korsgaard.com>
+References: <20250819204443.3155790-1-peter@korsgaard.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <a12078dc9f53e6138d224e91ec4b614f@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1755702600;
+ bh=Oswgp8mGs+hdA62hVF6ZNiwR0TpBJFtNQd1C1Jjf/JQ=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=ZsHj1Fiu+Yb7ybRhYYBmmrs8eUgLac1w+GZFCszYdgiBXmvTGipznE6Kal+gpUTMa
+ whWJqi0Etx1ZyN8LaHfMxMTxyItVTRx2/z8XIOm1xH0OaGoZ97z8oo2DLypb6gO8yH
+ PbWvqRP9BL5NR+nFzU6pZeFGQX/TvJJCAVUQW/dkWEfMjaE7JTdt58o9yBUgIumNSD
+ 1H0/XMNeQscxNqLPW9TYibE1kJHer6SdB60abxki7FiMco07stjqp7yWG68SZ+5xQ1
+ DEliqfRavWm55CvED9V9IqcPb9LObr+sA3PpgnTLenyPI5X7dKuu3YmrUxDJ71jcgC
+ NVm28ReAYufqA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=ZsHj1Fiu
+Subject: Re: [Buildroot] [PATCH] package/go: security bump to version 1.23.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,73 +84,30 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=84276c0449b3c902ec73247bf74a1104e4c4b1fa
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 19/08/2025 22:44, Peter Korsgaard wrote:
+> go1.23.11 (released 2025-07-08) includes security fixes to the go 
+> command,
+> as well as bug fixes to the compiler, the linker, and the runtime.
+> 
+> go1.23.12 (released 2025-08-06) includes security fixes to the 
+> database/sql
+> and os/exec packages, as well as bug fixes to the runtime.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-go1.23.11 (released 2025-07-08) includes security fixes to the go command,
-as well as bug fixes to the compiler, the linker, and the runtime.
-See:
-- https://go.dev/doc/devel/release#go1.23.11
-- https://github.com/golang/go/issues?q=milestone%3AGo1.23.11+label%3ACherryPickApproved
-The 1.23.11 version fixes:
-- https://www.cve.org/CVERecord?id=CVE-2025-4674
+Applied to master, thanks.
 
-go1.23.12 (released 2025-08-06) includes security fixes to the database/sql
-and os/exec packages, as well as bug fixes to the runtime.
-See:
-- https://go.dev/doc/devel/release#go1.23.12
-- https://github.com/golang/go/issues?q=milestone%3AGo1.23.12+label%3ACherryPickApproved
-The 1.23.12 version fixes:
-- https://www.cve.org/CVERecord?id=CVE-2025-47907
+For info I added links to fixed issues and CVEs. See:
+https://gitlab.com/buildroot.org/buildroot/-/commit/84276c0449b3c902ec73247bf74a1104e4c4b1fa
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-[Julien: add links to release notes, fixed issues and CVEs]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/go/go.hash | 14 +++++++-------
- package/go/go.mk   |  2 +-
- 2 files changed, 8 insertions(+), 8 deletions(-)
+Best regards,
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 62e0772e2e..dc88e9beab 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,9 +1,9 @@
- # sha256 checksum from https://go.dev/dl/
--sha256  800a7ae1bff179a227b653a2f644517c800443b8b4abf3273af5e1cb7113de59  go1.23.10.src.tar.gz
--sha256  ded3c0a8d6d2a0ea5e7599c49678efa05cda139d31baaaf7d8d536a9e4cc19b2  go1.23.10.linux-386.tar.gz
--sha256  535f9f81802499f2a7dbfa70abb8fda3793725fcc29460f719815f6e10b5fd60  go1.23.10.linux-amd64.tar.gz
--sha256  bfb1f1df7173f44648ee070a39ab0481068632f595305a699d89cd56a33b8081  go1.23.10.linux-arm64.tar.gz
--sha256  b6e00c9a72406d394b9f167e74670e28b72ed559cca8115b21be1cb9d5316cb4  go1.23.10.linux-armv6l.tar.gz
--sha256  8fb94455cfa5e9a5e8af2bfbc7323a6fed2dabaffda1a69dae5dd41b669bbb57  go1.23.10.linux-ppc64le.tar.gz
--sha256  7d0e8651eb54fce5cfe2d4b412ddfa50144ce21907f72192a6549ffe03db4e1f  go1.23.10.linux-s390x.tar.gz
-+sha256  e1cce9379a24e895714a412c7ddd157d2614d9edbe83a84449b6e1840b4f1226  go1.23.12.src.tar.gz
-+sha256  3b2fd446e26642555d1446a38ccbefb2a30bba3179d3ef132ed64d3c63b0c42a  go1.23.12.linux-386.tar.gz
-+sha256  d3847fef834e9db11bf64e3fb34db9c04db14e068eeb064f49af747010454f90  go1.23.12.linux-amd64.tar.gz
-+sha256  52ce172f96e21da53b1ae9079808560d49b02ac86cecfa457217597f9bc28ab3  go1.23.12.linux-arm64.tar.gz
-+sha256  9704eba01401a3793f54fac162164b9c5d8cc6f3cab5cee72684bb72294d9f41  go1.23.12.linux-armv6l.tar.gz
-+sha256  1a7cc5f7baeaf39125dce5d660a39438e7f0e04d13d3498590d240aae976b565  go1.23.12.linux-ppc64le.tar.gz
-+sha256  2f43708aa0922d692da0a1fc775475c343907610bec77002de1bbe37601ea338  go1.23.12.linux-s390x.tar.gz
- sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 744bb0d3ba..69ca746783 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GO_VERSION = 1.23.10
-+GO_VERSION = 1.23.12
- 
- HOST_GO_GOPATH = $(HOST_DIR)/share/go-path
- HOST_GO_HOST_CACHE = $(HOST_DIR)/share/host-go-cache
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
