@@ -4,66 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7746CA0EDC
-	for <buildroot@archiver.kernel.org>; Wed, 20 Aug 2025 13:26:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C7EECA0EDC
+	for <buildroot@archiver.kernel.org>; Wed, 20 Aug 2025 14:33:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 41D9A8375B;
-	Wed, 20 Aug 2025 13:26:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E12588378C;
+	Wed, 20 Aug 2025 14:33:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xEiXF-hKBSM9; Wed, 20 Aug 2025 13:26:50 +0000 (UTC)
+ id 9hZWu3XBAkD2; Wed, 20 Aug 2025 14:33:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5247A83709
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0AE7983716
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5247A83709;
-	Wed, 20 Aug 2025 13:26:50 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 71E1FE0A
- for <buildroot@buildroot.org>; Wed, 20 Aug 2025 13:26:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0AE7983716;
+	Wed, 20 Aug 2025 14:33:37 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 16C8CDE6
+ for <buildroot@buildroot.org>; Wed, 20 Aug 2025 14:33:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 58224407F6
- for <buildroot@buildroot.org>; Wed, 20 Aug 2025 13:26:49 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 010AF411BE
+ for <buildroot@buildroot.org>; Wed, 20 Aug 2025 14:33:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KQ-2bohtIFw7 for <buildroot@buildroot.org>;
- Wed, 20 Aug 2025 13:26:48 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=136.243.2.102;
- helo=nyx.n621.de; envelope-from=fl@n621.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 54475407E6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 54475407E6
-Received: from nyx.n621.de (v4gw.hekate.n621.de [136.243.2.102])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 54475407E6
- for <buildroot@buildroot.org>; Wed, 20 Aug 2025 13:26:47 +0000 (UTC)
-Received: from charybdis.office.fixme.cloud (localhost [127.0.0.1])
- by nyx.n621.de (Postfix) with ESMTP id DB9E6E0018C;
- Wed, 20 Aug 2025 15:26:44 +0200 (CEST)
-From: Florian Larysch <fl@n621.de>
-To: buildroot@buildroot.org
-Cc: Florian Larysch <fl@n621.de>
-Date: Wed, 20 Aug 2025 15:21:22 +0200
-Message-ID: <20250820132628.681-3-fl@n621.de>
-X-Mailer: git-send-email 2.50.1
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vKcw00N-JJCJ for <buildroot@buildroot.org>;
+ Wed, 20 Aug 2025 14:33:35 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1190541029
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1190541029
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1190541029
+ for <buildroot@buildroot.org>; Wed, 20 Aug 2025 14:33:34 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 4021419F5C3;
+ Wed, 20 Aug 2025 16:33:30 +0200 (CEST)
+Received: from 2001:18c0:a22:bf00:5c2b:f296:f108:6612
+ via 2001:18c0:a22:bf00:5c2b:f296:f108:6612 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Wed, 20 Aug 2025 16:33:30 +0200
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=n621.de; s=dkim; t=1755696404;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=N//qqQL7co0NpSn9D8Ao4kq2J13x5LWo9QfZPDRVNP4=;
- b=Jv0Hjn7LdQJMPqN1NKKX7+AZrS4rNBmAPppWtyYv6Sqfy2THVh/FE45UrkKSE71AXHKY68
- VGmNQKS+svfg4V6TfGRusNdDvA5nTnqgw6l+xPdqZIUR0+yMcnn9t8H9MUCY4weDFb05ai
- W5kXH9WfwUwQHrkkJskJ/Dfmr9wtJ1s=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=n621.de
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=n621.de header.i=@n621.de header.a=rsa-sha256
- header.s=dkim header.b=Jv0Hjn7L
-Subject: [Buildroot] [PATCH next 1/1] package/vorbis-tools: bump to version
- 1.4.3
+Date: Wed, 20 Aug 2025 16:33:30 +0200
+To: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250819150834.1651775-6-angelo.compagnucci@gmail.com>
+References: <20250819150834.1651775-1-angelo.compagnucci@gmail.com>
+ <20250819150834.1651775-6-angelo.compagnucci@gmail.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <fc982bfaa07d96ba7c970f44a88397d4@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1755700411;
+ bh=Y5EIt1XSUWvGA6t7QvwOhxewOfAWalhP+iSkpefwZ6U=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=LAZMkDFyybCz+V1934Su8myhEvUDMUzhT7QwhEc9Nnm1asDfBMWotwuPJzJOmr67q
+ 4SlTb4WVve43ZYDqDJiIOHqJi1BtRGiy6gV3DAZCBIkJaXwADLZ+fQxze7/tO7WY1s
+ PICzf+EI5JPAP6I7rpUD7sr4aKa/Mul7drCYroCU8HOeenpbT+67DTlrGfl1KTVtRN
+ GaSRzGMMWVCfdPiofC4RTRiGvBnS4GKisPV6NS0HN6XLEDo0Gon40IGN5vUY0pX9/m
+ 2DGeOmpAmUUVCpLs/ouD4SgzKkyfyV4rj6F8aqV5uMjtmQPYcNK3cXQXIBjbVB0SqP
+ /Ou3fa0WzVXwA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=LAZMkDFy
+Subject: Re: [Buildroot] [PATCH 5/5] package/cups: bump to version 2.4.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -75,110 +81,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This is a bugfix release that among other things includes the GCC 14
-build fix and resolves CVE-2023-43361.
+Hi Angelo,
 
-Changelog: https://github.com/xiph/vorbis-tools/blob/v1.4.3/CHANGES
+On 19/08/2025 17:08, Angelo Compagnucci wrote:
+> Changelog:
+> https://github.com/OpenPrinting/cups/releases/tag/v2.4.12
+> 
+> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 
-Signed-off-by: Florian Larysch <fl@n621.de>
----
-I think this could also go into master, the diff looks like this is
-indeed purely a bugfix release.
+I already applied your first cups bump submission in next:
+https://patchwork.ozlabs.org/project/buildroot/patch/20250818145555.1039619-1-angelo.compagnucci@gmail.com/
+https://gitlab.com/buildroot.org/buildroot/-/commit/f6be007591f504516fef6434e29c2ca9246ac5a7
 
- .../0001-fix-build-with-gcc-14.patch          | 51 -------------------
- package/vorbis-tools/vorbis-tools.hash        |  2 +-
- package/vorbis-tools/vorbis-tools.mk          |  2 +-
- 3 files changed, 2 insertions(+), 53 deletions(-)
- delete mode 100644 package/vorbis-tools/0001-fix-build-with-gcc-14.patch
+I checked it was building, but we don't have a runtime test (yet).
 
-diff --git a/package/vorbis-tools/0001-fix-build-with-gcc-14.patch b/package/vorbis-tools/0001-fix-build-with-gcc-14.patch
-deleted file mode 100644
-index a05ce8a584..0000000000
---- a/package/vorbis-tools/0001-fix-build-with-gcc-14.patch
-+++ /dev/null
-@@ -1,51 +0,0 @@
--From f4a31fe975ea37537f39ace4420aee893b7e0b1a Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 21 Jul 2024 21:57:38 +0200
--Subject: [PATCH] fix build with gcc >= 14
--
--Add missing includes to avoid the following build failure with gcc >=
--14:
--
--codec_skeleton.c: In function 'skeleton_process_fisbone_message_header':
--codec_skeleton.c:119:9: error: implicit declaration of function 'utf8_decode' [-Wimplicit-function-declaration]
--  119 |     if (utf8_decode(header, &decoded) < 0) {
--      |         ^~~~~~~~~~~
--
--Fixes:
-- - http://autobuild.buildroot.org/results/bb5d56d836e7d0f2a62daa9954878ad6e0b190ed
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Upstream: https://github.com/xiph/vorbis-tools/pull/48
-----
-- ogginfo/codec_skeleton.c | 2 ++
-- share/utf8.c             | 1 +
-- 2 files changed, 3 insertions(+)
--
--diff --git a/ogginfo/codec_skeleton.c b/ogginfo/codec_skeleton.c
--index a27f8da..f906f8c 100644
----- a/ogginfo/codec_skeleton.c
--+++ b/ogginfo/codec_skeleton.c
--@@ -28,6 +28,8 @@
-- 
-- #include "private.h"
-- 
--+#include "utf8.h"
--+
-- typedef struct {
--     bool supported;
--     uint16_t version_major;
--diff --git a/share/utf8.c b/share/utf8.c
--index be378d1..e819b67 100644
----- a/share/utf8.c
--+++ b/share/utf8.c
--@@ -28,6 +28,7 @@
-- #include <stdlib.h>
-- #include <string.h>
-- 
--+#include "charset.h"
-- #include "utf8.h"
-- 
-- 
---- 
--2.43.0
--
-diff --git a/package/vorbis-tools/vorbis-tools.hash b/package/vorbis-tools/vorbis-tools.hash
-index a4f463e466..e31daf96ac 100644
---- a/package/vorbis-tools/vorbis-tools.hash
-+++ b/package/vorbis-tools/vorbis-tools.hash
-@@ -1,4 +1,4 @@
- # From http://downloads.xiph.org/releases/vorbis/SHA256SUMS
--sha256  db7774ec2bf2c939b139452183669be84fda5774d6400fc57fde37f77624f0b0  vorbis-tools-1.4.2.tar.gz
-+sha256  a1fe3ddc6777bdcebf6b797e7edfe0437954b24756ffcc8c6b816b63e0460dde  vorbis-tools-1.4.3.tar.gz
- # Locally computed
- sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/vorbis-tools/vorbis-tools.mk b/package/vorbis-tools/vorbis-tools.mk
-index 936d2d816c..d64fe0b1ee 100644
---- a/package/vorbis-tools/vorbis-tools.mk
-+++ b/package/vorbis-tools/vorbis-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--VORBIS_TOOLS_VERSION = 1.4.2
-+VORBIS_TOOLS_VERSION = 1.4.3
- VORBIS_TOOLS_SITE = http://downloads.xiph.org/releases/vorbis
- VORBIS_TOOLS_LICENSE = GPL-2.0
- VORBIS_TOOLS_LICENSE_FILES = COPYING
--- 
-2.50.1
+Do I need to revert it?
 
+Alternatively, we can wait for this series to be merged.
+
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
