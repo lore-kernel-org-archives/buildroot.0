@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B645BCA0EFA
-	for <buildroot@archiver.kernel.org>; Thu, 21 Aug 2025 18:57:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD959CA0EFF
+	for <buildroot@archiver.kernel.org>; Thu, 21 Aug 2025 18:57:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DA200616E2;
-	Thu, 21 Aug 2025 18:57:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A1DEC8461A;
+	Thu, 21 Aug 2025 18:57:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DPQx5fHKKJt9; Thu, 21 Aug 2025 18:57:11 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3rn4EVatlbyy; Thu, 21 Aug 2025 18:57:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 98D876171B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC8EB8461B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 98D876171B;
-	Thu, 21 Aug 2025 18:57:11 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 08A491C7
+	by smtp1.osuosl.org (Postfix) with ESMTP id AC8EB8461B;
+	Thu, 21 Aug 2025 18:57:13 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1DD9125B
  for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:57:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9A50E4184D
- for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:56:59 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id AD94040D21
+ for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:57:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PwDyImZ2sjXq for <buildroot@buildroot.org>;
- Thu, 21 Aug 2025 18:56:58 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CYULyXkbaVda for <buildroot@buildroot.org>;
+ Thu, 21 Aug 2025 18:57:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C3C0F41485
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EC03E40CB1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C3C0F41485
- for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:56:58 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EC03E40CB1
+ for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:56:59 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B222787A04; Thu, 21 Aug 2025 18:56:58 +0000 (UTC)
+ id DC84387A07; Thu, 21 Aug 2025 18:56:59 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 21 Aug 2025 10:36:38 +0200
+Date: Thu, 21 Aug 2025 10:39:20 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: e3b83947736efacf8fcdc668ca70cb388bb359ac
-X-Git-Newrev: 490172faec7cf91a207ae275f6e5500b204687d1
+X-Git-Oldrev: 9e8a3796e6fd224b3ef2e785f1539173d7f1f1ec
+X-Git-Newrev: f323c3e5feee4f9f42aafb2f63559fbd9be3c7a1
 X-Patchwork-Hint: ignore
-Message-Id: <20250821185658.B222787A04@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x]
- configs/acmesystems_acqua_a5_*: bump to Linux 6.12.41
+Message-Id: <20250821185659.DC84387A07@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] support/testing:
+ test_wine: fix test after bootlin toolchains update
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,53 +66,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=490172faec7cf91a207ae275f6e5500b204687d1
+commit: https://git.buildroot.net/buildroot/commit/?id=f323c3e5feee4f9f42aafb2f63559fbd9be3c7a1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Signed-off-by: Edgar Bonet <bonet@grenoble.cnrs.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit f8a2cb8d4124a1b11302f681f2fff844d7082b73)
+Since Buildroot commit [1] "update to Bootlin toolchains 2025.08-1",
+the tests.package.test_wine fails to build its Kernel 6.6.27 with
+gcc 15.1.0.
+
+This commit fixes the issue by updating the test Kernel version to
+the latest 6.6.y version (6.6.102 at the time of this commit) which
+includes the fix for gcc-15.
+
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/10984686766
+
+[1] https://gitlab.com/buildroot.org/buildroot/-/commit/947dbc92a20c5acea7882166cae7893e6ea661e1
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 20100403d3b6d4568f1c9815c446f241815ec76b)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- board/acmesystems/acqua-a5/patches/linux/linux.hash | 2 +-
- configs/acmesystems_acqua_a5_256mb_defconfig        | 2 +-
- configs/acmesystems_acqua_a5_512mb_defconfig        | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ support/testing/tests/package/test_wine.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/board/acmesystems/acqua-a5/patches/linux/linux.hash b/board/acmesystems/acqua-a5/patches/linux/linux.hash
-index 7a4c4e57c9..2c86a53263 100644
---- a/board/acmesystems/acqua-a5/patches/linux/linux.hash
-+++ b/board/acmesystems/acqua-a5/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  87be0360df0931b340d2bac35161a548070fbc3a8c352c49e21e96666c26aeb4  linux-6.12.9.tar.xz
-+sha256  6b19a3ae99423de2416964d67251d745910277af258b4c4c63e88fd87dbf0e27  linux-6.12.41.tar.xz
-diff --git a/configs/acmesystems_acqua_a5_256mb_defconfig b/configs/acmesystems_acqua_a5_256mb_defconfig
-index a50e306b1b..9e6d35a859 100644
---- a/configs/acmesystems_acqua_a5_256mb_defconfig
-+++ b/configs/acmesystems_acqua_a5_256mb_defconfig
-@@ -10,7 +10,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/acmesystems/acqua-a5/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.41"
- BR2_LINUX_KERNEL_DEFCONFIG="sama5"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_CUSTOM_DTS_DIR="board/acmesystems/acqua-a5/dts"
-diff --git a/configs/acmesystems_acqua_a5_512mb_defconfig b/configs/acmesystems_acqua_a5_512mb_defconfig
-index 6ae8d037e7..8e6d9774da 100644
---- a/configs/acmesystems_acqua_a5_512mb_defconfig
-+++ b/configs/acmesystems_acqua_a5_512mb_defconfig
-@@ -10,7 +10,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/acmesystems/acqua-a5/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.41"
- BR2_LINUX_KERNEL_DEFCONFIG="sama5"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_CUSTOM_DTS_DIR="board/acmesystems/acqua-a5/dts"
+diff --git a/support/testing/tests/package/test_wine.py b/support/testing/tests/package/test_wine.py
+index 4e5b4a8b11..8c7b80f522 100644
+--- a/support/testing/tests/package/test_wine.py
++++ b/support/testing/tests/package/test_wine.py
+@@ -15,7 +15,7 @@ class TestWine(infra.basetest.BRTest):
+         BR2_TOOLCHAIN_EXTERNAL=y
+         BR2_LINUX_KERNEL=y
+         BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.27"
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.102"
+         BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+         BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux.config"
+         BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
