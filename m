@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2066CA0EEB
-	for <buildroot@archiver.kernel.org>; Thu, 21 Aug 2025 18:57:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8926CA0EFA
+	for <buildroot@archiver.kernel.org>; Thu, 21 Aug 2025 18:57:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A51F6616BC;
-	Thu, 21 Aug 2025 18:57:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AF71A61B3C;
+	Thu, 21 Aug 2025 18:57:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v4XpJHUNSUoO; Thu, 21 Aug 2025 18:57:44 +0000 (UTC)
+ id du45NHQJzXeI; Thu, 21 Aug 2025 18:57:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C0B236171A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E8B7616F2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C0B236171A;
-	Thu, 21 Aug 2025 18:57:44 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id E300D1C7
- for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:57:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2E8B7616F2;
+	Thu, 21 Aug 2025 18:57:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0FD081C7
+ for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:57:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AB92840CB1
- for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:57:10 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id AEEEA84600
+ for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:57:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1bgKhJjGqt5I for <buildroot@buildroot.org>;
- Thu, 21 Aug 2025 18:57:09 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id puhxy7Sbpud8 for <buildroot@buildroot.org>;
+ Thu, 21 Aug 2025 18:57:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1F8A540D21
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E39B184612
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1F8A540D21
- for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:57:09 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E39B184612
+ for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:57:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1107787A0C; Thu, 21 Aug 2025 18:57:09 +0000 (UTC)
+ id D3BDA813AF; Thu, 21 Aug 2025 18:57:11 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 21 Aug 2025 10:41:29 +0200
+Date: Thu, 21 Aug 2025 16:29:17 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: d16495c1d2ab8d266e3270cbae781992b909e359
-X-Git-Newrev: 41cfa2f45753e9abab37227d1f2a085f8b161615
+X-Git-Oldrev: 6243ccd33736993b69ba8e8b937e9a62bc78d196
+X-Git-Newrev: 626fee3421e43ffd8265575c93221f81e3c7b884
 X-Patchwork-Hint: ignore
-Message-Id: <20250821185709.1107787A0C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/rrdtool: mark CPE
- as valid
+Message-Id: <20250821185711.D3BDA813AF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/elfutils: fix
+ build after 0.193 version bump
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,32 +66,88 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=41cfa2f45753e9abab37227d1f2a085f8b161615
+commit: https://git.buildroot.net/buildroot/commit/?id=626fee3421e43ffd8265575c93221f81e3c7b884
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-rrdtool_project is a valid CPE vendor, see
-https://nvd.nist.gov/products/cpe/detail/744D7444-F505-4F38-BB2C-B1540A3966E4
+The 0.193 version bump done in commit
+c7508a23242aae7a80f22acc4473da25f7f9e96d broke the build on numerous
+CPU architectures. Let's take a patch from upstream's main branch to
+fix the issue.
 
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+Fixes:
+
+  https://autobuild.buildroot.net/results/3b005f7afec386f6fa4237f427f73367d55bb211/ (sparc64)
+  https://autobuild.buildroot.net/results/a6b1d5078abdd6c8def93aaffa2e67573250da3e/ (m68k)
+  https://autobuild.buildroot.net/results/45305cc2be3b255740808ee1f3486d1a10abfbb4/ (microblaze)
+  and a bunch more
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit e5ab63220713c369a749fe5c92b30e5774e9fc7d)
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 022ff55a39cad5d103b3bf29f887c37ec0b2f0f9)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/rrdtool/rrdtool.mk | 1 +
- 1 file changed, 1 insertion(+)
+ ...30-backends-guard-asm-perf_regs.h-include.patch | 53 ++++++++++++++++++++++
+ 1 file changed, 53 insertions(+)
 
-diff --git a/package/rrdtool/rrdtool.mk b/package/rrdtool/rrdtool.mk
-index be30013992..fd9883077c 100644
---- a/package/rrdtool/rrdtool.mk
-+++ b/package/rrdtool/rrdtool.mk
-@@ -8,6 +8,7 @@ RRDTOOL_VERSION = 1.9.0
- RRDTOOL_SITE = https://github.com/oetiker/rrdtool-1.x/releases/download/v$(RRDTOOL_VERSION)
- RRDTOOL_LICENSE = GPL-2.0+ with FLOSS license exceptions as explained in COPYRIGHT
- RRDTOOL_LICENSE_FILES = COPYRIGHT LICENSE
-+RRDTOOL_CPE_ID_VALID = YES
- RRDTOOL_DEPENDENCIES = host-pkgconf libglib2 $(TARGET_NLS_DEPENDENCIES)
- 
- # 0001-Fix-BUILD_DATE-in-rrdtool-help-output.patch
+diff --git a/package/elfutils/0003-PR32930-backends-guard-asm-perf_regs.h-include.patch b/package/elfutils/0003-PR32930-backends-guard-asm-perf_regs.h-include.patch
+new file mode 100644
+index 0000000000..76c604510b
+--- /dev/null
++++ b/package/elfutils/0003-PR32930-backends-guard-asm-perf_regs.h-include.patch
+@@ -0,0 +1,53 @@
++From d05241ce690018548857199bd34d7734c7164679 Mon Sep 17 00:00:00 2001
++From: Serhei Makarov <serhei@serhei.io>
++Date: Mon, 5 May 2025 12:08:55 -0400
++Subject: [PATCH] PR32930 backends/: guard asm/perf_regs.h include
++
++asm/perf_regs.h is an arch-specific linux include, not present on
++architectures like hppa and m68k that lack perf_events support.
++
++Only one place we need to fix; others already guard the include by
++architecture, or use architecture-independent headers (e.g.
++linux/perf_events.h).
++
++* backends/libebl_PERF_FLAGS.h: Only include asm/perf_regs.h on
++  architectures where we use it.
++
++Signed-off-by: Serhei Makarov <serhei@serhei.io>
++Upstream: d05241ce690018548857199bd34d7734c7164679
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ backends/libebl_PERF_FLAGS.h | 8 ++++++--
++ 1 file changed, 6 insertions(+), 2 deletions(-)
++
++diff --git a/backends/libebl_PERF_FLAGS.h b/backends/libebl_PERF_FLAGS.h
++index 2ed45f0f..51c20ea6 100644
++--- a/backends/libebl_PERF_FLAGS.h
+++++ b/backends/libebl_PERF_FLAGS.h
++@@ -32,8 +32,12 @@
++ #define _LIBEBL_PERF_FLAGS_H 1
++ 
++ #if defined(__linux__)
+++/* XXX Need to exclude __linux__ arches without perf_regs.h. */
+++#if defined(__x86_64__) || defined(__i386__)
+++/* || defined(other_architecture)... */
++ # include <asm/perf_regs.h>
++ #endif
+++#endif
++ 
++ #if defined(_ASM_X86_PERF_REGS_H)
++ /* See the code in x86_initreg_sample.c for list of required regs and
++@@ -49,8 +53,8 @@
++    see the code in tools/perf/util/intel-pt.c intel_pt_add_gp_regs()
++    and note how regs are added in the same order as the perf_regs.h enum.  */
++ #else
++-/* Since asm/perf_regs.h gives the register layout for a different arch,
++-   we can't unwind x86_64 frames.  */
+++/* Since asm/perf_regs.h is absent, or gives the register layout for a
+++   different arch, we can't unwind i386 and x86_64 frames. */
++ #define PERF_FRAME_REGISTERS_I386 0
++ #define PERF_FRAME_REGISTERS_X86_64 0
++ #endif
++-- 
++2.50.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
