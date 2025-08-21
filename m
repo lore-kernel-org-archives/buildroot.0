@@ -1,105 +1,106 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E70BCA0EFF
-	for <buildroot@archiver.kernel.org>; Thu, 21 Aug 2025 19:21:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89B02CA0EEB
+	for <buildroot@archiver.kernel.org>; Thu, 21 Aug 2025 19:21:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 137F561745;
-	Thu, 21 Aug 2025 19:21:49 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wTwJh9IS0IYX; Thu, 21 Aug 2025 19:21:47 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9C7BA61C5D
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9C7BA61C5D;
-	Thu, 21 Aug 2025 19:21:46 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 329361C8
- for <buildroot@buildroot.org>; Thu, 21 Aug 2025 19:21:09 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 227108472F
- for <buildroot@buildroot.org>; Thu, 21 Aug 2025 19:21:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 641E18478F;
+	Thu, 21 Aug 2025 19:21:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4pUkXKvkskyS for <buildroot@buildroot.org>;
- Thu, 21 Aug 2025 19:21:08 +0000 (UTC)
+ id aDoSIA5zw7o8; Thu, 21 Aug 2025 19:21:49 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9744384751
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9744384751;
+	Thu, 21 Aug 2025 19:21:49 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2F0201C8
+ for <buildroot@buildroot.org>; Thu, 21 Aug 2025 19:21:13 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 15CC140B62
+ for <buildroot@buildroot.org>; Thu, 21 Aug 2025 19:21:13 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ca40enzUwxm6 for <buildroot@buildroot.org>;
+ Thu, 21 Aug 2025 19:21:12 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
+ client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2D06984725
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D06984725
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2D06984725
- for <buildroot@buildroot.org>; Thu, 21 Aug 2025 19:21:08 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id
- ffacd0b85a97d-3b9d41c1964so639691f8f.0
- for <buildroot@buildroot.org>; Thu, 21 Aug 2025 12:21:07 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3884240B26
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3884240B26
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3884240B26
+ for <buildroot@buildroot.org>; Thu, 21 Aug 2025 19:21:12 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ 5b1f17b1804b1-45a1b0c52f3so8510175e9.3
+ for <buildroot@buildroot.org>; Thu, 21 Aug 2025 12:21:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1755804066; x=1756408866;
+ d=1e100.net; s=20230601; t=1755804070; x=1756408870;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=nx19/DfX5Os1etL9IZsE7WenmuEl1Au+qMPzLa85C8k=;
- b=oT+9t+VNyuIApMq9FB595sQv4KdYjkALuhUVNVWc8piHP6HVaoqTFgkGkW6wzk60kX
- vSu5IH5gblNswxJT0eUR1KED6hFow7a6loPTIzSsvfGP9DEzuIH9WyzRVWkixRnX3dxN
- gsFiW7ZA7iIu5kBFuPu2KJYo9KjaLyZgF4JYfEMedlXl9/UEfkGBu+MwK+IItCQcGKWL
- +ffoZMqv5bk4M+ssiWdI0dI+1Ez4WKzupQzC/qB1mfQSCPhJibIhTlaMgJp5y3OPaWxY
- yRhwoTUjxo9O6lrntwXTBgFWPD3UTdSZc8uBwl7AHenClq5v1u9yocLGLFo9d1wNevHh
- 28Gg==
+ bh=f2K0QIA4NQbf9vD3G1gzVirdRAbhBfT+g2BSmEKYNv8=;
+ b=m98Tep6tyhM/2xGDPmvKilqW5dUnLvCFZ3qTjXDsvQ1r5yYjQgKbp43NZTDK1fDuOk
+ v86/cu18dXI0FRr8NysTzIdQqTQlvzLeOc5vkLEUs6U6cwMvdotUPbh5oUSwaZjbQBVc
+ Cg1Jrxmk92cm9EHwQcHlWvQe+4WanH+4Bty65O3de04QJuTNVkp5K9M9CqJjMWh7dBgT
+ ZhKVFBXA66bWZADEPGDeaUOiHNgwGIdCXab1IX+JScuRNnrKSA61Jj2pJvLu/b7g+nSm
+ DuyIekmoDuvYzxyrEJybZVC/iD2KSHA3RNashjcsswIkYVN7mZkc66zknu3UWm1WoDdV
+ fe9A==
 X-Forwarded-Encrypted: i=1;
- AJvYcCW5wDa1qicIotyBfzZh8MwRTapEtbCr/P8ykddMC9QdnvMPEPzDMx9OdEgoVV9FNWMct7CFzQr/8U4=@buildroot.org
-X-Gm-Message-State: AOJu0YywUjZvvAbtVItLs4Hzruw81dKnag8Nay8xR9ja9T+bCbgB2189
- h1FI5It+Rmjab5JUqdIP3K2eRokCdn75gHiPlZdw/lhlIMkrkzp4mpOviOap4JHv1W01ZmWFz5u
- 0XnEY9Bo=
-X-Gm-Gg: ASbGnctXk/qNbzsIbxeO2rN/s8cXBebRb0jtYewRg07Z4ENXkH3lMrmMto6cnx6d7tV
- 0dGUKVhrECSZ30hKAy+tgKhOtH27Cv1pZcdMgu6T60tfxiLX/ktkiwDutTc+/iLSeVUymn/ZrOg
- VN7/AfhUfH3diCSXpOyuPIWnkDcA7GZr5BlyEP3epiq/b7/JvV+qdySdJh2n6mKva6D9dWOr1Cr
- JaSOLUWu8Qnxm9h49mdqyYf1oCpmqGsoskrX2pPAny8kvqwdrhmNHtpnb6HQ+4F7OevWH/inAD0
- wtVgvr7NKVyIApHbjics+vOANkoYypXvrZ0qnlEURBbNdWemq/HcyCYNwJb2CNHizzbWE6+jr8v
- eV/NIkGxJDQJT0cudyQz1S+ru
-X-Google-Smtp-Source: AGHT+IFVxHVXss8f7NZwDomS2MRk/66WJGnXUtvKdO29keaPzvzkbnV8ndxDk4aTjFlAkN2ATL1EZA==
-X-Received: by 2002:a5d:5f53:0:b0:3b9:2960:bf92 with SMTP id
- ffacd0b85a97d-3c5d7ea4c79mr147616f8f.0.1755804065869; 
- Thu, 21 Aug 2025 12:21:05 -0700 (PDT)
+ AJvYcCVuXALT/nveCJ951Hh3fe4YUUZ2Irg2xkbpUdkdcCjt6Lguzyn3oIaKeixE5lTeBr4OyRgmtwKlAvU=@buildroot.org
+X-Gm-Message-State: AOJu0YwOBMOFIIh3GfoOQA4CfewmxG5IFqTfg454m8GAx0XtDE0vtghs
+ j/dFhSCkTwYGEs5rk4nAOZv/VoYA5JqQrdc1uKr8FZjSbrxqX6q4NmNDeBnu9B7Cf2U/oVvAqhl
+ UtFjo0sQ=
+X-Gm-Gg: ASbGnctA82xmugM6RwZbT7WCHxc6aY+LxfiJRH1PeUToToDEz+e2u+1ajX3iDKvQizx
+ Qyt/9CaNJaBxxtTSQ/fqUKIoltv/Pppy5zSxfqY3lClwwaaPEBLesSDb0mnYKwV9z8NSHAe4yZ3
+ TKTC4LIXT8CNXV3cN1Tx/TR+3lbyBup95i5bBB6At8EkJeT44+p2iROcZCw/Md7N+kGX/rtcSkU
+ rMspkgBmTvlWx91JI9kwpQjNsNmPg0p22alIKNSrPr9ov48EAI7vJUt5NxAtyGqKs9G3xigFieJ
+ 2FqDbX2dv8e21bxmdrmc0hNA3T3xyiLju8xmrwywgYc4mMF8Ik3zRYraXnFM+/WCPxHfQc2GBmG
+ 8UB1a392TQMPIzFOzNCPz/St/
+X-Google-Smtp-Source: AGHT+IGyaphaoT+d5BNTlxmYHMpBgRtp6q16C3Hix3aAnFs9qIqbVMqh1u/Up+MnjMOu5H6pdjwz4A==
+X-Received: by 2002:a05:600c:4506:b0:456:1bae:5470 with SMTP id
+ 5b1f17b1804b1-45b5179b6camr2306575e9.8.1755804070321; 
+ Thu, 21 Aug 2025 12:21:10 -0700 (PDT)
 Received: from arch ([79.132.233.79]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3c074d43bc6sm12566091f8f.25.2025.08.21.12.21.05
+ 5b1f17b1804b1-45b4e9cff78sm16331945e9.6.2025.08.21.12.21.09
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 21 Aug 2025 12:21:05 -0700 (PDT)
-To: Romain Naour <romain.naour@smile.fr>
+ Thu, 21 Aug 2025 12:21:09 -0700 (PDT)
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Thu, 21 Aug 2025 21:21:05 +0200
-Message-ID: <20250821192105.24112-1-thomas.perale@mind.be>
+Date: Thu, 21 Aug 2025 21:21:09 +0200
+Message-ID: <20250821192109.24272-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250813212834.59170-1-romain.naour@smile.fr>
-References: <20250813212834.59170-1-romain.naour@smile.fr>
+In-Reply-To: <20250814210758.563308-1-giulio.benetti@benettiengineering.com>
+References: <20250814210758.563308-1-giulio.benetti@benettiengineering.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1755804066; x=1756408866; darn=buildroot.org;
+ d=mind.be; s=google; t=1755804070; x=1756408870; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=nx19/DfX5Os1etL9IZsE7WenmuEl1Au+qMPzLa85C8k=;
- b=GDWEd2/DgCcKmUwb5kFoIuAlT+qC6a3NOMHdHygnZ/UR7RttYY9eN6ewU4QpQ4/kED
- AVQp5CJg1H7dmI41pV4KG6GC6ueN1wx6vGJDQ1hfeZW7Ce+Dt+MnHE/R0ozRHFl5HkN4
- ZQzytvOsJiqBTK81IhIOXodha4JN9a2jq9ZgTXSvdRSe5ACRaXuzJQno/aFJXSMq78KI
- exotY5zNjiVxfeYrsZKIXV7NknzBDCKBO+GR5/M8zmEX76UeH3JCGx2kBZxg293RP7w1
- NhVJdOrfl5saXjjI5J22O/7dbh5ORTGW3+GMvofRbTiYUrDQE+Vul3HosCP/Lc7SOBh5
- Mj/g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=f2K0QIA4NQbf9vD3G1gzVirdRAbhBfT+g2BSmEKYNv8=;
+ b=HoTuWDEHy8oomNS4Ek3DxxM7Tc+iH4ZlTY1qM4vvegJG+aLivWrNaduJoXJf+jLodW
+ FBZc6BAltdjp4rb7uq23j3nrGeaVPH32tIWnl1epx1MrIfMHxxIwNr8+v80V0VEatc4y
+ z4lhJkZ1DsboT//V5cKmQTjrTyVSsJd2tixidaeXa0gih8V2f6CdD+S5ECWN1ugLABqx
+ d590nzsVtI6O3Gnhd1aFTqbUSrOsfRz7skO8rdKUEU8KN086SepVja7Spp0k/JYphzKA
+ SrXAJYPS9lpaR/uAGhGaSPEai0dholJeex5W+96nR9HMMrGcx90dr8WpX4E9z9CcJsms
+ suWg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=GDWEd2/D
-Subject: Re: [Buildroot] [PATCH] package/rt-tests: update URL
+ header.a=rsa-sha256 header.s=google header.b=HoTuWDEH
+Subject: Re: [Buildroot] [PATCH] package/libtracefs: fix build failure due
+ to missing NPTL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,51 +120,35 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> The previous version bump 8f52d4183e ("package/rt-tests: bump to
-> version 2.8") was using the latest release, so the URL was updated to
-> remove the "older" subdirectory.
-> 
-> The URL was:
-> 
->   https://www.kernel.org/pub/linux/utils/rt-tests/rt-tests-2.8.tar.xz
-> 
-> On the 01/07/2025 a new rt-tests release was published (2.9), so the
-> 2.8 archive was moved to "older" subdirectory and once again breaking
-> existing packaging downloads.
-> 
-> The "new" URL is now:
-> 
->   https://www.kernel.org/pub/linux/utils/rt-tests/older/rt-tests-2.8.tar.xz
-> 
-> [1] https://lore.kernel.org/linux-rt-users/20241228114346.6020d6b0@windsurf/
+> At the moment package libtracefs builds utest that requires
+> pthread_barrier_(), so since we don't need utest let's disable it.
 > 
 > Fixes:
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/10984686708 (TestRtTests)
+> https://autobuild.buildroot.net/results/69b/69b75908bebdf9382a4cd9b138fcaf1e34daba09//
 > 
-> Cc: Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
 Applied to 2025.02.x & 2025.05.x. Thanks
 
 > ---
->  package/rt-tests/rt-tests.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/libtracefs/libtracefs.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/package/rt-tests/rt-tests.mk b/package/rt-tests/rt-tests.mk
-> index 3c6b6f2276..6c445fde91 100644
-> --- a/package/rt-tests/rt-tests.mk
-> +++ b/package/rt-tests/rt-tests.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
+> diff --git a/package/libtracefs/libtracefs.mk b/package/libtracefs/libtracefs.mk
+> index d24763fa7d..6b8f838c2e 100644
+> --- a/package/libtracefs/libtracefs.mk
+> +++ b/package/libtracefs/libtracefs.mk
+> @@ -14,6 +14,7 @@ LIBTRACEFS_DEPENDENCIES = host-bison host-flex host-pkgconf libtraceevent
 >  
-> -RT_TESTS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/rt-tests
-> +RT_TESTS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/rt-tests/older
->  RT_TESTS_SOURCE = rt-tests-$(RT_TESTS_VERSION).tar.xz
->  RT_TESTS_VERSION = 2.8
->  RT_TESTS_LICENSE = GPL-2.0+
+>  LIBTRACEFS_CONF_OPTS = \
+>  	-Ddoc=false \
+> -	-Dsamples=false
+> +	-Dsamples=false \
+> +	-Dutest=false
+>  
+>  $(eval $(meson-package))
 > -- 
-> 2.50.1
+> 2.43.0
 > 
 > _______________________________________________
 > buildroot mailing list
