@@ -1,106 +1,105 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46916CA0EFA
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CB6BCA0EEB
 	for <buildroot@archiver.kernel.org>; Thu, 21 Aug 2025 19:21:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1529461C09;
+	by smtp1.osuosl.org (Postfix) with ESMTP id 523A1846FA;
 	Thu, 21 Aug 2025 19:21:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WuxA-WNnYb_q; Thu, 21 Aug 2025 19:21:38 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id p4vFf-IL-Sxu; Thu, 21 Aug 2025 19:21:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C7854617BA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 77D00846AB
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C7854617BA;
-	Thu, 21 Aug 2025 19:21:36 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 363531C8
- for <buildroot@buildroot.org>; Thu, 21 Aug 2025 19:20:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 77D00846AB;
+	Thu, 21 Aug 2025 19:21:38 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6CCD51C7
+ for <buildroot@buildroot.org>; Thu, 21 Aug 2025 19:20:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BDFFE40CF0
- for <buildroot@buildroot.org>; Thu, 21 Aug 2025 19:20:55 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 53AC0846EE
+ for <buildroot@buildroot.org>; Thu, 21 Aug 2025 19:20:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nsUzEyUFTnGG for <buildroot@buildroot.org>;
- Thu, 21 Aug 2025 19:20:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TQIfDCZOzW75 for <buildroot@buildroot.org>;
+ Thu, 21 Aug 2025 19:20:56 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::436; helo=mail-wr1-x436.google.com;
+ client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B420840D21
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B420840D21
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B420840D21
- for <buildroot@buildroot.org>; Thu, 21 Aug 2025 19:20:54 +0000 (UTC)
-Received: by mail-wr1-x436.google.com with SMTP id
- ffacd0b85a97d-3b9a342e8ffso1048717f8f.0
- for <buildroot@buildroot.org>; Thu, 21 Aug 2025 12:20:54 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5ED0B841B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5ED0B841B1
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5ED0B841B1
+ for <buildroot@buildroot.org>; Thu, 21 Aug 2025 19:20:56 +0000 (UTC)
+Received: by mail-wm1-x331.google.com with SMTP id
+ 5b1f17b1804b1-45b4d892175so5390415e9.2
+ for <buildroot@buildroot.org>; Thu, 21 Aug 2025 12:20:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1755804053; x=1756408853;
+ d=1e100.net; s=20230601; t=1755804054; x=1756408854;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=0+cixiLTvwglS3jLzI3VDDdSwavd0yiHLLNrT2W7mU8=;
- b=FztDr1oz8+twgTTOwVi3KTZtB1msSvGTcXB2Z0X7QKm0y8WjKzT8le5oUilhXqMgLP
- RObqJUHQIQWJk3kEaGj5S5L8VVfiy+WSatyoTvvLjWcNpFvaRkoC/Bkn6QkwGMGIHN9E
- jC/26c0SFlMKM/3lAoj5UBif7L86EeoN3biLRSmpZK+n4XbDnnubIzi+jXNf8n1ENTW3
- jbAhodzjODguValexOjzBeEv9f0Qi+GaXVjoNpjOgAnfJ5K0RGtNbOa3i7GEke+TqHYv
- DiZfnQnTq/utDqsgKMDFW164te5jdTlkFHu2MSWzKyBIkHLmeDjlEozjwznfUKagXyHb
- bAow==
+ bh=CUM5ep96H0AuJW5LMRmEh+Ygb0c9FF1C53reTJtmob0=;
+ b=ongTalt4a75tWwqVI4EB8TWAsbSDXdAYyEJv9yzrvEC8AYmSGcjRHfhEYjhp3Qy6My
+ l9hqU0Dp0hwPeZTtoUkFT9SRHRGFP9VCDIXD8sIrGX41lDZU10gN9GxVsHGGkIw45dfI
+ 42l3aXntmbUfT2RxGT9xk9PY2aPCGGZoomZFTOTOBbjkrtofrzY1y9Ptj2yqVvrWrOkn
+ OdBXTic5Fbo9O1m5jqS/J+4c33V5MT11Z1N9fjxEJWEMc4fMV6IGd6pPh9T1l3SpTf/7
+ aIVyg/BJFQbPoEMS1V5HMaAZ8AsTAGXuTKJwuN2/0a95oktEYRPF+a4/gh0HnUZuf0Tz
+ Mf2Q==
 X-Forwarded-Encrypted: i=1;
- AJvYcCVFX77Bwe3Pt1/qkJbdFELB1eP0xwdYML/teC9m+cqWbP+8n+NnQeuI2meKJKgX2pycYanOiaqKmzg=@buildroot.org
-X-Gm-Message-State: AOJu0Yx7L8V1ypNRYnZ48qOVeJaImzrIZW6BuFYoIYLuNgFb0WzZJFoF
- EzhNysd0EL/YoV2TLi9Zyz3c8cgA/AQLiubdWMByPZhZwK5toiA5yMBizWFW94T1OQB0SA0LMWv
- farNO3rU=
-X-Gm-Gg: ASbGnctJ1s3itVwjYbFT0/JouMuer0P2lf79Tc8GVB23HOdKlEBl6dyM91Mg85vZpAo
- jFsuNUtof3fcHsNGDP6/ybK+a4zEwFLO78zqFMzy7QIVJMMrshK+r3/dRFfGbbpIoInpI1A14yH
- 6RbqbnmHOyEnGGD7FSQhOHjRzuQIdgbmFiIj5FTCOhejqm6LBVTNWqZVyhDzwHSXik+VUpMX4gP
- pshsZHEP8RfBh+6aQGnS3PcgaDjszPa5Q/b0kNq5rSdSlN0v4qfHDBYcjQZbSXHiYMwIzUeF5G/
- Qc7VymVbaaQ/eH+9CgTILa2TJ1k6ut6SPBHxkzDIy78/l91wRTG2OsUJTlEOD2Oqx8eiKTmOqq9
- gR/ZZF/MRA+TdIQ==
-X-Google-Smtp-Source: AGHT+IEfpkAik3xoRTy7cRjF5dJ5Cz9u8MDbmj9DHrskU0910EcxY/psNi/9v5YZmBXAsBC/Yd+39A==
-X-Received: by 2002:a5d:5850:0:b0:3b7:95ac:6f55 with SMTP id
- ffacd0b85a97d-3c5d48fba9cmr161786f8f.20.1755804052626; 
- Thu, 21 Aug 2025 12:20:52 -0700 (PDT)
+ AJvYcCWxrNpguq7pwoYBAAwm3PVXbIXMb93UnUNCSR1MeIhofSrIgBiVOCSUU24gVmsXsoyxpbJQL+9qG6A=@buildroot.org
+X-Gm-Message-State: AOJu0YzPqvpnZdr0bpUR9HXCvGhNPnqgByWwYwl1NO9+6f1TE3l3rRBE
+ g5Ud7v6lXjejevNF0oPtIuXjMRzVq777AsZEU/sI4+l+tKMNKp2I/b1rZ1yw6yXwVDiO6li2V6m
+ TzrJ3xjs=
+X-Gm-Gg: ASbGnctf97dKFbZquPNg46X+3fVXlMAXjFsTT3Z79eq0+p48vb29/qpVAiymo5mNGHw
+ 1w7XkAqNH0jIOQoRkIv6T/+6szlPCcMsIyLNItCsr4f895CvQ13WcjSD/WLenD0rCYyT+tvK7Lv
+ ImD9iaujGVrYmcvz+MYkQQjv/lK8A2OZUd+AtYXGO/ocpowwp5ko+/97cwvcHeXwXIdO56PW4mH
+ eHrJl0/0ZbrkQbvLsI0j03cKQ0I1/3aqQ38PDZ1kdt6s6e7qHfcW0Wn3p/S1bVP9uUVKhTlf6uH
+ KnrK/Cy1vr5eTr0K2F4dC/Csxb0LlHq82WdovGNC8l2qzAnkv+VdrHRnPZSmpyCDV1qlQEMJokz
+ rIRZxPvU4S0U1mQ==
+X-Google-Smtp-Source: AGHT+IHEEVM2ZGMTTWdN77CPPtnZY5wRbAcDxta2NHbWVQ9ss5aJn+4HlJ+CWV1Pz55kphBn5ZyHlQ==
+X-Received: by 2002:a05:600c:630c:b0:456:2b4d:d752 with SMTP id
+ 5b1f17b1804b1-45b517cfe7dmr1673215e9.20.1755804054465; 
+ Thu, 21 Aug 2025 12:20:54 -0700 (PDT)
 Received: from arch ([79.132.233.79]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3c4d62907b3sm3163196f8f.36.2025.08.21.12.20.52
+ 5b1f17b1804b1-45b50dd02ebsm8042755e9.9.2025.08.21.12.20.54
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 21 Aug 2025 12:20:52 -0700 (PDT)
-To: Peter Korsgaard <peter@korsgaard.com>
+ Thu, 21 Aug 2025 12:20:54 -0700 (PDT)
+To: Titouan Christophe <titouan.christophe@mind.be>
 Cc: Thomas Perale <thomas.perale@mind.be>,
 	buildroot@buildroot.org
-Date: Thu, 21 Aug 2025 21:20:51 +0200
-Message-ID: <20250821192051.23831-1-thomas.perale@mind.be>
+Date: Thu, 21 Aug 2025 21:20:53 +0200
+Message-ID: <20250821192053.23931-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250812073645.2072147-1-peter@korsgaard.com>
-References: <20250812073645.2072147-1-peter@korsgaard.com>
+In-Reply-To: <20250812100148.717381-1-titouan.christophe@mind.be>
+References: <20250812100148.717381-1-titouan.christophe@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1755804053; x=1756408853; darn=buildroot.org;
+ d=mind.be; s=google; t=1755804054; x=1756408854; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=0+cixiLTvwglS3jLzI3VDDdSwavd0yiHLLNrT2W7mU8=;
- b=aCVpt331Mk5wkBNWmwZHovHw1WFQpqqIBSDLQBY0Vx11ApuJMa3f7ui+xtDq/LB1xb
- cg3EiF5M2QMEbJ+iFSED6295ODDupS/AL17wJHuTxkNAetkzAtHnjMTjCWXnfYWJgEvT
- IPBe8l53p+uh71NZEcuSX8EPobVAYJupJuhdjtsl9O4qqfAdQoB+CTtehhQKqDjAeiub
- 4Y74G+daO42xWo4ZaQBZJfiKI9SLgOK8jhG8FtuyE9qKFDJF9tbZ8xCnERg1KFqj2hhY
- vIQVJMCQVuS7X+cwNinRahT4CvjBqzyHSfxOrKNGUvY0ic3g294d3rQLe4QbvAQgMaYC
- FhhA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=CUM5ep96H0AuJW5LMRmEh+Ygb0c9FF1C53reTJtmob0=;
+ b=UGnTmbeDdPzC8OKLw/YjF2RJnpKEbOvBYJa1IMMC81jU5CrHcU27r0q43eLskq3+Hp
+ 9bEA+hOOYufJ4F3uwiVyb0yFWToAs9rgPgJOLZI5gT+ffRHmMykR5+UrtB2jsfLxooMf
+ J6d3KVq2iIS3GWNbcITNdV/BxPJKpckkyAo1xpPpCeHujPXktauupmFAR8y14mQJeRlU
+ FQzTozykeHuux5jA5b6C7gvYa6gd0ntyfjEp8fHj3DJFp4bkgBz9r/ladGPPHB3cDuoa
+ MQ+pR4GGTNJu+tEaHHowIFzThgbkECEb9E76JEo/lw3pBQGSmH5ln6G4y5STrmlqB0GC
+ 7CHA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=aCVpt331
-Subject: Re: [Buildroot] [PATCH 1/3] Makefile: release: make manual build
- reproducible
+ header.a=rsa-sha256 header.s=google header.b=UGnTmbeD
+Subject: Re: [Buildroot] [PATCH 1/4] package/openconnect: add CPE vendor
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -120,41 +119,31 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> The manual contains build timestamps like:
+> infradead is a valid CPE vendor for openconnect, see
+> https://nvd.nist.gov/products/cpe/detail/2877E5FD-6361-465D-81D7-AE1EBB3E059F
 > 
-> Buildroot 2025.08-rc1 manual generated on 2025-08-12 06:43:37 UTC
-> 
-> Making it not reproducible.  Luckily asciidoc respects SOURCE_DATE_EPOCH, so
-> use that to use the timestamp of the latest git commit instead.
-> 
-> Notice: The release and manual targets are marked as noconfig targets (and
-> need to stay like that for make release), so we cannot use the
-> BR2_REPRODUCIBLE logic.  Instead manually set SOURCE_DATE_EPOCH.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 
 Applied to 2025.02.x & 2025.05.x. Thanks
 
 > ---
->  Makefile | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  package/openconnect/openconnect.mk | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/Makefile b/Makefile
-> index 203d90510d..33e8563e93 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -1250,7 +1250,8 @@ release: OUT = buildroot-$(BR2_VERSION)
->  # documentation to the git output
->  release:
->  	git archive --format=tar --prefix=$(OUT)/ HEAD > $(OUT).tar
-> -	$(MAKE) O=$(OUT) manual-html manual-text manual-pdf
-> +	SOURCE_DATE_EPOCH=$$(git log -1 --format=%at 2> /dev/null) \
-> +		$(MAKE) O=$(OUT) manual-html manual-text manual-pdf
->  	$(MAKE) O=$(OUT) distclean
->  	tar rf $(OUT).tar $(OUT)
->  	gzip -9 -c < $(OUT).tar > $(OUT).tar.gz
+> diff --git a/package/openconnect/openconnect.mk b/package/openconnect/openconnect.mk
+> index 3fd9f990b0..73716d708e 100644
+> --- a/package/openconnect/openconnect.mk
+> +++ b/package/openconnect/openconnect.mk
+> @@ -9,6 +9,7 @@ OPENCONNECT_SITE = https://www.infradead.org/openconnect/download
+>  OPENCONNECT_DEPENDENCIES = host-pkgconf libxml2 zlib
+>  OPENCONNECT_LICENSE = LGPL-2.1
+>  OPENCONNECT_LICENSE_FILES = COPYING.LGPL
+> +OPENCONNECT_CPE_ID_VENDOR = infradead
+>  OPENCONNECT_CONF_OPTS = \
+>  	--disable-dsa-tests \
+>  	--with-vpnc-script=/etc/vpnc/vpnc-script \
 > -- 
-> 2.39.5
+> 2.50.1
 > 
 > _______________________________________________
 > buildroot mailing list
