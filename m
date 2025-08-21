@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F562CA0EFF
-	for <buildroot@archiver.kernel.org>; Thu, 21 Aug 2025 18:57:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B75ACA0EEB
+	for <buildroot@archiver.kernel.org>; Thu, 21 Aug 2025 18:57:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 53A8C61B7A;
-	Thu, 21 Aug 2025 18:57:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 52CE661B66;
+	Thu, 21 Aug 2025 18:57:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FLRnsWwzfhGG; Thu, 21 Aug 2025 18:57:55 +0000 (UTC)
+ id zzuvEa5DLNfo; Thu, 21 Aug 2025 18:57:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D280361B60
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6875661B6A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D280361B60;
-	Thu, 21 Aug 2025 18:57:54 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id C98971C7
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6875661B6A;
+	Thu, 21 Aug 2025 18:57:53 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 64C2125B
  for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:57:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7DBCD418CA
- for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:57:10 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 626966168E
+ for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:57:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Q2O5Mqks2VZy for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FfQDFKsHT1du for <buildroot@buildroot.org>;
  Thu, 21 Aug 2025 18:57:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C83F641884
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 910BC61713
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C83F641884
+ by smtp3.osuosl.org (Postfix) with ESMTP id 910BC61713
  for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:57:09 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C4CB9813AF; Thu, 21 Aug 2025 18:57:09 +0000 (UTC)
+ id 8E0DE87A07; Thu, 21 Aug 2025 18:57:09 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 21 Aug 2025 16:28:33 +0200
+Date: Thu, 21 Aug 2025 16:28:12 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 66750d2d72edd7dba2d3769679bc89441add9a7e
-X-Git-Newrev: 86c3077ff45db88fba21a85b2580f395b221c8b5
+X-Git-Oldrev: 6171150697d7a3e6756bc6167e5e5be3dcb313b1
+X-Git-Newrev: e0b33c1f5003a8aac3858f8c1d7491c7dbdf0f37
 X-Patchwork-Hint: ignore
-Message-Id: <20250821185709.C4CB9813AF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x]
- support/testing/tests/fs/test_iso9660.py: use a more recent toolchain
+Message-Id: <20250821185709.8E0DE87A07@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/setserial:
+ simplify patching
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,56 +66,107 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=86c3077ff45db88fba21a85b2580f395b221c8b5
+commit: https://git.buildroot.net/buildroot/commit/?id=e0b33c1f5003a8aac3858f8c1d7491c7dbdf0f37
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-The ISO9660 tests are currently using an old 2017 toolchain. Let's
-switch to a modern toolchain, which is regularly updated. Also, we use
-a toolchain based on glibc since grub2 doesn't build with recent
-uClibc toolchains.
+The original commit (aaa2b660a9f9 ("setserial: convert to autotargets
+and fix manpages install") wasn't entirely clear why we went for a
+removal of a patch from the tarball we get from Debian.
 
-It will work around build issues with syslinux.
+It is assumed the original patch mainly only wanted to remove the strip
+and make sure the directories are created before files are installed in
+there. But doing only that made my build fail because the linker doesn't
+find @CXXFLAGS@. After undoing the addition of this variable (and its
+use) from 01_makefile.patch it now compiles just fine.
 
-Fixes:
+Therefore, instead of removing the patch from the tarball we get from
+Debian, simply update the patch we carry in the tree to remove what's
+necessary and simplify the patching logic.
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/10975828975
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/10975828871
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/10975828770
+This could also help identify notable differences between the
+01_makefile.patch from two different versions whenever we upgrade.
 
-(Even though those should be fixed separately, as syslinux should
-continue to build with old compilers not supporting std=gnu17)
-
+Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 2e2bfd678b9e868ddb6ad559a726b138d2ec5110)
+(cherry picked from commit c688a1a8a833a89e9e6fcef70f183766e341e11d)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- support/testing/tests/fs/test_iso9660.py | 11 ++---------
- 1 file changed, 2 insertions(+), 9 deletions(-)
+ package/setserial/0001-build-system-fix.patch | 33 +++++++++++++++++++++++----
+ package/setserial/setserial.mk                |  2 --
+ 2 files changed, 29 insertions(+), 6 deletions(-)
 
-diff --git a/support/testing/tests/fs/test_iso9660.py b/support/testing/tests/fs/test_iso9660.py
-index 3d08f2e895..1b86bfbfc1 100644
---- a/support/testing/tests/fs/test_iso9660.py
-+++ b/support/testing/tests/fs/test_iso9660.py
-@@ -4,16 +4,9 @@ import infra.basetest
+diff --git a/package/setserial/0001-build-system-fix.patch b/package/setserial/0001-build-system-fix.patch
+index eec7993d19..06f2201bd4 100644
+--- a/package/setserial/0001-build-system-fix.patch
++++ b/package/setserial/0001-build-system-fix.patch
+@@ -3,7 +3,19 @@ sure that the directories (especially the manpages directory) are
+ created before installing files to them. This is similar to what
+ automake does.
  
- BASIC_CONFIG = \
-     """
--    BR2_x86_pentium4=y
-+    BR2_x86_core2=y
-     BR2_TOOLCHAIN_EXTERNAL=y
--    BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
--    BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--    BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-i386-pentium4-full-2017.05-1078-g95b1dae.tar.bz2"
--    BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
--    BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_2=y
--    BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
--    # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
--    BR2_TOOLCHAIN_EXTERNAL_CXX=y
-+    BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_CORE2_GLIBC_STABLE=y
-     BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-     BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
-     BR2_LINUX_KERNEL=y
++Also remove CXXFLAGS and its use since the linker errors out with:
++
++  cannot find @CXXFLAGS@: No such file or directory
++
++Additionally, remove the strip command made on the wrong file.
++
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++[rebased on top of Debian's setserial_2.17-57.debian.tar.xz instead of relying
++ on deletion of 01_makefile.patch]
++[extend commit log to explain why CXXFLAGS is removed and also that strip is
++ removed on purpose, c.f. original commit aaa2b660a9f9 ("setserial: convert to
++ autotargets and fix manpages install")]
++Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
+ ---
+  Makefile.in |    7 ++++---
+  1 file changed, 4 insertions(+), 3 deletions(-)
+@@ -12,17 +24,30 @@ Index: setserial-2.17/Makefile.in
+ ===================================================================
+ --- setserial-2.17.orig/Makefile.in
+ +++ setserial-2.17/Makefile.in
+-@@ -26,9 +26,10 @@ setserial.cat: setserial.8
++@@ -15,7 +15,6 @@ RM = rm -f
++ CFLAGS = @CFLAGS@
++ LDFLAGS = @LDFLAGS@
++ CPPFLAGS = @CPPFLAGS@
++-CXXFLAGS = @CXXFLAGS@
++ DEFS = @DEFS@
++ INCS = -I.
++ TAR = tar
++@@ -23,14 +22,15 @@ TAR = tar
++ all: setserial setserial.cat
++ 
++ setserial: setserial.c
++-	$(CC) $(CFLAGS) $(CXXFLAGS) $(CPPFLAGS) $(LDFLAGS) $(DEFS) $(INCS) setserial.c -o setserial
+++	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(DEFS) $(INCS) setserial.c -o setserial
++ 
++ setserial.cat: setserial.8
+  	nroff -man setserial.8 > setserial.cat
+  
+  install: setserial setserial.8
+ -	$(INSTALL_PROGRAM) setserial $(DESTDIR)/bin
+ -	$(STRIP) $(DESTDIR)/bin/setserial
+--	$(INSTALL_DATA) setserial.8 $(DESTDIR)/usr/man/man8
+ +	mkdir -p $(DESTDIR)/usr/bin
+ +	$(INSTALL_PROGRAM) setserial $(DESTDIR)/usr/bin
+ +	mkdir -p $(DESTDIR)/usr/share/man/man8
+-+	$(INSTALL_DATA) setserial.8 $(DESTDIR)/usr/share/man/man8
++ 	$(INSTALL_DATA) setserial.8 $(DESTDIR)/usr/share/man/man8
+  
+  clean:
+- 	$(RM) setserial setserial.o setserial.cat *~
+diff --git a/package/setserial/setserial.mk b/package/setserial/setserial.mk
+index 5bce05056a..9beee349c8 100644
+--- a/package/setserial/setserial.mk
++++ b/package/setserial/setserial.mk
+@@ -29,8 +29,6 @@ define SETSERIAL_APPLY_DEBIAN_PATCHES
+ 	# - Apply patches in the order listed in debian/patches/series
+ 	if [ -d $(@D)/debian/patches ]; then \
+ 		touch $(@D)/gorhack.h; \
+-		rm $(@D)/debian/patches/01_makefile.patch; \
+-		sed -i '/01_makefile.patch/d' $(@D)/debian/patches/series; \
+ 		$(APPLY_PATCHES) $(@D) $(@D)/debian/patches series; \
+ 	fi
+ endef
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
