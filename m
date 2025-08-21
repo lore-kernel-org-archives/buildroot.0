@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82C1DCA0EFA
-	for <buildroot@archiver.kernel.org>; Thu, 21 Aug 2025 19:20:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40B51CA0EEB
+	for <buildroot@archiver.kernel.org>; Thu, 21 Aug 2025 19:20:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 58D90846DD;
-	Thu, 21 Aug 2025 19:20:50 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XE56iFB4Nw2X; Thu, 21 Aug 2025 19:20:48 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9571D846D7
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9571D846D7;
-	Thu, 21 Aug 2025 19:20:48 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 271581C8
- for <buildroot@buildroot.org>; Thu, 21 Aug 2025 19:20:17 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 23310616BA
- for <buildroot@buildroot.org>; Thu, 21 Aug 2025 19:20:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1994B61B26;
+	Thu, 21 Aug 2025 19:20:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xD6nbg3QAhbM for <buildroot@buildroot.org>;
+ id kB2TXr7CHqvf; Thu, 21 Aug 2025 19:20:50 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EFF2261B3E
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id EFF2261B3E;
+	Thu, 21 Aug 2025 19:20:49 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id A72E61C8
+ for <buildroot@buildroot.org>; Thu, 21 Aug 2025 19:20:17 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7DCAC40D21
+ for <buildroot@buildroot.org>; Thu, 21 Aug 2025 19:20:16 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VsQ_XMY9tSOS for <buildroot@buildroot.org>;
  Thu, 21 Aug 2025 19:20:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B0FE616F1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B50A640D75
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4B0FE616F1
+ by smtp2.osuosl.org (Postfix) with ESMTP id B50A640D75
  for <buildroot@buildroot.org>; Thu, 21 Aug 2025 19:20:14 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3B1FA838C4; Thu, 21 Aug 2025 19:20:14 +0000 (UTC)
+ id A677D87880; Thu, 21 Aug 2025 19:20:14 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 21 Aug 2025 10:53:40 +0200
+Date: Thu, 21 Aug 2025 10:54:22 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: ffde1fd264f6d28ec73ccbdba06afdf66dd5b69d
-X-Git-Newrev: 2bf2d75cf27fce4d3bff5950ac33f8b8f9785841
+X-Git-Oldrev: 72e9554f9293b376ea17d9ce69520cf7d8eee326
+X-Git-Newrev: 761d5434c91bcac110492fe34a96fea7db67dd21
 X-Patchwork-Hint: ignore
-Message-Id: <20250821192014.3B1FA838C4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/prboom: fix build
- w/ gcc-14
+Message-Id: <20250821192014.A677D87880@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/setserial: apply
+ patches from setserial_2.17-45.3.diff.gz
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,186 +61,160 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============6506039447760412962=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2bf2d75cf27fce4d3bff5950ac33f8b8f9785841
+--===============6506039447760412962==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=761d5434c91bcac110492fe34a96fea7db67dd21
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-When building prboom with gcc-14 the following error appeared on the
-autobuilder:
+Since 64ac7199525f ("apply-patches.sh: add recursivity when scanning
+patchdir"), patches with the .dpatch file extension are simply ignored.
 
-```
-i_main.c: In function 'main':
-i_main.c:359:10: error: assignment to 'const char * const*' from incompatible pointer type 'char **' [-Wincompatible-pointer-types]
-  359 |   myargv = argv;
-      |          ^
-```
+Unfortunately, setserial package stopped applying the patches after that
+commit.
 
-While this package did not receive any update for a while on the
-sourceforge mirror, I backported the fix from a fork. For more
-information see [1].
+Sadly, 0002-tiocghayesesp-build-fix.patch is breaking the patch context
+for patch 18 in the debian diff because we are currently applying
+patches from within Buildroot tree before applying the ones we download
+from Debian. Instead of doing some hacks, let's apply Debian patches
+before Buildroot's. However, this requires a few changes. First, we need
+to migrate away from the SETSERIAL_PATCH mechanism because currently
+_PRE_PATCH_HOOKS runs before this is applied and _POST_PATCH_HOOKS runs
+after the Buildroot patches are applied.
+Instead, let's use an _EXTRA_DOWNLOADS we manually extract à-la
+package/android-tools/android-tools.mk. Then in the _PRE_PATCH_HOOKS, we
+apply the big diff the _EXTRA_DOWNLOADS contains so that the patches
+from within can be applied afterwards.
 
-[1] https://github.com/coelckers/prboom-plus/commit/92d44b6383a3e053feac2c820b8114873fcd798e
+Because the big diff still contains only patches with the *.dpatch
+extensions that are not supported anymore, we need to either rename all
+patches or use the 00list file that lists all patches in the order they
+need to be applied. Fortunately, Buildroot already supports applying
+patches with `patch` regardless of their extension if they are within
+such a file. Unfortunately, it needs to be called "series", hence the
+renaming.
 
-Fixes: https://autobuild.buildroot.org/results/888/88846e3cb267b04da58bc17d92fd5dd385b65b5d
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Because patch 18 from the big diff is now applied before
+0002-tiocghayesesp-build-fix.patch from Buildroot tree, the latter will
+fail if left unmodified, so this commit also rebases it.
+
+Finally, we keep the removal of 01_makefile.dpatch for now even though
+it only exists because it generates a conflict with
+0001-build-system-fix.patch from Buildroot tree. It'll be rebased in a
+later commit though.
+
+Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit c0bf3da45b4feb9d849f79743cfc3e11e70290c7)
+(cherry picked from commit 534147af946dab2013398f6bd50df903c0276ef7)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...myargv-instead-of-const-char-const-myargv.patch | 140 +++++++++++++++++++++
- 1 file changed, 140 insertions(+)
+ .checkpackageignore                                |  1 -
+ .../setserial/0002-tiocghayesesp-build-fix.patch   |  7 ++++--
+ package/setserial/setserial.mk                     | 26 ++++++++++++++++++----
+ 3 files changed, 27 insertions(+), 7 deletions(-)
 
-diff --git a/package/prboom/0003-gcc-warnings-const-myargv-instead-of-const-char-const-myargv.patch b/package/prboom/0003-gcc-warnings-const-myargv-instead-of-const-char-const-myargv.patch
-new file mode 100644
-index 0000000000..b102175d59
---- /dev/null
-+++ b/package/prboom/0003-gcc-warnings-const-myargv-instead-of-const-char-const-myargv.patch
-@@ -0,0 +1,140 @@
-+From 92d44b6383a3e053feac2c820b8114873fcd798e Mon Sep 17 00:00:00 2001
-+From: entryway <entryway@localhost>
-+Date: Fri, 10 Jun 2011 19:59:18 +0000
-+Subject: [PATCH] gcc warnings: 'const **myargv' instead of 'const char * const
-+ * myargv'
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 1cf0e76510..0176a5fb19 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -1067,7 +1067,6 @@ package/sentry-native/0001-sentry.h-include-ucontext.h.patch lib_patch.Upstream
+ package/ser2net/S50ser2net Shellcheck lib_sysv.Indent lib_sysv.Variables
+ package/setools/0001-Do-not-export-use-setools.InfoFlowAnalysis-and-setoo.patch lib_patch.Upstream
+ package/setserial/0001-build-system-fix.patch lib_patch.Upstream
+-package/setserial/0002-tiocghayesesp-build-fix.patch lib_patch.Upstream
+ package/shadowsocks-libev/0001-configure.ac-use-pkg-config-to-find-netfilter_conntr.patch lib_patch.Upstream
+ package/shadowsocks-libev/0002-fix-maybe-uninitialized-errors.patch lib_patch.Upstream
+ package/shadowsocks-libev/0003-lib-Makefile.am-remove-static-from-LDFLAGS.patch lib_patch.Upstream
+diff --git a/package/setserial/0002-tiocghayesesp-build-fix.patch b/package/setserial/0002-tiocghayesesp-build-fix.patch
+index 176a0c9e15..670be34c28 100644
+--- a/package/setserial/0002-tiocghayesesp-build-fix.patch
++++ b/package/setserial/0002-tiocghayesesp-build-fix.patch
+@@ -6,6 +6,9 @@ define the TIOCGHAYESESP ioctl, breaking the build.
+ It's very unlikely to be of interest anymore, so just undef it.
+ 
+ Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
++[rebased on top of Debian's setserial_2.17-45.3.diff]
++Upstream: N/A only for compatibility with Linux kernels [2.6.33;2.6.36[
++Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
+ ---
+  setserial.c |    5 +++++
+  1 file changed, 5 insertions(+)
+@@ -14,9 +17,9 @@ Index: setserial-2.17/setserial.c
+ ===================================================================
+ --- setserial-2.17.orig/setserial.c
+ +++ setserial-2.17/setserial.c
+-@@ -24,6 +24,11 @@
++@@ -39,6 +39,11 @@
++ #include "safety.h"
+  #endif
+- #include <linux/serial.h>
+  
+ +/* linux/hayesesp.h got removed in 2.6.33 but some archs (like x86)
+ +   still define TIOCGHAYESESP. It's very unlikely to be of interest
+diff --git a/package/setserial/setserial.mk b/package/setserial/setserial.mk
+index 66ca59d79d..002bf21161 100644
+--- a/package/setserial/setserial.mk
++++ b/package/setserial/setserial.mk
+@@ -5,23 +5,41 @@
+ ################################################################################
+ 
+ SETSERIAL_VERSION = 2.17
+-SETSERIAL_PATCH = setserial_2.17-45.3.diff.gz
+ SETSERIAL_SOURCE = setserial_$(SETSERIAL_VERSION).orig.tar.gz
+ SETSERIAL_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/s/setserial
++SETSERIAL_EXTRA_DOWNLOADS = setserial_2.17-45.3.diff.gz
+ SETSERIAL_LICENSE = GPL-2.0
+ SETSERIAL_LICENSE_FILES = debian/copyright
+ # make all also builds setserial.cat which needs nroff
+ SETSERIAL_MAKE_OPTS = setserial
+ 
++# Extract the Debian tarball inside the sources
++define SETSERIAL_DEBIAN_EXTRACT
++	$(call suitable-extractor,$(notdir $(SETSERIAL_EXTRA_DOWNLOADS))) \
++		$(SETSERIAL_DL_DIR)/$(notdir $(SETSERIAL_EXTRA_DOWNLOADS)) > $(@D)/setserial_2.17-45.3.diff
++endef
 +
-+Upstream: https://github.com/coelckers/prboom-plus/commit/92d44b6383a3e053feac2c820b8114873fcd798e
-+[thomas: backport to 2.5.0]
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ src/SDL/i_main.c |  3 ++-
-+ src/d_main.c     | 20 ++++++++++++--------
-+ src/m_argv.c     |  3 +--
-+ src/m_argv.h     |  2 +-
-+ 4 files changed, 16 insertions(+), 12 deletions(-)
++SETSERIAL_POST_EXTRACT_HOOKS += SETSERIAL_DEBIAN_EXTRACT
 +
-+diff --git a/src/SDL/i_main.c b/src/SDL/i_main.c
-+index 05cd655..1c19ef0 100644
-+--- a/src/SDL/i_main.c
-++++ b/src/SDL/i_main.c
-+@@ -356,7 +356,8 @@ int main(int argc, char **argv)
-+ #endif
-+ 
-+   myargc = argc;
-+-  myargv = argv;
-++  myargv = malloc(sizeof(myargv[0]) * myargc);
-++  memcpy(myargv, argv, sizeof(myargv[0]) * myargc);
-+ 
-+ #ifdef _WIN32
-+   if (!M_CheckParm("-nodraw")) {
-+diff --git a/src/d_main.c b/src/d_main.c
-+index 6d8493e..320e07a 100644
-+--- a/src/d_main.c
-++++ b/src/d_main.c
-+@@ -870,7 +870,7 @@ static void FindResponseFile (void)
-+ 	int indexinfile;
-+         byte *file = NULL;
-+         const char **moreargs = malloc(myargc * sizeof(const char*));
-+-        const char **newargv;
-++        char **newargv;
-+         // proff 04/05/2000: Added for searching responsefile
-+         char fname[PATH_MAX+1];
-+ 
-+@@ -904,14 +904,15 @@ static void FindResponseFile (void)
-+ 	  int k;
-+           lprintf(LO_ERROR,"\nResponse file empty!\n");
-+ 
-+-	  newargv = calloc(sizeof(char *),MAXARGVS);
-++	  newargv = calloc(sizeof(newargv[0]),myargc);
-+ 	  newargv[0] = myargv[0];
-+           for (k = 1,index = 1;k < myargc;k++)
-+           {
-+             if (i!=k)
-+               newargv[index++] = myargv[k];
-+           }
-+-          myargc = index; myargv = newargv;
-++          myargc = index;
-++          myargv = newargv;
-+           return;
-+         }
-+ 
-+@@ -919,8 +920,8 @@ static void FindResponseFile (void)
-+ 	memcpy((void *)moreargs,&myargv[i+1],(index = myargc - i - 1) * sizeof(myargv[0]));
-+ 
-+ 	{
-+-	  const char *firstargv = myargv[0];
-+-	  newargv = calloc(sizeof(char *),MAXARGVS);
-++	  char *firstargv = myargv[0];
-++	  newargv = calloc(sizeof(newargv[0]), 1);
-+ 	  newargv[0] = firstargv;
-+ 	}
-+ 
-+@@ -949,16 +950,19 @@ static void FindResponseFile (void)
-+ 
-+ 	      // Terminate string, realloc and add to argv
-+ 	      *p = 0;
-++	      newargv = realloc(newargv, sizeof(newargv[0]) * (indexinfile + 1));
-+ 	      newargv[indexinfile++] = realloc(s,strlen(s)+1);
-+ 	    }
-+ 	  } while(size > 0);
-+ 	}
-+ 	free(file);
-+ 
-++	newargv = realloc(newargv, sizeof(newargv[0]) * (indexinfile + index));
-+ 	memcpy((void *)&newargv[indexinfile],moreargs,index*sizeof(moreargs[0]));
-+ 	free((void *)moreargs);
-+ 
-+-        myargc = indexinfile+index; myargv = newargv;
-++        myargc = indexinfile+index;
-++        myargv = newargv;
-+ 
-+         // DISPLAY ARGS
-+         //jff 9/3/98 use logical output routine
-+@@ -999,7 +1003,7 @@ static void DoLooseFiles(void)
-+   int lmpcount = 0;
-+   int dehcount = 0;
-+   int i,j,p;
-+-  const char **tmyargv;  // use these to recreate the argv array
-++  char **tmyargv;  // use these to recreate the argv array
-+   int tmyargc;
-+   boolean skip[MAXARGVS]; // CPhipps - should these be skipped at the end
-+ 
-+@@ -1060,7 +1064,7 @@ static void DoLooseFiles(void)
-+ 
-+   // Now go back and redo the whole myargv array with our stuff in it.
-+   // First, create a new myargv array to copy into
-+-  tmyargv = calloc(sizeof(char *),MAXARGVS);
-++  tmyargv = calloc(sizeof(tmyargv[0]),MAXARGVS);
-+   tmyargv[0] = myargv[0]; // invocation
-+   tmyargc = 1;
-+ 
-+diff --git a/src/m_argv.c b/src/m_argv.c
-+index 9392840..4fa1ed8 100644
-+--- a/src/m_argv.c
-++++ b/src/m_argv.c
-+@@ -37,8 +37,7 @@
-+ #include "m_argv.h"
-+ 
-+ int    myargc;
-+-const char * const * myargv; // CPhipps - not sure if ANSI C allows you to
-+-// modify contents of argv, but I can't imagine it does.
-++char **myargv;
-+ 
-+ //
-+ // M_CheckParm
-+diff --git a/src/m_argv.h b/src/m_argv.h
-+index 5340c15..b1d5907 100644
-+--- a/src/m_argv.h
-++++ b/src/m_argv.h
-+@@ -39,7 +39,7 @@
-+  * MISC
-+  */
-+ extern int  myargc;
-+-extern const char * const * myargv; /* CPhipps - const * const * */
-++extern char **myargv;
-+ 
-+ /* Returns the position of the given parameter in the arg list (0 if not found). */
-+ int M_CheckParm(const char *check);
-+-- 
-+2.50.1
+ define SETSERIAL_APPLY_DEBIAN_PATCHES
+-	# Touching gorhack.h is needed for the Debian patch 18 to work
++	# - Applying diff gotten from SETSERIAL_EXTRA_DOWNLOADS
++	# - Touching gorhack.h is needed for the Debian patch 18 to work
++	# - Rename 00list which contains the list of patches to "series" so
++	#   Buildroot knows in which order the patches need to be applied. This
++	#   is necessary because their file extension is dpatch, which isn't
++	#   supported by the APPLY_PATCHES script outside of the series
++	#   mechanism.
++	$(APPLY_PATCHES) $(@D) $(@D) setserial_2.17-45.3.diff
++
+ 	if [ -d $(@D)/debian/patches ]; then \
+ 		touch $(@D)/gorhack.h; \
+ 		rm $(@D)/debian/patches/01_makefile.dpatch; \
+-		$(APPLY_PATCHES) $(@D) $(@D)/debian/patches *.dpatch; \
++		mv $(@D)/debian/patches/00list $(@D)/debian/patches/series; \
++		sed -i '/01_makefile.dpatch/d' $(@D)/debian/patches/series; \
++		$(APPLY_PATCHES) $(@D) $(@D)/debian/patches series; \
+ 	fi
+ endef
+ 
+-SETSERIAL_POST_PATCH_HOOKS += SETSERIAL_APPLY_DEBIAN_PATCHES
++SETSERIAL_PRE_PATCH_HOOKS += SETSERIAL_APPLY_DEBIAN_PATCHES
+ 
+ $(eval $(autotools-package))
+
+--===============6506039447760412962==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6506039447760412962==--
