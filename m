@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C0BFCA0EFF
-	for <buildroot@archiver.kernel.org>; Thu, 21 Aug 2025 18:57:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F562CA0EFF
+	for <buildroot@archiver.kernel.org>; Thu, 21 Aug 2025 18:57:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0E21B84648;
-	Thu, 21 Aug 2025 18:57:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 53A8C61B7A;
+	Thu, 21 Aug 2025 18:57:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Es18-pSR1MQM; Thu, 21 Aug 2025 18:57:52 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FLRnsWwzfhGG; Thu, 21 Aug 2025 18:57:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0FB518465F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D280361B60
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0FB518465F;
-	Thu, 21 Aug 2025 18:57:52 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 56BE91C7
+	by smtp3.osuosl.org (Postfix) with ESMTP id D280361B60;
+	Thu, 21 Aug 2025 18:57:54 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id C98971C7
  for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:57:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3DE9E8461E
- for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:57:14 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7DBCD418CA
+ for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:57:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qfUOsqE4UuVV for <buildroot@buildroot.org>;
- Thu, 21 Aug 2025 18:57:13 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Q2O5Mqks2VZy for <buildroot@buildroot.org>;
+ Thu, 21 Aug 2025 18:57:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 82D5384600
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C83F641884
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 82D5384600
- for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:57:13 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C83F641884
+ for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:57:09 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 72578813AF; Thu, 21 Aug 2025 18:57:13 +0000 (UTC)
+ id C4CB9813AF; Thu, 21 Aug 2025 18:57:09 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 21 Aug 2025 16:29:52 +0200
+Date: Thu, 21 Aug 2025 16:28:33 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 3b58729fe5594abfb11e9dea0593b510326edb98
-X-Git-Newrev: 22388b67c5dd44e6ad33925ae67efce71ebd316a
+X-Git-Oldrev: 66750d2d72edd7dba2d3769679bc89441add9a7e
+X-Git-Newrev: 86c3077ff45db88fba21a85b2580f395b221c8b5
 X-Patchwork-Hint: ignore
-Message-Id: <20250821185713.72578813AF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/gstreamer1: bump
- to version 1.24.13
+Message-Id: <20250821185709.C4CB9813AF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x]
+ support/testing/tests/fs/test_iso9660.py: use a more recent toolchain
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,44 +66,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=22388b67c5dd44e6ad33925ae67efce71ebd316a
+commit: https://git.buildroot.net/buildroot/commit/?id=86c3077ff45db88fba21a85b2580f395b221c8b5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-For various bugfixes. For details, see the release notes:
-https://gstreamer.freedesktop.org/releases/1.24/
+The ISO9660 tests are currently using an old 2017 toolchain. Let's
+switch to a modern toolchain, which is regularly updated. Also, we use
+a toolchain based on glibc since grub2 doesn't build with recent
+uClibc toolchains.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+It will work around build issues with syslinux.
+
+Fixes:
+
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/10975828975
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/10975828871
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/10975828770
+
+(Even though those should be fixed separately, as syslinux should
+continue to build with old compilers not supporting std=gnu17)
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit f001f40c8bf74ea7290606ffb9a79daa13f9daac)
+(cherry picked from commit 2e2bfd678b9e868ddb6ad559a726b138d2ec5110)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/gstreamer1/gstreamer1/gstreamer1.hash | 4 ++--
- package/gstreamer1/gstreamer1/gstreamer1.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ support/testing/tests/fs/test_iso9660.py | 11 ++---------
+ 1 file changed, 2 insertions(+), 9 deletions(-)
 
-diff --git a/package/gstreamer1/gstreamer1/gstreamer1.hash b/package/gstreamer1/gstreamer1/gstreamer1.hash
-index 7cc992a5cb..edfd60d9d3 100644
---- a/package/gstreamer1/gstreamer1/gstreamer1.hash
-+++ b/package/gstreamer1/gstreamer1/gstreamer1.hash
-@@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.24.11.tar.xz.sha256sum
--sha256  093a379602a250d5cd33b88e723757c80198317efde33893edf3c87b6e53b907  gstreamer-1.24.11.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.24.13.tar.xz.sha256sum
-+sha256  ed4678e1d0708db01a469ae5dd31c10cac73c0fb3f7c2c471b0d3cab0affc7d1  gstreamer-1.24.13.tar.xz
- sha256  ad2eec519ebd4b5df86ea84dff24ae3bfa2edea846a703b58902dd221ae375db  COPYING
-diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
-index e06309beb4..e9299e9e93 100644
---- a/package/gstreamer1/gstreamer1/gstreamer1.mk
-+++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/support/testing/tests/fs/test_iso9660.py b/support/testing/tests/fs/test_iso9660.py
+index 3d08f2e895..1b86bfbfc1 100644
+--- a/support/testing/tests/fs/test_iso9660.py
++++ b/support/testing/tests/fs/test_iso9660.py
+@@ -4,16 +4,9 @@ import infra.basetest
  
--GSTREAMER1_VERSION = 1.24.11
-+GSTREAMER1_VERSION = 1.24.13
- GSTREAMER1_SOURCE = gstreamer-$(GSTREAMER1_VERSION).tar.xz
- GSTREAMER1_SITE = https://gstreamer.freedesktop.org/src/gstreamer
- GSTREAMER1_INSTALL_STAGING = YES
+ BASIC_CONFIG = \
+     """
+-    BR2_x86_pentium4=y
++    BR2_x86_core2=y
+     BR2_TOOLCHAIN_EXTERNAL=y
+-    BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+-    BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+-    BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-i386-pentium4-full-2017.05-1078-g95b1dae.tar.bz2"
+-    BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
+-    BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_2=y
+-    BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+-    # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+-    BR2_TOOLCHAIN_EXTERNAL_CXX=y
++    BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_CORE2_GLIBC_STABLE=y
+     BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+     BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
+     BR2_LINUX_KERNEL=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
