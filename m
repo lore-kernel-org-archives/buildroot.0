@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 853D3CA0EFA
-	for <buildroot@archiver.kernel.org>; Thu, 21 Aug 2025 18:57:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9A0FCA0EFA
+	for <buildroot@archiver.kernel.org>; Thu, 21 Aug 2025 18:58:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5F14684643;
-	Thu, 21 Aug 2025 18:57:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BD1B9846B5;
+	Thu, 21 Aug 2025 18:58:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Z_GbAeZSikdS; Thu, 21 Aug 2025 18:57:56 +0000 (UTC)
+ id PWK8zj060vc1; Thu, 21 Aug 2025 18:57:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 337278465F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AEE8B846AF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 337278465F;
-	Thu, 21 Aug 2025 18:57:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AEE8B846AF;
+	Thu, 21 Aug 2025 18:57:59 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id D77781C8
- for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:57:15 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 11D7A1C7
+ for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:57:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AD4FD418BB
- for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:57:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4FD5A418D3
+ for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:57:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id V61DkPT-zj5Q for <buildroot@buildroot.org>;
- Thu, 21 Aug 2025 18:57:11 +0000 (UTC)
+ id zqRAqjs18jnp for <buildroot@buildroot.org>;
+ Thu, 21 Aug 2025 18:57:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B641D41884
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 82BDF418CC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B641D41884
- for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:57:11 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 82BDF418CC
+ for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:57:12 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A75D8813AF; Thu, 21 Aug 2025 18:57:11 +0000 (UTC)
+ id 7375F813AF; Thu, 21 Aug 2025 18:57:12 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 21 Aug 2025 16:28:56 +0200
+Date: Thu, 21 Aug 2025 16:29:40 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: cd8c99bfdacb8304216b386e838ada76fcd0a77d
-X-Git-Newrev: 6243ccd33736993b69ba8e8b937e9a62bc78d196
+X-Git-Oldrev: 585d0f57e491a886fce95d7b85ef8569eeb837ed
+X-Git-Newrev: 3b58729fe5594abfb11e9dea0593b510326edb98
 X-Patchwork-Hint: ignore
-Message-Id: <20250821185711.A75D8813AF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] boot/grub2: add patches
- to fix numerous CVEs
+Message-Id: <20250821185712.7375F813AF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/go: security bump
+ to version 1.23.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,160 +66,69 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6243ccd33736993b69ba8e8b937e9a62bc78d196
+commit: https://git.buildroot.net/buildroot/commit/?id=3b58729fe5594abfb11e9dea0593b510326edb98
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-This patch brings the entire stack of Debian patches on grub2 titled
-"cve-2025-jan" and available at:
+go1.23.11 (released 2025-07-08) includes security fixes to the go command,
+as well as bug fixes to the compiler, the linker, and the runtime.
+See:
+- https://go.dev/doc/devel/release#go1.23.11
+- https://github.com/golang/go/issues?q=milestone%3AGo1.23.11+label%3ACherryPickApproved
+The 1.23.11 version fixes:
+- https://www.cve.org/CVERecord?id=CVE-2025-4674
 
-  https://salsa.debian.org/grub-team/grub/-/tree/debian/2.12-9/debian/patches/cve-2025-jan?ref_type=tags
+go1.23.12 (released 2025-08-06) includes security fixes to the database/sql
+and os/exec packages, as well as bug fixes to the runtime.
+See:
+- https://go.dev/doc/devel/release#go1.23.12
+- https://github.com/golang/go/issues?q=milestone%3AGo1.23.12+label%3ACherryPickApproved
+The 1.23.12 version fixes:
+- https://www.cve.org/CVERecord?id=CVE-2025-47907
 
-As of this exact Debian grub2 version 2.12-9. Some minor conflicts had
-to be fixed. All patches are in upstream Grub master, but mixed with
-hundreds of other changes, which is why Debian's effort to backport
-them has been leveraged here.
-
-In addition to those patches, 2 extra patches are added:
-
- 0073-net-drivers-ieee1275-ofnet-Add-missing-grub_malloc.patch
- 0074-Constant-time-grub_crypto_memcmp.patch
-
-The first one fixes an issue in one of the earlier patches. The fix is
-not in Debian, but is in upstream Grub.
-
-The second one fixes another CVE, not fixed in Debian, but fixed in
-OpenSUSE. This fix is not upstream as upstream has decided to move to
-libgcrypt instead to avoid the problem, but that's a fairly large
-change.
-
-Overall, this patch fixes all CVEs currently reported by pkg-stats
-against our grub2 package, namely:
-
-CVE-2024-45777
-CVE-2024-45778
-CVE-2024-45779
-CVE-2024-45780
-CVE-2024-45782
-CVE-2024-56737
-CVE-2024-56738
-CVE-2025-0678
-CVE-2025-0684
-CVE-2025-0685
-CVE-2025-0686
-CVE-2025-0689
-CVE-2025-1125
-
-With the previous fixes on runtime tests added (to use glibc
-toolchains to build grub2 tests), this commit successfully passes all
-tests:
-
-- The ISO9660 tests that use grub2:
-  https://gitlab.com/tpetazzoni/buildroot/-/pipelines/1985234563
-
-- The grub2 tests:
-  https://gitlab.com/tpetazzoni/buildroot/-/pipelines/1985234685
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-[Julien: also tested by building and booting
- - qemu_aarch64_sbsa_defconfig
- - qemu_arm_ebbr_defconfig
- - qemu_loongarch64_virt_efi_defconfig
- - qemu_riscv64_virt_efi_defconfig
- - pc_x86_64_bios_defconfig
- - pc_x86_64_efi_defconfig
-]
-Tested-by: Julien Olivain <ju.o@free.fr>
-[Julien:
- - fix patch #72 upstream link to point to the initial patch
-   sumbission rather than a reply
- - merge two _IGNORE_CVES blocks for patch #50 into a single one
- - order _IGNORE_CVES blocks by numerical patch order
- - order numerically the CVE list in commit log
- - add a "Fixes:" tag in patch #74 since its commit log does not
-   mention the CVE.
-]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+[Julien: add links to release notes, fixed issues and CVEs]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-
-(cherry picked from commit ded3e0045aeeab226d2770fe8de522422c174434)
+(cherry picked from commit 84276c0449b3c902ec73247bf74a1104e4c4b1fa)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- boot/grub2/0002-misc-Implement-grub_strlcpy.patch  |  70 +++
- boot/grub2/0003-fs-ufs-Fix-a-heap-OOB-write.patch  |  36 ++
- ...-hfs-Fix-stack-OOB-write-with-grub_strcpy.patch |  36 ++
- ...ar-Initialize-name-in-grub_cpio_find_file.patch |  45 ++
- ...-Integer-overflow-leads-to-heap-OOB-write.patch |  94 ++++
- ...7-fs-f2fs-Set-a-grub_errno-if-mount-fails.patch |  36 ++
- ...s-hfsplus-Set-a-grub_errno-if-mount-fails.patch |  40 ++
- ...s-iso9660-Set-a-grub_errno-if-mount-fails.patch |  38 ++
- boot/grub2/0010-fs-iso9660-Fix-invalid-free.patch  |  55 ++
- .../0011-fs-jfs-Fix-OOB-read-in-jfs_getent.patch   |  68 +++
- ...OOB-read-caused-by-invalid-dir-slot-index.patch |  69 +++
- ...full-40-bits-offset-and-address-for-a-dat.patch | 133 +++++
- ...nsistent-signed-unsigned-types-usage-in-r.patch |  90 ++++
- ...Fix-out-of-bounds-read-for-inline-extents.patch |  51 ++
- .../grub2/0016-fs-xfs-Fix-out-of-bounds-read.patch |  48 ++
- ...suring-failing-to-mount-sets-a-grub_errno.patch |  47 ++
- .../0018-kern-file-Ensure-file-data-is-set.patch   |  37 ++
- ...e-Implement-filesystem-reference-counting.patch | 449 +++++++++++++++++
- ...pback-Reference-tracking-for-the-loopback.patch | 108 ++++
- .../0021-kern-disk-Limit-recursion-depth.patch     | 125 +++++
- ...partition-Limit-recursion-in-part_iterate.patch |  49 ++
- ...-script-execute-Limit-the-recursion-depth.patch |  60 +++
- ...ter-net_default_ip-and-net_default_mac-va.patch |  34 ++
- ...variables-hooks-when-interface-is-unregis.patch |  93 ++++
- ...-OOB-write-in-grub_net_search_config_file.patch |  89 ++++
- ...tp-Fix-stack-buffer-overflow-in-tftp_open.patch | 120 +++++
- ...rs-jpeg-Do-not-permit-duplicate-SOF0-mark.patch |  38 ++
- ...ix-for-an-integer-overflow-in-grub_dl_ref.patch | 143 ++++++
- ...ck-for-the-SHF_INFO_LINK-flag-in-grub_dl_.patch |  46 ++
- ...xtcmd-Missing-check-for-failed-allocation.patch |  39 ++
- .../0032-commands-ls-Fix-NULL-dereference.patch    |  37 ++
- ...p-Unregister-the-check_signatures-hooks-o.patch |  36 ++
- ...l-Remove-variables-hooks-on-module-unload.patch |  42 ++
- ...t-Remove-variables-hooks-on-module-unload.patch |  39 ++
- ...eger-overflow-leads-to-heap-OOB-write-or-.patch |  40 ++
- ...-Integer-overflow-leads-to-heap-OOB-write.patch |  58 +++
- ...ad-Fix-an-integer-overflow-when-supplying.patch |  74 +++
- ...st-Stack-overflow-due-to-unlimited-recurs.patch |  88 ++++
- ...nicmd-Block-the-dump-command-in-lockdown-.patch |  38 ++
- ...mrw-Disable-memory-reading-in-lockdown-mo.patch |  55 ++
- ...xdump-Disable-memory-reading-in-lockdown-.patch |  42 ++
- .../grub2/0043-fs-bfs-Disable-under-lockdown.patch |  57 +++
- ...s-Disable-many-filesystems-under-lockdown.patch | 396 +++++++++++++++
- ...Use-safe-math-macros-to-prevent-overflows.patch | 551 +++++++++++++++++++++
- ...t-overflows-when-allocating-memory-for-ar.patch |  47 ++
- ...if-returned-pointer-for-allocated-memory-.patch | 157 ++++++
- ...75-ofdisk-Call-grub_ieee1275_close-when-g.patch |  36 ++
- ...Use-safe-math-macros-to-prevent-overflows.patch | 362 ++++++++++++++
- ...overflows-when-allocating-memory-for-arra.patch |  87 ++++
- ...overflows-when-assigning-returned-values-.patch | 110 ++++
- ...Use-safe-math-macros-to-prevent-overflows.patch | 143 ++++++
- ...ent-overflows-when-allocating-memory-for-.patch |  45 ++
- ...k-if-returned-pointer-for-allocated-memor.patch |  93 ++++
- ...missing-NULL-check-after-grub_strdup-call.patch |  29 ++
- ...Use-safe-math-macros-to-prevent-overflows.patch | 250 ++++++++++
- ...-overflows-when-allocating-memory-for-arr.patch |  50 ++
- ...f-returned-pointer-for-allocated-memory-i.patch |  36 ++
- ...-fs-sfs-Check-if-allocated-memory-is-NULL.patch |  37 ++
- ...ute-Fix-potential-underflow-and-NULL-dere.patch |  37 ++
- ...sdep-unix-getroot-Fix-potential-underflow.patch |  40 ++
- ...Ensure-consistent-overflow-error-messages.patch |  60 +++
- ...i-Define-GRUB_EHCI_TOGGLE-as-grub_uint32_.patch |  35 ++
- ...-Use-safe-math-to-avoid-an-integer-overfl.patch |  46 ++
- ...ion-Add-sanity-check-after-grub_strtoul-c.patch |  51 ++
- ...-Add-sanity-check-after-grub_strtoul-call.patch |  62 +++
- ...86-linux-Cast-left-shift-to-grub_uint32_t.patch |  35 ++
- ...i386-bsd-Use-safe-math-to-avoid-underflow.patch |  61 +++
- ...ork-out-of-bounds-read-for-inline-and-ext.patch |  69 +++
- ...grub_xfs_iterate_dir-return-value-in-case.patch |  53 ++
- ...agate-incorrect-inode-error-from-grub_xfs.patch |  77 +++
- ...le-root-inode-read-failure-in-grub_xfs_mo.patch |  29 ++
- ...rs-ieee1275-ofnet-Add-missing-grub_malloc.patch |  36 ++
- .../0074-Constant-time-grub_crypto_memcmp.patch    |  63 +++
- boot/grub2/grub2.mk                                |  31 ++
- 74 files changed, 6206 insertions(+)
+ package/go/go.hash | 14 +++++++-------
+ package/go/go.mk   |  2 +-
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/package/go/go.hash b/package/go/go.hash
+index 62e0772e2e..dc88e9beab 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,9 +1,9 @@
+ # sha256 checksum from https://go.dev/dl/
+-sha256  800a7ae1bff179a227b653a2f644517c800443b8b4abf3273af5e1cb7113de59  go1.23.10.src.tar.gz
+-sha256  ded3c0a8d6d2a0ea5e7599c49678efa05cda139d31baaaf7d8d536a9e4cc19b2  go1.23.10.linux-386.tar.gz
+-sha256  535f9f81802499f2a7dbfa70abb8fda3793725fcc29460f719815f6e10b5fd60  go1.23.10.linux-amd64.tar.gz
+-sha256  bfb1f1df7173f44648ee070a39ab0481068632f595305a699d89cd56a33b8081  go1.23.10.linux-arm64.tar.gz
+-sha256  b6e00c9a72406d394b9f167e74670e28b72ed559cca8115b21be1cb9d5316cb4  go1.23.10.linux-armv6l.tar.gz
+-sha256  8fb94455cfa5e9a5e8af2bfbc7323a6fed2dabaffda1a69dae5dd41b669bbb57  go1.23.10.linux-ppc64le.tar.gz
+-sha256  7d0e8651eb54fce5cfe2d4b412ddfa50144ce21907f72192a6549ffe03db4e1f  go1.23.10.linux-s390x.tar.gz
++sha256  e1cce9379a24e895714a412c7ddd157d2614d9edbe83a84449b6e1840b4f1226  go1.23.12.src.tar.gz
++sha256  3b2fd446e26642555d1446a38ccbefb2a30bba3179d3ef132ed64d3c63b0c42a  go1.23.12.linux-386.tar.gz
++sha256  d3847fef834e9db11bf64e3fb34db9c04db14e068eeb064f49af747010454f90  go1.23.12.linux-amd64.tar.gz
++sha256  52ce172f96e21da53b1ae9079808560d49b02ac86cecfa457217597f9bc28ab3  go1.23.12.linux-arm64.tar.gz
++sha256  9704eba01401a3793f54fac162164b9c5d8cc6f3cab5cee72684bb72294d9f41  go1.23.12.linux-armv6l.tar.gz
++sha256  1a7cc5f7baeaf39125dce5d660a39438e7f0e04d13d3498590d240aae976b565  go1.23.12.linux-ppc64le.tar.gz
++sha256  2f43708aa0922d692da0a1fc775475c343907610bec77002de1bbe37601ea338  go1.23.12.linux-s390x.tar.gz
+ sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 744bb0d3ba..69ca746783 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GO_VERSION = 1.23.10
++GO_VERSION = 1.23.12
+ 
+ HOST_GO_GOPATH = $(HOST_DIR)/share/go-path
+ HOST_GO_HOST_CACHE = $(HOST_DIR)/share/host-go-cache
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
