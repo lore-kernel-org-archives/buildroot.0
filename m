@@ -1,106 +1,106 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67E5CCA0EFF
-	for <buildroot@archiver.kernel.org>; Thu, 21 Aug 2025 19:21:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40DA8CA0EFA
+	for <buildroot@archiver.kernel.org>; Thu, 21 Aug 2025 19:21:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3754D61AE9;
-	Thu, 21 Aug 2025 19:21:27 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id c36PrF6mM1yQ; Thu, 21 Aug 2025 19:21:25 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6B96A61BD5
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6B96A61BD5;
-	Thu, 21 Aug 2025 19:21:22 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0F97C25B
- for <buildroot@buildroot.org>; Thu, 21 Aug 2025 19:20:46 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8F14084679
- for <buildroot@buildroot.org>; Thu, 21 Aug 2025 19:20:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 15E368469C;
+	Thu, 21 Aug 2025 19:21:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qNmz7qKW9S3z for <buildroot@buildroot.org>;
- Thu, 21 Aug 2025 19:20:44 +0000 (UTC)
+ id e9q68uKdq_O7; Thu, 21 Aug 2025 19:21:29 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B24B384742
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id B24B384742;
+	Thu, 21 Aug 2025 19:21:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id B519F1C8
+ for <buildroot@buildroot.org>; Thu, 21 Aug 2025 19:20:51 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9B813846E1
+ for <buildroot@buildroot.org>; Thu, 21 Aug 2025 19:20:51 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YBjABAHJXQ7C for <buildroot@buildroot.org>;
+ Thu, 21 Aug 2025 19:20:50 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
+ client-ip=2a00:1450:4864:20::436; helo=mail-wr1-x436.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 41C2684683
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 41C2684683
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 41C2684683
- for <buildroot@buildroot.org>; Thu, 21 Aug 2025 19:20:43 +0000 (UTC)
-Received: by mail-wr1-x42b.google.com with SMTP id
- ffacd0b85a97d-3c5e043c85bso17211f8f.1
- for <buildroot@buildroot.org>; Thu, 21 Aug 2025 12:20:43 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E1EDB846D3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E1EDB846D3
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E1EDB846D3
+ for <buildroot@buildroot.org>; Thu, 21 Aug 2025 19:20:49 +0000 (UTC)
+Received: by mail-wr1-x436.google.com with SMTP id
+ ffacd0b85a97d-3b9e41101d4so867951f8f.2
+ for <buildroot@buildroot.org>; Thu, 21 Aug 2025 12:20:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1755804042; x=1756408842;
+ d=1e100.net; s=20230601; t=1755804048; x=1756408848;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=6a1b6DpDoB2DLCZJg+Q1KoM2wX+sJwlxCWvbPYjhucA=;
- b=wfOMGVErHabMM9eYH9/kEE8mv8hY85xnXBZhlGQPoeDLEHyXqcb/DQNMgNIX1kyEON
- z9oz4XDm0n55fM84JQ+LN/nGhU79JuatGl1odOWxL/Hn+r0b0HYa1w7ST7qQxNv/NnQI
- 7uAC9x8V7rXaOKlPqp+ZdfvW7L+qgj35HmCYCHKjSfQAdmZIJII7wPKw2R0JDkxtNnb8
- lodc9ZZzm+68MZtPjpN5nSsTdkWkYZ/g1kxgnQCVRgsPXw4JE9U45kOsiJiHw5HGKHiq
- 4up0sry5+pNtO7qgKYiR6m3vg9zHDcSDhWSpQvTNJiZGrzld0wKlV58jx65Q2ZKAg7Up
- sBfw==
+ bh=WLlQwhlD/JTi7Ikf11a0Ko2JTa5IcLkLx9yorV7SkVg=;
+ b=oBoJjXMwvqxegVHD8c+vrJjDj15FjZujY3HyPl78pgyq0xHVLo4TM0Ws4WYs0snC3T
+ 7MX+pYXLr01Ycj/u2DPJ28LliXBuobM9+rOgI/VUO6E2OIMyNZyqnrtBcNbUPJ9Bj72f
+ dB9Ng/oLOdiLqHmZxCS72wWdPEg/rCfOhHEIAlIPGn6augD/QKkXiA2UYCd2hclTJNrT
+ KgvMbmQaDCTzy6qgj4w35bQBUsnS91T1boarQJt1j2v61lu91sUJQFEx64Uc2kD/vNfu
+ EvCJL8mW4KeIf8RTPfMUTZDu3QEDcE0CB8ZsGdhSuoJ1idbLJBiTIMo0XewfP58oyFn0
+ NJSQ==
 X-Forwarded-Encrypted: i=1;
- AJvYcCVdOTO9YwVz6KA+4a/OJlb29qjabCz+Ww3LABxruyWxzyq8/tH9zIbTlpyd9BefPIG17uoK2AhhYKE=@buildroot.org
-X-Gm-Message-State: AOJu0YzrkpKivX1TQkc1DP6deo3vuc9SMGni3BJSpIHFXM95xkpwazG3
- NqnoYvwhV1Z0Y6NALRv5yDVQTlzSNUHCUY1PwVOCSqHt6DTgNC0pEZm0BxCsq+HVt2I=
-X-Gm-Gg: ASbGnctedSl8qxD3lbk/RUjPINNGSNO0gJcZjE8F7Y5WjasJii3lzsM80QETPuHtDvg
- qbSQq8RAgudskTJNf59aaD7ZUWC52/2IYxYU3sMowRFChOeHVZFkbsrzZ9JwG2IoYf9jHDIbQPM
- +iuqTrWRZogg/ODlypOetWUYSZPRmEuwIikWkmnA6M1tYRsm+XYn0vPHmEUPLI8QA1gjFULTbwx
- 8iDMoMQC+zQT7RZF8GnXa1BDwYPv66GaajBcAniCDnd0pkwgRGUzdOoXL6zTNWYz/S3K3Om4jkm
- 4B4PCob7u1u4oGj5AGaBDT/39cRTdY2NKaxKWIP7Pv4hTaZEhJ0lLTFLQY6SUnypdULOo1R5E27
- IjT0DXUCPAF3rBAy4O4X4tEQY
-X-Google-Smtp-Source: AGHT+IEXiE/1i9UnARpcYoW7Mww/52zsB1+KE1OOn1GHgh93JQqNOZUPDbyV71wUOReK23d/lePXAQ==
-X-Received: by 2002:a5d:5c84:0:b0:3a4:f7ae:77c9 with SMTP id
- ffacd0b85a97d-3c5d25d6679mr179151f8f.5.1755804041996; 
- Thu, 21 Aug 2025 12:20:41 -0700 (PDT)
+ AJvYcCXsPGbkndb2ciForY4otsqpqdSbpo2kE1qduOft/y2bW9VXzEYLt+KlJp1TBKQUrK1wYoqd+zB+V+c=@buildroot.org
+X-Gm-Message-State: AOJu0YxJBiqpUtkx8i306PxgwUEdPuZx6CbGp0oUSera2sDD+6ZRtcrX
+ 2lGC88Bs9dz+m/ftUXDD2zhzbKdtU3+Y4mh01VsHdrTewR3wrc11zYJiNR0dpVRk44hAAY6yokV
+ 8vV7XdLc=
+X-Gm-Gg: ASbGnct82DeHpx8BvmX20+YpU49gK0M2OnghK4aGEHkuTbnPR2Mw0kJ9ZK2Hpq1AIA6
+ Ex/s6LTLfTTK0+ZHT/90Wv56PGi1EoOtVYBg0Z2rFiEWlXXLB9LnvtXhSFTBDMcCmwJX5bd050b
+ 5gUpl48Bt4qZXLwOfEKclIY2Dw6dQYt6d2tR2O4MX+s3orpJCB6VsD8QdgfPZV1TYUR/3Vh/je6
+ 5k34PhYZmuHw3B6JsC4w22PID6tXcMl5/6k6pvr9goKIx/hX63niAe9dV5zKWmZV+OQr8CZFA0b
+ l4ZlIyyxoLo2n6MTigdOfZBdqTRVckPBytcF/VQkbWYKggrn4htXFH8+ChUFFB5Vrh/vpwigamh
+ hK7c9FhLxTDmdTw==
+X-Google-Smtp-Source: AGHT+IGCLL10obRFZHXV0v+d7afzT1zS3l5ytkVI6DWrgdB14qxIQVCMOsqq8SsbMIKQ7v5SDONSMQ==
+X-Received: by 2002:a05:6000:26c2:b0:3c3:ae31:7183 with SMTP id
+ ffacd0b85a97d-3c5dc734292mr94442f8f.34.1755804046270; 
+ Thu, 21 Aug 2025 12:20:46 -0700 (PDT)
 Received: from arch ([79.132.233.79]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3c52121313asm2412056f8f.57.2025.08.21.12.20.41
+ 5b1f17b1804b1-45b4e2534f0sm18170565e9.1.2025.08.21.12.20.45
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 21 Aug 2025 12:20:41 -0700 (PDT)
-To: Quentin Schulz <foss+buildroot@0leil.net>
+ Thu, 21 Aug 2025 12:20:45 -0700 (PDT)
+To: Edgar Bonet <bonet@grenoble.cnrs.fr>
 Cc: Thomas Perale <thomas.perale@mind.be>,
-	buildroot@buildroot.org
-Date: Thu, 21 Aug 2025 21:20:41 +0200
-Message-ID: <20250821192041.23347-1-thomas.perale@mind.be>
+ Buildroot development <buildroot@buildroot.org>
+Date: Thu, 21 Aug 2025 21:20:45 +0200
+Message-ID: <20250821192045.23554-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250307-setserial-fix-v1-0-c37c1e7e8234@cherry.de>
-References: <20250307-setserial-fix-v1-0-c37c1e7e8234@cherry.de>
+In-Reply-To: <e4faa576-d8ee-4805-aad8-f19e388fa3cb@grenoble.cnrs.fr>
+References: <e4faa576-d8ee-4805-aad8-f19e388fa3cb@grenoble.cnrs.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1755804042; x=1756408842; darn=buildroot.org;
+ d=mind.be; s=google; t=1755804048; x=1756408848; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=6a1b6DpDoB2DLCZJg+Q1KoM2wX+sJwlxCWvbPYjhucA=;
- b=ZsXZu+wktdE0w1Ix9Io1gsqa7qKOcL5XccEV6pi2x+GUtTBLvtVib+a4tq+6FVTaoi
- VTvssptXcTRNloHpT4hpzhMkaXONe+O3DEWC6SSGXK5NfvImA9pSQjHowhB/3igSIUhP
- G9ZTbTQIhhTCMJ8Ox43TLSbznzdD49JROyLKLm5eX5mkpQKiIaMwhIQ65gWjD4+mviTD
- BOXOzOQFOMQrcR3sa5P0s9mCMR98Ly1KNOCicZlHnnCQ7H2vZZDYXo703Ctopf++JKc3
- Ieud4JbzeATkafqOric89Wk5uFlYP3VSe0coKPespOSp4KDcWZNbuRv4uj3ZkdccLi7H
- 8hww==
+ bh=WLlQwhlD/JTi7Ikf11a0Ko2JTa5IcLkLx9yorV7SkVg=;
+ b=CpoMB2cQbhTJkGLiZQA0rMviwyNNLciHaecjo0XxFQuKBl8PQBAqkw9pBW2TBo9mGg
+ mEnUB6jUZEX8PcbFCjBY/dFij79Y3AREbycYhF0ZMMvb+MLQmdXYRTjYQHl77Ul8UjM6
+ l/Z+QtfeuRapdAg9T28TFSZ/yAi9Nc/d+bd2YaX8IKsz1lBISzskIWoEbfzxXRoXt0Yb
+ iFVERs8eQWon55b1y0Ihzw1gWd3SsdA+IekAyVhs+AV0QyHMqI+PKdi46b/bKNckXZ6x
+ Thl34Ws/JMM7X+6zsamCvTAsbx7TMGffHUBwe0WqsJTGaulgCYG3k1Bblpzq+/XbcNQQ
+ 62CA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=ZsXZu+wk
-Subject: Re: [Buildroot] [PATCH 0/4] package/setserial: patch with _PATCH
- content and fix build on newer toolchains
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=CpoMB2cQ
+Subject: Re: [Buildroot] [PATCH 1/1] configs/acmesystems_acqua_a5_*: bump to
+ Linux 6.12.41
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -120,47 +120,52 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> The patching logic is broken for a while (only 13 years :) ) since
-> commit 64ac7199525f ("apply-patches.sh: add recursivity when scanning
-> patchdir") where support for patch files whose file extension is .dpatch
-> got dropped, therefore the patch were simply and silently not applied
-> anymore.
-> 
-> This series fixes that but is a bit more complex because we have patches
-> inside Buildroot tree that conflict with the patches we get from the
-> package's upstream.
-> 
-> Finally, setserial currently doesn't build on the Aarch64 external
-> toolchain, so this fixes that by running ./configure (via _AUTORECONF =
-> YES) to fix a configure-time compiler warning that fails the compiler
-> check in the configure step, and also update to latest version available
-> in Debian tree which includes necessary patches to fix other warnings
-> returned by the compiler.
-> 
-> Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
+> Signed-off-by: Edgar Bonet <bonet@grenoble.cnrs.fr>
 
 Applied to 2025.02.x & 2025.05.x. Thanks
 
 > ---
-> Quentin Schulz (4):
->       package/setserial: apply patches from setserial_2.17-45.3.diff.gz
->       package/setserial: autoreconfigure for compatibility with newer toolchains
->       package/setserial: update to 2.17-57 for compatibility with newer toolchains
->       package/setserial: simplify patching
+>  board/acmesystems/acqua-a5/patches/linux/linux.hash | 2 +-
+>  configs/acmesystems_acqua_a5_256mb_defconfig        | 2 +-
+>  configs/acmesystems_acqua_a5_512mb_defconfig        | 2 +-
+>  3 files changed, 3 insertions(+), 3 deletions(-)
 > 
->  package/setserial/0001-build-system-fix.patch      | 33 +++++++++++++++++++---
->  .../setserial/0002-tiocghayesesp-build-fix.patch   |  7 +++--
->  package/setserial/setserial.hash                   |  4 +--
->  package/setserial/setserial.mk                     | 23 +++++++++++----
->  4 files changed, 53 insertions(+), 14 deletions(-)
-> ---
-> base-commit: 17134726213a2188946a07b73ff2e2d0363ad636
-> change-id: 20250307-setserial-fix-1d908277767a
-> 
-> Best regards,
+> diff --git a/board/acmesystems/acqua-a5/patches/linux/linux.hash b/board/acmesystems/acqua-a5/patches/linux/linux.hash
+> index 7a4c4e57c9..2c86a53263 100644
+> --- a/board/acmesystems/acqua-a5/patches/linux/linux.hash
+> +++ b/board/acmesystems/acqua-a5/patches/linux/linux.hash
+> @@ -1,2 +1,2 @@
+>  # Locally calculated
+> -sha256  87be0360df0931b340d2bac35161a548070fbc3a8c352c49e21e96666c26aeb4  linux-6.12.9.tar.xz
+> +sha256  6b19a3ae99423de2416964d67251d745910277af258b4c4c63e88fd87dbf0e27  linux-6.12.41.tar.xz
+> diff --git a/configs/acmesystems_acqua_a5_256mb_defconfig b/configs/acmesystems_acqua_a5_256mb_defconfig
+> index a50e306b1b..9e6d35a859 100644
+> --- a/configs/acmesystems_acqua_a5_256mb_defconfig
+> +++ b/configs/acmesystems_acqua_a5_256mb_defconfig
+> @@ -10,7 +10,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+>  BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/acmesystems/acqua-a5/genimage.cfg"
+>  BR2_LINUX_KERNEL=y
+>  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.41"
+>  BR2_LINUX_KERNEL_DEFCONFIG="sama5"
+>  BR2_LINUX_KERNEL_DTS_SUPPORT=y
+>  BR2_LINUX_KERNEL_CUSTOM_DTS_DIR="board/acmesystems/acqua-a5/dts"
+> diff --git a/configs/acmesystems_acqua_a5_512mb_defconfig b/configs/acmesystems_acqua_a5_512mb_defconfig
+> index 6ae8d037e7..8e6d9774da 100644
+> --- a/configs/acmesystems_acqua_a5_512mb_defconfig
+> +++ b/configs/acmesystems_acqua_a5_512mb_defconfig
+> @@ -10,7 +10,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+>  BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/acmesystems/acqua-a5/genimage.cfg"
+>  BR2_LINUX_KERNEL=y
+>  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.41"
+>  BR2_LINUX_KERNEL_DEFCONFIG="sama5"
+>  BR2_LINUX_KERNEL_DTS_SUPPORT=y
+>  BR2_LINUX_KERNEL_CUSTOM_DTS_DIR="board/acmesystems/acqua-a5/dts"
 > -- 
-> Quentin Schulz <quentin.schulz@cherry.de>
-> 
+> 2.43.0
 > _______________________________________________
 > buildroot mailing list
 > buildroot@buildroot.org
