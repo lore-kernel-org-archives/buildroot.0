@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B2B9CA0EFA
-	for <buildroot@archiver.kernel.org>; Thu, 21 Aug 2025 18:57:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DFF9CA0EFF
+	for <buildroot@archiver.kernel.org>; Thu, 21 Aug 2025 18:57:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2A3B261AB4;
-	Thu, 21 Aug 2025 18:57:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2308B616FD;
+	Thu, 21 Aug 2025 18:57:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9-hYN2z4Ux-n; Thu, 21 Aug 2025 18:57:32 +0000 (UTC)
+ id HhPFuSLOa9fz; Thu, 21 Aug 2025 18:57:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5214361ABE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9B7C261ABE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5214361ABE;
-	Thu, 21 Aug 2025 18:57:32 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0733D1C7
- for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:57:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9B7C261ABE;
+	Thu, 21 Aug 2025 18:57:33 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id CF7A31C8
+ for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:57:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DB52C616AA
- for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:57:03 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C217A418CC
+ for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:57:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BpWKaf2z51cj for <buildroot@buildroot.org>;
- Thu, 21 Aug 2025 18:57:02 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lamCJYbBUrNu for <buildroot@buildroot.org>;
+ Thu, 21 Aug 2025 18:57:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 90393616BA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F307841884
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 90393616BA
- for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:57:02 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id F307841884
+ for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:57:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7F81E87A07; Thu, 21 Aug 2025 18:57:02 +0000 (UTC)
+ id E3BF1813AF; Thu, 21 Aug 2025 18:57:08 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 21 Aug 2025 10:40:57 +0200
+Date: Thu, 21 Aug 2025 10:41:10 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 836be446b28027db6573a99bfb73b8e87f168721
-X-Git-Newrev: 7e67a0b99baadf321feacc7870bdc3e8bac3a0ae
+X-Git-Oldrev: 30d84a9927b58bcf9bdd0190cfebd289741309ed
+X-Git-Newrev: 95bd30893f3b9a77cc883aff57f758d1d008570d
 X-Patchwork-Hint: ignore
-Message-Id: <20250821185702.7F81E87A07@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x]
- package/start-stop-daemon: fix build issues with musl and GCC 14
+Message-Id: <20250821185708.E3BF1813AF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/prboom: fix build
+ w/ gcc-14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,61 +66,180 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7e67a0b99baadf321feacc7870bdc3e8bac3a0ae
+commit: https://git.buildroot.net/buildroot/commit/?id=95bd30893f3b9a77cc883aff57f758d1d008570d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Unlike glibc and uClibc, musl doesn't play tricks with transparent
-unions for the second argument to bind() to accept the various sockaddr
-variants, but rather just defines it as "struct sockaddr*". As GCC 14 no
-longer allows arbitrary implicit pointer casts, this results in a build
-error. Import the upstream patch that adds the cast.
+When building prboom with gcc-14 the following error appeared on the
+autobuilder:
 
-Fixes: https://autobuild.buildroot.org/results/00b/00b42a35a80c2deb61f2cd40aedd231597bbb290
-Signed-off-by: Florian Larysch <fl@n621.de>
+```
+i_main.c: In function 'main':
+i_main.c:359:10: error: assignment to 'const char * const*' from incompatible pointer type 'char **' [-Wincompatible-pointer-types]
+  359 |   myargv = argv;
+      |          ^
+```
+
+While this package did not receive any update for a while on the
+sourceforge mirror, I backported the fix from a fork. For more
+information see [1].
+
+[1] https://github.com/coelckers/prboom-plus/commit/92d44b6383a3e053feac2c820b8114873fcd798e
+
+Fixes: https://autobuild.buildroot.org/results/888/88846e3cb267b04da58bc17d92fd5dd385b65b5d
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 562eb870fe6455e396d35354c80ce50d7e1c01b6)
+(cherry picked from commit c0bf3da45b4feb9d849f79743cfc3e11e70290c7)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...struct-sockaddr_un-to-struct-sockaddr-on-.patch | 31 ++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
+ ...myargv-instead-of-const-char-const-myargv.patch | 140 +++++++++++++++++++++
+ 1 file changed, 140 insertions(+)
 
-diff --git a/package/start-stop-daemon/0003-s-s-d-Cast-struct-sockaddr_un-to-struct-sockaddr-on-.patch b/package/start-stop-daemon/0003-s-s-d-Cast-struct-sockaddr_un-to-struct-sockaddr-on-.patch
+diff --git a/package/prboom/0003-gcc-warnings-const-myargv-instead-of-const-char-const-myargv.patch b/package/prboom/0003-gcc-warnings-const-myargv-instead-of-const-char-const-myargv.patch
 new file mode 100644
-index 0000000000..c093b49e2e
+index 0000000000..b102175d59
 --- /dev/null
-+++ b/package/start-stop-daemon/0003-s-s-d-Cast-struct-sockaddr_un-to-struct-sockaddr-on-.patch
-@@ -0,0 +1,31 @@
-+From 209ffbbf7c8fcf49d9296c969feb7a41aece6525 Mon Sep 17 00:00:00 2001
-+From: Guillem Jover <guillem@debian.org>
-+Date: Tue, 6 Dec 2022 18:37:08 +0100
-+Subject: [PATCH] s-s-d: Cast struct sockaddr_un to struct sockaddr on bind()
-+ call
++++ b/package/prboom/0003-gcc-warnings-const-myargv-instead-of-const-char-const-myargv.patch
+@@ -0,0 +1,140 @@
++From 92d44b6383a3e053feac2c820b8114873fcd798e Mon Sep 17 00:00:00 2001
++From: entryway <entryway@localhost>
++Date: Fri, 10 Jun 2011 19:59:18 +0000
++Subject: [PATCH] gcc warnings: 'const **myargv' instead of 'const char * const
++ * myargv'
 +
-+Changelog: internal
-+Warned-by: gcc -Wincompatible-pointer-types on musl-libc
-+
-+Upstream: https://git.dpkg.org/cgit/dpkg/dpkg.git/commit/?id=209ffbbf7c8fcf49d9296c969feb7a41aece6525
-+Signed-off-by: Florian Larysch <fl@n621.de>
++Upstream: https://github.com/coelckers/prboom-plus/commit/92d44b6383a3e053feac2c820b8114873fcd798e
++[thomas: backport to 2.5.0]
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 +---
-+ utils/start-stop-daemon.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ src/SDL/i_main.c |  3 ++-
++ src/d_main.c     | 20 ++++++++++++--------
++ src/m_argv.c     |  3 +--
++ src/m_argv.h     |  2 +-
++ 4 files changed, 16 insertions(+), 12 deletions(-)
 +
-+diff --git a/utils/start-stop-daemon.c b/utils/start-stop-daemon.c
-+index 6863151c1..a15c0493f 100644
-+--- a/utils/start-stop-daemon.c
-++++ b/utils/start-stop-daemon.c
-+@@ -632,7 +632,7 @@ create_notify_socket(void)
-+ 	su.sun_family = AF_UNIX;
-+ 	strncpy(su.sun_path, sockname, sizeof(su.sun_path) - 1);
++diff --git a/src/SDL/i_main.c b/src/SDL/i_main.c
++index 05cd655..1c19ef0 100644
++--- a/src/SDL/i_main.c
+++++ b/src/SDL/i_main.c
++@@ -356,7 +356,8 @@ int main(int argc, char **argv)
++ #endif
 + 
-+-	rc = bind(fd, &su, sizeof(su));
-++	rc = bind(fd, (struct sockaddr *)&su, sizeof(su));
-+ 	if (rc < 0)
-+ 		fatale("cannot bind to notification socket");
++   myargc = argc;
++-  myargv = argv;
+++  myargv = malloc(sizeof(myargv[0]) * myargc);
+++  memcpy(myargv, argv, sizeof(myargv[0]) * myargc);
 + 
++ #ifdef _WIN32
++   if (!M_CheckParm("-nodraw")) {
++diff --git a/src/d_main.c b/src/d_main.c
++index 6d8493e..320e07a 100644
++--- a/src/d_main.c
+++++ b/src/d_main.c
++@@ -870,7 +870,7 @@ static void FindResponseFile (void)
++ 	int indexinfile;
++         byte *file = NULL;
++         const char **moreargs = malloc(myargc * sizeof(const char*));
++-        const char **newargv;
+++        char **newargv;
++         // proff 04/05/2000: Added for searching responsefile
++         char fname[PATH_MAX+1];
++ 
++@@ -904,14 +904,15 @@ static void FindResponseFile (void)
++ 	  int k;
++           lprintf(LO_ERROR,"\nResponse file empty!\n");
++ 
++-	  newargv = calloc(sizeof(char *),MAXARGVS);
+++	  newargv = calloc(sizeof(newargv[0]),myargc);
++ 	  newargv[0] = myargv[0];
++           for (k = 1,index = 1;k < myargc;k++)
++           {
++             if (i!=k)
++               newargv[index++] = myargv[k];
++           }
++-          myargc = index; myargv = newargv;
+++          myargc = index;
+++          myargv = newargv;
++           return;
++         }
++ 
++@@ -919,8 +920,8 @@ static void FindResponseFile (void)
++ 	memcpy((void *)moreargs,&myargv[i+1],(index = myargc - i - 1) * sizeof(myargv[0]));
++ 
++ 	{
++-	  const char *firstargv = myargv[0];
++-	  newargv = calloc(sizeof(char *),MAXARGVS);
+++	  char *firstargv = myargv[0];
+++	  newargv = calloc(sizeof(newargv[0]), 1);
++ 	  newargv[0] = firstargv;
++ 	}
++ 
++@@ -949,16 +950,19 @@ static void FindResponseFile (void)
++ 
++ 	      // Terminate string, realloc and add to argv
++ 	      *p = 0;
+++	      newargv = realloc(newargv, sizeof(newargv[0]) * (indexinfile + 1));
++ 	      newargv[indexinfile++] = realloc(s,strlen(s)+1);
++ 	    }
++ 	  } while(size > 0);
++ 	}
++ 	free(file);
++ 
+++	newargv = realloc(newargv, sizeof(newargv[0]) * (indexinfile + index));
++ 	memcpy((void *)&newargv[indexinfile],moreargs,index*sizeof(moreargs[0]));
++ 	free((void *)moreargs);
++ 
++-        myargc = indexinfile+index; myargv = newargv;
+++        myargc = indexinfile+index;
+++        myargv = newargv;
++ 
++         // DISPLAY ARGS
++         //jff 9/3/98 use logical output routine
++@@ -999,7 +1003,7 @@ static void DoLooseFiles(void)
++   int lmpcount = 0;
++   int dehcount = 0;
++   int i,j,p;
++-  const char **tmyargv;  // use these to recreate the argv array
+++  char **tmyargv;  // use these to recreate the argv array
++   int tmyargc;
++   boolean skip[MAXARGVS]; // CPhipps - should these be skipped at the end
++ 
++@@ -1060,7 +1064,7 @@ static void DoLooseFiles(void)
++ 
++   // Now go back and redo the whole myargv array with our stuff in it.
++   // First, create a new myargv array to copy into
++-  tmyargv = calloc(sizeof(char *),MAXARGVS);
+++  tmyargv = calloc(sizeof(tmyargv[0]),MAXARGVS);
++   tmyargv[0] = myargv[0]; // invocation
++   tmyargc = 1;
++ 
++diff --git a/src/m_argv.c b/src/m_argv.c
++index 9392840..4fa1ed8 100644
++--- a/src/m_argv.c
+++++ b/src/m_argv.c
++@@ -37,8 +37,7 @@
++ #include "m_argv.h"
++ 
++ int    myargc;
++-const char * const * myargv; // CPhipps - not sure if ANSI C allows you to
++-// modify contents of argv, but I can't imagine it does.
+++char **myargv;
++ 
++ //
++ // M_CheckParm
++diff --git a/src/m_argv.h b/src/m_argv.h
++index 5340c15..b1d5907 100644
++--- a/src/m_argv.h
+++++ b/src/m_argv.h
++@@ -39,7 +39,7 @@
++  * MISC
++  */
++ extern int  myargc;
++-extern const char * const * myargv; /* CPhipps - const * const * */
+++extern char **myargv;
++ 
++ /* Returns the position of the given parameter in the arg list (0 if not found). */
++ int M_CheckParm(const char *check);
 +-- 
 +2.50.1
-+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
