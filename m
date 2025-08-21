@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87C1CCA0EFF
-	for <buildroot@archiver.kernel.org>; Thu, 21 Aug 2025 18:57:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 998DFCA0EFA
+	for <buildroot@archiver.kernel.org>; Thu, 21 Aug 2025 18:57:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5DB638462E;
-	Thu, 21 Aug 2025 18:57:18 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YcbqwHinzKUd; Thu, 21 Aug 2025 18:57:17 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6B59584628
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6B59584628;
-	Thu, 21 Aug 2025 18:57:17 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0612B1C8
- for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:57:02 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5CF16614D4
- for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:57:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6CEC8616FA;
+	Thu, 21 Aug 2025 18:57:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WTDRZMpvfk4s for <buildroot@buildroot.org>;
- Thu, 21 Aug 2025 18:56:58 +0000 (UTC)
+ id m1419YgXG_a0; Thu, 21 Aug 2025 18:57:19 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BD2D361746
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id BD2D361746;
+	Thu, 21 Aug 2025 18:57:18 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4120E1C8
+ for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:57:02 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id DEF2B41485
+ for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:56:59 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bd4n97YG25lv for <buildroot@buildroot.org>;
+ Thu, 21 Aug 2025 18:56:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CEA0A6141B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29BD84184E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id CEA0A6141B
- for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:56:58 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 29BD84184E
+ for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:56:59 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BEB1387A05; Thu, 21 Aug 2025 18:56:58 +0000 (UTC)
+ id 1B0BD87A05; Thu, 21 Aug 2025 18:56:59 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 21 Aug 2025 10:36:48 +0200
+Date: Thu, 21 Aug 2025 10:38:10 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 490172faec7cf91a207ae275f6e5500b204687d1
-X-Git-Newrev: 90ffd2cad98db3598f4fe40cde0f86fa99a9a083
+X-Git-Oldrev: 1e42391321b2870bbd25b59b29140dbfd44727af
+X-Git-Newrev: 475c289d5a736423a0a8a6a9cf06e43a3374c733
 X-Patchwork-Hint: ignore
-Message-Id: <20250821185658.BEB1387A05@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/luajit: add
- CPE_VERSION & CPE_UPDATE
+Message-Id: <20250821185659.1B0BD87A05@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/ofono: mark CPE
+ as valid
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,38 +66,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=90ffd2cad98db3598f4fe40cde0f86fa99a9a083
+commit: https://git.buildroot.net/buildroot/commit/?id=475c289d5a736423a0a8a6a9cf06e43a3374c733
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Since this package hasn't had a proper release in a while this patch set
-the CPE_VERSION and CPE_UPDATE to the latest tags available.
+The default ofono_project:ofono is a valid CPE, see
+https://nvd.nist.gov/products/cpe/detail/734A0A32-DA21-49B8-86BD-1A60C7CDF864
 
-The annotation available on NVD all refers to this last available
-version `cpe:2.3:a:luajit:luajit:2.1.0:beta3:*:*:*:*:*:*`.
-
-See https://nvd.nist.gov/vuln/detail/CVE-2020-15890 for instance.
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit e388ef88f06aeffddf5da242c400269604b0fa7f)
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 5927f9778f07f20b742201cefa344bafef0cd4f0)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/luajit/luajit.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/ofono/ofono.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
-index b030a16cfc..ebec4d87ac 100644
---- a/package/luajit/luajit.mk
-+++ b/package/luajit/luajit.mk
-@@ -9,6 +9,8 @@ LUAJIT_SITE = $(call github,LuaJIT,LuaJIT,$(LUAJIT_VERSION))
- LUAJIT_LICENSE = MIT
- LUAJIT_LICENSE_FILES = COPYRIGHT
- LUAJIT_CPE_ID_VENDOR = luajit
-+LUAJIT_CPE_ID_VERSION = 2.1.0
-+LUAJIT_CPE_ID_UPDATE = beta3
- 
- LUAJIT_INSTALL_STAGING = YES
- 
+diff --git a/package/ofono/ofono.mk b/package/ofono/ofono.mk
+index 1ff43092c4..ba0846e823 100644
+--- a/package/ofono/ofono.mk
++++ b/package/ofono/ofono.mk
+@@ -9,6 +9,7 @@ OFONO_SOURCE = ofono-$(OFONO_VERSION).tar.xz
+ OFONO_SITE = $(BR2_KERNEL_MIRROR)/linux/network/ofono
+ OFONO_LICENSE = GPL-2.0
+ OFONO_LICENSE_FILES = COPYING
++OFONO_CPE_ID_VALID = YES
+ OFONO_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	dbus \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
