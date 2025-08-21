@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C630CA0EEB
-	for <buildroot@archiver.kernel.org>; Thu, 21 Aug 2025 19:20:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82C1DCA0EFA
+	for <buildroot@archiver.kernel.org>; Thu, 21 Aug 2025 19:20:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E389F6175A;
-	Thu, 21 Aug 2025 19:20:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 58D90846DD;
+	Thu, 21 Aug 2025 19:20:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Q7_4f6-r5exX; Thu, 21 Aug 2025 19:20:47 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XE56iFB4Nw2X; Thu, 21 Aug 2025 19:20:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E69261B14
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9571D846D7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2E69261B14;
-	Thu, 21 Aug 2025 19:20:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9571D846D7;
+	Thu, 21 Aug 2025 19:20:48 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id E76B81C7
- for <buildroot@buildroot.org>; Thu, 21 Aug 2025 19:20:16 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 271581C8
+ for <buildroot@buildroot.org>; Thu, 21 Aug 2025 19:20:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D967B616BA
- for <buildroot@buildroot.org>; Thu, 21 Aug 2025 19:20:16 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 23310616BA
+ for <buildroot@buildroot.org>; Thu, 21 Aug 2025 19:20:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lvilFWRafR1m for <buildroot@buildroot.org>;
- Thu, 21 Aug 2025 19:20:15 +0000 (UTC)
+ id xD6nbg3QAhbM for <buildroot@buildroot.org>;
+ Thu, 21 Aug 2025 19:20:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 06A0061714
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B0FE616F1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 06A0061714
- for <buildroot@buildroot.org>; Thu, 21 Aug 2025 19:20:15 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4B0FE616F1
+ for <buildroot@buildroot.org>; Thu, 21 Aug 2025 19:20:14 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E73E98403C; Thu, 21 Aug 2025 19:20:14 +0000 (UTC)
+ id 3B1FA838C4; Thu, 21 Aug 2025 19:20:14 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 21 Aug 2025 10:54:31 +0200
+Date: Thu, 21 Aug 2025 10:53:40 +0200
 X-Git-Refname: refs/heads/2025.05.x
-X-Git-Oldrev: e36bbb0e2e02b95c25455fca1e3e67bdddcff4db
-X-Git-Newrev: 3afff7b8bca772ddb729d975ad010e52fa00c16b
+X-Git-Oldrev: ffde1fd264f6d28ec73ccbdba06afdf66dd5b69d
+X-Git-Newrev: 2bf2d75cf27fce4d3bff5950ac33f8b8f9785841
 X-Patchwork-Hint: ignore
-Message-Id: <20250821192014.E73E98403C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.05.x] package/setserial: update
- to 2.17-57 for compatibility with newer toolchains
+Message-Id: <20250821192014.3B1FA838C4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.05.x] package/prboom: fix build
+ w/ gcc-14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,88 +66,180 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3afff7b8bca772ddb729d975ad010e52fa00c16b
+commit: https://git.buildroot.net/buildroot/commit/?id=2bf2d75cf27fce4d3bff5950ac33f8b8f9785841
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.05.x
 
-Debian has a newer setserial which compiles on newer toolchains, so
-let's update to it.
+When building prboom with gcc-14 the following error appeared on the
+autobuilder:
 
-Noteworthy is the change from a big diff to a tarball containing the
-whole debian directory. The series file which contains all patches to
-apply is named properly so no need to rename 00list anymore. The patches
-file extension is now .patch instead of .dpatch.
+```
+i_main.c: In function 'main':
+i_main.c:359:10: error: assignment to 'const char * const*' from incompatible pointer type 'char **' [-Wincompatible-pointer-types]
+  359 |   myargv = argv;
+      |          ^
+```
 
-This fixes the build with BR2_TOOLCHAIN_EXTERNAL_ARM_AARCH64 external
-toolchain (14.2.rel1).
+While this package did not receive any update for a while on the
+sourceforge mirror, I backported the fix from a fork. For more
+information see [1].
 
-Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
+[1] https://github.com/coelckers/prboom-plus/commit/92d44b6383a3e053feac2c820b8114873fcd798e
+
+Fixes: https://autobuild.buildroot.org/results/888/88846e3cb267b04da58bc17d92fd5dd385b65b5d
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 871cdeab6a00054a1366d5e0ea56bd62a53f1c76)
+(cherry picked from commit c0bf3da45b4feb9d849f79743cfc3e11e70290c7)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/setserial/setserial.hash |  4 ++--
- package/setserial/setserial.mk   | 21 +++++++--------------
- 2 files changed, 9 insertions(+), 16 deletions(-)
+ ...myargv-instead-of-const-char-const-myargv.patch | 140 +++++++++++++++++++++
+ 1 file changed, 140 insertions(+)
 
-diff --git a/package/setserial/setserial.hash b/package/setserial/setserial.hash
-index 991d2860a9..3c1ade56ff 100644
---- a/package/setserial/setserial.hash
-+++ b/package/setserial/setserial.hash
-@@ -1,5 +1,5 @@
--# From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/s/setserial/setserial_2.17-45.3.dsc
-+# From https://snapshot.debian.org/file/98a1ce8758c5313a8b8a266d493605e578bcc4f6/setserial_2.17-57.dsc
- sha256  7e4487d320ac31558563424189435d396ddf77953bb23111a17a3d1487b5794a  setserial_2.17.orig.tar.gz
--sha256  33db87e8a86cf12b7c97efca9e056865e71358e8cfeb3931118b2647ce1eecc6  setserial_2.17-45.3.diff.gz
-+sha256  e96ef61d3e5fc5a77d6e54c4c48a2caee31931732a18ee49e4c67d128ad181c9  setserial_2.17-57.debian.tar.xz
- # Locally computed
- sha256  1d7e810ed28daf370def626dfd4c502f2f77d2b678f1ac72e2ba675dd6f9af0d  debian/copyright
-diff --git a/package/setserial/setserial.mk b/package/setserial/setserial.mk
-index 6567738e76..5bce05056a 100644
---- a/package/setserial/setserial.mk
-+++ b/package/setserial/setserial.mk
-@@ -6,8 +6,8 @@
- 
- SETSERIAL_VERSION = 2.17
- SETSERIAL_SOURCE = setserial_$(SETSERIAL_VERSION).orig.tar.gz
--SETSERIAL_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/s/setserial
--SETSERIAL_EXTRA_DOWNLOADS = setserial_2.17-45.3.diff.gz
-+SETSERIAL_SITE = https://snapshot.debian.org/archive/debian/20250307T084701Z/pool/main/s/setserial
-+SETSERIAL_EXTRA_DOWNLOADS = setserial_$(SETSERIAL_VERSION)-57.debian.tar.xz
- SETSERIAL_LICENSE = GPL-2.0
- SETSERIAL_LICENSE_FILES = debian/copyright
- # make all also builds setserial.cat which needs nroff
-@@ -18,26 +18,19 @@ SETSERIAL_AUTORECONF = YES
- # Extract the Debian tarball inside the sources
- define SETSERIAL_DEBIAN_EXTRACT
- 	$(call suitable-extractor,$(notdir $(SETSERIAL_EXTRA_DOWNLOADS))) \
--		$(SETSERIAL_DL_DIR)/$(notdir $(SETSERIAL_EXTRA_DOWNLOADS)) > $(@D)/setserial_2.17-45.3.diff
-+		$(SETSERIAL_DL_DIR)/$(notdir $(SETSERIAL_EXTRA_DOWNLOADS)) | \
-+		$(TAR) -C $(@D) $(TAR_OPTIONS) -
- endef
- 
- SETSERIAL_POST_EXTRACT_HOOKS += SETSERIAL_DEBIAN_EXTRACT
- 
- define SETSERIAL_APPLY_DEBIAN_PATCHES
--	# - Applying diff gotten from SETSERIAL_EXTRA_DOWNLOADS
- 	# - Touching gorhack.h is needed for the Debian patch 18 to work
--	# - Rename 00list which contains the list of patches to "series" so
--	#   Buildroot knows in which order the patches need to be applied. This
--	#   is necessary because their file extension is dpatch, which isn't
--	#   supported by the APPLY_PATCHES script outside of the series
--	#   mechanism.
--	$(APPLY_PATCHES) $(@D) $(@D) setserial_2.17-45.3.diff
--
-+	# - Apply patches in the order listed in debian/patches/series
- 	if [ -d $(@D)/debian/patches ]; then \
- 		touch $(@D)/gorhack.h; \
--		rm $(@D)/debian/patches/01_makefile.dpatch; \
--		mv $(@D)/debian/patches/00list $(@D)/debian/patches/series; \
--		sed -i '/01_makefile.dpatch/d' $(@D)/debian/patches/series; \
-+		rm $(@D)/debian/patches/01_makefile.patch; \
-+		sed -i '/01_makefile.patch/d' $(@D)/debian/patches/series; \
- 		$(APPLY_PATCHES) $(@D) $(@D)/debian/patches series; \
- 	fi
- endef
+diff --git a/package/prboom/0003-gcc-warnings-const-myargv-instead-of-const-char-const-myargv.patch b/package/prboom/0003-gcc-warnings-const-myargv-instead-of-const-char-const-myargv.patch
+new file mode 100644
+index 0000000000..b102175d59
+--- /dev/null
++++ b/package/prboom/0003-gcc-warnings-const-myargv-instead-of-const-char-const-myargv.patch
+@@ -0,0 +1,140 @@
++From 92d44b6383a3e053feac2c820b8114873fcd798e Mon Sep 17 00:00:00 2001
++From: entryway <entryway@localhost>
++Date: Fri, 10 Jun 2011 19:59:18 +0000
++Subject: [PATCH] gcc warnings: 'const **myargv' instead of 'const char * const
++ * myargv'
++
++Upstream: https://github.com/coelckers/prboom-plus/commit/92d44b6383a3e053feac2c820b8114873fcd798e
++[thomas: backport to 2.5.0]
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++---
++ src/SDL/i_main.c |  3 ++-
++ src/d_main.c     | 20 ++++++++++++--------
++ src/m_argv.c     |  3 +--
++ src/m_argv.h     |  2 +-
++ 4 files changed, 16 insertions(+), 12 deletions(-)
++
++diff --git a/src/SDL/i_main.c b/src/SDL/i_main.c
++index 05cd655..1c19ef0 100644
++--- a/src/SDL/i_main.c
+++++ b/src/SDL/i_main.c
++@@ -356,7 +356,8 @@ int main(int argc, char **argv)
++ #endif
++ 
++   myargc = argc;
++-  myargv = argv;
+++  myargv = malloc(sizeof(myargv[0]) * myargc);
+++  memcpy(myargv, argv, sizeof(myargv[0]) * myargc);
++ 
++ #ifdef _WIN32
++   if (!M_CheckParm("-nodraw")) {
++diff --git a/src/d_main.c b/src/d_main.c
++index 6d8493e..320e07a 100644
++--- a/src/d_main.c
+++++ b/src/d_main.c
++@@ -870,7 +870,7 @@ static void FindResponseFile (void)
++ 	int indexinfile;
++         byte *file = NULL;
++         const char **moreargs = malloc(myargc * sizeof(const char*));
++-        const char **newargv;
+++        char **newargv;
++         // proff 04/05/2000: Added for searching responsefile
++         char fname[PATH_MAX+1];
++ 
++@@ -904,14 +904,15 @@ static void FindResponseFile (void)
++ 	  int k;
++           lprintf(LO_ERROR,"\nResponse file empty!\n");
++ 
++-	  newargv = calloc(sizeof(char *),MAXARGVS);
+++	  newargv = calloc(sizeof(newargv[0]),myargc);
++ 	  newargv[0] = myargv[0];
++           for (k = 1,index = 1;k < myargc;k++)
++           {
++             if (i!=k)
++               newargv[index++] = myargv[k];
++           }
++-          myargc = index; myargv = newargv;
+++          myargc = index;
+++          myargv = newargv;
++           return;
++         }
++ 
++@@ -919,8 +920,8 @@ static void FindResponseFile (void)
++ 	memcpy((void *)moreargs,&myargv[i+1],(index = myargc - i - 1) * sizeof(myargv[0]));
++ 
++ 	{
++-	  const char *firstargv = myargv[0];
++-	  newargv = calloc(sizeof(char *),MAXARGVS);
+++	  char *firstargv = myargv[0];
+++	  newargv = calloc(sizeof(newargv[0]), 1);
++ 	  newargv[0] = firstargv;
++ 	}
++ 
++@@ -949,16 +950,19 @@ static void FindResponseFile (void)
++ 
++ 	      // Terminate string, realloc and add to argv
++ 	      *p = 0;
+++	      newargv = realloc(newargv, sizeof(newargv[0]) * (indexinfile + 1));
++ 	      newargv[indexinfile++] = realloc(s,strlen(s)+1);
++ 	    }
++ 	  } while(size > 0);
++ 	}
++ 	free(file);
++ 
+++	newargv = realloc(newargv, sizeof(newargv[0]) * (indexinfile + index));
++ 	memcpy((void *)&newargv[indexinfile],moreargs,index*sizeof(moreargs[0]));
++ 	free((void *)moreargs);
++ 
++-        myargc = indexinfile+index; myargv = newargv;
+++        myargc = indexinfile+index;
+++        myargv = newargv;
++ 
++         // DISPLAY ARGS
++         //jff 9/3/98 use logical output routine
++@@ -999,7 +1003,7 @@ static void DoLooseFiles(void)
++   int lmpcount = 0;
++   int dehcount = 0;
++   int i,j,p;
++-  const char **tmyargv;  // use these to recreate the argv array
+++  char **tmyargv;  // use these to recreate the argv array
++   int tmyargc;
++   boolean skip[MAXARGVS]; // CPhipps - should these be skipped at the end
++ 
++@@ -1060,7 +1064,7 @@ static void DoLooseFiles(void)
++ 
++   // Now go back and redo the whole myargv array with our stuff in it.
++   // First, create a new myargv array to copy into
++-  tmyargv = calloc(sizeof(char *),MAXARGVS);
+++  tmyargv = calloc(sizeof(tmyargv[0]),MAXARGVS);
++   tmyargv[0] = myargv[0]; // invocation
++   tmyargc = 1;
++ 
++diff --git a/src/m_argv.c b/src/m_argv.c
++index 9392840..4fa1ed8 100644
++--- a/src/m_argv.c
+++++ b/src/m_argv.c
++@@ -37,8 +37,7 @@
++ #include "m_argv.h"
++ 
++ int    myargc;
++-const char * const * myargv; // CPhipps - not sure if ANSI C allows you to
++-// modify contents of argv, but I can't imagine it does.
+++char **myargv;
++ 
++ //
++ // M_CheckParm
++diff --git a/src/m_argv.h b/src/m_argv.h
++index 5340c15..b1d5907 100644
++--- a/src/m_argv.h
+++++ b/src/m_argv.h
++@@ -39,7 +39,7 @@
++  * MISC
++  */
++ extern int  myargc;
++-extern const char * const * myargv; /* CPhipps - const * const * */
+++extern char **myargv;
++ 
++ /* Returns the position of the given parameter in the arg list (0 if not found). */
++ int M_CheckParm(const char *check);
++-- 
++2.50.1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
