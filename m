@@ -4,103 +4,99 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C392CA0EEB
-	for <buildroot@archiver.kernel.org>; Thu, 21 Aug 2025 19:22:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3145ACA0EFF
+	for <buildroot@archiver.kernel.org>; Thu, 21 Aug 2025 19:22:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5F81D61CD0;
-	Thu, 21 Aug 2025 19:22:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 04D24617A6;
+	Thu, 21 Aug 2025 19:22:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kaiDZrGlgxBl; Thu, 21 Aug 2025 19:22:18 +0000 (UTC)
+ id 1C1H1wuQ-AIy; Thu, 21 Aug 2025 19:22:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B60AB61CAC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E02B961B21
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B60AB61CAC;
-	Thu, 21 Aug 2025 19:22:07 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 406A31C7
- for <buildroot@buildroot.org>; Thu, 21 Aug 2025 19:21:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E02B961B21;
+	Thu, 21 Aug 2025 19:22:08 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id AEB321C8
+ for <buildroot@buildroot.org>; Thu, 21 Aug 2025 19:21:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2777284761
- for <buildroot@buildroot.org>; Thu, 21 Aug 2025 19:21:32 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A061640D21
+ for <buildroot@buildroot.org>; Thu, 21 Aug 2025 19:21:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2iSNeQNPYLYb for <buildroot@buildroot.org>;
- Thu, 21 Aug 2025 19:21:31 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0XsISvuHbfIu for <buildroot@buildroot.org>;
+ Thu, 21 Aug 2025 19:21:33 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
+ client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B38CB8476F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B38CB8476F
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B38CB8476F
- for <buildroot@buildroot.org>; Thu, 21 Aug 2025 19:21:30 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id
- 5b1f17b1804b1-45a1b0c82eeso10710915e9.3
- for <buildroot@buildroot.org>; Thu, 21 Aug 2025 12:21:30 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B1B4140D1C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B1B4140D1C
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B1B4140D1C
+ for <buildroot@buildroot.org>; Thu, 21 Aug 2025 19:21:32 +0000 (UTC)
+Received: by mail-wm1-x335.google.com with SMTP id
+ 5b1f17b1804b1-45a1b05a59fso10249935e9.1
+ for <buildroot@buildroot.org>; Thu, 21 Aug 2025 12:21:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1755804089; x=1756408889;
+ d=1e100.net; s=20230601; t=1755804091; x=1756408891;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=MNZzdsfFNM7W4ugbxVytm5EzKn6NnYd17cfUjnM3bc4=;
- b=kiaw0+P6rkIfDSKgOMVYHHhEVidj5O2OL01d3DD1F0k920iWlGBL7MC/vv7kXRNs9m
- fv/pVMkQ1MN9mkGy9Hfze4rD1ij7XpWhE90l2nhKF+Z5tW9/iEpRSSc8hchQ2ON3xvaB
- teTKeN2Gnc/w2QnQsra4axHOc5CmNagCvDpWuFyfwhtDf6ODYQQuL7Dun1ABz2ZM4/W3
- bhpbSWXDvu0kxwvrLefIVRBs7hk1hYq/i9w1hiE1Rw4d87UyJaCIJ5GAVorsOTqpNK3f
- zSZoDZUtUq0ssGwJciWo+kOa8zyHwcE78WYte5HmDWxnB1K4XSLQMAQDK7GQVhKTQZ74
- E2OQ==
-X-Forwarded-Encrypted: i=1;
- AJvYcCVadmy+8c/vTKj9xI/0LenFhsjIu4U5SWvC9Soujd3G+kqJ1QjAymAqmrPuln7SP1yEyD65HfyHUkM=@buildroot.org
-X-Gm-Message-State: AOJu0Yx7yPc7FUpStnCqcOLiCH2pd7V4sMbH7XJQVRludvFVlg2VvSoq
- aegG3i5AUapVEHmAIqtIn1/lO756KQHM7NNs5DXB5q8ykkD14n1mniA8cMEhm8BWimvZjGOHXBp
- oCEwVv3c=
-X-Gm-Gg: ASbGncvi4tXh95X9M8RQdTXZ0TRjVAgNlokujRpCW3sugwPYqivyCE4MxDnbJiCHNWW
- JTkr93RSzTrEDU4iVSlfbcLKvP55o2KhIqZxaRsWkIkNnE3muLyqCOioBR+Fps11Xvzd0seKENe
- r5jpYSuKHQZrfhAiiocPlclpTh2wKg/Td4mU53JDlOn220mcRMVq5FyKZJeeEAMpryGT7CmTDJZ
- iVOl2ObCo3GvSgn1UjrLuMJBL7Xq57o1j3sp2Av9rXvbm0dTXpObDyv+lfCfo8qpssf3aQlMM+9
- tDYDrLbFO7vVi2iHQqeuOaxjpBBSPEghz/TsGI1N21HxDMhkuBFJ1F7/0mri/LIAWOIibeV6mC2
- H6byJoBiJUHSXlJlg+uCiw9T6
-X-Google-Smtp-Source: AGHT+IENqO4GoLAciKmUjJAyqiDW55I4o0B5zyAGO2yJb92FTIpY6OvBnrF0jV76etnHs2By6TsacA==
-X-Received: by 2002:a05:600c:4511:b0:456:1156:e5f5 with SMTP id
- 5b1f17b1804b1-45b517d27f6mr2069375e9.31.1755804088773; 
- Thu, 21 Aug 2025 12:21:28 -0700 (PDT)
+ bh=aptq84ka0S1FrlaKRv9nZEiNCkTRJyipCLiWn04XDT8=;
+ b=TxlYR7tTd7j8XU9tWHrxv2XnKvJWNWHrJdwJ7RqCejKx66zWFutE1/2CdHw4zcqjhc
+ vZB233Pbcxxf96k3xIFKA1k2dn3Ey2eZK0UwqzE6Kf3EG86SyjGTr2x9WkSHopOoBx6Y
+ SLE6DQZjNJIqmsKU9Bay4LYov74M+gC5SLmy4QjLXVi92Allrx7LE9BjxHvb7D83G9Vw
+ SVRtlrPE93caMt6bnU3/Z/MBKNiJAHZ7JP64b8NZQYxdmuGwyUeEtEbgLFoVFuLPKH5C
+ po3OpOZow17MAv0nIRpao5ONmWLmSE5Mr+MLQNM4bU9j02H4GgBi+tLYOq+/y0bQdbbU
+ h+cA==
+X-Gm-Message-State: AOJu0Yw02ETc3ULSVlWksUHUELZkp/DN+lZMRlzfwe9nSp4+kFvVJwpw
+ g44IxdLvB6CCEI1OqYh7l4hhAJ4G/9gJJHOY/C0wpEbAGrO++HuRUjXJBP6pfOg4+aw=
+X-Gm-Gg: ASbGncsB/jOnBYLp1nkmrAOvD1+tHHxTe7GuZGGo18Ea7IhBOyKUzj2pBPA8C1RRPGr
+ S/1ennQG4nMIriY/lgxqR/IdRxlyhxLqQhLhOF9T2Grsh6JXuMLs/Q6O7kY4WCxB383Zah+7tn5
+ JR81gYfHYQwKVHhXH/hJDMWArwVMZHU1Jlofic5V3qN+VgxCoifU9LjQRF29NaWtR7YK1qHLacY
+ aJtWU9znzrcrN4NtEJtQ3JqyO03zEQuLNXQKZWkGLAwhksv49zOrT2DU9Bg5ch8jB/QfI3Xwbjh
+ ilsveeBgTcIDhOgn2zzlGjtXhORCgX9sx2WVyNfg7ks02sd0bxzDTk19TaYoqT8fBAmXp7fsOmg
+ yCHm5WgTk8c4S8Q==
+X-Google-Smtp-Source: AGHT+IFKGmSmNPzvSlOMwXvtCF57SHxXNG3nJLRI2azUXpplwUVFGjk5Xm7IwDuymV+u3XPhrxLj+Q==
+X-Received: by 2002:a05:600c:4715:b0:456:13d8:d141 with SMTP id
+ 5b1f17b1804b1-45b517d2700mr1474365e9.27.1755804090679; 
+ Thu, 21 Aug 2025 12:21:30 -0700 (PDT)
 Received: from arch ([79.132.233.79]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3c07487986fsm13882391f8f.1.2025.08.21.12.21.28
+ 5b1f17b1804b1-45b50ddfcecsm7843215e9.8.2025.08.21.12.21.30
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 21 Aug 2025 12:21:28 -0700 (PDT)
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Thomas Perale <thomas.perale@mind.be>,
-	buildroot@buildroot.org
-Date: Thu, 21 Aug 2025 21:21:28 +0200
-Message-ID: <20250821192128.24816-1-thomas.perale@mind.be>
+ Thu, 21 Aug 2025 12:21:30 -0700 (PDT)
+To: Thomas Perale <thomas.perale@mind.be>
+Cc: buildroot@buildroot.org
+Date: Thu, 21 Aug 2025 21:21:30 +0200
+Message-ID: <20250821192130.24924-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250818083826.2770186-1-thomas.petazzoni@bootlin.com>
-References: <20250818083826.2770186-1-thomas.petazzoni@bootlin.com>
+In-Reply-To: <20250819133911.3965048-1-thomas.perale@mind.be>
+References: <20250819133911.3965048-1-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1755804089; x=1756408889; darn=buildroot.org;
+ d=mind.be; s=google; t=1755804091; x=1756408891; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=MNZzdsfFNM7W4ugbxVytm5EzKn6NnYd17cfUjnM3bc4=;
- b=fC2FLOpcZU82rRnVYwWbskBT6NtArEpQLjfuGAMhlbz0TaXF97Rji9BE9+Db1Ba2Iu
- UtHk3mHZJYQYsmfy47vIKiRPc2MPpr9fTsrsD2L8BnxU5SSK2CEVFFPFNXBvRXNDuBmx
- Ojgjjzc18pofu2G3nm1WRTwG9PbWoT41QMuUYNAUKdKse1Ewvta62+EPQKY4PFJKSt2V
- P6s3HEdZzFjAXiKUNuKBdowv8Pj2+mJrMWLyRc2Pf+Y0XGS6SMc930cg8p2hjI/fbaFw
- XePMyrNuhCf0EoFO+0s3AfgR6HBnuMt5ds+iuICTGsaio1xBsqSVFlntqBCml0mlbNk1
- ja8w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=aptq84ka0S1FrlaKRv9nZEiNCkTRJyipCLiWn04XDT8=;
+ b=Z2ZpeLmSzNkUCbr4xOOZIJ1AV3L5APpjQX260PnZ23GmGVrFb+GqP+n5JIb1Yer9oJ
+ P6nornIYpi4qn/vNyCJ+RREyKyS2fuRkHEDHHkc6YALtw7YTFpSJAYTvDfsuoZLXWSj3
+ 5AuOdlJ1Hp+zJDvDsSvkYlVYund32gOZmoC/1ps+vTRNjShfVsBC56WtRPztEaEl8hI0
+ NxYfZmNcxEDE8ACfXNck5wkFR6kdEhbx6IYz03ra4Na8H6sU5oJAy5JBcWy72zZRTduR
+ tAzH2/t/slYMp3WujCQUwqDpr7wgAGkRg2eRnJGTsRHfGtpxwTqsN0TFwvM/O3Cv9Dnd
+ QL5Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=fC2FLOpc
-Subject: Re: [Buildroot] [PATCH] package/elfutils: fix build after 0.193
- version bump
+ header.a=rsa-sha256 header.s=google header.b=Z2ZpeLmS
+Subject: Re: [Buildroot] [PATCH] package/openjpeg: add patch to fix
+ CVE-2025-54874
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -120,86 +116,90 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> The 0.193 version bump done in commit
-> c7508a23242aae7a80f22acc4473da25f7f9e96d broke the build on numerous
-> CPU architectures. Let's take a patch from upstream's main branch to
-> fix the issue.
+> Fixes the following vulnerability:
 > 
-> Fixes:
+> - CVE-2025-54874
 > 
->   https://autobuild.buildroot.net/results/3b005f7afec386f6fa4237f427f73367d55bb211/ (sparc64)
->   https://autobuild.buildroot.net/results/a6b1d5078abdd6c8def93aaffa2e67573250da3e/ (m68k)
->   https://autobuild.buildroot.net/results/45305cc2be3b255740808ee1f3486d1a10abfbb4/ (microblaze)
->   and a bunch more
+>     OpenJPEG is an open-source JPEG 2000 codec. In OpenJPEG 2.5.3 and
+>     earlier, a call to opj_jp2_read_header may lead to OOB heap memory
+>     write when the data stream p_stream is too short and p_image is not
+>     initialized.
 > 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> For more information, see:
+>   - https://www.cve.org/CVERecord?id=CVE-2025-54874
+>   - https://github.com/uclouvain/openjpeg/commit/f809b80c67717c152a5ad30bf06774f00da4fd2d
+> 
+> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
 Applied to 2025.02.x & 2025.05.x. Thanks
 
 > ---
->  ...ckends-guard-asm-perf_regs.h-include.patch | 53 +++++++++++++++++++
->  1 file changed, 53 insertions(+)
->  create mode 100644 package/elfutils/0003-PR32930-backends-guard-asm-perf_regs.h-include.patch
+>  ...check-for-error-after-parsing-header.patch | 41 +++++++++++++++++++
+>  package/openjpeg/openjpeg.mk                  |  3 ++
+>  2 files changed, 44 insertions(+)
+>  create mode 100644 package/openjpeg/0001-check-for-error-after-parsing-header.patch
 > 
-> diff --git a/package/elfutils/0003-PR32930-backends-guard-asm-perf_regs.h-include.patch b/package/elfutils/0003-PR32930-backends-guard-asm-perf_regs.h-include.patch
+> diff --git a/package/openjpeg/0001-check-for-error-after-parsing-header.patch b/package/openjpeg/0001-check-for-error-after-parsing-header.patch
 > new file mode 100644
-> index 0000000000..76c604510b
+> index 0000000000..9a02fbf3d4
 > --- /dev/null
-> +++ b/package/elfutils/0003-PR32930-backends-guard-asm-perf_regs.h-include.patch
-> @@ -0,0 +1,53 @@
-> +From d05241ce690018548857199bd34d7734c7164679 Mon Sep 17 00:00:00 2001
-> +From: Serhei Makarov <serhei@serhei.io>
-> +Date: Mon, 5 May 2025 12:08:55 -0400
-> +Subject: [PATCH] PR32930 backends/: guard asm/perf_regs.h include
+> +++ b/package/openjpeg/0001-check-for-error-after-parsing-header.patch
+> @@ -0,0 +1,41 @@
+> +From f809b80c67717c152a5ad30bf06774f00da4fd2d Mon Sep 17 00:00:00 2001
+> +From: Sebastian Rasmussen <sebras@gmail.com>
+> +Date: Thu, 16 Jan 2025 02:13:43 +0100
+> +Subject: [PATCH] opj_jp2_read_header: Check for error after parsing header.
 > +
-> +asm/perf_regs.h is an arch-specific linux include, not present on
-> +architectures like hppa and m68k that lack perf_events support.
+> +Consider the case where the caller has not set the p_image
+> +pointer to NULL before calling opj_read_header().
 > +
-> +Only one place we need to fix; others already guard the include by
-> +architecture, or use architecture-independent headers (e.g.
-> +linux/perf_events.h).
+> +If opj_j2k_read_header_procedure() fails while obtaining the rest
+> +of the marker segment when calling opj_stream_read_data() because
+> +the data stream is too short, then opj_j2k_read_header() will
+> +never have the chance to initialize p_image, leaving it
+> +uninitialized.
 > +
-> +* backends/libebl_PERF_FLAGS.h: Only include asm/perf_regs.h on
-> +  architectures where we use it.
+> +opj_jp2_read_header() will check the p_image value whether
+> +opj_j2k_read_header() suceeded or failed. This may be detected as
+> +an error in valgrind or ASAN.
 > +
-> +Signed-off-by: Serhei Makarov <serhei@serhei.io>
-> +Upstream: d05241ce690018548857199bd34d7734c7164679
-> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> +The fix is to check whether opj_j2k_read_header() suceeded before
+> +using the output argument p_image.
+> +
+> +Upstream: https://github.com/uclouvain/openjpeg/commit/f809b80c67717c152a5ad30bf06774f00da4fd2d
+> +CVE: CVE-2025-54874
+> +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 > +---
-> + backends/libebl_PERF_FLAGS.h | 8 ++++++--
-> + 1 file changed, 6 insertions(+), 2 deletions(-)
+> + src/lib/openjp2/jp2.c | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
 > +
-> +diff --git a/backends/libebl_PERF_FLAGS.h b/backends/libebl_PERF_FLAGS.h
-> +index 2ed45f0f..51c20ea6 100644
-> +--- a/backends/libebl_PERF_FLAGS.h
-> ++++ b/backends/libebl_PERF_FLAGS.h
-> +@@ -32,8 +32,12 @@
-> + #define _LIBEBL_PERF_FLAGS_H 1
+> +diff --git a/src/lib/openjp2/jp2.c b/src/lib/openjp2/jp2.c
+> +index 4df055a54..da5063186 100644
+> +--- a/src/lib/openjp2/jp2.c
+> ++++ b/src/lib/openjp2/jp2.c
+> +@@ -2873,7 +2873,7 @@ OPJ_BOOL opj_jp2_read_header(opj_stream_private_t *p_stream,
+> +                               p_image,
+> +                               p_manager);
 > + 
-> + #if defined(__linux__)
-> ++/* XXX Need to exclude __linux__ arches without perf_regs.h. */
-> ++#if defined(__x86_64__) || defined(__i386__)
-> ++/* || defined(other_architecture)... */
-> + # include <asm/perf_regs.h>
-> + #endif
-> ++#endif
-> + 
-> + #if defined(_ASM_X86_PERF_REGS_H)
-> + /* See the code in x86_initreg_sample.c for list of required regs and
-> +@@ -49,8 +53,8 @@
-> +    see the code in tools/perf/util/intel-pt.c intel_pt_add_gp_regs()
-> +    and note how regs are added in the same order as the perf_regs.h enum.  */
-> + #else
-> +-/* Since asm/perf_regs.h gives the register layout for a different arch,
-> +-   we can't unwind x86_64 frames.  */
-> ++/* Since asm/perf_regs.h is absent, or gives the register layout for a
-> ++   different arch, we can't unwind i386 and x86_64 frames. */
-> + #define PERF_FRAME_REGISTERS_I386 0
-> + #define PERF_FRAME_REGISTERS_X86_64 0
-> + #endif
-> +-- 
-> +2.50.1
+> +-    if (p_image && *p_image) {
+> ++    if (ret && p_image && *p_image) {
+> +         /* Set Image Color Space */
+> +         if (jp2->enumcs == 16) {
+> +             (*p_image)->color_space = OPJ_CLRSPC_SRGB;
+> diff --git a/package/openjpeg/openjpeg.mk b/package/openjpeg/openjpeg.mk
+> index 275659cd3c..7b1352c222 100644
+> --- a/package/openjpeg/openjpeg.mk
+> +++ b/package/openjpeg/openjpeg.mk
+> @@ -11,6 +11,9 @@ OPENJPEG_LICENSE_FILES = LICENSE
+>  OPENJPEG_CPE_ID_VENDOR = uclouvain
+>  OPENJPEG_INSTALL_STAGING = YES
+>  
+> +# 0001-check-for-error-after-parsing-header.patch
+> +OPENJPEG_IGNORE_CVES += CVE-2025-54874
 > +
+>  OPENJPEG_DEPENDENCIES += $(if $(BR2_PACKAGE_ZLIB),zlib)
+>  OPENJPEG_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBPNG),libpng)
+>  OPENJPEG_DEPENDENCIES += $(if $(BR2_PACKAGE_TIFF),tiff)
 > -- 
 > 2.50.1
 > 
