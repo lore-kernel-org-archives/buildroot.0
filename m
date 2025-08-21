@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8926CA0EFA
-	for <buildroot@archiver.kernel.org>; Thu, 21 Aug 2025 18:57:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB4D5CA0EEB
+	for <buildroot@archiver.kernel.org>; Thu, 21 Aug 2025 18:57:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AF71A61B3C;
-	Thu, 21 Aug 2025 18:57:47 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id du45NHQJzXeI; Thu, 21 Aug 2025 18:57:46 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E8B7616F2
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2E8B7616F2;
-	Thu, 21 Aug 2025 18:57:46 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0FD081C7
- for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:57:13 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AEEEA84600
- for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:57:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9F3618467B;
+	Thu, 21 Aug 2025 18:57:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id puhxy7Sbpud8 for <buildroot@buildroot.org>;
- Thu, 21 Aug 2025 18:57:12 +0000 (UTC)
+ id AJZNa9Zrb3ru; Thu, 21 Aug 2025 18:57:47 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B43B7845F5
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id B43B7845F5;
+	Thu, 21 Aug 2025 18:57:47 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5D0E91C8
+ for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:57:13 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5C576418C1
+ for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:57:10 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id slD_4ACdBcVC for <buildroot@buildroot.org>;
+ Thu, 21 Aug 2025 18:57:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E39B184612
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A1775418CA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E39B184612
- for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:57:11 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A1775418CA
+ for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:57:09 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D3BDA813AF; Thu, 21 Aug 2025 18:57:11 +0000 (UTC)
+ id 9DD59813AF; Thu, 21 Aug 2025 18:57:09 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 21 Aug 2025 16:29:17 +0200
+Date: Thu, 21 Aug 2025 16:28:22 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 6243ccd33736993b69ba8e8b937e9a62bc78d196
-X-Git-Newrev: 626fee3421e43ffd8265575c93221f81e3c7b884
+X-Git-Oldrev: e0b33c1f5003a8aac3858f8c1d7491c7dbdf0f37
+X-Git-Newrev: 66750d2d72edd7dba2d3769679bc89441add9a7e
 X-Patchwork-Hint: ignore
-Message-Id: <20250821185711.D3BDA813AF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/elfutils: fix
- build after 0.193 version bump
+Message-Id: <20250821185709.9DD59813AF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] DEVELOPERS: remove Suniel
+ Mahesh, boucing e-mail
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,88 +66,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=626fee3421e43ffd8265575c93221f81e3c7b884
+commit: https://git.buildroot.net/buildroot/commit/?id=66750d2d72edd7dba2d3769679bc89441add9a7e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-The 0.193 version bump done in commit
-c7508a23242aae7a80f22acc4473da25f7f9e96d broke the build on numerous
-CPU architectures. Let's take a patch from upstream's main branch to
-fix the issue.
+Suniel's e-mail address at Amarula Solutions is bouncing, so let's
+drop this stale entry:
 
-Fixes:
-
-  https://autobuild.buildroot.net/results/3b005f7afec386f6fa4237f427f73367d55bb211/ (sparc64)
-  https://autobuild.buildroot.net/results/a6b1d5078abdd6c8def93aaffa2e67573250da3e/ (m68k)
-  https://autobuild.buildroot.net/results/45305cc2be3b255740808ee1f3486d1a10abfbb4/ (microblaze)
-  and a bunch more
+<sunil@amarulasolutions.com>: host aspmx.l.google.com[142.250.27.26] said:
+    550-5.1.1 The email account that you tried to reach does not exist. Please
+    try 550-5.1.1 double-checking the recipient's email address for typos or
+    550-5.1.1 unnecessary spaces. For more information, go to 550 5.1.1
+    https://support.google.com/mail/?p=NoSuchUser
+    a640c23a62f3a-afcdce6d5e1si493680166b.9 - gsmtp (in reply to RCPT TO
+    command)
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 022ff55a39cad5d103b3bf29f887c37ec0b2f0f9)
+(cherry picked from commit 3c93cf106caeb9bda4ddfd81c5c377e9bc461bfb)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...30-backends-guard-asm-perf_regs.h-include.patch | 53 ++++++++++++++++++++++
- 1 file changed, 53 insertions(+)
+ DEVELOPERS | 7 -------
+ 1 file changed, 7 deletions(-)
 
-diff --git a/package/elfutils/0003-PR32930-backends-guard-asm-perf_regs.h-include.patch b/package/elfutils/0003-PR32930-backends-guard-asm-perf_regs.h-include.patch
-new file mode 100644
-index 0000000000..76c604510b
---- /dev/null
-+++ b/package/elfutils/0003-PR32930-backends-guard-asm-perf_regs.h-include.patch
-@@ -0,0 +1,53 @@
-+From d05241ce690018548857199bd34d7734c7164679 Mon Sep 17 00:00:00 2001
-+From: Serhei Makarov <serhei@serhei.io>
-+Date: Mon, 5 May 2025 12:08:55 -0400
-+Subject: [PATCH] PR32930 backends/: guard asm/perf_regs.h include
-+
-+asm/perf_regs.h is an arch-specific linux include, not present on
-+architectures like hppa and m68k that lack perf_events support.
-+
-+Only one place we need to fix; others already guard the include by
-+architecture, or use architecture-independent headers (e.g.
-+linux/perf_events.h).
-+
-+* backends/libebl_PERF_FLAGS.h: Only include asm/perf_regs.h on
-+  architectures where we use it.
-+
-+Signed-off-by: Serhei Makarov <serhei@serhei.io>
-+Upstream: d05241ce690018548857199bd34d7734c7164679
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ backends/libebl_PERF_FLAGS.h | 8 ++++++--
-+ 1 file changed, 6 insertions(+), 2 deletions(-)
-+
-+diff --git a/backends/libebl_PERF_FLAGS.h b/backends/libebl_PERF_FLAGS.h
-+index 2ed45f0f..51c20ea6 100644
-+--- a/backends/libebl_PERF_FLAGS.h
-++++ b/backends/libebl_PERF_FLAGS.h
-+@@ -32,8 +32,12 @@
-+ #define _LIBEBL_PERF_FLAGS_H 1
-+ 
-+ #if defined(__linux__)
-++/* XXX Need to exclude __linux__ arches without perf_regs.h. */
-++#if defined(__x86_64__) || defined(__i386__)
-++/* || defined(other_architecture)... */
-+ # include <asm/perf_regs.h>
-+ #endif
-++#endif
-+ 
-+ #if defined(_ASM_X86_PERF_REGS_H)
-+ /* See the code in x86_initreg_sample.c for list of required regs and
-+@@ -49,8 +53,8 @@
-+    see the code in tools/perf/util/intel-pt.c intel_pt_add_gp_regs()
-+    and note how regs are added in the same order as the perf_regs.h enum.  */
-+ #else
-+-/* Since asm/perf_regs.h gives the register layout for a different arch,
-+-   we can't unwind x86_64 frames.  */
-++/* Since asm/perf_regs.h is absent, or gives the register layout for a
-++   different arch, we can't unwind i386 and x86_64 frames. */
-+ #define PERF_FRAME_REGISTERS_I386 0
-+ #define PERF_FRAME_REGISTERS_X86_64 0
-+ #endif
-+-- 
-+2.50.1
-+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 52069b3d96..e66fd91fb8 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -3125,13 +3125,6 @@ N:	Steven Noonan <steven@uplinklabs.net>
+ F:	package/hwloc/
+ F:	package/powertop/
+ 
+-N:	Suniel Mahesh <sunil@amarulasolutions.com>
+-F:	board/pine64/rockpro64
+-F:	board/radxa/rockpi-n8
+-F:	configs/rock_pi_n8_defconfig
+-F:	configs/rockpro64_defconfig
+-F:	package/arm-gnu-toolchain/
+-
+ N:	Sven Oliver Moll <svolli@svolli.de>
+ F:	package/most/
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
