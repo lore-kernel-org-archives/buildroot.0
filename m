@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE189CA0EEB
-	for <buildroot@archiver.kernel.org>; Thu, 21 Aug 2025 18:57:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BBD5CA0EFA
+	for <buildroot@archiver.kernel.org>; Thu, 21 Aug 2025 18:57:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C337F616F0;
-	Thu, 21 Aug 2025 18:57:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3116684622;
+	Thu, 21 Aug 2025 18:57:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZoQn3a8n5yuN; Thu, 21 Aug 2025 18:57:42 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BpolBAwPN5hx; Thu, 21 Aug 2025 18:57:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 33D6E61B1C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 82CAB8466F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 33D6E61B1C;
-	Thu, 21 Aug 2025 18:57:42 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id D56491C7
- for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:57:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 82CAB8466F;
+	Thu, 21 Aug 2025 18:57:43 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 98AB41C7
+ for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:57:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5170A407C0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4522F418BB
  for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:57:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id glkBXXpbs4H2 for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZJcYbeUYewBl for <buildroot@buildroot.org>;
  Thu, 21 Aug 2025 18:57:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 04DBE40CB1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E467418C1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 04DBE40CB1
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7E467418C1
  for <buildroot@buildroot.org>; Thu, 21 Aug 2025 18:57:09 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0174387A07; Thu, 21 Aug 2025 18:57:09 +0000 (UTC)
+ id 7B99F813AF; Thu, 21 Aug 2025 18:57:09 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 21 Aug 2025 10:41:23 +0200
+Date: Thu, 21 Aug 2025 16:28:03 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 95bd30893f3b9a77cc883aff57f758d1d008570d
-X-Git-Newrev: d16495c1d2ab8d266e3270cbae781992b909e359
+X-Git-Oldrev: 18aaaa4b947e87b861c2383504bfb496a939e66d
+X-Git-Newrev: 6171150697d7a3e6756bc6167e5e5be3dcb313b1
 X-Patchwork-Hint: ignore
-Message-Id: <20250821185709.0174387A07@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/openconnect: add
- CPE vendor
+Message-Id: <20250821185709.7B99F813AF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/setserial: update
+ to 2.17-57 for compatibility with newer toolchains
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,32 +66,88 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d16495c1d2ab8d266e3270cbae781992b909e359
+commit: https://git.buildroot.net/buildroot/commit/?id=6171150697d7a3e6756bc6167e5e5be3dcb313b1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-infradead is a valid CPE vendor for openconnect, see
-https://nvd.nist.gov/products/cpe/detail/2877E5FD-6361-465D-81D7-AE1EBB3E059F
+Debian has a newer setserial which compiles on newer toolchains, so
+let's update to it.
 
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+Noteworthy is the change from a big diff to a tarball containing the
+whole debian directory. The series file which contains all patches to
+apply is named properly so no need to rename 00list anymore. The patches
+file extension is now .patch instead of .dpatch.
+
+This fixes the build with BR2_TOOLCHAIN_EXTERNAL_ARM_AARCH64 external
+toolchain (14.2.rel1).
+
+Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d2c975ad0291bb579411faec39e4e243e90abcdd)
+(cherry picked from commit 871cdeab6a00054a1366d5e0ea56bd62a53f1c76)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/openconnect/openconnect.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/setserial/setserial.hash |  4 ++--
+ package/setserial/setserial.mk   | 21 +++++++--------------
+ 2 files changed, 9 insertions(+), 16 deletions(-)
 
-diff --git a/package/openconnect/openconnect.mk b/package/openconnect/openconnect.mk
-index 3fd9f990b0..73716d708e 100644
---- a/package/openconnect/openconnect.mk
-+++ b/package/openconnect/openconnect.mk
-@@ -9,6 +9,7 @@ OPENCONNECT_SITE = https://www.infradead.org/openconnect/download
- OPENCONNECT_DEPENDENCIES = host-pkgconf libxml2 zlib
- OPENCONNECT_LICENSE = LGPL-2.1
- OPENCONNECT_LICENSE_FILES = COPYING.LGPL
-+OPENCONNECT_CPE_ID_VENDOR = infradead
- OPENCONNECT_CONF_OPTS = \
- 	--disable-dsa-tests \
- 	--with-vpnc-script=/etc/vpnc/vpnc-script \
+diff --git a/package/setserial/setserial.hash b/package/setserial/setserial.hash
+index 991d2860a9..3c1ade56ff 100644
+--- a/package/setserial/setserial.hash
++++ b/package/setserial/setserial.hash
+@@ -1,5 +1,5 @@
+-# From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/s/setserial/setserial_2.17-45.3.dsc
++# From https://snapshot.debian.org/file/98a1ce8758c5313a8b8a266d493605e578bcc4f6/setserial_2.17-57.dsc
+ sha256  7e4487d320ac31558563424189435d396ddf77953bb23111a17a3d1487b5794a  setserial_2.17.orig.tar.gz
+-sha256  33db87e8a86cf12b7c97efca9e056865e71358e8cfeb3931118b2647ce1eecc6  setserial_2.17-45.3.diff.gz
++sha256  e96ef61d3e5fc5a77d6e54c4c48a2caee31931732a18ee49e4c67d128ad181c9  setserial_2.17-57.debian.tar.xz
+ # Locally computed
+ sha256  1d7e810ed28daf370def626dfd4c502f2f77d2b678f1ac72e2ba675dd6f9af0d  debian/copyright
+diff --git a/package/setserial/setserial.mk b/package/setserial/setserial.mk
+index 6567738e76..5bce05056a 100644
+--- a/package/setserial/setserial.mk
++++ b/package/setserial/setserial.mk
+@@ -6,8 +6,8 @@
+ 
+ SETSERIAL_VERSION = 2.17
+ SETSERIAL_SOURCE = setserial_$(SETSERIAL_VERSION).orig.tar.gz
+-SETSERIAL_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/s/setserial
+-SETSERIAL_EXTRA_DOWNLOADS = setserial_2.17-45.3.diff.gz
++SETSERIAL_SITE = https://snapshot.debian.org/archive/debian/20250307T084701Z/pool/main/s/setserial
++SETSERIAL_EXTRA_DOWNLOADS = setserial_$(SETSERIAL_VERSION)-57.debian.tar.xz
+ SETSERIAL_LICENSE = GPL-2.0
+ SETSERIAL_LICENSE_FILES = debian/copyright
+ # make all also builds setserial.cat which needs nroff
+@@ -18,26 +18,19 @@ SETSERIAL_AUTORECONF = YES
+ # Extract the Debian tarball inside the sources
+ define SETSERIAL_DEBIAN_EXTRACT
+ 	$(call suitable-extractor,$(notdir $(SETSERIAL_EXTRA_DOWNLOADS))) \
+-		$(SETSERIAL_DL_DIR)/$(notdir $(SETSERIAL_EXTRA_DOWNLOADS)) > $(@D)/setserial_2.17-45.3.diff
++		$(SETSERIAL_DL_DIR)/$(notdir $(SETSERIAL_EXTRA_DOWNLOADS)) | \
++		$(TAR) -C $(@D) $(TAR_OPTIONS) -
+ endef
+ 
+ SETSERIAL_POST_EXTRACT_HOOKS += SETSERIAL_DEBIAN_EXTRACT
+ 
+ define SETSERIAL_APPLY_DEBIAN_PATCHES
+-	# - Applying diff gotten from SETSERIAL_EXTRA_DOWNLOADS
+ 	# - Touching gorhack.h is needed for the Debian patch 18 to work
+-	# - Rename 00list which contains the list of patches to "series" so
+-	#   Buildroot knows in which order the patches need to be applied. This
+-	#   is necessary because their file extension is dpatch, which isn't
+-	#   supported by the APPLY_PATCHES script outside of the series
+-	#   mechanism.
+-	$(APPLY_PATCHES) $(@D) $(@D) setserial_2.17-45.3.diff
+-
++	# - Apply patches in the order listed in debian/patches/series
+ 	if [ -d $(@D)/debian/patches ]; then \
+ 		touch $(@D)/gorhack.h; \
+-		rm $(@D)/debian/patches/01_makefile.dpatch; \
+-		mv $(@D)/debian/patches/00list $(@D)/debian/patches/series; \
+-		sed -i '/01_makefile.dpatch/d' $(@D)/debian/patches/series; \
++		rm $(@D)/debian/patches/01_makefile.patch; \
++		sed -i '/01_makefile.patch/d' $(@D)/debian/patches/series; \
+ 		$(APPLY_PATCHES) $(@D) $(@D)/debian/patches series; \
+ 	fi
+ endef
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
