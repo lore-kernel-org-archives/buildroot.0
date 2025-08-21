@@ -1,105 +1,101 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CB6BCA0EEB
-	for <buildroot@archiver.kernel.org>; Thu, 21 Aug 2025 19:21:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93105CA0FE2
+	for <buildroot@archiver.kernel.org>; Thu, 21 Aug 2025 19:21:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 523A1846FA;
-	Thu, 21 Aug 2025 19:21:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6D88661C5E;
+	Thu, 21 Aug 2025 19:21:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p4vFf-IL-Sxu; Thu, 21 Aug 2025 19:21:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NdKX_h23FQIx; Thu, 21 Aug 2025 19:21:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 77D00846AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BFC4961C55
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 77D00846AB;
-	Thu, 21 Aug 2025 19:21:38 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 6CCD51C7
+	by smtp3.osuosl.org (Postfix) with ESMTP id BFC4961C55;
+	Thu, 21 Aug 2025 19:21:39 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9484A1C7
  for <buildroot@buildroot.org>; Thu, 21 Aug 2025 19:20:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 53AC0846EE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 91E4561B5B
  for <buildroot@buildroot.org>; Thu, 21 Aug 2025 19:20:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TQIfDCZOzW75 for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Pn4YJurRA5h3 for <buildroot@buildroot.org>;
  Thu, 21 Aug 2025 19:20:56 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
+ client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5ED0B841B1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5ED0B841B1
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5ED0B841B1
- for <buildroot@buildroot.org>; Thu, 21 Aug 2025 19:20:56 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id
- 5b1f17b1804b1-45b4d892175so5390415e9.2
- for <buildroot@buildroot.org>; Thu, 21 Aug 2025 12:20:56 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 9F9DA61B65
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F9DA61B65
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9F9DA61B65
+ for <buildroot@buildroot.org>; Thu, 21 Aug 2025 19:20:55 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id
+ 5b1f17b1804b1-45a1b0c82eeso10707305e9.3
+ for <buildroot@buildroot.org>; Thu, 21 Aug 2025 12:20:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20230601; t=1755804054; x=1756408854;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=CUM5ep96H0AuJW5LMRmEh+Ygb0c9FF1C53reTJtmob0=;
- b=ongTalt4a75tWwqVI4EB8TWAsbSDXdAYyEJv9yzrvEC8AYmSGcjRHfhEYjhp3Qy6My
- l9hqU0Dp0hwPeZTtoUkFT9SRHRGFP9VCDIXD8sIrGX41lDZU10gN9GxVsHGGkIw45dfI
- 42l3aXntmbUfT2RxGT9xk9PY2aPCGGZoomZFTOTOBbjkrtofrzY1y9Ptj2yqVvrWrOkn
- OdBXTic5Fbo9O1m5jqS/J+4c33V5MT11Z1N9fjxEJWEMc4fMV6IGd6pPh9T1l3SpTf/7
- aIVyg/BJFQbPoEMS1V5HMaAZ8AsTAGXuTKJwuN2/0a95oktEYRPF+a4/gh0HnUZuf0Tz
- Mf2Q==
-X-Forwarded-Encrypted: i=1;
- AJvYcCWxrNpguq7pwoYBAAwm3PVXbIXMb93UnUNCSR1MeIhofSrIgBiVOCSUU24gVmsXsoyxpbJQL+9qG6A=@buildroot.org
-X-Gm-Message-State: AOJu0YzPqvpnZdr0bpUR9HXCvGhNPnqgByWwYwl1NO9+6f1TE3l3rRBE
- g5Ud7v6lXjejevNF0oPtIuXjMRzVq777AsZEU/sI4+l+tKMNKp2I/b1rZ1yw6yXwVDiO6li2V6m
- TzrJ3xjs=
-X-Gm-Gg: ASbGnctf97dKFbZquPNg46X+3fVXlMAXjFsTT3Z79eq0+p48vb29/qpVAiymo5mNGHw
- 1w7XkAqNH0jIOQoRkIv6T/+6szlPCcMsIyLNItCsr4f895CvQ13WcjSD/WLenD0rCYyT+tvK7Lv
- ImD9iaujGVrYmcvz+MYkQQjv/lK8A2OZUd+AtYXGO/ocpowwp5ko+/97cwvcHeXwXIdO56PW4mH
- eHrJl0/0ZbrkQbvLsI0j03cKQ0I1/3aqQ38PDZ1kdt6s6e7qHfcW0Wn3p/S1bVP9uUVKhTlf6uH
- KnrK/Cy1vr5eTr0K2F4dC/Csxb0LlHq82WdovGNC8l2qzAnkv+VdrHRnPZSmpyCDV1qlQEMJokz
- rIRZxPvU4S0U1mQ==
-X-Google-Smtp-Source: AGHT+IHEEVM2ZGMTTWdN77CPPtnZY5wRbAcDxta2NHbWVQ9ss5aJn+4HlJ+CWV1Pz55kphBn5ZyHlQ==
-X-Received: by 2002:a05:600c:630c:b0:456:2b4d:d752 with SMTP id
- 5b1f17b1804b1-45b517cfe7dmr1673215e9.20.1755804054465; 
- Thu, 21 Aug 2025 12:20:54 -0700 (PDT)
+ bh=egTQb+cA84c1MG9xc0pXX6muV4Uy5qhvJqx0EFXpSkE=;
+ b=AuAfUTVTZaZfz1XLk60HsA4ZP7Y9pvxmhWVIOTb26CUe1p1flDr7F3fLkDqB+QtFlr
+ lMtnUQoDblYVu9fgWryD8NawI3ijUtkOxIOPYq5rRBWvAJXXynhHo9cpDQOpLEzrphYn
+ EUhCmresRFtpx6xCcnxrb3rf0SkAipLtzLedlmCR1QMT6PyNytB5D/RAyYrPPulbyMRs
+ EsUo4PjOaQvfkkq80o+V4IVd4bohySZUXkJqRd01ZvxQFXOa+hawP8fmEXQaMEHmfcyp
+ BxlE4/ECqvBb1dj+Toz5JRAEdxbkLD8Yo+qFJ3MSwBrXCaFAIVHMATSUtkRGxR69o10l
+ IoHA==
+X-Gm-Message-State: AOJu0YwDtC2NSMiYV+RpaGbvL9062aay/lcgvr+8+j8bi+ic866pHKFD
+ oU7xKZIDlPxfR63ISibPQjfeltrzIHKxUNQQ8nnjKfTDrMQX36mO+EzMgJQt+ap0OoM=
+X-Gm-Gg: ASbGnctRztK5glA7bI5KPbu2q4PHIr5Wf2Vry9CjEMBQ3pbuqWF24W0CKlFJa4tSfkZ
+ Mm7fFJIGqaXGOaxm9Iec+V+mO9T6qQCPY1jEWkYZisKltmbUrZy8rgTclQBS5ERGmcBrs7ih15t
+ TJz73VDk4X9e45sPwS9ItySPJX9wboaEZmTzHpmewnUTFxsPvefuMerDQ7TYFvSCmJytZPsfEFQ
+ UpSvATs6Kg7uAMIPJYTx+bWh6LbKqZJabLE8hcvOjDW3C26vE2NVqFKaMZwX8pBVZ/vDvgIXN6k
+ L0TTTLemTMeC8D/vI363NX+2kU206GbQfX2xF2o3YQWzps9bBushNmNMlCDKTUwXLjO4tPEvgnJ
+ KZDd83mpI8iTEZw==
+X-Google-Smtp-Source: AGHT+IHhVlk767tek0+4Q+okrCy+WEGvvBec+fqQ3H/vf5/CM3MX6O3x319OV4Mg38S68D35HYG26A==
+X-Received: by 2002:a05:600c:1c16:b0:456:214f:f78d with SMTP id
+ 5b1f17b1804b1-45b517c5501mr1692345e9.22.1755804053556; 
+ Thu, 21 Aug 2025 12:20:53 -0700 (PDT)
 Received: from arch ([79.132.233.79]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-45b50dd02ebsm8042755e9.9.2025.08.21.12.20.54
+ 5b1f17b1804b1-45b50e2fa9csm8465405e9.16.2025.08.21.12.20.53
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 21 Aug 2025 12:20:54 -0700 (PDT)
-To: Titouan Christophe <titouan.christophe@mind.be>
-Cc: Thomas Perale <thomas.perale@mind.be>,
-	buildroot@buildroot.org
-Date: Thu, 21 Aug 2025 21:20:53 +0200
-Message-ID: <20250821192053.23931-1-thomas.perale@mind.be>
+ Thu, 21 Aug 2025 12:20:53 -0700 (PDT)
+To: Thomas Perale <thomas.perale@mind.be>
+Cc: buildroot@buildroot.org
+Date: Thu, 21 Aug 2025 21:20:52 +0200
+Message-ID: <20250821192052.23881-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250812100148.717381-1-titouan.christophe@mind.be>
-References: <20250812100148.717381-1-titouan.christophe@mind.be>
+In-Reply-To: <20250812173616.1977078-1-thomas.perale@mind.be>
+References: <20250812173616.1977078-1-thomas.perale@mind.be>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mind.be; s=google; t=1755804054; x=1756408854; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=CUM5ep96H0AuJW5LMRmEh+Ygb0c9FF1C53reTJtmob0=;
- b=UGnTmbeDdPzC8OKLw/YjF2RJnpKEbOvBYJa1IMMC81jU5CrHcU27r0q43eLskq3+Hp
- 9bEA+hOOYufJ4F3uwiVyb0yFWToAs9rgPgJOLZI5gT+ffRHmMykR5+UrtB2jsfLxooMf
- J6d3KVq2iIS3GWNbcITNdV/BxPJKpckkyAo1xpPpCeHujPXktauupmFAR8y14mQJeRlU
- FQzTozykeHuux5jA5b6C7gvYa6gd0ntyfjEp8fHj3DJFp4bkgBz9r/ladGPPHB3cDuoa
- MQ+pR4GGTNJu+tEaHHowIFzThgbkECEb9E76JEo/lw3pBQGSmH5ln6G4y5STrmlqB0GC
- 7CHA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=egTQb+cA84c1MG9xc0pXX6muV4Uy5qhvJqx0EFXpSkE=;
+ b=GVwIOj29LZ0RA69ha/At6UZ1PLTbS+GyFgSb3/s9LJULY3SWPij8B7CcCVNWoUQ0JB
+ yKvsJCDWNwqQVn1vKKI3Uiz2UTE3QLOb2jNbGUoT0oa+hOK5JDfIW5OoQu3KNtcjJPD0
+ fN8BpHKqLrdssnS+ofW9DU1D1u00gWCvrDvDQQioghBKBBBs7fGKGdkDlWQ6BrwL4pTM
+ oeo6GZFr0ki53MGCdw/fVhc8T7G/t87ZB2VAyWrAz4X/TNufeSFnU8471dzSXoRd0D8L
+ GX8RfaCHf1qBTiz2CClr/kaS+dNqKo0oAFANzs7ydywtC8fhtp06zahhFoJaOPEQdcRc
+ Xccw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=UGnTmbeD
-Subject: Re: [Buildroot] [PATCH 1/4] package/openconnect: add CPE vendor
+ header.a=rsa-sha256 header.s=google header.b=GVwIOj29
+Subject: Re: [Buildroot] [PATCH] package/bcusdk: fix build w/ gcc-14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,29 +115,111 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> infradead is a valid CPE vendor for openconnect, see
-> https://nvd.nist.gov/products/cpe/detail/2877E5FD-6361-465D-81D7-AE1EBB3E059F
+> When using gcc-14 the compilation fails with the following error
+> message:
 > 
-> Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+> ```
+> close.c: In function 'EIBClose':
+> close.c:38:3: error: implicit declaration of function 'close'; did you mean 'pclose'? [-Wimplicit-function-declaration]
+>    38 |   close (con->fd);
+>       |   ^~~~~
+>       |   pclose
+> openlocal.c: In function 'EIBSocketLocal':
+> openlocal.c:57:7: error: implicit declaration of function 'close'; did you mean 'pclose'? [-Wimplicit-function-declaration]
+>    57 |       close (con->fd);
+>       |       ^~~~~
+>       |       pclose
+> make[6]: *** [Makefile:611: close.lo] Error 1
+> ```
+> 
+> This patch include <unistd.h> to include the declaration of close.
+> 
+> Fixes: https://autobuild.buildroot.org/results/483/483fc4584815507c3798eb972e22e51f70f52c23/build-end.log
+> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
 Applied to 2025.02.x & 2025.05.x. Thanks
 
 > ---
->  package/openconnect/openconnect.mk | 1 +
->  1 file changed, 1 insertion(+)
+>  ...include-unistd-for-close-declaration.patch | 70 +++++++++++++++++++
+>  1 file changed, 70 insertions(+)
+>  create mode 100644 package/bcusdk/0005-include-unistd-for-close-declaration.patch
 > 
-> diff --git a/package/openconnect/openconnect.mk b/package/openconnect/openconnect.mk
-> index 3fd9f990b0..73716d708e 100644
-> --- a/package/openconnect/openconnect.mk
-> +++ b/package/openconnect/openconnect.mk
-> @@ -9,6 +9,7 @@ OPENCONNECT_SITE = https://www.infradead.org/openconnect/download
->  OPENCONNECT_DEPENDENCIES = host-pkgconf libxml2 zlib
->  OPENCONNECT_LICENSE = LGPL-2.1
->  OPENCONNECT_LICENSE_FILES = COPYING.LGPL
-> +OPENCONNECT_CPE_ID_VENDOR = infradead
->  OPENCONNECT_CONF_OPTS = \
->  	--disable-dsa-tests \
->  	--with-vpnc-script=/etc/vpnc/vpnc-script \
+> diff --git a/package/bcusdk/0005-include-unistd-for-close-declaration.patch b/package/bcusdk/0005-include-unistd-for-close-declaration.patch
+> new file mode 100644
+> index 0000000000..c05a68d9a3
+> --- /dev/null
+> +++ b/package/bcusdk/0005-include-unistd-for-close-declaration.patch
+> @@ -0,0 +1,70 @@
+> +From 7fe256a6e3b28e3ca5c163e38844c9e7c05099c1 Mon Sep 17 00:00:00 2001
+> +From: Thomas Perale <thomas.perale@mind.be>
+> +Date: Tue, 12 Aug 2025 18:43:26 +0200
+> +Subject: [PATCH] include unistd for close declaration
+> +
+> +When using gcc-14 the compilation fails with the following error
+> +message:
+> +
+> +```
+> +close.c: In function 'EIBClose':
+> +close.c:38:3: error: implicit declaration of function 'close'; did you mean 'pclose'? [-Wimplicit-function-declaration]
+> +   38 |   close (con->fd);
+> +      |   ^~~~~
+> +      |   pclose
+> +openlocal.c: In function 'EIBSocketLocal':
+> +openlocal.c:57:7: error: implicit declaration of function 'close'; did you mean 'pclose'? [-Wimplicit-function-declaration]
+> +   57 |       close (con->fd);
+> +      |       ^~~~~
+> +      |       pclose
+> +make[6]: *** [Makefile:611: close.lo] Error 1
+> +```
+> +
+> +This patch include <unistd.h> to include the declaration of close.
+> +
+> +Upstream: https://sourceforge.net/p/bcusdk/patches/6/
+> +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+> +---
+> + eibd/client/c/close.c      | 1 +
+> + eibd/client/c/openlocal.c  | 1 +
+> + eibd/client/c/openremote.c | 1 +
+> + 3 files changed, 3 insertions(+)
+> +
+> +diff --git a/eibd/client/c/close.c b/eibd/client/c/close.c
+> +index 900fcd8..f7508bb 100644
+> +--- a/eibd/client/c/close.c
+> ++++ b/eibd/client/c/close.c
+> +@@ -24,6 +24,7 @@
+> +     along with this program; if not, write to the Free Software
+> +     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+> + */
+> ++#include <unistd.h>
+> + 
+> + #include "eibclient-int.h"
+> + 
+> +diff --git a/eibd/client/c/openlocal.c b/eibd/client/c/openlocal.c
+> +index c7fd5d7..df2e9f9 100644
+> +--- a/eibd/client/c/openlocal.c
+> ++++ b/eibd/client/c/openlocal.c
+> +@@ -27,6 +27,7 @@
+> + 
+> + #include <sys/socket.h>
+> + #include <sys/un.h>
+> ++#include <unistd.h>
+> + 
+> + #include "eibclient-int.h"
+> + 
+> +diff --git a/eibd/client/c/openremote.c b/eibd/client/c/openremote.c
+> +index 24d7ecd..9b2be39 100644
+> +--- a/eibd/client/c/openremote.c
+> ++++ b/eibd/client/c/openremote.c
+> +@@ -30,6 +30,7 @@
+> + #include <netinet/in.h>
+> + #include <netinet/tcp.h>
+> + #include <netdb.h>
+> ++#include <unistd.h>
+> + 
+> + #include "eibclient-int.h"
+> + 
+> +-- 
+> +2.50.1
 > -- 
 > 2.50.1
 > 
