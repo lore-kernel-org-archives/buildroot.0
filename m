@@ -4,77 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2CD52CA0EEB
-	for <buildroot@archiver.kernel.org>; Fri, 22 Aug 2025 21:06:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D1DCCA0EEB
+	for <buildroot@archiver.kernel.org>; Fri, 22 Aug 2025 21:08:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DEBDD83A8B;
-	Fri, 22 Aug 2025 21:06:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 008E383B5A;
+	Fri, 22 Aug 2025 21:08:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mDGziO0viewB; Fri, 22 Aug 2025 21:06:37 +0000 (UTC)
+ id 7_29VZhXnlOC; Fri, 22 Aug 2025 21:08:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C1FB183AA3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 127DD83B1D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C1FB183AA3;
-	Fri, 22 Aug 2025 21:06:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 127DD83B1D;
+	Fri, 22 Aug 2025 21:08:39 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 9DC07D8
- for <buildroot@buildroot.org>; Fri, 22 Aug 2025 21:06:36 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 9C00742E
+ for <buildroot@buildroot.org>; Fri, 22 Aug 2025 21:08:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8F4DE40BBB
- for <buildroot@buildroot.org>; Fri, 22 Aug 2025 21:06:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8129340BE3
+ for <buildroot@buildroot.org>; Fri, 22 Aug 2025 21:08:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wZClz-YdWmGy for <buildroot@buildroot.org>;
- Fri, 22 Aug 2025 21:06:35 +0000 (UTC)
+ id R2tpNuj64oJX for <buildroot@buildroot.org>;
+ Fri, 22 Aug 2025 21:08:36 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
  helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 280C740BB6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 280C740BB6
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8154E40BE4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8154E40BE4
 Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 280C740BB6
- for <buildroot@buildroot.org>; Fri, 22 Aug 2025 21:06:34 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8154E40BE4
+ for <buildroot@buildroot.org>; Fri, 22 Aug 2025 21:08:36 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id E9D521A0D52;
- Fri, 22 Aug 2025 21:06:32 +0000 (UTC)
+ by smtpout-02.galae.net (Postfix) with ESMTPS id D9FCA1A0D52
+ for <buildroot@buildroot.org>; Fri, 22 Aug 2025 21:08:34 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id B52B6604AD;
- Fri, 22 Aug 2025 21:06:32 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id A3988604AD;
+ Fri, 22 Aug 2025 21:08:34 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id C7DF81C22CC97; 
- Fri, 22 Aug 2025 23:06:31 +0200 (CEST)
-Date: Fri, 22 Aug 2025 23:06:30 +0200
+ with ESMTPSA id A75321C22D4A8; 
+ Fri, 22 Aug 2025 23:08:32 +0200 (CEST)
+Date: Fri, 22 Aug 2025 23:08:31 +0200
 To: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 Cc: buildroot@buildroot.org
-Message-ID: <20250822230630.76b6f36a@windsurf>
-In-Reply-To: <20250820163921.1968030-3-angelo.compagnucci@gmail.com>
+Message-ID: <20250822230831.078510ea@windsurf>
+In-Reply-To: <20250820163921.1968030-2-angelo.compagnucci@gmail.com>
 References: <20250820163921.1968030-1-angelo.compagnucci@gmail.com>
- <20250820163921.1968030-3-angelo.compagnucci@gmail.com>
+ <20250820163921.1968030-2-angelo.compagnucci@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=dkim; 
- t=1755896792; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1755896914; h=from:subject:date:message-id:to:cc:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=YNIQHx/8DF16N9Nab4J2EDBdUU4Ib4rDq+uSrlpVVa8=;
- b=HwB/KeX9Qkx3Hu38FiS3gjTLcHsUb/1fnou+EyL7WZW89DVZICkHHwK+ih9PEyUVQv4tFU
- PJtdGa2m5ITf7MgjsZcKm1sJk2AvglbAXxhIgwi2LEQZxGU2PILFbMNSTzeW2hZyWwMtCR
- 6ZyL8oB/rDjcg+yMHIe6P2AgYgbbEaWfbnCGZ5M6Buf/IbkWh7j8Nk41HovE+dp9H7Ww3m
- ILz6x3fyJuKRN9Q8hRzrvepdB/5qjEE1lvnV2Cy+TsMbw5z5KwA2Mci66ziCQEQEQheMQb
- yOPLyBAcy7aojV2gbEQqLrUFTU/1/IhU78fy/yXOe7vIBNLjqKMpClKvGaY8hQ==
+ bh=6u1G02pAQpYPrzVIGuR2RVQLwHBkqq7Z/75Fks1V6IY=;
+ b=acbjIqBdx7e+Bbyq1JT05xTwiH31NoeL67GRpdSqnF11azgxq6IE/UqgrLRz1z5WnTd2pM
+ K0Kvt0eXI77VNb+Xxt27ELVxqqmEsrDscCRrw5Sat31cAcyIdplzW/KDw0zRPX2dGY1gcu
+ TvHQqUNh7MIRGw/ScaC8U5D44JM/jeC7FwJF5gbNH2NCuElK74csqtCXTol7EdcI9QJmTt
+ /oLRzPILZNL3wcZ+FM2FrYhfwGyLXX1L9vDgPuxENomlfeKTuPeOA2nn4HGRWFgyH2TjHY
+ eCpdosC8r1J55YJWHzlOKUBNGH96eng3EqMkvXOBhWT7bDALp2SChzMSj/6m5g==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=HwB/KeX9
-Subject: Re: [Buildroot] [PATCH 2/4 v2] package/libcupsfilters: new package
+ dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
+ header.a=rsa-sha256 header.s=dkim header.b=acbjIqBd
+Subject: Re: [Buildroot] [PATCH 1/4 v2] package/qpdf: bump to version 12.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,114 +94,70 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Hello Angelo,
 
-Thanks a lot for this great work! I have a number of comments/questions
-below.
+Thanks for this patch, which looks great. I have a few questions below.
 
-On Wed, 20 Aug 2025 18:39:19 +0200
+On Wed, 20 Aug 2025 18:39:18 +0200
 Angelo Compagnucci <angelo.compagnucci@gmail.com> wrote:
 
+> diff --git a/package/qpdf/qpdf.mk b/package/qpdf/qpdf.mk
+> index d479515789..2a4e7f3386 100644
+> --- a/package/qpdf/qpdf.mk
+> +++ b/package/qpdf/qpdf.mk
+> @@ -4,36 +4,30 @@
+>  #
+>  ################################################################################
+>  
+> -QPDF_VERSION = 10.5.0
+> -QPDF_SITE = http://downloads.sourceforge.net/project/qpdf/qpdf/$(QPDF_VERSION)
+> +QPDF_VERSION = 12.2.0
+> +QPDF_SITE = https://github.com/qpdf/qpdf/releases/download/v$(QPDF_VERSION)
+>  QPDF_INSTALL_STAGING = YES
+>  QPDF_LICENSE = Apache-2.0 or Artistic-2.0
+>  QPDF_LICENSE_FILES = LICENSE.txt Artistic-2.0
+>  QPDF_CPE_ID_VALID = YES
+>  QPDF_DEPENDENCIES = host-pkgconf zlib jpeg
+> +QPDF_SUPPORTS_IN_SOURCE_BUILD = NO
+>  
+> -QPDF_CONF_OPTS = --with-random=/dev/urandom
+> -
+> -ifeq ($(BR2_USE_WCHAR),)
+> -QPDF_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -DQPDF_NO_WCHAR_T"
 
-> diff --git a/package/libcupsfilters/Config.in b/package/libcupsfilters/Config.in
-> new file mode 100644
-> index 0000000000..e664869a41
-> --- /dev/null
-> +++ b/package/libcupsfilters/Config.in
-> @@ -0,0 +1,34 @@
-> +config BR2_PACKAGE_LIBCUPSFILTERS
-> +	bool "libcupsfilters"
-> +	# needs fork()
-> +	depends on BR2_USE_MMU
-> +	depends on BR2_INSTALL_LIBSTDCPP # qpdf
-> +	depends on !BR2_STATIC_LIBS
-> +	depends on BR2_USE_WCHAR # libglib2
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-> +	depends on BR2_PACKAGE_CUPS
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # qpdf
-> +	depends on BR2_TOOLCHAIN_HAS_ATOMIC # qpdf
+Are you confident that qpdf no builds properly in configurations with
+BR2_USE_WCHAR disabled, without anything special?
 
-For the ones that don't have a comment, are they directly dependencies
-due to libcupsfilter itself?
+> -endif
+> +QPDF_CONF_OPTS = -DSKIP_OS_SECURE_RANDOM=ON \
+> +	-DUSE_IMPLICIT_CRYPTO=OFF -DREQUIRE_CRYPTO_NATIVE=ON
 
-> +	select BR2_PACKAGE_JPEG
+What are these 3 options doing? -DSKIP_OS_SECURE_RANDOM=ON seems scary,
+and the other ones would benefit from a bit of explanation so we
+understand how it interacts with the options below to select crypto
+support.
 
-This dependency doesn't seem to be mandatory according to
-https://github.com/OpenPrinting/libcupsfilters/blob/master/INSTALL.md#prerequisites-for-compilation
+>  ifeq ($(BR2_PACKAGE_GNUTLS),y)
+> -QPDF_CONF_OPTS += --enable-crypto-gnutls
+> +QPDF_CONF_OPTS += -DREQUIRE_CRYPTO_GNUTLS=ON
+>  QPDF_DEPENDENCIES += gnutls
+>  else
+> -QPDF_CONF_OPTS += --disable-crypto-gnutls
+> +QPDF_CONF_OPTS += -DREQUIRE_CRYPTO_GNUTLS=OFF
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_OPENSSL),y)
+> -QPDF_CONF_OPTS += --enable-crypto-openssl
+> +QPDF_CONF_OPTS += -DREQUIRE_CRYPTO_OPENSSL=ON
+>  QPDF_DEPENDENCIES += openssl
+>  else
+> -QPDF_CONF_OPTS += --disable-crypto-openssl
+> -endif
+> -
+> -ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+> -QPDF_CONF_ENV += LIBS=-latomic
 
-> +	select BR2_PACKAGE_FONTCONFIG
-
-Same.
-
-> +	select BR2_PACKAGE_FREETYPE
-
-There's no mention of freetype in INSTALL.md nor in configure.ac.
-
-> +	select BR2_PACKAGE_LCMS2
-> +	select BR2_PACKAGE_LIBGLIB2
-
-There's no mention of glib2 in INSTALL.md nor in configure.ac.
-
-> diff --git a/package/libcupsfilters/libcupsfilters.mk b/package/libcupsfilters/libcupsfilters.mk
-> new file mode 100644
-> index 0000000000..9cf449ac8d
-> --- /dev/null
-> +++ b/package/libcupsfilters/libcupsfilters.mk
-> @@ -0,0 +1,93 @@
-> +################################################################################
-> +#
-> +# libcupsfilters
-> +#
-> +################################################################################
-> +
-> +LIBCUPSFILTERS_VERSION = 2.1.1
-> +LIBCUPSFILTERS_SITE = https://github.com/OpenPrinting/libcupsfilters/releases/download/$(LIBCUPSFILTERS_VERSION)
-> +LIBCUPSFILTERS_LICENSE = GPL-2.0, GPL-2.0+, GPL-3.0, GPL-3.0+, LGPL-2, LGPL-2.1+, MIT, BSD-4-Clause
-> +LIBCUPSFILTERS_LICENSE_FILES = COPYING
-> +LIBCUPSFILTERS_CPE_ID_VENDOR = linuxfoundation
-
-Where did you find this? I don't see any CPE entry about libcupsfilter,
-so we can't know which CPE it will get for the moment.
-
-> +LIBCUPSFILTERS_DEPENDENCIES = cups libglib2 lcms2 qpdf fontconfig freetype jpeg
-
-As requested above: this needs to be revisited.
-
-> +LIBCUPSFILTERS_INSTALL_STAGING = YES
-> +
-> +LIBCUPSFILTERS_CONF_OPTS = \
-> +	--disable-mutool \
-> +	--disable-foomatic \
-> +	--disable-braille \
-> +	--enable-imagefilters \
-
-What is the impact of this? Do we need it unconditionally?
-
-> +	--with-cups-config=$(STAGING_DIR)/usr/bin/cups-config \
-> +	--with-sysroot=$(STAGING_DIR) \
-> +	--with-pdftops=pdftops \
-> +	--with-jpeg \
-
-jpeg seems optional.
-
-> +	--with-test-font-path=/dev/null \
-> +	--without-rcdir
-
-You can probably check in ./configure --help for other things to
-disable, like:
-
-	--without-jpegxl
-
-(I honestly didn't find any other).
-
-
-> +define LIBCUPSFILTERS_INSTALL_INIT_SYSV
-> +	$(INSTALL) -D -m 0755 package/cups-filters/S82cups-browsed \
-> +		$(TARGET_DIR)/etc/init.d/S82cups-browsed
-
-We really don't want libcupsfilter to install an init script that comes
-from package/cups-filters/. If libcupsfilter is now responsible for
-this, the init script should be moved there (or possibly copied
-initially, and then removed in the commit that bumps cups-filters, or
-something like that).
+This is no longer needed? Did you test building with a SPARC toolchain
+for example, which is known to be picky as all __atomic built-ins are
+implemented in libatomic?
 
 Thanks a lot!
 
