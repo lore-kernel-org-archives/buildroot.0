@@ -4,77 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 390A9CA0EEB
-	for <buildroot@archiver.kernel.org>; Fri, 22 Aug 2025 18:48:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5AB20CA0EED
+	for <buildroot@archiver.kernel.org>; Fri, 22 Aug 2025 20:08:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D2D8782A29;
-	Fri, 22 Aug 2025 18:48:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D2CFC83BBA;
+	Fri, 22 Aug 2025 20:08:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 53Kkwtgmx1Oq; Fri, 22 Aug 2025 18:48:37 +0000 (UTC)
+ id snWa13bropvL; Fri, 22 Aug 2025 20:08:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B07C82998
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E346C83BB1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3B07C82998;
-	Fri, 22 Aug 2025 18:48:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 84727963
- for <buildroot@buildroot.org>; Fri, 22 Aug 2025 18:48:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E346C83BB1;
+	Fri, 22 Aug 2025 20:08:14 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id C9A3F42E
+ for <buildroot@buildroot.org>; Fri, 22 Aug 2025 20:08:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7CA7160C28
- for <buildroot@buildroot.org>; Fri, 22 Aug 2025 18:48:36 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B08EB40CB5
+ for <buildroot@buildroot.org>; Fri, 22 Aug 2025 20:08:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tkKyXYKKrllV for <buildroot@buildroot.org>;
- Fri, 22 Aug 2025 18:48:35 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
- helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CJqwwT866F9T for <buildroot@buildroot.org>;
+ Fri, 22 Aug 2025 20:08:13 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A081460C21
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A081460C21
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A081460C21
- for <buildroot@buildroot.org>; Fri, 22 Aug 2025 18:48:34 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id 683404E40BAE
- for <buildroot@buildroot.org>; Fri, 22 Aug 2025 18:48:32 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 22DC6604AD;
- Fri, 22 Aug 2025 18:48:32 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 457601C22D6A8; 
- Fri, 22 Aug 2025 20:48:20 +0200 (CEST)
-Date: Fri, 22 Aug 2025 20:48:16 +0200
-To: "uuidxx@163.com" <uuidxx@163.com>
-Cc: "romain.naour@smile.fr" <romain.naour@smile.fr>, Thomas Petazzoni via
- buildroot <buildroot@buildroot.org>
-Message-ID: <20250822204816.226053fd@windsurf>
-In-Reply-To: <OSZPR01MB786801D0CA53D517D6E04AD6FD31A@OSZPR01MB7868.jpnprd01.prod.outlook.com>
-References: <OSZPR01MB786801D0CA53D517D6E04AD6FD31A@OSZPR01MB7868.jpnprd01.prod.outlook.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1755888510; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=liO1hu2Spor3uZKvsZogFsu4H/EWNBuMLeUX7Dl1Fsk=;
- b=E8e0PdaqjTj1r+e8AC9HgplwrUkUGjFz2QAWDp7tXikyhfefF0Ty7k/nHmmbdMdM2a/Kj3
- qN5c13YiqxHwJZrS55Mh5H7MqqwYnprcgWqbsY+LrypKvkCcZCxl+pQsoeIPQdvkFIrIP5
- CwNcc9cchMR6eXWnsf0BopaCnnI+edtN1JmMol0sb6lOv0lSU+tnhEJXxV7lMb6pnXaOEk
- I4z169Yk89m7mB5CsYgv2/cYT8YHZeDjQ/v4kzAs+uAtuNU8FhMoM1nSdCQKCIZDKneNdE
- 5wiNkpdCnJDistdaR2iT911zt+3wNhhEEkxskrPt04S4W908nF7T158CsnuKuA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=E8e0Pdaq
-Subject: Re: [Buildroot] [PATCH v3 1/1] package/lrzsz: fix build with gcc 15
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0A59640CF3
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0A59640CF3
+ for <buildroot@buildroot.org>; Fri, 22 Aug 2025 20:08:13 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 0492F8777A; Fri, 22 Aug 2025 20:08:13 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 22 Aug 2025 22:07:39 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 13e778fcf14949a45c64803d5fd5ee8061a518d4
+X-Git-Newrev: b73853cf7fedb42d686732c20b5c5a440c3f269b
+X-Patchwork-Hint: ignore
+Message-Id: <20250822200813.0492F8777A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dump1090: fix build w/ gcc-15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -88,57 +59,90 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=b73853cf7fedb42d686732c20b5c5a440c3f269b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 18 Aug 2025 14:58:50 +0000
-"uuidxx@163.com" <uuidxx@163.com> wrote:
+Fixes https://autobuild.buildroot.org/results/dbf55d0fd8d779f408e7ccca4c2a9083e7a11f6a/
 
-> Fixes:
->   https://autobuild.buildroot.net/results/a1a5aad2ccc69aeff586d7a83620f10d51ccfdb6/
-> 
-> Upstream: https://github.com/UweOhse/lrzsz/pull/8
-> 
-> Signed-off-by: Frank Chung <uuidxx@163.com>
-> ---
-> Changes v2 -> v3:
->   - remove `[PATCH 2/2]` from the patch (suggested by Thomas)
->   - use `Upstream` instaead of `From` (suggested by Thomas)
->   - point to the autobuilder issue (suggested by Thomas)
-> ---
->  package/lrzsz/0005-fix-build-with-gcc15.patch | 85 +++++++++++++++++++
->  1 file changed, 85 insertions(+)
->  create mode 100644 package/lrzsz/0005-fix-build-with-gcc15.patch
+GCC-15 has gained a new warning about non-NUL terminated strings and
+dump1090 is built with -Werror leading to build errors like:
 
-Thanks, I've applied, but after doing a number of changes:
+interactive.c:143:23: error: initializer-string for array of 'char' truncates
+ NUL terminator but destination lacks 'nonstring' attribute (5 chars into 4
+ available) [-Werror=unterminated-string-initialization]
+  143 |     char spinner[4] = "|/-\\";
 
-1. Use the actual patch from the pull request, keeping his original
-   author. This required removing our patch 0002, which is already part
-   of the patch in this pull request
+Add a patch from an upstream pull request to fix this by zero terminating
+the strings.
 
-2. Backport two other patches from this repository, which are also
-   fixing GCC 15.x build issues.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../dump1090/0002-Fix-compilation-with-GCC15.patch | 50 ++++++++++++++++++++++
+ 1 file changed, 50 insertions(+)
 
-3. Add ac_cv_type_signal=void in LRZSZ_CONF_ENV to fix another GCC 15.x
-   build issue.
-
-4. Fix your From: which wasn't matching your Signed-off-by (your name
-   is missing in your From:)
-
-All of this lead to the following commit:
-https://gitlab.com/buildroot.org/buildroot/-/commit/13e778fcf14949a45c64803d5fd5ee8061a518d4
-
-Thanks for your contribution!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/dump1090/0002-Fix-compilation-with-GCC15.patch b/package/dump1090/0002-Fix-compilation-with-GCC15.patch
+new file mode 100644
+index 0000000000..6361dbc907
+--- /dev/null
++++ b/package/dump1090/0002-Fix-compilation-with-GCC15.patch
+@@ -0,0 +1,50 @@
++From 93be1da123215e8ac15a0deaffedd480e8899f77 Mon Sep 17 00:00:00 2001
++From: Conrad Kostecki <conrad@kostecki.com>
++Date: Tue, 22 Apr 2025 00:41:31 +0200
++Subject: [PATCH] Fix compilation with GCC15
++
++Upstream: https://github.com/flightaware/dump1090/pull/261
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ ais_charset.c | 2 +-
++ ais_charset.h | 2 +-
++ interactive.c | 2 +-
++ 3 files changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/ais_charset.c b/ais_charset.c
++index a487e3c..0d3af03 100644
++--- a/ais_charset.c
+++++ b/ais_charset.c
++@@ -1,3 +1,3 @@
++ #include "ais_charset.h"
++ 
++-char ais_charset[64] = "@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_ !\"#$%&'()*+,-./0123456789:;<=>?";
+++char ais_charset[65] = "@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_ !\"#$%&'()*+,-./0123456789:;<=>?";
++diff --git a/ais_charset.h b/ais_charset.h
++index 93d4a72..95ef373 100644
++--- a/ais_charset.h
+++++ b/ais_charset.h
++@@ -1,6 +1,6 @@
++ #ifndef AIS_CHARSET_H
++ #define AIS_CHARSET_H
++ 
++-extern char ais_charset[64];
+++extern char ais_charset[65];
++ 
++ #endif
++diff --git a/interactive.c b/interactive.c
++index 8761c95..75775ad 100644
++--- a/interactive.c
+++++ b/interactive.c
++@@ -140,7 +140,7 @@ void interactiveShowData(void) {
++     static bool need_clear = true;
++     uint64_t now = mstime();
++     char progress;
++-    char spinner[4] = "|/-\\";
+++    char spinner[5] = "|/-\\";
++     int valid = 0;
++     double signalMax = -100.0;
++     double signalMin = +100.0;
++-- 
++2.39.5
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
