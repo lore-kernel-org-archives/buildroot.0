@@ -1,76 +1,106 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00096CA0EE4
-	for <buildroot@archiver.kernel.org>; Sat, 23 Aug 2025 14:38:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 599DACA0EED
+	for <buildroot@archiver.kernel.org>; Sat, 23 Aug 2025 15:05:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A296683C64;
-	Sat, 23 Aug 2025 14:38:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 110D141488;
+	Sat, 23 Aug 2025 15:05:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZCFxelfM8jLY; Sat, 23 Aug 2025 14:38:54 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cLvNyD3gBVp2; Sat, 23 Aug 2025 15:05:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9A06083C6C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0B38841480
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9A06083C6C;
-	Sat, 23 Aug 2025 14:38:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 21E5571E
- for <buildroot@buildroot.org>; Sat, 23 Aug 2025 14:38:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0B38841480;
+	Sat, 23 Aug 2025 15:05:53 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id E9C3B19C
+ for <buildroot@buildroot.org>; Sat, 23 Aug 2025 15:05:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 12F0C83C6C
- for <buildroot@buildroot.org>; Sat, 23 Aug 2025 14:38:53 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E6F7F6128F
+ for <buildroot@buildroot.org>; Sat, 23 Aug 2025 15:05:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Cja8F6UFMktf for <buildroot@buildroot.org>;
- Sat, 23 Aug 2025 14:38:52 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 328DC83CDF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 328DC83CDF
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 328DC83CDF
- for <buildroot@buildroot.org>; Sat, 23 Aug 2025 14:38:51 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id 28EAF1A0D24
- for <buildroot@buildroot.org>; Sat, 23 Aug 2025 14:38:49 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id E9BCB606A7
- for <buildroot@buildroot.org>; Sat, 23 Aug 2025 14:38:48 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 139E01C22D0E6; 
- Sat, 23 Aug 2025 16:38:47 +0200 (CEST)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BtvPWx0ItGvL for <buildroot@buildroot.org>;
+ Sat, 23 Aug 2025 15:05:49 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::433; helo=mail-wr1-x433.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org F0C7F61289
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F0C7F61289
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
+ [IPv6:2a00:1450:4864:20::433])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id F0C7F61289
+ for <buildroot@buildroot.org>; Sat, 23 Aug 2025 15:05:48 +0000 (UTC)
+Received: by mail-wr1-x433.google.com with SMTP id
+ ffacd0b85a97d-3b9d41c1149so1829026f8f.0
+ for <buildroot@buildroot.org>; Sat, 23 Aug 2025 08:05:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1755961547; x=1756566347;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=nxsH2ZaLb7PRf8OArCfnyWFSijDA7h4jP8EGXEgJBB0=;
+ b=bMzJNMf9W7tVqMs60vKM6y1uw3yvLhFXMNDJCbeFJxAH4XkptXJk305Bdb1seS9VPr
+ nGJq53gKnscdxcyyXOMJi1jv7kCHf26UjVrAfcC1z3dL/8XZAJif/xJF6sZhGu6wL/lq
+ en2saFm+9vUDgttH+EoZx9+146OJ9lhvrkWE3GCvEAmRWp6tpJkXIIpRA7r6Vp1ZwOtW
+ KZKMfdFBVsphyR7Lf4iEf89ecnZfiITohg2qQGXnqcv19t91imEgcY5AIUz2FgjxguTg
+ gX3vJgV9Zv44y5V/1EVvFW0q6VOcx9WqvFlxYWnLB6b8e1qIY08zavK2bKc/xkkXlykx
+ D/ug==
+X-Gm-Message-State: AOJu0YxIWBxHgxkcCzT3qJYnWQ1Gybz4lfC8R4vab+XyWFxnUrRpkzTT
+ mdnpI3Q6en8YiQtSR73RspnwiqrPM4AOiU68FO6ll/cn577CjlKr4XPVD6rfAWLIinhh8Qr8ohP
+ hgRVI
+X-Gm-Gg: ASbGncsR9n6Em4zqdJznMGtSqKSDSoJpnSIsmWKrOROesrxd5wpu3WyVL/nqocka/vK
+ YdzhNfl/Vy0rW2zCRulkViATA882dFsyVcXUJ3p6GlkTH5U1NJi75aWebZ6ZtUoUk1W2Mmi9KF3
+ UCjW7wC1FmVKiP1Q83Ptuh6RdwrpiDjQc7dVoPQWJ16JpNQZ46g9Xd+BWjwL0v6VhzAbDhq40Ct
+ iQwdYkQtyUFbHeRHbszlUuXd5dBy9bTFdSasY0mZZMH8GiSywaGCiBj4zntWBk11S62V0Jz12I2
+ TiNuoS6g1or4FvW2iqk2aOCOBGTlXDh63jPGR6r+sDXzxwE57DHcX+G3adPwNTWB1LejhHG75gX
+ y/y0ov5P1NIrnBGSwGnyqhSv9h6to1S16JCxDDV+v7RVxG6xJP1uQHxhISwZQqVsxW3Ct8USG9j
+ rhcRWV15H9LsTvqYmB1+dNnSPpNYVRxYk=
+X-Google-Smtp-Source: AGHT+IEmug9wymmJimNbTUl+50y1nDp+5+tpVpNYrqsFE6aZ7wtLSzfw4PxHZSEjSm7PrqYWX4rrgg==
+X-Received: by 2002:a05:6000:2882:b0:3b8:d16a:a4a5 with SMTP id
+ ffacd0b85a97d-3c5d7ac658emr4512823f8f.0.1755961546778; 
+ Sat, 23 Aug 2025 08:05:46 -0700 (PDT)
+Received: from P-NTS-Evian.home
+ (2a01cb05949d5800c97d3b734a46d823.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:949d:5800:c97d:3b73:4a46:d823])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-3c711d9f389sm3833503f8f.60.2025.08.23.08.05.46
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 23 Aug 2025 08:05:46 -0700 (PDT)
 To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 23 Aug 2025 16:38:42 +0200
-Message-ID: <20250823143843.50035-1-thomas.petazzoni@bootlin.com>
+Cc: Romain Naour <romain.naour@smile.fr>,
+	Julien Olivain <ju.o@free.fr>
+Date: Sat, 23 Aug 2025 17:05:41 +0200
+Message-ID: <20250823150543.3233205-2-romain.naour@smile.fr>
 X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20250823150543.3233205-1-romain.naour@smile.fr>
+References: <20250823150543.3233205-1-romain.naour@smile.fr>
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=dkim; 
- t=1755959928; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding; bh=StYi4FBA07j7xJ3n2X/HLUD2aqyaytAQhNdv5M0fK3w=;
- b=KUgTfcYHvCOxF43SvK5ZGAJ422+bLDayRr9dNyE16tXM6LT5gH/JBa5zhr6xesIW67jDvA
- UObiE8psWaeHdEYMobYCNmiFYvCVhxftnXeJijieya041Thb1BUT13vrk9UPeYScjWvgAz
- Jj6mc69QD4hohUwRBbtdbruKwnAD3uisTFtaNKoXtu+aottJn9A++I0NMoFY9ewetgGEUG
- 1QYJSdBCnhVYAdy2x09Xk4MD5dO7j+VwNOMMd8MwlgSbb1K4lWkGQhqHjpZjnYLvrIpuhz
- s05QaFZo0bkQtpnkk2mBniwGcNQOxEw7NhYvxhIQf5NEeWpfxDblH2ihjwh62A==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=smile.fr; s=google; t=1755961547; x=1756566347; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=nxsH2ZaLb7PRf8OArCfnyWFSijDA7h4jP8EGXEgJBB0=;
+ b=0UQ2yk6HoUqQGmw1PaV8rYN0vwc5wsGt2TWdHSywsX0AJ4nSo1mRDWFyQ+AlmViaOZ
+ xBeYbNvu0QmsjB5R+l5uVVoEADCOWg3u7x35hu66/L2XENh+V9STcNp2255ajg3tHUyj
+ Nu2IRRbikclL/69OJYLZUHv83bXuWu7f26MSM=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=KUgTfcYH
-Subject: [Buildroot] [PATCH] support/scripts/cve.py: handle CVEs with
- 'configurations' but no 'nodes' inside
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
+ header.s=google header.b=0UQ2yk6H
+Subject: [Buildroot] [PATCH 2/4] support/testing: TestWget: replace thttpd
+ by Busybox's httpd server
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,61 +112,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Romain Naour via buildroot <buildroot@buildroot.org>
+Reply-To: Romain Naour <romain.naour@smile.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The each_cpe() method is careful that some CVEs have no
-"configurations", but some CVEs such as
-https://nvd.nist.gov/vuln/detail/CVE-2025-32915 apparently have a
-"configurations" node, but no "nodes" inside the "configurations",
-causing an exception:
+In order to remove thttpd package from Buildroot, we have to replace it
+from TestWget.
 
-Traceback (most recent call last):
-  File "/home/buildroot/buildroot-stats/./support/scripts/pkg-stats", line 1382, in <module>
-    __main__()
-  File "/home/buildroot/buildroot-stats/./support/scripts/pkg-stats", line 1371, in __main__
-    check_package_cves(args.nvd_path, packages)
-  File "/home/buildroot/buildroot-stats/./support/scripts/pkg-stats", line 679, in check_package_cves
-    check_package_cve_affects(cve, cpe_product_pkgs)
-  File "/home/buildroot/buildroot-stats/./support/scripts/pkg-stats", line 638, in check_package_cve_affects
-    for product in cve.affected_products:
-                   ^^^^^^^^^^^^^^^^^^^^^
-  File "/home/buildroot/buildroot-stats/support/scripts/cve.py", line 185, in affected_products
-    return set(cpe_product(p['id']) for p in self.each_cpe())
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/buildroot/buildroot-stats/support/scripts/cve.py", line 185, in <genexpr>
-    return set(cpe_product(p['id']) for p in self.each_cpe())
-              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/buildroot/buildroot-stats/support/scripts/cve.py", line 173, in each_cpe
-    for node in nodes['nodes']:
-                ~~~~~^^^^^^^^^
-KeyError: 'nodes'
+Busybox's httpd server doesn't report server identification, update
+TestWget accordingly.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/11042295041
+
+Cc: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
-This should be applied to all maintained branches: next, master,
-2025.02 and 2025.05 as we run pkg-stats daily on all those branches.
----
- support/scripts/cve.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ support/testing/tests/package/test_wget.py | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/support/scripts/cve.py b/support/scripts/cve.py
-index 1cbe24c02d..ba41762fa0 100755
---- a/support/scripts/cve.py
-+++ b/support/scripts/cve.py
-@@ -170,7 +170,7 @@ class CVE:
+diff --git a/support/testing/tests/package/test_wget.py b/support/testing/tests/package/test_wget.py
+index c121cbd21c..7279b77667 100644
+--- a/support/testing/tests/package/test_wget.py
++++ b/support/testing/tests/package/test_wget.py
+@@ -7,8 +7,8 @@ class TestWget(infra.basetest.BRTest):
+     config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
+         """
+         BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
++        BR2_PACKAGE_BUSYBOX_HTTPD=y
+         BR2_PACKAGE_WGET=y
+-        BR2_PACKAGE_THTTPD=y
+         BR2_TARGET_ROOTFS_CPIO=y
+         # BR2_TARGET_ROOTFS_TAR is not set
+         """
+@@ -47,11 +47,9 @@ class TestWget(infra.basetest.BRTest):
+         self.assertEqual(out[0], msg)
  
-     def each_cpe(self):
-         for nodes in self.nvd_cve.get('configurations', []):
--            for node in nodes['nodes']:
-+            for node in nodes.get('nodes', []):
-                 for cpe in self.parse_node(node):
-                     yield cpe
- 
+         # We download one last time, showing the server response. We
+-        # check we can see the OK status and our thttpd server
+-        # identification.
++        # check we can see the OK status.
+         cmd = f"wget --no-verbose --server-response -O /dev/null {url}"
+         out, ret = self.emulator.run(cmd)
+         self.assertEqual(ret, 0)
+         out_str = "\n".join(out)
+         self.assertIn("HTTP/1.1 200 OK", out_str)
+-        self.assertIn("Server: thttpd/", out_str)
 -- 
 2.50.1
 
