@@ -1,74 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3EC5FCA0EED
-	for <buildroot@archiver.kernel.org>; Sat, 23 Aug 2025 16:47:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82EA0CA0EED
+	for <buildroot@archiver.kernel.org>; Sat, 23 Aug 2025 16:51:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 11A3483D71;
-	Sat, 23 Aug 2025 16:47:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 427BD612CE;
+	Sat, 23 Aug 2025 16:51:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WrrVg9R0VaUD; Sat, 23 Aug 2025 16:47:40 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id c9YRObJvjjzZ; Sat, 23 Aug 2025 16:51:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3BF9183D55
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0AFA7612F8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3BF9183D55;
-	Sat, 23 Aug 2025 16:47:40 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 8885571E
- for <buildroot@buildroot.org>; Sat, 23 Aug 2025 16:47:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0AFA7612F8;
+	Sat, 23 Aug 2025 16:51:58 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7198519C
+ for <buildroot@buildroot.org>; Sat, 23 Aug 2025 16:51:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6DB5783D5D
- for <buildroot@buildroot.org>; Sat, 23 Aug 2025 16:47:39 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 637C240087
+ for <buildroot@buildroot.org>; Sat, 23 Aug 2025 16:51:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XONQp-A3VHiG for <buildroot@buildroot.org>;
- Sat, 23 Aug 2025 16:47:38 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 99E138112D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 99E138112D
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 99E138112D
- for <buildroot@buildroot.org>; Sat, 23 Aug 2025 16:47:38 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 95C6619F5C2;
- Sat, 23 Aug 2025 18:47:35 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 23 Aug 2025 18:47:35 +0200
-MIME-Version: 1.0
-Date: Sat, 23 Aug 2025 18:47:35 +0200
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250822221959.4092428-1-thomas.petazzoni@bootlin.com>
-References: <20250822221959.4092428-1-thomas.petazzoni@bootlin.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <408785260b4697c812769600f094350a@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1755967656;
- bh=co540a97erhEDCmbFxcwqpUlkKL3q10GooFdcuEXtnA=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=nNRmDsAHsiB3+zj/vA25LawrpzTSR/v4DtqS4FddTj+0GaqnDQDP9M7MFPWj3P69m
- Era7pcEK6MzAQ/+ekEvwFhzdllE6LzzlQjQhSZEpRUctQTPBYM2BXsfT0F9sMUd+Fz
- 4i/FLKxc8Bl9LTBvCwLgmjS2xYXarnM3TYEscqNmTD1LiEHCFkkQdjb7hzdKPgLCKG
- g3/lIy8JtkGXuXyNn2VBB4DSfg3pYvDUGA+zHUaYv8Wp5Ij4hP7EmRFj2fqXFfXYQm
- VxaYDK9GtgiUtHsgACcDmi4RmQh9za5WeD4fK+/Z8E5emYybUg8+Rw5HJ71IXuVqvF
- GRQdzsfOjiCYA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=nNRmDsAH
-Subject: Re: [Buildroot] [PATCH] package/p11-kit: fix build with GCC 15.x
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lyWcZpUCqjNl for <buildroot@buildroot.org>;
+ Sat, 23 Aug 2025 16:51:55 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4A51D40052
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4A51D40052
+ for <buildroot@buildroot.org>; Sat, 23 Aug 2025 16:51:55 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 398DA876DD; Sat, 23 Aug 2025 16:51:55 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 23 Aug 2025 18:50:11 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 103f75bfabbf5a837e6036be8851711f06171283
+X-Git-Newrev: d1553b47e07f0dd5b01212c210615e02e68ae7fc
+X-Patchwork-Hint: ignore
+Message-Id: <20250823165155.398DA876DD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gpm: fix build with GCC 15.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,36 +59,405 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 23/08/2025 00:19, Thomas Petazzoni via buildroot wrote:
-> The AC_HEADER_STDBOOL macro used in configure.ac is expanded in the
-> shipped ./configure by a fairly old version, which misdetects our
-> <stdbool.h> as being not usable. Consequently, the code defines its
-> own bool type, with true/false, clashing with GCC 15.x.
-> 
-> Doing a pass of autoreconf addresses the problem.
-> 
-> The autoreconf needs pkg.m4, which comes from host-pkgconf, added as a
-> dependency.
-> 
-> Note that host-pkgconf was already a dependency for one of the
-> optional dependencies of p11-kit, and we're keeping it there even
-> though host-pkgconf is now also an unconditional dependency as we
-> expect this unconditional host-pkgconf dependency to be removed when
-> we drop autoreconf.
-> 
-> Fixes:
-> 
->   
-> https://autobuild.buildroot.net/results/760df1a8c21afa893ade5181ce797e14c1f6bdce/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=d1553b47e07f0dd5b01212c210615e02e68ae7fc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Import upstream-submitted patches that fix the build with GCC 15.x.
+
+Fixes:
+
+  https://autobuild.buildroot.net/results/a6b25e6795682a18dff3c88519833663da2134d9/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ ...wing-ncurses-functions.-This-fails-with-G.patch | 236 +++++++++++++++++++++
+ ...n-definition-in-yacc-source-file-until-va.patch |  83 ++++++++
+ ...ete-type-definition-for-WINDOW-in-Gpm_Wge.patch |  39 ++++
+ 3 files changed, 358 insertions(+)
+
+diff --git a/package/gpm/0008-Avoid-shadowing-ncurses-functions.-This-fails-with-G.patch b/package/gpm/0008-Avoid-shadowing-ncurses-functions.-This-fails-with-G.patch
+new file mode 100644
+index 0000000000..d7b984d0da
+--- /dev/null
++++ b/package/gpm/0008-Avoid-shadowing-ncurses-functions.-This-fails-with-G.patch
+@@ -0,0 +1,236 @@
++From 436f3f0a75a42dc9e07f2fe85b73eeb4c95e0515 Mon Sep 17 00:00:00 2001
++From: NHOrus <jy6x2b32pie9@yahoo.com>
++Date: Tue, 11 Feb 2025 18:42:47 +0400
++Subject: [PATCH] Avoid shadowing ncurses functions. This fails with GCC-15 and
++ other compilers implementing C23 Added prefix gpm_ to raw() and noraw() used
++ in two files because they are implemented in same two files, and are static.
++ Same with scr_dump() and src_restore() in yacc source file
++
++Upstream: https://github.com/telmich/gpm/pull/49
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ src/prog/gpm-root.y   | 10 +++++-----
++ src/prog/hltest.c     | 11 +++++------
++ src/prog/mouse-test.c | 24 ++++++++++++------------
++ 3 files changed, 22 insertions(+), 23 deletions(-)
++
++diff --git a/src/prog/gpm-root.y b/src/prog/gpm-root.y
++index d3d064c..7001d6e 100644
++--- a/src/prog/gpm-root.y
+++++ b/src/prog/gpm-root.y
++@@ -939,7 +939,7 @@ static unsigned short clear_sel_args[6]={0, 0,0, 0,0, 4};
++ static unsigned char *clear_sel_arg= (unsigned char *)clear_sel_args+1;
++ 
++ /*------------*/
++-static inline void scr_dump(int fd, FILE *f, unsigned char *buffer, int vc)
+++static inline void gpm_scr_dump(int fd, FILE *f, unsigned char *buffer, int vc)
++ {
++    int dumpfd;
++    char dumpname[20];
++@@ -958,7 +958,7 @@ static inline void scr_dump(int fd, FILE *f, unsigned char *buffer, int vc)
++ }
++ 
++ /*------------*/
++-static inline void scr_restore(int fd, FILE *f, unsigned char *buffer, int vc)
+++static inline void gpm_scr_restore(int fd, FILE *f, unsigned char *buffer, int vc)
++ {
++    int x,y, dumpfd;
++    char dumpname[20];
++@@ -1002,7 +1002,7 @@ Posted *postmenu(int fd, FILE *f, Draw *draw, int x, int y, int console)
++    if (!new) return NULL;
++    new->draw=draw;
++    new->dump=dump=malloc(opt_buf);
++-   scr_dump(fd,f,dump,console);
+++   gpm_scr_dump(fd,f,dump,console);
++    lines=dump[0]; columns=dump[1];
++    i=(columns*dump[3]+dump[2])*2+1; /* where to get it */
++    if (i<0) i=1;
++@@ -1060,7 +1060,7 @@ Posted *postmenu(int fd, FILE *f, Draw *draw, int x, int y, int console)
++    for (i=0; i<draw->width; i++) PUTC(HORLINE,draw->bord,draw->back);
++    PUTC(LRCORNER,draw->bord,draw->back);
++ 
++-   scr_restore(fd,f,dump,console);
+++   gpm_scr_restore(fd,f,dump,console);
++    free(dump);
++ 
++ #undef PUTC
++@@ -1077,7 +1077,7 @@ Posted *unpostmenu(int fd, FILE *f, Posted *which, int vc)
++ {
++    Posted *prev=which->prev;
++ 
++-   scr_restore(fd,f,which->dump, vc);
+++   gpm_scr_restore(fd,f,which->dump, vc);
++    ioctl(fd,TCXONC,TCOON); /* activate the console */  
++    free(which->dump);
++    free(which);
++diff --git a/src/prog/hltest.c b/src/prog/hltest.c
++index cce0abc..a916873 100644
++--- a/src/prog/hltest.c
+++++ b/src/prog/hltest.c
++@@ -80,7 +80,6 @@ int wid,hei,vcsize;
++ unsigned short clear_sel_args[6]={0, 0,0, 0,0, 4};
++ unsigned char *clear_sel_arg= (unsigned char *)clear_sel_args+1;
++ 
++-
++ static inline int scrdump(char *buf)
++ {
++    clear_sel_arg[0]=2;  /* clear_selection */
++@@ -99,7 +98,7 @@ static inline int scrrestore(char *buf)
++ 
++ 
++ /* I don't like curses, so I'm doing low level stuff here */
++-static void raw(void)
+++static void gpm_raw(void)
++ {
++ struct termios it;
++ 
++@@ -115,7 +114,7 @@ tcsetattr(fileno(stdin),TCSANOW,&it);
++ 
++ }
++ 
++-static void noraw(void)
+++static void gpm_noraw(void)
++ {
++ struct termios it;
++ 
++@@ -136,7 +135,7 @@ void killed(int signo)
++ {
++    CLEAR;
++    fprintf(stderr,"hltest: killed by signal %i\r\n",signo);
++-   noraw();
+++   gpm_noraw();
++    exit(0);
++ }
++ 
++@@ -525,7 +524,7 @@ int main(int argc, char **argv)
++    gpm_roi_handler=xhandler;
++    gpm_roi_data=NULL;
++ 
++-   raw();
+++   gpm_raw();
++    newmsg(0,NULL); /* init data structures */
++    while((c=Gpm_Getchar())!=EOF) {
++       char s[32];
++@@ -538,6 +537,6 @@ int main(int argc, char **argv)
++    newmsg(roi ? ((WinInfo *)roi->clientdata)->number : 0,s);
++    }
++ 
++-   noraw();
+++   gpm_noraw();
++    exit(0);
++ }
++diff --git a/src/prog/mouse-test.c b/src/prog/mouse-test.c
++index 0bb1982..7235bba 100644
++--- a/src/prog/mouse-test.c
+++++ b/src/prog/mouse-test.c
++@@ -106,7 +106,7 @@ return 0;
++ /*----------------------------------------------------------------------------- 
++    Place the description here.
++  -----------------------------------------------------------------------------*/
++-static void raw(void)
+++static void gpm_raw(void)
++ {
++    struct termios it;
++ 
++@@ -125,7 +125,7 @@ static void raw(void)
++ /*----------------------------------------------------------------------------- 
++    Place the description here.
++  -----------------------------------------------------------------------------*/
++-static void noraw(void)
+++static void gpm_noraw(void)
++ {
++    struct termios it;
++ 
++@@ -144,7 +144,7 @@ static void noraw(void)
++ void killed(int signo)
++ {
++    fprintf(stderr,"mouse-test: killed by signal %i\r\n",signo);
++-   noraw();
+++   gpm_noraw();
++    exit(0);
++ }
++ 
++@@ -196,7 +196,7 @@ int mousereopen(int oldfd, char *name, Gpm_Type *type)
++ 
++ int noneofthem(void)
++ {
++-   noraw();
+++   gpm_noraw();
++    printf("\n\nSomething went wrong, I didn't manage to detect your"
++ 	 "protocol\n\nFeel free to report your problems to the author\n");
++    exit(1);
++@@ -336,7 +336,7 @@ int main(int argc, char **argv)
++    I_serial=mice->init; /* the first one has I_serial */
++ 
++    signal(SIGINT,killed);   /* control-C kills us */
++-   raw();
+++   gpm_raw();
++ 
++ /*====================================== First of all, detect the device */
++ 
++@@ -568,7 +568,7 @@ int main(int argc, char **argv)
++    /* why checking and not using return value ??? */
++    CHECKFAIL(typecount);
++    if (typecount==1) {
++-      noraw();
+++      gpm_noraw();
++       printf("\n\n\nWell, it seems like your mouse is already detected:\n"
++       "it is on the device \"%s\", and speaks the protocol \"%s\"\n",
++       mousename,list->this->name);
++@@ -587,7 +587,7 @@ int main(int argc, char **argv)
++    } while(i!='y' && i!='n');
++ 
++    if (i=='n') {
++-      noraw();
+++      gpm_noraw();
++       printf("\nThen, you should use the \"bare\" protocol on \"%s\"\n",
++ 	   mousename);
++       exit(0);
++@@ -634,7 +634,7 @@ int main(int argc, char **argv)
++    for (pending=0,i=0;i<got-16;i++)
++       if(!memcmp(buf+i,buf+i+8,8)) pending++;
++    if (pending > 3) {
++-      noraw();
+++      gpm_noraw();
++       printf("\nYour mouse seems to be a 'mman' one  on \"%s\" (%i matches)\n",
++ 	   mousename,pending);
++       exit(0);
++@@ -660,7 +660,7 @@ int main(int argc, char **argv)
++          continue;
++       }
++ 	   if (pending>3) {
++-	      noraw();
+++	      gpm_noraw();
++ 	      printf("\nYour mouse seems to be a '%s' one on \"%s\" (%i matches)\n",
++ 		   cur->this->name,mousename,pending);
++ 	      exit(0);
++@@ -695,7 +695,7 @@ int main(int argc, char **argv)
++          for (pending=0,i=0;i<got-20;i++)
++             if(!memcmp(buf+i,buf+i+10,10)) pending++;
++          if (pending>3) {
++-            noraw();
+++            gpm_noraw();
++             printf("\nYour mouse becomes a 3-buttons ('-t msc') one when\n"
++ 	         "gpm gets '-o %s' on it command line, and X gets\n"
++ 	         "%s in XF86Config\nThe device is \"%s\"",
++@@ -726,7 +726,7 @@ int main(int argc, char **argv)
++    for (pending=0,i=0;i<got-20;i++)
++       if(!memcmp(buf+i,buf+i+10,10)) pending++;
++    if (pending>3) {
++-      noraw();
+++      gpm_noraw();
++       printf("\nWorked. You should keep the button pressed every time the\n"
++ 	   "computer boots, and run gpm in '-R' mode in order to ignore\n"
++ 	   "such hassle when starting X\n\nStill better, but a better mouse\n"
++@@ -734,7 +734,7 @@ int main(int argc, char **argv)
++ 
++       exit(0);
++    }
++-   noraw();
+++   gpm_noraw();
++    printf("\nI'm lost. Can't tell you how to use your middle button\n");
++    return 0;
++ }
++-- 
++2.50.1
++
+diff --git a/package/gpm/0009-Fix-function-definition-in-yacc-source-file-until-va.patch b/package/gpm/0009-Fix-function-definition-in-yacc-source-file-until-va.patch
+new file mode 100644
+index 0000000000..b12f409c39
+--- /dev/null
++++ b/package/gpm/0009-Fix-function-definition-in-yacc-source-file-until-va.patch
+@@ -0,0 +1,83 @@
++From 4e3d358da1c6066d7a320ffc157ca9e35ed34e49 Mon Sep 17 00:00:00 2001
++From: NHOrus <jy6x2b32pie9@yahoo.com>
++Date: Tue, 11 Feb 2025 19:01:48 +0400
++Subject: [PATCH] Fix function definition in yacc source file until valid C23.
++ Fill empty argument lists with values. Add 0 as third argument for
++ two-argument function, it will be ignored at call site.
++
++Upstream: https://github.com/telmich/gpm/pull/49
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ src/prog/gpm-root.y | 14 +++++++-------
++ 1 file changed, 7 insertions(+), 7 deletions(-)
++
++diff --git a/src/prog/gpm-root.y b/src/prog/gpm-root.y
++index 7001d6e..56072ac 100644
++--- a/src/prog/gpm-root.y
+++++ b/src/prog/gpm-root.y
++@@ -128,7 +128,7 @@ typedef struct DrawItem {
++    char *name;
++    char *arg;   /* a cmd string */
++    void *clientdata;  /* a (Draw *) for menus or whatever   */
++-   int (*fun)();
+++   int (*fun)(int, struct DrawItem *, int);
++    struct DrawItem *next;
++ } DrawItem;
++ 
++@@ -159,7 +159,7 @@ int yyerror(char *s);
++ int yylex(void);
++ 
++ DrawItem *cfg_cat(DrawItem *, DrawItem *);
++-DrawItem *cfg_makeitem(int mode, char *msg, int(*fun)(), void *detail);
+++DrawItem *cfg_makeitem(int mode, char *msg, int(*fun)(int,  DrawItem *, int), void *detail);
++ 
++ 
++ /*===================================================================*
++@@ -195,7 +195,7 @@ int f_pipe(int mode, DrawItem *self, int uid);
++       char *string;
++       Draw *draw;
++       DrawItem *item;
++-      int (*fun)();
+++      int (*fun)(int,  DrawItem *, int);
++       }
++ 
++ %token <string> T_STRING
++@@ -284,7 +284,7 @@ struct tokenName tokenList[] = {
++ struct funcName {
++    char *name;
++    int token;
++-   int (*fun)();
+++   int (*fun)(int,  DrawItem *, int);
++    };
++ struct funcName funcList[] = {
++    {"f.debug",T_FUNC,f_debug},
++@@ -390,7 +390,7 @@ Draw *cfg_alloc(void)
++ 
++ /*---------------------------------------------------------------------*/
++ /* malloc an empty DrawItem and fill it */
++-DrawItem *cfg_makeitem(int mode, char *msg, int(*fun)(), void *detail)
+++DrawItem *cfg_makeitem(int mode, char *msg, int(*fun)(int,  DrawItem *, int), void *detail)
++ {
++    DrawItem *new=calloc(1,sizeof(DrawItem));
++ 
++@@ -405,7 +405,7 @@ DrawItem *cfg_makeitem(int mode, char *msg, int(*fun)(), void *detail)
++ 
++       case 'F': /* a function without args */
++          new->fun=fun;
++-         if (fun) fun(F_CREATE,new);
+++         if (fun) fun(F_CREATE,new,0);
++          break;
++ 
++       case 'M':
++@@ -1047,7 +1047,7 @@ Posted *postmenu(int fd, FILE *f, Draw *draw, int x, int y, int console)
++    }
++    /* sides and items */
++    for (item=draw->menu; y++, item; item=item->next) {
++-         if (item->fun) (*(item->fun))(F_POST,item);
+++         if (item->fun) (*(item->fun))(F_POST,item,0);
++          GOTO(x,y); PUTC(VERLINE,draw->bord,draw->back);
++          for (i=0;i<item->pad;i++) PUTC(' ',draw->fore,draw->back);
++          PUTS(item->name,draw->fore,draw->back); i+=strlen(item->name);
++-- 
++2.50.1
++
+diff --git a/package/gpm/0010-Add-incomplete-type-definition-for-WINDOW-in-Gpm_Wge.patch b/package/gpm/0010-Add-incomplete-type-definition-for-WINDOW-in-Gpm_Wge.patch
+new file mode 100644
+index 0000000000..c22eac6f47
+--- /dev/null
++++ b/package/gpm/0010-Add-incomplete-type-definition-for-WINDOW-in-Gpm_Wge.patch
+@@ -0,0 +1,39 @@
++From d6d5168713b1513dc2a780d21bb33dcf16a7a518 Mon Sep 17 00:00:00 2001
++From: NHOrus <jy6x2b32pie9@yahoo.com>
++Date: Sat, 22 Feb 2025 01:12:32 +0400
++Subject: [PATCH] Add incomplete type definition for WINDOW in Gpm_Wgetch()
++
++Window handle is an opaque pointer that Gpm_Wgetch() passes
++through straight to ncurses if it's not null and calls getch
++if it's null. Code doesn't care what's inside the handle
++as long as it agrees with curses definition.
++
++Upstream: https://github.com/telmich/gpm/pull/49
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ src/headers/gpm.h | 9 ++++++++-
++ 1 file changed, 8 insertions(+), 1 deletion(-)
++
++diff --git a/src/headers/gpm.h b/src/headers/gpm.h
++index 57dc618..6c53fbf 100644
++--- a/src/headers/gpm.h
+++++ b/src/headers/gpm.h
++@@ -268,7 +268,14 @@ Gpm_Roi * Gpm_LowerRoi(Gpm_Roi *which, Gpm_Roi *after);
++ /* libcurses.c */
++ /* #include <curses.h>  Hmm... seems risky */
++ 
++-extern int Gpm_Wgetch();
+++/* Window handle is an opaque pointer that Gpm_Wgetch()
+++ * passes through to ncurses if it's not null and calls getch
+++ * if it's null. Code doesn't care what's inside the handle
+++ * as long as it agrees with curses definition.
+++*/
+++typedef struct _win_st WINDOW;
+++
+++extern int Gpm_Wgetch(WINDOW *);
++ #define Gpm_Getch() (Gpm_Wgetch(NULL))
++ 
++ /* libxtra.c */
++-- 
++2.50.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
