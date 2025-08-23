@@ -1,51 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31771CA0EE4
-	for <buildroot@archiver.kernel.org>; Sat, 23 Aug 2025 16:36:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 470DCCA0EED
+	for <buildroot@archiver.kernel.org>; Sat, 23 Aug 2025 16:38:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D3ADE612F8;
-	Sat, 23 Aug 2025 16:36:17 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Q6J-Gw2x-_Ys; Sat, 23 Aug 2025 16:36:17 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E67B6610CA
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E67B6610CA;
-	Sat, 23 Aug 2025 16:36:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id D4AFE71E
- for <buildroot@buildroot.org>; Sat, 23 Aug 2025 16:36:15 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C5A1D83D4B
- for <buildroot@buildroot.org>; Sat, 23 Aug 2025 16:36:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F016883D77;
+	Sat, 23 Aug 2025 16:38:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mjDgtOjrGbBo for <buildroot@buildroot.org>;
- Sat, 23 Aug 2025 16:36:15 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E2D7D83D3F
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E2D7D83D3F
- for <buildroot@buildroot.org>; Sat, 23 Aug 2025 16:36:14 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CFD1C876B5; Sat, 23 Aug 2025 16:36:14 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 23 Aug 2025 18:34:35 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c53f5e78fcd0c6af9174c76d381a44aa48fb4f24
-X-Git-Newrev: 41463deed46b1085d7e6d327d0846805c110d7fe
-X-Patchwork-Hint: ignore
-Message-Id: <20250823163614.CFD1C876B5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/liblog4c-localtime: fix build with
+ id It7c9SSK73pF; Sat, 23 Aug 2025 16:38:01 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3BFC783D71
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3BFC783D71;
+	Sat, 23 Aug 2025 16:38:01 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id EABC971E
+ for <buildroot@buildroot.org>; Sat, 23 Aug 2025 16:37:59 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id D03C383D77
+ for <buildroot@buildroot.org>; Sat, 23 Aug 2025 16:37:59 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1mu9Wc6SzTl9 for <buildroot@buildroot.org>;
+ Sat, 23 Aug 2025 16:37:59 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org EBE5C83D71
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EBE5C83D71
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id EBE5C83D71
+ for <buildroot@buildroot.org>; Sat, 23 Aug 2025 16:37:58 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id 9207B60129;
+ Sat, 23 Aug 2025 18:37:53 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 23 Aug 2025 18:37:53 +0200
+MIME-Version: 1.0
+Date: Sat, 23 Aug 2025 18:37:53 +0200
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org, Alexander Varnin <fenixk19@mail.ru>
+In-Reply-To: <20250819202922.3407686-1-thomas.petazzoni@bootlin.com>
+References: <20250819202922.3407686-1-thomas.petazzoni@bootlin.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <9e3f28e87f7f00f161be6b3f0ef52f52@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1755967075;
+ bh=t3ZASuUrRfAkMzJUSuprVd+OU3CHsjYdGSXoAByYk3U=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=T/bKu5W9qLTHEvBsN+Oh1K9nGNBCkl6efelyei0PZ9Xb4MrAugOygDr8BNAYv68fz
+ S+0/Z3khY0Ec7mV6VDBri0cs6O5wCBKUlqmxwUHKeDlYU9O1CHiYrtyqt8UAWQnz6j
+ vh20C9kC3U/qHNtVh5tHgxvvmv/9nVWs3ZJQWnLk41ZVpwJ3gge/NiWKLUmpqa2hP2
+ h7qUobTeKeP+rIDrk7H/m+h7X06U7r1pDFu9qv3EE4Hs5BIHZ5vt/08ZUGTwkx63Xe
+ KQMmjpM4uAZD7CnqHsi8DR9bsvfn8JrXAFroZOrRa/jqfWLj0BauyvyrqUU72MvXlU
+ WNN969vEWP4RA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=T/bKu5W9
+Subject: Re: [Buildroot] [PATCH] package/liblog4c-localtime: fix build with
  GCC 15.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -60,85 +84,34 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=41463deed46b1085d7e6d327d0846805c110d7fe
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 19/08/2025 22:29, Thomas Petazzoni via buildroot wrote:
+> Add simple patch, submitted upstream, to fix the build with GCC 15.x:
+> 
+> userloc_formatter.c: In function 'userloc_format':
+> userloc_formatter.c:30:5: error: implicit declaration of function 
+> 'sd_debug' [-Wimplicit-function-declaration]
+>    30 |     sd_debug("Formatter s13_userloc checking location info for 
+> userdata %X",a_event->evt_loc->loc_data);
+>       |     ^~~~~~~~
+> make[4]: *** [Makefile:519: userloc_formatter.lo] Error 1
+> 
+> Fixes:
+> 
+>   
+> https://autobuild.buildroot.org/results/dab64025e6a1688d5fadc2b9bd3738a2c886aa9c/
+> 
+> Considering the level of upstream maintenance, we did hesitate with
+> dropping the package, but as the fix was quite simple, we did the fix
+> instead.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Add simple patch, submitted upstream, to fix the build with GCC 15.x:
-
-userloc_formatter.c: In function 'userloc_format':
-userloc_formatter.c:30:5: error: implicit declaration of function 'sd_debug' [-Wimplicit-function-declaration]
-   30 |     sd_debug("Formatter s13_userloc checking location info for userdata %X",a_event->evt_loc->loc_data);
-      |     ^~~~~~~~
-make[4]: *** [Makefile:519: userloc_formatter.lo] Error 1
-
-Fixes:
-
-  https://autobuild.buildroot.org/results/dab64025e6a1688d5fadc2b9bd3738a2c886aa9c/
-
-Considering the level of upstream maintenance, we did hesitate with
-dropping the package, but as the fix was quite simple, we did the fix
-instead.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...serloc_formatter.c-drop-usage-of-sd_debug.patch | 42 ++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
-
-diff --git a/package/liblog4c-localtime/0006-examples-userloc_formatter.c-drop-usage-of-sd_debug.patch b/package/liblog4c-localtime/0006-examples-userloc_formatter.c-drop-usage-of-sd_debug.patch
-new file mode 100644
-index 0000000000..8f54d1d6fd
---- /dev/null
-+++ b/package/liblog4c-localtime/0006-examples-userloc_formatter.c-drop-usage-of-sd_debug.patch
-@@ -0,0 +1,42 @@
-+From 1dfc4a60ebf96766b682c464ae69c453ce15105a Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Tue, 19 Aug 2025 20:04:09 +0200
-+Subject: [PATCH] examples/userloc_formatter.c: drop usage of sd_debug()
-+
-+With recent compilers, log4c-localtime fails to build with:
-+
-+userloc_formatter.c: In function 'userloc_format':
-+userloc_formatter.c:30:5: error: implicit declaration of function 'sd_debug' [-Wimplicit-function-declaration]
-+   30 |     sd_debug("Formatter s13_userloc checking location info for userdata %X",a_event->evt_loc->loc_data);
-+      |     ^~~~~~~~
-+make[4]: *** [Makefile:519: userloc_formatter.lo] Error 1
-+
-+This function seems to be an internal function of the log4c-localtime
-+library, and is not used by any other example application. Since it's
-+only used to print some debugging information, we simply get rid of
-+the problematic code.
-+
-+Upstream: https://github.com/rcmadruga/log4c-localtime/pull/2
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ examples/userloc_formatter.c | 2 --
-+ 1 file changed, 2 deletions(-)
-+
-+diff --git a/examples/userloc_formatter.c b/examples/userloc_formatter.c
-+index 4299a48..7bcf0e9 100644
-+--- a/examples/userloc_formatter.c
-++++ b/examples/userloc_formatter.c
-+@@ -27,10 +27,8 @@ static const char* userloc_format(
-+     static char buffer[4096];
-+     user_locinfo_t* uloc = NULL;
-+ 
-+-    sd_debug("Formatter s13_userloc checking location info for userdata %X",a_event->evt_loc->loc_data);
-+     if (a_event->evt_loc->loc_data != NULL)
-+     {
-+-	sd_debug("Formatter s13_userloc getting a valid user location info pointer");
-+         uloc = (user_locinfo_t*) a_event->evt_loc->loc_data;
-+         sprintf(buffer, "[%s][HOST:%s][PID:%i][FILE:%s][LINE:%i][MSG:%s]",
-+ 		a_event->evt_category,  
-+-- 
-+2.50.1
-+
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
