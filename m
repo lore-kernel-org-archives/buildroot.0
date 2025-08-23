@@ -4,73 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9784DCA0EFA
-	for <buildroot@archiver.kernel.org>; Sat, 23 Aug 2025 21:20:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42149CA0EFA
+	for <buildroot@archiver.kernel.org>; Sat, 23 Aug 2025 21:30:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6C5D961456;
-	Sat, 23 Aug 2025 21:20:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 165B86146B;
+	Sat, 23 Aug 2025 21:30:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N3_MVQFB_6NJ; Sat, 23 Aug 2025 21:20:18 +0000 (UTC)
+ id bwl588WzEZns; Sat, 23 Aug 2025 21:30:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A90F161466
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2AA0B6146C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A90F161466;
-	Sat, 23 Aug 2025 21:20:18 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 9B87D19C
- for <buildroot@buildroot.org>; Sat, 23 Aug 2025 21:20:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2AA0B6146C;
+	Sat, 23 Aug 2025 21:30:00 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 669CB19C
+ for <buildroot@buildroot.org>; Sat, 23 Aug 2025 21:29:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8D688413E2
- for <buildroot@buildroot.org>; Sat, 23 Aug 2025 21:20:17 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4D4D86146B
+ for <buildroot@buildroot.org>; Sat, 23 Aug 2025 21:29:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id F_JRwWAuRlJA for <buildroot@buildroot.org>;
- Sat, 23 Aug 2025 21:20:17 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org BE70F413E9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BE70F413E9
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BE70F413E9
- for <buildroot@buildroot.org>; Sat, 23 Aug 2025 21:20:16 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 81EBC19F57E;
- Sat, 23 Aug 2025 23:20:10 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 23 Aug 2025 23:20:10 +0200
-MIME-Version: 1.0
-Date: Sat, 23 Aug 2025 23:20:10 +0200
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org, Michel Stempin <michel.stempin@wanadoo.fr>,
- Damien Le Moal <dlemoal@kernel.org>
-In-Reply-To: <20250819172830.3350159-1-thomas.petazzoni@bootlin.com>
-References: <20250819172830.3350159-1-thomas.petazzoni@bootlin.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <819a477b5ca76d549accd942a2e97a8b@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1755984015;
- bh=2XjZE8Mpn3BwOoiAg66M6lcDzW5ZmN3J2lDulzUcJRI=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=YVwpuxdwRwKb7qT4TOwjf9yt3q65uTaErq/UjLl9otRRGKWJI/MpVHQp9A44Pv7uL
- /FLHRvDPpOVpL5GdIOZHqa1i4U2xe2cBT8e0FIATr6CuxnvO38qLqE+/45dvoI4Agz
- qXpI8puYqQfEGZhGBl+8j9RITNW/jpnQMA9n+XDvqVYIbsrpZ/ljF2Ctblo/GYmwlC
- sKhm+24hnCTYCrRPls4539NkBkFa59Hg/MJmSpn9Ic2Sl/Ocm1CgeIv0wJkHETT0rd
- UN3RMXhJ6R1fAchzyV79GqtCQj+bZ0Ei3+4niDGMAhNglh8FIbaCOWMVxjBBC99Zwj
- /R0F7bNsYmtCg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=YVwpuxdw
-Subject: Re: [Buildroot] [PATCH] configs/sipeed_licheepi_zero: remove
- defconfig, broken
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UxcxQs0pIaLA for <buildroot@buildroot.org>;
+ Sat, 23 Aug 2025 21:29:57 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8A73061469
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8A73061469
+ for <buildroot@buildroot.org>; Sat, 23 Aug 2025 21:29:57 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 7903B87709; Sat, 23 Aug 2025 21:29:57 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 23 Aug 2025 23:24:47 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 67422b9d9cd02d29393081d83af4dd16093c43b1
+X-Git-Newrev: bbec805717167714ee6b22b8c8b2ddddcce47ea4
+X-Patchwork-Hint: ignore
+Message-Id: <20250823212957.7903B87709@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/gdbm: add upstream
+ patch to fix GCC 15.x issues
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,42 +60,189 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=bbec805717167714ee6b22b8c8b2ddddcce47ea4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On 19/08/2025 19:28, Thomas Petazzoni via buildroot wrote:
-> This defconfig no longer builds:
-> 
->   https://gitlab.com/buildroot.org/buildroot/-/jobs/11026771001
-> 
-> It has been broken for over 2 months:
-> 
->   
-> https://gitlab.com/buildroot.org/buildroot/-/jobs?name=T%3Dsipeed_licheepi_zero&kind=BUILD
-> 
-> It uses Linux 5.8.3, which is not even an LTS maintained kernel.
-> 
-> Unless a fix is provided, this defconfig will be removed.
+Fixes:
 
-For info, I proposed in:
-https://patchwork.ozlabs.org/project/buildroot/patch/20250823211802.2213734-1-ju.o@free.fr/
-an update for this defconfig which fixes this build issue.
+  https://autobuild.buildroot.net/results/3bffec1eba130b3ad7ec270d870c04c2659fce8d/
 
-> 
-> Fixes:
-> 
->   https://gitlab.com/buildroot.org/buildroot/-/jobs/11026771001
-> 
-> Cc: Michel Stempin <michel.stempin@wanadoo.fr>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/gdbm/0001-C23-compatibility-fix.patch | 158 ++++++++++++++++++++++++++
+ 1 file changed, 158 insertions(+)
 
-Best regards,
-
-Julien.
+diff --git a/package/gdbm/0001-C23-compatibility-fix.patch b/package/gdbm/0001-C23-compatibility-fix.patch
+new file mode 100644
+index 0000000000..87fd94e196
+--- /dev/null
++++ b/package/gdbm/0001-C23-compatibility-fix.patch
+@@ -0,0 +1,158 @@
++From 238315e9f4f547dff4f5b9dff2f903385a8048cb Mon Sep 17 00:00:00 2001
++From: Sergey Poznyakoff <gray@gnu.org>
++Date: Sun, 17 Nov 2024 22:58:54 +0200
++Subject: [PATCH] C23 compatibility fix
++
++This fixes https://puszcza.gnu.org.ua/bugs/?642
++
++* tools/var.c (union value): Rename bool to b.
++
++Upstream: 734f69451392ffb6280d8a3aef51e2673c9b8554
++[Thomas: needed a few backporting adjustements]
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ tools/var.c | 32 ++++++++++++++++----------------
++ 1 file changed, 16 insertions(+), 16 deletions(-)
++
++diff --git a/tools/var.c b/tools/var.c
++index 0f285f1..c553ae5 100644
++--- a/tools/var.c
+++++ b/tools/var.c
++@@ -27,7 +27,7 @@
++ union value
++ {
++   char *string;
++-  int bool;
+++  int b;
++   int num;
++ };
++ 
++@@ -90,7 +90,7 @@ static struct variable vartab[] = {
++     .name = "confirm",
++     .type = VART_BOOL,
++     .flags = VARF_INIT,
++-    .init = { .bool = 1 }
+++    .init = { .b = 1 }
++   },
++   {
++     .name = "cachesize",
++@@ -114,32 +114,32 @@ static struct variable vartab[] = {
++     .name = "lock",
++     .type = VART_BOOL,
++     .flags = VARF_INIT,
++-    .init = { .bool = 1 }
+++    .init = { .b = 1 }
++   },
++   {
++     .name = "mmap",
++     .type = VART_BOOL,
++     .flags = VARF_INIT,
++-    .init = { .bool = 1 }
+++    .init = { .b = 1 }
++   },
++   {
++     .name = "sync",
++     .type = VART_BOOL,
++     .flags = VARF_INIT,
++-    .init = { .bool = 0 }
+++    .init = { .b = 0 }
++   },
++   {
++     .name = "coalesce",
++     .type = VART_BOOL,
++     .flags = VARF_INIT,
++-    .init = { .bool = 0 },
+++    .init = { .b = 0 },
++     .sethook = coalesce_sethook
++   },
++   {
++     .name = "centfree",
++     .type = VART_BOOL,
++     .flags = VARF_INIT,
++-    .init = { .bool = 0 },
+++    .init = { .b = 0 },
++     .sethook = centfree_sethook
++   },
++   {
++@@ -252,21 +252,21 @@ s2b (union value *vp, void *val, int flags)
++   for (i = 0; trueval[i]; i++)
++     if (strcasecmp (trueval[i], val) == 0)
++       {
++-	vp->bool = 1;
+++	vp->b = 1;
++ 	return VAR_OK;
++       }
++   
++   for (i = 0; falseval[i]; i++)
++     if (strcasecmp (falseval[i], val) == 0)
++       {
++-	vp->bool = 0;
+++	vp->b = 0;
++ 	return VAR_OK;
++       }
++   
++   n = strtoul (val, &p, 0);
++   if (*p)
++     return VAR_ERR_BADTYPE;
++-  vp->bool = !!n;
+++  vp->b = !!n;
++   return VAR_OK;
++ }
++   
++@@ -286,7 +286,7 @@ s2i (union value *vp, void *val, int flags)
++ static int
++ b2b (union value *vp, void *val, int flags)
++ {
++-  vp->bool = !!*(int*)val;
+++  vp->b = !!*(int*)val;
++   return VAR_OK;
++ }
++ 
++@@ -307,7 +307,7 @@ i2i (union value *vp, void *val, int flags)
++ static int
++ i2b (union value *vp, void *val, int flags)
++ {
++-  vp->bool = *(int*)val;
+++  vp->b = *(int*)val;
++   return VAR_OK;
++ }
++ 
++@@ -414,7 +414,7 @@ variable_get (const char *name, int type, void **val)
++       break;
++ 
++     case VART_BOOL:
++-      *(int*)val = vp->v.bool;
+++      *(int*)val = vp->v.b;
++       break;
++       
++     case VART_INT:
++@@ -461,7 +461,7 @@ variable_print_all (FILE *fp)
++ 	      break;
++ 	      
++ 	    case VART_BOOL:
++-	      fprintf (fp, "%s%s", vp->v.bool ? "" : "no", vp->name);
+++	      fprintf (fp, "%s%s", vp->v.b ? "" : "no", vp->name);
++ 	      break;
++ 	      
++ 	    case VART_STRING:
++@@ -647,7 +647,7 @@ centfree_sethook (struct variable *var, union value *v)
++ {
++   if (!v)
++     return VAR_OK;
++-  return gdbmshell_setopt ("GDBM_SETCENTFREE", GDBM_SETCENTFREE, v->bool) == 0
+++  return gdbmshell_setopt ("GDBM_SETCENTFREE", GDBM_SETCENTFREE, v->b) == 0
++          ? VAR_OK : VAR_ERR_GDBM;
++ }
++ 
++@@ -656,7 +656,7 @@ coalesce_sethook (struct variable *var, union value *v)
++ {
++   if (!v)
++     return VAR_OK;
++-  return gdbmshell_setopt ("GDBM_SETCOALESCEBLKS", GDBM_SETCOALESCEBLKS, v->bool) == 0
+++  return gdbmshell_setopt ("GDBM_SETCOALESCEBLKS", GDBM_SETCOALESCEBLKS, v->b) == 0
++          ? VAR_OK : VAR_ERR_GDBM;
++ }
++ 
++-- 
++2.50.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
