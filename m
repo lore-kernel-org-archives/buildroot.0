@@ -4,98 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13638CA0EFA
-	for <buildroot@archiver.kernel.org>; Sat, 23 Aug 2025 10:38:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33549CA0EE4
+	for <buildroot@archiver.kernel.org>; Sat, 23 Aug 2025 10:55:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ABB32612F5;
-	Sat, 23 Aug 2025 10:38:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D562061274;
+	Sat, 23 Aug 2025 10:55:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1-QMa-cYqtxq; Sat, 23 Aug 2025 10:38:55 +0000 (UTC)
+ id 402oQi8NVQlL; Sat, 23 Aug 2025 10:55:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A85DD612FA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2EF9B61277
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A85DD612FA;
-	Sat, 23 Aug 2025 10:38:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id C633B19C
- for <buildroot@buildroot.org>; Sat, 23 Aug 2025 10:38:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2EF9B61277;
+	Sat, 23 Aug 2025 10:55:18 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1EF7BE4
+ for <buildroot@buildroot.org>; Sat, 23 Aug 2025 10:55:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B6F1F83CB1
- for <buildroot@buildroot.org>; Sat, 23 Aug 2025 10:38:53 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 057D7413DF
+ for <buildroot@buildroot.org>; Sat, 23 Aug 2025 10:55:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1PB77FXS-ntj for <buildroot@buildroot.org>;
- Sat, 23 Aug 2025 10:38:53 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
- envelope-from=angelo.compagnucci@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9C81683BF8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C81683BF8
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9C81683BF8
- for <buildroot@buildroot.org>; Sat, 23 Aug 2025 10:38:52 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id
- ffacd0b85a97d-3c6df24f128so574571f8f.3
- for <buildroot@buildroot.org>; Sat, 23 Aug 2025 03:38:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1755945530; x=1756550330;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=n9B1i7og5/wQ18HkttA0zNZSE3cymOe7Z1dp7zAkgpg=;
- b=QCM7xzUS/GcBuEYWq/MeHTOUUftAI38UqqXdis3dLGVo+4As+wg/O5rk6dKrmArCRD
- 0huvjQSHS/UUIgA3ALgEkcoAHG58rbizZoNR9EvurcvYAX8lp3+Pgm9zaivtJPYNMLi+
- GsAmv+HGZAVgg/8lXVmlmewWoJizXjhTzMO7S9vFKeKMCYjO1ADOPFHao20k/N0vWNoJ
- njTMyRwr7c4DC7EkbvddmmcPXmo8g55gIPUdcRlq0IyqZ9mNjVbUsO2bnlayB2iwD5uh
- vmH2O9GK8hsIh7CuoFaMBq7w0I4/7EkL3W0p/iRGnRMMT2XvjZ85T7dr97rcLw/Kee0h
- 1Hqg==
-X-Gm-Message-State: AOJu0YxHPAcfeg7txOXmFwoPmONTlzVCmuzHwKC53MNvKtlbHpWOD8jI
- 0BCh0gJrCcaVlqDkRCnIMPF3i4CuNmQ7JxVcWT+y/dneJqHWxnKzuxhuSN++8Zuc
-X-Gm-Gg: ASbGncuwekS+Hj74E2sQDWQsSC1Vepo7RnKEx1IK/7wv5xr0nwYYS9MuK5cwMfAdd54
- bhSbXNeQge4IqsvNw6rQFs12CzJv8e4HkDamG5vjjD/fGzvGHw/j6Z6WGo/977EfjnuauHXEWhX
- 6aRd1oQR7y0rrCNDeEhSYOGFnVxSU8mUroLQu2NBz/kl21n7fQyWFtt5KLN74+InhSYKEZRWI3G
- vLTNKbvC5tDNHy6jB0yOtX4LLnqVz3Vz5dA2ay/0jPCIuqyKn/yT5RX+DBvDymA3p60gmoj8mhA
- KTYFvBEsPI4eJO5napmMcrN/jglNtaSKQdAYTflacDKDNS/JWVMBk+64/5qfLUoZfE/6ZvWcvaK
- F202AZrD+LGASIIYITYQqHDLX+HBppAb0QI7RTdenLsXCbA==
-X-Google-Smtp-Source: AGHT+IFWznnkEGXfZRLFqnrg/2xNAizeHB9pk04CvE/fkNzOwG1l+PgzsfcScuD9KAqls0yQs0aeZQ==
-X-Received: by 2002:a5d:5f83:0:b0:3b7:81a6:45c1 with SMTP id
- ffacd0b85a97d-3c5dac168ddmr4141979f8f.6.1755945530041; 
- Sat, 23 Aug 2025 03:38:50 -0700 (PDT)
-Received: from localhost.localdomain ([212.22.141.99])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3c711abd15asm3126047f8f.56.2025.08.23.03.38.49
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 23 Aug 2025 03:38:49 -0700 (PDT)
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hRE1GzLliviI for <buildroot@buildroot.org>;
+ Sat, 23 Aug 2025 10:55:15 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C848541375
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C848541375
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C848541375
+ for <buildroot@buildroot.org>; Sat, 23 Aug 2025 10:55:14 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:7427:ac55:2702:f075])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 1234B60136;
+ Sat, 23 Aug 2025 12:55:08 +0200 (CEST)
 To: buildroot@buildroot.org
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Sat, 23 Aug 2025 12:38:47 +0200
-Message-Id: <20250823103847.3888908-1-angelo.compagnucci@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Cc: Julien Olivain <ju.o@free.fr>,
+	Romain Naour <romain.naour@smile.fr>
+Date: Sat, 23 Aug 2025 12:54:56 +0200
+Message-ID: <20250823105456.28057-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.51.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1755945530; x=1756550330; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=n9B1i7og5/wQ18HkttA0zNZSE3cymOe7Z1dp7zAkgpg=;
- b=J6Xcr9QWHE68G+s2Jc1xmTKRhtTfeoh7jW11O+G4QTowC8R9LMB/3x7xibUW5Uvxa/
- VudQ2UJcRGVcnBDDU+Oydxy01rf8pn2EFgP/gD2HzXDuZ9dx9tw7mGp0OCzb8GQWe0jZ
- HpReH9c+pWo/SXbzQGaB/YB5lk+hUJmCt1P2Dp9JAgZWURu+JF1XJxXA96GW9jWeHJjw
- G5kP48GVZLfrM2bbdTODyvHQC5wnCZuhUu7lBUzZPbIyryd7KBQ5ZTPwlthhyVPg27V/
- Rch6uvPmzGTsJ+FRoD6NOS6lsskfri4j9k4CfAbgzs8SWlQTo/OIIaz0lRp8CGMhUSrM
- 4JdA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1755946511;
+ bh=Q+kICG04dB4hK1kTo22S3gIi9YvF0w4cL/Jthj4/mg8=;
+ h=From:To:Cc:Subject:Date:From;
+ b=Eg2V+Sx3Ek1IvhaQTFAVGXE4OWdoDvrQC6qrTQ42ao+nSLrJO1mx0e/+pfJGjiLVu
+ TKPotCpAoi0NsAqSF3CE9s6RVNBJbQHER6i9O+vfvZr3TKFt3O1j7CqFngj9uw1vTW
+ kFYDHLpblGQ0wajT9O1vFI6OjKeXnKjV2GI97xtUej0r380rUdBuqSYPH1svQwGw09
+ LdLzgELwK67oPVzzWQfs17bIbZ5pXmM1RuEofxM3ArbN9qGH0k+WFMdm8V6ccLl/6W
+ CV1sPTfeVjJZMJCYONIR+71EVO4psLpcngADkkJVzpSa7lk9xg/jT823ENJsmLPJyj
+ v8yy60wCATZNQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=J6Xcr9QW
-Subject: [Buildroot] [PATCH v3] package/wcurl: new package
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=Eg2V+Sx3
+Subject: [Buildroot] [PATCH 1/1] support/misc/gitlab-ci.yml.in: check
+ legal-info in test-pkg
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -107,103 +78,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-wcurl is a command line tool which lets you download URLs without having to
-remember any parameters.
+The script "utils/test-pkg" is systematically checking legal-info.
+See [1]. This is useful to check all license hashes are up to date.
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+The Buildroot Gitlab CI integration has an identical testing
+capability. It is faster because it can run all supported toolchain
+test builds in parallel. See [2].
+
+It was observed in [3] that the Gitlab CI test-pkg variant does not
+check legal-info.
+
+This commit align the Gitlab CI test-pkg behavior to the
+"utils/test-pkg" script by adding a "make legal-info" command.
+
+[1] https://gitlab.com/buildroot.org/buildroot/-/blob/2025.05/utils/test-pkg#L195
+[2] https://gitlab.com/buildroot.org/buildroot/-/blob/2025.05/support/misc/gitlab-ci.yml.in#L129
+[3] https://lore.kernel.org/buildroot/75e688887d95948c57a11416de3047b5@free.fr/
+
+Cc: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
-v1->v2:
-Fix runtime dependencies (Baruch Siach)
-v2->v3:
-Fix select instead of depends (Baruch Siach)
+ support/misc/gitlab-ci.yml.in | 1 +
+ 1 file changed, 1 insertion(+)
 
- DEVELOPERS               |  1 +
- package/Config.in        |  1 +
- package/wcurl/Config.in  |  9 +++++++++
- package/wcurl/wcurl.hash |  3 +++
- package/wcurl/wcurl.mk   | 16 ++++++++++++++++
- 5 files changed, 30 insertions(+)
- create mode 100644 package/wcurl/Config.in
- create mode 100644 package/wcurl/wcurl.hash
- create mode 100644 package/wcurl/wcurl.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 3efad36d70..3a3d263c8f 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -242,6 +242,7 @@ F:	package/sam-ba/
- F:	package/sshguard/
- F:	package/sunwait/
- F:	package/sysdig/
-+F:	package/wcurl/
- 
- N:	Andy Shevchenko <andy.shevchenko@gmail.com>
- F:	package/fb-test-app/
-diff --git a/package/Config.in b/package/Config.in
-index 137f74ed82..61463e7820 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2724,6 +2724,7 @@ endif
- 	source "package/vsftpd/Config.in"
- 	source "package/vtun/Config.in"
- 	source "package/wavemon/Config.in"
-+	source "package/wcurl/Config.in"
- 	source "package/wget/Config.in"
- 	source "package/whois/Config.in"
- 	source "package/wireguard-linux-compat/Config.in"
-diff --git a/package/wcurl/Config.in b/package/wcurl/Config.in
-new file mode 100644
-index 0000000000..c2aca8bb71
---- /dev/null
-+++ b/package/wcurl/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_WCURL
-+	bool "wcurl"
-+	select BR2_PACKAGE_LIBCURL
-+	select BR2_PACKAGE_LIBCURL_CURL
-+	help
-+	  wcurl is a small command-line tool that wraps curl for easier use
-+	  when downloading files from the web.
-+
-+	  https://curl.se/wcurl/
-diff --git a/package/wcurl/wcurl.hash b/package/wcurl/wcurl.hash
-new file mode 100644
-index 0000000000..b747e99502
---- /dev/null
-+++ b/package/wcurl/wcurl.hash
-@@ -0,0 +1,3 @@
-+# sha256 locally computed
-+sha256  a745475f3511090685c4d000a10f4155147b75a8c7781764612a7e8f67bb6d82  wcurl-2025.05.26.tar.gz
-+sha256  0127bdd267b1fa65bf5a6c487c907948e0c009aa35a5949c8aed91f779d27810  LICENSE
-diff --git a/package/wcurl/wcurl.mk b/package/wcurl/wcurl.mk
-new file mode 100644
-index 0000000000..8499bd3e1b
---- /dev/null
-+++ b/package/wcurl/wcurl.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# wcurl
-+#
-+################################################################################
-+
-+WCURL_VERSION = 2025.05.26
-+WCURL_SITE = $(call github,curl,wcurl,v$(WCURL_VERSION))
-+WCURL_LICENSE = curl
-+WCURL_LICENSE_FILES = LICENSE
-+
-+define FOO_INSTALL_TARGET_CMDS
-+	 $(INSTALL) -D -m 0755 $(@D)/wcurl $(TARGET_DIR)/usr/bin
-+endef
-+
-+$(eval $(generic-package))
+diff --git a/support/misc/gitlab-ci.yml.in b/support/misc/gitlab-ci.yml.in
+index db206432aa..2358f573c8 100644
+--- a/support/misc/gitlab-ci.yml.in
++++ b/support/misc/gitlab-ci.yml.in
+@@ -135,6 +135,7 @@ before_script:
+         - make O=${OUTPUT_DIR} savedefconfig
+         - echo 'Build buildroot'
+         - *run_make
++        - make O=${OUTPUT_DIR} legal-info
+     needs:
+         - pipeline: $PARENT_PIPELINE_ID
+           job: generate-gitlab-ci-yml
 -- 
-2.34.1
+2.51.0
 
 _______________________________________________
 buildroot mailing list
