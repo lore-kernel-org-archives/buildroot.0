@@ -1,51 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED8C3CAC581
-	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 14:17:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76941CAC588
+	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 14:17:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C183D60745;
-	Mon,  8 Sep 2025 14:17:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 50EA08073F;
+	Mon,  8 Sep 2025 14:17:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zhDveFxqlUyD; Mon,  8 Sep 2025 14:17:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9zQeeQ_ZFKJs; Mon,  8 Sep 2025 14:17:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EEC84606E5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 56DB7805D6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EEC84606E5;
-	Mon,  8 Sep 2025 14:17:44 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 68142186
+	by smtp1.osuosl.org (Postfix) with ESMTP id 56DB7805D6;
+	Mon,  8 Sep 2025 14:17:41 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0F204234
  for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B66584007A
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:30 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id F165540201
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VhLizlQDjSzu for <buildroot@buildroot.org>;
- Mon,  8 Sep 2025 14:16:30 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5eJqU45BwwA8 for <buildroot@buildroot.org>;
+ Mon,  8 Sep 2025 14:16:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D36940058
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0DB8340213
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0D36940058
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:30 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0DB8340213
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:24 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0A71F80DA7; Mon,  8 Sep 2025 14:16:30 +0000 (UTC)
+ id 0A1F583916; Mon,  8 Sep 2025 14:16:24 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 2 Sep 2025 21:47:13 +0200
+Date: Sun, 24 Aug 2025 16:41:15 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4c2cf885d89872bb99e2f6945205b152c194abc5
-X-Git-Newrev: 498b5f3846831e4e9407eed2069bb33e1f5442f8
+X-Git-Oldrev: 2dd20212f2edb3a763d9251dce157956245bec09
+X-Git-Newrev: aea7c89396f20570b5ce32c4a235f7011ad0bd01
 X-Patchwork-Hint: ignore
-Message-Id: <20250908141630.0A71F80DA7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/catch2: bump to version 3.10.0
+Message-Id: <20250908141624.0A1F583916@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cpp-httplib: add patch for
+ CVE-2025-46728
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +66,164 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=498b5f3846831e4e9407eed2069bb33e1f5442f8
+commit: https://git.buildroot.net/buildroot/commit/?id=aea7c89396f20570b5ce32c4a235f7011ad0bd01
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release Notes:
+Fix the following vulnerability:
 
-v3.10.0: https://github.com/catchorg/Catch2/releases/tag/v3.10.0
-v3.9.1: https://github.com/catchorg/Catch2/releases/tag/v3.9.1
-v3.9.0: https://github.com/catchorg/Catch2/releases/tag/v3.9.0
+- CVE-2025-46728
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+    cpp-httplib is a C++ header-only HTTP/HTTPS server and client library.
+    Prior to version 0.20.1, the library fails to enforce configured size
+    limits on incoming request bodies when `Transfer-Encoding: chunked` is
+    used or when no `Content-Length` header is provided. A remote attacker
+    can send a chunked request without the terminating zero-length chunk,
+    causing uncontrolled memory allocation on the server. This leads to
+    potential exhaustion of system memory and results in a server crash or
+    unresponsiveness. Version 0.20.1 fixes the issue by enforcing limits
+    during parsing. If the limit is exceeded at any point during reading,
+    the connection is terminated immediately. A short-term workaround
+    through a Reverse Proxy is available. If updating the library
+    immediately is not feasible, deploy a reverse proxy (e.g., Nginx,
+    HAProxy) in front of the `cpp-httplib` application. Configure the
+    proxy to enforce maximum request body size limits, thereby stopping
+    excessively large requests before they reach the vulnerable library
+    code.
+
+For more information, see:
+  - https://www.cve.org/CVERecord?id=CVE-2025-46728
+  - https://github.com/yhirose/cpp-httplib/commit/7b752106ac42bd5b907793950d9125a0972c8e8e
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/catch2/catch2.hash | 2 +-
- package/catch2/catch2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../cpp-httplib/0001-merge-commit-from-fork.patch  | 103 +++++++++++++++++++++
+ package/cpp-httplib/cpp-httplib.mk                 |   3 +
+ 2 files changed, 106 insertions(+)
 
-diff --git a/package/catch2/catch2.hash b/package/catch2/catch2.hash
-index 30ff1f43b3..8776009945 100644
---- a/package/catch2/catch2.hash
-+++ b/package/catch2/catch2.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  18b3f70ac80fccc340d8c6ff0f339b2ae64944782f8d2fca2bd705cf47cadb79  catch2-3.8.1.tar.gz
-+sha256  fc4303a5c2738beaa727066e126b5a28837a812230a3c5826caa38e7ab99ca48  catch2-3.10.0.tar.gz
- sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE.txt
-diff --git a/package/catch2/catch2.mk b/package/catch2/catch2.mk
-index 00d6e5bfdc..76fb852464 100644
---- a/package/catch2/catch2.mk
-+++ b/package/catch2/catch2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/cpp-httplib/0001-merge-commit-from-fork.patch b/package/cpp-httplib/0001-merge-commit-from-fork.patch
+new file mode 100644
+index 0000000000..180bb22e11
+--- /dev/null
++++ b/package/cpp-httplib/0001-merge-commit-from-fork.patch
+@@ -0,0 +1,103 @@
++From 7b752106ac42bd5b907793950d9125a0972c8e8e Mon Sep 17 00:00:00 2001
++From: Ville Vesilehto <ville@vesilehto.fi>
++Date: Sat, 3 May 2025 11:39:01 +0300
++Subject: [PATCH] Merge commit from fork
++
++* fix(parser): Limit line length in getline
++
++Prevents potential infinite loop and memory exhaustion in
++stream_line_reader::getline by enforcing max line length.
++
++Signed-off-by: Ville Vesilehto <ville@vesilehto.fi>
++
++* fix: increase default max line length to 32k
++
++LONG_QUERY_VALUE test is set at 25k.
++
++Signed-off-by: Ville Vesilehto <ville@vesilehto.fi>
++
++* test(client): expect read error with too long query
++
++Adds a test case (`TooLongQueryValue`) to verify client behavior
++when the request URI is excessively long, exceeding
++`CPPHTTPLIB_MAX_LINE_LENGTH`. In this scenario, the server is
++expected to reset the connection.
++
++Signed-off-by: Ville Vesilehto <ville@vesilehto.fi>
++
++CVE: CVE-2025-46728
++Upstream: https://github.com/yhirose/cpp-httplib/commit/7b752106ac42bd5b907793950d9125a0972c8e8e
++[thomas: adapt lines numbers to v0.19.0]
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++---
++ httplib.h    |  9 +++++++++
++ test/test.cc | 15 +++++++++++++++
++ 2 files changed, 24 insertions(+)
++
++diff --git a/httplib.h b/httplib.h
++index cb182c4129..a2aa24f96b 100644
++--- a/httplib.h
+++++ b/httplib.h
++@@ -145,6 +145,10 @@
++ #define CPPHTTPLIB_LISTEN_BACKLOG 5
++ #endif
++ 
+++#ifndef CPPHTTPLIB_MAX_LINE_LENGTH
+++#define CPPHTTPLIB_MAX_LINE_LENGTH 32768
+++#endif
+++
++ /*
++  * Headers
++  */
++@@ -2998,6 +3002,11 @@ inline bool stream_line_reader::getline() {
++ #endif
++ 
++   for (size_t i = 0;; i++) {
+++    if (size() >= CPPHTTPLIB_MAX_LINE_LENGTH) {
+++      // Treat exceptionally long lines as an error to
+++      // prevent infinite loops/memory exhaustion
+++      return false;
+++    }
++     char byte;
++     auto n = strm_.read(&byte, 1);
++ 
++diff --git a/test/test.cc b/test/test.cc
++index 4fd9983bd8..7f5cc8a9d0 100644
++--- a/test/test.cc
+++++ b/test/test.cc
++@@ -42,6 +42,9 @@ const int PORT = 1234;
++ const string LONG_QUERY_VALUE = string(25000, '@');
++ const string LONG_QUERY_URL = "/long-query-value?key=" + LONG_QUERY_VALUE;
++ 
+++const string TOO_LONG_QUERY_VALUE = string(35000, '@');
+++const string TOO_LONG_QUERY_URL = "/too-long-query-value?key=" + TOO_LONG_QUERY_VALUE;
+++
++ const std::string JSON_DATA = "{\"hello\":\"world\"}";
++ 
++ const string LARGE_DATA = string(1024 * 1024 * 100, '@'); // 100MB
++@@ -2839,6 +2842,11 @@ class ServerTest : public ::testing::Test {
++                EXPECT_EQ(LONG_QUERY_URL, req.target);
++                EXPECT_EQ(LONG_QUERY_VALUE, req.get_param_value("key"));
++              })
+++        .Get("/too-long-query-value",
+++             [&](const Request &req, Response & /*res*/) {
+++               EXPECT_EQ(TOO_LONG_QUERY_URL, req.target);
+++               EXPECT_EQ(TOO_LONG_QUERY_VALUE, req.get_param_value("key"));
+++             })
++         .Get("/array-param",
++              [&](const Request &req, Response & /*res*/) {
++                EXPECT_EQ(3u, req.get_param_value_count("array"));
++@@ -3624,6 +3632,13 @@ TEST_F(ServerTest, LongQueryValue) {
++   EXPECT_EQ(StatusCode::UriTooLong_414, res->status);
++ }
++ 
+++TEST_F(ServerTest, TooLongQueryValue) {
+++  auto res = cli_.Get(TOO_LONG_QUERY_URL.c_str());
+++
+++  ASSERT_FALSE(res);
+++  EXPECT_EQ(Error::Read, res.error());
+++}
+++
++ TEST_F(ServerTest, TooLongHeader) {
++   Request req;
++   req.method = "GET";
+diff --git a/package/cpp-httplib/cpp-httplib.mk b/package/cpp-httplib/cpp-httplib.mk
+index 712c3f7293..928cef8a86 100644
+--- a/package/cpp-httplib/cpp-httplib.mk
++++ b/package/cpp-httplib/cpp-httplib.mk
+@@ -13,6 +13,9 @@ CPP_HTTPLIB_INSTALL_STAGING = YES
+ CPP_HTTPLIB_CONF_OPTS = \
+ 	-Dcpp-httplib_test=false
  
--CATCH2_VERSION = 3.8.1
-+CATCH2_VERSION = 3.10.0
- CATCH2_SITE = $(call github,catchorg,Catch2,v$(CATCH2_VERSION))
- CATCH2_INSTALL_STAGING = YES
- CATCH2_INSTALL_TARGET = NO
++# 0001-merge-commit-from-fork.patch
++CPP_HTTPLIB_IGNORE_CVES += CVE-2025-46728
++
+ ifeq ($(BR2_PACKAGE_CPP_HTTPLIB_COMPILE),y)
+ CPP_HTTPLIB_CONF_OPTS += -Dcpp-httplib_compile=true
+ CPP_HTTPLIB_DEPENDENCIES += host-python3
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
