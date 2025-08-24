@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77539CA0EFC
-	for <buildroot@archiver.kernel.org>; Sun, 24 Aug 2025 15:11:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 151ADCA0EEB
+	for <buildroot@archiver.kernel.org>; Sun, 24 Aug 2025 15:12:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3152884599;
-	Sun, 24 Aug 2025 15:11:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C422441AA1;
+	Sun, 24 Aug 2025 15:12:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zjMtvUlCRqNP; Sun, 24 Aug 2025 15:11:29 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WoK_kY2EAmx8; Sun, 24 Aug 2025 15:12:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A90008457F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 35C0A41A78
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A90008457F;
-	Sun, 24 Aug 2025 15:11:29 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1060A19C
- for <buildroot@buildroot.org>; Sun, 24 Aug 2025 15:11:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 35C0A41A78;
+	Sun, 24 Aug 2025 15:12:34 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id A683CCA
+ for <buildroot@buildroot.org>; Sun, 24 Aug 2025 15:12:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E7CA884596
- for <buildroot@buildroot.org>; Sun, 24 Aug 2025 15:11:27 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 985B56161D
+ for <buildroot@buildroot.org>; Sun, 24 Aug 2025 15:12:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id whAqf3J4AyHW for <buildroot@buildroot.org>;
- Sun, 24 Aug 2025 15:11:26 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id W-ySxc2q192M for <buildroot@buildroot.org>;
+ Sun, 24 Aug 2025 15:12:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9F1A98457F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AECA860B8D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9F1A98457F
- for <buildroot@buildroot.org>; Sun, 24 Aug 2025 15:11:26 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id AECA860B8D
+ for <buildroot@buildroot.org>; Sun, 24 Aug 2025 15:12:31 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8E15480E53; Sun, 24 Aug 2025 15:11:26 +0000 (UTC)
+ id 9FC9987A75; Sun, 24 Aug 2025 15:12:31 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 24 Aug 2025 16:41:15 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 2dd20212f2edb3a763d9251dce157956245bec09
-X-Git-Newrev: aea7c89396f20570b5ce32c4a235f7011ad0bd01
+Date: Sun, 24 Aug 2025 17:10:27 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d26f3717588cfec10ab8572aa5ffa0a8ae471341
+X-Git-Newrev: fd313c4cebc8c0a8db2ff9641b48e2d8a993c245
 X-Patchwork-Hint: ignore
-Message-Id: <20250824151126.8E15480E53@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/cpp-httplib: add patch
- for CVE-2025-46728
+Message-Id: <20250824151231.9FC9987A75@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cpp-httplib: add patch for
+ CVE-2025-46728
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,8 +66,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aea7c89396f20570b5ce32c4a235f7011ad0bd01
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+commit: https://git.buildroot.net/buildroot/commit/?id=fd313c4cebc8c0a8db2ff9641b48e2d8a993c245
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fix the following vulnerability:
 
@@ -95,6 +95,7 @@ For more information, see:
   - https://github.com/yhirose/cpp-httplib/commit/7b752106ac42bd5b907793950d9125a0972c8e8e
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+(cherry picked from commit aea7c89396f20570b5ce32c4a235f7011ad0bd01)
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
  .../cpp-httplib/0001-merge-commit-from-fork.patch  | 103 +++++++++++++++++++++
