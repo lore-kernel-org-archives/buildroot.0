@@ -4,100 +4,103 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2902CA0EFC
-	for <buildroot@archiver.kernel.org>; Sun, 24 Aug 2025 17:18:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CFB04CA0EFC
+	for <buildroot@archiver.kernel.org>; Sun, 24 Aug 2025 17:18:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7BC0B60B27;
-	Sun, 24 Aug 2025 17:18:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B3FFD60B65;
+	Sun, 24 Aug 2025 17:18:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CBa99PfwqS-c; Sun, 24 Aug 2025 17:18:30 +0000 (UTC)
+ id rzNSyFYtDBLZ; Sun, 24 Aug 2025 17:18:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9E86460AF5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D0DE260B20
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9E86460AF5;
-	Sun, 24 Aug 2025 17:18:30 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id AF424CA
- for <buildroot@buildroot.org>; Sun, 24 Aug 2025 17:18:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D0DE260B20;
+	Sun, 24 Aug 2025 17:18:31 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 13521CA
+ for <buildroot@buildroot.org>; Sun, 24 Aug 2025 17:18:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 95C38417EE
+ by smtp2.osuosl.org (Postfix) with ESMTP id D9C8540784
  for <buildroot@buildroot.org>; Sun, 24 Aug 2025 17:18:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bHTh8cY1f7GJ for <buildroot@buildroot.org>;
- Sun, 24 Aug 2025 17:18:27 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GlItafnZCfkr for <buildroot@buildroot.org>;
+ Sun, 24 Aug 2025 17:18:28 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
+ client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
  envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6193C417E7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6193C417E7
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
- [IPv6:2a00:1450:4864:20::332])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6193C417E7
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C48BC40027
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C48BC40027
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C48BC40027
  for <buildroot@buildroot.org>; Sun, 24 Aug 2025 17:18:27 +0000 (UTC)
-Received: by mail-wm1-x332.google.com with SMTP id
- 5b1f17b1804b1-45b5c12dd87so6931975e9.2
+Received: by mail-wm1-x329.google.com with SMTP id
+ 5b1f17b1804b1-45a1b05a49cso28472515e9.1
  for <buildroot@buildroot.org>; Sun, 24 Aug 2025 10:18:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1756055905; x=1756660705;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=PFr7v14lqjTmFS/kenfuY/f7avzwlE/cdO1eY54rx64=;
- b=CsJZYHzOI9AW5nHYjQVwUy9KAezOem5ewF4pPDtWtbQa9AGqKdcHtYVSEX0mU7Xmeh
- 747nNNbIl4DeJhWoEytcpYMpxA30dWS9k41/Pv9KcCz9ba6k+ZgTwpJnDvlc9d3Oi42u
- vQgLhHcjSikxJHiO8hj9F3kF4x8RD5ihhDiYvz8zs26ZKTxV6HMhg9sNnMtlpkWWxsuc
- qJO9llu60nbnNRcsElNknGckJ76/cElPlSMeKiYY9h/ZcILlDWKC2nndkMYfYGTNuwKG
- S5SAArbsGCZ+6gO1fqqm1lYK6GQWrR7Xtb2NTq/ODAaQnXjyAopFMRReo7u2ZoY1/YLj
- 6PQw==
-X-Gm-Message-State: AOJu0YwOhNElQad/V1PwYYlBDHBmyDH+ESivzuixF8sM6/t7YjYHue9Y
- jwQQLZzfBh4nR4tJi3Go5AhyBndeaFmBQ5yFDNitaaXP4hQH88qViitRoMVVmsaNjQ5/qA+oyJk
- SmjgK
-X-Gm-Gg: ASbGncvPNgZ+JHduTJ0p3QAkuDDeJEjUg0hGDRrLY3Q0n26hm/vPc3thj+/tAYOtvZQ
- oRquCAReDMZSrxjd+khqt7y1dhstHW3Qc16fXl+UnrzPDlQjdwsCV4wvQ4zjbhtsxjLzHknHUkD
- KnMQAigECoGHd3gq9tVxu0oi8vMHqkOhFPtZR/QzQkKExFhIchy5eXukeVcucatBx4dbwfL95w1
- P7FIN2bb7iDfjeFxppkEMSJCuDoR7T9haRUr3k8fA1yb43bc+iGzBiYgl1gCYuCtG8yNOSZ95Ac
- i3ujwK6y+7imo8/Zrr+nGfFBjF6s5mvlaWxlstMjeJfjw4eg9moTYzq2sBw+SZSVW6KKo2C7kkD
- 4QU/p49gub89hwN5ZMm8KEDaH+vT4rWnae881LVR4sSR5fg84OFDYw2Y8dQCDDa7cMlh6K88QPz
- iUXRRyt36nvTno27TXk0rn
-X-Google-Smtp-Source: AGHT+IGTqw0dJcncULgN3zLD2+vuRLZV0q0H239PTkbSHKVw+oLmvT3Fi1tunteT5fXuEC8oXhf7XQ==
-X-Received: by 2002:a05:600c:3b95:b0:458:bda4:43df with SMTP id
- 5b1f17b1804b1-45b517cba02mr86090555e9.17.1756055905039; 
+ d=1e100.net; s=20230601; t=1756055906; x=1756660706;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=18YC5QBl5ZnnEw89fWOHoGSdyreAEBtXqwYkDnmqp0I=;
+ b=jkrnukarEZCPNiUJZypXrW5Ni/FIJQxYPzFEPUyb6OrxTlbK0U+wHtKXUKoVt9bST2
+ XvfztfClNiMOIJ6K9LuJID7hs5oOkQnBg1Np1YTjAiNYAbNZGewLrd/MT1r/BG3TB8fC
+ Ccl/3GWANgVjyxCNR0EnYRYDJdZJxsnAQ/oOd3FvPZjSKZXdLHCYKkc7701tP3qWHEXR
+ P9F4X8kCYzlzMsQzM0vPZWYyrmD/7XxoHRONjg50nlsRJdIUXmUYpFYc30DdyFUAjkOT
+ Q5ilVI7MVRmzRG3BhufIw5+IjBk4AEyjopUiW1ngKc/LU+6f38wtiYOvHBYFT51PgZs9
+ g+9w==
+X-Gm-Message-State: AOJu0YyzN7HBrMFB5QzJR+DhWNO9aWuIlf0AwiX5RB5TIk19ZJWBgR70
+ c0QLEYF1oZDwSQePNcOMJm2+WhXAU3PhCYlXgmAgB7k7pizEZuDhYI9bfwYj3rJrwzehodmLHO7
+ XO6P9
+X-Gm-Gg: ASbGncviry0But3vQYK108KcqES421b7zwqps7IH1a8Wp1pHFA1by+u8fVMme1HDWJu
+ Ze0nEOxT+4HEjcg/g4M/RiuhGRsPdHBAHNY91mUQ8yKJ33ZC+UMdxKQvlR8wSKMC7WhMVtQdVoM
+ NiTh00VJ/dprC2ilFrkxReF3sN5sTkEvznp9XTpzBiZ9zDLFYl6DuJQIEMt7bgCuvsjSZLns4XH
+ 967CtZHG5zA9Gt1DjwAoiDA+0RGkXaEKpohq2ynK1a8ftyomIakTuFlq7LsYuYUcU9GFZDiSkMi
+ w2D0jfSJaGn3Cxi90rD/TiNR/D6PwdMd7iAIBM4y31V0tAikZIVGjnfuOQN3FKg3PgbJesBV8Dq
+ tx1mHr5hZX9hqhvf2wUVJ0XvmzWRxy4xNrdnu3ZaZsXA8pJinCraLad+KCp19222f/qmXqZ0xbm
+ Do+JIKEyKAcM1iOqzie4gAmCmzgCX2KF4=
+X-Google-Smtp-Source: AGHT+IE7OQXe7mUse1zNd/8up7NlGyM0cE3B8KDBJMB1x+lCPWT42rNF2gd2cakgXWoCxyVg+TWOWQ==
+X-Received: by 2002:a05:600c:1c20:b0:458:c059:7d9c with SMTP id
+ 5b1f17b1804b1-45b5d48ea24mr24976195e9.6.1756055905593; 
  Sun, 24 Aug 2025 10:18:25 -0700 (PDT)
 Received: from P-NTS-Evian.home
  (2a01cb05949d5800c97d3b734a46d823.ipv6.abo.wanadoo.fr.
  [2a01:cb05:949d:5800:c97d:3b73:4a46:d823])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-45b57492459sm77972095e9.18.2025.08.24.10.18.24
+ 5b1f17b1804b1-45b57492459sm77972095e9.18.2025.08.24.10.18.25
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 24 Aug 2025 10:18:24 -0700 (PDT)
+ Sun, 24 Aug 2025 10:18:25 -0700 (PDT)
 To: buildroot@buildroot.org
 Cc: Romain Naour <romain.naour@smile.fr>,
 	Julien Olivain <ju.o@free.fr>
-Date: Sun, 24 Aug 2025 19:18:21 +0200
-Message-ID: <20250824171822.4123094-1-romain.naour@smile.fr>
+Date: Sun, 24 Aug 2025 19:18:22 +0200
+Message-ID: <20250824171822.4123094-2-romain.naour@smile.fr>
 X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20250824171822.4123094-1-romain.naour@smile.fr>
+References: <20250824171822.4123094-1-romain.naour@smile.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1756055905; x=1756660705; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=PFr7v14lqjTmFS/kenfuY/f7avzwlE/cdO1eY54rx64=;
- b=4B4/TzxbJOiwBvMxq6Ofioo6VSjkryH/qxzqeAC9P6IubAKZln3WVAJrYoOJ0TdHvc
- o80UPTgUOP1HSQKNLDA9OfoNiL4xpPUDH6SzNJjUd4o3lgvDRlSvjbUxf5d70X8PyoeJ
- 2VpGNVsrVqhOZZmapVDpEA9jmL9bnVEof6Tgg=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=smile.fr; s=google; t=1756055906; x=1756660706; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=18YC5QBl5ZnnEw89fWOHoGSdyreAEBtXqwYkDnmqp0I=;
+ b=yHkd6GfG61TPBbVGpl/y+1tTzhMz2BJ7VCpWNHmDwuAmF1LShQpbf8GGZhjlw1eBNG
+ PzjH6TLyxPVE442Z9ydOmkFthgXp7E1/mbYGVib0sPN8kGwsxXW2DHVO/br5aTQTXyfD
+ uT+C/aII34/XaCmGYGfWYDtBQhKW5sdXHwZd0=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=4B4/Tzxb
-Subject: [Buildroot] [PATCH 1/2] package/xvisor: Use '-std=gnu11' to fix
- build with GCC 15
+ header.s=google header.b=yHkd6GfG
+Subject: [Buildroot] [PATCH 2/2] support/testing: TestXvisor: bump custom
+ opensbi version to 1.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,72 +122,33 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 Since Buildroot commit [1] "update to Bootlin toolchains 2025.08-1",
 the TestXvisor fails when building xvisor with gcc 15.1.0.
 
-GCC 15 changed the default C standard version to C23 [2], resulting in
-errors from the xvisor definitions of bool from core/include/vmm_types.h,
-which is a reserved keyword under C23.
+Since xvisor is now fixed, opensbi 1.5 fail to build with gcc-15 for
+the same reasons.
 
-Since CFLAGS are hardcoded in the main Makefile, add '-std=gnu11' to
-'cflags' to resolve the error.
+opensbi 1.6 include a fix for C23 enabled compilers [2]
 
 [1] https://gitlab.com/buildroot.org/buildroot/-/commit/947dbc92a20c5acea7882166cae7893e6ea661e1
-[2] https://gcc.gnu.org/gcc-15/porting_to.html
-
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/11042295047
+[2] https://github.com/riscv-software-src/opensbi/commit/d539d64a23bbd64ba324eed595449bcc9c7be0cb
 
 Cc: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- ...e-std-gnu11-to-fix-build-with-GCC-15.patch | 40 +++++++++++++++++++
- 1 file changed, 40 insertions(+)
- create mode 100644 package/xvisor/0003-Makefile-Use-std-gnu11-to-fix-build-with-GCC-15.patch
+ support/testing/tests/package/test_xvisor.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/xvisor/0003-Makefile-Use-std-gnu11-to-fix-build-with-GCC-15.patch b/package/xvisor/0003-Makefile-Use-std-gnu11-to-fix-build-with-GCC-15.patch
-new file mode 100644
-index 0000000000..f78e6efb9c
---- /dev/null
-+++ b/package/xvisor/0003-Makefile-Use-std-gnu11-to-fix-build-with-GCC-15.patch
-@@ -0,0 +1,40 @@
-+From 53a53af30ce1704b7de806a51d822472fbcc57de Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@smile.fr>
-+Date: Sun, 24 Aug 2025 18:26:52 +0200
-+Subject: [PATCH] Makefile: Use '-std=gnu11' to fix build with GCC 15
-+
-+GCC 15 changed the default C standard version to C23 [1], resulting in
-+errors from the xvisor definitions of bool from core/include/vmm_types.h,
-+which is a reserved keyword under C23.
-+
-+Since CFLAGS are hardcoded in the main Makefile, add '-std=gnu11' to
-+'cflags' to resolve the error.
-+
-+[1] https://gcc.gnu.org/gcc-15/porting_to.html
-+
-+Upstream: https://github.com/xvisor/xvisor/pull/200
-+
-+Fixes:
-+https://gitlab.com/buildroot.org/buildroot/-/jobs/11042295047
-+
-+Signed-off-by: Romain Naour <romain.naour@smile.fr>
-+---
-+ Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Makefile b/Makefile
-+index 1984408c..8731ece0 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -166,7 +166,7 @@ cppflags+=-I$(libs_dir)/include
-+ cppflags+=$(cpu-cppflags)
-+ cppflags+=$(board-cppflags)
-+ cppflags+=$(libs-cppflags-y)
-+-cflags=-g -Wall -nostdlib --sysroot=$(drivers_dir)/include -fno-builtin -fno-stack-protector -D__VMM__
-++cflags=-std=gnu11 -g -Wall -nostdlib --sysroot=$(drivers_dir)/include -fno-builtin -fno-stack-protector -D__VMM__
-+ cflags+=$(board-cflags)
-+ cflags+=$(cpu-cflags)
-+ cflags+=$(libs-cflags-y)
-+-- 
-+2.50.1
-+
+diff --git a/support/testing/tests/package/test_xvisor.py b/support/testing/tests/package/test_xvisor.py
+index b1b7d1a5e0..6872e22db9 100644
+--- a/support/testing/tests/package/test_xvisor.py
++++ b/support/testing/tests/package/test_xvisor.py
+@@ -16,7 +16,7 @@ class TestXvisor(infra.basetest.BRTest):
+         # BR2_TARGET_ROOTFS_TAR is not set
+         BR2_TARGET_OPENSBI=y
+         BR2_TARGET_OPENSBI_CUSTOM_VERSION=y
+-        BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE="1.5"
++        BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE="1.6"
+         BR2_TARGET_OPENSBI_PLAT="generic"
+         BR2_PACKAGE_HOST_QEMU=y
+         BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
 -- 
 2.50.1
 
