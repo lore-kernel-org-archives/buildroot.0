@@ -1,73 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3FD73CA0EEB
-	for <buildroot@archiver.kernel.org>; Sun, 24 Aug 2025 08:05:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5444CA0EFC
+	for <buildroot@archiver.kernel.org>; Sun, 24 Aug 2025 08:24:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 03EB541AB0;
-	Sun, 24 Aug 2025 08:05:17 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qwMIB--WFEm4; Sun, 24 Aug 2025 08:05:16 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4EBD641B74
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4EBD641B74;
-	Sun, 24 Aug 2025 08:05:16 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 927A61D9
- for <buildroot@buildroot.org>; Sun, 24 Aug 2025 08:05:13 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 844C461719
- for <buildroot@buildroot.org>; Sun, 24 Aug 2025 08:05:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 86F6C608D1;
+	Sun, 24 Aug 2025 08:24:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3HYBH4amcjfp for <buildroot@buildroot.org>;
- Sun, 24 Aug 2025 08:05:12 +0000 (UTC)
+ id sWuPfSrWFSfo; Sun, 24 Aug 2025 08:24:46 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B8A4B6074F
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id B8A4B6074F;
+	Sun, 24 Aug 2025 08:24:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 47EB01D9
+ for <buildroot@buildroot.org>; Sun, 24 Aug 2025 08:24:46 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 38FED83D24
+ for <buildroot@buildroot.org>; Sun, 24 Aug 2025 08:24:46 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bdKMX1cl2Rxy for <buildroot@buildroot.org>;
+ Sun, 24 Aug 2025 08:24:45 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.128;
  helo=smtpcmd11128.aruba.it;
  envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 760126169C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 760126169C
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E75F483C56
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E75F483C56
 Received: from smtpcmd11128.aruba.it (smtpcmd11128.aruba.it [62.149.156.128])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 760126169C
- for <buildroot@buildroot.org>; Sun, 24 Aug 2025 08:05:12 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E75F483C56
+ for <buildroot@buildroot.org>; Sun, 24 Aug 2025 08:24:44 +0000 (UTC)
 Received: from localhost.localdomain ([95.168.107.28])
  by Aruba SMTP with ESMTPSA
- id q5ivuKRIbtr9dq5ivuLWlz; Sun, 24 Aug 2025 10:05:10 +0200
+ id q61puKanQtr9dq61quLZJJ; Sun, 24 Aug 2025 10:24:42 +0200
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Sun, 24 Aug 2025 09:57:39 +0200
-Message-ID: <20250824075739.386831-1-giulio.benetti@benettiengineering.com>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Joseph Kogut <joseph.kogut@gmail.com>
+Date: Sun, 24 Aug 2025 10:12:13 +0200
+Message-ID: <20250824081213.452038-1-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfPWhGqC2+KGmmRDAxZWzFSdgwTALMfeiCgW7PlyhtWQmPEJjz0l4TmVUnQHNLfibXUH0fANiOHRS8QgNFvKIPdEvGREA5fjKW1n0j6bXMPL3kATeHBjj
- y6gIRQ5AfgDibq7XmQWq9GXKWvSCe0nQsczYP9kJMa6AoHFTsuWo61rov2vWfnQiFRjFChmge5r+Nu818UDEWkHoK7q89wc/xjaQIGcY+/YbOxMf0DS09QYw
- JyTvXREDGBMoB+kA3eXQGuVrsOmaAlseLlB/Uk9DKp7tyA6Q0Gz2XKGmpxJvKuc5
+X-CMAE-Envelope: MS4xfAYhhxogtFGj3FiEUv2Cmq7KLPPbn8v8DiRVTxE7h1jZOqRpJwMN2gEYuTVUKl3hWbH7HH6TBM4PS9i1oSYG9TVDPvQSUT1+6VdnA8DtZ5MLPcidRIKF
+ gDmaVwegCrUQGMjPPgNAA8L1dQKmW/XZ21LpeNClN1BgGcOS4kowMA/gQ8tYpXKhaV3iUHkUO/Q6kJ5rBl6+QS8s6UAgd/OmpWIVCKYMjeUihUGm6oNRN5iz
+ wh2sPdH2bj/bBE6NmvTKZFPBKw/JUmivb2DeopnVvVREu2Tv0k0FibHOhi14T2C0bL9zYO13eNRoJincP+adWA==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1756022710; bh=pvUnpiayK0yufv8eQ/0ctMfo75gSDTzV9E+UTxblQZQ=;
+ t=1756023882; bh=lEG8qBqK979bMoRJpsRFvZxTi59Kd+LxzWnMvC5YKSw=;
  h=From:To:Subject:Date:MIME-Version;
- b=MQJANIx7v/f1blThuHXomGMQ+1HVmvZrA7fpcmYnOY8kiXfAjeFCXIqRu1dH3JuwK
- yWTDqvTa6uUoOwKANLNCWJZclnF9wPtKDEStX2NJ1yQhb6kX/7/+Dc+hsw6+nRGh0L
- Y2QdM9P21nGHpF1pdTkaRZVVvPCH6RS7Te5/reaN7oqeW/TespYN5aPVHlQ483Ezbu
- i43q+5kAtAhC5VxRzypQ7Zr3lJuVNDusSmp7aDS1M43J0FyVR8lhbONLO0rBWfUgtK
- bAKkfPYKd3O3vfjdpyOlurSliqKAcO7RM6XngtzXTUpMJH3QDsG0Kx2BZCyw1o4oza
- AWk9RHIfruLbQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=Pz9pmtRqoh0epAFYDNnejiZXBvTNarSjUwTHC84Jvdes2duSGqlzxuFreV+OQZNPv
+ yeSfMYxRW6gcjypDjchhrHVXhkT1nwUjb1SIsVzGOJn2hQaPAQgMWe0gK5lsH0VBCJ
+ LqkTjWhb5yj4xZgyhwVWjDcT1WWkApqfeokjMqH+t24n1SD+VEwyMGVtSvbt/kDA9n
+ NSwQAfPg+MhqVpcjDo50oE6hCgsybhPeEO9vpIpywAJ3MlztSsOIsIAHsLa2PuQNto
+ j5QFrUF40h2nNGmczVOT0cYSoDxu+NVegzWnbjT+8fY6ZrqMtuH3AuOem73nnYURYV
+ AsZLQ6VNL/8bA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=MQJANIx7
-Subject: [Buildroot] [for-next] package/harfbuzz: bump to version 11.4.3
+ header.s=a1 header.b=Pz9pmtRq
+Subject: [Buildroot] [for-next] package/libnss: bump version to 3.115.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,37 +85,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release Notes:
-https://github.com/harfbuzz/harfbuzz/releases/tag/11.4.3
+For release note, see:
+https://hg-edge.mozilla.org/projects/nss/file/tip/doc/rst/releases/nss_3_115_1.rst
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/harfbuzz/harfbuzz.hash | 2 +-
- package/harfbuzz/harfbuzz.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-index 3085b8aded..463a37d22b 100644
---- a/package/harfbuzz/harfbuzz.hash
-+++ b/package/harfbuzz/harfbuzz.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  7aafab93115eb56cdc9a931ab7d19ff60d7f2937b599d140f17236f374e32698  harfbuzz-11.4.1.tar.xz
-+sha256  6660415ad48fa1a46e4fa75fcdb70ff819c452153f08677d34ffb29eda66415d  harfbuzz-11.4.3.tar.xz
- sha256  ba8f810f2455c2f08e2d56bb49b72f37fcf68f1f4fade38977cfd7372050ad64  COPYING
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index 50ce2b6ada..103ab7a6f5 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 1c6b5ede18..abd550d5c8 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_115_RTM/src/SHA256SUMS
+-sha256  ac2a47fb33bd79320159144e01c0d4af9a937a2d928c7c77ff06f5d9507861ab  nss-3.115.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_115_1_RTM/src/SHA256SUMS
++sha256  b8189c030b528e57dc5290023c07eea429ce242912a51a0388c184c75a257bcf  nss-3.115.1.tar.gz
+ # Locally calculated
+ sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index fa711912b4..9e8e7d36cf 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--HARFBUZZ_VERSION = 11.4.1
-+HARFBUZZ_VERSION = 11.4.3
- HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
- HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
- HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+-LIBNSS_VERSION = 3.115
++LIBNSS_VERSION = 3.115.1
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
 -- 
 2.43.0
 
