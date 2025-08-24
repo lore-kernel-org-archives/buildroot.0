@@ -1,51 +1,109 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5C31CA0EFC
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C967BCA0EEB
 	for <buildroot@archiver.kernel.org>; Sun, 24 Aug 2025 15:36:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7694B40E39;
+	by smtp1.osuosl.org (Postfix) with ESMTP id A11AC845BE;
 	Sun, 24 Aug 2025 15:36:41 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Z8hTPGbB6BR0; Sun, 24 Aug 2025 15:36:40 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8620340E72
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8620340E72;
-	Sun, 24 Aug 2025 15:36:40 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id E5C6D19C
- for <buildroot@buildroot.org>; Sun, 24 Aug 2025 15:36:37 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CB690845AC
- for <buildroot@buildroot.org>; Sun, 24 Aug 2025 15:36:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UF51kHBKhcfc for <buildroot@buildroot.org>;
- Sun, 24 Aug 2025 15:36:37 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 10F99845B2
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 10F99845B2
+ id xsNKqqwpPSqk; Sun, 24 Aug 2025 15:36:39 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 51EA2845AC
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 51EA2845AC;
+	Sun, 24 Aug 2025 15:36:39 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8A058CA
  for <buildroot@buildroot.org>; Sun, 24 Aug 2025 15:36:37 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F390687A90; Sun, 24 Aug 2025 15:36:36 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 24 Aug 2025 17:30:44 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fd313c4cebc8c0a8db2ff9641b48e2d8a993c245
-X-Git-Newrev: b4d8147a9532cbe2abf25d69f58e0c73b82136fb
-X-Patchwork-Hint: ignore
-Message-Id: <20250824153636.F390687A90@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/php-lua: fix build with PHP8/GCC14
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 87A2040605
+ for <buildroot@buildroot.org>; Sun, 24 Aug 2025 15:36:37 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fvkl-giS4INd for <buildroot@buildroot.org>;
+ Sun, 24 Aug 2025 15:36:36 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::42c; helo=mail-wr1-x42c.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 44B8F405EB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 44B8F405EB
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
+ [IPv6:2a00:1450:4864:20::42c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 44B8F405EB
+ for <buildroot@buildroot.org>; Sun, 24 Aug 2025 15:36:36 +0000 (UTC)
+Received: by mail-wr1-x42c.google.com with SMTP id
+ ffacd0b85a97d-3c607029266so1363696f8f.3
+ for <buildroot@buildroot.org>; Sun, 24 Aug 2025 08:36:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1756049794; x=1756654594;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=JOlN1lW2K3gPzUL57MwMdvF5c1pXwmrxdv6Fez9rUPc=;
+ b=Yx8hIH5O9gfCG1NQQ1LpE3DivFey7y3WC90NiBoOtTksPkzPrUOLg1J142DYhJ2T1q
+ KORFPSMqyXLsmj8wJ8wbKabX9KYgo7XGOsN0xpfMdT0KAtcXxuXbIs/ZIiTrIdLSlCwa
+ PU9IJy8Zh3nfiq9oASTPx12EmmVYwND1aqB+o4IuzdWtVGKdT2Qec2O9VFb/WTzCKy5H
+ OXw2YPmdH0LKPX33nvArJV+WtszkoxzSeT3g4CgErABQny+GKDTXcRfThD1RJt4jA+xW
+ k9lPzSjd2jEofnR4SLEz6Xgsmu9TvmtplXnQU+ibXqTVgdRRlrX5E1E+0NdiNIWlMmtJ
+ cFmQ==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCV1w+AV7i/Ue20UjK9w2tpK61d+Eao00nywto9NBu6scWASQWY+ObjL25hVCJFXvuKdoUsWQIJrXCA=@buildroot.org
+X-Gm-Message-State: AOJu0Yy3SBCKLzR0N+F0HszjBJvImkSRdPYuCQFYrXou5Vfpz4FE5bpa
+ T5JTf59VK67BBoOoMM2f1zlVhxSyO77p0OILqU+aU4uptH5TDDUZdSDTehSDfpG4qfA=
+X-Gm-Gg: ASbGnct8y1lRG0eegPcJccBY3cQu52rRC0RrvfpiCM+DxxWObwiPyKMvFeVwtuCEXIB
+ /dvmDV19JlYez0NBP5kEjsp2AsMi9w1N8xkr03bjWcTFlYzXC53lk6xgM9Ma8vleWcc/mqyKjJr
+ 5T27sp+vMxiqJB5OexYLo2RFratg1h0GPU/50PNil7HK2UhrnBl9RBNs30KcfKQCbKAtdjnYyvc
+ wlhcTh4EtBPZeSncnKpX0mkYAAX+Dy9rClHUPd/UOBRRUmAVEF1Oqkd6VY4IkV+rWqC5rJNIPIZ
+ kParu21O0T5CKCIqv6j4OA18IM9DCOSoWZpJ0GFGM4/32aa3bt4mhYU+7bSH9sV3Rtp7WM6+H1M
+ qCsgot52UQkVVsrRm8t7NaWbeAqMl/RMaYIQl6askAzhcu3ucXh+9BQsBTxbM7zre/7/gpa4S6V
+ kSsyttnz7czcqhswT0GEZz0AqZY/7t3qGWf0nHSdx2NfLKcQVJztNa3RJzqxmc
+X-Google-Smtp-Source: AGHT+IFp4sq/YgUjzHAG0yZ29CZ6CAXk54IraEtiI65utiihmRdzvaxRU0cLvqILfpFI83yxP/fbwA==
+X-Received: by 2002:a05:6000:1a8f:b0:3c9:a722:e186 with SMTP id
+ ffacd0b85a97d-3c9a722e3a6mr54779f8f.30.1756049794016; 
+ Sun, 24 Aug 2025 08:36:34 -0700 (PDT)
+Received: from ?IPV6:2a01:cb05:949d:5800:c97d:3b73:4a46:d823?
+ (2a01cb05949d5800c97d3b734a46d823.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:949d:5800:c97d:3b73:4a46:d823])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-45b5f4ef19dsm15408065e9.19.2025.08.24.08.36.33
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 24 Aug 2025 08:36:33 -0700 (PDT)
+Message-ID: <5120138b-60e2-40ba-9f17-ea421c56be14@smile.fr>
+Date: Sun, 24 Aug 2025 17:36:33 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
+ buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ =?UTF-8?Q?Herv=C3=A9_Codina?= <herve.codina@bootlin.com>,
+ Nicolas Carrier <nicolas.carrier@nav-timing.safrangroup.com>
+References: <20250811-php-lua-v3-1-f238174c6e4a@bootlin.com>
+Content-Language: fr
+In-Reply-To: <20250811-php-lua-v3-1-f238174c6e4a@bootlin.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile.fr; s=google; t=1756049794; x=1756654594; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=JOlN1lW2K3gPzUL57MwMdvF5c1pXwmrxdv6Fez9rUPc=;
+ b=WPzPE6NGASM5uFZYE94bIusrXSCSEvyxrhLuHJuZC72sIMzTSUzlwgCa4HGgc1OyBH
+ Fjm9dpkUYXfNQsqbEKuVqXfeKK3sYkNI9+poxNthPWMZem2x86JAXZRTwd0amTu+fVtd
+ XRBMTwzPpC/3yzZdWUWgDrX76Hv7Ba0cORQ3E=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
+ header.a=rsa-sha256 header.s=google header.b=WPzPE6NG
+Subject: Re: [Buildroot] [PATCH v3] package/php-lua: fix build with
+ PHP8/GCC14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,167 +117,123 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Romain Naour via buildroot <buildroot@buildroot.org>
 Reply-To: Romain Naour <romain.naour@smile.fr>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7455347309760110639=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7455347309760110639==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=b4d8147a9532cbe2abf25d69f58e0c73b82136fb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-On both Buildroot 2025.02.x and master branch, php-lua build fails on
-the following error:
-
-lua.c:862:44: error: assignment to 'zend_object_write_property_t' {aka
-'struct _zval_struct * (*)(struct _zend_object *, struct _zend_string *,
-struct _zval_struct *, void **)'} from incompatible pointer type 'void
-(*)(zval *, zval *, zval *, void **)' {aka 'void (*)(struct _zval_struct
-*, struct _zval_struct *, struct _zval_struct *, void **)'}
-[-Wincompatible-pointer-types]
-  862 |         lua_object_handlers.write_property =
-php_lua_write_property;
-      |                                            ^
-lua.c:863:44: error: assignment to 'zend_object_read_property_t' {aka
-'struct _zval_struct * (*)(struct _zend_object *, struct _zend_string *,
-int,  void **, struct _zval_struct *)'} from incompatible pointer type
-'zval * (*)(zval *, zval *, int,  void **, zval *)' {aka 'struct
-_zval_struct * (*)(struct _zval_struct *, struct _zval_struct *, int,
-void **, struct _zval_struct *)'} [-Wincompatible-pointer-types]
-  863 |         lua_object_handlers.read_property  =
-php_lua_read_property;
-      |                                            ^
-make[2]: *** [Makefile:214: lua.lo] Error 1
-
-The error can be reproduced with the following minimal defconfig:
-
-BR2_arm=y
-BR2_cortex_a9=y
-BR2_ARM_ENABLE_NEON=y
-BR2_ARM_ENABLE_VFP=y
-BR2_ARM_FPU_NEON=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-BR2_PACKAGE_LUA=y
-BR2_PACKAGE_PHP=y
-BR2_PACKAGE_PHP_LUA=y
-
-This build failure is the result of two events/conditions:
-- the update to PHP8 has changed the prototype for
-  zend_object_read_property_t (see [1]). But at this time, php-lua just
-  generated a new warning (-Wincompatible-pointer-types)
-- using bootlin bleeding-edge toolchain brings in GCC14, which now turns
-  this warning into a systematic error (see [2])
-
-This issue is still present on the upstream repository, but it has been
-fixed on one of its forks. Bring the relevant patch from the fork to
-allow building php-lua.
-
-[1] https://github.com/php/php-src/commit/91ef4124e56
-[2] https://gcc.gnu.org/gcc-14/porting_to.html#incompatible-pointer-types
-
-Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
-[Romain: update Upstream link]
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
- ...-write-properly-read-property-was-changed.patch | 77 ++++++++++++++++++++++
- 1 file changed, 77 insertions(+)
-
-diff --git a/package/php-lua/0003-php8-Signature-of-write-properly-read-property-was-changed.patch b/package/php-lua/0003-php8-Signature-of-write-properly-read-property-was-changed.patch
-new file mode 100644
-index 0000000000..82a6bbd0b2
---- /dev/null
-+++ b/package/php-lua/0003-php8-Signature-of-write-properly-read-property-was-changed.patch
-@@ -0,0 +1,77 @@
-+From de1068d634519abf2461dac9427b5ff24b6603af Mon Sep 17 00:00:00 2001
-+From: Mikhail Galanin <mikhail.galanin@team.bumble.com>
-+Date: Tue, 24 Aug 2021 08:28:47 +0100
-+Subject: [PATCH] php8: Signature of write_property/read_property was changed
-+ in https://github.com/php/php-src/commit/91ef4124e56
-+
-+Upstream: upstream dead, taken from fork at https://github.com/badoo/php-lua/pull/8
-+Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
-+---
-+ lua.c | 28 ++++++++++++++--------------
-+ 1 file changed, 14 insertions(+), 14 deletions(-)
-+
-+diff --git a/lua.c b/lua.c
-+index edc2868..32c1471 100755
-+--- a/lua.c
-++++ b/lua.c
-+@@ -229,46 +229,46 @@ zend_object *php_lua_create_object(zend_class_entry *ce)
-+ 
-+ /** {{{ static zval * php_lua_read_property(zval *object, zval *member, int type)
-+ */
-+-zval *php_lua_read_property(zval *object, zval *member, int type, void **cache_slot, zval *rv){
-+-	lua_State *L = (Z_LUAVAL_P(object))->L;
-+-	zend_string *str_member;
-++zval *php_lua_read_property(zend_object *object, zend_string *member, int type, void **cache_slot, zval *rv){
-++	lua_State *L = php_lua_obj_from_obj(object)->L;
-+ 
-+ 	if (type != BP_VAR_R) {
-+ 		ZVAL_NULL(rv);
-+ 		return rv;
-+ 	}
-+ 
-+-	str_member = zval_get_string(member);
-+ #if (LUA_VERSION_NUM < 502)
-+-	lua_getfield(L, LUA_GLOBALSINDEX, ZSTR_VAL(str_member));
-++	lua_getfield(L, LUA_GLOBALSINDEX, ZSTR_VAL(member));
-+ #else
-+-	lua_getglobal(L, ZSTR_VAL(str_member));
-++	lua_getglobal(L, ZSTR_VAL(member));
-+ #endif
-+-	zend_string_release(str_member);
-+ 
-+-	php_lua_get_zval_from_lua(L, -1, object, rv);
-++	zval lua_zval_object;
-++	ZVAL_OBJ(&lua_zval_object, object);
-++
-++	php_lua_get_zval_from_lua(L, -1, &lua_zval_object, rv);
-+ 	lua_pop(L, 1);
-++
-+ 	return rv;
-+ }
-+ /* }}} */
-+ 
-+ /** {{{ static void php_lua_write_property(zval *object, zval *member, zval *value)
-+ */
-+-static void php_lua_write_property(zval *object, zval *member, zval *value, void ** key) {
-+-	lua_State *L = (Z_LUAVAL_P(object))->L;
-+-	zend_string *str_member = zval_get_string(member);
-++static zval* php_lua_write_property(zend_object *object, zend_string *member, zval *value, void ** key) {
-++	lua_State *L = php_lua_obj_from_obj(object)->L;
-+ 
-+ #if (LUA_VERSION_NUM < 502)
-+-	php_lua_send_zval_to_lua(L, member);
-++	lua_pushlstring(L, ZSTR_VAL(val), ZSTR_LEN(val));
-+ 	php_lua_send_zval_to_lua(L, value);
-+ 
-+ 	lua_settable(L, LUA_GLOBALSINDEX);
-+ #else
-+ 	php_lua_send_zval_to_lua(L, value);
-+-	lua_setglobal(L, Z_STRVAL_P(member));
-++	lua_setglobal(L, ZSTR_VAL(member));
-+ #endif
-+ 
-+-	zend_string_release(str_member);
-++	return value;
-+ }
-+ /* }}} */
-+ 
-
---===============7455347309760110639==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7455347309760110639==--
+SGVsbG8gQWxleGlzLCBUaG9tYXMsIEFsbCwKCkxlIDExLzA4LzIwMjUgw6AgMDk6NTIsIEFsZXhp
+cyBMb3Rob3LDqSB2aWEgYnVpbGRyb290IGEgw6ljcml0wqA6Cj4gT24gYm90aCBCdWlsZHJvb3Qg
+MjAyNS4wMi54IGFuZCBtYXN0ZXIgYnJhbmNoLCBwaHAtbHVhIGJ1aWxkIGZhaWxzIG9uCj4gdGhl
+IGZvbGxvd2luZyBlcnJvcjoKPiAKPiBsdWEuYzo4NjI6NDQ6IGVycm9yOiBhc3NpZ25tZW50IHRv
+ICd6ZW5kX29iamVjdF93cml0ZV9wcm9wZXJ0eV90JyB7YWthCj4gJ3N0cnVjdCBfenZhbF9zdHJ1
+Y3QgKiAoKikoc3RydWN0IF96ZW5kX29iamVjdCAqLCBzdHJ1Y3QgX3plbmRfc3RyaW5nICosCj4g
+c3RydWN0IF96dmFsX3N0cnVjdCAqLCB2b2lkICoqKSd9IGZyb20gaW5jb21wYXRpYmxlIHBvaW50
+ZXIgdHlwZSAndm9pZAo+ICgqKSh6dmFsICosIHp2YWwgKiwgenZhbCAqLCB2b2lkICoqKScge2Fr
+YSAndm9pZCAoKikoc3RydWN0IF96dmFsX3N0cnVjdAo+ICosIHN0cnVjdCBfenZhbF9zdHJ1Y3Qg
+Kiwgc3RydWN0IF96dmFsX3N0cnVjdCAqLCB2b2lkICoqKSd9Cj4gWy1XaW5jb21wYXRpYmxlLXBv
+aW50ZXItdHlwZXNdCj4gICA4NjIgfCAgICAgICAgIGx1YV9vYmplY3RfaGFuZGxlcnMud3JpdGVf
+cHJvcGVydHkgPQo+IHBocF9sdWFfd3JpdGVfcHJvcGVydHk7Cj4gICAgICAgfCAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXgo+IGx1YS5jOjg2Mzo0NDogZXJyb3I6
+IGFzc2lnbm1lbnQgdG8gJ3plbmRfb2JqZWN0X3JlYWRfcHJvcGVydHlfdCcge2FrYQo+ICdzdHJ1
+Y3QgX3p2YWxfc3RydWN0ICogKCopKHN0cnVjdCBfemVuZF9vYmplY3QgKiwgc3RydWN0IF96ZW5k
+X3N0cmluZyAqLAo+IGludCwgIHZvaWQgKiosIHN0cnVjdCBfenZhbF9zdHJ1Y3QgKiknfSBmcm9t
+IGluY29tcGF0aWJsZSBwb2ludGVyIHR5cGUKPiAnenZhbCAqICgqKSh6dmFsICosIHp2YWwgKiwg
+aW50LCAgdm9pZCAqKiwgenZhbCAqKScge2FrYSAnc3RydWN0Cj4gX3p2YWxfc3RydWN0ICogKCop
+KHN0cnVjdCBfenZhbF9zdHJ1Y3QgKiwgc3RydWN0IF96dmFsX3N0cnVjdCAqLCBpbnQsCj4gdm9p
+ZCAqKiwgc3RydWN0IF96dmFsX3N0cnVjdCAqKSd9IFstV2luY29tcGF0aWJsZS1wb2ludGVyLXR5
+cGVzXQo+ICAgODYzIHwgICAgICAgICBsdWFfb2JqZWN0X2hhbmRsZXJzLnJlYWRfcHJvcGVydHkg
+ID0KPiBwaHBfbHVhX3JlYWRfcHJvcGVydHk7Cj4gICAgICAgfCAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgXgo+IG1ha2VbMl06ICoqKiBbTWFrZWZpbGU6MjE0OiBs
+dWEubG9dIEVycm9yIDEKPiAKPiBUaGUgZXJyb3IgY2FuIGJlIHJlcHJvZHVjZWQgd2l0aCB0aGUg
+Zm9sbG93aW5nIG1pbmltYWwgZGVmY29uZmlnOgo+IAo+IEJSMl9hcm09eQo+IEJSMl9jb3J0ZXhf
+YTk9eQo+IEJSMl9BUk1fRU5BQkxFX05FT049eQo+IEJSMl9BUk1fRU5BQkxFX1ZGUD15Cj4gQlIy
+X0FSTV9GUFVfTkVPTj15Cj4gQlIyX1RPT0xDSEFJTl9FWFRFUk5BTD15Cj4gQlIyX1RPT0xDSEFJ
+Tl9FWFRFUk5BTF9CT09UTElOPXkKPiBCUjJfUEFDS0FHRV9MVUE9eQo+IEJSMl9QQUNLQUdFX1BI
+UD15Cj4gQlIyX1BBQ0tBR0VfUEhQX0xVQT15Cj4gCj4gVGhpcyBidWlsZCBmYWlsdXJlIGlzIHRo
+ZSByZXN1bHQgb2YgdHdvIGV2ZW50cy9jb25kaXRpb25zOgo+IC0gdGhlIHVwZGF0ZSB0byBQSFA4
+IGhhcyBjaGFuZ2VkIHRoZSBwcm90b3R5cGUgZm9yCj4gICB6ZW5kX29iamVjdF9yZWFkX3Byb3Bl
+cnR5X3QgKHNlZSBbMV0pLiBCdXQgYXQgdGhpcyB0aW1lLCBwaHAtbHVhIGp1c3QKPiAgIGdlbmVy
+YXRlZCBhIG5ldyB3YXJuaW5nICgtV2luY29tcGF0aWJsZS1wb2ludGVyLXR5cGVzKQo+IC0gdXNp
+bmcgYm9vdGxpbiBibGVlZGluZy1lZGdlIHRvb2xjaGFpbiBicmluZ3MgaW4gR0NDMTQsIHdoaWNo
+IG5vdyB0dXJucwo+ICAgdGhpcyB3YXJuaW5nIGludG8gYSBzeXN0ZW1hdGljIGVycm9yIChzZWUg
+WzJdKQo+IAo+IFRoaXMgaXNzdWUgaXMgc3RpbGwgcHJlc2VudCBvbiB0aGUgdXBzdHJlYW0gcmVw
+b3NpdG9yeSwgYnV0IGl0IGhhcyBiZWVuCj4gZml4ZWQgb24gb25lIG9mIGl0cyBmb3Jrcy4gQnJp
+bmcgdGhlIHJlbGV2YW50IHBhdGNoIGZyb20gdGhlIGZvcmsgdG8KPiBhbGxvdyBidWlsZGluZyBw
+aHAtbHVhLgo+IAo+IFsxXSBodHRwczovL2dpdGh1Yi5jb20vcGhwL3BocC1zcmMvY29tbWl0Lzkx
+ZWY0MTI0ZTU2Cj4gWzJdIGh0dHBzOi8vZ2NjLmdudS5vcmcvZ2NjLTE0L3BvcnRpbmdfdG8uaHRt
+bCNpbmNvbXBhdGlibGUtcG9pbnRlci10eXBlcwo+IAo+IFNpZ25lZC1vZmYtYnk6IEFsZXhpcyBM
+b3Rob3LDqSA8YWxleGlzLmxvdGhvcmVAYm9vdGxpbi5jb20+Cj4gLS0tCj4gQ2hhbmdlcyBpbiB2
+MzoKPiAtIEFkZGVkIGVtcHR5IFVwc3RyZWFtIHRhZwo+IC0gTGluayB0byB2MjogaHR0cHM6Ly9s
+b3JlLmtlcm5lbC5vcmcvci8yMDI1MDgwNi1waHAtbHVhLXYyLTEtYTczZmFhZDkzOWU5QGJvb3Rs
+aW4uY29tCj4gCj4gQ2hhbmdlcyBpbiB2MjoKPiAtIHVwZGF0ZSBjb21taXQgdGl0bGUgCj4gLSBh
+ZGQgbW9yZSBkZXRhaWxzIGFib3V0IHRoZSBjb25kaXRpb25zIGxlYWRpbmcgdG8gdGhlIGJ1aWxk
+IGZhaWx1cmUKPiAtIGFkZCBtaW5pbWFsIGRlZmNvbmZpZwo+IC0gTGluayB0byB2MTogaHR0cHM6
+Ly9sb3JlLmtlcm5lbC5vcmcvci8yMDI1MDgwNi1waHAtbHVhLXYxLTEtZTFmNTI0ZmVkMGE1QGJv
+b3RsaW4uY29tCj4gLS0tCj4gIC4uLi13cml0ZS1wcm9wZXJseS1yZWFkLXByb3BlcnR5LXdhcy1j
+aGFuZ2VkLnBhdGNoIHwgNzkgKysrKysrKysrKysrKysrKysrKysrKwo+ICAxIGZpbGUgY2hhbmdl
+ZCwgNzkgaW5zZXJ0aW9ucygrKQo+IAo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3BocC1sdWEvMDAw
+My1waHA4LVNpZ25hdHVyZS1vZi13cml0ZS1wcm9wZXJseS1yZWFkLXByb3BlcnR5LXdhcy1jaGFu
+Z2VkLnBhdGNoIGIvcGFja2FnZS9waHAtbHVhLzAwMDMtcGhwOC1TaWduYXR1cmUtb2Ytd3JpdGUt
+cHJvcGVybHktcmVhZC1wcm9wZXJ0eS13YXMtY2hhbmdlZC5wYXRjaAo+IG5ldyBmaWxlIG1vZGUg
+MTAwNjQ0Cj4gaW5kZXggMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMC4u
+YzEzNTdiNTkxYjViNzk0YjFlZWNmN2NiMDI2MDlhMjFkZTYxNWI0Ywo+IC0tLSAvZGV2L251bGwK
+PiArKysgYi9wYWNrYWdlL3BocC1sdWEvMDAwMy1waHA4LVNpZ25hdHVyZS1vZi13cml0ZS1wcm9w
+ZXJseS1yZWFkLXByb3BlcnR5LXdhcy1jaGFuZ2VkLnBhdGNoCj4gQEAgLTAsMCArMSw3OSBAQAo+
+ICtGcm9tIGRlMTA2OGQ2MzQ1MTlhYmYyNDYxZGFjOTQyN2I1ZmYyNGI2NjAzYWYgTW9uIFNlcCAx
+NyAwMDowMDowMCAyMDAxCj4gK0Zyb206IE1pa2hhaWwgR2FsYW5pbiA8bWlraGFpbC5nYWxhbmlu
+QHRlYW0uYnVtYmxlLmNvbT4KPiArRGF0ZTogVHVlLCAyNCBBdWcgMjAyMSAwODoyODo0NyArMDEw
+MAo+ICtTdWJqZWN0OiBbUEFUQ0hdIHBocDg6IFNpZ25hdHVyZSBvZiB3cml0ZV9wcm9wZXJ0eS9y
+ZWFkX3Byb3BlcnR5IHdhcyBjaGFuZ2VkCj4gKyBpbiBodHRwczovL2dpdGh1Yi5jb20vcGhwL3Bo
+cC1zcmMvY29tbWl0LzkxZWY0MTI0ZTU2Cj4gKwo+ICtUYWtlbiBmcm9tIGh0dHBzOi8vZ2l0aHVi
+LmNvbS9iYWRvby9waHAtbHVhL3B1bGwvOAo+ICsKPiArVXBzdHJlYW06IG4vYQoKSSB1cGRhdGVk
+IHRoZSBsaW5rIGZvbGxvd2luZyBUaG9tYXMncyByZXBseSBbMV0KClsxXSBodHRwczovL2xvcmUu
+a2VybmVsLm9yZy9idWlsZHJvb3QvMjAyNTA4MTMxMjQzNTMuNDAxNWM0NjZAd2luZHN1cmYvCgpB
+cHBsaWVkIHRvIG1hc3RlciwgdGhhbmtzLgoKQmVzdCByZWdhcmRzLApSb21haW4KCgo+ICtTaWdu
+ZWQtb2ZmLWJ5OiBBbGV4aXMgTG90aG9yw6kgPGFsZXhpcy5sb3Rob3JlQGJvb3RsaW4uY29tPgo+
+ICstLS0KPiArIGx1YS5jIHwgMjggKysrKysrKysrKysrKystLS0tLS0tLS0tLS0tLQo+ICsgMSBm
+aWxlIGNoYW5nZWQsIDE0IGluc2VydGlvbnMoKyksIDE0IGRlbGV0aW9ucygtKQo+ICsKPiArZGlm
+ZiAtLWdpdCBhL2x1YS5jIGIvbHVhLmMKPiAraW5kZXggZWRjMjg2OC4uMzJjMTQ3MSAxMDA3NTUK
+PiArLS0tIGEvbHVhLmMKPiArKysrIGIvbHVhLmMKPiArQEAgLTIyOSw0NiArMjI5LDQ2IEBAIHpl
+bmRfb2JqZWN0ICpwaHBfbHVhX2NyZWF0ZV9vYmplY3QoemVuZF9jbGFzc19lbnRyeSAqY2UpCj4g
+KyAKPiArIC8qKiB7e3sgc3RhdGljIHp2YWwgKiBwaHBfbHVhX3JlYWRfcHJvcGVydHkoenZhbCAq
+b2JqZWN0LCB6dmFsICptZW1iZXIsIGludCB0eXBlKQo+ICsgKi8KPiArLXp2YWwgKnBocF9sdWFf
+cmVhZF9wcm9wZXJ0eSh6dmFsICpvYmplY3QsIHp2YWwgKm1lbWJlciwgaW50IHR5cGUsIHZvaWQg
+KipjYWNoZV9zbG90LCB6dmFsICpydil7Cj4gKy0JbHVhX1N0YXRlICpMID0gKFpfTFVBVkFMX1Ao
+b2JqZWN0KSktPkw7Cj4gKy0JemVuZF9zdHJpbmcgKnN0cl9tZW1iZXI7Cj4gKyt6dmFsICpwaHBf
+bHVhX3JlYWRfcHJvcGVydHkoemVuZF9vYmplY3QgKm9iamVjdCwgemVuZF9zdHJpbmcgKm1lbWJl
+ciwgaW50IHR5cGUsIHZvaWQgKipjYWNoZV9zbG90LCB6dmFsICpydil7Cj4gKysJbHVhX1N0YXRl
+ICpMID0gcGhwX2x1YV9vYmpfZnJvbV9vYmoob2JqZWN0KS0+TDsKPiArIAo+ICsgCWlmICh0eXBl
+ICE9IEJQX1ZBUl9SKSB7Cj4gKyAJCVpWQUxfTlVMTChydik7Cj4gKyAJCXJldHVybiBydjsKPiAr
+IAl9Cj4gKyAKPiArLQlzdHJfbWVtYmVyID0genZhbF9nZXRfc3RyaW5nKG1lbWJlcik7Cj4gKyAj
+aWYgKExVQV9WRVJTSU9OX05VTSA8IDUwMikKPiArLQlsdWFfZ2V0ZmllbGQoTCwgTFVBX0dMT0JB
+TFNJTkRFWCwgWlNUUl9WQUwoc3RyX21lbWJlcikpOwo+ICsrCWx1YV9nZXRmaWVsZChMLCBMVUFf
+R0xPQkFMU0lOREVYLCBaU1RSX1ZBTChtZW1iZXIpKTsKPiArICNlbHNlCj4gKy0JbHVhX2dldGds
+b2JhbChMLCBaU1RSX1ZBTChzdHJfbWVtYmVyKSk7Cj4gKysJbHVhX2dldGdsb2JhbChMLCBaU1RS
+X1ZBTChtZW1iZXIpKTsKPiArICNlbmRpZgo+ICstCXplbmRfc3RyaW5nX3JlbGVhc2Uoc3RyX21l
+bWJlcik7Cj4gKyAKPiArLQlwaHBfbHVhX2dldF96dmFsX2Zyb21fbHVhKEwsIC0xLCBvYmplY3Qs
+IHJ2KTsKPiArKwl6dmFsIGx1YV96dmFsX29iamVjdDsKPiArKwlaVkFMX09CSigmbHVhX3p2YWxf
+b2JqZWN0LCBvYmplY3QpOwo+ICsrCj4gKysJcGhwX2x1YV9nZXRfenZhbF9mcm9tX2x1YShMLCAt
+MSwgJmx1YV96dmFsX29iamVjdCwgcnYpOwo+ICsgCWx1YV9wb3AoTCwgMSk7Cj4gKysKPiArIAly
+ZXR1cm4gcnY7Cj4gKyB9Cj4gKyAvKiB9fX0gKi8KPiArIAo+ICsgLyoqIHt7eyBzdGF0aWMgdm9p
+ZCBwaHBfbHVhX3dyaXRlX3Byb3BlcnR5KHp2YWwgKm9iamVjdCwgenZhbCAqbWVtYmVyLCB6dmFs
+ICp2YWx1ZSkKPiArICovCj4gKy1zdGF0aWMgdm9pZCBwaHBfbHVhX3dyaXRlX3Byb3BlcnR5KHp2
+YWwgKm9iamVjdCwgenZhbCAqbWVtYmVyLCB6dmFsICp2YWx1ZSwgdm9pZCAqKiBrZXkpIHsKPiAr
+LQlsdWFfU3RhdGUgKkwgPSAoWl9MVUFWQUxfUChvYmplY3QpKS0+TDsKPiArLQl6ZW5kX3N0cmlu
+ZyAqc3RyX21lbWJlciA9IHp2YWxfZ2V0X3N0cmluZyhtZW1iZXIpOwo+ICsrc3RhdGljIHp2YWwq
+IHBocF9sdWFfd3JpdGVfcHJvcGVydHkoemVuZF9vYmplY3QgKm9iamVjdCwgemVuZF9zdHJpbmcg
+Km1lbWJlciwgenZhbCAqdmFsdWUsIHZvaWQgKioga2V5KSB7Cj4gKysJbHVhX1N0YXRlICpMID0g
+cGhwX2x1YV9vYmpfZnJvbV9vYmoob2JqZWN0KS0+TDsKPiArIAo+ICsgI2lmIChMVUFfVkVSU0lP
+Tl9OVU0gPCA1MDIpCj4gKy0JcGhwX2x1YV9zZW5kX3p2YWxfdG9fbHVhKEwsIG1lbWJlcik7Cj4g
+KysJbHVhX3B1c2hsc3RyaW5nKEwsIFpTVFJfVkFMKHZhbCksIFpTVFJfTEVOKHZhbCkpOwo+ICsg
+CXBocF9sdWFfc2VuZF96dmFsX3RvX2x1YShMLCB2YWx1ZSk7Cj4gKyAKPiArIAlsdWFfc2V0dGFi
+bGUoTCwgTFVBX0dMT0JBTFNJTkRFWCk7Cj4gKyAjZWxzZQo+ICsgCXBocF9sdWFfc2VuZF96dmFs
+X3RvX2x1YShMLCB2YWx1ZSk7Cj4gKy0JbHVhX3NldGdsb2JhbChMLCBaX1NUUlZBTF9QKG1lbWJl
+cikpOwo+ICsrCWx1YV9zZXRnbG9iYWwoTCwgWlNUUl9WQUwobWVtYmVyKSk7Cj4gKyAjZW5kaWYK
+PiArIAo+ICstCXplbmRfc3RyaW5nX3JlbGVhc2Uoc3RyX21lbWJlcik7Cj4gKysJcmV0dXJuIHZh
+bHVlOwo+ICsgfQo+ICsgLyogfX19ICovCj4gKyAKPiAKPiAtLS0KPiBiYXNlLWNvbW1pdDogMmZk
+NTIwYzhkNTJiOWUwZWQ1ZTI2MzQzODEzZmRkOGRiY2FkYjQ1Zgo+IGNoYW5nZS1pZDogMjAyNTA4
+MDYtcGhwLWx1YS0zOTg5NWQ0ZmUxNzkKPiAKPiBCZXN0IHJlZ2FyZHMsCgpfX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0
+CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWls
+bWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
