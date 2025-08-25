@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C107ACAC586
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1FCECAC588
 	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 14:18:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 988BE80875;
+	by smtp3.osuosl.org (Postfix) with ESMTP id A9DF56066B;
 	Mon,  8 Sep 2025 14:18:19 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Q7LMVhc7T4bu; Mon,  8 Sep 2025 14:18:17 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B02FA807BF
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B02FA807BF;
-	Mon,  8 Sep 2025 14:18:16 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0DB3912A0
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:38 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 528FC605FA
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id o0p-zvSW2gue for <buildroot@buildroot.org>;
- Mon,  8 Sep 2025 14:16:31 +0000 (UTC)
+ id XhwkH_TbcIkO; Mon,  8 Sep 2025 14:18:18 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE61660680
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id BE61660680;
+	Mon,  8 Sep 2025 14:18:18 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 109CF186
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:39 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id DFA5240217
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:25 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pezXndxj3BDz for <buildroot@buildroot.org>;
+ Mon,  8 Sep 2025 14:16:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8BACA60610
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 45D254020C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8BACA60610
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:31 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 45D254020C
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 870AD81353; Mon,  8 Sep 2025 14:16:31 +0000 (UTC)
+ id 34783818B3; Mon,  8 Sep 2025 14:16:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 5 Sep 2025 19:16:00 +0200
+Date: Tue, 26 Aug 2025 00:37:42 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: aa6b9c979dfb4a3a55109d819cac66924cde5913
-X-Git-Newrev: 076888b071516c540bbdac5003e307f052fc81fc
+X-Git-Oldrev: 7a9f1744ac3a05ef9443f6c0453a1a8fee83aaf2
+X-Git-Newrev: 7b5c42fae34c47a773fe100ba7f2de3d4369fcb2
 X-Patchwork-Hint: ignore
-Message-Id: <20250908141631.870AD81353@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/nano: bump to version 8.6
+Message-Id: <20250908141625.34783818B3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libfuse3: bump to version 3.17.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,43 +65,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=076888b071516c540bbdac5003e307f052fc81fc
+commit: https://git.buildroot.net/buildroot/commit/?id=7b5c42fae34c47a773fe100ba7f2de3d4369fcb2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog: https://www.nano-editor.org/dist/v8/ChangeLog
+Release notes:
+https://github.com/libfuse/libfuse/releases/tag/fuse-3.17.4
 
-Signed-off-by: Osama Abdelkader <osama.abdelkader@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/nano/nano.hash | 4 ++--
- package/nano/nano.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libfuse3/libfuse3.hash | 2 +-
+ package/libfuse3/libfuse3.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nano/nano.hash b/package/nano/nano.hash
-index c4866b99db..714046414a 100644
---- a/package/nano/nano.hash
-+++ b/package/nano/nano.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://www.nano-editor.org/dist/v8/nano-8.5.tar.xz.asc
-+# https://www.nano-editor.org/dist/v8/nano-8.6.tar.xz.asc
- # using key 168E6F4297BFD7A79AFD4496514BBE2EB8E1961F
--sha256  000b011d339c141af9646d43288f54325ff5c6e8d39d6e482b787bbc6654c26a  nano-8.5.tar.xz
-+sha256  f7abfbf0eed5f573ab51bd77a458f32d82f9859c55e9689f819d96fe1437a619  nano-8.6.tar.xz
- sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index e3005f4dd0..183dc07e7e 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/libfuse3/libfuse3.hash b/package/libfuse3/libfuse3.hash
+index 73fe1a84d1..1091dbd6c1 100644
+--- a/package/libfuse3/libfuse3.hash
++++ b/package/libfuse3/libfuse3.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated sha256 checksums
+-sha256  99dcab8a4be0e5d3c44f882ab9d4a711533f8cb4a4298e41175ff9bb63770fe5  libfuse3-3.17.3.tar.gz
++sha256  dd21d1545c05e73ada594b93fe593351b7dbf10940fd93b934b9395513108b34  libfuse3-3.17.4.tar.gz
+ sha256  b8832d9caaa075bbbd2aef24efa09f8b7ab66a832812d88c602da0c7b4397fad  LICENSE
+diff --git a/package/libfuse3/libfuse3.mk b/package/libfuse3/libfuse3.mk
+index 6b6723dafc..6a6111a065 100644
+--- a/package/libfuse3/libfuse3.mk
++++ b/package/libfuse3/libfuse3.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- NANO_VERSION_MAJOR = 8
--NANO_VERSION = $(NANO_VERSION_MAJOR).5
-+NANO_VERSION = $(NANO_VERSION_MAJOR).6
- NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
- NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
- NANO_LICENSE = GPL-3.0+
+-LIBFUSE3_VERSION = 3.17.3
++LIBFUSE3_VERSION = 3.17.4
+ LIBFUSE3_SITE = $(call github,libfuse,libfuse,fuse-$(LIBFUSE3_VERSION))
+ LIBFUSE3_LICENSE = LGPL-2.1
+ LIBFUSE3_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
