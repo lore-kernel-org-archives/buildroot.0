@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CAE43CAC581
-	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 14:17:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3BD8CAC588
+	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 14:17:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A085680525;
-	Mon,  8 Sep 2025 14:17:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A525B8065E;
+	Mon,  8 Sep 2025 14:17:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iqey5bXZvlnf; Mon,  8 Sep 2025 14:17:09 +0000 (UTC)
+ id nZakT7XEDH0z; Mon,  8 Sep 2025 14:17:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8566F80635
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D82098064B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8566F80635;
-	Mon,  8 Sep 2025 14:17:08 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0CA00186
+	by smtp1.osuosl.org (Postfix) with ESMTP id D82098064B;
+	Mon,  8 Sep 2025 14:17:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 287EC186
  for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4586D605BB
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:23 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D0CA94004F
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tLAwBCG2f5Ew for <buildroot@buildroot.org>;
- Mon,  8 Sep 2025 14:16:22 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id APrmFElqviLY for <buildroot@buildroot.org>;
+ Mon,  8 Sep 2025 14:16:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AAFE9605AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B3EE4004D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id AAFE9605AA
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:22 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0B3EE4004D
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:24 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A723683916; Mon,  8 Sep 2025 14:16:22 +0000 (UTC)
+ id E71668359C; Mon,  8 Sep 2025 14:16:24 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 23 Aug 2025 01:56:25 +0200
+Date: Mon, 25 Aug 2025 23:04:11 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 80ab57f6a91da7f807190b27d0f28846842a3897
-X-Git-Newrev: 6ae74b80b71ce89d56b28b54303be5171070d22e
+X-Git-Oldrev: 91a5714b33b9dd8349e256b5d6a681bde55cd1ef
+X-Git-Newrev: dde429752ec611beb4aa7734e03884d66ba7fdb2
 X-Patchwork-Hint: ignore
-Message-Id: <20250908141622.A723683916@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/fmlib: bump version to
- lf-6.12.20-2.0.0
+Message-Id: <20250908141624.E71668359C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/stm32f769_disco_sd: bump Linux to
+ 5.15.186 and U-Boot to 2025.07
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,40 +66,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6ae74b80b71ce89d56b28b54303be5171070d22e
+commit: https://git.buildroot.net/buildroot/commit/?id=dde429752ec611beb4aa7734e03884d66ba7fdb2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-No change.
+The patch bumps the Linux kernel to version 5.15.186 and U-Boot to
+version 2025.07.
 
-Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/fmlib/fmlib.hash | 2 +-
- package/fmlib/fmlib.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ board/stmicroelectronics/stm32f769-disco/patches/linux/linux.hash | 2 +-
+ board/stmicroelectronics/stm32f769-disco/patches/uboot/uboot.hash | 2 +-
+ configs/stm32f769_disco_sd_defconfig                              | 4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/fmlib/fmlib.hash b/package/fmlib/fmlib.hash
-index 2d63a615c0..7293ecbc07 100644
---- a/package/fmlib/fmlib.hash
-+++ b/package/fmlib/fmlib.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  087e1be3584a390cf0a75fa3730589edf76aa9a4832fa012a67c381cbf5b57a3  fmlib-lf-6.12.3-1.0.0-3-g7a58eca.tar.gz
-+sha256  491315e35fb8d411305f4e66413ee3fe0e265f9cc8b5f27ec7587d15bf79991f  fmlib-lf-6.12.20-2.0.0.tar.gz
- sha256  5d7770fa9f70f0c6f0b4784bbca8401811259a4b1e03455dbd863ffd0d34d2ca  LICENSE
-diff --git a/package/fmlib/fmlib.mk b/package/fmlib/fmlib.mk
-index 2d25c0845c..14bcca5e40 100644
---- a/package/fmlib/fmlib.mk
-+++ b/package/fmlib/fmlib.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FMLIB_VERSION = lf-6.12.3-1.0.0-3-g7a58eca
-+FMLIB_VERSION = lf-6.12.20-2.0.0
- FMLIB_SITE = $(call github,nxp-qoriq,fmlib,$(FMLIB_VERSION))
- FMLIB_LICENSE = BSD-3-Clause
- FMLIB_LICENSE_FILES = LICENSE
+diff --git a/board/stmicroelectronics/stm32f769-disco/patches/linux/linux.hash b/board/stmicroelectronics/stm32f769-disco/patches/linux/linux.hash
+index 4e0aeb77d8..68e85f8a21 100644
+--- a/board/stmicroelectronics/stm32f769-disco/patches/linux/linux.hash
++++ b/board/stmicroelectronics/stm32f769-disco/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  9319a47b1e9b5d344ff6015431856d0c9640e4faedc527c87f9129061a27136f  linux-5.15.179.tar.xz
++sha256  9c4efdd7ee550d524c017b5dae27725374526311e983661850cd880af671cb2a  linux-5.15.186.tar.xz
+diff --git a/board/stmicroelectronics/stm32f769-disco/patches/uboot/uboot.hash b/board/stmicroelectronics/stm32f769-disco/patches/uboot/uboot.hash
+index 80ea21b7cb..440526977b 100644
+--- a/board/stmicroelectronics/stm32f769-disco/patches/uboot/uboot.hash
++++ b/board/stmicroelectronics/stm32f769-disco/patches/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  439d3bef296effd54130be6a731c5b118be7fddd7fcc663ccbc5fb18294d8718  u-boot-2025.04.tar.bz2
++sha256  0f933f6c5a426895bf306e93e6ac53c60870e4b54cda56d95211bec99e63bec7  u-boot-2025.07.tar.bz2
+diff --git a/configs/stm32f769_disco_sd_defconfig b/configs/stm32f769_disco_sd_defconfig
+index e0c592ad82..edd429f758 100644
+--- a/configs/stm32f769_disco_sd_defconfig
++++ b/configs/stm32f769_disco_sd_defconfig
+@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/stmicroelectronics/stm32f769-disco/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.179"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.186"
+ BR2_LINUX_KERNEL_DEFCONFIG="stm32"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(LINUX_DIR)/arch/arm/configs/dram_0xc0000000.config board/stmicroelectronics/stm32f769-disco/linux-sd.fragment"
+ BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+@@ -23,7 +23,7 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="32M"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.04"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32f769-disco"
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
