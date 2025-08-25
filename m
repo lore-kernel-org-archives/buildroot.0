@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BE38CAC581
-	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 14:17:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D170ACAC586
+	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 14:17:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1F4B480578;
-	Mon,  8 Sep 2025 14:17:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A67D080518;
+	Mon,  8 Sep 2025 14:17:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OuDssC_46R7c; Mon,  8 Sep 2025 14:17:16 +0000 (UTC)
+ id TNFR26PGsNM9; Mon,  8 Sep 2025 14:17:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD47380672
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6F4148062A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DD47380672;
-	Mon,  8 Sep 2025 14:17:15 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1634B234
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6F4148062A;
+	Mon,  8 Sep 2025 14:17:17 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3A68F186
  for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CE9CA605C0
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:24 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 06A8C4004D
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aNPrCQcdMjqn for <buildroot@buildroot.org>;
- Mon,  8 Sep 2025 14:16:24 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vizs-JRPX7GC for <buildroot@buildroot.org>;
+ Mon,  8 Sep 2025 14:16:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA600605CA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1E15040054
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id EA600605CA
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:23 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1E15040054
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E734C83916; Mon,  8 Sep 2025 14:16:23 +0000 (UTC)
+ id 0EA1C818B3; Mon,  8 Sep 2025 14:16:25 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 23 Aug 2025 23:25:41 +0200
+Date: Mon, 25 Aug 2025 23:04:36 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bbec805717167714ee6b22b8c8b2ddddcce47ea4
-X-Git-Newrev: 2dd20212f2edb3a763d9251dce157956245bec09
+X-Git-Oldrev: dde429752ec611beb4aa7734e03884d66ba7fdb2
+X-Git-Newrev: 7a9f1744ac3a05ef9443f6c0453a1a8fee83aaf2
 X-Patchwork-Hint: ignore
-Message-Id: <20250908141623.E734C83916@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gdbm: bump to version 1.26
+Message-Id: <20250908141625.0EA1C818B3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/stm32mp1*_dk*: bump Linux to
+ 6.12.36 and U-Boot to 2025.07
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,218 +66,137 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2dd20212f2edb3a763d9251dce157956245bec09
+commit: https://git.buildroot.net/buildroot/commit/?id=7a9f1744ac3a05ef9443f6c0453a1a8fee83aaf2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-1.24 -> 1.25 changes:
+The patch bumps the Linux kernel to version 6.12.36 and U-Boot to
+version 2025.07 for
 
-  https://puszcza.gnu.org.ua/forum/forum.php?forum_id=1362
+- stm32mp135f_dk_defconfig
+- stm32mp157a_dk1_defconfig
+- stm32mp157c_dk2_defconfig
 
-1.25 -> 1.26 changes:
+The new version of U-Boot with commit [1] enabled OF_UPSTREAM flag for
+STM32MP15 platforms. This required properly updating the DEVICE_TREE
+parameter to pass to U-Boot in order to successfully complete the build.
 
-  https://puszcza.gnu.org.ua/forum/forum.php?forum_id=1367
+Tested on STM32MP157C-DK2 Discovery Board.
 
-We can drop 0001-C23-compatibility-fix.patch as it is upstream.
+[1] https://gitlab.com/u-boot/u-boot/-/commit/35f90f76f45b186251cd5da0b6f057e0382fb7db
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/gdbm/0001-C23-compatibility-fix.patch | 158 --------------------------
- package/gdbm/gdbm.hash                        |   6 +-
- package/gdbm/gdbm.mk                          |   2 +-
- 3 files changed, 4 insertions(+), 162 deletions(-)
+ board/stmicroelectronics/common/stm32mp1xx/patches/linux/linux.hash | 2 +-
+ board/stmicroelectronics/common/stm32mp1xx/patches/uboot/uboot.hash | 2 +-
+ configs/stm32mp135f_dk_defconfig                                    | 6 +++---
+ configs/stm32mp157a_dk1_defconfig                                   | 6 +++---
+ configs/stm32mp157c_dk2_defconfig                                   | 6 +++---
+ 5 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/package/gdbm/0001-C23-compatibility-fix.patch b/package/gdbm/0001-C23-compatibility-fix.patch
-deleted file mode 100644
-index 87fd94e196..0000000000
---- a/package/gdbm/0001-C23-compatibility-fix.patch
-+++ /dev/null
-@@ -1,158 +0,0 @@
--From 238315e9f4f547dff4f5b9dff2f903385a8048cb Mon Sep 17 00:00:00 2001
--From: Sergey Poznyakoff <gray@gnu.org>
--Date: Sun, 17 Nov 2024 22:58:54 +0200
--Subject: [PATCH] C23 compatibility fix
--
--This fixes https://puszcza.gnu.org.ua/bugs/?642
--
--* tools/var.c (union value): Rename bool to b.
--
--Upstream: 734f69451392ffb6280d8a3aef51e2673c9b8554
--[Thomas: needed a few backporting adjustements]
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-----
-- tools/var.c | 32 ++++++++++++++++----------------
-- 1 file changed, 16 insertions(+), 16 deletions(-)
--
--diff --git a/tools/var.c b/tools/var.c
--index 0f285f1..c553ae5 100644
----- a/tools/var.c
--+++ b/tools/var.c
--@@ -27,7 +27,7 @@
-- union value
-- {
--   char *string;
---  int bool;
--+  int b;
--   int num;
-- };
-- 
--@@ -90,7 +90,7 @@ static struct variable vartab[] = {
--     .name = "confirm",
--     .type = VART_BOOL,
--     .flags = VARF_INIT,
---    .init = { .bool = 1 }
--+    .init = { .b = 1 }
--   },
--   {
--     .name = "cachesize",
--@@ -114,32 +114,32 @@ static struct variable vartab[] = {
--     .name = "lock",
--     .type = VART_BOOL,
--     .flags = VARF_INIT,
---    .init = { .bool = 1 }
--+    .init = { .b = 1 }
--   },
--   {
--     .name = "mmap",
--     .type = VART_BOOL,
--     .flags = VARF_INIT,
---    .init = { .bool = 1 }
--+    .init = { .b = 1 }
--   },
--   {
--     .name = "sync",
--     .type = VART_BOOL,
--     .flags = VARF_INIT,
---    .init = { .bool = 0 }
--+    .init = { .b = 0 }
--   },
--   {
--     .name = "coalesce",
--     .type = VART_BOOL,
--     .flags = VARF_INIT,
---    .init = { .bool = 0 },
--+    .init = { .b = 0 },
--     .sethook = coalesce_sethook
--   },
--   {
--     .name = "centfree",
--     .type = VART_BOOL,
--     .flags = VARF_INIT,
---    .init = { .bool = 0 },
--+    .init = { .b = 0 },
--     .sethook = centfree_sethook
--   },
--   {
--@@ -252,21 +252,21 @@ s2b (union value *vp, void *val, int flags)
--   for (i = 0; trueval[i]; i++)
--     if (strcasecmp (trueval[i], val) == 0)
--       {
---	vp->bool = 1;
--+	vp->b = 1;
-- 	return VAR_OK;
--       }
--   
--   for (i = 0; falseval[i]; i++)
--     if (strcasecmp (falseval[i], val) == 0)
--       {
---	vp->bool = 0;
--+	vp->b = 0;
-- 	return VAR_OK;
--       }
--   
--   n = strtoul (val, &p, 0);
--   if (*p)
--     return VAR_ERR_BADTYPE;
---  vp->bool = !!n;
--+  vp->b = !!n;
--   return VAR_OK;
-- }
--   
--@@ -286,7 +286,7 @@ s2i (union value *vp, void *val, int flags)
-- static int
-- b2b (union value *vp, void *val, int flags)
-- {
---  vp->bool = !!*(int*)val;
--+  vp->b = !!*(int*)val;
--   return VAR_OK;
-- }
-- 
--@@ -307,7 +307,7 @@ i2i (union value *vp, void *val, int flags)
-- static int
-- i2b (union value *vp, void *val, int flags)
-- {
---  vp->bool = *(int*)val;
--+  vp->b = *(int*)val;
--   return VAR_OK;
-- }
-- 
--@@ -414,7 +414,7 @@ variable_get (const char *name, int type, void **val)
--       break;
-- 
--     case VART_BOOL:
---      *(int*)val = vp->v.bool;
--+      *(int*)val = vp->v.b;
--       break;
--       
--     case VART_INT:
--@@ -461,7 +461,7 @@ variable_print_all (FILE *fp)
-- 	      break;
-- 	      
-- 	    case VART_BOOL:
---	      fprintf (fp, "%s%s", vp->v.bool ? "" : "no", vp->name);
--+	      fprintf (fp, "%s%s", vp->v.b ? "" : "no", vp->name);
-- 	      break;
-- 	      
-- 	    case VART_STRING:
--@@ -647,7 +647,7 @@ centfree_sethook (struct variable *var, union value *v)
-- {
--   if (!v)
--     return VAR_OK;
---  return gdbmshell_setopt ("GDBM_SETCENTFREE", GDBM_SETCENTFREE, v->bool) == 0
--+  return gdbmshell_setopt ("GDBM_SETCENTFREE", GDBM_SETCENTFREE, v->b) == 0
--          ? VAR_OK : VAR_ERR_GDBM;
-- }
-- 
--@@ -656,7 +656,7 @@ coalesce_sethook (struct variable *var, union value *v)
-- {
--   if (!v)
--     return VAR_OK;
---  return gdbmshell_setopt ("GDBM_SETCOALESCEBLKS", GDBM_SETCOALESCEBLKS, v->bool) == 0
--+  return gdbmshell_setopt ("GDBM_SETCOALESCEBLKS", GDBM_SETCOALESCEBLKS, v->b) == 0
--          ? VAR_OK : VAR_ERR_GDBM;
-- }
-- 
---- 
--2.50.1
--
-diff --git a/package/gdbm/gdbm.hash b/package/gdbm/gdbm.hash
-index a9df48908f..7b4a3ce1b3 100644
---- a/package/gdbm/gdbm.hash
-+++ b/package/gdbm/gdbm.hash
-@@ -1,6 +1,6 @@
- # From https://www.gnu.org.ua/software/gdbm/download.html
--md5  c780815649e52317be48331c1773e987  gdbm-1.24.tar.gz
--sha1  7bd455f28c9e4afacc042e0c712aac1b2391fef2  gdbm-1.24.tar.gz
-+md5  aaa600665bc89e2febb3c7bd90679115  gdbm-1.26.tar.gz
-+sha1  6cee3657de948e691e8df26509157be950cef4d4  gdbm-1.26.tar.gz
- # Locally computed
--sha256  695e9827fdf763513f133910bc7e6cfdb9187943a4fec943e57449723d2b8dbf  gdbm-1.24.tar.gz
-+sha256  6a24504a14de4a744103dcb936be976df6fbe88ccff26065e54c1c47946f4a5e  gdbm-1.26.tar.gz
- sha256  690d762f2e8e149ab1e2d6a409a3853b6151a2533b2382fae549a176d6bedecf  COPYING
-diff --git a/package/gdbm/gdbm.mk b/package/gdbm/gdbm.mk
-index 1a2c352d71..8c739af662 100644
---- a/package/gdbm/gdbm.mk
-+++ b/package/gdbm/gdbm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GDBM_VERSION = 1.24
-+GDBM_VERSION = 1.26
- GDBM_SITE = $(BR2_GNU_MIRROR)/gdbm
- GDBM_LICENSE = GPL-3.0+
- GDBM_LICENSE_FILES = COPYING
+diff --git a/board/stmicroelectronics/common/stm32mp1xx/patches/linux/linux.hash b/board/stmicroelectronics/common/stm32mp1xx/patches/linux/linux.hash
+index df103b8199..6c7685ad4d 100644
+--- a/board/stmicroelectronics/common/stm32mp1xx/patches/linux/linux.hash
++++ b/board/stmicroelectronics/common/stm32mp1xx/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  ab48800ab49985a78d2318ae8ac5f28fd3e123ea17357ef21498105a53337336  linux-6.12.22.tar.xz
++sha256  4a168aed2de5a81aadd90ba2b153860a98d99bfc34651936e17f18e54f01ba8c  linux-6.12.36.tar.xz
+diff --git a/board/stmicroelectronics/common/stm32mp1xx/patches/uboot/uboot.hash b/board/stmicroelectronics/common/stm32mp1xx/patches/uboot/uboot.hash
+index 80ea21b7cb..440526977b 100644
+--- a/board/stmicroelectronics/common/stm32mp1xx/patches/uboot/uboot.hash
++++ b/board/stmicroelectronics/common/stm32mp1xx/patches/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  439d3bef296effd54130be6a731c5b118be7fddd7fcc663ccbc5fb18294d8718  u-boot-2025.04.tar.bz2
++sha256  0f933f6c5a426895bf306e93e6ac53c60870e4b54cda56d95211bec99e63bec7  u-boot-2025.07.tar.bz2
+diff --git a/configs/stm32mp135f_dk_defconfig b/configs/stm32mp135f_dk_defconfig
+index 3ba1acac81..eb20466709 100644
+--- a/configs/stm32mp135f_dk_defconfig
++++ b/configs/stm32mp135f_dk_defconfig
+@@ -8,7 +8,7 @@ BR2_ROOTFS_OVERLAY="board/stmicroelectronics/stm32mp135f-dk/overlay"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp1xx/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.22"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.36"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32mp135f-dk/linux.config"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -40,7 +40,7 @@ BR2_TARGET_OPTEE_OS_PLATFORM_FLAVOR="135F_DK"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.04"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp13"
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+@@ -48,5 +48,5 @@ BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
+ # BR2_TARGET_UBOOT_FORMAT_BIN is not set
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin u-boot.dtb"
+-BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=stm32mp135f-dk"
++BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=st/stm32mp135f-dk"
+ BR2_PACKAGE_HOST_GENIMAGE=y
+diff --git a/configs/stm32mp157a_dk1_defconfig b/configs/stm32mp157a_dk1_defconfig
+index d96ff54dc9..a42e90bbeb 100644
+--- a/configs/stm32mp157a_dk1_defconfig
++++ b/configs/stm32mp157a_dk1_defconfig
+@@ -7,7 +7,7 @@ BR2_ROOTFS_OVERLAY="board/stmicroelectronics/stm32mp157a-dk1/overlay/"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp1xx/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.22"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.36"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32mp157a-dk1/linux.config"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -30,7 +30,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.04"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp15_trusted"
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+@@ -39,5 +39,5 @@ BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
+ BR2_TARGET_UBOOT_FORMAT_DTB=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
+-BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=stm32mp157a-dk1"
++BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=st/stm32mp157a-dk1"
+ BR2_PACKAGE_HOST_GENIMAGE=y
+diff --git a/configs/stm32mp157c_dk2_defconfig b/configs/stm32mp157c_dk2_defconfig
+index 183e3ab862..a149936303 100644
+--- a/configs/stm32mp157c_dk2_defconfig
++++ b/configs/stm32mp157c_dk2_defconfig
+@@ -7,7 +7,7 @@ BR2_ROOTFS_OVERLAY="board/stmicroelectronics/stm32mp157c-dk2/overlay/"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp1xx/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.22"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.36"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32mp157c-dk2/linux.config"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -30,7 +30,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.04"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp15_trusted"
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+@@ -39,5 +39,5 @@ BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
+ BR2_TARGET_UBOOT_FORMAT_DTB=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
+-BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=stm32mp157c-dk2"
++BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=st/stm32mp157c-dk2"
+ BR2_PACKAGE_HOST_GENIMAGE=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
