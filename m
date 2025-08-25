@@ -1,51 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FF35CAC586
-	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 14:18:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD88ACAC588
+	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 14:18:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 54B07807ED;
-	Mon,  8 Sep 2025 14:18:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 958F160778;
+	Mon,  8 Sep 2025 14:18:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YCXlov36qmhy; Mon,  8 Sep 2025 14:18:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id y1IaEbLHOskP; Mon,  8 Sep 2025 14:18:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF804807CE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A873960684
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AF804807CE;
-	Mon,  8 Sep 2025 14:18:07 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 16753CA
+	by smtp3.osuosl.org (Postfix) with ESMTP id A873960684;
+	Mon,  8 Sep 2025 14:18:09 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2A91B234
  for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6EA6980545
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:27 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 61D2E40219
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JEaFtEb-JFr2 for <buildroot@buildroot.org>;
- Mon,  8 Sep 2025 14:16:26 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dkfrsDyG2-ZI for <buildroot@buildroot.org>;
+ Mon,  8 Sep 2025 14:16:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F160A80532
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9E2294021C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id F160A80532
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:25 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9E2294021C
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:24 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D8E84818B3; Mon,  8 Sep 2025 14:16:25 +0000 (UTC)
+ id 9AA0A83CB1; Mon,  8 Sep 2025 14:16:24 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 27 Aug 2025 23:02:16 +0200
+Date: Mon, 25 Aug 2025 23:03:48 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9f9ec04c73f0b59eff324c1f23ac036dada3a185
-X-Git-Newrev: 080975a9f48ee63063207034c36987c68f09e54d
+X-Git-Oldrev: 0c9a4b79950a733aaf310c6b277b5cee4e79bed5
+X-Git-Newrev: d1d20a3c74b3a9479e5275469cb030a0c752dc14
 X-Patchwork-Hint: ignore
-Message-Id: <20250908141625.D8E84818B3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libnftnl: bump version to 1.3.0
+Message-Id: <20250908141624.9AA0A83CB1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/stm32f469_disco_{sd,
+ xip}: bump Linux to 5.15.186
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,49 +66,72 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=080975a9f48ee63063207034c36987c68f09e54d
+commit: https://git.buildroot.net/buildroot/commit/?id=d1d20a3c74b3a9479e5275469cb030a0c752dc14
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For change log, see:
-https://git.netfilter.org/libnftnl/log/?h=libnftnl-1.3.0
+The patch bumps the Linux kernel to version 5.15.186 and, for the SD
+configuration, also updates U-Boot to version 2025.07.
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-[Julien: add link to git change log]
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libnftnl/libnftnl.hash | 5 +++--
- package/libnftnl/libnftnl.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ board/stmicroelectronics/stm32f469-disco/patches/linux/linux.hash | 2 +-
+ board/stmicroelectronics/stm32f469-disco/patches/uboot/uboot.hash | 2 +-
+ configs/stm32f469_disco_sd_defconfig                              | 4 ++--
+ configs/stm32f469_disco_xip_defconfig                             | 2 +-
+ 4 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libnftnl/libnftnl.hash b/package/libnftnl/libnftnl.hash
-index bd29e76bc3..1182d31fee 100644
---- a/package/libnftnl/libnftnl.hash
-+++ b/package/libnftnl/libnftnl.hash
-@@ -1,8 +1,9 @@
- # From http://www.netfilter.org/projects/libnftnl/downloads.html
- # Checked pgp signature:
--# https://www.netfilter.org/projects/libnftnl/files/libnftnl-1.2.7.tar.xz.sig
-+# https://www.netfilter.org/projects/libnftnl/files/libnftnl-1.3.0.tar.xz.sig
- # with key:
- # https://www.netfilter.org/files/coreteam-gpg-key-0xD55D978A8A1420E4.txt
--sha256  9122774f968093d5c0bacddd67de480f31fa4073405a7fc058a34b0f387aecb3  libnftnl-1.2.7.tar.xz
-+# https://www.netfilter.org/projects/libnftnl/files/libnftnl-1.3.0.tar.xz.sha256sum
-+sha256  0f4be47a8bb8b77a350ee58cbd4b5fae6260ad486a527706ab15cfe1dd55a3c4  libnftnl-1.3.0.tar.xz
- # Locally computed:
- sha256  98193898c663001eff2fdcfb676e210c13042bc1a05e8d570c363efa396f8e24  COPYING
-diff --git a/package/libnftnl/libnftnl.mk b/package/libnftnl/libnftnl.mk
-index 65a1431e94..26f112c504 100644
---- a/package/libnftnl/libnftnl.mk
-+++ b/package/libnftnl/libnftnl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBNFTNL_VERSION = 1.2.7
-+LIBNFTNL_VERSION = 1.3.0
- LIBNFTNL_SITE = https://netfilter.org/projects/libnftnl/files
- LIBNFTNL_SOURCE = libnftnl-$(LIBNFTNL_VERSION).tar.xz
- LIBNFTNL_LICENSE = GPL-2.0+
+diff --git a/board/stmicroelectronics/stm32f469-disco/patches/linux/linux.hash b/board/stmicroelectronics/stm32f469-disco/patches/linux/linux.hash
+index 4e0aeb77d8..68e85f8a21 100644
+--- a/board/stmicroelectronics/stm32f469-disco/patches/linux/linux.hash
++++ b/board/stmicroelectronics/stm32f469-disco/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  9319a47b1e9b5d344ff6015431856d0c9640e4faedc527c87f9129061a27136f  linux-5.15.179.tar.xz
++sha256  9c4efdd7ee550d524c017b5dae27725374526311e983661850cd880af671cb2a  linux-5.15.186.tar.xz
+diff --git a/board/stmicroelectronics/stm32f469-disco/patches/uboot/uboot.hash b/board/stmicroelectronics/stm32f469-disco/patches/uboot/uboot.hash
+index 80ea21b7cb..440526977b 100644
+--- a/board/stmicroelectronics/stm32f469-disco/patches/uboot/uboot.hash
++++ b/board/stmicroelectronics/stm32f469-disco/patches/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  439d3bef296effd54130be6a731c5b118be7fddd7fcc663ccbc5fb18294d8718  u-boot-2025.04.tar.bz2
++sha256  0f933f6c5a426895bf306e93e6ac53c60870e4b54cda56d95211bec99e63bec7  u-boot-2025.07.tar.bz2
+diff --git a/configs/stm32f469_disco_sd_defconfig b/configs/stm32f469_disco_sd_defconfig
+index 6193855bd2..704e8ecc16 100644
+--- a/configs/stm32f469_disco_sd_defconfig
++++ b/configs/stm32f469_disco_sd_defconfig
+@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/stmicroelectronics/stm32f469-disco/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.179"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.186"
+ BR2_LINUX_KERNEL_DEFCONFIG="stm32"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(LINUX_DIR)/arch/arm/configs/dram_0x00000000.config board/stmicroelectronics/stm32f469-disco/linux-sd.fragment"
+ BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+@@ -24,7 +24,7 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="32M"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.04"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32f469-discovery"
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+diff --git a/configs/stm32f469_disco_xip_defconfig b/configs/stm32f469_disco_xip_defconfig
+index f014f77d76..5d6c5ba752 100644
+--- a/configs/stm32f469_disco_xip_defconfig
++++ b/configs/stm32f469_disco_xip_defconfig
+@@ -8,7 +8,7 @@ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/stmicroelectronics/common/stm32f4xx/stm32-post-build.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.179"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.186"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32f469-disco/linux-xip.config"
+ BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
