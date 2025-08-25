@@ -4,143 +4,144 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E535CA0EFA
-	for <buildroot@archiver.kernel.org>; Mon, 25 Aug 2025 13:47:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84803CA0FE7
+	for <buildroot@archiver.kernel.org>; Mon, 25 Aug 2025 13:47:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 14ACA84C98;
-	Mon, 25 Aug 2025 13:47:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DBE8984C92;
+	Mon, 25 Aug 2025 13:47:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1bjncvapaBtC; Mon, 25 Aug 2025 13:47:01 +0000 (UTC)
+ id jYxD4YKcmhE0; Mon, 25 Aug 2025 13:47:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0D16284C94
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 32D4584C94
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0D16284C94;
-	Mon, 25 Aug 2025 13:47:01 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 9DA6D114
+	by smtp1.osuosl.org (Postfix) with ESMTP id 32D4584C94;
+	Mon, 25 Aug 2025 13:47:02 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id BA262114
  for <buildroot@buildroot.org>; Mon, 25 Aug 2025 13:46:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 83B1461150
+ by smtp4.osuosl.org (Postfix) with ESMTP id A108C41F0C
  for <buildroot@buildroot.org>; Mon, 25 Aug 2025 13:46:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Cq6R3oeEDk34 for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eYGRKdIA6wPn for <buildroot@buildroot.org>;
  Mon, 25 Aug 2025 13:46:59 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.21;
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.22;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 56F6D61CAB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 56F6D61CAB
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 56F6D61CAB
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 56B4141EB1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56B4141EB1
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 56B4141EB1
  for <buildroot@buildroot.org>; Mon, 25 Aug 2025 13:46:57 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from haruka.home.arpa ([85.22.122.97]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Ml6m4-1u5LHt01m8-00b2o5; Mon, 25
- Aug 2025 15:46:53 +0200
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MKsnF-1v52Vn3n2b-00SQ1Q; Mon, 25
+ Aug 2025 15:46:55 +0200
 To: buildroot@buildroot.org
-Date: Mon, 25 Aug 2025 15:46:30 +0200
-Message-ID: <20250825134631.2405569-1-fiona.klute@gmx.de>
+Date: Mon, 25 Aug 2025 15:46:31 +0200
+Message-ID: <20250825134631.2405569-2-fiona.klute@gmx.de>
 X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20250825134631.2405569-1-fiona.klute@gmx.de>
+References: <20250825134631.2405569-1-fiona.klute@gmx.de>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:JKjCTShT/sCHYISbiGW0Q5SwVDYEVLbtdnwjCHfKn7zneIDMd0q
- inwCzyqEz7uVwsJGFBuSL1Om3nPOx6SQ8OQ9uTmhwP+9ZBU6tUXJR2ntu1xu1GqeNfsP3qM
- 2t32LQOCM9A/R1yWi0l2qPlUQ/rtTaDy1rzuayNjGhBt695Pc746O8IOb4f3XEiU0s2gH46
- 1PmequhnoN6DivtCGVIrQ==
-UI-OutboundReport: notjunk:1;M01:P0:fTG6vtIIMgI=;o1UUjXYrdjXVPBHOLCaPHfWNwPB
- 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
- vvgyCTvilT7pWUtySEJqrofyoaZUMUxA==
+X-Provags-ID: V03:K1:WeQC9YWd8abVYD28RPLMfWFePzDsrG/C4qo6/l7oMZSW+y9ueLI
+ wz/fgZM4ikE/MMinrTnVCL3UILjVtTN4anx8roPzJUdNDvSLxfnZD6nfdcPIyVLrYx14Bfj
+ SjgblcSjNRVZHPjZ4Mw5geNcqb13cTKxgUNFLr9nQgLHMV/7Ti+W3jmpe4x6FVKidx3htq/
+ e9Fdctu5uEN23jqwofDBQ==
+UI-OutboundReport: notjunk:1;M01:P0:1LBCvgf4d9Y=;LO7LZq8n9NWj4wiIG8JRxJmNRnX
+ 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
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.de; 
- s=s31663417; t=1756129613; x=1756734413; i=fiona.klute@gmx.de;
- bh=gKCyazSfvNeeSO9NEPLGvJvl0senph4uNoT5ifeEFm4=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
- MIME-Version:Content-Transfer-Encoding:cc:
+ s=s31663417; t=1756129615; x=1756734415; i=fiona.klute@gmx.de;
+ bh=c9SkXa9rMIPMtQpNK9ueLgt7xxo0QLG0TOqnsPpkhPc=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
+ References:MIME-Version:Content-Transfer-Encoding:cc:
  content-transfer-encoding:content-type:date:from:message-id:
  mime-version:reply-to:subject:to;
- b=GpllCFEmyBtje+u6a3Hp08xC8SJYRsnPFmrk4Cj/tI1nCXqqbp9MEfghVL0x3fiI
- 3vzv9Pm1qm9K8PjQKI2rO65pYqdyHnrMl6C4LdLQWkZ8AzCIZMhhlNGXM0MyIn3xv
- gcgq1+yela9eQjFRkao7Mp1sD/cAyZs4iH9pGeEXouVOSO9xMNVel+Oc+h2I2sJ+0
- I01jD8IET5oTeeud9kn3fl2OMQH7qcSisPDBRgd+UPUFcHbGPQDSKJQNgwmLLVr6F
- d+URg4vLAIpphZeunNN7uJWUSutQSMHsEIZRezsFOcH3OFN691YIynli8HpBUK00K
- OabatdnPYoiZztHwfw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=tvFGD3SHWg1askKtcliTwdRBTIB2qeNsDctTGMOuMG9STobccIA6Cw66ID6ySogL
+ HypEtv/7/atWPvImTLFLHbN4ohbQWbM0Q2kDjv9aXMEni1LnLzYZGLond6zcJUnGb
+ PAcmbk91VgXNiOLbKkMM0N6jaGyDYZMQuDRS5n+tj/2CVer4eb8vBCS731p0Hba5y
+ ipz3Fgg0WEeAF8Jt/TeNHoqEkQ/4GrdfMIyyxOUlV6SGgP1IgHWBDBnn6qUJHLviE
+ ApPgY2hVoUbq0VFLRljFuRnQf74THo0pr7S48B390mnN7y1FdlxLNPxYNF4igNb0E
+ 7+BDyYdNsrMTgVfq/Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
- header.a=rsa-sha256 header.s=s31663417 header.b=GpllCFEm
-Subject: [Buildroot] [PATCH v2 1/2]
- support/testing/tests/package/test_docker_compose.py: update kernel & VM
- CPU
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
+ header.s=s31663417 header.b=tvFGD3SH
+Subject: [Buildroot] [PATCH v2 2/2] package/docker-engine: prefer cgroup v2
+ with kernel >=5.4 and no systemd
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -164,163 +165,52 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
 
-Since commit 947dbc92a20c5acea7882166cae7893e6ea661e1 the Bootlin
-stable toolchain uses headers 5.4, which can lead to build outputs
-incompatible with older kernels. Update to the latest 5.4 kernel to
-avoid this. The kernel config is updated according to the requirements
-of current Docker, runc, and crun.
+Without systemd package/docker-engine requires another way to mount
+/sys/fs/cgroup, so far unconditionally provided by
+BR2_PACKAGE_CGROUPFS_MOUNT for cgroup v1. However, it is preferable to
+use cgroup v2 if possible. Whether Docker can use cgroup v2 depends on
+the kernel version, the Docker documentation lists the requirement as
+"v4.15 or later (v5.2 or later is recommended)" [1].
 
-Additionally switch the CPU of the test VM to Haswell, to avoid
-dockerd failing to start with a "This program can only be run on AMD64
-processors with v3 microarchitecture support" error.
+Select BR2_PACKAGE_CGROUPFS_V2_MOUNT instead of
+BR2_PACKAGE_CGROUPFS_MOUNT if the kernel headers match the recommended
+version.
+
+[1] https://docs.docker.com/engine/containers/runmetrics/#running-docker-on-cgroup-v2
 
 Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+Reviewed-by: Christian Stewart <christian@aperture.us>
 ---
-Changes v1 -> v2:
-* Add this patch to avoid test failures observed with what's now patch
-  2 alone, though not necessarily caused by it
+I noticed Docker was unconditionally pulling in
+BR2_PACKAGE_CGROUPFS_MOUNT while investigating a Docker warning about
+memory cgroup not being available, and indeed my kernel config has
+CONFIG_MEMCG enabled, but not the "highly discouraged" (to quote its
+kernel config description) CONFIG_MEMCG_V1. Switching to v2 on
+sufficiently recent kernels seems equally highly preferable.
 
- .../testing/conf/docker-compose-kernel.config | 57 +++++++++++++------
- .../tests/package/test_docker_compose.py      |  4 +-
- 2 files changed, 41 insertions(+), 20 deletions(-)
+An alternative could be to entirely drop cgroup v1 support, and
+require a kernel with cgroup v2 support. Given that 5.4.x is currently
+the oldest "longterm" series upstream that doesn't seem unreasonable,
+and would allow dropping package/cgroupfs-mount once the few packages
+that currently need it have been updated.
 
-diff --git a/support/testing/conf/docker-compose-kernel.config b/support/testing/conf/docker-compose-kernel.config
-index 4d30a578ec..fd28da7a4a 100644
---- a/support/testing/conf/docker-compose-kernel.config
-+++ b/support/testing/conf/docker-compose-kernel.config
-@@ -1,10 +1,22 @@
- # CONFIG_SWAP is not set
- CONFIG_SYSVIPC=y
-+CONFIG_POSIX_MQUEUE=y
- # CONFIG_CROSS_MEMORY_ATTACH is not set
- CONFIG_HIGH_RES_TIMERS=y
-+CONFIG_CGROUPS=y
-+CONFIG_MEMCG=y
-+CONFIG_BLK_CGROUP=y
-+CONFIG_CGROUP_SCHED=y
-+CONFIG_CGROUP_PIDS=y
-+CONFIG_CGROUP_FREEZER=y
-+CONFIG_CPUSETS=y
-+CONFIG_CGROUP_DEVICE=y
-+CONFIG_CGROUP_CPUACCT=y
-+CONFIG_CGROUP_BPF=y
-+CONFIG_BPF_SYSCALL=y
- # CONFIG_COMPAT_BRK is not set
-+CONFIG_SMP=y
- # CONFIG_X86_EXTENDED_PLATFORM is not set
--CONFIG_IOSF_MBI=y
- CONFIG_MCORE2=y
- # CONFIG_X86_MCE is not set
- # CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS is not set
-@@ -12,9 +24,8 @@ CONFIG_LEGACY_VSYSCALL_NONE=y
- # CONFIG_SUSPEND is not set
- # CONFIG_ACPI is not set
- CONFIG_CPU_IDLE=y
--CONFIG_PCI_MSI=y
- # CONFIG_VIRTUALIZATION is not set
--# CONFIG_IOSCHED_CFQ is not set
-+CONFIG_BLK_DEV_THROTTLING=y
- # CONFIG_MQ_IOSCHED_DEADLINE is not set
- # CONFIG_MQ_IOSCHED_KYBER is not set
- # CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
-@@ -25,23 +36,36 @@ CONFIG_UNIX=y
- CONFIG_INET=y
- CONFIG_IP_MULTICAST=y
- CONFIG_IP_ADVANCED_ROUTER=y
--# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
--# CONFIG_INET_XFRM_MODE_TUNNEL is not set
--# CONFIG_INET_XFRM_MODE_BEET is not set
--# CONFIG_IPV6 is not set
--# CONFIG_NF_CONNTRACK_PROCFS is not set
--# CONFIG_NF_CT_PROTO_DCCP is not set
--# CONFIG_NF_CT_PROTO_SCTP is not set
--# CONFIG_NF_CT_PROTO_UDPLITE is not set
-+# CONFIG_IPV6_SIT is not set
-+CONFIG_NETFILTER=y
-+CONFIG_NF_CONNTRACK=y
-+CONFIG_NETFILTER_XT_MARK=y
-+CONFIG_NETFILTER_XT_MATCH_ADDRTYPE=y
-+CONFIG_NETFILTER_XT_MATCH_CONNTRACK=y
-+CONFIG_NETFILTER_XT_MATCH_IPVS=y
- CONFIG_IP_VS=y
- CONFIG_IP_VS_RR=y
- CONFIG_IP_VS_NFCT=y
--# CONFIG_BRIDGE_IGMP_SNOOPING is not set
-+CONFIG_IP_NF_IPTABLES=y
-+CONFIG_IP_NF_FILTER=y
-+CONFIG_IP_NF_NAT=y
-+CONFIG_IP_NF_TARGET_MASQUERADE=y
-+CONFIG_IP_NF_MANGLE=y
-+CONFIG_IP_NF_RAW=y
-+CONFIG_IP6_NF_IPTABLES=y
-+CONFIG_IP6_NF_FILTER=y
-+CONFIG_IP6_NF_MANGLE=y
-+CONFIG_IP6_NF_RAW=y
-+CONFIG_IP6_NF_NAT=y
-+CONFIG_IP6_NF_TARGET_MASQUERADE=y
-+CONFIG_BRIDGE=y
- # CONFIG_WIRELESS is not set
-+CONFIG_PCI=y
- CONFIG_DEVTMPFS=y
- CONFIG_DEVTMPFS_MOUNT=y
- CONFIG_VIRTIO_BLK=y
- CONFIG_NETDEVICES=y
-+CONFIG_VETH=y
- CONFIG_VIRTIO_NET=y
- # CONFIG_ETHERNET is not set
- # CONFIG_WLAN is not set
-@@ -52,26 +76,23 @@ CONFIG_VT_HW_CONSOLE_BINDING=y
- # CONFIG_DEVMEM is not set
- CONFIG_SERIAL_8250=y
- CONFIG_SERIAL_8250_CONSOLE=y
--# CONFIG_SERIAL_8250_LPSS is not set
--# CONFIG_SERIAL_8250_MID is not set
- # CONFIG_HW_RANDOM_INTEL is not set
- # CONFIG_HW_RANDOM_AMD is not set
- # CONFIG_HW_RANDOM_VIA is not set
- CONFIG_HW_RANDOM_VIRTIO=y
--# CONFIG_DEVPORT is not set
- # CONFIG_HWMON is not set
- # CONFIG_USB_SUPPORT is not set
- CONFIG_RTC_CLASS=y
- CONFIG_VIRTIO_PCI=y
--# CONFIG_VIRTIO_PCI_LEGACY is not set
-+CONFIG_VIRTIO_MMIO=y
- # CONFIG_X86_PLATFORM_DEVICES is not set
- # CONFIG_IOMMU_SUPPORT is not set
- CONFIG_EXT4_FS=y
-+CONFIG_OVERLAY_FS=y
- CONFIG_TMPFS=y
- # CONFIG_MISC_FILESYSTEMS is not set
- # CONFIG_NETWORK_FILESYSTEMS is not set
-+CONFIG_KEYS=y
- CONFIG_SECURITYFS=y
--# CONFIG_CRYPTO_ECHAINIV is not set
- # CONFIG_CRYPTO_HW is not set
--# CONFIG_UNUSED_SYMBOLS is not set
- CONFIG_UNWINDER_FRAME_POINTER=y
-diff --git a/support/testing/tests/package/test_docker_compose.py b/support/testing/tests/package/test_docker_compose.py
-index 6a8f6f4010..a96c9d1481 100644
---- a/support/testing/tests/package/test_docker_compose.py
-+++ b/support/testing/tests/package/test_docker_compose.py
-@@ -17,7 +17,7 @@ class BaseTestDockerCompose(infra.basetest.BRTest):
-         BR2_ROOTFS_POST_SCRIPT_ARGS="{}"
-         BR2_LINUX_KERNEL=y
-         BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.262"
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.296"
-         BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-         BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="{}"
-         BR2_PACKAGE_PYTHON3=y
-@@ -59,7 +59,7 @@ class BaseTestDockerCompose(infra.basetest.BRTest):
-         self.emulator.boot(arch="x86_64",
-                            kernel=kernel,
-                            kernel_cmdline=["root=/dev/vda", "console=ttyS0"],
--                           options=["-cpu", "Nehalem",
-+                           options=["-cpu", "Haswell",
-                                     "-m", "512M",
-                                     "-device", "virtio-rng-pci",
-                                     "-drive", "file={},format=raw,if=virtio".format(rootfs),
+ package/docker-engine/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
+index 6338eeeef1..d591ee4e3b 100644
+--- a/package/docker-engine/Config.in
++++ b/package/docker-engine/Config.in
+@@ -7,7 +7,8 @@ config BR2_PACKAGE_DOCKER_ENGINE
+ 	depends on BR2_USE_MMU # containerd
+ 	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS # libseccomp
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # libseccomp
+-	select BR2_PACKAGE_CGROUPFS_MOUNT if !BR2_PACKAGE_SYSTEMD # runtime dependency
++	select BR2_PACKAGE_CGROUPFS_V2_MOUNT if !BR2_PACKAGE_SYSTEMD && BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4 # runtime dependency
++	select BR2_PACKAGE_CGROUPFS_MOUNT if !BR2_PACKAGE_SYSTEMD && !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4 # runtime dependency
+ 	select BR2_PACKAGE_CONTAINERD # runtime dependency
+ 	select BR2_PACKAGE_HOST_GO
+ 	select BR2_PACKAGE_IPTABLES # runtime dependency
 -- 
 2.50.1
 
