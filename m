@@ -4,154 +4,155 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32325CA0EE4
-	for <buildroot@archiver.kernel.org>; Tue, 26 Aug 2025 06:10:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A19ECA0EE4
+	for <buildroot@archiver.kernel.org>; Tue, 26 Aug 2025 06:10:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EA7676F778;
-	Tue, 26 Aug 2025 06:10:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2CAF96F76D;
+	Tue, 26 Aug 2025 06:10:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id R2ScfAS9FwqH; Tue, 26 Aug 2025 06:10:05 +0000 (UTC)
+ id w9KuZeJhdjyz; Tue, 26 Aug 2025 06:10:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0CB436F76B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2EC5B6F779
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0CB436F76B;
-	Tue, 26 Aug 2025 06:10:05 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 39920CD
- for <buildroot@buildroot.org>; Tue, 26 Aug 2025 06:10:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2EC5B6F779;
+	Tue, 26 Aug 2025 06:10:06 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3E903CD
+ for <buildroot@buildroot.org>; Tue, 26 Aug 2025 06:10:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1FE3841C42
- for <buildroot@buildroot.org>; Tue, 26 Aug 2025 06:10:02 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 24F5141C19
+ for <buildroot@buildroot.org>; Tue, 26 Aug 2025 06:10:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4D47051Rg-UB for <buildroot@buildroot.org>;
- Tue, 26 Aug 2025 06:10:01 +0000 (UTC)
+ id GdOEtUejMzVx for <buildroot@buildroot.org>;
+ Tue, 26 Aug 2025 06:10:02 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:2407::62d;
- helo=nam02-bn1-obe.outbound.protection.outlook.com;
+ client-ip=2a01:111:f403:240a::628;
+ helo=nam04-mw2-obe.outbound.protection.outlook.com;
  envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5F3AD4076C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5F3AD4076C
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com
- (mail-bn1nam02on2062d.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:2407::62d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5F3AD4076C
- for <buildroot@buildroot.org>; Tue, 26 Aug 2025 06:10:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2844F4076C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2844F4076C
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com
+ (mail-mw2nam04on20628.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:240a::628])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2844F4076C
+ for <buildroot@buildroot.org>; Tue, 26 Aug 2025 06:10:02 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=rwN3ynUk1ZKO6O+c6WejejhPkkWDj26LbhLl+9z5RdVEQqBfuveRL+hBvubWJMBxIS2O2ionaIReyVJ/hkWMnEAoMKXYFD/VU70XYt2wRVDHizNM5Xa/N5NHTXS5tZEhS+fCOE0trRovh3NOQO8aAp9g3kuU+fRBPt3IMi1CD4nr6tmR6YKtefIEWoHTf2LEyeyQBEhMBXOX/UHAC/gU4FS7jhMKi2Bwk4//Wyqv5xqecSjKIzvj1P/UtoZG7IFPdbSre90K6s2kQq1A7fj5UV8ZTrAPJMXQRtuJjsSbDBCsrPEbhVh57WaZt2bHP9r98UO1j0Eq6B3R8x0M0V/5Nw==
+ b=JXWAtZ5lj4J9KXZoiAFbZvxBCTX0r6DhZO3dZbAoSOUEk5/TnfSFLQQwQquQ9RL8qn/PcsfVo3UeIGFN2n3Lj/ThmO6x77fHl0YUUEcEFvP3IL2PWoGethT90NwFnMFKhlDDz+J2Lp61jnhQz/hocHWbrzv1REamyBvyzPMdxxiN/9DYbwkDsOyBtYDnwhG5UPuKdy7HxHC1/Xe7stXYiKBuxBCQCniOTwfHIOQEgrlbF0GgkYFvGB+q22GemSU7PedeK692RhOqIKPpgTIgy6f7BgS29hirWbDtcK8wuoFTdxqOdD7yeoKxNUOV5G5U70TVjk97kLk66xupIoGfOg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SrmejogQfttBER1wbnWnKTJp9nKka6H44I97JM6F8OY=;
- b=HmE+HiMa3hRSUDJPcJYbf172ZkBcgaqBwLTr6uGBWgGcEbppkOZxUCJTFky8sHFBiGXyhZnyk6xVkhM8MrXA50uo1VejILCI5tccVGydHcA9+GnTCQ/0t4CWMnr6qi/sl7cRXex+AwcaQcakHJOpm0Z+ulAIvVke9TD7ijYD9jy/sz0sqCitfQ0m9LvoICa7PhD4T6v8DFDDgZ1CKQ4iqsOGL0j+yfohC152fVSqG6cUJ9CvqBc66UYvdDhNKtKKm2XmLAFbqrcUyN5LAu+qDqqq7sqHd0XbEbnZhm08sHiddjMQkcyr+H8S8F0mTFH0Aku5XtLyWHf+487EHLAy2w==
+ bh=cTZrnHQzJdjR5V9V6t2ypEhcWj7Q4boG4MNmiMRJH0E=;
+ b=uUYVj1VoIrnKf79GBvKrpRPLGyM5PyVEV+O/YwOdUaZKgoGWrnpkyJq6wopk3vzKJAqdCP5ZilNZJtcq7ZCPyBHbG+UuCAgFSS8M3shiRgj5ad3ADryNyBUv1osd2yRVEqdjMXgiAoskcA1X9fkSk6UN9rG/e3qG3x6EdUE8c4G3MJlOv9cvHyib9FTdG7Znk0MPmn9zILOoN3tetAFy6R8SD22O1Jm9KcL0x77+tDgiE6vUER8LHaAhaNw3AJo4Tl7SogXdPP2OqJPHORF74M3EYBlrxd3ZVkd6Kc2JQX4BCC585nY4pnW0da/e/+fgphNSEUMCpf6iOO9pgaRxDQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
-Received: from MN2PR16CA0045.namprd16.prod.outlook.com (2603:10b6:208:234::14)
- by CH3PR12MB7569.namprd12.prod.outlook.com (2603:10b6:610:146::6)
+Received: from MW4PR04CA0374.namprd04.prod.outlook.com (2603:10b6:303:81::19)
+ by CH0PR12MB8551.namprd12.prod.outlook.com (2603:10b6:610:186::21)
  with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9052.20; Tue, 26 Aug
- 2025 06:09:56 +0000
-Received: from BL02EPF00021F6D.namprd02.prod.outlook.com
- (2603:10b6:208:234:cafe::57) by MN2PR16CA0045.outlook.office365.com
- (2603:10b6:208:234::14) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9052.21 via Frontend Transport; Tue,
- 26 Aug 2025 06:09:55 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9052.22; Tue, 26 Aug
+ 2025 06:09:57 +0000
+Received: from MWH0EPF000989E5.namprd02.prod.outlook.com
+ (2603:10b6:303:81:cafe::7f) by MW4PR04CA0374.outlook.office365.com
+ (2603:10b6:303:81::19) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9052.20 via Frontend Transport; Tue,
+ 26 Aug 2025 06:09:57 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
 Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- BL02EPF00021F6D.mail.protection.outlook.com (10.167.249.9) with Microsoft
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ MWH0EPF000989E5.mail.protection.outlook.com (10.167.241.132) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.9052.8 via Frontend Transport; Tue, 26 Aug 2025 06:09:55 +0000
-Received: from satlexmb08.amd.com (10.181.42.217) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ 15.20.9052.8 via Frontend Transport; Tue, 26 Aug 2025 06:09:56 +0000
+Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 26 Aug
- 2025 01:09:55 -0500
-Received: from SATLEXMB04.amd.com (10.181.40.145) by satlexmb08.amd.com
- (10.181.42.217) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.1748.10; Mon, 25 Aug
- 2025 23:09:55 -0700
+ 2025 01:09:52 -0500
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB05.amd.com
+ (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 26 Aug
+ 2025 01:09:52 -0500
 Received: from xirengwts09.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
- Transport; Tue, 26 Aug 2025 01:09:53 -0500
+ Transport; Tue, 26 Aug 2025 01:09:50 -0500
 To: <buildroot@buildroot.org>
-Date: Tue, 26 Aug 2025 07:09:42 +0100
-Message-ID: <20250826060943.1394934-4-neal.frager@amd.com>
+Date: Tue, 26 Aug 2025 07:09:41 +0100
+Message-ID: <20250826060943.1394934-3-neal.frager@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20250826060943.1394934-1-neal.frager@amd.com>
 References: <20250826060943.1394934-1-neal.frager@amd.com>
 MIME-Version: 1.0
+Received-SPF: None (SATLEXMB05.amd.com: neal.frager@amd.com does not designate
+ permitted sender hosts)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF00021F6D:EE_|CH3PR12MB7569:EE_
-X-MS-Office365-Filtering-Correlation-Id: aadcb598-2ea1-44d2-e558-08dde4672dbc
+X-MS-TrafficTypeDiagnostic: MWH0EPF000989E5:EE_|CH0PR12MB8551:EE_
+X-MS-Office365-Filtering-Correlation-Id: d0d12210-ac45-4438-54aa-08dde4672e5f
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
- ARA:13230040|36860700013|1800799024|7416014|82310400026|376014|41080700001; 
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?3nYRvDZoskYHNvOcqLtGwT77ydbfOcotGTx2kF+mfF1wj7OXCb9UVVcAsBi3?=
- =?us-ascii?Q?TFQAS4VYQiHZeRSGVGF6yElGx7HcDi9996aapwEwW+6q6u7Wwp2QilUdBgHR?=
- =?us-ascii?Q?WQJMZ18Og3xJvo1oWB3ZeQK5c8VNRKXUNJdlIdTT2q7ko9faF7QIw+P0cDNd?=
- =?us-ascii?Q?ECSs+1P9Tu5LOsftzfp3zcR0DSqx18vHIffiVDxK0XcdWhPIeVMebuMxm9FD?=
- =?us-ascii?Q?xZ19u5XogW3YC87C3vtRfIDpMiVFZqfSpyhYHan6qGrbST0JHAfsMnG6Ayqk?=
- =?us-ascii?Q?KobqxJCJNjZZitRlDyz3oWUkYBQtX5DJ3pLQBM4hiNSWjh8tS77bwdnkVSLK?=
- =?us-ascii?Q?Rfm84Zdhh0/oUcOx8Yag6s7edKzgPZlkiyxP1MBDY3hM6Su6irjSHltbrkfG?=
- =?us-ascii?Q?F7vigJXldKwrPQgwCwOHcLBuG04oJq6ScjmFSbMvNzT9HAbrfik2xCCI5Mgo?=
- =?us-ascii?Q?Kd1WR1yx3sWC8nG5Upu1YvyAH868Y63nb2//d0agJa40gUV7Lg5Kj3laR/qa?=
- =?us-ascii?Q?d44jLAsKvfJLGXyykLXd/F54X+wqnpamdTsg8RF8drTA3O3RCvSd8lP6lf4I?=
- =?us-ascii?Q?iKml45NYBGNzAJptQ/4SfiEAV7EJyw83m5dnAxjneM7o5Z1pDuU5YvpiZDEf?=
- =?us-ascii?Q?GUYeAa67y7yKihSfHrTKiVpvZ8XR7vkcJH8cYVKs2anGQL1AytfPm1s1FEMu?=
- =?us-ascii?Q?nK2dWQeLvjcQGcvNzochcqW8NeSEhd7GLmI5weunCSDDSL+dPQDjcHlISsh/?=
- =?us-ascii?Q?yZEQ4pWa9tKYXs6W9UHQ0K0VjYimIb8qxtMCOWz5F50ln1OCqQvy7M8fny9c?=
- =?us-ascii?Q?4m8P+SeK05TnD5H12psYD6FPqolR5zd4cSPe2C1qsTmbLfQxkt7+PCM95GWB?=
- =?us-ascii?Q?1CkO2idhmEd/R9o80q/W0h0hCmZlkhXV0eOWWhluz7TLmbD4GLPy6oKG3Djj?=
- =?us-ascii?Q?MlUH2+8Ko+7LIT4yzpOB5qsY1RWb3Q/9gy48K49XwNsNLStOaejiNiqju6y4?=
- =?us-ascii?Q?8pTmTpzQbXNLBlBz6FMovAhFUa4iiBmXxF3/Ox/uXBQGkTGhqnlTF1COw+2+?=
- =?us-ascii?Q?grNqFay/2tw0rkZfqmVW5LRXmORt5bfbRsCbNb4YojC/EU6yg5Va0VbQjFMq?=
- =?us-ascii?Q?pbsClVAPS670FHXDzOCL1CuQ70GQQ6cppNXtVUdBQFU6nje00nza+V/OtEPI?=
- =?us-ascii?Q?+YJpnlBuGaU7y8t03M9slm2rJL3W0jN+l24SFkJjzEnIptc8dbMih+l3H1N4?=
- =?us-ascii?Q?BVah1kUDDPOJjc4j6Pi4ovlY8yGanpEtS4d+gbVq6nDuRS6DEHo35+A4x0wA?=
- =?us-ascii?Q?VFI9yFZpTywTK0I+O5ZQAMBE8PJa1kzBVrgIHxjlmjHIZOqZ+gHY4kID8/N3?=
- =?us-ascii?Q?1aiTD4VTySCU8eSb4bfqshsNVEk9vqwLSM4ekxJeokJcBNP7TvNBI7XQwiWu?=
- =?us-ascii?Q?zR/LzXbdMk//NZx/D3IDQSxxHvOGxmu7iEhujchbafJo08DL++6CyNDKIoSA?=
- =?us-ascii?Q?bXiVp44Y8BR2jTiOWZD67w8Im9/fayFJptnl17T+IuPY7+G2HX1PAyv6ZF8x?=
- =?us-ascii?Q?C6mYgPua2T60wGHy50w=3D?=
+ ARA:13230040|7416014|376014|36860700013|82310400026|1800799024|13003099007|41080700001;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?VwC4xtWHJXd2HWdh43BZvo2PzfOVfIrj406PyS5W7XQg33dd5jo24b8Qt/2w?=
+ =?us-ascii?Q?AVGOP2cpDJ6OigE5RwBkEmgjKC429HGjBCB7oaXuPSPsSN/sHtO1yBxiS6Ba?=
+ =?us-ascii?Q?NQF7btj5+0QCfWgJ/IeNpE4mi/jeORYu7AVD4I+XKFhnJF4rKPhJDBbTH4pi?=
+ =?us-ascii?Q?JZgOB8dQynJu1FmwmX35G5vXES8ctH7+Ui8LKFaVMbXzI+5bBOnroxRpGoE3?=
+ =?us-ascii?Q?JvIWHW2f2IkRTvGxSr0Gtaqu0MHKgMzvfB2KR91dJNNRdMz0/QkYH7/I1uY2?=
+ =?us-ascii?Q?3txDKrOjm0YZr20eeLVQR/icbAZu6xjW0mF9c2kKlCeykpn9LPwHT8Mgm28V?=
+ =?us-ascii?Q?vMMsABBqJKveKZvYn0QMRCYC1giPV6cWHr7KeKI9TPv5HTi4S2qkptGAq7Pv?=
+ =?us-ascii?Q?S/GtWMZdnRZaR6CHFGIOYoWs+zJI+6uwoq9AM+Rh7w+Fe83DE/5XFMCEwmbE?=
+ =?us-ascii?Q?4wP/QI7p6Z+y+9jW8FNUWYtivctlnRMdGZ6dlQ6oJFw2avr/umnp7fzZu1fU?=
+ =?us-ascii?Q?rBfJRSGaV3WvV8K1oxFEySnznWxC8pwyEa4+yeC6t5fDiXbbM6E1354ZObGF?=
+ =?us-ascii?Q?9GpX3BZ2zIrjZjMINH+X4zW5XJkxLCsfn2uMf0kRcOzwa9HKRnqI2ffoIpo/?=
+ =?us-ascii?Q?ICyeouNufmMKx8OtCNkAUQ0c40H+oW17+zxsuiQ3yCtqwqUtdkcezQsKyi5m?=
+ =?us-ascii?Q?InRC0ox/jP0FOG1j6lLlb87U6wNSNk20+zr14hfKpinxGoPIFQB5UpLhkcyj?=
+ =?us-ascii?Q?ZAj04Q6KaZr5aHG3NudUrtapzhTBWoCgFnLWJh3JvOYUmgTcc7q493NyCpye?=
+ =?us-ascii?Q?zKRUQ9kFkkVBc7qLrMCdOW9tGo9mc58j19KqqJ7CjQriBRmY+5AZJFhng3LH?=
+ =?us-ascii?Q?XBTj9tRP5RB4x6NXvawRz0TalA2hgkUg9DwxLeHrZ6WDKTUnaj9yys+1D424?=
+ =?us-ascii?Q?RlbdMQHMAueZJIdAOsnYEnpG1WtYEQdboJwNYRRP0d1B1srV/+L/WHEh8Azf?=
+ =?us-ascii?Q?d8mx406rvmkJUlNMKFvnHvqz7qQBwA/mj4y/lJIKSfvlZzVRvdelMZyoewHB?=
+ =?us-ascii?Q?9l60kwj7/cpLY865fol3oXPBgf0HgxYjTiaocbDbc/+RjRHkvKTEAe5QJpjy?=
+ =?us-ascii?Q?+5b41NuXONBwQlIOv2+T28TPF+eUgv7/mV5S5rl+n+ogzQpBO43G16EnKXDF?=
+ =?us-ascii?Q?+5IExj0w3aOUjjuYaRIBuOOL2KSTRgAUu2XNKZo4kyFbSvsAjAdDB4anfa8u?=
+ =?us-ascii?Q?RFgQzCy36s9+6+Z2Wg4r2Zg/Z4J6Lpz88JOVTC9ldf+CaxWTskwQdQQaDBIO?=
+ =?us-ascii?Q?FKKWmVVMxCMpuqP+pA9xAS87/pgMWTMGsg995KnhCHzEivQP4uiuR5v+m5fI?=
+ =?us-ascii?Q?/S1rHcGkpm4Qyj2yObiFvrSxQ+pGlJDO0+x/hHFRcQx6G+kE3LlS91esWGHI?=
+ =?us-ascii?Q?EtKtTGbmYE/1gPJag/X7tennVyKjc86Y8yaRviNJFaFS2Aq1KWd1FYkX37Wz?=
+ =?us-ascii?Q?y46U6TK+dHn6uyQFsks9eWKRFC2E460Dj5yl?=
 X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
- IPV:CAL; SFV:NSPM; H:SATLEXMB03.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
- SFS:(13230040)(36860700013)(1800799024)(7416014)(82310400026)(376014)(41080700001);
+ IPV:CAL; SFV:NSPM; H:SATLEXMB04.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
+ SFS:(13230040)(7416014)(376014)(36860700013)(82310400026)(1800799024)(13003099007)(41080700001);
  DIR:OUT; SFP:1101; 
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Aug 2025 06:09:55.6136 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: aadcb598-2ea1-44d2-e558-08dde4672dbc
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Aug 2025 06:09:56.5887 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: d0d12210-ac45-4438-54aa-08dde4672e5f
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
- Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL02EPF00021F6D.namprd02.prod.outlook.com
+ Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: MWH0EPF000989E5.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB7569
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB8551
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amd.com; s=selector1; 
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SrmejogQfttBER1wbnWnKTJp9nKka6H44I97JM6F8OY=;
- b=eiaI2Xh7a1DuI75A8/QnK12hA/WSDUhqbpEhm2jG/hvZ69VmUkm8H/sYXRBmu9Ll0/CECSIlSF3eUIdV3TJcLAH88DZjmMfdzcTsbYRESBTU3SwjIx6ziVBpgIKJarP+bMxItQw/RT8hmrztGtwwPOo3ret3H/I4rmqiviTrS48=
+ bh=cTZrnHQzJdjR5V9V6t2ypEhcWj7Q4boG4MNmiMRJH0E=;
+ b=tjMMyPZNe0GfvDEo/oOqxfUmrbW6577MvpqgcRhs1QaDV+W1GDpF/cRCRjy0/i2VW8jrCJF+HMfm7qSkALOXaJAoYPZ5+0FR65T/bDIii1WSniavafDUuyyJ8iGvbcpNLVGxKDVLu8Q4RVEhAo00WXyrnDERx+s/uDMODT8SGiA=
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=amd.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=eiaI2Xh7
-Subject: [Buildroot] [PATCH v2 4/5] configs/versal_*: bump xilinx-prebuilt
- to xilinx_v2025.1_update1
+ header.s=selector1 header.b=tjMMyPZN
+Subject: [Buildroot] [PATCH v2 3/5] configs/versal_vek280: bump
+ xilinx-prebuilt to xilinx_v2025.1_update1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -174,41 +175,102 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch bumps the other versal defconfigs xilinx-prebuilt package to
+This patch bumps the versal_vek280_defconfig xilinx-prebuilt package to
 version xilinx_v2025.1_update1.
+
+As part of this update, the vek280 pdi file has been updated from the
+petalinux flow to the yocto edf flow. In the process, the memory map has been
+corrected to match the Linux intree dts memory node, so the vek280 memory node
+patch is no longer required.
+
+https://github.com/Xilinx/soc-prebuilt-firmware/commit/f755d022cd9bd2e6a09eed0f80078bca3345279e
 
 Signed-off-by: Neal Frager <neal.frager@amd.com>
 ---
 V1->V2:
 - new to patch series
 ---
- configs/versal_vck190_defconfig | 1 +
- configs/versal_vpk180_defconfig | 1 +
- 2 files changed, 2 insertions(+)
+ ...sal-vek280-prebuilt-pdi-is-incorrect.patch | 50 -------------------
+ configs/versal_vek280_defconfig               |  3 +-
+ 2 files changed, 2 insertions(+), 51 deletions(-)
+ delete mode 100644 board/versal/vek280/patches/linux/0001-arm64-versal-vek280-prebuilt-pdi-is-incorrect.patch
 
-diff --git a/configs/versal_vck190_defconfig b/configs/versal_vck190_defconfig
-index c9d99876d5..8338e36a90 100644
---- a/configs/versal_vck190_defconfig
-+++ b/configs/versal_vck190_defconfig
+diff --git a/board/versal/vek280/patches/linux/0001-arm64-versal-vek280-prebuilt-pdi-is-incorrect.patch b/board/versal/vek280/patches/linux/0001-arm64-versal-vek280-prebuilt-pdi-is-incorrect.patch
+deleted file mode 100644
+index 357c0abb2f..0000000000
+--- a/board/versal/vek280/patches/linux/0001-arm64-versal-vek280-prebuilt-pdi-is-incorrect.patch
++++ /dev/null
+@@ -1,50 +0,0 @@
+-From e79a96ff89b11fea03680633ab830894288ee9f0 Mon Sep 17 00:00:00 2001
+-From: Neal Frager <neal.frager@amd.com>
+-Date: Thu, 28 Nov 2024 07:50:28 +0000
+-Subject: [PATCH] arm64: versal: vek280 prebuilt pdi is incorrect
+-
+-The prebuilt vpl_gen_fixed.pdi for the vek280 is incorrect and does not define
+-the DDR memory region for address 0x8 0000 0000 - 0x8 8000 0000.  For this
+-reason, the intree Linux dts memory node for the vek280 will not boot.
+-
+-This patch works around the issue until the prebuilt pdi file is changed.
+-
+-https://github.com/Xilinx/soc-prebuilt-firmware/blob/xilinx_v2024.2/vek280-versal/vpl_gen_fixed.pdi
+-
+-Upstream: n/a
+-
+-Signed-off-by: Neal Frager <neal.frager@amd.com>
+----
+- arch/arm64/boot/dts/xilinx/versal-vek280-revA.dts | 2 +-
+- arch/arm64/boot/dts/xilinx/versal-vek280-revB.dts | 2 +-
+- 2 files changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/arch/arm64/boot/dts/xilinx/versal-vek280-revA.dts b/arch/arm64/boot/dts/xilinx/versal-vek280-revA.dts
+-index ad5d590318e6..a306eacca5b3 100644
+---- a/arch/arm64/boot/dts/xilinx/versal-vek280-revA.dts
+-+++ b/arch/arm64/boot/dts/xilinx/versal-vek280-revA.dts
+-@@ -19,7 +19,7 @@ / {
+- 
+- 	memory: memory@0 {
+- 		device_type = "memory";
+--		reg = <0 0 0 0x80000000>, <0x8 0x0 0x1 0x80000000>; /* 2GB + 6GB */
+-+		reg = <0 0 0 0x80000000>, <0x8 0x80000000 0x1 0x80000000>; /* 2GB + 6GB */
+- 	};
+- 
+- 	chosen {
+-diff --git a/arch/arm64/boot/dts/xilinx/versal-vek280-revB.dts b/arch/arm64/boot/dts/xilinx/versal-vek280-revB.dts
+-index a5ee80a373e2..ba54a5ef0c73 100644
+---- a/arch/arm64/boot/dts/xilinx/versal-vek280-revB.dts
+-+++ b/arch/arm64/boot/dts/xilinx/versal-vek280-revB.dts
+-@@ -19,7 +19,7 @@ / {
+- 
+- 	memory: memory@0 {
+- 		device_type = "memory";
+--		reg = <0 0 0 0x80000000>, <0x8 0x00000000 0x1 0x80000000>; /* 2GB + 6GB */
+-+		reg = <0 0 0 0x80000000>, <0x8 0x80000000 0x1 0x80000000>; /* 2GB + 6GB */
+- 	};
+- 
+- 	chosen {
+--- 
+-2.25.1
+-
+diff --git a/configs/versal_vek280_defconfig b/configs/versal_vek280_defconfig
+index 4aa25f8d67..f0c156910f 100644
+--- a/configs/versal_vek280_defconfig
++++ b/configs/versal_vek280_defconfig
+@@ -5,7 +5,7 @@ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
+ BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
+ BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-buildroot-elf"
+-BR2_GLOBAL_PATCH_DIR="board/versal/vek280/patches board/xilinx/patches board/xilinx/linux_6.12.10/patches"
++BR2_GLOBAL_PATCH_DIR="board/xilinx/patches board/xilinx/linux_6.12.10/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/versal/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/versal/post-image.sh"
 @@ -43,6 +43,7 @@ BR2_TARGET_XILINX_EMBEDDEDSW=y
  BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM=y
  BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PSMFW=y
  BR2_TARGET_XILINX_PREBUILT=y
 +BR2_TARGET_XILINX_PREBUILT_VERSION="xilinx_v2025.1_update1"
  BR2_TARGET_XILINX_PREBUILT_VERSAL=y
- BR2_PACKAGE_HOST_BOOTGEN=y
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
-diff --git a/configs/versal_vpk180_defconfig b/configs/versal_vpk180_defconfig
-index 500298c2f4..6307cf115f 100644
---- a/configs/versal_vpk180_defconfig
-+++ b/configs/versal_vpk180_defconfig
-@@ -43,6 +43,7 @@ BR2_TARGET_XILINX_EMBEDDEDSW=y
- BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM=y
- BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PSMFW=y
- BR2_TARGET_XILINX_PREBUILT=y
-+BR2_TARGET_XILINX_PREBUILT_VERSION="xilinx_v2025.1_update1"
- BR2_TARGET_XILINX_PREBUILT_VERSAL=y
- BR2_TARGET_XILINX_PREBUILT_BOARD="vpk180"
+ BR2_TARGET_XILINX_PREBUILT_BOARD="vek280"
  BR2_PACKAGE_HOST_BOOTGEN=y
 -- 
 2.25.1
