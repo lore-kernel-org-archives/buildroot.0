@@ -4,74 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B5C8CA0FED
-	for <buildroot@archiver.kernel.org>; Tue, 26 Aug 2025 22:07:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06E19CA0FED
+	for <buildroot@archiver.kernel.org>; Tue, 26 Aug 2025 23:11:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 22C01406B3;
-	Tue, 26 Aug 2025 22:07:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7608140531;
+	Tue, 26 Aug 2025 23:11:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8psG8FyESNYt; Tue, 26 Aug 2025 22:07:55 +0000 (UTC)
+ id c7kkvBOD4DeD; Tue, 26 Aug 2025 23:11:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C779406AC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AFC5C40523
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4C779406AC;
-	Tue, 26 Aug 2025 22:07:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id A14C2B8C
- for <buildroot@buildroot.org>; Tue, 26 Aug 2025 22:07:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AFC5C40523;
+	Tue, 26 Aug 2025 23:11:41 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id DBAC5B8C
+ for <buildroot@buildroot.org>; Tue, 26 Aug 2025 23:11:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 91AB880D10
- for <buildroot@buildroot.org>; Tue, 26 Aug 2025 22:07:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C22524035E
+ for <buildroot@buildroot.org>; Tue, 26 Aug 2025 23:11:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iPDQLFqwPHLW for <buildroot@buildroot.org>;
- Tue, 26 Aug 2025 22:07:53 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8A7B380D08
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8A7B380D08
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8A7B380D08
- for <buildroot@buildroot.org>; Tue, 26 Aug 2025 22:07:52 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id E53275FFAF;
- Wed, 27 Aug 2025 00:07:46 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 27 Aug 2025 00:07:46 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2VaTjN7OMlZS for <buildroot@buildroot.org>;
+ Tue, 26 Aug 2025 23:11:39 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::62e; helo=mail-pl1-x62e.google.com;
+ envelope-from=petr.vorel@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org F0EE54008C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F0EE54008C
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com
+ [IPv6:2607:f8b0:4864:20::62e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F0EE54008C
+ for <buildroot@buildroot.org>; Tue, 26 Aug 2025 23:11:38 +0000 (UTC)
+Received: by mail-pl1-x62e.google.com with SMTP id
+ d9443c01a7336-2487a60d649so11632735ad.2
+ for <buildroot@buildroot.org>; Tue, 26 Aug 2025 16:11:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1756249898; x=1756854698;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=qyaLbjcJPWg2snzfIrNa4444b2CkKsjL6x2OkOIXZ8g=;
+ b=hA8GWDyRkK5zaXzHqD7RHqvE7o8tuCQjG5xbAkW1zf/1tymqRg5lv1gPZjCtRbJSNN
+ kT7CQYQN6L9INoRaz2Y91gLzaFbRlFCxR2EemIGZuFmGW5oggxvhAH8Lh6Xh0UC1KSCa
+ fkgzJdmBqzVsb5QiN6A6oshUXHx2nqmEhsjdmQqw67d+pAVKL4/4z1zhNf6qhBjfMwxW
+ /aHc7AmH97cI8SdCAHyRA0Z934/1JCrsmQRhc7UsufI5KrIRlVjM21FSYqhwq71SXOpb
+ Ujd9fSB/6ozFZYKkxHRTYYqqqJuF9Os8J2nodsYmpB1UGpny4Ey72Iavv3p02TXP4BRk
+ aQUg==
+X-Gm-Message-State: AOJu0YxpBCxFIMuNrRGFuwqgrPZ01vtTjoDyy8znuU+y+2KieTzUkVve
+ 4xbcRkROBFW0OS9QXI+dfgnBPslV6fGcJpWVkujQZ0qwQq9cNr5sG++VShMvJA==
+X-Gm-Gg: ASbGncsHSIp1bvglkABNGdk+2Nv4qcF9ma8vlqU7tBpa5nIttWnzKn+/fqxzCQeGFYt
+ qPNegwTGx4I/CUpXDccyTCK8IclvdUxnz0OhQYr5VSghahPQQaRqz0nly7SqV4QXut+LJOy47gv
+ X2RrUrxc4hegN0vKosVIdhbR5R3pWChepB1IhUAdLXSHSRCyo22O+P4+NUlfyx7Yw1+3I21gugR
+ 4IHakk8towVuVmhxUMISqHD8xQJzPfnbv6G46Ytx5GDmFEn1AwUKKKspMwikSl5/pFURZ/RBxJ5
+ P5lDpGAkVd9jUEsqtTFRrxh/qeS2L2eqzkkG5Lf+iHFpV5Q1FgR/IJeuN77yMzBP6TnINjEwJTo
+ VOilAbEfx5NgpO0Cems4kxz/Qz6zobp4jnn4M
+X-Google-Smtp-Source: AGHT+IFU8+ldwQMsN5D7epOvAnC1XNwlgQagr0jAv4+xQtvox+emIihonQUd8hMX37jrR1FFplglCw==
+X-Received: by 2002:a17:902:d2c7:b0:248:9429:3641 with SMTP id
+ d9443c01a7336-24894293aa4mr13440305ad.48.1756249898131; 
+ Tue, 26 Aug 2025 16:11:38 -0700 (PDT)
+Received: from x230.suse.cz (gw1.ms-free.net. [185.243.124.10])
+ by smtp.gmail.com with ESMTPSA id
+ d9443c01a7336-2466889e11csm105522605ad.155.2025.08.26.16.11.34
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 26 Aug 2025 16:11:37 -0700 (PDT)
+From: Petr Vorel <petr.vorel@gmail.com>
+To: buildroot@buildroot.org
+Date: Wed, 27 Aug 2025 01:11:20 +0200
+Message-ID: <20250826231121.135117-1-petr.vorel@gmail.com>
+X-Mailer: git-send-email 2.50.1
 MIME-Version: 1.0
-Date: Wed, 27 Aug 2025 00:07:46 +0200
-To: Yacin Belmihoub-Martel <yacin.belmihoub-martel@silabs.com>
-Cc: buildroot@buildroot.org, James Hilliard <james.hilliard1@gmail.com>
-In-Reply-To: <20250825234140.2080155-2-yacin.belmihoub-martel@silabs.com>
-References: <20250825234140.2080155-1-yacin.belmihoub-martel@silabs.com>
- <20250825234140.2080155-2-yacin.belmihoub-martel@silabs.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <017ac2eca62c06cd8b4af852b9d70d54@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1756246069;
- bh=XNxgM96eWZC93GjDT3pWBNy5HHf+uIqvEKSn9v/sHr8=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=mVOUTMcnA4OV5NoCvw8aV0BPWbnBwcamqOXgpTiSBN6WYOhXjZHpJ8nDGkZDRMedh
- rqYJWOBHHhqbDZ+qqE4L8882EJeGFUZHIonWe+tUbLzzU4JiSwehrqoRHMQth9vhhR
- u74amyw2Io+8yFftS1O+jOp0JWPJkqlg+Gd7l09ReJjqlPC8s8wmVcyz03g7tNAP+h
- 5FTsTw1aX5vN0Vdrdt6yWOCMvTbqThAR2A/tm6Tz0yRmsePdWQKmEC4EaGq23F0DxR
- 9nhLwK4pMuYC0AX8P8jwHU0g50Nj5PNEfw8AK0W7203ZtpzerI9ZjzumZYbd+ZiNdY
- JaeSA3fpnhdOw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1756249898; x=1756854698; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=qyaLbjcJPWg2snzfIrNa4444b2CkKsjL6x2OkOIXZ8g=;
+ b=g5W/BEp3+aGAFqexAcCXeHEGTgqIIOHoxoHwVboFaysvXlZl2ZGOnHBD/FFdIgxGAJ
+ wVRaha9lCNjPKTtr3S5RGv08+YnPSNm7pxdFiBuPEMnQlPqfEkv6C6GmolmwA8WmrLqu
+ 2Ogu8iosKAabq/3WJ2LXjzK2lhZ4FMmmwe+aZmHyZURw1BqZECmxljQoqcNtsCeAMpvX
+ 59DW9Sq8ROfINe+xynah21jEF/Y8FQI8WUFiPAOlXkNSfIYi8U3Z0jpD8uTvdA6Mud49
+ VQCCVsFbx68iYhPKOTTH+Z05kMwschfNCneoDFt+VpgsEXdS1kttz69aY1ifjezBMWAm
+ /v2g==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=mVOUTMcn
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-pyroute2: add missing
- python3 ssl dependency
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=g5W/BEp3
+Subject: [Buildroot] [PATCH 1/1] package/nftables: Bump version to 1.1.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,36 +106,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Cc: Petr Vorel <petr.vorel@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Yacin,
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+---
+ package/nftables/nftables.hash | 5 +++--
+ package/nftables/nftables.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-Thank you for you first contribution!
+diff --git a/package/nftables/nftables.hash b/package/nftables/nftables.hash
+index ef635cd3c3..b7c65777ca 100644
+--- a/package/nftables/nftables.hash
++++ b/package/nftables/nftables.hash
+@@ -1,8 +1,9 @@
+ # From https://netfilter.org/projects/nftables/downloads.html
+ # Checked pgp signature:
+-# https://netfilter.org/projects/nftables/files/nftables-1.1.0.tar.xz.sig
++# https://netfilter.org/projects/nftables/files/nftables-1.1.4.tar.xz.sig
+ # with key:
+ # https://netfilter.org/files/coreteam-gpg-key-0xD55D978A8A1420E4.txt
+-sha256  ef3373294886c5b607ee7be82c56a25bc04e75f802f8e8adcd55aac91eb0aa24  nftables-1.1.0.tar.xz
++# https://www.netfilter.org/projects/nftables/files/nftables-1.1.4.tar.xz.sha256sum
++sha256  3444f0012af0472399eeae89a758b9c6dc5f311f6c67a48988fa1600fc4bac86  nftables-1.1.4.tar.xz
+ # Locally computed:
+ sha256  4ee1e51baf5f3166712fa0c3e01338c7257e50ddef245d28bb14ad68f6070ba5  COPYING
+diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
+index f6e6a64efd..94bf977725 100644
+--- a/package/nftables/nftables.mk
++++ b/package/nftables/nftables.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NFTABLES_VERSION = 1.1.0
++NFTABLES_VERSION = 1.1.4
+ NFTABLES_SOURCE = nftables-$(NFTABLES_VERSION).tar.xz
+ NFTABLES_SITE = https://www.netfilter.org/projects/nftables/files
+ NFTABLES_DEPENDENCIES = libmnl libnftnl host-pkgconf $(TARGET_NLS_DEPENDENCIES)
+-- 
+2.50.1
 
-On 26/08/2025 01:41, Yacin Belmihoub-Martel via buildroot wrote:
-> pyroute2 needs _ssl from netlink.rtnl.probe_msg [1].
-> 
-> [1] 
-> https://github.com/svinota/pyroute2/blob/4205dfbcd0fd4ac7ca78196a83f411906f5a5d72/pyroute2/netlink/rtnl/probe_msg.py#L5
-> 
-> Signed-off-by: Yacin Belmihoub-Martel 
-> <yacin.belmihoub-martel@silabs.com>
-
-I applied this patch to master, to include this fix in the upcoming
-Buildroot 2025.08 release.
-
-A similar fix was also included in our "next" release branch.
-To better explain the situation, I rewrote the commit log. See:
-https://gitlab.com/buildroot.org/buildroot/-/commit/c399b6d682c480512622d71ac2317c8494d2d73e
-
-Best regards,
-
-Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
