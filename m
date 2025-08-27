@@ -1,52 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D4ABCAC586
-	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 14:18:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 942C0CAC588
+	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 14:18:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D0BE280549;
-	Mon,  8 Sep 2025 14:18:31 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dNVvi6ofFKty; Mon,  8 Sep 2025 14:18:31 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C2CD28096C
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C2CD28096C;
-	Mon,  8 Sep 2025 14:18:30 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 10F0F186
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:41 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E53FD605DC
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6B30B607B5;
+	Mon,  8 Sep 2025 14:18:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Vh9wIbgDqjl4 for <buildroot@buildroot.org>;
- Mon,  8 Sep 2025 14:16:31 +0000 (UTC)
+ id BwBzGkyoeXMn; Mon,  8 Sep 2025 14:18:32 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9BF796069F
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9BF796069F;
+	Mon,  8 Sep 2025 14:18:32 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 50A8D186
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:41 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8926A40216
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:26 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LUcAsIRXcrnA for <buildroot@buildroot.org>;
+ Mon,  8 Sep 2025 14:16:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6CD84605C1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 78BC54021C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6CD84605C1
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:31 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 78BC54021C
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6A2EB81353; Mon,  8 Sep 2025 14:16:31 +0000 (UTC)
+ id 76037818B3; Mon,  8 Sep 2025 14:16:25 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 4 Sep 2025 20:49:04 +0200
+Date: Wed, 27 Aug 2025 11:54:34 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7c20afb95eae62ebffd7f9f093e6a60cea274892
-X-Git-Newrev: 7bf44f11e70e66bdefc39c78f79a7b7e07c24fc4
+X-Git-Oldrev: 4b987677e145fdb212debf708f40faaa18c4f29c
+X-Git-Newrev: fdc002ee38e58ef4abfbd1615217a5977f9a0077
 X-Patchwork-Hint: ignore
-Message-Id: <20250908141631.6A2EB81353@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/aspeed_*: update hostname and
- /etc/issue
+Message-Id: <20250908141625.76037818B3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/imxrt1050-evk: Check hashes,
+ use bootlin toolchain
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,69 +59,91 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2597878142721367406=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2597878142721367406==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=7bf44f11e70e66bdefc39c78f79a7b7e07c24fc4
+commit: https://git.buildroot.net/buildroot/commit/?id=fdc002ee38e58ef4abfbd1615217a5977f9a0077
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Include the SoC model in both hostname and /etc/issue to match the
-.dts file names.
+This commit adds BR2_DOWNLOAD_FORCE_CHECK_HASHES=y and
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_STABLE=y in the
+defconfig, bumps kernel to 6.12.43, and adds custom hash files.
+The exception entry in .checkpackageignore is also removed.
 
-Signed-off-by: Cédric Le Goater <clg@kaod.org>
-Reviewed-by: Joel Stanley <joel@jms.id.au>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+[Peter: correct linux-headers.patch symlink]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/aspeed_ast2500evb_defconfig | 4 ++--
- configs/aspeed_ast2600evb_defconfig | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .checkpackageignore                                               | 1 -
+ .../imxrt1050evk/patches/linux-headers/linuux-headers.hash        | 1 +
+ board/freescale/imxrt1050evk/patches/linux/linux.hash             | 2 ++
+ board/freescale/imxrt1050evk/patches/uboot/uboot.hash             | 2 ++
+ configs/imxrt1050-evk_defconfig                                   | 8 ++++++--
+ 5 files changed, 11 insertions(+), 3 deletions(-)
 
-diff --git a/configs/aspeed_ast2500evb_defconfig b/configs/aspeed_ast2500evb_defconfig
-index ffc0ec8d52..64666cc3d7 100644
---- a/configs/aspeed_ast2500evb_defconfig
-+++ b/configs/aspeed_ast2500evb_defconfig
-@@ -1,7 +1,7 @@
+diff --git a/.checkpackageignore b/.checkpackageignore
+index ca7fec588a..4cf1c9f449 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -156,7 +156,6 @@ configs/imx6ullevk_defconfig lib_defconfig.ForceCheckHash
+ configs/imx6ulpico_defconfig lib_defconfig.ForceCheckHash
+ configs/imx7dpico_defconfig lib_defconfig.ForceCheckHash
+ configs/imx8mqevk_defconfig lib_defconfig.ForceCheckHash
+-configs/imxrt1050-evk_defconfig lib_defconfig.ForceCheckHash
+ configs/khadas_vim3_defconfig lib_defconfig.ForceCheckHash
+ configs/kontron_bl_imx8mm_defconfig lib_defconfig.ForceCheckHash
+ configs/kontron_pitx_imx8m_defconfig lib_defconfig.ForceCheckHash
+diff --git a/board/freescale/imxrt1050evk/patches/linux-headers/linuux-headers.hash b/board/freescale/imxrt1050evk/patches/linux-headers/linuux-headers.hash
+new file mode 120000
+index 0000000000..5808d92afe
+--- /dev/null
++++ b/board/freescale/imxrt1050evk/patches/linux-headers/linuux-headers.hash
+@@ -0,0 +1 @@
++../linux/linux.hash
+\ No newline at end of file
+diff --git a/board/freescale/imxrt1050evk/patches/linux/linux.hash b/board/freescale/imxrt1050evk/patches/linux/linux.hash
+new file mode 100644
+index 0000000000..216d9b9d39
+--- /dev/null
++++ b/board/freescale/imxrt1050evk/patches/linux/linux.hash
+@@ -0,0 +1,2 @@
++# From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
++sha256  0fcbbbbcd456e87bbbfc8bf37af541fda62ccfcce76903503424fd101ef7bdee  linux-6.12.43.tar.xz
+diff --git a/board/freescale/imxrt1050evk/patches/uboot/uboot.hash b/board/freescale/imxrt1050evk/patches/uboot/uboot.hash
+new file mode 100644
+index 0000000000..440526977b
+--- /dev/null
++++ b/board/freescale/imxrt1050evk/patches/uboot/uboot.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  0f933f6c5a426895bf306e93e6ac53c60870e4b54cda56d95211bec99e63bec7  u-boot-2025.07.tar.bz2
+diff --git a/configs/imxrt1050-evk_defconfig b/configs/imxrt1050-evk_defconfig
+index fce2b831f3..0574eae981 100644
+--- a/configs/imxrt1050-evk_defconfig
++++ b/configs/imxrt1050-evk_defconfig
+@@ -1,12 +1,16 @@
  BR2_arm=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_16=y
--BR2_TARGET_GENERIC_HOSTNAME="aspeed-evb"
--BR2_TARGET_GENERIC_ISSUE="Aspeed EVB"
-+BR2_TARGET_GENERIC_HOSTNAME="ast2500-evb"
-+BR2_TARGET_GENERIC_ISSUE="Aspeed AST2500 EVB"
- BR2_SYSTEM_DHCP="eth0"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/aspeed/common/post-image.sh"
+ BR2_cortex_m7=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_7=y
++BR2_TOOLCHAIN_EXTERNAL=y
++BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
++BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_STABLE=y
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
++BR2_GLOBAL_PATCH_DIR="board/freescale/imxrt1050evk/patches"
+ BR2_ROOTFS_OVERLAY="board/freescale/imxrt1050evk/rootfs_overlay"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/freescale/imxrt1050evk/genimage.cfg"
  BR2_LINUX_KERNEL=y
-diff --git a/configs/aspeed_ast2600evb_defconfig b/configs/aspeed_ast2600evb_defconfig
-index 2057091776..0572f78599 100644
---- a/configs/aspeed_ast2600evb_defconfig
-+++ b/configs/aspeed_ast2600evb_defconfig
-@@ -1,8 +1,8 @@
- BR2_arm=y
- BR2_cortex_a7=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_16=y
--BR2_TARGET_GENERIC_HOSTNAME="aspeed-evb"
--BR2_TARGET_GENERIC_ISSUE="Aspeed EVB"
-+BR2_TARGET_GENERIC_HOSTNAME="ast2600-evb"
-+BR2_TARGET_GENERIC_ISSUE="Aspeed AST2600 EVB"
- BR2_SYSTEM_DHCP="eth0"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/aspeed/common/post-image.sh"
- BR2_LINUX_KERNEL=y
-
---===============2597878142721367406==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.7"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.43"
+ BR2_LINUX_KERNEL_DEFCONFIG="imxrt"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="nxp/imx/imxrt1050-evk"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2597878142721367406==--
