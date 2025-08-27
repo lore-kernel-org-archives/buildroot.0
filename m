@@ -1,52 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9FB76C8303F
-	for <buildroot@archiver.kernel.org>; Wed, 27 Aug 2025 05:47:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40248CA0EFF
+	for <buildroot@archiver.kernel.org>; Wed, 27 Aug 2025 06:02:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5DAA560BDF;
-	Wed, 27 Aug 2025 05:47:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AFAD6811B5;
+	Wed, 27 Aug 2025 06:02:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p7zt9-6sfDC7; Wed, 27 Aug 2025 05:47:22 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pwytoY_EJoXO; Wed, 27 Aug 2025 06:02:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4C96560BE0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B5967811AF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4C96560BE0;
-	Wed, 27 Aug 2025 05:47:22 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 3C318B0B
- for <buildroot@buildroot.org>; Wed, 27 Aug 2025 05:47:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B5967811AF;
+	Wed, 27 Aug 2025 06:02:46 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id E407CB8C
+ for <buildroot@buildroot.org>; Wed, 27 Aug 2025 06:02:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2D5B160BDF
- for <buildroot@buildroot.org>; Wed, 27 Aug 2025 05:47:21 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D5FD060BFF
+ for <buildroot@buildroot.org>; Wed, 27 Aug 2025 06:02:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id afHYkBtbVC_7 for <buildroot@buildroot.org>;
- Wed, 27 Aug 2025 05:47:20 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 36FAF60BDD
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 36FAF60BDD
- for <buildroot@buildroot.org>; Wed, 27 Aug 2025 05:47:20 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 25DB087BB2; Wed, 27 Aug 2025 05:47:20 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 0-rkvLktzrBc for <buildroot@buildroot.org>;
+ Wed, 27 Aug 2025 06:02:44 +0000 (UTC)
+Received-SPF: None (mailfrom) identity=mailfrom;
+ client-ip=2a01:4f8:151:30a2::163; helo=serv15.avernis.de;
+ envelope-from=br015@umbiko.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 83E6960BFC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 83E6960BFC
+Received: from serv15.avernis.de (serv15.avernis.de
+ [IPv6:2a01:4f8:151:30a2::163])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 83E6960BFC
+ for <buildroot@buildroot.org>; Wed, 27 Aug 2025 06:02:43 +0000 (UTC)
+Received: by serv15.avernis.de (Postfix) with ESMTPSA id 950EABDE3DFC;
+ Wed, 27 Aug 2025 07:56:01 +0200 (CEST)
+From: Andreas Ziegler <br015@umbiko.net>
 To: buildroot@buildroot.org
-Date: Wed, 27 Aug 2025 07:42:02 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c399b6d682c480512622d71ac2317c8494d2d73e
-X-Git-Newrev: 34b585c099cf42af9076900ae4f5288d9872323d
-X-Patchwork-Hint: ignore
-Message-Id: <20250827054720.25DB087BB2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/liboauth: remove package
+Cc: Andreas Ziegler <br015@umbiko.net>
+Date: Wed, 27 Aug 2025 07:55:48 +0200
+Message-ID: <20250827055548.1739-1-br015@umbiko.net>
+X-Mailer: git-send-email 2.43.0
+MIME-Version: 1.0
+X-Virus-Scanned: clamav-milter 1.0.7 at serv15.avernis.de
+X-Virus-Status: Clean
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=umbiko.net; s=mail; 
+ t=1756274161; bh=+XKHtL3OijrUwy0jc8fNKejhuuYSJXU7sNFlxjSG7GY=;
+ h=From:To:Cc:Subject:Date;
+ b=NmimfLG6kORoA/31IBPH+TS+Dp1cbWYEdbBqzqqKqBYWvg7ZBbFwsLEX5+QPO2RTA
+ PxsoL1HWBsKKbyAcG1HkkwYBPyrA4PkulWa8aNMwMgKje4ry5JPCcpwL72wpwV11pE
+ ngiGCsJIgYpGdZ5GkJpL8vIPi5bnUL03F4BjXbHA=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=umbiko.net
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=umbiko.net header.i=@umbiko.net header.a=rsa-sha256
+ header.s=mail header.b=NmimfLG6
+Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: upgrade Andreas Ziegler's email
+ address
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,289 +76,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=34b585c099cf42af9076900ae4f5288d9872323d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The old one lasted for 10 years, lately spam 
+levels reached a rather uncomfortable level ... 
 
-This package fails to build in the autobuilders:
-
-  https://autobuild.buildroot.net/?reason=liboauth%
-
-The last upstream release, 1.0.3, was done 11 years ago:
-
-  https://sourceforge.net/projects/liboauth/
-
-There is a Github repo at:
-
-  https://github.com/x42/liboauth
-
-with commits from 3 years ago, but no release.
-
-We already carry a patch fixing the build with OpenSSL 1.1.x, which
-has been submitted at https://github.com/x42/liboauth/issues/9 but
-never merged, despite being opened since 2017.
-
-This package also has no maintainer in DEVELOPERS, and it has no
-reverse dependency in Buildroot, so let's get rid of it.
-
-Fixes:
-
-  https://autobuild.buildroot.net/results/8694ece6874a5fe297e707b12af85eeaef227675/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Andreas Ziegler <br015@umbiko.net>
 ---
- .checkpackageignore                                |   1 -
- package/Config.in                                  |   1 -
- ...0001-Fixes-build-issue-with-OpenSSL-1.1.0.patch | 156 ---------------------
- package/liboauth/Config.in                         |  11 --
- package/liboauth/liboauth.hash                     |   3 -
- package/liboauth/liboauth.mk                       |  20 ---
- 6 files changed, 192 deletions(-)
+ DEVELOPERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index c88968e4d5..cd858d1732 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -661,7 +661,6 @@ package/libnetfilter_conntrack/0001-conntrack-fix-build-with-kernel-5-15-and-mus
- package/libnfc/0001-autotools-make-example-build-optional.patch lib_patch.Upstream
- package/libnids/0001-libpcap-use-pkg-config.patch lib_patch.Upstream
- package/libnss/0001-Bug-1801182-Allow-overriding-OS_ARCH-OS_TEST-and-OS_.patch lib_patch.Upstream
--package/liboauth/0001-Fixes-build-issue-with-OpenSSL-1.1.0.patch lib_patch.Upstream
- package/libodb-mysql/0001-fix-syntax-issue-while-checking-ldflags.patch lib_patch.Upstream
- package/libodb-mysql/0002-mariadb-FTBFS-fix.patch lib_patch.Upstream
- package/libopenssl/0001-Reproducible-build-do-not-leak-compiler-path.patch lib_patch.Upstream
-diff --git a/package/Config.in b/package/Config.in
-index 137f74ed82..899301078e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2093,7 +2093,6 @@ menu "Networking"
- 	source "package/libnids/Config.in"
- 	source "package/libnl/Config.in"
- 	source "package/libnpupnp/Config.in"
--	source "package/liboauth/Config.in"
- 	source "package/liboping/Config.in"
- 	source "package/libosip2/Config.in"
- 	source "package/libpagekite/Config.in"
-diff --git a/package/liboauth/0001-Fixes-build-issue-with-OpenSSL-1.1.0.patch b/package/liboauth/0001-Fixes-build-issue-with-OpenSSL-1.1.0.patch
-deleted file mode 100644
-index 945307bba8..0000000000
---- a/package/liboauth/0001-Fixes-build-issue-with-OpenSSL-1.1.0.patch
-+++ /dev/null
-@@ -1,156 +0,0 @@
--From 5f1c949b1703367f7f06454fcff650bdb7bac840 Mon Sep 17 00:00:00 2001
--From: DJ Lucas <dj@linuxfromscratch.org>
--Date: Sun, 9 Sep 2018 15:46:15 +0200
--Subject: [PATCH] Fixes build issue with OpenSSL-1.1.0
--
--Downloaded from
--http://www.linuxfromscratch.org/patches/blfs/svn/liboauth-1.0.3-openssl-1.1.0-2.patch
--
--Patch was sent upstream: https://github.com/x42/liboauth/issues/9
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- src/hash.c | 65 ++++++++++++++++++++++++++++++++++++++++++--------------------
-- 1 file changed, 44 insertions(+), 21 deletions(-)
--
--diff --git a/src/hash.c b/src/hash.c
--index 17ff5c8..b7958f7 100644
----- a/src/hash.c
--+++ b/src/hash.c
--@@ -362,6 +362,11 @@ looser:
-- #include "oauth.h" // base64 encode fn's.
-- #include <openssl/hmac.h>
-- 
--+#if OPENSSL_VERSION_NUMBER < 0x10100000
--+#define EVP_MD_CTX_new EVP_MD_CTX_create
--+#define EVP_MD_CTX_free EVP_MD_CTX_destroy
--+#endif
--+
-- char *oauth_sign_hmac_sha1 (const char *m, const char *k) {
--   return(oauth_sign_hmac_sha1_raw (m, strlen(m), k, strlen(k)));
-- }
--@@ -386,7 +391,7 @@ char *oauth_sign_rsa_sha1 (const char *m, const char *k) {
--   unsigned char *sig = NULL;
--   unsigned char *passphrase = NULL;
--   unsigned int len=0;
---  EVP_MD_CTX md_ctx;
--+  EVP_MD_CTX *md_ctx;
-- 
--   EVP_PKEY *pkey;
--   BIO *in;
--@@ -399,24 +404,31 @@ char *oauth_sign_rsa_sha1 (const char *m, const char *k) {
--     return xstrdup("liboauth/OpenSSL: can not read private key");
--   }
-- 
--+  md_ctx = EVP_MD_CTX_new();
--+  if (md_ctx == NULL) {
--+          return xstrdup("liboauth/OpenSSL: failed to allocate EVP_MD_CTX");
--+  }
--+
--   len = EVP_PKEY_size(pkey);
--   sig = (unsigned char*)xmalloc((len+1)*sizeof(char));
-- 
---  EVP_SignInit(&md_ctx, EVP_sha1());
---  EVP_SignUpdate(&md_ctx, m, strlen(m));
---  if (EVP_SignFinal (&md_ctx, sig, &len, pkey)) {
--+  EVP_SignInit(md_ctx, EVP_sha1());
--+  EVP_SignUpdate(md_ctx, m, strlen(m));
--+  if (EVP_SignFinal (md_ctx, sig, &len, pkey)) {
--     char *tmp;
--     sig[len] = '\0';
--     tmp = oauth_encode_base64(len,sig);
--     OPENSSL_free(sig);
--     EVP_PKEY_free(pkey);
--+    EVP_MD_CTX_free(md_ctx);
--     return tmp;
--   }
--+  EVP_MD_CTX_free(md_ctx);
--   return xstrdup("liboauth/OpenSSL: rsa-sha1 signing failed");
-- }
-- 
-- int oauth_verify_rsa_sha1 (const char *m, const char *c, const char *s) {
---  EVP_MD_CTX md_ctx;
--+  EVP_MD_CTX *md_ctx;
--   EVP_PKEY *pkey;
--   BIO *in;
--   X509 *cert = NULL;
--@@ -437,13 +449,18 @@ int oauth_verify_rsa_sha1 (const char *m, const char *c, const char *s) {
--     return -2;
--   }
-- 
--+	md_ctx = EVP_MD_CTX_new();
--+	if (md_ctx == NULL) {
--+		return -2;
--+	}
--+
--   b64d= (unsigned char*) xmalloc(sizeof(char)*strlen(s));
--   slen = oauth_decode_base64(b64d, s);
-- 
---  EVP_VerifyInit(&md_ctx, EVP_sha1());
---  EVP_VerifyUpdate(&md_ctx, m, strlen(m));
---  err = EVP_VerifyFinal(&md_ctx, b64d, slen, pkey);
---  EVP_MD_CTX_cleanup(&md_ctx);
--+  EVP_VerifyInit(md_ctx, EVP_sha1());
--+  EVP_VerifyUpdate(md_ctx, m, strlen(m));
--+  err = EVP_VerifyFinal(md_ctx, b64d, slen, pkey);
--+  EVP_MD_CTX_free(pkey);
--   EVP_PKEY_free(pkey);
--   xfree(b64d);
--   return (err);
--@@ -455,35 +472,41 @@ int oauth_verify_rsa_sha1 (const char *m, const char *c, const char *s) {
--  */
-- char *oauth_body_hash_file(char *filename) {
--   unsigned char fb[BUFSIZ];
---  EVP_MD_CTX ctx;
--+  EVP_MD_CTX *ctx;
--   size_t len=0;
--   unsigned char *md;
--   FILE *F= fopen(filename, "r");
--   if (!F) return NULL;
-- 
---  EVP_MD_CTX_init(&ctx);
---  EVP_DigestInit(&ctx,EVP_sha1());
--+  ctx = EVP_MD_CTX_new();
--+  if (ctx == NULL) {
--+          return xstrdup("liboauth/OpenSSL: failed to allocate EVP_MD_CTX");
--+  }
--+  EVP_DigestInit(ctx,EVP_sha1());
--   while (!feof(F) && (len=fread(fb,sizeof(char),BUFSIZ, F))>0) {
---    EVP_DigestUpdate(&ctx, fb, len);
--+    EVP_DigestUpdate(ctx, fb, len);
--   }
--   fclose(F);
--   len=0;
--   md=(unsigned char*) xcalloc(EVP_MD_size(EVP_sha1()),sizeof(unsigned char));
---  EVP_DigestFinal(&ctx, md,(unsigned int*) &len);
---  EVP_MD_CTX_cleanup(&ctx);
--+  EVP_DigestFinal(ctx, md,(unsigned int*) &len);
--+  EVP_MD_CTX_free(ctx);
--   return oauth_body_hash_encode(len, md);
-- }
-- 
-- char *oauth_body_hash_data(size_t length, const char *data) {
---  EVP_MD_CTX ctx;
--+  EVP_MD_CTX *ctx;
--   size_t len=0;
--   unsigned char *md;
--   md=(unsigned char*) xcalloc(EVP_MD_size(EVP_sha1()),sizeof(unsigned char));
---  EVP_MD_CTX_init(&ctx);
---  EVP_DigestInit(&ctx,EVP_sha1());
---  EVP_DigestUpdate(&ctx, data, length);
---  EVP_DigestFinal(&ctx, md,(unsigned int*) &len);
---  EVP_MD_CTX_cleanup(&ctx);
--+  ctx = EVP_MD_CTX_new();
--+  if (ctx == NULL) {
--+          return xstrdup("liboauth/OpenSSL: failed to allocate EVP_MD_CTX");
--+  }
--+  EVP_DigestInit(ctx,EVP_sha1());
--+  EVP_DigestUpdate(ctx, data, length);
--+  EVP_DigestFinal(ctx, md,(unsigned int*) &len);
--+  EVP_MD_CTX_free(ctx);
--   return oauth_body_hash_encode(len, md);
-- }
-- 
---- 
--2.14.4
--
-diff --git a/package/liboauth/Config.in b/package/liboauth/Config.in
-deleted file mode 100644
-index 4ed0efa6b1..0000000000
---- a/package/liboauth/Config.in
-+++ /dev/null
-@@ -1,11 +0,0 @@
--config BR2_PACKAGE_LIBOAUTH
--	bool "liboauth"
--	select BR2_PACKAGE_OPENSSL
--	help
--	  liboauth is a collection of c functions implementing the oAuth
--	  Core 1.0 Rev A standard API. liboauth provides basic functions
--	  to escape and encode parameters according to oAuth specs and
--	  offers high-level functions to sign requests or verify
--	  signatures.
--
--	  http://liboauth.sourceforge.net/
-diff --git a/package/liboauth/liboauth.hash b/package/liboauth/liboauth.hash
-deleted file mode 100644
-index 5fa0353d50..0000000000
---- a/package/liboauth/liboauth.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally computed:
--sha256  0df60157b052f0e774ade8a8bac59d6e8d4b464058cc55f9208d72e41156811f  liboauth-1.0.3.tar.gz
--sha256  c30608672733bf3abd2ccf6f3206be8d91b7ee58b007b2fdbcfbc61c655e7fb7  COPYING.MIT
-diff --git a/package/liboauth/liboauth.mk b/package/liboauth/liboauth.mk
-deleted file mode 100644
-index bd54330ddf..0000000000
---- a/package/liboauth/liboauth.mk
-+++ /dev/null
-@@ -1,20 +0,0 @@
--################################################################################
--#
--# liboauth
--#
--################################################################################
--
--LIBOAUTH_VERSION = 1.0.3
--LIBOAUTH_SITE = http://downloads.sourceforge.net/project/liboauth
--LIBOAUTH_INSTALL_STAGING = YES
--LIBOAUTH_DEPENDENCIES += host-pkgconf openssl
--LIBOAUTH_LICENSE = MIT
--LIBOAUTH_LICENSE_FILES = COPYING.MIT
--
--ifeq ($(BR2_PACKAGE_LIBCURL),y)
--LIBOAUTH_DEPENDENCIES += libcurl
--else
--LIBOAUTH_CONF_OPTS += --disable-libcurl
--endif
--
--$(eval $(autotools-package))
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 8915eb6738..537a8bc516 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -187,7 +187,7 @@ F:	package/pkg-qmake.mk
+ F:	package/qt5/qt5opcua/
+ F:	package/qt6/qt6opcua/
+ 
+-N:	Andreas Ziegler <br015@umbiko.net>
++N:	Andreas Ziegler <br025@umbiko.net>
+ F:	package/mpd/
+ 
+ N:	Andrey Smirnov <andrew.smirnov@gmail.com>
+-- 
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
