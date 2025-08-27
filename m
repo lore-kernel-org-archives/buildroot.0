@@ -4,71 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64720CA0EFF
-	for <buildroot@archiver.kernel.org>; Wed, 27 Aug 2025 21:49:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02A39CA0EFF
+	for <buildroot@archiver.kernel.org>; Wed, 27 Aug 2025 21:54:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 04639811B9;
-	Wed, 27 Aug 2025 21:49:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AEB9880E79;
+	Wed, 27 Aug 2025 21:54:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id h2AvEPOqRjPJ; Wed, 27 Aug 2025 21:49:40 +0000 (UTC)
+ id O9jbCPTznSkM; Wed, 27 Aug 2025 21:54:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 15A4E810D5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A950A80ECA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 15A4E810D5;
-	Wed, 27 Aug 2025 21:49:40 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 608CBB8C
- for <buildroot@buildroot.org>; Wed, 27 Aug 2025 21:49:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A950A80ECA;
+	Wed, 27 Aug 2025 21:54:49 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id DCB09114
+ for <buildroot@buildroot.org>; Wed, 27 Aug 2025 21:54:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4C35D80DAB
- for <buildroot@buildroot.org>; Wed, 27 Aug 2025 21:49:39 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CE73261221
+ for <buildroot@buildroot.org>; Wed, 27 Aug 2025 21:54:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q_0Z-JvI1qAO for <buildroot@buildroot.org>;
- Wed, 27 Aug 2025 21:49:38 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6D27380F51
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6D27380F51
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6D27380F51
- for <buildroot@buildroot.org>; Wed, 27 Aug 2025 21:49:38 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 6664219F54D;
- Wed, 27 Aug 2025 23:49:35 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 27 Aug 2025 23:49:35 +0200
-MIME-Version: 1.0
-Date: Wed, 27 Aug 2025 23:49:35 +0200
-To: Thomas Devoogdt <thomas@devoogdt.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250827071752.1760654-1-thomas@devoogdt.com>
-References: <20250827071752.1760654-1-thomas@devoogdt.com>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <6e3994b190d42c3e8f45481e7f3438c9@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1756331376;
- bh=x4UAafiRIBa48s6axmWzDvvTPtb+a6/8MmVveiSebl0=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=lq5keWbNecUYVw9mL1j+gAzn1utCwO6jBPKO4ajSQNRhEOSoXnNE3GF+9TIlYmkf9
- GjRT77UENJQWzhLnf7Z2profchom0bN+FdpJtMwuHNg9xa4lkiy1vb9/XQc5diiya6
- SPEHAWlrGZC0+MdwF3f1SWDfugsrPl30mEgIxdCMiKpUOsjyLDqyXF20avZNsJzDI2
- SQxwq9fycKjloelMas6fTKkjtmlGxgvlpsz8dwY1F5ZFNgtw5KuLVSqIONxYzOYgfO
- WWPU9bCRaeQqlWcqvel/GUH/RnAOigSolkShtLXNVSe+EJxjtbebR+WOizPOULH4Du
- KSmFblhessqew==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=lq5keWbN
-Subject: Re: [Buildroot] [PATCH v1] package/lighttpd: bump to 1.4.81
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pZiW_jsxJuG0 for <buildroot@buildroot.org>;
+ Wed, 27 Aug 2025 21:54:48 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 22C966122E
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 22C966122E
+ for <buildroot@buildroot.org>; Wed, 27 Aug 2025 21:54:48 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 0F6DF87BE9; Wed, 27 Aug 2025 21:54:48 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 27 Aug 2025 23:51:01 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 369518b372c0c1748aa4456dee2f8b8bc8a3052b
+X-Git-Newrev: 97e52b323c8940d6022e39451cc4e7c9500a8081
+X-Patchwork-Hint: ignore
+Message-Id: <20250827215448.0F6DF87BE9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libfcgi: update to
+ 2.4.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,76 +60,47 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=97e52b323c8940d6022e39451cc4e7c9500a8081
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Thanks for the patch. I have a comment, see below.
+Announcement:
+- https://github.com/FastCGI-Archives/fcgi2/releases/tag/2.4.6
 
-On 27/08/2025 09:17, Thomas Devoogdt wrote:
-> News:
-> - https://www.lighttpd.net/2025/8/13/1.4.80/
-> - https://www.lighttpd.net/2025/8/17/1.4.81/
-> 
-> See Changes from 1.4.79:
-> 
-> [build] remove references to libev; no longer used
-> 
-> So drop here as well.
-> 
-> Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
-> ---
->  package/lighttpd/lighttpd.hash | 8 ++++----
->  package/lighttpd/lighttpd.mk   | 9 +--------
->  2 files changed, 5 insertions(+), 12 deletions(-)
-> 
-[...]
-> diff --git a/package/lighttpd/lighttpd.mk 
-> b/package/lighttpd/lighttpd.mk
-> index 5337042340..71c860a31a 100644
-> --- a/package/lighttpd/lighttpd.mk
-> +++ b/package/lighttpd/lighttpd.mk
-> @@ -5,7 +5,7 @@
->  
-> ################################################################################
-> 
->  LIGHTTPD_VERSION_MAJOR = 1.4
-> -LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).79
-> +LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).81
->  LIGHTTPD_SOURCE = lighttpd-$(LIGHTTPD_VERSION).tar.xz
->  LIGHTTPD_SITE = 
-> http://download.lighttpd.net/lighttpd/releases-$(LIGHTTPD_VERSION_MAJOR).x
->  LIGHTTPD_LICENSE = BSD-3-Clause
-> @@ -76,13 +76,6 @@ else
->  LIGHTTPD_CONF_OPTS += -Dwith_ldap=disabled
->  endif
-> 
-> -ifeq ($(BR2_PACKAGE_LIGHTTPD_LIBEV),y)
+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/libfcgi/libfcgi.hash | 2 +-
+ package/libfcgi/libfcgi.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-If you remove the use of BR2_PACKAGE_LIGHTTPD_LIBEV here,
-you should also remove the option from Config.in too, and
-add an entry in the Config.in.legacy.
-
-Could you do so for the branch "next" please?
-
-> -LIGHTTPD_DEPENDENCIES += libev
-> -LIGHTTPD_CONF_OPTS += -Dwith_libev=enabled
-> -else
-> -LIGHTTPD_CONF_OPTS += -Dwith_libev=disabled
-> -endif
-> -
->  ifeq ($(BR2_PACKAGE_LIGHTTPD_LUA),y)
->  LIGHTTPD_DEPENDENCIES += lua
->  LIGHTTPD_CONF_OPTS += -Dwith_lua=true
-> --
-> 2.43.0
-
-Best regards,
-
-Julien.
+diff --git a/package/libfcgi/libfcgi.hash b/package/libfcgi/libfcgi.hash
+index 371dba8939..348b0b6867 100644
+--- a/package/libfcgi/libfcgi.hash
++++ b/package/libfcgi/libfcgi.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  92b0111a98d8636e06c128444a3d4d7a720bdd54e6ee4dd0c7b67775b1b0abff  libfcgi-2.4.5.tar.gz
++sha256  39af4fb21a6d695a5f0b1c4fa95776d2725f6bc6c77680943a2ab314acd505c1  libfcgi-2.4.6.tar.gz
+ sha256  f0a8fe4513a43e8eebb24cdcf9d2e7efc52e4d8259178c6d76d3d84418397d81  LICENSE
+diff --git a/package/libfcgi/libfcgi.mk b/package/libfcgi/libfcgi.mk
+index 2348af843b..e0ef6da55c 100644
+--- a/package/libfcgi/libfcgi.mk
++++ b/package/libfcgi/libfcgi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBFCGI_VERSION = 2.4.5
++LIBFCGI_VERSION = 2.4.6
+ LIBFCGI_SITE = $(call github,FastCGI-Archives,fcgi2,$(LIBFCGI_VERSION))
+ LIBFCGI_LICENSE = OML
+ LIBFCGI_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
