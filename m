@@ -4,49 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A658CA0FED
-	for <buildroot@archiver.kernel.org>; Wed, 27 Aug 2025 21:03:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57B8BCA0FED
+	for <buildroot@archiver.kernel.org>; Wed, 27 Aug 2025 21:04:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C844982AB6;
-	Wed, 27 Aug 2025 21:03:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 17F2482BBA;
+	Wed, 27 Aug 2025 21:04:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0jTvhdOTAh1X; Wed, 27 Aug 2025 21:03:36 +0000 (UTC)
+ id XjMjWRBWO7Kg; Wed, 27 Aug 2025 21:04:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 005EE82AC8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4239D82C38
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 005EE82AC8;
-	Wed, 27 Aug 2025 21:03:35 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id BCCCD114
- for <buildroot@buildroot.org>; Wed, 27 Aug 2025 21:03:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4239D82C38;
+	Wed, 27 Aug 2025 21:04:08 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id B9F7817D
+ for <buildroot@buildroot.org>; Wed, 27 Aug 2025 21:04:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9F66F411D3
- for <buildroot@buildroot.org>; Wed, 27 Aug 2025 21:03:34 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A9B1D82C38
+ for <buildroot@buildroot.org>; Wed, 27 Aug 2025 21:04:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T-Ei2mIVjAFA for <buildroot@buildroot.org>;
- Wed, 27 Aug 2025 21:03:34 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E6D73411CF
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E6D73411CF
- for <buildroot@buildroot.org>; Wed, 27 Aug 2025 21:03:33 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DDF5087BE6; Wed, 27 Aug 2025 21:03:33 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 27 Aug 2025 23:02:16 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 9f9ec04c73f0b59eff324c1f23ac036dada3a185
-X-Git-Newrev: 080975a9f48ee63063207034c36987c68f09e54d
-X-Patchwork-Hint: ignore
-Message-Id: <20250827210333.DDF5087BE6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libnftnl: bump version
- to 1.3.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id S0_H_YSsnyJS for <buildroot@buildroot.org>;
+ Wed, 27 Aug 2025 21:04:06 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 20FF282BBA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 20FF282BBA
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 20FF282BBA
+ for <buildroot@buildroot.org>; Wed, 27 Aug 2025 21:04:05 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id 1DDCFB00548;
+ Wed, 27 Aug 2025 23:04:03 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
+ via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Wed, 27 Aug 2025 23:04:03 +0200
+MIME-Version: 1.0
+Date: Wed, 27 Aug 2025 23:04:03 +0200
+To: Petr Vorel <petr.vorel@gmail.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250826231742.220244-1-petr.vorel@gmail.com>
+References: <20250826231742.220244-1-petr.vorel@gmail.com>
+User-Agent: Webmail Free/1.6.11
+Message-ID: <aad00bfce5b22b10e46ec3c1049f9e28@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1756328644;
+ bh=NFwjJWHPHIP9G93okBj3rwqpoqx9vnBFctkVZYmmDZ0=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=WFYKBVLQW8/Cvvjcy9PIf3ezcukEGasaJMfQJySXWY0+//B4GATE6HXkztkFUjI4S
+ K23g94Kowm4QmELhKMPPN9NullGpYLNfu1OLc1MZJSf3TB6YCXbdIrss0RYBdAVY8v
+ ZLO5vRlLzZqM9Y8wJopTFEBNdtThAzgrxUH71UTs8AzJTVbXcf2RcSol/jy8U5Ht0t
+ gMfS59r7EaqUP1h4MhjPa2jWzAXpNu+NZkkFcpoptzPAbAmSY1GNPIFT22ZK7YEBn3
+ xoR828W0gY0cGUVhaTZJn+srnDR+b0IuoThnwn7I7/fFYLaFjeVqz5uH4pwsV14uKB
+ ay6NX9B/rI28w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=WFYKBVLQ
+Subject: Re: [Buildroot] [PATCH 1/1] package/libnftnl: bump version to 1.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,55 +82,15 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=080975a9f48ee63063207034c36987c68f09e54d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On 27/08/2025 01:17, Petr Vorel wrote:
+> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 
-For change log, see:
-https://git.netfilter.org/libnftnl/log/?h=libnftnl-1.3.0
-
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-[Julien: add link to git change log]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/libnftnl/libnftnl.hash | 5 +++--
- package/libnftnl/libnftnl.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/package/libnftnl/libnftnl.hash b/package/libnftnl/libnftnl.hash
-index bd29e76bc3..1182d31fee 100644
---- a/package/libnftnl/libnftnl.hash
-+++ b/package/libnftnl/libnftnl.hash
-@@ -1,8 +1,9 @@
- # From http://www.netfilter.org/projects/libnftnl/downloads.html
- # Checked pgp signature:
--# https://www.netfilter.org/projects/libnftnl/files/libnftnl-1.2.7.tar.xz.sig
-+# https://www.netfilter.org/projects/libnftnl/files/libnftnl-1.3.0.tar.xz.sig
- # with key:
- # https://www.netfilter.org/files/coreteam-gpg-key-0xD55D978A8A1420E4.txt
--sha256  9122774f968093d5c0bacddd67de480f31fa4073405a7fc058a34b0f387aecb3  libnftnl-1.2.7.tar.xz
-+# https://www.netfilter.org/projects/libnftnl/files/libnftnl-1.3.0.tar.xz.sha256sum
-+sha256  0f4be47a8bb8b77a350ee58cbd4b5fae6260ad486a527706ab15cfe1dd55a3c4  libnftnl-1.3.0.tar.xz
- # Locally computed:
- sha256  98193898c663001eff2fdcfb676e210c13042bc1a05e8d570c363efa396f8e24  COPYING
-diff --git a/package/libnftnl/libnftnl.mk b/package/libnftnl/libnftnl.mk
-index 65a1431e94..26f112c504 100644
---- a/package/libnftnl/libnftnl.mk
-+++ b/package/libnftnl/libnftnl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBNFTNL_VERSION = 1.2.7
-+LIBNFTNL_VERSION = 1.3.0
- LIBNFTNL_SITE = https://netfilter.org/projects/libnftnl/files
- LIBNFTNL_SOURCE = libnftnl-$(LIBNFTNL_VERSION).tar.xz
- LIBNFTNL_LICENSE = GPL-2.0+
+Applied to next, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
