@@ -4,72 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A36E7CA0EFF
-	for <buildroot@archiver.kernel.org>; Wed, 27 Aug 2025 21:57:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 315A1CA0FED
+	for <buildroot@archiver.kernel.org>; Wed, 27 Aug 2025 22:29:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 76E37831CA;
-	Wed, 27 Aug 2025 21:57:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D900E8126E;
+	Wed, 27 Aug 2025 22:29:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DujL7sacR4XS; Wed, 27 Aug 2025 21:56:59 +0000 (UTC)
+ id ssSgrGqWYBZY; Wed, 27 Aug 2025 22:29:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9E9CD831B0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E692781223
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9E9CD831B0;
-	Wed, 27 Aug 2025 21:56:59 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 06F7FB8C
- for <buildroot@buildroot.org>; Wed, 27 Aug 2025 21:56:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E692781223;
+	Wed, 27 Aug 2025 22:29:47 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id EEBDCB8C
+ for <buildroot@buildroot.org>; Wed, 27 Aug 2025 22:29:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id ECFEA40B8F
- for <buildroot@buildroot.org>; Wed, 27 Aug 2025 21:56:58 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E2CBD81220
+ for <buildroot@buildroot.org>; Wed, 27 Aug 2025 22:29:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FMj0RwdE5DuN for <buildroot@buildroot.org>;
- Wed, 27 Aug 2025 21:56:58 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 51CAC40AD5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 51CAC40AD5
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 51CAC40AD5
- for <buildroot@buildroot.org>; Wed, 27 Aug 2025 21:56:57 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ku5fnro21JZ3 for <buildroot@buildroot.org>;
+ Wed, 27 Aug 2025 22:29:45 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F21A681212
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F21A681212
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id F21A681212
+ for <buildroot@buildroot.org>; Wed, 27 Aug 2025 22:29:44 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:7427:ac55:2702:f075])
  (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id 21FC278050C;
- Wed, 27 Aug 2025 23:56:55 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:7427:ac55:2702:f075
- via 2a01:e0a:485:b220:7427:ac55:2702:f075 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 27 Aug 2025 23:56:55 +0200
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id AD1565FFB4;
+ Thu, 28 Aug 2025 00:29:40 +0200 (CEST)
+To: buildroot@buildroot.org
+Cc: Julien Olivain <ju.o@free.fr>
+Date: Thu, 28 Aug 2025 00:29:34 +0200
+Message-ID: <20250827222934.1249498-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.51.0
 MIME-Version: 1.0
-Date: Wed, 27 Aug 2025 23:56:55 +0200
-To: Andreas Ziegler <br015@umbiko.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250827055548.1739-1-br015@umbiko.net>
-References: <20250827055548.1739-1-br015@umbiko.net>
-User-Agent: Webmail Free/1.6.11
-Message-ID: <25267b806a1461a164ad25c37ec15e35@free.fr>
-X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1756331816;
- bh=Rof/ZVp9cjsbgRxGWUvT/FOzDeiMm3AwbB6377hN/Ow=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=gKq1t68ZD4Z6BCQjlcb7ZIuYR8/z4RVWgobMKBsc7b0yj/yXYSTAv9iJV2yiRADTS
- wqEosl1cdMaXThZ73sYIFVjBR1Kw6gb//N1etbnc5cpK7ZFlM/NCgSSOFBlmM84hKi
- FxtzGIgtB5s8rwir2tkUp+9W2vv6Bh2iwRpTIJbS47vT47HshWwJqDEkuTOe29zRtj
- Paa0+sobEEsoiV29SQfOFOazjrU/CzuAroNCLf92RSTFBfaxsQVHjlkwbZbE31zXd1
- MmZ4TAorVDwfUl/WkQKpj3z25w0JZ4WFqF0qv38f8TL1trkoX9dYsA/b4fL0b265r+
- nYsNr6BguzC1A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1756333781;
+ bh=FLkxQd0Ili7BzIH1juOVxtrPmU+1EHuSNvWhMMJXemA=;
+ h=From:To:Cc:Subject:Date:From;
+ b=Dk8nGdk9bmLELTAntW/gHAD58K5yOyEg9V8PlwcmG/HminezpydK1crKiq0Et4QLz
+ jvrtavW+0T/kI2MMMP9BmuCMRT7Oa45A/RDUq82BtC1gpUOmLqj4fUgRIuqgbwuCwz
+ /n183UVNlRNUlOMxuQNC9JkuTCsAF6dbyxdC6w1HrTejdrL7pbGz8jyu7udM6kRif/
+ HV4bA97RRQ9Dmnm/9w4L4OJgX7KZ09tFT1s4oGm0BNVWB1e84/fGLuROEpyzWDPjF3
+ LuoalxcC1uD43POErlTCRAM2R5/mK/FV9p7CxoDx2g7AwuRjbdFYRQyBeEODOs3Wje
+ aEXsxwaxqDMkA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=gKq1t68Z
-Subject: Re: [Buildroot] [PATCH 1/1] DEVELOPERS: upgrade Andreas Ziegler's
- email address
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Dk8nGdk9
+Subject: [Buildroot] [PATCH next 1/1] package/acpica: bump to version
+ 20250807
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,18 +78,52 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 27/08/2025 07:55, Andreas Ziegler wrote:
-> The old one lasted for 10 years, lately spam
-> levels reached a rather uncomfortable level ...
-> 
-> Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+For change log since 20241212, see:
+https://github.com/acpica/acpica/blob/20250807/documents/changes.txt
 
-Applied to master, thanks.
+License file hash is changed after a year update in upstream commit:
+https://github.com/acpica/acpica/commit/53553c302b5fc57afe55dd3d96ce3aa861dea1df
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/acpica/acpica.hash | 4 ++--
+ package/acpica/acpica.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/acpica/acpica.hash b/package/acpica/acpica.hash
+index 9972e34b3b..e88107e9c7 100644
+--- a/package/acpica/acpica.hash
++++ b/package/acpica/acpica.hash
+@@ -1,3 +1,3 @@
+ # locally computed hash
+-sha256  9dca83cfee390b710485fbdf787048370049c05723b10cc220cfef6e13c31961  acpica-unix-20241212.tar.gz
+-sha256  b28f54dc421531bbe269afd8c28bf6fdfd6affbe50c2831464f777ec1766d4a5  source/include/acpi.h
++sha256  eaca4c0248db872a055ab38b0deab4f5f577d1a0cada0fcbc0d80955e2a98e33  acpica-unix-20250807.tar.gz
++sha256  dbfa87ff77586ffd8da1185981a9695e80db09b114b3b00c194a9bcc2292a95e  source/include/acpi.h
+diff --git a/package/acpica/acpica.mk b/package/acpica/acpica.mk
+index 2c97c04367..e236a81ed0 100644
+--- a/package/acpica/acpica.mk
++++ b/package/acpica/acpica.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-ACPICA_VERSION = 20241212
++ACPICA_VERSION = 20250807
+ ACPICA_SOURCE = acpica-unix-$(ACPICA_VERSION).tar.gz
+-ACPICA_SITE = https://github.com/user-attachments/files/18117992
++ACPICA_SITE = https://github.com/user-attachments/files/21674610
+ ACPICA_LICENSE = BSD-3-Clause or GPL-2.0
+ ACPICA_LICENSE_FILES = source/include/acpi.h
+ ACPICA_DEPENDENCIES = host-bison host-flex
+-- 
+2.51.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
