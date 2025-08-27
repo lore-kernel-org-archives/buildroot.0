@@ -1,52 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A137FCAC586
-	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 14:17:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12997CAC581
+	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 14:17:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 767AD60690;
-	Mon,  8 Sep 2025 14:17:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D7A0C806AC;
+	Mon,  8 Sep 2025 14:17:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id t8tSX6G3n-5v; Mon,  8 Sep 2025 14:17:29 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 44wC1sKNtChI; Mon,  8 Sep 2025 14:17:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A744560715
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 63FB3806A5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A744560715;
-	Mon,  8 Sep 2025 14:17:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 63FB3806A5;
+	Mon,  8 Sep 2025 14:17:24 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1D7B4186
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:31 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5D71340073
+ by lists1.osuosl.org (Postfix) with ESMTP id 2E19E186
  for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:30 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id DF57340065
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7HZ1MWkvEE2p for <buildroot@buildroot.org>;
- Mon,  8 Sep 2025 14:16:29 +0000 (UTC)
+ id e5UFz5SJFlTU for <buildroot@buildroot.org>;
+ Mon,  8 Sep 2025 14:16:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A6B654004F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 43B8F40054
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A6B654004F
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:29 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 43B8F40054
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 97E68818B3; Mon,  8 Sep 2025 14:16:29 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 2C8DE818B3; Mon,  8 Sep 2025 14:16:26 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 29 Aug 2025 10:43:27 +0200
+Date: Wed, 27 Aug 2025 23:26:29 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ef62f8121932381635a1addada1f073e09ec2bbc
-X-Git-Newrev: 4dc68655682388c34339abcd76192718cf0786da
+X-Git-Oldrev: 080975a9f48ee63063207034c36987c68f09e54d
+X-Git-Newrev: 369518b372c0c1748aa4456dee2f8b8bc8a3052b
 X-Patchwork-Hint: ignore
-Message-Id: <20250908141629.97E68818B3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/acpica: bump to version 20250807
+Message-Id: <20250908141626.2C8DE818B3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/nftables: Bump version to 1.1.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,54 +57,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4dc68655682388c34339abcd76192718cf0786da
+commit: https://git.buildroot.net/buildroot/commit/?id=369518b372c0c1748aa4456dee2f8b8bc8a3052b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For change log since 20241212, see:
-https://github.com/acpica/acpica/blob/20250807/documents/changes.txt
+For change log since 1.1.0, see:
+https://git.netfilter.org/nftables/log/?h=v1.1.4
 
-License file hash is changed after a year update in upstream commit:
-https://github.com/acpica/acpica/commit/53553c302b5fc57afe55dd3d96ce3aa861dea1df
-
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+[Julien: add link to git log]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/acpica/acpica.hash | 4 ++--
- package/acpica/acpica.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/nftables/nftables.hash | 5 +++--
+ package/nftables/nftables.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/acpica/acpica.hash b/package/acpica/acpica.hash
-index 9972e34b3b..e88107e9c7 100644
---- a/package/acpica/acpica.hash
-+++ b/package/acpica/acpica.hash
-@@ -1,3 +1,3 @@
- # locally computed hash
--sha256  9dca83cfee390b710485fbdf787048370049c05723b10cc220cfef6e13c31961  acpica-unix-20241212.tar.gz
--sha256  b28f54dc421531bbe269afd8c28bf6fdfd6affbe50c2831464f777ec1766d4a5  source/include/acpi.h
-+sha256  eaca4c0248db872a055ab38b0deab4f5f577d1a0cada0fcbc0d80955e2a98e33  acpica-unix-20250807.tar.gz
-+sha256  dbfa87ff77586ffd8da1185981a9695e80db09b114b3b00c194a9bcc2292a95e  source/include/acpi.h
-diff --git a/package/acpica/acpica.mk b/package/acpica/acpica.mk
-index 2c97c04367..e236a81ed0 100644
---- a/package/acpica/acpica.mk
-+++ b/package/acpica/acpica.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/nftables/nftables.hash b/package/nftables/nftables.hash
+index ef635cd3c3..b7c65777ca 100644
+--- a/package/nftables/nftables.hash
++++ b/package/nftables/nftables.hash
+@@ -1,8 +1,9 @@
+ # From https://netfilter.org/projects/nftables/downloads.html
+ # Checked pgp signature:
+-# https://netfilter.org/projects/nftables/files/nftables-1.1.0.tar.xz.sig
++# https://netfilter.org/projects/nftables/files/nftables-1.1.4.tar.xz.sig
+ # with key:
+ # https://netfilter.org/files/coreteam-gpg-key-0xD55D978A8A1420E4.txt
+-sha256  ef3373294886c5b607ee7be82c56a25bc04e75f802f8e8adcd55aac91eb0aa24  nftables-1.1.0.tar.xz
++# https://www.netfilter.org/projects/nftables/files/nftables-1.1.4.tar.xz.sha256sum
++sha256  3444f0012af0472399eeae89a758b9c6dc5f311f6c67a48988fa1600fc4bac86  nftables-1.1.4.tar.xz
+ # Locally computed:
+ sha256  4ee1e51baf5f3166712fa0c3e01338c7257e50ddef245d28bb14ad68f6070ba5  COPYING
+diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
+index f6e6a64efd..94bf977725 100644
+--- a/package/nftables/nftables.mk
++++ b/package/nftables/nftables.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ACPICA_VERSION = 20241212
-+ACPICA_VERSION = 20250807
- ACPICA_SOURCE = acpica-unix-$(ACPICA_VERSION).tar.gz
--ACPICA_SITE = https://github.com/user-attachments/files/18117992
-+ACPICA_SITE = https://github.com/user-attachments/files/21674610
- ACPICA_LICENSE = BSD-3-Clause or GPL-2.0
- ACPICA_LICENSE_FILES = source/include/acpi.h
- ACPICA_DEPENDENCIES = host-bison host-flex
+-NFTABLES_VERSION = 1.1.0
++NFTABLES_VERSION = 1.1.4
+ NFTABLES_SOURCE = nftables-$(NFTABLES_VERSION).tar.xz
+ NFTABLES_SITE = https://www.netfilter.org/projects/nftables/files
+ NFTABLES_DEPENDENCIES = libmnl libnftnl host-pkgconf $(TARGET_NLS_DEPENDENCIES)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
