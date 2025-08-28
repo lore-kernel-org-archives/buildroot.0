@@ -1,70 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB0E3C8303F
-	for <buildroot@archiver.kernel.org>; Thu, 28 Aug 2025 10:18:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4234FC8303F
+	for <buildroot@archiver.kernel.org>; Thu, 28 Aug 2025 10:24:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AADFC82B51;
-	Thu, 28 Aug 2025 10:18:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F115B40987;
+	Thu, 28 Aug 2025 10:24:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id w1gcFCAn5Yqc; Thu, 28 Aug 2025 10:18:59 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jVbVHbqFUgW6; Thu, 28 Aug 2025 10:24:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DB68282B9F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2A12440B60
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DB68282B9F;
-	Thu, 28 Aug 2025 10:18:58 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4AD5517D
- for <buildroot@buildroot.org>; Thu, 28 Aug 2025 10:18:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2A12440B60;
+	Thu, 28 Aug 2025 10:24:49 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8E40017D
+ for <buildroot@buildroot.org>; Thu, 28 Aug 2025 10:24:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2F89682B51
- for <buildroot@buildroot.org>; Thu, 28 Aug 2025 10:18:58 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7F8DB40C39
+ for <buildroot@buildroot.org>; Thu, 28 Aug 2025 10:24:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Xa8uGAeJiIoc for <buildroot@buildroot.org>;
- Thu, 28 Aug 2025 10:18:57 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1828:2000:679::23; helo=helium.openadk.org;
- envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 224D282B9F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 224D282B9F
-Received: from helium.openadk.org (helium.openadk.org
- [IPv6:2a00:1828:2000:679::23])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 224D282B9F
- for <buildroot@buildroot.org>; Thu, 28 Aug 2025 10:18:56 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id B4ED23520762; Thu, 28 Aug 2025 12:18:54 +0200 (CEST)
-Date: Thu, 28 Aug 2025 12:18:54 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NWTDnaCAYNDs for <buildroot@buildroot.org>;
+ Thu, 28 Aug 2025 10:24:47 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7BFBB40987
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7BFBB40987
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7BFBB40987
+ for <buildroot@buildroot.org>; Thu, 28 Aug 2025 10:24:47 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -77535260; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Thu, 28 Aug 2025 10:24:43 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peko@dell.be.48ers.dk>) id 1urZoA-0066Ys-29;
+ Thu, 28 Aug 2025 12:24:42 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Message-ID: <aLAtDsqpq1ePUy46@waldemar-brodkorb.de>
+Date: Thu, 28 Aug 2025 12:24:40 +0200
+Message-Id: <20250828102441.1455178-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
-Content-Disposition: inline
-X-Operating-System: Linux 6.1.0-38-amd64 x86_64
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1756376334; bh=8yx4EInJqFyFXRYJHcaWTl7d3Cw007scIyUq4ik9xpg=;
- h=Date:From:To:Subject:From;
- b=KfnWN631r3y8/JKrUAVc8dC4sNYQEng633hn4uLHLToUu/0z9AfsKRXGcOPxsjHCb
- oijO7H3pGpE0EM7xTiZM8o2G6yKjO/rggiBoXvu/MM3W0t3pHu8OlmDzI8fEodd8Tm
- ZzrqpnqSwrQwdd1fcqwWCWclbNGAU36RsebFJ4eXOae5NXtNo+TfTuWRKGQODDyrLS
- g7WkiyQT3+SEYVQdGOsJDrp7nafMXK2yf3ca3P55ITmPohL+ZrIqus2xB7Gwuyx0Ku
- 3XVpQutbVmLY4vZr4QsgP/11HZ5bf7hUVZ3gtqS3Fvnl0KgqE7Vo2ivx1xlf+DBz1s
- ZhfZ7Ymn2wCAA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=P1R101G5RaNs0NjEv4hdpMxRNXPHl6UYk+qqttAST2YiVg2UAQX9Ty8l0yjOPSmadqiVP+lpEEx7COLPErbgToLXQG5Io2UkmWVl9D5Dj1uv+/2CI34is+5QNHKolRbbZWa8irdtFuOPBSUylquC6sUfGowpMSncjJoqSkbz/Dto2tbmP34IVMmTBFclPkAcprCtvjXJ7fFWsPwZInYa1x0UwwUi7P5otxvtwYfsdl0onOuvb/GmJeM8LpKK2OdhyC3mGbUH1rEddA4TX7PnYJIYy9Fl59JbsAx/XfBEsES08z6Jc4lvMkOgpjkbnOEmaGwvMjGpa7cCrXu9R8K7Xg==;
+ s=purelymail1; d=purelymail.com; v=1;
+ bh=zxYmMCcwI9Ozzp8ivxQZsEaWklh3t55XC9WX51UTmLM=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
- header.from=openadk.org
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
- header.s=2022 header.b=KfnWN631
-Subject: [Buildroot] [PATCH] xterm: bump to 401
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail1 header.b=P1R101G5
+X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
+Subject: [Buildroot] [PATCH] package/squid: bump to version 6.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,44 +83,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-See the Changes here:
-https://invisible-island.net/xterm/xterm.log.html
+Bufix release fixing a number of issues:
 
-COPYING was changed, the year was bumped and some extra
-license information was removed.
+- Bug 5352: Do not get stuck in RESPMOD after pausing peer read(2)
+- Bug 5489: Fix "make check" linking on Solaris
+- Fix SNMP cacheNumObjCount -- number of cached objects
+- Do not duplicate received Surrogate-Capability in sent requests
+- Fix Mem::Segment::open() stub to fix build without shm_open()
+- ... and CI and documentation updates
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+https://github.com/squid-cache/squid/releases/tag/SQUID_6_14
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xterm/xterm.hash | 4 ++--
- package/xterm/xterm.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/squid/squid.hash | 2 +-
+ package/squid/squid.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/xterm/xterm.hash b/package/xterm/xterm.hash
-index e0fdcfe66e..e86db1c06e 100644
---- a/package/xterm/xterm.hash
-+++ b/package/xterm/xterm.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256  1cd5763d94d9370fed10d804e831a089b2ace0e7a74b6f56ef5a16a766bde7be  xterm-389.tgz
-+sha256  3da2b5e64cb49b03aa13057d85e62e1f2e64f7c744719c00d338d11cd3e6ca1a  xterm-401.tgz
+diff --git a/package/squid/squid.hash b/package/squid/squid.hash
+index df52a3be16..329d61ca93 100644
+--- a/package/squid/squid.hash
++++ b/package/squid/squid.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
--sha256  e38de4a0780954b5a7e69b5fa6c571daa8a1bfbacb4f2c5b2f07099e1a1d7c93  COPYING
-+sha256  99f70364bb769635eb9de18cc286e16cb78026f3b6478276344ee8619098dff6  COPYING
-diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
-index c2c97dd318..fb6de107e9 100644
---- a/package/xterm/xterm.mk
-+++ b/package/xterm/xterm.mk
+-sha256  232e0567946ccc0115653c3c18f01e83f2d9cc49c43d9dead8b319af0b35ad52  squid-6.13.tar.xz
++sha256  9eafe06f58a199b918e79d33d8aa03afb9ae0c11d18974dca0b44c2669cab6dd  squid-6.14.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index 4519a7d36e..b021170d9b 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XTERM_VERSION = 389
-+XTERM_VERSION = 401
- XTERM_SOURCE = xterm-$(XTERM_VERSION).tgz
- XTERM_SITE = http://invisible-mirror.net/archives/xterm
- XTERM_DEPENDENCIES = ncurses xlib_libXaw host-pkgconf
+-SQUID_VERSION = 6.13
++SQUID_VERSION = 6.14
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+ SQUID_SITE = https://github.com/squid-cache/squid/releases/download/SQUID_$(subst .,_,$(SQUID_VERSION))
+ SQUID_LICENSE = GPL-2.0+
 -- 
-2.47.2
+2.39.5
 
 _______________________________________________
 buildroot mailing list
