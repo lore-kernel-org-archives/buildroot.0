@@ -1,76 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18A7AC8303F
-	for <buildroot@archiver.kernel.org>; Thu, 28 Aug 2025 13:05:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E5B0CA0EED
+	for <buildroot@archiver.kernel.org>; Thu, 28 Aug 2025 13:05:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BD47A40E19;
-	Thu, 28 Aug 2025 13:05:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1ACAD816FB;
+	Thu, 28 Aug 2025 13:05:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OcColHPMKxuY; Thu, 28 Aug 2025 13:05:30 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PFLASOvOOftA; Thu, 28 Aug 2025 13:05:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E165E40E09
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3AB87817A7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E165E40E09;
-	Thu, 28 Aug 2025 13:05:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3AB87817A7;
+	Thu, 28 Aug 2025 13:05:31 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id E187617D
- for <buildroot@buildroot.org>; Thu, 28 Aug 2025 13:05:27 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 648511B0
+ for <buildroot@buildroot.org>; Thu, 28 Aug 2025 13:05:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C8B3260D78
- for <buildroot@buildroot.org>; Thu, 28 Aug 2025 13:05:27 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 568FB6070F
+ for <buildroot@buildroot.org>; Thu, 28 Aug 2025 13:05:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2KvN2T6scZLo for <buildroot@buildroot.org>;
+ id piIeW0frt1JW for <buildroot@buildroot.org>;
  Thu, 28 Aug 2025 13:05:27 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
  helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D5A236070F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D5A236070F
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 733A660AF6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 733A660AF6
 Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D5A236070F
- for <buildroot@buildroot.org>; Thu, 28 Aug 2025 13:05:26 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 733A660AF6
+ for <buildroot@buildroot.org>; Thu, 28 Aug 2025 13:05:27 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id D12C71A0E38
- for <buildroot@buildroot.org>; Thu, 28 Aug 2025 13:05:23 +0000 (UTC)
+ by smtpout-02.galae.net (Postfix) with ESMTPS id DFF2C1A0E42
+ for <buildroot@buildroot.org>; Thu, 28 Aug 2025 13:05:25 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id A096960303
- for <buildroot@buildroot.org>; Thu, 28 Aug 2025 13:05:23 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id BAC7D60303
+ for <buildroot@buildroot.org>; Thu, 28 Aug 2025 13:05:25 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id E8FDC1C22C45A; 
- Thu, 28 Aug 2025 15:05:22 +0200 (CEST)
+ with ESMTPSA id 322831C22CBE7; 
+ Thu, 28 Aug 2025 15:05:25 +0200 (CEST)
 To: buildroot@buildroot.org
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 28 Aug 2025 15:05:09 +0200
-Message-ID: <20250828130513.146485-1-thomas.petazzoni@bootlin.com>
+Date: Thu, 28 Aug 2025 15:05:11 +0200
+Message-ID: <20250828130513.146485-3-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20250828130513.146485-1-thomas.petazzoni@bootlin.com>
+References: <20250828130513.146485-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=dkim; 
- t=1756386323; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding; bh=tewswkT3rO59AgUYS+TZpanP+i5bow7Jnrip9xFWFUQ=;
- b=XNO4ZspC5pVCox6ldHOu1pvJpuwufeXiZc7F8Y1u08JH1HZaj2VsUsDIk9HNCJnHCNTViD
- vdmrGGBCL/uQhpiQiofkwTyvKJEsrUuaQCMRmD5Nq0eLmCbWMxc3/d19ucytnvWAUQ09aI
- D8w4o56akf0EEOtQg5wVfhB5rybF30vLP5gh8vDTMCkFwR4DddbZ6Is/rlOwshwqp24l6f
- 7Qh7zMp7l69PtysHyWmZwd7y8G/586xURANlmuIYL1a62C4ydUNvou3C9HoQUCq9jbrCsg
- MgUhSmhW0+U5dRwu6Uu1wD5uakujdp2zY6Qq6pBQgCylwLMlHxn46SaqG77jZQ==
+ t=1756386325; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding:in-reply-to:references;
+ bh=xH4EFmfjlVmB69aTEwHu1dlXayCMAJBFVGNCEgF1ZpY=;
+ b=1VZuQhX4szGRNMuUzXKKg9a0nKLxSHMqlRah8GsLsKI2AGRunKY5Xaa6Ou4q0apB8852o1
+ dY90yKsWCKB9U64coN0OpurZg1wF0v6X/pxsOyMQI077XikpSfpSZ0SOPshnwwc0V1m2Nm
+ EiDwH6M+b5GTkAjnB+QXBOSpITlTZBFtUcLOG2eIEMqGBIsw5Sb6bd5mqfxDE+P+NylAjY
+ 5poSCRDtL5Rod7nUNi0TVeFku+2w07YkFg8rSVGbk/Y8LyFvv4skbD5MFaQB4cU8OjfYAz
+ UFkmsgtaC5qqikbmXbhWnBEYltuPVQm139+ixuzDEQLZFE+uGq04dIegUq8tgA==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=XNO4ZspC
-Subject: [Buildroot] [PATCH v2 1/3] package/libsvgtiny: add patch to fix GCC
- 15.x build issue
+ dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
+ header.a=rsa-sha256 header.s=dkim header.b=1VZuQhX4
+Subject: [Buildroot] [PATCH v2 3/3] package/netsurf-buildsystem: remove
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -89,71 +91,69 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add a small, easily backportable patch to fix GCC 15.x build
-issue. The issue is also fixed upstream in later releases, but this
-patch is a minimal fix that can be backported to LTS independently
-from a version bump.
-
-Fixes:
-
-  https://autobuild.buildroot.org/results/c3d703663faabe40448d908afbdbb351a016aece/
+This host package was only used as a build dependency of libsvgtiny,
+which itself has been removed, so it can be dropped as well.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-v1 -> v2: no changes
+v1 -> v2: No changes.
 
- ...ient-svgtiny_list-.c-add-missing-std.patch | 42 +++++++++++++++++++
- 1 file changed, 42 insertions(+)
- create mode 100644 package/libsvgtiny/0005-src-svgtiny_gradient-svgtiny_list-.c-add-missing-std.patch
+ DEVELOPERS                                    |  3 ---
+ .../netsurf-buildsystem.hash                  |  3 ---
+ .../netsurf-buildsystem.mk                    | 20 -------------------
+ 3 files changed, 26 deletions(-)
+ delete mode 100644 package/netsurf-buildsystem/netsurf-buildsystem.hash
+ delete mode 100644 package/netsurf-buildsystem/netsurf-buildsystem.mk
 
-diff --git a/package/libsvgtiny/0005-src-svgtiny_gradient-svgtiny_list-.c-add-missing-std.patch b/package/libsvgtiny/0005-src-svgtiny_gradient-svgtiny_list-.c-add-missing-std.patch
-new file mode 100644
-index 0000000000..17e63ba541
---- /dev/null
-+++ b/package/libsvgtiny/0005-src-svgtiny_gradient-svgtiny_list-.c-add-missing-std.patch
-@@ -0,0 +1,42 @@
-+From 1d86ce7e6ea9fae8285eed23d838f87ab3ac083c Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Tue, 19 Aug 2025 23:28:35 +0200
-+Subject: [PATCH] src/{svgtiny_gradient,svgtiny_list}.c: add missing <stdlib.h>
-+
-+Needed to get the prototype for malloc()/free().
-+
-+Upstream: N/A, already fixed upstream in a later release (but as part
-+of a larger commit)
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ src/svgtiny_gradient.c | 1 +
-+ src/svgtiny_list.c     | 1 +
-+ 2 files changed, 2 insertions(+)
-+
-+diff --git a/src/svgtiny_gradient.c b/src/svgtiny_gradient.c
-+index 3a8db73..5172223 100644
-+--- a/src/svgtiny_gradient.c
-++++ b/src/svgtiny_gradient.c
-+@@ -8,6 +8,7 @@
-+ #include <assert.h>
-+ #include <math.h>
-+ #include <string.h>
-++#include <stdlib.h>
-+ #include "svgtiny.h"
-+ #include "svgtiny_internal.h"
-+ 
-+diff --git a/src/svgtiny_list.c b/src/svgtiny_list.c
-+index 53cfb34..91e2c98 100644
-+--- a/src/svgtiny_list.c
-++++ b/src/svgtiny_list.c
-+@@ -11,6 +11,7 @@
-+  */
-+ 
-+ #include <assert.h>
-++#include <stdlib.h>
-+ #include "svgtiny.h"
-+ #include "svgtiny_internal.h"
-+ 
-+-- 
-+2.50.1
-+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 762cd6d430..9fbdace7c1 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1001,9 +1001,6 @@ F:	package/atest/
+ F:	package/crucible/
+ F:	package/kmscube/
+ 
+-N:	Fabio Porcedda <fabio.porcedda@gmail.com>
+-F:	package/netsurf-buildsystem/
+-
+ N:	Fabio Urquiza <fabiorush@gmail.com>
+ F:	package/bitcoin/
+ 
+diff --git a/package/netsurf-buildsystem/netsurf-buildsystem.hash b/package/netsurf-buildsystem/netsurf-buildsystem.hash
+deleted file mode 100644
+index 9da8c67aef..0000000000
+--- a/package/netsurf-buildsystem/netsurf-buildsystem.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally computed
+-sha256  b8620c6a95ccf071046cdb8e4e0ca149cdd58d292eb9ee02b3b0d63646466b72  netsurf-buildsystem-7574b41345968b5f7e9ca5875faccb1478ce0555-git4.tar.gz
+-sha256  b2ddc1d607332423f6cf415b2ac619a1c03dd565facdc39a571282a520929a65  llvm/LICENSE.TXT
+diff --git a/package/netsurf-buildsystem/netsurf-buildsystem.mk b/package/netsurf-buildsystem/netsurf-buildsystem.mk
+deleted file mode 100644
+index d4efec0e1d..0000000000
+--- a/package/netsurf-buildsystem/netsurf-buildsystem.mk
++++ /dev/null
+@@ -1,20 +0,0 @@
+-################################################################################
+-#
+-# netsurf-buildsystem
+-#
+-################################################################################
+-
+-NETSURF_BUILDSYSTEM_VERSION = 7574b41345968b5f7e9ca5875faccb1478ce0555
+-NETSURF_BUILDSYSTEM_SITE = http://git.netsurf-browser.org/buildsystem.git
+-NETSURF_BUILDSYSTEM_SITE_METHOD = git
+-NETSURF_BUILDSYSTEM_LICENSE = MIT, BSD-3-Clause (for llvm/* files)
+-NETSURF_BUILDSYSTEM_LICENSE_FILES = llvm/LICENSE.TXT
+-
+-NETSURF_BUILDSYSTEM_INSTALL_DIR = $(HOST_DIR)/share/netsurf-buildsystem
+-
+-define HOST_NETSURF_BUILDSYSTEM_INSTALL_CMDS
+-	mkdir -p $(NETSURF_BUILDSYSTEM_INSTALL_DIR)
+-	cp -dpfr $(@D)/* $(NETSURF_BUILDSYSTEM_INSTALL_DIR)
+-endef
+-
+-$(eval $(host-generic-package))
 -- 
 2.50.1
 
