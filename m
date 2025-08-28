@@ -4,70 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F363BCA0EED
-	for <buildroot@archiver.kernel.org>; Thu, 28 Aug 2025 10:01:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB0E3C8303F
+	for <buildroot@archiver.kernel.org>; Thu, 28 Aug 2025 10:18:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A1CFC821D8;
-	Thu, 28 Aug 2025 10:01:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AADFC82B51;
+	Thu, 28 Aug 2025 10:18:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IlhqM1m7DtZc; Thu, 28 Aug 2025 10:01:52 +0000 (UTC)
+ id w1gcFCAn5Yqc; Thu, 28 Aug 2025 10:18:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB888820B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DB68282B9F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CB888820B1;
-	Thu, 28 Aug 2025 10:01:52 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id C7E5517D
- for <buildroot@buildroot.org>; Thu, 28 Aug 2025 10:01:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DB68282B9F;
+	Thu, 28 Aug 2025 10:18:58 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4AD5517D
+ for <buildroot@buildroot.org>; Thu, 28 Aug 2025 10:18:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C4FCA400E3
- for <buildroot@buildroot.org>; Thu, 28 Aug 2025 10:01:51 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2F89682B51
+ for <buildroot@buildroot.org>; Thu, 28 Aug 2025 10:18:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UnGoOwHDOP0D for <buildroot@buildroot.org>;
- Thu, 28 Aug 2025 10:01:51 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2A40640C8B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2A40640C8B
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2A40640C8B
- for <buildroot@buildroot.org>; Thu, 28 Aug 2025 10:01:49 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 876252855; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Thu, 28 Aug 2025 10:01:46 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@dell.be.48ers.dk>) id 1urZRx-005h1D-2X;
- Thu, 28 Aug 2025 12:01:45 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Xa8uGAeJiIoc for <buildroot@buildroot.org>;
+ Thu, 28 Aug 2025 10:18:57 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1828:2000:679::23; helo=helium.openadk.org;
+ envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 224D282B9F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 224D282B9F
+Received: from helium.openadk.org (helium.openadk.org
+ [IPv6:2a00:1828:2000:679::23])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 224D282B9F
+ for <buildroot@buildroot.org>; Thu, 28 Aug 2025 10:18:56 +0000 (UTC)
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id B4ED23520762; Thu, 28 Aug 2025 12:18:54 +0200 (CEST)
+Date: Thu, 28 Aug 2025 12:18:54 +0200
+From: Waldemar Brodkorb <wbx@openadk.org>
 To: buildroot@buildroot.org
-Date: Thu, 28 Aug 2025 12:01:44 +0200
-Message-Id: <20250828100145.1356985-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.39.5
+Message-ID: <aLAtDsqpq1ePUy46@waldemar-brodkorb.de>
 MIME-Version: 1.0
-X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=KSs0nfL1dQWqIwUjBRz7CzcEDaV/35uxCgAvadMWzeRPtV8fFokrE8ofyKeRiK7DiQr5isqJUNJ1MYbsSuwnYNWqVzEWCrzKbAhOLn9ukMbP+uT9Nqir8oNkgWz66+Fg7osNZoPDcu9G9peH3pKw3HzKO21U6VOp28F2+7t1hpAxuDKqCnnm28K6/sVJF6wkQuYFZ5Qnv7ak20AYjCuR+r7+tAx+KtKa66CIl7sWPHfHBFtcPTBkXEO4JaPivs2HjA4B4YUWQCYbtYXbW2hNwkPTjXoi4/nEqS0z4J45+sCaf78v6qaXuc4dKVhL4IKTDf8VKA6IFMVRGeDZyiIFxQ==;
- s=purelymail1; d=purelymail.com; v=1;
- bh=Su151tgYMgbM3c+H20upD5DLPbETHzIt1YnKdXHkC7A=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+Content-Disposition: inline
+X-Operating-System: Linux 6.1.0-38-amd64 x86_64
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=openadk.org; s=2022; 
+ t=1756376334; bh=8yx4EInJqFyFXRYJHcaWTl7d3Cw007scIyUq4ik9xpg=;
+ h=Date:From:To:Subject:From;
+ b=KfnWN631r3y8/JKrUAVc8dC4sNYQEng633hn4uLHLToUu/0z9AfsKRXGcOPxsjHCb
+ oijO7H3pGpE0EM7xTiZM8o2G6yKjO/rggiBoXvu/MM3W0t3pHu8OlmDzI8fEodd8Tm
+ ZzrqpnqSwrQwdd1fcqwWCWclbNGAU36RsebFJ4eXOae5NXtNo+TfTuWRKGQODDyrLS
+ g7WkiyQT3+SEYVQdGOsJDrp7nafMXK2yf3ca3P55ITmPohL+ZrIqus2xB7Gwuyx0Ku
+ 3XVpQutbVmLY4vZr4QsgP/11HZ5bf7hUVZ3gtqS3Fvnl0KgqE7Vo2ivx1xlf+DBz1s
+ ZhfZ7Ymn2wCAA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ header.from=openadk.org
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=KSs0nfL1
-X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
-Subject: [Buildroot] [PATCH] package/unbound: mark CVE-2025-5994 as not
- applicable
+ unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
+ header.s=2022 header.b=KfnWN631
+Subject: [Buildroot] [PATCH] xterm: bump to 401
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -79,39 +76,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Stefan Ott <stefan@ott.net>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Unbound is vulnerable to CVE-2025-5994: "Cache poisoning via the ECS-enabled
-Rebirthday Attack" if built with --enable-subnet, which is not the case in
-Buildroot, so mark it as not applicable.
+See the Changes here:
+https://invisible-island.net/xterm/xterm.log.html
 
-https://nlnetlabs.nl/downloads/unbound/CVE-2025-5994.txt
+COPYING was changed, the year was bumped and some extra
+license information was removed.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/unbound/unbound.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/xterm/xterm.hash | 4 ++--
+ package/xterm/xterm.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/unbound/unbound.mk b/package/unbound/unbound.mk
-index 03a5e8e150..e9a32e6129 100644
---- a/package/unbound/unbound.mk
-+++ b/package/unbound/unbound.mk
-@@ -23,6 +23,9 @@ UNBOUND_CONF_OPTS = \
- 	--with-libexpat=$(STAGING_DIR)/usr \
- 	--with-ssl=$(STAGING_DIR)/usr
+diff --git a/package/xterm/xterm.hash b/package/xterm/xterm.hash
+index e0fdcfe66e..e86db1c06e 100644
+--- a/package/xterm/xterm.hash
++++ b/package/xterm/xterm.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256  1cd5763d94d9370fed10d804e831a089b2ace0e7a74b6f56ef5a16a766bde7be  xterm-389.tgz
++sha256  3da2b5e64cb49b03aa13057d85e62e1f2e64f7c744719c00d338d11cd3e6ca1a  xterm-401.tgz
+ # Locally calculated
+-sha256  e38de4a0780954b5a7e69b5fa6c571daa8a1bfbacb4f2c5b2f07099e1a1d7c93  COPYING
++sha256  99f70364bb769635eb9de18cc286e16cb78026f3b6478276344ee8619098dff6  COPYING
+diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
+index c2c97dd318..fb6de107e9 100644
+--- a/package/xterm/xterm.mk
++++ b/package/xterm/xterm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# Only vulnerable if built with --enable-subnet
-+UNBOUND_IGNORE_CVES += CVE-2025-5994
-+
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS_NPTL),y)
- UNBOUND_CONF_OPTS += --with-pthreads
- else
+-XTERM_VERSION = 389
++XTERM_VERSION = 401
+ XTERM_SOURCE = xterm-$(XTERM_VERSION).tgz
+ XTERM_SITE = http://invisible-mirror.net/archives/xterm
+ XTERM_DEPENDENCIES = ncurses xlib_libXaw host-pkgconf
 -- 
-2.39.5
+2.47.2
 
 _______________________________________________
 buildroot mailing list
