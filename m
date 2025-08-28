@@ -1,55 +1,55 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E5B0CA0EED
-	for <buildroot@archiver.kernel.org>; Thu, 28 Aug 2025 13:05:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24C20C8303F
+	for <buildroot@archiver.kernel.org>; Thu, 28 Aug 2025 13:05:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1ACAD816FB;
-	Thu, 28 Aug 2025 13:05:32 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PFLASOvOOftA; Thu, 28 Aug 2025 13:05:31 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3AB87817A7
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3AB87817A7;
-	Thu, 28 Aug 2025 13:05:31 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 648511B0
- for <buildroot@buildroot.org>; Thu, 28 Aug 2025 13:05:28 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 568FB6070F
- for <buildroot@buildroot.org>; Thu, 28 Aug 2025 13:05:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E5A6C60AF6;
+	Thu, 28 Aug 2025 13:05:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id piIeW0frt1JW for <buildroot@buildroot.org>;
+ id Td_UJQttQu3d; Thu, 28 Aug 2025 13:05:32 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8510760D78
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8510760D78;
+	Thu, 28 Aug 2025 13:05:32 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 835FB1B0
+ for <buildroot@buildroot.org>; Thu, 28 Aug 2025 13:05:28 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 752CC40D90
+ for <buildroot@buildroot.org>; Thu, 28 Aug 2025 13:05:28 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id h8-kEnbl-FpH for <buildroot@buildroot.org>;
  Thu, 28 Aug 2025 13:05:27 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
  helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 733A660AF6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 733A660AF6
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D5A4940D89
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D5A4940D89
 Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 733A660AF6
- for <buildroot@buildroot.org>; Thu, 28 Aug 2025 13:05:27 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D5A4940D89
+ for <buildroot@buildroot.org>; Thu, 28 Aug 2025 13:05:26 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id DFF2C1A0E42
+ by smtpout-02.galae.net (Postfix) with ESMTPS id 03A341A0E3C
  for <buildroot@buildroot.org>; Thu, 28 Aug 2025 13:05:25 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id BAC7D60303
- for <buildroot@buildroot.org>; Thu, 28 Aug 2025 13:05:25 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id D31DE60303
+ for <buildroot@buildroot.org>; Thu, 28 Aug 2025 13:05:24 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 322831C22CBE7; 
- Thu, 28 Aug 2025 15:05:25 +0200 (CEST)
+ with ESMTPSA id EFC331C22D785; 
+ Thu, 28 Aug 2025 15:05:23 +0200 (CEST)
 To: buildroot@buildroot.org
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 28 Aug 2025 15:05:11 +0200
-Message-ID: <20250828130513.146485-3-thomas.petazzoni@bootlin.com>
+Date: Thu, 28 Aug 2025 15:05:10 +0200
+Message-ID: <20250828130513.146485-2-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20250828130513.146485-1-thomas.petazzoni@bootlin.com>
 References: <20250828130513.146485-1-thomas.petazzoni@bootlin.com>
@@ -57,22 +57,22 @@ MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=dkim; 
- t=1756386325; h=from:subject:date:message-id:to:cc:mime-version:
+ t=1756386324; h=from:subject:date:message-id:to:cc:mime-version:
  content-transfer-encoding:in-reply-to:references;
- bh=xH4EFmfjlVmB69aTEwHu1dlXayCMAJBFVGNCEgF1ZpY=;
- b=1VZuQhX4szGRNMuUzXKKg9a0nKLxSHMqlRah8GsLsKI2AGRunKY5Xaa6Ou4q0apB8852o1
- dY90yKsWCKB9U64coN0OpurZg1wF0v6X/pxsOyMQI077XikpSfpSZ0SOPshnwwc0V1m2Nm
- EiDwH6M+b5GTkAjnB+QXBOSpITlTZBFtUcLOG2eIEMqGBIsw5Sb6bd5mqfxDE+P+NylAjY
- 5poSCRDtL5Rod7nUNi0TVeFku+2w07YkFg8rSVGbk/Y8LyFvv4skbD5MFaQB4cU8OjfYAz
- UFkmsgtaC5qqikbmXbhWnBEYltuPVQm139+ixuzDEQLZFE+uGq04dIegUq8tgA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=K42JymZdWV5GASggX+BHVnglvG5bJpxEJskP2vFEbs0=;
+ b=vE3wRotQf+2gnSZbvJbpuhZ/CyQf90RoIu0Zrib6N87+Rzjr7u2mjaSdvbacJfEOLLx+kf
+ B88ToVG4FdRMWqTOT+G5BA3/DcMW3MEWzrMM3lBC6NGK/JbxKol12jYQBHNjT6ftFvRXqB
+ 4pQOFbJbRNK90wGVitBiB1sVMbVKY1OESph4tqxKAody0VdZIqNJ89uHOt9rwyjsNIeZPM
+ Jdv6V8ZMHa1AURGaV5hb1cGooyP6ciKpiiDjMl9yOC0Myo2XnSanATpVSnO+uwljrjthnY
+ UU/VtCRd46EEYFcdrkdoOnVUIt8RMxTKicskJu0/vOoGrmxeiMb22kPyD7WSoA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
- header.a=rsa-sha256 header.s=dkim header.b=1VZuQhX4
-Subject: [Buildroot] [PATCH v2 3/3] package/netsurf-buildsystem: remove
- package
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=vE3wRotQ
+Subject: [Buildroot] [PATCH v2 2/3] package/libsvgtiny: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,69 +91,520 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This host package was only used as a build dependency of libsvgtiny,
-which itself has been removed, so it can be dropped as well.
+This package hasn't been updated in years. It has new releases, such
+as 1.0.8 from December 2023, but nobody updated to it.
+
+Doing the version bump is not straightforward, and the original
+package submitter, Peter Korsgaard, is no longer using it. This
+package also had no reverse dependency, and no maintainer in the
+DEVELOPERS file.
+
+Therefore, let's drop this package.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-v1 -> v2: No changes.
+v1 -> v2: also drop from package/Config.in
 
- DEVELOPERS                                    |  3 ---
- .../netsurf-buildsystem.hash                  |  3 ---
- .../netsurf-buildsystem.mk                    | 20 -------------------
- 3 files changed, 26 deletions(-)
- delete mode 100644 package/netsurf-buildsystem/netsurf-buildsystem.hash
- delete mode 100644 package/netsurf-buildsystem/netsurf-buildsystem.mk
+ .checkpackageignore                           |   4 -
+ package/Config.in                             |   1 -
+ .../0001-disable-debug-printfs.patch          | 125 ------------------
+ package/libsvgtiny/0002-Remove-Werror.patch   |  44 ------
+ ...-inlines-and-non-inlines-calling-one.patch |  36 -----
+ ...nclude-gperf-generated-code-directly.patch |  99 --------------
+ ...ient-svgtiny_list-.c-add-missing-std.patch |  42 ------
+ package/libsvgtiny/Config.in                  |   9 --
+ package/libsvgtiny/libsvgtiny.hash            |   3 -
+ package/libsvgtiny/libsvgtiny.mk              |  47 -------
+ 10 files changed, 410 deletions(-)
+ delete mode 100644 package/libsvgtiny/0001-disable-debug-printfs.patch
+ delete mode 100644 package/libsvgtiny/0002-Remove-Werror.patch
+ delete mode 100644 package/libsvgtiny/0003-Hopefully-silence-warnings-about-inlines-and-non-inlines-calling-one.patch
+ delete mode 100644 package/libsvgtiny/0004-Build-Include-gperf-generated-code-directly.patch
+ delete mode 100644 package/libsvgtiny/0005-src-svgtiny_gradient-svgtiny_list-.c-add-missing-std.patch
+ delete mode 100644 package/libsvgtiny/Config.in
+ delete mode 100644 package/libsvgtiny/libsvgtiny.hash
+ delete mode 100644 package/libsvgtiny/libsvgtiny.mk
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 762cd6d430..9fbdace7c1 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1001,9 +1001,6 @@ F:	package/atest/
- F:	package/crucible/
- F:	package/kmscube/
- 
--N:	Fabio Porcedda <fabio.porcedda@gmail.com>
--F:	package/netsurf-buildsystem/
--
- N:	Fabio Urquiza <fabiorush@gmail.com>
- F:	package/bitcoin/
- 
-diff --git a/package/netsurf-buildsystem/netsurf-buildsystem.hash b/package/netsurf-buildsystem/netsurf-buildsystem.hash
+diff --git a/.checkpackageignore b/.checkpackageignore
+index bc315b3640..fb63cf6a77 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -653,10 +653,6 @@ package/libspatialindex/0002-CMakeLists.txt-fix-CMAKE_BUILD_TYPE.patch lib_patch
+ package/libsquish/0001-Makefile-add-f-option-for-ln-to-remove-existing-dest.patch lib_patch.Upstream
+ package/libsvg/0001-fix-expat-static-declaration.patch lib_patch.Upstream
+ package/libsvg/0002-Fix-undefined-symbol-png_set_gray_1_2_4_to_8.patch lib_patch.Upstream
+-package/libsvgtiny/0001-disable-debug-printfs.patch lib_patch.Upstream
+-package/libsvgtiny/0002-Remove-Werror.patch lib_patch.Upstream
+-package/libsvgtiny/0003-Hopefully-silence-warnings-about-inlines-and-non-inlines-calling-one.patch lib_patch.Upstream
+-package/libsvgtiny/0004-Build-Include-gperf-generated-code-directly.patch lib_patch.Upstream
+ package/libtalloc/0001-buildtools-wafsamba-add-disable-stack-protector-opti.patch lib_patch.Upstream
+ package/libtelnet/0001-fix-compilation-without-zlib.patch lib_patch.Upstream
+ package/libtheora/0001-link-libtheoradec.patch lib_patch.Upstream
+diff --git a/package/Config.in b/package/Config.in
+index 137f74ed82..09f242e5db 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1783,7 +1783,6 @@ menu "Graphics"
+ 	source "package/librsvg/Config.in"
+ 	source "package/libsvg/Config.in"
+ 	source "package/libsvg-cairo/Config.in"
+-	source "package/libsvgtiny/Config.in"
+ 	source "package/libva/Config.in"
+ 	source "package/libva-intel-driver/Config.in"
+ 	source "package/libvdpau/Config.in"
+diff --git a/package/libsvgtiny/0001-disable-debug-printfs.patch b/package/libsvgtiny/0001-disable-debug-printfs.patch
 deleted file mode 100644
-index 9da8c67aef..0000000000
---- a/package/netsurf-buildsystem/netsurf-buildsystem.hash
+index 72ed21ccfa..0000000000
+--- a/package/libsvgtiny/0001-disable-debug-printfs.patch
++++ /dev/null
+@@ -1,125 +0,0 @@
+-svntiny: svntiny_gradient.c: only print debugging if GRADIENT_DEBUG is enabled
+-
+-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+----
+- src/svgtiny_gradient.c |   23 ++++++++++++++++++++++-
+- 1 file changed, 22 insertions(+), 1 deletion(-)
+-
+-Index: libsvgtiny/src/svgtiny_gradient.c
+-===================================================================
+---- libsvgtiny.orig/src/svgtiny_gradient.c
+-+++ libsvgtiny/src/svgtiny_gradient.c
+-@@ -30,8 +30,9 @@ void svgtiny_find_gradient(const char *i
+- {
+- 	xmlNode *gradient;
+- 
+-+#ifdef GRADIENT_DEBUG
+- 	fprintf(stderr, "svgtiny_find_gradient: id \"%s\"\n", id);
+--
+-+#endif
+- 	state->linear_gradient_stop_count = 0;
+- 	state->gradient_x1 = "0%";
+- 	state->gradient_y1 = "0%";
+-@@ -47,13 +48,17 @@ void svgtiny_find_gradient(const char *i
+- 
+- 	gradient = svgtiny_find_element_by_id(
+- 			(xmlNode *) state->document, id);
+-+#ifdef GRADIENT_DEBUG
+- 	fprintf(stderr, "gradient %p\n", (void *) gradient);
+-+#endif
+- 	if (!gradient) {
+- 		fprintf(stderr, "gradient \"%s\" not found\n", id);
+- 		return;
+- 	}
+- 
+-+#ifdef GRADIENT_DEBUG
+- 	fprintf(stderr, "gradient name \"%s\"\n", gradient->name);
+-+#endif
+- 	if (strcmp((const char *) gradient->name, "linearGradient") == 0) {
+- 		svgtiny_parse_linear_gradient(gradient, state);
+- 	}
+-@@ -98,8 +103,10 @@ svgtiny_code svgtiny_parse_linear_gradie
+- 				return svgtiny_OUT_OF_MEMORY;
+- 			svgtiny_parse_transform(s, &a, &b, &c, &d, &e, &f);
+- 			free(s);
+-+#ifdef GRADIENT_DEBUG
+- 			fprintf(stderr, "transform %g %g %g %g %g %g\n",
+- 					a, b, c, d, e, f);
+-+#endif
+- 			state->gradient_transform.a = a;
+- 			state->gradient_transform.b = b;
+- 			state->gradient_transform.c = c;
+-@@ -143,7 +150,9 @@ svgtiny_code svgtiny_parse_linear_gradie
+- 		}
+- 
+- 		if (offset != -1 && color != svgtiny_TRANSPARENT) {
+-+#ifdef GRADIENT_DEBUG
+- 			fprintf(stderr, "stop %g %x\n", offset, color);
+-+#endif
+- 			state->gradient_stop[i].offset = offset;
+- 			state->gradient_stop[i].color = color;
+- 			i++;
+-@@ -220,9 +229,11 @@ svgtiny_code svgtiny_add_path_linear_gra
+- 	#endif
+- 
+- 	/* compute gradient vector */
+-+#ifdef GRADIENT_DEBUG
+- 	fprintf(stderr, "x1 %s, y1 %s, x2 %s, y2 %s\n",
+- 			state->gradient_x1, state->gradient_y1,
+- 			state->gradient_x2, state->gradient_y2);
+-+#endif
+- 	if (!state->gradient_user_space_on_use) {
+- 		gradient_x0 = object_x0 +
+- 				svgtiny_parse_length(state->gradient_x1,
+-@@ -297,9 +308,11 @@ svgtiny_code svgtiny_add_path_linear_gra
+- 
+- 	/* invert gradient transform for applying to vertices */
+- 	svgtiny_invert_matrix(&state->gradient_transform.a, trans);
+-+#ifdef GRADIENT_DEBUG
+- 	fprintf(stderr, "inverse transform %g %g %g %g %g %g\n",
+- 			trans[0], trans[1], trans[2], trans[3],
+- 			trans[4], trans[5]);
+-+#endif
+- 
+- 	/* compute points on the path for triangle vertices */
+- 	/* r, r0, r1 are distance along gradient vector */
+-@@ -372,8 +385,10 @@ svgtiny_code svgtiny_add_path_linear_gra
+- 		steps = ceilf(fabsf(r1 - r0) / 0.05);
+- 		if (steps == 0)
+- 			steps = 1;
+-+#ifdef GRADIENT_DEBUG
+- 		fprintf(stderr, "r0 %g, r1 %g, steps %i\n",
+- 				r0, r1, steps);
+-+#endif
+- 
+- 		/* loop through intermediate points */
+- 		for (z = 1; z != steps; z++) {
+-@@ -398,7 +413,9 @@ svgtiny_code svgtiny_add_path_linear_gra
+- 			r = ((x_trans - gradient_x0) * gradient_dx +
+- 					(y_trans - gradient_y0) * gradient_dy) /
+- 					gradient_norm_squared;
+-+#ifdef GRADIENT_DEBUG
+- 			fprintf(stderr, "(%g %g [%g]) ", x, y, r);
+-+#endif
+- 			point = svgtiny_list_push(pts);
+- 			if (!point) {
+- 				svgtiny_list_free(pts);
+-@@ -412,14 +429,18 @@ svgtiny_code svgtiny_add_path_linear_gra
+- 				min_pt = svgtiny_list_size(pts) - 1;
+- 			}
+- 		}
+-+#ifdef GRADIENT_DEBUG
+- 		fprintf(stderr, "\n");
+-+#endif
+- 
+- 		/* next segment start point is this segment end point */
+- 		x0 = x1;
+- 		y0 = y1;
+- 	}
+-+#ifdef GRADIENT_DEBUG
+- 	fprintf(stderr, "pts size %i, min_pt %i, min_r %.3f\n",
+- 			svgtiny_list_size(pts), min_pt, min_r);
+-+#endif
+- 
+- 	/* render triangles */
+- 	stop_count = state->linear_gradient_stop_count;
+diff --git a/package/libsvgtiny/0002-Remove-Werror.patch b/package/libsvgtiny/0002-Remove-Werror.patch
+deleted file mode 100644
+index c8b0c0b9ef..0000000000
+--- a/package/libsvgtiny/0002-Remove-Werror.patch
++++ /dev/null
+@@ -1,44 +0,0 @@
+-Remove -Werror from Makefile
+-
+-glibc-2.20 includes some changes to the include/features.h file
+-introduced by this commit:
+-
+-  https://sourceware.org/git/?p=glibc.git;a=commit;h=ade40b10ff5fa59a318cf55b9d8414b758e8df78
+-
+-Those changes make libsvgtiny fail because some warnings are thrown and
+-the build system is using the -Werror option. We disable this to be able
+-to build it, or otherwise we will see errors like this one:
+-
+-GPERF: src/colors.gperf
+-COMPILE: build-Linux-Linux-release-lib-static/src_colors.c
+-In file included from
+-/br/output/host/usr/mipsel-buildroot-linux-gnu/sysroot/usr/include/string.h:25:0,
+-		 from src/colors.gperf:16:
+-/br/output/host/usr/mipsel-buildroot-linux-gnu/sysroot/usr/include/features.h:148:3:
+-error: #warning "_BSD_SOURCE and _SVID_SOURCE are deprecated, use
+-_DEFAULT_SOURCE" [-Werror=cpp]
+-
+-and this one:
+-
+-In file included from src/colors.gperf:18:0:
+-/home/ldap/vriera/work/mips-buildroots/mips32/output/build/libsvgtiny-12121/src/svgtiny_internal.h:71:0:
+-error: "strndup" redefined [-Werror]
+-
+-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+-
+-diff -rup a/Makefile b/Makefile
+---- a/Makefile	2010-01-03 23:37:39.000000000 +0000
+-+++ b/Makefile	2014-12-11 11:35:37.241903884 +0000
+-@@ -13,12 +13,6 @@ TESTRUNNER := $(ECHO)
+- WARNFLAGS := -Wall -W -Wundef -Wpointer-arith -Wcast-align \
+- 	-Wwrite-strings -Wstrict-prototypes -Wmissing-prototypes \
+- 	-Wmissing-declarations -Wnested-externs -pedantic
+--# BeOS/Haiku/AmigaOS4 standard library headers create warnings
+--ifneq ($(TARGET),beos)
+--  ifneq ($(TARGET),AmigaOS)
+--    WARNFLAGS := $(WARNFLAGS) -Werror
+--  endif
+--endif
+- CFLAGS := -D_BSD_SOURCE -I$(CURDIR)/include/ \
+- 	-I$(CURDIR)/src $(WARNFLAGS) $(CFLAGS)
+- ifneq ($(GCCVER),2)
+diff --git a/package/libsvgtiny/0003-Hopefully-silence-warnings-about-inlines-and-non-inlines-calling-one.patch b/package/libsvgtiny/0003-Hopefully-silence-warnings-about-inlines-and-non-inlines-calling-one.patch
+deleted file mode 100644
+index 9285477d25..0000000000
+--- a/package/libsvgtiny/0003-Hopefully-silence-warnings-about-inlines-and-non-inlines-calling-one.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-From 21b4836ac9d6c6725590a925daa5d17eda9843e9 Mon Sep 17 00:00:00 2001
+-From: Daniel Silverstone <dsilvers@digital-scurf.org>
+-Date: Sat, 26 Apr 2014 16:24:54 +0100
+-Subject: Hopefully silence warnings about inlines and non inlines calling one
+- another.
+-
+-[Retrieved from:
+-https://source.netsurf-browser.org/libsvgtiny.git/commit/src?id=21b4836ac9d6c6725590a925daa5d17eda9843e9]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- src/colors.gperf | 9 +++++++++
+- 1 file changed, 9 insertions(+)
+-
+-diff --git a/src/colors.gperf b/src/colors.gperf
+-index 89152d2..96d5b9e 100644
+---- a/src/colors.gperf
+-+++ b/src/colors.gperf
+-@@ -16,6 +16,15 @@
+- #include <string.h>
+- #include "svgtiny.h"
+- #include "svgtiny_internal.h"
+-+
+-+/* This unusual define shennanigan is to try and prevent the gperf
+-+ * generated function from being inlined.  This is pointless given
+-+ * it (a) is in a separate .c file and (b) has external linkage.
+-+ */
+-+#ifdef __inline
+-+#undef __inline
+-+#define __inline
+-+#endif
+- %}
+- 
+- struct svgtiny_named_color;
+--- 
+-cgit v1.2.1
+-
+diff --git a/package/libsvgtiny/0004-Build-Include-gperf-generated-code-directly.patch b/package/libsvgtiny/0004-Build-Include-gperf-generated-code-directly.patch
+deleted file mode 100644
+index b5443e9912..0000000000
+--- a/package/libsvgtiny/0004-Build-Include-gperf-generated-code-directly.patch
++++ /dev/null
+@@ -1,99 +0,0 @@
+-From 4390f1c84e8fee51fc22468821e6fc158e783053 Mon Sep 17 00:00:00 2001
+-From: Michael Drake <michael.drake@codethink.co.uk>
+-Date: Thu, 20 Apr 2017 10:51:07 +0100
+-Subject: Build: Include gperf-generated code directly.
+-
+-Previously we built the generated code separatly and then linked to
+-it.  However, this caused problems with certain compilers and gperf
+-versions.  This change includes the generated code directly in
+-svgtiny.c instead, which is the only place its used.
+-
+-[Retrieved from:
+-https://source.netsurf-browser.org/libsvgtiny.git/commit/src?id=4390f1c84e8fee51fc22468821e6fc158e783053]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Dario: make the patch to be applied with fuzz factor 0]
+-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+----
+- src/Makefile           | 13 +++++++------
+- src/colors.gperf       |  8 --------
+- src/svgtiny.c          |  3 +++
+- src/svgtiny_internal.h |  5 -----
+- 4 files changed, 10 insertions(+), 19 deletions(-)
+-
+-(limited to 'src')
+-
+-diff --git a/src/Makefile b/src/Makefile
+-index a979720..fb8a72f 100644
+---- a/src/Makefile
+-+++ b/src/Makefile
+-@@ -1,13 +1,14 @@
+- # Sources
+- DIR_SOURCES := svgtiny.c svgtiny_gradient.c svgtiny_list.c
+- 
+--SOURCES := $(SOURCES) $(BUILDDIR)/src_colors.c
+-+SOURCES := $(SOURCES)
+- 
+--$(BUILDDIR)/src_colors.c: src/colors.gperf
+-+$(DIR)autogenerated_colors.c: src/colors.gperf
+- 	$(VQ)$(ECHO) "   GPERF: $<"
+--	$(Q)gperf --output-file=$@.tmp $<
+--# Hack for GCC 4.2 compatibility (gperf 3.0.4 solves this properly)
+--	$(Q)$(SED) -e 's/#ifdef __GNUC_STDC_INLINE__/#if defined __GNUC_STDC_INLINE__ || defined __GNUC_GNU_INLINE__/' $@.tmp >$@
+--	$(Q)$(RM) $@.tmp
+-+	$(Q)gperf --output-file=$@ $<
+-+
+-+PRE_TARGETS := $(DIR)autogenerated_colors.c
+-+
+-+CLEAN_ITEMS := $(DIR)autogenerated_colors.c
+- 
+- include build/makefiles/Makefile.subdir
+-diff --git a/src/colors.gperf b/src/colors.gperf
+-index 96d5b9e..a836787 100644
+---- a/src/colors.gperf
+-+++ b/src/colors.gperf
+-@@ -17,14 +17,6 @@
+- #include "svgtiny.h"
+- #include "svgtiny_internal.h"
+- 
+--/* This unusual define shennanigan is to try and prevent the gperf
+-- * generated function from being inlined.  This is pointless given
+-- * it (a) is in a separate .c file and (b) has external linkage.
+-- */
+--#ifdef __inline
+--#undef __inline
+--#define __inline
+--#endif
+- %}
+- 
+- struct svgtiny_named_color;
+-diff --git a/src/svgtiny.c b/src/svgtiny.c
+-index 4661a58..bbefb88 100644
+---- a/src/svgtiny.c
+-+++ b/src/svgtiny.c
+-@@ -17,6 +17,9 @@
+- #include "svgtiny.h"
+- #include "svgtiny_internal.h"
+- 
+-+/* Source file generated by `gperf`. */
+-+#include "autogenerated_colors.c"
+-+
+- #ifndef M_PI
+- #define M_PI		3.14159265358979323846
+- #endif
+-diff --git a/src/svgtiny_internal.h b/src/svgtiny_internal.h
+-index 158d230..6bf5d64 100644
+---- a/src/svgtiny_internal.h
+-+++ b/src/svgtiny_internal.h
+-@@ -87,9 +87,4 @@
+- void *svgtiny_list_push(struct svgtiny_list *list);
+- void svgtiny_list_free(struct svgtiny_list *list);
+- 
+--/* colors.gperf */
+--const struct svgtiny_named_color *
+--		svgtiny_color_lookup(register const char *str,
+--				register unsigned int len);
+--
+- #endif
+--- 
+-cgit v1.2.1
+-
+diff --git a/package/libsvgtiny/0005-src-svgtiny_gradient-svgtiny_list-.c-add-missing-std.patch b/package/libsvgtiny/0005-src-svgtiny_gradient-svgtiny_list-.c-add-missing-std.patch
+deleted file mode 100644
+index 17e63ba541..0000000000
+--- a/package/libsvgtiny/0005-src-svgtiny_gradient-svgtiny_list-.c-add-missing-std.patch
++++ /dev/null
+@@ -1,42 +0,0 @@
+-From 1d86ce7e6ea9fae8285eed23d838f87ab3ac083c Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Date: Tue, 19 Aug 2025 23:28:35 +0200
+-Subject: [PATCH] src/{svgtiny_gradient,svgtiny_list}.c: add missing <stdlib.h>
+-
+-Needed to get the prototype for malloc()/free().
+-
+-Upstream: N/A, already fixed upstream in a later release (but as part
+-of a larger commit)
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+----
+- src/svgtiny_gradient.c | 1 +
+- src/svgtiny_list.c     | 1 +
+- 2 files changed, 2 insertions(+)
+-
+-diff --git a/src/svgtiny_gradient.c b/src/svgtiny_gradient.c
+-index 3a8db73..5172223 100644
+---- a/src/svgtiny_gradient.c
+-+++ b/src/svgtiny_gradient.c
+-@@ -8,6 +8,7 @@
+- #include <assert.h>
+- #include <math.h>
+- #include <string.h>
+-+#include <stdlib.h>
+- #include "svgtiny.h"
+- #include "svgtiny_internal.h"
+- 
+-diff --git a/src/svgtiny_list.c b/src/svgtiny_list.c
+-index 53cfb34..91e2c98 100644
+---- a/src/svgtiny_list.c
+-+++ b/src/svgtiny_list.c
+-@@ -11,6 +11,7 @@
+-  */
+- 
+- #include <assert.h>
+-+#include <stdlib.h>
+- #include "svgtiny.h"
+- #include "svgtiny_internal.h"
+- 
+--- 
+-2.50.1
+-
+diff --git a/package/libsvgtiny/Config.in b/package/libsvgtiny/Config.in
+deleted file mode 100644
+index 836dec210e..0000000000
+--- a/package/libsvgtiny/Config.in
++++ /dev/null
+@@ -1,9 +0,0 @@
+-config BR2_PACKAGE_LIBSVGTINY
+-	bool "libsvgtiny"
+-	select BR2_PACKAGE_LIBXML2
+-	help
+-	  Libsvgtiny is an implementation of SVG Tiny, written in C.
+-	  It is currently in development for use with NetSurf and is
+-	  intended to be suitable for use in other projects too.
+-
+-	  http://www.netsurf-browser.org/projects/libsvgtiny/
+diff --git a/package/libsvgtiny/libsvgtiny.hash b/package/libsvgtiny/libsvgtiny.hash
+deleted file mode 100644
+index 55f4093e19..0000000000
+--- a/package/libsvgtiny/libsvgtiny.hash
 +++ /dev/null
 @@ -1,3 +0,0 @@
 -# Locally computed
--sha256  b8620c6a95ccf071046cdb8e4e0ca149cdd58d292eb9ee02b3b0d63646466b72  netsurf-buildsystem-7574b41345968b5f7e9ca5875faccb1478ce0555-git4.tar.gz
--sha256  b2ddc1d607332423f6cf415b2ac619a1c03dd565facdc39a571282a520929a65  llvm/LICENSE.TXT
-diff --git a/package/netsurf-buildsystem/netsurf-buildsystem.mk b/package/netsurf-buildsystem/netsurf-buildsystem.mk
+-sha256  758641d339b324a76294ef08e323faa2cefb557793f437c08af7deb3b73a453e  libsvgtiny-ea9d99fc8b231c22d06168135e181d61f4eb2f06-git4.tar.gz
+-sha256  92b965c77be71661cae51425a6b40a5ca274f44cc13c723c90fb471a9a26a828  README
+diff --git a/package/libsvgtiny/libsvgtiny.mk b/package/libsvgtiny/libsvgtiny.mk
 deleted file mode 100644
-index d4efec0e1d..0000000000
---- a/package/netsurf-buildsystem/netsurf-buildsystem.mk
+index 55ce4327fe..0000000000
+--- a/package/libsvgtiny/libsvgtiny.mk
 +++ /dev/null
-@@ -1,20 +0,0 @@
+@@ -1,47 +0,0 @@
 -################################################################################
 -#
--# netsurf-buildsystem
+-# libsvgtiny
 -#
 -################################################################################
 -
--NETSURF_BUILDSYSTEM_VERSION = 7574b41345968b5f7e9ca5875faccb1478ce0555
--NETSURF_BUILDSYSTEM_SITE = http://git.netsurf-browser.org/buildsystem.git
--NETSURF_BUILDSYSTEM_SITE_METHOD = git
--NETSURF_BUILDSYSTEM_LICENSE = MIT, BSD-3-Clause (for llvm/* files)
--NETSURF_BUILDSYSTEM_LICENSE_FILES = llvm/LICENSE.TXT
+-LIBSVGTINY_SITE = http://git.netsurf-browser.org/libsvgtiny.git
+-LIBSVGTINY_SITE_METHOD = git
+-LIBSVGTINY_VERSION = ea9d99fc8b231c22d06168135e181d61f4eb2f06
+-LIBSVGTINY_INSTALL_STAGING = YES
+-LIBSVGTINY_DEPENDENCIES = \
+-	libxml2 host-gperf host-pkgconf host-netsurf-buildsystem
+-LIBSVGTINY_LICENSE = MIT
+-LIBSVGTINY_LICENSE_FILES = README
 -
--NETSURF_BUILDSYSTEM_INSTALL_DIR = $(HOST_DIR)/share/netsurf-buildsystem
+-# The libsvgtiny build system cannot build both the shared and static
+-# libraries. So when the Buildroot configuration requests to build
+-# both the shared and static variants, we build only the shared one.
+-ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
+-LIBSVGTINY_COMPONENT_TYPE = lib-shared
+-else
+-LIBSVGTINY_COMPONENT_TYPE = lib-static
+-endif
 -
--define HOST_NETSURF_BUILDSYSTEM_INSTALL_CMDS
--	mkdir -p $(NETSURF_BUILDSYSTEM_INSTALL_DIR)
--	cp -dpfr $(@D)/* $(NETSURF_BUILDSYSTEM_INSTALL_DIR)
+-define LIBSVGTINY_CONFIGURE_CMDS
+-	ln -sf $(HOST_DIR)/share/netsurf-buildsystem $(@D)/build
 -endef
 -
--$(eval $(host-generic-package))
+-# Use $(MAKE1) since parallel build fails
+-define LIBSVGTINY_BUILD_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE1) -C $(@D) PREFIX=/usr \
+-		COMPONENT_TYPE=$(LIBSVGTINY_COMPONENT_TYPE)
+-endef
+-
+-define LIBSVGTINY_INSTALL_STAGING_CMDS
+-	$(TARGET_CONFIGURE_OPTS) \
+-		$(MAKE1) -C $(@D) PREFIX=/usr DESTDIR=$(STAGING_DIR) \
+-		COMPONENT_TYPE=$(LIBSVGTINY_COMPONENT_TYPE) install
+-endef
+-
+-define LIBSVGTINY_INSTALL_TARGET_CMDS
+-	$(TARGET_CONFIGURE_OPTS) \
+-		$(MAKE1) -C $(@D) PREFIX=/usr DESTDIR=$(TARGET_DIR) \
+-		COMPONENT_TYPE=$(LIBSVGTINY_COMPONENT_TYPE) install
+-endef
+-
+-$(eval $(generic-package))
 -- 
 2.50.1
 
