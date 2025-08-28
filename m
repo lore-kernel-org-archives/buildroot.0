@@ -4,68 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DEB1CA0EED
-	for <buildroot@archiver.kernel.org>; Thu, 28 Aug 2025 07:51:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD127CA0FF2
+	for <buildroot@archiver.kernel.org>; Thu, 28 Aug 2025 08:08:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F2EBB81220;
-	Thu, 28 Aug 2025 07:51:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7BB0082205;
+	Thu, 28 Aug 2025 08:08:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jEbPnHSXB56r; Thu, 28 Aug 2025 07:51:15 +0000 (UTC)
+ id uKEtnVbVUnGl; Thu, 28 Aug 2025 08:08:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 235FC81449
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC388821F1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 235FC81449;
-	Thu, 28 Aug 2025 07:51:15 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id A5A2D17D
- for <buildroot@buildroot.org>; Thu, 28 Aug 2025 07:51:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EC388821F1;
+	Thu, 28 Aug 2025 08:08:31 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id E3FFD1B0
+ for <buildroot@buildroot.org>; Thu, 28 Aug 2025 08:08:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 87DE381442
- for <buildroot@buildroot.org>; Thu, 28 Aug 2025 07:51:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C8D6060A87
+ for <buildroot@buildroot.org>; Thu, 28 Aug 2025 08:08:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CwvtDcjLETbx for <buildroot@buildroot.org>;
- Thu, 28 Aug 2025 07:51:11 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FGMio8gSCVaO for <buildroot@buildroot.org>;
+ Thu, 28 Aug 2025 08:08:30 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
+ helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E6C868133E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E6C868133E
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E6C868133E
- for <buildroot@buildroot.org>; Thu, 28 Aug 2025 07:51:10 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -741129575
- for <buildroot@buildroot.org>
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Thu, 28 Aug 2025 07:51:07 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1urXPX-005E1u-0S
- for buildroot@buildroot.org; Thu, 28 Aug 2025 09:51:07 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E01416079B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E01416079B
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E01416079B
+ for <buildroot@buildroot.org>; Thu, 28 Aug 2025 08:08:29 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-02.galae.net (Postfix) with ESMTPS id 091DA1A0E26
+ for <buildroot@buildroot.org>; Thu, 28 Aug 2025 08:08:27 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id D841560303
+ for <buildroot@buildroot.org>; Thu, 28 Aug 2025 08:08:26 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 21E331C229E43; 
+ Thu, 28 Aug 2025 10:08:25 +0200 (CEST)
 To: buildroot@buildroot.org
-Date: Thu, 28 Aug 2025 09:51:07 +0200
-Message-ID: <87cy8flw9g.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 28 Aug 2025 10:08:13 +0200
+Message-ID: <20250828080814.65891-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.50.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=hM5qbh93GgaMrzMCDAMAlN7s6VuJ/uoLMA5m2FBjNmTKByc8NrvgVrtQheul9Rh1KaHHsnn0I2/SYSSK/dK3abz7cN5jPizJFMbOleOlyvcPsaLIM4W7UrsaZOw8rQxLpImT4rGJFclww/FyZXPwj5Jbyb/IrjhPq8MB1k5oIHgi7RVHzelDj3tzd07/2DgDbOtpZf8TkLi8NGFIYp+yKmZn1+3CFgBa+tHJRn7lT42q18FVlTQcgSEN3SpQugiQ1ppaD4WkENMLh3wxvaxsXZ+BfV+Citub8hffJjkSRcGznRTAoHEEoQHg0Gm0nKPljbL7GnyDWHEKcKTqC126ag==;
- s=purelymail1; d=purelymail.com; v=1;
- bh=ILlGri4YpxsgUu42Ryw/+dIYZoacsWGQclc6VPoNxko=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=dkim; 
+ t=1756368506; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=H3LUDKYhta8h8T6pyhup8B9qzjrui74NXYaPeqkXUh8=;
+ b=iOC0OhH1XIjK76Ku2+8/sHkWrMyESJLa1Xa9Hx0Cco+x3ignDE0asY0udeNdFNHOGWr8bj
+ hfMBUdS7IpJfJJJwWIq8AlIW2GZu2CtipB//OkYp6czpWb6ZfjXf/xRmleEbPDee090mbp
+ vO4ZxldOz0dhkjMGoCxqFWAvCYKV+j9qj9l0WvApJBQLWL2ZsjHzj3bSmypH8BPibEVPD1
+ fXyqGOKj6GTXIbb8IvRH+96NiTGtN1ujBuCz1x2iUIKWTz/6KKyImV68VbKk83I5KRbsAp
+ Er7jEsJnR3vsj3ES7kHrAZmCgNYqpf5VaxibLRjqG5Rqm90+TsOboPlO5JVrog==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=hM5qbh93
-Subject: [Buildroot] Buildroot 2025.08-rc3 released
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=iOC0OhH1
+Subject: [Buildroot] [PATCH] package/b43-firmware: fix upstream URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,28 +81,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGksCgpCdWlsZHJvb3QgMjAyNS4wOC1yYzMgaXMgcmVsZWFzZWQgLSBHbyBkb3dubG9hZCBpdCBh
-dDoKCmh0dHBzOi8vYnVpbGRyb290Lm5ldC9kb3dubG9hZHMvYnVpbGRyb290LTIwMjUuMDgtcmMz
-LnRhci5negoKb3IKCmh0dHBzOi8vYnVpbGRyb290Lm5ldC9kb3dubG9hZHMvYnVpbGRyb290LTIw
-MjUuMDgtcmMzLnRhci54egoKT3IgZ2V0IGl0IGZyb20gR2l0OgoKaHR0cHM6Ly9naXRsYWIuY29t
-L2J1aWxkcm9vdC5vcmcvYnVpbGRyb290LmdpdCAoMjAyNS4wOC1yYzMgdGFnKQoKQW5vdGhlciB3
-ZWVrLCBhbm90aGVyIHJlbGVhc2UgY2FuZGlkYXRlLiBGb3IgZGV0YWlscywgc2VlIHRoZSBDSEFO
-R0VTCmZpbGU6CgpodHRwczovL2dpdGxhYi5jb20vYnVpbGRyb290Lm9yZy9idWlsZHJvb3QvLS9i
-bG9iLzIwMjUuMDgtcmMzL0NIQU5HRVMKClBsZWFzZSBnaXZlIGl0IGEgc3BpbiBhbmQgcmVwb3J0
-IGFueSBwcm9ibGVtcyB0byB0aGUgbWFpbGluZyBsaXN0IG9yCmJ1ZyB0cmFja2VyLiBNYW55IHRo
-YW5rcyB0byB0aGUgcGVvcGxlIGNvbnRyaWJ1dGluZyB0byB0aGlzIHJlbGVhc2U6CgpnaXQgc2hv
-cnRsb2cgLXNuIDIwMjUuMDgtcmMyLi4KCiAgICAyMyAgVGhvbWFzIFBldGF6em9uaQogICAgIDQg
-IEJlcm5kIEt1aGxzCiAgICAgNCAgUGV0ZXIgS29yc2dhYXJkCiAgICAgNCAgUm9tYWluIE5hb3Vy
-CiAgICAgMiAgRmxvcmlhbiBMYXJ5c2NoCiAgICAgMSAgQWxleGlzIExvdGhvcsOpCiAgICAgMSAg
-QW5kcmVhcyBaaWVnbGVyCiAgICAgMSAgRGFuaWVsIExhbmcKICAgICAxICBFZGdhciBCb25ldAog
-ICAgIDEgIEZyYW5rIENodW5nCiAgICAgMSAgSGVucmkgUm9vc2VuCiAgICAgMSAgSnVsaWVuIE9s
-aXZhaW4KICAgICAxICBNaWNoYWVsIFRyaW1hcmNoaQogICAgIDEgIE5lYWwgRnJhZ2VyCiAgICAg
-MSAgVGhvbWFzIFBlcmFsZQogICAgIDEgIFlhY2luIEJlbG1paG91Yi1NYXJ0ZWwKCi0tIApCeWUs
-IFBldGVyIEtvcnNnYWFyZApfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0
-dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Unfortunately Larry Finger passed away in June 2024 [1], and
+lwfinger.com is now squatted, and no longer has the same content as
+before, causing a breakage when trying to download the 5.100.138
+version of b43-firmware.
+
+Since the exact same file is available from the OpenWrt mirror, and we
+already use this mirror for the other b43-firmware version, let's use
+the OpenWrt mirror for both.
+
+Fixes:
+
+  https://autobuild.buildroot.org/results/daf0aefbb10299f150c2c6a93df759ad07974752/
+
+[1] https://lore.kernel.org/linux-wireless/77997185-86a6-41c5-af7a-74e4e9064437@lwfinger.net/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/b43-firmware/b43-firmware.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/b43-firmware/b43-firmware.mk b/package/b43-firmware/b43-firmware.mk
+index 8e9e877692..d4ab8c9b24 100644
+--- a/package/b43-firmware/b43-firmware.mk
++++ b/package/b43-firmware/b43-firmware.mk
+@@ -4,14 +4,14 @@
+ #
+ ################################################################################
+ 
++B43_FIRMWARE_SITE = http://mirror2.openwrt.org/sources
++
+ ifeq ($(BR2_PACKAGE_B43_FIRMWARE_KERNEL_AFTER_3_2),y)
+ B43_FIRMWARE_VERSION = 5.100.138
+-B43_FIRMWARE_SITE = http://www.lwfinger.com/b43-firmware
+ B43_FIRMWARE_SOURCE = broadcom-wl-$(B43_FIRMWARE_VERSION).tar.bz2
+ B43_FIRMWARE_DRIVER_FILE = linux/wl_apsta.o
+ else ifeq ($(BR2_PACKAGE_B43_FIRMWARE_KERNEL_BEFORE_3_2),y)
+ B43_FIRMWARE_VERSION = 5.10.56.27.3
+-B43_FIRMWARE_SITE = http://mirror2.openwrt.org/sources
+ B43_FIRMWARE_SOURCE = broadcom-wl-$(B43_FIRMWARE_VERSION)_mipsel.tar.bz2
+ B43_FIRMWARE_DRIVER_FILE = driver/wl_apsta/wl_prebuilt.o
+ endif
+-- 
+2.50.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
