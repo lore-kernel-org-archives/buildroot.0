@@ -4,131 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD58DCA0EED
-	for <buildroot@archiver.kernel.org>; Thu, 28 Aug 2025 14:07:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3730DCA0EED
+	for <buildroot@archiver.kernel.org>; Thu, 28 Aug 2025 14:49:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 71C494073D;
-	Thu, 28 Aug 2025 14:07:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E3F304100C;
+	Thu, 28 Aug 2025 14:49:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wpAWP7Ujsh8k; Thu, 28 Aug 2025 14:07:44 +0000 (UTC)
+ id K6QQGg9qR9tN; Thu, 28 Aug 2025 14:49:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA9D54070A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E4DC740FD1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AA9D54070A;
-	Thu, 28 Aug 2025 14:07:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E4DC740FD1;
+	Thu, 28 Aug 2025 14:49:47 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 95ED317D
- for <buildroot@buildroot.org>; Thu, 28 Aug 2025 14:07:43 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 8C3971B0
+ for <buildroot@buildroot.org>; Thu, 28 Aug 2025 14:49:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 849BF83BC8
- for <buildroot@buildroot.org>; Thu, 28 Aug 2025 14:07:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 68B0882247
+ for <buildroot@buildroot.org>; Thu, 28 Aug 2025 14:49:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LPwZtTLyy4ut for <buildroot@buildroot.org>;
- Thu, 28 Aug 2025 14:07:43 +0000 (UTC)
-X-Greylist: delayed 954 seconds by postgrey-1.37 at util1.osuosl.org;
- Thu, 28 Aug 2025 14:07:42 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 737C983BC7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 737C983BC7
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=98.142.107.122;
- helo=vern.gendns.com; envelope-from=david@lechnology.com; receiver=<UNKNOWN> 
-Received: from vern.gendns.com (vern.gendns.com [98.142.107.122])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 737C983BC7
- for <buildroot@buildroot.org>; Thu, 28 Aug 2025 14:07:42 +0000 (UTC)
-Received: from [2600:8803:e7e4:1d00:f172:fde4:ff0c:d0ee] (port=59660)
- by vern.gendns.com with esmtpsa (TLS1.2) tls
- TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.98.1)
- (envelope-from <david@lechnology.com>) id 1urd5K-000000004xo-2uql;
- Thu, 28 Aug 2025 09:51:46 -0400
-Message-ID: <cdf30431-3db3-4ce1-ac1d-ddbb902cc3f5@lechnology.com>
-Date: Thu, 28 Aug 2025 08:51:46 -0500
+ id iFUDi2dwdKxO for <buildroot@buildroot.org>;
+ Thu, 28 Aug 2025 14:49:45 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
+ helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 380FA8225E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 380FA8225E
+Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 380FA8225E
+ for <buildroot@buildroot.org>; Thu, 28 Aug 2025 14:49:44 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 023E7B978384; Thu, 28 Aug 2025 16:49:41 +0200 (CEST)
+Message-ID: <464bde47-d2bc-4573-9264-5ab54f61d6da@rnout.be>
+Date: Thu, 28 Aug 2025 16:49:39 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Titouan Christophe <titouan.christophe@mind.be>, buildroot@buildroot.org
-References: <20250828132749.41538-1-titouan.christophe@mind.be>
-Content-Language: en-US
-From: David Lechner <david@lechnology.com>
-Autocrypt: addr=david@lechnology.com; keydata=
- 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
-In-Reply-To: <20250828132749.41538-1-titouan.christophe@mind.be>
-X-AntiAbuse: This header was added to track abuse,
- please include it with any abuse report
-X-AntiAbuse: Primary Hostname - vern.gendns.com
-X-AntiAbuse: Original Domain - buildroot.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lechnology.com
-X-Get-Message-Sender-Via: vern.gendns.com: authenticated_id:
- davidmain+lechnology.com/only user confirmed/virtual account not confirmed
-X-Authenticated-Sender: vern.gendns.com: davidmain@lechnology.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; 
- d=lechnology.com; s=default; h=Content-Transfer-Encoding:Content-Type:
- In-Reply-To:From:References:To:Subject:MIME-Version:Date:Message-ID:Sender:
- Reply-To:Cc:Content-ID:Content-Description:Resent-Date:Resent-From:
- Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
- List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
- bh=DmSpVTQaPwGc/SAT/2Yasaf18xZzPGFWikI0chW6v38=; b=T0z/noeeKliPRHTUQr5UFYZaiD
- QEX0g+5eLUguOfcv3DXrmCLrhiCtUSjq80Cez1NUQA6CixBWtBebjf5+3ByVf0vExVGGmhOyf2Zb2
- Ig8lW9W87Tr3/SusnsF6QUEDSbah0/ugV+4sdsAPFZ0e+w2MQ4KnWk9qpYzXjFNPvGS7NBByvk3oF
- PBNRynsln+KGo87Oe2tN0LDJGEB19kqF/5wmKYlpHGf+WNpx5SNDfCLt/jBQzFbkX0yhjdKH0PF7q
- O8zipGnxAiVFJR3g/dKvc6qt4OiiKLlRfv4SLrDka75Tc4/5ljp6nWX/k8Re7gouc7EepiRmP2n23
- Fuvmmd1Q==;
+To: Alexander Shirokov <shirokovalexs@gmail.com>, buildroot@buildroot.org
+Cc: arnout@mind.be
+References: <20250715125737.798491-1-shirokovalexs@gmail.com>
+ <20250824135229.120140-1-shirokovalexs@gmail.com>
+Content-Language: en-GB, fr-BE
+In-Reply-To: <20250824135229.120140-1-shirokovalexs@gmail.com>
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=rnout.be; s=dkim; 
+ t=1756392583; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:content-language:in-reply-to:references;
+ bh=cIGdh9yr3fwPxjk3OIX4u07Wh+RmpLXusXd9x81x598=;
+ b=FKAMadpLDWlHnXXx0PUUv1CGNQhk7F8pZGHgNOco0V7nBvdbLHsJ43rCK7v241M8kamz7W
+ RxFMcO1rIZWBpse7jslWoS2mguh793WGNU97kP8RT2zfONgBC7jTruWTIKbV0aghMCX45z
+ 6y66GfhkHsOBICXmP/OFM+lBB/tIsCYXg5PkwH3ffRteSrxACq8ipzaW+qELzgYv7mO4x/
+ EwTDRbSgNNK7XrIoE6x2lMn439i9FVM9Q0NKAxrXXBmXVArEeOugqQXMTiurEFdGF1Jv5v
+ uugiUfQB7cHSx9pR2gborxfyoM7r8BvTKHcPEKlKlcAXq2BN30MklBRIlOWhJA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=lechnology.com
+ dmarc=pass (p=reject dis=none)
+ header.from=rnout.be
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=lechnology.com header.i=@lechnology.com
- header.a=rsa-sha256 header.s=default header.b=T0z/noee
-Subject: Re: [Buildroot] [PATCH] package/ev3dev-linux-drivers: remove package
+ unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
+ header.s=dkim header.b=FKAMadpL
+Subject: Re: [Buildroot] [v2,1/1] package/nnn: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -140,20 +78,105 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 8/28/25 8:27 AM, Titouan Christophe wrote:
-> These external linux drivers haven't seen any activity in Buildroot
-> for a while, and are anyway aimed at an old kernel version (4.19).
-> 
-> Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-> ---
-Acked-by: David Lechner <david@lechnology.com>
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+ICBIaSBBbGV4YW5kZXIsCgpPbiAyNC8wOC8yMDI1IDE1OjUyLCBBbGV4YW5kZXIgU2hpcm9rb3Yg
+d3JvdGU6Cj4gbm5uIGlzIGEgZmFzdCBhbmQgbWluaW1hbCB0ZXh0LWJhc2VkIGZpbGUgbWFuYWdl
+ci4gSXQgaXMgd3JpdHRlbiBpbiBDCj4gYW5kIGhhcyBtaW5pbWFsIGRlcGVuZGVuY2llcywgd2hp
+Y2ggbWFrZXMgaXQgcG9ydGFibGUgYW5kIHN1aXRhYmxlIGZvcgo+IGVtYmVkZGVkIHN5c3RlbXMu
+Cj4gCj4gUHJvamVjdCBwYWdlOiBodHRwczovL2dpdGh1Yi5jb20vamFydW4vbm5uCj4gV2lraTog
+aHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvTm5uXyhmaWxlX21hbmFnZXIpCj4gCj4gU2ln
+bmVkLW9mZi1ieTogQWxleGFuZGVyIFNoaXJva292IDxzaGlyb2tvdmFsZXhzQGdtYWlsLmNvbT4K
+CiAgQXBwbGllZCB0byBuZXh0LCB0aGFua3MuCgogIEkgc3RpbGwgaGFkIHRvIG1ha2UgcXVpdGUg
+YSBsb3Qgb2YgY2hhbmdlcywgc2VlIGJlbG93IGZvciBhIGxpc3QuIEEgbWFqb3IgCmVsZW1lbnQg
+aXMgdGhhdCB5b3Ugc2hvdWxkIHVzZSB0aGUgdXRpbHMvdGVzdC1wa2cgc2NyaXB0IHRvIHRlc3Qg
+aXQgaW4gZGlmZmVyZW50IApjb25maWd1cmF0aW9ucy4KCiAgICAgIC0gYWRkIG1pc3NpbmcgZGVw
+ZW5kZW5jeSBvbiBCUjJfVVNFX01NVSAoZm91bmQgd2l0aCB0ZXN0LXBrZyk7CiAgICAgIC0gYWRk
+IG1pc3NpbmcgY29tbWVudCBpbiBDb25maWcuaW47CiAgICAgIC0gYWRkIG11c2wtZmxzIGRlcGVu
+ZGVuY3kgd2hlbiBuZWVkZWQgKGZvdW5kIHdpdGggdGVzdC1wa2cpOwogICAgICAtIGFkZCBob3N0
+LXBrZ2NvbmYgZGVwZW5kZW5jeTsKICAgICAgLSBhZGQgTk5OX01BS0VfRU5WIHRvIGNvbGxlY3Qg
+ZXZlcnl0aGluZyBpbiBtYWtlIGVudmlyb25tZW50OwogICAgICAtIGRyb3AgVEFSR0VUX01BS0Vf
+RU5WIGZyb20gZW52aXJvbm1lbnQsIGl0J3MgYWxyZWFkeSBpbgogICAgICAgIFRBUkdFVF9DT05G
+SUdVUkVfT1BUUzsKICAgICAgLSBhZGQgUFJFRklYIHRvIE5OTl9NQUtFX0ZMQUdTOiBpdCBpcyBj
+dXJyZW50bHkgbm90IHVzZWQgaW4gdGhlCiAgICAgICAgYnVpbGQgc3RlcCwgYnV0IGluIHRoZSBm
+dXR1cmUgaXQgbWF5IGJlIHVzZWQ7CiAgICAgIC0gdXNlIE5PUkw9MC8xIGZvciByZWFkbGluZSBv
+cHRpb25hbCBkZXBlbmRlbmN5LCB0aGUgTWFrZWZpbGUgc2F5cyB0aGF0CiAgICAgICAgdGhlICJu
+b3JsIiB0YXJnZXQgaXMgbGVnYWN5OwogICAgICAtIHJlbW92ZSBjb21tZW50IGFib3V0IHJlYWRs
+aW5lIGRlcGVuZGVuY3ksIGl0J3Mgb2J2aW91czsKICAgICAgLSBpbmRlbnQgY29udGludWF0aW9u
+IGxpbmUgd2l0aCBhbiBleHRyYSB0YWIuCgoKICBSZWdhcmRzLAogIEFybm91dAoKPiAKPiAtLS0K
+PiBDaGFuZ2VzIHYxIC0+IHYyOgo+ICAgIC0gVXBkYXRpbmcgZGVwZW5kZW5jaWVzIGFuZCBzZWxl
+Y3RpbmcgIm5jdXJzZXMiIGZsYWdzCj4gICAgLSBVc2luZyAicmVhZGxpbmUiIGFzIGFuIG9wdGlv
+bmFsIGRlcGVuZGVuY3kKPiAgICAtIFNpbXBsaWZ5aW5nIGJ1aWxkIGFuZCBpbnN0YWxsYXRpb24g
+c3RlcHMKPiAgICAtIEZpeGluZyB0aGUgcGFja2FnZSB2ZXJzaW9uCj4gICAgLSBQbGFjaW5nIHRo
+ZSBwYWNrYWdlIHRvIHRoZSAiVGV4dCBlZGl0b3JzIGFuZCB2aWV3ZXJzIiBzZWN0aW9uLgo+ICAg
+ICAgQ2xvc2UgdG8gIm1jIgo+ICAgIC0gVXBkYXRpbmcgREVWRUxPUEVSUwo+IAo+IFNpZ25lZC1v
+ZmYtYnk6IEFsZXhhbmRlciBTaGlyb2tvdiA8c2hpcm9rb3ZhbGV4c0BnbWFpbC5jb20+Cj4gLS0t
+Cj4gICBERVZFTE9QRVJTICAgICAgICAgICAgfCAgMyArKysKPiAgIHBhY2thZ2UvQ29uZmlnLmlu
+ICAgICB8ICAxICsKPiAgIHBhY2thZ2Uvbm5uL0NvbmZpZy5pbiB8IDE0ICsrKysrKysrKysrKysr
+Cj4gICBwYWNrYWdlL25ubi9ubm4uaGFzaCAgfCAgMyArKysKPiAgIHBhY2thZ2Uvbm5uL25ubi5t
+ayAgICB8IDMzICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKwo+ICAgNSBmaWxlcyBj
+aGFuZ2VkLCA1NCBpbnNlcnRpb25zKCspCj4gICBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9u
+bm4vQ29uZmlnLmluCj4gICBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9ubm4vbm5uLmhhc2gK
+PiAgIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL25ubi9ubm4ubWsKPiAKPiBkaWZmIC0tZ2l0
+IGEvREVWRUxPUEVSUyBiL0RFVkVMT1BFUlMKPiBpbmRleCA4OTE1ZWI2NzM4Li5lM2UxMDk3OTIx
+IDEwMDY0NAo+IC0tLSBhL0RFVkVMT1BFUlMKPiArKysgYi9ERVZFTE9QRVJTCj4gQEAgLTkxLDYg
+KzkxLDkgQEAgRjoJcGFja2FnZS9tb2RlbS1tYW5hZ2VyLwo+ICAgTjoJQWxla3NhbmRyIE1ha2Fy
+b3YgPGFsZWtzYW5kci5vLm1ha2Fyb3ZAZ21haWwuY29tPgo+ICAgRjoJcGFja2FnZS9jcHAtaHR0
+cGxpYi8KPiAgIAo+ICtOOglBbGV4YW5kZXIgU2hpcm9rb3YgPHNoaXJva292YWxleHNAZ21haWwu
+Y29tPgo+ICtGOglwYWNrYWdlL25ubi8KPiArCj4gICBOOglBbGVzc2FuZHJvIFBhcnRlc290dGkg
+PGEucGFydGVzb3R0aUBnbWFpbC5jb20+Cj4gICBGOglwYWNrYWdlL29hdHBwLwo+ICAgCj4gZGlm
+ZiAtLWdpdCBhL3BhY2thZ2UvQ29uZmlnLmluIGIvcGFja2FnZS9Db25maWcuaW4KPiBpbmRleCAx
+MzdmNzRlZDgyLi5iNGVhYzVjZjkxIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvQ29uZmlnLmluCj4g
+KysrIGIvcGFja2FnZS9Db25maWcuaW4KPiBAQCAtMjk3Myw2ICsyOTczLDcgQEAgbWVudSAiVGV4
+dCBlZGl0b3JzIGFuZCB2aWV3ZXJzIgo+ICAgCXNvdXJjZSAicGFja2FnZS9tZy9Db25maWcuaW4i
+Cj4gICAJc291cmNlICJwYWNrYWdlL21vc3QvQ29uZmlnLmluIgo+ICAgCXNvdXJjZSAicGFja2Fn
+ZS9uYW5vL0NvbmZpZy5pbiIKPiArCXNvdXJjZSAicGFja2FnZS9ubm4vQ29uZmlnLmluIgo+ICAg
+CXNvdXJjZSAicGFja2FnZS91ZW1hY3MvQ29uZmlnLmluIgo+ICAgCXNvdXJjZSAicGFja2FnZS92
+aW0vQ29uZmlnLmluIgo+ICAgZW5kbWVudQo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL25ubi9Db25m
+aWcuaW4gYi9wYWNrYWdlL25ubi9Db25maWcuaW4KPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGlu
+ZGV4IDAwMDAwMDAwMDAuLjA3NWFmZjlkMjEKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvcGFja2Fn
+ZS9ubm4vQ29uZmlnLmluCj4gQEAgLTAsMCArMSwxNCBAQAo+ICtjb25maWcgQlIyX1BBQ0tBR0Vf
+Tk5OCj4gKwlib29sICJubm4iCj4gKwkjIEJ1aWxkaW5nIG5ubiB3aXRob3V0IHdpZGVjaGFyL1VU
+RiBzdXBwb3J0IGlzIHRoZW9yZXRpY2FsbHkKPiArCSMgcG9zc2libGUsIGJ1dCBpbiBwcmFjdGlj
+ZSBpdCBsZWFkcyB0byB1bnN0YWJsZSBidWlsZHMuCj4gKwkjIFRoYXTigJlzIHdoeSB0aGUgV0NI
+QVIgZGVwZW5kZW5jeSBpcyBoZXJlLgo+ICsJZGVwZW5kcyBvbiBCUjJfVVNFX1dDSEFSCj4gKwlz
+ZWxlY3QgQlIyX1BBQ0tBR0VfTkNVUlNFUwo+ICsJc2VsZWN0IEJSMl9QQUNLQUdFX05DVVJTRVNf
+V0NIQVIKPiArCWhlbHAKPiArCSAgbm5uIGlzIGEgbGlnaHR3ZWlnaHQgeWV0IHBvd2VyZnVsIHRl
+cm1pbmFsIGZpbGUgbWFuYWdlci4KPiArCSAgSXQgaXMgd3JpdHRlbiBpbiBDLCBoYXMgbWluaW1h
+bCBkZXBlbmRlbmN5LCBhbmQgd29ya3MKPiArCSAgb3V0IG9mIHRoZSBib3guCj4gKwo+ICsJICBo
+dHRwczovL2dpdGh1Yi5jb20vamFydW4vbm5uCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2Uvbm5uL25u
+bi5oYXNoIGIvcGFja2FnZS9ubm4vbm5uLmhhc2gKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGlu
+ZGV4IDAwMDAwMDAwMDAuLjY3MGE1OTFhZmIKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvcGFja2Fn
+ZS9ubm4vbm5uLmhhc2gKPiBAQCAtMCwwICsxLDMgQEAKPiArIyBMb2NhbGx5IGNvbXB1dGVkCj4g
+K3NoYTI1NiAgOWZhYWZmMWUzZjVhMmZkM2VkNTcwYTgzZjZmYjNiYWYwYmZjNmViZDZhOWFiYWMx
+NjIwM2QwNTdhYzNmZmZlMyAgbm5uLTUuMS50YXIuZ3oKPiArc2hhMjU2ICA4MjlmNDg1ZGM0ZjJm
+NTFjMjQ3MWIzNmE5OWUyMmYxNWZmMjE0OTY2ZTE2YjcyY2Q3OTc2OGIyMzM4YjQxMzJiICBMSUNF
+TlNFCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2Uvbm5uL25ubi5tayBiL3BhY2thZ2Uvbm5uL25ubi5t
+awo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAwMDAwMDAwMC4uNzVlNzFjYTBlOAo+
+IC0tLSAvZGV2L251bGwKPiArKysgYi9wYWNrYWdlL25ubi9ubm4ubWsKPiBAQCAtMCwwICsxLDMz
+IEBACj4gKyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4gKyMKPiArIyBubm4KPiArIwo+ICsjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIwo+ICsKPiArTk5OX1ZFUlNJT04gPSA1LjEKPiArTk5OX0xJQ0VO
+U0UgPSBCU0QtMi1DbGF1c2UKPiArTk5OX0xJQ0VOU0VfRklMRVMgPSBMSUNFTlNFCj4gK05OTl9T
+SVRFID0gJChjYWxsIGdpdGh1YixqYXJ1bixubm4sdiQoTk5OX1ZFUlNJT04pKQo+ICtOTk5fREVQ
+RU5ERU5DSUVTID0gbmN1cnNlcwo+ICtOTk5fTUFLRV9GTEFHUyA9IENGTEFHU19PUFRJTUlaQVRJ
+T049Cj4gKwo+ICsjICJyZWFkbGluZSIgaXMgYW4gb3B0aW9uYWwgZGVwZW5kZW5jeS4gSWYgdGhl
+IHBhY2thZ2UgaXMgZW5hYmxlZCwKPiArIyBhZGQgaXQgdG8gdGhlIGRlcGVuZGVuY2llcyBsaXN0
+LiBPdGhlcndpc2UsIGJ1aWxkIHRoZSAibm9ybCIgdGFyZ2V0Lgo+ICtpZmVxICgkKEJSMl9QQUNL
+QUdFX1JFQURMSU5FKSx5KQo+ICtOTk5fREVQRU5ERU5DSUVTICs9IHJlYWRsaW5lCj4gK2Vsc2UK
+PiArTk5OX01BS0VfRkxBR1MgKz0gbm9ybAo+ICtlbmRpZgo+ICsKPiArZGVmaW5lIE5OTl9CVUlM
+RF9DTURTCj4gKwkkKFRBUkdFVF9NQUtFX0VOVikgJChUQVJHRVRfQ09ORklHVVJFX09QVFMpICQo
+TUFLRSkgXAo+ICsJLUMgJChARCkgJChOTk5fTUFLRV9GTEFHUykKPiArZW5kZWYKPiArCj4gK2Rl
+ZmluZSBOTk5fSU5TVEFMTF9UQVJHRVRfQ01EUwo+ICsJJChUQVJHRVRfTUFLRV9FTlYpICQoVEFS
+R0VUX0NPTkZJR1VSRV9PUFRTKSAkKE1BS0UpIFwKPiArCS1DICQoQEQpICQoTk5OX01BS0VfRkxB
+R1MpIFwKPiArCURFU1RESVI9JChUQVJHRVRfRElSKSBQUkVGSVg9L3VzciBpbnN0YWxsCj4gK2Vu
+ZGVmCj4gKwo+ICskKGV2YWwgJChnZW5lcmljLXBhY2thZ2UpKQoKX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWls
+ZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9s
+aXN0aW5mby9idWlsZHJvb3QK
