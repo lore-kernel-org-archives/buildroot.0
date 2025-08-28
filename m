@@ -1,51 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FB19C8303F
-	for <buildroot@archiver.kernel.org>; Thu, 28 Aug 2025 13:26:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64858C8303F
+	for <buildroot@archiver.kernel.org>; Thu, 28 Aug 2025 13:28:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D992283BC5;
-	Thu, 28 Aug 2025 13:26:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2FBAD40612;
+	Thu, 28 Aug 2025 13:28:10 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6sfwKqLhdydM; Thu, 28 Aug 2025 13:28:09 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E9BE40649
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5E9BE40649;
+	Thu, 28 Aug 2025 13:28:09 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id E30B61B0
+ for <buildroot@buildroot.org>; Thu, 28 Aug 2025 13:28:08 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id DE44383B61
+ for <buildroot@buildroot.org>; Thu, 28 Aug 2025 13:28:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id l91OB1AIQ_vI; Thu, 28 Aug 2025 13:26:46 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B53C83BAB
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1B53C83BAB;
-	Thu, 28 Aug 2025 13:26:46 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 2F0861B0
- for <buildroot@buildroot.org>; Thu, 28 Aug 2025 13:26:32 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5EC8060DD2
- for <buildroot@buildroot.org>; Thu, 28 Aug 2025 13:26:30 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KwmNpJ7cNKPg for <buildroot@buildroot.org>;
- Thu, 28 Aug 2025 13:26:28 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id gxfCoa6FXHbQ for <buildroot@buildroot.org>;
+ Thu, 28 Aug 2025 13:28:08 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 177C460DFA
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 177C460DFA
- for <buildroot@buildroot.org>; Thu, 28 Aug 2025 13:26:28 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 14E0287CF9; Thu, 28 Aug 2025 13:26:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9076483B60
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9076483B60
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9076483B60
+ for <buildroot@buildroot.org>; Thu, 28 Aug 2025 13:28:07 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1732657001; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Thu, 28 Aug 2025 13:27:49 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peko@dell.be.48ers.dk>) id 1urcfM-006g2y-0k;
+ Thu, 28 Aug 2025 15:27:48 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 28 Aug 2025 15:14:26 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 54ac9c6450fc996681227f7100ffd64d66af2f37
-X-Git-Newrev: caf055a96c461ca3aa693fd0f7291d151be633ed
-X-Patchwork-Hint: ignore
-Message-Id: <20250828132628.14E0287CF9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/riotboard: remove defconfig, broken
+Date: Thu, 28 Aug 2025 15:27:46 +0200
+Message-Id: <20250828132747.1591583-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.39.5
+MIME-Version: 1.0
+X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=O5YStA98HCPKRk1S+SpbeB/pZWYDLP/K6m//RFKEdtFxd4X7NWyZr//vhq50lIaUQY/YdQrzVAa/n6awwYekfMxxZHxBacKhH+sPSwlOq5U4xGjzZ8OAtIfMKRSKtEcnK0+tsK2Tvs3bNI2spcF8uroGlt64PoRYaKiCwkdz1n7/s6ad5hn9VkVOoymM7De5V0Om7iiFqpBEtMg+o5LPr6cjsSzQ39FfI2Kt3MZ6YqhA03rWmstsLRe/EgIHTybPbBETyZy8OUZD47fDafmPR2qnT28C2W8V5rOPY2XROQNgynRV+AC76GrFAhjuJqwJ2IAPiuEHqPl+VkwVkQBm/g==;
+ s=purelymail1; d=purelymail.com; v=1;
+ bh=TwujZRnyjVqayyiNFaHFUMNe9imciRgMQHZw7TU6y3U=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail1 header.b=O5YStA98
+X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
+Subject: [Buildroot] [PATCH] package/vde2: fix build w/ gcc-15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -57,186 +78,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=caf055a96c461ca3aa693fd0f7291d151be633ed
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fixes: https://autobuild.buildroot.net/results/8d14173f31922a737c326be75aa24c9f9471342a/
 
-This defconfig no longer builds:
+The vde2 source code uses empty argument function pointer prototypes like:
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/11026769450
+typedef ssize_t (* ssize_fun)();
+extern ssize_fun vdehist_vderead;
 
-It has been broken for at least 2 months:
+In C17 and earlier, such prototypes means unknown number of arguments,
+whereas with C23 it means no arguments, leading to build failures:
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs?name=T%3Driotboard&kind=BUILD
+libvdehist.c:39:27: error: initialization of 'ssize_fun' {aka 'long int
+  (*)(void)'} from incompatible pointer type 'ssize_t (*)(int,  void *,
+  size_t)' {aka 'long int (*)(int,  void *, long unsigned int)'}
+  [-Wincompatible-pointer-types]
 
-It is using the outdated, not even LTS 4.18.x kernel, which most
-likely explains why it no longer builds with modern toolchains.
+Workaround it using -std=gnu99.  Vde2 is provided both as a host and target
+package, so do this unconditionally for both.
 
-Unless a fix is provided, this defconfig will be removed.
-
-Fixes:
-
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/11026769450
-
-Cc: Nikolay Dimitrov <nikolay.dimitrov@retrohub.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .checkpackageignore                                |  1 -
- DEVELOPERS                                         |  4 ---
- board/embest/riotboard/genimage.cfg                | 17 ----------
- board/embest/riotboard/readme.txt                  | 38 ----------------------
- .../rootfs_overlay/boot/extlinux/extlinux.conf     |  6 ----
- configs/riotboard_defconfig                        | 28 ----------------
- 6 files changed, 94 deletions(-)
+ package/vde2/vde2.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index ec3b11aa3f..eed9752a04 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -177,7 +177,6 @@ configs/pc_x86_64_efi_defconfig lib_defconfig.ForceCheckHash
- configs/pine64_defconfig lib_defconfig.ForceCheckHash
- configs/pine64_pinecube_defconfig lib_defconfig.ForceCheckHash
- configs/pine64_star64_defconfig lib_defconfig.ForceCheckHash
--configs/riotboard_defconfig lib_defconfig.ForceCheckHash
- configs/rock64_defconfig lib_defconfig.ForceCheckHash
- configs/rock_pi_n8_defconfig lib_defconfig.ForceCheckHash
- configs/roseapplepi_defconfig lib_defconfig.ForceCheckHash
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 6bab6502ce..4c1cc01da9 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2565,10 +2565,6 @@ F:	package/ofono/
- N:	Niklas Cassel <niklas.cassel@wdc.com>
- F:	configs/qemu_riscv64_nommu_virt_defconfig
+diff --git a/package/vde2/vde2.mk b/package/vde2/vde2.mk
+index ab4c32143d..7c7fbfca9c 100644
+--- a/package/vde2/vde2.mk
++++ b/package/vde2/vde2.mk
+@@ -38,5 +38,10 @@ HOST_VDE2_CONF_OPTS = \
+ 	--disable-profile \
+ 	--enable-tuntap
  
--N:	Nikolay Dimitrov <nikolay.dimitrov@retrohub.org>
--F:	board/embest/riotboard/
--F:	configs/riotboard_defconfig
--
- N:	Nimai Mahajan <nimaim@gmail.com>
- F:	package/libucl/
- 
-diff --git a/board/embest/riotboard/genimage.cfg b/board/embest/riotboard/genimage.cfg
-deleted file mode 100644
-index d2e851a78d..0000000000
---- a/board/embest/riotboard/genimage.cfg
-+++ /dev/null
-@@ -1,17 +0,0 @@
--image sdcard.img {
--	hdimage {
--	}
--
--	partition u-boot {
--		in-partition-table = "no"
--		image = "u-boot.imx"
--		offset = 1K
--	}
--
--	partition rootfs {
--		partition-type = 0x83
--		image = "rootfs.ext2"
--		offset = 1M
--		size = 60M
--	}
--}
-diff --git a/board/embest/riotboard/readme.txt b/board/embest/riotboard/readme.txt
-deleted file mode 100644
-index 4ba836fa5a..0000000000
---- a/board/embest/riotboard/readme.txt
-+++ /dev/null
-@@ -1,38 +0,0 @@
--Buildroot for Embest RIoTboard
--==============================
--
--This is a small development board, based on Freescale IMX6 Solo SoC
--(single core ARM Cortex-A9).
--
--More details about the board can be found at:
--
--  http://www.embest-tech.com/riotboard
--
--1. Compiling buildroot
------------------------
--
--$ make riotboard_defconfig
--$ make
--
--2. Installing buildroot
-------------------------
--
--Prepare an SD-card and plug it into your card reader. Always double
--check the block device before writing to it, as writing to the wrong
--block device can cause irrecoverable data loss. Now you can write the
--image to your SD-card:
--
--sudo dd if=output/images/sdcard.img of=/dev/<sdcard-block-device> bs=1M
--
--3. Running buildroot
----------------------
--
--Position the board so you can read the label "RIoTboard" on the right
--side of SW1 DIP switches. Configure the SW1 swiches like this:
--
--1   0  1   0   0  1   0  1
--ON OFF ON OFF OFF ON OFF ON
--
--Now plug your prepared SD-card in slot J6. Connect a serial console
--(115200, 8, N, 1) to header J18. Connect a 5V/1A power supply to the
--board and enjoy.
-diff --git a/board/embest/riotboard/rootfs_overlay/boot/extlinux/extlinux.conf b/board/embest/riotboard/rootfs_overlay/boot/extlinux/extlinux.conf
-deleted file mode 100644
-index 23e48a0da7..0000000000
---- a/board/embest/riotboard/rootfs_overlay/boot/extlinux/extlinux.conf
-+++ /dev/null
-@@ -1,6 +0,0 @@
--default buildroot
--
--label buildroot
--kernel /boot/zImage
--devicetree /boot/imx6dl-riotboard.dtb
--append console=ttymxc1,115200 root=/dev/mmcblk1p1 rw
-diff --git a/configs/riotboard_defconfig b/configs/riotboard_defconfig
-deleted file mode 100644
-index 709b54ff06..0000000000
---- a/configs/riotboard_defconfig
-+++ /dev/null
-@@ -1,28 +0,0 @@
--BR2_arm=y
--BR2_cortex_a9=y
--BR2_ARM_ENABLE_NEON=y
--BR2_ARM_ENABLE_VFP=y
--BR2_ARM_FPU_VFPV3=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
--BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
--BR2_ROOTFS_OVERLAY="board/embest/riotboard/rootfs_overlay"
--BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/embest/riotboard/genimage.cfg"
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18.10"
--BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
--BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-riotboard"
--BR2_LINUX_KERNEL_INSTALL_TARGET=y
--BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
--BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_ROOTFS_EXT2_4=y
--BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BOARDNAME="riotboard"
--BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.07"
--BR2_TARGET_UBOOT_FORMAT_IMX=y
--BR2_PACKAGE_HOST_DOSFSTOOLS=y
--BR2_PACKAGE_HOST_GENIMAGE=y
--BR2_PACKAGE_HOST_MTOOLS=y
++# C23 changes meaning of empty argument prototypes like int (*)()
++# causing build failures, so force gnu99
++VDE2_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
++HOST_VDE2_CONF_ENV = CFLAGS="$(HOST_CFLAGS) -std=gnu99"
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+-- 
+2.39.5
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
