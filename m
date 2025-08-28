@@ -1,51 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10966C8303F
-	for <buildroot@archiver.kernel.org>; Thu, 28 Aug 2025 13:26:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D264CA0FF2
+	for <buildroot@archiver.kernel.org>; Thu, 28 Aug 2025 13:26:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DDFD060E18;
-	Thu, 28 Aug 2025 13:26:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1245783B70;
+	Thu, 28 Aug 2025 13:26:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Vnp0AtGGd0Bd; Thu, 28 Aug 2025 13:26:35 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TYLBdeyRFlg9; Thu, 28 Aug 2025 13:26:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5DC9B60DF9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 09E8083B81
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5DC9B60DF9;
-	Thu, 28 Aug 2025 13:26:35 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 33449FC8
- for <buildroot@buildroot.org>; Thu, 28 Aug 2025 13:26:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 09E8083B81;
+	Thu, 28 Aug 2025 13:26:38 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 15E4E1B0
+ for <buildroot@buildroot.org>; Thu, 28 Aug 2025 13:26:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 172CB81EA3
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2D613837D3
  for <buildroot@buildroot.org>; Thu, 28 Aug 2025 13:26:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Oxsb59oQkaNg for <buildroot@buildroot.org>;
+ id fRq80B51jl03 for <buildroot@buildroot.org>;
  Thu, 28 Aug 2025 13:26:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2590483927
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 50F5483A50
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2590483927
+ by smtp1.osuosl.org (Postfix) with ESMTP id 50F5483A50
  for <buildroot@buildroot.org>; Thu, 28 Aug 2025 13:26:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 242718106C; Thu, 28 Aug 2025 13:26:28 +0000 (UTC)
+ id 50B5D87CF3; Thu, 28 Aug 2025 13:26:28 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 28 Aug 2025 15:14:49 +0200
+Date: Thu, 28 Aug 2025 15:16:31 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: caf055a96c461ca3aa693fd0f7291d151be633ed
-X-Git-Newrev: 83af501540b8a3f48fca1bacdc3ec11bd7abb9fe
+X-Git-Oldrev: 1a3bae64244422a4b5e1d0bbb7dbc9036585cc0e
+X-Git-Newrev: a933920ff0d28947f5f6d4f6b6be04f113ad960c
 X-Patchwork-Hint: ignore
-Message-Id: <20250828132628.242718106C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/rock64: remove defconfig, broken
+Message-Id: <20250828132628.50B5D87CF3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/ts7680: remove defconfig, broken
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,322 +60,170 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0299884557406024491=="
+Content-Type: multipart/mixed; boundary="===============3340664325113585330=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0299884557406024491==
+--===============3340664325113585330==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=83af501540b8a3f48fca1bacdc3ec11bd7abb9fe
+commit: https://git.buildroot.net/buildroot/commit/?id=a933920ff0d28947f5f6d4f6b6be04f113ad960c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 This defconfig no longer builds:
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/11026769723
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/11026774180
 
 It has been broken for at least 2 months:
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs?name=T%3Drock64&kind=BUILD
+  https://gitlab.com/buildroot.org/buildroot/-/jobs?name=T%3Dts7680&kind=BUILD
 
-The old u-boot-2020.07-rc4 no longer builds.
+It uses the outdated Linux 4.9 kernel, which is no longer maintained,
+and no longer builds with recent toolchains.
 
 Unless a fix is provided, this defconfig will be removed.
 
 Fixes:
 
-    https://gitlab.com/buildroot.org/buildroot/-/jobs/11026769723
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/11026774180
 
-Cc: Michał Łyszczek <michal.lyszczek@bofc.pl>
+Cc: Julien Grossholtz <julien.grossholtz@openest.io>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- .checkpackageignore                                |  3 -
- DEVELOPERS                                         |  2 -
- board/pine64/rock64/extlinux.conf                  |  4 -
- board/pine64/rock64/genimage.cfg                   | 23 ------
- ...e-rk3328-needs-itb-image-to-boot-properly.patch | 34 --------
- board/pine64/rock64/post-build.sh                  |  9 --
- board/pine64/rock64/readme.txt                     | 95 ----------------------
- configs/rock64_defconfig                           | 39 ---------
- 8 files changed, 209 deletions(-)
+ .checkpackageignore                   |  1 -
+ DEVELOPERS                            |  2 --
+ board/technologic/ts7680/genimage.cfg | 14 ----------
+ board/technologic/ts7680/readme.txt   | 50 -----------------------------------
+ configs/ts7680_defconfig              | 16 -----------
+ 5 files changed, 83 deletions(-)
 
 diff --git a/.checkpackageignore b/.checkpackageignore
-index eed9752a04..da5da17365 100644
+index 2596a5c77b..11c8a23763 100644
 --- a/.checkpackageignore
 +++ b/.checkpackageignore
-@@ -47,8 +47,6 @@ board/orangepi/orangepi-zero/patches/linux/0001-ARM-dts-orange-pi-zero-interrupt
- board/orangepi/orangepi-zero/patches/linux/0002-ARM-dts-orange-pi-zero-enable-spi-nor.patch lib_patch.Upstream
- board/orangepi/orangepi-zero/patches/linux/0003-ARM-dts-orange-pi-zero-enable-spidev.patch lib_patch.Upstream
- board/orangepi/orangepi-zero/patches/linux/0004-ARM-dts-orange-pi-zero-enable-uart.patch lib_patch.Upstream
--board/pine64/rock64/patches/uboot/0001-Makefile-rk3328-needs-itb-image-to-boot-properly.patch lib_patch.Upstream
--board/pine64/rock64/post-build.sh Shellcheck
- board/qemu/aarch64-sbsa/assemble-flash-images Shellcheck
- board/qemu/x86/post-build.sh Shellcheck
- board/qemu/x86_64/post-build.sh Shellcheck
-@@ -177,7 +175,6 @@ configs/pc_x86_64_efi_defconfig lib_defconfig.ForceCheckHash
- configs/pine64_defconfig lib_defconfig.ForceCheckHash
- configs/pine64_pinecube_defconfig lib_defconfig.ForceCheckHash
- configs/pine64_star64_defconfig lib_defconfig.ForceCheckHash
--configs/rock64_defconfig lib_defconfig.ForceCheckHash
- configs/rock_pi_n8_defconfig lib_defconfig.ForceCheckHash
- configs/roseapplepi_defconfig lib_defconfig.ForceCheckHash
- configs/s6lx9_microboard_defconfig lib_defconfig.ForceCheckHash
+@@ -198,7 +198,6 @@ configs/stm32mp157c_odyssey_defconfig lib_defconfig.ForceCheckHash
+ configs/terasic_de10nano_cyclone5_defconfig lib_defconfig.ForceCheckHash
+ configs/ts4900_defconfig lib_defconfig.ForceCheckHash
+ configs/ts5500_defconfig lib_defconfig.ForceCheckHash
+-configs/ts7680_defconfig lib_defconfig.ForceCheckHash
+ configs/uevm5432_defconfig lib_defconfig.ForceCheckHash
+ configs/visionfive_defconfig lib_defconfig.ForceCheckHash
+ configs/wandboard_defconfig lib_defconfig.ForceCheckHash
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 4c1cc01da9..c5170a0f65 100644
+index e0ea0c2c26..b33dbf8c5e 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2460,8 +2460,6 @@ F:	package/rcw-smarc-sal28/
+@@ -1796,9 +1796,7 @@ F:	package/qt5/
  
- N:	Michał Łyszczek <michal.lyszczek@bofc.pl>
- F:	board/altera/socrates_cyclone5/
--F:	board/pine64/rock64
--F:	configs/rock64_defconfig
- F:	configs/socrates_cyclone5_defconfig
- F:	package/netifrc/
- F:	package/openrc/
-diff --git a/board/pine64/rock64/extlinux.conf b/board/pine64/rock64/extlinux.conf
+ N:	Julien Grossholtz <julien.grossholtz@openest.io>
+ F:	board/raspberrypi/
+-F:	board/technologic/ts7680/
+ F:	configs/raspberrypizero2w_defconfig
+-F:	configs/ts7680_defconfig
+ F:	package/paho-mqtt-c
+ 
+ N:	Julien Olivain <ju.o@free.fr>
+diff --git a/board/technologic/ts7680/genimage.cfg b/board/technologic/ts7680/genimage.cfg
 deleted file mode 100644
-index bf71982a9f..0000000000
---- a/board/pine64/rock64/extlinux.conf
+index 58a63edd1a..0000000000
+--- a/board/technologic/ts7680/genimage.cfg
 +++ /dev/null
-@@ -1,4 +0,0 @@
--label rock64-buildroot
--  kernel /boot/Image
--  devicetree /boot/rk3328-rock64.dtb
--  append console=ttyS2,1500000n8 root=/dev/mmcblk0p1 ro rootwait
-diff --git a/board/pine64/rock64/genimage.cfg b/board/pine64/rock64/genimage.cfg
-deleted file mode 100644
-index 7b749d1dd6..0000000000
---- a/board/pine64/rock64/genimage.cfg
-+++ /dev/null
-@@ -1,23 +0,0 @@
+@@ -1,14 +0,0 @@
 -image sdcard.img {
 -	hdimage {
 -	}
 -
--	partition uboot-spl {
--		in-partition-table = "no"
--		image = "u-boot-tpl-spl.img"
--		offset = 32K # 512 * 0x40 from start of sd card
--	}
--
--	partition uboot {
--		in-partition-table = "no"
--		image = "u-boot.itb"
--		offset = 256K # 512 * 0x200 from start of sd card
+-	partition unused {
+-		size = 512
 -	}
 -
 -	partition rootfs {
 -		partition-type = 0x83
--		bootable = "yes"
--		image = "rootfs.ext2"
--		size = 500M
+-		image = "rootfs.ext4"
+-		size = 256M
 -	}
 -}
-diff --git a/board/pine64/rock64/patches/uboot/0001-Makefile-rk3328-needs-itb-image-to-boot-properly.patch b/board/pine64/rock64/patches/uboot/0001-Makefile-rk3328-needs-itb-image-to-boot-properly.patch
+diff --git a/board/technologic/ts7680/readme.txt b/board/technologic/ts7680/readme.txt
 deleted file mode 100644
-index 7c84736034..0000000000
---- a/board/pine64/rock64/patches/uboot/0001-Makefile-rk3328-needs-itb-image-to-boot-properly.patch
+index 3f703330bf..0000000000
+--- a/board/technologic/ts7680/readme.txt
 +++ /dev/null
-@@ -1,34 +0,0 @@
--From d312c4e40bf816823bdcfd066dd2511b23e83c9c Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Micha=C5=82=20=C5=81yszczek?= <michal.lyszczek@bofc.pl>
--Date: Tue, 5 Feb 2019 22:08:54 +0100
--Subject: [PATCH] Makefile: rk3328 needs itb image to boot properly
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
+@@ -1,50 +0,0 @@
+-Technologic Systems TS-7680 SBC
+-===============================
 -
--Signed-off-by: Michał Łyszczek <michal.lyszczek@bofc.pl>
--[Dario: make the patch to be applied with fuzz factor 0]
--Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-----
-- Makefile | 5 +++++
-- 1 file changed, 5 insertions(+)
+-This document explains how to set up a basic Buildroot system for
+-the Technologic Systems TS-7680 Single Board Computer.
 -
--diff --git a/Makefile b/Makefile
--index 149f83994814..ebbdf2596b9b 100644
----- a/Makefile
--+++ b/Makefile
--@@ -923,6 +923,11 @@ ifeq ($(CONFIG_SYS_COREBOOT)$(CONFIG_SPL),yy)
-- ALL-$(CONFIG_BINMAN) += u-boot-x86-with-spl.bin
-- endif
-- 
--+# rk3328 needs itb image to boot properly
--+ifeq ($(CONFIG_ROCKCHIP_RK3328),y)
--+ALL-y += u-boot.itb
--+endif
--+
-- # Build a combined spl + u-boot image for sunxi
-- ifeq ($(CONFIG_ARCH_SUNXI)$(CONFIG_SPL),yy)
-- ALL-y += u-boot-sunxi-with-spl.bin
---- 
--2.43.0
+-The TS-7680 SBC is based on the Freescale i.MX286 ARM ARM926EJ-S
+-running at 454MHz. The TS-7680 features are 10/100 Ethernet ports,
+-Wi-Fi, microSD card, eMMC, NOR Flash, USB host port, CAN ports,
+-relays and ADC/DAC. More details on the board here:
+-https://docs.embeddedTS.com/TS-7680
 -
-diff --git a/board/pine64/rock64/post-build.sh b/board/pine64/rock64/post-build.sh
-deleted file mode 100755
-index 26b53cba8e..0000000000
---- a/board/pine64/rock64/post-build.sh
-+++ /dev/null
-@@ -1,9 +0,0 @@
--#!/bin/sh
+-The TS-7680 uses a 4.9 Linux kernel provided by Technologic Systems.
 -
--MKIMAGE=$HOST_DIR/bin/mkimage
--BOARD_DIR="$(dirname $0)"
+-To build the default configuration you only have to run:
 -
--$MKIMAGE -n rk3328 -T rksd -d $BINARIES_DIR/u-boot-tpl.bin $BINARIES_DIR/u-boot-tpl.img
--cat $BINARIES_DIR/u-boot-tpl.img $BINARIES_DIR/u-boot-spl.bin > $BINARIES_DIR/u-boot-tpl-spl.img
--
--install -m 0644 -D $BOARD_DIR/extlinux.conf $TARGET_DIR/boot/extlinux/extlinux.conf
-diff --git a/board/pine64/rock64/readme.txt b/board/pine64/rock64/readme.txt
-deleted file mode 100644
-index 029c67641e..0000000000
---- a/board/pine64/rock64/readme.txt
-+++ /dev/null
-@@ -1,95 +0,0 @@
--Intro
--=====
--
--This default configuration will allow you to start experimenting with the
--buildroot environment for the Rock64. With this default configuration you
--can log in into board via uart and look around.
--
--Board homepage: https://www.pine64.org/?page_id=7147
--
--Build
--=====
--
--First, load rock64 config for buildroot
--
--  $ make rock64_defconfig
--
--Optionally make changes to buildroot config (to install more programs)
--
--  $ make menuconfig
--
--And then build everything
--
+-  $ make ts7680_defconfig
 -  $ make
 -
--When completed, following files will be generated in output/images directory:
+-The output looks like:
+-output/images
+-├── imx28-ts7680.dtb
+-├── rootfs.ext2
+-├── rootfs.ext4 -> rootfs.ext2
+-├── rootfs.tar
+-├── sdcard.img
+-└── uImage
 -
--  .
--  ├── Image
--  ├── bl31.bin
--  ├── bl31.elf
--  ├── rk3328-rock64.dtb
--  ├── rootfs.ext2
--  ├── rootfs.ext4 -> rootfs.ext2
--  ├── rootfs.tar
--  ├── sdcard.img
--  ├── u-boot-spl.bin
--  ├── u-boot-tpl-spl.img
--  ├── u-boot-tpl.bin
--  ├── u-boot-tpl.img
--  ├── u-boot.bin
--  └── u-boot.itb
+-The provided genimage configuration generates an image file containing
+-two partitions. The first one is unused, but mandatory as the
+-TS-7680 built-in bootloader loads the Linux uImage from the /boot
+-directory in the second partition. The second partition contains the
+-rootfs with the Linux uImage into the /boot directory.
 -
--Creating bootable SD card
--=========================
+-  $ fdisk output/images/sdcard.img
+-  output/images/sdcard.img1          1      1       1  512B  0 Empty
+-  output/images/sdcard.img2          2 524289  524288  256M 83 Linux
 -
--!!! THIS COMMAND MAY WIPE YOUR DISK!
--!!! MAKE SURE YOU PASSED CORRECT DEVICE!
--!!! OR IT THIS WILL WIPE YOUR DISK!
+-This image can be directly written to an SD card.
 -
--Simply invoke (as root)
+-    $ sudo dd if=output/images/sdcard.img of=/dev/mmcblk0
 -
--  # dd if=output/images/sdcard.img of=/dev/sdX && sync
+-To boot with Buildroot, insert this SD card on the board, make sure
+-the SD jumper is present and the U-Boot jumper is not.
 -
--Where X is your SD card device (not partition), of= argument may also be
--/dev/mmcblk0 if you are using built-in sd card reader.
--
--Runtime
--=======
--
--Login
-------
--
--By default, buildroot has no password, just type 'root' as login user, and
--you will be logged in.
--
--Serial console
----------------
--
--Serial console needs to be connected to pins (into 40pin rpi compatible part)
--
--pin 6:  gnd
--pin 8:  tx
--pin 10: rx
--
--Pin numbers are printed on board.
--
--Uart configuration is not standard. Rock64 uses 1500000 (1,5M) baudrate
--with standard 8n1.
--
--Ethernet
----------
--
--To enable ethernet you need to load modules for it:
--
--# modprobe stmmac
--# modprobe dwmac-rk
--
--and since by default there is no dhcp installed, you need to configure ip
--address, remember to change address to fit your network.
--
--# ifconfig eth0 up
--# ip addr add 10.1.1.180/24 dev eth0
--# ping 10.1.1.1
--PING 10.1.1.1 (10.1.1.1): 56 data bytes
--64 bytes from 10.1.1.1: seq=0 ttl=64 time=0.695 ms
-diff --git a/configs/rock64_defconfig b/configs/rock64_defconfig
+-The bootloader comes pre-flashed on the board on an SPI flash. Since
+-updating the bootloader is risky and not trivial, it is not included
+-in the Buildroot defconfig. Refer to
+-https://docs.embeddedts.com/TS-7680#U-Boot for details on
+-which U-Boot config to use and how to flash it.
+diff --git a/configs/ts7680_defconfig b/configs/ts7680_defconfig
 deleted file mode 100644
-index 744d3a7159..0000000000
---- a/configs/rock64_defconfig
+index 9e058b1d78..0000000000
+--- a/configs/ts7680_defconfig
 +++ /dev/null
-@@ -1,39 +0,0 @@
--BR2_aarch64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
--BR2_GLOBAL_PATCH_DIR="board/pine64/rock64/patches"
--BR2_TARGET_GENERIC_GETTY_PORT="ttyS2"
--BR2_ROOTFS_POST_BUILD_SCRIPT="board/pine64/rock64/post-build.sh"
+@@ -1,16 +0,0 @@
+-BR2_arm=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
 -BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pine64/rock64/genimage.cfg"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/technologic/ts7680/genimage.cfg"
 -BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.216"
--BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,embeddedTS,linux-4.9.y,v4.9.311-ts)/linux-v4.9.311-ts.tar.gz"
+-BR2_LINUX_KERNEL_DEFCONFIG="ts_imx28"
+-BR2_LINUX_KERNEL_UIMAGE=y
+-BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x40008000"
 -BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3328-rock64"
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx28-ts7680"
 -BR2_LINUX_KERNEL_INSTALL_TARGET=y
--BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
 -BR2_TARGET_ROOTFS_EXT2=y
 -BR2_TARGET_ROOTFS_EXT2_4=y
--BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.2"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="rk3328"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="bl31/*.elf"
--BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
--BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/ayufan-rock64/linux-mainline-u-boot.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="release-2020-07"
--BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rock64-rk3328"
--BR2_TARGET_UBOOT_NEEDS_DTC=y
--BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
--BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
--BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
--BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
--BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
--BR2_TARGET_UBOOT_SPL=y
--BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl.bin tpl/u-boot-tpl.bin"
 -BR2_PACKAGE_HOST_GENIMAGE=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS=y
 
---===============0299884557406024491==
+--===============3340664325113585330==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -386,4 +234,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============0299884557406024491==--
+--===============3340664325113585330==--
