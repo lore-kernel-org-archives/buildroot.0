@@ -4,70 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B49FCA0EED
-	for <buildroot@archiver.kernel.org>; Thu, 28 Aug 2025 20:27:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 636ACCA0EED
+	for <buildroot@archiver.kernel.org>; Thu, 28 Aug 2025 20:34:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2027D81210;
-	Thu, 28 Aug 2025 20:27:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 06E8380B47;
+	Thu, 28 Aug 2025 20:34:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GD90l15LA5PK; Thu, 28 Aug 2025 20:27:55 +0000 (UTC)
+ id 8ajSiwW3Leld; Thu, 28 Aug 2025 20:34:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1FAA183EC7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 10E4980B4C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1FAA183EC7;
-	Thu, 28 Aug 2025 20:27:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 745F2928
- for <buildroot@buildroot.org>; Thu, 28 Aug 2025 20:27:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 10E4980B4C;
+	Thu, 28 Aug 2025 20:34:26 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5D9C7928
+ for <buildroot@buildroot.org>; Thu, 28 Aug 2025 20:34:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 650F383EC7
- for <buildroot@buildroot.org>; Thu, 28 Aug 2025 20:27:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 438264107E
+ for <buildroot@buildroot.org>; Thu, 28 Aug 2025 20:34:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HYGUVBsTNGgI for <buildroot@buildroot.org>;
- Thu, 28 Aug 2025 20:27:52 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id T_6PLMrp_eFL for <buildroot@buildroot.org>;
+ Thu, 28 Aug 2025 20:34:23 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6987D81210
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6987D81210
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4BC0D4101C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4BC0D4101C
 Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6987D81210
- for <buildroot@buildroot.org>; Thu, 28 Aug 2025 20:27:52 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4BC0D4101C
+ for <buildroot@buildroot.org>; Thu, 28 Aug 2025 20:34:23 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id F3F2CB978306; Thu, 28 Aug 2025 22:27:49 +0200 (CEST)
-Message-ID: <0f6eab32-2aa6-4a34-8a35-9bbd93e4991c@rnout.be>
-Date: Thu, 28 Aug 2025 22:27:47 +0200
+ with ESMTPSA id EF58DB978315; Thu, 28 Aug 2025 22:34:20 +0200 (CEST)
+Message-ID: <d3c9c076-dcaf-4856-aaeb-4c49b1b667ac@rnout.be>
+Date: Thu, 28 Aug 2025 22:34:19 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Romain Naour <romain.naour@smile.fr>, Florian Larysch <fl@n621.de>,
- buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20250822212816.15241-1-fl@n621.de>
- <87d20357-7f5d-422d-9893-6ac6466f64ed@smile.fr>
+To: Thomas Perale <thomas.perale@mind.be>, buildroot@buildroot.org
+References: <20250817093118.3455688-1-thomas.perale@mind.be>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <87d20357-7f5d-422d-9893-6ac6466f64ed@smile.fr>
+In-Reply-To: <20250817093118.3455688-1-thomas.perale@mind.be>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1756412870; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1756413261; h=from:subject:date:message-id:to:cc:mime-version:content-type:
  content-transfer-encoding:content-language:in-reply-to:references;
- bh=XgipVg1R7fJbuwGns7QFMTsfc3wKDyy7hf6pHD7Hy+Q=;
- b=m62pC0fhn3EXd31VeKuuQrhHBxMz69mroazEp57nPwuTcPE8sJ56hVspMmhxTQGmjea7FG
- hXy2lCYWpj7XfB5YYBKFDiVDK1jwbtNIw8xD4UwfxK1jK5n++Gvz5N6FlzRSdh3O32dXmO
- F9Mp4cek5/8DQL9C6ayU7ayZUY7MBDYme8v7M8BCWb2UjQ0XcStwH/4Ef2EIYVYThuVkzH
- wYz7K5zgjoeaJAH/hvc3bPHNN8ZZF4bqCCHqGGgeG1yweYgiUDkRfjvRglSrNcHXUj0pPe
- fQcQhvFdDWlRaewUmW9+INRUzqsqEusCE6zgZHzsTUK5iZuq9RxHfCuU6NcaHg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=rmPN+wpHvThTD3pyRR4X33KBTjpqwh2uWDpQcxankmI=;
+ b=a+ttprRmTK/lPZCFsGOEShWjagNfRQZPDD0bJ+VkBVPtAC/hQWqIESR9wJwyJLXeWGWrrZ
+ 6TB/9tq7QwwWUV0qO8RZ6+1VjMP2o2amWm/HAFQaE445Ayn7dhYpG3ei1/EPgnt9ZKR1EN
+ Dpp3MCuYsuzy9Pa0Fur+4uWhVQ9v2Un21pZINHVfh5oRsmLpKU9sZ5jn+IXERtTZCUCQEQ
+ 6lLOlyyHUhCcawQaCWSJXeOmrBDR0K7ZSr0YX6tskPPyMPe6M0NJMu1q9CSHIttYjKsamp
+ iiwubLMPkLtqjGVMXbLtF61EujWszuwkEO4KpiNYMVBS1M5W3NHPgl9UuSCBow==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=m62pC0fh
-Subject: Re: [Buildroot] [PATCH 1/1] docs/manual: mention checkpackageignore
- file
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
+ header.s=dkim header.b=a+ttprRm
+Subject: Re: [Buildroot] [PATCH v2] python-yarl: bump to v1.20.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,67 +78,82 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@rnout.be>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: James Hilliard <james.hilliard1@gmail.com>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-CgpPbiAyMy8wOC8yMDI1IDIzOjU0LCBSb21haW4gTmFvdXIgdmlhIGJ1aWxkcm9vdCB3cm90ZToK
-PiBIZWxsbyBGbG9yaWFuLCBBbGwsCj4gCj4gTGUgMjIvMDgvMjAyNSDDoCAyMzoyNywgRmxvcmlh
-biBMYXJ5c2NoIGEgw6ljcml0wqA6Cj4+IEN1cnJlbnRseSwgdGhlIG1hbnVhbCBkb2Vzbid0IG1l
-bnRpb24gdGhlIGNoZWNrcGFja2FnZWlnbm9yZSBmaWxlIGF0Cj4+IGFsbCwgbGVhdmluZyB0aGUg
-dXNlciB1bmRlciB0aGUgYXNzdW1wdGlvbiB0aGF0IHJ1bm5pbmcgIm1ha2UKPj4gY2hlY2stcGFj
-a2FnZSIgYW5kIHJ1bm5pbmcgdXRpbHMvY2hlY2stcGFja2FnZSBkaXJlY3RseSBvbiB0aGUgcGFj
-a2FnZQo+PiB0aGV5IGhhdmUgdG91Y2hlZCB3b3VsZCBiZSBlcXVpdmFsZW50LCB3aGVuIHRoZSBm
-b3JtZXIgZXZhbHVhdGVzIHRoZQo+PiBjaGVja3BhY2thZ2VpZ25vcmUgZmlsZSB3aGlsZSB0aGUg
-bGF0dGVyIGRvZXMgbm90LiBUaGlzIGNvdWxkIGNhdXNlIHRoZW0KPj4gdG8gZm9yZ2V0IHRvIHJl
-bW92ZSBzdGFsZSBlbnRyaWVzIGZyb20gdGhhdCBmaWxlLgo+Pgo+PiBQb2ludCBvdXQgdGhpcyBk
-aWZmZXJlbmNlIGluIGJlaGF2aW9yLgo+IAo+IEFjdHVhbGx5IC5jaGVja3BhY2thZ2VpZ25vcmUg
-ZmlsZSBtdXN0IGJlIHJlbW92ZWQgYXMgc29vbiBhcyBwb3NzaWJsZSEgKEknbSBub3QKPiB1c2Ug
-d2UgcmVhbGx5IHdhbnQgdG8gYWRkIGl0IHRvIHRoZSBtYW51YWwpCj4gT3ZlciB0aGUgdGltZSwg
-dGhlIG51bWJlciBvZiBpZ25vcmVkIHdhcm5pbmdzIGlzIHJlZHVjZWQuCgogIFdlbGwsIEkgdGhp
-bmsgdGhpcyBwYXRjaCBhZGRyZXNzZXMgdGhhdCBieSBtYWtpbmcgaXQgZXhwbGljaXQgdGhhdCBs
-aW5lcyAKc2hvdWxkIGJlIHJlbW92ZWQgZnJvbSB0aGF0IGZpbGUuCgpbc25pcF0KPiBBbHNvLCBy
-dW5uaW5nIHV0aWxzL2NoZWNrLXBhY2thZ2UgZGlyZWN0bHkgb24geW91ciBob3N0IHdpdGhvdXQg
-dXNpbmcKPiB1dGlscy9kb2NrZXItcnVuIG1heSBnaXZlIGEgZGlmZmVyZW50IHJlc3VsdCBkdWUg
-dG8gdGhlIFNoZWxsY2hlY2sgYW5kIGZsYWtlOAo+IHZlcnNpb24uCj4gVGhhdCdzIHdoeSwgaXQn
-cyBhY3R1YWxseSBiZXR0ZXIgdXNpbmcgY2hlY2stcGFja2FnZSBmcm9tIERvY2tlciBlbnZpcm9u
-bWVudAo+ICh1dGlscy9kb2NrZXItcnVuKS4KCiAgVGhhdCdzIGluZGVlZCB3aGF0IHRoZSBleGFt
-cGxlIGNvZGUgZG9lcy4KCj4gVXNpbmcgdXRpbHMvY2hlY2stcGFja2FnZSBkaXJlY3RseSBpcyB1
-c2VmdWwgd2hlbiBhZGRpbmcgYSBuZXcgcGFja2FnZSAobm8KPiAuY2hlY2twYWNrYWdlaWdub3Jl
-IGVudHJ5IGV4aXN0KSBvciBjaGVja2luZyBwYWNrYWdlcyBmcm9tIGEgQlIyX0VYVEVSTkFMIFsy
-XS4KCiAgWWVzLCB0aGUgdGV4dCBhbHJlYWR5IGhhcyBhIHJlZmVyZW5jZSB0byB0aGF0IHNlY3Rp
-b24uIEluIHRoYXQgc2VjdGlvbiwgCnRob3VnaCwgdGhlIGNoZWNrcGFja2FnZWlnbm9yZSBmaWxl
-IGlzIG5vdCByZWxldmFudCBiZWNhdXNlIHlvdSBzaG91bGQgbmV2ZXIgYWRkIAp0byBpdC4KCiAg
-U28gSSB0aGluayB0aGlzIHBhdGNoIGFjY3VyYXRlbHkgYWRkcmVzc2VzIGEgc2hvcnRjb21pbmcg
-aW4gdGhlIG1hbnVhbCBhbmQgCkkndmUgYXBwbGllZCBpdC4KCiAgUmVnYXJkcywKICBBcm5vdXQK
-Cj4gCj4gWzFdCj4gaHR0cHM6Ly9naXRsYWIuY29tL2J1aWxkcm9vdC5vcmcvYnVpbGRyb290Ly0v
-Y29tbWl0LzFlZDA3NTIxMzIyZDVkMGVjMjYyODgzMTY5NDQzYWY5MTJkYjMwZjMKPiAKPiBbMl0K
-PiBodHRwczovL2dpdGxhYi5jb20vYnVpbGRyb290Lm9yZy9idWlsZHJvb3QvLS9ibG9iL21hc3Rl
-ci9kb2NzL21hbnVhbC9hZGRpbmctcGFja2FnZXMtdGlwcy5hZG9jP3JlZl90eXBlPWhlYWRzI2No
-ZWNrLXBhY2thZ2UKPiAKPj4KPj4gU2lnbmVkLW9mZi1ieTogRmxvcmlhbiBMYXJ5c2NoIDxmbEBu
-NjIxLmRlPgo+PiAtLS0KPj4gICBkb2NzL21hbnVhbC9jb250cmlidXRlLmFkb2MgfCA2ICsrKyst
-LQo+PiAgIDEgZmlsZSBjaGFuZ2VkLCA0IGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCj4+
-Cj4+IGRpZmYgLS1naXQgYS9kb2NzL21hbnVhbC9jb250cmlidXRlLmFkb2MgYi9kb2NzL21hbnVh
-bC9jb250cmlidXRlLmFkb2MKPj4gaW5kZXggZmZhZmY2Zjg1Ny4uYjQ4NGY4YjUyNCAxMDA2NDQK
-Pj4gLS0tIGEvZG9jcy9tYW51YWwvY29udHJpYnV0ZS5hZG9jCj4+ICsrKyBiL2RvY3MvbWFudWFs
-L2NvbnRyaWJ1dGUuYWRvYwo+PiBAQCAtMzIxLDkgKzMyMSwxMSBAQCBOb3cgY2hlY2sgdGhlIGNv
-ZGluZyBzdHlsZSBmb3IgdGhlIGNoYW5nZXMgeW91IGNvbW1pdHRlZDoKPj4gICAkIHV0aWxzL2Rv
-Y2tlci1ydW4gbWFrZSBjaGVjay1wYWNrYWdlCj4+ICAgLS0tLQo+PiAgIAo+PiAtTm93LCB5b3Ug
-YXJlIHJlYWR5IHRvIGdlbmVyYXRlIHRoZW4gc3VibWl0IHlvdXIgcGF0Y2ggc2V0Lgo+PiArVGhp
-cyBjb21tYW5kICh1bmxpa2UgY2FsbGluZyArdXRpbHMvY2hlY2stcGFja2FnZSsgZGlyZWN0bHkp
-IHdpbGwgYWxzbyB3YXJuCj4+ICthYm91dCBhbnkgc3RhbGUgZW50cmllcyBpbiB0aGUgKy5jaGVj
-a3BhY2thZ2VpZ25vcmUrIGZpbGUgdGhhdCB5b3VyIHBhdGNoZXMKPj4gK21pZ2h0IGhhdmUgcmVz
-b2x2ZWQuCj4gCj4gQnV0IGluZGVlZCwgdXNpbmcgdXRpbHMvY2hlY2stcGFja2FnZSBkaXJlY3Rs
-eSBmb3IgaW4gdHJlZSBwYWNrYWdlcyAodmVyc2lvbgo+IGJ1bXApIHdlIG1heSBmb3JnZXQgdG8g
-cmVtb3ZlIGFuIC5jaGVja3BhY2thZ2VpZ25vcmUgZW50cnkuCj4gCj4+ICAgCj4+IC1UbyBnZW5l
-cmF0ZSBpdCwgcnVuOgo+PiArTm93LCB5b3UgYXJlIHJlYWR5IHRvIGdlbmVyYXRlIHRoZW4gc3Vi
-bWl0IHlvdXIgcGF0Y2ggc2V0LiBUbyBnZW5lcmF0ZSBpdCwgcnVuOgo+IAo+IFdoeSBtb3Zpbmcg
-dGhlIG5ldyBsaW5lIGhlcmU/Cj4gCj4gQmVzdCByZWdhcmRzLAo+IFJvbWFpbgo+IAo+PiAgIAo+
-PiAgIC0tLS0KPj4gICAkIGdpdCBmb3JtYXQtcGF0Y2ggLU0gLW4gLXMgLW8gb3V0Z29pbmcgb3Jp
-Z2luL21hc3Rlcgo+IAo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fCj4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3Jn
-Cj4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290
-CgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJv
-b3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVp
-bGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+
+
+On 17/08/2025 11:31, Thomas Perale via buildroot wrote:
+> Since the python-cython bump to v3.1.2 (see [1]), python-yarl has been
+> failing on the autobuilder with the following error message:
+> 
+> ```
+> ERROR Missing dependencies:
+> 	Cython~=3.0.0; python_version >= "3.12"
+> make: *** [package/pkg-generic.mk:273: /home/buildroot/instance-0/output-1/build/python-yarl-1.18.3/.stamp_built] Error 1
+> ```
+> 
+> The cython dependency has been addressed in python-yarl v1.20.1, for
+> more information see the github issue [2].
+> 
+> For more information on the release, see:
+> 
+>    - https://github.com/aio-libs/yarl/releases/tag/v1.19.0
+>    - https://github.com/aio-libs/yarl/releases/tag/v1.20.0
+>    - https://github.com/aio-libs/yarl/releases/tag/v1.20.1
+> 
+> [1] b536caaec0 package/python-cython: bump to version 3.1.2
+> [2] https://github.com/aio-libs/yarl/pull/1514
+> 
+> Fixes: https://autobuild.buildroot.org/results/d36/d367b69b85a65fa94e923ecff3ba03723b2a6e88
+> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+
+  Applied to master, thanks.
+
+  There was actually an earlier patch by Yegor that does the same thing, but 
+this one has a better commit message.
+
+  Regards,
+  Arnout
+
+> ---
+>   package/python-yarl/python-yarl.hash | 4 ++--
+>   package/python-yarl/python-yarl.mk   | 4 ++--
+>   2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/python-yarl/python-yarl.hash b/package/python-yarl/python-yarl.hash
+> index ca2d42bf58..43ba31f81f 100644
+> --- a/package/python-yarl/python-yarl.hash
+> +++ b/package/python-yarl/python-yarl.hash
+> @@ -1,5 +1,5 @@
+>   # md5, sha256 from https://pypi.org/pypi/yarl/json
+> -md5  80b89d2b28be7345a38f099b2f839d7d  yarl-1.18.3.tar.gz
+> -sha256  ac1801c45cbf77b6c99242eeff4fffb5e4e73a800b5c4ad4fc0be5def634d2e1  yarl-1.18.3.tar.gz
+> +md5  23352fbc2b165825d4a33682c91788bc  yarl-1.20.1.tar.gz
+> +sha256  d017a4997ee50c91fd5466cef416231bb82177b93b029906cefc542ce14c35ac  yarl-1.20.1.tar.gz
+>   # Locally computed sha256 checksums
+>   sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+> diff --git a/package/python-yarl/python-yarl.mk b/package/python-yarl/python-yarl.mk
+> index 160dec8a1b..4f25394c8b 100644
+> --- a/package/python-yarl/python-yarl.mk
+> +++ b/package/python-yarl/python-yarl.mk
+> @@ -4,9 +4,9 @@
+>   #
+>   ################################################################################
+>   
+> -PYTHON_YARL_VERSION = 1.18.3
+> +PYTHON_YARL_VERSION = 1.20.1
+>   PYTHON_YARL_SOURCE = yarl-$(PYTHON_YARL_VERSION).tar.gz
+> -PYTHON_YARL_SITE = https://files.pythonhosted.org/packages/b7/9d/4b94a8e6d2b51b599516a5cb88e5bc99b4d8d4583e468057eaa29d5f0918
+> +PYTHON_YARL_SITE = https://files.pythonhosted.org/packages/3c/fb/efaa23fa4e45537b827620f04cf8f3cd658b76642205162e072703a5b963
+>   PYTHON_YARL_LICENSE = Apache-2.0
+>   PYTHON_YARL_LICENSE_FILES = LICENSE
+>   PYTHON_YARL_SETUP_TYPE = setuptools
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
