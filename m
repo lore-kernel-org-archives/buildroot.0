@@ -4,69 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADBA6CA0EED
-	for <buildroot@archiver.kernel.org>; Thu, 28 Aug 2025 21:59:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3058BCA0FF6
+	for <buildroot@archiver.kernel.org>; Thu, 28 Aug 2025 22:09:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 75CE0412F8;
-	Thu, 28 Aug 2025 21:59:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D89C141317;
+	Thu, 28 Aug 2025 22:09:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Zi9FdDmeBcW5; Thu, 28 Aug 2025 21:59:37 +0000 (UTC)
+ id mNOmUuz7ExzH; Thu, 28 Aug 2025 22:09:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9FA74412FA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2646E41319
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9FA74412FA;
-	Thu, 28 Aug 2025 21:59:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 61ED96C
- for <buildroot@buildroot.org>; Thu, 28 Aug 2025 21:59:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2646E41319;
+	Thu, 28 Aug 2025 22:09:09 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id B32EB6C
+ for <buildroot@buildroot.org>; Thu, 28 Aug 2025 22:09:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 971BD61233
- for <buildroot@buildroot.org>; Thu, 28 Aug 2025 21:59:35 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A4CDA41246
+ for <buildroot@buildroot.org>; Thu, 28 Aug 2025 22:09:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rNuLIsPLai7a for <buildroot@buildroot.org>;
- Thu, 28 Aug 2025 21:59:33 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2A97C61237
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A97C61237
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2A97C61237
- for <buildroot@buildroot.org>; Thu, 28 Aug 2025 21:59:32 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1976516174; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Thu, 28 Aug 2025 21:59:29 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@dell.be.48ers.dk>) id 1urkeW-009ZcO-0x;
- Thu, 28 Aug 2025 23:59:28 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rtHo8u2Vziaw for <buildroot@buildroot.org>;
+ Thu, 28 Aug 2025 22:09:07 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.128;
+ helo=smtpcmd11128.aruba.it;
+ envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org F076D40050
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F076D40050
+Received: from smtpcmd11128.aruba.it (smtpcmd11128.aruba.it [62.149.156.128])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F076D40050
+ for <buildroot@buildroot.org>; Thu, 28 Aug 2025 22:09:05 +0000 (UTC)
+Received: from localhost.localdomain ([95.168.107.28])
+ by Aruba SMTP with ESMTPSA
+ id rknkubY4htr9drknkuzG1T; Fri, 29 Aug 2025 00:09:00 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Thu, 28 Aug 2025 23:59:27 +0200
-Message-Id: <20250828215927.2281857-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.39.5
+Cc: Christian Stewart <christian@aperture.us>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Fri, 29 Aug 2025 00:08:59 +0200
+Message-ID: <20250828220859.468633-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=r0bF9qSEMA8sSs5YJZxqVz41S8+ocrKNxqvhh2MOJuNlLBbBB8F+drwnLJpooWPpQiRhzQlTrm14p0PiLSr8ZfctTfgQjtkjeuNITrpXNDAyOKkzEWXWOwwKSby6u2NB61YhrAUgnZHj3XX1VkwYBBYJW/xlJOkekw9RrEA5iRrR+7mXJQWyn9AZkgDpyUNUzLuqgTm1/Q44+aeAW2pVy1UfzFZAtqDQCsN0jnhyCGX7f59dVTFXte5Ffa3kGJfx0cbwaDElJwBRi/nrCjduM1Pl0H8np7ZCcwTM7tUQh1ZHg7EtBc5VRevjXJFXwmIB10fipUGQfdZH2lmhQoQm/g==;
- s=purelymail1; d=purelymail.com; v=1;
- bh=Y0Prc5IVsJaBI7OJdDcezda4P7VOI7NyRrfZJOuPgog=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-CMAE-Envelope: MS4xfBLgKFOqZw0K7m5jpLR3ORaK6nBWkuEy84BmoDK31WXm5Uha4fQY2mvpLtHvvCUC4uAmL9rX3YmqYQgnq+Ve92I+O9sus0Zc4Vi4FD2dS3d06gLyUAiG
+ +nAwTYCsORYBKfJOJPMyl6noQ/Cb9iSV8UkKfekK98U60GLACo+HEGdC9m9g6gsG95FjQ677iK0o0i1bbb3AGwA7tA+v9xxP4JKdZ5IXKwvihxhs1IrCLpae
+ 1++plOE00Gf0mwU9fPVhoiaIZ/HpZ/2yJbB/w/VKaJ83UjhGqLooeTOrybe9yS8fvUfjexyifks2yG33VQm0sg==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1756418941; bh=KdSjB+6GQK8VazXPU3rg6NXV9jVftn0x1ENmWhc/7Uw=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=OdQSqhkbfeXPqqTlPn0oG5GjxevAqjMWh3qehoaqtkfV6OioZCHOz/lBOfYay21RF
+ 5hCIdkGw5Qu2pDxtVhj8kNojNuy3RLCWSSQxF3vCyKyWJZJ8Al+3qVqh4LXjjrsIGt
+ 8bMeupR3sIsB4weFgEIPWT24O0QNFSdxK5dRnLgzDG261GgweAfq6quN0wqsO7grpH
+ 6bCxEu/FkKmzE2DsyD2/ap91yqT8W7kbDK6m1dacQOXP8L8WSxL8861sOfdwFe1nH8
+ 7BOep99FOZRsyr87aVJpTpYu1/Q0O9Qe5mnYg0Xki1h89eeSh2dqvdYCoO+uDnliYM
+ UQsaZN0Nyi4NA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=r0bF9qSE
-X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
-Subject: [Buildroot] [PATCH] package/ipmitool: move to codeberg
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=OdQSqhkb
+Subject: [Buildroot] [PATCH] package/rtl8821au: bump to version 2025-08-29
+ branch v5.2.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -78,66 +81,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Floris Bos <bos@je-eigen-domein.nl>, Heiko Thiery <heiko.thiery@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The github repo was deleted and moved to codeberg, so use that instead:
+This version allows to build up to Linux version 6.16
 
-https://lwn.net/Articles/926101/
+Fixes:
+https://autobuild.buildroot.org/results/588b834b133abfc983945beef37f7f2b0df71c5f
 
-It is unclear if the auto generated tarballs from codeberg are reproducible,
-so instead fetch through git.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/ipmitool/Config.in     | 2 +-
- package/ipmitool/ipmitool.hash | 2 +-
- package/ipmitool/ipmitool.mk   | 5 +++--
- 3 files changed, 5 insertions(+), 4 deletions(-)
+ package/rtl8821au/rtl8821au.hash | 2 +-
+ package/rtl8821au/rtl8821au.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ipmitool/Config.in b/package/ipmitool/Config.in
-index dd2b0e6b6d..f759caa08f 100644
---- a/package/ipmitool/Config.in
-+++ b/package/ipmitool/Config.in
-@@ -10,7 +10,7 @@ config BR2_PACKAGE_IPMITOOL
- 	  it can be provided by the iana-assignment package or by a
- 	  rootfs overlay.
- 
--	  https://github.com/ipmitool/ipmitool/
-+	  https://codeberg.org/IPMITool/ipmitool/
- 
- if BR2_PACKAGE_IPMITOOL
- 
-diff --git a/package/ipmitool/ipmitool.hash b/package/ipmitool/ipmitool.hash
-index c3b298e3ba..c65fdb0342 100644
---- a/package/ipmitool/ipmitool.hash
-+++ b/package/ipmitool/ipmitool.hash
+diff --git a/package/rtl8821au/rtl8821au.hash b/package/rtl8821au/rtl8821au.hash
+index e79e32ff3d..2796c50791 100644
+--- a/package/rtl8821au/rtl8821au.hash
++++ b/package/rtl8821au/rtl8821au.hash
 @@ -1,3 +1,3 @@
- # Locally computed:
--sha256  48b010e7bcdf93e4e4b6e43c53c7f60aa6873d574cbd45a8d86fa7aaeebaff9c  ipmitool-1_8_19.tar.gz
-+sha256  78bc6fdbb0487652a3d0220072b9428d4ab6dfc198de2f28e8493932e6b893af  ipmitool-IPMITOOL_1_8_19-git4.tar.gz
- sha256  b7e2382a8be43b5f6cb092f2d2bda163bf1a1938be9300f821a845cbcd535f56  COPYING
-diff --git a/package/ipmitool/ipmitool.mk b/package/ipmitool/ipmitool.mk
-index 159bb7c8b6..04c77bcae3 100644
---- a/package/ipmitool/ipmitool.mk
-+++ b/package/ipmitool/ipmitool.mk
-@@ -4,8 +4,9 @@
+ # Locally calculated
+-sha256  fd02814e2ab5435cf4213aaf876d28dedccc0bec8c91ed768336727276c5eae6  rtl8821au-d0a49ba401a8661ef0cdc4cf8850bc7c927a062c.tar.gz
++sha256  d8d11753f88d670be7489fd1d5d30718543f4994ccc5031609f4408a5586ef3c  rtl8821au-4d39880a41201ddb14b19f2e7273054bb812b32e.tar.gz
+ sha256  640d90f6ee401241ff62834d0d1b33f83049e99b8bfdfa04ed1b0a1635dde3e7  LICENSE
+diff --git a/package/rtl8821au/rtl8821au.mk b/package/rtl8821au/rtl8821au.mk
+index aa900839f5..afd520b467 100644
+--- a/package/rtl8821au/rtl8821au.mk
++++ b/package/rtl8821au/rtl8821au.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IPMITOOL_VERSION = 1_8_19
--IPMITOOL_SITE = $(call github,ipmitool,ipmitool,IPMITOOL_$(IPMITOOL_VERSION))
-+IPMITOOL_VERSION = IPMITOOL_1_8_19
-+IPMITOOL_SITE = https://codeberg.org/IPMITool/ipmitool.git
-+IPMITOOL_SITE_METHOD = git
- IPMITOOL_LICENSE = BSD-3-Clause
- IPMITOOL_LICENSE_FILES = COPYING
- IPMITOOL_CPE_ID_VALID = YES
+-RTL8821AU_VERSION = d0a49ba401a8661ef0cdc4cf8850bc7c927a062c
++RTL8821AU_VERSION = 4d39880a41201ddb14b19f2e7273054bb812b32e
+ RTL8821AU_SITE = $(call github,benetti-engineering,rtl8821au,$(RTL8821AU_VERSION))
+ RTL8821AU_LICENSE = GPL-2.0
+ RTL8821AU_LICENSE_FILES = LICENSE
 -- 
-2.39.5
+2.43.0
 
 _______________________________________________
 buildroot mailing list
