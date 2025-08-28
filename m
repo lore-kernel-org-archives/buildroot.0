@@ -1,52 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D170ACAC586
-	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 14:17:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D3A8CAC581
+	for <buildroot@archiver.kernel.org>; Mon,  8 Sep 2025 14:17:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A67D080518;
-	Mon,  8 Sep 2025 14:17:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 23B8D605AA;
+	Mon,  8 Sep 2025 14:17:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TNFR26PGsNM9; Mon,  8 Sep 2025 14:17:17 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id c1ohXDll1NAd; Mon,  8 Sep 2025 14:17:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6F4148062A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D452E60623
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6F4148062A;
-	Mon,  8 Sep 2025 14:17:17 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 3A68F186
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D452E60623;
+	Mon,  8 Sep 2025 14:17:21 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 081E0186
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 06A8C4004D
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:26 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 97B05605C7
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vizs-JRPX7GC for <buildroot@buildroot.org>;
- Mon,  8 Sep 2025 14:16:25 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wNNRlTqfFBdZ for <buildroot@buildroot.org>;
+ Mon,  8 Sep 2025 14:16:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1E15040054
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4CAD0605AA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1E15040054
- for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:25 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4CAD0605AA
+ for <buildroot@buildroot.org>; Mon,  8 Sep 2025 14:16:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0EA1C818B3; Mon,  8 Sep 2025 14:16:25 +0000 (UTC)
+ id 20A9280DA7; Mon,  8 Sep 2025 14:16:27 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 25 Aug 2025 23:04:36 +0200
+Date: Thu, 28 Aug 2025 16:25:53 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: dde429752ec611beb4aa7734e03884d66ba7fdb2
-X-Git-Newrev: 7a9f1744ac3a05ef9443f6c0453a1a8fee83aaf2
+X-Git-Oldrev: 97e52b323c8940d6022e39451cc4e7c9500a8081
+X-Git-Newrev: 7856e41685a179fdda7b21a10455e52fe5fa5cb0
 X-Patchwork-Hint: ignore
-Message-Id: <20250908141625.0EA1C818B3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/stm32mp1*_dk*: bump Linux to
- 6.12.36 and U-Boot to 2025.07
+Message-Id: <20250908141627.20A9280DA7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/nnn: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,146 +57,168 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1153459841766721874=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7a9f1744ac3a05ef9443f6c0453a1a8fee83aaf2
+--===============1153459841766721874==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=7856e41685a179fdda7b21a10455e52fe5fa5cb0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The patch bumps the Linux kernel to version 6.12.36 and U-Boot to
-version 2025.07 for
+nnn is a fast and minimal text-based file manager. It is written in C
+and has minimal dependencies, which makes it portable and suitable for
+embedded systems.
 
-- stm32mp135f_dk_defconfig
-- stm32mp157a_dk1_defconfig
-- stm32mp157c_dk2_defconfig
+Project page: https://github.com/jarun/nnn
+Wiki: https://en.wikipedia.org/wiki/Nnn_(file_manager)
 
-The new version of U-Boot with commit [1] enabled OF_UPSTREAM flag for
-STM32MP15 platforms. This required properly updating the DEVICE_TREE
-parameter to pass to U-Boot in order to successfully complete the build.
-
-Tested on STM32MP157C-DK2 Discovery Board.
-
-[1] https://gitlab.com/u-boot/u-boot/-/commit/35f90f76f45b186251cd5da0b6f057e0382fb7db
-
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Alexander Shirokov <shirokovalexs@gmail.com>
+[Arnout:
+ - add missing dependency on BR2_USE_MMU (found with test-pkg);
+ - add missing comment in Config.in;
+ - add musl-fls dependency when needed (found with test-pkg);
+ - add host-pkgconf dependency;
+ - add NNN_MAKE_ENV to collect everything in make environment;
+ - drop TARGET_MAKE_ENV from environment, it's already in
+   TARGET_CONFIGURE_OPTS;
+ - add PREFIX to NNN_MAKE_FLAGS: it is currently not used in the
+   build step, but in the future it may be used;
+ - use NORL=0/1 for readline optional dependency, the Makefile says that
+   the "norl" target is legacy;
+ - remove comment about readline dependency, it's obvious;
+ - indent continuation line with an extra tab.
+]
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- board/stmicroelectronics/common/stm32mp1xx/patches/linux/linux.hash | 2 +-
- board/stmicroelectronics/common/stm32mp1xx/patches/uboot/uboot.hash | 2 +-
- configs/stm32mp135f_dk_defconfig                                    | 6 +++---
- configs/stm32mp157a_dk1_defconfig                                   | 6 +++---
- configs/stm32mp157c_dk2_defconfig                                   | 6 +++---
- 5 files changed, 11 insertions(+), 11 deletions(-)
+ DEVELOPERS            |  3 +++
+ package/Config.in     |  1 +
+ package/nnn/Config.in | 20 ++++++++++++++++++++
+ package/nnn/nnn.hash  |  3 +++
+ package/nnn/nnn.mk    | 40 ++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 67 insertions(+)
 
-diff --git a/board/stmicroelectronics/common/stm32mp1xx/patches/linux/linux.hash b/board/stmicroelectronics/common/stm32mp1xx/patches/linux/linux.hash
-index df103b8199..6c7685ad4d 100644
---- a/board/stmicroelectronics/common/stm32mp1xx/patches/linux/linux.hash
-+++ b/board/stmicroelectronics/common/stm32mp1xx/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  ab48800ab49985a78d2318ae8ac5f28fd3e123ea17357ef21498105a53337336  linux-6.12.22.tar.xz
-+sha256  4a168aed2de5a81aadd90ba2b153860a98d99bfc34651936e17f18e54f01ba8c  linux-6.12.36.tar.xz
-diff --git a/board/stmicroelectronics/common/stm32mp1xx/patches/uboot/uboot.hash b/board/stmicroelectronics/common/stm32mp1xx/patches/uboot/uboot.hash
-index 80ea21b7cb..440526977b 100644
---- a/board/stmicroelectronics/common/stm32mp1xx/patches/uboot/uboot.hash
-+++ b/board/stmicroelectronics/common/stm32mp1xx/patches/uboot/uboot.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  439d3bef296effd54130be6a731c5b118be7fddd7fcc663ccbc5fb18294d8718  u-boot-2025.04.tar.bz2
-+sha256  0f933f6c5a426895bf306e93e6ac53c60870e4b54cda56d95211bec99e63bec7  u-boot-2025.07.tar.bz2
-diff --git a/configs/stm32mp135f_dk_defconfig b/configs/stm32mp135f_dk_defconfig
-index 3ba1acac81..eb20466709 100644
---- a/configs/stm32mp135f_dk_defconfig
-+++ b/configs/stm32mp135f_dk_defconfig
-@@ -8,7 +8,7 @@ BR2_ROOTFS_OVERLAY="board/stmicroelectronics/stm32mp135f-dk/overlay"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp1xx/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.22"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.36"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32mp135f-dk/linux.config"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -40,7 +40,7 @@ BR2_TARGET_OPTEE_OS_PLATFORM_FLAVOR="135F_DK"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.04"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.07"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp13"
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-@@ -48,5 +48,5 @@ BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
- # BR2_TARGET_UBOOT_FORMAT_BIN is not set
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin u-boot.dtb"
--BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=stm32mp135f-dk"
-+BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=st/stm32mp135f-dk"
- BR2_PACKAGE_HOST_GENIMAGE=y
-diff --git a/configs/stm32mp157a_dk1_defconfig b/configs/stm32mp157a_dk1_defconfig
-index d96ff54dc9..a42e90bbeb 100644
---- a/configs/stm32mp157a_dk1_defconfig
-+++ b/configs/stm32mp157a_dk1_defconfig
-@@ -7,7 +7,7 @@ BR2_ROOTFS_OVERLAY="board/stmicroelectronics/stm32mp157a-dk1/overlay/"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp1xx/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.22"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.36"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32mp157a-dk1/linux.config"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -30,7 +30,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.04"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.07"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp15_trusted"
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-@@ -39,5 +39,5 @@ BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
- BR2_TARGET_UBOOT_FORMAT_DTB=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
--BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=stm32mp157a-dk1"
-+BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=st/stm32mp157a-dk1"
- BR2_PACKAGE_HOST_GENIMAGE=y
-diff --git a/configs/stm32mp157c_dk2_defconfig b/configs/stm32mp157c_dk2_defconfig
-index 183e3ab862..a149936303 100644
---- a/configs/stm32mp157c_dk2_defconfig
-+++ b/configs/stm32mp157c_dk2_defconfig
-@@ -7,7 +7,7 @@ BR2_ROOTFS_OVERLAY="board/stmicroelectronics/stm32mp157c-dk2/overlay/"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp1xx/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.22"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.36"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32mp157c-dk2/linux.config"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -30,7 +30,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.04"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.07"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp15_trusted"
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-@@ -39,5 +39,5 @@ BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
- BR2_TARGET_UBOOT_FORMAT_DTB=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
--BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=stm32mp157c-dk2"
-+BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=st/stm32mp157c-dk2"
- BR2_PACKAGE_HOST_GENIMAGE=y
+diff --git a/DEVELOPERS b/DEVELOPERS
+index cdcde0585f..0276f2f2cf 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -91,6 +91,9 @@ F:	package/modem-manager/
+ N:	Aleksandr Makarov <aleksandr.o.makarov@gmail.com>
+ F:	package/cpp-httplib/
+ 
++N:	Alexander Shirokov <shirokovalexs@gmail.com>
++F:	package/nnn/
++
+ N:	Alessandro Partesotti <a.partesotti@gmail.com>
+ F:	package/oatpp/
+ 
+diff --git a/package/Config.in b/package/Config.in
+index 137f74ed82..b4eac5cf91 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2973,6 +2973,7 @@ menu "Text editors and viewers"
+ 	source "package/mg/Config.in"
+ 	source "package/most/Config.in"
+ 	source "package/nano/Config.in"
++	source "package/nnn/Config.in"
+ 	source "package/uemacs/Config.in"
+ 	source "package/vim/Config.in"
+ endmenu
+diff --git a/package/nnn/Config.in b/package/nnn/Config.in
+new file mode 100644
+index 0000000000..64cfa8e0a5
+--- /dev/null
++++ b/package/nnn/Config.in
+@@ -0,0 +1,20 @@
++config BR2_PACKAGE_NNN
++	bool "nnn"
++	depends on BR2_USE_MMU # fork
++	# Building nnn without widechar/UTF support is theoretically
++	# possible, but in practice it leads to unstable builds.
++	# That’s why the WCHAR dependency is here.
++	depends on BR2_USE_WCHAR
++	select BR2_PACKAGE_NCURSES
++	select BR2_PACKAGE_NCURSES_WCHAR
++	select BR2_PACKAGE_MUSL_FTS if !BR2_TOOLCHAIN_USES_GLIBC
++	help
++	  nnn is a lightweight yet powerful terminal file manager.
++	  It is written in C, has minimal dependency, and works
++	  out of the box.
++
++	  https://github.com/jarun/nnn
++
++comment "nnn needs a toolchain with wchar"
++	depends on BR2_USE_MMU # fork
++	depends on !BR2_USE_WCHAR
+diff --git a/package/nnn/nnn.hash b/package/nnn/nnn.hash
+new file mode 100644
+index 0000000000..670a591afb
+--- /dev/null
++++ b/package/nnn/nnn.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  9faaff1e3f5a2fd3ed570a83f6fb3baf0bfc6ebd6a9abac16203d057ac3fffe3  nnn-5.1.tar.gz
++sha256  829f485dc4f2f51c2471b36a99e22f15ff214966e16b72cd79768b2338b4132b  LICENSE
+diff --git a/package/nnn/nnn.mk b/package/nnn/nnn.mk
+new file mode 100644
+index 0000000000..acbd0ce314
+--- /dev/null
++++ b/package/nnn/nnn.mk
+@@ -0,0 +1,40 @@
++################################################################################
++#
++# nnn
++#
++################################################################################
++
++NNN_VERSION = 5.1
++NNN_LICENSE = BSD-2-Clause
++NNN_LICENSE_FILES = LICENSE
++NNN_SITE = $(call github,jarun,nnn,v$(NNN_VERSION))
++NNN_DEPENDENCIES = ncurses host-pkgconf
++
++NNN_MAKE_ENV = $(TARGET_CONFIGURE_OPTS)
++NNN_MAKE_FLAGS = \
++	CFLAGS_OPTIMIZATION= \
++	PREFIX=/usr
++
++ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),)
++NNN_DEPENDENCIES += musl-fts
++# Must be passed in env so it can be appended to by the Makefile
++NNN_MAKE_ENV += LDLIBS="-lfts"
++endif
++
++ifeq ($(BR2_PACKAGE_READLINE),y)
++NNN_DEPENDENCIES += readline
++NNN_MAKE_FLAGS += O_NORL=0
++else
++NNN_MAKE_FLAGS += O_NORL=1
++endif
++
++define NNN_BUILD_CMDS
++	$(NNN_MAKE_ENV) $(MAKE) -C $(@D) $(NNN_MAKE_FLAGS)
++endef
++
++define NNN_INSTALL_TARGET_CMDS
++	$(NNN_MAKE_ENV) $(MAKE) -C $(@D) $(NNN_MAKE_FLAGS) \
++		DESTDIR=$(TARGET_DIR) install
++endef
++
++$(eval $(generic-package))
+
+--===============1153459841766721874==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1153459841766721874==--
