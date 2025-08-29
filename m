@@ -1,75 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DD43CA0FF0
-	for <buildroot@archiver.kernel.org>; Fri, 29 Aug 2025 18:32:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44F22CA0FF0
+	for <buildroot@archiver.kernel.org>; Fri, 29 Aug 2025 18:32:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0858040CD7;
-	Fri, 29 Aug 2025 18:32:30 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id C-S4jaSr8JV8; Fri, 29 Aug 2025 18:32:29 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4EC2D411B0
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4EC2D411B0;
-	Fri, 29 Aug 2025 18:32:29 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id A0E931F4
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 18:32:27 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8681D842E0
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 18:32:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 033258466D;
+	Fri, 29 Aug 2025 18:32:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6-smX-OQ9qnI for <buildroot@buildroot.org>;
- Fri, 29 Aug 2025 18:32:26 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ id nqkvXAlXZrjS; Fri, 29 Aug 2025 18:32:49 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0BB35842E7
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0BB35842E7;
+	Fri, 29 Aug 2025 18:32:49 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6BFB7D2
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 18:32:47 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5CA03842E7
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 18:32:47 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4DAkqYKZ-GiW for <buildroot@buildroot.org>;
+ Fri, 29 Aug 2025 18:32:46 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D645D842B6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D645D842B6
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D645D842B6
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 18:32:25 +0000 (UTC)
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1500596889; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Fri, 29 Aug 2025 18:32:24 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1us3tf-00CyKL-2h;
- Fri, 29 Aug 2025 20:32:23 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D9FB842D7
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9D9FB842D7
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 18:32:46 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 9876787E40; Fri, 29 Aug 2025 18:32:46 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20250829153435.2193952-1-thomas.petazzoni@bootlin.com>
-Date: Fri, 29 Aug 2025 20:32:23 +0200
-In-Reply-To: <20250829153435.2193952-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni via buildroot's message of "Fri, 29 Aug 2025 17:34:33
- +0200")
-Message-ID: <87iki6gers.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
- b=Hg3vyXh9y7QWYLVMPBQcP/aCD9hfZHfqdO8bfE778zQYZtG+i9BueyjlEgijKkum31hbqQquhMTHKCHPI33z3yqfoAyTQfbRpu2Vro3C3pMgElbw/Z6yaIu8ontBduFDLsyVkyoAIFbeAa9ppo4WEQLek/8wrUJULRHPsmXZJWrrA1PWSj1QcNy6kbBHyKINlGEXc+Kls5njUKcvqqE3Dln/CbWWKc8bSYwKRNoBNiXpRxFVu1DK3QqmoNbiAD8K8sikpwdzXfI/aP3YvjX4Jyc58ZdAZRX0lkGcvvPPZmYgpEgdB9cua40mpbwiPTHINLcWmlB/kgu3UZDjJ8Z8DQ==;
- s=purelymail1; d=purelymail.com; v=1;
- bh=bf/616sEs99FFZlSki954qZXteh+nbpjkG0+2SSV0EE=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=Hg3vyXh9
-Subject: Re: [Buildroot] [PATCH] package/libgsm: fix build failure with GCC
+To: buildroot@buildroot.org
+Date: Fri, 29 Aug 2025 20:31:21 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 31342fb5ff9adf1afd016ae56a07b830b5b24088
+X-Git-Newrev: 7ed636069fbdc9942bcd637f6f902c13415a9910
+X-Patchwork-Hint: ignore
+Message-Id: <20250829183246.9876787E40@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libgsm: fix build failure with GCC
  15.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -82,26 +59,107 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============3680009426961998598=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
+--===============3680009426961998598==
+Content-Type: text/plain
 
- > Fixes:
- >   http://autobuild.buildroot.net/results/95f0ff842e4fddcf9d2ffaeb7ddbb9abeb821319/
+commit: https://git.buildroot.net/buildroot/commit/?id=7ed636069fbdc9942bcd637f6f902c13415a9910
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > There is no proper upstream project with a Git repo or mailing list,
- > so we just sent the patch by e-mail to the project maintainer.
+Fixes:
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+  http://autobuild.buildroot.net/results/95f0ff842e4fddcf9d2ffaeb7ddbb9abeb821319/
 
-Committed, thanks.
+There is no proper upstream project with a Git repo or mailing list,
+so we just sent the patch by e-mail to the project maintainer.
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../libgsm/0002-Fix-signal-handler-prototype.patch | 61 ++++++++++++++++++++++
+ 1 file changed, 61 insertions(+)
+
+diff --git a/package/libgsm/0002-Fix-signal-handler-prototype.patch b/package/libgsm/0002-Fix-signal-handler-prototype.patch
+new file mode 100644
+index 0000000000..c28cf584a1
+--- /dev/null
++++ b/package/libgsm/0002-Fix-signal-handler-prototype.patch
+@@ -0,0 +1,61 @@
++From 7ffab0a5028f0bfcb864c2387f41b8d4eb33fb8e Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Fri, 29 Aug 2025 17:27:55 +0200
++Subject: [PATCH] Fix signal handler prototype
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Recent versions of gcc, starting from gcc 15.x, are more picky about
++function prototypes, and that cause the following issue:
++
++usr/include/signal.h:93:23: note: expected ‘__sighandler_t’ {aka ‘void (*)(int)’} but argument is of type ‘void (*)(void)’
++
++ultimately causing a build failure.
++
++This patch fixes that by ensuring the signal handler has the right
++prototype. The onintr() function is not only used as a signal handler,
++but also on memory allocation failure, in which case a dummy value of
++0 is passed as argument, since anyway this value isn't used by
++onintr().
++
++Upstream: sent by e-mail to Jutta Degener <jutta@pobox.com>
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ src/toast.c | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/src/toast.c b/src/toast.c
++index 05cd0b3..70a14ba 100644
++--- a/src/toast.c
+++++ b/src/toast.c
++@@ -211,7 +211,7 @@ static char * suffix P2((name, suf), char *name, char * suf)
++ }
++ 
++ 
++-static void catch_signals P1((fun), SIGHANDLER_T (*fun) ())
+++static void catch_signals P1((fun), SIGHANDLER_T (*fun) (int))
++ {
++ #ifdef	SIGHUP
++ 	signal( SIGHUP,   fun );
++@@ -230,7 +230,7 @@ static void catch_signals P1((fun), SIGHANDLER_T (*fun) ())
++ #endif
++ }
++ 
++-static SIGHANDLER_T onintr P0()
+++static SIGHANDLER_T onintr P1((signo), int signo)
++ {
++ 	char * tmp = outname;
++ 
++@@ -253,7 +253,7 @@ static char * emalloc P1((len), size_t len)
++ 	if (!(s = malloc(len))) {
++ 		fprintf(stderr, "%s: failed to malloc %d bytes -- abort\n",
++ 			progname, (int)len);
++-		onintr();
+++		onintr(0);
++ 		exit(1);
++ 	}
++ 	return s;
++-- 
++2.50.1
++
+
+--===============3680009426961998598==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3680009426961998598==--
