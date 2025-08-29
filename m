@@ -4,65 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E5C6CA0FF9
-	for <buildroot@archiver.kernel.org>; Fri, 29 Aug 2025 09:21:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6E6BCA0FF9
+	for <buildroot@archiver.kernel.org>; Fri, 29 Aug 2025 09:33:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 642BC82EB4;
-	Fri, 29 Aug 2025 09:21:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B8BB38422B;
+	Fri, 29 Aug 2025 09:33:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Jez5zPtMZG-J; Fri, 29 Aug 2025 09:21:01 +0000 (UTC)
+ id i94TLn_2LR_P; Fri, 29 Aug 2025 09:33:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8A274833A3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CAD6B84215
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8A274833A3;
-	Fri, 29 Aug 2025 09:21:01 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0A82969
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 09:21:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CAD6B84215;
+	Fri, 29 Aug 2025 09:33:23 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id C7FCF69
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 09:33:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EADF3417CA
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 09:20:59 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B97E36110B
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 09:33:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vfMuJlIAurcG for <buildroot@buildroot.org>;
- Fri, 29 Aug 2025 09:20:59 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
- helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 074E5417C4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 074E5417C4
-Received: from mail.nubo.coop (mail2.nubo.coop [79.99.201.12])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 074E5417C4
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 09:20:58 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VugVu2cjIWeI for <buildroot@buildroot.org>;
+ Fri, 29 Aug 2025 09:33:21 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org EE51660E47
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE51660E47
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EE51660E47
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 09:33:20 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-03.galae.net (Postfix) with ESMTPS id 0990F4E40BD2;
+ Fri, 29 Aug 2025 09:33:18 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id D476F606B9;
+ Fri, 29 Aug 2025 09:33:17 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 8B83BB978448; Fri, 29 Aug 2025 11:20:56 +0200 (CEST)
-To: buildroot@buildroot.org
-Cc: Arnout Vandecappelle <arnout@rnout.be>, Vincent Fazio <vfazio@xes-inc.com>,
- James Hilliard <james.hilliard1@gmail.com>
-Date: Fri, 29 Aug 2025 11:20:55 +0200
-Message-ID: <20250829092055.518106-1-arnout@rnout.be>
-X-Mailer: git-send-email 2.51.0
+ with ESMTPSA id BBD901C22C97A; 
+ Fri, 29 Aug 2025 11:33:13 +0200 (CEST)
+Date: Fri, 29 Aug 2025 11:33:12 +0200
+To: Titouan Christophe <titouan.christophe@mind.be>
+Message-ID: <20250829113312.46070790@windsurf>
+In-Reply-To: <20250829090842.103239-1-titouan.christophe@mind.be>
+References: <20250829090842.103239-1-titouan.christophe@mind.be>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rnout.be; s=dkim; 
- t=1756459257; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding; bh=KeghI7rxWgVQy9siGt8VGPR1p99Uufl/+LBaYd0816o=;
- b=QA+gUCseUi50U8yfLCTZuRZ0bzMdVXWpktuxFW/s+YTabxHn4wGTMr0fUZH7RkRQxa8f0Y
- 9H7LUqkR/YxlxrvJHbBzwn0Zj0lahrHNEvcchgBqAU99U6bE2439A7Zzp1SVIT9PDVFn5i
- 7u1pLotMnbrEGkmmW7GMiyedW8eJlShDM8AaRinDx/fw4hVmNXRCqqW/psGJCpX6irypt9
- Hp84naKTn+c69VVXjz6n2IgvwtY9lM4pMizQyogxnE3jCEyR2jrhaWTQvBresAStTJb5PQ
- nvsCFgpnM/5rlW+VElVZytI3hiCPH9CEWogYWJMSO3TCmZP3EubUO9hnnTSwPw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=bootlin.com; s=dkim; 
+ t=1756459997; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:in-reply-to:references;
+ bh=k/N2/9YWNGbzUP02aGA2Z3wGGVHwfJLq0N1hTCabqNA=;
+ b=jWTIW/o3bHkcSz28KYHwj/839TcCltQKhZdGrq4LAmZIetgsxhMidn0PrPz1G5TD3f1n6e
+ 3RmCuuw+TY3TuB6so8OVpzABDH0ANL3oGo1vNBwGm8toopH75wpcNKU56iir4ihf+niOBo
+ ZopFrwW4B7kSGsBqJWNkE4/t8pzD8roZXpvwHTc41s/tszbnyQ5wiABWoyuuPhSR4uyCKT
+ oMSZC9wf1S4zFGjnfeFI3kcEm60PZju9BQcvwqoIqgc8eRyFhYknzvSScBMSvVf2ymjAe6
+ D/WDJTcXCRy7f0F0TK/H4nIb9ce68m8k7PSRvBFVB34GDGpramhlQKIX0p1Wdg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
- header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=QA+gUCse
-Subject: [Buildroot] [PATCH v2] package/python3: do build-time detection of
- non-working toolchain
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com
+ header.a=rsa-sha256 header.s=dkim header.b=jWTIW/o3
+Subject: Re: [Buildroot] [PATCH] docs/download: rework download section
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -74,84 +83,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: thomas.perale@mind.be, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Since the bump to Python 3.13.2 in commit
-d63e207eb869063f82c867658676c2903beb08cb, there is a runtime assertion
-in Python when the toolchain doesn't support time64 [1]. The only such
-toolchain is one with uClibc and linux headers < 5.1.
+On Fri, 29 Aug 2025 11:08:42 +0200
+Titouan Christophe <titouan.christophe@mind.be> wrote:
 
-Encoding this dependency in Config.in was deemed to complicated (cfr.
-commit ffd00280315e60908d0d317b1dfb4c714590a03e).
+> - Display active Buildroot versions as a table, similarly to kernel.org
+> - Add latest release date for all version
+> - Add expected End of Life dates for all versions
+> - Add link to the changelog
+> 
+> This makes the section much more compact, which makes it easier for
+> users to compare the versions and know what to expect from them
+> 
+> Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+> ---
+> This is how it now looks like: https://imgur.com/a/a3ipSiz
 
-Instead, do a build-time check of the same condition. The check itself
-is a bit complicated, but it is localized to python3.mk and doesn't need
-to be propagated to all reverse dependencies.
+Didn't review the HTML soup, but the result looks very nice, so:
 
-Testing such a corner case toolchain is a bit complicated. It can be
-done with the following configuration.
+Acked-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-BR2_arm=y
-BR2_cortex_a9=y
-BR2_ARM_ENABLE_VFP=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://toolchains.bootlin.com/downloads/releases/toolchains/armv7-eabihf/tarballs/armv7-eabihf--uclibc--stable-2018.02-1.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_1=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_PACKAGE_PYTHON3=y
-
-It needs to be built in an environment that has libmpfr.so.4 installed
-as the pre-built toolchain from that era did not include it. An easy
-way to achieve this is to build this configuration under an old
-Buildroot Docker container:
-
-IMAGE=buildroot/base:20180205.0730 ./utils/docker-run make python3
-
-With a build-time check, the autobuilders could get build failures when
-generating such a config. However, the autobuilders cannot use a
-toolchain with this configuration (they only use more recent
-toolchains). Therefore, no update to genrandconfig is needed.
-
-[1] https://gitlab.com/buildroot.org/buildroot/-/issues/95#note_2348479811
-
-Cc: Vincent Fazio <vfazio@xes-inc.com>
-Cc: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
----
-v1 -> v2: remove genrandconfig change (which I actually forgot to
-include in v1).
----
- package/python3/python3.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index ef0658262a..1546915f08 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -315,3 +315,11 @@ define PYTHON3_REMOVE_OPTIMIZED_PYC_FILES
- 		xargs -0 --no-run-if-empty rm -f
- endef
- PYTHON3_TARGET_FINALIZE_HOOKS += PYTHON3_REMOVE_OPTIMIZED_PYC_FILES
-+
-+# uClibc without time64 support (i.e. when linux headers < 5.1) causes
-+# a runtime assertion in Python. Encoding this as a dependency in Config.in
-+# causes too many problems for propagating reverse dependencies. Therefore
-+# instead we do a build time check.
-+ifeq ($(BR_BUILDING)$(BR2_PACKAGE_PYTHON3)$(BR2_TOOLCHAIN_USES_UCLIBC)-$(BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1),yyy-)
-+$(error Python3 doesn't work with uClibc and kernel headers < 5.1. Please use a different toolchain or unselect Python3.)
-+endif
 -- 
-2.51.0
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
