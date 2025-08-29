@@ -1,100 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 272AFCA0FF9
-	for <buildroot@archiver.kernel.org>; Fri, 29 Aug 2025 11:05:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8172CA0FF9
+	for <buildroot@archiver.kernel.org>; Fri, 29 Aug 2025 11:11:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D531B822CF;
-	Fri, 29 Aug 2025 11:05:12 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UrL3m3-rNX1H; Fri, 29 Aug 2025 11:05:12 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 10F65822B3
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 10F65822B3;
-	Fri, 29 Aug 2025 11:05:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 17DB2D2
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 11:05:10 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 08F0F4188F
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 11:05:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 859EA41568;
+	Fri, 29 Aug 2025 11:11:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FyX3OnE3dT6v for <buildroot@buildroot.org>;
- Fri, 29 Aug 2025 11:05:09 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62c; helo=mail-ej1-x62c.google.com;
- envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org F351C417A5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F351C417A5
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com
- [IPv6:2a00:1450:4864:20::62c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id F351C417A5
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 11:05:08 +0000 (UTC)
-Received: by mail-ej1-x62c.google.com with SMTP id
- a640c23a62f3a-afe9f6caf9eso291203366b.3
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 04:05:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1756465506; x=1757070306;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=3oBqoeQlRP5GgZf7cYt4L8+RG9bYXgI5tiXLjo/UgVE=;
- b=KiJ+MDc1nud7U7DC5RBm5zkF/0c+w0ikDwwui4QHYHTetovyMghhvWEvdkNRSHtyth
- ZWZYjiVvIIe3PFG0Y0JQS2wHShkRk1StjuFTcPljjshz42BnMPVRC6okRwoP41Tkb6VB
- YhH4THlUNk07/6y7cuoM+PY+KGSfky3ZIsFLZHVD35PXgaRxbPTOKFDPaLVts8/unsPv
- 2wHjI8E3ahB3Exq78QNfn5p/8FuQ51zSyCwvvifZzfguMDE1j64XYCXFfiMbASaOpuBB
- RbxsgzNc8tQAKhDrNsqx/V87plOrpYH81WN8fP7ue7T/jeYQiEY39UATUru3Kg7X0Lzl
- BEyA==
-X-Gm-Message-State: AOJu0YwVm6YohwKhQrjnPONeLRC6L1ZSIYSfWUtt7Hin/7g8tywxiO2/
- A+OyQwQW2uufNlkwtzOF1IlQA3oa9vbVTT/mXO3v+8xZu9pEj9OxrMmaOBFdcg==
-X-Gm-Gg: ASbGncvkntdw2jUKPkqmRSM/mDjezPNk85rT5QVs+6pC6qkMe4fUKDbY+DzmGgLzaOK
- gd1RF0z9V/TsGctVvxYyzuXCuNUC4+HPMowhYpGghVA4X6+O9qpbjtqZc/TFpB/rHCBlYSPZ/45
- gCgLgcbFEEEa0TZwWxthrZIN85aNk+v2shfPvx5japcRcR9smJSd9PVqTYtGjSzX7M0qKOYJGnx
- q8pLQkY/JrJNPlAkW8jo8fYMtwuizIEllVjF49jnOzcEZW7VQMCo9/9J4+yZ0rpgJ4jSc+wYUnJ
- y/jQm9iNGIdypsPF1/0GH5gFn+Xn6ibX8F0xWI4Lu2iG6arHRNKgJZESBzJa1HCYiqunVq2Z1+e
- cHrHy27Yngaz8oh4YpviExIEEFX1xHcTrDLIGaCD9bX0e+eS44R/x99PrrjTmhb84NW+wMqCmyR
- XFFQacaoNbb323DQ==
-X-Google-Smtp-Source: AGHT+IHSjJ7aO9lzWUlDHwxLV1n+WXusDtSCovVUwknvMRzwNMib2W2WLcjyLZjd/Gl+tAZBJKETmQ==
-X-Received: by 2002:a17:907:6e8c:b0:afe:e9ee:4ae0 with SMTP id
- a640c23a62f3a-afee9ee5741mr499970466b.59.1756465505770; 
- Fri, 29 Aug 2025 04:05:05 -0700 (PDT)
-Received: from development2.visionsystems.local (mail.visionsystems.de.
- [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-afefcc6631esm173451266b.95.2025.08.29.04.05.04
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 29 Aug 2025 04:05:04 -0700 (PDT)
+ id fzQm75uEktGx; Fri, 29 Aug 2025 11:11:49 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B07B41544
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8B07B41544;
+	Fri, 29 Aug 2025 11:11:49 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id F0DA0D2
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 11:11:47 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id D6BA641559
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 11:11:47 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GVW0BWJyWE9G for <buildroot@buildroot.org>;
+ Fri, 29 Aug 2025 11:11:46 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
+ helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8E47B40497
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8E47B40497
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8E47B40497
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 11:11:45 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-04.galae.net (Postfix) with ESMTPS id 77DC3C8F1C5
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 11:11:29 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id DED05606B9
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 11:11:43 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id ED7E61C22DAEE; 
+ Fri, 29 Aug 2025 13:11:34 +0200 (CEST)
 To: buildroot@buildroot.org
-Date: Fri, 29 Aug 2025 13:04:55 +0200
-Message-Id: <20250829110455.2608767-1-yegorslists@googlemail.com>
-X-Mailer: git-send-email 2.34.1
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 29 Aug 2025 13:11:24 +0200
+Message-ID: <20250829111125.1668963-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.50.1
 MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=googlemail.com; s=20230601; t=1756465506; x=1757070306; darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=3oBqoeQlRP5GgZf7cYt4L8+RG9bYXgI5tiXLjo/UgVE=;
- b=MmvJDoWqpyQwtJqZZdNrF7KQo78xpzOWd+YgOgFl5KeEMJMo6YkQFtWiLCrG9sOGaj
- JtVNNiSsgT6f9SmF5kB5uwC9jzVWn6WwDaeVKUUkOWhRcKGhMWcf1/m0S2j4PcXGR8a+
- 5DXaBlzDXid8Fjpf7JGsbUPlyqVr37qTaP+/OZ+SfdaXyXT/BgODdq3v57zb5naN82Ic
- mbp3ON9B5U33rHeD25suOCtiqB0myRzwAYO5Oq9C4PsgXlw1Fc9NdWbiHm6zuPswjU0Q
- ZjvHcxbUJv/FjDR9p2hu7q6inkzlthrHUZulastB+Cbmfyxfap+6YHk73OoP1KMZCdzZ
- pI3w==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=googlemail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=bootlin.com; s=dkim; 
+ t=1756465903; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=ptuHlE6XlXEbWgF91uaFRkNhs8vzkGF0lSD0mLU5DJ4=;
+ b=0IZegIjJDmngGoeLlsDj2bb0Ppck0Sh80FSsa+mJBiKZBN8e2leKv+mKcf3fT3bW3DtxVe
+ bYy+eFuXy4r0GuPISBMLhyWbfPn+LZbQIStkvOQ1Zl5uTYEFidsuAtMEl1ZVeSFk6YQaF2
+ M1IlzVQniYT1i4yqBJEpj+w58X+NtqxAviviEGQjt7bfMpllaxrmfATkLWjRSJP7hyt8Po
+ U/p1QN3ialqro/Kdo4Xg9hbdICR9bWyiKvn1On4Ln80E4Gthkko6ySsMkI5l0oOqC9imGM
+ 28bhDwRSbaIlNkAAlgusjZXo9poCwdcgjrz4NI1rkUaefCDYTomla+BlOTUHmg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=googlemail.com header.i=@googlemail.com
- header.a=rsa-sha256 header.s=20230601 header.b=MmvJDoWq
-Subject: [Buildroot] [PATCH] package/libftdi1: enable static only build
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=0IZegIjJ
+Subject: [Buildroot] [PATCH v2] package/mariadb: fix sub-option indentation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -106,48 +81,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: yegorslists--- via buildroot <buildroot@buildroot.org>
-Reply-To: yegorslists@googlemail.com
-Cc: Daniel Sangue <daniel.sangue@sangue.ch>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+The Config.in comment is between the main BR2_PACKAGE_MARIADB option
+and its sub-options, causing the sub-options to not appear as nicely
+indented in menuconfig.
 
-libfdti1 provides configuration options SHAREDLIBS and STATICLIBS
-that allow any combination of static/shared libraries.
+Before:
 
-Fixes:
-https://autobuild.buildroot.org/results/d7b9a45ccffc1c9e3fd796c3e46ee396b7d88272/
+[ ] mariadb
+[ ] mariadb server
+  [ ] mariadb embedded server
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+After:
+
+[ ] mariadb
+  [ ] mariadb server
+    [ ] mariadb embedded server
+
+which is what we want.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libftdi1/libftdi1.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+v1 -> v2: my v1 was messed up and contained unrelated changes.
 
-diff --git a/package/libftdi1/libftdi1.mk b/package/libftdi1/libftdi1.mk
-index 31ffa1aca3..0595ccf963 100644
---- a/package/libftdi1/libftdi1.mk
-+++ b/package/libftdi1/libftdi1.mk
-@@ -13,6 +13,14 @@ LIBFTDI1_LICENSE_FILES = LICENSE COPYING.LIB
- LIBFTDI1_CONFIG_SCRIPTS = libftdi1-config
- LIBFTDI1_CONF_OPTS = -DDOCUMENTATION=OFF -DEXAMPLES=OFF
+ package/mariadb/Config.in | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/package/mariadb/Config.in b/package/mariadb/Config.in
+index acedd1da9d..693b7ce925 100644
+--- a/package/mariadb/Config.in
++++ b/package/mariadb/Config.in
+@@ -20,11 +20,6 @@ config BR2_PACKAGE_MARIADB
  
-+ifeq ($(BR2_STATIC_LIBS),y)
-+LIBFTDI1_CONF_OPTS += -DSTATICLIBS=ON -DSHAREDLIBS=OFF
-+else ifeq ($(BR2_SHARED_LIBS),y)
-+LIBFTDI1_CONF_OPTS += -DSTATICLIBS=OFF -DSHAREDLIBS=ON
-+else
-+LIBFTDI1_CONF_OPTS += -DSTATICLIBS=ON -DSHAREDLIBS=ON
-+endif
+ 	  http://www.mariadb.org/
+ 
+-comment "mariadb needs a toolchain w/ dynamic library, C++, threads, wchar"
+-	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP \
+-		|| !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+-	depends on BR2_TOOLCHAIN_HAS_ATOMIC || BR2_TOOLCHAIN_HAS_SYNC_8
+-
+ if BR2_PACKAGE_MARIADB
+ 
+ config BR2_PACKAGE_MARIADB_SERVER
+@@ -39,3 +34,8 @@ config BR2_PACKAGE_MARIADB_SERVER_EMBEDDED
+ 	  Install the mariadb embedded server on the target.
+ 
+ endif
 +
- ifeq ($(BR2_PACKAGE_LIBFTDI1_LIBFTDIPP1),y)
- LIBFTDI1_LICENSE += , GPL-2.0 with exception (libftdipp1)
- LIBFTDI1_LICENSE_FILES += COPYING.GPL
++comment "mariadb needs a toolchain w/ dynamic library, C++, threads, wchar"
++	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP \
++		|| !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC || BR2_TOOLCHAIN_HAS_SYNC_8
 -- 
-2.34.1
+2.50.1
 
 _______________________________________________
 buildroot mailing list
