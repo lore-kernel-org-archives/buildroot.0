@@ -4,78 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BCB2CA0FF7
-	for <buildroot@archiver.kernel.org>; Fri, 29 Aug 2025 09:41:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FE9DCA0FF9
+	for <buildroot@archiver.kernel.org>; Fri, 29 Aug 2025 09:46:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0021784275;
-	Fri, 29 Aug 2025 09:41:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 03E70822E8;
+	Fri, 29 Aug 2025 09:46:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id E4pdBoS6DV3p; Fri, 29 Aug 2025 09:41:42 +0000 (UTC)
+ id 3zZ2k8PSv0I9; Fri, 29 Aug 2025 09:46:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2ED0B8426C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4458E82419
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2ED0B8426C;
-	Fri, 29 Aug 2025 09:41:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4458E82419;
+	Fri, 29 Aug 2025 09:46:35 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id BFDCCD2
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 09:41:40 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1E66669
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 09:46:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A647040818
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 09:41:40 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0FC74412D1
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 09:46:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WKu488VxG0Hw for <buildroot@buildroot.org>;
- Fri, 29 Aug 2025 09:41:40 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.178.249;
- helo=mslow3.mail.gandi.net; envelope-from=luca.ceresoli@bootlin.com;
+ id Wb-y4n3hSjO0 for <buildroot@buildroot.org>;
+ Fri, 29 Aug 2025 09:46:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9FAB6414CC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9FAB6414CC
-Received: from mslow3.mail.gandi.net (mslow3.mail.gandi.net [217.70.178.249])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9FAB6414CC
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 09:41:38 +0000 (UTC)
-Received: from relay15.mail.gandi.net (relay15.mail.gandi.net [217.70.178.235])
- by mslow3.mail.gandi.net (Postfix) with ESMTP id 8D97D5832CF
- for <buildroot@buildroot.org>; Fri, 29 Aug 2025 09:18:29 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id F35A443189;
- Fri, 29 Aug 2025 09:18:22 +0000 (UTC)
-Date: Fri, 29 Aug 2025 11:18:21 +0200
-To: Neal Frager <neal.frager@amd.com>
-Message-ID: <20250829111821.0645b31a@booty>
-In-Reply-To: <20250826060943.1394934-3-neal.frager@amd.com>
-References: <20250826060943.1394934-1-neal.frager@amd.com>
- <20250826060943.1394934-3-neal.frager@amd.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-redhat-linux-gnu)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 93005412B4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 93005412B4
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 93005412B4
+ for <buildroot@buildroot.org>; Fri, 29 Aug 2025 09:46:31 +0000 (UTC)
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1129126245; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Fri, 29 Aug 2025 09:46:27 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peko@dell.be.48ers.dk>) id 1urvgg-00BTdd-33;
+ Fri, 29 Aug 2025 11:46:26 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Fri, 29 Aug 2025 11:46:25 +0200
+Message-Id: <20250829094626.2735514-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddukeefhedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefnuhgtrgcuvegvrhgvshholhhiuceolhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepgfevieekhffhgfekhffftedutdehveeuudelieehvedugfejtdffueekieffffetnecuffhomhgrihhnpedupghuphgurghtvgdurdgrshdpghhithhhuhgsrdgtohhmpdgsohhothhlihhnrdgtohhmnecukfhppedvrgdtvdemieejtdemvddtvddtmegvrgdtudemsggvgedumeelhegvjeemfeegfeemledufegvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeeijedtmedvtddvtdemvggrtddumegsvgegudemleehvgejmeefgeefmeeludefvgdphhgvlhhopegsohhothihpdhmrghilhhfrhhomheplhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepudefpdhrtghpthhtohepnhgvrghlrdhfrhgrghgvrhesrghmugdrtghomhdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrt
- ghpthhtoheprghrnhhouhhtsehrnhhouhhtrdgsvgdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdprhgtphhtthhopehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmpdhrtghpthhtohepmhhitghhrghlrdhsihhmvghksegrmhgurdgtohhmpdhrtghpthhtohepjhhurdhosehfrhgvvgdrfhhrpdhrtghpthhtohepsghrrghnughonhdrmhgrihgvrhestgholhhlihhnshdrtghomh
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1756459104;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=+6hD9xRb6U9yt64oxDkhfuZuAF+LCEwd5pOF9Buk0fE=;
- b=SCKa+FOCqApmwc+kx+oJyPYDIp1ywnnM0dJEXmlPeh4TqJ4Eoc7S7fKGgKkNoOBH2BgjMI
- H1UJFFN4LH09BxHcZKbLhG3Up0iVubmeVNYPQUTln4R7bvImXtBEE4DgxBReaDG0/F5wYH
- FY16Gs0YAta+sBKTOQpeVX6xzMlWtJTmpmY5KAod7kVLRcpmsrcFXJcbMa4NMSISLJkIIj
- ne1/Bg+ziOtN5H8yx9jD0DAsFgpu8IGE7VldaMnCiuQEh8SBu26eG3nzG7hXfdxX4XoOr/
- YxP6ZOUA/Ef1hucOmThGRFsvBvoHi0UIfi4xca1eeK74DgD8Un9z8S7hv+JIiQ==
+X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ b=WDU59Cw5h1t616EeMNKjEvcL5tkezrYMbGeBAXdtia547lRhJH4YTioRLW+WWstJgql57jIVjCzY7ZnzQiAM+Mvc4HSsanvJRYCAOrLRPlkPvUZ70kPS0hVF1fOhqD58QLerbpS6St0BFkQNM51DzidaPzGfhayIdffwBalMuUTSEKTtTfgXlwIalEQ+l4XlMRzQS7ayOO0Yt50zAUeRrbt+vQLRUzQvf2U9Dh7G0N386+OTNDEzE8d642yaro16eCs4C9PNNsfjNKJHq4nlfFW0LL9m1VpVNUwGIVE2R7/TAkW8AqKn5+sQBoVLLKmEEwgw/AsNUlu0q42vFR5/Yw==;
+ s=purelymail1; d=purelymail.com; v=1;
+ bh=nQRT1FMjBuAQE+RzKKDDyHZjLjirAqOFSiNrYkgBdqM=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=SCKa+FOC
-Subject: Re: [Buildroot] [PATCH v2 3/5] configs/versal_vek280: bump
- xilinx-prebuilt to xilinx_v2025.1_update1
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail1 header.b=WDU59Cw5
+X-Mailman-Original-Authentication-Results: purelymail.com; auth=pass
+Subject: [Buildroot] [PATCH] package/brcm-patchram-plus: fix build w/ gcc-15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,44 +78,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Luca Ceresoli via buildroot <buildroot@buildroot.org>
-Reply-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: yann.morin@orange.com, ibai.erkiaga-elorza@amd.com, buildroot@buildroot.org,
- brandon.maier@collins.com, manikanta.sreeram@amd.com, ju.o@free.fr,
- thomas.petazzoni@bootlin.com, romain.naour@smile.fr, michal.simek@amd.com,
- romain.naour@gmail.com
+Cc: Vadim Kochan <vadim4j@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 26 Aug 2025 07:09:41 +0100
-Neal Frager <neal.frager@amd.com> wrote:
+Fixes http://autobuild.buildroot.net/results/2058934e442c0b3f3d0bd81bd7ed080c2eaade31/
 
-> This patch bumps the versal_vek280_defconfig xilinx-prebuilt package to
-> version xilinx_v2025.1_update1.
-> 
-> As part of this update, the vek280 pdi file has been updated from the
-> petalinux flow to the yocto edf flow. In the process, the memory map has been
-> corrected to match the Linux intree dts memory node, so the vek280 memory node
-> patch is no longer required.
+The source code uses empty argument function pointer prototypes, which
+changed behaviour in C23 (default in gcc-15):
 
-This is not very meaningful for Buildroot users not knowing the
-"petalinux flow" and the "yocto edf flow"...
+https://gcc.gnu.org/gcc-15/porting_to.html#c23-fn-decls-without-parameters
 
-> https://github.com/Xilinx/soc-prebuilt-firmware/commit/f755d022cd9bd2e6a09eed0f80078bca3345279e
+Causing build issues. Fix it by forcing gnu99 mode instead.
 
-...however at this URL one can probably guess the details that are
-relevant for Buildroot.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/brcm-patchram-plus/brcm-patchram-plus.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-So overall it's OK:
-
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-
+diff --git a/package/brcm-patchram-plus/brcm-patchram-plus.mk b/package/brcm-patchram-plus/brcm-patchram-plus.mk
+index d873330769..81ffc47aee 100644
+--- a/package/brcm-patchram-plus/brcm-patchram-plus.mk
++++ b/package/brcm-patchram-plus/brcm-patchram-plus.mk
+@@ -10,4 +10,8 @@ BRCM_PATCHRAM_PLUS_LICENSE = Apache-2.0
+ BRCM_PATCHRAM_PLUS_LICENSE_FILES = COPYING
+ BRCM_PATCHRAM_PLUS_AUTORECONF = YES
+ 
++# C23 changes meaning of empty argument prototypes like int (*)()
++# causing build failures, so force gnu99
++BRCM_PATCHRAM_PLUS_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
++
+ $(eval $(autotools-package))
 -- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.39.5
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
